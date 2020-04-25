@@ -160,7 +160,7 @@ function BuildFeedback(parent, tab, status)
 end
 
 net.Receive("get_ticket", function()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 	local _fbt = net.ReadTable()
 
 	if settingsWindow.window != nil then
@@ -187,7 +187,7 @@ end)
 
 hook.Add("open_server_feedback", "open_server_feedback", function()
 	SaveLastSite()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	net.Start("get_ticket")
 	net.SendToServer()

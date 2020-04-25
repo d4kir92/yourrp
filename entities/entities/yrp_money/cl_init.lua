@@ -8,8 +8,8 @@ local white =  Color(255, 255, 255, 255)
 local mocolor = Color(6, 92, 39, 255)
 
 function ENT:Draw()
-	local ply = LocalPlayer()
-	if ply:GetPos():Distance(self:GetPos()) < 2200 then
+	local lply = LocalPlayer()
+	if lply:GetPos():Distance(self:GetPos()) < 2200 then
 		self:DrawModel()
 		local money = self:GetMoney()
 		if money != nil then
@@ -45,7 +45,7 @@ function ENT:Draw()
 			cam.End3D2D()
 
 			if GetGlobalDBool("bool_tag_on_head_name", false) then
-				ang = ply:GetAngles()
+				ang = lply:GetAngles()
 				ang = Angle(0, ang.y - 90, 90)
 				cam.Start3D2D(pos + Vector(0, 0, 4), ang, 0.04 )
 					draw.SimpleTextOutlined(money, "Y_72_700", 0, 0, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))

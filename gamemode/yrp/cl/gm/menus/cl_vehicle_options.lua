@@ -30,7 +30,7 @@ end)
 
 function optionVehicleWindow(vehicle, vehicleTab)
 	openMenu()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	yrp_vehicle.window = createVGUI("YFrame", nil, 1090, 160, 0, 0)
 	yrp_vehicle.window:Center()
@@ -61,7 +61,7 @@ function optionVehicleWindow(vehicle, vehicleTab)
 		draw.RoundedBox(0, YRP.ctr(4), YRP.ctr(160), pw - YRP.ctr(8), YRP.ctr(70-4), Color(255, 255, 0, 200))
 	end
 
-	if ply:HasAccess() then
+	if lply:HasAccess() then
 		local _buttonRemoveOwner = createVGUI("DButton", yrp_vehicle.window, 530, 50, 545, 170)
 		_buttonRemoveOwner:SetText("")
 		function _buttonRemoveOwner:DoClick()

@@ -125,7 +125,7 @@ function SWEP:PrimaryAttack()
 	if self.pdelay < CurTime() then
 		self.pdelay = CurTime() + 0.4
 		if CLIENT then
-			local ply = LocalPlayer()
+			local lply = LocalPlayer()
 			net.Start("dbInsertIntoMap")
 				net.WriteString("yrp_" .. GetMapNameDB())
 				net.WriteString("position, angle, type")

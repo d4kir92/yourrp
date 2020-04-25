@@ -136,13 +136,13 @@ end)
 
 local oldlevel = oldlevel or nil--ply:Level()
 hook.Add("HUDPaint", "yrp_hud_levelup", function()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 	if IsLevelSystemEnabled() then
 		if oldlevel == nil then
-			ply:Level()
+			lply:Level()
 		end
-		if oldlevel != ply:Level() then
-			oldlevel = ply:Level()
+		if oldlevel != lply:Level() then
+			oldlevel = lply:Level()
 
 			surface.PlaySound("garrysmod/content_downloaded.wav")
 
@@ -152,7 +152,7 @@ hook.Add("HUDPaint", "yrp_hud_levelup", function()
 			levelup:SetTitle("")
 			levelup.LID_levelup = YRP.lang_string("LID_levelup")
 			local tab = {}
-			tab["LEVEL"] = ply:Level()
+			tab["LEVEL"] = lply:Level()
 			levelup.LID_levelx = YRP.lang_string("LID_levelx", tab)
 			levelup.lucolor = Color(255, 255, 100, 255)
 			levelup.lxcolor = Color(255, 255, 255, 255)
@@ -173,7 +173,7 @@ hook.Add("HUDPaint", "yrp_hud_levelup", function()
 					draw.SimpleTextOutlined(self.LID_levelx, "Y_24_500", pw / 2, ph / 4 * 3, self.lxcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
 				end
 
-				if self.level != ply:Level() then
+				if self.level != lply:Level() then
 					self:Remove()
 				end
 				self.delay = self.delay or CurTime() + 6
@@ -352,11 +352,11 @@ function TestYourRPContent()
 end
 TestYourRPContent()
 hook.Add("HUDPaint", "yrp_hud", function()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
-	if ply:GetDBool("yrp_speaking", false) then
+	if lply:GetDBool("yrp_speaking", false) then
 		local text = YRP.lang_string("LID_youarespeaking")
-		if ply:GetDBool("mute_voice", false) then
+		if lply:GetDBool("mute_voice", false) then
 			text = text .. " (" .. YRP.lang_string("LID_speaklocal") .. ")"
 		end
 		draw.SimpleTextOutlined(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
@@ -371,22 +371,22 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		surfaceBox(0, 0, ScrW(), ScrH(), Color(255, 255, 255, 255))
 		surfaceText(YRP.lang_string("LID_blinded"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(100), Color(255, 255, 0, 255), 1, 1)
 	end
-	if ply:IsFlagSet(FL_FROZEN) then
+	if lply:IsFlagSet(FL_FROZEN) then
 		surfaceText(YRP.lang_string("LID_frozen"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(150), Color(255, 255, 0, 255), 1, 1)
 	end
-	if ply:GetDBool("cloaked", false) then
+	if lply:GetDBool("cloaked", false) then
 		surfaceText(YRP.lang_string("LID_cloaked"), "Y_30_500", ScrW2(), ScrH2() - YRP.ctr(400), Color(255, 255, 0, 255), 1, 1)
 	end
 
-	DrawEquipment(ply, "backpack")
-	DrawEquipment(ply, "weaponprimary1")
-	DrawEquipment(ply, "weaponprimary2")
-	DrawEquipment(ply, "weaponsecondary1")
-	DrawEquipment(ply, "weaponsecondary2")
-	DrawEquipment(ply, "weapongadget")
+	DrawEquipment(lply, "backpack")
+	DrawEquipment(lply, "weaponprimary1")
+	DrawEquipment(lply, "weaponprimary2")
+	DrawEquipment(lply, "weaponsecondary1")
+	DrawEquipment(lply, "weaponsecondary2")
+	DrawEquipment(lply, "weapongadget")
 
-	if !ply:InVehicle() then
-		HudPlayer(ply)
+	if !lply:InVehicle() then
+		HudPlayer(lply)
 		HudView()
 		HudCrosshair()
 	end
@@ -441,7 +441,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		-- Current Stars
 		surface.SetDrawColor(255, 255, 255, 255)
 		for x = 1, 5 do
-			if ply:GetDInt("yrp_stars", 0) >= x then
+			if lply:GetDInt("yrp_stars", 0) >= x then
 				surface.DrawTexturedRect(stars.x + x * stars.size + stars.br, stars.y + stars.br, stars.cur, stars.cur)
 			end
 		end

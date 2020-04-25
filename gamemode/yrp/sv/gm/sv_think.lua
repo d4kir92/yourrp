@@ -102,6 +102,10 @@ function con_ra(ply)
 end
 
 function con_st(ply, _time)
+	if GetGlobalDBool("bool_onlywhencook", false) and !IsCookPlaying() then
+		ply:SetDFloat("GetCurStamina", 100)
+		return false
+	end
 	ply.jumping = ply.jumping or false
 
 	if ply:IsOnGround() and ply.jumping then
@@ -161,14 +165,16 @@ function con_st(ply, _time)
 end
 
 function anti_bunnyhop(ply)
-	if ply:KeyDown(IN_JUMP) and ply:GetDBool("canjump", true) then
-		ply:SetDBool("canjump", false)
-	elseif ply:OnGround() and ply:GetDFloat("GetCurStamina", 0) >= GetGlobalDFloat("float_scale_stamina_jump", 30) and !ply:GetDBool("jump_resetting", false) and !ply:GetDBool("canjump", false) then
-		ply:SetDBool("jump_resetting", true)
-		timer.Simple(0.4, function()
-			ply:SetDBool("jump_resetting", false)
-			ply:SetDBool("canjump", true)
-		end)
+	if !ply:GetDBool("jump_resetting", false) then
+		if ply:KeyDown(IN_JUMP) and ply:GetDBool("canjump", true) then
+			ply:SetDBool("canjump", false)
+		elseif ply:OnGround() and ply:GetDFloat("GetCurStamina", 0) >= GetGlobalDFloat("float_scale_stamina_jump", 30) and !ply:GetDBool("canjump", false) then
+			ply:SetDBool("jump_resetting", true)
+			timer.Simple(0.4, function()
+				ply:SetDBool("jump_resetting", false)
+				ply:SetDBool("canjump", true)
+			end)
+		end
 	end
 end
 

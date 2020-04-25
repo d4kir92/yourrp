@@ -40,10 +40,10 @@ function OpenInventory(target)
 		inv.w = 5 * ItemSize() + 4 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp)
 		inv.h = ItemSize() + 2 * YRP.ctr(inv.sp)
 
-		lply.invx = ScW() - YRP.ctr(50)
-		lply.invy = ScH() - (ItemSize() + YRP.ctr(60))
+		lply.invx = ScrW() - YRP.ctr(50)
+		lply.invy = ScrH() - (ItemSize() + YRP.ctr(60))
 
-		inv.win = createD("DFrame", nil, inv.w, inv.h, ScW() - inv.w - YRP.ctr(50), ScH() - inv.h)
+		inv.win = createD("DFrame", nil, inv.w, inv.h, ScrW() - inv.w - YRP.ctr(50), ScrH() - inv.h)
 		inv.win:MakePopup()
 		inv.win:SetTitle("")
 		inv.win:ShowCloseButton(true)
@@ -86,6 +86,7 @@ end
 CloseInventory()
 
 net.Receive("open_storage", function(len)
+	local lply = LocalPlayer()
 	OpenInventory(true)
 
 	if pa(Inventory()) then
@@ -108,7 +109,7 @@ net.Receive("open_storage", function(len)
 	end
 end)
 
-dropitem = dropitem or createD("DPanelList", nil, ScW(), ScH(), 0, 0)
+dropitem = dropitem or createD("DPanelList", nil, ScrW(), ScrH(), 0, 0)
 function dropitem:Paint(pw, ph)
 	--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
 end

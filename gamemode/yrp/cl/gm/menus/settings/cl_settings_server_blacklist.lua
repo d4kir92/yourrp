@@ -184,7 +184,7 @@ end)
 
 hook.Add("open_server_blacklist", "open_server_blacklist", function()
 	SaveLastSite()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	net.Start("yrp_blacklist_get")
 	net.SendToServer()

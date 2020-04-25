@@ -351,7 +351,7 @@ end)
 
 hook.Add("open_server_whitelist", "open_server_whitelist", function()
 	SaveLastSite()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	timer.Simple(0.0, function()
 		net.Start("getGroupsWhitelist")

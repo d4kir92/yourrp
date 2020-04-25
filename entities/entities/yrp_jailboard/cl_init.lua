@@ -2,10 +2,10 @@
 include("shared.lua")
 
 function ENT:Draw()
-	local ply = LocalPlayer()
-	local eyeTrace = ply:GetEyeTrace()
+	local lply = LocalPlayer()
+	local eyeTrace = lply:GetEyeTrace()
 
-	if ply:GetPos():Distance(self:GetPos()) < 2000 then
+	if lply:GetPos():Distance(self:GetPos()) < 2000 then
 		self:DrawModel()
 	end
 end

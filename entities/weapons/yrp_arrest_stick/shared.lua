@@ -59,7 +59,6 @@ function SWEP:PrimaryAttack()
 	if CurTime() < self.delay then return end
 	self.delay = CurTime() + self.cooldown
 
-	local ply = self:GetOwner()
 	local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)
 	if tr.Hit then
 		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
@@ -85,7 +84,6 @@ function SWEP:SecondaryAttack()
 	if CurTime() < self.delay then return end
 	self.delay = CurTime() + self.cooldown
 
-	local ply = self:GetOwner()
 	local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)
 	if tr.Hit then
 		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)

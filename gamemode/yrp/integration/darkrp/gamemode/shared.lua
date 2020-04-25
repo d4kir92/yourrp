@@ -167,7 +167,7 @@ function DarkRP.formatMoney(amount)
 	--Description: Format a number as a money value. Includes currency symbol.
 	--printGM("darkrp", "formatMoney(" .. tostring(amount) .. ")")
 	if CLIENT then
-		local ply = LocalPlayer()
+		local lply = LocalPlayer()
 		return formatMoney(amount, ply)
 	else
 		return formatMoney(amount)

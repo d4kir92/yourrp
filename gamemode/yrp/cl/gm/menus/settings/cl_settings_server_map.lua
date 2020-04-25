@@ -66,7 +66,7 @@ net.Receive("getMapSite", function(len)
 		if len > 512000 then
 			printGM("note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)")
 		end
-		local ply = LocalPlayer()
+		local lply = LocalPlayer()
 		if pa(settingsWindow.window) then
 			local parent = settingsWindow.window.site
 			local site = parent
@@ -133,7 +133,7 @@ end)
 
 -- #F8Map
 net.Receive("getMapTab", function(len)
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	local tab = net.ReadString()
 	local dbTab = net.ReadTable()

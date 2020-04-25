@@ -304,8 +304,8 @@ function GetSENTsList()
 end
 
 function OpenSelector(tbl_list, tbl_sele, closeF)
-	local ply = LocalPlayer()
-	ply.global_working = table.concat(tbl_sele, ",")
+	local lply = LocalPlayer()
+	lply.global_working = table.concat(tbl_sele, ",")
 	local site = {}
 	site.cur = 1
 	site.max = 1
@@ -530,7 +530,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 							end
 						end
 
-						ply.global_working = tmpString
+						lply.global_working = tmpString
 					end
 
 					tmpX = tmpX + YRP.ctr(item.w) + tmpBr
@@ -1874,8 +1874,8 @@ hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 end)
 
 net.Receive("yrp_noti", function(len)
-	local ply = LocalPlayer()
-	if ply:IsValid() and ply:HasAccess() then
+	local lply = LocalPlayer()
+	if lply:IsValid() and lply:HasAccess() then
 		local _str_lang = net.ReadString()
 		local _time = 4
 		local _channel = NOTIFY_GENERIC
@@ -1907,8 +1907,8 @@ end)
 
 local delay = 0
 net.Receive("yrp_info", function(len)
-	local ply = LocalPlayer()
-	if ply:IsValid() and delay < CurTime() then
+	local lply = LocalPlayer()
+	if lply:IsValid() and delay < CurTime() then
 		delay = CurTime() + 1
 		local _str = net.ReadString()
 		_str = YRP.lang_string("LID_notallowed") .. " (" .. YRP.lang_string(_str) .. ")"
@@ -1918,8 +1918,8 @@ end)
 
 local delay2 = 0
 net.Receive("yrp_info2", function(len)
-	local ply = LocalPlayer()
-	if ply:IsValid() and delay2 < CurTime() then
+	local lply = LocalPlayer()
+	if lply:IsValid() and delay2 < CurTime() then
 		delay2 = CurTime() + 1
 		local _str = net.ReadString()
 		_str = YRP.lang_string(_str)
@@ -1936,8 +1936,8 @@ net.Receive("yrp_info2", function(len)
 end)
 
 net.Receive("yrp_message", function(len)
-	local ply = LocalPlayer()
-	if ply:IsValid() then
+	local lply = LocalPlayer()
+	if lply:IsValid() then
 		local _str = YRP.lang_string(net.ReadString())
 		notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
 	end

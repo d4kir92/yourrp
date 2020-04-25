@@ -76,8 +76,8 @@ function useFunction(str)
 	if str == nil then
 		return
 	end
-	local ply = LocalPlayer()
-	local eyeTrace = ply:GetEyeTrace()
+	local lply = LocalPlayer()
+	local eyeTrace = lply:GetEyeTrace()
 
 	if str == "close_all" then
 		close_all()
@@ -214,8 +214,8 @@ function useFunction(str)
 end
 
 function keyDown(key, str, distance)
-	local ply = LocalPlayer()
-	local plyTrace = ply:GetEyeTrace()
+	local lply = LocalPlayer()
+	local plyTrace = lply:GetEyeTrace()
 	local _return = false
 	if distance != nil then
 		if plyTrace.Entity:GetPos():Distance(ply:GetPos()) > distance then
@@ -226,7 +226,7 @@ function keyDown(key, str, distance)
 		if keys[tostring(key)] == nil then
 			keys[tostring(key)] = false
 		end
-		if ply:KeyDown(key) and !keys[tostring(key)] then
+		if lply:KeyDown(key) and !keys[tostring(key)] then
 			keys[tostring(key)] = true
 			timer.Simple(0.2, function()
 				if str != nil then
@@ -240,11 +240,11 @@ end
 
 function keyPressed(key, str, distance)
 	if ChatIsClosedForChat() then
-		local ply = LocalPlayer()
-		local plyTrace = ply:GetEyeTrace()
+		local lply = LocalPlayer()
+		local plyTrace = lply:GetEyeTrace()
 		local _return = false
 		if distance and ea(plyTrace.Entity) then
-			if plyTrace.Entity:GetPos():Distance(ply:GetPos()) > distance then
+			if plyTrace.Entity:GetPos():Distance(lply:GetPos()) > distance then
 				_return = true
 			end
 		end
@@ -274,50 +274,50 @@ local setup = false
 local hudD = nil
 local hudFail = hudFail or false
 function KeyPress()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	hudD = hudD or CurTime() + 240
 
 	if hudD < CurTime() then
 		hudD = CurTime() + 240
-		if ply:GetDInt("hud_version", -1) < 0 and !hudFail then
+		if lply:GetDInt("hud_version", -1) < 0 and !hudFail then
 			hudFail = true
 			net.Start("rebuildHud")
 			net.SendToServer()
-			YRP.msg("error", "HUD Version outdated! " .. tostring(ply:GetDInt("hud_version", -1)) .. " " .. printReadyError())
+			YRP.msg("error", "HUD Version outdated! " .. tostring(lply:GetDInt("hud_version", -1)) .. " " .. printReadyError())
 		end
 	end
 
-	ply.view_range = ply.view_range or 0
-	ply.view_range_view = ply.view_range_view or 0
+	lply.view_range = lply.view_range or 0
+	lply.view_range_view = lply.view_range_view or 0
 
-	ply.view_z = ply.view_z or 0
-	ply.view_x = ply.view_x or 0
-	ply.view_s = ply.view_s or 0
+	lply.view_z = lply.view_z or 0
+	lply.view_x = lply.view_x or 0
+	lply.view_s = lply.view_s or 0
 
-	ply.view_z_c = ply.view_z_c or 0
-	ply.view_x_c = ply.view_x_c or 0
-	ply.view_s_c = ply.view_s_c or 0
+	lply.view_z_c = lply.view_z_c or 0
+	lply.view_x_c = lply.view_x_c or 0
+	lply.view_s_c = lply.view_s_c or 0
 
 	if !setup then
 		setup = true
-		ply.view_range = 0
-		ply.view_range_view = 0
+		lply.view_range = 0
+		lply.view_range_view = 0
 
-		ply.view_z = 0
-		ply.view_x = 0
-		ply.view_s = 0
+		lply.view_z = 0
+		lply.view_x = 0
+		lply.view_s = 0
 
-		ply.view_z_c = 0
-		ply.view_x_c = 0
-		ply.view_s_c = 0
+		lply.view_z_c = 0
+		lply.view_x_c = 0
+		lply.view_s_c = 0
 	else
-		if ply:IsInCombat() and CurTime() > blink_delay and !system.HasFocus() then
+		if lply:IsInCombat() and CurTime() > blink_delay and !system.HasFocus() then
 			blink_delay = CurTime() + 1
 			system.FlashWindow()
 		end
 
-		if ply:AFK() then
+		if lply:AFK() then
 			local afk = true
 			for i = 107, 113 do
 				if input.IsMouseDown(i) then
@@ -327,7 +327,7 @@ function KeyPress()
 			end
 			if afk then
 				for i = 0, 159 do
-					if ply:KeyDown(i) then
+					if lply:KeyDown(i) then
 						afk = false
 						break
 					end
@@ -344,7 +344,7 @@ function KeyPress()
 				end
 			end
 			for i = 0, 159 do
-				if ply:KeyDown(i) then
+				if lply:KeyDown(i) then
 					afktime = CurTime()
 				end
 			end
@@ -363,95 +363,95 @@ function KeyPress()
 						_view_delay = true
 					end)
 
-					if tonumber(ply.view_range_view) > 0 then
-						ply.view_range_view = 0
+					if tonumber(lply.view_range_view) > 0 then
+						lply.view_range_view = 0
 					else
 						local _old_view = tonumber(LocalPlayer():GetDInt("view_range_old", 0))
 						if _old_view > 0 then
-							ply.view_range_view = _old_view
+							lply.view_range_view = _old_view
 						else
-							ply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "0"))
+							lply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "0"))
 						end
 					end
 
-					ply.view_range = ply.view_range_view
+					lply.view_range = lply.view_range_view
 				end
 			else
 				--[[ smoothing ]]--
-				if tonumber(ply.view_range) < tonumber(ply.view_range_view) then
-					ply.view_range = ply:GetDInt("view_range") + ply.view_range_view / 16
+				if tonumber(lply.view_range) < tonumber(lply.view_range_view) then
+					lply.view_range = lply:GetDInt("view_range") + lply.view_range_view / 16
 				else
 
 					if input.IsKeyDown(get_keybind("view_zoom_out")) then
 						done_tutorial("tut_vo", 5)
 
-						ply.view_range_view = ply.view_range_view + 1
+						lply.view_range_view = lply.view_range_view + 1
 
-						if tonumber(ply.view_range_view) > tonumber(GetGlobalDString("text_view_distance", "0")) then
-							ply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "0"))
+						if tonumber(lply.view_range_view) > tonumber(GetGlobalDString("text_view_distance", "0")) then
+							lply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "0"))
 						end
-						ply.view_range_old = ply.view_range_view
+						lply.view_range_old = lply.view_range_view
 					elseif input.IsKeyDown(get_keybind("view_zoom_in")) then
 						done_tutorial("tut_vi", 5)
 
-						ply.view_range_view = ply.view_range_view - 1
+						lply.view_range_view = lply.view_range_view - 1
 
-						if tonumber(ply.view_range_view) < -200 then
-							ply.view_range_view = -200
+						if tonumber(lply.view_range_view) < -200 then
+							lply.view_range_view = -200
 						end
-						ply.view_range_old = ply.view_range_view
+						lply.view_range_old = lply.view_range_view
 					end
-					ply.view_range = ply.view_range_view
+					lply.view_range = lply.view_range_view
 				end
 			end
 
 			--[[ Up and down ]]--
 			if input.IsKeyDown(get_keybind("view_up")) then
-				ply.view_z_c = ply.view_z_c + 0.1
+				lply.view_z_c = lply.view_z_c + 0.1
 			elseif input.IsKeyDown(get_keybind("view_down")) then
-				ply.view_z_c = ply.view_z_c - 0.1
+				lply.view_z_c = lply.view_z_c - 0.1
 			end
-			if tonumber(ply.view_z_c) > 100 then
-				ply.view_z_c = 100
-			elseif tonumber(ply.view_z_c) < -100 then
-				ply.view_z_c = -100
+			if tonumber(lply.view_z_c) > 100 then
+				lply.view_z_c = 100
+			elseif tonumber(lply.view_z_c) < -100 then
+				lply.view_z_c = -100
 			end
-			if tonumber(ply.view_z_c) < 3 and tonumber(ply.view_z_c) > -3 then
-				ply.view_z = 0
+			if tonumber(lply.view_z_c) < 3 and tonumber(lply.view_z_c) > -3 then
+				lply.view_z = 0
 			else
-				ply.view_z = ply.view_z_c
+				lply.view_z = lply.view_z_c
 			end
 
 			--[[ Left and right ]]--
 			if input.IsKeyDown(get_keybind("view_right")) then
-				ply.view_x_c = ply.view_x_c + 0.1
+				lply.view_x_c = lply.view_x_c + 0.1
 			elseif input.IsKeyDown(get_keybind("view_left")) then
-				ply.view_x_c = ply.view_x_c - 0.1
+				lply.view_x_c = lply.view_x_c - 0.1
 			end
-			if tonumber(ply.view_x_c) > 300 then
-				ply.view_x_c = 300
-			elseif tonumber(ply.view_x_c) < -300 then
-				ply.view_x_c = -300
+			if tonumber(lply.view_x_c) > 300 then
+				lply.view_x_c = 300
+			elseif tonumber(lply.view_x_c) < -300 then
+				lply.view_x_c = -300
 			end
-			if tonumber(ply.view_x_c) < 3 and tonumber(ply.view_x_c) > -3 then
-				ply.view_x = 0
+			if tonumber(lply.view_x_c) < 3 and tonumber(lply.view_x_c) > -3 then
+				lply.view_x = 0
 			else
-				ply.view_x = ply.view_x_c
+				lply.view_x = lply.view_x_c
 			end
 
 			--[[ spin right and spin left ]]--
 			if input.IsKeyDown(get_keybind("view_spin_right")) then
-				ply.view_s_c = ply.view_s_c + 0.4
+				lply.view_s_c = lply.view_s_c + 0.4
 			elseif input.IsKeyDown(get_keybind("view_spin_left")) then
-				ply.view_s_c = ply.view_s_c - 0.4
+				lply.view_s_c = lply.view_s_c - 0.4
 			end
-			if tonumber(ply.view_s_c) > 360 or tonumber(ply.view_s_c) < -360 then
-				ply.view_s_c = 0
+			if tonumber(lply.view_s_c) > 360 or tonumber(lply.view_s_c) < -360 then
+				lply.view_s_c = 0
 			end
-			if tonumber(ply.view_s_c) < 6 and tonumber(ply.view_s_c) > -6 then
-				ply.view_s = 0
+			if tonumber(lply.view_s_c) < 6 and tonumber(lply.view_s_c) > -6 then
+				lply.view_s = 0
 			else
-				ply.view_s = ply.view_s_c
+				lply.view_s =  lply.view_s_c
 			end
 		end
 	end
@@ -529,21 +529,21 @@ PLAYER.TauntCam = TauntCamera()
 
 -- #THIRDPERSON
 local oldang = Angle(0, 0, 0)
-local function yrpCalcView(ply, pos, angles, fov)
-	ply.view_range = ply.view_range or 0
-	ply.view_range_view = ply.view_range_view or 0
+local function yrpCalcView(lply, pos, angles, fov)
+	lply.view_range = lply.view_range or 0
+	lply.view_range_view = lply.view_range_view or 0
 
-	ply.view_z = ply.view_z or 0
-	ply.view_x = ply.view_x or 0
-	ply.view_s = ply.view_s or 0
+	lply.view_z = lply.view_z or 0
+	lply.view_x = lply.view_x or 0
+	lply.view_s = lply.view_s or 0
 
-	ply.view_z_c = ply.view_z_c or 0
-	ply.view_x_c = ply.view_x_c or 0
-	ply.view_s_c = ply.view_s_c or 0
+	lply.view_z_c = lply.view_z_c or 0
+	lply.view_x_c = lply.view_x_c or 0
+	lply.view_s_c = lply.view_s_c or 0
 
-	if ply:Alive() then --and !ply:IsPlayingTaunt() then
+	if lply:Alive() then --and !lply:IsPlayingTaunt() then
 
-		if ply:AFK() then
+		if lply:AFK() then
 			if (oldang.p + 1 < angles.p and oldang.p - 1 < angles.p) or (oldang.y + 1 < angles.y and oldang.y - 1 < angles.y) or (oldang.r + 1 < angles.r and oldang.r - 1 < angles.r) then
 				net.Start("notafk")
 				net.SendToServer()
@@ -552,30 +552,30 @@ local function yrpCalcView(ply, pos, angles, fov)
 		oldang = angles
 
 		local disablethirdperson = false
-		local weapon = ply:GetActiveWeapon()
+		local weapon = lply:GetActiveWeapon()
 		if weapon != NULL and weapon:GetClass() != nil then
-			local _weaponName = string.lower(tostring(ply:GetActiveWeapon():GetClass()))
+			local _weaponName = string.lower(tostring(lply:GetActiveWeapon():GetClass()))
 			if string.find(_weaponName, "lightsaber", 0, false) then
 				--disablethirdperson = true
 			end
 		end
 
-		local _view_range = ply.view_range or 0
+		local _view_range = lply.view_range or 0
 		if _view_range < 0 then
 			_view_range = 0
 		end
-		if ply:IsPlayingTaunt() then
+		if lply:IsPlayingTaunt() then
 			disablethirdperson = false
 			_view_range = 200
 		end
-		local dist = _view_range * ply:GetModelScale()
+		local dist = _view_range * lply:GetModelScale()
 
 		local view = {}
-		if ply:GetModel() != "models/player.mdl" and !ply:InVehicle() and !disablethirdperson and GetGlobalDBool("bool_thirdperson", false) then
-			if ply:LookupBone("ValveBiped.Bip01_Head1") != nil then
-				pos2 = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1")) + (angles:Forward() * 12 * ply:GetModelScale())
+		if lply:GetModel() != "models/player.mdl" and !lply:InVehicle() and !disablethirdperson and GetGlobalDBool("bool_thirdperson", false) then
+			if lply:LookupBone("ValveBiped.Bip01_Head1") != nil then
+				pos2 = lply:GetBonePosition(lply:LookupBone("ValveBiped.Bip01_Head1")) + (angles:Forward() * 12 * lply:GetModelScale())
 			end
-			if ply:GetMoveType() == MOVETYPE_NOCLIP and ply:GetModel() == "models/crow.mdl" then
+			if lply:GetMoveType() == MOVETYPE_NOCLIP and lply:GetModel() == "models/crow.mdl" then
 				local _tmpThick = 4
 				local _minDistFor = 8
 				local _minDistBac = 40
@@ -591,19 +591,19 @@ local function yrpCalcView(ply, pos, angles, fov)
 			else
 			--if _thirdperson == 2 then
 
-				if tonumber(ply.view_range or 0) > 0 then
-					if ply:LookupBone("ValveBiped.Bip01_Head1") != nil then
-						local _head = ply:GetPos().z + ply:OBBMaxs().z
+				if tonumber(lply.view_range or 0) > 0 then
+					if lply:LookupBone("ValveBiped.Bip01_Head1") != nil then
+						local _head = lply:GetPos().z + lply:OBBMaxs().z
 						pos.z = _head
 					end
 					--Thirdperson
-					dist = ply.view_range * ply:GetModelScale()
+					dist = lply.view_range * lply:GetModelScale()
 
 					local _tmpThick = 4
 					local _minDistFor = 8
 					local _minDistBac = 40
-					angles = angles + Angle(0, ply.view_s, 0)
-					local _pos_change = angles:Up() * ply.view_z + angles:Right() * ply.view_x
+					angles = angles + Angle(0, lply.view_s, 0)
+					local _pos_change = angles:Up() * lply.view_z + angles:Right() * lply.view_x
 
 					local tr = util.TraceHull({
 						start = pos + angles:Forward() * _minDistFor,
@@ -647,7 +647,7 @@ local function yrpCalcView(ply, pos, angles, fov)
 						_drawViewmodel = true
 						return view
 					end
-				elseif tonumber(ply.view_range) > -200 and tonumber(ply.view_range) <= 0 then
+				elseif tonumber(lply.view_range) > -200 and tonumber(lply.view_range) <= 0 then
 					--Disabled
 					view.origin = pos
 					view.angles = angles
@@ -656,15 +656,15 @@ local function yrpCalcView(ply, pos, angles, fov)
 					return view
 				else
 					--Firstperson realistic
-					local dist = ply.view_range * ply:GetModelScale()
+					local dist = lply.view_range * lply:GetModelScale()
 
 					local _tmpThick = 16
-					local _head = ply:LookupBone("ValveBiped.Bip01_Head1")
+					local _head = lply:LookupBone("ValveBiped.Bip01_Head1")
 
 					if worked(_head, "_head failed @cl_think.lua") then
 						local tr = util.TraceHull({
-							start = ply:GetBonePosition(_head) + angles:Forward() * 4,
-							endpos = ply:GetBonePosition(_head) - angles:Forward() * 4,
+							start = lply:GetBonePosition(_head) + angles:Forward() * 4,
+							endpos = lply:GetBonePosition(_head) - angles:Forward() * 4,
 							filter = {LocalPlayer(),weapon},
 							mins = Vector(-_tmpThick, -_tmpThick, -_tmpThick),
 							maxs = Vector(_tmpThick, _tmpThick, _tmpThick),
@@ -672,7 +672,7 @@ local function yrpCalcView(ply, pos, angles, fov)
 						})
 
 						if !tr.Hit then
-							pos2 = ply:GetBonePosition(_head) + (angles:Forward() * 5 * ply:GetModelScale()) - Vector(0, 0, 1.4) * ply:GetModelScale() + (angles:Up() * 6 * ply:GetModelScale())
+							pos2 = lply:GetBonePosition(_head) + (angles:Forward() * 5 * lply:GetModelScale()) - Vector(0, 0, 1.4) * lply:GetModelScale() + (angles:Up() * 6 * lply:GetModelScale())
 							view.origin = pos2
 							_savePos = pos2
 							view.angles = angles
@@ -698,7 +698,7 @@ local function yrpCalcView(ply, pos, angles, fov)
 			end
 		end
 	else
-		local entindex = ply:GetDInt("ent_ragdollindex")
+		local entindex = lply:GetDInt("ent_ragdollindex")
 
 		if entindex then
 			local ent = Entity(entindex)
@@ -731,7 +731,7 @@ hook.Add("CalcView", "MyCalcView", yrpCalcView)
 function showPlayermodel()
 	local lply = LocalPlayer()
 
-	if !LocalPlayer():InVehicle() then
+	if !lply:InVehicle() then
 		if _drawViewmodel then-- or LocalPlayer():IsPlayingTaunt() then
 			return true
 		else

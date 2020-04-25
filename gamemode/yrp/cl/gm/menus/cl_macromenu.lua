@@ -47,6 +47,7 @@ function UseMacro(uid)
 end
 
 net.Receive("yrp_get_macros", function(len)
+	local lply = LocalPlayer()
 	_mm.tab = net.ReadTable()
 
 	if pa(_mm.content) then
@@ -128,7 +129,7 @@ end)
 function OpenMacroMenu()
 	openMenu()
 
-	_mm.window = createD("YFrame", nil, YRP.ctr(720 + 36), YRP.ctr(780), 0, 0)
+	_mm.window = createD("YFrame", nil, YRP.ctr(720 + 36), YRP.ctr(820), 0, 0)
 	_mm.window:Center()
 	_mm.window:MakePopup()
 	_mm.window:SetTitle(YRP.lang_string("LID_macromenu"))

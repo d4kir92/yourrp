@@ -111,9 +111,9 @@ end
 function printReadyError()
 	local lply = LocalPlayer()
 
-	local str = "yrp_received_ready: " .. tostring(LocalPlayer():GetDBool("yrp_received_ready", false))
+	local str = "yrp_received_ready: " .. tostring(lply:GetDBool("yrp_received_ready", false))
 	str = str .. " yrp_rToSv: " .. tostring(yrp_rToSv)
-	str = str .. " loadedchars: " .. tostring(LocalPlayer():GetDBool("loadedchars", false))
+	str = str .. " loadedchars: " .. tostring(lply:GetDBool("loadedchars", false))
 	str = str .. " yrp_hookinitpostentity: " .. tostring(yrp_hookinitpostentity)
 	str = str .. " yrp_initpostentity: " .. tostring(yrp_initpostentity)
 	str = str .. " YRP_NOINIT: " .. tostring(YRP_NOINIT)

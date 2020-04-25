@@ -355,7 +355,7 @@ end
 
 hook.Add("open_server_logs", "open_server_logs", function()
 	SaveLastSite()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	BuildLogsSite()
 end)

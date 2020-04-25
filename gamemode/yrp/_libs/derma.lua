@@ -279,8 +279,8 @@ function GetFont()
 end
 
 function interfaceDesign()
-	local ply = LocalPlayer()
-	local design = ply:GetDString("interface_design", "Material Design 1")
+	local lply = LocalPlayer()
+	local design = lply:GetDString("interface_design", "Material Design 1")
 
 	if yrp_if[design] ~= nil then
 		return design
@@ -290,33 +290,33 @@ function interfaceDesign()
 end
 
 function InterfaceBorder()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
-	return ply:GetDBool("interface_border", true)
+	return lply:GetDBool("interface_border", true)
 end
 
 function InterfaceRounded()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
-	return ply:GetDBool("interface_rounded", true)
+	return lply:GetDBool("interface_rounded", true)
 end
 
 function InterfaceTransparent()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
-	return ply:GetDBool("interface_transparent", true)
+	return lply:GetDBool("interface_transparent", true)
 end
 
 function InterfaceColor()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
-	return ply:GetDString("interface_color", "blue")
+	return lply:GetDString("interface_color", "blue")
 end
 
 function InterfaceStyle()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
-	return ply:GetDString("interface_style", "dark")
+	return lply:GetDString("interface_style", "dark")
 end
 
 local yrp_colors = {}
@@ -1481,7 +1481,7 @@ hook.Add("Think", "yrp_motion", function()
 	local lply = LocalPlayer()
 
 	lply.oldang = lply.oldang or Angle(0, 0, 0)
-	lply.newang = LocalPlayer():EyeAngles()
+	lply.newang = lply:EyeAngles()
 
 	lply.swayx = lply.swayx or 0
 	lply.swayy = lply.swayy or 0

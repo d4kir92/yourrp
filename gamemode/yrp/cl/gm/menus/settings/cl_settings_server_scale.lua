@@ -86,7 +86,7 @@ end
 
 hook.Add("open_server_scale", "open_server_scale", function()
 	SaveLastSite()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	BuildScaleSite()
 end)

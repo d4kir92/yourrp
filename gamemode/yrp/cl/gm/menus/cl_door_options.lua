@@ -39,7 +39,7 @@ end)
 function buyWindow(door, tabBuilding)
 	tabBuilding.bool_canbeowned = tobool(tabBuilding.bool_canbeowned)
 	openMenu()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	local _doors = 0
 	local _tmpDoors = ents.FindByClass("prop_door_rotating")
@@ -252,7 +252,7 @@ end
 
 function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 	openMenu()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	local OWNER = false
 	if door:GetDString("ownerGroup", "") == "" and tonumber(door:GetDString("ownerCharID")) == tonumber(LocalPlayer():CharID()) then

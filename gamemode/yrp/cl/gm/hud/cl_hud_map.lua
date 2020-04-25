@@ -58,7 +58,6 @@ function openMap()
 				self:ShowCloseButton(false)
 			end
 			if map != nil then
-				local ply = lply
 				draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 254))					 --_map.window of Map
 
 				local win = {}
@@ -73,8 +72,8 @@ function openMap()
 
 				local _testHeight = 4000
 				local tr = util.TraceLine({
-					start = ply:GetPos() + Vector(0, 0, 16),
-					endpos = ply:GetPos() + Vector(0, 0, _testHeight),
+					start = lply:GetPos() + Vector(0, 0, 16),
+					endpos = lply:GetPos() + Vector(0, 0, _testHeight),
 					filter = _filterENTS
 				})
 				local _height = 0
@@ -212,7 +211,7 @@ function openMap()
 				local y = plyPos.y
 				local w = YRP.ctr(50)
 				local h = YRP.ctr(50)
-				local rot = ply:EyeAngles().y - 90
+				local rot = lply:EyeAngles().y - 90
 
 				surface.SetDrawColor(100, 100, 255, 255)
 				surface.SetMaterial(YRP.GetDesignIcon("navigation"))
@@ -220,8 +219,8 @@ function openMap()
 				draw.SimpleTextOutlined(YRP.lang_string("LID_you"), "Y_24_500", plyPos.x, plyPos.y-YRP.ctr(50), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				--Coords
-				draw.SimpleTextOutlined(math.Round(ply:GetPos().x, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleTextOutlined(", " .. math.Round(ply:GetPos().y, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(math.Round(lply:GetPos().x, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(", " .. math.Round(lply:GetPos().y, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 				draw.SimpleTextOutlined("[M] - " .. YRP.lang_string("LID_map") .. ": " .. _mapName, "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 

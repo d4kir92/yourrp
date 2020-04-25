@@ -2,8 +2,6 @@
 
 local PANEL = {}
 
-local lply = LocalPlayer()
-
 local w = 10
 local h = 10
 
@@ -38,6 +36,7 @@ function PANEL:SetIcon(ico)
 end
 
 function PANEL:Paint(pw, ph)
+	local lply = LocalPlayer()
 	draw.RoundedBoxEx(YRP.ctr(14), 0, YRP.ctr(10), YRP.ctr(20), ph - YRP.ctr(10), self._ccol, false, false, true, false)--self._ccol)
 	draw.RoundedBoxEx(YRP.ctr(14), YRP.ctr(10), YRP.ctr(10), pw - 1 * YRP.ctr(10), ph - 1 * YRP.ctr(10), lply:InterfaceValue("YFrame", "NC"), false, false, false, true)--self._ccol)
 end
@@ -74,7 +73,6 @@ end
 local NEXTS = {}
 
 function PANEL:Init()
-	lply = LocalPlayer()
 	self:SetText("")
 
 	self._open = false
@@ -95,6 +93,7 @@ function PANEL:Init()
 	end
 	local sbar = self.con.VBar
 	function sbar:Paint(w, h)
+		local lply = LocalPlayer()
 		draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
 	end
 	function sbar.btnUp:Paint(w, h)
@@ -104,6 +103,7 @@ function PANEL:Init()
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 	end
 	function sbar.btnGrip:Paint(w, h)
+		local lply = LocalPlayer()
 		draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
 	end
 
@@ -111,6 +111,7 @@ function PANEL:Init()
 	self.btn = createD("DButton", self, 10, 10, 0, 0)
 	self.btn:SetText("")
 	function self.btn:Paint(pw, ph)
+		local lply = LocalPlayer()
 		draw.RoundedBoxEx(YRP.ctr(10), 0, 0, YRP.ctr(20), ph, base._hcol, true, false, false, false)
 		draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, lply:InterfaceValue("YFrame", "PC"), false, true, false, false)
 
@@ -140,6 +141,7 @@ function PANEL:Init()
 
 		local sbar = list.VBar
 		function sbar:Paint(w, h)
+			local lply = LocalPlayer()
 			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
 		end
 		function sbar.btnUp:Paint(w, h)
@@ -149,6 +151,7 @@ function PANEL:Init()
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 		end
 		function sbar.btnGrip:Paint(w, h)
+			local lply = LocalPlayer()
 			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
 		end
 
@@ -181,6 +184,7 @@ function PANEL:Init()
 	
 		local bg = createD("DPanel", r, YRP.ctr(w), YRP.ctr(h), 0, 0)
 		function bg:Paint(pw, ph)
+			local lply = LocalPlayer()
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, YRP.ctr(20), ph, StringToColor(rol.string_color), true, false, true, false)
 			draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, lply:InterfaceValue("YFrame", "PC"), false, true, false, true)
 
@@ -288,6 +292,7 @@ function PANEL:Init()
 		local btn = createD("DButton", bg, bg:GetWide(), bg:GetTall(), 0, 0)
 		btn:SetText("")
 		function btn:Paint(pw, ph)
+			local lply = LocalPlayer()
 			if rol.int_prerole == 0 and (!rol.bool_locked or lply:HasAccess()) and rol.int_requireslevel <= lply:Level() then
 				if self:IsHovered() then
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 10))
@@ -301,6 +306,7 @@ function PANEL:Init()
 			end
 		end
 		function btn:DoClick()
+			local lply = LocalPlayer()
 			rol.int_prerole = tonumber(rol.int_prerole)
 			if (!rol.bool_locked or lply:HasAccess()) and rol.int_requireslevel <= lply:Level() then
 				lply:SetDString("charcreate_ruid", rol.uniqueID)
@@ -384,6 +390,7 @@ function PANEL:Init()
 	end
 
 	function self.btn:DoClick()
+		local lply = LocalPlayer()
 		base._open = !base._open
 		if base._open then
 			net.Receive("yrp_roleselection_getcontent", function(len)

@@ -346,7 +346,7 @@ function CreateRoleSelectionContent(PARENT)
 	end
 
 	
-	local site = createD("DPanel", parent, ScW(), ScH(), 0, 0)
+	local site = createD("DPanel", parent, ScrW(), ScrH(), 0, 0)
 	function site:Paint(pw, ph)
 		if !LocalPlayer():GetDBool("cc", true) then
 			if self:GetWide() != parent:GetWide() then

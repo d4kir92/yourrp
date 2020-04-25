@@ -149,7 +149,7 @@ function CreateFactionSelectionContent()
 							self:SetFGColor(Color(255, 255, 255))
 						end
 
-						local join = createD("DButton", faction, faction:GetWide(), faction:GetTall(), 0, 0)
+						local join = createD("DButton", faction, faction:GetWide() - YRP.ctr(60), faction:GetTall(), 0, 0)
 						join:SetText("")
 						function join:Paint(pw, ph)
 							if self:IsHovered() then

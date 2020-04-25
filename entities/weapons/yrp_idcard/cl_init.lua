@@ -26,14 +26,14 @@ end
 hook.Add("PostDrawTranslucentRenderables", "yrp_draw_idcards", YDrawIDCards)
 
 hook.Add("HUDPaint", "yrp_yrp_idcard", function()
-	local ply = LocalPlayer()
-	local weapon = ply:GetActiveWeapon()
+	local lply = LocalPlayer()
+	local weapon = lply:GetActiveWeapon()
 	if weapon:IsValid() and weapon:GetClass() == "yrp_idcard" then
 		local scale = YRP.ctr(900) / GetGlobalDInt("int_" .. "background" .. "_w", 100)
 		local w = GetGlobalDInt("int_" .. "background" .. "_w", 100)
 		local h = GetGlobalDInt("int_" .. "background" .. "_h", 100)
 		w = w * scale
 		h = h * scale
-		drawIDCard(ply, scale, ScrW() - w - YRP.ctr(200), ScrH() - h - YRP.ctr(200))
+		drawIDCard(lply, scale, ScrW() - w - YRP.ctr(200), ScrH() - h - YRP.ctr(200))
 	end
 end)

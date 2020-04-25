@@ -68,6 +68,7 @@ function yts(str , str2)
 end
 
 function ErrorValidToSend(str)
+	str = tostring(str)
 
 	if game.SinglePlayer() then
 		return false
@@ -82,15 +83,7 @@ function ErrorValidToSend(str)
 		return false
 	end
 
-	local tab = string.Explode("\n", str)
-	local gmbug = false
-	for i, v in pairs(tab) do
-		if i == 1 and (yts(v, "yourrp") or yts(v, "yrp")) then
-			gmbug = true
-		end
-	end
-
-	if gmbug and string.StartWith(str, "[") and (yts(str, "/yrp/") or yts(str, "yourrp")) and !yts(str, "database or disk is full") and !yts(str , "<eof>") then
+	if string.StartWith(str, "[") and (yts(str, "/yrp/") or yts(str, "yourrp")) and !yts(str, "database or disk is full") and !yts(str , "<eof>") then
 		return true
 	else
 		return false
@@ -283,10 +276,10 @@ function send_error(realm, str, force)
 				entry["entry.1106559712"] = game.GetIPAddress() or "0.0.0.0:99999"
 				entry["entry.1029765769"] = dedi
 				if CLIENT then
-					local ply = LocalPlayer()
+					local lply = LocalPlayer()
 					local _steamid = "UNKNOWN"
-					if ea(ply) then
-						_steamid = ply:SteamID()
+					if ea(lply) then
+						_steamid = lply:SteamID()
 					end
 					entry["entry.1898856001"] = tostring(_steamid)
 				else
@@ -385,6 +378,8 @@ function SendAllErrors(str)
 	_sv_errors = update_error_table_sv()
 	send_errors("server", _sv_errors)
 end
+
+SendAllErrors("instant")
 
 local first = true
 timer.Create("update_error_tables", 20, 0, function()

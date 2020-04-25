@@ -51,7 +51,7 @@ function get_icon_burger_menu()
 end
 
 function F8RequireUG(site, usergroups)
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 	local ugs = string.Explode(", ", usergroups)
 
 	if !pa(settingsWindow) then return end

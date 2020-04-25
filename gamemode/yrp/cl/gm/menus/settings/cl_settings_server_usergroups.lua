@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local ply = LocalPlayer()
+local lply = LocalPlayer()
 
 local UGS = UGS or {}
 
@@ -205,9 +205,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		surfaceButton(self, pw, ph, YRP.lang_string("LID_change"))
 	end
 	hook.Add("selector_usergroup_string_sweps", "selector_usergroup_string_sweps", function()
-		ply = LocalPlayer()
-		if ply.global_working != nil then
-			local string_sweps = ply.global_working
+		local lply = LocalPlayer()
+		if lply.global_working != nil then
+			local string_sweps = lply.global_working
 			if wk(string_sweps) then
 				net.Start("usergroup_update_string_sweps")
 					net.WriteString(CURRENT_USERGROUP)

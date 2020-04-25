@@ -29,7 +29,7 @@ YRPKEYBINDS["toggle_mouse"] = KEY_F3
 YRPKEYBINDS["toggle_map"] = KEY_M
 YRPKEYBINDS["drop_item"] = KEY_G
 
-YRPKEYBINDS["menu_interact"] = KEY_E
+YRPKEYBINDS["menu_interact"] = KEY_K
 
 YRPKEYBINDS["sp_open"] = KEY_UP
 YRPKEYBINDS["sp_close"] = KEY_DOWN
@@ -68,10 +68,10 @@ function get_keybind(name)
 	return tonumber(yrp_keybinds[name]) or -1
 end
 
-function set_keybind(name, value)
+function set_keybind(name, value, force)
 	if value != 0 then
 		for n, v in pairs(yrp_keybinds) do
-			if n == "version" then
+			if n == "version" or force then
 				continue
 			end
 			if tonumber(value) == tonumber(v) and name != n and !string.StartWith(n, "menu_options_") then
@@ -79,6 +79,7 @@ function set_keybind(name, value)
 			end
 		end
 	end
+
 	local result = SQL_UPDATE(DATABASE_NAME, "'" .. name .. "' = '" .. value .. "'", "uniqueID = '" .. 1 .. "'")
 	yrp_keybinds[name] = value
 	return true
@@ -142,7 +143,7 @@ end
 check_yrp_keybinds()
 
 if get_keybind("menu_interact") == KEY_E then
-	set_keybind("menu_interact", KEY_K)
+	set_keybind("menu_interact", KEY_K, true)
 end
 
 function YResetKeybinds()

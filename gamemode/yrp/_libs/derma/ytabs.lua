@@ -34,7 +34,7 @@ function PANEL:AddOption(name, func, height)
 	height = height or 100
 	self.height = height
 	self:UPDATESIZE()
-	print("height", height)
+
 	local tab = createD("DButton", nil, YRP.ctr(400), YRP.ctr(height), 0, 0)
 	tab:SetText("")
 	tab.tabs = self

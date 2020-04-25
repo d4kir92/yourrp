@@ -125,7 +125,7 @@ function SWEP:PrimaryAttack()
 	if self.pdelay < CurTime() then
 		self.pdelay = CurTime() + 0.4
 		if CLIENT then
-			local ply = LocalPlayer()
+			local lply = LocalPlayer()
 			if self.startpos == nil then
 				self.startpos = string.Explode(" ", tostring(ply:GetPos()))
 				self.startang = string.Explode(" ", tostring(ply:GetAngles()))

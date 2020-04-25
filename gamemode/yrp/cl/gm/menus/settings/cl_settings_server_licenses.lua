@@ -80,7 +80,7 @@ end)
 
 hook.Add("open_server_licenses", "open_server_licenses", function()
 	SaveLastSite()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	net.Start("get_licenses")
 	net.SendToServer()

@@ -4,7 +4,7 @@ function openCharacterCreation()
 	if CharacterMenu == nil then
 		openMenu()
 		
-		local win = createD("DFrame", nil, ScW(), ScH(), 0, 0)
+		local win = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 		win:MakePopup()
 		win:Center()
 		win:SetTitle("")
@@ -91,7 +91,7 @@ function openCharacterSelection()
 			closeMenu()
 		end
 
-		_cs.frame.bg = createD("DHTML", _cs.frame, ScW(), ScH(), PosX(), 0)
+		_cs.frame.bg = createD("DHTML", _cs.frame, ScrW(), ScrH(), 0, 0)
 		_cs.frame.bg.url = ""
 
 		_cs.frame.bgcf = createD("DPanel", _cs.frame.bg, _cs.frame.bg:GetWide(), _cs.frame.bg:GetTall(), 0, 0)
@@ -110,7 +110,7 @@ function openCharacterSelection()
 			local newurl = GetGlobalDString("text_character_background", "")
 			if oldurl != newurl then
 				_cs.frame.bg.url = newurl
-				_cs.frame.bg:SetHTML(GetHTMLImage(newurl, ScW(), ScH())) -- url?
+				_cs.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
 			end
 		end
 

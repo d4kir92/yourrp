@@ -596,6 +596,8 @@ net.Receive("shop_get_tabs", function(len)
 end)
 
 function CreateBuyMenuContent(parent, uid)
+	local lply = LocalPlayer()
+
 	uid = uid or 1
 	
 	if IsValid(parent) then

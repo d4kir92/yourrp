@@ -13,7 +13,7 @@ ENT.name = {}
 ENT.SteamID = {}
 
 function ENT:Draw()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	if self.display == nil then
 		self.display = vgui.Create("DFrame")
@@ -25,7 +25,7 @@ function ENT:Draw()
 		self.display.ent = self
 
 		function self.display:Paint(pw, ph)
-			local bankName = "YRP Bank [" .. GetGlobalDString("text_money_pre", "") .. ply:GetDString("moneybank", "-1") .. GetGlobalDString("text_money_pos", "") .. "]"
+			local bankName = "YRP Bank [" .. GetGlobalDString("text_money_pre", "") .. lply:GetDString("moneybank", "-1") .. GetGlobalDString("text_money_pos", "") .. "]"
 			if self.ent:GetDString("status") == "startup" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0))
 				draw.SimpleTextOutlined("..." .. YRP.lang_string("LID_loading") .. "...", "Y_80_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -220,7 +220,7 @@ function ENT:Draw()
 		end
 	end
 
-	if ply:GetPos():Distance(self:GetPos()) < 2200 then
+	if lply:GetPos():Distance(self:GetPos()) < 2200 then
 		self:DrawModel()
 
 		local ang = self:GetAngles()

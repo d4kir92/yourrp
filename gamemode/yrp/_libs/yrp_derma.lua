@@ -41,6 +41,7 @@ local mat = Material("pp/blurscreen")
 mat:SetFloat("$blur", 3)
 mat:Recompute()
 local function DrawBlur(px, py, sw, sh, alpha)
+
 	alpha = alpha or 100
 	alpha = math.Clamp(alpha, 0, 100)
 

@@ -446,7 +446,7 @@ end)
 
 hook.Add("open_server_shops", "open_server_shops", function()
 	SaveLastSite()
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	local w = settingsWindow.window.site:GetWide()
 	local h = settingsWindow.window.site:GetTall()

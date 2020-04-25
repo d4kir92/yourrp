@@ -25,12 +25,12 @@ function showSecurityLevel(door)
 end
 
 function HudView()
-	local ply = LocalPlayer()
-	local _eyeTrace = ply:GetEyeTrace()
+	local lply = LocalPlayer()
+	local _eyeTrace = lply:GetEyeTrace()
 
 	local ent = _eyeTrace.Entity
 	if ea(ent) then
-		local plypos = ply:GetPos()
+		local plypos = lply:GetPos()
 		local entpos = ent:WorldSpaceCenter()
 		if entpos == Vector(0, 0, 0) then
 			entpos = ent:GetPos()
@@ -44,18 +44,18 @@ function HudView()
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopen", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			local canbeowned = tobool(_eyeTrace.Entity:GetDTable("building", {}).bool_canbeowned)
-			if canbeowned or ply:HasAccess() then
+			if canbeowned or lply:HasAccess() then
 				local tab2 = {}
 				tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_door")) .. "]"
 				draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopensettings", tab2), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				showOwner(_eyeTrace)
 				showSecurityLevel(_eyeTrace.Entity)
 			end
-		elseif _eyeTrace.Entity:IsVehicle() and !ply:InVehicle() then
+		elseif _eyeTrace.Entity:IsVehicle() and !lply:InVehicle() then
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleTextOutlined(YRP.lang_string("LID_presstogetin", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			if _eyeTrace.Entity:GetDString("ownerRPName") == ply:Nick() then
+			if _eyeTrace.Entity:GetDString("ownerRPName") == lply:Nick() then
 				local tab2 = {}
 				tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_vehicle")) .. "]"
 				draw.SimpleTextOutlined(YRP.lang_string("LID_presstoopensettings", tab2), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -66,7 +66,7 @@ function HudView()
 				local plycol = _eyeTrace.Entity:GetColor()
 				local tab = {}
 				tab["NAME"] = tostring(_eyeTrace.Entity:RPName())
-				tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+				tab["KEY"] = "[" .. string.upper(GetKeybindName("menu_interact")) .. "]"
 				draw.SimpleTextOutlined(YRP.lang_string("LID_presstointeractwith", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, plycol.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 		elseif _eyeTrace.Entity:IsNPC() then

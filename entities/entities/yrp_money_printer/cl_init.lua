@@ -3,7 +3,7 @@
 include("shared.lua")
 
 function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full)
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 	local tmp = createD("DPanel", parent, w, h, x, y)
 	function tmp:Paint(pw, ph)
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
@@ -49,7 +49,7 @@ end
 
 local upgradeframe = nil
 net.Receive("getMoneyPrintMenu", function(len)
-	local ply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	local mp = net.ReadEntity()
 
@@ -171,8 +171,8 @@ net.Receive("getMoneyPrintMenu", function(len)
 end)
 
 function ENT:Draw()
-	local ply = LocalPlayer()
-	local dist = ply:GetPos():Distance(self:GetPos())
+	local lply = LocalPlayer()
+	local dist = lply:GetPos():Distance(self:GetPos())
 	if dist < 2800 then
 		self:DrawModel()
 	end
