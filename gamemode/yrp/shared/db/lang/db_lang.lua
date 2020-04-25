@@ -84,6 +84,8 @@ function YRPTestContentAddons()
 				if addon.mounted and addon.downloaded then
 					hascontent = true
 					SetGlobalDBool("hascontent", true)
+				else
+					YRP.msg("note", "YOURRP CONTENT IS NOT MOUNTED/DOWNLOADED!")
 				end
 			elseif addon.wsid == "1964961396" and addon.mounted and addon.downloaded then
 				hasfakecontent = true

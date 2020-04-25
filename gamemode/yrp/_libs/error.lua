@@ -78,9 +78,9 @@ function ErrorValidToSend(str)
 	end
 
 	if CLIENT and LocalPlayer():GetDBool("isserverdedicated") == false then
-		return false
+		--return false
 	elseif SERVER and game.IsDedicated() == false then
-		return false
+		--return false
 	end
 
 	if string.StartWith(str, "[") and (yts(str, "/yrp/") or yts(str, "yourrp")) and !yts(str, "database or disk is full") and !yts(str , "<eof>") then
