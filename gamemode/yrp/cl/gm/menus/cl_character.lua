@@ -162,7 +162,7 @@ function openCharacterSelection()
 			end
 		end
 
-		local characterList = createD("DScrollPanel", charactersBackground, YRP.ctr(fw), ScrH() - (2 * border), 0, 0)
+		local characterList = createD("DScrollPanel", charactersBackground, YRP.ctr(fw) - br, ScrH() - (2 * border) - br - YRP.ctr(120), 0, br)
 
 		net.Receive("yrp_get_characters", function(len)
 			printGM("gm", "received characterlist")
@@ -193,7 +193,7 @@ function openCharacterSelection()
 					for i = 1, #_characters do
 						if _characters[i].char != nil then
 							cache[i] = {}
-							cache[i].tmpChar = createD("YButton", characterList, YRP.ctr(fw) - 2 * br, YRP.ctr(200), br, br + y * YRP.ctr(200) + y * br, br)
+							cache[i].tmpChar = createD("YButton", characterList, YRP.ctr(fw) - 2 * br, YRP.ctr(200), br, br + y * YRP.ctr(200) + y * br, 0)
 							local tmpChar = cache[i].tmpChar
 							tmpChar:SetText("")
 
@@ -323,7 +323,7 @@ function openCharacterSelection()
 			net.SendToServer()
 		end)
 
-		local deleteChar = createD("YButton", characterList, YRP.ctr(80), YRP.ctr(80), br, characterList:GetTall() - YRP.ctr(80) - br)
+		local deleteChar = createD("YButton", charactersBackground, YRP.ctr(80), YRP.ctr(80), br, characterList:GetTall() + YRP.ctr(40))
 		deleteChar:SetText("")
 		function deleteChar:Paint(pw, ph)
 			hook.Run("YRemovePaint", self, pw, ph)
@@ -354,7 +354,7 @@ function openCharacterSelection()
 		end
 
 		local button = {}
-		local charactersCreate = createD("YButton", characterList, YRP.ctr(80), YRP.ctr(80), characterList:GetWide() - YRP.ctr(80) - br, characterList:GetTall() - YRP.ctr(80) - br)
+		local charactersCreate = createD("YButton", charactersBackground, YRP.ctr(80), YRP.ctr(80), characterList:GetWide() - YRP.ctr(40) - 2 * br, characterList:GetTall() + YRP.ctr(40))
 		charactersCreate:SetText("")
 		function charactersCreate:Paint(pw, ph)
 			if character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then

@@ -519,6 +519,22 @@ function GetPMTableOfRole(ruid)
 end
 
 --[[ Server Send Characters to Client ]]--
+function SendLoopCharacterList(ply, tab)
+	if net.BytesLeft() == nil then
+		net.Start("yrp_get_characters")
+			net.WriteTable(tab)
+		net.Send(ply)
+
+		timer.Simple(2, function()
+			ply:SetDBool("loadedchars", true)
+		end)
+	else
+		timer.Simple(0.1, function()
+			SendLoopCharacterList(ply, tab)
+		end)
+	end
+end
+
 function send_characters(ply)
 	local netTable = {}
 
@@ -581,13 +597,7 @@ function send_characters(ply)
 		netTable.plytab = plytab
 		netTable.chars = chars
 
-		net.Start("yrp_get_characters")
-			net.WriteTable(netTable)
-		net.Send(ply)
-
-		timer.Simple(2, function()
-			ply:SetDBool("loadedchars", true)
-		end)
+		SendLoopCharacterList(ply, netTable)
 	else
 		printGM("note", "[send_characters] plytab failed! " .. tostring(plytab))
 	end
