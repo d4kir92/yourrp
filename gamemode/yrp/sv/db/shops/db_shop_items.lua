@@ -355,7 +355,7 @@ function spawnItem(ply, item, duid)
 			if ENT.t != nil and ENT.t.SpawnFunction != nil then
 				ent = ENT.t:SpawnFunction(ply, tr, item.ClassName)
 
-				ent:SetOwner(ply)
+				--ent:SetOwner(ply)
 				ent:SetDEntity("yrp_owner", ply)
 				ent:Activate()
 
@@ -393,7 +393,7 @@ function spawnItem(ply, item, duid)
 
 				printGM("gm", "[spawnItem] Spawned 3")
 
-				ent:SetOwner(ply)
+				--ent:SetOwner(ply)
 				ent:SetDEntity("yrp_owner", ply)
 
 				ent:Activate()
@@ -427,7 +427,7 @@ function spawnItem(ply, item, duid)
 			
 					printGM("gm", "[spawnItem] Spawned 4")
 
-					ent:SetOwner(ply)
+					--ent:SetOwner(ply)
 					ent:SetDEntity("yrp_owner", ply)
 
 					return true, ent
