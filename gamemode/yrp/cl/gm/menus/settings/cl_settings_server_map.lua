@@ -62,72 +62,66 @@ function getCopyMapPNG()
 end
 
 net.Receive("getMapSite", function(len)
-	if wk(settingsWindow.window) then
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 		if len > 512000 then
 			printGM("note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)")
 		end
 		local lply = LocalPlayer()
-		if pa(settingsWindow.window) then
-			local parent = settingsWindow.window.site
-			local site = parent
-			local tabs = createD("YTabs", parent, site:GetWide(), site:GetTall(), 0, 0)
-			tabs:SetTabWide(540)
-			function tabs:Think()
-				self:SetSize(site:GetWide(), site:GetTall())
+
+		local tabs = createD("YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+		tabs:SetTabWide(540)
+		function tabs:Think()
+			if pa(PARENT) then
+				self:SetSize(PARENT:GetWide(), PARENT:GetTall())
 			end
-			settingsWindow.window.site.tabs = tabs
-
-			--[[settingsWindow.window.site.tabpage = createD("DPanel", parent, parent:GetWide(), parent:GetTall(), 0, YRP.ctr(100))
-			function settingsWindow.window.site.tabpage:Paint(pw, ph)
-			end
-
-			local tabpage = settingsWindow.window.site.tabpage]]
-
-			-- GROUPS AND ROLES
-			tabs:AddOption("LID_groupspawnpoints", function(parent)
-				net.Start("getMapTab")
-					net.WriteString("groupspawnpoints")
-				net.SendToServer()
-			end)
-			tabs:AddOption("LID_rolespawnpoints", function(parent)
-				net.Start("getMapTab")
-					net.WriteString("rolespawnpoints")
-				net.SendToServer()
-			end)
-
-			-- SHOPS
-			tabs:AddOption("LID_dealers", function(parent)
-				net.Start("getMapTab")
-					net.WriteString("dealers")
-				net.SendToServer()
-			end)
-			tabs:AddOption("LID_storagepoints", function(parent)
-				net.Start("getMapTab")
-					net.WriteString("storagepoints")
-				net.SendToServer()
-			end)
-
-			-- JAIL
-			tabs:AddOption("LID_jailpoint", function(parent)
-				net.Start("getMapTab")
-					net.WriteString("jailpoints")
-				net.SendToServer()
-			end)
-			tabs:AddOption("LID_releasepoint", function(parent)
-				net.Start("getMapTab")
-					net.WriteString("releasepoints")
-				net.SendToServer()
-			end)
-
-			-- OTHER THINGS
-			tabs:AddOption("LID_other", function(parent)
-				net.Start("getMapTab")
-					net.WriteString("other")
-				net.SendToServer()
-			end)
-
-			tabs:GoToSite("LID_groupspawnpoints")
 		end
+		PARENT.maptabs = tabs
+
+		-- GROUPS AND ROLES
+		tabs:AddOption("LID_groupspawnpoints", function(parent)
+			net.Start("getMapTab")
+				net.WriteString("groupspawnpoints")
+			net.SendToServer()
+		end)
+		tabs:AddOption("LID_rolespawnpoints", function(parent)
+			net.Start("getMapTab")
+				net.WriteString("rolespawnpoints")
+			net.SendToServer()
+		end)
+
+		-- SHOPS
+		tabs:AddOption("LID_dealers", function(parent)
+			net.Start("getMapTab")
+				net.WriteString("dealers")
+			net.SendToServer()
+		end)
+		tabs:AddOption("LID_storagepoints", function(parent)
+			net.Start("getMapTab")
+				net.WriteString("storagepoints")
+			net.SendToServer()
+		end)
+
+		-- JAIL
+		tabs:AddOption("LID_jailpoint", function(parent)
+			net.Start("getMapTab")
+				net.WriteString("jailpoints")
+			net.SendToServer()
+		end)
+		tabs:AddOption("LID_releasepoint", function(parent)
+			net.Start("getMapTab")
+				net.WriteString("releasepoints")
+			net.SendToServer()
+		end)
+
+		-- OTHER THINGS
+		tabs:AddOption("LID_other", function(parent)
+			net.Start("getMapTab")
+				net.WriteString("other")
+			net.SendToServer()
+		end)
+
+		tabs:GoToSite("LID_groupspawnpoints")
 	end
 end)
 
@@ -140,12 +134,10 @@ net.Receive("getMapTab", function(len)
 	local dbGrp = net.ReadTable()
 	local dbRol = net.ReadTable()
 
-	if !pa(settingsWindow) then return end
-	if !pa(settingsWindow.window) then return end
-	if !pa(settingsWindow.window.site) then return end
+	local PARENT = GetSettingsSite()
+	if !pa(PARENT) then return end
 
-	local parent = settingsWindow.window.site.tabs.site
-	--local parent = settingsWindow.window.site.tabpage
+	local parent = PARENT.maptabs.site
 
 	if !wk(parent) or !pa(parent) then return end
 	parent:Clear()
@@ -354,7 +346,7 @@ net.Receive("getMapTab", function(len)
 			net.Start("teleportto")
 				net.WriteString(mapList:GetLine(mapList:GetSelectedLine()):GetValue(1))
 			net.SendToServer()
-			settingsWindow.window:Remove()
+			GetSettingsSite():Remove()
 		end
 	end
 	function btnTeleport:Paint(pw, ph)
@@ -377,9 +369,7 @@ net.Receive("getMapTab", function(len)
 	end
 end)
 
-hook.Add("open_server_map", "open_server_map", function()
-	SaveLastSite()
-
+function OpenSettingsMap()
 	net.Start("getMapSite")
 	net.SendToServer()
-end)
+end

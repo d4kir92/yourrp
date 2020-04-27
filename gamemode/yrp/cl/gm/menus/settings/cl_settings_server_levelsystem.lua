@@ -4,13 +4,9 @@ net.Receive("get_levelsystem_settings", function(len)
 	local lply = LocalPlayer()
 	local setting = net.ReadTable()
 
-	if pa(settingsWindow.window) then
-
-		local Parent = settingsWindow.window.site
-
-
-
-		local GRP_LS = createD("YGroupBox", Parent, YRP.ctr(1000), YRP.ctr(530), YRP.ctr(20), YRP.ctr(20))
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
+		local GRP_LS = createD("YGroupBox", PARENT, YRP.ctr(1000), YRP.ctr(530), YRP.ctr(20), YRP.ctr(20))
 		GRP_LS:SetText("LID_levelsystem")
 		function GRP_LS:Paint(pw, ph)
 			hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -187,7 +183,7 @@ net.Receive("get_levelsystem_settings", function(len)
 
 
 
-		local GRP_XP = createD("YGroupBox", Parent, YRP.ctr(1000), YRP.ctr(530), YRP.ctr(1040), YRP.ctr(20))
+		local GRP_XP = createD("YGroupBox", PARENT, YRP.ctr(1000), YRP.ctr(530), YRP.ctr(1040), YRP.ctr(20))
 		GRP_XP:SetText("LID_levelsystem")
 		function GRP_XP:Paint(pw, ph)
 			hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -291,7 +287,7 @@ net.Receive("get_levelsystem_settings", function(len)
 
 
 		-- Diagramm
-		local diagramm = createD("YLabel", Parent, YRP.ctr(1600), YRP.ctr(800), YRP.ctr(2060), YRP.ctr(20))
+		local diagramm = createD("YLabel", PARENT, YRP.ctr(1600), YRP.ctr(800), YRP.ctr(2060), YRP.ctr(20))
 		diagramm:SetText("")
 		function diagramm:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
@@ -351,9 +347,7 @@ net.Receive("get_levelsystem_settings", function(len)
 	end
 end)
 
-hook.Add("open_server_levelsystem", "open_server_levelsystem", function()
-	SaveLastSite()
-
+function OpenSettingsLevelsystem()
 	net.Start("get_levelsystem_settings")
 	net.SendToServer()
-end)
+end

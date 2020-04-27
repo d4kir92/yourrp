@@ -310,7 +310,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 	site.cur = 1
 	site.max = 1
 	site.count = #tbl_list
-	local frame = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
+	local frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:Center()
 	frame:SetTitle("")
@@ -327,7 +327,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 	local item = {}
 	item.w = 740
 	item.h = 370
-	local _w = ScW() - YRP.ctr(20)
+	local _w = ScrW() - YRP.ctr(20)
 	local _h = ScrH() - YRP.ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = YRP.ctr(10)
 	local _y = YRP.ctr(50 + 10 + 50 + 10)
@@ -544,7 +544,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 		end
 	end
 
-	local nextB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), ScW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10))
+	local nextB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), ScrW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10))
 	nextB:SetText("")
 
 	function nextB:Paint(pw, ph)
@@ -595,7 +595,7 @@ function OpenSingleSelector(tab, closeF)
 	local _item = {}
 	_item.w = 740
 	_item.h = 370
-	local _w = ScW() - YRP.ctr(20)
+	local _w = ScrW() - YRP.ctr(20)
 	local _h = ScrH() - YRP.ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = YRP.ctr(10)
 	local _y = YRP.ctr(50 + 10 + 50 + 10)
@@ -615,7 +615,7 @@ function OpenSingleSelector(tab, closeF)
 	end
 
 	getMaxSite()
-	local frame = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
+	local frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:SetTitle(YRP.lang_string("Item Menu"))
 
@@ -740,7 +740,7 @@ function OpenSingleSelector(tab, closeF)
 		end
 	end
 
-	local nextB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), ScW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10))
+	local nextB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), ScrW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10))
 	nextB:SetText("")
 
 	function nextB:Paint(pw, ph)
@@ -789,7 +789,7 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 	site.max = 1
 	site.count = #tab
 	local table2 = string.Explode(",", _globalWorking)
-	local frame = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
+	local frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:Center()
 	frame:SetTitle("")
@@ -806,7 +806,7 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 	local item = {}
 	item.w = 740
 	item.h = 370
-	local _w = ScW() - YRP.ctr(20)
+	local _w = ScrW() - YRP.ctr(20)
 	local _h = ScrH() - YRP.ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = YRP.ctr(10)
 	local _y = YRP.ctr(50 + 10 + 50 + 10)
@@ -1037,7 +1037,7 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 		end
 	end
 
-	local nextB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), ScW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10))
+	local nextB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), ScrW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10))
 	nextB:SetText("")
 
 	function nextB:Paint(pw, ph)
@@ -1089,7 +1089,7 @@ function openSingleSelector(tab, closeF, web)
 	local _item = {}
 	_item.w = 740
 	_item.h = 370
-	local _w = ScW() - YRP.ctr(20)
+	local _w = ScrW() - YRP.ctr(20)
 	local _h = ScrH() - YRP.ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = YRP.ctr(10)
 	local _y = YRP.ctr(50 + 10 + 50 + 10)
@@ -1109,7 +1109,7 @@ function openSingleSelector(tab, closeF, web)
 	end
 
 	getMaxSite()
-	local frame = createD("DFrame", nil, ScW(), ScrH(), 0, 0)
+	local frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:SetTitle(YRP.lang_string("Item Menu"))
 
@@ -1236,7 +1236,7 @@ function openSingleSelector(tab, closeF, web)
 		end
 	end
 
-	local nextB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), ScW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10))
+	local nextB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), ScrW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10))
 	nextB:SetText("")
 
 	function nextB:Paint(pw, ph)
@@ -2264,7 +2264,7 @@ hook.Add("Think", "openDeathScreen", function(len)
 			end
 		end
 
-		win.respawn = createD("YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScH() - YRP.ctr(400))
+		win.respawn = createD("YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScrH() - YRP.ctr(400))
 		win.respawn:SetText("LID_respawnnow")
 		function win.respawn:DoClick()
 			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
@@ -2289,7 +2289,7 @@ hook.Add("Think", "openDeathScreen", function(len)
 			end
 		end
 
-		win.changecharacter = createD("YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScH() - YRP.ctr(250))
+		win.changecharacter = createD("YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScrH() - YRP.ctr(250))
 		win.changecharacter:SetText("LID_changecharacter")
 		function win.changecharacter:DoClick()
 			ds = false

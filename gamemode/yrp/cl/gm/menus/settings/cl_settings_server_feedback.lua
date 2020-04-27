@@ -163,9 +163,10 @@ net.Receive("get_ticket", function()
 	local lply = LocalPlayer()
 	local _fbt = net.ReadTable()
 
-	if settingsWindow.window != nil then
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 
-		local site = settingsWindow.window.site
+		local site = PARENT
 
 		local tabs = createD("YTabs", site, ScW(), ScH() - YRP.ctr(100), 0, 0)
 
@@ -185,10 +186,7 @@ net.Receive("get_ticket", function()
 	end
 end)
 
-hook.Add("open_server_feedback", "open_server_feedback", function()
-	SaveLastSite()
-	local lply = LocalPlayer()
-
+function OpenSettingsFeedback()
 	net.Start("get_ticket")
 	net.SendToServer()
-end)
+end

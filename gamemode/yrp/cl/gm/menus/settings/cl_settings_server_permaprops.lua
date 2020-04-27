@@ -79,9 +79,8 @@ end)
 
 
 function CreatePermaPropsSetting()
-	if pa(settingsWindow.window) then
-		local PARENT = settingsWindow.window.site
-
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 		pp.list = createD("DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 		pp.list:EnableVerticalScrollbar()
 		pp.list:SetSpacing(YRP.ctr(20))
@@ -101,6 +100,6 @@ function CreatePermaPropsSetting()
 	end
 end
 
-hook.Add("open_server_permaprops", "open_server_permaprops", function()
+function OpenSettingsPermaProps()
 	CreatePermaPropsSetting()
-end)
+end

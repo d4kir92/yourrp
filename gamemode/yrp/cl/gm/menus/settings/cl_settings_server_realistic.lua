@@ -1,9 +1,8 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 net.Receive("Connect_Settings_Realistic", function(len)
-	if pa(settingsWindow) then
-
-		local PARENT = settingsWindow.window.site
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 
 		function PARENT:OnRemove()
 			net.Start("Disconnect_Settings_Realistic")
@@ -104,9 +103,7 @@ net.Receive("Connect_Settings_Realistic", function(len)
 	end
 end)
 
-hook.Add("open_server_realistic", "open_server_realistic", function()
-	SaveLastSite()
-	
+function OpenSettingsRealistic()
 	net.Start("Connect_Settings_Realistic")
 	net.SendToServer()
-end)
+end

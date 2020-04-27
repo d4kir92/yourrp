@@ -24,10 +24,8 @@ function AddStatusLine(parent, cat, entry, str_id, color)
 end
 
 net.Receive("Connect_Settings_Status", function(len)
-	if pa(settingsWindow.window) then
-
-		local PARENT = settingsWindow.window.site
-
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 		function PARENT:OnRemove()
 			net.Start("Disconnect_Settings_Status")
 			net.SendToServer()
@@ -105,9 +103,7 @@ net.Receive("Connect_Settings_Status", function(len)
 	end
 end)
 
-hook.Add("open_server_status", "open_server_status", function()
-	SaveLastSite()
-	
+function OpenSettingsStatus()
 	net.Start("Connect_Settings_Status")
 	net.SendToServer()
-end)
+end

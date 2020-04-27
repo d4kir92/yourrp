@@ -143,13 +143,11 @@ function OpenCombinedMenu()
 		sites[c].content = CreateHelpMenuContent
 		c = c + 1
 
-		--if GetGlobalDBool("bool_players_can_switch_role", false) then
-			sites[c] = {}
-			sites[c].name = "LID_roles"
-			sites[c].icon = "person_pin"
-			sites[c].content = CreateRoleMenuContent
-			c = c + 1
-		--end
+		sites[c] = {}
+		sites[c].name = "LID_roles"
+		sites[c].icon = "person_pin"
+		sites[c].content = CreateRoleMenuContent
+		c = c + 1
 
 		sites[c] = {}
 		sites[c].name = "LID_shop"
@@ -242,12 +240,6 @@ function OpenCombinedMenu()
 		sites[c].content = CreateKeybindsContent
 		c = c + 1
 
-		--[[sites[c] = {}
-		sites[c].name = "LID_commands"
-		sites[c].icon = "code"
-		--sites[c].content = 
-		c = c + 1]]
-
 		sites[c] = {}
 		sites[c].name = "hr"
 		c = c + 1
@@ -280,17 +272,14 @@ function OpenCombinedMenu()
 		local font = "Y_" .. math.Clamp(math.Round(cm.menu.ph - 2 * br), 4, 100) ..  "_700"
 		function cm.menu:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
-			--hook.Run("YPanelPaint", self, pw, ph)
-
-			--[[local gm = "YourRP by D4KiR"
-			draw.SimpleText(gm, "Y_18_500", br, ph - br - YRP.ctr(40), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-			local vert = "Version:"
-			local vern = GAMEMODE.Version
-			draw.SimpleText(vert, "Y_18_500", br, ph - br, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-			draw.SimpleText(vern, "Y_18_500", br + YRP.ctr(120), ph - br, GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)]]
 		end
 		cm.menu:SetSpacing(YRP.ctr(20))
-		
+		if cm.menu.expanded then
+			cm.win:UpdateSize(cm.menu.ph)
+		else
+			cm.win:UpdateSize()
+		end
+
 		cm.menu.expander = createD("DButton", cm.menu, cm.menu.ph, cm.menu.ph, 0, cm.menu:GetTall() - cm.menu.ph)
 		cm.menu.expander:SetText("")
 		function cm.menu.expander:DoClick()
@@ -382,7 +371,7 @@ function OpenCombinedMenu()
 					local tw, th = surface.GetTextSize(YRP.lang_string(v.name))
 					if tw > cm.menu.pw then
 						cm.menu.pw = tw
-						cm.win:UpdateSize()
+						--cm.win:UpdateSize()
 					end
 					draw.SimpleText(YRP.lang_string(v.name), font, ph, ph / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
@@ -411,7 +400,11 @@ function OpenCombinedMenu()
 				cm.menu:AddItem(site)
 			end
 		end
-		cm.win:UpdateSize()
+		if cm.menu.expanded == true then
+			cm.win:UpdateSize()
+		else
+			cm.win:UpdateSize(cm.menu.ph)
+		end
 	elseif pa(cm.win) then
 		cm.win:Show()
 		for i, site in pairs(cm.sites) do

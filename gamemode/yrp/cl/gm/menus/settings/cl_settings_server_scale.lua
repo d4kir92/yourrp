@@ -3,8 +3,8 @@
 -- #scale
 
 function BuildScaleSite()
-	if pa(settingsWindow.window) then
-		local PARENT = settingsWindow.window.site
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 		
 		local SW = 500
 
@@ -84,9 +84,6 @@ function BuildScaleSite()
 	end
 end
 
-hook.Add("open_server_scale", "open_server_scale", function()
-	SaveLastSite()
-	local lply = LocalPlayer()
-
+function OpenSettingsScale()
 	BuildScaleSite()
-end)
+end

@@ -34,9 +34,8 @@ function BuildTable(tab, parent, name, tabx)
 end
 
 function CreateDarkRPSetting()
-	if pa(settingsWindow.window) then
-		local PARENT = settingsWindow.window.site
-
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 		local list = createD("DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 		list:EnableVerticalScrollbar()
 		function list:Paint(pw, ph)
@@ -47,6 +46,6 @@ function CreateDarkRPSetting()
 	end
 end
 
-hook.Add("open_server_darkrp", "open_server_darkrp", function()
+function OpenSettingsDarkRP()
 	CreateDarkRPSetting()
-end)
+end

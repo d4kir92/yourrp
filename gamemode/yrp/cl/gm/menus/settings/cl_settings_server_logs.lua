@@ -320,12 +320,11 @@ function BuildLogs(parent, typ)
 end
 
 function BuildLogsSite()
-	if pa(settingsWindow.window) then
-
-		local site = settingsWindow.window.site
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 
 		-- TABS
-		local tabs = createD("YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
+		local tabs = createD("YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
 		tabs:AddOption("LID_kills", function(parent)
 			BuildLogs(parent, "LID_kills")
@@ -353,9 +352,6 @@ function BuildLogsSite()
 	end
 end
 
-hook.Add("open_server_logs", "open_server_logs", function()
-	SaveLastSite()
-	local lply = LocalPlayer()
-
+function OpenSettingsLogs()
 	BuildLogsSite()
-end)
+end

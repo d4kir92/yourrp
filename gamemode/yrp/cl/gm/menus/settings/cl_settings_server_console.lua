@@ -1,9 +1,9 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 net.Receive("Connect_Settings_Console", function(len)
-	if pa(settingsWindow) then
-
-		local PARENT = settingsWindow.window.site
+	local PARENT = GetSettingsSite()
+	
+	if pa(PARENT) then
 
 		PARENT.consolebackground = createD("DPanel", PARENT, YRP.ctr(1000), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 
@@ -32,15 +32,16 @@ end)
 
 net.Receive("get_console_line", function(len)
 	local str = net.ReadString()
-	if pa(settingsWindow) and pa(settingsWindow.window) and pa(settingsWindow.window.site.console) then
-		settingsWindow.window.site.console:AppendText(str)
-		settingsWindow.window.site.console:AppendText("\n")
+
+	local PARENT = GetSettingsSite()
+	
+	if pa(PARENT) and pa(PARENT.console) then
+		PARENT.console:AppendText(str)
+		PARENT.console:AppendText("\n")
 	end
 end)
 
-hook.Add("open_server_console", "open_server_console", function()
-	SaveLastSite()
-	
+function OpenSettingsConsole()
 	net.Start("Connect_Settings_Console")
 	net.SendToServer()
-end)
+end

@@ -2,7 +2,7 @@
 
 function GetPlayerByName(name)
 	for i, ply in pairs(player.GetAll()) do
-		if string.find(string.lower(ply:RPName()), string.lower(name)) or string.find(string.lower(ply:SteamName()), string.lower(name)) then
+		if ply:IsPlayer() and string.find(string.lower(ply:RPName()), string.lower(name)) or string.find(string.lower(ply:SteamName()), string.lower(name)) then
 			return ply
 		end
 	end

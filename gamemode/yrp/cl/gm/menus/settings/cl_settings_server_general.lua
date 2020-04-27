@@ -258,10 +258,8 @@ function AddToTabRecursive(tab, folder, path, wildcard)
 end
 
 net.Receive("Connect_Settings_General", function(len)
-	if pa(settingsWindow) and settingsWindow.window != nil then
-
-		local PARENT = settingsWindow.window.site
-
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 		function PARENT:OnRemove()
 			net.Start("Disconnect_Settings_General")
 			net.SendToServer()
@@ -984,9 +982,7 @@ net.Receive("Connect_Settings_General", function(len)
 	end
 end)
 
-hook.Add("open_server_general", "open_server_general", function()
-	SaveLastSite()
-
+function OpenSettingsGeneral()
 	net.Start("Connect_Settings_General")
 	net.SendToServer()
-end)
+end

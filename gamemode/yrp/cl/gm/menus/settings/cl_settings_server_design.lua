@@ -13,10 +13,9 @@ net.Receive("get_design_settings", function(len)
 	local INTERFACES = net.ReadTable()
 	local hud_profiles = net.ReadTable()
 
-	if pa(settingsWindow.window) then
-
-		local Parent = settingsWindow.window.site
-		local GRP_HUD = createD("YGroupBox", Parent, YRP.ctr(1000), YRP.ctr(1600), YRP.ctr(20), YRP.ctr(20))
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
+		local GRP_HUD = createD("YGroupBox", PARENT, YRP.ctr(1000), YRP.ctr(1600), YRP.ctr(20), YRP.ctr(20))
 		GRP_HUD:SetText("LID_hud")
 		function GRP_HUD:Paint(pw, ph)
 			hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -892,7 +891,7 @@ net.Receive("get_design_settings", function(len)
 
 
 
-		local GRP_IF = createD("YGroupBox", Parent, YRP.ctr(1000), YRP.ctr(1600), YRP.ctr(20 + 1000 + 20), YRP.ctr(20))
+		local GRP_IF = createD("YGroupBox", PARENT, YRP.ctr(1000), YRP.ctr(1600), YRP.ctr(20 + 1000 + 20), YRP.ctr(20))
 		GRP_IF:SetText("LID_interface")
 		function GRP_IF:Paint(pw, ph)
 			hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -1033,8 +1032,8 @@ net.Receive("get_design_settings", function(len)
 			end
 		end)
 
-		local px, py = settingsWindow.window:GetPos()
-		local pv_win = createD("YFrame", Parent, YRP.ctr(1000), YRP.ctr(1000), px + YRP.ctr(2200), YRP.ctr(120))
+		local px, py = PARENT:GetPos()
+		local pv_win = createD("YFrame", PARENT, YRP.ctr(1000), YRP.ctr(1000), px + YRP.ctr(2200), YRP.ctr(120))
 		pv_win:SetTitle("LID_window")
 		function pv_win:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)
@@ -1082,9 +1081,7 @@ net.Receive("get_design_settings", function(len)
 	end
 end)
 
-hook.Add("open_server_design", "open_server_design", function()
-	SaveLastSite()
-
+function OpenSettingsDesign()
 	net.Start("get_design_settings")
 	net.SendToServer()
-end)
+end

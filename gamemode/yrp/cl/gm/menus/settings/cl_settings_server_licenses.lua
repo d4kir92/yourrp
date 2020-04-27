@@ -4,17 +4,18 @@ local _li = {}
 net.Receive("get_licenses", function()
 	local _licenses = net.ReadTable()
 
-	if settingsWindow.window != nil then
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 
-		local spw = settingsWindow.window.site:GetWide()
-		local sph = settingsWindow.window.site:GetTall()
+		local spw = PARENT:GetWide()
+		local sph = PARENT:GetTall()
 
-		_li.ea = createD("DPanel", settingsWindow.window.site, ScW() - YRP.ctr(40 + 480 + 40 + 40), sph - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
+		_li.ea = createD("DPanel", PARENT, ScW() - YRP.ctr(40 + 480 + 40 + 40), sph - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
 		function _li.ea:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 		end
 
-		_li._lic = createD("DYRPDBList", settingsWindow.window.site, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
+		_li._lic = createD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
 		_li._lic:SetListHeader("licenses")
 		--_li._lic:SetDStrForAdd("license_add")
 		_li._lic:SetEditArea(_li.ea)
@@ -78,10 +79,9 @@ net.Receive("get_licenses", function()
 	end
 end)
 
-hook.Add("open_server_licenses", "open_server_licenses", function()
-	SaveLastSite()
+function OpenSettingsLicenses()
 	local lply = LocalPlayer()
 
 	net.Start("get_licenses")
 	net.SendToServer()
-end)
+end

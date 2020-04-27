@@ -6,7 +6,7 @@ local _yrp_appearance = {}
 local play = true
 net.Receive("get_menu_bodygroups", function(len)
 	local _tbl = net.ReadTable()
-	if _tbl.string_playermodels != nil then
+	if _tbl.string_playermodels != nil and pa(_yrp_appearance.window) then
 		local _skin = tonumber(_tbl.skin)
 		local _pms = string.Explode(",", _tbl.string_playermodels)
 		if GetGlobalDBool("bool_appearance_system", false) and pa(_yrp_appearance.left) then

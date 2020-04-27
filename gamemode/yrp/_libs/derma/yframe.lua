@@ -71,6 +71,7 @@ function PANEL:ChangedSize()
 end
 
 function PANEL:CanMaximise()
+	self.canmiximise = true
 	self.btnmax:SetVisible(true)
 end
 
@@ -212,7 +213,7 @@ function PANEL:Think()
 		self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
 		self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
 
-		if self:GetSizable() then
+		if self.canmiximise then--self:GetSizable() then
 			--self.btnmax:SetVisible(true)
 			self.btnmax:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
 			self.btnmax:SetPos(self.close:GetPos() - self.btnmax:GetWide() - YRP.ctr(20), self:GetHeaderHeight() * 0.2)

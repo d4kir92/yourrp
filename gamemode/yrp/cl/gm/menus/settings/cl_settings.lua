@@ -30,37 +30,43 @@ include("cl_settings_server_permaprops.lua")
 
 include("cl_settings_server_yourrp_addons.lua")
 
-local _yrp_settings = {}
-_yrp_settings.design = {}
-_yrp_settings.design.mode = "dark"
-_yrp_settings.materials = {}
-_yrp_settings.materials.logo100 = Material("vgui/yrp/logo100_beta.png")
-_yrp_settings.materials.dark = {}
-_yrp_settings.materials.dark.close = Material("vgui/yrp/dark_close.png")
-_yrp_settings.materials.dark.settings = Material("vgui/yrp/dark_settings.png")
-_yrp_settings.materials.dark.burger = Material("vgui/yrp/dark_burger.png")
-_yrp_settings.materials.light = {}
-_yrp_settings.materials.light.close = Material("vgui/yrp/light_close.png")
-_yrp_settings.materials.light.settings = Material("vgui/yrp/light_settings.png")
-_yrp_settings.materials.light.burger = Material("vgui/yrp/light_burger.png")
+local sm = {}
+sm.open = false
+sm.currentsite = 1
 
-settingsWindow = settingsWindow or {}
+sm.category = "LID_usermanagement"
 
-function get_icon_burger_menu()
-	return _yrp_settings.materials[_yrp_settings.design.mode].burger
+function ToggleSettings(id)
+	id = tonumber(id)
+	sm.currentsite = id
+	if !sm.open and YRPIsNoMenuOpen() then
+		OpenSettings()
+	elseif sm.open then
+		CloseSettings()
+	end
+end
+
+function CloseSettings()
+	sm.open = false
+	if pa(sm.win) then
+		sm.win:Hide()
+	end
+end
+
+function GetSettingsSite()
+	return sm.tabsite or sm.site
 end
 
 function F8RequireUG(site, usergroups)
 	local lply = LocalPlayer()
 	local ugs = string.Explode(", ", usergroups)
 
-	if !pa(settingsWindow) then return end
-	if !pa(settingsWindow.window) then return end
-	if !pa(settingsWindow.window.site) then return end
+	local PARENT = GetSettingsSite()
+	if !pa(PARENT) then return end
 
 	local allugs = {}
 	allugs["USERGROUPS"] = usergroups
-	local notallowed = createD("DPanel", settingsWindow.window.site, settingsWindow.window.site:GetWide(), settingsWindow.window.site:GetTall(), 0, 0)
+	local notallowed = createD("DPanel", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function notallowed:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
 		surfaceText(YRP.lang_string("LID_settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "Y_24_500", w / 2, h / 2, Color(255, 0, 0), 1, 1)
@@ -75,439 +81,371 @@ function F8RequireUG(site, usergroups)
 
 	if site == "usergroups" then
 		for i, v in pairs(ugs) do
-			local example = createD("DTextEntry", settingsWindow.window.site, YRP.ctr(1400), YRP.ctr(50), settingsWindow.window.site:GetWide() / 2 - YRP.ctr(1400 / 2), settingsWindow.window.site:GetTall() / 2 + YRP.ctr(300) + (i - 1) * YRP.ctr(60))
+			local example = createD("DTextEntry", PARENT, YRP.ctr(1400), YRP.ctr(50), PARENT:GetWide() / 2 - YRP.ctr(1400 / 2), PARENT:GetTall() / 2 + YRP.ctr(300) + (i - 1) * YRP.ctr(60))
 			example:SetText("yrp_usergroup \"" .. lply:RPName() .. "\" " .. v .. "       OR when ULX/ULIB installed: " .. "ulx adduser \"" .. lply:RPName() .. "\" " .. v)
 		end
 	end
 end
 
-local delaysettings = 0
-function toggleSettings()
-	if YRPIsNoMenuOpen() then
-		if delaysettings < CurTime() then
-			delaysettings = CurTime() + 2
-			OpenSettings()
-		else
-			CloseSettings()
-			notification.AddLegacy("SETTINGS MENU IS ON COOLDOWN", NOTIFY_GENERIC, 2)
-		end
-	else
-		CloseSettings()
-	end
-end
-
 concommand.Add("yrp_open_settings", function(ply, cmd, args)
-	printGM("gm", "Open settings window")
+	printGM( "gm", "Open settings window" )
 	OpenSettings()
 end)
 
-function CloseSettings()
-	if settingsWindow.window != NULL and settingsWindow.window != nil then
-		closeMenu()
-		settingsWindow.window:Remove()
-		settingsWindow.window = nil
-	end
-end
+function SettingsTabsContent()
+	local lply = LocalPlayer()
+	local PARENT = sm.site
 
-local SAVE_CATE = "LID_moderation"
-local SAVE_SITE = "open_server_status"
-local maximised = false
-function SaveLastSite()
-	
+	-- TABS
+	local tabs = createD("YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	function tabs:Think()
+		self:SetSize(PARENT:GetWide(), PARENT:GetTall())
+	end
+
+	sm.tabsite = tabs.site
+
+	if sm.currentsite == 1 then
+		if lply:GetDBool("bool_players", false) then
+			tabs:AddOption("LID_settings_players", function(parent)
+				OpenSettingsPlayers()
+			end)
+		end
+		if lply:GetDBool("bool_whitelist", false) then
+			tabs:AddOption("LID_whitelist", function(parent)
+				OpenSettingsWhitelist()
+			end)
+		end
+		
+		tabs:GoToSite("LID_settings_players")
+	elseif sm.currentsite == 2 then
+		if lply:GetDBool("bool_status", false) then
+			tabs:AddOption("LID_settings_status", function(parent)
+				OpenSettingsStatus()
+			end)
+		end
+		if lply:GetDBool("bool_groupsandroles", false) then
+			tabs:AddOption("LID_settings_groupsandroles", function(parent)
+				OpenSettingsGroupsAndRoles()
+			end)
+		end
+		if lply:GetDBool("bool_map", false) then
+			tabs:AddOption("LID_settings_map", function(parent)
+				OpenSettingsMap()
+			end)
+		end
+		--if lply:GetDBool("bool_status", false) then
+		--[[tabs:AddOption("LID_character", function(parent)
+
+		end)]]
+		--end
+		if lply:GetDBool("bool_logs", false) then
+			tabs:AddOption("LID_logs", function(parent)
+				OpenSettingsLogs()
+			end)
+		end
+		if lply:GetDBool("bool_blacklist", false) then
+			tabs:AddOption("LID_blacklist", function(parent)
+				OpenSettingsBlacklist()
+			end)
+		end
+		if lply:GetDBool("bool_feedback", false) then
+			tabs:AddOption("LID_feedback", function(parent)
+				OpenSettingsFeedback()
+			end)
+		end
+
+		tabs:GoToSite("LID_settings_status")
+	elseif sm.currentsite == 3 then
+		if lply:GetDBool("bool_realistic", false) then
+			tabs:AddOption("LID_settings_realistic", function(parent)
+				OpenSettingsRealistic()
+			end)
+		end
+		if lply:GetDBool("bool_shops", false) then
+			tabs:AddOption("LID_settings_shops", function(parent)
+				OpenSettingsShops()
+			end)
+		end
+		if lply:GetDBool("bool_licenses", false) then
+			tabs:AddOption("LID_settings_licenses", function(parent)
+				OpenSettingsLicenses()
+			end)
+		end
+		if lply:GetDBool("bool_usergroups", false) then
+			tabs:AddOption("LID_settings_usergroups", function(parent)
+				OpenSettingsUsergroups()
+			end)
+		end
+		if lply:GetDBool("bool_levelsystem", false) then
+			tabs:AddOption("LID_levelsystem", function(parent)
+				OpenSettingsLevelsystem()
+			end)
+		end
+		if lply:GetDBool("bool_design", false) then
+			tabs:AddOption("LID_settings_design", function(parent)
+				OpenSettingsDesign()
+			end)
+		end
+		if lply:GetDBool("bool_scale", false) then
+			tabs:AddOption("LID_scale", function(parent)
+				OpenSettingsScale()
+			end)
+		end
+
+		tabs:GoToSite("LID_settings_realistic")
+	elseif sm.currentsite == 4 then
+		if lply:GetDBool("bool_general", false) then
+			tabs:AddOption("LID_settings_general", function(parent)
+				OpenSettingsGeneral()
+			end)
+		end
+		if lply:GetDBool("bool_console", false) then
+			tabs:AddOption("LID_server_console", function(parent)
+				OpenSettingsConsole()
+			end)
+		end
+		if lply:GetDBool("bool_ac_database", false) then
+			tabs:AddOption("LID_settings_database", function(parent)
+				OpenSettingsDatabase()
+			end)
+		end
+		--if lply:GetDBool("bool_status", false) then
+			--[[tabs:AddOption("LID_settings_socials", function(parent)
+				
+			end)]]
+		--end
+		if lply:GetDBool("bool_darkrp", false) then
+			tabs:AddOption("DarkRP", function(parent)
+				OpenSettingsDarkRP()
+			end)
+		end
+		if lply:GetDBool("bool_permaprops", false) then
+			tabs:AddOption("Perma Props", function(parent)
+				OpenSettingsPermaProps()
+			end)
+		end
+
+		tabs:GoToSite("LID_settings_general")
+	elseif sm.currentsite == 5 then
+		if lply:GetDBool("bool_yourrp_addons", false) then
+			tabs:AddOption("LID_settings_yourrp_addons", function(parent)
+				OpenSettingsYourRPAddons()
+			end)
+		end
+
+		tabs:GoToSite("LID_settings_yourrp_addons")
+	end
 end
 
 function OpenSettings()
 	local lply = LocalPlayer()
-	openMenu()
+	sm.open = true
+	local br = YRP.ctr(20)
+	if pa(sm.win) == false then
 
-	YRPCheckVersion()
-
-	settingsWindow.window = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
-	settingsWindow.window:Center()
-	settingsWindow.window:MakePopup()
-	settingsWindow.window:SetTitle("LID_chooseapage")
-	settingsWindow.window:SetBorder(0)
-	settingsWindow.window:SetDraggable(true)
-	settingsWindow.window:SetMinWidth(100)
-	settingsWindow.window:SetMinHeight(100)
-	settingsWindow.window:Sizable(true)
-	settingsWindow.window:SetMaximised(LocalPlayer():GetDBool("settingsmaximised", nil), "SETTING")
-	settingsWindow.window:CanMaximise()
-	
-	local tmp = settingsWindow.window
-
-	-- LOGO
-	local logoS = tmp:GetHeaderHeight() - YRP.ctr(20)
-	tmp.logo = createD("YPanel", tmp, YRP.ctr(200), logoS, tmp:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10))
-	tmp.logo.yrp = Material("vgui/yrp/logo100_beta.png")
-	function tmp.logo:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(self.yrp)
-		surface.DrawTexturedRect(0, 0, 400 * logoS / 130, 130 * logoS / 130)
-
-		self.w = self.w or 0
-		if self.w != 400 * logoS / 130 or self.h != logoS or self.x != tmp:GetWide() / 2 - self.w or self.y != YRP.ctr(10) then
-			self.w = 400 * logoS / 130
-			self.h = logoS
-			self.x = tmp:GetWide() / 2 - self.w
-			self.y = YRP.ctr(10)
-
-			self:SetSize(self.w, self.h)
-			self:SetPos(self.x, self.y)
-		end
-	end
-
-	-- DISCORD
-	local icon_size = tmp:GetHeaderHeight() - YRP.ctr(20)
-	local icon_x, icon_y = tmp.logo:GetPos()
-	icon_x = icon_x + tmp.logo:GetWide() + YRP.ctr(20)
-	tmp.discord = createD("YPanel", tmp, icon_size, icon_size, icon_x, icon_y)
-	tmp.discord.logo = createD("DHTML", tmp.discord, icon_size, icon_size, 0, 0)
-	tmp.discord.btn = createD("DButton", tmp.discord, icon_size, icon_size, 0, 0)
-	tmp.discord.btn:SetText("")
-	local img = GetHTMLImage("https://discordapp.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg", icon_size, icon_size)
-	tmp.discord.logo:SetHTML(img)
-	function tmp.discord:Paint(pw, ph)
-		icon_size = tmp:GetHeaderHeight() - YRP.ctr(20)
-		icon_x, icon_y = tmp.logo:GetPos()
-		icon_x = icon_x + tmp.logo:GetWide() + YRP.ctr(20)
-		if self.w != icon_size or self.h != icon_size or self.x != icon_x or self.y != icon_y then
-			self.w = icon_size
-			self.h = icon_size
-			self.x = icon_x
-			self.y = icon_y
-
-			self:SetSize(self.w, self.h)
-			self:SetPos(self.x, self.y)
-			self.logo:SetSize(self.w, self.h)
-			self.btn:SetSize(self.w, self.h)
-		end
-	end
-	function tmp.discord.btn:Paint(pw, ph)
-	end
-	function tmp.discord.btn:DoClick()
-		gui.OpenURL("https://discord.gg/CXXDCMJ")
-	end
-
-	function settingsWindow.window:AddCategory(str, icon)
-		self.cats = self.cats or {}
-
-		self.cats[str] = {}
-		self.cats[str].icon = icon or self.cats[str].icon
-		self.cats[str].icon = Material(self.cats[str].icon)
+		local sites = {}
 		
-		self.cats[str]["id"] = table.Count(self.cats)
-
-		self.cats[str].sites = self.cats[str].sites or {}
-	end
-
-	function settingsWindow.window:AddSite(cat, str, lstr, icon, bo)
-		if !lply:GetDBool(bo, false) then
-			return
+		local c = 1
+		if lply:GetDBool("bool_players", false) or lply:GetDBool("bool_whitelist", false) then
+			sites[c] = {}
+			sites[c].name = "LID_usermanagement"
+			sites[c].icon = "64_user"
+			sites[c].content = SettingsTabsContent
+			c = c + 1
 		end
 
-		self.cats[cat].sites[str] = self.cats[cat].sites[str] or {}
-		self.cats[cat].sites[str].lstr = lstr
-		self.cats[cat].sites[str].icon = Material(icon)
-		self.cats[cat].sites[str]["id"] = table.Count(self.cats[cat].sites)
-	end
-
-	function settingsWindow.window:ChangedSize()
-		self.menubg:SetSize(self._mw, self:GetTall() - self:GetHeaderHeight() - self._bh)
-		self.menubg:SetPos(0, self:GetHeaderHeight())
-
-		self.menu:SetSize(self._is, self.menubg:GetTall() - 2 * self._mb)
-		self.menu:SetPos(self._mb, self._mb)
-		function self.menu:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
+		if lply:GetDBool("bool_status", false) or lply:GetDBool("bool_groupsandroles", false) or lply:GetDBool("bool_map", false) or lply:GetDBool("bool_logs", false) or lply:GetDBool("bool_blacklist", false) or lply:GetDBool("bool_feedback", false) then
+			sites[c] = {}
+			sites[c].name = "LID_moderation"
+			sites[c].icon = "64_info-circle"
+			sites[c].content = SettingsTabsContent
+			c = c + 1
 		end
 
-		self.botbar:SetSize(self:GetWide(), self._bh)
-		self.botbar:SetPos(0, self:GetTall() - self._bh)
+		if lply:GetDBool("bool_realistic", false) or lply:GetDBool("bool_shops", false) or lply:GetDBool("bool_licenses", false) or lply:GetDBool("bool_usergroups", false) or lply:GetDBool("bool_levelsystem", false) or lply:GetDBool("bool_design", false) or lply:GetDBool("bool_scale", false) then
+			sites[c] = {}
+			sites[c].name = "LID_administration"
+			sites[c].icon = "64_wrench"
+			sites[c].content = SettingsTabsContent
+			c = c + 1
+		end
 
-		self.site:SetSize(self:GetWide() - self._mw, self:GetTall() - self:GetHeaderHeight() - self._bh)
-		self.site:SetPos(self._mw, self:GetHeaderHeight())
-	end
+		if lply:GetDBool("bool_general", false) or lply:GetDBool("bool_console", false) or lply:GetDBool("bool_ac_database", false) or lply:GetDBool("bool_darkrp", false) or lply:GetDBool("bool_permaprops", false) then
+			sites[c] = {}
+			sites[c].name = "LID_server"
+			sites[c].icon = "64_server"
+			sites[c].content = SettingsTabsContent
+			c = c + 1
+		end
+	
+		if lply:GetDBool("bool_yourrp_addons", false) then
+			sites[c] = {}
+			sites[c].name = "YourRP"
+			sites[c].icon = "64_theater-masks"
+			sites[c].content = SettingsTabsContent
+			c = c + 1
+		end
 
-	function settingsWindow.window:CloseAll()
-		if self.menu != nil then
-			for i, v in pairs(self.menu:GetItems()) do
-				v.btn:Close()
-				v.list:CloseAll()
-				settingsWindow.window.site:Clear()
-				settingsWindow.window:SetTitle(YRP.lang_string("LID_chooseapage"))
+		if c == 1 then
+			OpenSettingsUsergroups()
+		end
+
+		sm.win = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
+		sm.win:SetTitle(SQL_STR_OUT(GetGlobalDString("text_server_name", "")))
+		sm.win:MakePopup()
+		--sm.win:SetHeaderHeight(YRP.ctr(100))
+		sm.win:SetBorder(0)
+		sm.win:CanMaximise()
+		sm.win:SetMaximised(LocalPlayer():GetDBool("settingsmaximised", nil), "SETTING")
+		function sm.win:Paint(pw, ph)
+			if SQL_STR_OUT(GetGlobalDString("text_server_name", "")) != self:GetTitle() then
+				self:SetTitle(SQL_STR_OUT(GetGlobalDString("text_server_name", "")))
+			end
+			hook.Run("YFramePaint", self, pw, ph)
+		end
+
+		local content = sm.win:GetContent()
+		-- MENU
+		sm.menu = createD("DPanelList", content, 10, BFH() - sm.win:GetHeaderHeight(), 0, 0)
+		sm.menu:SetText("")
+		sm.menu.pw = 10
+		sm.menu.ph = YRP.ctr(64) + 2 * br
+		sm.menu.expanded = sm.menu.expanded or lply:GetDBool("settings_expanded", true)
+		local font = "Y_" .. math.Clamp(math.Round(sm.menu.ph - 2 * br), 4, 100) ..  "_700"
+		function sm.menu:Paint(pw, ph)
+			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
+		end
+		sm.menu:SetSpacing(YRP.ctr(20))
+		
+		sm.menu.expander = createD("DButton", sm.menu, sm.menu.ph, sm.menu.ph, 0, sm.menu:GetTall() - sm.menu.ph)
+		sm.menu.expander:SetText("")
+		function sm.menu.expander:DoClick()
+			if lply:GetDBool("settings_expanded", true) then
+				sm.win:UpdateSize(sm.menu.ph)
+
+				sm.menu.expanded = false
+			else
+				sm.win:UpdateSize()
+
+				sm.menu.expanded = true
+			end
+			lply:SetDBool("settings_expanded", sm.menu.expanded)
+		end
+		function sm.menu.expander:Paint(pw, ph)
+			if lply:GetDBool("settings_expanded", true) then
+				surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+			else
+				surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+			end
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+		end
+		
+		-- SITE
+		sm.site = createD("YPanel", content, BFW() - 10, BFH() - sm.win:GetHeaderHeight(), 10, 0)
+		sm.site:SetText("")
+		sm.site:SetHeaderHeight(sm.win:GetHeaderHeight())
+		function sm.site:Paint(pw, ph)
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
+			local tab = {}
+			tab.color = lply:InterfaceValue("YFrame", "BG")
+			hook.Run("YPanelPaint", self, pw, ph, tab) --draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
+		end
+
+		-- SITES
+		sm.sites = {}
+		function sm.menu:ClearSelection()
+			for i, child in pairs(sm.site:GetChildren()) do
+				child:Remove()
+			end
+
+			for i, v in pairs(sm.sites) do
+				v.selected = false
 			end
 		end
-	end
 
-	function settingsWindow.window:CreateMenu()
-		self._is = YRP.ctr(120) 					-- Icon Size
-		self._mb = YRP.ctr(20)						-- Menu Border
-		self._mw = self._is + 2 * self._mb		-- Menu Width
-		self._bh = YRP.ctr(50)						-- Bottombar Height
-
-		self.menubg = createD("DPanel", self, 10, 10, 0, 0)
-		function self.menubg:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
-		end
-		self.menu = createD("DPanelList", self.menubg, 10, 10, 0, 0)
-		self.menu:SetSpacing(self._mb * 2)
-
-		self.botbar = createD("DPanel", self, 10, 10, 0, 0)
-		function self.botbar:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
-
-			draw.SimpleText(GetGlobalDString("text_server_name", "-"), "Y_18_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, GetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		function sm.win:UpdateSize(pw)
+			local sw = pw or sm.menu.pw + sm.menu.ph + 2 * br
+			sm.menu:SetWide(sw)
+			sm.site:SetWide(sm.win:GetWide() - sm.menu:GetWide())
+			sm.site:SetPos(sm.menu:GetWide(), 0)
 		end
 
-		self.site = createD("DPanel", self, 10, 10, 0, 0)
-		function self.site:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
-		end
-
-		self:ChangedSize()
-
-		for cname, c in SortedPairsByMemberValue(self.cats, "id") do
-			local cat = createD("DPanel", nil, self._is, self._is, 0, 0)
-			cat.main = self
-			function cat:Paint(pw, ph)
-				draw.RoundedBox(ph / 2, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "PC"))
-			end
-
-			cat.list = createD("DPanelList", cat, self._is, 0, 0, 0)
-			cat.list.main = self
-			cat.list:SetSpacing(self._mb)
-			function cat.list:Paint(pw, ph)
-				draw.RoundedBox(ph / 2, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "PC"))
-			end
-			function cat.list:CloseAll()
-				for i, v in pairs(cat.list:GetItems()) do
-					v:Close()
+		surface.SetFont(font)
+		for i, v in pairs(sites) do
+			if v.name != "hr" then
+		
+				local tw, th = surface.GetTextSize(YRP.lang_string(v.name))
+				if tw > sm.menu.pw then
+					sm.menu.pw = tw
 				end
-			end
 
-			cat.btn = createD("DButton", cat, self._is, self._is, 0, 0)
-			cat.btn.main = self
-			cat.btn:SetText("")
-			cat.btn.name = cname
-			cat.btn.list = cat.list
-			function cat.btn:Paint(pw, ph)
-				--self.r = self.r or 0
-				self.col = self.cor or lply:InterfaceValue("YFrame", "HI")
-				if self._sel then
-					self.col = lply:InterfaceValue("YFrame", "HI")
-					self.col.r = math.Clamp(self.col.r + 30, 0, 255)
-					self.col.g = math.Clamp(self.col.g + 30, 0, 255)
-					self.col.b = math.Clamp(self.col.b + 30, 0, 255)
-				else
-					self.col = lply:InterfaceValue("YFrame", "HI")
-				end
-
-				if self:IsHovered() or self._sel then
-					--self.r = self.r - 1
-				else
-					--self.r = self.r + 1
-				end
-				--self.r = math.Clamp(self.r, 10, ph / 2)
-				draw.RoundedBox(0, 0, 0, pw, ph, self.col)
-
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(c.icon)
-				surface.DrawTexturedRect(ph * 0.1, ph * 0.1, ph * 0.8, ph * 0.8)
-
-				local text = YRP.lang_string(self.name)
-				surface.SetFont("Y_18_500")
-				local tw, th = surface.GetTextSize(text)
-				self.tx = self.tx or pw / 2
-				if tw > pw then
-					self.tx = self.tx - 0.5
-					if self.tx < -tw / 1.5 then
-						self.tx = tw * 1.5
-					end
-				end
-				draw.SimpleText(text, "Y_18_500", self.tx, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			end
-			function cat.btn:Close()
-				self._sel = false
-				cat:SetTall(self.main._is)
-				cat.list:SetTall(self.main._is)
-
-				self.main.menu:Rebuild()
-			end
-			function cat.btn:Open()
-				self._sel = true
-				cat:SetTall((table.Count(c.sites) + 1) * (self.main._is + self.main._mb) - self.main._mb)
-				cat.list:SetTall(cat:GetTall() - (self.main._is + self.main._mb))
-				cat.list:SetPos(0, self.main._is + self.main._mb)
-				
-				self.main.menu:Rebuild()
-			end
-			function cat.btn:DoClick()
-				self._sel = self._sel or false
-
-				self._sel = !self._sel
-
-				if self._sel then
-					self.main:CloseAll()
-					self:Open()
-				else
-					self:Close()
-				end
-			end
-			settingsWindow.window.cats[cname].btn = cat.btn
-			if table.Count(c.sites) == 0 then
-				cat:Remove()
-				continue
-			end
-			for i, s in SortedPairsByMemberValue(c.sites, "id") do
-				local site = createD("DButton", nil, cat.btn.main._is, cat.btn.main._is, 0, 0)
+				sm.sites[v.name] = createD("YButton", sm.menu, sm.menu.pw, sm.menu.ph, 0, 0)
+				local site = sm.sites[v.name]
 				site:SetText("")
-				site.hook = i
-				site.name = s.lstr
-				site.icon = s.icon
+				site.id = tonumber(i)
 				function site:Paint(pw, ph)
-					--self.r = self.r or 0
-					self.col = self.cor or lply:InterfaceValue("YFrame", "HI")
-					if self._sel then
-						self.col = lply:InterfaceValue("YFrame", "HI")
-						self.col.r = math.Clamp(self.col.r + 40, 0, 255)
-						self.col.g = math.Clamp(self.col.g + 40, 0, 255)
-						self.col.b = math.Clamp(self.col.b + 40, 0, 255)
-					else
-						self.col = lply:InterfaceValue("YFrame", "HI")
-					end
+					self.aw = self.aw or 0
 
-					if self:IsHovered() or self._sel then
-						--self.r = self.r - 1
+					local lply = LocalPlayer()
+					local color = lply:InterfaceValue("YFrame", "HB")
+					if self:IsHovered() then
+						color = lply:InterfaceValue("YButton", "SC")
+						color.a = 120
+						self.aw = math.Clamp(self.aw + 20, 0, pw)
+					elseif self.selected then
+						color = lply:InterfaceValue("YButton", "SC")
+						self.aw = math.Clamp(self.aw + 20, 0, pw)
 					else
-						--self.r = self.r + 1
+						self.aw = math.Clamp(self.aw - 20, 0, pw)
 					end
-					--self.r = math.Clamp(self.r, 10, ph / 2)
-					draw.RoundedBox(ph / 2, 0, 0, pw, ph, self.col)
-	
+					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
+
 					surface.SetDrawColor(255, 255, 255, 255)
-					surface.SetMaterial(self.icon)
-					surface.DrawTexturedRect(ph * 0.2, ph * 0.2, ph * 0.6, ph * 0.6)
-	
-					local text = YRP.lang_string(self.name)
-					surface.SetFont("Y_18_500")
-					local tw, th = surface.GetTextSize(text)
-					self.tx = self.tx or pw / 2
-					if tw > pw then
-						self.tx = self.tx - 0.5
-						if self.tx < -tw / 1.5 then
-							self.tx = tw * 1.5
-						end
+					surface.SetMaterial(YRP.GetDesignIcon(v.icon))
+					surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+
+					surface.SetFont(font)
+					local tw, th = surface.GetTextSize(YRP.lang_string(v.name))
+					if tw > sm.menu.pw then
+						sm.menu.pw = tw
 					end
-					draw.SimpleText(text, "Y_18_500", self.tx, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string(v.name), font, ph, ph / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 				function site:DoClick()
-					SAVE_CATE = cname
-					SAVE_SITE = i
-
-					tmp:SetTitle(string.upper(YRP.lang_string(site.name)))
-
-					cat.list:CloseAll()
-
-					site:Open()
-
-					settingsWindow.window.site:Clear()
-
-					hook.Call(self.hook)
-				end
-				function site:Close()
-					self._sel = false
-				end
-				function site:Open()
-					self._sel = true
+					sm.menu:ClearSelection()
+					sm.currentsite = tonumber(self.id)
+					self.selected = true
+					if v.content != nil then
+						v.content(sm.site) --CreateHelpMenuContent(sm.site)
+					end
 				end
 
-				settingsWindow.window.cats[cname].sites[i].btn = site
+				if sm.currentsite == site.id then
+					site:DoClick()
+				end
 
-				cat.list:AddItem(site)
+				sm.menu:AddItem(site)
+			else
+				sm.sites[v.name] = createD("DPanel", sm.menu, sm.menu.pw, YRP.ctr(20), 0, 0)
+				local site = sm.sites[v.name]
+				function site:Paint(pw, ph)
+					local hr = YRP.ctr(2)
+					draw.RoundedBox(0, br, ph / 2 - hr / 2, pw - br * 2, hr, Color(255, 255, 255, 255))
+				end
+
+				sm.menu:AddItem(site)
 			end
-
-			self.menu:AddItem(cat)
 		end
-	end
 
-	function settingsWindow.window:SwitchToSite(cat, site)
-		function self.site:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
-		end
-	
-		if self.cats[cat] != nil and self.cats[cat].sites[site] != nil then
-			self.cats[cat].btn:DoClick()
-			self.cats[cat].sites[site].btn:DoClick()
+		if lply:GetDBool("settings_expanded", true) then
+			sm.win:UpdateSize()
 		else
-			function self.site:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
-				draw.SimpleText(YRP.lang_string("LID_settings_yourusergrouphasnopermission"), "Y_30_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			end
-			F8RequireUG("usergroups", "yrp_usergroups")
+			sm.win:UpdateSize(sm.menu.ph)
 		end
+	elseif pa(sm.win) then
+		sm.win:Show()
 	end
-
-
-
-	--Sites
-	local SV_USERMANAGEMENT = "LID_usermanagement"
-	settingsWindow.window:AddCategory(SV_USERMANAGEMENT, "icon16/user.png")
-	settingsWindow.window:AddSite(SV_USERMANAGEMENT, "open_server_give", "LID_settings_players", "icon16/group.png", "bool_players")
-	settingsWindow.window:AddSite(SV_USERMANAGEMENT, "open_server_whitelist", "LID_whitelist", "icon16/page_white_add.png", "bool_whitelist")
-
-	local SV_MODERATION = "LID_moderation"
-	settingsWindow.window:AddCategory(SV_MODERATION, "icon16/shield.png")
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_status", "LID_settings_status", "icon16/error.png", "bool_status")
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_groups_and_roles", "LID_settings_groupsandroles", "icon16/group_edit.png", "bool_groupsandroles")
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_map", "LID_settings_map", "icon16/map_edit.png", "bool_map")
-	-- character [vcard_edit.png] Character
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_logs", "LID_logs", "icon16/page_white_error.png", "bool_logs")
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_blacklist", "LID_blacklist", "icon16/page_white_delete.png", "bool_blacklist")
-	settingsWindow.window:AddSite(SV_MODERATION, "open_server_feedback", "LID_settings_feedback", "icon16/user_comment.png", "bool_feedback")
-	
-	local SV_ADMINISTRATION = "LID_administration"
-	settingsWindow.window:AddCategory(SV_ADMINISTRATION, "icon16/lightning.png")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_realistic", "LID_settings_realistic", "icon16/rainbow.png", "bool_realistic")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_shops", "LID_settings_shops", "icon16/cart_edit.png", "bool_shops")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_licenses", "LID_settings_licenses", "icon16/vcard_edit.png", "bool_licenses")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_usergroups", "LID_settings_usergroups", "icon16/user_edit.png", "bool_usergroups")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_levelsystem", "LID_levelsystem", "icon16/wand.png", "bool_levelsystem")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_design", "LID_settings_design", "icon16/picture_edit.png", "bool_design")
-	settingsWindow.window:AddSite(SV_ADMINISTRATION, "open_server_scale", "LID_scale", "icon16/arrow_out.png", "bool_scale")
-	-- money money.png "bool_money"
-
-	local SV_SERVER = "LID_server"
-	settingsWindow.window:AddCategory(SV_SERVER, "icon16/wrench_orange.png")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_general", "LID_settings_general", "icon16/world.png", "bool_general")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_console", "LID_server_console", "icon16/application_xp_terminal.png", "bool_console")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_database", "LID_settings_database", "icon16/database_gear.png", "bool_ac_database")
-	-- Socials [television.png]
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_darkrp", "DarkRP", "icon16/bomb.png", "bool_darkrp")
-	settingsWindow.window:AddSite(SV_SERVER, "open_server_permaprops", "Perma Props", "icon16/brick.png", "bool_permaprops")
-	
-	local YRP_YOURRP = "YourRP"
-	settingsWindow.window:AddCategory(YRP_YOURRP, "vgui/yrp/icon24.png")
-	settingsWindow.window:AddSite(YRP_YOURRP, "open_server_yourrp_addons", "LID_settings_yourrp_addons", "icon16/plugin.png", "bool_yourrp_addons")
-
-
-
-	settingsWindow.window:CreateMenu()
-	settingsWindow.window:SwitchToSite(SAVE_CATE, SAVE_SITE)
-	
-	--[[
-
-	--StartSite
-	settingsWindow.window:SwitchToSite(SAVE_SITE)
-	settingsWindow.window:SetMaximised(LocalPlayer():GetDBool("settingsmaximised", nil), "SETTING")
-
-	--"https://discordapp.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg")
-	--"https://discord.gg/CXXDCMJ")
-
-	]]
 end
 
 net.Receive("setting_hasnoaccess", function(len)

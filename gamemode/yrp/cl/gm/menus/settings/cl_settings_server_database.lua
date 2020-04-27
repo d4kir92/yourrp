@@ -1,10 +1,8 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 net.Receive("Connect_Settings_Database", function(len)
-	if pa(settingsWindow) then
-
-		local PARENT = settingsWindow.window.site
-
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 		function PARENT:OnRemove()
 			net.Start("Disconnect_Settings_Database")
 			net.SendToServer()
@@ -329,9 +327,7 @@ net.Receive("Connect_Settings_Database", function(len)
 	end
 end)
 
-hook.Add("open_server_database", "open_server_database", function()
-	SaveLastSite()
-
+function OpenSettingsDatabase()
 	net.Start("Connect_Settings_Database")
 	net.SendToServer()
-end)
+end

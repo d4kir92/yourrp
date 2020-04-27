@@ -93,10 +93,8 @@ function AddYRPAddon(parent, tab)
 end
 
 net.Receive("Connect_Settings_YourRP_Addons", function(len)
-	if pa(settingsWindow) then
-
-		local PARENT = settingsWindow.window.site
-
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 		function PARENT:OnRemove()
 			net.Start("Disconnect_Settings_YourRP_Addons")
 			net.SendToServer()
@@ -137,9 +135,7 @@ net.Receive("Connect_Settings_YourRP_Addons", function(len)
 	end
 end)
 
-hook.Add("open_server_yourrp_addons", "open_server_yourrp_addons", function()
-	SaveLastSite()
-
+function OpenSettingsYourRPAddons()
 	net.Start("Connect_Settings_YourRP_Addons")
 	net.SendToServer()
-end)
+end

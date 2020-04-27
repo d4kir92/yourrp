@@ -70,7 +70,6 @@ function BuildWhitelist(parent, tab)
 					end
 				end
 			elseif (tab == "LID_all") then -- ALL
-				print(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), YRP.lang_string("LID_all"), YRP.lang_string("LID_all"), whi.date, whi.status)
 				list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), YRP.lang_string("LID_all"), YRP.lang_string("LID_all"), whi.date, whi.status)
 				found = true
 			else
@@ -328,9 +327,10 @@ net.Receive("getRolesWhitelist", function(len)
 end)
 
 net.Receive("getRoleWhitelist", function(len)
-	if pa(settingsWindow.window) then
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 
-		local site = settingsWindow.window.site
+		local site = PARENT
 
 		tabW = net.ReadTable()
 
@@ -361,8 +361,7 @@ net.Receive("getRoleWhitelist", function(len)
 	end
 end)
 
-hook.Add("open_server_whitelist", "open_server_whitelist", function()
-	SaveLastSite()
+function OpenSettingsWhitelist()
 	local lply = LocalPlayer()
 
 	loadedR = false
@@ -380,4 +379,4 @@ hook.Add("open_server_whitelist", "open_server_whitelist", function()
 		net.Start("getRoleWhitelist")
 		net.SendToServer()
 	end)
-end)
+end

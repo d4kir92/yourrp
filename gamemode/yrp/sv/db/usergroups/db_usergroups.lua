@@ -373,7 +373,7 @@ net.Receive("usergroup_add", function(len, ply)
 
 	SortUserGroups()
 
-	local _tmp = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local _tmp = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 	local _ugs = {}
 	for i, ug in pairs(_tmp) do
 		_ugs[tonumber(ug.uniqueID)] = ug
@@ -1748,6 +1748,8 @@ end)
 
 util.AddNetworkString("UpdateUsergroupsList")
 function ReloadUsergroupsList()
+	SortUserGroups()
+	
 	local ugs = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 	for i, pl in pairs(HANDLER_USERGROUPS) do
 		net.Start("UpdateUsergroupsList")

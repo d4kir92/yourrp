@@ -153,9 +153,9 @@ function BuildBlacklist(parent, tabBL, tab)
 end
 
 net.Receive("yrp_blacklist_get", function(len)
-	if pa(settingsWindow.window) then
+	local site = GetSettingsSite()
 
-		local site = settingsWindow.window.site
+	if pa(site) then
 
 		site:Clear()
 
@@ -182,10 +182,9 @@ net.Receive("yrp_blacklist_get", function(len)
 	end
 end)
 
-hook.Add("open_server_blacklist", "open_server_blacklist", function()
-	SaveLastSite()
+function OpenSettingsBlacklist()
 	local lply = LocalPlayer()
 
 	net.Start("yrp_blacklist_get")
 	net.SendToServer()
-end)
+end

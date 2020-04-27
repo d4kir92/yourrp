@@ -4,8 +4,9 @@ local save_delay = 0
 net.Receive("getCharakterList", function()
 	local _charTab = net.ReadTable()
 
-	if pa(settingsWindow) and pa(settingsWindow.window) then
-		local cl_rpName = createVGUI("DTextEntry", settingsWindow.window.site, 800, 50, 10, 50)
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
+		local cl_rpName = createVGUI("DTextEntry", PARENT, 800, 50, 10, 50)
 		if _charTab.rpname != nil then
 			cl_rpName:SetText(_charTab.rpname)
 		end
@@ -15,7 +16,7 @@ net.Receive("getCharakterList", function()
 			end
 		end
 
-		local cl_rpDescription = createVGUI("DTextEntry", settingsWindow.window.site, 1200, 400, 10, 200)
+		local cl_rpDescription = createVGUI("DTextEntry", PARENT, 1200, 400, 10, 200)
 		cl_rpDescription:SetMultiline(true)
 		if _charTab.rpdescription != nil then
 			cl_rpDescription:SetText(_charTab.rpdescription)
@@ -24,7 +25,7 @@ net.Receive("getCharakterList", function()
 
 		end
 
-		local cl_save = createVGUI("YButton", settingsWindow.window.site, 400, 50, 10, 620)
+		local cl_save = createVGUI("YButton", PARENT, 400, 50, 10, 620)
 		cl_save:SetText("LID_change")
 		function cl_save:Paint(pw, ph)
 			if CurTime() > save_delay then

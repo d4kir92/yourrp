@@ -103,7 +103,7 @@ function useFunction(str)
 			ToggleInventory()
 		elseif str == "openSettings" then
 			done_tutorial("tut_ms")
-			toggleSettings()
+			ToggleSettings()
 		elseif str == "openMap" then
 			done_tutorial("tut_tma")
 			toggleMap()

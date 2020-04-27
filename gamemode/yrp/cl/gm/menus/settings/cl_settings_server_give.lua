@@ -1,8 +1,10 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 net.Receive("setting_players", function(len)
-	if pa(settingsWindow.window) then
-		local PARENT = settingsWindow.window.site
+	local PARENT = GetSettingsSite()
+
+	if pa(PARENT) then
+
 		local _giveListView = createD("DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 		_giveListView:AddColumn("SteamID")
 		_giveListView:AddColumn(YRP.lang_string("LID_nick"))
@@ -144,9 +146,7 @@ net.Receive("setting_players", function(len)
 	end
 end)
 
-hook.Add("open_server_give", "open_server_give", function()
-	SaveLastSite()
-
+function OpenSettingsPlayers()
 	net.Start("setting_players")
 	net.SendToServer()
-end)
+end

@@ -5,8 +5,9 @@ local _sh = {}
 net.Receive("get_shops", function()
 	local _shops = net.ReadTable()
 
-	if settingsWindow.window != nil then
-		_sh._sho = createD("DYRPDBList", settingsWindow.window.site, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
+		_sh._sho = createD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
 		_sh._sho.tbl = _shops
 		_sh._sho:SetListHeader("shops")
 		_sh._sho:SetEditArea(_sh.ea)
@@ -59,8 +60,9 @@ end)
 net.Receive("get_shop_categories", function()
 	local _scats = net.ReadTable()
 
-	if settingsWindow.window != nil then
-		_sh._cat = createD("DYRPDBList", settingsWindow.window.site, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40+500+40))
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
+		_sh._cat = createD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40+500+40))
 		_sh._cat.tbl = _scats
 		_sh._cat:SetListHeader("categories")
 		_sh._cat:SetEditArea(_sh.ea)
@@ -119,8 +121,9 @@ end)
 net.Receive("get_shop_items", function()
 	local _sitems = net.ReadTable()
 
-	if pa(settingsWindow.window) then
-		_sh._sit = createD("DYRPDBList", settingsWindow.window.site, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40+500+40+500+40))
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
+		_sh._sit = createD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40+500+40+500+40))
 		_sh._sit.tbl = _sitems
 		_sh._sit:SetListHeader("items")
 		_sh._sit:SetEditArea(_sh.ea)
@@ -444,18 +447,15 @@ net.Receive("get_shop_items", function()
 	end
 end)
 
-hook.Add("open_server_shops", "open_server_shops", function()
-	SaveLastSite()
-	local lply = LocalPlayer()
+function OpenSettingsShops()
+	local w = GetSettingsSite():GetWide()
+	local h = GetSettingsSite():GetTall()
 
-	local w = settingsWindow.window.site:GetWide()
-	local h = settingsWindow.window.site:GetTall()
-
-	_sh.ea = createD("DPanel", settingsWindow.window.site, ScW() - YRP.ctr(40 + 480 + 40 + 40), h - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
+	_sh.ea = createD("DPanel", GetSettingsSite(), ScW() - YRP.ctr(40 + 480 + 40 + 40), h - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
 	function _sh.ea:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 	end
 
 	net.Start("get_shops")
 	net.SendToServer()
-end)
+end

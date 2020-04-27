@@ -3,10 +3,8 @@
 --#roles #groups #settings
 
 net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
-	if pa(settingsWindow) and pa(settingsWindow.window) then
-
-		local PARENT = settingsWindow.window.site
-
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
 		local cur_group = {}
 		cur_group.cur = 0
 		cur_group.par = 0
@@ -2666,9 +2664,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 	end
 end)
 
-hook.Add("open_server_groups_and_roles", "open_server_groups_and_roles", function()
-	SaveLastSite()
-
+function OpenSettingsGroupsAndRoles()
 	net.Start("Subscribe_Settings_GroupsAndRoles")
 	net.SendToServer()
-end)
+end

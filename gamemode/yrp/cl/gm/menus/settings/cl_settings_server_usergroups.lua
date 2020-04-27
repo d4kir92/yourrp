@@ -17,18 +17,21 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	CURRENT_USERGROUP = tonumber(ug.uniqueID)
 	UGS[CURRENT_USERGROUP] = ug
 
-	local PARENT = settingsWindow.window.site
+	local PARENT = GetSettingsSite()
 
 	if pa(PARENT.ug) then
 		PARENT.ug:Remove()
 	end
 
-	PARENT.ug = createD("DPanel", PARENT, ScrW() - YRP.ctr(20 + 500 + 20), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(20 + 500), YRP.ctr(0))
-	function PARENT.ug:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 100))
-	end
+	PARENT.ug = createD("DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(20 + 500 + 20), PARENT:GetTall(), YRP.ctr(20 + 500), YRP.ctr(0))
 
-	PARENT = PARENT.ug
+	PARENT.ugp = createD("DPanel", PARENT, ScrW() / 2, PARENT:GetTall(), 0, 0)
+	function PARENT.ugp:Paint(pw, ph)
+		--surfaceBox(0, 0, pw, ph, Color(255, 100, 100, 100))
+	end
+	PARENT.ug:AddPanel(PARENT.ugp)
+
+	PARENT = PARENT.ugp
 
 	-- NAME
 	local NAME = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(100), YRP.ctr(20), YRP.ctr(20))
@@ -624,7 +627,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 end)
 
 function AddUG(tbl)
-	local PARENT = settingsWindow.window.site
+	local PARENT = GetSettingsSite()
 
 	UGS[tonumber(tbl.uniqueID)] = tbl
 
@@ -634,7 +637,7 @@ function AddUG(tbl)
 	_ug:SetText("")
 	function _ug:Paint(pw, ph)
 		self.string_color = StringToColor(UGS[self.uid].string_color)
-		surfaceButton(self, pw, ph, string.upper(UGS[self.uid].string_name), self.string_color, ph + YRP.ctr(40 + 20), ph / 2, 0, 1, false)
+		surfaceButton(self, pw, ph, string.upper(UGS[self.uid].string_name) .. " " .. UGS[self.uid].int_position, self.string_color, ph + YRP.ctr(40 + 20), ph / 2, 0, 1, false)
 
 		if strEmpty(UGS[tonumber(tbl.uniqueID)].string_icon) then
 			surfaceBox(YRP.ctr(8) + YRP.ctr(40) + YRP.ctr(8), YRP.ctr(4), ph - YRP.ctr(8), ph - YRP.ctr(8), Color(255, 255, 255, 255))
@@ -663,7 +666,7 @@ function AddUG(tbl)
 	UP:SetText("")
 	local up = UP
 	function up:Paint(pw, ph)
-		if P.int_position > 2 then
+		if P.int_position > 1 then
 			local tab = {}
 			tab.r = pw / 2
 			tab.color = Color(255, 255, 100)
@@ -679,7 +682,7 @@ function AddUG(tbl)
 		end
 	end
 	function up:DoClick()
-		if P.int_position > 2 then
+		if P.int_position > 1 then
 			net.Start("settings_usergroup_position_up")
 				net.WriteString(P.uniqueID)
 			net.SendToServer()
@@ -690,7 +693,7 @@ function AddUG(tbl)
 	DO:SetText("")
 	local dn = DO
 	function dn:Paint(pw, ph)
-		if P.int_position <= table.Count(UGS) then
+		if P.int_position < table.Count(UGS) then
 			local tab = {}
 			tab.r = pw / 2
 			tab.color = Color(255, 255, 100)
@@ -706,7 +709,7 @@ function AddUG(tbl)
 		end
 	end
 	function dn:DoClick()
-		if P.int_position <= table.Count(UGS) then
+		if P.int_position < table.Count(UGS) then
 			net.Start("settings_usergroup_position_dn")
 				net.WriteString(P.uniqueID)
 			net.SendToServer()
@@ -755,25 +758,24 @@ net.Receive("usergroup_add", function(len)
 end)
 
 function UpdateUsergroupsList(ugs)
-	if pa(settingsWindow) then
-		local PARENT = settingsWindow.window.site
-		if pa(PARENT) then
-			UGS = {}
-			PARENT.ugs:Clear()
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
+		
+		UGS = {}
+		PARENT.ugs:Clear()
 
-			for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
-				ug.int_position = tonumber(ug.int_position)
-				if ug.int_position < 10 then
-					if tobool(ug.bool_removeable) then
-						AddUG(ug)
-					end
+		for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
+			ug.int_position = tonumber(ug.int_position)
+			if ug.int_position < 10 then
+				if tobool(ug.bool_removeable) then
+					AddUG(ug)
 				end
 			end
-			for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
-				if ug.int_position >= 10 then
-					if tobool(ug.bool_removeable) then
-						AddUG(ug)
-					end
+		end
+		for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
+			if ug.int_position >= 10 then
+				if tobool(ug.bool_removeable) then
+					AddUG(ug)
 				end
 			end
 		end
@@ -789,72 +791,65 @@ net.Receive("UpdateUsergroupsList", function()
 end)
 
 net.Receive("Connect_Settings_UserGroups", function(len)
-	if pa(settingsWindow) then
-		if settingsWindow.window != nil then
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then		
+		CURRENT_USERGROUP = nil
 
-			CURRENT_USERGROUP = nil
+		local ugs = net.ReadTable()
 
-			local ugs = net.ReadTable()
-
-			local PARENT = settingsWindow.window.site
-
-			function PARENT:OnRemove()
-				net.Start("Disconnect_Settings_UserGroups")
-				net.SendToServer()
-			end
-
-			--[[ UserGroups Action Buttons ]]--
-			local _ug_add = createD("DButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
-			_ug_add:SetText("")
-			function _ug_add:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "+", Color(0, 255, 0, 255))
-			end
-			function _ug_add:DoClick()
-				net.Start("usergroup_add")
-				net.SendToServer()
-			end
-
-			local _ug_rem = createD("DButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20 + 500 - 50), YRP.ctr(20))
-			_ug_rem:SetText("")
-			function _ug_rem:Paint(pw, ph)
-				if wk(UGS[CURRENT_USERGROUP]) then
-					if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
-						surfaceButton(self, pw, ph, "-", Color(255, 0, 0, 255))
-					end
-				end
-			end
-			function _ug_rem:DoClick()
-				if wk(UGS[CURRENT_USERGROUP]) then
-					if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
-						net.Start("usergroup_rem")
-							net.WriteString(CURRENT_USERGROUP)
-						net.SendToServer()
-					end
-				end
-			end
-
-			local _ugs_title = createD("DPanel", PARENT, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20 + 50 + 20))
-			function _ugs_title:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-				surfaceText(YRP.lang_string("LID_usergroups"), "Y_26_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
-			end
-
-			--[[ UserGroupsList ]]--
-			PARENT.ugs = createD("DPanelList", PARENT, YRP.ctr(500), ScrH() - YRP.ctr(20 + 150 + 20 + 50 + 20), YRP.ctr(20), YRP.ctr(20 + 50 + 20 + 50))
-			function PARENT.ugs:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
-			end
-			PARENT.ugs:EnableVerticalScrollbar(true)
-
-			UpdateUsergroupsList(ugs)
+		function PARENT:OnRemove()
+			net.Start("Disconnect_Settings_UserGroups")
+			net.SendToServer()
 		end
+
+		--[[ UserGroups Action Buttons ]]--
+		local _ug_add = createD("DButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
+		_ug_add:SetText("")
+		function _ug_add:Paint(pw, ph)
+			surfaceButton(self, pw, ph, "+", Color(0, 255, 0, 255))
+		end
+		function _ug_add:DoClick()
+			net.Start("usergroup_add")
+			net.SendToServer()
+		end
+		
+		local _ug_rem = createD("DButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20 + 500 - 50), YRP.ctr(20))
+		_ug_rem:SetText("")
+		function _ug_rem:Paint(pw, ph)
+			if wk(UGS[CURRENT_USERGROUP]) then
+				if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
+					surfaceButton(self, pw, ph, "-", Color(255, 0, 0, 255))
+				end
+			end
+		end
+		function _ug_rem:DoClick()
+			if wk(UGS[CURRENT_USERGROUP]) then
+				if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
+					net.Start("usergroup_rem")
+						net.WriteString(CURRENT_USERGROUP)
+					net.SendToServer()
+				end
+			end
+		end
+
+		local _ugs_title = createD("DPanel", PARENT, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20 + 50 + 20))
+		function _ugs_title:Paint(pw, ph)
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+			surfaceText(YRP.lang_string("LID_usergroups"), "Y_26_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+		end
+
+		--[[ UserGroupsList ]]--
+		PARENT.ugs = createD("DPanelList", PARENT, YRP.ctr(500), ScrH() - YRP.ctr(20 + 150 + 20 + 50 + 20), YRP.ctr(20), YRP.ctr(20 + 50 + 20 + 50))
+		function PARENT.ugs:Paint(pw, ph)
+			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+		end
+		PARENT.ugs:EnableVerticalScrollbar(true)
+
+		UpdateUsergroupsList(ugs)
 	end
 end)
 
-hook.Add("open_server_usergroups", "open_server_usergroups", function()
-	SaveLastSite()
-	if pa(settingsWindow) then
-		net.Start("Connect_Settings_UserGroups")
-		net.SendToServer()
-	end
-end)
+function OpenSettingsUsergroups()
+	net.Start("Connect_Settings_UserGroups")
+	net.SendToServer()
+end
