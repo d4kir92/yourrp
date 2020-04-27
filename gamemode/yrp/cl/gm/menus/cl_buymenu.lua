@@ -391,6 +391,7 @@ net.Receive("shop_get_tabs", function(len)
 		if tab.haspermanent then
 			local _tab2 = BUYMENU.tabs:AddTab(YRP.lang_string("LID_mystorage") .. ": " .. SQL_STR_OUT(tab.name), tab.uniqueID)
 			function _tab2:GetCategories()
+				local lply = LocalPlayer()
 				net.Receive("yrp_shop_get_categories", function(le)
 					local _uid = net.ReadString()
 					local _cats = net.ReadTable()
@@ -600,7 +601,7 @@ function CreateBuyMenuContent(parent, uid)
 
 	uid = uid or 1
 	
-	if IsValid(parent) then
+	if pa(parent) then
 		BUYMENU.content = parent
 		--[[ Shop ]]--
 		BUYMENU.shop = createD("DPanelList", BUYMENU.content, BUYMENU.content:GetWide(), BUYMENU.content:GetTall() - YRP.ctr(100), YRP.ctr(0), YRP.ctr(100))
@@ -608,9 +609,11 @@ function CreateBuyMenuContent(parent, uid)
 		BUYMENU.shop:SetSpacing(20)
 		BUYMENU.shop:SetNoSizing(false)
 		function BUYMENU.shop:Paint(pw, ph)
-			self:SetWide(BUYMENU.content:GetWide())
-			self:SetTall(BUYMENU.content:GetTall() - YRP.ctr(100))
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 100, 240))
+			if pa(BUYMENU.content) then
+				self:SetWide(BUYMENU.content:GetWide())
+				self:SetTall(BUYMENU.content:GetTall() - YRP.ctr(100))
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 100, 240))
+			end
 		end
 
 		BUYMENU.tabs = createD("DYRPTabs", BUYMENU.content, BUYMENU.content:GetWide(), YRP.ctr(100), 0, 0)
