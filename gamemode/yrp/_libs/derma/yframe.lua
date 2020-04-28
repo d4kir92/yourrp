@@ -92,6 +92,7 @@ function PANEL:SetMaximised(b, von)
 			self:SetSize(BFW(), BFH())
 			self:Center()
 		end
+		self:UpdateSize()
 	end
 end
 

@@ -104,7 +104,7 @@ function PANEL:Init()
 	end
 	function sbar.btnGrip:Paint(w, h)
 		local lply = LocalPlayer()
-		draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+		draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
 	end
 
 	-- BTN
@@ -152,7 +152,7 @@ function PANEL:Init()
 		end
 		function sbar.btnGrip:Paint(w, h)
 			local lply = LocalPlayer()
-			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+			draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
 		end
 
 		for i, r in pairs(rols) do

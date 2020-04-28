@@ -382,7 +382,7 @@ function CreateRoleSelectionContent(PARENT)
 	end
 	local sbar = list.VBar
 	function sbar:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(255, 255, 255))
+		draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
 	end
 	function sbar.btnUp:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
@@ -391,7 +391,7 @@ function CreateRoleSelectionContent(PARENT)
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 	end
 	function sbar.btnGrip:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+		draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
 	end
 
 

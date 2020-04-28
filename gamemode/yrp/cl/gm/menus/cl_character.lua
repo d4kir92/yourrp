@@ -64,6 +64,8 @@ end
 local curChar = "-1"
 local _cur = ""
 function openCharacterSelection()
+	local lply = LocalPlayer()
+
 	local fw = 860
 	local br = YRP.ctr(20)
 
@@ -162,7 +164,25 @@ function openCharacterSelection()
 			end
 		end
 
-		local characterList = createD("DScrollPanel", charactersBackground, YRP.ctr(fw) - br, ScrH() - (2 * border) - br - YRP.ctr(120), 0, br)
+		local characterList = createD("DPanelList", charactersBackground, YRP.ctr(fw) - 2 * br, ScrH() - (2 * border) - br - YRP.ctr(120), br, br)
+		characterList:EnableVerticalScrollbar()
+		characterList:SetSpacing(YRP.ctr(20))
+		function characterList:Paint(pw, ph)
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
+		end
+		local sbar = characterList.VBar
+		function sbar:Paint(w, h)
+			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
+		end
+		function sbar.btnUp:Paint(w, h)
+			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+		end
+		function sbar.btnDown:Paint(w, h)
+			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+		end
+		function sbar.btnGrip:Paint(w, h)
+			draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+		end
 
 		net.Receive("yrp_get_characters", function(len)
 			printGM("gm", "received characterlist")
@@ -193,7 +213,7 @@ function openCharacterSelection()
 					for i = 1, #_characters do
 						if _characters[i].char != nil then
 							cache[i] = {}
-							cache[i].tmpChar = createD("YButton", characterList, YRP.ctr(fw) - 2 * br, YRP.ctr(200), br, br + y * YRP.ctr(200) + y * br, 0)
+							cache[i].tmpChar = createD("YButton", nil, YRP.ctr(fw) - 2 * br, YRP.ctr(200), br, br + y * YRP.ctr(200) + y * br, 0)
 							local tmpChar = cache[i].tmpChar
 							tmpChar:SetText("")
 
@@ -308,6 +328,9 @@ function openCharacterSelection()
 								curChar = tmpChar.charid
 								tmpChar:DoClick()
 							end
+
+							characterList:AddItem(cache[i].tmpChar)
+
 							y = y + 1
 						end
 					end
@@ -354,7 +377,7 @@ function openCharacterSelection()
 		end
 
 		local button = {}
-		local charactersCreate = createD("YButton", charactersBackground, YRP.ctr(80), YRP.ctr(80), characterList:GetWide() - YRP.ctr(40) - 2 * br, characterList:GetTall() + YRP.ctr(40))
+		local charactersCreate = createD("YButton", charactersBackground, YRP.ctr(80), YRP.ctr(80), characterList:GetWide() - YRP.ctr(40) - br, characterList:GetTall() + YRP.ctr(40))
 		charactersCreate:SetText("")
 		function charactersCreate:Paint(pw, ph)
 			if character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then

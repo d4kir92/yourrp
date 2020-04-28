@@ -2242,21 +2242,23 @@ hook.Add("Think", "openDeathScreen", function(len)
 		win:ShowCloseButton(false)
 		win.systime = SysTime()
 		function win:Paint(pw, ph)
+			self.a = self.a or 0
+			self.a = math.Clamp(self.a + 0.02, 0, 1)
 			if LocalPlayer():Alive() or LocalPlayer():CharID() <= 0 then
 				ds = false
 				self:Remove()
 				gui.EnableScreenClicker(false)
 			end
 			Derma_DrawBackgroundBlur(self, self.systime)
-			draw.RoundedBox(0, 0, YRP.ctr(300), pw, YRP.ctr(500), Color(0, 0, 0, 180))
+			draw.RoundedBox(0, 0, YRP.ctr(300), pw, YRP.ctr(500), Color(0, 0, 0, 180 * self.a))
 			if LocalPlayer():GetDInt("int_deathtimestamp_max", 0) <= CurTime() then
-				draw.SimpleText(string.upper(YRP.lang_string("LID_youdied")), "Y_100_700", pw / 2, YRP.ctr(300 + 500 / 2), Color(255, 100, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(YRP.lang_string("LID_youdied")), "Y_100_700", pw / 2, YRP.ctr(300 + 500 / 2), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			else
-				draw.SimpleText(YRP.lang_string("LID_youreunconsious") .. ".", "Y_50_700", pw / 2, YRP.ctr(300 + 500 / 3), Color(255, 100, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.lang_string("LID_youreunconsious") .. ".", "Y_50_700", pw / 2, YRP.ctr(300 + 500 / 3), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 				local tab = {}
 				tab["X"] = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_max", 0) - CurTime(), 0)
-				draw.SimpleText(YRP.lang_string("LID_youredeadinxseconds", tab) .. ".", "Y_30_700", pw / 2, YRP.ctr(300 + 500 * 2 / 3), Color(255, 100, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.lang_string("LID_youredeadinxseconds", tab) .. ".", "Y_30_700", pw / 2, YRP.ctr(300 + 500 * 2 / 3), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
 			if input.IsMouseDown(MOUSE_FIRST) or input.IsMouseDown(MOUSE_RIGHT) then

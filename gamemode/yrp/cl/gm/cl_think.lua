@@ -555,8 +555,10 @@ local function yrpCalcView(lply, pos, angles, fov)
 		local weapon = lply:GetActiveWeapon()
 		if weapon != NULL and weapon:GetClass() != nil then
 			local _weaponName = string.lower(tostring(lply:GetActiveWeapon():GetClass()))
-			if string.find(_weaponName, "lightsaber", 0, false) then
-				--disablethirdperson = true
+			if _weaponName == "yrp_lightsaber_base" then
+				
+			elseif string.find(_weaponName, "lightsaber", 0, false) then
+				disablethirdperson = true
 			end
 		end
 
@@ -743,6 +745,7 @@ function showPlayermodel()
 		else
 			
 		end
+		return false
 	end
 end
 hook.Remove("ShouldDrawLocalPlayer", "ShowPlayermodel")

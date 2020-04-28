@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
--- #WHITELIST
+-- #Settings
 
 include("cl_settings_client_charakter.lua")
 include("cl_settings_client_keybinds.lua")
@@ -108,11 +108,13 @@ function SettingsTabsContent()
 		if lply:GetDBool("bool_players", false) then
 			tabs:AddOption("LID_settings_players", function(parent)
 				OpenSettingsPlayers()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_players")))
 			end)
 		end
 		if lply:GetDBool("bool_whitelist", false) then
 			tabs:AddOption("LID_whitelist", function(parent)
 				OpenSettingsWhitelist()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_whitelist")))
 			end)
 		end
 		
@@ -121,16 +123,19 @@ function SettingsTabsContent()
 		if lply:GetDBool("bool_status", false) then
 			tabs:AddOption("LID_settings_status", function(parent)
 				OpenSettingsStatus()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_status")))
 			end)
 		end
 		if lply:GetDBool("bool_groupsandroles", false) then
 			tabs:AddOption("LID_settings_groupsandroles", function(parent)
 				OpenSettingsGroupsAndRoles()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_groupsandroles")))
 			end)
 		end
 		if lply:GetDBool("bool_map", false) then
 			tabs:AddOption("LID_settings_map", function(parent)
 				OpenSettingsMap()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_map")))
 			end)
 		end
 		--if lply:GetDBool("bool_status", false) then
@@ -141,16 +146,19 @@ function SettingsTabsContent()
 		if lply:GetDBool("bool_logs", false) then
 			tabs:AddOption("LID_logs", function(parent)
 				OpenSettingsLogs()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_logs")))
 			end)
 		end
 		if lply:GetDBool("bool_blacklist", false) then
 			tabs:AddOption("LID_blacklist", function(parent)
 				OpenSettingsBlacklist()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_blacklist")))
 			end)
 		end
 		if lply:GetDBool("bool_feedback", false) then
 			tabs:AddOption("LID_feedback", function(parent)
 				OpenSettingsFeedback()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_feedback")))
 			end)
 		end
 
@@ -159,36 +167,43 @@ function SettingsTabsContent()
 		if lply:GetDBool("bool_realistic", false) then
 			tabs:AddOption("LID_settings_realistic", function(parent)
 				OpenSettingsRealistic()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_realistic")))
 			end)
 		end
 		if lply:GetDBool("bool_shops", false) then
 			tabs:AddOption("LID_settings_shops", function(parent)
 				OpenSettingsShops()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_shops")))
 			end)
 		end
 		if lply:GetDBool("bool_licenses", false) then
 			tabs:AddOption("LID_settings_licenses", function(parent)
 				OpenSettingsLicenses()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_licenses")))
 			end)
 		end
 		if lply:GetDBool("bool_usergroups", false) then
 			tabs:AddOption("LID_settings_usergroups", function(parent)
 				OpenSettingsUsergroups()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_usergroups")))
 			end)
 		end
 		if lply:GetDBool("bool_levelsystem", false) then
 			tabs:AddOption("LID_levelsystem", function(parent)
 				OpenSettingsLevelsystem()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_levelsystem")))
 			end)
 		end
 		if lply:GetDBool("bool_design", false) then
 			tabs:AddOption("LID_settings_design", function(parent)
 				OpenSettingsDesign()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_design")))
 			end)
 		end
 		if lply:GetDBool("bool_scale", false) then
 			tabs:AddOption("LID_scale", function(parent)
 				OpenSettingsScale()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_scale")))
 			end)
 		end
 
@@ -197,16 +212,19 @@ function SettingsTabsContent()
 		if lply:GetDBool("bool_general", false) then
 			tabs:AddOption("LID_settings_general", function(parent)
 				OpenSettingsGeneral()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_general")))
 			end)
 		end
 		if lply:GetDBool("bool_console", false) then
 			tabs:AddOption("LID_server_console", function(parent)
 				OpenSettingsConsole()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_server_console")))
 			end)
 		end
 		if lply:GetDBool("bool_ac_database", false) then
 			tabs:AddOption("LID_settings_database", function(parent)
 				OpenSettingsDatabase()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_database")))
 			end)
 		end
 		--if lply:GetDBool("bool_status", false) then
@@ -217,11 +235,13 @@ function SettingsTabsContent()
 		if lply:GetDBool("bool_darkrp", false) then
 			tabs:AddOption("DarkRP", function(parent)
 				OpenSettingsDarkRP()
+				sm.win:SetTitle(string.upper("DarkRP"))
 			end)
 		end
 		if lply:GetDBool("bool_permaprops", false) then
 			tabs:AddOption("Perma Props", function(parent)
 				OpenSettingsPermaProps()
+				sm.win:SetTitle(string.upper("Perma Props"))
 			end)
 		end
 
@@ -230,6 +250,7 @@ function SettingsTabsContent()
 		if lply:GetDBool("bool_yourrp_addons", false) then
 			tabs:AddOption("LID_settings_yourrp_addons", function(parent)
 				OpenSettingsYourRPAddons()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_yourrp_addons")))
 			end)
 		end
 
@@ -291,18 +312,83 @@ function OpenSettings()
 		end
 
 		sm.win = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
-		sm.win:SetTitle(SQL_STR_OUT(GetGlobalDString("text_server_name", "")))
+		sm.win:SetTitle("")
 		sm.win:MakePopup()
 		--sm.win:SetHeaderHeight(YRP.ctr(100))
 		sm.win:SetBorder(0)
 		sm.win:CanMaximise()
 		sm.win:SetMaximised(LocalPlayer():GetDBool("settingsmaximised", nil), "SETTING")
 		function sm.win:Paint(pw, ph)
-			if SQL_STR_OUT(GetGlobalDString("text_server_name", "")) != self:GetTitle() then
-				self:SetTitle(SQL_STR_OUT(GetGlobalDString("text_server_name", "")))
-			end
 			hook.Run("YFramePaint", self, pw, ph)
+			draw.SimpleText(self:GetTitle(), "Y_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2 + YRP.ctr(120), self:GetHeaderHeight() / 2, GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_18_500", pw - YRP.ctr(300), self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end
+
+		-- LOGO
+		local logoS = sm.win:GetHeaderHeight() - YRP.ctr(20)
+		sm.win.logo = createD("YPanel", sm.win, YRP.ctr(200), logoS, sm.win:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10))
+		sm.win.logo.yrp = Material("vgui/yrp/logo100_beta.png")
+		function sm.win.logo:Paint(pw, ph)
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetMaterial(self.yrp)
+			surface.DrawTexturedRect(0, 0, 400 * logoS / 130, 130 * logoS / 130)
+
+			self.w = self.w or 0
+			if self.w != 400 * logoS / 130 or self.h != logoS or self.x != sm.win:GetWide() / 2 - self.w or self.y != YRP.ctr(10) then
+				self.w = 400 * logoS / 130
+				self.h = logoS
+				self.x = sm.win:GetWide() / 2 - self.w
+				self.y = YRP.ctr(10)
+
+				self:SetSize(self.w, self.h)
+				self:SetPos(self.x, self.y)
+			end
+		end
+
+		-- DISCORD
+		local icon_size = sm.win:GetHeaderHeight() - YRP.ctr(20)
+		local icon_x, icon_y = sm.win.logo:GetPos()
+		icon_x = icon_x + sm.win.logo:GetWide() + YRP.ctr(20)
+		sm.win.discord = createD("YPanel", sm.win, icon_size, icon_size, icon_x, icon_y)
+		sm.win.discord.logo = createD("DHTML", sm.win.discord, icon_size, icon_size, 0, 0)
+		sm.win.discord.btn = createD("DButton", sm.win.discord, icon_size, icon_size, 0, 0)
+		sm.win.discord.btn:SetText("")
+		local img = GetHTMLImage("https://discordapp.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg", icon_size, icon_size)
+		sm.win.discord.logo:SetHTML(img)
+		function sm.win.discord:Paint(pw, ph)
+			icon_size = sm.win:GetHeaderHeight() - YRP.ctr(20)
+			icon_x, icon_y = sm.win.logo:GetPos()
+			icon_x = icon_x + sm.win.logo:GetWide() + YRP.ctr(20)
+			if self.w != icon_size or self.h != icon_size or self.x != icon_x or self.y != icon_y then
+				self.w = icon_size
+				self.h = icon_size
+				self.x = icon_x
+				self.y = icon_y
+
+				self:SetSize(self.w, self.h)
+				self:SetPos(self.x, self.y)
+				self.logo:SetSize(self.w, self.h)
+				self.btn:SetSize(self.w, self.h)
+			end
+		end
+		function sm.win.discord.btn:Paint(pw, ph)
+		end
+		function sm.win.discord.btn:DoClick()
+			gui.OpenURL("https://discord.gg/CXXDCMJ")
+		end
+
+		--[[sm.win.botbar = createD("DPanel", sm.win, sm.win:GetWide(), YRP.ctr(50), 0, 0)
+		function sm.win.botbar:Paint(pw, ph)
+			self:SetWide(sm.win:GetWide())
+			self:SetPos(0, sm.win:GetTall() - YRP.ctr(50))
+			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
+
+			draw.SimpleText(GetGlobalDString("text_server_name", "-"), "Y_18_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, GetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		end]]
 
 		local content = sm.win:GetContent()
 		-- MENU
@@ -314,6 +400,7 @@ function OpenSettings()
 		local font = "Y_" .. math.Clamp(math.Round(sm.menu.ph - 2 * br), 4, 100) ..  "_700"
 		function sm.menu:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
+			self:SetTall(sm.win:GetTall() - sm.win:GetHeaderHeight())
 		end
 		sm.menu:SetSpacing(YRP.ctr(20))
 		
@@ -332,6 +419,7 @@ function OpenSettings()
 			lply:SetDBool("settings_expanded", sm.menu.expanded)
 		end
 		function sm.menu.expander:Paint(pw, ph)
+			self:SetPos(0, sm.menu:GetTall() - sm.menu.ph)
 			if lply:GetDBool("settings_expanded", true) then
 				surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
 			else
@@ -346,6 +434,7 @@ function OpenSettings()
 		sm.site:SetText("")
 		sm.site:SetHeaderHeight(sm.win:GetHeaderHeight())
 		function sm.site:Paint(pw, ph)
+			self:SetTall(sm.win:GetTall() - sm.win:GetHeaderHeight())
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 			local tab = {}
 			tab.color = lply:InterfaceValue("YFrame", "BG")
@@ -366,8 +455,10 @@ function OpenSettings()
 
 		function sm.win:UpdateSize(pw)
 			local sw = pw or sm.menu.pw + sm.menu.ph + 2 * br
+
 			sm.menu:SetWide(sw)
 			sm.site:SetWide(sm.win:GetWide() - sm.menu:GetWide())
+
 			sm.site:SetPos(sm.menu:GetWide(), 0)
 		end
 

@@ -52,7 +52,7 @@ function CreateFactionSelectionContent()
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 	end
 	function sbar.btnGrip:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+		draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
 	end
 
 

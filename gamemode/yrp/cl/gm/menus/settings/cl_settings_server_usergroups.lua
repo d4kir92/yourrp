@@ -25,7 +25,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 	PARENT.ug = createD("DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(20 + 500 + 20), PARENT:GetTall(), YRP.ctr(20 + 500), YRP.ctr(0))
 
-	PARENT.ugp = createD("DPanel", PARENT, ScrW() / 2, PARENT:GetTall(), 0, 0)
+	PARENT.ugp = createD("DPanel", PARENT, YRP.ctr(3000), PARENT:GetTall(), 0, 0)
 	function PARENT.ugp:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color(255, 100, 100, 100))
 	end

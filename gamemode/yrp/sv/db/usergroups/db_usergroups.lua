@@ -1900,3 +1900,14 @@ net.Receive("usergroup_update_string_licenses", function(len, ply)
 
 	printGM("db", ply:YRPName() .. " updated licenses of usergroup (" .. uid .. ") to [" .. string_licenses .. "]")
 end)
+
+hook.Add("Think", "yrp_usergroup_haschanged", function()
+	for i, ply in pairs(player.GetAll()) do
+		ply.yrp_ug = ply.yrp_ug or ply:GetUserGroup()
+		if ply.yrp_ug != ply:GetUserGroup() then
+			ply.yrp_ug = ply:GetUserGroup()
+			YRP.msg("note", ply:RPName() .. " has a new usergroup, respawning...")
+			ply:Kill()
+		end
+	end
+end)
