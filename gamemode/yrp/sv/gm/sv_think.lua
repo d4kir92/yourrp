@@ -233,7 +233,7 @@ end
 function teleporterAlive(uid)
 	for j, tel in pairs(ents.GetAll()) do
 		if tel:GetClass() == "yrp_teleporter" then
-			if tel:GetDInt("yrp_teleporter_uid", nil) != nil and tonumber(tel:GetDInt("yrp_teleporter_uid", nil)) == tonumber(uid) then
+			if tel:GetDInt("yrp_teleporter_uid", -1) != -1 and tonumber(tel:GetDInt("yrp_teleporter_uid", -1)) == tonumber(uid) then
 				return true
 			end
 			tel.PermaProps = true
