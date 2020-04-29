@@ -127,11 +127,11 @@ function SWEP:PrimaryAttack()
 		if CLIENT then
 			local lply = LocalPlayer()
 			if self.startpos == nil then
-				self.startpos = string.Explode(" ", tostring(ply:GetPos()))
-				self.startang = string.Explode(" ", tostring(ply:GetAngles()))
+				self.startpos = string.Explode(" ", tostring(lply:GetPos()))
+				self.startang = string.Explode(" ", tostring(lply:GetAngles()))
 			else
-				self.endpos = string.Explode(" ", tostring(ply:GetPos()))
-				self.endang = string.Explode(" ", tostring(ply:GetAngles()))
+				self.endpos = string.Explode(" ", tostring(lply:GetPos()))
+				self.endang = string.Explode(" ", tostring(lply:GetAngles()))
 
 				net.Start("dbInsertIntoMap")
 					net.WriteString("yrp_" .. GetMapNameDB())
