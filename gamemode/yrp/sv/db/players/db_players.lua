@@ -201,28 +201,30 @@ function set_role(ply, rid)
 	local _char_id = ply:CharID()
 	if _char_id != nil then
 		local old_rid = ply:GetChaTab()
-		old_rid = old_rid.roleID
-		local _result = SQL_UPDATE("yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID())
-		local _role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. rid)
-		local _old_uid = ply:GetDString("roleUniqueID", "1")
-		ply:SetDString("roleUniqueID", rid)
+		if wk(old_rid) then
+			old_rid = old_rid.roleID
+			local _result = SQL_UPDATE("yrp_characters", "roleID = " .. rid, "uniqueID = " .. ply:CharID())
+			local _role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. rid)
+			local _old_uid = ply:GetDString("roleUniqueID", "1")
+			ply:SetDString("roleUniqueID", rid)
 
-		SetIDCardID(ply)
+			SetIDCardID(ply)
 
-		if _role != nil then
-			_role = tonumber(_role[1].int_groupID)
-			if isnumber(_role) then
-				local _result2 = SQL_UPDATE("yrp_characters", "groupID = " .. _role, "uniqueID = " .. ply:CharID())
-				ply:SetDString("groupUniqueID", _role)
+			if _role != nil then
+				_role = tonumber(_role[1].int_groupID)
+				if isnumber(_role) then
+					local _result2 = SQL_UPDATE("yrp_characters", "groupID = " .. _role, "uniqueID = " .. ply:CharID())
+					ply:SetDString("groupUniqueID", _role)
+				else
+					YRP.msg("note", "_role = " .. _role)
+				end
 			else
-				YRP.msg("note", "_role = " .. _role)
+				YRP.msg("note", "_role failed")
 			end
-		else
-			YRP.msg("note", "_role failed")
+			updateRoleUses(_old_uid)
+			updateRoleUses(rid)
+			hook.Run("yrp_get_role_post", ply, rid)
 		end
-		updateRoleUses(_old_uid)
-		updateRoleUses(rid)
-		hook.Run("yrp_get_role_post", ply, rid)
 	end
 end
 

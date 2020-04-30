@@ -869,7 +869,7 @@ end)
 
 util.AddNetworkString("yrp_voice_channel_add")
 net.Receive("yrp_voice_channel_add", function(len, ply)
-	local name = net.ReadString()
+	local name = SQL_STR_IN(net.ReadString())
 
 	local augs = table.concat(net.ReadTable(), ",")
 	local agrps = table.concat(net.ReadTable(), ",")
@@ -902,7 +902,7 @@ end)
 
 util.AddNetworkString("yrp_voice_channel_save")
 net.Receive("yrp_voice_channel_save", function(len, ply)
-	local name = net.ReadString()
+	local name = SQL_STR_IN(net.ReadString())
 
 	local augs = table.concat(net.ReadTable(), ",")
 	local agrps = table.concat(net.ReadTable(), ",")

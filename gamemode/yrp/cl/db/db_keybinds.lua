@@ -38,6 +38,7 @@ YRPKEYBINDS["mute_voice"] = KEY_HOME
 YRPKEYBINDS["macro_menu"] = KEY_INSERT
 
 YRPKEYBINDS["voice_menu"] = KEY_COMMA
+YRPKEYBINDS["chat_menu"] = KEY_PERIOD
 
 for i = 1, 49 do
 	YRPKEYBINDS["m_" .. i] = 0

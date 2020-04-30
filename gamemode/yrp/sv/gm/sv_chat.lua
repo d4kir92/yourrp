@@ -42,39 +42,6 @@ net.Receive("finishchat", function(len, ply)
 	ply:SetDBool("istyping", false)
 end)
 
-local paket = {}
-paket.lokal = true
-paket.command = "/test"
-paket.text = "TESTTEXT"
-paket.sender = "UNKNOWN"
-paket.usergroup = ""
-
-function is_chat_command(str, command)
-	if str != nil and command != nil then
-		local _size = string.len(string.lower(command))
-		local _slash = string.sub(string.lower(str), 1, 1 + _size) == "/" .. string.lower(command)
-		local _call = string.sub(string.lower(str), 1, 1 + _size) == "!" .. string.lower(command)
-		if _slash or _call then
-			paket.iscommand = true
-			return true
-		else
-			paket.iscommand = false
-			return false
-		end
-	end
-	paket.iscommand = false
-	return false
-end
-
-function print_warning(str)
-	local _table = {}
-	_table[1] = Color(255, 0, 0)
-	_table[2] = str
-	net.Start("yrp_player_say")
-		net.WriteTable(_table)
-	net.Broadcast()
-end
-
 function print_help(sender)
 	sender:ChatPrint("")
 	sender:ChatPrint("[HELP] (/help or !help) Any command can start with / or !")
@@ -112,7 +79,6 @@ function print_help(sender)
 	sender:ChatPrint("")
 	return ""
 end
-
 
 function roll_number(sender)
 	local number = math.Round(math.Rand(0, 100))
@@ -345,113 +311,6 @@ net.Receive("set_chat_mode", function(len, ply)
 	ply:SetDString("chat_mode", string.lower(_str))
 end)
 
-function unpack_paket(sender, text, iscommand)
-	paket = {}
-
-	if string.find(text[1], "/", 1, false) or string.find(text[1], "!", 1, false) then
-		--command
-		local _start = 2
-		local _end = string.find(text, " ", 1, false)
-		if _end != nil then
-			_end = _end -1
-		end
-
-		paket.command = string.sub(text, _start, _end)
-		if paket.command == "/" then
-			if GetGlobalDBool("bool_chat_ooc", true) then
-				paket.command = "ooc"
-			else
-				paket.command = "general"
-			end
-		elseif paket.command == "." then
-			if GetGlobalDBool("bool_chat_looc", true) then
-				paket.command = "looc"
-			else
-				paket.command = "say"
-			end
-		end
-
-		--text
-		local _start_txt = _end or 0
-		_start_txt = _start_txt + 2
-
-		paket.text = string.sub(text, _start_txt)
-	else
-		paket.command = sender:GetDString("chat_mode", "say")
-		paket.text = text
-	end
-
-	paket.text_color = Color(255, 255, 255)
-
-	paket.isyrpcommand = true
-	if paket.command == "advert" then
-		paket.command_color = Color(255, 255, 0)
-		paket.text_color = Color(255, 255, 0)
-	elseif paket.command == "me" then
-		paket.command_color = Color(0, 255, 0)
-		paket.text_color = Color(0, 255, 0)
-	elseif paket.command == "it" then
-		paket.command_color = Color(255, 255, 255)
-		paket.text_color = Color(255, 255, 255)
-	elseif paket.command == "say" then
-		paket.command_color = Color(100, 255, 100)
-		paket.text_color = Color(255, 255, 255)
-	elseif paket.command == "general" then
-		paket.command_color = Color(200, 200, 255)
-		paket.text_color = Color(200, 200, 255)
-	elseif paket.command == "ooc" or paket.command == "looc" then
-		paket.command_color = Color(100, 255, 100)
-	elseif paket.command == "admin" then
-		paket.command_color = Color(255, 255, 0)
-		paket.text_color = Color(255, 255, 20)
-	elseif paket.command == "event" then
-		paket.command_color = Color(255, 255, 100)
-		paket.text_color = Color(255, 255, 100)
-	elseif paket.command == "faction" then
-		paket.command_color = Color(100, 100, 255)
-		paket.text_color = Color(160, 160, 255)
-	elseif paket.command == "group" then
-		paket.command_color = Color(160, 160, 255)
-		paket.text_color = Color(160, 160, 255)
-	elseif paket.command == "role" then
-		paket.command_color = Color(0, 255, 0)
-		paket.text_color = Color(20, 255, 20)
-	elseif paket.command == "yell" then
-		paket.command_color = Color(255, 0, 0)
-		paket.text_color = Color(255, 0, 0)
-	elseif paket.command == "roll" then
-		paket.command_color = Color(100, 100, 255)
-		paket.text_color = Color(100, 100, 255)
-	elseif paket.command == "service" then
-		paket.command_color = Color(255, 165, 0)
-		paket.text_color = Color(255, 165, 0)
-	else
-		paket.isyrpcommand = false
-		paket.command_color = Color(255, 0, 0)
-	end
-
-	paket.steamname = sender:SteamName()
-	if GetGlobalDBool("bool_yrp_chat_show_name", false) then
-		paket.rpname = sender:RPName()
-	end
-	if GetGlobalDBool("bool_yrp_chat_show_usergroup", false) then
-		paket.usergroup = sender:GetUserGroup()
-		paket.usergroup_color = sender:GetUserGroupColor()
-	end
-	if GetGlobalDBool("bool_yrp_chat_show_rolename", false) then
-		paket.role = sender:GetDString("roleName")
-	end
-	if GetGlobalDBool("bool_yrp_chat_show_factionname", false) then
-		paket.faction = sender:GetDString("factionName")
-	end
-	if GetGlobalDBool("bool_yrp_chat_show_groupname", false) then
-		paket.group = sender:GetDString("groupName")
-	end
-	if GetGlobalDBool("bool_yrp_chat_show_idcardid", false) then
-		paket.idcardid = sender:GetDString("idcardid")
-	end
-end
-
 util.AddNetworkString("sendanim")
 function SendAnim(ply, slot, activity, loop)
 	net.Start("sendanim")
@@ -490,135 +349,93 @@ net.Receive("setafk", function(len, ply)
 	ply:SetAFK(true)
 end)
 
-function GM:PlayerSay(sender, text, teamChat)
-	unpack_paket(sender, text)
+function DoCommand(sender, command, text)
+	command = string.lower(command)
+	text = text or ""
 
-	if text != "!help" and !strEmpty(text) then
-		SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_chat', '" .. sender:SteamID64() .. "', '" .. SQL_STR_IN(text) .. "'")
-	end
-
-	paket.command = string.lower(paket.command)
-
-	if !GetGlobalDBool("bool_chat_ooc", true) then
-		if paket.command == "ooc" then
-			paket.command = "general"
-		end
-	end
-	if !GetGlobalDBool("bool_chat_looc", true) then
-		if paket.command == "looc" then
-			paket.command = "say"
-		end
-	end
-	if !GetGlobalDBool("bool_chat_role", true) then
-		if paket.command == "role" then
-			paket.command = "general"
-		end
-	end
-	if !GetGlobalDBool("bool_chat_group", true) then
-		if paket.command == "group" then
-			paket.command = "general"
-		end
-	end
-	if !GetGlobalDBool("bool_chat_yell", true) then
-		if paket.command == "yell" then
-			paket.command = "say"
-		end
-	end
-	if !GetGlobalDBool("bool_chat_service", true) then
-		if paket.command == "service" then
-			paket.command = "say"
-		end
-	end
-
-	if paket.command == "general" or paket.command == "ooc" or paket.command == "advert" or paket.command == "event" then
-		paket.lokal = false
-	else
-		paket.lokal = true
-	end
-
-	if paket.command == "afk" then
+	if command == "afk" then
 		sender:SetAFK(!sender:AFK())
 		return ""
 	end
 
-	if paket.command == "dnd" then
+	if command == "dnd" then
 		sender:SetDBool("isdnd", !sender:GetDBool("isdnd", false))
 		return ""
 	end
 
-	if paket.command == "help" then
+	if command == "help" then
 		print_help(sender)
 		return ""
 	end
 
-	if paket.command == "dropweapon" then
+	if command == "dropweapon" then
 		drop_weapon(sender)
 		return ""
 	end
 
-	if paket.command == "dropmoney" then
+	if command == "dropmoney" then
 		drop_money(sender, text)
 		return ""
 	end
 
-	if paket.command == "kill" then
+	if command == "kill" then
 		do_suicide(sender)
 		return ""
 	end
 
-	if paket.command == "tag_dev" then
+	if command == "tag_dev" then
 		show_tag_dev(sender)
 		return ""
 	end
 
-	if paket.command == "tag_ug" then
+	if command == "tag_ug" then
 		show_tag_ug(sender)
 		return ""
 	end
 
-	if paket.command == "setmoney" then
+	if command == "setmoney" then
 		set_money(sender, text)
 		return ""
 	end
 
-	if paket.command == "addmoney" then
+	if command == "addmoney" then
 		add_money(sender, text)
 		return ""
 	end
 
-	if paket.command == "addxp" then
+	if command == "addxp" then
 		add_xp(sender, text)
 		return ""
 	end
 
-	if paket.command == "addlevel" then
+	if command == "addlevel" then
 		add_level(sender, text)
 		return ""
 	end
 
-	if paket.command == "setlevel" then
+	if command == "setlevel" then
 		set_level(sender, text)
 		return ""
 	end
 
-	if paket.command == "sleep" then
+	if command == "sleep" then
 		do_sleep(sender)
 		return ""
 	end
 
-	if paket.command == "revive" then
+	if command == "revive" then
 		revive(sender, text)
 		return ""
 	end
 
-	if paket.command == "alert" then
+	if command == "alert" then
 		if sender:HasAccess() then
 			AddAlert(string.sub(text, 8))
 			return ""
 		end
 	end
 
-	if paket.command == "givelicense" then
+	if command == "givelicense" then
 		text = string.sub(text, 14)
 		local args = string.Explode(" ", text)
 		local name = args[1]
@@ -635,7 +452,7 @@ function GM:PlayerSay(sender, text, teamChat)
 		end
 	end
 
-	if paket.command == "rpname" or paket.command == "name" or paket.command == "nick" then
+	if command == "rpname" or command == "name" or command == "nick" then
 		if GetGlobalDBool("bool_characters_changeable_name", false) then
 			sender:SetRPName(paket.text)
 			return ""
@@ -643,112 +460,145 @@ function GM:PlayerSay(sender, text, teamChat)
 			sender:ChatPrint("SetRPName is not enabled.")
 		end
 	end
+end
 
-	local pk = {}
-	pk.iscommand = paket.iscommand
-	pk.command = paket.command
-	pk.command_color = paket.command_color
-	pk.text = paket.text
-	pk.text_color = paket.text_color
-	pk.lokal = paket.lokal
-	pk.rpname = paket.rpname or ""
-	pk.steamname = paket.steamname or ""
-	pk.usergroup = paket.usergroup or ""
-	pk.usergroup_color = paket.usergroup_color or Color(0, 0, 100)
-	pk.rolename = paket.role or ""
-	pk.factionname = paket.faction or ""
-	pk.groupname = paket.group or ""
-	pk.idcardid = paket.idcardid or ""
-	pk.isyrpcommand = paket.isyrpcommand or false
-	pk.afk = sender:AFK()
-	pk.dnd = sender:DND()
+function RN(text)
+	local cs, ce = string.find(text, "RN(", 1, true)
+	if cs then
+		local s, e = string.find(text, ")", cs, true)
+		if e then
+			local pre = string.sub(text, 1, cs - 1)
+			local suf = string.sub(text, e + 1)
+			local ex = string.sub(text, cs + 3, e - 1)
+			print(ex)
+			ex = string.Explode(",", ex)
 
-	if paket.command == "roll" then
-		local tab = {}
-		tab["NAME"] = sender:RPName()
-		tab["NUMBER"] = tostring(roll_number(sender))
-		pk.text = YRP.lang_string("LID_rolled", tab)
+			local rn = math.random(ex[1], ex[2])
+
+			text = pre .. rn .. suf
+		end
+	end
+	return text
+end
+
+function GM:PlayerSay(sender, text, teamChat)
+	local channel = "SAY"
+	if string.StartWith(text, "!") or string.StartWith(text, "/") then
+		local s, e = string.find(text, " ")
+		if s then
+			channel = string.sub(text, 2, s - 1)
+			text = string.sub(text, s + 1)
+		else
+			channel = string.sub(text, 2)
+			text = ""
+		end
+		channel = string.upper(channel)
 	end
 
-	if GetGlobalBool("bool_msg_channel_chat", false) then
-		MsgC(GetRealmColor(), "\n[", Color(0, 100, 225), "YRP", GetRealmColor(), "|", Color(0, 0, 255),"CHAT", GetRealmColor(), "] ", pk.command_color, "[" .. string.upper(pk.command) .. "] ", pk.text_color, pk.groupname .. " " .. pk.rolename .. " " .. pk.steamname .. " [" .. pk.rpname .. "]", ": ", pk.text .. "\n")
-	end
+	local tab = SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. channel .. "'")
+	if wk(tab) then
+		tab = tab[1]
+		
+		tab.int_mode = tonumber(tab.int_mode)
 
-	if paket.command == "admin" then
-		if sender:HasAccess() then
-			for k, receiver in pairs(player.GetAll()) do
-				if receiver:HasAccess() then
+		local result = tab.string_structure
+
+		result = string.Replace(result, "%USERGROUP%", string.upper(sender:GetUserGroup()))
+		result = string.Replace(result, "%STEAMNAME%", sender:SteamName())
+		result = string.Replace(result, "%RPNAME%", sender:RPName())
+		result = string.Replace(result, "%IDCARDID%", sender:IDCardID())
+
+		result = string.Replace(result, "%FACTION%", sender:GetFactionName())
+		result = string.Replace(result, "%GROUP%", sender:GetGroupName())
+		result = string.Replace(result, "%ROLE%", sender:GetRoleName())
+
+		result = string.Replace(result, "%TEXT%", text)
+
+		result = RN(result)
+
+		local pk = {}
+		while(!strEmpty(result)) do
+			local cs, ce = string.find(result, "Color(", 1, true)
+			if cs == 1 then
+				local s, e = string.find(result, ")", 1, true)
+				if e then
+					local color = string.sub(result, cs + 6, e - 1)
+					color = string.Explode(",", color)
+					table.insert(pk, Color(color[1], color[2], color[3]))
+
+					result = string.sub(result, e + 1)
+				end
+			elseif cs then
+				local tex = string.sub(result, 1, cs - 1)
+				
+				table.insert(pk, tex)
+
+				result = string.sub(result, cs)
+			else
+				table.insert(pk, result)
+				result = ""
+			end
+		end
+
+		if text != "!help" and !strEmpty(text) then
+			SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', '" .. SQL_STR_IN(text) .. "'")
+		end
+
+		if tab.int_mode == 0 then -- GLOBAL
+			net.Start("yrp_player_say")
+				net.WriteEntity(sender)
+				net.WriteTable(pk)
+			net.Broadcast()
+			return ""
+		elseif tab.int_mode == 1 then -- LOCAL
+			for i, v in pairs(player.GetAll()) do
+				if v:GetPos():Distance(sender:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
 					net.Start("yrp_player_say")
+						net.WriteEntity(sender)
 						net.WriteTable(pk)
-					net.Send(receiver)
+					net.Send(v)
 				end
 			end
 			return ""
+		elseif tab.int_mode == 2 then -- FACTION
+			for i, v in pairs(player.GetAll()) do
+				if v:GetPos():Distance(sender:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
+					net.Start("yrp_player_say")
+						net.WriteEntity(sender)
+						net.WriteTable(pk)
+					net.Send(v)
+				end
+			end
+			return ""
+		elseif tab.int_mode == 3 then -- GROUP
+			for i, v in pairs(player.GetAll()) do
+				if v:GetPos():Distance(sender:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
+					net.Start("yrp_player_say")
+						net.WriteEntity(sender)
+						net.WriteTable(pk)
+					net.Send(v)
+				end
+			end
+			return ""
+		elseif tab.int_mode == 4 then -- ROLE
+			for i, v in pairs(player.GetAll()) do
+				if v:GetPos():Distance(sender:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
+					net.Start("yrp_player_say")
+						net.WriteEntity(sender)
+						net.WriteTable(pk)
+					net.Send(v)
+				end
+			end
+			return ""
+		elseif tab.int_mode == 9 then -- Custom
+			-- IN WORK :P
+			return ""
 		else
+			DoCommand(sender, channel, text)
 			return ""
 		end
-	end
-
-	if paket.command == "faction" then
-		for k, receiver in pairs(player.GetAll()) do
-			if receiver:GetDString("factionName") == sender:GetDString("factionName") then
-				net.Start("yrp_player_say")
-					net.WriteTable(pk)
-				net.Send(receiver)
-			end
-		end
+	else
 		return ""
+		--return channel .. " RPNAME : " .. text
 	end
-
-	if paket.command == "group" then
-		for k, receiver in pairs(player.GetAll()) do
-			if receiver:GetDString("groupName") == sender:GetDString("groupName") then
-				net.Start("yrp_player_say")
-					net.WriteTable(pk)
-				net.Send(receiver)
-			end
-		end
-		return ""
-	end
-
-	if paket.command == "role" then
-		for k, receiver in pairs(player.GetAll()) do
-			if receiver:GetDString("roleName") == sender:GetDString("roleName") then
-				net.Start("yrp_player_say")
-					net.WriteTable(pk)
-				net.Send(receiver)
-			end
-		end
-		return ""
-	end
-
-	if paket.command == "service" then
-		for k, receiver in pairs(player.GetAll()) do
-			if receiver:isCP() or receiver == sender then
-				net.Start("yrp_player_say")
-					net.WriteTable(pk)
-				net.Send(receiver)
-			end
-		end
-		return ""
-	end
-
-	if !paket.isyrpcommand then
-		return ""
-	end
-
-	if !paket.lokal then
-		net.Start("yrp_player_say")
-			net.WriteTable(pk)
-		net.Broadcast()
-	elseif paket.lokal then
-		for k, receiver in pairs(player.GetAll()) do
-			if sender:GetPos():Distance(receiver:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
-				net.Start("yrp_player_say")
-					net.WriteTable(pk)
-				net.Send(receiver)
-			end
-		end
-	end
-	return ""
 end

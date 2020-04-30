@@ -68,9 +68,6 @@ function update_chat_choices()
 	if yrpChat.comboBox != nil then
 		local c = 1
 		yrpChat.comboBox:Clear()
-		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_general") .. " /GENERAL", "general", false)
-		chatids["general"] = c
-		c = c + 1
 		if GetGlobalDBool("bool_chat_ooc", true) then
 			yrpChat.comboBox:AddChoice(YRP.lang_string("LID_ooc") .. " /OOC", "ooc", false)
 			chatids["ooc"] = c
@@ -87,19 +84,11 @@ function update_chat_choices()
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_advert") .. " /ADVERT", "advert", false)
 		chatids["advert"] = c
 		c = c + 1
-		if GetGlobalDBool("bool_chat_yell", true) then
-			yrpChat.comboBox:AddChoice(YRP.lang_string("LID_yell") .. " /YELL", "yell", false)
-			chatids["yell"] = c
-			c = c + 1
-		end
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_me") .. " /ME", "me", false)
 		chatids["me"] = c
 		c = c + 1
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_it") .. " /IT", "it", false)
 		chatids["it"] = c
-		c = c + 1
-		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_admin") .. " /ADMIN", "admin", false)
-		chatids["admin"] = c
 		c = c + 1
 		if GetGlobalDBool("bool_chat_group", true) then
 			yrpChat.comboBox:AddChoice(YRP.lang_string("LID_group") .. " /GROUP", "group", false)
@@ -109,11 +98,6 @@ function update_chat_choices()
 		if GetGlobalDBool("bool_chat_role", true) then
 			yrpChat.comboBox:AddChoice(YRP.lang_string("LID_role") .. " /ROLE", "role", false)
 			chatids["role"] = c
-			c = c + 1
-		end
-		if GetGlobalDBool("bool_chat_service", true) then
-			yrpChat.comboBox:AddChoice(YRP.lang_string("LID_service") .. " /SERVICE", "service", false)
-			chatids["service"] = c
 			c = c + 1
 		end
 		yrpChat.comboBox:AddChoice(YRP.lang_string("LID_faction") .. " /FACTION", "faction", false)
@@ -206,6 +190,7 @@ function niceCommand(com)
 	return com
 end
 
+local CHATMODE = "SAY"
 function InitYRPChat()
 	local lply = LocalPlayer()
 	if yrpChat.window == nil then
@@ -262,10 +247,7 @@ function InitYRPChat()
 					--yrpChat.tabs:SetSize(sw - YRP.ctr(2 * 20), YRP.ctr(60))
 				end
 				local _com = yrpChat.writeField:GetText()
-				if isFullyCommand(_com, "sgeneral", YRP.lang_string("LID_general")) and GetGlobalDBool("bool_chat_general", true) then
-					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_general"), chatids["general"])
-				elseif isFullyCommand(_com, "sooc", YRP.lang_string("LID_ooc")) and GetGlobalDBool("bool_chat_ooc", true) then
+				if isFullyCommand(_com, "sooc", YRP.lang_string("LID_ooc")) and GetGlobalDBool("bool_chat_ooc", true) then
 					yrpChat.writeField:SetText("")
 					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_ooc"), chatids["ooc"])
 				elseif isFullyCommand(_com, "slooc", YRP.lang_string("LID_looc")) and GetGlobalDBool("bool_chat_looc", true) then
@@ -280,24 +262,15 @@ function InitYRPChat()
 				elseif isFullyCommand(_com, "sit", YRP.lang_string("LID_it")) then
 					yrpChat.writeField:SetText("")
 					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_it"), chatids["it"])
-				elseif isFullyCommand(_com, "syell", YRP.lang_string("LID_yell")) and GetGlobalDBool("bool_chat_yell", true) then
-					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_yell"), chatids["yell"])
 				elseif isFullyCommand(_com, "sadvert", YRP.lang_string("LID_advert")) then
 					yrpChat.writeField:SetText("")
 					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_advert"), chatids["advert"])
-				elseif isFullyCommand(_com, "sadmin", YRP.lang_string("LID_admin")) then
-					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_admin"), chatids["admin"])
 				elseif isFullyCommand(_com, "sgroup", YRP.lang_string("LID_group")) and GetGlobalDBool("bool_chat_group", true) then
 					yrpChat.writeField:SetText("")
 					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_group"), chatids["group"])
 				elseif isFullyCommand(_com, "srole", YRP.lang_string("LID_role")) and GetGlobalDBool("bool_chat_role", true) then
 					yrpChat.writeField:SetText("")
 					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_role"), chatids["role"])
-				elseif isFullyCommand(_com, "sservice", YRP.lang_string("LID_service")) and GetGlobalDBool("bool_chat_service", true) then
-					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_service"), chatids["service"])
 				elseif isFullyCommand(_com, "sfaction", YRP.lang_string("LID_faction")) then
 					yrpChat.writeField:SetText("")
 					yrpChat.comboBox:ChooseOption(YRP.lang_string("LID_faction"), chatids["faction"])
@@ -309,6 +282,7 @@ function InitYRPChat()
 		end
 
 		function yrpChat.comboBox:OnSelect(index, value, data)
+			CHATMODE = data
 			net.Start("set_chat_mode")
 				net.WriteString(string.lower(data))
 			net.SendToServer()
@@ -342,7 +316,12 @@ function InitYRPChat()
 				gui.HideGameUI()
 			elseif code == KEY_ENTER then
 				if !strEmpty(string.Trim(self:GetText())) then
-					LocalPlayer():ConCommand("say \"" .. self:GetText() .. "\"")
+					local text = self:GetText()
+					if string.StartWith(text, "!") or string.StartWith(text, "/") then
+						LocalPlayer():ConCommand("say \"".. text .. "\"")
+					else
+						LocalPlayer():ConCommand("say \"!" .. CHATMODE .. " " .. text .. "\"")
+					end
 				end
 				yrpChat.closeChatbox()
 			end
@@ -555,109 +534,13 @@ net.Receive("stopanim", function()
 end)
 
 net.Receive("yrp_player_say", function(len)
-	local _tmp = net.ReadTable()
-	local _write = false
+	local sender = net.ReadEntity()
+	local pk = net.ReadTable()
 
-	if _tmp.command == "say" or _tmp.command == "yell" or _tmp.command == "advert" or _tmp.command == "general" or _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "me" or _tmp.command == "it" or _tmp.command == "roll" or _tmp.command == "admin" or _tmp.command == "faction" or _tmp.command == "group" or _tmp.command == "role" or _tmp.command == "service" or _tmp.command == "event" then
-		_write = true
-
-		_tmp.status = ""
-		if _tmp.afk then
-			_tmp.status = "<AFK>"
-		end
-		if _tmp.dnd then
-			_tmp.status = "<DND>"
-		end
-
-		_tmp.name = ""
-		if _tmp.command != "roll" and _tmp.command != "event" and _tmp.command != "it" then
-			if !strEmpty(_tmp.factionname) then
-				_tmp.name = _tmp.name .. "[" .. _tmp.factionname .. "] "
-			end
-			if !strEmpty(_tmp.groupname) and _tmp.groupname != _tmp.factionname then
-				_tmp.name = _tmp.name .. _tmp.groupname .. " "
-			end
-			if !strEmpty(_tmp.idcardid) then
-				_tmp.name = _tmp.name .. _tmp.idcardid .. " "
-			end
-			if !strEmpty(_tmp.rolename) then
-				_tmp.name = _tmp.name .. _tmp.rolename .. " "
-			end
-			if !strEmpty(_tmp.rpname) then
-				_tmp.name = _tmp.name .. _tmp.rpname
-			end
-		end
+	if GetGlobalDBool("bool_yrp_chat", false) then
+		chat.AddText(true, sender, unpack(pk))
+	else
+		chat.AddText(true, unpack(pk))
 	end
-
-	local _usergroup = false
-	if _tmp.command == "ooc" or _tmp.command == "looc" or _tmp.command == "admin" then
-		_usergroup = true
-		_tmp.name = _tmp.steamname
-	end
-
-	if true then
-		local _unpack = {}
-
-		_tmp._lokal = ""
-		_tmp.lokal_color = Color(255, 100, 100)
-		if !_tmp.lokal then
-			_tmp._lokal = YRP.lang_string("LID_globalchat")
-			_tmp.lokal_color = Color(255, 165, 0)
-
-			table.insert(_unpack, _tmp.lokal_color)
-			table.insert(_unpack, "[")
-			table.insert(_unpack, string.upper(_tmp._lokal))
-			table.insert(_unpack, "]")
-
-			table.insert(_unpack, " ")
-
-			if _usergroup then
-				if !strEmpty(_tmp.usergroup) then
-					table.insert(_unpack, _tmp.usergroup_color)
-					table.insert(_unpack, "[")
-					table.insert(_unpack, string.upper(_tmp.usergroup))
-					table.insert(_unpack, "]")
-
-					table.insert(_unpack, " ")
-				end
-			end
-		end
-
-		if !_tmp.isyrpcommand then
-			table.insert(_unpack, Color(255, 0, 0))
-			table.insert(_unpack, "[")
-			table.insert(_unpack, YRP.lang_string("LID_command"))
-			table.insert(_unpack, "]")
-			table.insert(_unpack, " ")
-		end
-
-		if _tmp.command != "me" and _tmp.command != "it" and _tmp.command != "roll" and _tmp.command != "say" then
-			table.insert(_unpack, _tmp.command_color)
-			table.insert(_unpack, "[")
-			table.insert(_unpack, string.upper(	niceCommand(_tmp.command)))
-			table.insert(_unpack, "]")
-			table.insert(_unpack, " ")
-		end
-
-		table.insert(_unpack, Color(255, 0, 0))
-		table.insert(_unpack, _tmp.status)
-
-		table.insert(_unpack, _tmp.command_color)
-		table.insert(_unpack, _tmp.name)
-
-		if _tmp.command == "it" then
-			table.insert(_unpack, "***")
-		end
-		if _tmp.command != "me" and _tmp.command != "it" and _tmp.command != "roll" and _tmp.command != "event" then
-			table.insert(_unpack, ":\n")
-		elseif _tmp.command != "roll" and _tmp.command != "event" then
-			table.insert(_unpack, " ")
-		end
-
-		table.insert(_unpack, _tmp.text_color)
-		table.insert(_unpack, tostring(_tmp.text))
-
-		chat.AddText(true, unpack(_unpack))
-		chat.PlaySound()
-	end
+	chat.PlaySound()
 end)
