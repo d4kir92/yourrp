@@ -349,9 +349,57 @@ net.Receive("setafk", function(len, ply)
 	ply:SetAFK(true)
 end)
 
+function strTrimLeft(str, cha)
+	local s, e = string.find(str, cha)
+	return string.sub(str, 1, s - 1)
+end
+
+function strTrimRight(str, cha)
+	local s, e = string.find(str, cha)
+	return string.sub(str, s + 1)
+end
+
+function SendPM(sender, msg)
+	local name = strTrimLeft(msg, " ")
+	msg = strTrimRight(msg, " ")
+	local target = GetPlayerByName(name)
+
+	local pk = {}
+	table.insert(pk, Color(255, 100, 255))
+	table.insert(pk, "LID_to;")
+	table.insert(pk, " ")
+	table.insert(pk, target:RPName())
+	table.insert(pk, ": ")
+	table.insert(pk, msg)
+	net.Start("yrp_player_say")
+		net.WriteEntity(sender)
+		net.WriteTable(pk)
+	net.Send(sender)
+
+	local pk2 = {}
+	table.insert(pk2, Color(255, 100, 255))
+	table.insert(pk2, "LID_from;")
+	table.insert(pk2, " ")
+	table.insert(pk2, sender:RPName())
+	table.insert(pk2, ": ")
+	table.insert(pk2, msg)
+	net.Start("yrp_player_say")
+		net.WriteEntity(target)
+		net.WriteTable(pk2)
+	net.Send(target)
+end
+
 function DoCommand(sender, command, text)
 	command = string.lower(command)
 	text = text or ""
+
+	local purtext = text
+
+	text = command .. " " .. text
+
+	if command == "pm" or command == "w" then
+		SendPM(sender, purtext)
+	end
 
 	if command == "afk" then
 		sender:SetAFK(!sender:AFK())
@@ -470,7 +518,7 @@ function RN(text)
 			local pre = string.sub(text, 1, cs - 1)
 			local suf = string.sub(text, e + 1)
 			local ex = string.sub(text, cs + 3, e - 1)
-			print(ex)
+
 			ex = string.Explode(",", ex)
 
 			local rn = math.random(ex[1], ex[2])
@@ -598,6 +646,8 @@ function GM:PlayerSay(sender, text, teamChat)
 			return ""
 		end
 	else
+		DoCommand(sender, channel, text)
+
 		return ""
 		--return channel .. " RPNAME : " .. text
 	end

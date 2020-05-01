@@ -60,4 +60,6 @@ include("gm/cl_think.lua")
 include("gm/menus/cl_voice.lua")
 include("gm/menus/cl_chatchannels.lua")
 
+include("gm/menus/cl_talents.lua")
+
 printGM("gm", "Loaded cl_includes.lua")

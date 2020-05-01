@@ -160,6 +160,7 @@ net.Receive("getsitehelp", function(len)
 		AddKeybind(keybinds, GetKeybindName("mute_voice"), "LID_mutevoice", "")
 		AddKeybind(keybinds, GetKeybindName("voice_menu"), "LID_voicechat", "")
 		AddKeybind(keybinds, GetKeybindName("chat_menu"), "LID_chat", "")
+		AddKeybind(keybinds, GetKeybindName("menu_talents"), "LID_talents", "talents")
 
 		HELPMENU.discord = createD("YButton", HELPMENU.mainmenu.site, YRP.ctr(500), YRP.ctr(50), HELPMENU.content:GetWide() - YRP.ctr(560), YRP.ctr(20 + 50 + 20))
 		HELPMENU.discord:SetText("Get Live Support")

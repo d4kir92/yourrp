@@ -110,6 +110,8 @@ AddCSLuaFile("yrp/cl/gm/menus/cl_macromenu.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_voice.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_chatchannels.lua")
 
+AddCSLuaFile("yrp/cl/gm/menus/cl_talents.lua")
+
 --[[ includes ]]--
 include("shared.lua")
 

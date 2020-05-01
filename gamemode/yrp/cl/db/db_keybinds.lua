@@ -9,7 +9,7 @@ YRPKEYBINDS["menu_inventory"] = KEY_I
 YRPKEYBINDS["menu_options_vehicle"] = KEY_O
 YRPKEYBINDS["menu_options_door"] = KEY_O
 YRPKEYBINDS["menu_appearance"] = KEY_P
-YRPKEYBINDS["menu_emotes"] = KEY_N
+YRPKEYBINDS["menu_emotes"] = KEY_MINUS
 YRPKEYBINDS["menu_laws"] = KEY_L
 
 YRPKEYBINDS["menu_char"] = KEY_H
@@ -39,6 +39,8 @@ YRPKEYBINDS["macro_menu"] = KEY_INSERT
 
 YRPKEYBINDS["voice_menu"] = KEY_COMMA
 YRPKEYBINDS["chat_menu"] = KEY_PERIOD
+
+YRPKEYBINDS["menu_talents"] = KEY_N
 
 for i = 1, 49 do
 	YRPKEYBINDS["m_" .. i] = 0
@@ -145,6 +147,9 @@ check_yrp_keybinds()
 
 if get_keybind("menu_interact") == KEY_E then
 	set_keybind("menu_interact", KEY_K, true)
+end
+if get_keybind("menu_emotes") == KEY_N then
+	set_keybind("menu_emotes", KEY_MINUS, true)
 end
 
 function YResetKeybinds()

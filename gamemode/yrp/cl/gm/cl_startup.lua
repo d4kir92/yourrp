@@ -2227,11 +2227,16 @@ function drawIDCard(ply, scale, px, py)
 	end
 end
 
+local customdeathscreen = false
+function CustomDeathscreen(b)
+	customdeathscreen = b
+end
+
 -- #DEATHSCREEN, #RESPAWNING, #CHANGECHARACTER
 local dsd = CurTime() + 2
 local ds = ds or false
 hook.Add("Think", "openDeathScreen", function(len)
-	if LocalPlayer():LoadedGamemode() and !LocalPlayer():Alive() and !vgui.CursorVisible() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds and GetGlobalDBool("bool_deathscreen", false) then
+	if LocalPlayer():LoadedGamemode() and !LocalPlayer():Alive() and !vgui.CursorVisible() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds and GetGlobalDBool("bool_deathscreen", false) and !customdeathscreen then
 		ds = true
 		local win = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 		win:SetTitle("")

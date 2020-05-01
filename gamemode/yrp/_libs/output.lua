@@ -10,11 +10,10 @@ _text.spacePos = "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 
 function strEmpty(str)
 	if isstring(str) then
-		local tab = string.Explode("", str)
-		for i, v in pairs(tab) do
-			if v != " " then -- function strEmpty(str)
-				return false
-			end
+		if string.Trim(str) == "" then
+			return true
+		else
+			return false
 		end
 	end
 	return true
