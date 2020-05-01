@@ -73,16 +73,19 @@ function GenerateChatTable()
 			yrp_chat_channels[tonumber(channel.uniqueID)].uniqueID = tonumber(channel.uniqueID)
 
 			-- NAME
-			yrp_chat_channels[tonumber(channel.uniqueID)]["string_name"] = channel.string_name
+			yrp_chat_channels[tonumber(channel.uniqueID)]["string_name"] = SQL_STR_OUT(channel.string_name)
 		
 			-- MODE
 			yrp_chat_channels[tonumber(channel.uniqueID)]["int_mode"] = tonumber(channel.int_mode)
 
 			-- STRUCTURE
-			yrp_chat_channels[tonumber(channel.uniqueID)]["string_structure"] = channel.string_structure
+			yrp_chat_channels[tonumber(channel.uniqueID)]["string_structure"] = SQL_STR_OUT(channel.string_structure)
 
 			-- REMOVEABLE
 			yrp_chat_channels[tonumber(channel.uniqueID)]["bool_removeable"] = tobool(channel.bool_removeable)
+
+			-- ENABLED
+			yrp_chat_channels[tonumber(channel.uniqueID)]["bool_enabled"] = tobool(channel.bool_enabled)
 
 			-- ACTIVE
 			local augs = string.Explode(",", channel.string_active_usergroups)

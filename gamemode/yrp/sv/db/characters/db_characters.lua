@@ -521,9 +521,18 @@ end
 --[[ Server Send Characters to Client ]]--
 function SendLoopCharacterList(ply, tab)
 	if net.BytesLeft() == nil then
-		net.Start("yrp_get_characters")
-			net.WriteTable(tab)
-		net.Send(ply)
+		local c = 1
+		for i, char in pairs(tab) do
+			local last = false
+			if c == table.Count(tab) then
+				last = true
+			end
+			net.Start("yrp_get_characters")
+				net.WriteTable(char)
+				net.WriteBool(last)
+			net.Send(ply)
+			c = c + 1
+		end
 
 		timer.Simple(2, function()
 			ply:SetDBool("loadedchars", true)
@@ -538,7 +547,7 @@ end
 function send_characters(ply)
 	local netTable = {}
 
-	local chars = {}
+	--local chars = {}
 
 	local chaTab = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
@@ -591,16 +600,7 @@ function send_characters(ply)
 		printGM("note", "[send_characters] chaTab failed! " .. tostring(chaTab))
 	end
 
-	local plytab = ply:GetPlyTab()
-
-	if wk(plytab) then
-		netTable.plytab = plytab
-		netTable.chars = chars
-
-		SendLoopCharacterList(ply, netTable)
-	else
-		printGM("note", "[send_characters] plytab failed! " .. tostring(plytab))
-	end
+	SendLoopCharacterList(ply, netTable)
 end
 
 --[[ Client ask for Characters ]]--

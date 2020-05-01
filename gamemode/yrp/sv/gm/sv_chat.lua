@@ -549,7 +549,7 @@ function GM:PlayerSay(sender, text, teamChat)
 		
 		tab.int_mode = tonumber(tab.int_mode)
 
-		local result = tab.string_structure
+		local result = SQL_STR_OUT(tab.string_structure)
 
 		result = string.Replace(result, "%USERGROUP%", string.upper(sender:GetUserGroup()))
 		result = string.Replace(result, "%STEAMNAME%", sender:SteamName())

@@ -69,6 +69,7 @@ local chatids = {}
 function update_chat_choices()
 	if yrpChat.comboBox != nil then
 		yrpChat.comboBox:Clear()
+		chatids = {}
 		
 		for i, v in pairs(GetGlobalDTable("yrp_chat_channels")) do
 			local selected = false
@@ -76,10 +77,18 @@ function update_chat_choices()
 				selected = true
 			end
 			yrpChat.comboBox:AddChoice(v.string_name, v.string_name, selected)
-			chatids[v.string_name] = v.uniqueID
+			chatids[v.string_name] = tonumber(v.uniqueID)
 		end
 	end
 end
+
+local oldchoices = {}
+hook.Add("Think", "yrp_think_chat_choices", function()
+	if GetGlobalDTable("yrp_chat_channels", {}) != oldchoices then
+		oldchoices = GetGlobalDTable("yrp_chat_channels", {})
+		update_chat_choices()
+	end
+end)
 
 hook.Add("yrp_language_changed", "chat_language_changed", function()
 	update_chat_choices()
@@ -220,7 +229,7 @@ function InitYRPChat()
 				local _com = yrpChat.writeField:GetText()
 				_com = string.upper(_com)
 				local test = string.sub(_com, 2)
-				if chatids[test] then
+				if test != nil and chatids[test] != nil then
 					yrpChat.writeField:SetText("")
 					yrpChat.comboBox:ChooseOptionID(chatids[test])
 				end
