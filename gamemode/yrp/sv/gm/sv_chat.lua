@@ -305,10 +305,9 @@ function do_sleep(sender)
 end
 
 util.AddNetworkString("set_chat_mode")
-
 net.Receive("set_chat_mode", function(len, ply)
 	local _str = net.ReadString() or "say"
-	ply:SetDString("chat_mode", string.lower(_str))
+	ply:SetDString("chat_mode", string.upper(_str))
 end)
 
 util.AddNetworkString("sendanim")

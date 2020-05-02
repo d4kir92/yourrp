@@ -13,6 +13,8 @@ function YRPChatChannel(edit, uid)
 	local mode = ""
 	local structure = ""
 
+	local enabled = 1
+
 	local augs = {}
 	local agrps = {}
 	local arols = {}
@@ -87,8 +89,69 @@ function YRPChatChannel(edit, uid)
 			win.structure:SetText(structure)
 		end
 	end
+	-- RPName
+	win.rpname = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(0), YRP.ctr(250))
+	win.rpname:SetText("LID_rpname")
+	function win.rpname:DoClick()
+		win.structure:SetText(win.structure:GetText() .. "%RPNAME%")
+	end
+	-- STEAMNAME
+	win.steamname = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), YRP.ctr(250))
+	win.steamname:SetText("LID_steamname")
+	function win.steamname:DoClick()
+		win.structure:SetText(win.structure:GetText() .. "%STEAMNAME%")
+	end
+	-- USERGROUP
+	win.usergroup = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(640), YRP.ctr(250))
+	win.usergroup:SetText("LID_usergroup")
+	function win.usergroup:DoClick()
+		win.structure:SetText(win.structure:GetText() .. "%USERGROUP%")
+	end
+	-- IDCARDID
+	win.idcardid = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(960), YRP.ctr(250))
+	win.idcardid:SetText("LID_idcardid")
+	function win.idcardid:DoClick()
+		win.structure:SetText(win.structure:GetText() .. "%IDCARDID%")
+	end
 
+	-- FACTION
+	win.faction = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(0), YRP.ctr(300))
+	win.faction:SetText("LID_faction")
+	function win.faction:DoClick()
+		win.structure:SetText(win.structure:GetText() .. "%FACTION%")
+	end
+	-- GROUP
+	win.group = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), YRP.ctr(300))
+	win.group:SetText("LID_group")
+	function win.group:DoClick()
+		win.structure:SetText(win.structure:GetText() .. "%GROUP%")
+	end
+	-- ROLE
+	win.role = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(640), YRP.ctr(300))
+	win.role:SetText("LID_role")
+	function win.role:DoClick()
+		win.structure:SetText(win.structure:GetText() .. "%ROLE%")
+	end
+	-- TEXT
+	win.text = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(960), YRP.ctr(300))
+	win.text:SetText("LID_text")
+	function win.text:DoClick()
+		win.structure:SetText(win.structure:GetText() .. "%TEXT%")
+	end
 
+	-- enabled
+	win.enabled = createD("DCheckBox", CON, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(400))
+	win.enabled:SetChecked(tobool(GetGlobalDTable("yrp_chat_channels")[uid].bool_enabled))
+	function win.enabled:OnChange(bVal)
+		if bVal then
+			enabled = 1
+		else
+			enabled = 0
+		end
+	end
+	win.enabledname = createD("YLabel", CON, YRP.ctr(250), YRP.ctr(50), YRP.ctr(50), YRP.ctr(400))
+	win.enabledname:SetText("LID_enabled")
+	
 	--[[
 	-- ACTIVE --
 	-- USERGROUPS
@@ -347,6 +410,8 @@ function YRPChatChannel(edit, uid)
 				net.WriteString(mode)
 				net.WriteString(structure)
 
+				net.WriteString(enabled)
+
 				net.WriteTable(augs)
 				net.WriteTable(agrps)
 				net.WriteTable(arols)
@@ -393,6 +458,8 @@ function YRPChatChannel(edit, uid)
 				net.WriteString(mode)
 				net.WriteString(structure)
 
+				net.WriteString(enabled)
+
 				net.WriteTable(augs)
 				net.WriteTable(agrps)
 				net.WriteTable(arols)
@@ -427,7 +494,7 @@ function OpenChatMenu()
 	local h = YRP.ctr(80)
 	local pbr = YRP.ctr(20)
 	for i, channel in pairs(GetGlobalDTable("yrp_chat_channels", {})) do
-		if IsInChannel(lply, channel, true) or lply:HasAccess() then
+		if lply:HasAccess() then
 			local line = createD("DPanel", nil, CONTENT:GetWide(), h, 0, 0)
 			function line:Paint(pw, ph)
 			end
@@ -440,10 +507,8 @@ function OpenChatMenu()
 			local status = createD("DPanel", bg, h, h, 0, 0)
 			function status:Paint(pw, ph)
 				local color = Color(255, 0, 0, 255)
-				if IsActiveInChannel(lply, channel, true) then
+				if channel.bool_enabled == 1 then
 					color = Color(0, 255, 0, 255)
-				elseif IsInChannel(lply, channel, true) then
-					color = Color(100, 100, 255, 255)
 				end
 				draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 			end

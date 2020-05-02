@@ -130,8 +130,12 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 
 			ply:Give("yrp_unarmed")
 
-			local plyTab = ply:GetPlyTab()
-			if wk(plyTab) then
+			local plyT = ply:GetPlyTab()
+			if wk(plyT) then
+				if plyT.CurrentCharacter != -1 then
+					ply:SetDInt("charid", tonumber(plyT.CurrentCharacter))
+				end
+				
 				local _rol_tab = ply:GetRolTab()
 				if wk(_rol_tab) then
 					SetRole(ply, _rol_tab.uniqueID)

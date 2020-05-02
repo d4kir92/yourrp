@@ -64,7 +64,7 @@ function closeCharacterSelection()
 	end
 end
 
-local curChar = "-1"
+local curChar = -1
 local _cur = ""
 local chars = {}
 local loading = false
@@ -74,6 +74,8 @@ function LoadCharacters()
 	DONE_LOADING = DONE_LOADING or true
 
 	local cache = {}
+
+	curChar = LocalPlayer():CharID()
 
 	if pa(_cs.charactersBackground) then
 		_cs.charactersBackground.text = ""
@@ -108,6 +110,7 @@ function LoadCharacters()
 					chars[i].faction = chars[i].faction or {}
 
 					tmpChar.charid = chars[i].char.uniqueID or "UID INVALID"
+					tmpChar.charid = tonumber(tmpChar.charid)
 					tmpChar.rpname = chars[i].char.rpname or "RPNAME INVALID"
 					tmpChar.level = chars[i].char.int_level or "-1"
 					tmpChar.rolename = chars[i].role.string_name or "ROLE INVALID"
@@ -180,7 +183,7 @@ function LoadCharacters()
 					end
 					function tmpChar:DoClick()
 						if i <= LocalPlayer():GetDInt("int_characters_max", 1) then
-							curChar = self.charid
+							curChar = tonumber(self.charid)
 							_cur = self.rpname
 							if self.playermodels != nil and self.playermodelID != nil then
 								local _playermodel = self.playermodels[tonumber(self.playermodelID)] or nil
@@ -210,7 +213,7 @@ function LoadCharacters()
 					end
 
 					if chars[i].char.uniqueID == LocalPlayer():CharID() then--chars.plytab.CurrentCharacter then
-						curChar = LocalPlayer():CharID()
+						curChar = tonumber(LocalPlayer():CharID())
 						tmpChar:DoClick()
 					end
 

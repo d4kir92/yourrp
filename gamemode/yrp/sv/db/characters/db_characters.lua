@@ -72,10 +72,11 @@ local Player = FindMetaTable("Player")
 function Player:CharacterLoadout()
 	printGM("debug", "[CharacterLoadout] " .. self:YRPName())
 	local chatab = self:GetChaTab()
+	local plytab = self:GetPlyTab()
 	if wk(chatab) then
 		self:SetDInt("int_xp", chatab.int_xp)
 		self:SetDString("int_level", chatab.int_level)
-		self:SetDString("charid", chatab.uniqueID)
+		self:SetDInt("charid", tonumber(chatab.uniqueID))
 
 		self:SetDInt("int_warnings", chatab.int_warnings)
 		self:SetDInt("int_violations", chatab.int_violations)
@@ -521,6 +522,11 @@ end
 --[[ Server Send Characters to Client ]]--
 function SendLoopCharacterList(ply, tab)
 	if net.BytesLeft() == nil then
+		local plyT = ply:GetPlyTab()
+		if wk(plyT) then
+			ply:SetDInt("charid", tonumber(plyT.CurrentCharacter))
+		end
+
 		local c = 1
 		for i, char in pairs(tab) do
 			local last = false

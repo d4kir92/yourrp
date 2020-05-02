@@ -85,7 +85,7 @@ function GenerateChatTable()
 			yrp_chat_channels[tonumber(channel.uniqueID)]["bool_removeable"] = tobool(channel.bool_removeable)
 
 			-- ENABLED
-			yrp_chat_channels[tonumber(channel.uniqueID)]["bool_enabled"] = tobool(channel.bool_enabled)
+			yrp_chat_channels[tonumber(channel.uniqueID)]["bool_enabled"] = tonumber(channel.bool_enabled)
 
 			-- ACTIVE
 			local augs = string.Explode(",", channel.string_active_usergroups)
@@ -211,6 +211,8 @@ net.Receive("yrp_chat_channel_add", function(len, ply)
 	local mode = net.ReadString()
 	local structure = SQL_STR_IN(net.ReadString())
 
+	local enabled = tonumber(net.ReadString())
+
 	local augs = table.concat(net.ReadTable(), ",")
 	local agrps = table.concat(net.ReadTable(), ",")
 	local arols = table.concat(net.ReadTable(), ",")
@@ -221,8 +223,8 @@ net.Receive("yrp_chat_channel_add", function(len, ply)
 
 	SQL_INSERT_INTO(
 		DATABASE_NAME,
-		"string_name, int_mode, string_structure, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles",
-		"'" .. name .. "', '" .. mode .. "', '" .. structure .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols	.. "'"
+		"string_name, int_mode, string_structure, bool_enabled, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles",
+		"'" .. name .. "', '" .. mode .. "', '" .. structure .. "', '" .. enabled .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols	.. "'"
 	)
 
 	GenerateChatTable()
@@ -233,6 +235,8 @@ net.Receive("yrp_chat_channel_save", function(len, ply)
 	local name = SQL_STR_IN(net.ReadString())
 	local mode = net.ReadString()
 	local structure = SQL_STR_IN(net.ReadString())
+
+	local enabled = tonumber(net.ReadString())
 
 	local augs = table.concat(net.ReadTable(), ",")
 	local agrps = table.concat(net.ReadTable(), ",")
@@ -246,7 +250,7 @@ net.Receive("yrp_chat_channel_save", function(len, ply)
 	
 	SQL_UPDATE(
 		DATABASE_NAME,
-		"string_name = '" .. name .. "', int_mode = '" .. mode .. "', string_structure = '" .. structure .. "', string_active_usergroups = '" .. augs .. "', string_active_groups = '" .. agrps .. "', string_active_roles = '" .. arols .. "', string_passive_usergroups = '" .. pugs .. "', string_passive_groups = '" .. pgrps .. "', string_passive_roles = '" .. prols .. "'",
+		"string_name = '" .. name .. "', int_mode = '" .. mode .. "', string_structure = '" .. structure .. "', bool_enabled = '" .. enabled .. "',string_active_usergroups = '" .. augs .. "', string_active_groups = '" .. agrps .. "', string_active_roles = '" .. arols .. "', string_passive_usergroups = '" .. pugs .. "', string_passive_groups = '" .. pgrps .. "', string_passive_roles = '" .. prols .. "'",
 		"uniqueID = '" .. uid .. "'"
 	)
 

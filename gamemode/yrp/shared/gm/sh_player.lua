@@ -213,9 +213,9 @@ end
 
 function Player:CharID()
 	if self:IsBot() then
-		return 1
+		return 0
 	else
-		return tonumber(self:GetDString("charid", "-1"))
+		return tonumber(self:GetDInt("charid", -1))
 	end
 end
 

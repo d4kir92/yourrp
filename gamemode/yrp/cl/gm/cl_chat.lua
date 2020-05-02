@@ -228,18 +228,18 @@ function InitYRPChat()
 				end
 				local _com = yrpChat.writeField:GetText()
 				_com = string.upper(_com)
-				local test = string.sub(_com, 2)
-				if test != nil and chatids[test] != nil then
+				local test = string.sub(_com, 3)
+				if (string.StartWith(_com, "!S") or string.StartWith(_com, "/S")) and test != nil and chatids[test] != nil then
 					yrpChat.writeField:SetText("")
-					yrpChat.comboBox:ChooseOptionID(chatids[test])
+					yrpChat.comboBox:ChooseOption(test)
 				end
 			end
 		end
 
 		function yrpChat.comboBox:OnSelect(index, value, data)
-			CHATMODE = data
+			CHATMODE = value
 			net.Start("set_chat_mode")
-				net.WriteString(string.lower(data))
+				net.WriteString(string.upper(value))
 			net.SendToServer()
 		end
 

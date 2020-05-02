@@ -431,7 +431,9 @@ function set_role_values(ply, pmid)
 			ply:SetDString("groupColor", groTab.string_color)
 			ply:SetDString("groupIcon", groTab.string_icon)
 
-			ply:SetPlayerColor(StringToVector(groTab.string_color))
+			if GetGlobalDBool("bool_team_color", true) then
+				ply:SetPlayerColor(StringToVector(groTab.string_color))
+			end
 
 			ply:SetDBool("groupiscp", tobool(groTab.bool_iscp))
 

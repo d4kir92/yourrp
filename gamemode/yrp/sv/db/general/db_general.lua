@@ -49,6 +49,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_gamemode_name", "TEXT DEFAULT 'YourRP'")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_graffiti_disabled", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_anti_bhop", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_suicide_disabled", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_team_color", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_items_on_death", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_items_role", "INT DEFAULT 0")
@@ -658,6 +659,13 @@ net.Receive("update_bool_suicide_disabled", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_suicide_disabled", "bool_suicide_disabled", b)
 end)
+
+util.AddNetworkString("update_bool_team_color")
+net.Receive("update_bool_team_color", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_team_color", "bool_team_color", b)
+end)
+
 
 
 util.AddNetworkString("update_bool_drop_items_on_death")
