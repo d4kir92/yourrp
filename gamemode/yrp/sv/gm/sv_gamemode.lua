@@ -60,6 +60,9 @@ function GM:PlayerInitialSpawn(ply)
 				timer.Simple(0.1, function()
 					teleportToSpawnpoint(ply)
 				end)
+				timer.Simple(0.2, function()
+					teleportToSpawnpoint(ply)
+				end)
 			end)
 		end
 	end
@@ -196,6 +199,9 @@ hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 		ply:SetDBool("can_respawn", false)
 
 		timer.Simple(0.1, function()
+			teleportToSpawnpoint(ply)
+		end)
+		timer.Simple(0.2, function()
 			teleportToSpawnpoint(ply)
 		end)
 	end

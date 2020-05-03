@@ -591,6 +591,10 @@ function GM:PlayerSay(sender, text, teamChat)
 			SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', '" .. SQL_STR_IN(text) .. "'")
 		end
 
+		if !tobool(tab.bool_enabled) then
+			return ""
+		end
+
 		if tab.int_mode == 0 then -- GLOBAL
 			net.Start("yrp_player_say")
 				net.WriteEntity(sender)

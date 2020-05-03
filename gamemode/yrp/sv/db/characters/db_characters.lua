@@ -78,6 +78,8 @@ function Player:CharacterLoadout()
 		self:SetDString("int_level", chatab.int_level)
 		self:SetDInt("charid", tonumber(chatab.uniqueID))
 
+		self:SetDInt("pmid", tonumber(chatab.playermodelID))
+
 		self:SetDInt("int_warnings", chatab.int_warnings)
 		self:SetDInt("int_violations", chatab.int_violations)
 		self:SetDInt("int_arrests", chatab.int_arrests)
@@ -530,10 +532,17 @@ function SendLoopCharacterList(ply, tab)
 		local c = 1
 		for i, char in pairs(tab) do
 			local last = false
+			local first = false
+			if c == 1 then
+				print("FIRST")
+				first = true
+			end
 			if c == table.Count(tab) then
+				print("LAST")
 				last = true
 			end
 			net.Start("yrp_get_characters")
+				net.WriteBool(first)
 				net.WriteTable(char)
 				net.WriteBool(last)
 			net.Send(ply)

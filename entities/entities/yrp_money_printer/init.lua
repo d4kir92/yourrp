@@ -66,11 +66,11 @@ net.Receive("fuelUp", function(len, ply)
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetDInt("fuelCost")
-		if ply:canAfford(cost) and mp:GetDInt("fuel") < mp:GetDInt("fuelMax") then
+		if ply:canAfford(cost) and mp:GetDInt("fuel", 0) < mp:GetDInt("fuelMax", 0) then
 			ply:addMoney(-cost)
-			mp:SetDInt("fuel", mp:GetDInt("fuel") + 10)
-			if mp:GetDInt("fuel") > mp:GetDInt("fuelMax") then
-				mp:SetDInt("fuel", mp:GetDInt("fuelMax"))
+			mp:SetDInt("fuel", mp:GetDInt("fuel", 0) + 10)
+			if mp:GetDInt("fuel", 0) > mp:GetDInt("fuelMax", 0) then
+				mp:SetDInt("fuel", mp:GetDInt("fuelMax", 0))
 			end
 		end
 	end
@@ -106,10 +106,10 @@ end)
 util.AddNetworkString("startMoneyPrinter")
 net.Receive("startMoneyPrinter", function(len, ply)
 	local mp = net.ReadEntity()
-	if mp:GetDBool("working") then
+	if mp:GetDBool("working", false) then
 		mp:SetDBool("working", false)
 	elseif !mp:GetDBool("working") then
-		if mp:GetDInt("fuel") > 0 then
+		if mp:GetDInt("fuel", 0) > 0 then
 			mp:SetDBool("working", true)
 		end
 	end
@@ -239,7 +239,7 @@ function ENT:Think()
 	end
 
 	if self:GetDInt("money") != nil then
-		if self:GetDInt("fuel") > 0 and self:GetDBool("working") then
+		if self:GetDInt("fuel", 0) > 0 and self:GetDBool("working") then
 
 			self.workingsound = sound.Add({
 				name = "moneyprintersound",
@@ -257,7 +257,7 @@ function ENT:Think()
 			self.delay = CurTime() + test
 
 			self:SetDInt("fuel", self:GetDInt("fuel") - 1)
-			if self:GetDInt("fuel") < 0 then
+			if self:GetDInt("fuel", 0) < 0 then
 				self:SetDInt("fuel", 0)
 			end
 

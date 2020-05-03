@@ -419,7 +419,7 @@ function set_role_values(ply, pmid)
 			ply:SetDFloat("float_dmgtype_energybeam", tonumber(rolTab.float_dmgtype_energybeam))
 
 			-- Darkrp Team
-			ply:SetTeam(rolTab.uniqueID)
+			--ply:SetTeam(rolTab.uniqueID) -- disables damage against npcs
 		else
 			printGM("note", "[SET ROLE VALUES] No role selected -> Suicide")
 			ply:KillSilent()

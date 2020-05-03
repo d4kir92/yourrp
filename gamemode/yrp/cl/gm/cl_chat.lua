@@ -72,12 +72,15 @@ function update_chat_choices()
 		chatids = {}
 		
 		for i, v in pairs(GetGlobalDTable("yrp_chat_channels")) do
-			local selected = false
-			if CHATMODE == v.string_name then
-				selected = true
+			local enabled = tobool(v.bool_enabled)
+			if enabled then
+				local selected = false
+				if CHATMODE == v.string_name then
+					selected = true
+				end
+				yrpChat.comboBox:AddChoice(v.string_name, v.string_name, selected)
+				chatids[v.string_name] = tonumber(v.uniqueID)
 			end
-			yrpChat.comboBox:AddChoice(v.string_name, v.string_name, selected)
-			chatids[v.string_name] = tonumber(v.uniqueID)
 		end
 	end
 end

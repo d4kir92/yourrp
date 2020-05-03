@@ -21,7 +21,7 @@ function ENT:Draw()
 
 			local pos = self:GetPos()
 			local ang = self:GetAngles()
-			cam.Start3D2D(pos + self:GetUp() * 0.82, ang, 0.02 )
+			cam.Start3D2D(pos + self:GetUp() * 0.83, ang, 0.02 )
 				if self:GetModel() == "models/props/cs_assault/money.mdl" then
 					draw.RoundedBox(0, -200, -92, 200 * 2, 92 * 2, mocolor)
 					surface.SetDrawColor(255, 255, 255, 255)
@@ -34,7 +34,7 @@ function ENT:Draw()
 			local up = ang:RotateAroundAxis(ang:Up(), 180)
 			local right = ang:RotateAroundAxis(ang:Right(), 0)
 			local forward = ang:RotateAroundAxis(ang:Forward(), 180)
-			cam.Start3D2D(pos + self:GetUp() * 0.06, ang, 0.02 )
+			cam.Start3D2D(pos + self:GetUp() * 0.05, ang, 0.02 )
 				if self:GetModel() == "models/props/cs_assault/money.mdl" then
 					draw.RoundedBox(0, -200, -92, 200 * 2, 92 * 2, mocolor)
 					surface.SetDrawColor(255, 255, 255, 255)

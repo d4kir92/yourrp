@@ -109,6 +109,8 @@ function LoadCharacters()
 					chars[i].group = chars[i].group or {}
 					chars[i].faction = chars[i].faction or {}
 
+					chars[i].char.uniqueID = tonumber(chars[i].char.uniqueID)
+
 					tmpChar.charid = chars[i].char.uniqueID or "UID INVALID"
 					tmpChar.charid = tonumber(tmpChar.charid)
 					tmpChar.rpname = chars[i].char.rpname or "RPNAME INVALID"
@@ -118,7 +120,7 @@ function LoadCharacters()
 					tmpChar.factionIcon = chars[i].faction.string_icon or ""
 					tmpChar.groupID = chars[i].group.string_name or "GROUP INVALID"
 					tmpChar.map = SQL_STR_OUT(chars[i].char.map)
-					tmpChar.playermodelID = chars[i].char.playermodelID
+					tmpChar.playermodelID = LocalPlayer():GetDInt("pmid", 1)
 
 					tmpChar.playermodels = string.Explode(",", chars[i].role.string_playermodels) or {}
 					if tmpChar.playermodels == "" or tmpChar.playermodels == " " then
@@ -185,19 +187,19 @@ function LoadCharacters()
 						if i <= LocalPlayer():GetDInt("int_characters_max", 1) then
 							curChar = tonumber(self.charid)
 							_cur = self.rpname
-							if self.playermodels != nil and self.playermodelID != nil then
-								local _playermodel = self.playermodels[tonumber(self.playermodelID)] or nil
-								if _playermodel != nil and charplayermodel != NULL and pa(charplayermodel) then
+							if self.playermodels != nil and LocalPlayer():GetDInt("pmid", 1) != nil then
+								local _playermodel = self.playermodels[LocalPlayer():GetDInt("pmid", 1)] or nil
+								if _playermodel != nil and _cs.charplayermodel != NULL and pa(_cs.charplayermodel) then
 									if !strEmpty(_playermodel) then
-										charplayermodel:SetModel(_playermodel)
+										_cs.charplayermodel:SetModel(_playermodel)
 									else
-										charplayermodel:SetModel("models / player / skeleton.mdl")
+										_cs.charplayermodel:SetModel("models/player/skeleton.mdl")
 									end
-									if charplayermodel.Entity != nil then
-										charplayermodel.Entity:SetModelScale(self.playermodelsize or 1)
-										charplayermodel.Entity:SetSkin(self.skin)
+									if _cs.charplayermodel.Entity != nil then
+										_cs.charplayermodel.Entity:SetModelScale(self.playermodelsize or 1)
+										_cs.charplayermodel.Entity:SetSkin(self.skin)
 										for bgx = 0, 19 do
-											charplayermodel.Entity:SetBodygroup(bgx, self["bg" .. bgx])
+											_cs.charplayermodel.Entity:SetBodygroup(bgx, self["bg" .. bgx])
 										end
 									end
 								end
@@ -228,11 +230,15 @@ function LoadCharacters()
 	LocalPlayer():SetDBool("loadedchars", true)
 end
 net.Receive("yrp_get_characters", function(len)
+	local first = net.ReadBool()
+	if first and pa(_cs.characterList) then
+		chars = {}
+		_cs.characterList:Clear()
+	end
 	local char = net.ReadTable()
 	local last = net.ReadBool()
 	table.insert(chars, char)
 	if last then
-		loading = false
 		LoadCharacters()
 	end
 end)
@@ -240,18 +246,21 @@ end)
 function openCharacterSelection()
 	local lply = LocalPlayer()
 
+	if !loading then
+		loading = true
+		timer.Simple(0.3, function()
+			loading = false
+		end)
+	else
+		return
+	end
+
 	chars = {}
 
 	_cs.character = {}
 	_cs.character.amount = 0
 
 	openMenu()
-
-	if !loading then
-		loading = true
-	else
-		return
-	end
 
 	if !pa(_cs.frame) then
 		_cs.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
@@ -314,19 +323,19 @@ function openCharacterSelection()
 			draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
-		local charplayermodel = createD("DModelPanel", _cs.frame, ScrH() - YRP.ctr(200), ScrH() - YRP.ctr(200), ScrW2() - (ScrH() - YRP.ctr(200)) / 2, 0)
-		charplayermodel:SetModel("models/player/skeleton.mdl")
-		charplayermodel:SetAnimated(true)
-		charplayermodel.Angles = Angle(0, 0, 0)
-		charplayermodel:RunAnimation()
+		_cs.charplayermodel = createD("DModelPanel", _cs.frame, ScrH() - YRP.ctr(200), ScrH() - YRP.ctr(200), ScrW2() - (ScrH() - YRP.ctr(200)) / 2, 0)
+		_cs.charplayermodel:SetModel("models/player/skeleton.mdl")
+		_cs.charplayermodel:SetAnimated(true)
+		_cs.charplayermodel.Angles = Angle(0, 0, 0)
+		_cs.charplayermodel:RunAnimation()
 
-		function charplayermodel:DragMousePress()
+		function _cs.charplayermodel:DragMousePress()
 			self.PressX, self.PressY = gui.MousePos()
 			self.Pressed = true
 		end
-		function charplayermodel:DragMouseRelease() self.Pressed = false end
+		function _cs.charplayermodel:DragMouseRelease() self.Pressed = false end
 
-		function charplayermodel:LayoutEntity(ent)
+		function _cs.charplayermodel:LayoutEntity(ent)
 
 			if (self.bAnimated) then self:RunAnimation() end
 
