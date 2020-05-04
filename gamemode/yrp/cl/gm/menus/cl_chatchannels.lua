@@ -94,24 +94,28 @@ function YRPChatChannel(edit, uid)
 	win.rpname:SetText("LID_rpname")
 	function win.rpname:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%RPNAME%")
+		structure = win.structure:GetText()
 	end
 	-- STEAMNAME
 	win.steamname = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), YRP.ctr(250))
 	win.steamname:SetText("LID_steamname")
 	function win.steamname:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%STEAMNAME%")
+		structure = win.structure:GetText()
 	end
 	-- USERGROUP
 	win.usergroup = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(640), YRP.ctr(250))
 	win.usergroup:SetText("LID_usergroup")
 	function win.usergroup:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%USERGROUP%")
+		structure = win.structure:GetText()
 	end
 	-- IDCARDID
 	win.idcardid = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(960), YRP.ctr(250))
 	win.idcardid:SetText("LID_idcardid")
 	function win.idcardid:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%IDCARDID%")
+		structure = win.structure:GetText()
 	end
 
 	-- FACTION
@@ -119,29 +123,37 @@ function YRPChatChannel(edit, uid)
 	win.faction:SetText("LID_faction")
 	function win.faction:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%FACTION%")
+		structure = win.structure:GetText()
 	end
 	-- GROUP
 	win.group = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), YRP.ctr(300))
 	win.group:SetText("LID_group")
 	function win.group:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%GROUP%")
+		structure = win.structure:GetText()
 	end
 	-- ROLE
 	win.role = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(640), YRP.ctr(300))
 	win.role:SetText("LID_role")
 	function win.role:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%ROLE%")
+		structure = win.structure:GetText()
 	end
 	-- TEXT
 	win.text = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(960), YRP.ctr(300))
 	win.text:SetText("LID_text")
 	function win.text:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%TEXT%")
+		structure = win.structure:GetText()
 	end
 
 	-- enabled
 	win.enabled = createD("DCheckBox", CON, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(400))
-	win.enabled:SetChecked(tobool(GetGlobalDTable("yrp_chat_channels")[uid].bool_enabled))
+	if edit then
+		win.enabled:SetChecked(tobool(GetGlobalDTable("yrp_chat_channels")[uid].bool_enabled))
+	else
+		win.enabled:SetChecked(true)
+	end
 	function win.enabled:OnChange(bVal)
 		if bVal then
 			enabled = 1

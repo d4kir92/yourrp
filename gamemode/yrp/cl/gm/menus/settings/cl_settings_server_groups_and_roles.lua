@@ -106,7 +106,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			net.SendToServer()
 		end
 
-		gs.glist = createD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(940), YRP.ctr(20), YRP.ctr(80))
+		gs.glist = createD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(840), YRP.ctr(20), YRP.ctr(80))
 		gs.gplist = createD("DPanelList", gs.glist, gs.glist:GetWide(), gs.glist:GetTall(), 0, 0)
 		gs.gplist:EnableVerticalScrollbar(true)
 		gs.gplist:SetSpacing(YRP.ctr(10))
@@ -316,7 +316,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			net.WriteString(cur_group.par)
 		net.SendToServer()
 
-		rs.top = createD("DPanel", PARENT, YRP.ctr(800-120), YRP.ctr(60), YRP.ctr(80), YRP.ctr(1040))
+		rs.top = createD("DPanel", PARENT, YRP.ctr(800-120), YRP.ctr(60), YRP.ctr(80), YRP.ctr(940))
 		function rs.top:Paint(pw, ph)
 			if rs.top.headername != nil then
 				local tab = {}
@@ -339,7 +339,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.bac = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(1040))
+		rs.bac = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(940))
 		rs.bac:SetText("")
 		function rs.bac:Paint(pw, ph)
 			if cur_role.pre > 0 then
@@ -382,7 +382,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.add = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), YRP.ctr(1040))
+		rs.add = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), YRP.ctr(940))
 		rs.add:SetText("")
 		function rs.add:Paint(pw, ph)
 			if rs.top.headername != nil then
@@ -408,7 +408,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.rlist = createD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(940), YRP.ctr(20), YRP.ctr(1100))
+		rs.rlist = createD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(840), YRP.ctr(20), YRP.ctr(1000))
 		function rs.rlist:Paint(pw, ph)
 			if rs.top.headername != nil then
 				local tab = {}

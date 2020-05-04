@@ -73,7 +73,7 @@ function GenerateChatTable()
 			yrp_chat_channels[tonumber(channel.uniqueID)].uniqueID = tonumber(channel.uniqueID)
 
 			-- NAME
-			yrp_chat_channels[tonumber(channel.uniqueID)]["string_name"] = SQL_STR_OUT(channel.string_name)
+			yrp_chat_channels[tonumber(channel.uniqueID)]["string_name"] = string.upper(SQL_STR_OUT(channel.string_name))
 		
 			-- MODE
 			yrp_chat_channels[tonumber(channel.uniqueID)]["int_mode"] = tonumber(channel.int_mode)
@@ -207,7 +207,7 @@ end)
 
 util.AddNetworkString("yrp_chat_channel_add")
 net.Receive("yrp_chat_channel_add", function(len, ply)
-	local name = SQL_STR_IN(net.ReadString())
+	local name = string.upper(SQL_STR_IN(net.ReadString()))
 	local mode = net.ReadString()
 	local structure = SQL_STR_IN(net.ReadString())
 
@@ -232,7 +232,7 @@ end)
 
 util.AddNetworkString("yrp_chat_channel_save")
 net.Receive("yrp_chat_channel_save", function(len, ply)
-	local name = SQL_STR_IN(net.ReadString())
+	local name = string.upper(SQL_STR_IN(net.ReadString()))
 	local mode = net.ReadString()
 	local structure = SQL_STR_IN(net.ReadString())
 

@@ -350,12 +350,20 @@ end)
 
 function strTrimLeft(str, cha)
 	local s, e = string.find(str, cha)
-	return string.sub(str, 1, s - 1)
+	if s then
+		return string.sub(str, 1, s - 1)
+	else
+		return ""
+	end
 end
 
 function strTrimRight(str, cha)
 	local s, e = string.find(str, cha)
-	return string.sub(str, s + 1)
+	if s then
+		return string.sub(str, s + 1)
+	else
+		return ""
+	end
 end
 
 function SendPM(sender, msg)
@@ -501,8 +509,13 @@ function DoCommand(sender, command, text)
 
 	if command == "rpname" or command == "name" or command == "nick" then
 		if GetGlobalDBool("bool_characters_changeable_name", false) then
-			sender:SetRPName(paket.text)
-			return ""
+			local tab = string.Explode(" ", text)
+			if tab[2] != nil then
+				sender:SetRPName(tab[2])
+				return ""
+			else
+				sender:ChatPrint("SetRPName need more text")
+			end
 		else
 			sender:ChatPrint("SetRPName is not enabled.")
 		end
@@ -529,6 +542,7 @@ function RN(text)
 end
 
 function GM:PlayerSay(sender, text, teamChat)
+	print(sender, text)
 	local channel = "SAY"
 	if string.StartWith(text, "!") or string.StartWith(text, "/") then
 		local s, e = string.find(text, " ")
