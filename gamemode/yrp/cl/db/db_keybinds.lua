@@ -145,13 +145,6 @@ function check_yrp_keybinds()
 end
 check_yrp_keybinds()
 
-if get_keybind("menu_interact") == KEY_E then
-	set_keybind("menu_interact", KEY_K, true)
-end
-if get_keybind("menu_emotes") == KEY_N then
-	set_keybind("menu_emotes", KEY_MINUS, true)
-end
-
 function YResetKeybinds()
 	for i, keybind in pairs(YRPKEYBINDS) do
 		set_keybind(i, keybind)

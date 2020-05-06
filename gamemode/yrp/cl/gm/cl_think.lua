@@ -510,7 +510,9 @@ function KeyPress()
 
 	keyPressed(get_keybind("macro_menu"), "macro_menu")
 	for i = 1, 49 do
-		keyPressed(get_keybind("m_" .. i), "m_" .. i)
+		if get_keybind("m_" .. i) != 0 then
+			keyPressed(get_keybind("m_" .. i), "m_" .. i)
+		end
 	end
 end
 hook.Add("Think", "Thinker", KeyPress)

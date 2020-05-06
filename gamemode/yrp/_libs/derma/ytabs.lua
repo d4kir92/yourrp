@@ -19,7 +19,7 @@ function PANEL:Init()
 	self.auto = true
 	self.tabwide = 400
 
-	self.tabs = {}
+	self.tabs = self.tabs or {}
 end
 
 function PANEL:SetTabWide(num)
@@ -31,6 +31,8 @@ function PANEL:SetAutoTab(b)
 end
 
 function PANEL:AddOption(name, func, height)
+	self.tabs = self.tabs or {}
+
 	height = height or 100
 	self.height = height
 	self:UPDATESIZE()
@@ -75,6 +77,8 @@ function PANEL:AddOption(name, func, height)
 end
 
 function PANEL:GoToSite(name)
+	self.tabs = self.tabs or {}
+
 	self.site:Clear()
 	self.current = name
 	self.tabs[name](self.site)

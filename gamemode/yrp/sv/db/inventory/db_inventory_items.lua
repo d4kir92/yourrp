@@ -42,6 +42,11 @@ function CreateItem(slotID, tab)
 		tab.text_classname = tab.text_classname or "Unnamed"
 		tab.text_printname = tab.text_printname or "yrp_money_printer"
 		tab.text_worldmodel = tab.text_worldmodel or "models/props_junk/garbage_takeoutcarton001a.mdl"
+
+		tab.text_classname = SQL_STR_IN(tab.text_classname)
+		tab.text_printname = SQL_STR_IN(tab.text_printname)
+		tab.text_worldmodel = SQL_STR_IN(tab.text_worldmodel)
+
 		tab.int_storageID = tab.int_storageID or 0
 		tab.text_type = tab.text_type or "item"
 		tab.int_fixed = tab.int_fixed or "0"
@@ -84,9 +89,9 @@ function CreateItemByEntity(slotID, entity)
 	end
 
 	local tab = {}
-	tab.text_classname = entity:GetClass()
-	tab.text_printname = entity:GetName()
-	tab.text_worldmodel = entity:GetModel()
+	tab.text_classname = SQL_STR_IN(entity:GetClass())
+	tab.text_printname = SQL_STR_IN(entity:GetName())
+	tab.text_worldmodel = SQL_STR_IN(entity:GetModel())
 	tab.text_type = entity.text_type or "item"
 
 	if tab.text_type == "bag" then
@@ -188,8 +193,8 @@ function DropItem(ply, slotID)
 
 	RemoveItem(item.uniqueID)
 
-	local e = ents.Create(item.text_classname)
-	e:SetModel(item.text_worldmodel)
+	local e = ents.Create(SQL_STR_OUT(item.text_classname))
+	e:SetModel(SQL_STR_OUT(item.text_worldmodel))
 	local pos = ply:GetPos() + ply:GetForward() * 64
 	local mins = e:OBBMins()
 	local maxs = e:OBBMaxs()

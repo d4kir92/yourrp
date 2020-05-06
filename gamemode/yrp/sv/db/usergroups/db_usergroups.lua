@@ -1904,10 +1904,14 @@ end)
 hook.Add("Think", "yrp_usergroup_haschanged", function()
 	for i, ply in pairs(player.GetAll()) do
 		ply.yrp_ug = ply.yrp_ug or ply:GetUserGroup()
-		if ply.yrp_ug != ply:GetUserGroup() then
+		if ply:GetUserGroup() != ply.yrp_ug then
 			ply.yrp_ug = ply:GetUserGroup()
-			YRP.msg("note", ply:RPName() .. " has a new usergroup, respawning...")
-			ply:Kill()
+			timer.Simple(0, function()
+				if IsValid(ply) then
+					YRP.msg("note", ply:RPName() .. " has a new usergroup, respawning...")
+					ply:Kill()
+				end
+			end)
 		end
 	end
 end)

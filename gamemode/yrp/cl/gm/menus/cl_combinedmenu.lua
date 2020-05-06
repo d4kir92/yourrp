@@ -128,6 +128,120 @@ function CreateCollectionContent(PARENT)
 	end
 end
 
+function CreateTwitchContent(PARENT)
+	local link = GetGlobalDString("text_social_twitch", "")
+	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	function WorkshopPage:Paint(pw, ph)
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+	end
+	WorkshopPage:OpenURL(link)
+
+	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	openLink:SetText("")
+	function openLink:Paint(pw, ph)
+		hook.Run("YButtonPaint", self, pw, ph)
+		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+	end
+	function openLink:DoClick()
+		gui.OpenURL(link)
+	end
+end
+
+function CreateYoutubeContent(PARENT)
+	local link = GetGlobalDString("text_social_youtube", "")
+	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	function WorkshopPage:Paint(pw, ph)
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+	end
+	WorkshopPage:OpenURL(link)
+
+	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	openLink:SetText("")
+	function openLink:Paint(pw, ph)
+		hook.Run("YButtonPaint", self, pw, ph)
+		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+	end
+	function openLink:DoClick()
+		gui.OpenURL(link)
+	end
+end
+
+function CreateTwitterContent(PARENT)
+	local link = GetGlobalDString("text_social_twitter", "")
+	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	function WorkshopPage:Paint(pw, ph)
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+	end
+	WorkshopPage:OpenURL(link)
+
+	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	openLink:SetText("")
+	function openLink:Paint(pw, ph)
+		hook.Run("YButtonPaint", self, pw, ph)
+		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+	end
+	function openLink:DoClick()
+		gui.OpenURL(link)
+	end
+end
+
+function CreateSteamGroupContent(PARENT)
+	local link = GetGlobalDString("text_social_steamgroup", "")
+	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	function WorkshopPage:Paint(pw, ph)
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+	end
+	WorkshopPage:OpenURL(link)
+
+	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	openLink:SetText("")
+	function openLink:Paint(pw, ph)
+		hook.Run("YButtonPaint", self, pw, ph)
+		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+	end
+	function openLink:DoClick()
+		gui.OpenURL(link)
+	end
+end
+
+function CreateFacebookContent(PARENT)
+	local link = GetGlobalDString("text_social_facebook", "")
+	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	function WorkshopPage:Paint(pw, ph)
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+	end
+	WorkshopPage:OpenURL(link)
+
+	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	openLink:SetText("")
+	function openLink:Paint(pw, ph)
+		hook.Run("YButtonPaint", self, pw, ph)
+		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+	end
+	function openLink:DoClick()
+		gui.OpenURL(link)
+	end
+end
+
+function CreateInstagramContent(PARENT)
+	local link = GetGlobalDString("text_social_instagram", "")
+	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	function WorkshopPage:Paint(pw, ph)
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+	end
+	WorkshopPage:OpenURL(link)
+
+	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	openLink:SetText("")
+	function openLink:Paint(pw, ph)
+		hook.Run("YButtonPaint", self, pw, ph)
+		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+	end
+	function openLink:DoClick()
+		gui.OpenURL(link)
+	end
+end
+
 function OpenCombinedMenu()
 	local lply = LocalPlayer()
 	cm.open = true
@@ -224,6 +338,60 @@ function OpenCombinedMenu()
 			sites[c].name = "LID_collection"
 			sites[c].icon = "web"
 			sites[c].content = CreateCollectionContent
+			c = c + 1
+			community = true
+		end
+
+		if !strEmpty(GetGlobalDString("text_social_youtube", "")) then
+			sites[c] = {}
+			sites[c].name = "LID_youtube"
+			sites[c].icon = "64_youtube"
+			sites[c].content = CreateYoutubeContent
+			c = c + 1
+			community = true
+		end
+
+		if !strEmpty(GetGlobalDString("text_social_twitch", "")) then
+			sites[c] = {}
+			sites[c].name = "LID_twitch"
+			sites[c].icon = "64_twitch"
+			sites[c].content = CreateTwitchContent
+			c = c + 1
+			community = true
+		end
+
+		if !strEmpty(GetGlobalDString("text_social_twitter", "")) then
+			sites[c] = {}
+			sites[c].name = "LID_twitter"
+			sites[c].icon = "64_twitter-square"
+			sites[c].content = CreateTwitterContent
+			c = c + 1
+			community = true
+		end
+
+		if !strEmpty(GetGlobalDString("text_social_steamgroup", "")) then
+			sites[c] = {}
+			sites[c].name = "LID_steamgroup"
+			sites[c].icon = "64_steam-square"
+			sites[c].content = CreateSteamGroupContent
+			c = c + 1
+			community = true
+		end
+
+		if !strEmpty(GetGlobalDString("text_social_facebook", "")) then
+			sites[c] = {}
+			sites[c].name = "LID_facebook"
+			sites[c].icon = "64_facebook-square"
+			sites[c].content = CreateFacebookContent
+			c = c + 1
+			community = true
+		end
+
+		if !strEmpty(GetGlobalDString("text_social_instagram", "")) then
+			sites[c] = {}
+			sites[c].name = "Instagram"
+			sites[c].icon = "64_instagram"
+			sites[c].content = CreateInstagramContent
 			c = c + 1
 			community = true
 		end

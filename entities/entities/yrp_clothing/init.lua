@@ -5,9 +5,6 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
-util.AddNetworkString("ATMPressPrev")
-util.AddNetworkString("ATMPressNext")
-
 function ENT:Initialize()
 	self:SetModel("models/props_wasteland/controlroom_storagecloset001a.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)

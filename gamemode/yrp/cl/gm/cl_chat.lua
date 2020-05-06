@@ -199,6 +199,12 @@ function InitYRPChat()
 		yrpChat.comboBox = createD("DComboBox", yrpChat.window, 1, 1, 1, 1)
 		update_chat_choices()
 
+		function yrpChat.comboBox:Paint(pw, ph)
+			surface.SetDrawColor(lply:InterfaceValue("YFrame", "BG"))
+			surface.DrawRect(0, 0, pw, ph)
+			self:SetTextColor(Color(255, 255, 255))
+		end
+
 		function yrpChat.window:Paint(pw, ph)
 			checkChatVisible()
 			if _showChat then
@@ -246,7 +252,7 @@ function InitYRPChat()
 			net.SendToServer()
 		end
 
-		yrpChat.writeField = createVGUI("DTextEntry", yrpChat.window, 1, 1, 1, 1)
+		yrpChat.writeField = createD("DTextEntry", yrpChat.window, 1, 1, 1, 1)
 
 		function yrpChat.writeField:PerformLayout()
 			local ts = LocalPlayer():HudValue("CH", "TS")
@@ -256,6 +262,16 @@ function InitYRPChat()
 				end
 				self:SetFontInternal("Y_" .. ts .. "_500")
 			end
+
+			self:SetTextColor(Color(40, 40, 40))
+			self:SetFGColor(Color(40, 40, 40))
+			self:SetBGColor(lply:InterfaceValue("YFrame", "HB"))
+		end
+
+		function yrpChat.writeField:Paint(pw, ph)
+			surface.SetDrawColor(lply:InterfaceValue("YFrame", "HB"))
+			surface.DrawRect(0, 0, self:GetWide(), self:GetTall())
+			self:DrawTextEntryText(Color(255, 255, 255), Color(30, 130, 255), Color(255, 255, 255))
 		end
 
 		function yrpChat.richText:PerformLayout()
@@ -266,6 +282,9 @@ function InitYRPChat()
 				end
 				self:SetFontInternal("Y_" .. ts .. "_500")
 			end
+
+			self:SetFGColor(Color(255, 255, 255))
+			self:SetBGColor(lply:InterfaceValue("YFrame", "HB"))
 		end
 
 		yrpChat.writeField.OnKeyCodeTyped = function(self, code)
@@ -339,6 +358,9 @@ function InitYRPChat()
 						end
 
 						local _l = {}
+						_l.l_www = false
+						_l.l_secure = false
+
 						_l.l_start = string.find(str, "https://", 1)
 						if _l.l_start != nil then
 							_l.l_secure = true
@@ -348,9 +370,13 @@ function InitYRPChat()
 							if _l.l_start == nil then
 								_l.l_www = true
 								_l.l_start = string.find(str, "www.", 1)
+							else
+								_l.l_start = string.find(str, ".")
+								if _l.l_start != nil then
+									_l.l_point = true
+								end
 							end
 						end
-
 						if _l.l_start != nil then
 
 							_l.l_end = #str

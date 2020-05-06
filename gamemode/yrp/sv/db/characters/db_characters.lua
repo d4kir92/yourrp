@@ -534,11 +534,9 @@ function SendLoopCharacterList(ply, tab)
 			local last = false
 			local first = false
 			if c == 1 then
-				print("FIRST")
 				first = true
 			end
 			if c == table.Count(tab) then
-				print("LAST")
 				last = true
 			end
 			net.Start("yrp_get_characters")

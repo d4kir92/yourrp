@@ -9,7 +9,7 @@ net.Receive("get_menu_bodygroups", function(len)
 	if _tbl.string_playermodels != nil and pa(_yrp_appearance.window) then
 		local _skin = tonumber(_tbl.skin)
 		local _pms = string.Explode(",", _tbl.string_playermodels)
-		if GetGlobalDBool("bool_appearance_system", false) and pa(_yrp_appearance.left) then
+		if pa(_yrp_appearance.left) then
 			if _yrp_appearance.left.GetChildren != nil then
 				for i, child in pairs(_yrp_appearance.left:GetChildren()) do
 					child:Remove()
@@ -264,7 +264,9 @@ end)
 
 function toggleAppearanceMenu()
 	if YRPIsNoMenuOpen() then
-		open_appearance()
+		if GetGlobalDBool("bool_appearance_system", false) then
+			open_appearance()
+		end
 	else
 		close_appearance()
 	end
@@ -282,7 +284,7 @@ function close_appearance()
 end
 
 net.Receive("openAM", function(len)
-	toggleAppearanceMenu()
+	open_appearance()
 end)
 
 function open_appearance()
@@ -307,12 +309,8 @@ function open_appearance()
 		--paintBr(pw, ph, Color(255, 0, 0, 255))
 	end
 
-	if GetGlobalDBool("bool_appearance_system", false) then
-		net.Start("get_menu_bodygroups")
-		net.SendToServer()
-	else
-		_yrp_appearance.window:Remove()
-	end
+	net.Start("get_menu_bodygroups")
+	net.SendToServer()
 
 	_yrp_appearance.window:MakePopup()
 end

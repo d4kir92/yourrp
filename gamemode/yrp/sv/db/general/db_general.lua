@@ -213,6 +213,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_query_port", "TEXT DEFAULT 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitch", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitter", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_facebook", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_instagram", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_youtube", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_steamgroup", "TEXT DEFAULT ' '")
 
@@ -1456,6 +1457,13 @@ net.Receive("update_text_social_facebook", function(len, ply)
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "")
 	GeneralUpdateString(ply, "update_text_social_facebook", "text_social_facebook", str)
+end)
+
+util.AddNetworkString("update_text_social_instagram")
+net.Receive("update_text_social_instagram", function(len, ply)
+	local str = net.ReadString()
+	str = string.Replace(str, " ", "")
+	GeneralUpdateString(ply, "update_text_social_instagram", "text_social_instagram", str)
 end)
 
 util.AddNetworkString("update_text_social_steamgroup")

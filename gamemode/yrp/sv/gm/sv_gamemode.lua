@@ -751,7 +751,7 @@ function GenerateVoiceTable()
 			yrp_voice_channels[tonumber(channel.uniqueID)].uniqueID = tonumber(channel.uniqueID)
 
 			-- NAME
-			yrp_voice_channels[tonumber(channel.uniqueID)]["string_name"] = channel.string_name
+			yrp_voice_channels[tonumber(channel.uniqueID)]["string_name"] = SQL_STR_OUT(channel.string_name)
 		
 			-- MODE
 			yrp_voice_channels[tonumber(channel.uniqueID)]["string_mode"] = tonumber(channel.string_mode)
@@ -1027,49 +1027,22 @@ net.Receive("mute_channel", function(len, ply)
 end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
-	--print(listener, talker)
-	--[[if listener == talker and listener == player.GetAll()[1] then
-		print("--------------------------------------------------------------------------------")
-	end]]
 	if listener == talker then
 		return false
 	end
 	local canhear = false
 	for i, channel in pairs(GetGlobalDTable("yrp_voice_channels", {})) do
 		if IsActiveInChannel(talker, channel) and IsInChannel(listener, channel) then -- If Talker allowed to talk and both are in that channel
-			--print("IN SAME CHANNEL, and talker is active Channel-ID: " .. i, listener, talker)
 			canhear = true
 			break
 		end
 	end
 
 	if canhear and !talker:GetDBool("mute_voice", false) then
-		--print(listener, "can hear", talker)
 		return true
 	else
-		--print(listener, "cant Hear", talker)
-		return IsInMaxVoiceRange(listener, talker), true	-- 3D Voice enabled
+		return IsInMaxVoiceRange(listener, talker)	-- 3D Voice enabled
 	end
-
-	--[[if IsVoiceEnabled() then
-		if listener != talker then
-			if Is3DVoiceEnabled() then
-				if IsVoiceChannelsEnabled() then
-					return CanHear(listener, talker), HearFaded(listener, talker)	-- 3D Voice chat + voice channels
-				elseif IsVoiceRadioEnabled() then
-					return CanHearChannel(listener, talker)--, HearFadedChannel(listener, talker)
-				else
-					return IsInMaxVoiceRange(listener, talker), true	-- 3D Voice enabled
-				end
-			else
-				return true, false -- 3D Voice chat disabled
-			end
-		else
-			return false
-		end
-	else
-		return false -- Voice disabled
-	end]]
 end
 
 function setbodygroups(ply)

@@ -114,7 +114,7 @@ net.Receive("yrp_item_store", function(len)
 	if pa(slot) then
 		local i = createD("YItem", nil, ItemSize(), ItemSize(), 0, 0)
 		i:SetItemID(item.uniqueID)
-		i:SetModel(item.text_worldmodel)
+		i:SetModel(SQL_STR_OUT(item.text_worldmodel))
 		if item.isinv then
 			i:DoClick()
 		end

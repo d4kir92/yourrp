@@ -27,7 +27,11 @@ util.AddNetworkString("yrp_info")
 
 function teleportToSpawnpoint(ply)
 	if ply.ignorespawnpoint then
-		ply.ignorespawnpoint = false
+		timer.Simple(0.5, function()
+			if IsValid(ply) and ply.ignorespawnpoint then
+				ply.ignorespawnpoint = false
+			end
+		end)
 		return false
 	else
 		timer.Simple(0.0, function()
