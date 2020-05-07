@@ -143,6 +143,12 @@ function CreateCharContent(parent)
 		function cl_nationality:OnChange()
 
 		end
+
+		local text_nationalities = string.Explode(",", GetGlobalDString("text_nationalities", ""))
+		for i, v in pairs(text_nationalities) do
+			cl_nationality:AddChoice(v, v, false)
+		end
+
 		Y = Y + 50 + 20
 	end
 

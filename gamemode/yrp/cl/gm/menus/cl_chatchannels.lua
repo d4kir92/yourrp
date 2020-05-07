@@ -564,7 +564,7 @@ end
 function ToggleChatMenu()
 	if pa(vm.win) then
 		CloseChatMenu()
-	else
+	elseif YRPIsNoMenuOpen() then
 		OpenChatMenu()
 	end
 end

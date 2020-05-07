@@ -370,6 +370,11 @@ function CreateCharacterSettingsContent()
 			function nati:OnChange()
 				lply:SetDString("charcreate_nati", self:GetText())
 			end
+			local text_nationalities = string.Explode(",", GetGlobalDString("text_nationalities", ""))
+			for i, v in pairs(text_nationalities) do
+				nati:AddChoice(v, v, false)
+			end
+
 			list:AddItem(nati)
 			list:AddItem(hr)
 		end

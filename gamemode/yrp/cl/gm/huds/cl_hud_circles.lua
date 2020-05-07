@@ -98,7 +98,7 @@ function HUDCirclesDrawIcon(ele, icon, perc, text)
 		end
 		local font = "Y_" .. fontsize .. "_500"
 
-		draw.SimpleTextOutlined(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color(0, 0, 0))
+		draw.SimpleText(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color(0, 0, 0))
 	end
 end
 
@@ -120,7 +120,7 @@ function HUDCirclesDrawText(ele, text)
 		local ay = lply:HudValue(ele, "AY")
 		local midx = x + (ax * w) / 2
 		local midy = y + (ay * h) / 2
-		draw.SimpleTextOutlined(text, font, midx, midy, Color( 255, 255, 255, 255 ), ax, ay, 2, Color(0, 0, 0))
+		draw.SimpleText(text, font, midx, midy, Color( 255, 255, 255, 255 ), ax, ay, 2, Color(0, 0, 0))
 	end
 end
 

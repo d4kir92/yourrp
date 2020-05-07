@@ -36,7 +36,7 @@ function DrawRectBlur(pnl, px, py, sw, sh, blur)
 end
 
 local steps = 3
-local multiplier = 6
+--local multiplier = 6
 local mat = Material("pp/blurscreen")
 mat:SetFloat("$blur", 3)
 mat:Recompute()
@@ -57,7 +57,7 @@ local function DrawBlur(px, py, sw, sh, alpha)
 			render.SetStencilFailOperation( STENCIL_KEEP )
 			render.SetStencilZFailOperation( STENCIL_KEEP )
 			
-			surface.SetDrawColor(0, 0, 0, 1)
+			surface.SetDrawColor(50, 50, 50, 255)
 			draw.NoTexture()
 			surface.DrawTexturedRect(px, py, sw, sh)
 			
@@ -71,7 +71,7 @@ local function DrawBlur(px, py, sw, sh, alpha)
 				--render.UpdateScreenEffectTexture()
 				render.DrawScreenQuad()
 			end
-			surface.SetDrawColor(0, 0, 0, alpha)
+			surface.SetDrawColor(50, 50, 50, alpha)
 			draw.NoTexture()
 			surface.DrawRect(0, 0, ScrW(), ScrH())
 			

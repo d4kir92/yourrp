@@ -26,13 +26,23 @@ function isMainMenuOpen()
 	return gui.IsGameUIVisible()
 end
 
-hook.Add("StartChat", "HasStartedTyping", function(isTeamChat)
+local wasgroup = false
+hook.Remove("StartChat", "yrp_startchat")
+hook.Add("StartChat", "yrp_startchat", function(isTeamChat)
 	chatisopen = true
 	net.Start("startchat")
 	net.SendToServer()
+	if isTeamChat then
+		wasgroup = true
+		
+		SetChatMode("GROUP")
+	elseif wasgroup then
+		wasgroup = false
+		SetChatMode("SAY")
+	end
 end)
 
-hook.Add("FinishChat", "ClientFinishTyping", function()
+hook.Add("FinishChat", "yrp_finishchat", function()
 	chatisopen = false
 	net.Start("finishchat")
 	net.SendToServer()
@@ -111,8 +121,14 @@ function useFunction(str)
 			toggleInteractMenu()
 		elseif str == "menu_talents" then
 			ToggleTalentsMenu()
-		elseif str == "mute_voice" then
+		elseif str == "voice_mute" then
 			net.Start("yrp_mute_voice")
+			net.SendToServer()
+		elseif str == "voice_range_up" then
+			net.Start("yrp_voice_range_up")
+			net.SendToServer()
+		elseif str == "voice_range_dn" then
+			net.Start("yrp_voice_range_dn")
 			net.SendToServer()
 		elseif str == "voice_menu" then
 			ToggleVoiceMenu()
@@ -492,16 +508,17 @@ function KeyPress()
 
 	keyPressed(get_keybind("toggle_mouse"), "F11Toggle")
 
-	keyPressed(KEY_PAGEUP, "vyes")
-	keyPressed(KEY_PAGEDOWN, "vno")
+	--keyPressed(KEY_PAGEUP, "vyes")
+	--keyPressed(KEY_PAGEDOWN, "vno")
 
 	keyPressed(get_keybind("drop_item"), "dropitem")
 
 	keyPressed(KEY_UP, "openSP")
 	keyPressed(KEY_DOWN, "closeSP")
 
-	keyPressed(get_keybind("mute_voice"), "mute_voice")
-
+	keyPressed(get_keybind("voice_mute"), "voice_mute")
+	keyPressed(get_keybind("voice_range_up"), "voice_range_up")
+	keyPressed(get_keybind("voice_range_dn"), "voice_range_dn")
 	keyPressed(get_keybind("voice_menu"), "voice_menu")
 
 	keyPressed(get_keybind("chat_menu"), "chat_menu")

@@ -2,7 +2,29 @@
 
 -- #CHAT
 
+local yrpChat = {}
+
+local _delay = 4
+local _fadeout = CurTime() + _delay
+local _chatIsOpen = false
+local chatclosedforkeybinds = true
+_showChat = true
+local chatids = {}
+local oldchoices = {}
+local chatAlpha = 0
+
 local CHATMODE = "SAY"
+
+function GetChatMode()
+	return CHATMODE
+end
+
+function SetChatMode(mode)
+	if type(mode) == "string" then
+		CHATMODE = string.upper(mode)
+		yrpChat.comboBox:SetText(CHATMODE)
+	end
+end
 
 function ContainsIp(...)
 	local tab = {...}
@@ -57,15 +79,6 @@ function ChatBlacklisted(...)
 	return false
 end
 
-local yrpChat = {}
-
-local _delay = 4
-local _fadeout = CurTime() + _delay
-local _chatIsOpen = false
-local chatclosedforkeybinds = true
-_showChat = true
-
-local chatids = {}
 function update_chat_choices()
 	if yrpChat.comboBox != nil then
 		yrpChat.comboBox:Clear()
@@ -85,7 +98,6 @@ function update_chat_choices()
 	end
 end
 
-local oldchoices = {}
 hook.Add("Think", "yrp_think_chat_choices", function()
 	if GetGlobalDTable("yrp_chat_channels", {}) != oldchoices then
 		oldchoices = GetGlobalDTable("yrp_chat_channels", {})
@@ -105,7 +117,6 @@ function ChatIsClosedForChat()
 	return chatclosedforkeybinds
 end
 
-local chatAlpha = 0
 function checkChatVisible()
 	if yrpChat.window != nil then
 		if _chatIsOpen then
@@ -144,13 +155,6 @@ end
 
 function IsChatVisible()
 	return _showChat
-end
-
-function isFullyCommand(com, iscom, iscom2)
-	if com == "/" .. iscom .. " " or com == "!" .. iscom .. " " or com == "/" .. string.lower(iscom2) .. " " or com == "!" .. string.lower(iscom2) .. " " then
-		return true
-	end
-	return false
 end
 
 function niceCommand(com)
@@ -246,7 +250,7 @@ function InitYRPChat()
 		end
 
 		function yrpChat.comboBox:OnSelect(index, value, data)
-			CHATMODE = value
+			SetChatMode(value)
 			net.Start("set_chat_mode")
 				net.WriteString(string.upper(value))
 			net.SendToServer()
@@ -308,7 +312,7 @@ function InitYRPChat()
 			yrpChat.writeField:RequestFocus()
 
 			_chatIsOpen = true
-			gamemode.Call("StartChat")
+			gamemode.Call("StartChat", bteam)
 
 			yrpChat.richText:SetVisible(true)
 			yrpChat.writeField:SetVisible(true)
@@ -422,8 +426,10 @@ function InitYRPChat()
 					end
 				elseif t == "number" then
 					yrpChat.richText:AppendText(obj)
+				elseif t == "boolean" then
+					YRP.msg("note", "chat.addtext (boolean): " .. tostring(obj))
 				else
-					YRP.msg("error", "TYPE: " .. t .. " obj: " .. tostring(obj))
+					YRP.msg("error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj))
 				end
 			end
 

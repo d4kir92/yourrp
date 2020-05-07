@@ -34,7 +34,10 @@ YRPKEYBINDS["menu_interact"] = KEY_K
 YRPKEYBINDS["sp_open"] = KEY_UP
 YRPKEYBINDS["sp_close"] = KEY_DOWN
 
-YRPKEYBINDS["mute_voice"] = KEY_HOME
+YRPKEYBINDS["voice_mute"] = KEY_HOME
+YRPKEYBINDS["voice_range_up"] = KEY_PAGEUP
+YRPKEYBINDS["voice_range_dn"] = KEY_PAGEDOWN
+
 YRPKEYBINDS["macro_menu"] = KEY_INSERT
 
 YRPKEYBINDS["voice_menu"] = KEY_COMMA
@@ -105,6 +108,9 @@ end
 --db_drop_table("yrp_keybinds")
 function check_yrp_keybinds()
 	SQL_INIT_DATABASE(DATABASE_NAME)
+
+	SQL_UPDATE(DATABASE_NAME, "speak_next = '0'")
+	SQL_UPDATE(DATABASE_NAME, "speak_prev = '0'")
 
 	local _check_version = SQL_SELECT(DATABASE_NAME, "version", "uniqueID = 1")
 	if _check_version != false and _check_version != nil then

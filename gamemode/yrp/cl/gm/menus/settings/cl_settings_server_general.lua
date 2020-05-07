@@ -941,7 +941,8 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_max, YRP.lang_string("LID_respawntime") .. " [" .. YRP.lang_string("LID_max") .. "]", "update_int_deathtimestamp_max")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_spawncorpseondeath, "LID_spawncorpseondeath", "update_bool_spawncorpseondeath")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_deathscreen, "LID_deathscreen", "update_bool_deathscreen")
-		
+		CreateTextBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.text_nationalities, "LID_nationalities", "update_text_nationalities")
+
 
 
 		--[[ SOCIAL SETTINGS ]]--

@@ -37,7 +37,7 @@ function HUDIconsDrawText(ele, text)
 		y = y + h / 16 + (h - h / 8) / 2 * ay
 		local font = "Y_" .. fontsize .. "_500"
 
-		draw.SimpleTextOutlined(text, font, x, y, Color(255, 255, 255, 255), ax, ay, 1, Color(0, 0, 0))
+		draw.SimpleText(text, font, x, y, Color(255, 255, 255, 255), ax, ay, 1, Color(0, 0, 0))
 	end
 end
 
@@ -83,7 +83,7 @@ function HUDIconsDrawIcon(ele, icon, perc, text)
 		end
 		local font = "Y_" .. fontsize .. "_500"
 
-		draw.SimpleTextOutlined(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleText(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 

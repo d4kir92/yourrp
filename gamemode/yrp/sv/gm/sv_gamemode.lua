@@ -710,12 +710,16 @@ net.Receive("yrp_mute_voice", function(len, ply)
 	ply:SetDBool("mute_voice", !ply:GetDBool("mute_voice", false))
 end)
 
-function IsInMaxVoiceRange(listener, talker)
-	local dist = listener:GetPos():Distance(talker:GetPos())
-	local result = dist <= GetGlobalDInt("int_voice_max_range", 1)
-	--p(listener, talker, result)
-	return result
-end
+util.AddNetworkString("yrp_voice_range_up")
+net.Receive("yrp_voice_range_up", function(len, ply)
+	ply:SetDInt("voice_range", math.Clamp(ply:GetDInt("voice_range", 2) + 1, 0, 4))
+end)
+
+util.AddNetworkString("yrp_voice_range_dn")
+net.Receive("yrp_voice_range_dn", function(len, ply)
+	ply:SetDInt("voice_range", math.Clamp(ply:GetDInt("voice_range", 2) - 1, 0, 4))
+end)
+
 
 
 -- VOICE CHANNELS
@@ -1028,7 +1032,7 @@ end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
 	if listener == talker then
-		return false
+		--return false
 	end
 	local canhear = false
 	for i, channel in pairs(GetGlobalDTable("yrp_voice_channels", {})) do
@@ -1041,7 +1045,11 @@ function GM:PlayerCanHearPlayersVoice(listener, talker)
 	if canhear and !talker:GetDBool("mute_voice", false) then
 		return true
 	else
-		return IsInMaxVoiceRange(listener, talker)	-- 3D Voice enabled
+		if IsInMaxVoiceRange(listener, talker) then
+			if IsInSpeakRange(listener, talker) then
+				return true
+			end
+		end
 	end
 end
 

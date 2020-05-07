@@ -1,22 +1,27 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local HP = Material("vgui/material/icon_favorite.png")
-local AR = Material("vgui/material/icon_security.png")
-local ST = Material("vgui/material/icon_flash.png")
-local BA = Material("vgui/material/icon_battery.png")
-local HU = Material("vgui/material/icon_restaurant.png")
-local TH = Material("vgui/material/icon_drink.png")
-local XP = Material("vgui/material/icon_star.png")
-local MO = Material("icon16/money.png")
-local SA = Material("icon16/money_add.png")
-local CA = Material("vgui/material/icon_timer.png")
-local AB = Material("icon16/wand.png")
+--[[
 
-local RA = YRP.GetDesignIcon("radiation")
-local HY = YRP.GetDesignIcon("hygiene")
 
-local ID = Material("icon16/vcard.png")
-local CR = Material("icon16/clock.png")
+]]
+
+local HP = YRP.GetDesignIcon("64_heart")
+local AR = YRP.GetDesignIcon("64_shield-alt")
+local ST = YRP.GetDesignIcon("64_running")
+local BA = YRP.GetDesignIcon("64_battery-full")
+local HU = YRP.GetDesignIcon("64_hamburger")
+local TH = YRP.GetDesignIcon("64_glass-cheers")
+local XP = YRP.GetDesignIcon("64_atom")
+local MO = YRP.GetDesignIcon("64_money-bill")
+local SA = YRP.GetDesignIcon("64_money-bill-alt")
+local CA = YRP.GetDesignIcon("64_magic")
+local AB = YRP.GetDesignIcon("64_tint")
+local RA = YRP.GetDesignIcon("64_radiation")
+local HY = YRP.GetDesignIcon("64_pills")
+local ID = YRP.GetDesignIcon("64_address-card")
+local CR = YRP.GetDesignIcon("64_clock")
+local RO = YRP.GetDesignIcon("64_user-graduate")
+local NA = YRP.GetDesignIcon("64_user")
 
 local SPACE = {}
 local ELES = {}
@@ -189,17 +194,15 @@ function HUDSpace()
 		ELES["RO"] = {
 			0,
 			nil,
-			nil,
-			lply:GetRoleName(),
-			2
+			RO,
+			lply:GetRoleName()
 		}
 
 		ELES["NA"] = {
 			0,
 			nil,
-			nil,
-			lply:RPName(),
-			2
+			NA,
+			lply:RPName()
 		}
 
 		ELES["ID"] = {

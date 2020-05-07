@@ -19,12 +19,12 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_noclip_mdl", "TEXT DEFAULT 'models/crow.mdl'
 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_server_collectionid", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_community_servers", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_community_servers", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_server_name", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_server_logo", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_server_rules", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_server_rules", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_server_welcome_message", "TEXT DEFAULT 'Welcome'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_server_message_of_the_day", "TEXT DEFAULT 'Today'")
@@ -174,7 +174,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_usergroup", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_money_on_death", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_money_max_amount_of_dropped_money", "TEXT DEFAULT '1000'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pre", "TEXT DEFAULT '$'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pos", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pos", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_money_model", "TEXT DEFAULT 'models/props/cs_assault/money.mdl'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_money_printer_spawn_money", "INT DEFAULT 1")
@@ -200,22 +200,22 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_max", "INT DEFAULT 60")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_spawncorpseondeath", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_deathscreen", "INT DEFAULT 1")
 
-
+SQL_ADD_COLUMN(DATABASE_NAME, "text_nationalities", "TEXT DEFAULT ''")
 
 --[[ Social Settings ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_forum", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord_widgetid", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_ip", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_forum", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord_widgetid", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_ip", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_port", "TEXT DEFAULT '9987'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_query_port", "TEXT DEFAULT '10011'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitch", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitter", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_facebook", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_instagram", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_youtube", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_steamgroup", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitch", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitter", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_facebook", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_instagram", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_youtube", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_social_steamgroup", "TEXT DEFAULT ''")
 
 --[[ OLD ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "access_jail", "TEXT DEFAULT -1")
@@ -1378,6 +1378,12 @@ util.AddNetworkString("update_bool_deathscreen")
 net.Receive("update_bool_deathscreen", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_deathscreen", "bool_deathscreen", b)
+end)
+
+util.AddNetworkString("update_text_nationalities")
+net.Receive("update_text_nationalities", function(len, ply)
+	local str = net.ReadString()
+	GeneralUpdateString(ply, "update_text_nationalities", "text_nationalities", str)
 end)
 
 

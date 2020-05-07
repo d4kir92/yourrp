@@ -83,7 +83,7 @@ function PANEL:SetMaximised(b, von)
 			self.maximised = !self.maximised
 		end
 
-		LocalPlayer():SetDBool("settingsmaximised", self.maximised)
+		--LocalPlayer():SetDBool("settingsmaximised", self.maximised)
 
 		if self.maximised then
 			self:SetPos(0, 0)

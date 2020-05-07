@@ -532,7 +532,7 @@ function ToggleVoiceMenu()
 	if pa(vm.win) then
 		surface.PlaySound("npc/metropolice/vo/off2.wav")
 		CloseVoiceMenu()
-	else
+	elseif YRPIsNoMenuOpen() then
 		surface.PlaySound("npc/metropolice/vo/on2.wav")
 		OpenVoiceMenu()
 	end

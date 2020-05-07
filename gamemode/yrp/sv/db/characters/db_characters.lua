@@ -803,12 +803,14 @@ net.Receive("inv_pm_up", function(len, ply)
 	local _cur = net.ReadInt(16)
 	local _pms = string.Explode(",", GetPlayermodelsOfRole(ply:GetRolTab().uniqueID))
 	if wk(_pms) then
-		ply:SetDString("string_playermodel", _pms[_cur])
-		ply:SetModel(_pms[_cur])
-		local _charid = ply:CharID()
-		SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
-		ply:UpdateBackpack()
-		SendBodyGroups(ply)
+		if wk(_pms[_cur]) then
+			ply:SetDString("string_playermodel", _pms[_cur])
+			ply:SetModel(_pms[_cur])
+			local _charid = ply:CharID()
+			SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
+			ply:UpdateBackpack()
+			SendBodyGroups(ply)
+		end
 	end
 end)
 
@@ -816,13 +818,15 @@ util.AddNetworkString("inv_pm_do")
 net.Receive("inv_pm_do", function(len, ply)
 	local _cur = net.ReadInt(16)
 	local _pms = string.Explode(",", GetPlayermodelsOfRole(ply:GetRolTab().uniqueID))
-	if _pms != nil then
-		ply:SetDString("string_playermodel", _pms[_cur])
-		ply:SetModel(_pms[_cur])
-		local _charid = ply:CharID()
-		SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
-		ply:UpdateBackpack()
-		SendBodyGroups(ply)
+	if wk(_pms) then
+		if wk(_pms[_cur]) then
+			ply:SetDString("string_playermodel", _pms[_cur])
+			ply:SetModel(_pms[_cur])
+			local _charid = ply:CharID()
+			SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
+			ply:UpdateBackpack()
+			SendBodyGroups(ply)
+		end
 	end
 end)
 

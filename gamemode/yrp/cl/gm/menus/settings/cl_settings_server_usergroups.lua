@@ -637,7 +637,8 @@ function AddUG(tbl)
 	_ug:SetText("")
 	function _ug:Paint(pw, ph)
 		self.string_color = StringToColor(UGS[self.uid].string_color)
-		surfaceButton(self, pw, ph, string.upper(UGS[self.uid].string_name) .. " " .. UGS[self.uid].int_position, self.string_color, ph + YRP.ctr(40 + 20), ph / 2, 0, 1, false)
+		local text = string.upper(UGS[self.uid].string_name) -- .. " " .. UGS[self.uid].int_position
+		surfaceButton(self, pw, ph, text, self.string_color, ph + YRP.ctr(40 + 20), ph / 2, 0, 1, false)
 
 		if strEmpty(UGS[tonumber(tbl.uniqueID)].string_icon) then
 			surfaceBox(YRP.ctr(8) + YRP.ctr(40) + YRP.ctr(8), YRP.ctr(4), ph - YRP.ctr(8), ph - YRP.ctr(8), Color(255, 255, 255, 255))
@@ -839,7 +840,7 @@ net.Receive("Connect_Settings_UserGroups", function(len)
 		end
 
 		--[[ UserGroupsList ]]--
-		PARENT.ugs = createD("DPanelList", PARENT, YRP.ctr(500), ScrH() - YRP.ctr(20 + 150 + 20 + 50 + 20), YRP.ctr(20), YRP.ctr(20 + 50 + 20 + 50))
+		PARENT.ugs = createD("DPanelList", PARENT, YRP.ctr(500), PARENT:GetTall() - YRP.ctr(2 * 20 + 120), YRP.ctr(20), YRP.ctr(20 + 50 + 20 + 50))
 		function PARENT.ugs:Paint(pw, ph)
 			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 		end

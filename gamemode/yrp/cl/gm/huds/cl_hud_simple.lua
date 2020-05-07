@@ -99,15 +99,27 @@ function HUDSimpleBAR(tab)
 			Simple[tab.element]["text"].brcolor = lply:HudValue(tab.element, "TB")
 
 			if Simple[tab.element]["bar"].fw > Simple[tab.element]["bar"].fh then
-				Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].fh * 0.6
-				Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].fh * 0.6
-				Simple[tab.element]["icon"].fx = Simple[tab.element]["bar"].x + Simple[tab.element]["bar"].fh * 0.2
-				Simple[tab.element]["icon"].fy = Simple[tab.element]["bar"].y + Simple[tab.element]["bar"].fh * 0.2
+				Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].fh * 0.75
+				Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].fh * 0.75
+
+				Simple[tab.element]["icon"].w = Simple[tab.element]["icon"].w - Simple[tab.element]["icon"].w%4
+				Simple[tab.element]["icon"].h = Simple[tab.element]["icon"].h - Simple[tab.element]["icon"].h%4
+
+				local br = (Simple[tab.element]["bar"].fh - Simple[tab.element]["icon"].h) / 2
+
+				Simple[tab.element]["icon"].fx = Simple[tab.element]["bar"].x + br
+				Simple[tab.element]["icon"].fy = Simple[tab.element]["bar"].y + br
 			else
-				Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].fw * 0.6
-				Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].fw * 0.6
-				Simple[tab.element]["icon"].fx = Simple[tab.element]["bar"].x + Simple[tab.element]["bar"].fw * 0.2
-				Simple[tab.element]["icon"].fy = Simple[tab.element]["bar"].y + Simple[tab.element]["bar"].fw * 0.2
+				Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].fw * 0.75
+				Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].fw * 0.75
+
+				Simple[tab.element]["icon"].w = Simple[tab.element]["icon"].w - Simple[tab.element]["icon"].w%4
+				Simple[tab.element]["icon"].h = Simple[tab.element]["icon"].h - Simple[tab.element]["icon"].h%4
+
+				local br = (Simple[tab.element]["bar"].fw - Simple[tab.element]["icon"].w) / 2
+
+				Simple[tab.element]["icon"].fx = Simple[tab.element]["bar"].x + br
+				Simple[tab.element]["icon"].fy = Simple[tab.element]["bar"].y + br
 			end
 		else
 			Simple[tab.element]["bar"].x = HUDMOTIONX(Simple[tab.element]["bar"].fx)
@@ -146,7 +158,7 @@ function HUDSimpleBAR(tab)
 			if tab.tfont != nil then
 				Simple[tab.element]["text"].font = tab.tfont
 			end
-			HudTextBr(Simple[tab.element]["text"])
+			HudText(Simple[tab.element]["text"])
 		end
 	end
 end
@@ -387,7 +399,7 @@ function HUDSimpleCompass()
 					local alpha = GetFadeAlpha(x, Simple["COM"][i .. "num"].x, w)
 					Simple["COM"][i .. "num"].color = Color(255, 255, 255, alpha * 255)
 					Simple["COM"][i .. "num"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
-					HudTextBr(Simple["COM"][i .. "num"])
+					HudText(Simple["COM"][i .. "num"])
 				end
 			end
 
@@ -397,7 +409,7 @@ function HUDSimpleCompass()
 			local alpha = GetFadeAlpha(x, Simple["COM"]["north"].x, w)
 			Simple["COM"]["north"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["north"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
-			HudTextBr(Simple["COM"]["north"])
+			HudText(Simple["COM"]["north"])
 
 			-- South
 			Simple["COM"]["south"].x = x + (fw + w * 0.0) % w
@@ -405,7 +417,7 @@ function HUDSimpleCompass()
 			alpha = GetFadeAlpha(x, Simple["COM"]["south"].x, w)
 			Simple["COM"]["south"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["south"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
-			HudTextBr(Simple["COM"]["south"])
+			HudText(Simple["COM"]["south"])
 
 			-- East
 			Simple["COM"]["east"].x = x + (fw + w * 0.75) % w
@@ -413,7 +425,7 @@ function HUDSimpleCompass()
 			alpha = GetFadeAlpha(x, Simple["COM"]["east"].x, w)
 			Simple["COM"]["east"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["east"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
-			HudTextBr(Simple["COM"]["east"])
+			HudText(Simple["COM"]["east"])
 
 			-- West
 			Simple["COM"]["west"].x = x + (fw + w * 0.25) % w
@@ -421,11 +433,11 @@ function HUDSimpleCompass()
 			alpha = GetFadeAlpha(x, Simple["COM"]["west"].x, w)
 			Simple["COM"]["west"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["west"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
-			HudTextBr(Simple["COM"]["west"])
+			HudText(Simple["COM"]["west"])
 
 			-- Degree Number
 			Simple["COM"]["degree"].text = tab.text
-			HudTextBr(Simple["COM"]["degree"])
+			HudText(Simple["COM"]["degree"])
 
 			-- Needle
 			--HudBox(Simple["COM"]["needle"])
@@ -483,21 +495,22 @@ local ping_delay = 0
 local pingcolor = Color(0, 0, 0)
 
 local icons = {}
-icons["RA"] = YRP.GetDesignIcon("radiation")
-icons["HP"] = Material("icon16/heart.png")
-icons["AR"] = Material("icon16/shield.png")
-icons["MO"] = Material("icon16/money.png")
-icons["SA"] = Material("icon16/money_add.png")
-icons["RO"] = Material("icon16/user.png")
-icons["ST"] = Material("icon16/lightning.png")
-icons["HU"] = Material("icon16/cake.png")
-icons["TH"] = Material("icon16/cup.png")
-icons["HY"] = YRP.GetDesignIcon("hygiene")
-icons["CA"] = Material("icon16/hourglass.png")
-icons["AB"] = Material("icon16/wand.png")
-icons["BA"] = Material("icon16/computer.png")
-icons["ID"] = Material("icon16/vcard.png")
-icons["CR"] = Material("icon16/clock.png")
+icons["RA"] = YRP.GetDesignIcon("64_radiation")
+icons["HP"] = YRP.GetDesignIcon("64_heart")
+icons["AR"] = YRP.GetDesignIcon("64_shield-alt")
+icons["MO"] = YRP.GetDesignIcon("64_money-bill")
+icons["SA"] = YRP.GetDesignIcon("64_money-bill-alt")
+icons["ST"] = YRP.GetDesignIcon("64_running")
+icons["HU"] = YRP.GetDesignIcon("64_hamburger")
+icons["TH"] = YRP.GetDesignIcon("64_glass-cheers")
+icons["HY"] = YRP.GetDesignIcon("64_pills")
+icons["CA"] = YRP.GetDesignIcon("64_magic")
+icons["AB"] = YRP.GetDesignIcon("64_tint")
+icons["BA"] = YRP.GetDesignIcon("64_battery-full")
+icons["ID"] = YRP.GetDesignIcon("64_address-card")
+icons["CR"] = YRP.GetDesignIcon("64_clock")
+icons["RO"] = YRP.GetDesignIcon("64_user-graduate")
+icons["NA"] = YRP.GetDesignIcon("64_user")
 
 function HUDSimple()
 	local lply = LocalPlayer()
@@ -689,6 +702,7 @@ function HUDSimple()
 		NA.cur = 0
 		NA.max = 1
 		NA.text = lply:RPName()
+		NA.icon = icons["NA"]
 		HUDSimpleBAR(NA)
 		ID = {}
 		ID.element = "ID"
@@ -748,7 +762,7 @@ function HUDSimple()
 		RO.max = 1
 		RO.text = lply:GetRoleName()
 		RO.icon = icons["RO"]
-		RO.tcolor = lply:GetRoleColor()
+		--RO.tcolor = lply:GetRoleColor()
 		HUDSimpleBAR(RO)
 		if GetGlobalDBool("bool_stamina", false) then
 			local ST = {}

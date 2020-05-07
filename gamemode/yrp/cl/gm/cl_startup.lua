@@ -1560,6 +1560,11 @@ function drawPlates()
 				end
 			end
 			render.SetColorMaterial()
+
+			local range = GetVoiceRange(ply)
+			render.DrawSphere(ply:GetPos(), range, 16, 16, col)
+			render.DrawWireframeSphere(ply:GetPos(), range, 16, 16, col, true)
+
 			render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col)
 			render.DrawWireframeSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col, true)
 			Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))

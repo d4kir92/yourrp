@@ -373,7 +373,7 @@ function HUDFO76Compass(tab)
 			hr_n.w = YRP.ctr(8)
 			hr_n.h = hr_n.h * 0.3
 			HudBox(hr_n)
-			HudTextBr(FO76[tab.element]["north"])
+			HudText(FO76[tab.element]["north"])
 
 			-- South
 			FO76[tab.element]["south"].x = x + (fw + w * 0.0) % w
@@ -384,7 +384,7 @@ function HUDFO76Compass(tab)
 			hr_s.w = YRP.ctr(8)
 			hr_s.h = hr_s.h * 0.3
 			HudBox(hr_s)
-			HudTextBr(FO76[tab.element]["south"])
+			HudText(FO76[tab.element]["south"])
 
 			-- East
 			FO76[tab.element]["east"].x = x + (fw + w * 0.75) % w
@@ -395,7 +395,7 @@ function HUDFO76Compass(tab)
 			hr_e.w = YRP.ctr(8)
 			hr_e.h = hr_e.h * 0.3
 			HudBox(hr_e)
-			HudTextBr(FO76[tab.element]["east"])
+			HudText(FO76[tab.element]["east"])
 
 			-- West
 			FO76[tab.element]["west"].x = x + (fw + w * 0.25) % w
@@ -406,7 +406,7 @@ function HUDFO76Compass(tab)
 			hr_w.w = YRP.ctr(8)
 			hr_w.h = hr_w.h * 0.3
 			HudBox(hr_w)
-			HudTextBr(FO76[tab.element]["west"])
+			HudText(FO76[tab.element]["west"])
 		end
 	end
 end

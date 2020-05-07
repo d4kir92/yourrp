@@ -169,8 +169,8 @@ hook.Add("HUDPaint", "yrp_hud_levelup", function()
 				if self.aw < tw then
 					self.aw = math.Clamp(self.aw + 5, 0, tw)
 				else
-					draw.SimpleTextOutlined(self.LID_levelup, "Y_36_500", pw / 2, ph / 4, self.lucolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
-					draw.SimpleTextOutlined(self.LID_levelx, "Y_24_500", pw / 2, ph / 4 * 3, self.lxcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.brcolor)
+					draw.SimpleText(self.LID_levelup, "Y_36_500", pw / 2, ph / 4, self.lucolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(self.LID_levelx, "Y_24_500", pw / 2, ph / 4 * 3, self.lxcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				if self.level != lply:Level() then
@@ -283,17 +283,19 @@ function YRP_PM:Think()
 			YRP_PM:SetPos(YRP_PM.x, YRP_PM.y)
 			YRP_PM:SetSize(YRP_PM.h, YRP_PM.h)
 			YRP_PM:SetModel(YRP_PM.model)
-
-			local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
-			if lb != nil then
-				local eyepos = YRP_PM.Entity:GetBonePosition(lb)
-				eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
-				YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
-				YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-26, 0, 0))	-- Move cam in front of eyes
-				YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
-			else
-				YRP_PM:SetLookAt(Vector(0, 0, 40))
-				YRP_PM:SetCamPos(Vector(50, 50, 50))
+			
+			if ea(YRP_PM.Entity) then
+				local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
+				if lb != nil then
+					local eyepos = YRP_PM.Entity:GetBonePosition(lb)
+					eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
+					YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
+					YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-26, 0, 0))	-- Move cam in front of eyes
+					YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
+				else
+					YRP_PM:SetLookAt(Vector(0, 0, 40))
+					YRP_PM:SetCamPos(Vector(50, 50, 50))
+				end
 			end
 
 			if !YRP_PM.visible then
@@ -359,7 +361,9 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		if lply:GetDBool("mute_voice", false) then
 			text = text .. " (" .. YRP.lang_string("LID_speaklocal") .. ")"
 		end
-		draw.SimpleTextOutlined(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+		text = text .. " " .. YRP.lang_string("LID_range") .. ": " .. GetVoiceRange(lply)
+
+		draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 	end
 
 	DONE_LOADING = DONE_LOADING or false
@@ -392,7 +396,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	end
 
 	if game.SinglePlayer() then
-		draw.SimpleTextOutlined("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleText("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 	end
 
 	local _target = LocalPlayer():GetDString("hittargetName", "")
