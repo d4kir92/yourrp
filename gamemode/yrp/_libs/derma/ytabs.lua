@@ -41,7 +41,9 @@ function PANEL:AddOption(name, func, height)
 	tab:SetText("")
 	tab.tabs = self
 	function tab:DoClick()
-		self.tabs:GoToSite(name)
+		if self.tabs != nil and wk(name) then
+			self.tabs:GoToSite(name)
+		end
 	end
 	function tab:Paint(pw, ph)
 		if self.tabs.auto then
@@ -77,6 +79,7 @@ function PANEL:AddOption(name, func, height)
 end
 
 function PANEL:GoToSite(name)
+	if name == nil then return end
 	self.tabs = self.tabs or {}
 
 	self.site:Clear()

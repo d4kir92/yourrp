@@ -14,46 +14,49 @@ if CLIENT then
 		local hcolors = {"TE", "TB", "BG", "BA", "BR"}
 		local hints = {"AX", "AY", "TS"}
 
-		if table.HasValue(hfloats, art) then
-			--local f_val = self:GetDFloat("float_HUD_" .. element .. "_" .. art, -1.0)
-			local f_val = YRPHUD("float_HUD_" .. element .. "_" .. art, -1.0)
-			if art == "POSI_X" or  art == "SIZE_W" then
-				f_val = f_val * ScW()
-				if art == "POSI_X" and BiggerThen16_9() then
-					f_val = f_val + PosX()
+		if YRPHUD != nil then
+			if table.HasValue(hfloats, art) then
+				--local f_val = self:GetDFloat("float_HUD_" .. element .. "_" .. art, -1.0)
+				local f_val = YRPHUD("float_HUD_" .. element .. "_" .. art, -1.0)
+				if art == "POSI_X" or  art == "SIZE_W" then
+					f_val = f_val * ScW()
+					if art == "POSI_X" and BiggerThen16_9() then
+						f_val = f_val + PosX()
+					end
+				else
+					f_val = f_val * ScH()
 				end
-			else
-				f_val = f_val * ScH()
-			end
-			return math.Round(f_val, 0)
-		elseif table.HasValue(hbools, art) then
-			return YRPHUD("bool_HUD_" .. element .. "_" .. art, false) --self:GetDBool("bool_HUD_" .. element .. "_" .. art, false)
-		elseif table.HasValue(hcolors, art) then
-			if element == "AB" then
-				local abcolors = {}
-				abcolors["none"] = Color(0, 0, 0, 0)
-				abcolors["mana"] = Color(100, 100, 255, 255)
-				abcolors["rage"] = Color(255, 0, 0, 255)
-				abcolors["energy"] = Color(255, 255, 0, 255)
-				abcolors["force"] = Color(100, 100, 255, 255)
-				return abcolors[self:GetDString("GetAbilityType", "none")]
-			else
-				local hcolor = YRPHUD("color_HUD_" .. element .. "_" .. art, "255, 0, 0") -- self:GetDString("color_HUD_" .. element .. "_" .. art, "255, 0, 0")
-				hcolor = string.Explode(",", hcolor)
-				return Color(hcolor[1], hcolor[2], hcolor[3], hcolor[4] or 255)
-			end
-		elseif table.HasValue(hints, art) then
-			local ay = YRPHUD("int_HUD_" .. element .. "_" .. art, -1)
-			if art == "AY" then
-				if ay == 3 then
-					ay = 0
-				elseif ay == 4 then
-					ay = 2
+				return math.Round(f_val, 0)
+			elseif table.HasValue(hbools, art) then
+				return YRPHUD("bool_HUD_" .. element .. "_" .. art, false) --self:GetDBool("bool_HUD_" .. element .. "_" .. art, false)
+			elseif table.HasValue(hcolors, art) then
+				if element == "AB" then
+					local abcolors = {}
+					abcolors["none"] = Color(0, 0, 0, 0)
+					abcolors["mana"] = Color(100, 100, 255, 255)
+					abcolors["rage"] = Color(255, 0, 0, 255)
+					abcolors["energy"] = Color(255, 255, 0, 255)
+					abcolors["force"] = Color(100, 100, 255, 255)
+					return abcolors[self:GetDString("GetAbilityType", "none")]
+				else
+					local hcolor = YRPHUD("color_HUD_" .. element .. "_" .. art, "255, 0, 0") -- self:GetDString("color_HUD_" .. element .. "_" .. art, "255, 0, 0")
+					hcolor = string.Explode(",", hcolor)
+					return Color(hcolor[1], hcolor[2], hcolor[3], hcolor[4] or 255)
 				end
+			elseif table.HasValue(hints, art) then
+				local ay = YRPHUD("int_HUD_" .. element .. "_" .. art, -1)
+				if art == "AY" then
+					if ay == 3 then
+						ay = 0
+					elseif ay == 4 then
+						ay = 2
+					end
+				end
+				return ay
 			end
-			return ay
+			return "ART: " .. art .. " not found."
 		end
-		return "ART: " .. art .. " not found."
+		return ""
 	end
 
 	function Player:HudElement(element)

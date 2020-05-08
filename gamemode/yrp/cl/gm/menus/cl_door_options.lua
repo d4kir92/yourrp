@@ -142,22 +142,24 @@ function buyWindow(door, tabBuilding)
 			local _tmpBuildings = net.ReadTable()
 			tabBuilding.uniqueID = tonumber(tabBuilding.uniqueID)
 
-			_ComboBoxHouseName.setup = true
-			if _ComboBoxHouseName != NULL then
-				for k, v in pairs(_tmpBuildings) do
-					v.uniqueID = tonumber(v.uniqueID)
-					if pa(_ComboBoxHouseName) then
-						local isbuilding = false
-						if v.uniqueID == tabBuilding.uniqueID then
-							isbuilding = true
+			if pa(_ComboBoxHouseName) then
+				_ComboBoxHouseName.setup = true
+				if _ComboBoxHouseName != NULL then
+					for k, v in pairs(_tmpBuildings) do
+						v.uniqueID = tonumber(v.uniqueID)
+						if pa(_ComboBoxHouseName) then
+							local isbuilding = false
+							if v.uniqueID == tabBuilding.uniqueID then
+								isbuilding = true
+							end
+							_ComboBoxHouseName:AddChoice(v.name .. " [" .. YRP.lang_string("LID_doors") .. ": " .. v.doors .. "] [BUID: " .. v.uniqueID .. "]", v.uniqueID, isbuilding)
+						else
+							break
 						end
-						_ComboBoxHouseName:AddChoice(v.name .. " [" .. YRP.lang_string("LID_doors") .. ": " .. v.doors .. "] [BUID: " .. v.uniqueID .. "]", v.uniqueID, isbuilding)
-					else
-						break
 					end
 				end
+				_ComboBoxHouseName.setup = false
 			end
-			_ComboBoxHouseName.setup = false
 		end)
 		function _ComboBoxHouseName:OnSelect(index, value, data)
 			local _tmpData = _ComboBoxHouseName:GetOptionData(index)
@@ -176,7 +178,9 @@ function buyWindow(door, tabBuilding)
 		function _ButtonAddNew:DoClick()
 			net.Start("addnewbuilding")
 			net.SendToServer()
-			yrp_door.window:Close()
+			if pa(yrp_door.window) then
+				yrp_door.window:Close()
+			end
 		end
 
 		local _ComboBoxGroupName = createD("DComboBox", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(450))

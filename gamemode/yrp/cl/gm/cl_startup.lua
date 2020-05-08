@@ -1836,6 +1836,7 @@ hook.Add("HUDPaint", "yrp_esp_draw", function()
 				local ScrCen = OBBCen:ToScreen()
 
 				local dist = math.Round(LocalPlayer():GetPos():Distance(p:GetPos()) * 0.019, 0)
+				draw3DText("[F8] " .. YRP.lang_string("LID_usergroups") .. " -> " .. YRP.lang_string("LID_canuseesp"), ScrCen.x, ScrCen.y - 70)
 				draw3DText(YRP.lang_string("LID_distance") .. ": " .. dist .. "m", ScrCen.x, ScrCen.y - 50)
 				draw3DText(YRP.lang_string("LID_health") .. ": " .. p:Health() .. "/" .. p:GetMaxHealth() .. " [" .. p:Armor() .. "/" .. p:GetMaxArmor() .. "]", ScrCen.x, ScrCen.y - 30)
 				draw3DText(YRP.lang_string("LID_name") .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]", ScrCen.x, ScrCen.y - 10)

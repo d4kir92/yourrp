@@ -280,7 +280,7 @@ function InitYRPChat()
 
 		function yrpChat.richText:PerformLayout()
 			local ts = LocalPlayer():HudValue("CH", "TS")
-			if ts > 0 then
+			if ts != nil and ts > 0 then
 				if self.SetUnderlineFont != nil then
 					self:SetUnderlineFont("Y_" .. ts .. "_500")
 				end

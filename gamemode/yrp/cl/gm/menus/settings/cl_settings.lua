@@ -324,6 +324,9 @@ function OpenSettings()
 			draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2 + YRP.ctr(120), self:GetHeaderHeight() / 2, GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			draw.SimpleText(YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_18_500", pw - YRP.ctr(300), self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end
+		function sm.win:Close()
+			CloseSettings()
+		end
 
 		-- LOGO
 		local logoS = sm.win:GetHeaderHeight() - YRP.ctr(20)

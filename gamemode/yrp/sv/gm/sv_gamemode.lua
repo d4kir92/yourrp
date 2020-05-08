@@ -597,7 +597,7 @@ end
 hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, dmginfo)
 	if ply:IsFullyAuthenticated() then
 
-		if IsInsideSafezone(ply) then
+		if IsInsideSafezone(ply) or ply:HasGodMode() or ply:GetDBool("godmode", false) then
 			dmginfo:ScaleDamage(0)
 		else
 			if dmginfo:GetAttacker() != ply then
@@ -656,16 +656,16 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 			else
 				dmginfo:ScaleDamage(1)
 			end
-		end
-	end
 
-	local attacker = dmginfo:GetAttacker()
-	local damage = dmginfo:GetDamage()
-	damage = math.Round(damage, 2)
-	if attacker:IsPlayer() then
-		SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmginfo:GetDamage() .. "'")
-	else
-		SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID64() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'")	
+			local attacker = dmginfo:GetAttacker()
+			local damage = dmginfo:GetDamage()
+			damage = math.Round(damage, 2)
+			if attacker:IsPlayer() then
+				SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmginfo:GetDamage() .. "'")
+			else
+				SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID64() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'")	
+			end
+		end
 	end
 end)
 
