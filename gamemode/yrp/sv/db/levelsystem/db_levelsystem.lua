@@ -120,20 +120,26 @@ function Player:AddLevel(level)
 		local newlvl = curlvl + 1
 		if newlvl <= maxlvl then
 
-			SQL_UPDATE("yrp_characters", "int_level = '" .. newlvl .. "'", "uniqueID = '" .. charid .. "'")
-			self:SetDString("int_level", newlvl)
-
-			self:AddLevel(level)
+			local result = SQL_UPDATE("yrp_characters", "int_level = '" .. newlvl .. "'", "uniqueID = '" .. charid .. "'")
+			if result != nil then
+				YRP.msg("error", "AddLevel FAILED #1: " .. tostring(result))
+			else
+				self:SetDString("int_level", newlvl)
+				self:AddLevel(level)
+			end
 		end
 	elseif level < 0 then
 		level = level + 1
 		local newlvl = curlvl - 1
 		if newlvl >= minlvl then
 
-			SQL_UPDATE("yrp_characters", "int_level = '" .. newlvl .. "'", "uniqueID = '" .. charid .. "'")
-			self:SetDString("int_level", newlvl)
-
-			self:AddLevel(level)
+			local result = SQL_UPDATE("yrp_characters", "int_level = '" .. newlvl .. "'", "uniqueID = '" .. charid .. "'")
+			if result != nil then
+				YRP.msg("error", "AddLevel FAILED #2: " .. tostring(result))
+			else
+				self:SetDString("int_level", newlvl)
+				self:AddLevel(level)
+			end
 		end
 	end
 end

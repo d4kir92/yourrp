@@ -129,6 +129,10 @@ function PANEL:UpdateSize()
 	self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
 	self.langu:SetPos(self:GetWide() - self.langu:GetWide() - self:GetHeaderHeight() * 1.0, self:GetHeaderHeight() * 0.2)
 
+	if self.UpdateCustomeSize then
+		self:UpdateCustomeSize()
+	end
+
 	self:ChangedSize()
 end
 

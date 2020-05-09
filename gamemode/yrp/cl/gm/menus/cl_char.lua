@@ -44,6 +44,7 @@ end
 
 local save_delay = 0
 function CreateCharContent(parent)
+	local lply = LocalPlayer()
 	CHAR.content = parent
 
 
@@ -82,6 +83,8 @@ function CreateCharContent(parent)
 	end
 	Y = Y + 220
 
+
+
 	local cl_birthday = nil
 	if GetGlobalDBool("bool_characters_birthday", false) then
 		local cl_birthdayheader = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
@@ -97,6 +100,8 @@ function CreateCharContent(parent)
 		end
 		Y = Y + 50 + 20
 	end
+
+
 
 	local cl_bodyheight = nil
 	if GetGlobalDBool("bool_characters_bodyheight", false) then
@@ -114,6 +119,8 @@ function CreateCharContent(parent)
 		Y = Y + 50 + 20
 	end
 
+
+
 	local cl_weight = nil
 	if GetGlobalDBool("bool_characters_weight", false) then
 		local cl_weightheader = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
@@ -129,6 +136,8 @@ function CreateCharContent(parent)
 		end
 		Y = Y + 50 + 20
 	end	
+
+
 
 	local cl_nationality = nil
 	if GetGlobalDBool("bool_characters_nationality", false) then
@@ -151,6 +160,30 @@ function CreateCharContent(parent)
 
 		Y = Y + 50 + 20
 	end
+
+
+
+	local attr = createD("YPanel", parent, YRP.ctr(300), YRP.ctr(260), YRP.ctr(20), YRP.ctr(Y))
+	function attr:Paint(pw, ph)
+		hook.Run("YPanelPaint", self, pw, ph)
+
+		draw.SimpleText(YRP.lang_string("LID_strength") .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleText(YRP.lang_string("LID_agility") .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleText(YRP.lang_string("LID_stamina") .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleText(YRP.lang_string("LID_intellect") .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(140), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleText(YRP.lang_string("LID_spirit") .. ":" , "Y_14_500", YRP.ctr(20), YRP.ctr(180), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleText(YRP.lang_string("LID_armor") .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		
+		draw.SimpleText(lply:GetDInt("int_strength", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText(lply:GetDInt("int_agility", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText(lply:GetDInt("int_stamina", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText(lply:GetDInt("int_intellect", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(140), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText(lply:GetDInt("int_spirit", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(180), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText(lply:GetDInt("int_armor", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+	end
+
+	Y = Y + 400 + 20
+
 
 
 	local cl_save = createD("YButton", parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))

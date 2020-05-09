@@ -139,11 +139,24 @@ function Player:DropSWEPSilence(cname)
 	self:RemoveWeapon(cname)
 end
 
-function Player:IsAllowedToDropSWEP(cname)
+function Player:IsAllowedToDropSWEPRole(cname)
 	local ndsweps = SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetDString("roleUniqueID", "0") .. "'")
 	if wk(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode(",", ndsweps.string_ndsweps)
+		if table.HasValue(ndsweps, cname) then
+			return false
+		else
+			return true
+		end
+	end
+end
+
+function Player:IsAllowedToDropSWEPUG(cname)
+	local ndsweps = SQL_SELECT("yrp_usergroups", "string_nonesweps", "uniqueID = '" .. string.lower(self:GetUserGroup()) .. "'")
+	if wk(ndsweps) then
+		ndsweps = ndsweps[1]
+		ndsweps = string.Explode(",", ndsweps.string_nonesweps)
 		if table.HasValue(ndsweps, cname) then
 			return false
 		else
@@ -162,7 +175,7 @@ net.Receive("dropswep", function(len, ply)
 
 		if _weapon != NULL and _weapon != nil and _weapon.notdropable == nil then
 			local _wclass = _weapon:GetClass() or ""
-			if ply:IsAllowedToDropSWEP(_wclass) then
+			if ply:IsAllowedToDropSWEPRole(_wclass) and ply:IsAllowedToDropSWEPUG(_wclass) then
 				ply:DropSWEP(_wclass)
 				_dropped = true
 			end

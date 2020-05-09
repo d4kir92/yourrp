@@ -12,10 +12,6 @@ function PlayerLoadedGame(ply)
 	local OS_OSX = tab.isosx
 	local Country = tab.country
 
-	if open_character_selection != nil then
-		open_character_selection(ply)
-	end
-
 	if OS_Windows then
 		ply:SetDString("yrp_os", "windows")
 	elseif OS_Linux then
@@ -61,6 +57,10 @@ hook.Add("Think", "yrp_loaded_game", function()
 			if ply.lgtime and ply.lgtime < CurTime() and ply:SteamID64() != nil then -- Only goes here, when a player fully loaded
 				ply.lgtime = nil
 				ply:SetDBool("finishedloading", true)
+
+				if open_character_selection != nil then
+					open_character_selection(ply)
+				end
 
 				net.Start("yrp_noti")
 					net.WriteString("playerisready")

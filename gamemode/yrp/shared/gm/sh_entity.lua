@@ -20,3 +20,7 @@ end
 function Entity:ItemSizeH()
 	return tonumber(self:GetDString("item_size_h", nil))
 end
+
+function Entity:IsDealer()
+	return self:GetClass() == "yrp_dealer"
+end

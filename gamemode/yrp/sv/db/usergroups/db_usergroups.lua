@@ -10,8 +10,9 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'unnamed usergroup'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0,255'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_sents", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_nonesweps", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_sents", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT 1")
@@ -509,6 +510,21 @@ net.Receive("usergroup_update_string_sweps", function(len, ply)
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_update_string_sweps")
 			net.WriteString(string_sweps)
+		net.Send(pl)
+	end
+end)
+
+util.AddNetworkString("usergroup_update_string_nonesweps")
+net.Receive("usergroup_update_string_nonesweps", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local string_nonesweps = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "string_nonesweps = '" .. string_nonesweps .. "'", "uniqueID = '" .. uid .. "'")
+
+	printGM("db", ply:YRPName() .. " updated string_nonesweps of usergroup (" .. uid .. ") to [" .. string_nonesweps .. "]")
+
+	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
+		net.Start("usergroup_update_string_nonesweps")
+			net.WriteString(string_nonesweps)
 		net.Send(pl)
 	end
 end)
@@ -1460,6 +1476,9 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 end)
 
 function GM:PhysgunPickup(pl, ent)
+	if ent:IsDealer() then
+		return false
+	end
 	local tabUsergroup = SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 	if wk(tabUsergroup) then
 		tabUsergroup = tabUsergroup[1]

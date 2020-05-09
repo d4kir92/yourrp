@@ -346,7 +346,6 @@ net.Receive("getMapTab", function(len)
 			net.Start("teleportto")
 				net.WriteString(mapList:GetLine(mapList:GetSelectedLine()):GetValue(1))
 			net.SendToServer()
-			GetSettingsSite():Remove()
 		end
 	end
 	function btnTeleport:Paint(pw, ph)

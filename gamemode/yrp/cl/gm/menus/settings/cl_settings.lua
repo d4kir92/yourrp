@@ -46,10 +46,12 @@ function ToggleSettings(id)
 	end
 end
 
-function CloseSettings()
+function CloseSettings(pnl)
 	sm.open = false
 	if pa(sm.win) then
 		sm.win:Hide()
+	elseif wk(pnl) and pnl.Remove != nil then
+		pnl:Remove()
 	end
 end
 
@@ -325,7 +327,7 @@ function OpenSettings()
 			draw.SimpleText(YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_18_500", pw - YRP.ctr(300), self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end
 		function sm.win:Close()
-			CloseSettings()
+			CloseSettings(self)
 		end
 
 		-- LOGO
@@ -397,7 +399,7 @@ function OpenSettings()
 		-- MENU
 		sm.menu = createD("DPanelList", content, 10, BFH() - sm.win:GetHeaderHeight(), 0, 0)
 		sm.menu:SetText("")
-		sm.menu.pw = 10
+		sm.menu.pw = YRP.ctr(64) + 2 * br
 		sm.menu.ph = YRP.ctr(64) + 2 * br
 		sm.menu.expanded = sm.menu.expanded or lply:GetDBool("settings_expanded", true)
 		local font = "Y_" .. math.Clamp(math.Round(sm.menu.ph - 2 * br), 4, 100) ..  "_700"
@@ -411,11 +413,11 @@ function OpenSettings()
 		sm.menu.expander:SetText("")
 		function sm.menu.expander:DoClick()
 			if lply:GetDBool("settings_expanded", true) then
-				sm.win:UpdateSize(sm.menu.ph)
+				sm.win:UpdateCustomeSize(sm.menu.ph)
 
 				sm.menu.expanded = false
 			else
-				sm.win:UpdateSize()
+				sm.win:UpdateCustomeSize()
 
 				sm.menu.expanded = true
 			end
@@ -456,7 +458,7 @@ function OpenSettings()
 			end
 		end
 
-		function sm.win:UpdateSize(pw)
+		function sm.win:UpdateCustomeSize(pw)
 			local sw = pw or sm.menu.pw + sm.menu.ph + 2 * br
 
 			sm.menu:SetWide(sw)
@@ -533,9 +535,9 @@ function OpenSettings()
 		end
 
 		if lply:GetDBool("settings_expanded", true) then
-			sm.win:UpdateSize()
+			sm.win:UpdateCustomeSize()
 		else
-			sm.win:UpdateSize(sm.menu.ph)
+			sm.win:UpdateCustomeSize(sm.menu.ph)
 		end
 	elseif pa(sm.win) then
 		sm.win:Show()

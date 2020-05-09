@@ -739,7 +739,11 @@ function HUDSimple()
 			XP.element = "XP"
 			XP.cur = lply:XP()
 			XP.max = lply:GetMaxXP()
-			XP.text = YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " (" .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level()
+			if XP.cur < XP.max then
+				XP.text = YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " (" .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level()
+			else
+				XP.text = YRP.lang_string("LID_level") .. " " .. lply:Level()
+			end
 			HUDSimpleBAR(XP)
 		end
 		MO = {}
