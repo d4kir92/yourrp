@@ -441,7 +441,7 @@ function OpenCombinedMenu()
 		function cm.menu:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
 		end
-		cm.menu:SetSpacing(YRP.ctr(20))
+		cm.menu:SetSpacing(YRP.ctr(10))
 		if cm.menu.expanded then
 			cm.win:UpdateSize(cm.menu.ph)
 		else

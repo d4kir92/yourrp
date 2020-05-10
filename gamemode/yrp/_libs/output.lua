@@ -179,8 +179,10 @@ function YRP.msg(chan, str_msg, tochat)
 			MsgC(_yrpc, _yrp)
 			MsgC(rc, "|")
 			MsgC(cc, cn)
-			if cn == "DB" then
+			if cn == "DB" and GetSQLModeName != nil then
 				MsgC(cc, ":" .. GetSQLModeName())
+			elseif cn == "DB" then
+				MsgC(cc, ":" .. "UNKNOWN")
 			end
 			MsgC(rc, "] ")
 

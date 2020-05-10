@@ -1033,7 +1033,7 @@ net.Receive("get_design_settings", function(len)
 		end)
 
 		local px, py = PARENT:GetPos()
-		local pv_win = createD("YFrame", PARENT, YRP.ctr(1000), YRP.ctr(1000), px + YRP.ctr(2200), YRP.ctr(120))
+		local pv_win = createD("YFrame", PARENT, YRP.ctr(1000), YRP.ctr(1000), ScrW() - YRP.ctr(1000 + 20), YRP.ctr(120))
 		pv_win:SetTitle("LID_window")
 		function pv_win:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)

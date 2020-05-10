@@ -19,6 +19,7 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 	info.islinux = system.IsLinux()
 	info.isosx = system.IsOSX()
 	info.country = system.GetCountry()
+	info.branch = GetBranch()
 	
 	local b, bb = net.BytesLeft()
 	if b and b > 0 then

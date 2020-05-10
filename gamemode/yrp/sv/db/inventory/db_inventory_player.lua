@@ -92,46 +92,52 @@ function Player:RemoveWeapon(cname)
 end
 
 function Player:DropSWEP(cname, force)
-	self.dropdelay = self.dropdelay or CurTime() - 1
-	if self.dropdelay < CurTime() or force then
-		self.dropdelay = CurTime() + 1
-		local wep = self:GetWeapon(cname)
-		wep:SetDBool("canpickup", false)
-		--[[local clip1 = wep:Clip1()
-		local clip2 = wep:Clip2()
-		local clip1max = wep:GetMaxClip1()
-		local clip2max = wep:GetMaxClip2()
-		]]
-		self:RemoveWeapon(cname)
+	if (self:IsAllowedToDropSWEPRole(cname) and self:IsAllowedToDropSWEPUG(cname)) or force then
+		self.dropdelay = self.dropdelay or CurTime() - 1
+		if self.dropdelay < CurTime() or force then
+			self.dropdelay = CurTime() + 1
+			local wep = self:GetWeapon(cname)
+			wep:SetDBool("canpickup", false)
+			--[[local clip1 = wep:Clip1()
+			local clip2 = wep:Clip2()
+			local clip1max = wep:GetMaxClip1()
+			local clip2max = wep:GetMaxClip2()
+			]]
+			self:RemoveWeapon(cname)
 
-		local ent = ents.Create(cname)
+			local ent = ents.Create(cname)
 
-		if ent.WorldModel == "" then
-			ent.WorldModel = "models/props_junk/garbage_takeoutcarton001a.mdl"
-		end
-
-		ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
-		ent:SetAngles(self:GetAngles())
-		ent:SetDBool("canpickup", false)
-		ent.dropped = true
-		ent:Spawn()
-		--[[ent:SetDInt("clip1", clip1)
-		ent:SetDInt("clip2", clip2)
-		ent:SetDInt("clip1max", clip1max)
-		ent:SetDInt("clip2max", clip2max)]]
-
-		local ttl = math.Clamp(GetGlobalDInt("int_ttlsweps", 60), 1, 3600)
-		timer.Simple(ttl, function()
-			if ea(ent) and !ent:GetOwner():IsValid() then
-				ent:Remove()
+			if ent.WorldModel == "" then
+				ent.WorldModel = "models/props_junk/garbage_takeoutcarton001a.mdl"
 			end
-		end)
 
-		if ent:GetPhysicsObject():IsValid() then
-			ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
+			ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
+			ent:SetAngles(self:GetAngles())
+			ent:SetDBool("canpickup", false)
+			ent.dropped = true
+			ent:Spawn()
+			--[[ent:SetDInt("clip1", clip1)
+			ent:SetDInt("clip2", clip2)
+			ent:SetDInt("clip1max", clip1max)
+			ent:SetDInt("clip2max", clip2max)]]
+
+			local ttl = math.Clamp(GetGlobalDInt("int_ttlsweps", 60), 1, 3600)
+			timer.Simple(ttl, function()
+				if ea(ent) and !ent:GetOwner():IsValid() then
+					ent:Remove()
+				end
+			end)
+
+			if ent:GetPhysicsObject():IsValid() then
+				ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
+			end
+		else
+			-- on cooldown
 		end
 	else
-		-- on cooldown
+		net.Start("dropswep")
+			net.WriteBool(false)
+		net.Send(self)
 	end
 end
 
@@ -150,10 +156,11 @@ function Player:IsAllowedToDropSWEPRole(cname)
 			return true
 		end
 	end
+	return true
 end
 
 function Player:IsAllowedToDropSWEPUG(cname)
-	local ndsweps = SQL_SELECT("yrp_usergroups", "string_nonesweps", "uniqueID = '" .. string.lower(self:GetUserGroup()) .. "'")
+	local ndsweps = SQL_SELECT("yrp_usergroups", "string_nonesweps", "string_name = '" .. string.lower(self:GetUserGroup()) .. "'")
 	if wk(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode(",", ndsweps.string_nonesweps)
@@ -163,28 +170,21 @@ function Player:IsAllowedToDropSWEPUG(cname)
 			return true
 		end
 	end
+	return true
 end
 
 util.AddNetworkString("dropswep")
 net.Receive("dropswep", function(len, ply)
 	local _enabled = PlayersCanDropWeapons()
-	local _dropped = false
 
 	if _enabled then
 		local _weapon = ply:GetActiveWeapon()
 
 		if _weapon != NULL and _weapon != nil and _weapon.notdropable == nil then
 			local _wclass = _weapon:GetClass() or ""
-			if ply:IsAllowedToDropSWEPRole(_wclass) and ply:IsAllowedToDropSWEPUG(_wclass) then
-				ply:DropSWEP(_wclass)
-				_dropped = true
-			end
+			ply:DropSWEP(_wclass)
 		end
 	else
 		printGM("note", ply:YRPName() .. " PlayersCanDropWeapons == FALSE")
 	end
-
-	net.Start("dropswep")
-	net.WriteBool(_dropped)
-	net.Send(ply)
 end)

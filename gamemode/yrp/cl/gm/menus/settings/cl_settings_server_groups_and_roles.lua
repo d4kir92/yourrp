@@ -27,7 +27,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		PARENT.rs = {}
 		local rs = PARENT.rs
 
-		gs.bac = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(20))
+		gs.bac = createD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(20))
 		gs.bac:SetText("")
 		function gs.bac:Paint(pw, ph)
 			if cur_group.cur > 0 then
@@ -85,20 +85,10 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			DrawText(tab2)
 		end
 
-		gs.add = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), YRP.ctr(20))
-		gs.add:SetText("")
+		gs.add = createD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), YRP.ctr(20))
+		gs.add:SetText("+")
 		function gs.add:Paint(pw, ph)
-			local tab = {}
-			tab.color = Color(0, 255, 0)
-			DrawPanel(self, tab)
-			local tab2 = {}
-			tab2.x = pw / 2
-			tab2.y = ph / 2
-			tab2.ax = 1
-			tab2.ay = 1
-			tab2.text = "+"
-			tab2.font = "Y_18_500"
-			DrawText(tab2)
+			hook.Run("YButtonAPaint", self, pw, ph)
 		end
 		function gs.add:DoClick()
 			net.Start("settings_add_group")
@@ -146,7 +136,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		function CreateLineGroup(parent, group)
 			group.uniqueID = tonumber(group.uniqueID)
 			gs.gplist[group.uniqueID] = gs.gplist[group.uniqueID] or {}
-			gs.gplist[group.uniqueID] = createD("DButton", parent, parent:GetWide() - YRP.ctr(20), YRP.ctr(120), 0, 0)
+			gs.gplist[group.uniqueID] = createD("YButton", parent, parent:GetWide() - YRP.ctr(20), YRP.ctr(120), 0, 0)
 			gs.gplist[group.uniqueID]:SetText("")
 			for i, e in pairs(group) do
 				if string.StartWith(i, "int_") then
@@ -196,23 +186,16 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ico:SetHTML(GetHTMLImage(group.string_icon, ico:GetWide(), ico:GetTall()))
 			TestHTML(ico, group.string_icon, false)
 
-			gs.gplist[group.uniqueID].up = createD("DButton", gs.gplist[group.uniqueID], YRP.ctr(40), gs.gplist[group.uniqueID]:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), YRP.ctr(10))
+			gs.gplist[group.uniqueID].up = createD("YButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), YRP.ctr(10))
 			gs.gplist[group.uniqueID].up:SetText("")
 			local up = gs.gplist[group.uniqueID].up
 			function up:Paint(pw, ph)
 				if gs.gplist[group.uniqueID].int_position > 1 then
-					local tab = {}
-					tab.r = pw / 2
-					tab.color = Color(255, 255, 100)
-					DrawPanel(self, tab)
-					local tab2 = {}
-					tab2.x = pw / 2
-					tab2.y = ph / 2
-					tab2.ax = 1
-					tab2.ay = 1
-					tab2.text = "▲"
-					tab2.font = "Y_18_500"
-					DrawText(tab2)
+					hook.Run("YButtonPaint", self, pw, ph)
+
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+					surface.DrawTexturedRect(0, 0, pw, ph)
 				end
 			end
 			function up:DoClick()
@@ -221,23 +204,16 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			gs.gplist[group.uniqueID].dn = createD("DButton", gs.gplist[group.uniqueID], YRP.ctr(40), gs.gplist[group.uniqueID]:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), gs.gplist[group.uniqueID]:GetTall() / 2 + YRP.ctr(5))
+			gs.gplist[group.uniqueID].dn = createD("YButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(40 + 10))
 			gs.gplist[group.uniqueID].dn:SetText("")
 			local dn = gs.gplist[group.uniqueID].dn
 			function dn:Paint(pw, ph)
 				if gs.gplist[group.uniqueID].int_position < table.Count(gs.gplist.tab) then
-					local tab = {}
-					tab.r = pw / 2
-					tab.color = Color(255, 255, 100)
-					DrawPanel(self, tab)
-					local tab2 = {}
-					tab2.x = pw / 2
-					tab2.y = ph / 2
-					tab2.ax = 1
-					tab2.ay = 1
-					tab2.text = "▼"
-					tab2.font = "Y_18_500"
-					DrawText(tab2)
+					hook.Run("YButtonPaint", self, pw, ph)
+
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+					surface.DrawTexturedRect(0, 0, pw, ph)
 				end
 			end
 			function dn:DoClick()
@@ -246,7 +222,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			gs.gplist[group.uniqueID].ch = createD("DButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), gs.gplist[group.uniqueID]:GetWide() - YRP.ctr(66), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(60))
+			gs.gplist[group.uniqueID].ch = createD("YButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), gs.gplist[group.uniqueID]:GetWide() - YRP.ctr(66), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(60))
 			gs.gplist[group.uniqueID].ch:SetText("")
 			local ch = gs.gplist[group.uniqueID].ch
 			surface.SetFont("Y_14_500")
@@ -254,7 +230,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local tw, _ = surface.GetTextSize(text)
 			tw = tw + YRP.ctr(20)
 			ch:SetWide(tw)
-			ch:SetPos(gs.gplist[group.uniqueID]:GetWide() - tw - YRP.ctr(10), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(50))
+			ch:SetPos(gs.gplist[group.uniqueID]:GetWide() - tw - YRP.ctr(10 + 10), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(40 + 10))
 			function ch:Paint(pw, ph)
 				local tab = {}
 				tab.color = Color(255, 255, 100)
@@ -339,7 +315,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.bac = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(940))
+		rs.bac = createD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(940))
 		rs.bac:SetText("")
 		function rs.bac:Paint(pw, ph)
 			if cur_role.pre > 0 then
@@ -382,21 +358,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.add = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), YRP.ctr(940))
-		rs.add:SetText("")
+		rs.add = createD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), YRP.ctr(940))
+		rs.add:SetText("+")
 		function rs.add:Paint(pw, ph)
 			if rs.top.headername != nil then
-				local tab = {}
-				tab.color = Color(0, 255, 0)
-				DrawPanel(self, tab)
-				local tab2 = {}
-				tab2.x = pw / 2
-				tab2.y = ph / 2
-				tab2.ax = 1
-				tab2.ay = 1
-				tab2.text = "+"
-				tab2.font = "Y_18_500"
-				DrawText(tab2)
+				hook.Run("YButtonAPaint", self, pw, ph)
 			end
 		end
 		function rs.add:DoClick()
@@ -467,23 +433,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end]]
 
-		ea.del = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(840), YRP.ctr(20))
-		ea.del:SetText("")
+		ea.del = createD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(840), YRP.ctr(20))
+		ea.del:SetText("-")
 		function ea.del:Paint(pw, ph)
 			if ea.typ != nil and tonumber(ea.tab.uniqueID) != 1 then
-				local tab = {}
-				tab.color = Color(80, 80, 80)
-				DrawPanel(self, tab)
-
-				local tab2 = {}
-				tab2.w = pw
-				tab2.h = ph
-				tab2.x = YRP.ctr(20)
-				tab2.y = ph / 2
-				tab2.ax = 0
-				tab2.text = "-"
-				tab2.font = "Y_18_500"
-				DrawText(tab2)
+				hook.Run("YButtonRPaint", self, pw, ph)
 			elseif ea.typ != nil then
 				local tab = {}
 				tab.color = YRPGetColor("3")
@@ -539,7 +493,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		ea.dup = createD("DButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(900), YRP.ctr(20))
+		ea.dup = createD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(900), YRP.ctr(20))
 		ea.dup:SetText("")
 		function ea.dup:Paint(pw, ph)
 			if ea.typ != nil then
@@ -854,7 +808,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 		function CreateLineRole(parent, role)
 			role.uniqueID = tonumber(role.uniqueID)
 			rs.rplist[role.uniqueID] = rs.rplist[role.uniqueID] or {}
-			rs.rplist[role.uniqueID] = createD("DButton", parent, parent:GetWide() - YRP.ctr(20), YRP.ctr(120), 0, 0)
+			rs.rplist[role.uniqueID] = createD("YButton", parent, parent:GetWide() - YRP.ctr(20), YRP.ctr(120), 0, 0)
 			rs.rplist[role.uniqueID]:SetText("")
 			for i, e in pairs(role) do
 				if string.StartWith(i, "int_") then
@@ -904,23 +858,16 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ico:SetHTML(GetHTMLImage(role.string_icon, ico:GetWide(), ico:GetTall()))
 			TestHTML(ico, role.string_icon, false)
 
-			rs.rplist[role.uniqueID].up = createD("DButton", rs.rplist[role.uniqueID], YRP.ctr(40), rs.rplist[role.uniqueID]:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), YRP.ctr(10))
+			rs.rplist[role.uniqueID].up = createD("YButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), YRP.ctr(10))
 			rs.rplist[role.uniqueID].up:SetText("")
 			local up = rs.rplist[role.uniqueID].up
 			function up:Paint(pw, ph)
 				if rs.rplist[role.uniqueID].int_position > 1 then
-					local tab = {}
-					tab.r = pw / 2
-					tab.color = Color(255, 255, 100)
-					DrawPanel(self, tab)
-					local tab2 = {}
-					tab2.x = pw / 2
-					tab2.y = ph / 2
-					tab2.ax = 1
-					tab2.ay = 1
-					tab2.text = "▲"
-					tab2.font = "Y_18_500"
-					DrawText(tab2)
+					hook.Run("YButtonPaint", self, pw, ph)
+
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+					surface.DrawTexturedRect(0, 0, pw, ph)
 				end
 			end
 			function up:DoClick()
@@ -929,23 +876,16 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			rs.rplist[role.uniqueID].dn = createD("DButton", rs.rplist[role.uniqueID], YRP.ctr(40), rs.rplist[role.uniqueID]:GetTall() / 2 - YRP.ctr(15), YRP.ctr(10), rs.rplist[role.uniqueID]:GetTall() / 2 + YRP.ctr(5))
+			rs.rplist[role.uniqueID].dn = createD("YButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(40 + 10))
 			rs.rplist[role.uniqueID].dn:SetText("")
 			local dn = rs.rplist[role.uniqueID].dn
 			function dn:Paint(pw, ph)
 				if rs.rplist[role.uniqueID].int_position < table.Count(rs.rplist.tab) then
-					local tab = {}
-					tab.r = pw / 2
-					tab.color = Color(255, 255, 100)
-					DrawPanel(self, tab)
-					local tab2 = {}
-					tab2.x = pw / 2
-					tab2.y = ph / 2
-					tab2.ax = 1
-					tab2.ay = 1
-					tab2.text = "▼"
-					tab2.font = "Y_18_500"
-					DrawText(tab2)
+					hook.Run("YButtonPaint", self, pw, ph)
+
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+					surface.DrawTexturedRect(0, 0, pw, ph)
 				end
 			end
 			function dn:DoClick()
@@ -954,7 +894,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 
-			rs.rplist[role.uniqueID].ch = createD("DButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), rs.rplist[role.uniqueID]:GetWide() - YRP.ctr(66), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(60))
+			rs.rplist[role.uniqueID].ch = createD("YButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), rs.rplist[role.uniqueID]:GetWide() - YRP.ctr(66), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(60))
 			rs.rplist[role.uniqueID].ch:SetText("")
 			local ch = rs.rplist[role.uniqueID].ch
 			local text = YRP.lang_string("LID_nextranks") .. " ▶"
@@ -962,7 +902,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local tw, _ = surface.GetTextSize(text)
 			tw = tw + YRP.ctr(20)
 			ch:SetWide(tw)
-			ch:SetPos(rs.rplist[role.uniqueID]:GetWide() - tw - YRP.ctr(10), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(50))
+			ch:SetPos(rs.rplist[role.uniqueID]:GetWide() - tw - YRP.ctr(10 + 10), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(40 + 10))
 			function ch:Paint(pw, ph)
 				local tab = {}
 				tab.color = Color(255, 255, 100)
@@ -1284,7 +1224,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 					win.dpl = createD("DPanelList", win, YRP.ctr(800), YRP.ctr(750), 0, YRP.ctr(50))
 					for i, flag in pairs(cf) do
-						local line = createD("DButton", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
+						local line = createD("YButton", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
 						line:SetText(flag.string_name)
 						function line:DoClick()
 							net.Start("add_role_flag")
@@ -1524,7 +1464,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 														draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 													end
 												end
-												d_pm.btn = createD("DButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
+												d_pm.btn = createD("YButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
 												d_pm.btn:SetText("")
 												function d_pm.btn:DoClick()
 													if !table.HasValue(pmwin.pms, v.WorldModel) then
@@ -1560,7 +1500,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								pmsel:RefreshPage()
 							end
 
-							pmsel.prev = createD("DButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 - YRP.ctr(50 + 20) - YRP.ctr(200), ScH() - YRP.ctr(50 + 20))
+							pmsel.prev = createD("YButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 - YRP.ctr(50 + 20) - YRP.ctr(200), ScH() - YRP.ctr(50 + 20))
 							pmsel.prev:SetText("<")
 							function pmsel.prev:DoClick()
 								if pmsel.nr >= perpage then
@@ -1569,7 +1509,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								end
 							end
 
-							pmsel.next = createD("DButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 + YRP.ctr(50 + 20), ScH() - YRP.ctr(50 + 20))
+							pmsel.next = createD("YButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 + YRP.ctr(50 + 20), ScH() - YRP.ctr(50 + 20))
 							pmsel.next:SetText(">")
 							function pmsel.next:DoClick()
 								pmsel.nr = pmsel.nr + perpage
@@ -1682,7 +1622,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 														draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 													end
 												end
-												d_pm.btn = createD("DButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
+												d_pm.btn = createD("YButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
 												d_pm.btn:SetText("")
 												function d_pm.btn:DoClick()
 													if !table.HasValue(pmwin.pms, v.WorldModel) then
@@ -1718,7 +1658,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								pmsel:RefreshPage()
 							end
 
-							pmsel.prev = createD("DButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 - YRP.ctr(50 + 20) - YRP.ctr(200), ScH() - YRP.ctr(50 + 20))
+							pmsel.prev = createD("YButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 - YRP.ctr(50 + 20) - YRP.ctr(200), ScH() - YRP.ctr(50 + 20))
 							pmsel.prev:SetText("<")
 							function pmsel.prev:DoClick()
 								if pmsel.nr >= perpage then
@@ -1727,7 +1667,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								end
 							end
 
-							pmsel.next = createD("DButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 + YRP.ctr(50 + 20), ScH() - YRP.ctr(50 + 20))
+							pmsel.next = createD("YButton", pmsel, YRP.ctr(200), YRP.ctr(50), ScW() / 2 + YRP.ctr(50 + 20), ScH() - YRP.ctr(50 + 20))
 							pmsel.next:SetText(">")
 							function pmsel.next:DoClick()
 								pmsel.nr = pmsel.nr + perpage
@@ -1762,6 +1702,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							end
 						end
 					end
+					function win.add:Paint(pw, ph)
+						hook.Run("YButtonAPaint", self, pw, ph)
+					end
 
 					win.dpl = createD("DPanelList", content, content:GetWide() - YRP.ctr(20 * 2), content:GetTall() - YRP.ctr(20 + 50 + 20 + 20), YRP.ctr(20), YRP.ctr(20 + 50 + 20))
 					win.dpl:EnableVerticalScrollbar(true)
@@ -1780,7 +1723,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								if pms[self.i] != nil then
 									local pm = pms[self.i]
 									if pa(win.dpl) and string.find(string.lower(pm.string_name), self.searchstr) or string.find(string.lower(pm.string_models), self.searchstr) then
-										local line = createD("DButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
+										local line = createD("YButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
 										line.string_name = pm.string_name
 										line.models = string.Explode(",", pm.string_models)
 										line:SetText("")
@@ -1912,7 +1855,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					self.dpl:Clear()
 					for i, v in pairs(cl_sweps) do
 						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
-							local d_swep = createD("DButton", nil, winswep.dpl:GetWide(), height / 4, 0, 0)
+							local d_swep = createD("YButton", nil, winswep.dpl:GetWide(), height / 4, 0, 0)
 							d_swep:SetText(v.PrintName)
 							function d_swep:DoClick()
 								net.Start("add_role_swep")
@@ -2012,7 +1955,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					self.dpl:Clear()
 					for i, v in pairs(cl_ndsweps) do
 						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
-							local d_ndswep = createD("DButton", nil, winndswep.dpl:GetWide(), height / 4, 0, 0)
+							local d_ndswep = createD("YButton", nil, winndswep.dpl:GetWide(), height / 4, 0, 0)
 							d_ndswep:SetText(v.PrintName)
 							function d_ndswep:DoClick()
 								net.Start("add_role_ndswep")
@@ -2116,7 +2059,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								v.ClassName = v.ClassName or ""
 								v.WorldModel = v.WorldModel or ""
 								if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
-									local d_licenses = createD("DButton", nil, winlicenses.dpl:GetWide(), height / 4, 0, 0)
+									local d_licenses = createD("YButton", nil, winlicenses.dpl:GetWide(), height / 4, 0, 0)
 									d_licenses:SetText(v.PrintName)
 									function d_licenses:DoClick()
 										net.Start("add_role_license")

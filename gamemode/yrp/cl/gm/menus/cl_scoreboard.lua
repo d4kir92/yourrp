@@ -543,6 +543,7 @@ function OpenSBS()
 							end
 							pl.sbp.playtime = pl.sbp.pt.h .. ":" .. pl.sbp.pt.m
 							pl.sbp.os = pl:GetDString("yrp_os", "other")
+							pl.sbp.gmod_branch = pl:GetDString("gmod_branch", "FAILED")
 							pl.sbp.lang = pl:GetLanguageShort()
 
 							local country = pl:GetCountry()
@@ -664,7 +665,7 @@ function OpenSBS()
 								local icon_size = YRP.ctr(100)
 								YRP.DrawIcon(YRP.GetDesignIcon("os_" .. self.os), icon_size, icon_size, pw - YRP.ctr(x * fac) - icon_size, (ph - icon_size) / 2, Color(255, 255, 255, 255))
 								if self:IsHovered() then
-									draw.SimpleTextOutlined(string.upper(self.os), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleTextOutlined(string.upper(self.os) .. " (" .. self.gmod_branch .. ")", "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 								end
 								x = x + scolen["oper"]
 							end
@@ -741,6 +742,10 @@ function OpenSBS()
 							self.Avatar:SetPaintedManually(true)
 
 						render.SetStencilEnable(false)
+					end
+
+					function pl.sbp.avap:PaintOver(pw, ph)
+						draw.SimpleText(pl:GetDString("gmod_branch", "FAILED"), "Y_18_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				end
 				sbs.stab:AddItem(pl.sbp)
@@ -850,6 +855,7 @@ function OpenSBS()
 							end
 							pl.usbp.playtime = pl.usbp.pt.h .. ":" .. pl.usbp.pt.m
 							pl.usbp.os = pl:GetDString("yrp_os", "other")
+							pl.usbp.gmod_branch = pl:GetDString("gmod_branch", "FAILED")
 							pl.usbp.lang = pl:GetLanguageShort()
 
 							local country = pl:GetCountry()
@@ -910,7 +916,7 @@ function OpenSBS()
 								local icon_size = YRP.ctr(100)
 								YRP.DrawIcon(YRP.GetDesignIcon("os_" .. self.os), icon_size, icon_size, pw - YRP.ctr(x * fac) - icon_size, (ph - icon_size) / 2, Color(255, 255, 255, 255))
 								if self:IsHovered() then
-									draw.SimpleTextOutlined(string.upper(self.os), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleTextOutlined(string.upper(self.os) .. " (" .. self.gmod_branch .. ")", "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 								end
 								x = x + scolen["oper"]
 							end
@@ -970,6 +976,10 @@ function OpenSBS()
 							self.Avatar:SetPaintedManually(true)
 
 						render.SetStencilEnable(false)
+					end
+
+					function pl.usbp.avap:PaintOver(pw, ph)
+						draw.SimpleText(pl:GetDString("gmod_branch", "FAILED"), "Y_18_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				end
 				sbs.stab:AddItem(pl.usbp)

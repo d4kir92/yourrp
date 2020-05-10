@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 283 --do NOT change this!
-GM.VersionCanary = 570 --do NOT change this!
+GM.VersionBeta = 284 --do NOT change this!
+GM.VersionCanary = 571 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -26,6 +26,10 @@ GM.ServerIsDedicated = game.IsDedicated()
 
 function GetRPBase()
 	return GAMEMODE.rpbase
+end
+
+function GetBranch()
+	return jit.arch
 end
 
 VERSIONART = "github"
@@ -347,7 +351,6 @@ function GetAllDoors()
 end
 
 function IsInTable(tab, val)
-	--print("IsInTable", val, tab[val])
 	if tab[val] != nil then
 		return true
 	else
@@ -361,10 +364,8 @@ function IsInChannel(ply, channel, skip)
 	local ug = ply:GetUserGroup()
 	local grp = ply:GetGroupUID()
 	local rol = ply:GetRoleUID()
-	--print("IsInChannel", ply, ug)
-
+	
 	if !skip and ply:GetDBool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
-		--print("IS FALSE mute")
 		return false
 	end
 
@@ -379,18 +380,26 @@ function IsActiveInChannel(ply, channel, skip)
 	local rol = ply:GetRoleUID()
 
 	if !skip and ply:GetDBool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
-		--print("IS FALSE mutemic")
 		return false
 	end
-	--print("IsActiveInChannel", ply, ug)
 	return IsInTable(channel.string_active_usergroups, ug) or IsInTable(channel.string_active_groups, grp) or IsInTable(channel.string_active_roles, rol) or false
 end
 
 function IsInMaxVoiceRange(listener, talker)
 	local dist = listener:GetPos():Distance(talker:GetPos())
 	local result = dist <= GetGlobalDInt("int_voice_max_range", 1)
-	--p(listener, talker, result)
 	return result
+end
+
+function GetVoiceRangeText(ply)
+	local ranges = {
+		[0] = YRP.lang_string("LID_whisper"),
+		[1] = YRP.lang_string("LID_quiet"),
+		[2] = "",
+		[3] = YRP.lang_string("LID_noisy"), 
+		[4] = YRP.lang_string("LID_yell")
+	}
+	return ranges[ply:GetDInt("voice_range", 2)]
 end
 
 function GetVoiceRange(ply)
@@ -401,7 +410,7 @@ function GetVoiceRange(ply)
 		[3] = 400, 
 		[4] = GetGlobalDInt("int_voice_max_range", 1)
 	}
-	return math.Clamp(ranges[ply:GetDInt("voice_range", 0)], 0, GetGlobalDInt("int_voice_max_range", 1))
+	return math.Clamp(ranges[ply:GetDInt("voice_range", 2)], 0, GetGlobalDInt("int_voice_max_range", 1))
 end
 
 function IsInSpeakRange(listener, talker)

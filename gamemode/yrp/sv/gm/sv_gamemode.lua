@@ -198,6 +198,8 @@ hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 	if ply:GetDBool("can_respawn", false) then
 		ply:SetDBool("can_respawn", false)
 
+		ply:SetupHands()
+
 		timer.Simple(0.1, function()
 			teleportToSpawnpoint(ply)
 		end)
@@ -206,6 +208,16 @@ hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 		end)
 	end
 end)
+
+function GM:PlayerSetHandsModel( ply, ent ) -- Choose the model for hands according to their player model.
+	local simplemodel = player_manager.TranslateToPlayerModelName( ply:GetModel() )
+	local info = player_manager.TranslatePlayerHands( simplemodel )
+	if ( info ) then
+		ent:SetModel( info.model )
+		ent:SetSkin( info.skin )
+		ent:SetBodyGroups( info.body )
+	end
+end
 
 hook.Add("PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function(ply)
 	--printGM("gm", "[PostPlayerDeath] " .. tostring(ply:YRPName()) .. " is dead.")
@@ -366,7 +378,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 	if GetGlobalDBool("bool_spawncorpseondeath", true) then
 	
 		ply.rd = ents.Create("prop_ragdoll")
-		if IsValid(ply.rd) then
+		if IsValid(ply.rd) and ply:GetModel() != nil then
 			ply.rd:SetModel(ply:GetModel())
 			ply.rd:SetPos(ply:GetPos())
 			ply.rd:SetAngles(ply:GetAngles())
@@ -392,6 +404,9 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 				YRP.msg("note", "GetRagdollEntity does not exists.")
 			end
 		else
+			if ea(ply.rd) then
+				ply.rd:Remove()
+			end
 			YRP.msg("error", "Spawn Defi Ragdoll... FAILED: ply.rd is not valid")
 		end
 	end
@@ -422,7 +437,7 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 		local _weapons = ply:GetWeapons()
 		local _cooldown_item = 120
 		for i, wep in pairs(_weapons) do
-			if wep:GetModel() != "" and IsNoDefaultWeapon(wep:GetClass()) and IsNoRoleSwep(ply, wep:GetClass()) and IsNoUserGroupWeapon(ply, wep:GetClass()) and IsNoNotDroppableRoleSwep(ply, wep:GetClass()) then
+			if wep:GetModel() != "" and IsNoDefaultWeapon(wep:GetClass()) and IsNoRoleSwep(ply, wep:GetClass()) and IsNoUserGroupWeapon(ply, wep:GetClass()) then
 				ply:DropSWEP(wep:GetClass(), true)
 				timer.Simple(_cooldown_item, function()
 					if wep:IsValid() then
@@ -435,7 +450,6 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 				--ply:DropSWEPSilence(wep:GetClass())
 			end
 		end
-		--ply:DropBackpackStorage()
 	end
 	if IsDropMoneyOnDeathEnabled() and !ply:GetDBool("switchrole", false) then
 		local _money = ply:GetMoney()
@@ -1057,6 +1071,7 @@ function setbodygroups(ply)
 	local chaTab = ply:GetChaTab()
 	if wk(chaTab) then
 		ply:SetSkin(chaTab.skin)
+		ply:SetupHands()
 		for i = 0, 19 do
 			ply:SetBodygroup(i, chaTab["bg" .. i])
 		end
@@ -1112,36 +1127,3 @@ function GM:PostCleanupMap()
 	LoadWorldStorages()
 end
 
-
-
-
--- TEST - TODO
---[[
-function sendToDiscord(msg)
-	msg = msg or ""
-
-	local data = {
-		["username"] = "TESTNAME",
-		["icon_url"] = "http://i.imgur.com/XLgutLX.png",
-		["text"] = "test"
-	}
-
-	local newdata = util.TableToJSON(data)
-
-	http.Post(
-	"https://discordapp.com/api/webhooks/646291405194657802/TOkSVYZeXojEa0OR4bCOOZHv7AZdY76IdZ6OVJK3WRG4EAW4pYnRronMnhrrpGnIA45M",
-	newdata,
-	function( result, ... )
-		if result then
-			p( "Done!" )
-			p(result, ...)
-		end
-	end,
-	function( failed )
-		p( failed )
-	end,
-	{["Content-Type"] = "application/json"}
-	)
-end
---sendToDiscord("TEST")
-]]

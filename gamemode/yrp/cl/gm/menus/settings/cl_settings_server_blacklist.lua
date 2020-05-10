@@ -22,7 +22,7 @@ function BuildBlacklist(parent, tabBL, tab)
 
 	for k, bla in pairs(tabBL) do
 		local found = false
-		if tab == "LID_all" or tab == "LID_inventory" and bla.name == "inventory" or tab == "LID_chat" and bla.name == "chat" then
+		if tab == "LID_all" or tab == "LID_inventory" and bla.name == "inventory" or tab == "LID_chat" and bla.name == "chat" or tab == "LID_entities" and bla.name == "entities" then
 			list:AddLine(bla.uniqueID, bla.name, bla.value)
 		end
 	end
@@ -47,7 +47,7 @@ function BuildBlacklist(parent, tabBL, tab)
 		addlist:AddItem(BLNameHeader)
 
 		local BLName = createD("DComboBox", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
-		for k, v in pairs({"chat", "inventory"}) do
+		for k, v in pairs({"chat", "inventory", "entities"}) do
 			BLName:AddChoice(v, v)
 		end
 		addlist:AddItem(BLName)
@@ -176,6 +176,9 @@ net.Receive("yrp_blacklist_get", function(len)
 		end)
 		tabs:AddOption("LID_chat", function(parent)
 			BuildBlacklist(parent, tabBL, "LID_chat")
+		end)
+		tabs:AddOption("LID_entities", function(parent)
+			BuildBlacklist(parent, tabBL, "LID_entities")
 		end)
 
 		tabs:GoToSite(tab)

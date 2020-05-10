@@ -246,7 +246,7 @@ function add_xp(sender, text)
 		local _xp = tonumber(_table[3])
 		if isnumber(_xp) then
 			local _receiver = GetPlayerByName(_name)
-			if worked(_receiver, "xp receiver not found!") then
+			if ea(_receiver) then
 				_receiver:AddXP(_xp)
 				return ""
 			else
@@ -284,7 +284,7 @@ function set_level(sender, text)
 		local _lvl = tonumber(_table[3])
 		if isnumber(_lvl) then
 			local _receiver = GetPlayerByName(_name)
-			if worked(_receiver, "level receiver not found!") then
+			if ea(_receiver) then
 				_receiver:SetLevel(_lvl)
 				return ""
 			else
@@ -542,7 +542,6 @@ function RN(text)
 end
 
 function GM:PlayerSay(sender, text, teamChat)
-	print(sender, text)
 	local channel = "SAY"
 	if string.StartWith(text, "!") or string.StartWith(text, "/") then
 		local s, e = string.find(text, " ")

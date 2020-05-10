@@ -105,8 +105,12 @@ end)
 
 function Player:ClearXP()
 	local charid = self:CharID()
-	SQL_UPDATE("yrp_characters", "int_xp = " .. "0", "uniqueID = '" .. charid .. "'")
-	self:SetDInt("int_xp", 0)
+	local result = SQL_UPDATE("yrp_characters", "int_xp = " .. "0", "uniqueID = '" .. charid .. "'")
+	if result != nil then
+		YRP.msg("error", "ClearXP FAILED #1: " .. tostring(result))
+	else
+		self:SetDInt("int_xp", 0)
+	end
 end
 
 function Player:AddLevel(level)
@@ -172,17 +176,30 @@ function Player:AddXP(xp)
 			if curlvl < maxlvl then
 				if newxp > maxxp then
 					newxp = newxp - maxxp
-					self:AddLevel(1)
-					SQL_UPDATE("yrp_characters", "int_xp = '" .. "0'", "uniqueID = '" .. charid .. "'")
-					self:AddXP(newxp)
+					local result = SQL_UPDATE("yrp_characters", "int_xp = '" .. "0'", "uniqueID = '" .. charid .. "'")
+					if result != nil then
+						YRP.msg("error", "AddXP FAILED #1: " .. tostring(result))
+					else
+						self:AddLevel(1)
+						self:AddXP(newxp)
+					end
 				else
-					SQL_UPDATE("yrp_characters", "int_xp = '" .. newxp .. "'", "uniqueID = '" .. charid .. "'")
-					self:SetDInt("int_xp", newxp)
+					local result = SQL_UPDATE("yrp_characters", "int_xp = '" .. newxp .. "'", "uniqueID = '" .. charid .. "'")
+					if result != nil then
+						YRP.msg("error", "AddXP FAILED #2: " .. tostring(result))
+					else
+						self:SetDInt("int_xp", newxp)
+					end
 				end
 			elseif curlvl > maxlvl then
 				self:SetLevel(maxlvl)
 			elseif newxp > maxxp then
-				self:SetDInt("int_xp", maxxp)
+				local result = SQL_UPDATE("yrp_characters", "int_xp = '" .. maxxp .. "'", "uniqueID = '" .. charid .. "'")
+				if result != nil then
+					YRP.msg("error", "AddXP FAILED #5: " .. tostring(result))
+				else
+					self:SetDInt("int_xp", maxxp)
+				end
 			else
 				--YRP.msg("error", "AddXP ELSE " .. tostring(curlvl) .. " | " .. tostring(maxlvl) .. " | " .. tostring(newxp) .. " | " .. tostring(maxxp))
 			end
@@ -190,16 +207,23 @@ function Player:AddXP(xp)
 			local newxp = curxp + xp
 			if curlvl > 1 then
 				if newxp < 0 then
-					self:AddLevel(-1)
-
 					maxxp = math.Round(math.pow(lvl - 1, lvlmulti), 0) + xpforlvl
 					newxp = newxp + maxxp
 
-					SQL_UPDATE("yrp_characters", "int_xp = '" .. "0'", "uniqueID = '" .. charid .. "'")
-					self:AddXP(newxp)
+					local result = SQL_UPDATE("yrp_characters", "int_xp = '" .. "0'", "uniqueID = '" .. charid .. "'")
+					if result != nil then
+						YRP.msg("error", "AddXP FAILED #3: " .. tostring(result))
+					else
+						self:AddLevel(-1)
+						self:AddXP(newxp)
+					end
 				else
-					SQL_UPDATE("yrp_characters", "int_xp = '" .. newxp .. "'", "uniqueID = '" .. charid .. "'")
-					self:SetDInt("int_xp", newxp)
+					local result = SQL_UPDATE("yrp_characters", "int_xp = '" .. newxp .. "'", "uniqueID = '" .. charid .. "'")
+					if result != nil then
+						YRP.msg("error", "AddXP FAILED #4: " .. tostring(result))
+					else
+						self:SetDInt("int_xp", newxp)
+					end
 				end
 			end
 		end

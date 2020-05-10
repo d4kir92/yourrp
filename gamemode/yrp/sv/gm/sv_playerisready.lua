@@ -11,6 +11,7 @@ function PlayerLoadedGame(ply)
 	local OS_Linux = tab.islinux
 	local OS_OSX = tab.isosx
 	local Country = tab.country
+	local Branch = tab.branch
 
 	if OS_Windows then
 		ply:SetDString("yrp_os", "windows")
@@ -21,6 +22,8 @@ function PlayerLoadedGame(ply)
 	else
 		ply:SetDString("yrp_os", "other")
 	end
+
+	ply:SetDString("gmod_branch", Branch or "Unknown")
 
 	ply:SetDString("yrp_country", Country or "Unknown")
 

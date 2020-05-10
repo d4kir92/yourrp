@@ -69,6 +69,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickup", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupplayer", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupworld", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupotherowner", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupignoreblacklist", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeteammatesonmap", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeenemiesonmap", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canuseesp", "INT DEFAULT 0")
@@ -1031,6 +1032,13 @@ net.Receive("usergroup_update_bool_physgunpickupotherowner", function(len, ply)
 	UGCheckBox(ply, uid, "bool_physgunpickupotherowner", bool_physgunpickupotherowner)
 end)
 
+util.AddNetworkString("usergroup_update_bool_physgunpickupignoreblacklist")
+net.Receive("usergroup_update_bool_physgunpickupignoreblacklist", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_physgunpickupignoreblacklist = net.ReadString()
+	UGCheckBox(ply, uid, "bool_physgunpickupignoreblacklist", bool_physgunpickupignoreblacklist)
+end)
+
 
 
 util.AddNetworkString("usergroup_update_bool_canseeteammatesonmap")
@@ -1475,15 +1483,29 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 	end
 end)
 
+function EntBlacklisted(ent)
+	local blacklist = GetGlobalDTable("yrp_blacklist_entities", {})
+
+	for i, black in pairs(blacklist) do
+		if string.find(ent:GetClass(), black.value) or string.find(ent:GetModel(), black.value) then
+			return true
+		end
+	end
+
+	return false
+end
+
 function GM:PhysgunPickup(pl, ent)
 	if ent:IsDealer() then
 		return false
 	end
-	local tabUsergroup = SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+	local tabUsergroup = SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer, bool_physgunpickupignoreblacklist", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 	if wk(tabUsergroup) then
 		tabUsergroup = tabUsergroup[1]
 		if tobool(tabUsergroup.bool_physgunpickup) then
-			if ent:IsPlayer() then
+			if EntBlacklisted(ent) and !tobool(tabUsergroup.bool_physgunpickupignoreblacklist) then
+				return false
+			elseif ent:IsPlayer() then
 				if tobool(tabUsergroup.bool_physgunpickupplayer) then
 					if ent:GetDInt("int_position", 0) >= pl:GetDInt("int_position", 0) then -- ent (target) > position as pl
 						return true
