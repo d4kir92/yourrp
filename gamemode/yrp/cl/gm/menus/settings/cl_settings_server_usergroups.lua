@@ -436,6 +436,58 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 
 
+	-- YTools
+	local YTOOLS = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(50 + 500), YRP.ctr(20 + 500 + 20), YRP.ctr(20 + 550 + 20))
+	YTOOLS:INITPanel("DPanelList")
+	YTOOLS:SetHeader(YRP.lang_string("LID_tools"))
+	YTOOLS:SetText(ug.string_icon)
+	function YTOOLS.plus:Paint(pw, ph)
+		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
+	end
+	YTOOLS.plus:EnableVerticalScrollbar(true)
+
+	UGS[CURRENT_USERGROUP].string_tools = string.Explode(",", UGS[CURRENT_USERGROUP].string_tools)
+	if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, "") then
+		table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "")
+	end
+
+	local tools = spawnmenu.GetTools()--UGS[CURRENT_USERGROUP].string_tools --net.ReadTable()
+	for i, cat in pairs(tools) do
+		for j, cat2 in pairs(cat.Items) do
+			for k, too in pairs(cat2) do
+				if type(too) == "table" then
+					local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
+					function line:Paint(pw, ph)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
+						draw.SimpleText(too.ItemName, "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					end
+					local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+					if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, too.ItemName) then
+						cb:SetChecked(true)
+					end
+					function cb:OnChange(bVal)
+						if bVal then
+							table.insert(UGS[CURRENT_USERGROUP].string_tools, too.ItemName)
+						else
+							table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, too.ItemName)
+						end
+
+						local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
+
+						net.Start("usergroup_update_string_tools")
+							net.WriteString(CURRENT_USERGROUP)
+							net.WriteString(str)
+						net.SendToServer()
+					end
+					
+					YTOOLS.plus:AddItem(line)
+				end
+			end
+		end
+	end
+
+
+
 	-- ENTITIES
 	--[[
 	ug.string_sents = string.Explode(";", ug.string_sents)
@@ -730,10 +782,6 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	GAMEPLAYAddCheckBox("bool_ragdolls", "LID_gp_ragdolls")
 	GAMEPLAYAddHr()
 	GAMEPLAYAddCheckBox("bool_noclip", "LID_gp_noclip")
-	GAMEPLAYAddCheckBox("bool_removetool", "LID_gp_removetool")
-	GAMEPLAYAddCheckBox("bool_dynamitetool", "LID_gp_dynamitetool")
-	GAMEPLAYAddCheckBox("bool_creatortool", "LID_gp_creatortool")
-	GAMEPLAYAddCheckBox("bool_customfunctions", "LID_gp_customfunctions")
 	GAMEPLAYAddCheckBox("bool_ignite", "LID_gp_ignite")
 	GAMEPLAYAddCheckBox("bool_drive", "LID_gp_drive")
 	GAMEPLAYAddCheckBox("bool_flashlight", "LID_gp_flashlight")
@@ -748,6 +796,8 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	GAMEPLAYAddCheckBox("bool_physgunpickupworld", "LID_gp_physgunpickupworld")
 	GAMEPLAYAddCheckBox("bool_physgunpickupotherowner", "LID_gp_physgunpickupotherowner")
 	GAMEPLAYAddCheckBox("bool_physgunpickupignoreblacklist", "LID_physgunpickupignoreblacklist")
+	GAMEPLAYAddHr()
+	GAMEPLAYAddCheckBox("bool_gravgunpunt", "LID_gravgunpunt")
 	GAMEPLAYAddHr()
 	GAMEPLAYAddCheckBox("bool_canseeteammatesonmap", "LID_gp_canseeteammatesonmap")
 	GAMEPLAYAddCheckBox("bool_canseeenemiesonmap", "LID_gp_canseeenemiesonmap")

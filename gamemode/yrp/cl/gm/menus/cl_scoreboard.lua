@@ -745,7 +745,10 @@ function OpenSBS()
 					end
 
 					function pl.sbp.avap:PaintOver(pw, ph)
-						draw.SimpleText(pl:GetDString("gmod_branch", "FAILED"), "Y_18_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						local branch = pl:GetDString("gmod_branch", "FAILED")
+						if branch != "64Bit" and pl:HasAccess() then
+							draw.SimpleText(branch, "Y_12_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						end
 					end
 				end
 				sbs.stab:AddItem(pl.sbp)
@@ -979,7 +982,10 @@ function OpenSBS()
 					end
 
 					function pl.usbp.avap:PaintOver(pw, ph)
-						draw.SimpleText(pl:GetDString("gmod_branch", "FAILED"), "Y_18_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						local branch = pl:GetDString("gmod_branch", "FAILED")
+						if branch != "64Bit" and pl:HasAccess() then
+							draw.SimpleText(branch, "Y_12_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						end
 					end
 				end
 				sbs.stab:AddItem(pl.usbp)

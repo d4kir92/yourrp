@@ -15,6 +15,8 @@ local chatAlpha = 0
 
 local CHATMODE = "SAY"
 
+local BR = 10
+
 function GetChatMode()
 	return CHATMODE
 end
@@ -223,21 +225,21 @@ function InitYRPChat()
 				local sw = lply:HudValue("CH", "SIZE_W")
 				local sh = lply:HudValue("CH", "SIZE_H")
 				--printGM("deb", "InitYRPChat x " .. x .. ", y " .. y .. ", w " .. w .. ", h " .. h .. ", px " .. px .. ", py " .. py .. ", sw " .. sw ..", sh " .. sh)
-				if px != x or py != y or sw != w or sh != h then
+				if px != x or py != y or sw != w or sh != h then				
 					yrpChat.window:SetPos(px, py)
 					yrpChat.window:SetSize(sw, sh)
 
-					yrpChat.comboBox:SetPos(YRP.ctr(20), sh - YRP.ctr(60 + 20))
+					yrpChat.comboBox:SetPos(YRP.ctr(BR), sh - YRP.ctr(60 + BR))
 					yrpChat.comboBox:SetSize(YRP.ctr(120), YRP.ctr(60))
 
-					yrpChat.writeField:SetPos(YRP.ctr(20 + 120), sh - YRP.ctr(60 + 20))
-					yrpChat.writeField:SetSize(sw - YRP.ctr(2 * 20 + 120), YRP.ctr(60))
+					yrpChat.writeField:SetPos(YRP.ctr(BR + 120), sh - YRP.ctr(60 + BR))
+					yrpChat.writeField:SetSize(sw - YRP.ctr(2 * BR + 120), YRP.ctr(60))
 
-					yrpChat.richText:SetPos(YRP.ctr(20), YRP.ctr(20))
-					yrpChat.richText:SetSize(sw - YRP.ctr(2 * 20), sh - YRP.ctr(2 * 20 + 60 + 20))
+					yrpChat.richText:SetPos(YRP.ctr(BR), YRP.ctr(BR))
+					yrpChat.richText:SetSize(sw - YRP.ctr(2 * BR), sh - YRP.ctr(2 * BR + 60 + BR))
 
-					--yrpChat.tabs:SetPos(YRP.ctr(20), YRP.ctr(20))
-					--yrpChat.tabs:SetSize(sw - YRP.ctr(2 * 20), YRP.ctr(60))
+					--yrpChat.tabs:SetPos(YRP.ctr(BR), YRP.ctr(BR))
+					--yrpChat.tabs:SetSize(sw - YRP.ctr(2 * BR), YRP.ctr(60))
 				end
 				local _com = yrpChat.writeField:GetText()
 				_com = string.upper(_com)
@@ -428,6 +430,8 @@ function InitYRPChat()
 					yrpChat.richText:AppendText(obj)
 				elseif t == "boolean" then
 					YRP.msg("note", "chat.addtext (boolean): " .. tostring(obj))
+				elseif t == "entity" then
+					YRP.msg("error", "chat.addtext (entity): " .. tostring(obj))
 				else
 					YRP.msg("error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj))
 				end

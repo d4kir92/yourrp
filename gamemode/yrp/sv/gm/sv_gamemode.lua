@@ -115,7 +115,6 @@ end
 
 hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 	if ply:IsValid() then
-
 		ply:SetDString("licenseIDs", "")
 		ply:SetDString("licenseNames", "")
 

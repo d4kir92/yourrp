@@ -42,7 +42,7 @@ function BuildFeedbackLine(parent, tab)
 	_fb.steamnamel:SetText("LID_steamname")
 	_fb.steamnamete = createD("DTextEntry", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(20), YRP.ctr(70))
 	_fb.steamnamete:SetEditable(false)
-	_fb.steamnamete:SetFont("Y_23_500")
+	_fb.steamnamete:SetFont("Y_22_500")
 	_fb.steamnamete:SetText(tab.steamname or "NO STEAMNAME AVAILABLE")
 
 	-- RPNAME
@@ -50,7 +50,7 @@ function BuildFeedbackLine(parent, tab)
 	_fb.rpnamel:SetText("LID_rpname")
 	_fb.rpnamete = createD("DTextEntry", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(20), YRP.ctr(170))
 	_fb.rpnamete:SetEditable(false)
-	_fb.rpnamete:SetFont("Y_23_500")
+	_fb.rpnamete:SetFont("Y_22_500")
 	_fb.rpnamete:SetText(tab.rpname or "NO RPNAME AVAILABLE")
 
 	-- CONTACT
@@ -58,7 +58,7 @@ function BuildFeedbackLine(parent, tab)
 	_fb.contactl:SetText("LID_contact")
 	_fb.contactte = createD("DTextEntry", _fb, YRP.ctr(400), YRP.ctr(50), YRP.ctr(20), YRP.ctr(270))
 	_fb.contactte:SetEditable(false)
-	_fb.contactte:SetFont("Y_23_500")
+	_fb.contactte:SetFont("Y_22_500")
 	_fb.contactte:SetText(tab.contact or "NO CONTACT AVAILABLE")
 
 	-- TITEL
@@ -67,7 +67,7 @@ function BuildFeedbackLine(parent, tab)
 	_fb.titlete = createD("DTextEntry", _fb, YRP.ctr(800), YRP.ctr(50) * tab.rows, YRP.ctr(440), YRP.ctr(70))
 	_fb.titlete:SetEditable(false)
 	_fb.titlete:SetMultiline(true)
-	_fb.titlete:SetFont("Y_23_500")
+	_fb.titlete:SetFont("Y_22_500")
 	_fb.titlete:SetText(tab.title or "NO TITLE AVAILABLE")
 
 	-- FEEDBACK
@@ -76,7 +76,7 @@ function BuildFeedbackLine(parent, tab)
 	_fb.feedbackte = createD("DTextEntry", _fb, YRP.ctr(800), YRP.ctr(50) * tab.rows, YRP.ctr(1260), YRP.ctr(70))
 	_fb.feedbackte:SetEditable(false)
 	_fb.feedbackte:SetMultiline(true)
-	_fb.feedbackte:SetFont("Y_23_500")
+	_fb.feedbackte:SetFont("Y_22_500")
 	_fb.feedbackte:SetText(tab.feedback or "NO FEEDBACK AVAILABLE")
 
 	-- PROFILE

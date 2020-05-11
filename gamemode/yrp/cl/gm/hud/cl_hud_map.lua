@@ -206,7 +206,7 @@ function openMap()
 					c2 = c2 + 1
 				end
 
-				--draw.SimpleText(win.x .. " |  ||| " ..nulPos.x .. " | " .. win.w, "Y_15_500", ScrW2(), ScrH2(), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+				--draw.SimpleText(win.x .. " |  ||| " ..nulPos.x .. " | " .. win.w, "Y_14_500", ScrW2(), ScrH2(), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 
 				--You
 				local x = plyPos.x

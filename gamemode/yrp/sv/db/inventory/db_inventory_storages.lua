@@ -82,7 +82,7 @@ util.AddNetworkString("get_inventory")
 net.Receive("get_inventory", function(len, ply)
 	local storage = GetCharacterStorage(ply)
 
-	if wk(storage) then
+	if wk(storage) and storage.uniqueID != nil then
 		local nettab = {}
 		local es = ents.FindInSphere(ply:GetPos(), 100)
 		for i, ent in pairs(es) do

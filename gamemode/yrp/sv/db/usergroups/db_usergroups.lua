@@ -14,6 +14,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_nonesweps", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_sents", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_tools", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT 1")
 
@@ -54,10 +55,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_props", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_ragdolls", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_removetool", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_dynamitetool", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_creatortool", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_customfunctions", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_ignite", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_drive", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_flashlight", "INT DEFAULT 0")
@@ -70,6 +67,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupplayer", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupworld", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupotherowner", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupignoreblacklist", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_gravgunpunt", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeteammatesonmap", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeenemiesonmap", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_canuseesp", "INT DEFAULT 0")
@@ -1039,6 +1037,13 @@ net.Receive("usergroup_update_bool_physgunpickupignoreblacklist", function(len, 
 	UGCheckBox(ply, uid, "bool_physgunpickupignoreblacklist", bool_physgunpickupignoreblacklist)
 end)
 
+util.AddNetworkString("usergroup_update_bool_gravgunpunt")
+net.Receive("usergroup_update_bool_gravgunpunt", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_gravgunpunt = net.ReadString()
+	UGCheckBox(ply, uid, "bool_gravgunpunt", bool_gravgunpunt)
+end)
+
 
 
 util.AddNetworkString("usergroup_update_bool_canseeteammatesonmap")
@@ -1544,78 +1549,49 @@ function GM:PhysgunPickup(pl, ent)
 	return false
 end
 
+function GM:GravGunPunt(pl, ent)
+	local tabUsergroup = SQL_SELECT(DATABASE_NAME, "bool_gravgunpunt", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+	if wk(tabUsergroup) then
+		tabUsergroup = tabUsergroup[1]
+		if tobool(tabUsergroup.bool_gravgunpunt) then
+			return true
+		else
+			net.Start("yrp_info")
+				net.WriteString("gravgunpunt")
+			net.Send(pl)
+			return false
+		end
+	else
+		printGM("db", "[GravGunPunt] failed! UserGroup not found in database.")
+		return false
+	end
+	return false
+end
+
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
-	if ea(pl) then
+	if ea(pl) and wk(tool) then
+		local tools = {}
+		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+		if wk(tab) then
+			tab = tab[1]
+			tools = string.Explode(",", tab.string_tools)
+		end
+		
 		local owner = tr.Entity:GetOwner()
 		if owner == NULL then
 			owner = tr.Entity:GetRPOwner()
 		end
-		if tool == "remover" then
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_removetool", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if wk(_tmp) then
-				_tmp = _tmp[1]
-
-				if tobool(_tmp.bool_removetool) and (pl:HasAccess() or (owner == pl or owner == NULL)) then
-					return true
-				else
-					net.Start("yrp_info")
-						net.WriteString("removetool")
-					net.Send(pl)
-					return false
-				end
-			else
-				YRP.msg("note", "[CanTool] [remover] failed! UserGroup not found in database.")
-				return false
-			end
-		elseif tool == "dynamite" then
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_dynamitetool", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if _tmp != nil and _tmp != false then
-				_tmp = _tmp[1]
-				if tobool(_tmp.bool_dynamitetool) then
-					return true
-				else
-					net.Start("yrp_info")
-						net.WriteString("bool_dynamitetool")
-					net.Send(pl)
-					return false
-				end
-			else
-				YRP.msg("note", "[CanTool] [dynamite] failed! UserGroup not found in database.")
-				return false
-			end
-		elseif tool == "creator" then
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_creatortool", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if _tmp != nil and _tmp != false then
-				_tmp = _tmp[1]
-				if tobool(_tmp.bool_creatortool) then
-					return true
-				else
-					net.Start("yrp_info")
-						net.WriteString("bool_creatortool")
-					net.Send(pl)
-					return false
-				end
-			else
-				YRP.msg("note", "[CanTool] [customfunctions] failed! UserGroup not found in database.")
-				return false
-			end
+		
+		
+		
+		if table.HasValue(tools, tool) then
+			return true
 		else
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_customfunctions", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if _tmp != nil and _tmp != false then
-				_tmp = _tmp[1]
-				if tobool(_tmp.bool_customfunctions) then
-					return true
-				else
-					net.Start("yrp_info")
-						net.WriteString("bool_customfunctions")
-					net.Send(pl)
-					return false
-				end
-			else
-				YRP.msg("note", "[CanTool] [customfunctions] failed! UserGroup not found in database.")
-				return false
-			end
+			net.Start("yrp_info")
+				net.WriteString("TOOL: " .. tostring(tool))
+			net.Send(pl)
 		end
+		return false
 	else
 		YRP.msg("note", "[CanTool] Player is not valid!")
 	end
@@ -1941,6 +1917,16 @@ net.Receive("usergroup_update_string_licenses", function(len, ply)
 
 	printGM("db", ply:YRPName() .. " updated licenses of usergroup (" .. uid .. ") to [" .. string_licenses .. "]")
 end)
+
+util.AddNetworkString("usergroup_update_string_tools")
+net.Receive("usergroup_update_string_tools", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local string_tools = string.lower(net.ReadString())
+	SQL_UPDATE(DATABASE_NAME, "string_tools = '" .. string_tools .. "'", "uniqueID = '" .. uid .. "'")
+
+	printGM("db", ply:YRPName() .. " updated tools of usergroup (" .. uid .. ") to [" .. string_tools .. "]")
+end)
+
 
 hook.Add("Think", "yrp_usergroup_haschanged", function()
 	for i, ply in pairs(player.GetAll()) do
