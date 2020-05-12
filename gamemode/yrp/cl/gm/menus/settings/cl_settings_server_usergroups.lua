@@ -451,7 +451,32 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "")
 	end
 
-	local tools = spawnmenu.GetTools()--UGS[CURRENT_USERGROUP].string_tools --net.ReadTable()
+	local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
+	function line:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
+		draw.SimpleText("ALL", "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	end
+	local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+	if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, "ALL") then
+		cb:SetChecked(true)
+	end
+	function cb:OnChange(bVal)
+		if bVal then
+			table.insert(UGS[CURRENT_USERGROUP].string_tools, "ALL")
+		else
+			table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "ALL")
+		end
+
+		local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
+
+		net.Start("usergroup_update_string_tools")
+			net.WriteString(CURRENT_USERGROUP)
+			net.WriteString(str)
+		net.SendToServer()
+	end
+	YTOOLS.plus:AddItem(line)
+
+	local tools = spawnmenu.GetTools()
 	for i, cat in pairs(tools) do
 		for j, cat2 in pairs(cat.Items) do
 			for k, too in pairs(cat2) do
@@ -484,6 +509,44 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 				end
 			end
 		end
+	end
+	local properties = {
+		"ignite",
+		"extinguish",
+		"remover",
+		"drive",
+		"collision",
+		"keepupright",
+		"bodygroups",
+		"gravity",
+		"persist"
+	}
+	for i, v in pairs(properties) do
+		local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
+		function line:Paint(pw, ph)
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
+			draw.SimpleText(v, "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
+		local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+		if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, v) then
+			cb:SetChecked(true)
+		end
+		function cb:OnChange(bVal)
+			if bVal then
+				table.insert(UGS[CURRENT_USERGROUP].string_tools, v)
+			else
+				table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, v)
+			end
+
+			local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
+
+			net.Start("usergroup_update_string_tools")
+				net.WriteString(CURRENT_USERGROUP)
+				net.WriteString(str)
+			net.SendToServer()
+		end
+		
+		YTOOLS.plus:AddItem(line)
 	end
 
 

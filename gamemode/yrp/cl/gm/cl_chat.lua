@@ -16,6 +16,7 @@ local chatAlpha = 0
 local CHATMODE = "SAY"
 
 local BR = 10
+local H = 50
 
 function GetChatMode()
 	return CHATMODE
@@ -124,7 +125,7 @@ function checkChatVisible()
 		if _chatIsOpen then
 			_fadeout = CurTime() + _delay
 		end
-		if CurTime() > _fadeout and !yrpChat.writeField:HasFocus() then
+		if CurTime() > _fadeout and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.settings:HasFocus() then
 			_showChat = false
 		else
 			_showChat = true
@@ -142,11 +143,13 @@ function checkChatVisible()
 			yrpChat.richText:SetVisible(_showChat)
 			yrpChat.writeField:SetVisible(_showChat)
 			yrpChat.comboBox:SetVisible(_showChat)
+			yrpChat.settings:SetVisible(_showChat)
 		elseif chatAlpha > 1 then
 			chatAlpha = 1
 			yrpChat.richText:SetVisible(_showChat)
 			yrpChat.writeField:SetVisible(_showChat)
 			yrpChat.comboBox:SetVisible(_showChat)
+			yrpChat.settings:SetVisible(_showChat)
 		end
 	end
 end
@@ -198,7 +201,7 @@ function InitYRPChat()
 		yrpChat.richText:GotoTextEnd()
 		function yrpChat.richText:Paint(pw, ph)
 			if _showChat then
-				draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"))
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 20))
 			end
 		end
 
@@ -206,7 +209,7 @@ function InitYRPChat()
 		update_chat_choices()
 
 		function yrpChat.comboBox:Paint(pw, ph)
-			surface.SetDrawColor(lply:InterfaceValue("YFrame", "BG"))
+			surface.SetDrawColor(Color(0, 0, 0, 0))
 			surface.DrawRect(0, 0, pw, ph)
 			self:SetTextColor(Color(255, 255, 255))
 		end
@@ -215,7 +218,7 @@ function InitYRPChat()
 			checkChatVisible()
 			if _showChat then
 
-				draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 120))
 	
 				local x, y = yrpChat.window:GetPos()
 				local w, h = yrpChat.window:GetSize()
@@ -225,21 +228,24 @@ function InitYRPChat()
 				local sw = lply:HudValue("CH", "SIZE_W")
 				local sh = lply:HudValue("CH", "SIZE_H")
 				--printGM("deb", "InitYRPChat x " .. x .. ", y " .. y .. ", w " .. w .. ", h " .. h .. ", px " .. px .. ", py " .. py .. ", sw " .. sw ..", sh " .. sh)
-				if px != x or py != y or sw != w or sh != h then				
+				if px != x or py != y or sw != w or sh != h then
 					yrpChat.window:SetPos(px, py)
 					yrpChat.window:SetSize(sw, sh)
 
-					yrpChat.comboBox:SetPos(YRP.ctr(BR), sh - YRP.ctr(60 + BR))
-					yrpChat.comboBox:SetSize(YRP.ctr(120), YRP.ctr(60))
+					yrpChat.comboBox:SetPos(YRP.ctr(BR), sh - YRP.ctr(H + BR))
+					yrpChat.comboBox:SetSize(YRP.ctr(120), YRP.ctr(H))
 
-					yrpChat.writeField:SetPos(YRP.ctr(BR + 120), sh - YRP.ctr(60 + BR))
-					yrpChat.writeField:SetSize(sw - YRP.ctr(2 * BR + 120), YRP.ctr(60))
+					yrpChat.writeField:SetPos(YRP.ctr(BR + 120), sh - YRP.ctr(H + BR))
+					yrpChat.writeField:SetSize(sw - YRP.ctr(2 * BR + 120 + H + BR), YRP.ctr(H))
 
 					yrpChat.richText:SetPos(YRP.ctr(BR), YRP.ctr(BR))
-					yrpChat.richText:SetSize(sw - YRP.ctr(2 * BR), sh - YRP.ctr(2 * BR + 60 + BR))
+					yrpChat.richText:SetSize(sw - YRP.ctr(2 * BR), sh - YRP.ctr(2 * BR + H + BR))
+					
+					yrpChat.settings:SetPos(sw - YRP.ctr(BR + H), sh - YRP.ctr(H + BR))
+					yrpChat.settings:SetSize(YRP.ctr(H), YRP.ctr(H))
 
 					--yrpChat.tabs:SetPos(YRP.ctr(BR), YRP.ctr(BR))
-					--yrpChat.tabs:SetSize(sw - YRP.ctr(2 * BR), YRP.ctr(60))
+					--yrpChat.tabs:SetSize(sw - YRP.ctr(2 * BR), YRP.ctr(H))
 				end
 				local _com = yrpChat.writeField:GetText()
 				_com = string.upper(_com)
@@ -270,18 +276,25 @@ function InitYRPChat()
 			end
 
 			self:SetTextColor(Color(40, 40, 40))
-			self:SetFGColor(Color(40, 40, 40))
-			self:SetBGColor(lply:InterfaceValue("YFrame", "HB"))
+			self:SetFGColor(Color(0, 0, 0, 0))
+			self:SetBGColor(Color(0, 0, 0, 0))
 		end
 
 		function yrpChat.writeField:Paint(pw, ph)
-			surface.SetDrawColor(lply:InterfaceValue("YFrame", "HB"))
+			surface.SetDrawColor(Color(0, 0, 0, 20))
 			surface.DrawRect(0, 0, self:GetWide(), self:GetTall())
-			self:DrawTextEntryText(Color(255, 255, 255), Color(30, 130, 255), Color(255, 255, 255))
+			self:DrawTextEntryText(Color(255, 255, 255), Color(0, 0, 0, 0), Color(255, 255, 255))
+			if !self:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
+				timer.Simple(0.1, function()
+					if !self:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
+						yrpChat.closeChatbox()
+					end
+				end)
+			end
 		end
 
 		function yrpChat.richText:PerformLayout()
-			local ts = LocalPlayer():HudValue("CH", "TS")
+			local ts = LocalPlayer():GetDInt("CH_TS", LocalPlayer():HudValue("CH", "TS"))
 			if ts != nil and ts > 0 then
 				if self.SetUnderlineFont != nil then
 					self:SetUnderlineFont("Y_" .. ts .. "_500")
@@ -290,7 +303,34 @@ function InitYRPChat()
 			end
 
 			self:SetFGColor(Color(255, 255, 255))
-			self:SetBGColor(lply:InterfaceValue("YFrame", "HB"))
+			self:SetBGColor(Color(0, 0, 0, 0))
+		end
+
+		yrpChat.settings = createD("YButton", yrpChat.window, 10, 10, 10, 10)
+		yrpChat.settings:SetText("")
+		function yrpChat.settings:Paint(pw, ph)
+			local w = pw - pw % 4
+			local h = ph - ph % 4
+
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetMaterial(YRP.GetDesignIcon("64_cog"))
+			surface.DrawTexturedRect((pw - w) / 2, (ph - h) / 2, w, h)
+		end
+		function yrpChat.settings:DoClick()
+			local win = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+			win:MakePopup()
+			win:Center()
+			win:SetTitle("LID_settings")
+
+			local tspn = createD("YLabel", win:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
+			tspn:SetText("LID_textsize")
+			local tsnw = createD("DNumberWang", win:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0 + 50))
+			tsnw:SetValue(LocalPlayer():GetDInt("CH_TS", LocalPlayer():HudValue("CH", "TS")))
+			tsnw:SetMin(10)
+			tsnw:SetMax(64)
+			function tsnw:OnValueChanged(val)
+				LocalPlayer():SetDInt("CH_TS", tsnw:GetValue())
+			end
 		end
 
 		yrpChat.writeField.OnKeyCodeTyped = function(self, code)
@@ -311,6 +351,7 @@ function InitYRPChat()
 		end
 		function yrpChat:openChatbox(bteam)
 			yrpChat.window:MakePopup()
+			yrpChat.comboBox:RequestFocus()
 			yrpChat.writeField:RequestFocus()
 
 			_chatIsOpen = true
@@ -319,6 +360,7 @@ function InitYRPChat()
 			yrpChat.richText:SetVisible(true)
 			yrpChat.writeField:SetVisible(true)
 			yrpChat.comboBox:SetVisible(true)
+			yrpChat.settings:SetVisible(true)
 
 			chatclosedforkeybinds = false
 		end

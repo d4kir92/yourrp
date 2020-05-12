@@ -342,7 +342,7 @@ end
 local _icons = {}
 
 function YRP.AddDesignIcon(name, path)
-	_icons[name] = Material(path)
+	_icons[name] = Material(path, "noclamp")
 end
 
 function YRP.GetDesignIcon(name)

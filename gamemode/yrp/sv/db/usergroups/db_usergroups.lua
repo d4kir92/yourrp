@@ -110,10 +110,6 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
 	_str = _str .. "bool_props, "
 	_str = _str .. "bool_ragdolls, "
 	_str = _str .. "bool_noclip, "
-	_str = _str .. "bool_removetool, "
-	_str = _str .. "bool_dynamitetool, "
-	_str = _str .. "bool_creatortool, "
-	_str = _str .. "bool_customfunctions, "
 	_str = _str .. "bool_ignite, "
 	_str = _str .. "bool_drive, "
 	_str = _str .. "bool_flashlight, "
@@ -145,7 +141,7 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
 	local _str2 = "'superadmin', "
 	_str2 = _str2 .. "1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 
 	SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
 end
@@ -178,10 +174,6 @@ if unremoveable == nil then
 	_str = _str .. "bool_props, "
 	_str = _str .. "bool_ragdolls, "
 	_str = _str .. "bool_noclip, "
-	_str = _str .. "bool_removetool, "
-	_str = _str .. "bool_dynamitetool, "
-	_str = _str .. "bool_creatortool, "
-	_str = _str .. "bool_customfunctions, "
 	_str = _str .. "bool_ignite, "
 	_str = _str .. "bool_drive, "
 	_str = _str .. "bool_flashlight, "
@@ -213,7 +205,7 @@ if unremoveable == nil then
 
 	local _str2 = "'yrp_usergroups', 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 0, 0"
 
 	SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
@@ -925,34 +917,6 @@ net.Receive("usergroup_update_bool_noclip", function(len, ply)
 	UGCheckBox(ply, uid, "bool_noclip", bool_noclip)
 end)
 
-util.AddNetworkString("usergroup_update_bool_removetool")
-net.Receive("usergroup_update_bool_removetool", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	local bool_removetool = net.ReadString()
-	UGCheckBox(ply, uid, "bool_removetool", bool_removetool)
-end)
-
-util.AddNetworkString("usergroup_update_bool_dynamitetool")
-net.Receive("usergroup_update_bool_dynamitetool", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	local bool_dynamitetool = net.ReadString()
-	UGCheckBox(ply, uid, "bool_dynamitetool", bool_dynamitetool)
-end)
-
-util.AddNetworkString("usergroup_update_bool_creatortool")
-net.Receive("usergroup_update_bool_creatortool", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	local bool_creatortool = net.ReadString()
-	UGCheckBox(ply, uid, "bool_creatortool", bool_creatortool)
-end)
-
-util.AddNetworkString("usergroup_update_bool_customfunctions")
-net.Receive("usergroup_update_bool_customfunctions", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	local bool_customfunctions = net.ReadString()
-	UGCheckBox(ply, uid, "bool_customfunctions", bool_customfunctions)
-end)
-
 util.AddNetworkString("usergroup_update_bool_ignite")
 net.Receive("usergroup_update_bool_ignite", function(len, ply)
 	local uid = tonumber(net.ReadString())
@@ -1455,6 +1419,7 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 					end
 				end)
 			end
+			return true
 		else
 			-- TURNED ON
 			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_noclip", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
@@ -1506,6 +1471,7 @@ function GM:PhysgunPickup(pl, ent)
 	end
 	local tabUsergroup = SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer, bool_physgunpickupignoreblacklist", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 	if wk(tabUsergroup) then
+		pTab(tabUsergroup)
 		tabUsergroup = tabUsergroup[1]
 		if tobool(tabUsergroup.bool_physgunpickup) then
 			if EntBlacklisted(ent) and !tobool(tabUsergroup.bool_physgunpickupignoreblacklist) then
@@ -1570,6 +1536,7 @@ end
 
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if ea(pl) and wk(tool) then
+		--printGM("gm", "CanTool: " .. tool)
 		local tools = {}
 		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(tab) then
@@ -1581,10 +1548,10 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 		if owner == NULL then
 			owner = tr.Entity:GetRPOwner()
 		end
-		
-		
-		
-		if table.HasValue(tools, tool) then
+
+		if table.HasValue(tools, "all") then
+			return true
+		elseif table.HasValue(tools, tool) then
 			return true
 		else
 			net.Start("yrp_info")
@@ -1598,132 +1565,32 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 end)
 
 hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
-	if ea(pl) then
-		printGM("gm", "CanProperty: " .. property)
-		if property == "ignite" or property == "extinguish" then
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_ignite", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if _tmp != nil and _tmp != false then
-				_tmp = _tmp[1]
-				if tobool(_tmp.bool_ignite) then
-					return true
-				else
-					net.Start("yrp_info")
-						net.WriteString("ignite")
-					net.Send(pl)
-					return false
-				end
-			else
-				printGM("db", "[ignite] failed! UserGroup not found in database.")
-				return false
-			end
-		elseif property == "remover" then
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_removetool", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if _tmp != nil and _tmp != false then
-				_tmp = _tmp[1]
-				if tobool(_tmp.bool_removetool) then
-					return true
-				else
-					net.Start("yrp_info")
-						net.WriteString("removetool")
-					net.Send(pl)
-					return false
-				end
-			else
-				printGM("db", "[remover] failed! UserGroup not found in database.")
-				return false
-			end
-		elseif property == "drive" then
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_drive", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if _tmp != nil and _tmp != false then
-				_tmp = _tmp[1]
-				if tobool(_tmp.bool_drive) then
-					return true
-				else
-					net.Start("yrp_info")
-						net.WriteString("drive")
-					net.Send(pl)
-					return false
-				end
-			else
-				printGM("db", "[drive] failed! UserGroup not found in database.")
-				return false
-			end
-		elseif property == "collision" then
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_collision", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if _tmp != nil and _tmp != false then
-				_tmp = _tmp[1]
-				if tobool(_tmp.bool_collision) then
-					return true
-				else
-					net.Start("yrp_info")
-						net.WriteString("collision")
-					net.Send(pl)
-					return false
-				end
-			else
-				printGM("db", "[collision] failed! UserGroup not found in database.")
-				return false
-			end
-		elseif property == "keepupright" then
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_keepupright", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if _tmp != nil and _tmp != false then
-				_tmp = _tmp[1]
-				if tobool(_tmp.bool_keepupright) then
-					return true
-				else
-					net.Start("yrp_info")
-						net.WriteString("keepupright")
-					net.Send(pl)
-					return false
-				end
-			else
-				printGM("db", "[keepupright] failed! UserGroup not found in database.")
-				return false
-			end
-		elseif property == "bodygroups" then
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_bodygroups", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if _tmp != nil and _tmp != false then
-				_tmp = _tmp[1]
-				if tobool(_tmp.bool_bodygroups) then
-					return true
-				else
-					net.Start("yrp_info")
-						net.WriteString("bodygroups")
-					net.Send(pl)
-					return false
-				end
-			else
-				printGM("db", "[bodygroups] failed! UserGroup not found in database.")
-				return false
-			end
-		elseif property == "gravity" then
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_gravity", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-			if _tmp != nil and _tmp != false then
-				_tmp = _tmp[1]
-				if tobool(_tmp.bool_gravity) then
-					return true
-				else
-					net.Start("yrp_info")
-						net.WriteString("gravity")
-					net.Send(pl)
-					return false
-				end
-			else
-				printGM("db", "[gravity] failed! UserGroup not found in database.")
-				return false
-			end
-		elseif property == "persist" then
-			if pl:HasAccess() then
-				return true
-			else
-				net.Start("yrp_info")
-					net.WriteString("persist")
-				net.Send(pl)
-				return false
-			end
-		else
-			YRP.msg("note", "Missing permissions => Property: " .. property)
+	if ea(pl) and wk(tool) then
+		--printGM("gm", "CanProperty: " .. property)
+		local tools = {}
+		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+		if wk(tab) then
+			tab = tab[1]
+			tools = string.Explode(",", tab.string_tools)
 		end
+		
+		local owner = tr.Entity:GetOwner()
+		if owner == NULL then
+			owner = tr.Entity:GetRPOwner()
+		end
+
+		if table.HasValue(tools, "all") then
+			return true
+		elseif table.HasValue(tools, property) then
+			return true
+		else
+			net.Start("yrp_info")
+				net.WriteString("TOOL: " .. tostring(property))
+			net.Send(pl)
+		end
+		return false
+	else
+		YRP.msg("note", "[CanProperty] Player is not valid!")
 	end
 end)
 

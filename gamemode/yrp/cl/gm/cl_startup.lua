@@ -1510,7 +1510,15 @@ function drawPlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur
 	cam.End3D2D()
 end
 
-hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(ply, bool) return true end)
+hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(ply, bool)
+	if bool and ply:GetDBool("bool_noclip", false) then
+		return true
+	elseif !bool then
+		return true
+	end
+	return false
+end)
+
 local _icons = {}
 _icons["hp"] = Material("icon16/heart.png")
 _icons["ar"] = Material("icon16/shield.png")
