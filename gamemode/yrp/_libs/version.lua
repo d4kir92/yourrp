@@ -68,7 +68,7 @@ function SetYRPChannel()
 
 				for art, tab in pairs(test) do
 					if tab.stable == GAMEMODE.VersionStable and tab.beta == GAMEMODE.VersionBeta and tab.canary == GAMEMODE.VersionCanary then
-						printGM("gm", "Gamemode channel: " .. string.upper(art))
+						YRP.msg("gm", "Gamemode channel: " .. string.upper(art))
 						GAMEMODE.VersionSort = art
 						break
 					end
@@ -77,7 +77,7 @@ function SetYRPChannel()
 			end
 		end,
 			function(error)
-				printGM("note", "SetYRPChannel: " .. error)
+				YRP.msg("note", "SetYRPChannel: " .. error)
 				timer.Simple(1, function()
 					SetYRPChannel()
 				end)

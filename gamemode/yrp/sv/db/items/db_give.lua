@@ -118,7 +118,7 @@ function Player:EquipWeapon(slot, item)
 end
 
 function Player:PutInWeaponSlot(item)
-	printGM("db", "Player:PutInWeaponSlot(item)")
+	YRP.msg("db", "Player:PutInWeaponSlot(item)")
 	local _wpp1 = self:EquipWeapon("eqwpp1", item)
 	if _wpp1 then return true end
 	local _wpp2 = self:EquipWeapon("eqwpp2", item)
@@ -134,7 +134,7 @@ function Player:PutInWeaponSlot(item)
 end
 
 function Player:PutInBackpack(item)
-	printGM("db", "Player:PutInBackpack(item)")
+	YRP.msg("db", "Player:PutInBackpack(item)")
 	local _char_id = self:CharID()
 	if wk(_char_id) then
 		local _slot = SQL_SELECT("yrp_characters", "eqbp", "uniqueID = '" .. _char_id .. "'")
@@ -274,7 +274,7 @@ function Player:DropBackpackStorage()
 										_item:Spawn()
 										SQL_DELETE_FROM("yrp_items", "uniqueID = '" .. item.uniqueID .. "'")
 									else
-										printGM("note", "Player has an item that not exists anymore. (" .. item.ClassName .. ")")
+										YRP.msg("note", "Player has an item that not exists anymore. (" .. item.ClassName .. ")")
 										SQL_DELETE_FROM("yrp_items", "uniqueID = '" .. item.uniqueID .. "'")
 									end
 								end
@@ -290,7 +290,7 @@ end
 util.AddNetworkString("yrp_message")
 
 function Player:PutInInventory(cname, noammo)
-	printGM("db", "Player:PutInInventory(" .. cname .. ", " .. tostring(noammo) .. ")")
+	YRP.msg("db", "Player:PutInInventory(" .. cname .. ", " .. tostring(noammo) .. ")")
 	local ent = ents.Create(cname)
 	if ea(ent) then
 		ent:Spawn()
@@ -317,7 +317,7 @@ function Player:PutInInventory(cname, noammo)
 end
 
 function Player:ForceEquip(cname, noammo)
-	printGM("debug", "ForceEquip(" .. cname .. ")")
+	YRP.msg("debug", "ForceEquip(" .. cname .. ")")
 	self.canpickup = true
 	local weapon = self:LegacyGive(cname, noammo)
 
@@ -331,7 +331,7 @@ function Player:ForceEquip(cname, noammo)
 end
 
 function Player:Give(cname, noammo)
-	printGM("debug", "Give(" .. cname .. ")")
+	YRP.msg("debug", "Give(" .. cname .. ")")
 	local _noAmmo = noammo
 
 	if _noAmmo == nil then
@@ -380,7 +380,7 @@ if Player.LegacyStripWeapon == nil then
 end
 
 function Player:ForceStripWeapon(weapon)
-	printGM("gm", "ForceStripWeapon(" .. weapon .. ")")
+	YRP.msg("gm", "ForceStripWeapon(" .. weapon .. ")")
 
 	return self:LegacyStripWeapon(weapon)
 end
@@ -422,7 +422,7 @@ function Player:RemoveWeaponFromInventory(cname)
 end
 
 function Player:StripWeapon(weapon)
-	printGM("note", "StripWeapon(" .. tostring(weapon) .. ")")
+	YRP.msg("note", "StripWeapon(" .. tostring(weapon) .. ")")
 
 	if IsInventorySystemEnabled() then
 		self:RemoveWeaponFromInventory(weapon)

@@ -114,15 +114,15 @@ function check_yrp_keybinds()
 
 	local _check_version = SQL_SELECT(DATABASE_NAME, "version", "uniqueID = 1")
 	if _check_version != false and _check_version != nil then
-		printGM("note", "Checking keybinds version")
+		YRP.msg("note", "Checking keybinds version")
 		_check_version = _check_version[1]
 		if tonumber(_check_version.version) != tonumber(yrp_keybinds.version) then
 
-			printGM("note", "Keybinds OUTDATED!")
+			YRP.msg("note", "Keybinds OUTDATED!")
 			db_drop_table(DATABASE_NAME)
 			SQL_INIT_DATABASE(DATABASE_NAME)
 		else
-			printGM("note", "Keybinds up to date")
+			YRP.msg("note", "Keybinds up to date")
 		end
 	end
 
@@ -138,7 +138,7 @@ function check_yrp_keybinds()
 		local _result = SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 		_tmp = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
 		if _tmp == nil or _tmp == false then
-			printGM("error", DATABASE_NAME .. " has no entries.")
+			YRP.msg("error", DATABASE_NAME .. " has no entries.")
 		end
 	end
 

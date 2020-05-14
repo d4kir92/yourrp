@@ -2,7 +2,7 @@
 
 local leftedPlys = {}
 function GM:PlayerDisconnected(ply)
-	printGM("gm", "[PlayerDisconnected] " .. ply:YRPName())
+	YRP.msg("gm", "[PlayerDisconnected] " .. ply:YRPName())
 	save_clients("PlayerDisconnected")
 
 	SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "disconnected" .. "'")
@@ -38,12 +38,12 @@ function GM:PlayerDisconnected(ply)
 end
 
 function GM:PlayerConnect(name, ip)
-	printGM("gm", "[PlayerConnect] Name: " .. name .. " (IP: " .. ip .. ")")
+	YRP.msg("gm", "[PlayerConnect] Name: " .. name .. " (IP: " .. ip .. ")")
 	PrintMessage(HUD_PRINTTALK, name .. " is connecting to the Server.")
 end
 
 function GM:PlayerInitialSpawn(ply)
-	--printGM("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
+	--YRP.msg("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
 
 	if !IsValid(ply) then return end
 
@@ -69,7 +69,7 @@ function GM:PlayerInitialSpawn(ply)
 end
 
 function GM:PlayerSelectSpawn(ply)
-	--printGM("gm", "[PlayerSelectSpawn] " .. ply:YRPName())
+	--YRP.msg("gm", "[PlayerSelectSpawn] " .. ply:YRPName())
 
 	local spawns = ents.FindByClass("info_player_start")
 	local random_entry = math.random(#spawns)
@@ -79,7 +79,7 @@ function GM:PlayerSelectSpawn(ply)
 end
 
 hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
-	printGM("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
+	YRP.msg("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
 
 	ply:SetDBool("isserverdedicated", game.IsDedicated())
 
@@ -94,7 +94,7 @@ end)
 YRP = YRP or {}
 
 function YRP:Loadout(ply)
-	printGM("gm", "[Loadout] " .. ply:YRPName() .. " get YourRP Loadout.")
+	YRP.msg("gm", "[Loadout] " .. ply:YRPName() .. " get YourRP Loadout.")
 	ply:SetDBool("bool_loadouted", false)
 
 	ply:SetDInt("speak_channel", 0)
@@ -119,7 +119,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 		ply:SetDString("licenseNames", "")
 
 		ply:StripWeapons()
-		printGM("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
+		YRP.msg("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
 		YRP:Loadout(ply)
 
 		if ply:HasCharacterSelected() then
@@ -130,19 +130,20 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 			ply:SetDBool("broken_arm_left", false)
 			ply:SetDBool("broken_arm_right", false)
 
-			ply:Give("yrp_unarmed")
+			--ply:Give("yrp_unarmed")
 
 			local plyT = ply:GetPlyTab()
 			if wk(plyT) then
+				plyT.CurrentCharacter = tonumber(plyT.CurrentCharacter)
 				if plyT.CurrentCharacter != -1 then
-					ply:SetDInt("charid", tonumber(plyT.CurrentCharacter))
+					ply:SetDInt("yrp_charid", tonumber(plyT.CurrentCharacter))
 				end
 				
 				local _rol_tab = ply:GetRolTab()
 				if wk(_rol_tab) then
 					SetRole(ply, _rol_tab.uniqueID)
 				else
-					printGM("note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
+					YRP.msg("note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
 
 					local chatab = ply:GetChaTab()
 					if wk(chatab) then
@@ -164,7 +165,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 
 					setbodygroups(ply)
 				else
-					printGM("note", "Give char failed -> KillSilent -> " .. ply:YRPName() .. " char: " .. tostring(chaTab))
+					YRP.msg("note", "Give char failed -> KillSilent -> " .. ply:YRPName() .. " char: " .. tostring(chaTab))
 					if !ply:IsBot() then
 						ply:KillSilent()
 					end
@@ -180,7 +181,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 				YRP.msg("error", "[PlayerLoadout] failed at plytab.")
 			end
 		else
-			printGM("note", "[PlayerLoadout] " .. ply:YRPName() .. " has no character selected.")
+			YRP.msg("note", "[PlayerLoadout] " .. ply:YRPName() .. " has no character selected.")
 		end
 
 		ply:UpdateBackpack()
@@ -193,7 +194,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 end)
 
 hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
-	--printGM("gm", "[PlayerSpawn] " .. tostring(ply:YRPName()) .. " spawned.")
+	--YRP.msg("gm", "[PlayerSpawn] " .. tostring(ply:YRPName()) .. " spawned.")
 	if ply:GetDBool("can_respawn", false) then
 		ply:SetDBool("can_respawn", false)
 
@@ -219,7 +220,7 @@ function GM:PlayerSetHandsModel( ply, ent ) -- Choose the model for hands accord
 end
 
 hook.Add("PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function(ply)
-	--printGM("gm", "[PostPlayerDeath] " .. tostring(ply:YRPName()) .. " is dead.")
+	--YRP.msg("gm", "[PostPlayerDeath] " .. tostring(ply:YRPName()) .. " is dead.")
 	ply:StopBleeding()
 	ply:InteruptCasting()
 
@@ -417,11 +418,11 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 		SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value",	"'" .. os.time() .. "' ,'LID_kills', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmg:GetDamage() .. "'")
 	end
 
-	--printGM("gm", "[DoPlayerDeath] " .. tostring(ply:YRPName()) .. " do death.")
+	--YRP.msg("gm", "[DoPlayerDeath] " .. tostring(ply:YRPName()) .. " do death.")
 	local _reward = tonumber(ply:GetDString("hitreward"))
 	if isnumber(_reward) and attacker:IsPlayer() then
 		if attacker:IsAgent() then
-			printGM("note", "Hit done! " .. _reward)
+			YRP.msg("note", "Hit done! " .. _reward)
 			attacker:addMoney(_reward)
 			hitdone(ply, attacker)
 		end
@@ -644,12 +645,16 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 						if hitgroup == HITGROUP_LEFTARM then
 							ply:SetDBool("broken_arm_left", true)
 
-							--ply:SetActiveWeapon("yrp_unarmed")
+							if !ply:HasWeapon("yrp_unarmed") then
+								ply:Give("yrp_unarmed")
+							end
 							ply:SelectWeapon("yrp_unarmed")
 						elseif hitgroup == HITGROUP_RIGHTARM then
 							ply:SetDBool("broken_arm_right", true)
 
-							--ply:SetActiveWeapon("yrp_unarmed")
+							if !ply:HasWeapon("yrp_unarmed") then
+								ply:Give("yrp_unarmed")
+							end
 							ply:SelectWeapon("yrp_unarmed")
 						end
 					end

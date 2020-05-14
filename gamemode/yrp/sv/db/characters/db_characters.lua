@@ -67,13 +67,13 @@ end
 
 local Player = FindMetaTable("Player")
 function Player:CharacterLoadout()
-	printGM("debug", "[CharacterLoadout] " .. self:YRPName())
+	YRP.msg("debug", "[CharacterLoadout] " .. self:YRPName())
 	local chatab = self:GetChaTab()
 	local plytab = self:GetPlyTab()
+
 	if wk(chatab) then
 		self:SetDInt("int_xp", chatab.int_xp)
 		self:SetDString("int_level", chatab.int_level)
-		self:SetDInt("charid", tonumber(chatab.uniqueID))
 
 		self:SetDInt("pmid", tonumber(chatab.playermodelID))
 
@@ -210,7 +210,7 @@ function Player:SetRPName(str)
 		newname = SQL_STR_OUT(newname)
 		self:SetDString("rpname", newname)
 
-		printGM("note", oldname .. " changed name to " .. newname, true)
+		YRP.msg("note", oldname .. " changed name to " .. newname, true)
 	end
 end
 
@@ -362,7 +362,7 @@ end)
 
 util.AddNetworkString("moneyreset")
 net.Receive("moneyreset", function(len, ply)
-	printGM("db", "<[MONEY RESET]>")
+	YRP.msg("db", "<[MONEY RESET]>")
 	SQL_UPDATE("yrp_characters", "money = '" .. "0" .. "'", nil)
 	SQL_UPDATE("yrp_characters", "moneybank = '" .. "0" .. "'", nil)
 	for i, pl in pairs(player.GetAll()) do
@@ -485,7 +485,7 @@ function GetPlayermodelsOfRole(ruid)
 		end
 		return table.concat(tab,",")
 	else
-		printGM("note", "role " .. ruid .. " has no playermodels")
+		YRP.msg("note", "role " .. ruid .. " has no playermodels")
 		return ""
 	end
 end
@@ -513,7 +513,7 @@ function GetPMTableOfRole(ruid)
 		end
 		return tab
 	else
-		printGM("note", "role " .. ruid .. " has no playermodels")
+		YRP.msg("note", "role " .. ruid .. " has no playermodels")
 		return ""
 	end
 end
@@ -523,7 +523,7 @@ function SendLoopCharacterList(ply, tab)
 	if net.BytesLeft() == nil then
 		local plyT = ply:GetPlyTab()
 		if wk(plyT) then
-			ply:SetDInt("charid", tonumber(plyT.CurrentCharacter))
+			ply:SetDInt("yrp_charid", tonumber(plyT.CurrentCharacter))
 		end
 
 		local c = 1
@@ -607,7 +607,7 @@ function send_characters(ply)
 			end
 		end
 	else
-		printGM("note", "[send_characters] chaTab failed! " .. tostring(chaTab))
+		YRP.msg("note", "[send_characters] chaTab failed! " .. tostring(chaTab))
 	end
 
 	SendLoopCharacterList(ply, netTable)
@@ -615,7 +615,7 @@ end
 
 --[[ Client ask for Characters ]]--
 net.Receive("yrp_get_characters", function(len, ply)
-	printGM("db", ply:YRPName() .. " ask for characters")
+	YRP.msg("db", ply:YRPName() .. " ask for characters")
 	send_characters(ply)
 end)
 
@@ -625,7 +625,7 @@ net.Receive("DeleteCharacter", function(len, ply)
 	if wk(charID) then
 		local result = SQL_DELETE_FROM("yrp_characters", "uniqueID = '" .. tonumber(charID) .. "'")
 		if result == nil then
-			printGM("db", "DeleteCharacter: success"	)
+			YRP.msg("db", "DeleteCharacter: success"	)
 			ply:KillSilent()
 			local steamid = ply:SteamID()
 			if wk(steamid) then
@@ -640,7 +640,7 @@ net.Receive("DeleteCharacter", function(len, ply)
 			end
 			ply:Spawn()
 		else
-			printGM("note", "DeleteCharacter: fail")
+			YRP.msg("note", "DeleteCharacter: fail")
 		end
 		send_characters(ply)
 	end
@@ -683,14 +683,14 @@ function CreateCharacter(ply, tab)
 					YRP.msg("error", "[CreateCharacter] failed @Update!")
 				end
 			else
-				printGM("note", "[CreateCharacter] chars failed: " .. tostring(chars))
+				YRP.msg("note", "[CreateCharacter] chars failed: " .. tostring(chars))
 			end
 		else
 			YRP.msg("error", "[CreateCharacter] failed - char: " .. tostring(char) .. " " .. sql_show_last_error())
 		end
 		send_characters(ply)
 	else
-		printGM("note", "[CreateCharacter] role not found!")
+		YRP.msg("note", "[CreateCharacter] role not found!")
 	end
 	CreateCharacterStorages()
 end
@@ -723,7 +723,7 @@ net.Receive("EnterWorld", function(len, ply)
 		SQL_UPDATE("yrp_players", "CurrentCharacter = '" .. char .. "'", "SteamID = '" .. ply:SteamID() .. "'")
 		ply:Spawn()
 	else
-		printGM("gm", "No valid character selected (" .. tostring(char) .. ")")
+		YRP.msg("gm", "No valid character selected (" .. tostring(char) .. ")")
 	end
 end)
 
@@ -747,7 +747,7 @@ function SendBodyGroups(ply)
 				end
 			end
 		else
-			printGM("note", "get_menu_bodygroups failed!")
+			YRP.msg("note", "get_menu_bodygroups failed!")
 		end
 	end
 end

@@ -228,10 +228,6 @@ function YRP.msg(chan, str_msg, tochat)
 	end
 end
 
-function printGM(channel, text, tochat)
-	YRP.msg(channel, text, tochat)
-end
-
 function printTab(table, name)
 	hr_pre("debug")
 	local _header = "PrintTable: "
@@ -240,12 +236,12 @@ function printTab(table, name)
 		name = name .. " "
 	end
 	_header = _header .. name .. "(" .. tostring(table) .. ")"
-	printGM("note", _header)
+	YRP.msg("note", _header)
 
 	if istable(table) then
 		PrintTable(table)
 	else
-		printGM("note", "printTab " .. tostring(table) .. " is not a table!")
+		YRP.msg("note", "printTab " .. tostring(table) .. " is not a table!")
 	end
 	hr_pos("debug")
 end

@@ -15,7 +15,7 @@ function worked(obj, name, _silence)
 		return true
 	else
 		if !_silence then
-			printGM("note", "NOT WORKED: " .. tostring(obj) .. " " .. tostring(name))
+			YRP.msg("note", "NOT WORKED: " .. tostring(obj) .. " " .. tostring(name))
 		end
 		return false
 	end
@@ -40,10 +40,10 @@ end
 function check_yrp_sv_errors(str)
 	if !file.Exists("yrp/sv_errors.txt", "DATA") then
 		if !file.Exists("yrp", "DATA") then
-			printGM("db", "yrp existiert nicht")
+			YRP.msg("db", "yrp existiert nicht")
 			file.CreateDir("yrp")
 		end
-		printGM("db", "yrp/sv_errors.txt existiert nicht")
+		YRP.msg("db", "yrp/sv_errors.txt existiert nicht")
 		file.Write("yrp/sv_errors.txt", 0)
 		return false
 	end
@@ -53,10 +53,10 @@ end
 function check_yrp_cl_errors(str)
 	if !file.Exists("yrp/cl_errors.txt", "DATA") then
 		if !file.Exists("yrp", "DATA") then
-			printGM("db", "yrp existiert nicht")
+			YRP.msg("db", "yrp existiert nicht")
 			file.CreateDir("yrp")
 		end
-		printGM("db", "yrp/cl_errors.txt existiert nicht")
+		YRP.msg("db", "yrp/cl_errors.txt existiert nicht")
 		file.Write("yrp/cl_errors.txt", 0)
 		return false
 	end
@@ -138,7 +138,7 @@ function update_error_table_sv()
 				file.Write("yrp/sv_errors.txt", table.Count(_explode))
 				return _errors
 			else
-				--printGM("gm", "No new error")
+				--YRP.msg("gm", "No new error")
 			end
 		end
 	end
@@ -194,7 +194,7 @@ function update_error_table_cl()
 				file.Write("yrp/cl_errors.txt", table.Count(_explode))
 				return _errors
 			else
-				--printGM("gm", "No new error")
+				--YRP.msg("gm", "No new error")
 			end
 		end
 	end
@@ -298,21 +298,21 @@ function send_error(realm, str, force)
 				if realm != "server_all" then
 					http.Post(_url, entry, function(result)
 						if result then
-							printGM("gm", "[SENT ERROR TO DEVELOPER] " .. str)
+							YRP.msg("gm", "[SENT ERROR TO DEVELOPER] " .. str)
 						end
 					end, function(failed)
 						if tostring(failed) != "unsuccessful" then
-							printGM("error", "ERROR1: " .. tostring(failed))
+							YRP.msg("error", "ERROR1: " .. tostring(failed))
 						end
 					end)
 				else
 					http.Post(_url2, entry, function(result)
 						if result then
-							printGM("gm", "[SENT ERROR TO DEVELOPER 2] " .. str)
+							YRP.msg("gm", "[SENT ERROR TO DEVELOPER 2] " .. str)
 						end
 					end, function(failed)
 						if tostring(failed) != "unsuccessful" then
-							printGM("error", "ERROR2: " .. tostring(failed))
+							YRP.msg("error", "ERROR2: " .. tostring(failed))
 						end
 					end)
 				end
@@ -361,7 +361,7 @@ function CanSendError()
 	else
 		if tick % 120 == 0 and IsYRPOutdated() != nil then
 			if IsYRPOutdated() then
-				printGM("note", "Gamemode is outdated!")
+				YRP.msg("note", "Gamemode is outdated!")
 			end
 		end
 	end
@@ -370,7 +370,7 @@ end
 
 function SendAllErrors(str)
 	if str != nil then
-		printGM("note", "[SendAllErrors] " .. str)
+		YRP.msg("debug", "[SendAllErrors] " .. str)
 	end
 	_cl_errors = update_error_table_cl()
 	send_errors("client", _cl_errors)

@@ -12,8 +12,8 @@ end
 
 function Player:getAgendaTable()
 	--Description: Get the agenda a player can see. Note: when a player is not the manager of an agenda, it returns the agenda of the manager.
-	--printGM("darkrp", "getAgendaTable()")
-	--printGM("darkrp", DarkRP._not)
+	--YRP.msg("darkrp", "getAgendaTable()")
+	--YRP.msg("darkrp", DarkRP._not)
 	return false
 end
 
@@ -68,8 +68,8 @@ end
 
 function Player:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 	--Description: Get the entity that is closest to a player's line of sight and its distance.
-	printGM("darkrp", "getEyeSightHitEntity(searchDistance, hitDistance, filter)")
-	printGM("darkrp", DarkRP._not)
+	YRP.msg("darkrp", "getEyeSightHitEntity(searchDistance, hitDistance, filter)")
+	YRP.msg("darkrp", DarkRP._not)
 	return NULL, 0
 end
 
@@ -132,22 +132,22 @@ end
 
 function Player:getPocketItems()
 	--Description: Get a player's pocket items.
-	printGM("darkrp", "getPocketItems()")
-	printGM("darkrp", DarkRP._not)
+	YRP.msg("darkrp", "getPocketItems()")
+	YRP.msg("darkrp", DarkRP._not)
 	return {}
 end
 
 function Player:getWantedReason()
 	--Description: Get the reason why someone is wanted
-	printGM("darkrp", "getWantedReason()")
-	printGM("darkrp", DarkRP._not)
+	YRP.msg("darkrp", "getWantedReason()")
+	YRP.msg("darkrp", DarkRP._not)
 	return "old getWantedReason"
 end
 
 function Player:hasDarkRPPrivilege(priv)
 	--Description: Whether the player has a certain privilege.
-	printGM("darkrp", "hasDarkRPPrivilege(" .. tostring(priv) .. ")")
-	printGM("darkrp", DarkRP._not)
+	YRP.msg("darkrp", "hasDarkRPPrivilege(" .. tostring(priv) .. ")")
+	YRP.msg("darkrp", DarkRP._not)
 	return false
 end
 
@@ -162,21 +162,21 @@ end
 
 function Player:isArrested()
 	--Description: Whether this player is arrested
-	--printGM("darkrp", "isArrested()")
+	--YRP.msg("darkrp", "isArrested()")
 	return self:GetDBool("injail", false)
 end
 
 function Player:isChief()
 	--Description: Whether this player is a Chief.
-	printGM("darkrp", "isChief()")
-	printGM("darkrp", DarkRP._not)
+	YRP.msg("darkrp", "isChief()")
+	YRP.msg("darkrp", DarkRP._not)
 	return false
 end
 
 function Player:isCook()
 	--Description: Whether this player is a cook. This function is only available if hungermod is enabled.
-	printGM("darkrp", "isCook()")
-	printGM("darkrp", DarkRP._not)
+	YRP.msg("darkrp", "isCook()")
+	YRP.msg("darkrp", DarkRP._not)
 	return false
 end
 
@@ -212,8 +212,8 @@ end
 
 function Player:nickSortedPlayers()
 	--Description: A table of players sorted by RP name.
-	printGM("darkrp", "nickSortedPlayers()")
-	printGM("darkrp", DarkRP._not)
+	YRP.msg("darkrp", "nickSortedPlayers()")
+	YRP.msg("darkrp", DarkRP._not)
 	return {}
 end
 

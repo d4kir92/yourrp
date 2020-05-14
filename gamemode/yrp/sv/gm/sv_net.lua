@@ -19,7 +19,7 @@ end)
 
 --Restart Server
 net.Receive("restartServer", function(len, ply)
-	printGM("gm", "RunConsoleCommand(_restart)")
+	YRP.msg("gm", "RunConsoleCommand(_restart)")
 	RunConsoleCommand("_restart")
 end)
 
@@ -37,11 +37,11 @@ net.Receive("updateServer", function(len, ply)
 		if countdown > 10 then
 			if (countdown%10) == 0 then
 				PrintMessage(HUD_PRINTCENTER, message)
-				printGM("server", message)
+				YRP.msg("server", message)
 			end
 		elseif countdown <= 10 then
 			PrintMessage(HUD_PRINTCENTER, message)
-			printGM("server", message)
+			YRP.msg("server", message)
 		end
 		countdown = countdown - 1
 		if countdown == -1 then
@@ -55,12 +55,12 @@ net.Receive("cancelRestartServer", function(len, ply)
 	timer.Remove("timerRestartServer")
 	local message = "Restart Server CANCELED!"
 	PrintMessage(HUD_PRINTCENTER, message)
-	printGM("server", message)
+	YRP.msg("server", message)
 end)
 
 function changeUserGroup(ply, cmd, args)
-	printGM("note", "This Command (yrp_usergroup) is only for this round!")
-	printGM("note", "Use an admin tool to make yourself permanent to an UserGroup")
+	YRP.msg("note", "This Command (yrp_usergroup) is only for this round!")
+	YRP.msg("note", "Use an admin tool to make yourself permanent to an UserGroup")
 	local _cmdpre = "[" .. string.upper("yrp_usergroup") .. "] "
 	local message = ""
 	if #args == 2 then
@@ -70,35 +70,35 @@ function changeUserGroup(ply, cmd, args)
 				if string.find(string.lower(v:Nick()), string.lower(args[1])) or string.find(string.lower(v:SteamName()), string.lower(args[1])) then
 					v:SetUserGroup(args[2])
 					v:UserGroupLoadout()
-					printGM("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
+					YRP.msg("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
 					return
 				end
 			end
-			printGM("note", _cmdpre .. "Player [" .. args[1] .. "] not found.")
+			YRP.msg("note", _cmdpre .. "Player [" .. args[1] .. "] not found.")
 		elseif ply:HasAccess() or ply:IPAddress() == "loopback" then
 			--[[ if admin/superadmin/owner tries ]]--
 			for k, v in pairs(player.GetAll()) do
 				if string.find(string.lower(v:Nick()), string.lower(args[1])) or string.find(string.lower(v:SteamName()), string.lower(args[1])) then
 					v:SetUserGroup(args[2])
 					v:UserGroupLoadout()
-					printGM("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
+					YRP.msg("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
 					return
 				end
 			end
-			printGM("note", _cmdpre .. args[1] .. " not found.")
+			YRP.msg("note", _cmdpre .. args[1] .. " not found.")
 		elseif ply:IsPlayer() then
 			--[[ if no rcon rights tries ]]--
 			message = ply:SteamName() .. " tried to give " .. args[1] .. " the usergroup " .. args[2] .. "."
-			printGM("note", _cmdpre .. message)
+			YRP.msg("note", _cmdpre .. message)
 		end
 	else
 		--[[ Failed command ]]--
 		if #args > 2 then
-			printGM("note", _cmdpre .. "To much arguments (yrp_usergroup STEAMNAME/RPNAME UserGroup)")
-			printGM("note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin")
+			YRP.msg("note", _cmdpre .. "To much arguments (yrp_usergroup STEAMNAME/RPNAME UserGroup)")
+			YRP.msg("note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin")
 		else
-			printGM("note", _cmdpre .. "Not enough arguments (yrp_usergroup STEAMNAME/RPNAME UserGroup)")
-			printGM("note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin")
+			YRP.msg("note", _cmdpre .. "Not enough arguments (yrp_usergroup STEAMNAME/RPNAME UserGroup)")
+			YRP.msg("note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin")
 		end
 	end
 end

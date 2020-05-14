@@ -975,7 +975,7 @@ util.AddNetworkString("yrp_hud_info")
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:HudLoadout()
-	printGM("debug", "[HudLoadout] " .. self:YRPName())
+	YRP.msg("debug", "[HudLoadout] " .. self:YRPName())
 	local hudeles = SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(hudeles) then
 		net.Start("yrp_hud_info")

@@ -87,21 +87,21 @@ function allowedToUseDoor(id, ply, door)
 					elseif IsUnderGroupOf(ply, bui_guid) then
 						return true
 					else
-						printGM("note", "[allowedToUseDoor] not allowed")
+						YRP.msg("note", "[allowedToUseDoor] not allowed")
 						return false
 					end
 					return false
 				end
 			end
 		else
-			printGM("note", "[allowedToUseDoor] not allowed 2")
+			YRP.msg("note", "[allowedToUseDoor] not allowed 2")
 			return false
 		end
 	end
 end
 
 function searchForDoors()
-	printGM("db", "[Buildings] Search Map for Doors")
+	YRP.msg("db", "[Buildings] Search Map for Doors")
 
 	for k, v in pairs(GetAllDoors()) do
 		SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
@@ -115,13 +115,13 @@ function searchForDoors()
 	end
 
 	local allDoorsNum = table.Count(GetAllDoors())
-	printGM("db", "[Buildings] Done finding them (" .. allDoorsNum .. " doors found)")
+	YRP.msg("db", "[Buildings] Done finding them (" .. allDoorsNum .. " doors found)")
 	return allDoorsNum
 end
 
 util.AddNetworkString("loaded_doors")
 function loadDoors()
-	printGM("db", "[Buildings] Setting up Doors!")
+	YRP.msg("db", "[Buildings] Setting up Doors!")
 	local _tmpDoors = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 
 	if wk(_tmpDoors) then
@@ -131,7 +131,7 @@ function loadDoors()
 				door:SetDString("uniqueID", i)
 				HasUseFunction(door)
 			else
-				printGM("note", "[Buildings] more doors, then in list!")
+				YRP.msg("note", "[Buildings] more doors, then in list!")
 			end
 		end
 	end
@@ -196,21 +196,21 @@ function loadDoors()
 		end
 	end
 
-	printGM("db", "[Buildings] Map Doors are now available!")
+	YRP.msg("db", "[Buildings] Map Doors are now available!")
 	SetGlobalBool("loaded_doors", true)
 	net.Start("loaded_doors")
 	net.Broadcast()
 end
 
 function check_map_doors()
-	printGM("db", "[Buildings] Get Database Doors and Buildings")
+	YRP.msg("db", "[Buildings] Get Database Doors and Buildings")
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 	local _tmpTable2 = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
 	if wk(_tmpTable) and wk(_tmpTable2) then
-		printGM("db", "[Buildings] Found! (" .. tostring(table.Count(_tmpTable)) .. " Doors | " .. tostring(table.Count(_tmpTable)) .. " Buildings)")
+		YRP.msg("db", "[Buildings] Found! (" .. tostring(table.Count(_tmpTable)) .. " Doors | " .. tostring(table.Count(_tmpTable)) .. " Buildings)")
 		local doors = GetAllDoors()
 		if (table.Count(_tmpTable)) < (table.Count(doors)) then
-			printGM("db", "[Buildings] New doors found!")
+			YRP.msg("db", "[Buildings] New doors found!")
 			searchForDoors()
 		end
 	else
@@ -261,7 +261,7 @@ function canLock(ply, tab)
 	elseif (tab.ownerCharID == "" or tab.ownerCharID == " ") and tab.groupID == "-1" then
 		return false
 	else
-		printGM("error", "canLock ELSE")
+		YRP.msg("error", "canLock ELSE")
 		return false
 	end
 end
@@ -406,15 +406,15 @@ net.Receive("buyBuilding", function(len, ply)
 						v:SetDBool("bool_hasowner", true)
 					end
 				end
-				printGM("gm", ply:RPName() .. " has buyed a door")
+				YRP.msg("gm", ply:RPName() .. " has buyed a door")
 			else
-				printGM("gm", ply:RPName() .. " has already an owner!")
+				YRP.msg("gm", ply:RPName() .. " has already an owner!")
 			end
 		else
-			printGM("gm", ply:RPName() .. " has not enough money to buy door")
+			YRP.msg("gm", ply:RPName() .. " has not enough money to buy door")
 		end
 	else
-		printGM("note", "buildings disabled")
+		YRP.msg("note", "buildings disabled")
 	end
 end)
 
@@ -521,10 +521,10 @@ net.Receive("changeBuildingName", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewName = net.ReadString()
 	if wk(_tmpBuildingID) then
-		printGM("note", "renamed Building: " .. _tmpNewName)
+		YRP.msg("note", "renamed Building: " .. _tmpNewName)
 		SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "name = '" .. SQL_STR_IN(_tmpNewName) .. "'" , "uniqueID = " .. _tmpBuildingID)
 	else
-		printGM("note", "changeBuildingName failed")
+		YRP.msg("note", "changeBuildingName failed")
 	end
 end)
 
@@ -555,11 +555,11 @@ net.Receive("changeBuildingHeader", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewName = net.ReadString()
 	if wk(_tmpBuildingID) then
-		printGM("note", "header Building: " .. _tmpNewName)
+		YRP.msg("note", "header Building: " .. _tmpNewName)
 		SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "text_header = '" .. SQL_STR_IN(_tmpNewName) .. "'" , "uniqueID = " .. _tmpBuildingID)
 		ChangeBuildingString(tonumber(_tmpBuildingID), "text_header", _tmpNewName)
 	else
-		printGM("note", "changeBuildingName failed")
+		YRP.msg("note", "changeBuildingName failed")
 	end
 end)
 
@@ -567,11 +567,11 @@ net.Receive("changeBuildingDescription", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewName = net.ReadString()
 	if wk(_tmpBuildingID) then
-		printGM("note", "description Building: " .. _tmpNewName)
+		YRP.msg("note", "description Building: " .. _tmpNewName)
 		SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "text_description = '" .. SQL_STR_IN(_tmpNewName) .. "'" , "uniqueID = " .. _tmpBuildingID)
 		ChangeBuildingString(tonumber(_tmpBuildingID), "text_description", _tmpNewName)
 	else
-		printGM("note", "changeBuildingName failed")
+		YRP.msg("note", "changeBuildingName failed")
 	end
 end)
 
@@ -659,13 +659,13 @@ net.Receive("getBuildingInfo", function(len, ply)
 				net.Send(ply)
 			--end
 		else
-			printGM("note", "getBuildingInfo -> Building not found in Database.")
+			YRP.msg("note", "getBuildingInfo -> Building not found in Database.")
 			net.Start("getBuildingInfo")
 				net.WriteBool(false)
 			net.Send(ply)
 		end
 	else
-		printGM("note", "getBuildingInfo -> BuildingID is not valid")
+		YRP.msg("note", "getBuildingInfo -> BuildingID is not valid")
 	end
 end)
 

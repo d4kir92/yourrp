@@ -55,12 +55,12 @@ function YRPSendIsReady()
 		end
 
 		local _wsitems = engine.GetAddons()
-		printGM("note", "[" .. #_wsitems .. " Workshop items]")
-		printGM("note", " Nr.\tID\t\tName Mounted")
+		YRP.msg("note", "[" .. #_wsitems .. " Workshop items]")
+		YRP.msg("note", " Nr.\tID\t\tName Mounted")
 
 		for k, ws in pairs(_wsitems) do
 			if !ws.mounted then
-				printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
+				YRP.msg("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
 				if IsValid(ws.path) then
 					game.MountGMA(tostring(ws.path))
 				else
@@ -69,7 +69,7 @@ function YRPSendIsReady()
 			end
 		end
 
-		printGM("note", "Workshop Addons Done")
+		YRP.msg("note", "Workshop Addons Done")
 		playerfullready = true
 
 		--TestYourRPContent()
@@ -98,13 +98,13 @@ hook.Add("Think", "yrp_think_ready", function()
 end)
 
 hook.Add("InitPostEntity", "yrp_InitPostEntity_ready", function()
-	printGM("note", "All entities are loaded.")
+	YRP.msg("note", "All entities are loaded.")
 
 	yrp_hookinitpostentity = true
 end)
 
 function GM:InitPostEntity()
-	printGM("note", "All Entities have initialized.")
+	YRP.msg("note", "All Entities have initialized.")
 
 	yrp_initpostentity = true
 end

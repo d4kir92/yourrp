@@ -32,7 +32,7 @@ net.Receive("getBuildingInfo", function(len)
 			end
 		end
 	else
-		printGM("note", "getDoorInfo Receive: NIL")
+		YRP.msg("note", "getDoorInfo Receive: NIL")
 	end
 end)
 

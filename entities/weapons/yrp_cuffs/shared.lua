@@ -95,7 +95,9 @@ if SERVER then
 			if ea(_weapon) then
 				_weapon:Remove()
 			end
-			--args.target:SetActiveWeapon("yrp_unarmed")
+			if !args.target:HasWeapon("yrp_unarmed") then
+				args.target:Give("yrp_unarmed")
+			end
 			args.target:SelectWeapon("yrp_unarmed")
 		end
 	end)

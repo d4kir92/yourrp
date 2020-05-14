@@ -5,7 +5,7 @@
 local c = 0
 function PlayerLoadedGame(ply)
 	c = c + 1
-	printGM("note", tostring(ply:YRPName()) .. " finished loading. c: " ..  c)
+	YRP.msg("note", tostring(ply:YRPName()) .. " finished loading. c: " ..  c)
 	local tab = net.ReadTable()
 	local OS_Windows = tab.iswindows
 	local OS_Linux = tab.islinux
@@ -22,9 +22,7 @@ function PlayerLoadedGame(ply)
 	else
 		ply:SetDString("yrp_os", "other")
 	end
-
 	ply:SetDString("gmod_branch", Branch or "Unknown")
-
 	ply:SetDString("yrp_country", Country or "Unknown")
 
 	-- YRP Chat?
@@ -36,16 +34,22 @@ function PlayerLoadedGame(ply)
 
 	ply:SetDBool("isserverdedicated", game.IsDedicated())
 
-	SendDGlobals(ply)
-
 	ply:DesignLoadout("PlayerLoadedGame")
+
+	local plyT = ply:GetPlyTab()
+	if wk(plyT) then
+		plyT.CurrentCharacter = tonumber(plyT.CurrentCharacter)
+		if plyT.CurrentCharacter != -1 then
+			ply:SetDInt("yrp_charid", tonumber(plyT.CurrentCharacter))
+		end
+	end
+
+	SendDGlobals(ply)
+	SendDEntities(ply, "PlayerLoadedGame")
+
 	ply:SendTeamsToPlayer()
 	
 	ply:SetDBool("finishedloadingcharacter", true)
-
-	SendDEntities(ply, "PlayerLoadedGame")
-
-	ply.lgtime = CurTime() + 6
 
 	if IsValid(ply) and ply.KillSilent then
 		ply:KillSilent()
@@ -57,8 +61,9 @@ end
 hook.Add("Think", "yrp_loaded_game", function()
 	for i, ply in pairs(player.GetAll()) do
 		if IsValid(ply) then
-			if ply.lgtime and ply.lgtime < CurTime() and ply:SteamID64() != nil then -- Only goes here, when a player fully loaded
-				ply.lgtime = nil
+			if ply:GetDInt("yrp_load_glo", 0) == 100 and ply:GetDInt("yrp_load_ent", 0) == 100 and ply:SteamID64() != nil and ply.yrploaded == nil then -- Only goes here, when a player fully loaded
+				ply.yrploaded = true
+
 				ply:SetDBool("finishedloading", true)
 
 				if open_character_selection != nil then

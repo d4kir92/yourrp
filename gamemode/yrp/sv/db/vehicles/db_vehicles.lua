@@ -80,10 +80,10 @@ function canVehicleLock(ply, tab)
 		end
 		return false
 	elseif tab.ownerCharID == "" then
-		printGM("note", "canVehicleLock empty")
+		YRP.msg("note", "canVehicleLock empty")
 		return false
 	else
-		printGM("error", "canVehicleLock ELSE")
+		YRP.msg("error", "canVehicleLock ELSE")
 		return false
 	end
 end

@@ -51,7 +51,7 @@ function check_yrp_tutorials()
 		local _result = SQL_INSERT_INTO_DEFAULTVALUES(_db_name)
 		_tmp = SQL_SELECT(_db_name, "*", "uniqueID = 1")
 		if _tmp == nil or _tmp == false then
-			printGM("error", _db_name .. " has no entries.")
+			YRP.msg("error", _db_name .. " has no entries.")
 		end
 	end
 

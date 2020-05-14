@@ -4,6 +4,6 @@ local Entity = FindMetaTable("Entity")
 
 function Entity:drawOwnableInfo()
 	--Description: Draw the ownability information on a door or vehicle.
-	printGM("darkrp", "drawOwnableInfo()")
-	printGM("darkrp", DarkRP._not)
+	YRP.msg("darkrp", "drawOwnableInfo()")
+	YRP.msg("darkrp", DarkRP._not)
 end

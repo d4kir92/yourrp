@@ -65,7 +65,7 @@ net.Receive("getMapSite", function(len)
 	local PARENT = GetSettingsSite()
 	if pa(PARENT) then
 		if len > 512000 then
-			printGM("note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)")
+			YRP.msg("note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)")
 		end
 		local lply = LocalPlayer()
 

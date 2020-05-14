@@ -232,15 +232,15 @@ local HANDLER_GENERAL = {}
 
 function RemFromHandler_General(ply)
 	table.RemoveByValue(HANDLER_GENERAL, ply)
-	printGM("gm", ply:YRPName() .. " disconnected from General")
+	YRP.msg("gm", ply:YRPName() .. " disconnected from General")
 end
 
 function AddToHandler_General(ply)
 	if !table.HasValue(HANDLER_GENERAL, ply) then
 		table.insert(HANDLER_GENERAL, ply)
-		printGM("gm", ply:YRPName() .. " connected to General")
+		YRP.msg("gm", ply:YRPName() .. " connected to General")
 	else
-		printGM("gm", ply:YRPName() .. " already connected to General")
+		YRP.msg("gm", ply:YRPName() .. " already connected to General")
 	end
 end
 
@@ -413,7 +413,7 @@ function SetYRPCollectionID(cid)
 	cid = cid or 0
 	cid = tonumber(cid)
 	if cid > 0 then
-		printGM("db", "SetYRPCollectionID(" .. cid .. ")")
+		YRP.msg("db", "SetYRPCollectionID(" .. cid .. ")")
 		yrp_general.text_server_collectionid = cid
 		SQL_UPDATE(DATABASE_NAME, "text_server_collectionid = '" .. cid .. "'", "uniqueID = '1'")
 
@@ -454,25 +454,25 @@ function GeneralUpdateValue(ply, netstr, str, value)
 end
 
 function GeneralUpdateBool(ply, netstr, str, value)
-	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(tobool(value)))
+	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(tobool(value)))
 	GeneralUpdateValue(ply, netstr, str, value)
 	SetGlobalDBool(str, tobool(value))
 end
 
 function GeneralUpdateString(ply, netstr, str, value)
-	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
+	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, SQL_STR_IN(str), value)
 	SetGlobalDString(str, SQL_STR_OUT(value))
 end
 
 function GeneralUpdateInt(ply, netstr, str, value)
-	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
+	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
 	SetGlobalDInt(str, value)
 end
 
 function GeneralUpdateFloat(ply, netstr, str, value)
-	printGM("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
+	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
 	SetGlobalDFloat(str, value)
 end
@@ -484,7 +484,7 @@ function GeneralUpdateGlobalValue(ply, netstr, str, value)
 end
 
 function GeneralUpdateGlobalBool(ply, netstr, str, value)
-	printGM("db", ply:YRPName() .. " updated global " .. str .. " to: " .. tostring(tobool(value)))
+	YRP.msg("db", ply:YRPName() .. " updated global " .. str .. " to: " .. tostring(tobool(value)))
 	GeneralUpdateGlobalValue(ply, netstr, str, value)
 	SetGlobalDBool(str, tobool(value))
 end
@@ -1606,7 +1606,7 @@ net.Receive("gethelpmenu", function(len, ply)
 			net.WriteTable(subtabs)
 		net.Send(ply)
 	else
-		printGM("note", "gamemode broken contact developer!")
+		YRP.msg("note", "gamemode broken contact developer!")
 	end
 end)
 
@@ -1814,7 +1814,7 @@ net.Receive("db_jailaccess", function(len, ply)
 
 	local _result = SQL_UPDATE(_dbTable, _dbSets, "uniqueID = 1")
 	if _result != nil then
-		printGM("error", "access_jail failed! " .. tostring(_dbTable) .. " | " .. tostring(_dbSets))
+		YRP.msg("error", "access_jail failed! " .. tostring(_dbTable) .. " | " .. tostring(_dbSets))
 	end
 end)
 
@@ -1826,7 +1826,7 @@ net.Receive("dbUpdate", function(len, ply)
 	local _result = SQL_UPDATE(_dbTable, _dbSets, _dbWhile)
 	local _usergroup_ = string.Explode(" ", _dbWhile)
 	local _restriction_ = string.Explode(" ", SQL_STR_IN(_dbSets))
-	printGM("note", "[OLD DBUPDATE] " .. ply:SteamName() .. " SETS " .. _dbSets .. " WHERE " .. _dbWhile)
+	YRP.msg("note", "[OLD DBUPDATE] " .. ply:SteamName() .. " SETS " .. _dbSets .. " WHERE " .. _dbWhile)
 end)
 
 
@@ -1847,7 +1847,7 @@ net.Receive("ply_ban", function(len, ply)
 			_target:Ban(24 * 60, false)
 			_target:Kick("You get banned for 24 hours by " .. ply:YRPName())
 		else
-			printGM("note", "ply_ban " .. tostring(_target) .. " IS NIL => NOT AVAILABLE")
+			YRP.msg("note", "ply_ban " .. tostring(_target) .. " IS NIL => NOT AVAILABLE")
 		end
 	end
 end)

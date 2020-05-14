@@ -69,13 +69,13 @@ local _cur = ""
 local chars = {}
 local loading = false
 function LoadCharacters()
-	printGM("gm", "received characterlist")
+	YRP.msg("gm", "received characterlist")
 
 	DONE_LOADING = DONE_LOADING or true
 
 	local cache = {}
 
-	curChar = LocalPlayer():CharID()
+	curChar = tonumber(LocalPlayer():CharID())
 
 	if pa(_cs.charactersBackground) then
 		_cs.charactersBackground.text = ""
@@ -156,12 +156,16 @@ function LoadCharacters()
 						tmpChar.grp = ""
 					end
 					tmpChar.rol = tmpChar.rolename
+
 					if IsLevelSystemEnabled() then
 						tmpChar.rol = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. "    " .. tmpChar.rol
 					end
 
 					function tmpChar:Paint(pw, ph)
 						--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 1))
+						if curChar == -1 then
+							curChar = tonumber(LocalPlayer():CharID())
+						end
 						if curChar == self.charid then
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255, 160))
 						end
@@ -204,7 +208,7 @@ function LoadCharacters()
 									end
 								end
 							else
-								printGM("note", "Character role has no playermodel!")
+								YRP.msg("note", "Character role has no playermodel!")
 							end
 						end
 					end
@@ -371,7 +375,7 @@ function openCharacterSelection()
 		end
 
 		timer.Simple(0.1, function()
-			printGM("gm", "ask for characterlist")
+			YRP.msg("gm", "ask for characterlist")
 
 			net.Start("yrp_get_characters")
 			net.SendToServer()
@@ -472,5 +476,7 @@ function openCharacterSelection()
 end
 
 net.Receive("openCharacterMenu", function(len, ply)
-	openCharacterSelection()
+	timer.Simple(1, function()
+		openCharacterSelection()
+	end)
 end)

@@ -232,13 +232,13 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 													break
 												end
 											end
-											printGM("note", activator:RPName() .. " transfered " .. GetGlobalDString("text_money_pre", "") .. self.money .. GetGlobalDString("text_money_pos", "") .. " to " .. dbSelectTarget[1].rpname)
+											YRP.msg("note", activator:RPName() .. " transfered " .. GetGlobalDString("text_money_pre", "") .. self.money .. GetGlobalDString("text_money_pos", "") .. " to " .. dbSelectTarget[1].rpname)
 										end
 									end
 								end
 							end
 						else
-							printGM("note", "self.money is not a number.")
+							YRP.msg("note", "self.money is not a number.")
 						end
 
 						self.money = nil

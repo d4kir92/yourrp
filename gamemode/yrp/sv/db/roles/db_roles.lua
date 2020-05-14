@@ -74,7 +74,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_bullet", "INTEGER DEFAULT 1.0")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_energybeam", "INTEGER DEFAULT 1.0")
 
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	printGM("note", DATABASE_NAME .. " has not the default role")
+	YRP.msg("note", DATABASE_NAME .. " has not the default role")
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "1, 'Civilian', '0,0,255', 1, 0")
 end
 
@@ -111,7 +111,7 @@ function MoveUnusedGroups()
 end
 
 function MoveUnusedRolesToDefault()
-	printGM("note", "Move unused roles to default group")
+	YRP.msg("note", "Move unused roles to default group")
 	local allroles = SQL_SELECT("yrp_ply_roles", "*", nil)
 	if wk(allroles) then
 		for i, role in pairs(allroles) do
@@ -134,7 +134,7 @@ MoveUnusedRolesToDefault()
 
 -- CONVERTING OLD roles
 if wk(SQL_SELECT("yrp_roles", "*", nil)) then
-	printGM("note", "Converting OLD Roles into NEW Roles")
+	YRP.msg("note", "Converting OLD Roles into NEW Roles")
 	local oldroles = SQL_SELECT("yrp_roles", "*", nil)
 	for i, role in pairs(oldroles) do
 		if tonumber(role.uniqueID) > 1 then
@@ -440,9 +440,9 @@ function SubscribeRoleList(ply, gro, pre)
 	end
 	if !table.HasValue(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply) then
 		table.insert(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply)
-		printGM("gm", ply:YRPName() .. " subscribed to RoleList " .. gro .. " pre: " .. pre)
+		YRP.msg("gm", ply:YRPName() .. " subscribed to RoleList " .. gro .. " pre: " .. pre)
 	else
-		printGM("gm", ply:YRPName() .. " already subscribed to RoleList " .. gro .. " pre: " .. pre)
+		YRP.msg("gm", ply:YRPName() .. " already subscribed to RoleList " .. gro .. " pre: " .. pre)
 	end
 end
 
@@ -455,7 +455,7 @@ function UnsubscribeRoleList(ply, gro, pre)
 	end
 	if table.HasValue(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply) then
 		table.RemoveByValue(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply)
-		printGM("gm", ply:YRPName() .. " unsubscribed from RoleList " .. gro .. " pre: " .. pre)
+		YRP.msg("gm", ply:YRPName() .. " unsubscribed from RoleList " .. gro .. " pre: " .. pre)
 	end
 end
 
@@ -465,9 +465,9 @@ function SubscribeRole(ply, uid)
 	end
 	if !table.HasValue(HANDLER_GROUPSANDROLES["roles"][uid], ply) then
 		table.insert(HANDLER_GROUPSANDROLES["roles"][uid], ply)
-		printGM("gm", ply:YRPName() .. " subscribed to Role " .. uid)
+		YRP.msg("gm", ply:YRPName() .. " subscribed to Role " .. uid)
 	else
-		printGM("gm", ply:YRPName() .. " already subscribed to Role " .. uid)
+		YRP.msg("gm", ply:YRPName() .. " already subscribed to Role " .. uid)
 	end
 end
 
@@ -477,7 +477,7 @@ function UnsubscribeRole(ply, uid)
 	end
 	if table.HasValue(HANDLER_GROUPSANDROLES["roles"][uid], ply) then
 		table.RemoveByValue(HANDLER_GROUPSANDROLES["roles"][uid], ply)
-		printGM("gm", ply:YRPName() .. " unsubscribed from Role " .. uid)
+		YRP.msg("gm", ply:YRPName() .. " unsubscribed from Role " .. uid)
 	end
 end
 
@@ -584,7 +584,7 @@ function DuplicateRole(ruid)
 
 			SendRoleList(nil, guid, role.int_prerole)
 		else
-			printGM("note", "Role [" .. ruid .. "] was deleted.")
+			YRP.msg("note", "Role [" .. ruid .. "] was deleted.")
 		end
 	end
 end
@@ -609,7 +609,7 @@ net.Receive("get_grp_roles", function(len, ply)
 			net.WriteTable(_roles)
 		net.Send(ply)
 	else
-		printGM("note", "Group [" .. _uid .. "] has no roles.")
+		YRP.msg("note", "Group [" .. _uid .. "] has no roles.")
 	end
 end)
 
@@ -691,7 +691,7 @@ net.Receive("settings_add_role", function(len, ply)
 		--SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_role.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
 	end
 
-	printGM("db", "Added new role: " .. new_role.uniqueID)
+	YRP.msg("db", "Added new role: " .. new_role.uniqueID)
 
 	SendRoleList(nil, gro, pre)
 end)
@@ -828,7 +828,7 @@ net.Receive("getScoreboardGroups", function(len, ply)
 			net.WriteTable(_tmpGroups)
 		net.Broadcast()
 	else
-		printGM("note", "getScoreboardGroups failed!")
+		YRP.msg("note", "getScoreboardGroups failed!")
 		pTab(_tmpGroups)
 	end
 end)
@@ -1404,7 +1404,7 @@ net.Receive("openInteractMenu", function(len, ply)
 							--Only look for 30 preroles
 							tmpCounter = tmpCounter + 1
 							if tmpCounter >= 30 then
-								printGM("note", "You have a loop in your preroles!")
+								YRP.msg("note", "You have a loop in your preroles!")
 								tmpSearch = false
 							end
 						end
@@ -1455,7 +1455,7 @@ function addToWhitelist( SteamID, roleID, groupID, nick, ply, target )
 		local name = target:SteamName()
 		SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', '" .. nick .. "', " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
 	else
-		printGM( "note", "is already in whitelist")
+		YRP.msg( "note", "is already in whitelist")
 	end
 end
 
@@ -1497,11 +1497,11 @@ net.Receive("promotePlayer", function(len, ply)
 
 		SetRole( tmpTarget, tmpTableTargetPromoteRole.uniqueID, true )
 
-		printGM( "note", ply:Nick() .. " promoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetPromoteRole.uniqueID )
+		YRP.msg( "note", ply:Nick() .. " promoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetPromoteRole.uniqueID )
 	elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
-		printGM( "error", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use promote function! He is not an instructor!" )
+		YRP.msg( "error", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use promote function! He is not an instructor!" )
 	else
-		printGM( "error", "ELSE promote: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
+		YRP.msg( "error", "ELSE promote: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
 	end
 end)
 
@@ -1536,11 +1536,11 @@ net.Receive( "demotePlayer", function( len, ply )
 		removeFromWhitelist( tmpTarget:SteamID(), tmpTableTargetRole[1].uniqueID )
 		SetRole( tmpTarget, tmpTableTargetDemoteRole.uniqueID )
 
-		printGM( "note", ply:Nick() .. " demoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetDemoteRole.uniqueID )
+		YRP.msg( "note", ply:Nick() .. " demoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetDemoteRole.uniqueID )
 	elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
-		printGM( "note", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use demote function! He is not an instructor!" )
+		YRP.msg( "note", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use demote function! He is not an instructor!" )
 	else
-		printGM( "error", "ELSE demote: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
+		YRP.msg( "error", "ELSE demote: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
 	end
 end)
 

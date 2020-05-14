@@ -55,6 +55,9 @@ end
 
 function SWEP:DestroyCuffs()
 	self.Owner:InteruptCasting()
+	if !self.Owner:HasWeapon("yrp_unarmed") then
+		self.Owner:Give("yrp_unarmed")
+	end
 	self.Owner:SelectWeapon("yrp_unarmed")
 	self:Remove()
 end

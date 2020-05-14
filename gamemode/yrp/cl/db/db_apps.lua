@@ -20,15 +20,15 @@ function appSize()
 end
 
 function addApp(app)
-	printGM("db", "Add App: " .. tostring(app.PrintName) .. " [" .. tostring(app.ClassName).. "]")
+	YRP.msg("db", "Add App: " .. tostring(app.PrintName) .. " [" .. tostring(app.ClassName).. "]")
 	if app.PrintName == nil then
-		printGM("note", "-> app.PrintName is missing!")
+		YRP.msg("note", "-> app.PrintName is missing!")
 	end
 	if app.ClassName == nil then
-		printGM("note", "-> app.ClassName is missing!")
+		YRP.msg("note", "-> app.ClassName is missing!")
 	end
 	if app.OpenApp == nil then
-		printGM("note", "-> function app:OpenApp is missing!")
+		YRP.msg("note", "-> function app:OpenApp is missing!")
 	end
 
 	list.Add("yrp_apps", app)

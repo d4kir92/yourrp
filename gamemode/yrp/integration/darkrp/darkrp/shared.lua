@@ -18,8 +18,8 @@ local UNKNOWN_DARKRPVAR = 255 -- Should be equal to 2^DARKRP_ID_BITS - 1
 DarkRP.DARKRP_ID_BITS = DARKRP_ID_BITS
 
 function DarkRP:registerDarkRPVar(name, writeFn, readFn)
-	printGM("darkrp", "DarkRP:registerDarkRPVar(" .. tostring(name) .. ", " .. tostring(writeFn) .. ", " .. tostring(readFn) .. ")")
-	printGM("darkrp", DarkRP._not)
+	YRP.msg("darkrp", "DarkRP:registerDarkRPVar(" .. tostring(name) .. ", " .. tostring(writeFn) .. ", " .. tostring(readFn) .. ")")
+	YRP.msg("darkrp", DarkRP._not)
 	maxId = maxId + 1
 
   -- UNKNOWN_DARKRPVAR is reserved for unknown values

@@ -5,7 +5,7 @@
 local _cmdpre = "[COMMAND] "
 local _cmdsv = "This command is adminonly/serversided!"
 concommand.Add("yrp_usergroup", function(ply, cmd, args)
-	printGM("note", _cmdpre .. _cmdsv)
+	YRP.msg("note", _cmdpre .. _cmdsv)
 end)
 
 local chatisopen = false

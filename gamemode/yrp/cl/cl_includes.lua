@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-printGM("gm", "Loading cl_includes.lua")
+YRP.msg("gm", "Loading cl_includes.lua")
 
 include("db/db_database.lua")
 
@@ -62,4 +62,4 @@ include("gm/menus/cl_chatchannels.lua")
 
 include("gm/menus/cl_talents.lua")
 
-printGM("gm", "Loaded cl_includes.lua")
+YRP.msg("gm", "Loaded cl_includes.lua")

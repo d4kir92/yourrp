@@ -62,9 +62,12 @@ hook.Add("WeaponEquip", "yrp_weaponequip", function(wep, owner)
 	local swep = weapons.GetStored(wep:GetClass())
 	local oldammo = owner:GetAmmoCount(atype)
 
-	timer.Simple(0, function()
-		owner:SetAmmo(owner:GetAmmoCount(atype) - (owner:GetAmmoCount(atype) - oldammo), atype)
-	end)
+	local ENT = weapons.GetStored(wep:GetClass())
+	if wk(ENT) then
+		timer.Simple(0, function()
+			owner:SetAmmo(owner:GetAmmoCount(atype) - (owner:GetAmmoCount(atype) - oldammo), atype)
+		end)
+	end
 end)
 
 
@@ -185,6 +188,6 @@ net.Receive("dropswep", function(len, ply)
 			ply:DropSWEP(_wclass)
 		end
 	else
-		printGM("note", ply:YRPName() .. " PlayersCanDropWeapons == FALSE")
+		YRP.msg("note", ply:YRPName() .. " PlayersCanDropWeapons == FALSE")
 	end
 end)

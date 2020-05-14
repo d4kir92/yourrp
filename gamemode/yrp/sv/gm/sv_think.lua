@@ -10,7 +10,7 @@ end)
 util.AddNetworkString("client_lang")
 net.Receive("client_lang", function(len, ply)
 	local _lang = net.ReadString()
-	printGM("db", ply:YRPName() .. " using language: " .. string.upper(_lang))
+	YRP.msg("db", ply:YRPName() .. " using language: " .. string.upper(_lang))
 	ply:SetDString("client_lang", _lang or "NONE")
 end)
 
@@ -215,7 +215,7 @@ function check_salary(ply)
 				ply:UpdateMoney()
 			end
 		else
-			printGM("error", "CheckMoney in check_salary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
+			YRP.msg("error", "CheckMoney in check_salary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
 			ply:CheckMoney()
 		end
 	end
@@ -336,7 +336,7 @@ timer.Create("ServerThink", TICK, 0, function()
 				if tonumber(dealer.uniqueID) != 1 and !dealerAlive(dealer.uniqueID) then
 					local _del = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'")
 					if _del != nil then
-						printGM("gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!")
+						YRP.msg("gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!")
 						_del = _del[1]
 						local _dealer = ents.Create("yrp_dealer")
 						_dealer:SetDString("dealerID", dealer.uniqueID)
@@ -429,13 +429,13 @@ timer.Create("ServerThink", TICK, 0, function()
 	if GAMEMODE:IsAutomaticServerReloadingEnabled() then
 		local _changelevel = 21600
 		if _time >= _changelevel then
-			printGM("gm", "Auto Reload")
+			YRP.msg("gm", "Auto Reload")
 			timer.Simple(1, function()
 				game.ConsoleCommand("changelevel " .. GetMapNameDB() .. "\n")
 			end)
 		elseif _time >= _changelevel-30 then
 			local _str = "Auto Reload in " .. _changelevel-_time .. " sec"
-			printGM("gm", _str)
+			YRP.msg("gm", _str)
 			net.Start("yrp_info2")
 				net.WriteString(_str)
 			net.Broadcast()

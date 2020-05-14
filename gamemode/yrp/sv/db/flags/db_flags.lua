@@ -19,9 +19,9 @@ function AddCustomFlag(name, typ)
 		local _found = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. name .. "' AND string_type = '" .. typ .. "'")
 		if !_found then
 			SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_type", "'" .. name .. "', '" .. typ .. "'")
-			printGM("note", "Custom Flag " .. name .. " (" .. typ .. ") added.")
+			YRP.msg("note", "Custom Flag " .. name .. " (" .. typ .. ") added.")
 		else
-			--printGM("note", "Custom Flag " .. name .. " (" .. typ .. ") already exists.")
+			--YRP.msg("note", "Custom Flag " .. name .. " (" .. typ .. ") already exists.")
 		end
 	end
 end

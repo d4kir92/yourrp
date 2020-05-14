@@ -111,7 +111,7 @@ net.Receive("whitelistPlayer", function(len, ply)
 			SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
 			SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', 'Role: " .. DBRole.string_name .. "'")
 		else
-			printGM("note", "whitelistPlayer FAILED! CALL DEVS")
+			YRP.msg("note", "whitelistPlayer FAILED! CALL DEVS")
 		end
 	end
 	sendRoleWhitelist(ply)

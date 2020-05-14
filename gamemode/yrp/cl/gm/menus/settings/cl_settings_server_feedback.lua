@@ -16,7 +16,7 @@ function GetAvatarUrl(steamid)
 			end
 		end,
 		function(error)
-			printGM("gm", "GetAvatarUrl ERROR: " .. error)
+			YRP.msg("gm", "GetAvatarUrl ERROR: " .. error)
 		end
 	)
 end

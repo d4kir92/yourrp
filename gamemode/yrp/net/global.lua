@@ -357,42 +357,42 @@ if SERVER then
 		YRP_NW_Globals["FLOAT"] = YRP_NW_Globals["FLOAT"] or {}
 		YRP_NW_Globals["TABLE"] = YRP_NW_Globals["TABLE"] or {}
 	
-		timer.Simple(4, function()
+		timer.Simple(2, function()
 			for i, v in pairs(YRP_NW_Globals["BOOL"]) do
 				SendGlobalDBool(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 15)
 		end)
 
-		timer.Simple(6, function()
+		timer.Simple(4, function()
 			for i, v in pairs(YRP_NW_Globals["STRING"]) do
 				SendGlobalDString(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 30)
 		end)
 
-		timer.Simple(8, function()
+		timer.Simple(6, function()
 			for i, v in pairs(YRP_NW_Globals["INT"]) do
 				SendGlobalDInt(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 45)
 		end)
 
-		timer.Simple(10, function()
+		timer.Simple(8, function()
 			for i, v in pairs(YRP_NW_Globals["FLOAT"]) do
 				SendGlobalDFloat(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 60)
 		end)
 
-		timer.Simple(12, function()
+		timer.Simple(10, function()
 			for i, v in pairs(YRP_NW_Globals["TABLE"]) do
 				SendGlobalDTable(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 75)
 		end)
 
-		timer.Simple(14, function()
+		timer.Simple(12, function()
 			ply:SetDInt("yrp_load_glo", 100)
 
 			sending = false

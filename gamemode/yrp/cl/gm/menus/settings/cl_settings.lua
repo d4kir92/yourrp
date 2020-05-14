@@ -90,7 +90,7 @@ function F8RequireUG(site, usergroups)
 end
 
 concommand.Add("yrp_open_settings", function(ply, cmd, args)
-	printGM( "gm", "Open settings window" )
+	YRP.msg( "gm", "Open settings window" )
 	OpenSettings()
 end)
 

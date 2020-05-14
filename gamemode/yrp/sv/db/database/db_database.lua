@@ -13,15 +13,15 @@ local HANDLER_DATABASE = {}
 
 function RemFromHandler_Database(ply)
 	table.RemoveByValue(HANDLER_DATABASE, ply)
-	printGM("gm", ply:YRPName() .. " disconnected from Database")
+	YRP.msg("gm", ply:YRPName() .. " disconnected from Database")
 end
 
 function AddToHandler_Database(ply)
 	if !table.HasValue(HANDLER_DATABASE, ply) then
 		table.insert(HANDLER_DATABASE, ply)
-		printGM("gm", ply:YRPName() .. " connected to Database")
+		YRP.msg("gm", ply:YRPName() .. " connected to Database")
 	else
-		printGM("gm", ply:YRPName() .. " already connected to Database")
+		YRP.msg("gm", ply:YRPName() .. " already connected to Database")
 	end
 end
 
@@ -97,7 +97,7 @@ function GetBackupCreateTime()
 			return 60
 		end
 	else
-		printGM("note", "GetBackupCreateTime FAILED")
+		YRP.msg("note", "GetBackupCreateTime FAILED")
 		return 60
 	end
 end
@@ -108,7 +108,7 @@ function CreateYRPBackupsFolder()
 		if file.Exists("yrp_backups", "DATA") then
 			return true
 		else
-			printGM("note", "yrp_backups folder failed to create")
+			YRP.msg("note", "yrp_backups folder failed to create")
 			return false
 		end
 	else
@@ -117,7 +117,7 @@ function CreateYRPBackupsFolder()
 end
 
 function RemoveOldBackups()
-	printGM("db", "[BACKUP] Remove old ones")
+	YRP.msg("db", "[BACKUP] Remove old ones")
 	if CreateYRPBackupsFolder() then
 		local backups = file.Find("yrp_backups/sv_backup_*.txt", "DATA")
 		local _remove_after = sql.Query("SELECT int_backup_delete FROM yrp_sql WHERE uniqueID = 1;")
@@ -125,19 +125,19 @@ function RemoveOldBackups()
 		for i, fi in pairs(backups) do
 			if os.time() - (_remove_after * 60 * 60 * 24) > file.Time("yrp_backups/" .. fi, "DATA") then
 				file.Delete("yrp_backups/" .. fi, "DATA")
-				printGM("note", "[BACKUP] " .. "Removed: " .. fi)
+				YRP.msg("note", "[BACKUP] " .. "Removed: " .. fi)
 			end
 		end
 	end
 end
 
 function CreateBackup()
-	printGM("db", "[BACKUP] Create backup")
+	YRP.msg("db", "[BACKUP] Create backup")
 	if CreateYRPBackupsFolder() then
 		local _fi = "yrp_backups/" .. "sv" .. "_" .. "backup" .. "_" .. os.time() .. "___" ..  os.date("%Y_%m_%d___%H_%M_%S", os.time()) .. ".txt"
 		file.Write(_fi, file.Read("sv.db", "GAME"))
 		if !file.Exists(_fi, "DATA") then
-			printGM("note", "Failed to create")
+			YRP.msg("note", "Failed to create")
 		end
 	end
 end

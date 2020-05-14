@@ -62,7 +62,7 @@ function teleportToReleasepoint(ply)
 		ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
 	else
 		local _str = YRP.lang_string("LID_noreleasepoint")
-		printGM("note", "[teleportToReleasepoint] " .. _str)
+		YRP.msg("note", "[teleportToReleasepoint] " .. _str)
 
 		net.Start("yrp_noti")
 			net.WriteString("noreleasepoint")
@@ -127,7 +127,7 @@ function teleportToJailpoint(ply, tim, police)
 			end
 		else
 			local _str = YRP.lang_string("LID_nojailpoint")
-			printGM("note", "[teleportToJailpoint] " .. _str)
+			YRP.msg("note", "[teleportToJailpoint] " .. _str)
 
 			net.Start("yrp_noti")
 				net.WriteString("nojailpoint")
@@ -164,14 +164,14 @@ net.Receive("dbAddJail", function(len, ply)
 
 				local _tmpTable = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
 
-				printGM("note", p:Nick() .. " added to jail")
+				YRP.msg("note", p:Nick() .. " added to jail")
 
 				p:SetDInt("jailtime", _tmpTable[1].time)
 				timer.Simple(0.02, function()
 					p:SetDBool("injail", true)
 				end)
 			else
-				printGM("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
+				YRP.msg("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
 			end
 			break
 		end

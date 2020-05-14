@@ -140,7 +140,7 @@ local oldfont = ""
 function changeFontSize()
 	if YRP.GetFont() != oldfont then
 		oldfont = YRP.GetFont()
-		printGM("db", "changeFontSize")
+		YRP.msg("db", "changeFontSize")
 
 		for s = 4, 100 do
 			yrp_create_font("Y_" .. s .. "_500", YRP.GetFont(), s, 500, false)

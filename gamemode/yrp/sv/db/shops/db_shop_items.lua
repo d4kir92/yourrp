@@ -46,7 +46,7 @@ util.AddNetworkString("shop_item_add")
 net.Receive("shop_item_add", function(len, ply)
 	local _catID = net.ReadString()
 	local _new = SQL_INSERT_INTO(_db_name, "categoryID", _catID)
-	printGM("db", "shop_item_add: " .. db_worked(_new))
+	YRP.msg("db", "shop_item_add: " .. db_worked(_new))
 	send_shop_items(ply, _catID)
 end)
 
@@ -55,7 +55,7 @@ net.Receive("shop_item_rem", function(len, ply)
 	local _uid = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = SQL_DELETE_FROM(_db_name, "uniqueID = " .. _uid)
-	printGM("db", "shop_item_rem: " .. db_worked(_new))
+	YRP.msg("db", "shop_item_rem: " .. db_worked(_new))
 	send_shop_items(ply, _catID)
 end)
 
@@ -65,7 +65,7 @@ net.Receive("shop_item_edit_name", function(len, ply)
 	local _new_name = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = SQL_UPDATE(_db_name, "name = '" .. SQL_STR_IN(_new_name) .. "'", "uniqueID = " .. _uid)
-	printGM("db", "shop_item_edit_name: " .. db_worked(_new))
+	YRP.msg("db", "shop_item_edit_name: " .. db_worked(_new))
 end)
 
 util.AddNetworkString("shop_item_edit_desc")
@@ -74,7 +74,7 @@ net.Receive("shop_item_edit_desc", function(len, ply)
 	local _new_desc = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = SQL_UPDATE(_db_name, "description = '" .. SQL_STR_IN(_new_desc) .. "'", "uniqueID = " .. _uid)
-	printGM("db", "shop_item_edit_desc: " .. db_worked(_new))
+	YRP.msg("db", "shop_item_edit_desc: " .. db_worked(_new))
 end)
 
 util.AddNetworkString("shop_item_edit_price")
@@ -83,7 +83,7 @@ net.Receive("shop_item_edit_price", function(len, ply)
 	local _new_price = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = SQL_UPDATE(_db_name, "price = '" .. SQL_STR_IN(_new_price) .. "'", "uniqueID = " .. _uid)
-	printGM("db", "shop_item_edit_price: " .. db_worked(_new))
+	YRP.msg("db", "shop_item_edit_price: " .. db_worked(_new))
 end)
 
 util.AddNetworkString("shop_item_edit_level")
@@ -92,7 +92,7 @@ net.Receive("shop_item_edit_level", function(len, ply)
 	local _new_level = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = SQL_UPDATE(_db_name, "int_level = '" .. _new_level .. "'", "uniqueID = " .. _uid)
-	printGM("db", "shop_item_edit_level: " .. db_worked(_new))
+	YRP.msg("db", "shop_item_edit_level: " .. db_worked(_new))
 end)
 
 util.AddNetworkString("shop_item_edit_quan")
@@ -101,7 +101,7 @@ net.Receive("shop_item_edit_quan", function(len, ply)
 	local _new_quan = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = SQL_UPDATE(_db_name, "quantity = '" .. _new_quan .. "'", "uniqueID = " .. _uid)
-	printGM("db", "shop_item_edit_quan: " .. db_worked(_new))
+	YRP.msg("db", "shop_item_edit_quan: " .. db_worked(_new))
 end)
 
 util.AddNetworkString("shop_item_edit_cool")
@@ -110,7 +110,7 @@ net.Receive("shop_item_edit_cool", function(len, ply)
 	local _new_cool = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = SQL_UPDATE(_db_name, "cooldown = '" .. SQL_STR_IN(_new_cool) .. "'", "uniqueID = " .. _uid)
-	printGM("db", "shop_item_edit_cool: " .. db_worked(_new))
+	YRP.msg("db", "shop_item_edit_cool: " .. db_worked(_new))
 end)
 
 util.AddNetworkString("shop_item_edit_lice")
@@ -119,7 +119,7 @@ net.Receive("shop_item_edit_lice", function(len, ply)
 	local _new_lice = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = SQL_UPDATE(_db_name, "licenseID = '" .. _new_lice .. "'", "uniqueID = " .. _uid)
-	printGM("db", "shop_item_edit_lice: " .. db_worked(_new))
+	YRP.msg("db", "shop_item_edit_lice: " .. db_worked(_new))
 	local _test = SQL_SELECT(_db_name, "licenseID", "uniqueID = " .. _uid)
 end)
 
@@ -129,7 +129,7 @@ net.Receive("shop_item_edit_perm", function(len, ply)
 	local _new_perm = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = SQL_UPDATE(_db_name, "permanent = '" .. SQL_STR_IN(_new_perm) .. "'", "uniqueID = " .. _uid)
-	printGM("db", "shop_item_edit_perm: " .. db_worked(_new))
+	YRP.msg("db", "shop_item_edit_perm: " .. db_worked(_new))
 end)
 
 util.AddNetworkString("shop_get_items_storage")
@@ -181,11 +181,11 @@ net.Receive("shop_item_edit_base", function(len, ply)
 
 	local _new = SQL_UPDATE(_db_name, "WorldModel = '" .. _wm .. "', ClassName = '" .. _cn .. "', PrintName = '" .. SQL_STR_IN(_pn) .. "', type = '" .. _type .. "'", "uniqueID = " .. _uid)
 
-	printGM("db", "shop_item_edit_base: " .. db_worked(_new))
+	YRP.msg("db", "shop_item_edit_base: " .. db_worked(_new))
 end)
 
 function SpawnVehicle(item, pos, ang)
-	printGM("gm", "SpawnVehicle(" .. tostring(item) .. ", " .. tostring(pos) .. ", " .. tostring(ang) .. ")")
+	YRP.msg("gm", "SpawnVehicle(" .. tostring(item) .. ", " .. tostring(pos) .. ", " .. tostring(ang) .. ")")
 	local vehicles = get_all_vehicles()
 	local vehicle = {}
 	local _custom = ""
@@ -196,7 +196,7 @@ function SpawnVehicle(item, pos, ang)
 			vehicle = v
 
 			if v.Custom == "simfphys" then
-				printGM("gm", "[SpawnVehicle] simfphys vehicle")
+				YRP.msg("gm", "[SpawnVehicle] simfphys vehicle")
 				local spawnname = item.ClassName
 				local _vehicle = list.Get("simfphys_vehicles")[spawnname]
 				local car = simfphys.SpawnVehicleSimple(v.ClassName, pos, ang)
@@ -204,7 +204,7 @@ function SpawnVehicle(item, pos, ang)
 
 				timer.Simple(0.2, function()
 					if simfphys ~= nil and simfphys.RegisterEquipment ~= nil then
-						printGM("gm", "[SpawnVehicle] -> simfphys armored vehilce")
+						YRP.msg("gm", "[SpawnVehicle] -> simfphys armored vehilce")
 						simfphys.RegisterEquipment(car)
 					end
 				end)
@@ -240,7 +240,7 @@ function SpawnVehicle(item, pos, ang)
 
 		return car
 	else
-		printGM("note", "[SpawnVehicle] vehicle not available anymore")
+		YRP.msg("note", "[SpawnVehicle] vehicle not available anymore")
 
 		return NULL
 	end
@@ -289,7 +289,7 @@ function spawnItem(ply, item, duid)
 		local SP = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. SPUID .. "'")
 		if wk(SP) then
 			SP = SP[1]
-			printGM("gm", "[spawnItem] Item To Storagepoint")
+			YRP.msg("gm", "[spawnItem] Item To Storagepoint")
 
 			local pos = string.Explode(",", SP.position)
 			TARGETPOS = Vector(pos[1], pos[2], pos[3])
@@ -298,7 +298,7 @@ function spawnItem(ply, item, duid)
 
 	if TARGETPOS == nil then
 		TARGETPOS = ply:GetPos()
-		printGM("gm", "[spawnItem] Item To Player")
+		YRP.msg("gm", "[spawnItem] Item To Player")
 	end
 
 	TARGETPOS = TARGETPOS + Vector(0, 0, 50)
@@ -361,7 +361,7 @@ function spawnItem(ply, item, duid)
 
 				ent:SetDString( "item_uniqueID", item.uniqueID )
 
-				printGM("gm", "[spawnItem] Spawned 1")
+				YRP.msg("gm", "[spawnItem] Spawned 1")
 
 				return true, ent
 			else
@@ -377,7 +377,7 @@ function spawnItem(ply, item, duid)
 					
 					ent:SetDString( "item_uniqueID", item.uniqueID )
 
-					printGM("gm", "[spawnItem] Spawned 2")
+					YRP.msg("gm", "[spawnItem] Spawned 2")
 					return true, ent
 				else
 					YRP.msg("note", "Not valid " .. item.ClassName)
@@ -391,7 +391,7 @@ function spawnItem(ply, item, duid)
 
 				ent:SetDString("item_uniqueID", item.uniqueID)
 
-				printGM("gm", "[spawnItem] Spawned 3")
+				YRP.msg("gm", "[spawnItem] Spawned 3")
 
 				--ent:SetOwner(ply)
 				ent:SetDEntity("yrp_owner", ply)
@@ -425,7 +425,7 @@ function spawnItem(ply, item, duid)
 
 					ent:SetDString("item_uniqueID", item.uniqueID)
 			
-					printGM("gm", "[spawnItem] Spawned 4")
+					YRP.msg("gm", "[spawnItem] Spawned 4")
 
 					--ent:SetOwner(ply)
 					ent:SetDEntity("yrp_owner", ply)
@@ -454,7 +454,7 @@ net.Receive("item_buy", function(len, ply)
 		_item.name = SQL_STR_OUT(tostring(_item.name))
 
 		if ply:canAfford(tonumber(_item.price)) then
-			printGM("gm", ply:YRPName() .. " buyed " .. _item.name)
+			YRP.msg("gm", ply:YRPName() .. " buyed " .. _item.name)
 
 			if _item.type == "licenses" then
 				ply:AddLicense(_item.ClassName)
@@ -474,7 +474,7 @@ net.Receive("item_buy", function(len, ply)
 						end
 					end
 				else
-					printGM("note", "Failed to spawn item from shop " .. tostring(_spawned))
+					YRP.msg("note", "Failed to spawn item from shop " .. tostring(_spawned))
 					return false
 				end
 			end

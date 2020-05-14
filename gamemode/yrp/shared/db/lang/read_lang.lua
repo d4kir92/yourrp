@@ -28,6 +28,6 @@ function YRP.read_lang(filepath)
 			end
 		end
 	else
-		printGM("note", "FILE NOT FOUND (" .. tostring(filepath) .. ")")
+		YRP.msg("note", "FILE NOT FOUND (" .. tostring(filepath) .. ")")
 	end
 end

@@ -233,15 +233,15 @@ local HANDLER_USERGROUPS = {}
 
 function RemFromHandler_UserGroups(ply)
 	table.RemoveByValue(HANDLER_USERGROUPS, ply)
-	printGM("gm", ply:YRPName() .. " disconnected from UserGroups")
+	YRP.msg("gm", ply:YRPName() .. " disconnected from UserGroups")
 end
 
 function AddToHandler_UserGroups(ply)
 	if !table.HasValue(HANDLER_USERGROUPS, ply) then
 		table.insert(HANDLER_USERGROUPS, ply)
-		printGM("gm", ply:YRPName() .. " connected to UserGroups")
+		YRP.msg("gm", ply:YRPName() .. " connected to UserGroups")
 	else
-		printGM("gm", ply:YRPName() .. " already connected to UserGroups")
+		YRP.msg("gm", ply:YRPName() .. " already connected to UserGroups")
 	end
 end
 
@@ -283,14 +283,14 @@ util.AddNetworkString("Connect_Settings_UserGroups")
 net.Receive("Connect_Settings_UserGroups", function(len, ply)
 	GetULXUserGroups()
 
-	printGM("gm", "Connect_Settings_UserGroups => " .. ply:YRPName())
+	YRP.msg("gm", "Connect_Settings_UserGroups => " .. ply:YRPName())
 	if ply:CanAccess("bool_usergroups") then
 		AddToHandler_UserGroups(ply)
 		local _usergroups = {}
 		for k, v in pairs(player.GetAll()) do
 			local _ug = string.lower(v:GetUserGroup())
 			if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug .. "'") == nil then
-				printGM("note", "usergroup: " .. _ug .. " not found, adding to db")
+				YRP.msg("note", "usergroup: " .. _ug .. " not found, adding to db")
 				SQL_INSERT_INTO(DATABASE_NAME, "string_name", "'" .. _ug .. "'")
 			end
 		end
@@ -317,9 +317,9 @@ function RemFromHandler_UserGroup(ply, uid)
 	HANDLER_USERGROUP[uid] = HANDLER_USERGROUP[uid] or {}
 	if table.HasValue(HANDLER_USERGROUP[uid], ply) then
 		table.RemoveByValue(HANDLER_USERGROUP[uid], ply)
-		printGM("gm", ply:YRPName() .. " disconnected from UserGroup (" .. uid .. ")")
+		YRP.msg("gm", ply:YRPName() .. " disconnected from UserGroup (" .. uid .. ")")
 	else
-		printGM("gm", ply:YRPName() .. " not connected to UserGroup (" .. uid .. ")")
+		YRP.msg("gm", ply:YRPName() .. " not connected to UserGroup (" .. uid .. ")")
 	end
 end
 
@@ -327,9 +327,9 @@ function AddToHandler_UserGroup(ply, uid)
 	HANDLER_USERGROUP[uid] = HANDLER_USERGROUP[uid] or {}
 	if !table.HasValue(HANDLER_USERGROUP[uid], ply) then
 		table.insert(HANDLER_USERGROUP[uid], ply)
-		printGM("gm", ply:YRPName() .. " connected to UserGroup (" .. uid .. ")")
+		YRP.msg("gm", ply:YRPName() .. " connected to UserGroup (" .. uid .. ")")
 	else
-		printGM("gm", ply:YRPName() .. " already connected to UserGroup (" .. uid .. ")")
+		YRP.msg("gm", ply:YRPName() .. " already connected to UserGroup (" .. uid .. ")")
 	end
 end
 
@@ -361,7 +361,7 @@ end)
 util.AddNetworkString("usergroup_add")
 net.Receive("usergroup_add", function(len, ply)
 	SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
-	printGM("gm", ply:YRPName() .. " added a new UserGroup")
+	YRP.msg("gm", ply:YRPName() .. " added a new UserGroup")
 
 	SortUserGroups()
 
@@ -384,7 +384,7 @@ net.Receive("usergroup_rem", function(len, ply)
 
 	SortUserGroups()
 
-	printGM("gm", ply:YRPName() .. " removed UserGroup (" .. uid .. ")")
+	YRP.msg("gm", ply:YRPName() .. " removed UserGroup (" .. uid .. ")")
 
 	for i, pl in pairs(HANDLER_USERGROUPS) do
 		net.Start("usergroup_rem")
@@ -427,13 +427,13 @@ function Player:CanAccess(site)
 				end
 			end
 			self:NoAccess(lsite, usergroups)
-			printGM("note", self:YRPName() .. " can NOT access " .. lsite .. "")
+			YRP.msg("note", self:YRPName() .. " can NOT access " .. lsite .. "")
 		elseif _b then
-			printGM("db", self:YRPName() .. " can access " .. lsite .. "")
+			YRP.msg("db", self:YRPName() .. " can access " .. lsite .. "")
 		end
 		return tobool(_b)
 	end
-	printGM("note", self:YRPName() .. " can NOT access " .. lsite .. "")
+	YRP.msg("note", self:YRPName() .. " can NOT access " .. lsite .. "")
 	self:NoAccess(lsite)
 	return false
 end
@@ -445,7 +445,7 @@ net.Receive("usergroup_update_string_name", function(len, ply)
 	local string_name = string.lower(net.ReadString())
 	SQL_UPDATE(DATABASE_NAME, "string_name = '" .. string_name .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated name of usergroup (" .. uid .. ") to [" .. string_name .. "]")
+	YRP.msg("db", ply:YRPName() .. " updated name of usergroup (" .. uid .. ") to [" .. string_name .. "]")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		if pl != ply then
@@ -462,7 +462,7 @@ net.Receive("usergroup_update_string_color", function(len, ply)
 	local string_color = net.ReadString()
 	SQL_UPDATE(DATABASE_NAME, "string_color = '" .. string_color .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated color of usergroup (" .. uid .. ") to [" .. string_color .. "]")
+	YRP.msg("db", ply:YRPName() .. " updated color of usergroup (" .. uid .. ") to [" .. string_color .. "]")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		if pl != ply then
@@ -479,7 +479,7 @@ net.Receive("usergroup_update_icon", function(len, ply)
 	local string_icon = net.ReadString()
 	SQL_UPDATE(DATABASE_NAME, "string_icon = '" .. string_icon .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated string_icon of usergroup (" .. uid .. ") to [" .. string_icon .. "]")
+	YRP.msg("db", ply:YRPName() .. " updated string_icon of usergroup (" .. uid .. ") to [" .. string_icon .. "]")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		if pl != ply then
@@ -496,7 +496,7 @@ net.Receive("usergroup_update_string_sweps", function(len, ply)
 	local string_sweps = net.ReadString()
 	SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. string_sweps .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated string_sweps of usergroup (" .. uid .. ") to [" .. string_sweps .. "]")
+	YRP.msg("db", ply:YRPName() .. " updated string_sweps of usergroup (" .. uid .. ") to [" .. string_sweps .. "]")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_update_string_sweps")
@@ -511,7 +511,7 @@ net.Receive("usergroup_update_string_nonesweps", function(len, ply)
 	local string_nonesweps = net.ReadString()
 	SQL_UPDATE(DATABASE_NAME, "string_nonesweps = '" .. string_nonesweps .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated string_nonesweps of usergroup (" .. uid .. ") to [" .. string_nonesweps .. "]")
+	YRP.msg("db", ply:YRPName() .. " updated string_nonesweps of usergroup (" .. uid .. ") to [" .. string_nonesweps .. "]")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_update_string_nonesweps")
@@ -526,7 +526,7 @@ net.Receive("usergroup_update_entities", function(len, ply)
 	local string_entities = net.ReadString()
 	SQL_UPDATE(DATABASE_NAME, "string_entities = '" .. string_entities .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated string_entities of usergroup (" .. uid .. ") to [" .. string_entities .. "]")
+	YRP.msg("db", ply:YRPName() .. " updated string_entities of usergroup (" .. uid .. ") to [" .. string_entities .. "]")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_update_entities")
@@ -564,7 +564,7 @@ net.Receive("usergroup_add_sent", function(len, ply)
 
 	SQL_UPDATE(DATABASE_NAME, "sents = '" .. sents .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " added sent [ " .. sent .. " ] for usergroup (" .. uid .. ")")
+	YRP.msg("db", ply:YRPName() .. " added sent [ " .. sent .. " ] for usergroup (" .. uid .. ")")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_add_sent")
@@ -591,7 +591,7 @@ net.Receive("usergroup_rem_sent", function(len, ply)
 
 	SQL_UPDATE(DATABASE_NAME, "sents = '" .. sents .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " removed sent [ " .. sent .. " ] for usergroup (" .. uid .. ")")
+	YRP.msg("db", ply:YRPName() .. " removed sent [ " .. sent .. " ] for usergroup (" .. uid .. ")")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_rem_sent")
@@ -655,7 +655,7 @@ function UGUpdateInt(ply, uid, name, value)
 	name = string.lower(name)
 	SQL_UPDATE(DATABASE_NAME, name .. " = '" .. value .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated " .. name .. " of usergroup (" .. uid .. ") to [" .. value .. "]")
+	YRP.msg("db", ply:YRPName() .. " updated " .. name .. " of usergroup (" .. uid .. ") to [" .. value .. "]")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_update_" .. name)
@@ -680,7 +680,7 @@ function UGCheckBox(ply, uid, name, value)
 	name = string.lower(name)
 	SQL_UPDATE(DATABASE_NAME, name .. " = '" .. value .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated " .. name .. " of usergroup (" .. uid .. ") to [" .. value .. "]")
+	YRP.msg("db", ply:YRPName() .. " updated " .. name .. " of usergroup (" .. uid .. ") to [" .. value .. "]")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_update_" .. name)
@@ -1065,7 +1065,7 @@ hook.Add("PlayerSpawnVehicle", "yrp_vehicles_restriction", function(pl, model, n
 			if tobool(_tmp.bool_vehicles) then
 				return true
 			else
-				printGM("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a vehicle.")
+				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a vehicle.")
 
 				net.Start("yrp_info")
 					net.WriteString("vehicles")
@@ -1085,7 +1085,7 @@ hook.Add("PlayerGiveSWEP", "yrp_weapons_restriction", function(pl)
 			if tobool(_tmp.bool_weapons) then
 				return true
 			else
-				printGM("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a weapon.")
+				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a weapon.")
 
 				net.Start("yrp_info")
 					net.WriteString("weapon")
@@ -1171,7 +1171,7 @@ hook.Add("PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
 			if tobool(_tmp.bool_entities) then
 				return true
 			else
-				printGM("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn an entity.")
+				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn an entity.")
 
 				net.Start("yrp_info")
 					net.WriteString("entities")
@@ -1191,7 +1191,7 @@ hook.Add("PlayerSpawnEffect", "yrp_effects_restriction", function(pl)
 			if tobool(_tmp.bool_effects) then
 				return true
 			else
-				printGM("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn an effect.")
+				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn an effect.")
 
 				net.Start("yrp_info")
 					net.WriteString("effects")
@@ -1211,7 +1211,7 @@ hook.Add("PlayerSpawnNPC", "yrp_npcs_restriction", function(pl)
 			if tobool(_tmp.bool_npcs) then
 				return true
 			else
-				printGM("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a npc.")
+				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a npc.")
 
 				net.Start("yrp_info")
 					net.WriteString("npcs")
@@ -1231,7 +1231,7 @@ hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl)
 			if tobool(_tmp.bool_props) then
 				return true
 			else
-				printGM("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a prop.")
+				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a prop.")
 
 				net.Start("yrp_info")
 					net.WriteString("props")
@@ -1239,7 +1239,7 @@ hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl)
 				return false
 			end
 		else
-			printGM("db", "[PlayerSpawnProp] failed! UserGroup not found in database.")
+			YRP.msg("db", "[PlayerSpawnProp] failed! UserGroup not found in database.")
 			return false
 		end
 	end
@@ -1253,7 +1253,7 @@ hook.Add("PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function(pl, model)
 			if tobool(_tmp.bool_ragdolls) then
 				return true
 			else
-				printGM("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a ragdoll.")
+				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a ragdoll.")
 
 				net.Start("yrp_info")
 					net.WriteString("ragdolls")
@@ -1262,7 +1262,7 @@ hook.Add("PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function(pl, model)
 				return false
 			end
 		else
-			printGM("db", "[PlayerSpawnRagdoll] failed! UserGroup not found in database.")
+			YRP.msg("db", "[PlayerSpawnRagdoll] failed! UserGroup not found in database.")
 		end
 	end
 end)
@@ -1437,7 +1437,7 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 					RenderNoClip(pl)
 					return true
 				else
-					printGM("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to noclip.")
+					YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to noclip.")
 
 					net.Start("yrp_info")
 						net.WriteString("noclip")
@@ -1446,7 +1446,7 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 					return false
 				end
 			else
-				printGM("db", "[noclip] failed! UserGroup not found in database.")
+				YRP.msg("db", "[noclip] failed! UserGroup not found in database.")
 				return false
 			end
 		end
@@ -1471,7 +1471,6 @@ function GM:PhysgunPickup(pl, ent)
 	end
 	local tabUsergroup = SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer, bool_physgunpickupignoreblacklist", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 	if wk(tabUsergroup) then
-		pTab(tabUsergroup)
 		tabUsergroup = tabUsergroup[1]
 		if tobool(tabUsergroup.bool_physgunpickup) then
 			if EntBlacklisted(ent) and !tobool(tabUsergroup.bool_physgunpickupignoreblacklist) then
@@ -1509,7 +1508,7 @@ function GM:PhysgunPickup(pl, ent)
 			return false
 		end
 	else
-		printGM("db", "[PhysgunPickup] failed! UserGroup not found in database.")
+		YRP.msg("db", "[PhysgunPickup] failed! UserGroup not found in database.")
 		return false
 	end
 	return false
@@ -1528,7 +1527,7 @@ function GM:GravGunPunt(pl, ent)
 			return false
 		end
 	else
-		printGM("db", "[GravGunPunt] failed! UserGroup not found in database.")
+		YRP.msg("db", "[GravGunPunt] failed! UserGroup not found in database.")
 		return false
 	end
 	return false
@@ -1536,7 +1535,7 @@ end
 
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if ea(pl) and wk(tool) then
-		--printGM("gm", "CanTool: " .. tool)
+		--YRP.msg("gm", "CanTool: " .. tool)
 		local tools = {}
 		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(tab) then
@@ -1566,7 +1565,7 @@ end)
 
 hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
 	if ea(pl) and wk(tool) then
-		--printGM("gm", "CanProperty: " .. property)
+		--YRP.msg("gm", "CanProperty: " .. property)
 		local tools = {}
 		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(tab) then
@@ -1595,7 +1594,7 @@ hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
 end)
 
 function Player:UserGroupLoadout()
-	--printGM("gm", self:SteamName() .. " UserGroupLoadout")
+	--YRP.msg("gm", self:SteamName() .. " UserGroupLoadout")
 	local UG = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. string.lower(self:GetUserGroup()) .. "'")
 	if wk(UG) then
 		UG = UG[1]
@@ -1782,7 +1781,7 @@ net.Receive("usergroup_update_string_licenses", function(len, ply)
 	local string_licenses = string.lower(net.ReadString())
 	SQL_UPDATE(DATABASE_NAME, "string_licenses = '" .. string_licenses .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated licenses of usergroup (" .. uid .. ") to [" .. string_licenses .. "]")
+	YRP.msg("db", ply:YRPName() .. " updated licenses of usergroup (" .. uid .. ") to [" .. string_licenses .. "]")
 end)
 
 util.AddNetworkString("usergroup_update_string_tools")
@@ -1791,7 +1790,7 @@ net.Receive("usergroup_update_string_tools", function(len, ply)
 	local string_tools = string.lower(net.ReadString())
 	SQL_UPDATE(DATABASE_NAME, "string_tools = '" .. string_tools .. "'", "uniqueID = '" .. uid .. "'")
 
-	printGM("db", ply:YRPName() .. " updated tools of usergroup (" .. uid .. ") to [" .. string_tools .. "]")
+	YRP.msg("db", ply:YRPName() .. " updated tools of usergroup (" .. uid .. ") to [" .. string_tools .. "]")
 end)
 
 

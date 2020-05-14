@@ -19,8 +19,8 @@ end
 
 function Player:getPreferredJobModel(teamNr)
 	--Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
-	printGM("darkrp", "getPreferredJobModel(" .. tostring(teamNr) .. ")")
-	printGM("darkrp", DarkRP._not)
+	YRP.msg("darkrp", "getPreferredJobModel(" .. tostring(teamNr) .. ")")
+	YRP.msg("darkrp", DarkRP._not)
 	return ""
 end
 

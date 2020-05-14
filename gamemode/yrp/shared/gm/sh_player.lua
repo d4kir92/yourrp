@@ -100,7 +100,7 @@ function Player:GetPlyTab()
 				YRP.msg("note", "[GetPlyTab] LoadedGamemode failed [" .. tostring(steamid) .. "]" )
 			end
 		else
-			printGM("error", "[GetPlyTab] player is invalid. (" .. tostring(self:SteamID()) .. ") IsPlayer()?: " .. tostring(self:IsPlayer()))
+			YRP.msg("error", "[GetPlyTab] player is invalid. (" .. tostring(self:SteamID()) .. ") IsPlayer()?: " .. tostring(self:IsPlayer()))
 		end
 	end
 	return false
@@ -127,7 +127,7 @@ function Player:HasCharacterSelected()
 	if SERVER then
 		if self:IsValid() then
 			if self:GetDBool("finishedloadingcharacter", false) then
-				--printGM("note", self:YRPName() .. " HasCharacterSelected?")
+				--YRP.msg("note", self:YRPName() .. " HasCharacterSelected?")
 				local _ply_tab = self:GetPlyTab()
 				if wk(_ply_tab) and tostring(_ply_tab.CurrentCharacter) != "NULL" and _ply_tab.CurrentCharacter != NULL then
 					return true
@@ -215,7 +215,7 @@ function Player:CharID()
 	if self:IsBot() then
 		return 0
 	else
-		return tonumber(self:GetDInt("charid", -1))
+		return self:GetDInt("yrp_charid", -1)
 	end
 end
 
@@ -224,7 +224,7 @@ function Player:CheckMoney()
 		timer.Simple(4, function()
 			local _m = self:GetDString("money", "FAILED")
 			if _m == "FAILED" then
-				printGM("error", "CheckMoney failed")
+				YRP.msg("error", "CheckMoney failed")
 				return false
 			end
 			local _money = tonumber(_m)
@@ -233,7 +233,7 @@ function Player:CheckMoney()
 			end
 			_mb = self:GetDString("moneybank", "FAILED")
 			if _mb == "FAILED" then
-				printGM("error", "CheckMoney failed")
+				YRP.msg("error", "CheckMoney failed")
 				return false
 			end
 			local _moneybank = tonumber(_mb)
@@ -361,7 +361,7 @@ if SERVER then
 		self:SetDBool("iscasting", true)
 		timer.Create(self:SteamID() .. "castduration", tick, 0, function()
 
-			--printGM("note", self:GetDString("castname") .. " " .. tostring(self:GetDFloat("castcur")))
+			--YRP.msg("note", self:GetDString("castname") .. " " .. tostring(self:GetDFloat("castcur")))
 
 			--[[ Casting ]]--
 			if self:GetDInt("castmode") == 0 then

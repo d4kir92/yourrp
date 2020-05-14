@@ -2039,7 +2039,7 @@ function loadDoorTexts()
 				end
 			end
 		end)
-		printGM("gm", "loaded door texts")
+		YRP.msg("gm", "loaded door texts")
 	elseif loadattempts < 10 then
 		timer.Simple(2, function()
 			loadDoorTexts()

@@ -10,7 +10,7 @@ ICON_SIZE = 100
 --[[ SHARED ]]--
 
 function PrintStorage(tab)
-	printGM("db", tostring(tab))
+	YRP.msg("db", tostring(tab))
 	for y=1, #tab do
 		local _row = ""
 		for x=1, INV_MAXW do
@@ -20,9 +20,9 @@ function PrintStorage(tab)
 			end
 			_row = _row .. tostring(_item) .. "\t"
 		end
-		printGM("db", _row)
+		YRP.msg("db", _row)
 	end
-	printGM("db", "________________________________")
+	YRP.msg("db", "________________________________")
 end
 
 function distance(num1, num2)
@@ -89,7 +89,7 @@ function GetEntityItemSize(ent)
 			return _result
 		end
 	else
-		printGM("error", "GetEntityItemSize failed => ent not alive")
+		YRP.msg("error", "GetEntityItemSize failed => ent not alive")
 	end
 	return false
 end

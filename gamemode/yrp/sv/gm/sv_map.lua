@@ -216,7 +216,7 @@ function get_coords()
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
 		if tries < 5 then
 			timer.Simple(5, function()
-				printGM("note", "get_map_coords() retry")
+				YRP.msg("note", "get_map_coords() retry")
 				get_map_coords()
 			end)
 		end

@@ -54,7 +54,7 @@ function CreateEquipmentStorage(ply, typ, PID, w, h)
 end
 
 function SaveStorages(str)
-	printGM("db", "SaveStorages(" .. string.upper(tostring(str)) .. ")")
+	YRP.msg("db", "SaveStorages(" .. string.upper(tostring(str)) .. ")")
 	local _ents = ents.GetAll()
 	for i, ent in pairs(_ents) do
 		if ent:IsValid() and ent:GetDString("storage_uid", "") != "" and ent:IsWorldStorage() then
@@ -125,7 +125,7 @@ function Entity:InitStorage(w, h)
 			_storage = SQL_SELECT(_db_name, "*", "uniqueID = " .. _uid)
 		else
 			--[[ NEW STORAGE ]]--
-			printGM("note", "NEW STORAGE(" .. tostring(self) .. ", " .. sizew .. ", " .. sizeh .. ")")
+			YRP.msg("note", "NEW STORAGE(" .. tostring(self) .. ", " .. sizew .. ", " .. sizeh .. ")")
 			local _pos = string.Explode(" ", tostring(self:GetPos()))
 			local _posx = _pos[1]
 			local _posy = _pos[2]

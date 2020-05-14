@@ -80,7 +80,7 @@ function CreateTeamspeakContent(PARENT)
 	local ip = GetGlobalDString("text_social_teamspeak_ip", "")
 	local port = GetGlobalDString("text_social_teamspeak_port", "")
 	local query_port = GetGlobalDString("text_social_teamspeak_query_port", "")
-	printGM("gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
+	YRP.msg("gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
 
 	if !strEmpty(ip) then
 		if !strEmpty(port) and !strEmpty(query_port) then
@@ -97,7 +97,7 @@ function CreateTeamspeakContent(PARENT)
 			ipport:SetText(ip .. ":" .. port)
 			ipport:SetEditable(true)
 		else
-			printGM("note", "missing Port and QueryPort")
+			YRP.msg("note", "missing Port and QueryPort")
 		end
 	end
 end

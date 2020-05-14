@@ -7,15 +7,15 @@ local HANDLER_STATUS = {}
 
 function RemFromHandler_Console(ply)
 	table.RemoveByValue(HANDLER_STATUS, ply)
-	printGM("gm", ply:YRPName() .. " disconnected from Console")
+	YRP.msg("gm", ply:YRPName() .. " disconnected from Console")
 end
 
 function AddToHandler_Console(ply)
 	if !table.HasValue(HANDLER_STATUS, ply) then
 		table.insert(HANDLER_STATUS, ply)
-		printGM("gm", ply:YRPName() .. " connected to Console")
+		YRP.msg("gm", ply:YRPName() .. " connected to Console")
 	else
-		printGM("gm", ply:YRPName() .. " already connected to Console")
+		YRP.msg("gm", ply:YRPName() .. " already connected to Console")
 	end
 end
 

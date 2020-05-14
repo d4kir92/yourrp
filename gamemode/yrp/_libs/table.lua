@@ -6,12 +6,12 @@ function pTab(table, name)
 		name = name .. " "
 	end
 	name = name .. "(" .. tostring(table) .. ")"
-	printGM("ptab", name)
+	YRP.msg("ptab", name)
 
 	if istable(table) then
 		PrintTable(table)
 	else
-		printGM("ptab", "printTab " .. tostring(table) .. " is not a table!")
+		YRP.msg("ptab", "printTab " .. tostring(table) .. " is not a table!")
 	end
 end
 
@@ -21,7 +21,7 @@ function combineTables(tab1, tab2)
 			if item != nil and item != "nil" then
 				table.insert(tab1, item)
 			else
-				printGM("note", "combineTables: i: " .. tostring(i) .. " " .. tostring(item) .. " is nil")
+				YRP.msg("note", "combineTables: i: " .. tostring(i) .. " " .. tostring(item) .. " is nil")
 			end
 		end
 		for i, item in pairs(tab1) do
@@ -30,7 +30,7 @@ function combineTables(tab1, tab2)
 		end
 		return tab1
 	else
-		printGM("note", tostring(tab1) .. " and " .. tostring(tab2) .. " are not tables")
+		YRP.msg("note", tostring(tab1) .. " and " .. tostring(tab2) .. " are not tables")
 		return {}
 	end
 end
@@ -44,7 +44,7 @@ function combineStringTables(str1, str2)
 		local _tab1 = string.Explode(",", tostring(str1))
 		local _tab2 = string.Explode(",", tostring(str2))
 		local tab = combineTables(_tab1, _tab2)
-		printGM("note", "combineStringTables ERROR str1: " .. tostring(str1) .. " str2: " .. tostring(str2))
+		YRP.msg("note", "combineStringTables ERROR str1: " .. tostring(str1) .. " str2: " .. tostring(str2))
 		return ""
 	end
 end

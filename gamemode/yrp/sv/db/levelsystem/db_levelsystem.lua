@@ -104,6 +104,7 @@ net.Receive("update_ls_int_xp_per_revive", function(len, ply)
 end)
 
 function Player:ClearXP()
+	if !self:Alive() then return end
 	local charid = self:CharID()
 	local result = SQL_UPDATE("yrp_characters", "int_xp = " .. "0", "uniqueID = '" .. charid .. "'")
 	if result != nil then
@@ -114,10 +115,16 @@ function Player:ClearXP()
 end
 
 function Player:AddLevel(level)
+	if !self:Alive() then return end
 	local charid = self:CharID()
 	local curlvl = self:Level()
 	local minlvl = self:GetMinLevel()
 	local maxlvl = self:GetMaxLevel()
+
+	if charid <= 0 then
+		YRP.msg("error", "AddLevel FAILED #3: charid <= 0: " .. tostring(charid))
+		return
+	end
 
 	if level > 0 then
 		level = level - 1
@@ -149,12 +156,14 @@ function Player:AddLevel(level)
 end
 
 function Player:SetLevel(level)
+	if !self:Alive() then return end
 	local curlvl = self:Level()
 	self:ClearXP()
 	self:AddLevel(level - curlvl)
 end
 
 function Player:AddXP(xp)
+	if !self:Alive() then return end
 	xp = tonumber(xp)
 	local lvltab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	lvltab = lvltab[1]

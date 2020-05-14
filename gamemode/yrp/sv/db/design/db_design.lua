@@ -27,10 +27,10 @@ end
 local HUDS = {}
 function RegisterHUDDesign(tab)
 	if tab.name == nil then
-		printGM("note", "RegisterDesign Failed! Missing Design Name")
+		YRP.msg("note", "RegisterDesign Failed! Missing Design Name")
 		return false
 	elseif tab.author == nil then
-		printGM("note", "RegisterDesign Failed! Missing Design Author")
+		YRP.msg("note", "RegisterDesign Failed! Missing Design Author")
 		return false
 	end
 	HUDS[tab.name] = tab
@@ -91,7 +91,7 @@ function Player:DesignLoadout(from)
 	self:SetDInt("yrp_loading", 0)
 	self:HudLoadout()
 	self:InterfaceLoadout()
-	printGM("debug", "[DesignLoadout] " .. self:YRPName() .. " " .. from)
+	YRP.msg("debug", "[DesignLoadout] " .. self:YRPName() .. " " .. from)
 	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(setting) then
 		setting = setting[1]
@@ -123,7 +123,7 @@ end)
 util.AddNetworkString("change_hud_design")
 net.Receive("change_hud_design", function(len, ply)
 	local string_hud_design = net.ReadString()
-	printGM("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
+	YRP.msg("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
 	SQL_UPDATE(DATABASE_NAME, "string_hud_design = '" .. string_hud_design .. "'", "uniqueID = '1'")
 	for i, pl in pairs(player.GetAll()) do
 		pl:SetDString("string_hud_design", string_hud_design)
@@ -134,10 +134,10 @@ end)
 INTERFACES = INTERFACES or {}
 function RegisterInterfaceDesign(tab)
 	if tab.name == nil then
-		printGM("note", "RegisterDesign Failed! Missing Design Name")
+		YRP.msg("note", "RegisterDesign Failed! Missing Design Name")
 		return false
 	elseif tab.author == nil then
-		printGM("note", "RegisterDesign Failed! Missing Design Author")
+		YRP.msg("note", "RegisterDesign Failed! Missing Design Author")
 		return false
 	end
 	INTERFACES[tab.name] = tab
@@ -160,7 +160,7 @@ RegisterInterfaceDesign(IF_Blur)
 util.AddNetworkString("change_interface_design")
 net.Receive("change_interface_design", function(len, ply)
 	local string_interface_design = net.ReadString()
-	printGM("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
+	YRP.msg("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
 	SQL_UPDATE(DATABASE_NAME, "string_interface_design = '" .. string_interface_design .. "'", "uniqueID = '1'")
 	SetGlobalDString("string_interface_design", string_interface_design)
 
@@ -211,7 +211,7 @@ end)
 util.AddNetworkString("yrp_update_font")
 net.Receive("yrp_update_font", function(len, ply)
 	local string_fontname = net.ReadString()
-	printGM("db", "[DESIGN] string_fontname changed to " .. string_fontname)
+	YRP.msg("db", "[DESIGN] string_fontname changed to " .. string_fontname)
 	SQL_UPDATE(DATABASE_NAME, "string_fontname = '" .. string_fontname .. "'", "uniqueID = '1'")
 
 	for i, p in pairs(player.GetAll()) do

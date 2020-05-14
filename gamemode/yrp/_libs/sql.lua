@@ -12,13 +12,13 @@ function disk_full(error)
 			local lply = LocalPlayer()
 			ply:PrintMessage(HUD_PRINTTALK, "database or disk is full, please make more space!")
 			notification.AddLegacy("[YourRP] Database or disk is full, please make more space!", NOTIFY_ERROR, 40)
-			printGM("error", GetSQLModeName() .. ": " .. tostring(ply:SteamID()) .. " (database or disk is full)")
+			YRP.msg("error", GetSQLModeName() .. ": " .. tostring(ply:SteamID()) .. " (database or disk is full)")
 		end
 	end
 end
 
 function sql_show_last_error()
-	--printGM("db", "sql_show_last_error()")
+	--YRP.msg("db", "sql_show_last_error()")
 	local _last_error = tostring(sql.LastError()) or ""
 
 	if SERVER then
@@ -117,7 +117,7 @@ function db_int(int)
 	if isnumber(_int) then
 		return _int
 	else
-		printGM("error", GetSQLModeName() .. ": " .. tostring(int) .. " is not a number! return -1")
+		YRP.msg("error", GetSQLModeName() .. ": " .. tostring(int) .. " is not a number! return -1")
 
 		return -1
 	end
@@ -127,13 +127,13 @@ function db_drop_table(db_table)
 	local _result = sql.Query("DROP TABLE " .. db_table)
 
 	if _result != nil then
-		printGM("error", GetSQLModeName() .. ": " .. "db_drop_table " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
+		YRP.msg("error", GetSQLModeName() .. ": " .. "db_drop_table " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
 		sql_show_last_error()
 	end
 end
 
 function retry_load_database(db_name)
-	printGM("error", GetSQLModeName() .. ": " .. "retry_load_database " .. tostring(db_name))
+	YRP.msg("error", GetSQLModeName() .. ": " .. "retry_load_database " .. tostring(db_name))
 	--SQL_INIT_DATABASE(db_name)
 end
 
@@ -145,7 +145,7 @@ function db_is_empty(db_name)
 	if worked(_tmp, db_name .. " is empty!") then
 		if _show_db_if_not_empty then
 			hr_pre("db")
-			printGM("db", db_name)
+			YRP.msg("db", db_name)
 			printTab(_tmp, db_name)
 			hr_pos("db")
 		end
@@ -184,7 +184,7 @@ end
 function SetSQLMode(sqlmode, force)
 	YRPSQL.int_mode = tonumber(sqlmode)
 	if force then
-		printGM("db", "Update SQLMODE to: " .. YRPSQL.int_mode)
+		YRP.msg("db", "Update SQLMODE to: " .. YRPSQL.int_mode)
 		local _q = "UPDATE "
 		_q = _q .. "yrp_sql"
 		_q = _q .. " SET " .. "int_mode = " .. YRPSQL.int_mode
@@ -195,14 +195,14 @@ function SetSQLMode(sqlmode, force)
 end
 
 function SQL_TABLE_EXISTS(db_table)
-	-- printGM("db", "SQL_TABLE_EXISTS(" .. tostring(db_table) .. ")")
+	-- YRP.msg("db", "SQL_TABLE_EXISTS(" .. tostring(db_table) .. ")")
 	if GetSQLMode() == 0 then
 		local _r = SQL_SELECT(db_table, "*", nil)
 
 		if _r == nil or istable(_r) then
 			return true
 		else
-			printGM("note", "Table [" .. tostring(db_table) .. "] not exists.")
+			YRP.msg("note", "Table [" .. tostring(db_table) .. "] not exists.")
 
 			return false
 		end
@@ -212,7 +212,7 @@ function SQL_TABLE_EXISTS(db_table)
 		if _r == nil or istable(_r) then
 			return true
 		else
-			printGM("note", "Table [" .. tostring(db_table) .. "] not exists.")
+			YRP.msg("note", "Table [" .. tostring(db_table) .. "] not exists.")
 
 			return false
 		end
@@ -222,9 +222,9 @@ end
 function SQL_QUERY(query)
 	query = tostring(query)
 
-	--printGM("db", "SQL_QUERY(" .. tostring(query) .. ")")
+	--YRP.msg("db", "SQL_QUERY(" .. tostring(query) .. ")")
 	if !string.find(query, ";") then
-		printGM("error", GetSQLModeName() .. ": " .. "Query has no ; [" .. query .. "]")
+		YRP.msg("error", GetSQLModeName() .. ": " .. "Query has no ; [" .. query .. "]")
 
 		return false
 	end
@@ -237,7 +237,7 @@ function SQL_QUERY(query)
 		elseif _result == false then
 			return _result
 		else
-			--printGM("db", "ELSE")
+			--YRP.msg("db", "ELSE")
 			return _result
 		end
 	elseif GetSQLMode() == 1 then
@@ -246,7 +246,7 @@ function SQL_QUERY(query)
 
 			que.onError = function(q, e)
 				if string.find(e, "Unknown column") == nil and string.find(e, "doesn't exist") == nil then
-					printGM("error", GetSQLModeName() .. ": " .. "SQL_QUERY - ERROR: " .. tostring(e) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(query))
+					YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_QUERY - ERROR: " .. tostring(e) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(query))
 					q:error()
 				end
 			end
@@ -256,19 +256,19 @@ function SQL_QUERY(query)
 			local _test = que:getData()
 
 			if istable(_test) then
-				if #_test == 0 then return nil end --printGM("db", "SQL_QUERY TABLE EMPTY 1")
+				if #_test == 0 then return nil end --YRP.msg("db", "SQL_QUERY TABLE EMPTY 1")
 
 				return _test
 			elseif _test == nil then
-				--printGM("db", "SQL_QUERY TABLE EMPTY 2")
+				--YRP.msg("db", "SQL_QUERY TABLE EMPTY 2")
 				return false
 			else
-				printGM("db", "SQL_QUERY TABLE MISSING (" .. tostring(_test) .. ")")
+				YRP.msg("db", "SQL_QUERY TABLE MISSING (" .. tostring(_test) .. ")")
 
 				return false
 			end
 		else
-			printGM("db", "CURRENTLY NOT CONNECTED TO MYSQL SERVER")
+			YRP.msg("db", "CURRENTLY NOT CONNECTED TO MYSQL SERVER")
 		end
 	end
 end
@@ -277,15 +277,15 @@ function SQL_DROP_TABLE(db_table)
 	local _result = SQL_QUERY("DROP TABLE " .. db_table .. ";")
 
 	if _result != nil then
-		printGM("error", GetSQLModeName() .. ": " .. "SQL_DROP_TABLE " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
+		YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_DROP_TABLE " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
 		sql_show_last_error()
 	else
-		printGM("db", "DROPPED " .. tostring(db_table) .. " TABLE")
+		YRP.msg("db", "DROPPED " .. tostring(db_table) .. " TABLE")
 	end
 end
 
 function SQL_CREATE_TABLE(db_table)
-	printGM("db", "SQL_CREATE_TABLE(" .. tostring(db_table) .. ")")
+	YRP.msg("db", "SQL_CREATE_TABLE(" .. tostring(db_table) .. ")")
 
 	if GetSQLMode() == 0 then
 		local _q = "CREATE TABLE "
@@ -309,7 +309,7 @@ function SQL_CREATE_TABLE(db_table)
 end
 
 function SQL_SELECT(db_table, db_columns, db_where)
-	--printGM("db", "SQL_SELECT(" .. tostring(db_table) .. ", " .. tostring(db_columns) .. ", " .. tostring(db_where) .. ")")
+	--YRP.msg("db", "SQL_SELECT(" .. tostring(db_table) .. ", " .. tostring(db_columns) .. ", " .. tostring(db_where) .. ")")
 	if GetSQLMode() == 0 then
 		local _q = "SELECT "
 		_q = _q .. db_columns
@@ -340,7 +340,7 @@ function SQL_SELECT(db_table, db_columns, db_where)
 end
 
 function SQL_UPDATE(db_table, db_sets, db_where)
-	--printGM("db", "SQL_UPDATE(" .. tostring(db_table) .. ", " .. tostring(db_sets) .. ", " .. tostring(db_where) .. ")")
+	--YRP.msg("db", "SQL_UPDATE(" .. tostring(db_table) .. ", " .. tostring(db_sets) .. ", " .. tostring(db_where) .. ")")
 	if GetSQLMode() == 0 then
 		local _q = "UPDATE "
 		_q = _q .. db_table
@@ -370,7 +370,7 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 end
 
 function SQL_INSERT_INTO(db_table, db_columns, db_values)
-	printGM("db", "SQL_INSERT_INTO(" .. tostring(db_table) .. " | " .. tostring(db_columns) .. " | " .. tostring(db_values) .. ")")
+	YRP.msg("db", "SQL_INSERT_INTO(" .. tostring(db_table) .. " | " .. tostring(db_columns) .. " | " .. tostring(db_values) .. ")")
 	if GetSQLMode() == 0 then
 		if SQL_TABLE_EXISTS(db_table) then
 			local _q = "INSERT INTO "
@@ -383,7 +383,7 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 			local _result = SQL_QUERY(_q)
 
 			if _result != nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 			return _result
 		end
@@ -419,7 +419,7 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 						val = string.sub(db_values, 1, _e - 1)
 						db_values = string.sub(db_values, _e + 1)
 					else
-						printGM("note", "[SQL_INSERT_INTO] ELSE")
+						YRP.msg("note", "[SQL_INSERT_INTO] ELSE")
 					end
 				elseif value != nil then
 					db_values = string.sub(db_values, value + 1)
@@ -455,7 +455,7 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 			local _result = SQL_QUERY(_q)
 
 			if _result != nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(_q))
+				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(_q))
 			end
 
 			return _result
@@ -464,7 +464,7 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 end
 
 function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
-	--printGM("db", "SQL_INSERT_INTO_DEFAULTVALUES(" .. tostring(db_table) .. ")")
+	--YRP.msg("db", "SQL_INSERT_INTO_DEFAULTVALUES(" .. tostring(db_table) .. ")")
 	if GetSQLMode() == 0 then
 		if SQL_TABLE_EXISTS(db_table) then
 			local _q = "INSERT INTO "
@@ -473,7 +473,7 @@ function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 			local _result = SQL_QUERY(_q)
 
 			if _result != nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 
 			return _result
@@ -493,7 +493,7 @@ function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 			local _result = SQL_INSERT_INTO(db_table, _cols, _vals)
 
 			if _result != nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 
 			return _result
@@ -516,7 +516,7 @@ function SQL_DELETE_FROM(db_table, db_where)
 			local _result = SQL_QUERY(_q)
 
 			if _result != nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 		end
 	elseif GetSQLMode() == 1 then
@@ -533,14 +533,14 @@ function SQL_DELETE_FROM(db_table, db_where)
 			local _result = SQL_QUERY(_q)
 
 			if _result != nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result))
+				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result))
 			end
 		end
 	end
 end
 
 function SQL_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
-	--printGM("db", "SQL_CHECK_IF_COLUMN_EXISTS(" .. tostring(db_name) .. ", " .. tostring(column_name) .. ")")
+	--YRP.msg("db", "SQL_CHECK_IF_COLUMN_EXISTS(" .. tostring(db_name) .. ", " .. tostring(column_name) .. ")")
 	if GetSQLMode() == 0 then
 		local _result = SQL_SELECT(db_name, column_name, nil)
 
@@ -585,7 +585,7 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 			elseif string.find(datatype, "INT") != nil or string.find(datatype, "INTEGER") != nil then
 				YRPSQL[table_name][column_name] = "1"
 			else
-				printGM("note", "[SQL_ADD_COLUMN] " .. table_name .. " | " .. column_name)
+				YRP.msg("note", "[SQL_ADD_COLUMN] " .. table_name .. " | " .. column_name)
 			end
 		end
 
@@ -598,7 +598,7 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 			local _r = SQL_QUERY(_q)
 
 			if _r != nil then
-				printGM("error", GetSQLModeName() .. ": " .. "SQL_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_r))
+				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_r))
 			end
 
 			return _r
@@ -607,7 +607,7 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 end
 
 if SERVER then
-	printGM("db", "Connect to Database")
+	YRP.msg("db", "Connect to Database")
 	local _sql_settings = sql.Query("SELECT * FROM yrp_sql")
 
 	if wk(_sql_settings) then
@@ -631,61 +631,61 @@ if SERVER then
 
 			timer.Simple(10, function()
 				if !YRPSQL.mysql_worked then
-					printGM("note", "Took to long to connect to mysql server, switch back to sqlite")
+					YRP.msg("note", "Took to long to connect to mysql server, switch back to sqlite")
 					SetSQLMode(0, true)
 				end
 			end)
 
-			printGM("db", "Connection info:")
-			printGM("db", "Hostname: " .. _sql_settings.string_host)
-			printGM("db", "Username: " .. _sql_settings.string_username)
-			printGM("note", "Password: " .. _sql_settings.string_password .. " (DON'T SHOW THIS TO OTHERS)")
-			printGM("db", "Database/Schema: " .. _sql_settings.string_database)
-			printGM("db", "Port: " .. _sql_settings.int_port)
+			YRP.msg("db", "Connection info:")
+			YRP.msg("db", "Hostname: " .. _sql_settings.string_host)
+			YRP.msg("db", "Username: " .. _sql_settings.string_username)
+			YRP.msg("note", "Password: " .. _sql_settings.string_password .. " (DON'T SHOW THIS TO OTHERS)")
+			YRP.msg("db", "Database/Schema: " .. _sql_settings.string_database)
+			YRP.msg("db", "Port: " .. _sql_settings.int_port)
 
-			printGM("db", "Setup MYSQL Connection-Table")
+			YRP.msg("db", "Setup MYSQL Connection-Table")
 			YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port))
 
 			YRPSQL.db.onConnected = function()
-				printGM("note", "CONNECTED!")
+				YRP.msg("note", "CONNECTED!")
 				YRPSQL.mysql_worked = true
 				SetSQLMode(1)
 			end
 
 			--SQL_QUERY("SET @@global.sql_mode='MYSQL40'")
 			YRPSQL.db.onConnectionFailed = function()
-				printGM("note", "CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!")
+				YRP.msg("note", "CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!")
 				SetSQLMode(0, true)
 			end
 
-			printGM("db", "Connect to MYSQL Server, if stuck => connection info is wrong or server offline! (default mysql port: 3306)")
+			YRP.msg("db", "Connect to MYSQL Server, if stuck => connection info is wrong or server offline! (default mysql port: 3306)")
 			YRPSQL.db:connect()
 			YRPSQL.db:wait()
 		end
 	end
 end
-printGM("db", "Current SQL Mode: " .. GetSQLModeName())
+YRP.msg("db", "Current SQL Mode: " .. GetSQLModeName())
 
 function SQL_INIT_DATABASE(db_name)
-	--printGM("db", "SQL_INIT_DATABASE(" .. tostring(db_name) .. ")")
+	--YRP.msg("db", "SQL_INIT_DATABASE(" .. tostring(db_name) .. ")")
 
 	if GetSQLMode() == 0 then
 		if !SQL_TABLE_EXISTS(db_name) then
-			printGM("note", tostring(db_name) .. " not exists")
+			YRP.msg("note", tostring(db_name) .. " not exists")
 			local _result = SQL_CREATE_TABLE(db_name)
 
 			if !SQL_TABLE_EXISTS(db_name) then
-				printGM("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " (table not exists) lastError: " .. sql_show_last_error())
+				YRP.msg("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " (table not exists) lastError: " .. sql_show_last_error())
 				retry_load_database(db_name)
 			end
 		end
 	elseif GetSQLMode() == 1 then
 		if !SQL_TABLE_EXISTS(db_name) then
-			printGM("note", tostring(db_name) .. " not exists")
+			YRP.msg("note", tostring(db_name) .. " not exists")
 			local _result = SQL_CREATE_TABLE(db_name)
 
 			if !SQL_TABLE_EXISTS(db_name) then
-				printGM("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " fail")
+				YRP.msg("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " fail")
 				sql_show_last_error()
 				retry_load_database(db_name)
 			end

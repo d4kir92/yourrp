@@ -35,7 +35,7 @@ SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '0'")
 
 -- DEFAULT GROUP
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	printGM("note", DATABASE_NAME .. " has not the default group")
+	YRP.msg("note", DATABASE_NAME .. " has not the default group")
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "1, 'Civilians', '0,0,255', 0, 0")
 end
 
@@ -158,15 +158,15 @@ end
 
 function RemFromHandler_GroupsAndRoles(ply)
 	table.RemoveByValue(HANDLER_GROUPSANDROLES, ply)
-	printGM("gm", ply:YRPName() .. " unsubscribed from GroupsAndRoles")
+	YRP.msg("gm", ply:YRPName() .. " unsubscribed from GroupsAndRoles")
 end
 
 function AddToHandler_GroupsAndRoles(ply)
 	if !table.HasValue(HANDLER_GROUPSANDROLES, ply) then
 		table.insert(HANDLER_GROUPSANDROLES, ply)
-		printGM("gm", ply:YRPName() .. " subscribed to GroupsAndRoles")
+		YRP.msg("gm", ply:YRPName() .. " subscribed to GroupsAndRoles")
 	else
-		printGM("gm", ply:YRPName() .. " already subscribed to GroupsAndRoles")
+		YRP.msg("gm", ply:YRPName() .. " already subscribed to GroupsAndRoles")
 	end
 end
 
@@ -176,9 +176,9 @@ function SubscribeGroupList(ply, uid)
 	end
 	if !table.HasValue(HANDLER_GROUPSANDROLES["groupslist"][uid], ply) then
 		table.insert(HANDLER_GROUPSANDROLES["groupslist"][uid], ply)
-		printGM("gm", ply:YRPName() .. " subscribed to GroupList " .. uid)
+		YRP.msg("gm", ply:YRPName() .. " subscribed to GroupList " .. uid)
 	else
-		printGM("gm", ply:YRPName() .. " already subscribed to GroupList " .. uid)
+		YRP.msg("gm", ply:YRPName() .. " already subscribed to GroupList " .. uid)
 	end
 end
 
@@ -188,7 +188,7 @@ function UnsubscribeGroupList(ply, uid)
 	end
 	if table.HasValue(HANDLER_GROUPSANDROLES["groupslist"][uid], ply) then
 		table.RemoveByValue(HANDLER_GROUPSANDROLES["groupslist"][uid], ply)
-		printGM("gm", ply:YRPName() .. " unsubscribed from GroupList " .. uid)
+		YRP.msg("gm", ply:YRPName() .. " unsubscribed from GroupList " .. uid)
 	end
 end
 
@@ -198,9 +198,9 @@ function SubscribeGroup(ply, uid)
 	end
 	if !table.HasValue(HANDLER_GROUPSANDROLES["groups"][uid], ply) then
 		table.insert(HANDLER_GROUPSANDROLES["groups"][uid], ply)
-		printGM("gm", ply:YRPName() .. " subscribed to Group " .. uid)
+		YRP.msg("gm", ply:YRPName() .. " subscribed to Group " .. uid)
 	else
-		printGM("gm", ply:YRPName() .. " already subscribed to Group " .. uid)
+		YRP.msg("gm", ply:YRPName() .. " already subscribed to Group " .. uid)
 	end
 end
 
@@ -210,7 +210,7 @@ function UnsubscribeGroup(ply, uid)
 	end
 	if table.HasValue(HANDLER_GROUPSANDROLES["groups"][uid], ply) then
 		table.RemoveByValue(HANDLER_GROUPSANDROLES["groups"][uid], ply)
-		printGM("gm", ply:YRPName() .. " unsubscribed from Group " .. uid)
+		YRP.msg("gm", ply:YRPName() .. " unsubscribed from Group " .. uid)
 	end
 end
 
@@ -313,7 +313,7 @@ function DuplicateGroup(guid)
 
 		SendGroupList(group.int_parentgroup)
 	else
-		printGM("note", "Group [" .. guid .. "] was deleted.")
+		YRP.msg("note", "Group [" .. guid .. "] was deleted.")
 	end
 end
 
@@ -348,7 +348,7 @@ net.Receive("settings_add_group", function(len, ply)
 		--SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_group.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
 	end
 
-	printGM("db", "Added new group: " .. new_group.uniqueID)
+	YRP.msg("db", "Added new group: " .. new_group.uniqueID)
 
 	SendGroupList(uid)
 end)

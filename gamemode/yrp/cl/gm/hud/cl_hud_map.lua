@@ -285,6 +285,6 @@ net.Receive("sendCoords", function()
 		map = net.ReadTable()
 		openMap()
 	else
-		printGM("note", "wait for server coords")
+		YRP.msg("note", "wait for server coords")
 	end
 end)

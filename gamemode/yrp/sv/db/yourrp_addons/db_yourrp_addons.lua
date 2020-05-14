@@ -9,15 +9,15 @@ local HANDLER_YOURRP_ADDONS = {}
 
 function RemFromHandler_YourRP_Addons(ply)
 	table.RemoveByValue(HANDLER_YOURRP_ADDONS, ply)
-	printGM("gm", ply:YRPName() .. " disconnected from YourRP_Addons")
+	YRP.msg("gm", ply:YRPName() .. " disconnected from YourRP_Addons")
 end
 
 function AddToHandler_YourRP_Addons(ply)
 	if !table.HasValue(HANDLER_YOURRP_ADDONS, ply) then
 		table.insert(HANDLER_YOURRP_ADDONS, ply)
-		printGM("gm", ply:YRPName() .. " connected to YourRP_Addons")
+		YRP.msg("gm", ply:YRPName() .. " connected to YourRP_Addons")
 	else
-		printGM("gm", ply:YRPName() .. " already connected to YourRP_Addons")
+		YRP.msg("gm", ply:YRPName() .. " already connected to YourRP_Addons")
 	end
 end
 
@@ -44,7 +44,7 @@ end)
 YRP = YRP or {}
 
 function YRP:AddYRPAddon(tab)
-	printGM("db", "Add YourRP Addon(" .. tostring(tab.name) .. " by " .. tostring(tab.author) .. ")")
+	YRP.msg("db", "Add YourRP Addon(" .. tostring(tab.name) .. " by " .. tostring(tab.author) .. ")")
 	if type(tab) != "table" then return false end
 	tab.name = tab.name or ""
 	tab.author = tab.author or "NO AUTHOR"

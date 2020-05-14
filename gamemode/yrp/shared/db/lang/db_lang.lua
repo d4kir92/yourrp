@@ -104,7 +104,7 @@ end
 
 function PrintLIDError(var)
 	if !string.find(var, " ") and !string.find(var, ":") and !string.find(var, "-") and HasYRPContent() and !HasYRPFakeContent() then
-		printGM("error", "Translation string [" .. tostring(var) .. "] not found, sent to Dev. Wait for next update!")
+		YRP.msg("error", "Translation string [" .. tostring(var) .. "] not found, sent to Dev. Wait for next update!")
 	end
 end
 
@@ -204,7 +204,7 @@ end
 function YRP.send_lang(short)
 	-- send info to server, to let others know what language i chose
 	if CLIENT then
-		printGM("lang", "Send Language to Server: [" .. tostring(short) .. "]")
+		YRP.msg("lang", "Send Language to Server: [" .. tostring(short) .. "]")
 		net.Start("client_lang")
 		net.WriteString(tostring(short))
 		net.SendToServer()
@@ -223,7 +223,7 @@ function YRP.read_language(short, init)
 		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 
 		if !default then
-			printGM("lang", "Get Language-Pack [" .. YRP.lang_string("LID_initshort") .. "] " .. YRP.lang_string("LID_initlanguage") .. "/" .. YRP.lang_string("LID_initinenglish"))
+			YRP.msg("lang", "Get Language-Pack [" .. YRP.lang_string("LID_initshort") .. "] " .. YRP.lang_string("LID_initlanguage") .. "/" .. YRP.lang_string("LID_initinenglish"))
 		end
 
 		YRP.read_lang("resource/localization/yrp/general/lang_" .. short .. ".properties")
@@ -257,7 +257,7 @@ end
 
 function YRP.LoadLanguage(short, init)
 	if short == nil then
-		printGM("note", "LoadLanguage ERROR!")
+		YRP.msg("note", "LoadLanguage ERROR!")
 
 		return false
 	end
@@ -270,24 +270,24 @@ function YRP.LoadLanguage(short, init)
 		hr_pre("lang")
 
 		if short == "auto" then
-			printGM("lang", "[AUTOMATIC DETECTION]")
+			YRP.msg("lang", "[AUTOMATIC DETECTION]")
 			YRP.search_language()
 
 			if yrp_current_lang.get_language != "" then
 				short = string.lower(yrp_current_lang.get_language)
-				printGM("lang", "Found Language: " .. "[" .. short .. "]")
+				YRP.msg("lang", "Found Language: " .. "[" .. short .. "]")
 
 				if !YRP.check_languagepack() then
 					short = "en"
-					printGM("lang", "Can't find Language-Pack, using Default-Language-Pack.")
+					YRP.msg("lang", "Can't find Language-Pack, using Default-Language-Pack.")
 				end
 			else
 				short = "en"
-				printGM("lang", "Can't find Language from Game, using Default-Language-Pack.")
+				YRP.msg("lang", "Can't find Language from Game, using Default-Language-Pack.")
 			end
 		else
 			yrp_current_lang.get_language = short
-			printGM("lang", "Manually change to Language [" .. short .. "]")
+			YRP.msg("lang", "Manually change to Language [" .. short .. "]")
 		end
 
 		--have to read en first, so incomplete translations have en as base
@@ -298,7 +298,7 @@ function YRP.LoadLanguage(short, init)
 			YRP.read_language(short, init)
 		end
 
-		printGM("lang", "Language changed to [" .. YRP.lang_string("LID_initshort") .. "] " .. YRP.lang_string("LID_initlanguage"))
+		YRP.msg("lang", "Language changed to [" .. YRP.lang_string("LID_initshort") .. "] " .. YRP.lang_string("LID_initlanguage"))
 		YRP.send_lang(short) -- Send To Server
 		hook.Run("yrp_current_language_changed") -- Update Chat
 		hr_pos("lang")
@@ -346,7 +346,7 @@ end
 
 function YRP.initLang()
 	hr_pre("lang")
-	printGM("lang", "... SEARCHING FOR LANGUAGE ...")
+	YRP.msg("lang", "... SEARCHING FOR LANGUAGE ...")
 	YRP.LoadLanguage("auto", false)
 	hr_pos("lang")
 end

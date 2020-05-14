@@ -101,7 +101,7 @@ AddIFElement(Blur)
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:InterfaceLoadout()
-	printGM("debug", "[InterfaceLoadout] " .. self:YRPName())
+	YRP.msg("debug", "[InterfaceLoadout] " .. self:YRPName())
 	local ifeles = SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(ifeles) then
 		for i, ele in pairs(ifeles) do

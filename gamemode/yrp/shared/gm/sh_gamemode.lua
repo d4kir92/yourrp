@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 286 --do NOT change this!
-GM.VersionCanary = 576 --do NOT change this!
+GM.VersionBeta = 287 --do NOT change this!
+GM.VersionCanary = 577 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -46,9 +46,9 @@ GM.Art = VERSIONART
 function ChangeChannel(channel)
 	if channel == "stable" or channel == "beta" or channel == "canary" then
 		GAMEMODE.VersionSort = channel
-		printGM("gm", "Switched to " .. tostring(channel))
+		YRP.msg("gm", "Switched to " .. tostring(channel))
 	else
-		printGM("error", "Switched to not available channel (" .. tostring(channel) .. ")")
+		YRP.msg("error", "Switched to not available channel (" .. tostring(channel) .. ")")
 	end
 end
 
@@ -110,7 +110,7 @@ end
 concommand.Add("yrp_version", function(ply, cmd, args)
 	hr_pre("gm")
 	local _text = "Gamemode - Version:\t" .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")"
-	printGM("gm", _text)
+	YRP.msg("gm", _text)
 	hr_pos("gm")
 end)
 
@@ -123,29 +123,29 @@ concommand.Add("yrp_status", function(ply, cmd, args)
 	end
 
 	hr_pre("gm")
-	printGM("gm", "    Version: " .. GAMEMODE.Version)
-	printGM("gm", "    Channel: " .. string.upper(GAMEMODE.VersionSort))
-	printGM("gm", " Servername: " .. GetHostName())
-	printGM("gm", "         IP: " .. game.GetIPAddress())
-	printGM("gm", "        Map: " .. GetMapNameDB())
-	printGM("gm", "    Players: " .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()))
+	YRP.msg("gm", "    Version: " .. GAMEMODE.Version)
+	YRP.msg("gm", "    Channel: " .. string.upper(GAMEMODE.VersionSort))
+	YRP.msg("gm", " Servername: " .. GetHostName())
+	YRP.msg("gm", "         IP: " .. game.GetIPAddress())
+	YRP.msg("gm", "        Map: " .. GetMapNameDB())
+	YRP.msg("gm", "    Players: " .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()))
 	hr_pos("gm")
 end)
 
 concommand.Add("yrp_maps", function(ply, cmd, args)
 	hr_pre("gm")
-	printGM("gm", "[MAPS ON SERVER]")
+	YRP.msg("gm", "[MAPS ON SERVER]")
 	local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
 	for i, map in pairs(allmaps) do
 		local mapname = string.Replace(map, ".bsp", "")
-		printGM("gm", i .. "\t" .. mapname)
+		YRP.msg("gm", i .. "\t" .. mapname)
 	end
 	hr_pos("gm")
 end)
 
 concommand.Add("yrp_map", function(ply, cmd, args)
 	hr_pre("gm")
-	printGM("gm", "[Changelevel]")
+	YRP.msg("gm", "[Changelevel]")
 	local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
 	for i, map in pairs(allmaps) do
 		local mapname = string.Replace(map, ".bsp", "")
@@ -155,13 +155,13 @@ concommand.Add("yrp_map", function(ply, cmd, args)
 	local map = allmaps[id]
 	if map != nil then
 		if SERVER then
-			printGM("gm", "Changelevel to " .. map)
+			YRP.msg("gm", "Changelevel to " .. map)
 			RunConsoleCommand("changelevel", map)
 		else
-			printGM("gm", "ONLY AVAILABLE ON SERVER")
+			YRP.msg("gm", "ONLY AVAILABLE ON SERVER")
 		end
 	else
-		printGM("gm", "ID OUT OF RANGE")
+		YRP.msg("gm", "ID OUT OF RANGE")
 	end
 	hr_pos("gm")
 end)
@@ -182,49 +182,49 @@ end
 
 concommand.Add("yrp_players", function(ply, cmd, args)
 	hr_pre("gm")
-	printGM("gm", "Players:\t" .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()))
-	printGM("gm", "ID   SteamID              Name                     Money")
+	YRP.msg("gm", "Players:\t" .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()))
+	YRP.msg("gm", "ID   SteamID              Name                     Money")
 	for i, pl in pairs(player.GetAll()) do
 		local _id = makeString(string.ToTable(pl:UserID()), 4, false)
 		local _steamid = makeString(string.ToTable(pl:SteamID()), 20, false)
 		local _name = makeString(string.ToTable(pl:YRPName()), 24, true)
 		local _money = makeString(string.ToTable(pl:GetDString("money", -1)), 12, false)
 		local _str = string.format("%s %s %s %s", _id, _steamid, _name, _money)
-		printGM("gm", _str)
+		YRP.msg("gm", _str)
 	end
 	hr_pos("gm")
 end)
 
 function PrintHelp()
 	hr_pre("note")
-	printGM("note", "Shared Commands:")
-	printGM("note", "yrp_status")
-	printGM("note", "	Shows info")
-	printGM("note", "yrp_version")
-	printGM("note", "	Shows gamemode version")
-	printGM("note", "yrp_players")
-	printGM("note", "	Shows all players")
-	printGM("note", "yrp_usergroup RPNAME UserGroup")
-	printGM("note", "	Put a player with the RPNAME to the UserGroup")
-	printGM("note", "yrp_maps")
-	printGM("note", "	Shows all maps on server")
-	printGM("note", "yrp_map ID")
-	printGM("note", "	Changelevel to map ID")
-	printGM("note", "yrp_collection / yrp_collectionid")
-	printGM("note", "	Shows servers collectionid")
+	YRP.msg("note", "Shared Commands:")
+	YRP.msg("note", "yrp_status")
+	YRP.msg("note", "	Shows info")
+	YRP.msg("note", "yrp_version")
+	YRP.msg("note", "	Shows gamemode version")
+	YRP.msg("note", "yrp_players")
+	YRP.msg("note", "	Shows all players")
+	YRP.msg("note", "yrp_usergroup RPNAME UserGroup")
+	YRP.msg("note", "	Put a player with the RPNAME to the UserGroup")
+	YRP.msg("note", "yrp_maps")
+	YRP.msg("note", "	Shows all maps on server")
+	YRP.msg("note", "yrp_map ID")
+	YRP.msg("note", "	Changelevel to map ID")
+	YRP.msg("note", "yrp_collection / yrp_collectionid")
+	YRP.msg("note", "	Shows servers collectionid")
 	hr_pos("note")
 
 	hr_pre("note")
-	printGM("note", "Client Commands:")
-	printGM("note", "yrp_cl_hud X")
-	printGM("note", "	1: Shows hud, 0: Hide hud")
-	printGM("note", "yrp_togglesettings")
-	printGM("note", "	Toggle settings menu")
+	YRP.msg("note", "Client Commands:")
+	YRP.msg("note", "yrp_cl_hud X")
+	YRP.msg("note", "	1: Shows hud, 0: Hide hud")
+	YRP.msg("note", "yrp_togglesettings")
+	YRP.msg("note", "	Toggle settings menu")
 	hr_pos("note")
 
 	hr_pre("note")
-	printGM("note", "Server Commands:")
-	printGM("note", "yrp_givelicense NAME LICENSENAME")
+	YRP.msg("note", "Server Commands:")
+	YRP.msg("note", "yrp_givelicense NAME LICENSENAME")
 	hr_pos("note")
 end
 
@@ -242,7 +242,7 @@ end
 
 function PrintCollectionID()
 	hr_pre("note")
-	printGM("note", "Server - CollectionID: " .. YRPCollectionID())
+	YRP.msg("note", "Server - CollectionID: " .. YRPCollectionID())
 	hr_pos("note")
 end
 concommand.Add("yrp_collectionid", function(ply, cmd, args)

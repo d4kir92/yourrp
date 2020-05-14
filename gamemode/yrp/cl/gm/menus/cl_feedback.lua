@@ -89,7 +89,7 @@ function CreateTicketContent(parent)
 		hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, string.upper(YRP.lang_string("LID_sendticket")))
 	end
 	function TICKET.send:DoClick()
-		printGM("gm", "send ticket")
+		YRP.msg("gm", "send ticket")
 
 		if TICKET.titleT:GetText() != "" or TICKET.ticketT:GetText() != "" or TICKET.contactT:GetText() != "" then
 			local entry = {}
@@ -103,7 +103,7 @@ function CreateTicketContent(parent)
 
 				end
 			end, function(failed)
-				printGM("error", "Ticket: " .. tostring(failed))
+				YRP.msg("error", "Ticket: " .. tostring(failed))
 			end)
 
 			local _net_table = {}

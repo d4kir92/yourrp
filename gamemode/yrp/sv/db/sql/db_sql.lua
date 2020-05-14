@@ -8,7 +8,7 @@ util.AddNetworkString("get_sql_info")
 local DATABASE_NAME = "yrp_sql"
 
 function SQLITE_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
-	--printGM("db", "SQL_CHECK_IF_COLUMN_EXISTS(" .. tostring(db_name) .. ", " .. tostring(column_name) .. ")")
+	--YRP.msg("db", "SQL_CHECK_IF_COLUMN_EXISTS(" .. tostring(db_name) .. ", " .. tostring(column_name) .. ")")
 	local _result = sql.Query("SELECT " .. column_name .. " FROM " .. db_name)
 	if _result == false then
 		return false
@@ -18,13 +18,13 @@ function SQLITE_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 end
 
 function SQLITE_ADD_COLUMN(table_name, column_name, datatype)
-	--printGM("db", "SQL_ADD_COLUMN(" .. tostring(table_name) .. ", " .. tostring(column_name) .. ", " .. tostring(datatype) .. ")")
+	--YRP.msg("db", "SQL_ADD_COLUMN(" .. tostring(table_name) .. ", " .. tostring(column_name) .. ", " .. tostring(datatype) .. ")")
 	local _result = SQLITE_CHECK_IF_COLUMN_EXISTS(table_name, column_name)
 	if !_result then
 		local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ""
 		local _r = sql.Query(_q)
 		if _r != nil then
-			printGM("error", "SQLITE_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+			YRP.msg("error", "SQLITE_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 		end
 		return _r
 	end
@@ -42,7 +42,7 @@ SQLITE_ADD_COLUMN(DATABASE_NAME, "int_backup_create", "INT DEFAULT '1'", true)
 SQLITE_ADD_COLUMN(DATABASE_NAME, "int_backup_delete", "INT DEFAULT '30'", true)
 
 if sql.Query("SELECT * FROM yrp_sql") == nil then
-	printGM("db", "Missing first entry, insert it now!")
+	YRP.msg("db", "Missing first entry, insert it now!")
 	sql.Query("INSERT INTO yrp_sql DEFAULT VALUES")
 end
 
@@ -106,22 +106,22 @@ function UpdateValue(tab)
 end
 
 function UpdateString(tab)
-	printGM("db", tab.ply:YRPName() .. " updated string " .. tab.id .. " to: " .. tab.value)
+	YRP.msg("db", tab.ply:YRPName() .. " updated string " .. tab.id .. " to: " .. tab.value)
 	UpdateValue(tab)
 end
 
 function UpdateInt(tab)
-	printGM("db", tab.ply:YRPName() .. " updated int " .. tab.id .. " to: " .. tab.value)
+	YRP.msg("db", tab.ply:YRPName() .. " updated int " .. tab.id .. " to: " .. tab.value)
 	UpdateValue(tab)
 end
 
 function UpdateFloat(tab)
-	printGM("db", tab.ply:YRPName() .. " updated float " .. tab.id .. " to: " .. tab.value)
+	YRP.msg("db", tab.ply:YRPName() .. " updated float " .. tab.id .. " to: " .. tab.value)
 	UpdateValue(tab)
 end
 
 function UpdateBool(tab)
-	printGM("db", tab.ply:YRPName() .. " updated bool " .. tab.id .. " to: " .. tab.value)
+	YRP.msg("db", tab.ply:YRPName() .. " updated bool " .. tab.id .. " to: " .. tab.value)
 	UpdateValue(tab)
 end
 
@@ -134,17 +134,17 @@ function DBUpdateValue(db_name, str, l_db, value)
 end
 
 function DBUpdateFloat(db_name, ply, netstr, str, l_db, value)
-	printGM("db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring(value))
+	YRP.msg("db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring(value))
 	DBUpdateValue(db_name, str, l_db, value)
 end
 
 function DBUpdateInt(db_name, ply, netstr, str, l_db, value)
-	printGM("db", ply:YRPName() .. " updated int " .. str .. " to: " .. tostring(value))
+	YRP.msg("db", ply:YRPName() .. " updated int " .. str .. " to: " .. tostring(value))
 	DBUpdateValue(db_name, str, l_db, value)
 end
 
 function DBUpdateString(db_name, ply, netstr, str, l_db, value)
-	printGM("db", ply:YRPName() .. " updated string " .. str .. " to: " .. tostring(value))
+	YRP.msg("db", ply:YRPName() .. " updated string " .. str .. " to: " .. tostring(value))
 	DBUpdateValue(db_name, str, l_db, value)
 end
 
@@ -187,11 +187,11 @@ net.Receive("change_to_sql_mode", function(len, ply)
 	if ply:HasAccess() then
 		DBUpdateInt(DATABASE_NAME, ply, "update_" .. "int_mode", "int_mode", yrp_sql, _mode)
 		SetSQLMode(_mode)
-		printGM("note", ply:YRPName() .. " changed sqlmode to " .. GetSQLModeName())
+		YRP.msg("note", ply:YRPName() .. " changed sqlmode to " .. GetSQLModeName())
 		timer.Simple(1, function()
 			game.ConsoleCommand("changelevel " .. GetMapName() .. "\n")
 		end)
 	else
-		printGM("note", ply:YRPName() .. " tried to use change_to_sql_mode")
+		YRP.msg("note", ply:YRPName() .. " tried to use change_to_sql_mode")
 	end
 end)

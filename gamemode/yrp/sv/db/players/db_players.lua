@@ -26,7 +26,7 @@ end)
 
 g_db_reseted = false
 function save_clients(str)
-	printGM("db", string.upper("[Saving all clients] [" .. str .. "]"))
+	YRP.msg("db", string.upper("[Saving all clients] [" .. str .. "]"))
 	if !g_db_reseted then
 		for k, ply in pairs(player.GetAll()) do
 
@@ -70,12 +70,12 @@ function save_clients(str)
 				_text = _text .. "s"
 			end
 			_text = _text .. "]"
-			printGM("db", string.upper(_text))
+			YRP.msg("db", string.upper(_text))
 		else
-			printGM("db", string.upper("=> [No clients on server]"))
+			YRP.msg("db", string.upper("=> [No clients on server]"))
 		end
 	else
-		printGM("db", "no saving, because db reset")
+		YRP.msg("db", "no saving, because db reset")
 	end
 
 	SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")
@@ -271,7 +271,7 @@ function set_role_values(ply, pmid)
 		if worked(rolTab, "set_role_values rolTab") and worked(ChaTab, "set_role_values ChaTab") then
 			if ChaTab.storage != nil then
 				local _storage = string.Explode(",", ChaTab.storage)
-				printGM("debug", "[set_role_values] " .. ply:YRPName() .. " give permanent Licenses")
+				YRP.msg("debug", "[set_role_values] " .. ply:YRPName() .. " give permanent Licenses")
 				for i, lic in pairs(_storage) do
 					local _lic = SQL_SELECT("yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'")
 					if _lic != nil and _lic != false then
@@ -297,7 +297,7 @@ function set_role_values(ply, pmid)
 			end
 			ply:SetDString("Gender", ChaTab.gender)
 		else
-			printGM("note", "[SET ROLE VALUES] No role or/and no character -> Suicide")
+			YRP.msg("note", "[SET ROLE VALUES] No role or/and no character -> Suicide")
 			ply:KillSilent()
 		end
 
@@ -421,7 +421,7 @@ function set_role_values(ply, pmid)
 			-- Darkrp Team
 			--ply:SetTeam(rolTab.uniqueID) -- disables damage against npcs
 		else
-			printGM("note", "[SET ROLE VALUES] No role selected -> Suicide")
+			YRP.msg("note", "[SET ROLE VALUES] No role selected -> Suicide")
 			ply:KillSilent()
 		end
 
@@ -442,7 +442,7 @@ function set_role_values(ply, pmid)
 			ply:SetDString("factionUniqueID", faction.uniqueID)
 			ply:SetDString("factionColor", faction.string_color)
 		else
-			printGM("note", "[SET ROLE VALUES] No group selected -> Suicide")
+			YRP.msg("note", "[SET ROLE VALUES] No group selected -> Suicide")
 			ply:KillSilent()
 		end
 		ply:SetDBool("loaded", true)
@@ -458,14 +458,14 @@ function set_ply_pos(ply, map, pos, ang)
 			local tmpAng = string.Split(ang, " ")
 			ply:SetEyeAngles(Angle(tonumber(tmpAng[1]), tonumber(tmpAng[2]), tonumber(tmpAng[3])))
 		else
-			printGM("db", "[" .. ply:SteamName() .. "] is new on this map.")
+			YRP.msg("db", "[" .. ply:SteamName() .. "] is new on this map.")
 		end
 	end)
 end
 
 function open_character_selection(ply)
 	if ply:IsFullyAuthenticated() then
-		printGM("db", "[" .. ply:SteamName() .. "] -> open character selection.")
+		YRP.msg("db", "[" .. ply:SteamName() .. "] -> open character selection.")
 		local steamid = ply:SteamID() or ply:UniqueID()
 		local tmpTable = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. steamid .. "'")
 		if !wk(tmpTable) then
@@ -474,11 +474,15 @@ function open_character_selection(ply)
 		net.Start("openCharacterMenu")
 			net.WriteTable(tmpTable)
 		net.Send(ply)
+	else
+		timer.Simple(1, function()
+			open_character_selection(ply)
+		end)
 	end
 end
 
 function add_yrp_player(ply, steamid)
-	printGM("db", "[" .. ply:SteamName() .. "] -> Add player to database.")
+	YRP.msg("db", "[" .. ply:SteamName() .. "] -> Add player to database.")
 
 	steamid = steamid or ply:SteamID() or ply:UniqueID()
 
@@ -498,17 +502,17 @@ function add_yrp_player(ply, steamid)
 
 		local _insert = SQL_INSERT_INTO("yrp_players", cols, vals)
 		if _insert == nil then
-			printGM("db", "[" .. ply:SteamName() .. "] -> Successfully added player to database.")
+			YRP.msg("db", "[" .. ply:SteamName() .. "] -> Successfully added player to database.")
 
 			ply:SetServerKeybinds()
 		else
-			printGM("error", "add_yrp_player failed! _insert: " .. tostring(_insert))
+			YRP.msg("error", "add_yrp_player failed! _insert: " .. tostring(_insert))
 		end
 	end
 end
 
 function check_yrp_player(ply, steamid)
-	printGM("db", "[" .. ply:SteamName() .. "] -> Checking if player is in database.")
+	YRP.msg("db", "[" .. ply:SteamName() .. "] -> Checking if player is in database.")
 
 	steamid = steamid or ply:SteamID() or ply:UniqueID()
 
@@ -518,12 +522,12 @@ function check_yrp_player(ply, steamid)
 		if _result == nil then
 			add_yrp_player(ply, steamid)
 		elseif wk(_result) then
-			printGM("db", "[" .. ply:SteamName() .. "] is in database.")
+			YRP.msg("db", "[" .. ply:SteamName() .. "] is in database.")
 			if #_result > 1 then
-				printGM("db", "[" .. ply:SteamName() .. "] is more then 1 time in database (" .. #_result .. ")")
+				YRP.msg("db", "[" .. ply:SteamName() .. "] is more then 1 time in database (" .. #_result .. ")")
 				for k, v in pairs(_result) do
 					if k > 1 then
-						printGM("db", "[" .. ply:SteamName() .. "] delete other entry.")
+						YRP.msg("db", "[" .. ply:SteamName() .. "] delete other entry.")
 						SQL_DELETE_FROM("yrp_players", "uniqueID = " .. v.uniqueID)
 					end
 				end
@@ -534,14 +538,14 @@ function check_yrp_player(ply, steamid)
 	else
 		YRP.msg("error", "SteamID FAILED [" .. tostring(steamid) .. "]")
 		timer.Simple(1, function()
-			printGM("db", "[" .. ply:SteamName() .. "] -> Retry check.")
+			YRP.msg("db", "[" .. ply:SteamName() .. "] -> Retry check.")
 			check_yrp_player(ply, steamid)
 		end)
 	end
 end
 
 function check_yrp_client(ply, steamid)
-	printGM("db", "[" .. ply:SteamName() .. "] -> Check client (" .. ply:SteamID() .. ")")
+	YRP.msg("db", "[" .. ply:SteamName() .. "] -> Check client (" .. ply:SteamID() .. ")")
 
 	check_yrp_player(ply, steamid)
 
@@ -578,7 +582,7 @@ net.Receive("give_getGroTab", function(len, ply)
 			net.WriteTable(_tmpGroupList)
 		net.Send(ply)
 	else
-		printGM("note", "give_getGroTab: _tmpGroupList failed!")
+		YRP.msg("note", "give_getGroTab: _tmpGroupList failed!")
 	end
 end)
 
@@ -592,7 +596,7 @@ net.Receive("give_getRolTab", function(len, ply)
 			net.WriteTable(_tmpRolTab)
 		net.Send(ply)
 	else
-		printGM("note", "give_getRolTab: _tmpRolTab failed!")
+		YRP.msg("note", "give_getRolTab: _tmpRolTab failed!")
 	end
 end)
 
@@ -608,7 +612,7 @@ net.Receive("getPlyList", function(len, ply)
 			net.WriteTable(_tmpRoleList)
 		net.Send(ply)
 	else
-		printGM("note", "getPlyList: _tmpChaList and _tmpRoleList and _tmpGroupList failed!")
+		YRP.msg("note", "getPlyList: _tmpChaList and _tmpRoleList and _tmpGroupList failed!")
 	end
 end)
 
@@ -622,7 +626,7 @@ net.Receive("giveRole", function(len, ply)
 			RemRolVals(_ply)
 			set_role(_ply, uniqueIDRole)
 			set_role_values(_ply)
-			printGM("note", tostring(_ply:Nick()) .. " is now the role: " .. tostring(uniqueIDRole))
+			YRP.msg("note", tostring(_ply:Nick()) .. " is now the role: " .. tostring(uniqueIDRole))
 			return true
 		end
 	end
@@ -638,7 +642,7 @@ function isWhitelisted(ply, id)
 		if worked(_plyAllowedAll, "_plyAllowedAll", true) then
 			_plyAllowedAll = _plyAllowedAll[1]
 			if _plyAllowedAll.roleID == "-1" or _plyAllowedAll.groupID == "-1" then
-				printGM("gm", ply:RPName() .. " is ALL whitelisted")
+				YRP.msg("gm", ply:RPName() .. " is ALL whitelisted")
 				return true
 			end
 		end
@@ -646,22 +650,22 @@ function isWhitelisted(ply, id)
 		local _plyAllowedRole = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND roleID = " .. id)
 		local _plyAllowedGroup = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND groupID = " .. _role.int_groupID .. " AND roleID = -1")
 		if ply:HasAccess() then
-			printGM("gm", ply:RPName() .. " has access.")
+			YRP.msg("gm", ply:RPName() .. " has access.")
 			return true
 		else
 			if worked(_plyAllowedRole, "_plyAllowedRole", true) then
-				printGM("gm", ply:RPName() .. " is role whitelisted.")
+				YRP.msg("gm", ply:RPName() .. " is role whitelisted.")
 				return true
 			elseif worked(_plyAllowedGroup, "_plyAllowedGroup", true) then
-				printGM("gm", ply:RPName() .. " is group whitelisted.")
+				YRP.msg("gm", ply:RPName() .. " is group whitelisted.")
 				return true
 			else
-				printGM("gm", ply:RPName() .. " is not role and not group whitelisted.")
+				YRP.msg("gm", ply:RPName() .. " is not role and not group whitelisted.")
 				return false
 			end
 		end
 	end
-	printGM("gm", ply:RPName() .. " is not whitelisted.")
+	YRP.msg("gm", ply:RPName() .. " is not whitelisted.")
 	return false
 end
 
@@ -708,14 +712,14 @@ function startVote(ply, table)
 				if _yes > _no and (_yes + _no) > 1 then
 					SetRole(votePly, table[1].uniqueID)
 				else
-					printGM("gm", "VOTE: not enough yes")
+					YRP.msg("gm", "VOTE: not enough yes")
 				end
 				timer.Remove("voteRunning")
 			end
 			voteCount = voteCount - 1
 		end)
 	else
-		printGM("gm", "a vote is currently running")
+		YRP.msg("gm", "a vote is currently running")
 	end
 end
 
@@ -730,7 +734,7 @@ function canGetRole(ply, roleID, want)
 			if tonumber(tmpTableRole.bool_adminonly) == 1 then
 				if !ply:HasAccess() then
 					local text = "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin."
-					printGM("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin.")
+					YRP.msg("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin.")
 					net.Start("yrp_info2")
 						net.WriteString(text)
 					net.Send(ply)
@@ -750,7 +754,7 @@ function canGetRole(ply, roleID, want)
 			if wk(chatab) then
 				if tonumber(chatab.int_level) < tonumber(tmpTableRole.int_requireslevel) then
 					local text = ply:YRPName() .. " is not high enough (is: " .. tonumber(chatab.int_level) .. " need: " .. tonumber(tmpTableRole.int_requireslevel) .. ")!"
-					printGM("gm", "[canGetRole] " .. text)
+					YRP.msg("gm", "[canGetRole] " .. text)
 					net.Start("yrp_info2")
 						net.WriteString(text)
 					net.Send(ply)
@@ -759,7 +763,7 @@ function canGetRole(ply, roleID, want)
 			else
 				if 1 < tonumber(tmpTableRole.int_requireslevel) then
 					local text = ply:YRPName() .. " is not high enough (is: " .. 1 .. " need: " .. tonumber(tmpTableRole.int_requireslevel) .. ")!"
-					printGM("gm", "[canGetRole] " .. text)
+					YRP.msg("gm", "[canGetRole] " .. text)
 					net.Start("yrp_info2")
 						net.WriteString(text)
 					net.Send(ply)
@@ -769,7 +773,7 @@ function canGetRole(ply, roleID, want)
 
 			if tonumber(ply:GetDInt("ts_role_" .. ply:GetRoleUID(), 0)) > CurTime() and want then
 				local text = ply:YRPName() .. " is on cooldown for this role!"
-				printGM("gm", "[canGetRole] " .. text)
+				YRP.msg("gm", "[canGetRole] " .. text)
 				net.Start("yrp_info2")
 					net.WriteString(text)
 				net.Send(ply)
@@ -778,10 +782,10 @@ function canGetRole(ply, roleID, want)
 
 			-- Whitelist + Prerole
 			if tonumber(tmpTableRole.bool_whitelist) == 1 or tonumber(tmpTableRole.int_prerole) > 0 then
-				printGM("gm", "[canGetRole] " .. "Whitelist-Role or Prerole-Role")
+				YRP.msg("gm", "[canGetRole] " .. "Whitelist-Role or Prerole-Role")
 				if !isWhitelisted(ply, roleID) then
 					local text = ply:YRPName() .. " is not whitelisted."
-					printGM("gm", "[canGetRole] " .. text)
+					YRP.msg("gm", "[canGetRole] " .. text)
 					net.Start("yrp_info2")
 						net.WriteString(text)
 					net.Send(ply)
@@ -795,7 +799,7 @@ function canGetRole(ply, roleID, want)
 			local found = table.HasValue(ugs, ug) or table.HasValue(ugs, "ALL")
 			if !found then
 				local text = ply:YRPName() .. " is not allowed to use this role (UserGroup)."
-				printGM("gm", "[canGetRole] " .. text)
+				YRP.msg("gm", "[canGetRole] " .. text)
 				net.Start("yrp_info2")
 					net.WriteString(text)
 				net.Send(ply)
@@ -804,14 +808,14 @@ function canGetRole(ply, roleID, want)
 			return true
 		else
 			local text = ply:YRPName() .. " maxamount reached."
-			printGM("gm", "[canGetRole] " .. text)
+			YRP.msg("gm", "[canGetRole] " .. text)
 			net.Start("yrp_info2")
 				net.WriteString(text)
 			net.Send(ply)
 			return false
 		end
 	end
-	printGM("note", "[canGetRole] " .. "FAILED: " .. tostring(roleID))
+	YRP.msg("note", "[canGetRole] " .. "FAILED: " .. tostring(roleID))
 	return false
 end
 
@@ -837,7 +841,7 @@ function canVoteRole(ply, roleID)
 			end
 		end
 	end
-	printGM("note", "[canVoteRole] " .. "not voteable, max reached")
+	YRP.msg("note", "[canVoteRole] " .. "not voteable, max reached")
 	return false
 end
 

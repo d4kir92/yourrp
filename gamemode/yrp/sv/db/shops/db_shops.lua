@@ -33,7 +33,7 @@ util.AddNetworkString("shop_add")
 
 net.Receive("shop_add", function(len, ply)
 	local _new = SQL_INSERT_INTO(_db_name, "name", "'new shop'")
-	printGM("db", "shop_add: " .. db_worked(_new))
+	YRP.msg("db", "shop_add: " .. db_worked(_new))
 
 	send_shops(ply)
 end)
@@ -43,7 +43,7 @@ util.AddNetworkString("shop_rem")
 net.Receive("shop_rem", function(len, ply)
 	local _uid = net.ReadString()
 	local _new = SQL_DELETE_FROM(_db_name, "uniqueID = " .. _uid)
-	printGM("db", "shop_rem: " .. tostring(_uid))
+	YRP.msg("db", "shop_rem: " .. tostring(_uid))
 
 	send_shops(ply)
 end)
@@ -54,7 +54,7 @@ net.Receive("shop_edit_name", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_name = net.ReadString()
 	local _new = SQL_UPDATE(_db_name, "name = '" .. SQL_STR_IN(_new_name) .. "'", "uniqueID = " .. _uid)
-	printGM("db", "shop_edit_name: " .. tostring(_uid))
+	YRP.msg("db", "shop_edit_name: " .. tostring(_uid))
 end)
 
 function HasShopPermanent(tab)
@@ -79,7 +79,7 @@ end
 
 util.AddNetworkString("shop_get_tabs")
 function OpenBuyMenu(ply, uid)
-	--printGM("note", "OpenBuyMenu | ply: " .. tostring(ply:RPName()) .. " | uid: " .. tostring(uid))
+	--YRP.msg("note", "OpenBuyMenu | ply: " .. tostring(ply:RPName()) .. " | uid: " .. tostring(uid))
 	local _dealer = SQL_SELECT("yrp_dealers", "*", "uniqueID = '" .. uid .. "'")
 	if _dealer != nil then
 		_dealer = _dealer[1]
@@ -101,7 +101,7 @@ function OpenBuyMenu(ply, uid)
 			net.WriteTable(_nw_tabs)
 		net.Send(ply)
 	else
-		printGM("note", "Dealer not found")
+		YRP.msg("note", "Dealer not found")
 	end
 end
 

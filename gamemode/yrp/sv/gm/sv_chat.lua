@@ -93,7 +93,7 @@ function drop_weapon(sender)
 				sender:DropSWEP(_weapon:GetClass())
 			end
 		else
-			printGM("note", sender:YRPName() .. " drop weapon is disabled!")
+			YRP.msg("note", sender:YRPName() .. " drop weapon is disabled!")
 		end
 	end
 	return ""
@@ -134,13 +134,13 @@ function drop_money(sender, text)
 			end
 			emoney:Spawn()
 			emoney:SetMoney(_moneyAmount)
-			printGM("note", sender:Nick() .. " dropped " .. _moneyAmount .. " money")
+			YRP.msg("note", sender:Nick() .. " dropped " .. _moneyAmount .. " money")
 			return ""
 		else
-			printGM("note", sender:Nick() .. " can't afford to dropmoney (" .. _moneyAmount .. ")")
+			YRP.msg("note", sender:Nick() .. " can't afford to dropmoney (" .. _moneyAmount .. ")")
 		end
 	else
-		printGM("note", "Failed dropmoney")
+		YRP.msg("note", "Failed dropmoney")
 	end
 	sender:ChatPrint("\nCommand-FAILED")
 end
@@ -182,16 +182,16 @@ function set_money(sender, text)
 					return ""
 				end
 				ply:SetMoney(_money)
-				printGM("note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money)
+				YRP.msg("note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money)
 				return ""
 			else
-				printGM("note", "[set_money] Name: " .. tostring(_name) .. " not found!")
+				YRP.msg("note", "[set_money] Name: " .. tostring(_name) .. " not found!")
 				return ""
 			end
 		end
 		sender:ChatPrint("\nCommand-FAILED")
 	else
-		printGM("note", sender:YRPName() .. " tried to use setmoney!")
+		YRP.msg("note", sender:YRPName() .. " tried to use setmoney!")
 	end
 end
 
@@ -211,7 +211,7 @@ function revive(sender, text)
 			sender:ChatPrint("\nCommand-FAILED")
 		end
 	else
-		printGM("note", sender:YRPName() .. " tried to use setmoney!")
+		YRP.msg("note", sender:YRPName() .. " tried to use setmoney!")
 	end
 end
 
@@ -228,14 +228,14 @@ function add_money(sender, text)
 					return ""
 				end
 				ply:addMoney(_money)
-				printGM("note", sender:Nick() .. " adds " .. _money .. " to " .. ply:Nick())
+				YRP.msg("note", sender:Nick() .. " adds " .. _money .. " to " .. ply:Nick())
 				return ""
 			else
 				sender:ChatPrint("\nCommand-FAILED: Player not found")
 			end
 		end
 	else
-		printGM("note", sender:Nick() .. " tried to use addmoney!")
+		YRP.msg("note", sender:Nick() .. " tried to use addmoney!")
 	end
 end
 
@@ -254,7 +254,7 @@ function add_xp(sender, text)
 			end
 		end
 	else
-		printGM("note", sender:Nick() .. " tried to use addxp!")
+		YRP.msg("note", sender:Nick() .. " tried to use addxp!")
 	end
 end
 
@@ -273,7 +273,7 @@ function add_level(sender, text)
 			end
 		end
 	else
-		printGM("note", sender:Nick() .. " tried to use addlevel!")
+		YRP.msg("note", sender:Nick() .. " tried to use addlevel!")
 	end
 end
 
@@ -292,7 +292,7 @@ function set_level(sender, text)
 			end
 		end
 	else
-		printGM("note", sender:Nick() .. " tried to use setlevel!")
+		YRP.msg("note", sender:Nick() .. " tried to use setlevel!")
 	end
 end
 

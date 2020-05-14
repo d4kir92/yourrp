@@ -7,8 +7,8 @@
 
 hr_pre("gm")
 
-printGM("gm", "Loading Resources")
-printGM("gm", "")
+YRP.msg("gm", "Loading Resources")
+YRP.msg("gm", "")
 
 
 
@@ -29,16 +29,16 @@ resource.AddWorkshop("182308069")
 
 --Server Workshop Collection
 local _wsitems = engine.GetAddons()
-printGM("gm", "Nr.\t\tName")
---printGM("gm", " Nr.\tID\t\tName")
+YRP.msg("gm", "Nr.\t\tName")
+--YRP.msg("gm", " Nr.\tID\t\tName")
 local i = 0
 local d = 0
 for k, ws in pairs(_wsitems) do
 	i = i + 1
 
 	if ws.mounted and ws.downloaded then
-		printGM("gm", "+[" .. k .. "]\t[" .. tostring(ws.title) .. "]")
-		--printGM("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "]")
+		YRP.msg("gm", "+[" .. k .. "]\t[" .. tostring(ws.title) .. "]")
+		--YRP.msg("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "]")
 
 		resource.AddWorkshop(tostring(ws.wsid))
 		d = d + 1
@@ -46,9 +46,9 @@ for k, ws in pairs(_wsitems) do
 		YRP.msg("gm", ">>> Addon [" .. ws.title .. "] not mounted or downloaded <<<")
 	end
 end
-printGM("gm", "")
-printGM("gm", "=> " .. tostring(d) .. "/" .. tostring(i) .. " Workshop files that will be send to Clients")
-printGM("gm", "")
+YRP.msg("gm", "")
+YRP.msg("gm", "=> " .. tostring(d) .. "/" .. tostring(i) .. " Workshop files that will be send to Clients")
+YRP.msg("gm", "")
 
-printGM("gm", "Loaded Resources")
+YRP.msg("gm", "Loaded Resources")
 hr_pos("gm")

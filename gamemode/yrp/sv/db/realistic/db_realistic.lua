@@ -44,15 +44,15 @@ local HANDLER_REALISTIC = {}
 
 function RemFromHandler_Realistic(ply)
 	table.RemoveByValue(HANDLER_REALISTIC, ply)
-	printGM("gm", ply:YRPName() .. " disconnected from Realistic")
+	YRP.msg("gm", ply:YRPName() .. " disconnected from Realistic")
 end
 
 function AddToHandler_Realistic(ply)
 	if !table.HasValue(HANDLER_REALISTIC, ply) then
 		table.insert(HANDLER_REALISTIC, ply)
-		printGM("gm", ply:YRPName() .. " connected to Realistic")
+		YRP.msg("gm", ply:YRPName() .. " connected to Realistic")
 	else
-		printGM("gm", ply:YRPName() .. " already connected to Realistic")
+		YRP.msg("gm", ply:YRPName() .. " already connected to Realistic")
 	end
 end
 
@@ -79,9 +79,9 @@ net.Receive("Disconnect_Settings_Realistic", function(len, ply)
 end)
 
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	printGM("note", DATABASE_NAME .. " has not the default values, adding them")
+	YRP.msg("note", DATABASE_NAME .. " has not the default values, adding them")
 	local _result = SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
-	printGM("note", tostring(_result))
+	YRP.msg("note", tostring(_result))
 end
 
 local yrp_realistic = {}
@@ -108,7 +108,7 @@ function YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
 end
 
 function YRPUpdateBool(handler, db_name, ply, netstr, str, l_db, value)
-	printGM("db", ply:YRPName() .. " updated bool " .. str .. " to: " .. tostring(tobool(value)))
+	YRP.msg("db", ply:YRPName() .. " updated bool " .. str .. " to: " .. tostring(tobool(value)))
 	YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
 	for i, pl in pairs(player.GetAll()) do
 		pl:SetDBool(str, tobool(value))
@@ -116,7 +116,7 @@ function YRPUpdateBool(handler, db_name, ply, netstr, str, l_db, value)
 end
 
 function YRPUpdateFloat(handler, db_name, ply, netstr, str, l_db, value)
-	printGM("db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring(value))
+	YRP.msg("db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring(value))
 	YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
 	for i, pl in pairs(player.GetAll()) do
 		pl:SetDFloat(str, value)

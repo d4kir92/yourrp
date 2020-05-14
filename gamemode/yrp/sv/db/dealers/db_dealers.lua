@@ -42,7 +42,7 @@ function CleanUpDealers()
 				end
 			end
 			if !found and tonumber(dealer.uniqueID) != 1 then
-				printGM("db", "Removed unused dealer: " .. dealer.name .. " [UID: " .. dealer.uniqueID .. "]")
+				YRP.msg("db", "Removed unused dealer: " .. dealer.name .. " [UID: " .. dealer.uniqueID .. "]")
 				dealer_rem(dealer.uniqueID)
 			end
 		end

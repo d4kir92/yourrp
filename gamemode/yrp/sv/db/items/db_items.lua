@@ -145,7 +145,7 @@ function Player:MoveItem(_slot1, _slot2, _item)
 	end
 
 	if tonumber(_item.intern_storageID) == tonumber(_slot2.storageID) then
-		printGM("note", "[moveitem] " .. tostring(_item.ClassName) .. " (CANT PUT SELF INSIDE SELF)")
+		YRP.msg("note", "[moveitem] " .. tostring(_item.ClassName) .. " (CANT PUT SELF INSIDE SELF)")
 		return false
 	end
 
@@ -160,10 +160,10 @@ function Player:MoveItem(_slot1, _slot2, _item)
 		end
 
 		if _slot2.storageID == 0 then
-			printGM("db", "[moveitem] FROM NEARBY TO NEARBY")
+			YRP.msg("db", "[moveitem] FROM NEARBY TO NEARBY")
 			--
 		elseif _slot2.storageID != 0 then
-			printGM("db", "[moveitem] FROM NEARBY TO STORAGE " .. _slot2.storageID)
+			YRP.msg("db", "[moveitem] FROM NEARBY TO STORAGE " .. _slot2.storageID)
 			local _storage = SQL_SELECT("yrp_storages", "*", "uniqueID = " .. _i.storageID)
 			if _storage != nil then
 				_storage = _storage[1]
@@ -185,11 +185,11 @@ function Player:MoveItem(_slot1, _slot2, _item)
 
 				if IsEnoughSpace(_stor, _i.sizew, _i.sizeh, _i.posx, _i.posy, _i.uniqueID) then
 					if !IsRightInventoryType(_storage.type, _item.entity:GetDString("eqtype", "world")) then
-						printGM("note", "[moveitem] Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _item.entity:GetDString("eqtype", "world"))
+						YRP.msg("note", "[moveitem] Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _item.entity:GetDString("eqtype", "world"))
 						return "notrighttype"
 					end
 
-					--printGM("db", "[moveitem] ENOUGH SPACE")
+					--YRP.msg("db", "[moveitem] ENOUGH SPACE")
 					local _result = CreateItem(_item, _slot2)
 					_item.entity:Remove()
 					_item.uniqueID = _result.uniqueID
@@ -206,12 +206,12 @@ function Player:MoveItem(_slot1, _slot2, _item)
 						end
 					end
 				else
-					printGM("db", "[moveitem] FROM NEARBY TO STORAGE: Not Enough Space!")
+					YRP.msg("db", "[moveitem] FROM NEARBY TO STORAGE: Not Enough Space!")
 					return "e1"
 				end
 			end
 		else
-			printGM("error", "[moveitem] FROM NEARBY TO ERROR")
+			YRP.msg("error", "[moveitem] FROM NEARBY TO ERROR")
 			return false
 		end
 	elseif _slot1.storageID != 0 then
@@ -223,11 +223,11 @@ function Player:MoveItem(_slot1, _slot2, _item)
 			_i.posy = _slot2.posy
 
 			if _slot2.storageID == 0 then
-				printGM("db", "FROM STORAGE " .. _slot1.storageID .. " TO NEARBY")
+				YRP.msg("db", "FROM STORAGE " .. _slot1.storageID .. " TO NEARBY")
 				local _result = SQL_DELETE_FROM(_db_name, "uniqueID = " .. _item.uniqueID)
 				_item = ItemToEntity(_item, self)
 			elseif _slot2.storageID != 0 then
-				printGM("db", "FROM STORAGE " .. _slot1.storageID .. " TO STORAGE " .._slot2.storageID)
+				YRP.msg("db", "FROM STORAGE " .. _slot1.storageID .. " TO STORAGE " .._slot2.storageID)
 				local _storage = SQL_SELECT("yrp_storages", "*", "uniqueID = " .. _i.storageID)
 				if _storage != nil then
 					_storage = _storage[1]
@@ -246,7 +246,7 @@ function Player:MoveItem(_slot1, _slot2, _item)
 						if ea(_ent) then
 							_type = _item.entity:GetDString("eqtype", "world")
 						end
-						printGM("note", "Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _type)
+						YRP.msg("note", "Item is not right inventory type | storage: " .. _storage.type .. " | item: " .. _type)
 						return "notrighttype"
 					end
 
@@ -260,19 +260,19 @@ function Player:MoveItem(_slot1, _slot2, _item)
 					if IsEnoughSpace(_stor, _i.sizew, _i.sizeh, _i.posx, _i.posy, _i.uniqueID) then
 						local _result = SQL_UPDATE(_db_name, "storageID = '" .. _i.storageID .. "', posx = '" .. _i.posx .. "', posy = '" .. _i.posy .. "'", "uniqueID = " .. _i.uniqueID)
 					else
-						printGM("db", "moveitem: FROM STORAGE TO STORAGE: Not Enough Space!")
+						YRP.msg("db", "moveitem: FROM STORAGE TO STORAGE: Not Enough Space!")
 						return "e2"
 					end
 				end
 			else
-				printGM("error", "FROM STORAGE TO ERROR")
+				YRP.msg("error", "FROM STORAGE TO ERROR")
 				return false
 			end
 		else
-			printGM("note", "[moveitem] item not available anymore")
+			YRP.msg("note", "[moveitem] item not available anymore")
 		end
 	else
-		printGM("error", "[moveitem] FROM UNKNOWN")
+		YRP.msg("error", "[moveitem] FROM UNKNOWN")
 		return false
 	end
 

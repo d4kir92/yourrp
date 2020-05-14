@@ -18,7 +18,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_classname", "TEXT DEFAULT 'npc_zombie'")
 --db_is_empty(DATABASE_NAME)
 
 function teleportToPoint(ply, pos)
-	--printGM("note", "teleportToPoint " .. tostring(pos))
+	--YRP.msg("note", "teleportToPoint " .. tostring(pos))
 	tp_to(ply, Vector(pos[1], pos[2], pos[3]))
 end
 
@@ -35,7 +35,7 @@ function teleportToSpawnpoint(ply)
 		return false
 	else
 		timer.Simple(0.0, function()
-			printGM("note", "teleportToSpawnpoint " .. ply:Nick())
+			YRP.msg("note", "teleportToSpawnpoint " .. ply:Nick())
 			local rolTab = ply:GetRolTab()
 			local groTab = ply:GetGroTab()
 			local chaTab = ply:GetChaTab()
@@ -46,7 +46,7 @@ function teleportToSpawnpoint(ply)
 					local _tmpGroupSpawnpoints = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'GroupSpawnpoint' AND linkID = " .. groTab.uniqueID)
 					if _tmpRoleSpawnpoints != nil then
 						local _randomSpawnPoint = table.Random(_tmpRoleSpawnpoints)
-						printGM("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint (" .. tostring(rolTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint (" .. tostring(rolTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
 
 						local _tmp = string.Explode(",", _randomSpawnPoint.position)
 						tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
@@ -57,7 +57,7 @@ function teleportToSpawnpoint(ply)
 						return true
 					elseif _tmpGroupSpawnpoints != nil then
 						local _randomSpawnPoint = table.Random(_tmpGroupSpawnpoints)
-						printGM("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint (" .. tostring(groTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint (" .. tostring(groTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
 
 						local _tmp = string.Explode(",", _randomSpawnPoint.position)
 						tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
@@ -79,7 +79,7 @@ function teleportToSpawnpoint(ply)
 								local _gs = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "linkID = " .. _ug.uniqueID)
 								if _gs != nil then
 									local _randomSpawnPoint = table.Random(_gs)
-									printGM("note", "[" .. ply:Nick() .. "] teleported to int_parent-groupspawnpoint (" .. tostring(_ug.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+									YRP.msg("note", "[" .. ply:Nick() .. "] teleported to int_parent-groupspawnpoint (" .. tostring(_ug.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
 									local _tmp = string.Explode(",", _randomSpawnPoint.position)
 									tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 									_tmp = string.Explode(",", _randomSpawnPoint.angle)
@@ -93,7 +93,7 @@ function teleportToSpawnpoint(ply)
 							end
 						end
 						local _str = "[" .. tostring(groTab.string_name) .. "]" .. " has NO role or group spawnpoint!"
-						printGM("note", _str)
+						YRP.msg("note", _str)
 
 						net.Start("yrp_noti")
 							net.WriteString("nogroupspawn")
@@ -181,7 +181,7 @@ net.Receive("dbInsertIntoMap", function(len, ply)
 	if sql.TableExists(_tmpDBTable) then
 		SQL_INSERT_INTO(_tmpDBTable, _tmpDBCol, _tmpDBVal)
 	else
-		printGM("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
+		YRP.msg("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
 	end
 
 	UpdateSpawnerNPCTable()

@@ -227,7 +227,7 @@ function InitYRPChat()
 				local py = lply:HudValue("CH", "POSI_Y")
 				local sw = lply:HudValue("CH", "SIZE_W")
 				local sh = lply:HudValue("CH", "SIZE_H")
-				--printGM("deb", "InitYRPChat x " .. x .. ", y " .. y .. ", w " .. w .. ", h " .. h .. ", px " .. px .. ", py " .. py .. ", sw " .. sw ..", sh " .. sh)
+				--YRP.msg("deb", "InitYRPChat x " .. x .. ", y " .. y .. ", w " .. w .. ", h " .. h .. ", px " .. px .. ", py " .. py .. ", sw " .. sw ..", sh " .. sh)
 				if px != x or py != y or sw != w or sh != h then
 					yrpChat.window:SetPos(px, py)
 					yrpChat.window:SetSize(sw, sh)
@@ -497,7 +497,7 @@ function InitYRPChat()
 		end)
 	else
 		--[[timer.Simple(1, function()
-			printGM("error", "Chat creation failed! " .. tostring(yrpChat) .. " " .. tostring(yrpChat.window) .. "." )
+			YRP.msg("error", "Chat creation failed! " .. tostring(yrpChat) .. " " .. tostring(yrpChat.window) .. "." )
 			InitYRPChat()
 		end)]]
 	end

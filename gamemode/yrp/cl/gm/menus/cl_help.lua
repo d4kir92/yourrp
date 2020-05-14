@@ -363,7 +363,7 @@ net.Receive("getsitecommunityteamspeak", function(len)
 		local ip = net.ReadString()
 		local port = net.ReadString()
 		local query_port = net.ReadString()
-		printGM("gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
+		YRP.msg("gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
 
 		if !strEmpty(ip) then
 			if !strEmpty(port) and !strEmpty(query_port) then
@@ -380,7 +380,7 @@ net.Receive("getsitecommunityteamspeak", function(len)
 				ipport:SetText(ip .. ":" .. port)
 				ipport:SetEditable(false)
 			else
-				printGM("note", "missing Port and QueryPort")
+				YRP.msg("note", "missing Port and QueryPort")
 			end
 		end
 	end

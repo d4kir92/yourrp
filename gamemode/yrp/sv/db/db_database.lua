@@ -9,21 +9,21 @@ yrp_db.version = 1
 yrp_db.loaded = false
 
 function retry_load_database()
-	printGM("db", "ERROR!!! >> retry Load Database in 10sec <<")
-	printGM("db", "ERROR!!! >> Your database is maybe broken! <<")
+	YRP.msg("db", "ERROR!!! >> retry Load Database in 10sec <<")
+	YRP.msg("db", "ERROR!!! >> Your database is maybe broken! <<")
 
 	if timer.Exists("retryLoadDatabase") then
 		timer.Remove("retryLoadDatabase")
 	end
 
 	local integrity_check = sql.Query("pragma integrity_check;")
-	printGM("db", "Integrity_check: " .. tostring(integrity_check))
+	YRP.msg("db", "Integrity_check: " .. tostring(integrity_check))
 
 	local nodes = sql.Query("reindex nodes;")
-	printGM("db", "Nodes: " .. tostring(nodes))
+	YRP.msg("db", "Nodes: " .. tostring(nodes))
 
 	local pristine = sql.Query("reindex pristine;")
-	printGM("db", "Pristine: " .. tostring(pristine))
+	YRP.msg("db", "Pristine: " .. tostring(pristine))
 
 	timer.Create("retryLoadDatabase", 10, 1, function()
 		db_init_database()
@@ -86,23 +86,23 @@ end
 
 local _db_reseted = false
 function reset_database()
-	printGM("db", "reset Database")
+	YRP.msg("db", "reset Database")
 
 	_db_reseted = true
 
 	for k, v in pairs(YRP_DBS) do
 		db_drop_table(v)
 	end
-	printGM("db", "DONE reset Database")
+	YRP.msg("db", "DONE reset Database")
 end
 --reset_database()
 
 net.Receive("hardresetdatabase", function(len, ply)
 	if string.lower(ply:GetUserGroup()) == "superadmin" then
-		printGM("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
-		printGM("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
-		printGM("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
-		printGM("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+		YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+		YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+		YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+		YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
 
 		PrintMessage(HUD_PRINTCENTER, "Hard RESET by [" .. ply:Nick() .. "] in 10sec changelevel")
 
@@ -129,7 +129,7 @@ end
 
 function db_init_database()
 	hr_pre("db")
-	printGM("db", "LOAD DATABASES")
+	YRP.msg("db", "LOAD DATABASES")
 
 	for i, db in pairs(YRP_DBS) do
 		SQL_INIT_DATABASE(db)
@@ -137,7 +137,7 @@ function db_init_database()
 
 	yrp_db.loaded = true
 
-	printGM("db", "DONE Loading DATABASES")
+	YRP.msg("db", "DONE Loading DATABASES")
 	hr_pos("db")
 end
 db_init_database()
