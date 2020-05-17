@@ -294,6 +294,7 @@ function OpenSBS()
 		--sbs.frame:MakePopup()
 		function sbs.frame.btnClose:DoClick()
 			CloseSBS()
+			sbs.frame:Remove()
 		end
 
 		local _mapPNG = getMapPNG()
@@ -534,7 +535,7 @@ function OpenSBS()
 								pl.sbp.color = Color(pl.sbp.color.r + 20, pl.sbp.color.g + 20, pl.sbp.color.b + 20, 100)
 							end
 
-							pl.sbp.pt = string.FormattedTime(pl:GetDFloat("uptime_current", 0))
+							pl.sbp.pt = string.FormattedTime(os.clock() - pl:GetDFloat("uptime_current", 0))
 							if pl.sbp.pt.m < 10 then
 								pl.sbp.pt.m = "0" .. pl.sbp.pt.m
 							end

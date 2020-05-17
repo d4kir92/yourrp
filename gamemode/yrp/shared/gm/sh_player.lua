@@ -447,14 +447,6 @@ if SERVER then
 		local _res = SQL_UPDATE("yrp_players", "uptime_current = " .. 0, "SteamID = '" .. self:SteamID() .. "'")
 	end
 
-	function Player:getuptimecurrent()
-		local _ret = SQL_SELECT("yrp_players", "uptime_current", "SteamID = '" .. self:SteamID() .. "'")
-		if _ret != nil and _ret != false then
-			return _ret[1].uptime_current
-		end
-		return 0
-	end
-
 	function Player:getuptimetotal()
 		local _ret = SQL_SELECT("yrp_players", "uptime_total", "SteamID = '" .. self:SteamID() .. "'")
 		if _ret != nil and _ret != false then
@@ -463,12 +455,15 @@ if SERVER then
 		return 0
 	end
 
+	function Player:getuptimecurrent()
+		return os.clock() - self:GetDFloat("uptime_current", 0)
+	end
+
 	function Player:addSecond()
 		local _sec_total = self:getuptimetotal()
 		local _sec_current = self:getuptimecurrent()
 		if _sec_current != nil and _sec_total != nil and _sec_current != false and _sec_total != false then
 			local _res = SQL_UPDATE("yrp_players", "uptime_total = " .. _sec_total + 1 .. ", uptime_current = " .. _sec_current + 1, "SteamID = '" .. self:SteamID() .. "'")
-			self:SetDFloat("uptime_current", self:getuptimecurrent())
 			self:SetDFloat("uptime_total", self:getuptimetotal())
 			self:SetDFloat("uptime_server", os.clock())
 		end

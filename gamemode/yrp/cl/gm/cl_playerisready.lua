@@ -20,6 +20,7 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 	info.isosx = system.IsOSX()
 	info.country = system.GetCountry()
 	info.branch = GetBranch()
+	info.uptime = os.clock()
 	
 	local b, bb = net.BytesLeft()
 	if b and b > 0 then

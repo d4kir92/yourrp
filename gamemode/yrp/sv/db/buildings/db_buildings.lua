@@ -619,6 +619,21 @@ net.Receive("getBuildings", function(len, ply)
 	net.Send(ply)
 end)
 
+function SendBuildingInfo(ply, ent, tabB, tabO, tabG)
+	if net.BytesLeft() == nil then
+		net.Start("getBuildingInfo")
+			net.WriteEntity(ent)
+			net.WriteTable(tabB)
+			net.WriteTable(tabO)
+			net.WriteTable(tabG)
+		net.Send(ply)
+	else
+		timer.Simple(0.1, function()
+			SendBuildingInfo(ply, ent, tabB, tabO, tabG)
+		end)
+	end
+end
+
 net.Receive("getBuildingInfo", function(len, ply)
 	local door = net.ReadEntity()
 	local buid = door:GetDString("buildingID")
@@ -633,7 +648,7 @@ net.Receive("getBuildingInfo", function(len, ply)
 			tabBuilding = tabBuilding[1]
 			tabBuilding.name = SQL_STR_OUT(tabBuilding.name)
 			if !strEmpty(tabBuilding.ownerCharID) then
-				tabOwner = SQL_SELECT("yrp_characters", "*", "uniqueID = " .. tabBuilding.ownerCharID)
+				tabOwner = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. tabBuilding.ownerCharID .. "'")
 				if wk(tabOwner) then
 					tabOwner = tabOwner[1]
 					--owner = tabOwner.rpname
@@ -641,7 +656,7 @@ net.Receive("getBuildingInfo", function(len, ply)
 					tabOwner = {}
 				end
 			elseif tabBuilding.groupID != "" then
-				tabGroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. tabBuilding.groupID)
+				tabGroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tabBuilding.groupID .. "'")
 				if wk(tabGroup) then
 					tabGroup = tabGroup[1]
 					--owner = _tmpGroTab.string_name
@@ -649,15 +664,8 @@ net.Receive("getBuildingInfo", function(len, ply)
 					tabGroup = {}
 				end
 			end
-
-			--if allowedToUseDoor(buid, ply, door) then
-				net.Start("getBuildingInfo")
-					net.WriteEntity(door)
-					net.WriteTable(tabBuilding)
-					net.WriteTable(tabOwner)
-					net.WriteTable(tabGroup)
-				net.Send(ply)
-			--end
+			
+			SendBuildingInfo(ply, door, tabBuilding, tabOwner, tabGroup)
 		else
 			YRP.msg("note", "getBuildingInfo -> Building not found in Database.")
 			net.Start("getBuildingInfo")

@@ -11,11 +11,14 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 
-	self:SetPos(self:GetPos()+Vector(0,0,100))
-	self:DropToFloor()
+	self:SetPos(self:GetPos() + Vector(0,0,100))
+
 	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
-		phys:Wake()
+		timer.Simple(0.0, function()
+			phys:Wake()
+			self:DropToFloor()
+		end)
 	end
 end
 

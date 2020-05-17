@@ -661,14 +661,16 @@ net.Receive("Connect_Settings_General", function(len)
 							self.d = self.d or 0
 							self.d = self.d + 0.1
 							timer.Simple(self.d, function()
-								net.Start("update_idcard_" .. "int_" .. ele .. "_x")
-									net.WriteString("int_" .. ele .. "_x")
-									net.WriteString(x)
-								net.SendToServer()
-								net.Start("update_idcard_" .. "int_" .. ele .. "_y")
-									net.WriteString("int_" .. ele .. "_y")
-									net.WriteString(y)
-								net.SendToServer()
+								if net.BytesLeft() == nil then
+									net.Start("update_idcard_" .. "int_" .. ele .. "_x")
+										net.WriteString("int_" .. ele .. "_x")
+										net.WriteString(x)
+									net.SendToServer()
+									net.Start("update_idcard_" .. "int_" .. ele .. "_y")
+										net.WriteString("int_" .. ele .. "_y")
+										net.WriteString(y)
+									net.SendToServer()
+								end
 							end)
 						end
 					end

@@ -173,14 +173,14 @@ function LoadCharacters()
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
 						end
 
-						local x = 30
+						local x = YRP.ctr(30)
 						if !strEmpty(self.factionIcon) then
-							x = ph * 2
+							x = ph
 						end
-						draw.SimpleText(self.rpname, "Y_32_700", YRP.ctr(x), YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-						draw.SimpleText(self.fac, "Y_18_500", YRP.ctr(x), YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-						draw.SimpleText(self.grp, "Y_18_500", YRP.ctr(x), YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-						draw.SimpleText(self.rol, "Y_18_500", YRP.ctr(x), YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(self.rpname, "Y_32_700", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(self.rol, "Y_18_500", x, YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 						if i > LocalPlayer():GetDInt("int_characters_max", 1) then
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
@@ -292,10 +292,10 @@ function openCharacterSelection()
 			Derma_DrawBackgroundBlur(self, 0)
 
 			-- Header of Menu
-			draw.SimpleText(YRP.lang_string("LID_characterselection"), "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string("LID_characterselection"), "Y_18_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 			-- Current Character Name
-			draw.SimpleText(_cur, "Y_36_500", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(_cur, "Y_40_500", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 			-- Get Newest Background for the Menu
 			local oldurl = _cs.frame.bg.url
