@@ -292,6 +292,11 @@ hook.Add("PlayerDeath", "yrp_stars_playerdeath", function(victim, inflictor, att
 	if attacker:IsPlayer() then
 		AddStar(attacker)
 	end
+
+	if GetGlobalDBool("bool_characters_removeondeath", false) then
+		local test = SQL_UPDATE("yrp_characters", "bool_archived = '1'", "uniqueID = '" .. victim:CharID() .. "'")
+		victim:SetDBool("yrp_chararchived", true)
+	end
 end)
 
 hook.Add("OnNPCKilled", "yrp_stars_onnpckilled", function(npc, attacker, inflictor)

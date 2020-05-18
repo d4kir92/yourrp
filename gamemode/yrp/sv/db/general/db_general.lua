@@ -189,6 +189,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_othergender", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_changeable_name", "INT DEFAULT 1")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_removeondeath", "INT DEFAULT 0")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_birthday", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_bodyheight", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_weight", "INT DEFAULT 1")
@@ -1332,6 +1334,12 @@ util.AddNetworkString("update_bool_characters_changeable_name")
 net.Receive("update_bool_characters_changeable_name", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_characters_changeable_name", "bool_characters_changeable_name", b)
+end)
+
+util.AddNetworkString("update_bool_characters_removeondeath")
+net.Receive("update_bool_characters_removeondeath", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_characters_removeondeath", "bool_characters_removeondeath", b)
 end)
 
 util.AddNetworkString("update_bool_characters_birthday")

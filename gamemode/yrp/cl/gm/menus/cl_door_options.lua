@@ -19,20 +19,25 @@ end
 
 net.Receive("getBuildingInfo", function(len)
 	local door = net.ReadEntity()
-	local tabBuilding = net.ReadTable()
-	local tabOwner = net.ReadTable()
-	local tabGroup = net.ReadTable()
+	local tab = net.ReadTable()
+	if wk(tab) then
+		local tabBuilding = tab["B"]
+		local tabOwner = tab["O"]
+		local tabGroup = tab["G"]
 
-	if GetGlobalDBool("bool_building_system", false) then
-		if ea(door) then
-			if table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
-				optionWindow(door, tabBuilding, tabOwner, tabGroup)
-			else
-				buyWindow(door, tabBuilding)
+		if GetGlobalDBool("bool_building_system", false) then
+			if ea(door) then
+				if table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
+					optionWindow(door, tabBuilding, tabOwner, tabGroup)
+				else
+					buyWindow(door, tabBuilding)
+				end
 			end
+		else
+			YRP.msg("note", "getBuildingInfo Building System Disabled")
 		end
 	else
-		YRP.msg("note", "getDoorInfo Receive: NIL")
+		YRP.msg("note", "getBuildingInfo net Table broken")
 	end
 end)
 

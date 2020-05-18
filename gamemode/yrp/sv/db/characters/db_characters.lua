@@ -56,7 +56,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_armor", "INT DEFAULT 0")
 --[[ EQUIPMENT NEW ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "TEXT DEFAULT '0'")
 
-
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_archived", "TEXT DEFAULT '0'")
 
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "1")
@@ -711,6 +711,8 @@ net.Receive("EnterWorld", function(len, ply)
 	if wk(roltab) then
 		updateRoleUses(roltab.uniqueID)
 	end
+
+	ply:SetDBool("yrp_chararchived", false)
 
 	local char = net.ReadString()
 	if char != ply:CharID() then

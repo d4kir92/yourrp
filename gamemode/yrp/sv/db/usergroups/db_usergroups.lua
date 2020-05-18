@@ -1550,7 +1550,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 
 		if table.HasValue(tools, "all") then
 			return true
-		elseif table.HasValue(tools, tool) then
+		elseif table.HasValue(tools, string.lower(tool)) then
 			return true
 		else
 			net.Start("yrp_info")
@@ -1787,7 +1787,7 @@ end)
 util.AddNetworkString("usergroup_update_string_tools")
 net.Receive("usergroup_update_string_tools", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local string_tools = string.lower(net.ReadString())
+	local string_tools = net.ReadString()
 	SQL_UPDATE(DATABASE_NAME, "string_tools = '" .. string_tools .. "'", "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated tools of usergroup (" .. uid .. ") to [" .. string_tools .. "]")

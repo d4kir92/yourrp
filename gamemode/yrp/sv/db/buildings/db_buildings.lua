@@ -619,17 +619,16 @@ net.Receive("getBuildings", function(len, ply)
 	net.Send(ply)
 end)
 
-function SendBuildingInfo(ply, ent, tabB, tabO, tabG)
+function SendBuildingInfo(ply, ent, tab)
+	local t = tab or {}
 	if net.BytesLeft() == nil then
 		net.Start("getBuildingInfo")
 			net.WriteEntity(ent)
-			net.WriteTable(tabB)
-			net.WriteTable(tabO)
-			net.WriteTable(tabG)
+			net.WriteTable(t)
 		net.Send(ply)
 	else
 		timer.Simple(0.1, function()
-			SendBuildingInfo(ply, ent, tabB, tabO, tabG)
+			SendBuildingInfo(ply, ent, t)
 		end)
 	end
 end
@@ -647,25 +646,35 @@ net.Receive("getBuildingInfo", function(len, ply)
 		if wk(tabBuilding) then
 			tabBuilding = tabBuilding[1]
 			tabBuilding.name = SQL_STR_OUT(tabBuilding.name)
+			tabBuilding.groupID = tonumber(tabBuilding.groupID)
 			if !strEmpty(tabBuilding.ownerCharID) then
 				tabOwner = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. tabBuilding.ownerCharID .. "'")
 				if wk(tabOwner) then
 					tabOwner = tabOwner[1]
 					--owner = tabOwner.rpname
 				else
+					YRP.msg("note", "[getBuildingInfo] owner dont exists.")
 					tabOwner = {}
 				end
-			elseif tabBuilding.groupID != "" then
+			elseif tabBuilding.groupID != 0 then
 				tabGroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tabBuilding.groupID .. "'")
 				if wk(tabGroup) then
 					tabGroup = tabGroup[1]
 					--owner = _tmpGroTab.string_name
 				else
+					local test = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "groupID = '0'", "uniqueID = '" .. buid .. "'")
+
+					YRP.msg("note", "[getBuildingInfo] group dont exists.")
 					tabGroup = {}
 				end
 			end
 			
-			SendBuildingInfo(ply, door, tabBuilding, tabOwner, tabGroup)
+			local tab = {}
+			tab["B"] = tabBuilding
+			tab["O"] = tabOwner
+			tab["G"] = tabGroup
+
+			SendBuildingInfo(ply, door, tab)
 		else
 			YRP.msg("note", "getBuildingInfo -> Building not found in Database.")
 			net.Start("getBuildingInfo")

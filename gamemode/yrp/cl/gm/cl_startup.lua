@@ -2288,7 +2288,7 @@ hook.Add("Think", "openDeathScreen", function(len)
 		win.respawn = createD("YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScrH() - YRP.ctr(400))
 		win.respawn:SetText("LID_respawnnow")
 		function win.respawn:DoClick()
-			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() and !LocalPlayer():GetDBool("yrp_chararchived", false) then
 				net.Start("EnterWorld")
 					net.WriteString(LocalPlayer():CharID())
 				net.SendToServer()
@@ -2299,14 +2299,16 @@ hook.Add("Think", "openDeathScreen", function(len)
 			end
 		end
 		function win.respawn:Paint(pw, ph)
-			local tab = {}
-			tab.color = Color(56, 118, 29, 255)
-			tab.tcolor = Color(255, 255, 255, 255)
-			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
-				hook.Run("YButtonPaint", self, pw, ph, tab)
-			else
-				tab.text = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_min", 0) - CurTime(), 0)
-				hook.Run("YButtonPaint", self, pw, ph, tab)
+			if !LocalPlayer():GetDBool("yrp_chararchived", false) then
+				local tab = {}
+				tab.color = Color(56, 118, 29, 255)
+				tab.tcolor = Color(255, 255, 255, 255)
+				if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+					hook.Run("YButtonPaint", self, pw, ph, tab)
+				else
+					tab.text = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_min", 0) - CurTime(), 0)
+					hook.Run("YButtonPaint", self, pw, ph, tab)
+				end
 			end
 		end
 

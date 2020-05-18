@@ -451,20 +451,21 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "")
 	end
 
+	pTab(UGS[CURRENT_USERGROUP].string_tools)
 	local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
 	function line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
-		draw.SimpleText("ALL", "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("all", "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 	local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
-	if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, "ALL") then
+	if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, "all") then
 		cb:SetChecked(true)
 	end
 	function cb:OnChange(bVal)
 		if bVal then
-			table.insert(UGS[CURRENT_USERGROUP].string_tools, "ALL")
+			table.insert(UGS[CURRENT_USERGROUP].string_tools, "all")
 		else
-			table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "ALL")
+			table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "all")
 		end
 
 		local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
@@ -481,6 +482,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		for j, cat2 in pairs(cat.Items) do
 			for k, too in pairs(cat2) do
 				if type(too) == "table" then
+					too.ItemName = string.lower(too.ItemName)
 					local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
 					function line:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
@@ -845,14 +847,14 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	GAMEPLAYAddCheckBox("bool_ragdolls", "LID_gp_ragdolls")
 	GAMEPLAYAddHr()
 	GAMEPLAYAddCheckBox("bool_noclip", "LID_gp_noclip")
-	GAMEPLAYAddCheckBox("bool_ignite", "LID_gp_ignite")
-	GAMEPLAYAddCheckBox("bool_drive", "LID_gp_drive")
-	GAMEPLAYAddCheckBox("bool_flashlight", "LID_gp_flashlight")
-	GAMEPLAYAddHr()
-	GAMEPLAYAddCheckBox("bool_collision", "LID_gp_collision")
-	GAMEPLAYAddCheckBox("bool_gravity", "LID_gp_gravity")
-	GAMEPLAYAddCheckBox("bool_keepupright", "LID_gp_keepupright")
-	GAMEPLAYAddCheckBox("bool_bodygroups", "LID_gp_bodygroups")
+	--GAMEPLAYAddCheckBox("bool_ignite", "LID_gp_ignite")
+	--GAMEPLAYAddCheckBox("bool_drive", "LID_gp_drive")
+	--GAMEPLAYAddCheckBox("bool_flashlight", "LID_gp_flashlight")
+	--GAMEPLAYAddHr()
+	--GAMEPLAYAddCheckBox("bool_collision", "LID_gp_collision")
+	--GAMEPLAYAddCheckBox("bool_gravity", "LID_gp_gravity")
+	--GAMEPLAYAddCheckBox("bool_keepupright", "LID_gp_keepupright")
+	--GAMEPLAYAddCheckBox("bool_bodygroups", "LID_gp_bodygroups")
 	GAMEPLAYAddHr()
 	GAMEPLAYAddCheckBox("bool_physgunpickup", "LID_gp_physgunpickup")
 	GAMEPLAYAddCheckBox("bool_physgunpickupplayer", "LID_gp_physgunpickupplayers")

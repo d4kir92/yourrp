@@ -80,8 +80,7 @@ function LoadCharacters()
 	if pa(_cs.charactersBackground) then
 		_cs.charactersBackground.text = ""
 		if wk(chars) then
-			_cs.character.amount = #chars or 0
-			_cs.character.amount = tonumber(_cs.character.amount)
+			_cs.character.amount = 0
 
 			if #chars < 1 then
 				if pa(_cs.frame) then
@@ -99,17 +98,27 @@ function LoadCharacters()
 			end
 			for i = 1, #chars do
 				if chars[i].char != nil then
-					cache[i] = {}
-					cache[i].tmpChar = createD("YButton", nil, YRP.ctr(fw) - 2 * br, YRP.ctr(200), br, br + y * YRP.ctr(200) + y * br, 0)
-					local tmpChar = cache[i].tmpChar
-					tmpChar:SetText("")
-
 					chars[i].char = chars[i].char or {}
 					chars[i].role = chars[i].role or {}
 					chars[i].group = chars[i].group or {}
 					chars[i].faction = chars[i].faction or {}
 
 					chars[i].char.uniqueID = tonumber(chars[i].char.uniqueID)
+					chars[i].char.bool_archived = tobool(chars[i].char.bool_archived)
+					pTab(chars[i].char)
+					
+					if GetGlobalDBool("bool_characters_removeondeath", false) then
+						if chars[i].char.bool_archived then
+							continue
+						end
+					end
+
+					_cs.character.amount = _cs.character.amount + 1
+
+					cache[i] = {}
+					cache[i].tmpChar = createD("YButton", nil, YRP.ctr(fw) - 2 * br, YRP.ctr(200), br, br + y * YRP.ctr(200) + y * br, 0)
+					local tmpChar = cache[i].tmpChar
+					tmpChar:SetText("")
 
 					tmpChar.charid = chars[i].char.uniqueID or "UID INVALID"
 					tmpChar.charid = tonumber(tmpChar.charid)

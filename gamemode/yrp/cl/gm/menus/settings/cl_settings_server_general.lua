@@ -931,6 +931,9 @@ net.Receive("Connect_Settings_General", function(len)
 
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_changeable_name, "LID_namechangeable", "update_bool_characters_changeable_name")
+		
+		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_removeondeath, "LID_removeondeath", "update_bool_characters_removeondeath")
 
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())	
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_birthday, "LID_birthday", "update_bool_characters_birthday")
