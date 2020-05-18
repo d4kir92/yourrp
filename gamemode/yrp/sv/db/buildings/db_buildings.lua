@@ -677,9 +677,6 @@ net.Receive("getBuildingInfo", function(len, ply)
 			SendBuildingInfo(ply, door, tab)
 		else
 			YRP.msg("note", "getBuildingInfo -> Building not found in Database.")
-			net.Start("getBuildingInfo")
-				net.WriteBool(false)
-			net.Send(ply)
 		end
 	else
 		YRP.msg("note", "getBuildingInfo -> BuildingID is not valid")
