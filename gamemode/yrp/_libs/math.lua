@@ -65,15 +65,19 @@ end
 local bfw = 2800
 local bfh = 2100
 function BFW()
-	return YRP.ctr(bfw)
+	if BiggerThen16_9() then
+		return ScrH() * 16 / 9 - YRP.ctr(40)
+	else
+		return ScrW() - YRP.ctr(40)
+	end
 end
 
 function BFH()
-	return YRP.ctr(bfh)
+	return ScrH() - YRP.ctr(40)
 end
 
 function BPX()
-	return ScrW() / 2 - YRP.ctr(bfw) / 2
+	return ScrW() / 2 - BFW() / 2
 end
 
 function BPY()

@@ -57,7 +57,7 @@ local function DrawBlur(px, py, sw, sh, alpha)
 			render.SetStencilFailOperation( STENCIL_KEEP )
 			render.SetStencilZFailOperation( STENCIL_KEEP )
 			
-			surface.SetDrawColor(50, 50, 50, 255)
+			surface.SetDrawColor(50, 50, 50, 10)
 			draw.NoTexture()
 			surface.DrawTexturedRect(px, py, sw, sh)
 			
@@ -68,7 +68,7 @@ local function DrawBlur(px, py, sw, sh, alpha)
 			for i = 1, steps do
 				--mat:SetFloat("$blur", (i / steps) * (6))
 				--mat:Recompute()
-				render.UpdateScreenEffectTexture()
+				--render.UpdateScreenEffectTexture()
 				render.DrawScreenQuad()
 			end
 			surface.SetDrawColor(50, 50, 50, alpha)

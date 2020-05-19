@@ -31,9 +31,9 @@ function SetIsScoreboardOpen(bo)
 	isScoreboardOpen = bo
 	if pa(sbs.frame) then
 		if bo and sbs.frame != nil then
-			sbs.frame:Show()
+			sbs.frame.visible = true --:Show()
 		else
-			sbs.frame:Hide()
+			sbs.frame.visible = false --:Hide()
 		end
 	end
 end
@@ -285,6 +285,7 @@ end
 
 local fac = fac or 1
 function OpenSBS()
+	local lply = LocalPlayer()
 	if pa(sbs.frame) == false then
 		sbs.frame = createD("DFrame", nil, BFW(), BFH(), 0, 0)
 		sbs.frame:Center()
@@ -295,18 +296,37 @@ function OpenSBS()
 		function sbs.frame.btnClose:DoClick()
 			CloseSBS()
 			sbs.frame:Remove()
-		end
+			sbs.frame = nil
+		end	
 
 		local _mapPNG = getMapPNG()
 
 		local _server_logo = GetGlobalDString("text_server_logo", "")
 		text_server_logo = GetHTMLImage(GetGlobalDString("text_server_logo", ""), YRP.ctr(256), YRP.ctr(256))
-
-		sbs.frame.tick = CurTime()
+		
+		sbs.frame.version = lply:GetDInt("hud_version", 0)
 		function sbs.frame:Paint(pw, ph)
+			if lply:GetDInt("hud_version", 0) != self.version then
+				CloseSBS()
+				sbs.frame:Remove()
+				sbs.frame = nil
+			end
+			if self.visible == nil then
+				self.visible = true
+			end
+			self.alpha = self.alpha or 0
+
+			if self.visible then
+				self.alpha = self.alpha + 40
+			else
+				self.alpha = self.alpha - 40
+			end
+			self.alpha = math.Clamp(self.alpha, 0, 250)
+
+			sbs.frame.tick = sbs.frame.tick or CurTime()
 			if self.tick < CurTime() then
 				if input.IsMouseDown(MOUSE_RIGHT) or input.IsMouseDown(MOUSE_MIDDLE) then
-					gui.EnableScreenClicker(!vgui.CursorVisible())
+					gui.EnableScreenClicker(true)
 					self.tick = CurTime() + 0.4
 				end
 			end
@@ -316,38 +336,45 @@ function OpenSBS()
 				self:ShowCloseButton(false)
 			end
 
-			draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(20, 20, 20, 250)) -- Background
+			self.blurtime = self.blurtime or CurTime() + 2
+			if self.alpha > 0 then
+				Derma_DrawBackgroundBlur(self, self.blurtime)
 
-			if strEmpty(_server_logo) then
-				draw.RoundedBox(0, YRP.ctr(256), YRP.ctr(128-50), pw - YRP.ctr(512), YRP.ctr(100), Color(100, 100, 255, 100)) -- Stripe
-			else
-				draw.RoundedBox(0, YRP.ctr(256) / 2, YRP.ctr(128-50), pw - YRP.ctr(512) / 2, YRP.ctr(100), Color(100, 100, 255, 100)) -- Stripe
-			end
+				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(20, 20, 20, self.alpha)) -- Background
 
-			draw.SimpleTextOutlined(GAMEMODE:GetGameDescription() .. " [" .. GetRPBase() .. "]", "Y_20_500", YRP.ctr(256 + 20), YRP.ctr(128-20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined(GetHostName(), "Y_24_500", YRP.ctr(256 + 20), YRP.ctr(128 + 20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-
-			draw.SimpleTextOutlined(YRP.lang_string("LID_map") .. ": " .. GetNiceMapName(), "Y_20_500", pw - YRP.ctr(256 + 20), YRP.ctr(128-20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_players") .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "Y_20_500", pw - YRP.ctr(256 + 20), YRP.ctr(128 + 20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-
-			if strEmpty(_server_logo) then
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(sbs.icons.yrp)
-				surface.DrawTexturedRect(YRP.ctr(4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
-			end
-
-			if _mapPNG != false then
-				draw.RoundedBox(0, pw - YRP.ctr(256 + 8), 0, YRP.ctr(256 + 8), YRP.ctr(256 + 8), Color(0, 0, 0, 255))
-
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(_mapPNG)
-				surface.DrawTexturedRect(pw - YRP.ctr(256 + 4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
-			else
 				if strEmpty(_server_logo) then
-					surface.SetDrawColor(255, 255, 255, 255)
-					surface.SetMaterial(sbs.icons.yrp	)
-					surface.DrawTexturedRect(pw - YRP.ctr(256 + 4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
+					draw.RoundedBox(0, YRP.ctr(256), YRP.ctr(128-50), pw - YRP.ctr(512), YRP.ctr(100), Color(100, 100, 255, self.alpha)) -- Stripe
+				else
+					draw.RoundedBox(0, YRP.ctr(256) / 2, YRP.ctr(128-50), pw - YRP.ctr(512) / 2, YRP.ctr(100), Color(100, 100, 255, self.alpha)) -- Stripe
 				end
+
+				draw.SimpleText(GAMEMODE:GetGameDescription() .. " [" .. GetRPBase() .. "]", "Y_20_500", YRP.ctr(256 + 20), YRP.ctr(128-20), Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(GetHostName(), "Y_24_500", YRP.ctr(256 + 20), YRP.ctr(128 + 20), Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+				draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. GetNiceMapName(), "Y_20_500", pw - YRP.ctr(256 + 20), YRP.ctr(128-20), Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.lang_string("LID_players") .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "Y_20_500", pw - YRP.ctr(256 + 20), YRP.ctr(128 + 20), Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+
+				if strEmpty(_server_logo) then
+					surface.SetDrawColor(255, 255, 255, sbs.frame.alpha)
+					surface.SetMaterial(sbs.icons.yrp)
+					surface.DrawTexturedRect(YRP.ctr(4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
+				end
+
+				if _mapPNG != false then
+					draw.RoundedBox(0, pw - YRP.ctr(256 + 8), 0, YRP.ctr(256 + 8), YRP.ctr(256 + 8), Color(0, 0, 0, sbs.frame.alpha))
+
+					surface.SetDrawColor(255, 255, 255, sbs.frame.alpha)
+					surface.SetMaterial(_mapPNG)
+					surface.DrawTexturedRect(pw - YRP.ctr(256 + 4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
+				else
+					if strEmpty(_server_logo) then
+						surface.SetDrawColor(255, 255, 255, sbs.frame.alpha)
+						surface.SetMaterial(sbs.icons.yrp	)
+						surface.DrawTexturedRect(pw - YRP.ctr(256 + 4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
+					end
+				end
+			else
+				self.blurtime = CurTime() + 2
 			end
 		end
 
@@ -374,13 +401,13 @@ function OpenSBS()
 
 			fac = 1 + (4 / t * (1 - t / table.Count(scolen)))
 
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, sbs.frame.alpha))
 
 			local br = 40
 			local x = 128 + 10
 
 			if IsLevelSystemEnabled() and GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_level"), "Y_24_500", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(YRP.lang_string("LID_level"), "Y_24_500", YRP.ctr(x), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				x = x + scolen["leve"]
 				act["leve"] = true
 			else
@@ -388,7 +415,7 @@ function OpenSBS()
 			end
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_idcardid", false) then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_idcardid"), "Y_24_500", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(YRP.lang_string("LID_idcardid"), "Y_24_500", YRP.ctr(x), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				x = x + scolen["idca"]
 				act["idca"] = true
 			else
@@ -407,7 +434,7 @@ function OpenSBS()
 				end
 			end
 			if GetGlobalDBool("bool_yrp_scoreboard_show_name", false) or GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
-				draw.SimpleTextOutlined(naugname, "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(naugname, "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				x = x + scolen["name"]
 				act["name"] = true
 			else
@@ -421,7 +448,7 @@ function OpenSBS()
 				elseif !GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 					rgname = YRP.lang_string("LID_role")
 				end
-				draw.SimpleTextOutlined(rgname, "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(rgname, "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				x = x + scolen["role"]
 				act["role"] = true
 			else
@@ -429,12 +456,12 @@ function OpenSBS()
 			end
 
 			x = br
-			draw.SimpleTextOutlined(YRP.lang_string("LID_ping"), "Y_24_500", pw - YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleText(YRP.lang_string("LID_ping"), "Y_24_500", pw - YRP.ctr(x), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 			x = x + scolen["ping"]
 			act["ping"] = true
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_os"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(YRP.lang_string("LID_os"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				x = x + scolen["oper"]
 				act["oper"] = true
 			else
@@ -442,7 +469,7 @@ function OpenSBS()
 			end
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_playtime", false) then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_playtime"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(YRP.lang_string("LID_playtime"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				x = x + scolen["play"]
 				act["play"] = true
 			else
@@ -450,7 +477,7 @@ function OpenSBS()
 			end
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_country"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(YRP.lang_string("LID_country"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				x = x + scolen["coun"]
 				act["coun"] = true
 			else
@@ -458,7 +485,7 @@ function OpenSBS()
 			end
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_language"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(YRP.lang_string("LID_language"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				x = x + scolen["lang"]
 				act["lang"] = true
 			else
@@ -472,7 +499,7 @@ function OpenSBS()
 				elseif !GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
 					fdname = YRP.lang_string("LID_frags")
 				end
-				draw.SimpleTextOutlined(fdname, "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(fdname, "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				x = x + scolen["frag"]
 				act["frag"] = true
 			else
@@ -502,12 +529,18 @@ function OpenSBS()
 	if wk(rplys) then
 		for j, f in pairs(rplys) do
 			for i, pl in SortedPairsByMemberValue(f, "groupuid") do
-				if pl.sbp == nil then
+				if !pa(pl.sbp) or pl.sbp:GetParent() != sbs.stab then
+					if pa(pl.sbp) then
+						pl.sbp:Remove()
+					end
 					pl.sbp = createD("DButton", sbs.stab, BFW(), YRP.ctr(128), 0, 0)
 					pl.sbp.pl = pl
 					pl.sbp:SetText("")
 					function pl.sbp:DoClick()
 						OpenPlayerOptions(pl)
+					end
+					function pl.sbp:OnRemove()
+						pl.sbp = nil
 					end
 
 					if strUrl(pl:GetDString("roleIcon", "")) then
@@ -526,39 +559,39 @@ function OpenSBS()
 					function pl.sbp:Paint(pw, ph)
 						if !self.pl:IsValid() then
 							self:Remove()
-						else
-							pl.sbp.col = i % 2 * 100
-							pl.sbp.color = pl:GetGroupColor()
-							if pl.sbp.color.r >= 240 then
-								pl.sbp.color = Color(pl.sbp.color.r - 20, pl.sbp.color.g - 20, pl.sbp.color.b - 20, 100)
+						elseif pa(self) then
+							self.col = i % 2 * 100
+							self.color = pl:GetGroupColor() or Color(255, 0, 0)
+							if self.color.r >= 240 then
+								self.color = Color(self.color.r - 20, self.color.g - 20, self.color.b - 20, sbs.frame.alpha)
 							else
-								pl.sbp.color = Color(pl.sbp.color.r + 20, pl.sbp.color.g + 20, pl.sbp.color.b + 20, 100)
+								self.color = Color(self.color.r + 20, self.color.g + 20, self.color.b + 20, sbs.frame.alpha)
 							end
 
-							pl.sbp.pt = string.FormattedTime(os.clock() - pl:GetDFloat("uptime_current", 0))
-							if pl.sbp.pt.m < 10 then
-								pl.sbp.pt.m = "0" .. pl.sbp.pt.m
+							self.pt = string.FormattedTime(os.clock() - pl:GetDFloat("uptime_current", 0))
+							if self.pt.m < 10 then
+								self.pt.m = "0" .. self.pt.m
 							end
-							if pl.sbp.pt.h < 10 then
-								pl.sbp.pt.h = "0" .. pl.sbp.pt.h
+							if self.pt.h < 10 then
+								self.pt.h = "0" .. self.pt.h
 							end
-							pl.sbp.playtime = pl.sbp.pt.h .. ":" .. pl.sbp.pt.m
-							pl.sbp.os = pl:GetDString("yrp_os", "other")
-							pl.sbp.gmod_branch = pl:GetDString("gmod_branch", "FAILED")
-							pl.sbp.lang = pl:GetLanguageShort()
+							self.playtime = self.pt.h .. ":" .. self.pt.m
+							self.os = pl:GetDString("yrp_os", "other")
+							self.gmod_branch = pl:GetDString("gmod_branch", "FAILED")
+							self.lang = pl:GetLanguageShort()
 
 							local country = pl:GetCountry()
-							pl.sbp.country = country
+							self.country = country
 							local countryshort = pl:GetCountryShort()
-							pl.sbp.cc = string.lower(countryshort)
-							if tostring(YRP.GetDesignIcon("flag_" .. pl.sbp.cc)) == "Material [vgui/material/icon_clear]" and mc[pl.sbp.cc] == nil and string.upper(pl.sbp.cc) != "LOADING" and YRP.AllIconsLoaded() then
-								mc[pl.sbp.cc] = true
-								YRP.msg("mis", "Missing Country: " .. string.upper(pl.sbp.cc))
+							self.cc = string.lower(countryshort)
+							if tostring(YRP.GetDesignIcon("flag_" .. self.cc)) == "Material [vgui/material/icon_clear]" and mc[self.cc] == nil and string.upper(self.cc) != "LOADING" and YRP.AllIconsLoaded() then
+								mc[self.cc] = true
+								YRP.msg("mis", "Missing Country: " .. string.upper(self.cc))
 							end
 
 							self.bg = self.color
 							if self:IsHovered() then
-								self.bg = Color(255, 255, 0, 255)
+								self.bg = Color(255, 255, 255, 128)
 							end
 							draw.RoundedBox(0, 0, 0, pw + ph / 2, ph, self.bg)
 
@@ -566,12 +599,12 @@ function OpenSBS()
 							local x = 128 + 10
 
 							if IsLevelSystemEnabled() and GetGlobalDBool("bool_yrp_scoreboard_show_level", false) then
-								draw.SimpleTextOutlined(pl:Level(), "Y_24_500", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+								draw.SimpleText(pl:Level(), "Y_24_500", YRP.ctr(x), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								x = x + scolen["leve"]
 							end
 
 							if GetGlobalDBool("bool_yrp_scoreboard_show_idcardid", false) then
-								draw.SimpleTextOutlined(pl:GetDString("idcardid", "X"), "Y_24_500", YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+								draw.SimpleText(pl:GetDString("idcardid", "X"), "Y_24_500", YRP.ctr(x), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								x = x + scolen["idca"]
 							end
 
@@ -584,10 +617,10 @@ function OpenSBS()
 								ugy = ph / 2
 							end
 							if GetGlobalDBool("bool_yrp_scoreboard_show_name", false) then
-								draw.SimpleTextOutlined(pl:RPName(), "Y_24_500", YRP.ctr(x * fac), nay, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+								draw.SimpleText(pl:RPName(), "Y_24_500", YRP.ctr(x * fac), nay, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 							if GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
-								draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "Y_24_500", YRP.ctr(x * fac), ugy, pl:GetUserGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+								draw.SimpleText(string.upper(pl:GetUserGroup()), "Y_24_500", YRP.ctr(x * fac), ugy, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 							if GetGlobalDBool("bool_yrp_scoreboard_show_name", false) or GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 								x = x + scolen["name"]
@@ -602,16 +635,16 @@ function OpenSBS()
 								end
 								if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) then
 									self.rolicon = self.rolicon or ""
-									if pa(pl.sbp.ricon) then
+									if pa(self.ricon) then
 										if self.rolicon != pl:GetDString("roleIcon", "") then
 											self.rolicon = pl:GetDString("roleIcon", "")
 											local text_ricon = GetHTMLImage(self.rolicon, YRP.ctr(60), YRP.ctr(60))
-											pl.sbp.ricon:SetHTML(text_ricon)
-										elseif pa(pl.sbp.ricon) then
+											self.ricon:SetHTML(text_ricon)
+										elseif pa(self.ricon) then
 											if !strUrl(pl:GetDString("roleIcon", "")) then
-												pl.sbp.ricon:Remove()
+												self.ricon:Remove()
 											else
-												pl.sbp.ricon:SetPos(YRP.ctr(x * fac + 2), ry - YRP.ctr(30))
+												self.ricon:SetPos(YRP.ctr(x * fac + 2), ry - YRP.ctr(30))
 											end
 										end
 									end
@@ -619,21 +652,37 @@ function OpenSBS()
 									if strUrl(pl:GetDString("roleIcon", "")) then
 										iconx = 64
 									end
-									draw.SimpleTextOutlined(pl:GetRoleName(), "Y_24_500", YRP.ctr(x * fac + iconx + 10), ry, pl:GetRoleColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(pl:GetRoleName(), "Y_24_500", YRP.ctr(x * fac + iconx + 10), ry, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+									if pa(self.ricon) then
+										if sbs.frame.alpha > 0 then
+											self.ricon:Show()
+										else
+											self.ricon:Hide()
+										end
+									end
 								end
 								if GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 									self.grpicon = self.grpicon or ""
-									if pa(pl.sbp.gicon) then
+									if pa(self.gicon) then
 										if self.grpicon != pl:GetDString("groupIcon", "") then
 											self.grpicon = pl:GetDString("groupIcon", "")
 											local text_gicon = GetHTMLImage(self.grpicon, YRP.ctr(60), YRP.ctr(60))
-											pl.sbp.gicon:SetHTML(text_gicon)
+											self.gicon:SetHTML(text_gicon)
 										else
 											if !strUrl(pl:GetDString("groupIcon", "")) then
-												pl.sbp.gicon:Remove()
+												self.gicon:Remove()
 											else
-												pl.sbp.gicon:SetPos(YRP.ctr(x * fac + 2), gy - YRP.ctr(30))
+												self.gicon:SetPos(YRP.ctr(x * fac + 2), gy - YRP.ctr(30))
 											end
+										end
+									end
+
+									if pa(self.gicon) then
+										if sbs.frame.alpha > 0 then
+											self.gicon:Show()
+										else
+											self.gicon:Hide()
 										end
 									end
 
@@ -645,7 +694,7 @@ function OpenSBS()
 									if strUrl(pl:GetDString("groupIcon", "")) then
 										iconx = 64
 									end
-									draw.SimpleTextOutlined(grpname, "Y_24_500", YRP.ctr(x * fac + iconx + 10), gy, pl:GetGroupColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(grpname, "Y_24_500", YRP.ctr(x * fac + iconx + 10), gy, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								end
 								x = x + scolen["role"]
 							end
@@ -653,35 +702,35 @@ function OpenSBS()
 							x = br
 
 							local ping = pl:Ping()
-							local ping_color = Color(255, 0, 0, 255)
+							local ping_color = Color(255, 0, 0, sbs.frame.alpha)
 							if ping < 100 then
-								ping_color = Color(0, 255, 0, 255)
+								ping_color = Color(0, 255, 0, sbs.frame.alpha)
 							elseif ping >= 100 and ping < 200 then
-								ping_color = Color(255, 255, 0, 255)
+								ping_color = Color(255, 255, 0, sbs.frame.alpha)
 							end
-							draw.SimpleTextOutlined(ping, "Y_24_500", pw - YRP.ctr(x), ph / 2, ping_color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							draw.SimpleText(ping, "Y_24_500", pw - YRP.ctr(x), ph / 2, ping_color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 							x = x + scolen["ping"]
 
 							if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
 								local icon_size = YRP.ctr(100)
-								YRP.DrawIcon(YRP.GetDesignIcon("os_" .. self.os), icon_size, icon_size, pw - YRP.ctr(x * fac) - icon_size, (ph - icon_size) / 2, Color(255, 255, 255, 255))
+								YRP.DrawIcon(YRP.GetDesignIcon("os_" .. self.os), icon_size, icon_size, pw - YRP.ctr(x * fac) - icon_size, (ph - icon_size) / 2, Color(255, 255, 255, sbs.frame.alpha))
 								if self:IsHovered() then
-									draw.SimpleTextOutlined(string.upper(self.os) .. " (" .. self.gmod_branch .. ")", "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(string.upper(self.os) .. " (" .. self.gmod_branch .. ")", "Y_12_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 								end
 								x = x + scolen["oper"]
 							end
 
 							if GetGlobalDBool("bool_yrp_scoreboard_show_playtime", false) then
-								draw.SimpleTextOutlined(self.playtime, "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+								draw.SimpleText(self.playtime, "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 								x = x + scolen["play"]
 							end
 
 							if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
 								local icon_size = YRP.ctr(100)
 								local icon_wide = icon_size * 1.49
-								YRP.DrawIcon(YRP.GetDesignIcon("flag_" .. self.cc), icon_size * 1.49, icon_size, pw - YRP.ctr(x * fac) - icon_wide, ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
+								YRP.DrawIcon(YRP.GetDesignIcon("flag_" .. self.cc), icon_size * 1.49, icon_size, pw - YRP.ctr(x * fac) - icon_wide, ph / 2 - icon_size / 2, Color(255, 255, 255, sbs.frame.alpha))
 								if self:IsHovered() then
-									draw.SimpleTextOutlined(string.upper(self.cc), "Y_24_500", pw - YRP.ctr(x * fac) - icon_wide / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(string.upper(self.cc), "Y_24_500", pw - YRP.ctr(x * fac) - icon_wide / 2, ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								end
 								x = x + scolen["coun"]
 							end
@@ -689,9 +738,9 @@ function OpenSBS()
 							if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
 								local icon_size = YRP.ctr(100)
 								local icon_wide = icon_size * 1.49
-								YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. self.lang), icon_size * 1.49, icon_size, pw - YRP.ctr(x * fac) - icon_wide, ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
+								YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. self.lang), icon_size * 1.49, icon_size, pw - YRP.ctr(x * fac) - icon_wide, ph / 2 - icon_size / 2, Color(255, 255, 255, sbs.frame.alpha))
 								if self:IsHovered() then
-									draw.SimpleTextOutlined(string.upper(self.lang), "Y_24_500", pw - YRP.ctr(x * fac) - icon_wide / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(string.upper(self.lang), "Y_24_500", pw - YRP.ctr(x * fac) - icon_wide / 2, ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								end
 								x = x + scolen["lang"]
 							end
@@ -705,10 +754,10 @@ function OpenSBS()
 									fy = ph / 2
 								end
 								if GetGlobalDBool("bool_yrp_scoreboard_show_frags", false) then
-									draw.SimpleTextOutlined(pl:Frags(), "Y_24_500", pw - YRP.ctr(x * fac), fy, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(pl:Frags(), "Y_24_500", pw - YRP.ctr(x * fac), fy, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 								end
 								if GetGlobalDBool("bool_yrp_scoreboard_show_deaths", false) then
-									draw.SimpleTextOutlined(pl:Deaths(), "Y_24_500", pw - YRP.ctr(x * fac), dy, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(pl:Deaths(), "Y_24_500", pw - YRP.ctr(x * fac), dy, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 								end
 								x = x + scolen["frag"]
 							end
@@ -720,35 +769,37 @@ function OpenSBS()
 					pl.sbp.avap.Avatar:SetPlayer(pl, YRP.ctr(128-8))
 					pl.sbp.avap.Avatar:SetPaintedManually(true)
 					function pl.sbp.avap:Paint(pw, ph)
-						render.ClearStencil()
-						render.SetStencilEnable(true)
+						--if pl.sbp != nil then
+							render.ClearStencil()
+							render.SetStencilEnable(true)
 
-							render.SetStencilWriteMask(1)
-							render.SetStencilTestMask(1)
+								render.SetStencilWriteMask(1)
+								render.SetStencilTestMask(1)
 
-							render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
+								render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
 
-							render.SetStencilFailOperation(STENCILOPERATION_INCR)
-							render.SetStencilPassOperation(STENCILOPERATION_KEEP)
-							render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
+								render.SetStencilFailOperation(STENCILOPERATION_INCR)
+								render.SetStencilPassOperation(STENCILOPERATION_KEEP)
+								render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
 
-							render.SetStencilReferenceValue(1)
+								render.SetStencilReferenceValue(1)
 
-							drawRoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 255))
+								drawRoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, sbs.frame.alpha))
 
-							render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
+								render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
-							self.Avatar:SetPaintedManually(false)
-							self.Avatar:PaintManual()
-							self.Avatar:SetPaintedManually(true)
+								self.Avatar:SetPaintedManually(false)
+								self.Avatar:PaintManual()
+								self.Avatar:SetPaintedManually(true)
 
-						render.SetStencilEnable(false)
+							render.SetStencilEnable(false)
+						--end
 					end
 
 					function pl.sbp.avap:PaintOver(pw, ph)
 						local branch = pl:GetDString("gmod_branch", "FAILED")
 						if branch != "64Bit" and pl:HasAccess() then
-							draw.SimpleText(branch, "Y_12_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							draw.SimpleText(branch, "Y_12_500", pw / 2, ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						end
 					end
 				end
@@ -768,7 +819,7 @@ function OpenSBS()
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 100))
 
 			local x = 128 + 10
-			draw.SimpleTextOutlined(YRP.lang_string("LID_characterselection"), "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleText(YRP.lang_string("LID_characterselection"), "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 		sbs.stab:AddItem(sbs.charsel)
 
@@ -783,7 +834,7 @@ function OpenSBS()
 			end
 
 			local idcardid = YRP.lang_string("LID_idcardid")
-			draw.SimpleTextOutlined(idcardid, "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleText(idcardid, "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			x = x + scolen["idca"]
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_idcardid", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
@@ -791,7 +842,7 @@ function OpenSBS()
 			end
 
 			local naugname = YRP.lang_string("LID_name")
-			draw.SimpleTextOutlined(naugname, "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleText(naugname, "Y_24_500", YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			x = x + scolen["name"]
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_rolename", false) or GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
@@ -804,26 +855,26 @@ function OpenSBS()
 
 			local br = 40
 			x = br
-			draw.SimpleTextOutlined(YRP.lang_string("LID_ping"), "Y_24_500", pw - YRP.ctr(x), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleText(YRP.lang_string("LID_ping"), "Y_24_500", pw - YRP.ctr(x), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 			x = x + scolen["ping"]
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_os"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(YRP.lang_string("LID_os"), "Y_12_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				x = x + scolen["oper"]
 			end
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_playtime", false) then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_playtime"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(YRP.lang_string("LID_playtime"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				x = x + scolen["play"]
 			end
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_country"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(YRP.lang_string("LID_country"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				x = x + scolen["coun"]
 			end
 
 			if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
-				draw.SimpleTextOutlined(YRP.lang_string("LID_language"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(YRP.lang_string("LID_language"), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				x = x + scolen["lang"]
 			end
 		end
@@ -843,7 +894,7 @@ function OpenSBS()
 							self:Remove()
 						else
 							pl.usbp.col = i % 2 * 100
-							pl.usbp.color = Color(255, 255, 255, 255)
+							pl.usbp.color = Color(0, 0, 0, sbs.frame.alpha)
 							if pl.usbp.color.r >= 240 then
 								pl.usbp.color = Color(pl.usbp.color.r - 20, pl.usbp.color.g - 20, pl.usbp.color.b - 20, 100)
 							else
@@ -873,7 +924,7 @@ function OpenSBS()
 		
 							self.bg = self.color
 							if self:IsHovered() then
-								self.bg = Color(255, 255, 0, 255)
+								self.bg = Color(255, 255, 0, sbs.frame.alpha)
 							end
 							draw.RoundedBox(0, 0, 0, pw + ph / 2, ph, self.bg)
 
@@ -893,10 +944,10 @@ function OpenSBS()
 									ugy = ph / 2
 								end
 								if GetGlobalDBool("bool_yrp_scoreboard_show_name", false) then
-									draw.SimpleTextOutlined(pl:RPName(), "Y_24_500", YRP.ctr(x * fac), nay, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(pl:RPName(), "Y_24_500", YRP.ctr(x * fac), nay, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								end
 								if GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
-									draw.SimpleTextOutlined(string.upper(pl:GetUserGroup()), "Y_24_500", YRP.ctr(x * fac), ugy, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(string.upper(pl:GetUserGroup()), "Y_24_500", YRP.ctr(x * fac), ugy, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								end
 								if GetGlobalDBool("bool_yrp_scoreboard_show_name", false) or GetGlobalDBool("bool_yrp_scoreboard_show_usergroup", false) then
 									x = x + scolen["name"]
@@ -913,29 +964,29 @@ function OpenSBS()
 
 							local br = 40
 							x = br
-							draw.SimpleTextOutlined(pl:Ping(), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							draw.SimpleText(pl:Ping(), "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 							x = x + scolen["ping"]
 
 							if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
 								local icon_size = YRP.ctr(100)
-								YRP.DrawIcon(YRP.GetDesignIcon("os_" .. self.os), icon_size, icon_size, pw - YRP.ctr(x * fac) - icon_size, (ph - icon_size) / 2, Color(255, 255, 255, 255))
+								YRP.DrawIcon(YRP.GetDesignIcon("os_" .. self.os), icon_size, icon_size, pw - YRP.ctr(x * fac) - icon_size, (ph - icon_size) / 2, Color(255, 255, 255, sbs.frame.alpha))
 								if self:IsHovered() then
-									draw.SimpleTextOutlined(string.upper(self.os) .. " (" .. self.gmod_branch .. ")", "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(string.upper(self.os) .. " (" .. self.gmod_branch .. ")", "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 								end
 								x = x + scolen["oper"]
 							end
 
-							if GetGlobalDBool("bool_yrp_scoreboard_showpl.usbplaytime", false) then
-								draw.SimpleTextOutlined(self.playtime, "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							if GetGlobalDBool("bool_yrp_scoreboard_showplaytime", false) then
+								draw.SimpleText(self.playtime, "Y_24_500", pw - YRP.ctr(x * fac), ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 								x = x + scolen["play"]
 							end
 
 							if GetGlobalDBool("bool_yrp_scoreboard_show_country", false) then
 								local icon_size = YRP.ctr(100)
 								local icon_wide = icon_size * 1.49
-								YRP.DrawIcon(YRP.GetDesignIcon("flag_" .. self.cc), icon_size * 1.49, icon_size, pw - YRP.ctr(x * fac) - icon_wide, ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
+								YRP.DrawIcon(YRP.GetDesignIcon("flag_" .. self.cc), icon_size * 1.49, icon_size, pw - YRP.ctr(x * fac) - icon_wide, ph / 2 - icon_size / 2, Color(255, 255, 255, sbs.frame.alpha))
 								if self:IsHovered() then
-									draw.SimpleTextOutlined(string.upper(self.cc), "Y_24_500", pw - YRP.ctr(x * fac) - icon_wide / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(string.upper(self.cc), "Y_24_500", pw - YRP.ctr(x * fac) - icon_wide / 2, ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								end
 								x = x + scolen["coun"]
 							end
@@ -943,9 +994,9 @@ function OpenSBS()
 							if GetGlobalDBool("bool_yrp_scoreboard_show_language", false) then
 								local icon_size = YRP.ctr(100)
 								local icon_wide = icon_size * 1.49
-								YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. self.lang), icon_size * 1.49, icon_size, pw - YRP.ctr(x * fac) - icon_wide, ph / 2 - icon_size / 2, Color(255, 255, 255, 255))
+								YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. self.lang), icon_size * 1.49, icon_size, pw - YRP.ctr(x * fac) - icon_wide, ph / 2 - icon_size / 2, Color(255, 255, 255, sbs.frame.alpha))
 								if self:IsHovered() then
-									draw.SimpleTextOutlined(string.upper(self.lang), "Y_24_500", pw - YRP.ctr(x * fac) - icon_wide / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									draw.SimpleText(string.upper(self.lang), "Y_24_500", pw - YRP.ctr(x * fac) - icon_wide / 2, ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								end
 								x = x + scolen["lang"]
 							end
@@ -971,7 +1022,7 @@ function OpenSBS()
 
 							render.SetStencilReferenceValue(1)
 
-							drawRoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 255))
+							drawRoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, sbs.frame.alpha))
 
 							render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
@@ -985,7 +1036,7 @@ function OpenSBS()
 					function pl.usbp.avap:PaintOver(pw, ph)
 						local branch = pl:GetDString("gmod_branch", "FAILED")
 						if branch != "64Bit" and pl:HasAccess() then
-							draw.SimpleText(branch, "Y_12_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							draw.SimpleText(branch, "Y_12_500", pw / 2, ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						end
 					end
 				end

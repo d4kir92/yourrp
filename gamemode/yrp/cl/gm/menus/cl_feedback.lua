@@ -24,6 +24,7 @@ function closeTicketMenu()
 			TICKET.content:GetParent():Close()
 		end
 	end
+	CloseCombinedMenu()
 end
 
 local _url = "https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/formResponse"
@@ -116,6 +117,8 @@ function CreateTicketContent(parent)
 			net.Start("add_ticket")
 				net.WriteTable(_net_table)
 			net.SendToServer()
+
+			notification.AddLegacy("TICKET SENDED", 0, 3 )
 		end
 
 		closeTicketMenu()
