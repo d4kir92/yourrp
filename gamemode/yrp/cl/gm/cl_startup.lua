@@ -2408,9 +2408,7 @@ function loading:Paint(pw, ph)
 	draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", pw / 2, ph / 2 + YRP.ctr(760), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 
-	if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 then
-		self:Remove()
-	elseif lply:GetDBool("finishedloading", false) and lply:GetDBool("loadedchars", false) then
+	if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 and lply:GetDBool("finishedloading", false) and lply:GetDBool("loadedchars", false) then
 		self:Remove()
 	end
 end

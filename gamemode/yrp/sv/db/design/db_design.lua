@@ -119,7 +119,7 @@ net.Receive("ply_changed_resolution", function(len, ply)
 	end
 	timer.Simple(1, function()
 		self:SetDInt("hud_version", self:GetDInt("hud_version", 0) + 1)
-	end
+	end)
 	timer.Simple(30, function()
 		self:SetDInt("hud_version", self:GetDInt("hud_version", 0) + 1)
 	end)
