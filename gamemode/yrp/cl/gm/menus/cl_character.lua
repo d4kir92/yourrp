@@ -105,7 +105,6 @@ function LoadCharacters()
 
 					chars[i].char.uniqueID = tonumber(chars[i].char.uniqueID)
 					chars[i].char.bool_archived = tobool(chars[i].char.bool_archived)
-					pTab(chars[i].char)
 					
 					if GetGlobalDBool("bool_characters_removeondeath", false) then
 						if chars[i].char.bool_archived then

@@ -118,10 +118,10 @@ net.Receive("ply_changed_resolution", function(len, ply)
 		return
 	end
 	timer.Simple(1, function()
-		self:SetDInt("hud_version", self:GetDInt("hud_version", 0) + 1)
+		ply:SetDInt("hud_version", self:GetDInt("hud_version", 0) + 1)
 	end)
 	timer.Simple(30, function()
-		self:SetDInt("hud_version", self:GetDInt("hud_version", 0) + 1)
+		ply:SetDInt("hud_version", self:GetDInt("hud_version", 0) + 1)
 	end)
 	--ply:DesignLoadout("ply_changed_resolution")
 end)

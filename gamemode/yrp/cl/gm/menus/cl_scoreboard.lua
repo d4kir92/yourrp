@@ -317,11 +317,15 @@ function OpenSBS()
 			self.alpha = self.alpha or 0
 
 			if self.visible then
-				self.alpha = self.alpha + 40
+				self.alpha = self.alpha + 20
 			else
-				self.alpha = self.alpha - 40
+				self.alpha = self.alpha - 20
 			end
 			self.alpha = math.Clamp(self.alpha, 0, 250)
+
+			if self.alpha == 0 then
+				self:Hide()
+			end
 
 			sbs.frame.tick = sbs.frame.tick or CurTime()
 			if self.tick < CurTime() then
@@ -510,6 +514,8 @@ function OpenSBS()
 		sbs.stab = createD("DPanelList", sbs.frame, BFW(), BFH() - YRP.ctr(256 + 10 + 64), 0, YRP.ctr(256 + 10 + 64))
 		sbs.stab:EnableVerticalScrollbar(true)
 	end
+
+	sbs.frame:Show()
 
 	sbs.stab:Clear()
 

@@ -456,15 +456,15 @@ function InitYRPChat()
 							yrpChat.richText:AppendText(str)
 						end
 					end
-				elseif t == "entity" and obj:IsPlayer() then
+				elseif t == "entity" and obj:IsPlayer() and !yrp then
 					local col = GAMEMODE:GetTeamColor(obj)
-					if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
+					if isnumber(tonumber(col.r)) and isnumber(tonumber(col.g)) and isnumber(tonumber(col.b)) then
 						yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
 						yrpChat.richText:AppendText(obj:Nick())
 					end
-				elseif t == "player" and obj:IsPlayer() then
+				elseif t == "player" and obj:IsPlayer() and !yrp then
 					local col = GAMEMODE:GetTeamColor(obj)
-					if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
+					if isnumber(tonumber(col.r)) and isnumber(tonumber(col.g)) and isnumber(tonumber(col.b)) then
 						yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
 						yrpChat.richText:AppendText(obj:Nick())
 					end
@@ -474,7 +474,7 @@ function InitYRPChat()
 					YRP.msg("note", "chat.addtext (boolean): " .. tostring(obj))
 				elseif t == "entity" then
 					YRP.msg("error", "chat.addtext (entity): " .. tostring(obj))
-				else
+				elseif !yrp then
 					YRP.msg("error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj))
 				end
 			end

@@ -351,8 +351,10 @@ timer.Create("ServerThink", TICK, 0, function()
 						_dealer:Spawn()
 
 						timer.Simple(1, function()
-							_dealer.Entity:LookupSequence("idle_all_01")
-							_dealer.Entity:ResetSequence("idle_all_01")
+							if ea(_dealer.Entity) then
+								_dealer.Entity:LookupSequence("idle_all_01")
+								_dealer.Entity:ResetSequence("idle_all_01")
+							end
 						end)
 					end
 				end

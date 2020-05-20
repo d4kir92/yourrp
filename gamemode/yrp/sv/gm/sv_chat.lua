@@ -542,6 +542,7 @@ function RN(text)
 end
 
 function GM:PlayerSay(sender, text, teamChat)
+	local oldtext = text
 	local channel = "SAY"
 	if string.StartWith(text, "!") or string.StartWith(text, "/") then
 		local s, e = string.find(text, " ")
@@ -659,12 +660,10 @@ function GM:PlayerSay(sender, text, teamChat)
 			return ""
 		else
 			DoCommand(sender, channel, text)
-			return ""
 		end
 	else
 		DoCommand(sender, channel, text)
-
-		return ""
-		--return channel .. " RPNAME : " .. text
 	end
+
+	return oldtext
 end

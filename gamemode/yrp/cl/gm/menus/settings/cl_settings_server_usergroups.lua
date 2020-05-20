@@ -451,7 +451,6 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "")
 	end
 
-	pTab(UGS[CURRENT_USERGROUP].string_tools)
 	local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
 	function line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
