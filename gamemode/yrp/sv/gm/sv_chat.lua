@@ -43,7 +43,7 @@ net.Receive("finishchat", function(len, ply)
 end)
 
 function print_help(sender)
-	sender:ChatPrint("")
+	sender:ChatPrint("--- --- ---")
 	sender:ChatPrint("[HELP] (/help or !help) Any command can start with / or !")
 	sender:ChatPrint("afk - Away from keyboard")
 	sender:ChatPrint("dnd - Do not disturb")
@@ -76,7 +76,7 @@ function print_help(sender)
 
 		sender:ChatPrint("revive NAME")
 	end
-	sender:ChatPrint("")
+	sender:ChatPrint("--- --- ---")
 	return ""
 end
 

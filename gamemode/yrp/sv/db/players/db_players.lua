@@ -467,12 +467,8 @@ function open_character_selection(ply)
 	if ply:IsFullyAuthenticated() then
 		YRP.msg("db", "[" .. ply:SteamName() .. "] -> open character selection.")
 		local steamid = ply:SteamID() or ply:UniqueID()
-		local tmpTable = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. steamid .. "'")
-		if !wk(tmpTable) then
-			tmpTable = {}
-		end
+
 		net.Start("openCharacterMenu")
-			net.WriteTable(tmpTable)
 		net.Send(ply)
 	else
 		timer.Simple(1, function()

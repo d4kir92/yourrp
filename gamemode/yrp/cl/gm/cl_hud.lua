@@ -365,7 +365,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 			text = text .. " (" .. YRP.lang_string("LID_range") .. " " .. GetVoiceRangeText(lply) .. " [" .. GetVoiceRange(lply) .. "])"
 		end
 
-		draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	DONE_LOADING = DONE_LOADING or false
@@ -398,7 +398,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	end
 
 	if game.SinglePlayer() then
-		draw.SimpleText("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleText("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	local _target = LocalPlayer():GetDString("hittargetName", "")

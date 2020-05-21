@@ -221,12 +221,14 @@ end
 
 hook.Add("PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function(ply)
 	--YRP.msg("gm", "[PostPlayerDeath] " .. tostring(ply:YRPName()) .. " is dead.")
-	ply:StopBleeding()
-	ply:InteruptCasting()
+	if IsValid(ply) then
+		ply:StopBleeding()
+		ply:InteruptCasting()
 
-	ply:SetDInt("yrp_stars", 0)
+		ply:SetDInt("yrp_stars", 0)
 
-	ply:SetDBool("can_respawn", true)
+		ply:SetDBool("can_respawn", true)
+	end
 end)
 
 function AddStar(ply)

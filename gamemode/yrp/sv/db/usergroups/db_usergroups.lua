@@ -1535,14 +1535,14 @@ end
 
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if ea(pl) and wk(tool) then
-		--YRP.msg("gm", "CanTool: " .. tool)
+		YRP.msg("gm", "CanTool: " .. tool)
 		local tools = {}
 		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(tab) then
 			tab = tab[1]
 			tools = string.Explode(",", tab.string_tools)
 		end
-		
+		pTab(tools)
 		local owner = tr.Entity:GetOwner()
 		if owner == NULL then
 			owner = tr.Entity:GetRPOwner()
@@ -1565,14 +1565,14 @@ end)
 
 hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
 	if ea(pl) and wk(tool) then
-		--YRP.msg("gm", "CanProperty: " .. property)
+		YRP.msg("gm", "CanProperty: " .. property)
 		local tools = {}
 		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(tab) then
 			tab = tab[1]
 			tools = string.Explode(",", tab.string_tools)
 		end
-		
+		pTab(tools)
 		local owner = tr.Entity:GetOwner()
 		if owner == NULL then
 			owner = tr.Entity:GetRPOwner()

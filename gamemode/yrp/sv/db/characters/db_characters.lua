@@ -554,6 +554,8 @@ function SendLoopCharacterList(ply, tab)
 	end
 end
 
+util.AddNetworkString("OpenCharacterCreation")
+
 function send_characters(ply)
 	local netTable = {}
 
@@ -606,11 +608,12 @@ function send_characters(ply)
 				YRP.msg("note", "[send_characters] roleid != nil or groupid != nil")
 			end
 		end
-	else
-		YRP.msg("note", "[send_characters] chaTab failed! " .. tostring(chaTab))
-	end
 
-	SendLoopCharacterList(ply, netTable)
+		SendLoopCharacterList(ply, netTable)
+	else
+		net.Start("OpenCharacterCreation")
+		net.Send(ply)
+	end
 end
 
 --[[ Client ask for Characters ]]--
