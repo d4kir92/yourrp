@@ -351,6 +351,34 @@ function DefaultHUDSettings(reset)
 	TH.ints.TS = 24
 	AddHUDElement(TH, reset)
 
+	local AL = {}
+	AL.element = "AL"
+	AL.floats = {}
+	AL.floats.POSI_X = 0.0026041667442769
+	AL.floats.POSI_Y = 0.9351851940155
+	AL.floats.SIZE_W = 0.11458333581686
+	AL.floats.SIZE_H = 0.027777777984738
+	AL.bools = {}
+	AL.bools.VISI = 1
+	AL.bools.ROUN = 0
+	AL.bools.ICON = 1
+	AL.bools.TEXT = 0
+	AL.bools.PERC = 1
+	AL.bools.BACK = 1
+	AL.bools.BORD = 0
+	AL.bools.EXTR = 1
+	AL.colors = {}
+	AL.colors.TE = "255, 255, 255, 255"
+	AL.colors.TB = "0, 0, 0, 255"
+	AL.colors.BG = "0, 0, 0, 120"
+	AL.colors.BA = "52, 70, 150, 180"
+	AL.colors.BR = "52, 70, 150, 180"
+	AL.ints = {}
+	AL.ints.AX = 1
+	AL.ints.AY = 1
+	AL.ints.TS = 24
+	AddHUDElement(AL, reset)
+
 	local CA = {}
 	CA.element = "CA"
 	CA.floats = {}

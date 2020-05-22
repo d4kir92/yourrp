@@ -503,6 +503,7 @@ icons["SA"] = YRP.GetDesignIcon("64_money-bill-alt")
 icons["ST"] = YRP.GetDesignIcon("64_running")
 icons["HU"] = YRP.GetDesignIcon("64_hamburger")
 icons["TH"] = YRP.GetDesignIcon("64_glass-cheers")
+icons["AL"] = YRP.GetDesignIcon("64_wine-bottle")
 icons["HY"] = YRP.GetDesignIcon("64_pills")
 icons["CA"] = YRP.GetDesignIcon("64_magic")
 icons["AB"] = YRP.GetDesignIcon("64_tint")
@@ -588,6 +589,11 @@ function HUDSimple()
 			local TH = {}
 			TH.element = "TH"
 			HUDSimpleBG(TH)
+		end
+		if GetGlobalDBool("bool_permille", false) then
+			local AL = {}
+			AL.element = "AL"
+			HUDSimpleBG(AL)
 		end
 		if lply:GetDBool("iscasting", false) then
 			local CA = {}
@@ -797,6 +803,16 @@ function HUDSimple()
 			TH.percentage = math.Round(lply:Thirst() / lply:GetMaxThirst() * 100, 0) .. "%"
 			TH.icon = icons["TH"]
 			HUDSimpleBAR(TH)
+		end
+		if GetGlobalDBool("bool_permille", false) then
+			local AL = {}
+			AL.element = "AL"
+			AL.cur = lply:Permille()
+			AL.max = lply:GetMaxPermille()
+			AL.text = math.Round(lply:Permille(), 1) .. " / " .. math.Round(lply:GetMaxPermille(), 0)
+			AL.percentage = math.Round(lply:Permille() / lply:GetMaxPermille() * 4, 0) .. "‰"
+			AL.icon = icons["AL"]
+			HUDSimpleBAR(AL)
 		end
 		if GetGlobalDBool("bool_radiation", false) then
 			local RA = {}
@@ -1020,6 +1036,11 @@ function HUDSimple()
 			local TH = {}
 			TH.element = "TH"
 			HUDSimpleBR(TH)
+		end
+		if GetGlobalDBool("bool_permille", false) then
+			local AL = {}
+			AL.element = "AL"
+			HUDSimpleBR(AL)
 		end
 		if lply:GetDBool("iscasting", false) then
 			local CA = {}

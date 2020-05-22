@@ -114,6 +114,14 @@ function Player:GetMaxThirst()
 	return 100.0
 end
 
+function Player:Permille()
+	return math.Round(self:GetDFloat("permille", 0.0), 1)
+end
+
+function Player:GetMaxPermille()
+	return 4.0
+end
+
 function Player:Radiation()
 	return math.Round(self:GetDFloat("GetCurRadiation", 1), 1)
 end
@@ -266,8 +274,8 @@ function Player:Eat(num) -- Add num to hunger
 	self:YRPEat(num)
 end
 
-function Player:Drink(num) -- Add num to thirst
-	self:YRPDrink(num)
+function Player:Drink(num, alc) -- Add num to thirst
+	self:YRPDrink(num, alc)
 end
 
 --[[ Money ]]--

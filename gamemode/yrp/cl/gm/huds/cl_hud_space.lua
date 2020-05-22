@@ -11,6 +11,7 @@ local ST = YRP.GetDesignIcon("64_running")
 local BA = YRP.GetDesignIcon("64_battery-full")
 local HU = YRP.GetDesignIcon("64_hamburger")
 local TH = YRP.GetDesignIcon("64_glass-cheers")
+local AL = YRP.GetDesignIcon("64_wine-bottle")
 local XP = YRP.GetDesignIcon("64_atom")
 local MO = YRP.GetDesignIcon("64_money-bill")
 local SA = YRP.GetDesignIcon("64_money-bill-alt")
@@ -61,6 +62,12 @@ function HUDSpace()
 			lply:Thirst(),
 			lply:GetMaxThirst(),
 			TH
+		}
+		ELES["AL"] = {
+			lply:Permille(),
+			lply:GetMaxPermille(),
+			AL,
+			lply:Permille() / lply:GetMaxPermille() * 100 .. "‰",
 		}
 
 		local weapon = lply:GetActiveWeapon()
@@ -293,7 +300,7 @@ function HUDSpace()
 						ay = 0
 						SPACE[ele].ay = 3
 					elseif SPACE[ele].ay == 1 then
-						ay = SPACE[ele].BackgroundH * 0.46
+						ay = SPACE[ele].BackgroundH * 0.5
 					elseif SPACE[ele].ay == 2 then
 						ay = SPACE[ele].BackgroundH
 						SPACE[ele].ay = 4
@@ -318,7 +325,7 @@ function HUDSpace()
 						ay = 0
 						SPACE[ele].ay = 3
 					elseif SPACE[ele].ay == 1 then
-						ay = SPACE[ele].h * 0.46
+						ay = SPACE[ele].h * 0.5
 					elseif SPACE[ele].ay == 2 then
 						ay = SPACE[ele].h
 						SPACE[ele].ay = 4

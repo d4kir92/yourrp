@@ -72,13 +72,17 @@ function con_hg(ply, time)
 end
 
 function con_th(ply)
-	if true and !IsCookPlaying() then return false end
+	if !IsCookPlaying() then return false end
 	local newval = tonumber(ply:GetDFloat("thirst", 0.0)) - 0.01 * GetGlobalDFloat("float_scale_thirst", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
 	ply:SetDFloat("thirst", newval)
 	if tonumber(ply:GetDFloat("thirst", 0.0)) < 20.0 then
 		ply:TakeDamage(ply:GetMaxHealth() / 50)
 	end
+
+	local newval2 = tonumber(ply:GetDFloat("permille", 0.0)) - 0.01 * GetGlobalDFloat("float_scale_permille", 1.0)
+	newval2 = math.Clamp(newval2, 0.0, 4.0)
+	ply:SetDFloat("permille", newval2)
 end
 
 function con_hy(ply)

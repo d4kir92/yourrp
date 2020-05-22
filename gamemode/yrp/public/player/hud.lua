@@ -93,6 +93,8 @@ if CLIENT then
 			return GetGlobalDBool("bool_hunger", false) and self:GetDBool("bool_hunger", false)
 		elseif element == "TH" then
 			return GetGlobalDBool("bool_thirst", false) and self:GetDBool("bool_thirst", false)
+		elseif element == "AL" then
+			return GetGlobalDBool("bool_permille", false)
 		elseif element == "ST" then
 			return GetGlobalDBool("bool_stamina", false) and self:GetDBool("bool_stamina", false)
 		elseif element == "RA" then

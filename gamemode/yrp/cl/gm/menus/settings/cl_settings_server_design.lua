@@ -725,6 +725,11 @@ net.Receive("get_design_settings", function(len)
 			TH.name = "LID_thirstbar"
 			AddElement(TH)
 
+			local AL = {}
+			AL.element = "AL"
+			AL.name = "LID_permille"
+			AddElement(AL)
+
 			local CA = {}
 			CA.element = "CA"
 			CA.name = "LID_castbar"

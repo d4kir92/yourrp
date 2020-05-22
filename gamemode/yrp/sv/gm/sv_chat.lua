@@ -601,7 +601,7 @@ function GM:PlayerSay(sender, text, teamChat)
 			end
 		end
 
-		if text != "!help" and !strEmpty(text) then
+		if channel != "HELP" and !strEmpty(text) then
 			SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', '" .. SQL_STR_IN(text) .. "'")
 		end
 
@@ -664,6 +664,6 @@ function GM:PlayerSay(sender, text, teamChat)
 	else
 		DoCommand(sender, channel, text)
 	end
-
+	
 	return oldtext
 end

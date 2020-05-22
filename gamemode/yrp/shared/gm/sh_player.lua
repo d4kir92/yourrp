@@ -48,7 +48,7 @@ function Player:YRPEat(num)
 	end
 end
 
-function Player:YRPDrink(num)
+function Player:YRPDrink(num, permille)
 	num = tonumber(num)
 	if isnumber(num) then
 		local drinksounds = {
@@ -59,8 +59,16 @@ function Player:YRPDrink(num)
 		local name, nr = table.Random(drinksounds)
 		self:EmitSound(name)
 
-		local newthirst = math.Clamp(self:GetDFloat("thirst", 0.0) + num, 0, 100.0)
+		local newthirst = math.Clamp(self:GetDFloat("thirst", 0.0) + num, 0, self:GetMaxThirst())
 		self:SetDFloat("thirst", newthirst)
+	end
+
+	if permille != nil then
+		permille = tonumber(permille)
+		if isnumber(permille) then
+			local newpermille = math.Clamp(self:GetDFloat("permille", 0.0) + num, 0, self:GetMaxPermille())
+			self:SetDFloat("permille", newpermille)
+		end
 	end
 end
 
