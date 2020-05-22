@@ -520,7 +520,7 @@ end
 
 --[[ Server Send Characters to Client ]]--
 function SendLoopCharacterList(ply, tab)
-	if net.BytesLeft() == nil then
+	if net.BytesLeft() == nil and net.BytesWritten() == nil then
 		local plyT = ply:GetPlyTab()
 		if wk(plyT) then
 			ply:SetDInt("yrp_charid", tonumber(plyT.CurrentCharacter))

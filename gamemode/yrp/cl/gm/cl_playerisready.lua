@@ -23,7 +23,8 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 	info.uptime = os.clock()
 	
 	local b, bb = net.BytesLeft()
-	if b and b > 0 then
+	local w, ww = net.BytesWritten()
+	if b and b > 0 and w and w > 0 then
 		YRP.msg("note", "Already running a net message, retry sending ready message.")
 		timer.Simple(2, function()
 			YRPSendIsReadyPingPong()

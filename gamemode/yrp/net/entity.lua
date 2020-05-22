@@ -29,7 +29,7 @@ if SERVER then
 			return
 		end
 
-		if net.BytesLeft() == nil then
+		if net.BytesLeft() == nil and net.BytesWritten() == nil then
 			-- If no traffic
 			if key == YRP_QUEUE_Ents["STRING"][1] then
 				net.Start("SetDString")
@@ -112,7 +112,7 @@ if SERVER then
 			return
 		end
 
-		if net.BytesLeft() == nil then
+		if net.BytesLeft() == nil and net.BytesWritten() == nil then
 			-- If no traffic
 			if key == YRP_QUEUE_Ents["BOOL"][1] then
 				net.Start("SetDBool")
@@ -206,7 +206,7 @@ if SERVER then
 			return
 		end
 
-		if net.BytesLeft() == nil then
+		if net.BytesLeft() == nil and net.BytesWritten() == nil then
 			-- If no traffic
 			if key == YRP_QUEUE_Ents["INT"][1] then
 				net.Start("SetDInt")
@@ -294,7 +294,7 @@ if SERVER then
 			return
 		end
 
-		if net.BytesLeft() == nil then
+		if net.BytesLeft() == nil and net.BytesWritten() == nil then
 			-- If no traffic
 			if key == YRP_QUEUE_Ents["FLOAT"][1] then
 				net.Start("SetDFloat")
@@ -387,7 +387,7 @@ if SERVER then
 			return
 		end
 
-		if net.BytesLeft() == nil then
+		if net.BytesLeft() == nil and net.BytesWritten() == nil then
 			-- If no traffic
 			if key == YRP_QUEUE_Ents["ENTITY"][1] then
 				net.Start("SetDEntity")
@@ -475,7 +475,7 @@ if SERVER then
 			return
 		end
 
-		if net.BytesLeft() == nil then
+		if net.BytesLeft() == nil and net.BytesWritten() == nil then
 			-- If no traffic
 			if key == YRP_QUEUE_Ents["TABLE"][1] then
 				net.Start("SetDTable")

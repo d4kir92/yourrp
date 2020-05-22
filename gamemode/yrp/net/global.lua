@@ -22,7 +22,7 @@ if SERVER then
 			table.insert(YRP_QUEUE_Globals["BOOL"], index)
 		end
 
-		if net.BytesLeft() == nil then
+		if net.BytesLeft() == nil and net.BytesWritten() == nil then
 			-- If no traffic
 			if index == YRP_QUEUE_Globals["BOOL"][1] then
 				net.Start("SetGlobalDBool")
@@ -94,7 +94,7 @@ if SERVER then
 			table.insert(YRP_QUEUE_Globals["STRING"], index)
 		end
 
-		if net.BytesLeft() == nil then
+		if net.BytesLeft() == nil and net.BytesWritten() == nil then
 			-- If no traffic
 			if index == YRP_QUEUE_Globals["STRING"][1] then
 				net.Start("SetGlobalDString")
@@ -160,7 +160,7 @@ if SERVER then
 			table.insert(YRP_QUEUE_Globals["INT"], index)
 		end
 
-		if net.BytesLeft() == nil then
+		if net.BytesLeft() == nil and net.BytesWritten() == nil then
 			-- If no traffic
 			if index == YRP_QUEUE_Globals["INT"][1] then
 				net.Start("SetGlobalDInt")
@@ -227,7 +227,7 @@ if SERVER then
 			table.insert(YRP_QUEUE_Globals["FLOAT"], index)
 		end
 
-		if net.BytesLeft() == nil then
+		if net.BytesLeft() == nil and net.BytesWritten() == nil then
 			-- If no traffic
 			if index == YRP_QUEUE_Globals["FLOAT"][1] then
 				net.Start("SetGlobalDFloat")
@@ -293,7 +293,7 @@ if SERVER then
 			table.insert(YRP_QUEUE_Globals["TABLE"], index)
 		end
 
-		if net.BytesLeft() == nil then
+		if net.BytesLeft() == nil and net.BytesWritten() == nil then
 			-- If no traffic
 			if index == YRP_QUEUE_Globals["TABLE"][1] then
 				net.Start("SetGlobalDTable")

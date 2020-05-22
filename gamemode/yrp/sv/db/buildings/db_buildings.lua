@@ -621,7 +621,7 @@ end)
 
 function SendBuildingInfo(ply, ent, tab)
 	local t = tab or {}
-	if net.BytesLeft() == nil then
+	if net.BytesLeft() == nil and net.BytesWritten() == nil then
 		net.Start("getBuildingInfo")
 			net.WriteEntity(ent)
 			net.WriteTable(t)

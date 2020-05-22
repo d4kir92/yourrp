@@ -661,7 +661,7 @@ net.Receive("Connect_Settings_General", function(len)
 							self.d = self.d or 0
 							self.d = self.d + 0.1
 							timer.Simple(self.d, function()
-								if net.BytesLeft() == nil then
+								if net.BytesLeft() == nil and net.BytesWritten() == nil then
 									net.Start("update_idcard_" .. "int_" .. ele .. "_x")
 										net.WriteString("int_" .. ele .. "_x")
 										net.WriteString(x)
