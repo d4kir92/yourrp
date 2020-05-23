@@ -2324,6 +2324,8 @@ hook.Add("Think", "openDeathScreen", function(len)
 		function win.changecharacter:Paint(pw, ph)
 			hook.Run("YButtonPaint", self, pw, ph)
 		end
+	elseif LocalPlayer():Alive() then
+		dsd = CurTime() + 2
 	end
 end)
 

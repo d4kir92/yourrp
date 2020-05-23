@@ -339,16 +339,27 @@ function InitYRPChat()
 				gui.HideGameUI()
 			elseif code == KEY_ENTER then
 				if !strEmpty(string.Trim(self:GetText())) then
-					local text = self:GetText()
-					if string.StartWith(text, "!") or string.StartWith(text, "/") then
-						LocalPlayer():ConCommand("say \"".. text .. "\"")
-					else
-						LocalPlayer():ConCommand("say \"!" .. CHATMODE .. " " .. text .. "\"")
+					local tex = self:GetText()
+					local text = ""
+					for i = 0, 10 do
+						timer.Simple(2 * i, function()
+							if !strEmpty(string.Trim(tex)) then
+								text = string.sub(tex, 1, 120)
+								tex = string.sub(tex, 121)
+								
+								if string.StartWith(text, "!") or string.StartWith(text, "/") then
+									LocalPlayer():ConCommand("say \"".. text .. "\"")
+								else
+									LocalPlayer():ConCommand("say \"!" .. CHATMODE .. " " .. text .. "\"")
+								end
+							end
+						end)
 					end
 				end
 				yrpChat.closeChatbox()
 			end
 		end
+
 		function yrpChat:openChatbox(bteam)
 			yrpChat.window:MakePopup()
 			yrpChat.comboBox:RequestFocus()
@@ -572,7 +583,6 @@ end)
 net.Receive("yrp_player_say", function(len)
 	local sender = net.ReadEntity()
 	local pk = net.ReadTable()
-
 	for i, v in pairs(pk) do
 		if isstring(v) then
 			local s, e = string.find(v, "LID_")

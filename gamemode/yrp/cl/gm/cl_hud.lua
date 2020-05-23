@@ -356,6 +356,12 @@ TestYourRPContent()
 hook.Add("HUDPaint", "yrp_hud", function()
 	local lply = LocalPlayer()
 
+	if lply:GetDBool("yrp_spawning", false) then
+		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 255))
+
+		draw.SimpleText(YRP.lang_string("LID_pleasewait"), "Y_18_500", ScrW() / 2, ScrH() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+
 	if lply:GetDBool("yrp_speaking", false) then
 		local text = YRP.lang_string("LID_youarespeaking")
 		if lply:GetDBool("mute_voice", false) then

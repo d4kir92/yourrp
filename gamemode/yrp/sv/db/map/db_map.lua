@@ -42,8 +42,8 @@ function teleportToSpawnpoint(ply)
 
 			if wk(chaTab) and wk(groTab) and wk(rolTab) then
 				if SQL_STR_OUT(chaTab.map) == GetMapNameDB() then
-					local _tmpRoleSpawnpoints = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'RoleSpawnpoint' AND linkID = " .. rolTab.uniqueID)
-					local _tmpGroupSpawnpoints = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'GroupSpawnpoint' AND linkID = " .. groTab.uniqueID)
+					local _tmpRoleSpawnpoints = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'RoleSpawnpoint' AND linkID = '" .. rolTab.uniqueID .. "'")
+					local _tmpGroupSpawnpoints = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'GroupSpawnpoint' AND linkID = '" .. groTab.uniqueID .. "'")
 					if _tmpRoleSpawnpoints != nil then
 						local _randomSpawnPoint = table.Random(_tmpRoleSpawnpoints)
 						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint (" .. tostring(rolTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
@@ -72,14 +72,14 @@ function teleportToSpawnpoint(ply)
 						_ug.int_parentgroup = groTab.int_parentgroup
 
 						while (_has_ug) do
-							_ug = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. _ug.int_parentgroup)
+							_ug = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. _ug.int_parentgroup .. "'")
 
 							if _ug != nil then
 								_ug = _ug[1]
 								local _gs = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "linkID = " .. _ug.uniqueID)
 								if _gs != nil then
 									local _randomSpawnPoint = table.Random(_gs)
-									YRP.msg("note", "[" .. ply:Nick() .. "] teleported to int_parent-groupspawnpoint (" .. tostring(_ug.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+									YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENTGroupSpawnpoint (" .. tostring(_ug.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
 									local _tmp = string.Explode(",", _randomSpawnPoint.position)
 									tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 									_tmp = string.Explode(",", _randomSpawnPoint.angle)

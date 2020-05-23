@@ -726,7 +726,10 @@ net.Receive("EnterWorld", function(len, ply)
 	end
 	if wk(char) then
 		SQL_UPDATE("yrp_players", "CurrentCharacter = '" .. char .. "'", "SteamID = '" .. ply:SteamID() .. "'")
-		ply:Spawn()
+		ply:SetDBool("yrp_spawning", true)
+		timer.Simple(0.1, function()
+			ply:Spawn()
+		end)
 	else
 		YRP.msg("gm", "No valid character selected (" .. tostring(char) .. ")")
 	end

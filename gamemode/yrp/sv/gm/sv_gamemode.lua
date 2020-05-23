@@ -43,7 +43,7 @@ function GM:PlayerConnect(name, ip)
 end
 
 function GM:PlayerInitialSpawn(ply)
-	--YRP.msg("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
+	YRP.msg("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
 
 	if !IsValid(ply) then return end
 
@@ -57,12 +57,10 @@ function GM:PlayerInitialSpawn(ply)
 			timer.Simple(1, function()
 
 				SetRole(ply, rolTab.uniqueID)
-				timer.Simple(0.1, function()
-					teleportToSpawnpoint(ply)
-				end)
-				timer.Simple(0.2, function()
-					teleportToSpawnpoint(ply)
-				end)
+
+				--timer.Simple(0.1, function()
+					--teleportToSpawnpoint(ply)
+				--end)
 			end)
 		end
 	end
@@ -194,17 +192,15 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 end)
 
 hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
-	--YRP.msg("gm", "[PlayerSpawn] " .. tostring(ply:YRPName()) .. " spawned.")
+	YRP.msg("gm", "[PlayerSpawn] " .. tostring(ply:YRPName()) .. " spawned.")
 	if ply:GetDBool("can_respawn", false) then
 		ply:SetDBool("can_respawn", false)
 
 		ply:SetupHands()
 
-		timer.Simple(0.1, function()
+		timer.Simple(0.4, function()
 			teleportToSpawnpoint(ply)
-		end)
-		timer.Simple(0.2, function()
-			teleportToSpawnpoint(ply)
+			ply:SetDBool("yrp_spawning", false)
 		end)
 	end
 end)

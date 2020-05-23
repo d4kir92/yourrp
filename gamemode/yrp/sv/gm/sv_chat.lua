@@ -542,6 +542,7 @@ function RN(text)
 end
 
 function GM:PlayerSay(sender, text, teamChat)
+
 	local oldtext = text
 	local channel = "SAY"
 	if string.StartWith(text, "!") or string.StartWith(text, "/") then
@@ -665,5 +666,5 @@ function GM:PlayerSay(sender, text, teamChat)
 		DoCommand(sender, channel, text)
 	end
 	
-	return oldtext
+	--return oldtext
 end
