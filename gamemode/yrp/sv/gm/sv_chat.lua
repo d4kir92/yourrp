@@ -666,5 +666,6 @@ function GM:PlayerSay(sender, text, teamChat)
 		DoCommand(sender, channel, text)
 	end
 	
+	return ""
 	--return oldtext
 end

@@ -35,6 +35,17 @@ function GM:PlayerDisconnected(ply)
 			end
 		end)
 	end
+
+	-- Remove all items belong to the player
+	for i, ent in pairs(ents.GetAll()) do
+		if ent.PermaProps then -- if perma propped => ignore
+			continue
+		end
+
+		if ent:GetOwner() == ply or ent:GetRPOwner() == ply then
+			ent:Remove()
+		end
+	end
 end
 
 function GM:PlayerConnect(name, ip)
@@ -222,6 +233,7 @@ hook.Add("PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function(ply)
 		ply:InteruptCasting()
 
 		ply:SetDInt("yrp_stars", 0)
+		ply:SetDFloat("permille", 0.0)
 
 		ply:SetDBool("can_respawn", true)
 	end

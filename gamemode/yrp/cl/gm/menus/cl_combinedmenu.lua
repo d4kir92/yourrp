@@ -429,17 +429,23 @@ function OpenCombinedMenu()
 			end
 			hook.Run("YFramePaint", self, pw, ph)
 		end
+		cm.win:CanMaximise()
+		cm.win:SetMaximised(LocalPlayer():GetDBool("combinedmaximised", true), "COMBINED")
+		cm.win:SetSizable(true)
+		cm.win:SetMinWidth(700)
+		cm.win:SetMinHeight(700)
 
 		local content = cm.win:GetContent()
 		-- MENU
-		cm.menu = createD("DPanelList", content, 10, BFH() - cm.win:GetHeaderHeight(), 0, 0)
+		cm.menu = createD("DPanelList", content, 10, BFH() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br, 0, 0)
+		cm.menu:EnableVerticalScrollbar()
 		cm.menu:SetText("")
 		cm.menu.pw = 10
 		cm.menu.ph = YRP.ctr(64) + 2 * br
 		cm.menu.expanded = lply:GetDBool("combined_expanded", true)
 		local font = "Y_" .. math.Clamp(math.Round(cm.menu.ph - 2 * br), 4, 100) ..  "_700"
 		function cm.menu:Paint(pw, ph)
-			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
+			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"))
 		end
 		cm.menu:SetSpacing(YRP.ctr(10))
 		if cm.menu.expanded then
@@ -448,7 +454,7 @@ function OpenCombinedMenu()
 			cm.win:UpdateSize()
 		end
 
-		cm.menu.expander = createD("DButton", cm.menu, cm.menu.ph, cm.menu.ph, 0, cm.menu:GetTall() - cm.menu.ph)
+		cm.menu.expander = createD("DButton", cm.win, cm.menu.ph, cm.menu.ph, 0, cm.win:GetHeaderHeight() + cm.menu:GetTall())
 		cm.menu.expander:SetText("")
 		function cm.menu.expander:DoClick()
 			if cm.menu.expanded then
@@ -463,6 +469,8 @@ function OpenCombinedMenu()
 			lply:SetDBool("combined_expanded", cm.menu.expanded)
 		end
 		function cm.menu.expander:Paint(pw, ph)
+			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
+
 			if cm.menu.expanded then
 				surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
 			else
@@ -498,8 +506,14 @@ function OpenCombinedMenu()
 		function cm.win:UpdateSize(pw)
 			local sw = pw or cm.menu.pw + cm.menu.ph + 2 * br
 			cm.menu:SetWide(sw)
-			cm.site:SetWide(cm.win:GetWide() - cm.menu:GetWide())
+			cm.menu:SetTall(cm.win:GetTall() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br)
+
+			cm.menu.expander:SetPos(0, cm.win:GetHeaderHeight() + cm.menu:GetTall())
+			cm.menu.expander:SetWide(sw)
+
 			cm.site:SetPos(cm.menu:GetWide(), 0)
+			cm.site:SetWide(cm.win:GetWide() - cm.menu:GetWide())
+			cm.site:SetTall(cm.win:GetTall() - cm.win:GetHeaderHeight())
 		end
 
 		surface.SetFont(font)

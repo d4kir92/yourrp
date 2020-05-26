@@ -319,7 +319,10 @@ function OpenSettings()
 		--sm.win:SetHeaderHeight(YRP.ctr(100))
 		sm.win:SetBorder(0)
 		sm.win:CanMaximise()
-		sm.win:SetMaximised(LocalPlayer():GetDBool("settingsmaximised", nil), "SETTING")
+		sm.win:SetMaximised(LocalPlayer():GetDBool("settingsmaximised", true), "SETTING")
+		sm.win:SetSizable(true)
+		sm.win:SetMinWidth(700)
+		sm.win:SetMinHeight(700)
 		function sm.win:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)
 			draw.SimpleText(self:GetTitle(), "Y_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -409,7 +412,7 @@ function OpenSettings()
 		end
 		sm.menu:SetSpacing(YRP.ctr(20))
 		
-		sm.menu.expander = createD("DButton", sm.menu, sm.menu.ph, sm.menu.ph, 0, sm.menu:GetTall() - sm.menu.ph)
+		sm.menu.expander = createD("DButton", sm.win, sm.menu.ph, sm.menu.ph, 0, sm.win:GetTall() - sm.menu.ph)
 		sm.menu.expander:SetText("")
 		function sm.menu.expander:DoClick()
 			if lply:GetDBool("settings_expanded", true) then
@@ -424,7 +427,7 @@ function OpenSettings()
 			lply:SetDBool("settings_expanded", sm.menu.expanded)
 		end
 		function sm.menu.expander:Paint(pw, ph)
-			self:SetPos(0, sm.menu:GetTall() - sm.menu.ph)
+			self:SetPos(0, sm.win:GetTall() - sm.menu.ph)
 			if lply:GetDBool("settings_expanded", true) then
 				surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
 			else
@@ -462,8 +465,10 @@ function OpenSettings()
 			local sw = pw or sm.menu.pw + sm.menu.ph + 2 * br
 
 			sm.menu:SetWide(sw)
+			sm.menu:SetTall(sm.win:GetContent():GetTall())
+			
 			sm.site:SetWide(sm.win:GetWide() - sm.menu:GetWide())
-
+			sm.site:SetTall(sm.win:GetContent():GetTall())
 			sm.site:SetPos(sm.menu:GetWide(), 0)
 		end
 

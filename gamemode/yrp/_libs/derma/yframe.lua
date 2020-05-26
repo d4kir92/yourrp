@@ -20,6 +20,8 @@ function PANEL:SetHeaderHeight(num)
 	else
 		YRP.msg("note", "SetHeaderHeight | num is not a number: " .. tostring(num) .. "!")
 	end
+
+	self:InternalUpdateSize()
 	self:UpdateSize()
 end
 
@@ -29,6 +31,8 @@ end
 
 function PANEL:SetBorder(b)
 	self._border = b
+
+	self:InternalUpdateSize()
 	self:UpdateSize()
 end
 
@@ -83,8 +87,6 @@ function PANEL:SetMaximised(b, von)
 			self.maximised = !self.maximised
 		end
 
-		--LocalPlayer():SetDBool("settingsmaximised", self.maximised)
-
 		if self.maximised then
 			self:SetPos(0, 0)
 			self:SetSize(ScrW(), ScrH())
@@ -92,6 +94,8 @@ function PANEL:SetMaximised(b, von)
 			self:SetSize(BFW(), BFH())
 			self:Center()
 		end
+
+		self:InternalUpdateSize()
 		self:UpdateSize()
 	end
 end
@@ -118,11 +122,14 @@ function PANEL:Sizable(b)
 end
 
 function PANEL:UpdateSize()
+end
+
+function PANEL:InternalUpdateSize()
 	local br = YRP.ctr(self._border)
 	local header = self:GetHeaderHeight()
 	local pw = self:GetWide()
 	local ph = self:GetTall()
-	self.con:SetSize(pw - 2 * br, ph - header - 2 * br)
+	self.con:SetSize(pw - 2 * br - 2, ph - header - 2 * br)
 	self.con:SetPos(br, header + br)
 	self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
 	self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
@@ -137,6 +144,7 @@ function PANEL:UpdateSize()
 end
 
 function PANEL:OnSizeChanged(pw, ph)
+	self:InternalUpdateSize()
 	self:UpdateSize()
 end
 
@@ -195,12 +203,15 @@ function PANEL:Init()
 	self.sh = self:GetTall()
 	self.px, self.py = self:GetPos()
 
+	self:InternalUpdateSize()
 	self:UpdateSize()
 end
 
 function PANEL:Think()
 	if self._headerheight != YRP.ctr(GetGlobalDInt("int_headerheight", 100)) then
 		self._headerheight = YRP.ctr(GetGlobalDInt("int_headerheight", 100))
+
+		self:InternalUpdateSize()
 		self:UpdateSize()
 	end
 

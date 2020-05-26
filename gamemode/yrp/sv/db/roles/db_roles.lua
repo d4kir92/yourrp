@@ -1075,21 +1075,23 @@ end)
 
 function AddSwepToRole(ruid, swepcn)
 	local role = GetRole(ruid)
-	local sweps = string.Explode(",", role.string_sweps)
-	if !table.HasValue(sweps, tostring(swepcn)) then
-		local oldsweps = {}
-		for i, v in pairs(sweps) do
-			if !strEmpty(v) then
-				table.insert(oldsweps, v)
+	if wk(role) then
+		local sweps = string.Explode(",", role.string_sweps)
+		if !table.HasValue(sweps, tostring(swepcn)) then
+			local oldsweps = {}
+			for i, v in pairs(sweps) do
+				if !strEmpty(v) then
+					table.insert(oldsweps, v)
+				end
 			end
+
+			local newsweps = oldsweps
+			table.insert(newsweps, tostring(swepcn))
+			newsweps = string.Implode(",", newsweps)
+
+			SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. newsweps .. "'", "uniqueID = '" .. ruid .. "'")
+			SendSweps(ruid)
 		end
-
-		local newsweps = oldsweps
-		table.insert(newsweps, tostring(swepcn))
-		newsweps = string.Implode(",", newsweps)
-
-		SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. newsweps .. "'", "uniqueID = '" .. ruid .. "'")
-		SendSweps(ruid)
 	end
 end
 

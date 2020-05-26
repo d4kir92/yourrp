@@ -62,18 +62,16 @@ function PY()
 	return ScrH() / 2 - YRP.ctr(fh) / 2
 end
 
-local bfw = 2800
-local bfh = 2100
 function BFW()
 	if BiggerThen16_9() then
-		return ScrH() * 16 / 9 - YRP.ctr(40)
+		return ScrH() * 16 / 9 - YRP.ctr(400)
 	else
-		return ScrW() - YRP.ctr(40)
+		return ScrW() - YRP.ctr(400)
 	end
 end
 
 function BFH()
-	return ScrH() - YRP.ctr(40)
+	return ScrH() - YRP.ctr(200)
 end
 
 function BPX()
@@ -81,7 +79,7 @@ function BPX()
 end
 
 function BPY()
-	return ScrH() / 2 - YRP.ctr(bfh) / 2
+	return ScrH() / 2 - BFH() / 2
 end
 
 

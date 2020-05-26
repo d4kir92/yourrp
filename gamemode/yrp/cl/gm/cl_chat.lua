@@ -322,9 +322,17 @@ function InitYRPChat()
 			win:Center()
 			win:SetTitle("LID_settings")
 
-			local tspn = createD("YLabel", win:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
+			local tila = createD("YLabel", win:GetContent(), YRP.ctr(350), YRP.ctr(50), YRP.ctr(50), YRP.ctr(0))
+			tila:SetText("LID_textsize")
+			local ticb = createD("DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
+			ticb:SetChecked(lply:GetDBool("yrp_timestamp", true))
+			function ticb:OnChange()
+				lply:SetDBool("yrp_timestamp", !lply:GetDBool("yrp_timestamp", true))
+			end
+
+			local tspn = createD("YLabel", win:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(0), YRP.ctr(100))
 			tspn:SetText("LID_textsize")
-			local tsnw = createD("DNumberWang", win:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0 + 50))
+			local tsnw = createD("DNumberWang", win:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(0), YRP.ctr(100 + 50))
 			tsnw:SetValue(LocalPlayer():GetDInt("CH_TS", LocalPlayer():HudValue("CH", "TS")))
 			tsnw:SetMin(10)
 			tsnw:SetMax(64)
@@ -400,6 +408,16 @@ function InitYRPChat()
 			local args = { ... }
 			yrpChat.richText:AppendText("\n")
 			_delay = 3
+			if lply:GetDBool("yrp_timestamp", true) and GetGlobalDBool("bool_yrp_chat", false) then
+				local clock = {}
+				clock.sec = os.date("%S")
+				clock.min = os.date("%M")
+				clock.hours = os.date("%I")
+
+				yrpChat.richText:InsertColorChange(200, 200, 255, 255)
+				yrpChat.richText:AppendText(clock.hours .. ":" .. clock.min .. ":" .. clock.sec .. " ")
+				yrpChat.richText:InsertColorChange(255, 255, 255, 255)
+			end
 			for i, obj in pairs(args) do
 				local t = string.lower(type(obj))
 				if t == "boolean" and i == 1 then

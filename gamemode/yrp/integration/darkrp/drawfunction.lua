@@ -23,9 +23,9 @@ function surface.DrawNonParsedText(text)
 end
 
 function chat.AddNonParsedText(...)
-		local tbl = {...}
-		for i = 2, #tbl, 2 do
-				tbl[i] = safeText(tbl[i])
-		end
-		return chat.AddText(unpack(tbl))
+	local tbl = {...}
+	for i = 2, #tbl, 2 do
+			tbl[i] = safeText(tbl[i])
+	end
+	return chat.AddText(unpack(tbl))
 end

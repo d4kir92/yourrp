@@ -68,7 +68,7 @@ local function DrawBlur(px, py, sw, sh, alpha)
 			for i = 1, steps do
 				--mat:SetFloat("$blur", (i / steps) * (6))
 				--mat:Recompute()
-				--render.UpdateScreenEffectTexture()
+				render.UpdateScreenEffectTexture()
 				render.DrawScreenQuad()
 			end
 			surface.SetDrawColor(50, 50, 50, alpha)

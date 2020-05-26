@@ -259,7 +259,7 @@ function BuildLogs(parent, typ)
 							rt:AppendText(v.string_alttarget)
 	
 							rt:InsertColorChange(255, 255, 255, 255)
-							rt:AppendText(" does " .. v.string_value .. " damage to ")
+							rt:AppendText(" does " .. tostring(v.string_value) .. " damage to ")
 
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(v.string_target_steamid)

@@ -370,7 +370,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 		function rs.add:DoClick()
-			if rs.top.headername != nil then
+			if rs.top.headername != nil and cur_role.gro != nil and cur_role.pre != nil then
 				net.Start("settings_add_role")
 					net.WriteString(cur_role.gro)
 					net.WriteString(cur_role.pre)
@@ -961,6 +961,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea.typ = "role"
 			ea.tab = role
 
+			if role.uniqueID == nil then return end
+			
 			ea[role.uniqueID] = ea[role.uniqueID] or {}
 
 			ea.background:Clear()

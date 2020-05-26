@@ -136,7 +136,8 @@ net.Receive("getMapTab", function(len)
 
 	local PARENT = GetSettingsSite()
 	if !pa(PARENT) then return end
-
+	if !pa(PARENT.maptabs) then return end
+	
 	local parent = PARENT.maptabs.site
 
 	if !wk(parent) or !pa(parent) then return end

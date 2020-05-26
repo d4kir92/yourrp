@@ -353,6 +353,15 @@ function TestYourRPContent()
 	end
 end
 TestYourRPContent()
+
+local function TEST()
+	local lply = LocalPlayer()
+    if lply:Permille() > 0 then
+        DrawMotionBlur(0.1, 0.79, 0.05)
+    end
+end
+hook.Add( "RenderScreenspaceEffects", "BlurTest", TEST)
+
 hook.Add("HUDPaint", "yrp_hud", function()
 	local lply = LocalPlayer()
 
