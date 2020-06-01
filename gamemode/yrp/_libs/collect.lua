@@ -123,7 +123,7 @@ if SERVER then
 			YRP.msg("db", "[ServerInfo] up to date!")
 		end,
 		function(e)
-			YRP.msg("error", "UpdateServerInfo ERROR: " .. tostring(e))
+			YRP.msg("note", "UpdateServerInfo ERROR: " .. tostring(e))
 		end)
 	end
 end

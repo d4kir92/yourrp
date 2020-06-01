@@ -9,6 +9,8 @@ SQL.ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1")
 
 
 function CreateStorage(size, inv)
+	if !wk(size) then return end
+	
 	local result = SQL_INSERT_INTO(DATABASE_NAME, "int_storage_size", "'" .. size .. "'")
 
 	if result == nil then

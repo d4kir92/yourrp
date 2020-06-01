@@ -42,8 +42,8 @@ function teleportToSpawnpoint(ply)
 
 			if wk(chaTab) and wk(groTab) and wk(rolTab) then
 				if SQL_STR_OUT(chaTab.map) == GetMapNameDB() then
-					local _tmpRoleSpawnpoints = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'RoleSpawnpoint' AND linkID = '" .. rolTab.uniqueID .. "'")
-					local _tmpGroupSpawnpoints = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'GroupSpawnpoint' AND linkID = '" .. groTab.uniqueID .. "'")
+					local _tmpRoleSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'RoleSpawnpoint' AND linkID = '" .. rolTab.uniqueID .. "'")
+					local _tmpGroupSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'GroupSpawnpoint' AND linkID = '" .. groTab.uniqueID .. "'")
 					if _tmpRoleSpawnpoints != nil then
 						local _randomSpawnPoint = table.Random(_tmpRoleSpawnpoints)
 						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint (" .. tostring(rolTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
@@ -76,7 +76,7 @@ function teleportToSpawnpoint(ply)
 
 							if _ug != nil then
 								_ug = _ug[1]
-								local _gs = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "linkID = " .. _ug.uniqueID)
+								local _gs = SQL_SELECT(DATABASE_NAME, "*", "linkID = " .. _ug.uniqueID)
 								if _gs != nil then
 									local _randomSpawnPoint = table.Random(_gs)
 									YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENTGroupSpawnpoint (" .. tostring(_ug.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
@@ -118,19 +118,19 @@ util.AddNetworkString("removeMapEntry")
 net.Receive("removeMapEntry", function(len, ply)
 	local _tmpUniqueID = net.ReadString()
 
-	local _tmpMapTable = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. _tmpUniqueID .. "'")
+	local _tmpMapTable = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _tmpUniqueID .. "'")
 	if _tmpMapTable != nil then
 		_tmpMapTable = _tmpMapTable[1]
 		if _tmpMapTable.type == "dealer" then
 			dealer_rem(_tmpMapTable.linkID)
 		end
 	end
-	SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = " .. _tmpUniqueID)
+	SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _tmpUniqueID)
 end)
 
 net.Receive("getMapList", function(len, ply)
 	if ply:CanAccess("bool_map") then
-		local _tmpMapTable = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", nil)
+		local _tmpMapTable = SQL_SELECT(DATABASE_NAME, "*", nil)
 		if !wk(_tmpMapTable) then
 			_tmpMapTable = {}
 		end

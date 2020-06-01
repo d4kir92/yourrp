@@ -28,7 +28,7 @@ function HUDSimpleBG(tab)
 
 				Simple[tab.element]["background"].r = 0
 				if lply:HudValue(tab.element, "ROUN") then
-					Simple[tab.element]["background"].r = tab.r or Simple[tab.element]["background"].h / 2
+					Simple[tab.element]["background"].r = tab.r or YRP.ctr(15)
 				end
 
 				Simple[tab.element]["background"].color = lply:HudValue(tab.element, "BG")
@@ -39,7 +39,8 @@ function HUDSimpleBG(tab)
 				end
 				Simple[tab.element]["background"].x = HUDMOTIONX(Simple[tab.element]["background"].fx)
 				Simple[tab.element]["background"].y = HUDMOTIONY(Simple[tab.element]["background"].fy)
-				DrawRectBlurHUD(Simple[tab.element]["background"].x, Simple[tab.element]["background"].y, Simple[tab.element]["background"].w, Simple[tab.element]["background"].h, Simple[tab.element]["background"].color.a)
+				--DrawRectBlurHUD(Simple[tab.element]["background"].x, Simple[tab.element]["background"].y, Simple[tab.element]["background"].w, Simple[tab.element]["background"].h, Simple[tab.element]["background"].color.a)
+				draw.RoundedBox(Simple[tab.element]["background"].r, Simple[tab.element]["background"].x, Simple[tab.element]["background"].y, Simple[tab.element]["background"].w, Simple[tab.element]["background"].h, Simple[tab.element]["background"].color)
 			end
 		end
 	end
@@ -73,7 +74,7 @@ function HUDSimpleBAR(tab)
 
 			Simple[tab.element]["bar"].r = 0
 			if lply:HudValue(tab.element, "ROUN") then
-				Simple[tab.element]["bar"].r = tab.r or Simple[tab.element]["bar"].h / 2
+				Simple[tab.element]["bar"].r = tab.r or YRP.ctr(15)
 			end
 
 			Simple[tab.element]["bar"].color = lply:HudValue(tab.element, "BA")
@@ -188,7 +189,7 @@ function HUDSimpleBR(tab)
 
 				Simple[tab.element]["border"].r = 0
 				if lply:HudValue(tab.element, "ROUN") then
-					Simple[tab.element]["border"].r = tab.r or Simple[tab.element]["border"].h / 2
+					Simple[tab.element]["border"].r = tab.r or YRP.ctr(15)
 				end
 
 				Simple[tab.element]["border"].color = lply:HudValue(tab.element, "BR")
