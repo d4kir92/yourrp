@@ -371,7 +371,7 @@ function set_role_values(ply, pmid)
 			ply:SetDBool("bool_canbeagent", tobool(rolTab.bool_canbeagent))
 			ply:SetDBool("isadminonly", tobool(rolTab.bool_adminonly))
 
-			ply:SetDInt("int_role_cooldown", tonumber(rolTab.int_cooldown))
+			--ply:SetDInt("int_role_cooldown", tonumber(rolTab.int_cooldown))
 			ply:SetDString("int_roleondeath", rolTab.int_roleondeath)
 
 			ply:SetDInt("int_securitylevel", rolTab.int_securitylevel)

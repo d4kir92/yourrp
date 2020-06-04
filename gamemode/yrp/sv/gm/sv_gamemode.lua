@@ -209,7 +209,7 @@ hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 
 		ply:SetupHands()
 
-		timer.Simple(0.4, function()
+		timer.Simple(0.8, function()
 			teleportToSpawnpoint(ply)
 			ply:SetDBool("yrp_spawning", false)
 		end)

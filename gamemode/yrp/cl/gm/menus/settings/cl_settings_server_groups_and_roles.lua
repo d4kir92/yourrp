@@ -2292,7 +2292,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			local cooldown = {}
+			--[[local cooldown = {}
 			cooldown.parent = ea.restriction:GetContent()
 			cooldown.header = "LID_cooldown"
 			cooldown.netstr = "update_role_int_cooldown"
@@ -2301,7 +2301,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			cooldown.lforce = false
 			cooldown.min = 0
 			cooldown.max = 360
-			ea[role.uniqueID].cooldown = DIntBox(cooldown)
+			ea[role.uniqueID].cooldown = DIntBox(cooldown)]]
 
 			DHr(hr)
 

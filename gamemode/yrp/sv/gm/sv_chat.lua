@@ -509,9 +509,12 @@ function DoCommand(sender, command, text)
 
 	if command == "rpname" or command == "name" or command == "nick" then
 		if GetGlobalDBool("bool_characters_changeable_name", false) then
-			local tab = string.Explode(" ", text)
-			if tab[2] != nil then
-				sender:SetRPName(tab[2])
+			local name = text
+			name = string.Replace(name, "!rpname ", "")
+			name = string.Replace(name, "!name ", "")
+			name = string.Replace(name, "!nick ", "")
+			if name != nil then
+				sender:SetRPName(name)
 				return ""
 			else
 				sender:ChatPrint("SetRPName need more text")
