@@ -27,7 +27,7 @@ function DHr(tab)
 	return pnl
 end
 
-function DCheckBoxes(tab)
+function YRPDCheckBoxes(tab)
 	tab = tab or {}
 	tab.parent = tab.parent or nil
 	if tab.parent != nil then
@@ -178,7 +178,7 @@ function DCheckBoxes(tab)
 	return pnl
 end
 
-function DCheckBox(tab)
+function YRPDCheckBox(tab)
 	tab = tab or {}
 	tab.parent = tab.parent or nil
 	if tab.parent != nil then
@@ -249,7 +249,7 @@ function DCheckBox(tab)
 	return pnl
 end
 
-function DComboBox(tab)
+function YRPDComboBox(tab)
 	tab = tab or {}
 	tab.parent = tab.parent or nil
 	if tab.parent != nil then
@@ -564,7 +564,7 @@ function DTextBox(tab)
 	return pnl
 end
 
-function DNumberWang(tab)
+function YRPDNumberWang(tab)
 	tab = tab or {}
 	tab.w = tab.w or 10
 	tab.h = tab.h or 10
@@ -706,7 +706,7 @@ function DAttributeBar(tab)
 	tab.dnw[1].w = tab.w / tab.len
 	tab.dnw[1].h = tab.h
 	tab.dnw[1].len = tab.len
-	pnl.cu = DNumberWang(tab.dnw[1])
+	pnl.cu = YRPDNumberWang(tab.dnw[1])
 
 	tab.dnw[2].uniqueID = tab.uniqueID
 	tab.dnw[2].parent = tab.parent
@@ -714,7 +714,7 @@ function DAttributeBar(tab)
 	tab.dnw[2].h = tab.h
 	tab.dnw[2].len = tab.len
 	tab.dnw[2].x = tab.w / tab.len
-	pnl.ma = DNumberWang(tab.dnw[2])
+	pnl.ma = YRPDNumberWang(tab.dnw[2])
 
 	if tab.dnw[3] != nil then
 		tab.dnw[3].uniqueID = tab.uniqueID
@@ -723,7 +723,7 @@ function DAttributeBar(tab)
 		tab.dnw[3].h = tab.h
 		tab.dnw[3].len = tab.len
 		tab.dnw[3].x = tab.w / tab.len * 2
-		pnl.up = DNumberWang(tab.dnw[3])
+		pnl.up = YRPDNumberWang(tab.dnw[3])
 	end
 	if tab.dnw[4] != nil then
 		tab.dnw[4].uniqueID = tab.uniqueID
@@ -732,7 +732,7 @@ function DAttributeBar(tab)
 		tab.dnw[4].h = tab.h
 		tab.dnw[4].len = tab.len
 		tab.dnw[4].x = tab.w / tab.len * 3
-		pnl.dn = DNumberWang(tab.dnw[4])
+		pnl.dn = YRPDNumberWang(tab.dnw[4])
 	end
 
 	if tab.par != nil and tab.par.AddItem != nil then

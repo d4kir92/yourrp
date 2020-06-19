@@ -164,9 +164,11 @@ function OpenEmotesMenu()
 	end
 
 	net.Receive("do_act", function(len)
-		local ply = net.ReadEntity()
+		local pl = net.ReadEntity()
 		local act = net.ReadString()
-		ply:AnimRestartGesture( GESTURE_SLOT_CUSTOM, act, true )
+		if IsValid(pl) then
+			pl:AnimRestartGesture( GESTURE_SLOT_CUSTOM, act, true )
+		end
 	end)
 
 	function _em.emotes:DoClick()

@@ -248,6 +248,8 @@ end
 
 util.AddNetworkString("yrp_info2")
 function spawnItem(ply, item, duid)
+	ClassName = item.ClassName -- fix for WAC addons, dumb!
+
 	if item.type == "weapons" then
 		local wep = ply:Give(item.ClassName)
 		if wk(wep) then

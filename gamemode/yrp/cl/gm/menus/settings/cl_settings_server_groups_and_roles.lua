@@ -681,7 +681,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					parentgroup.uniqueID = group.uniqueID
 					parentgroup.lforce = false
 					parentgroup.choices = othergroups
-					ea[group.uniqueID].parentgroup = DComboBox(parentgroup)
+					ea[group.uniqueID].parentgroup = YRPDComboBox(parentgroup)
 				end
 
 				DHr(hr)
@@ -693,7 +693,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				iscp.netstr = "update_group_bool_iscp"
 				iscp.value = group.bool_iscp
 				iscp.uniqueID = group.uniqueID
-				ea[group.uniqueID].iscp = DCheckBox(iscp)
+				ea[group.uniqueID].iscp = YRPDCheckBox(iscp)
 
 
 
@@ -737,7 +737,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					usergroups.uniqueID = group.uniqueID
 					usergroups.lforce = false
 					usergroups.choices = ugs
-					ea[group.uniqueID].usergroups = DCheckBoxes(usergroups)
+					ea[group.uniqueID].usergroups = YRPDCheckBoxes(usergroups)
 
 					DHr(hr)
 				end
@@ -766,7 +766,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					whitelist.value = group.bool_whitelist
 					whitelist.uniqueID = group.uniqueID
 					whitelist.lforce = false
-					ea[group.uniqueID].whitelist = DCheckBox(whitelist)
+					ea[group.uniqueID].whitelist = YRPDCheckBox(whitelist)
 
 					DHr(hr)
 				end
@@ -780,7 +780,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					locked.value = group.bool_locked
 					locked.uniqueID = group.uniqueID
 					locked.lforce = false
-					ea[group.uniqueID].locked = DCheckBox(locked)
+					ea[group.uniqueID].locked = YRPDCheckBox(locked)
 
 					DHr(hr)
 					
@@ -792,7 +792,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					visible.value = group.bool_visible_cc
 					visible.uniqueID = group.uniqueID
 					visible.lforce = false
-					ea[group.uniqueID].visible = DCheckBox(visible)
+					ea[group.uniqueID].visible = YRPDCheckBox(visible)
 
 					DHr(hr)
 
@@ -804,7 +804,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					visible2.value = group.bool_visible_rm
 					visible2.uniqueID = group.uniqueID
 					visible2.lforce = false
-					ea[group.uniqueID].visible2 = DCheckBox(visible2)
+					ea[group.uniqueID].visible2 = YRPDCheckBox(visible2)
 				end
 			end
 		end)
@@ -1054,7 +1054,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				maxamount.uniqueID = role.uniqueID
 				maxamount.lforce = false
 				maxamount.choices = maxa
-				ea[role.uniqueID].maxamount = DComboBox(maxamount)
+				ea[role.uniqueID].maxamount = YRPDComboBox(maxamount)
 
 				DHr(hr)
 			end
@@ -1092,7 +1092,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				int_groupID.uniqueID = role.uniqueID
 				int_groupID.lforce = false
 				int_groupID.choices = grps
-				ea[role.uniqueID].int_groupID = DComboBox(int_groupID)
+				ea[role.uniqueID].int_groupID = YRPDComboBox(int_groupID)
 
 				DHr(hr)
 			end
@@ -1156,7 +1156,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				prerole.uniqueID = role.uniqueID
 				prerole.lforce = false
 				prerole.choices = otherroles
-				ea[role.uniqueID].prerole = DComboBox(prerole)
+				ea[role.uniqueID].prerole = YRPDComboBox(prerole)
 
 				DHr(hr)
 			end
@@ -1178,7 +1178,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			roleondeath.uniqueID = role.uniqueID
 			roleondeath.lforce = false
 			roleondeath.choices = rod_roles
-			ea[role.uniqueID].roleondeath = DComboBox(roleondeath)
+			ea[role.uniqueID].roleondeath = YRPDComboBox(roleondeath)
 
 			ea.info:AutoSize(true)
 
@@ -1205,7 +1205,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			bool_instructor.value = role.bool_instructor
 			bool_instructor.uniqueID = role.uniqueID
 			bool_instructor.lforce = false
-			ea[role.uniqueID].bool_instructor = DCheckBox(bool_instructor)
+			ea[role.uniqueID].bool_instructor = YRPDCheckBox(bool_instructor)
 
 			hr.parent = ea.flags:GetContent()
 			DHr(hr)
@@ -2177,7 +2177,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				usergroups.uniqueID = role.uniqueID
 				usergroups.lforce = false
 				usergroups.choices = ugs
-				ea[role.uniqueID].usergroups = DCheckBoxes(usergroups)
+				ea[role.uniqueID].usergroups = YRPDCheckBoxes(usergroups)
 
 				DHr(hr)
 			end
@@ -2221,7 +2221,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				whitelist.value = role.bool_whitelist
 				whitelist.uniqueID = role.uniqueID
 				whitelist.lforce = false
-				ea[role.uniqueID].whitelist = DCheckBox(whitelist)
+				ea[role.uniqueID].whitelist = YRPDCheckBox(whitelist)
 
 				DHr(hr)
 			end
@@ -2235,7 +2235,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				locked.value = role.bool_locked
 				locked.uniqueID = role.uniqueID
 				locked.lforce = false
-				ea[role.uniqueID].locked = DCheckBox(locked)
+				ea[role.uniqueID].locked = YRPDCheckBox(locked)
 
 				DHr(hr)
 			end
@@ -2249,7 +2249,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				bool_canbeagent.value = role.bool_canbeagent
 				bool_canbeagent.uniqueID = role.uniqueID
 				bool_canbeagent.lforce = false
-				ea[role.uniqueID].bool_canbeagent = DCheckBox(bool_canbeagent)
+				ea[role.uniqueID].bool_canbeagent = YRPDCheckBox(bool_canbeagent)
 
 				DHr(hr)
 
@@ -2261,7 +2261,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				visible.value = role.bool_visible_cc
 				visible.uniqueID = role.uniqueID
 				visible.lforce = false
-				ea[role.uniqueID].visible = DCheckBox(visible)
+				ea[role.uniqueID].visible = YRPDCheckBox(visible)
 
 				DHr(hr)
 
@@ -2273,7 +2273,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				visible2.value = role.bool_visible_rm
 				visible2.uniqueID = role.uniqueID
 				visible2.lforce = false
-				ea[role.uniqueID].visible2 = DCheckBox(visible2)
+				ea[role.uniqueID].visible2 = YRPDCheckBox(visible2)
 
 				DHr(hr)
 			end
@@ -2287,7 +2287,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				bool_voteable.value = role.bool_voteable
 				bool_voteable.uniqueID = role.uniqueID
 				bool_voteable.lforce = false
-				ea[role.uniqueID].bool_voteable = DCheckBox(bool_voteable)
+				ea[role.uniqueID].bool_voteable = YRPDCheckBox(bool_voteable)
 
 				DHr(hr)
 			end
@@ -2457,7 +2457,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			string_ability.uniqueID = role.uniqueID
 			string_ability.lforce = false
 			string_ability.choices = tab_a
-			ea[role.uniqueID].string_ability = DComboBox(string_ability)
+			ea[role.uniqueID].string_ability = YRPDComboBox(string_ability)
 
 			local ability = {}
 			ability.parent = ea.attributes:GetContent()
@@ -2555,7 +2555,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				bool_hunger.netstr = "update_role_bool_hunger"
 				bool_hunger.value = role.bool_hunger
 				bool_hunger.uniqueID = role.uniqueID
-				ea[role.uniqueID].bool_hunger = DCheckBox(bool_hunger)
+				ea[role.uniqueID].bool_hunger = YRPDCheckBox(bool_hunger)
 
 				DHr(hr)
 			end
@@ -2568,7 +2568,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				bool_thirst.netstr = "update_role_bool_thirst"
 				bool_thirst.value = role.bool_thirst
 				bool_thirst.uniqueID = role.uniqueID
-				ea[role.uniqueID].bool_thirst = DCheckBox(bool_thirst)
+				ea[role.uniqueID].bool_thirst = YRPDCheckBox(bool_thirst)
 
 				DHr(hr)
 			end
@@ -2581,7 +2581,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				bool_stamina.netstr = "update_role_bool_stamina"
 				bool_stamina.value = role.bool_stamina
 				bool_stamina.uniqueID = role.uniqueID
-				ea[role.uniqueID].bool_stamina = DCheckBox(bool_stamina)
+				ea[role.uniqueID].bool_stamina = YRPDCheckBox(bool_stamina)
 
 				DHr(hr)
 			end

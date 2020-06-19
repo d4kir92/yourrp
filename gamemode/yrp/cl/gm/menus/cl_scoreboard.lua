@@ -548,7 +548,9 @@ function OpenSBS()
 						OpenPlayerOptions(pl)
 					end
 					function pl.sbp:OnRemove()
-						pl.sbp = nil
+						if pl.sbp != nil then
+							pl.sbp = nil
+						end
 					end
 
 					if strUrl(pl:GetDString("roleIcon", "")) then

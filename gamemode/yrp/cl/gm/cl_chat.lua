@@ -501,7 +501,7 @@ function InitYRPChat()
 					yrpChat.richText:AppendText(obj)
 				elseif t == "boolean" then
 					YRP.msg("note", "chat.addtext (boolean): " .. tostring(obj))
-				elseif t == "entity" then
+				elseif t == "entity" and IsValid(obj) then
 					YRP.msg("error", "chat.addtext (entity): " .. tostring(obj))
 				elseif !yrp then
 					YRP.msg("error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj))

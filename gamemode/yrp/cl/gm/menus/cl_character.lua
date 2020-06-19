@@ -241,8 +241,10 @@ function LoadCharacters()
 
 	LocalPlayer():SetDBool("loadedchars", true)
 
-	_cs.frame:Show()
-	_cs.frame:MakePopup()
+	if pa(_cs.frame) then
+		_cs.frame:Show()
+		_cs.frame:MakePopup()
+	end
 end
 net.Receive("yrp_get_characters", function(len)
 	local first = net.ReadBool()
