@@ -19,7 +19,7 @@ function CloseMacroMenu()
 end
 
 function UseMacro(uid)
-	if wk(_mm.tab) then
+	if wk(uid) and wk(_mm.tab) and wk(_mm.tab[uid]) and wk(_mm.tab[uid].value) then
 		local mtext = SQL_STR_OUT(_mm.tab[uid].value)
 		local tim = 0
 
