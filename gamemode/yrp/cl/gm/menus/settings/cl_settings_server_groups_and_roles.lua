@@ -724,8 +724,13 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					end
 
 					for i, ug in pairs(db_ugs) do
-						ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
-						ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
+						if ug.string_name != nil then
+							ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
+							ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
+						else
+							print("WHATS THAT? #1")
+							pTab(ug)
+						end
 					end
 
 					local usergroups = {}
@@ -2164,8 +2169,13 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 
 				for i, ug in pairs(db_ugs) do
-					ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
-					ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
+					if ug.string_name != nil then
+						ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
+						ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
+					else
+						print("WHATS THAT? #2")
+						pTab(ug)
+					end
 				end
 
 				local usergroups = {}

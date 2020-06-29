@@ -91,7 +91,7 @@ function Player:DesignLoadout(from)
 	self:SetDInt("yrp_loading", 0)
 	self:HudLoadout()
 	self:InterfaceLoadout()
-	YRP.msg("debug", "[DesignLoadout] " .. self:YRPName() .. " " .. from)
+	YRP.msg("debug", "[DesignLoadout] " .. self:YRPName() .. " " .. tostring(from))
 	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(setting) then
 		setting = setting[1]
@@ -99,6 +99,8 @@ function Player:DesignLoadout(from)
 		SetGlobalDString("string_interface_design", setting.string_interface_design)
 		SetGlobalDString("string_hud_profile", setting.string_hud_profile)
 		SetGlobalDInt("int_headerheight", setting.int_headerheight)
+	else
+		YRP.msg("note", "Fatal Error: Design Settings not found")
 	end
 	self:SetDInt("yrp_loading", 100)
 end
