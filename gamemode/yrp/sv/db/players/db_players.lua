@@ -464,7 +464,7 @@ function set_ply_pos(ply, map, pos, ang)
 end
 
 function open_character_selection(ply)
-	if ply:IsFullyAuthenticated() then
+	if IsValid(ply) and ply:IsPlayer() and ply:IsFullyAuthenticated() then
 		YRP.msg("db", "[" .. ply:SteamName() .. "] -> open character selection.")
 		local steamid = ply:SteamID() or ply:UniqueID()
 

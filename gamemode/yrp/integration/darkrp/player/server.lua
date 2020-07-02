@@ -194,9 +194,9 @@ function Player:setDarkRPVar(variable, value, target)
 	if value == nil then return false end
 	
 	if isnumber(value) then
-		self:SetDInt(variable, value)
+		self:SetNWInt(variable, value)
 	else
-		self:SetDString(variable, value)
+		self:SetNWString(variable, value)
 	end
 end
 

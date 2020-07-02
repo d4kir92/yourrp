@@ -261,8 +261,6 @@ net.Receive("yrp_get_characters", function(len)
 end)
 
 function openCharacterSelection()
-	local lply = LocalPlayer()
-
 	if !loading then
 		loading = true
 		timer.Simple(0.3, function()
@@ -375,6 +373,7 @@ function openCharacterSelection()
 		end
 		local sbar = _cs.characterList.VBar
 		function sbar:Paint(w, h)
+			local lply = LocalPlayer()
 			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
 		end
 		function sbar.btnUp:Paint(w, h)
@@ -384,6 +383,7 @@ function openCharacterSelection()
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 		end
 		function sbar.btnGrip:Paint(w, h)
+			local lply = LocalPlayer()
 			draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
 		end
 

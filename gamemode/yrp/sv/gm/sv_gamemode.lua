@@ -568,6 +568,11 @@ hook.Add("EntityTakeDamage", "YRP_EntityTakeDamage", function(ent, dmginfo)
 		local hitfactor = GetHitFactorVehicles() or 1
 		dmginfo:ScaleDamage(hitfactor)
 	elseif ent:IsPlayer() then
+		if GetGlobalDBool("bool_antipropkill", true) then
+			if dmginfo:GetAttacker():GetClass() == "prop_physics" then
+				dmginfo:ScaleDamage(0)
+			end
+		end
 		if dmginfo:GetDamageType() == DMG_BURN then
 			dmginfo:ScaleDamage(ent:GetDFloat("float_dmgtype_burn", 1.0))
 		elseif dmginfo:GetDamageType() == DMG_BULLET then
@@ -623,6 +628,7 @@ function StartCombat(ply)
 	end
 end
 
+hook.Remove("ScalePlayerDamage", "YRP_ScalePlayerDamage")
 hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, dmginfo)
 	if ply:IsFullyAuthenticated() then
 
@@ -634,6 +640,12 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 			end
 
 			SlowThink(ply)
+
+			if GetGlobalDBool("bool_antipropkill", true) then
+				if dmginfo:GetAttacker():GetClass() == "prop_physics" then
+					dmginfo:ScaleDamage(0)
+				end
+			end
 
 			if IsBleedingEnabled() then
 				local _rand = math.Rand(0, 100)

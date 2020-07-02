@@ -371,29 +371,33 @@ function SendPM(sender, msg)
 	msg = strTrimRight(msg, " ")
 	local target = GetPlayerByName(name)
 
-	local pk = {}
-	table.insert(pk, Color(255, 100, 255))
-	table.insert(pk, "LID_to;")
-	table.insert(pk, " ")
-	table.insert(pk, target:RPName())
-	table.insert(pk, ": ")
-	table.insert(pk, msg)
-	net.Start("yrp_player_say")
-		net.WriteEntity(sender)
-		net.WriteTable(pk)
-	net.Send(sender)
+	if target != NULL then
+		local pk = {}
+		table.insert(pk, Color(255, 100, 255))
+		table.insert(pk, "LID_to;")
+		table.insert(pk, " ")
+		table.insert(pk, target:RPName())
+		table.insert(pk, ": ")
+		table.insert(pk, msg)
+		net.Start("yrp_player_say")
+			net.WriteEntity(sender)
+			net.WriteTable(pk)
+		net.Send(sender)
 
-	local pk2 = {}
-	table.insert(pk2, Color(255, 100, 255))
-	table.insert(pk2, "LID_from;")
-	table.insert(pk2, " ")
-	table.insert(pk2, sender:RPName())
-	table.insert(pk2, ": ")
-	table.insert(pk2, msg)
-	net.Start("yrp_player_say")
-		net.WriteEntity(target)
-		net.WriteTable(pk2)
-	net.Send(target)
+		local pk2 = {}
+		table.insert(pk2, Color(255, 100, 255))
+		table.insert(pk2, "LID_from;")
+		table.insert(pk2, " ")
+		table.insert(pk2, sender:RPName())
+		table.insert(pk2, ": ")
+		table.insert(pk2, msg)
+		net.Start("yrp_player_say")
+			net.WriteEntity(target)
+			net.WriteTable(pk2)
+		net.Send(target)
+	else
+		sender:ChatPrint("TARGET NOT FOUND")
+	end
 end
 
 function DoCommand(sender, command, text)

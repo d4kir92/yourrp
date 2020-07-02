@@ -123,10 +123,10 @@ end
 
 if SERVER then
 	function Entity:CPPISetOwner(ent)
-		self:SetDEntity("cppiowner", ent)
+		self:SetNWEntity("cppiowner", ent)
 	end
 end
 
 function Entity:CPPIGetOwner()
-	return self:GetDEntity("cppiowner")
+	return self:GetNWEntity("cppiowner")
 end

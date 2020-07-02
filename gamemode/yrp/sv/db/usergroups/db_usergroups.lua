@@ -1559,7 +1559,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 end)
 
 hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
-	if ea(pl) and wk(property) then
+	if ea(pl) and wk(property) and pl.GetUserGroup != nil then
 		YRP.msg("gm", "CanProperty: " .. property)
 		local tools = {}
 		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")

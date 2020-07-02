@@ -245,7 +245,7 @@ function SetDInt(entindex, key, value)
 			end
 		end
 	else
-		YRP.msg("note", "[SetDInt] " .. tostring(key) .. tostring(value))
+		YRP.msg("note", "[SetDInt] FAILED " .. tostring(key) .. tostring(value))
 	end
 end
 function ENTITY:SetDInt(key, value)
@@ -335,7 +335,7 @@ function SetDFloat(entindex, key, value)
 			end
 		end
 	else
-		YRP.msg("note", "[SetDFloat] " .. tostring(key) .. tostring(value))
+		YRP.msg("note", "[SetDFloat] FAILED " .. tostring(key) .. tostring(value))
 	end
 end
 function ENTITY:SetDFloat(key, value)
@@ -426,7 +426,7 @@ function SetDEntity(entindex, key, value)
 			end
 		end
 	else
-		YRP.msg("note", "[SetDEntity] " .. tostring(key) .. tostring(value))
+		YRP.msg("note", "[SetDEntity] FAILED " .. tostring(key) .. tostring(value))
 	end
 end
 function ENTITY:SetDEntity(key, value)
@@ -514,7 +514,7 @@ function SetDTable(entindex, key, value)
 			end
 		end
 	else
-		YRP.msg("note", "[SetDTable] " .. tostring(key) .. tostring(value))
+		YRP.msg("note", "[SetDTable] FAILED " .. tostring(key) .. tostring(value))
 	end
 end
 function ENTITY:SetDTable(key, value)
