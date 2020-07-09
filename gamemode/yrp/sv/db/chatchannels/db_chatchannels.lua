@@ -40,7 +40,7 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ADVERT" .. "'") == nil t
 	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ADVERT', 'Color(255, 255, 0)[ADVERT] %RPNAME%: %TEXT%', 0, 0")
 end
 if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ROLL" .. "'") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ROLL', 'Color(100, 100, 255)%RPNAME% rolled a RN(0,100)', 0, 0")
+	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ROLL', 'Color(100, 100, 255)%RPNAME% rolled a RN(0,100)', 1, 0")
 end
 if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "EVENT" .. "'") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'EVENT', 'Color(255, 255, 100)[EVENT] %RPNAME%: Color(255, 255, 100)%TEXT%', 0, 0")

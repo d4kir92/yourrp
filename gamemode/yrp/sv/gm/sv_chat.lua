@@ -80,11 +80,6 @@ function print_help(sender)
 	return ""
 end
 
-function roll_number(sender)
-	local number = math.Round(math.Rand(0, 100))
-	return number
-end
-
 function drop_weapon(sender)
 	if ea(sender) then
 		local _weapon = sender:GetActiveWeapon()
@@ -523,14 +518,28 @@ function DoCommand(sender, command, text)
 			name = string.Replace(name, "/name ", "")
 			name = string.Replace(name, "/nick ", "")
 
-			if !strEmpty(name) then
-				sender:SetRPName(name)
-				return ""
+			name = string.Replace(name, "rpname ", "")
+			name = string.Replace(name, "name ", "")
+			name = string.Replace(name, "nick ", "")
+
+			local tab = string.Explode(" ", name)
+			local ply = GetPlayerByName(tab[1])
+			if table.Count(tab) > 2 then
+				sender:ChatPrint("\nTo much words, must be /" .. command .. " \"newname\" or /" .. command .. " \"playername\" \"newname\"")
 			else
-				sender:ChatPrint("SetRPName need more text")
+				if ply != NULL then
+					ply:SetRPName(tab[2])
+				else
+					if !strEmpty(name) then
+						sender:SetRPName(name)
+						return ""
+					else
+						sender:ChatPrint("\nSetRPName need more text.")
+					end
+				end
 			end
 		else
-			sender:ChatPrint("SetRPName is not enabled.")
+			sender:ChatPrint("\nSetRPName is not enabled.")
 		end
 	end
 end

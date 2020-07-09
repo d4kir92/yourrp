@@ -26,7 +26,7 @@ util.AddNetworkString("yrp_noti")
 util.AddNetworkString("yrp_info")
 
 function teleportToSpawnpoint(ply)
-	if ply.ignorespawnpoint then
+	if ply.ignorespawnpoint == true then
 		timer.Simple(0.5, function()
 			if IsValid(ply) and ply.ignorespawnpoint then
 				ply.ignorespawnpoint = false
@@ -34,80 +34,78 @@ function teleportToSpawnpoint(ply)
 		end)
 		return false
 	else
-		timer.Simple(0.0, function()
-			YRP.msg("note", "teleportToSpawnpoint " .. ply:Nick())
-			local rolTab = ply:GetRolTab()
-			local groTab = ply:GetGroTab()
-			local chaTab = ply:GetChaTab()
+		YRP.msg("note", "teleportToSpawnpoint " .. ply:Nick())
+		local rolTab = ply:GetRolTab()
+		local groTab = ply:GetGroTab()
+		local chaTab = ply:GetChaTab()
 
-			if wk(chaTab) and wk(groTab) and wk(rolTab) then
-				if SQL_STR_OUT(chaTab.map) == GetMapNameDB() then
-					local _tmpRoleSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'RoleSpawnpoint' AND linkID = '" .. rolTab.uniqueID .. "'")
-					local _tmpGroupSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'GroupSpawnpoint' AND linkID = '" .. groTab.uniqueID .. "'")
-					if _tmpRoleSpawnpoints != nil then
-						local _randomSpawnPoint = table.Random(_tmpRoleSpawnpoints)
-						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint (" .. tostring(rolTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+		if wk(chaTab) and wk(groTab) and wk(rolTab) then
+			if SQL_STR_OUT(chaTab.map) == GetMapNameDB() then
+				local _tmpRoleSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'RoleSpawnpoint' AND linkID = '" .. rolTab.uniqueID .. "'")
+				local _tmpGroupSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'GroupSpawnpoint' AND linkID = '" .. groTab.uniqueID .. "'")
+				if _tmpRoleSpawnpoints != nil then
+					local _randomSpawnPoint = table.Random(_tmpRoleSpawnpoints)
+					YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint (" .. tostring(rolTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
 
-						local _tmp = string.Explode(",", _randomSpawnPoint.position)
-						tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
-						_tmp = string.Explode(",", _randomSpawnPoint.angle)
-						if ply:IsPlayer() then
-							ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
-						end
-						return true
-					elseif _tmpGroupSpawnpoints != nil then
-						local _randomSpawnPoint = table.Random(_tmpGroupSpawnpoints)
-						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint (" .. tostring(groTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
-
-						local _tmp = string.Explode(",", _randomSpawnPoint.position)
-						tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
-						_tmp = string.Explode(",", _randomSpawnPoint.angle)
-						if ply:IsPlayer() then
-							ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
-						end
-						return true
-					else
-						local _has_ug = true
-						local _ug = {}
-						_ug.int_parentgroup = groTab.int_parentgroup
-
-						while (_has_ug) do
-							_ug = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. _ug.int_parentgroup .. "'")
-
-							if _ug != nil then
-								_ug = _ug[1]
-								local _gs = SQL_SELECT(DATABASE_NAME, "*", "linkID = " .. _ug.uniqueID)
-								if _gs != nil then
-									local _randomSpawnPoint = table.Random(_gs)
-									YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENTGroupSpawnpoint (" .. tostring(_ug.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
-									local _tmp = string.Explode(",", _randomSpawnPoint.position)
-									tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
-									_tmp = string.Explode(",", _randomSpawnPoint.angle)
-									if ply:IsPlayer() then
-										ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
-									end
-									return true
-								end
-							else
-								_has_ug = false
-							end
-						end
-						local _str = "[" .. tostring(groTab.string_name) .. "]" .. " has NO role or group spawnpoint!"
-						YRP.msg("note", _str)
-
-						net.Start("yrp_noti")
-							net.WriteString("nogroupspawn")
-							net.WriteString(tostring(groTab.string_name))
-						net.Broadcast()
-
-						tp_to(ply, ply:GetPos())
-						return false
+					local _tmp = string.Explode(",", _randomSpawnPoint.position)
+					tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+					_tmp = string.Explode(",", _randomSpawnPoint.angle)
+					if ply:IsPlayer() then
+						ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
 					end
+					return true
+				elseif _tmpGroupSpawnpoints != nil then
+					local _randomSpawnPoint = table.Random(_tmpGroupSpawnpoints)
+					YRP.msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint (" .. tostring(groTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+
+					local _tmp = string.Explode(",", _randomSpawnPoint.position)
+					tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+					_tmp = string.Explode(",", _randomSpawnPoint.angle)
+					if ply:IsPlayer() then
+						ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+					end
+					return true
+				else
+					local _has_ug = true
+					local _ug = {}
+					_ug.int_parentgroup = groTab.int_parentgroup
+
+					while (_has_ug) do
+						_ug = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. _ug.int_parentgroup .. "'")
+
+						if _ug != nil then
+							_ug = _ug[1]
+							local _gs = SQL_SELECT(DATABASE_NAME, "*", "linkID = " .. _ug.uniqueID)
+							if _gs != nil then
+								local _randomSpawnPoint = table.Random(_gs)
+								YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENTGroupSpawnpoint (" .. tostring(_ug.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+								local _tmp = string.Explode(",", _randomSpawnPoint.position)
+								tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+								_tmp = string.Explode(",", _randomSpawnPoint.angle)
+								if ply:IsPlayer() then
+									ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+								end
+								return true
+							end
+						else
+							_has_ug = false
+						end
+					end
+					local _str = "[" .. tostring(groTab.string_name) .. "]" .. " has NO role or group spawnpoint!"
+					YRP.msg("note", _str)
+
+					net.Start("yrp_noti")
+						net.WriteString("nogroupspawn")
+						net.WriteString(tostring(groTab.string_name))
+					net.Broadcast()
+
+					tp_to(ply, ply:GetPos())
+					return false
 				end
-			else
-				return false
 			end
-		end)
+		else
+			return false
+		end
 	end
 end
 
