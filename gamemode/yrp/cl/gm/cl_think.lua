@@ -192,18 +192,18 @@ function useFunction(str)
 			UseMacro(uid)
 		elseif GetGlobalDBool("bool_yrp_combined_menu", false) then
 			local id = 0
-			if str == "OpenHelpMenu" GetGlobalDBool("bool_yrp_help_menu", false) then
+			if str == "OpenHelpMenu" and GetGlobalDBool("bool_yrp_help_menu", false) then
 				done_tutorial("tut_f1info", 10)
 				id = 1
 			elseif str == "OpenRoleMenu" and GetGlobalDBool("bool_yrp_role_menu", false) then
 				id = 2
-			elseif str == "OpenBuyMenu" GetGlobalDBool("bool_yrp_buy_menu", false) then
+			elseif str == "OpenBuyMenu" and GetGlobalDBool("bool_yrp_buy_menu", false) then
 				id = 3
-			elseif str == "openCharMenu" GetGlobalDBool("bool_yrp_char_menu", false) then
+			elseif str == "openCharMenu" and GetGlobalDBool("bool_yrp_char_menu", false) then
 				id = 4
-			elseif str == "openKeybindsMenu" GetGlobalDBool("bool_yrp_keybinds_menu", false) then
+			elseif str == "openKeybindsMenu" and GetGlobalDBool("bool_yrp_keybinds_menu", false) then
 				id = 5
-			elseif str == "openTicketMenu" GetGlobalDBool("bool_yrp_tickets_menu", false) then
+			elseif str == "openTicketMenu" and GetGlobalDBool("bool_yrp_tickets_menu", false) then
 				done_tutorial("tut_feedback")
 				id = 6
 			end
