@@ -192,18 +192,18 @@ function useFunction(str)
 			UseMacro(uid)
 		elseif GetGlobalDBool("bool_yrp_combined_menu", false) then
 			local id = 0
-			if str == "OpenHelpMenu" then
+			if str == "OpenHelpMenu" GetGlobalDBool("bool_yrp_help_menu", false) then
 				done_tutorial("tut_f1info", 10)
 				id = 1
-			elseif str == "OpenRoleMenu" then
+			elseif str == "OpenRoleMenu" and GetGlobalDBool("bool_yrp_role_menu", false) then
 				id = 2
-			elseif str == "OpenBuyMenu" then
+			elseif str == "OpenBuyMenu" GetGlobalDBool("bool_yrp_buy_menu", false) then
 				id = 3
-			elseif str == "openCharMenu" then
+			elseif str == "openCharMenu" GetGlobalDBool("bool_yrp_char_menu", false) then
 				id = 4
-			elseif str == "openKeybindsMenu" then
+			elseif str == "openKeybindsMenu" GetGlobalDBool("bool_yrp_keybinds_menu", false) then
 				id = 5
-			elseif str == "openTicketMenu" then
+			elseif str == "openTicketMenu" GetGlobalDBool("bool_yrp_tickets_menu", false) then
 				done_tutorial("tut_feedback")
 				id = 6
 			end
@@ -211,22 +211,22 @@ function useFunction(str)
 				ToggleCombinedMenu(id)
 			end
 		elseif !GetGlobalDBool("bool_yrp_combined_menu", false) then
-			if str == "OpenHelpMenu" then
+			if str == "OpenHelpMenu" and GetGlobalDBool("bool_yrp_help_menu", false) then
 				done_tutorial("tut_welcome")
 				done_tutorial("tut_feedback")
 				done_tutorial("tut_f1info", 10)
 				ToggleHelpMenu()
-			elseif str == "OpenRoleMenu" then
+			elseif str == "OpenRoleMenu" and GetGlobalDBool("bool_yrp_role_menu", false) then
 				done_tutorial("tut_mr")
 				ToggleRoleMenu()
-			elseif str == "OpenBuyMenu" then
+			elseif str == "OpenBuyMenu" and GetGlobalDBool("bool_yrp_buy_menu", false) then
 				done_tutorial("tut_mb")
 				ToggleBuyMenu()
-			elseif str == "openTicketMenu" then
+			elseif str == "openTicketMenu" and GetGlobalDBool("bool_yrp_tickets_menu", false) then
 				toggleTicketMenu()
-			elseif str == "openCharMenu" then
+			elseif str == "openCharMenu" and GetGlobalDBool("bool_yrp_char_menu", false) then
 				toggleCharMenu()
-			elseif str == "openKeybindsMenu" then
+			elseif str == "openKeybindsMenu" and GetGlobalDBool("bool_yrp_keybinds_menu", false) then
 				toggleKeybindsMenu()
 			end			
 		end

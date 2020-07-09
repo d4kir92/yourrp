@@ -445,6 +445,13 @@ net.Receive("Connect_Settings_General", function(len)
 		General_Slider:AddPanel(GAMEMODE_VISUALS)
 
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_combined_menu, "LID_combinedmenu", "update_bool_yrp_combined_menu")
+		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_role_menu, "LID_rolemenu", "update_bool_yrp_role_menu")
+		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_help_menu, "LID_helpmenu", "update_bool_yrp_help_menu")
+		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_buy_menu, "LID_buymenu", "update_bool_yrp_buy_menu")
+		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_char_menu, "LID_charactermenu", "update_bool_yrp_char_menu")
+		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_keybinds_menu, "LID_keybindsmenu", "update_bool_yrp_keybinds_menu")
+		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_tickets_menu, "LID_ticketsmenu", "update_bool_yrp_tickets_menu")
+
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_background, "LID_character_background", "update_text_character_background")
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
