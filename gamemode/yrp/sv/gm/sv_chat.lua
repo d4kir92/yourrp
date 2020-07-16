@@ -507,6 +507,7 @@ function DoCommand(sender, command, text)
 	end
 
 	if command == "rpname" or command == "name" or command == "nick" then
+		print("CHANGE NAME")
 		if GetGlobalDBool("bool_characters_changeable_name", false) then
 			local name = text
 
@@ -524,18 +525,16 @@ function DoCommand(sender, command, text)
 
 			local tab = string.Explode(" ", name)
 			local ply = GetPlayerByName(tab[1])
-			if table.Count(tab) > 2 then
-				sender:ChatPrint("\nTo much words, must be /" .. command .. " \"newname\" or /" .. command .. " \"playername\" \"newname\"")
+
+			if ply != NULL then
+				name = string.Replace(name, tab[1] .. " ", "")
+				ply:SetRPName(name)
 			else
-				if ply != NULL then
-					ply:SetRPName(tab[2])
+				if !strEmpty(name) then
+					sender:SetRPName(name)
+					return ""
 				else
-					if !strEmpty(name) then
-						sender:SetRPName(name)
-						return ""
-					else
-						sender:ChatPrint("\nSetRPName need more text.")
-					end
+					sender:ChatPrint("\nSetRPName need more text.")
 				end
 			end
 		else

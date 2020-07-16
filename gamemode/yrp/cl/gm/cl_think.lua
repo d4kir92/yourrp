@@ -261,25 +261,27 @@ end
 function keyPressed(key, str, distance)
 	if ChatIsClosedForChat() then
 		local lply = LocalPlayer()
-		local plyTrace = lply:GetEyeTrace()
-		local _return = false
-		if distance and ea(plyTrace.Entity) then
-			if plyTrace.Entity:GetPos():Distance(lply:GetPos()) > distance then
-				_return = true
+		if IsValid(lply) and wk(lply.GetEyeTrace) then
+			local plyTrace = lply:GetEyeTrace()
+			local _return = false
+			if distance and ea(plyTrace.Entity) then
+				if plyTrace.Entity:GetPos():Distance(lply:GetPos()) > distance then
+					_return = true
+				end
 			end
-		end
-		if !_return then
-			if keys[tostring(key)] == nil then
-				keys[tostring(key)] = false
-			end
-			if input.IsKeyDown(key) and !keys[tostring(key)] then
-				keys[tostring(key)] = true
-				timer.Simple(0.14, function()
-					if str != nil then
-						useFunction(str)
-					end
+			if !_return then
+				if keys[tostring(key)] == nil then
 					keys[tostring(key)] = false
-				end)
+				end
+				if input.IsKeyDown(key) and !keys[tostring(key)] then
+					keys[tostring(key)] = true
+					timer.Simple(0.14, function()
+						if str != nil then
+							useFunction(str)
+						end
+						keys[tostring(key)] = false
+					end)
+				end
 			end
 		end
 	end
