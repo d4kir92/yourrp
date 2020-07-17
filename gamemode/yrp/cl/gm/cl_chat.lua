@@ -516,8 +516,6 @@ function InitYRPChat()
 			oldAddText (...)
 		end
 
-		LocalPlayer():ConCommand("say \"" .. "!help" .. "\"")
-
 		yrpChat.richText:GotoTextEnd()
 		yrpChat.richText:GotoTextEnd()
 

@@ -77,6 +77,8 @@ hook.Add("Think", "yrp_loaded_game", function()
 					net.WriteString(ply:Nick())
 				net.Broadcast()
 
+				ply:ChatPrint("!help for help")
+
 				if os.time() != nil and SQL_INSERT_INTO != nil then
 					SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "connected" .. "'")
 				end

@@ -52,10 +52,6 @@ function YRPSendIsReady()
 
 		YRP.initLang()
 
-		if tobool(get_tutorial("tut_welcome")) then
-			OpenHelpMenu()
-		end
-
 		local _wsitems = engine.GetAddons()
 		YRP.msg("note", "[" .. #_wsitems .. " Workshop items]")
 		YRP.msg("note", " Nr.\tID\t\tName Mounted")
