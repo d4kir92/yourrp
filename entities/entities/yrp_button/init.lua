@@ -19,7 +19,9 @@ function ENT:Initialize()
 end
 
 function ENT:Use(activator, caller)
-	activator:EmitSound("buttons/button14.wav", 75, 100, 1, CHAN_AUTO )
+	local filename = "buttons/button14.wav"
+	util.PrecacheSound(filename)
+	activator:EmitSound(filename, 75, 100, 1, CHAN_AUTO )
 end
 
 function ENT:Think()

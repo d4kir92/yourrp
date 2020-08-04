@@ -1797,13 +1797,13 @@ function drawPlates()
 
 				if GetGlobalDBool("bool_tag_on_side_armor", false) then
 					local col = ply:HudValue("AR", "BA")
-					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ar"], ply:Armor(), ply:GetDString("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
+					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ar"], ply:Armor(), ply:GetDInt("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
 				if LocalPlayer():HasAccess() then
 					local col = ply:HudValue("ST", "BA")
-					drawPlayerInfo(ply, ply:GetDFloat("GetCurStamina", "") .. "/" .. ply:GetDFloat("GetMaxStamina", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ms"], ply:GetDFloat("GetCurStamina", ""), ply:GetDString("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
+					drawPlayerInfo(ply, ply:GetDFloat("GetCurStamina", 0.0) .. "/" .. ply:GetDFloat("GetMaxStamina", 1.0), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ms"], ply:GetDFloat("GetCurStamina", 0.0), ply:GetDFloat("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
 					_z = _z + _d
 					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sn"])
 					_z = _z + _d

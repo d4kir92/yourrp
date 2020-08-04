@@ -249,7 +249,7 @@ function ENT:Think()
 				pitch = { 90, 110 },
 				sound = "ambient/machines/combine_terminal_idle1.wav"
 			})
-
+			
 			self:EmitSound("moneyprintersound") -- "ambient/machines/combine_terminal_idle1.wav", 75, 100, 1/self:GetDInt("cooler"), CHAN_AUTO)
 
 			if CurTime() < self.delay then return end

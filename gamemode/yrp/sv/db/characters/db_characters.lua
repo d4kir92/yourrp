@@ -82,8 +82,8 @@ function Player:CharacterLoadout()
 		self:SetDInt("int_arrests", chatab.int_arrests)
 
 		self:SetDString("string_birthday", SQL_STR_OUT(chatab.string_birthday))
-		self:SetDInt("int_bodyheight", chatab.int_bodyheight)
-		self:SetDInt("int_weight", chatab.int_weight)
+		self:SetDInt("int_bodyheight", chatab.int_bodyheight or 0)
+		self:SetDInt("int_weight", chatab.int_weight or 0)
 		self:SetDString("string_nationality", SQL_STR_OUT(chatab.string_nationality))
 		
 		for i = 0, 4 do

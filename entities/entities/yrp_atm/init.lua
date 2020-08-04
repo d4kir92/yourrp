@@ -156,7 +156,11 @@ function ENT:createButtonNumber(parent, up, forward, right, add)
 	function tmp:Use(activator, caller, useType, value)
 		if !pressed then
 			pressed = true
-			self:EmitSound("buttons/button14.wav", 75, 100, 1, CHAN_AUTO )
+
+			local filename = "buttons/button14.wav"
+			util.PrecacheSound(filename)
+			self:EmitSound(filename, 75, 100, 1, CHAN_AUTO )
+
 			if add != "<" then
 				tmp.parent:SetDString("othermoney", tmp.parent:GetDString("othermoney", "") .. add)
 			else
@@ -186,7 +190,11 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 	function tmp:Use(activator, caller, useType, value)
 		if !pressed then
 			pressed = true
-			self:EmitSound("buttons/button14.wav", 75, 100, 1, CHAN_AUTO )
+
+			local filename = "buttons/button14.wav"
+			util.PrecacheSound(filename)
+			self:EmitSound(filename, 75, 100, 1, CHAN_AUTO )
+
 			if func != nil then
 				if func == "ATMPressNext" then
 					self.parent:ATMPressNext(activator)

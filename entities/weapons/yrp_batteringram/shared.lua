@@ -65,7 +65,9 @@ function SWEP:PrimaryAttack()
 					self.target:Fire("Open")
 				end
 
-				self:GetOwner():EmitSound("physics/wood/wood_box_impact_hard2.wav", 75, 100, 1, CHAN_AUTO)
+				local filename = "physics/wood/wood_box_impact_hard2.wav"
+				util.PrecacheSound(filename)
+				self:GetOwner():EmitSound(filename, 75, 100, 1, CHAN_AUTO)
 			end
 		end
 	end

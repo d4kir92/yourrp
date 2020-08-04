@@ -78,9 +78,9 @@ function ErrorValidToSend(str)
 	end
 
 	if CLIENT and LocalPlayer():GetDBool("isserverdedicated") == false then
-		--return false
+		return false
 	elseif SERVER and game.IsDedicated() == false then
-		--return false
+		return false
 	end
 
 	if string.StartWith(str, "[") and (yts(str, "/yrp/") or yts(str, "yourrp")) and !yts(str, "database or disk is full") and !yts(str , "<eof>") then
@@ -256,7 +256,7 @@ function send_error(realm, str, force)
 
 	if ErrorValidToSend(str) or force then
 		timer.Create("wait_for_gamemode" .. str, 1, 0, function()
-			if gmod.GetGamemode() != nil and SERVER or (CLIENT and LocalPlayer():LoadedGamemode()) then
+			if gmod.GetGamemode() != nil and SERVER or (CLIENT and wk(LocalPlayer().LoadedGamemode) and LocalPlayer():LoadedGamemode()) then
 				isdbfull(str)
 				ismalformed(str)
 

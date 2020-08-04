@@ -41,6 +41,7 @@ function Player:YRPEat(num)
 			"physics/body/body_medium_break4.wav"
 		}
 		local name, nr = table.Random(eatsounds)
+		util.PrecacheSound(name)
 		self:EmitSound(name)
 
 		local newhunger = math.Clamp(self:GetDFloat("hunger", 0.0) + num, 0, 100.0)
@@ -57,6 +58,7 @@ function Player:YRPDrink(num, permille)
 			"drink1.wav"
 		}
 		local name, nr = table.Random(drinksounds)
+		util.PrecacheSound(name)
 		self:EmitSound(name)
 
 		local newthirst = math.Clamp(self:GetDFloat("thirst", 0.0) + num, 0, self:GetMaxThirst())

@@ -245,7 +245,7 @@ function SetDInt(entindex, key, value)
 			end
 		end
 	else
-		YRP.msg("note", "[SetDInt] FAILED " .. tostring(key) .. tostring(value))
+		YRP.msg("note", "[SetDInt] FAILED " .. tostring(key) .. " " .. tostring(value))
 	end
 end
 function ENTITY:SetDInt(key, value)

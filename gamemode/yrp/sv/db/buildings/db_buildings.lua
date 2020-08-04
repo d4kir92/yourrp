@@ -314,7 +314,9 @@ function openDoor(ply, ent, nr)
 				end
 			else
 				--YRP.msg("note", "Building: NOT ALLOWED TO OPEN")
-				ent:EmitSound("doors/default_locked.wav", 75, 100, 1, CHAN_AUTO )
+				local filename = "doors/default_locked.wav"
+				util.PrecacheSound(filename)
+				ent:EmitSound(filename, 75, 100, 1, CHAN_AUTO )
 			end
 		else
 			YRP.msg("note", "Building must be not ownable or PUBLIC")

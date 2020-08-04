@@ -168,3 +168,12 @@ function BuildStorage(storage, slots)
 		YRP.msg("note", "Storage is closed.")
 	end
 end
+
+net.Receive("yrpclosebag", function(len)
+	local storID = net.ReadString()
+
+	local storage = GetStoragePanel(storID)
+	if wk(storage) then
+		storage:GetParent():Remove()
+	end
+end)

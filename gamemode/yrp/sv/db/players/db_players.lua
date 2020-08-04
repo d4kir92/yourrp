@@ -70,9 +70,9 @@ function save_clients(str)
 				_text = _text .. "s"
 			end
 			_text = _text .. "]"
-			YRP.msg("db", string.upper(_text))
+			--YRP.msg("db", string.upper(_text))
 		else
-			YRP.msg("db", string.upper("=> [No clients on server]"))
+			--YRP.msg("db", string.upper("=> [No clients on server]"))
 		end
 	else
 		YRP.msg("db", "no saving, because db reset")

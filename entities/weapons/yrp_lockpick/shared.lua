@@ -59,9 +59,13 @@ function SWEP:PrimaryAttack()
 			local class = tr.Entity:GetClass()
 			if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalDInt("int_door_distance", 200) and (class ==  "func_door_rotating" or class ==  "func_door" or class == "prop_door_rotating") then
 				ply:StartCasting("lockpick", "LID_lockpicking", 0, self.target, 3, 50, 1, false)
-				ply:EmitSound("doors/door_locked2.wav", 75, 100, 1, CHAN_AUTO)
+				local filename = "doors/door_locked2.wav"
+				util.PrecacheSound(filename)
+				ply:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
 				timer.Create("lockpick_loop", 2, 3, function()
-					ply:EmitSound("doors/door_locked2.wav", 75, 100, 1, CHAN_AUTO)
+					filename = "doors/door_locked2.wav"
+					util.PrecacheSound(filename)
+					ply:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
 				end)
 			end
 		end

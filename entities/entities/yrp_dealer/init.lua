@@ -81,6 +81,7 @@ function ENT:OpenBuyMenu(pl)
 	}
 
 	local s = table.Random(hisounds)
+	util.PrecacheSound(s)
 	self:EmitSound(s)
 end
 

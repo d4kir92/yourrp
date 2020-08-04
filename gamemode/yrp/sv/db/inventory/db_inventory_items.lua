@@ -207,7 +207,12 @@ function DropItem(ply, slotID)
 	e:Spawn()
 end	
 
-
+util.AddNetworkString("yrpclosebag")
+function CloseBag(storID)
+	net.Start("yrpclosebag")
+		net.WriteString(storID)
+	net.Broadcast()
+end
 
 function MoveItem(itemID, slotID)
 	itemID = tonumber(itemID)
@@ -239,11 +244,25 @@ function MoveItem(itemID, slotID)
 			YRP.msg("db", "You cant put bag into bag (self)")
 			return
 		end
+
+		if item.text_type == "bag" then
+			for i, slot in pairs(GetStorageSlots(item.int_storageID)) do
+				local ite = SQL_SELECT(DATABASE_NAME, "*", "int_slotID = '" .. slot.uniqueID .. "'")
+				if wk(ite) then
+					YRP.msg("db", "Bag is not empty")
+					return
+				end
+			end
+		end
 	
 		local oldslot = item.int_slotID
 		local newslot = slot.uniqueID
 
 		if !GetItem(slotID) then -- when no item in target
+
+			if item.text_type == "bag" then
+				CloseBag(item.int_storageID)
+			end
 
 			SQL_UPDATE(DATABASE_NAME, "int_slotID = '" .. newslot .. "'", "uniqueID = '" .. item.uniqueID .. "'")
 

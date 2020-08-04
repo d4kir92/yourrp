@@ -486,7 +486,9 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		if LocalPlayer().radiation < CurTime() then
 			LocalPlayer().radiation = CurTime() + math.Rand(0.1, 0.5)
 			if IsInsideRadiation(LocalPlayer()) then
-				LocalPlayer():EmitSound("tools/ifm/ifm_snap.wav")
+				local filename = "tools/ifm/ifm_snap.wav"
+				util.PrecacheSound(filename)
+				LocalPlayer():EmitSound(filename)
 			end
 		end
 	end

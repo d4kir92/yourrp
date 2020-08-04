@@ -507,7 +507,6 @@ function DoCommand(sender, command, text)
 	end
 
 	if command == "rpname" or command == "name" or command == "nick" then
-		print("CHANGE NAME")
 		if GetGlobalDBool("bool_characters_changeable_name", false) then
 			local name = text
 
@@ -638,12 +637,12 @@ function GM:PlayerSay(sender, text, teamChat)
 			net.Broadcast()
 			return ""
 		elseif tab.int_mode == 1 then -- LOCAL
-			for i, v in pairs(player.GetAll()) do
-				if v:GetPos():Distance(sender:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
+			for i, p in pairs(player.GetAll()) do
+				if p:GetPos():Distance(sender:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
 					net.Start("yrp_player_say")
 						net.WriteEntity(sender)
 						net.WriteTable(pk)
-					net.Send(v)
+					net.Send(p)
 				end
 			end
 			return ""
