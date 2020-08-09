@@ -642,7 +642,7 @@ net.Receive("getBuildingInfo", function(len, ply)
 	local tabBuilding = {}
 	local tabOwner = {}
 	local tabGroup = {}
-	if wk(buid) then
+	if wk(buid) and buid != "nil" then
 		tabBuilding = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. buid .. "'")
 		--local owner = ""
 		if wk(tabBuilding) then
