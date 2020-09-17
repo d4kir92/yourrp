@@ -164,3 +164,29 @@ end)
 net.Receive("getRoleWhitelist", function(len, ply)
 	sendRoleWhitelist(ply)
 end)
+
+
+
+-- for itzonelightning
+function WhitelistToRole(ply, rid)
+
+	local _SteamID = ply:SteamID()
+	local _nick = ply:Nick()
+	local target = ply
+	local roleID = rid
+
+	local DBRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. roleID)
+	if wk(DBRole) then
+		DBRole = DBRole[1]
+		local _groupID = DBRole.int_groupID
+
+		local dat = util.DateStamp()
+		local status = "WhitelistToRole by " .. ply:SteamName()
+		local name = target:SteamName()
+		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. SQL_STR_IN(status) .. "', '" .. SQL_STR_IN(name) .. "'")
+		SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', 'Role: " .. DBRole.string_name .. "'")
+	else
+		YRP.msg("note", "WhitelistToRole FAILED! CALL DEVS")
+	end
+end
+
