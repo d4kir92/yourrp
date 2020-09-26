@@ -808,7 +808,7 @@ function OpenSBS()
 
 					function pl.sbp.avap:PaintOver(pw, ph)
 						local branch = pl:GetDString("gmod_branch", "FAILED")
-						if branch != "64Bit" and pl:HasAccess() then
+						if branch != "64Bit" and pl:HasAccess() and wk(sbs.frame) then
 							draw.SimpleText(branch, "Y_12_500", pw / 2, ph / 2, Color(255, 255, 255, sbs.frame.alpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						end
 					end

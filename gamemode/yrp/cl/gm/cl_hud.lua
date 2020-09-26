@@ -303,7 +303,7 @@ function YRP_PM:Think()
 			end
 		end
 
-		if lply:GetDInt("hud_version", 0) != SL.version or SL.url != GetGlobalDString("text_server_logo", "") then
+		if IsValid(SL) and (lply:GetDInt("hud_version", 0) != SL.version or SL.url != GetGlobalDString("text_server_logo", "")) then
 			SL.version = lply:GetDInt("hud_version", 0)
 			SL.visible = lply:HudValue("SL", "VISI")
 			SL.url = GetGlobalDString("text_server_logo", "")

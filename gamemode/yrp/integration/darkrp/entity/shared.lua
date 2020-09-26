@@ -68,9 +68,7 @@ end
 
 function Entity:isDoor()
 	--Description: Whether this entity is considered a door in DarkRP.
-	YRP.msg("darkrp", "isDoor()")
-	YRP.msg("darkrp", DarkRP._not)
-	return false
+	return self:GetClass() == "prop_door_rotating" or self:GetClass() == "func_door" or self:GetClass() == "func_door_rotating"
 end
 
 function Entity:isKeysAllowedToOwn(ply)
