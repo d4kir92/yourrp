@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2020 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
---#roles #rolesmenu #groups #factions
+--#roles #rolesmenu #rolemenu #groups #factions
 
 ROLEMENU = ROLEMENU or {}
 ROLEMENU.open = false

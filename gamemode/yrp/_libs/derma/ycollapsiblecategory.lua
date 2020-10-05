@@ -227,7 +227,7 @@ function PANEL:Init()
 					surface.SetDrawColor(lply:InterfaceValue("YFrame", "PC"))
 					surface.DrawPoly(self.circ2bg)
 
-					render.SetStencilReferenceValue(1)
+					render.SetStencilReferenceValue(12)
 					render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
 
 					surface.SetDrawColor(lply:InterfaceValue("YFrame", "BG"))
@@ -248,7 +248,7 @@ function PANEL:Init()
 					surface.SetDrawColor(lply:InterfaceValue("YFrame", "PC"))
 					surface.DrawPoly(self.circ2)
 
-					render.SetStencilReferenceValue(1)
+					render.SetStencilReferenceValue(12)
 					render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
 
 					surface.SetDrawColor(Color(100, 255, 100, 100))
@@ -269,7 +269,7 @@ function PANEL:Init()
 		if type(rol.pms) == "table" then
 			if !strEmpty(rol.pms[1]) then
 				pm:SetModel(rol.pms[1])
-				if pm.panel.Entity:IsValid() then
+				if false then--pm.panel.Entity:IsValid() then
 					function pm.panel:LayoutEntity( ent )
 						ent:SetSequence( ent:LookupSequence("menu_gman") )
 						pm.panel:RunAnimation()

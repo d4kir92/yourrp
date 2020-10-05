@@ -439,6 +439,21 @@ function OpenCombinedMenu()
 		-- MENU
 		cm.menu = createD("DPanelList", content, 10, BFH() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br, 0, 0)
 		cm.menu:EnableVerticalScrollbar()
+		local sbar = cm.menu.VBar
+		function sbar:Paint(w, h)
+			local lply = LocalPlayer()
+			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"), 0)
+		end
+		function sbar.btnUp:Paint(w, h)
+			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+		end
+		function sbar.btnDown:Paint(w, h)
+			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+		end
+		function sbar.btnGrip:Paint(w, h)
+			local lply = LocalPlayer()
+			draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+		end
 		cm.menu:SetText("")
 		cm.menu.pw = 10
 		cm.menu.ph = YRP.ctr(64) + 2 * br
@@ -504,6 +519,7 @@ function OpenCombinedMenu()
 		end
 
 		function cm.win:UpdateSize(pw)
+			cm.menu.pw = 240
 			local sw = pw or cm.menu.pw + cm.menu.ph + 2 * br
 			cm.menu:SetWide(sw)
 			cm.menu:SetTall(cm.win:GetTall() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br)
@@ -531,17 +547,23 @@ function OpenCombinedMenu()
 				function site:Paint(pw, ph)
 					self.aw = self.aw or 0
 
+					if self:GetWide() ~= self:GetTall() then
+						self.animspeed = 14
+					else
+						self.animspeed = 4
+					end
+
 					local lply = LocalPlayer()
 					local color = lply:InterfaceValue("YFrame", "HB")
 					if self:IsHovered() then
 						color = lply:InterfaceValue("YButton", "SC")
 						color.a = 120
-						self.aw = math.Clamp(self.aw + 20, 0, pw)
+						self.aw = math.Clamp(self.aw + self.animspeed, 0, pw)
 					elseif self.selected then
 						color = lply:InterfaceValue("YButton", "SC")
-						self.aw = math.Clamp(self.aw + 20, 0, pw)
+						self.aw = math.Clamp(self.aw + self.animspeed, 0, pw)
 					else
-						self.aw = math.Clamp(self.aw - 20, 0, pw)
+						self.aw = math.Clamp(self.aw - self.animspeed, 0, pw)
 					end
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
 
