@@ -52,7 +52,7 @@ function CreateCharacterSettingsContent()
 
 	local header = createD("DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200))
 	function header:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string("LID_charactercreation"), "Y_36_700", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string("LID_charactercreation"), "Y_36_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	local btn = {}
@@ -204,7 +204,7 @@ function CreateCharacterSettingsContent()
 					local pbg = createD("DPanel", nil, ew, YRP.ctr(config.hh * 2), 0, 0)
 					function pbg:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "PC"))
-						draw.SimpleText(lply:GetDInt("charcreate_bg" .. bg.id, 0) + 1 .. "/" .. table.Count(bg.submodels) .. " " .. bg["name"], "Y_18_700", YRP.ctr(config.hh + config.br), ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(lply:GetDInt("charcreate_bg" .. bg.id, 0) + 1 .. "/" .. table.Count(bg.submodels) .. " " .. bg["name"], "Y_18_500", YRP.ctr(config.hh + config.br), ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 
 					local skinup = createD("YButton", pbg, YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.1), YRP.ctr(config.hh * 0.1))

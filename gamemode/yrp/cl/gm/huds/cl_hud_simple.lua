@@ -294,7 +294,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["degree"].fy = y + h * 0.50
 			Simple["COM"]["degree"].ax = 1
 			Simple["COM"]["degree"].ay = 1
-			Simple["COM"]["degree"].font = "Y_" .. fontsize .. "_700"
+			Simple["COM"]["degree"].font = "Y_" .. fontsize .. "_500"
 			Simple["COM"]["degree"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["degree"].brcolor = lply:HudValue("COM", "TB")
 
@@ -304,7 +304,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["north"].fy = y + h * 0.50
 			Simple["COM"]["north"].ax = 1
 			Simple["COM"]["north"].ay = 1
-			Simple["COM"]["north"].font = "Y_" .. nextfontsize .. "_700"
+			Simple["COM"]["north"].font = "Y_" .. nextfontsize .. "_500"
 			Simple["COM"]["north"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["north"].brcolor = lply:HudValue("COM", "TB")
 			Simple["COM"]["north"].text = YRP.lang_string("LID_north_short")

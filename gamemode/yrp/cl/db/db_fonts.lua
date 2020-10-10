@@ -44,6 +44,7 @@ YRP.AddFont("pricedown bl", 1.34)
 
 YRP.AddFont("Roboto", 1)
 
+YRP.AddFont("Sci-Fi [Rus by me] Normal", 0.6)
 YRP.AddFont("Space Age", 1.1)
 YRP.AddFont("Star Jedi", 1.3)
 YRP.AddFont("Starcraft", 0.72)

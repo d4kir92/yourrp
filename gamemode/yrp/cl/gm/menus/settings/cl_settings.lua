@@ -405,7 +405,7 @@ function OpenSettings()
 		sm.menu.pw = YRP.ctr(64) + 2 * br
 		sm.menu.ph = YRP.ctr(64) + 2 * br
 		sm.menu.expanded = sm.menu.expanded or lply:GetDBool("settings_expanded", true)
-		local font = "Y_" .. math.Clamp(math.Round(sm.menu.ph - 2 * br), 4, 100) ..  "_700"
+		local font = "Y_" .. math.Clamp(math.Round(sm.menu.ph - 2 * br), 4, 100) ..  "_500"
 		function sm.menu:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
 			self:SetTall(sm.win:GetTall() - sm.win:GetHeaderHeight())

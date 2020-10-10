@@ -625,7 +625,7 @@ function paintButton(derma, pw, ph, mytext)
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
 	local _brC = Color(0, 0, 0, 255)
 	paintBr(pw, ph, _brC)
-	draw.SimpleTextOutlined(YRP.lang_string(mytext), "Y_18_700", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+	draw.SimpleTextOutlined(YRP.lang_string(mytext), "Y_18_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 end
 
 function paintPanel(derma, pw, ph, color)
@@ -1020,7 +1020,7 @@ function createMDMenu(parent, w, h, x, y)
 		for k, v in pairs(tmp.cat) do
 			local tmpCat = createD("DPanel", tmp.menulist, IconSize, YRP.ctr(0), BR, YRP.ctr(posY))
 			function tmpCat:Paint(pw, ph)
-				draw.SimpleTextOutlined(string.upper(YRP.lang_string(v)), "Y_18_700", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(string.upper(YRP.lang_string(v)), "Y_18_500", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 			tmp.menulist:AddItem(tmpCat)
 
@@ -1069,7 +1069,7 @@ function createMDMenu(parent, w, h, x, y)
 
 				local tmpHr = createD("DPanel", nil, IconSize, YRP.ctr(0), 0, YRP.ctr(posY))
 				function tmpHr:Paint(pw, ph)
-					--draw.SimpleTextOutlined("test", "Y_18_700", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					--draw.SimpleTextOutlined("test", "Y_18_500", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 
 				tmp.menulist:AddItem(tmpHr)

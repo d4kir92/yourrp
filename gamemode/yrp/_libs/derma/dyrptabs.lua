@@ -55,7 +55,7 @@ function PANEL:Init()
 			local _color = Color(255, 255, 255)
 			local font = "Y_24_500"
 			if self.selected then
-				font = "Y_24_700"
+				font = "Y_24_500"
 				_color = lply:InterfaceValue("YButton", "SC")
 				draw.RoundedBox(0, YRP.ctr(2), ph - YRP.ctr(4 + 2), pw - 2 * YRP.ctr(2), YRP.ctr(4), _color)
 			end

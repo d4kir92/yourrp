@@ -14,9 +14,9 @@ net.Receive("Connect_Settings_Console", function(len)
 
 		PARENT.console = createD("RichText", PARENT.consolebackground, YRP.ctr(1000), PARENT:GetTall() - YRP.ctr(40) - YRP.ctr(50), 0, 0)
 		if PARENT.console.SetUnderlineFont != nil then
-			PARENT.console:SetUnderlineFont("Y_18_700")
+			PARENT.console:SetUnderlineFont("Y_18_500")
 		end
-		PARENT.console:SetFontInternal("Y_18_700")
+		PARENT.console:SetFontInternal("Y_18_500")
 		PARENT.console:InsertColorChange(0, 0, 0, 255)
 
 		PARENT.consoletext = createD("DTextEntry", PARENT.consolebackground, YRP.ctr(1000), YRP.ctr(50), 0, PARENT:GetTall() - YRP.ctr(40) - YRP.ctr(50))

@@ -89,8 +89,6 @@ render.SetStencilEnable(false);
 render.ClearStencil();
 	]]
 
-
-	-- Reset everything to known good
 	render.SetStencilWriteMask( 0xFF )
 	render.SetStencilTestMask( 0xFF )
 	render.SetStencilReferenceValue( 0 )
@@ -99,27 +97,21 @@ render.ClearStencil();
 	-- render.SetStencilFailOperation( STENCIL_KEEP )
 	render.SetStencilZFailOperation( STENCIL_KEEP )
 	render.ClearStencil()
-
-	-- Enable stencils
 	render.SetStencilEnable( true )
-	-- Set everything up everything draws to the stencil buffer instead of the screen
 	render.SetStencilReferenceValue( 1 )
 	render.SetStencilCompareFunction( STENCIL_NEVER )
 	render.SetStencilFailOperation( STENCIL_REPLACE )
 
-	-- Draw a weird shape to the stencil buffer
 	draw.NoTexture()
 	surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
 	local diameter = h / 2
 	drawCircle(diameter, diameter, diameter, math.max(w, h))
 
-	-- Only draw things that are in the stencil buffer
 	render.SetStencilCompareFunction( STENCIL_EQUAL )
 	render.SetStencilFailOperation( STENCIL_KEEP )
 
 	self.panel:PaintManual()
 
-	-- Let everything render normally again
 	render.SetStencilEnable( false )
 end
  

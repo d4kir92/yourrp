@@ -75,7 +75,7 @@ function createRoleBox(rol, parent, mainparent)
 		_rol.rn.rolename = _rol.rn:GetParent().tbl.string_name
 		_rol.rn.rolecolor = StringToColor(_rol.rn:GetParent().tbl.string_color)
 		function _rol.rn:Paint(pw, ph)
-			draw.SimpleText(self.rolename, "Y_24_700", ph + YRP.ctr(10), ph / 3, Color(255, 255, 255), 0, 1)
+			draw.SimpleText(self.rolename, "Y_24_500", ph + YRP.ctr(10), ph / 3, Color(255, 255, 255), 0, 1)
 		end
 
 		-- Role Salary --
@@ -83,7 +83,7 @@ function createRoleBox(rol, parent, mainparent)
 		_rol.rs.rolesalary = _rol.rs:GetParent().tbl.int_salary
 		_rol.rs.rolecolor = StringToColor(_rol.rn:GetParent().tbl.string_color)
 		function _rol.rs:Paint(pw, ph)
-			draw.SimpleText(MoneyFormatRounded(self.rolesalary, 0), "Y_20_700", ph + YRP.ctr(10), ph / 3 * 2, Color(255, 255, 255, 255), 0, 1)
+			draw.SimpleText(MoneyFormatRounded(self.rolesalary, 0), "Y_20_500", ph + YRP.ctr(10), ph / 3 * 2, Color(255, 255, 255, 255), 0, 1)
 		end
 
 		-- Role MaxAmount --
@@ -106,7 +106,7 @@ function createRoleBox(rol, parent, mainparent)
 				if tonumber(rol.int_uses) == tonumber(rol.int_maxamount) then
 					color = Color(255, 0, 0)
 				end
-				draw.SimpleText(self:GetParent().tbl.int_uses .. "/" .. self:GetParent().tbl.int_maxamount, "Y_20_700", pw - YRP.ctr(w / 2 + br), ph - YRP.ctr(h / 2 + br) * 1.1, color, 1, 1)
+				draw.SimpleText(self:GetParent().tbl.int_uses .. "/" .. self:GetParent().tbl.int_maxamount, "Y_20_500", pw - YRP.ctr(w / 2 + br), ph - YRP.ctr(h / 2 + br) * 1.1, color, 1, 1)
 
 				--BR
 				--drawRBBR(0, YRP.ctr(_br), 0, pw, ph, Color(0, 0, 0, 255), YRP.ctr(4))

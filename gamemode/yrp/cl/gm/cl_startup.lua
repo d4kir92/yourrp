@@ -1197,7 +1197,7 @@ function openSingleSelector(tab, closeF, web)
 					function icon:Paint(pw, ph)
 						if item.ishidden then
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100))
-							draw.SimpleText("HIDDEN ENTITY!", "Y_30_700", pw / 2, YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							draw.SimpleText("HIDDEN ENTITY!", "Y_30_500", pw / 2, YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						else
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 						end
@@ -1830,7 +1830,7 @@ hook.Add("PostDrawTranslucentRenderables", "yrp_draw_plates", drawPlates)
 function draw3DText(text, x, y, color)
 	color = color or Color(255, 255, 255, 255)
 	surface.SetTextColor(color)
-	surface.SetFont("Y_" .. 24 .. "_700")
+	surface.SetFont("Y_" .. 24 .. "_500")
 	local tw, _ = surface.GetTextSize(text)
 	surface.SetTextPos(x - tw / 2, y)
 	surface.DrawText(text)
@@ -1959,7 +1959,7 @@ end)
 
 function DrawDoorText(door)
 	local header = SQL_STR_OUT(door:GetDString("text_header", ""))
-	surface.SetFont("Y_24_700")
+	surface.SetFont("Y_24_500")
 	local head_size = surface.GetTextSize(header)
 	surface.SetTextColor(255, 255, 255)
 	surface.SetTextPos(- head_size / 2, -80)
@@ -1975,7 +1975,7 @@ function DrawDoorText(door)
 	local sl = door:GetDInt("int_securitylevel", 0)
 	if sl > 0 then
 		local int_securitylevel = YRP.lang_string("LID_securitylevel") .. ": " .. sl
-		surface.SetFont("Y_24_700")
+		surface.SetFont("Y_24_500")
 		local secu_size = surface.GetTextSize(int_securitylevel)
 		surface.SetTextColor(255, 255, 255)
 		surface.SetTextPos(- secu_size / 2, -20)
@@ -2271,13 +2271,13 @@ hook.Add("Think", "openDeathScreen", function(len)
 			Derma_DrawBackgroundBlur(self, self.systime)
 			draw.RoundedBox(0, 0, YRP.ctr(300), pw, YRP.ctr(500), Color(0, 0, 0, 180 * self.a))
 			if LocalPlayer():GetDInt("int_deathtimestamp_max", 0) <= CurTime() then
-				draw.SimpleText(string.upper(YRP.lang_string("LID_youdied")), "Y_100_700", pw / 2, YRP.ctr(300 + 500 / 2), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(YRP.lang_string("LID_youdied")), "Y_100_500", pw / 2, YRP.ctr(300 + 500 / 2), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			else
-				draw.SimpleText(YRP.lang_string("LID_youreunconsious") .. ".", "Y_50_700", pw / 2, YRP.ctr(300 + 500 / 3), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.lang_string("LID_youreunconsious") .. ".", "Y_50_500", pw / 2, YRP.ctr(300 + 500 / 3), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 				local tab = {}
 				tab["X"] = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_max", 0) - CurTime(), 0)
-				draw.SimpleText(YRP.lang_string("LID_youredeadinxseconds", tab) .. ".", "Y_30_700", pw / 2, YRP.ctr(300 + 500 * 2 / 3), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.lang_string("LID_youredeadinxseconds", tab) .. ".", "Y_30_500", pw / 2, YRP.ctr(300 + 500 * 2 / 3), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
 			if input.IsMouseDown(MOUSE_FIRST) or input.IsMouseDown(MOUSE_RIGHT) then
@@ -2401,8 +2401,8 @@ function loading:Paint(pw, ph)
 	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(580), w * lply:GetDInt("yrp_load_ent", -1) / 100, h, Color(100, 100, 255, 255))
 	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * lply:GetDInt("yrp_load_glo", -1) / 100, h, Color(100, 100, 255, 255))
 	-- BAR TEXT
-	draw.SimpleText("Entities Values: " .. lply:GetDInt("yrp_load_ent", 0) .. "%", "Y_20_700", pw / 2, ph / 2 + YRP.ctr(605), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	draw.SimpleText("Global Values: " .. lply:GetDInt("yrp_load_glo", 0) .. "%", "Y_20_700", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText("Entities Values: " .. lply:GetDInt("yrp_load_ent", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(605), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText("Global Values: " .. lply:GetDInt("yrp_load_glo", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 
 	

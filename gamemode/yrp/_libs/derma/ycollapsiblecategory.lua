@@ -126,7 +126,7 @@ function PANEL:Init()
 			x = ph / 2
 		end
 
-		draw.SimpleText(base._htext, "Y_" .. math.Clamp(math.Round(ph - 2 * YRP.ctr(20), 0), 4, 100) .. "_700", x, ph / 2, TextColor(lply:InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(base._htext, "Y_" .. math.Clamp(math.Round(ph - 2 * YRP.ctr(20), 0), 4, 100) .. "_500", x, ph / 2, TextColor(lply:InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	net.Receive("get_next_ranks", function(len)
@@ -192,7 +192,7 @@ function PANEL:Init()
 			draw.RoundedBox(diameter / 2, YRP.ctr(18), YRP.ctr(8), diameter + YRP.ctr(4), diameter + YRP.ctr(4), StringToColor(rol.string_color))
 			draw.RoundedBox(diameter / 2, YRP.ctr(20), YRP.ctr(10), diameter, diameter, lply:InterfaceValue("YFrame", "PC"))
 
-			draw.SimpleText(rol.string_name, "Y_26_700", ph + YRP.ctr(20), ph / 3, TextColor(lply:InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(rol.string_name, "Y_26_500", ph + YRP.ctr(20), ph / 3, TextColor(lply:InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP.ctr(20), ph / 3 * 2, TextColor(lply:InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			if rol.int_maxamount > 0 then
 				local radius = ph / 2 - 1 * YRP.ctr(10)
@@ -257,7 +257,7 @@ function PANEL:Init()
 					render.SetStencilEnable(false)
 				end
 
-				draw.SimpleText(rol.int_uses .. "/" .. rol.int_maxamount, "Y_" .. 20 .. "_700", pw - ph / 2, ph / 2, TextColor(lply:InterfaceValue("YFrame", "PC")), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(rol.int_uses .. "/" .. rol.int_maxamount, "Y_" .. 20 .. "_500", pw - ph / 2, ph / 2, TextColor(lply:InterfaceValue("YFrame", "PC")), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 
@@ -301,7 +301,7 @@ function PANEL:Init()
 			if rol.bool_locked or rol.int_requireslevel > lply:Level() then
 				YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - 2 * YRP.ctr(40), ph - 2 * YRP.ctr(40), YRP.ctr(50), YRP.ctr(40), TextColor(StringToColor(rol.string_color)))
 				if rol.int_requireslevel > lply:Level() then
-					draw.SimpleText(rol.int_requireslevel, "Y_40_700", ph / 2 + YRP.ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(rol.int_requireslevel, "Y_40_500", ph / 2 + YRP.ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 		end

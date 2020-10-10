@@ -217,7 +217,7 @@ function YRP.msg(chan, str_msg, tochat)
 					err:SetDraggable(false)
 					err:SetTitle("")
 					function err:Paint(pw, ph)
-						draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string("LID_error") .. "] " .. "Look into the console!", "Y_14_700", Color(255, 0, 0), Color(0, 0, 0))
+						draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string("LID_error") .. "] " .. "Look into the console!", "Y_14_500", Color(255, 0, 0), Color(0, 0, 0))
 					end
 					timer.Simple(8, function()
 						err:Remove()
