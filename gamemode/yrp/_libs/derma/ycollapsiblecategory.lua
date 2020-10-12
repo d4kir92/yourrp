@@ -262,12 +262,12 @@ function PANEL:Init()
 		end
 
 		local diameter = YRP.ctr(h) - 2 * YRP.ctr(10)
-		local pm = createD("YModelPanel", bg, diameter, diameter, YRP.ctr(20), YRP.ctr(10))
 		if type(rol.pms) != "table" and type(rol.pms) == "string" then
 			rol.pms = string.Explode(",", rol.pms)
 		end
 		if type(rol.pms) == "table" then
 			if !strEmpty(rol.pms[1]) then
+				local pm = createD("YModelPanel", bg, diameter, diameter, YRP.ctr(20), YRP.ctr(10))
 				pm:SetModel(rol.pms[1])
 				if false then--pm.panel.Entity:IsValid() then
 					function pm.panel:LayoutEntity( ent )

@@ -148,6 +148,8 @@ include("sql/db_sql.lua")
 
 include("database/db_database.lua")
 
+include("general/db_general.lua") -- First Database
+
 include("console/db_console.lua")
 include("status/db_status.lua")
 include("yourrp_addons/db_yourrp_addons.lua")
@@ -170,7 +172,6 @@ include("profiles_hud/db_profiles_hud.lua")
 
 include("idcard/db_idcard.lua")
 
-include("general/db_general.lua")
 include("players/db_players.lua")
 include("characters/db_characters.lua")
 include("groups/db_groups.lua")

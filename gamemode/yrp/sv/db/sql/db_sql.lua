@@ -42,7 +42,7 @@ SQLITE_ADD_COLUMN(DATABASE_NAME, "int_backup_create", "INT DEFAULT '1'", true)
 SQLITE_ADD_COLUMN(DATABASE_NAME, "int_backup_delete", "INT DEFAULT '30'", true)
 
 if sql.Query("SELECT * FROM yrp_sql") == nil then
-	YRP.msg("db", "Missing first entry, insert it now!")
+	--YRP.msg("db", "Missing first entry, insert it now!")
 	sql.Query("INSERT INTO yrp_sql DEFAULT VALUES")
 end
 

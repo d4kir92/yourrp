@@ -241,8 +241,8 @@ function ismalformed(str)
 	end
 end
 
-local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
-local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse"
+local _url = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse" -- deleted
+local _url2 = "https://docs.google.com/forms/d/e/1FAIpQLSdTOU5NjdzpUjOyYbymXOeM3oyFfoVFBNKOAcBZbX3UxgAK6A/formResponse" -- deleted
 function send_error(realm, str, force)
 	local entry = {}
 
@@ -254,7 +254,7 @@ function send_error(realm, str, force)
 	end
 	dedi = string.upper(dedi)
 
-	if ErrorValidToSend(str) or force then
+	--[[if ErrorValidToSend(str) or force then
 		timer.Create("wait_for_gamemode" .. str, 1, 0, function()
 			if gmod.GetGamemode() != nil and SERVER or (CLIENT and wk(LocalPlayer().LoadedGamemode) and LocalPlayer():LoadedGamemode()) then
 				isdbfull(str)
@@ -296,7 +296,7 @@ function send_error(realm, str, force)
 				entry["entry.471979789"] = string.upper(tostring(!game.SinglePlayer()))
 
 				if realm != "server_all" then
-					http.Post(_url, entry, function(result)
+					-[[http.Post(_url, entry, function(result)
 						if result then
 							YRP.msg("gm", "[SENT ERROR TO DEVELOPER] " .. str)
 						end
@@ -320,7 +320,7 @@ function send_error(realm, str, force)
 				timer.Remove("wait_for_gamemode" .. str)
 			end
 		end)
-	end
+	end]]
 end
 
 local _sended = {}
@@ -370,7 +370,7 @@ end
 
 function SendAllErrors(str)
 	if str != nil then
-		YRP.msg("debug", "[SendAllErrors] " .. str)
+		--YRP.msg("debug", "[SendAllErrors] " .. str)
 	end
 	_cl_errors = update_error_table_cl()
 	send_errors("client", _cl_errors)
@@ -382,7 +382,7 @@ end
 SendAllErrors("instant")
 
 local first = true
-timer.Create("update_error_tables", 20, 0, function()
+timer.Create("update_error_tables", 60, 0, function()
 	if first then
 		first = false
 	else

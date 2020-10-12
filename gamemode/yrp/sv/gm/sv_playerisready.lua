@@ -12,7 +12,7 @@ function PlayerLoadedGame(ply)
 	local OS_OSX = tab.isosx
 	local Country = tab.country
 	local Branch = tab.branch
-	local UpTime = tab.uptime
+	--local UpTime = tab.uptime
 
 	if OS_Windows then
 		ply:SetDString("yrp_os", "windows")
@@ -25,7 +25,7 @@ function PlayerLoadedGame(ply)
 	end
 	ply:SetDString("gmod_branch", Branch or "Unknown")
 	ply:SetDString("yrp_country", Country or "Unknown")
-	ply:SetDFloat("uptime_current", UpTime)
+	ply:SetDFloat("uptime_current", os.clock())
 
 	-- YRP Chat?
 	local _chat = SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")

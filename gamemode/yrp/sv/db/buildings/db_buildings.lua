@@ -197,7 +197,7 @@ function loadDoors()
 	end
 
 	YRP.msg("db", "[Buildings] Map Doors are now available!")
-	SetGlobalBool("loaded_doors", true)
+	SetGlobalDBool("loaded_doors", true)
 	net.Start("loaded_doors")
 	net.Broadcast()
 end

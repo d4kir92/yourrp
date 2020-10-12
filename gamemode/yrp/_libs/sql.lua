@@ -285,7 +285,7 @@ function SQL_DROP_TABLE(db_table)
 end
 
 function SQL_CREATE_TABLE(db_table)
-	YRP.msg("db", "SQL_CREATE_TABLE(" .. tostring(db_table) .. ")")
+	YRP.msg("db", "Create Table (" .. tostring(db_table) .. ")")
 
 	if GetSQLMode() == 0 then
 		local _q = "CREATE TABLE "
@@ -370,7 +370,7 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 end
 
 function SQL_INSERT_INTO(db_table, db_columns, db_values)
-	YRP.msg("db", "SQL_INSERT_INTO(" .. tostring(db_table) .. " | " .. tostring(db_columns) .. " | " .. tostring(db_values) .. ")")
+	YRP.msg("debug", "SQL_INSERT_INTO(" .. tostring(db_table) .. " | " .. tostring(db_columns) .. " | " .. tostring(db_values) .. ")")
 	if GetSQLMode() == 0 then
 		if SQL_TABLE_EXISTS(db_table) then
 			local _q = "INSERT INTO "
@@ -671,7 +671,6 @@ function SQL_INIT_DATABASE(db_name)
 
 	if GetSQLMode() == 0 then
 		if !SQL_TABLE_EXISTS(db_name) then
-			YRP.msg("note", tostring(db_name) .. " not exists")
 			local _result = SQL_CREATE_TABLE(db_name)
 
 			if !SQL_TABLE_EXISTS(db_name) then
@@ -681,7 +680,6 @@ function SQL_INIT_DATABASE(db_name)
 		end
 	elseif GetSQLMode() == 1 then
 		if !SQL_TABLE_EXISTS(db_name) then
-			YRP.msg("note", tostring(db_name) .. " not exists")
 			local _result = SQL_CREATE_TABLE(db_name)
 
 			if !SQL_TABLE_EXISTS(db_name) then

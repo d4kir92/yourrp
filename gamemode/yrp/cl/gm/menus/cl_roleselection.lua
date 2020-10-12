@@ -437,6 +437,8 @@ function CreateRoleSelectionContent(PARENT)
 		if pa(list) then
 			local gtab = net.ReadTable()
 
+			local factioncount = tonumber(net.ReadString())
+
 			local w = list:GetWide() -- YRP.ctr(2 * config.br)
 			local h = YRP.ctr(100)
 
@@ -461,7 +463,7 @@ function CreateRoleSelectionContent(PARENT)
 						end
 					end
 
-					if !LocalPlayer():GetDBool("cc", false) and GetGlobalDBool("bool_players_can_switch_faction", false) then
+					if !LocalPlayer():GetDBool("cc", false) and GetGlobalDBool("bool_players_can_switch_faction", false) and factioncount > 1 then
 						local changefaction = createD("YButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 20), YRP.ctr(20))
 						changefaction:SetText("LID_changefaction")
 						function changefaction:Think()

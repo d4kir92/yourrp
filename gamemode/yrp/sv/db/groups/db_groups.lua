@@ -579,8 +579,16 @@ net.Receive("yrp_roleselection_getgroups", function(len, ply)
 		nettab = dbtab
 	end
 
+	local factioncount = 0
+	local fatab = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. 0 .. "'")
+
+	for i, v in pairs(fatab) do
+		factioncount = factioncount + 1
+	end
+
 	net.Start("yrp_roleselection_getgroups")
 		net.WriteTable(nettab)
+		net.WriteString(factioncount)
 	net.Send(ply)
 end)
 

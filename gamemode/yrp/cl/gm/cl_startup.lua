@@ -1986,7 +1986,7 @@ end
 local loadattempts = 0
 function loadDoorTexts()
 	loadattempts = loadattempts + 1
-	if GetGlobalBool("loaded_doors", false) and (table.Count(ents.FindByClass("prop_door_rotating")) > 0 or table.Count(ents.FindByClass("func_door")) > 0 or table.Count(ents.FindByClass("func_door_rotating")) > 0) then
+	if GetGlobalDBool("loaded_doors", false) and (table.Count(ents.FindByClass("prop_door_rotating")) > 0 or table.Count(ents.FindByClass("func_door")) > 0 or table.Count(ents.FindByClass("func_door_rotating")) > 0) then
 		hook.Remove("PostDrawOpaqueRenderables", "yrp_door_info")
 		hook.Add("PostDrawOpaqueRenderables", "yrp_door_info", function()
 			local DOORS = GetAllDoors()
@@ -2407,7 +2407,7 @@ function loading:Paint(pw, ph)
 
 	
 	-- TIME
-	draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", pw / 2, ph / 2 + YRP.ctr(760), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 
 	if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 and lply:GetDBool("finishedloading", false) and lply:GetDBool("loadedchars", false) then

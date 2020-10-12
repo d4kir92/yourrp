@@ -20,7 +20,7 @@ end
 local PANEL = {}
 
 function PANEL:Init()
-	self.panel = vgui.Create( "SpawnIcon", self ) -- The magic of changing 1 line of code is amazing
+	self.panel = vgui.Create( "SpawnIcon", self )
 	self.panel:SetPaintedManually( true )
 end
 

@@ -52,6 +52,7 @@ end
 --HudToCode("Identifycard")
 
 function HudProfileToDataBase(name, tab)
+	YRP.msg("db", "Load Hud Profile: " .. name, nil, true)
 	if SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. name .. "'") == nil then
 		SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. "name" .. "', '" .. name .. "'")
 		for i, v in pairs(tab) do
@@ -62,6 +63,7 @@ function HudProfileToDataBase(name, tab)
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. v .. "'", "name = '" .. i .. "' AND profile_name = '" .. name .. "'")
 		end
 	end
+	YRP.msg("db", "Loaded Hud Profile: " .. name, nil, true)
 end
 
 function ProfilesYourRPDefault()

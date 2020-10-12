@@ -201,37 +201,40 @@ local heated = false
 local overheated = false
 function ENT:Think()
 	if CurTime() < self.tick then return end
-	self.tick = CurTime() + 0.1
+	self.tick = CurTime() + 1
+
+	local temp = self:GetDFloat("temp", 0.0)
 	if self:GetDBool("working") then
-		if self:GetDFloat("temp", 0.0) > 70.0 then
+		if temp > 70.0 then
 			overheated = true
 		else
 			overheated = false
 		end
 		if self:GetDInt("cooler", 0) > self:GetDInt("cpu", 0) then
-			self:SetDFloat("temp", self:GetDFloat("temp", 0.0) - 0.1)
-			if self:GetDFloat("temp", 0.0) < 34.0 and heated then
-				self:SetDFloat("temp", 34.0)
+			temp = temp - 1
+			if temp < 34.0 and heated then
+				temp = 34.0
 			end
 		elseif self:GetDInt("cooler", 0) + 1 < self:GetDInt("cpu", 0) then
-			self:SetDFloat("temp", self:GetDFloat("temp", 0.0) + 0.2)
+			temp = temp + 2
 		else
 			if overheated then
-				self:SetDFloat("temp", self:GetDFloat("temp", 0.0) - 0.1)
+				temp = temp - 1
 			else
-				self:SetDFloat("temp", self:GetDFloat("temp", 0.0) + 0.1)
+				temp = temp + 1
 			end
-			if self:GetDFloat("temp", 0.0) > 34.0 then
+			if temp > 34.0 then
 				heated = true
 			end
 		end
 	else
-		self:SetDFloat("temp", self:GetDFloat("temp", 0.0) - 0.3)
+		temp = temp - 0.3
 		heated = false
 	end
-	if self:GetDFloat("temp", 0.0) < 0.0 then
-		self:SetDFloat("temp", 0.0)
+	if temp < 0.0 then
+		temp = 0.0
 	end
+	self:SetDFloat("temp", temp)
 
 	-- To much heat, explode
 	if self:GetDFloat("temp", 0.0) > self:GetDFloat("tempMax", 90.0) then

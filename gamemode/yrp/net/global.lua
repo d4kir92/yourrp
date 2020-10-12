@@ -356,43 +356,51 @@ if SERVER then
 		YRP_NW_Globals["INT"] = YRP_NW_Globals["INT"] or {}
 		YRP_NW_Globals["FLOAT"] = YRP_NW_Globals["FLOAT"] or {}
 		YRP_NW_Globals["TABLE"] = YRP_NW_Globals["TABLE"] or {}
-	
-		timer.Simple(2, function()
+
+		local interval = 4
+		local ti = 0
+
+		timer.Simple(ti, function()
 			for i, v in pairs(YRP_NW_Globals["BOOL"]) do
 				SendGlobalDBool(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 15)
 		end)
-
-		timer.Simple(4, function()
+		
+		ti = ti + interval
+		timer.Simple(ti, function()
 			for i, v in pairs(YRP_NW_Globals["STRING"]) do
 				SendGlobalDString(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 30)
 		end)
 
-		timer.Simple(6, function()
+		ti = ti + interval
+		timer.Simple(ti, function()
 			for i, v in pairs(YRP_NW_Globals["INT"]) do
 				SendGlobalDInt(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 45)
 		end)
 
-		timer.Simple(8, function()
+		ti = ti + interval
+		timer.Simple(ti, function()
 			for i, v in pairs(YRP_NW_Globals["FLOAT"]) do
 				SendGlobalDFloat(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 60)
 		end)
 
-		timer.Simple(10, function()
+		ti = ti + interval
+		timer.Simple(ti, function()
 			for i, v in pairs(YRP_NW_Globals["TABLE"]) do
 				SendGlobalDTable(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 75)
 		end)
 
-		timer.Simple(12, function()
+		ti = ti + interval
+		timer.Simple(ti, function()
 			ply:SetDInt("yrp_load_glo", 100)
 
 			sending = false

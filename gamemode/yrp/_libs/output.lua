@@ -127,10 +127,10 @@ function MSGChannelEnabled(chan)
 	if !isstring(chan) then return false end
 
 	chan = string.lower(chan)
-	if GetGlobalBool("bool_msg_channel_" .. chan, false) or chan == "printtable" or chan == "missing" or chan == "error" then
+	if chan == "printtable" or chan == "missing" or chan == "error" then
 		return true
-	elseif GetGlobalBool("yrp_general_loaded", false) then
-		if !IsChannelRegistered(chan) and GetGlobalBool("bool_msg_channel_" .. chan, true) then
+	elseif GetGlobalDBool("yrp_general_loaded") then
+		if !IsChannelRegistered(chan) and GetGlobalDBool("bool_msg_channel_" .. chan) then
 			YRP.msg("error", "!!!" .. chan .. "!!!")
 		end
 		return false
@@ -160,12 +160,12 @@ end
 --local r = GetRealm()
 local rc = GetRealmColor()
 local _msgcache = {}
-function YRP.msg(chan, str_msg, tochat)
+function YRP.msg(chan, str_msg, tochat, force)
 	if !isstring(chan) then return false end
 	if !isstring(str_msg) then return false end
 
 	local cn = GetChannelName(chan)
-	if MSGChannelEnabled(cn) then
+	if force or MSGChannelEnabled(cn) then
 		if str_msg == nil or str_msg == false then
 			str_msg = tostring(str_msg)
 		end
@@ -187,10 +187,18 @@ function YRP.msg(chan, str_msg, tochat)
 			MsgC(rc, "] ")
 
 			MsgC(rc, msg)
+		
+			if force then
+				MsgC(rc, " ")
+				MsgC(Color(255, 0, 0), "[FORCED]")
+			end
 
 			MsgC("\n")
 
 			local str = "[" .. _yrp .. "|" .. cn .. "] " .. msg
+			if force then
+				str = str .. " [FORCED]"
+			end
 			if tochat and SERVER then
 				PrintMessage(3, "\n ")
 				PrintMessage(3, str)

@@ -321,7 +321,7 @@ if SERVER then
 		end
 	end
 end
-function SetDFloat(entindex, key, value)
+function SetDFloat(entindex, key, value, range)
 	if isnumber(entindex) and isstring(key) and wk(value) and isnumber(tonumber(value)) then
 		value = tonumber(value)
 
@@ -331,16 +331,28 @@ function SetDFloat(entindex, key, value)
 		if YRP_NW_Ents[entindex]["FLOAT"][key] == nil or YRP_NW_Ents[entindex]["FLOAT"][key] != value then
 			YRP_NW_Ents[entindex]["FLOAT"][key] = value
 			if SERVER then
-				SendDFloat(entindex, key, value)
+				if range then
+					for i, p in pairs(player.GetAll()) do
+						if ents.GetByIndex( entindex ) then
+							local ent = ents.GetByIndex( entindex )
+							local dist = p:GetPos():Distance(ent:GetPos())
+							if dist <= range then
+								SendDFloat(entindex, key, value, p)
+							end
+						end
+					end
+				else
+					SendDFloat(entindex, key, value)
+				end
 			end
 		end
 	else
 		YRP.msg("note", "[SetDFloat] FAILED " .. tostring(key) .. tostring(value))
 	end
 end
-function ENTITY:SetDFloat(key, value)
+function ENTITY:SetDFloat(key, value, range)
 	local entindex = self:EntIndex()
-	SetDFloat(entindex, key, value)
+	SetDFloat(entindex, key, value, range)
 end
 if CLIENT then
 	net.Receive("SetDFloat", function(len)
@@ -581,69 +593,108 @@ if SERVER then
 	local c = 0
 
 	function SendDEntities(ply, funcname)
+		local interval = 4
+		local ti = 2
+
+		YRP_NW_Ents = YRP_NW_Ents or {}
+
 		for j, ent in pairs(ents.GetAll()) do
 			if ent.EntIndex != nil then
 				local entindex = ent:EntIndex()
-				YRP_NW_Ents = YRP_NW_Ents or {}
 				YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
 				YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
 				YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
 				YRP_NW_Ents[entindex]["INT"] = YRP_NW_Ents[entindex]["INT"] or {}
 				YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
 				YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
+			end
+		end
 
-				ply:SetDInt("yrp_load_ent", 0)
+		ply:SetDInt("yrp_load_ent", 0)
 
-				timer.Simple(1, function()
+		timer.Simple(ti, function()
+			for j, ent in pairs(ents.GetAll()) do
+				if ent.EntIndex != nil then
+					local entindex = ent:EntIndex()
+					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+					YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
 					if table.Count(YRP_NW_Ents[entindex]["BOOL"]) > 0 then
 						for i, v in pairs(YRP_NW_Ents[entindex]["BOOL"]) do
 							SendDBool(entindex, i, v, ply)
 						end
-						ply:SetDInt("yrp_load_ent", 10)
 					end
-				end)
-
-				timer.Simple(3, function()
+				end
+			end
+			ply:SetDInt("yrp_load_ent", 10)
+		end)
+		ti = ti + interval
+		timer.Simple(ti, function()
+			for j, ent in pairs(ents.GetAll()) do
+				if ent.EntIndex != nil then
+					local entindex = ent:EntIndex()
+					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+					YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
 					if table.Count(YRP_NW_Ents[entindex]["STRING"]) > 0 then
 						for i, v in pairs(YRP_NW_Ents[entindex]["STRING"]) do
 							SendDString(entindex, i, v, ply)
 						end
-						ply:SetDInt("yrp_load_ent", 30)
 					end
-				end)
-
-				timer.Simple(5, function()
+				end
+			end
+			ply:SetDInt("yrp_load_ent", 30)
+		end)
+		ti = ti + interval
+		timer.Simple(ti, function()
+			for j, ent in pairs(ents.GetAll()) do
+				if ent.EntIndex != nil then
+					local entindex = ent:EntIndex()
+					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+					YRP_NW_Ents[entindex]["INT"] = YRP_NW_Ents[entindex]["INT"] or {}
 					if table.Count(YRP_NW_Ents[entindex]["INT"]) > 0 then
 						for i, v in pairs(YRP_NW_Ents[entindex]["INT"]) do
 							if i != "yrp_load_glo" and i != "yrp_load_ent" then
 								SendDInt(entindex, i, v, ply)
 							end
 						end
-						ply:SetDInt("yrp_load_ent", 50)
 					end
-				end)
-
-				timer.Simple(7, function()
+				end
+			end
+			ply:SetDInt("yrp_load_ent", 50)
+		end)
+		ti = ti + interval
+		timer.Simple(ti, function()
+			for j, ent in pairs(ents.GetAll()) do
+				if ent.EntIndex != nil then
+					local entindex = ent:EntIndex()
+					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+					YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
 					if table.Count(YRP_NW_Ents[entindex]["FLOAT"]) > 0 then
 						for i, v in pairs(YRP_NW_Ents[entindex]["FLOAT"]) do
 							SendDFloat(entindex, i, v, ply)
 						end
-						ply:SetDInt("yrp_load_ent", 70)
 					end
-				end)
-
-				timer.Simple(9, function()
+				end
+			end
+			ply:SetDInt("yrp_load_ent", 70)
+		end)
+		ti = ti + interval
+		timer.Simple(ti, function()
+			for j, ent in pairs(ents.GetAll()) do
+				if ent.EntIndex != nil then
+					local entindex = ent:EntIndex()
+					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+					YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
 					if table.Count(YRP_NW_Ents[entindex]["TABLE"]) > 0 then
 						for i, v in pairs(YRP_NW_Ents[entindex]["TABLE"]) do
 							SendDTable(entindex, i, v, ply)
 						end
-						ply:SetDInt("yrp_load_ent", 90)
 					end
-				end)
+				end
 			end
-		end
+			ply:SetDInt("yrp_load_ent", 90)
+		end)
 
-		timer.Simple(11, function()
+		timer.Simple(ti, function()
 			SendDInit(entindex, ply)
 			ply:SetDInt("yrp_load_ent", 100)
 			
@@ -655,7 +706,7 @@ end
 function RemoveFromEntTable( entindex )
 	if !sending then
 		if istable(YRP_NW_Ents[entindex]) then
-			table.RemoveByValue(YRP_NW_Ents, entindex)
+			table.remove(YRP_NW_Ents, entindex)
 		end
 	else
 		timer.Simple(1, function()
