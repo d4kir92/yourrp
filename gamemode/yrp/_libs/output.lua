@@ -114,6 +114,7 @@ msgchannels["debug"] = true
 msgchannels["printtable"] = true
 msgchannels["missing"] = true
 msgchannels["error"] = true
+msgchannels["darkrp"] = true
 function IsChannelRegistered(chan)
 	chan = string.lower(chan)
 	if msgchannels[chan] then
