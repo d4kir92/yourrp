@@ -32,10 +32,12 @@ function PANEL:Init()
 			icon = YRP.GetDesignIcon("64_angle-up")
 		end
 
-		surface.SetMaterial(icon)
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.DrawTexturedRect(pw - ph, br, ph - 2 * br, ph - 2 * br)
-
+		if wk(icon) then
+			surface.SetMaterial(icon)
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.DrawTexturedRect(pw - ph, br, ph - 2 * br, ph - 2 * br)
+		end
+		
 		if tobool(self.locked) then
 			YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), Color(255, 0, 0))
 		end

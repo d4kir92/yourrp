@@ -67,7 +67,9 @@ function CreateDiscordContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP.GetDesignIcon("launch") ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		end
 		draw.SimpleText("Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 	end
 
@@ -119,7 +121,9 @@ function CreateCollectionContent(PARENT)
 
 		function openLink:Paint(pw, ph)
 			hook.Run("YButtonPaint", self, pw, ph)
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+			if YRP.GetDesignIcon("launch") ~= nil then
+				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+			end
 		end
 
 		function openLink:DoClick()
@@ -140,7 +144,9 @@ function CreateTwitchContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP.GetDesignIcon("launch") ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		end
 	end
 	function openLink:DoClick()
 		gui.OpenURL(link)
@@ -178,7 +184,9 @@ function CreateTwitterContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP.GetDesignIcon("launch") ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		end
 	end
 	function openLink:DoClick()
 		gui.OpenURL(link)
@@ -197,7 +205,9 @@ function CreateSteamGroupContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP.GetDesignIcon("launch") ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		end
 	end
 	function openLink:DoClick()
 		gui.OpenURL(link)
@@ -216,7 +226,9 @@ function CreateFacebookContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP.GetDesignIcon("launch") ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		end
 	end
 	function openLink:DoClick()
 		gui.OpenURL(link)
@@ -235,7 +247,9 @@ function CreateInstagramContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP.GetDesignIcon("launch") ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		end
 	end
 	function openLink:DoClick()
 		gui.OpenURL(link)
@@ -487,9 +501,13 @@ function OpenCombinedMenu()
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
 
 			if cm.menu.expanded then
-				surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+				if YRP.GetDesignIcon("64_angle-left") ~= nil then
+					surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+				end
 			else
-				surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+				if YRP.GetDesignIcon("64_angle-right") ~= nil then
+					surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+				end
 			end
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
@@ -567,9 +585,11 @@ function OpenCombinedMenu()
 					end
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
 
-					surface.SetDrawColor(255, 255, 255, 255)
-					surface.SetMaterial(YRP.GetDesignIcon(v.icon))
-					surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+					if YRP.GetDesignIcon(v.icon) ~= nil then
+						surface.SetDrawColor(255, 255, 255, 255)
+						surface.SetMaterial(YRP.GetDesignIcon(v.icon))
+						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+					end
 
 					surface.SetFont(font)
 					local tw, th = surface.GetTextSize(YRP.lang_string(v.name))

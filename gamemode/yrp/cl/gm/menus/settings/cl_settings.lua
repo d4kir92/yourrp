@@ -429,9 +429,13 @@ function OpenSettings()
 		function sm.menu.expander:Paint(pw, ph)
 			self:SetPos(0, sm.win:GetTall() - sm.menu.ph)
 			if lply:GetDBool("settings_expanded", true) then
-				surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+				if YRP.GetDesignIcon("64_angle-left") ~= nil then
+					surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+				end
 			else
-				surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+				if YRP.GetDesignIcon("64_angle-right") ~= nil then
+					surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+				end
 			end
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
@@ -502,10 +506,12 @@ function OpenSettings()
 					end
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
 
-					surface.SetDrawColor(255, 255, 255, 255)
-					surface.SetMaterial(YRP.GetDesignIcon(v.icon))
-					surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
-
+					if YRP.GetDesignIcon(v.icon) ~= nil then
+						surface.SetDrawColor(255, 255, 255, 255)
+						surface.SetMaterial(YRP.GetDesignIcon(v.icon))
+						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+					end
+					
 					surface.SetFont(font)
 					local tw, th = surface.GetTextSize(YRP.lang_string(v.name))
 					if tw > sm.menu.pw then

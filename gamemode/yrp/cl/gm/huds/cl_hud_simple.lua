@@ -141,9 +141,9 @@ function HUDSimpleBAR(tab)
 				HudBox(Simple[tab.element]["bar"])
 			end
 
-			if lply:HudValue(tab.element, "ICON") and tab.icon != nil then
+			if lply:HudValue(tab.element, "ICON") and YRP.GetDesignIcon(tab.icon) then
 				local ico = tab.icon
-				YRP.DrawIcon(ico, Simple[tab.element]["icon"].w, Simple[tab.element]["icon"].h, Simple[tab.element]["icon"].x, Simple[tab.element]["icon"].y, Color(255, 255, 255))
+				YRP.DrawIcon(YRP.GetDesignIcon(ico), Simple[tab.element]["icon"].w, Simple[tab.element]["icon"].h, Simple[tab.element]["icon"].x, Simple[tab.element]["icon"].y, Color(255, 255, 255))
 			end
 
 			Simple[tab.element]["text"].text = ""
@@ -496,23 +496,23 @@ local ping_delay = 0
 local pingcolor = Color(0, 0, 0)
 
 local icons = {}
-icons["RA"] = YRP.GetDesignIcon("64_radiation")
-icons["HP"] = YRP.GetDesignIcon("64_heart")
-icons["AR"] = YRP.GetDesignIcon("64_shield-alt")
-icons["MO"] = YRP.GetDesignIcon("64_money-bill")
-icons["SA"] = YRP.GetDesignIcon("64_money-bill-alt")
-icons["ST"] = YRP.GetDesignIcon("64_running")
-icons["HU"] = YRP.GetDesignIcon("64_hamburger")
-icons["TH"] = YRP.GetDesignIcon("64_glass-cheers")
-icons["AL"] = YRP.GetDesignIcon("64_wine-bottle")
-icons["HY"] = YRP.GetDesignIcon("64_pills")
-icons["CA"] = YRP.GetDesignIcon("64_magic")
-icons["AB"] = YRP.GetDesignIcon("64_tint")
-icons["BA"] = YRP.GetDesignIcon("64_battery-full")
-icons["ID"] = YRP.GetDesignIcon("64_address-card")
-icons["CR"] = YRP.GetDesignIcon("64_clock")
-icons["RO"] = YRP.GetDesignIcon("64_user-graduate")
-icons["NA"] = YRP.GetDesignIcon("64_user")
+icons["RA"] = "64_radiation"
+icons["HP"] = "64_heart"
+icons["AR"] = "64_shield-alt"
+icons["MO"] = "64_money-bill"
+icons["SA"] = "64_money-bill-alt"
+icons["ST"] = "64_running"
+icons["HU"] = "64_hamburger"
+icons["TH"] = "64_glass-cheers"
+icons["AL"] = "64_wine-bottle"
+icons["CA"] = "64_magic"
+icons["AB"] = "64_tint"
+icons["BA"] = "64_battery-full"
+icons["ID"] = "64_address-card"
+icons["CR"] = "64_clock"
+icons["RO"] = "64_user-graduate"
+icons["NA"] = "64_user"
+icons["HY"] = "hygiene"
 
 function HUDSimple()
 	local lply = LocalPlayer()
@@ -832,7 +832,7 @@ function HUDSimple()
 			HY.max = lply:GetMaxHygiene()
 			HY.text = lply:Hygiene() .. " / " .. lply:GetMaxHygiene()
 			HY.percentage = math.Round(lply:Hygiene() / lply:GetMaxHygiene() * 100, 0) .. "%"
-			HY.icon = YRP.GetDesignIcon("hygiene")
+			HY.icon = icons["HY"]
 			HUDSimpleBAR(HY)
 		end
 		if lply:GetDBool("iscasting", false) then

@@ -312,9 +312,11 @@ function InitYRPChat()
 			local w = pw - pw % 4
 			local h = ph - ph % 4
 
-			surface.SetDrawColor(255, 255, 255, 255)
-			surface.SetMaterial(YRP.GetDesignIcon("64_cog"))
-			surface.DrawTexturedRect((pw - w) / 2, (ph - h) / 2, w, h)
+			if YRP.GetDesignIcon("64_cog") ~= nil then
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetMaterial(YRP.GetDesignIcon("64_cog"))
+				surface.DrawTexturedRect((pw - w) / 2, (ph - h) / 2, w, h)
+			end
 		end
 		function yrpChat.settings:DoClick()
 			local win = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)

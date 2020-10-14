@@ -70,6 +70,8 @@ function YRPSendIsReady()
 		YRP.msg("note", "Workshop Addons Done")
 		playerfullready = true
 
+		YRP.LoadDesignIcon()
+
 		--TestYourRPContent()
 	end
 end

@@ -593,8 +593,8 @@ if SERVER then
 	local c = 0
 
 	function SendDEntities(ply, funcname)
-		local interval = 4
-		local ti = 2
+		local interval = 2
+		local ti = 1
 
 		YRP_NW_Ents = YRP_NW_Ents or {}
 

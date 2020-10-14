@@ -202,14 +202,19 @@ hook.Add("YAddPaint", "YAdd_Material", function(self, pw, ph, tab)
 			color.g = color.g + 50
 			color.b = color.b + 50
 		end
-		surface.SetDrawColor(color)
-		surface.SetMaterial(YRP.GetDesignIcon("circle"))
-		surface.DrawTexturedRect(0, 0, pw, ph)
+	
+		if YRP.GetDesignIcon("circle") ~= nil then
+			surface.SetDrawColor(color)
+			surface.SetMaterial(YRP.GetDesignIcon("circle"))
+			surface.DrawTexturedRect(0, 0, pw, ph)
+		end
 
 		local br = ph * 0.1
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(YRP.GetDesignIcon("add"))
-		surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		if YRP.GetDesignIcon("add") ~= nil then
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetMaterial(YRP.GetDesignIcon("add"))
+			surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		end
 		return true
 	end
 end)
@@ -224,14 +229,19 @@ hook.Add("YRemovePaint", "YRemove_Material", function(self, pw, ph, tab)
 		elseif self:IsHovered() then
 			color = Color(206, 111, 111)
 		end
-		surface.SetDrawColor(color)
-		surface.SetMaterial(YRP.GetDesignIcon("circle"))
-		surface.DrawTexturedRect(0, 0, pw, ph)
+
+		if YRP.GetDesignIcon("circle") ~= nil then
+			surface.SetDrawColor(color)
+			surface.SetMaterial(YRP.GetDesignIcon("circle"))
+			surface.DrawTexturedRect(0, 0, pw, ph)
+		end
 
 		local br = ph * 0.1
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(YRP.GetDesignIcon("remove"))
-		surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		if YRP.GetDesignIcon("remove") ~= nil then
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetMaterial(YRP.GetDesignIcon("remove"))
+			surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		end
 		return true
 	end
 end)
@@ -252,14 +262,19 @@ hook.Add("YClosePaint", "YClose_Material", function(self, pw, ph, tab)
 		else
 			color = Color(0, 0, 0, 0)
 		end
-		surface.SetDrawColor(color)
-		surface.SetMaterial(YRP.GetDesignIcon("circle"))
-		surface.DrawTexturedRect(0, 0, pw, ph)
+
+		if YRP.GetDesignIcon("circle") ~= nil then
+			surface.SetDrawColor(color)
+			surface.SetMaterial(YRP.GetDesignIcon("circle"))
+			surface.DrawTexturedRect(0, 0, pw, ph)
+		end
 
 		local br = ph * 0.1
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(YRP.GetDesignIcon("clear"))
-		surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		if YRP.GetDesignIcon("clear") ~= nil then
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetMaterial(YRP.GetDesignIcon("clear"))
+			surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		end
 		return true
 	end
 end)
@@ -280,14 +295,19 @@ hook.Add("YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 		else
 			color = Color(0, 0, 0, 0)
 		end
-		surface.SetDrawColor(color)
-		surface.SetMaterial(YRP.GetDesignIcon("circle"))
-		surface.DrawTexturedRect(0, 0, pw, ph)
+
+		if YRP.GetDesignIcon("circle") ~= nil then
+			surface.SetDrawColor(color)
+			surface.SetMaterial(YRP.GetDesignIcon("circle"))
+			surface.DrawTexturedRect(0, 0, pw, ph)
+		end
 
 		local br = ph * 0.1
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(YRP.GetDesignIcon("mat_square"))
-		surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		if YRP.GetDesignIcon("mat_square") ~= nil then
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetMaterial(YRP.GetDesignIcon("mat_square"))
+			surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+		end
 		return true
 	end
 end)

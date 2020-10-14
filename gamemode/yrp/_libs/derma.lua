@@ -340,10 +340,43 @@ function YRPAddColor(design, color, nr, col)
 end
 
 local _icons = {}
+local _w_icons = {}
+
+local m_adding = false
+local m_counter = 0
+local m_w_counter = 0
 
 function YRP.AddDesignIcon(name, path)
-	_icons[name] = Material(path, "noclamp")
+	m_w_counter = m_w_counter + 1
+	_w_icons[m_w_counter] = {name, path}
 end
+
+function YRP.LoadDesignIcon()
+	if !m_adding and _w_icons[m_counter + 1] ~= nil then
+		
+		m_adding = true
+		m_counter = m_counter + 1
+
+		local name = _w_icons[m_counter][1]
+		local path = _w_icons[m_counter][2]
+
+		local mat, ti = Material(path, "noclamp")
+		_icons[name] = mat
+
+		m_adding = false
+
+		if _w_icons[m_counter + 1] ~= nil then
+			YRP.LoadDesignIcon()
+		end
+	elseif m_counter ~= m_w_counter then
+		timer.Simple(1, function()
+			YRP.LoadDesignIcon()
+		end)
+	end
+end
+timer.Simple(1, function()
+	YRP.LoadDesignIcon()
+end)
 
 function YRP.GetDesignIcon(name)
 	if _icons[name] ~= nil then
@@ -356,14 +389,14 @@ end
 
 function YRP.DrawIcon(material, w, h, x, y, color)
 	local col = color or YRPGetColor("6")
-	surface.SetDrawColor(col)
-	surface.SetMaterial(material)
-	surface.DrawTexturedRect(x or 0, y or 0, w or 64, h or 64)
+	if wk(material) then
+		surface.SetDrawColor(col)
+		surface.SetMaterial(material)
+		surface.DrawTexturedRect(x or 0, y or 0, w or 64, h or 64)
+	end
 end
 
-function YRP.AllIconsLoaded()
-	return YRP.iconsloaded or false
-end
+YRP.AddDesignIcon("clear", "vgui/material/icon_clear.png")
 
 YRP.AddDesignIcon("lang_auto", "vgui/iso_639/" .. "auto" .. ".png")
 YRP.AddDesignIcon("group", "vgui/material/icon_group.png")
@@ -394,16 +427,12 @@ YRP.AddDesignIcon("rotate_left", "vgui/material/icon_rotate_left.png")
 YRP.AddDesignIcon("rotate_right", "vgui/material/icon_rotate_right.png")
 YRP.AddDesignIcon("smartphone", "vgui/material/icon_smartphone.png")
 YRP.AddDesignIcon("system_update", "vgui/material/icon_system_update.png")
-YRP.AddDesignIcon("os_windows", "vgui/material/icon_os_windows.png")
-YRP.AddDesignIcon("os_linux", "vgui/material/icon_os_linux.png")
-YRP.AddDesignIcon("os_osx", "vgui/material/icon_os_osx.png")
 YRP.AddDesignIcon("work", "vgui/material/icon_work.png")
 YRP.AddDesignIcon("done", "vgui/material/icon_done_outline.png")
 YRP.AddDesignIcon("navigation", "vgui/material/icon_navigation.png")
 YRP.AddDesignIcon("chat", "vgui/material/icon_chat.png")
 YRP.AddDesignIcon("voice", "vgui/material/icon_voice.png")
 YRP.AddDesignIcon("close", "vgui/material/icon_highlight_off.png")
-YRP.AddDesignIcon("clear", "vgui/material/icon_clear.png")
 YRP.AddDesignIcon("mat_square", "vgui/material/icon_square.png")
 YRP.AddDesignIcon("launch", "vgui/material/icon_launch.png")
 YRP.AddDesignIcon("lock", "vgui/material/icon_lock.png")
@@ -415,23 +444,12 @@ YRP.AddDesignIcon("pause_circle", "vgui/material/icon_pause_circle.png")
 YRP.AddDesignIcon("language", "vgui/material/icon_language.png")
 YRP.AddDesignIcon("list", "vgui/material/icon_list.png")
 YRP.AddDesignIcon("edit", "vgui/material/icon_create.png")
-
-YRP.AddDesignIcon("discord", "vgui/material/icon_discord.png")
-YRP.AddDesignIcon("discord_black", "vgui/material/icon_discord_black.png")
-YRP.AddDesignIcon("discord_white", "vgui/material/icon_discord_white.png")
-
-YRP.AddDesignIcon("ts", "vgui/material/icon_ts_bluelight.png")
-YRP.AddDesignIcon("ts_light", "vgui/material/icon_ts_light.png")
-
 YRP.AddDesignIcon("circle", "vgui/material/icon_circle.png")
 YRP.AddDesignIcon("add", "vgui/material/icon_add.png")
 YRP.AddDesignIcon("remove", "vgui/material/icon_remove.png")
-
 YRP.AddDesignIcon("shopping_cart", "vgui/material/icon_shop_cart.png")
-
 YRP.AddDesignIcon("radiation", "vgui/material/icon_radiation.png")
 YRP.AddDesignIcon("hygiene", "vgui/material/icon_hygiene.png")
-
 YRP.AddDesignIcon("dashboard", "vgui/material/icon_dashboard.png")
 YRP.AddDesignIcon("person_pin", "vgui/material/icon_person_pin.png")
 YRP.AddDesignIcon("accessibility", "vgui/material/icon_accessibility.png")
@@ -441,6 +459,14 @@ YRP.AddDesignIcon("forum", "vgui/material/icon_forum.png")
 YRP.AddDesignIcon("policy", "vgui/material/icon_policy.png")
 YRP.AddDesignIcon("ts_white", "vgui/material/icon_teamspeak.png")
 YRP.AddDesignIcon("code", "vgui/material/icon_code.png")
+
+YRP.AddDesignIcon("discord", "vgui/material/icon_discord.png")
+YRP.AddDesignIcon("discord_black", "vgui/material/icon_discord_black.png")
+YRP.AddDesignIcon("discord_white", "vgui/material/icon_discord_white.png")
+
+YRP.AddDesignIcon("os_windows", "vgui/material/icon_os_windows.png")
+YRP.AddDesignIcon("os_linux", "vgui/material/icon_os_linux.png")
+YRP.AddDesignIcon("os_osx", "vgui/material/icon_os_osx.png")
 
 local files, folders = file.Find("materials/icons/*", "GAME")
 for _, folder in pairs(folders) do
@@ -460,8 +486,6 @@ for _, folder in pairs(folders) do
 		end
 	end
 end
-
-YRP.iconsloaded = true
 
 -- Flags
 local flags, _ = file.Find("materials/vgui/iso_3166/*.png", "GAME", "nameasc")
@@ -526,9 +550,11 @@ function surfaceCheckBox(derma, pw, ph, icon)
 
 			if derma:GetChecked() then
 				br = 4
-				surface.SetDrawColor(0, 255, 0, 255)
-				surface.SetMaterial(YRP.GetDesignIcon(icon))
-				surface.DrawTexturedRect(YRP.ctr(br), YRP.ctr(br), pw - YRP.ctr(br * 2), ph - YRP.ctr(8))
+				if YRP.GetDesignIcon(icon) ~= nil then
+					surface.SetDrawColor(0, 255, 0, 255)
+					surface.SetMaterial(YRP.GetDesignIcon(icon))
+					surface.DrawTexturedRect(YRP.ctr(br), YRP.ctr(br), pw - YRP.ctr(br * 2), ph - YRP.ctr(8))
+				end
 			end
 		end
 	else
@@ -579,7 +605,7 @@ function mouseVisible()
 	return vgui.CursorVisible()
 end
 
---[[ OLD ]]
+-- OLD
 --
 local _menuOpen = false
 function YRPIsNoMenuOpen()

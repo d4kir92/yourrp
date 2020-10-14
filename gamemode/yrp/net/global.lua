@@ -357,7 +357,7 @@ if SERVER then
 		YRP_NW_Globals["FLOAT"] = YRP_NW_Globals["FLOAT"] or {}
 		YRP_NW_Globals["TABLE"] = YRP_NW_Globals["TABLE"] or {}
 
-		local interval = 4
+		local interval = 2
 		local ti = 0
 
 		timer.Simple(ti, function()
