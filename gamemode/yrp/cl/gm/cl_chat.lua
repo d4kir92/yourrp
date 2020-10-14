@@ -406,7 +406,6 @@ function InitYRPChat()
 		local oldAddText = chat.AddText
 		function chat.AddText(...)
 			if ContainsIp(...) or ChatBlacklisted(...) then return end
-			local yrp = false
 			local args = { ... }
 			yrpChat.richText:AppendText("\n")
 			_delay = 3
@@ -422,9 +421,7 @@ function InitYRPChat()
 			end
 			for i, obj in pairs(args) do
 				local t = string.lower(type(obj))
-				if t == "boolean" and i == 1 then
-					yrp = true
-				elseif t == "table" then
+				if t == "table" then
 					if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
 						yrpChat.richText:InsertColorChange(obj.r, obj.g, obj.b, 255)
 					end
@@ -464,7 +461,7 @@ function InitYRPChat()
 							if _l.l_www then
 								_link = "https://" .. _link
 							end
-							if !strEmpty(_link) and yrp then
+							if !strEmpty(_link) then
 								if _l.l_secure then
 									yrpChat.richText:InsertColorChange(200, 200, 255, 255)
 								else
@@ -487,25 +484,25 @@ function InitYRPChat()
 							yrpChat.richText:AppendText(str)
 						end
 					end
-				elseif t == "entity" and obj:IsPlayer() and !yrp then
+				elseif t == "entity" and obj:IsPlayer() then
 					local col = GAMEMODE:GetTeamColor(obj)
 					if isnumber(tonumber(col.r)) and isnumber(tonumber(col.g)) and isnumber(tonumber(col.b)) then
 						yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
 						yrpChat.richText:AppendText(obj:Nick())
 					end
-				elseif t == "player" and obj:IsPlayer() and !yrp then
-					local col = GAMEMODE:GetTeamColor(obj)
+				elseif t == "player" and obj:IsPlayer() then
+					--[[local col = GAMEMODE:GetTeamColor(obj)
 					if isnumber(tonumber(col.r)) and isnumber(tonumber(col.g)) and isnumber(tonumber(col.b)) then
 						yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
 						yrpChat.richText:AppendText(obj:Nick())
-					end
+					end]]
 				elseif t == "number" then
 					yrpChat.richText:AppendText(obj)
 				elseif t == "boolean" then
 					YRP.msg("note", "chat.addtext (boolean): " .. tostring(obj))
 				elseif t == "entity" and IsValid(obj) then
 					YRP.msg("error", "chat.addtext (entity): " .. tostring(obj))
-				elseif !yrp then
+				else
 					YRP.msg("error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj))
 				end
 			end
@@ -617,9 +614,9 @@ net.Receive("yrp_player_say", function(len)
 	end
 
 	if GetGlobalDBool("bool_yrp_chat", false) then
-		chat.AddText(true, sender, unpack(pk))
+		chat.AddText(sender, unpack(pk))
 	else
-		chat.AddText(true, unpack(pk))
+		chat.AddText(unpack(pk))
 	end
 	chat.PlaySound()
 end)
