@@ -1340,7 +1340,7 @@ function RemoveDeadRag(ent)
 	if (ent == NULL) or (ent == nil) then return end
 
 	if (ent:GetClass() == "class C_ClientRagdoll") and ent:IsValid() and ent != NULL then
-			SafeRemoveEntityDelayed(ent, 60)
+		SafeRemoveEntityDelayed(ent, 60)
 	end
 end
 
@@ -2334,7 +2334,7 @@ end)
 -- #LOADING
 local yrp_icon = Material("yrp/yrp_icon")
 
-local loading = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+loading = loading or createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 loading:SetTitle("")
 loading:Center()
 loading:ShowCloseButton(false)

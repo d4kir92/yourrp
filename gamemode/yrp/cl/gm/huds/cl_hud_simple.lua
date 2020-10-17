@@ -141,7 +141,7 @@ function HUDSimpleBAR(tab)
 				HudBox(Simple[tab.element]["bar"])
 			end
 
-			if lply:HudValue(tab.element, "ICON") and YRP.GetDesignIcon(tab.icon) then
+			if lply:HudValue(tab.element, "ICON") and tab.icon and YRP.GetDesignIcon(tab.icon) then
 				local ico = tab.icon
 				YRP.DrawIcon(YRP.GetDesignIcon(ico), Simple[tab.element]["icon"].w, Simple[tab.element]["icon"].h, Simple[tab.element]["icon"].x, Simple[tab.element]["icon"].y, Color(255, 255, 255))
 			end

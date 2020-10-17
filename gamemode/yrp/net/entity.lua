@@ -706,7 +706,7 @@ end
 function RemoveFromEntTable( entindex )
 	if !sending then
 		if istable(YRP_NW_Ents[entindex]) then
-			table.remove(YRP_NW_Ents, entindex)
+			table.RemoveByValue(YRP_NW_Ents, entindex)
 		end
 	else
 		timer.Simple(1, function()
