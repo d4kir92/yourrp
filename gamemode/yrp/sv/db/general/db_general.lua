@@ -29,7 +29,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_server_rules", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_server_welcome_message", "TEXT DEFAULT 'Welcome'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_server_message_of_the_day", "TEXT DEFAULT 'Today'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug_voice", "INT DEFAULT 0")
 

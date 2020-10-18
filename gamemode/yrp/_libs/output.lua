@@ -131,8 +131,10 @@ function MSGChannelEnabled(chan)
 	if chan == "printtable" or chan == "missing" or chan == "error" then
 		return true
 	elseif GetGlobalDBool("yrp_general_loaded") then
-		if !IsChannelRegistered(chan) and GetGlobalDBool("bool_msg_channel_" .. chan) then
+		if !IsChannelRegistered(chan) then
 			YRP.msg("error", "!!!" .. chan .. "!!!")
+		elseif GetGlobalDBool("bool_msg_channel_" .. chan) == true then
+			return true
 		end
 		return false
 	else
@@ -164,7 +166,6 @@ local _msgcache = {}
 function YRP.msg(chan, str_msg, tochat, force)
 	if !isstring(chan) then return false end
 	if !isstring(str_msg) then return false end
-
 	local cn = GetChannelName(chan)
 	if force or MSGChannelEnabled(cn) then
 		if str_msg == nil or str_msg == false then

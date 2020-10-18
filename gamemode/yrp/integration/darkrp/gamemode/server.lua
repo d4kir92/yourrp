@@ -159,7 +159,6 @@ end
 util.AddNetworkString("sendNotify")
 function DarkRP.notify(ply, msgType, time, message)
 	--Description: Log a message in DarkRP
-	YRP.msg("darkrp", "notify(ply, msgType, time, " .. tostring(message) .. ")")
 	if ply:IsPlayer() and wk(message) then
 		net.Start("sendNotify")
 			net.WriteString(message)

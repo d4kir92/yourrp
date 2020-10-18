@@ -245,51 +245,20 @@ net.Receive("addnewbuilding", function()
 	SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
 end)
 
-function canLock(ply, tab)
-	if !strEmpty(tab.ownerCharID) then
-		if tostring(ply:CharID()) == tostring(tab.ownerCharID) then
-			return true
-		end
-		return false
-	elseif tab.groupID != "-1" then
-		if ply:GetDString("groupUniqueID", "Failed") == tab.groupID then
-			return true
-		elseif IsUnderGroupOf(ply, tab.groupID) then
-			return true
-		end
-		return false
-	elseif (tab.ownerCharID == "" or tab.ownerCharID == " ") and tab.groupID == "-1" then
-		return false
-	else
-		YRP.msg("error", "canLock ELSE")
-		return false
-	end
-end
-
 function unlockDoor(ply, ent, nr)
-	local _tmpBuildingTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. nr .. "'")
-	if wk(_tmpBuildingTable) then
-		_tmpBuildingTable = _tmpBuildingTable[1]
-		if canLock(ply, _tmpBuildingTable) then
-			ent:Fire("Unlock")
-			return true
-		end
-	else
-		return false
+	if canLock(ply, ent) then
+		ent:Fire("Unlock")
+		return true
 	end
+	return false
 end
 
 function lockDoor(ply, ent, nr)
-	local _tmpBuildingTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. nr .. "'")
-	if wk(_tmpBuildingTable) then
-		_tmpBuildingTable = _tmpBuildingTable[1]
-		if canLock(ply, _tmpBuildingTable) then
-			ent:Fire("Lock")
-			return true
-		end
-	else
-		return false
+	if canLock(ply, ent) then
+		ent:Fire("Lock")
+		return true
 	end
+	return false
 end
 
 function openDoor(ply, ent, nr)
@@ -299,7 +268,7 @@ function openDoor(ply, ent, nr)
 		_tmpBuildingTable.bool_canbeowned = tonumber(_tmpBuildingTable.bool_canbeowned)
 		_tmpBuildingTable.groupID = tonumber(_tmpBuildingTable.groupID)
 
-		if canLock(ply, _tmpBuildingTable) then
+		if canLock(ply, ent) then
 			ent:Fire("Toggle")
 		elseif _tmpBuildingTable.bool_canbeowned == 0 or _tmpBuildingTable.groupID == -1 then
 			_tmpBuildingTable.int_securitylevel = tonumber(_tmpBuildingTable.int_securitylevel)

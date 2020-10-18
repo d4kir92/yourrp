@@ -30,15 +30,13 @@ end
 
 function Entity:isLocked()
 	--Description: Whether this door/vehicle is locked.
-	YRP.msg("darkrp", "isLocked()")
-	YRP.msg("darkrp", DarkRP._not)
-	return false
+	local locked = ent:GetSaveTable().m_bLocked
+	return locked
 end
 
 function Entity:keysLock()
 	--Description: Lock this door or vehicle.
-	YRP.msg("darkrp", "keysLock()")
-	YRP.msg("darkrp", DarkRP._not)
+	self:Fire("Lock")
 end
 
 function Entity:keysOwn(ply)
@@ -49,8 +47,7 @@ end
 
 function Entity:keysUnLock()
 	--Description: Unlock this door or vehicle.
-	YRP.msg("darkrp", "keysUnLock()")
-	YRP.msg("darkrp", DarkRP._not)
+	self:Fire("Unlock")
 end
 
 function Entity:keysUnOwn(ply)

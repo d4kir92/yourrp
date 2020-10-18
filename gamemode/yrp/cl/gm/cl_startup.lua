@@ -2334,84 +2334,88 @@ end)
 -- #LOADING
 local yrp_icon = Material("yrp/yrp_icon")
 
-loading = loading or createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
-loading:SetTitle("")
-loading:Center()
-loading:ShowCloseButton(false)
-loading.d = CurTime() + 1
-loading.t = 0
-loading.tmax = 120
-loading:MakePopup()
-loading.r = 0
-loading.rdir = 1
-function loading:Paint(pw, ph)
-	self:MoveToFront()
+if tostring(loading) != "[NULL Panel]" then
+	loading = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+end
+if pa(loading) then
+	loading:SetTitle("")
+	loading:Center()
+	loading:ShowCloseButton(false)
+	loading.d = CurTime() + 1
+	loading.t = 0
+	loading.tmax = 120
+	loading:MakePopup()
+	loading.r = 0
+	loading.rdir = 1
+	function loading:Paint(pw, ph)
+		self:MoveToFront()
 
-	local lply = LocalPlayer()
+		local lply = LocalPlayer()
 
-	if self.d < CurTime() then
-		self.d = CurTime() + 1
-		self.t = self.t + 1
+		if self.d < CurTime() then
+			self.d = CurTime() + 1
+			self.t = self.t + 1
 
-		if self.t >= self.tmax then
-			if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 then
-				YRP.msg("error", "loading => " .. self.tmax .. "+ " .. " " .. printReadyError())
-				self:Remove()
-			elseif self.t > self.tmax then
-				self.t = 0
+			if self.t >= self.tmax then
+				if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 then
+					YRP.msg("error", "loading => " .. self.tmax .. "+ " .. " " .. printReadyError())
+					self:Remove()
+				elseif self.t > self.tmax then
+					self.t = 0
+				end
 			end
 		end
-	end
 
-	-- BG, Background
-	draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255))
-	
+		-- BG, Background
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255))
+		
 
 
-	-- LOGO
-	local logosize = 512 / 4
-	surface.SetDrawColor(255, 255, 255, 255)
-	surface.SetMaterial(yrp_icon)
-	surface.DrawTexturedRectRotated(YRP.ctr(logosize) * 0.8, YRP.ctr(logosize) * 0.8, YRP.ctr(logosize), YRP.ctr(logosize), self.r)
-	if self.rdir > 0 then
-		self.r = self.r + 0.1
-		if self.r >= 10 then
-			self.rdir = -1
+		-- LOGO
+		local logosize = 512 / 4
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(yrp_icon)
+		surface.DrawTexturedRectRotated(YRP.ctr(logosize) * 0.8, YRP.ctr(logosize) * 0.8, YRP.ctr(logosize), YRP.ctr(logosize), self.r)
+		if self.rdir > 0 then
+			self.r = self.r + 0.1
+			if self.r >= 10 then
+				self.rdir = -1
+			end
+		else
+			self.r = self.r - 0.1
+			if self.r <= -10 then
+				self.rdir = 1
+			end
 		end
-	else
-		self.r = self.r - 0.1
-		if self.r <= -10 then
-			self.rdir = 1
+
+
+		-- LOADING TEXT
+		draw.SimpleText(YRP.lang_string("LID_loading") .. " ... " .. YRP.lang_string("LID_pleasewait"), "Y_50_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		
+
+
+		-- BAR VALUES
+		local w = YRP.ctr(1000)
+		local h = YRP.ctr(60)
+		-- BAR BG
+		draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(580), w, h, Color(80, 80, 80, 255))
+		draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w, h, Color(80, 80, 80, 255))
+		-- BAR
+		draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(580), w * lply:GetDInt("yrp_load_ent", -1) / 100, h, Color(100, 100, 255, 255))
+		draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * lply:GetDInt("yrp_load_glo", -1) / 100, h, Color(100, 100, 255, 255))
+		-- BAR TEXT
+		draw.SimpleText("Entities Values: " .. lply:GetDInt("yrp_load_ent", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(605), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText("Global Values: " .. lply:GetDInt("yrp_load_glo", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+
+		
+		-- TIME
+		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+
+		if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 and lply:GetDBool("finishedloading", false) and lply:GetDBool("loadedchars", false) then
+			self:Remove()
 		end
-	end
-
-
-	-- LOADING TEXT
-	draw.SimpleText(YRP.lang_string("LID_loading") .. " ... " .. YRP.lang_string("LID_pleasewait"), "Y_50_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	
-
-
-	-- BAR VALUES
-	local w = YRP.ctr(1000)
-	local h = YRP.ctr(60)
-	-- BAR BG
-	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(580), w, h, Color(80, 80, 80, 255))
-	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w, h, Color(80, 80, 80, 255))
-	-- BAR
-	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(580), w * lply:GetDInt("yrp_load_ent", -1) / 100, h, Color(100, 100, 255, 255))
-	draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * lply:GetDInt("yrp_load_glo", -1) / 100, h, Color(100, 100, 255, 255))
-	-- BAR TEXT
-	draw.SimpleText("Entities Values: " .. lply:GetDInt("yrp_load_ent", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(605), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	draw.SimpleText("Global Values: " .. lply:GetDInt("yrp_load_glo", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-
-	
-	-- TIME
-	draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-
-
-	if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 and lply:GetDBool("finishedloading", false) and lply:GetDBool("loadedchars", false) then
-		self:Remove()
 	end
 end
 

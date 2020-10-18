@@ -649,3 +649,54 @@ function Player:HasLicense(license)
 	return false
 end
 
+-- DOORS
+function IsOwnedBy(ply, door)
+	if door:isDoor() then
+		return tostring(ply:CharID()) == tostring(door:GetDString("ownerCharID", ""))
+	elseif door:isVehicle() then
+		return tostring(ply:CharID()) == tostring(door:GetDInt("ownerCharID", 0))
+	end
+	return false
+end
+
+function canLock(ply, door)
+	if door:isDoor() then
+		if !strEmpty(door:GetDString("ownerCharID", "")) then
+			if tostring(ply:CharID()) == tostring(door:GetDString("ownerCharID", "")) then
+				return true
+			end
+			return false
+		elseif door:GetDString("ownerGroup", "") != "" then
+			if ply:GetDString("groupUniqueID", "Failed") == door:GetDString("ownerGroup", "") then
+				return true
+			elseif IsUnderGroupOf(ply, door:GetDString("ownerGroup", "")) then
+				return true
+			end
+			return false
+		elseif strEmpty(door:GetDString("ownerCharID", "")) and door:SetDString("ownerGroup", "") == "" then
+			return false
+		else
+			YRP.msg("error", "canLock ELSE")
+			return false
+		end
+	else
+		return canVehicleLock(ply, door)
+	end
+end
+
+function canVehicleLock(ply, veh)
+	if tostring(veh:GetDInt("ownerCharID", 0)) != "0" then
+		if tostring(ply:CharID()) == tostring(tab.ownerCharID) then
+			return true
+		end
+		return false
+	elseif tostring(veh:GetDInt("ownerCharID", 0)) == "0" then
+		if veh:GetRPOwner() == ply then
+			return true
+		end
+		return false
+	else
+		YRP.msg("error", "canVehicleLock ELSE")
+		return false
+	end
+end

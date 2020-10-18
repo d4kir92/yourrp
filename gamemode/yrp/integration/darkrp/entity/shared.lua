@@ -68,6 +68,7 @@ end
 
 function Entity:isDoor()
 	--Description: Whether this entity is considered a door in DarkRP.
+	if self == NULL then return end
 	return self:GetClass() == "prop_door_rotating" or self:GetClass() == "func_door" or self:GetClass() == "func_door_rotating"
 end
 
@@ -80,23 +81,17 @@ end
 
 function Entity:isKeysOwnable()
 	--Description: Whether this door can be bought.
-	YRP.msg("darkrp", "isKeysOwnable()")
-	YRP.msg("darkrp", DarkRP._not)
-	return false
+	return GetGlobalDBool("bool_building_system", false)
 end
 
 function Entity:isKeysOwned()
 	--Description: Whether this door is owned by someone.
-	YRP.msg("darkrp", "isKeysOwned()")
-	YRP.msg("darkrp", DarkRP._not)
-	return false
+	return self:GetDBool("bool_hasowner", false) == true
 end
 
 function Entity:isKeysOwnedBy(ply)
 	--Description: Whether this door is owned or co-owned by this player
-	YRP.msg("darkrp", "isKeysOwnedBy(ply)")
-	YRP.msg("darkrp", DarkRP._not)
-	return false
+	return IsOwnedBy(ply, self)
 end
 
 function Entity:isMasterOwner(ply)

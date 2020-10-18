@@ -90,9 +90,11 @@ function drawMenuInfo()
 		local y = ibr
 
 		--[[ F1 ]]--
-		surface.SetDrawColor(color)
-		surface.SetMaterial(YRP.GetDesignIcon("help")	)
-		surface.DrawTexturedRect(x, y, isize, isize)
+		if wk(YRP.GetDesignIcon("help")) then
+			surface.SetDrawColor(color)
+			surface.SetMaterial(YRP.GetDesignIcon("help"))
+			surface.DrawTexturedRect(x, y, isize, isize)
+		end
 		x = x + isize + ibr
 		local text = "[" .. "F1" .. "] " .. YRP.lang_string("LID_help")
 		sText(text, "Y_18_500", x, y + isize / 2, color, 0, 1)

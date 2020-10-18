@@ -37,20 +37,6 @@ function Player:arrest(time, Arrester)
 	end)
 end
 
-function Player:canKeysLock(door)
-	--Description: Whether the player can lock a given door.
-	YRP.msg("darkrp", "canKeysLock(door)")
-	YRP.msg("darkrp", DarkRP._not)
-	return false
-end
-
-function Player:canKeysUnlock(door)
-	--Description: Whether the player can unlock a given door.
-	YRP.msg("darkrp", "canKeysUnlock(door)")
-	YRP.msg("darkrp", DarkRP._not)
-	return false
-end
-
 function Player:changeAllowed(team)
 	--Description: Returns whether a player is allowed to get a certain job.
 	YRP.msg("darkrp", "changeAllowed(" .. tostring(team) .. ")")
