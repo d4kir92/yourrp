@@ -787,7 +787,8 @@ net.Receive("send_team", function(len)
 	local teamuid = teamTab.uniqueID
 
 	_G[teamname] = team
-	table.insert(RPExtraTeams, teamTab)
+	RPExtraTeams[teamuid] = teamTab
+	--table.insert(RPExtraTeams, teamTab) -- old
 
 	team.SetUp(teamuid, teamname, teamcolor)
 end)

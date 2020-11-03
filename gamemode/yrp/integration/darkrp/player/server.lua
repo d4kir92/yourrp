@@ -178,7 +178,13 @@ function Player:setDarkRPVar(variable, value, target)
 	--Description: Set a shared variable. Make sure the variable is registered with DarkRP.registerDarkRPVar!
 	YRP.msg("darkrp", "setDarkRPVar(" .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. ")")
 	if value == nil then return false end
-	
+
+	if variable == "Thirst" then
+		self:Drink(value - self:GetDFloat("thirst", 0.0))
+	elseif variable == "Energy" then
+		self:Eat(value - self:GetDFloat("hunger", 0.0))
+	end
+
 	if isnumber(value) then
 		self:SetNWInt(variable, value)
 	else

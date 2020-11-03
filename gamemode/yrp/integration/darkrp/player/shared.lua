@@ -66,16 +66,30 @@ function Player:getDarkRPVar(var)
 		return tonumber(self:GetDString("hitreward"))
 	elseif var == "lastHitTime" then
 		return 0 -- notavailable
+	elseif var == "Thirst" then
+		return self:Thirst()
 	else
-		local _nw_var = self:GetDString(var, "VARIABLE NOT FOUND")
-		if tonumber(_nw_var) == nil then
-			return _nw_var
-		elseif isnumber(_nw_var) != nil then
-			return tonumber(_nw_var)
+		local _nw_var = self:GetDInt(var)
+		local _nw_var2 = self:GetDString(var)
+		if _nw_var != nil then
+			if tonumber(_nw_var) == nil then
+				return _nw_var
+			elseif isnumber(_nw_var) != nil then
+				return tonumber(_nw_var)
+			else
+				return _nw_var
+			end
 		else
-			return _nw_var
+			if tonumber(_nw_var2) == nil then
+				return _nw_var2
+			elseif isnumber(_nw_var2) != nil then
+				return tonumber(_nw_var2)
+			else
+				return _nw_var2
+			end
 		end
 	end
+	return 0
 end
 
 function Player:getEyeSightHitEntity(searchDistance, hitDistance, filter)
@@ -132,15 +146,17 @@ function Player:getJobTable()
 	return _job
 end
 
-RPExtraTeams = {}
+RPExtraTeams = RPExtraTeams or {}
 function GetRPExtraTeams()
-	RPExtraTeams = {}
+	RPExtraTeams = RPExtraTeams or {}
 	for i, ply in pairs(player.GetAll()) do
 		local _job = ply:getJobTable()
-		table.insert(RPExtraTeams, _job)
+		RPExtraTeams[ply:Team()] = _job
+		--table.insert(RPExtraTeams, _job) -- old
 	end
 	return RPExtraTeams
 end
+GetRPExtraTeams()
 
 function Player:getPocketItems()
 	--Description: Get a player's pocket items.
