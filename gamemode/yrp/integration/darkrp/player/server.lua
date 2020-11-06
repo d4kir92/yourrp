@@ -179,16 +179,18 @@ function Player:setDarkRPVar(variable, value, target)
 	YRP.msg("darkrp", "setDarkRPVar(" .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. ")")
 	if value == nil then return false end
 
+	target = target or self
+
 	if variable == "Thirst" then
-		self:Drink(value - self:GetDFloat("thirst", 0.0))
+		target:Drink(value - target:GetDFloat("thirst", 0.0))
 	elseif variable == "Energy" then
-		self:Eat(value - self:GetDFloat("hunger", 0.0))
+		target:Eat(value - target:GetDFloat("hunger", 0.0))
 	end
 
 	if isnumber(value) then
-		self:SetNWInt(variable, value)
+		target:SetNWInt(variable, value)
 	else
-		self:SetNWString(variable, value)
+		target:SetNWString(variable, value)
 	end
 end
 
@@ -219,7 +221,7 @@ end
 function Player:setSelfDarkRPVar(variable, value)
 	--Description: Set a shared variable that is only seen by the player to whom this variable applies.
 	YRP.msg("darkrp", "setSelfDarkRPVar(variable, value)")
-	YRP.msg("darkrp", DarkRP._not)
+	self:setDarkRPVar(variable, value, self)
 end
 
 function Player:teamBan(team, time)

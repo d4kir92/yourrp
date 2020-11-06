@@ -18,7 +18,7 @@ function YDrawIDCards()
 			end
 
 			cam.Start3D2D(pos + ply:EyeAngles():Forward() * correction, ang, sca)
-				drawIDCard(ply)
+				--drawIDCard(ply)
 			cam.End3D2D()
 		end
 	end

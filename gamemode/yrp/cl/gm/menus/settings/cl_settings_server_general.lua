@@ -461,6 +461,7 @@ net.Receive("Connect_Settings_General", function(len)
 		--GetGlobalDInt("int_yrp_chat_range_local", 400)
 
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idstructure, YRP.lang_string("LID_idstructure") .. " (!D 1Dig., !L 1Let., !N 1Num.)", "update_text_idstructure")
+		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idcard_background, "LID_background", "update_text_idcard_background")
 		local gs = 8
 		local idcard_change = createD("YButton", GAMEMODE_VISUALS:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, 0)
 		idcard_change:SetText("LID_change")
@@ -471,7 +472,7 @@ net.Receive("Connect_Settings_General", function(len)
 			idbg:SetTitle("")
 			idbg:SetDraggable(false)
 			function idbg:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
 				for y = 0, ScrH(), gs do
 					draw.RoundedBox(0, 0, y, pw, 1, Color(255, 255, 255, 255))
 				end
@@ -505,6 +506,7 @@ net.Receive("Connect_Settings_General", function(len)
 				"weight",
 				"nationality",
 			}
+			local register = {}
 			for i, ele in pairs(elements) do
 				local name = string.upper(ele)
 				if !string.find(ele, "box") then
@@ -666,7 +668,14 @@ net.Receive("Connect_Settings_General", function(len)
 						self.posy = y
 					elseif e.ts <= CurTime() then
 						e.ts = CurTime() + 1
-						if GetGlobalDInt("int_" .. ele .. "_x", 10) != x or GetGlobalDInt("int_" .. ele .. "_y", 10) != y then
+
+						register["int_" .. ele .. "_x"] = register["int_" .. ele .. "_x"] or x
+						register["int_" .. ele .. "_y"] = register["int_" .. ele .. "_y"] or y
+
+						if register["int_" .. ele .. "_x"] != x or register["int_" .. ele .. "_y"] != y then
+							register["int_" .. ele .. "_x"] = x
+							register["int_" .. ele .. "_y"] = y
+
 							self.d = self.d or 0
 							self.d = self.d + 0.1
 							timer.Simple(self.d, function()
@@ -691,7 +700,14 @@ net.Receive("Connect_Settings_General", function(len)
 						self.sizh = h
 					elseif e.ts2 <= CurTime() then
 						e.ts2 = CurTime() + 1
-						if GetGlobalDInt("int_" .. ele .. "_w", 10) != w or GetGlobalDInt("int_" .. ele .. "_h", 10) != h then
+
+						register["int_" .. ele .. "_w"] = register["int_" .. ele .. "_w"] or w
+						register["int_" .. ele .. "_h"] = register["int_" .. ele .. "_h"] or h
+
+						if register["int_" .. ele .. "_w"] != w or register["int_" .. ele .. "_h"] != h then
+							register["int_" .. ele .. "_w"] = w
+							register["int_" .. ele .. "_h"] = h
+							
 							net.Start("update_idcard_" .. "int_" .. ele .. "_w")
 								net.WriteString("int_" .. ele .. "_w")
 								net.WriteString(w)
@@ -708,8 +724,20 @@ net.Receive("Connect_Settings_General", function(len)
 						local g = e.col.g
 						local b = e.col.b
 						local a = e.col.a
-						if e.ts3 <= CurTime() then
+
+						register["int_" .. ele .. "_r"] = register["int_" .. ele .. "_r"] or r
+						register["int_" .. ele .. "_g"] = register["int_" .. ele .. "_g"] or g
+						register["int_" .. ele .. "_b"] = register["int_" .. ele .. "_b"] or b
+						register["int_" .. ele .. "_a"] = register["int_" .. ele .. "_a"] or a
+
+						if e.ts3 <= CurTime() and (register["int_" .. ele .. "_r"] != r or register["int_" .. ele .. "_g"] != g or register["int_" .. ele .. "_b"] != b or register["int_" .. ele .. "_a"] != a) then
+							register["int_" .. ele .. "_r"] = r
+							register["int_" .. ele .. "_g"] = g
+							register["int_" .. ele .. "_b"] = b
+							register["int_" .. ele .. "_a"] = a
+
 							e.ts3 = CurTime() + 1
+
 							net.Start("update_idcard_" .. "int_" .. ele .. "_r")
 								net.WriteString("int_" .. ele .. "_r")
 								net.WriteString(r)

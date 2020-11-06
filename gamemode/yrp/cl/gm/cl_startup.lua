@@ -2060,7 +2060,9 @@ local mats = {}
 function drawIDCard(ply, scale, px, py)
 	px = px or 0
 	py = py or 0
-	scale = scale or 1
+	if scale == nil then
+		scale = 1
+	end
 	local elements = {
 		"background",
 		"box1",
@@ -2122,8 +2124,8 @@ function drawIDCard(ply, scale, px, py)
 			x = x + px
 			y = y + py
 
-			if !string.find(ele, "logo") then
-				if string.find(ele, "background") or string.find(ele, "box") then
+			if !string.find(ele, "logo") and !string.find(ele, "background") then
+				if string.find(ele, "box") then
 					draw.RoundedBox(0, x, y, w, h, color)
 				else
 					local text = ""
@@ -2204,28 +2206,38 @@ function drawIDCard(ply, scale, px, py)
 					draw.SimpleText(text, "Y_" .. fs .. "_500", tx, ty, color, ax, ay)
 				end
 			else
+				if string.find(ele, "background") and strEmpty(GetGlobalDString("text_idcard_background", "")) then
+					draw.RoundedBox(0, x, y, w, h, color)
+				end
 				if logos[ele] == nil then
 					logos[ele] = true
-					local size = 256
-					ply.html = createD("DHTML", nil, size, size, 0, 0)
-					ply.html:SetHTML(GetHTMLImage(GetGlobalDString("text_server_logo", ""), size, size))
-					function ply.html:Paint(pw, ph)
-						if pa(ply.html) then
-							ply.htmlmat = ply.html:GetHTMLMaterial()
-							if ply.htmlmat != nil and !ply.html.found then
-								ply.html.found = true
-								timer.Simple(0.5, function()
-									ply.matname = ply.htmlmat:GetName()
+
+					w = GetGlobalDInt("int_" .. ele .. "_w", 100)
+					h = GetGlobalDInt("int_" .. ele .. "_h", 100)
+
+					local test = createD("DHTML", nil, w, h, 0, 0)
+					if string.find(ele, "logo") then
+						test:SetHTML(GetHTMLImage(GetGlobalDString("text_server_logo", ""), w, h))
+					else
+						test:SetHTML(GetHTMLImage(GetGlobalDString("text_idcard_background", ""), w, h))
+					end
+					function test:Paint(pw, ph)
+						if pa(test) then
+							test.mat = test:GetHTMLMaterial()
+							if test.mat != nil and !test.found then
+								test.found = true
+								timer.Simple(1.0, function()
+									test.matname = test.mat:GetName()
 									local matdata =	{
-										["$basetexture"] = ply.matname,
+										["$basetexture"] = test.matname,
 										["$model"] = 1,
 										["$translucent"] = 1,
 										["$vertexalpha"] = 1,
 										["$vertexcolor"] = 1
 									}
-									local uid = string.Replace(ply.matname, "__vgui_texture_", "")
+									local uid = string.Replace(test.matname, "__vgui_texture_", "")
 									mats[ele] = CreateMaterial("WebMaterial_" .. uid, "UnlitGeneric", matdata)
-									ply.html:Remove()
+									test:Remove()
 								end)
 							end
 						end
