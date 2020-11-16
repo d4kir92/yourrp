@@ -61,7 +61,6 @@ function allowedToUseDoor(id, ply, door)
 		if wk(_tmpBuildingTable) then
 			local bui_cuid = _tmpBuildingTable[1].ownerCharID
 			local bui_guid = _tmpBuildingTable[1].groupID
-
 			if (tostring(bui_cuid) == "" or tostring(bui_cuid) == " ") and tonumber(_tmpBuildingTable[1].groupID) == -1 then
 				return true
 			else
@@ -73,6 +72,7 @@ function allowedToUseDoor(id, ply, door)
 					
 					door:SetDTable("owner", {})
 					door:SetDString("ownerRPName", "")
+					door:SetDInt("ownerGroupUID", -99)
 					door:SetDString("ownerGroup", "")
 					door:SetDString("ownerCharID", "")
 					door:SetDBool("bool_hasowner", false)
@@ -157,10 +157,11 @@ function loadDoors()
 						end
 					else
 						if tonumber(w.groupID) != 0 then
-							local _tmpGroupName = SQL_SELECT("yrp_ply_groups", "string_name", "uniqueID = " .. w.groupID)
+							local _tmpGroupName = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", "uniqueID = " .. w.groupID)
 							if wk(_tmpGroupName) then
 								_tmpGroupName = _tmpGroupName[1]
 								if wk(_tmpGroupName) then
+									v:SetDInt("ownerGroupUID", _tmpGroupName.uniqueID)
 									v:SetDString("ownerGroup", tostring(_tmpGroupName.string_name))
 									v:SetDBool("bool_hasowner", true)
 								end
@@ -306,6 +307,7 @@ function BuildingRemoveOwner(SteamID)
 				if v:GetDString("ownerCharID") == charid then
 					v:SetDTable("owner", {})
 					v:SetDString("ownerRPName", "")
+					v:SetDInt("ownerGroupUID", -99)
 					v:SetDString("ownerGroup", "")
 					v:SetDString("ownerCharID", "")
 					v:SetDBool("bool_hasowner", false)
@@ -327,6 +329,7 @@ net.Receive("removeOwner", function(len, ply)
 		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
 			v:SetDTable("owner", {})
 			v:SetDString("ownerRPName", "")
+			v:SetDInt("ownerGroupUID", -99)
 			v:SetDString("ownerGroup", "")
 			v:SetDString("ownerCharID", "")
 			v:SetDBool("bool_hasowner", false)
@@ -345,6 +348,7 @@ net.Receive("sellBuilding", function(len, ply)
 		if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
 			v:SetDTable("owner", {})
 			v:SetDString("ownerRPName", "")
+			v:SetDInt("ownerGroupUID", -99)
 			v:SetDString("ownerGroup", "")
 			v:SetDString("ownerCharID", "")
 			v:SetDBool("bool_hasowner", false)
@@ -395,12 +399,12 @@ net.Receive("setBuildingOwnerGroup", function(len, ply)
 
 	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "groupID = " .. _tmpGroupID, "uniqueID = " .. _tmpBuildingID)
 
-	local _tmpGroupName = SQL_SELECT("yrp_ply_groups", "string_name", "uniqueID = " .. _tmpGroupID)
+	local _tmpGroupName = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", "uniqueID = " .. _tmpGroupID)
 	if wk(_tmpGroupName) then
 		for k, v in pairs(GetAllDoors()) do
 			if tonumber(v:GetDString("buildingID")) == tonumber(_tmpBuildingID) then
+				v:SetDInt("ownerGroupUID", _tmpGroupName[1].uniqueID)
 				v:SetDString("ownerGroup", _tmpGroupName[1].string_name)
-				v:SetDString("ownerGroupUID", _tmpGroupName[1].uniqueID)
 				v:SetDBool("bool_hasowner", true)
 			end
 		end

@@ -663,20 +663,22 @@ function canLock(ply, door)
 	if door:isDoor() then
 		if !strEmpty(door:GetDString("ownerCharID", "")) then
 			if tostring(ply:CharID()) == tostring(door:GetDString("ownerCharID", "")) then
+				YRP.msg("note", "[canLock] " .. "IsOwner")
 				return true
 			end
 			return false
 		elseif door:GetDString("ownerGroup", "") != "" then
-			if ply:GetDString("groupUniqueID", "Failed") == door:GetDString("ownerGroup", "") then
+			if tonumber(ply:GetDString("groupUniqueID", "-98")) == tonumber(door:GetDInt("ownerGroupUID", -99)) then
 				return true
-			elseif IsUnderGroupOf(ply, door:GetDString("ownerGroup", "")) then
+			elseif IsUnderGroupOf(ply, tonumber(door:GetDInt("ownerGroupUID", -99))) then
 				return true
 			end
 			return false
-		elseif strEmpty(door:GetDString("ownerCharID", "")) and door:SetDString("ownerGroup", "") == "" then
+		elseif strEmpty(door:GetDString("ownerCharID", "")) and door:GetDString("ownerGroup", "") == "" then
+			YRP.msg("note", "[canLock] " .. "Building has no owner! (from Player: " .. ply:RPName() .. ")")
 			return false
 		else
-			YRP.msg("error", "canLock ELSE")
+			YRP.msg("error", "[canLock] " .. "Unknown Error")
 			return false
 		end
 	else
