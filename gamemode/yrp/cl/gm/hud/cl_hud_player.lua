@@ -44,8 +44,80 @@ function showIcon(str, material)
 	surface.DrawTexturedRect(anchorW(HudV(str .. "aw")) + YRP.ctr(HudV(str .. "px")) + YRP.ctr(30) - YRP.ctr(16), anchorH(HudV(str .. "ah")) + YRP.ctr(HudV(str .. "py")) + YRP.ctr(HudV(str .. "sh")/2) - YRP.ctr(16), YRP.ctr(32), YRP.ctr(32))
 end
 
+local once = true
+local tabs = {
+	["spawnmenu.content_tab"] = "bool_props",
+	["spawnmenu.category.npcs"] = "bool_npcs",
+	--["spawnmenu.category.addons"] = "bool_Addons",
+	["spawnmenu.category.weapons"] = "bool_weapons",
+	["spawnmenu.category.postprocess"] = "bool_postprocess",
+	--["spawnmenu.category.your_spawnlists"] = "bool_Your Spawnlists",
+	--["spawnmenu.category.addon_spawnlists"] = "bool_Addon Spawnlists",
+	--["spawnmenu.category.games"] = "bool_Games",
+	--["spawnmenu.category.browse"] = "bool_Browse",
+	["spawnmenu.category.entities"] = "bool_entities",
+	["spawnmenu.category.vehicles"] = "bool_vehicles",
+	--["spawnmenu.category.creations"] = "bool_Creations",
+	["spawnmenu.category.dupes"] = "bool_dupes",
+	["spawnmenu.category.saves"] = "bool_saves"
+}
 hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 	openMenu()
+
+	local lply = LocalPlayer()
+
+	if once then -- Fix tabsorting
+		once = false
+		timer.Simple(0.2, function()
+			g_SpawnMenu:Close(true) -- close it after short time
+			timer.Simple(0.1, function()
+				g_SpawnMenu:Open() -- reopen with handling the tabs
+				hook.Run("SpawnMenuOpen") -- reload the hook
+			end)
+		end)
+	else -- Handling Tabs
+		local allhidden = true -- for when all disabllowed
+		local firsttab = nil
+
+		-- Loop through all tabs of spawnmenu
+		for i, v in pairs(g_SpawnMenu.CreateMenu.Items) do
+			local tab = v.Tab -- tab
+			local text = tab:GetText() -- tab name
+			for lstr, bstr in pairs(tabs) do
+				if text == language.GetPhrase(lstr) then -- if tabtext == tabletabtext
+					tab:SetVisible(lply:GetDBool(bstr, false)) -- set visible if allowed to
+					if lply:GetDBool(bstr) then -- if allowed
+						allhidden = false -- then disable hiding the whole element
+						if firsttab == nil then -- if not firsttab found
+							firsttab = lstr -- set it
+						end
+					end
+				end
+			end
+		end
+		
+		-- Switch to allowed tab if on an unallowed one
+		local text = g_SpawnMenu.CreateMenu:GetActiveTab():GetText() -- active tab of spawnmenu
+		local changefirstpage = false
+		for lstr, bstr in pairs(tabs) do
+			if language.GetPhrase(text) == language.GetPhrase(lstr) then -- if active tab text == table tab text
+				if !lply:GetDBool(bstr) then -- is not allowed
+					changefirstpage = true -- then change tab
+				end
+			end
+		end
+		if changefirstpage then -- change first tab page, because currently on unallowed
+			g_SpawnMenu:OpenCreationMenuTab("#" .. firsttab) -- changes to new tab page
+		end
+
+		-- Hide the whole element when all disallowed
+		if allhidden then
+			g_SpawnMenu.CreateMenu:SetVisible(false)
+		else
+			g_SpawnMenu.CreateMenu:SetVisible(true)
+		end
+	end
+	
 	return LocalPlayer():GetDBool("bool_canusespawnmenu", false)
 end)
 
