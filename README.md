@@ -1,4 +1,4 @@
-# GMOD-YourRP-unstable
+# GMOD-YourRP-stable
 YourRP beta
 
 download and put inside gamemodes folder
