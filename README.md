@@ -1,4 +1,4 @@
-# GMOD-YourRP-stable
+# GMOD-YourRP
 YourRP beta
 
 download and put inside gamemodes folder
@@ -9,8 +9,6 @@ Website:                    https://sites.google.com/view/yrp
 
 Discord:                    https://discord.gg/CXXDCMJ
 
-Workshop (Stable Version):  later
-
-Workshop (Beta Version):    https://steamcommunity.com/sharedfiles/filedetails/?id=1114204152
+Workshop:                   https://steamcommunity.com/sharedfiles/filedetails/?id=1114204152
 
 Workshop Content:           https://steamcommunity.com/sharedfiles/filedetails/?id=1189643820
