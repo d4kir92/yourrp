@@ -6,9 +6,9 @@ SWEP.Instructions = ""
 
 SWEP.Category = "[YourRP] Medical"
 
-SWEP.PrintName = "Syringe WIP"
+SWEP.PrintName = "Syringe"
 SWEP.Language = "en"
-SWEP.LanguageString = "syringe"
+SWEP.LanguageString = "LID_syringe"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1
@@ -33,7 +33,7 @@ SWEP.DrawCrosshair = true
 
 SWEP.HoldType = "normal"
 function SWEP:Initialize()
-	self:SetWeaponHoldType( self.HoldType )
+	self:SetWeaponHoldType(self.HoldType)
 end
 
 function SWEP:Reload()
@@ -46,15 +46,22 @@ end
 
 function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()
-	local tr = util.QuickTrace( ply:EyePos(), ply:GetAimVector() * 64, ply )
+	local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)
 	if tr.Hit then
 		self.target = tr.Entity
 		if tr.Entity:IsPlayer() then
-			--printGM( "note", "bandaging" )
+			--YRP.msg("note", "bandaging")
 		end
 	end
 end
 
 function SWEP:SecondaryAttack()
 
+end
+
+local wave = Material( "vgui/entities/yrp_syringe.png", "noclamp smooth" )
+function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+	surface.SetMaterial( wave )
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.DrawTexturedRect( x + (wide - tall) / 2, y, tall, tall )
 end

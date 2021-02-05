@@ -1,8 +1,8 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 AddCSLuaFile()
 
-DEFINE_BASECLASS( "base_anim" )
+DEFINE_BASECLASS("yrp_money")
 
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
@@ -20,3 +20,11 @@ ENT.Editable = false
 ENT.Spawnable = true
 ENT.AdminOnly = true
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
+
+ENT.money = 0
+
+function ENT:GetMoney()
+	self.money = tonumber(self:GetDString("money", "-1"))
+	self.PrintName = "YourRP - " .. self.money .. " Money"
+	return self.money
+end

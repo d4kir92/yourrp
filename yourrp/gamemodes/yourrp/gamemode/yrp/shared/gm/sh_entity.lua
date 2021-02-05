@@ -1,22 +1,26 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local Entity = FindMetaTable( "Entity" )
+local Entity = FindMetaTable("Entity")
 function Entity:HasStorage()
-  return self:GetNWBool( "hasinventory", false )
+	return self:GetDBool("hasinventory", false)
 end
 
 function Entity:StorageName()
-  return self:GetNWString( "storagename", "" )
+	return self:GetDString("storagename", "")
 end
 
 function Entity:IsWorldStorage()
-  return self:GetNWString( "isaworldstorage", false )
+	return self:GetDString("isaworldstorage", false)
 end
 
 function Entity:ItemSizeW()
-  return tonumber( self:GetNWString( "item_size_w", nil ) )
+	return tonumber(self:GetDString("item_size_w", nil))
 end
 
 function Entity:ItemSizeH()
-  return tonumber( self:GetNWString( "item_size_h", nil ) )
+	return tonumber(self:GetDString("item_size_h", nil))
+end
+
+function Entity:IsDealer()
+	return self:GetClass() == "yrp_dealer"
 end

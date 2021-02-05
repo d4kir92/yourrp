@@ -1,105 +1,126 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local _fb = {}
+-- #TICKET
 
-function toggleFeedbackMenu()
-  if isNoMenuOpen() then
-    openFeedbackMenu()
-  else
-    closeFeedbackMenu()
-  end
+TICKET = TICKET or {}
+TICKET.open = false
+
+function toggleTicketMenu()
+	if !TICKET.open and YRPIsNoMenuOpen() then
+		openTicketMenu()
+	else
+		closeTicketMenu()
+	end
 end
 
-function closeFeedbackMenu()
-  if _fb.window != nil then
-    closeMenu()
-    _fb.window:Remove()
-    _fb.window = nil
-  end
+function closeTicketMenu()
+	TICKET.open = false
+	if TICKET.window != nil then
+		closeMenu()
+		TICKET.window:Remove()
+		TICKET.window = nil
+	elseif pa(TICKET.content) and pa(TICKET.content:GetParent()) then
+		if TICKET.content:GetParent().Close != nil then
+			TICKET.content:GetParent():Close()
+		end
+	end
+	CloseCombinedMenu()
 end
 
 local _url = "https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/formResponse"
 
-function openFeedbackMenu()
-  openMenu()
-  _fb.window = createD( "DFrame", nil, BScrW(), ScrH(), 0, 0 )
-  _fb.window:Center()
-  _fb.window:SetTitle( "" )
-  function _fb.window:OnClose()
-    closeMenu()
-  end
-  function _fb.window:OnRemove()
-    closeMenu()
-  end
+function openTicketMenu()
+	openMenu()
 
-  _fb.langu = derma_change_language( _fb.window, ctr( 400 ), ctr( 50 ), BScrW()/2, ctr( 50 ) )
+	TICKET.open = true
+	TICKET.window = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
+	TICKET.window:Center()
+	TICKET.window:SetTitle("LID_sendticket")
+	TICKET.window:SetHeaderHeight(YRP.ctr(100))
+	function TICKET.window:OnClose()
+		closeMenu()
+	end
+	function TICKET.window:OnRemove()
+		closeMenu()
+	end
+	TICKET.window.systime = SysTime()
+	function TICKET.window:Paint(pw, ph)
+		Derma_DrawBackgroundBlur(self, self.systime)
+		hook.Run("YFramePaint", self, pw, ph)
+	end
+	TICKET.window:MakePopup()
 
-  function _fb.window:Paint( pw, ph )
-    surfaceWindow( self, pw, ph, lang_string( "givefeedback" ) )
-  end
+	CreateTicketContent(TICKET.window.con)
+end
 
-  _fb.discord = createD( "DButton", _fb.window, ctr( 800 ), ctr( 50 ), ctr( 10 ), ctr( 50 ) )
-  _fb.discord:SetText( "" )
-  function _fb.discord:Paint( pw, ph )
-    surfaceButton( self, pw, ph, lang_string( "livesupport" ) )
-  end
-  function _fb.discord:DoClick()
-    gui.OpenURL( "https://discord.gg/sEgNZxg" )
-  end
+function CreateTicketContent(parent)
+	TICKET.content = parent
 
-  _fb.titleP = createD( "DPanel", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 120 ) )
-  function _fb.titleP:Paint( pw, ph )
-    surfaceText( lang_string( "title" ), "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
-  end
-  _fb.titleT = createD( "DTextEntry", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 170 ) )
+	TICKET.discord = createD("YButton", TICKET.content, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
+	TICKET.discord:SetText("LID_getlivesupport")
+	function TICKET.discord:Paint(pw, ph)
+		hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_getlivesupport"))
+	end
+	function TICKET.discord:DoClick()
+		gui.OpenURL("https://discord.gg/sEgNZxg")
+	end
 
-  _fb.feedbackP = createD( "DPanel", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 250 ) )
-  function _fb.feedbackP:Paint( pw, ph )
-    surfaceText( lang_string( "feedback" ) .. " (" .. lang_string( "problems" ) .. ", " .. lang_string( "suggestions" ) .. ", ...)", "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
-  end
-  _fb.feedbackT = createD( "DTextEntry", _fb.window, BScrW() - ctr( 20 ), ctr( 500 ), ctr( 10 ), ctr( 300 ) )
-  _fb.feedbackT:SetMultiline( true )
+	TICKET.titleP = createD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(170))
+	function TICKET.titleP:Paint(pw, ph)
+		surfaceText(YRP.lang_string("LID_title"), "Y_25_500", YRP.ctr(0), ph / 2, Color(255, 255, 255), 0, 1)
+	end
+	TICKET.titleT = createD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(220))
 
-  _fb.contactP = createD( "DPanel", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 850 ) )
-  function _fb.contactP:Paint( pw, ph )
-    surfaceText( lang_string( "contact" ) .. " (" .. lang_string( "notrequired" ) .. ")", "roleInfoHeader", ctr( 10 ), ph/2, Color( 255, 255, 255 ), 0, 1 )
-  end
-  _fb.contactT = createD( "DTextEntry", _fb.window, BScrW() - ctr( 20 ), ctr( 50 ), ctr( 10 ), ctr( 900 ) )
+	TICKET.ticketP = createD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(300))
+	function TICKET.ticketP:Paint(pw, ph)
+		surfaceText(YRP.lang_string("LID_ticket") .. " (" .. YRP.lang_string("LID_problems") .. ", " .. YRP.lang_string("LID_suggestions") .. ", ...)", "Y_25_500", YRP.ctr(0), ph/2, Color(255, 255, 255), 0, 1)
+	end
+	TICKET.ticketT = createD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(500), YRP.ctr(20), YRP.ctr(350))
+	TICKET.ticketT:SetMultiline(true)
 
-  _fb.send = createD( "DButton", _fb.window, ctr( 600 ), ctr( 50 ), ctr( 10 ), ctr( 1000 ) )
-  _fb.send:SetText( "" )
-  function _fb.send:Paint( pw, ph )
-    surfaceButton( self, pw, ph, string.upper( lang_string( "sendfeedback" ) ) )
-  end
-  function _fb.send:DoClick()
-    printGM( "gm", "send feedback" )
+	TICKET.contactP = createD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(900))
+	function TICKET.contactP:Paint(pw, ph)
+		surfaceText(YRP.lang_string("LID_contact") .. " (" .. YRP.lang_string("LID_notrequired") .. ")", "Y_25_500", YRP.ctr(0), ph/2, Color(255, 255, 255), 0, 1)
+	end
+	TICKET.contactT = createD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(950))
 
-    if _fb.titleT:GetText() != "" or _fb.feedbackT:GetText() != "" or _fb.contactT:GetText() != "" then
-      local entry = {}
-      entry["entry.1141598078"] = _fb.titleT:GetText() or "FAILED"
-      entry["entry.761186932"] = _fb.feedbackT:GetText() or "FAILED"
-      entry["entry.1633448754"] = _fb.contactT:GetText() or "FAILED"
-      entry["entry.1109864644"] = LocalPlayer():SteamID() or "FAILED"
+	TICKET.send = createD("YButton", TICKET.content, YRP.ctr(600), YRP.ctr(50), YRP.ctr(20), YRP.ctr(1050))
+	TICKET.send:SetText("LID_sendticket")
+	function TICKET.send:Paint(pw, ph)
+		hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, string.upper(YRP.lang_string("LID_sendticket")))
+	end
+	function TICKET.send:DoClick()
+		YRP.msg("gm", "send ticket")
 
-      http.Post( _url, entry, function( result )
-        if result then end
-      end, function( failed )
-        printGM( "error", "Feedback-API: " .. tostring( failed ) )
-      end )
+		if TICKET.titleT:GetText() != "" or TICKET.ticketT:GetText() != "" or TICKET.contactT:GetText() != "" then
+			local entry = {}
+			entry["entry.1141598078"] = TICKET.titleT:GetText() or "FAILED"
+			entry["entry.761186932"] = TICKET.ticketT:GetText() or "FAILED"
+			entry["entry.1633448754"] = TICKET.contactT:GetText() or "FAILED"
+			entry["entry.1109864644"] = LocalPlayer():SteamID() or "FAILED"
 
-      local _net_table = {}
-      _net_table.title = _fb.titleT:GetText() or "FAILED"
-      _net_table.feedback = _fb.feedbackT:GetText() or "FAILED"
-      _net_table.contact = _fb.contactT:GetText() or "FAILED"
-      _net_table.steamid = LocalPlayer():SteamID() or "FAILED"
-      _net_table.steamname = LocalPlayer():SteamName() or "FAILED"
-      net.Start( "add_feedback" )
-        net.WriteTable( _net_table )
-      net.SendToServer()
-    end
+			http.Post(_url, entry, function(result)
+				if result then
 
-    closeFeedbackMenu()
-  end
+				end
+			end, function(failed)
+				YRP.msg("error", "Ticket: " .. tostring(failed))
+			end)
 
-  _fb.window:MakePopup()
+			local _net_table = {}
+			_net_table.title = TICKET.titleT:GetText() or "FAILED"
+			_net_table.feedback = TICKET.ticketT:GetText() or "FAILED"
+			_net_table.contact = TICKET.contactT:GetText() or "FAILED"
+			_net_table.steamid = LocalPlayer():SteamID() or "FAILED"
+			_net_table.steamname = LocalPlayer():SteamName() or "FAILED"
+			_net_table.rpname = LocalPlayer():RPName() or "FAILED"
+			net.Start("add_ticket")
+				net.WriteTable(_net_table)
+			net.SendToServer()
+
+			notification.AddLegacy("TICKET SENDED", 0, 3 )
+		end
+
+		closeTicketMenu()
+	end
 end

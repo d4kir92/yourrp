@@ -1,168 +1,178 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-function createFont( _name, _font, _size, __weight, _outline, _shadow )
-	--printGM( "db", "createFont: " .. _name )
-	--printGM( "db", _font .. ", " .. _size .. ", " .. __weight )
-	_size = ctr( _size*2 )
-	surface.CreateFont( _name, {
-		font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-		extended = true,
-		size = _size,
-		weight = __weight,
-		blursize = 0,
-		scanlines = 0,
-		antialias = true,
-		underline = false,
-		italic = false,
-		strikeout = false,
-		symbol = false,
-		rotary = false,
-		shadow = _shadow or false,
-		additive = false,
-		outline = _outline or false
-	} )
+local font = font or "Ubuntu"
+local fontscale = fontscale or 1
+local fonts = fonts or {}
+
+function YRP.AddFont(fontname, scale)
+	fontname = fontname or ""
+	local fontID = string.lower(fontname)
+	if fontID != "" and fonts[fontID] == nil and scale != nil then
+		local fontentry = {}
+		fontentry.name = fontname
+		fontentry.scale = scale
+		fonts[fontID] = fontentry
+	end
 end
 
-local tmpFont = "Roboto"
-local _weight = 500
+YRP.AddFont("AmazDooMLeft", 1)
+YRP.AddFont("Aniron", 1.2)
+YRP.AddFont("Arial", 0.94)
 
-function changeFontSizeOf( _font, _size )
-	printGM( "note", "changeFontSizeOf" .. _font .. _size)
-	createFont( _font, tmpFont, _size, weight, false )
+YRP.AddFont("Caribbean", 0.7)
+YRP.AddFont("Comfortaa", 1.1)
+
+YRP.AddFont("Gang of Three", 0.9)
+
+YRP.AddFont("Halo", 0.58)
+YRP.AddFont("Harry Potter", 1)
+
+YRP.AddFont("Impact", 1)
+
+YRP.AddFont("Kelt", 1)
+YRP.AddFont("Kimberley Bl", 0.96)
+
+YRP.AddFont("Mali", 1.6)
+YRP.AddFont("Metro", 0.5)
+YRP.AddFont("Military Font 7", 0.72)
+
+YRP.AddFont("Overseer", 1)
+
+YRP.AddFont("pixelmix", 0.7)
+YRP.AddFont("Pokemon Solid", 2)
+YRP.AddFont("pricedown bl", 1.34)
+
+YRP.AddFont("Roboto", 1)
+
+YRP.AddFont("Sci-Fi [Rus by me] Normal", 0.6)
+YRP.AddFont("Space Age", 1.1)
+YRP.AddFont("Star Jedi", 1.3)
+YRP.AddFont("Starcraft", 0.72)
+YRP.AddFont("Swanky and Moo Moo", 1.3)
+
+YRP.AddFont("Tahoma", 1)
+
+YRP.AddFont("Ubuntu", 1)
+
+YRP.AddFont("ZombieA", 0.74)
+
+function YRP.GetFonts()
+	return fonts
 end
 
-function update_db_fonts()
-	createFont( "mmsf", tmpFont, HudV("mmsf"), _weight, false )
-	createFont( "hpsf", tmpFont, HudV("hpsf"), _weight, false )
-	createFont( "arsf", tmpFont, HudV("arsf"), _weight, false )
-	createFont( "wpsf", tmpFont, HudV("wpsf"), _weight, false )
-	createFont( "wssf", tmpFont, HudV("wssf"), _weight, false )
-	createFont( "wnsf", tmpFont, HudV("wnsf"), _weight, false )
-	createFont( "ttsf", tmpFont, HudV("ttsf"), _weight, false )
-	createFont( "mosf", tmpFont, HudV("mosf"), _weight, false )
-	createFont( "mhsf", tmpFont, HudV("mhsf"), _weight, false )
-	createFont( "mtsf", tmpFont, HudV("mtsf"), _weight, false )
-	createFont( "mssf", tmpFont, HudV("mssf"), _weight, false )
-	createFont( "vtsf", tmpFont, HudV("vtsf"), _weight, false )
-	createFont( "cbsf", tmpFont, HudV("cbsf"), _weight, false )
-	createFont( "masf", tmpFont, HudV("masf"), _weight, false )
-	createFont( "casf", tmpFont, HudV("casf"), _weight, false )
-	createFont( "stsf", tmpFont, HudV("stsf"), _weight, false )
-	createFont( "xpsf", tmpFont, HudV("xpsf"), _weight, false )
-	createFont( "utsf", tmpFont, HudV("utsf"), _weight, false )
-	createFont( "blsf", tmpFont, HudV("utsf"), _weight, false )
-	createFont( "rtsf", tmpFont, HudV("utsf"), _weight, false )
+function YRP.GetFont()
+	return font
 end
 
-function changeFontSize()
-	printGM( "db", "changeFontSize" )
+local savedfonts = {}
 
-	--[[ DESIGNS ]]--
-	createFont( "mat1header", tmpFont, 22, _weight, false )
-	createFont( "mat1text", tmpFont, 18, 0, false )
-
-	--[[ EMOTES ]]--
-	createFont( "emotes", tmpFont, 22, _weight, false )
-
-	--[[ 3D2D ]]--
-	createFont( "3d2d_string", tmpFont, 22, _weight, false )
-
-	--[[ Settings ]]--
-	createFont( "Settings_Normal", tmpFont, 22, _weight, false )
-	createFont( "Settings_Header", tmpFont, 26, _weight, false )
-
-	createFont( "apph1", tmpFont, fontr( 36 ), _weight, false )
-	createFont( "appt", tmpFont, fontr( 30 ), _weight, false )
-
-	createFont( "appname", tmpFont, ctrb( 28 ), _weight, false )
-
-	createFont( "plates", tmpFont, 30, _weight, false )
-	createFont( "plyinfo", tmpFont, 18, _weight, false )
-
-	createFont( "mdMenu", tmpFont, 17, 1000, false )
-
-	createFont( "windowTitle", tmpFont, 18, 1000, false )
-
-	createFont( "HudSettings", tmpFont, 24, _weight, false )
-
-	createFont( "HudDefault", tmpFont, 72, _weight, false )
-
-	createFont( "SettingsNormal", tmpFont, 24, _weight, false )
-	createFont( "SettingsHeader", tmpFont, 30, _weight, false )
-
-	createFont( "roleInfoHeader", tmpFont, 24, _weight, false )
-	createFont( "roleInfoText", tmpFont, 20, _weight, false )
-
-	createFont( "charTitle", tmpFont, 20, 800, false )
-	createFont( "charHeader", tmpFont, 20, 800, false )
-	createFont( "charText", tmpFont, 20, 800, false )
-
-	createFont( "pmT", tmpFont, 18, _weight, false )
-	createFont( "weaponT", tmpFont, 14, _weight, false )
-
-	createFont( "HudBars", tmpFont, 24, _weight, false )
-	createFont( "HudHeader", tmpFont, 36, _weight, false )
-	createFont( "HudVersion", tmpFont, 30, 1000, false )
-
-	createFont( "72", tmpFont, 72, _weight, false )
-	--Creating
-	createFont( "mmsf", tmpFont, 24, _weight, false )
-	createFont( "hpsf", tmpFont, 24, _weight, false )
-	createFont( "arsf", tmpFont, 24, _weight, false )
-	createFont( "wpsf", tmpFont, 24, _weight, false )
-	createFont( "wssf", tmpFont, 24, _weight, false )
-	createFont( "wnsf", tmpFont, 24, _weight, false )
-	createFont( "ttsf", tmpFont, 24, _weight, false )
-	createFont( "mosf", tmpFont, 24, _weight, false )
-	createFont( "mhsf", tmpFont, 24, _weight, false )
-	createFont( "mtsf", tmpFont, 24, _weight, false )
-	createFont( "mssf", tmpFont, 24, _weight, false )
-	createFont( "vtsf", tmpFont, 24, _weight, false )
-	createFont( "cbsf", tmpFont, 24, _weight, false )
-	createFont( "masf", tmpFont, 24, _weight, false )
-	createFont( "casf", tmpFont, 24, _weight, false )
-	createFont( "stsf", tmpFont, 24, _weight, false )
-	createFont( "xpsf", tmpFont, 24, _weight, false )
-	createFont( "utsf", tmpFont, 24, _weight, false )
-	createFont( "blsf", tmpFont, 24, _weight, false )
-	createFont( "rtsf", tmpFont, 24, _weight, false )
-
-	createFont( "sef", tmpFont, 24, 1, false )
-
-	timer.Create( "createFontDB", 0.1, 0, function()
-		if is_hud_db_loaded() then
-			--Changing to right values
-			update_db_fonts()
-
-			printGM( "db", "HUD Fonts loaded." )
-
-			timer.Remove( "createFontDB" )
+function YRP.SetFont(fontname)
+	if wk(fontname) then
+		local fontID = string.lower(fontname)
+		local fontTab = fonts[fontID]
+		if wk(fontTab) then
+			font = fontTab.name or ""
+			fontscale = fontTab.scale or ""
+			table.Empty(savedfonts)
+			YRP.msg("note", "Changed font to: " .. font .. " Scale(" .. fontscale .. ")")
+			changeFontSize()
+		else
+			YRP.msg("error", "fontname: " .. tostring(fontname) .. " fontTab: " .. tostring(fontTab))
 		end
-	end)
+	end
+end
 
-	createFont( "ScoreBoardTitle", tmpFont, 24, _weight, false )
-	createFont( "ScoreBoardNormal", tmpFont, 20, _weight, false )
+net.Receive("yrp_set_font", function(len)
+	local fname = net.ReadString()
+	YRP.SetFont(fname)
+end)
+timer.Simple(1, function()
+	net.Start("yrp_set_font")
+	net.SendToServer()
+end)
 
-	createFont( "ATM_Header", tmpFont, 80, _weight, false )
-	createFont( "ATM_Normal", tmpFont, 60, _weight, false )
-	createFont( "ATM_Name", tmpFont, 40, _weight, false )
+function GetFontSizeTable()
+	local tab = {}
+	table.insert(tab, 8)
+	table.insert(tab, 9)
+	table.insert(tab, 10)
+	table.insert(tab, 11)
+	table.insert(tab, 12)
+	table.insert(tab, 14)
+	table.insert(tab, 18)
+	table.insert(tab, 24)
+	table.insert(tab, 30)
+	table.insert(tab, 36)
+	table.insert(tab, 48)
+	table.insert(tab, 60)
+	table.insert(tab, 72)
+	table.insert(tab, 96)
+	return tab
+end
 
-	--DarkRP Fonts
-	createFont( "DarkRPHUD1", tmpFont, 16, _weight, false )
-	createFont( "DarkRPHUD2", tmpFont, 24, _weight, false )
-	createFont( "Trebuchet18", tmpFont, 16, _weight, false )
-	createFont( "Trebuchet20", tmpFont, 20, _weight, false )
-	createFont( "Trebuchet24", tmpFont, 24, _weight, false )
-	createFont( "Trebuchet48", tmpFont, 48, _weight, false )
-	createFont( "TabLarge", tmpFont, 16, 700, false )
-	createFont( "UiBold", tmpFont, 16, 800, false )
-	createFont( "HUDNumber5", tmpFont, 30, 800, false )
-	createFont( "ScoreboardHeader", tmpFont, 32, _weight, false )
-	createFont( "ScoreboardSubtitle", tmpFont, 24, _weight, false )
-	createFont( "ScoreboardPlayerName", tmpFont, 19, _weight, false )
-	createFont( "ScoreboardPlayerName2", tmpFont, 15, _weight, false )
-	createFont( "ScoreboardPlayerNameBig", tmpFont, 24, _weight, false )
-	createFont( "AckBarWriting", tmpFont, 20, _weight, false )
-	createFont( "DarkRP_tipjar", tmpFont, 100, _weight, false )
+function yrp_create_font(_name, _font, _size, _weight, _outline, _shadow)
+	if wk(_name) and wk(_font) and wk(_size) then
+		if table.HasValue(savedfonts, _name) then
+			--
+		else
+			table.insert(savedfonts, _name)
+			surface.CreateFont(_name, {
+				font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+				extended = true,
+				size = YRP.ctr(_size * fontscale * 2),
+				weight = _weight or 500,
+				blursize = 0,
+				scanlines = 0,
+				antialias = true,
+				underline = false,
+				italic = false,
+				strikeout = false,
+				symbol = false,
+				rotary = false,
+				shadow = _shadow or false,
+				additive = false,
+				outline = _outline or false
+			})
+		end
+	end
+end
+
+local oldfont = ""
+function changeFontSize()
+	if YRP.GetFont() != oldfont then
+		oldfont = YRP.GetFont()
+		YRP.msg("db", "changeFontSize")
+
+		for s = 4, 100 do
+			yrp_create_font("Y_" .. s .. "_500", YRP.GetFont(), s, 500, false)
+			yrp_create_font("Y_" .. s .. "_700", YRP.GetFont(), s, 700, false)
+		end
+
+		--DarkRP Fonts
+		yrp_create_font("DarkRPHUD1", YRP.GetFont(), 16, 500, false)
+		yrp_create_font("DarkRPHUD2", YRP.GetFont(), 24, 500, false)
+		yrp_create_font("Trebuchet18", YRP.GetFont(), 16, 500, false)
+		yrp_create_font("Trebuchet20", YRP.GetFont(), 20, 500, false)
+		yrp_create_font("Trebuchet24", YRP.GetFont(), 24, 500, false)
+		yrp_create_font("Trebuchet48", YRP.GetFont(), 48, 500, false)
+		yrp_create_font("TabLarge", YRP.GetFont(), 16, 700, false)
+		yrp_create_font("UiBold", YRP.GetFont(), 16, 700, false)
+		yrp_create_font("HUDNumber5", YRP.GetFont(), 30, 700, false)
+		yrp_create_font("ScoreboardHeader", YRP.GetFont(), 32, 500, false)
+		yrp_create_font("ScoreboardSubtitle", YRP.GetFont(), 24, 500, false)
+		yrp_create_font("ScoreboardPlayerName", YRP.GetFont(), 19, 500, false)
+		yrp_create_font("ScoreboardPlayerName2", YRP.GetFont(), 15, 500, false)
+		yrp_create_font("ScoreboardPlayerNameBig", YRP.GetFont(), 24, 500, false)
+		yrp_create_font("AckBarWriting", YRP.GetFont(), 20, 500, false)
+		yrp_create_font("DarkRP_tipjar", YRP.GetFont(), 100, 500, false)
+	end
 end
 changeFontSize()
+
+local files, _ = file.Find("resource/fonts/*.ttf", "GAME")
+for i, f in pairs(files) do
+	if string.EndsWith(f, "-regular.ttf") then
+		local fo = string.Replace(f, "-regular.ttf", "")
+		YRP.AddFont(fo, 1)
+	end
+end

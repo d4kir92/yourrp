@@ -8,7 +8,7 @@ SWEP.Category = "[YourRP] Medical"
 
 SWEP.PrintName = "Splint"
 SWEP.Language = "en"
-SWEP.LanguageString = "splint"
+SWEP.LanguageString = "LID_splint"
 
 SWEP.Slot = 5
 SWEP.SlotPos = 1
@@ -33,11 +33,11 @@ SWEP.DrawCrosshair = true
 
 SWEP.HoldType = "normal"
 function SWEP:Initialize()
-	self:SetWeaponHoldType( self.HoldType )
+	self:SetWeaponHoldType(self.HoldType)
 end
 
 function SWEP:Reload()
-	self:DefaultReload( ACT_VM_RELOAD )
+	self:DefaultReload(ACT_VM_RELOAD)
 end
 
 function SWEP:Think()
@@ -49,22 +49,24 @@ function SWEP:PrimaryAttack()
 	if SERVER then
 		if self:Clip1() > 0 then
 			local ply = self:GetOwner()
-			local tr = util.QuickTrace( ply:EyePos(), ply:GetAimVector() * 100, ply )
+			local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 100, ply)
 			if tr.Hit then
 				self.target = tr.Entity
 				if tr.Entity:IsPlayer() then
-					ply:StartCasting( "splint", "splinting", 0, self.target, 3, 100, 1, false )
+					ply:StartCasting("splint", "LID_splinting", 0, self.target, 3, 100, 1, false)
 				end
 			end
+		else
+			self:Remove()
 		end
 	end
 end
 
 if SERVER then
-	hook.Add( "yrp_castdone_splint", "splint", function( args )
-		args.target:Heal( 10 )
+	hook.Add("yrp_castdone_splint", "splint", function(args)
+		args.target:Heal(10)
 		args.target:Unbroke()
-		args.attacker:GetActiveWeapon():TakePrimaryAmmo( 1 )
+		args.attacker:GetActiveWeapon():TakePrimaryAmmo(1)
 	end)
 end
 
@@ -73,7 +75,16 @@ function SWEP:SecondaryAttack()
 		if self:Clip1() > 0 then
 			local ply = self:GetOwner()
 			_target = ply
-			ply:StartCasting( "splint", "splinting", 0, _target, 3, 100, 1, false )
+			ply:StartCasting("splint", "LID_splinting", 0, _target, 3, 100, 1, false)
+		else
+			self:Remove()
 		end
 	end
+end
+
+local wave = Material( "vgui/entities/yrp_splint.png", "noclamp smooth" )
+function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+	surface.SetMaterial( wave )
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.DrawTexturedRect( x + (wide - tall) / 2, y, tall, tall )
 end

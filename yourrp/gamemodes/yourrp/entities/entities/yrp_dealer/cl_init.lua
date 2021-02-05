@@ -1,15 +1,17 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 include('shared.lua')
 
+net.Receive("open_buy_menu", function(len)
+	local id = net.ReadString()
+	OpenBuyMenu(id)
+end)
+
 function ENT:Draw()
-  self:DrawModel()
+	if LocalPlayer():GetPos():Distance(self:GetPos()) > 2800 then return end
+	self:DrawModel()
 end
 
-function ENT:DrawTranslucent()
-	self:Draw()
-end
-
-function ENT:SetRagdollBones( bIn )
+function ENT:SetRagdollBones(bIn)
 	self.m_bRagdollSetup = bIn
 end

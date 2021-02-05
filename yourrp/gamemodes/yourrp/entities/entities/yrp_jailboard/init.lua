@@ -1,44 +1,67 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-AddCSLuaFile( "cl_init.lua" )
-AddCSLuaFile( "shared.lua" )
+AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
 
-include( "shared.lua" )
+include("shared.lua")
 
-util.AddNetworkString( "openLawBoard" )
+util.AddNetworkString("openLawBoard")
 
 function ENT:Initialize()
-	self:SetModel( "models/props_c17/Frame002a.mdl" )
-	self:PhysicsInit( SOLID_VPHYSICS )
-	self:SetMoveType( MOVETYPE_VPHYSICS )
-	self:SetSolid( SOLID_VPHYSICS )
+	self:SetModel("models/props_combine/combine_intmonitor001.mdl")
+	self:PhysicsInit(SOLID_VPHYSICS)
+	self:SetMoveType(MOVETYPE_VPHYSICS)
+	self:SetSolid(SOLID_VPHYSICS)
 
-	self:SetPos(self:GetPos()+Vector(0,0,100))
-	self:DropToFloor()
-  local phys = self:GetPhysicsObject()
+	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
 end
 
-function ENT:Use( activator, caller )
-	local tmpTable = SQL_SELECT( "yrp_jail", "*", nil )
-	local tmpGroups = SQL_SELECT( "yrp_groups", "*", nil )
-	local tmpGeneral = SQL_SELECT( "yrp_general", "*", nil )
-	local chaTab = caller:GetChaTab()
-	local tmpRoles = SQL_SELECT( "yrp_roles", "*", "uniqueID = " .. chaTab.roleID .. "")
+function ENT:Use(activator, caller)
+	local tmpTable = SQL_SELECT("yrp_jail", "*", nil)
 
-	if tmpTable == nil or tmpTable == false then
+	if !wk(tmpTable) then
 		tmpTable = {}
 	end
-	net.Start( "openLawBoard" )
-		net.WriteTable( tmpTable )
-		net.WriteTable( tmpGroups )
-		net.WriteTable( tmpGeneral )
-		net.WriteInt( tmpRoles[1].groupID, 16 )
-	net.Send( caller )
+
+	for i, v in pairs(tmpTable) do
+		local cells = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' and uniqueID = '" .. v.cell .. "'")
+		if wk(cells) then
+			cells = cells[1]
+			v.cellname = cells.name
+		else
+			v.cellname = "DELETED CELL"
+		end
+	end
+
+	net.Start("openLawBoard")
+		net.WriteTable(tmpTable)
+	net.Send(caller)
 end
 
 function ENT:Think()
 
 end
+
+util.AddNetworkString("jail")
+net.Receive("jail", function(len, ply)
+	local target = net.ReadEntity()
+
+	local jail = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. target:SteamID() .. "'")
+	if wk(jail) then
+		jail = jail[1]
+		local tim = jail.time or 2*60
+		teleportToJailpoint(target, tim, ply)
+	end
+end)
+
+util.AddNetworkString("unjail")
+net.Receive("unjail", function(len, ply)
+	local target = net.ReadEntity()
+
+	SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. target:SteamID() .. "'")
+
+	teleportToReleasepoint(target)
+end)

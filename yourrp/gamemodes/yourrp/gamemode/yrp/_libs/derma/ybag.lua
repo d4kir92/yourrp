@@ -1,0 +1,24 @@
+--Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+
+local PANEL = {}
+
+itemsize = itemsize or 100
+
+function PANEL:Paint(pw, ph)
+	draw.RoundedBox(10, 0, 0, pw, ph, Color(40, 40, 40, 254))
+end
+
+function PANEL:SetStorage(uid)
+	self.storage:SetStorage(uid)
+end
+
+function PANEL:Init()
+	self:SetTitle("")
+
+	self.storage = createD("YStorage", self, YRP.ctr(100), YRP.ctr(100), 0, YRP.ctr(50))
+	self.storage:SetBag(self)
+
+	self:MakePopup()
+end
+
+vgui.Register("YBag", PANEL, "DFrame")

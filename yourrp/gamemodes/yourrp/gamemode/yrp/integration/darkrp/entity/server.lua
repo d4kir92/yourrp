@@ -1,114 +1,111 @@
---Copyright (C) 2017-2018 Arno Zura ( https://www.gnu.org/licenses/gpl.txt )
+--Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-local Entity = FindMetaTable( "Entity" )
+local Entity = FindMetaTable("Entity")
 
-function Entity:addKeysAllowedToOwn( ply )
-  --Description: Make this player allowed to co-own the door or vehicle.
-  printGM( "darkrp", "addKeysAllowedToOwn( ply )" )
-  printGM( "darkrp", DarkRP._not )
+function Entity:addKeysAllowedToOwn(ply)
+	--Description: Make this player allowed to co-own the door or vehicle.
+	YRP.msg("darkrp", "addKeysAllowedToOwn(ply)")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
-function Entity:addKeysDoorOwner( ply )
-  --Description: Make this player a co-owner of the door.
-  printGM( "darkrp", "addKeysDoorOwner( ply )" )
-  printGM( "darkrp", DarkRP._not )
+function Entity:addKeysDoorOwner(ply)
+	--Description: Make this player a co-owner of the door.
+	YRP.msg("darkrp", "addKeysDoorOwner(ply)")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
-function Entity:addKeysDoorTeam( team )
-  --Description: Allow a team to lock/unlock a door..
-  printGM( "darkrp", "addKeysDoorTeam( team )" )
-  printGM( "darkrp", DarkRP._not )
+function Entity:addKeysDoorTeam(team)
+	--Description: Allow a team to lock/unlock a door..
+	YRP.msg("darkrp", "addKeysDoorTeam(team)")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
 function Entity:doorIndex()
-  --Description: Get the door index of a door. Use this to store door
-  --             information in the database.
-  printGM( "darkrp", "doorIndex()" )
+	--Description: Get the door index of a door. Use this to store door
+	--						 information in the database.
+	YRP.msg("darkrp", "doorIndex()")
 
-  return self:GetNWInt( "uniqueID", -1 )
+	return self:GetDInt("uniqueID", -1)
 end
 
 function Entity:isLocked()
-  --Description: Whether this door/vehicle is locked.
-  printGM( "darkrp", "isLocked()" )
-  printGM( "darkrp", DarkRP._not )
-  return false
+	--Description: Whether this door/vehicle is locked.
+	local locked = ent:GetSaveTable().m_bLocked
+	return locked
 end
 
 function Entity:keysLock()
-  --Description: Lock this door or vehicle.
-  printGM( "darkrp", "keysLock()" )
-  printGM( "darkrp", DarkRP._not )
+	--Description: Lock this door or vehicle.
+	self:Fire("Lock")
 end
 
-function Entity:keysOwn( ply )
-  --Description: Make the player the master owner of the door
-  printGM( "darkrp", "keysOwn( ply )" )
-  printGM( "darkrp", DarkRP._not )
+function Entity:keysOwn(ply)
+	--Description: Make the player the master owner of the door
+	YRP.msg("darkrp", "keysOwn(ply)")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
 function Entity:keysUnLock()
-  --Description: Unlock this door or vehicle.
-  printGM( "darkrp", "keysUnLock()" )
-  printGM( "darkrp", DarkRP._not )
+	--Description: Unlock this door or vehicle.
+	self:Fire("Unlock")
 end
 
-function Entity:keysUnOwn( ply )
-  --Description: Make this player unown the door/vehicle.
-  printGM( "darkrp", "keysUnOwn( ply )" )
-  printGM( "darkrp", DarkRP._not )
+function Entity:keysUnOwn(ply)
+	--Description: Make this player unown the door/vehicle.
+	YRP.msg("darkrp", "keysUnOwn(ply)")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
 function Entity:removeAllKeysAllowedToOwn()
-  --Description: Disallow all people from owning the door.
-  printGM( "darkrp", "removeAllKeysAllowedToOwn()" )
-  printGM( "darkrp", DarkRP._not )
+	--Description: Disallow all people from owning the door.
+	YRP.msg("darkrp", "removeAllKeysAllowedToOwn()")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
 function Entity:removeAllKeysDoorTeams()
-  --Description: Disallow all teams from locking/unlocking a door.
-  printGM( "darkrp", "removeAllKeysDoorTeams()" )
-  printGM( "darkrp", DarkRP._not )
+	--Description: Disallow all teams from locking/unlocking a door.
+	YRP.msg("darkrp", "removeAllKeysDoorTeams()")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
 function Entity:removeAllKeysExtraOwners()
-  --Description: Remove all co-owners from a door.
-  printGM( "darkrp", "removeAllKeysExtraOwners()" )
-  printGM( "darkrp", DarkRP._not )
+	--Description: Remove all co-owners from a door.
+	YRP.msg("darkrp", "removeAllKeysExtraOwners()")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
-function Entity:removeKeysAllowedToOwn( ply )
-  --Description: Remove a player from being allowed to co-own a door.
-  printGM( "darkrp", "removeKeysAllowedToOwn( ply )" )
-  printGM( "darkrp", DarkRP._not )
+function Entity:removeKeysAllowedToOwn(ply)
+	--Description: Remove a player from being allowed to co-own a door.
+	YRP.msg("darkrp", "removeKeysAllowedToOwn(ply)")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
-function Entity:removeKeysDoorOwner( ply )
-  --Description: Remove this player as co-owner
-  printGM( "darkrp", "removeKeysDoorOwner( ply )" )
-  printGM( "darkrp", DarkRP._not )
+function Entity:removeKeysDoorOwner(ply)
+	--Description: Remove this player as co-owner
+	YRP.msg("darkrp", "removeKeysDoorOwner(ply)")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
-function Entity:removeKeysDoorTeam( team )
-  --Description: Disallow a team from locking/unlocking a door.
-  printGM( "darkrp", "removeKeysDoorTeam( team )" )
-  printGM( "darkrp", DarkRP._not )
+function Entity:removeKeysDoorTeam(team)
+	--Description: Disallow a team from locking/unlocking a door.
+	YRP.msg("darkrp", "removeKeysDoorTeam(team)")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
-function Entity:setDoorGroup( group )
-  --Description: Set the door group of a door.
-  printGM( "darkrp", "setDoorGroup( group )" )
-  printGM( "darkrp", DarkRP._not )
+function Entity:setDoorGroup(group)
+	--Description: Set the door group of a door.
+	YRP.msg("darkrp", "setDoorGroup(group)")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
-function Entity:setKeysNonOwnable( ownable )
-  --Description: Set whether this door or vehicle is ownable or not.
-  printGM( "darkrp", "setKeysNonOwnable( ownable )" )
-  printGM( "darkrp", DarkRP._not )
+function Entity:setKeysNonOwnable(ownable)
+	--Description: Set whether this door or vehicle is ownable or not.
+	YRP.msg("darkrp", "setKeysNonOwnable(ownable)")
+	YRP.msg("darkrp", DarkRP._not)
 end
 
-function Entity:setKeysTitle( title )
-  --Description: Set the title of a door or vehicle.
-  printGM( "darkrp", "setKeysTitle( title )" )
-  printGM( "darkrp", DarkRP._not )
+function Entity:setKeysTitle(title)
+	--Description: Set the title of a door or vehicle.
+	YRP.msg("darkrp", "setKeysTitle(title)")
+	YRP.msg("darkrp", DarkRP._not)
 end
