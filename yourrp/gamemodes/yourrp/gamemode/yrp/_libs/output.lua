@@ -163,75 +163,89 @@ end
 --local r = GetRealm()
 local rc = GetRealmColor()
 local _msgcache = {}
+
+local yrpmsgantispam = {}
+
 function YRP.msg(chan, str_msg, tochat, force)
 	if !isstring(chan) then return false end
 	if !isstring(str_msg) then return false end
-	local cn = GetChannelName(chan)
-	if force or MSGChannelEnabled(cn) then
-		if str_msg == nil or str_msg == false then
-			str_msg = tostring(str_msg)
+
+	if force or strEmpty(str_msg) or not table.HasValue(yrpmsgantispam, str_msg) then
+		if not table.HasValue(yrpmsgantispam, str_msg) then
+			table.insert(yrpmsgantispam, str_msg)
+			
+			timer.Simple(3, function()
+				table.RemoveByValue(yrpmsgantispam, str_msg)
+			end)
 		end
-		local cc = GetChannelColor(cn)
-		local _yrp = GetGamemodeShortname()
-		local _yrpc = Color(0, 100, 225)
 
-		msgs = string.Explode("\n", str_msg)
-		for i, msg in pairs(msgs) do
-			MsgC(rc, "[")
-			MsgC(_yrpc, _yrp)
-			MsgC(rc, "|")
-			MsgC(cc, cn)
-			if cn == "DB" and GetSQLModeName != nil then
-				MsgC(cc, ":" .. GetSQLModeName())
-			elseif cn == "DB" then
-				MsgC(cc, ":" .. "UNKNOWN")
+		local cn = GetChannelName(chan)
+		if force or MSGChannelEnabled(cn) then
+			if str_msg == nil or str_msg == false then
+				str_msg = tostring(str_msg)
 			end
-			MsgC(rc, "] ")
+			local cc = GetChannelColor(cn)
+			local _yrp = GetGamemodeShortname()
+			local _yrpc = Color(0, 100, 225)
 
-			MsgC(rc, msg)
-		
-			if force then
-				MsgC(rc, " ")
-				MsgC(Color(255, 0, 0), "[FORCED]")
-			end
-
-			MsgC("\n")
-
-			local str = "[" .. _yrp .. "|" .. cn .. "] " .. msg
-			if force then
-				str = str .. " [FORCED]"
-			end
-			if tochat and SERVER then
-				PrintMessage(3, "\n ")
-				PrintMessage(3, str)
-			end
-			if SERVER and AddToFakeServerConsole != nil then
-				AddToFakeServerConsole(str)
-			end
-
-			if cn == "ERROR" or cn == "MISSING" then
-				local REALM = "CLIENT"
-				if SERVER then
-					REALM = "SERVER"
+			msgs = string.Explode("\n", str_msg)
+			for i, msg in pairs(msgs) do
+				MsgC(rc, "[")
+				MsgC(_yrpc, _yrp)
+				MsgC(rc, "|")
+				MsgC(cc, cn)
+				if cn == "DB" and GetSQLModeName != nil then
+					MsgC(cc, ":" .. GetSQLModeName())
+				elseif cn == "DB" then
+					MsgC(cc, ":" .. "UNKNOWN")
 				end
-				if CLIENT then
-					if LocalPlayer().LoadedGamemode != nil then
-						send_error(REALM, "[" .. cn .. "] " .. msg .. " LoadedGamemode: " .. tostring(LocalPlayer():LoadedGamemode()), true)
-					end
-				else
-					send_error(REALM, "[" .. cn .. "] " .. msg, true)
+				MsgC(rc, "] ")
+
+				MsgC(rc, msg)
+			
+				if force then
+					MsgC(rc, " ")
+					MsgC(Color(255, 0, 0), "[FORCED]")
 				end
-				if CLIENT and cn == "ERROR" and createD != nil then
-					local err = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400))
-					err:ShowCloseButton(false)
-					err:SetDraggable(false)
-					err:SetTitle("")
-					function err:Paint(pw, ph)
-						draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string("LID_error") .. "] " .. "Look into the console!", "Y_14_500", Color(255, 0, 0), Color(0, 0, 0))
+
+				MsgC("\n")
+
+				local str = "[" .. _yrp .. "|" .. cn .. "] " .. msg
+				if force then
+					str = str .. " [FORCED]"
+				end
+				if tochat and SERVER then
+					PrintMessage(3, "\n ")
+					PrintMessage(3, str)
+				end
+				if SERVER and AddToFakeServerConsole != nil then
+					AddToFakeServerConsole(str)
+				end
+
+				if cn == "ERROR" or cn == "MISSING" then
+					local REALM = "CLIENT"
+					if SERVER then
+						REALM = "SERVER"
 					end
-					timer.Simple(8, function()
-						err:Remove()
-					end)
+					if CLIENT then
+						if LocalPlayer().LoadedGamemode != nil then
+							send_error(REALM, "[" .. cn .. "] " .. msg .. " LoadedGamemode: " .. tostring(LocalPlayer():LoadedGamemode()), true)
+						end
+					else
+						send_error(REALM, "[" .. cn .. "] " .. msg, true)
+					end
+					if CLIENT and cn == "ERROR" and createD != nil then
+						local err = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400))
+						err:ShowCloseButton(false)
+						err:SetDraggable(false)
+						err:SetTitle("")
+						function err:Paint(pw, ph)
+							draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string("LID_error") .. "] " .. "Look into the console!", "Y_14_500", Color(255, 0, 0), Color(0, 0, 0))
+						end
+						timer.Simple(8, function()
+							err:Remove()
+						end)
+					end
 				end
 			end
 		end

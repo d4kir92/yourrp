@@ -442,9 +442,8 @@ timer.Create("ServerThink", TICK, 0, function()
 		elseif _time >= _changelevel-30 then
 			local _str = "Auto Reload in " .. _changelevel-_time .. " sec"
 			YRP.msg("gm", _str)
-			net.Start("yrp_info2")
-				net.WriteString(_str)
-			net.Broadcast()
+
+			YRPNotiToPly(_str)
 		end
 	end
 

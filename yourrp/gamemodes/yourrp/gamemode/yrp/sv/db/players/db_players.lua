@@ -731,9 +731,8 @@ function canGetRole(ply, roleID, want)
 				if !ply:HasAccess() then
 					local text = "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin."
 					YRP.msg("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin.")
-					net.Start("yrp_info2")
-						net.WriteString(text)
-					net.Send(ply)
+
+					YRPNotiToPly(text, ply)
 					return false
 				else
 					return true
@@ -751,18 +750,16 @@ function canGetRole(ply, roleID, want)
 				if tonumber(chatab.int_level) < tonumber(tmpTableRole.int_requireslevel) then
 					local text = ply:YRPName() .. " is not high enough (is: " .. tonumber(chatab.int_level) .. " need: " .. tonumber(tmpTableRole.int_requireslevel) .. ")!"
 					YRP.msg("gm", "[canGetRole] " .. text)
-					net.Start("yrp_info2")
-						net.WriteString(text)
-					net.Send(ply)
+					
+					YRPNotiToPly(text, ply)
 					return false
 				end
 			else
 				if 1 < tonumber(tmpTableRole.int_requireslevel) then
 					local text = ply:YRPName() .. " is not high enough (is: " .. 1 .. " need: " .. tonumber(tmpTableRole.int_requireslevel) .. ")!"
 					YRP.msg("gm", "[canGetRole] " .. text)
-					net.Start("yrp_info2")
-						net.WriteString(text)
-					net.Send(ply)
+					
+					YRPNotiToPly(text, ply)
 					return false
 				end
 			end
@@ -770,9 +767,8 @@ function canGetRole(ply, roleID, want)
 			if tonumber(ply:GetDInt("ts_role_" .. ply:GetRoleUID(), 0)) > CurTime() and want then
 				local text = ply:YRPName() .. " is on cooldown for this role!"
 				YRP.msg("gm", "[canGetRole] " .. text)
-				net.Start("yrp_info2")
-					net.WriteString(text)
-				net.Send(ply)
+				
+				YRPNotiToPly(text, ply)
 				return false
 			end
 
@@ -782,9 +778,8 @@ function canGetRole(ply, roleID, want)
 				if !isWhitelisted(ply, roleID) then
 					local text = ply:YRPName() .. " is not whitelisted."
 					YRP.msg("gm", "[canGetRole] " .. text)
-					net.Start("yrp_info2")
-						net.WriteString(text)
-					net.Send(ply)
+					
+					YRPNotiToPly(text, ply)
 					return false
 				end
 			end
@@ -796,18 +791,16 @@ function canGetRole(ply, roleID, want)
 			if !found then
 				local text = ply:YRPName() .. " is not allowed to use this role (UserGroup)."
 				YRP.msg("gm", "[canGetRole] " .. text)
-				net.Start("yrp_info2")
-					net.WriteString(text)
-				net.Send(ply)
+				
+				YRPNotiToPly(text, ply)
 				return false
 			end
 			return true
 		else
 			local text = ply:YRPName() .. " maxamount reached."
 			YRP.msg("gm", "[canGetRole] " .. text)
-			net.Start("yrp_info2")
-				net.WriteString(text)
-			net.Send(ply)
+			
+			YRPNotiToPly(text, ply)
 			return false
 		end
 	end
@@ -866,8 +859,6 @@ net.Receive("wantRole", function(len, ply)
 		local _role = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. uniqueIDRole)
 		startVote(ply, _role)
 	else
-		net.Start("yrp_info2")
-			net.WriteString("not allowed to get this role")
-		net.Send(ply)
+		YRPNotiToPly(text, "not allowed to get this role")
 	end
 end)

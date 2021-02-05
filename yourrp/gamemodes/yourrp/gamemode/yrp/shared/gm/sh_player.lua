@@ -67,8 +67,8 @@ function Player:YRPDrink(num, permille)
 
 	if permille != nil then
 		permille = tonumber(permille)
-		if isnumber(permille) then
-			local newpermille = math.Clamp(self:GetDFloat("permille", 0.0) + num, 0, self:GetMaxPermille())
+		if isnumber(permille) and permille > 0 then
+			local newpermille = math.Clamp(self:GetDFloat("permille", 0.0) + permille, 0, self:GetMaxPermille())
 			self:SetDFloat("permille", newpermille)
 		end
 	end

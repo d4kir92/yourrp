@@ -23,7 +23,6 @@ function teleportToPoint(ply, pos)
 end
 
 util.AddNetworkString("yrp_noti")
-util.AddNetworkString("yrp_info")
 
 function teleportToSpawnpoint(ply)
 	if ply.ignorespawnpoint == true then

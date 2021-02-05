@@ -246,7 +246,6 @@ function SpawnVehicle(item, pos, ang)
 	end
 end
 
-util.AddNetworkString("yrp_info2")
 function spawnItem(ply, item, duid)
 	ClassName = item.ClassName -- fix for WAC addons, dumb!
 

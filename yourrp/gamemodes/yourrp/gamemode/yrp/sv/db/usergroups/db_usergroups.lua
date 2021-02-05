@@ -1078,7 +1078,41 @@ net.Receive("usergroup_update_int_characters_max", function(len, ply)
 	UGUpdateInt(ply, uid, "int_characters_max", int_characters_max)
 end)
 
+local antinoti1spam = {}
+util.AddNetworkString("yrp_info")
+function YRPNotiToPlyDisallowed(ply, msg)
+	if not table.HasValue(antinoti1spam, ply) then
+		table.insert(antinoti1spam, ply)
 
+		net.Start("yrp_info")
+			net.WriteString(msg)
+		net.Send(ply)
+
+		timer.Simple(5, function()
+			table.RemoveByValue(antinoti1spam, ply)
+		end)
+	end
+end
+
+local antinoti2spam = {}
+util.AddNetworkString("yrp_info2")
+function YRPNotiToPly(msg, ply)
+	if not table.HasValue(antinoti2spam, ply) then
+		table.insert(antinoti2spam, ply)
+
+		net.Start("yrp_info2")
+			net.WriteString(msg)
+		if ply then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
+
+		timer.Simple(5, function()
+			table.RemoveByValue(antinoti2spam, ply)
+		end)
+	end
+end
 
 -- Functions
 hook.Add("PlayerSpawnVehicle", "yrp_vehicles_restriction", function(pl, model, name, tab)
@@ -1091,9 +1125,7 @@ hook.Add("PlayerSpawnVehicle", "yrp_vehicles_restriction", function(pl, model, n
 			else
 				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a vehicle.")
 
-				net.Start("yrp_info")
-					net.WriteString("vehicles")
-				net.Send(pl)
+				YRPNotiToPlyDisallowed(pl, "vehicles")
 
 				return false
 			end
@@ -1111,9 +1143,7 @@ hook.Add("PlayerGiveSWEP", "yrp_weapons_restriction", function(pl)
 			else
 				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a weapon.")
 
-				net.Start("yrp_info")
-					net.WriteString("weapon")
-				net.Send(pl)
+				YRPNotiToPlyDisallowed(pl, "weapon")
 
 				return false
 			end
@@ -1197,9 +1227,7 @@ hook.Add("PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
 			else
 				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn an entity.")
 
-				net.Start("yrp_info")
-					net.WriteString("entities")
-				net.Send(pl)
+				YRPNotiToPlyDisallowed(pl, "entities")
 
 				return false
 			end
@@ -1217,9 +1245,7 @@ hook.Add("PlayerSpawnEffect", "yrp_effects_restriction", function(pl)
 			else
 				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn an effect.")
 
-				net.Start("yrp_info")
-					net.WriteString("effects")
-				net.Send(pl)
+				YRPNotiToPlyDisallowed(pl, "effects")
 
 				return false
 			end
@@ -1237,9 +1263,7 @@ hook.Add("PlayerSpawnNPC", "yrp_npcs_restriction", function(pl)
 			else
 				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a npc.")
 
-				net.Start("yrp_info")
-					net.WriteString("npcs")
-				net.Send(pl)
+				YRPNotiToPlyDisallowed(pl, "npcs")
 
 				return false
 			end
@@ -1257,9 +1281,8 @@ hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl)
 			else
 				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a prop.")
 
-				net.Start("yrp_info")
-					net.WriteString("props")
-				net.Send(pl)
+				YRPNotiToPlyDisallowed(pl, "props")
+
 				return false
 			end
 		else
@@ -1279,9 +1302,7 @@ hook.Add("PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function(pl, model)
 			else
 				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a ragdoll.")
 
-				net.Start("yrp_info")
-					net.WriteString("ragdolls")
-				net.Send(pl)
+				YRPNotiToPlyDisallowed(pl, "ragdolls")
 
 				return false
 			end
@@ -1463,9 +1484,7 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 				else
 					YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to noclip.")
 
-					net.Start("yrp_info")
-						net.WriteString("noclip")
-					net.Send(pl)
+					YRPNotiToPlyDisallowed(pl, "noclip")
 
 					return false
 				end
@@ -1505,9 +1524,8 @@ function GM:PhysgunPickup(pl, ent)
 						return true
 					end
 				else
-					net.Start("yrp_info")
-						net.WriteString("physgunpickupplayer")
-					net.Send(pl)
+					YRPNotiToPlyDisallowed(pl, "physgunpickupplayer")
+
 					return false
 				end
 			elseif ent:CreatedByMap() then
@@ -1526,9 +1544,8 @@ function GM:PhysgunPickup(pl, ent)
 		elseif ent:GetRPOwner() == pl then
 			return true
 		else
-			net.Start("yrp_info")
-				net.WriteString("physgunpickup")
-			net.Send(pl)
+			YRPNotiToPlyDisallowed(pl, "physgunpickup")
+
 			return false
 		end
 	else
@@ -1545,9 +1562,8 @@ function GM:GravGunPunt(pl, ent)
 		if tobool(tabUsergroup.bool_gravgunpunt) then
 			return true
 		else
-			net.Start("yrp_info")
-				net.WriteString("gravgunpunt")
-			net.Send(pl)
+			YRPNotiToPlyDisallowed(pl, "gravgunpunt")
+
 			return false
 		end
 	else
@@ -1557,9 +1573,10 @@ function GM:GravGunPunt(pl, ent)
 	return false
 end
 
+local toolantispam = {}
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if ea(pl) and wk(tool) then
-		YRP.msg("gm", "CanTool: " .. tool)
+		--YRP.msg("gm", "CanTool: " .. tool)
 		local tools = {}
 		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(tab) then
@@ -1577,33 +1594,49 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 		if hasright then
 			if tr then
 				if tr.Entity then
-					if tr.Entity:GetRPOwner() == pl or pl:HasAccess() then
+					local Owner = tr.Entity:GetRPOwner()
+					if Owner == pl or pl:HasAccess() then
 						return true
 					else
-						if ea(tr.Entity:GetRPOwner()) then
-							YRP.msg("note", pl:RPName() .. " tried to modify entity from: " .. tr.Entity:GetRPOwner():RPName())
-						else
-							YRP.msg("note", pl:RPName() .. " tried to modify entity from: " .. "WORLD")
+						if !table.HasValue(toolantispam, pl) then
+							table.insert(toolantispam, pl)
+
+							if ea(Owner) then
+								YRP.msg("note", "[CanTool] " .. pl:RPName() .. " tried to modify entity from: " .. Owner:RPName())
+
+								YRPNotiToPlyDisallowed(pl, "You are not the owner!")
+							else
+								YRP.msg("note", "[CanTool] " .. pl:RPName() .. " tried to modify entity from: " .. "MAP-Entity")
+								YRP.msg("note", "[CanTool] " .. pl:GetUserGroup() .. " has no right to modify it.")
+
+								YRPNotiToPlyDisallowed(pl, "Map Entities!")
+							end
+
+							timer.Simple(5, function()
+								if ea(pl) then
+									table.RemoveByValue(toolantispam, pl)
+								end
+							end)
 						end
+
 						return false
 					end
 				end
 			end
 			return true
 		else
-			net.Start("yrp_info")
-				net.WriteString("TOOL: " .. tostring(tool))
-			net.Send(pl)
+			YRPNotiToPlyDisallowed(pl, "Tool: " .. tostring(tool))
 		end
+		YRP.msg("error", "[CanTool] " .. "FAIL FOR TOOL: " .. tool)
 		return false
 	else
-		YRP.msg("note", "[CanTool] Player is not valid!")
+		YRP.msg("error", "[CanTool] Player is not valid!")
 	end
 end)
 
 hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
 	if ea(pl) and wk(property) and pl.GetUserGroup != nil then
-		YRP.msg("gm", "CanProperty: " .. property)
+		--YRP.msg("gm", "CanProperty: " .. property)
 		local tools = {}
 		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(tab) then
@@ -1616,10 +1649,9 @@ hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
 		elseif table.HasValue(tools, property) then
 			return true
 		else
-			net.Start("yrp_info")
-				net.WriteString("TOOL: " .. tostring(property))
-			net.Send(pl)
+			YRPNotiToPlyDisallowed(pl, "TOOL: " .. tostring(property))
 		end
+		YRP.msg("note", "[CanProperty] " .. "FAIL FOR Property: " .. property)
 		return false
 	else
 		YRP.msg("note", "[CanProperty] Player is not valid!")
