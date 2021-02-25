@@ -97,6 +97,44 @@ function CreateTextBoxLine(dpanellist, text, lstr, netstr)
 	return background
 end
 
+function CreateComboBoxLine(dpanellist, text, lstr, netstr, default, choices)
+	local background = createD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
+	function background:Paint(pw, ph)
+		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
+	end
+
+	local combobox = createD("DComboBox", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
+	combobox.serverside = false
+	for id, v in pairs(choices) do
+		local selected = false
+		if v == default then
+			selected = true
+		end
+		combobox:AddChoice(v, id, selected)
+	end
+
+	function combobox:OnSelect(index, value)
+		if !self.serverside then
+			net.Start(netstr)
+				net.WriteString(self:GetText())
+			net.SendToServer()
+		end
+	end
+
+	net.Receive(netstr, function(len)
+		local tex = net.ReadString()
+		if pa(combobox) then
+			combobox.serverside = true
+			combobox:SetText(tex)
+			combobox.serverside = false
+		end
+	end)
+
+	dpanellist:AddItem(background)
+
+	return background
+end
+
 function CreateTextBoxBox(dpanellist, text, lstr, netstr)
 	text = SQL_STR_OUT(text)
 	local background = createD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(50 + 400 + 10), 0, 0)
@@ -453,6 +491,9 @@ net.Receive("Connect_Settings_General", function(len)
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_background, "LID_character_background", "update_text_character_background")
+
+		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "Character Design", "update_text_character_design", GetGlobalDString("text_character_design", "Horizontal"), {"Horizontal", "Vertical"})
+
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat, "LID_yourrpchat", "update_bool_yrp_chat")
 		CreateNumberWangLine(GAMEMODE_VISUALS:GetContent(), GEN.int_yrp_chat_range_local, YRP.lang_string("LID_localchatrange"), "update_int_yrp_chat_range_local", 50, 1000, 10)

@@ -382,7 +382,7 @@ end
 SendAllErrors("instant")
 
 local first = true
-timer.Create("update_error_tables", 60, 0, function()
+--[[timer.Create("update_error_tables", 60, 0, function()
 	if first then
 		first = false
 	else
@@ -391,4 +391,4 @@ timer.Create("update_error_tables", 60, 0, function()
 		end
 	end
 	tick = tick + 1
-end)
+end)]]

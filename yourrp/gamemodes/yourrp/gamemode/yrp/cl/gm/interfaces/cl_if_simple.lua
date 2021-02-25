@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+local yrpr = 16
+
 hook.Add("YFramePaint", "YFrame_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
@@ -51,7 +53,7 @@ hook.Add("YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor
-		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 
 		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
@@ -83,7 +85,7 @@ hook.Add("YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor
-		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 
 		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
@@ -115,7 +117,7 @@ hook.Add("YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor
-		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
 
 		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true

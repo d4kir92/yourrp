@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 325 --do NOT change this!
-GM.VersionCanary = 653 --do NOT change this!
+GM.VersionBeta = 326 --do NOT change this!
+GM.VersionCanary = 655 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -313,11 +313,11 @@ RunConsoleCommand("studio_queue_mode", "1")
 RunConsoleCommand("r_hunkalloclightmaps", "0")
 
 -- Enable Errorlog
-RunConsoleCommand("lua_log_sv", "1")
+--RunConsoleCommand("lua_log_sv", "1")
 
 if CLIENT then
 	-- Enable Errorlog
-	RunConsoleCommand("lua_log_cl", "1")
+	--RunConsoleCommand("lua_log_cl", "1")
 
 	-- Multicore (Client) enable:
 	RunConsoleCommand("cl_threaded_bone_setup", "1")
