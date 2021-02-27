@@ -5,7 +5,7 @@
 local c = 0
 function PlayerLoadedGame(ply)
 	c = c + 1
-	YRP.msg("note", tostring(ply:YRPName()) .. " finished loading. c: " ..  c)
+	YRP.msg("note", tostring(ply:YRPName()) .. " finished loading. Count: " ..  c)
 	local tab = net.ReadTable()
 	local OS_Windows = tab.iswindows
 	local OS_Linux = tab.islinux

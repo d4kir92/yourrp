@@ -351,53 +351,6 @@ function YRP.AddDesignIcon(name, path)
 	_w_icons[m_w_counter] = {name, path}
 end
 
-function YRP.LoadDesignIcon()
-	if !m_adding and _w_icons[m_counter + 1] ~= nil then
-		
-		m_adding = true
-		m_counter = m_counter + 1
-
-		local name = _w_icons[m_counter][1]
-		local path = _w_icons[m_counter][2]
-
-		local mat, ti = Material(path, "noclamp")
-		_icons[name] = mat
-
-		m_adding = false
-
-		if _w_icons[m_counter + 1] ~= nil then
-			YRP.LoadDesignIcon()
-		end
-	elseif m_counter ~= m_w_counter then
-		timer.Simple(1, function()
-			YRP.LoadDesignIcon()
-		end)
-	end
-end
-timer.Simple(1, function()
-	YRP.LoadDesignIcon()
-end)
-
-function YRP.GetDesignIcon(name)
-	if _icons[name] ~= nil then
-		if tostring(_icons[name]) != "Material [___error]" then
-			return _icons[name]
-		end
-	end
-	return _icons["clear"]
-end
-
-function YRP.DrawIcon(material, w, h, x, y, color)
-	local col = color or YRPGetColor("6")
-	if wk(material) then
-		surface.SetDrawColor(col)
-		surface.SetMaterial(material)
-		surface.DrawTexturedRect(x or 0, y or 0, w or 64, h or 64)
-	end
-end
-
-YRP.AddDesignIcon("clear", "vgui/material/icon_clear.png")
-
 YRP.AddDesignIcon("lang_auto", "vgui/iso_639/" .. "auto" .. ".png")
 YRP.AddDesignIcon("group", "vgui/material/icon_group.png")
 YRP.AddDesignIcon("role", "vgui/material/icon_person.png")
@@ -492,6 +445,53 @@ local flags, _ = file.Find("materials/vgui/iso_3166/*.png", "GAME", "nameasc")
 for i, flag in pairs(flags) do
 	flag = string.Replace(flag, ".png", "")
 	YRP.AddDesignIcon("flag_" .. flag, "vgui/iso_3166/" .. flag .. ".png")
+end
+
+function YRP.LoadDesignIcon()
+	if !m_adding and _w_icons[m_counter + 1] ~= nil then
+		
+		m_adding = true
+		m_counter = m_counter + 1
+
+		local name = _w_icons[m_counter][1]
+		local path = _w_icons[m_counter][2]
+
+		local mat, ti = Material(path, "noclamp")
+		_icons[name] = mat
+
+		m_adding = false
+
+		if _w_icons[m_counter + 1] ~= nil then
+			YRP.LoadDesignIcon()
+		end
+	elseif m_counter ~= m_w_counter then
+		timer.Simple(1, function()
+			YRP.LoadDesignIcon()
+		end)
+	end
+end
+timer.Simple(1, function()
+	YRP.LoadDesignIcon()
+end)
+
+YRP.AddDesignIcon("clear", "vgui/material/icon_clear.png")
+
+function YRP.GetDesignIcon(name)
+	if _icons[name] ~= nil then
+		if tostring(_icons[name]) != "Material [___error]" then
+			return _icons[name]
+		end
+	end
+	return _icons["clear"]
+end
+
+function YRP.DrawIcon(material, w, h, x, y, color)
+	local col = color or YRPGetColor("6")
+	if wk(material) then
+		surface.SetDrawColor(col)
+		surface.SetMaterial(material)
+		surface.DrawTexturedRect(x or 0, y or 0, w or 64, h or 64)
+	end
 end
 
 local _delay = 1

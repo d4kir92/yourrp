@@ -57,7 +57,7 @@ net.Receive("get_design_settings", function(len)
 
 		-- HUD Customize
 		function Customize()
-			CloseSettings()
+			F8CloseSettings()
 
 			local hudcustom = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 			hudcustom:SetTitle("")
@@ -884,7 +884,7 @@ net.Receive("get_design_settings", function(len)
 			draw.SimpleText(YRP.lang_string("LID_settodefault"), "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		function hud_reset_settings:DoClick()
-			CloseSettings()
+			F8CloseSettings()
 
 			function YesFunction()
 				net.Start("reset_hud_settings")

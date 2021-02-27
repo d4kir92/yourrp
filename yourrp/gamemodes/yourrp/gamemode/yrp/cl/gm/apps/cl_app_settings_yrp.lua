@@ -16,7 +16,7 @@ function APP:AppIcon(pw, ph)
 end
 
 function APP:OpenApp(display, x, y, w, h)
-	OpenSettings()
+	F8OpenSettings()
 	closeSP()
 end
 

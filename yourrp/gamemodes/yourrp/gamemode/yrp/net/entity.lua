@@ -709,7 +709,7 @@ function RemoveFromEntTable( entindex )
 			table.RemoveByValue(YRP_NW_Ents, entindex)
 		end
 	else
-		timer.Simple(1, function()
+		timer.Simple(0.1, function()
 			RemoveFromEntTable( entindex )
 		end)
 	end

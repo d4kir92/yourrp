@@ -728,7 +728,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
 							ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
 						else
-							print("WHATS THAT? #1")
+							YRP.msg("note", "WHATS THAT? #1")
 							pTab(ug)
 						end
 					end
@@ -2173,7 +2173,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
 						ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
 					else
-						print("WHATS THAT? #2")
+						YRP.msg("note", "WHATS THAT? #2")
 						pTab(ug)
 					end
 				end

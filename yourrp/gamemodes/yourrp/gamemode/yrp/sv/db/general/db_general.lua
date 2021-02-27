@@ -133,6 +133,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D
 SQL_ADD_COLUMN(DATABASE_NAME, "text_idcard_background", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_idcardid", "INT DEFAULT 1")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_showowner", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_crosshair", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_hud", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_swaying", "INT DEFAULT 0")
@@ -1074,6 +1075,14 @@ net.Receive("update_int_yrp_chat_range_local", function(len, ply)
 	if isnumber(tonumber(int)) then
 		GeneralUpdateInt(ply, "update_int_yrp_chat_range_local", "int_yrp_chat_range_local", int)
 	end
+end)
+
+
+
+util.AddNetworkString("update_bool_yrp_showowner")
+net.Receive("update_bool_yrp_showowner", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_yrp_showowner", "bool_yrp_showowner", b)
 end)
 
 

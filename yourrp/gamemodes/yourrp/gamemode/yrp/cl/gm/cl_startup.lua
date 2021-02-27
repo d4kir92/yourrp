@@ -1392,13 +1392,15 @@ function drawStringBox(ent, instr, z, color)
 		box.h = th + 2 * br
 		draw.RoundedBox(math.Round(box.h / 2 - (box.h / 2) % 1, 0), - box.w / 2, 0, box.w, box.h, Color(0, 0, 0, 160))
 
-		local ico = {}
-		ico.w = th * 0.8
-		ico.h = ico.w
-		ico.br = (th - ico.h) / 2
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(YRP.GetDesignIcon("shopping_cart"))
-		surface.DrawTexturedRect(-box.w / 2 + br + ico.br, br + ico.br, ico.w, ico.h)
+		if YRP.GetDesignIcon("shopping_cart") ~= nil then
+			local ico = {}
+			ico.w = th * 0.8
+			ico.h = ico.w
+			ico.br = (th - ico.h) / 2
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetMaterial(YRP.GetDesignIcon("shopping_cart"))
+			surface.DrawTexturedRect(-box.w / 2 + br + ico.br, br + ico.br, ico.w, ico.h)
+		end
 
 		draw.SimpleText(instr, "Y_18_500", -box.w / 2 + th + 2 * br, box.h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) --, 1, Color(0, 0, 0))
 	cam.End3D2D()
@@ -1878,7 +1880,7 @@ end)
 
 hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	for i, ent in pairs(ents.GetAll()) do
-		if ent:IsNPC() and !ent:IsPlayer() and ent:GetDString("dealerID", "") != "" then
+		if ent:IsNPC() and !ent:IsPlayer() and ent:IsDealer() then
 			local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 			if dist < 300 then
 				drawStringBox(ent, ent:GetDString("name", "Unnamed"), 20, Color(255, 255, 255))

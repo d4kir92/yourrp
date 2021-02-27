@@ -129,8 +129,8 @@ function CreateKeybindsContent(parent)
 		_yesButton:SetText(YRP.lang_string("LID_yes"))
 		function _yesButton:DoClick()
 			YResetKeybinds()
-			CloseSettings()
-			OpenSettings()
+			F8CloseSettings()
+			F8OpenSettings()
 			_window:Close()
 		end
 

@@ -35,23 +35,46 @@ sm.open = false
 sm.currentsite = 1
 
 sm.category = "LID_usermanagement"
+sm.usergroup = nil
+
+function F8CheckUsergroup()
+	if LocalPlayer():GetUserGroup() ~= sm.usergroup then
+		sm.usergroup = LocalPlayer():GetUserGroup()
+		sm.open = false
+		return true
+	end
+	return false
+end
 
 function ToggleSettings(id)
+	local usergroupchanged = F8CheckUsergroup()
+	if usergroupchanged then
+		F8HardCloseSettings()
+	end
+
 	id = tonumber(id)
 	sm.currentsite = id
 	if !sm.open and YRPIsNoMenuOpen() then
-		OpenSettings()
+		F8OpenSettings()
 	elseif sm.open then
-		CloseSettings()
+		F8CloseSettings()
 	end
 end
 
-function CloseSettings(pnl)
+function F8CloseSettings(pnl)
 	sm.open = false
 	if pa(sm.win) then
 		sm.win:Hide()
 	elseif wk(pnl) and pnl.Remove != nil then
 		pnl:Remove()
+	end
+end
+
+function F8HardCloseSettings()
+	sm.open = false
+	if pa(sm.win) then
+		sm.win:Remove()
+		sm.win = nil
 	end
 end
 
@@ -91,7 +114,7 @@ end
 
 concommand.Add("yrp_open_settings", function(ply, cmd, args)
 	YRP.msg( "gm", "Open settings window" )
-	OpenSettings()
+	F8OpenSettings()
 end)
 
 function SettingsTabsContent()
@@ -260,12 +283,17 @@ function SettingsTabsContent()
 	end
 end
 
-function OpenSettings()
+function F8OpenSettings()
+	local usergroupchanged = F8CheckUsergroup()
+	if usergroupchanged then
+		F8HardCloseSettings()
+	end
+
 	local lply = LocalPlayer()
 	sm.open = true
 	local br = YRP.ctr(20)
-	if pa(sm.win) == false then
 
+	if pa(sm.win) == false then
 		local sites = {}
 		
 		local c = 1
@@ -330,7 +358,7 @@ function OpenSettings()
 			draw.SimpleText(YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_18_500", pw - YRP.ctr(300), self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end
 		function sm.win:Close()
-			CloseSettings(self)
+			F8CloseSettings(self)
 		end
 
 		-- LOGO

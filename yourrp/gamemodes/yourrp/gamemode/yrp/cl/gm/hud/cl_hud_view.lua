@@ -1,19 +1,21 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function showOwner(eyeTrace)
-	if eyeTrace.Entity:GetOwner() != nil and eyeTrace.Entity:GetOwner() != NULL then
-		draw.SimpleText(YRP.lang_string("LID_owner") .. ": " .. tostring(eyeTrace.Entity:GetOwner()), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	else
-		if eyeTrace.Entity:GetRPOwner() == LocalPlayer() then
-			draw.SimpleText(YRP.lang_string("LID_owner") .. ": " .. YRP.lang_string("LID_you"), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		elseif eyeTrace.Entity:GetRPOwner() != NULL and eyeTrace.Entity:GetRPOwner():IsPlayer() then
-			draw.SimpleText(YRP.lang_string("LID_owner") .. ": " .. eyeTrace.Entity:GetRPOwner():RPName(), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		elseif !strEmpty(eyeTrace.Entity:GetDString("ownerRPName", "")) or !strEmpty(eyeTrace.Entity:GetDString("ownerGroup", "")) then
-			local groupname = eyeTrace.Entity:GetDString("ownerGroup", "")
-			if string.lower(groupname) == "public" then
-				groupname = YRP.lang_string("LID_public")
+	if GetGlobalDBool("bool_yrp_showowner", true) then
+		if eyeTrace.Entity:GetOwner() != nil and eyeTrace.Entity:GetOwner() != NULL then
+			draw.SimpleText(YRP.lang_string("LID_owner") .. ": " .. tostring(eyeTrace.Entity:GetOwner()), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		else
+			if eyeTrace.Entity:GetRPOwner() == LocalPlayer() then
+				draw.SimpleText(YRP.lang_string("LID_owner") .. ": " .. YRP.lang_string("LID_you"), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			elseif eyeTrace.Entity:GetRPOwner() != NULL and eyeTrace.Entity:GetRPOwner():IsPlayer() then
+				draw.SimpleText(YRP.lang_string("LID_owner") .. ": " .. eyeTrace.Entity:GetRPOwner():RPName(), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			elseif !strEmpty(eyeTrace.Entity:GetDString("ownerRPName", "")) or !strEmpty(eyeTrace.Entity:GetDString("ownerGroup", "")) then
+				local groupname = eyeTrace.Entity:GetDString("ownerGroup", "")
+				if string.lower(groupname) == "public" then
+					groupname = YRP.lang_string("LID_public")
+				end
+				draw.SimpleText(YRP.lang_string("LID_owner") .. ": " ..	eyeTrace.Entity:GetDString("ownerRPName", "") .. groupname, "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
-			draw.SimpleText(YRP.lang_string("LID_owner") .. ": " ..	eyeTrace.Entity:GetDString("ownerRPName", "") .. groupname, "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 	end
 end
@@ -70,7 +72,7 @@ function HudView()
 				draw.SimpleText(YRP.lang_string("LID_presstointeractwith", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, plycol.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 		elseif _eyeTrace.Entity:IsNPC() then
-			if _eyeTrace.Entity:GetDString("dealerID", "") != "" then
+			if _eyeTrace.Entity:IsDealer() then
 				draw.SimpleText(_eyeTrace.Entity:GetDString("name", ""), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				local key = {}
 				key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
