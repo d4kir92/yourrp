@@ -73,6 +73,7 @@ function ENT:OpenBuyMenu(pl)
 		net.WriteString(self:GetDString("dealerID", "-1"))
 	net.Send(pl)
 
+	--[[
 	local hisounds = {
 		"vo/npc/male01/hi01.wav",
 		"vo/npc/male01/hi02.wav",
@@ -83,6 +84,7 @@ function ENT:OpenBuyMenu(pl)
 	local s = table.Random(hisounds)
 	util.PrecacheSound(s)
 	self:EmitSound(s)
+	]]--
 end
 
 function ENT:AcceptInput(input, entActivator, entCaller, data)
