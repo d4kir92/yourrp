@@ -1595,7 +1595,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 			if tr then
 				if tr.Entity then
 					local Owner = tr.Entity:GetRPOwner()
-					if Owner == pl or pl:HasAccess() then
+					if Owner == pl or pl:HasAccess() or !ea(Owner) then
 						return true
 					else
 						if !table.HasValue(toolantispam, pl) then
@@ -1605,12 +1605,13 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 								YRP.msg("note", "[CanTool] " .. pl:RPName() .. " tried to modify entity from: " .. Owner:RPName())
 
 								YRPNotiToPlyDisallowed(pl, "You are not the owner!")
-							else
+							end
+								--[[elseif tr.Entity:CreatedByMap() then
 								YRP.msg("note", "[CanTool] " .. pl:RPName() .. " tried to modify entity from: " .. "MAP-Entity")
 								YRP.msg("note", "[CanTool] " .. pl:GetUserGroup() .. " has no right to modify it.")
 
 								YRPNotiToPlyDisallowed(pl, "Map Entities!")
-							end
+							end]]
 
 							timer.Simple(5, function()
 								if ea(pl) then
