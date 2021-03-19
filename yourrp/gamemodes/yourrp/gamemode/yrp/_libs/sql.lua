@@ -510,7 +510,7 @@ function SQL_DELETE_FROM(db_table, db_where)
 			if db_where != nil then
 				_q = _q .. " WHERE "
 				_q = _q .. db_where
-				_q = _q .. " ;"
+				_q = _q .. ";"
 			end
 
 			local _result = SQL_QUERY(_q)

@@ -416,7 +416,8 @@ if SERVER then
 	end
 
 	function Player:addMoney(money)
-		if wk(money) and isnumber(money) and self:GetDString("money") != nil then
+		if wk(money) and isnumber(money) and isnumber(tonumber(self:GetDString("money"))) then
+			print(money, self:GetDString("money"))
 			local newmoney = math.Round(tonumber(self:GetDString("money")), 2) + math.Round(money, 2)
 			self:SetDString("money", math.Round(newmoney, 2))
 			self:UpdateMoney()

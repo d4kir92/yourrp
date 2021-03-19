@@ -191,8 +191,12 @@ end
 
 function DarkRP.payPlayer(sender, receiver, amount)
 	--Description: Make one player give money to the other player.
-	YRP.msg("darkrp", "payPlayer(sender, receiver, " .. tostring(amount) .. ")")
-	YRP.msg("darkrp", DarkRP._not)
+	if sender:canAfford(amount) then
+		sender:AddMoney(-amount)
+		receiver:AddMoney(amount)
+	else
+		YRP.msg("note", sender:RPName() .. " don't have enough money to payplayer " .. receiver:RPName())
+	end
 end
 
 function DarkRP.printConsoleMessage(ply, msg)
