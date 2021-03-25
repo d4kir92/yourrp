@@ -559,6 +559,10 @@ PLAYER.TauntCam = TauntCamera()
 -- #THIRDPERSON
 local oldang = Angle(0, 0, 0)
 local function yrpCalcView(lply, pos, angles, fov)
+	if angles == nil then
+		return view
+	end
+
 	lply.view_range = lply.view_range or 0
 	lply.view_range_view = lply.view_range_view or 0
 
