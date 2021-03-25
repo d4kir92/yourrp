@@ -26,7 +26,7 @@ end)
 
 g_db_reseted = false
 function save_clients(str)
-	YRP.msg("db", string.upper("[Saving all clients] [" .. str .. "]"))
+	--YRP.msg("db", string.upper("[Saving all clients] [" .. str .. "]"))
 	if !g_db_reseted then
 		for k, ply in pairs(player.GetAll()) do
 
@@ -78,9 +78,11 @@ function save_clients(str)
 		YRP.msg("db", "no saving, because db reset")
 	end
 
-	SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")
-	SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_holo%'")
-	--local pp = SQL_SELECT("permaprops", "*")
+	local pp = SQL_SELECT("permaprops", "*")
+	if pp then
+		SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")
+		SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_holo%'")
+	end
 end
 
 function updateRoleUses(rid)

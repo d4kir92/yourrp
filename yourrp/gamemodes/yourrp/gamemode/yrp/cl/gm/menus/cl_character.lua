@@ -1,7 +1,45 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+surface.CreateFont("Saira_60", {
+	font = "Saira",
+	extended = true,
+	size = 60,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false
+})
+
+surface.CreateFont("Saira_100", {
+	font = "Saira SemiBold",
+	extended = true,
+	size = 100,
+	weight = 1000,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false
+})
+
 local fw = 860
 local br = YRP.ctr(20)
+
+local trashicon = ""
 
 function openCharacterCreation()
 	if CharacterMenu == nil then
@@ -71,6 +109,8 @@ local loading = false
 function LoadCharacters()
 	YRP.msg("gm", "received characterlist")
 
+	trashicon = YRP.GetDesignIcon("64_trash")
+
 	DONE_LOADING = DONE_LOADING or true
 
 	local cache = {}
@@ -78,6 +118,7 @@ function LoadCharacters()
 	curChar = tonumber(LocalPlayer():CharID())
 
 	if pa(CharMenu.charactersBackground) then
+		local i = 1
 		CharMenu.charactersBackground.text = ""
 		if wk(chars) then
 			CharMenu.character.amount = 0
@@ -96,6 +137,7 @@ function LoadCharacters()
 				end
 				v.tmpChar:Remove()
 			end
+			
 			for i = 1, #chars do
 				if chars[i].char != nil then
 					chars[i].char = chars[i].char or {}
@@ -240,7 +282,7 @@ function LoadCharacters()
 						function tmpChar:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 255))
 
-							draw.SimpleText(self.rpname, "Y_42_500", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							draw.SimpleText(self.rpname, "Saira_60", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 							if i > LocalPlayer():GetDInt("int_characters_max", 1) then
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
@@ -314,7 +356,7 @@ function LoadCharacters()
 									net.SendToServer()
 								elseif tonumber(tmpChar.charid) != nil then
 									net.Start("EnterWorld")
-										net.WriteString(tonumber(tmpChar.charid))
+										net.WriteString(tmpChar.charid)
 									net.SendToServer()
 									if pa(CharMenu.frame) then
 										CharMenu.frame:Close()
@@ -329,12 +371,11 @@ function LoadCharacters()
 						deleteChar:SetText("")
 						function deleteChar:Paint(pw, ph)
 							--hook.Run("YRemovePaint", self, pw, ph)
-							local icon = YRP.GetDesignIcon("64_trash")
 							local color = Color(160, 160, 160, 255)
 							if self:IsHovered() then
 								color = Color(255, 255, 255, 255)
 							end
-							surface.SetMaterial(icon)
+							surface.SetMaterial(trashicon)
 							surface.SetDrawColor(color)
 							surface.DrawTexturedRect(0, 0, pw, ph)
 						end
@@ -376,6 +417,50 @@ function LoadCharacters()
 					end
 
 					y = y + 1
+				end
+
+				i = i + 1
+			end
+			
+			if GetGlobalDString("text_character_design", "HorizontalNEW") == "HorizontalNEW" then
+				local sw = YRP.ctr(fw) - 2 * br
+				local sh = YRP.ctr(200)
+				local px = 0
+				local py = 0
+				if GetGlobalDString("text_character_design", "HorizontalNEW") == "HorizontalNEW" then
+					sw = YRP.ctr(350*2)
+					sh = YRP.ctr(600*2)
+					px = 0
+					py = 0
+				end
+
+				local tmpChar = createD("YButton", nil, sw, sh, px, py)
+				tmpChar:SetText("")
+				function tmpChar:Paint(pw, ph)
+					if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 255))
+						
+						local sw = pw - 2 * YRP.ctr(180)
+						local breite = YRP.ctr(50)
+						if YRP.GetDesignIcon("add") ~= nil then
+							draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sw / 2, breite, sw, Color(102, 102, 102, 255))
+							draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
+						end
+					end
+				end
+				function tmpChar:DoClick()
+					if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+						if pa(CharMenu.frame) then
+							CharMenu.frame:Close()
+						end
+						openCharacterCreation()
+					end
+				end
+
+				if CharMenu.characterList.AddItem then
+					CharMenu.characterList:AddItem(tmpChar)
+				else
+					CharMenu.characterList:AddPanel(tmpChar)
 				end
 			end
 		end
@@ -859,7 +944,7 @@ function openCharacterSelection()
 				if acur > amax then
 					color = Color(255, 100, 100, 255)
 				end
-				draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw - br - YRP.ctr(100), ph - br - YRP.ctr(200) - br - YRP.ctr(100), color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw / 2, ph - YRP.ctr(300), color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
 			-- Language Changer / LanguageChanger
@@ -875,15 +960,18 @@ function openCharacterSelection()
 				surface.SetDrawColor(Color(255, 255, 255))
 				surface.DrawTexturedRect(self.br, self.br, ph - 2 * self.br, ph - 2 * self.br)
 
-				draw.SimpleText("YourRP", "Y_70_500", ph + 1 * self.br, ph / 2, Color(23, 107, 225), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText("YourRP", "Saira_100", ph + 1 * self.br, ph / 2, Color(23, 107, 225), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			CharMenu.charactersBackground = createD("DPanel", CharMenu.frame, ScrW() - YRP.ctr(2 * 600), ScrH() - YRP.ctr(600 + 360), YRP.ctr(600), YRP.ctr(600))
+			local charw = YRP.ctr(3 * 350*2 + 2 * 200)
+			CharMenu.charactersBackground = createD("DPanel", CharMenu.frame, charw, ScrH() - YRP.ctr(600 + 360), ScrW() / 2 - charw / 2, YRP.ctr(600))
 			CharMenu.charactersBackground.text = YRP.lang_string("LID_siteisloading")
 			function CharMenu.charactersBackground:Paint(pw, ph)
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
 				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
+
+
 
 			CharMenu.characterList = createD("DHorizontalScroller", CharMenu.charactersBackground, CharMenu.charactersBackground:GetWide(), CharMenu.charactersBackground:GetTall(), 0, 0)
 			--CharMenu.characterList:EnableVerticalScrollbar()
@@ -892,28 +980,48 @@ function openCharacterSelection()
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 			end
 			
+
+
+			CharMenu.characterList.scroll = 0
+
+			CharMenu.prevChar = createD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), ScrW() / 2 - charw / 2 - YRP.ctr(100 + 100), YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2))
+			CharMenu.prevChar:SetText("")
+			function CharMenu.prevChar:Paint(pw, ph)
+				hook.Run("YButtonPaint", self, pw, ph)
+				if YRP.GetDesignIcon("64_angle-right") ~= nil then
+					surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
+				end
+			end
+			function CharMenu.prevChar:DoClick()
+				CharMenu.characterList.scroll = CharMenu.characterList.scroll - YRP.ctr(350 * 2 + 200)
+				CharMenu.characterList:SetScroll(CharMenu.characterList.scroll)
+			end
+
+			CharMenu.nextChar = createD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), ScrW() / 2 + charw / 2 + YRP.ctr(100), YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2))
+			CharMenu.nextChar:SetText("")
+			function CharMenu.nextChar:Paint(pw, ph)
+				hook.Run("YButtonPaint", self, pw, ph)
+				if YRP.GetDesignIcon("64_angle-right") ~= nil then
+					surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
+				end
+			end
+			function CharMenu.nextChar:DoClick()
+				CharMenu.characterList.scroll = CharMenu.characterList.scroll + YRP.ctr(350 * 2 + 200)
+				CharMenu.characterList:SetScroll(CharMenu.characterList.scroll)
+			end
+
+
+
 			timer.Simple(0.01, function()
 				YRP.msg("gm", "ask for characterlist")
 
 				net.Start("yrp_get_characters")
 				net.SendToServer()
 			end)
-
-			local charactersCreate = createD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), ScrW() - YRP.ctr(200), ScrH() - YRP.ctr(200))
-			charactersCreate:SetText("")
-			function charactersCreate:Paint(pw, ph)
-				if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
-					hook.Run("YAddPaint", self, pw, ph)
-				end
-			end
-			function charactersCreate:DoClick()
-				if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
-					if pa(CharMenu.frame) then
-						CharMenu.frame:Close()
-					end
-					openCharacterCreation()
-				end
-			end
 		end
 	end
 end
