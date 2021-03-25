@@ -492,7 +492,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_background, "LID_character_background", "update_text_character_background")
 
-		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "Character Design", "update_text_character_design", GetGlobalDString("text_character_design", "Horizontal"), {"Horizontal", "Vertical"})
+		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "Character Design", "update_text_character_design", GetGlobalDString("text_character_design", "HorizontalNEW"), {"HorizontalNEW", "Horizontal", "Vertical"})
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat, "LID_yourrpchat", "update_bool_yrp_chat")
