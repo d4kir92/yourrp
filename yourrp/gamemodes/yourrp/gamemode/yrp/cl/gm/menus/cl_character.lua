@@ -982,36 +982,46 @@ function openCharacterSelection()
 			
 
 
-			CharMenu.characterList.scroll = 0
+			CharMenu.characterList.OffsetX = 0
 
 			CharMenu.prevChar = createD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), ScrW() / 2 - charw / 2 - YRP.ctr(100 + 100), YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2))
 			CharMenu.prevChar:SetText("")
 			function CharMenu.prevChar:Paint(pw, ph)
-				hook.Run("YButtonPaint", self, pw, ph)
-				if YRP.GetDesignIcon("64_angle-right") ~= nil then
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
-					surface.SetDrawColor(255, 255, 255, 255)
-					surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
+				if CharMenu.characterList.OffsetX > 0 then
+					hook.Run("YButtonPaint", self, pw, ph)
+					if YRP.GetDesignIcon("64_angle-right") ~= nil then
+						surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+						surface.SetDrawColor(255, 255, 255, 255)
+						surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
+					end
 				end
 			end
 			function CharMenu.prevChar:DoClick()
-				CharMenu.characterList.scroll = CharMenu.characterList.scroll - YRP.ctr(350 * 2 + 200)
-				CharMenu.characterList:SetScroll(CharMenu.characterList.scroll)
+				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX - YRP.ctr(350 * 2 + 200)
+				if CharMenu.characterList.OffsetX <= 0 then
+					CharMenu.characterList.OffsetX = 0
+				end
+				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
 			end
 
 			CharMenu.nextChar = createD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), ScrW() / 2 + charw / 2 + YRP.ctr(100), YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2))
 			CharMenu.nextChar:SetText("")
 			function CharMenu.nextChar:Paint(pw, ph)
-				hook.Run("YButtonPaint", self, pw, ph)
-				if YRP.GetDesignIcon("64_angle-right") ~= nil then
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
-					surface.SetDrawColor(255, 255, 255, 255)
-					surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
+				if CharMenu.characterList.OffsetX < CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide() then
+					hook.Run("YButtonPaint", self, pw, ph)
+					if YRP.GetDesignIcon("64_angle-right") ~= nil then
+						surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+						surface.SetDrawColor(255, 255, 255, 255)
+						surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
+					end
 				end
 			end
 			function CharMenu.nextChar:DoClick()
-				CharMenu.characterList.scroll = CharMenu.characterList.scroll + YRP.ctr(350 * 2 + 200)
-				CharMenu.characterList:SetScroll(CharMenu.characterList.scroll)
+				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX + YRP.ctr(350 * 2 + 200)
+				if CharMenu.characterList.OffsetX >= CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide() then
+					CharMenu.characterList.OffsetX = CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide()
+				end
+				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
 			end
 
 

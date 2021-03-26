@@ -829,7 +829,7 @@ net.Receive("getScoreboardGroups", function(len, ply)
 		net.Broadcast()
 	else
 		YRP.msg("note", "getScoreboardGroups failed!")
-		pTab(_tmpGroups)
+		pFTab(_tmpGroups)
 	end
 end)
 
@@ -971,7 +971,24 @@ net.Receive("get_all_playermodels", function(len, ply)
 		allpms = {}
 	end
 	for x, pm in pairs(allpms) do
+		pm.uses = 0
+
 		pm.string_models = SQL_STR_OUT(pm.string_models)
+
+		-- Count uses
+		local roles = SQL_SELECT("yrp_ply_roles", "uniqueID, string_name, string_playermodels", "string_playermodels LIKE '%" .. pm.uniqueID .. "%'")
+		if roles then
+			for y, role in pairs(roles) do
+				local rolepms = string.Explode(",", role.string_playermodels)
+				if rolepms then
+					for z, rolepm in pairs(rolepms) do
+						if pm.uniqueID == rolepm then
+							pm.uses = pm.uses + 1
+						end
+					end
+				end
+			end
+		end
 	end
 
 	net.Start("get_all_playermodels")

@@ -193,9 +193,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				if gs.gplist[group.uniqueID].int_position > 1 then
 					hook.Run("YButtonPaint", self, pw, ph)
 
-					surface.SetDrawColor(255, 255, 255, 255)
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
-					surface.DrawTexturedRect(0, 0, pw, ph)
+					if YRP.GetDesignIcon("64_angle-up") then
+						surface.SetDrawColor(255, 255, 255, 255)
+						surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+						surface.DrawTexturedRect(0, 0, pw, ph)
+					end
 				end
 			end
 			function up:DoClick()
@@ -211,9 +213,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				if gs.gplist[group.uniqueID].int_position < table.Count(gs.gplist.tab) then
 					hook.Run("YButtonPaint", self, pw, ph)
 
-					surface.SetDrawColor(255, 255, 255, 255)
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
-					surface.DrawTexturedRect(0, 0, pw, ph)
+					if YRP.GetDesignIcon("64_angle-down") then
+						surface.SetDrawColor(255, 255, 255, 255)
+						surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+						surface.DrawTexturedRect(0, 0, pw, ph)
+					end
 				end
 			end
 			function dn:DoClick()
@@ -729,7 +733,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
 						else
 							YRP.msg("note", "WHATS THAT? #1")
-							pTab(ug)
+							pFTab(ug)
 						end
 					end
 
@@ -874,9 +878,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				if rs.rplist[role.uniqueID].int_position > 1 then
 					hook.Run("YButtonPaint", self, pw, ph)
 
-					surface.SetDrawColor(255, 255, 255, 255)
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
-					surface.DrawTexturedRect(0, 0, pw, ph)
+					if YRP.GetDesignIcon("64_angle-up") then
+						surface.SetDrawColor(255, 255, 255, 255)
+						surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+						surface.DrawTexturedRect(0, 0, pw, ph)
+					end
 				end
 			end
 			function up:DoClick()
@@ -892,9 +898,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				if rs.rplist[role.uniqueID].int_position < table.Count(rs.rplist.tab) then
 					hook.Run("YButtonPaint", self, pw, ph)
 
-					surface.SetDrawColor(255, 255, 255, 255)
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
-					surface.DrawTexturedRect(0, 0, pw, ph)
+					if YRP.GetDesignIcon("64_angle-down") then
+						surface.SetDrawColor(255, 255, 255, 255)
+						surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+						surface.DrawTexturedRect(0, 0, pw, ph)
+					end
 				end
 			end
 			function dn:DoClick()
@@ -1506,6 +1514,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								end
 							end
 							function pmsel:Search(strsearch)
+								strsearch = string.lower(strsearch)
+
 								pmsel.strsearch = strsearch
 								pmsel.nr = 0
 								pmsel:RefreshPage()
@@ -1664,6 +1674,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								end
 							end
 							function pmsel:Search(strsearch)
+								strsearch = string.lower(strsearch)
+
 								pmsel.strsearch = strsearch
 								pmsel.nr = 0
 								pmsel:RefreshPage()
@@ -1751,6 +1763,23 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 											draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 										end
 
+
+
+										line.remove = createD("YButton", line, YRP.ctr(300), YRP.ctr(100), win.dpl:GetWide() - YRP.ctr(350), YRP.ctr(50))
+										line.remove:SetText("LID_remove")
+										function line.remove:DoClick()
+											net.Start("rem_playermodel")
+												net.WriteInt(pm.uniqueID, 32)
+											net.SendToServer()
+											line:Remove()
+										end
+										function line.remove:Paint(pw, ph)
+											draw.RoundedBox(16, 0, 0, pw, ph, Color(255, 140, 140))
+											draw.SimpleText(YRP.lang_string("LID_remove") .. " (" .. pm.uses .. " " .. "uses" .. ")", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										end
+
+
+
 										if line.models[1] != nil then
 											line.model = createD("DModelPanel", line, line:GetTall(), line:GetTall(), 0, 0)
 											line.model:SetModel(line.models[1])
@@ -1776,7 +1805,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					end
 				
 					function win:Search(strsearch)
-						self.searchstr = strsearch
+						self.searchstr = string.lower(strsearch)
 
 						self.searching = false
 
@@ -1863,6 +1892,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				winswep.dpl:EnableVerticalScrollbar(true)
 				local height = ScrH() - YRP.ctr(100)
 				function winswep:Search(strsearch)
+					strsearch = string.lower(strsearch)
+
 					self.dpl:Clear()
 					for i, v in pairs(cl_sweps) do
 						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
@@ -1963,6 +1994,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				winndswep.dpl:EnableVerticalScrollbar(true)
 				local height = ScrH() - YRP.ctr(100)
 				function winndswep:Search(strsearch)
+					strsearch = string.lower(strsearch)
+
 					self.dpl:Clear()
 					for i, v in pairs(cl_ndsweps) do
 						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
@@ -2063,6 +2096,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					winlicenses.dpl:EnableVerticalScrollbar(true)
 					local height = ScrH() - YRP.ctr(100)
 					function winlicenses:Search(strsearch)
+						strsearch = string.lower(strsearch)
+
 						self.dpl:Clear()
 						if strsearch != nil then
 							for i, v in pairs(cl_licenses) do
@@ -2174,7 +2209,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
 					else
 						YRP.msg("note", "WHATS THAT? #2")
-						pTab(ug)
+						pFTab(ug)
 					end
 				end
 

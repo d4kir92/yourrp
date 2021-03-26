@@ -44,3 +44,13 @@ if wk(pms) then
 		end
 	end
 end
+
+
+util.AddNetworkString("rem_playermodel")
+net.Receive("rem_playermodel", function(len, ply)
+	local muid = net.ReadInt(32)
+
+	if muid == nil then return end
+
+	SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. muid .. "'")
+end)

@@ -15,6 +15,10 @@ function pTab(table, name)
 	end
 end
 
+function pFTab(table, name)
+	pTab(table, name)
+end
+
 function combineTables(tab1, tab2)
 	if istable(tab1) and istable(tab2) then
 		for i, item in pairs(tab2) do
