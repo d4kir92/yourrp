@@ -69,7 +69,7 @@ function HudView()
 				local tab = {}
 				tab["NAME"] = tostring(_eyeTrace.Entity:RPName())
 				tab["KEY"] = "[" .. string.upper(GetKeybindName("menu_interact")) .. "]"
-				draw.SimpleText(YRP.lang_string("LID_presstointeractwith", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, plycol.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				--draw.SimpleText(YRP.lang_string("LID_presstointeractwith", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, plycol.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 		elseif _eyeTrace.Entity:IsNPC() then
 			if _eyeTrace.Entity:IsDealer() then
