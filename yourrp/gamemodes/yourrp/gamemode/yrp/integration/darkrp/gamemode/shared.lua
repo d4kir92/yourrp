@@ -166,12 +166,7 @@ end
 function DarkRP.formatMoney(amount)
 	--Description: Format a number as a money value. Includes currency symbol.
 	--YRP.msg("darkrp", "formatMoney(" .. tostring(amount) .. ")")
-	if CLIENT then
-		local lply = LocalPlayer()
-		return formatMoney(amount, ply)
-	else
-		return formatMoney(amount)
-	end
+	return formatMoney(amount)
 end
 
 function DarkRP.getAgendas()

@@ -189,11 +189,11 @@ function ScrH2()
 	return ScrH() / 2
 end
 
-function formatMoney(money, ply)
-	if CLIENT and wk(money) then
+function formatMoney(money)
+	if wk(money) then
 		return GetGlobalDString("text_money_pre", "") .. money .. GetGlobalDString("text_money_pos", "")
 	else
-		return "[FAILED]" .. tostring(money) .. "[FAILED]"
+		return "[FAILED: formatMoney]"
 	end
 end
 
