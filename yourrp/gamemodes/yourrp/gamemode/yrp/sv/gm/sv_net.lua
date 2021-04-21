@@ -19,43 +19,49 @@ end)
 
 --Restart Server
 net.Receive("restartServer", function(len, ply)
-	YRP.msg("gm", "RunConsoleCommand(_restart)")
-	RunConsoleCommand("_restart")
+	if ply:HasAccess() then
+		YRP.msg("gm", "RunConsoleCommand(_restart)")
+		RunConsoleCommand("_restart")
+	end
 end)
 
 net.Receive("updateServer", function(len, ply)
-	local _tmpString = net.ReadString()
-	local _result = SQL_UPDATE("yrp_general", "text_gamemode_name = '" .. SQL_STR_IN(_tmpString) .. "'")
-	if worked(_result, "text_gamemode_name failed") then
-	end
-	local countdown = net.ReadInt(16)
-	timer.Create("timerRestartServer", 1, 0, function()
-		local message = "Updating Server in " .. countdown .. " seconds"
-		if countdown == 0 then
-			message = "Server is updating."
+	if ply:HasAccess() then
+		local _tmpString = net.ReadString()
+		local _result = SQL_UPDATE("yrp_general", "text_gamemode_name = '" .. SQL_STR_IN(_tmpString) .. "'")
+		if worked(_result, "text_gamemode_name failed") then
 		end
-		if countdown > 10 then
-			if (countdown%10) == 0 then
+		local countdown = net.ReadInt(16)
+		timer.Create("timerRestartServer", 1, 0, function()
+			local message = "Updating Server in " .. countdown .. " seconds"
+			if countdown == 0 then
+				message = "Server is updating."
+			end
+			if countdown > 10 then
+				if (countdown%10) == 0 then
+					PrintMessage(HUD_PRINTCENTER, message)
+					YRP.msg("server", message)
+				end
+			elseif countdown <= 10 then
 				PrintMessage(HUD_PRINTCENTER, message)
 				YRP.msg("server", message)
 			end
-		elseif countdown <= 10 then
-			PrintMessage(HUD_PRINTCENTER, message)
-			YRP.msg("server", message)
-		end
-		countdown = countdown - 1
-		if countdown == -1 then
-			timer.Remove("timerRestartServer")
-			game.ConsoleCommand("changelevel " .. GetMapNameDB() .. "\n")
-		end
-	end)
+			countdown = countdown - 1
+			if countdown == -1 then
+				timer.Remove("timerRestartServer")
+				game.ConsoleCommand("changelevel " .. GetMapNameDB() .. "\n")
+			end
+		end)
+	end
 end)
 
 net.Receive("cancelRestartServer", function(len, ply)
-	timer.Remove("timerRestartServer")
-	local message = "Restart Server CANCELED!"
-	PrintMessage(HUD_PRINTCENTER, message)
-	YRP.msg("server", message)
+	if ply:HasAccess() then
+		timer.Remove("timerRestartServer")
+		local message = "Restart Server CANCELED!"
+		PrintMessage(HUD_PRINTCENTER, message)
+		YRP.msg("server", message)
+	end
 end)
 
 function changeUserGroup(ply, cmd, args)
