@@ -156,9 +156,8 @@ function PANEL:Init()
 		end
 
 		for i, r in pairs(rols) do
-			if i == 1 then
-				AddRole(rlist, r, w, h, list)
-			else
+			r.bool_eventrole = tobool(r.bool_eventrole)
+			if r.bool_eventrole == GetGlobalDBool("create_eventchar", false) then
 				AddRole(rlist, r, w, h, list)
 			end
 		end
@@ -410,7 +409,8 @@ function PANEL:Init()
 						rol.int_uses = tonumber(rol.int_uses)
 						rol.int_maxamount = tonumber(rol.int_maxamount)
 						rol.int_prerole = tonumber(rol.int_prerole)
-
+						rol.bool_eventrole = tobool(rol.bool_eventrole)
+						
 						-- Restrictions
 						if !table.HasValue(rol.string_usergroups, "ALL") then
 							if !table.HasValue(rol.string_usergroups, string.upper(lply:GetUserGroup())) then
@@ -419,12 +419,12 @@ function PANEL:Init()
 						end
 
 						if LocalPlayer():GetDBool("cc", true) == true and !rol.bool_visible_cc then
-							continue
+							--continue
 						elseif LocalPlayer():GetDBool("cc", false) == false and !rol.bool_visible_rm then
-							continue
+							--continue
 						end
 
-						if rol.int_prerole == 0 then
+						if rol.int_prerole == 0 and rol.bool_eventrole == GetGlobalDBool("create_eventchar", false) then
 							w = rw
 							h = rh
 							local rlist = createD("DHorizontalScroller", nil, 10, YRP.ctr(h), 0, 0)
@@ -448,9 +448,9 @@ function PANEL:Init()
 						grp.bool_visible_rm = tobool(grp.bool_visible_rm)
 
 						if LocalPlayer():GetDBool("cc", true) == true and !grp.bool_visible_cc then
-							continue
+							--continue
 						elseif LocalPlayer():GetDBool("cc", false) == false and !grp.bool_visible_rm then
-							continue
+							--continue
 						end
 
 						local group = createD("YCollapsibleCategory", base.con, w, h, 0, 0)

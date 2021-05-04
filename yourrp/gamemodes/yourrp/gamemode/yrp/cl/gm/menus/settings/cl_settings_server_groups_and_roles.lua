@@ -2337,6 +2337,18 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
+			local bool_eventrole = {}
+			bool_eventrole.parent = ea.restriction:GetContent()
+			bool_eventrole.uniqueID = role.uniqueID
+			bool_eventrole.header = "EVENT ROLE?"
+			bool_eventrole.netstr = "update_role_bool_eventrole"
+			bool_eventrole.value = role.bool_eventrole
+			bool_eventrole.uniqueID = role.uniqueID
+			bool_eventrole.lforce = false
+			ea[role.uniqueID].bool_eventrole = YRPDCheckBox(bool_eventrole)
+
+			DHr(hr)
+
 			--[[local cooldown = {}
 			cooldown.parent = ea.restriction:GetContent()
 			cooldown.header = "LID_cooldown"

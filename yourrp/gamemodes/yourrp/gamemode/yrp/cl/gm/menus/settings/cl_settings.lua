@@ -32,7 +32,7 @@ include("cl_settings_server_yourrp_addons.lua")
 
 local sm = {}
 sm.open = false
-sm.currentsite = 1
+sm.currentsite = "LID_usermanagement"
 
 sm.category = "LID_usermanagement"
 sm.usergroup = nil
@@ -51,8 +51,6 @@ function ToggleSettings(id)
 	if usergroupchanged then
 		F8HardCloseSettings()
 	end
-
-	id = tonumber(id)
 	sm.currentsite = id
 	if !sm.open and YRPIsNoMenuOpen() then
 		F8OpenSettings()
@@ -128,8 +126,7 @@ function SettingsTabsContent()
 	end
 
 	sm.tabsite = tabs.site
-
-	if sm.currentsite == 1 then
+	if sm.currentsite == "LID_usermanagement" then
 		if lply:GetDBool("bool_players", false) then
 			tabs:AddOption("LID_settings_players", function(parent)
 				OpenSettingsPlayers()
@@ -144,7 +141,7 @@ function SettingsTabsContent()
 		end
 		
 		tabs:GoToSite("LID_settings_players")
-	elseif sm.currentsite == 2 then
+	elseif sm.currentsite == "LID_moderation" then
 		if lply:GetDBool("bool_status", false) then
 			tabs:AddOption("LID_settings_status", function(parent)
 				OpenSettingsStatus()
@@ -188,7 +185,7 @@ function SettingsTabsContent()
 		end
 
 		tabs:GoToSite("LID_settings_status")
-	elseif sm.currentsite == 3 then
+	elseif sm.currentsite == "LID_administration" then
 		if lply:GetDBool("bool_realistic", false) then
 			tabs:AddOption("LID_settings_realistic", function(parent)
 				OpenSettingsRealistic()
@@ -233,7 +230,7 @@ function SettingsTabsContent()
 		end
 
 		tabs:GoToSite("LID_settings_realistic")
-	elseif sm.currentsite == 4 then
+	elseif sm.currentsite == "LID_server" then
 		if lply:GetDBool("bool_general", false) then
 			tabs:AddOption("LID_settings_general", function(parent)
 				OpenSettingsGeneral()
@@ -271,7 +268,7 @@ function SettingsTabsContent()
 		end
 
 		tabs:GoToSite("LID_settings_general")
-	elseif sm.currentsite == 5 then
+	elseif sm.currentsite == "YourRP" then
 		if lply:GetDBool("bool_yourrp_addons", false) then
 			tabs:AddOption("LID_settings_yourrp_addons", function(parent)
 				OpenSettingsYourRPAddons()
@@ -355,10 +352,34 @@ function F8OpenSettings()
 			hook.Run("YFramePaint", self, pw, ph)
 			draw.SimpleText(self:GetTitle(), "Y_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2 + YRP.ctr(120), self:GetHeaderHeight() / 2, GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_18_500", pw - YRP.ctr(300), self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_18_500", pw - YRP.ctr(400), self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end
 		function sm.win:Close()
 			F8CloseSettings(self)
+		end
+
+		local rlsize = sm.win:GetHeaderHeight() - YRP.ctr(20)
+		sm.win.reload = createD("YButton", sm.win, rlsize, rlsize, 0, 0)
+		sm.win.reload:SetText("")
+		function sm.win.reload:Paint(pw, ph)
+			local br = YRP.ctr(10)
+			if self.sw ~= sm.win:GetWide() or self.sh ~= sm.win:GetTall() then
+				self:SetPos(sm.win:GetWide() - YRP.ctr(300) - rlsize, YRP.ctr(10))
+			end
+			hook.Run("YButtonPaint", self, pw, ph)
+			
+			if YRP.GetDesignIcon("64_angle-right") ~= nil then
+				surface.SetMaterial(YRP.GetDesignIcon("64_sync"))
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+			end
+		end
+		function sm.win.reload:DoClick()
+			F8HardCloseSettings()
+			
+			timer.Simple(0.1, function()
+				ToggleSettings()
+			end)
 		end
 
 		-- LOGO
@@ -549,7 +570,7 @@ function F8OpenSettings()
 				end
 				function site:DoClick()
 					sm.menu:ClearSelection()
-					sm.currentsite = tonumber(self.id)
+					sm.currentsite = v.name
 					self.selected = true
 					if v.content != nil then
 						v.content(sm.site) --CreateHelpMenuContent(sm.site)

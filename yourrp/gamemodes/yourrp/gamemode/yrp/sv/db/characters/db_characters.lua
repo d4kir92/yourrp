@@ -21,6 +21,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_bodyheight", "INT DEFAULT 180")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_weight", "INT DEFAULT 80")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_nationality", "TEXT DEFAULT ''")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_eventchar", "INT DEFAULT 0")
+
 --[[ LEVEL ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "int_level", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_xp", "INT DEFAULT 0")
@@ -653,7 +655,7 @@ function CreateCharacter(ply, tab)
 	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(tab.roleID))
 	if wk(role) then
 		local steamid = ply:SteamID() or ply:UniqueID()
-		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, rpdescription, string_birthday, int_bodyheight, int_weight, string_nationality"
+		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, rpdescription, string_birthday, int_bodyheight, int_weight, string_nationality, bool_eventchar"
 		for i = 0, 19 do
 			cols = cols .. ", bg" .. i
 		end
@@ -668,11 +670,12 @@ function CreateCharacter(ply, tab)
 		vals = vals .. "'" .. SQL_STR_IN(GetMapNameDB()) .. "', "
 		vals = vals .. tonumber(tab.skin) .. ", "
 		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.rpdescription)) .. "', "
-
+		
 		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.birt)) .. "', "
 		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.bohe)) .. "', "
 		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.weig)) .. "', "
-		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.nati)) .. "'"
+		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.nati)) .. "', "
+		vals = vals .. "'" .. btn(tab.create_eventchar) .. "'"
 
 		for i = 0, 19 do
 			vals = vals .. ", " .. tonumber(tab.bg[i])

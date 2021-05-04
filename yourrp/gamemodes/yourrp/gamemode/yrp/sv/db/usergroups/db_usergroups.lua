@@ -19,6 +19,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_tools", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_characters_max", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_charactersevent_max", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminaccess", "INT DEFAULT 0")
 
@@ -1078,6 +1079,13 @@ net.Receive("usergroup_update_int_characters_max", function(len, ply)
 	UGUpdateInt(ply, uid, "int_characters_max", int_characters_max)
 end)
 
+util.AddNetworkString("usergroup_update_int_charactersevent_max")
+net.Receive("usergroup_update_int_charactersevent_max", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local int_charactersevent_max = net.ReadString()
+	UGUpdateInt(ply, uid, "int_charactersevent_max", int_charactersevent_max)
+end)
+
 local antinoti1spam = {}
 util.AddNetworkString("yrp_info")
 function YRPNotiToPlyDisallowed(ply, msg)
@@ -1672,6 +1680,7 @@ function Player:UserGroupLoadout()
 		self:SetDString("usergroupColor", UG.string_color)
 		self:SetDInt("int_position", UG.int_position)
 		self:SetDInt("int_characters_max", UG.int_characters_max)
+		self:SetDInt("int_charactersevent_max", UG.int_charactersevent_max)
 
 		for i, v in pairs(UG) do
 			if string.StartWith(i, "bool_") then

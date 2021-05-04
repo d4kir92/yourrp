@@ -869,6 +869,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 	GAMEPLAYAddHr()
 	GAMEPLAYAddIntBox("int_characters_max", "LID_charactersmax")
+	GAMEPLAYAddIntBox("int_charactersevent_max", YRP.lang_string("LID_charactersmax") .. " (EVENT)")
 end)
 
 function AddUG(tbl)

@@ -161,6 +161,7 @@ function CreateCharacterSettingsContent()
 				character.bohe = lply:GetDString("charcreate_bohe")
 				character.weig = lply:GetDString("charcreate_weig")
 				character.nati = lply:GetDString("charcreate_nati")
+				character.create_eventchar = GetGlobalDBool("create_eventchar", false)
 
 				net.Start("CreateCharacter")
 					net.WriteTable(character)

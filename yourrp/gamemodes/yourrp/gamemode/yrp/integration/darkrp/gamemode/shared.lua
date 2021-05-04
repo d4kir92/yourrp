@@ -412,3 +412,4 @@ function DarkRP.simplerrRun(f, args)
 	YRP.msg("darkrp", DarkRP._not)
 	return {}
 end
+
