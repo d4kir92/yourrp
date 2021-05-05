@@ -13,7 +13,7 @@ function YRPSetupCoords()
 end
 
 hook.Add("InitPostEntity", "yrp_InitPostEntity_doors_and_coords", function()
-	YRP.msg("note", "InitPostEntity()")
+	--YRP.msg("note", "InitPostEntity()")
 
 	YRPSetupDoors()
 	YRPSetupCoords()

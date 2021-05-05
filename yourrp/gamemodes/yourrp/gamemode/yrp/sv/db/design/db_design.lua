@@ -153,7 +153,7 @@ function RegisterInterfaceDesign(tab)
 		return false
 	end
 	INTERFACES[tab.name] = tab
-	YRP.msg("db", "Added Interface Design (" .. tostring(tab.name) .. ")")
+	--YRP.msg("db", "Added Interface Design (" .. tostring(tab.name) .. ")")
 	return true
 end
 

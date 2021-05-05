@@ -607,7 +607,6 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 end
 
 if SERVER then
-	YRP.msg("db", "Connect to Database")
 	local _sql_settings = sql.Query("SELECT * FROM yrp_sql")
 
 	if wk(_sql_settings) then
@@ -617,6 +616,8 @@ if SERVER then
 	end
 
 	if GetSQLMode() == 1 then
+		YRP.msg("db", "Connect to MYSQL Database")
+	
 		-- MYSQL
 		require("mysqloo")
 

@@ -112,23 +112,31 @@ function MoveUnusedGroups()
 end
 
 function MoveUnusedRolesToDefault()
-	YRP.msg("note", "Move unused roles to default group")
+	local changed = false
 	local allroles = SQL_SELECT("yrp_ply_roles", "*", nil)
 	if wk(allroles) then
 		for i, role in pairs(allroles) do
 			-- If prerole not exists remove the prerole
-			local prerole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. role.int_prerole .. "'")
-			if !wk(prerole) then
-				SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+			if tonumber(role.int_prerole) != 0 then
+				local prerole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. role.int_prerole .. "'")
+				if !wk(prerole) then
+					changed = true
+					SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+				end
 			end
 
 			MoveUnusedGroups()
 			-- if group not exists move it to default group
 			local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
 			if !wk(group) then
+				changed = true
+				print("AHA2")
 				SQL_UPDATE(DATABASE_NAME, "int_groupID = '1', int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
 			end
 		end
+	end
+	if changed then
+		YRP.msg("note", "Moved unused roles to the default group")
 	end
 end
 MoveUnusedRolesToDefault()

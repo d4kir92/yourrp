@@ -7,7 +7,7 @@
 
 hr_pre("gm")
 
-YRP.msg("gm", "Loading Resources")
+YRP.msg("gm", "Loading Resources (Workshop-Downloader)")
 YRP.msg("gm", "")
 
 
@@ -29,16 +29,24 @@ resource.AddWorkshop("182308069")
 
 --Server Workshop Collection
 local _wsitems = engine.GetAddons()
-YRP.msg("gm", "Nr.\t\tName")
---YRP.msg("gm", " Nr.\tID\t\tName")
+local _wscount = table.Count(_wsitems)
+local form = math.log10(_wscount) - math.log10(_wscount) % 1 + 1
+
+local header = ""
+header = header .. " NR"
+for i = 1, form do
+	header = header .. " "
+end
+header = header .. " NAME"
+YRP.msg("gm", header)
+
 local i = 0
 local d = 0
 for k, ws in pairs(_wsitems) do
 	i = i + 1
 
 	if ws.mounted and ws.downloaded then
-		YRP.msg("gm", "+[" .. k .. "]\t[" .. tostring(ws.title) .. "]")
-		--YRP.msg("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "]")
+		YRP.msg("gm", "+[" .. string.format("%0" .. form .. "d", k) .. "] [" .. tostring(ws.title) .. "]")
 
 		resource.AddWorkshop(tostring(ws.wsid))
 		d = d + 1
@@ -50,5 +58,5 @@ YRP.msg("gm", "")
 YRP.msg("gm", "=> " .. tostring(d) .. "/" .. tostring(i) .. " Workshop files that will be send to Clients")
 YRP.msg("gm", "")
 
-YRP.msg("gm", "Loaded Resources")
+YRP.msg("gm", "Loaded Resources (Workshop-Downloader)")
 hr_pos("gm")

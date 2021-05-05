@@ -279,11 +279,15 @@ function YRP.LoadLanguage(short, init)
 
 				if !YRP.check_languagepack() then
 					short = "en"
-					YRP.msg("lang", "Can't find Language-Pack, using Default-Language-Pack.")
+					if CLIENT then
+						YRP.msg("lang", "Can't find Language-Pack, using Default-Language-Pack.")
+					end
 				end
 			else
 				short = "en"
-				YRP.msg("lang", "Can't find Language from Game, using Default-Language-Pack.")
+				if CLIENT then
+					YRP.msg("lang", "Can't find Language from Game, using Default-Language-Pack.")
+				end
 			end
 		else
 			yrp_current_lang.get_language = short
