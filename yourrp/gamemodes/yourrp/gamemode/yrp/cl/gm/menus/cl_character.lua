@@ -91,13 +91,13 @@ local CharMenu = {}
 function toggleCharacterSelection()
 	if YRPIsNoMenuOpen() then
 		openCharacterSelection()
-	else
+	elseif LocalPlayer():Alive() then
 		closeCharacterSelection()
 	end
 end
 
 function closeCharacterSelection()
-	if CharMenu.frame != nil and LocalPlayer():GetDBool("loadedchars", false) == true then
+	if CharMenu.frame != nil and LocalPlayer():GetDBool("loadedchars", false) == true and LocalPlayer():Alive() then
 		closeMenu()
 		CharMenu.frame:Remove()
 		CharMenu.frame = nil
@@ -318,7 +318,7 @@ function LoadCharacters()
 						end
 					else
 						function tmpChar:Paint(pw, ph)
-							draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 240))
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
 
 							draw.SimpleText(self.rpname, "Saira_60", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
@@ -484,7 +484,7 @@ function LoadCharacters()
 				tmpChar:SetText("")
 				function tmpChar:Paint(pw, ph)
 					if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 255))
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
 						
 						local sw = pw - 2 * YRP.ctr(180)
 						local breite = YRP.ctr(50)
@@ -515,7 +515,7 @@ function LoadCharacters()
 				tmpCharEvent:SetText("")
 				function tmpCharEvent:Paint(pw, ph)
 					if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 255))
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
 						
 						draw.SimpleText(YRP.lang_string("LID_event"), "Y_18_500", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
