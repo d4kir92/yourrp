@@ -14,7 +14,7 @@ if SERVER then
 	YRP_QUEUE_Globals["BOOL"] = YRP_QUEUE_Globals["BOOL"] or {}
 	util.AddNetworkString("SetGlobalDBool")
 
-	function SendGlobalDBool(index, bo, ply)
+	function YRPSendGlobalDBool(index, bo, ply)
 		if table.HasValue(YRP_QUEUE_Globals["BOOL"], index) then
 			table.RemoveByValue(YRP_QUEUE_Globals["BOOL"], index)
 			table.insert(YRP_QUEUE_Globals["BOOL"], 1, index)
@@ -37,13 +37,13 @@ if SERVER then
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
-					SendGlobalDBool(index, bo, ply)
+					YRPSendGlobalDBool(index, bo, ply)
 				end)
 			end
 		else
 			-- RETRY later when no traffic
 			timer.Simple(NETDELAY, function()
-				SendGlobalDBool(index, bo, ply)
+				YRPSendGlobalDBool(index, bo, ply)
 			end)
 		end
 	end
@@ -54,7 +54,7 @@ function SetGlobalDBool(index, bo)
 		if YRP_NW_Globals["BOOL"][index] != bo or YRP_NW_Globals["BOOL"][index] == nil then
 			YRP_NW_Globals["BOOL"][index] = bo
 			if SERVER then
-				SendGlobalDBool(index, bo)
+				YRPSendGlobalDBool(index, bo)
 			end
 		end
 	else
@@ -86,7 +86,7 @@ if SERVER then
 	YRP_QUEUE_Globals["STRING"] = YRP_QUEUE_Globals["STRING"] or {}
 	util.AddNetworkString("SetGlobalDString")
 
-	function SendGlobalDString(index, str, ply)
+	function YRPSendGlobalDString(index, str, ply)
 		if table.HasValue(YRP_QUEUE_Globals["STRING"], index) then
 			table.RemoveByValue(YRP_QUEUE_Globals["STRING"], index)
 			table.insert(YRP_QUEUE_Globals["STRING"], 1, index)
@@ -109,13 +109,13 @@ if SERVER then
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
-					SendGlobalDString(index, str, ply)
+					YRPSendGlobalDString(index, str, ply)
 				end)
 			end
 		else
 			-- RETRY later when no traffic
 			timer.Simple(NETDELAY, function()
-				SendGlobalDString(index, str, ply)
+				YRPSendGlobalDString(index, str, ply)
 			end)
 		end
 	end
@@ -126,7 +126,7 @@ function SetGlobalDString(index, str)
 		if YRP_NW_Globals["STRING"][index] != str or YRP_NW_Globals["STRING"][index] == nil then
 			YRP_NW_Globals["STRING"][index] = str
 			if SERVER then
-				SendGlobalDString(index, str)
+				YRPSendGlobalDString(index, str)
 			end
 		end
 	else
@@ -152,7 +152,7 @@ if SERVER then
 	YRP_QUEUE_Globals["INT"] = YRP_QUEUE_Globals["INT"] or {}
 	util.AddNetworkString("SetGlobalDInt")
 
-	function SendGlobalDInt(index, int, ply)
+	function YRPSendGlobalDInt(index, int, ply)
 		if table.HasValue(YRP_QUEUE_Globals["INT"], index) then
 			table.RemoveByValue(YRP_QUEUE_Globals["INT"], index)
 			table.insert(YRP_QUEUE_Globals["INT"], 1, index)
@@ -175,13 +175,13 @@ if SERVER then
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
-					SendGlobalDInt(index, int, ply)
+					YRPSendGlobalDInt(index, int, ply)
 				end)
 			end
 		else
 			-- RETRY later when no traffic
 			timer.Simple(NETDELAY, function()
-				SendGlobalDInt(index, int, ply)
+				YRPSendGlobalDInt(index, int, ply)
 			end)
 		end
 	end
@@ -192,7 +192,7 @@ function SetGlobalDInt(index, int)
 		if YRP_NW_Globals["INT"][index] != int or YRP_NW_Globals["INT"][index] == nil then
 			YRP_NW_Globals["INT"][index] = tonumber(int)
 			if SERVER then
-				SendGlobalDInt(index, int)
+				YRPSendGlobalDInt(index, int)
 			end
 		end
 	else
@@ -219,7 +219,7 @@ if SERVER then
 	YRP_QUEUE_Globals["FLOAT"] = YRP_QUEUE_Globals["FLOAT"] or {}
 	util.AddNetworkString("SetGlobalDFloat")
 
-	function SendGlobalDFloat(index, flo, ply)
+	function YRPSendGlobalDFloat(index, flo, ply)
 		if table.HasValue(YRP_QUEUE_Globals["FLOAT"], index) then
 			table.RemoveByValue(YRP_QUEUE_Globals["FLOAT"], index)
 			table.insert(YRP_QUEUE_Globals["FLOAT"], 1, index)
@@ -242,13 +242,13 @@ if SERVER then
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
-					SendGlobalDFloat(index, flo, ply)
+					YRPSendGlobalDFloat(index, flo, ply)
 				end)
 			end
 		else
 			-- RETRY later when no traffic
 			timer.Simple(NETDELAY, function()
-				SendGlobalDFloat(index, flo, ply)
+				YRPSendGlobalDFloat(index, flo, ply)
 			end)
 		end
 	end
@@ -259,7 +259,7 @@ function SetGlobalDFloat(index, flo)
 		if YRP_NW_Globals["FLOAT"][index] != flo or YRP_NW_Globals["FLOAT"][index] == nil then
 			YRP_NW_Globals["FLOAT"][index] = flo
 			if SERVER then
-				SendGlobalDFloat(index, flo)
+				YRPSendGlobalDFloat(index, flo)
 			end
 		end
 	else
@@ -285,7 +285,7 @@ if SERVER then
 	YRP_QUEUE_Globals["TABLE"] = YRP_QUEUE_Globals["TABLE"] or {}
 	util.AddNetworkString("SetGlobalDTable")
 
-	function SendGlobalDTable(index, tab, ply)
+	function YRPSendGlobalDTable(index, tab, ply)
 		if table.HasValue(YRP_QUEUE_Globals["TABLE"], index) then
 			table.RemoveByValue(YRP_QUEUE_Globals["TABLE"], index)
 			table.insert(YRP_QUEUE_Globals["TABLE"], 1, index)
@@ -308,13 +308,13 @@ if SERVER then
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
-					SendGlobalDTable(index, tab, ply)
+					YRPSendGlobalDTable(index, tab, ply)
 				end)
 			end
 		else
 			-- RETRY later when no traffic
 			timer.Simple(NETDELAY, function()
-				SendGlobalDTable(index, tab, ply)
+				YRPSendGlobalDTable(index, tab, ply)
 			end)
 		end
 	end
@@ -325,7 +325,7 @@ function SetGlobalDTable(index, tab)
 		if YRP_NW_Globals["TABLE"][index] != tab or YRP_NW_Globals["TABLE"][index] == nil then
 			YRP_NW_Globals["TABLE"][index] = tab
 			if SERVER then
-				SendGlobalDTable(index, tab)
+				YRPSendGlobalDTable(index, tab)
 			end
 		end
 	else
@@ -362,7 +362,7 @@ if SERVER then
 
 		timer.Simple(ti, function()
 			for i, v in pairs(YRP_NW_Globals["BOOL"]) do
-				SendGlobalDBool(i, v, ply)
+				YRPSendGlobalDBool(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 15)
 		end)
@@ -370,7 +370,7 @@ if SERVER then
 		ti = ti + interval
 		timer.Simple(ti, function()
 			for i, v in pairs(YRP_NW_Globals["STRING"]) do
-				SendGlobalDString(i, v, ply)
+				YRPSendGlobalDString(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 30)
 		end)
@@ -378,7 +378,7 @@ if SERVER then
 		ti = ti + interval
 		timer.Simple(ti, function()
 			for i, v in pairs(YRP_NW_Globals["INT"]) do
-				SendGlobalDInt(i, v, ply)
+				YRPSendGlobalDInt(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 45)
 		end)
@@ -386,7 +386,7 @@ if SERVER then
 		ti = ti + interval
 		timer.Simple(ti, function()
 			for i, v in pairs(YRP_NW_Globals["FLOAT"]) do
-				SendGlobalDFloat(i, v, ply)
+				YRPSendGlobalDFloat(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 60)
 		end)
@@ -394,7 +394,7 @@ if SERVER then
 		ti = ti + interval
 		timer.Simple(ti, function()
 			for i, v in pairs(YRP_NW_Globals["TABLE"]) do
-				SendGlobalDTable(i, v, ply)
+				YRPSendGlobalDTable(i, v, ply)
 			end
 			ply:SetDInt("yrp_load_glo", 75)
 		end)

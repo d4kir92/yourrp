@@ -76,7 +76,7 @@ function con_th(ply)
 	newval2 = math.Clamp(newval2, 0.0, ply:GetMaxPermille())
 	ply:SetDFloat("permille", newval2)
 
-	if !IsCookPlaying() then return false end
+	if GetGlobalDBool("bool_onlywhencook", false) and !IsCookPlaying() then return false end
 	local newval = tonumber(ply:GetDFloat("thirst", 0.0)) - 0.01 * GetGlobalDFloat("float_scale_thirst", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
 	ply:SetDFloat("thirst", newval)

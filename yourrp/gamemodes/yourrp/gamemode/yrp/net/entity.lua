@@ -6,17 +6,17 @@ YRP_NW_Ents = YRP_NW_Ents or {}
 YRP_QUEUE_Ents = YRP_QUEUE_Ents or {}
 
 -- Delay when traffic
-local NETDELAY = 0.002
+local NETDELAY = 0.005
 
 -- Delay when no traffic but wrong entry
-local RETDELAY = 0.001
+local RETDELAY = 0.003
 
 -- STRING
 if SERVER then
 	YRP_QUEUE_Ents["STRING"] = YRP_QUEUE_Ents["STRING"] or {}
 	util.AddNetworkString("SetDString")
 
-	function SendDString(entindex, key, value, ply)
+	function YRPSendDString(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["STRING"], key) then
 			table.RemoveByValue(YRP_QUEUE_Ents["STRING"], key)
 			table.insert(YRP_QUEUE_Ents["STRING"], 1, key)
@@ -45,13 +45,13 @@ if SERVER then
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
-					SendDString(entindex, key, value, ply)
+					YRPSendDString(entindex, key, value, ply)
 				end)
 			end
 		else
 			-- RETRY later when no traffic
 			timer.Simple(NETDELAY, function()
-				SendDString(entindex, key, value, ply)
+				YRPSendDString(entindex, key, value, ply)
 			end)
 		end
 	end
@@ -65,7 +65,7 @@ function SetDString(entindex, key, value)
 		if YRP_NW_Ents[entindex]["STRING"][key] != value or YRP_NW_Ents[entindex]["STRING"][key] == nil then
 			YRP_NW_Ents[entindex]["STRING"][key] = value
 			if SERVER then
-				SendDString(entindex, key, value)
+				YRPSendDString(entindex, key, value)
 			end
 		end
 	end
@@ -99,7 +99,7 @@ if SERVER then
 	YRP_QUEUE_Ents["BOOL"] = YRP_QUEUE_Ents["BOOL"] or {}
 	util.AddNetworkString("SetDBool")
 
-	function SendDBool(entindex, key, value, ply)
+	function YRPSendDBool(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["BOOL"], key) then
 			table.RemoveByValue(YRP_QUEUE_Ents["BOOL"], key)
 			table.insert(YRP_QUEUE_Ents["BOOL"], 1, key)
@@ -128,13 +128,13 @@ if SERVER then
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
-					SendDBool(entindex, key, value, ply)
+					YRPSendDBool(entindex, key, value, ply)
 				end)
 			end
 		else
 			-- RETRY later when no traffic
 			timer.Simple(NETDELAY, function()
-				SendDBool(entindex, key, value, ply)
+				YRPSendDBool(entindex, key, value, ply)
 			end)
 		end
 	end
@@ -147,7 +147,7 @@ function SetDBool(entindex, key, value)
 		if YRP_NW_Ents[entindex]["BOOL"][key] != value or YRP_NW_Ents[entindex]["BOOL"][key] == nil then
 			YRP_NW_Ents[entindex]["BOOL"][key] = value
 			if SERVER then
-				SendDBool(entindex, key, value)
+				YRPSendDBool(entindex, key, value)
 			end
 		end
 	end
@@ -193,7 +193,7 @@ if SERVER then
 	YRP_QUEUE_Ents["INT"] = YRP_QUEUE_Ents["INT"] or {}
 	util.AddNetworkString("SetDInt")
 
-	function SendDInt(entindex, key, value, ply)
+	function YRPSendDInt(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["INT"], key) then
 			table.RemoveByValue(YRP_QUEUE_Ents["INT"], key)
 			table.insert(YRP_QUEUE_Ents["INT"], 1, key)
@@ -222,13 +222,13 @@ if SERVER then
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
-					SendDInt(entindex, key, value, ply)
+					YRPSendDInt(entindex, key, value, ply)
 				end)
 			end
 		else
 			-- RETRY later when no traffic
 			timer.Simple(NETDELAY, function()
-				SendDInt(entindex, key, value, ply)
+				YRPSendDInt(entindex, key, value, ply)
 			end)
 		end
 	end
@@ -241,7 +241,7 @@ function SetDInt(entindex, key, value)
 		if YRP_NW_Ents[entindex]["INT"][key] != value or YRP_NW_Ents[entindex]["INT"][key] == nil then
 			YRP_NW_Ents[entindex]["INT"][key] = tonumber(value)
 			if SERVER then
-				SendDInt(entindex, key, tonumber(value))
+				YRPSendDInt(entindex, key, tonumber(value))
 			end
 		end
 	else
@@ -281,7 +281,7 @@ if SERVER then
 	YRP_QUEUE_Ents["FLOAT"] = YRP_QUEUE_Ents["FLOAT"] or {}
 	util.AddNetworkString("SetDFloat")
 
-	function SendDFloat(entindex, key, value, ply)
+	function YRPSendDFloat(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["FLOAT"], key) then
 			table.RemoveByValue(YRP_QUEUE_Ents["FLOAT"], key)
 			table.insert(YRP_QUEUE_Ents["FLOAT"], 1, key)
@@ -310,13 +310,13 @@ if SERVER then
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
-					SendDFloat(entindex, key, value, ply)
+					YRPSendDFloat(entindex, key, value, ply)
 				end)
 			end
 		else
 			-- RETRY later when no traffic
 			timer.Simple(NETDELAY, function()
-				SendDFloat(entindex, key, value, ply)
+				YRPSendDFloat(entindex, key, value, ply)
 			end)
 		end
 	end
@@ -337,12 +337,12 @@ function SetDFloat(entindex, key, value, range)
 							local ent = ents.GetByIndex( entindex )
 							local dist = p:GetPos():Distance(ent:GetPos())
 							if dist <= range then
-								SendDFloat(entindex, key, value, p)
+								YRPSendDFloat(entindex, key, value, p)
 							end
 						end
 					end
 				else
-					SendDFloat(entindex, key, value)
+					YRPSendDFloat(entindex, key, value)
 				end
 			end
 		end
@@ -386,7 +386,7 @@ if SERVER then
 	YRP_QUEUE_Ents["ENTITY"] = YRP_QUEUE_Ents["ENTITY"] or {}
 	util.AddNetworkString("SetDEntity")
 
-	function SendDEntity(entindex, key, value, ply)
+	function YRPSendDEntity(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["ENTITY"], key) then
 			table.RemoveByValue(YRP_QUEUE_Ents["ENTITY"], key)
 			table.insert(YRP_QUEUE_Ents["ENTITY"], 1, key)
@@ -415,13 +415,13 @@ if SERVER then
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
-					SendDEntity(entindex, key, value, ply)
+					YRPSendDEntity(entindex, key, value, ply)
 				end)
 			end
 		else
 			-- RETRY later when no traffic
 			timer.Simple(NETDELAY, function()
-				SendDEntity(entindex, key, value, ply)
+				YRPSendDEntity(entindex, key, value, ply)
 			end)
 		end
 	end
@@ -434,7 +434,7 @@ function SetDEntity(entindex, key, value)
 		if YRP_NW_Ents[entindex]["ENTITY"][key] != value or YRP_NW_Ents[entindex]["ENTITY"][key] == nil then
 			YRP_NW_Ents[entindex]["ENTITY"][key] = value
 			if SERVER then
-				SendDEntity(entindex, key, value)
+				YRPSendDEntity(entindex, key, value)
 			end
 		end
 	else
@@ -474,7 +474,7 @@ if SERVER then
 	YRP_QUEUE_Ents["TABLE"] = YRP_QUEUE_Ents["TABLE"] or {}
 	util.AddNetworkString("SetDTable")
 
-	function SendDTable(entindex, key, value, ply)
+	function YRPSendDTable(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["TABLE"], key) then
 			table.RemoveByValue(YRP_QUEUE_Ents["TABLE"], key)
 			table.insert(YRP_QUEUE_Ents["TABLE"], 1, key)
@@ -503,13 +503,13 @@ if SERVER then
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
-					SendDTable(entindex, key, value, ply)
+					YRPSendDTable(entindex, key, value, ply)
 				end)
 			end
 		else
 			-- RETRY later when no traffic
 			timer.Simple(NETDELAY, function()
-				SendDTable(entindex, key, value, ply)
+				YRPSendDTable(entindex, key, value, ply)
 			end)
 		end
 	end
@@ -522,7 +522,7 @@ function SetDTable(entindex, key, value)
 		if YRP_NW_Ents[entindex]["TABLE"][key] != value or YRP_NW_Ents[entindex]["TABLE"][key] == nil then
 			YRP_NW_Ents[entindex]["TABLE"][key] = value
 			if SERVER then
-				SendDTable(entindex, key, value)
+				YRPSendDTable(entindex, key, value)
 			end
 		end
 	else
@@ -569,7 +569,7 @@ function ENTITY:SetDInit(key, value)
 end
 if SERVER then
 	util.AddNetworkString("SetDInit")
-	function SendDInit(entindex, ply)
+	function YRPSendDInit(entindex, ply)
 		if entindex != nil then
 			net.Start("SetDInit")
 				net.WriteUInt(entindex, 16)
@@ -620,7 +620,7 @@ if SERVER then
 					YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
 					if table.Count(YRP_NW_Ents[entindex]["BOOL"]) > 0 then
 						for i, v in pairs(YRP_NW_Ents[entindex]["BOOL"]) do
-							SendDBool(entindex, i, v, ply)
+							YRPSendDBool(entindex, i, v, ply)
 						end
 					end
 				end
@@ -636,7 +636,7 @@ if SERVER then
 					YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
 					if table.Count(YRP_NW_Ents[entindex]["STRING"]) > 0 then
 						for i, v in pairs(YRP_NW_Ents[entindex]["STRING"]) do
-							SendDString(entindex, i, v, ply)
+							YRPSendDString(entindex, i, v, ply)
 						end
 					end
 				end
@@ -653,7 +653,7 @@ if SERVER then
 					if table.Count(YRP_NW_Ents[entindex]["INT"]) > 0 then
 						for i, v in pairs(YRP_NW_Ents[entindex]["INT"]) do
 							if i != "yrp_load_glo" and i != "yrp_load_ent" then
-								SendDInt(entindex, i, v, ply)
+								YRPSendDInt(entindex, i, v, ply)
 							end
 						end
 					end
@@ -670,7 +670,7 @@ if SERVER then
 					YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
 					if table.Count(YRP_NW_Ents[entindex]["FLOAT"]) > 0 then
 						for i, v in pairs(YRP_NW_Ents[entindex]["FLOAT"]) do
-							SendDFloat(entindex, i, v, ply)
+							YRPSendDFloat(entindex, i, v, ply)
 						end
 					end
 				end
@@ -686,7 +686,7 @@ if SERVER then
 					YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
 					if table.Count(YRP_NW_Ents[entindex]["TABLE"]) > 0 then
 						for i, v in pairs(YRP_NW_Ents[entindex]["TABLE"]) do
-							SendDTable(entindex, i, v, ply)
+							YRPSendDTable(entindex, i, v, ply)
 						end
 					end
 				end
@@ -695,7 +695,7 @@ if SERVER then
 		end)
 
 		timer.Simple(ti, function()
-			SendDInit(entindex, ply)
+			YRPSendDInit(entindex, ply)
 			ply:SetDInt("yrp_load_ent", 100)
 			
 			sending = false
@@ -703,19 +703,20 @@ if SERVER then
 	end
 end
 
-function RemoveFromEntTable( entindex )
+function YRPRemoveFromEntTable( entindex )
 	if !sending then
 		if istable(YRP_NW_Ents[entindex]) then
-			table.RemoveByValue(YRP_NW_Ents, entindex)
+			YRP_NW_Ents[entindex] = nil
+			--table.RemoveByValue(YRP_NW_Ents, entindex)
 		end
 	else
 		timer.Simple(0.1, function()
-			RemoveFromEntTable( entindex )
+			YRPRemoveFromEntTable( entindex )
 		end)
 	end
 end
 
 function GM:EntityRemoved( ent )
 	local entindex = ent:EntIndex()
-	RemoveFromEntTable( entindex )
+	YRPRemoveFromEntTable( entindex )
 end

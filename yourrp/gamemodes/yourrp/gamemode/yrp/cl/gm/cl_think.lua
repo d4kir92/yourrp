@@ -375,7 +375,7 @@ function KeyPress()
 				net.SendToServer()
 			end
 		end
-
+		
 		if !vgui.CursorVisible() then
 			if input.IsKeyDown(get_keybind("view_switch")) then
 				--[[ When toggle view ]]--
@@ -392,7 +392,7 @@ function KeyPress()
 						if _old_view > 0 then
 							lply.view_range_view = _old_view
 						else
-							lply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "0"))
+							lply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "200"))
 						end
 					end
 
@@ -409,8 +409,8 @@ function KeyPress()
 
 						lply.view_range_view = lply.view_range_view + 1
 
-						if tonumber(lply.view_range_view) > tonumber(GetGlobalDString("text_view_distance", "0")) then
-							lply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "0"))
+						if tonumber(lply.view_range_view) > tonumber(GetGlobalDString("text_view_distance", "200")) then
+							lply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "200"))
 						end
 						lply.view_range_old = lply.view_range_view
 					elseif input.IsKeyDown(get_keybind("view_zoom_in")) then

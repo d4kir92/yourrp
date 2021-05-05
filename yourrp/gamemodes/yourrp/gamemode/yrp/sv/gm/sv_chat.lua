@@ -155,6 +155,7 @@ function show_tag_dev(sender)
 	end
 	return ""
 end
+
 function show_tag_ug(sender)
 	if !sender:GetDBool("tag_ug", false) then
 		sender:SetDBool("tag_ug", true)
@@ -469,11 +470,6 @@ function DoCommand(sender, command, text)
 
 	if command == "setlevel" then
 		set_level(sender, text)
-		return ""
-	end
-
-	if command == "sleep" then
-		do_sleep(sender)
 		return ""
 	end
 

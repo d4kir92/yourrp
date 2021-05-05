@@ -289,3 +289,5 @@ function ENT:OnRemove()
 	self:StopSound("moneyprintersound")
 	self:SetDBool("working", false)
 end
+
+

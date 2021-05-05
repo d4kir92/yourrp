@@ -52,6 +52,7 @@ function tp_to(ply, pos)
 			else
 				ply:SetAngles(_tmpAngle)
 			end
+			return true
 		else
 			for i = 1, 3 do
 				for j = 0, 360, 45 do
@@ -65,10 +66,12 @@ function tp_to(ply, pos)
 						else
 							ply:SetAngles(_tmpAngle)
 						end
-						return
+						return true
 					end
 				end
 			end
 		end
 	end
+	YRP.msg("note", ">>> FAILED TO TELEPORT: " .. ply:RPName() .. " (not enough space!) <<<")
+	return false
 end

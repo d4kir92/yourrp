@@ -33,7 +33,7 @@ function teleportToSpawnpoint(ply)
 		end)
 		return false
 	else
-		YRP.msg("note", "teleportToSpawnpoint " .. ply:Nick())
+		--YRP.msg("note", "teleportToSpawnpoint " .. ply:Nick())
 		local rolTab = ply:GetRolTab()
 		local groTab = ply:GetGroTab()
 		local chaTab = ply:GetChaTab()
@@ -44,10 +44,12 @@ function teleportToSpawnpoint(ply)
 				local _tmpGroupSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'GroupSpawnpoint' AND linkID = '" .. groTab.uniqueID .. "'")
 				if _tmpRoleSpawnpoints != nil then
 					local _randomSpawnPoint = table.Random(_tmpRoleSpawnpoints)
-					YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint (" .. tostring(rolTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
 
 					local _tmp = string.Explode(",", _randomSpawnPoint.position)
-					tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+					local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+					if worked then
+						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint (" .. tostring(rolTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+					end
 					_tmp = string.Explode(",", _randomSpawnPoint.angle)
 					if ply:IsPlayer() then
 						ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
@@ -55,10 +57,12 @@ function teleportToSpawnpoint(ply)
 					return true
 				elseif _tmpGroupSpawnpoints != nil then
 					local _randomSpawnPoint = table.Random(_tmpGroupSpawnpoints)
-					YRP.msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint (" .. tostring(groTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
-
+					
 					local _tmp = string.Explode(",", _randomSpawnPoint.position)
-					tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+					local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+					if worked then
+						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint (" .. tostring(groTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+					end
 					_tmp = string.Explode(",", _randomSpawnPoint.angle)
 					if ply:IsPlayer() then
 						ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
@@ -77,9 +81,11 @@ function teleportToSpawnpoint(ply)
 							local _gs = SQL_SELECT(DATABASE_NAME, "*", "linkID = " .. _ug.uniqueID)
 							if _gs != nil then
 								local _randomSpawnPoint = table.Random(_gs)
-								YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENTGroupSpawnpoint (" .. tostring(_ug.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
 								local _tmp = string.Explode(",", _randomSpawnPoint.position)
-								tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+								local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+								if worked then
+									YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENTGroupSpawnpoint (" .. tostring(_ug.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+								end
 								_tmp = string.Explode(",", _randomSpawnPoint.angle)
 								if ply:IsPlayer() then
 									ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
