@@ -5,6 +5,7 @@
 include("cl_settings_client_charakter.lua")
 include("cl_settings_client_keybinds.lua")
 include("cl_settings_server_give.lua")
+include("cl_settings_server_events.lua")
 include("cl_settings_server_licenses.lua")
 include("cl_settings_server_shops.lua")
 include("cl_settings_server_map.lua")
@@ -127,6 +128,12 @@ function SettingsTabsContent()
 
 	sm.tabsite = tabs.site
 	if sm.currentsite == "LID_usermanagement" then
+		if lply:GetDBool("bool_events", false) then
+			tabs:AddOption("LID_event", function(parent)
+				OpenSettingsEvents()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_event")))
+			end)
+		end
 		if lply:GetDBool("bool_players", false) then
 			tabs:AddOption("LID_settings_players", function(parent)
 				OpenSettingsPlayers()
@@ -140,7 +147,7 @@ function SettingsTabsContent()
 			end)
 		end
 		
-		tabs:GoToSite("LID_settings_players")
+		tabs:GoToSite("LID_event")
 	elseif sm.currentsite == "LID_moderation" then
 		if lply:GetDBool("bool_status", false) then
 			tabs:AddOption("LID_settings_status", function(parent)

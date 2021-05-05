@@ -743,6 +743,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 	ACCESSAddHr()
 	-- LID_usermanagement
+	ACCESSAddCheckBox("bool_events", "LID_event")
 	ACCESSAddCheckBox("bool_players", "LID_settings_players")
 	ACCESSAddCheckBox("bool_whitelist", "LID_whitelist")
 

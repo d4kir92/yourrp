@@ -70,7 +70,7 @@ function sendRoleWhitelist(ply)
 		end
 	end
 
-	if ply:CanAccess("bool_players") or ply:CanAccess("bool_whitelist") then
+	if ply:CanAccess("bool_whitelist") then
 		local _tmpWhiteList = SQL_SELECT("yrp_role_whitelist", "*", nil)
 
 		if !wk(_tmpWhiteList) then
