@@ -38,80 +38,78 @@ function teleportToSpawnpoint(ply)
 		local chaTab = ply:GetChaTab()
 
 		if wk(chaTab) and wk(groTab) and wk(rolTab) then
-			if SQL_STR_OUT(chaTab.map) == GetMapNameDB() then
-				local _tmpRoleSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'RoleSpawnpoint' AND linkID = '" .. rolTab.uniqueID .. "'")
-				local _tmpGroupSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'GroupSpawnpoint' AND linkID = '" .. groTab.uniqueID .. "'")
-				if _tmpRoleSpawnpoints != nil then
-					local _randomSpawnPoint = table.Random(_tmpRoleSpawnpoints)
+			local _roleSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'RoleSpawnpoint' AND linkID = '" .. rolTab.uniqueID .. "'")
+			local _groupSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'GroupSpawnpoint' AND linkID = '" .. groTab.uniqueID .. "'")
+			if _roleSpawnpoints != nil then
+				local _randomSpawnPoint = table.Random(_roleSpawnpoints)
 
-					local _tmp = string.Explode(",", _randomSpawnPoint.position)
-					local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
-					if worked then
-						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint")
-					else
-						YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to RoleSpawnpoint")
-					end
-					_tmp = string.Explode(",", _randomSpawnPoint.angle)
-					if ply:IsPlayer() then
-						ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
-					end
-					return true
-				elseif _tmpGroupSpawnpoints != nil then
-					local _randomSpawnPoint = table.Random(_tmpGroupSpawnpoints)
-					
-					local _tmp = string.Explode(",", _randomSpawnPoint.position)
-					local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
-					if worked then
-						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint")
-					else
-						YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to GroupSpawnpoint")
-					end
-					_tmp = string.Explode(",", _randomSpawnPoint.angle)
-					if ply:IsPlayer() then
-						ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
-					end
-					return true
+				local _tmp = string.Explode(",", _randomSpawnPoint.position)
+				local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+				if worked then
+					YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint")
 				else
-					local _has_ug = true
-					local _ug = {}
-					_ug.int_parentgroup = groTab.int_parentgroup
-
-					while (_has_ug) do
-						_ug = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. _ug.int_parentgroup .. "'")
-
-						if _ug != nil then
-							_ug = _ug[1]
-							local _gs = SQL_SELECT(DATABASE_NAME, "*", "linkID = " .. _ug.uniqueID)
-							if _gs != nil then
-								local _randomSpawnPoint = table.Random(_gs)
-								local _tmp = string.Explode(",", _randomSpawnPoint.position)
-								local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
-								if worked then
-									YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENTGroupSpawnpoint")
-								else
-									YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to PARENTGroupSpawnpoint")
-								end
-								_tmp = string.Explode(",", _randomSpawnPoint.angle)
-								if ply:IsPlayer() then
-									ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
-								end
-								return true
-							end
-						else
-							_has_ug = false
-						end
-					end
-					local _str = "[" .. tostring(groTab.string_name) .. "]" .. " has NO role or group spawnpoint!"
-					YRP.msg("error", _str)
-
-					net.Start("yrp_noti")
-						net.WriteString("nogroupspawn")
-						net.WriteString(tostring(groTab.string_name))
-					net.Broadcast()
-
-					tp_to(ply, ply:GetPos())
-					return false
+					YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to RoleSpawnpoint")
 				end
+				_tmp = string.Explode(",", _randomSpawnPoint.angle)
+				if ply:IsPlayer() then
+					ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+				end
+				return true
+			elseif _groupSpawnpoints != nil then
+				local _randomSpawnPoint = table.Random(_groupSpawnpoints)
+				
+				local _tmp = string.Explode(",", _randomSpawnPoint.position)
+				local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+				if worked then
+					YRP.msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint")
+				else
+					YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to GroupSpawnpoint")
+				end
+				_tmp = string.Explode(",", _randomSpawnPoint.angle)
+				if ply:IsPlayer() then
+					ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+				end
+				return true
+			else
+				local _has_ug = true
+				local _ug = {}
+				_ug.int_parentgroup = groTab.int_parentgroup
+
+				while (_has_ug) do
+					_ug = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. _ug.int_parentgroup .. "'")
+
+					if _ug != nil then
+						_ug = _ug[1]
+						local _gs = SQL_SELECT(DATABASE_NAME, "*", "linkID = " .. _ug.uniqueID)
+						if _gs != nil then
+							local _randomSpawnPoint = table.Random(_gs)
+							local _tmp = string.Explode(",", _randomSpawnPoint.position)
+							local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
+							if worked then
+								YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENTGroupSpawnpoint")
+							else
+								YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to PARENTGroupSpawnpoint")
+							end
+							_tmp = string.Explode(",", _randomSpawnPoint.angle)
+							if ply:IsPlayer() then
+								ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
+							end
+							return true
+						end
+					else
+						_has_ug = false
+					end
+				end
+				local _str = "[" .. tostring(groTab.string_name) .. "]" .. " has NO role or group spawnpoint!"
+				YRP.msg("error", _str)
+
+				net.Start("yrp_noti")
+					net.WriteString("nogroupspawn")
+					net.WriteString(tostring(groTab.string_name))
+				net.Broadcast()
+
+				tp_to(ply, ply:GetPos())
+				return false
 			end
 		else
 			YRP.msg("error", "[teleportToSpawnpoint] FAILED! r: " .. tostring(roltab) .. " g: " .. tostring(groTab) .. " c: " .. tostring(chaTab))
