@@ -137,9 +137,9 @@ if CLIENT then
 				return false
 			end
 		elseif element == "ID" then
-			return self:HasWeapon("yrp_idcard")
+			return true
 		else
-			-- 
+			-- anything else
 		end
 		return true
 	end
