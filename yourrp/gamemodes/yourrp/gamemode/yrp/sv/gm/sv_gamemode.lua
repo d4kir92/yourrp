@@ -54,26 +54,14 @@ function GM:PlayerConnect(name, ip)
 end
 
 function GM:PlayerInitialSpawn(ply)
-	YRP.msg("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
+	--YRP.msg("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
 
-	if !IsValid(ply) then return end
+	if !IsValid(ply) then
+		return
+	end
 
 	if IsValid(ply) and ply.KillSilent then
 		ply:KillSilent()
-	end
-
-	if ply:HasCharacterSelected() then
-		local rolTab = ply:GetRolTab()
-		if wk(rolTab) then
-			timer.Simple(1, function()
-
-				SetRole(ply, rolTab.uniqueID)
-
-				--timer.Simple(0.1, function()
-					--teleportToSpawnpoint(ply)
-				--end)
-			end)
-		end
 	end
 end
 
@@ -88,7 +76,7 @@ function GM:PlayerSelectSpawn(ply)
 end
 
 hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
-	YRP.msg("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
+	--YRP.msg("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
 
 	ply:SetDBool("isserverdedicated", game.IsDedicated())
 
@@ -103,7 +91,7 @@ end)
 YRP = YRP or {}
 
 function YRP:Loadout(ply)
-	YRP.msg("gm", "[Loadout] " .. ply:YRPName() .. " get YourRP Loadout.")
+	--YRP.msg("gm", "[Loadout] " .. ply:YRPName() .. " get YourRP Loadout.")
 	ply:SetDBool("bool_loadouted", false)
 
 	ply:SetDInt("speak_channel", 0)
@@ -128,7 +116,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 		ply:SetDString("licenseNames", "")
 
 		ply:StripWeapons()
-		YRP.msg("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
+		--YRP.msg("gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment.")
 		YRP:Loadout(ply)
 
 		if ply:HasCharacterSelected() then
@@ -190,7 +178,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 				YRP.msg("error", "[PlayerLoadout] failed at plytab.")
 			end
 		else
-			YRP.msg("note", "[PlayerLoadout] " .. ply:YRPName() .. " has no character selected.")
+			--YRP.msg("note", "[PlayerLoadout] " .. ply:YRPName() .. " has no character selected.")
 		end
 
 		ply:UpdateBackpack()
@@ -210,8 +198,10 @@ hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 		ply:SetupHands()
 
 		timer.Simple(1.0, function()
-			teleportToSpawnpoint(ply)
-			ply:SetDBool("yrp_spawning", false)
+			if ply:HasCharacterSelected() then
+				teleportToSpawnpoint(ply)
+				ply:SetDBool("yrp_spawning", false)
+			end
 		end)
 	end
 end)

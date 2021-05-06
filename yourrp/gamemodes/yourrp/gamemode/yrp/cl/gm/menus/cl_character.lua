@@ -451,7 +451,7 @@ function LoadCharacters()
 						end
 					end
 
-					if chars[i].char.uniqueID == LocalPlayer():CharID() then--chars.plytab.CurrentCharacter then
+					if chars[i].char.uniqueID == LocalPlayer():CharID() then
 						curChar = tonumber(LocalPlayer():CharID())
 						tmpChar:DoClick()
 					end

@@ -33,7 +33,6 @@ function teleportToSpawnpoint(ply)
 		end)
 		return false
 	else
-		--YRP.msg("note", "teleportToSpawnpoint " .. ply:Nick())
 		local rolTab = ply:GetRolTab()
 		local groTab = ply:GetGroTab()
 		local chaTab = ply:GetChaTab()
@@ -48,7 +47,9 @@ function teleportToSpawnpoint(ply)
 					local _tmp = string.Explode(",", _randomSpawnPoint.position)
 					local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 					if worked then
-						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint (" .. tostring(rolTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint")
+					else
+						YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to RoleSpawnpoint")
 					end
 					_tmp = string.Explode(",", _randomSpawnPoint.angle)
 					if ply:IsPlayer() then
@@ -61,7 +62,9 @@ function teleportToSpawnpoint(ply)
 					local _tmp = string.Explode(",", _randomSpawnPoint.position)
 					local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 					if worked then
-						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint (" .. tostring(groTab.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+						YRP.msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint")
+					else
+						YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to GroupSpawnpoint")
 					end
 					_tmp = string.Explode(",", _randomSpawnPoint.angle)
 					if ply:IsPlayer() then
@@ -84,7 +87,9 @@ function teleportToSpawnpoint(ply)
 								local _tmp = string.Explode(",", _randomSpawnPoint.position)
 								local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 								if worked then
-									YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENTGroupSpawnpoint (" .. tostring(_ug.string_name) .. ") " .. tostring(_randomSpawnPoint.position))
+									YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENTGroupSpawnpoint")
+								else
+									YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to PARENTGroupSpawnpoint")
 								end
 								_tmp = string.Explode(",", _randomSpawnPoint.angle)
 								if ply:IsPlayer() then
@@ -97,7 +102,7 @@ function teleportToSpawnpoint(ply)
 						end
 					end
 					local _str = "[" .. tostring(groTab.string_name) .. "]" .. " has NO role or group spawnpoint!"
-					YRP.msg("note", _str)
+					YRP.msg("error", _str)
 
 					net.Start("yrp_noti")
 						net.WriteString("nogroupspawn")
@@ -109,6 +114,7 @@ function teleportToSpawnpoint(ply)
 				end
 			end
 		else
+			YRP.msg("error", "[teleportToSpawnpoint] FAILED! r: " .. tostring(roltab) .. " g: " .. tostring(groTab) .. " c: " .. tostring(chaTab))
 			return false
 		end
 	end

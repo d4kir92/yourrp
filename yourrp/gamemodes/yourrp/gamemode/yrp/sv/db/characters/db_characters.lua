@@ -624,7 +624,7 @@ end
 
 --[[ Client ask for Characters ]]--
 net.Receive("yrp_get_characters", function(len, ply)
-	YRP.msg("db", ply:YRPName() .. " ask for characters")
+	--YRP.msg("db", ply:YRPName() .. " ask for characters")
 	send_characters(ply)
 end)
 
@@ -717,29 +717,9 @@ end)
 
 util.AddNetworkString("EnterWorld")
 net.Receive("EnterWorld", function(len, ply)
-	local roltab = ply:GetRolTab()
-	if wk(roltab) then
-		updateRoleUses(roltab.uniqueID)
-	end
+	local cuid = net.ReadString()
 
-	ply:SetDBool("yrp_chararchived", false)
-
-	local char = net.ReadString()
-	if char != ply:CharID() then
-		if GetGlobalDBool("bool_removebuildingownercharswitch", false) then
-			BuildingRemoveOwner(ply:SteamID())
-		end
-		hook.Run("yrp_switched_character", ply, ply:CharID(), char)
-	end
-	if wk(char) then
-		SQL_UPDATE("yrp_players", "CurrentCharacter = '" .. char .. "'", "SteamID = '" .. ply:SteamID() .. "'")
-		ply:SetDBool("yrp_spawning", true)
-		timer.Simple(0.1, function()
-			ply:Spawn()
-		end)
-	else
-		YRP.msg("gm", "No valid character selected (" .. tostring(char) .. ")")
-	end
+	YRPSpawnAsCharacter(ply, cuid, false)
 end)
 
 function SendBodyGroups(ply)

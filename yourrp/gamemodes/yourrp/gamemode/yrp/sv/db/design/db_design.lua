@@ -114,7 +114,7 @@ end)
 local once = false
 util.AddNetworkString("ply_changed_resolution")
 net.Receive("ply_changed_resolution", function(len, ply)
-	YRP.msg("note", ply:YRPName() .. " changed the Resolution.")
+	--YRP.msg("note", ply:YRPName() .. " changed the Resolution.")
 	if !once then
 		once = true
 		return

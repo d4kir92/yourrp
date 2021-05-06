@@ -121,7 +121,7 @@ end
 
 util.AddNetworkString("loaded_doors")
 function loadDoors()
-	YRP.msg("db", "[Buildings] Setting up Doors!")
+	--YRP.msg("db", "[Buildings] Setting up Doors!")
 	local _tmpDoors = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 
 	if wk(_tmpDoors) then
@@ -197,18 +197,18 @@ function loadDoors()
 		end
 	end
 
-	YRP.msg("db", "[Buildings] Map Doors are now available!")
+	--YRP.msg("db", "[Buildings] Map Doors are now available!")
 	SetGlobalDBool("loaded_doors", true)
 	net.Start("loaded_doors")
 	net.Broadcast()
 end
 
 function check_map_doors()
-	YRP.msg("db", "[Buildings] Get Database Doors and Buildings")
+	--YRP.msg("db", "[Buildings] Get Database Doors and Buildings")
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 	local _tmpTable2 = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
 	if wk(_tmpTable) and wk(_tmpTable2) then
-		YRP.msg("db", "[Buildings] Found! (" .. tostring(table.Count(_tmpTable)) .. " Doors | " .. tostring(table.Count(_tmpTable)) .. " Buildings)")
+		--YRP.msg("db", "[Buildings] Found! (" .. tostring(table.Count(_tmpTable)) .. " Doors | " .. tostring(table.Count(_tmpTable)) .. " Buildings)")
 		local doors = GetAllDoors()
 		if (table.Count(_tmpTable)) < (table.Count(doors)) then
 			YRP.msg("db", "[Buildings] New doors found!")

@@ -5,7 +5,7 @@
 local c = 0
 function PlayerLoadedGame(ply)
 	c = c + 1
-	YRP.msg("note", tostring(ply:YRPName()) .. " finish loading. Count: " ..  c)
+
 	local tab = net.ReadTable()
 	local OS_Windows = tab.iswindows
 	local OS_Linux = tab.islinux
@@ -59,7 +59,7 @@ function PlayerLoadedGame(ply)
 
 	UpdateDarkRPTable(ply)
 
-	YRP.msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading. Count: " ..  c)
+	YRP.msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading.")-- Count: " ..  c)
 end
 
 hook.Add("Think", "yrp_loaded_game", function()

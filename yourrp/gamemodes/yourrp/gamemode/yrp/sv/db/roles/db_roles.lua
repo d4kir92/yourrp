@@ -130,7 +130,7 @@ function MoveUnusedRolesToDefault()
 			local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
 			if !wk(group) then
 				changed = true
-				print("AHA2")
+
 				SQL_UPDATE(DATABASE_NAME, "int_groupID = '1', int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
 			end
 		end

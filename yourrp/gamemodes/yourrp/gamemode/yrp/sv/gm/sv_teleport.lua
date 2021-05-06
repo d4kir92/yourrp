@@ -52,6 +52,7 @@ function tp_to(ply, pos)
 			else
 				ply:SetAngles(_tmpAngle)
 			end
+
 			return true
 		else
 			for i = 1, 3 do
@@ -66,6 +67,7 @@ function tp_to(ply, pos)
 						else
 							ply:SetAngles(_tmpAngle)
 						end
+
 						return true
 					end
 				end

@@ -26,7 +26,7 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 	local w, ww = net.BytesWritten()
 	if b and b > 0 and w and w > 0 then
 		YRP.msg("note", "Already running a net message, retry sending ready message.")
-		timer.Simple(0.2, function()
+		timer.Simple(0.11, function()
 			YRPSendIsReadyPingPong()
 		end)
 	else
@@ -34,7 +34,7 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 			net.WriteTable(info)
 		net.SendToServer()
 
-		timer.Simple(20, function()
+		timer.Simple(19.9, function()
 			if !lply:GetDBool("yrp_received_ready") then
 				YRP.msg("note", "Retry sending ready message.")
 				YRPSendIsReadyPingPong()

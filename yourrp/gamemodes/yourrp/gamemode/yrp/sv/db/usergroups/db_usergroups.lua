@@ -434,7 +434,7 @@ function Player:CanAccess(site)
 			self:NoAccess(lsite, usergroups)
 			YRP.msg("note", self:YRPName() .. " can NOT access " .. lsite .. "")
 		elseif _b then
-			YRP.msg("db", self:YRPName() .. " can access " .. lsite .. "")
+			--YRP.msg("db", self:YRPName() .. " can access " .. lsite .. "")
 		end
 		return tobool(_b)
 	end

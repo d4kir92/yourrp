@@ -117,7 +117,7 @@ function CreateYRPBackupsFolder()
 end
 
 function RemoveOldBackups()
-	YRP.msg("db", "[BACKUP] Remove old ones")
+	--YRP.msg("db", "[BACKUP] Remove old ones")
 	if CreateYRPBackupsFolder() then
 		local backups = file.Find("yrp_backups/sv_backup_*.txt", "DATA")
 		local _remove_after = sql.Query("SELECT int_backup_delete FROM yrp_sql WHERE uniqueID = 1;")

@@ -9,6 +9,7 @@ SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(_db_name, "SteamName", "TEXT DEFAULT ' '")
 
 SQL_ADD_COLUMN(_db_name, "CurrentCharacter", "INT DEFAULT 1")
+SQL_ADD_COLUMN(_db_name, "NormalCharacter", "INT DEFAULT 1")
 SQL_ADD_COLUMN(_db_name, "Timestamp", "INT DEFAULT 1")
 SQL_ADD_COLUMN(_db_name, "uptime_total", "INT DEFAULT 0")
 SQL_ADD_COLUMN(_db_name, "uptime_current", "INT DEFAULT 0")
@@ -467,7 +468,7 @@ end
 
 function open_character_selection(ply)
 	if IsValid(ply) and ply:IsPlayer() and ply:IsFullyAuthenticated() then
-		YRP.msg("db", "[" .. ply:SteamName() .. "] -> open character selection.")
+		--YRP.msg("db", "[" .. ply:SteamName() .. "] -> open character selection.")
 		local steamid = ply:SteamID() or ply:UniqueID()
 
 		net.Start("openCharacterMenu")
@@ -510,7 +511,7 @@ function add_yrp_player(ply, steamid)
 end
 
 function check_yrp_player(ply, steamid)
-	YRP.msg("db", "[" .. ply:SteamName() .. "] -> Checking if player is in database.")
+	--YRP.msg("db", "[" .. ply:SteamName() .. "] -> Checking if player is in database.")
 
 	steamid = steamid or ply:SteamID() or ply:UniqueID()
 
@@ -520,7 +521,7 @@ function check_yrp_player(ply, steamid)
 		if _result == nil then
 			add_yrp_player(ply, steamid)
 		elseif wk(_result) then
-			YRP.msg("db", "[" .. ply:SteamName() .. "] is in database.")
+			--YRP.msg("db", "[" .. ply:SteamName() .. "] is in database.")
 			if #_result > 1 then
 				YRP.msg("db", "[" .. ply:SteamName() .. "] is more then 1 time in database (" .. #_result .. ")")
 				for k, v in pairs(_result) do
@@ -543,7 +544,7 @@ function check_yrp_player(ply, steamid)
 end
 
 function check_yrp_client(ply, steamid)
-	YRP.msg("db", "[" .. ply:SteamName() .. "] -> Check client (" .. ply:SteamID() .. ")")
+	--YRP.msg("db", "[" .. ply:SteamName() .. "] -> Check client (" .. ply:SteamID() .. ")")
 
 	check_yrp_player(ply, steamid)
 

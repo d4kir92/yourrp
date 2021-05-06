@@ -1951,6 +1951,18 @@ net.Receive("yrp_info2", function(len)
 	end
 end)
 
+local delay3 = 0
+net.Receive("yrp_info3", function(len)
+	local lply = LocalPlayer()
+	if lply:IsValid() and delay3 < CurTime() then
+		delay3 = CurTime() + 1
+		local _str = net.ReadString()
+		_str = YRP.lang_string(_str)
+
+		notification.AddLegacy(_str, NOTIFY_GENERIC, 10)
+	end
+end)
+
 net.Receive("yrp_message", function(len)
 	local lply = LocalPlayer()
 	if lply:IsValid() then
