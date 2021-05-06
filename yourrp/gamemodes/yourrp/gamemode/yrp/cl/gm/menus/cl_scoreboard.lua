@@ -295,6 +295,7 @@ function CloseSBS()
 end
 
 local fac = fac or 1
+local svLogoStr = ""
 function OpenSBS()
 	local lply = LocalPlayer()
 	if pa(sbs.frame) == false then
@@ -310,10 +311,8 @@ function OpenSBS()
 			sbs.frame = nil
 		end	
 
-		local _mapPNG = getMapPNG()
-
-		local _server_logo = GetGlobalDString("text_server_logo", "")
-		text_server_logo = GetHTMLImage(GetGlobalDString("text_server_logo", ""), YRP.ctr(256), YRP.ctr(256))
+		svLogoStr = GetGlobalDString("text_server_logo", "")
+		HTMLSvLogoStr = GetHTMLImage(svLogoStr, YRP.ctr(256), YRP.ctr(256))
 		
 		sbs.frame.version = lply:GetDInt("hud_version", 0)
 		function sbs.frame:Paint(pw, ph)
@@ -322,6 +321,14 @@ function OpenSBS()
 				self:Remove()
 				sbs.frame = nil
 			end
+
+			if ServerLogo and ServerLogo2 and svLogoStr != GetGlobalDString("text_server_logo", "") then
+				svLogoStr = GetGlobalDString("text_server_logo", "")
+				HTMLSvLogoStr = GetHTMLImage(svLogoStr, YRP.ctr(256), YRP.ctr(256))
+				ServerLogo:SetHTML(HTMLSvLogoStr)
+				ServerLogo2:SetHTML(HTMLSvLogoStr)
+			end
+
 			if self.visible == nil then
 				self.visible = true
 			end
@@ -357,11 +364,7 @@ function OpenSBS()
 
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(20, 20, 20, alpha)) -- Background
 
-				if strEmpty(_server_logo) then
-					draw.RoundedBox(0, YRP.ctr(256), YRP.ctr(128-50), pw - YRP.ctr(512), YRP.ctr(100), Color(100, 100, 255, alpha)) -- Stripe
-				else
-					draw.RoundedBox(0, YRP.ctr(256) / 2, YRP.ctr(128-50), pw - YRP.ctr(512) / 2, YRP.ctr(100), Color(100, 100, 255, alpha)) -- Stripe
-				end
+				--draw.RoundedBox(3, YRP.ctr(256 + 10), YRP.ctr(128-50), pw - YRP.ctr(512+2*10), YRP.ctr(100), Color(100, 100, 255, alpha)) -- Stripe
 
 				draw.SimpleText(GAMEMODE:GetGameDescription() .. " [" .. GetRPBase() .. "]", "Y_20_500", YRP.ctr(256 + 20), YRP.ctr(128-20), Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				draw.SimpleText(GetHostName(), "Y_24_500", YRP.ctr(256 + 20), YRP.ctr(128 + 20), Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -369,39 +372,29 @@ function OpenSBS()
 				draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. GetNiceMapName(), "Y_20_500", pw - YRP.ctr(256 + 20), YRP.ctr(128-20), Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				draw.SimpleText(YRP.lang_string("LID_players") .. ": " .. #player.GetAll() .. "/" .. game.MaxPlayers(), "Y_20_500", pw - YRP.ctr(256 + 20), YRP.ctr(128 + 20), Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
-				if strEmpty(_server_logo) then
+				if strEmpty(svLogoStr) then
 					surface.SetDrawColor(255, 255, 255, alpha)
 					surface.SetMaterial(sbs.icons.yrp)
 					surface.DrawTexturedRect(YRP.ctr(4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
 				end
 
-				if _mapPNG != false then
-					draw.RoundedBox(0, pw - YRP.ctr(256 + 8), 0, YRP.ctr(256 + 8), YRP.ctr(256 + 8), Color(0, 0, 0, alpha))
-
+				
+				if strEmpty(svLogoStr) then
 					surface.SetDrawColor(255, 255, 255, alpha)
-					surface.SetMaterial(_mapPNG)
+					surface.SetMaterial(sbs.icons.yrp	)
 					surface.DrawTexturedRect(pw - YRP.ctr(256 + 4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
-				else
-					if strEmpty(_server_logo) then
-						surface.SetDrawColor(255, 255, 255, alpha)
-						surface.SetMaterial(sbs.icons.yrp	)
-						surface.DrawTexturedRect(pw - YRP.ctr(256 + 4), YRP.ctr(4), YRP.ctr(256), YRP.ctr(256))
-					end
 				end
 			else
 				self.blurtime = CurTime() + 2
 			end
 		end
 
-		if !strEmpty(_server_logo) then
-			local ServerLogo = createD("DHTML", sbs.frame, YRP.ctr(256), YRP.ctr(256), YRP.ctr(4), YRP.ctr(4))
-			ServerLogo:SetHTML(text_server_logo)
-			--TestHTML(ServerLogo, text_server_logo, false)
-			if _mapPNG == false then
-				local ServerLogo2 = createD("DHTML", sbs.frame, YRP.ctr(256), YRP.ctr(256), sbs.frame:GetWide() - YRP.ctr(256 + 4), YRP.ctr(4))
-				ServerLogo2:SetHTML(text_server_logo)
-				--TestHTML(ServerLogo2, text_server_logo, false)
-			end
+		if !strEmpty(svLogoStr) then
+			ServerLogo = createD("DHTML", sbs.frame, YRP.ctr(256), YRP.ctr(256), YRP.ctr(4), YRP.ctr(4))
+			ServerLogo:SetHTML(HTMLSvLogoStr)
+
+			ServerLogo2 = createD("DHTML", sbs.frame, YRP.ctr(256), YRP.ctr(256), sbs.frame:GetWide() - YRP.ctr(256 + 4), YRP.ctr(4))
+			ServerLogo2:SetHTML(HTMLSvLogoStr)
 		end
 
 		sbs.header = createD("DPanel", sbs.frame, BFW(), YRP.ctr(64), 0, YRP.ctr(256 + 10))
@@ -717,15 +710,7 @@ function OpenSBS()
 							end
 
 							x = br
-
-							local ping = pl:Ping()
-							local ping_color = Color(255, 0, 0, alpha)
-							if ping < 100 then
-								ping_color = Color(0, 255, 0, alpha)
-							elseif ping >= 100 and ping < 200 then
-								ping_color = Color(255, 255, 0, alpha)
-							end
-							draw.SimpleText(ping, "Y_24_500", pw - YRP.ctr(x), ph / 2, ping_color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(pl:Ping(), "Y_24_500", pw - YRP.ctr(x), ph / 2, YRPTextColor(self.color, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 							x = x + scolen["ping"]
 
 							if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
