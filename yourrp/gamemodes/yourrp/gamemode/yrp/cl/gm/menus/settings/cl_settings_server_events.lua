@@ -75,12 +75,14 @@ net.Receive("setting_events", function(len)
 					local uid = EVENT.EventList:GetLine(EVENT.EventList:GetSelectedLine()):GetValue(1)
 					local _, steamid = Frame.Player:GetSelected()
 					local charname, charuid = Frame.Char:GetSelected()
-					net.Start("yrp_event_char_add")
-						net.WriteString(uid)
-						net.WriteString(steamid)
-						net.WriteString(charuid)
-						net.WriteString(charname)
-					net.SendToServer()
+					if Frame.Char:GetSelected() then
+						net.Start("yrp_event_char_add")
+							net.WriteString(uid)
+							net.WriteString(steamid)
+							net.WriteString(charuid)
+							net.WriteString(charname)
+						net.SendToServer()
+					end
 
 					Frame:Close()
 				end
