@@ -201,6 +201,9 @@ hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 			if ply:HasCharacterSelected() then
 				teleportToSpawnpoint(ply)
 				ply:SetDBool("yrp_spawning", false)
+			else
+				teleportToSpawnpoint(ply)
+				ply:SetDBool("yrp_spawning", false)
 			end
 		end)
 	end

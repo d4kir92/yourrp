@@ -49,10 +49,10 @@ function PlayerLoadedGame(ply)
 	SendDGlobals(ply)
 	SendDEntities(ply, "PlayerLoadedGame")
 
-	ply:SendTeamsToPlayer()
-	
 	ply:SetDBool("finishedloadingcharacter", true)
 
+	ply:SendTeamsToPlayer()
+	
 	if IsValid(ply) and ply.KillSilent then
 		ply:KillSilent()
 	end
