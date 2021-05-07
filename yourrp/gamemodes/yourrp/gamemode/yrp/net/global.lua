@@ -1,6 +1,7 @@
 -- Networking
 
 YRP_NW_Globals = YRP_NW_Globals or {}
+
 YRP_QUEUE_Globals = YRP_QUEUE_Globals or {}
 
 -- Delay when traffic
@@ -347,7 +348,6 @@ function GetGlobalDTable(index, def)
 end
 
 -- INIT
-local sending = false
 if SERVER then
 	function SendDGlobals(ply)
 		ply:SetDInt("yrp_load_glo", 0)
@@ -402,8 +402,7 @@ if SERVER then
 		ti = ti + interval
 		timer.Simple(ti, function()
 			ply:SetDInt("yrp_load_glo", 100)
-
-			sending = false
 		end)
 	end
 end
+
