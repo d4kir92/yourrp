@@ -16,12 +16,12 @@ scolen["play"] = 220
 scolen["ping"] = 100
 -- CONFIG
 
-function YRPTextColor(bgcolor, alpha)
+function YRPTextColor(bgcolor, a)
 	local brightness = (bgcolor.r * 299 + bgcolor.g * 587 + bgcolor.b * 114) / 1000
 	if brightness > 125 then
-		return Color(0, 0, 0, alpha)
+		return Color(0, 0, 0, a)
 	else
-		return Color(255, 255, 255, alpha)
+		return Color(255, 255, 255, a)
 	end
 end
 

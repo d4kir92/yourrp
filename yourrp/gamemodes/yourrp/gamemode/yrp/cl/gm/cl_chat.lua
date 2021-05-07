@@ -265,6 +265,18 @@ function InitYRPChat()
 		end
 
 		yrpChat.writeField = createD("DTextEntry", yrpChat.window, 1, 1, 1, 1)
+		yrpChat.writeField:SetHistoryEnabled(true)
+		--[[function yrpChat.writeField:GetAutoComplete( text )
+			local suggestions = {}
+		
+			for _, ply in ipairs( player.GetAll() ) do -- For every player,
+				if string.StartWith( ply:Nick(), text ) then -- if the player's name starts with it...
+					table.insert( suggestions, ply:Nick() ) -- ... insert it into the list.
+				end
+			end
+		
+			return suggestions
+		end]]
 
 		function yrpChat.writeField:PerformLayout()
 			local ts = LocalPlayer():HudValue("CH", "TS")
@@ -343,7 +355,7 @@ function InitYRPChat()
 			end
 		end
 
-		yrpChat.writeField.OnKeyCodeTyped = function(self, code)
+		yrpChat.writeField.OnKeyCode = function(self, code)
 			if code == KEY_ESCAPE then
 				yrpChat.closeChatbox()
 				gui.HideGameUI()
@@ -356,7 +368,9 @@ function InitYRPChat()
 							if !strEmpty(string.Trim(tex)) then
 								text = string.sub(tex, 1, 120)
 								tex = string.sub(tex, 121)
-								
+
+								yrpChat.writeField:AddHistory( text )
+
 								if string.StartWith(text, "!") or string.StartWith(text, "/") then
 									LocalPlayer():ConCommand("say \"".. text .. "\"")
 								else
@@ -369,7 +383,7 @@ function InitYRPChat()
 				yrpChat.closeChatbox()
 			end
 		end
-
+		
 		function yrpChat:openChatbox(bteam)
 			yrpChat.window:MakePopup()
 			yrpChat.comboBox:RequestFocus()

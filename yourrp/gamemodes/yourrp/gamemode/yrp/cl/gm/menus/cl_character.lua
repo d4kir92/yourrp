@@ -353,7 +353,7 @@ function LoadCharacters()
 								end
 							end
 						end
-						local _playermodel = tmpChar.playermodels[tmpChar.charid] or nil
+						local _playermodel = tmpChar.playermodels[1] or nil
 						if _playermodel != nil and tmpChar.charplayermodel != NULL and pa(tmpChar.charplayermodel) then
 							if !strEmpty(_playermodel) then
 								tmpChar.charplayermodel:SetModel(_playermodel)
