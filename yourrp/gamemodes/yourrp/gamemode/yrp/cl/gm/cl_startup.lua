@@ -461,7 +461,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 						icon.item = v
 						icon:SetText("")
 
-						--timer.Create("shop" .. count, 0.002 * count, 1, function()
+						timer.Create("shop" .. count, 0.002 * count, 1, function()
 							if icon != nil and icon != NULL and icon.item != nil then
 								icon:SetModel(icon.item.WorldModel)
 
@@ -471,7 +471,7 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 									icon:SetCamPos(Vector(0, -30, 15))
 								end
 							end
-						--end)
+						end)
 					end
 
 					local tmpButton = createD("DButton", tmpPointer, YRP.ctr(item.w), YRP.ctr(item.h), 0, 0)
@@ -707,11 +707,11 @@ function OpenSingleSelector(tab, closeF)
 					spawnicon.item = item
 					spawnicon:SetText("")
 
-					--timer.Create("shop" .. count, 0.002 * count, 1, function()
+					timer.Create("shop" .. count, 0.002 * count, 1, function()
 						if spawnicon != nil and spawnicon != NULL and spawnicon.item != nil then
 							spawnicon:SetModel(spawnicon.item.WorldModel)
 						end
-					--end)
+					end)
 
 					spawnicon:SetTooltip(item.PrintName)
 					local _tmpName = createD("DButton", icon, YRP.ctr(_item.w), YRP.ctr(_item.h), 0, 0)
@@ -949,7 +949,7 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 						icon.item = v
 						icon:SetText("")
 
-						--timer.Create("shop" .. count, 0.002 * count, 1, function()
+						timer.Create("shop" .. count, 0.002 * count, 1, function()
 							if icon != nil and icon != NULL and icon.item != nil then
 								icon:SetModel(icon.item.WorldModel)
 
@@ -959,7 +959,7 @@ function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
 									icon:SetCamPos(Vector(0, -30, 15))
 								end
 							end
-						--end)
+						end)
 					end
 
 					local tmpButton = createD("DButton", tmpPointer, YRP.ctr(item.w), YRP.ctr(item.h), 0, 0)

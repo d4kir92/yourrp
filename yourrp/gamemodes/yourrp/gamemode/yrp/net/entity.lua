@@ -20,14 +20,14 @@ if SERVER then
 
 	function YRPSendDString(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["STRING"], key) then
-			table.remove(YRP_QUEUE_Ents["STRING"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["STRING"], key)
 			table.insert(YRP_QUEUE_Ents["STRING"], 1, key)
 		else
 			table.insert(YRP_QUEUE_Ents["STRING"], key)
 		end
 
 		if entindex == nil then
-			table.remove(YRP_QUEUE_Ents["STRING"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["STRING"], key)
 			return
 		end
 
@@ -43,7 +43,7 @@ if SERVER then
 				else
 					net.Broadcast()
 				end
-				table.remove(YRP_QUEUE_Ents["STRING"], key)
+				table.RemoveByValue(YRP_QUEUE_Ents["STRING"], key)
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
@@ -105,14 +105,14 @@ if SERVER then
 
 	function YRPSendDBool(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["BOOL"], key) then
-			table.remove(YRP_QUEUE_Ents["BOOL"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["BOOL"], key)
 			table.insert(YRP_QUEUE_Ents["BOOL"], 1, key)
 		else
 			table.insert(YRP_QUEUE_Ents["BOOL"], key)
 		end
 
 		if entindex == nil then
-			table.remove(YRP_QUEUE_Ents["BOOL"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["BOOL"], key)
 			return
 		end
 
@@ -128,7 +128,7 @@ if SERVER then
 				else
 					net.Broadcast()
 				end
-				table.remove(YRP_QUEUE_Ents["BOOL"], key)
+				table.RemoveByValue(YRP_QUEUE_Ents["BOOL"], key)
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
@@ -201,14 +201,14 @@ if SERVER then
 
 	function YRPSendDInt(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["INT"], key) then
-			table.remove(YRP_QUEUE_Ents["INT"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["INT"], key)
 			table.insert(YRP_QUEUE_Ents["INT"], 1, key)
 		else
 			table.insert(YRP_QUEUE_Ents["INT"], key)
 		end
 
 		if entindex == nil then
-			table.remove(YRP_QUEUE_Ents["INT"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["INT"], key)
 			return
 		end
 
@@ -224,7 +224,7 @@ if SERVER then
 				else
 					net.Broadcast()
 				end
-				table.remove(YRP_QUEUE_Ents["INT"], key)
+				table.RemoveByValue(YRP_QUEUE_Ents["INT"], key)
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
@@ -291,14 +291,14 @@ if SERVER then
 
 	function YRPSendDFloat(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["FLOAT"], key) then
-			table.remove(YRP_QUEUE_Ents["FLOAT"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["FLOAT"], key)
 			table.insert(YRP_QUEUE_Ents["FLOAT"], 1, key)
 		else
 			table.insert(YRP_QUEUE_Ents["FLOAT"], key)
 		end
 
 		if entindex == nil then
-			table.remove(YRP_QUEUE_Ents["FLOAT"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["FLOAT"], key)
 			return
 		end
 
@@ -314,7 +314,7 @@ if SERVER then
 				else
 					net.Broadcast()
 				end
-				table.remove(YRP_QUEUE_Ents["FLOAT"], key)
+				table.RemoveByValue(YRP_QUEUE_Ents["FLOAT"], key)
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
@@ -398,14 +398,14 @@ if SERVER then
 
 	function YRPSendDEntity(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["ENTITY"], key) then
-			table.remove(YRP_QUEUE_Ents["ENTITY"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["ENTITY"], key)
 			table.insert(YRP_QUEUE_Ents["ENTITY"], 1, key)
 		else
 			table.insert(YRP_QUEUE_Ents["ENTITY"], key)
 		end
 
 		if entindex == nil then
-			table.remove(YRP_QUEUE_Ents["ENTITY"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["ENTITY"], key)
 			return
 		end
 
@@ -421,7 +421,7 @@ if SERVER then
 				else
 					net.Broadcast()
 				end
-				table.remove(YRP_QUEUE_Ents["ENTITY"], key)
+				table.RemoveByValue(YRP_QUEUE_Ents["ENTITY"], key)
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
@@ -488,14 +488,14 @@ if SERVER then
 
 	function YRPSendDTable(entindex, key, value, ply)
 		if table.HasValue(YRP_QUEUE_Ents["TABLE"], key) then
-			table.remove(YRP_QUEUE_Ents["TABLE"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["TABLE"], key)
 			table.insert(YRP_QUEUE_Ents["TABLE"], 1, key)
 		else
 			table.insert(YRP_QUEUE_Ents["TABLE"], key)
 		end
 
 		if entindex == nil then
-			table.remove(YRP_QUEUE_Ents["TABLE"], key)
+			table.RemoveByValue(YRP_QUEUE_Ents["TABLE"], key)
 			return
 		end
 
@@ -511,7 +511,7 @@ if SERVER then
 				else
 					net.Broadcast()
 				end
-				table.remove(YRP_QUEUE_Ents["TABLE"], key)
+				table.RemoveByValue(YRP_QUEUE_Ents["TABLE"], key)
 			else
 				-- RETRY if not first entry
 				timer.Simple(RETDELAY, function()
