@@ -285,13 +285,17 @@ end
 
 function AddToTabRecursive(tab, folder, path, wildcard)
 	local files, folders = file.Find( folder .. "*", path )
-	for k, v in pairs( files ) do
-		if ( !string.EndsWith( v, ".mdl" ) ) then continue end
-		table.insert( tab, folder .. v )
+	if files then
+		for k, v in pairs( files ) do
+			if ( !string.EndsWith( v, ".mdl" ) ) then continue end
+			table.insert( tab, folder .. v )
+		end
 	end
 
-	for k, v in pairs( folders ) do
-		AddToTabRecursive(tab, folder .. v .. "/", path, wildcard)
+	if folders then
+		for k, v in pairs( folders ) do
+			AddToTabRecursive(tab, folder .. v .. "/", path, wildcard)
+		end
 	end
 end
 

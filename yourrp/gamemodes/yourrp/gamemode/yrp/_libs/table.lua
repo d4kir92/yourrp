@@ -1,13 +1,13 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-function tableRemoveByKey(tab, key)
+--[[function tableRemoveByKey(tab, key)
 	local index = table.KeyFromValue(tab, key)
 	if ( !index ) then
 		tab[key] = nil
 		return false
 	end
 	return table.remove(tab, index)
-end
+end]]
 
 function pTab(table, name)
 	name = name or ""
