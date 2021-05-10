@@ -145,9 +145,6 @@ function useFunction(str)
 				end
 			end
 
-		--When scoreboard open, enable mouse
-		elseif str == "scoreboard" and IsScoreboardOpen() then
-			gui.EnableScreenClicker(true)
 		--Inventory
 		elseif str == "dropitem" and !mouseVisible() then
 			local _weapon = LocalPlayer():GetActiveWeapon()
@@ -184,8 +181,6 @@ function useFunction(str)
 		elseif str == "vno" and !mouseVisible() then
 			net.Start("voteNo")
 			net.SendToServer()
-		elseif str == "scoreboard" and IsScoreboardOpen() then
-			gui.EnableScreenClicker(true)
 		elseif string.StartWith(str, "m_") then
 			str = string.Replace(str, "m_", "")
 			local uid = tonumber(str)
@@ -479,8 +474,6 @@ function KeyPress()
 	end
 
 	keyPressed(KEY_ESCAPE, "close_all")
-
-	keyPressed(IN_ATTACK2, "scoreboard")
 
 	keyPressed(KEY_F1, "OpenHelpMenu")
 	keyPressed(KEY_F7, "openTicketMenu")

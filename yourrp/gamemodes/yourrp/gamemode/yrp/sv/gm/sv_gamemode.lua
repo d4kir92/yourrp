@@ -80,6 +80,8 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 
 	ply:SetDBool("isserverdedicated", game.IsDedicated())
 
+	ply:SetDBool("yrp_characterselection", true)
+
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid or uniqueID)
 

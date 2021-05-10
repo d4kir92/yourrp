@@ -39,7 +39,7 @@ function Player:DND()
 end
 
 function Player:IDCardID()
-	return self:GetDString("idcardid", "FAIL")
+	return self:GetDString("idcardid", "")
 end
 
 function Player:GetLanguage() -- The Language the player selected

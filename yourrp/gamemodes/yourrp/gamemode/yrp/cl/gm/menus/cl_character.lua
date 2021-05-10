@@ -322,7 +322,7 @@ function LoadCharacters()
 
 							draw.SimpleText(self.rpname, "Saira_60", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-							if i > LocalPlayer():GetDInt("int_characters_max", 1) then
+							if cni > LocalPlayer():GetDInt("int_characters_max", 1) then
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
 								draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 							end
@@ -421,9 +421,11 @@ function LoadCharacters()
 							if self:IsHovered() then
 								color = Color(255, 255, 255, 255)
 							end
-							surface.SetMaterial(trashicon)
-							surface.SetDrawColor(color)
-							surface.DrawTexturedRect(0, 0, pw, ph)
+							if trashicon then
+								surface.SetMaterial(trashicon)
+								surface.SetDrawColor(color)
+								surface.DrawTexturedRect(0, 0, pw, ph)
+							end
 						end
 						function deleteChar:DoClick()
 							local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
@@ -480,9 +482,9 @@ function LoadCharacters()
 					py = 0
 				end
 
-				local tmpChar = createD("YButton", nil, sw, sh, px, py)
-				tmpChar:SetText("")
-				function tmpChar:Paint(pw, ph)
+				local addChar = createD("YButton", nil, sw, sh, px, py)
+				addChar:SetText("")
+				function addChar:Paint(pw, ph)
 					if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
 						
@@ -494,7 +496,7 @@ function LoadCharacters()
 						end
 					end
 				end
-				function tmpChar:DoClick()
+				function addChar:DoClick()
 					isEventChar = self.bool_eventchar
 					if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
 						if pa(CharMenu.frame) then
@@ -506,14 +508,14 @@ function LoadCharacters()
 				end
 
 				if CharMenu.characterList.AddItem then
-					CharMenu.characterList:AddItem(tmpChar)
+					CharMenu.characterList:AddItem(addChar)
 				else
-					CharMenu.characterList:AddPanel(tmpChar)
+					CharMenu.characterList:AddPanel(addChar)
 				end
 
-				local tmpCharEvent = createD("YButton", nil, sw, sh, px, py)
-				tmpCharEvent:SetText("")
-				function tmpCharEvent:Paint(pw, ph)
+				local addCharEvent = createD("YButton", nil, sw, sh, px, py)
+				addCharEvent:SetText("")
+				function addCharEvent:Paint(pw, ph)
 					if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
 						
@@ -527,7 +529,7 @@ function LoadCharacters()
 						end
 					end
 				end
-				function tmpCharEvent:DoClick()
+				function addCharEvent:DoClick()
 					if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
 						if pa(CharMenu.frame) then
 							CharMenu.frame:Close()
@@ -538,9 +540,9 @@ function LoadCharacters()
 				end
 
 				if CharMenu.characterList.AddItem then
-					CharMenu.characterList:AddItem(tmpCharEvent)
+					CharMenu.characterList:AddItem(addCharEvent)
 				else
-					CharMenu.characterList:AddPanel(tmpCharEvent)
+					CharMenu.characterList:AddPanel(addCharEvent)
 				end
 			end
 		end

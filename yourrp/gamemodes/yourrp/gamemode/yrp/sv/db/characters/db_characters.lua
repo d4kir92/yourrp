@@ -626,6 +626,10 @@ end
 net.Receive("yrp_get_characters", function(len, ply)
 	--YRP.msg("db", ply:YRPName() .. " ask for characters")
 	send_characters(ply)
+
+	if !ply:Alive() then
+		ply:SetDBool("yrp_characterselection", true)
+	end
 end)
 
 net.Receive("DeleteCharacter", function(len, ply)
@@ -720,6 +724,8 @@ net.Receive("EnterWorld", function(len, ply)
 	local cuid = net.ReadString()
 
 	YRPSpawnAsCharacter(ply, cuid, false)
+
+	ply:SetDBool("yrp_characterselection", false)
 end)
 
 function SendBodyGroups(ply)
