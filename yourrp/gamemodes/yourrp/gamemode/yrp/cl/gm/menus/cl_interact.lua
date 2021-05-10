@@ -94,7 +94,7 @@ net.Receive("openInteractMenu", function(len)
 		drawIDCard(ply, scale, YRP.ctr(10), YRP.ctr(10))
 		
 		--[[ Licenses ]]--
-		if LocalPlayer():isCP() then
+		if LocalPlayer():isCP() or LocalPlayer():GetDBool("bool_canusewarnsystem", false) then
 			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255))
 			draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(470 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 			draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
@@ -118,7 +118,7 @@ net.Receive("openInteractMenu", function(len)
 		hook.Run("YButtonPaint", self, pw, ph)
 	end]]
 
-	if LocalPlayer():isCP() then
+	if LocalPlayer():isCP() or LocalPlayer():GetDBool("bool_canusewarnsystem", false) then
 		local btnVerwarnungUp = createVGUI("YButton", content, 50, 50, 10, 1000)
 		btnVerwarnungUp:SetText("⮝")
 		function btnVerwarnungUp:DoClick()

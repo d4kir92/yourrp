@@ -865,6 +865,8 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	GAMEPLAYAddHr()
 	GAMEPLAYAddCheckBox("bool_canuseesp", "LID_gp_canuseesp")
 	GAMEPLAYAddHr()
+	GAMEPLAYAddCheckBox("bool_canusewarnsystem", "Can use WarnSystem")
+	GAMEPLAYAddHr()
 	GAMEPLAYAddCheckBox("bool_canusecontextmenu", "LID_gp_canusecontextmenu")
 	GAMEPLAYAddCheckBox("bool_canusespawnmenu", "LID_gp_canusespawnmenu")
 

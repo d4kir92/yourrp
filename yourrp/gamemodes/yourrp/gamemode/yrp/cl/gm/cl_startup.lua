@@ -2448,7 +2448,7 @@ end
 local windowOpen = false
 
 net.Receive("openLawBoard", function(len)
-	if not windowOpen and LocalPlayer():isCP() then
+	if not windowOpen and LocalPlayer():isCP() or LocalPlayer():GetDBool("bool_canusewarnsystem", false) then
 		local tmpJailList = net.ReadTable()
 		windowOpen = true
 		local window = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
