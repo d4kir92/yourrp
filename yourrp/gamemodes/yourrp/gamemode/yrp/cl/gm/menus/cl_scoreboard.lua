@@ -416,7 +416,6 @@ function YRPScoreboardAddPlayer(ply)
 				table.RemoveByValue(YRPScoreboard.plys, ply)
 				--YRPScoreboard.list:RemoveItem(plypnl)
 				plypnl:Remove()
-				pTab(YRPScoreboard.plys)
 			end
 		end
 		plypnl.avatar = createD("AvatarImage", plypnl, avsize - 2 * br, avsize - 2 * br, avbr + br, avbr + br)

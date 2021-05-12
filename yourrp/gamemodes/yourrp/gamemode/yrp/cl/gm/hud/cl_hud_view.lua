@@ -41,60 +41,60 @@ function HudView()
 			return
 		end
 
-		if GetGlobalDBool("bool_building_system", false) and (_eyeTrace.Entity:GetClass() == "prop_door_rotating" or _eyeTrace.Entity:GetClass() == "func_door" or _eyeTrace.Entity:GetClass() == "func_door_rotating") and plypos:Distance(entpos) < GetGlobalDInt("int_door_distance", 200) then
+		if GetGlobalDBool("bool_building_system", false) and ent:IsDoor() and plypos:Distance(entpos) < GetGlobalDInt("int_door_distance", 200) then
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleText(YRP.lang_string("LID_presstoopen", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			local canbeowned = tobool(_eyeTrace.Entity:GetDTable("building", {}).bool_canbeowned)
+			local canbeowned = tobool(ent:GetDTable("building", {}).bool_canbeowned)
 			if canbeowned or lply:HasAccess() then
 				local tab2 = {}
 				tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_door")) .. "]"
 				draw.SimpleText(YRP.lang_string("LID_presstoopensettings", tab2), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				showOwner(_eyeTrace)
-				showSecurityLevel(_eyeTrace.Entity)
+				showSecurityLevel(ent)
 			end
-		elseif _eyeTrace.Entity:IsVehicle() and !lply:InVehicle() then
+		elseif ent:IsVehicle() and !lply:InVehicle() then
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleText(YRP.lang_string("LID_presstogetin", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			if _eyeTrace.Entity:GetDString("ownerRPName") == lply:Nick() then
+			if ent:GetDString("ownerRPName") == lply:Nick() then
 				local tab2 = {}
 				tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_vehicle")) .. "]"
 				draw.SimpleText(YRP.lang_string("LID_presstoopensettings", tab2), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 			showOwner(_eyeTrace)
-		elseif _eyeTrace.Entity:IsPlayer() then
-			if _eyeTrace.Entity:GetColor().a != 0 or !_eyeTrace.Entity:GetDBool("cloaked") then
-				local plycol = _eyeTrace.Entity:GetColor()
+		elseif ent:IsPlayer() then
+			if ent:GetColor().a != 0 or !ent:GetDBool("cloaked") then
+				local plycol = ent:GetColor()
 				local tab = {}
-				tab["NAME"] = tostring(_eyeTrace.Entity:RPName())
+				tab["NAME"] = tostring(ent:RPName())
 				tab["KEY"] = "[" .. string.upper(GetKeybindName("menu_interact")) .. "]"
 				--draw.SimpleText(YRP.lang_string("LID_presstointeractwith", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, plycol.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
-		elseif _eyeTrace.Entity:IsNPC() then
-			if _eyeTrace.Entity:IsDealer() then
-				draw.SimpleText(_eyeTrace.Entity:GetDString("name", ""), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		elseif ent:IsNPC() then
+			if ent:IsDealer() then
+				draw.SimpleText(ent:GetDString("name", ""), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				local key = {}
 				key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 				draw.SimpleText(YRP.lang_string("LID_presstotrade", key), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
-		elseif _eyeTrace.Entity:GetClass() == "yrp_clothing" and plypos:Distance(entpos) < 150 then
+		elseif ent:GetClass() == "yrp_clothing" and plypos:Distance(entpos) < 150 then
 			local key = {}
 			key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleText(YRP.lang_string("LID_presstochangeyourclothes", key), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		elseif _eyeTrace.Entity:HasStorage() and plypos:Distance(entpos) < 150 then
+		elseif ent:HasStorage() and plypos:Distance(entpos) < 150 then
 			local key = {}
 			key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
-			key["NAME"] = _eyeTrace.Entity:StorageName()
+			key["NAME"] = ent:StorageName()
 			draw.SimpleText(YRP.lang_string("LID_presstoopenname", key), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		elseif _eyeTrace.Entity:GetDBool("yrp_has_use", false) then
+		elseif ent:GetDBool("yrp_has_use", false) then
 			local text = "PRESS [" .. string.upper(GetKeybindName("in_use")) .. "]"
-			if _eyeTrace.Entity:GetDString("yrp_use_message", "") != "" then
-				text = text .. ": " .. _eyeTrace.Entity:GetDString("yrp_use_message", "")
+			if ent:GetDString("yrp_use_message", "") != "" then
+				text = text .. ": " .. ent:GetDString("yrp_use_message", "")
 			end
 			draw.SimpleText(text, "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
-		if !_eyeTrace.Entity:IsPlayer() then
+		if !ent:IsPlayer() then
 			showOwner(_eyeTrace)
 		end
 	end

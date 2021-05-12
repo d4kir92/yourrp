@@ -43,7 +43,7 @@ function Player:getDarkRPVar(var)
 	elseif var == "rpname" then
 		return self:RPName() or self:SteamName()
 	elseif var == "HasGunlicense" then
-		return true
+		return false
 	elseif var == "Energy" then
 		return self:Hunger()
 	elseif var == "wanted" then
@@ -51,7 +51,7 @@ function Player:getDarkRPVar(var)
 	elseif var == "wantedReason" then
 		return notavailable
 	elseif var == "agenda" then
-		return notavailable
+		return ""
 	elseif var == "AFK" then
 		return self:AFK()
 	elseif var == "AFKDemoted" then
@@ -277,7 +277,7 @@ local function InitializeDarkRPVars(len)
 		end
 end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
-timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
+--timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
 
 net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
 		local userID = net.ReadUInt(16)

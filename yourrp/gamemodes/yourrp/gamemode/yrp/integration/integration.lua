@@ -4,6 +4,8 @@ DarkRP = DarkRP or {}
 DarkRP.disabledDefaults = DarkRP.disabledDefaults or {}
 DarkRP.disabledDefaults.modules = DarkRP.disabledDefaults.modules or {}
 
+DarkRP.hooks = {}
+
 function DarkRP.stub()
 end
 function DarkRP.hookStub()

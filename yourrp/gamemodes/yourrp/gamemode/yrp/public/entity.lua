@@ -8,3 +8,7 @@ local Entity = FindMetaTable("Entity")
 function Entity:GetRPOwner()
 	return self:GetDEntity("yrp_owner", NULL)
 end
+
+function Entity:IsDoor()
+	return self:GetClass() == "prop_door_rotating" or self:GetClass() == "func_door" or self:GetClass() == "func_door_rotating"
+end

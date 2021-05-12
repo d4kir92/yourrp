@@ -193,7 +193,7 @@ function DarkRP.getCategories()
 	YRP.msg("darkrp", "getCategories() not fully implemented")
 	local tab = {}
 	tab.jobs = RPExtraTeams
-	return {}
+	return tab
 end
 
 function DarkRP.getChatCommand(command)

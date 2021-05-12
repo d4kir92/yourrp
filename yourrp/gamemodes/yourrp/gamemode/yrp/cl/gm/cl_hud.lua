@@ -224,11 +224,14 @@ timer.Simple(1, function()
 	ava.x = 0
 	ava.y = 0
 	ava.version = -1
-	function HUD_AVATAR:Think()
+	function HUD_AVATARUpdate()
+		local lply = LocalPlayer()
+
 		if GetGlobalDBool("bool_yrp_hud", false) then
-			local lply = LocalPlayer()
 			if lply:GetDInt("hud_version", 0) != ava.version then
 				ava.version = lply:GetDInt("hud_version", 0)
+
+				HUD_AVATAR:Show()
 
 				ava.w = lply:HudValue("AV", "SIZE_W")
 				ava.h = lply:HudValue("AV", "SIZE_H")
@@ -238,16 +241,25 @@ timer.Simple(1, function()
 
 				PAvatar:SetPos(ava.x, ava.y)
 				PAvatar:SetSize(ava.h, ava.h)
-				self:SetPlayer(LocalPlayer(), ava.h)
+				HUD_AVATAR:SetPlayer(LocalPlayer(), ava.h)
 				if !ava.visible then
 					PAvatar:SetSize(0, 0)
 				end
 
-				self:SetPos(0, 0)
-				self:SetSize(PAvatar:GetWide(), PAvatar:GetTall())
+				HUD_AVATAR:SetPos(0, 0)
+				HUD_AVATAR:SetSize(PAvatar:GetWide(), PAvatar:GetTall())
+			end
+		else
+			if lply:GetDInt("hud_version", 0) != ava.version then
+				ava.version = lply:GetDInt("hud_version", 0)
+
+				HUD_AVATAR:Hide()
 			end
 		end
+
+		timer.Simple(1, HUD_AVATARUpdate)
 	end
+	HUD_AVATARUpdate()
 end)
 
 SL = SL or vgui.Create("DHTML", nil)
@@ -266,12 +278,16 @@ YRP_PM.x = 0
 YRP_PM.y = 0
 YRP_PM.version = -1
 YRP_PM.model = ""
-function YRP_PM:Think()
+function YRP_PMUpdate()
+	local lply = LocalPlayer()
+	if !lply:IsValid() then return end
+
 	if GetGlobalDBool("bool_yrp_hud", false) then
-		local lply = LocalPlayer()
-		if !lply:IsValid() then return end
 		if lply:GetDInt("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetPlayerModel() then
 			YRP_PM.version = lply:GetDInt("hud_version", 0)
+
+			YRP_PM:Show()
+
 			YRP_PM.model = lply:GetPlayerModel()
 
 			YRP_PM.w = lply:HudValue("PM", "SIZE_W")
@@ -319,8 +335,18 @@ function YRP_PM:Think()
 
 			SL:SetVisible(SL.visible)
 		end
+	else
+		if lply:GetDInt("hud_version", 0) != YRP_PM.version then
+			YRP_PM.version = lply:GetDInt("hud_version", 0)
+
+			YRP_PM:Hide()
+			YRP_PM:SetModel("")
+		end
 	end
+
+	timer.Simple(1, YRP_PMUpdate)
 end
+YRP_PMUpdate()
 
 function YRP_PM:LayoutEntity(ent)
 	local seq = ent:LookupSequence("menu_gman")
@@ -495,3 +521,160 @@ hook.Add("HUDPaint", "yrp_hud", function()
 end)
 
 
+
+local yrpeh = nil
+function YRPInitEdgeHud()
+	if EdgeHUD and EdgeHUD.Configuration and yrpeh == nil then
+		YRP.msg("note", "EDGEHUD installed, add hunger and thirst.")
+		if EdgeHUD.Configuration.GetConfigValue( "LowerLeft" ) then
+
+			--Create a variable for the local player.
+			local ply = LocalPlayer()
+		
+			--Create a copy of the colors and vars table.
+			local COLORS = table.Copy(EdgeHUD.Colors)
+			local VARS = table.Copy(EdgeHUD.Vars)
+		
+			local screenWidth = ScrW()
+			local screenHeight = ScrH()
+		
+			local alwaysShowPercentage = EdgeHUD.Configuration.GetConfigValue( "LowerLeft_AlwaysShow" )
+		
+			--Create a table where we store information about the statuswidgets.
+			local statusWidgets = {}
+
+			--Insert intot he table.
+			table.insert(statusWidgets,	{
+				Icon = Material("edgehud/icon_hunger.png", "smooth"),
+				Color = Color(131,90,38),
+				getData = function(  )
+					return ply:getDarkRPVar("Energy")
+				end,
+				getMax = function(  )
+					return 100
+				end,
+				IsDisabled = function(  )
+					return !GetGlobalDBool("bool_hunger", false)
+				end
+			})
+
+			table.insert(statusWidgets,	{
+				Icon = Material("edgehud/icon_thirst.png", "smooth"),
+				Color = ply:HudValue("TH", "BA"),
+				getData = function(  )
+					return ply:getDarkRPVar("Thirst")
+				end,
+				getMax = function(  )
+					return 100
+				end,
+				IsDisabled = function(  )
+					return !GetGlobalDBool("bool_thirst", false)
+				end
+			})
+
+			--Loop through statusWidgets.
+			for i = 1,#statusWidgets do
+				local id = i + 2
+
+				--Create a x & y var for the position.
+				local x = VARS.ScreenMargin + (VARS.ElementsMargin + VARS.statusWidgetWidth) * (i - 1)
+				local y = screenHeight - VARS.ScreenMargin - VARS.WidgetHeight * 3 - VARS.ElementsMargin * 2
+		
+				--Create a var for the current widget.
+				local curWidget = statusWidgets[i]
+		
+				--Create a widgetbox.
+				local statusWidget = vgui.Create("EdgeHUD:WidgetBox")
+				statusWidget:SetWidth(VARS.statusWidgetWidth)
+				statusWidget:SetPos(x + EdgeHUD.LeftOffset,y - EdgeHUD.BottomOffset - (VARS.WidgetHeight + VARS.ElementsMargin))
+				
+				yrpeh = statusWidget
+
+				--Register the derma element.
+				EdgeHUD.RegisterDerma("StatusWidget_" .. id, statusWidget)
+		
+				--Create the icon.
+				local Icon = vgui.Create("DImage",statusWidget)
+				Icon:SetSize(VARS.iconSize_Small,VARS.iconSize_Small)
+				Icon:SetPos(statusWidget:GetWide() / 2 - VARS.iconSize_Small / 2, VARS.iconMargin_Small)
+				Icon:SetMaterial(curWidget.Icon)
+		
+				--Create a lerpedData for the curWidget.
+				local lerpedData = curWidget.getData()
+		
+				--Create a lerpedSize var.
+				local lerpedSize = Icon:GetWide()
+		
+				--Create a lerpedPos var.
+				local xPos, lerpedPos = Icon:GetPos()
+		
+				--Create a lerpedAlha var.
+				local lerpedAlpha = 255
+		
+				--Create a PaintOVer function for the statusWidget.
+				statusWidget.Paint = function( s, w, h )
+					if curWidget:IsDisabled() then
+						Icon:Hide()
+						return
+					else
+						Icon:Show()
+					end
+
+					--Draw the background.
+					surface.SetDrawColor(COLORS["Black_Transparent"])
+					surface.DrawRect(0,0,w,h)
+		
+					--Get the player's max health.
+					local max = curWidget.getMax()
+					local data = math.max(curWidget.getData() or 0,0)
+		
+					--Cache the FrameTime.
+					local FT = FrameTime() * 5
+		
+					--Lerp the EdgeHUD.calcData.
+					lerpedData = Lerp(FT or 0,lerpedData or 0,data or 0)
+		
+					--Calculate the proportion.
+					local prop = math.Clamp(lerpedData / max,0,1)
+		
+					--Lerp the Alpha.
+					lerpedAlpha = Lerp(FT,lerpedAlpha,prop > 0.999 and alwaysShowPercentage == false and data <= max and 0 or 255)
+		
+					--Calculate the height.
+					local height = h * prop
+		
+					--Draw the overlay.
+					surface.SetDrawColor(ColorAlpha(curWidget.Color,lerpedAlpha))
+					surface.DrawRect(0,h - height,w,height)
+		
+					--Draw the infotext.
+					draw.SimpleText(math.max(math.Round(lerpedData),0) .. "%","EdgeHUD:Small",w / 2,h - VARS.iconMargin_Small,ColorAlpha(COLORS["White"],lerpedAlpha),TEXT_ALIGN_CENTER,TEXT_ALIGN_BOTTOM)
+		
+					--Draw the white outline.
+					surface.SetDrawColor(COLORS["White_Outline"])
+					surface.DrawOutlinedRect(0,0,w,h)
+		
+					--Draw the corners.
+					surface.SetDrawColor(COLORS["White_Corners"])
+					EdgeHUD.DrawEdges(0,0,w,h, 8)
+		
+					--Calculate the new size.
+					lerpedSize = Lerp(FT,lerpedSize,prop > 0.999 and alwaysShowPercentage == false and data <= max  and VARS.iconSize or VARS.iconSize_Small)
+		
+					--Update the size.
+					Icon:SetSize(lerpedSize,lerpedSize)
+		
+					--Calculate the new ypos.
+					lerpedPos = Lerp(FT,lerpedPos,prop > 0.999 and alwaysShowPercentage == false and data <= max  and VARS.iconMargin or VARS.iconMargin_Small)
+		
+					--Update the position.
+					Icon:SetPos(xPos,lerpedPos)
+		
+				end
+			end		
+		end
+	end
+
+	timer.Simple(2, YRPInitEdgeHud)
+end
+YRPInitEdgeHud()

@@ -12,16 +12,31 @@ end
 
 function Entity:getDoorData()
 	--Description: Internal function to get the door/vehicle data.
-	YRP.msg("darkrp", "getDoorData()")
-	YRP.msg("darkrp", DarkRP._not)
-	return {}
+	if not self:isKeysOwnable() then
+		return {}
+	end
+
+	self.DoorData = self.DoorData or {}
+
+	self.DoorData.owner = nil
+
+	local charid = tonumber(self:GetDString("ownerCharID", ""))
+	if ea(self:GetRPOwner()) then
+		self.DoorData.owner = self:GetRPOwner():UserID()
+	elseif charid and charid > 0 then
+		for i, v in pairs(player.GetAll()) do
+			if v:CharID() == charid then
+				self.DoorData.owner = v:UserID()
+			end
+		end
+	end
+
+    return self.DoorData
 end
 
 function Entity:getDoorOwner()
 	--Description: Get the owner of a door.
-	YRP.msg("darkrp", "getDoorOwner()")
-	YRP.msg("darkrp", DarkRP._not)
-	return NULL
+	return self:GetRPOwner()
 end
 
 function Entity:getKeysAllowedToOwn()
@@ -81,7 +96,7 @@ end
 
 function Entity:isKeysOwnable()
 	--Description: Whether this door can be bought.
-	return GetGlobalDBool("bool_building_system", false)
+	return self:GetDBool("bool_canbeowned", true)
 end
 
 function Entity:isKeysOwned()

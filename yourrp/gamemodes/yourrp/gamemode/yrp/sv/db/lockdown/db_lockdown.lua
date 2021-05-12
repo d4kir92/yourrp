@@ -116,6 +116,8 @@ net.Receive("set_lockdown", function(len, ply)
 	end
 
 	if bool_lockdown then
+		SetGlobalBool("DarkRP_LockDown", true)
+		
 		-- LOCKDOWN START
 		YRP.msg("note", ply:RPName() .. " started a lockdown!")
 		sound.Add( {
@@ -149,6 +151,8 @@ net.Receive("set_lockdown", function(len, ply)
 			end
 		end
 	else
+		SetGlobalBool("DarkRP_LockDown", false)
+
 		--LOCKDOWN END
 		YRP.msg("note", ply:RPName() .. " stopped the lockdown!")
 		for i, speaker in pairs(_G["LOCKDOWN_ENTITIES"]) do

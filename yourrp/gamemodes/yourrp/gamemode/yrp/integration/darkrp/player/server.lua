@@ -277,3 +277,5 @@ function Player:warrant(warranter, reason)
 	YRP.msg("darkrp", "warrant(warranter, reason)")
 	YRP.msg("darkrp", DarkRP._not)
 end
+
+DarkRP.hooks.playerArrested = Player.arrest
