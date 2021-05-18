@@ -121,7 +121,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_keybinds_menu", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_tickets_menu", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_character_background", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_character_design", "TEXT DEFAULT 'Horizontal'")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_character_design", "TEXT DEFAULT 'HorizontalNew'")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_name", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_rolename", "INT DEFAULT 1")

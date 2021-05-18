@@ -214,3 +214,8 @@ net.Receive("update_yrp_darkrp", function(len)
 	SetDarkRPTab(tab)
 	UpdateDarkRP(DarkRP)
 end)
+
+function loadCustomDarkRPItems()
+    hook.Run("loadCustomDarkRPItems")
+end
+timer.Simple(1, loadCustomDarkRPItems)

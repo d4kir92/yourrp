@@ -521,11 +521,11 @@ function InitScoreboard()
 
 		
 		yrptab["level"] = 24
-		yrptab["idcardid"] = 100
+		yrptab["idcardid"] = 140
 		if !GetGlobalDBool("bool_yrp_scoreboard_show_level", false) and !GetGlobalDBool("bool_yrp_scoreboard_show_idcardid", false) then
 			yrptab["name"] = 260
 		else
-			yrptab["name"] = 140
+			yrptab["name"] = 160
 		end
 		yrptab["groupname"] = 180
 		if !GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
