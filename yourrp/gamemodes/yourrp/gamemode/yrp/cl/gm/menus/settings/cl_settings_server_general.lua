@@ -494,6 +494,9 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_tickets_menu, "LID_ticketsmenu", "update_bool_yrp_tickets_menu")
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
+		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_background, "Loading Background", "update_text_loading_background")
+
+		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_background, "LID_character_background", "update_text_character_background")
 
 		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "Character Design", "update_text_character_design", GetGlobalDString("text_character_design", "HorizontalNEW"), {"HorizontalNEW", "Horizontal", "Vertical"})

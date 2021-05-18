@@ -280,67 +280,67 @@ YRP_PM.version = -1
 YRP_PM.model = ""
 function YRP_PMUpdate()
 	local lply = LocalPlayer()
-	if !lply:IsValid() then return end
+	if IsValid(lply) then
+		if GetGlobalDBool("bool_yrp_hud", false) then
+			if lply:GetDInt("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetPlayerModel() then
+				YRP_PM.version = lply:GetDInt("hud_version", 0)
 
-	if GetGlobalDBool("bool_yrp_hud", false) then
-		if lply:GetDInt("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetPlayerModel() then
-			YRP_PM.version = lply:GetDInt("hud_version", 0)
+				YRP_PM:Show()
 
-			YRP_PM:Show()
+				YRP_PM.model = lply:GetPlayerModel()
 
-			YRP_PM.model = lply:GetPlayerModel()
+				YRP_PM.w = lply:HudValue("PM", "SIZE_W")
+				YRP_PM.h = lply:HudValue("PM", "SIZE_H")
+				YRP_PM.x = lply:HudValue("PM", "POSI_X")
+				YRP_PM.y = lply:HudValue("PM", "POSI_Y")
+				YRP_PM.visible = lply:HudValue("PM", "VISI")
 
-			YRP_PM.w = lply:HudValue("PM", "SIZE_W")
-			YRP_PM.h = lply:HudValue("PM", "SIZE_H")
-			YRP_PM.x = lply:HudValue("PM", "POSI_X")
-			YRP_PM.y = lply:HudValue("PM", "POSI_Y")
-			YRP_PM.visible = lply:HudValue("PM", "VISI")
+				YRP_PM:SetPos(YRP_PM.x, YRP_PM.y)
+				YRP_PM:SetSize(YRP_PM.h, YRP_PM.h)
+				YRP_PM:SetModel(YRP_PM.model)
+				
+				if ea(YRP_PM.Entity) then
+					local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
+					if lb != nil then
+						local eyepos = YRP_PM.Entity:GetBonePosition(lb)
+						eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
+						YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
+						YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-26, 0, 0))	-- Move cam in front of eyes
+						YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
+					else
+						YRP_PM:SetLookAt(Vector(0, 0, 40))
+						YRP_PM:SetCamPos(Vector(50, 50, 50))
+					end
+				end
 
-			YRP_PM:SetPos(YRP_PM.x, YRP_PM.y)
-			YRP_PM:SetSize(YRP_PM.h, YRP_PM.h)
-			YRP_PM:SetModel(YRP_PM.model)
-			
-			if ea(YRP_PM.Entity) then
-				local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
-				if lb != nil then
-					local eyepos = YRP_PM.Entity:GetBonePosition(lb)
-					eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
-					YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
-					YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-26, 0, 0))	-- Move cam in front of eyes
-					YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
-				else
-					YRP_PM:SetLookAt(Vector(0, 0, 40))
-					YRP_PM:SetCamPos(Vector(50, 50, 50))
+				if !YRP_PM.visible then
+					YRP_PM:SetModel("")
 				end
 			end
 
-			if !YRP_PM.visible then
+			if IsValid(SL) and (lply:GetDInt("hud_version", 0) != SL.version or SL.url != GetGlobalDString("text_server_logo", "")) then
+				SL.version = lply:GetDInt("hud_version", 0)
+				SL.visible = lply:HudValue("SL", "VISI")
+				SL.url = GetGlobalDString("text_server_logo", "")
+
+				SL.w = lply:HudValue("SL", "SIZE_W")
+				SL.h = lply:HudValue("SL", "SIZE_H")
+				SL.x = lply:HudValue("SL", "POSI_X")
+				SL.y = lply:HudValue("SL", "POSI_Y")
+
+				SL:SetPos(SL.x, SL.y)
+				SL:SetSize(SL.h, SL.h)
+				SL:SetHTML(GetHTMLImage(SL.url, SL.h, SL.h))
+
+				SL:SetVisible(SL.visible)
+			end
+		else
+			if lply:GetDInt("hud_version", 0) != YRP_PM.version then
+				YRP_PM.version = lply:GetDInt("hud_version", 0)
+
+				YRP_PM:Hide()
 				YRP_PM:SetModel("")
 			end
-		end
-
-		if IsValid(SL) and (lply:GetDInt("hud_version", 0) != SL.version or SL.url != GetGlobalDString("text_server_logo", "")) then
-			SL.version = lply:GetDInt("hud_version", 0)
-			SL.visible = lply:HudValue("SL", "VISI")
-			SL.url = GetGlobalDString("text_server_logo", "")
-
-			SL.w = lply:HudValue("SL", "SIZE_W")
-			SL.h = lply:HudValue("SL", "SIZE_H")
-			SL.x = lply:HudValue("SL", "POSI_X")
-			SL.y = lply:HudValue("SL", "POSI_Y")
-
-			SL:SetPos(SL.x, SL.y)
-			SL:SetSize(SL.h, SL.h)
-			SL:SetHTML(GetHTMLImage(SL.url, SL.h, SL.h))
-
-			SL:SetVisible(SL.visible)
-		end
-	else
-		if lply:GetDInt("hud_version", 0) != YRP_PM.version then
-			YRP_PM.version = lply:GetDInt("hud_version", 0)
-
-			YRP_PM:Hide()
-			YRP_PM:SetModel("")
 		end
 	end
 

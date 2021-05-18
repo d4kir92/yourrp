@@ -769,7 +769,7 @@ function HUDSimple()
 		HUDSimpleBAR(SA)
 		RO = {}
 		RO.element = "RO"
-		RO.cur = 1
+		RO.cur = 0
 		RO.max = 1
 		RO.text = lply:GetRoleName()
 		RO.icon = icons["RO"]

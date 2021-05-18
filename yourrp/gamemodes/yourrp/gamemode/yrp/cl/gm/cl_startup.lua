@@ -2367,14 +2367,35 @@ if pa(loading) then
 	loading:SetTitle("")
 	loading:Center()
 	loading:ShowCloseButton(false)
-	loading.d = CurTime() + 1
-	loading.t = 0
-	loading.tmax = 120
 	loading:MakePopup()
-	loading.r = 0
-	loading.rdir = 1
 	function loading:Paint(pw, ph)
+		-- BG, Background
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255))
+	end
+
+	loading.bg = createD("DHTML", loading, loading:GetWide(), loading:GetTall(), 0, 0)
+	loading.bg.url = ""
+
+	loading.blur = createD("DPanel", loading, loading:GetWide(), loading:GetTall(), 0, 0)
+	loading.blur.d = CurTime() + 1
+	loading.blur.t = 0
+	loading.blur.tmax = 120
+	loading.blur.r = 0
+	loading.blur.rdir = 1
+
+	function loading.blur:Paint(pw, ph)
 		self:MoveToFront()
+
+		if loading.bg.url != GetGlobalDString("text_loading_background", "") then
+			loading.bg.url = GetGlobalDString("text_loading_background", "")
+
+			if strEmpty(loading.bg.url) then
+				loading.bg:Hide()
+			else
+				loading.bg:SetHTML(GetHTMLImage(GetGlobalDString("text_loading_background", ""), loading:GetWide(), loading:GetTall()))
+				loading.bg:Show()
+			end
+		end
 
 		local lply = LocalPlayer()
 
@@ -2385,16 +2406,13 @@ if pa(loading) then
 			if self.t >= self.tmax then
 				if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 then
 					YRP.msg("error", "loading => " .. self.tmax .. "+ " .. " " .. printReadyError())
-					self:Remove()
+					loading:Remove()
 				elseif self.t > self.tmax then
 					self.t = 0
 				end
 			end
 		end
 
-		-- BG, Background
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255))
-		
 
 
 		-- LOGO
@@ -2440,15 +2458,14 @@ if pa(loading) then
 
 
 		if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 and lply:GetDBool("finishedloading", false) and lply:GetDBool("loadedchars", false) then
-			self:Remove()
+			loading:Remove()
 		end
 	end
 end
 
 local windowOpen = false
-
 net.Receive("openLawBoard", function(len)
-	if not windowOpen and LocalPlayer():isCP() or LocalPlayer():GetDBool("bool_canusewarnsystem", false) then
+	if not windowOpen and (LocalPlayer():isCP() or LocalPlayer():GetDBool("bool_canusewarnsystem", false)) then
 		local tmpJailList = net.ReadTable()
 		windowOpen = true
 		local window = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())

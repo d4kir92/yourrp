@@ -527,11 +527,11 @@ function InitScoreboard()
 		else
 			yrptab["name"] = 160
 		end
-		yrptab["groupname"] = 180
+		yrptab["groupname"] = 220
 		if !GetGlobalDBool("bool_yrp_scoreboard_show_groupname", false) then
 			yrptab["rolename"] = 360
 		else
-			yrptab["rolename"] = 180
+			yrptab["rolename"] = 220
 		end
 		yrptab["usergroup"] = 200
 		yrptab["language"] = 140

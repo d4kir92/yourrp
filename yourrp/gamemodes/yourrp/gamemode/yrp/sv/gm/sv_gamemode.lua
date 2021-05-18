@@ -82,6 +82,8 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 
 	ply:SetDBool("yrp_characterselection", true)
 
+	YRPSendGlobalDString("text_loading_background", GetGlobalDString("text_loading_background"), ply)
+
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid or uniqueID)
 
