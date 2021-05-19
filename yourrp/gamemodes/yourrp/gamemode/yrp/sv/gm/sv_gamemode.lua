@@ -1152,3 +1152,49 @@ function GM:PostCleanupMap()
 	LoadWorldStorages()
 end
 
+local posturl = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSe9Po-FzCYFCNIlXbZfywXOIPooZ48_FqvEAwHrnRdTBolmHg/formResponse"
+function SendServerInfo()
+	if game.IsDedicated() then
+		if GAMEMODE then
+			--print("SendServerInfo")
+			local entry = {}
+
+			-- IP
+			entry["entry.447060141"] = tostring(game.GetIPAddress())
+
+			-- Servername
+			entry["entry.38355044"] = "SN:" .. tostring(GetHostName())
+
+			-- Gamemodename
+			entry["entry.809731523"] = "GN:" .. GetGlobalDString("text_gamemode_name", "lol")
+
+			-- MaxPlayers
+			entry["entry.1368236947"] = tostring(game.MaxPlayers())
+
+			entry["entry.1556630983"] = tostring(GAMEMODE.VersionStable)
+			entry["entry.1322118780"] = tostring(GAMEMODE.VersionBeta)
+			entry["entry.1406407238"] = tostring(GAMEMODE.VersionCanary)
+
+			-- CollectionID
+			entry["entry.1569548085"] = tostring(YRPCollectionID())
+
+			http.Post(posturl, entry,
+			function(body, length, headers, code)
+				if code == 200 then
+					--print("SendServerInfo Worked")
+				else
+					print("SendServerInfo failed: " .. code)
+				end
+			end,
+			function( failed )
+				print("SendServerInfo failed: " .. tostring(failed))
+			end)
+		else
+			timer.Simple(1, SendServerInfo)
+		end
+	end
+end
+
+hook.Add("OnGamemodeLoaded", "yrp_OnGamemodeLoaded", function()
+	SendServerInfo()
+end)
