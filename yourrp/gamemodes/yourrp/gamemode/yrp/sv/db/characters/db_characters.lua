@@ -561,11 +561,8 @@ function SendLoopCharacterList(ply, tab)
 end
 
 util.AddNetworkString("OpenCharacterCreation")
-
 function send_characters(ply)
 	local netTable = {}
-
-	--local chars = {}
 
 	local chaTab = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 

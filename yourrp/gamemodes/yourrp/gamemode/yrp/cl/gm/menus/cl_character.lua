@@ -109,7 +109,7 @@ local _cur = ""
 local chars = {}
 local loading = false
 function LoadCharacters()
-	YRP.msg("gm", "received characterlist")
+	--YRP.msg("gm", "received characterlist")
 
 	trashicon = YRP.GetDesignIcon("64_trash")
 
@@ -174,7 +174,7 @@ function LoadCharacters()
 					local sh = YRP.ctr(200)
 					local px = 0
 					local py = 0
-					if GetGlobalDString("text_character_design", "HorizontalNEW") == "HorizontalNEW" then
+					if string.lower(GetGlobalDString("text_character_design", "HorizontalNEW")) == "horizontalnew" then
 						sw = YRP.ctr(350*2)
 						sh = YRP.ctr(600*2)
 						px = 0
@@ -235,7 +235,7 @@ function LoadCharacters()
 						tmpChar.rol = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. "    " .. tmpChar.rol
 					end
 
-					if GetGlobalDString("text_character_design", "HorizontalNEW") != "HorizontalNEW" then
+					if string.lower(GetGlobalDString("text_character_design", "HorizontalNEW")) != "horizontalnew" then
 						function tmpChar:Paint(pw, ph)
 							if curChar == -1 then
 								curChar = tonumber(LocalPlayer():CharID())
@@ -470,82 +470,92 @@ function LoadCharacters()
 				i = i + 1
 			end
 			
-			if GetGlobalDString("text_character_design", "HorizontalNEW") == "HorizontalNEW" then
+			if string.lower(GetGlobalDString("text_character_design", "HorizontalNEW")) == "horizontalnew" then
 				local sw = YRP.ctr(fw) - 2 * br
 				local sh = YRP.ctr(200)
 				local px = 0
 				local py = 0
-				if GetGlobalDString("text_character_design", "HorizontalNEW") == "HorizontalNEW" then
+				if string.lower(GetGlobalDString("text_character_design", "HorizontalNEW")) == "horizontalnew" then
 					sw = YRP.ctr(350*2)
 					sh = YRP.ctr(600*2)
 					px = 0
 					py = 0
 				end
 
-				local addChar = createD("YButton", nil, sw, sh, px, py)
-				addChar:SetText("")
-				function addChar:Paint(pw, ph)
-					if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
-						
-						local sw = pw - 2 * YRP.ctr(180)
-						local breite = YRP.ctr(50)
-						if YRP.GetDesignIcon("add") ~= nil then
-							draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sw / 2, breite, sw, Color(102, 102, 102, 255))
-							draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
+				if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+					local addChar = createD("YButton", nil, sw, sh, px, py)
+					addChar:SetText("")
+					function addChar:Paint(pw, ph)
+						if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
+							
+							local sw = pw - 2 * YRP.ctr(180)
+							local breite = YRP.ctr(50)
+							if YRP.GetDesignIcon("add") ~= nil then
+								draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sw / 2, breite, sw, Color(102, 102, 102, 255))
+								draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
+							end
 						end
 					end
-				end
-				function addChar:DoClick()
-					isEventChar = self.bool_eventchar
-					if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
-						if pa(CharMenu.frame) then
-							CharMenu.frame:Close()
-						end
-						SetGlobalDBool("create_eventchar", false)
-						openCharacterCreation()
-					end
-				end
-
-				if CharMenu.characterList.AddItem then
-					CharMenu.characterList:AddItem(addChar)
-				else
-					CharMenu.characterList:AddPanel(addChar)
-				end
-
-				local addCharEvent = createD("YButton", nil, sw, sh, px, py)
-				addCharEvent:SetText("")
-				function addCharEvent:Paint(pw, ph)
-					if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
-						
-						draw.SimpleText(YRP.lang_string("LID_event"), "Y_18_500", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-						local sw = pw - 2 * YRP.ctr(180)
-						local breite = YRP.ctr(50)
-						if YRP.GetDesignIcon("add") ~= nil then
-							draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sw / 2, breite, sw, Color(102, 102, 102, 255))
-							draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
+					function addChar:DoClick()
+						isEventChar = self.bool_eventchar
+						if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+							if pa(CharMenu.frame) then
+								CharMenu.frame:Close()
+							end
+							SetGlobalDBool("create_eventchar", false)
+							openCharacterCreation()
 						end
 					end
-				end
-				function addCharEvent:DoClick()
-					if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
-						if pa(CharMenu.frame) then
-							CharMenu.frame:Close()
-						end
-						SetGlobalDBool("create_eventchar", true)
-						openCharacterCreation()
+
+					if CharMenu.characterList.AddItem then
+						CharMenu.characterList:AddItem(addChar)
+					else
+						CharMenu.characterList:AddPanel(addChar)
 					end
 				end
 
-				if CharMenu.characterList.AddItem then
-					CharMenu.characterList:AddItem(addCharEvent)
-				else
-					CharMenu.characterList:AddPanel(addCharEvent)
+				if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
+					local addCharEvent = createD("YButton", nil, sw, sh, px, py)
+					addCharEvent:SetText("")
+					function addCharEvent:Paint(pw, ph)
+						if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
+							
+							draw.SimpleText(YRP.lang_string("LID_event"), "Y_18_500", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+							local sw = pw - 2 * YRP.ctr(180)
+							local breite = YRP.ctr(50)
+							if YRP.GetDesignIcon("add") ~= nil then
+								draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sw / 2, breite, sw, Color(102, 102, 102, 255))
+								draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
+							end
+						end
+					end
+					function addCharEvent:DoClick()
+						if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
+							if pa(CharMenu.frame) then
+								CharMenu.frame:Close()
+							end
+							SetGlobalDBool("create_eventchar", true)
+							openCharacterCreation()
+						end
+					end
+
+					if CharMenu.characterList.AddItem then
+						CharMenu.characterList:AddItem(addCharEvent)
+					else
+						CharMenu.characterList:AddPanel(addCharEvent)
+					end
 				end
 			end
 		end
+	end
+
+	if CharMenu.characterList:GetWide() > CharMenu.characterList:GetCanvas():GetWide() then
+		CharMenu.characterList:SetWide(CharMenu.characterList:GetCanvas():GetWide())
+		local px, py = CharMenu.characterList:GetPos()
+		CharMenu.characterList:SetPos(CharMenu.charactersBackground:GetWide() / 2 - CharMenu.characterList:GetWide() / 2, py)
 	end
 
 	LocalPlayer():SetDBool("loadedchars", true)
@@ -585,9 +595,11 @@ function openCharacterSelection()
 	CharMenu.character.amount = 0
 
 	openMenu()
-
+	
 	if !pa(CharMenu.frame) then
-		if GetGlobalDString("text_character_design", "HorizontalNEW") == "Vertical" then
+		local design = string.lower(GetGlobalDString("text_character_design", "HorizontalNEW"))
+
+		if design == "vertical" then
 			CharMenu.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 			CharMenu.frame:Hide()
 			CharMenu.frame:SetTitle("")
@@ -723,7 +735,7 @@ function openCharacterSelection()
 			end
 
 			timer.Simple(0.1, function()
-				YRP.msg("gm", "ask for characterlist")
+				--YRP.msg("gm", "ask for characterlist")
 
 				net.Start("yrp_get_characters")
 				net.SendToServer()
@@ -843,7 +855,7 @@ function openCharacterSelection()
 					openCharacterCreation()
 				end
 			end
-		elseif GetGlobalDString("text_character_design", "HorizontalNEW") == "Horizontal" then -- Horizontal
+		elseif design == "horizontal" then -- Horizontal
 			CharMenu.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 			CharMenu.frame:Hide()
 			CharMenu.frame:SetTitle("")
@@ -954,7 +966,7 @@ function openCharacterSelection()
 			end
 			
 			timer.Simple(0.1, function()
-				YRP.msg("gm", "ask for characterlist")
+				--YRP.msg("gm", "ask for characterlist")
 
 				net.Start("yrp_get_characters")
 				net.SendToServer()
@@ -1074,7 +1086,7 @@ function openCharacterSelection()
 					openCharacterCreation()
 				end
 			end
-		elseif GetGlobalDString("text_character_design", "HorizontalNEW") == "HorizontalNEW" then -- HorizontalNEW
+		elseif design == "horizontalnew" then -- HorizontalNEW
 			CharMenu.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 			CharMenu.frame:Hide()
 			CharMenu.frame:SetTitle("")
@@ -1205,10 +1217,8 @@ function openCharacterSelection()
 				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
 			end
 
-
-
 			timer.Simple(0.01, function()
-				YRP.msg("gm", "ask for characterlist")
+				--YRP.msg("gm", "ask for characterlist")
 
 				net.Start("yrp_get_characters")
 				net.SendToServer()

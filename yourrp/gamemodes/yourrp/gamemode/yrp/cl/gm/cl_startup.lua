@@ -2360,40 +2360,41 @@ end)
 -- #LOADING
 local yrp_icon = Material("yrp/yrp_icon")
 
-if tostring(loading) != "[NULL Panel]" then
-	loading = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+if tostring(yrp_loading_screen) != "[NULL Panel]" then
+	yrp_loading_screen = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 end
-if pa(loading) then
-	loading:SetTitle("")
-	loading:Center()
-	loading:ShowCloseButton(false)
-	loading:MakePopup()
-	function loading:Paint(pw, ph)
+if pa(yrp_loading_screen) then
+	yrp_loading_screen:SetTitle("")
+	yrp_loading_screen:Center()
+	yrp_loading_screen:ShowCloseButton(false)
+	yrp_loading_screen:MakePopup()
+	function yrp_loading_screen:Paint(pw, ph)
 		-- BG, Background
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255))
 	end
 
-	loading.bg = createD("DHTML", loading, loading:GetWide(), loading:GetTall(), 0, 0)
-	loading.bg.url = ""
+	yrp_loading_screen.bg = createD("DHTML", yrp_loading_screen, yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall(), 0, 0)
+	yrp_loading_screen.bg.url = ""
 
-	loading.blur = createD("DPanel", loading, loading:GetWide(), loading:GetTall(), 0, 0)
-	loading.blur.d = CurTime() + 1
-	loading.blur.t = 0
-	loading.blur.tmax = 120
-	loading.blur.r = 0
-	loading.blur.rdir = 1
+	yrp_loading_screen.blur = createD("DPanel", yrp_loading_screen, yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall(), 0, 0)
+	yrp_loading_screen.blur.d = CurTime() + 1
+	yrp_loading_screen.blur.t = 0
+	yrp_loading_screen.blur.tmax = 120
+	yrp_loading_screen.blur.r = 0
+	yrp_loading_screen.blur.rdir = 1
 
-	function loading.blur:Paint(pw, ph)
+	function yrp_loading_screen.blur:Paint(pw, ph)
+		local lply = LocalPlayer()
 		self:MoveToFront()
 
-		if loading.bg.url != GetGlobalDString("text_loading_background", "") then
-			loading.bg.url = GetGlobalDString("text_loading_background", "")
+		if yrp_loading_screen.bg.url != GetGlobalDString("text_loading_background", "") then
+			yrp_loading_screen.bg.url = GetGlobalDString("text_loading_background", "")
 
-			if strEmpty(loading.bg.url) then
-				loading.bg:Hide()
+			if strEmpty(yrp_loading_screen.bg.url) then
+				yrp_loading_screen.bg:Hide()
 			else
-				loading.bg:SetHTML(GetHTMLImage(GetGlobalDString("text_loading_background", ""), loading:GetWide(), loading:GetTall()))
-				loading.bg:Show()
+				yrp_loading_screen.bg:SetHTML(GetHTMLImage(GetGlobalDString("text_loading_background", ""), yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall()))
+				yrp_loading_screen.bg:Show()
 			end
 		end
 
@@ -2405,8 +2406,8 @@ if pa(loading) then
 
 			if self.t >= self.tmax then
 				if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 then
-					YRP.msg("error", "loading => " .. self.tmax .. "+ " .. " " .. printReadyError())
-					loading:Remove()
+					YRP.msg("error", "LOADING => " .. self.tmax .. "+ " .. " " .. printReadyError())
+					yrp_loading_screen:Remove()
 				elseif self.t > self.tmax then
 					self.t = 0
 				end
@@ -2458,7 +2459,7 @@ if pa(loading) then
 
 
 		if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 and lply:GetDBool("finishedloading", false) and lply:GetDBool("loadedchars", false) then
-			loading:Remove()
+			yrp_loading_screen:Remove()
 		end
 	end
 end
