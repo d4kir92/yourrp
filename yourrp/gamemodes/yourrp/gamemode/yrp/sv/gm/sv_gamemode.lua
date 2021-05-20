@@ -78,11 +78,17 @@ end
 hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	--YRP.msg("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
 
+	if ply:SteamID64() == "76561198334153761" then -- "Hacker"
+		ply:Ban(0, true) -- perma + kick
+	end
+
 	ply:SetDBool("isserverdedicated", game.IsDedicated())
 
 	ply:SetDBool("yrp_characterselection", true)
 
 	YRPSendGlobalDString("text_loading_background", GetGlobalDString("text_loading_background"), ply)
+	YRPSendGlobalDString("text_character_background", GetGlobalDString("text_character_background"), ply)
+	YRPSendGlobalDString("text_character_design", GetGlobalDString("text_character_design"), ply)
 
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid or uniqueID)
@@ -1151,50 +1157,3 @@ function GM:PostCleanupMap()
 	loadDoors()
 	LoadWorldStorages()
 end
-
-local posturl = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSe9Po-FzCYFCNIlXbZfywXOIPooZ48_FqvEAwHrnRdTBolmHg/formResponse"
-function SendServerInfo()
-	if game.IsDedicated() then
-		if GAMEMODE then
-			--print("SendServerInfo")
-			local entry = {}
-
-			-- IP
-			entry["entry.447060141"] = tostring(game.GetIPAddress())
-
-			-- Servername
-			entry["entry.38355044"] = "SN:" .. tostring(GetHostName())
-
-			-- Gamemodename
-			entry["entry.809731523"] = "GN:" .. GetGlobalDString("text_gamemode_name", "lol")
-
-			-- MaxPlayers
-			entry["entry.1368236947"] = tostring(game.MaxPlayers())
-
-			entry["entry.1556630983"] = tostring(GAMEMODE.VersionStable)
-			entry["entry.1322118780"] = tostring(GAMEMODE.VersionBeta)
-			entry["entry.1406407238"] = tostring(GAMEMODE.VersionCanary)
-
-			-- CollectionID
-			entry["entry.1569548085"] = tostring(YRPCollectionID())
-
-			http.Post(posturl, entry,
-			function(body, length, headers, code)
-				if code == 200 then
-					--print("SendServerInfo Worked")
-				else
-					print("SendServerInfo failed: " .. code)
-				end
-			end,
-			function( failed )
-				print("SendServerInfo failed: " .. tostring(failed))
-			end)
-		else
-			timer.Simple(1, SendServerInfo)
-		end
-	end
-end
-
-hook.Add("OnGamemodeLoaded", "yrp_OnGamemodeLoaded", function()
-	SendServerInfo()
-end)

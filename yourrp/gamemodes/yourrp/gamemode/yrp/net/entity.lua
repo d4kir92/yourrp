@@ -3,7 +3,7 @@ local ENTITY = FindMetaTable("Entity")
 
 -- CUSTOM
 YRP_NW_Ents = YRP_NW_Ents or {}
-YRP_NW_EntsIDs = YRP_NW_EntsIDs or {}
+--YRP_NW_EntsIDs = YRP_NW_EntsIDs or {}
 
 YRP_QUEUE_Ents = YRP_QUEUE_Ents or {}
 
@@ -63,7 +63,7 @@ function SetDString(entindex, key, value)
 	if isnumber(entindex) and isstring(key) and value != "nil" then
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-		YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+		--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 		YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
 		if YRP_NW_Ents[entindex]["STRING"][key] != value or YRP_NW_Ents[entindex]["STRING"][key] == nil then
 			YRP_NW_Ents[entindex]["STRING"][key] = value
@@ -88,7 +88,7 @@ end
 function GetDString(entindex, key, value)
 	YRP_NW_Ents = YRP_NW_Ents or {}
 	YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-	YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+	--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 	YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
 	local result = YRP_NW_Ents[entindex]["STRING"][key] or value
 	return tostring(result)
@@ -147,7 +147,7 @@ function SetDBool(entindex, key, value)
 	if isnumber(entindex) and isstring(key) and isbool(value) then
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-		YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+		--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 		YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
 		if YRP_NW_Ents[entindex]["BOOL"][key] != value or YRP_NW_Ents[entindex]["BOOL"][key] == nil then
 			YRP_NW_Ents[entindex]["BOOL"][key] = value
@@ -172,7 +172,7 @@ end
 function GetDBool(entindex, key, value)
 	YRP_NW_Ents = YRP_NW_Ents or {}
 	YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-	YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+	--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 	YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
 	local result = YRP_NW_Ents[entindex]["BOOL"][key]
 	if isbool(result) then
@@ -243,7 +243,7 @@ function SetDInt(entindex, key, value)
 	if isnumber(entindex) and isstring(key) and isnumber(tonumber(value)) then
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-		YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+		--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 		YRP_NW_Ents[entindex]["INT"] = YRP_NW_Ents[entindex]["INT"] or {}
 		if YRP_NW_Ents[entindex]["INT"][key] != value or YRP_NW_Ents[entindex]["INT"][key] == nil then
 			YRP_NW_Ents[entindex]["INT"][key] = tonumber(value)
@@ -270,7 +270,7 @@ end
 function GetDInt(entindex, key, value)
 	YRP_NW_Ents = YRP_NW_Ents or {}
 	YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-	YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+	--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 	YRP_NW_Ents[entindex]["INT"] = YRP_NW_Ents[entindex]["INT"] or {}
 	local result = YRP_NW_Ents[entindex]["INT"][key] or value
 	return tonumber(result)
@@ -335,7 +335,7 @@ function SetDFloat(entindex, key, value, range)
 
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-		YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+		--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 		YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
 		if YRP_NW_Ents[entindex]["FLOAT"][key] == nil or YRP_NW_Ents[entindex]["FLOAT"][key] != value then
 			YRP_NW_Ents[entindex]["FLOAT"][key] = value
@@ -374,7 +374,7 @@ end
 function GetDFloat(entindex, key, value, d)
 	YRP_NW_Ents = YRP_NW_Ents or {}
 	YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-	YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+	--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 	YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
 	local result = YRP_NW_Ents[entindex]["FLOAT"][key] or value
 	if d != nil then
@@ -440,7 +440,7 @@ function SetDEntity(entindex, key, value)
 	if isnumber(entindex) and isstring(key) and isentity(value) then
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-		YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+		--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 		YRP_NW_Ents[entindex]["ENTITY"] = YRP_NW_Ents[entindex]["ENTITY"] or {}
 		if YRP_NW_Ents[entindex]["ENTITY"][key] != value or YRP_NW_Ents[entindex]["ENTITY"][key] == nil then
 			YRP_NW_Ents[entindex]["ENTITY"][key] = value
@@ -467,7 +467,7 @@ end
 function GetDEntity(entindex, key, value)
 	YRP_NW_Ents = YRP_NW_Ents or {}
 	YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-	YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+	--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 	YRP_NW_Ents[entindex]["ENTITY"] = YRP_NW_Ents[entindex]["ENTITY"] or {}
 	local result = YRP_NW_Ents[entindex]["ENTITY"][key] or value
 	return result
@@ -530,7 +530,7 @@ function SetDTable(entindex, key, value)
 	if isnumber(entindex) and isstring(key) and istable(value) then
 		YRP_NW_Ents = YRP_NW_Ents or {}
 		YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-		YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+		--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 		YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
 		if YRP_NW_Ents[entindex]["TABLE"][key] != value or YRP_NW_Ents[entindex]["TABLE"][key] == nil then
 			YRP_NW_Ents[entindex]["TABLE"][key] = value
@@ -557,7 +557,7 @@ end
 function GetDTable(entindex, key, value)
 	YRP_NW_Ents = YRP_NW_Ents or {}
 	YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-	YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+	--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 	YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
 	local result = YRP_NW_Ents[entindex]["TABLE"][key] or value
 	return result
@@ -575,7 +575,7 @@ end
 function SetDInit(entindex)
 	YRP_NW_Ents = YRP_NW_Ents or {}
 	YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-	YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+	--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
 	YRP_NW_Ents[entindex]["INIT"] = true
 end
 function ENTITY:SetDInit(key, value)
@@ -615,13 +615,15 @@ if SERVER then
 		for j, ent in pairs(ents.GetAll()) do
 			if ent.EntIndex != nil then
 				local entindex = ent:EntIndex()
-				YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-				YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
-				YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
-				YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
-				YRP_NW_Ents[entindex]["INT"] = YRP_NW_Ents[entindex]["INT"] or {}
-				YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
-				YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
+				if YRP_NW_Ents[entindex] then
+					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+					--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+					YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
+					YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
+					YRP_NW_Ents[entindex]["INT"] = YRP_NW_Ents[entindex]["INT"] or {}
+					YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
+					YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
+				end
 			end
 		end
 
@@ -631,12 +633,14 @@ if SERVER then
 			for j, ent in pairs(ents.GetAll()) do
 				if ent.EntIndex != nil then
 					local entindex = ent:EntIndex()
-					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-					YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
-					YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
-					if table.Count(YRP_NW_Ents[entindex]["BOOL"]) > 0 then
-						for i, v in pairs(YRP_NW_Ents[entindex]["BOOL"]) do
-							YRPSendDBool(entindex, i, v, ply)
+					if YRP_NW_Ents[entindex] then
+						YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+						--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+						YRP_NW_Ents[entindex]["BOOL"] = YRP_NW_Ents[entindex]["BOOL"] or {}
+						if table.Count(YRP_NW_Ents[entindex]["BOOL"]) > 0 then
+							for i, v in pairs(YRP_NW_Ents[entindex]["BOOL"]) do
+								YRPSendDBool(entindex, i, v, ply)
+							end
 						end
 					end
 				end
@@ -648,12 +652,14 @@ if SERVER then
 			for j, ent in pairs(ents.GetAll()) do
 				if ent.EntIndex != nil then
 					local entindex = ent:EntIndex()
-					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-					YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
-					YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
-					if table.Count(YRP_NW_Ents[entindex]["STRING"]) > 0 then
-						for i, v in pairs(YRP_NW_Ents[entindex]["STRING"]) do
-							YRPSendDString(entindex, i, v, ply)
+					if YRP_NW_Ents[entindex] then
+						YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+						--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+						YRP_NW_Ents[entindex]["STRING"] = YRP_NW_Ents[entindex]["STRING"] or {}
+						if table.Count(YRP_NW_Ents[entindex]["STRING"]) > 0 then
+							for i, v in pairs(YRP_NW_Ents[entindex]["STRING"]) do
+								YRPSendDString(entindex, i, v, ply)
+							end
 						end
 					end
 				end
@@ -665,13 +671,15 @@ if SERVER then
 			for j, ent in pairs(ents.GetAll()) do
 				if ent.EntIndex != nil then
 					local entindex = ent:EntIndex()
-					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-					YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
-					YRP_NW_Ents[entindex]["INT"] = YRP_NW_Ents[entindex]["INT"] or {}
-					if table.Count(YRP_NW_Ents[entindex]["INT"]) > 0 then
-						for i, v in pairs(YRP_NW_Ents[entindex]["INT"]) do
-							if i != "yrp_load_glo" and i != "yrp_load_ent" then
-								YRPSendDInt(entindex, i, v, ply)
+					if YRP_NW_Ents[entindex] then
+						YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+						--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+						YRP_NW_Ents[entindex]["INT"] = YRP_NW_Ents[entindex]["INT"] or {}
+						if table.Count(YRP_NW_Ents[entindex]["INT"]) > 0 then
+							for i, v in pairs(YRP_NW_Ents[entindex]["INT"]) do
+								if i != "yrp_load_glo" and i != "yrp_load_ent" then
+									YRPSendDInt(entindex, i, v, ply)
+								end
 							end
 						end
 					end
@@ -684,12 +692,14 @@ if SERVER then
 			for j, ent in pairs(ents.GetAll()) do
 				if ent.EntIndex != nil then
 					local entindex = ent:EntIndex()
-					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-					YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
-					YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
-					if table.Count(YRP_NW_Ents[entindex]["FLOAT"]) > 0 then
-						for i, v in pairs(YRP_NW_Ents[entindex]["FLOAT"]) do
-							YRPSendDFloat(entindex, i, v, ply)
+					if YRP_NW_Ents[entindex] then
+						YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+						--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+						YRP_NW_Ents[entindex]["FLOAT"] = YRP_NW_Ents[entindex]["FLOAT"] or {}
+						if table.Count(YRP_NW_Ents[entindex]["FLOAT"]) > 0 then
+							for i, v in pairs(YRP_NW_Ents[entindex]["FLOAT"]) do
+								YRPSendDFloat(entindex, i, v, ply)
+							end
 						end
 					end
 				end
@@ -701,12 +711,14 @@ if SERVER then
 			for j, ent in pairs(ents.GetAll()) do
 				if ent.EntIndex != nil then
 					local entindex = ent:EntIndex()
-					YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
-					YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
-					YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
-					if table.Count(YRP_NW_Ents[entindex]["TABLE"]) > 0 then
-						for i, v in pairs(YRP_NW_Ents[entindex]["TABLE"]) do
-							YRPSendDTable(entindex, i, v, ply)
+					if YRP_NW_Ents[entindex] then
+						YRP_NW_Ents[entindex] = YRP_NW_Ents[entindex] or {}
+						--YRP_NW_EntsIDs[entindex] = YRP_NW_Ents[entindex]
+						YRP_NW_Ents[entindex]["TABLE"] = YRP_NW_Ents[entindex]["TABLE"] or {}
+						if table.Count(YRP_NW_Ents[entindex]["TABLE"]) > 0 then
+							for i, v in pairs(YRP_NW_Ents[entindex]["TABLE"]) do
+								YRPSendDTable(entindex, i, v, ply)
+							end
 						end
 					end
 				end
@@ -727,14 +739,15 @@ function YRPRemoveFromEntTable( entindex )
 		return
 	end
 	if istable(YRP_NW_Ents[entindex]) then
-		--YRP_NW_Ents[entindex] = nil -- breaks it
-		table.RemoveByValue(YRP_NW_Ents, entindex) -- works
-		table.RemoveByValue(YRP_NW_EntsIDs, entindex) -- works
+		timer.Simple(1, function()
+			if !ea(Entity(entindex)) then
+				YRP_NW_Ents[entindex] = nil
+			end
+		end)
 	end
 end
 
-function GM:EntityRemoved( ent )
+hook.Add("EntityRemoved", "YRP_EntityRemoved", function( ent )
 	local entindex = ent:EntIndex()
 	YRPRemoveFromEntTable( entindex )
-end
-
+end)

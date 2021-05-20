@@ -75,7 +75,7 @@ function YRPSendIsReady()
 		--TestYourRPContent()
 	end
 end
-
+--YRPSendIsReadyPingPong()
 local YRP_COUNT = 0
 local YRP_INIT = false
 local YRP_NOINIT = false

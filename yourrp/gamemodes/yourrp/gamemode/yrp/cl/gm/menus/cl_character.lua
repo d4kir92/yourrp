@@ -174,7 +174,7 @@ function LoadCharacters()
 					local sh = YRP.ctr(200)
 					local px = 0
 					local py = 0
-					if string.lower(GetGlobalDString("text_character_design", "HorizontalNEW")) == "horizontalnew" then
+					if YRP_CharDesign == "horizontalnew" then
 						sw = YRP.ctr(350*2)
 						sh = YRP.ctr(600*2)
 						px = 0
@@ -235,7 +235,7 @@ function LoadCharacters()
 						tmpChar.rol = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. "    " .. tmpChar.rol
 					end
 
-					if string.lower(GetGlobalDString("text_character_design", "HorizontalNEW")) != "horizontalnew" then
+					if YRP_CharDesign != "horizontalnew" then
 						function tmpChar:Paint(pw, ph)
 							if curChar == -1 then
 								curChar = tonumber(LocalPlayer():CharID())
@@ -470,12 +470,12 @@ function LoadCharacters()
 				i = i + 1
 			end
 			
-			if string.lower(GetGlobalDString("text_character_design", "HorizontalNEW")) == "horizontalnew" then
+			if YRP_CharDesign == "horizontalnew" then
 				local sw = YRP.ctr(fw) - 2 * br
 				local sh = YRP.ctr(200)
 				local px = 0
 				local py = 0
-				if string.lower(GetGlobalDString("text_character_design", "HorizontalNEW")) == "horizontalnew" then
+				if YRP_CharDesign == "horizontalnew" then
 					sw = YRP.ctr(350*2)
 					sh = YRP.ctr(600*2)
 					px = 0
@@ -597,10 +597,26 @@ function openCharacterSelection()
 	openMenu()
 	
 	if !pa(CharMenu.frame) then
-		local design = string.lower(GetGlobalDString("text_character_design", "HorizontalNEW"))
+		YRP_CharDesign = string.lower(GetGlobalDString("text_character_design"))
 
-		if design == "vertical" then
-			CharMenu.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+		function CharMenu.logic()
+			if YRP_CharDesign != string.lower(GetGlobalDString("text_character_design")) then
+				YRP_CharDesign = string.lower(GetGlobalDString("text_character_design"))
+
+				if CharMenu.frame and CharMenu.frame:IsVisible() then
+					closeMenu()
+					CharMenu.frame:Remove()
+					CharMenu.frame = nil
+					openCharacterSelection()
+				end
+			end
+			timer.Simple(1, CharMenu.logic)
+		end
+		CharMenu.logic()
+
+		CharMenu.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+
+		if YRP_CharDesign == "vertical" then
 			CharMenu.frame:Hide()
 			CharMenu.frame:SetTitle("")
 			CharMenu.frame:ShowCloseButton(false)
@@ -855,8 +871,7 @@ function openCharacterSelection()
 					openCharacterCreation()
 				end
 			end
-		elseif design == "horizontal" then -- Horizontal
-			CharMenu.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+		elseif YRP_CharDesign == "horizontal" then -- Horizontal
 			CharMenu.frame:Hide()
 			CharMenu.frame:SetTitle("")
 			CharMenu.frame:ShowCloseButton(false)
@@ -1086,8 +1101,7 @@ function openCharacterSelection()
 					openCharacterCreation()
 				end
 			end
-		elseif design == "horizontalnew" then -- HorizontalNEW
-			CharMenu.frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+		elseif YRP_CharDesign == "horizontalnew" then -- HorizontalNEW
 			CharMenu.frame:Hide()
 			CharMenu.frame:SetTitle("")
 			CharMenu.frame:ShowCloseButton(false)

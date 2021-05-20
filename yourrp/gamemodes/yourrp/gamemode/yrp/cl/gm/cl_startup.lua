@@ -2387,14 +2387,16 @@ if pa(yrp_loading_screen) then
 		local lply = LocalPlayer()
 		self:MoveToFront()
 
-		if yrp_loading_screen.bg.url != GetGlobalDString("text_loading_background", "") then
-			yrp_loading_screen.bg.url = GetGlobalDString("text_loading_background", "")
+		if yrp_loading_screen.bg then
+			if yrp_loading_screen.bg.url != GetGlobalDString("text_loading_background", "") then
+				yrp_loading_screen.bg.url = GetGlobalDString("text_loading_background", "")
 
-			if strEmpty(yrp_loading_screen.bg.url) then
-				yrp_loading_screen.bg:Hide()
-			else
-				yrp_loading_screen.bg:SetHTML(GetHTMLImage(GetGlobalDString("text_loading_background", ""), yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall()))
-				yrp_loading_screen.bg:Show()
+				if strEmpty(yrp_loading_screen.bg.url) then
+					yrp_loading_screen.bg:Hide()
+				else
+					yrp_loading_screen.bg:SetHTML(GetHTMLImage(GetGlobalDString("text_loading_background", ""), yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall()))
+					yrp_loading_screen.bg:Show()
+				end
 			end
 		end
 
