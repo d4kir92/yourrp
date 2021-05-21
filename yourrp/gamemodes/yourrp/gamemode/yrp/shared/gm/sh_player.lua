@@ -32,6 +32,15 @@ end
 
 local Player = FindMetaTable("Player")
 
+Player.oldIsTyping = Player.IsTyping
+function Player:IsTyping()
+	if GetGlobalDBool("bool_yrp_chat", false) then
+		return self:GetDBool("istyping", false)
+	else
+		return self:oldIsTyping()
+	end
+end
+
 function Player:YRPEat(num)
 	num = tonumber(num)
 	if isnumber(num) then

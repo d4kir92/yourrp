@@ -64,6 +64,8 @@ Material.colors.YButton_NC = "93, 166, 251, 255"	-- Normal Color
 Material.colors.YButton_HC = "148, 197, 255, 255"	-- Hovered Color
 Material.colors.YButton_PC = "50, 144, 254, 255"	-- Pressed Color
 Material.colors.YButton_SC = "50, 144, 254, 255"	-- Selected Color
+Material.colors.Chat_BG = "0, 0, 0, 100"		-- ChatBackground Color
+Material.colors.Chat_FG = "255, 255, 255, 20"	-- ChatForeground Color
 
 Material.ints = {}
 
@@ -91,6 +93,8 @@ Blur.colors.YButton_NC = "200, 200, 200, 80"	-- Normal Color
 Blur.colors.YButton_HC = "255, 255, 255, 80"	-- Hovered Color
 Blur.colors.YButton_PC = "150, 150, 150, 80"	-- Pressed Color
 Blur.colors.YButton_SC = "220, 220, 220, 80"	-- Selected Color
+Blur.colors.Chat_BG = "0, 0, 0, 100"		-- ChatBackground Color
+Blur.colors.Chat_FG = "255, 255, 255, 20"	-- ChatForeground Color
 
 Blur.ints = {}
 

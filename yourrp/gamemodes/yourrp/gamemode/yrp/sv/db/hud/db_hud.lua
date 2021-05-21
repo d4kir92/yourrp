@@ -292,7 +292,7 @@ function DefaultHUDSettings(reset)
 	CH.ints = {}
 	CH.ints.AX = 1
 	CH.ints.AY = 1
-	CH.ints.TS = 24
+	CH.ints.TS = 20
 	AddHUDElement(CH, reset)
 
 	local HU = {}

@@ -557,8 +557,7 @@ function RN(text)
 	return text
 end
 
-function GM:PlayerSay(sender, text, teamChat)
-
+hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
 	local oldtext = text
 	local channel = "SAY"
 	if string.StartWith(text, "!") or string.StartWith(text, "/") then
@@ -684,4 +683,4 @@ function GM:PlayerSay(sender, text, teamChat)
 	
 	return ""
 	--return oldtext
-end
+end)
