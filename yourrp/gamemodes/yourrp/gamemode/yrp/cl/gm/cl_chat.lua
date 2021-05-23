@@ -2,6 +2,44 @@
 
 -- #CHAT
 
+local commands = {
+	"/rpname [NAME] NEWNAME",
+	"!rpname [NAME] NEWNAME",
+	"/pm NAME MESSAGE",
+	"!pm NAME MESSAGE",
+	"/w NAME MESSAGE",
+	"!w NAME MESSAGE",
+	"/afk",
+	"!afk",
+	"/dnd",
+	"!dnd",
+	"/help",
+	"!help",
+	"/dropweapon",
+	"!dropweapon",
+	"/dropmoney AMOUNT",
+	"!dropmoney AMOUNT"
+}
+
+local admincommands= {
+	"/tag_ug",
+	"!tag_ug",
+	"/setmoney NAME AMOUNT",
+	"!setmoney NAME AMOUNT",
+	"/addxp NAME AMOUNT",
+	"!addxp NAME AMOUNT",
+	"/addlevel NAME AMOUNT",
+	"!addlevel NAME AMOUNT",
+	"/setlevel NAME AMOUNT",
+	"!setlevel NAME AMOUNT",
+	"/revive NAME",
+	"!revive NAME",
+	"/alert TEXT",
+	"!alert TEXT",
+	"/givelicense NAME LICENSENAME",
+	"!givelicense NAME LICENSENAME"
+}
+
 yrpChat = yrpChat or {}
 
 if pa(yrpChat.window) then
@@ -143,9 +181,9 @@ function checkChatVisible()
 			_showChat = false
 		end
 		if _showChat then
-			chatAlpha = chatAlpha + 0.1
+			chatAlpha = chatAlpha + 0.03
 		else
-			chatAlpha = chatAlpha - 0.01
+			chatAlpha = chatAlpha - 0.03
 		end
 		if chatAlpha < 0 then
 			chatAlpha = 0
@@ -306,6 +344,31 @@ function InitYRPChat()
 
 		yrpChat.writeField = createD("DTextEntry", yrpChat.window, 1, 1, 1, 1)
 		yrpChat.writeField:SetHistoryEnabled(true)
+		function yrpChat.writeField:GetAutoComplete( text )
+			local suggestions = {}
+		
+			for _, ply in ipairs( player.GetAll() ) do
+				if string.StartWith(ply:RPName(), text) then
+					table.insert(suggestions, ply:Nick())
+				end
+			end
+
+			for _, cmd in pairs(commands) do
+				if string.StartWith(cmd, text) then
+					table.insert(suggestions, cmd)
+				end
+			end
+
+			if LocalPlayer():HasAccess() then
+				for _, cmd in pairs(admincommands) do
+					if string.StartWith(cmd, text) then
+						table.insert(suggestions, cmd)
+					end
+				end
+			end
+
+			return suggestions
+		end
 
 		function yrpChat.writeField:PerformLayout()
 			local ts = LocalPlayer():HudValue("CH", "TS")
@@ -578,7 +641,7 @@ function InitYRPChat()
 
 			_delay = _delay / 10
 			_delay = math.Clamp(_delay, 2, 30)
-			_fadeout = CurTime() + _delay
+			--_fadeout = CurTime() + _delay
 
 			yrpChat.richText:GotoTextEnd()
 			oldAddText (...)

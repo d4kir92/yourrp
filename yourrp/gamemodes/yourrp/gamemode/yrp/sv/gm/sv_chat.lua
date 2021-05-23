@@ -480,7 +480,7 @@ function DoCommand(sender, command, text)
 
 	if command == "alert" then
 		if sender:HasAccess() then
-			AddAlert(string.sub(text, 8))
+			AddAlert(string.sub(text, 7))
 			return ""
 		end
 	end
@@ -519,18 +519,35 @@ function DoCommand(sender, command, text)
 			name = string.Replace(name, "nick ", "")
 
 			local tab = string.Explode(" ", name)
+			if string.find(name, "\"") then
+				local newtab = string.Explode("\"", name)
+				tab = {}
+				for i, v in pairs(newtab) do
+					if !strEmpty(v) then
+						v = string.Replace(v, "\"", "")
+						table.insert(tab, v)
+					end
+				end
+			end
+
 			local ply = GetPlayerByName(tab[1])
 
-			if ply != NULL then
-				name = string.Replace(name, tab[1] .. " ", "")
-				ply:SetRPName(name)
-			else
-				if !strEmpty(name) then
-					sender:SetRPName(name)
-					return ""
+			if tab[#tab] != nil then
+				name = tab[#tab]
+
+				if ply != NULL then
+					name = string.Replace(name, tab[1] .. " ", "")
+					ply:SetRPName(name)
 				else
-					sender:ChatPrint("\nSetRPName need more text.")
+					if !strEmpty(name) then
+						sender:SetRPName(name)
+						return ""
+					else
+						sender:ChatPrint("\nSetRPName need more text.")
+					end
 				end
+			else
+				sender:ChatPrint("\ninvalid args.")
 			end
 		else
 			sender:ChatPrint("\nSetRPName is not enabled.")
