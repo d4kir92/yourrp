@@ -599,7 +599,7 @@ function Player:YRPGetRoleColor()
 end
 
 function Player:YRPGetRoleName()
-	local _rn = self:GetDString("roleName", "NO ROLE SELECTED")
+	local _rn = self:GetDString("roleName", "")
 	return _rn
 end
 
@@ -609,7 +609,7 @@ function Player:YRPGetFactionUID()
 end
 
 function Player:YRPGetFactionName()
-	local _gn = self:GetDString("factionName", "NO Faction SELECTED")
+	local _gn = self:GetDString("factionName", "")
 	return _gn
 end
 
@@ -626,7 +626,7 @@ function Player:YRPGetGroupUID()
 end
 
 function Player:YRPGetGroupName()
-	local _gn = self:GetDString("groupName", "NO GROUP SELECTED")
+	local _gn = self:GetDString("groupName", "")
 	return _gn
 end
 

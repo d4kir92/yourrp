@@ -381,8 +381,12 @@ function YRPScoreboardAddPlayer(ply)
 						draw.SimpleText(ply:GetRoleName(), "Saira_24", x, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 						x = x + yrptab["rolename"] + sp
 					end
-				else
+				elseif ply:IsBot() then
+					draw.SimpleText("[" .. ply:RPName() .. "]", "Saira_24", x, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				elseif ply:GetDBool("yrp_characterselection", true) then
 					draw.SimpleText("[" .. YRP.lang_string("LID_characterselection") .. "]", "Saira_24", x, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				else
+					draw.SimpleText("[" .. "FAIL" .. "]", "Saira_24", x, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 				
 

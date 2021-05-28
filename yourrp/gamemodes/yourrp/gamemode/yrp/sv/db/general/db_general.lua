@@ -1689,10 +1689,7 @@ net.Receive("gethelpmenu", function(len, ply)
 			--end
 		end]]
 
-		AddTab(tabs, "YourRP - Roadmap", "getsiteyourrproadmap")
-
 		AddTab(tabs, "YourRP", "")
-		AddSubTab(subtabs, "YourRP", "News", "getsiteyourrpnews")
 		AddSubTab(subtabs, "YourRP", "Whats New", "getsiteyourrpwhatsnew")
 		AddSubTab(subtabs, "YourRP", "Discord", "getsiteyourrpdiscord")
 		AddSubTab(subtabs, "YourRP", "Translations", "getsiteyourrptranslations", "")
@@ -1870,18 +1867,6 @@ end)
 util.AddNetworkString("getsiteyourrpwhatsnew")
 net.Receive("getsiteyourrpwhatsnew", function(len, ply)
 	net.Start("getsiteyourrpwhatsnew")
-	net.Send(ply)
-end)
-
-util.AddNetworkString("getsiteyourrproadmap")
-net.Receive("getsiteyourrproadmap", function(len, ply)
-	net.Start("getsiteyourrproadmap")
-	net.Send(ply)
-end)
-
-util.AddNetworkString("getsiteyourrpnews")
-net.Receive("getsiteyourrpnews", function(len, ply)
-	net.Start("getsiteyourrpnews")
 	net.Send(ply)
 end)
 

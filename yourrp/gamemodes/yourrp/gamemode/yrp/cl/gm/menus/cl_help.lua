@@ -518,54 +518,6 @@ net.Receive("getsiteyourrpwhatsnew", function(len)
 	end
 end)
 
-net.Receive("getsiteyourrproadmap", function(len)
-	if pa(HELPMENU.mainmenu.site) then
-		local link = "https://trello.com/b/GmQ8mYQi/yourrp"--"https://docs.google.com/spreadsheets/d/e/2PACX-1vQaL9ciXYnStYesglG7-zkRr1PdLNz1rbKgp5gF2EsGNfRAKkT3fBOYrGxyRYOEOg4khoQZh88ZxrBB/pubhtml"
-
-		local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
-		function page:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
-		end
-		page:OpenURL(link)
-
-		local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
-		openLink:SetText("")
-
-		function openLink:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "")
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
-		end
-
-		function openLink:DoClick()
-			gui.OpenURL(link)
-		end
-	end
-end)
-
-net.Receive("getsiteyourrpnews", function(len)
-	if pa(HELPMENU.mainmenu.site) then
-		local link = "https://docs.google.com/document/d/e/2PACX-1vRcuPnvnAqRD7dQFOkH9d0Q1G3qXFn6rAHJWAAl7wV2TEABGhDdJK9Y-LCONFKTiAWmJJZpsTcDnz5W/pub"
-
-		local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
-		function page:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
-		end
-		page:OpenURL(link)
-
-		local openLink = createD("DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
-		openLink:SetText("")
-
-		function openLink:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "")
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
-		end
-
-		function openLink:DoClick()
-			gui.OpenURL(link)
-		end
-	end
-end)
-
 net.Receive("getsiteyourrpdiscord", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local link = "https://discord.gg/sEgNZxg"
@@ -601,7 +553,7 @@ end)
 
 net.Receive("getsiteyourrpserverlist", function(len)
 	if pa(HELPMENU.mainmenu.site) then
-		local link = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQjN_z15gn7zQo-t6om2xArokvemGMs4pN2VasSuBNmzbEc7a0eUxG8lF5JZlT1l844LDhgJgrW52SJ/pubhtml?gid=0&single=true"
+		local link = "https://sites.google.com/view/yourrp-gmod/serverlist"
 
 		local page = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
 		page:OpenURL(link)

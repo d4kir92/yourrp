@@ -57,8 +57,7 @@ function SWEP:PrimaryAttack()
 end
 
 if CLIENT then
-
-	function DrawCuff(ply)
+	function YRP_DrawCuff(ply)
 		if ply:GetDBool("cuffed", false) then
 			local _r_hand = ply:LookupBone("ValveBiped.Bip01_R_Hand")
 			if _r_hand != nil then
@@ -66,14 +65,21 @@ if CLIENT then
 				local _l_hand = ply:LookupBone("ValveBiped.Bip01_L_Hand")
 				if _l_hand != nil then
 					local endPos = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_L_Hand"))
-					for i=0, 0.5, 0.01 do
-						render.DrawLine(startPos-Vector(0,0,i), endPos-Vector(0,0,i), Color(100, 100, 100), true)
-					end
+					render.DrawBeam(startPos, endPos, 1, 0, 0, Color( 100, 100, 100 ) )
 				end
+			end
+
+			local t1 = ply:GetDEntity("cuff_target")
+			local t2 = t1:GetDEntity("cuff_target")
+			if t1:LookupBone("ValveBiped.Bip01_R_Hand") and t2:LookupBone("ValveBiped.Bip01_R_Hand") then
+				t1 = t1:GetBonePosition(t1:LookupBone("ValveBiped.Bip01_R_Hand"))
+				t2 = t2:GetBonePosition(t2:LookupBone("ValveBiped.Bip01_R_Hand"))
+				render.DrawBeam(t1, t2, 1, 0, 0, Color( 100, 100, 100 ) )
 			end
 		end
 	end
-	hook.Add("PrePlayerDraw", "DrawCuff", DrawCuff)
+	hook.Remove("PrePlayerDraw", "YRP_DrawCuff")
+	hook.Add("PrePlayerDraw", "YRP_DrawCuff", YRP_DrawCuff)
 end
 
 if SERVER then
@@ -83,6 +89,14 @@ if SERVER then
 			-- args.target:SetActiveWeapon("yrp_cuffed")
 			args.target:SelectWeapon("yrp_cuffed")
 			args.target:SetDBool("cuffed", true)
+
+
+
+			local ply = args.attacker
+			local target = args.target
+
+			ply:SetDEntity("cuff_target", target)
+			target:SetDEntity("cuff_target", ply)
 		end
 	end)
 end
@@ -122,3 +136,55 @@ function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.DrawTexturedRect( x + (wide - tall) / 2, y, tall, tall )
 end
+
+hook.Add( "SetupMove", "YRP_SetupMove_Cuffs", function(ply, mv, cmd)
+	if not ply:GetDBool("cuffed", false) then return end
+
+	local target = ply.cuff_target
+
+	local TargetPoint = (target:IsPlayer() and target:GetShootPos()) or target:GetPos()
+	local MoveDir = (TargetPoint - ply:GetPos()):GetNormal()
+	local ShootPos = ply:GetShootPos() + (Vector(0,0, (ply:Crouching() and 0)))
+	local Distance = 120
+	
+	local distFromTarget = ShootPos:Distance( TargetPoint )
+	if distFromTarget<=(Distance+5) then return end
+	if ply:InVehicle() then
+		if SERVER and (distFromTarget>(Distance*3)) then
+			ply:ExitVehicle()
+		end
+		
+		return
+	end
+	
+	local TargetPos = TargetPoint - (MoveDir*Distance)
+	
+	local xDif = math.abs(ShootPos[1] - TargetPos[1])
+	local yDif = math.abs(ShootPos[2] - TargetPos[2])
+	local zDif = math.abs(ShootPos[3] - TargetPos[3])
+	
+	local speedMult = 3+ ( (xDif + yDif)*0.5)^1.01
+	local vertMult = math.max((math.Max(300-(xDif + yDif), -10)*0.08)^1.01  + (zDif/2),0)
+	
+	if target:GetGroundEntity()==ply then vertMult = -vertMult end
+	
+	local TargetVel = (TargetPos - ShootPos):GetNormal() * 10
+	TargetVel[1] = TargetVel[1]*speedMult
+	TargetVel[2] = TargetVel[2]*speedMult
+	TargetVel[3] = TargetVel[3]*vertMult
+	local dir = mv:GetVelocity()
+	
+	local clamp = 50
+	local vclamp = 20
+	local accel = 200
+	local vaccel = 30*(vertMult/50)
+	
+	dir[1] = (dir[1]>TargetVel[1]-clamp or dir[1]<TargetVel[1]+clamp) and math.Approach(dir[1], TargetVel[1], accel) or dir[1]
+	dir[2] = (dir[2]>TargetVel[2]-clamp or dir[2]<TargetVel[2]+clamp) and math.Approach(dir[2], TargetVel[2], accel) or dir[2]
+	
+	if ShootPos[3]<TargetPos[3] then
+		dir[3] = (dir[3]>TargetVel[3]-vclamp or dir[3]<TargetVel[3]+vclamp) and math.Approach(dir[3], TargetVel[3], vaccel) or dir[3]
+	end
+	
+	mv:SetVelocity( dir )
+end)

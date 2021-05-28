@@ -716,8 +716,8 @@ net.Receive("LogOut", function(len, ply)
 	ply:KillSilent()
 end)
 
-util.AddNetworkString("EnterWorld")
-net.Receive("EnterWorld", function(len, ply)
+util.AddNetworkString("YRP_EnterWorld")
+net.Receive("YRP_EnterWorld", function(len, ply)
 	local cuid = net.ReadString()
 
 	YRPSpawnAsCharacter(ply, cuid, false)

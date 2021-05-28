@@ -2315,7 +2315,7 @@ hook.Add("Think", "openDeathScreen", function(len)
 		win.respawn:SetText("LID_respawnnow")
 		function win.respawn:DoClick()
 			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() and !LocalPlayer():GetDBool("yrp_chararchived", false) then
-				net.Start("EnterWorld")
+				net.Start("YRP_EnterWorld")
 					net.WriteString(LocalPlayer():CharID())
 				net.SendToServer()
 				ds = false

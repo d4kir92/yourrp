@@ -39,7 +39,7 @@ function Player:getDarkRPVar(var)
 	elseif var == "salary" then
 		return tonumber(self:GetDString("salary", "-1"))
 	elseif var == "job" then
-		return self:GetDString("roleName", "NO ROLE SELECTED")
+		return self:GetDString("roleName", "")
 	elseif var == "rpname" then
 		return self:RPName() or self:SteamName()
 	elseif var == "HasGunlicense" then

@@ -400,7 +400,7 @@ function LoadCharacters()
 										net.Start("LogOut")
 										net.SendToServer()
 									elseif tonumber(tmpChar.charid) != nil then
-										net.Start("EnterWorld")
+										net.Start("YRP_EnterWorld")
 											net.WriteString(tmpChar.charid)
 										net.SendToServer()
 										if pa(CharMenu.frame) then
@@ -795,7 +795,7 @@ function openCharacterSelection()
 							net.Start("LogOut")
 							net.SendToServer()
 						elseif curChar != nil then
-							net.Start("EnterWorld")
+							net.Start("YRP_EnterWorld")
 								net.WriteString(curChar)
 							net.SendToServer()
 							if pa(CharMenu.frame) then
@@ -1025,7 +1025,7 @@ function openCharacterSelection()
 							net.Start("LogOut")
 							net.SendToServer()
 						elseif curChar != nil then
-							net.Start("EnterWorld")
+							net.Start("YRP_EnterWorld")
 								net.WriteString(curChar)
 							net.SendToServer()
 							if pa(CharMenu.frame) then
