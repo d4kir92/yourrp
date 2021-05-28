@@ -1,11 +1,8 @@
 # GMOD-YourRP
-YourRP beta
+YourRP
 
 download and put inside gamemodes folder
 name this folder yourrp or change it to your category, but also rename the txt file! :D
-
-
-Website:                    https://sites.google.com/view/yrp
 
 Discord:                    https://discord.gg/CXXDCMJ
 
