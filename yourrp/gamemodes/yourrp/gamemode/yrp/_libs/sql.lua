@@ -40,47 +40,47 @@ function sql_show_last_error()
 	return _last_error
 end
 
-local _db_dc = {}
-table.insert(_db_dc, " ")
-table.insert(_db_dc, "'")
-table.insert(_db_dc, "´")
-table.insert(_db_dc, "`")
-table.insert(_db_dc, "#")
-table.insert(_db_dc, "*")
-table.insert(_db_dc, "+")
-table.insert(_db_dc, "-")
-table.insert(_db_dc, "(")
-table.insert(_db_dc, ")")
-table.insert(_db_dc, "[")
-table.insert(_db_dc, "]")
-table.insert(_db_dc, "{")
-table.insert(_db_dc, "}")
-table.insert(_db_dc, "^")
-table.insert(_db_dc, "°")
-table.insert(_db_dc, "!")
-table.insert(_db_dc, "§")
-table.insert(_db_dc, "$")
-table.insert(_db_dc, "&")
-table.insert(_db_dc, "/")
-table.insert(_db_dc, "=")
-table.insert(_db_dc, "\"")
-table.insert(_db_dc, "?")
-table.insert(_db_dc, ".")
-table.insert(_db_dc, ",")
-table.insert(_db_dc, ";")
-table.insert(_db_dc, "<")
-table.insert(_db_dc, ">")
-table.insert(_db_dc, "ü")
-table.insert(_db_dc, "ö")
-table.insert(_db_dc, "ä")
-table.insert(_db_dc, "Ü")
-table.insert(_db_dc, "Ö")
-table.insert(_db_dc, "Ä")
+local YRP_DB_DC = {}
+table.insert(YRP_DB_DC, " ")
+table.insert(YRP_DB_DC, "'")
+table.insert(YRP_DB_DC, "´")
+table.insert(YRP_DB_DC, "`")
+table.insert(YRP_DB_DC, "#")
+table.insert(YRP_DB_DC, "*")
+table.insert(YRP_DB_DC, "+")
+table.insert(YRP_DB_DC, "-")
+table.insert(YRP_DB_DC, "(")
+table.insert(YRP_DB_DC, ")")
+table.insert(YRP_DB_DC, "[")
+table.insert(YRP_DB_DC, "]")
+table.insert(YRP_DB_DC, "{")
+table.insert(YRP_DB_DC, "}")
+table.insert(YRP_DB_DC, "^")
+table.insert(YRP_DB_DC, "°")
+table.insert(YRP_DB_DC, "!")
+table.insert(YRP_DB_DC, "§")
+table.insert(YRP_DB_DC, "$")
+table.insert(YRP_DB_DC, "&")
+table.insert(YRP_DB_DC, "/")
+table.insert(YRP_DB_DC, "=")
+table.insert(YRP_DB_DC, "\"")
+table.insert(YRP_DB_DC, "?")
+table.insert(YRP_DB_DC, ".")
+table.insert(YRP_DB_DC, ",")
+table.insert(YRP_DB_DC, ";")
+table.insert(YRP_DB_DC, "<")
+table.insert(YRP_DB_DC, ">")
+table.insert(YRP_DB_DC, "ü")
+table.insert(YRP_DB_DC, "ö")
+table.insert(YRP_DB_DC, "ä")
+table.insert(YRP_DB_DC, "Ü")
+table.insert(YRP_DB_DC, "Ö")
+table.insert(YRP_DB_DC, "Ä")
 
 function SQL_STR_IN(str)
 	local _res = tostring(str)
 
-	for k, sym in pairs(_db_dc) do
+	for k, sym in pairs(YRP_DB_DC) do
 		local _pre = ""
 
 		if k < 10 then
@@ -96,9 +96,9 @@ function SQL_STR_IN(str)
 end
 
 function SQL_STR_OUT(str)
-	local _res = str
+	local _res = tostring(str)
 
-	for k, sym in pairs(_db_dc) do
+	for k, sym in pairs(YRP_DB_DC) do
 		local _pre = ""
 
 		if k < 10 then

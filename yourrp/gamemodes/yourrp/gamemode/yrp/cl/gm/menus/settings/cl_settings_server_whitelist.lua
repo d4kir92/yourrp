@@ -10,6 +10,9 @@ local loadedR = false
 local loadedG = false
 
 function BuildWhitelist(parent, tab)
+	if !IsValid(parent) then
+		YRP.msg("error", "[BuildWhitelist] failed! parent: " .. tostring(parent))
+	end
 	if loadedR and loadedG then
 		local list = createD("DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
 		list:AddColumn("uniqueID"):SetFixedWidth(80)
