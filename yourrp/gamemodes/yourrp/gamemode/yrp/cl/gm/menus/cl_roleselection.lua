@@ -295,7 +295,7 @@ function CreateRolePreviewContent()
 		end
 
 		local back = createD("YButton", win, ew, YRP.ctr(hh), nw - ew - YRP.ctr(20), nh - YRP.ctr(hh + 20))
-		back:SetText("LID_back")
+		back:SetText("LID_back" .. "x")
 		function back:Paint(pw, ph)
 			if lply:GetDBool("rolepreview", false) then
 				hook.Run("YButtonRPaint", self, pw, ph)
@@ -407,13 +407,15 @@ function CreateRoleSelectionContent(PARENT)
 		btn.h = 75
 
 		local back = createD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
-		back:SetText("LID_back")
+		back:SetText("LID_back" .. "y")
 		function back:Paint(pw, ph)
-			if !lply:GetDBool("rolepreview", false) then
+			if !lply:GetDBool("rolepreview", false) and lply:GetDInt("char_count", count) > 0 then
 				hook.Run("YButtonRPaint", self, pw, ph)
 			end
 		end
 		function back:DoClick()
+			if lply:GetDInt("char_count", count) <= 0 then return end
+
 			if lply:GetDBool("onefaction", true) then
 				parent:Remove()
 				openCharacterSelection()
@@ -423,11 +425,6 @@ function CreateRoleSelectionContent(PARENT)
 				CreateFactionSelectionContent()
 			end
 		end
-
-		--[[local debug = createD("DButton", site, 25, 25, 400, 0)
-		function debug:DoClick()
-			parent:Remove()
-		end]]
 	end
 
 

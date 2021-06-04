@@ -67,6 +67,15 @@ end
 --db_drop_table(DATABASE_NAME)
 --db_is_empty(DATABASE_NAME)
 
+function YRPSendCharCount(ply)
+	local count = 0
+	local result = SQL_SELECT(DATABASE_NAME, "*", "SteamID = '" .. ply:SteamID() .. "'")
+	if wk(result) then
+		count = table.Count(result)
+	end
+	ply:SetDInt("char_count", count)
+end
+
 local Player = FindMetaTable("Player")
 function Player:CharacterLoadout()
 	YRP.msg("debug", "[CharacterLoadout] " .. self:YRPName())

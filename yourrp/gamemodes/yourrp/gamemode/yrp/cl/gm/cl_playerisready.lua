@@ -11,34 +11,48 @@ local d = d or 0
 
 local serverreceived = false
 
+local YRP_COUNT = 0
+local YRP_INIT = false
+local YRP_NOINIT = false
+local wassendtoserver = false
+
 function YRPSendIsReadyPingPong()	-- IMPORTANT
 	local lply = LocalPlayer()
 
-	local info = {}
-	info.iswindows = system.IsWindows()
-	info.islinux = system.IsLinux()
-	info.isosx = system.IsOSX()
-	info.country = system.GetCountry()
-	info.branch = GetBranch()
-	info.uptime = os.clock()
-	
-	local b, bb = net.BytesLeft()
-	local w, ww = net.BytesWritten()
-	if b and b > 0 and w and w > 0 then
-		YRP.msg("note", "Already running a net message, retry sending ready message.")
-		timer.Simple(0.11, function()
-			YRPSendIsReadyPingPong()
-		end)
-	else
-		net.Start("yrp_player_is_ready")
-			net.WriteTable(info)
-		net.SendToServer()
-
-		timer.Simple(19.9, function()
-			if !lply:GetDBool("yrp_received_ready") then
-				YRP.msg("note", "Retry sending ready message.")
+	if system.IsWindows and os.clock and system.GetCountry then
+		local info = {}
+		info.iswindows = system.IsWindows()
+		info.islinux = system.IsLinux()
+		info.isosx = system.IsOSX()
+		info.country = system.GetCountry()
+		info.branch = GetBranch()
+		info.uptime = os.clock()
+		
+		local b, bb = net.BytesLeft()
+		local w, ww = net.BytesWritten()
+		if b and b > 0 and w and w > 0 then
+			YRP.msg("note", "[YRPSendIsReadyPingPong] Already running a net message, retry sending ready message.")
+			timer.Simple(0.01, function()
 				YRPSendIsReadyPingPong()
-			end
+			end)
+		else
+			YRP.msg("note", "[YRPSendIsReadyPingPong] SEND TO SERVER (WORKED).")
+			net.Start("yrp_player_is_ready")
+				net.WriteTable(info)
+			net.SendToServer()
+			wassendtoserver = true
+
+			timer.Simple(19.9, function()
+				if !lply:GetDBool("yrp_received_ready") then
+					YRP.msg("note", "[YRPSendIsReadyPingPong] Retry sending ready message.")
+					YRPSendIsReadyPingPong()
+				end
+			end)
+		end
+	else
+		YRP.msg("note", "[YRPSendIsReadyPingPong] System/os not ready, retry.")
+		timer.Simple(0.01, function()
+			YRPSendIsReadyPingPong()
 		end)
 	end
 end
@@ -46,6 +60,8 @@ end
 function YRPSendIsReady()
 	if !yrp_rToSv then
 		yrp_rToSv = true
+
+		YRP.msg("note", "[YRPSendIsReady] Start")
 
 		-- IMPORTANT
 		YRPSendIsReadyPingPong()
@@ -75,10 +91,7 @@ function YRPSendIsReady()
 		--TestYourRPContent()
 	end
 end
---YRPSendIsReadyPingPong()
-local YRP_COUNT = 0
-local YRP_INIT = false
-local YRP_NOINIT = false
+
 hook.Add("Think", "yrp_think_ready", function()
 	if yrp_rToSv then return end
 
@@ -112,17 +125,12 @@ end
 function printReadyError()
 	local lply = LocalPlayer()
 
-	local str = "yrp_received_ready: " .. tostring(lply:GetDBool("yrp_received_ready", false))
-	str = str .. " yrp_rToSv: " .. tostring(yrp_rToSv)
-	str = str .. " loadedchars: " .. tostring(lply:GetDBool("loadedchars", false))
-	str = str .. " yrp_hookinitpostentity: " .. tostring(yrp_hookinitpostentity)
-	str = str .. " yrp_initpostentity: " .. tostring(yrp_initpostentity)
-	str = str .. " YRP_NOINIT: " .. tostring(YRP_NOINIT)
-	str = str .. " ENTS: " .. tostring(lply:GetDInt("yrp_load_ent", 0))
-	str = str .. " GLOS: " .. tostring(lply:GetDInt("yrp_load_glo", 0))
-	str = str .. " dedi: " .. tostring(lply:GetDBool("isserverdedicated"))
-	str = str .. " country: " .. tostring(system.GetCountry())
-	str = str .. " YRP_COUNT: " .. tostring(YRP_COUNT)
+	local str = "ReplyFromServer?: " .. tostring(lply:GetDBool("yrp_received_ready", false))
+	str = str .. " SendToServer?: " .. tostring(wassendtoserver)
+	str = str .. " Chars - loaded?: " .. tostring(lply:GetDBool("loadedchars", false))
+	str = str .. " ENTS - loaded?: " .. tostring(lply:GetDInt("yrp_load_ent", 0))
+	str = str .. " GLOS - loaded?: " .. tostring(lply:GetDInt("yrp_load_glo", 0))
+	str = str .. " DedicatedServer?: " .. tostring(lply:GetDBool("isserverdedicated"))
 
 	return str
 end

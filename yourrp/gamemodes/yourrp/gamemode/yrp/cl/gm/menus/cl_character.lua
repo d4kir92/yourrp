@@ -36,6 +36,8 @@ surface.CreateFont("Saira_100", {
 	outline = false
 })
 
+local charbgnotfound = "NO BACKGROUND FOUND - F8 General -> Character Background"
+
 local isEventChar = false
 
 local fw = 860
@@ -54,7 +56,7 @@ function openCharacterCreation()
 		win:ShowCloseButton(true)
 		win:SetDraggable(false)
 		function win:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0))
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40)) -- Dark Background - Character Creation
 		end
 		
 		win.bg = createD("DHTML", win, win:GetWide(), win:GetTall(), 0, 0)
@@ -623,7 +625,7 @@ function openCharacterSelection()
 			CharMenu.frame:SetDraggable(false)
 			CharMenu.frame:Center()
 			function CharMenu.frame:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255)) -- Dark Background - Character Selection [vertical]
 			end
 			function CharMenu.frame:OnClose()
 				closeMenu()
@@ -659,6 +661,9 @@ function openCharacterSelection()
 				if oldurl != newurl then
 					CharMenu.frame.bg.url = newurl
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
+				end
+				if newurl and strEmpty(newurl) then
+					draw.SimpleText(charbgnotfound, "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 
@@ -878,7 +883,7 @@ function openCharacterSelection()
 			CharMenu.frame:SetDraggable(false)
 			CharMenu.frame:Center()
 			function CharMenu.frame:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255)) -- Dark Background - Character Selection [horizontal]
 			end
 			function CharMenu.frame:OnClose()
 				closeMenu()
@@ -907,6 +912,9 @@ function openCharacterSelection()
 				if oldurl != newurl then
 					CharMenu.frame.bg.url = newurl
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
+				end
+				if newurl and strEmpty(newurl) then
+					draw.SimpleText(charbgnotfound, "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				local acur = CharMenu.character.amount or -1
@@ -1108,7 +1116,7 @@ function openCharacterSelection()
 			CharMenu.frame:SetDraggable(false)
 			CharMenu.frame:Center()
 			function CharMenu.frame:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255)) -- Dark Background - Character Selection [horizontalnew]
 			end
 			function CharMenu.frame:OnClose()
 				closeMenu()
@@ -1131,6 +1139,9 @@ function openCharacterSelection()
 				if oldurl != newurl then
 					CharMenu.frame.bg.url = newurl
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
+				end
+				if newurl and strEmpty(newurl) then
+					draw.SimpleText(charbgnotfound, "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				-- Current and Max Count of Possible Characters

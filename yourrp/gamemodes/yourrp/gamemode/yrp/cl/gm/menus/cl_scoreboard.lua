@@ -587,7 +587,12 @@ function InitScoreboard()
 
 		-- Table Footer
 		draw.RoundedBox(5, pw / 2 - sw / 2, ScrH() - 40, sw, hr, Color(255, 255, 255, 255))
+		local server = ""
+		if GAMEMODE.dedicated then
+			server = " [Dedicated]"
+		end
 		draw.SimpleText(string.upper(YRP.lang_string("LID_map")) .. ": " .. GetNiceMapName(), 															"Saira_30", pw / 2 - sw / 2, ScrH() - 20, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("YourRP - " .."v" .. YRPVersion() .. " (" .. string.upper(VERSIONART) .. ")" .. string.upper(server), 																											"Saira_30", pw / 2, ScrH() - 20, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		draw.SimpleText(table.Count(player.GetAll()) .. "/" .. game.MaxPlayers() .. " (" .. string.upper(YRP.lang_string("LID_players")) .. ")", 		"Saira_30", pw / 2 + sw / 2, ScrH() - 20, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 

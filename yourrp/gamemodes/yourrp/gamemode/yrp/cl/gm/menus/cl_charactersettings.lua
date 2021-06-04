@@ -59,7 +59,7 @@ function CreateCharacterSettingsContent()
 	btn.w = 500
 	btn.h = 75
 	local back = createD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
-	back:SetText("LID_back")
+	back:SetText("LID_back" .. "d")
 	function back:Paint(pw, ph)
 		hook.Run("YButtonRPaint", self, pw, ph)
 	end
@@ -158,8 +158,8 @@ function CreateCharacterSettingsContent()
 				end
 
 				character.birt = lply:GetDString("charcreate_birt")
-				character.bohe = lply:GetDString("charcreate_bohe")
-				character.weig = lply:GetDString("charcreate_weig")
+				character.bohe = lply:GetDString("charcreate_bohe") or 0
+				character.weig = lply:GetDString("charcreate_weig") or 0
 				character.nati = lply:GetDString("charcreate_nati")
 				character.create_eventchar = GetGlobalDBool("create_eventchar", false)
 

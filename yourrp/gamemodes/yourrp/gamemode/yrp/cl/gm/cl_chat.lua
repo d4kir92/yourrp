@@ -651,7 +651,9 @@ function InitYRPChat()
 		yrpChat.richText:GotoTextEnd()
 
 		timer.Simple(4, function()
-			yrpChat.richText:GotoTextEnd()
+			if pa(yrpChat.richText) then
+				yrpChat.richText:GotoTextEnd()
+			end
 		end)
 	end
 end

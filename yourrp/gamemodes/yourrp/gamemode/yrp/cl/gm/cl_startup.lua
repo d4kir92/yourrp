@@ -2388,16 +2388,23 @@ if pa(yrp_loading_screen) then
 		self:MoveToFront()
 
 		if yrp_loading_screen.bg then
-			if yrp_loading_screen.bg.url != GetGlobalDString("text_loading_background", "") then
-				yrp_loading_screen.bg.url = GetGlobalDString("text_loading_background", "")
-
-				if strEmpty(yrp_loading_screen.bg.url) then
-					yrp_loading_screen.bg:Hide()
+			if yrp_loading_screen.bg.url != GetGlobalDString("text_loading_background") then
+				yrp_loading_screen.bg.url = GetGlobalDString("text_loading_background")
+				if yrp_loading_screen.bg.url == nil then
+					--draw.SimpleText("LOADING", "Y_26_500", pw / 2, ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				else
-					yrp_loading_screen.bg:SetHTML(GetHTMLImage(GetGlobalDString("text_loading_background", ""), yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall()))
-					yrp_loading_screen.bg:Show()
+					if strEmpty(yrp_loading_screen.bg.url) then
+						yrp_loading_screen.bg:Hide()
+					else
+						yrp_loading_screen.bg:SetHTML(GetHTMLImage(yrp_loading_screen.bg.url, yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall()))
+						yrp_loading_screen.bg:Show()
+					end
 				end
 			end
+		end
+
+		if yrp_loading_screen.bg.url and strEmpty(yrp_loading_screen.bg.url) then
+			draw.SimpleText("NO LOADINGSCREEN FOUND - F8 General -> Loadingscreen Background", "Y_26_500", pw / 2, ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)		
 		end
 
 		local lply = LocalPlayer()

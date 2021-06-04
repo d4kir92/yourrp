@@ -51,6 +51,8 @@ function PlayerLoadedGame(ply)
 
 	ply:SetDBool("finishedloadingcharacter", true)
 
+	YRPSendCharCount(ply)
+
 	ply:SendTeamsToPlayer()
 	
 	if IsValid(ply) and ply.KillSilent then
