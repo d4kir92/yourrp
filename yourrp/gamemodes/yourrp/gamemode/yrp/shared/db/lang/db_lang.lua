@@ -147,44 +147,6 @@ function YRP.lang_string(var, vals)
 	return var
 end
 
--- Translate
-local searching = {}	-- Anti spam
-local translations = {}	-- finished translations
-function GetTranslation(sentence, target, source)
-	if yrp_current_lang["LID_initauthor"] != nil then
-		target = target or YRP.lang_string("LID_initshort")
-		source = source or "auto"
-		searching[sentence] = searching[sentence] or false
-		if translations[sentence] == nil and !searching[sentence] then
-			searching[sentence] = true
-			local url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" .. source .. "&tl=" .. target .. "&dt=t&q=" .. sentence .. ""
-			http.Fetch(
-				url,
-				function(body)
-					local tomuchtraffic = string.find(body, "unusual traffic")
-					if tomuchtraffic then
-						YRP.msg("note", "[GetTranslation] To much Translations")
-					else
-						body = string.sub(body, 5)
-						local result = string.sub(body, 1, string.find(body, "\"") - 1)
-						if result then
-							translations[sentence] = result
-							searching[sentence] = false
-						end
-					end
-				end,
-				function(error)
-					YRP.msg("note", "[GetTranslation] failed " .. error)
-				end
-			)
-		elseif translations[sentence] != nil then
-			return translations[sentence]
-		end
-	end
-	return sentence
-end
---GetTranslation("Lockdown")
-
 function YRP.GetAllLanguages()
 	return yrp_button_info
 end

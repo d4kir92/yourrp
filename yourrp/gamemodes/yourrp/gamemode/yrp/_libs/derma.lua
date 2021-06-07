@@ -1465,6 +1465,8 @@ function drawRoundedBoxBR(r, x, y, w, h, color, br)
 end
 
 function TestHTML(pnl, url, rem)
+	if SERVER then return end
+
 	if rem == nil then
 		rem = true
 	end

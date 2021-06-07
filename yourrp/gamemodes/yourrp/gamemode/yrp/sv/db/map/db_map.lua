@@ -101,7 +101,7 @@ function teleportToSpawnpoint(ply)
 					end
 				end
 				local _str = "[" .. tostring(groTab.string_name) .. "]" .. " has NO role or group spawnpoint!"
-				YRP.msg("error", _str)
+				YRP.msg("note", _str)
 
 				net.Start("yrp_noti")
 					net.WriteString("nogroupspawn")

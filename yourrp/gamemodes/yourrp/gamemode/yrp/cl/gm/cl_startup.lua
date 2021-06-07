@@ -1739,7 +1739,7 @@ function drawPlates()
 				_height = _height + 9
 			end
 
-			if ply:GetDBool("tag_dev", false) and tostring(ply:SteamID()) == "STEAM_0:1:20900349" then
+			if ply:GetDBool("tag_dev", false) and tostring(ply:SteamID64()) == "76561198002066427" then -- D4KIR, Developer of YourRP
 				drawPlate(ply, "DEVELOPER", _height, Color(0, 0, 0, color.a))
 				_height = _height + 9
 			end
