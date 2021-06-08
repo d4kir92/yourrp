@@ -503,7 +503,7 @@ function DoCommand(sender, command, text)
 	end
 
 	if command == "rpname" or command == "name" or command == "nick" then
-		if GetGlobalDBool("bool_characters_changeable_name", false) then
+		if GetGlobalDBool("bool_characters_changeable_name", false) or ply:HasAccess() then
 			local name = text
 
 			name = string.Replace(name, "!rpname ", "")
@@ -660,7 +660,7 @@ hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
 			return ""
 		elseif tab.int_mode == 2 then -- FACTION
 			for i, v in pairs(player.GetAll()) do
-				if v:GetPos():Distance(sender:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
+				if v:GetFactionUID() == sender:GetFactionUID() then
 					net.Start("yrp_player_say")
 						net.WriteEntity(sender)
 						net.WriteTable(pk)
@@ -670,7 +670,7 @@ hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
 			return ""
 		elseif tab.int_mode == 3 then -- GROUP
 			for i, v in pairs(player.GetAll()) do
-				if v:GetPos():Distance(sender:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
+				if v:GetGroupUID() == sender:GetGroupUID() then
 					net.Start("yrp_player_say")
 						net.WriteEntity(sender)
 						net.WriteTable(pk)
@@ -680,7 +680,7 @@ hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
 			return ""
 		elseif tab.int_mode == 4 then -- ROLE
 			for i, v in pairs(player.GetAll()) do
-				if v:GetPos():Distance(sender:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
+				if v:GetRoleUID() == sender:GetRoleUID() then
 					net.Start("yrp_player_say")
 						net.WriteEntity(sender)
 						net.WriteTable(pk)

@@ -701,6 +701,14 @@ if SERVER then
 	end
 end
 
+--[[local clock = os.clock
+function sleep(n)  -- seconds
+   local t0 = clock()
+   while clock() - t0 <= n do
+
+   end
+end]]
+
 function YRPRemoveFromEntTable(entindex)
 	if entindex == nil then
 		YRP.msg("error", "[YRPRemoveFromEntTable] ERROR! entindex == nil!")
@@ -708,18 +716,10 @@ function YRPRemoveFromEntTable(entindex)
 	end
 
 	if istable(YRP_NW_Ents[entindex]) then
-		timer.Simple(0, function()
-			local ent = Entity(entindex)
-			if not IsValid(ent) then
-				-- We actually got removed
-				timer.Simple(0, function() -- double check
-					if not IsValid(Entity(entindex)) then
-						-- We actually got removed
-						YRP_NW_Ents[entindex] = nil
-					end
-				end)
-			end
-		end)
+		local ent = Entity(entindex)
+		if not IsValid(ent) then
+			YRP_NW_Ents[entindex] = nil
+		end
 	end
 end
 

@@ -227,13 +227,6 @@ function YRP.msg(chan, str_msg, tochat, force)
 					if SERVER then
 						REALM = "SERVER"
 					end
-					if CLIENT then
-						if LocalPlayer().LoadedGamemode != nil then
-							send_error(REALM, "[" .. cn .. "] " .. msg .. " LoadedGamemode: " .. tostring(LocalPlayer():LoadedGamemode()), true)
-						end
-					else
-						send_error(REALM, "[" .. cn .. "] " .. msg, true)
-					end
 					if CLIENT and cn == "ERROR" and createD != nil then
 						local err = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400))
 						err:ShowCloseButton(false)

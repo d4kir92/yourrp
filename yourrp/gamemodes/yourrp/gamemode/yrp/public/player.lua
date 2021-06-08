@@ -432,6 +432,9 @@ function Player:GetRoleSweps()
 end
 
 --[[ Faction ]]--
+function Player:GetFactionUID() -- Faction uniqueID
+	return self:YRPGetFactionUID() -- return number
+end
 function Player:GetFactionUniqueID() -- Faction uniqueID
 	return self:YRPGetFactionUID() -- return number
 end

@@ -503,10 +503,8 @@ net.Receive("Connect_Settings_General", function(len)
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat, "LID_yourrpchat", "update_bool_yrp_chat")
-		CreateNumberWangLine(GAMEMODE_VISUALS:GetContent(), GEN.int_yrp_chat_range_local, YRP.lang_string("LID_localchatrange"), "update_int_yrp_chat_range_local", 50, 1000, 10)
+		CreateNumberWangLine(GAMEMODE_VISUALS:GetContent(), GEN.int_yrp_chat_range_local, YRP.lang_string("LID_localchatrange"), "update_int_yrp_chat_range_local", 50, 1000, 20)
 		
-		--GetGlobalDInt("int_yrp_chat_range_local", 400)
-
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idstructure, YRP.lang_string("LID_idstructure") .. " (!D 1Dig., !L 1Let., !N 1Num.)", "update_text_idstructure")
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idcard_background, "LID_background", "update_text_idcard_background")
 		local gs = 8

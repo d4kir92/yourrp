@@ -185,22 +185,27 @@ function checkChatVisible()
 		else
 			chatAlpha = chatAlpha - 0.03
 		end
-		if chatAlpha < 0 then
+		if YRPScoreboard:IsVisible() then
 			chatAlpha = 0
-			--yrpChat.richText:SetVisible(_showChat)
-			yrpChat.richText:SetVerticalScrollbarEnabled(_showChat)
-			yrpChat.window.logo:SetVisible(_showChat)
-			yrpChat.writeField:SetVisible(_showChat)
-			yrpChat.comboBox:SetVisible(_showChat)
-			yrpChat.settings:SetVisible(_showChat)
-		elseif chatAlpha > 1 then
-			chatAlpha = 1
-			--yrpChat.richText:SetVisible(_showChat)
-			yrpChat.richText:SetVerticalScrollbarEnabled(_showChat)
-			yrpChat.window.logo:SetVisible(_showChat)
-			yrpChat.writeField:SetVisible(_showChat)
-			yrpChat.comboBox:SetVisible(_showChat)
-			yrpChat.settings:SetVisible(_showChat)
+			yrpChat.window:SetVisible(false)
+		else
+			yrpChat.window:SetVisible(true)
+
+			if chatAlpha < 0 then
+				chatAlpha = 0
+				yrpChat.richText:SetVerticalScrollbarEnabled(_showChat)
+				yrpChat.window.logo:SetVisible(_showChat)
+				yrpChat.writeField:SetVisible(_showChat)
+				yrpChat.comboBox:SetVisible(_showChat)
+				yrpChat.settings:SetVisible(_showChat)
+			elseif chatAlpha > 1 then
+				chatAlpha = 1
+				yrpChat.richText:SetVerticalScrollbarEnabled(_showChat)
+				yrpChat.window.logo:SetVisible(_showChat)
+				yrpChat.writeField:SetVisible(_showChat)
+				yrpChat.comboBox:SetVisible(_showChat)
+				yrpChat.settings:SetVisible(_showChat)
+			end
 		end
 	end
 end
@@ -262,7 +267,6 @@ function InitYRPChat()
 		yrpChat.window.logo = createD("DHTML", yrpChat.window, YRP.ctr(H), YRP.ctr(H), 0, 0)
 
 		function yrpChat.window:Paint(pw, ph)
-			checkChatVisible()
 			if _showChat then
 
 				--DrawRectBlurHUD(0, 0, pw, ph, 100)
@@ -655,6 +659,15 @@ function InitYRPChat()
 				yrpChat.richText:GotoTextEnd()
 			end
 		end)
+
+		function YRPChatThink()
+			if yrpChat.window != nil then
+				checkChatVisible()
+			end
+
+			timer.Simple(0.01, YRPChatThink)
+		end
+		YRPChatThink()
 	end
 end
 
