@@ -355,6 +355,7 @@ function YRPScoreboardAddPlayer(ply)
 			draw.RoundedBox(0, avbr, avbr, avsize, avsize, Color(255, 255, 255, 255))
 		end
 		plypnl.infos = createD("DPanel", plypnl, sw - 13, size, 13, 0)
+
 		function plypnl.infos:Paint(pw, ph)
 			if IsValid(ply) then
 				self.guid = ply:GetGroupUID()
@@ -392,8 +393,31 @@ function YRPScoreboardAddPlayer(ply)
 
 
 
-				local trx = 80
-				draw.SimpleText(ply:Ping(), "Saira_24", pw - 20, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+				local trx = 90 + size
+				draw.SimpleText(ply:Ping(), "Saira_24", pw - 20 - size, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+				if self.Mute and (self.Muted == nil or self.Muted != ply:IsMuted()) then
+					self.Muted = ply:IsMuted()
+					if ( self.Muted ) then
+						self.Mute:SetImage( "icon32/muted.png" )
+					else
+						self.Mute:SetImage( "icon32/unmuted.png" )
+					end
+		
+					self.Mute.DoClick = function( s ) ply:SetMuted( !self.Muted ) end
+					self.Mute.OnMouseWheeled = function( s, delta )
+						ply:SetVoiceVolumeScale( ply:GetVoiceVolumeScale() + ( delta / 100 * 5 ) )
+						s.LastTick = CurTime()
+					end
+		
+					self.Mute.PaintOver = function( s, w, h )
+						if s:IsHovered() then
+							s.LastTick = CurTime()
+						end
+						local a = 255 - math.Clamp( CurTime() - ( s.LastTick or 0 ), 0, 3 ) * 255
+						draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0, a * 0.75 ) )
+						draw.SimpleText( math.ceil( ply:GetVoiceVolumeScale() * 100 ) .. "%", "DermaDefaultBold", w / 2, h / 2, Color( 255, 255, 255, a ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					end
+				end
 				if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
 					--draw.SimpleText(string.upper(ply:GetDString("yrp_os", "")), "Saira_24", pw - trx, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 					self.lang = YRP.GetDesignIcon("os_" .. ply:GetDString("yrp_os", ""))
@@ -428,7 +452,7 @@ function YRPScoreboardAddPlayer(ply)
 		plypnl.btn = createD("DButton", plypnl, sw, size, 0, 0)
 		plypnl.btn:SetText("")
 		function plypnl.btn:Paint(pw, ph)
-			--
+			-- draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
 		end
 		function plypnl.btn:DoClick()
 			--
@@ -436,6 +460,9 @@ function YRPScoreboardAddPlayer(ply)
 		function plypnl.btn:DoRightClick()
 			OpenPlayerOptions(ply)
 		end
+
+		plypnl.infos.Mute = createD("DImageButton", plypnl, size, size, 0, 0)
+		plypnl.infos.Mute:Dock( RIGHT )
 
 		YRPScoreboard.list:AddItem(plypnl)
 	end
@@ -567,8 +594,8 @@ function InitScoreboard()
 		end
 
 		local pr = pw / 2 + sw / 2
-		local trx = 80
-		draw.SimpleText(string.upper(YRP.lang_string("LID_ping")), "Saira_30", pr - 20, 160, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		local trx = 90 + size
+		draw.SimpleText(string.upper(YRP.lang_string("LID_ping")), "Saira_30", pr - 20 - size, 160, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		if GetGlobalDBool("bool_yrp_scoreboard_show_operating_system", false) then
 			draw.SimpleText(string.upper(YRP.lang_string("LID_os")), "Saira_30", pr - trx, 160, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 			trx = trx + yrptab["operating_system"] + sp
