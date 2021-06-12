@@ -2,11 +2,11 @@
 SWEP.Author = "D4KiR"
 SWEP.Contact = "youtube.com/c/D4KiR"
 SWEP.Purpose = ""
-SWEP.Instructions = "Leftclick - Weaponcheck"
+SWEP.Instructions = "Leftclick - Healthcheck"
 
 SWEP.Category = "[YourRP] Civil Protection"
 
-SWEP.PrintName = "Weapon checker"
+SWEP.PrintName = "Health checker"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 1
@@ -64,22 +64,11 @@ function SWEP:PrimaryAttack()
 		ply:EmitSound(hitsound)
 
 		if tr.Entity:IsPlayer() then
-			for i, w in pairs(tr.Entity:GetWeapons()) do
-				if CLIENT then
-					chat.AddText("--- --- --- --- --- --- --- --- ---")
-					chat.AddText(YRP.lang_string("LID_weapons") .. " (" .. tr.Entity:RPName() .. ")" .. ":")
-				end
-				for i, w in pairs(tr.Entity:GetWeapons()) do
-					if CLIENT then
-						local wn = w:GetPrintName() or w.PrintName
-						local pa = tr.Entity:GetAmmoCount(w:GetPrimaryAmmoType())
-						local sa = tr.Entity:GetAmmoCount(w:GetSecondaryAmmoType())
-						chat.AddText(wn, " | PA: ", pa, " | SA: ", sa)
-					end
-				end
-				if CLIENT then
-					chat.AddText("--- --- --- --- --- --- --- --- ---")
-				end
+			if CLIENT then
+				chat.AddText("--- --- --- --- --- --- --- --- ---")
+				chat.AddText(YRP.lang_string("LID_health") .. " (" .. tr.Entity:RPName() .. ")" .. ": " .. tr.Entity:Health())
+				chat.AddText(YRP.lang_string("LID_armor") .. " (" .. tr.Entity:RPName() .. ")" .. ": " .. tr.Entity:Armor())
+				chat.AddText("--- --- --- --- --- --- --- --- ---")
 			end
 		end
 	else
@@ -97,30 +86,16 @@ function SWEP:SecondaryAttack()
 
 	if CurTime() < self.delay then return end
 	self.delay = CurTime() + self.cooldown
-	
+
 	self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
 	ply:SetAnimation(PLAYER_ATTACK1)
 
 	ply:EmitSound(hitsound)
 
-	for i, w in pairs(ply:GetWeapons()) do
-		if CLIENT then
-			chat.AddText("--- --- --- --- --- --- --- --- ---")
-			chat.AddText(YRP.lang_string("LID_weapons") .. " (" .. ply:RPName() .. ")" .. ":")
-		end
-		for i, w in pairs(ply:GetWeapons()) do
-			if CLIENT then
-				local wn = w:GetPrintName() or w.PrintName
-				local pa = ply:GetAmmoCount(w:GetPrimaryAmmoType())
-				local sa = ply:GetAmmoCount(w:GetSecondaryAmmoType())
-				chat.AddText(wn, " | PA: ", pa, " | SA: ", sa)
-			end
-		end
-		if CLIENT then
-			chat.AddText("--- --- --- --- --- --- --- --- ---")
-		end
+	if CLIENT then
+		chat.AddText("--- --- --- --- --- --- --- --- ---")
+		chat.AddText(YRP.lang_string("LID_health") .. " (" .. ply:RPName() .. ")" .. ": " .. ply:Health())
+		chat.AddText(YRP.lang_string("LID_armor") .. " (" .. ply:RPName() .. ")" .. ": " .. ply:Armor())
+		chat.AddText("--- --- --- --- --- --- --- --- ---")
 	end
 end
-
-
-

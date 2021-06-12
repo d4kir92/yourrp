@@ -109,3 +109,4 @@ function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.DrawTexturedRect( x + (wide - tall) / 2, y, tall, tall )
 end
+

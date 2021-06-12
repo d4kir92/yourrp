@@ -391,6 +391,10 @@ hook.Add( "RenderScreenspaceEffects", "BlurTest", HUDPermille)
 hook.Add("HUDPaint", "yrp_hud", function()
 	local lply = LocalPlayer()
 
+	if game.SinglePlayer() then
+		draw.SimpleText("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+	
 	if lply:GetDBool("yrp_spawning", false) then
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 255)) -- Black Background - Respawning
 
@@ -437,10 +441,6 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		HudPlayer(lply)
 		HudView()
 		HudCrosshair()
-	end
-
-	if game.SinglePlayer() then
-		draw.SimpleText("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	local _target = LocalPlayer():GetDString("hittargetName", "")
