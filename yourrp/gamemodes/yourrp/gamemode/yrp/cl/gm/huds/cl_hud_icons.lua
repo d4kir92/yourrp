@@ -94,77 +94,79 @@ local ping_delay = CurTime()
 function HUDIcons()
 	local lply = LocalPlayer()
 
-	if GetGlobalDBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design") == "Icons" then
-		HUDIconsDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
-		HUDIconsDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() then
+		if GetGlobalDBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design") == "Icons" then
+			HUDIconsDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
+			HUDIconsDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())
 
-		HUDIconsDrawIcon("ST", ST, lply:Stamina() / lply:GetMaxStamina())
-		HUDIconsDrawIcon("HU", HU, lply:Hunger() / lply:GetMaxStamina())
-		HUDIconsDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxStamina())
+			HUDIconsDrawIcon("ST", ST, lply:Stamina() / lply:GetMaxStamina())
+			HUDIconsDrawIcon("HU", HU, lply:Hunger() / lply:GetMaxStamina())
+			HUDIconsDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxStamina())
 
-		HUDIconsDrawIcon("RA", RA, lply:Radiation() / lply:GetMaxRadiation())
-		HUDIconsDrawIcon("HY", HY, lply:Hygiene() / lply:GetMaxHygiene())
+			HUDIconsDrawIcon("RA", RA, lply:Radiation() / lply:GetMaxRadiation())
+			HUDIconsDrawIcon("HY", HY, lply:Hygiene() / lply:GetMaxHygiene())
 
-		if IsLevelSystemEnabled() then
-			local tab = {}
-			tab["LEVEL"] = lply:Level()
-			HUDIconsDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.lang_string("LID_levelx", tab) .. " (" .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%)")
+			if IsLevelSystemEnabled() then
+				local tab = {}
+				tab["LEVEL"] = lply:Level()
+				HUDIconsDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.lang_string("LID_levelx", tab) .. " (" .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%)")
+			end
+
+			HUDIconsDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(1))
+			HUDIconsDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(1))
+
+			if lply:GetDBool("iscasting", false) then
+				HUDIconsDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName())
+			end
+
+			local battery = system.BatteryPower()
+			HUDIconsDrawIcon("BA", BA, battery / 255)
+
+			HUDIconsDrawText("CR", os.date("%H:%M" , os.time()))
+			HUDIconsDrawText("RO", lply:GetRoleName())
+			HUDIconsDrawText("NA", lply:RPName())
+
+			if CurTime() > fps_delay then
+				fps_delay = CurTime() + 0.5
+				fps = GetFPS()
+			end
+			HUDIconsDrawText("PE", YRP.lang_string("LID_fps") .. ": " .. fps)
+			if CurTime() > ping_delay then
+				ping_delay = CurTime() + 0.5
+				ping = lply:Ping()
+			end
+			HUDIconsDrawText("NE", YRP.lang_string("LID_ping") .. ": " .. ping)
+
+			local weapon = lply:GetActiveWeapon()
+			if IsValid(weapon) then
+				local wpname = weapon:GetPrintName()
+				local clip1 = weapon:Clip1()
+				local clip1max = weapon:GetMaxClip1()
+				local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+
+				local clip2 = weapon:Clip2()
+				local clip2max = weapon:GetMaxClip2()
+				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+				HUDIconsDrawText("WN", wpname)
+				HUDIconsDrawText("WP", clip1 .. "/" .. clip1max .. " | " .. ammo1)
+				HUDIconsDrawText("WS", clip2 .. "/" .. clip2max .. " | " .. ammo2)
+			end
+
+			if lply:Lockdown() then
+				HUDIconsDrawText("LO", "[" .. GTS("lockdown") .. "] " .. lply:LockdownText())
+			end
+
+			local COM = {}
+			COM.element = "COM"
+			HUDSimpleBG(COM)
+			COM = {}
+			COM.element = "COM"
+			COM.text = lply:CoordAngle() - lply:CoordAngle() % 5 .. "°"
+			HUDSimpleCompass(COM)
+			COM = {}
+			COM.element = "COM"
+			HUDSimpleBR(COM)
 		end
-
-		HUDIconsDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(1))
-		HUDIconsDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(1))
-
-		if lply:GetDBool("iscasting", false) then
-			HUDIconsDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName())
-		end
-
-		local battery = system.BatteryPower()
-		HUDIconsDrawIcon("BA", BA, battery / 255)
-
-		HUDIconsDrawText("CR", os.date("%H:%M" , os.time()))
-		HUDIconsDrawText("RO", lply:GetRoleName())
-		HUDIconsDrawText("NA", lply:RPName())
-
-		if CurTime() > fps_delay then
-			fps_delay = CurTime() + 0.5
-			fps = GetFPS()
-		end
-		HUDIconsDrawText("PE", YRP.lang_string("LID_fps") .. ": " .. fps)
-		if CurTime() > ping_delay then
-			ping_delay = CurTime() + 0.5
-			ping = lply:Ping()
-		end
-		HUDIconsDrawText("NE", YRP.lang_string("LID_ping") .. ": " .. ping)
-
-		local weapon = lply:GetActiveWeapon()
-		if IsValid(weapon) then
-			local wpname = weapon:GetPrintName()
-			local clip1 = weapon:Clip1()
-			local clip1max = weapon:GetMaxClip1()
-			local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
-
-			local clip2 = weapon:Clip2()
-			local clip2max = weapon:GetMaxClip2()
-			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
-			HUDIconsDrawText("WN", wpname)
-			HUDIconsDrawText("WP", clip1 .. "/" .. clip1max .. " | " .. ammo1)
-			HUDIconsDrawText("WS", clip2 .. "/" .. clip2max .. " | " .. ammo2)
-		end
-
-		if lply:Lockdown() then
-			HUDIconsDrawText("LO", "[" .. GTS("lockdown") .. "] " .. lply:LockdownText())
-		end
-
-		local COM = {}
-		COM.element = "COM"
-		HUDSimpleBG(COM)
-		COM = {}
-		COM.element = "COM"
-		COM.text = lply:CoordAngle() - lply:CoordAngle() % 5 .. "°"
-		HUDSimpleCompass(COM)
-		COM = {}
-		COM.element = "COM"
-		HUDSimpleBR(COM)
 	end
 end
 hook.Add("HUDPaint", "yrp_hud_design_Icons", HUDIcons)

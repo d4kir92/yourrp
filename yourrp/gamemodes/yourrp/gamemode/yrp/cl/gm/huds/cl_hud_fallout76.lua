@@ -431,219 +431,221 @@ local pingcolor = Color(0, 0, 0)
 function HUD_FO76()
 	local lply = LocalPlayer()
 
-	if GetGlobalDBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design", "") == "Fallout 76" then
-		local HP = {}
-		HP.element = "HP"
-		HP.text = YRP.lang_string("LID_hp")
-		HP.cur = lply:Health()
-		HP.max = lply:GetMaxHealth()
-		FO76Element(HP)
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() then
+		if GetGlobalDBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design", "") == "Fallout 76" then
+			local HP = {}
+			HP.element = "HP"
+			HP.text = YRP.lang_string("LID_hp")
+			HP.cur = lply:Health()
+			HP.max = lply:GetMaxHealth()
+			FO76Element(HP)
 
-		local AR = {}
-		AR.element = "AR"
-		AR.text = YRP.lang_string("LID_ar")
-		AR.cur = lply:Armor()
-		AR.max = lply:GetMaxArmor()
-		FO76Element(AR)
+			local AR = {}
+			AR.element = "AR"
+			AR.text = YRP.lang_string("LID_ar")
+			AR.cur = lply:Armor()
+			AR.max = lply:GetMaxArmor()
+			FO76Element(AR)
 
-		local ST = {}
-		ST.element = "ST"
-		ST.text = YRP.lang_string("LID_st")
-		ST.cur = lply:Stamina()
-		ST.max = lply:GetMaxStamina()
-		FO76Element(ST)
+			local ST = {}
+			ST.element = "ST"
+			ST.text = YRP.lang_string("LID_st")
+			ST.cur = lply:Stamina()
+			ST.max = lply:GetMaxStamina()
+			FO76Element(ST)
 
-		local HU = {}
-		HU.element = "HU"
-		HU.text = YRP.lang_string("LID_hu")
-		HU.cur = lply:Hunger()
-		HU.max = lply:GetMaxHunger()
-		FO76Element(HU)
+			local HU = {}
+			HU.element = "HU"
+			HU.text = YRP.lang_string("LID_hu")
+			HU.cur = lply:Hunger()
+			HU.max = lply:GetMaxHunger()
+			FO76Element(HU)
 
-		local TH = {}
-		TH.element = "TH"
-		TH.text = YRP.lang_string("LID_th")
-		TH.cur = lply:Hunger()
-		TH.max = lply:GetMaxHunger()
-		FO76Element(TH)
+			local TH = {}
+			TH.element = "TH"
+			TH.text = YRP.lang_string("LID_th")
+			TH.cur = lply:Hunger()
+			TH.max = lply:GetMaxHunger()
+			FO76Element(TH)
 
-		local RA = {}
-		RA.element = "RA"
-		RA.text = YRP.lang_string("LID_ra")
-		RA.cur = lply:Radiation()
-		RA.max = lply:GetMaxRadiation()
-		FO76Element(RA)
+			local RA = {}
+			RA.element = "RA"
+			RA.text = YRP.lang_string("LID_ra")
+			RA.cur = lply:Radiation()
+			RA.max = lply:GetMaxRadiation()
+			FO76Element(RA)
 
-		local HY = {}
-		HY.element = "HY"
-		HY.text = YRP.lang_string("LID_hy")
-		HY.cur = lply:Hygiene()
-		HY.max = lply:GetMaxHygiene()
-		FO76Element(HY)
-	
-		local AB = {}
-		AB.element = "AB"
-		AB.text = YRP.lang_string("LID_ab")
-		AB.cur = lply:Ability()
-		AB.max = lply:GetMaxAbility()
-		FO76Element(AB)
+			local HY = {}
+			HY.element = "HY"
+			HY.text = YRP.lang_string("LID_hy")
+			HY.cur = lply:Hygiene()
+			HY.max = lply:GetMaxHygiene()
+			FO76Element(HY)
+		
+			local AB = {}
+			AB.element = "AB"
+			AB.text = YRP.lang_string("LID_ab")
+			AB.cur = lply:Ability()
+			AB.max = lply:GetMaxAbility()
+			FO76Element(AB)
 
 
-		local XP = {}
-		if IsLevelSystemEnabled() then
-			XP.element = "XP"
-			XP.text = YRP.lang_string("LID_xp")
-			XP.cur = lply:XP()
-			XP.max = lply:GetMaxXP()
-			XP.centertext = lply:Level()
-			FO76Element(XP)
-		end
-
-		local COM = {}
-		COM.element = "COM"
-		HUDFO76Compass(COM)
-
-		local weapon = lply:GetActiveWeapon()
-		if IsValid(weapon) then
-			local clip1 = weapon:Clip1()
-			local clip1max = weapon:GetMaxClip1()
-			local clip2 = weapon:Clip2()
-			local clip2max = weapon:GetMaxClip2()
-			local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
-			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
-			if ammo1 != nil then
-				local WP = {}
-				WP.element = "WP"
-				WP.cur = clip1
-				WP.max = clip1max
-				WP.text = clip1 .. "/" .. ammo1
-				FO76Numbers(WP)
-			end
-			if ammo2 != nil then
-				local WS = {}
-				WS.element = "WS"
-				WS.cur = clip2
-				WS.max = clip2max
-				WS.text = clip2 .. "/" .. ammo2
-				FO76Numbers(WS)
-			end
-			local WN = {}
-			WN.element = "WN"
-			WN.text = weapon:GetPrintName()
-			FO76Name(WN)
-		end
-
-		if CurTime() > ping_delay then
-			ping_delay = CurTime() + 0.5
-			ping = lply:Ping()
-			if ping < pingmin then
-				pingmin = ping
-			elseif ping > pingmax then
-				pingmax = ping
+			local XP = {}
+			if IsLevelSystemEnabled() then
+				XP.element = "XP"
+				XP.text = YRP.lang_string("LID_xp")
+				XP.cur = lply:XP()
+				XP.max = lply:GetMaxXP()
+				XP.centertext = lply:Level()
+				FO76Element(XP)
 			end
 
-			pingcou = pingcou + 1
-			pingtavg = pingtavg + ping
-			if pingcou > 9 then
-				pingavg = math.Round(pingtavg / 10, 0)
-				pingcou = 0
-				pingtavg = 0
+			local COM = {}
+			COM.element = "COM"
+			HUDFO76Compass(COM)
+
+			local weapon = lply:GetActiveWeapon()
+			if IsValid(weapon) then
+				local clip1 = weapon:Clip1()
+				local clip1max = weapon:GetMaxClip1()
+				local clip2 = weapon:Clip2()
+				local clip2max = weapon:GetMaxClip2()
+				local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+				if ammo1 != nil then
+					local WP = {}
+					WP.element = "WP"
+					WP.cur = clip1
+					WP.max = clip1max
+					WP.text = clip1 .. "/" .. ammo1
+					FO76Numbers(WP)
+				end
+				if ammo2 != nil then
+					local WS = {}
+					WS.element = "WS"
+					WS.cur = clip2
+					WS.max = clip2max
+					WS.text = clip2 .. "/" .. ammo2
+					FO76Numbers(WS)
+				end
+				local WN = {}
+				WN.element = "WN"
+				WN.text = weapon:GetPrintName()
+				FO76Name(WN)
 			end
 
-			if ping > 100 then
-				pingcolor = Color(255, 0, 0)
-			elseif ping > 50 then
-				pingcolor = Color(255, 255, 0)
-			else
-				pingcolor = Color(0, 255, 0)
+			if CurTime() > ping_delay then
+				ping_delay = CurTime() + 0.5
+				ping = lply:Ping()
+				if ping < pingmin then
+					pingmin = ping
+				elseif ping > pingmax then
+					pingmax = ping
+				end
+
+				pingcou = pingcou + 1
+				pingtavg = pingtavg + ping
+				if pingcou > 9 then
+					pingavg = math.Round(pingtavg / 10, 0)
+					pingcou = 0
+					pingtavg = 0
+				end
+
+				if ping > 100 then
+					pingcolor = Color(255, 0, 0)
+				elseif ping > 50 then
+					pingcolor = Color(255, 255, 0)
+				else
+					pingcolor = Color(0, 255, 0)
+				end
 			end
-		end
-		local NE = {}
-		NE.element = "NE"
-		NE.text = YRP.lang_string("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. ")"
-		NE.tcolor = pingcolor
-		FO76Name(NE)
+			local NE = {}
+			NE.element = "NE"
+			NE.text = YRP.lang_string("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. ")"
+			NE.tcolor = pingcolor
+			FO76Name(NE)
 
-		local PE = {}
-		PE.element = "PE"
-		if CurTime() > fps_delay then
-			fps_delay = CurTime() + 0.5
-			fps = GetFPS()
-			if fps < fpsmin then
-				fpsmin = fps
-			elseif fps > fpsmax then
-				fpsmax = fps
+			local PE = {}
+			PE.element = "PE"
+			if CurTime() > fps_delay then
+				fps_delay = CurTime() + 0.5
+				fps = GetFPS()
+				if fps < fpsmin then
+					fpsmin = fps
+				elseif fps > fpsmax then
+					fpsmax = fps
+				end
+
+				fpscou = fpscou + 1
+				fpstavg = fpstavg + fps
+				if fpscou > 9 then
+					fpsavg = math.Round(fpstavg / 10, 0)
+					fpscou = 0
+					fpstavg = 0
+				end
+
+				if fps < 30 then
+					fpscolor = Color(255, 0, 0)
+				elseif fps < 60 then
+					fpscolor = Color(255, 255, 0)
+				else
+					fpscolor = Color(0, 255, 0)
+				end
+			end
+			PE.text = YRP.lang_string("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. ")"
+			PE.tcolor = fpscolor
+			FO76Name(PE)
+
+			local MO = {}
+			MO.element = "MO"
+			MO.text = lply:FormattedMoneyRounded(3) .. " (+" .. lply:FormattedSalaryRounded(3) .. ")"
+			FO76Name(MO)
+
+			local CR = {}
+			CR.element = "CR"
+			CR.text = os.date("%H:%M" , os.time())
+			FO76Name(CR)
+
+			local ID = {}
+			ID.element = "ID"
+			ID.text = lply:GetDString("idcardid", "")
+			FO76Name(ID)
+
+			local batterypower = system.BatteryPower()
+			if batterypower <= 100 then
+				local BA = {}
+				BA.element = "BA"
+				BA.text = YRP.lang_string("LID_ba")
+				BA.cur = batterypower
+				BA.max = 100
+				FO76Element(BA)
 			end
 
-			fpscou = fpscou + 1
-			fpstavg = fpstavg + fps
-			if fpscou > 9 then
-				fpsavg = math.Round(fpstavg / 10, 0)
-				fpscou = 0
-				fpstavg = 0
+			if !strEmpty(lply:Condition()) then
+				local CON = {}
+				CON.element = "CON"
+				CON.text = lply:Condition()
+				FO76Name(CON)
 			end
 
-			if fps < 30 then
-				fpscolor = Color(255, 0, 0)
-			elseif fps < 60 then
-				fpscolor = Color(255, 255, 0)
-			else
-				fpscolor = Color(0, 255, 0)
+			if lply:Lockdown() then
+				local LO = {}
+				LO.element = "LO"
+				LO.text = "[" .. GTS("lockdown") .. "] " .. lply:LockdownText()
+				LO.tcolor = Color(255, 0, 0)
+				FO76Name(LO)
 			end
-		end
-		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. ")"
-		PE.tcolor = fpscolor
-		FO76Name(PE)
 
-		local MO = {}
-		MO.element = "MO"
-		MO.text = lply:FormattedMoneyRounded(3) .. " (+" .. lply:FormattedSalaryRounded(3) .. ")"
-		FO76Name(MO)
-
-		local CR = {}
-		CR.element = "CR"
-		CR.text = os.date("%H:%M" , os.time())
-		FO76Name(CR)
-
-		local ID = {}
-		ID.element = "ID"
-		ID.text = lply:GetDString("idcardid", "")
-		FO76Name(ID)
-
-		local batterypower = system.BatteryPower()
-		if batterypower <= 100 then
-			local BA = {}
-			BA.element = "BA"
-			BA.text = YRP.lang_string("LID_ba")
-			BA.cur = batterypower
-			BA.max = 100
-			FO76Element(BA)
-		end
-
-		if !strEmpty(lply:Condition()) then
-			local CON = {}
-			CON.element = "CON"
-			CON.text = lply:Condition()
-			FO76Name(CON)
-		end
-
-		if lply:Lockdown() then
-			local LO = {}
-			LO.element = "LO"
-			LO.text = "[" .. GTS("lockdown") .. "] " .. lply:LockdownText()
-			LO.tcolor = Color(255, 0, 0)
-			FO76Name(LO)
-		end
-
-		if lply:GetDBool("iscasting", false) then
-			local CA = {}
-			CA.element = "CA"
-			CA.cur = lply:CastTimeCurrent()
-			CA.max = lply:CastTimeMax()
-			CA.percentage = math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 0) .. "%"
-			CA.text = string.upper(lply:GetCastName()) .. " " .. CA.percentage
-			CA.icon = Material("icon16/hourglass.png")
-			FO76Name(CA)
+			if lply:GetDBool("iscasting", false) then
+				local CA = {}
+				CA.element = "CA"
+				CA.cur = lply:CastTimeCurrent()
+				CA.max = lply:CastTimeMax()
+				CA.percentage = math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 0) .. "%"
+				CA.text = string.upper(lply:GetCastName()) .. " " .. CA.percentage
+				CA.icon = Material("icon16/hourglass.png")
+				FO76Name(CA)
+			end
 		end
 	end
 end

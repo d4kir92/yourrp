@@ -34,7 +34,7 @@ function BuildScaleSite()
 		end
 		Y = Y + 120
 
-		local scale_hygiene = createD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
+		--[[local scale_hygiene = createD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
 		scale_hygiene:SetHeader("LID_scale_hygiene")
 		scale_hygiene:SetMin(0.01)
 		scale_hygiene:SetMax(100.0)
@@ -44,7 +44,7 @@ function BuildScaleSite()
 				net.WriteFloat(val)
 			net.SendToServer()
 		end
-		Y = Y + 120 + 50
+		Y = Y + 120 + 50]]
 
 		local scale_radiation_in = createD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
 		scale_radiation_in:SetHeader("LID_scale_radiation_in")

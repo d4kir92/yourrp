@@ -816,8 +816,8 @@ net.Receive("Connect_Settings_General", function(len)
 					X = X + YRP.ctr(50 + 2)
 				end
 
-				e.setting = createD("YButton", e, YRP.ctr(250), YRP.ctr(50), X, 0)
-				e.setting:SetText("LID_settings")
+				e.setting = createD("YButton", e, YRP.ctr(70), YRP.ctr(50), X, 0)
+				e.setting:SetText(string.sub(YRP.lang_string("LID_settings"), 1, 3) .. ".")
 				function e.setting:DoClick()
 					local win = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(1000), 0, 0)
 					win:SetTitle(name)

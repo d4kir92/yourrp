@@ -2403,7 +2403,7 @@ if pa(yrp_loading_screen) then
 			end
 		end
 
-		if yrp_loading_screen.bg.url and strEmpty(yrp_loading_screen.bg.url) then
+		if yrp_loading_screen.bg and yrp_loading_screen.bg.url and strEmpty(yrp_loading_screen.bg.url) then
 			draw.SimpleText("NO LOADINGSCREEN FOUND - F8 General -> Loadingscreen Background", "Y_26_500", pw / 2, ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)		
 		end
 

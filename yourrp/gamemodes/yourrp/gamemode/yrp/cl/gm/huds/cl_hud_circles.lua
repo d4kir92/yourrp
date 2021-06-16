@@ -126,86 +126,88 @@ end
 
 function HUDCircles()
 	local lply = LocalPlayer()
+	
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() then
+		if GetGlobalDBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design") == "Circles" then
+			HUDCirclesDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
+			HUDCirclesDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())
 
-	if GetGlobalDBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design") == "Circles" then
-		HUDCirclesDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
-		HUDCirclesDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())
+			HUDCirclesDrawIcon("HU", HU, lply:Hunger() / lply:GetMaxHunger())
+			HUDCirclesDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxThirst())
 
-		HUDCirclesDrawIcon("HU", HU, lply:Hunger() / lply:GetMaxHunger())
-		HUDCirclesDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxThirst())
+			HUDCirclesDrawIcon("ST", ST, lply:Stamina() / lply:GetMaxStamina())
 
-		HUDCirclesDrawIcon("ST", ST, lply:Stamina() / lply:GetMaxStamina())
+			HUDCirclesDrawIcon("RA", RA, lply:Radiation() / lply:GetMaxRadiation())
+			HUDCirclesDrawIcon("HY", HY, lply:Hygiene() / lply:GetMaxHygiene())
 
-		HUDCirclesDrawIcon("RA", RA, lply:Radiation() / lply:GetMaxRadiation())
-		HUDCirclesDrawIcon("HY", HY, lply:Hygiene() / lply:GetMaxHygiene())
-
-		if IsLevelSystemEnabled() then
-			local tab = {}
-			tab["LEVEL"] = lply:Level()
-			HUDCirclesDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.lang_string("LID_levelx", tab) .. " (" .. lply:XP() .. "%)")
-		end
-
-		if lply:Battery() < 100 then
-			HUDCirclesDrawIcon("BA", BA, lply:Battery() / lply:GetMaxBattery())
-		end
-
-		if lply:CastTimeCurrent() / lply:CastTimeMax() > 0 then
-			HUDCirclesDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName() .. " (" .. math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 0) .. "%)")
-		end
-
-		HUDCirclesDrawText("RO", lply:GetRoleName())
-		HUDCirclesDrawText("NA", lply:RPName())
-
-		HUDCirclesDrawText("CR", os.date("%H:%M" , os.time()))
-
-		HUDCirclesDrawText("PE", YRP.lang_string("LID_fps") .. ": " .. GetFPS())
-		HUDCirclesDrawText("NE", YRP.lang_string("LID_ping") .. ": " .. lply:Ping())
-
-		local wep = lply:GetActiveWeapon()
-		if wep != NULL then
-			local clip1 = wep:Clip1()
-			local maxclip1 = wep:GetMaxClip1()
-			local ammo1 = lply:GetAmmoCount(wep:GetPrimaryAmmoType())
-			local am1t = ""
-			if clip1 > -1 then
-				am1t = am1t .. clip1 .. "/" .. maxclip1
+			if IsLevelSystemEnabled() then
+				local tab = {}
+				tab["LEVEL"] = lply:Level()
+				HUDCirclesDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.lang_string("LID_levelx", tab) .. " (" .. lply:XP() .. "%)")
 			end
-			if ammo1 > -1 then
-				if am1t != "" then
-					am1t = am1t .. "|"
+
+			if lply:Battery() < 100 then
+				HUDCirclesDrawIcon("BA", BA, lply:Battery() / lply:GetMaxBattery())
+			end
+
+			if lply:CastTimeCurrent() / lply:CastTimeMax() > 0 then
+				HUDCirclesDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName() .. " (" .. math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 0) .. "%)")
+			end
+
+			HUDCirclesDrawText("RO", lply:GetRoleName())
+			HUDCirclesDrawText("NA", lply:RPName())
+
+			HUDCirclesDrawText("CR", os.date("%H:%M" , os.time()))
+
+			HUDCirclesDrawText("PE", YRP.lang_string("LID_fps") .. ": " .. GetFPS())
+			HUDCirclesDrawText("NE", YRP.lang_string("LID_ping") .. ": " .. lply:Ping())
+
+			local wep = lply:GetActiveWeapon()
+			if wep != NULL then
+				local clip1 = wep:Clip1()
+				local maxclip1 = wep:GetMaxClip1()
+				local ammo1 = lply:GetAmmoCount(wep:GetPrimaryAmmoType())
+				local am1t = ""
+				if clip1 > -1 then
+					am1t = am1t .. clip1 .. "/" .. maxclip1
 				end
-				am1t = am1t .. ammo1
-			end
-			if !strEmpty(am1t) then
-				HUDCirclesDrawIcon("WP", WP, clip1 / maxclip1, am1t)
-			end
-
-			local clip2 = wep:Clip2()
-			local maxclip2 = wep:GetMaxClip2()
-			local ammo2 = lply:GetAmmoCount(wep:GetSecondaryAmmoType())
-			local am2t = ""
-			if clip2 > -1 then
-				am2t = am2t .. clip2 .. "/" .. maxclip2
-			end
-			if ammo2 > -1 then
-				if am2t != "" then
-					am2t = am2t .. "|"
+				if ammo1 > -1 then
+					if am1t != "" then
+						am1t = am1t .. "|"
+					end
+					am1t = am1t .. ammo1
 				end
-				am2t = am2t .. ammo2
-			end
-			if !strEmpty(am2t) then
-				HUDCirclesDrawIcon("WS", WS, clip2 / maxclip2, am2t)
+				if !strEmpty(am1t) then
+					HUDCirclesDrawIcon("WP", WP, clip1 / maxclip1, am1t)
+				end
+
+				local clip2 = wep:Clip2()
+				local maxclip2 = wep:GetMaxClip2()
+				local ammo2 = lply:GetAmmoCount(wep:GetSecondaryAmmoType())
+				local am2t = ""
+				if clip2 > -1 then
+					am2t = am2t .. clip2 .. "/" .. maxclip2
+				end
+				if ammo2 > -1 then
+					if am2t != "" then
+						am2t = am2t .. "|"
+					end
+					am2t = am2t .. ammo2
+				end
+				if !strEmpty(am2t) then
+					HUDCirclesDrawIcon("WS", WS, clip2 / maxclip2, am2t)
+				end
+
+				HUDCirclesDrawText("WN", wep:GetPrintName())
 			end
 
-			HUDCirclesDrawText("WN", wep:GetPrintName())
+			HUDCirclesDrawText("SN", SQL_STR_OUT(GetGlobalDString("text_server_name", "SERVERNAME")))
+
+			HUDCirclesDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(2))
+			HUDCirclesDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(2))
+
+			HUDSimpleCompass()
 		end
-
-		HUDCirclesDrawText("SN", SQL_STR_OUT(GetGlobalDString("text_server_name", "SERVERNAME")))
-
-		HUDCirclesDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(2))
-		HUDCirclesDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(2))
-
-		HUDSimpleCompass()
 	end
 end
 hook.Add("HUDPaint", "yrp_hud_design_Circles", HUDCircles)

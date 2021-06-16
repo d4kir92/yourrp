@@ -121,6 +121,3 @@ function SWEP:SecondaryAttack()
 		end
 	end
 end
-
-
-
