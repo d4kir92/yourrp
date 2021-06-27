@@ -293,7 +293,7 @@ function set_level(sender, text)
 end
 
 function do_sleep(sender)
-	if sender:GetDBool("ragdolled", false) then
+	if IsRagdoll(sender) then
 		DoUnRagdoll(sender)
 	else
 		DoRagdoll(sender)

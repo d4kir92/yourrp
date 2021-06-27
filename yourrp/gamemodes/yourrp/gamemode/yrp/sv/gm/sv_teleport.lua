@@ -1,6 +1,11 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function enough_space(ply, pos)
+	if !IsValid(ply) or !ply:IsPlayer() then
+		YRP.msg("note", "[enough_space] Player is not VALID or isn't a Player! >>> ply: " .. tostring(ply))
+		return false
+	end
+
 	local tr = {
 		start = pos,
 		endpos = pos,
@@ -18,6 +23,11 @@ function enough_space(ply, pos)
 end
 
 function get_ground_pos(ply, pos)
+	if !IsValid(ply) or !ply:IsPlayer() then
+		YRP.msg("note", "[get_ground_pos] Player is not VALID or isn't a Player! >>> ply: " .. tostring(ply))
+		return pos
+	end
+
 	local tr = {
 		start = pos,
 		endpos = pos-Vector(0, 0, 9999),
@@ -34,6 +44,11 @@ function get_ground_pos(ply, pos)
 end
 
 function tp_to(ply, pos)
+	if !IsValid(ply) or !ply:IsPlayer() then
+		YRP.msg("note", "[tp_to] Player is not VALID or isn't a Player! >>> ply: " .. tostring(ply))
+		return false
+	end
+
 	local _pos = Vector(pos[1], pos[2], pos[3])
 	local _angle = Angle(0, 0, 0)
 	local _tmpAngle = ply:EyeAngles() or ply:GetAngles()
@@ -74,6 +89,10 @@ function tp_to(ply, pos)
 			end
 		end
 	end
-	YRP.msg("note", ">>> FAILED TO TELEPORT: " .. ply:RPName() .. " (not enough space!) <<<")
+	if ply.RPName then
+		YRP.msg("note", "[tp_to] >>> FAILED TO TELEPORT! " .. ply:RPName() .. " (not enough space!) <<<")
+	else
+		YRP.msg("note", "[tp_to] >>> FAILED! TELEPORTED TO EARLY?")
+	end
 	return false
 end

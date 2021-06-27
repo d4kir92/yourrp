@@ -1963,34 +1963,46 @@ net.Receive("tp_unjail", function(len, ply)
 	end
 end)
 
+function IsRagdoll(ply)
+	return ply:GetDBool("ragdolled", false)
+end
+
 function DoRagdoll(ply)
-	ply:SetDBool("ragdolled", true)
+	if IsValid(ply) and ply:IsPlayer() and not IsRagdoll(ply) then
+		ply:SetDBool("ragdolled", true)
 
-	local scale = ply:GetModelScale() or 1
+		local scale = ply:GetModelScale() or 1
 
-	local tmp = ents.Create("prop_ragdoll")
-	tmp:SetModel(ply:GetModel())
-	tmp:SetModelScale(scale, 0)
-	tmp:SetPos(ply:GetPos() + Vector(0, 0, 0))
-	tmp:Spawn()
+		local tmp = ents.Create("prop_ragdoll")
+		tmp:SetModel(ply:GetModel())
+		tmp:SetModelScale(scale, 0)
+		tmp:SetPos(ply:GetPos() + Vector(0, 0, 0))
+		tmp:Spawn()
 
-	ply:SetParent(tmp)
-	ply:SetDEntity("ragdoll", tmp)
+		ply:SetParent(tmp)
+		ply:SetDEntity("ragdoll", tmp)
 
-	RenderCloaked(ply)
+		ply:Freeze( true )
+
+		RenderCloaked(ply)
+	end
 end
 
 function DoUnRagdoll(ply)
-	ply:SetDBool("ragdolled", false)
-	ply:SetParent(nil)
+	if IsValid(ply) and ply:IsPlayer() and IsRagdoll(ply) then
+		ply:SetDBool("ragdolled", false)
+		ply:SetParent(nil)
 
-	local ragdoll = ply:GetDEntity("ragdoll")
-	if ea(ragdoll) then
-		ply:SetPos(ragdoll:GetPos())
-		ragdoll:Remove()
+		local ragdoll = ply:GetDEntity("ragdoll")
+		if ea(ragdoll) then
+			ply:SetPos(ragdoll:GetPos())
+			ragdoll:Remove()
+		end
+
+		ply:Freeze( false )
+
+		RenderNormal(ply)
 	end
-
-	RenderNormal(ply)
 end
 
 util.AddNetworkString("ragdoll")

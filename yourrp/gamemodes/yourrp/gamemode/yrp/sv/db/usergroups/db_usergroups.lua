@@ -1357,7 +1357,7 @@ function RenderEquipments(ply, mode, color)
 end
 
 function RenderCloaked(ply)
-	if ea(ply) then
+	if IsValid(ply) and ply:IsPlayer() and ply:Alive() and ply:GetWeapons() then
 		local _alpha = 0
 		ply:SetRenderMode(RENDERMODE_TRANSALPHA)
 		ply:SetColor(Color(255, 255, 255, _alpha))
