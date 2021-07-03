@@ -162,10 +162,10 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 		updateRoleUses(roltab.uniqueID)
 	end
 
-	ply:SetDBool("yrp_chararchived", false)
+	ply:SetNW2Bool("yrp_chararchived", false)
 
 	if cuid != ply:CharID() then
-		if GetGlobalDBool("bool_removebuildingownercharswitch", false) then
+		if GetGlobalBool("bool_removebuildingownercharswitch", false) then
 			BuildingRemoveOwner(ply:SteamID())
 		end
 		hook.Run("yrp_switched_character", ply, ply:CharID(), cuid)
@@ -175,7 +175,7 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 		if !force then
 			SQL_UPDATE("yrp_players", "NormalCharacter = '" .. cuid .. "'", "SteamID = '" .. ply:SteamID() .. "'")
 		end
-		ply:SetDBool("yrp_spawning", true)
+		ply:SetNW2Bool("yrp_spawning", true)
 		timer.Simple(0.1, function()
 			ply:Spawn()
 		end)
@@ -210,7 +210,7 @@ net.Receive("yrp_event_start", function(len, ply)
 	if wk(tab) then
 		tab = tab[1]
 
-		SetGlobalDBool("yrp_event_running", true)
+		SetGlobalBool("yrp_event_running", true)
 
 		local chars = string.Explode(";", tab.string_chars)
 		for i, charstring in pairs(chars) do
@@ -235,7 +235,7 @@ net.Receive("yrp_event_end", function(len, ply)
 	if wk(tab) then
 		tab = tab[1]
 
-		SetGlobalDBool("yrp_event_running", false)
+		SetGlobalBool("yrp_event_running", false)
 
 		local chars = string.Explode(";", tab.string_chars)
 		for i, charstring in pairs(chars) do

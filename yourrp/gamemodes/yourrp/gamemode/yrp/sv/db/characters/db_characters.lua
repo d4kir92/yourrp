@@ -73,7 +73,7 @@ function YRPSendCharCount(ply)
 	if wk(result) then
 		count = table.Count(result)
 	end
-	ply:SetDInt("char_count", count)
+	ply:SetNW2Int("char_count", count)
 end
 
 local Player = FindMetaTable("Player")
@@ -83,33 +83,33 @@ function Player:CharacterLoadout()
 	local plytab = self:GetPlyTab()
 
 	if wk(chatab) then
-		self:SetDInt("int_xp", chatab.int_xp)
-		self:SetDString("int_level", chatab.int_level)
+		self:SetNW2Int("int_xp", chatab.int_xp)
+		self:SetNW2String("int_level", chatab.int_level)
 
-		self:SetDInt("pmid", tonumber(chatab.playermodelID))
+		self:SetNW2Int("pmid", tonumber(chatab.playermodelID))
 
-		self:SetDInt("int_warnings", chatab.int_warnings)
-		self:SetDInt("int_violations", chatab.int_violations)
-		self:SetDInt("int_arrests", chatab.int_arrests)
+		self:SetNW2Int("int_warnings", chatab.int_warnings)
+		self:SetNW2Int("int_violations", chatab.int_violations)
+		self:SetNW2Int("int_arrests", chatab.int_arrests)
 
-		self:SetDString("string_birthday", SQL_STR_OUT(chatab.string_birthday))
-		if GetGlobalDBool("bool_characters_bodyheight", false) then
-			self:SetDInt("int_bodyheight", chatab.int_bodyheight)
+		self:SetNW2String("string_birthday", SQL_STR_OUT(chatab.string_birthday))
+		if GetGlobalBool("bool_characters_bodyheight", false) then
+			self:SetNW2Int("int_bodyheight", chatab.int_bodyheight)
 		end
-		if GetGlobalDBool("bool_characters_weight", false) then
-			self:SetDInt("int_weight", chatab.int_weight)
+		if GetGlobalBool("bool_characters_weight", false) then
+			self:SetNW2Int("int_weight", chatab.int_weight)
 		end
-		self:SetDString("string_nationality", SQL_STR_OUT(chatab.string_nationality))
+		self:SetNW2String("string_nationality", SQL_STR_OUT(chatab.string_nationality))
 		
 		for i = 0, 4 do
-			self:SetDString("eqbag" .. i, chatab["eqbag" .. i])
+			self:SetNW2String("eqbag" .. i, chatab["eqbag" .. i])
 		end
 
 		local levelsystem = SQL_SELECT("yrp_levelsystem", "*", nil)
 		if wk(levelsystem) then
 			levelsystem = levelsystem[1]
-			self:SetDString("int_xp_for_levelup", levelsystem.int_xp_for_levelup)
-			self:SetDString("float_multiplier", levelsystem.float_multiplier)
+			self:SetNW2String("int_xp_for_levelup", levelsystem.int_xp_for_levelup)
+			self:SetNW2String("float_multiplier", levelsystem.float_multiplier)
 		end
 	end
 end
@@ -127,19 +127,19 @@ function Player:VisualEquipment(name, slot)
 						_item = _item[1]
 						local _model = _item.WorldModel
 
-						local _old = self:GetDEntity(name)
+						local _old = self:GetNW2Entity(name)
 						if ea(_old) then
 							_old:Remove()
 						end
-						self:SetDString(name, _model)
+						self:SetNW2String(name, _model)
 						local _visual = ents.Create("prop_dynamic")
 						_visual:SetModel(_item.WorldModel)
 						_visual:SetOwner(self)
-						_visual:SetDBool("isviewmodel", true)
+						_visual:SetNW2Bool("isviewmodel", true)
 						_visual:Spawn()
 
-						self:SetDEntity(name, _visual)
-						self:SetDString(name .. "ClassName", _item.ClassName)
+						self:SetNW2Entity(name, _visual)
+						self:SetNW2String(name .. "ClassName", _item.ClassName)
 
 						local _maxs = _visual:OBBMaxs()
 						local _mins = _visual:OBBMins()
@@ -155,27 +155,27 @@ function Player:VisualEquipment(name, slot)
 							corax = 0
 							coray = -90
 							coraz = 90
-							self:SetDString(name .. "thick", _x)
+							self:SetNW2String(name .. "thick", _x)
 						elseif _x >= _z and _y >= _z then
 							corax = 0
 							coray = 0
 							coraz = 0
-							self:SetDString(name .. "thick", _z)
+							self:SetNW2String(name .. "thick", _z)
 						elseif _x >= _y and _z >= _y then
 							corax = 90
 							coray = 90
 							coraz = 90
-							self:SetDString(name .. "thick", _y)
+							self:SetNW2String(name .. "thick", _y)
 						end
-						self:SetDString(name .. "corax", corax)
-						self:SetDString(name .. "coray", coray)
-						self:SetDString(name .. "coraz", coraz)
+						self:SetNW2String(name .. "corax", corax)
+						self:SetNW2String(name .. "coray", coray)
+						self:SetNW2String(name .. "coraz", coraz)
 					else
-						local _old = self:GetDEntity(name)
+						local _old = self:GetNW2Entity(name)
 						if ea(_old) then
 							_old:Remove()
-							self:SetDEntity(name, NULL)
-							self:SetDString(name .. "ClassName", "")
+							self:SetNW2Entity(name, NULL)
+							self:SetNW2String(name .. "ClassName", "")
 						end
 					end
 					return _item
@@ -223,7 +223,7 @@ function Player:SetRPName(str)
 		SQL_UPDATE("yrp_characters", "rpname = '" .. newname .. "'", "uniqueID = " .. self:CharID())
 
 		newname = SQL_STR_OUT(newname)
-		self:SetDString("rpname", newname)
+		self:SetNW2String("rpname", newname)
 
 		YRP.msg("note", oldname .. " changed name to " .. newname, true)
 	end
@@ -396,9 +396,9 @@ util.AddNetworkString("change_rpdescription")
 net.Receive("change_rpdescription", function(len, ply)
 	local _new_rp_description = net.ReadString()
 	SQL_UPDATE("yrp_characters", "rpdescription = '" .. SQL_STR_IN(_new_rp_description) .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetDString("rpdescription", SQL_STR_OUT(_new_rp_description))
+	ply:SetNW2String("rpdescription", SQL_STR_OUT(_new_rp_description))
 	for i, v in pairs(string.Explode("\n", _new_rp_description)) do
-		ply:SetDString("rpdescription" .. i, SQL_STR_OUT(v))
+		ply:SetNW2String("rpdescription" .. i, SQL_STR_OUT(v))
 	end
 end)
 
@@ -406,25 +406,25 @@ util.AddNetworkString("change_birthday")
 net.Receive("change_birthday", function(len, ply)
 	local _new_birthday = net.ReadString()
 	SQL_UPDATE("yrp_characters", "string_birthday = '" .. SQL_STR_IN(_new_birthday) .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetDString("string_birthday", SQL_STR_OUT(_new_birthday))
+	ply:SetNW2String("string_birthday", SQL_STR_OUT(_new_birthday))
 end)
 util.AddNetworkString("change_bodyheight")
 net.Receive("change_bodyheight", function(len, ply)
 	local _new_bodyheight = net.ReadString()
 	SQL_UPDATE("yrp_characters", "int_bodyheight = '" .. _new_bodyheight .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetDInt("int_bodyheight", SQL_STR_OUT(_new_bodyheight))
+	ply:SetNW2Int("int_bodyheight", SQL_STR_OUT(_new_bodyheight))
 end)
 util.AddNetworkString("change_weight")
 net.Receive("change_weight", function(len, ply)
 	local _new_weight = net.ReadString()
 	SQL_UPDATE("yrp_characters", "int_weight = '" .. _new_weight .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetDInt("int_weight", SQL_STR_OUT(_new_weight))
+	ply:SetNW2Int("int_weight", SQL_STR_OUT(_new_weight))
 end)
 util.AddNetworkString("change_nationality")
 net.Receive("change_nationality", function(len, ply)
 	local _new_nationality = net.ReadString()
 	SQL_UPDATE("yrp_characters", "string_nationality = '" .. SQL_STR_IN(_new_nationality) .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetDString("string_nationality", SQL_STR_OUT(_new_nationality))
+	ply:SetNW2String("string_nationality", SQL_STR_OUT(_new_nationality))
 end)
 
 util.AddNetworkString("charGetGroups")
@@ -538,7 +538,7 @@ function SendLoopCharacterList(ply, tab)
 	if net.BytesLeft() == nil and net.BytesWritten() == nil then
 		local plyT = ply:GetPlyTab()
 		if wk(plyT) then
-			ply:SetDInt("yrp_charid", tonumber(plyT.CurrentCharacter))
+			ply:SetNW2Int("yrp_charid", tonumber(plyT.CurrentCharacter))
 		end
 
 		local c = 1
@@ -560,7 +560,7 @@ function SendLoopCharacterList(ply, tab)
 		end
 
 		timer.Simple(2, function()
-			ply:SetDBool("loadedchars", true)
+			ply:SetNW2Bool("loadedchars", true)
 		end)
 	else
 		timer.Simple(0.1, function()
@@ -634,7 +634,7 @@ net.Receive("yrp_get_characters", function(len, ply)
 	send_characters(ply)
 
 	if !ply:Alive() then
-		ply:SetDBool("yrp_characterselection", true)
+		ply:SetNW2Bool("yrp_characterselection", true)
 	end
 end)
 
@@ -679,7 +679,7 @@ function CreateCharacter(ply, tab)
 		vals = vals .. tonumber(role[1].uniqueID) .. ", "
 		vals = vals .. tonumber(role[1].int_groupID) .. ", "
 		vals = vals .. tonumber(tab.playermodelID) .. ", "
-		vals = vals .. GetGlobalDString("text_characters_money_start", 0) .. ", "
+		vals = vals .. GetGlobalString("text_characters_money_start", 0) .. ", "
 		vals = vals .. 0 .. ", "
 		vals = vals .. "'" .. SQL_STR_IN(GetMapNameDB()) .. "', "
 		vals = vals .. tonumber(tab.skin) .. ", "
@@ -731,7 +731,7 @@ net.Receive("YRP_EnterWorld", function(len, ply)
 
 	YRPSpawnAsCharacter(ply, cuid, false)
 
-	ply:SetDBool("yrp_characterselection", false)
+	ply:SetNW2Bool("yrp_characterselection", false)
 end)
 
 function SendBodyGroups(ply)
@@ -810,7 +810,7 @@ net.Receive("inv_pm_up", function(len, ply)
 	local _pms = string.Explode(",", GetPlayermodelsOfRole(ply:GetRolTab().uniqueID))
 	if wk(_pms) then
 		if wk(_pms[_cur]) then
-			ply:SetDString("string_playermodel", _pms[_cur])
+			ply:SetNW2String("string_playermodel", _pms[_cur])
 			ply:SetModel(_pms[_cur])
 			local _charid = ply:CharID()
 			SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
@@ -826,7 +826,7 @@ net.Receive("inv_pm_do", function(len, ply)
 	local _pms = string.Explode(",", GetPlayermodelsOfRole(ply:GetRolTab().uniqueID))
 	if wk(_pms) then
 		if wk(_pms[_cur]) then
-			ply:SetDString("string_playermodel", _pms[_cur])
+			ply:SetNW2String("string_playermodel", _pms[_cur])
 			ply:SetModel(_pms[_cur])
 			local _charid = ply:CharID()
 			SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
@@ -847,7 +847,7 @@ net.Receive("warning_up", function(len, ply)
 
 		SQL_UPDATE(DATABASE_NAME, "int_warnings = '" .. int_warnings .. "'", "uniqueID = '" .. p:CharID() .. "'")
 
-		p:SetDInt("int_warnings", int_warnings)
+		p:SetNW2Int("int_warnings", int_warnings)
 	end
 end)
 
@@ -862,7 +862,7 @@ net.Receive("warning_dn", function(len, ply)
 
 		SQL_UPDATE(DATABASE_NAME, "int_warnings = '" .. int_warnings .. "'", "uniqueID = '" .. p:CharID() .. "'")
 
-		p:SetDInt("int_warnings", int_warnings)
+		p:SetNW2Int("int_warnings", int_warnings)
 	end
 end)
 
@@ -877,7 +877,7 @@ net.Receive("violation_up", function(len, ply)
 
 		SQL_UPDATE(DATABASE_NAME, "int_violations = '" .. int_violations .. "'", "uniqueID = '" .. p:CharID() .. "'")
 
-		p:SetDInt("int_violations", int_violations)
+		p:SetNW2Int("int_violations", int_violations)
 	end
 end)
 
@@ -892,7 +892,7 @@ net.Receive("violation_dn", function(len, ply)
 
 		SQL_UPDATE(DATABASE_NAME, "int_violations = '" .. int_violations .. "'", "uniqueID = '" .. p:CharID() .. "'")
 
-		p:SetDInt("int_violations", int_violations)
+		p:SetNW2Int("int_violations", int_violations)
 	end
 end)
 
@@ -903,7 +903,7 @@ net.Receive("set_idcardid", function(len, ply)
 	local ptab = SQL_SELECT(DATABASE_NAME, "text_idcardid", "uniqueID = '" .. p:CharID() .. "'")
 	if wk(ptab) then
 		SQL_UPDATE(DATABASE_NAME, "text_idcardid = '" .. text_idcardid .. "'", "uniqueID = '" .. p:CharID() .. "'")
-		p:SetDString("idcardid", text_idcardid)
+		p:SetNW2String("idcardid", text_idcardid)
 	end
 end)
 
@@ -912,6 +912,6 @@ net.Receive("removearrests", function(len, ply)
 	local p = net.ReadEntity()
 	if wk(p:CharID()) then
 		SQL_UPDATE(DATABASE_NAME, "int_arrests = '" .. 0 .. "'", "uniqueID = '" .. p:CharID() .. "'")
-		p:SetDInt("int_arrests", 0)
+		p:SetNW2Int("int_arrests", 0)
 	end
 end)

@@ -92,7 +92,7 @@ function createShopItem(item, duid, id)
 			function w.cc:ValueChanged(col)
 				_i.modelc.color = col
 				_i.model:SetColor(_i.modelc.color)
-				lply:SetDString("item_color", ColorToString(col))
+				lply:SetNW2String("item_color", ColorToString(col))
 			end
 		end
 	end
@@ -166,7 +166,7 @@ function createShopItem(item, duid, id)
 			end
 			function _i.buy:DoClick()
 				net.Start("item_buy")
-					self.item.color = lply:GetDString("item_color", "255, 255, 255")
+					self.item.color = lply:GetNW2String("item_color", "255, 255, 255")
 					net.WriteTable(self.item)
 					net.WriteString(duid)
 				net.SendToServer()
@@ -561,7 +561,7 @@ net.Receive("shop_get_tabs", function(len)
 					end
 					_globalWorking = _dealer.WorldModel
 					hook.Add("close_dealerWorldmodel", "close_dealerWorldmodelHook", function()
-						_dealer.WorldModel = LocalPlayer():GetDString("WorldModel")
+						_dealer.WorldModel = LocalPlayer():GetNW2String("WorldModel")
 
 						net.Start("dealer_edit_worldmodel")
 							net.WriteString(_dealer.uniqueID)

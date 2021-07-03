@@ -432,7 +432,7 @@ function HUD_FO76()
 	local lply = LocalPlayer()
 
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() then
-		if GetGlobalDBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design", "") == "Fallout 76" then
+		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design", "") == "Fallout 76" then
 			local HP = {}
 			HP.element = "HP"
 			HP.text = YRP.lang_string("LID_hp")
@@ -608,7 +608,7 @@ function HUD_FO76()
 
 			local ID = {}
 			ID.element = "ID"
-			ID.text = lply:GetDString("idcardid", "")
+			ID.text = lply:GetNW2String("idcardid", "")
 			FO76Name(ID)
 
 			local batterypower = system.BatteryPower()
@@ -636,7 +636,7 @@ function HUD_FO76()
 				FO76Name(LO)
 			end
 
-			if lply:GetDBool("iscasting", false) then
+			if lply:GetNW2Bool("iscasting", false) then
 				local CA = {}
 				CA.element = "CA"
 				CA.cur = lply:CastTimeCurrent()

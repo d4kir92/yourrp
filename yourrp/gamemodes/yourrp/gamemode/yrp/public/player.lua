@@ -31,15 +31,15 @@ function Player:GetMaxBattery()
 end
 
 function Player:AFK()
-	return self:GetDBool("isafk", false)
+	return self:GetNW2Bool("isafk", false)
 end
 
 function Player:DND()
-	return self:GetDBool("isdnd", false)
+	return self:GetNW2Bool("isdnd", false)
 end
 
 function Player:IDCardID()
-	return self:GetDString("idcardid", "")
+	return self:GetNW2String("idcardid", "")
 end
 
 function Player:GetLanguage() -- The Language the player selected
@@ -51,7 +51,7 @@ function Player:GetLanguageShort() -- The Language the player selected (shortkey
 end
 
 function Player:GetCountryShort()
-	return string.upper(self:GetDString("yrp_country", "LOADING"))
+	return string.upper(self:GetNW2String("yrp_country", "LOADING"))
 end
 
 function Player:GetCountry() -- The Language the player selected
@@ -59,36 +59,36 @@ function Player:GetCountry() -- The Language the player selected
 end
 
 function Player:Slowed()
-	return self:GetDBool("slowed", false)
+	return self:GetNW2Bool("slowed", false)
 end
 
 function Player:IsInCombat()
-	return self:GetDBool("inCombat", false)
+	return self:GetNW2Bool("inCombat", false)
 end
 
 --[[ Stats ]]--
 function Player:GetMaxArmor()
-	return tonumber(self:GetDInt("MaxArmor", 100))
+	return tonumber(self:GetNW2Int("MaxArmor", 100))
 end
 
 function Player:GetMinLevel()
-	return tonumber(self:GetDString("int_level_min", "1"))
+	return tonumber(self:GetNW2String("int_level_min", "1"))
 end
 
 function Player:GetMaxLevel()
-	return tonumber(self:GetDString("int_level_max", "100"))
+	return tonumber(self:GetNW2String("int_level_max", "100"))
 end
 
 function Player:Stamina()
-	return math.Round(self:GetDFloat("GetCurStamina", 1), 2)
+	return math.Round(self:GetNW2Float("GetCurStamina", 1), 2)
 end
 
 function Player:GetMaxStamina()
-	return  math.Round(self:GetDFloat("GetMaxStamina", 10), 2)
+	return  math.Round(self:GetNW2Float("GetMaxStamina", 10), 2)
 end
 
 function Player:Hunger()
-	return math.Round(self:GetDFloat("hunger", 100.0), 1)
+	return math.Round(self:GetNW2Float("hunger", 100.0), 1)
 end
 
 function Player:GetMaxHunger()
@@ -96,7 +96,7 @@ function Player:GetMaxHunger()
 end
 
 function Player:Thirst()
-	return math.Round(self:GetDFloat("thirst", 100.0), 1)
+	return math.Round(self:GetNW2Float("thirst", 100.0), 1)
 end
 
 function Player:GetMaxThirst()
@@ -104,7 +104,7 @@ function Player:GetMaxThirst()
 end
 
 function Player:Permille()
-	return math.Round(self:GetDFloat("permille", 0.0), 1)
+	return math.Round(self:GetNW2Float("permille", 0.0), 1)
 end
 
 function Player:GetMaxPermille()
@@ -112,83 +112,83 @@ function Player:GetMaxPermille()
 end
 
 function Player:Radiation()
-	return math.Round(self:GetDFloat("GetCurRadiation", 1), 1)
+	return math.Round(self:GetNW2Float("GetCurRadiation", 1), 1)
 end
 
 function Player:GetMaxRadiation()
-	return math.Round(self:GetDFloat("GetMaxRadiation", 100), 1)
+	return math.Round(self:GetNW2Float("GetMaxRadiation", 100), 1)
 end
 
 function Player:Hygiene()
-	return math.Round(self:GetDFloat("GetCurHygiene", 1), 1)
+	return math.Round(self:GetNW2Float("GetCurHygiene", 1), 1)
 end
 
 function Player:GetMaxHygiene()
-	return math.Round(self:GetDFloat("GetMaxHygiene", 100), 1)
+	return math.Round(self:GetNW2Float("GetMaxHygiene", 100), 1)
 end
 
 function Player:SalaryTime()
-	return self:GetDInt("salarytime", 0)
+	return self:GetNW2Int("salarytime", 0)
 end
 
 function Player:NextSalaryTime()
-	return self:GetDInt("nextsalarytime", 0)
+	return self:GetNW2Int("nextsalarytime", 0)
 end
 
 function Player:GetCastName()
-	return YRP.lang_string(self:GetDString("castname", ""))
+	return YRP.lang_string(self:GetNW2String("castname", ""))
 end
 
 function Player:CastTimeCurrent()
-	return math.Round(self:GetDFloat("castcur", 0.0), 1)
+	return math.Round(self:GetNW2Float("castcur", 0.0), 1)
 end
 
 function Player:CastTimeMax()
-	return math.Round(self:GetDFloat("castmax", 1.0), 1)
+	return math.Round(self:GetNW2Float("castmax", 1.0), 1)
 end
 
 function Player:Ability()
-	return self:GetDInt("GetCurAbility", 0)
+	return self:GetNW2Int("GetCurAbility", 0)
 end
 
 function Player:GetMaxAbility()
-	return self:GetDInt("GetMaxAbility", 100)
+	return self:GetNW2Int("GetMaxAbility", 100)
 end
 
 function Player:IsBleeding()
-	return self:GetDBool("isbleeding", false)
+	return self:GetNW2Bool("isbleeding", false)
 end
 
 function Player:IsCuffed()
-	return self:GetDBool("cuffed")
+	return self:GetNW2Bool("cuffed")
 end
 
 function Player:IsHungry()
-	return self:GetDFloat("hunger", 100.0) < 20.0
+	return self:GetNW2Float("hunger", 100.0) < 20.0
 end
 
 function Player:IsThirsty()
-	return self:GetDFloat("thirst", 100.0) < 20.0
+	return self:GetNW2Float("thirst", 100.0) < 20.0
 end
 
 function Player:IsRightLegBroken()
-	return self:GetDBool("broken_leg_right", false)
+	return self:GetNW2Bool("broken_leg_right", false)
 end
 
 function Player:IsLeftLegBroken()
-	return self:GetDBool("broken_leg_left", false)
+	return self:GetNW2Bool("broken_leg_left", false)
 end
 
 function Player:IsRightArmBroken()
-	return self:GetDBool("broken_arm_right", false)
+	return self:GetNW2Bool("broken_arm_right", false)
 end
 
 function Player:IsLeftArmBroken()
-	return self:GetDBool("broken_arm_left", false)
+	return self:GetNW2Bool("broken_arm_left", false)
 end
 
 function Player:InJail()
-	return self:GetDBool("injail", false)
+	return self:GetNW2Bool("injail", false)
 end
 
 function Player:Condition()
@@ -199,53 +199,53 @@ function Player:Condition()
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_youarebleeding")
 	end
-	if self:GetDBool("cuffed") then
+	if self:GetNW2Bool("cuffed") then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_cuffed")
 	end
-	if self:GetDFloat("hunger", 100) < 20 then
+	if self:GetNW2Float("hunger", 100) < 20 then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_hungry")
 	end
-	if self:GetDFloat("thirst", 100) < 20.0 then
+	if self:GetNW2Float("thirst", 100) < 20.0 then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_thirsty")
 	end
-	if self:GetDBool("broken_leg_right", false) then
+	if self:GetNW2Bool("broken_leg_right", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_yourrightlegisbroken")
 	end
-	if self:GetDBool("broken_leg_left", false) then
+	if self:GetNW2Bool("broken_leg_left", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_yourleftlegisbroken")
 	end
-	if self:GetDBool("broken_arm_right", false) then
+	if self:GetNW2Bool("broken_arm_right", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_yourrightarmisbroken")
 	end
-	if self:GetDBool("broken_arm_left", false) then
+	if self:GetNW2Bool("broken_arm_left", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string("LID_yourleftarmisbroken")
 	end
-	if self:GetDBool("injail", false) then
+	if self:GetNW2Bool("injail", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. YRP.lang_string("LID_jail") .. ": " .. self:GetDInt("jailtime", 0)
+		_sttext = _sttext .. YRP.lang_string("LID_jail") .. ": " .. self:GetNW2Int("jailtime", 0)
 	end
 	return _sttext
 end
@@ -269,11 +269,11 @@ end
 
 --[[ Money ]]--
 function Player:GetMoney() -- Money that the character is holding
-	return math.Round(tonumber(self:GetDString("money", "0")), 2) -- return float
+	return math.Round(tonumber(self:GetNW2String("money", "0")), 2) -- return float
 end
 
 function Player:GetMoneyBank() -- Money that the bank is holding
-	return math.Round(tonumber(self:GetDString("moneybank", "0")), 2) -- return float
+	return math.Round(tonumber(self:GetNW2String("moneybank", "0")), 2) -- return float
 end
 
 function Player:Money()
@@ -285,7 +285,7 @@ function Player:MoneyBank()
 end
 
 function Player:Salary()
-	return tonumber(self:GetDString("salary", "0"))
+	return tonumber(self:GetNW2String("salary", "0"))
 end
 
 function string.point(num)
@@ -309,7 +309,7 @@ end
 if CLIENT then
 	function MoneyFormat(money)
 		money = tonumber(money)
-		return GetGlobalDString("text_money_pre", "") .. string.point(money) .. GetGlobalDString("text_money_pos", "")
+		return GetGlobalString("text_money_pre", "") .. string.point(money) .. GetGlobalString("text_money_pos", "")
 	end
 
 	function MoneyFormatRounded(money, round)
@@ -320,20 +320,20 @@ if CLIENT then
 			round = 0
 		end
 		money = tonumber(money)
-		return GetGlobalDString("text_money_pre", "") .. roundMoney(money, round) .. GetGlobalDString("text_money_pos", "")
+		return GetGlobalString("text_money_pre", "") .. roundMoney(money, round) .. GetGlobalString("text_money_pos", "")
 	end
 end
 
 function Player:FormattedMoney()
-	return GetGlobalDString("text_money_pre", "") .. string.point(self:Money()) .. GetGlobalDString("text_money_pos", "")
+	return GetGlobalString("text_money_pre", "") .. string.point(self:Money()) .. GetGlobalString("text_money_pos", "")
 end
 
 function Player:FormattedMoneyBank()
-	return GetGlobalDString("text_money_pre", "") .. string.point(self:MoneyBank()) .. GetGlobalDString("text_money_pos", "")
+	return GetGlobalString("text_money_pre", "") .. string.point(self:MoneyBank()) .. GetGlobalString("text_money_pos", "")
 end
 
 function Player:FormattedSalary()
-	return GetGlobalDString("text_money_pre", "") .. string.point(self:Salary()) .. GetGlobalDString("text_money_pos", "")
+	return GetGlobalString("text_money_pre", "") .. string.point(self:Salary()) .. GetGlobalString("text_money_pos", "")
 end
 
 function Player:FormattedMoneyRounded(round)
@@ -343,7 +343,7 @@ function Player:FormattedMoneyRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return GetGlobalDString("text_money_pre", "") .. roundMoney(self:Money(), round) .. GetGlobalDString("text_money_pos", "")
+	return GetGlobalString("text_money_pre", "") .. roundMoney(self:Money(), round) .. GetGlobalString("text_money_pos", "")
 end
 
 function Player:FormattedMoneyBankRounded(round)
@@ -353,7 +353,7 @@ function Player:FormattedMoneyBankRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return GetGlobalDString("text_money_pre", "") .. roundMoney(self:MoneyBank(), round) .. GetGlobalDString("text_money_pos", "")
+	return GetGlobalString("text_money_pre", "") .. roundMoney(self:MoneyBank(), round) .. GetGlobalString("text_money_pos", "")
 end
 
 function Player:FormattedSalaryRounded(round)
@@ -363,7 +363,7 @@ function Player:FormattedSalaryRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return GetGlobalDString("text_money_pre", "") .. roundMoney(self:Salary(), round) .. GetGlobalDString("text_money_pos", "")
+	return GetGlobalString("text_money_pre", "") .. roundMoney(self:Salary(), round) .. GetGlobalString("text_money_pos", "")
 end
 
 function Player:AddMoney(money)
@@ -376,19 +376,19 @@ end
 
 --[[ Character ]]--
 function Player:Level()
-	return tonumber(self:GetDString("int_level", "1"))
+	return tonumber(self:GetNW2String("int_level", "1"))
 end
 
 function Player:XP()
-	return tonumber(math.Round(self:GetDInt("int_xp", "1"), 0))
+	return tonumber(math.Round(self:GetNW2Int("int_xp", "1"), 0))
 end
 
 function Player:XPForLevelUp()
-	return tonumber(math.Round(self:GetDString("int_xp_for_levelup", "10"), 0))
+	return tonumber(math.Round(self:GetNW2String("int_xp_for_levelup", "10"), 0))
 end
 
 function Player:XPMultiplier()
-	return tonumber(math.Round(self:GetDString("float_multiplier", "1.5"), 0))
+	return tonumber(math.Round(self:GetNW2String("float_multiplier", "1.5"), 0))
 end
 
 function Player:GetMaxXP()
@@ -403,15 +403,15 @@ function Player:GetRoleColor() -- Group Color
 end
 
 function Player:GetRoleUID()
-	return tonumber(self:GetDString("roleUniqueID", "0"))
+	return tonumber(self:GetNW2String("roleUniqueID", "0"))
 end
 
 function Player:GetRoleCooldown()
-	return tonumber(self:GetDInt("int_role_cooldown", "1"))
+	return tonumber(self:GetNW2Int("int_role_cooldown", "1"))
 end
 
 function Player:GetRoleOnDeathRoleUID()
-	return tonumber(self:GetDString("int_roleondeath", "0"))
+	return tonumber(self:GetNW2String("int_roleondeath", "0"))
 end
 
 function Player:GetRoleName() -- Role Name / "Job" Name
@@ -420,15 +420,15 @@ function Player:GetRoleName() -- Role Name / "Job" Name
 end
 
 function Player:GetLicenseIDs()
-	return self:GetDString("licenseIDs", "")
+	return self:GetNW2String("licenseIDs", "")
 end
 
 function Player:GetLicenseNames()
-	return self:GetDString("licenseNames", "")
+	return self:GetNW2String("licenseNames", "")
 end
 
 function Player:GetRoleSweps()
-	return self:GetDString("sweps", "")
+	return self:GetNW2String("sweps", "")
 end
 
 --[[ Faction ]]--

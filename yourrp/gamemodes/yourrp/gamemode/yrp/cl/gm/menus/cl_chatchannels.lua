@@ -43,7 +43,7 @@ function YRPChatChannel(edit, uid)
 		name = win.name:GetText()
 	end
 	if edit then
-		name = GetGlobalDTable("yrp_chat_channels")[uid].string_name
+		name = GetGlobalTable("yrp_chat_channels")[uid].string_name
 		win.name:SetText(name)
 	end
 
@@ -66,7 +66,7 @@ function YRPChatChannel(edit, uid)
 	for i, v in pairs(modes) do
 		local selected = false
 		if edit then
-			mode = tonumber(GetGlobalDTable("yrp_chat_channels")[uid].int_mode)
+			mode = tonumber(GetGlobalTable("yrp_chat_channels")[uid].int_mode)
 			if isnumber(mode) and v[2] == mode then
 				selected = true
 			end
@@ -84,7 +84,7 @@ function YRPChatChannel(edit, uid)
 		structure = win.structure:GetText()
 	end
 	if edit then
-		structure = GetGlobalDTable("yrp_chat_channels")[uid].string_structure
+		structure = GetGlobalTable("yrp_chat_channels")[uid].string_structure
 		if isstring(structure) then
 			win.structure:SetText(structure)
 		end
@@ -150,7 +150,7 @@ function YRPChatChannel(edit, uid)
 	-- enabled
 	win.enabled = createD("DCheckBox", CON, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(400))
 	if edit then
-		win.enabled:SetChecked(tobool(GetGlobalDTable("yrp_chat_channels")[uid].bool_enabled))
+		win.enabled:SetChecked(tobool(GetGlobalTable("yrp_chat_channels")[uid].bool_enabled))
 	else
 		win.enabled:SetChecked(true)
 	end
@@ -194,7 +194,7 @@ function YRPChatChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_chat_channels")[uid]["string_active_usergroups"][ug.string_name] then
+				if GetGlobalTable("yrp_chat_channels")[uid]["string_active_usergroups"][ug.string_name] then
 					line.cb:SetChecked(true)
 					table.insert(augs, ug.string_name)
 				end
@@ -234,7 +234,7 @@ function YRPChatChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_chat_channels")[uid]["string_active_groups"][tonumber(ug.uniqueID)] then
+				if GetGlobalTable("yrp_chat_channels")[uid]["string_active_groups"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert(agrps, ug.uniqueID)
 				end
@@ -274,7 +274,7 @@ function YRPChatChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_chat_channels")[uid]["string_active_roles"][tonumber(ug.uniqueID)] then
+				if GetGlobalTable("yrp_chat_channels")[uid]["string_active_roles"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert(arols, ug.uniqueID)
 				end
@@ -317,7 +317,7 @@ function YRPChatChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_chat_channels")[uid]["string_passive_usergroups"][ug.string_name] then
+				if GetGlobalTable("yrp_chat_channels")[uid]["string_passive_usergroups"][ug.string_name] then
 					line.cb:SetChecked(true)
 					table.insert(pugs, ug.string_name)
 				end
@@ -357,7 +357,7 @@ function YRPChatChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_chat_channels")[uid]["string_passive_groups"][tonumber(ug.uniqueID)] then
+				if GetGlobalTable("yrp_chat_channels")[uid]["string_passive_groups"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert(pgrps, ug.uniqueID)
 				end
@@ -397,7 +397,7 @@ function YRPChatChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_chat_channels")[uid]["string_passive_roles"][tonumber(ug.uniqueID)] then
+				if GetGlobalTable("yrp_chat_channels")[uid]["string_passive_roles"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert(prols, ug.uniqueID)
 				end
@@ -441,7 +441,7 @@ function YRPChatChannel(edit, uid)
 			end)
 		end
 
-		if GetGlobalDTable("yrp_chat_channels")[uid]["bool_removeable"] then
+		if GetGlobalTable("yrp_chat_channels")[uid]["bool_removeable"] then
 			win.rem = createD("YButton", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(1170))
 			win.rem:SetText("LID_remove")
 			function win.rem:Paint(pw, ph)
@@ -505,7 +505,7 @@ function OpenChatMenu()
 
 	local h = YRP.ctr(80)
 	local pbr = YRP.ctr(20)
-	for i, channel in pairs(GetGlobalDTable("yrp_chat_channels", {})) do
+	for i, channel in pairs(GetGlobalTable("yrp_chat_channels", {})) do
 		if lply:HasAccess() then
 			local line = createD("DPanel", nil, CONTENT:GetWide(), h, 0, 0)
 			function line:Paint(pw, ph)

@@ -79,9 +79,9 @@ function LoadIDCardSetting(force)
 				-- FOUND DATABASE VALUE
 				value = value[1]
 				if string.StartWith(name, "bool_") then
-					SetGlobalDBool(name, tobool(value.value))
+					SetGlobalBool(name, tobool(value.value))
 				elseif string.StartWith(name, "int_") then
-					SetGlobalDInt(name, value.value)
+					SetGlobalInt(name, value.value)
 				end
 				register[name] = register[name] or nil
 				if register[name] == nil then
@@ -95,10 +95,10 @@ function LoadIDCardSetting(force)
 						elseif v == "false" then
 							v = 0
 						end
-						if string.StartWith(n, "bool_") and GetGlobalDBool(n, tobool(v)) ~= tobool(v) then
-							SetGlobalDBool(n, tobool(v))
-						elseif string.StartWith(n, "int_") and GetGlobalDInt(n, v) ~= v then
-							SetGlobalDInt(n, v)
+						if string.StartWith(n, "bool_") and GetGlobalBool(n, tobool(v)) ~= tobool(v) then
+							SetGlobalBool(n, tobool(v))
+						elseif string.StartWith(n, "int_") and GetGlobalInt(n, v) ~= v then
+							SetGlobalInt(n, v)
 						end
 						SQL_UPDATE(DATABASE_NAME, "value = '" .. v .. "'", "name = '" .. n .. "'")
 						LoadIDCardSetting(true)

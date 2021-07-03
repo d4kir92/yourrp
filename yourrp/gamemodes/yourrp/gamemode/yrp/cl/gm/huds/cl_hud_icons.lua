@@ -95,7 +95,7 @@ function HUDIcons()
 	local lply = LocalPlayer()
 
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() then
-		if GetGlobalDBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design") == "Icons" then
+		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Icons" then
 			HUDIconsDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
 			HUDIconsDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())
 
@@ -115,7 +115,7 @@ function HUDIcons()
 			HUDIconsDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(1))
 			HUDIconsDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(1))
 
-			if lply:GetDBool("iscasting", false) then
+			if lply:GetNW2Bool("iscasting", false) then
 				HUDIconsDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName())
 			end
 

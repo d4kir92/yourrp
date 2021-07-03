@@ -264,7 +264,7 @@ end)
 
 function toggleAppearanceMenu()
 	if YRPIsNoMenuOpen() then
-		if GetGlobalDBool("bool_appearance_system", false) then
+		if GetGlobalBool("bool_appearance_system", false) then
 			open_appearance()
 		end
 	else

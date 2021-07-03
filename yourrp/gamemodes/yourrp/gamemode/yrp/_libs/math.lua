@@ -191,7 +191,7 @@ end
 
 function formatMoney(money)
 	if wk(money) then
-		return GetGlobalDString("text_money_pre", "") .. money .. GetGlobalDString("text_money_pos", "")
+		return GetGlobalString("text_money_pre", "") .. money .. GetGlobalString("text_money_pos", "")
 	else
 		return "[FAILED: formatMoney]"
 	end

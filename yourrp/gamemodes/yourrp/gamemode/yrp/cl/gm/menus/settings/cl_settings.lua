@@ -128,19 +128,19 @@ function SettingsTabsContent()
 
 	sm.tabsite = tabs.site
 	if sm.currentsite == "LID_usermanagement" then
-		if lply:GetDBool("bool_events", false) then
+		if lply:GetNW2Bool("bool_events", false) then
 			tabs:AddOption("LID_event", function(parent)
 				OpenSettingsEvents()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_event")))
 			end)
 		end
-		if lply:GetDBool("bool_players", false) then
+		if lply:GetNW2Bool("bool_players", false) then
 			tabs:AddOption("LID_settings_players", function(parent)
 				OpenSettingsPlayers()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_players")))
 			end)
 		end
-		if lply:GetDBool("bool_whitelist", false) then
+		if lply:GetNW2Bool("bool_whitelist", false) then
 			tabs:AddOption("LID_whitelist", function(parent)
 				OpenSettingsWhitelist()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_whitelist")))
@@ -149,42 +149,42 @@ function SettingsTabsContent()
 		
 		tabs:GoToSite("LID_event")
 	elseif sm.currentsite == "LID_moderation" then
-		if lply:GetDBool("bool_status", false) then
+		if lply:GetNW2Bool("bool_status", false) then
 			tabs:AddOption("LID_settings_status", function(parent)
 				OpenSettingsStatus()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_status")))
 			end)
 		end
-		if lply:GetDBool("bool_groupsandroles", false) then
+		if lply:GetNW2Bool("bool_groupsandroles", false) then
 			tabs:AddOption("LID_settings_groupsandroles", function(parent)
 				OpenSettingsGroupsAndRoles()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_groupsandroles")))
 			end)
 		end
-		if lply:GetDBool("bool_map", false) then
+		if lply:GetNW2Bool("bool_map", false) then
 			tabs:AddOption("LID_settings_map", function(parent)
 				OpenSettingsMap()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_map")))
 			end)
 		end
-		--if lply:GetDBool("bool_status", false) then
+		--if lply:GetNW2Bool("bool_status", false) then
 		--[[tabs:AddOption("LID_character", function(parent)
 
 		end)]]
 		--end
-		if lply:GetDBool("bool_logs", false) then
+		if lply:GetNW2Bool("bool_logs", false) then
 			tabs:AddOption("LID_logs", function(parent)
 				OpenSettingsLogs()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_logs")))
 			end)
 		end
-		if lply:GetDBool("bool_blacklist", false) then
+		if lply:GetNW2Bool("bool_blacklist", false) then
 			tabs:AddOption("LID_blacklist", function(parent)
 				OpenSettingsBlacklist()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_blacklist")))
 			end)
 		end
-		if lply:GetDBool("bool_feedback", false) then
+		if lply:GetNW2Bool("bool_feedback", false) then
 			tabs:AddOption("LID_feedback", function(parent)
 				OpenSettingsFeedback()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_feedback")))
@@ -193,43 +193,43 @@ function SettingsTabsContent()
 
 		tabs:GoToSite("LID_settings_status")
 	elseif sm.currentsite == "LID_administration" then
-		if lply:GetDBool("bool_realistic", false) then
+		if lply:GetNW2Bool("bool_realistic", false) then
 			tabs:AddOption("LID_settings_realistic", function(parent)
 				OpenSettingsRealistic()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_realistic")))
 			end)
 		end
-		if lply:GetDBool("bool_shops", false) then
+		if lply:GetNW2Bool("bool_shops", false) then
 			tabs:AddOption("LID_settings_shops", function(parent)
 				OpenSettingsShops()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_shops")))
 			end)
 		end
-		if lply:GetDBool("bool_licenses", false) then
+		if lply:GetNW2Bool("bool_licenses", false) then
 			tabs:AddOption("LID_settings_licenses", function(parent)
 				OpenSettingsLicenses()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_licenses")))
 			end)
 		end
-		if lply:GetDBool("bool_usergroups", false) then
+		if lply:GetNW2Bool("bool_usergroups", false) then
 			tabs:AddOption("LID_settings_usergroups", function(parent)
 				OpenSettingsUsergroups()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_usergroups")))
 			end)
 		end
-		if lply:GetDBool("bool_levelsystem", false) then
+		if lply:GetNW2Bool("bool_levelsystem", false) then
 			tabs:AddOption("LID_levelsystem", function(parent)
 				OpenSettingsLevelsystem()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_levelsystem")))
 			end)
 		end
-		if lply:GetDBool("bool_design", false) then
+		if lply:GetNW2Bool("bool_design", false) then
 			tabs:AddOption("LID_settings_design", function(parent)
 				OpenSettingsDesign()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_design")))
 			end)
 		end
-		if lply:GetDBool("bool_scale", false) then
+		if lply:GetNW2Bool("bool_scale", false) then
 			tabs:AddOption("LID_scale", function(parent)
 				OpenSettingsScale()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_scale")))
@@ -238,36 +238,36 @@ function SettingsTabsContent()
 
 		tabs:GoToSite("LID_settings_realistic")
 	elseif sm.currentsite == "LID_server" then
-		if lply:GetDBool("bool_general", false) then
+		if lply:GetNW2Bool("bool_general", false) then
 			tabs:AddOption("LID_settings_general", function(parent)
 				OpenSettingsGeneral()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_general")))
 			end)
 		end
-		if lply:GetDBool("bool_console", false) then
+		if lply:GetNW2Bool("bool_console", false) then
 			tabs:AddOption("LID_server_console", function(parent)
 				OpenSettingsConsole()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_server_console")))
 			end)
 		end
-		if lply:GetDBool("bool_ac_database", false) then
+		if lply:GetNW2Bool("bool_ac_database", false) then
 			tabs:AddOption("LID_settings_database", function(parent)
 				OpenSettingsDatabase()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_database")))
 			end)
 		end
-		--if lply:GetDBool("bool_status", false) then
+		--if lply:GetNW2Bool("bool_status", false) then
 			--[[tabs:AddOption("LID_settings_socials", function(parent)
 				
 			end)]]
 		--end
-		if lply:GetDBool("bool_darkrp", false) then
+		if lply:GetNW2Bool("bool_darkrp", false) then
 			tabs:AddOption("DarkRP", function(parent)
 				OpenSettingsDarkRP()
 				sm.win:SetTitle(string.upper("DarkRP"))
 			end)
 		end
-		if lply:GetDBool("bool_permaprops", false) then
+		if lply:GetNW2Bool("bool_permaprops", false) then
 			tabs:AddOption("Perma Props", function(parent)
 				OpenSettingsPermaProps()
 				sm.win:SetTitle(string.upper("Perma Props"))
@@ -276,7 +276,7 @@ function SettingsTabsContent()
 
 		tabs:GoToSite("LID_settings_general")
 	elseif sm.currentsite == "YourRP" then
-		if lply:GetDBool("bool_yourrp_addons", false) then
+		if lply:GetNW2Bool("bool_yourrp_addons", false) then
 			tabs:AddOption("LID_settings_yourrp_addons", function(parent)
 				OpenSettingsYourRPAddons()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_yourrp_addons")))
@@ -301,7 +301,7 @@ function F8OpenSettings()
 		local sites = {}
 		
 		local c = 1
-		if lply:GetDBool("bool_players", false) or lply:GetDBool("bool_whitelist", false) then
+		if lply:GetNW2Bool("bool_players", false) or lply:GetNW2Bool("bool_whitelist", false) then
 			sites[c] = {}
 			sites[c].name = "LID_usermanagement"
 			sites[c].icon = "64_user"
@@ -309,7 +309,7 @@ function F8OpenSettings()
 			c = c + 1
 		end
 
-		if lply:GetDBool("bool_status", false) or lply:GetDBool("bool_groupsandroles", false) or lply:GetDBool("bool_map", false) or lply:GetDBool("bool_logs", false) or lply:GetDBool("bool_blacklist", false) or lply:GetDBool("bool_feedback", false) then
+		if lply:GetNW2Bool("bool_status", false) or lply:GetNW2Bool("bool_groupsandroles", false) or lply:GetNW2Bool("bool_map", false) or lply:GetNW2Bool("bool_logs", false) or lply:GetNW2Bool("bool_blacklist", false) or lply:GetNW2Bool("bool_feedback", false) then
 			sites[c] = {}
 			sites[c].name = "LID_moderation"
 			sites[c].icon = "64_info-circle"
@@ -317,7 +317,7 @@ function F8OpenSettings()
 			c = c + 1
 		end
 
-		if lply:GetDBool("bool_realistic", false) or lply:GetDBool("bool_shops", false) or lply:GetDBool("bool_licenses", false) or lply:GetDBool("bool_usergroups", false) or lply:GetDBool("bool_levelsystem", false) or lply:GetDBool("bool_design", false) or lply:GetDBool("bool_scale", false) then
+		if lply:GetNW2Bool("bool_realistic", false) or lply:GetNW2Bool("bool_shops", false) or lply:GetNW2Bool("bool_licenses", false) or lply:GetNW2Bool("bool_usergroups", false) or lply:GetNW2Bool("bool_levelsystem", false) or lply:GetNW2Bool("bool_design", false) or lply:GetNW2Bool("bool_scale", false) then
 			sites[c] = {}
 			sites[c].name = "LID_administration"
 			sites[c].icon = "64_wrench"
@@ -325,7 +325,7 @@ function F8OpenSettings()
 			c = c + 1
 		end
 
-		if lply:GetDBool("bool_general", false) or lply:GetDBool("bool_console", false) or lply:GetDBool("bool_ac_database", false) or lply:GetDBool("bool_darkrp", false) or lply:GetDBool("bool_permaprops", false) then
+		if lply:GetNW2Bool("bool_general", false) or lply:GetNW2Bool("bool_console", false) or lply:GetNW2Bool("bool_ac_database", false) or lply:GetNW2Bool("bool_darkrp", false) or lply:GetNW2Bool("bool_permaprops", false) then
 			sites[c] = {}
 			sites[c].name = "LID_server"
 			sites[c].icon = "64_server"
@@ -333,7 +333,7 @@ function F8OpenSettings()
 			c = c + 1
 		end
 	
-		if lply:GetDBool("bool_yourrp_addons", false) then
+		if lply:GetNW2Bool("bool_yourrp_addons", false) then
 			sites[c] = {}
 			sites[c].name = "YourRP"
 			sites[c].icon = "64_theater-masks"
@@ -351,7 +351,7 @@ function F8OpenSettings()
 		--sm.win:SetHeaderHeight(YRP.ctr(100))
 		sm.win:SetBorder(0)
 		sm.win:CanMaximise()
-		sm.win:SetMaximised(LocalPlayer():GetDBool("settingsmaximised", true), "SETTING")
+		sm.win:SetMaximised(LocalPlayer():GetNW2Bool("settingsmaximised", true), "SETTING")
 		sm.win:SetSizable(true)
 		sm.win:SetMinWidth(700)
 		sm.win:SetMinHeight(700)
@@ -450,7 +450,7 @@ function F8OpenSettings()
 			self:SetPos(0, sm.win:GetTall() - YRP.ctr(50))
 			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
 
-			draw.SimpleText(GetGlobalDString("text_server_name", "-"), "Y_18_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(GetGlobalString("text_server_name", "-"), "Y_18_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, GetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end]]
@@ -461,7 +461,7 @@ function F8OpenSettings()
 		sm.menu:SetText("")
 		sm.menu.pw = YRP.ctr(64) + 2 * br
 		sm.menu.ph = YRP.ctr(64) + 2 * br
-		sm.menu.expanded = sm.menu.expanded or lply:GetDBool("settings_expanded", true)
+		sm.menu.expanded = sm.menu.expanded or lply:GetNW2Bool("settings_expanded", true)
 		local font = "Y_" .. math.Clamp(math.Round(sm.menu.ph - 2 * br), 4, 100) ..  "_500"
 		function sm.menu:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
@@ -472,7 +472,7 @@ function F8OpenSettings()
 		sm.menu.expander = createD("DButton", sm.win, sm.menu.ph, sm.menu.ph, 0, sm.win:GetTall() - sm.menu.ph)
 		sm.menu.expander:SetText("")
 		function sm.menu.expander:DoClick()
-			if lply:GetDBool("settings_expanded", true) then
+			if lply:GetNW2Bool("settings_expanded", true) then
 				sm.win:UpdateCustomeSize(sm.menu.ph)
 
 				sm.menu.expanded = false
@@ -481,11 +481,11 @@ function F8OpenSettings()
 
 				sm.menu.expanded = true
 			end
-			lply:SetDBool("settings_expanded", sm.menu.expanded)
+			lply:SetNW2Bool("settings_expanded", sm.menu.expanded)
 		end
 		function sm.menu.expander:Paint(pw, ph)
 			self:SetPos(0, sm.win:GetTall() - sm.menu.ph)
-			if lply:GetDBool("settings_expanded", true) then
+			if lply:GetNW2Bool("settings_expanded", true) then
 				if YRP.GetDesignIcon("64_angle-left") ~= nil then
 					surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
 				end
@@ -602,7 +602,7 @@ function F8OpenSettings()
 			end
 		end
 
-		if lply:GetDBool("settings_expanded", true) then
+		if lply:GetNW2Bool("settings_expanded", true) then
 			sm.win:UpdateCustomeSize()
 		else
 			sm.win:UpdateCustomeSize(sm.menu.ph)

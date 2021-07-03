@@ -32,7 +32,7 @@ local reloading = 0
 local aimdownsights = 0
 function HudCrosshair()
 	local lply = LocalPlayer()
-	if lply:Alive() and GetGlobalDBool("bool_yrp_crosshair", false) then
+	if lply:Alive() and GetGlobalBool("bool_yrp_crosshair", false) then
 		if true or !contextMenuOpen then
 			local weapon = lply:GetActiveWeapon()
 			if weapon != NULL then
@@ -82,7 +82,7 @@ function HudCrosshair()
 						end
 					end
 
-					if lply:GetDString("string_hud_design", "notloaded") != "notloaded" then
+					if lply:GetNW2String("string_hud_design", "notloaded") != "notloaded" then
 						if lply:Alive() then
 							if true then
 

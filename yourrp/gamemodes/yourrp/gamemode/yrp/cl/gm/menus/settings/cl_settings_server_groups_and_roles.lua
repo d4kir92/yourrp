@@ -2604,7 +2604,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
-			if GetGlobalDBool("bool_hunger", false) then
+			if GetGlobalBool("bool_hunger", false) then
 				local bool_hunger = {}
 				bool_hunger.parent = ea.attributes:GetContent()
 				bool_hunger.uniqueID = role.uniqueID
@@ -2617,7 +2617,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			if GetGlobalDBool("bool_thirst", false) then
+			if GetGlobalBool("bool_thirst", false) then
 				local bool_thirst = {}
 				bool_thirst.parent = ea.attributes:GetContent()
 				bool_thirst.uniqueID = role.uniqueID
@@ -2630,7 +2630,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			if GetGlobalDBool("bool_stamina", false) then
+			if GetGlobalBool("bool_stamina", false) then
 				local bool_stamina = {}
 				bool_stamina.parent = ea.attributes:GetContent()
 				bool_stamina.uniqueID = role.uniqueID

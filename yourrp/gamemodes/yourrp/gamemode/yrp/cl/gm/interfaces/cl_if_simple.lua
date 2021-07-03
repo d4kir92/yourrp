@@ -6,7 +6,7 @@ hook.Add("YFramePaint", "YFrame_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		local hh = 24
 		if self.GetHeaderHeight != nil then
 			hh = self:GetHeaderHeight()
@@ -28,7 +28,7 @@ hook.Add("YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		local color = lply:InterfaceValue("YButton", "NC")
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 		if self:IsDown() or self:IsPressed() then
@@ -64,7 +64,7 @@ hook.Add("YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		local color = Color(126, 126, 126)
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 		if self:IsDown() or self:IsPressed() then
@@ -96,7 +96,7 @@ hook.Add("YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		local color = Color(126, 126, 126)
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 		if self:IsDown() or self:IsPressed() then
@@ -128,7 +128,7 @@ hook.Add("YLabelPaint", "YLabel_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		local color = lply:InterfaceValue("YFrame", "HI")
 		local tcolor = lply:InterfaceValue("YFrame", "HT")
 
@@ -155,7 +155,7 @@ hook.Add("YTextFieldPaint", "YTextFieldPaint_Material", function(self, pw, ph, t
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		local color = Color(50, 50, 50)
 		local tcolor = lply:InterfaceValue("YFrame", "HT")
 
@@ -182,7 +182,7 @@ hook.Add("YPanelPaint", "YPanel_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		local color = tab.color or lply:InterfaceValue("YFrame", "HI")
 
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
@@ -193,7 +193,7 @@ end)
 hook.Add("YAddPaint", "YAdd_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		local color = Color(100, 205, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -224,7 +224,7 @@ end)
 hook.Add("YRemovePaint", "YRemove_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		local color = Color(126, 126, 126)
 		if self:IsDown() or self:IsPressed() then
 			color = Color(197, 52, 52)
@@ -251,7 +251,7 @@ end)
 hook.Add("YClosePaint", "YClose_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		local color = Color(205, 100, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -284,7 +284,7 @@ end)
 hook.Add("YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		local color = Color(205, 205, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -317,7 +317,7 @@ end)
 hook.Add("YGroupBoxPaint", "YGroupBox_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Material" then
+	if GetGlobalString("string_interface_design") == "Material" then
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255))
 
 		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 60, 60, 255))

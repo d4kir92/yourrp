@@ -141,7 +141,7 @@ function useFunction(str)
 				if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
 					toggleDoorOptions(eyeTrace.Entity)
 				elseif eyeTrace.Entity:IsVehicle() then
-					toggleVehicleOptions(eyeTrace.Entity, eyeTrace.Entity:GetDInt("item_uniqueID"))
+					toggleVehicleOptions(eyeTrace.Entity, eyeTrace.Entity:GetNW2Int("item_uniqueID"))
 				end
 			end
 
@@ -185,43 +185,43 @@ function useFunction(str)
 			str = string.Replace(str, "m_", "")
 			local uid = tonumber(str)
 			UseMacro(uid)
-		elseif GetGlobalDBool("bool_yrp_combined_menu", false) then
+		elseif GetGlobalBool("bool_yrp_combined_menu", false) then
 			local id = 0
-			if str == "OpenHelpMenu" and GetGlobalDBool("bool_yrp_help_menu", false) then
+			if str == "OpenHelpMenu" and GetGlobalBool("bool_yrp_help_menu", false) then
 				done_tutorial("tut_f1info", 10)
 				id = 1
-			elseif str == "OpenRoleMenu" and GetGlobalDBool("bool_yrp_role_menu", false) then
+			elseif str == "OpenRoleMenu" and GetGlobalBool("bool_yrp_role_menu", false) then
 				id = 2
-			elseif str == "OpenBuyMenu" and GetGlobalDBool("bool_yrp_buy_menu", false) then
+			elseif str == "OpenBuyMenu" and GetGlobalBool("bool_yrp_buy_menu", false) then
 				id = 3
-			elseif str == "openCharMenu" and GetGlobalDBool("bool_yrp_char_menu", false) then
+			elseif str == "openCharMenu" and GetGlobalBool("bool_yrp_char_menu", false) then
 				id = 4
-			elseif str == "openKeybindsMenu" and GetGlobalDBool("bool_yrp_keybinds_menu", false) then
+			elseif str == "openKeybindsMenu" and GetGlobalBool("bool_yrp_keybinds_menu", false) then
 				id = 5
-			elseif str == "openTicketMenu" and GetGlobalDBool("bool_yrp_tickets_menu", false) then
+			elseif str == "openTicketMenu" and GetGlobalBool("bool_yrp_tickets_menu", false) then
 				done_tutorial("tut_feedback")
 				id = 6
 			end
 			if id > 0 then
 				ToggleCombinedMenu(id)
 			end
-		elseif !GetGlobalDBool("bool_yrp_combined_menu", false) then
-			if str == "OpenHelpMenu" and GetGlobalDBool("bool_yrp_help_menu", false) then
+		elseif !GetGlobalBool("bool_yrp_combined_menu", false) then
+			if str == "OpenHelpMenu" and GetGlobalBool("bool_yrp_help_menu", false) then
 				done_tutorial("tut_welcome")
 				done_tutorial("tut_feedback")
 				done_tutorial("tut_f1info", 10)
 				ToggleHelpMenu()
-			elseif str == "OpenRoleMenu" and GetGlobalDBool("bool_yrp_role_menu", false) then
+			elseif str == "OpenRoleMenu" and GetGlobalBool("bool_yrp_role_menu", false) then
 				done_tutorial("tut_mr")
 				ToggleRoleMenu()
-			elseif str == "OpenBuyMenu" and GetGlobalDBool("bool_yrp_buy_menu", false) then
+			elseif str == "OpenBuyMenu" and GetGlobalBool("bool_yrp_buy_menu", false) then
 				done_tutorial("tut_mb")
 				ToggleBuyMenu()
-			elseif str == "openTicketMenu" and GetGlobalDBool("bool_yrp_tickets_menu", false) then
+			elseif str == "openTicketMenu" and GetGlobalBool("bool_yrp_tickets_menu", false) then
 				toggleTicketMenu()
-			elseif str == "openCharMenu" and GetGlobalDBool("bool_yrp_char_menu", false) then
+			elseif str == "openCharMenu" and GetGlobalBool("bool_yrp_char_menu", false) then
 				toggleCharMenu()
-			elseif str == "openKeybindsMenu" and GetGlobalDBool("bool_yrp_keybinds_menu", false) then
+			elseif str == "openKeybindsMenu" and GetGlobalBool("bool_yrp_keybinds_menu", false) then
 				toggleKeybindsMenu()
 			end			
 		end
@@ -297,11 +297,11 @@ function KeyPress()
 
 	if hudD < CurTime() then
 		hudD = CurTime() + 240
-		if lply:GetDInt("hud_version", -1) < 0 and !hudFail then
+		if lply:GetNW2Int("hud_version", -1) < 0 and !hudFail then
 			hudFail = true
 			net.Start("rebuildHud")
 			net.SendToServer()
-			YRP.msg("error", "HUD Version outdated! " .. tostring(lply:GetDInt("hud_version", -1)) .. " " .. printReadyError())
+			YRP.msg("error", "HUD Version outdated! " .. tostring(lply:GetNW2Int("hud_version", -1)) .. " " .. printReadyError())
 		end
 	end
 
@@ -383,11 +383,11 @@ function KeyPress()
 					if tonumber(lply.view_range_view) > 0 then
 						lply.view_range_view = 0
 					else
-						local _old_view = tonumber(LocalPlayer():GetDInt("view_range_old", 0))
+						local _old_view = tonumber(LocalPlayer():GetNW2Int("view_range_old", 0))
 						if _old_view > 0 then
 							lply.view_range_view = _old_view
 						else
-							lply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "200"))
+							lply.view_range_view = tonumber(GetGlobalString("text_view_distance", "200"))
 						end
 					end
 
@@ -396,7 +396,7 @@ function KeyPress()
 			else
 				--[[ smoothing ]]--
 				if tonumber(lply.view_range) < tonumber(lply.view_range_view) then
-					lply.view_range = lply:GetDInt("view_range") + lply.view_range_view / 16
+					lply.view_range = lply:GetNW2Int("view_range") + lply.view_range_view / 16
 				else
 
 					if input.IsKeyDown(get_keybind("view_zoom_out")) then
@@ -404,8 +404,8 @@ function KeyPress()
 
 						lply.view_range_view = lply.view_range_view + 1
 
-						if tonumber(lply.view_range_view) > tonumber(GetGlobalDString("text_view_distance", "200")) then
-							lply.view_range_view = tonumber(GetGlobalDString("text_view_distance", "200"))
+						if tonumber(lply.view_range_view) > tonumber(GetGlobalString("text_view_distance", "200")) then
+							lply.view_range_view = tonumber(GetGlobalString("text_view_distance", "200"))
 						end
 						lply.view_range_old = lply.view_range_view
 					elseif input.IsKeyDown(get_keybind("view_zoom_in")) then
@@ -494,10 +494,10 @@ function KeyPress()
 	keyPressed(get_keybind("menu_role"), "OpenRoleMenu")
 	keyPressed(get_keybind("menu_buy"), "OpenBuyMenu")
 
-	keyPressed(get_keybind("menu_interact"), "openInteractMenu", GetGlobalDInt("int_door_distance", 200))
+	keyPressed(get_keybind("menu_interact"), "openInteractMenu", GetGlobalInt("int_door_distance", 200))
 
-	keyPressed(get_keybind("menu_options_door"), "openOptions", GetGlobalDInt("int_door_distance", 200))
-	keyPressed(get_keybind("menu_options_vehicle"), "openOptions", GetGlobalDInt("int_door_distance", 200))
+	keyPressed(get_keybind("menu_options_door"), "openOptions", GetGlobalInt("int_door_distance", 200))
+	keyPressed(get_keybind("menu_options_vehicle"), "openOptions", GetGlobalInt("int_door_distance", 200))
 
 	keyPressed(get_keybind("toggle_map"), "openMap")
 
@@ -599,7 +599,7 @@ local function yrpCalcView(lply, pos, angles, fov)
 		local dist = _view_range * lply:GetModelScale()
 
 		local view = {}
-		if lply:GetModel() != "models/player.mdl" and !lply:InVehicle() and !disablethirdperson and GetGlobalDBool("bool_thirdperson", false) then
+		if lply:GetModel() != "models/player.mdl" and !lply:InVehicle() and !disablethirdperson and GetGlobalBool("bool_thirdperson", false) then
 			if lply:LookupBone("ValveBiped.Bip01_Head1") != nil then
 				pos2 = lply:GetBonePosition(lply:LookupBone("ValveBiped.Bip01_Head1")) + (angles:Forward() * 12 * lply:GetModelScale())
 			end
@@ -726,7 +726,7 @@ local function yrpCalcView(lply, pos, angles, fov)
 			end
 		end
 	else
-		local entindex = lply:GetDInt("ent_ragdollindex")
+		local entindex = lply:GetNW2Int("ent_ragdollindex")
 
 		if entindex then
 			local ent = Entity(entindex)

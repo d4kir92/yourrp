@@ -29,13 +29,13 @@ function LoadBlacklist()
 	local tabInventory = SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "inventory" .. "'")
 	local tabEntities = SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "entities" .. "'")
 	if wk(tabChat) then
-		SetGlobalDTable("yrp_blacklist_chat", tabChat)
+		SetGlobalTable("yrp_blacklist_chat", tabChat)
 	end
 	if wk(tabInventory) then
-		SetGlobalDTable("yrp_blacklist_inventory", tabInventory)
+		SetGlobalTable("yrp_blacklist_inventory", tabInventory)
 	end
 	if wk(tabEntities) then
-		SetGlobalDTable("yrp_blacklist_entities", tabEntities)
+		SetGlobalTable("yrp_blacklist_entities", tabEntities)
 	end
 end
 LoadBlacklist()

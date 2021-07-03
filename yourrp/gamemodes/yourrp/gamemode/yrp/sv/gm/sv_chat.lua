@@ -21,11 +21,11 @@ hook.Add("Think", "yrp_alerts", function()
 
 			d = CurTime() + math.Clamp(string.len(tostring(first)) / 2, 3, 10)
 
-			SetGlobalDString("yrp_alert", first)
+			SetGlobalString("yrp_alert", first)
 
 			local result = table.RemoveByValue(alerts, first)
 		else
-			SetGlobalDString("yrp_alert", "")
+			SetGlobalString("yrp_alert", "")
 		end
 	end
 end)
@@ -34,12 +34,12 @@ util.AddNetworkString("yrp_player_say")
 
 util.AddNetworkString("startchat")
 net.Receive("startchat", function(len, ply)
-	ply:SetDBool("istyping", true)
+	ply:SetNW2Bool("istyping", true)
 end)
 
 util.AddNetworkString("finishchat")
 net.Receive("finishchat", function(len, ply)
-	ply:SetDBool("istyping", false)
+	ply:SetNW2Bool("istyping", false)
 end)
 
 function print_help(sender)
@@ -148,19 +148,19 @@ function do_suicide(sender)
 end
 
 function show_tag_dev(sender)
-	if !sender:GetDBool("tag_dev", false) then
-		sender:SetDBool("tag_dev", true)
+	if !sender:GetNW2Bool("tag_dev", false) then
+		sender:SetNW2Bool("tag_dev", true)
 	else
-		sender:SetDBool("tag_dev", false)
+		sender:SetNW2Bool("tag_dev", false)
 	end
 	return ""
 end
 
 function show_tag_ug(sender)
-	if !sender:GetDBool("tag_ug", false) then
-		sender:SetDBool("tag_ug", true)
+	if !sender:GetNW2Bool("tag_ug", false) then
+		sender:SetNW2Bool("tag_ug", true)
 	else
-		sender:SetDBool("tag_ug", false)
+		sender:SetNW2Bool("tag_ug", false)
 	end
 	return ""
 end
@@ -303,7 +303,7 @@ end
 util.AddNetworkString("set_chat_mode")
 net.Receive("set_chat_mode", function(len, ply)
 	local _str = net.ReadString() or "say"
-	ply:SetDString("chat_mode", string.upper(_str))
+	ply:SetNW2String("chat_mode", string.upper(_str))
 end)
 
 util.AddNetworkString("sendanim")
@@ -326,7 +326,7 @@ end
 
 local Player = FindMetaTable("Player")
 function Player:SetAFK(bo)
-	self:SetDBool("isafk", bo)
+	self:SetNW2Bool("isafk", bo)
 
 	SendAnim(self, GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_SIT, false)
 end
@@ -414,7 +414,7 @@ function DoCommand(sender, command, text)
 	end
 
 	if command == "dnd" then
-		sender:SetDBool("isdnd", !sender:GetDBool("isdnd", false))
+		sender:SetNW2Bool("isdnd", !sender:GetNW2Bool("isdnd", false))
 		return ""
 	end
 
@@ -503,7 +503,7 @@ function DoCommand(sender, command, text)
 	end
 
 	if command == "rpname" or command == "name" or command == "nick" then
-		if GetGlobalDBool("bool_characters_changeable_name", false) or ply:HasAccess() then
+		if GetGlobalBool("bool_characters_changeable_name", false) or ply:HasAccess() then
 			local name = text
 
 			name = string.Replace(name, "!rpname ", "")
@@ -650,7 +650,7 @@ hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
 			return ""
 		elseif tab.int_mode == 1 then -- LOCAL
 			for i, p in pairs(player.GetAll()) do
-				if p:GetPos():Distance(sender:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
+				if p:GetPos():Distance(sender:GetPos()) < GetGlobalInt("int_yrp_chat_range_local", 400) then
 					net.Start("yrp_player_say")
 						net.WriteEntity(sender)
 						net.WriteTable(pk)

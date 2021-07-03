@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 337 --do NOT change this!
-GM.VersionCanary = 677 --do NOT change this!
+GM.VersionBeta = 338 --do NOT change this!
+GM.VersionCanary = 679 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -188,7 +188,7 @@ concommand.Add("yrp_players", function(ply, cmd, args)
 		local _id = makeString(string.ToTable(pl:UserID()), 4, false)
 		local _steamid = makeString(string.ToTable(pl:SteamID()), 20, false)
 		local _name = makeString(string.ToTable(pl:YRPName()), 24, true)
-		local _money = makeString(string.ToTable(pl:GetDString("money", -1)), 12, false)
+		local _money = makeString(string.ToTable(pl:GetNW2String("money", -1)), 12, false)
 		local _str = string.format("%s %s %s %s", _id, _steamid, _name, _money)
 		YRP.msg("gm", _str)
 	end
@@ -237,7 +237,7 @@ concommand.Add("yrp__help", function(ply, cmd, args)
 end)
 
 function YRPCollectionID()
-	return tonumber(GetGlobalDString("text_server_collectionid", "0"))
+	return tonumber(GetGlobalString("text_server_collectionid", "0"))
 end
 
 function PrintCollectionID()
@@ -253,14 +253,14 @@ concommand.Add("yrp_collection", function(ply, cmd, args)
 end)
 
 hook.Add("StartCommand", "NoJumpGuns", function(ply, cmd)
-	if GetGlobalDBool("bool_anti_bhop", false) and !ply:GetDBool("canjump", false) and ply:GetMoveType() != MOVETYPE_NOCLIP then
+	if GetGlobalBool("bool_anti_bhop", false) and !ply:GetNW2Bool("canjump", false) and ply:GetMoveType() != MOVETYPE_NOCLIP then
 		cmd:RemoveKey(IN_JUMP)
 	end
 end)
 
 function IsEntityAlive(ply, uid)
 	for i, ent in pairs(ents.GetAll()) do
-		if tostring(ent:GetDString("item_uniqueID", "")) == tostring(uid) and ent:GetRPOwner() == ply then
+		if tostring(ent:GetNW2String("item_uniqueID", "")) == tostring(uid) and ent:GetRPOwner() == ply then
 			return true, ent
 		end
 	end
@@ -368,7 +368,7 @@ function IsInChannel(ply, channel, skip)
 	local grp = ply:GetGroupUID()
 	local rol = ply:GetRoleUID()
 	
-	if !skip and ply:GetDBool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
+	if !skip and ply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
 		return false
 	end
 
@@ -382,7 +382,7 @@ function IsActiveInChannel(ply, channel, skip)
 	local grp = ply:GetGroupUID()
 	local rol = ply:GetRoleUID()
 
-	if !skip and ply:GetDBool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
+	if !skip and ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
 		return false
 	end
 	return IsInTable(channel.string_active_usergroups, ug) or IsInTable(channel.string_active_groups, grp) or IsInTable(channel.string_active_roles, rol) or false
@@ -390,7 +390,7 @@ end
 
 function IsInMaxVoiceRange(listener, talker)
 	local dist = listener:GetPos():Distance(talker:GetPos())
-	local result = dist <= GetGlobalDInt("int_voice_max_range", 1)
+	local result = dist <= GetGlobalInt("int_voice_max_range", 1)
 	return result
 end
 
@@ -402,7 +402,7 @@ function GetVoiceRangeText(ply)
 		[3] = YRP.lang_string("LID_noisy"), 
 		[4] = YRP.lang_string("LID_yell")
 	}
-	return ranges[ply:GetDInt("voice_range", 2)]
+	return ranges[ply:GetNW2Int("voice_range", 2)]
 end
 
 function GetVoiceRange(ply)
@@ -411,9 +411,9 @@ function GetVoiceRange(ply)
 		[1] = 120,
 		[2] = 250,
 		[3] = 400, 
-		[4] = GetGlobalDInt("int_voice_max_range", 1)
+		[4] = GetGlobalInt("int_voice_max_range", 1)
 	}
-	return math.Clamp(ranges[ply:GetDInt("voice_range", 2)], 0, GetGlobalDInt("int_voice_max_range", 1))
+	return math.Clamp(ranges[ply:GetNW2Int("voice_range", 2)], 0, GetGlobalInt("int_voice_max_range", 1))
 end
 
 function IsInSpeakRange(listener, talker)

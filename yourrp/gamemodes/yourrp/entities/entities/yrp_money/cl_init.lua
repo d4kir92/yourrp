@@ -44,7 +44,7 @@ function ENT:Draw()
 				draw.SimpleTextOutlined(money, "Y_72_500", 0, 0, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			cam.End3D2D()
 
-			if GetGlobalDBool("bool_tag_on_head_name", false) then
+			if GetGlobalBool("bool_tag_on_head_name", false) then
 				ang = lply:GetAngles()
 				ang = Angle(0, ang.y - 90, 90)
 				cam.Start3D2D(pos + Vector(0, 0, 4), ang, 0.04 )

@@ -111,18 +111,18 @@ function Player:InterfaceLoadout()
 		for i, ele in pairs(ifeles) do
 			if ele.name != nil then
 				if string.StartWith(ele.name, "float_") then
-					self:SetDFloat(ele.name, tonumber(ele.value))
+					self:SetNW2Float(ele.name, tonumber(ele.value))
 				elseif string.StartWith(ele.name, "bool_") then
-					self:SetDBool(ele.name, tobool(ele.value))
+					self:SetNW2Bool(ele.name, tobool(ele.value))
 				elseif string.StartWith(ele.name, "color_") then
-					self:SetDString(ele.name, ele.value)
+					self:SetNW2String(ele.name, ele.value)
 				elseif string.StartWith(ele.name, "int_") then
-					self:SetDInt(ele.name, ele.value)
+					self:SetNW2Int(ele.name, ele.value)
 				end
 			end
 		end
 	end
-	self:SetDInt("interface_version", self:GetDInt("interface_version", 0) + 1)
+	self:SetNW2Int("interface_version", self:GetNW2Int("interface_version", 0) + 1)
 end
 
 function IFLoadoutAll()
@@ -155,22 +155,22 @@ net.Receive("update_interface_color", function(len, ply)
 end)
 
 function ResetDesign()
-	local tab = INTERFACES[GetGlobalDString("string_interface_design", "")]
+	local tab = INTERFACES[GetGlobalString("string_interface_design", "")]
 	if tab != nil then
 		for name, value in pairs(tab.floats) do
-			local _name = "float_IF_" .. GetGlobalDString("string_interface_design", "Material") .. "_" .. name
+			local _name = "float_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.bools) do
-			local _name = "bool_IF_" .. GetGlobalDString("string_interface_design", "Material") .. "_" .. name
+			local _name = "bool_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.colors) do
-			local _name = "color_IF_" .. GetGlobalDString("string_interface_design", "Material") .. "_" .. name
+			local _name = "color_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.ints) do
-			local _name = "int_IF_" .. GetGlobalDString("string_interface_design", "Material") .. "_" .. name
+			local _name = "int_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
 			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
 		end
 	end

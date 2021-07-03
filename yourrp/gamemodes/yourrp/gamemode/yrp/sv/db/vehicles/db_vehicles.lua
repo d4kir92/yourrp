@@ -22,7 +22,7 @@ function AddVehicle(veh, ply, item)
 	local cname = veh:GetClass()
 	local iuid = item.uniqueID
 
-	veh:SetDInt("ownerCharID", charid)
+	veh:SetNW2Int("ownerCharID", charid)
 
 	SQL_INSERT_INTO(DATABASE_NAME, "ownerCharID, ClassName, item_id", "'" .. charid .. "', '" .. cname .. "', '" .. iuid .. "'")
 end
@@ -46,7 +46,7 @@ net.Receive("getVehicleInfo", function(len, ply)
 
 	local _vehicleID = net.ReadString()
 
-	local _vehicleTab = SQL_SELECT(DATABASE_NAME, "*", "ownerCharID = '" .. _vehicle:GetDInt("ownerCharID", 0) .. "' AND item_id = " .. _vehicleID)
+	local _vehicleTab = SQL_SELECT(DATABASE_NAME, "*", "ownerCharID = '" .. _vehicle:GetNW2Int("ownerCharID", 0) .. "' AND item_id = " .. _vehicleID)
 
 	if worked(_vehicleTab, "getVehicleInfo | No buyed vehicle! Dont work on spawnmenu vehicle") then
 		local owner = ""
@@ -126,8 +126,8 @@ net.Receive("removeVehicleOwner", function(len, ply)
 	local result = SQL_UPDATE(DATABASE_NAME, "ownerCharID = ' '", "item_id = '" .. _tmpVehicleID .. "'")
 
 	for k, v in pairs(ents.GetAll()) do
-		if tonumber(v:GetDString("item_uniqueID")) == tonumber(_tmpVehicleID) then
-			v:SetDString("ownerRPName", "")
+		if tonumber(v:GetNW2String("item_uniqueID")) == tonumber(_tmpVehicleID) then
+			v:SetNW2String("ownerRPName", "")
 			v:SetOwner(NULL)
 		end
 	end

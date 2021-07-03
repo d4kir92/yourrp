@@ -109,7 +109,7 @@ end
 
 function ChatBlacklisted(...)
 	local tab = {...}
-	local blacklist = GetGlobalDTable("yrp_blacklist_chat", {})
+	local blacklist = GetGlobalTable("yrp_blacklist_chat", {})
 
 	local str = ""
 	for i, v in pairs(tab) do
@@ -132,7 +132,7 @@ function update_chat_choices()
 		yrpChat.comboBox:Clear()
 		chatids = {}
 		
-		for i, v in pairs(GetGlobalDTable("yrp_chat_channels")) do
+		for i, v in pairs(GetGlobalTable("yrp_chat_channels")) do
 			local enabled = tobool(v.bool_enabled)
 			if enabled then
 				local selected = false
@@ -148,8 +148,8 @@ end
 
 hook.Remove("Think", "yrp_think_chat_choices")
 hook.Add("Think", "yrp_think_chat_choices", function()
-	if GetGlobalDTable("yrp_chat_channels", {}) != oldchoices then
-		oldchoices = GetGlobalDTable("yrp_chat_channels", {})
+	if GetGlobalTable("yrp_chat_channels", {}) != oldchoices then
+		oldchoices = GetGlobalTable("yrp_chat_channels", {})
 		update_chat_choices()
 	end
 end)
@@ -177,7 +177,7 @@ function checkChatVisible()
 		else
 			_showChat = true
 		end
-		if GetGlobalDBool("bool_yrp_chat", false) == false then
+		if GetGlobalBool("bool_yrp_chat", false) == false then
 			_showChat = false
 		end
 		if _showChat then
@@ -224,7 +224,7 @@ function niceCommand(com)
 	elseif com == "yell" then
 		return YRP.lang_string("LID_yell")
 	elseif com == "advert" then
-		return GetGlobalDString("text_chat_advert", YRP.lang_string("LID_advert"))
+		return GetGlobalString("text_chat_advert", YRP.lang_string("LID_advert"))
 	elseif com == "admin" then
 		return YRP.lang_string("LID_admin")
 	elseif com == "faction" then
@@ -273,11 +273,11 @@ function InitYRPChat()
 				draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue("Chat", "FG"))
 
 				if self.logo then
-					if self.logo.svlogo != GetGlobalDString("text_server_logo", "") then
-						self.logo.svlogo = GetGlobalDString("text_server_logo", "")
+					if self.logo.svlogo != GetGlobalString("text_server_logo", "") then
+						self.logo.svlogo = GetGlobalString("text_server_logo", "")
 	
-						if !strEmpty(GetGlobalDString("text_server_logo", "")) then
-							self.logo:SetHTML(GetHTMLImage(GetGlobalDString("text_server_logo", ""), YRP.ctr(H), YRP.ctr(H)))
+						if !strEmpty(GetGlobalString("text_server_logo", "")) then
+							self.logo:SetHTML(GetHTMLImage(GetGlobalString("text_server_logo", ""), YRP.ctr(H), YRP.ctr(H)))
 							self.logo:Show()
 						else
 							self.logo:Hide()
@@ -291,7 +291,7 @@ function InitYRPChat()
 					end
 				end
 
-				local name = GetGlobalDString("text_server_name", "")
+				local name = GetGlobalString("text_server_name", "")
 				if strEmpty(name) then
 					name = GetHostName()
 				end
@@ -402,7 +402,7 @@ function InitYRPChat()
 		end
 
 		function yrpChat.richText:PerformLayout()
-			local ts = LocalPlayer():GetDInt("CH_TS", LocalPlayer():HudValue("CH", "TS"))
+			local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue("CH", "TS")
 			if ts != nil and ts > 6 then
 				if self.SetUnderlineFont != nil then
 					self:SetUnderlineFont("Y_" .. ts .. "_500")
@@ -435,19 +435,19 @@ function InitYRPChat()
 			local tila = createD("YLabel", win:GetContent(), YRP.ctr(350), YRP.ctr(50), YRP.ctr(50), YRP.ctr(0))
 			tila:SetText("Timestamp")
 			local ticb = createD("DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
-			ticb:SetChecked(lply:GetDBool("yrp_timestamp", false))
+			ticb:SetChecked(lply:GetNW2Bool("yrp_timestamp", false))
 			function ticb:OnChange()
-				lply:SetDBool("yrp_timestamp", !lply:GetDBool("yrp_timestamp", false))
+				lply:SetNW2Bool("yrp_timestamp", !lply:GetNW2Bool("yrp_timestamp", false))
 			end
 
 			local tspn = createD("YLabel", win:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(0), YRP.ctr(100))
 			tspn:SetText("LID_textsize")
 			local tsnw = createD("DNumberWang", win:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(0), YRP.ctr(100 + 50))
-			tsnw:SetValue(LocalPlayer():GetDInt("CH_TS", LocalPlayer():HudValue("CH", "TS")))
+			tsnw:SetValue(LocalPlayer().CH_TS or LocalPlayer():HudValue("CH", "TS"))
 			tsnw:SetMin(10)
 			tsnw:SetMax(64)
 			function tsnw:OnValueChanged(val)
-				LocalPlayer():SetDInt("CH_TS", tsnw:GetValue())
+				LocalPlayer().CH_TS = tsnw:GetValue()
 			end
 		end
 
@@ -530,7 +530,7 @@ function InitYRPChat()
 			local args = { ... }
 			yrpChat.richText:AppendText("\n")
 			_delay = 3
-			if lply:GetDBool("yrp_timestamp", false) and GetGlobalDBool("bool_yrp_chat", false) then
+			if lply:GetNW2Bool("yrp_timestamp", false) and GetGlobalBool("bool_yrp_chat", false) then
 				local clock = {}
 				clock.sec = os.date("%S")
 				clock.min = os.date("%M")
@@ -673,7 +673,7 @@ end
 
 timer.Create("yrp_init_chat", 1, 0, function()
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetDBool("finishedloading", false) and LocalPlayer():GetDString("string_hud_design", "notloaded") != "notloaded" then
+	if lply:IsValid() and lply:GetNW2Bool("finishedloading", false) and LocalPlayer():GetNW2String("string_hud_design", "notloaded") != "notloaded" then
 		InitYRPChat()
 		timer.Remove("yrp_init_chat")
 	end
@@ -681,7 +681,7 @@ end)
 
 hook.Remove("PlayerBindPress", "yrp_overrideChatbind")
 hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
-	if GetGlobalDBool("bool_yrp_chat", false) then
+	if GetGlobalBool("bool_yrp_chat", false) then
 		local bTeam = nil
 		if bind == "messagemode" then
 			bTeam = false
@@ -701,7 +701,7 @@ end)
 hook.Remove("ChatText", "yrp_serverNotifications")
 hook.Add("ChatText", "yrp_serverNotifications", function(index, name, text, type)
 	local lply = LocalPlayer()
-	if lply:IsValid() and GetGlobalDBool("bool_yrp_chat", false) then
+	if lply:IsValid() and GetGlobalBool("bool_yrp_chat", false) then
 		if type == "joinleave" or type == "none" then
 			if pa(yrpChat.richText) then
 				yrpChat.richText:AppendText(text.."\n")
@@ -713,7 +713,7 @@ end)
 hook.Remove("HUDShouldDraw", "noMoreDefault")
 hook.Add("HUDShouldDraw", "noMoreDefault", function(name)
 	local lply = LocalPlayer()
-	if lply:IsValid() and GetGlobalDBool("bool_yrp_chat", false) then
+	if lply:IsValid() and GetGlobalBool("bool_yrp_chat", false) then
 		if name == "CHudChat" then
 			return false
 		end
@@ -758,7 +758,7 @@ net.Receive("yrp_player_say", function(len)
 		end
 	end
 
-	if GetGlobalDBool("bool_yrp_chat", false) then
+	if GetGlobalBool("bool_yrp_chat", false) then
 		chat.AddText(sender, unpack(pk))
 	else
 		chat.AddText(unpack(pk))

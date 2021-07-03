@@ -85,8 +85,8 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 			local text = tab:GetText() -- tab name
 			for lstr, bstr in pairs(tabs) do
 				if text == language.GetPhrase(lstr) then -- if tabtext == tabletabtext
-					tab:SetVisible(lply:GetDBool(bstr, false)) -- set visible if allowed to
-					if lply:GetDBool(bstr) then -- if allowed
+					tab:SetVisible(lply:GetNW2Bool(bstr, false)) -- set visible if allowed to
+					if lply:GetNW2Bool(bstr) then -- if allowed
 						allhidden = false -- then disable hiding the whole element
 						if firsttab == nil then -- if not firsttab found
 							firsttab = lstr -- set it
@@ -101,7 +101,7 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 		local changefirstpage = false
 		for lstr, bstr in pairs(tabs) do
 			if language.GetPhrase(text) == language.GetPhrase(lstr) then -- if active tab text == table tab text
-				if !lply:GetDBool(bstr) then -- is not allowed
+				if !lply:GetNW2Bool(bstr) then -- is not allowed
 					changefirstpage = true -- then change tab
 				end
 			end
@@ -118,7 +118,7 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 		end
 	end
 	
-	return LocalPlayer():GetDBool("bool_canusespawnmenu", false)
+	return LocalPlayer():GetNW2Bool("bool_canusespawnmenu", false)
 end)
 
 hook.Add("SpawnMenuClose", "yrp_spawn_menu_close", function()
@@ -128,7 +128,7 @@ end)
 local contextMenuOpen = false
 hook.Add("ContextMenuOpen", "OnContextMenuOpen", function()
 	contextMenuOpen = true
-	return LocalPlayer():GetDBool("bool_canusecontextmenu", false)
+	return LocalPlayer():GetNW2Bool("bool_canusecontextmenu", false)
 end)
 
 hook.Add("ContextMenuClose", "OnContextMenuClose", function()
@@ -291,11 +291,11 @@ function client_toggled()
 end
 
 function server_toggled(ply)
-	return GetGlobalDBool("bool_yrp_hud", false)
+	return GetGlobalBool("bool_yrp_hud", false)
 end
 
 function HudPlayer(ply)
-	if ply:GetDString("string_hud_design") != "nil" then
+	if ply:GetNW2String("string_hud_design") != "nil" then
 		drawMenuInfo()
 
 		if ply:Alive() then

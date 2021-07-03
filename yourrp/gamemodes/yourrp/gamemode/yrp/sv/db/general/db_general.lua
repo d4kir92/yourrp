@@ -298,22 +298,22 @@ if wk(_init_general) then
 
 	for name, value in pairs(yrp_general) do
 		if string.StartWith(name, "bool_") then
-			SetGlobalDBool(name, tobool(value))
+			SetGlobalBool(name, tobool(value))
 		elseif string.StartWith(name, "text_") then
-			SetGlobalDString(name, tostring(value))
+			SetGlobalString(name, tostring(value))
 		elseif string.StartWith(name, "int_") then
-			SetGlobalDInt(name, tonumber(value))
+			SetGlobalInt(name, tonumber(value))
 		end
 	end
 
-	SetGlobalDBool("yrp_general_loaded", true)
+	SetGlobalBool("yrp_general_loaded", true)
 end
 
 
 
 --[[ GETTER ]]--
 function YRPDebug()
-	return GetGlobalDBool("bool_server_debug", false)
+	return GetGlobalBool("bool_server_debug", false)
 end
 
 function YRPErrorMod()
@@ -321,24 +321,24 @@ function YRPErrorMod()
 end
 
 function YRPIsAutomaticServerReloadingEnabled()
-	return GetGlobalDBool("bool_server_reload", false)
+	return GetGlobalBool("bool_server_reload", false)
 end
 
 
 function IsNoClipEffectEnabled()
-	return GetGlobalDBool("bool_noclip_effect", false)
+	return GetGlobalBool("bool_noclip_effect", false)
 end
 
 function IsNoClipStealthEnabled()
-	return GetGlobalDBool("bool_noclip_stealth", false)
+	return GetGlobalBool("bool_noclip_stealth", false)
 end
 
 function IsNoClipTagsEnabled()
-	return GetGlobalDBool("bool_noclip_tags", false)
+	return GetGlobalBool("bool_noclip_tags", false)
 end
 
 function IsNoClipModelEnabled()
-	return GetGlobalDBool("bool_noclip_model", false)
+	return GetGlobalBool("bool_noclip_model", false)
 end
 
 function YRPGetMoneyModel()
@@ -371,27 +371,27 @@ end
 
 
 function IsDropItemsOnDeathEnabled()
-	return GetGlobalDBool("bool_drop_items_on_death", false)
+	return GetGlobalBool("bool_drop_items_on_death", false)
 end
 
 function IsDealerImmortal()
-	return !GetGlobalDBool("bool_dealers_can_take_damage", false)
+	return !GetGlobalBool("bool_dealers_can_take_damage", false)
 end
 
 function IsRealisticEnabled()
-	return GetGlobalDBool("bool_realistic", false)
+	return GetGlobalBool("bool_realistic", false)
 end
 
 function PlayersCanDropWeapons()
-	return GetGlobalDBool("bool_players_can_drop_weapons", false)
+	return GetGlobalBool("bool_players_can_drop_weapons", false)
 end
 
 function IsSuicideDisabled()
-	return GetGlobalDBool("bool_suicide_disabled", false)
+	return GetGlobalBool("bool_suicide_disabled", false)
 end
 
 function IsDropMoneyOnDeathEnabled()
-	return GetGlobalDBool("bool_drop_money_on_death", false)
+	return GetGlobalBool("bool_drop_money_on_death", false)
 end
 
 util.AddNetworkString("do_act")
@@ -404,7 +404,7 @@ net.Receive("do_act", function(len, ply)
 end)
 
 function IsVoiceEnabled()
-	return GetGlobalDBool("bool_voice", false)
+	return GetGlobalBool("bool_voice", false)
 end
 
 function GetMaxVoiceRange()
@@ -418,7 +418,7 @@ end
 
 
 function GetIDStructure()
-	return GetGlobalDString("text_idstructure", "!D!D!D!D-!D!D!D!D-!D!D!D!D")
+	return GetGlobalString("text_idstructure", "!D!D!D!D-!D!D!D!D-!D!D!D!D")
 end
 
 
@@ -439,13 +439,13 @@ end
 function GeneralDB()
 	for i, set in pairs(yrp_general) do
 		if string.StartWith(i, "text_") then
-			SetGlobalDString(i, SQL_STR_OUT(set))
+			SetGlobalString(i, SQL_STR_OUT(set))
 		elseif string.StartWith(i, "bool_") then
-			SetGlobalDBool(i, tobool(set))
+			SetGlobalBool(i, tobool(set))
 		elseif string.StartWith(i, "int_") then
-			SetGlobalDInt(i, tonumber(set))
+			SetGlobalInt(i, tonumber(set))
 		elseif string.StartWith(i, "float_") then
-			SetGlobalDFloat(i, tonumber(set))
+			SetGlobalFloat(i, tonumber(set))
 		end
 	end
 end
@@ -471,25 +471,25 @@ end
 function GeneralUpdateBool(ply, netstr, str, value)
 	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(tobool(value)))
 	GeneralUpdateValue(ply, netstr, str, value)
-	SetGlobalDBool(str, tobool(value))
+	SetGlobalBool(str, tobool(value))
 end
 
 function GeneralUpdateString(ply, netstr, str, value)
 	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, SQL_STR_IN(str), value)
-	SetGlobalDString(str, SQL_STR_OUT(value))
+	SetGlobalString(str, SQL_STR_OUT(value))
 end
 
 function GeneralUpdateInt(ply, netstr, str, value)
 	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
-	SetGlobalDInt(str, value)
+	SetGlobalInt(str, value)
 end
 
 function GeneralUpdateFloat(ply, netstr, str, value)
 	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
-	SetGlobalDFloat(str, value)
+	SetGlobalFloat(str, value)
 end
 
 function GeneralUpdateGlobalValue(ply, netstr, str, value)
@@ -501,7 +501,7 @@ end
 function GeneralUpdateGlobalBool(ply, netstr, str, value)
 	YRP.msg("db", ply:YRPName() .. " updated global " .. str .. " to: " .. tostring(tobool(value)))
 	GeneralUpdateGlobalValue(ply, netstr, str, value)
-	SetGlobalDBool(str, tobool(value))
+	SetGlobalBool(str, tobool(value))
 end
 
 
@@ -1964,12 +1964,12 @@ net.Receive("tp_unjail", function(len, ply)
 end)
 
 function IsRagdoll(ply)
-	return ply:GetDBool("ragdolled", false)
+	return ply:GetNW2Bool("ragdolled", false)
 end
 
 function DoRagdoll(ply)
 	if IsValid(ply) and ply:IsPlayer() and not IsRagdoll(ply) then
-		ply:SetDBool("ragdolled", true)
+		ply:SetNW2Bool("ragdolled", true)
 
 		local scale = ply:GetModelScale() or 1
 
@@ -1980,7 +1980,7 @@ function DoRagdoll(ply)
 		tmp:Spawn()
 
 		ply:SetParent(tmp)
-		ply:SetDEntity("ragdoll", tmp)
+		ply:SetNW2Entity("ragdoll", tmp)
 
 		ply:Freeze( true )
 
@@ -1990,10 +1990,10 @@ end
 
 function DoUnRagdoll(ply)
 	if IsValid(ply) and ply:IsPlayer() and IsRagdoll(ply) then
-		ply:SetDBool("ragdolled", false)
+		ply:SetNW2Bool("ragdolled", false)
 		ply:SetParent(nil)
 
-		local ragdoll = ply:GetDEntity("ragdoll")
+		local ragdoll = ply:GetNW2Entity("ragdoll")
 		if ea(ragdoll) then
 			ply:SetPos(ragdoll:GetPos())
 			ragdoll:Remove()
@@ -2041,7 +2041,7 @@ net.Receive("god", function(len, ply)
 		local _target = net.ReadEntity()
 		_target:GodEnable()
 		_target:AddFlags(FL_GODMODE)
-		_target:SetDBool("godmode", true)
+		_target:SetNW2Bool("godmode", true)
 	end
 end)
 util.AddNetworkString("ungod")
@@ -2050,14 +2050,14 @@ net.Receive("ungod", function(len, ply)
 		local _target = net.ReadEntity()
 		_target:GodDisable()
 		_target:RemoveFlags(FL_GODMODE)
-		_target:SetDBool("godmode", false)
+		_target:SetNW2Bool("godmode", false)
 	end
 end)
 util.AddNetworkString("cloak")
 net.Receive("cloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetDBool("cloaked", true)
+		_target:SetNW2Bool("cloaked", true)
 		RenderCloaked(_target)
 	end
 end)
@@ -2065,7 +2065,7 @@ util.AddNetworkString("uncloak")
 net.Receive("uncloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetDBool("cloaked", false)
+		_target:SetNW2Bool("cloaked", false)
 		RenderNormal(_target)
 	end
 end)
@@ -2073,14 +2073,14 @@ util.AddNetworkString("blind")
 net.Receive("blind", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetDBool("blinded", true)
+		_target:SetNW2Bool("blinded", true)
 	end
 end)
 util.AddNetworkString("unblind")
 net.Receive("unblind", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetDBool("blinded", false)
+		_target:SetNW2Bool("blinded", false)
 	end
 end)
 util.AddNetworkString("ignite")

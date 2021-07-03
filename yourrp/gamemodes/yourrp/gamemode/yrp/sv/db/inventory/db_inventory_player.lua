@@ -18,10 +18,10 @@ function Player:Give(weaponClassName, bNoAmmo)
 			local clip2 = wep:Clip2()
 			local clip1max = wep:GetMaxClip1()
 			local clip2max = wep:GetMaxClip2()
-			wep:SetDInt("clip1", clip1)
-			wep:SetDInt("clip2", clip2)
-			wep:SetDInt("clip1max", clip1max)
-			wep:SetDInt("clip2max", clip2max)
+			wep:SetNW2Int("clip1", clip1)
+			wep:SetNW2Int("clip2", clip2)
+			wep:SetNW2Int("clip1max", clip1max)
+			wep:SetNW2Int("clip2max", clip2max)
 
 			local swep = weapons.GetStored(wep:GetClass())
 			if swep != nil and wk(swep.Primary) then
@@ -74,7 +74,7 @@ end)
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if ( ply:HasWeapon( wep:GetClass() ) ) then return false end
 
-	if wep.dropped and wep:GetDBool("canpickup", false) or wep.dropped == nil then
+	if wep.dropped and wep:GetNW2Bool("canpickup", false) or wep.dropped == nil then
 		return true
 	elseif ply:KeyPressed(IN_USE) then
 		ply.noammo = true
@@ -100,7 +100,7 @@ function Player:DropSWEP(cname, force)
 		if self.dropdelay < CurTime() or force then
 			self.dropdelay = CurTime() + 1
 			local wep = self:GetWeapon(cname)
-			wep:SetDBool("canpickup", false)
+			wep:SetNW2Bool("canpickup", false)
 			--[[local clip1 = wep:Clip1()
 			local clip2 = wep:Clip2()
 			local clip1max = wep:GetMaxClip1()
@@ -116,15 +116,15 @@ function Player:DropSWEP(cname, force)
 
 			ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
 			ent:SetAngles(self:GetAngles())
-			ent:SetDBool("canpickup", false)
+			ent:SetNW2Bool("canpickup", false)
 			ent.dropped = true
 			ent:Spawn()
-			--[[ent:SetDInt("clip1", clip1)
-			ent:SetDInt("clip2", clip2)
-			ent:SetDInt("clip1max", clip1max)
-			ent:SetDInt("clip2max", clip2max)]]
+			--[[ent:SetNW2Int("clip1", clip1)
+			ent:SetNW2Int("clip2", clip2)
+			ent:SetNW2Int("clip1max", clip1max)
+			ent:SetNW2Int("clip2max", clip2max)]]
 
-			local ttl = math.Clamp(GetGlobalDInt("int_ttlsweps", 60), 1, 3600)
+			local ttl = math.Clamp(GetGlobalInt("int_ttlsweps", 60), 1, 3600)
 			timer.Simple(ttl, function()
 				if ea(ent) and !ent:GetOwner():IsValid() then
 					ent:Remove()
@@ -149,7 +149,7 @@ function Player:DropSWEPSilence(cname)
 end
 
 function Player:IsAllowedToDropSWEPRole(cname)
-	local ndsweps = SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetDString("roleUniqueID", "0") .. "'")
+	local ndsweps = SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetNW2String("roleUniqueID", "0") .. "'")
 	if wk(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode(",", ndsweps.string_ndsweps)

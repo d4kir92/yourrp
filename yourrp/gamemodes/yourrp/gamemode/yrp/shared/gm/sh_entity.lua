@@ -2,23 +2,23 @@
 
 local Entity = FindMetaTable("Entity")
 function Entity:HasStorage()
-	return self:GetDBool("hasinventory", false)
+	return self:GetNW2Bool("hasinventory", false)
 end
 
 function Entity:StorageName()
-	return self:GetDString("storagename", "")
+	return self:GetNW2String("storagename", "")
 end
 
 function Entity:IsWorldStorage()
-	return self:GetDString("isaworldstorage", false)
+	return self:GetNW2String("isaworldstorage", false)
 end
 
 function Entity:ItemSizeW()
-	return tonumber(self:GetDString("item_size_w", nil))
+	return tonumber(self:GetNW2String("item_size_w", nil))
 end
 
 function Entity:ItemSizeH()
-	return tonumber(self:GetDString("item_size_h", nil))
+	return tonumber(self:GetNW2String("item_size_h", nil))
 end
 
 function Entity:IsDealer()

@@ -130,10 +130,10 @@ function MSGChannelEnabled(chan)
 	chan = string.lower(chan)
 	if chan == "printtable" or chan == "missing" or chan == "error" then
 		return true
-	elseif GetGlobalDBool("yrp_general_loaded") then
+	elseif GetGlobalBool("yrp_general_loaded") then
 		if !IsChannelRegistered(chan) then
 			YRP.msg("error", "!!!" .. chan .. "!!!")
-		elseif GetGlobalDBool("bool_msg_channel_" .. chan) == true then
+		elseif GetGlobalBool("bool_msg_channel_" .. chan) == true then
 			return true
 		end
 		return false

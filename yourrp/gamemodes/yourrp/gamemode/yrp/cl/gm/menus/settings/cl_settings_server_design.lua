@@ -858,7 +858,7 @@ net.Receive("get_design_settings", function(len)
 		GRP_HUD:AddItem(cb_profiles)
 		for i, v in pairs(hud_profiles) do
 			local selected = false
-			if GetGlobalDString("string_hud_profile", "") == v.value then
+			if GetGlobalString("string_hud_profile", "") == v.value then
 				selected = true
 			end
 			cb_profiles:AddChoice(v.value, v.value, selected)
@@ -978,7 +978,7 @@ net.Receive("get_design_settings", function(len)
 				if_hh:SetHeader(YRP.lang_string("LID_headerheight"))
 				if_hh.numberwang:SetMin(50)
 				if_hh.numberwang:SetMax(150)
-				if_hh.numberwang:SetValue(GetGlobalDInt("int_headerheight", 100))
+				if_hh.numberwang:SetValue(GetGlobalInt("int_headerheight", 100))
 				function if_hh.numberwang:OnValueChanged(val)
 					val = tonumber(val)
 					val = math.Clamp(val, 50, 150)

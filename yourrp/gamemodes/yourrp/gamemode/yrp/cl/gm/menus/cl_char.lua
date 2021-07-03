@@ -50,7 +50,7 @@ function CreateCharContent(parent)
 
 	local Y = 20
 	local cl_rpName = nil
-	if GetGlobalDBool("bool_characters_changeable_name", false) then
+	if GetGlobalBool("bool_characters_changeable_name", false) then
 		local cl_rpNamelabel = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
 		cl_rpNamelabel:SetText("")
 		function cl_rpNamelabel:Paint(pw, ph)
@@ -77,7 +77,7 @@ function CreateCharContent(parent)
 	Y = Y + 50
 	local cl_rpDescription = createD("DTextEntry", parent, YRP.ctr(800), YRP.ctr(200), YRP.ctr(20), YRP.ctr(Y))
 	cl_rpDescription:SetMultiline(true)
-	cl_rpDescription:SetText(LocalPlayer():GetDString("rpdescription", "FAIL"))
+	cl_rpDescription:SetText(LocalPlayer():GetNW2String("rpdescription", "FAIL"))
 	function cl_rpDescription:OnChange()
 
 	end
@@ -86,7 +86,7 @@ function CreateCharContent(parent)
 
 
 	local cl_birthday = nil
-	if GetGlobalDBool("bool_characters_birthday", false) then
+	if GetGlobalBool("bool_characters_birthday", false) then
 		local cl_birthdayheader = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
 		cl_birthdayheader:SetText("")
 		function cl_birthdayheader:Paint(pw, ph)
@@ -94,7 +94,7 @@ function CreateCharContent(parent)
 		end
 		Y = Y + 50
 		cl_birthday = createD("DTextEntry", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
-		cl_birthday:SetText(LocalPlayer():GetDString("string_birthday", ""))
+		cl_birthday:SetText(LocalPlayer():GetNW2String("string_birthday", ""))
 		function cl_birthday:OnChange()
 
 		end
@@ -104,7 +104,7 @@ function CreateCharContent(parent)
 
 
 	local cl_bodyheight = nil
-	if GetGlobalDBool("bool_characters_bodyheight", false) then
+	if GetGlobalBool("bool_characters_bodyheight", false) then
 		local cl_bodyheightheader = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
 		cl_bodyheightheader:SetText("")
 		function cl_bodyheightheader:Paint(pw, ph)
@@ -112,7 +112,7 @@ function CreateCharContent(parent)
 		end
 		Y = Y + 50
 		cl_bodyheight = createD("DNumberWang", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
-		cl_bodyheight:SetValue(tostring(LocalPlayer():GetDInt("int_bodyheight", 0)))
+		cl_bodyheight:SetValue(tostring(LocalPlayer():GetNW2Int("int_bodyheight", 0)))
 		function cl_bodyheight:OnChange()
 
 		end
@@ -122,7 +122,7 @@ function CreateCharContent(parent)
 
 
 	local cl_weight = nil
-	if GetGlobalDBool("bool_characters_weight", false) then
+	if GetGlobalBool("bool_characters_weight", false) then
 		local cl_weightheader = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
 		cl_weightheader:SetText("")
 		function cl_weightheader:Paint(pw, ph)
@@ -130,7 +130,7 @@ function CreateCharContent(parent)
 		end
 		Y = Y + 50
 		cl_weight = createD("DNumberWang", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
-		cl_weight:SetText(LocalPlayer():GetDInt("int_weight", 0))
+		cl_weight:SetText(LocalPlayer():GetNW2Int("int_weight", 0))
 		function cl_weight:OnChange()
 
 		end
@@ -140,7 +140,7 @@ function CreateCharContent(parent)
 
 
 	local cl_nationality = nil
-	if GetGlobalDBool("bool_characters_nationality", false) then
+	if GetGlobalBool("bool_characters_nationality", false) then
 		local cl_nationalityheader = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
 		cl_nationalityheader:SetText("")
 		function cl_nationalityheader:Paint(pw, ph)
@@ -148,12 +148,12 @@ function CreateCharContent(parent)
 		end
 		Y = Y + 50
 		cl_nationality = createD("DComboBox", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
-		cl_nationality:SetText(LocalPlayer():GetDString("string_nationality", ""))
+		cl_nationality:SetText(LocalPlayer():GetNW2String("string_nationality", ""))
 		function cl_nationality:OnChange()
 
 		end
 
-		local text_nationalities = string.Explode(",", GetGlobalDString("text_nationalities", ""))
+		local text_nationalities = string.Explode(",", GetGlobalString("text_nationalities", ""))
 		for i, v in pairs(text_nationalities) do
 			cl_nationality:AddChoice(v, v, false)
 		end
@@ -174,12 +174,12 @@ function CreateCharContent(parent)
 		draw.SimpleText(YRP.lang_string("LID_spirit") .. ":" , "Y_14_500", YRP.ctr(20), YRP.ctr(180), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 		draw.SimpleText(YRP.lang_string("LID_armor") .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 		
-		draw.SimpleText(lply:GetDInt("int_strength", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-		draw.SimpleText(lply:GetDInt("int_agility", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-		draw.SimpleText(lply:GetDInt("int_stamina", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-		draw.SimpleText(lply:GetDInt("int_intellect", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(140), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-		draw.SimpleText(lply:GetDInt("int_spirit", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(180), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-		draw.SimpleText(lply:GetDInt("int_armor", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText(lply:GetNW2Int("int_strength", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText(lply:GetNW2Int("int_agility", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText(lply:GetNW2Int("int_stamina", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText(lply:GetNW2Int("int_intellect", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(140), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText(lply:GetNW2Int("int_spirit", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(180), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText(lply:GetNW2Int("int_armor", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 	end
 
 	Y = Y + 400 + 20
@@ -199,7 +199,7 @@ function CreateCharContent(parent)
 	function cl_save:DoClick()
 		if CurTime() > save_delay then
 			save_delay = CurTime() + 4
-			if GetGlobalDBool("bool_characters_changeable_name", false) then
+			if GetGlobalBool("bool_characters_changeable_name", false) then
 				net.Start("change_rpname")
 					net.WriteString(cl_rpName:GetText())
 				net.SendToServer()
@@ -209,22 +209,22 @@ function CreateCharContent(parent)
 				net.WriteString(cl_rpDescription:GetText())
 			net.SendToServer()
 
-			if GetGlobalDBool("bool_characters_birthday", false) then
+			if GetGlobalBool("bool_characters_birthday", false) then
 				net.Start("change_birthday")
 					net.WriteString(cl_birthday:GetText())
 				net.SendToServer()
 			end
-			if GetGlobalDBool("bool_characters_bodyheight", false) then
+			if GetGlobalBool("bool_characters_bodyheight", false) then
 				net.Start("change_bodyheight")
 					net.WriteString(cl_bodyheight:GetText())
 				net.SendToServer()
 			end
-			if GetGlobalDBool("bool_characters_weight", false) then
+			if GetGlobalBool("bool_characters_weight", false) then
 				net.Start("change_weight")
 					net.WriteString(cl_weight:GetText())
 				net.SendToServer()
 			end
-			if GetGlobalDBool("bool_characters_nationality", false) then
+			if GetGlobalBool("bool_characters_nationality", false) then
 				net.Start("change_nationality")
 					net.WriteString(cl_nationality:GetText())
 				net.SendToServer()

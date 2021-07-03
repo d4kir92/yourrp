@@ -722,10 +722,10 @@ function OpenSingleSelector(tab, closeF)
 					end
 
 					function _tmpName:DoClick()
-						LocalPlayer():SetDString("WorldModel", item.WorldModel)
-						LocalPlayer():SetDString("ClassName", item.ClassName)
-						LocalPlayer():SetDString("PrintName", item.PrintName)
-						LocalPlayer():SetDString("Skin", item.Skin)
+						LocalPlayer().WorldModel = item.WorldModel
+						LocalPlayer().ClassName = item.ClassName
+						LocalPlayer().PrintName = item.PrintName
+						LocalPlayer().Skin = item.Skin
 						frame:Close()
 					end
 
@@ -1218,10 +1218,10 @@ function openSingleSelector(tab, closeF, web)
 					end
 
 					function _tmpName:DoClick()
-						LocalPlayer():SetDString("WorldModel", item.WorldModel)
-						LocalPlayer():SetDString("ClassName", item.ClassName)
-						LocalPlayer():SetDString("PrintName", item.PrintName)
-						LocalPlayer():SetDString("Skin", item.Skin)
+						LocalPlayer().WorldModel = item.WorldModel
+						LocalPlayer().ClassName = item.ClassName
+						LocalPlayer().PrintName = item.PrintName
+						LocalPlayer().Skin = item.Skin
 						frame:Close()
 					end
 
@@ -1513,7 +1513,7 @@ function drawPlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur
 end
 
 hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(ply, bool)
-	if bool and ply:GetDBool("bool_noclip", false) then
+	if bool and ply:GetNW2Bool("bool_noclip", false) then
 		return true
 	elseif !bool then
 		return true
@@ -1555,17 +1555,17 @@ function drawPlates()
 
 	for i, ply in SortedPairsByMemberValue(player.GetAll(), "distance", true) do
 
-		if GetGlobalDBool("bool_server_debug_voice", false) and LocalPlayer():GetPos():Distance(ply:GetPos()) < 1000 then
+		if GetGlobalBool("bool_server_debug_voice", false) and LocalPlayer():GetPos():Distance(ply:GetPos()) < 1000 then
 			local col = Color(255, 100, 100, 120)
 			if ply == LocalPlayer() then
-				local esphere = ents.FindInSphere(LocalPlayer():GetPos(), GetGlobalDInt("int_voice_max_range", 1))
+				local esphere = ents.FindInSphere(LocalPlayer():GetPos(), GetGlobalInt("int_voice_max_range", 1))
 				for j, ent in pairs(esphere) do
 					if ent:IsPlayer() and ent != LocalPlayer() then
 						col = Color(100, 255, 100, 120)
 					end
 				end
 			else
-				if LocalPlayer():GetPos():Distance(ply:GetPos()) < GetGlobalDInt("int_voice_max_range", 1) then
+				if LocalPlayer():GetPos():Distance(ply:GetPos()) < GetGlobalInt("int_voice_max_range", 1) then
 					col = Color(100, 255, 100, 120)
 				end
 			end
@@ -1575,9 +1575,9 @@ function drawPlates()
 			render.DrawSphere(ply:GetPos(), range, 16, 16, col)
 			render.DrawWireframeSphere(ply:GetPos(), range, 16, 16, col, true)
 
-			render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col)
-			render.DrawWireframeSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col, true)
-			Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
+			render.DrawSphere(ply:GetPos(), GetGlobalInt("int_voice_max_range", 1), 16, 16, col)
+			render.DrawWireframeSphere(ply:GetPos(), GetGlobalInt("int_voice_max_range", 1), 16, 16, col, true)
+			Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
 		end
 
 		if LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() and !ply:InVehicle() then
@@ -1590,7 +1590,7 @@ function drawPlates()
 			local color2 = ply:GetColor()
 			ply.headalpha = ply.headalpha or 0
 			ply.sidealpha = ply.sidealpha or 0
-			if GetGlobalDBool("bool_tag_on_head_target", false) then
+			if GetGlobalBool("bool_tag_on_head_target", false) then
 				local pt = LocalPlayer():GetEyeTrace()
 				if ply == pt.Entity then
 					ply.headalpha = ply.headalpha + 5
@@ -1605,7 +1605,7 @@ function drawPlates()
 			end
 			color.a = math.Clamp(color.a, 0, 240)
 
-			if GetGlobalDBool("bool_tag_on_side_target", false) then
+			if GetGlobalBool("bool_tag_on_side_target", false) then
 				local pt = LocalPlayer():GetEyeTrace()
 				if ply == pt.Entity then
 					ply.sidealpha = ply.sidealpha + 5
@@ -1619,17 +1619,17 @@ function drawPlates()
 			end
 			color2.a = math.Clamp(color2.a, 0, 240)
 
-			if LocalPlayer():GetDBool("bool_canuseesp", false) then
+			if LocalPlayer():GetNW2Bool("bool_canuseesp", false) then
 				render.SetColorMaterial()
 				local cent = ply:OBBCenter()
 				render.DrawSphere(ply:GetPos() + cent, cent.z, 16, 16, Color(0, 255, 0, 1))
 			end
 
-			if GetGlobalDBool("bool_tag_on_head", false) then
-				if GetGlobalDBool("bool_tag_on_head_voice", false) and ply:GetDBool("yrp_speaking", false) then
+			if GetGlobalBool("bool_tag_on_head", false) then
+				if GetGlobalBool("bool_tag_on_head_voice", false) and ply:GetNW2Bool("yrp_speaking", false) then
 					local plyvol = ply:VoiceVolume() * 200
 					plyvol = 55 + plyvol
-					if GetGlobalDBool("bool_tag_on_head_target_forced", false) then
+					if GetGlobalBool("bool_tag_on_head_target_forced", false) then
 						plyvol = math.Clamp(plyvol, 0, color.a)
 					else
 						plyvol = math.Clamp(plyvol, 0, 255)
@@ -1638,9 +1638,9 @@ function drawPlates()
 					YRP.DrawSymbol(ply, "voice", 18, voicecolor)
 				end
 
-				if GetGlobalDBool("bool_tag_on_head_chat", false) and ply:GetDBool("istyping", false) then
+				if GetGlobalBool("bool_tag_on_head_chat", false) and ply:GetNW2Bool("istyping", false) then
 					local chatalpha = 255
-					if GetGlobalDBool("bool_tag_on_head_target_forced", false) then
+					if GetGlobalBool("bool_tag_on_head_target_forced", false) then
 						chatalpha = math.Clamp(chatalpha, 0, color.a)
 					else
 						chatalpha = math.Clamp(chatalpha, 0, 255)
@@ -1648,15 +1648,15 @@ function drawPlates()
 					YRP.DrawSymbol(ply, "chat", 18, Color(255, 255, 255, chatalpha))
 				end
 
-				if GetGlobalDBool("bool_tag_on_head_armor", false) then
+				if GetGlobalBool("bool_tag_on_head_armor", false) then
 					_height = _height + 1
-					local str = ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100)
+					local str = ply:Armor() .. "/" .. ply:GetNW2Int("MaxArmor", 100)
 					local col = ply:HudValue("AR", "BA")
-					drawBar(ply, str, _height, color, ply:Armor(), ply:GetDInt("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
+					drawBar(ply, str, _height, color, ply:Armor(), ply:GetNW2Int("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
 					_height = _height + 6
 				end
 
-				if GetGlobalDBool("bool_tag_on_head_health", false) or LocalPlayer():GetDBool("bool_ismedic", false) then
+				if GetGlobalBool("bool_tag_on_head_health", false) or LocalPlayer():GetNW2Bool("bool_ismedic", false) then
 					_height = _height + 1
 					local str = ply:Health() .. "/" .. ply:GetMaxHealth()
 					local col = ply:HudValue("HP", "BA")
@@ -1664,19 +1664,19 @@ function drawPlates()
 					_height = _height + 6
 				end
 
-				if GetGlobalDBool("bool_tag_on_head_clan", false) then
-					if !strEmpty(ply:GetDString("yrp_clan", "")) then
-						drawString(ply, "<" .. ply:GetDString("yrp_clan", "") .. ">", _height, color)
+				if GetGlobalBool("bool_tag_on_head_clan", false) then
+					if !strEmpty(ply:GetNW2String("yrp_clan", "")) then
+						drawString(ply, "<" .. ply:GetNW2String("yrp_clan", "") .. ">", _height, color)
 						_height = _height + 5
 					end
 				end
 
-				if GetGlobalDBool("bool_tag_on_head_name", false) then
+				if GetGlobalBool("bool_tag_on_head_name", false) then
 					drawString(ply, ply:RPName(), _height, color)
 					_height = _height + 5
 				end
 
-				if IsLevelSystemEnabled() and GetGlobalDBool("bool_tag_on_head_level", false) then
+				if IsLevelSystemEnabled() and GetGlobalBool("bool_tag_on_head_level", false) then
 					local lvl = ply:Level()
 					local t = {}
 					t["LEVEL"] = lvl
@@ -1702,28 +1702,28 @@ function drawPlates()
 					_height = _height + 5
 				end
 
-				if GetGlobalDBool("bool_tag_on_head_rolename", false) then
+				if GetGlobalBool("bool_tag_on_head_rolename", false) then
 					local rc = ply:GetRoleColor()
 					rc.a = color.a
 					drawString(ply, ply:GetRoleName(), _height, rc)
 					_height = _height + 5
 				end
 
-				if GetGlobalDBool("bool_tag_on_head_groupname", false) then
+				if GetGlobalBool("bool_tag_on_head_groupname", false) then
 					local gc = ply:GetGroupColor()
 					gc.a = color.a
 					drawString(ply, ply:GetGroupName(), _height, gc)
 					_height = _height + 5
 				end
 
-				if GetGlobalDBool("bool_tag_on_head_factionname", false) then
+				if GetGlobalBool("bool_tag_on_head_factionname", false) then
 					local fc = ply:GetFactionColor()
 					fc.a = color.a
 					drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, fc)
 					_height = _height + 5
 				end
 
-				if GetGlobalDBool("bool_tag_on_head_usergroup", false) then
+				if GetGlobalBool("bool_tag_on_head_usergroup", false) then
 					local ugcolor = ply:GetUserGroupColor()
 					ugcolor.a = color.a
 					drawString(ply, string.upper(ply:GetUserGroup()), _height, ugcolor)
@@ -1733,18 +1733,18 @@ function drawPlates()
 
 			_height = _height + 2
 
-			if ply:GetDBool("tag_ug", false) or (GetGlobalDBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and color.a > 10 then
+			if ply:GetNW2Bool("tag_ug", false) or (GetGlobalBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and color.a > 10 then
 
 				drawPlate(ply, string.upper(ply:GetUserGroup()), _height, Color(0, 0, 140, color.a))
 				_height = _height + 9
 			end
 
-			if ply:GetDBool("tag_dev", false) and tostring(ply:SteamID64()) == "76561198002066427" then -- D4KIR, Developer of YourRP
+			if ply:GetNW2Bool("tag_dev", false) and tostring(ply:SteamID64()) == "76561198002066427" then -- D4KIR, Developer of YourRP
 				drawPlate(ply, "DEVELOPER", _height, Color(0, 0, 0, color.a))
 				_height = _height + 9
 			end
 
-			if GetGlobalDBool("bool_tag_on_side", false) then
+			if GetGlobalBool("bool_tag_on_side", false) then
 				local _alpha = color2.a --255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / _distance)
 
 				local _z = 50
@@ -1754,19 +1754,19 @@ function drawPlates()
 				local _h = 20
 				local _d = 2
 
-				if GetGlobalDBool("bool_tag_on_side_name", false) then
+				if GetGlobalBool("bool_tag_on_side_name", false) then
 					drawPlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["na"])
 					_z = _z + _d
 				end
 
-				if GetGlobalDBool("bool_tag_on_side_rolename", false) then
+				if GetGlobalBool("bool_tag_on_side_rolename", false) then
 					local rc = ply:GetRoleColor()
 					drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(rc.r, rc.g, rc.b, _alpha), _alpha, _icons["rn"])
 					_z = _z + _d
 				end
 
-				if GetGlobalDBool("bool_tag_on_side_groupname", false) then
-					local _color = ply:GetDString("groupColor", "255,0,0")
+				if GetGlobalBool("bool_tag_on_side_groupname", false) then
+					local _color = ply:GetNW2String("groupColor", "255,0,0")
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					local gc = ply:GetGroupColor()
@@ -1774,8 +1774,8 @@ function drawPlates()
 					_z = _z + _d
 				end
 
-				if GetGlobalDBool("bool_tag_on_side_factionname", false) then
-					local _color = ply:GetDString("factionColor", "255,0,0")
+				if GetGlobalBool("bool_tag_on_side_factionname", false) then
+					local _color = ply:GetNW2String("factionColor", "255,0,0")
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					local fc = ply:GetFactionColor()
@@ -1783,7 +1783,7 @@ function drawPlates()
 					_z = _z + _d
 				end
 
-				if GetGlobalDBool("bool_tag_on_side_level", false) then
+				if GetGlobalBool("bool_tag_on_side_level", false) then
 					local lvl = ply:Level()
 					local t = {}
 					t["LEVEL"] = lvl
@@ -1791,32 +1791,32 @@ function drawPlates()
 					_z = _z + _d
 				end
 
-				if GetGlobalDBool("bool_tag_on_side_health", false) then
+				if GetGlobalBool("bool_tag_on_side_health", false) then
 					local col = ply:HudValue("HP", "BA")
 					drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
-				if GetGlobalDBool("bool_tag_on_side_armor", false) then
+				if GetGlobalBool("bool_tag_on_side_armor", false) then
 					local col = ply:HudValue("AR", "BA")
-					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetDInt("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ar"], ply:Armor(), ply:GetDInt("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
+					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetNW2Int("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ar"], ply:Armor(), ply:GetNW2Int("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
 				if LocalPlayer():HasAccess() then
 					local col = ply:HudValue("ST", "BA")
-					drawPlayerInfo(ply, ply:GetDFloat("GetCurStamina", 0.0) .. "/" .. ply:GetDFloat("GetMaxStamina", 1.0), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ms"], ply:GetDFloat("GetCurStamina", 0.0), ply:GetDFloat("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
+					drawPlayerInfo(ply, ply:GetNW2Float("GetCurStamina", 0.0) .. "/" .. ply:GetNW2Float("GetMaxStamina", 1.0), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ms"], ply:GetNW2Float("GetCurStamina", 0.0), ply:GetNW2Float("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
 					_z = _z + _d
 					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sn"])
 					_z = _z + _d
 					local ugcolor = ply:GetUserGroupColor()
 					drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, _alpha), _alpha, _icons["ug"])
 					_z = _z + _d
-					drawPlayerInfo(ply, "+" .. GetGlobalDString("text_money_pre", "") .. ply:GetDString("salary", "") .. GetGlobalDString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sa"])
+					drawPlayerInfo(ply, "+" .. GetGlobalString("text_money_pre", "") .. ply:GetNW2String("salary", "") .. GetGlobalString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sa"])
 					_z = _z + _d
-					local _motext = GetGlobalDString("text_money_pre", "") .. ply:GetDString("money", "") .. GetGlobalDString("text_money_pos", "")
-					local _mMin = CurTime() + ply:GetDInt("salarytime", 0) - ply:GetDInt("nextsalarytime", 0)
-					local _mMax = ply:GetDInt("salarytime", 0) + 1
+					local _motext = GetGlobalString("text_money_pre", "") .. ply:GetNW2String("money", "") .. GetGlobalString("text_money_pos", "")
+					local _mMin = CurTime() + ply:GetNW2Int("salarytime", 0) - ply:GetNW2Int("nextsalarytime", 0)
+					local _mMax = ply:GetNW2Int("salarytime", 0) + 1
 					drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
 					_z = _z + _d
 				end
@@ -1839,7 +1839,7 @@ function draw3DText(text, x, y, color)
 end
 
 hook.Add("HUDPaint", "yrp_esp_draw", function()
-	if LocalPlayer():GetDBool("bool_canuseesp", false) then
+	if LocalPlayer():GetNW2Bool("bool_canuseesp", false) then
 		for i, p in pairs(player.GetAll()) do
 			--if p != LocalPlayer() then
 				local OBBCen = p:LocalToWorld(p:OBBCenter())
@@ -1855,7 +1855,7 @@ hook.Add("HUDPaint", "yrp_esp_draw", function()
 			--end
 		end
 	end
-	if GetGlobalDBool("bool_server_debug_voice", false) then
+	if GetGlobalBool("bool_server_debug_voice", false) then
 		for i, p in pairs(player.GetAll()) do
 			local OBBCen = p:LocalToWorld(p:OBBCenter())
 			local ScrCen = OBBCen:ToScreen()
@@ -1867,7 +1867,7 @@ hook.Add("HUDPaint", "yrp_esp_draw", function()
 
 			draw3DText(YRP.lang_string("LID_name") .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]" .. " GROUP: " .. "[" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y - 20)
 
-			if p:GetDBool("yrp_speaking", false) then
+			if p:GetNW2Bool("yrp_speaking", false) then
 				local text = "IS SPEAKING!"
 				if p != LocalPlayer() then
 					text = text .. " [Volume: " .. math.Round(p:VoiceVolume(), 2) .. "]"
@@ -1883,7 +1883,7 @@ hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 		if ent:IsNPC() and !ent:IsPlayer() and ent:IsDealer() then
 			local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 			if dist < 300 then
-				drawStringBox(ent, ent:GetDString("name", "Unnamed"), 20, Color(255, 255, 255))
+				drawStringBox(ent, ent:GetNW2String("name", "Unnamed"), 20, Color(255, 255, 255))
 			end
 		end
 	end
@@ -1972,21 +1972,21 @@ net.Receive("yrp_message", function(len)
 end)
 
 function DrawDoorText(door)
-	local header = SQL_STR_OUT(door:GetDString("text_header", ""))
+	local header = SQL_STR_OUT(door:GetNW2String("text_header", ""))
 	surface.SetFont("Y_24_500")
 	local head_size = surface.GetTextSize(header)
 	surface.SetTextColor(255, 255, 255)
 	surface.SetTextPos(- head_size / 2, -80)
 	surface.DrawText(header)
 
-	local description = SQL_STR_OUT(door:GetDString("text_description", ""))
+	local description = SQL_STR_OUT(door:GetNW2String("text_description", ""))
 	surface.SetFont("Y_14_500")
 	local desc_size = surface.GetTextSize(description)
 	surface.SetTextColor(255, 255, 255)
 	surface.SetTextPos(- desc_size / 2, -50)
 	surface.DrawText(description)
 
-	local sl = door:GetDInt("int_securitylevel", 0)
+	local sl = door:GetNW2Int("int_securitylevel", 0)
 	if sl > 0 then
 		local int_securitylevel = YRP.lang_string("LID_securitylevel") .. ": " .. sl
 		surface.SetFont("Y_24_500")
@@ -2000,7 +2000,7 @@ end
 local loadattempts = 0
 function loadDoorTexts()
 	loadattempts = loadattempts + 1
-	if GetGlobalDBool("loaded_doors", false) and (table.Count(ents.FindByClass("prop_door_rotating")) > 0 or table.Count(ents.FindByClass("func_door")) > 0 or table.Count(ents.FindByClass("func_door_rotating")) > 0) then
+	if GetGlobalBool("loaded_doors", false) and (table.Count(ents.FindByClass("prop_door_rotating")) > 0 or table.Count(ents.FindByClass("func_door")) > 0 or table.Count(ents.FindByClass("func_door_rotating")) > 0) then
 		hook.Remove("PostDrawOpaqueRenderables", "yrp_door_info")
 		hook.Add("PostDrawOpaqueRenderables", "yrp_door_info", function()
 			local DOORS = GetAllDoors()
@@ -2103,20 +2103,20 @@ function drawIDCard(ply, scale, px, py)
 	}
 
 	for i, ele in pairs(elements) do
-		if GetGlobalDBool("bool_" .. ele .. "_visible", false) then
-			local w = GetGlobalDInt("int_" .. ele .. "_w", 100)
-			local h = GetGlobalDInt("int_" .. ele .. "_h", 100)
+		if GetGlobalBool("bool_" .. ele .. "_visible", false) then
+			local w = GetGlobalInt("int_" .. ele .. "_w", 100)
+			local h = GetGlobalInt("int_" .. ele .. "_h", 100)
 
-			local x = GetGlobalDInt("int_" .. ele .. "_x", 0)
-			local y = GetGlobalDInt("int_" .. ele .. "_y", 0)
+			local x = GetGlobalInt("int_" .. ele .. "_x", 0)
+			local y = GetGlobalInt("int_" .. ele .. "_y", 0)
 
 			local color = {}
-			color.r = GetGlobalDInt("int_" .. ele .. "_r", 0)
-			color.g = GetGlobalDInt("int_" .. ele .. "_g", 0)
-			color.b = GetGlobalDInt("int_" .. ele .. "_b", 0)
-			color.a = GetGlobalDInt("int_" .. ele .. "_a", 0)
+			color.r = GetGlobalInt("int_" .. ele .. "_r", 0)
+			color.g = GetGlobalInt("int_" .. ele .. "_g", 0)
+			color.b = GetGlobalInt("int_" .. ele .. "_b", 0)
+			color.a = GetGlobalInt("int_" .. ele .. "_a", 0)
 
-			local colortype = GetGlobalDInt("int_" .. ele .. "_colortype", 0)
+			local colortype = GetGlobalInt("int_" .. ele .. "_colortype", 0)
 			if colortype == 2 then
 				color = ply:GetFactionColor()
 			elseif colortype == 3 then
@@ -2127,8 +2127,8 @@ function drawIDCard(ply, scale, px, py)
 				color = ply:GetUserGroupColor()
 			end
 
-			local ax = GetGlobalDInt("int_" .. ele .. "_ax", 0)
-			local ay = GetGlobalDInt("int_" .. ele .. "_ay", 0)
+			local ax = GetGlobalInt("int_" .. ele .. "_ax", 0)
+			local ay = GetGlobalInt("int_" .. ele .. "_ay", 0)
 
 			x = x * scale
 			y = y * scale
@@ -2144,54 +2144,54 @@ function drawIDCard(ply, scale, px, py)
 				else
 					local text = ""
 					if ele == "hostname" then
-						text = GetGlobalDString("text_server_name", "")
+						text = GetGlobalString("text_server_name", "")
 					elseif ele == "role" then
-						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+						if GetGlobalBool("bool_" .. ele .. "_title", false) then
 							text = YRP.lang_string("LID_role") .. ": "
 						end
 						text = text .. ply:GetRoleName()
 					elseif ele == "rpname" then
-						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+						if GetGlobalBool("bool_" .. ele .. "_title", false) then
 							text = YRP.lang_string("LID_name") .. ": "
 						end
 						text = text .. ply:RPName()
 					elseif ele == "securitylevel" then
-						text = YRP.lang_string("LID_" .. ele) .. " " .. ply:GetDInt("int_securitylevel", 0)
+						text = YRP.lang_string("LID_" .. ele) .. " " .. ply:GetNW2Int("int_securitylevel", 0)
 					elseif ele == "faction" then
-						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+						if GetGlobalBool("bool_" .. ele .. "_title", false) then
 							text = YRP.lang_string("LID_faction") .. ": "
 						end
 						text = text .. ply:GetFactionName()
 					elseif ele == "group" then
-						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+						if GetGlobalBool("bool_" .. ele .. "_title", false) then
 							text = YRP.lang_string("LID_group") .. ": "
 						end
 						text = text .. ply:GetGroupName()
 					elseif ele == "idcardid" then
-						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+						if GetGlobalBool("bool_" .. ele .. "_title", false) then
 							text = YRP.lang_string("LID_id") .. ": "
 						end
-						text = text .. ply:GetDString("idcardid", "")
+						text = text .. ply:GetNW2String("idcardid", "")
 					elseif ele == "birthday" then
-						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+						if GetGlobalBool("bool_" .. ele .. "_title", false) then
 							text = YRP.lang_string("LID_birthday") .. ": "
 						end
-						text = text .. ply:GetDString("string_birthday", "")
+						text = text .. ply:GetNW2String("string_birthday", "")
 					elseif ele == "bodyheight" then
-						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+						if GetGlobalBool("bool_" .. ele .. "_title", false) then
 							text = YRP.lang_string("LID_bodyheight") .. ": "
 						end
-						text = text .. tostring(ply:GetDInt("int_bodyheight", 0))
+						text = text .. tostring(ply:GetNW2Int("int_bodyheight", 0))
 					elseif ele == "weight" then
-						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+						if GetGlobalBool("bool_" .. ele .. "_title", false) then
 							text = YRP.lang_string("LID_weight") .. ": "
 						end
-						text = text .. tostring(ply:GetDInt("int_weight", 0))
+						text = text .. tostring(ply:GetNW2Int("int_weight", 0))
 					elseif ele == "nationality" then
-						if GetGlobalDBool("bool_" .. ele .. "_title", false) then
+						if GetGlobalBool("bool_" .. ele .. "_title", false) then
 							text = YRP.lang_string("LID_nationality") .. ": "
 						end
-						text = text .. ply:GetDString("string_nationality", "")
+						text = text .. ply:GetNW2String("string_nationality", "")
 					end
 
 					local tx = 0
@@ -2220,20 +2220,20 @@ function drawIDCard(ply, scale, px, py)
 					draw.SimpleText(text, "Y_" .. fs .. "_500", tx, ty, color, ax, ay)
 				end
 			else
-				if string.find(ele, "background") and strEmpty(GetGlobalDString("text_idcard_background", "")) then
+				if string.find(ele, "background") and strEmpty(GetGlobalString("text_idcard_background", "")) then
 					draw.RoundedBox(0, x, y, w, h, color)
 				end
 				if logos[ele] == nil then
 					logos[ele] = true
 
-					w = GetGlobalDInt("int_" .. ele .. "_w", 100)
-					h = GetGlobalDInt("int_" .. ele .. "_h", 100)
+					w = GetGlobalInt("int_" .. ele .. "_w", 100)
+					h = GetGlobalInt("int_" .. ele .. "_h", 100)
 
 					local test = createD("DHTML", nil, w, h, 0, 0)
 					if string.find(ele, "logo") then
-						test:SetHTML(GetHTMLImage(GetGlobalDString("text_server_logo", ""), w, h))
+						test:SetHTML(GetHTMLImage(GetGlobalString("text_server_logo", ""), w, h))
 					else
-						test:SetHTML(GetHTMLImage(GetGlobalDString("text_idcard_background", ""), w, h))
+						test:SetHTML(GetHTMLImage(GetGlobalString("text_idcard_background", ""), w, h))
 					end
 					function test:Paint(pw, ph)
 						if pa(test) then
@@ -2276,7 +2276,9 @@ end
 local dsd = CurTime() + 2
 local ds = ds or false
 hook.Add("Think", "openDeathScreen", function(len)
-	if LocalPlayer():LoadedGamemode() and !LocalPlayer():Alive() and !vgui.CursorVisible() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds and GetGlobalDBool("bool_deathscreen", false) and !customdeathscreen then
+	if LocalPlayer() == NULL then return end
+
+	if LocalPlayer():LoadedGamemode() and !LocalPlayer():Alive() and !vgui.CursorVisible() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds and GetGlobalBool("bool_deathscreen", false) and !customdeathscreen then
 		ds = true
 		local win = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 		win:SetTitle("")
@@ -2296,13 +2298,13 @@ hook.Add("Think", "openDeathScreen", function(len)
 			end
 			Derma_DrawBackgroundBlur(self, self.systime)
 			draw.RoundedBox(0, 0, YRP.ctr(300), pw, YRP.ctr(500), Color(0, 0, 0, 180 * self.a))
-			if LocalPlayer():GetDInt("int_deathtimestamp_max", 0) <= CurTime() then
+			if LocalPlayer():GetNW2Int("int_deathtimestamp_max", 0) <= CurTime() then
 				draw.SimpleText(string.upper(YRP.lang_string("LID_youdied")), "Y_100_500", pw / 2, YRP.ctr(300 + 500 / 2), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			else
 				draw.SimpleText(YRP.lang_string("LID_youreunconsious") .. ".", "Y_50_500", pw / 2, YRP.ctr(300 + 500 / 3), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 				local tab = {}
-				tab["X"] = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_max", 0) - CurTime(), 0)
+				tab["X"] = math.Round(LocalPlayer():GetNW2Int("int_deathtimestamp_max", 0) - CurTime(), 0)
 				draw.SimpleText(YRP.lang_string("LID_youredeadinxseconds", tab) .. ".", "Y_30_500", pw / 2, YRP.ctr(300 + 500 * 2 / 3), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
@@ -2314,7 +2316,7 @@ hook.Add("Think", "openDeathScreen", function(len)
 		win.respawn = createD("YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScrH() - YRP.ctr(400))
 		win.respawn:SetText("LID_respawnnow")
 		function win.respawn:DoClick()
-			if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() and !LocalPlayer():GetDBool("yrp_chararchived", false) then
+			if LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() and !LocalPlayer():GetNW2Bool("yrp_chararchived", false) then
 				net.Start("YRP_EnterWorld")
 					net.WriteString(LocalPlayer():CharID())
 				net.SendToServer()
@@ -2325,14 +2327,14 @@ hook.Add("Think", "openDeathScreen", function(len)
 			end
 		end
 		function win.respawn:Paint(pw, ph)
-			if !LocalPlayer():GetDBool("yrp_chararchived", false) then
+			if !LocalPlayer():GetNW2Bool("yrp_chararchived", false) then
 				local tab = {}
 				tab.color = Color(56, 118, 29, 255)
 				tab.tcolor = Color(255, 255, 255, 255)
-				if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+				if LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
 					hook.Run("YButtonPaint", self, pw, ph, tab)
 				else
-					tab.text = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_min", 0) - CurTime(), 0)
+					tab.text = math.Round(LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) - CurTime(), 0)
 					hook.Run("YButtonPaint", self, pw, ph, tab)
 				end
 			end
@@ -2385,11 +2387,14 @@ if pa(yrp_loading_screen) then
 
 	function yrp_loading_screen.blur:Paint(pw, ph)
 		local lply = LocalPlayer()
+
+		if lply == NULL then return end
+
 		self:MoveToFront()
 
 		if yrp_loading_screen.bg then
-			if yrp_loading_screen.bg.url != GetGlobalDString("text_loading_background") then
-				yrp_loading_screen.bg.url = GetGlobalDString("text_loading_background")
+			if yrp_loading_screen.bg.url != GetGlobalString("text_loading_background") then
+				yrp_loading_screen.bg.url = GetGlobalString("text_loading_background")
 				if yrp_loading_screen.bg.url == nil then
 					--draw.SimpleText("LOADING", "Y_26_500", pw / 2, ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				else
@@ -2407,20 +2412,9 @@ if pa(yrp_loading_screen) then
 			draw.SimpleText("NO LOADINGSCREEN FOUND - F8 General -> Loadingscreen Background", "Y_26_500", pw / 2, ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)		
 		end
 
-		local lply = LocalPlayer()
-
 		if self.d < CurTime() then
 			self.d = CurTime() + 1
 			self.t = self.t + 1
-
-			if self.t >= self.tmax then
-				if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 then
-					YRP.msg("error", "LOADING => " .. self.tmax .. "+ " .. " " .. printReadyError())
-					yrp_loading_screen:Remove()
-				elseif self.t > self.tmax then
-					self.t = 0
-				end
-			end
 		end
 
 
@@ -2451,15 +2445,20 @@ if pa(yrp_loading_screen) then
 		-- BAR VALUES
 		local w = YRP.ctr(1000)
 		local h = YRP.ctr(60)
+		local cur = 0
+		local max = 2
+		if lply:GetNW2Bool("finishedloading", false) then
+			cur = cur + 1
+		end
+		if lply:GetNW2Bool("loadedchars", false) then
+			cur = cur + 1
+		end
 		-- BAR BG
-		draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(580), w, h, Color(80, 80, 80, 255))
 		draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w, h, Color(80, 80, 80, 255))
 		-- BAR
-		draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(580), w * lply:GetDInt("yrp_load_ent", -1) / 100, h, Color(100, 100, 255, 255))
-		draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * lply:GetDInt("yrp_load_glo", -1) / 100, h, Color(100, 100, 255, 255))
+		draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * cur / max, h, Color(100, 100, 255, 255))
 		-- BAR TEXT
-		draw.SimpleText("Entities Values: " .. lply:GetDInt("yrp_load_ent", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(605), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText("Global Values: " .. lply:GetDInt("yrp_load_glo", 0) .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText("Global Values: " .. cur / max * 100 .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 
 		
@@ -2467,7 +2466,7 @@ if pa(yrp_loading_screen) then
 		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 
-		if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 and lply:GetDBool("finishedloading", false) and lply:GetDBool("loadedchars", false) then
+		if lply:GetNW2Bool("finishedloading", false) and lply:GetNW2Bool("loadedchars", false) then
 			yrp_loading_screen:Remove()
 		end
 	end
@@ -2475,7 +2474,7 @@ end
 
 local windowOpen = false
 net.Receive("openLawBoard", function(len)
-	if not windowOpen and (LocalPlayer():isCP() or LocalPlayer():GetDBool("bool_canusewarnsystem", false)) then
+	if not windowOpen and (LocalPlayer():isCP() or LocalPlayer():GetNW2Bool("bool_canusewarnsystem", false)) then
 		local tmpJailList = net.ReadTable()
 		windowOpen = true
 		local window = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
@@ -2541,7 +2540,7 @@ net.Receive("openLawBoard", function(len)
 				end
 
 				local _cell = createVGUI("DComboBox", addWindow:GetContent(), 380, 50, 10, 150)
-				for k, v in pairs(GetGlobalDTable("yrp_jailpoints")) do
+				for k, v in pairs(GetGlobalTable("yrp_jailpoints")) do
 					_cell:AddChoice(v.name, v.uniqueID)
 				end
 				function _cell:OnSelect(index, value, data)
@@ -2843,7 +2842,7 @@ net.Receive("openLawBoard", function(len)
 			local pinfo = createD("YPanel", parent, YRP.ctr(800), YRP.ctr(800), YRP.ctr(20), YRP.ctr(890))
 			function pinfo:Paint(pw, ph)
 				if plist.ply:IsPlayer() then
-					local scale = self:GetWide() / GetGlobalDInt("int_" .. "background" .. "_w", 100)
+					local scale = self:GetWide() / GetGlobalInt("int_" .. "background" .. "_w", 100)
 					drawIDCard(plist.ply, scale, 0, 0)
 				end
 			end
@@ -2871,7 +2870,7 @@ net.Receive("openLawBoard", function(len)
 			function btnVerwarnung:Paint(pw, ph)
 				if plist.ply:IsPlayer() then
 					hook.Run("YLabelPaint", self, pw, ph)
-					btnVerwarnung:SetText(YRP.lang_string("LID_warnings") .. ": " .. plist.ply:GetDInt("int_warnings", -1))
+					btnVerwarnung:SetText(YRP.lang_string("LID_warnings") .. ": " .. plist.ply:GetNW2Int("int_warnings", -1))
 				end
 			end
 
@@ -2898,7 +2897,7 @@ net.Receive("openLawBoard", function(len)
 			function btnVerstoesse:Paint(pw, ph)
 				if plist.ply:IsPlayer() then
 					hook.Run("YLabelPaint", self, pw, ph)
-					btnVerstoesse:SetText(YRP.lang_string("LID_violations") .. ": " .. plist.ply:GetDInt("int_violations", -1))
+					btnVerstoesse:SetText(YRP.lang_string("LID_violations") .. ": " .. plist.ply:GetNW2Int("int_violations", -1))
 				end
 			end
 
@@ -2907,7 +2906,7 @@ net.Receive("openLawBoard", function(len)
 			function btnArrests:Paint(pw, ph)
 				if plist.ply:IsPlayer() then
 					hook.Run("YLabelPaint", self, pw, ph)
-					btnArrests:SetText(YRP.lang_string("LID_arrests") .. ": " .. plist.ply:GetDInt("int_arrests", -1))
+					btnArrests:SetText(YRP.lang_string("LID_arrests") .. ": " .. plist.ply:GetNW2Int("int_arrests", -1))
 				end
 			end
 

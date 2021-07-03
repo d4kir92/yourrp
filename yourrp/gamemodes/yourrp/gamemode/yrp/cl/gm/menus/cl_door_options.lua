@@ -25,7 +25,7 @@ net.Receive("getBuildingInfo", function(len)
 		local tabOwner = tab["O"]
 		local tabGroup = tab["G"]
 
-		if GetGlobalDBool("bool_building_system", false) then
+		if GetGlobalBool("bool_building_system", false) then
 			if ea(door) then
 				if table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
 					optionWindow(door, tabBuilding, tabOwner, tabGroup)
@@ -49,19 +49,19 @@ function buyWindow(door, tabBuilding)
 	local _doors = 0
 	local _tmpDoors = ents.FindByClass("prop_door_rotating")
 	for k, v in pairs(_tmpDoors) do
-		if tonumber(v:GetDString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
+		if tonumber(v:GetNW2String("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
 			_doors = _doors + 1
 		end
 	end
 	local _tmpFDoors = ents.FindByClass("func_door")
 	for k, v in pairs(_tmpFDoors) do
-		if tonumber(v:GetDString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
+		if tonumber(v:GetNW2String("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
 			_doors = _doors + 1
 		end
 	end
 	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
 	for k, v in pairs(_tmpFRDoors) do
-		if tonumber(v:GetDString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
+		if tonumber(v:GetNW2String("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
 			_doors = _doors + 1
 		end
 	end
@@ -91,7 +91,7 @@ function buyWindow(door, tabBuilding)
 	end
 	function yrp_door.window.con:Paint(pw, ph)
 		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. tabBuilding.name, "Y_24_500", br, br, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ": " .. GetGlobalDString("text_money_pre", "") .. tabBuilding.buildingprice .. GetGlobalDString("text_money_pos", ""), "Y_24_500", br, YRP.ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ": " .. GetGlobalString("text_money_pre", "") .. tabBuilding.buildingprice .. GetGlobalString("text_money_pos", ""), "Y_24_500", br, YRP.ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_doors") .. ": " .. _doors, "Y_24_500", br, YRP.ctr(20 + 100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 
 		draw.RoundedBox(0, 0, YRP.ctr(200), pw, ph - YRP.ctr(200), Color(255, 255, 100, 200))
@@ -102,11 +102,11 @@ function buyWindow(door, tabBuilding)
 		draw.SimpleTextOutlined(YRP.lang_string("LID_canbeowned") .. ":", "Y_18_500", pw - YRP.ctr(450 - 10) - br, YRP.ctr(475), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "Y_18_500", pw - YRP.ctr(500) - br, YRP.ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 
-		if tostring(door:GetDString("buildingID", "-1")) == "-1" then
+		if tostring(door:GetNW2String("buildingID", "-1")) == "-1" then
 			draw.SimpleTextOutlined("Loading IDs", "Y_18_500", pw - br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		else
-			draw.SimpleTextOutlined("Building-ID: " .. door:GetDString("buildingID", "-1"), "Y_18_500", pw - br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-			draw.SimpleTextOutlined("Door-ID: " .. door:GetDString("uniqueID", "-1"), "Y_18_500", pw - br, YRP.ctr(290), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined("Building-ID: " .. door:GetNW2String("buildingID", "-1"), "Y_18_500", pw - br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined("Door-ID: " .. door:GetNW2String("uniqueID", "-1"), "Y_18_500", pw - br, YRP.ctr(290), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		end
 	end
 
@@ -264,26 +264,26 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 	local lply = LocalPlayer()
 
 	local OWNER = false
-	if door:GetDString("ownerGroup", "") == "" and tonumber(door:GetDString("ownerCharID")) == tonumber(LocalPlayer():CharID()) then
+	if door:GetNW2String("ownerGroup", "") == "" and tonumber(door:GetNW2String("ownerCharID")) == tonumber(LocalPlayer():CharID()) then
 		OWNER = true
 	end
 
 	local _doors = 0
 	local _tmpDoors = ents.FindByClass("prop_door_rotating")
 	for k, v in pairs(_tmpDoors) do
-		if tonumber(v:GetDString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
+		if tonumber(v:GetNW2String("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
 			_doors = _doors + 1
 		end
 	end
 	local _tmpFDoors = ents.FindByClass("func_door")
 	for k, v in pairs(_tmpFDoors) do
-		if tonumber(v:GetDString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
+		if tonumber(v:GetNW2String("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
 			_doors = _doors + 1
 		end
 	end
 	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
 	for k, v in pairs(_tmpFRDoors) do
-		if tonumber(v:GetDString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
+		if tonumber(v:GetNW2String("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
 			_doors = _doors + 1
 		end
 	end
@@ -313,15 +313,15 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 		if OWNER then
 			draw.SimpleTextOutlined(YRP.lang_string("LID_header"), "Y_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 			draw.SimpleTextOutlined(YRP.lang_string("LID_description"), "Y_18_500", pw - YRP.ctr(500 + 20), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-			--draw.SimpleTextOutlined(YRP.lang_string("LID_doorlevel") .. ": " .. door:GetDString("level", -1), "Y_24_500", YRP.ctr(10), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+			--draw.SimpleTextOutlined(YRP.lang_string("LID_doorlevel") .. ": " .. door:GetNW2String("level", -1), "Y_24_500", YRP.ctr(10), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
 		end
 
 		draw.RoundedBox(0, 0, YRP.ctr(220), pw, ph - YRP.ctr(220), Color(255, 255, 100, 200))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "Y_18_500", YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "Y_18_500", YRP.ctr(540), YRP.ctr(370), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 
-		draw.SimpleTextOutlined("Building-ID: " .. door:GetDString("buildingID", "FAILED"), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined("Door-ID: " .. door:GetDString("uniqueID", -1), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270 + 40), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined("Building-ID: " .. door:GetNW2String("buildingID", "FAILED"), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined("Door-ID: " .. door:GetNW2String("uniqueID", -1), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270 + 40), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 	end
 	function yrp_door.window:OnClose()
 		closeMenu()
@@ -332,7 +332,7 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 
 	--[[
 	local _ButtonUpgrade = createVGUI("YButton", yrp_door.window, 400, 50, 10, 200)
-	_ButtonUpgrade:SetText(YRP.lang_string("LID_upgradedoor") .. " (-" .. GetGlobalDString("text_money_pre", "") .. "100" .. GetGlobalDString("text_money_pos", "") .. ") NOT AVAILABLE")
+	_ButtonUpgrade:SetText(YRP.lang_string("LID_upgradedoor") .. " (-" .. GetGlobalString("text_money_pre", "") .. "100" .. GetGlobalString("text_money_pos", "") .. ") NOT AVAILABLE")
 	function _ButtonUpgrade:DoClick()
 		net.Start("wantHouse")
 			net.WriteInt(tabBuilding.uniqueID, 16)
@@ -343,7 +343,7 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 
 	if OWNER then
 		local _ButtonSell = createD("YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(150))
-		_ButtonSell:SetText(YRP.lang_string("LID_sell") .. " (+" .. GetGlobalDString("text_money_pre", "") .. tabBuilding.buildingprice / 2 .. GetGlobalDString("text_money_pos", "") .. ")")
+		_ButtonSell:SetText(YRP.lang_string("LID_sell") .. " (+" .. GetGlobalString("text_money_pre", "") .. tabBuilding.buildingprice / 2 .. GetGlobalString("text_money_pos", "") .. ")")
 		function _ButtonSell:DoClick()
 			net.Start("sellBuilding")
 				net.WriteString(tabBuilding.uniqueID)
@@ -351,7 +351,7 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 			yrp_door.window:Remove()
 		end
 		--function _ButtonSell:Paint(pw, ph)
-			--surfaceButton(self, pw, ph, YRP.lang_string("LID_sell") .. " (+" .. GetGlobalDString("text_money_pre", "") .. _price / 2 .. GetGlobalDString("text_money_pos", "") .. ")")
+			--surfaceButton(self, pw, ph, YRP.lang_string("LID_sell") .. " (+" .. GetGlobalString("text_money_pre", "") .. _price / 2 .. GetGlobalString("text_money_pos", "") .. ")")
 		--end
 
 		local _header = createD("DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(50))

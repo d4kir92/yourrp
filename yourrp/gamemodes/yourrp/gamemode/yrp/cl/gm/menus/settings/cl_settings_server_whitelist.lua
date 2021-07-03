@@ -50,7 +50,7 @@ function BuildWhitelist(parent, tab)
 
 		for k, whi in pairs(tabW) do
 			local found = false
-			if whi.roleID > 0 and (tab == "LID_all" or tab == "LID_roles") then -- ROLE
+			if whi.roleID and whi.roleID > 0 and (tab == "LID_all" or tab == "LID_roles") then -- ROLE
 				for l, rol in pairs(tabR) do
 					if found then
 						break
@@ -64,7 +64,7 @@ function BuildWhitelist(parent, tab)
 						end
 					end
 				end
-			elseif whi.roleID < 0 and whi.groupID > 0 and (tab == "LID_all" or tab == "LID_groups") then -- GROUP
+			elseif whi.roleID and whi.roleID < 0 and whi.groupID > 0 and (tab == "LID_all" or tab == "LID_groups") then -- GROUP
 				for m, grp in pairs(tabG) do
 					if (grp.uniqueID == whi.groupID) then
 						list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grp.string_name, "-", whi.date, whi.status)

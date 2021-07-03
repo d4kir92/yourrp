@@ -11,10 +11,10 @@ util.AddNetworkString("upgradeCPU")
 net.Receive("upgradeCPU", function(len, ply)
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
-		local cost = mp:GetDInt("cpuCost")
-		if ply:canAfford(cost) and mp:GetDInt("cpu") < mp:GetDInt("cpuMax") then
+		local cost = mp:GetNW2Int("cpuCost")
+		if ply:canAfford(cost) and mp:GetNW2Int("cpu") < mp:GetNW2Int("cpuMax") then
 			ply:addMoney(-cost)
-			mp:SetDInt("cpu", mp:GetDInt("cpu") + 1)
+			mp:SetNW2Int("cpu", mp:GetNW2Int("cpu") + 1)
 
 			mp.delay = CurTime()
 		end
@@ -25,10 +25,10 @@ util.AddNetworkString("upgradeCooler")
 net.Receive("upgradeCooler", function(len, ply)
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
-		local cost = mp:GetDInt("coolerCost")
-		if ply:canAfford(cost) and mp:GetDInt("cooler") < mp:GetDInt("coolerMax") then
+		local cost = mp:GetNW2Int("coolerCost")
+		if ply:canAfford(cost) and mp:GetNW2Int("cooler") < mp:GetNW2Int("coolerMax") then
 			ply:addMoney(-cost)
-			mp:SetDInt("cooler", mp:GetDInt("cooler") + 1)
+			mp:SetNW2Int("cooler", mp:GetNW2Int("cooler") + 1)
 
 			mp.delay = CurTime()
 		end
@@ -39,10 +39,10 @@ util.AddNetworkString("upgradePrinter")
 net.Receive("upgradePrinter", function(len, ply)
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
-		local cost = mp:GetDInt("printerCost")
-		if ply:canAfford(cost) and mp:GetDInt("printer") < mp:GetDInt("printerMax") then
+		local cost = mp:GetNW2Int("printerCost")
+		if ply:canAfford(cost) and mp:GetNW2Int("printer") < mp:GetNW2Int("printerMax") then
 			ply:addMoney(-cost)
-			mp:SetDInt("printer", mp:GetDInt("printer") + 1)
+			mp:SetNW2Int("printer", mp:GetNW2Int("printer") + 1)
 		end
 	end
 end)
@@ -51,12 +51,12 @@ util.AddNetworkString("upgradeStorage")
 net.Receive("upgradeStorage", function(len, ply)
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
-		local cost = mp:GetDInt("storageCost")
-		if ply:canAfford(cost) and mp:GetDInt("storage") < mp:GetDInt("storageMax") then
+		local cost = mp:GetNW2Int("storageCost")
+		if ply:canAfford(cost) and mp:GetNW2Int("storage") < mp:GetNW2Int("storageMax") then
 			ply:addMoney(-cost)
-			mp:SetDInt("storage", mp:GetDInt("storage") + 1)
-			mp:SetDInt("moneyMax", mp:GetDInt("moneyMax") + 1000)
-			mp:SetDInt("fuelMax", mp:GetDInt("fuelMax") + 10)
+			mp:SetNW2Int("storage", mp:GetNW2Int("storage") + 1)
+			mp:SetNW2Int("moneyMax", mp:GetNW2Int("moneyMax") + 1000)
+			mp:SetNW2Int("fuelMax", mp:GetNW2Int("fuelMax") + 10)
 		end
 	end
 end)
@@ -65,12 +65,12 @@ util.AddNetworkString("fuelUp")
 net.Receive("fuelUp", function(len, ply)
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
-		local cost = mp:GetDInt("fuelCost")
-		if ply:canAfford(cost) and mp:GetDInt("fuel", 0) < mp:GetDInt("fuelMax", 0) then
+		local cost = mp:GetNW2Int("fuelCost")
+		if ply:canAfford(cost) and mp:GetNW2Int("fuel", 0) < mp:GetNW2Int("fuelMax", 0) then
 			ply:addMoney(-cost)
-			mp:SetDInt("fuel", mp:GetDInt("fuel", 0) + 10)
-			if mp:GetDInt("fuel", 0) > mp:GetDInt("fuelMax", 0) then
-				mp:SetDInt("fuel", mp:GetDInt("fuelMax", 0))
+			mp:SetNW2Int("fuel", mp:GetNW2Int("fuel", 0) + 10)
+			if mp:GetNW2Int("fuel", 0) > mp:GetNW2Int("fuelMax", 0) then
+				mp:SetNW2Int("fuel", mp:GetNW2Int("fuelMax", 0))
 			end
 		end
 	end
@@ -80,12 +80,12 @@ util.AddNetworkString("repairMP")
 net.Receive("repairMP", function(len, ply)
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
-		local cost = mp:GetDInt("hpCost")
-		if ply:canAfford(cost) and mp:GetDInt("hp") < mp:GetDInt("hpMax") then
+		local cost = mp:GetNW2Int("hpCost")
+		if ply:canAfford(cost) and mp:GetNW2Int("hp") < mp:GetNW2Int("hpMax") then
 			ply:addMoney(-cost)
-			mp:SetDInt("hp", mp:GetDInt("hp") + 10)
-			if mp:GetDInt("hp") > mp:GetDInt("hpMax") then
-				mp:SetDInt("hp", mp:GetDInt("hpMax"))
+			mp:SetNW2Int("hp", mp:GetNW2Int("hp") + 10)
+			if mp:GetNW2Int("hp") > mp:GetNW2Int("hpMax") then
+				mp:SetNW2Int("hp", mp:GetNW2Int("hpMax"))
 			end
 		end
 	end
@@ -95,22 +95,22 @@ util.AddNetworkString("withdrawMoney")
 net.Receive("withdrawMoney", function(len, ply)
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
-		local withdraw = mp:GetDInt("money", 0)
+		local withdraw = mp:GetNW2Int("money", 0)
 
 		ply:addMoney(withdraw)
 
-		mp:SetDInt("money", 0)
+		mp:SetNW2Int("money", 0)
 	end
 end)
 
 util.AddNetworkString("startMoneyPrinter")
 net.Receive("startMoneyPrinter", function(len, ply)
 	local mp = net.ReadEntity()
-	if mp:GetDBool("working", false) then
-		mp:SetDBool("working", false)
-	elseif !mp:GetDBool("working") then
-		if mp:GetDInt("fuel", 0) > 0 then
-			mp:SetDBool("working", true)
+	if mp:GetNW2Bool("working", false) then
+		mp:SetNW2Bool("working", false)
+	elseif !mp:GetNW2Bool("working") then
+		if mp:GetNW2Int("fuel", 0) > 0 then
+			mp:SetNW2Bool("working", true)
 		end
 	end
 end)
@@ -126,51 +126,51 @@ function ENT:Initialize()
 		phys:Wake()
 	end
 
-	self:SetDString("yrp_use_message", "Open Moneyprinter Settings")
+	self:SetNW2String("yrp_use_message", "Open Moneyprinter Settings")
 
-	self:SetDBool("working", false)
+	self:SetNW2Bool("working", false)
 
-	self:SetDInt("cpu", 1)
-	self:SetDInt("cpuMax", 10)
-	self:SetDInt("cpuCost", 500)
+	self:SetNW2Int("cpu", 1)
+	self:SetNW2Int("cpuMax", 10)
+	self:SetNW2Int("cpuCost", 500)
 
-	self:SetDInt("cooler", 1)
-	self:SetDInt("coolerMax", 10)
-	self:SetDInt("coolerCost", 300)
+	self:SetNW2Int("cooler", 1)
+	self:SetNW2Int("coolerMax", 10)
+	self:SetNW2Int("coolerCost", 300)
 
-	self:SetDInt("printer", 1)
-	self:SetDInt("printerMax", 6)
-	self:SetDInt("printerCost", 500)
+	self:SetNW2Int("printer", 1)
+	self:SetNW2Int("printerMax", 6)
+	self:SetNW2Int("printerCost", 500)
 
-	self:SetDInt("storage", 1)
-	self:SetDInt("storageMax", 5)
-	self:SetDInt("storageCost", 600)
+	self:SetNW2Int("storage", 1)
+	self:SetNW2Int("storageMax", 5)
+	self:SetNW2Int("storageCost", 600)
 
-	self:SetDInt("fuel", 10)
-	self:SetDInt("fuelMax", 60)
-	self:SetDInt("fuelCost", 50)
+	self:SetNW2Int("fuel", 10)
+	self:SetNW2Int("fuelMax", 60)
+	self:SetNW2Int("fuelCost", 50)
 
-	self:SetDInt("money", 0)
-	self:SetDInt("moneyMax", 5000)
+	self:SetNW2Int("money", 0)
+	self:SetNW2Int("moneyMax", 5000)
 
-	self:SetDInt("hp", 100)
-	self:SetDInt("hpMax", 100)
-	self:SetDInt("hpCost", 600)
+	self:SetNW2Int("hp", 100)
+	self:SetNW2Int("hpMax", 100)
+	self:SetNW2Int("hpCost", 600)
 
-	self:SetDFloat("temp", 0.0)
-	self:SetDFloat("tempMax", 90.0)
+	self:SetNW2Float("temp", 0.0)
+	self:SetNW2Float("tempMax", 90.0)
 
 	self.tick = CurTime()
 	self.delay = CurTime()
-	self.countdown = 10 * self:GetDInt("cpuMax") + 5 * self:GetDInt("coolerMax") + 2
+	self.countdown = 10 * self:GetNW2Int("cpuMax") + 5 * self:GetNW2Int("coolerMax") + 2
 end
 
 function ENT:OnTakeDamage( dmginfo )
 	if !self.m_bApplyingDamage then
 		self.m_bApplyingDamage = true
-		self:SetDInt("hp", self:GetDInt("hp", 0) - dmginfo:GetDamage())
+		self:SetNW2Int("hp", self:GetNW2Int("hp", 0) - dmginfo:GetDamage())
 
-		if self:GetDInt("hp", 0) <= 0 then
+		if self:GetNW2Int("hp", 0) <= 0 then
 			 self:Destroy()
 		end
 		self.m_bApplyingDamage = false
@@ -203,19 +203,19 @@ function ENT:Think()
 	if CurTime() < self.tick then return end
 	self.tick = CurTime() + 1
 
-	local temp = self:GetDFloat("temp", 0.0)
-	if self:GetDBool("working") then
+	local temp = self:GetNW2Float("temp", 0.0)
+	if self:GetNW2Bool("working") then
 		if temp > 70.0 then
 			overheated = true
 		else
 			overheated = false
 		end
-		if self:GetDInt("cooler", 0) > self:GetDInt("cpu", 0) then
+		if self:GetNW2Int("cooler", 0) > self:GetNW2Int("cpu", 0) then
 			temp = temp - 1
 			if temp < 34.0 and heated then
 				temp = 34.0
 			end
-		elseif self:GetDInt("cooler", 0) + 1 < self:GetDInt("cpu", 0) then
+		elseif self:GetNW2Int("cooler", 0) + 1 < self:GetNW2Int("cpu", 0) then
 			temp = temp + 2
 		else
 			if overheated then
@@ -234,60 +234,60 @@ function ENT:Think()
 	if temp < 0.0 then
 		temp = 0.0
 	end
-	self:SetDFloat("temp", temp)
+	self:SetNW2Float("temp", temp)
 
 	-- To much heat, explode
-	if self:GetDFloat("temp", 0.0) > self:GetDFloat("tempMax", 90.0) then
+	if self:GetNW2Float("temp", 0.0) > self:GetNW2Float("tempMax", 90.0) then
 		self:Destroy()
 	end
 
-	if self:GetDInt("money") != nil then
-		if self:GetDInt("fuel", 0) > 0 and self:GetDBool("working") then
+	if self:GetNW2Int("money") != nil then
+		if self:GetNW2Int("fuel", 0) > 0 and self:GetNW2Bool("working") then
 
 			self.workingsound = sound.Add({
 				name = "moneyprintersound",
 				channel = CHAN_AUTO,
-				volume = 1.0 / self:GetDInt("cooler"),
+				volume = 1.0 / self:GetNW2Int("cooler"),
 				level = 60,
 				pitch = { 90, 110 },
 				sound = "ambient/machines/combine_terminal_idle1.wav"
 			})
 			
-			self:EmitSound("moneyprintersound") -- "ambient/machines/combine_terminal_idle1.wav", 75, 100, 1/self:GetDInt("cooler"), CHAN_AUTO)
+			self:EmitSound("moneyprintersound") -- "ambient/machines/combine_terminal_idle1.wav", 75, 100, 1/self:GetNW2Int("cooler"), CHAN_AUTO)
 
 			if CurTime() < self.delay then return end
-			local test = self.countdown - self:GetDInt("cpu") * 10 - self:GetDInt("cooler") * 5
+			local test = self.countdown - self:GetNW2Int("cpu") * 10 - self:GetNW2Int("cooler") * 5
 			self.delay = CurTime() + test
 
-			self:SetDInt("fuel", self:GetDInt("fuel") - 1)
-			if self:GetDInt("fuel", 0) < 0 then
-				self:SetDInt("fuel", 0)
+			self:SetNW2Int("fuel", self:GetNW2Int("fuel") - 1)
+			if self:GetNW2Int("fuel", 0) < 0 then
+				self:SetNW2Int("fuel", 0)
 			end
 
-			self:SetDInt("money", self:GetDInt("money") + (30 * self:GetDInt("printer")))
-			if self:GetDInt("money") > self:GetDInt("moneyMax") then
-				self:SetDInt("money", self:GetDInt("moneyMax"))
+			self:SetNW2Int("money", self:GetNW2Int("money") + (30 * self:GetNW2Int("printer")))
+			if self:GetNW2Int("money") > self:GetNW2Int("moneyMax") then
+				self:SetNW2Int("money", self:GetNW2Int("moneyMax"))
 			end
 
-			if GetGlobalDBool("bool_money_printer_spawn_money", false) and self:GetDInt("money", 0) > 0 then
-				local m = self:GetDInt("money", 0)
+			if GetGlobalBool("bool_money_printer_spawn_money", false) and self:GetNW2Int("money", 0) > 0 then
+				local m = self:GetNW2Int("money", 0)
 				local ent_m = ents.Create("yrp_money")
 				ent_m:SetMoney(m)
 				ent_m:SetPos(self:GetPos() + Vector(0, 0, 30))
 				ent_m:Spawn()
 
-				self:SetDInt("money", 0)
+				self:SetNW2Int("money", 0)
 			end
 		else
 			self:StopSound("moneyprintersound")
-			self:SetDBool("working", false)
+			self:SetNW2Bool("working", false)
 		end
 	end
 end
 
 function ENT:OnRemove()
 	self:StopSound("moneyprintersound")
-	self:SetDBool("working", false)
+	self:SetNW2Bool("working", false)
 end
 
 

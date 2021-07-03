@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function showOwner(eyeTrace)
-	if GetGlobalDBool("bool_yrp_showowner", true) then
+	if GetGlobalBool("bool_yrp_showowner", true) then
 		if eyeTrace.Entity:GetOwner() != nil and eyeTrace.Entity:GetOwner() != NULL then
 			draw.SimpleText(YRP.lang_string("LID_owner") .. ": " .. tostring(eyeTrace.Entity:GetOwner()), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		else
@@ -9,20 +9,20 @@ function showOwner(eyeTrace)
 				draw.SimpleText(YRP.lang_string("LID_owner") .. ": " .. YRP.lang_string("LID_you"), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			elseif eyeTrace.Entity:GetRPOwner() != NULL and eyeTrace.Entity:GetRPOwner():IsPlayer() then
 				draw.SimpleText(YRP.lang_string("LID_owner") .. ": " .. eyeTrace.Entity:GetRPOwner():RPName(), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			elseif !strEmpty(eyeTrace.Entity:GetDString("ownerRPName", "")) or !strEmpty(eyeTrace.Entity:GetDString("ownerGroup", "")) then
-				local groupname = eyeTrace.Entity:GetDString("ownerGroup", "")
+			elseif !strEmpty(eyeTrace.Entity:GetNW2String("ownerRPName", "")) or !strEmpty(eyeTrace.Entity:GetNW2String("ownerGroup", "")) then
+				local groupname = eyeTrace.Entity:GetNW2String("ownerGroup", "")
 				if string.lower(groupname) == "public" then
 					groupname = YRP.lang_string("LID_public")
 				end
-				draw.SimpleText(YRP.lang_string("LID_owner") .. ": " ..	eyeTrace.Entity:GetDString("ownerRPName", "") .. groupname, "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleText(YRP.lang_string("LID_owner") .. ": " ..	eyeTrace.Entity:GetNW2String("ownerRPName", "") .. groupname, "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 		end
 	end
 end
 
 function showSecurityLevel(door)
-	if door:GetDInt("int_securitylevel", 0) > 0 then
-		draw.SimpleText(YRP.lang_string("LID_securitylevel") .. ": " ..	door:GetDInt("int_securitylevel", 0), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	if door:GetNW2Int("int_securitylevel", 0) > 0 then
+		draw.SimpleText(YRP.lang_string("LID_securitylevel") .. ": " ..	door:GetNW2Int("int_securitylevel", 0), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 
@@ -37,15 +37,15 @@ function HudView()
 		if entpos == Vector(0, 0, 0) then
 			entpos = ent:GetPos()
 		end
-		if entpos:Distance(plypos) > GetGlobalDInt("int_door_distance", 200) then
+		if entpos:Distance(plypos) > GetGlobalInt("int_door_distance", 200) then
 			return
 		end
 
-		if GetGlobalDBool("bool_building_system", false) and ent:IsDoor() and plypos:Distance(entpos) < GetGlobalDInt("int_door_distance", 200) then
+		if GetGlobalBool("bool_building_system", false) and ent:IsDoor() and plypos:Distance(entpos) < GetGlobalInt("int_door_distance", 200) then
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleText(YRP.lang_string("LID_presstoopen", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			local canbeowned = tobool(ent:GetDTable("building", {}).bool_canbeowned)
+			local canbeowned = ent:GetNW2Bool("bool_canbeowned", false)
 			if canbeowned or lply:HasAccess() then
 				local tab2 = {}
 				tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_door")) .. "]"
@@ -57,14 +57,14 @@ function HudView()
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			draw.SimpleText(YRP.lang_string("LID_presstogetin", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-			if ent:GetDString("ownerRPName") == lply:Nick() then
+			if ent:GetNW2String("ownerRPName") == lply:Nick() then
 				local tab2 = {}
 				tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_vehicle")) .. "]"
 				draw.SimpleText(YRP.lang_string("LID_presstoopensettings", tab2), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 			showOwner(_eyeTrace)
 		elseif ent:IsPlayer() then
-			if ent:GetColor().a != 0 or !ent:GetDBool("cloaked") then
+			if ent:GetColor().a != 0 or !ent:GetNW2Bool("cloaked") then
 				local plycol = ent:GetColor()
 				local tab = {}
 				tab["NAME"] = tostring(ent:RPName())
@@ -73,7 +73,7 @@ function HudView()
 			end
 		elseif ent:IsNPC() then
 			if ent:IsDealer() then
-				draw.SimpleText(ent:GetDString("name", ""), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleText(ent:GetNW2String("name", ""), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				local key = {}
 				key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 				draw.SimpleText(YRP.lang_string("LID_presstotrade", key), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -87,10 +87,10 @@ function HudView()
 			key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 			key["NAME"] = ent:StorageName()
 			draw.SimpleText(YRP.lang_string("LID_presstoopenname", key), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		elseif ent:GetDBool("yrp_has_use", false) then
+		elseif ent:GetNW2Bool("yrp_has_use", false) then
 			local text = "PRESS [" .. string.upper(GetKeybindName("in_use")) .. "]"
-			if ent:GetDString("yrp_use_message", "") != "" then
-				text = text .. ": " .. ent:GetDString("yrp_use_message", "")
+			if ent:GetNW2String("yrp_use_message", "") != "" then
+				text = text .. ": " .. ent:GetNW2String("yrp_use_message", "")
 			end
 			draw.SimpleText(text, "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end

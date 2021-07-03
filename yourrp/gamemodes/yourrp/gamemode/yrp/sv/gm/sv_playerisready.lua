@@ -3,10 +3,9 @@
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
 local c = 0
-function PlayerLoadedGame(ply)
+function PlayerLoadedGame(ply, tab)
 	c = c + 1
 
-	local tab = net.ReadTable()
 	local OS_Windows = tab.iswindows
 	local OS_Linux = tab.islinux
 	local OS_OSX = tab.isosx
@@ -15,26 +14,26 @@ function PlayerLoadedGame(ply)
 	--local UpTime = tab.uptime
 
 	if OS_Windows then
-		ply:SetDString("yrp_os", "windows")
+		ply:SetNW2String("yrp_os", "windows")
 	elseif OS_Linux then
-		ply:SetDString("yrp_os", "linux")
+		ply:SetNW2String("yrp_os", "linux")
 	elseif OS_OSX then
-		ply:SetDString("yrp_os", "osx")
+		ply:SetNW2String("yrp_os", "osx")
 	else
-		ply:SetDString("yrp_os", "other")
+		ply:SetNW2String("yrp_os", "other")
 	end
-	ply:SetDString("gmod_branch", Branch or "Unknown")
-	ply:SetDString("yrp_country", Country or "Unknown")
-	ply:SetDFloat("uptime_current", os.clock())
+	ply:SetNW2String("gmod_branch", Branch or "Unknown")
+	ply:SetNW2String("yrp_country", Country or "Unknown")
+	ply:SetNW2Float("uptime_current", os.clock())
 
 	-- YRP Chat?
 	local _chat = SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")
 	if _chat != nil and _chat != false then
 		_chat = _chat[1]
-		ply:SetDBool("bool_yrp_chat", tobool(_chat.yrp_chat))
+		ply:SetNW2Bool("bool_yrp_chat", tobool(_chat.yrp_chat))
 	end
 
-	ply:SetDBool("isserverdedicated", game.IsDedicated())
+	ply:SetNW2Bool("isserverdedicated", game.IsDedicated())
 
 	ply:DesignLoadout("PlayerLoadedGame")
 
@@ -42,14 +41,13 @@ function PlayerLoadedGame(ply)
 	if wk(plyT) then
 		plyT.CurrentCharacter = tonumber(plyT.CurrentCharacter)
 		if plyT.CurrentCharacter != -1 then
-			ply:SetDInt("yrp_charid", tonumber(plyT.CurrentCharacter))
+			ply:SetNW2Int("yrp_charid", tonumber(plyT.CurrentCharacter))
 		end
 	end
 
-	SendDGlobals(ply)
-	SendDEntities(ply, "PlayerLoadedGame")
+	--SendDGlobals(ply)
 
-	ply:SetDBool("finishedloadingcharacter", true)
+	ply:SetNW2Bool("finishedloadingcharacter", true)
 
 	YRPSendCharCount(ply)
 
@@ -67,10 +65,10 @@ end
 hook.Add("Think", "yrp_loaded_game", function()
 	for i, ply in pairs(player.GetAll()) do
 		if IsValid(ply) then
-			if ply:GetDInt("yrp_load_glo", 0) == 100 and ply:GetDInt("yrp_load_ent", 0) == 100 and ply:SteamID64() != nil and ply.yrploaded == nil then -- Only goes here, when a player fully loaded
+			if ply:GetNW2Bool("finishedloadingcharacter") and ply:SteamID64() != nil and ply.yrploaded == nil then -- Only goes here, when a player fully loaded
 				ply.yrploaded = true
 
-				ply:SetDBool("finishedloading", true)
+				ply:SetNW2Bool("finishedloading", true)
 
 				if open_character_selection != nil then
 					open_character_selection(ply)
@@ -94,8 +92,9 @@ end)
 util.AddNetworkString("yrp_player_is_ready")
 net.Receive("yrp_player_is_ready", function(len, ply)
 	if ply:IsValid() then
-		ply:SetDBool("yrp_received_ready", true)
-		PlayerLoadedGame(ply)
+		ply:SetNW2Bool("yrp_received_ready", true)
+		local tab = net.ReadTable()
+		PlayerLoadedGame(ply, tab)
 	else
 		YRP.msg("error", "[yrp_player_is_ready] failed! [" .. tostring(ply:YRPName()) .. "] [" .. tostring(ply:SteamID()) .. "]")
 	end

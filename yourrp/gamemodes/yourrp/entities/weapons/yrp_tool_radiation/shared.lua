@@ -42,7 +42,7 @@ end
 
 function SWEP:Reload()
 	local pos = ""
-	for i, v in pairs(GetGlobalDTable("yrp_radiation")) do
+	for i, v in pairs(GetGlobalTable("yrp_radiation")) do
 		pos = v.pos
 	end
 	if pos != "" then
@@ -73,7 +73,7 @@ function SWEP:Think()
 			} )
 			pos = tr.HitPos or pos
 
-			for i, v in pairs(GetGlobalDTable("yrp_radiation")) do
+			for i, v in pairs(GetGlobalTable("yrp_radiation")) do
 				local p = StringToVector(v.pos)
 				if p:Distance(pos) < size * 2 then
 					YRP.msg("db", "Option Spawner")
@@ -154,7 +154,7 @@ function SWEP:PrimaryAttack()
 end
 
 function IsInsideRadiation(ply)
-	for i, v in pairs(GetGlobalDTable("yrp_radiation")) do
+	for i, v in pairs(GetGlobalTable("yrp_radiation")) do
 		local pos = string.Explode(",", v.pos)
 		local spos = Vector(pos[1], pos[2], pos[3])
 		local epos = Vector(pos[4], pos[5], pos[6])
@@ -179,7 +179,7 @@ function SWEP:SecondaryAttack()
 	if SERVER then
 		local ply = self:GetOwner()
 
-		for i, v in pairs(GetGlobalDTable("yrp_radiation")) do
+		for i, v in pairs(GetGlobalTable("yrp_radiation")) do
 			local pos = string.Explode(",", v.pos)
 			local spos = Vector(pos[1], pos[2], pos[3])
 			local epos = Vector(pos[4], pos[5], pos[6])
@@ -216,7 +216,7 @@ if CLIENT then
 				g = math.random(0, 255)
 				b = math.random(0, 255)
 			end
-			for i, v in pairs(GetGlobalDTable("yrp_radiation")) do
+			for i, v in pairs(GetGlobalTable("yrp_radiation")) do
 				local pos = string.Explode(",", v.pos)
 				local spos = Vector(pos[1], pos[2], pos[3])
 				local epos = Vector(pos[4], pos[5], pos[6])

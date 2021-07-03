@@ -141,7 +141,7 @@ function GenerateChatTable()
 		yrp_chat_channels = {}
 	end
 
-	SetGlobalDTable("yrp_chat_channels", yrp_chat_channels)
+	SetGlobalTable("yrp_chat_channels", yrp_chat_channels)
 end
 GenerateChatTable()
 

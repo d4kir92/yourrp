@@ -18,8 +18,10 @@ config.hh = 80
 
 
 function CreateCharacterSettingsContent()
-	local lply = LocalPlayer()
-
+	if LocalPlayer() == NULL then
+		timer.Simple(1, CreateCharacterSettingsContent)
+		return
+	end
 
 
 	local parent = CharacterMenu or RoleMenu
@@ -36,7 +38,7 @@ function CreateCharacterSettingsContent()
 
 	local win = createD("DPanel", site, YRP.ctr(config.w), YRP.ctr(config.h), 0, 0)
 	function win:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
+		draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue("YFrame", "NC"))
 	end
 	win:Center()
 	
@@ -59,7 +61,7 @@ function CreateCharacterSettingsContent()
 	btn.w = 500
 	btn.h = 75
 	local back = createD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
-	back:SetText("LID_back" .. "d")
+	back:SetText("LID_back")
 	function back:Paint(pw, ph)
 		hook.Run("YButtonRPaint", self, pw, ph)
 	end
@@ -73,6 +75,7 @@ function CreateCharacterSettingsContent()
 
 	net.Receive("yrp_char_getrole", function(len)
 		local rol = net.ReadTable()
+
 		rol.int_namelength = tonumber(rol.int_namelength)
 
 		-- TOP
@@ -91,7 +94,7 @@ function CreateCharacterSettingsContent()
 		end
 
 		local pms = createD("DModelPanel", win, ew, YRP.ctr(config.h - 320), ew + 2 * YRP.ctr(20), YRP.ctr(200))
-		pms.models = string.Explode(",", rol.pms)
+		pms.models = string.Explode(",", tostring(rol.pms))
 		pms:SetCamPos( Vector( 50, 50, 50 ) )
 		pms:SetLookAt( Vector( 0, 0, 40 ) )
 		pms:SetFOV( 50 )
@@ -116,17 +119,17 @@ function CreateCharacterSettingsContent()
 				end
 			end
 		end
-		if pms.models[tonumber(lply:GetDString("charcreate_rpmid", pms.id))] != nil then
-			pms:SetModel(pms.models[tonumber(lply:GetDString("charcreate_rpmid", pms.id))])
+		if pms.models[tonumber(LocalPlayer().charcreate_rpmid)] != nil then
+			pms:SetModel(pms.models[tonumber(LocalPlayer().charcreate_rpmid)])
 		end
 
-		lply:SetDString("charcreate_name", "")
+		LocalPlayer().charcreate_name = ""
 		local confirm = createD("YButton", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 100))
 		confirm:SetText("LID_enteraname")
 		function confirm:Paint(pw, ph)
 			local tab = {}
-			tab.color = lply:InterfaceValue("YButton", "NC")
-			local nam = lply:GetDString("charcreate_name", "")
+			tab.color = LocalPlayer():InterfaceValue("YButton", "NC")
+			local nam = LocalPlayer().charcreate_name
 			if rol.int_namelength == 0 then
 				tab.color = Color(100, 255, 100)
 				confirm:SetText("LID_confirm")
@@ -143,31 +146,33 @@ function CreateCharacterSettingsContent()
 			hook.Run("YButtonPaint", self, pw, ph, tab)
 		end
 		function confirm:DoClick()
-			local name = lply:GetDString("charcreate_name", "")
-			if string.len(name) <= rol.int_namelength and string.len(name) > 0 or rol.int_namelength == 0 then
+			local sname = LocalPlayer().charcreate_name
+			if string.len(sname) <= rol.int_namelength and string.len(sname) > 0 or rol.int_namelength == 0 then
 				local character = {}
-				character.roleID = lply:GetDString("charcreate_ruid")
-				character.rpname = lply:GetDString("charcreate_name")
-				character.rpdescription = lply:GetDString("charcreate_desc")
+				character.roleID = LocalPlayer().charcreate_ruid
+				character.rpname = LocalPlayer().charcreate_name
+				character.rpdescription = LocalPlayer().charcreate_desc
 				character.gender = "male"
-				character.playermodelID = lply:GetDString("charcreate_rpmid")
+				character.playermodelID = LocalPlayer().charcreate_rpmid
 				character.skin = 1
 				character.bg = {}
 				for i = 0, 19 do
-					character.bg[i] = lply:GetDInt("charcreate_bg" .. i, 0)
+					character.bg[i] = LocalPlayer():GetNW2Int("charcreate_bg" .. i, 0)
 				end
 
-				character.birt = lply:GetDString("charcreate_birt")
-				character.bohe = lply:GetDString("charcreate_bohe") or 0
-				character.weig = lply:GetDString("charcreate_weig") or 0
-				character.nati = lply:GetDString("charcreate_nati")
-				character.create_eventchar = GetGlobalDBool("create_eventchar", false)
+				character.birt = LocalPlayer().charcreate_birt
+				character.bohe = LocalPlayer().charcreate_bohe or 0
+				character.weig = LocalPlayer().charcreate_weig or 0
+				character.nati = LocalPlayer().charcreate_nati
+				character.create_eventchar = GetGlobalBool("create_eventchar", false)
 
 				net.Start("CreateCharacter")
 					net.WriteTable(character)
 				net.SendToServer()
-
-				CharacterMenu:Remove()
+				
+				if pa(CharacterMenu) then
+					CharacterMenu:Remove()
+				end
 				openCharacterSelection()
 			end
 		end
@@ -182,11 +187,11 @@ function CreateCharacterSettingsContent()
 			local appe = createD("DPanelList", win, ew, YRP.ctr(config.h - 2 * config.hh - 3 * config.br), YRP.ctr(20), YRP.ctr(20 + config.hh + 20 + config.hh))
 			appe:EnableVerticalScrollbar()
 			function appe:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+				draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue("YFrame", "BG"))
 			end
 			local sbar = appe.VBar
 			function sbar:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
+				draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
 			end
 			function sbar.btnUp:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
@@ -195,23 +200,23 @@ function CreateCharacterSettingsContent()
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 			end
 			function sbar.btnGrip:Paint(w, h)
-				draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+				draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
 			end
 			appe:SetSpacing(YRP.ctr(config.br))
 
 			for _, bg in pairs(bgs) do
-				lply:SetDInt("charcreate_bg" .. bg.id, 0)
+				LocalPlayer():SetNW2Int("charcreate_bg" .. bg.id, 0)
 				if table.Count(bg.submodels) > 1 then
 					local pbg = createD("DPanel", nil, ew, YRP.ctr(config.hh * 2), 0, 0)
 					function pbg:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "PC"))
-						draw.SimpleText(lply:GetDInt("charcreate_bg" .. bg.id, 0) + 1 .. "/" .. table.Count(bg.submodels) .. " " .. bg["name"], "Y_18_500", YRP.ctr(config.hh + config.br), ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue("YFrame", "PC"))
+						draw.SimpleText(LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) + 1 .. "/" .. table.Count(bg.submodels) .. " " .. bg["name"], "Y_18_500", YRP.ctr(config.hh + config.br), ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 
 					local skinup = createD("YButton", pbg, YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.1), YRP.ctr(config.hh * 0.1))
 					skinup:SetText("")
 					function skinup:Paint(pw, ph)
-						if lply:GetDInt("charcreate_bg" .. bg.id, 0) + 1 < table.Count(bg.submodels) then
+						if LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) + 1 < table.Count(bg.submodels) then
 							hook.Run("YButtonPaint", self, pw, ph)
 
 							surface.SetDrawColor(255, 255, 255, 255)
@@ -220,16 +225,16 @@ function CreateCharacterSettingsContent()
 						end
 					end
 					function skinup:DoClick()
-						if lply:GetDInt("charcreate_bg" .. bg.id, 0) + 1 < table.Count(bg.submodels) then
-							lply:SetDInt("charcreate_bg" .. bg.id, lply:GetDInt("charcreate_bg" .. bg.id, 0) + 1)
-							pms.Entity:SetBodygroup(bg.id, lply:GetDInt("charcreate_bg" .. bg.id, 0))
+						if LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) + 1 < table.Count(bg.submodels) then
+							LocalPlayer():SetNW2Int("charcreate_bg" .. bg.id, LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) + 1)
+							pms.Entity:SetBodygroup(bg.id, LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0))
 						end
 					end
 
 					local skindn = createD("YButton", pbg, YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.1), YRP.ctr(config.hh + config.hh * 0.1))
 					skindn:SetText("")
 					function skindn:Paint(pw, ph)
-						if lply:GetDInt("charcreate_bg" .. bg.id, 0) > 0 then
+						if LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) > 0 then
 							hook.Run("YButtonPaint", self, pw, ph)
 
 							surface.SetDrawColor(255, 255, 255, 255)
@@ -238,9 +243,9 @@ function CreateCharacterSettingsContent()
 						end
 					end
 					function skindn:DoClick()
-						if lply:GetDInt("charcreate_bg" .. bg.id, 0) > 0 then
-							lply:SetDInt("charcreate_bg" .. bg.id, lply:GetDInt("charcreate_bg" .. bg.id, 0) - 1)
-							pms.Entity:SetBodygroup(bg.id, lply:GetDInt("charcreate_bg" .. bg.id, 0))
+						if LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) > 0 then
+							LocalPlayer():SetNW2Int("charcreate_bg" .. bg.id, LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) - 1)
+							pms.Entity:SetBodygroup(bg.id, LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0))
 						end
 					end
 
@@ -255,11 +260,11 @@ function CreateCharacterSettingsContent()
 		local list = createD("DPanelList", win, ew, YRP.ctr(config.h - config.br * 2 - config.hh - config.br), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120))
 		list:EnableVerticalScrollbar()
 		function list:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+			draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue("YFrame", "BG"))
 		end
 		local sbar = list.VBar
 		function sbar:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
+			draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
 		end
 		function sbar.btnUp:Paint(w, h)
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
@@ -268,7 +273,7 @@ function CreateCharacterSettingsContent()
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 		end
 		function sbar.btnGrip:Paint(w, h)
-			draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+			draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
 		end
 
 		local hr = createD("DPanel", nil, ew, YRP.ctr(config.br), 0, 0)
@@ -293,7 +298,7 @@ function CreateCharacterSettingsContent()
 			end
 			function name:OnChange()
 				local nam = self:GetText()
-				lply:SetDString("charcreate_name", nam)
+				LocalPlayer().charcreate_name = nam
 				if #nam > rol.int_namelength then
 					--name:SetText(string.sub(nam, 1, rol.int_namelength))
 				end
@@ -304,7 +309,7 @@ function CreateCharacterSettingsContent()
 		end
 
 		-- Birthday
-		if GetGlobalDBool("bool_characters_birthday", false) then
+		if GetGlobalBool("bool_characters_birthday", false) then
 			local birtheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			birtheader:SetText("LID_birthday")
 			list:AddItem(birtheader)
@@ -321,14 +326,14 @@ function CreateCharacterSettingsContent()
 				self:SetBGColor(Color(0, 0, 0))
 			end
 			function birt:OnChange()
-				lply:SetDString("charcreate_birt", self:GetText())
+				LocalPlayer().charcreate_birt = self:GetText()
 			end
 			list:AddItem(birt)
 			list:AddItem(hr)
 		end
 		
 		-- Bodyheight
-		if GetGlobalDBool("bool_characters_bodyheight", false) then
+		if GetGlobalBool("bool_characters_bodyheight", false) then
 			local boheheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			boheheader:SetText("LID_bodyheight")
 			list:AddItem(boheheader)
@@ -337,14 +342,14 @@ function CreateCharacterSettingsContent()
 			bohe:SetText("")
 			bohe:SetFontInternal("Y_18_500")
 			function bohe:OnChange()
-				lply:SetDString("charcreate_bohe", self:GetText())
+				LocalPlayer().charcreate_bohe = self:GetText()
 			end
 			list:AddItem(bohe)
 			list:AddItem(hr)
 		end
 
 		-- Weight
-		if GetGlobalDBool("bool_characters_weight", false) then
+		if GetGlobalBool("bool_characters_weight", false) then
 			local weigheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			weigheader:SetText("LID_weight")
 			list:AddItem(weigheader)
@@ -353,14 +358,14 @@ function CreateCharacterSettingsContent()
 			weig:SetText("")
 			weig:SetFontInternal("Y_18_500")
 			function weig:OnChange()
-				lply:SetDString("charcreate_weig", self:GetText())
+				LocalPlayer().charcreate_weig = self:GetText()
 			end
 			list:AddItem(weig)
 			list:AddItem(hr)
 		end
 
 		-- Nationality
-		if GetGlobalDBool("bool_characters_nationality", false) then
+		if GetGlobalBool("bool_characters_nationality", false) then
 			local natiheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			natiheader:SetText("LID_nationality")
 			list:AddItem(natiheader)
@@ -369,9 +374,9 @@ function CreateCharacterSettingsContent()
 			nati:SetText("")
 			nati:SetFontInternal("Y_18_500")
 			function nati:OnChange()
-				lply:SetDString("charcreate_nati", self:GetText())
+				LocalPlayer().charcreate_nati = self:GetText()
 			end
-			local text_nationalities = string.Explode(",", GetGlobalDString("text_nationalities", ""))
+			local text_nationalities = string.Explode(",", GetGlobalString("text_nationalities", ""))
 			for i, v in pairs(text_nationalities) do
 				nati:AddChoice(v, v, false)
 			end
@@ -398,11 +403,14 @@ function CreateCharacterSettingsContent()
 			self:SetBGColor(Color(0, 0, 0))
 		end
 		function desc:OnChange()
-			lply:SetDString("charcreate_desc", self:GetText())
+			LocalPlayer().charcreate_desc = self:GetText()
 		end
 		list:AddItem(desc)
 	end)
-	net.Start("yrp_char_getrole")
-		net.WriteString(lply:GetDString("charcreate_ruid", 0))
-	net.SendToServer()
+
+	timer.Simple(0.2, function()
+		net.Start("yrp_char_getrole")
+			net.WriteString(LocalPlayer().charcreate_ruid)
+		net.SendToServer()
+	end)
 end

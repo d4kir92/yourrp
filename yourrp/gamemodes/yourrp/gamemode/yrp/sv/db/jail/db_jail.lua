@@ -49,8 +49,8 @@ SQL_ADD_COLUMN(_db_name, "cell", "INT DEFAULT 1")
 --db_is_empty(_db_name)
 
 function teleportToReleasepoint(ply)
-	ply:SetDBool("injail", false)
-	ply:SetDInt("jailtime", 0)
+	ply:SetNW2Bool("injail", false)
+	ply:SetNW2Int("jailtime", 0)
 
 	local _tmpTele = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "releasepoint" .. "'")
 
@@ -73,9 +73,9 @@ end
 
 function teleportToJailpoint(ply, tim, police)
 	if tim != nil then
-		ply:SetDInt("jailtime", tim)
+		ply:SetNW2Int("jailtime", tim)
 		timer.Simple(0.2, function()
-			ply:SetDBool("injail", true)
+			ply:SetNW2Bool("injail", true)
 		end)
 
 		-- CELL
@@ -111,8 +111,8 @@ function teleportToJailpoint(ply, tim, police)
 				end
 				if empty then
 					-- DONE
-					ply:SetDInt("int_arrests", ply:GetDInt("int_arrests", 0) + 1)
-					SQL_UPDATE("yrp_characters", "int_arrests = '" .. ply:GetDInt("int_arrests", 0) .. "'", "uniqueID = '" .. ply:CharID() .. "'")
+					ply:SetNW2Int("int_arrests", ply:GetNW2Int("int_arrests", 0) + 1)
+					SQL_UPDATE("yrp_characters", "int_arrests = '" .. ply:GetNW2Int("int_arrests", 0) .. "'", "uniqueID = '" .. ply:CharID() .. "'")
 					if police and police:IsPlayer() then
 						SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_source_steamid", "'" .. os.time() .. "', 'LID_arrests', '" .. ply:SteamID64() .. "', '" .. police:SteamID64() .. "'")
 					end
@@ -166,9 +166,9 @@ net.Receive("dbAddJail", function(len, ply)
 
 				YRP.msg("note", p:Nick() .. " added to jail")
 
-				p:SetDInt("jailtime", _tmpTable[1].time)
+				p:SetNW2Int("jailtime", _tmpTable[1].time)
 				timer.Simple(0.02, function()
-					p:SetDBool("injail", true)
+					p:SetNW2Bool("injail", true)
 				end)
 			else
 				YRP.msg("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
@@ -195,17 +195,17 @@ net.Receive("dbRemJail", function(len, ply)
 		if _in_jailboard != nil then
 			for k, v in pairs(player.GetAll()) do
 				if v:SteamID() == _SteamID then
-					v:SetDInt("jailtime", _in_jailboard[1].time)
+					v:SetNW2Int("jailtime", _in_jailboard[1].time)
 					timer.Simple(0.02, function()
-						v:SetDBool("injail", true)
+						v:SetNW2Bool("injail", true)
 					end)
 				end
 			end
 		else
 			for k, v in pairs(player.GetAll()) do
 				if v:SteamID() == _SteamID then
-					v:SetDBool("injail", false)
-					v:SetDInt("jailtime", 0)
+					v:SetNW2Bool("injail", false)
+					v:SetNW2Int("jailtime", 0)
 				end
 			end
 		end

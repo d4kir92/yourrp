@@ -24,7 +24,7 @@ function CreateLawsContent(PARENT)
 		local lockdowntext = lawtab.string_lockdowntext
 		local lockdown = tobool(lawtab.bool_lockdown)
 
-		if !lply:GetDBool("bool_" .. "ismayor", false) then
+		if !lply:GetNW2Bool("bool_" .. "ismayor", false) then
 			if PARENT:IsValid() then
 				_la.laws = createD("RichText", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 				for i, v in pairs(string.Explode("\n", laws)) do
@@ -91,7 +91,7 @@ function CreateLawsContent(PARENT)
 			end
 
 			-- Lockdown Alarms
-			local alarms = GetGlobalDTable("lockdown_alarms")
+			local alarms = GetGlobalTable("lockdown_alarms")
 			local l_alarms = createD("DPanelList", PARENT, YRP.ctr(760), YRP.ctr(400), YRP.ctr(800), YRP.ctr(120 + 50 + 20))
 			l_alarms:EnableVerticalScrollbar()
 			l_alarms:SetSpacing(4)

@@ -29,7 +29,7 @@ function GM:DrawDeathNotice(x, y)
 end
 
 hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
-	if GetGlobalDBool("bool_yrp_hud", false) then
+	if GetGlobalBool("bool_yrp_hud", false) then
 		local lply = LocalPlayer()
 		if lply:IsValid() then
 			local hide = {
@@ -37,7 +37,7 @@ hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
 				CHudBattery = true,
 				CHudAmmo = true,
 				CHudSecondaryAmmo = true,
-				CHudCrosshair = GetGlobalDBool("bool_yrp_crosshair", false),
+				CHudCrosshair = GetGlobalBool("bool_yrp_crosshair", false),
 				CHudVoiceStatus = false,
 				CHudDamageIndicator = true,
 				CHudDeathNotice = true
@@ -93,9 +93,9 @@ local _yrp_icon = Material("vgui/yrp/logo100_beta.png")
 local star = Material("vgui/material/icon_star.png")
 
 function DrawEquipment(ply, name)
-	local _tmp = ply:GetDEntity(name, NULL)
+	local _tmp = ply:GetNW2Entity(name, NULL)
 	if ea(_tmp) then
-		if tonumber(ply:GetDString("view_range", "0")) <= 0 then
+		if tonumber(ply:GetNW2String("view_range", "0")) <= 0 then
 			_tmp:SetNoDraw(true)
 		else
 			_tmp:SetNoDraw(false)
@@ -111,7 +111,7 @@ hook.Add("HUDPaint", "yrp_hud_safezone", function()
 end)
 
 hook.Add("HUDPaint", "yrp_hud_alert", function()
-	local text = GetGlobalDString("yrp_alert", "")
+	local text = GetGlobalString("yrp_alert", "")
 	local font = "Y_100_500"
 
 	surface.SetFont(font)
@@ -188,7 +188,7 @@ end)
 local HUD_AVATAR = nil
 local PAvatar = vgui.Create("DPanel")
 function PAvatar:Paint(pw, ph)
-	if GetGlobalDBool("bool_yrp_hud", false) then
+	if GetGlobalBool("bool_yrp_hud", false) then
 		render.ClearStencil()
 		render.SetStencilEnable(true)
 
@@ -226,34 +226,35 @@ timer.Simple(1, function()
 	ava.version = -1
 	function HUD_AVATARUpdate()
 		local lply = LocalPlayer()
+		if lply != NULL then
+			if GetGlobalBool("bool_yrp_hud", false) then
+				if lply:GetNW2Int("hud_version", 0) != ava.version then
+					ava.version = lply:GetNW2Int("hud_version", 0)
 
-		if GetGlobalDBool("bool_yrp_hud", false) then
-			if lply:GetDInt("hud_version", 0) != ava.version then
-				ava.version = lply:GetDInt("hud_version", 0)
+					HUD_AVATAR:Show()
 
-				HUD_AVATAR:Show()
+					ava.w = lply:HudValue("AV", "SIZE_W")
+					ava.h = lply:HudValue("AV", "SIZE_H")
+					ava.x = lply:HudValue("AV", "POSI_X")
+					ava.y = lply:HudValue("AV", "POSI_Y")
+					ava.visible = lply:HudValue("AV", "VISI")
 
-				ava.w = lply:HudValue("AV", "SIZE_W")
-				ava.h = lply:HudValue("AV", "SIZE_H")
-				ava.x = lply:HudValue("AV", "POSI_X")
-				ava.y = lply:HudValue("AV", "POSI_Y")
-				ava.visible = lply:HudValue("AV", "VISI")
+					PAvatar:SetPos(ava.x, ava.y)
+					PAvatar:SetSize(ava.h, ava.h)
+					HUD_AVATAR:SetPlayer(LocalPlayer(), ava.h)
+					if !ava.visible then
+						PAvatar:SetSize(0, 0)
+					end
 
-				PAvatar:SetPos(ava.x, ava.y)
-				PAvatar:SetSize(ava.h, ava.h)
-				HUD_AVATAR:SetPlayer(LocalPlayer(), ava.h)
-				if !ava.visible then
-					PAvatar:SetSize(0, 0)
+					HUD_AVATAR:SetPos(0, 0)
+					HUD_AVATAR:SetSize(PAvatar:GetWide(), PAvatar:GetTall())
 				end
+			else
+				if lply:GetNW2Int("hud_version", 0) != ava.version then
+					ava.version = lply:GetNW2Int("hud_version", 0)
 
-				HUD_AVATAR:SetPos(0, 0)
-				HUD_AVATAR:SetSize(PAvatar:GetWide(), PAvatar:GetTall())
-			end
-		else
-			if lply:GetDInt("hud_version", 0) != ava.version then
-				ava.version = lply:GetDInt("hud_version", 0)
-
-				HUD_AVATAR:Hide()
+					HUD_AVATAR:Hide()
+				end
 			end
 		end
 
@@ -281,9 +282,9 @@ YRP_PM.model = ""
 function YRP_PMUpdate()
 	local lply = LocalPlayer()
 	if IsValid(lply) then
-		if GetGlobalDBool("bool_yrp_hud", false) then
-			if lply:GetDInt("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetPlayerModel() then
-				YRP_PM.version = lply:GetDInt("hud_version", 0)
+		if GetGlobalBool("bool_yrp_hud", false) then
+			if lply:GetNW2Int("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetPlayerModel() then
+				YRP_PM.version = lply:GetNW2Int("hud_version", 0)
 
 				YRP_PM:Show()
 
@@ -318,10 +319,10 @@ function YRP_PMUpdate()
 				end
 			end
 
-			if IsValid(SL) and (lply:GetDInt("hud_version", 0) != SL.version or SL.url != GetGlobalDString("text_server_logo", "")) then
-				SL.version = lply:GetDInt("hud_version", 0)
+			if IsValid(SL) and (lply:GetNW2Int("hud_version", 0) != SL.version or SL.url != GetGlobalString("text_server_logo", "")) then
+				SL.version = lply:GetNW2Int("hud_version", 0)
 				SL.visible = lply:HudValue("SL", "VISI")
-				SL.url = GetGlobalDString("text_server_logo", "")
+				SL.url = GetGlobalString("text_server_logo", "")
 
 				SL.w = lply:HudValue("SL", "SIZE_W")
 				SL.h = lply:HudValue("SL", "SIZE_H")
@@ -335,8 +336,8 @@ function YRP_PMUpdate()
 				SL:SetVisible(SL.visible)
 			end
 		else
-			if lply:GetDInt("hud_version", 0) != YRP_PM.version then
-				YRP_PM.version = lply:GetDInt("hud_version", 0)
+			if lply:GetNW2Int("hud_version", 0) != YRP_PM.version then
+				YRP_PM.version = lply:GetNW2Int("hud_version", 0)
 
 				YRP_PM:Hide()
 				YRP_PM:SetModel("")
@@ -374,11 +375,15 @@ function TestYourRPContent()
 				end
 			end
 		end
-		LocalPlayer():SetDString("badyourrpcontent", str)
-		LocalPlayer():SetDBool("badyourrpcontent", true)
+		if LocalPlayer() != NULL then
+			LocalPlayer():SetNW2String("badyourrpcontent", str)
+			LocalPlayer():SetNW2Bool("badyourrpcontent", true)
+		end
 	end
 end
-TestYourRPContent()
+timer.Simple(4, function()
+	TestYourRPContent()
+end)
 
 local function HUDPermille()
 	local lply = LocalPlayer()
@@ -395,16 +400,16 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		draw.SimpleText("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	
-	if lply:GetDBool("yrp_spawning", false) then
+	if lply:GetNW2Bool("yrp_spawning", false) then
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 255)) -- Black Background - Respawning
 
 		draw.SimpleText(YRP.lang_string("LID_pleasewait"), "Y_18_500", ScrW() / 2, ScrH() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		draw.SimpleText(YRP.lang_string("LID_respawning"), "Y_40_500", ScrW() / 2, ScrH() / 2 + YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	if lply:GetDBool("yrp_speaking", false) then
+	if lply:GetNW2Bool("yrp_speaking", false) then
 		local text = YRP.lang_string("LID_youarespeaking")
-		if lply:GetDBool("mute_voice", false) then
+		if lply:GetNW2Bool("mute_voice", false) then
 			text = text .. " (" .. YRP.lang_string("LID_speaklocal") .. ")"
 		end
 		if GetVoiceRangeText(lply) != "" then
@@ -419,14 +424,14 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(10, 10, 10))
 	end
 
-	if GetGlobalDBool("blinded", false) then
+	if GetGlobalBool("blinded", false) then
 		surfaceBox(0, 0, ScrW(), ScrH(), Color(255, 255, 255, 255))
 		surfaceText(YRP.lang_string("LID_blinded"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(100), Color(255, 255, 0, 255), 1, 1)
 	end
 	if lply:IsFlagSet(FL_FROZEN) then
 		surfaceText(YRP.lang_string("LID_frozen"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(150), Color(255, 255, 0, 255), 1, 1)
 	end
-	if lply:GetDBool("cloaked", false) then
+	if lply:GetNW2Bool("cloaked", false) then
 		surfaceText(YRP.lang_string("LID_cloaked"), "Y_30_500", ScrW2(), ScrH2() - YRP.ctr(400), Color(255, 255, 0, 255), 1, 1)
 	end
 
@@ -443,9 +448,9 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		HudCrosshair()
 	end
 
-	local _target = LocalPlayer():GetDString("hittargetName", "")
+	local _target = LocalPlayer():GetNW2String("hittargetName", "")
 	if !strEmpty(_target) then
-		surfaceText(YRP.lang_string("LID_target") .. ": " .. LocalPlayer():GetDString("hittargetName", ""), "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 0, 0, 255), 0, 0)
+		surfaceText(YRP.lang_string("LID_target") .. ": " .. LocalPlayer():GetNW2String("hittargetName", ""), "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 0, 0, 255), 0, 0)
 		LocalPlayer():drawHitInfo()
 	end
 
@@ -465,7 +470,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		surface.DrawTexturedRect(_sp.x + _sp.w / 2 - ctrb(246) / 2, _sp.y - ctrb(80 + 10), ctrb(246), ctrb(80))
 	end
 
-	if GetGlobalDBool("bool_wanted_system", false) and false then
+	if GetGlobalBool("bool_wanted_system", false) and false then
 		local stars = {}
 		stars.size = YRP.ctr(80)
 		stars.cur = stars.size
@@ -489,7 +494,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		-- Current Stars
 		surface.SetDrawColor(255, 255, 255, 255)
 		for x = 1, 5 do
-			if lply:GetDInt("yrp_stars", 0) >= x then
+			if lply:GetNW2Int("yrp_stars", 0) >= x then
 				surface.DrawTexturedRect(stars.x + x * stars.size + stars.br, stars.y + stars.br, stars.cur, stars.cur)
 			end
 		end
@@ -499,15 +504,15 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		draw.SimpleText("YOURRP CONTENT IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	if LocalPlayer():GetDString("badyourrpcontent", "") != "" then
+	if LocalPlayer():GetNW2String("badyourrpcontent", "") != "" then
 		draw.SimpleText("Your addon is outdated, please delete/redownload (addons folder):", "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		local addons = string.Explode("\n", LocalPlayer():GetDString("badyourrpcontent", ""))
+		local addons = string.Explode("\n", LocalPlayer():GetNW2String("badyourrpcontent", ""))
 		for i, v in pairs(addons) do
 			draw.SimpleText("• " .. v, "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50) + i * YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 	end
 
-	if GetGlobalDBool("bool_radiation", false) then
+	if GetGlobalBool("bool_radiation", false) then
 		LocalPlayer().radiation = LocalPlayer().radiation or CurTime()
 		if LocalPlayer().radiation < CurTime() then
 			LocalPlayer().radiation = CurTime() + math.Rand(0.1, 0.5)
@@ -554,7 +559,7 @@ function YRPInitEdgeHud()
 					return 100
 				end,
 				IsDisabled = function(  )
-					return !GetGlobalDBool("bool_hunger", false)
+					return !GetGlobalBool("bool_hunger", false)
 				end
 			})
 
@@ -568,7 +573,7 @@ function YRPInitEdgeHud()
 					return 100
 				end,
 				IsDisabled = function(  )
-					return !GetGlobalDBool("bool_thirst", false)
+					return !GetGlobalBool("bool_thirst", false)
 				end
 			})
 

@@ -22,17 +22,17 @@ end
 
 function CreateWebsiteContent(PARENT)
 	local site = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
-	site:OpenURL(GetGlobalDString("text_social_website", ""))
+	site:OpenURL(GetGlobalString("text_social_website", ""))
 end
 
 function CreateForumContent(PARENT)
 	local site = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	
-	site:OpenURL(GetGlobalDString("text_social_forum", ""))
+	site:OpenURL(GetGlobalString("text_social_forum", ""))
 end
 
 function CreateRulesContent(PARENT)
-	local serverrules = GetGlobalDString("text_server_rules", "")
+	local serverrules = GetGlobalString("text_server_rules", "")
 
 	local page = createD("DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20))
 	function page:Paint(pw, ph)
@@ -52,8 +52,8 @@ function CreateRulesContent(PARENT)
 end
 
 function CreateDiscordContent(PARENT)
-	local link = GetGlobalDString("text_social_discord", "")
-	local widgetid = GetGlobalDString("text_social_discord_widgetid", "")
+	local link = GetGlobalString("text_social_discord", "")
+	local widgetid = GetGlobalString("text_social_discord_widgetid", "")
 
 	local page = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function page:Paint(pw, ph)
@@ -79,9 +79,9 @@ function CreateDiscordContent(PARENT)
 end
 
 function CreateTeamspeakContent(PARENT)
-	local ip = GetGlobalDString("text_social_teamspeak_ip", "")
-	local port = GetGlobalDString("text_social_teamspeak_port", "")
-	local query_port = GetGlobalDString("text_social_teamspeak_query_port", "")
+	local ip = GetGlobalString("text_social_teamspeak_ip", "")
+	local port = GetGlobalString("text_social_teamspeak_port", "")
+	local query_port = GetGlobalString("text_social_teamspeak_query_port", "")
 	YRP.msg("gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
 
 	if !strEmpty(ip) then
@@ -133,7 +133,7 @@ function CreateCollectionContent(PARENT)
 end
 
 function CreateTwitchContent(PARENT)
-	local link = GetGlobalDString("text_social_twitch", "")
+	local link = GetGlobalString("text_social_twitch", "")
 	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
@@ -154,7 +154,7 @@ function CreateTwitchContent(PARENT)
 end
 
 function CreateYoutubeContent(PARENT)
-	local link = GetGlobalDString("text_social_youtube", "")
+	local link = GetGlobalString("text_social_youtube", "")
 	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
@@ -173,7 +173,7 @@ function CreateYoutubeContent(PARENT)
 end
 
 function CreateTwitterContent(PARENT)
-	local link = GetGlobalDString("text_social_twitter", "")
+	local link = GetGlobalString("text_social_twitter", "")
 	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
@@ -194,7 +194,7 @@ function CreateTwitterContent(PARENT)
 end
 
 function CreateSteamGroupContent(PARENT)
-	local link = GetGlobalDString("text_social_steamgroup", "")
+	local link = GetGlobalString("text_social_steamgroup", "")
 	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
@@ -215,7 +215,7 @@ function CreateSteamGroupContent(PARENT)
 end
 
 function CreateFacebookContent(PARENT)
-	local link = GetGlobalDString("text_social_facebook", "")
+	local link = GetGlobalString("text_social_facebook", "")
 	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
@@ -236,7 +236,7 @@ function CreateFacebookContent(PARENT)
 end
 
 function CreateInstagramContent(PARENT)
-	local link = GetGlobalDString("text_social_instagram", "")
+	local link = GetGlobalString("text_social_instagram", "")
 	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
@@ -289,7 +289,7 @@ function OpenCombinedMenu()
 		sites[c].content = CreateCharContent
 		c = c + 1
 
-		if !strEmpty(GetGlobalDString("sting_laws", "")) or lply:GetDBool("bool_" .. "ismayor", false) then
+		if !strEmpty(GetGlobalString("sting_laws", "")) or lply:GetNW2Bool("bool_" .. "ismayor", false) then
 			sites[c] = {}
 			sites[c].name = "LID_laws"
 			sites[c].icon = "gavel"
@@ -302,7 +302,7 @@ function OpenCombinedMenu()
 		c = c + 1
 
 		local community = false
-		if !strEmpty(GetGlobalDString("text_social_website", "")) then
+		if !strEmpty(GetGlobalString("text_social_website", "")) then
 			sites[c] = {}
 			sites[c].name = "LID_website"
 			sites[c].icon = "web"
@@ -311,7 +311,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalDString("text_social_forum", "")) then
+		if !strEmpty(GetGlobalString("text_social_forum", "")) then
 			sites[c] = {}
 			sites[c].name = "LID_forum"
 			sites[c].icon = "forum"
@@ -320,7 +320,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 		
-		if !strEmpty(GetGlobalDString("text_server_rules", "")) then
+		if !strEmpty(GetGlobalString("text_server_rules", "")) then
 			sites[c] = {}
 			sites[c].name = "LID_rules"
 			sites[c].icon = "policy"
@@ -329,7 +329,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalDString("text_social_discord", "")) then
+		if !strEmpty(GetGlobalString("text_social_discord", "")) then
 			sites[c] = {}
 			sites[c].name = "LID_discord"
 			sites[c].icon = "discord_white"
@@ -338,7 +338,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 		
-		if !strEmpty(GetGlobalDString("text_social_teamspeak_ip", "")) then
+		if !strEmpty(GetGlobalString("text_social_teamspeak_ip", "")) then
 			sites[c] = {}
 			sites[c].name = "LID_teamspeak"
 			sites[c].icon = "ts_white"
@@ -356,7 +356,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalDString("text_social_youtube", "")) then
+		if !strEmpty(GetGlobalString("text_social_youtube", "")) then
 			sites[c] = {}
 			sites[c].name = "LID_youtube"
 			sites[c].icon = "64_youtube"
@@ -365,7 +365,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalDString("text_social_twitch", "")) then
+		if !strEmpty(GetGlobalString("text_social_twitch", "")) then
 			sites[c] = {}
 			sites[c].name = "LID_twitch"
 			sites[c].icon = "64_twitch"
@@ -374,7 +374,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalDString("text_social_twitter", "")) then
+		if !strEmpty(GetGlobalString("text_social_twitter", "")) then
 			sites[c] = {}
 			sites[c].name = "LID_twitter"
 			sites[c].icon = "64_twitter-square"
@@ -383,7 +383,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalDString("text_social_steamgroup", "")) then
+		if !strEmpty(GetGlobalString("text_social_steamgroup", "")) then
 			sites[c] = {}
 			sites[c].name = "LID_steamgroup"
 			sites[c].icon = "64_steam-square"
@@ -392,7 +392,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalDString("text_social_facebook", "")) then
+		if !strEmpty(GetGlobalString("text_social_facebook", "")) then
 			sites[c] = {}
 			sites[c].name = "LID_facebook"
 			sites[c].icon = "64_facebook-square"
@@ -401,7 +401,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalDString("text_social_instagram", "")) then
+		if !strEmpty(GetGlobalString("text_social_instagram", "")) then
 			sites[c] = {}
 			sites[c].name = "Instagram"
 			sites[c].icon = "64_instagram"
@@ -433,18 +433,18 @@ function OpenCombinedMenu()
 		c = c + 1
 				
 		cm.win = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
-		cm.win:SetTitle(SQL_STR_OUT(GetGlobalDString("text_server_name", "")))
+		cm.win:SetTitle(SQL_STR_OUT(GetGlobalString("text_server_name", "")))
 		cm.win:MakePopup()
 		--cm.win:SetHeaderHeight(YRP.ctr(100))
 		cm.win:SetBorder(0)
 		function cm.win:Paint(pw, ph)
-			if SQL_STR_OUT(GetGlobalDString("text_server_name", "")) != self:GetTitle() then
-				self:SetTitle(SQL_STR_OUT(GetGlobalDString("text_server_name", "")))
+			if SQL_STR_OUT(GetGlobalString("text_server_name", "")) != self:GetTitle() then
+				self:SetTitle(SQL_STR_OUT(GetGlobalString("text_server_name", "")))
 			end
 			hook.Run("YFramePaint", self, pw, ph)
 		end
 		cm.win:CanMaximise()
-		cm.win:SetMaximised(LocalPlayer():GetDBool("combinedmaximised", true), "COMBINED")
+		cm.win:SetMaximised(LocalPlayer():GetNW2Bool("combinedmaximised", true), "COMBINED")
 		cm.win:SetSizable(true)
 		cm.win:SetMinWidth(700)
 		cm.win:SetMinHeight(700)
@@ -471,7 +471,7 @@ function OpenCombinedMenu()
 		cm.menu:SetText("")
 		cm.menu.pw = 10
 		cm.menu.ph = YRP.ctr(64) + 2 * br
-		cm.menu.expanded = lply:GetDBool("combined_expanded", true)
+		cm.menu.expanded = lply:GetNW2Bool("combined_expanded", true)
 		local font = "Y_" .. math.Clamp(math.Round(cm.menu.ph - 2 * br), 4, 100) ..  "_500"
 		function cm.menu:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"))
@@ -495,7 +495,7 @@ function OpenCombinedMenu()
 
 				cm.menu.expanded = true
 			end
-			lply:SetDBool("combined_expanded", cm.menu.expanded)
+			lply:SetNW2Bool("combined_expanded", cm.menu.expanded)
 		end
 		function cm.menu.expander:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)

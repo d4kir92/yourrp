@@ -15,7 +15,7 @@ if SERVER then
 				entry["entry.38355044"] = "SN:" .. tostring(GetHostName())
 
 				-- Gamemodename
-				entry["entry.809731523"] = "GN:" .. GetGlobalDString("text_gamemode_name", "lol")
+				entry["entry.809731523"] = "GN:" .. GetGlobalString("text_gamemode_name", "lol")
 
 				-- MaxPlayers
 				entry["entry.1368236947"] = tostring(game.MaxPlayers())

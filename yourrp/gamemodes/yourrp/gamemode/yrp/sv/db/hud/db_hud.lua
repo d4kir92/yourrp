@@ -1010,7 +1010,7 @@ function Player:HudLoadout()
 			net.WriteTable(hudeles)
 		net.Send(self)
 	end
-	self:SetDInt("hud_version", self:GetDInt("hud_version", 0) + 1)
+	self:SetNW2Int("hud_version", self:GetNW2Int("hud_version", 0) + 1)
 end
 
 local hud_f = 0

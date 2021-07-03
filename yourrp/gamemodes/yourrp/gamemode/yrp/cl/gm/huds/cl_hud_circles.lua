@@ -128,7 +128,7 @@ function HUDCircles()
 	local lply = LocalPlayer()
 	
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() then
-		if GetGlobalDBool("bool_yrp_hud", false) and lply:GetDString("string_hud_design") == "Circles" then
+		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Circles" then
 			HUDCirclesDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
 			HUDCirclesDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())
 
@@ -201,7 +201,7 @@ function HUDCircles()
 				HUDCirclesDrawText("WN", wep:GetPrintName())
 			end
 
-			HUDCirclesDrawText("SN", SQL_STR_OUT(GetGlobalDString("text_server_name", "SERVERNAME")))
+			HUDCirclesDrawText("SN", SQL_STR_OUT(GetGlobalString("text_server_name", "SERVERNAME")))
 
 			HUDCirclesDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(2))
 			HUDCirclesDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(2))

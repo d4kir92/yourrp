@@ -31,9 +31,9 @@ function Player:arrest(time, Arrester)
 	--Description: Arrest a player.
 	YRP.msg("darkrp", "arrest(" .. tostring(time) .. ", " .. Arrester:Nick() .. ")")
 
-	self:SetDInt("jailtime", time)
+	self:SetNW2Int("jailtime", time)
 	timer.Simple(0.02, function()
-		self:SetDBool("injail", true)
+		self:SetNW2Bool("injail", true)
 	end)
 end
 
@@ -182,9 +182,9 @@ function Player:setDarkRPVar(variable, value, target)
 	target = target or self
 
 	if variable == "Thirst" then
-		target:Drink(value - target:GetDFloat("thirst", 0.0))
+		target:Drink(value - target:GetNW2Float("thirst", 0.0))
 	elseif variable == "Energy" then
-		target:Eat(value - target:GetDFloat("hunger", 0.0))
+		target:Eat(value - target:GetNW2Float("hunger", 0.0))
 	end
 
 	if isnumber(value) then
@@ -245,7 +245,7 @@ end
 function Player:unArrest(Unarrester)
 	--Description: Unarrest a player.
 	YRP.msg("darkrp", "unArrest(" .. Unarrester:YRPName() .. ")")
-	self:SetDBool("injail", false)
+	self:SetNW2Bool("injail", false)
 end
 
 function Player:unWanted(actor)

@@ -42,7 +42,7 @@ end
 
 function SWEP:Reload()
 	local pos = ""
-	for i, v in pairs(GetGlobalDTable("yrp_releasepoints")) do
+	for i, v in pairs(GetGlobalTable("yrp_releasepoints")) do
 		pos = v.pos
 	end
 	if pos != "" then
@@ -99,7 +99,7 @@ function SWEP:SecondaryAttack()
 		pos = tr.HitPos or pos
 
 		local found = false
-		for i, v in pairs(GetGlobalDTable("yrp_releasepoints")) do
+		for i, v in pairs(GetGlobalTable("yrp_releasepoints")) do
 			local p = StringToVector(v.pos)
 			if p:Distance(pos) < size * 2 then
 				SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
@@ -109,7 +109,7 @@ function SWEP:SecondaryAttack()
 		end
 
 		if !found then
-			for i, v in pairs(GetGlobalDTable("yrp_releasepoints")) do
+			for i, v in pairs(GetGlobalTable("yrp_releasepoints")) do
 				local p = StringToVector(v.pos)
 				if p:Distance(ply:GetPos()) < 160 then
 					SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
@@ -141,7 +141,7 @@ if CLIENT then
 				g = math.random(0, 255)
 				b = math.random(0, 255)
 			end
-			for i, v in pairs(GetGlobalDTable("yrp_releasepoints")) do
+			for i, v in pairs(GetGlobalTable("yrp_releasepoints")) do
 				local pos = StringToVector(v.pos)
 				if LocalPlayer():GetPos():Distance(pos) < 6000 then
 					render.SetColorMaterial()

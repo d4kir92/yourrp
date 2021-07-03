@@ -3,7 +3,7 @@
 local Player = FindMetaTable("Player")
 
 function Player:GetInterfaceDesign()
-	return GetGlobalDString("string_interface_design", "Material")
+	return GetGlobalString("string_interface_design", "Material")
 end
 
 function Player:InterfaceValue(element, art)
@@ -16,7 +16,7 @@ function Player:InterfaceValue(element, art)
 	elseif table.HasValue(ibools, art) then
 		return false
 	elseif table.HasValue(icolors, art) then
-		local icolor = self:GetDString("color_IF_" .. self:GetInterfaceDesign() .. "_" .. element .. "_" .. art, "0, 0, 0, 100")
+		local icolor = self:GetNW2String("color_IF_" .. self:GetInterfaceDesign() .. "_" .. element .. "_" .. art, "0, 0, 0, 100")
 		icolor = string.Explode(",", icolor)
 		return Color(icolor[1], icolor[2], icolor[3], icolor[4] or 255)
 	elseif table.HasValue(iints, art) then

@@ -8,15 +8,15 @@ function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full
 	function tmp:Paint(pw, ph)
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
 
-		draw.RoundedBox(0, 0, 0, (mp:GetDInt(item, -1) / mp:GetDInt(item .. "Max", -1)) * YRP.ctr(540) , ph, Color(0, 0, 255, 200))
+		draw.RoundedBox(0, 0, 0, (mp:GetNW2Int(item, -1) / mp:GetNW2Int(item .. "Max", -1)) * YRP.ctr(540) , ph, Color(0, 0, 255, 200))
 
-		draw.SimpleTextOutlined(mp:GetDInt(item, -1) .. "/" .. mp:GetDInt(item .. "Max", -1) .. " " .. name, "Y_24_500", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(mp:GetNW2Int(item, -1) .. "/" .. mp:GetNW2Int(item .. "Max", -1) .. " " .. name, "Y_24_500", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	local tmpBut = createD("DButton", tmp, YRP.ctr(220), h, w - YRP.ctr(220), 0)
 	tmpBut:SetText("")
 	function tmpBut:Paint(pw, ph)
-		local cost = mp:GetDInt(item .. "Cost")
-		if mp:GetDInt(item, 0) < mp:GetDInt(item .. "Max", 0) then
+		local cost = mp:GetNW2Int(item .. "Cost")
+		if mp:GetNW2Int(item, 0) < mp:GetNW2Int(item .. "Max", 0) then
 			if self:IsHovered() then
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
 				draw.SimpleTextOutlined(formatMoney(cost, ply), "Y_24_500", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -41,9 +41,9 @@ function tempInfo(mp, parent, w, h, x, y)
 	function tmp:Paint(pw, ph)
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
 
-		draw.RoundedBox(0, 0, 0, (mp:GetDFloat("temp", 0.0) / mp:GetDFloat("tempMax", 0.0)) * YRP.ctr(540) , ph, Color(0, 0, 255, 200))
+		draw.RoundedBox(0, 0, 0, (mp:GetNW2Float("temp", 0.0) / mp:GetNW2Float("tempMax", 0.0)) * YRP.ctr(540) , ph, Color(0, 0, 255, 200))
 
-		draw.SimpleTextOutlined(math.Round(tonumber(mp:GetDFloat("temp", 0.0)),2) .. " °C", "Y_24_500", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(math.Round(tonumber(mp:GetNW2Float("temp", 0.0)),2) .. " °C", "Y_24_500", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 
@@ -62,8 +62,7 @@ net.Receive("getMoneyPrintMenu", function(len)
 		end
 		function upgradeframe:Paint(pw, ph)
 			draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(40, 40, 40, 200))
-
-			draw.SimpleTextOutlined(YRP.lang_string("LID_money_printer"), "Y_24_500", pw/2, YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_money_printer") .. "[" .. mp:EntIndex() .. "]", "Y_24_500", pw/2, YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		end
 
 		--CPU
@@ -76,7 +75,7 @@ net.Receive("getMoneyPrintMenu", function(len)
 		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 140), "printer", "upgradePrinter",YRP.lang_string("LID_printer"),YRP.lang_string("LID_upgrade"),YRP.lang_string("LID_max"))
 
 		--Printer
-		if !GetGlobalDBool("bool_money_printer_spawn_money", false) then
+		if !GetGlobalBool("bool_money_printer_spawn_money", false) then
 			moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 220), "storage", "upgradeStorage",YRP.lang_string("LID_storage"),YRP.lang_string("LID_upgrade"),YRP.lang_string("LID_max"))
 		end
 
@@ -92,19 +91,19 @@ net.Receive("getMoneyPrintMenu", function(len)
 		--gather
 		local moneyInfo = createD("DPanel", upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 690))
 		function moneyInfo:Paint(pw, ph)
-			if !GetGlobalDBool("bool_money_printer_spawn_money", false) then
+			if !GetGlobalBool("bool_money_printer_spawn_money", false) then
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(0, 0, 0, 200))
 
-				draw.RoundedBox(0, 0, 0, (mp:GetDInt("money", -1) / mp:GetDInt("moneyMax", -1)) * YRP.ctr(360) , ph, Color(0, 0, 255, 200))
+				draw.RoundedBox(0, 0, 0, (mp:GetNW2Int("money", -1) / mp:GetNW2Int("moneyMax", -1)) * YRP.ctr(360) , ph, Color(0, 0, 255, 200))
 
-				draw.SimpleTextOutlined(formatMoney(mp:GetDInt("money", -1), ply) .. "/" .. formatMoney(mp:GetDInt("moneyMax" , -1), ply), "Y_24_500", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(formatMoney(mp:GetNW2Int("money", -1), ply) .. "/" .. formatMoney(mp:GetNW2Int("moneyMax" , -1), ply), "Y_24_500", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			end
 		end
 
 		local gatherMoney = createD("DButton", moneyInfo, YRP.ctr(220), YRP.ctr(60), YRP.ctr(540), YRP.ctr(0))
 		gatherMoney:SetText("")
 		function gatherMoney:Paint(pw, ph)
-			if !GetGlobalDBool("bool_money_printer_spawn_money", false) then
+			if !GetGlobalBool("bool_money_printer_spawn_money", false) then
 				if self:IsHovered() then
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
 					draw.SimpleTextOutlined(YRP.lang_string("LID_gather"), "Y_24_500", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
@@ -115,7 +114,7 @@ net.Receive("getMoneyPrintMenu", function(len)
 			end
 		end
 		function gatherMoney:DoClick()
-			if !GetGlobalDBool("bool_money_printer_spawn_money", false) then
+			if !GetGlobalBool("bool_money_printer_spawn_money", false) then
 				net.Start("withdrawMoney")
 					net.WriteEntity(mp)
 				net.SendToServer()
@@ -127,14 +126,14 @@ net.Receive("getMoneyPrintMenu", function(len)
 		workingB:SetText("")
 		function workingB:Paint(pw, ph)
 			local working =YRP.lang_string("LID_off")
-			if mp:GetDBool("working") then
+			if mp:GetNW2Bool("working") then
 				working =YRP.lang_string("LID_on")
 			end
 			if self:IsHovered() then
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 0, 200))
 				draw.SimpleTextOutlined(YRP.lang_string("LID_toggle"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			else
-				if mp:GetDBool("working") then
+				if mp:GetNW2Bool("working") then
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(0, 255, 0, 200))
 				else
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 0, 0, 200))

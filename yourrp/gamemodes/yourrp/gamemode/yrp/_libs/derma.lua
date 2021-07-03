@@ -280,7 +280,7 @@ end
 
 function interfaceDesign()
 	local lply = LocalPlayer()
-	local design = lply:GetDString("interface_design", "Material Design 1")
+	local design = lply:GetNW2String("interface_design", "Material Design 1")
 
 	if yrp_if[design] ~= nil then
 		return design
@@ -292,31 +292,31 @@ end
 function InterfaceBorder()
 	local lply = LocalPlayer()
 
-	return lply:GetDBool("interface_border", true)
+	return lply:GetNW2Bool("interface_border", true)
 end
 
 function InterfaceRounded()
 	local lply = LocalPlayer()
 
-	return lply:GetDBool("interface_rounded", true)
+	return lply:GetNW2Bool("interface_rounded", true)
 end
 
 function InterfaceTransparent()
 	local lply = LocalPlayer()
 
-	return lply:GetDBool("interface_transparent", true)
+	return lply:GetNW2Bool("interface_transparent", true)
 end
 
 function InterfaceColor()
 	local lply = LocalPlayer()
 
-	return lply:GetDString("interface_color", "blue")
+	return lply:GetNW2String("interface_color", "blue")
 end
 
 function InterfaceStyle()
 	local lply = LocalPlayer()
 
-	return lply:GetDString("interface_style", "dark")
+	return lply:GetNW2String("interface_style", "dark")
 end
 
 local yrp_colors = {}
@@ -1126,7 +1126,7 @@ function createMDMenu(parent, w, h, x, y)
 	function tmp.bot:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 20))
 
-		draw.SimpleText(GetGlobalDString("text_server_name", "-"), "Y_18_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(GetGlobalString("text_server_name", "-"), "Y_18_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, GetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
@@ -1527,7 +1527,7 @@ hook.Add("Think", "yrp_motion", function()
 end)
 
 function HUDMOTIONX(px)
-	if GetGlobalDBool("bool_yrp_hud_swaying", false) then
+	if GetGlobalBool("bool_yrp_hud_swaying", false) then
 		local lply = LocalPlayer()
 
 		return px + lply.swayx * 10
@@ -1537,7 +1537,7 @@ function HUDMOTIONX(px)
 end
 
 function HUDMOTIONY(py)
-	if GetGlobalDBool("bool_yrp_hud_swaying", false) then
+	if GetGlobalBool("bool_yrp_hud_swaying", false) then
 		local lply = LocalPlayer()
 
 		return py + -lply.swayy * 10

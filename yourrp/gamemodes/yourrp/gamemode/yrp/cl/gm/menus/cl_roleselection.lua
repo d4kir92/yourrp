@@ -20,17 +20,13 @@ local menu = nil
 
 
 function CreateRolePreviewContent()
-	local lply = LocalPlayer()
-
-
-
 	local parent = CharacterMenu or RoleMenu
 
 
 
 	local nw = YRP.ctr(config.w)
 	local nh = YRP.ctr(config.h)
-	if !LocalPlayer():GetDBool("cc", true) then
+	if !LocalPlayer().cc then
 		nw = parent:GetWide()
 		nh = parent:GetTall()
 	end
@@ -48,7 +44,7 @@ function CreateRolePreviewContent()
 	-- Fake POPUP
 	local win = createD("DPanel", parent, nw, nh, 0, 0)
 	function win:Paint(pw, ph)
-		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
+		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, LocalPlayer():InterfaceValue("YFrame", "NC"))
 	end
 	win:Center()
 
@@ -56,10 +52,8 @@ function CreateRolePreviewContent()
 
 	net.Receive("yrp_roleselection_getrole", function(len)
 		local rol = net.ReadTable()
-
-
-
-		lply:SetDBool("rolepreview", true)
+	
+		LocalPlayer().rolepreview = true
 	
 
 
@@ -88,7 +82,7 @@ function CreateRolePreviewContent()
 			self:SetBGColor(Color(50, 50, 50))
 			self:SetFGColor(Color(255, 255, 255))
 		end
-		desc:SetText(rol.string_description)
+		desc:SetText(tostring(rol.string_description))
 
 		local salaryheader = createD("YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), nh - YRP.ctr(hh + 20 + hh))
 		salaryheader:SetText("LID_salary")
@@ -112,8 +106,8 @@ function CreateRolePreviewContent()
 
 		local pms = createD("DModelPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20), ew + 2 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh))
 		pms.models = string.Explode(",", rol.pms)
-		lply:SetDString("charcreate_rpmid", 1)
-		pms.id = lply:GetDString("charcreate_rpmid", 1)
+		LocalPlayer().charcreate_rpmid = 1
+		pms.id = LocalPlayer().charcreate_rpmid
 		pms:SetCamPos( Vector( 80, 0, 40 ) )
 		pms:SetLookAt( Vector( 0, 0, 40 ) )
 		pms:SetFOV( 45 )
@@ -163,7 +157,7 @@ function CreateRolePreviewContent()
 			if pms.id + 1 <= table.Count(pms.models) then
 				pms.id = pms.id + 1
 				pms:SetModel(pms.models[pms.id])
-				lply:SetDString("charcreate_rpmid", pms.id)
+				LocalPlayer().charcreate_rpmid = pms.id
 			end
 		end
 
@@ -182,7 +176,7 @@ function CreateRolePreviewContent()
 			if pms.id - 1 > 0 then
 				pms.id = pms.id - 1
 				pms:SetModel(pms.models[pms.id])
-				lply:SetDString("charcreate_rpmid", pms.id)
+				LocalPlayer().charcreate_rpmid = pms.id
 			end
 		end
 
@@ -196,7 +190,7 @@ function CreateRolePreviewContent()
 		function swepsbg:Paint(pw, ph)
 			hook.Run("YTextFieldPaint", self, pw, ph)
 
-			draw.SimpleText(GetSWEPPrintName(lply:GetDString("preview_swep", "NO SWEPs")), "Y_18_500", pw / 2, YRP.ctr(50), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(GetSWEPPrintName(LocalPlayer():GetNW2String("preview_swep", "NO SWEPs")), "Y_18_500", pw / 2, YRP.ctr(50), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local sweps = createD("DModelPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20 + hh + 20 + 20 + hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh))
@@ -234,7 +228,7 @@ function CreateRolePreviewContent()
 		if sweps.models[1] != nil and sweps.Entity != nil then
 			sweps:SetModel(GetSWEPWorldModel(sweps.models[1]))
 			sweps.Entity:SetAngles(sweps.Angles)
-			lply:SetDString("preview_swep", sweps.models[1])
+			LocalPlayer():SetNW2String("preview_swep", sweps.models[1])
 		end
 
 		local nextpm = createD("YButton", sweps, YRP.ctr(64), YRP.ctr(64), sweps:GetWide() - YRP.ctr(64 + 20), YRP.ctr(450))
@@ -252,7 +246,7 @@ function CreateRolePreviewContent()
 			if sweps.id + 1 <= table.Count(sweps.models) then
 				sweps.id = sweps.id + 1
 				sweps:SetModel(GetSWEPWorldModel(sweps.models[sweps.id]))
-				lply:SetDString("preview_swep", sweps.models[sweps.id])
+				LocalPlayer():SetNW2String("preview_swep", sweps.models[sweps.id])
 			end
 		end
 
@@ -271,22 +265,22 @@ function CreateRolePreviewContent()
 			if sweps.id - 1 > 0 then
 				sweps.id = sweps.id - 1
 				sweps:SetModel(GetSWEPWorldModel(sweps.models[sweps.id]))
-				lply:SetDString("preview_swep", sweps.models[sweps.id])
+				LocalPlayer():SetNW2String("preview_swep", sweps.models[sweps.id])
 			end
 		end
 
-		if GetGlobalDBool("bool_players_can_switch_role", false) or LocalPlayer():GetDBool("cc", true) then
+		if GetGlobalBool("bool_players_can_switch_role", false) or LocalPlayer().cc then
 			local getrole = createD("YButton", win, ew, YRP.ctr(hh), nw - ew - YRP.ctr(20), nh - 2 * YRP.ctr(hh + 20))
 			getrole:SetText("LID_getrole")
 			function getrole:DoClick()
-				if LocalPlayer():GetDBool("cc", true) then
+				if LocalPlayer().cc then
 					parent:Clear()
 
 					CreateCharacterSettingsContent()
 				else
 					net.Start("wantRole")
-						net.WriteInt(lply:GetDString("charcreate_ruid", 0), 16)
-						net.WriteInt(lply:GetDString("charcreate_rpmid", 1), 16)
+						net.WriteInt(LocalPlayer().charcreate_ruid, 16)
+						net.WriteInt(LocalPlayer().charcreate_rpmid, 16)
 					net.SendToServer()
 					CloseCombinedMenu()
 					CloseRoleMenu()
@@ -295,45 +289,55 @@ function CreateRolePreviewContent()
 		end
 
 		local back = createD("YButton", win, ew, YRP.ctr(hh), nw - ew - YRP.ctr(20), nh - YRP.ctr(hh + 20))
-		back:SetText("LID_back" .. "x")
+		back:SetText("LID_back")
 		function back:Paint(pw, ph)
-			if lply:GetDBool("rolepreview", false) then
+			if LocalPlayer().rolepreview then
 				hook.Run("YButtonRPaint", self, pw, ph)
 			end
 		end
 		function back:DoClick()
-			if lply:GetDBool("rolepreview", false) then
+			if LocalPlayer().rolepreview then
 				if pa(menu) then
 					menu:Show()
 				end
 				win:Remove()
-				lply:SetDBool("rolepreview", false)
+				LocalPlayer().rolepreview = false
 			end
 		end
 	end)
-	net.Start("yrp_roleselection_getrole")
-		net.WriteString(lply:GetDString("charcreate_ruid", 0))
-	net.SendToServer()
+
+	timer.Simple(0.2, function()
+
+		if LocalPlayer().charcreate_ruid != nil then
+			net.Start("yrp_roleselection_getrole")
+				net.WriteString(LocalPlayer().charcreate_ruid)
+			net.SendToServer()
+		else
+			print("FAIL yrp_roleselection_getrole")
+		end
+	end)
 end
 
 
 
 function CreateRoleSelectionContent(PARENT)
-	local lply = LocalPlayer()
-
+	if LocalPlayer() == NULL then
+		print("FAIL CreateRoleSelectionContent")
+		return
+	end
 
 
 	local parent = PARENT or CharacterMenu or RoleMenu
 	
 
 
-	lply:SetDBool("rolepreview", false)
+	LocalPlayer().rolepreview = false
 
 
 
 	local SW = nil
 	local SH = nil
-	if LocalPlayer():GetDBool("cc", true) then
+	if LocalPlayer().cc then
 		SW = YRP.ctr(config.w)
 		SH = YRP.ctr(config.h)
 	else
@@ -348,7 +352,7 @@ function CreateRoleSelectionContent(PARENT)
 	
 	local site = createD("DPanel", parent, ScrW(), ScrH(), 0, 0)
 	function site:Paint(pw, ph)
-		if !LocalPlayer():GetDBool("cc", true) then
+		if !LocalPlayer().cc then
 			if self:GetWide() != parent:GetWide() then
 				SW = parent:GetWide()
 				SH = parent:GetTall()
@@ -359,7 +363,7 @@ function CreateRoleSelectionContent(PARENT)
 
 	local win = createD("DPanel", site, SW, SH, 0, 0)
 	function win:Paint(pw, ph)
-		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, LocalPlayer():InterfaceValue("YFrame", "BG"))
 
 		if win:GetWide() != SW then
 			win:SetWide(SW)
@@ -382,7 +386,7 @@ function CreateRoleSelectionContent(PARENT)
 	end
 	local sbar = list.VBar
 	function sbar:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
+		draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
 	end
 	function sbar.btnUp:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
@@ -391,12 +395,12 @@ function CreateRoleSelectionContent(PARENT)
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 	end
 	function sbar.btnGrip:Paint(w, h)
-		draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+		draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
 	end
 
 
 
-	if LocalPlayer():GetDBool("cc", true) then -- for Character Creation
+	if LocalPlayer().cc then -- for Character Creation
 		local header = createD("DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200))
 		function header:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string("LID_chooseyourrole"), "Y_36_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -407,19 +411,19 @@ function CreateRoleSelectionContent(PARENT)
 		btn.h = 75
 
 		local back = createD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
-		back:SetText("LID_back" .. "y")
+		back:SetText("LID_back")
 		function back:Paint(pw, ph)
-			if !lply:GetDBool("rolepreview", false) and lply:GetDInt("char_count", count) > 0 then
+			if !LocalPlayer().rolepreview and LocalPlayer():GetNW2Int("char_count", count) > 0 then
 				hook.Run("YButtonRPaint", self, pw, ph)
 			end
 		end
 		function back:DoClick()
-			if lply:GetDInt("char_count", count) <= 0 then return end
+			if LocalPlayer():GetNW2Int("char_count", count) <= 0 then return end
 
-			if lply:GetDBool("onefaction", true) then
+			if LocalPlayer():GetNW2Bool("onefaction", true) then
 				parent:Remove()
 				openCharacterSelection()
-			elseif !lply:GetDBool("rolepreview", false) then
+			elseif !LocalPlayer().rolepreview then
 				parent:Clear()
 
 				CreateFactionSelectionContent()
@@ -460,7 +464,7 @@ function CreateRoleSelectionContent(PARENT)
 						end
 					end
 
-					if !LocalPlayer():GetDBool("cc", false) and GetGlobalDBool("bool_players_can_switch_faction", false) and factioncount > 1 then
+					if !LocalPlayer().cc and GetGlobalBool("bool_players_can_switch_faction", false) and factioncount > 1 then
 						local changefaction = createD("YButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 20), YRP.ctr(20))
 						changefaction:SetText("LID_changefaction")
 						function changefaction:Think()
@@ -470,7 +474,7 @@ function CreateRoleSelectionContent(PARENT)
 							end
 						end
 						function changefaction:DoClick()
-							LocalPlayer():SetDBool("cc", false)
+							LocalPlayer().cc = false
 							menu:Hide()
 							CreateFactionSelectionContent()
 						end
@@ -486,6 +490,6 @@ function CreateRoleSelectionContent(PARENT)
 		end
 	end)
 	net.Start("yrp_roleselection_getgroups")
-		net.WriteString(lply:GetDString("charcreate_fuid", "0"))
+		net.WriteString(LocalPlayer().charcreate_fuid)
 	net.SendToServer()
 end

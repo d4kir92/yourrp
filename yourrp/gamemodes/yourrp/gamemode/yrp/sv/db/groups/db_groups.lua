@@ -620,19 +620,18 @@ util.AddNetworkString("yrp_roleselection_getrole")
 net.Receive("yrp_roleselection_getrole", function(len, ply)
 	local ruid = net.ReadString()
 	local roltab = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'")
-	
-	if !wk(roltab) then
-		roltab = {}
-	else
+	if wk(roltab) then
 		for i, v in pairs(roltab) do
 			v.pms = GetPlayermodelsOfRole(v.uniqueID)
 		end
 		roltab = roltab[1]
-	end
 
-	net.Start("yrp_roleselection_getrole")
-		net.WriteTable(roltab)
-	net.Send(ply)
+		net.Start("yrp_roleselection_getrole")
+			net.WriteTable(roltab)
+		net.Send(ply)
+	else
+		YRP.msg("error", "[yrp_roleselection_getrole] ruid not valid: " .. tostring(ruid))
+	end
 end)
 
 util.AddNetworkString("yrp_char_getrole")
@@ -640,16 +639,16 @@ net.Receive("yrp_char_getrole", function(len, ply)
 	local ruid = net.ReadString()
 	local roltab = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'")
 	
-	if !wk(roltab) then
-		roltab = {}
-	else
+	if wk(roltab) then
 		for i, v in pairs(roltab) do
 			v.pms = GetPlayermodelsOfRole(v.uniqueID)
 		end
 		roltab = roltab[1]
-	end
 
-	net.Start("yrp_char_getrole")
-		net.WriteTable(roltab)
-	net.Send(ply)
+		net.Start("yrp_char_getrole")
+			net.WriteTable(roltab)
+		net.Send(ply)
+	else
+		YRP.msg("error", "[yrp_char_getrole] ruid not valid: " .. tostring(ruid))
+	end
 end)

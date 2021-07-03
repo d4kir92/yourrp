@@ -15,7 +15,7 @@ net.Receive("setting_players", function(len)
 		_giveListView:AddColumn(YRP.lang_string("LID_money"))
 
 		for n, y in pairs(player.GetAll()) do
-			_giveListView:AddLine(y:SteamID(), y:SteamName(), y:RPName(), y:IDCardID(),y:GetDString("groupName"), y:GetDString("roleName"), y:GetDInt("money"))
+			_giveListView:AddLine(y:SteamID(), y:SteamName(), y:RPName(), y:IDCardID(),y:GetNW2String("groupName"), y:GetNW2String("roleName"), y:GetNW2Int("money"))
 		end
 
 		function _giveListView:OnRowRightClick(lineID, line)
@@ -108,7 +108,7 @@ net.Receive("setting_players", function(len)
 				_idcardidFrame:SetTitle(YRP.lang_string("LID_setidcardid"))
 
 				local _newidcardid = createVGUI("DTextEntry", _idcardidFrame, 380, 50, 10, 60)
-				_newidcardid:SetText(ply:GetDString("idcardid", "FAILED"))
+				_newidcardid:SetText(ply:GetNW2String("idcardid", "FAILED"))
 
 				local _idcardidButton = createVGUI("DButton", _idcardidFrame, 380, 50, 10, 60 + 10 + 50)
 				_idcardidButton:SetText(YRP.lang_string("LID_setidcardid"))

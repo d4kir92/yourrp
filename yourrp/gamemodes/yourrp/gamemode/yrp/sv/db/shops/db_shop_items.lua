@@ -252,8 +252,8 @@ function spawnItem(ply, item, duid)
 	if item.type == "weapons" then
 		local wep = ply:Give(item.ClassName)
 		if wk(wep) then
-			wep:SetDString("item_uniqueID", item.uniqueID)
-			wep:SetDEntity("yrp_owner", ply)
+			wep:SetNW2String("item_uniqueID", item.uniqueID)
+			wep:SetNW2Entity("yrp_owner", ply)
 			return true
 		else
 			YRP.msg("note", "Class " .. item.ClassName .. " dont give weapon")
@@ -357,10 +357,10 @@ function spawnItem(ply, item, duid)
 				ent = ENT.t:SpawnFunction(ply, tr, item.ClassName)
 
 				--ent:SetOwner(ply)
-				ent:SetDEntity("yrp_owner", ply)
+				ent:SetNW2Entity("yrp_owner", ply)
 				ent:Activate()
 
-				ent:SetDString( "item_uniqueID", item.uniqueID )
+				ent:SetNW2String( "item_uniqueID", item.uniqueID )
 
 				YRP.msg("gm", "[spawnItem] Spawned 1")
 
@@ -371,12 +371,12 @@ function spawnItem(ply, item, duid)
 					ent:SetPos(tr.HitPos)
 
 					--ent:SetOwner(ply)
-					ent:SetDEntity("yrp_owner", ply)
+					ent:SetNW2Entity("yrp_owner", ply)
 
 					ent:Spawn()
 					ent:Activate()
 					
-					ent:SetDString( "item_uniqueID", item.uniqueID )
+					ent:SetNW2String( "item_uniqueID", item.uniqueID )
 
 					YRP.msg("gm", "[spawnItem] Spawned 2")
 					return true, ent
@@ -390,12 +390,12 @@ function spawnItem(ply, item, duid)
 			if vehicle then
 				ent = simfphys.SpawnVehicle(nil, tr.HitPos + Vector(0, 0, 0), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
 
-				ent:SetDString("item_uniqueID", item.uniqueID)
+				ent:SetNW2String("item_uniqueID", item.uniqueID)
 
 				YRP.msg("gm", "[spawnItem] Spawned 3")
 
 				--ent:SetOwner(ply)
-				ent:SetDEntity("yrp_owner", ply)
+				ent:SetNW2Entity("yrp_owner", ply)
 
 				ent:Activate()
 
@@ -424,12 +424,12 @@ function spawnItem(ply, item, duid)
 					ent:Spawn()
 					ent:Activate()
 
-					ent:SetDString("item_uniqueID", item.uniqueID)
+					ent:SetNW2String("item_uniqueID", item.uniqueID)
 			
 					YRP.msg("gm", "[spawnItem] Spawned 4")
 
 					--ent:SetOwner(ply)
-					ent:SetDEntity("yrp_owner", ply)
+					ent:SetNW2Entity("yrp_owner", ply)
 
 					return true, ent
 				else
@@ -468,7 +468,7 @@ net.Receive("item_buy", function(len, ply)
 
 				if _spawned then
 					if ea(ent) then
-						ent:SetDInt("item_uniqueID", _item.uniqueID)
+						ent:SetNW2Int("item_uniqueID", _item.uniqueID)
 						ent:SetColor(StringToColor(_tab.color))
 						if ent:IsVehicle() then
 							AddVehicle(ent, ply, _item)
@@ -520,7 +520,7 @@ net.Receive("item_spawn", function(len, ply)
 
 				if _spawned then
 					if ea(ent) then
-						ent:SetDInt("item_uniqueID", _item.uniqueID)
+						ent:SetNW2Int("item_uniqueID", _item.uniqueID)
 						if ent:IsVehicle() then
 							AddVehicle(ent, ply, _item)
 						end

@@ -4,7 +4,7 @@
 local Entity = FindMetaTable("Entity")
 
 function Entity:SetWorldStorage(b)
-	self:SetDString("isaworldstorage", tobool(b))
+	self:SetNW2String("isaworldstorage", tobool(b))
 end
 
 local Player = FindMetaTable("Player")
@@ -323,7 +323,7 @@ function Player:ForceEquip(cname, noammo)
 
 	if wk(weapon) then
 		if weapon:IsValid() then
-			weapon:SetDBool("ispickupable", true)
+			weapon:SetNW2Bool("ispickupable", true)
 			return weapon
 		end
 	end
@@ -442,7 +442,7 @@ function Player:StripWeapons()
 end
 
 function Player:IsAllowedToDropSWEP(cname)
-	local ndsweps = SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetDString("roleUniqueID", "0") .. "'")
+	local ndsweps = SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetNW2String("roleUniqueID", "0") .. "'")
 	if wk(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode(",", ndsweps.string_ndsweps)
@@ -458,14 +458,14 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 	if not IsInventorySystemEnabled() then
 		--[[ Inventory OFF ]]
 		--
-		return wep:GetDBool("ispickupable", true)
+		return wep:GetNW2Bool("ispickupable", true)
 	else
 		--[[ Inventory ON ]]
 		--
 		if ply.canpickup == true then
 			ply.canpickup = false
 
-			return wep:GetDBool("ispickupable", true)
+			return wep:GetNW2Bool("ispickupable", true)
 		else
 			return false
 		end

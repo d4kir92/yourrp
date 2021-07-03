@@ -6,7 +6,7 @@ hook.Add("YFramePaint", "YFrame_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		local hh = 24
 		if self.GetHeaderHeight != nil then
 			hh = self:GetHeaderHeight()
@@ -27,7 +27,7 @@ hook.Add("YButtonPaint", "YButton_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		local color = lply:InterfaceValue("YButton", "NC")
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 		if self:IsDown() or self:IsPressed() then
@@ -63,7 +63,7 @@ hook.Add("YButtonAPaint", "YButtonA_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		local color = Color(126, 126, 126)
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 		if self:IsDown() or self:IsPressed() then
@@ -95,7 +95,7 @@ hook.Add("YButtonRPaint", "YButtonR_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		local color = Color(126, 126, 126)
 		local tcolor = lply:InterfaceValue("YButton", "NT")
 		if self:IsDown() or self:IsPressed() then
@@ -127,7 +127,7 @@ hook.Add("YLabelPaint", "YLabel_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		local color = lply:InterfaceValue("YFrame", "BG")
 		local tcolor = lply:InterfaceValue("YFrame", "HT")
 
@@ -154,7 +154,7 @@ hook.Add("YTextFieldPaint", "YTextFieldPaint_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		local color = lply:InterfaceValue("YFrame", "NC")
 		local tcolor = lply:InterfaceValue("YFrame", "HT")
 
@@ -181,7 +181,7 @@ hook.Add("YPanelPaint", "YPanel_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		local color = lply:InterfaceValue("YFrame", "HI")
 
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
@@ -192,7 +192,7 @@ end)
 hook.Add("YAddPaint", "YAdd_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		local color = Color(100, 205, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -218,7 +218,7 @@ end)
 hook.Add("YRemovePaint", "YRemove_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		local color = Color(205, 100, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -244,7 +244,7 @@ end)
 hook.Add("YClosePaint", "YClose_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		local color = Color(205, 100, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -270,7 +270,7 @@ end)
 hook.Add("YMaxPaint", "YMax_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		local color = Color(205, 205, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -296,7 +296,7 @@ end)
 hook.Add("YGroupBoxPaint", "YGroupBox_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalDString("string_interface_design") == "Blur" then
+	if GetGlobalString("string_interface_design") == "Blur" then
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 60))
 
 		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 60, 60, 60))

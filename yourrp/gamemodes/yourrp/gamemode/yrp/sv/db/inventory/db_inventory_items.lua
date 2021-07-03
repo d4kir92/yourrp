@@ -20,7 +20,7 @@ SQL.ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props_jun
 
 
 function InventoryBlacklisted(cname)
-	local blacklist = GetGlobalDTable("yrp_blacklist_inventory", {})
+	local blacklist = GetGlobalTable("yrp_blacklist_inventory", {})
 	
 	for i, black in pairs(blacklist) do
 		if string.find(cname, black.value) then

@@ -1660,7 +1660,6 @@ net.Receive("yrp_want_role", function(len, ply)
 	local ruid = net.ReadString()
 	ruid = tonumber(ruid)
 	local rol = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
-
 	local result = "Role dont exists anymore"
 	if wk(rol) then
 		if canGetRole(ply, ruid, true) then

@@ -424,9 +424,9 @@ net.Receive("get_shop_items", function()
 				end
 				hook.Add("selected_shop_item", "yrp_selected_shop_item", function()
 					if pa(_sh._sit) and pa(_sh._sit.type) then
-						local _wm = LocalPlayer():GetDString("WorldModel", "")
-						local _cn = LocalPlayer():GetDString("ClassName", "")
-						local _pn = LocalPlayer():GetDString("PrintName", "")
+						local _wm = LocalPlayer().WorldModel
+						local _cn = LocalPlayer().ClassName
+						local _pn = LocalPlayer().PrintName
 						local _type = _sh._sit.type.plus:GetOptionData(_sh._sit.type.plus:GetSelectedID())
 						net.Start("shop_item_edit_base")
 							net.WriteString(_sh._sit.type.plus.tbl.uniqueID)

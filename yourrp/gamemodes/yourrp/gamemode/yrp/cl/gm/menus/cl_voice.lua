@@ -39,7 +39,7 @@ function YRPVoiceChannel(edit, uid)
 		name = win.name:GetText()
 	end
 	if edit then
-		name = GetGlobalDTable("yrp_voice_channels")[uid].string_name
+		name = GetGlobalTable("yrp_voice_channels")[uid].string_name
 		win.name:SetText(name)
 	end
 
@@ -74,7 +74,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_voice_channels")[uid]["string_active_usergroups"][ug.string_name] then
+				if GetGlobalTable("yrp_voice_channels")[uid]["string_active_usergroups"][ug.string_name] then
 					line.cb:SetChecked(true)
 					table.insert(augs, ug.string_name)
 				end
@@ -114,7 +114,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_voice_channels")[uid]["string_active_groups"][tonumber(ug.uniqueID)] then
+				if GetGlobalTable("yrp_voice_channels")[uid]["string_active_groups"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert(agrps, ug.uniqueID)
 				end
@@ -154,7 +154,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_voice_channels")[uid]["string_active_roles"][tonumber(ug.uniqueID)] then
+				if GetGlobalTable("yrp_voice_channels")[uid]["string_active_roles"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert(arols, ug.uniqueID)
 				end
@@ -197,7 +197,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_voice_channels")[uid]["string_passive_usergroups"][ug.string_name] then
+				if GetGlobalTable("yrp_voice_channels")[uid]["string_passive_usergroups"][ug.string_name] then
 					line.cb:SetChecked(true)
 					table.insert(pugs, ug.string_name)
 				end
@@ -237,7 +237,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_voice_channels")[uid]["string_passive_groups"][tonumber(ug.uniqueID)] then
+				if GetGlobalTable("yrp_voice_channels")[uid]["string_passive_groups"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert(pgrps, ug.uniqueID)
 				end
@@ -277,7 +277,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 			if edit then
-				if GetGlobalDTable("yrp_voice_channels")[uid]["string_passive_roles"][tonumber(ug.uniqueID)] then
+				if GetGlobalTable("yrp_voice_channels")[uid]["string_passive_roles"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert(prols, ug.uniqueID)
 				end
@@ -374,7 +374,7 @@ function OpenVoiceMenu()
 
 	local h = YRP.ctr(80)
 	local pbr = YRP.ctr(20)
-	for i, channel in SortedPairsByMemberValue(GetGlobalDTable("yrp_voice_channels", {}), "int_position") do
+	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
 		if IsInChannel(lply, channel, true) or lply:HasAccess() then
 			local line = createD("DPanel", nil, CONTENT:GetWide(), h, 0, 0)
 			function line:Paint(pw, ph)
@@ -421,7 +421,7 @@ function OpenVoiceMenu()
 					mutemic:SetText("")
 					function mutemic:Paint(pw, ph)
 						local color = Color(0, 255, 0)
-						if lply:GetDBool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
+						if lply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
 							color = Color(255, 0, 0)
 						end
 						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
@@ -443,7 +443,7 @@ function OpenVoiceMenu()
 				function mute:Paint(pw, ph)
 					local icon = "64_volume-up"
 					local color = Color(0, 255, 0)
-					if lply:GetDBool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
+					if lply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
 						icon = "64_volume-mute"
 						color = Color(255, 0, 0)
 					end
@@ -465,7 +465,7 @@ function OpenVoiceMenu()
 				local dn = createD("YButton", bg, h, h, bg:GetWide() - 3 * h - 2 * YRP.ctr(20), 0)
 				dn:SetText("")
 				function dn:Paint(pw, ph)
-					if channel.int_position < table.Count(GetGlobalDTable("yrp_voice_channels", {})) - 1 then
+					if channel.int_position < table.Count(GetGlobalTable("yrp_voice_channels", {})) - 1 then
 						local color = lply:InterfaceValue("YButton", "NC")
 						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 

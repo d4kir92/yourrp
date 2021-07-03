@@ -65,14 +65,14 @@ net.Receive("openInteractMenu", function(len)
 			tmpPly = v
 			tmpTargetName = v:Nick()
 			tmpRPName = v:RPName()
-			tmpGender = v:GetDString("Gender")
-			tmpID = v:GetDString("idcardid")
+			tmpGender = v:GetNW2String("Gender")
+			tmpID = v:GetNW2String("idcardid")
 			tmpRPDescription = ""
 			for i = 1, 10 do
 				if i > 1 then
 					tmpRPDescription = tmpRPDescription .. "\n"
 				end
-				tmpRPDescription = tmpRPDescription .. SQL_STR_OUT(v:GetDString("rpdescription" .. i, ""))
+				tmpRPDescription = tmpRPDescription .. SQL_STR_OUT(v:GetNW2String("rpdescription" .. i, ""))
 			end
 			break
 		end
@@ -85,8 +85,8 @@ net.Receive("openInteractMenu", function(len)
 
 	local content = wInteract:GetContent()
 	function content:Paint(pw, ph)
-		local scaleW = pw / (GetGlobalDInt("int_" .. "background" .. "_w", 100) + 20)
-		local scaleH = YRP.ctr(470) / (GetGlobalDInt("int_" .. "background" .. "_h", 100) + 20)
+		local scaleW = pw / (GetGlobalInt("int_" .. "background" .. "_w", 100) + 20)
+		local scaleH = YRP.ctr(470) / (GetGlobalInt("int_" .. "background" .. "_h", 100) + 20)
 		local scale = scaleW
 		if scaleH < scaleW then
 			scale = scaleH
@@ -94,7 +94,7 @@ net.Receive("openInteractMenu", function(len)
 		drawIDCard(ply, scale, YRP.ctr(10), YRP.ctr(10))
 		
 		--[[ Licenses ]]--
-		if LocalPlayer():isCP() or LocalPlayer():GetDBool("bool_canusewarnsystem", false) then
+		if LocalPlayer():isCP() or LocalPlayer():GetNW2Bool("bool_canusewarnsystem", false) then
 			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255))
 			draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(470 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 			draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
@@ -118,7 +118,7 @@ net.Receive("openInteractMenu", function(len)
 		hook.Run("YButtonPaint", self, pw, ph)
 	end]]
 
-	if LocalPlayer():isCP() or LocalPlayer():GetDBool("bool_canusewarnsystem", false) then
+	if LocalPlayer():isCP() or LocalPlayer():GetNW2Bool("bool_canusewarnsystem", false) then
 		local btnVerwarnungUp = createVGUI("YButton", content, 50, 50, 10, 1000)
 		btnVerwarnungUp:SetText("⮝")
 		function btnVerwarnungUp:DoClick()
@@ -136,7 +136,7 @@ net.Receive("openInteractMenu", function(len)
 		local btnVerwarnung = createVGUI("YLabel", content, 450, 100, 60, 1000)
 		function btnVerwarnung:Paint(pw, ph)
 			hook.Run("YLabelPaint", self, pw, ph)
-			btnVerwarnung:SetText(YRP.lang_string("LID_warnings") .. ": " .. ply:GetDInt("int_warnings", -1))
+			btnVerwarnung:SetText(YRP.lang_string("LID_warnings") .. ": " .. ply:GetNW2Int("int_warnings", -1))
 		end
 
 		local btnVerstoesseUp = createVGUI("YButton", content, 50, 50, 10, 1110)
@@ -156,7 +156,7 @@ net.Receive("openInteractMenu", function(len)
 		local btnVerstoesse = createVGUI("YLabel", content, 450, 100, 60, 1110)
 		function btnVerstoesse:Paint(pw, ph)
 			hook.Run("YLabelPaint", self, pw, ph)
-			btnVerstoesse:SetText(YRP.lang_string("LID_violations") .. ": " .. ply:GetDInt("int_violations", -1))
+			btnVerstoesse:SetText(YRP.lang_string("LID_violations") .. ": " .. ply:GetNW2Int("int_violations", -1))
 		end
 	end
 

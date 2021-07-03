@@ -381,7 +381,7 @@ end
 
 function OpenRoleMenu()
 	openMenu()
-	if GetGlobalDBool("bool_players_can_switch_role", false) then
+	if GetGlobalBool("bool_players_can_switch_role", false) then
 		ROLEMENU.open = true
 		ROLEMENU.window = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
 		ROLEMENU.window:SetMinWidth(BFW())
@@ -405,8 +405,8 @@ function OpenRoleMenu()
 end
 
 function CreateRoleMenuContent(parent)
-	LocalPlayer():SetDBool("cc", false)
-	LocalPlayer():SetDString("charcreate_fuid", LocalPlayer():GetFactionUniqueID())
+	LocalPlayer().cc = false
+	LocalPlayer().charcreate_fuid = LocalPlayer():GetFactionUniqueID()
 
 	RoleMenu = parent
 

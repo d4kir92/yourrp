@@ -36,9 +36,8 @@ function PANEL:SetIcon(ico)
 end
 
 function PANEL:Paint(pw, ph)
-	local lply = LocalPlayer()
 	draw.RoundedBoxEx(YRP.ctr(14), 0, YRP.ctr(10), YRP.ctr(20), ph - YRP.ctr(10), self._ccol, false, false, true, false)--self._ccol)
-	draw.RoundedBoxEx(YRP.ctr(14), YRP.ctr(10), YRP.ctr(10), pw - 1 * YRP.ctr(10), ph - 1 * YRP.ctr(10), lply:InterfaceValue("YFrame", "NC"), false, false, false, true)--self._ccol)
+	draw.RoundedBoxEx(YRP.ctr(14), YRP.ctr(10), YRP.ctr(10), pw - 1 * YRP.ctr(10), ph - 1 * YRP.ctr(10), LocalPlayer():InterfaceValue("YFrame", "NC"), false, false, false, true)--self._ccol)
 end
 
 function PANEL:SetList(list)
@@ -93,8 +92,7 @@ function PANEL:Init()
 	end
 	local sbar = self.con.VBar
 	function sbar:Paint(w, h)
-		local lply = LocalPlayer()
-		draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
+		draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
 	end
 	function sbar.btnUp:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
@@ -103,17 +101,15 @@ function PANEL:Init()
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 	end
 	function sbar.btnGrip:Paint(w, h)
-		local lply = LocalPlayer()
-		draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+		draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
 	end
 
 	-- BTN
 	self.btn = createD("DButton", self, 10, 10, 0, 0)
 	self.btn:SetText("")
 	function self.btn:Paint(pw, ph)
-		local lply = LocalPlayer()
 		draw.RoundedBoxEx(YRP.ctr(10), 0, 0, YRP.ctr(20), ph, base._hcol, true, false, false, false)
-		draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, lply:InterfaceValue("YFrame", "PC"), false, true, false, false)
+		draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, LocalPlayer():InterfaceValue("YFrame", "PC"), false, true, false, false)
 
 		local x = 0
 		if !strEmpty(base._icon) then
@@ -126,7 +122,7 @@ function PANEL:Init()
 			x = ph / 2
 		end
 
-		draw.SimpleText(base._htext, "Y_" .. math.Clamp(math.Round(ph - 2 * YRP.ctr(20), 0), 4, 100) .. "_500", x, ph / 2, TextColor(lply:InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(base._htext, "Y_" .. math.Clamp(math.Round(ph - 2 * YRP.ctr(20), 0), 4, 100) .. "_500", x, ph / 2, TextColor(LocalPlayer():InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	net.Receive("get_next_ranks", function(len)
@@ -141,8 +137,7 @@ function PANEL:Init()
 
 		local sbar = list.VBar
 		function sbar:Paint(w, h)
-			local lply = LocalPlayer()
-			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"))
+			draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
 		end
 		function sbar.btnUp:Paint(w, h)
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
@@ -151,13 +146,12 @@ function PANEL:Init()
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 		end
 		function sbar.btnGrip:Paint(w, h)
-			local lply = LocalPlayer()
-			draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+			draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
 		end
 
 		for i, r in pairs(rols) do
 			r.bool_eventrole = tobool(r.bool_eventrole)
-			if r.bool_eventrole == GetGlobalDBool("create_eventchar", false) then
+			if r.bool_eventrole == GetGlobalBool("create_eventchar", false) then
 				AddRole(rlist, r, w, h, list)
 			end
 		end
@@ -183,16 +177,15 @@ function PANEL:Init()
 	
 		local bg = createD("DPanel", r, YRP.ctr(w), YRP.ctr(h), 0, 0)
 		function bg:Paint(pw, ph)
-			local lply = LocalPlayer()
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, YRP.ctr(20), ph, StringToColor(rol.string_color), true, false, true, false)
-			draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, lply:InterfaceValue("YFrame", "PC"), false, true, false, true)
+			draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, LocalPlayer():InterfaceValue("YFrame", "PC"), false, true, false, true)
 
 			local diameter = ph - 2 * YRP.ctr(10)
 			draw.RoundedBox(diameter / 2, YRP.ctr(18), YRP.ctr(8), diameter + YRP.ctr(4), diameter + YRP.ctr(4), StringToColor(rol.string_color))
-			draw.RoundedBox(diameter / 2, YRP.ctr(20), YRP.ctr(10), diameter, diameter, lply:InterfaceValue("YFrame", "PC"))
+			draw.RoundedBox(diameter / 2, YRP.ctr(20), YRP.ctr(10), diameter, diameter, LocalPlayer():InterfaceValue("YFrame", "PC"))
 
-			draw.SimpleText(rol.string_name, "Y_26_500", ph + YRP.ctr(20), ph / 3, TextColor(lply:InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP.ctr(20), ph / 3 * 2, TextColor(lply:InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(rol.string_name, "Y_26_500", ph + YRP.ctr(20), ph / 3, TextColor(LocalPlayer():InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP.ctr(20), ph / 3 * 2, TextColor(LocalPlayer():InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			if rol.int_maxamount > 0 then
 				local radius = ph / 2 - 1 * YRP.ctr(10)
 				local rcol = StringToColor(rol.string_color)
@@ -223,13 +216,13 @@ function PANEL:Init()
 					render.SetStencilPassOperation(STENCILOPERATION_KEEP)
 					render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
 
-					surface.SetDrawColor(lply:InterfaceValue("YFrame", "PC"))
+					surface.SetDrawColor(LocalPlayer():InterfaceValue("YFrame", "PC"))
 					surface.DrawPoly(self.circ2bg)
 
 					render.SetStencilReferenceValue(12)
 					render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
 
-					surface.SetDrawColor(lply:InterfaceValue("YFrame", "BG"))
+					surface.SetDrawColor(LocalPlayer():InterfaceValue("YFrame", "BG"))
 					surface.DrawPoly(self.circbg)
 
 					render.SetStencilEnable(false)
@@ -244,7 +237,7 @@ function PANEL:Init()
 					render.SetStencilPassOperation(STENCILOPERATION_KEEP)
 					render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
 
-					surface.SetDrawColor(lply:InterfaceValue("YFrame", "PC"))
+					surface.SetDrawColor(LocalPlayer():InterfaceValue("YFrame", "PC"))
 					surface.DrawPoly(self.circ2)
 
 					render.SetStencilReferenceValue(12)
@@ -256,7 +249,7 @@ function PANEL:Init()
 					render.SetStencilEnable(false)
 				end
 
-				draw.SimpleText(rol.int_uses .. "/" .. rol.int_maxamount, "Y_" .. 20 .. "_500", pw - ph / 2, ph / 2, TextColor(lply:InterfaceValue("YFrame", "PC")), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(rol.int_uses .. "/" .. rol.int_maxamount, "Y_" .. 20 .. "_500", pw - ph / 2, ph / 2, TextColor(LocalPlayer():InterfaceValue("YFrame", "PC")), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 
@@ -291,27 +284,27 @@ function PANEL:Init()
 		local btn = createD("DButton", bg, bg:GetWide(), bg:GetTall(), 0, 0)
 		btn:SetText("")
 		function btn:Paint(pw, ph)
-			local lply = LocalPlayer()
-			if rol.int_prerole == 0 and (!rol.bool_locked or lply:HasAccess()) and rol.int_requireslevel <= lply:Level() then
+			if rol.int_prerole == 0 and (!rol.bool_locked or LocalPlayer():HasAccess()) and rol.int_requireslevel <= LocalPlayer():Level() then
 				if self:IsHovered() then
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 10))
 				end
 			end
-			if rol.bool_locked or rol.int_requireslevel > lply:Level() then
+			if rol.bool_locked or rol.int_requireslevel > LocalPlayer():Level() then
 				YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - 2 * YRP.ctr(40), ph - 2 * YRP.ctr(40), YRP.ctr(50), YRP.ctr(40), TextColor(StringToColor(rol.string_color)))
-				if rol.int_requireslevel > lply:Level() then
+				if rol.int_requireslevel > LocalPlayer():Level() then
 					draw.SimpleText(rol.int_requireslevel, "Y_40_500", ph / 2 + YRP.ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 		end
 		function btn:DoClick()
-			local lply = LocalPlayer()
 			rol.int_prerole = tonumber(rol.int_prerole)
-			if (!rol.bool_locked or lply:HasAccess()) and rol.int_requireslevel <= lply:Level() then
-				lply:SetDString("charcreate_ruid", rol.uniqueID)
-				net.Start("yrp_want_role")
-					net.WriteString(rol.uniqueID)
-				net.SendToServer()
+			if (!rol.bool_locked or LocalPlayer():HasAccess()) and rol.int_requireslevel <= LocalPlayer():Level() then
+				LocalPlayer().charcreate_ruid = rol.uniqueID
+				timer.Simple(0.2, function()
+					net.Start("yrp_want_role")
+						net.WriteString(rol.uniqueID)
+					net.SendToServer()
+				end)
 			end
 		end
 
@@ -391,7 +384,6 @@ function PANEL:Init()
 	end
 
 	function self.btn:DoClick()
-		local lply = LocalPlayer()
 		base._open = !base._open
 		if base._open then
 			net.Receive("yrp_roleselection_getcontent", function(len)
@@ -413,18 +405,18 @@ function PANEL:Init()
 						
 						-- Restrictions
 						if !table.HasValue(rol.string_usergroups, "ALL") then
-							if !table.HasValue(rol.string_usergroups, string.upper(lply:GetUserGroup())) then
+							if !table.HasValue(rol.string_usergroups, string.upper(LocalPlayer():GetUserGroup())) then
 								--continue
 							end
 						end
 
-						if LocalPlayer():GetDBool("cc", true) == true and !rol.bool_visible_cc then
+						if LocalPlayer().cc == true and !rol.bool_visible_cc then
 							--continue
-						elseif LocalPlayer():GetDBool("cc", false) == false and !rol.bool_visible_rm then
+						elseif LocalPlayer().cc == false and !rol.bool_visible_rm then
 							--continue
 						end
 
-						if rol.int_prerole == 0 and rol.bool_eventrole == GetGlobalDBool("create_eventchar", false) then
+						if rol.int_prerole == 0 and rol.bool_eventrole == GetGlobalBool("create_eventchar", false) then
 							w = rw
 							h = rh
 							local rlist = createD("DHorizontalScroller", nil, 10, YRP.ctr(h), 0, 0)
@@ -447,9 +439,9 @@ function PANEL:Init()
 						grp.bool_visible_cc = tobool(grp.bool_visible_cc)
 						grp.bool_visible_rm = tobool(grp.bool_visible_rm)
 
-						if LocalPlayer():GetDBool("cc", true) == true and !grp.bool_visible_cc then
+						if LocalPlayer().cc == true and !grp.bool_visible_cc then
 							--continue
-						elseif LocalPlayer():GetDBool("cc", false) == false and !grp.bool_visible_rm then
+						elseif LocalPlayer().cc == false and !grp.bool_visible_rm then
 							--continue
 						end
 

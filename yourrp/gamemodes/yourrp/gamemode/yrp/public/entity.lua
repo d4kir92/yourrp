@@ -6,7 +6,7 @@
 local Entity = FindMetaTable("Entity")
 
 function Entity:GetRPOwner()
-	return self:GetDEntity("yrp_owner", NULL)
+	return self:GetNW2Entity("yrp_owner", NULL)
 end
 
 function Entity:IsDoor()

@@ -26,7 +26,7 @@ function CreateFactionSelectionContent()
 
 	local nw = YRP.ctr(config.w)
 	local nh = YRP.ctr(config.h)
-	if !LocalPlayer():GetDBool("cc", true) then
+	if !LocalPlayer().cc then
 		nw = parent:GetWide()
 		nh = parent:GetTall()
 	end
@@ -57,7 +57,7 @@ function CreateFactionSelectionContent()
 
 
 
-	if LocalPlayer():GetDBool("cc", true) then -- for Character Creation
+	if LocalPlayer().cc then -- for Character Creation
 		local header = createD("DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200))
 		function header:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string("LID_chooseyourfaction"), "Y_36_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -68,7 +68,7 @@ function CreateFactionSelectionContent()
 		btn.h = 75
 
 		local back = createD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
-		back:SetText("LID_back" .. "F")
+		back:SetText("LID_back")
 		function back:Paint(pw, ph)
 			hook.Run("YButtonRPaint", self, pw, ph)
 		end
@@ -89,7 +89,7 @@ function CreateFactionSelectionContent()
 			local y = 0
 
 			if table.Count(ftab) > 1 then -- If more then 1 Faction
-				lply:SetDBool("onefaction", false)
+				lply:SetNW2Bool("onefaction", false)
 				local w = (nw - YRP.ctr(3 * config.br)) / 2
 				local h = YRP.ctr(500)
 				if table.Count(ftab) > 4 then
@@ -107,16 +107,16 @@ function CreateFactionSelectionContent()
 					fac.bool_visible_cc = tobool(fac.bool_visible_cc)
 					fac.bool_visible_rm = tobool(fac.bool_visible_rm)
 
-					if LocalPlayer():GetDBool("cc", true) == true and !fac.bool_visible_cc then
+					if LocalPlayer().cc == true and !fac.bool_visible_cc then
 						continue
-					elseif LocalPlayer():GetDBool("cc", false) == false and !fac.bool_visible_rm then
+					elseif LocalPlayer().cc == false and !fac.bool_visible_rm then
 						continue
 					end
 		
 					if fac.uniqueID != -1 then
 						local faction = createD("YPanel", nil, w, h, YRP.ctr(config.br) + x * (w + YRP.ctr(config.br)), YRP.ctr(config.br) + y * (h + YRP.ctr(config.br)))
 						function faction:Paint(pw, ph)
-							if LocalPlayer():GetDBool("cc", false) then
+							if LocalPlayer().cc then
 								draw.RoundedBox(YRP.ctr(10), 0, 0, w, h, lply:InterfaceValue("YFrame", "BG"))
 							else
 								draw.RoundedBox(YRP.ctr(10), 0, 0, w, h, lply:InterfaceValue("YFrame", "HB"))
@@ -157,7 +157,7 @@ function CreateFactionSelectionContent()
 							end
 						end
 						function join:DoClick()
-							lply:SetDString("charcreate_fuid", fac.uniqueID)
+							lply.charcreate_fuid = fac.uniqueID
 							parent:Clear()
 
 							CreateRoleSelectionContent()
@@ -175,8 +175,8 @@ function CreateFactionSelectionContent()
 					end
 				end
 			else -- If not Enough Factions
-				lply:SetDString("charcreate_fuid", "1")
-				lply:SetDBool("onefaction", true)
+				lply.charcreate_fuid = 1
+				lply:SetNW2Bool("onefaction", true)
 				parent:Clear()
 
 				CreateRoleSelectionContent()

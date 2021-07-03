@@ -20,7 +20,7 @@ function Entity:getDoorData()
 
 	self.DoorData.owner = nil
 
-	local charid = tonumber(self:GetDString("ownerCharID", ""))
+	local charid = tonumber(self:GetNW2String("ownerCharID", ""))
 	if ea(self:GetRPOwner()) then
 		self.DoorData.owner = self:GetRPOwner():UserID()
 	elseif charid and charid > 0 then
@@ -96,12 +96,12 @@ end
 
 function Entity:isKeysOwnable()
 	--Description: Whether this door can be bought.
-	return self:GetDBool("bool_canbeowned", true)
+	return self:GetNW2Bool("bool_canbeowned", true)
 end
 
 function Entity:isKeysOwned()
 	--Description: Whether this door is owned by someone.
-	return self:GetDBool("bool_hasowner", false) == true
+	return self:GetNW2Bool("bool_hasowner", false) == true
 end
 
 function Entity:isKeysOwnedBy(ply)

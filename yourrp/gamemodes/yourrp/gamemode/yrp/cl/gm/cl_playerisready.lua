@@ -43,7 +43,7 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 			wassendtoserver = true
 
 			timer.Simple(19.9, function()
-				if !lply:GetDBool("yrp_received_ready") then
+				if !lply:GetNW2Bool("yrp_received_ready") then
 					YRP.msg("note", "[YRPSendIsReadyPingPong] Retry sending ready message.")
 					YRPSendIsReadyPingPong()
 				end
@@ -121,37 +121,3 @@ function GM:InitPostEntity()
 
 	yrp_initpostentity = true
 end
-
-function printReadyError()
-	local lply = LocalPlayer()
-
-	local str = "ReplyFromServer?: " .. tostring(lply:GetDBool("yrp_received_ready", false))
-	str = str .. " SendToServer?: " .. tostring(wassendtoserver)
-	str = str .. " Chars - loaded?: " .. tostring(lply:GetDBool("loadedchars", false))
-	str = str .. " ENTS - loaded?: " .. tostring(lply:GetDInt("yrp_load_ent", 0))
-	str = str .. " GLOS - loaded?: " .. tostring(lply:GetDInt("yrp_load_glo", 0))
-	str = str .. " DedicatedServer?: " .. tostring(lply:GetDBool("isserverdedicated"))
-
-	return str
-end
-
-local failed = failed or false
-timer.Create("yrp_sendready", 120, 0, function()
-	local lply = LocalPlayer()
-	if !yrp_rToSv then
-		failed = true
-		if lply:GetDInt("yrp_load_ent", 0) == 100 and lply:GetDInt("yrp_load_glo", 0) == 100 then
-			YRP.msg("error", "SEND IS READY FAILED " .. printReadyError())
-			YRPSendIsReady()
-		else
-			YRP.msg("error", "SEND IS READY FAILED 2 " .. printReadyError())
-		end
-	else
-		if failed then
-			--YRP.msg("error", "SEND IS READY WORKED ERROR: " .. printReadyError())
-		else
-			YRP.msg("note", "SEND IS READY WORKED")
-			timer.Remove("yrp_sendready")
-		end
-	end
-end)

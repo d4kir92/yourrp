@@ -675,7 +675,7 @@ function UGUpdateInt(ply, uid, name, value)
 		ug.string_name = string.lower(ug.string_name)
 		for i, pl in pairs(player.GetAll()) do
 			if string.lower(pl:GetUserGroup()) == ug.string_name then
-				pl:SetDInt(name, value)
+				pl:SetNW2Int(name, value)
 			end
 		end
 	end
@@ -700,7 +700,7 @@ function UGCheckBox(ply, uid, name, value)
 		ug.string_name = string.lower(ug.string_name)
 		for i, pl in pairs(player.GetAll()) do
 			if string.lower(pl:GetUserGroup()) == ug.string_name then
-				pl:SetDBool(name, tobool(value))
+				pl:SetNW2Bool(name, tobool(value))
 			end
 		end
 	end
@@ -1177,17 +1177,17 @@ end)
 
 local Entity = FindMetaTable("Entity")
 function Entity:YRPSetOwner(ply)
-	self:SetDEntity("yrp_owner", ply)
+	self:SetNW2Entity("yrp_owner", ply)
 end
 
 function Entity:YRPRemoveOwner()
-	self:SetDEntity("yrp_owner", NULL)
+	self:SetNW2Entity("yrp_owner", NULL)
 end
 
 function HasUseFunction(ent)
 	if IsEntity(ent) then
 		if ent.Use != nil then
-			ent:SetDBool("yrp_has_use", true)
+			ent:SetNW2Bool("yrp_has_use", true)
 		end
 	end
 end
@@ -1337,12 +1337,12 @@ hook.Add("PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function(pl, model)
 end)
 
 function RenderEquipment(ply, name, mode, color)
-	local _eq = ply:GetDEntity(name)
+	local _eq = ply:GetNW2Entity(name)
 	if ea(_eq) then
 		_eq:SetRenderMode(mode)
 		_eq:SetColor(color)
-		_eq:SetDInt(name .. "mode", mode)
-		_eq:SetDString(name .. "color", color.r .. "," .. color.g .. "," .. color.b .. "," .. color.a)
+		_eq:SetNW2Int(name .. "mode", mode)
+		_eq:SetNW2String(name .. "color", color.r .. "," .. color.g .. "," .. color.b .. "," .. color.a)
 	end
 end
 
@@ -1371,7 +1371,7 @@ end
 
 function RenderNoClip(ply, alpha)
 	if ea(ply) then
-		if ply:GetDBool("cloaked", false) then
+		if ply:GetNW2Bool("cloaked", false) then
 			RenderCloaked(ply)
 		else
 			local _alpha = 255
@@ -1392,7 +1392,7 @@ function RenderNoClip(ply, alpha)
 			RenderEquipments(ply, RENDERMODE_TRANSALPHA, Color(255, 255, 255, _alpha))
 		end
 
-		--local model = GetGlobalDString("text_noclip_mdl", "")
+		--local model = GetGlobalString("text_noclip_mdl", "")
 		--if !strEmpty(model) then
 			--ply:SetModel(model)
 		--end
@@ -1401,7 +1401,7 @@ end
 
 function RenderFrozen(ply)
 	if ea(ply) then
-		if ply:GetDBool("cloaked", false) then
+		if ply:GetNW2Bool("cloaked", false) then
 			RenderCloaked(ply)
 		else
 			ply:SetRenderMode(RENDERMODE_NORMAL)
@@ -1417,7 +1417,7 @@ end
 
 function RenderNormal(ply)
 	if ea(ply) then
-		if ply:GetDBool("cloaked", false) then
+		if ply:GetNW2Bool("cloaked", false) then
 			RenderCloaked(ply)
 		elseif ply:IsFlagSet(FL_FROZEN) then
 			RenderFrozen(ply)
@@ -1497,7 +1497,7 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 				if tobool(_tmp.bool_noclip) then
 
 					if IsNoClipModelEnabled() then
-						local mdl = GetGlobalDString("text_noclip_mdl", "")
+						local mdl = GetGlobalString("text_noclip_mdl", "")
 						if !strEmpty(mdl) then
 							pl:SetModel(mdl)
 						end
@@ -1521,7 +1521,7 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 end)
 
 function EntBlacklisted(ent)
-	local blacklist = GetGlobalDTable("yrp_blacklist_entities", {})
+	local blacklist = GetGlobalTable("yrp_blacklist_entities", {})
 
 	for i, black in pairs(blacklist) do
 		if string.find(ent:GetClass(), black.value) or string.find(ent:GetModel(), black.value) then
@@ -1544,7 +1544,7 @@ function GM:PhysgunPickup(pl, ent)
 				return false
 			elseif ent:IsPlayer() then
 				if tobool(tabUsergroup.bool_physgunpickupplayer) then
-					if ent:GetDInt("int_position", 0) >= pl:GetDInt("int_position", 0) then -- ent (target) > position as pl
+					if ent:GetNW2Int("int_position", 0) >= pl:GetNW2Int("int_position", 0) then -- ent (target) > position as pl
 						return true
 					end
 				else
@@ -1688,19 +1688,19 @@ function Player:UserGroupLoadout()
 	local UG = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. string.lower(self:GetUserGroup()) .. "'")
 	if wk(UG) then
 		UG = UG[1]
-		self:SetDString("usergroup_sweps", UG.string_sweps)
+		self:SetNW2String("usergroup_sweps", UG.string_sweps)
 		local SWEPS = string.Explode(",", UG.string_sweps)
 		for i, swep in pairs(SWEPS) do
 			self:Give(swep)
 		end
-		self:SetDString("usergroupColor", UG.string_color)
-		self:SetDInt("int_position", UG.int_position)
-		self:SetDInt("int_characters_max", UG.int_characters_max)
-		self:SetDInt("int_charactersevent_max", UG.int_charactersevent_max)
+		self:SetNW2String("usergroupColor", UG.string_color)
+		self:SetNW2Int("int_position", UG.int_position)
+		self:SetNW2Int("int_characters_max", UG.int_characters_max)
+		self:SetNW2Int("int_charactersevent_max", UG.int_charactersevent_max)
 
 		for i, v in pairs(UG) do
 			if string.StartWith(i, "bool_") then
-				self:SetDBool(i, tobool(v))
+				self:SetNW2Bool(i, tobool(v))
 			end
 		end
 

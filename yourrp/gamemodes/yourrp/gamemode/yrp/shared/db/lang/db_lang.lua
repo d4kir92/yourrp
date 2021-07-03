@@ -83,23 +83,23 @@ function YRPTestContentAddons()
 			if addon.wsid == "1189643820" then
 				if addon.mounted and addon.downloaded then
 					hascontent = true
-					SetGlobalDBool("hascontent", true)
+					SetGlobalBool("hascontent", true)
 				else
 					YRP.msg("note", "YOURRP CONTENT IS NOT MOUNTED/DOWNLOADED!")
 				end
 			elseif addon.wsid == "1964961396" and addon.mounted and addon.downloaded then
 				hasfakecontent = true
-				SetGlobalDBool("hasfakecontent", true)
+				SetGlobalBool("hasfakecontent", true)
 			end
 		end
 	end
 end
 YRPTestContentAddons()
 function HasYRPContent()
-	return GetGlobalDBool("hascontent", false)
+	return GetGlobalBool("hascontent", false)
 end
 function HasYRPFakeContent()
-	return GetGlobalDBool("hasfakecontent", false)
+	return GetGlobalBool("hasfakecontent", false)
 end
 
 function PrintLIDError(var)
@@ -118,7 +118,7 @@ function YRP.lang_string(var, vals)
 
 			-- IF NOT FOUND
 			if !wk(translation) then
-				if nf[var] == nil and CLIENT and LocalPlayer().LoadedGamemode and LocalPlayer():LoadedGamemode() and LocalPlayer():GetDBool("badyourrpcontent", false) then
+				if nf[var] == nil and CLIENT and LocalPlayer().LoadedGamemode and LocalPlayer():LoadedGamemode() and LocalPlayer():GetNW2Bool("badyourrpcontent", false) then
 					nf[var] = var
 					PrintLIDError(var)
 				end

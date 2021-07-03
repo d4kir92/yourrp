@@ -66,9 +66,9 @@ function openCharacterCreation()
 		function win.blur:Paint(pw, ph)
 			-- Blur Background
 			Derma_DrawBackgroundBlur(self, 0)
-			if win.bg.url != GetGlobalDString("text_character_background", "") then
-				win.bg.url = GetGlobalDString("text_character_background", "")
-				win.bg:SetHTML(GetHTMLImage(GetGlobalDString("text_character_background", ""), win:GetWide(), win:GetTall()))
+			if win.bg.url != GetGlobalString("text_character_background", "") then
+				win.bg.url = GetGlobalString("text_character_background", "")
+				win.bg:SetHTML(GetHTMLImage(GetGlobalString("text_character_background", ""), win:GetWide(), win:GetTall()))
 			end
 		end
 		function win.blur:OnRemove()
@@ -82,10 +82,10 @@ function openCharacterCreation()
 
 
 		
-		LocalPlayer():SetDBool("cc", true)
+		LocalPlayer().cc = true
 		CreateFactionSelectionContent()
 	end
-	LocalPlayer():SetDBool("loadedchars", true)
+	--LocalPlayer():SetNW2Bool("loadedchars", true)
 end
 
 local CharMenu = {}
@@ -99,7 +99,7 @@ function toggleCharacterSelection()
 end
 
 function closeCharacterSelection()
-	if CharMenu.frame != nil and LocalPlayer():GetDBool("loadedchars", false) == true and LocalPlayer():Alive() then
+	if CharMenu.frame != nil and LocalPlayer():GetNW2Bool("loadedchars", false) == true and LocalPlayer():Alive() then
 		closeMenu()
 		CharMenu.frame:Remove()
 		CharMenu.frame = nil
@@ -132,7 +132,7 @@ function LoadCharacters()
 				if pa(CharMenu.frame) then
 					CharMenu.frame:Close()
 				end
-				SetGlobalDBool("create_eventchar", false)
+				SetGlobalBool("create_eventchar", false)
 				openCharacterCreation()
 				return false
 			end
@@ -157,7 +157,7 @@ function LoadCharacters()
 					chars[i].char.bool_archived = tobool(chars[i].char.bool_archived)
 					chars[i].char.bool_eventchar = tobool(chars[i].char.bool_eventchar)
 
-					if GetGlobalDBool("bool_characters_removeondeath", false) then
+					if GetGlobalBool("bool_characters_removeondeath", false) then
 						if chars[i].char.bool_archived then
 							continue
 						end
@@ -195,7 +195,7 @@ function LoadCharacters()
 					tmpChar.factionIcon = chars[i].faction.string_icon or ""
 					tmpChar.groupID = chars[i].group.string_name or "GROUP INVALID"
 					tmpChar.map = SQL_STR_OUT(chars[i].char.map)
-					tmpChar.playermodelID = LocalPlayer():GetDInt("pmid", 1)
+					tmpChar.playermodelID = LocalPlayer():GetNW2Int("pmid", 1)
 					tmpChar.bool_eventchar = chars[i].char.bool_eventchar								--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 1))
 
 					tmpChar.playermodels = string.Explode(",", chars[i].role.string_playermodels) or {}
@@ -260,7 +260,7 @@ function LoadCharacters()
 								draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								draw.SimpleText(self.rol, "Y_18_500", x, YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	
-								if cei > LocalPlayer():GetDInt("int_charactersevent_max", 1) then
+								if cei > LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
 									draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								end
@@ -281,7 +281,7 @@ function LoadCharacters()
 								draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								draw.SimpleText(self.rol, "Y_18_500", x, YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-								if cni > LocalPlayer():GetDInt("int_characters_max", 1) then
+								if cni > LocalPlayer():GetNW2Int("int_characters_max", 1) then
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
 									draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								end
@@ -289,11 +289,11 @@ function LoadCharacters()
 						end
 						function tmpChar:DoClick()
 							isEventChar = self.bool_eventchar
-							if cni <= LocalPlayer():GetDInt("int_characters_max", 1) then
+							if cni <= LocalPlayer():GetNW2Int("int_characters_max", 1) then
 								curChar = tonumber(self.charid)
 								_cur = self.rpname
-								if self.playermodels != nil and LocalPlayer():GetDInt("pmid", 1) != nil then
-									local _playermodel = self.playermodels[LocalPlayer():GetDInt("pmid", 1)] or nil
+								if self.playermodels != nil and LocalPlayer():GetNW2Int("pmid", 1) != nil then
+									local _playermodel = self.playermodels[LocalPlayer():GetNW2Int("pmid", 1)] or nil
 									if _playermodel != nil and CharMenu.charplayermodel != NULL and pa(CharMenu.charplayermodel) then
 										if !strEmpty(_playermodel) then
 											CharMenu.charplayermodel:SetModel(_playermodel)
@@ -324,7 +324,7 @@ function LoadCharacters()
 
 							draw.SimpleText(self.rpname, "Saira_60", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-							if cni > LocalPlayer():GetDInt("int_characters_max", 1) then
+							if cni > LocalPlayer():GetNW2Int("int_characters_max", 1) then
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
 								draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 							end
@@ -375,8 +375,8 @@ function LoadCharacters()
 								draw.SimpleText("EVENT CHARACTER", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 							else
 								local tab = {}
-								tab.text = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_min", 0) - CurTime(), 0)
-								if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+								tab.text = math.Round(LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) - CurTime(), 0)
+								if LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
 									tab.text = YRP.lang_string("LID_enterworld") -- .. " (" .. _cur .. ")"
 								end
 								if LocalPlayer() != nil and LocalPlayer():Alive() then
@@ -397,7 +397,7 @@ function LoadCharacters()
 							if tmpChar.bool_eventchar then
 								-- nothing
 							else
-								if LocalPlayer() != nil and tonumber(tmpChar.charid) != "-1" and LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+								if LocalPlayer() != nil and tonumber(tmpChar.charid) != "-1" and LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
 									if LocalPlayer():Alive() then
 										net.Start("LogOut")
 										net.SendToServer()
@@ -484,11 +484,11 @@ function LoadCharacters()
 					py = 0
 				end
 
-				if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+				if CharMenu.character.amount < LocalPlayer():GetNW2Int("int_characters_max", 1) then
 					local addChar = createD("YButton", nil, sw, sh, px, py)
 					addChar:SetText("")
 					function addChar:Paint(pw, ph)
-						if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+						if CharMenu.character.amount < LocalPlayer():GetNW2Int("int_characters_max", 1) then
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
 							
 							local sw = pw - 2 * YRP.ctr(180)
@@ -501,11 +501,11 @@ function LoadCharacters()
 					end
 					function addChar:DoClick()
 						isEventChar = self.bool_eventchar
-						if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+						if CharMenu.character.amount < LocalPlayer():GetNW2Int("int_characters_max", 1) then
 							if pa(CharMenu.frame) then
 								CharMenu.frame:Close()
 							end
-							SetGlobalDBool("create_eventchar", false)
+							SetGlobalBool("create_eventchar", false)
 							openCharacterCreation()
 						end
 					end
@@ -517,11 +517,11 @@ function LoadCharacters()
 					end
 				end
 
-				if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
+				if CharMenu.character.amountevent < LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
 					local addCharEvent = createD("YButton", nil, sw, sh, px, py)
 					addCharEvent:SetText("")
 					function addCharEvent:Paint(pw, ph)
-						if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
+						if CharMenu.character.amountevent and CharMenu.character.amountevent < LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
 							
 							draw.SimpleText(YRP.lang_string("LID_event"), "Y_18_500", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -535,11 +535,11 @@ function LoadCharacters()
 						end
 					end
 					function addCharEvent:DoClick()
-						if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
+						if CharMenu.character.amountevent < LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
 							if pa(CharMenu.frame) then
 								CharMenu.frame:Close()
 							end
-							SetGlobalDBool("create_eventchar", true)
+							SetGlobalBool("create_eventchar", true)
 							openCharacterCreation()
 						end
 					end
@@ -560,7 +560,7 @@ function LoadCharacters()
 		CharMenu.characterList:SetPos(CharMenu.charactersBackground:GetWide() / 2 - CharMenu.characterList:GetWide() / 2, py)
 	end
 
-	LocalPlayer():SetDBool("loadedchars", true)
+	--LocalPlayer():SetNW2Bool("loadedchars", true)
 
 	if pa(CharMenu.frame) then
 		CharMenu.frame:Show()
@@ -599,11 +599,11 @@ function openCharacterSelection()
 	openMenu()
 	
 	if !pa(CharMenu.frame) then
-		YRP_CharDesign = string.lower(GetGlobalDString("text_character_design"))
+		YRP_CharDesign = string.lower(GetGlobalString("text_character_design"))
 
 		function CharMenu.logic()
-			if YRP_CharDesign != string.lower(GetGlobalDString("text_character_design")) then
-				YRP_CharDesign = string.lower(GetGlobalDString("text_character_design"))
+			if YRP_CharDesign != string.lower(GetGlobalString("text_character_design")) then
+				YRP_CharDesign = string.lower(GetGlobalString("text_character_design"))
 
 				if CharMenu.frame and CharMenu.frame:IsVisible() then
 					closeMenu()
@@ -650,14 +650,14 @@ function openCharacterSelection()
 				draw.SimpleText(_cur, "Y_40_500", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 				local aecur = CharMenu.character.amountevent or -1
-				local aemax = LocalPlayer():GetDInt("int_charactersevent_max", 1)
+				local aemax = LocalPlayer():GetNW2Int("int_charactersevent_max", 1)
 				if aecur < aemax then
 					draw.SimpleText(YRP.lang_string("LID_event"), "Y_24_500", pw / 2 - YRP.ctr(480), ph - YRP.ctr(180), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				-- Get Newest Background for the Menu
 				local oldurl = CharMenu.frame.bg.url
-				local newurl = GetGlobalDString("text_character_background", "")
+				local newurl = GetGlobalString("text_character_background", "")
 				if oldurl != newurl then
 					CharMenu.frame.bg.url = newurl
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
@@ -678,14 +678,14 @@ function openCharacterSelection()
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 100))
 
 				local acur = CharMenu.character.amount or -1
-				local amax = LocalPlayer():GetDInt("int_characters_max", 1)
+				local amax = LocalPlayer():GetNW2Int("int_characters_max", 1)
 				local acolor = Color(255, 255, 255, 255)
 				if acur > amax then
 					acolor = Color(255, 100, 100, 255)
 				end
 
 				local aecur = CharMenu.character.amountevent or -1
-				local aemax = LocalPlayer():GetDInt("int_charactersevent_max", 1)
+				local aemax = LocalPlayer():GetNW2Int("int_charactersevent_max", 1)
 				local aecolor = Color(255, 255, 255, 255)
 				if aecur > aemax then
 					aecolor = Color(255, 100, 100, 255)
@@ -773,8 +773,8 @@ function openCharacterSelection()
 					draw.SimpleText("EVENT CHARACTER", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				else
 					local tab = {}
-					tab.text = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_min", 0) - CurTime(), 0)
-					if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+					tab.text = math.Round(LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) - CurTime(), 0)
+					if LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
 						tab.text = YRP.lang_string("LID_enterworld") -- .. " (" .. _cur .. ")"
 					end
 					if LocalPlayer() != nil and LocalPlayer():Alive() then
@@ -795,7 +795,7 @@ function openCharacterSelection()
 				if isEventChar then
 					-- nothing
 				else
-					if LocalPlayer() != nil and curChar != "-1" and LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+					if LocalPlayer() != nil and curChar != "-1" and LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
 						if LocalPlayer():Alive() then
 							net.Start("LogOut")
 							net.SendToServer()
@@ -846,16 +846,16 @@ function openCharacterSelection()
 			local charactersCreate = createD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(100), py)
 			charactersCreate:SetText("")
 			function charactersCreate:Paint(pw, ph)
-				if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+				if CharMenu.character.amount < LocalPlayer():GetNW2Int("int_characters_max", 1) then
 					hook.Run("YAddPaint", self, pw, ph)
 				end
 			end
 			function charactersCreate:DoClick()
-				if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+				if CharMenu.character.amount < LocalPlayer():GetNW2Int("int_characters_max", 1) then
 					if pa(CharMenu.frame) then
 						CharMenu.frame:Close()
 					end
-					SetGlobalDBool("create_eventchar", false)
+					SetGlobalBool("create_eventchar", false)
 					openCharacterCreation()
 				end
 			end
@@ -863,16 +863,16 @@ function openCharacterSelection()
 			local charactersCreateEvent = createD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(210), py)
 			charactersCreateEvent:SetText("")
 			function charactersCreateEvent:Paint(pw, ph)
-				if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
+				if CharMenu.character.amountevent < LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
 					hook.Run("YAddPaint", self, pw, ph)
 				end
 			end
 			function charactersCreateEvent:DoClick()
-				if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
+				if CharMenu.character.amountevent < LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
 					if pa(CharMenu.frame) then
 						CharMenu.frame:Close()
 					end
-					SetGlobalDBool("create_eventchar", true)
+					SetGlobalBool("create_eventchar", true)
 					openCharacterCreation()
 				end
 			end
@@ -908,7 +908,7 @@ function openCharacterSelection()
 
 				-- Get Newest Background for the Menu
 				local oldurl = CharMenu.frame.bg.url
-				local newurl = GetGlobalDString("text_character_background", "")
+				local newurl = GetGlobalString("text_character_background", "")
 				if oldurl != newurl then
 					CharMenu.frame.bg.url = newurl
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
@@ -918,14 +918,14 @@ function openCharacterSelection()
 				end
 
 				local acur = CharMenu.character.amount or -1
-				local amax = LocalPlayer():GetDInt("int_characters_max", 1)
+				local amax = LocalPlayer():GetNW2Int("int_characters_max", 1)
 				local acolor = Color(255, 255, 255, 255)
 				if acur > amax then
 					acolor = Color(255, 100, 100, 255)
 				end
 
 				local aecur = CharMenu.character.amountevent or -1
-				local aemax = LocalPlayer():GetDInt("int_charactersevent_max", 1)
+				local aemax = LocalPlayer():GetNW2Int("int_charactersevent_max", 1)
 				local aecolor = Color(255, 255, 255, 255)
 				if aecur > aemax then
 					aecolor = Color(255, 100, 100, 255)
@@ -1006,8 +1006,8 @@ function openCharacterSelection()
 					draw.SimpleText("EVENT CHARACTER", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				else
 					local tab = {}
-					tab.text = math.Round(LocalPlayer():GetDInt("int_deathtimestamp_min", 0) - CurTime(), 0)
-					if LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+					tab.text = math.Round(LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) - CurTime(), 0)
+					if LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
 						tab.text = YRP.lang_string("LID_enterworld") -- .. " (" .. _cur .. ")"
 					end
 					if LocalPlayer() != nil and LocalPlayer():Alive() then
@@ -1028,7 +1028,7 @@ function openCharacterSelection()
 				if isEventChar then
 					-- nothing
 				else
-					if LocalPlayer() != nil and curChar != "-1" and LocalPlayer():GetDInt("int_deathtimestamp_min", 0) <= CurTime() then
+					if LocalPlayer() != nil and curChar != "-1" and LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
 						if LocalPlayer():Alive() then
 							net.Start("LogOut")
 							net.SendToServer()
@@ -1079,16 +1079,16 @@ function openCharacterSelection()
 			local charactersCreate = createD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(100), py)
 			charactersCreate:SetText("")
 			function charactersCreate:Paint(pw, ph)
-				if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+				if CharMenu.character.amount < LocalPlayer():GetNW2Int("int_characters_max", 1) then
 					hook.Run("YAddPaint", self, pw, ph)
 				end
 			end
 			function charactersCreate:DoClick()
-				if CharMenu.character.amount < LocalPlayer():GetDInt("int_characters_max", 1) then
+				if CharMenu.character.amount < LocalPlayer():GetNW2Int("int_characters_max", 1) then
 					if pa(CharMenu.frame) then
 						CharMenu.frame:Close()
 					end
-					SetGlobalDBool("create_eventchar", false)
+					SetGlobalBool("create_eventchar", false)
 					openCharacterCreation()
 				end
 			end
@@ -1096,16 +1096,16 @@ function openCharacterSelection()
 			local charactersCreateEvent = createD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(210), py)
 			charactersCreateEvent:SetText("")
 			function charactersCreateEvent:Paint(pw, ph)
-				if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
+				if CharMenu.character.amountevent < LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
 					hook.Run("YAddPaint", self, pw, ph)
 				end
 			end
 			function charactersCreateEvent:DoClick()
-				if CharMenu.character.amountevent < LocalPlayer():GetDInt("int_charactersevent_max", 1) then
+				if CharMenu.character.amountevent < LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
 					if pa(CharMenu.frame) then
 						CharMenu.frame:Close()
 					end
-					SetGlobalDBool("create_eventchar", true)
+					SetGlobalBool("create_eventchar", true)
 					openCharacterCreation()
 				end
 			end
@@ -1135,7 +1135,7 @@ function openCharacterSelection()
 
 				-- Get Newest Background for the Menu
 				local oldurl = CharMenu.frame.bg.url
-				local newurl = GetGlobalDString("text_character_background", "")
+				local newurl = GetGlobalString("text_character_background", "")
 				if oldurl != newurl then
 					CharMenu.frame.bg.url = newurl
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
@@ -1146,7 +1146,7 @@ function openCharacterSelection()
 
 				-- Current and Max Count of Possible Characters
 				local acur = CharMenu.character.amount or -1
-				local amax = LocalPlayer():GetDInt("int_characters_max", 1)
+				local amax = LocalPlayer():GetNW2Int("int_characters_max", 1)
 				local acolor = Color(255, 255, 255, 255)
 				if acur > amax then
 					acolor = Color(255, 100, 100, 255)
@@ -1155,7 +1155,7 @@ function openCharacterSelection()
 
 				-- Current and Max Count of Possible Event Characters
 				local aecur = CharMenu.character.amountevent or -1
-				local aemax = LocalPlayer():GetDInt("int_charactersevent_max", 1)
+				local aemax = LocalPlayer():GetNW2Int("int_charactersevent_max", 1)
 				local aecolor = Color(255, 255, 255, 255)
 				if aecur > aemax then
 					aecolor = Color(255, 100, 100, 255)
@@ -1260,7 +1260,7 @@ end)
 
 net.Receive("OpenCharacterCreation", function(len, ply)
 	timer.Simple(1, function()
-		SetGlobalDBool("create_eventchar", false)
+		SetGlobalBool("create_eventchar", false)
 		openCharacterCreation()
 	end)
 end)

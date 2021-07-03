@@ -88,21 +88,21 @@ end)
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:DesignLoadout(from)
-	self:SetDInt("yrp_loading", 0)
+	self:SetNW2Int("yrp_loading", 0)
 	self:HudLoadout()
 	self:InterfaceLoadout()
 	YRP.msg("debug", "[DesignLoadout] " .. self:YRPName() .. " " .. tostring(from))
 	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(setting) then
 		setting = setting[1]
-		self:SetDString("string_hud_design", setting.string_hud_design)
-		SetGlobalDString("string_interface_design", setting.string_interface_design)
-		SetGlobalDString("string_hud_profile", setting.string_hud_profile)
-		SetGlobalDInt("int_headerheight", setting.int_headerheight)
+		self:SetNW2String("string_hud_design", setting.string_hud_design)
+		SetGlobalString("string_interface_design", setting.string_interface_design)
+		SetGlobalString("string_hud_profile", setting.string_hud_profile)
+		SetGlobalInt("int_headerheight", setting.int_headerheight)
 	else
 		YRP.msg("note", "Fatal Error: Design Settings not found")
 	end
-	self:SetDInt("yrp_loading", 100)
+	self:SetNW2Int("yrp_loading", 100)
 end
 
 util.AddNetworkString("rebuildHud")
@@ -121,12 +121,12 @@ net.Receive("ply_changed_resolution", function(len, ply)
 	end
 	timer.Simple(1, function()
 		if IsValid(ply) then
-			ply:SetDInt("hud_version", ply:GetDInt("hud_version", 0) + 1)
+			ply:SetNW2Int("hud_version", ply:GetNW2Int("hud_version", 0) + 1)
 		end
 	end)
 	timer.Simple(30, function()
 		if IsValid(ply) then
-			ply:SetDInt("hud_version", ply:GetDInt("hud_version", 0) + 1)
+			ply:SetNW2Int("hud_version", ply:GetNW2Int("hud_version", 0) + 1)
 		end
 	end)
 	--ply:DesignLoadout("ply_changed_resolution")
@@ -138,7 +138,7 @@ net.Receive("change_hud_design", function(len, ply)
 	YRP.msg("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
 	SQL_UPDATE(DATABASE_NAME, "string_hud_design = '" .. string_hud_design .. "'", "uniqueID = '1'")
 	for i, pl in pairs(player.GetAll()) do
-		pl:SetDString("string_hud_design", string_hud_design)
+		pl:SetNW2String("string_hud_design", string_hud_design)
 	end
 end)
 
@@ -174,7 +174,7 @@ net.Receive("change_interface_design", function(len, ply)
 	local string_interface_design = net.ReadString()
 	YRP.msg("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
 	SQL_UPDATE(DATABASE_NAME, "string_interface_design = '" .. string_interface_design .. "'", "uniqueID = '1'")
-	SetGlobalDString("string_interface_design", string_interface_design)
+	SetGlobalString("string_interface_design", string_interface_design)
 
 	ResetDesign()
 end)
@@ -237,5 +237,5 @@ net.Receive("yrp_change_headerheight", function(len, ply)
 	newheaderheight = tonumber(newheaderheight)
 
 	SQL_UPDATE(DATABASE_NAME, "int_headerheight = '" .. newheaderheight .. "'", "uniqueID = '1'")
-	SetGlobalDInt("int_headerheight", newheaderheight)
+	SetGlobalInt("int_headerheight", newheaderheight)
 end)
