@@ -1,6 +1,6 @@
 -- Networking
 
-local YRP_Global_Tables = {}
+YRP_Global_Tables = YRP_Global_Tables or {}
 
 if SERVER then
 	util.AddNetworkString("YRPSetGlobalTable")
@@ -44,7 +44,14 @@ if CLIENT then
 		SetGlobalTable(key, tab)
 	end)
 
-	net.Start("YRPGetGlobalTables")
-	net.SendToServer()
+	hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded_GlobalTable", function()
+		net.Start("YRPGetGlobalTables")
+		net.SendToServer()
+	end)
+
+	timer.Simple(2, function()
+		net.Start("YRPGetGlobalTables")
+		net.SendToServer()
+	end)
 end
 
