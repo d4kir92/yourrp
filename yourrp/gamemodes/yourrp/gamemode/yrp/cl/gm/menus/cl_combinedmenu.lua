@@ -443,8 +443,11 @@ function OpenCombinedMenu()
 			end
 			hook.Run("YFramePaint", self, pw, ph)
 		end
+		if LocalPlayer().combinedmaximised == nil then
+			LocalPlayer().combinedmaximised = false
+		end
 		cm.win:CanMaximise()
-		cm.win:SetMaximised(LocalPlayer():GetNW2Bool("combinedmaximised", true), "COMBINED")
+		cm.win:SetMaximised(LocalPlayer().combinedmaximised, "COMBINED")
 		cm.win:SetSizable(true)
 		cm.win:SetMinWidth(700)
 		cm.win:SetMinHeight(700)
@@ -471,7 +474,7 @@ function OpenCombinedMenu()
 		cm.menu:SetText("")
 		cm.menu.pw = 10
 		cm.menu.ph = YRP.ctr(64) + 2 * br
-		cm.menu.expanded = lply:GetNW2Bool("combined_expanded", true)
+		cm.menu.expanded = lply.combined_expanded or true
 		local font = "Y_" .. math.Clamp(math.Round(cm.menu.ph - 2 * br), 4, 100) ..  "_500"
 		function cm.menu:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"))
@@ -495,7 +498,7 @@ function OpenCombinedMenu()
 
 				cm.menu.expanded = true
 			end
-			lply:SetNW2Bool("combined_expanded", cm.menu.expanded)
+			lply.combined_expanded = cm.menu.expanded
 		end
 		function cm.menu.expander:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)

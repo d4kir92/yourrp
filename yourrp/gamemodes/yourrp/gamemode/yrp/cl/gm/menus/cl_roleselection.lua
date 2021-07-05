@@ -190,7 +190,7 @@ function CreateRolePreviewContent()
 		function swepsbg:Paint(pw, ph)
 			hook.Run("YTextFieldPaint", self, pw, ph)
 
-			draw.SimpleText(GetSWEPPrintName(LocalPlayer():GetNW2String("preview_swep", "NO SWEPs")), "Y_18_500", pw / 2, YRP.ctr(50), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(GetSWEPPrintName(LocalPlayer().preview_swep or "NO SWEPS"), "Y_18_500", pw / 2, YRP.ctr(50), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local sweps = createD("DModelPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20 + hh + 20 + 20 + hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh))
@@ -225,10 +225,9 @@ function CreateRolePreviewContent()
 			self.zoom = self.zoom + scrollDelta
 			sweps:SetCamPos( Vector( self.zoom, 0, 0 ) )
 		end
-		if sweps.models[1] != nil and sweps.Entity != nil then
+		if sweps.models[1] != nil then
 			sweps:SetModel(GetSWEPWorldModel(sweps.models[1]))
-			sweps.Entity:SetAngles(sweps.Angles)
-			LocalPlayer():SetNW2String("preview_swep", sweps.models[1])
+			LocalPlayer().preview_swep = sweps.models[1]
 		end
 
 		local nextpm = createD("YButton", sweps, YRP.ctr(64), YRP.ctr(64), sweps:GetWide() - YRP.ctr(64 + 20), YRP.ctr(450))
@@ -246,7 +245,7 @@ function CreateRolePreviewContent()
 			if sweps.id + 1 <= table.Count(sweps.models) then
 				sweps.id = sweps.id + 1
 				sweps:SetModel(GetSWEPWorldModel(sweps.models[sweps.id]))
-				LocalPlayer():SetNW2String("preview_swep", sweps.models[sweps.id])
+				LocalPlayer().preview_swep = sweps.models[sweps.id]
 			end
 		end
 
@@ -265,7 +264,7 @@ function CreateRolePreviewContent()
 			if sweps.id - 1 > 0 then
 				sweps.id = sweps.id - 1
 				sweps:SetModel(GetSWEPWorldModel(sweps.models[sweps.id]))
-				LocalPlayer():SetNW2String("preview_swep", sweps.models[sweps.id])
+				LocalPlayer().preview_swep = sweps.models[sweps.id]
 			end
 		end
 
@@ -420,7 +419,7 @@ function CreateRoleSelectionContent(PARENT)
 		function back:DoClick()
 			if LocalPlayer():GetNW2Int("char_count", count) <= 0 then return end
 
-			if LocalPlayer():GetNW2Bool("onefaction", true) then
+			if LocalPlayer().onefaction then
 				parent:Remove()
 				openCharacterSelection()
 			elseif !LocalPlayer().rolepreview then

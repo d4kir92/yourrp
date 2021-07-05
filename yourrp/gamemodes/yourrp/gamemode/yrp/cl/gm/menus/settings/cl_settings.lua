@@ -294,6 +294,12 @@ function F8OpenSettings()
 	end
 
 	local lply = LocalPlayer()
+	if lply.settings_expanded == nil then
+		lply.settings_expanded = true
+	end
+	if lply.settingsmaximised == nil then
+		lply.settingsmaximised = false
+	end
 	sm.open = true
 	local br = YRP.ctr(20)
 
@@ -351,7 +357,7 @@ function F8OpenSettings()
 		--sm.win:SetHeaderHeight(YRP.ctr(100))
 		sm.win:SetBorder(0)
 		sm.win:CanMaximise()
-		sm.win:SetMaximised(LocalPlayer():GetNW2Bool("settingsmaximised", true), "SETTING")
+		sm.win:SetMaximised(LocalPlayer().settingsmaximised, "SETTING")
 		sm.win:SetSizable(true)
 		sm.win:SetMinWidth(700)
 		sm.win:SetMinHeight(700)
@@ -461,7 +467,7 @@ function F8OpenSettings()
 		sm.menu:SetText("")
 		sm.menu.pw = YRP.ctr(64) + 2 * br
 		sm.menu.ph = YRP.ctr(64) + 2 * br
-		sm.menu.expanded = sm.menu.expanded or lply:GetNW2Bool("settings_expanded", true)
+		sm.menu.expanded = sm.menu.expanded or lply.settings_expanded
 		local font = "Y_" .. math.Clamp(math.Round(sm.menu.ph - 2 * br), 4, 100) ..  "_500"
 		function sm.menu:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
@@ -472,7 +478,7 @@ function F8OpenSettings()
 		sm.menu.expander = createD("DButton", sm.win, sm.menu.ph, sm.menu.ph, 0, sm.win:GetTall() - sm.menu.ph)
 		sm.menu.expander:SetText("")
 		function sm.menu.expander:DoClick()
-			if lply:GetNW2Bool("settings_expanded", true) then
+			if lply.settings_expanded then
 				sm.win:UpdateCustomeSize(sm.menu.ph)
 
 				sm.menu.expanded = false
@@ -481,11 +487,11 @@ function F8OpenSettings()
 
 				sm.menu.expanded = true
 			end
-			lply:SetNW2Bool("settings_expanded", sm.menu.expanded)
+			lply.settings_expanded = sm.menu.expanded
 		end
 		function sm.menu.expander:Paint(pw, ph)
 			self:SetPos(0, sm.win:GetTall() - sm.menu.ph)
-			if lply:GetNW2Bool("settings_expanded", true) then
+			if lply.settings_expanded then
 				if YRP.GetDesignIcon("64_angle-left") ~= nil then
 					surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
 				end
@@ -602,7 +608,7 @@ function F8OpenSettings()
 			end
 		end
 
-		if lply:GetNW2Bool("settings_expanded", true) then
+		if lply.settings_expanded then
 			sm.win:UpdateCustomeSize()
 		else
 			sm.win:UpdateCustomeSize(sm.menu.ph)

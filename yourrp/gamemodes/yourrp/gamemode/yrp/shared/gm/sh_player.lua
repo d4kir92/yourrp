@@ -41,44 +41,46 @@ function Player:IsTyping()
 	end
 end
 
-function Player:YRPEat(num)
-	num = tonumber(num)
-	if isnumber(num) then
-		local eatsounds = {
-			"npc/barnacle/barnacle_crunch2.wav",
-			"npc/barnacle/barnacle_crunch3.wav",
-			"physics/body/body_medium_break4.wav"
-		}
-		local name, nr = table.Random(eatsounds)
-		util.PrecacheSound(name)
-		self:EmitSound(name)
-
-		local newhunger = math.Clamp(self:GetNW2Float("hunger", 0.0) + num, 0, 100.0)
-		self:SetNW2Float("hunger", newhunger)
-	end
-end
-
-function Player:YRPDrink(num, permille)
-	num = tonumber(num)
-	if isnumber(num) then
-		local drinksounds = {
-			"npc/barnacle/barnacle_gulp1.wav",
-			"npc/barnacle/barnacle_gulp2.wav",
-			"drink1.wav"
-		}
-		local name, nr = table.Random(drinksounds)
-		util.PrecacheSound(name)
-		self:EmitSound(name)
-
-		local newthirst = math.Clamp(self:GetNW2Float("thirst", 0.0) + num, 0, self:GetMaxThirst())
-		self:SetNW2Float("thirst", newthirst)
+if SERVER then
+	function Player:YRPEat(num)
+		num = tonumber(num)
+		if isnumber(num) then
+			local eatsounds = {
+				"npc/barnacle/barnacle_crunch2.wav",
+				"npc/barnacle/barnacle_crunch3.wav",
+				"physics/body/body_medium_break4.wav"
+			}
+			local name, nr = table.Random(eatsounds)
+			util.PrecacheSound(name)
+			self:EmitSound(name)
+			
+			local newhunger = math.Clamp(self:GetNW2Float("hunger", 0.0) + num, 0, 100.0)
+			self:SetNW2Float("hunger", newhunger)
+		end
 	end
 
-	if permille != nil then
-		permille = tonumber(permille)
-		if isnumber(permille) and permille > 0 then
-			local newpermille = math.Clamp(self:GetNW2Float("permille", 0.0) + permille, 0, self:GetMaxPermille())
-			self:SetNW2Float("permille", newpermille)
+	function Player:YRPDrink(num, permille)
+		num = tonumber(num)
+		if isnumber(num) then
+			local drinksounds = {
+				"npc/barnacle/barnacle_gulp1.wav",
+				"npc/barnacle/barnacle_gulp2.wav",
+				"drink1.wav"
+			}
+			local name, nr = table.Random(drinksounds)
+			util.PrecacheSound(name)
+			self:EmitSound(name)
+
+			local newthirst = math.Clamp(self:GetNW2Float("thirst", 0.0) + num, 0, self:GetMaxThirst())
+			self:SetNW2Float("thirst", newthirst)
+		end
+
+		if permille != nil then
+			permille = tonumber(permille)
+			if isnumber(permille) and permille > 0 then
+				local newpermille = math.Clamp(self:GetNW2Float("permille", 0.0) + permille, 0, self:GetMaxPermille())
+				self:SetNW2Float("permille", newpermille)
+			end
 		end
 	end
 end

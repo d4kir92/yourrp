@@ -811,6 +811,7 @@ net.Receive("inv_pm_up", function(len, ply)
 	if wk(_pms) then
 		if wk(_pms[_cur]) then
 			ply:SetNW2String("string_playermodel", _pms[_cur])
+			ply:SetNW2Int("pmid", _cur)
 			ply:SetModel(_pms[_cur])
 			local _charid = ply:CharID()
 			SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
@@ -827,6 +828,7 @@ net.Receive("inv_pm_do", function(len, ply)
 	if wk(_pms) then
 		if wk(_pms[_cur]) then
 			ply:SetNW2String("string_playermodel", _pms[_cur])
+			ply:SetNW2Int("pmid", _cur)
 			ply:SetModel(_pms[_cur])
 			local _charid = ply:CharID()
 			SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))

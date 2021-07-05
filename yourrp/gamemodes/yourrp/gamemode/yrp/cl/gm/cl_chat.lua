@@ -241,6 +241,7 @@ end
 
 function InitYRPChat()
 	local lply = LocalPlayer()
+	lply.yrp_timestamp = lply.yrp_timestamp or false
 	if yrpChat.window == nil then
 		yrpChat.window = createD("DFrame", nil, 100, 100, 100, 100)
 		yrpChat.window:SetTitle("")
@@ -293,7 +294,7 @@ function InitYRPChat()
 
 				local name = GetGlobalString("text_server_name", "")
 				if strEmpty(name) then
-					name = GetHostName()
+					name = YRPGetHostName()
 				end
 				draw.SimpleText(name, "Y_16_500", pw / 2, YRP.ctr(BR + H / 2), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
@@ -435,9 +436,9 @@ function InitYRPChat()
 			local tila = createD("YLabel", win:GetContent(), YRP.ctr(350), YRP.ctr(50), YRP.ctr(50), YRP.ctr(0))
 			tila:SetText("Timestamp")
 			local ticb = createD("DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
-			ticb:SetChecked(lply:GetNW2Bool("yrp_timestamp", false))
+			ticb:SetChecked(lply.yrp_timestamp)
 			function ticb:OnChange()
-				lply:SetNW2Bool("yrp_timestamp", !lply:GetNW2Bool("yrp_timestamp", false))
+				lply.yrp_timestamp = !lply.yrp_timestamp
 			end
 
 			local tspn = createD("YLabel", win:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(0), YRP.ctr(100))
@@ -530,12 +531,11 @@ function InitYRPChat()
 			local args = { ... }
 			yrpChat.richText:AppendText("\n")
 			_delay = 3
-			if lply:GetNW2Bool("yrp_timestamp", false) and GetGlobalBool("bool_yrp_chat", false) then
+			if lply.yrp_timestamp and GetGlobalBool("bool_yrp_chat", false) then
 				local clock = {}
 				clock.sec = os.date("%S")
 				clock.min = os.date("%M")
 				clock.hours = os.date("%I")
-
 				yrpChat.richText:InsertColorChange(200, 200, 255, 255)
 				yrpChat.richText:AppendText(clock.hours .. ":" .. clock.min .. ":" .. clock.sec .. " ")
 				yrpChat.richText:InsertColorChange(255, 255, 255, 255)

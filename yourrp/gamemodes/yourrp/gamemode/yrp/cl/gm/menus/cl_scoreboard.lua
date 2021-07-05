@@ -542,10 +542,17 @@ function InitScoreboard()
 			gui.EnableScreenClicker(true)
 		end
 
+		if yrp_sb_canclose and LocalPlayer():KeyDown(IN_SCORE) then
+			CloseSBS()
+		end
+		if vgui.CursorVisible() and not LocalPlayer():KeyDown(IN_SCORE) then
+			yrp_sb_canclose = true
+		end
+
 		-- NAME
 		local name = GetGlobalString("text_server_name", "")
 		if strEmpty(name) then
-			name = GetHostName()
+			name = YRPGetHostName()
 		end
 		draw.SimpleText(name, "Saira_72", pw / 2, 80, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
@@ -655,6 +662,7 @@ InitScoreboard()
 
 function GM:ScoreboardShow()
 	OpenSBS()
+	yrp_sb_canclose = false
 end
 
 function GM:ScoreboardHide()

@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 339 --do NOT change this!
-GM.VersionCanary = 681 --do NOT change this!
+GM.VersionBeta = 340 --do NOT change this!
+GM.VersionCanary = 683 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -125,7 +125,7 @@ concommand.Add("yrp_status", function(ply, cmd, args)
 	hr_pre("gm")
 	YRP.msg("gm", "    Version: " .. GAMEMODE.Version)
 	YRP.msg("gm", "    Channel: " .. string.upper(GAMEMODE.VersionSort))
-	YRP.msg("gm", " Servername: " .. GetHostName())
+	YRP.msg("gm", " Servername: " .. YRPGetHostName())
 	YRP.msg("gm", "         IP: " .. game.GetIPAddress())
 	YRP.msg("gm", "        Map: " .. GetMapNameDB())
 	YRP.msg("gm", "    Players: " .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()))
@@ -602,6 +602,14 @@ if system.IsLinux() then
 		Msg('\27[41;15m\27[1m')
 		_ErrorNoHalt(msg)
 		Msg(color_clear_sequence)
+	end
+end
+
+function YRPGetHostName()
+	if GetGlobalString( "ServerName") then
+		return GetGlobalString( "ServerName")
+	else
+		return GetGlobalString("text_server_name", "")
 	end
 end
 

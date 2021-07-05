@@ -157,7 +157,7 @@ function CreateCharacterSettingsContent()
 				character.skin = 1
 				character.bg = {}
 				for i = 0, 19 do
-					character.bg[i] = LocalPlayer():GetNW2Int("charcreate_bg" .. i, 0)
+					character.bg[i] = LocalPlayer()["charcreate_bg" .. i] or 0
 				end
 
 				character.birt = LocalPlayer().charcreate_birt
@@ -205,18 +205,18 @@ function CreateCharacterSettingsContent()
 			appe:SetSpacing(YRP.ctr(config.br))
 
 			for _, bg in pairs(bgs) do
-				LocalPlayer():SetNW2Int("charcreate_bg" .. bg.id, 0)
+				LocalPlayer()["charcreate_bg" .. bg.id] = 0
 				if table.Count(bg.submodels) > 1 then
 					local pbg = createD("DPanel", nil, ew, YRP.ctr(config.hh * 2), 0, 0)
 					function pbg:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue("YFrame", "PC"))
-						draw.SimpleText(LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) + 1 .. "/" .. table.Count(bg.submodels) .. " " .. bg["name"], "Y_18_500", YRP.ctr(config.hh + config.br), ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(LocalPlayer()["charcreate_bg" .. bg.id] + 1 .. "/" .. table.Count(bg.submodels) .. " " .. bg["name"], "Y_18_500", YRP.ctr(config.hh + config.br), ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 
 					local skinup = createD("YButton", pbg, YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.1), YRP.ctr(config.hh * 0.1))
 					skinup:SetText("")
 					function skinup:Paint(pw, ph)
-						if LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) + 1 < table.Count(bg.submodels) then
+						if LocalPlayer()["charcreate_bg" .. bg.id] + 1 < table.Count(bg.submodels) then
 							hook.Run("YButtonPaint", self, pw, ph)
 
 							surface.SetDrawColor(255, 255, 255, 255)
@@ -225,16 +225,16 @@ function CreateCharacterSettingsContent()
 						end
 					end
 					function skinup:DoClick()
-						if LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) + 1 < table.Count(bg.submodels) then
-							LocalPlayer():SetNW2Int("charcreate_bg" .. bg.id, LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) + 1)
-							pms.Entity:SetBodygroup(bg.id, LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0))
+						if LocalPlayer()["charcreate_bg" .. bg.id] + 1 < table.Count(bg.submodels) then
+							LocalPlayer()["charcreate_bg" .. bg.id] = LocalPlayer()["charcreate_bg" .. bg.id] + 1
+							pms.Entity:SetBodygroup(bg.id, LocalPlayer()["charcreate_bg" .. bg.id])
 						end
 					end
 
 					local skindn = createD("YButton", pbg, YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.1), YRP.ctr(config.hh + config.hh * 0.1))
 					skindn:SetText("")
 					function skindn:Paint(pw, ph)
-						if LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) > 0 then
+						if LocalPlayer()["charcreate_bg" .. bg.id] > 0 then
 							hook.Run("YButtonPaint", self, pw, ph)
 
 							surface.SetDrawColor(255, 255, 255, 255)
@@ -243,9 +243,9 @@ function CreateCharacterSettingsContent()
 						end
 					end
 					function skindn:DoClick()
-						if LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) > 0 then
-							LocalPlayer():SetNW2Int("charcreate_bg" .. bg.id, LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0) - 1)
-							pms.Entity:SetBodygroup(bg.id, LocalPlayer():GetNW2Int("charcreate_bg" .. bg.id, 0))
+						if LocalPlayer()["charcreate_bg" .. bg.id] > 0 then
+							LocalPlayer()["charcreate_bg" .. bg.id] = LocalPlayer()["charcreate_bg" .. bg.id] - 1
+							pms.Entity:SetBodygroup(bg.id, LocalPlayer()["charcreate_bg" .. bg.id])
 						end
 					end
 

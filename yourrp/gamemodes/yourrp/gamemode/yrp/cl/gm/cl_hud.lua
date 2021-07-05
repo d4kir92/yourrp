@@ -375,9 +375,9 @@ function TestYourRPContent()
 				end
 			end
 		end
+		LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
 		if LocalPlayer() != NULL then
-			LocalPlayer():SetNW2String("badyourrpcontent", str)
-			LocalPlayer():SetNW2Bool("badyourrpcontent", true)
+			LocalPlayer().badyourrpcontent = str
 		end
 	end
 end
@@ -504,9 +504,10 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		draw.SimpleText("YOURRP CONTENT IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	if LocalPlayer():GetNW2String("badyourrpcontent", "") != "" then
+	LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
+	if LocalPlayer().badyourrpcontent != "" then
 		draw.SimpleText("Your addon is outdated, please delete/redownload (addons folder):", "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		local addons = string.Explode("\n", LocalPlayer():GetNW2String("badyourrpcontent", ""))
+		local addons = string.Explode("\n", LocalPlayer().badyourrpcontent)
 		for i, v in pairs(addons) do
 			draw.SimpleText("• " .. v, "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50) + i * YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end

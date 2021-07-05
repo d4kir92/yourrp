@@ -85,7 +85,6 @@ function openCharacterCreation()
 		LocalPlayer().cc = true
 		CreateFactionSelectionContent()
 	end
-	--LocalPlayer():SetNW2Bool("loadedchars", true)
 end
 
 local CharMenu = {}
@@ -195,14 +194,15 @@ function LoadCharacters()
 					tmpChar.factionIcon = chars[i].faction.string_icon or ""
 					tmpChar.groupID = chars[i].group.string_name or "GROUP INVALID"
 					tmpChar.map = SQL_STR_OUT(chars[i].char.map)
-					tmpChar.playermodelID = LocalPlayer():GetNW2Int("pmid", 1)
-					tmpChar.bool_eventchar = chars[i].char.bool_eventchar								--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 1))
+					tmpChar.playermodelID = chars[i].char.playermodelID or 1
+					tmpChar.playermodelID = tonumber(tmpChar.playermodelID)
+					tmpChar.bool_eventchar = chars[i].char.bool_eventchar
 
-					tmpChar.playermodels = string.Explode(",", chars[i].role.string_playermodels) or {}
-					if tmpChar.playermodels == "" or tmpChar.playermodels == " " then
-						tmpChar.playermodels = {}
+					tmpChar.playermodels = {}
+					if !strEmpty(chars[i].role.string_playermodels) then
+						tmpChar.playermodels = string.Explode(",", chars[i].role.string_playermodels)
 					end
-
+	
 					tmpChar.playermodelsize = chars[i].role.playermodelsize
 					tmpChar.skin = chars[i].char.skin
 					tmpChar.bg0 = chars[i].char.bg0 or 0
@@ -292,8 +292,8 @@ function LoadCharacters()
 							if cni <= LocalPlayer():GetNW2Int("int_characters_max", 1) then
 								curChar = tonumber(self.charid)
 								_cur = self.rpname
-								if self.playermodels != nil and LocalPlayer():GetNW2Int("pmid", 1) != nil then
-									local _playermodel = self.playermodels[LocalPlayer():GetNW2Int("pmid", 1)] or nil
+								if self.playermodels != nil and self.playermodelID != nil then
+									local _playermodel = self.playermodels[self.playermodelID] or nil
 									if _playermodel != nil and CharMenu.charplayermodel != NULL and pa(CharMenu.charplayermodel) then
 										if !strEmpty(_playermodel) then
 											CharMenu.charplayermodel:SetModel(_playermodel)
@@ -343,6 +343,15 @@ function LoadCharacters()
 						function tmpChar.charplayermodel:DragMouseRelease() self.Pressed = false end
 
 						function tmpChar.charplayermodel:LayoutEntity(ent)
+							local _playermodel = tmpChar.playermodels[tmpChar.playermodelID] or nil
+							if _playermodel == nil or strEmpty(_playermodel) then
+								_playermodel = "models/player/skeleton.mdl"
+							end
+							if self.pm != _playermodel then
+								self.pm = _playermodel
+								tmpChar.charplayermodel:SetModel(self.pm)
+							end
+
 							if (self.bAnimated) then self:RunAnimation() end
 
 							if (self.Pressed) then
@@ -355,15 +364,7 @@ function LoadCharacters()
 								end
 							end
 						end
-						local _playermodel = tmpChar.playermodels[1] or nil
-						if _playermodel != nil and tmpChar.charplayermodel != NULL and pa(tmpChar.charplayermodel) then
-							if !strEmpty(_playermodel) then
-								tmpChar.charplayermodel:SetModel(_playermodel)
-							else
-								tmpChar.charplayermodel:SetModel("models/player/skeleton.mdl")
-							end
-						end
-
+						
 						local button = {}
 						button.w = YRP.ctr(200*2)
 						button.h = YRP.ctr(36*2)
@@ -559,8 +560,6 @@ function LoadCharacters()
 		local px, py = CharMenu.characterList:GetPos()
 		CharMenu.characterList:SetPos(CharMenu.charactersBackground:GetWide() / 2 - CharMenu.characterList:GetWide() / 2, py)
 	end
-
-	--LocalPlayer():SetNW2Bool("loadedchars", true)
 
 	if pa(CharMenu.frame) then
 		CharMenu.frame:Show()
