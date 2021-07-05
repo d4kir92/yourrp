@@ -606,10 +606,12 @@ if system.IsLinux() then
 end
 
 function YRPGetHostName()
-	if GetGlobalString( "ServerName") then
-		return GetGlobalString( "ServerName")
+	if !strEmpty(GetGlobalString("ServerName")) then
+		return GetGlobalString("ServerName")
+	elseif !strEmpty(GetGlobalString("text_server_name")) then
+		return GetGlobalString("text_server_name")
 	else
-		return GetGlobalString("text_server_name", "")
+		return GetHostName()
 	end
 end
 
