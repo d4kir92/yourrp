@@ -1305,8 +1305,9 @@ function YRP.Color()
 end
 
 yrp_hud = yrp_hud or {}
+local yrp_hud_loaded = false
 function YRPHUD(name, failed)
-	if LocalPlayer():LoadedGamemode() then
+	if LocalPlayer():LoadedGamemode() and yrp_hud_loaded then
 		local value = yrp_hud[name]
 		if value != nil then
 			return value
@@ -1332,6 +1333,7 @@ net.Receive("yrp_hud_info", function(len)
 		end
 	end
 
+	yrp_hud_loaded = true
 	--changeFontSize()
 end)
 

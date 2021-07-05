@@ -53,5 +53,4 @@ if SERVER then
 		end)
 		timer.Simple(2, SendServerInfo)
 	end)
-
 end
