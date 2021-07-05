@@ -753,8 +753,8 @@ local function yrpCalcView(lply, pos, angles, fov)
 		end
 	end
 end
-hook.Remove("CalcView", "MyCalcView")
-hook.Add("CalcView", "MyCalcView", yrpCalcView)
+hook.Remove("CalcView", "YRPMyCalcView")
+hook.Add("CalcView", "YRPMyCalcView", yrpCalcView)
 
 function showPlayermodel()
 	local lply = LocalPlayer()

@@ -618,46 +618,46 @@ end
 --[[
 -- GMOD Discord Trace Errors
 local function FormatTraceback(dumpStr)
-    local stackDump = string.Explode("\n", dumpStr)
-    local newDumpStr = ""
+	local stackDump = string.Explode("\n", dumpStr)
+	local newDumpStr = ""
 
-    for i=1, #stackDump do
-        if i > 2 then
-            local stackNum = i - 2
-            local stackEntry = string.Trim(stackDump[i])
+	for i=1, #stackDump do
+		if i > 2 then
+			local stackNum = i - 2
+			local stackEntry = string.Trim(stackDump[i])
 
-            local stackEntryFuncLabelStart, stackEntryFuncLabelEnd = string.find(stackEntry, ": in function ")
-            local stackEntryMainChunkReplace = 0
-            stackEntry, stackEntryMainChunkReplace = string.gsub(stackEntry, ": in main chunk", "")
+			local stackEntryFuncLabelStart, stackEntryFuncLabelEnd = string.find(stackEntry, ": in function ")
+			local stackEntryMainChunkReplace = 0
+			stackEntry, stackEntryMainChunkReplace = string.gsub(stackEntry, ": in main chunk", "")
 
-            if stackEntryFuncLabelStart then
-                local stackEntryFuncName = string.sub(stackEntry, stackEntryFuncLabelEnd + 2, #stackEntry - 1)
-                stackEntry = string.sub(stackEntry, 1, stackEntryFuncLabelStart - 1)
+			if stackEntryFuncLabelStart then
+				local stackEntryFuncName = string.sub(stackEntry, stackEntryFuncLabelEnd + 2, #stackEntry - 1)
+				stackEntry = string.sub(stackEntry, 1, stackEntryFuncLabelStart - 1)
 
-                if stackEntry == "[C]" then
-                    stackEntry = stackEntry .. ":-1"
-                end
+				if stackEntry == "[C]" then
+					stackEntry = stackEntry .. ":-1"
+				end
 
-                stackEntry = stackEntryFuncName .. " - " .. stackEntry
-            elseif stackEntryMainChunkReplace > 0 then
-                stackEntry = "unknown - " .. stackEntry
-            end
+				stackEntry = stackEntryFuncName .. " - " .. stackEntry
+			elseif stackEntryMainChunkReplace > 0 then
+				stackEntry = "unknown - " .. stackEntry
+			end
 
-            newDumpStr = newDumpStr .. string.rep(" ", stackNum) .. stackNum .. ". " .. stackEntry
-            newDumpStr = newDumpStr .. (i < #stackDump and "\n" or "")
-        end
-    end
+			newDumpStr = newDumpStr .. string.rep(" ", stackNum) .. stackNum .. ". " .. stackEntry
+			newDumpStr = newDumpStr .. (i < #stackDump and "\n" or "")
+		end
+	end
 
-    return newDumpStr
+	return newDumpStr
 end
 
 local _R = debug.getregistry()
 oErrorFunc = oErrorFunc or _R[1]
 _R[1] = function(...)
-    local errVarArg = {...}
-    local errorString = table.concat(errVarArg)
+	local errVarArg = {...}
+	local errorString = table.concat(errVarArg)
 
-    pcall(hook.Call, "LuaError", GAMEMODE, errorString, FormatTraceback(debug.traceback()))
-    return oErrorFunc(...)
+	pcall(hook.Call, "LuaError", GAMEMODE, errorString, FormatTraceback(debug.traceback()))
+	return oErrorFunc(...)
 end
 ]]
