@@ -604,6 +604,11 @@ net.Receive("getBuildingInfo", function(len, ply)
 	local door = net.ReadEntity()
 	local buid = door:GetNW2String("buildingID")
 
+	if ply:GetNW2Bool("bool_" .. "ishobo", false) then
+		YRP.msg("note", "[getBuildingInfo] Is Hobo, not possible to buy as hobo")
+		return
+	end
+
 	local tabBuilding = {}
 	local tabOwner = {}
 	local tabGroup = {}

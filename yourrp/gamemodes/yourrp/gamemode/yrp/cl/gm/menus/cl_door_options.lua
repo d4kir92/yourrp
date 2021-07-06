@@ -26,7 +26,7 @@ net.Receive("getBuildingInfo", function(len)
 		local tabGroup = tab["G"]
 
 		if GetGlobalBool("bool_building_system", false) then
-			if ea(door) then
+			if ea(door) and !LocalPlayer():GetNW2Bool("bool_" .. "ishobo", false) then
 				if table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
 					optionWindow(door, tabBuilding, tabOwner, tabGroup)
 				else

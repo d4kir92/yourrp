@@ -406,14 +406,14 @@ function PANEL:Init()
 						-- Restrictions
 						if !table.HasValue(rol.string_usergroups, "ALL") then
 							if !table.HasValue(rol.string_usergroups, string.upper(LocalPlayer():GetUserGroup())) then
-								--continue
+								continue
 							end
 						end
 
 						if LocalPlayer().cc == true and !rol.bool_visible_cc then
-							--continue
+							continue
 						elseif LocalPlayer().cc == false and !rol.bool_visible_rm then
-							--continue
+							continue
 						end
 
 						if rol.int_prerole == 0 and rol.bool_eventrole == GetGlobalBool("create_eventchar", false) then
@@ -440,9 +440,9 @@ function PANEL:Init()
 						grp.bool_visible_rm = tobool(grp.bool_visible_rm)
 
 						if LocalPlayer().cc == true and !grp.bool_visible_cc then
-							--continue
+							continue
 						elseif LocalPlayer().cc == false and !grp.bool_visible_rm then
-							--continue
+							continue
 						end
 
 						local group = createD("YCollapsibleCategory", base.con, w, h, 0, 0)
