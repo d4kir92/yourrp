@@ -78,6 +78,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_removebuildingownertime", "TEXT DEFAULT '600
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_ttlsweps", "INT DEFAULT 60")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "int_afkkicktime", "INT DEFAULT 300")
+
 
 
 --[[ Gamemode Systems ]]--
@@ -801,6 +803,14 @@ net.Receive("update_int_ttlsweps", function(len, ply)
 	local int = net.ReadString()
 	if isnumber(tonumber(int)) then
 		GeneralUpdateInt(ply, "update_int_ttlsweps", "int_ttlsweps", int)
+	end
+end)
+
+util.AddNetworkString("update_int_afkkicktime")
+net.Receive("update_int_afkkicktime", function(len, ply)
+	local int = net.ReadString()
+	if isnumber(tonumber(int)) then
+		GeneralUpdateInt(ply, "update_int_afkkicktime", "int_afkkicktime", int)
 	end
 end)
 

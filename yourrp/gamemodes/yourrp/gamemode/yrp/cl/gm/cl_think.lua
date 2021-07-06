@@ -789,3 +789,4 @@ net.Receive("send_team", function(len)
 
 	team.SetUp(teamuid, teamname, teamcolor)
 end)
+

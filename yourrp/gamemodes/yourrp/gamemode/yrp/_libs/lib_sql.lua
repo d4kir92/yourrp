@@ -107,7 +107,15 @@ function SQL.TABLE_EXISTS(db_table)
 			return false
 		end
 	elseif SQL.MODE() == "MYSQL" then
-		YRP.msg("note", "MYSQL not available")
+		local _r = SQL_SELECT(db_table, "*", nil)
+
+		if _r == nil or istable(_r) then
+			return true
+		else
+			YRP.msg("note", "Table [" .. tostring(db_table) .. "] not exists.")
+
+			return false
+		end
 	end
 end
 
@@ -130,7 +138,35 @@ function SQL.QUERY(query)
 		end
 		return _result
 	elseif SQL.MODE() == "MYSQL" then
-		YRP.msg("note", "MYSQL not available")
+		if YRPSQL.db != nil then
+			local que = YRPSQL.db:query(query)
+
+			que.onError = function(q, e)
+				if string.find(e, "Unknown column") == nil and string.find(e, "doesn't exist") == nil then
+					YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_QUERY - ERROR: " .. tostring(e) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(query))
+					q:error()
+				end
+			end
+
+			que:start()
+			que:wait(true)
+			local _test = que:getData()
+
+			if istable(_test) then
+				if #_test == 0 then return nil end --YRP.msg("db", "SQL_QUERY TABLE EMPTY 1")
+
+				return _test
+			elseif _test == nil then
+				--YRP.msg("db", "SQL_QUERY TABLE EMPTY 2")
+				return false
+			else
+				YRP.msg("db", "SQL_QUERY TABLE MISSING (" .. tostring(_test) .. ")")
+
+				return false
+			end
+		else
+			YRP.msg("db", "CURRENTLY NOT CONNECTED TO MYSQL SERVER")
+		end
 	end
 end
 
@@ -148,48 +184,44 @@ end
 
 function SQL.SELECT(tab)
 	--YRP.msg("db", "SQL.SELECT")
-	if SQL.MODE() == "SQLITE" then
-		if SQL.TABLE_EXISTS(tab.table) then
-			local _q = "SELECT "
-			for i, col in pairs(tab.cols) do
-				col = SQL_STR_OUT(col)
-				if i > 1 then
-					_q = _q .. ", " .. col
-				else
-					_q = _q .. col
-				end
+	if SQL.TABLE_EXISTS(tab.table) then
+		local _q = "SELECT "
+		for i, col in pairs(tab.cols) do
+			col = SQL_STR_OUT(col)
+			if i > 1 then
+				_q = _q .. ", " .. col
+			else
+				_q = _q .. col
 			end
-			_q = _q .. " FROM " .. tab.table
+		end
+		_q = _q .. " FROM " .. tab.table
 
-			if tab.where != nil then
-				_q = _q .. " WHERE "
-				_q = _q .. tab.where
-			end
+		if tab.where != nil then
+			_q = _q .. " WHERE "
+			_q = _q .. tab.where
+		end
 
-			if tab.manual != nil then
-				_q = _q .. " "
-				_q = _q .. tab.manual
-			end
+		if tab.manual != nil then
+			_q = _q .. " "
+			_q = _q .. tab.manual
+		end
 
-			_q = _q .. ";"
+		_q = _q .. ";"
 
-			local rettab = SQL.QUERY(_q)
-			if istable(rettab) then
-				for i, v in pairs(rettab) do
-					for j, w in pairs(v) do
-						w = SQL.STR_OUT(w)
-						if isnumber(tonumber(w)) then
-							rettab[i][j] = tonumber(w)
-						end
+		local rettab = SQL.QUERY(_q)
+		if istable(rettab) then
+			for i, v in pairs(rettab) do
+				for j, w in pairs(v) do
+					w = SQL.STR_OUT(w)
+					if isnumber(tonumber(w)) then
+						rettab[i][j] = tonumber(w)
 					end
 				end
 			end
-			return rettab
-		else
-			return false
 		end
-	elseif SQL.MODE() == "MYSQL" then
-		YRP.msg("note", "MYSQL not available")
+		return rettab
+	else
+		return false
 	end
 end
 

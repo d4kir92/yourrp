@@ -263,10 +263,16 @@ local TICK = 0.1
 local DEC = 1
 timer.Remove("ServerThink")
 timer.Create("ServerThink", TICK, 0, function()
-	local _all_players = player.GetAll()
-
 	if _time % 1.0 == 0 then	-- Every second
-		for k, ply in pairs(_all_players) do
+		for k, ply in pairs(player.GetAll()) do
+
+			if ply:AFK() then
+				if ply:GetNW2Float("afkts") and GetGlobalInt("int_afkkicktime") and CurTime() - ply:GetNW2Float("afkts") >= GetGlobalInt("int_afkkicktime") then
+					ply:SetNW2Bool("isafk", false)
+					ply:Kick("AFK")
+				end
+			end
+
 			ply:addSecond()
 			if ply:GetNW2Bool("loaded", false) then
 				if !ply:GetNW2Bool("inCombat") then
@@ -306,7 +312,7 @@ timer.Create("ServerThink", TICK, 0, function()
 		end
 	end
 
-	for k, ply in pairs(_all_players) do -- Every 0.1 seconds
+	for k, ply in pairs(player.GetAll()) do -- Every 0.1 seconds
 		if ply:GetNW2Bool("loaded", false) then
 			-- Every 0.1
 			reg_ab(ply)

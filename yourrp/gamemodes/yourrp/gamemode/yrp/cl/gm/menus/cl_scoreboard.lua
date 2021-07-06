@@ -303,6 +303,13 @@ function OpenPlayerOptions(ply)
 	end
 end
 
+function IsScoreboardVisible()
+	if YRPScoreboard != NULL and YRPScoreboard:IsVisible() then
+		return true
+	end
+	return false
+end
+
 function CloseSBS()
 	if !pa(YRPScoreboard) then return end
 

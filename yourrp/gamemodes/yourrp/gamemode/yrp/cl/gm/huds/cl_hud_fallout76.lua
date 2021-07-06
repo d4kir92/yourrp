@@ -431,7 +431,7 @@ local pingcolor = Color(0, 0, 0)
 function HUD_FO76()
 	local lply = LocalPlayer()
 
-	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() then
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and !IsScoreboardVisible() then
 		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design", "") == "Fallout 76" then
 			local HP = {}
 			HP.element = "HP"

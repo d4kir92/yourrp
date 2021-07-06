@@ -792,29 +792,29 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					ea[group.uniqueID].locked = YRPDCheckBox(locked)
 
 					DHr(hr)
-					
-					local visible = {}
-					visible.parent = ea.restriction:GetContent()
-					visible.uniqueID = group.uniqueID
-					visible.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_charactercreation") .. ")"
-					visible.netstr = "update_group_bool_visible_cc"
-					visible.value = group.bool_visible_cc
-					visible.uniqueID = group.uniqueID
-					visible.lforce = false
-					ea[group.uniqueID].visible = YRPDCheckBox(visible)
-
-					DHr(hr)
-
-					local visible2 = {}
-					visible2.parent = ea.restriction:GetContent()
-					visible2.uniqueID = group.uniqueID
-					visible2.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_rolemenu") .. ")"
-					visible2.netstr = "update_group_bool_visible_rm"
-					visible2.value = group.bool_visible_rm
-					visible2.uniqueID = group.uniqueID
-					visible2.lforce = false
-					ea[group.uniqueID].visible2 = YRPDCheckBox(visible2)
 				end
+				
+				local visible = {}
+				visible.parent = ea.restriction:GetContent()
+				visible.uniqueID = group.uniqueID
+				visible.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_charactercreation") .. ")"
+				visible.netstr = "update_group_bool_visible_cc"
+				visible.value = group.bool_visible_cc
+				visible.uniqueID = group.uniqueID
+				visible.lforce = false
+				ea[group.uniqueID].visible = YRPDCheckBox(visible)
+
+				DHr(hr)
+
+				local visible2 = {}
+				visible2.parent = ea.restriction:GetContent()
+				visible2.uniqueID = group.uniqueID
+				visible2.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_rolemenu") .. ")"
+				visible2.netstr = "update_group_bool_visible_rm"
+				visible2.value = group.bool_visible_rm
+				visible2.uniqueID = group.uniqueID
+				visible2.lforce = false
+				ea[group.uniqueID].visible2 = YRPDCheckBox(visible2)
 			end
 		end)
 
@@ -2297,31 +2297,31 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				ea[role.uniqueID].bool_canbeagent = YRPDCheckBox(bool_canbeagent)
 
 				DHr(hr)
-
-				local visible = {}
-				visible.parent = ea.restriction:GetContent()
-				visible.uniqueID = role.uniqueID
-				visible.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_charactercreation") .. ")"
-				visible.netstr = "update_role_bool_visible_cc"
-				visible.value = role.bool_visible_cc
-				visible.uniqueID = role.uniqueID
-				visible.lforce = false
-				ea[role.uniqueID].visible = YRPDCheckBox(visible)
-
-				DHr(hr)
-
-				local visible2 = {}
-				visible2.parent = ea.restriction:GetContent()
-				visible2.uniqueID = role.uniqueID
-				visible2.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_rolemenu") .. ")"
-				visible2.netstr = "update_role_bool_visible_rm"
-				visible2.value = role.bool_visible_rm
-				visible2.uniqueID = role.uniqueID
-				visible2.lforce = false
-				ea[role.uniqueID].visible2 = YRPDCheckBox(visible2)
-
-				DHr(hr)
 			end
+
+			local visible = {}
+			visible.parent = ea.restriction:GetContent()
+			visible.uniqueID = role.uniqueID
+			visible.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_charactercreation") .. ")"
+			visible.netstr = "update_role_bool_visible_cc"
+			visible.value = role.bool_visible_cc
+			visible.uniqueID = role.uniqueID
+			visible.lforce = false
+			ea[role.uniqueID].visible = YRPDCheckBox(visible)
+
+			DHr(hr)
+
+			local visible2 = {}
+			visible2.parent = ea.restriction:GetContent()
+			visible2.uniqueID = role.uniqueID
+			visible2.header = YRP.lang_string("LID_visible") .. " (" .. YRP.lang_string("LID_rolemenu") .. ")"
+			visible2.netstr = "update_role_bool_visible_rm"
+			visible2.value = role.bool_visible_rm
+			visible2.uniqueID = role.uniqueID
+			visible2.lforce = false
+			ea[role.uniqueID].visible2 = YRPDCheckBox(visible2)
+
+			DHr(hr)
 
 			if role.uniqueID > 1 then
 				local bool_voteable = {}

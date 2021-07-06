@@ -1305,7 +1305,7 @@ function YRP.Color()
 end
 
 yrp_hud = yrp_hud or {}
-local yrp_hud_loaded = false
+yrp_hud_loaded = yrp_hud_loaded or false
 function YRPHUD(name, failed)
 	if LocalPlayer():LoadedGamemode() and yrp_hud_loaded then
 		local value = yrp_hud[name]

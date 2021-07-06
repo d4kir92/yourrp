@@ -326,8 +326,9 @@ end
 
 local Player = FindMetaTable("Player")
 function Player:SetAFK(bo)
+	self:SetNW2Float("afkts", CurTime())
 	self:SetNW2Bool("isafk", bo)
-
+	
 	SendAnim(self, GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_SIT, false)
 end
 

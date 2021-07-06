@@ -9,7 +9,7 @@ net.Receive("get_shops", function()
 	if pa(PARENT) then
 		_sh._sho = createD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
 		_sh._sho.tbl = _shops
-		_sh._sho:SetListHeader("shops")
+		_sh._sho:SetListHeader(YRP.lang_string("LID_settings_shops"))
 		_sh._sho:SetEditArea(_sh.ea)
 		function _sh._sho:AddFunction()
 			net.Start("shop_add")
@@ -64,7 +64,7 @@ net.Receive("get_shop_categories", function()
 	if pa(PARENT) then
 		_sh._cat = createD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40+500+40))
 		_sh._cat.tbl = _scats
-		_sh._cat:SetListHeader("categories")
+		_sh._cat:SetListHeader(YRP.lang_string("LID_categories"))
 		_sh._cat:SetEditArea(_sh.ea)
 		function _sh._cat:AddFunction()
 			if _sh._sho.uid != nil then
@@ -125,7 +125,7 @@ net.Receive("get_shop_items", function()
 	if pa(PARENT) then
 		_sh._sit = createD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40+500+40+500+40))
 		_sh._sit.tbl = _sitems
-		_sh._sit:SetListHeader("items")
+		_sh._sit:SetListHeader(YRP.lang_string("LID_items"))
 		_sh._sit:SetEditArea(_sh.ea)
 		function _sh._sit:AddFunction()
 			if _sh._cat.uid != nil then

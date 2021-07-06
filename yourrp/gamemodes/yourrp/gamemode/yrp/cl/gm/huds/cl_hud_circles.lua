@@ -127,7 +127,7 @@ end
 function HUDCircles()
 	local lply = LocalPlayer()
 	
-	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() then
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and !IsScoreboardVisible() then
 		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Circles" then
 			HUDCirclesDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
 			HUDCirclesDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())

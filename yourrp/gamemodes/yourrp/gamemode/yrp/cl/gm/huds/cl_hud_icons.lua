@@ -94,7 +94,7 @@ local ping_delay = CurTime()
 function HUDIcons()
 	local lply = LocalPlayer()
 
-	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() then
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and !IsScoreboardVisible() then
 		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Icons" then
 			HUDIconsDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
 			HUDIconsDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())
