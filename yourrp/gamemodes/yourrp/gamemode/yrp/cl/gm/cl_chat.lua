@@ -49,11 +49,15 @@ end
 
 local ypr_logo = Material("yrp/yrp_icon")
 
+local words = 0
 local _delay = 4
+local _delayText = 1
 local _fadeout = CurTime() + _delay
+local _fadeoutText = CurTime() + _delay
 local _chatIsOpen = false
 local chatclosedforkeybinds = true
 _showChat = true
+_showChatText = true
 local chatids = {}
 local oldchoices = {}
 local chatAlpha = 0
@@ -177,6 +181,12 @@ function checkChatVisible()
 		else
 			_showChat = true
 		end
+		if CurTime() > _fadeoutText and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.settings:HasFocus() then
+			_showChatText = false
+			words = 0
+		else
+			_showChatText = true
+		end
 		if GetGlobalBool("bool_yrp_chat", false) == false then
 			_showChat = false
 		end
@@ -193,19 +203,17 @@ function checkChatVisible()
 
 			if chatAlpha < 0 then
 				chatAlpha = 0
-				yrpChat.richText:SetVerticalScrollbarEnabled(_showChat)
-				yrpChat.window.logo:SetVisible(_showChat)
-				yrpChat.writeField:SetVisible(_showChat)
-				yrpChat.comboBox:SetVisible(_showChat)
-				yrpChat.settings:SetVisible(_showChat)
 			elseif chatAlpha > 1 then
 				chatAlpha = 1
-				yrpChat.richText:SetVerticalScrollbarEnabled(_showChat)
-				yrpChat.window.logo:SetVisible(_showChat)
-				yrpChat.writeField:SetVisible(_showChat)
-				yrpChat.comboBox:SetVisible(_showChat)
-				yrpChat.settings:SetVisible(_showChat)
 			end
+
+			yrpChat.richText:SetVerticalScrollbarEnabled(_showChat)
+			yrpChat.window.logo:SetVisible(_showChat)
+			yrpChat.writeField:SetVisible(_showChat)
+			yrpChat.comboBox:SetVisible(_showChat)
+			yrpChat.settings:SetVisible(_showChat)
+
+			yrpChat.richText:SetVisible(_showChatText)
 		end
 	end
 end
@@ -550,6 +558,9 @@ function InitYRPChat()
 					_delay = _delay + string.len(obj)
 					local _text = string.Explode(" ", obj)
 					for k, str in pairs(_text) do
+						if !strEmpty(str) then
+							words = words + 1
+						end
 						if k > 1 then
 							yrpChat.richText:AppendText(" ")
 						end
@@ -632,6 +643,7 @@ function InitYRPChat()
 					end
 				elseif t == "number" then
 					yrpChat.richText:AppendText(obj)
+					words = words + 1
 				elseif t == "boolean" then
 					YRP.msg("note", "chat.addtext (boolean): " .. tostring(obj))
 				elseif t == "entity" and IsValid(obj) then
@@ -646,6 +658,9 @@ function InitYRPChat()
 			_delay = _delay / 10
 			_delay = math.Clamp(_delay, 2, 30)
 			--_fadeout = CurTime() + _delay
+
+			_fadeoutText = CurTime() + math.Clamp(words * _delayText, 4, 60)
+			
 
 			yrpChat.richText:GotoTextEnd()
 			oldAddText (...)
