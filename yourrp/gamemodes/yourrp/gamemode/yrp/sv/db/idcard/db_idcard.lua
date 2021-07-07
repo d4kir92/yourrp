@@ -81,7 +81,7 @@ function LoadIDCardSetting(force)
 				if string.StartWith(name, "bool_") then
 					SetGlobalBool(name, tobool(value.value))
 				elseif string.StartWith(name, "int_") then
-					SetGlobalInt(name, value.value)
+					SetGlobalInt(name, tonumber(value.value))
 				end
 				register[name] = register[name] or nil
 				if register[name] == nil then
@@ -97,7 +97,7 @@ function LoadIDCardSetting(force)
 						end
 						if string.StartWith(n, "bool_") and GetGlobalBool(n, tobool(v)) ~= tobool(v) then
 							SetGlobalBool(n, tobool(v))
-						elseif string.StartWith(n, "int_") and GetGlobalInt(n, v) ~= v then
+						elseif string.StartWith(n, "int_") and GetGlobalDInt(n, v) ~= v then
 							SetGlobalInt(n, v)
 						end
 						SQL_UPDATE(DATABASE_NAME, "value = '" .. v .. "'", "name = '" .. n .. "'")

@@ -267,7 +267,7 @@ timer.Create("ServerThink", TICK, 0, function()
 		for k, ply in pairs(player.GetAll()) do
 
 			if ply:AFK() then
-				if ply:GetNW2Float("afkts") and GetGlobalInt("int_afkkicktime") and CurTime() - ply:GetNW2Float("afkts") >= GetGlobalInt("int_afkkicktime") then
+				if ply:GetNW2Float("afkts") and GetGlobalDInt("int_afkkicktime") and CurTime() - ply:GetNW2Float("afkts") >= GetGlobalDInt("int_afkkicktime") then
 					ply:SetNW2Bool("isafk", false)
 					ply:Kick("AFK")
 				end
@@ -654,7 +654,7 @@ hook.Add( "KeyPress", "yrp_keypress_use_door", function( ply, key )
 	if ( key == IN_USE ) then
 		local tr = util.TraceLine( {
 			start = ply:EyePos(),
-			endpos = ply:EyePos() + ply:EyeAngles():Forward() * GetGlobalInt("int_door_distance", 200),
+			endpos = ply:EyePos() + ply:EyeAngles():Forward() * GetGlobalDInt("int_door_distance", 200),
 			filter = function( ent ) if ( ent:GetClass() == "func_door" ) then return true end end
 		} )
 

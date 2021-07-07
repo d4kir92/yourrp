@@ -1560,14 +1560,14 @@ function drawPlates()
 		if GetGlobalBool("bool_server_debug_voice", false) and LocalPlayer():GetPos():Distance(ply:GetPos()) < 1000 then
 			local col = Color(255, 100, 100, 120)
 			if ply == LocalPlayer() then
-				local esphere = ents.FindInSphere(LocalPlayer():GetPos(), GetGlobalInt("int_voice_max_range", 1))
+				local esphere = ents.FindInSphere(LocalPlayer():GetPos(), GetGlobalDInt("int_voice_max_range", 1))
 				for j, ent in pairs(esphere) do
 					if ent:IsPlayer() and ent != LocalPlayer() then
 						col = Color(100, 255, 100, 120)
 					end
 				end
 			else
-				if LocalPlayer():GetPos():Distance(ply:GetPos()) < GetGlobalInt("int_voice_max_range", 1) then
+				if LocalPlayer():GetPos():Distance(ply:GetPos()) < GetGlobalDInt("int_voice_max_range", 1) then
 					col = Color(100, 255, 100, 120)
 				end
 			end
@@ -1577,9 +1577,9 @@ function drawPlates()
 			render.DrawSphere(ply:GetPos(), range, 16, 16, col)
 			render.DrawWireframeSphere(ply:GetPos(), range, 16, 16, col, true)
 
-			render.DrawSphere(ply:GetPos(), GetGlobalInt("int_voice_max_range", 1), 16, 16, col)
-			render.DrawWireframeSphere(ply:GetPos(), GetGlobalInt("int_voice_max_range", 1), 16, 16, col, true)
-			Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
+			render.DrawSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col)
+			render.DrawWireframeSphere(ply:GetPos(), GetGlobalDInt("int_voice_max_range", 1), 16, 16, col, true)
+			Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalDInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
 		end
 
 		if LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() and !ply:InVehicle() then
@@ -2106,19 +2106,19 @@ function drawIDCard(ply, scale, px, py)
 
 	for i, ele in pairs(elements) do
 		if GetGlobalBool("bool_" .. ele .. "_visible", false) then
-			local w = GetGlobalInt("int_" .. ele .. "_w", 100)
-			local h = GetGlobalInt("int_" .. ele .. "_h", 100)
+			local w = GetGlobalDInt("int_" .. ele .. "_w", 100)
+			local h = GetGlobalDInt("int_" .. ele .. "_h", 100)
 
-			local x = GetGlobalInt("int_" .. ele .. "_x", 0)
-			local y = GetGlobalInt("int_" .. ele .. "_y", 0)
+			local x = GetGlobalDInt("int_" .. ele .. "_x", 0)
+			local y = GetGlobalDInt("int_" .. ele .. "_y", 0)
 
 			local color = {}
-			color.r = GetGlobalInt("int_" .. ele .. "_r", 0)
-			color.g = GetGlobalInt("int_" .. ele .. "_g", 0)
-			color.b = GetGlobalInt("int_" .. ele .. "_b", 0)
-			color.a = GetGlobalInt("int_" .. ele .. "_a", 0)
+			color.r = GetGlobalDInt("int_" .. ele .. "_r", 0)
+			color.g = GetGlobalDInt("int_" .. ele .. "_g", 0)
+			color.b = GetGlobalDInt("int_" .. ele .. "_b", 0)
+			color.a = GetGlobalDInt("int_" .. ele .. "_a", 0)
 
-			local colortype = GetGlobalInt("int_" .. ele .. "_colortype", 0)
+			local colortype = GetGlobalDInt("int_" .. ele .. "_colortype", 0)
 			if colortype == 2 then
 				color = ply:GetFactionColor()
 			elseif colortype == 3 then
@@ -2129,8 +2129,8 @@ function drawIDCard(ply, scale, px, py)
 				color = ply:GetUserGroupColor()
 			end
 
-			local ax = GetGlobalInt("int_" .. ele .. "_ax", 0)
-			local ay = GetGlobalInt("int_" .. ele .. "_ay", 0)
+			local ax = GetGlobalDInt("int_" .. ele .. "_ax", 0)
+			local ay = GetGlobalDInt("int_" .. ele .. "_ay", 0)
 
 			x = x * scale
 			y = y * scale
@@ -2228,8 +2228,8 @@ function drawIDCard(ply, scale, px, py)
 				if logos[ele] == nil then
 					logos[ele] = true
 
-					w = GetGlobalInt("int_" .. ele .. "_w", 100)
-					h = GetGlobalInt("int_" .. ele .. "_h", 100)
+					w = GetGlobalDInt("int_" .. ele .. "_w", 100)
+					h = GetGlobalDInt("int_" .. ele .. "_h", 100)
 
 					local test = createD("DHTML", nil, w, h, 0, 0)
 					if string.find(ele, "logo") then
@@ -2844,7 +2844,7 @@ net.Receive("openLawBoard", function(len)
 			local pinfo = createD("YPanel", parent, YRP.ctr(800), YRP.ctr(800), YRP.ctr(20), YRP.ctr(890))
 			function pinfo:Paint(pw, ph)
 				if plist.ply:IsPlayer() then
-					local scale = self:GetWide() / GetGlobalInt("int_" .. "background" .. "_w", 100)
+					local scale = self:GetWide() / GetGlobalDInt("int_" .. "background" .. "_w", 100)
 					drawIDCard(plist.ply, scale, 0, 0)
 				end
 			end

@@ -124,7 +124,7 @@ function Player:DropSWEP(cname, force)
 			ent:SetNW2Int("clip1max", clip1max)
 			ent:SetNW2Int("clip2max", clip2max)]]
 
-			local ttl = math.Clamp(GetGlobalInt("int_ttlsweps", 60), 1, 3600)
+			local ttl = math.Clamp(GetGlobalDInt("int_ttlsweps", 60), 1, 3600)
 			timer.Simple(ttl, function()
 				if ea(ent) and !ent:GetOwner():IsValid() then
 					ent:Remove()

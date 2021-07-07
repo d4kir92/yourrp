@@ -85,8 +85,8 @@ net.Receive("openInteractMenu", function(len)
 
 	local content = wInteract:GetContent()
 	function content:Paint(pw, ph)
-		local scaleW = pw / (GetGlobalInt("int_" .. "background" .. "_w", 100) + 20)
-		local scaleH = YRP.ctr(470) / (GetGlobalInt("int_" .. "background" .. "_h", 100) + 20)
+		local scaleW = pw / (GetGlobalDInt("int_" .. "background" .. "_w", 100) + 20)
+		local scaleH = YRP.ctr(470) / (GetGlobalDInt("int_" .. "background" .. "_h", 100) + 20)
 		local scale = scaleW
 		if scaleH < scaleW then
 			scale = scaleH

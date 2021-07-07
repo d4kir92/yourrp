@@ -414,8 +414,8 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 		end
 	end
 
-	ply:SetNW2Int("int_deathtimestamp_min", CurTime() + GetGlobalInt("int_deathtimestamp_min", 20))
-	ply:SetNW2Int("int_deathtimestamp_max", CurTime() + GetGlobalInt("int_deathtimestamp_max", 60))
+	ply:SetNW2Int("int_deathtimestamp_min", CurTime() + GetGlobalDInt("int_deathtimestamp_min", 20))
+	ply:SetNW2Int("int_deathtimestamp_max", CurTime() + GetGlobalDInt("int_deathtimestamp_max", 60))
 
 	-- NEW RAGDOLL
 	if GetGlobalBool("bool_spawncorpseondeath", true) then
@@ -430,7 +430,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 			ply.rd.ply = ply
 			ply.rd.removeable = false
 
-			timer.Simple(GetGlobalInt("int_deathtimestamp_max", 60), function()
+			timer.Simple(GetGlobalDInt("int_deathtimestamp_max", 60), function()
 				if IsValid(ply.rd) then
 					ply.rd:Remove()
 				end

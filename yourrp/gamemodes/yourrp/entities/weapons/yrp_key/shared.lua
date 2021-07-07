@@ -34,7 +34,7 @@ SWEP.Secondary.Ammo = "none"
 SWEP.DrawCrosshair = true
 
 SWEP.HoldType = "pistol"
-SWEP.ViewModelFOV = 70
+SWEP.ViewModelFOV = 90
 SWEP.ViewModelFlip = false
 SWEP.UseHands = true
 SWEP.ViewModel = "models/props/yrp_key.mdl"
@@ -168,6 +168,11 @@ end
 if CLIENT then
 
 	SWEP.vRenderOrder = nil
+
+	function SWEP:PreDrawViewModel( vm, weapon, ply )
+		vm:SetModelScale(0.001)
+	end
+
 	function SWEP:ViewModelDrawn()
 		
 		local vm = self.Owner:GetViewModel()
@@ -279,9 +284,8 @@ if CLIENT then
 
 	SWEP.wRenderOrder = nil
 	function SWEP:DrawWorldModel()
-		
 		if (self.ShowWorldModel == nil or self.ShowWorldModel) then
-			self:DrawModel()
+			--self:DrawModel()
 		end
 		
 		if (!self.WElements) then return end

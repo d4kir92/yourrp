@@ -55,3 +55,17 @@ if CLIENT then
 	end)
 end
 
+-- FIXES
+function GetGlobalDInt(key, value)
+	local result = GetGlobalInt(key)
+	if result != nil then
+		result = result
+	else
+		result = value
+	end
+	if result != nil then
+		return tonumber(result)
+	else
+		return value
+	end
+end
