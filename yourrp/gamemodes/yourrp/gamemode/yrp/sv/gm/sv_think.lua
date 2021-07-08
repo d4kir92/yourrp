@@ -310,6 +310,14 @@ timer.Create("ServerThink", TICK, 0, function()
 				anti_bunnyhop(ply)
 			end
 		end
+
+		if GetGlobalBool("bool_radiation", false) then
+			for k, ent in pairs(ents.GetAll()) do
+				if ent:IsNPC() then
+					con_ra(ent)
+				end
+			end
+		end
 	end
 
 	for k, ply in pairs(player.GetAll()) do -- Every 0.1 seconds

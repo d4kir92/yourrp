@@ -54,7 +54,7 @@ if SERVER then
 	util.AddNetworkString("yrp_radiation_options")
 end
 
-local size = 8
+local size = 128
 
 local key_delay = CurTime()
 local keydown = false
