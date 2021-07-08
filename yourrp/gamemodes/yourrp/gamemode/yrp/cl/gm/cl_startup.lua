@@ -1912,7 +1912,8 @@ net.Receive("yrp_noti", function(len)
 			name["NAME"] = net.ReadString()
 			_str = _str .. YRP.lang_string("LID_hasfinishedloading", name)
 		elseif _str_lang == "newfeedback" then
-			_str = _str .. "New Feedback!"
+			_str = _str .. "New TICKET!"
+			_time = 10
 		elseif _str_lang == "database_full_server" then
 			_str = _str .. "SERVER: Database or disk is full, please make more space!"
 			_time = 40

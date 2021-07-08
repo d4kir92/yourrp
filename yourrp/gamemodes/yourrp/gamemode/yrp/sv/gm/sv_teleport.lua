@@ -1,8 +1,15 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+function YRPIsValidEntityForTeleport(ent)
+	if !IsValid(ent) then
+		YRP.msg("note", "[YRPIsValidEntityForTeleport] Entity is not valid to teleport >>> ent: " .. tostring(ent))
+		return false
+	end
+	return true
+end
+
 function enough_space(ply, pos)
-	if !IsValid(ply) or !ply:IsPlayer() then
-		YRP.msg("note", "[enough_space] Player is not VALID or isn't a Player! >>> ply: " .. tostring(ply))
+	if !YRPIsValidEntityForTeleport(ply) then
 		return false
 	end
 
@@ -23,8 +30,7 @@ function enough_space(ply, pos)
 end
 
 function get_ground_pos(ply, pos)
-	if !IsValid(ply) or !ply:IsPlayer() then
-		YRP.msg("note", "[get_ground_pos] Player is not VALID or isn't a Player! >>> ply: " .. tostring(ply))
+	if !YRPIsValidEntityForTeleport(ply) then
 		return pos
 	end
 
@@ -44,8 +50,7 @@ function get_ground_pos(ply, pos)
 end
 
 function tp_to(ply, pos)
-	if !IsValid(ply) or !ply:IsPlayer() then
-		YRP.msg("note", "[tp_to] Player is not VALID or isn't a Player! >>> ply: " .. tostring(ply))
+	if !YRPIsValidEntityForTeleport(ply) then
 		return false
 	end
 

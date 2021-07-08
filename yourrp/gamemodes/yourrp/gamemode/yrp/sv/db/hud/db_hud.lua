@@ -1078,6 +1078,7 @@ net.Receive("get_hud_element_settings", function(len, ply)
 	net.Send(ply)
 end)
 
+-- bool to number
 function tonum(bo)
 	if bo then
 		return 1

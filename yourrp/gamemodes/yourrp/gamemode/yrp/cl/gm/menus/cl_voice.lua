@@ -10,6 +10,7 @@ function YRPVoiceChannel(edit, uid)
 	CloseVoiceMenu()
 
 	local name = ""
+	local hear = nil
 
 	local augs = {}
 	local agrps = {}
@@ -42,6 +43,33 @@ function YRPVoiceChannel(edit, uid)
 		name = GetGlobalTable("yrp_voice_channels")[uid].string_name
 		win.name:SetText(name)
 	end
+	
+	-- Defaults
+	win.defaultsheader = createD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(0))
+	win.defaultsheader:SetText(YRP.lang_string("LID_defaults"))
+
+	win.defaultsbg = createD("DPanel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50))
+	function win.defaultsbg:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20))
+	end
+	win.defaults = createD("DPanelList", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50))
+	win.defaults:EnableVerticalScrollbar()
+
+	-- Hear?
+	local line = createD("DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
+	function line:Paint(pw, ph)
+		draw.SimpleText(YRP.lang_string("LID_hearq"), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	end
+
+	line.cb = createD("DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
+	function line.cb:OnChange(bVal)
+		hear = bVal
+	end
+	hear = GetGlobalTable("yrp_voice_channels")[uid].int_hear
+	if hear then
+		line.cb:SetChecked(hear)
+	end
+	win.defaults:AddItem(line)
 
 
 
@@ -298,6 +326,7 @@ function YRPVoiceChannel(edit, uid)
 		function win.save:DoClick()
 			net.Start("yrp_voice_channel_save")
 				net.WriteString(name)
+				net.WriteBool(hear)
 
 				net.WriteTable(augs)
 				net.WriteTable(agrps)
@@ -340,6 +369,7 @@ function YRPVoiceChannel(edit, uid)
 		function win.add:DoClick()
 			net.Start("yrp_voice_channel_add")
 				net.WriteString(name)
+				net.WriteString(hear)
 
 				net.WriteTable(augs)
 				net.WriteTable(agrps)
@@ -517,6 +547,47 @@ function OpenVoiceMenu()
 		function vm.win.add:DoClick()
 			YRPVoiceChannel(false)
 		end
+	end
+
+	local size = YRP.ctr(50)
+	vm.win.muteall = createD("YButton", CONTENT, size, size, CONTENT:GetWide() - size, CONTENT:GetTall() - YRP.ctr(50))
+	vm.win.muteall:SetText("+")
+	function vm.win.muteall:Paint(pw, ph)
+		local icon = "64_volume-up"
+		local color = Color(0, 255, 0)
+		if lply:GetNW2Bool("mute_channel_all", false) then
+			icon = "64_volume-mute"
+			color = Color(255, 0, 0)
+		end
+		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
+		
+		local br = YRP.ctr(8)
+		surface.SetMaterial(YRP.GetDesignIcon(icon))
+		surface.SetDrawColor( 255, 255, 255, 255 )
+		surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+	end
+	function vm.win.muteall:DoClick()
+		net.Start("mute_channel_all")
+		net.SendToServer()
+	end
+
+	vm.win.mutemicall = createD("YButton", CONTENT, size, size, CONTENT:GetWide() - size - YRP.ctr(10) - size, CONTENT:GetTall() - YRP.ctr(50))
+	vm.win.mutemicall:SetText("+")
+	function vm.win.mutemicall:Paint(pw, ph)
+		local color = Color(0, 255, 0)
+		if lply:GetNW2Bool("mutemic_channel_all", false) then
+			color = Color(255, 0, 0)
+		end
+		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
+
+		local br = YRP.ctr(8)
+		surface.SetMaterial( YRP.GetDesignIcon("voice") )
+		surface.SetDrawColor( 255, 255, 255, 255 )
+		surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+	end
+	function vm.win.mutemicall:DoClick()
+		net.Start("mutemic_channel_all")
+		net.SendToServer()
 	end
 end
 

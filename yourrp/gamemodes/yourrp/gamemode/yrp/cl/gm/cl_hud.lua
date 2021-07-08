@@ -526,7 +526,13 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	end
 end)
 
-
+hook.Add("HUDPaint", "yrp_hud_collectionid", function()
+	local lply = LocalPlayer()
+	if lply:HasAccess() and YRPCollectionID() == 0 then
+		local text = YRP.lang_string("LID_thecollectionidismissing") .. " (" .. GetKeybindName("menu_settings") .. " >> " .. YRP.lang_string("LID_server") .. " >> " .. YRP.lang_string("LID_general") .. " >> " .. YRP.lang_string("LID_collectionid") .. ")"
+		draw.SimpleText(text, "Y_30_500", ScrW() / 2, ScrH()  * 0.12, Color(255, 255, 0, 255), 1, 1)
+	end
+end)
 
 local yrpeh = nil
 function YRPInitEdgeHud()

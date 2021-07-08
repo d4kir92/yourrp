@@ -82,6 +82,10 @@ function GM:PlayerInitialSpawn(ply)
 		PlayerLoadedGame(ply, tab)
 	end
 
+	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+		ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, !tobool(channel.int_hear))
+	end
+
 	if !IsValid(ply) then
 		return
 	end
@@ -799,10 +803,11 @@ end)
 local DATABASE_NAME = "yrp_voice_channels"
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_hear", "INTEGER DEFAULT '0'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_mode", "TEXT DEFAULT '0'") -- 0 = Normal, 1 = Global
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "TEXT DEFAULT '0'")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT '0'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_active_usergroups", "TEXT DEFAULT 'superadmin,user'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_active_groups", "TEXT DEFAULT '1'")
@@ -816,7 +821,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_roles", "TEXT DEFAULT '1'")
 
 local yrp_voice_channels = {}
 if SQL_SELECT(DATABASE_NAME, "*") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_mode, string_active_usergroups, string_passive_usergroups", "'DEFAULT', 0, 'superadmin, admin, user', 'superadmin, admin, user'")
+	SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_hear, string_mode, string_active_usergroups, string_passive_usergroups", "'DEFAULT', 1, 0, 'superadmin, admin, user', 'superadmin, admin, user'")
 end
 
 function GenerateVoiceTable()
@@ -829,7 +834,10 @@ function GenerateVoiceTable()
 
 			-- NAME
 			yrp_voice_channels[tonumber(channel.uniqueID)]["string_name"] = SQL_STR_OUT(channel.string_name)
-		
+
+			-- Hear?
+			yrp_voice_channels[tonumber(channel.uniqueID)]["int_hear"] = tobool(channel.int_hear)
+			
 			-- MODE
 			yrp_voice_channels[tonumber(channel.uniqueID)]["string_mode"] = tonumber(channel.string_mode)
 
@@ -957,6 +965,7 @@ end)
 util.AddNetworkString("yrp_voice_channel_add")
 net.Receive("yrp_voice_channel_add", function(len, ply)
 	local name = SQL_STR_IN(net.ReadString())
+	local hear = tonum(net.ReadBool())
 
 	local augs = table.concat(net.ReadTable(), ",")
 	local agrps = table.concat(net.ReadTable(), ",")
@@ -968,8 +977,8 @@ net.Receive("yrp_voice_channel_add", function(len, ply)
 
 	SQL_INSERT_INTO(
 		DATABASE_NAME,
-		"string_name, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles, int_position",
-		"'" .. name .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols	.. "', '" .. table.Count(GetGlobalTable("yrp_voice_channels", {})) .. "'"
+		"string_name, int_hear, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles, int_position",
+		"'" .. name .. "', '" .. hear .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols	.. "', '" .. table.Count(GetGlobalTable("yrp_voice_channels", {})) .. "'"
 	)
 
 	GenerateVoiceTable()
@@ -990,6 +999,7 @@ end)
 util.AddNetworkString("yrp_voice_channel_save")
 net.Receive("yrp_voice_channel_save", function(len, ply)
 	local name = SQL_STR_IN(net.ReadString())
+	local hear = tonum(net.ReadBool())
 
 	local augs = table.concat(net.ReadTable(), ",")
 	local agrps = table.concat(net.ReadTable(), ",")
@@ -1003,7 +1013,7 @@ net.Receive("yrp_voice_channel_save", function(len, ply)
 	
 	SQL_UPDATE(
 		DATABASE_NAME,
-		"string_name = '" .. name .. "', string_active_usergroups = '" .. augs .. "', string_active_groups = '" .. agrps .. "', string_active_roles = '" .. arols .. "', string_passive_usergroups = '" .. pugs .. "', string_passive_groups = '" .. pgrps .. "', string_passive_roles = '" .. prols .. "'",
+		"string_name = '" .. name .. "', int_hear = '" .. hear .. "', string_active_usergroups = '" .. augs .. "', string_active_groups = '" .. agrps .. "', string_active_roles = '" .. arols .. "', string_passive_usergroups = '" .. pugs .. "', string_passive_groups = '" .. pgrps .. "', string_passive_roles = '" .. prols .. "'",
 		"uniqueID = '" .. uid .. "'"
 	)
 
@@ -1101,6 +1111,24 @@ net.Receive("mute_channel", function(len, ply)
 	local uid = net.ReadString()
 
 	ply:SetNW2Bool("yrp_voice_channel_mute_" .. uid, !ply:GetNW2Bool("yrp_voice_channel_mute_" .. uid, false))
+end)
+
+util.AddNetworkString("mutemic_channel_all")
+net.Receive("mutemic_channel_all", function(len, ply)
+	ply:SetNW2Bool("mutemic_channel_all", !ply:GetNW2Bool("mutemic_channel_all", false))
+
+	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+		ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, ply:GetNW2Bool("mutemic_channel_all", false))
+	end
+end)
+
+util.AddNetworkString("mute_channel_all")
+net.Receive("mute_channel_all", function(len, ply)
+	ply:SetNW2Bool("mute_channel_all", !ply:GetNW2Bool("mute_channel_all", false))
+
+	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+		ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, ply:GetNW2Bool("mute_channel_all", false))
+	end
 end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
