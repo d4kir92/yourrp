@@ -29,7 +29,6 @@ end
 function HudView()
 	local lply = LocalPlayer()
 	local _eyeTrace = lply:GetEyeTrace()
-
 	local ent = _eyeTrace.Entity
 	if ea(ent) then
 		local plypos = lply:GetPos()
@@ -40,7 +39,6 @@ function HudView()
 		if entpos:Distance(plypos) > GetGlobalDInt("int_door_distance", 200) then
 			return
 		end
-
 		if GetGlobalBool("bool_building_system", false) and ent:IsDoor() and plypos:Distance(entpos) < GetGlobalDInt("int_door_distance", 200) then
 			local tab = {}
 			tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"

@@ -57,7 +57,7 @@ end
 
 -- FIXES
 function GetGlobalDInt(key, value)
-	local result = GetGlobalInt(key)
+	local result = GetGlobalInt(key, value)
 	if result != nil then
 		result = result
 	else
