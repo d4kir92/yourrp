@@ -454,6 +454,11 @@ net.Receive("item_buy", function(len, ply)
 		_item = _item[1]
 		_item.name = SQL_STR_OUT(tostring(_item.name))
 
+		if ply:GetNW2Float("buy_ts", 0.0) > CurTime() then
+			YRP.msg("note", "[item_buy] On Cooldown")
+			return
+		end
+
 		if ply:canAfford(tonumber(_item.price)) then
 			YRP.msg("gm", ply:YRPName() .. " buyed " .. _item.name)
 
@@ -474,6 +479,8 @@ net.Receive("item_buy", function(len, ply)
 							AddVehicle(ent, ply, _item)
 						end
 					end
+
+					ply:SetNW2Float("buy_ts", CurTime() + 2)
 				else
 					YRP.msg("note", "Failed to spawn item from shop " .. tostring(_spawned))
 					return false

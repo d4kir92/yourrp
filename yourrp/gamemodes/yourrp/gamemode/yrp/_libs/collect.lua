@@ -51,6 +51,6 @@ if SERVER then
 		timer.Simple(2, function()
 			MsgC(Color(255, 255, 0), ">>> Server is ready <<<\n")
 		end)
-		timer.Simple(2, SendServerInfo)
+		timer.Simple(4, SendServerInfo)
 	end)
 end

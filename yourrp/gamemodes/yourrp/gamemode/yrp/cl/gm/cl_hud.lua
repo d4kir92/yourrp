@@ -283,12 +283,13 @@ function YRP_PMUpdate()
 	local lply = LocalPlayer()
 	if IsValid(lply) then
 		if GetGlobalBool("bool_yrp_hud", false) then
-			if lply:GetNW2Int("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetPlayerModel() then
+			if lply:GetNW2Int("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetPlayerModel() or YRP_PM.skin != lply:GetSkin() then
 				YRP_PM.version = lply:GetNW2Int("hud_version", 0)
 
 				YRP_PM:Show()
 
 				YRP_PM.model = lply:GetPlayerModel()
+				YRP_PM.skin = lply:GetSkin()
 
 				YRP_PM.w = lply:HudValue("PM", "SIZE_W")
 				YRP_PM.h = lply:HudValue("PM", "SIZE_H")
@@ -301,6 +302,7 @@ function YRP_PMUpdate()
 				YRP_PM:SetModel(YRP_PM.model)
 				
 				if ea(YRP_PM.Entity) then
+					YRP_PM.Entity:SetSkin(lply:GetSkin())
 					local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
 					if lb != nil then
 						local eyepos = YRP_PM.Entity:GetBonePosition(lb)

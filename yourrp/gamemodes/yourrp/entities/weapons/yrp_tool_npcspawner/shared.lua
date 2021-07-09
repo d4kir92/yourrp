@@ -163,6 +163,7 @@ function SWEP:PrimaryAttack()
 				endpos = ply:EyePos() + ply:EyeAngles():Forward() * 10000,
 				filter = function( ent ) if ( ent:GetClass() == "prop_physics" ) then return true end end
 			} )
+			print(tr.HitPos)
 			pos = tr.HitPos or pos
 
 			SQL_INSERT_INTO("yrp_" .. GetMapNameDB(), "position, type, name", "'" .. string.Replace(tostring(pos), " ", ",") .. "', '" .. "spawner_npc" .. "', 'Spawner'")

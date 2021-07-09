@@ -155,14 +155,20 @@ function createShopItem(item, duid, id)
 			_i.buy.item = item
 			function _i.buy:Paint(pw, ph)
 				local _color = Color(34, 139, 34)
+				local _text = YRP.lang_string("LID_buy")
 				if !LocalPlayer():canAfford(item.price) then
 					_color = Color(255, 100, 100)
 				end
 				if self:IsHovered() then
 					_color = Color(255, 255, 100)
 				end
+				if LocalPlayer():GetNW2Float("buy_ts", 0.0) > CurTime() then
+					_color = Color(255, 0, 0)
+					_text = YRP.lang_string("LID_oncooldown")
+				end
+
 				draw.RoundedBox(0, 0, 0, pw, ph, _color)
-				draw.SimpleText(YRP.lang_string("LID_buy"), "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+				draw.SimpleText(_text, "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 			function _i.buy:DoClick()
 				net.Start("item_buy")

@@ -170,7 +170,9 @@ if CLIENT then
 	SWEP.vRenderOrder = nil
 
 	function SWEP:PreDrawViewModel( vm, weapon, ply )
-		vm:SetModelScale(0.001)
+		if vm then
+			vm:SetModelScale(0.00001)
+		end
 	end
 
 	function SWEP:ViewModelDrawn()
