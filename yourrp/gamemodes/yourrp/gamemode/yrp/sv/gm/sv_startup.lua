@@ -2,13 +2,13 @@
 
 function YRPSetupDoors()
 	timer.Simple(3, function()
-		check_map_doors()
+		YRPCheckMapDoors()
 	end)
 end
 
 function YRPSetupCoords()
 	timer.Simple(4, function()
-		get_map_coords()
+		YRPGetMapDoors()
 	end)
 end
 

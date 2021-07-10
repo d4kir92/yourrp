@@ -200,7 +200,7 @@ function loadDoors()
 	net.Broadcast()
 end
 
-function check_map_doors()
+function YRPCheckMapDoors()
 	--YRP.msg("db", "[Buildings] Get Database Doors and Buildings")
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 	local _tmpTable2 = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)

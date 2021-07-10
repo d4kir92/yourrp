@@ -171,12 +171,14 @@ function createShopItem(item, duid, id)
 				draw.SimpleText(_text, "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 			end
 			function _i.buy:DoClick()
-				net.Start("item_buy")
-					self.item.color = lply.item_color or "255, 255, 255"
-					net.WriteTable(self.item)
-					net.WriteString(duid)
-				net.SendToServer()
-				CloseBuyMenu()
+				if LocalPlayer():GetNW2Float("buy_ts", 0.0) < CurTime() then
+					net.Start("item_buy")
+						self.item.color = lply.item_color or "255, 255, 255"
+						net.WriteTable(self.item)
+						net.WriteString(duid)
+					net.SendToServer()
+					CloseBuyMenu()
+				end
 			end
 		end
 	else

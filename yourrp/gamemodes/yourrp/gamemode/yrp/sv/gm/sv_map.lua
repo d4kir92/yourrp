@@ -39,7 +39,7 @@ net.Receive("askCoords", function(len, ply)
 			net.WriteTable(_map_size)
 		net.Send(ply)
 
-		get_map_coords()
+		YRPGetMapDoors()
 	else
 		net.Start("sendCoords")
 			net.WriteBool(true)
@@ -55,7 +55,7 @@ net.Receive("askCoordsMM", function(len, ply)
 			net.WriteTable(_map_size)
 		net.Send(ply)
 
-		get_map_coords()
+		YRPGetMapDoors()
 	else
 		net.Start("sendCoordsMM")
 			net.WriteBool(true)
@@ -216,13 +216,13 @@ function get_coords()
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
 		if tries < 5 then
 			timer.Simple(5, function()
-				YRP.msg("note", "get_map_coords() retry")
-				get_map_coords()
+				YRP.msg("note", "YRPGetMapDoors() retry")
+				YRPGetMapDoors()
 			end)
 		end
 	end
 end
 
-function get_map_coords()
+function YRPGetMapDoors()
 	get_coords()
 end
