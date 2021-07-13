@@ -53,14 +53,15 @@ local words = 0
 local _delay = 4
 local _delayText = 1
 local _fadeout = CurTime() + _delay
-local _fadeoutText = CurTime() + _delay
+local _fadeoutText = CurTime() + _delayText
 local _chatIsOpen = false
 local chatclosedforkeybinds = true
-_showChat = true
+_showChat = false
 _showChatText = true
 local chatids = {}
 local oldchoices = {}
-local chatAlpha = 0
+local chatAlpha = 255
+local once = true
 
 local CHATMODE = "SAY"
 
@@ -173,8 +174,12 @@ end
 
 function checkChatVisible()
 	if yrpChat.window != nil then
+
 		if IsChatOpen() then
 			_fadeout = CurTime() + _delay
+		end
+		if _fadeoutText < _fadeout then
+			_fadeoutText = _fadeout
 		end
 		if CurTime() > _fadeout and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.settings:HasFocus() then
 			_showChat = false
@@ -191,27 +196,24 @@ function checkChatVisible()
 			_showChat = false
 		end
 		if _showChat then
-			chatAlpha = chatAlpha + 0.03
+			chatAlpha = chatAlpha + 10
 		else
-			chatAlpha = chatAlpha - 0.03
+			chatAlpha = chatAlpha - 10
 		end
-		if YRPScoreboard:IsVisible() then
+		if YRPScoreboard:IsVisible() or YRPScoreboard:IsVisible() then
 			chatAlpha = 0
 			yrpChat.window:SetVisible(false)
 		else
 			yrpChat.window:SetVisible(true)
-
-			if chatAlpha < 0 then
-				chatAlpha = 0
-			elseif chatAlpha > 1 then
-				chatAlpha = 1
-			end
-
+			
+			chatAlpha = math.Clamp(chatAlpha, 0, 255)
+			
+			--yrpChat.window:SetAlpha(chatAlpha)
 			yrpChat.richText:SetVerticalScrollbarEnabled(_showChat)
-			yrpChat.window.logo:SetVisible(_showChat)
-			yrpChat.writeField:SetVisible(_showChat)
-			yrpChat.comboBox:SetVisible(_showChat)
-			yrpChat.settings:SetVisible(_showChat)
+			yrpChat.window.logo:SetAlpha(chatAlpha)
+			yrpChat.writeField:SetAlpha(chatAlpha)
+			yrpChat.comboBox:SetAlpha(chatAlpha)
+			yrpChat.settings:SetAlpha(chatAlpha)
 
 			yrpChat.richText:SetVisible(_showChatText)
 		end
@@ -259,7 +261,7 @@ function InitYRPChat()
 		yrpChat.richText = createD("RichText", yrpChat.window, 1, 1, 1, 1)
 		yrpChat.richText:GotoTextEnd()
 		function yrpChat.richText:Paint(pw, ph)
-			if _showChat then
+			if IsChatVisible() then
 				draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue("Chat", "BG"))
 			end
 		end
@@ -276,7 +278,7 @@ function InitYRPChat()
 		yrpChat.window.logo = createD("DHTML", yrpChat.window, YRP.ctr(H), YRP.ctr(H), 0, 0)
 
 		function yrpChat.window:Paint(pw, ph)
-			if _showChat then
+			if IsChatVisible() then
 
 				--DrawRectBlurHUD(0, 0, pw, ph, 100)
 				draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue("Chat", "FG"))
@@ -497,14 +499,9 @@ function InitYRPChat()
 			_chatIsOpen = true
 			gamemode.Call("StartChat", bteam)
 
-			--yrpChat.richText:SetVisible(true)
-			yrpChat.richText:SetVerticalScrollbarEnabled(_showChat)
-			yrpChat.window.logo:SetVisible(_showChat)
-			yrpChat.writeField:SetVisible(true)
-			yrpChat.comboBox:SetVisible(true)
-			yrpChat.settings:SetVisible(true)
 
 			chatclosedforkeybinds = false
+			once = false
 		end
 
 		function yrpChat.closeChatbox()
@@ -657,10 +654,8 @@ function InitYRPChat()
 
 			_delay = _delay / 10
 			_delay = math.Clamp(_delay, 2, 30)
-			--_fadeout = CurTime() + _delay
 
 			_fadeoutText = CurTime() + math.Clamp(words * _delayText, 4, 60)
-			
 
 			yrpChat.richText:GotoTextEnd()
 			oldAddText (...)
@@ -671,8 +666,12 @@ function InitYRPChat()
 
 		timer.Simple(4, function()
 			if pa(yrpChat.richText) then
+				yrpChat:openChatbox()
 				yrpChat.richText:GotoTextEnd()
 			end
+		end)
+		timer.Simple(5, function()
+			yrpChat:closeChatbox()
 		end)
 
 		function YRPChatThink()
@@ -690,6 +689,10 @@ timer.Create("yrp_init_chat", 1, 0, function()
 	local lply = LocalPlayer()
 	if lply:IsValid() and lply:GetNW2Bool("finishedloading", false) and LocalPlayer():GetNW2String("string_hud_design", "notloaded") != "notloaded" then
 		InitYRPChat()
+
+		timer.Simple(2, function()
+			_fadeout = CurTime() + 0.1
+		end)
 		timer.Remove("yrp_init_chat")
 	end
 end)
@@ -719,7 +722,9 @@ hook.Add("ChatText", "yrp_serverNotifications", function(index, name, text, type
 	if lply:IsValid() and GetGlobalBool("bool_yrp_chat", false) then
 		if type == "joinleave" or type == "none" then
 			if pa(yrpChat.richText) then
-				yrpChat.richText:AppendText(text.."\n")
+				yrpChat.richText:AppendText("\n" .. text .."\n")
+
+				_fadeoutText = CurTime() + 4
 			end
 		end
 	end

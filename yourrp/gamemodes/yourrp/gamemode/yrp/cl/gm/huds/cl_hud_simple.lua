@@ -35,7 +35,7 @@ function HUDSimpleBG(tab)
 			else
 				if tab.a != nil then
 					Simple[tab.element]["background"].color = lply:HudValue(tab.element, "BG")
-					Simple[tab.element]["background"].color.a = tab.a * Simple[tab.element]["background"].color.a
+					Simple[tab.element]["background"].color.a = tab.a
 				end
 				Simple[tab.element]["background"].x = HUDMOTIONX(Simple[tab.element]["background"].fx)
 				Simple[tab.element]["background"].y = HUDMOTIONY(Simple[tab.element]["background"].fy)

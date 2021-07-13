@@ -411,7 +411,7 @@ function YRPHUDSpace()
 								-- TEXT
 								draw.SimpleText(text, font, XFontCenter, YFontCenter, Color(255,255,255,255), AX, AY)
 							elseif etab[5] == 1 then
-								draw.RoundedBox(6, x, y, w, h, Color(0, 0, 0, 160 * Alpha))
+								draw.RoundedBox(6, x, y, w, h, Color(0, 0, 0, Alpha))
 							elseif etab[5] == 2 then
 								draw.SimpleText(text, font, XFontCenter, YFontCenter, Color(255,255,255,255), AX, AY)
 							elseif etab[5] == 3 then

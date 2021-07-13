@@ -412,20 +412,18 @@ function CreateRoleSelectionContent(PARENT)
 		local back = createD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
 		back:SetText("LID_back")
 		function back:Paint(pw, ph)
-			if !LocalPlayer().rolepreview and LocalPlayer():GetNW2Int("char_count", count) > 0 then
-				hook.Run("YButtonRPaint", self, pw, ph)
-			end
+			hook.Run("YButtonRPaint", self, pw, ph)
 		end
 		function back:DoClick()
-			if LocalPlayer():GetNW2Int("char_count", count) <= 0 then return end
-
-			if LocalPlayer().onefaction then
-				parent:Remove()
-				openCharacterSelection()
-			elseif !LocalPlayer().rolepreview then
+			if !LocalPlayer().onefaction or (!LocalPlayer().rolepreview and LocalPlayer():GetNW2Int("char_count", 0) > 0) then
+				print("!onefaction or rolepreview", LocalPlayer().onefaction )
 				parent:Clear()
 
 				CreateFactionSelectionContent()
+			elseif LocalPlayer().onefaction then
+				print("onefaction")
+				parent:Remove()
+				openCharacterSelection()
 			end
 		end
 	end

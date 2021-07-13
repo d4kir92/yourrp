@@ -571,6 +571,8 @@ end
 
 util.AddNetworkString("OpenCharacterCreation")
 function send_characters(ply)
+	YRPSendCharCount(ply)
+
 	local netTable = {}
 
 	local chaTab = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
@@ -625,6 +627,10 @@ function send_characters(ply)
 	else
 		net.Start("OpenCharacterCreation")
 		net.Send(ply)
+
+		timer.Simple(2, function()
+			ply:SetNW2Bool("loadedchars", true)
+		end)
 	end
 end
 
