@@ -655,7 +655,9 @@ function InitYRPChat()
 				elseif t == "entity" and IsValid(obj) then
 					YRP.msg("error", "chat.addtext (entity): " .. tostring(obj))
 				elseif t == "player" then
-					--
+					-- invalid players
+				elseif t == "entity" then
+					-- invalid entities
 				else
 					YRP.msg("error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj))
 				end
