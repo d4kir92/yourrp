@@ -2285,7 +2285,7 @@ hook.Add("Think", "openDeathScreen", function(len)
 		ds = true
 		local win = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 		win:SetTitle("")
-		--win:MakePopup()
+		--win:MakePopup() -- chat not work in deathscreen if popup
 		gui.EnableScreenClicker(true)
 		win:Center()
 		win:SetDraggable(false)
@@ -2301,6 +2301,11 @@ hook.Add("Think", "openDeathScreen", function(len)
 			end
 			Derma_DrawBackgroundBlur(self, self.systime)
 			draw.RoundedBox(0, 0, YRP.ctr(300), pw, YRP.ctr(500), Color(0, 0, 0, 180 * self.a))
+			
+			if !vgui.CursorVisible() then
+				draw.SimpleText(YRP.lang_string("LID_rightclicktoshowmouse"), "Y_80_500", pw / 2, ph / 2, Color(255, 255, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+
 			if LocalPlayer():GetNW2Int("int_deathtimestamp_max", 0) <= CurTime() then
 				draw.SimpleText(string.upper(YRP.lang_string("LID_youdied")), "Y_100_500", pw / 2, YRP.ctr(300 + 500 / 2), Color(255, 100, 100, 255 * self.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			else

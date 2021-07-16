@@ -360,6 +360,8 @@ net.Receive("shop_get_tabs", function(len)
 								self:ClearContent()
 							end
 						end
+						
+						_cat.header:DoClick() -- opens the items
 
 						BUYMENU.shop:AddItem(_cat)
 						BUYMENU.shop:Rebuild()

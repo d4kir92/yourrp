@@ -556,6 +556,11 @@ function InitScoreboard()
 			yrp_sb_canclose = true
 		end
 
+		-- MOUSE HELP
+		if !vgui.CursorVisible() then
+			draw.SimpleText(YRP.lang_string("LID_rightclicktoshowmouse"), "Saira_24", pw / 2, 34, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
+
 		-- NAME
 		local name = GetGlobalString("text_server_name", "")
 		if strEmpty(name) then

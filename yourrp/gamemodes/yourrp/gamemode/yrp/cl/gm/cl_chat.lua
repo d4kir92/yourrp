@@ -2,6 +2,8 @@
 
 -- #CHAT
 
+local yrp_chat_show = false
+
 local commands = {
 	"/rpname [NAME] NEWNAME",
 	"!rpname [NAME] NEWNAME",
@@ -406,7 +408,7 @@ function InitYRPChat()
 			if !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
 				timer.Simple(0.1, function()
 					if pa(yrpChat.window) and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
-						yrpChat.closeChatbox()
+						yrpChat.closeChatbox("NOT FOCUS ANYMORE")
 					end
 				end)
 			end
@@ -464,7 +466,7 @@ function InitYRPChat()
 
 		yrpChat.writeField.OnKeyCode = function(self, code)
 			if code == KEY_ESCAPE then
-				yrpChat.closeChatbox()
+				yrpChat.closeChatbox("PRESSED ESCAPE")
 				gui.HideGameUI()
 			elseif code == KEY_ENTER then
 				if !strEmpty(string.Trim(self:GetText())) then
@@ -487,34 +489,41 @@ function InitYRPChat()
 						end)
 					end
 				end
-				yrpChat.closeChatbox()
+				yrpChat.closeChatbox("PRESSED ENTER")
 			end
 		end
 		
 		function yrpChat:openChatbox(bteam)
-			yrpChat.window:MakePopup()
-			yrpChat.comboBox:RequestFocus()
-			yrpChat.writeField:RequestFocus()
+			if !yrp_chat_show then
+				yrp_chat_show = true
 
-			_chatIsOpen = true
-			gamemode.Call("StartChat", bteam)
+				yrpChat.window:MakePopup()
+				yrpChat.comboBox:RequestFocus()
+				yrpChat.writeField:RequestFocus()
+
+				_chatIsOpen = true
+				gamemode.Call("StartChat", bteam)
 
 
-			chatclosedforkeybinds = false
-			once = false
+				chatclosedforkeybinds = false
+				once = false
+			end
 		end
 
-		function yrpChat.closeChatbox()
-			if pa(yrpChat.window) then
-				yrpChat.window:SetMouseInputEnabled(false)
-				yrpChat.window:SetKeyboardInputEnabled(false)
+		function yrpChat.closeChatbox(reason)
+			if pa(yrpChat.window) and yrp_chat_show then
+				yrp_chat_show = false
+				
 				gui.EnableScreenClicker(false)
-
+				
 				_chatIsOpen = false
 				gamemode.Call("FinishChat")
 
 				yrpChat.writeField:SetText("")
 				gamemode.Call("ChatTextChanged", "")
+
+				yrpChat.window:SetMouseInputEnabled(false)
+				yrpChat.window:SetKeyboardInputEnabled(false)
 
 				timer.Simple(0.1, function()
 					chatclosedforkeybinds = true

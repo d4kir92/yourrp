@@ -573,14 +573,6 @@ function HUDSimple()
 				HY.element = "HY"
 				HUDSimpleBG(HY)
 			end
-			if GetGlobalBool("bool_yrp_chat", false) then
-				local CH = {}
-				CH.element = "CH"
-				CH.r = YRP.ctr(16)
-				CH.a = ChatAlpha()
-				--CH.visiblefunc = IsChatVisible
-				HUDSimpleBG(CH)
-			end
 			if lply:HudElementVisible("HU") then
 				local HU = {}
 				HU.element = "HU"
@@ -1020,13 +1012,6 @@ function HUDSimple()
 				local HY = {}
 				HY.element = "HY"
 				HUDSimpleBR(HY)
-			end
-			if GetGlobalBool("bool_yrp_chat", false) then
-				local CH = {}
-				CH.element = "CH"
-				CH.r = YRP.ctr(16)
-				CH.visiblefunc = IsChatVisible
-				HUDSimpleBR(CH)
 			end
 			if GetGlobalBool("bool_hunger", false) then
 				local HU = {}

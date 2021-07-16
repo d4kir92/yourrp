@@ -416,12 +416,10 @@ function CreateRoleSelectionContent(PARENT)
 		end
 		function back:DoClick()
 			if !LocalPlayer().onefaction or (!LocalPlayer().rolepreview and LocalPlayer():GetNW2Int("char_count", 0) > 0) then
-				print("!onefaction or rolepreview", LocalPlayer().onefaction )
 				parent:Clear()
 
 				CreateFactionSelectionContent()
 			elseif LocalPlayer().onefaction then
-				print("onefaction")
 				parent:Remove()
 				openCharacterSelection()
 			end
