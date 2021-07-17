@@ -65,9 +65,12 @@ function YRPVoiceChannel(edit, uid)
 	function line.cb:OnChange(bVal)
 		hear = bVal
 	end
-	hear = GetGlobalTable("yrp_voice_channels")[uid].int_hear
-	if hear then
-		line.cb:SetChecked(hear)
+	
+	if edit then
+		hear = GetGlobalTable("yrp_voice_channels")[uid].int_hear
+		if hear then
+			line.cb:SetChecked(hear)
+		end
 	end
 	win.defaults:AddItem(line)
 
