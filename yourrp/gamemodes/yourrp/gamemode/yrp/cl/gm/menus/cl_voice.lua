@@ -10,7 +10,7 @@ function YRPVoiceChannel(edit, uid)
 	CloseVoiceMenu()
 
 	local name = ""
-	local hear = nil
+	local hear = false
 
 	local augs = {}
 	local agrps = {}
@@ -370,9 +370,10 @@ function YRPVoiceChannel(edit, uid)
 			hook.Run("YButtonAPaint", self, pw, ph)
 		end
 		function win.add:DoClick()
+			print(name, hear, augs, agrps)
 			net.Start("yrp_voice_channel_add")
 				net.WriteString(name)
-				net.WriteString(hear)
+				net.WriteBool(hear)
 
 				net.WriteTable(augs)
 				net.WriteTable(agrps)
