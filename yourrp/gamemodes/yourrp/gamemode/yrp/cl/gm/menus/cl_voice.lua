@@ -370,7 +370,6 @@ function YRPVoiceChannel(edit, uid)
 			hook.Run("YButtonAPaint", self, pw, ph)
 		end
 		function win.add:DoClick()
-			print(name, hear, augs, agrps)
 			net.Start("yrp_voice_channel_add")
 				net.WriteString(name)
 				net.WriteBool(hear)
