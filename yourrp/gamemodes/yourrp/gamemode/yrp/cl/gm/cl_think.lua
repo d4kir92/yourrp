@@ -556,16 +556,16 @@ local function yrpCalcView(lply, pos, angles, fov)
 		return view
 	end
 
-	lply.view_range = lply.view_range or 0
-	lply.view_range_view = lply.view_range_view or 0
+	lply.yrp_view_range = lply.yrp_view_range or 0
+	lply.yrp_view_range_view = lply.yrp_view_range_view or 0
 
-	lply.view_z = lply.view_z or 0
-	lply.view_x = lply.view_x or 0
-	lply.view_s = lply.view_s or 0
+	lply.yrp_view_z = lply.yrp_view_z or 0
+	lply.yrp_view_x = lply.yrp_view_x or 0
+	lply.yrp_view_s = lply.yrp_view_s or 0
 
-	lply.view_z_c = lply.view_z_c or 0
-	lply.view_x_c = lply.view_x_c or 0
-	lply.view_s_c = lply.view_s_c or 0
+	lply.yrp_view_z_c = lply.yrp_view_z_c or 0
+	lply.yrp_view_x_c = lply.yrp_view_x_c or 0
+	lply.yrp_view_s_c = lply.yrp_view_s_c or 0
 
 	if lply:Alive() then --and !lply:IsPlayingTaunt() then
 
@@ -588,7 +588,7 @@ local function yrpCalcView(lply, pos, angles, fov)
 			end
 		end
 
-		local _view_range = lply.view_range or 0
+		local _view_range = lply.yrp_view_range or 0
 		if _view_range < 0 then
 			_view_range = 0
 		end
@@ -618,20 +618,19 @@ local function yrpCalcView(lply, pos, angles, fov)
 				return view
 			else
 			--if _thirdperson == 2 then
-
-				if tonumber(lply.view_range or 0) > 0 then
+				if tonumber(lply.yrp_view_range or 0) > 0 then
 					if lply:LookupBone("ValveBiped.Bip01_Head1") != nil then
 						local _head = lply:GetPos().z + lply:OBBMaxs().z
 						pos.z = _head
 					end
 					--Thirdperson
-					dist = lply.view_range * lply:GetModelScale()
+					dist = lply.yrp_view_range * lply:GetModelScale()
 
 					local _tmpThick = 4
 					local _minDistFor = 8
 					local _minDistBac = 40
-					angles = angles + Angle(0, lply.view_s, 0)
-					local _pos_change = angles:Up() * lply.view_z + angles:Right() * lply.view_x
+					angles = angles + Angle(0, lply.yrp_view_s, 0)
+					local _pos_change = angles:Up() * lply.yrp_view_z + angles:Right() * lply.yrp_view_x
 
 					local tr = util.TraceHull({
 						start = pos + angles:Forward() * _minDistFor,
@@ -675,7 +674,7 @@ local function yrpCalcView(lply, pos, angles, fov)
 						_drawViewmodel = true
 						return view
 					end
-				elseif tonumber(lply.view_range) > -200 and tonumber(lply.view_range) <= 0 then
+				elseif tonumber(lply.yrp_view_range) > -200 and tonumber(lply.yrp_view_range) <= 0 then
 					--Disabled
 					view.origin = pos
 					view.angles = angles
@@ -684,7 +683,7 @@ local function yrpCalcView(lply, pos, angles, fov)
 					return view
 				else
 					--Firstperson realistic
-					local dist = lply.view_range * lply:GetModelScale()
+					local dist = lply.yrp_view_range * lply:GetModelScale()
 
 					local _tmpThick = 16
 					local _head = lply:LookupBone("ValveBiped.Bip01_Head1")
@@ -753,8 +752,8 @@ local function yrpCalcView(lply, pos, angles, fov)
 		end
 	end
 end
-hook.Remove("CalcView", "YRPMyCalcView")
-hook.Add("CalcView", "YRPMyCalcView", yrpCalcView)
+hook.Remove("CalcView", "YRP_CV")
+hook.Add("CalcView", "YRP_CV", yrpCalcView)
 
 function showPlayermodel()
 	local lply = LocalPlayer()
