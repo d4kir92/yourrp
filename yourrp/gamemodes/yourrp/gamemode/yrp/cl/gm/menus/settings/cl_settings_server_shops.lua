@@ -407,8 +407,6 @@ net.Receive("get_shop_items", function()
 							openSingleSelector(_itemlist, "selected_shop_item")
 						end)
 					elseif value == "roles" then
-						net.Start("getallroles")
-						net.SendToServer()
 						net.Receive("getallroles", function()
 							local _net_tab = net.ReadTable()
 							_itemlist = _net_tab
@@ -420,6 +418,9 @@ net.Receive("get_shop_items", function()
 
 							openSingleSelector(_itemlist, "selected_shop_item")
 						end)
+
+						net.Start("getallroles")
+						net.SendToServer()
 					end
 				end
 				hook.Add("selected_shop_item", "yrp_selected_shop_item", function()

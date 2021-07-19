@@ -1606,7 +1606,7 @@ end
 
 util.AddNetworkString("getallroles")
 net.Receive("getallroles", function(len, ply)
-	local dbtab = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local dbtab = SQL_SELECT(DATABASE_NAME, "uniqueID, string_name", nil)
 	if wk(dbtab) then
 		for i, v in pairs(dbtab) do
 			local pms = string.Explode(",", GetPlayermodelsOfRole(v.uniqueID))

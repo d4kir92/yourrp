@@ -265,15 +265,18 @@ end
 
 function hudThirdperson(ply, color)
 	if input.IsKeyDown(get_keybind("view_zoom_in")) or input.IsKeyDown(get_keybind("view_zoom_out")) then
+		ply.yrp_view_range = ply.yrp_view_range or 0
+		ply.yrp_view_range_view = ply.yrp_view_range_view or 0
+		
 		local _3PText = ""
-		if ply.view_range <= -200 then
+		if ply.yrp_view_range <= -200 then
 			_3PText = YRP.lang_string("LID_fppr")
-		elseif ply.view_range > -200 and ply.view_range < 0 then
+		elseif ply.yrp_view_range > -200 and ply.yrp_view_range < 0 then
 			_3PText = YRP.lang_string("LID_fpp")
-		elseif ply.view_range > 0 then
+		elseif ply.yrp_view_range > 0 then
 			_3PText = YRP.lang_string("LID_tpp")
 		end
-		draw.SimpleText(_3PText .. " (" .. math.Round(ply.view_range, -1) .. ")", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleText(_3PText .. " (" .. math.Round(ply.yrp_view_range, -1) .. ")", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 	if input.IsKeyDown(get_keybind("view_up")) or input.IsKeyDown(get_keybind("view_down")) then
 		draw.SimpleText(YRP.lang_string("LID_viewingheight") .. " (" .. math.Round(ply.view_z, 0) .. ")", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))

@@ -1583,7 +1583,7 @@ function drawPlates()
 		end
 
 		if LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() and !ply:InVehicle() then
-			if LocalPlayer().view_range != nil and LocalPlayer().view_range <= 0 and ply == LocalPlayer() then
+			if LocalPlayer().yrp_view_range != nil and LocalPlayer().yrp_view_range <= 0 and ply == LocalPlayer() then
 				continue
 			end
 			local renderalpha = 255 - 255 * (LocalPlayer():GetPos():Distance(ply:GetPos()) / renderdist)

@@ -305,8 +305,8 @@ function KeyPress()
 		end
 	end
 
-	lply.view_range = lply.view_range or 0
-	lply.view_range_view = lply.view_range_view or 0
+	lply.yrp_view_range = lply.yrp_view_range or 0
+	lply.yrp_view_range_view = lply.yrp_view_range_view or 0
 
 	lply.view_z = lply.view_z or 0
 	lply.view_x = lply.view_x or 0
@@ -318,8 +318,8 @@ function KeyPress()
 
 	if !setup then
 		setup = true
-		lply.view_range = 0
-		lply.view_range_view = 0
+		lply.yrp_view_range = 0
+		lply.yrp_view_range_view = 0
 
 		lply.view_z = 0
 		lply.view_x = 0
@@ -380,45 +380,45 @@ function KeyPress()
 						_view_delay = true
 					end)
 
-					if tonumber(lply.view_range_view) > 0 then
-						lply.view_range_view = 0
+					if tonumber(lply.yrp_view_range_view) > 0 then
+						lply.yrp_view_range_view = 0
 					else
-						local _old_view = tonumber(LocalPlayer():GetNW2Int("view_range_old", 0))
+						local _old_view = lply.yrp_view_range_old or 0
 						if _old_view > 0 then
-							lply.view_range_view = _old_view
+							lply.yrp_view_range_view = _old_view
 						else
-							lply.view_range_view = tonumber(GetGlobalString("text_view_distance", "200"))
+							lply.yrp_view_range_view = tonumber(GetGlobalString("text_view_distance", "200"))
 						end
 					end
 
-					lply.view_range = lply.view_range_view
+					lply.yrp_view_range = lply.yrp_view_range_view
 				end
 			else
 				--[[ smoothing ]]--
-				if tonumber(lply.view_range) < tonumber(lply.view_range_view) then
-					lply.view_range = lply:GetNW2Int("view_range") + lply.view_range_view / 16
+				if tonumber(lply.yrp_view_range) < tonumber(lply.yrp_view_range_view) then
+					lply.yrp_view_range = lply.yrp_view_range + lply.yrp_view_range_view / 16
 				else
 
 					if input.IsKeyDown(get_keybind("view_zoom_out")) then
 						done_tutorial("tut_vo", 5)
 
-						lply.view_range_view = lply.view_range_view + 1
+						lply.yrp_view_range_view = lply.yrp_view_range_view + 1
 
-						if tonumber(lply.view_range_view) > tonumber(GetGlobalString("text_view_distance", "200")) then
-							lply.view_range_view = tonumber(GetGlobalString("text_view_distance", "200"))
+						if tonumber(lply.yrp_view_range_view) > tonumber(GetGlobalString("text_view_distance", "200")) then
+							lply.yrp_view_range_view = tonumber(GetGlobalString("text_view_distance", "200"))
 						end
-						lply.view_range_old = lply.view_range_view
+						lply.yrp_view_range_old = lply.yrp_view_range_view
 					elseif input.IsKeyDown(get_keybind("view_zoom_in")) then
 						done_tutorial("tut_vi", 5)
 
-						lply.view_range_view = lply.view_range_view - 1
+						lply.yrp_view_range_view = lply.yrp_view_range_view - 1
 
-						if tonumber(lply.view_range_view) < -200 then
-							lply.view_range_view = -200
+						if tonumber(lply.yrp_view_range_view) < -200 then
+							lply.yrp_view_range_view = -200
 						end
-						lply.view_range_old = lply.view_range_view
+						lply.yrp_view_range_old = lply.yrp_view_range_view
 					end
-					lply.view_range = lply.view_range_view
+					lply.yrp_view_range = lply.yrp_view_range_view
 				end
 			end
 

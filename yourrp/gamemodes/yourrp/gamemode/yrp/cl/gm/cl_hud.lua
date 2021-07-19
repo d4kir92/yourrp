@@ -95,7 +95,8 @@ local star = Material("vgui/material/icon_star.png")
 function DrawEquipment(ply, name)
 	local _tmp = ply:GetNW2Entity(name, NULL)
 	if ea(_tmp) then
-		if tonumber(ply:GetNW2String("view_range", "0")) <= 0 then
+		ply.yrp_view_range = ply.yrp_view_range or 0
+		if ply.yrp_view_range <= 0 then
 			_tmp:SetNoDraw(true)
 		else
 			_tmp:SetNoDraw(false)
