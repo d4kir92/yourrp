@@ -167,7 +167,7 @@ net.Receive("yrp_shop_get_items", function(len, ply)
 	end
 
 	net.Start("yrp_shop_get_items")
-	net.WriteTable(_nw)
+		net.WriteTable(_nw)
 	net.Send(ply)
 end)
 

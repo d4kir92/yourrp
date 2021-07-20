@@ -494,6 +494,11 @@ function InitYRPChat()
 		end
 		
 		function yrpChat:openChatbox(bteam)
+			if !pa(yrpChat.window) then
+				notification.AddLegacy("[YourRP] [openChatbox] ChatBox Window broken", NOTIFY_ERROR, 10)
+				yrp_chat_show = false
+				return
+			end
 			if !yrp_chat_show then
 				yrp_chat_show = true
 
@@ -511,7 +516,12 @@ function InitYRPChat()
 		end
 
 		function yrpChat.closeChatbox(reason)
-			if pa(yrpChat.window) and yrp_chat_show then
+			if !pa(yrpChat.window) then
+				notification.AddLegacy("[YourRP] [closeChatbox] ChatBox Window broken", NOTIFY_ERROR, 10)
+				yrp_chat_show = false
+				return
+			end
+			if yrp_chat_show then
 				yrp_chat_show = false
 				
 				gui.EnableScreenClicker(false)
@@ -720,8 +730,10 @@ hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
 			return
 		end
 
-		if yrpChat.window != nil then
+		if pa(yrpChat.window) then
 			yrpChat:openChatbox(bTeam)
+		else
+			notification.AddLegacy("[YourRP] [yrp_overrideChatbind] ChatBox Window broken", NOTIFY_ERROR, 10)
 		end
 		return true
 	end

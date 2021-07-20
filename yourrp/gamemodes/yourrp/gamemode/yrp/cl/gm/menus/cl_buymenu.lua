@@ -31,7 +31,7 @@ end)
 
 function createShopItem(item, duid, id)
 	local lply = LocalPlayer()
-	YRP.msg("note", "[BUYMENU] createShopItem")
+
 	item.int_level = tonumber(item.int_level)
 	local W = 1800
 	local H = 500 + 2 * 20
@@ -138,7 +138,6 @@ function createShopItem(item, duid, id)
 	end
 
 	if LocalPlayer():HasLicense(item.licenseID) then
-		YRP.msg("note", "[BUYMENU] HAS LICENSE")
 		if IsLevelSystemEnabled() and LocalPlayer():Level() < item.int_level then
 			_i.require = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE))
 			_i.require.level = item.int_level
@@ -322,7 +321,6 @@ net.Receive("shop_get_tabs", function(len)
 						_cat.color2 = lply:InterfaceValue("YFrame", "HB")
 						function _cat:DoClick()
 							if self:IsOpen() then
-								YRP.msg("note", "[BUYMENU] CATEGORY OPEN")
 								net.Receive("yrp_shop_get_items", function(l)
 									local _items = net.ReadTable()
 									if IsValid(self) then
@@ -333,7 +331,6 @@ net.Receive("shop_get_tabs", function(len)
 										local idmax = math.Round(_cat:GetWide() / w - 0.6, 0)
 										for k, item in pairs(_items) do
 											--[[if id == 0 then
-												YRP.msg("note", "[BUYMENU] CREATE LINE")
 												hid = hid + 1
 												self.hs[hid] = createD("DPanel", nil, w * idmax, YRP.ctr(650 + 2 * 20), 0, 0)
 												local line = self.hs[hid]
@@ -361,10 +358,10 @@ net.Receive("shop_get_tabs", function(len)
 							end
 						end
 						
-						_cat.header:DoClick() -- opens the items
-
 						BUYMENU.shop:AddItem(_cat)
 						BUYMENU.shop:Rebuild()
+
+						_cat.header:DoClick() -- opens the items
 					end
 					if LocalPlayer():HasAccess() then
 						local _remove = createD("DButton", _cat, YRP.ctr(400), YRP.ctr(100), 0, 0)
@@ -392,10 +389,6 @@ net.Receive("shop_get_tabs", function(len)
 		end
 		function _tab:Click()
 			_tab.GetCategories()
-		end
-	
-		if i == 1 then
-			_tab:DoClick()
 		end
 
 		if tab.haspermanent then
