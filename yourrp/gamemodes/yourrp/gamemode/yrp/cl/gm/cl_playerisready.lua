@@ -121,3 +121,4 @@ function GM:InitPostEntity()
 
 	yrp_initpostentity = true
 end
+

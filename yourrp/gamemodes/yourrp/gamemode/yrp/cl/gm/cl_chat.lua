@@ -47,6 +47,8 @@ yrpChat = yrpChat or {}
 if pa(yrpChat.window) then
 	yrpChat.window:Remove()
 	yrpChat.window = nil
+
+	timer.Simple(1, InitYRPChat)
 end
 
 local ypr_logo = Material("yrp/yrp_icon")
@@ -56,7 +58,6 @@ local _delay = 4
 local _delayText = 1
 local _fadeout = CurTime() + _delay
 local _fadeoutText = CurTime() + _delayText
-local _chatIsOpen = false
 local chatclosedforkeybinds = true
 _showChat = false
 _showChatText = true
@@ -166,24 +167,27 @@ hook.Add("yrp_language_changed", "chat_language_changed", function()
 	update_chat_choices()
 end)
 
-function IsChatOpen()
-	return _chatIsOpen
+function YRPIsChatOpen()
+	return yrpChat._chatIsOpen
 end
 
 function ChatIsClosedForChat()
 	return chatclosedforkeybinds
 end
 
-function checkChatVisible()
-	if yrpChat.window != nil then
+counti = counti or 0
+counti = counti + 1
 
-		if IsChatOpen() then
+function YRPCheckChatVisible()
+	if yrpChat.window != nil then
+		if YRPIsChatOpen() then
 			_fadeout = CurTime() + _delay
 		end
 		if _fadeoutText < _fadeout then
 			_fadeoutText = _fadeout
 		end
 		if CurTime() > _fadeout and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.settings:HasFocus() then
+			--chat.AddText("1: " .. tostring(CurTime() > _fadeout) .. " / " .. tostring(!yrpChat.writeField:HasFocus()) .. " / " .. tostring(!yrpChat.comboBox:HasFocus()) .. " / " .. tostring(!yrpChat.settings:HasFocus()))
 			_showChat = false
 		else
 			_showChat = true
@@ -195,6 +199,7 @@ function checkChatVisible()
 			_showChatText = true
 		end
 		if GetGlobalBool("bool_yrp_chat", false) == false then
+			--chat.AddText("2: " .. tostring(_showChat))
 			_showChat = false
 		end
 		if _showChat then
@@ -206,6 +211,8 @@ function checkChatVisible()
 			chatAlpha = 0
 			yrpChat.window:SetVisible(false)
 		else
+			--chat.AddText("_showChat: " .. tostring(_showChat))
+		
 			yrpChat.window:SetVisible(true)
 			
 			chatAlpha = math.Clamp(chatAlpha, 0, 255)
@@ -506,7 +513,7 @@ function InitYRPChat()
 				yrpChat.comboBox:RequestFocus()
 				yrpChat.writeField:RequestFocus()
 
-				_chatIsOpen = true
+				yrpChat._chatIsOpen = true
 				gamemode.Call("StartChat", bteam)
 
 
@@ -526,7 +533,7 @@ function InitYRPChat()
 				
 				gui.EnableScreenClicker(false)
 				
-				_chatIsOpen = false
+				yrpChat._chatIsOpen = false
 				gamemode.Call("FinishChat")
 
 				yrpChat.writeField:SetText("")
@@ -549,7 +556,7 @@ function InitYRPChat()
 			end
 		end
 
-		local oldAddText = chat.AddText
+		oldAddText = oldAddText or chat.AddText
 		function chat.AddText(...)
 			if ContainsIp(...) or ChatBlacklisted(...) then return end
 			local args = { ... }
@@ -685,19 +692,9 @@ function InitYRPChat()
 		yrpChat.richText:GotoTextEnd()
 		yrpChat.richText:GotoTextEnd()
 
-		timer.Simple(4, function()
-			if pa(yrpChat.richText) then
-				yrpChat:openChatbox()
-				yrpChat.richText:GotoTextEnd()
-			end
-		end)
-		timer.Simple(5, function()
-			yrpChat:closeChatbox()
-		end)
-
 		function YRPChatThink()
 			if yrpChat.window != nil then
-				checkChatVisible()
+				YRPCheckChatVisible()
 			end
 
 			timer.Simple(0.01, YRPChatThink)
@@ -705,18 +702,6 @@ function InitYRPChat()
 		YRPChatThink()
 	end
 end
-
-timer.Create("yrp_init_chat", 1, 0, function()
-	local lply = LocalPlayer()
-	if lply:IsValid() and lply:GetNW2Bool("finishedloading", false) and LocalPlayer():GetNW2String("string_hud_design", "notloaded") != "notloaded" then
-		InitYRPChat()
-
-		timer.Simple(2, function()
-			_fadeout = CurTime() + 0.1
-		end)
-		timer.Remove("yrp_init_chat")
-	end
-end)
 
 hook.Remove("PlayerBindPress", "yrp_overrideChatbind")
 hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
@@ -807,4 +792,13 @@ net.Receive("yrp_player_say", function(len)
 		chat.AddText(unpack(pk))
 	end
 	chat.PlaySound()
+end)
+
+
+
+net.Receive("yrp_ready_received", function(len)
+	InitYRPChat()
+	timer.Simple(2, function()
+		_fadeout = CurTime() + 0.1
+	end)
 end)

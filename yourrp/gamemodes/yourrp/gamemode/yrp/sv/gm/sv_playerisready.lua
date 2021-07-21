@@ -2,6 +2,8 @@
 
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
+util.AddNetworkString("yrp_ready_received")
+
 local c = 0
 function PlayerLoadedGame(ply, tab)
 	c = c + 1
@@ -60,6 +62,9 @@ function PlayerLoadedGame(ply, tab)
 	UpdateDarkRPTable(ply)
 
 	YRP.msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading.")-- Count: " ..  c)
+
+	net.Start("yrp_ready_received")
+	net.Send(ply)
 end
 
 hook.Add("Think", "yrp_loaded_game", function()
