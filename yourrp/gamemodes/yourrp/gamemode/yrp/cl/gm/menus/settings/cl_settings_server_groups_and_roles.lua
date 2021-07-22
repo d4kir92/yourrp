@@ -980,8 +980,22 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			ea.background:Clear()
 
-			local col1 = createD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+			local col1 = createD("DPanelList", ea.background, YRP.ctr(800+24), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+			col1:EnableVerticalScrollbar(true)
 			col1:SetSpacing(YRP.ctr(20))
+			local sbar = col1.VBar
+			function sbar:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
+			end
+			function sbar.btnUp:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			end
+			function sbar.btnDown:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			end
+			function sbar.btnGrip:Paint(w, h)
+				draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
+			end
 
 			local info = createD("YGroupBox", col1, YRP.ctr(800), YRP.ctr(866), YRP.ctr(20), YRP.ctr(20))
 			info:SetText("LID_general")
@@ -1280,8 +1294,22 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			ea.flags:AutoSize(true)
 
-			local col2 = createD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+			local col2 = createD("DPanelList", ea.background, YRP.ctr(800+24), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+			col2:EnableVerticalScrollbar(true)
 			col2:SetSpacing(YRP.ctr(20))
+			local sbar = col2.VBar
+			function sbar:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
+			end
+			function sbar.btnUp:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			end
+			function sbar.btnDown:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			end
+			function sbar.btnGrip:Paint(w, h)
+				draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
+			end
 
 			local appearance = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(800), YRP.ctr(840), YRP.ctr(20))
 			appearance:SetText("LID_appearance")
@@ -2172,6 +2200,77 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			net.Start("get_role_licenses")
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
+
+			-- Ammunation
+			local ammobg = createD("YPanel", col2, YRP.ctr(800), YRP.ctr(350), 0, 0)
+			local ammoheader = createD("YLabel", ammobg, YRP.ctr(800), YRP.ctr(50), 0, 0)
+			ammoheader:SetText("LID_ammo")
+			function ammoheader:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+				draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+
+			ammolist = createD("DPanelList", ammobg, YRP.ctr(800-23-20), YRP.ctr(300), 0, YRP.ctr(50))
+			ammolist:SetSpacing(2)
+			ammolist:EnableVerticalScrollbar(true)
+			local sbar = ammolist.VBar
+			function sbar:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
+			end
+			function sbar.btnUp:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			end
+			function sbar.btnDown:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			end
+			function sbar.btnGrip:Paint(w, h)
+				draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
+			end
+
+			local tammos = role.string_ammos or ""
+			tammos = string.Explode(";", tammos)
+			local ammos = {}
+			for i, v in pairs(tammos) do
+				local t = string.Split(v, ":")
+				ammos[t[1]] = t[2]
+			end
+
+			function YRPUpdateAmmoAmount()
+				local tab = {}
+				for i, v in pairs(ammos) do
+					table.insert(tab, i .. ":" .. v)
+				end
+				local result = table.concat(tab, ";")
+				net.Start("update_role_string_ammos")
+					net.WriteString(role.uniqueID)
+					net.WriteString(result)
+				net.SendToServer()
+			end
+
+			for i, v in pairs(game.GetAmmoTypes()) do
+				local abg = createD("YPanel", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
+				
+				local ahe = createD("YLabel", abg, YRP.ctr(400), YRP.ctr(50), 0, 0)
+				ahe:SetText("#" .. i .. ": " .. v)
+				function ahe:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255))
+					draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				end
+
+				local ava = createD("DNumberWang", abg, YRP.ctr(400), YRP.ctr(50), YRP.ctr(400), 0)
+				ava:SetDecimals(0)
+				ava:SetMin(0)
+				ava:SetMax(999)
+				ava:SetValue(ammos[v] or 0)
+				function ava:OnValueChanged(val)
+					ammos[v] = val
+					YRPUpdateAmmoAmount()
+				end
+
+				ammolist:AddItem(abg)
+			end
+
+			ea.equipment:AddItem(ammobg)
 
 			ea.equipment:AutoSize(true)
 

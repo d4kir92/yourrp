@@ -400,6 +400,19 @@ function set_role_values(ply, pmid)
 				end
 			end
 
+			-- ammos
+			local tammos = rolTab.string_ammos or ""
+			tammos = string.Explode(";", tammos)
+			local ammos = {}
+			for i, v in pairs(tammos) do
+				local t = string.Split(v, ":")
+				ammos[t[1]] = t[2]
+			end
+			for name, amount in pairs(ammos) do
+				local ammo = ply:GetAmmoCount(name)
+				ply:SetAmmo(ammo + amount, name)
+			end
+
 			--custom flags
 			local allflags = SQL_SELECT("yrp_flags", "*", nil)
 			for i, flag in pairs(allflags) do
