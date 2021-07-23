@@ -32,7 +32,7 @@ function CreateForumContent(PARENT)
 end
 
 function CreateRulesContent(PARENT)
-	local serverrules = GetGlobalString("text_server_rules", "")
+	local serverrules = SQL_STR_OUT(table.concat(GetGlobalTable("text_server_rules", ""), "\n"))
 
 	local page = createD("DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20))
 	function page:Paint(pw, ph)
@@ -320,7 +320,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 		
-		if !strEmpty(GetGlobalString("text_server_rules", "")) then
+		if table.Count(GetGlobalTable("text_server_rules", {})) > 0 then
 			sites[c] = {}
 			sites[c].name = "LID_rules"
 			sites[c].icon = "policy"

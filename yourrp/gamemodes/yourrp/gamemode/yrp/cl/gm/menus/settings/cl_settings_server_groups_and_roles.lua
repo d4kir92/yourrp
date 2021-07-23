@@ -815,6 +815,114 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				visible2.uniqueID = group.uniqueID
 				visible2.lforce = false
 				ea[group.uniqueID].visible2 = YRPDCheckBox(visible2)
+
+
+
+				local col2 = createD("DPanelList", ea.background, YRP.ctr(800+24), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+				col2:EnableVerticalScrollbar(true)
+				col2:SetSpacing(YRP.ctr(20))
+				local sbar = col2.VBar
+				function sbar:Paint(w, h)
+					draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
+				end
+				function sbar.btnUp:Paint(w, h)
+					draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+				end
+				function sbar.btnDown:Paint(w, h)
+					draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+				end
+				function sbar.btnGrip:Paint(w, h)
+					draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
+				end
+
+				local equipment = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1250), 0, 0)
+				equipment:SetText("LID_equipment")
+				function equipment:Paint(pw, ph)
+					hook.Run("YGroupBoxPaint", self, pw, ph)
+				end
+				col2:AddItem(equipment)
+				ea.background:AddPanel(col2)
+
+				ea[group.uniqueID].equipment = equipment
+				ea.equipment = ea[group.uniqueID].equipment
+
+
+
+				-- Ammunation
+				local ammobg = createD("YPanel", col2, YRP.ctr(800), YRP.ctr(850), 0, 0)
+				local ammoheader = createD("YLabel", ammobg, YRP.ctr(800), YRP.ctr(50), 0, 0)
+				ammoheader:SetText("LID_ammo")
+				function ammoheader:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+					draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
+
+				ammolist = createD("DPanelList", ammobg, YRP.ctr(800-23-20), YRP.ctr(800), 0, YRP.ctr(50))
+				ammolist:SetSpacing(2)
+				ammolist:EnableVerticalScrollbar(true)
+				local sbar = ammolist.VBar
+				function sbar:Paint(w, h)
+					draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
+				end
+				function sbar.btnUp:Paint(w, h)
+					draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+				end
+				function sbar.btnDown:Paint(w, h)
+					draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+				end
+				function sbar.btnGrip:Paint(w, h)
+					draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
+				end
+
+				local tammos = group.string_ammos or ""
+				tammos = string.Explode(";", tammos)
+				local ammos = {}
+				for i, v in pairs(tammos) do
+					local t = string.Split(v, ":")
+					ammos[t[1]] = t[2]
+				end
+
+				function YRPUpdateAmmoAmountGroup()
+					local tab = {}
+					for i, v in pairs(ammos) do
+						if tonumber(v) > 0 then
+							table.insert(tab, i .. ":" .. v)
+						end
+					end
+					local result = table.concat(tab, ";")
+					net.Start("update_group_string_ammos")
+						net.WriteString(group.uniqueID)
+						net.WriteString(result)
+					net.SendToServer()
+				end
+
+				for i, v in pairs(game.GetAmmoTypes()) do
+					local abg = createD("YPanel", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
+					
+					local ahe = createD("YLabel", abg, YRP.ctr(400), YRP.ctr(50), 0, 0)
+					ahe:SetText(v)
+					function ahe:Paint(pw, ph)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255))
+						draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					end
+
+					local ava = createD("DNumberWang", abg, YRP.ctr(400), YRP.ctr(50), YRP.ctr(400), 0)
+					ava:SetDecimals(0)
+					ava:SetMin(0)
+					ava:SetMax(999)
+					ava:SetValue(ammos[v] or 0)
+					function ava:OnValueChanged(val)
+						ammos[v] = math.Clamp(val, self:GetMin(), self:GetMax())
+						YRPUpdateAmmoAmountGroup()
+					end
+
+					ammolist:AddItem(abg)
+				end
+
+				ea.equipment:AddItem(ammobg)
+
+				ea.equipment:AutoSize(true)
+
 			end
 		end)
 
@@ -2235,10 +2343,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				ammos[t[1]] = t[2]
 			end
 
-			function YRPUpdateAmmoAmount()
+			function YRPUpdateAmmoAmountRole()
 				local tab = {}
 				for i, v in pairs(ammos) do
-					table.insert(tab, i .. ":" .. v)
+					if tonumber(v) > 0 then
+						table.insert(tab, i .. ":" .. v)
+					end
 				end
 				local result = table.concat(tab, ";")
 				net.Start("update_role_string_ammos")
@@ -2251,7 +2361,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local abg = createD("YPanel", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
 				
 				local ahe = createD("YLabel", abg, YRP.ctr(400), YRP.ctr(50), 0, 0)
-				ahe:SetText("#" .. i .. ": " .. v)
+				ahe:SetText(v)
 				function ahe:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255))
 					draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -2263,8 +2373,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				ava:SetMax(999)
 				ava:SetValue(ammos[v] or 0)
 				function ava:OnValueChanged(val)
-					ammos[v] = val
-					YRPUpdateAmmoAmount()
+					ammos[v] = math.Clamp(val, self:GetMin(), self:GetMax())
+					YRPUpdateAmmoAmountRole()
 				end
 
 				ammolist:AddItem(abg)

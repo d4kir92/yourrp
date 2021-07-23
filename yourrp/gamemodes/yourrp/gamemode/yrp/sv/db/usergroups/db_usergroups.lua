@@ -12,6 +12,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0,255'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_nonesweps", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_sents", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_tools", "TEXT DEFAULT ''")
@@ -522,6 +523,21 @@ net.Receive("usergroup_update_string_nonesweps", function(len, ply)
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_update_string_nonesweps")
 			net.WriteString(string_nonesweps)
+		net.Send(pl)
+	end
+end)
+
+util.AddNetworkString("usergroup_update_string_ammos")
+net.Receive("usergroup_update_string_ammos", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local string_ammos = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "string_ammos = '" .. string_ammos .. "'", "uniqueID = '" .. uid .. "'")
+
+	YRP.msg("db", ply:YRPName() .. " updated string_ammos of usergroup (" .. uid .. ") to [" .. string_ammos .. "]")
+
+	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
+		net.Start("usergroup_update_string_ammos")
+			net.WriteString(string_ammos)
 		net.Send(pl)
 	end
 end)
@@ -1688,15 +1704,37 @@ function Player:UserGroupLoadout()
 	local UG = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. string.lower(self:GetUserGroup()) .. "'")
 	if wk(UG) then
 		UG = UG[1]
+		
+		self:SetNW2String("usergroupColor", UG.string_color)
+		self:SetNW2Int("int_position", UG.int_position)
+		self:SetNW2Int("int_characters_max", UG.int_characters_max)
+		self:SetNW2Int("int_charactersevent_max", UG.int_charactersevent_max)
+
+
+
+		-- sweps
 		self:SetNW2String("usergroup_sweps", UG.string_sweps)
 		local SWEPS = string.Explode(",", UG.string_sweps)
 		for i, swep in pairs(SWEPS) do
 			self:Give(swep)
 		end
-		self:SetNW2String("usergroupColor", UG.string_color)
-		self:SetNW2Int("int_position", UG.int_position)
-		self:SetNW2Int("int_characters_max", UG.int_characters_max)
-		self:SetNW2Int("int_charactersevent_max", UG.int_charactersevent_max)
+
+
+
+		-- ammos
+		local tammos = UG.string_ammos or ""
+		tammos = string.Explode(";", tammos)
+		local ammos = {}
+		for i, v in pairs(tammos) do
+			local t = string.Split(v, ":")
+			ammos[t[1]] = t[2]
+		end
+		for name, amount in pairs(ammos) do
+			local ammo = self:GetAmmoCount(name)
+			self:SetAmmo(ammo + amount, name)
+		end
+
+
 
 		for i, v in pairs(UG) do
 			if string.StartWith(i, "bool_") then
@@ -1704,6 +1742,7 @@ function Player:UserGroupLoadout()
 			end
 		end
 
+		
 		local _licenseIDs = string.Explode(",", UG.string_licenses)
 		for i, lic in pairs(_licenseIDs) do
 			if tonumber(lic) != nil then
@@ -1884,6 +1923,14 @@ net.Receive("usergroup_update_string_tools", function(len, ply)
 	YRP.msg("db", ply:YRPName() .. " updated tools of usergroup (" .. uid .. ") to [" .. string_tools .. "]")
 end)
 
+util.AddNetworkString("usergroup_update_string_ammos")
+net.Receive("usergroup_update_string_ammos", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local string_ammos = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "string_ammos = '" .. string_ammos .. "'", "uniqueID = '" .. uid .. "'")
+
+	YRP.msg("db", ply:YRPName() .. " updated ammos of usergroup (" .. uid .. ") to [" .. string_ammos .. "]")
+end)
 
 hook.Add("Think", "yrp_usergroup_haschanged", function()
 	for i, ply in pairs(player.GetAll()) do

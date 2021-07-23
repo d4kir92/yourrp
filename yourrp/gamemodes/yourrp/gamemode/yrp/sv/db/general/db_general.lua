@@ -301,10 +301,12 @@ if wk(_init_general) then
 	for name, value in pairs(yrp_general) do
 		if string.StartWith(name, "bool_") then
 			SetGlobalBool(name, tobool(value))
-		elseif string.StartWith(name, "text_") then
-			SetGlobalString(name, tostring(value))
+		elseif name == "text_server_rules" then
+			SetGlobalTable(name, string.Explode("\n", tostring(value)))
 		elseif string.StartWith(name, "int_") then
 			SetGlobalInt(name, tonumber(value))
+		elseif string.StartWith(name, "text_") then
+			SetGlobalString(name, tostring(value))
 		end
 	end
 
@@ -482,6 +484,12 @@ function GeneralUpdateString(ply, netstr, str, value)
 	SetGlobalString(str, SQL_STR_OUT(value))
 end
 
+function GeneralUpdateTable(ply, netstr, str, value)
+	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
+	GeneralUpdateValue(ply, netstr, SQL_STR_IN(str), value)
+	SetGlobalTable(str, string.Explode("\n", SQL_STR_OUT(value)))
+end
+
 function GeneralUpdateInt(ply, netstr, str, value)
 	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
@@ -570,7 +578,7 @@ end)
 util.AddNetworkString("update_text_server_rules")
 net.Receive("update_text_server_rules", function(len, ply)
 	local str = SQL_STR_IN(net.ReadString())
-	GeneralUpdateString(ply, "update_text_server_rules", "text_server_rules", str)
+	GeneralUpdateTable(ply, "update_text_server_rules", "text_server_rules", str)
 end)
 
 util.AddNetworkString("update_text_server_welcome_message")

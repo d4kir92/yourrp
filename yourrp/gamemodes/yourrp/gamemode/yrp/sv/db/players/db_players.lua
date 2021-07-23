@@ -457,6 +457,19 @@ function set_role_values(ply, pmid)
 			ply:SetNW2String("factionName", faction.string_name)
 			ply:SetNW2String("factionUniqueID", faction.uniqueID)
 			ply:SetNW2String("factionColor", faction.string_color)
+
+			-- ammos
+			local tammos = groTab.string_ammos or ""
+			tammos = string.Explode(";", tammos)
+			local ammos = {}
+			for i, v in pairs(tammos) do
+				local t = string.Split(v, ":")
+				ammos[t[1]] = t[2]
+			end
+			for name, amount in pairs(ammos) do
+				local ammo = ply:GetAmmoCount(name)
+				ply:SetAmmo(ammo + amount, name)
+			end
 		else
 			YRP.msg("note", "[SET ROLE VALUES] No group selected -> Suicide")
 			ply:KillSilent()

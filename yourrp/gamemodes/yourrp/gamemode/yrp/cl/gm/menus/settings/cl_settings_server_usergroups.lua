@@ -552,6 +552,78 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 
 
+	-- Ammunation
+	local ammobg = createD("YPanel", PARENT, YRP.ctr(500), YRP.ctr(50 + 500), YRP.ctr(20 + 500 + 20), YRP.ctr(20 + 550 + 20 + 550 + 20))
+	local ammoheader = createD("YLabel", ammobg, YRP.ctr(500), YRP.ctr(50), 0, 0)
+	ammoheader:SetText("LID_ammo")
+	function ammoheader:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+
+	ammolist = createD("DPanelList", ammobg, YRP.ctr(500), YRP.ctr(500), 0, YRP.ctr(50))
+	ammolist:SetSpacing(2)
+	ammolist:EnableVerticalScrollbar(true)
+	local sbar = ammolist.VBar
+	function sbar:Paint(w, h)
+		draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
+	end
+	function sbar.btnUp:Paint(w, h)
+		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+	end
+	function sbar.btnDown:Paint(w, h)
+		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+	end
+	function sbar.btnGrip:Paint(w, h)
+		draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
+	end
+	local tammos = UGS[CURRENT_USERGROUP].string_ammos or ""
+	tammos = string.Explode(";", tammos)
+	local ammos = {}
+	for i, v in pairs(tammos) do
+		local t = string.Split(v, ":")
+		ammos[t[1]] = t[2]
+	end
+
+	function YRPUpdateAmmoAmountUG()
+		local tab = {}
+		for i, v in pairs(ammos) do
+			if tonumber(v) > 0 then
+				table.insert(tab, i .. ":" .. v)
+			end
+		end
+		local result = table.concat(tab, ";")
+		net.Start("usergroup_update_string_ammos")
+			net.WriteString(CURRENT_USERGROUP)
+			net.WriteString(result)
+		net.SendToServer()
+	end
+
+	for i, v in pairs(game.GetAmmoTypes()) do
+		local abg = createD("YPanel", nil, YRP.ctr(500), YRP.ctr(50), 0, 0)
+		
+		local ahe = createD("YLabel", abg, YRP.ctr(250), YRP.ctr(50), 0, 0)
+		ahe:SetText(v)
+		function ahe:Paint(pw, ph)
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255))
+			draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
+
+		local ava = createD("DNumberWang", abg, YRP.ctr(250), YRP.ctr(50), YRP.ctr(250), 0)
+		ava:SetDecimals(0)
+		ava:SetMin(0)
+		ava:SetMax(999)
+		ava:SetValue(ammos[v] or 0)
+		function ava:OnValueChanged(val)
+			ammos[v] = math.Clamp(val, self:GetMin(), self:GetMax())
+			YRPUpdateAmmoAmountUG()
+		end
+
+		ammolist:AddItem(abg)
+	end
+
+
+
 	local ACCESS = createD("YGroupBox", PARENT, YRP.ctr(800), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(20 + 500 + 20 + 500 + 20), YRP.ctr(20))
 	ACCESS:SetText("LID_accesssettings")
 	function ACCESS:Paint(pw, ph)
