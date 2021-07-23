@@ -43,9 +43,9 @@ hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
 				CHudDeathNotice = true
 			}
 
-			--[[if g_VoicePanelList != nil then
-				g_VoicePanelList:SetVisible(true)
-			end]]
+			if g_VoicePanelList != nil then
+				g_VoicePanelList:SetVisible(false)
+			end
 			if (hide[ name ]) then return false end
 		end
 	end
