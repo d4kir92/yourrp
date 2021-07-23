@@ -136,8 +136,12 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D
 SQL_ADD_COLUMN(DATABASE_NAME, "text_idcard_background", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_idcardid", "INT DEFAULT 1")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_voice_module", "INT DEFAULT 0")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_showowner", "INT DEFAULT 1")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_crosshair", "INT DEFAULT 1")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_hud", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_swaying", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard", "INT DEFAULT 1")
@@ -1117,6 +1121,14 @@ util.AddNetworkString("update_bool_yrp_crosshair")
 net.Receive("update_bool_yrp_crosshair", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_yrp_crosshair", "bool_yrp_crosshair", b)
+end)
+
+
+
+util.AddNetworkString("update_bool_yrp_voice_module")
+net.Receive("update_bool_yrp_voice_module", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_yrp_voice_module", "bool_yrp_voice_module", b)
 end)
 
 

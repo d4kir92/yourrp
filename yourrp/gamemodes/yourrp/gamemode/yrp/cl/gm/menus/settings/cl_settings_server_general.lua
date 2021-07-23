@@ -908,6 +908,8 @@ net.Receive("Connect_Settings_General", function(len)
 
 		GAMEMODE_VISUALS:GetContent():AddItem(idcard_change)
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
+		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_voice_module, "Voice Module (Bottom Right)", "update_bool_yrp_voice_module")
+		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_showowner, "Show owner", "update_bool_yrp_showowner")
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_crosshair, "LID_yourrpcrosshair", "update_bool_yrp_crosshair")

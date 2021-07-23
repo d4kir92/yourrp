@@ -44,7 +44,7 @@ hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
 			}
 
 			if g_VoicePanelList != nil then
-				g_VoicePanelList:SetVisible(false)
+				g_VoicePanelList:SetVisible(GetGlobalBool("bool_yrp_voice_module", false))
 			end
 			if (hide[ name ]) then return false end
 		end
