@@ -110,7 +110,7 @@ local _cur = ""
 local chars = {}
 local loading = false
 function LoadCharacters()
-	--YRP.msg("gm", "received characterlist")
+	YRP.msg("gm", "received characterlist")
 
 	trashicon = YRP.GetDesignIcon("64_trash")
 
@@ -581,6 +581,10 @@ net.Receive("yrp_get_characters", function(len)
 end)
 
 function openCharacterSelection()
+	if pa(CharMenu.characterList) then
+		CharMenu.characterList:Clear()
+	end
+
 	if !loading then
 		loading = true
 		timer.Simple(0.3, function()
@@ -594,6 +598,7 @@ function openCharacterSelection()
 
 	CharMenu.character = {}
 	CharMenu.character.amount = 0
+	CharMenu.character.amountevent = 0
 
 	openMenu()
 	
@@ -753,13 +758,6 @@ function openCharacterSelection()
 				local lply = LocalPlayer()
 				draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
 			end
-
-			timer.Simple(0.1, function()
-				--YRP.msg("gm", "ask for characterlist")
-
-				net.Start("yrp_get_characters")
-				net.SendToServer()
-			end)
 
 			local button = {}
 			button.w = YRP.ctr(600)
@@ -986,13 +984,6 @@ function openCharacterSelection()
 			function CharMenu.characterList:Paint(pw, ph)
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 			end
-			
-			timer.Simple(0.1, function()
-				--YRP.msg("gm", "ask for characterlist")
-
-				net.Start("yrp_get_characters")
-				net.SendToServer()
-			end)
 
 			local button = {}
 			button.w = YRP.ctr(600)
@@ -1064,6 +1055,9 @@ function openCharacterSelection()
 					net.SendToServer()
 
 					_window:Close()
+
+					closeCharacterSelection()
+					openCharacterSelection()
 				end
 
 				local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
@@ -1240,15 +1234,16 @@ function openCharacterSelection()
 				end
 				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
 			end
-
-			timer.Simple(0.01, function()
-				--YRP.msg("gm", "ask for characterlist")
-
-				net.Start("yrp_get_characters")
-				net.SendToServer()
-			end)
 		end
 	end
+
+	
+	timer.Simple(0.01, function()
+		--YRP.msg("gm", "ask for characterlist")
+
+		net.Start("yrp_get_characters")
+		net.SendToServer()
+	end)
 end
 
 net.Receive("openCharacterMenu", function(len, ply)

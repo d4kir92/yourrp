@@ -19,6 +19,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "date", "TEXT DEFAULT '0000-00-00 00-00-00'")
 --db_is_empty(DATABASE_NAME)
 
 util.AddNetworkString("getRoleWhitelist")
+util.AddNetworkString("getRoleWhitelist_line")
 util.AddNetworkString("whitelistPlayer")
 util.AddNetworkString("whitelistPlayerGroup")
 util.AddNetworkString("whitelistPlayerAll")
@@ -77,9 +78,21 @@ function sendRoleWhitelist(ply)
 			_tmpWhiteList = {}
 		end
 
+		for i, line in pairs(_tmpWhiteList) do
+			--timer.Simple(0.001 * i, function()
+				net.Start("getRoleWhitelist_line")
+					net.WriteString(i)
+					net.WriteTable(line)
+					net.WriteBool(i == #_tmpWhiteList)
+				net.Send(ply)
+			--end)
+		end
+
+		--[[
 		net.Start("getRoleWhitelist")
 			net.WriteTable(_tmpWhiteList)
 		net.Send(ply)
+		]]
 	end
 end
 

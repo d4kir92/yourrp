@@ -8,20 +8,21 @@ local tabG = {}
 
 local loadedR = false
 local loadedG = false
+local loadedW = false
 
 function BuildWhitelist(parent, tab)
 	if !IsValid(parent) then
 		YRP.msg("error", "[BuildWhitelist] failed! parent: " .. tostring(parent))
 	end
-	if loadedR and loadedG then
+	if loadedR and loadedG and loadedW and pa(parent) then
 		local list = createD("DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
-		list:AddColumn("uniqueID"):SetFixedWidth(80)
+		list:AddColumn("uniqueID"):SetFixedWidth(60)
 		list:AddColumn("SteamID"):SetFixedWidth(130)
 		list:AddColumn(YRP.lang_string("LID_nick"))
 		list:AddColumn(YRP.lang_string("LID_name"))
 		list:AddColumn(YRP.lang_string("LID_group"))
 		list:AddColumn(YRP.lang_string("LID_role"))
-		list:AddColumn(YRP.lang_string("LID_time")):SetFixedWidth(130)
+		list:AddColumn(YRP.lang_string("LID_time")):SetFixedWidth(120)
 		list:AddColumn(YRP.lang_string("LID_status"))
 		function list:Think()
 			if self.w != parent:GetWide() - YRP.ctr(60 + 500) or self.h != parent:GetTall() - YRP.ctr(40) or self.x != YRP.ctr(20) or self.y != YRP.ctr(20) then
@@ -57,7 +58,7 @@ function BuildWhitelist(parent, tab)
 					elseif (rol.uniqueID == whi.roleID) then
 						for m, grp in pairs(tabG) do
 							if (grp.uniqueID == rol.int_groupID) then -- ROLE
-								list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grp.string_name, rol.string_name, whi.date, whi.status)
+								list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grp.string_name, rol.string_name, whi.date, SQL_STR_OUT(whi.status))
 								found = true
 								break
 							end
@@ -67,13 +68,13 @@ function BuildWhitelist(parent, tab)
 			elseif whi.roleID and whi.roleID < 0 and whi.groupID > 0 and (tab == "LID_all" or tab == "LID_groups") then -- GROUP
 				for m, grp in pairs(tabG) do
 					if (grp.uniqueID == whi.groupID) then
-						list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grp.string_name, "-", whi.date, whi.status)
+						list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grp.string_name, "-", whi.date, SQL_STR_OUT(whi.status))
 						found = true
 						break
 					end
 				end
 			elseif (tab == "LID_all") then -- ALL
-				list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), YRP.lang_string("LID_all"), YRP.lang_string("LID_all"), whi.date, whi.status)
+				list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), YRP.lang_string("LID_all"), YRP.lang_string("LID_all"), whi.date, SQL_STR_OUT(whi.status))
 				found = true
 			else
 				local rolname = "-"
@@ -98,10 +99,10 @@ function BuildWhitelist(parent, tab)
 					rolname = YRP.lang_string("LID_all")
 				end
 				if string.StartWith(whi.status, "Manually") and tab == "LID_manually" then
-					list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grpname, rolname, whi.date, whi.status)
+					list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grpname, rolname, whi.date, SQL_STR_OUT(whi.status))
 					found = true
 				elseif string.StartWith(whi.status, "Promoted") and tab == "LID_promote" then
-					list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grpname, rolname, whi.date, whi.status)
+					list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grpname, rolname, whi.date, SQL_STR_OUT(whi.status))
 					found = true
 				end
 			end
@@ -283,10 +284,18 @@ function BuildWhitelist(parent, tab)
 		btnRem:SetText(YRP.lang_string("LID_removeentry"))
 		function btnRem:DoClick()
 			if list:GetSelectedLine() != nil then
-				if list:GetLine(list:GetSelectedLine()):GetValue(1) != nil then
+				local uid = list:GetLine(list:GetSelectedLine()):GetValue(1)
+				if uid != nil then
 					net.Start("whitelistPlayerRemove")
-						net.WriteInt(list:GetLine(list:GetSelectedLine()):GetValue(1) , 16)
+						net.WriteInt(uid, 16)
 					net.SendToServer()
+
+					for i, v in pairs(tabW) do
+						if v.uniqueID == uid then
+							tabW[i] = nil
+						end
+					end
+
 					list:RemoveLine(list:GetSelectedLine())
 				end
 			end
@@ -329,38 +338,43 @@ net.Receive("getRolesWhitelist", function(len)
 	loadedR = true
 end)
 
-net.Receive("getRoleWhitelist", function(len)
+net.Receive("getRoleWhitelist_line", function(len)
 	local PARENT = GetSettingsSite()
 	if pa(PARENT) then
 
 		local site = PARENT
 
-		tabW = net.ReadTable()
+		local id = net.ReadString() or "0"
+		id = tonumber(id)
+		tabW[id] = net.ReadTable()
 
-		-- TABS
-		local tabs = createD("YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
-		function tabs:Think()
-			self:SetSize(site:GetWide(), site:GetTall())
-		end
+		if net.ReadBool() then
+			loadedW = true
 
-		tabs:AddOption("LID_all", function(parent)
-			BuildWhitelist(parent, "LID_all")
-		end)
-		tabs:AddOption("LID_roles", function(parent)
-			BuildWhitelist(parent, "LID_roles")
-		end)
-		tabs:AddOption("LID_groups", function(parent)
-			BuildWhitelist(parent, "LID_groups")
-		end)
-		tabs:AddOption("LID_manually", function(parent)
-			BuildWhitelist(parent, "LID_manually")
-		end)
-		tabs:AddOption("LID_promote", function(parent)
-			BuildWhitelist(parent, "LID_promote")
-		end)
+			-- TABS
+			local tabs = createD("YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
+			function tabs:Think()
+				self:SetSize(site:GetWide(), site:GetTall())
+			end
 
+			tabs:AddOption("LID_all", function(parent)
+				BuildWhitelist(parent, "LID_all")
+			end)
+			tabs:AddOption("LID_roles", function(parent)
+				BuildWhitelist(parent, "LID_roles")
+			end)
+			tabs:AddOption("LID_groups", function(parent)
+				BuildWhitelist(parent, "LID_groups")
+			end)
+			tabs:AddOption("LID_manually", function(parent)
+				BuildWhitelist(parent, "LID_manually")
+			end)
+			tabs:AddOption("LID_promote", function(parent)
+				BuildWhitelist(parent, "LID_promote")
+			end)
 
-		tabs:GoToSite("LID_all")		
+			tabs:GoToSite("LID_all")	
+		end	
 	end
 end)
 
