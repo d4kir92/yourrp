@@ -422,8 +422,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	DONE_LOADING = DONE_LOADING or false
-	if !DONE_LOADING then
+	if pa(yrp_loading_screen) then
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(10, 10, 10))
 	end
 

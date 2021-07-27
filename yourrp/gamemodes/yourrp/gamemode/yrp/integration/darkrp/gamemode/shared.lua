@@ -266,11 +266,16 @@ function DarkRP.getIncompleteChatCommands()
 	return {}
 end
 
+jobByCmd = jobByCmd or {}
 function DarkRP.getJobByCommand(command)
 	--Description: Get the job table and number from the command of the job.
-	YRP.msg("darkrp", "getJobByCommand(" .. command .. ")")
-	YRP.msg("darkrp", DarkRP._not)
-	return {}, 0
+	--YRP.msg("darkrp", "getJobByCommand(" .. command .. ")")
+	if jobByCmd[command] then
+		return jobByCmd[command], jobByCmd[command]
+	else
+		print("NOT FOUND")
+		return nil, nil
+	end
 end
 
 function DarkRP.getLaws()

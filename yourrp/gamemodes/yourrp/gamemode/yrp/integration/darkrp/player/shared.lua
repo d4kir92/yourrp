@@ -123,13 +123,14 @@ function Player:getJobTable()
 	--Description: Get the job table of a player.
 	local _job = {}
 
+	_job.team = self:GetRoleUID()
+
 	_job.name = self:GetNW2String("roleName", "INVALID")
 	local _pms = string.Explode(",", self:GetNW2String("playermodels", "INVALID"))
 	_job.model = _pms
 	_job.description = self:GetNW2String("roleDescription", "INVALID")
 	local _weapons = string.Explode(",", self:GetNW2String("sweps", "INVALID"))
 	_job.weapons = _weapons
-	_job.command = "NONE"
 	_job.max = tonumber(self:GetNW2String("maxamount", -1))
 	_job.salary = tonumber(self:GetNW2String("salary", "INVALID"))
 	_job.admin = tonumber(self:GetNW2Bool("isadminonly")) or 0

@@ -39,15 +39,13 @@ end
 
 function Player:changeAllowed(team)
 	--Description: Returns whether a player is allowed to get a certain job.
-	YRP.msg("darkrp", "changeAllowed(" .. tostring(team) .. ")")
-	YRP.msg("darkrp", DarkRP._not)
-	return false
+	return true
 end
 
 function Player:changeTeam(team, force, suppressNotification)
 	--Description: Change the team of a player.
-	YRP.msg("darkrp", "changeTeam(" .. tostring(team) .. ", " .. tostring(force) .. ", " .. tostring(suppressNotification) .. ")")
-	YRP.msg("darkrp", DarkRP._not)
+	print(team, force, suppressNotification)
+	SetRole(self, team, false, nil)
 	return false
 end
 
@@ -176,7 +174,7 @@ end
 
 function Player:setDarkRPVar(variable, value, target)
 	--Description: Set a shared variable. Make sure the variable is registered with DarkRP.registerDarkRPVar!
-	YRP.msg("darkrp", "setDarkRPVar(" .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. ")")
+	--YRP.msg("darkrp", "setDarkRPVar(" .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. ")")
 	if value == nil then return false end
 
 	target = target or self
@@ -185,6 +183,12 @@ function Player:setDarkRPVar(variable, value, target)
 		target:Drink(value - target:GetNW2Float("thirst", 0.0))
 	elseif variable == "Energy" then
 		target:Eat(value - target:GetNW2Float("hunger", 0.0))
+	elseif variable == "rpname" then
+		target:SetRPName(value)
+	elseif variable == "money" then
+		target:SetMoney(value)
+	else
+		print("[setDarkRPVar] MISSING VARIABLE", variable)
 	end
 
 	if isnumber(value) then

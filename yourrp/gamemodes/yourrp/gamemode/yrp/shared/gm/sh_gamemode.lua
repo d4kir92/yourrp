@@ -661,3 +661,10 @@ _R[1] = function(...)
 	return oErrorFunc(...)
 end
 ]]
+
+function IsVoidCharEnabled()
+	if VoidChar != nil then
+		return true
+	end
+	return false
+end

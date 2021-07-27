@@ -13,6 +13,7 @@ include("gm/huds/cl_hud_space.lua")
 include("gm/huds/cl_hud_fallout76.lua")
 include("gm/huds/cl_hud_icons.lua")
 include("gm/huds/cl_hud_circles.lua")
+include("gm/huds/cl_hud_thin.lua")
 
 include("gm/interfaces/cl_if_simple.lua")
 include("gm/interfaces/cl_if_blur.lua")

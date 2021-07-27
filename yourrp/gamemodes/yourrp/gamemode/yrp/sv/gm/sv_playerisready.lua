@@ -47,13 +47,13 @@ function PlayerLoadedGame(ply, tab)
 		end
 	end
 
+	print("TEST", ply:GetNW2Int("yrp_charid"))
+
 	--SendDGlobals(ply)
 
 	ply:SetNW2Bool("finishedloadingcharacter", true)
 
 	YRPSendCharCount(ply)
-
-	ply:SendTeamsToPlayer()
 	
 	if IsValid(ply) and ply.KillSilent then
 		ply:KillSilent()

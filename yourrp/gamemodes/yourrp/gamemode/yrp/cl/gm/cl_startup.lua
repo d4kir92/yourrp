@@ -2458,7 +2458,7 @@ if pa(yrp_loading_screen) then
 		if lply:GetNW2Bool("finishedloading", false) then
 			cur = cur + 1
 		end
-		if lply:GetNW2Bool("loadedchars", false) then
+		if lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() then
 			cur = cur + 1
 		end
 		-- BAR BG
@@ -2474,7 +2474,7 @@ if pa(yrp_loading_screen) then
 		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 
-		if lply:GetNW2Bool("finishedloading", false) and lply:GetNW2Bool("loadedchars", false) then
+		if lply:GetNW2Bool("finishedloading", false) and (lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled()) then
 			yrp_loading_screen:Remove()
 		end
 	end

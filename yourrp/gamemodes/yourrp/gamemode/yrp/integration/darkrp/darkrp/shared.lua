@@ -28,3 +28,11 @@ function DarkRP:registerDarkRPVar(name, writeFn, readFn)
 	DarkRPVars[name] = {id = maxId, name = name, writeFn = writeFn, readFn = readFn}
 	DarkRPVarById[maxId] = DarkRPVars[name]
 end
+
+TEAM_CITIZEN = 1
+TEAM_HOBO = 2
+TEAM_MEDIC = 3
+TEAM_POLICE = 4
+TEAM_GANG = 5
+TEAM_MOB = 6
+TEAM_GUN = 7

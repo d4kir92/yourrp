@@ -237,31 +237,43 @@ end
 -- CONVERTING
 
 -- darkrp
+jobByCmd = jobByCmd or {}
 function ConvertToDarkRPJob(tab)
 	local _job = {}
 
+	_job.team = tonumber(tab.uniqueID)
+	
 	_job.name = tab.string_name
-	local _pms = string.Explode(",", "")
-	_job.model = _pms
-	_job.description = tab.string_description
-	local _weapons = string.Explode(",", "")
+	local pms = GetPlayermodelsOfRole(tab.uniqueID)
+	if string.find(pms, ",") then
+		print("HAS more then 1", pms)
+		pms = string.Explode(",", GetPlayermodelsOfRole(tab.uniqueID))
+	end
+	if type(pms) == "string" and strEmpty(pms) then
+		pms = "models/player/skeleton.mdl"
+	end
+	_job.model = pms
+	_job.description = tab.string_description or ""
+	local _weapons = string.Explode(",", tab.string_sweps)
 	_job.weapons = _weapons
 	_job.max = tonumber(tab.int_maxamount)
 	_job.salary = tonumber(tab.int_salary)
 	_job.admin = tonumber(tab.bool_adminonly) or 0
-	_job.vote = tobool(tab.bool_voteable) or false
+	_job.vote = tobool(tab.bool_voteable)
 	if tab.string_licenses != "" then
 		_job.hasLicense = true
 	else
 		_job.hasLicense = false
 	end
-	_job.candemote =	tobool(tab.bool_instructor) or false
+	_job.candemote = tobool(tab.bool_instructor) or false
 	local gname = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tab.int_groupID .. "'")
 	if wk(gname) then
 		gname = gname[1].string_name
 	end
 	_job.category = gname or "invalid group"
 	_job.command = ConvertToDarkRPJobName(tab.string_name)
+
+	--_job.RequiresVote = function() end
 
 	-- YRP
 	_job.color = string.Explode(",", tab.string_color)
@@ -276,8 +288,12 @@ local TEAMS = {}
 if wk(drp_allroles) then
 	for i, role in pairs(drp_allroles) do
 		local teamname = ConvertToDarkRPJobName(role.string_name)
-		TEAMS[teamname] = ConvertToDarkRPJob(role)
+		local darkrpjob = ConvertToDarkRPJob(role)
+		local darkrpjobuid = darkrpjob.team
+		TEAMS[teamname] = darkrpjob
 		_G[teamname] = tonumber(role.uniqueID) --TEAMS["TEAM_" .. role.string_name]
+		RPExtraTeams[darkrpjobuid] = darkrpjob
+		jobByCmd[darkrpjob.command] = darkrpjobuid
 	end
 end
 

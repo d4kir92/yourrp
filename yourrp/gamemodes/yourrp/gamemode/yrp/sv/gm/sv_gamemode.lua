@@ -108,11 +108,40 @@ end
 hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	--YRP.msg("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
 
+	ply:SendTeamsToPlayer()
+
 	if ply:SteamID64() == "76561198334153761" then -- "if Hacker, then ban"
 		ply:Ban(0, true) -- perma + kick
 	end
 
 	ply:SetNW2Bool("isserverdedicated", game.IsDedicated())
+
+	if IsVoidCharEnabled() then
+		local chars = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
+		if !wk(chars) then
+			local tab = {}
+			tab.roleID = 1
+			tab.rpname = ply:Nick()
+			tab.gender = "gendermale"
+			
+			tab.playermodelID = 1
+			tab.skin = 1
+			tab.rpdescription = "-"
+			tab.birt = "01.01.2000"
+			tab.bohe = 180
+			tab.weig = 60
+			tab.nati = 0
+			tab.create_eventchar = 0
+
+			tab.bg = {}
+			for i = 0, 19 do
+				tab.bg[i] = 0
+			end
+
+			CreateCharacter(ply, tab)
+			print("HAS NO CHAR, create one")
+		end
+	end
 
 	ply:SetNW2Bool("yrp_characterselection", true)
 
@@ -177,7 +206,9 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 				
 				local _rol_tab = ply:GetRolTab()
 				if wk(_rol_tab) then
-					SetRole(ply, _rol_tab.uniqueID)
+					if not IsVoidCharEnabled() then
+						SetRole(ply, _rol_tab.uniqueID)
+					end
 				else
 					YRP.msg("note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
 
@@ -193,7 +224,9 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 				if wk(chaTab) then
 					ply:SetNW2String("money", chaTab.money)
 					ply:SetNW2String("moneybank", chaTab.moneybank)
-					ply:SetNW2String("rpname", SQL_STR_OUT(chaTab.rpname))
+					if not IsVoidCharEnabled() then
+						ply:SetNW2String("rpname", SQL_STR_OUT(chaTab.rpname))
+					end
 					ply:SetNW2String("rpdescription", SQL_STR_OUT(chaTab.rpdescription))
 					for i, v in pairs(string.Explode("\n", chaTab.rpdescription)) do
 						ply:SetNW2String("rpdescription" .. i, SQL_STR_OUT(v))

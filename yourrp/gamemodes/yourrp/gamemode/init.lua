@@ -38,6 +38,7 @@ AddCSLuaFile("yrp/cl/gm/huds/cl_hud_space.lua")
 AddCSLuaFile("yrp/cl/gm/huds/cl_hud_fallout76.lua")
 AddCSLuaFile("yrp/cl/gm/huds/cl_hud_icons.lua")
 AddCSLuaFile("yrp/cl/gm/huds/cl_hud_circles.lua")
+AddCSLuaFile("yrp/cl/gm/huds/cl_hud_thin.lua")
 
 AddCSLuaFile("yrp/cl/gm/interfaces/cl_if_simple.lua")
 AddCSLuaFile("yrp/cl/gm/interfaces/cl_if_blur.lua")

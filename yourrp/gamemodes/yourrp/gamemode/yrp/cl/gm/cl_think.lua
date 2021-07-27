@@ -776,14 +776,18 @@ end
 hook.Remove("ShouldDrawLocalPlayer", "ShowPlayermodel")
 hook.Add("ShouldDrawLocalPlayer", "ShowPlayermodel", showPlayermodel)
 
+jobByCmd = jobByCmd or {}
 net.Receive("send_team", function(len)
 	local teamname = net.ReadString()
 	local teamTab = net.ReadTable()
 	local teamcolor = teamTab.color
 	local teamuid = teamTab.uniqueID
 
-	_G[teamname] = team
+	_G[teamname] = teamuid
 	RPExtraTeams[teamuid] = teamTab
+
+	jobByCmd[teamTab.command] = teamuid
+
 	--table.insert(RPExtraTeams, teamTab) -- old
 
 	team.SetUp(teamuid, teamname, teamcolor)

@@ -413,6 +413,11 @@ YRP.AddDesignIcon("policy", "vgui/material/icon_policy.png")
 YRP.AddDesignIcon("ts_white", "vgui/material/icon_teamspeak.png")
 YRP.AddDesignIcon("code", "vgui/material/icon_code.png")
 
+YRP.AddDesignIcon("wifi", "vgui/material/icon_wifi.png")
+
+YRP.AddDesignIcon("bullet", "vgui/material/icon_bullet.png")
+YRP.AddDesignIcon("bullet_secondary", "vgui/material/icon_bullet_secondary.png")
+
 YRP.AddDesignIcon("discord", "vgui/material/icon_discord.png")
 YRP.AddDesignIcon("discord_black", "vgui/material/icon_discord_black.png")
 YRP.AddDesignIcon("discord_white", "vgui/material/icon_discord_white.png")

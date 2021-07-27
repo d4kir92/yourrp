@@ -370,7 +370,7 @@ function YRPScoreboardAddPlayer(ply)
 				self.guid = ply:GetGroupUID()
 
 				local x = size
-				if !ply:GetNW2Bool("yrp_characterselection", true) then
+				if !ply:GetNW2Bool("yrp_characterselection", true) or IsVoidCharEnabled() then
 					if GetGlobalBool("bool_yrp_scoreboard_show_level", false) then
 						draw.SimpleText(ply:Level(), "Saira_24", x + yrptab["level"], ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 						x = x + yrptab["level"] + sp

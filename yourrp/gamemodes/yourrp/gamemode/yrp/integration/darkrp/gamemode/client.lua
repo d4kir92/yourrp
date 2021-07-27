@@ -97,8 +97,7 @@ end
 
 function DarkRP.setPreferredJobModel(teamNr, model)
 	--Description: Set the model preferred by the player (if the job allows multiple models).
-	YRP.msg("darkrp", "setPreferredJobModel(teamNr, model)")
-	YRP.msg("darkrp", DarkRP._not)
+	YRP.msg("darkrp", "setPreferredJobModel(" .. tostring(teamNr) .. ", " .. tostring(model) .. ")")
 end
 
 function DarkRP.switchTabOrder(firstTab, secondTab)
@@ -107,10 +106,40 @@ function DarkRP.switchTabOrder(firstTab, secondTab)
 	YRP.msg("darkrp", DarkRP._not)
 end
 
-function DarkRP.textWrap(text, font, width)
+function DarkRP.textWrap(text, font, maxWidth)
 	--Description: Wrap a text around when reaching a certain width.
-	YRP.msg("darkrp", "textWrap(text, font, width)")
-	YRP.msg("darkrp", DarkRP._not)
+	local totalWidth = 0
+
+    surface.SetFont(font)
+
+    local spaceWidth = surface.GetTextSize(' ')
+    text = text:gsub("(%s?[%S]+)", function(word)
+		local char = string.sub(word, 1, 1)
+		if char == "\n" or char == "\t" then
+			totalWidth = 0
+		end
+
+		local wordlen = surface.GetTextSize(word)
+		totalWidth = totalWidth + wordlen
+
+		-- Wrap around when the max width is reached
+		if wordlen >= maxWidth then -- Split the word if the word is too big
+			local splitWord, splitPoint = charWrap(word, maxWidth - (totalWidth - wordlen), maxWidth)
+			totalWidth = splitPoint
+			return splitWord
+		elseif totalWidth < maxWidth then
+			return word
+		end
+
+		-- Split before the word
+		if char == ' ' then
+			totalWidth = wordlen - spaceWidth
+			return '\n' .. string.sub(word, 2)
+		end
+
+		totalWidth = wordlen
+		return '\n' .. word
+	end)
 	return text
 end
 

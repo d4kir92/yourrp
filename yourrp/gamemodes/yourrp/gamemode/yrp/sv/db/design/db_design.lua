@@ -85,6 +85,14 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_circles", function()
 	RegisterHUDDesign(HUD_Circles)
 end)
 
+hook.Add("RegisterHUDDesign", "RegisterHUDDesign_Thin", function()
+	local HUD_Thin = {}
+	HUD_Thin.name = "Thin"
+	HUD_Thin.author = "D4KiR"
+	HUD_Thin.progress = 0
+	RegisterHUDDesign(HUD_Thin)
+end)
+
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:DesignLoadout(from)
