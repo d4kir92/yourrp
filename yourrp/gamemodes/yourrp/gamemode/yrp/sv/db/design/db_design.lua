@@ -89,7 +89,7 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_Thin", function()
 	local HUD_Thin = {}
 	HUD_Thin.name = "Thin"
 	HUD_Thin.author = "D4KiR"
-	HUD_Thin.progress = 0
+	HUD_Thin.progress = 100
 	RegisterHUDDesign(HUD_Thin)
 end)
 

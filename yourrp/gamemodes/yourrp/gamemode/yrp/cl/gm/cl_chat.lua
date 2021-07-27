@@ -407,7 +407,7 @@ else
 				if !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
 					timer.Simple(0.1, function()
 						if pa(yrpChat.window) and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
-							yrpChat.closeChatbox("NOT FOCUS ANYMORE")
+							--yrpChat.closeChatbox("NOT FOCUS ANYMORE")
 						end
 					end)
 				end

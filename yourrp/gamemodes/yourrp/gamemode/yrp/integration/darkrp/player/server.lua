@@ -44,7 +44,6 @@ end
 
 function Player:changeTeam(team, force, suppressNotification)
 	--Description: Change the team of a player.
-	print(team, force, suppressNotification)
 	SetRole(self, team, false, nil)
 	return false
 end

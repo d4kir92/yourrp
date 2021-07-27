@@ -246,7 +246,6 @@ function ConvertToDarkRPJob(tab)
 	_job.name = tab.string_name
 	local pms = GetPlayermodelsOfRole(tab.uniqueID)
 	if string.find(pms, ",") then
-		print("HAS more then 1", pms)
 		pms = string.Explode(",", GetPlayermodelsOfRole(tab.uniqueID))
 	end
 	if type(pms) == "string" and strEmpty(pms) then

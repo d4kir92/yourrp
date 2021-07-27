@@ -273,7 +273,6 @@ function DarkRP.getJobByCommand(command)
 	if jobByCmd[command] then
 		return jobByCmd[command], jobByCmd[command]
 	else
-		print("NOT FOUND")
 		return nil, nil
 	end
 end

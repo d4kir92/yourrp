@@ -139,7 +139,7 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 			end
 
 			CreateCharacter(ply, tab)
-			print("HAS NO CHAR, create one")
+			print("[YourRP] [VOIDCHAR] HAS NO CHAR, create one")
 		end
 	end
 

@@ -47,8 +47,6 @@ function PlayerLoadedGame(ply, tab)
 		end
 	end
 
-	print("TEST", ply:GetNW2Int("yrp_charid"))
-
 	--SendDGlobals(ply)
 
 	ply:SetNW2Bool("finishedloadingcharacter", true)

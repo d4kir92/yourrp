@@ -32,8 +32,8 @@ local function YRPDrawThin(tab)
 
 	HUD_THIN[name] = HUD_THIN[name] or {}
 	
-	if lply:GetNW2Int("hud_version", -1) != HUD_THIN[name]["version"] then
-		HUD_THIN[name]["version"] = lply:GetNW2Int("hud_version", -1)
+	if lply:GetNW2Int("hud_version", 0) != HUD_THIN[name]["hud_version"] then
+		HUD_THIN[name]["hud_version"] = lply:GetNW2Int("hud_version", 0)
 
 		HUD_THIN[name].x = lply:HudValue(name, "POSI_X")
 		HUD_THIN[name].y = lply:HudValue(name, "POSI_Y")
@@ -79,7 +79,7 @@ local function YRPDrawThin(tab)
 
 		HUD_THIN[name].loaded = true
 	end
-
+	
 	if HUD_THIN[name].loaded and lply:HudElementVisible(name) then
 		-- Background
 		draw.RoundedBox(0, HUD_THIN[name].x, HUD_THIN[name].y, HUD_THIN[name].w, HUD_THIN[name].h, Color(0, 0, 0, 100))
@@ -120,7 +120,6 @@ end
 
 function YRPHUDThin()
 	local lply = LocalPlayer()
-
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and !IsScoreboardVisible() then
 		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Thin" then
 			local HP = {}
