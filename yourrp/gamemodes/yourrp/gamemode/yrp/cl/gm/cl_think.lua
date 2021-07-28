@@ -119,8 +119,8 @@ function useFunction(str)
 			toggleMap()
 		elseif str == "openInteractMenu" then
 			toggleInteractMenu()
-		elseif str == "menu_talents" then
-			ToggleTalentsMenu()
+		--elseif str == "menu_talents" then
+			--ToggleTalentsMenu()
 		elseif str == "voice_mute" then
 			net.Start("yrp_mute_voice")
 			net.SendToServer()
@@ -518,7 +518,7 @@ function KeyPress()
 
 	keyPressed(get_keybind("chat_menu"), "chat_menu")
 
-	keyPressed(get_keybind("menu_talents"), "menu_talents")
+	--keyPressed(get_keybind("menu_talents"), "menu_talents")
 
 	keyPressed(get_keybind("macro_menu"), "macro_menu")
 	for i = 1, 49 do

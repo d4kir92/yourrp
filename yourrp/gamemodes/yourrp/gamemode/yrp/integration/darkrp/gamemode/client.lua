@@ -97,7 +97,7 @@ end
 
 function DarkRP.setPreferredJobModel(teamNr, model)
 	--Description: Set the model preferred by the player (if the job allows multiple models).
-	YRP.msg("darkrp", "setPreferredJobModel(" .. tostring(teamNr) .. ", " .. tostring(model) .. ")")
+	--YRP.msg("darkrp", "setPreferredJobModel(" .. tostring(teamNr) .. ", " .. tostring(model) .. ")")
 end
 
 function DarkRP.switchTabOrder(firstTab, secondTab)

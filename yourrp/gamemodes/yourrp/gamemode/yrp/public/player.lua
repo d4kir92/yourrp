@@ -397,6 +397,10 @@ function Player:GetMaxXP()
 	return tonumber(res)
 end
 
+function Player:MaxXP()
+	return self:GetMaxXP()
+end
+
 --[[ Role ]]--
 function Player:GetRoleColor() -- Group Color
 	return self:YRPGetRoleColor() -- return Color(int r, int g, int b, int a)

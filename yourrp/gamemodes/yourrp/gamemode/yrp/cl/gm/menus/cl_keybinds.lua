@@ -96,7 +96,7 @@ function CreateKeybindsContent(parent)
 	table.insert(keybinds, {YRP.lang_string("LID_voicerangedn"), "voice_range_dn"})
 	table.insert(keybinds, {YRP.lang_string("LID_voicechat"), "voice_menu"})
 	table.insert(keybinds, {YRP.lang_string("LID_chat"), "chat_menu"})
-	table.insert(keybinds, {YRP.lang_string("LID_talents"), "menu_talents"})
+	--table.insert(keybinds, {YRP.lang_string("LID_talents"), "menu_talents"})
 	function background:Paint(pw, ph)
 		for i, v in pairs(keybinds) do
 			draw.SimpleTextOutlined(YRP.lang_string(v[1]), "Y_24_500", YRP.ctr(_wide), YRP.ctr(20) + (i - 1) * YRP.ctr(50 + 4), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))

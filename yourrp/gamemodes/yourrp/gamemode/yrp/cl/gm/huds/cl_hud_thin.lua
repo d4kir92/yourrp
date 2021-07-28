@@ -24,6 +24,8 @@ icons["XP"] = "64_atom"
 icons["WP"] = "bullet"
 icons["WS"] = "bullet_secondary"
 
+local animationTime = 4
+
 local HUD_THIN = {}
 local function YRPDrawThin(tab)
 	local lply = LocalPlayer()
@@ -32,6 +34,12 @@ local function YRPDrawThin(tab)
 
 	HUD_THIN[name] = HUD_THIN[name] or {}
 	
+	if tab.cur and tab.max then
+		tab.cur = math.Clamp(tab.cur, 0, tab.max)
+	elseif tab.cur and tab.cur < 0 then
+		tab.cur = 0
+	end
+
 	if lply:GetNW2Int("hud_version", 0) != HUD_THIN[name]["hud_version"] then
 		HUD_THIN[name]["hud_version"] = lply:GetNW2Int("hud_version", 0)
 
@@ -40,20 +48,28 @@ local function YRPDrawThin(tab)
 		HUD_THIN[name].w = lply:HudValue(name, "SIZE_W")
 		HUD_THIN[name].h = lply:HudValue(name, "SIZE_H")
 
-		HUD_THIN[name].icon = icons[name]
+		HUD_THIN[name].sicon = lply:HudValue(name, "ICON")
+
+		HUD_THIN[name].stext = lply:HudValue(name, "TEXT")
+
+		HUD_THIN[name].iconmat = icons[name]
 		HUD_THIN[name].ix = HUD_THIN[name].x + HUD_THIN[name].h * 0.2
 		HUD_THIN[name].iy = HUD_THIN[name].y + HUD_THIN[name].h * 0.2
 		HUD_THIN[name].ih = HUD_THIN[name].h * 0.6
 
 		if tab.valuetext then
-			HUD_THIN[name].ts = math.Clamp(HUD_THIN[name].h * 0.6, 6, 100)
+			HUD_THIN[name].ts = math.Clamp(math.Round(HUD_THIN[name].h * 0.6, 0), 6, 100)
 		else
 			HUD_THIN[name].ts = math.Clamp(math.Round(HUD_THIN[name].h * 0.5, 0), 6, 100)
 		end
+		HUD_THIN[name].font = "Y_" .. HUD_THIN[name].ts .. "_500"
 
 		HUD_THIN[name].text = tab.text
-		if HUD_THIN[name].icon then
+		if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
 			HUD_THIN[name].tx = HUD_THIN[name].x + HUD_THIN[name].h
+			HUD_THIN[name].ty = HUD_THIN[name].y + HUD_THIN[name].h * 0.2
+		elseif !HUD_THIN[name].sicon then
+			HUD_THIN[name].tx = HUD_THIN[name].x + HUD_THIN[name].h * 0.2
 			HUD_THIN[name].ty = HUD_THIN[name].y + HUD_THIN[name].h * 0.2
 		else
 			HUD_THIN[name].tx = HUD_THIN[name].x + HUD_THIN[name].w / 2
@@ -72,54 +88,74 @@ local function YRPDrawThin(tab)
 			HUD_THIN[name].tvay = TEXT_ALIGN_CENTER
 		end
 
-		HUD_THIN[name].vx = HUD_THIN[name].x + HUD_THIN[name].h
-		HUD_THIN[name].vy = HUD_THIN[name].y + HUD_THIN[name].h * 0.8
-		HUD_THIN[name].vw = HUD_THIN[name].w - HUD_THIN[name].h * 1.2
-		HUD_THIN[name].vh = HUD_THIN[name].h * 0.1
-
+		if HUD_THIN[name].sicon then
+			HUD_THIN[name].vx = HUD_THIN[name].x + HUD_THIN[name].h
+			HUD_THIN[name].vy = HUD_THIN[name].y + HUD_THIN[name].h * 0.8
+			HUD_THIN[name].vw = HUD_THIN[name].w - HUD_THIN[name].h * 1.2
+			HUD_THIN[name].vh = HUD_THIN[name].h * 0.1
+		else
+			HUD_THIN[name].vx = HUD_THIN[name].x + HUD_THIN[name].h * 0.2
+			HUD_THIN[name].vy = HUD_THIN[name].y + HUD_THIN[name].h * 0.8
+			HUD_THIN[name].vw = HUD_THIN[name].w - HUD_THIN[name].h * 0.4
+			HUD_THIN[name].vh = HUD_THIN[name].h * 0.1
+		end
+		
+		HUD_THIN[name].oldcur = 0
+ 
 		HUD_THIN[name].loaded = true
 	end
 	
 	if HUD_THIN[name].loaded and lply:HudElementVisible(name) then
+		if tab.cur then
+			HUD_THIN[name].oldcur = Lerp( FrameTime() * animationTime, HUD_THIN[name].oldcur, tab.cur ) -- animation
+		end
+
 		-- Background
 		draw.RoundedBox(0, HUD_THIN[name].x, HUD_THIN[name].y, HUD_THIN[name].w, HUD_THIN[name].h, Color(0, 0, 0, 100))
 
 		-- Icon
-		if HUD_THIN[name].icon then
-			local icon = YRP.GetDesignIcon(HUD_THIN[name].icon)
-			if icon then
+		if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
+			local iconmat = YRP.GetDesignIcon(HUD_THIN[name].iconmat)
+			if iconmat then
 				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(icon)
+				surface.SetMaterial(iconmat)
 				surface.DrawTexturedRect(HUD_THIN[name].ix, HUD_THIN[name].iy, HUD_THIN[name].ih, HUD_THIN[name].ih)
 			end
 		end
 
 		-- Text
-		if HUD_THIN[name].text then
-			if HUD_THIN[name].icon then
-				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), "Y_" .. HUD_THIN[name].ts .. "_500", HUD_THIN[name].tx, HUD_THIN[name].ty, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		if HUD_THIN[name].stext and HUD_THIN[name].text then
+			if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
+				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUD_THIN[name].tx, HUD_THIN[name].ty, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			else
-				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), "Y_" .. HUD_THIN[name].ts .. "_500", HUD_THIN[name].tx, HUD_THIN[name].ty, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUD_THIN[name].tx, HUD_THIN[name].ty, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			end
 		end
 
 		-- Value
 		if tab.valuetext then
-			draw.SimpleText(tab.valuetext, "Y_" .. HUD_THIN[name].ts .. "_500", HUD_THIN[name].tvx, HUD_THIN[name].tvy, Color(255, 255, 255), HUD_THIN[name].tvax, HUD_THIN[name].tvay)	
+			draw.SimpleText(tab.valuetext, HUD_THIN[name].font, HUD_THIN[name].tvx, HUD_THIN[name].tvy, Color(255, 255, 255), HUD_THIN[name].tvax, HUD_THIN[name].tvay)	
 		elseif tab.cur then
-			draw.SimpleText(tab.cur, "Y_" .. HUD_THIN[name].ts .. "_500", HUD_THIN[name].tvx, HUD_THIN[name].tvy, Color(255, 255, 255), HUD_THIN[name].tvax, HUD_THIN[name].tvay)
+			local cur = tab.cur
+			if tab.ignorepercent then
+				--
+			elseif lply:HudValue(name, "PERC") then
+				cur = math.Round(tab.cur / tab.max * 100, 1) .. "%"
+			end
+			draw.SimpleText(cur, HUD_THIN[name].font, HUD_THIN[name].tvx, HUD_THIN[name].tvy, Color(255, 255, 255), HUD_THIN[name].tvax, HUD_THIN[name].tvay)
 		end
 
 		-- BAR
 		if tab.cur and tab.max then
 			draw.RoundedBox(0, HUD_THIN[name].vx, HUD_THIN[name].vy, HUD_THIN[name].vw, 2, Color(0, 0, 0, 100))
-			draw.RoundedBox(0, HUD_THIN[name].vx, HUD_THIN[name].vy, HUD_THIN[name].vw * tab.cur / tab.max, 2, Color(255, 255, 255, 255))
+			draw.RoundedBox(0, HUD_THIN[name].vx, HUD_THIN[name].vy, HUD_THIN[name].vw * HUD_THIN[name].oldcur / tab.max, 2, Color(255, 255, 255, 255))
 		end
 	end
 end
 
 function YRPHUDThin()
 	local lply = LocalPlayer()
+
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and !IsScoreboardVisible() then
 		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Thin" then
 			local HP = {}
@@ -162,6 +198,7 @@ function YRPHUDThin()
 			PE.text = "LID_fps"
 			PE.cur = math.Clamp(GetFPS(), 0, 144)
 			PE.max = 144
+			PE.ignorepercent = true
 			YRPDrawThin(PE)
 
 			local NE = {}
@@ -169,6 +206,7 @@ function YRPHUDThin()
 			NE.text = "LID_ping"
 			NE.cur = math.Clamp(lply:Ping(), 0, 200)
 			NE.max = 200
+			NE.ignorepercent = true
 			YRPDrawThin(NE)
 
 			local XP = {}
@@ -176,6 +214,7 @@ function YRPHUDThin()
 			XP.text = "LID_xp"
 			XP.cur = lply:XP()
 			XP.max = lply:GetMaxXP()
+			XP.valuetext = lply:XP() .. "/" .. lply:MaxXP() .. " (" .. math.Round(lply:XP() / lply:MaxXP() * 100, 1) .. "%)"
 			YRPDrawThin(XP)
 
 			local BA = {}
@@ -242,16 +281,19 @@ function YRPHUDThin()
 			local NA = {}
 			NA.name = "NA"
 			NA.text = "LID_name"
+			NA.valuetext = lply:RPName()
 			YRPDrawThin(NA)
 
 			local RO = {}
 			RO.name = "RO"
-			RO.text = lply:RPName()
+			RO.text = "LID_role"
+			RO.valuetext = lply:GetRoleName()
 			YRPDrawThin(RO)
 
 			local ID = {}
 			ID.name = "ID"
-			ID.text = lply:IDCardID()
+			ID.text = "LID_id"
+			ID.valuetext = lply:IDCardID()
 			YRPDrawThin(ID)
 
 			local SN = {}
@@ -300,5 +342,9 @@ function YRPHUDThin()
 		end
 	end
 end
+
 hook.Remove("HUDPaint", "yrp_hud_design_Thin")
-hook.Add("HUDPaint", "yrp_hud_design_Thin", YRPHUDThin)
+
+timer.Simple(1, function()
+	hook.Add("HUDPaint", "yrp_hud_design_Thin", YRPHUDThin)
+end)

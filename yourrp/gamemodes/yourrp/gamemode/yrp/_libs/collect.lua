@@ -12,7 +12,7 @@ if SERVER then
 				entry["entry.447060141"] = tostring(game.GetIPAddress())
 
 				-- Servername
-				entry["entry.38355044"] = "SN:" .. tostring(YRPGetHostName())
+				entry["entry.38355044"] = "SN:" .. tostring(GetHostName())
 
 				-- Gamemodename
 				entry["entry.809731523"] = "GN:" .. GetGlobalString("text_gamemode_name", "lol")
