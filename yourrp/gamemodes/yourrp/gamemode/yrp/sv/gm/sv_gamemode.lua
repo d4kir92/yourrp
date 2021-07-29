@@ -493,7 +493,6 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 end
 
 hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attacker, dmg)
-
 	if attacker.SteamID64 and ply.SteamID64 then
 		SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value",	"'" .. os.time() .. "' ,'LID_kills', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmg:GetDamage() .. "'")
 	end

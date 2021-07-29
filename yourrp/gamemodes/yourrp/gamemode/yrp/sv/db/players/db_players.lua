@@ -97,7 +97,26 @@ function updateRoleUses(rid)
 	SQL_UPDATE("yrp_ply_roles", "int_uses = '" .. _count .. "'", "uniqueID = '" .. rid .. "'")
 end
 
+local defaultsweps = {}
+defaultsweps["yrp_key"] = true
+defaultsweps["yrp_unarmed"] = true
+
 function SetRole(ply, rid, force, pmid)
+	if IsVoidCharEnabled() and !ply:Alive() then
+		ply:Spawn()
+	end
+	
+	if true then
+		for i, wep in pairs(ply:GetWeapons()) do
+			local cname = wep:GetClass()
+			if defaultsweps[cname] and IsNoRoleSwep(ply, cname) and IsNoUserGroupWeapon(ply, cname) then
+				--
+			else
+				ply:StripWeapon(cname)
+			end
+		end
+	end
+
 	if canGetRole(ply, rid, false) or force then
 		set_role(ply, rid)
 		set_role_values(ply, pmid)
