@@ -206,9 +206,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 				
 				local _rol_tab = ply:GetRolTab()
 				if wk(_rol_tab) then
-					if not IsVoidCharEnabled() then
-						SetRole(ply, _rol_tab.uniqueID)
-					end
+					SetRole(ply, _rol_tab.uniqueID)
 				else
 					YRP.msg("note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
 
