@@ -308,26 +308,26 @@ function KeyPress()
 	lply.yrp_view_range = lply.yrp_view_range or 0
 	lply.yrp_view_range_view = lply.yrp_view_range_view or 0
 
-	lply.view_z = lply.view_z or 0
-	lply.view_x = lply.view_x or 0
-	lply.view_s = lply.view_s or 0
+	lply.yrp_view_z = lply.yrp_view_z or 0
+	lply.yrp_view_x = lply.yrp_view_x or 0
+	lply.yrp_view_s = lply.yrp_view_s or 0
 
-	lply.view_z_c = lply.view_z_c or 0
-	lply.view_x_c = lply.view_x_c or 0
-	lply.view_s_c = lply.view_s_c or 0
+	lply.yrp_view_z_c = lply.yrp_view_z_c or 0
+	lply.yrp_view_x_c = lply.yrp_view_x_c or 0
+	lply.yrp_view_s_c = lply.yrp_view_s_c or 0
 
 	if !setup then
 		setup = true
 		lply.yrp_view_range = 0
 		lply.yrp_view_range_view = 0
 
-		lply.view_z = 0
-		lply.view_x = 0
-		lply.view_s = 0
+		lply.yrp_view_z = 0
+		lply.yrp_view_x = 0
+		lply.yrp_view_s = 0
 
-		lply.view_z_c = 0
-		lply.view_x_c = 0
-		lply.view_s_c = 0
+		lply.yrp_view_z_c = 0
+		lply.yrp_view_x_c = 0
+		lply.yrp_view_s_c = 0
 	else
 		if lply:IsInCombat() and CurTime() > blink_delay and !system.HasFocus() then
 			blink_delay = CurTime() + 1
@@ -424,51 +424,51 @@ function KeyPress()
 
 			--[[ Up and down ]]--
 			if input.IsKeyDown(get_keybind("view_up")) then
-				lply.view_z_c = lply.view_z_c + 0.1
+				lply.yrp_view_z_c = lply.yrp_view_z_c + 0.1
 			elseif input.IsKeyDown(get_keybind("view_down")) then
-				lply.view_z_c = lply.view_z_c - 0.1
+				lply.yrp_view_z_c = lply.yrp_view_z_c - 0.1
 			end
-			if tonumber(lply.view_z_c) > 100 then
-				lply.view_z_c = 100
-			elseif tonumber(lply.view_z_c) < -100 then
-				lply.view_z_c = -100
+			if tonumber(lply.yrp_view_z_c) > 100 then
+				lply.yrp_view_z_c = 100
+			elseif tonumber(lply.yrp_view_z_c) < -100 then
+				lply.yrp_view_z_c = -100
 			end
-			if tonumber(lply.view_z_c) < 3 and tonumber(lply.view_z_c) > -3 then
-				lply.view_z = 0
+			if tonumber(lply.yrp_view_z_c) < 3 and tonumber(lply.yrp_view_z_c) > -3 then
+				lply.yrp_view_z = 0
 			else
-				lply.view_z = lply.view_z_c
+				lply.yrp_view_z = lply.yrp_view_z_c
 			end
 
 			--[[ Left and right ]]--
 			if input.IsKeyDown(get_keybind("view_right")) then
-				lply.view_x_c = lply.view_x_c + 0.1
+				lply.yrp_view_x_c = lply.yrp_view_x_c + 0.1
 			elseif input.IsKeyDown(get_keybind("view_left")) then
-				lply.view_x_c = lply.view_x_c - 0.1
+				lply.yrp_view_x_c = lply.yrp_view_x_c - 0.1
 			end
-			if tonumber(lply.view_x_c) > 300 then
-				lply.view_x_c = 300
-			elseif tonumber(lply.view_x_c) < -300 then
-				lply.view_x_c = -300
+			if tonumber(lply.yrp_view_x_c) > 300 then
+				lply.yrp_view_x_c = 300
+			elseif tonumber(lply.yrp_view_x_c) < -300 then
+				lply.yrp_view_x_c = -300
 			end
-			if tonumber(lply.view_x_c) < 3 and tonumber(lply.view_x_c) > -3 then
-				lply.view_x = 0
+			if tonumber(lply.yrp_view_x_c) < 3 and tonumber(lply.yrp_view_x_c) > -3 then
+				lply.yrp_view_x = 0
 			else
-				lply.view_x = lply.view_x_c
+				lply.yrp_view_x = lply.yrp_view_x_c
 			end
 
 			--[[ spin right and spin left ]]--
 			if input.IsKeyDown(get_keybind("view_spin_right")) then
-				lply.view_s_c = lply.view_s_c + 0.4
+				lply.yrp_view_s_c = lply.yrp_view_s_c + 0.4
 			elseif input.IsKeyDown(get_keybind("view_spin_left")) then
-				lply.view_s_c = lply.view_s_c - 0.4
+				lply.yrp_view_s_c = lply.yrp_view_s_c - 0.4
 			end
-			if tonumber(lply.view_s_c) > 360 or tonumber(lply.view_s_c) < -360 then
-				lply.view_s_c = 0
+			if tonumber(lply.yrp_view_s_c) > 360 or tonumber(lply.yrp_view_s_c) < -360 then
+				lply.yrp_view_s_c = 0
 			end
-			if tonumber(lply.view_s_c) < 6 and tonumber(lply.view_s_c) > -6 then
-				lply.view_s = 0
+			if tonumber(lply.yrp_view_s_c) < 6 and tonumber(lply.yrp_view_s_c) > -6 then
+				lply.yrp_view_s = 0
 			else
-				lply.view_s =  lply.view_s_c
+				lply.yrp_view_s =  lply.yrp_view_s_c
 			end
 		end
 	end

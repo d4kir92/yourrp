@@ -40,6 +40,10 @@ local function YRPDrawThin(tab)
 		tab.cur = 0
 	end
 
+	if HUD_THIN[name].oldcur and tab.max and HUD_THIN[name].oldcur > tab.max then
+		HUD_THIN[name].oldcur = tab.max
+	end
+
 	if lply:GetNW2Int("hud_version", 0) != HUD_THIN[name]["hud_version"] then
 		HUD_THIN[name]["hud_version"] = lply:GetNW2Int("hud_version", 0)
 
@@ -111,7 +115,7 @@ local function YRPDrawThin(tab)
 		end
 
 		-- Background
-		draw.RoundedBox(0, HUD_THIN[name].x, HUD_THIN[name].y, HUD_THIN[name].w, HUD_THIN[name].h, Color(0, 0, 0, 100))
+		draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].x), HUDMOTIONY(HUD_THIN[name].y), HUD_THIN[name].w, HUD_THIN[name].h, Color(0, 0, 0, 100))
 
 		-- Icon
 		if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
@@ -119,22 +123,22 @@ local function YRPDrawThin(tab)
 			if iconmat then
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.SetMaterial(iconmat)
-				surface.DrawTexturedRect(HUD_THIN[name].ix, HUD_THIN[name].iy, HUD_THIN[name].ih, HUD_THIN[name].ih)
+				surface.DrawTexturedRect(HUDMOTIONX(HUD_THIN[name].ix), HUDMOTIONY(HUD_THIN[name].iy), HUD_THIN[name].ih, HUD_THIN[name].ih)
 			end
 		end
 
 		-- Text
 		if HUD_THIN[name].stext and HUD_THIN[name].text then
 			if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
-				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUD_THIN[name].tx, HUD_THIN[name].ty, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tx), HUDMOTIONY(HUD_THIN[name].ty), Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			else
-				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUD_THIN[name].tx, HUD_THIN[name].ty, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tx), HUDMOTIONY(HUD_THIN[name].ty), Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			end
 		end
 
 		-- Value
 		if tab.valuetext then
-			draw.SimpleText(tab.valuetext, HUD_THIN[name].font, HUD_THIN[name].tvx, HUD_THIN[name].tvy, Color(255, 255, 255), HUD_THIN[name].tvax, HUD_THIN[name].tvay)	
+			draw.SimpleText(tab.valuetext, HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tvx), HUDMOTIONY(HUD_THIN[name].tvy), Color(255, 255, 255), HUD_THIN[name].tvax, HUD_THIN[name].tvay)	
 		elseif tab.cur then
 			local cur = tab.cur
 			if tab.ignorepercent then
@@ -142,13 +146,13 @@ local function YRPDrawThin(tab)
 			elseif lply:HudValue(name, "PERC") then
 				cur = math.Round(tab.cur / tab.max * 100, 1) .. "%"
 			end
-			draw.SimpleText(cur, HUD_THIN[name].font, HUD_THIN[name].tvx, HUD_THIN[name].tvy, Color(255, 255, 255), HUD_THIN[name].tvax, HUD_THIN[name].tvay)
+			draw.SimpleText(cur, HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tvx), HUDMOTIONY(HUD_THIN[name].tvy), Color(255, 255, 255), HUD_THIN[name].tvax, HUD_THIN[name].tvay)
 		end
 
 		-- BAR
 		if tab.cur and tab.max then
-			draw.RoundedBox(0, HUD_THIN[name].vx, HUD_THIN[name].vy, HUD_THIN[name].vw, 2, Color(0, 0, 0, 100))
-			draw.RoundedBox(0, HUD_THIN[name].vx, HUD_THIN[name].vy, HUD_THIN[name].vw * HUD_THIN[name].oldcur / tab.max, 2, Color(255, 255, 255, 255))
+			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].vx), HUDMOTIONY(HUD_THIN[name].vy), HUD_THIN[name].vw, 2, Color(0, 0, 0, 100))
+			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].vx), HUDMOTIONY(HUD_THIN[name].vy), HUD_THIN[name].vw * HUD_THIN[name].oldcur / tab.max, 2, Color(255, 255, 255, 255))
 		end
 	end
 end

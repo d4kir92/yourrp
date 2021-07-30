@@ -415,7 +415,7 @@ function CreateRoleSelectionContent(PARENT)
 			hook.Run("YButtonRPaint", self, pw, ph)
 		end
 		function back:DoClick()
-			if !LocalPlayer().onefaction or (!LocalPlayer().rolepreview and LocalPlayer():GetNW2Int("char_count", 0) > 0) then
+			if !LocalPlayer().onefaction and (!LocalPlayer().rolepreview and LocalPlayer():GetNW2Int("char_count", 0) > 0) then
 				parent:Clear()
 
 				CreateFactionSelectionContent()

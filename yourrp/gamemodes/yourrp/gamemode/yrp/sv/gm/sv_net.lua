@@ -75,7 +75,6 @@ function changeUserGroup(ply, cmd, args)
 			for k, v in pairs(player.GetAll()) do
 				if string.find(string.lower(v:Nick()), string.lower(args[1])) or string.find(string.lower(v:SteamName()), string.lower(args[1])) then
 					v:SetUserGroup(args[2])
-					v:UserGroupLoadout()
 					YRP.msg("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
 					return
 				end
@@ -86,7 +85,6 @@ function changeUserGroup(ply, cmd, args)
 			for k, v in pairs(player.GetAll()) do
 				if string.find(string.lower(v:Nick()), string.lower(args[1])) or string.find(string.lower(v:SteamName()), string.lower(args[1])) then
 					v:SetUserGroup(args[2])
-					v:UserGroupLoadout()
 					YRP.msg("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
 					return
 				end

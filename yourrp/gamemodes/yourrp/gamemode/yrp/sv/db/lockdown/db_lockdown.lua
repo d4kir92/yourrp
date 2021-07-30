@@ -16,7 +16,7 @@ end
 
 local Player = FindMetaTable("Player")
 function Player:LockdownLoadout()
-	--YRP.msg("gm", self:SteamName() .. " UserGroupLoadout")
+	--YRP.msg("gm", self:SteamName() .. " LockdownLoadout")
 	local lockdown = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(lockdown) then
 		lockdown = lockdown[1]

@@ -271,23 +271,29 @@ function OpenCombinedMenu()
 		sites[c].content = CreateHelpMenuContent
 		c = c + 1
 
-		sites[c] = {}
-		sites[c].name = "LID_roles"
-		sites[c].icon = "person_pin"
-		sites[c].content = CreateRoleMenuContent
-		c = c + 1
+		if GetGlobalBool("bool_yrp_role_menu", false) then
+			sites[c] = {}
+			sites[c].name = "LID_roles"
+			sites[c].icon = "person_pin"
+			sites[c].content = CreateRoleMenuContent
+			c = c + 1
+		end
+		
+		if GetGlobalBool("bool_yrp_buy_menu", false) then
+			sites[c] = {}
+			sites[c].name = "LID_shop"
+			sites[c].icon = "shopping_cart"
+			sites[c].content = CreateBuyMenuContent
+			c = c + 1
+		end
 
-		sites[c] = {}
-		sites[c].name = "LID_shop"
-		sites[c].icon = "shopping_cart"
-		sites[c].content = CreateBuyMenuContent
-		c = c + 1
-
-		sites[c] = {}
-		sites[c].name = "LID_character"
-		sites[c].icon = "accessibility"
-		sites[c].content = CreateCharContent
-		c = c + 1
+		if GetGlobalBool("bool_yrp_char_menu", false) then
+			sites[c] = {}
+			sites[c].name = "LID_character"
+			sites[c].icon = "accessibility"
+			sites[c].content = CreateCharContent
+			c = c + 1
+		end
 
 		if !strEmpty(GetGlobalString("sting_laws", "")) or lply:GetNW2Bool("bool_" .. "ismayor", false) then
 			sites[c] = {}
@@ -319,8 +325,8 @@ function OpenCombinedMenu()
 			c = c + 1
 			community = true
 		end
-		
-		if table.Count(GetGlobalTable("text_server_rules", {})) > 0 then
+
+		if table.Count(GetGlobalTable("text_server_rules", {})) > 1 then
 			sites[c] = {}
 			sites[c].name = "LID_rules"
 			sites[c].icon = "policy"
@@ -416,22 +422,26 @@ function OpenCombinedMenu()
 			c = c + 1
 		end
 
-		sites[c] = {}
-		sites[c].name = "LID_keybinds"
-		sites[c].icon = "keyboard"
-		sites[c].content = CreateKeybindsContent
-		c = c + 1
+		if GetGlobalBool("bool_yrp_keybinds_menu", false) then
+			sites[c] = {}
+			sites[c].name = "LID_keybinds"
+			sites[c].icon = "keyboard"
+			sites[c].content = CreateKeybindsContent
+			c = c + 1
 
-		sites[c] = {}
-		sites[c].name = "hr"
-		c = c + 1
+			sites[c] = {}
+			sites[c].name = "hr"
+			c = c + 1
+		end
 
-		sites[c] = {}
-		sites[c].name = "LID_ticket"
-		sites[c].icon = "feedback"
-		sites[c].content = CreateTicketContent
-		c = c + 1
-				
+		if GetGlobalBool("bool_yrp_tickets_menu", false) then
+			sites[c] = {}
+			sites[c].name = "LID_ticket"
+			sites[c].icon = "feedback"
+			sites[c].content = CreateTicketContent
+			c = c + 1
+		end
+					
 		cm.win = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
 		cm.win:SetTitle(SQL_STR_OUT(GetGlobalString("text_server_name", "")))
 		cm.win:MakePopup()

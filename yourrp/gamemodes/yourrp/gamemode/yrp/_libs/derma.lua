@@ -1519,13 +1519,14 @@ hook.Add("Think", "yrp_motion", function()
 	lply.swayx = lply.swayx or 0
 	lply.swayy = lply.swayy or 0
 
-	local valx = Lerp(FrameTime() * 8, lply.swayx, lply.newang.y - lply.oldang.y)
-	local valy = Lerp(FrameTime() * 8, lply.swayy, lply.newang.p - lply.oldang.p)
-	if valx < 4 and valx > -4 then
-		lply.swayx = valx
+	local valx1 = Lerp(FrameTime() * 8, lply.swayx, lply.newang.y - lply.oldang.y)
+	local valy1 = Lerp(FrameTime() * 8, lply.swayy, lply.newang.p - lply.oldang.p)
+
+	if valx1 < 4 and valx1 > -4 then
+		lply.swayx = valx1
 	end
-	if valy < 4 and valy > -4 then
-		lply.swayy = valy
+	if valy1 < 4 and valy1 > -4 then
+		lply.swayy = valy1
 	end
 
 	lply.oldang = lply.newang
@@ -1535,7 +1536,7 @@ function HUDMOTIONX(px)
 	if GetGlobalBool("bool_yrp_hud_swaying", false) then
 		local lply = LocalPlayer()
 
-		return px + lply.swayx * 10
+		return px + lply.swayx * 20
 	else
 		return px
 	end
@@ -1545,7 +1546,7 @@ function HUDMOTIONY(py)
 	if GetGlobalBool("bool_yrp_hud_swaying", false) then
 		local lply = LocalPlayer()
 
-		return py + -lply.swayy * 10
+		return py + -lply.swayy * 20
 	else
 		return py
 	end

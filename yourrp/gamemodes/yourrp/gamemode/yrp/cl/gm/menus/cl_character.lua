@@ -45,7 +45,7 @@ local br = YRP.ctr(20)
 
 local trashicon = ""
 
-function openCharacterCreation()
+function openCharacterCreation(from)
 	if IsVoidCharEnabled() then return end
 
 	if CharacterMenu == nil then
@@ -132,7 +132,7 @@ function LoadCharacters()
 						CharMenu.frame:Close()
 					end
 					SetGlobalBool("create_eventchar", false)
-					openCharacterCreation()
+					openCharacterCreation("#char < 1, not event char")
 					return false
 				end
 				local y = 0
@@ -323,7 +323,7 @@ function LoadCharacters()
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
 
 								draw.SimpleText(self.rpname, "Saira_60", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
+								
 								if cni > LocalPlayer():GetNW2Int("int_characters_max", 1) then
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
 									draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -507,7 +507,7 @@ function LoadCharacters()
 									CharMenu.frame:Close()
 								end
 								SetGlobalBool("create_eventchar", false)
-								openCharacterCreation()
+								openCharacterCreation("add char, not event char")
 							end
 						end
 
@@ -541,7 +541,7 @@ function LoadCharacters()
 									CharMenu.frame:Close()
 								end
 								SetGlobalBool("create_eventchar", true)
-								openCharacterCreation()
+								openCharacterCreation("add char, event char")
 							end
 						end
 
@@ -556,7 +556,7 @@ function LoadCharacters()
 		end
 
 		if CharMenu.characterList:GetWide() > CharMenu.characterList:GetCanvas():GetWide() then
-			CharMenu.characterList:SetWide(CharMenu.characterList:GetCanvas():GetWide())
+			--CharMenu.characterList:SetWide(CharMenu.characterList:GetCanvas():GetWide()) -- breaks vertical
 			local px, py = CharMenu.characterList:GetPos()
 			CharMenu.characterList:SetPos(CharMenu.charactersBackground:GetWide() / 2 - CharMenu.characterList:GetWide() / 2, py)
 		end
@@ -856,7 +856,7 @@ function openCharacterSelection()
 						CharMenu.frame:Close()
 					end
 					SetGlobalBool("create_eventchar", false)
-					openCharacterCreation()
+					openCharacterCreation("create char, not event char")
 				end
 			end
 
@@ -873,7 +873,7 @@ function openCharacterSelection()
 						CharMenu.frame:Close()
 					end
 					SetGlobalBool("create_eventchar", true)
-					openCharacterCreation()
+					openCharacterCreation("create char, event char")
 				end
 			end
 		elseif YRP_CharDesign == "horizontal" then -- Horizontal
@@ -1085,7 +1085,7 @@ function openCharacterSelection()
 						CharMenu.frame:Close()
 					end
 					SetGlobalBool("create_eventchar", false)
-					openCharacterCreation()
+					openCharacterCreation("create char, no event char")
 				end
 			end
 			
@@ -1102,7 +1102,7 @@ function openCharacterSelection()
 						CharMenu.frame:Close()
 					end
 					SetGlobalBool("create_eventchar", true)
-					openCharacterCreation()
+					openCharacterCreation("create char, event char")
 				end
 			end
 		elseif YRP_CharDesign == "horizontalnew" then -- HorizontalNEW
@@ -1258,6 +1258,6 @@ end)
 net.Receive("OpenCharacterCreation", function(len, ply)
 	timer.Simple(1, function()
 		SetGlobalBool("create_eventchar", false)
-		openCharacterCreation()
+		openCharacterCreation("server force openCharacterCreation")
 	end)
 end)

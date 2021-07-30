@@ -388,7 +388,7 @@ function YRPScoreboardAddPlayer(ply)
 						x = x + yrptab["groupname"] + sp
 					end
 					if GetGlobalBool("bool_yrp_scoreboard_show_rolename", false) then
-						draw.SimpleText(ply:GetRoleName(), "Saira_24", x, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(ply:GetRoleName(), "Saira_24", x, ph / 2, ply:GetRoleColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 						x = x + yrptab["rolename"] + sp
 					end
 				elseif ply:GetNW2Bool("yrp_characterselection", true) then
@@ -445,7 +445,7 @@ function YRPScoreboardAddPlayer(ply)
 					trx = trx + yrptab["language"] + sp
 				end
 				if GetGlobalBool("bool_yrp_scoreboard_show_usergroup", false) then
-					draw.SimpleText(string.upper(ply:GetUserGroup()), "Saira_24", pw - trx, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(string.upper(ply:GetUserGroup()), "Saira_24", pw - trx, ph / 2, ply:GetUserGroupColor(), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 					trx = trx + yrptab["usergroup"] + sp
 				end
 			else

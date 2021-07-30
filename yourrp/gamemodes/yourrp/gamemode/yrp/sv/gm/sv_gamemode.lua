@@ -152,6 +152,8 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid or uniqueID)
 
+	ply:UserGroupLoadout()
+
 	if IsValid(ply) and ply.KillSilent then
 		ply:KillSilent()
 	end
@@ -164,8 +166,6 @@ function YRP:Loadout(ply)
 	ply:SetNW2Bool("bool_loadouted", false)
 
 	ply:SetNW2Int("speak_channel", 0)
-
-	ply:UserGroupLoadout()
 
 	ply:LockdownLoadout()
 

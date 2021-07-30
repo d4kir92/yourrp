@@ -14,6 +14,7 @@ function BuildWhitelist(parent, tab)
 	if !IsValid(parent) then
 		YRP.msg("error", "[BuildWhitelist] failed! parent: " .. tostring(parent))
 	end
+
 	if loadedR and loadedG and loadedW and pa(parent) then
 		local list = createD("DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
 		list:AddColumn("uniqueID"):SetFixedWidth(60)
@@ -50,60 +51,64 @@ function BuildWhitelist(parent, tab)
 		end
 
 		for k, whi in pairs(tabW) do
-			local found = false
-			if whi.roleID and whi.roleID > 0 and (tab == "LID_all" or tab == "LID_roles") then -- ROLE
-				for l, rol in pairs(tabR) do
-					if found then
-						break
-					elseif (rol.uniqueID == whi.roleID) then
-						for m, grp in pairs(tabG) do
-							if (grp.uniqueID == rol.int_groupID) then -- ROLE
-								list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grp.string_name, rol.string_name, whi.date, SQL_STR_OUT(whi.status))
-								found = true
+			if whi.roleID == nil then
+				--
+			else
+				local found = false
+				if whi.roleID and whi.roleID > 0 and (tab == "LID_all" or tab == "LID_roles") then -- ROLE
+					for l, rol in pairs(tabR) do
+						if found then
+							break
+						elseif (rol.uniqueID == whi.roleID) then
+							for m, grp in pairs(tabG) do
+								if (grp.uniqueID == rol.int_groupID) then -- ROLE
+									list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grp.string_name, rol.string_name, whi.date, SQL_STR_OUT(whi.status))
+									found = true
+									break
+								end
+							end
+						end
+					end
+				elseif whi.roleID and whi.roleID < 0 and whi.groupID > 0 and (tab == "LID_all" or tab == "LID_groups") then -- GROUP
+					for m, grp in pairs(tabG) do
+						if (grp.uniqueID == whi.groupID) then
+							list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grp.string_name, "-", whi.date, SQL_STR_OUT(whi.status))
+							found = true
+							break
+						end
+					end
+				elseif (tab == "LID_all") then -- ALL
+					list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), YRP.lang_string("LID_all"), YRP.lang_string("LID_all"), whi.date, SQL_STR_OUT(whi.status))
+					found = true
+				else
+					local rolname = "-"
+					local grpname = "-"
+					if whi.roleID > 0 then
+						for l, rol in pairs(tabR) do
+							if (rol.uniqueID == whi.roleID) then
+								rolname = rol.string_name
 								break
 							end
 						end
 					end
-				end
-			elseif whi.roleID and whi.roleID < 0 and whi.groupID > 0 and (tab == "LID_all" or tab == "LID_groups") then -- GROUP
-				for m, grp in pairs(tabG) do
-					if (grp.uniqueID == whi.groupID) then
-						list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grp.string_name, "-", whi.date, SQL_STR_OUT(whi.status))
+					if whi.groupID > 0 then
+						for m, grp in pairs(tabG) do
+							if (grp.uniqueID == whi.groupID) then
+								grpname = grp.string_name
+							end
+						end
+					end
+					if grpname == "-" and rolname == "-" then
+						grpname = YRP.lang_string("LID_all")
+						rolname = YRP.lang_string("LID_all")
+					end
+					if string.StartWith(whi.status, "Manually") and tab == "LID_manually" then
+						list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grpname, rolname, whi.date, SQL_STR_OUT(whi.status))
 						found = true
-						break
+					elseif string.StartWith(whi.status, "Promoted") and tab == "LID_promote" then
+						list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grpname, rolname, whi.date, SQL_STR_OUT(whi.status))
+						found = true
 					end
-				end
-			elseif (tab == "LID_all") then -- ALL
-				list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), YRP.lang_string("LID_all"), YRP.lang_string("LID_all"), whi.date, SQL_STR_OUT(whi.status))
-				found = true
-			else
-				local rolname = "-"
-				local grpname = "-"
-				if whi.roleID > 0 then
-					for l, rol in pairs(tabR) do
-						if (rol.uniqueID == whi.roleID) then
-							rolname = rol.string_name
-							break
-						end
-					end
-				end
-				if whi.groupID > 0 then
-					for m, grp in pairs(tabG) do
-						if (grp.uniqueID == whi.groupID) then
-							grpname = grp.string_name
-						end
-					end
-				end
-				if grpname == "-" and rolname == "-" then
-					grpname = YRP.lang_string("LID_all")
-					rolname = YRP.lang_string("LID_all")
-				end
-				if string.StartWith(whi.status, "Manually") and tab == "LID_manually" then
-					list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grpname, rolname, whi.date, SQL_STR_OUT(whi.status))
-					found = true
-				elseif string.StartWith(whi.status, "Promoted") and tab == "LID_promote" then
-					list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grpname, rolname, whi.date, SQL_STR_OUT(whi.status))
-					found = true
 				end
 			end
 		end
