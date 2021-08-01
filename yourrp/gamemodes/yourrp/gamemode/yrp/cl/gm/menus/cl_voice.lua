@@ -408,7 +408,7 @@ function OpenVoiceMenu()
 	local h = YRP.ctr(80)
 	local pbr = YRP.ctr(20)
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
-		if IsInChannel(lply, channel, true) or lply:HasAccess() then
+		if IsInChannel(lply, channel.uniqueID, true) or lply:HasAccess() then
 			local line = createD("DPanel", nil, CONTENT:GetWide(), h, 0, 0)
 			function line:Paint(pw, ph)
 			end
@@ -421,9 +421,9 @@ function OpenVoiceMenu()
 			local status = createD("DPanel", bg, h, h, 0, 0)
 			function status:Paint(pw, ph)
 				local color = Color(255, 0, 0, 255)
-				if IsActiveInChannel(lply, channel, true) then
+				if IsActiveInChannel(lply, channel.uniqueID, true) then
 					color = Color(0, 255, 0, 255)
-				elseif IsInChannel(lply, channel, true) then
+				elseif IsInChannel(lply, channel.uniqueID, true) then
 					color = Color(100, 100, 255, 255)
 				end
 				draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
@@ -448,8 +448,8 @@ function OpenVoiceMenu()
 				draw.SimpleText(channel.string_name, "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			if IsInChannel(lply, channel, true) then
-				if IsActiveInChannel(lply, channel, true) then
+			if IsInChannel(lply, channel.uniqueID, true) then
+				if IsActiveInChannel(lply, channel.uniqueID, true) then
 					local mutemic = createD("YButton", bg, h, h, bg:GetWide() - h * 2 - YRP.ctr(20), 0)
 					mutemic:SetText("")
 					function mutemic:Paint(pw, ph)

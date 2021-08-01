@@ -559,7 +559,7 @@ function SendRoleList(ply, gro, pre)
 					net.WriteString(gro)
 					net.WriteString(pre)
 				net.Send(ply)
-			else
+			elseif HANDLER_GROUPSANDROLES["roleslist"] and HANDLER_GROUPSANDROLES["roleslist"][gro] and HANDLER_GROUPSANDROLES["roleslist"][gro][pre] then
 				local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
 				for i, pl in pairs(tbl_bc) do
 					net.Start("settings_subscribe_rolelist")
@@ -579,9 +579,10 @@ function SendRoleList(ply, gro, pre)
 end
 
 -- Duplicate
-function DuplicateRole(ruid)
+function DuplicateRole(ruid, guid)
 	ruid = ruid or "-1"
 	ruid = tonumber(ruid)
+
 	if ruid > -1 then
 		local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
 		if wk(role) then
@@ -606,8 +607,10 @@ function DuplicateRole(ruid)
 			vals = table.concat(vals, ", ")
 
 			SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
-
-			SendRoleList(nil, guid, role.int_prerole)
+			
+			if guid and role.int_prerole then
+				SendRoleList(nil, guid, role.int_prerole)
+			end
 		else
 			YRP.msg("note", "Role [" .. ruid .. "] was deleted.")
 		end
@@ -1428,7 +1431,7 @@ net.Receive("openInteractMenu", function(len, ply)
 									tmpPromoteName = tmpTableSearch[1].string_name
 								end
 
-								if tmpSearchUniqueID == 0 or tmpPromote and tmpDemote then
+								--[[if tmpSearchUniqueID == 0 or tmpPromote and tmpDemote then
 									if !tmpDemote and tonumber(tmpTargetRole[1].uniqueID) != 1 and tonumber(tmpTargetRole[1].int_groupID) == ply:GetGroupUID() then
 										-- von First Role to CIV
 										tmpDemote = true
@@ -1441,6 +1444,9 @@ net.Receive("openInteractMenu", function(len, ply)
 										tmpPromoteName = tmpTableSearch[1].string_name
 									end
 									tmpSearch = false
+								end]]
+								if tmpPromote and tmpDemote then
+									tmpSearch = false
 								end
 							end
 							tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
@@ -1448,7 +1454,7 @@ net.Receive("openInteractMenu", function(len, ply)
 							--Only look for 30 preroles
 							tmpCounter = tmpCounter + 1
 							if tmpCounter >= 30 then
-								YRP.msg("note", "You have a loop in your preroles!")
+								--YRP.msg("note", "You have a loop in your preroles!")
 								tmpSearch = false
 							end
 						end
@@ -1585,6 +1591,59 @@ net.Receive( "demotePlayer", function( len, ply )
 		YRP.msg( "note", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use demote function! He is not an instructor!" )
 	else
 		YRP.msg( "error", "ELSE demote: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
+	end
+end)
+
+function YRPGetFirstRankUID(ruid)
+	local tries = 30
+
+	local lastuid = ruid
+	local resultuid = 1
+
+	local Search = true
+	while (Search) do
+		local int_prerole = SQL_SELECT(DATABASE_NAME, "uniqueID, int_prerole", "uniqueID = '" .. lastuid .. "'")
+		if wk(int_prerole) then
+			int_prerole = int_prerole[1].int_prerole
+
+			local prerole = SQL_SELECT(DATABASE_NAME, "uniqueID, int_prerole", "uniqueID = '" .. int_prerole .. "'")
+			if wk(prerole) then
+				lastuid = prerole[1].uniqueID
+
+				resultuid = lastuid
+			end
+		end
+
+		tries = tries - 1
+		if tries <= 0 then
+			Search = false
+		end
+	end
+	return resultuid
+end
+
+util.AddNetworkString("invitetogroup")
+net.Receive("invitetogroup", function( len, ply )
+	local tmpTargetSteamID = net.ReadString()
+
+	local tmpTarget = nil
+	for k, v in pairs( player.GetAll() ) do
+		if v:SteamID() == tmpTargetSteamID then
+			tmpTarget = v
+		end
+	end
+
+	local tmpTableInstructorRole = ply:GetRolTab()
+
+	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
+		local firstrankuid = YRPGetFirstRankUID(ply:GetRoleUID())
+		SetRole( tmpTarget, firstrankuid )
+
+		YRP.msg( "note", ply:Nick() .. " invited " .. tmpTarget:Nick() .. " to " .. ply:GetGroupName() )
+	elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
+		YRP.msg( "note", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use invite function! He is not an instructor!" )
+	else
+		YRP.msg( "error", "ELSE invite: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
 	end
 end)
 

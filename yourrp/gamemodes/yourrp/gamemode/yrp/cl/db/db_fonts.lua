@@ -19,6 +19,8 @@ YRP.AddFont("AmazDooMLeft", 1)
 YRP.AddFont("Aniron", 1.2)
 YRP.AddFont("Arial", 0.94)
 
+YRP.AddFont("bf4 numbers", 1)
+
 YRP.AddFont("Caribbean", 0.7)
 YRP.AddFont("Comfortaa", 1.1)
 

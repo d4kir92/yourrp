@@ -967,6 +967,34 @@ function DefaultHUDSettings(reset)
 	HY.ints.TS = 24
 	AddHUDElement(HY, reset)
 
+	local VO = {}
+	VO.element = "VO"
+	VO.floats = {}
+	VO.floats.POSI_X = 0.8828125
+	VO.floats.POSI_Y = 0.0046296296641231
+	VO.floats.SIZE_W = 0.11458333581686
+	VO.floats.SIZE_H = 0.027777777984738
+	VO.bools = {}
+	VO.bools.VISI = 1
+	VO.bools.ROUN = 0
+	VO.bools.ICON = 1
+	VO.bools.TEXT = 1
+	VO.bools.PERC = 1
+	VO.bools.BACK = 1
+	VO.bools.BORD = 0
+	VO.bools.EXTR = 1
+	VO.colors = {}
+	VO.colors.TE = "255, 255, 255, 255"
+	VO.colors.TB = "0, 0, 0, 255"
+	VO.colors.BG = "0, 0, 0, 120"
+	VO.colors.BA = "33, 108, 42, 180"
+	VO.colors.BR = "33, 108, 42, 180"
+	VO.ints = {}
+	VO.ints.AX = 1
+	VO.ints.AY = 1
+	VO.ints.TS = 24
+	AddHUDElement(VO, reset)
+
 	for i = 1, 10 do
 		BOX = {}
 		BOX.element = "BOX" .. i

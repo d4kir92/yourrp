@@ -723,7 +723,26 @@ end
 
 net.Receive("CreateCharacter", function(len, ply)
 	local tab = net.ReadTable()
-	CreateCharacter(ply, tab)
+
+	local namealreadyinuse = false
+
+	local allchars = SQL_SELECT(DATABASE_NAME, "*", nil)
+	for i, v in pairs(allchars) do
+		if string.lower(v.rpname) == string.lower(tab.rpname) then
+			namealreadyinuse = true
+		end
+	end
+
+	if namealreadyinuse then
+		net.Start("CreateCharacter")
+			net.WriteBool(false)
+		net.Send(ply)
+	else
+		CreateCharacter(ply, tab)
+		net.Start("CreateCharacter")
+			net.WriteBool(true)
+		net.Send(ply)
+	end
 end)
 
 util.AddNetworkString("LogOut")

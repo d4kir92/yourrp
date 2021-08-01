@@ -188,6 +188,20 @@ net.Receive("openInteractMenu", function(len)
 				hook.Run("YButtonPaint", self, pw, ph)
 			end
 		end
+
+		if !promoteable and !demoteable then
+			local btnbtnInviteToGroup = createVGUI("YButton", content, 500, 50, 520, 1000)
+			btnbtnInviteToGroup:SetText(YRP.lang_string("LID_invitetogroup"))
+			function btnbtnInviteToGroup:DoClick()
+				net.Start("invitetogroup")
+					net.WriteString(tmpTargetSteamID)
+				net.SendToServer()
+				wInteract:Close()
+			end
+			function btnbtnInviteToGroup:Paint(pw, ph)
+				hook.Run("YButtonPaint", self, pw, ph)
+			end
+		end
 	end
 
 	wInteract:Center()

@@ -2398,7 +2398,9 @@ if pa(yrp_loading_screen) then
 
 		if lply == NULL then return end
 
-		self:MoveToFront()
+		if pa(yrp_loading_screen) then
+			yrp_loading_screen:MoveToFront()
+		end
 
 		if yrp_loading_screen.bg then
 			if yrp_loading_screen.bg.url != GetGlobalString("text_loading_background") then
@@ -2444,38 +2446,72 @@ if pa(yrp_loading_screen) then
 			end
 		end
 
-
-		-- LOADING TEXT
-		draw.SimpleText(YRP.lang_string("LID_loading") .. " ... " .. YRP.lang_string("LID_pleasewait"), "Y_50_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		
-
-
-		-- BAR VALUES
-		local w = YRP.ctr(1000)
-		local h = YRP.ctr(60)
-		local cur = 0
-		local max = 2
-		if lply:GetNW2Bool("finishedloading", false) then
-			cur = cur + 1
-		end
-		if lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() then
-			cur = cur + 1
-		end
-		-- BAR BG
-		draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w, h, Color(80, 80, 80, 255))
-		-- BAR
-		draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * cur / max, h, Color(100, 100, 255, 255))
-		-- BAR TEXT
-		draw.SimpleText("Global Values: " .. cur / max * 100 .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-
-		
-		-- TIME
-		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-
-
 		if lply:GetNW2Bool("finishedloading", false) and (lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled()) then
-			yrp_loading_screen:Remove()
+			if GetGlobalBool("bool_yrp_play_button", false) then
+				if self.logo == nil then
+					local w = YRP.ctr(512)
+					local h = YRP.ctr(512)
+					self.logo = createD("DHTML", self, w, h, pw / 2 - w / 2, ph / 2 - h / 2)
+					self.logo.w = w
+					self.logo.h = h
+				end
+				if self.logo then
+					if self.logo.svlogo != GetGlobalString("text_server_logo", "") then
+						self.logo.svlogo = GetGlobalString("text_server_logo", "")
+	
+						if !strEmpty(GetGlobalString("text_server_logo", "")) then
+							self.logo:SetHTML(GetHTMLImage(GetGlobalString("text_server_logo", ""), self.logo.w, self.logo.h))
+							self.logo:Show()
+						else
+							self.logo:Hide()
+						end
+					end
+				end
+
+				if self.joinbutton == nil then
+					local w = YRP.ctr(500)
+					local h = YRP.ctr(100)
+					self.joinbutton = createD("YButton", self, w, h, pw / 2 - w / 2, ph / 2 + YRP.ctr(670))
+					self.joinbutton:SetText("")
+					function self.joinbutton:Paint(pw, ph)
+						hook.Run("YButtonPaint", self, pw, ph)
+						draw.SimpleText(YRP.lang_string("LID_play"), "Y_30_500", pw / 2, ph / 2, TextColor(lply:InterfaceValue("YButton", "NC")), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					end
+					function self.joinbutton:DoClick()
+						yrp_loading_screen:Remove()
+					end
+				end
+			else
+				yrp_loading_screen:Remove()
+			end
+		else
+			-- LOADING TEXT
+			draw.SimpleText(YRP.lang_string("LID_loading") .. " ... " .. YRP.lang_string("LID_pleasewait"), "Y_50_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			
+
+
+			-- BAR VALUES
+			local w = YRP.ctr(1000)
+			local h = YRP.ctr(60)
+			local cur = 0
+			local max = 2
+			if lply:GetNW2Bool("finishedloading", false) then
+				cur = cur + 1
+			end
+			if lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() then
+				cur = cur + 1
+			end
+			-- BAR BG
+			draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w, h, Color(80, 80, 80, 255))
+			-- BAR
+			draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * cur / max, h, Color(100, 100, 255, 255))
+			-- BAR TEXT
+			draw.SimpleText("Global Values: " .. cur / max * 100 .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+
+			
+			-- TIME
+			draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 		end
 	end
 end

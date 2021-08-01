@@ -361,31 +361,41 @@ function IsInTable(tab, val)
 	end
 end
 
-function IsInChannel(ply, channel, skip)
+function IsInChannel(ply, cuid, skip)
 	skip = skip or false
 
-	local ug = ply:GetUserGroup()
-	local grp = ply:GetGroupUID()
-	local rol = ply:GetRoleUID()
-	
-	if !skip and ply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
+	local channel = GetGlobalTable("yrp_voice_channels", {})[cuid]
+	if channel then
+		local ug = ply:GetUserGroup()
+		local grp = ply:GetGroupUID()
+		local rol = ply:GetRoleUID()
+		
+		if !skip and ply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
+			return false
+		end
+
+		return IsInTable(channel.string_active_usergroups, ug) or IsInTable(channel.string_active_groups, grp) or IsInTable(channel.string_active_roles, rol) or IsInTable(channel.string_passive_usergroups, ug) or IsInTable(channel.string_passive_groups, grp) or IsInTable(channel.string_passive_roles, rol) or false
+	else
 		return false
 	end
-
-	return IsInTable(channel.string_active_usergroups, ug) or IsInTable(channel.string_active_groups, grp) or IsInTable(channel.string_active_roles, rol) or IsInTable(channel.string_passive_usergroups, ug) or IsInTable(channel.string_passive_groups, grp) or IsInTable(channel.string_passive_roles, rol) or false
 end
 
-function IsActiveInChannel(ply, channel, skip)
+function IsActiveInChannel(ply, cuid, skip)
 	skip = skip or false
-	
-	local ug = ply:GetUserGroup()
-	local grp = ply:GetGroupUID()
-	local rol = ply:GetRoleUID()
 
-	if !skip and ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
+	local channel = GetGlobalTable("yrp_voice_channels", {})[cuid]
+	if channel then
+		local ug = ply:GetUserGroup()
+		local grp = ply:GetGroupUID()
+		local rol = ply:GetRoleUID()
+
+		if !skip and ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
+			return false
+		end
+		return IsInTable(channel.string_active_usergroups, ug) or IsInTable(channel.string_active_groups, grp) or IsInTable(channel.string_active_roles, rol) or false
+	else
 		return false
 	end
-	return IsInTable(channel.string_active_usergroups, ug) or IsInTable(channel.string_active_groups, grp) or IsInTable(channel.string_active_roles, rol) or false
 end
 
 function IsInMaxVoiceRange(listener, talker)

@@ -685,7 +685,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	-- >> character 
 	ACCESSAddCheckBox("bool_logs", "LID_logs")
 	ACCESSAddCheckBox("bool_blacklist", "LID_blacklist")
-	ACCESSAddCheckBox("bool_feedback", "LID_settings_feedback")
+	ACCESSAddCheckBox("bool_feedback", "LID_tickets")
 
 	ACCESSAddHr()
 	-- LID_administration

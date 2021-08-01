@@ -28,7 +28,7 @@ function BuildFeedbackLine(parent, tab)
 
 	tab.rows = string.Explode("\n", tab.feedback)
 	tab.rows = #tab.rows
-	tab.rows = math.Clamp(tab.rows, 5, 50)
+	tab.rows = math.Clamp(tab.rows, 6, 50)
 
 	-- LINE
 	local _fb = createD("YPanel", parent, parent:GetWide(), YRP.ctr(90) + YRP.ctr(50) * tab.rows, 0, 0)
@@ -72,7 +72,7 @@ function BuildFeedbackLine(parent, tab)
 
 	-- FEEDBACK
 	_fb.feedbackp = createD("YLabel", _fb, YRP.ctr(800), YRP.ctr(50), YRP.ctr(1260), YRP.ctr(20))
-	_fb.feedbackp:SetText("LID_settings_fb_feedback")
+	_fb.feedbackp:SetText("LID_tickets")
 	_fb.feedbackte = createD("DTextEntry", _fb, YRP.ctr(800), YRP.ctr(50) * tab.rows, YRP.ctr(1260), YRP.ctr(70))
 	_fb.feedbackte:SetEditable(false)
 	_fb.feedbackte:SetMultiline(true)
@@ -105,6 +105,22 @@ function BuildFeedbackLine(parent, tab)
 
 		_fb.statusbtn2 = createD("YButton", _fb, YRP.ctr(500), YRP.ctr(50), YRP.ctr(2080), YRP.ctr(160))
 		_fb.statusbtn2:SetText("LID_movetowip")
+	end
+
+	_fb.statusbtn4 = createD("YButton", _fb, YRP.ctr(500), YRP.ctr(50), YRP.ctr(2080), YRP.ctr(230))
+	_fb.statusbtn4:SetText("LID_tpto")
+	function _fb.statusbtn4:DoClick()
+		net.Start("tp_tpto_steamid64")
+			net.WriteString(_fb.steamid64)
+		net.SendToServer()
+	end
+
+	_fb.statusbtn5 = createD("YButton", _fb, YRP.ctr(500), YRP.ctr(50), YRP.ctr(2080), YRP.ctr(300))
+	_fb.statusbtn5:SetText("LID_bring")
+	function _fb.statusbtn5:DoClick()
+		net.Start("tp_bring_steamid64")
+			net.WriteString(_fb.steamid64)
+		net.SendToServer()
 	end
 
 	if _fb.statusbtn1 then

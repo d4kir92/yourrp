@@ -129,8 +129,8 @@ function con_st(ply, _time)
 	end
 
 	if _time % 1.0 == 0 then
-		if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:InVehicle() then
-			if ply:KeyDown(IN_SPEED) and (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)) then
+		if !ply:InVehicle() then
+			if ply:GetMoveType() != MOVETYPE_NOCLIP and (ply:KeyDown(IN_SPEED) and (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT))) then
 				local newval = ply:GetNW2Float("GetCurStamina", 0) - (ply:GetNW2Float("stamindown", 1))
 				newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float("GetMaxStamina", 100)), 1)
 				ply:SetNW2Float("GetCurStamina", newval)

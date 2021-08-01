@@ -12,7 +12,7 @@ YRPKEYBINDS["menu_appearance"] = KEY_P
 YRPKEYBINDS["menu_emotes"] = KEY_MINUS
 YRPKEYBINDS["menu_laws"] = KEY_L
 
-YRPKEYBINDS["menu_char"] = KEY_H
+YRPKEYBINDS["menu_char"] = KEY_Z
 YRPKEYBINDS["menu_keybinds"] = KEY_J
 
 YRPKEYBINDS["view_switch"] = KEY_T
@@ -40,7 +40,7 @@ YRPKEYBINDS["voice_range_dn"] = KEY_PAGEDOWN
 
 YRPKEYBINDS["macro_menu"] = KEY_INSERT
 
-YRPKEYBINDS["voice_menu"] = KEY_COMMA
+YRPKEYBINDS["voice_menu"] = KEY_H
 YRPKEYBINDS["chat_menu"] = KEY_PERIOD
 
 YRPKEYBINDS["menu_talents"] = KEY_N
@@ -57,7 +57,7 @@ net.Receive("SetServerKeybinds", function(len)
 end)
 
 local yrp_keybinds = {}
-yrp_keybinds.version = 2
+yrp_keybinds.version = 3
 
 function KBTab()
 	return yrp_keybinds
@@ -102,6 +102,7 @@ function GetKeybindName(kbname)
 	if string.StartWith(kbname, "in_") then
 		_kb = YRP.lang_string("LID_" .. kbname)
 	end
+	_kb = string.upper(_kb)
 	return tostring(_kb)
 end
 

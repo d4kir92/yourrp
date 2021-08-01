@@ -815,6 +815,11 @@ net.Receive("get_design_settings", function(len)
 			HY.name = "LID_hygiene"
 			AddElement(HY)
 
+			local VO = {}
+			VO.element = "VO"
+			VO.name = "LID_voice"
+			AddElement(VO)
+
 			function editarea:DoClick()
 				if table.Count(editarea["settingswindows"]) == 0 then
 					for i, child in pairs(self:GetChildren()) do

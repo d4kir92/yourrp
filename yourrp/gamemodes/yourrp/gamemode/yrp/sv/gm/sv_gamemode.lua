@@ -364,7 +364,7 @@ hook.Add("PlayerDeath", "yrp_stars_playerdeath", function(victim, inflictor, att
 		AddStar(attacker)
 	end
 
-	DoUnRagdoll(ply)
+	YRPDoUnRagdoll(ply)
 
 	if GetGlobalBool("bool_characters_removeondeath", false) then
 		local test = SQL_UPDATE("yrp_characters", "bool_archived = '1'", "uniqueID = '" .. victim:CharID() .. "'")
@@ -1129,11 +1129,32 @@ net.Receive("channel_dn", function(len, ply)
 	end)
 end)
 
+function YRPCountActiveChannels(ply)
+	local c = 0
+	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+		if !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
+			c = c + 1
+		end
+	end
+	ply:SetNW2Int("yrp_voice_channel_active", c)
+end
+
+function YRPCountPassiveChannels(ply)
+	local c = 0
+	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+		if !ply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
+			c = c + 1
+		end
+	end
+	ply:SetNW2Int("yrp_voice_channel_passive", c)
+end
+
 util.AddNetworkString("mutemic_channel")
 net.Receive("mutemic_channel", function(len, ply)
 	local uid = net.ReadString()
 
 	ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. uid, !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. uid, true))
+	YRPCountActiveChannels(ply)
 end)
 
 util.AddNetworkString("mute_channel")
@@ -1141,6 +1162,7 @@ net.Receive("mute_channel", function(len, ply)
 	local uid = net.ReadString()
 
 	ply:SetNW2Bool("yrp_voice_channel_mute_" .. uid, !ply:GetNW2Bool("yrp_voice_channel_mute_" .. uid, false))
+	YRPCountPassiveChannels(ply)
 end)
 
 util.AddNetworkString("mutemic_channel_all")
@@ -1150,6 +1172,7 @@ net.Receive("mutemic_channel_all", function(len, ply)
 	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
 		ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, ply:GetNW2Bool("mutemic_channel_all", false))
 	end
+	YRPCountActiveChannels(ply)
 end)
 
 util.AddNetworkString("mute_channel_all")
@@ -1159,6 +1182,7 @@ net.Receive("mute_channel_all", function(len, ply)
 	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
 		ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, ply:GetNW2Bool("mute_channel_all", false))
 	end
+	YRPCountPassiveChannels(ply)
 end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
@@ -1167,7 +1191,7 @@ function GM:PlayerCanHearPlayersVoice(listener, talker)
 	end
 	local canhear = false
 	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
-		if IsActiveInChannel(talker, channel) and IsInChannel(listener, channel) then -- If Talker allowed to talk and both are in that channel
+		if IsActiveInChannel(talker, channel.uniqueID) and IsInChannel(listener, channel.uniqueID) then -- If Talker allowed to talk and both are in that channel
 			canhear = true
 			break
 		end

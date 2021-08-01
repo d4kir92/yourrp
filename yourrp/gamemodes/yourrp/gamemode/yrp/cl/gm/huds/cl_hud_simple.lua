@@ -172,6 +172,11 @@ function HUDSimpleBR(tab)
 			Simple[tab.element] = Simple[tab.element] or {}
 			Simple[tab.element]["border"] = Simple[tab.element]["border"] or {}
 
+			if Simple[tab.element]["border"].fx and Simple[tab.element]["border"].fy then
+				Simple[tab.element]["border"].x = HUDMOTIONX(Simple[tab.element]["border"].fx)
+				Simple[tab.element]["border"].y = HUDMOTIONY(Simple[tab.element]["border"].fy)
+			end
+
 			if lply:GetNW2Int("hud_version", 0) != Simple[tab.element]["border"]["version"] then
 				Simple[tab.element]["border"]["version"] = lply:GetNW2Int("hud_version", 0)
 
@@ -197,9 +202,6 @@ function HUDSimpleBR(tab)
 			elseif lply:HudValue(tab.element, "ROUN") then
 				HudBoxBrRounded(Simple[tab.element]["border"])
 			else
-				Simple[tab.element]["border"].x = HUDMOTIONX(Simple[tab.element]["border"].fx)
-				Simple[tab.element]["border"].y = HUDMOTIONY(Simple[tab.element]["border"].fy)
-			
 				HudBoxBr(Simple[tab.element]["border"])
 			end
 		end

@@ -88,12 +88,12 @@ function CreateCharacterSettingsContent()
 		local pmsheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(20 + config.hh + 20))
 		pmsheader:SetText("LID_character")
 
-		local pmsbg = createD("YPanel", win, ew, YRP.ctr(config.h - 320), ew + 2 * YRP.ctr(20), YRP.ctr(200))
+		local pmsbg = createD("YPanel", win, ew, YRP.ctr(config.h - 420), ew + 2 * YRP.ctr(20), YRP.ctr(200))
 		function pmsbg:Paint(pw, ph)
 			hook.Run("YTextFieldPaint", self, pw, ph)
 		end
 
-		local pms = createD("DModelPanel", win, ew, YRP.ctr(config.h - 320), ew + 2 * YRP.ctr(20), YRP.ctr(200))
+		local pms = createD("DModelPanel", win, ew, YRP.ctr(config.h - 420), ew + 2 * YRP.ctr(20), YRP.ctr(200))
 		pms.models = string.Explode(",", tostring(rol.pms))
 		pms:SetCamPos( Vector( 50, 50, 50 ) )
 		pms:SetLookAt( Vector( 0, 0, 40 ) )
@@ -138,7 +138,7 @@ function CreateCharacterSettingsContent()
 				confirm:SetText("LID_nameistolong")
 			elseif string.len(nam) <= 0 then
 				tab.color = Color(255, 255, 100)
-				confirm:SetText("LID_enteraname")
+				confirm:SetText("LID_nameistoshort")
 			else
 				tab.color = Color(100, 255, 100)
 				confirm:SetText("LID_confirm")
@@ -166,17 +166,53 @@ function CreateCharacterSettingsContent()
 				character.nati = LocalPlayer().charcreate_nati
 				character.create_eventchar = GetGlobalBool("create_eventchar", false)
 
+				net.Receive("CreateCharacter", function(len)
+					local success = net.ReadBool()
+					if success then
+						if pa(CharacterMenu) then
+							CharacterMenu:Remove()
+						end
+						openCharacterSelection()
+					else
+						local win = createD("YFrame", nil, 400, 200, 0, 0)
+						win:SetTitle("LID_warning")
+						win:Center()
+						win:MakePopup()
+
+						win.warning = createD("YLabel", win, 380, 200 - win:GetHeaderHeight() - 20, 10, win:GetHeaderHeight() + 10)
+						win.warning:SetText("LID_nameisalreadyinuse")
+					end
+				end)
+
 				net.Start("CreateCharacter")
 					net.WriteTable(character)
 				net.SendToServer()
-				
-				if pa(CharacterMenu) then
-					CharacterMenu:Remove()
-				end
-				openCharacterSelection()
 			end
 		end
 
+
+
+		if rol.int_namelength > 0 then
+			local name = createD("DTextEntry", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 200))
+			name:SetText("")
+			name:SetPlaceholderText(YRP.lang_string("LID_enteraname"))
+			function name:PerformLayout()
+				if self.SetUnderlineFont != nil then
+					self:SetUnderlineFont("Y_18_500")
+				end
+				self:SetFontInternal("Y_18_500")
+
+				self:SetFGColor(Color(255, 255, 255))
+				self:SetBGColor(Color(0, 0, 0))
+			end
+			function name:OnChange()
+				local nam = self:GetText()
+				LocalPlayer().charcreate_name = nam
+				if #nam > rol.int_namelength then
+					--name:SetText(string.sub(nam, 1, rol.int_namelength))
+				end
+			end
+		end
 
 		
 		-- LEFT
@@ -280,34 +316,6 @@ function CreateCharacterSettingsContent()
 		function hr:Paint(pw, ph)
 		end
 	
-		if rol.int_namelength > 0 then
-			local nameheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120))
-			nameheader:SetText("LID_name")
-			list:AddItem(nameheader)
-	
-			local name = createD("DTextEntry", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(200))
-			name:SetText("")
-			function name:PerformLayout()
-				if self.SetUnderlineFont != nil then
-					self:SetUnderlineFont("Y_18_500")
-				end
-				self:SetFontInternal("Y_18_500")
-
-				self:SetFGColor(Color(255, 255, 255))
-				self:SetBGColor(Color(0, 0, 0))
-			end
-			function name:OnChange()
-				local nam = self:GetText()
-				LocalPlayer().charcreate_name = nam
-				if #nam > rol.int_namelength then
-					--name:SetText(string.sub(nam, 1, rol.int_namelength))
-				end
-			end
-			list:AddItem(name)
-
-			list:AddItem(hr)
-		end
-
 		-- Birthday
 		if GetGlobalBool("bool_characters_birthday", false) then
 			local birtheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)

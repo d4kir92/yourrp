@@ -294,9 +294,9 @@ end
 
 function do_sleep(sender)
 	if IsRagdoll(sender) then
-		DoUnRagdoll(sender)
+		YRPDoUnRagdoll(sender)
 	else
-		DoRagdoll(sender)
+		YRPDoRagdoll(sender)
 	end
 end
 

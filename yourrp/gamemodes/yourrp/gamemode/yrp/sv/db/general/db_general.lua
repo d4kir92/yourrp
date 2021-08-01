@@ -136,6 +136,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D
 SQL_ADD_COLUMN(DATABASE_NAME, "text_idcard_background", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_idcardid", "INT DEFAULT 1")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_play_button", "INT DEFAULT 0")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_voice_module", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_showowner", "INT DEFAULT 1")
@@ -1125,6 +1127,12 @@ end)
 
 
 
+util.AddNetworkString("update_bool_yrp_play_button")
+net.Receive("update_bool_yrp_play_button", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_yrp_play_button", "bool_yrp_play_button", b)
+end)
+
 util.AddNetworkString("update_bool_yrp_voice_module")
 net.Receive("update_bool_yrp_voice_module", function(len, ply)
 	local b = btn(net.ReadBool())
@@ -1964,6 +1972,36 @@ net.Receive("ply_ban", function(len, ply)
 	end
 end)
 
+function YRPGetPlayerBySteamID64(steamid64)
+	for i, ply in pairs(player.GetAll()) do
+		if ply:SteamID64() == steamid64 then
+			return ply
+		end
+	end
+	return nil
+end
+
+util.AddNetworkString("tp_tpto_steamid64")
+net.Receive("tp_tpto_steamid64", function(len, ply)
+	if ply:HasAccess() then
+		local steamid64 = net.ReadString()
+		local _target = YRPGetPlayerBySteamID64(steamid64)
+		if _target then
+			teleportToPoint(ply, _target:GetPos())
+		end
+	end
+end)
+util.AddNetworkString("tp_bring_steamid64")
+net.Receive("tp_bring_steamid64", function(len, ply)
+	if ply:HasAccess() then
+		local steamid64 = net.ReadString()
+		local _target = YRPGetPlayerBySteamID64(steamid64)
+		if _target then
+			teleportToPoint(_target, ply:GetPos())
+		end
+	end
+end)
+
 util.AddNetworkString("tp_tpto")
 net.Receive("tp_tpto", function(len, ply)
 	if ply:HasAccess() then
@@ -1993,11 +2031,11 @@ net.Receive("tp_unjail", function(len, ply)
 	end
 end)
 
-function IsRagdoll(ply)
+function YRPIsRagdoll(ply)
 	return ply:GetNW2Bool("ragdolled", false)
 end
 
-function DoRagdoll(ply)
+function YRPDoRagdoll(ply)
 	if IsValid(ply) and ply:IsPlayer() and not IsRagdoll(ply) then
 		ply:SetNW2Bool("ragdolled", true)
 
@@ -2018,7 +2056,7 @@ function DoRagdoll(ply)
 	end
 end
 
-function DoUnRagdoll(ply)
+function YRPDoUnRagdoll(ply)
 	if IsValid(ply) and ply:IsPlayer() and IsRagdoll(ply) then
 		ply:SetNW2Bool("ragdolled", false)
 		ply:SetParent(nil)
@@ -2039,14 +2077,14 @@ util.AddNetworkString("ragdoll")
 net.Receive("ragdoll", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		DoRagdoll(_target)
+		YRPDoRagdoll(_target)
 	end
 end)
 util.AddNetworkString("unragdoll")
 net.Receive("unragdoll", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		DoUnRagdoll(_target)
+		YRPDoUnRagdoll(_target)
 	end
 end)
 util.AddNetworkString("freeze")

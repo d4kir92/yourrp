@@ -238,6 +238,30 @@ function LoadCharacters()
 						end
 
 						if YRP_CharDesign != "horizontalnew" then
+							tmpChar.mdl = createD("DModelPanel", tmpChar, tmpChar:GetTall(), tmpChar:GetTall(), 0, 0)
+							local pm = tmpChar.playermodels[tmpChar.playermodelID]
+							if strEmpty(pm) then
+								pm = "models/player/skeleton.mdl"
+							end
+							tmpChar.mdl:SetModel(pm)
+							function tmpChar.mdl:LayoutEntity(ent)
+								ent:SetSequence(ent:LookupSequence("menu_gman"))
+								tmpChar.mdl:RunAnimation()		
+								return
+							end
+							if tmpChar.mdl.Entity then
+								local head = tmpChar.mdl.Entity:LookupBone("ValveBiped.Bip01_Head1")
+								if head then
+									local eyepos = tmpChar.mdl.Entity:GetBonePosition(head)
+									if eyepos then
+										eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
+										tmpChar.mdl:SetLookAt(eyepos)
+										tmpChar.mdl:SetCamPos(eyepos-Vector(-20, 0, 0))	-- Move cam in front of eyes
+										tmpChar.mdl.Entity:SetEyeTarget(eyepos-Vector(-20, 0, 0))
+									end
+								end
+							end
+
 							function tmpChar:Paint(pw, ph)
 								if curChar == -1 then
 									curChar = tonumber(LocalPlayer():CharID())
@@ -253,7 +277,7 @@ function LoadCharacters()
 		
 									local x = YRP.ctr(30)
 									if !strEmpty(self.factionIcon) then
-										x = ph
+										x = ph + YRP.ctr(30)
 									end
 									draw.SimpleText(YRP.lang_string("LID_event") .. ": " .. self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -274,7 +298,7 @@ function LoadCharacters()
 
 									local x = YRP.ctr(30)
 									if !strEmpty(self.factionIcon) then
-										x = ph
+										x = ph + YRP.ctr(30)
 									end
 									draw.SimpleText(self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -314,9 +338,9 @@ function LoadCharacters()
 								end
 							end
 
-							if !strEmpty(tmpChar.factionIcon) then
-								local icon = createD("DHTML", tmpChar, tmpChar:GetTall() * 0.8, tmpChar:GetTall() * 0.8, tmpChar:GetTall() * 0.1, tmpChar:GetTall() * 0.1)
-								icon:SetHTML(GetHTMLImage(tmpChar.factionIcon, icon:GetWide(), icon:GetTall()))
+							if !strEmpty(tmpChar.factionIcon) and tmpChar.icon == nil then
+								tmpChar.icon = createD("DHTML", tmpChar, tmpChar:GetTall() * 0.8, tmpChar:GetTall() * 0.8, tmpChar:GetWide() - tmpChar:GetTall() * 0.9, tmpChar:GetTall() * 0.1)
+								tmpChar.icon:SetHTML(GetHTMLImage(tmpChar.factionIcon, tmpChar.icon:GetWide(), tmpChar.icon:GetTall()))
 							end
 						else
 							function tmpChar:Paint(pw, ph)
@@ -713,7 +737,8 @@ function openCharacterSelection()
 				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
-			CharMenu.charplayermodel = createD("DModelPanel", CharMenu.frame, ScrH() - YRP.ctr(200), ScrH() - YRP.ctr(200), ScrW2() - (ScrH() - YRP.ctr(200)) / 2, 0)
+			local cmdlbr = 60
+			CharMenu.charplayermodel = createD("DModelPanel", CharMenu.frame, ScrH() - YRP.ctr(cmdlbr), ScrH() - YRP.ctr(cmdlbr), ScrW2() - (ScrH() - YRP.ctr(cmdlbr)) / 2, YRP.ctr(cmdlbr) / 2)
 			CharMenu.charplayermodel:SetModel("models/player/skeleton.mdl")
 			CharMenu.charplayermodel:SetAnimated(true)
 			CharMenu.charplayermodel.Angles = Angle(0, 0, 0)
@@ -739,6 +764,16 @@ function openCharacterSelection()
 					end
 				end
 			end
+
+			local mn, mx = CharMenu.charplayermodel.Entity:GetRenderBounds()
+			local size = 0
+			size = math.max( size, math.abs(mn.x) + math.abs(mx.x) )
+			size = math.max( size, math.abs(mn.y) + math.abs(mx.y) )
+			size = math.max( size, math.abs(mn.z) + math.abs(mx.z) )
+
+			CharMenu.charplayermodel:SetFOV( 45 )
+			CharMenu.charplayermodel:SetCamPos( Vector( size, size, size ) )
+			CharMenu.charplayermodel:SetLookAt( (mn + mx) * 0.5 )
 
 			CharMenu.characterList = createD("DPanelList", CharMenu.charactersBackground, YRP.ctr(fw) - 2 * br, ScrH() - (2 * border) - br - YRP.ctr(120), br, br)
 			CharMenu.characterList:EnableVerticalScrollbar()

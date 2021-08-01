@@ -185,9 +185,9 @@ function SettingsTabsContent()
 			end)
 		end
 		if lply:GetNW2Bool("bool_feedback", false) then
-			tabs:AddOption("LID_feedback", function(parent)
+			tabs:AddOption("LID_tickets", function(parent)
 				OpenSettingsFeedback()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_feedback")))
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_tickets")))
 			end)
 		end
 

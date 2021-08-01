@@ -503,7 +503,8 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	end
 
 	if !HasYRPContent() then
-		draw.SimpleText("YOURRP CONTENT IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleTextOutlined("YOURRP CONTENT IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined("Add YourRP Content to your Collection!", "Y_60_500", ScrW2(), ScrH2() + 40, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
@@ -532,7 +533,7 @@ hook.Add("HUDPaint", "yrp_hud_collectionid", function()
 	local lply = LocalPlayer()
 	if lply:HasAccess() and YRPCollectionID() == 0 then
 		local text = YRP.lang_string("LID_thecollectionidismissing") .. " (" .. GetKeybindName("menu_settings") .. " >> " .. YRP.lang_string("LID_server") .. " >> " .. YRP.lang_string("LID_general") .. " >> " .. YRP.lang_string("LID_collectionid") .. ")"
-		draw.SimpleText(text, "Y_30_500", ScrW() / 2, ScrH()  * 0.12, Color(255, 255, 0, 255), 1, 1)
+		draw.SimpleTextOutlined(text, "Y_50_500", ScrW() / 2, ScrH()  * 0.12, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end)
 
@@ -692,3 +693,43 @@ function YRPInitEdgeHud()
 	timer.Simple(2, YRPInitEdgeHud)
 end
 YRPInitEdgeHud()
+
+
+local VO = {}
+
+hook.Add("HUDPaint", "yrp_voice_module", function()
+	local lply = LocalPlayer()
+
+	VO.font = "Y_16_500"
+	surface.SetFont(VO.font)
+
+	local ac = lply:GetNW2Int("yrp_voice_channel_active", 0)
+
+	if ac == 0 then
+		VO.text = YRP.lang_string("LID_radiodisabled") .. " (" .. string.Replace(YRP.lang_string("LID_pressvoicetoopenradiomenu"), "KEY", GetKeybindName("voice_menu")) .. ")"
+	elseif ac == 1 then
+		VO.text = YRP.lang_string("LID_1channelactive") .. " (" .. GetKeybindName("voice_menu") .. ")"
+	else
+		VO.text = string.Replace(YRP.lang_string("LID_xchannelactive"), "X", ac) .. " (" .. GetKeybindName("voice_menu") .. ")"
+	end
+	VO.tw = surface.GetTextSize(VO.text)
+
+	if lply:GetNW2Int("hud_version", 0) != VO.version then
+		VO.version = lply:GetNW2Int("hud_version", 0)
+
+		VO.x = lply:HudValue("VO", "POSI_X")
+		VO.y = lply:HudValue("VO", "POSI_Y")
+		VO.w = lply:HudValue("VO", "SIZE_W")
+		VO.h = lply:HudValue("VO", "SIZE_H")
+
+		VO.tx = VO.x + VO.w / 2
+		VO.ty = VO.y + VO.h / 2
+	end
+
+	VO.tw = VO.tw + VO.h / 2
+
+	draw.RoundedBox(5, VO.tx - VO.tw / 2, VO.y, VO.tw, VO.h, Color(25, 25, 25))
+	draw.SimpleText(VO.text, VO.font, VO.tx, VO.ty, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+end)
+
+
