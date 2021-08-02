@@ -170,6 +170,8 @@ function YRP.msg(chan, str_msg, tochat, force)
 	if !isstring(chan) then return false end
 	if !isstring(str_msg) then return false end
 
+	if chan == "debug" then return end
+
 	if force or strEmpty(str_msg) or not table.HasValue(yrpmsgantispam, str_msg) then
 		if not table.HasValue(yrpmsgantispam, str_msg) then
 			table.insert(yrpmsgantispam, str_msg)

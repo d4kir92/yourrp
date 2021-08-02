@@ -2,18 +2,18 @@
 
 local DATABASE_NAME = "yrp_inventory_items"
 
-SQL.ADD_COLUMN(DATABASE_NAME, "int_slotID", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_slotID", "INT DEFAULT 0")
 
-SQL.ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
 
-SQL.ADD_COLUMN(DATABASE_NAME, "int_fixed", "INT DEFAULT 0")		-- Fixed = not moveable
+SQL_ADD_COLUMN(DATABASE_NAME, "int_fixed", "INT DEFAULT 0")		-- Fixed = not moveable
 
-SQL.ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0")		-- storageID
+SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0")		-- storageID
 
-SQL.ADD_COLUMN(DATABASE_NAME, "text_printname", "TEXT DEFAULT 'Unnamed'")
-SQL.ADD_COLUMN(DATABASE_NAME, "text_classname", "TEXT DEFAULT 'yrp_money_printer'")
-SQL.ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props_junk/garbage_takeoutcarton001a.mdl'")
---SQL.ADD_COLUMN(DATABASE_NAME, "tab_properties", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_printname", "TEXT DEFAULT 'Unnamed'")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_classname", "TEXT DEFAULT 'yrp_money_printer'")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props_junk/garbage_takeoutcarton001a.mdl'")
+--SQL_ADD_COLUMN(DATABASE_NAME, "tab_properties", "TEXT DEFAULT ''")
 
 --SQL_DROP_TABLE(DATABASE_NAME)
 
@@ -66,12 +66,7 @@ function CreateItem(slotID, tab)
 		return false
 	end
 
-	local last = {}
-	last.table = DATABASE_NAME
-	last.cols = {}
-	last.cols[1] = "*"
-	last.manual = "ORDER BY uniqueID DESC LIMIT 1"
-	last = SQL.SELECT(last)
+	local last = SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
 	if wk(last) then
 		last = last[1]
 		StoreItem(slotID, last)

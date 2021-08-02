@@ -44,36 +44,6 @@ function Player:EquipWeapons()
 
 		if wk(_char) then
 			_char = _char[1]
-			local _wpp1 = self:GetEQ("eqwpp1")
-
-			if wk(_wpp1) then
-				self:ForceEquip(_wpp1.ClassName)
-			end
-
-			local _wpp2 = self:GetEQ("eqwpp2")
-
-			if wk(_wpp2) then
-				self:ForceEquip(_wpp2.ClassName)
-			end
-
-			local _wps1 = self:GetEQ("eqwps1")
-
-			if wk(_wps1) then
-				self:ForceEquip(_wps1.ClassName)
-			end
-
-			local _wps2 = self:GetEQ("eqwps2")
-
-			if wk(_wps2) then
-				self:ForceEquip(_wps2.ClassName)
-			end
-
-			local _wpg = self:GetEQ("eqwpg")
-
-			if wk(_wpg) then
-				self:ForceEquip(_wpg.ClassName)
-			end
-
 			self:UpdateBackpack()
 		end
 	end
@@ -223,21 +193,6 @@ function Player:RemoveSwep(cname, slot)
 		SQL_DELETE_FROM("yrp_items", "uniqueID = '" .. _eq.uniqueID .. "'")
 		return true
 	end
-
-	return false
-end
-
-function Player:RemoveVisual(cname)
-	local _wpp1 = self:RemoveSwep(cname, "eqwpp1")
-	if _wpp1 then return true end
-	local _wpp2 = self:RemoveSwep(cname, "eqwpp2")
-	if _wpp2 then return true end
-	local _wps1 = self:RemoveSwep(cname, "eqwps1")
-	if _wps1 then return true end
-	local _wps2 = self:RemoveSwep(cname, "eqwps2")
-	if _wps2 then return true end
-	local _wpg = self:RemoveSwep(cname, "eqwpg")
-	if _wpg then return true end
 
 	return false
 end
@@ -414,7 +369,6 @@ end
 
 function Player:RemoveWeaponFromInventory(cname)
 	self:RemoveWeapon(cname)
-	self:RemoveVisual(cname)
 
 	if not _rem_wep then
 		self:RemoveFromInventory(cname)

@@ -27,10 +27,12 @@ local usedpms = {}
 local roles = SQL_SELECT("yrp_ply_roles", "string_playermodels, uniqueID", nil)
 if wk(roles) then
 	for i, role in pairs(roles) do
-		local pms = string.Explode(",", role.string_playermodels)
-		for j, pm in pairs(pms) do
-			if !strEmpty(pm) and !table.HasValue(usedpms, pm) then
-				table.insert(usedpms, pm)
+		if role.string_playermodels then
+			local pms = string.Explode(",", role.string_playermodels)
+			for j, pm in pairs(pms) do
+				if !strEmpty(pm) and !table.HasValue(usedpms, pm) then
+					table.insert(usedpms, pm)
+				end
 			end
 		end
 	end

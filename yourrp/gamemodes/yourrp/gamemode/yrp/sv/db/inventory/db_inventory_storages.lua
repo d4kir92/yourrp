@@ -2,7 +2,7 @@
 
 local DATABASE_NAME = "yrp_inventory_storages"
 
-SQL.ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1")
 
 --SQL_DROP_TABLE(DATABASE_NAME)
 
@@ -16,12 +16,7 @@ function CreateStorage(size, inv)
 	if result == nil then
 		YRP.msg("db", "Created Storage")
 
-		local last = {}
-		last.table = DATABASE_NAME
-		last.cols = {}
-		last.cols[1] = "*"
-		last.manual = "ORDER BY uniqueID DESC LIMIT 1"
-		last = SQL.SELECT(last)
+		local last = SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
 		if wk(last) then
 			last = last[1]
 

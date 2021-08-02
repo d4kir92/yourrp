@@ -374,12 +374,7 @@ function YRPRegisterObject(obj)
 
 		SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
 
-		local last = {}
-		last.table = DATABASE_NAME
-		last.cols = {}
-		last.cols[1] = "*"
-		last.manual = "ORDER BY uniqueID DESC LIMIT 1"
-		last = SQL.SELECT(last)
+		local last = SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
 		if wk(last) then
 			last = last[1]
 		end

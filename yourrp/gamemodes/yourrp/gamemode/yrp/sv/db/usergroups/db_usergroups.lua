@@ -1364,12 +1364,6 @@ end
 
 function RenderEquipments(ply, mode, color)
 	RenderEquipment(ply, "backpack", mode, color)
-
-	RenderEquipment(ply, "weaponprimary1", mode, color)
-	RenderEquipment(ply, "weaponprimary2", mode, color)
-	RenderEquipment(ply, "weaponsecondary1", mode, color)
-	RenderEquipment(ply, "weaponsecondary2", mode, color)
-	RenderEquipment(ply, "weapongadget", mode, color)
 end
 
 function RenderCloaked(ply)
@@ -1713,10 +1707,13 @@ function Player:UserGroupLoadout()
 
 
 		-- sweps
+		local SWEPS = UG.string_sweps
 		self:SetNW2String("usergroup_sweps", UG.string_sweps)
-		local SWEPS = string.Explode(",", UG.string_sweps)
-		for i, swep in pairs(SWEPS) do
-			self:Give(swep)
+		if SWEPS then
+			SWEPS = string.Explode(",", SWEPS)
+			for i, swep in pairs(SWEPS) do
+				self:Give(swep)
+			end
 		end
 
 
@@ -1743,10 +1740,13 @@ function Player:UserGroupLoadout()
 		end
 
 		
-		local _licenseIDs = string.Explode(",", UG.string_licenses)
-		for i, lic in pairs(_licenseIDs) do
-			if tonumber(lic) != nil then
-				self:AddLicense(lic)
+		local _licenseIDs = UG.string_licenses
+		if _licenseIDs then
+			_licenseIDs = string.Explode(",", UG.string_licenses)
+			for i, lic in pairs(_licenseIDs) do
+				if tonumber(lic) != nil then
+					self:AddLicense(lic)
+				end
 			end
 		end
 	end
@@ -1823,7 +1823,10 @@ end)
 
 util.AddNetworkString("get_perma_props")
 net.Receive("get_perma_props", function(len, ply)
-	local tab = SQL_SELECT("permaprops", "*", nil)
+	local tab = {}
+	if SQL_TABLE_EXISTS("permaprops") then
+		tab = SQL_SELECT("permaprops", "*", nil)
+	end
 
 	ply.ppid = ply.ppid or 0
 
@@ -1871,7 +1874,9 @@ util.AddNetworkString("yrp_pp_remove")
 net.Receive("yrp_pp_remove", function(len, ply)
 	local ppid = net.ReadString()
 
-	SQL_DELETE_FROM("permaprops", "id = '" .. ppid .. "'")
+	if SQL_TABLE_EXISTS("permaprops") then
+		SQL_DELETE_FROM("permaprops", "id = '" .. ppid .. "'")
+	end
 end)
 
 util.AddNetworkString("yrp_pp_close")
@@ -1884,13 +1889,15 @@ util.AddNetworkString("yrp_pp_teleport")
 net.Receive("yrp_pp_teleport", function(len, ply)
 	local ppid = net.ReadString()
 
-	local tab = SQL_SELECT("permaprops", "*", "id = '" .. ppid .. "'")
-	if wk(tab) then
-		tab = tab[1]
+	if SQL_TABLE_EXISTS("permaprops") then
+		local tab = SQL_SELECT("permaprops", "*", "id = '" .. ppid .. "'")
+		if wk(tab) then
+			tab = tab[1]
 
-		tab.content = util.JSONToTable(tab.content)
+			tab.content = util.JSONToTable(tab.content)
 
-		ply:SetPos(tab.content.Pos)
+			ply:SetPos(tab.content.Pos)
+		end
 	end
 end)
 

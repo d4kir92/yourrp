@@ -324,12 +324,9 @@ timer.Create("ServerThink", TICK, 0, function()
 		end
 	end
 
-	if _time % 30.0 == 1 or GetGlobalBool("yrp_update_teleporters", false) or GetGlobalBool("yrp_update_holos", false) then
+	if _time % 30.0 == 1 or GetGlobalBool("yrp_update_teleporters", false) then
 		if GetGlobalBool("yrp_update_teleporters", true) != false then
 			SetGlobalBool("yrp_update_teleporters", false)
-		end
-		if GetGlobalBool("yrp_update_holos", true) != false then
-			SetGlobalBool("yrp_update_holos", false)
 		end
 
 		local _dealers = SQL_SELECT("yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'")
@@ -386,32 +383,6 @@ timer.Create("ServerThink", TICK, 0, function()
 				end
 			else
 				YRP.msg("note", "There are a lot of Teleporters!")
-			end
-		end
-
-		local holos = SQL_SELECT("yrp_holos", "*", "string_map = '" .. game.GetMap() .. "'")
-		if wk(holos) then
-			if table.Count(holos) < 100 then
-				for i, holo in pairs(holos) do
-					if !holoAlive(holo.uniqueID) then
-						local tp = ents.Create("yrp_holo")
-						if ( IsValid( tp ) ) then
-							local pos = string.Explode(",", holo.string_position)
-							pos = Vector(pos[1], pos[2], pos[3])
-							tp:SetPos(pos - tp:GetUp() * 5)
-							local ang = string.Explode(",", holo.string_angle)
-							ang = Angle(ang[1], ang[2], ang[3])
-							tp:SetAngles(ang)
-							tp:SetNW2Int("yrp_holo_uid", tonumber(holo.uniqueID))
-							tp:SetNW2String("string_name", holo.string_name)
-							tp:SetNW2String("string_target", holo.string_target)
-							tp:Spawn()
-							tp.PermaProps = true
-						end
-					end
-				end
-			else
-				YRP.msg("note", "There are a lot of holos!")
 			end
 		end
 	end

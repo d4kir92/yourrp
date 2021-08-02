@@ -37,17 +37,19 @@ SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '0'")
 -- DEFAULT GROUP
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	YRP.msg("note", DATABASE_NAME .. " has not the default group")
-	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "1, 'Civilians', '0,0,255', 0, 0")
+	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "'1', 'Civilians', '0,0,255', '0', '0'")
 end
 
-for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", nil)) do
-	v.uniqueID = tonumber(v.uniqueID)
-	v.int_parentgroup = tonumber(v.int_parentgroup)
-	if v.uniqueID != -1 and v.int_parentgroup == v.uniqueID then
-		SQL_UPDATE(DATABASE_NAME, "int_parentgroup = '0'", "uniqueID = '" .. v.uniqueID .. "'")
+local dbtab = SQL_SELECT(DATABASE_NAME, "*", nil)
+if dbtab then
+	for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", nil)) do
+		v.uniqueID = tonumber(v.uniqueID)
+		v.int_parentgroup = tonumber(v.int_parentgroup)
+		if v.uniqueID != -1 and v.int_parentgroup == v.uniqueID then
+			SQL_UPDATE(DATABASE_NAME, "int_parentgroup = '0'", "uniqueID = '" .. v.uniqueID .. "'")
+		end
 	end
 end
-
 --db_drop_table(DATABASE_NAME)
 
 -- Local Table
@@ -532,20 +534,6 @@ net.Receive("get_grps", function(len, ply)
 		net.Send(ply)
 	end
 end)
-
--- Transfer
-local old_groups = SQL_SELECT("yrp_groups", "*", nil)
-if wk(old_groups) then
-	for i, old_grp in pairs(old_groups) do
-		local ogrp = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. old_grp.uniqueID .. "'")
-		if !wk(ogrp) then
-			if tonumber(old_grp.uppergroup) == -1 then
-				old_grp.uppergroup = 0
-			end
-			SQL_INSERT_INTO("yrp_ply_groups", "string_name, string_color, int_parentgroup, uniqueID", "'" .. old_grp.groupID .. "', '" .. old_grp.color .. "', '" .. old_grp.uppergroup .. "', '" .. old_grp.uniqueID .. "'")
-		end
-	end
-end
 
 function GetGroupTable(gid)
 	local result = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. gid .. "'")

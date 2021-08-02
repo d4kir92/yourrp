@@ -17,12 +17,7 @@ end
 util.AddNetworkString("SetServerKeybinds")
 local PLAYER = FindMetaTable("Player")
 function PLAYER:SetServerKeybinds()
-	local sel = {}
-	sel.table = DATABASE_NAME
-	sel.cols = {}
-	sel.cols[1] = "*"
-	sel.where = nil
-	local selresult = SQL.SELECT(sel)
+	local selresult = SQL_SELECT(DATABASE_NAME, "*", nil)
 	net.Start("SetServerKeybinds")
 		net.WriteTable(selresult)
 	net.Send(self)
@@ -32,26 +27,11 @@ util.AddNetworkString("setserverdefaultkeybind")
 net.Receive("setserverdefaultkeybind", function(len, ply)
 	local keybinds = net.ReadTable()
 	for name, value in pairs(keybinds) do
-		local sel = {}
-		sel.table = DATABASE_NAME
-		sel.cols = {}
-		sel.cols[1] = "*"
-		sel.where = "name = '" .. name .. "'"
-		local selresult = SQL.SELECT(sel)
+		local selresult = SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'")
 		if selresult != nil then
-			local tab = {}
-			tab.table = DATABASE_NAME
-			tab.sets = {}
-			tab.sets["value"] = value
-			tab.where = "name = '" .. name .. "'"
-			SQL.UPDATE(tab)
+			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. name .. "'")
 		else
-			local tab = {}
-			tab.table = DATABASE_NAME
-			tab.cols = {}
-			tab.cols["name"] = name
-			tab.cols["value"] = value
-			SQL.INSERT_INTO(tab)
+			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. value .. "'")
 		end
 	end
 end)

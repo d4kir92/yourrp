@@ -79,10 +79,13 @@ function save_clients(str)
 		YRP.msg("db", "no saving, because db reset")
 	end
 
-	local pp = SQL_SELECT("permaprops", "*")
-	if pp then
-		SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")
-		SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_holo%'")
+	local pp = {}
+	if SQL_TABLE_EXISTS("permaprops") then
+		pp = SQL_SELECT("permaprops", "*")
+		if pp then
+			SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")
+			SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_holo%'")
+		end
 	end
 end
 

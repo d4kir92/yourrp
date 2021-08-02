@@ -87,7 +87,7 @@ function OpenBuyMenu(ply, uid)
 		local _nw_tabs = {}
 		if _tabs[1] != "" then
 			for i, tab in pairs(_tabs) do
-				local _tab = SQL_SELECT("yrp_shops", "*", "uniqueID = " .. tab)
+				local _tab = SQL_SELECT("yrp_shops", "*", "uniqueID = '" .. tab .. "'")
 				if _tab != false and _tab != nil then
 					_tab = _tab[1]
 					_tab.haspermanent = HasShopPermanent(tab)

@@ -88,7 +88,10 @@ function GenerateChatTable()
 			yrp_chat_channels[tonumber(channel.uniqueID)]["bool_enabled"] = tonumber(channel.bool_enabled)
 
 			-- ACTIVE
-			local augs = string.Explode(",", channel.string_active_usergroups)
+			local augs = {}
+			if channel.string_active_usergroups then
+				augs = string.Explode(",", channel.string_active_usergroups)
+			end
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_active_usergroups"] = {}
 			for _, ug in pairs(augs) do
 				if !strEmpty(ug) then
@@ -96,7 +99,11 @@ function GenerateChatTable()
 				end
 			end
 
-			local agrps = string.Explode(",", channel.string_active_groups)
+
+			local agrps = {}
+			if channel.string_active_groups then
+				agrps = string.Explode(",", channel.string_active_groups)
+			end
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_active_groups"] = {}
 			for _, grp in pairs(agrps) do
 				if !strEmpty(grp) then
@@ -104,7 +111,10 @@ function GenerateChatTable()
 				end
 			end
 
-			local arols = string.Explode(",", channel.string_active_roles)
+			local arols = {}
+			if channel.string_active_roles then
+				arols = string.Explode(",", channel.string_active_roles)
+			end
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_active_roles"] = {}
 			for _, rol in pairs(arols) do
 				if !strEmpty(rol) then
@@ -113,7 +123,10 @@ function GenerateChatTable()
 			end
 
 			-- PASSIVE
-			local pugs = string.Explode(",", channel.string_passive_usergroups)
+			local pugs = {}
+			if channel.string_passive_usergroups then
+				pugs = string.Explode(",", channel.string_passive_usergroups)
+			end
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_passive_usergroups"] = {}
 			for _, ug in pairs(pugs) do
 				if !strEmpty(ug) then
@@ -121,7 +134,10 @@ function GenerateChatTable()
 				end
 			end
 
-			local pgrps = string.Explode(",", channel.string_passive_groups)
+			local pgrps = {}
+			if channel.string_passive_groups then
+				pgrps = string.Explode(",", channel.string_passive_groups)
+			end
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_passive_groups"] = {}
 			for _, grp in pairs(pgrps) do
 				if !strEmpty(grp) then
@@ -129,7 +145,10 @@ function GenerateChatTable()
 				end
 			end
 
-			local prols = string.Explode(",", channel.string_passive_roles)
+			local prols = {}
+			if channel.string_passive_roles then
+				prols = string.Explode(",", channel.string_passive_roles)
+			end
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_passive_roles"] = {}
 			for _, rol in pairs(prols) do
 				if !strEmpty(rol) then

@@ -851,7 +851,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_roles", "TEXT DEFAULT '1'")
 
 local yrp_voice_channels = {}
 if SQL_SELECT(DATABASE_NAME, "*") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_hear, string_mode, string_active_usergroups, string_passive_usergroups", "'DEFAULT', 1, 0, 'superadmin, admin, user', 'superadmin, admin, user'")
+	SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_hear, string_mode, string_active_usergroups, string_passive_usergroups", "'DEFAULT', '1', '0', 'superadmin, admin, user', 'superadmin, admin, user'")
 end
 
 function GenerateVoiceTable()
@@ -875,7 +875,10 @@ function GenerateVoiceTable()
 			yrp_voice_channels[tonumber(channel.uniqueID)]["int_position"] = tonumber(channel.int_position)
 
 			-- ACTIVE
-			local augs = string.Explode(",", channel.string_active_usergroups)
+			local augs = {}
+			if channel.string_active_usergroups then
+				augs = string.Explode(",", channel.string_active_usergroups)
+			end
 			yrp_voice_channels[tonumber(channel.uniqueID)]["string_active_usergroups"] = {}
 			for _, ug in pairs(augs) do
 				if !strEmpty(ug) then
@@ -883,7 +886,10 @@ function GenerateVoiceTable()
 				end
 			end
 
-			local agrps = string.Explode(",", channel.string_active_groups)
+			local agrps = {}
+			if channel.string_active_groups then
+				agrps = string.Explode(",", channel.string_active_groups)
+			end
 			yrp_voice_channels[tonumber(channel.uniqueID)]["string_active_groups"] = {}
 			for _, grp in pairs(agrps) do
 				if !strEmpty(grp) then
@@ -891,7 +897,10 @@ function GenerateVoiceTable()
 				end
 			end
 
-			local arols = string.Explode(",", channel.string_active_roles)
+			local arols = {}
+			if channel.string_active_roles then
+				arols = string.Explode(",", channel.string_active_roles)
+			end
 			yrp_voice_channels[tonumber(channel.uniqueID)]["string_active_roles"] = {}
 			for _, rol in pairs(arols) do
 				if !strEmpty(rol) then
@@ -900,7 +909,10 @@ function GenerateVoiceTable()
 			end
 
 			-- PASSIVE
-			local pugs = string.Explode(",", channel.string_passive_usergroups)
+			local pugs = {}
+			if channel.string_passive_usergroups then
+				pugs = string.Explode(",", channel.string_passive_usergroups)
+			end
 			yrp_voice_channels[tonumber(channel.uniqueID)]["string_passive_usergroups"] = {}
 			for _, ug in pairs(pugs) do
 				if !strEmpty(ug) then
@@ -908,7 +920,10 @@ function GenerateVoiceTable()
 				end
 			end
 
-			local pgrps = string.Explode(",", channel.string_passive_groups)
+			local pgrps = {}
+			if channel.string_passive_groups then
+				pgrps = string.Explode(",", channel.string_passive_groups)
+			end
 			yrp_voice_channels[tonumber(channel.uniqueID)]["string_passive_groups"] = {}
 			for _, grp in pairs(pgrps) do
 				if !strEmpty(grp) then
@@ -916,7 +931,10 @@ function GenerateVoiceTable()
 				end
 			end
 
-			local prols = string.Explode(",", channel.string_passive_roles)
+			local prols = {}
+			if channel.string_passive_roles then
+				prols = string.Explode(",", channel.string_passive_roles)
+ 			end
 			yrp_voice_channels[tonumber(channel.uniqueID)]["string_passive_roles"] = {}
 			for _, rol in pairs(prols) do
 				if !strEmpty(rol) then

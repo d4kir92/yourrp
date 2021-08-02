@@ -187,33 +187,7 @@ end
 
 function Player:UpdateBackpack()
 	local _bp = self:VisualEquipment("backpack", "eqbp") --, "ValveBiped.Bip01_Spine4", 1.3, Vector(-16, -7, 3.4), Angle(0, -90 -12, -90))
-	self:UpdateWeaponPrimary1()
-	self:UpdateWeaponPrimary2()
-	self:UpdateWeaponSecondary1()
-	self:UpdateWeaponSecondary2()
-	self:UpdateWeaponGadget()
 	return _bp
-end
-
-local _site = 14
-function Player:UpdateWeaponPrimary1()
-	return self:VisualEquipment("weaponprimary1", "eqwpp1") --,"ValveBiped.Bip01_R_Clavicle", 1, Vector(0, -10, 7), Angle(0, 90 - _site, 90))
-end
-
-function Player:UpdateWeaponPrimary2()
-	return self:VisualEquipment("weaponprimary2", "eqwpp2") --,"ValveBiped.Bip01_L_Clavicle", 1, Vector(0, -10, -7), Angle(0, 90 - _site, 90))
-end
-
-function Player:UpdateWeaponSecondary1()
-	return self:VisualEquipment("weaponsecondary1", "eqwps1") --,"ValveBiped.Bip01_R_Thigh", 1, Vector(0, 0, -4), Angle(0, 0, 90))
-end
-
-function Player:UpdateWeaponSecondary2()
-	return self:VisualEquipment("weaponsecondary2", "eqwps2") --,"ValveBiped.Bip01_L_Thigh", 1, Vector(0, 0, 4), Angle(0, 0, 90))
-end
-
-function Player:UpdateWeaponGadget()
-	return self:VisualEquipment("weapongadget", "eqwpg") --,"ValveBiped.Bip01_L_Thigh", 1, Vector(0, -5, 0), Angle(0, 0, 90))
 end
 
 function Player:SetRPName(str)
@@ -228,106 +202,6 @@ function Player:SetRPName(str)
 		YRP.msg("note", oldname .. " changed name to " .. newname, true)
 	end
 end
-
-util.AddNetworkString("update_slot_weapon_primary_1")
-net.Receive("update_slot_weapon_primary_1", function(len, ply)
-	if ea(ply) then
-		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(DATABASE_NAME, "eqwpp1", "uniqueID = '" .. _charid .. "'")
-		if _uid != nil then
-			_uid = _uid[1].eqwpp1
-			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
-			if _backpack_storage == nil then
-				_backpack_storage = CreateEquipmentStorage(ply, "eqwpp1", _charid, ITEM_MAXW, ITEM_MAXH)
-				_backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'")
-			end
-			_backpack_storage = _backpack_storage[1]
-			net.Start("update_slot_weapon_primary_1")
-				net.WriteTable(_backpack_storage)
-			net.Send(ply)
-		end
-	end
-end)
-
-util.AddNetworkString("update_slot_weapon_primary_2")
-net.Receive("update_slot_weapon_primary_2", function(len, ply)
-	if ea(ply) then
-		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(DATABASE_NAME, "eqwpp2", "uniqueID = '" .. _charid .. "'")
-		if _uid != nil then
-			_uid = _uid[1].eqwpp2
-			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
-			if _backpack_storage == nil then
-				_backpack_storage = CreateEquipmentStorage(ply, "eqwpp2", _charid, ITEM_MAXW, ITEM_MAXH)
-				_backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'")
-			end
-			_backpack_storage = _backpack_storage[1]
-			net.Start("update_slot_weapon_primary_2")
-				net.WriteTable(_backpack_storage)
-			net.Send(ply)
-		end
-	end
-end)
-
-util.AddNetworkString("update_slot_weapon_secondary_1")
-net.Receive("update_slot_weapon_secondary_1", function(len, ply)
-	if ea(ply) then
-		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(DATABASE_NAME, "eqwps1", "uniqueID = '" .. _charid .. "'")
-		if _uid != nil then
-			_uid = _uid[1].eqwps1
-			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
-			if _backpack_storage == nil then
-				_backpack_storage = CreateEquipmentStorage(ply, "eqwps1", _charid, 4, 2)
-				_backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'")
-			end
-			_backpack_storage = _backpack_storage[1]
-			net.Start("update_slot_weapon_secondary_1")
-				net.WriteTable(_backpack_storage)
-			net.Send(ply)
-		end
-	end
-end)
-
-util.AddNetworkString("update_slot_weapon_secondary_2")
-net.Receive("update_slot_weapon_secondary_2", function(len, ply)
-	if ea(ply) then
-		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(DATABASE_NAME, "eqwps2", "uniqueID = '" .. _charid .. "'")
-		if _uid != nil then
-			_uid = _uid[1].eqwps2
-			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
-			if _backpack_storage == nil then
-				_backpack_storage = CreateEquipmentStorage(ply, "eqwps2", _charid, 4, 2)
-				_backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'")
-			end
-			_backpack_storage = _backpack_storage[1]
-			net.Start("update_slot_weapon_secondary_2")
-				net.WriteTable(_backpack_storage)
-			net.Send(ply)
-		end
-	end
-end)
-
-util.AddNetworkString("update_slot_weapon_gadget")
-net.Receive("update_slot_weapon_gadget", function(len, ply)
-	if ea(ply) then
-		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(DATABASE_NAME, "eqwpg", "uniqueID = '" .. _charid .. "'")
-		if _uid != nil then
-			_uid = _uid[1].eqwpg
-			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
-			if _backpack_storage == nil then
-				_backpack_storage = CreateEquipmentStorage(ply, "eqwpg", _charid, 1, 1)
-				_backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'")
-			end
-			_backpack_storage = _backpack_storage[1]
-			net.Start("update_slot_weapon_gadget")
-				net.WriteTable(_backpack_storage)
-			net.Send(ply)
-		end
-	end
-end)
 
 util.AddNetworkString("update_backpack")
 net.Receive("update_backpack", function(len, ply)
@@ -484,25 +358,26 @@ function GetPlayermodelsOfRole(ruid)
 	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(ruid) .. "'")
 	if wk(role) then
 		role = role[1]
-		local rpms = string.Explode(",", role.string_playermodels)
-		local tab = {}
-		for i, id in pairs(rpms) do
-			local tmppms = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
-			if wk(tmppms) then
-				tmppms = tmppms[1]
-				tmppms = string.Explode(",", tmppms.string_models)
-				for x, pm in pairs(tmppms) do
-					for y, xpm in pairs(string.Explode(",", SQL_STR_OUT(pm))) do
-						table.insert(tab, SQL_STR_OUT(xpm))
+		if role.string_playermodels then
+			local rpms = string.Explode(",", role.string_playermodels)
+			local tab = {}
+			for i, id in pairs(rpms) do
+				local tmppms = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
+				if wk(tmppms) then
+					tmppms = tmppms[1]
+					tmppms = string.Explode(",", tmppms.string_models)
+					for x, pm in pairs(tmppms) do
+						for y, xpm in pairs(string.Explode(",", SQL_STR_OUT(pm))) do
+							table.insert(tab, SQL_STR_OUT(xpm))
+						end
 					end
 				end
 			end
+			return table.concat(tab,",")
 		end
-		return table.concat(tab,",")
-	else
-		YRP.msg("note", "role " .. ruid .. " has no playermodels")
-		return ""
 	end
+	YRP.msg("note", "role " .. ruid .. " has no playermodels")
+	return ""
 end
 
 function GetPMTableOfRole(ruid)
@@ -629,7 +504,9 @@ function send_characters(ply)
 		net.Send(ply)
 
 		timer.Simple(2, function()
-			ply:SetNW2Bool("loadedchars", true)
+			if IsValid(ply) then
+				ply:SetNW2Bool("loadedchars", true)
+			end
 		end)
 	end
 end

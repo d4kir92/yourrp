@@ -308,7 +308,7 @@ function SQL_CREATE_TABLE(db_table)
 	end
 end
 
-function SQL_SELECT(db_table, db_columns, db_where)
+function SQL_SELECT(db_table, db_columns, db_where, db_extra)
 	--YRP.msg("db", "SQL_SELECT(" .. tostring(db_table) .. ", " .. tostring(db_columns) .. ", " .. tostring(db_where) .. ")")
 	if GetSQLMode() == 0 then
 		local _q = "SELECT "
@@ -331,6 +331,10 @@ function SQL_SELECT(db_table, db_columns, db_where)
 		if db_where != nil then
 			_q = _q .. " WHERE "
 			_q = _q .. db_where
+		end
+
+		if db_extra then
+			_q = _q .. " " .. db_extra
 		end
 
 		_q = _q .. ";"
@@ -389,7 +393,21 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 		end
 	elseif GetSQLMode() == 1 then
 		if SQL_TABLE_EXISTS(db_table) then
-			local newcols = string.Explode(",", db_columns)
+			local _q = "INSERT INTO "
+			_q = _q .. db_table
+			_q = _q .. " ("
+			_q = _q .. db_columns
+			_q = _q .. ") VALUES ("
+			_q = _q .. db_values
+			_q = _q .. ");"
+			local _result = SQL_QUERY(_q)
+
+			if _result != nil then
+				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+			end
+			return _result
+
+			--[[local newcols = string.Explode(",", db_columns)
 			for i, v in pairs(newcols) do
 				local col = string.Replace(v, " ", "")
 				newcols[i] = col
@@ -458,7 +476,7 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(_q))
 			end
 
-			return _result
+			return _result]]
 		end
 	end
 end
@@ -480,17 +498,7 @@ function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 		end
 	elseif GetSQLMode() == 1 then
 		if SQL_TABLE_EXISTS(db_table) then
-			local _cols = {}
-			local _vals = {}
-
-			for i, col in pairs(YRPSQL[db_table]) do
-				table.insert(_cols, i)
-				table.insert(_vals, col)
-			end
-
-			_cols = string.Implode(",", _cols)
-			_vals = string.Implode(",", _vals)
-			local _result = SQL_INSERT_INTO(db_table, _cols, _vals)
+			local _result = SQL_QUERY("INSERT INTO " .. db_table .. " VALUES();")
 
 			if _result != nil then
 				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
@@ -560,6 +568,11 @@ function SQL_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 	end
 end
 
+function SQL_HAS_COLUMN(table_name, column_name)
+	local _r = SQL_QUERY("SHOW COLUMNS FROM " .. YRPSQL.schema .. "." .. tostring(table_name) .. " LIKE '" .. column_name .. "';")
+	return _r
+end
+
 function SQL_ADD_COLUMN(table_name, column_name, datatype)
 	local _result = SQL_CHECK_IF_COLUMN_EXISTS(table_name, column_name)
 
@@ -569,40 +582,19 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 
 		return _r
 	elseif GetSQLMode() == 1 then
-		-- MYSQL DEFAULT VALUES FIX
-		if YRPSQL[table_name] == nil then
-			YRPSQL[table_name] = {}
+		if string.find(datatype, "TEXT") then
+			datatype = string.Replace(datatype, "TEXT", "VARCHAR(255)")
+		end
+		local _r = nil
+		if !SQL_HAS_COLUMN(table_name, column_name) then
+			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring(table_name) .. " ADD " .. column_name .. " " .. datatype .. ";"
+			_r = SQL_QUERY(_q)
+		else
+			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring(table_name) .. " CHANGE " .. column_name .. " " .. column_name .. " " .. datatype .. ";"
+			_r = SQL_QUERY(_q)
 		end
 
-		if YRPSQL[table_name][column_name] == nil then
-			local _start, _end = string.find(datatype, "DEFAULT ", 1)
-
-			if _end != nil then
-				local _default_value = string.sub(datatype, _end + 1)
-				YRPSQL[table_name][column_name] = _default_value
-			elseif string.find(datatype, "TEXT") != nil then
-				YRPSQL[table_name][column_name] = "' '"
-			elseif string.find(datatype, "INT") != nil or string.find(datatype, "INTEGER") != nil then
-				YRPSQL[table_name][column_name] = "1"
-			else
-				YRP.msg("note", "[SQL_ADD_COLUMN] " .. table_name .. " | " .. column_name)
-			end
-		end
-
-		if !_result then
-			if string.find(datatype, "TEXT") then
-				datatype = "TEXT"
-			end
-
-			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. table_name .. " ADD " .. column_name .. " " .. datatype .. ";"
-			local _r = SQL_QUERY(_q)
-
-			if _r != nil then
-				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_r))
-			end
-
-			return _r
-		end
+		return _r
 	end
 end
 
@@ -617,7 +609,7 @@ if SERVER then
 
 	if GetSQLMode() == 1 then
 		YRP.msg("db", "Connect to MYSQL Database")
-	
+
 		-- MYSQL
 		require("mysqloo")
 
@@ -627,6 +619,7 @@ if SERVER then
 			MsgC(Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases")
 			YRPSQL.outdated = true
 		end
+
 		if !YRPSQL.outdated then
 			YRPSQL.mysql_worked = false
 
@@ -648,18 +641,19 @@ if SERVER then
 			YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port))
 
 			YRPSQL.db.onConnected = function()
-				YRP.msg("note", "CONNECTED!")
+				YRP.msg("note", ">>> CONNECTED! <<<")
 				YRPSQL.mysql_worked = true
 				SetSQLMode(1)
 			end
 
 			--SQL_QUERY("SET @@global.sql_mode='MYSQL40'")
-			YRPSQL.db.onConnectionFailed = function()
-				YRP.msg("note", "CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!")
+			YRPSQL.db.onConnectionFailed = function(db, serr)
+				YRP.msg("note", ">>> CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!")
+				YRP.msg("error", serr)
 				SetSQLMode(0, true)
 			end
 
-			YRP.msg("db", "Connect to MYSQL Server, if stuck => connection info is wrong or server offline! (default mysql port: 3306)")
+			YRP.msg("db", ">>> Connect to MYSQL Server, if stuck => connection info is wrong or server offline! (default mysql port: 3306)")
 			YRPSQL.db:connect()
 			YRPSQL.db:wait()
 		end

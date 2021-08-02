@@ -208,13 +208,7 @@ end)
 
 util.AddNetworkString("yrp_set_font")
 function SendFontName(ply)
-	local tab = {}
-	tab.table = DATABASE_NAME
-	tab.cols = {}
-	tab.cols[1] = "string_fontname"
-	tab.where = "uniqueID = '1'"
-
-	local dbtab = SQL.SELECT(tab)
+	local dbtab = SQL_SELECT(DATABASE_NAME, "string_fontname", "uniqueID = '1'")
 	if wk(dbtab) then
 		dbtab = dbtab[1]
 

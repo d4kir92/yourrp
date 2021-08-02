@@ -97,9 +97,12 @@ function GetMapNameDB()
 end
 
 function StringToColor(str)
-	local _col = string.Explode(",", str)
-
-	return Color(_col[1], _col[2], _col[3], _col[4] or 255)
+	if type(str) == "string" then
+		local _col = string.Explode(",", str)
+		return Color(_col[1] or 0, _col[2] or 0, _col[3] or 0, _col[4] or 255)
+	else
+		return Color(255, 0, 0, 255)
+	end
 end
 
 function StringToVector(str)

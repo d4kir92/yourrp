@@ -85,7 +85,9 @@ if CLIENT then
 		if self:HudValue(element, "VISI") == false then
 			return false
 		end
-		if element == "CA" then
+		if !self:Alive() then
+			return false
+		elseif element == "CA" then
 			return self:GetNW2Bool("iscasting", false)
 		elseif element == "LO" then
 			return self:Lockdown()
@@ -96,7 +98,7 @@ if CLIENT then
 		elseif element == "AL" then
 			return GetGlobalBool("bool_permille", false)
 		elseif element == "ST" then
-			return GetGlobalBool("bool_stamina", false) and self:GetNW2Bool("bool_stamina", false)
+			return GetGlobalBool("bool_stamina", false) and self:GetNW2Bool("bool_stamina", false) and self:GetNW2Float("GetCurStamina", 0.0) < self:GetNW2Float("GetMaxStamina", 0.0)
 		elseif element == "RA" then
 			return GetGlobalBool("bool_radiation", false)
 		elseif element == "HY" then
@@ -128,7 +130,9 @@ if CLIENT then
 		elseif element == "AB" then
 			return self:GetNW2String("GetAbilityType", "none") != "none"
 		elseif element == "HP" then
+			return self:Health() > 0
 		elseif element == "AR" then
+			return self:Armor() > 0
 		elseif element == "WN" then
 			local weapon = self:GetActiveWeapon()
 			if weapon:IsValid() then

@@ -77,7 +77,9 @@ SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_energybeam", "INTEGER DEFAULT 1.0")
 
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	YRP.msg("note", DATABASE_NAME .. " has not the default role")
-	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "1, 'Civilian', '0,0,255', 1, 0")
+	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "'1', 'Civilian', '0,0,255', '1', '0'")
+else
+	SQL_UPDATE(DATABASE_NAME, "string_color = '0,0,0'", "uniqueID = '1'")
 end
 
 --[[local yrp_ply_roles =  SQL_SELECT(DATABASE_NAME, "*", nil)
@@ -91,7 +93,7 @@ if wk(yrp_ply_roles) then
 	end
 end]]
 
-SQL_UPDATE(DATABASE_NAME, "uses = 0", nil)
+SQL_UPDATE(DATABASE_NAME, "int_uses = '0'", nil)
 
 function MoveUnusedGroups()
 	local count = 0
@@ -141,62 +143,6 @@ function MoveUnusedRolesToDefault()
 	end
 end
 MoveUnusedRolesToDefault()
-
--- CONVERTING OLD roles
-if wk(SQL_SELECT("yrp_roles", "*", nil)) then
-	YRP.msg("note", "Converting OLD Roles into NEW Roles")
-	local oldroles = SQL_SELECT("yrp_roles", "*", nil)
-	for i, role in pairs(oldroles) do
-		if tonumber(role.uniqueID) > 1 then
-			local cols = "string_name,"
-			cols = cols .. "string_description,"
-			cols = cols .. "int_salary,"
-			cols = cols .. "int_groupID,"
-			cols = cols .. "string_sweps,"
-			cols = cols .. "bool_voteable,"
-			cols = cols .. "bool_adminonly,"
-			cols = cols .. "bool_whitelist,"
-			cols = cols .. "int_maxamount,"
-			cols = cols .. "int_hp,"
-			cols = cols .. "int_hpmax,"
-			cols = cols .. "int_ar,"
-			cols = cols .. "int_armax,"
-			cols = cols .. "int_speedwalk,"
-			cols = cols .. "int_speedrun,"
-			cols = cols .. "int_powerjump,"
-			cols = cols .. "int_prerole,"
-			cols = cols .. "bool_instructor,"
-			cols = cols .. "int_salarytime,"
-			cols = cols .. "string_licenses"
-
-			local vals = "'" .. role.roleID .. "', "
-			vals = vals .. "'" .. role.description .. "', "
-			vals = vals .. "'" .. role.salary .. "', "
-			vals = vals .. "'" .. role.groupID .. "', "
-			vals = vals .. "'" .. role.sweps .. "', "
-			vals = vals .. "'" .. role.voteable .. "', "
-			vals = vals .. "'" .. role.adminonly .. "', "
-			vals = vals .. "'" .. role.whitelist .. "', "
-			vals = vals .. "'" .. role.maxamount .. "', "
-			vals = vals .. "'" .. role.hp .. "', "
-			vals = vals .. "'" .. role.hpmax .. "', "
-			vals = vals .. "'" .. role.ar .. "', "
-			vals = vals .. "'" .. role.armax .. "', "
-			vals = vals .. "'" .. role.speedwalk .. "', "
-			vals = vals .. "'" .. role.speedrun .. "', "
-			vals = vals .. "'" .. role.powerjump .. "', "
-			vals = vals .. "'" .. role.prerole .. "', "
-			vals = vals .. "'" .. role.instructor .. "', "
-			vals = vals .. "'" .. role.salarytime ..	"', "
-			vals = vals .. "'" .. role.licenseIDs .. "' "
-
-			SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
-			SQL_DELETE_FROM("yrp_roles", "uniqueID = '" .. role.uniqueID .. "'")
-		end
-	end
-	SQL_DROP_TABLE("yrp_roles")
-end
--- CONVERTING OLD roles
 
 
 
@@ -253,7 +199,10 @@ function ConvertToDarkRPJob(tab)
 	end
 	_job.model = pms
 	_job.description = tab.string_description or ""
-	local _weapons = string.Explode(",", tab.string_sweps)
+	local _weapons = ""
+	if tab.string_sweps then
+		_weapons = string.Explode(",", tab.string_sweps)
+	end
 	_job.weapons = _weapons
 	_job.max = tonumber(tab.int_maxamount)
 	_job.salary = tonumber(tab.int_salary)
@@ -275,8 +224,12 @@ function ConvertToDarkRPJob(tab)
 	--_job.RequiresVote = function() end
 
 	-- YRP
-	_job.color = string.Explode(",", tab.string_color)
-	_job.color = Color(_job.color[1], _job.color[2], _job.color[3], _job.color[4])
+	if tab.string_color then
+		_job.color = string.Explode(",", tab.string_color)
+		_job.color = Color(_job.color[1], _job.color[2], _job.color[3], _job.color[4])
+	else
+		_job.color = Color(0, 0, 0, 255)
+	end
 	_job.uniqueID = tonumber(tab.uniqueID)
 
 	return _job
@@ -1649,23 +1602,12 @@ end)
 
 -- Role Reset
 function CheckIfRoleExists(ply, ruid)
-	local tab = {}
-	tab.table = DATABASE_NAME
-	tab.cols = {}
-	tab.cols[1] = "*"
-	tab.where = "uniqueID = '" .. ruid .. "'"
-	local result = SQL.SELECT(tab)
+	local result = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
 
 	if result == nil then
 		YRP.msg("note", "Role not exists anymore! Change back to default role!")
 
-		local utab = {}
-		utab.table = "yrp_characters"
-		utab.sets = {}
-		utab.sets["roleID"] = 1
-		utab.sets["groupID"] = 1
-		utab.where = "roleID = '" .. ruid .. "'"
-		SQL.UPDATE(utab)
+		SQL_UPDATE(DATABASE_NAME, "roleID = '1', groupID = '1'", "roleID = '" .. ruid .. "'")
 
 		ply:KillSilent()
 	end

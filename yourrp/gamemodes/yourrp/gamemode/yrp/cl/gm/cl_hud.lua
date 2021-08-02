@@ -438,11 +438,6 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	end
 
 	DrawEquipment(lply, "backpack")
-	DrawEquipment(lply, "weaponprimary1")
-	DrawEquipment(lply, "weaponprimary2")
-	DrawEquipment(lply, "weaponsecondary1")
-	DrawEquipment(lply, "weaponsecondary2")
-	DrawEquipment(lply, "weapongadget")
 
 	if !lply:InVehicle() then
 		HudPlayer(lply)
