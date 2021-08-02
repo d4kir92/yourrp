@@ -165,9 +165,9 @@ function createShopItem(item, duid, id)
 					_color = Color(255, 0, 0)
 					_text = YRP.lang_string("LID_oncooldown")
 				end
+				self:SetText(_text)
 
-				draw.RoundedBox(0, 0, 0, pw, ph, _color)
-				draw.SimpleText(_text, "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+				hook.Run("YButtonAPaint", self, pw, ph)
 			end
 			function _i.buy:DoClick()
 				if LocalPlayer():GetNW2Float("buy_ts", 0.0) < CurTime() then

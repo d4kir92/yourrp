@@ -44,7 +44,10 @@ end
 
 function Player:changeTeam(team, force, suppressNotification)
 	--Description: Change the team of a player.
-	SetRole(self, team, false, nil)
+	if canGetRole(self, team) then
+		SetRole(self, team, false, nil)
+		return true
+	end
 	return false
 end
 

@@ -168,20 +168,6 @@ function con_st(ply, _time)
 	end
 end
 
-function anti_bunnyhop(ply)
-	if !ply:GetNW2Bool("jump_resetting", false) then
-		if ply:KeyDown(IN_JUMP) and ply:GetNW2Bool("canjump", true) then
-			ply:SetNW2Bool("canjump", false)
-		elseif ply:OnGround() and ply:GetNW2Float("GetCurStamina", 0) >= GetGlobalFloat("float_scale_stamina_jump", 30) and !ply:GetNW2Bool("canjump", false) then
-			ply:SetNW2Bool("jump_resetting", true)
-			timer.Simple(0.4, function()
-				ply:SetNW2Bool("jump_resetting", false)
-				ply:SetNW2Bool("canjump", true)
-			end)
-		end
-	end
-end
-
 function reg_ab(ply)
 	local reg = ply:GetNW2Float("GetRegAbility", 0.0)
 	local tick = ply:GetNW2Float("GetRegTick", 1.0)
@@ -306,8 +292,6 @@ timer.Create("ServerThink", TICK, 0, function()
 
 				time_jail(ply)
 				check_salary(ply)
-
-				anti_bunnyhop(ply)
 			end
 		end
 

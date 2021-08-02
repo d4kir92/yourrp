@@ -27,6 +27,9 @@ end)
 hook.Add("YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
+
 	local lply = LocalPlayer()
 	if GetGlobalString("string_interface_design") == "Material" then
 		local color = lply:InterfaceValue("YButton", "NC")
@@ -48,20 +51,29 @@ hook.Add("YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 			color.g = color.g + 50
 			color.b = color.b + 50
 		else
+			tcolor.r = 255
+			tcolor.g = 255
+			tcolor.b = 255
+			if tab.force then
+				color = Color(0, 0, 0, 0)
+			end
 			self.hovering = false
 			self.clicked = false
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor
-		draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(YRP.ctr(yrpr), tab.x, tab.y, pw, ph, Color(color.r, color.g, color.b, color.a))
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, TextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)
 
 hook.Add("YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 	tab = tab or {}
+
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
 
 	local lply = LocalPlayer()
 	if GetGlobalString("string_interface_design") == "Material" then
@@ -80,14 +92,20 @@ hook.Add("YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 			end
 			color = Color(206, 111, 111)
 		else
+			tcolor.r = 255
+			tcolor.g = 255
+			tcolor.b = 255
+			if tab.force then
+				color = Color(0, 0, 0, 0)
+			end
 			self.hovering = false
 			self.clicked = false
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor
-		draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(YRP.ctr(yrpr), tab.x, tab.y, pw, ph, Color(color.r, color.g, color.b, color.a))
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, TextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)
@@ -112,14 +130,20 @@ hook.Add("YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 			end
 			color = Color(111, 206, 111)
 		else
+			tcolor.r = 255
+			tcolor.g = 255
+			tcolor.b = 255
+			if tab.force then
+				color = Color(0, 0, 0, 0)
+			end
 			self.hovering = false
 			self.clicked = false
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor
-		draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+		draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, color.a))
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, TextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)

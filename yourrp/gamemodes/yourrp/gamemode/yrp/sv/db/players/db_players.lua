@@ -671,40 +671,53 @@ net.Receive("giveRole", function(len, ply)
 	end
 end)
 
+util.AddNetworkString("yrp_whitelist_infoplayer")
+function YRPWhitelistInfoPlayer(ply, msg)
+	net.Start("yrp_whitelist_infoplayer")
+		net.WriteString(msg)
+	net.Send(ply)
+end
+
 function isWhitelisted(ply, id)
 	local _role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. id)
 	if wk(_role) then
 		_role = _role[1]
 
-		local steamid = ply:SteamID() or ply:UniqueID()
-		local _plyAllowedAll = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "'")
-		if worked(_plyAllowedAll, "_plyAllowedAll", true) then
-			_plyAllowedAll = _plyAllowedAll[1]
-			if _plyAllowedAll.roleID == "-1" or _plyAllowedAll.groupID == "-1" then
-				YRP.msg("gm", ply:RPName() .. " is ALL whitelisted")
-				return true
+		if tonumber(_role.bool_whitelist) == 1 or tonumber(_role.int_prerole) > 0 then
+			local steamid = ply:SteamID() or ply:UniqueID()
+			local _plyAllowedAll = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "'")
+			if worked(_plyAllowedAll, "_plyAllowedAll", true) then
+				_plyAllowedAll = _plyAllowedAll[1]
+				if _plyAllowedAll.roleID == "-1" or _plyAllowedAll.groupID == "-1" then
+					YRP.msg("gm", ply:RPName() .. " is ALL whitelisted")
+					return true
+				end
 			end
-		end
 
-		local _plyAllowedRole = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND roleID = " .. id)
-		local _plyAllowedGroup = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND groupID = " .. _role.int_groupID .. " AND roleID = -1")
-		if ply:HasAccess() then
-			YRP.msg("gm", ply:RPName() .. " has access.")
-			return true
-		else
-			if worked(_plyAllowedRole, "_plyAllowedRole", true) then
-				YRP.msg("gm", ply:RPName() .. " is role whitelisted.")
-				return true
-			elseif worked(_plyAllowedGroup, "_plyAllowedGroup", true) then
-				YRP.msg("gm", ply:RPName() .. " is group whitelisted.")
+			local _plyAllowedRole = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND roleID = " .. id)
+			local _plyAllowedGroup = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND groupID = " .. _role.int_groupID .. " AND roleID = -1")
+			if ply:HasAccess() then
+				YRP.msg("gm", ply:RPName() .. " has access.")
 				return true
 			else
-				YRP.msg("gm", ply:RPName() .. " is not role and not group whitelisted.")
-				return false
+				if worked(_plyAllowedRole, "_plyAllowedRole", true) then
+					YRP.msg("gm", ply:RPName() .. " is role whitelisted.")
+					return true
+				elseif worked(_plyAllowedGroup, "_plyAllowedGroup", true) then
+					YRP.msg("gm", ply:RPName() .. " is group whitelisted.")
+					return true
+				else
+					YRPWhitelistInfoPlayer(ply, "LID_youarenotwhitelisted")
+					YRP.msg("gm", ply:RPName() .. " is not whitelisted.")
+					return false
+				end
 			end
+		else
+			return true
 		end
 	end
-	YRP.msg("gm", ply:RPName() .. " is not whitelisted.")
+	YRPWhitelistInfoPlayer(ply, "ROLE DOESN'T EXISTS ANYMORE")
+	YRP.msg("gm", "ROLE DOESN'T EXISTS ANYMORE")
 	return false
 end
 
@@ -822,7 +835,7 @@ function canGetRole(ply, roleID, want)
 					local text = ply:YRPName() .. " is not whitelisted."
 					YRP.msg("gm", "[canGetRole] " .. text)
 					
-					YRPNotiToPly(text, ply)
+					--YRPNotiToPly(text, ply)
 					return false
 				end
 			end

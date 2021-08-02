@@ -1891,6 +1891,11 @@ hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	end
 end)
 
+net.Receive("yrp_whitelist_infoplayer", function(len)
+	local msg = net.ReadString()
+	notification.AddLegacy(YRP.lang_string(msg), NOTIFY_GENERIC, 6)
+end)
+
 net.Receive("yrp_noti", function(len)
 	local lply = LocalPlayer()
 	if lply:IsValid() and lply:HasAccess() then

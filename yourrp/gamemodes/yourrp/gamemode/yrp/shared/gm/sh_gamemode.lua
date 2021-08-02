@@ -252,12 +252,6 @@ concommand.Add("yrp_collection", function(ply, cmd, args)
 	PrintCollectionID()
 end)
 
-hook.Add("StartCommand", "NoJumpGuns", function(ply, cmd)
-	if GetGlobalBool("bool_anti_bhop", false) and !ply:GetNW2Bool("canjump", false) and ply:GetMoveType() != MOVETYPE_NOCLIP then
-		cmd:RemoveKey(IN_JUMP)
-	end
-end)
-
 function IsEntityAlive(ply, uid)
 	for i, ent in pairs(ents.GetAll()) do
 		if tostring(ent:GetNW2String("item_uniqueID", "")) == tostring(uid) and ent:GetRPOwner() == ply then
@@ -623,6 +617,7 @@ function YRPGetHostName()
 	else
 		return GetHostName()
 	end
+	return ""
 end
 
 --[[

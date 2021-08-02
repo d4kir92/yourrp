@@ -343,6 +343,9 @@ function LoadCharacters()
 								tmpChar.icon:SetHTML(GetHTMLImage(tmpChar.factionIcon, tmpChar.icon:GetWide(), tmpChar.icon:GetTall()))
 							end
 						else
+							function tmpChar:YRPIsHovered()
+								return tmpChar.btnishovered or tmpChar.mdlishovered or self:IsHovered()
+							end
 							function tmpChar:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
 
@@ -352,9 +355,13 @@ function LoadCharacters()
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
 									draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								end
-							end
 
-							tmpChar.charplayermodel = createD("DModelPanel", tmpChar, tmpChar:GetWide(), tmpChar:GetTall(), 0, 0)
+								if tmpChar:YRPIsHovered() then
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
+								end			
+							end
+							local mdlsize = tmpChar:GetTall() - YRP.ctr(100)
+							tmpChar.charplayermodel = createD("DModelPanel", tmpChar, mdlsize, mdlsize, tmpChar:GetWide() / 2 - mdlsize / 2, YRP.ctr(100))
 							tmpChar.charplayermodel:SetModel("models/player/skeleton.mdl")
 							tmpChar.charplayermodel:SetAnimated(true)
 							tmpChar.charplayermodel.Angles = Angle(0, 0, 0)
@@ -388,31 +395,48 @@ function LoadCharacters()
 									end
 								end
 							end
+
+							function tmpChar.charplayermodel:PaintOver(pw, ph)
+								if self:IsHovered() then
+									tmpChar.mdlishovered = true
+								else
+									tmpChar.mdlishovered = false
+								end
+							end
 							
 							local button = {}
 							button.w = YRP.ctr(200*2)
 							button.h = YRP.ctr(36*2)
 							button.x = tmpChar:GetWide() / 2 - button.w / 2
-							button.y = tmpChar:GetTall() - YRP.ctr(20*2) - button.h
+							button.y = tmpChar:GetTall() / 2 - button.h / 2
 							local charactersEnter = createD("YButton", tmpChar, button.w, button.h, button.x, button.y)
 							function charactersEnter:Paint(pw, ph)
+								if self:IsHovered() then
+									tmpChar.btnishovered = true
+								else
+									tmpChar.btnishovered = false
+								end
+
 								if tmpChar.bool_eventchar then
 									draw.SimpleText("EVENT CHARACTER", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 								else
-									local tab = {}
-									tab.text = math.Round(LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) - CurTime(), 0)
-									if LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
-										tab.text = YRP.lang_string("LID_enterworld") -- .. " (" .. _cur .. ")"
-									end
-									if LocalPlayer() != nil and LocalPlayer():Alive() then
-										tab.text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
-										tab.color = Color(255, 100, 100, 255)
-									end
-					
-									local hasdesign = hook.Run("YButtonPaint", self, pw, ph, tab)
-									if !hasdesign then
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
-										draw.SimpleTextOutlined(tab.text, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+									if IsValid(LocalPlayer()) then
+										local t = {}
+										t.text = math.Round(LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) - CurTime(), 0)
+										if LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
+											t.text = YRP.lang_string("LID_play") -- .. " (" .. _cur .. ")"
+										end
+										if (tmpChar:YRPIsHovered() or self:IsHovered()) and !tmpChar.charplayermodel.Pressed then
+											if LocalPlayer():Alive() then
+												t.text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
+												t.color = Color(255, 100, 100, 255)
+												self:SetText(t.text)
+												hook.Run("YButtonRPaint", self, pw, ph)
+											else
+												self:SetText(t.text)
+												hook.Run("YButtonAPaint", self, pw, ph)
+											end
+										end
 									end
 								end
 							end
@@ -439,8 +463,10 @@ function LoadCharacters()
 							end
 				
 							local px, py = charactersEnter:GetPos()
-				
-							local deleteChar = createD("YButton", tmpChar, button.h - 2 * YRP.ctr(10), button.h - 2 * YRP.ctr(10), px - YRP.ctr(10) - button.h, py + YRP.ctr(10))
+							
+							local deletesize = YRP.ctr(40)
+							local deletebr = YRP.ctr(20)
+							local deleteChar = createD("YButton", tmpChar, deletesize, deletesize, tmpChar:GetWide() - deletesize - deletebr, deletebr)
 							deleteChar:SetText("")
 							function deleteChar:Paint(pw, ph)
 								--hook.Run("YRemovePaint", self, pw, ph)
@@ -673,7 +699,6 @@ function openCharacterSelection()
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
 
-				
 				-- Header of Menu
 				draw.SimpleText(YRP.lang_string("LID_characterselection"), "Y_18_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
@@ -738,7 +763,8 @@ function openCharacterSelection()
 			end
 
 			local cmdlbr = 60
-			CharMenu.charplayermodel = createD("DModelPanel", CharMenu.frame, ScrH() - YRP.ctr(cmdlbr), ScrH() - YRP.ctr(cmdlbr), ScrW2() - (ScrH() - YRP.ctr(cmdlbr)) / 2, YRP.ctr(cmdlbr) / 2)
+			local size = ScrH() - 2 * YRP.ctr(cmdlbr)
+			CharMenu.charplayermodel = createD("DModelPanel", CharMenu.frame, size, size, ScrW2() - size * 0.48, YRP.ctr(cmdlbr))
 			CharMenu.charplayermodel:SetModel("models/player/skeleton.mdl")
 			CharMenu.charplayermodel:SetAnimated(true)
 			CharMenu.charplayermodel.Angles = Angle(0, 0, 0)
@@ -810,14 +836,14 @@ function openCharacterSelection()
 					local tab = {}
 					tab.text = math.Round(LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) - CurTime(), 0)
 					if LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
-						tab.text = YRP.lang_string("LID_enterworld") -- .. " (" .. _cur .. ")"
+						tab.text = YRP.lang_string("LID_play") -- .. " (" .. _cur .. ")"
 					end
 					if LocalPlayer() != nil and LocalPlayer():Alive() then
 						tab.text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
 						tab.color = Color(255, 100, 100, 255)
 					end
 
-					local hasdesign = hook.Run("YButtonPaint", self, pw, ph, tab)
+					local hasdesign = hook.Run("YButtonAPaint", self, pw, ph, tab)
 					if !hasdesign then
 						draw.RoundedBox(10, 0, 0, pw, ph, Color(255, 255, 255))
 						draw.SimpleTextOutlined(tab.text, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
@@ -934,7 +960,7 @@ function openCharacterSelection()
 			function CharMenu.frame.bgcf:Paint(pw, ph)
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
-				
+
 				-- Header of Menu
 				draw.SimpleText(YRP.lang_string("LID_characterselection"), "Y_18_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
@@ -989,7 +1015,7 @@ function openCharacterSelection()
 			end
 
 			local size = ScrH() - br - br - YRP.ctr(200) - br - br - br - YRP.ctr(100) - br - br
-			CharMenu.charplayermodel = createD("DModelPanel", CharMenu.frame, size, size, ScrW2() - (size) / 2, br)
+			CharMenu.charplayermodel = createD("DModelPanel", CharMenu.frame, size, size, ScrW2() - size / 2, br)
 			CharMenu.charplayermodel:SetModel("models/player/skeleton.mdl")
 			CharMenu.charplayermodel:SetAnimated(true)
 			CharMenu.charplayermodel.Angles = Angle(0, 0, 0)
@@ -1036,14 +1062,14 @@ function openCharacterSelection()
 					local tab = {}
 					tab.text = math.Round(LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) - CurTime(), 0)
 					if LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
-						tab.text = YRP.lang_string("LID_enterworld") -- .. " (" .. _cur .. ")"
+						tab.text = YRP.lang_string("LID_play") -- .. " (" .. _cur .. ")"
 					end
 					if LocalPlayer() != nil and LocalPlayer():Alive() then
 						tab.text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
 						tab.color = Color(255, 100, 100, 255)
 					end
 
-					local hasdesign = hook.Run("YButtonPaint", self, pw, ph, tab)
+					local hasdesign = hook.Run("YButtonAPaint", self, pw, ph, tab)
 					if !hasdesign then
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 						draw.SimpleTextOutlined(tab.text, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
@@ -1164,6 +1190,8 @@ function openCharacterSelection()
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
 
+				draw.SimpleText(YRPGetHostName(), "Y_60_500", pw / 2, YRP.ctr(120), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
 				-- Get Newest Background for the Menu
 				local oldurl = CharMenu.frame.bg.url
 				local newurl = GetGlobalString("text_character_background", "")
@@ -1233,14 +1261,21 @@ function openCharacterSelection()
 
 			CharMenu.characterList.OffsetX = 0
 
-			CharMenu.prevChar = createD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), ScrW() / 2 - charw / 2 - YRP.ctr(100 + 100), YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2))
+			local arrowbtnsize = YRP.ctr(128)
+
+			CharMenu.prevChar = createD("YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 - charw / 2 - YRP.ctr(100 + 100), YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2))
 			CharMenu.prevChar:SetText("")
 			function CharMenu.prevChar:Paint(pw, ph)
 				if CharMenu.characterList.OffsetX > 0 then
-					hook.Run("YButtonPaint", self, pw, ph)
+					--hook.Run("YButtonPaint", self, pw, ph)
+					local lply = LocalPlayer()
+					local color = Color(255, 255, 255, 255)
+					if self:IsHovered() then
+						color = lply:InterfaceValue("YButton", "NC")
+					end
 					if YRP.GetDesignIcon("64_angle-right") ~= nil then
 						surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
-						surface.SetDrawColor(255, 255, 255, 255)
+						surface.SetDrawColor(color)
 						surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
 					end
 				end
@@ -1253,14 +1288,19 @@ function openCharacterSelection()
 				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
 			end
 
-			CharMenu.nextChar = createD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), ScrW() / 2 + charw / 2 + YRP.ctr(100), YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2))
+			CharMenu.nextChar = createD("YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 + charw / 2 + arrowbtnsize, YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2))
 			CharMenu.nextChar:SetText("")
 			function CharMenu.nextChar:Paint(pw, ph)
 				if CharMenu.characterList.OffsetX < CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide() then
-					hook.Run("YButtonPaint", self, pw, ph)
+					--hook.Run("YButtonPaint", self, pw, ph)
+					local lply = LocalPlayer()
+					local color = Color(255, 255, 255, 255)
+					if self:IsHovered() then
+						color = lply:InterfaceValue("YButton", "NC")
+					end
 					if YRP.GetDesignIcon("64_angle-right") ~= nil then
 						surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
-						surface.SetDrawColor(255, 255, 255, 255)
+						surface.SetDrawColor(color)
 						surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
 					end
 				end
