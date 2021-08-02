@@ -113,7 +113,7 @@ function ConvertToDarkRPJobName(name)
 	if wk(name) then
 		name = string.Replace(name, " ", "_")
 		local jobname = "TEAM_" .. name
-		return jobname
+		return string.upper(jobname)
 	else
 		return "FAILED"
 	end

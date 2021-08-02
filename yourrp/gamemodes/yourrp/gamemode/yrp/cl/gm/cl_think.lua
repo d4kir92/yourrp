@@ -783,7 +783,7 @@ net.Receive("send_team", function(len)
 	local teamcolor = teamTab.color
 	local teamuid = teamTab.uniqueID
 
-	_G[teamname] = teamuid
+	_G[string.upper(teamname)] = teamuid
 	RPExtraTeams[teamuid] = teamTab
 
 	jobByCmd[teamTab.command] = teamuid

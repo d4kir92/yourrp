@@ -290,7 +290,7 @@ if wk(drp_allroles) then
 		local darkrpjob = ConvertToDarkRPJob(role)
 		local darkrpjobuid = darkrpjob.team
 		TEAMS[teamname] = darkrpjob
-		_G[teamname] = tonumber(role.uniqueID) --TEAMS["TEAM_" .. role.string_name]
+		_G[string.upper(teamname)] = tonumber(role.uniqueID) --TEAMS["TEAM_" .. role.string_name]
 		RPExtraTeams[darkrpjobuid] = darkrpjob
 		jobByCmd[darkrpjob.command] = darkrpjobuid
 	end
