@@ -102,7 +102,8 @@ end
 
 function UpdateValue(tab)
 	tab.uniqueID = tab.uniqueID or 1
-	sql.Query("UPDATE " .. tab.db .. " SET " .. tab.id .. " = '" .. tab.value .. "' WHERE uniqueID = '" .. tab.uniqueID .. "'")
+	SQL_UPDATE(tab.db, tab.id .. " = '" .. tab.value .. "'", "uniqueID = '" .. tab.uniqueID .. "'")
+	--sql.Query("UPDATE " .. tab.db .. " SET " .. tab.id .. " = '" .. tab.value .. "' WHERE uniqueID = '" .. tab.uniqueID .. "'")
 end
 
 function UpdateString(tab)

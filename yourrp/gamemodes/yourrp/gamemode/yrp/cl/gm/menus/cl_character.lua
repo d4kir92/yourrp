@@ -1190,8 +1190,6 @@ function openCharacterSelection()
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
 
-				draw.SimpleText(YRPGetHostName(), "Y_60_500", pw / 2, YRP.ctr(120), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
 				-- Get Newest Background for the Menu
 				local oldurl = CharMenu.frame.bg.url
 				local newurl = GetGlobalString("text_character_background", "")
@@ -1227,17 +1225,39 @@ function openCharacterSelection()
 			-- Language Changer / LanguageChanger
 			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
 
-			CharMenu.charactersHeader = createD("YPanel", CharMenu.frame, ScrW(), YRP.ctr(120*2), 0, 0)
-			CharMenu.charactersHeader.logo = Material("yrp/yrpicon.png")
-			CharMenu.charactersHeader.br = YRP.ctr(30)
+			local iconsize = YRP.ctr(120*2)
+			local iconbr = YRP.ctr(30)
+			CharMenu.charactersHeader = createD("YPanel", CharMenu.frame, ScrW(), iconsize, 0, 0)
+			CharMenu.charactersHeader.logo = createD("DHTML", CharMenu.frame, iconsize, iconsize, 0, 0)
+			CharMenu.charactersHeader.matlogo = Material("yrp/yrpicon.png")
+			CharMenu.charactersHeader.br = iconbr
 			function CharMenu.charactersHeader:Paint(pw, ph)
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 255))
 
-				surface.SetMaterial(self.logo)
-				surface.SetDrawColor(Color(255, 255, 255))
-				surface.DrawTexturedRect(self.br, self.br, ph - 2 * self.br, ph - 2 * self.br)
-
-				draw.SimpleText("YourRP", "Saira_100", ph + 1 * self.br, ph / 2, Color(23, 107, 225), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				if self.logo then
+					if self.logo.svlogo != GetGlobalString("text_server_logo", "") then
+						self.logo.svlogo = GetGlobalString("text_server_logo", "")
+						
+						if !strEmpty(GetGlobalString("text_server_logo", "")) then
+							self.logo:SetHTML(GetHTMLImage(GetGlobalString("text_server_logo", ""), iconsize, iconsize))
+							self.logo:Show()
+						else
+							self.logo:Hide()
+						end
+					end
+		
+					if !self.logo:IsVisible() then
+						surface.SetMaterial(ypr_logo)
+						surface.SetDrawColor(255, 255, 255, 255)
+						surface.DrawTexturedRect(iconbr, iconbr, iconsize, iconsize)
+					else
+						surface.SetMaterial(self.matlogo)
+						surface.SetDrawColor(Color(255, 255, 255))
+						surface.DrawTexturedRect(self.br, self.br, ph - 2 * self.br, ph - 2 * self.br)
+					end
+				end
+				
+				draw.SimpleText(YRPGetHostName(), "Saira_100", ph + 1 * self.br, ph / 2, Color(23, 107, 225), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			local charw = YRP.ctr(3 * 350*2 + 2 * 200)

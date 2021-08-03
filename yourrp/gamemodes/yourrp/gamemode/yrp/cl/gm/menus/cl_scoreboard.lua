@@ -673,8 +673,10 @@ end
 YRPInitScoreboard()
 
 function GM:ScoreboardShow()
-	YRPOpenSBS()
-	yrp_sb_canclose = false
+	if GetGlobalBool("bool_yrp_scoreboard") then
+		YRPOpenSBS()
+		yrp_sb_canclose = false
+	end
 end
 
 function GM:ScoreboardHide()

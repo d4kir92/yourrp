@@ -263,6 +263,7 @@ function openDoor(ply, ent, nr)
 	local _tmpBuildingTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. ent:GetNW2String("buildingID", "-1") .. "'")
 	if wk(_tmpBuildingTable) then
 		_tmpBuildingTable = _tmpBuildingTable[1]
+
 		_tmpBuildingTable.bool_canbeowned = tonumber(_tmpBuildingTable.bool_canbeowned)
 		_tmpBuildingTable.groupID = tonumber(_tmpBuildingTable.groupID)
 

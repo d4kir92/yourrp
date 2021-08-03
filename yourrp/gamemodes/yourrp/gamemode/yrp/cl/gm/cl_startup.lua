@@ -2259,10 +2259,16 @@ function drawIDCard(ply, scale, px, py)
 						end
 					end
 				end
-				if mats[ele] != nil then
-					surface.SetDrawColor(color)
-					surface.SetMaterial(mats[ele])
-					surface.DrawTexturedRect(x, y, w, h)
+				if ele == "serverlogo" and strEmpty(GetGlobalString("text_server_logo", "")) then
+					--
+				elseif ele == "background" and strEmpty(GetGlobalString("text_idcard_background", "")) then
+					--
+				else
+					if mats[ele] != nil then
+						surface.SetDrawColor(color)
+						surface.SetMaterial(mats[ele])
+						surface.DrawTexturedRect(x, y, w, h)
+					end
 				end
 			end
 		end
