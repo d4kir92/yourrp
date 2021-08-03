@@ -90,7 +90,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirst", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_permille", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_stamina", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_radiation", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_hygiene", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_identity_card", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_map_system", "INT DEFAULT 1")
@@ -214,15 +213,12 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_removeondeath", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_birthday", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_bodyheight", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_weight", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_nationality", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_min", "INT DEFAULT 6")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_max", "INT DEFAULT 30")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_spawncorpseondeath", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_deathscreen", "INT DEFAULT 1")
-
-SQL_ADD_COLUMN(DATABASE_NAME, "text_nationalities", "TEXT DEFAULT ''")
 
 --[[ Social Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ''")
@@ -243,12 +239,13 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_social_steamgroup", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "access_jail", "TEXT DEFAULT -1")
 
 --[[ SCALE ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_hunger", "INT DEFAULT 1.0")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_thirst", "INT DEFAULT 1.5")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_in", "INT DEFAULT 50.0")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_out", "INT DEFAULT 8.0")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_hygiene", "INT DEFAULT 1.0")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_jump", "INT DEFAULT 30.0")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_hunger", "TEXT DEFAULT '1.0'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_thirst", "TEXT DEFAULT '1.5'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_up", "TEXT DEFAULT '1.0'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_down", "TEXT DEFAULT '1.0'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_in", "TEXT DEFAULT '50.0'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_out", "TEXT DEFAULT '8.0'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_jump", "TEXT DEFAULT '30.0'")
 
 local HANDLER_GENERAL = {}
 
@@ -872,13 +869,6 @@ net.Receive("update_bool_radiation", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_radiation", "bool_radiation", b)
 end)
 
-util.AddNetworkString("update_bool_hygiene")
-net.Receive("update_bool_hygiene", function(len, ply)
-	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "update_bool_hygiene", "bool_hygiene", b)
-end)
-
-
 util.AddNetworkString("update_bool_map_system")
 net.Receive("update_bool_map_system", function(len, ply)
 	local b = btn(net.ReadBool())
@@ -1477,11 +1467,6 @@ net.Receive("update_bool_characters_weight", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_characters_weight", "bool_characters_weight", b)
 end)
-util.AddNetworkString("update_bool_characters_nationality")
-net.Receive("update_bool_characters_nationality", function(len, ply)
-	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "update_bool_characters_nationality", "bool_characters_nationality", b)
-end)
 
 util.AddNetworkString("update_int_deathtimestamp_min")
 net.Receive("update_int_deathtimestamp_min", function(len, ply)
@@ -1506,12 +1491,6 @@ util.AddNetworkString("update_bool_deathscreen")
 net.Receive("update_bool_deathscreen", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_deathscreen", "bool_deathscreen", b)
-end)
-
-util.AddNetworkString("update_text_nationalities")
-net.Receive("update_text_nationalities", function(len, ply)
-	local str = net.ReadString()
-	GeneralUpdateString(ply, "update_text_nationalities", "text_nationalities", str)
 end)
 
 
@@ -1621,6 +1600,20 @@ net.Receive("update_float_scale_thirst", function(len, ply)
 	GeneralUpdateFloat(ply, "update_float_scale_thirst", "float_scale_thirst", flo)
 end)
 
+
+util.AddNetworkString("update_float_scale_stamina_up")
+net.Receive("update_float_scale_stamina_up", function(len, ply)
+	local flo = net.ReadFloat()
+	GeneralUpdateFloat(ply, "update_float_scale_stamina_up", "float_scale_stamina_up", flo)
+end)
+
+util.AddNetworkString("update_float_scale_stamina_down")
+net.Receive("update_float_scale_stamina_down", function(len, ply)
+	local flo = net.ReadFloat()
+	GeneralUpdateFloat(ply, "update_float_scale_stamina_down", "float_scale_stamina_down", flo)
+end)
+
+
 util.AddNetworkString("update_float_scale_radiation_in")
 net.Receive("update_float_scale_radiation_in", function(len, ply)
 	local flo = net.ReadFloat()
@@ -1631,12 +1624,6 @@ util.AddNetworkString("update_float_scale_radiation_out")
 net.Receive("update_float_scale_radiation_out", function(len, ply)
 	local flo = net.ReadFloat()
 	GeneralUpdateFloat(ply, "update_float_scale_radiation_out", "float_scale_radiation_out", flo)
-end)
-
-util.AddNetworkString("update_float_scale_hygiene")
-net.Receive("update_float_scale_hygiene", function(len, ply)
-	local flo = net.ReadFloat()
-	GeneralUpdateFloat(ply, "update_float_scale_hygiene", "float_scale_hygiene", flo)
 end)
 
 util.AddNetworkString("update_float_scale_stamina_jump")

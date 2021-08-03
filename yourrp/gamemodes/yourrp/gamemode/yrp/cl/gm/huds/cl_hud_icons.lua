@@ -12,7 +12,6 @@ local SA = Material("icon16/money_add.png")
 local CA = Material("vgui/material/icon_timer.png")
 
 local RA = YRP.GetDesignIcon("radiation")
-local HY = YRP.GetDesignIcon("hygiene")
 
 function HUDIconsDrawText(ele, text)
 	local lply = LocalPlayer()
@@ -91,10 +90,11 @@ local fps = 0
 local fps_delay = CurTime()
 local ping = 0
 local ping_delay = CurTime()
+
 function HUDIcons()
 	local lply = LocalPlayer()
 
-	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and !IsScoreboardVisible() then
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
 		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Icons" then
 			HUDIconsDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
 			HUDIconsDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())
@@ -104,7 +104,6 @@ function HUDIcons()
 			HUDIconsDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxStamina())
 
 			HUDIconsDrawIcon("RA", RA, lply:Radiation() / lply:GetMaxRadiation())
-			HUDIconsDrawIcon("HY", HY, lply:Hygiene() / lply:GetMaxHygiene())
 
 			if IsLevelSystemEnabled() then
 				local tab = {}
@@ -169,4 +168,7 @@ function HUDIcons()
 		end
 	end
 end
-hook.Add("HUDPaint", "yrp_hud_design_Icons", HUDIcons)
+
+timer.Simple(1, function()
+	hook.Add("HUDPaint", "yrp_hud_design_Icons", HUDIcons)
+end)

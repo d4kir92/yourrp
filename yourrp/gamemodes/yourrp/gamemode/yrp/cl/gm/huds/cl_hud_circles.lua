@@ -13,7 +13,6 @@ local WS = Material("vgui/material/icon_add_circle.png")
 local MO = Material("vgui/material/icon_add.png")
 local SA = Material("vgui/material/icon_add_circle.png")
 local RA = YRP.GetDesignIcon("radiation")
-local HY = YRP.GetDesignIcon("hygiene")
 
 function drawC(x, y, radius, seg, color)
 	surface.SetDrawColor(color)
@@ -127,7 +126,7 @@ end
 function HUDCircles()
 	local lply = LocalPlayer()
 	
-	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and !IsScoreboardVisible() then
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
 		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Circles" then
 			HUDCirclesDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
 			HUDCirclesDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())
@@ -138,7 +137,6 @@ function HUDCircles()
 			HUDCirclesDrawIcon("ST", ST, lply:Stamina() / lply:GetMaxStamina())
 
 			HUDCirclesDrawIcon("RA", RA, lply:Radiation() / lply:GetMaxRadiation())
-			HUDCirclesDrawIcon("HY", HY, lply:Hygiene() / lply:GetMaxHygiene())
 
 			if IsLevelSystemEnabled() then
 				local tab = {}
@@ -210,4 +208,7 @@ function HUDCircles()
 		end
 	end
 end
-hook.Add("HUDPaint", "yrp_hud_design_Circles", HUDCircles)
+
+timer.Simple(1, function()
+	hook.Add("HUDPaint", "yrp_hud_design_Circles", HUDCircles)
+end)

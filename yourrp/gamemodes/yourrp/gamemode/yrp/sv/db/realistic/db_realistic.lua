@@ -5,40 +5,39 @@
 
 local DATABASE_NAME = "yrp_realistic"
 
---db_drop_table(DATABASE_NAME)
---db_is_empty(DATABASE_NAME)
+--SQL_DROP_TABLE(DATABASE_NAME)
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_bonefracturing", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_bonechance_legs", "INT DEFAULT 15")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_bonechance_arms", "INT DEFAULT 15")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_bonechance_legs", "TEXT DEFAULT '15'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_bonechance_arms", "TEXT DEFAULT '15'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_bleeding", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_bleedingchance", "INT DEFAULT 20")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_bleedingchance", "TEXT DEFAULT '20'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_slowing", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_slowingfactor", "INT DEFAULT 0.4")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_slowingtime", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_slowingfactor", "TEXT DEFAULT '0.4'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_slowingtime", "TEXT DEFAULT '1'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_custom_falldamage", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_custom_falldamage_percentage", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_custom_falldamage_muliplier", "INT DEFAULT 0.125")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_custom_falldamage_muliplier", "TEXT DEFAULT '0.125'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_headshotdeadly_player", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_player_head", "INT DEFAULT 10")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_player_ches", "INT DEFAULT 1.5")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_player_stom", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_player_arms", "INT DEFAULT 0.6")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_player_legs", "INT DEFAULT 0.6")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_player_head", "TEXT DEFAULT '10'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_player_ches", "TEXT DEFAULT '1.5'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_player_stom", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_player_arms", "TEXT DEFAULT '0.6'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_player_legs", "TEXT DEFAULT '0.6'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_headshotdeadly_npc", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_npc_head", "INT DEFAULT 10")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_npc_ches", "INT DEFAULT 1.5")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_npc_stom", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_npc_arms", "INT DEFAULT 0.6")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_npc_legs", "INT DEFAULT 0.6")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_npc_head", "TEXT DEFAULT '10'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_npc_ches", "TEXT DEFAULT '1.5'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_npc_stom", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_npc_arms", "TEXT DEFAULT '0.6'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_npc_legs", "TEXT DEFAULT '0.6'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_entities", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_vehicles", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_entities", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_vehicles", "TEXT DEFAULT '1'")
 
 local HANDLER_REALISTIC = {}
 

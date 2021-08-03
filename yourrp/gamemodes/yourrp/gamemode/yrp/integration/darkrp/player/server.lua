@@ -190,7 +190,7 @@ function Player:setDarkRPVar(variable, value, target)
 	elseif variable == "money" then
 		target:SetMoney(value)
 	else
-		print("[setDarkRPVar] MISSING VARIABLE", variable)
+		yrpmsg("[setDarkRPVar] MISSING VARIABLE", variable)
 	end
 
 	if isnumber(value) then

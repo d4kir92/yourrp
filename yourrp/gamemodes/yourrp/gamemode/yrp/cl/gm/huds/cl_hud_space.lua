@@ -19,7 +19,6 @@ function YRPHUDSpace()
 		local CA = YRP.GetDesignIcon("64_magic")
 		local AB = YRP.GetDesignIcon("64_tint")
 		local RA = YRP.GetDesignIcon("64_radiation")
-		local HY = YRP.GetDesignIcon("64_pills")
 		local ID = YRP.GetDesignIcon("64_address-card")
 		local CR = YRP.GetDesignIcon("64_clock")
 		local RO = YRP.GetDesignIcon("64_user-graduate")
@@ -178,12 +177,6 @@ function YRPHUDSpace()
 				lply:Radiation(),
 				lply:GetMaxRadiation(),
 				RA
-			}
-
-			ELES["HY"] = {
-				lply:Hygiene(),
-				lply:GetMaxHygiene(),
-				HY
 			}
 
 			ELES["LO"] = {

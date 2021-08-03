@@ -810,11 +810,6 @@ net.Receive("get_design_settings", function(len)
 			RA.name = "LID_radiation"
 			AddElement(RA)
 
-			local HY = {}
-			HY.element = "HY"
-			HY.name = "LID_hygiene"
-			AddElement(HY)
-
 			local VO = {}
 			VO.element = "VO"
 			VO.name = "LID_voice"
@@ -895,7 +890,7 @@ net.Receive("get_design_settings", function(len)
 				net.Start("reset_hud_settings")
 				net.SendToServer()
 			end
-			AreYouSure(YesFunction)
+			YRPAreYouSure(YesFunction)
 		end
 		GRP_HUD:AddItem(hud_reset_settings)
 

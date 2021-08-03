@@ -72,11 +72,11 @@ function YRPTextColor(bgcolor, a)
 	end
 end
 
-function notself(ply)
+function YRPNotSelf(ply)
 	return ply != LocalPlayer()
 end
 
-function OpenPlayerOptions(ply)
+function YRPOpenPlayerOptions(ply)
 	local lp = LocalPlayer()
 	if lp:HasAccess() then
 		local _mx, _my = gui.MousePos()
@@ -126,7 +126,7 @@ function OpenPlayerOptions(ply)
 			_menu:AddOption(YRP.lang_string("LID_country") .. ": " .. ply:GetCountry(), "icon16/map.png")
 			_menu:AddSpacer()
 
-			if notself(ply) then
+			if YRPNotSelf(ply) then
 				local ban = _menu:AddOption(YRP.lang_string("LID_ban"), "icon16/world_link.png")
 				function ban:DoClick()
 					net.Start("ply_ban")
@@ -142,7 +142,7 @@ function OpenPlayerOptions(ply)
 				_menu:AddSpacer()
 			end
 
-			if notself(ply) then
+			if YRPNotSelf(ply) then
 				local tpto = _menu:AddOption(YRP.lang_string("LID_tpto"), "icon16/arrow_right.png")
 				function tpto:DoClick()
 					net.Start("tp_tpto")
@@ -303,21 +303,21 @@ function OpenPlayerOptions(ply)
 	end
 end
 
-function IsScoreboardVisible()
-	if YRPScoreboard != NULL and YRPScoreboard:IsVisible() then
+function YRPIsScoreboardVisible()
+	if pa(YRPScoreboard) and YRPScoreboard:IsVisible() then
 		return true
 	end
 	return false
 end
 
-function CloseSBS()
+function YRPCloseSBS()
 	if !pa(YRPScoreboard) then return end
 
 	YRPScoreboard:Hide()
 	gui.EnableScreenClicker(false)
 end
 
-function OpenSBS()
+function YRPOpenSBS()
 	if !pa(YRPScoreboard) then return end
 
 	YRPScoreboard:Show()
@@ -466,7 +466,7 @@ function YRPScoreboardAddPlayer(ply)
 			--
 		end
 		function plypnl.btn:DoRightClick()
-			OpenPlayerOptions(ply)
+			YRPOpenPlayerOptions(ply)
 		end
 
 		plypnl.infos.Mute = createD("DImageButton", plypnl, size, size, 0, 0)
@@ -503,7 +503,7 @@ end
 
 local ypr_logo = Material("yrp/yrp_icon")
 
-function InitScoreboard()
+function YRPInitScoreboard()
 	if pa(YRPScoreboard) then
 		YRPScoreboard:Remove()
 	end
@@ -522,7 +522,7 @@ function InitScoreboard()
 		
 		if self.amount != table.Count(player.GetAll()) then
 			self.amount = table.Count(player.GetAll())
-			OpenSBS()
+			YRPOpenSBS()
 		end
 
 		if self.logo then
@@ -550,7 +550,7 @@ function InitScoreboard()
 		end
 
 		if yrp_sb_canclose and LocalPlayer():KeyDown(IN_SCORE) then
-			CloseSBS()
+			YRPCloseSBS()
 		end
 		if vgui.CursorVisible() and not LocalPlayer():KeyDown(IN_SCORE) then
 			yrp_sb_canclose = true
@@ -662,7 +662,7 @@ function InitScoreboard()
 	end
 	function YRPScoreboard.hide:DoClick()
 		if vgui.CursorVisible() then
-			CloseSBS()
+			YRPCloseSBS()
 		end
 	end
 
@@ -670,15 +670,15 @@ function InitScoreboard()
 
 	YRPScoreboard:Hide()
 end
-InitScoreboard()
+YRPInitScoreboard()
 
 function GM:ScoreboardShow()
-	OpenSBS()
+	YRPOpenSBS()
 	yrp_sb_canclose = false
 end
 
 function GM:ScoreboardHide()
 	if !vgui.CursorVisible() then
-		CloseSBS()
+		YRPCloseSBS()
 	end
 end

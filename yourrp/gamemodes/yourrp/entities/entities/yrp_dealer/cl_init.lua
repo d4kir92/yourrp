@@ -4,7 +4,7 @@ include('shared.lua')
 
 net.Receive("open_buy_menu", function(len)
 	local id = net.ReadString()
-	OpenBuyMenu(id)
+	YRPOpenBuyMenu(id)
 end)
 
 function ENT:Draw()

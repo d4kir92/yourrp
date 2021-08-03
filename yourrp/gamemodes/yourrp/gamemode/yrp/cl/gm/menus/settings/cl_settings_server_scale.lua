@@ -32,19 +32,43 @@ function BuildScaleSite()
 				net.WriteFloat(val)
 			net.SendToServer()
 		end
-		Y = Y + 120
+		Y = Y + 120 + 50
 
-		--[[local scale_hygiene = createD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
-		scale_hygiene:SetHeader("LID_scale_hygiene")
-		scale_hygiene:SetMin(0.01)
-		scale_hygiene:SetMax(100.0)
-		scale_hygiene:SetValue(GetGlobalFloat("float_scale_hygiene", 0))
-		function scale_hygiene:OnValueChanged(val)
-			net.Start("update_float_scale_hygiene")
+		local scale_stamina_up = createD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
+		scale_stamina_up:SetHeader(YRP.lang_string("LID_stamina") .. " " .. "▲")
+		scale_stamina_up:SetMin(0.1)
+		scale_stamina_up:SetMax(10.0)
+		scale_stamina_up:SetValue(GetGlobalFloat("float_scale_stamina_up", 0))
+		function scale_stamina_up:OnValueChanged(val)
+			net.Start("update_float_scale_stamina_up")
 				net.WriteFloat(val)
 			net.SendToServer()
 		end
-		Y = Y + 120 + 50]]
+		Y = Y + 120
+
+		local scale_stamina_down = createD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
+		scale_stamina_down:SetHeader(YRP.lang_string("LID_stamina") .. " " .. "▼")
+		scale_stamina_down:SetMin(0.1)
+		scale_stamina_down:SetMax(10.0)
+		scale_stamina_down:SetValue(GetGlobalFloat("float_scale_stamina_down", 0))
+		function scale_stamina_down:OnValueChanged(val)
+			net.Start("update_float_scale_stamina_down")
+				net.WriteFloat(val)
+			net.SendToServer()
+		end
+		Y = Y + 120
+		
+		local scale_stamina_jump = createD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
+		scale_stamina_jump:SetHeader("LID_scale_stamina_jump")
+		scale_stamina_jump:SetMin(0.01)
+		scale_stamina_jump:SetMax(100.0)
+		scale_stamina_jump:SetValue(GetGlobalFloat("float_scale_stamina_jump", 0))
+		function scale_stamina_jump:OnValueChanged(val)
+			net.Start("update_float_scale_stamina_jump")
+				net.WriteFloat(val)
+			net.SendToServer()
+		end
+		Y = Y + 120 + 50
 
 		local scale_radiation_in = createD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
 		scale_radiation_in:SetHeader("LID_scale_radiation_in")
@@ -65,18 +89,6 @@ function BuildScaleSite()
 		scale_radiation_out:SetValue(GetGlobalFloat("float_scale_radiation_out", 0))
 		function scale_radiation_out:OnValueChanged(val)
 			net.Start("update_float_scale_radiation_out")
-				net.WriteFloat(val)
-			net.SendToServer()
-		end
-		Y = Y + 120 + 50
-
-		local scale_stamina_jump = createD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
-		scale_stamina_jump:SetHeader("LID_scale_stamina_jump")
-		scale_stamina_jump:SetMin(0.01)
-		scale_stamina_jump:SetMax(100.0)
-		scale_stamina_jump:SetValue(GetGlobalFloat("float_scale_stamina_jump", 0))
-		function scale_stamina_jump:OnValueChanged(val)
-			net.Start("update_float_scale_stamina_jump")
 				net.WriteFloat(val)
 			net.SendToServer()
 		end

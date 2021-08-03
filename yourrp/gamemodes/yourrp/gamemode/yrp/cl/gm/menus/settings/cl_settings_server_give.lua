@@ -31,7 +31,7 @@ net.Receive("setting_players", function(len)
 			local tmpX, tmpY = gui.MousePos()
 			tmpX = tmpX - YRP.ctr(4)
 			tmpY = tmpY - YRP.ctr(4)
-			local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10 + 50 + 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
+			local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
 			_tmpPanel:SetPos(tmpX, tmpY)
 			_tmpPanel.ready = false
 			timer.Simple(0.2, function()
@@ -135,9 +135,91 @@ net.Receive("setting_players", function(len)
 				net.SendToServer()
 			end
 
+			local _buttonGiveLicense = createVGUI("DButton", _tmpPanel, 400, 50, 10, 190)
+			_buttonGiveLicense:SetText(YRP.lang_string("LID_givelicense"))
+			function _buttonGiveLicense:DoClick()
+				local _licenseFrame = createVGUI("DFrame", nil, 400, 180, 0, 0)
+				_licenseFrame:Center()
+				_licenseFrame:ShowCloseButton(true)
+				_licenseFrame:SetDraggable(true)
+				_licenseFrame:SetTitle(YRP.lang_string("LID_givelicense"))
+
+				local license = 0
+				local _newlicense = createVGUI("DComboBox", _licenseFrame, 380, 50, 10, 60)
+
+				net.Receive("get_licenses_player", function(len)
+					local tab = net.ReadTable()
+					for k, v in pairs(tab) do
+						_newlicense:AddChoice(SQL_STR_OUT(v.name), v.uniqueID)
+					end
+					function _newlicense:OnSelect(index, value, data)
+						license = data
+					end
+				end)
+				net.Start("get_licenses_player")
+				net.SendToServer()
+
+				local _licenseButton = createVGUI("DButton", _licenseFrame, 380, 50, 10, 60 + 10 + 50)
+				_licenseButton:SetText(YRP.lang_string("LID_givelicense"))
+				function _licenseButton:DoClick()
+					net.Start("givelicense")
+						net.WriteEntity(ply)
+						net.WriteString(license)
+					net.SendToServer()
+					_licenseFrame:Close()
+				end
+
+				function _licenseFrame:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
+				end
+
+				_licenseFrame:MakePopup()
+			end
+
+			local _buttonRemoveLicense = createVGUI("DButton", _tmpPanel, 400, 50, 10, 250)
+			_buttonRemoveLicense:SetText(YRP.lang_string("LID_removelicense"))
+			function _buttonRemoveLicense:DoClick()
+				local _licenseFrame = createVGUI("DFrame", nil, 400, 180, 0, 0)
+				_licenseFrame:Center()
+				_licenseFrame:ShowCloseButton(true)
+				_licenseFrame:SetDraggable(true)
+				_licenseFrame:SetTitle(YRP.lang_string("LID_removelicense"))
+
+				local license = 0
+				local _newlicense = createVGUI("DComboBox", _licenseFrame, 380, 50, 10, 60)
+
+				net.Receive("get_licenses_player", function(len)
+					local tab = net.ReadTable()
+					for k, v in pairs(tab) do
+						_newlicense:AddChoice(SQL_STR_OUT(v.name), v.uniqueID)
+					end
+					function _newlicense:OnSelect(index, value, data)
+						license = data
+					end
+				end)
+				net.Start("get_licenses_player")
+				net.SendToServer()
+
+				local _licenseButton = createVGUI("DButton", _licenseFrame, 380, 50, 10, 60 + 10 + 50)
+				_licenseButton:SetText(YRP.lang_string("LID_removelicense"))
+				function _licenseButton:DoClick()
+					net.Start("removelicense")
+						net.WriteEntity(ply)
+						net.WriteString(license)
+					net.SendToServer()
+					_licenseFrame:Close()
+				end
+
+				function _licenseFrame:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
+				end
+
+				_licenseFrame:MakePopup()
+			end
+
 			function _tmpPanel:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_ds_col())
-				if !_tmpPanel:IsHovered() and !_buttonRole:IsHovered() and !_buttonSetID:IsHovered() and !_buttonRemoveArrests:IsHovered() and _tmpPanel.ready == true then
+				if !_tmpPanel:IsHovered() and !_buttonRole:IsHovered() and !_buttonSetID:IsHovered() and !_buttonRemoveArrests:IsHovered() and !_buttonGiveLicense:IsHovered() and !_buttonRemoveLicense:IsHovered() and _tmpPanel.ready == true then
 					_tmpPanel:Remove()
 				end
 			end

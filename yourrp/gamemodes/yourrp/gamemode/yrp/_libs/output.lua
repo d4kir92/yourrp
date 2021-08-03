@@ -30,6 +30,10 @@ function hr()
 	print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
 end
 
+function yrpmsg(msg)
+	print(msg)
+end
+
 function bool_status(b)
 	if tobool(b) then
 		return YRP.lang_string("LID_enabled")

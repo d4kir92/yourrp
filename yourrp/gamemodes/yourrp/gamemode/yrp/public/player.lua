@@ -119,14 +119,6 @@ function Player:GetMaxRadiation()
 	return math.Round(self:GetNW2Float("GetMaxRadiation", 100), 1)
 end
 
-function Player:Hygiene()
-	return math.Round(self:GetNW2Float("GetCurHygiene", 1), 1)
-end
-
-function Player:GetMaxHygiene()
-	return math.Round(self:GetNW2Float("GetMaxHygiene", 100), 1)
-end
-
 function Player:SalaryTime()
 	return self:GetNW2Int("salarytime", 0)
 end

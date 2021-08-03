@@ -454,7 +454,6 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_permille, "LID_permille", "update_bool_permille")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_stamina, "LID_stamina", "update_bool_stamina")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_radiation, "LID_radiation", "update_bool_radiation")
-		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_hygiene, "LID_hygiene", "update_bool_hygiene")
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_building_system, "LID_buildingsystem", "update_bool_building_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_inventory_system, "LID_inventorysystem", "update_bool_inventory_system")
@@ -548,8 +547,7 @@ net.Receive("Connect_Settings_General", function(len)
 				"serverlogo",
 				"birthday",
 				"bodyheight",
-				"weight",
-				"nationality",
+				"weight"
 			}
 			local register = {}
 			for i, ele in pairs(elements) do
@@ -1023,14 +1021,12 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_birthday, "LID_birthday", "update_bool_characters_birthday")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_bodyheight, "LID_bodyheight", "update_bool_characters_bodyheight")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_weight, "LID_weight", "update_bool_characters_weight")
-		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_nationality, "LID_nationality", "update_bool_characters_nationality")
-		
+
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_min, YRP.lang_string("LID_respawntime") .. " [" .. YRP.lang_string("LID_min") .. "]", "update_int_deathtimestamp_min")
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_max, YRP.lang_string("LID_respawntime") .. " [" .. YRP.lang_string("LID_max") .. "]", "update_int_deathtimestamp_max")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_spawncorpseondeath, "LID_spawncorpseondeath", "update_bool_spawncorpseondeath")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_deathscreen, "LID_deathscreen", "update_bool_deathscreen")
-		CreateTextBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.text_nationalities, "LID_nationalities", "update_text_nationalities")
 
 
 

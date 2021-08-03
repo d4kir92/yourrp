@@ -101,8 +101,6 @@ if CLIENT then
 			return GetGlobalBool("bool_stamina", false) and self:GetNW2Bool("bool_stamina", false) and self:GetNW2Float("GetCurStamina", 0.0) < self:GetNW2Float("GetMaxStamina", 0.0)
 		elseif element == "RA" then
 			return GetGlobalBool("bool_radiation", false)
-		elseif element == "HY" then
-			return GetGlobalBool("bool_hygiene", false)
 		elseif element == "XP" then
 			return IsLevelSystemEnabled()
 		elseif element == "WP" then

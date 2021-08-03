@@ -139,15 +139,11 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 			end
 
 			CreateCharacter(ply, tab)
-			print("[YourRP] [VOIDCHAR] HAS NO CHAR, create one")
+			yrpmsg("[YourRP] [VOIDCHAR] HAS NO CHAR, create one")
 		end
 	end
 
 	ply:SetNW2Bool("yrp_characterselection", true)
-
-	--YRPSendGlobalDString("text_loading_background", GetGlobalString("text_loading_background"), ply)
-	--YRPSendGlobalDString("text_character_background", GetGlobalString("text_character_background"), ply)
-	--YRPSendGlobalDString("text_character_design", GetGlobalString("text_character_design"), ply)
 
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid or uniqueID)
@@ -242,7 +238,6 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 
 				ply:SetNW2Float("hunger", 100)
 				ply:SetNW2Float("thirst", 100)
-				ply:SetNW2Float("GetCurHygiene", 100)
 				ply:SetNW2Float("GetCurRadiation", 0)
 			else
 				YRP.msg("error", "[PlayerLoadout] failed at plytab.")

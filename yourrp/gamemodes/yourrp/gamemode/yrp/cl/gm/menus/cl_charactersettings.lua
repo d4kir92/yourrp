@@ -372,27 +372,6 @@ function CreateCharacterSettingsContent()
 			list:AddItem(hr)
 		end
 
-		-- Nationality
-		if GetGlobalBool("bool_characters_nationality", false) then
-			local natiheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
-			natiheader:SetText("LID_nationality")
-			list:AddItem(natiheader)
-
-			local nati = createD("DComboBox", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
-			nati:SetText("")
-			nati:SetFontInternal("Y_18_500")
-			function nati:OnChange()
-				LocalPlayer().charcreate_nati = self:GetText()
-			end
-			local text_nationalities = string.Explode(",", GetGlobalString("text_nationalities", ""))
-			for i, v in pairs(text_nationalities) do
-				nati:AddChoice(v, v, false)
-			end
-
-			list:AddItem(nati)
-			list:AddItem(hr)
-		end
-
 		-- Description
 		local descheader = createD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 		descheader:SetText("LID_description")

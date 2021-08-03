@@ -17,7 +17,6 @@ icons["ID"] = "64_address-card"
 icons["CR"] = "64_clock"
 icons["RO"] = "64_user-graduate"
 icons["NA"] = "64_user"
-icons["HY"] = "hygiene"
 icons["PE"] = "64_window-restore"
 icons["NE"] = "wifi"
 icons["XP"] = "64_atom"
@@ -53,8 +52,12 @@ local function YRPDrawThin(tab)
 		HUD_THIN[name].h = lply:HudValue(name, "SIZE_H")
 
 		HUD_THIN[name].sicon = lply:HudValue(name, "ICON")
-
 		HUD_THIN[name].stext = lply:HudValue(name, "TEXT")
+		HUD_THIN[name].sback = lply:HudValue(name, "BACK")
+
+		HUD_THIN[name].colorbg = lply:HudValue(name, "BG")
+		HUD_THIN[name].colorbar = lply:HudValue(name, "BA")
+		HUD_THIN[name].colortext = lply:HudValue(name, "TE")
 
 		HUD_THIN[name].iconmat = icons[name]
 		HUD_THIN[name].ix = HUD_THIN[name].x + HUD_THIN[name].h * 0.2
@@ -115,8 +118,10 @@ local function YRPDrawThin(tab)
 		end
 
 		-- Background
-		draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].x), HUDMOTIONY(HUD_THIN[name].y), HUD_THIN[name].w, HUD_THIN[name].h, Color(0, 0, 0, 100))
-
+		if HUD_THIN[name].sback then
+			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].x), HUDMOTIONY(HUD_THIN[name].y), HUD_THIN[name].w, HUD_THIN[name].h, HUD_THIN[name].colorbg)
+		end
+		
 		-- Icon
 		if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
 			local iconmat = YRP.GetDesignIcon(HUD_THIN[name].iconmat)
@@ -130,15 +135,15 @@ local function YRPDrawThin(tab)
 		-- Text
 		if HUD_THIN[name].stext and HUD_THIN[name].text then
 			if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
-				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tx), HUDMOTIONY(HUD_THIN[name].ty), Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tx), HUDMOTIONY(HUD_THIN[name].ty), HUD_THIN[name].colortext, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			else
-				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tx), HUDMOTIONY(HUD_THIN[name].ty), Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tx), HUDMOTIONY(HUD_THIN[name].ty), HUD_THIN[name].colortext, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			end
 		end
 
 		-- Value
 		if tab.valuetext then
-			draw.SimpleText(tab.valuetext, HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tvx), HUDMOTIONY(HUD_THIN[name].tvy), Color(255, 255, 255), HUD_THIN[name].tvax, HUD_THIN[name].tvay)	
+			draw.SimpleText(tab.valuetext, HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tvx), HUDMOTIONY(HUD_THIN[name].tvy), HUD_THIN[name].colortext, HUD_THIN[name].tvax, HUD_THIN[name].tvay)	
 		elseif tab.cur then
 			local cur = tab.cur
 			if tab.ignorepercent then
@@ -146,13 +151,13 @@ local function YRPDrawThin(tab)
 			elseif lply:HudValue(name, "PERC") then
 				cur = math.Round(tab.cur / tab.max * 100, 1) .. "%"
 			end
-			draw.SimpleText(cur, HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tvx), HUDMOTIONY(HUD_THIN[name].tvy), Color(255, 255, 255), HUD_THIN[name].tvax, HUD_THIN[name].tvay)
+			draw.SimpleText(cur, HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tvx), HUDMOTIONY(HUD_THIN[name].tvy), HUD_THIN[name].colortext, HUD_THIN[name].tvax, HUD_THIN[name].tvay)
 		end
 
 		-- BAR
 		if tab.cur and tab.max then
 			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].vx), HUDMOTIONY(HUD_THIN[name].vy), HUD_THIN[name].vw, 2, Color(0, 0, 0, 100))
-			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].vx), HUDMOTIONY(HUD_THIN[name].vy), HUD_THIN[name].vw * HUD_THIN[name].oldcur / tab.max, 2, Color(255, 255, 255, 255))
+			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].vx), HUDMOTIONY(HUD_THIN[name].vy), HUD_THIN[name].vw * HUD_THIN[name].oldcur / tab.max, 2, HUD_THIN[name].colorbar)
 		end
 	end
 end
@@ -160,8 +165,14 @@ end
 function YRPHUDThin()
 	local lply = LocalPlayer()
 
-	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and !IsScoreboardVisible() then
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
 		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Thin" then
+			for i = 1, 10 do
+				local BOX = {}
+				BOX.name = "BOX" .. i
+				YRPDrawThin(BOX)
+			end
+
 			local HP = {}
 			HP.name = "HP"
 			HP.text = "LID_health"

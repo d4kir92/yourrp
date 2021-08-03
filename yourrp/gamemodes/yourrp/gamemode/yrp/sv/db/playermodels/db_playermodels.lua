@@ -11,8 +11,8 @@ local DATABASE_NAME = "yrp_playermodels"
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT ' '")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_models", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_size_min", "INT DEFAULT '1'")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_size_max", "INT DEFAULT '1'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_size_min", "TEXT DEFAULT '1'")
+SQL_ADD_COLUMN(DATABASE_NAME, "float_size_max", "TEXT DEFAULT '1'")
 
 local oldpms = SQL_SELECT(DATABASE_NAME, "*", nil)
 if wk(oldpms) then

@@ -160,6 +160,7 @@ end)
 
 local Player = FindMetaTable("Player")
 function Player:AddLicense(license)
+	license = tostring(license)
 	if tonumber(license) != nil then
 		local _licenseIDs = self:GetNW2String("licenseIDs", "")
 
@@ -172,6 +173,36 @@ function Player:AddLicense(license)
 		end
 		_licenseIDs = string.Implode(",", _licenseIDs)
 
+		self:SetNW2String("licenseIDs", tostring(_licenseIDs))
+
+		local ids = string.Explode(",", _licenseIDs)
+		local lnames = {}
+		for i, id in pairs(ids) do
+			local lic = SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'")
+			if wk(lic) then
+				lic = lic[1]
+				table.insert(lnames, lic.name)
+			end
+		end
+		lnames = table.concat(lnames, ", ")
+		self:SetNW2String("licenseNames", lnames)
+	end
+end
+
+function Player:RemoveLicense(license)
+	license = tostring(license)
+	if tonumber(license) != nil then
+		local _licenseIDs = self:GetNW2String("licenseIDs", "")
+
+		_licenseIDs = string.Explode(",", _licenseIDs)
+		if table.HasValue(_licenseIDs, license) then
+			table.RemoveByValue(_licenseIDs, license)
+		end
+		if table.HasValue(_licenseIDs, "") then
+			table.RemoveByValue(_licenseIDs, "")
+		end
+		_licenseIDs = string.Implode(",", _licenseIDs)
+		
 		self:SetNW2String("licenseIDs", tostring(_licenseIDs))
 
 		local ids = string.Explode(",", _licenseIDs)
@@ -234,4 +265,13 @@ function GiveLicense(ply, lid)
 	YRP.msg("gm", "Give " .. ply:RPName() .. " LicenseID " .. lid)
 
 	ply:AddLicense(lid)
+end
+
+function RemoveLicense(ply, lid)
+	if !IsValid(ply) then return end
+	if !wk(lid) then return end
+
+	YRP.msg("gm", "Removed from " .. ply:RPName() .. " LicenseID " .. lid)
+
+	ply:RemoveLicense(lid)
 end

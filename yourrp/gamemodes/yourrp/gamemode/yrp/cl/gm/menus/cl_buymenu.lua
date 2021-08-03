@@ -5,15 +5,15 @@
 BUYMENU = BUYMENU or {}
 BUYMENU.open = false
 
-function ToggleBuyMenu()
+function YRPToggleBuyMenu()
 	if !BUYMENU.open and YRPIsNoMenuOpen() then
-		OpenBuyMenu()
+		YRPOpenBuyMenu()
 	else
-		CloseBuyMenu()
+		YRPCloseBuyMenu()
 	end
 end
 
-function CloseBuyMenu()
+function YRPCloseBuyMenu()
 	BUYMENU.open = false
 	if BUYMENU.window != nil then
 		closeMenu()
@@ -176,7 +176,7 @@ function createShopItem(item, duid, id)
 						net.WriteTable(self.item)
 						net.WriteString(duid)
 					net.SendToServer()
-					CloseBuyMenu()
+					YRPCloseBuyMenu()
 				end
 			end
 		end
@@ -273,7 +273,7 @@ function createStorageItem(item, duid)
 				_i.spawn.name = "LID_tospawn"
 			end
 
-			CloseBuyMenu()
+			YRPCloseBuyMenu()
 		end
 	end
 
@@ -376,7 +376,7 @@ net.Receive("shop_get_tabs", function(len)
 								net.WriteString(_dealer_uid)
 								net.WriteString(self.uid)
 							net.SendToServer()
-							CloseBuyMenu()
+							YRPCloseBuyMenu()
 						end
 						BUYMENU.shop:AddItem(_remove)
 						BUYMENU.shop:Rebuild()
@@ -502,7 +502,7 @@ net.Receive("shop_get_tabs", function(len)
 				if self:GetParent().Close != nil then
 					self:GetParent():Close()
 				end
-				CloseBuyMenu()
+				YRPCloseBuyMenu()
 			end
 		end
 	end
@@ -528,7 +528,7 @@ net.Receive("shop_get_tabs", function(len)
 				_set:Center()
 				_set:MakePopup()
 				function _set:Paint(pw, ph)
-					CloseBuyMenu()
+					YRPCloseBuyMenu()
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 				end
 
@@ -633,7 +633,7 @@ function CreateBuyMenuContent(parent, uid)
 	end
 end
 
-function OpenBuyMenu(uid)
+function YRPOpenBuyMenu(uid)
 	uid = uid or 1
 	openMenu()
 

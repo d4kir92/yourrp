@@ -514,11 +514,10 @@ icons["ID"] = "64_address-card"
 icons["CR"] = "64_clock"
 icons["RO"] = "64_user-graduate"
 icons["NA"] = "64_user"
-icons["HY"] = "hygiene"
 
 function HUDSimple()
 	local lply = LocalPlayer()
-	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and !IsScoreboardVisible() then
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
 		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Simple" then
 			local batterypower = system.BatteryPower()
 
@@ -569,11 +568,6 @@ function HUDSimple()
 				local RA = {}
 				RA.element = "RA"
 				HUDSimpleBG(RA)
-			end
-			if GetGlobalBool("bool_hygiene", false) then
-				local HY = {}
-				HY.element = "HY"
-				HUDSimpleBG(HY)
 			end
 			if lply:HudElementVisible("HU") then
 				local HU = {}
@@ -819,16 +813,6 @@ function HUDSimple()
 				RA.icon = icons["RA"]
 				HUDSimpleBAR(RA)
 			end
-			if GetGlobalBool("bool_hygiene", false) then
-				local HY = {}
-				HY.element = "HY"
-				HY.cur = lply:Hygiene()
-				HY.max = lply:GetMaxHygiene()
-				HY.text = lply:Hygiene() .. " / " .. lply:GetMaxHygiene()
-				HY.percentage = math.Round(lply:Hygiene() / lply:GetMaxHygiene() * 100, 0) .. "%"
-				HY.icon = icons["HY"]
-				HUDSimpleBAR(HY)
-			end
 			if lply:GetNW2Bool("iscasting", false) then
 				local CA = {}
 				CA.element = "CA"
@@ -1010,11 +994,6 @@ function HUDSimple()
 				RA.element = "RA"
 				HUDSimpleBR(RA)
 			end
-			if GetGlobalBool("bool_hygiene", false) then
-				local HY = {}
-				HY.element = "HY"
-				HUDSimpleBR(HY)
-			end
 			if GetGlobalBool("bool_hunger", false) then
 				local HU = {}
 				HU.element = "HU"
@@ -1084,4 +1063,7 @@ function HUDSimple()
 		end
 	end
 end
-hook.Add("HUDPaint", "yrp_hud_design_Simple", HUDSimple)
+
+timer.Simple(1, function()
+	hook.Add("HUDPaint", "yrp_hud_design_Simple", HUDSimple)
+end)

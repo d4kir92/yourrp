@@ -547,10 +547,10 @@ function SQL_DELETE_FROM(db_table, db_where)
 	end
 end
 
-function SQL_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
-	--YRP.msg("db", "SQL_CHECK_IF_COLUMN_EXISTS(" .. tostring(db_name) .. ", " .. tostring(column_name) .. ")")
+function SQL_CHECK_IF_COLUMN_EXISTS(db_table, column_name)
+	--YRP.msg("db", "SQL_CHECK_IF_COLUMN_EXISTS(" .. tostring(db_table) .. ", " .. tostring(column_name) .. ")")
 	if GetSQLMode() == 0 then
-		local _result = SQL_SELECT(db_name, column_name, nil)
+		local _result = SQL_SELECT(db_table, column_name, nil)
 
 		if _result == false then
 			return false
@@ -558,7 +558,7 @@ function SQL_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 			return true
 		end
 	elseif GetSQLMode() == 1 then
-		local _result = SQL_SELECT(db_name, column_name, nil)
+		local _result = SQL_SELECT(db_table, column_name, nil)
 
 		if _result == false then
 			return false
@@ -568,16 +568,23 @@ function SQL_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 	end
 end
 
-function SQL_HAS_COLUMN(table_name, column_name)
-	local _r = SQL_QUERY("SHOW COLUMNS FROM " .. YRPSQL.schema .. "." .. tostring(table_name) .. " LIKE '" .. column_name .. "';")
+function SQL_HAS_COLUMN(db_table, column_name)
+	local _r = SQL_QUERY("SHOW COLUMNS FROM " .. YRPSQL.schema .. "." .. tostring(db_table) .. " LIKE '" .. column_name .. "';")
 	return _r
 end
 
-function SQL_ADD_COLUMN(table_name, column_name, datatype)
-	local _result = SQL_CHECK_IF_COLUMN_EXISTS(table_name, column_name)
+GAMEMODELOADED_SQL = GAMEMODELOADED_SQL or nil
 
+hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded_SQL", function()
+	GAMEMODELOADED_SQL = true -- only runs when startup
+end)
+
+function SQL_ADD_COLUMN(db_table, column_name, datatype)
+	if GAMEMODELOADED_SQL then
+		return -- ALREADY LOADED ALL COLUMNS
+	end
 	if GetSQLMode() == 0 then
-		local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ";"
+		local _q = "ALTER TABLE " .. db_table .. " ADD " .. column_name .. " " .. datatype .. ";"
 		local _r = SQL_QUERY(_q)
 
 		return _r
@@ -586,11 +593,11 @@ function SQL_ADD_COLUMN(table_name, column_name, datatype)
 			datatype = string.Replace(datatype, "TEXT", "VARCHAR(255)")
 		end
 		local _r = nil
-		if !SQL_HAS_COLUMN(table_name, column_name) then
-			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring(table_name) .. " ADD " .. column_name .. " " .. datatype .. ";"
+		if !SQL_HAS_COLUMN(db_table, column_name) then
+			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring(db_table) .. " ADD " .. column_name .. " " .. datatype .. ";" -- FAST
 			_r = SQL_QUERY(_q)
 		else
-			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring(table_name) .. " CHANGE " .. column_name .. " " .. column_name .. " " .. datatype .. ";"
+			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring(db_table) .. " CHANGE " .. column_name .. " " .. column_name .. " " .. datatype .. ";" -- SLOW
 			_r = SQL_QUERY(_q)
 		end
 

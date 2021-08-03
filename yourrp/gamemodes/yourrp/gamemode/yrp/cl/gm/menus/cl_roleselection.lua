@@ -312,7 +312,7 @@ function CreateRolePreviewContent()
 				net.WriteString(LocalPlayer().charcreate_ruid)
 			net.SendToServer()
 		else
-			print("FAIL yrp_roleselection_getrole")
+			yrpmsg(">>> FAIL yrp_roleselection_getrole")
 		end
 	end)
 end
@@ -321,7 +321,7 @@ end
 
 function CreateRoleSelectionContent(PARENT)
 	if LocalPlayer() == NULL then
-		print("FAIL CreateRoleSelectionContent")
+		yrpmsg(">>> FAIL CreateRoleSelectionContent")
 		return
 	end
 

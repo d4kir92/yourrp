@@ -4,15 +4,15 @@ local inv = inv or {}
 inv.open = false
 inv.br = 10
 inv.sp = 20
-function ToggleInventory()
+function YRPToggleInventory()
 	if inv.win == nil then -- DEBUG
-		OpenInventory()
+		YRPOpenInventory()
 	else
-		CloseInventory()
+		YRPCloseInventory()
 	end
 end
 
-function CloseInventory()
+function YRPCloseInventory()
 	inv.open = false
 	if inv.win != nil then
 		surface.PlaySound("ambient/materials/wood_creak4.wav")
@@ -25,11 +25,11 @@ function ItemSize()
 	return YRP.ctr(100)
 end
 
-function Inventory()
+function YRPInventory()
 	return inv.win
 end
 
-function OpenInventory(target)
+function YRPOpenInventory(target)
 	if IsInventorySystemEnabled() and YRPIsNoMenuOpen() then
 		inv.open = true
 
@@ -54,7 +54,7 @@ function OpenInventory(target)
 
 		net.Receive("get_inventory", function(len)
 			local storageID = net.ReadString()
-			if pa(Inventory()) then
+			if pa(YRPInventory()) then
 				inv.storage = createD("YStorage", inv.win, ItemSize() * 5 + YRP.ctr(inv.br) * 4, ItemSize(), YRP.ctr(inv.sp), YRP.ctr(inv.sp))
 				inv.storage:SetCols(5)
 				inv.storage:SetStorageID(storageID)
@@ -67,7 +67,7 @@ function OpenInventory(target)
 					env:Center()
 					env:SetTitle("")
 					function env:Paint(pw, ph)
-						if !Inventory() then
+						if !YRPInventory() then
 							self:Remove()
 						end
 						draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
@@ -83,13 +83,13 @@ function OpenInventory(target)
 		net.SendToServer()
 	end
 end
-CloseInventory()
+YRPCloseInventory()
 
 net.Receive("open_storage", function(len)
 	local lply = LocalPlayer()
-	OpenInventory(true)
+	YRPOpenInventory(true)
 
-	if pa(Inventory()) then
+	if pa(YRPInventory()) then
 		local wsuid = net.ReadString()
 		local name = net.ReadString()
 		
@@ -98,7 +98,7 @@ net.Receive("open_storage", function(len)
 		env:Center()
 		env:SetTitle("")
 		function env:Paint(pw, ph)
-			if !Inventory() then
+			if !YRPInventory() then
 				self:Remove()
 			end
 			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))

@@ -40,8 +40,7 @@ local elements = {
 	"serverlogo",
 	"birthday",
 	"bodyheight",
-	"weight",
-	"nationality",
+	"weight"
 }
 
 local names = {

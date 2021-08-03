@@ -85,15 +85,6 @@ function con_th(ply)
 	end
 end
 
-function con_hy(ply)
-	local newval = tonumber(ply:GetNW2Float("GetCurHygiene", 0.0)) - 0.01 * GetGlobalFloat("float_scale_hygiene", 1.0)
-	newval = math.Clamp(newval, 0.0, 100.0)
-	ply:SetNW2Float("GetCurHygiene", newval)
-	if tonumber(ply:GetNW2Float("GetCurHygiene", 0.0)) < 20.0 then
-		ply:TakeDamage(ply:GetMaxHealth() / 50)
-	end
-end
-
 function con_ra(ply)
 	if IsInsideRadiation(ply) then
 		ply:SetNW2Float("GetCurRadiation", math.Clamp(tonumber(ply:GetNW2Float("GetCurRadiation", 0.0)) + 0.01 * GetGlobalFloat("float_scale_radiation_in", 50.0), 0, 100))
@@ -131,11 +122,11 @@ function con_st(ply, _time)
 	if _time % 1.0 == 0 then
 		if !ply:InVehicle() then
 			if ply:GetMoveType() != MOVETYPE_NOCLIP and (ply:KeyDown(IN_SPEED) and (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT))) then
-				local newval = ply:GetNW2Float("GetCurStamina", 0) - (ply:GetNW2Float("stamindown", 1))
+				local newval = ply:GetNW2Float("GetCurStamina", 0) - (ply:GetNW2Float("stamindown", 1)) * GetGlobalFloat("float_scale_stamina_down", 1.0)
 				newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float("GetMaxStamina", 100)), 1)
 				ply:SetNW2Float("GetCurStamina", newval)
 			elseif ply:GetNW2Float("thirst", 0) > 20 then
-				local newval = ply:GetNW2Float("GetCurStamina", 0) + ply:GetNW2Float("staminup", 1)
+				local newval = ply:GetNW2Float("GetCurStamina", 0) + ply:GetNW2Float("staminup", 1) * GetGlobalFloat("float_scale_stamina_up", 1.0)
 				newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float("GetMaxStamina", 100)), 1)
 				ply:SetNW2Float("GetCurStamina", newval)
 			end
@@ -282,9 +273,6 @@ timer.Create("ServerThink", TICK, 0, function()
 				end
 				if GetGlobalBool("bool_thirst", false) and ply:GetNW2Bool("bool_thirst", false) then
 					con_th(ply)
-				end
-				if GetGlobalBool("bool_hygiene", false) then
-					con_hy(ply)
 				end
 				if GetGlobalBool("bool_radiation", false) then
 					con_ra(ply)

@@ -78,7 +78,7 @@ function HasShopPermanent(tab)
 end
 
 util.AddNetworkString("shop_get_tabs")
-function OpenBuyMenu(ply, uid)
+function YRPOpenBuyMenu(ply, uid)
 	--YRP.msg("note", "OpenBuyMenu | ply: " .. tostring(ply:RPName()) .. " | uid: " .. tostring(uid))
 	local _dealer = SQL_SELECT("yrp_dealers", "*", "uniqueID = '" .. uid .. "'")
 	if _dealer != nil then
@@ -107,7 +107,7 @@ end
 
 net.Receive("shop_get_tabs", function(len, ply)
 	local _uid = net.ReadString()
-	OpenBuyMenu(ply, _uid)
+	YRPOpenBuyMenu(ply, _uid)
 end)
 
 util.AddNetworkString("shop_get_all_tabs")

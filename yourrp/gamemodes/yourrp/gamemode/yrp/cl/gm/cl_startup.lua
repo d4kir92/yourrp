@@ -2106,8 +2106,7 @@ function drawIDCard(ply, scale, px, py)
 		"serverlogo",
 		"birthday",
 		"bodyheight",
-		"weight",
-		"nationality",
+		"weight"
 	}
 
 	for i, ele in pairs(elements) do
@@ -2195,11 +2194,6 @@ function drawIDCard(ply, scale, px, py)
 							text = YRP.lang_string("LID_weight") .. ": "
 						end
 						text = text .. tostring(ply:GetNW2Int("int_weight", 0))
-					elseif ele == "nationality" then
-						if GetGlobalBool("bool_" .. ele .. "_title", false) then
-							text = YRP.lang_string("LID_nationality") .. ": "
-						end
-						text = text .. ply:GetNW2String("string_nationality", "")
 					end
 
 					local tx = 0

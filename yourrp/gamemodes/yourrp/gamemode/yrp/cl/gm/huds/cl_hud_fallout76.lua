@@ -428,10 +428,11 @@ local pingtavg = 0
 local pingcou = 0
 local ping_delay = 0
 local pingcolor = Color(0, 0, 0)
+
 function HUD_FO76()
 	local lply = LocalPlayer()
 
-	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and !IsScoreboardVisible() then
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
 		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design", "") == "Fallout 76" then
 			local HP = {}
 			HP.element = "HP"
@@ -474,13 +475,6 @@ function HUD_FO76()
 			RA.cur = lply:Radiation()
 			RA.max = lply:GetMaxRadiation()
 			FO76Element(RA)
-
-			local HY = {}
-			HY.element = "HY"
-			HY.text = YRP.lang_string("LID_hy")
-			HY.cur = lply:Hygiene()
-			HY.max = lply:GetMaxHygiene()
-			FO76Element(HY)
 		
 			local AB = {}
 			AB.element = "AB"
@@ -650,4 +644,6 @@ function HUD_FO76()
 	end
 end
 
-hook.Add("HUDPaint", "yrp_hud_design_Fallout76", HUD_FO76)
+timer.Simple(1, function()
+	hook.Add("HUDPaint", "yrp_hud_design_Fallout76", HUD_FO76)
+end)

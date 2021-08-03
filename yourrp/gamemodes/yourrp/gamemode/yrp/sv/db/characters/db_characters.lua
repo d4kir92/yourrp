@@ -19,7 +19,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "skin", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_birthday", "TEXT DEFAULT '01.01.2000'")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_bodyheight", "INT DEFAULT 180")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_weight", "INT DEFAULT 80")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_nationality", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_eventchar", "INT DEFAULT 0")
 
@@ -99,8 +98,7 @@ function Player:CharacterLoadout()
 		if GetGlobalBool("bool_characters_weight", false) then
 			self:SetNW2Int("int_weight", chatab.int_weight)
 		end
-		self:SetNW2String("string_nationality", SQL_STR_OUT(chatab.string_nationality))
-		
+
 		for i = 0, 4 do
 			self:SetNW2String("eqbag" .. i, chatab["eqbag" .. i])
 		end
@@ -293,12 +291,6 @@ net.Receive("change_weight", function(len, ply)
 	local _new_weight = net.ReadString()
 	SQL_UPDATE("yrp_characters", "int_weight = '" .. _new_weight .. "'", "uniqueID = " .. ply:CharID())
 	ply:SetNW2Int("int_weight", SQL_STR_OUT(_new_weight))
-end)
-util.AddNetworkString("change_nationality")
-net.Receive("change_nationality", function(len, ply)
-	local _new_nationality = net.ReadString()
-	SQL_UPDATE("yrp_characters", "string_nationality = '" .. SQL_STR_IN(_new_nationality) .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetNW2String("string_nationality", SQL_STR_OUT(_new_nationality))
 end)
 
 util.AddNetworkString("charGetGroups")
@@ -552,7 +544,7 @@ function CreateCharacter(ply, tab)
 	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(tab.roleID))
 	if wk(role) then
 		local steamid = ply:SteamID() or ply:UniqueID()
-		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, rpdescription, string_birthday, int_bodyheight, int_weight, string_nationality, bool_eventchar"
+		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, rpdescription, string_birthday, int_bodyheight, int_weight, bool_eventchar"
 		for i = 0, 19 do
 			cols = cols .. ", bg" .. i
 		end
@@ -571,7 +563,6 @@ function CreateCharacter(ply, tab)
 		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.birt)) .. "', "
 		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.bohe)) .. "', "
 		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.weig)) .. "', "
-		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.nati)) .. "', "
 		vals = vals .. "'" .. btn(tab.create_eventchar) .. "'"
 
 		for i = 0, 19 do
@@ -817,5 +808,37 @@ net.Receive("removearrests", function(len, ply)
 	if wk(p:CharID()) then
 		SQL_UPDATE(DATABASE_NAME, "int_arrests = '" .. 0 .. "'", "uniqueID = '" .. p:CharID() .. "'")
 		p:SetNW2Int("int_arrests", 0)
+	end
+end)
+
+util.AddNetworkString("get_licenses_player")
+net.Receive("get_licenses_player", function(len, ply)
+	local tab = SQL_SELECT("yrp_licenses", "*", nil)
+	if wk(tab) then
+		net.Start("get_licenses_player")
+			net.WriteTable(tab)
+		net.Send(ply)
+	end
+end)
+
+util.AddNetworkString("givelicense")
+net.Receive("givelicense", function(len, ply)
+	if ply:HasAccess() then
+		local target = net.ReadEntity()
+		local uid = tonumber(net.ReadString())
+		if uid and uid > 0 then
+			GiveLicense(target, uid)
+		end
+	end
+end)
+
+util.AddNetworkString("removelicense")
+net.Receive("removelicense", function(len, ply)
+	if ply:HasAccess() then
+		local target = net.ReadEntity()
+		local uid = tonumber(net.ReadString())
+		if uid and uid > 0 then
+			RemoveLicense(target, uid)
+		end
 	end
 end)

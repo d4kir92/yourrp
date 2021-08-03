@@ -139,30 +139,6 @@ function CreateCharContent(parent)
 
 
 
-	local cl_nationality = nil
-	if GetGlobalBool("bool_characters_nationality", false) then
-		local cl_nationalityheader = createD("DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
-		cl_nationalityheader:SetText("")
-		function cl_nationalityheader:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_nationality"), "Y_24_500", 0, ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		end
-		Y = Y + 50
-		cl_nationality = createD("DComboBox", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y))
-		cl_nationality:SetText(LocalPlayer():GetNW2String("string_nationality", ""))
-		function cl_nationality:OnChange()
-
-		end
-
-		local text_nationalities = string.Explode(",", GetGlobalString("text_nationalities", ""))
-		for i, v in pairs(text_nationalities) do
-			cl_nationality:AddChoice(v, v, false)
-		end
-
-		Y = Y + 50 + 20
-	end
-
-
-
 	local attr = createD("YPanel", parent, YRP.ctr(300), YRP.ctr(260), YRP.ctr(20), YRP.ctr(Y))
 	function attr:Paint(pw, ph)
 		hook.Run("YPanelPaint", self, pw, ph)
@@ -222,11 +198,6 @@ function CreateCharContent(parent)
 			if GetGlobalBool("bool_characters_weight", false) then
 				net.Start("change_weight")
 					net.WriteString(cl_weight:GetText())
-				net.SendToServer()
-			end
-			if GetGlobalBool("bool_characters_nationality", false) then
-				net.Start("change_nationality")
-					net.WriteString(cl_nationality:GetText())
 				net.SendToServer()
 			end
 		end

@@ -5,8 +5,8 @@
 
 local DATABASE_NAME = "yrp_hud"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
 
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
@@ -938,34 +938,6 @@ function DefaultHUDSettings(reset)
 	RA.ints.AY = 1
 	RA.ints.TS = 24
 	AddHUDElement(RA, reset)
-
-	local HY = {}
-	HY.element = "HY"
-	HY.floats = {}
-	HY.floats.POSI_X = 0.41666665673256
-	HY.floats.POSI_Y = 0.96759259700775
-	HY.floats.SIZE_W = 0.16666667163372
-	HY.floats.SIZE_H = 0.027777777984738
-	HY.bools = {}
-	HY.bools.VISI = 1
-	HY.bools.ROUN = 0
-	HY.bools.ICON = 1
-	HY.bools.TEXT = 0
-	HY.bools.PERC = 1
-	HY.bools.BACK = 1
-	HY.bools.BORD = 0
-	HY.bools.EXTR = 1
-	HY.colors = {}
-	HY.colors.TE = "255, 255, 255, 255"
-	HY.colors.TB = "0, 0, 0, 255"
-	HY.colors.BG = "0, 0, 0, 120"
-	HY.colors.BA = "138, 43, 226, 180"
-	HY.colors.BR = "138, 43, 226, 180"
-	HY.ints = {}
-	HY.ints.AX = 1
-	HY.ints.AY = 1
-	HY.ints.TS = 24
-	AddHUDElement(HY, reset)
 
 	local VO = {}
 	VO.element = "VO"
