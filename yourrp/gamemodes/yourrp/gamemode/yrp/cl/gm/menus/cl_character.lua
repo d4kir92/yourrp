@@ -46,7 +46,7 @@ local br = YRP.ctr(20)
 local trashicon = ""
 
 function openCharacterCreation(from)
-	if IsVoidCharEnabled() then return end
+	if IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) then return end
 
 	if CharacterMenu == nil then
 		openMenu()
@@ -113,7 +113,7 @@ local chars = {}
 local loading = false
 function LoadCharacters()
 	YRP.msg("gm", "received characterlist")
-	if not IsVoidCharEnabled() then
+	if !IsVoidCharEnabled() and GetGlobalBool("bool_character_system", true) then
 		trashicon = YRP.GetDesignIcon("64_trash")
 
 		local cache = {}
@@ -632,7 +632,7 @@ net.Receive("yrp_get_characters", function(len)
 end)
 
 function openCharacterSelection()
-	if IsVoidCharEnabled() then return end
+	if IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) then return end
 
 	if pa(CharMenu.characterList) then
 		CharMenu.characterList:Clear()
@@ -724,7 +724,7 @@ function openCharacterSelection()
 			end
 
 			-- Language Changer / LanguageChanger
-			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(64*5.6 + 20), YRP.ctr(20), YRP.ctr(64), true)
 
 			local border = YRP.ctr(50)
 			CharMenu.charactersBackground = createD("DPanel", CharMenu.frame, YRP.ctr(fw), ScrH() - (2 * border), (ScrW() - ScW()) / 2 + border, border)
@@ -1002,7 +1002,7 @@ function openCharacterSelection()
 			end
 
 			-- Language Changer / LanguageChanger
-			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(64*5.6 + 20), YRP.ctr(20), YRP.ctr(64), true)
 
 			local border = YRP.ctr(50)
 			CharMenu.charactersBackground = createD("DPanel", CharMenu.frame, ScrW() - (2 * br), YRP.ctr(200) + (2 * br), br, ScrH() - YRP.ctr(200) - 2 * br - br)
@@ -1223,7 +1223,7 @@ function openCharacterSelection()
 			end
 
 			-- Language Changer / LanguageChanger
-			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(64*5.6 + 20), YRP.ctr(20), YRP.ctr(64), true)
 
 			local iconsize = YRP.ctr(120*2)
 			local iconbr = YRP.ctr(30)

@@ -190,9 +190,23 @@ end
 
 function DarkRP.getCategories()
 	--Description: Get all categories for all F4 menu tabs.
-	YRP.msg("darkrp", "getCategories() not fully implemented")
 	local tab = {}
 	tab.jobs = RPExtraTeams
+	tab.entities = {}
+	tab.shipments = {}
+	tab.weapons = {}
+	tab.ammo = {}
+	tab.vehicles = {}
+	for i, job in pairs(tab.jobs) do
+		job.members = {}
+		for i, ply in pairs(player.GetAll()) do
+			if ply:Team() == job.team then
+				tinsert(job.members, ply)
+			end
+			--tab.members[ply:GetTeam()] = {}
+			--tab.members[ply:GetTeam()].team = ply:GetTeam()
+		end
+	end
 	return tab
 end
 
@@ -226,9 +240,7 @@ end
 
 function DarkRP.getDemoteGroups()
 	--Description: Get all demote groups Every team in the same group will return the same object.
-	YRP.msg("darkrp", "getDemoteGroups()")
-	YRP.msg("darkrp", DarkRP._not)
-	--set(table) Table in which the keys are team numbers and the values Disjoint-Set.
+	return {}
 end
 
 function DarkRP.getDoorVars()

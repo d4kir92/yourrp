@@ -1,11 +1,13 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
-
-function CreateCheckBoxLine(dpanellist, val, lstr, netstr, fixx)
+	
+function CreateCheckBoxLine(dpanellist, val, lstr, netstr, fixx, textcolor)
+	textcolor = textcolor or Color(255, 255, 255)
 	fixx = fixx or 0
 	local background = createD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(50), 0, 0)
 	background.text_posx = YRP.ctr(50 + 10)
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr), nil, self.text_posx + YRP.ctr(fixx), nil, 0, 1)
+		surfacePanel(self, pw, ph, "", nil, self.text_posx + YRP.ctr(fixx), nil, 0, 1)
+		draw.SimpleText(YRP.lang_string(lstr), "Y_16_500", self.text_posx + YRP.ctr(fixx), ph / 2, textcolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	background.checkbox = createD("DCheckBox", background, YRP.ctr(50), YRP.ctr(50), 0 + YRP.ctr(fixx), 0)
@@ -424,6 +426,8 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_players_can_drop_weapons, "LID_playerscandropweapons", "update_bool_players_can_drop_weapons")
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
+		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_players_start_with_default_role, "LID_playersstartwithdefaultrole", "update_bool_players_start_with_default_role", nil, Color(255, 0, 0, 255))
+		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_dealers_can_take_damage, "LID_dealerscantakedamage", "update_bool_dealers_can_take_damage")
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_thirdperson, "LID_tpp", "update_bool_thirdperson")
@@ -455,6 +459,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_stamina, "LID_stamina", "update_bool_stamina")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_radiation, "LID_radiation", "update_bool_radiation")
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_character_system, "LID_charactersystem", "update_bool_character_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_building_system, "LID_buildingsystem", "update_bool_building_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_inventory_system, "LID_inventorysystem", "update_bool_inventory_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_realistic_system, "LID_realisticsystem", "update_bool_realistic_system")

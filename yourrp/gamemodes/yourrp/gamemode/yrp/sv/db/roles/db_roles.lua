@@ -246,6 +246,8 @@ if wk(drp_allroles) then
 		_G[string.upper(teamname)] = tonumber(role.uniqueID) --TEAMS["TEAM_" .. role.string_name]
 		RPExtraTeams[darkrpjobuid] = darkrpjob
 		jobByCmd[darkrpjob.command] = darkrpjobuid
+
+		team.SetUp(role.uniqueID, role.string_name, darkrpjob.color)
 	end
 end
 

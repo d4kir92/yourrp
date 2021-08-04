@@ -70,7 +70,6 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 	kb.key = keybind
 
 	function kb:Paint(pw, ph)
-		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "Y_18_500", ph + YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), 0, 1)
 		local text = ""
 		local color = Color(255, 255, 255, 255)
 
@@ -80,9 +79,10 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		end
 
 		text = text .. YRP.lang_string(lstr)
-		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "Y_18_500", ph + YRP.ctr(10), ph / 2, color, 0, 1)
-		draw.SimpleText(text, "Y_18_500", ph + YRP.ctr(300), ph / 2, color, 0, 1)
+		draw.SimpleText(text, "Y_18_500", ph + YRP.ctr(10), ph / 2, color, 0, 1)
 		YRP.DrawIcon(YRP.GetDesignIcon(icon), ph - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), color)
+
+		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "Y_18_500", ph + YRP.ctr(600), ph / 2, Color(255, 255, 255, 255), 0, 1)
 	end
 
 	plist:AddItem(kb)
@@ -157,7 +157,7 @@ net.Receive("getsitehelp", function(len)
 		AddKeybind(keybinds, GetKeybindName("sp_open"), "LID_presstoopensmartphone", "smartphone", "bool_smartphone_system")
 		AddKeybind(keybinds, GetKeybindName("sp_close"), "LID_presstoclosesmartphone", "system_update", "bool_smartphone_system")
 		AddKeybindBr(keybinds)
-		AddKeybind(keybinds, GetKeybindName("voice_mute"), "LID_mutevoice", "voice")
+		AddKeybind(keybinds, GetKeybindName("voice_mute"), "LID_mutevoice", "mute")
 		AddKeybind(keybinds, GetKeybindName("voice_range_up"), "LID_voicerangeup", "voice")
 		AddKeybind(keybinds, GetKeybindName("voice_range_dn"), "LID_voicerangedn", "voice")
 		AddKeybind(keybinds, GetKeybindName("voice_menu"), "LID_voicechat", "voice")

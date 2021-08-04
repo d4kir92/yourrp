@@ -156,6 +156,10 @@ function YRP.GetCurrentLanguage()
 	return yrp_cur_lang
 end
 
+function YRP.GetCurrentLanguageInEnglish()
+	return yrp_button_info[YRP.GetCurrentLanguage()].inenglish
+end
+
 function YRP.check_languagepack()
 	for k, v in pairs(yrp_shorts) do
 		if yrp_current_lang.get_language == v then return true end

@@ -133,9 +133,10 @@ function PANEL:InternalUpdateSize()
 	self.con:SetPos(br, header + br)
 	self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
 	self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
-	self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
-	self.langu:SetPos(self:GetWide() - self.langu:GetWide() - self:GetHeaderHeight() * 1.0, self:GetHeaderHeight() * 0.2)
-
+	if self.langu then
+		self.langu:SetTall(self:GetHeaderHeight() * 0.6)
+		self.langu:SetPos(self:GetWide() - self.langu:GetWide() - self:GetHeaderHeight() * 1.0, self:GetHeaderHeight() * 0.2)
+	end
 	if self.UpdateCustomeSize then
 		self:UpdateCustomeSize()
 	end
@@ -192,7 +193,7 @@ function PANEL:Init()
 		self.main:SetMaximised(nil, "BTN")
 	end
 
-	self.langu = YRP.DChangeLanguage(self, self:GetWide() - self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.6, true)
+	self.langu = YRP.DChangeLanguage(self, self:GetWide() - self:GetHeaderHeight() * 0.6 * 5.6, self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.6, true)
 
 	self.con = createD("YPanel", self, 1000, 1000, 0, 0)
 	function self.con:Paint(pw, ph)
@@ -235,14 +236,14 @@ function PANEL:Think()
 			self.btnmax:SetPos(self.close:GetPos() - self.btnmax:GetWide() - YRP.ctr(20), self:GetHeaderHeight() * 0.2)
 
 			if IsValid(self.langu) then
-				self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
+				self.langu:SetTall(self:GetHeaderHeight() * 0.6)
 				self.langu:SetPos(self.btnmax:GetPos() - self.langu:GetWide() - YRP.ctr(20), self:GetHeaderHeight() * 0.2)
 			end
 		else
 			--self.btnmax:SetVisible(false)
 			if IsValid(self.langu) then
-				self.langu:SetSize(self:GetHeaderHeight() * 0.6 * 1.4903, self:GetHeaderHeight() * 0.6)
-				self.langu:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.6 * 1.4903 - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.2)
+				self.langu:SetTall(self:GetHeaderHeight() * 0.6)
+				self.langu:SetPos(self:GetWide() - self.langu:GetWide() - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.2)
 			end
 		end
 	end

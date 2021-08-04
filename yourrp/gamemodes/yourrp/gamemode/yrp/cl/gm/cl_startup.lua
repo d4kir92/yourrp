@@ -109,32 +109,49 @@ end
 
 function YRP.DChangeLanguage(parent, x, y, size, vert)
 	local sw = size
-	local sh = size * 0.671
+	local sh = size / 5.6
 	if vert then
-		sw = size * 1.4903
+		sw = size * 5.6
 		sh = size
 	end
 
-	local LanguageChanger = createD("DButton", parent, sw, sh, x, y)
-	LanguageChanger:SetText("")
-	LanguageChanger.selecting = false
+	local LanguageChanger = createD("DPanel", parent, sw, sh, x, y)
 	function LanguageChanger:Paint(pw, ph)
-		local color = YRPGetColor("2")
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
+	end
+	LanguageChanger.selecting = false
+
+	LanguageChanger.btn = createD("DButton", LanguageChanger, sw, sh, 0, 0)
+	LanguageChanger.btn:SetText("")
+	local br = YRP.ctr(10)
+	function LanguageChanger.btn:Paint(pw, ph)
+		local color = Color(0, 0, 0, 0) --YRPGetColor("2")
+		local text = YRP.GetCurrentLanguageInEnglish()
 
 		if self:IsHovered() then
 			color = YRPGetColor("1")
 		end
 
 		draw.RoundedBox(ph / 4, 0, 0, pw, ph, color)
-		YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. YRP.GetCurrentLanguage()), ph, ph * 0.671, (pw - ph) / 2, (ph - ph * 0.671) / 2, Color(255, 255, 255, 255))
+
+		local ts = math.Round(math.Clamp(ph, 6, 100), 0)
+		local font = "Y_" .. ts .. "_500"
+
+		if self.oldtext != text then
+			self.oldtext = text
+
+			surface.SetFont(font)
+			local tsw, tsh = surface.GetTextSize(text)
+			self:SetWide( br + size + br + tsw + br )
+			self:SetPos( LanguageChanger:GetWide() - self:GetWide(), 0 )
+		end
+
+		YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. YRP.GetCurrentLanguage()), ph, ph * 0.671, br, (ph - ph * 0.671) / 2, Color(255, 255, 255, 255))
+		draw.SimpleText(text, font, br + size + br, ph / 2 * 0.85, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
-	function LanguageChanger:Selecting()
-		return self.selecting
-	end
-
-	function LanguageChanger:DoClick()
-		self.selecting = true
+	function LanguageChanger.btn:DoClick()
+		LanguageChanger.selecting = true
 		local languages = YRP.GetAllLanguages()
 		surface.SetFont(GetFont())
 		local _longestLanguageString = 0
@@ -2398,6 +2415,8 @@ if pa(yrp_loading_screen) then
 	yrp_loading_screen.blur.r = 0
 	yrp_loading_screen.blur.rdir = 1
 
+	yrp_loading_screen.blur.master = yrp_loading_screen
+
 	function yrp_loading_screen.blur:Paint(pw, ph)
 		local lply = LocalPlayer()
 
@@ -2451,7 +2470,7 @@ if pa(yrp_loading_screen) then
 			end
 		end
 
-		if lply:GetNW2Bool("finishedloading", false) and (lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled()) then
+		if lply:GetNW2Bool("finishedloading", false) and (lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true)) then
 			if GetGlobalBool("bool_yrp_play_button", false) then
 				if self.logo == nil then
 					local w = YRP.ctr(512)
@@ -2478,12 +2497,17 @@ if pa(yrp_loading_screen) then
 					local h = YRP.ctr(100)
 					self.joinbutton = createD("YButton", self, w, h, pw / 2 - w / 2, ph / 2 + YRP.ctr(670))
 					self.joinbutton:SetText("")
+					self.joinbutton.master = yrp_loading_screen
 					function self.joinbutton:Paint(pw, ph)
 						hook.Run("YButtonPaint", self, pw, ph)
 						draw.SimpleText(YRP.lang_string("LID_play"), "Y_30_500", pw / 2, ph / 2, TextColor(lply:InterfaceValue("YButton", "NC")), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 					function self.joinbutton:DoClick()
-						yrp_loading_screen:Remove()
+						--self.master:Remove()
+						
+						if pa(self:GetParent()) and pa(self:GetParent():GetParent()) then
+							self:GetParent():GetParent():Remove()
+						end
 					end
 				end
 			else
@@ -2503,7 +2527,7 @@ if pa(yrp_loading_screen) then
 			if lply:GetNW2Bool("finishedloading", false) then
 				cur = cur + 1
 			end
-			if lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() then
+			if lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) then
 				cur = cur + 1
 			end
 			-- BAR BG

@@ -56,6 +56,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_items_role", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_need_to_introduce", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_drop_weapons", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_start_with_default_role", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_dealers_can_take_damage", "INT DEFAULT 1")
 
@@ -93,6 +94,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_radiation", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_identity_card", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_map_system", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_character_system", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_building_system", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_inventory_system", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_appearance_system", "INT DEFAULT 1")
@@ -134,7 +136,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D
 SQL_ADD_COLUMN(DATABASE_NAME, "text_idcard_background", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_idcardid", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_play_button", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_play_button", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_voice_module", "INT DEFAULT 0")
 
@@ -719,7 +721,11 @@ net.Receive("update_bool_players_can_drop_weapons", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_players_can_drop_weapons", "bool_players_can_drop_weapons", b)
 end)
-
+util.AddNetworkString("update_bool_players_start_with_default_role")
+net.Receive("update_bool_players_start_with_default_role", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_players_start_with_default_role", "bool_players_start_with_default_role", b)
+end)
 
 util.AddNetworkString("update_bool_dealers_can_take_damage")
 net.Receive("update_bool_dealers_can_take_damage", function(len, ply)
@@ -873,6 +879,12 @@ util.AddNetworkString("update_bool_map_system")
 net.Receive("update_bool_map_system", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_map_system", "bool_map_system", b)
+end)
+
+util.AddNetworkString("update_bool_character_system")
+net.Receive("update_bool_character_system", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_character_system", "bool_character_system", b)
 end)
 
 util.AddNetworkString("update_bool_building_system")
@@ -1986,6 +1998,7 @@ util.AddNetworkString("tp_tpto")
 net.Receive("tp_tpto", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
+		ply:SetNW2Vector("yrpoldpos", ply:GetPos())
 		teleportToPoint(ply, _target:GetPos())
 	end
 end)
@@ -1993,7 +2006,19 @@ util.AddNetworkString("tp_bring")
 net.Receive("tp_bring", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
+		_target:SetNW2Vector("yrpoldpos", _target:GetPos())
 		teleportToPoint(_target, ply:GetPos())
+	end
+end)
+util.AddNetworkString("tp_return")
+net.Receive("tp_return", function(len, ply)
+	if ply:HasAccess() then
+		local _target = net.ReadEntity()
+		if _target:GetNW2Vector("yrpoldpos") != Vector(0, 0, 0) then
+			teleportToPoint(_target, _target:GetNW2Vector("yrpoldpos"))
+
+			_target:SetNW2Vector("yrpoldpos", Vector(0, 0, 0)) -- RESET
+		end
 	end
 end)
 util.AddNetworkString("tp_jail")

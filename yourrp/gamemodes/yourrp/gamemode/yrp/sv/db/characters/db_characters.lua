@@ -842,3 +842,9 @@ net.Receive("removelicense", function(len, ply)
 		end
 	end
 end)
+
+function YRPSetAllCharsToDefaultRole(ply)
+	if IsValid(ply) then
+		SQL_UPDATE(DATABASE_NAME, "roleID = '1'", "SteamID = '" .. ply:SteamID() .. "'")
+	end
+end

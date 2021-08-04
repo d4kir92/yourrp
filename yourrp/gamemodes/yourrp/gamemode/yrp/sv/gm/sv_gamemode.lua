@@ -89,10 +89,6 @@ function GM:PlayerInitialSpawn(ply)
 	if !IsValid(ply) then
 		return
 	end
-
-	if IsValid(ply) and ply.KillSilent then
-		ply:KillSilent()
-	end
 end
 
 function GM:PlayerSelectSpawn(ply)
@@ -116,7 +112,22 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 
 	ply:SetNW2Bool("isserverdedicated", game.IsDedicated())
 
-	if IsVoidCharEnabled() then
+	ply:SetNW2Bool("yrp_characterselection", true)
+
+	ply:resetUptimeCurrent()
+	check_yrp_client(ply, steamid or uniqueID)
+
+	ply:UserGroupLoadout()
+
+	if IsValid(ply) and ply.KillSilent then
+		ply:KillSilent()
+	end
+
+	if GetGlobalBool("bool_players_start_with_default_role", false) then
+		YRPSetAllCharsToDefaultRole(ply)
+	end
+
+	if IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) then
 		local chars = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 		if !wk(chars) then
 			local tab = {}
@@ -141,17 +152,6 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 			CreateCharacter(ply, tab)
 			yrpmsg("[YourRP] [VOIDCHAR] HAS NO CHAR, create one")
 		end
-	end
-
-	ply:SetNW2Bool("yrp_characterselection", true)
-
-	ply:resetUptimeCurrent()
-	check_yrp_client(ply, steamid or uniqueID)
-
-	ply:UserGroupLoadout()
-
-	if IsValid(ply) and ply.KillSilent then
-		ply:KillSilent()
 	end
 end)
 

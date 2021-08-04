@@ -54,7 +54,11 @@ function PlayerLoadedGame(ply, tab)
 	YRPSendCharCount(ply)
 	
 	if IsValid(ply) and ply.KillSilent then
-		ply:KillSilent()
+		if GetGlobalBool("bool_character_system", true) then
+			ply:KillSilent()
+		else
+			ply:Spawn()
+		end
 	end
 
 	UpdateDarkRPTable(ply)

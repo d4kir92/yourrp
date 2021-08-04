@@ -789,7 +789,6 @@ net.Receive("send_team", function(len)
 	jobByCmd[teamTab.command] = teamuid
 
 	--table.insert(RPExtraTeams, teamTab) -- old
-
 	team.SetUp(teamuid, teamname, teamcolor)
 end)
 
