@@ -444,8 +444,8 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 		end
 	end
 
-	ply:SetNW2Int("int_deathtimestamp_min", CurTime() + GetGlobalDInt("int_deathtimestamp_min", 20))
-	ply:SetNW2Int("int_deathtimestamp_max", CurTime() + GetGlobalDInt("int_deathtimestamp_max", 60))
+	ply:SetNW2Int("int_deathtimestamp_min", CurTime() + GetGlobalInt("int_deathtimestamp_min", 20))
+	ply:SetNW2Int("int_deathtimestamp_max", CurTime() + GetGlobalInt("int_deathtimestamp_max", 60))
 
 	-- NEW RAGDOLL
 	if GetGlobalBool("bool_spawncorpseondeath", true) then
@@ -460,8 +460,8 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 			ply.rd.ply = ply
 			ply.rd.removeable = false
 
-			timer.Simple(GetGlobalDInt("int_deathtimestamp_max", 60), function()
-				if IsValid(ply.rd) then
+			timer.Simple(GetGlobalInt("int_deathtimestamp_max", 60), function()
+				if IsValid(ply) and IsValid(ply.rd) then
 					ply.rd:Remove()
 				end
 			end)
@@ -1163,7 +1163,7 @@ function YRPCountPassiveChannels(ply)
 end
 
 function YRPSwitchToVoiceChannel(ply, uid)
-	if !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. uid) then
+	if !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. uid, false) then
 		ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. uid, true) 
 	else
 		for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do

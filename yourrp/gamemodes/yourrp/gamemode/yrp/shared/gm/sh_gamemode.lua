@@ -397,7 +397,7 @@ end
 
 function IsInMaxVoiceRange(listener, talker)
 	local dist = listener:GetPos():Distance(talker:GetPos())
-	local result = dist <= GetGlobalDInt("int_voice_max_range", 1)
+	local result = dist <= GetGlobalInt("int_voice_max_range", 1)
 	return result
 end
 
@@ -418,9 +418,9 @@ function GetVoiceRange(ply)
 		[1] = 120,
 		[2] = 250,
 		[3] = 400, 
-		[4] = GetGlobalDInt("int_voice_max_range", 1)
+		[4] = GetGlobalInt("int_voice_max_range", 1)
 	}
-	return math.Clamp(ranges[ply:GetNW2Int("voice_range", 2)], 0, GetGlobalDInt("int_voice_max_range", 1))
+	return math.Clamp(ranges[ply:GetNW2Int("voice_range", 2)], 0, GetGlobalInt("int_voice_max_range", 1))
 end
 
 function IsInSpeakRange(listener, talker)

@@ -202,7 +202,7 @@ function SQL_TABLE_EXISTS(db_table)
 		if _r == nil or istable(_r) then
 			return true
 		else
-			YRP.msg("note", "Table [" .. tostring(db_table) .. "] not exists.")
+			--YRP.msg("note", "Table [" .. tostring(db_table) .. "] not exists.")
 
 			return false
 		end
@@ -212,7 +212,7 @@ function SQL_TABLE_EXISTS(db_table)
 		if _r == nil or istable(_r) then
 			return true
 		else
-			YRP.msg("note", "Table [" .. tostring(db_table) .. "] not exists.")
+			--YRP.msg("note", "Table [" .. tostring(db_table) .. "] not exists.")
 
 			return false
 		end

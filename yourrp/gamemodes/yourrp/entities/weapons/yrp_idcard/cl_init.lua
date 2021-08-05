@@ -18,7 +18,7 @@ function YDrawIDCards()
 			end
 
 			cam.Start3D2D(pos + ply:EyeAngles():Forward() * correction, ang, sca)
-				--drawIDCard(ply)
+				drawIDCard(ply)
 			cam.End3D2D()
 		end
 	end
@@ -29,9 +29,9 @@ hook.Add("HUDPaint", "yrp_yrp_idcard", function()
 	local lply = LocalPlayer()
 	local weapon = lply:GetActiveWeapon()
 	if weapon:IsValid() and weapon:GetClass() == "yrp_idcard" then
-		local scale = YRP.ctr(900) / GetGlobalDInt("int_" .. "background" .. "_w", 100)
-		local w = GetGlobalDInt("int_" .. "background" .. "_w", 100)
-		local h = GetGlobalDInt("int_" .. "background" .. "_h", 100)
+		local scale = YRP.ctr(900) / GetGlobalInt("int_" .. "background" .. "_w", 100)
+		local w = GetGlobalInt("int_" .. "background" .. "_w", 100)
+		local h = GetGlobalInt("int_" .. "background" .. "_h", 100)
 		w = w * scale
 		h = h * scale
 		drawIDCard(lply, scale, ScrW() - w - YRP.ctr(200), ScrH() - h - YRP.ctr(200))

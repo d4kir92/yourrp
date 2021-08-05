@@ -340,6 +340,8 @@ function YRPOpenSBS()
 
 	YRPScoreboard:Show()
 
+	gui.EnableScreenClicker(true)
+
 	-- Players
 	YRPScoreboard.list:Clear()
 	YRPScoreboard.plys = {}
@@ -568,15 +570,17 @@ function YRPScoreboardAddPlayer(ply)
 		plyopt = createD("DPanel", plyframe, sw, size, 0, 0)
 		plyopt:Dock( TOP )
 		function plyopt:Paint(pw, ph)
-			if LocalPlayer():HasAccess() then
+			if IsValid(ply) and LocalPlayer():HasAccess() then
 				local br = ph * 0.1
 				local iconsize = ph * 0.8
 				local ts = math.Round(math.Clamp(ph * 0.5, 6, 100), 0)
 
 				-- Money
-				surface.SetMaterial(YRP.GetDesignIcon("64_money-bill"))
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.DrawTexturedRect(br, br, iconsize, iconsize)
+				if YRP.GetDesignIcon("64_money-bill") then
+					surface.SetMaterial(YRP.GetDesignIcon("64_money-bill"))
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.DrawTexturedRect(br, br, iconsize, iconsize)
+				end
 
 				draw.SimpleText(ply:FormattedMoney(), "Y_" .. ts .. "_500", ph + br, ph / 2 * 0.9, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
@@ -590,55 +594,67 @@ function YRPScoreboardAddPlayer(ply)
 
 		local btns = {}
 		btns[1] = {"LID_account", "account", false, false, function()
-			ply:ShowProfile()
+			if IsValid(ply) then
+				ply:ShowProfile()
+			end
 		end}
 		btns[2] = {"LID_info", "128_info-circle", false, false, function()
-			SetClipboardText("SteamID: \t" .. ply:SteamID() .. " \nSteamID64: \t" .. ply:SteamID64() .. " \nRPName: \t" .. ply:RPName() .. " \nSteamName: \t" .. ply:SteamName())
+			if IsValid(ply) then
+				SetClipboardText("SteamID: \t" .. ply:SteamID() .. " \nSteamID64: \t" .. ply:SteamID64() .. " \nRPName: \t" .. ply:RPName() .. " \nSteamName: \t" .. ply:SteamName())
+			end
 		end}
 		btns[3] = {"LID_tpto", "128_arrow-circle-up", true, true, function()
-			if YRPNotSelf(ply) then
+			if IsValid(ply) and YRPNotSelf(ply) then
 				net.Start("tp_tpto")
 					net.WriteEntity(ply)
 				net.SendToServer()
 			end
 		end}
 		btns[4] = {"LID_bring", "128_arrow-circle-down", true, true, function()
-			if YRPNotSelf(ply) then
+			if IsValid(ply) and YRPNotSelf(ply) then
 				net.Start("tp_bring")
 					net.WriteEntity(ply)
 				net.SendToServer()
 			end
 		end}
 		btns[5] = {"LID_return", "return", true, false, function()
-			net.Start("tp_return")
-				net.WriteEntity(ply)
-			net.SendToServer()
+			if IsValid(ply) then
+				net.Start("tp_return")
+					net.WriteEntity(ply)
+				net.SendToServer()
+			end
 		end, function(btn)
-			if ply:GetNW2Vector("yrpoldpos") != Vector(0, 0, 0) then
-				btn.iconcolor = Color(255, 255, 255)
-			else
-				btn.iconcolor = Color(255, 0, 0)
+			if IsValid(ply) then
+				if ply:GetNW2Vector("yrpoldpos") != Vector(0, 0, 0) then
+					btn.iconcolor = Color(255, 255, 255)
+				else
+					btn.iconcolor = Color(255, 0, 0)
+				end
 			end
 		end}
-		btns[6] = {"LID_freeze", "128_snowflake", true, true, function()
-			if !ply:IsFlagSet(FL_FROZEN) then
-				net.Start("freeze")
-					net.WriteEntity(ply)
-				net.SendToServer()
-			else
-				net.Start("unfreeze")
-					net.WriteEntity(ply)
-				net.SendToServer()
+		btns[6] = {"LID_freeze", "128_snowflake", true, false, function()
+			if IsValid(ply) then
+				if !ply:IsFlagSet(FL_FROZEN) then
+					net.Start("freeze")
+						net.WriteEntity(ply)
+					net.SendToServer()
+				else
+					net.Start("unfreeze")
+						net.WriteEntity(ply)
+					net.SendToServer()
+				end
 			end
 		end, function(btn)
-			if ply:IsFlagSet(FL_FROZEN) then
-				btn.iconcolor = Color(100, 100, 255)
-			else
-				btn.iconcolor = Color(255, 255, 255)
+			if IsValid(ply) then
+				if ply:IsFlagSet(FL_FROZEN) then
+					btn.iconcolor = Color(100, 100, 255)
+				else
+					btn.iconcolor = Color(255, 255, 255)
+				end
 			end
 		end}
 		btns[7] = {"LID_spectate", "eye", true, true, function()
-			if YRPNotSelf(ply) then
+			if IsValid(ply) and YRPNotSelf(ply) then
 				local frame = vgui.Create( "DFrame" )
 				frame:SetTitle(ply:RPName() .. " [" .. ply:SteamName() .. "]")
 				frame:SetSize(ScrW() / 2, ScrH() / 2)
@@ -671,27 +687,39 @@ function YRPScoreboardAddPlayer(ply)
 			end
 		end}
 		btns[8] = {"LID_cloak", "incognito", true, false, function()
-			if !ply:GetNW2Bool("cloaked", false) then
-				net.Start("cloak")
-					net.WriteEntity(ply)
-				net.SendToServer()
-			else
-				net.Start("uncloak")
-					net.WriteEntity(ply)
-				net.SendToServer()
+			if IsValid(ply) then
+				if !ply:GetNW2Bool("cloaked", false) then
+					net.Start("cloak")
+						net.WriteEntity(ply)
+					net.SendToServer()
+				else
+					net.Start("uncloak")
+						net.WriteEntity(ply)
+					net.SendToServer()
+				end
 			end
 		end, function(btn)
-			if ply:GetNW2Bool("cloaked", false) then
-				btn.iconcolor = Color(0, 255, 0)
-			else
-				btn.iconcolor = Color(255, 255, 255)
+			if IsValid(ply) then
+				if ply:GetNW2Bool("cloaked", false) then
+					btn.iconcolor = Color(0, 255, 0)
+				else
+					btn.iconcolor = Color(255, 255, 255)
+				end
 			end
 		end}
 		btns[9] = {"LID_kick", "128_fist-raised", true, true, function()
-			
+			if IsValid(ply) then
+				net.Start("ply_kick")
+					net.WriteEntity(ply)
+				net.SendToServer()
+			end
 		end}
 		btns[10] = {"LID_ban", "128_gavel", true, true, function()
-			
+			if IsValid(ply) then
+				net.Start("ply_ban")
+					net.WriteEntity(ply)
+				net.SendToServer()
+			end
 		end}
 		for i, btn in pairs(btns) do
 			if !btn[3] or btn[3] and LocalPlayer():HasAccess() then
@@ -840,17 +868,10 @@ function YRPInitScoreboard()
 				surface.DrawTexturedRect(ScrW() / 2 - sw / 2, 20, 128, 128)
 			end
 		end
-
-		if LocalPlayer():KeyDown(IN_ATTACK2) and self.delay < CurTime() then
+		
+		if  input.IsMouseDown( MOUSE_RIGHT ) and self.delay < CurTime() then
 			self.delay = CurTime() + 0.5
-			gui.EnableScreenClicker(true)
-		end
-
-		if yrp_sb_canclose and LocalPlayer():KeyDown(IN_SCORE) then
-			YRPCloseSBS()
-		end
-		if vgui.CursorVisible() and not LocalPlayer():KeyDown(IN_SCORE) then
-			yrp_sb_canclose = true
+			gui.EnableScreenClicker(!vgui.CursorVisible())
 		end
 
 		-- MOUSE HELP
@@ -962,21 +983,6 @@ function YRPInitScoreboard()
 
 
 
-	YRPScoreboard.hide = createD("YButton", YRPScoreboard, 200, 40, ScrW() - 200 - 10, 10)
-	YRPScoreboard.hide:SetText("LID_hide")
-	function YRPScoreboard.hide:Paint(pw, ph)
-		if vgui.CursorVisible() then
-			hook.Run("YButtonPaint", self, pw, ph)
-		end
-	end
-	function YRPScoreboard.hide:DoClick()
-		if vgui.CursorVisible() then
-			YRPCloseSBS()
-		end
-	end
-
-
-
 	YRPScoreboard:Hide()
 end
 YRPInitScoreboard()
@@ -984,12 +990,9 @@ YRPInitScoreboard()
 function GM:ScoreboardShow()
 	if GetGlobalBool("bool_yrp_scoreboard") then
 		YRPOpenSBS()
-		yrp_sb_canclose = false
 	end
 end
 
 function GM:ScoreboardHide()
-	if !vgui.CursorVisible() then
-		YRPCloseSBS()
-	end
+	YRPCloseSBS()
 end

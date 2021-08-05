@@ -186,10 +186,14 @@ hook.Add("HUDPaint", "yrp_hud_levelup", function()
 	end
 end)
 
-local HUD_AVATAR = nil
-local PAvatar = vgui.Create("DPanel")
+HUD_AVATAR = HUD_AVATAR or nil
+PAvatar = PAvatar or nil
+if pa(PAvatar) then
+	PAvatar:Remove()
+end
+PAvatar = vgui.Create("DPanel")
 function PAvatar:Paint(pw, ph)
-	if GetGlobalBool("bool_yrp_hud", false) then
+	if GetGlobalBool("bool_yrp_hud", false) and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
 		render.ClearStencil()
 		render.SetStencilEnable(true)
 
@@ -208,7 +212,7 @@ function PAvatar:Paint(pw, ph)
 
 			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
-			if HUD_AVATAR != nil then
+			if pa(HUD_AVATAR) then
 				HUD_AVATAR:SetPaintedManually(false)
 				HUD_AVATAR:PaintManual()
 				HUD_AVATAR:SetPaintedManually(true)
@@ -219,6 +223,7 @@ function PAvatar:Paint(pw, ph)
 end
 timer.Simple(1, function()
 	HUD_AVATAR = vgui.Create("AvatarImage", PAvatar)
+	HUD_AVATAR:MoveToBack()
 	local ava = {}
 	ava.w = 64
 	ava.h = 64
@@ -226,6 +231,10 @@ timer.Simple(1, function()
 	ava.y = 0
 	ava.version = -1
 	function HUD_AVATARUpdate()
+		if !pa(HUD_AVATAR) then return end
+
+		HUD_AVATAR:MoveToBack()
+
 		local lply = LocalPlayer()
 		if lply != NULL then
 			if GetGlobalBool("bool_yrp_hud", false) then
@@ -265,6 +274,7 @@ timer.Simple(1, function()
 end)
 
 SL = SL or vgui.Create("DHTML", nil)
+SL:MoveToBack()
 SL.w = 64
 SL.h = 64
 SL.x = 0
@@ -286,8 +296,6 @@ function YRP_PMUpdate()
 		if GetGlobalBool("bool_yrp_hud", false) then
 			if lply:GetNW2Int("hud_version", 0) != YRP_PM.version or YRP_PM.model != lply:GetPlayerModel() or YRP_PM.skin != lply:GetSkin() then
 				YRP_PM.version = lply:GetNW2Int("hud_version", 0)
-
-				YRP_PM:Show()
 
 				YRP_PM.model = lply:GetPlayerModel()
 				YRP_PM.skin = lply:GetSkin()
@@ -342,13 +350,18 @@ function YRP_PMUpdate()
 			if lply:GetNW2Int("hud_version", 0) != YRP_PM.version then
 				YRP_PM.version = lply:GetNW2Int("hud_version", 0)
 
-				YRP_PM:Hide()
 				YRP_PM:SetModel("")
 			end
 		end
 	end
 
-	timer.Simple(1, YRP_PMUpdate)
+	if YRPIsScoreboardVisible() then
+		YRP_PM:Hide()
+	else
+		YRP_PM:Show()
+	end
+
+	timer.Simple(0.3, YRP_PMUpdate)
 end
 YRP_PMUpdate()
 

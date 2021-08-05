@@ -478,6 +478,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice, "LID_voicechat", "update_bool_voice")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_module, YRP.lang_string("LID_voicemodule") .. " (YourRP)", "update_bool_voice_module")
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_module_locally, YRP.lang_string("LID_voicemodule") .. " (YourRP) [" .. YRP.lang_string("local") .. "]", "update_bool_voice_module_locally")
 		CreateNumberWangLine(GAMEMODE_SYSTEMS:GetContent(), GEN.int_voice_max_range, YRP.lang_string("LID_maxvoicerange"), "update_int_voice_max_range", 100)
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_gmod_voice_module, YRP.lang_string("LID_voicemodule") .. " (GMOD)", "update_bool_gmod_voice_module")
@@ -562,7 +563,7 @@ net.Receive("Connect_Settings_General", function(len)
 				if !string.find(ele, "box") then
 					name = YRP.lang_string("LID_" .. ele)
 				end
-				local e = createD("YFrame", idbg, GetGlobalDInt("int_" .. ele .. "_w", 10), GetGlobalDInt("int_" .. ele .. "_h", 10), GetGlobalDInt("int_" .. ele .. "_x", 10), GetGlobalDInt("int_" .. ele .. "_y", 10))
+				local e = createD("YFrame", idbg, GetGlobalInt("int_" .. ele .. "_w", 10), GetGlobalInt("int_" .. ele .. "_h", 10), GetGlobalInt("int_" .. ele .. "_x", 10), GetGlobalInt("int_" .. ele .. "_y", 10))
 				if string.find(ele, "background") then
 					e:SetDraggable(false)
 					e.draggable = false
@@ -583,13 +584,13 @@ net.Receive("Connect_Settings_General", function(len)
 				e.ts3 = CurTime() + 1
 				function e:Paint(pw, ph)
 					--[[if ele == "background" or string.find(ele,  "box") then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(GetGlobalDInt("int_" .. ele .. "_r", 0), GetGlobalDInt("int_" .. ele .. "_g", 0), GetGlobalDInt("int_" .. ele .. "_b", 0), GetGlobalDInt("int_" .. ele .. "_a", 0)))
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(GetGlobalInt("int_" .. ele .. "_r", 0), GetGlobalInt("int_" .. ele .. "_g", 0), GetGlobalInt("int_" .. ele .. "_b", 0), GetGlobalInt("int_" .. ele .. "_a", 0)))
 					end]]
 					local visible = false
 					local mx, my = gui.MousePos()
 					local px, py = self:GetPos()
 					self.inbg = false
-					if GetGlobalDInt("int_" .. ele .. "_x", 0) < GetGlobalDInt("int_" .. "background" .. "_w", 0) and GetGlobalDInt("int_" .. ele .. "_y", 0) < GetGlobalDInt("int_" .. "background" .. "_h", 0) then
+					if GetGlobalInt("int_" .. ele .. "_x", 0) < GetGlobalInt("int_" .. "background" .. "_w", 0) and GetGlobalInt("int_" .. ele .. "_y", 0) < GetGlobalInt("int_" .. "background" .. "_h", 0) then
 						self.inbg = true
 					end
 					if self:IsHovered() then
@@ -598,7 +599,7 @@ net.Receive("Connect_Settings_General", function(len)
 						visible = true
 					elseif GetGlobalBool("bool_" .. ele .. "_visible", false) == false then
 						visible = true
-					elseif GetGlobalDInt("int_" .. ele .. "_x", 0) > GetGlobalDInt("int_" .. "background" .. "_w", 0) or GetGlobalDInt("int_" .. ele .. "_y", 0) > GetGlobalDInt("int_" .. "background" .. "_h", 0) then
+					elseif GetGlobalInt("int_" .. ele .. "_x", 0) > GetGlobalInt("int_" .. "background" .. "_w", 0) or GetGlobalInt("int_" .. ele .. "_y", 0) > GetGlobalInt("int_" .. "background" .. "_h", 0) then
 						visible = true
 					end
 
@@ -617,7 +618,7 @@ net.Receive("Connect_Settings_General", function(len)
 						a2 = 100
 						a3 = 200
 					end
-					if self.inbg and (mx > GetGlobalDInt("int_" .. "background" .. "_w", 0) or my > GetGlobalDInt("int_" .. "background" .. "_h", 0)) then
+					if self.inbg and (mx > GetGlobalInt("int_" .. "background" .. "_w", 0) or my > GetGlobalInt("int_" .. "background" .. "_h", 0)) then
 						a1 = 0
 						a2 = 0
 						a3 = 0
@@ -849,7 +850,7 @@ net.Receive("Connect_Settings_General", function(len)
 					cho[5] = YRP.lang_string("LID_usergroup") .. "-" .. YRP.lang_string("LID_color")
 					for id, v in pairs(cho) do
 						local selected = false
-						if id == GetGlobalDInt("int_" .. ele .. "_colortype", 0) then
+						if id == GetGlobalInt("int_" .. ele .. "_colortype", 0) then
 							selected = true
 						end
 						win.colortype:AddChoice(YRP.lang_string(v), id, selected)
@@ -862,7 +863,7 @@ net.Receive("Connect_Settings_General", function(len)
 					end
 
 					win.color = createD("DColorMixer", win:GetContent(), YRP.ctr(400), YRP.ctr(400), 0, YRP.ctr(50))
-					win.color:SetColor(Color(GetGlobalDInt("int_" .. ele .. "_r", 0), GetGlobalDInt("int_" .. ele .. "_g", 0), GetGlobalDInt("int_" .. ele .. "_b", 0), GetGlobalDInt("int_" .. ele .. "_a", 0)))
+					win.color:SetColor(Color(GetGlobalInt("int_" .. ele .. "_r", 0), GetGlobalInt("int_" .. ele .. "_g", 0), GetGlobalInt("int_" .. ele .. "_b", 0), GetGlobalInt("int_" .. ele .. "_a", 0)))
 					function win.color:ValueChanged(colo)
 						e.col = colo
 					end
@@ -909,8 +910,9 @@ net.Receive("Connect_Settings_General", function(len)
 				end
 			end
 		end
-
 		GAMEMODE_VISUALS:GetContent():AddItem(idcard_change)
+		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_show_securitylevel, YRP.lang_string("LID_securitylevel") .. " (Show/Hide on Door)", "update_bool_show_securitylevel")
+
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_play_button, "LID_playbutton", "update_bool_yrp_play_button")
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())

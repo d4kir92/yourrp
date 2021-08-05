@@ -239,6 +239,14 @@ function YRPHUDThin()
 			BA.max = 100
 			YRPDrawThin(BA)
 			
+			local CA = {}
+			CA.name = "CA"
+			CA.text = lply:GetCastName()
+			CA.cur = lply:CastTimeCurrent()
+			CA.max = lply:CastTimeMax()
+			CA.valuetext = math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 1) .. "%"
+			YRPDrawThin(CA)
+
 			local weapon = lply:GetActiveWeapon()
 			if IsValid(weapon) then
 				local clip1 = weapon:Clip1()

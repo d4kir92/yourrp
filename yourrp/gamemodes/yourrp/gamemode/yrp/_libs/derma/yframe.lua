@@ -167,7 +167,7 @@ function PANEL:Init()
 		self._cb = true
 	end
 
-	self._headerheight = YRP.ctr(GetGlobalDInt("int_headerheight", 100))
+	self._headerheight = YRP.ctr(GetGlobalInt("int_headerheight", 100))
 	self._border = 20
 
 	self:ShowCloseButton(false)
@@ -209,8 +209,8 @@ function PANEL:Init()
 end
 
 function PANEL:Think()
-	if self._headerheight != YRP.ctr(GetGlobalDInt("int_headerheight", 100)) then
-		self._headerheight = YRP.ctr(GetGlobalDInt("int_headerheight", 100))
+	if self._headerheight != YRP.ctr(GetGlobalInt("int_headerheight", 100)) then
+		self._headerheight = YRP.ctr(GetGlobalInt("int_headerheight", 100))
 
 		self:InternalUpdateSize()
 		self:UpdateSize()

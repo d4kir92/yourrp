@@ -110,6 +110,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_wanted_system", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_module", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_module_locally", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_max_range", "INT DEFAULT 900")
 
@@ -140,6 +141,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_yrp_chat_range_local", "INT DEFAULT 400")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D!D-!D!D!D!D'")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_idcard_background", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_idcardid", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_show_securitylevel", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_play_button", "INT DEFAULT 1")
 
@@ -976,6 +978,12 @@ net.Receive("update_bool_voice_module", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_voice_module", "bool_voice_module", b)
 end)
 
+util.AddNetworkString("update_bool_voice_module_locally")
+net.Receive("update_bool_voice_module_locally", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_voice_module_locally", "bool_voice_module_locally", b)
+end)
+
 util.AddNetworkString("update_int_voice_max_range")
 net.Receive("update_int_voice_max_range", function(len, ply)
 	local int = net.ReadString()
@@ -1110,6 +1118,12 @@ util.AddNetworkString("update_bool_yrp_chat_show_idcardid")
 net.Receive("update_bool_yrp_chat_show_idcardid", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_yrp_chat_show_idcardid", "bool_yrp_chat_show_idcardid", b)
+end)
+
+util.AddNetworkString("update_bool_show_securitylevel")
+net.Receive("update_bool_show_securitylevel", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_show_securitylevel", "bool_show_securitylevel", b)
 end)
 
 util.AddNetworkString("update_int_yrp_chat_range_local")

@@ -96,7 +96,7 @@ function LoadIDCardSetting(force)
 						end
 						if string.StartWith(n, "bool_") and GetGlobalBool(n, tobool(v)) ~= tobool(v) then
 							SetGlobalBool(n, tobool(v))
-						elseif string.StartWith(n, "int_") and GetGlobalDInt(n, v) ~= v then
+						elseif string.StartWith(n, "int_") and GetGlobalInt(n, v) ~= v then
 							SetGlobalInt(n, v)
 						end
 						SQL_UPDATE(DATABASE_NAME, "value = '" .. v .. "'", "name = '" .. n .. "'")

@@ -63,7 +63,11 @@ function PANEL:Setup( ply )
 		if table.Count(channels) > 0 then
 			text = table.concat( channels, ", " )
 		else
-			text = YRP.lang_string("LID_environment")
+			if GetGlobalBool("bool_voice_module_locally") then
+				text = YRP.lang_string("LID_environment")
+			else
+				self:Remove()
+			end
 		end
 		self.Channels:SetText( text )
 
@@ -95,9 +99,17 @@ function PANEL:Paint( w, h )
 
 	local vol = self.ply:VoiceVolume()
 
-	draw.RoundedBox( br, br, br, iconsize, iconsize, self.ply:GetFactionColor() )
 	draw.RoundedBox( br, 0, 0, w, h, Color( 0, vol * 255, 0, 240 ) )
 
+	local circlesize = 10
+	if YRP.GetDesignIcon("circle") then
+		surface.SetDrawColor(self.ply:GetFactionColor())
+		surface.SetMaterial(YRP.GetDesignIcon("circle"))
+		surface.DrawTexturedRect(br, br, circlesize, circlesize)
+	end
+
+	--draw.RoundedBox( br, br, br, iconsize, iconsize, self.ply:GetFactionColor() )
+	
 end
 
 function PANEL:Think()
@@ -159,7 +171,7 @@ hook.Add("PlayerStartVoice", "YRP_VOICE_MODULE_PlayerStartVoice", function(ply)
 
 	local pnl = yrp_VoicePanelList:Add( "VoiceNotifyYRP" )
 	pnl:Setup( ply )
-	
+
 	PlayerVoicePanels[ ply ] = pnl
 
 end)

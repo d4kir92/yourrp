@@ -651,7 +651,7 @@ hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
 			return ""
 		elseif tab.int_mode == 1 then -- LOCAL
 			for i, p in pairs(player.GetAll()) do
-				if p:GetPos():Distance(sender:GetPos()) < GetGlobalDInt("int_yrp_chat_range_local", 400) then
+				if p:GetPos():Distance(sender:GetPos()) < GetGlobalInt("int_yrp_chat_range_local", 400) then
 					net.Start("yrp_player_say")
 						net.WriteEntity(sender)
 						net.WriteTable(pk)
