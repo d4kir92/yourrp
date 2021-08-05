@@ -73,7 +73,7 @@ surface.CreateFont("Saira_16", {
 })
 
 local sh = ScrH() * 0.8
-local sw = sh * 1.6
+local sw = sh * 1.8
 sh = math.floor(sh)
 sw = math.floor(sw)
 local size = 40
@@ -800,6 +800,7 @@ end
 local ypr_logo = Material("yrp/yrp_icon")
 
 function YRPInitScoreboard()
+	sw = math.Clamp(sw, sh, ScrW())
 	if pa(YRPScoreboard) then
 		YRPScoreboard:Remove()
 	end
@@ -874,15 +875,15 @@ function YRPInitScoreboard()
 		else
 			yrptab["name"] = 160
 		end
-		yrptab["groupname"] = 240
+		yrptab["groupname"] = 320
 		if !GetGlobalBool("bool_yrp_scoreboard_show_groupname", false) then
 			yrptab["rolename"] = 360
 		else
-			yrptab["rolename"] = 240
+			yrptab["rolename"] = 280
 		end
-		yrptab["usergroup"] = 200
-		yrptab["language"] = 100
-		yrptab["operating_system"] = 60
+		yrptab["usergroup"] = 210
+		yrptab["language"] = 90
+		yrptab["operating_system"] = 50
 
 
 
@@ -948,7 +949,7 @@ function YRPInitScoreboard()
 		
 
 		-- BOTTOM LEFT
-		draw.SimpleText("YourRP - " .."v" .. YRPVersion() .. " (" .. string.upper(VERSIONART) .. ")" .. string.upper(server), "Saira_16", 6, ScrH() - 8, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("v" .. YRPVersion() .. " (" .. string.upper(VERSIONART) .. ")" .. string.upper(server), "Saira_16", 6, ScrH() - 8, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 
