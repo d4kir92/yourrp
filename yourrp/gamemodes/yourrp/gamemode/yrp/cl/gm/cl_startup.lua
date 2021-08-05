@@ -1457,7 +1457,6 @@ function drawBar(ply, stri, z, color, cur, max, barcolor)
 	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
 		surface.SetFont("Y_22_500")
 		local _tw, _th = surface.GetTextSize(str)
-		_tw = math.Round(_tw * 1.00, 0)
 		_th = _th
 		local w = 200
 		local r = 4

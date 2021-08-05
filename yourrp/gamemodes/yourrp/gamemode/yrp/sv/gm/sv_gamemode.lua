@@ -1162,12 +1162,29 @@ function YRPCountPassiveChannels(ply)
 	ply:SetNW2Int("yrp_voice_channel_passive", c)
 end
 
+function YRPSwitchToVoiceChannel(ply, uid)
+	if !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. uid) then
+		ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. uid, true) 
+	else
+		for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+			if channel.uniqueID == uid then
+				ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, false)
+			else
+				ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true)
+			end
+		end
+	end
+
+	YRPCountActiveChannels(ply)
+end
+
 util.AddNetworkString("mutemic_channel")
 net.Receive("mutemic_channel", function(len, ply)
 	local uid = net.ReadString()
+	uid = uid or "0"
+	uid = tonumber(uid)
 
-	ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. uid, !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. uid, true))
-	YRPCountActiveChannels(ply)
+	YRPSwitchToVoiceChannel(ply, uid)
 end)
 
 util.AddNetworkString("mute_channel")
@@ -1196,6 +1213,36 @@ net.Receive("mute_channel_all", function(len, ply)
 		ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, ply:GetNW2Bool("mute_channel_all", false))
 	end
 	YRPCountPassiveChannels(ply)
+end)
+
+util.AddNetworkString("yrp_next_voice_channel")
+net.Receive("yrp_next_voice_channel", function(len, ply)
+	local chan = -1
+	local found = false
+	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+		if IsInChannel(ply, channel.uniqueID) then
+			if IsActiveInChannel(ply, channel.uniqueID) and ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) == false then
+				found = true
+			elseif found then
+				chan = channel.uniqueID
+				break
+			end
+		end
+	end
+
+	if chan <= -1 then -- when not after
+		for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+			if IsInChannel(ply, channel.uniqueID) then
+				found = true
+				chan = channel.uniqueID
+				break
+			end
+		end
+	end
+
+	if chan > -1 then
+		YRPSwitchToVoiceChannel(ply, chan)
+	end
 end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)

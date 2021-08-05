@@ -1,5 +1,8 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
+local colr = Color(200, 0, 0)
+local colg = Color(0, 200, 0)
+
 local vm = {}
 
 function CloseVoiceMenu()
@@ -401,7 +404,16 @@ function OpenVoiceMenu()
 
 	local CONTENT = vm.win:GetContent()
 
-	vm.win.list = createD("DPanelList", CONTENT, CONTENT:GetWide(), CONTENT:GetTall() - YRP.ctr(50 + 20), 0, 0)
+	-- HEADER
+	vm.win.listheader = createD("DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(50 + 20), 0, 0)
+	function vm.win.listheader:Paint(pw, ph)
+		draw.SimpleText(YRP.lang_string("LID_name"), "Y_20_500", YRP.ctr(100), ph / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(lply:GetNW2Int("yrp_voice_channel_active", 0) .. "/" .. "1", "Y_20_500", YRP.ctr(1190), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(lply:GetNW2Int("yrp_voice_channel_passive", 0), "Y_20_500", YRP.ctr(1290), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+
+	-- LIST
+	vm.win.list = createD("DPanelList", CONTENT, CONTENT:GetWide(), CONTENT:GetTall() - YRP.ctr(50 + 20), 0, YRP.ctr(50 + 20))
 	vm.win.list:EnableVerticalScrollbar()
 	vm.win.list:SetSpacing(YRP.ctr(10))
 
@@ -420,9 +432,9 @@ function OpenVoiceMenu()
 
 			local status = createD("DPanel", bg, h, h, 0, 0)
 			function status:Paint(pw, ph)
-				local color = Color(255, 0, 0, 255)
+				local color = Color(255, 100, 100, 255)
 				if IsActiveInChannel(lply, channel.uniqueID, true) then
-					color = Color(0, 255, 0, 255)
+					color = Color(100, 255, 100, 255)
 				elseif IsInChannel(lply, channel.uniqueID, true) then
 					color = Color(100, 100, 255, 255)
 				end
@@ -434,9 +446,11 @@ function OpenVoiceMenu()
 				edit:SetText("")
 				function edit:Paint(pw, ph)
 					local br = YRP.ctr(8)
-					surface.SetMaterial( YRP.GetDesignIcon("edit") )
-					surface.SetDrawColor( 255, 255, 255, 255 )
-					surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+					if YRP.GetDesignIcon("edit") then
+						surface.SetMaterial( YRP.GetDesignIcon("edit") )
+						surface.SetDrawColor( 255, 255, 255, 255 )
+						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+					end
 				end
 				function edit:DoClick()
 					YRPVoiceChannel(true, channel.uniqueID)
@@ -453,16 +467,18 @@ function OpenVoiceMenu()
 					local mutemic = createD("YButton", bg, h, h, bg:GetWide() - h * 2 - YRP.ctr(20), 0)
 					mutemic:SetText("")
 					function mutemic:Paint(pw, ph)
-						local color = Color(0, 255, 0)
+						local color = colg
 						if lply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
-							color = Color(255, 0, 0)
+							color = colr
 						end
 						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
 						local br = YRP.ctr(8)
-						surface.SetMaterial( YRP.GetDesignIcon("voice") )
-						surface.SetDrawColor( 255, 255, 255, 255 )
-						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+						if YRP.GetDesignIcon("mic") then
+							surface.SetMaterial( YRP.GetDesignIcon("mic") )
+							surface.SetDrawColor( 255, 255, 255, 255 )
+							surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+						end
 					end
 					function mutemic:DoClick()
 						net.Start("mutemic_channel")
@@ -475,17 +491,19 @@ function OpenVoiceMenu()
 				mute:SetText("")
 				function mute:Paint(pw, ph)
 					local icon = "64_volume-up"
-					local color = Color(0, 255, 0)
+					local color = colg
 					if lply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
 						icon = "64_volume-mute"
-						color = Color(255, 0, 0)
+						color = colr
 					end
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
 					local br = YRP.ctr(8)
-					surface.SetMaterial(YRP.GetDesignIcon(icon))
-					surface.SetDrawColor( 255, 255, 255, 255 )
-					surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+					if YRP.GetDesignIcon(icon) then
+						surface.SetMaterial(YRP.GetDesignIcon(icon))
+						surface.SetDrawColor( 255, 255, 255, 255 )
+						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+					end
 				end
 				function mute:DoClick()
 					net.Start("mute_channel")
@@ -503,9 +521,11 @@ function OpenVoiceMenu()
 						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
 						local br = YRP.ctr(8)
-						surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
-						surface.SetDrawColor( 255, 255, 255, 255 )
-						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+						if YRP.GetDesignIcon("64_angle-down") then
+							surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+							surface.SetDrawColor( 255, 255, 255, 255 )
+							surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+						end
 					end
 				end
 				function dn:DoClick()
@@ -523,9 +543,11 @@ function OpenVoiceMenu()
 						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
 						local br = YRP.ctr(8)
-						surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
-						surface.SetDrawColor( 255, 255, 255, 255 )
-						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+						if YRP.GetDesignIcon("64_angle-up") then
+							surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+							surface.SetDrawColor( 255, 255, 255, 255 )
+							surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+						end
 					end
 				end
 				function up:DoClick()
@@ -557,41 +579,45 @@ function OpenVoiceMenu()
 	vm.win.muteall:SetText("+")
 	function vm.win.muteall:Paint(pw, ph)
 		local icon = "64_volume-up"
-		local color = Color(0, 255, 0)
+		local color = colg
 		if lply:GetNW2Bool("mute_channel_all", false) then
 			icon = "64_volume-mute"
-			color = Color(255, 0, 0)
+			color = colr
 		end
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 		
 		local br = YRP.ctr(8)
-		surface.SetMaterial(YRP.GetDesignIcon(icon))
-		surface.SetDrawColor( 255, 255, 255, 255 )
-		surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+		if YRP.GetDesignIcon(icon) then
+			surface.SetMaterial(YRP.GetDesignIcon(icon))
+			surface.SetDrawColor( 255, 255, 255, 255 )
+			surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+		end
 	end
 	function vm.win.muteall:DoClick()
 		net.Start("mute_channel_all")
 		net.SendToServer()
 	end
 
-	vm.win.mutemicall = createD("YButton", CONTENT, size, size, CONTENT:GetWide() - size - YRP.ctr(10) - size, CONTENT:GetTall() - YRP.ctr(50))
+	--[[vm.win.mutemicall = createD("YButton", CONTENT, size, size, CONTENT:GetWide() - size - YRP.ctr(10) - size, CONTENT:GetTall() - YRP.ctr(50))
 	vm.win.mutemicall:SetText("+")
 	function vm.win.mutemicall:Paint(pw, ph)
-		local color = Color(0, 255, 0)
+		local color = colg
 		if lply:GetNW2Bool("mutemic_channel_all", false) then
-			color = Color(255, 0, 0)
+			color = colr
 		end
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
 		local br = YRP.ctr(8)
-		surface.SetMaterial( YRP.GetDesignIcon("voice") )
-		surface.SetDrawColor( 255, 255, 255, 255 )
-		surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+		if YRP.GetDesignIcon("mic") then
+			surface.SetMaterial( YRP.GetDesignIcon("mic") )
+			surface.SetDrawColor( 255, 255, 255, 255 )
+			surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+		end
 	end
 	function vm.win.mutemicall:DoClick()
 		net.Start("mutemic_channel_all")
 		net.SendToServer()
-	end
+	end]]
 end
 
 net.Receive("channel_dn", function(len)
@@ -603,11 +629,18 @@ net.Receive("channel_up", function(len)
 end)
 
 function ToggleVoiceMenu()
-	if pa(vm.win) then
-		surface.PlaySound("npc/metropolice/vo/off2.wav")
-		CloseVoiceMenu()
-	elseif YRPIsNoMenuOpen() then
-		surface.PlaySound("npc/metropolice/vo/on2.wav")
-		OpenVoiceMenu()
+	if GetGlobalBool("bool_voice", false) then
+		if pa(vm.win) then
+			surface.PlaySound("npc/metropolice/vo/off2.wav")
+			CloseVoiceMenu()
+		elseif YRPIsNoMenuOpen() then
+			surface.PlaySound("npc/metropolice/vo/on2.wav")
+			OpenVoiceMenu()
+		end
 	end
+end
+
+function NextVoiceChannel()
+	net.Start("yrp_next_voice_channel")
+	net.SendToServer()
 end

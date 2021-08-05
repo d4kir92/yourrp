@@ -109,7 +109,12 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_die_on_role_switch", "INT DEFAULT 0"
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_wanted_system", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_module", "INT DEFAULT 1")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_max_range", "INT DEFAULT 900")
+
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_gmod_voice_module", "INT DEFAULT 0")
+
 
 
 
@@ -137,8 +142,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_idcard_background", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_idcardid", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_play_button", "INT DEFAULT 1")
-
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_voice_module", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_showowner", "INT DEFAULT 1")
 
@@ -967,12 +970,25 @@ net.Receive("update_bool_voice", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_voice", "bool_voice", b)
 end)
 
+util.AddNetworkString("update_bool_voice_module")
+net.Receive("update_bool_voice_module", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_voice_module", "bool_voice_module", b)
+end)
+
 util.AddNetworkString("update_int_voice_max_range")
 net.Receive("update_int_voice_max_range", function(len, ply)
 	local int = net.ReadString()
 	if isnumber(tonumber(int)) then
 		GeneralUpdateInt(ply, "update_int_voice_max_range", "int_voice_max_range", int)
 	end
+end)
+
+
+util.AddNetworkString("update_bool_gmod_voice_module")
+net.Receive("update_bool_gmod_voice_module", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_gmod_voice_module", "bool_gmod_voice_module", b)
 end)
 
 
@@ -1126,12 +1142,6 @@ util.AddNetworkString("update_bool_yrp_play_button")
 net.Receive("update_bool_yrp_play_button", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_yrp_play_button", "bool_yrp_play_button", b)
-end)
-
-util.AddNetworkString("update_bool_yrp_voice_module")
-net.Receive("update_bool_yrp_voice_module", function(len, ply)
-	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "update_bool_yrp_voice_module", "bool_yrp_voice_module", b)
 end)
 
 

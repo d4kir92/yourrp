@@ -477,8 +477,10 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_players_die_on_role_switch, "LID_playersdieonroleswitch", "update_bool_players_die_on_role_switch")
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice, "LID_voicechat", "update_bool_voice")
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_module, YRP.lang_string("LID_voicemodule") .. " (YourRP)", "update_bool_voice_module")
 		CreateNumberWangLine(GAMEMODE_SYSTEMS:GetContent(), GEN.int_voice_max_range, YRP.lang_string("LID_maxvoicerange"), "update_int_voice_max_range", 100)
-
+		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_gmod_voice_module, YRP.lang_string("LID_voicemodule") .. " (GMOD)", "update_bool_gmod_voice_module")
 
 
 		--[[ GAMEMODE VISUALS ]]--
@@ -911,8 +913,6 @@ net.Receive("Connect_Settings_General", function(len)
 		GAMEMODE_VISUALS:GetContent():AddItem(idcard_change)
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_play_button, "LID_playbutton", "update_bool_yrp_play_button")
-		CreateHRLine(GAMEMODE_VISUALS:GetContent())
-		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_voice_module, "LID_voicemodule", "update_bool_yrp_voice_module")
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_showowner, "LID_showowner", "update_bool_yrp_showowner")
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())

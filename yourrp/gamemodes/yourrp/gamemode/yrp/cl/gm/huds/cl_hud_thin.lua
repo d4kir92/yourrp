@@ -26,7 +26,7 @@ icons["WS"] = "bullet_secondary"
 local animationTime = 4
 
 local HUD_THIN = {}
-local function YRPDrawThin(tab)
+function YRPDrawThin(tab)
 	local lply = LocalPlayer()
 
 	local name = tab.name
@@ -46,10 +46,10 @@ local function YRPDrawThin(tab)
 	if lply:GetNW2Int("hud_version", 0) != HUD_THIN[name]["hud_version"] then
 		HUD_THIN[name]["hud_version"] = lply:GetNW2Int("hud_version", 0)
 
-		HUD_THIN[name].x = lply:HudValue(name, "POSI_X")
-		HUD_THIN[name].y = lply:HudValue(name, "POSI_Y")
-		HUD_THIN[name].w = lply:HudValue(name, "SIZE_W")
-		HUD_THIN[name].h = lply:HudValue(name, "SIZE_H")
+		HUD_THIN[name].x = tab.x or lply:HudValue(name, "POSI_X")
+		HUD_THIN[name].y = tab.y or lply:HudValue(name, "POSI_Y")
+		HUD_THIN[name].w = tab.w or lply:HudValue(name, "SIZE_W")
+		HUD_THIN[name].h = tab.h or lply:HudValue(name, "SIZE_H")
 
 		HUD_THIN[name].sicon = lply:HudValue(name, "ICON")
 		HUD_THIN[name].stext = lply:HudValue(name, "TEXT")

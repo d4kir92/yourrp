@@ -111,6 +111,8 @@ function Player:DesignLoadout(from)
 		YRP.msg("note", "Fatal Error: Design Settings not found")
 	end
 	self:SetNW2Int("yrp_loading", 100)
+
+	YRPCountPassiveChannels(self)
 end
 
 util.AddNetworkString("rebuildHud")

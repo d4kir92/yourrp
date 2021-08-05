@@ -447,7 +447,7 @@ function YRPScoreboardAddPlayer(ply)
 						x = x + yrptab["groupname"] + sp
 					end
 					if GetGlobalBool("bool_yrp_scoreboard_show_rolename", false) then
-						local text = ply:GetGroupName()
+						local text = ply:GetRoleName()
 						local font = "Saira_24"
 						surface.SetFont(font)
 						local tsw, tsh = surface.GetTextSize(text)
@@ -462,7 +462,7 @@ function YRPScoreboardAddPlayer(ply)
 						x = x + yrptab["rolename"] + sp
 					end
 				elseif ply:GetNW2Bool("yrp_characterselection", true) then
-					draw.SimpleText("[" .. YRP.lang_string("LID_characterselection") .. "]", "Saira_24", x, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText("[" .. YRP.lang_string("LID_characterselection") .. "]", "Saira_24", x, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				else
 					draw.SimpleText("[" .. "FAIL" .. "]", "Saira_24", x, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
@@ -874,11 +874,11 @@ function YRPInitScoreboard()
 		else
 			yrptab["name"] = 160
 		end
-		yrptab["groupname"] = 220
+		yrptab["groupname"] = 240
 		if !GetGlobalBool("bool_yrp_scoreboard_show_groupname", false) then
 			yrptab["rolename"] = 360
 		else
-			yrptab["rolename"] = 220
+			yrptab["rolename"] = 240
 		end
 		yrptab["usergroup"] = 200
 		yrptab["language"] = 100

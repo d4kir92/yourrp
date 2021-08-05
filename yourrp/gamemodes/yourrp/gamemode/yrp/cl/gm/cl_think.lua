@@ -131,7 +131,11 @@ function useFunction(str)
 			net.Start("yrp_voice_range_dn")
 			net.SendToServer()
 		elseif str == "voice_menu" then
-			ToggleVoiceMenu()
+			if input.IsShiftDown() then
+				NextVoiceChannel()
+			else
+				ToggleVoiceMenu()
+			end
 		elseif str == "chat_menu" then
 			ToggleChatMenu()
 		elseif str == "macro_menu" then

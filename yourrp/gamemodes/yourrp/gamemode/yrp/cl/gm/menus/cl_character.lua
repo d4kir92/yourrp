@@ -254,7 +254,7 @@ function LoadCharacters()
 								if head then
 									local eyepos = tmpChar.mdl.Entity:GetBonePosition(head)
 									if eyepos then
-										eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
+										eyepos:Add(Vector(0, 0, 3))	-- Move up slightly
 										tmpChar.mdl:SetLookAt(eyepos)
 										tmpChar.mdl:SetCamPos(eyepos-Vector(-20, 0, 0))	-- Move cam in front of eyes
 										tmpChar.mdl.Entity:SetEyeTarget(eyepos-Vector(-20, 0, 0))

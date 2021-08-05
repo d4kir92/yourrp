@@ -44,7 +44,7 @@ hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
 			}
 
 			if g_VoicePanelList != nil then
-				g_VoicePanelList:SetVisible(GetGlobalBool("bool_yrp_voice_module", false))
+				g_VoicePanelList:SetVisible(GetGlobalBool("bool_gmod_voice_module", false))
 			end
 			if (hide[ name ]) then return false end
 		end
@@ -698,15 +698,42 @@ hook.Add("HUDPaint", "yrp_voice_module", function()
 	VO.font = "Y_16_500"
 	surface.SetFont(VO.font)
 
-	local ac = lply:GetNW2Int("yrp_voice_channel_active", 0)
-
-	if ac == 0 then
-		VO.text = YRP.lang_string("LID_radiodisabled") .. " (" .. string.Replace(YRP.lang_string("LID_pressvoicetoopenradiomenu"), "KEY", GetKeybindName("voice_menu")) .. ")"
-	elseif ac == 1 then
-		VO.text = YRP.lang_string("LID_1channelactive") .. " (" .. GetKeybindName("voice_menu") .. ")"
-	else
-		VO.text = string.Replace(YRP.lang_string("LID_xchannelactive"), "X", ac) .. " (" .. GetKeybindName("voice_menu") .. ")"
+	local texta = {}
+	local textp = {}
+	for i, v in pairs(GetGlobalTable("yrp_voice_channels")) do
+		if IsActiveInChannel(lply, v.uniqueID) then
+			table.insert(texta, v.string_name)
+		end
+		if IsInChannel(lply, v.uniqueID) then
+			table.insert(textp, v.string_name)
+		end
 	end
+
+	local ca = table.Count(texta)
+	local cp = table.Count(textp)
+
+	if ca == 0 then
+		VO.text = "-"
+	else
+		VO.text = YRP.lang_string("LID_active") .. ": " .. table.concat(texta, ", ")
+	end
+
+	VO.text = VO.text .. " | "
+
+	if cp == 0 then
+		VO.text = VO.text .. "-"
+	elseif cp <= 2 then
+		VO.text = VO.text .. table.concat(textp, ", ")
+	else
+		VO.text = VO.text .. string.Replace(YRP.lang_string("LID_xpassive"), "X", cp)
+	end
+
+	if ca == 0 and cp == 0 then
+		VO.text = "" .. string.Replace(YRP.lang_string("LID_pressvoicetoopenradiomenu"), "KEY", GetKeybindName("voice_menu")) .. ""
+	else
+		VO.text = VO.text .. " (" .. GetKeybindName("voice_menu") .. ")"
+	end
+
 	VO.tw = surface.GetTextSize(VO.text)
 
 	if lply:GetNW2Int("hud_version", 0) != VO.version then
