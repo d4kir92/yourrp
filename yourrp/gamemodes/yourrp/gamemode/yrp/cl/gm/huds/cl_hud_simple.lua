@@ -512,6 +512,7 @@ icons["AB"] = "64_tint"
 icons["BA"] = "64_battery-full"
 icons["ID"] = "64_address-card"
 icons["CR"] = "64_clock"
+icons["CC"] = "64_clock"
 icons["RO"] = "64_user-graduate"
 icons["NA"] = "64_user"
 
@@ -538,6 +539,8 @@ function HUDSimple()
 			HUDSimpleBG(ID)
 			local CR = {}
 			CR.element = "CR"
+			local CC = {}
+			CC.element = "CC"
 			HUDSimpleBG(CR)
 			local HP = {}
 			HP.element = "HP"
@@ -713,6 +716,13 @@ function HUDSimple()
 			CR.text = os.date("%H:%M" , os.time())
 			CR.icon = icons["CR"]
 			HUDSimpleBAR(CR)
+			CC = {}
+			CC.element = "CC"
+			CC.cur = 0
+			CC.max = 1
+			CC.text = lply:FormattedCharPlayTime()
+			CC.icon = icons["CC"]
+			HUDSimpleBAR(CC)
 			HP = {}
 			HP.element = "HP"
 			HP.cur = lply:Health()

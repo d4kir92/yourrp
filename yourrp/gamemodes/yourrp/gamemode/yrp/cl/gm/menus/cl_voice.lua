@@ -408,8 +408,8 @@ function OpenVoiceMenu()
 	vm.win.listheader = createD("DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(50 + 20), 0, 0)
 	function vm.win.listheader:Paint(pw, ph)
 		draw.SimpleText(YRP.lang_string("LID_name"), "Y_20_500", YRP.ctr(100), ph / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText(lply:GetNW2Int("yrp_voice_channel_active", 0) .. "/" .. "1", "Y_20_500", YRP.ctr(1190), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(lply:GetNW2Int("yrp_voice_channel_passive", 0), "Y_20_500", YRP.ctr(1290), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(lply:GetNW2Int("yrp_voice_channel_active_mic", 0) .. "/" .. "1", "Y_20_500", YRP.ctr(1190), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(lply:GetNW2Int("yrp_voice_channel_passive_voice", 0), "Y_20_500", YRP.ctr(1290), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	-- LIST
@@ -462,31 +462,33 @@ function OpenVoiceMenu()
 				draw.SimpleText(channel.string_name, "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			if IsInChannel(lply, channel.uniqueID, true) then
-				if IsActiveInChannel(lply, channel.uniqueID, true) then
-					local mutemic = createD("YButton", bg, h, h, bg:GetWide() - h * 2 - YRP.ctr(20), 0)
-					mutemic:SetText("")
-					function mutemic:Paint(pw, ph)
-						local color = colg
-						if lply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
-							color = colr
-						end
-						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
+			
 
-						local br = YRP.ctr(8)
-						if YRP.GetDesignIcon("mic") then
-							surface.SetMaterial( YRP.GetDesignIcon("mic") )
-							surface.SetDrawColor( 255, 255, 255, 255 )
-							surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
-						end
+			if IsActiveInChannel(lply, channel.uniqueID, true) then
+				local mutemic = createD("YButton", bg, h, h, bg:GetWide() - h * 2 - YRP.ctr(20), 0)
+				mutemic:SetText("")
+				function mutemic:Paint(pw, ph)
+					local color = colg
+					if lply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
+						color = colr
 					end
-					function mutemic:DoClick()
-						net.Start("mutemic_channel")
-							net.WriteString(channel.uniqueID)
-						net.SendToServer()
+					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
+
+					local br = YRP.ctr(8)
+					if YRP.GetDesignIcon("mic") then
+						surface.SetMaterial( YRP.GetDesignIcon("mic") )
+						surface.SetDrawColor( 255, 255, 255, 255 )
+						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
 					end
 				end
+				function mutemic:DoClick()
+					net.Start("mutemic_channel")
+						net.WriteString(channel.uniqueID)
+					net.SendToServer()
+				end
+			end
 
+			if IsInChannel(lply, channel.uniqueID, true) then
 				local mute = createD("YButton", bg, h, h, bg:GetWide() - h, 0)
 				mute:SetText("")
 				function mute:Paint(pw, ph)

@@ -652,7 +652,7 @@ net.Receive("Connect_Settings_General", function(len)
 						draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 255, 60, a2))
 					end
 
-					draw.SimpleText(name, "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, a3), 1, 1)
+					draw.SimpleTextOutlined(name, "Y_24_700", pw / 2, ph / 2, Color(255, 255, 255, a3), 1, 1, 1, Color(0, 0, 0, a3))
 
 					-- SIZE
 					local w, h = self:GetSize()

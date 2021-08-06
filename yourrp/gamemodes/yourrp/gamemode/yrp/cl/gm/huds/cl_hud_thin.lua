@@ -15,6 +15,7 @@ icons["AB"] = "64_tint"
 icons["BA"] = "64_battery-full"
 icons["ID"] = "64_address-card"
 icons["CR"] = "64_clock"
+icons["CC"] = "64_clock"
 icons["RO"] = "64_user-graduate"
 icons["NA"] = "64_user"
 icons["PE"] = "64_window-restore"
@@ -170,6 +171,7 @@ function YRPHUDThin()
 			for i = 1, 10 do
 				local BOX = {}
 				BOX.name = "BOX" .. i
+				BOX.valuetext = lply:HudValue(BOX.name, "CTEX")
 				YRPDrawThin(BOX)
 			end
 
@@ -355,6 +357,12 @@ function YRPHUDThin()
 			CR.max = 60 * 60 * 24
 			CR.valuetext = os.date("%H:%M" , os.time())
 			YRPDrawThin(CR)
+
+			local CC = {}
+			CC.name = "CC"
+			CC.text = "LID_playtime"
+			CC.valuetext = lply:FormattedCharPlayTime()
+			YRPDrawThin(CC)
 
 			local LO = {}
 			LO.name = "LO"

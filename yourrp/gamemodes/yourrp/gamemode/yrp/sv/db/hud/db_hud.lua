@@ -57,6 +57,18 @@ function AddHUDElement(tab, reset)
 			end
 		end
 	end
+	if tab.strings != nil then
+		for name, value in pairs(tab.strings) do
+			local _name = "text_HUD_" .. tab.element .. "_" .. name
+			if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
+				SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
+			end
+
+			if reset then
+				SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+			end
+		end
+	end
 end
 
 --[[
@@ -847,13 +859,41 @@ function DefaultHUDSettings(reset)
 	CR.colors.TE = "255, 255, 255, 255"
 	CR.colors.TB = "0, 0, 0, 255"
 	CR.colors.BG = "0, 0, 0, 120"
-	CR.colors.BA = "0, 0, 0, 0"
+	CR.colors.BA = "100, 100, 100, 255"
 	CR.colors.BR = "0, 0, 0, 180"
 	CR.ints = {}
 	CR.ints.AX = 1
 	CR.ints.AY = 1
 	CR.ints.TS = 24
 	AddHUDElement(CR, reset)
+
+	local CC = {}
+	CC.element = "CC"
+	CC.floats = {}
+	CC.floats.POSI_X = 0.46875
+	CC.floats.POSI_Y = 0.1
+	CC.floats.SIZE_W = 0.0625
+	CC.floats.SIZE_H = 0.027777777984738
+	CC.bools = {}
+	CC.bools.VISI = 1
+	CC.bools.ROUN = 0
+	CC.bools.ICON = 1
+	CC.bools.TEXT = 1
+	CC.bools.PERC = 1
+	CC.bools.BACK = 0
+	CC.bools.BORD = 0
+	CC.bools.EXTR = 1
+	CC.colors = {}
+	CC.colors.TE = "255, 255, 255, 255"
+	CC.colors.TB = "0, 0, 0, 255"
+	CC.colors.BG = "0, 0, 0, 120"
+	CC.colors.BA = "100, 100, 255, 255"
+	CC.colors.BR = "0, 0, 0, 180"
+	CC.ints = {}
+	CC.ints.AX = 1
+	CC.ints.AY = 1
+	CC.ints.TS = 24
+	AddHUDElement(CC, reset)
 
 	local SL = {}
 	SL.element = "SL"
@@ -994,6 +1034,8 @@ function DefaultHUDSettings(reset)
 		BOX.ints.AX = 1
 		BOX.ints.AY = 1
 		BOX.ints.TS = 18
+		BOX.strings = {}
+		BOX.strings.CTEX = ""
 		AddHUDElement(BOX, reset)
 	end
 end
@@ -1070,7 +1112,7 @@ end)
 util.AddNetworkString("get_hud_element_settings")
 net.Receive("get_hud_element_settings", function(len, ply)
 	local element = net.ReadString()
-	local ele = SQL_SELECT(DATABASE_NAME, "*", "name LIKE '" .. "bool_HUD_" .. element .. "_%'")
+	local ele = SQL_SELECT(DATABASE_NAME, "*", nil)--"name LIKE '" .. "bool_HUD_" .. element .. "_%'")
 	local nettab = {}
 	for i, e in pairs(ele) do
 		nettab[e.name] = e.value
@@ -1095,6 +1137,15 @@ net.Receive("update_hud_bool", function(len, ply)
 	local art = net.ReadString()
 	local b = net.ReadBool()
 	SQL_UPDATE(DATABASE_NAME, "value = '" .. tonum(b) .. "'", "name = '" .. "bool_HUD_" .. element .. "_" .. art .. "'")
+	HudLoadoutAll()
+end)
+
+util.AddNetworkString("update_hud_text")
+net.Receive("update_hud_text", function(len, ply)
+	local element = net.ReadString()
+	local text = net.ReadString()
+
+	SQL_UPDATE(DATABASE_NAME, "value = '" .. text .. "'", "name = '" .. "text_HUD_" .. element .. "_" .. "CTEX" .. "'")
 	HudLoadoutAll()
 end)
 

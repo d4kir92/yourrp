@@ -34,6 +34,8 @@ function save_clients(str)
 			local steamid = ply:SteamID() or ply:UniqueID()
 			local _result = SQL_UPDATE(_db_name, "Timestamp = " .. os.time(), "SteamID = '" .. steamid .. "'")
 
+			ply:AddPlayTime(true)
+			
 			if ply:Alive() then
 				local _char_id = ply:CharID()
 				if worked(_char_id, "CharID failed @save_clients") then
@@ -307,7 +309,7 @@ function set_role_values(ply, pmid)
 					pmid = 1
 				end
 				local pm = pms[pmid]
-				if wk(pm) then
+				if wk(pm) and pm.string_model then
 					ply:SetNW2String("string_playermodel", pm.string_model)
 					ply:SetModel(pm.string_model)
 

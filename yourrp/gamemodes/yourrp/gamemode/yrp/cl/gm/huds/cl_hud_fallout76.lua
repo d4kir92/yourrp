@@ -600,6 +600,11 @@ function HUD_FO76()
 			CR.text = os.date("%H:%M" , os.time())
 			FO76Name(CR)
 
+			local CC = {}
+			CC.element = "CC"
+			CC.text = lply:FormattedCharPlayTime()
+			FO76Name(CC)
+
 			local ID = {}
 			ID.element = "ID"
 			ID.text = lply:GetNW2String("idcardid", "")

@@ -233,9 +233,8 @@ end
 
 function DarkRP.getDemoteGroup(teamNr)
 	--Description: Get the demote group of a team. Every team in the same group will return the same object.
-	YRP.msg("darkrp", "getDemoteGroup(" .. tostring(teamNr) .. ")")
-	YRP.msg("darkrp", DarkRP._not)
 	--set(Disjoint-Set) the demote group identifier
+	return {}
 end
 
 function DarkRP.getDemoteGroups()

@@ -54,6 +54,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_intellect", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_spirit", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_armor", "INT DEFAULT 0")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "text_playtime", "TEXT DEFAULT '0'")
+
 --[[ EQUIPMENT NEW ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "TEXT DEFAULT '0'")
 
@@ -109,6 +111,8 @@ function Player:CharacterLoadout()
 			self:SetNW2String("int_xp_for_levelup", levelsystem.int_xp_for_levelup)
 			self:SetNW2String("float_multiplier", levelsystem.float_multiplier)
 		end
+
+		self:SetNW2String("text_playtime", chatab.text_playtime)
 	end
 end
 
@@ -791,6 +795,15 @@ net.Receive("violation_dn", function(len, ply)
 	end
 end)
 
+util.AddNetworkString("set_rpname")
+net.Receive("set_rpname", function(len, ply)
+	local p = net.ReadEntity()
+	local rpname = net.ReadString()
+	if ply:HasAccess() then
+		p:SetRPName(rpname)
+	end
+end)
+
 util.AddNetworkString("set_idcardid")
 net.Receive("set_idcardid", function(len, ply)
 	local p = net.ReadEntity()
@@ -848,3 +861,14 @@ function YRPSetAllCharsToDefaultRole(ply)
 		SQL_UPDATE(DATABASE_NAME, "roleID = '1'", "SteamID = '" .. ply:SteamID() .. "'")
 	end
 end
+
+util.AddNetworkString("setting_characters")
+net.Receive("setting_characters", function(len, ply)
+	local tab = SQL_SELECT(DATABASE_NAME, "SteamID, rpname, text_idcardid, rpdescription, groupID, roleID, money, moneybank, int_level, bool_eventchar, bool_archived", nil)
+	if !wk(tab) then
+		tab = {}
+	end
+	net.Start("setting_characters")
+		net.WriteTable(tab)
+	net.Send(ply)
+end)

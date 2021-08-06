@@ -15,6 +15,9 @@ end
 if SQL_SELECT(DATABASE_NAME, "*", "name = 'int_background_x'") != nil then
 	SQL_UPDATE(DATABASE_NAME, "value = '0'", "name = 'int_background_x'")
 	SQL_UPDATE(DATABASE_NAME, "value = '0'", "name = 'int_background_y'")
+else
+	SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_x', '0'")
+	SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_y', '0'")
 end
 
 --SQL_DROP_TABLE(DATABASE_NAME)
@@ -66,10 +69,12 @@ local maxtries = 3
 
 local tries = 0
 local register = {}
-function LoadIDCardSetting(force)
+function LoadIDCardSetting(force, from)
 	tries = tries + 1
 	local missing = false
 
+	local cx = 0
+	local cy = 0
 	for i, ele in pairs(elements) do
 		for j, name in pairs(names) do
 			name = string.Replace(name, "ELEMENT", ele)
@@ -100,16 +105,55 @@ function LoadIDCardSetting(force)
 							SetGlobalInt(n, v)
 						end
 						SQL_UPDATE(DATABASE_NAME, "value = '" .. v .. "'", "name = '" .. n .. "'")
-						LoadIDCardSetting(true)
+						LoadIDCardSetting(true, "UPDATED VARIABLE")
 					end)
 				end
 			else
 				-- Missed DB Value, add them
 				if string.StartWith(name, "bool_") then
-					SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', 1")
+					SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
 					missing = true
 				elseif string.StartWith(name, "int_") then
-					SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', 100")
+					if string.EndsWith(name, "_r") then
+						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
+					elseif string.EndsWith(name, "_g") then
+						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
+					elseif string.EndsWith(name, "_b") then
+						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
+					elseif string.EndsWith(name, "_a") then
+						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
+					elseif string.EndsWith(name, "_ax") then
+						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
+					elseif string.EndsWith(name, "_ay") then
+						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
+					elseif string.EndsWith(name, "_colortype") then
+						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
+					elseif string.EndsWith(name, "_x") then
+						if i > 1 then
+							SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. cx * 180 .. "'")
+							cx = cx + 1
+						end
+					elseif string.EndsWith(name, "_y") then
+						if i > 1 then
+							SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. 600 + cy * 180 .. "'")
+							if cx > 9 then
+								cx = 0
+								cy = cy + 1
+							end
+						end
+					else
+						if string.find(name, "background") then
+							if string.EndsWith(name, "_w") then
+								SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '600'")
+							elseif string.EndsWith(name, "_h") then
+								SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '400'")
+							else
+								SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '160'")
+							end
+						else
+							SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '160'")
+						end
+					end
 					missing = true
 				else
 					YRP.msg("note", "[LoadIDCardSetting] ELSE " .. name)
@@ -150,7 +194,7 @@ function LoadIDCardSetting(force)
 		-- Updated
 	elseif missing and tries < maxtries then
 		-- If something was missing, Reload NW Variables
-		LoadIDCardSetting()
+		LoadIDCardSetting(nil, "MISSING and tries < maxtries")
 	end
 end
-LoadIDCardSetting()
+LoadIDCardSetting(nil, "INIT")

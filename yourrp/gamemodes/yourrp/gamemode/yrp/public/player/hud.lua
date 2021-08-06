@@ -13,6 +13,7 @@ if CLIENT then
 		local hbools = {"VISI", "ROUN", "ICON", "TEXT", "PERC", "BACK", "BORD", "EXTR"}
 		local hcolors = {"TE", "TB", "BG", "BA", "BR"}
 		local hints = {"AX", "AY", "TS"}
+		local hstrings = {"CTEX"}
 
 		if YRPHUD != nil then
 			if table.HasValue(hfloats, art) then
@@ -53,6 +54,9 @@ if CLIENT then
 					end
 				end
 				return ay
+			elseif table.HasValue(hstrings, art) then
+				local text = YRPHUD("text_HUD_" .. element .. "_" .. art, "")
+				return text
 			end
 			return "ART: " .. art .. " not found."
 		end

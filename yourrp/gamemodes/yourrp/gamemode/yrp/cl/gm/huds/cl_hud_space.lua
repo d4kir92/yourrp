@@ -21,6 +21,7 @@ function YRPHUDSpace()
 		local RA = YRP.GetDesignIcon("64_radiation")
 		local ID = YRP.GetDesignIcon("64_address-card")
 		local CR = YRP.GetDesignIcon("64_clock")
+		local CC = YRP.GetDesignIcon("64_clock")
 		local RO = YRP.GetDesignIcon("64_user-graduate")
 		local NA = YRP.GetDesignIcon("64_user")
 
@@ -148,6 +149,13 @@ function YRPHUDSpace()
 				nil,
 				CR,
 				os.date("%H:%M" , os.time()),
+				--2
+			}
+			ELES["CC"] = {
+				0,
+				nil,
+				CC,
+				lply:FormattedCharPlayTime(),
 				--2
 			}
 			ELES["PE"] = {

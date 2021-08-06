@@ -307,11 +307,12 @@ net.Receive("get_design_settings", function(len)
 				function win.setting:DoClick()
 					net.Receive("get_hud_element_settings", function(le)
 						local eletab = net.ReadTable()
+
 						local wx, wy = win:GetPos()
 
 						win.visible = false
 
-						win.winset = createD("DFrame", nil, YRP.ctr(860), YRP.ctr(860), wx, wy)
+						win.winset = createD("DFrame", nil, YRP.ctr(900), YRP.ctr(900), wx, wy)
 						win.winset:MakePopup()
 						win.winset:SetTitle("")
 						win.winset:Center()
@@ -488,7 +489,6 @@ net.Receive("get_design_settings", function(len)
 
 							win.winset.dpl:AddItem(line)
 						end
-
 						function win.winset:AddColorMixer(t)
 							local line = createD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 							function line:Paint(pw, ph)
@@ -528,6 +528,23 @@ net.Receive("get_design_settings", function(len)
 										net.WriteString("" .. col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a .. "")
 									net.SendToServer()
 								end
+							end
+
+							win.winset.dpl:AddItem(line)
+						end
+						function win.winset:AddTextBox(t)
+							local line = createD("DPanel", nil, YRP.ctr(500), YRP.ctr(50), 0, 0)
+							function line:Paint(pw, ph)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", YRP.ctr(420), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							end
+
+							local cb = createD("DTextEntry", line, YRP.ctr(400), YRP.ctr(50), 0, 0)
+							cb:SetText(t.value)
+							function cb:OnTextChanged()
+								net.Start("update_hud_text")
+									net.WriteString(t.element)
+									net.WriteString(self:GetText())
+								net.SendToServer()
 							end
 
 							win.winset.dpl:AddItem(line)
@@ -630,6 +647,15 @@ net.Receive("get_design_settings", function(len)
 						colorborder.element = tab.element
 						colorborder.art = "BR"
 						win.winset:AddColorMixer(colorborder)
+
+						if eletab["text_HUD_" .. tab.element .. "_CTEX"] then
+							local text = {}
+							text.name = "LID_text"
+							text.element = tab.element
+							text.art = "text"
+							text.value = eletab["text_HUD_" .. tab.element .. "_CTEX"]
+							win.winset:AddTextBox(text)
+						end
 					end)
 					if table.Count(editarea["settingswindows"]) == 0 then
 						net.Start("get_hud_element_settings")
@@ -674,6 +700,11 @@ net.Receive("get_design_settings", function(len)
 			CR.element = "CR"
 			CR.name = "LID_realtime"
 			AddElement(CR)
+
+			local CC = {}
+			CC.element = "CC"
+			CC.name = "LID_playtime"
+			AddElement(CC)
 
 			local HP = {}
 			HP.element = "HP"

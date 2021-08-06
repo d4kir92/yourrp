@@ -243,6 +243,8 @@ timer.Create("ServerThink", TICK, 0, function()
 	if _time % 1.0 == 0 then	-- Every second
 		for k, ply in pairs(player.GetAll()) do
 
+			ply:AddPlayTime()
+
 			if ply:AFK() then
 				if ply:GetNW2Float("afkts") and GetGlobalInt("int_afkkicktime") and CurTime() - ply:GetNW2Float("afkts") >= GetGlobalInt("int_afkkicktime") then
 					ply:SetNW2Bool("isafk", false)
@@ -250,7 +252,6 @@ timer.Create("ServerThink", TICK, 0, function()
 				end
 			end
 
-			ply:addSecond()
 			if ply:GetNW2Bool("loaded", false) then
 				if !ply:GetNW2Bool("inCombat") then
 					reg_hp(ply)	 --HealthReg

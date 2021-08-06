@@ -156,7 +156,8 @@ function HUDCircles()
 			HUDCirclesDrawText("NA", lply:RPName())
 
 			HUDCirclesDrawText("CR", os.date("%H:%M" , os.time()))
-
+			HUDCirclesDrawText("CC", lply:FormattedCharPlayTime())
+			
 			HUDCirclesDrawText("PE", YRP.lang_string("LID_fps") .. ": " .. GetFPS())
 			HUDCirclesDrawText("NE", YRP.lang_string("LID_ping") .. ": " .. lply:Ping())
 

@@ -1750,6 +1750,9 @@ function Player:UserGroupLoadout()
 			end
 		end
 	end
+
+	YRPCountActiveChannels(self)
+	YRPCountPassiveChannels(self)
 end
 
 util.AddNetworkString("yrp_restartserver")

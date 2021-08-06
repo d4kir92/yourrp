@@ -32,6 +32,21 @@ end
 
 local Player = FindMetaTable("Player")
 
+function Player:CharPlayTime()
+	return os.time() - self:GetNW2Int("ts_spawned") + tonumber(self:GetNW2String("text_playtime", "0"))
+end
+
+function Player:FormattedCharPlayTime()
+	local time = self:CharPlayTime()
+	--local seco = time % 60
+	local minu = math.floor(time / 60 % 60, 0)
+	if minu < 10 then
+		minu = "0" .. minu
+	end
+	local hour = math.floor(time / 3600, 0)
+	return hour .. ":" .. minu
+end
+
 Player.oldIsTyping = Player.IsTyping
 function Player:IsTyping()
 	if GetGlobalBool("bool_yrp_chat", false) then
@@ -476,16 +491,6 @@ if SERVER then
 
 	function Player:getuptimecurrent()
 		return os.clock() - self:GetNW2Float("uptime_current", 0)
-	end
-
-	function Player:addSecond()
-		local _sec_total = self:getuptimetotal()
-		local _sec_current = self:getuptimecurrent()
-		if _sec_current != nil and _sec_total != nil and _sec_current != false and _sec_total != false then
-			local _res = SQL_UPDATE("yrp_players", "uptime_total = " .. _sec_total + 1 .. ", uptime_current = " .. _sec_current + 1, "SteamID = '" .. self:SteamID() .. "'")
-			--self:SetNW2Float("uptime_total", self:getuptimetotal())
-			--self:SetNW2Float("uptime_server", os.clock())
-		end
 	end
 
 	function Player:Heal(amount)

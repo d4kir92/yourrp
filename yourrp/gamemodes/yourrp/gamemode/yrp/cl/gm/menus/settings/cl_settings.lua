@@ -5,6 +5,7 @@
 include("cl_settings_client_charakter.lua")
 include("cl_settings_client_keybinds.lua")
 include("cl_settings_server_give.lua")
+include("cl_settings_server_characters.lua")
 include("cl_settings_server_events.lua")
 include("cl_settings_server_licenses.lua")
 include("cl_settings_server_shops.lua")
@@ -138,6 +139,12 @@ function SettingsTabsContent()
 			tabs:AddOption("LID_settings_players", function(parent)
 				OpenSettingsPlayers()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_players")))
+			end)
+		end
+		if lply:GetNW2Bool("bool_players", false) then
+			tabs:AddOption("LID_characters", function(parent)
+				OpenSettingsCharacters()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_characters")))
 			end)
 		end
 		if lply:GetNW2Bool("bool_whitelist", false) then

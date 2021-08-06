@@ -15,7 +15,7 @@ net.Receive("setting_players", function(len)
 		_giveListView:AddColumn(YRP.lang_string("LID_money"))
 
 		for n, y in pairs(player.GetAll()) do
-			_giveListView:AddLine(y:SteamID(), y:SteamName(), y:RPName(), y:IDCardID(),y:GetNW2String("groupName"), y:GetNW2String("roleName"), y:GetNW2Int("money"))
+			_giveListView:AddLine(y:SteamID(), y:SteamName(), y:RPName(), y:IDCardID(), y:GetNW2String("groupName"), y:GetNW2String("roleName"), y:GetNW2Int("money"))
 		end
 
 		function _giveListView:OnRowRightClick(lineID, line)
@@ -31,14 +31,43 @@ net.Receive("setting_players", function(len)
 			local tmpX, tmpY = gui.MousePos()
 			tmpX = tmpX - YRP.ctr(4)
 			tmpY = tmpY - YRP.ctr(4)
-			local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
+			local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
 			_tmpPanel:SetPos(tmpX, tmpY)
 			_tmpPanel.ready = false
 			timer.Simple(0.2, function()
 				_tmpPanel.ready = true
 			end)
 
-			local _buttonRole = createVGUI("DButton", _tmpPanel, 400, 50, 10, 10)
+			local _buttonSetRPName = createVGUI("DButton", _tmpPanel, 400, 50, 10, 10)
+			_buttonSetRPName:SetText(YRP.lang_string("LID_rpname"))
+			function _buttonSetRPName:DoClick()
+				local _rpnameFrame = createVGUI("DFrame", nil, 400, 180, 0, 0)
+				_rpnameFrame:Center()
+				_rpnameFrame:ShowCloseButton(true)
+				_rpnameFrame:SetDraggable(true)
+				_rpnameFrame:SetTitle(YRP.lang_string("LID_rpname"))
+
+				local _newrpname = createVGUI("DTextEntry", _rpnameFrame, 380, 50, 10, 60)
+				_newrpname:SetText(ply:GetNW2String("rpname", "FAILED"))
+
+				local _rpnameButton = createVGUI("DButton", _rpnameFrame, 380, 50, 10, 60 + 10 + 50)
+				_rpnameButton:SetText(YRP.lang_string("LID_rpname"))
+				function _rpnameButton:DoClick()
+					net.Start("set_rpname")
+						net.WriteEntity(ply)
+						net.WriteString(_newrpname:GetText())
+					net.SendToServer()
+					_rpnameFrame:Close()
+				end
+
+				function _rpnameFrame:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
+				end
+
+				_rpnameFrame:MakePopup()
+			end
+
+			local _buttonRole = createVGUI("DButton", _tmpPanel, 400, 50, 10, 70)
 			_buttonRole:SetText(YRP.lang_string("LID_giverole"))
 			function _buttonRole:DoClick()
 				local _giveFrame = createVGUI("DFrame", nil, 400, 305, 0, 0)
@@ -98,7 +127,7 @@ net.Receive("setting_players", function(len)
 				_giveFrame:MakePopup()
 			end
 
-			local _buttonSetID = createVGUI("DButton", _tmpPanel, 400, 50, 10, 70)
+			local _buttonSetID = createVGUI("DButton", _tmpPanel, 400, 50, 10, 130)
 			_buttonSetID:SetText(YRP.lang_string("LID_setidcardid"))
 			function _buttonSetID:DoClick()
 				local _idcardidFrame = createVGUI("DFrame", nil, 400, 180, 0, 0)
@@ -127,7 +156,7 @@ net.Receive("setting_players", function(len)
 				_idcardidFrame:MakePopup()
 			end
 
-			local _buttonRemoveArrests = createVGUI("DButton", _tmpPanel, 400, 50, 10, 130)
+			local _buttonRemoveArrests = createVGUI("DButton", _tmpPanel, 400, 50, 10, 190)
 			_buttonRemoveArrests:SetText(YRP.lang_string("LID_removearrests"))
 			function _buttonRemoveArrests:DoClick()
 				net.Start("removearrests")
@@ -135,7 +164,7 @@ net.Receive("setting_players", function(len)
 				net.SendToServer()
 			end
 
-			local _buttonGiveLicense = createVGUI("DButton", _tmpPanel, 400, 50, 10, 190)
+			local _buttonGiveLicense = createVGUI("DButton", _tmpPanel, 400, 50, 10, 250)
 			_buttonGiveLicense:SetText(YRP.lang_string("LID_givelicense"))
 			function _buttonGiveLicense:DoClick()
 				local _licenseFrame = createVGUI("DFrame", nil, 400, 180, 0, 0)
@@ -176,7 +205,7 @@ net.Receive("setting_players", function(len)
 				_licenseFrame:MakePopup()
 			end
 
-			local _buttonRemoveLicense = createVGUI("DButton", _tmpPanel, 400, 50, 10, 250)
+			local _buttonRemoveLicense = createVGUI("DButton", _tmpPanel, 400, 50, 10, 310)
 			_buttonRemoveLicense:SetText(YRP.lang_string("LID_removelicense"))
 			function _buttonRemoveLicense:DoClick()
 				local _licenseFrame = createVGUI("DFrame", nil, 400, 180, 0, 0)
@@ -219,7 +248,7 @@ net.Receive("setting_players", function(len)
 
 			function _tmpPanel:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_ds_col())
-				if !_tmpPanel:IsHovered() and !_buttonRole:IsHovered() and !_buttonSetID:IsHovered() and !_buttonRemoveArrests:IsHovered() and !_buttonGiveLicense:IsHovered() and !_buttonRemoveLicense:IsHovered() and _tmpPanel.ready == true then
+				if !_tmpPanel:IsHovered() and !_buttonSetRPName:IsHovered() and !_buttonRole:IsHovered() and !_buttonSetID:IsHovered() and !_buttonRemoveArrests:IsHovered() and !_buttonGiveLicense:IsHovered() and !_buttonRemoveLicense:IsHovered() and _tmpPanel.ready == true then
 					_tmpPanel:Remove()
 				end
 			end

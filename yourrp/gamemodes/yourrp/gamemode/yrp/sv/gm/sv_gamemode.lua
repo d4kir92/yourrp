@@ -430,6 +430,28 @@ function PLAYER:GetRagdollEntity()
 	return self:OldGetRagdollEntity() or self.rd or NULL
 end
 
+function PLAYER:AddPlayTime(force)
+	if self.yrp_ts_oldchar != self:CharID() or force then -- char changed or FORCED
+		-- Calculate Time
+		if self.yrp_ts_oldchar then -- ADD TIME FOR OLD CHAR
+			local playtime = os.time() - self:GetNW2Int("ts_spawned", os.time())
+			
+			local tab = SQL_SELECT("yrp_characters", "uniqueID, text_playtime", "uniqueID = '" .. self.yrp_ts_oldchar .. "'")
+			if wk(tab) then
+				local oldplaytime = tab[1].text_playtime
+				
+				SQL_UPDATE("yrp_characters", "text_playtime = '" .. oldplaytime + playtime .. "'", "uniqueID = '" .. self.yrp_ts_oldchar .. "'")
+			end
+		end
+
+
+
+		-- Set For New Char
+		self:SetNW2Int("ts_spawned", os.time())
+		self.yrp_ts_oldchar = self:CharID()
+	end
+end
+
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
 	ply:CreateRagdoll()
@@ -1144,26 +1166,36 @@ end)
 
 function YRPCountActiveChannels(ply)
 	local c = 0
+	local cm = 0
 	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
-		if !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
+		if IsActiveInChannel(ply, channel.uniqueID, true) then
 			c = c + 1
+			if IsActiveInChannel(ply, channel.uniqueID) then
+				cm = cm + 1
+			end
 		end
 	end
 	ply:SetNW2Int("yrp_voice_channel_active", c)
+	ply:SetNW2Int("yrp_voice_channel_active_mic", cm)
 end
 
 function YRPCountPassiveChannels(ply)
 	local c = 0
+	local cm = 0
 	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
-		if !ply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
+		if IsInChannel(ply, channel.uniqueID, true) then
 			c = c + 1
+			if IsInChannel(ply, channel.uniqueID) then
+				cm = cm + 1
+			end
 		end
 	end
 	ply:SetNW2Int("yrp_voice_channel_passive", c)
+	ply:SetNW2Int("yrp_voice_channel_passive_voice", cm)
 end
 
 function YRPSwitchToVoiceChannel(ply, uid)
-	if !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. uid, false) then
+	if !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. uid, true) then
 		ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. uid, true) 
 	else
 		for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
@@ -1219,11 +1251,12 @@ util.AddNetworkString("yrp_next_voice_channel")
 net.Receive("yrp_next_voice_channel", function(len, ply)
 	local chan = -1
 	local found = false
+	
 	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
 		if IsInChannel(ply, channel.uniqueID) then
-			if IsActiveInChannel(ply, channel.uniqueID) and ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) == false then
+			if IsActiveInChannel(ply, channel.uniqueID, true) and ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) == false then
 				found = true
-			elseif found then
+			elseif found and IsActiveInChannel(ply, channel.uniqueID, true) then
 				chan = channel.uniqueID
 				break
 			end
@@ -1232,7 +1265,7 @@ net.Receive("yrp_next_voice_channel", function(len, ply)
 
 	if chan <= -1 then -- when not after
 		for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
-			if IsInChannel(ply, channel.uniqueID) then
+			if IsActiveInChannel(ply, channel.uniqueID, true) and ply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) == false then
 				found = true
 				chan = channel.uniqueID
 				break
