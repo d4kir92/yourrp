@@ -664,25 +664,29 @@ function YRPScoreboardAddPlayer(ply)
 				--frame:MakePopup()
 
 				function frame:Paint( w, h )
-					local x, y = self:GetPos()
+					if IsValid(ply) then
+						local x, y = self:GetPos()
 
-					local tr = util.TraceHull( {
-						start = ply:EyePos(),
-						endpos = ply:EyePos() - ( ply:GetAimVector() * 200 ),
-						filter = ply,
-						mins = Vector( -10, -10, -10 ),
-						maxs = Vector( 10, 10, 10 ),
-						mask = MASK_SHOT_HULL
-					} )
+						local tr = util.TraceHull( {
+							start = ply:EyePos(),
+							endpos = ply:EyePos() - ( ply:GetAimVector() * 200 ),
+							filter = ply,
+							mins = Vector( -10, -10, -10 ),
+							maxs = Vector( 10, 10, 10 ),
+							mask = MASK_SHOT_HULL
+						} )
 
-					local old = DisableClipping( true ) -- Avoid issues introduced by the natural clipping of Panel rendering
-					render.RenderView( {
-						origin = tr.HitPos, --ply:EyePos() - ply:GetRenderAngles():Forward() * 200,
-						angles = ply:GetRenderAngles(), -- + LocalPlayer():GetAngles(),
-						x = x, y = y,
-						w = w, h = h
-					} )
-					DisableClipping( old )
+						local old = DisableClipping( true ) -- Avoid issues introduced by the natural clipping of Panel rendering
+						render.RenderView( {
+							origin = tr.HitPos, --ply:EyePos() - ply:GetRenderAngles():Forward() * 200,
+							angles = ply:GetRenderAngles(), -- + LocalPlayer():GetAngles(),
+							x = x, y = y,
+							w = w, h = h
+						} )
+						DisableClipping( old )
+					else
+						self:Remove()
+					end
 				end
 			end
 		end}

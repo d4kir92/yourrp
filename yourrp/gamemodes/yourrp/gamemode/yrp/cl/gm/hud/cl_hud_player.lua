@@ -66,6 +66,10 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 
 	local lply = LocalPlayer()
 
+	if !IsValid(lply) then
+		return false
+	end
+
 	if once then -- Fix tabsorting
 		once = false
 		timer.Simple(0.2, function()
@@ -85,8 +89,8 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 			local text = tab:GetText() -- tab name
 			for lstr, bstr in pairs(tabs) do
 				if text == language.GetPhrase(lstr) then -- if tabtext == tabletabtext
-					tab:SetVisible(lply:GetNW2Bool(bstr, false)) -- set visible if allowed to
-					if lply:GetNW2Bool(bstr) then -- if allowed
+					tab:SetVisible(LocalPlayer():GetNW2Bool(bstr, false)) -- set visible if allowed to
+					if LocalPlayer():GetNW2Bool(bstr) then -- if allowed
 						allhidden = false -- then disable hiding the whole element
 						if firsttab == nil then -- if not firsttab found
 							firsttab = lstr -- set it

@@ -36,6 +36,8 @@ surface.CreateFont("Saira_100", {
 	outline = false
 })
 
+local ypr_logo = Material("yrp/yrp_icon")
+
 local charbgnotfound = "NO BACKGROUND FOUND - F8 General -> Character Background"
 
 local isEventChar = false

@@ -244,7 +244,7 @@ function BuildLogs(parent, typ)
 							rt:InsertClickableTextEnd()
 	
 							rt:InsertColorChange(255, 255, 255, 255)
-							rt:AppendText(" does " .. v.string_value .. " damage to ")
+							rt:AppendText(" does " .. tostring(v.string_value) .. " damage to ")
 
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(v.string_target_steamid)
@@ -256,17 +256,17 @@ function BuildLogs(parent, typ)
 							rt:InsertClickableTextEnd()
 						else
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:AppendText(v.string_alttarget)
+							rt:AppendText(tostring(v.string_alttarget))
 	
 							rt:InsertColorChange(255, 255, 255, 255)
 							rt:AppendText(" does " .. tostring(v.string_value) .. " damage to ")
 
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(v.string_target_steamid)
+							rt:InsertClickableTextStart(tostring(v.string_target_steamid))
 							if target.RPName then
 								rt:AppendText(target:RPName())
 							else
-								rt:AppendText(v.string_target_steamid)
+								rt:AppendText(tostring(v.string_target_steamid))
 							end
 							rt:InsertClickableTextEnd()
 						end

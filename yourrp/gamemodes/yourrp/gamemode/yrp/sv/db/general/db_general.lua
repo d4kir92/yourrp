@@ -2065,7 +2065,7 @@ function YRPIsRagdoll(ply)
 end
 
 function YRPDoRagdoll(ply)
-	if IsValid(ply) and ply:IsPlayer() and not IsRagdoll(ply) then
+	if IsValid(ply) and ply:IsPlayer() and not YRPIsRagdoll(ply) then
 		ply:SetNW2Bool("ragdolled", true)
 
 		local scale = ply:GetModelScale() or 1
@@ -2086,7 +2086,7 @@ function YRPDoRagdoll(ply)
 end
 
 function YRPDoUnRagdoll(ply)
-	if IsValid(ply) and ply:IsPlayer() and IsRagdoll(ply) then
+	if IsValid(ply) and ply:IsPlayer() and YRPIsRagdoll(ply) then
 		ply:SetNW2Bool("ragdolled", false)
 		ply:SetParent(nil)
 

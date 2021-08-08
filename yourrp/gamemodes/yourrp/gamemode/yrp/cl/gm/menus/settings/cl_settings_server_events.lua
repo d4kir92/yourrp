@@ -204,7 +204,7 @@ net.Receive("setting_events", function(len)
 		net.Receive("yrp_get_events", function(len)
 			local tab = net.ReadTable()
 
-			if wk(tab) then
+			if wk(tab) and pa(EVENT) and pa(EVENT.EventList) then
 				EVENT.EventList:Clear()
 
 				for n, event in pairs(tab) do

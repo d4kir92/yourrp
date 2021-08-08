@@ -118,10 +118,12 @@ function YRP.lang_string(var, vals)
 
 			-- IF NOT FOUND
 			if !wk(translation) then
-				LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
-				if nf[var] == nil and CLIENT and LocalPlayer().LoadedGamemode and LocalPlayer():LoadedGamemode() and LocalPlayer().badyourrpcontent != "" then
-					nf[var] = var
-					PrintLIDError(var)
+				if CLIENT then
+					LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
+					if nf[var] == nil and LocalPlayer().LoadedGamemode and LocalPlayer():LoadedGamemode() and LocalPlayer().badyourrpcontent != "" then
+						nf[var] = var
+						PrintLIDError(var)
+					end
 				end
 				return var
 			end

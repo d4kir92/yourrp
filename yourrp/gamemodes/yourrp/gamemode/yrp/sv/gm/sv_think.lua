@@ -103,19 +103,17 @@ function con_st(ply, _time)
 	end
 	ply.jumping = ply.jumping or false
 
-	if ply:IsOnGround() and ply.jumping then
-		ply.jumping = false
-	end
+	if ply:GetMoveType() != MOVETYPE_NOCLIP then
+		if ply:IsOnGround() and ply.jumping then
+			ply.jumping = false
+		end
 
-	if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:InVehicle() then
-		if !ply:IsOnGround() then
-			if !ply.jumping then
-				ply.jumping = true
+		if !ply:InVehicle() and !ply:IsOnGround() and !ply.jumping then
+			ply.jumping = true
 
-				local newval = ply:GetNW2Float("GetCurStamina", 0) - GetGlobalFloat("float_scale_stamina_jump", 30)
-				newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float("GetMaxStamina", 100)), 1)
-				ply:SetNW2Float("GetCurStamina", newval)
-			end
+			local newval = ply:GetNW2Float("GetCurStamina", 0) - GetGlobalFloat("float_scale_stamina_jump", 30)
+			newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float("GetMaxStamina", 100)), 1)
+			ply:SetNW2Float("GetCurStamina", newval)
 		end
 	end
 

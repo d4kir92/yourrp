@@ -790,7 +790,7 @@ hook.Add("OnLuaError", "yrp_OnLuaError", function(...)
 	local trace = tab.trace
 	local realm = tab.realm
 	
-	if YRPNewError(err) then
+	if err and trace and realm and ( string.find(err, "/yrp/") or string.find(trace, "/yrp/") ) and YRPNewError(err) then
 		YRPAddError(err, trace, realm)
 	end
 end)

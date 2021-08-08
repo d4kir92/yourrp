@@ -72,7 +72,7 @@ else
 	end
 
 	function SetChatMode(mode)
-		if type(mode) == "string" then
+		if type(mode) == "string" and pa(yrpChat) and pa(yrpChat.comboBox) then
 			CHATMODE = string.upper(mode)
 			yrpChat.comboBox:SetText(CHATMODE)
 		end

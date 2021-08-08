@@ -808,10 +808,12 @@ util.AddNetworkString("set_idcardid")
 net.Receive("set_idcardid", function(len, ply)
 	local p = net.ReadEntity()
 	local text_idcardid = net.ReadString()
-	local ptab = SQL_SELECT(DATABASE_NAME, "text_idcardid", "uniqueID = '" .. p:CharID() .. "'")
-	if wk(ptab) then
-		SQL_UPDATE(DATABASE_NAME, "text_idcardid = '" .. text_idcardid .. "'", "uniqueID = '" .. p:CharID() .. "'")
-		p:SetNW2String("idcardid", text_idcardid)
+	if wk(p:CharID()) then
+		local ptab = SQL_SELECT(DATABASE_NAME, "text_idcardid", "uniqueID = '" .. p:CharID() .. "'")
+		if wk(ptab) then
+			SQL_UPDATE(DATABASE_NAME, "text_idcardid = '" .. text_idcardid .. "'", "uniqueID = '" .. p:CharID() .. "'")
+			p:SetNW2String("idcardid", text_idcardid)
+		end
 	end
 end)
 
