@@ -406,7 +406,7 @@ timer.Create("ServerThink", TICK, 0, function()
 	end
 
 	if _time == 10 then
-		YRPCheckVersion()
+		YRPCheckVersion("think")
 	elseif _time == 30 then
 		--IsServerInfoOutdated()
 	end

@@ -188,26 +188,11 @@ function DarkRP.getAvailableVehicles()
 	return {}
 end
 
+CATEGORIES = CATEGORIES or {}
+
 function DarkRP.getCategories()
 	--Description: Get all categories for all F4 menu tabs.
-	local tab = {}
-	tab.jobs = RPExtraTeams
-	tab.entities = {}
-	tab.shipments = {}
-	tab.weapons = {}
-	tab.ammo = {}
-	tab.vehicles = {}
-	for i, job in pairs(tab.jobs) do
-		job.members = {}
-		for i, ply in pairs(player.GetAll()) do
-			if ply:Team() == job.team then
-				tinsert(job.members, ply)
-			end
-			--tab.members[ply:GetTeam()] = {}
-			--tab.members[ply:GetTeam()].team = ply:GetTeam()
-		end
-	end
-	return tab
+	return CATEGORIES
 end
 
 function DarkRP.getChatCommand(command)

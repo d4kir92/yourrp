@@ -292,14 +292,6 @@ function set_level(sender, text)
 	end
 end
 
-function do_sleep(sender)
-	if IsRagdoll(sender) then
-		YRPDoUnRagdoll(sender)
-	else
-		YRPDoRagdoll(sender)
-	end
-end
-
 util.AddNetworkString("set_chat_mode")
 net.Receive("set_chat_mode", function(len, ply)
 	local _str = net.ReadString() or "say"

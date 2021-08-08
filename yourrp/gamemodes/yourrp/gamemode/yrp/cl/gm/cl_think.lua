@@ -796,3 +796,27 @@ net.Receive("send_team", function(len)
 	team.SetUp(teamuid, teamname, teamcolor)
 end)
 
+CATEGORIES = CATEGORIES or {}
+CATEGORIES.jobs = CATEGORIES.jobs or {}
+CATEGORIES.entities = CATEGORIES.entities or {}
+CATEGORIES.shipments = CATEGORIES.shipments or {}
+CATEGORIES.weapons = CATEGORIES.weapons or {}
+CATEGORIES.ammo = CATEGORIES.ammo or {}
+CATEGORIES.vehicles = CATEGORIES.vehicles or {}
+net.Receive("send_categories", function(len)
+	local catname = net.ReadString()
+	local catTab = net.ReadTable()
+
+	CATEGORIES.jobs[catname] = catTab
+end)
+
+net.Receive("drp_combinetabs", function(len)
+	for i, cat in pairs(CATEGORIES.jobs) do
+		cat.members = {}
+		for i, role in pairs(RPExtraTeams) do
+			if role and cat and role.int_groupID == cat.uniqueID then
+				table.insert(cat.members, role)
+			end
+		end
+	end
+end)

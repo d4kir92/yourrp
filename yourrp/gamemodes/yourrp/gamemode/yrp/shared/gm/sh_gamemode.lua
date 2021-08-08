@@ -17,8 +17,8 @@ GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
 GM.Help = "Create your rp you want to make!" --do NOT change this!
 GM.dedicated = "-" --do NOT change this!
 GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 345 --do NOT change this!
-GM.VersionCanary = 693 --do NOT change this!
+GM.VersionBeta = 346 --do NOT change this!
+GM.VersionCanary = 695 --do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
 GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
@@ -309,13 +309,7 @@ RunConsoleCommand("mat_queue_mode", "-1")
 RunConsoleCommand("studio_queue_mode", "1")
 RunConsoleCommand("r_hunkalloclightmaps", "0")
 
--- Enable Errorlog
---RunConsoleCommand("lua_log_sv", "1")
-
 if CLIENT then
-	-- Enable Errorlog
-	--RunConsoleCommand("lua_log_cl", "1")
-
 	-- Multicore (Client) enable:
 	RunConsoleCommand("cl_threaded_bone_setup", "1")
 	RunConsoleCommand("cl_threaded_client_leaf_system", "1")
@@ -623,56 +617,180 @@ function YRPGetHostName()
 	return ""
 end
 
---[[
--- GMOD Discord Trace Errors
-local function FormatTraceback(dumpStr)
-	local stackDump = string.Explode("\n", dumpStr)
-	local newDumpStr = ""
-
-	for i=1, #stackDump do
-		if i > 2 then
-			local stackNum = i - 2
-			local stackEntry = string.Trim(stackDump[i])
-
-			local stackEntryFuncLabelStart, stackEntryFuncLabelEnd = string.find(stackEntry, ": in function ")
-			local stackEntryMainChunkReplace = 0
-			stackEntry, stackEntryMainChunkReplace = string.gsub(stackEntry, ": in main chunk", "")
-
-			if stackEntryFuncLabelStart then
-				local stackEntryFuncName = string.sub(stackEntry, stackEntryFuncLabelEnd + 2, #stackEntry - 1)
-				stackEntry = string.sub(stackEntry, 1, stackEntryFuncLabelStart - 1)
-
-				if stackEntry == "[C]" then
-					stackEntry = stackEntry .. ":-1"
-				end
-
-				stackEntry = stackEntryFuncName .. " - " .. stackEntry
-			elseif stackEntryMainChunkReplace > 0 then
-				stackEntry = "unknown - " .. stackEntry
-			end
-
-			newDumpStr = newDumpStr .. string.rep(" ", stackNum) .. stackNum .. ". " .. stackEntry
-			newDumpStr = newDumpStr .. (i < #stackDump and "\n" or "")
-		end
-	end
-
-	return newDumpStr
-end
-
-local _R = debug.getregistry()
-oErrorFunc = oErrorFunc or _R[1]
-_R[1] = function(...)
-	local errVarArg = {...}
-	local errorString = table.concat(errVarArg)
-
-	pcall(hook.Call, "LuaError", GAMEMODE, errorString, FormatTraceback(debug.traceback()))
-	return oErrorFunc(...)
-end
-]]
-
 function IsVoidCharEnabled()
 	if VoidChar != nil then
 		return true
 	end
 	return false
 end
+
+
+
+-- ERROR LOGGING
+
+-- CONFIG
+local filename = "yrp/yrp_errors.json"
+local deleteafter = 60 * 60 * 24
+local url_cl = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdsvTPwNqIDBPE-UcJLcTaxR9dC0U7HcleQCxoVq-Aa2qk6eA/formResponse"
+local url_sv = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSecLLX255Pvm-uMPtgG-1deTdT5KJuAikz75mfZBbytbG93vg/formResponse"
+-- CONFIG
+
+local YRPErrors = {}
+local function YRPCheckErrorFile()
+	if !file.Exists( "yrp", "DATA" ) then
+		file.CreateDir( "yrp" )
+	end
+	if !file.Exists( filename, "DATA" ) then
+		local tab = {}
+		file.Write( filename, util.TableToJSON( tab, true ) )
+	end
+	YRPErrors = util.JSONToTable( file.Read( filename, "DATA" ) )
+
+end
+YRPCheckErrorFile()
+
+local function YRPNewError(err)
+	YRPCheckErrorFile()
+
+	for i, v in pairs(YRPErrors) do
+		if v.err and v.err == err then
+			return false
+		end
+	end
+	return true
+end
+
+local function YRPSaveErrors()
+	file.Write( filename, util.TableToJSON( YRPErrors, true ) )
+end
+
+local function YRPSendError(tab)
+	local entry = {}
+	local posturl = ""
+
+	if tab.realm == "SERVER" then
+		-- err
+		entry["entry.60824756"] = tostring(tab.err)
+
+		-- trace
+		entry["entry.881449865"] = tostring(tab.trace)
+
+		-- ts
+		entry["entry.1817954213"] = tostring(tab.ts)
+
+		-- realm
+		entry["entry.482867838"] = tostring(tab.realm)
+
+		-- stable
+		entry["entry.1564591854"] = tostring(GAMEMODE.VersionStable)
+
+		-- beta
+		entry["entry.1746105951"] = tostring(GAMEMODE.VersionBeta)
+
+		-- canary
+		entry["entry.176860124"] = tostring(GAMEMODE.VersionCanary)
+
+		posturl = url_sv
+	elseif tab.realm == "CLIENT" then
+		-- err
+		entry["entry.1671624092"] = tostring(tab.err)
+
+		-- trace
+		entry["entry.1839792460"] = tostring(tab.trace)
+
+		-- ts
+		entry["entry.1069217162"] = tostring(tab.ts)
+
+		-- realm
+		entry["entry.507913261"] = tostring(tab.realm)
+
+		-- stable
+		entry["entry.933178868"] = tostring(GAMEMODE.VersionStable)
+
+		-- beta
+		entry["entry.625348867"] = tostring(GAMEMODE.VersionBeta)
+
+		-- canary
+		entry["entry.1848121189"] = tostring(GAMEMODE.VersionCanary)
+
+		posturl = url_cl
+	else
+		print(">>> [YRPSendError] FAIL! >> Realm: " .. tostring(tab.realm))
+		return
+	end
+
+	if GAMEMODE and GAMEMODE.VersionSortWasSet and IsYRPOutdated then
+		if IsYRPOutdated() then
+			print("[YRPSendError] >> YourRP Is Outdated")
+		else
+			print("[YRPSendError] >> " .. tostring(tab.err))
+			
+			http.Post(posturl, entry,
+			function(body, length, headers, code)
+				if code == 200 then
+					-- worked
+					tab.sended = true
+					YRPSaveErrors()
+				else
+					YRP.msg("error", "[YRPSendError] failed: " .. "HTTP " .. tostring(code))
+				end
+			end,
+			function( failed )
+				YRP.msg("error", "[YRPSendError] failed: " .. tostring(failed))
+			end)
+		end
+	else
+		timer.Simple(0.1, function()
+			YRPSendError(tab)
+		end)
+	end
+end
+
+local function YRPAddError(err, trace, realm)
+	print("[YRPAddError] >> Found a new ERROR")
+
+	local newerr = {}
+	newerr.err = err
+	newerr.trace = trace
+	newerr.ts = os.time()
+	newerr.realm = realm
+	newerr.sended = false
+	table.insert(YRPErrors, newerr)
+
+	YRPSendError(newerr)
+
+	YRPSaveErrors()
+end
+
+-- REMOVE OUTDATED ONES
+if YRPErrors then
+	local TMPYRPErrors = {}
+	local changed = false
+	for i, v in pairs(YRPErrors) do
+		if v.ts and os.time() - v.ts < deleteafter then
+			table.insert( TMPYRPErrors, v )
+		else
+			changed = true
+		end
+		if !v.sended then
+			timer.Simple(10 * i, function()
+				YRPSendError(v)
+			end)
+		end
+	end
+	if changed then
+		YRPErrors = TMPYRPErrors
+		YRPSaveErrors()
+	end
+end
+
+hook.Add("OnLuaError", "yrp_OnLuaError", function(...)
+	local tab = ...
+	local err = tab.path
+	local trace = tab.trace
+	local realm = tab.realm
+	
+	if YRPNewError(err) then
+		YRPAddError(err, trace, realm)
+	end
+end)

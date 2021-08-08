@@ -304,8 +304,8 @@ local _init_general = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if wk(_init_general) then
 	yrp_general = _init_general[1]
 
-	RunConsoleCommand("lua_log_sv", yrp_general.bool_server_debug)
-	RunConsoleCommand("lua_log_cl", yrp_general.bool_server_debug)
+	--RunConsoleCommand("lua_log_sv", yrp_general.bool_server_debug)
+	--RunConsoleCommand("lua_log_cl", yrp_general.bool_server_debug)
 
 	for name, value in pairs(yrp_general) do
 		if string.StartWith(name, "bool_") then

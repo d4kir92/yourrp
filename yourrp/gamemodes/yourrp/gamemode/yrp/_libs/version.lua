@@ -163,11 +163,12 @@ if CLIENT then
 end
 
 local check = 0
-function YRPCheckVersion()
+function YRPCheckVersion(from)
 	if GAMEMODE != nil then
 		if GAMEMODE.VersionSortWasSet then
 			if CurTime() < check then return end
 			check = CurTime() + 1
+			
 			http.Fetch("https://docs.google.com/spreadsheets/d/1ImHeLchvq2D_1DJHrHepF3WuncxIU4N431pzXOLNr8M/edit?usp=sharing",
 			function(body, len, headers, code)
 				if body != nil then
@@ -207,9 +208,9 @@ function YRPCheckVersion()
 			end)
 		end
 	else
-		timer.Simple(5, function()
-			YRPCheckVersion()
+		timer.Simple(0.1, function()
+			YRPCheckVersion("retry GAMEMODE")
 		end)
 	end
 end
-YRPCheckVersion()
+YRPCheckVersion("init")

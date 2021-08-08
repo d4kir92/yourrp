@@ -183,7 +183,7 @@ net.Receive("getsitehelp", function(len)
 		function version:Paint(pw, ph)
 			draw.SimpleText("(" .. string.upper(GAMEMODE.dedicated) .. " Server) (" .. string.upper(GAMEMODE.Art) .. ") YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "Y_22_500", pw, ph / 2, GetVersionColor(), 2, 1)
 		end
-		YRPCheckVersion()
+		YRPCheckVersion("help")
 	end
 end)
 

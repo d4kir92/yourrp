@@ -231,8 +231,21 @@ function ConvertToDarkRPJob(tab)
 		_job.color = Color(0, 0, 0, 255)
 	end
 	_job.uniqueID = tonumber(tab.uniqueID)
+	_job.int_groupID = tab.int_groupID
 
 	return _job
+end
+
+function ConvertToDarkRPCategory(tab, cat)
+	local t = {}
+
+	t.name = tab.string_name or "-"
+	t.categorises = cat
+	t.startExpanded = true
+	t.color = StringToColor(tab.string_color) or Color(0, 107, 0, 255)
+	t.sortOrder = 100
+
+	return t
 end
 
 local drp_allroles = SQL_SELECT(DATABASE_NAME, "*", nil)
@@ -253,12 +266,64 @@ end
 
 util.AddNetworkString("send_team")
 local Player = FindMetaTable("Player")
-function Player:SendTeamsToPlayer()
+function Player:DRPSendTeamsToPlayer()
 	for i, role in pairs(TEAMS) do
 		net.Start("send_team")
 			net.WriteString(i)
 			net.WriteTable(role)
 		net.Send(self)
+	end
+end
+
+local drp_allgroups = SQL_SELECT("yrp_ply_groups", "*", nil)
+local CATEGORIES = {}
+CATEGORIES.jobs = {}
+if wk(drp_allgroups) then
+	for i, group in pairs(drp_allgroups) do
+		local catname = group.string_name
+		local tab = ConvertToDarkRPCategory(group, "jobs")
+		CATEGORIES.jobs[catname] = tab
+	end
+end
+
+util.AddNetworkString("send_categories")
+util.AddNetworkString("drp_combinetabs")
+function Player:DRPSendCategoriesToPlayer()
+	for i, group in pairs(CATEGORIES.jobs) do
+		net.Start("send_categories")
+			net.WriteString(i)
+			net.WriteTable(group)
+		net.Send(self)
+	end
+
+	net.Start("drp_combinetabs")
+	net.Send(self)
+	for i, cat in pairs(CATEGORIES.jobs) do
+		cat.members = {}
+		for i, role in pairs(TEAMS) do
+			if role.int_groupID == cat.uniqueID then
+				table.insert(cat.members, role)
+			end
+		end
+	end
+end
+
+local categories = DarkRP.getCategories()
+if categories then
+	categories = DarkRP.getCategories().jobs -- GROUPS
+	if categories then -- GROUPS
+		for _, group in ipairs(categories) do -- GROUPS
+			bKeypads.DarkRP.JobCategories.Members[group.name] = group
+
+			bKeypads.DarkRP.JobCategories.Teams[group.name] = {}
+			for _, job in ipairs(group.members) do
+				if bKeypads.DarkRP.JobCategories.Teams[group.name][job.team] then
+					bKeypads.DarkRP.JobCategories.Teams[group.name][job.team] = true
+				else
+					--
+				end
+			end
+		end
 	end
 end
 -- darkrp

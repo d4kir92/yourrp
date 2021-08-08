@@ -766,5 +766,3 @@ hook.Add("HUDPaint", "yrp_voice_module", function()
 	draw.RoundedBox(5, VO.tx - VO.tw / 2, VO.y, VO.tw, VO.h, Color(25, 25, 25))
 	draw.SimpleText(VO.text, VO.font, VO.tx, VO.ty, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end)
-
-

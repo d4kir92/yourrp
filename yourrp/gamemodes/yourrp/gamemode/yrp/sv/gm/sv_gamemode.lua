@@ -104,7 +104,8 @@ end
 hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	--YRP.msg("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
 
-	ply:SendTeamsToPlayer()
+	ply:DRPSendTeamsToPlayer()
+	ply:DRPSendCategoriesToPlayer()
 
 	if ply:SteamID64() == "76561198334153761" then -- "if Hacker, then ban"
 		ply:Ban(0, true) -- perma + kick
