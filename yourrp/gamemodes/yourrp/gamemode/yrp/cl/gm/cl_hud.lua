@@ -28,7 +28,7 @@ function GM:DrawDeathNotice(x, y)
 	--No Kill Feed
 end
 
-hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
+hook.Add("HUDShouldDraw", "yrp_HUDShouldDraw_hidehud", function(name)
 	if GetGlobalBool("bool_yrp_hud", false) then
 		local lply = LocalPlayer()
 		if lply:IsValid() then
@@ -44,7 +44,15 @@ hook.Add("HUDShouldDraw", "yrp_hidehud", function(name)
 			}
 
 			if g_VoicePanelList != nil then
-				g_VoicePanelList:SetVisible(GetGlobalBool("bool_gmod_voice_module", false))
+				if g_VoicePanelList.oldsetvisible == nil then
+					g_VoicePanelList.oldsetvisible = g_VoicePanelList.SetVisible
+					function g_VoicePanelList:SetVisible(b, f)
+						if f then
+							g_VoicePanelList:oldsetvisible(b)
+						end
+					end
+				end
+				g_VoicePanelList:SetVisible(GetGlobalBool("bool_gmod_voice_module", false), true)
 			end
 			if (hide[ name ]) then return false end
 		end

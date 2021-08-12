@@ -318,6 +318,7 @@ if CLIENT then
 	RunConsoleCommand("r_threaded_renderables", "1")
 	RunConsoleCommand("r_threaded_client_shadow_manager", "1")
 	RunConsoleCommand("r_queued_ropes", "1")
+	RunConsoleCommand("M9KGasEffect", "0")
 elseif SERVER then
 	-- "removes" voice icons
 	RunConsoleCommand("mp_show_voice_icons", "0")

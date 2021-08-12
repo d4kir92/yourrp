@@ -4,7 +4,7 @@ surface.CreateFont("Saira_72", {
 	font = "Saira",
 	extended = true,
 	size = 72,
-	weight = 700,
+	weight = 500,
 	blursize = 0,
 	scanlines = 0,
 	antialias = true,
@@ -40,7 +40,7 @@ surface.CreateFont("Saira_24", {
 	font = "Saira",
 	extended = true,
 	size = 24,
-	weight = 700,
+	weight = 500,
 	blursize = 0,
 	scanlines = 0,
 	antialias = true,
@@ -58,7 +58,7 @@ surface.CreateFont("Saira_16", {
 	font = "Saira",
 	extended = true,
 	size = 16,
-	weight = 700,
+	weight = 500,
 	blursize = 0,
 	scanlines = 0,
 	antialias = true,
@@ -807,32 +807,46 @@ function YRPScoreboardAddPlayer(ply)
 	end
 end
 
+local ypr_logo = Material("yrp/yrp_icon")
 local matBlurScreen = Material( "pp/blurscreen" )
-function YRPBlurScoreboard(panel)
+
+local function DrawBlurRect(x, y, w, h, amount, density)
+    surface.SetDrawColor(0, 0, 0)
+    surface.SetMaterial(matBlurScreen)
+
+    for i = 1, density do
+		matBlurScreen:SetFloat("$blur", (i / 3) * (amount or 6))
+        matBlurScreen:Recompute()
+        render.UpdateScreenEffectTexture()
+        render.SetScissorRect(x, y, x + w, y + h, true)
+        surface.DrawTexturedRect(0 * -1, 0 * -1, ScrW(), ScrH())
+        render.SetScissorRect(0, 0, 0, 0, false)
+    end
+end
+
+local function YRPBlurScoreboard(panel, amount, density)
 	local x, y = panel:LocalToScreen( 0, 0 )
 
 	local wasEnabled = DisableClipping( true )
 
 	-- Menu cannot do blur
 	if ( !MENU_DLL ) then
-		surface.SetMaterial( matBlurScreen )
 		surface.SetDrawColor( 255, 255, 255, 255 )
+		surface.SetMaterial( matBlurScreen )
 
-		for i=0.33, 1, 0.33 do
-			matBlurScreen:SetFloat( "$blur", 10 * i )
+		for i = 1, density do
+			matBlurScreen:SetFloat("$blur", (i / 3) * (amount or 6))
 			matBlurScreen:Recompute()
-			if ( render ) then render.UpdateScreenEffectTexture() end -- Todo: Make this available to menu Lua
+			if ( render ) then render.UpdateScreenEffectTexture() end
 			surface.DrawTexturedRect( x * -1, y * -1, ScrW(), ScrH() )
 		end
 	end
 
-	surface.SetDrawColor( 0, 0, 0, 240 )
+	surface.SetDrawColor( 0, 0, 0, 180 )
 	surface.DrawRect( x * -1, y * -1, ScrW(), ScrH() )
 
 	DisableClipping( wasEnabled )
 end
-
-local ypr_logo = Material("yrp/yrp_icon")
 
 function YRPInitScoreboard()
 	sw = math.Clamp(sw, sh, ScrW())
@@ -850,7 +864,8 @@ function YRPInitScoreboard()
 	YRPScoreboard.logo = createD("DHTML", YRPScoreboard, 128, 128, ScrW() / 2 - sw / 2, 20)
 
 	function YRPScoreboard:Paint(pw, ph)
-		YRPBlurScoreboard(self)
+		YRPBlurScoreboard(self, 10, 3)
+		--DrawBlurRect(0, 0, pw, ph, 3, 6)
 		
 		if self.amount != table.Count(player.GetAll()) then
 			self.amount = table.Count(player.GetAll())
@@ -958,7 +973,7 @@ function YRPInitScoreboard()
 		end
 		if GetGlobalBool("bool_yrp_scoreboard_show_usergroup", false) then
 			--draw.RoundedBox(0, pr - trx - yrptab["usergroup"], 160 - 10, yrptab["usergroup"], 1000, Color(255, 0, 0, 100))
-			draw.SimpleText(string.upper(YRP.lang_string("LID_usergroup")), "Saira_30", pr - trx - yrptab["usergroup"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(string.upper(YRP.lang_string("LID_rank")), "Saira_30", pr - trx - yrptab["usergroup"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			trx = trx + yrptab["usergroup"] + sp
 		end
 		draw.RoundedBox(5, pw / 2 - sw / 2, 180, sw, hr, Color(255, 255, 255, 255))

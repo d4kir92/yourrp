@@ -1354,12 +1354,6 @@ function GM:PostCleanupMap()
 	-- Rebuild Doors
 	YRP.msg("note", "RELOAD DOORS")
 
-	if YRP_NETWORK_TYPE == 0 then
-		for i, p in pairs(player.GetAll()) do
-			SendDEntities(p, "PostCleanupMap")
-		end
-	end
-
 	loadDoors()
 	LoadWorldStorages()
 end

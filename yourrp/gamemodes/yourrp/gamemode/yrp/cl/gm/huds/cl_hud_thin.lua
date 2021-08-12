@@ -24,6 +24,78 @@ icons["XP"] = "64_atom"
 icons["WP"] = "bullet"
 icons["WS"] = "bullet_secondary"
 
+local nti = 360 / 15
+local noi = 18
+
+local function DrawThinCompass(px, py, sw, sh)
+ 
+	local lp = LocalPlayer()   
+	local size = ScrW() * 0.5   
+   
+	if IsValid(lp) then
+		local dir = lp:CoordAngle()
+	   
+		for i=0, nti - 1 do
+			local ang = i * 15
+		   
+			local dif = math.AngleDifference(ang, dir)
+		   
+			local numofinst = noi
+		   
+			local offang = ( numofinst * 12 ) / 2.8
+			
+			if math.abs(dif) < offang then
+				local alpha = math.Clamp( 0.8 - (math.abs(dif)/(offang)) , 0, 1 ) * 255            
+
+				local pos = -dif/15 * sw / 10
+			   
+				local text = ang
+			   
+				local font = "Y_16_500"
+				local directionfont = "Y_18_500"
+			   
+				local clr = Color(200,200,200,alpha)
+				local drt = Color(230,230,230,alpha)
+
+				if YRP.GetDesignIcon("keyboard_arrow_down") then
+					surface.SetDrawColor( 100, 100, 255 )
+					surface.SetMaterial( YRP.GetDesignIcon("keyboard_arrow_down") )
+					surface.DrawTexturedRect( ScrW()/2 - 24 / 2, py - 6, 24, 24 )
+				end
+	
+				if ang == 0 then
+					direction = YRP.lang_string("LID_north_short")
+					surface.SetDrawColor( 100, 100, 255, alpha )
+				elseif ang == 180 then
+					direction = YRP.lang_string("LID_south_short")
+				elseif ang == 90 then
+					direction = YRP.lang_string("LID_east_short")
+				elseif ang == 270 then
+					direction = YRP.lang_string("LID_west_short")
+				elseif ang == 45 then
+					direction = YRP.lang_string("LID_north_short") .. YRP.lang_string("LID_east_short")
+				elseif ang == 135 then
+					direction = YRP.lang_string("LID_south_short") .. YRP.lang_string("LID_east_short")
+				elseif ang == 225 then
+					direction = YRP.lang_string("LID_south_short") .. YRP.lang_string("LID_west_short")
+				elseif ang == 315 then
+					direction = YRP.lang_string("LID_north_short") .. YRP.lang_string("LID_west_short")
+				else
+					direction = ""
+				end
+				if ang != 0 then
+					surface.SetDrawColor( clr )
+				end
+				surface.DrawRect( px + sw / 2 - 25 - pos, py + 38, 50, 3 )		
+				
+				draw.DrawText( text, font, px + sw / 2 - pos, py + 53, clr, TEXT_ALIGN_CENTER )
+
+				draw.DrawText( direction, directionfont, px + sw / 2 - pos, py + 10, drt, TEXT_ALIGN_CENTER )
+			end          
+		end  
+	end
+end
+
 local animationTime = 4
 
 local HUD_THIN = {}
@@ -163,11 +235,17 @@ function YRPDrawThin(tab)
 	end
 end
 
+local ox = 0
+local oy = 0
 function YRPHUDThin()
 	local lply = LocalPlayer()
 
-	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
+	if YRPHudVarsLoaded and YRPHudVarsLoaded() and YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
 		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Thin" then
+			if lply:HudElementVisible("COM") then
+				DrawThinCompass(lply:HudValue("COM", "POSI_X"), lply:HudValue("COM", "POSI_Y"), lply:HudValue("COM", "SIZE_W"), lply:HudValue("COM", "SIZE_H"))
+			end
+
 			for i = 1, 10 do
 				local BOX = {}
 				BOX.name = "BOX" .. i
@@ -368,11 +446,10 @@ function YRPHUDThin()
 			LO.name = "LO"
 			LO.valuetext = "[" .. GTS("lockdown") .. "] " .. lply:LockdownText()
 			YRPDrawThin(LO)
-
-			HUDSimpleCompass()
 		end
 	end
 end
 
 hook.Remove("HUDPaint", "yrp_hud_design_Thin")
 hook.Add("HUDPaint", "yrp_hud_design_Thin", YRPHUDThin)
+

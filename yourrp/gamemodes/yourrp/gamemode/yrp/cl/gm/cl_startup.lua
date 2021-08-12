@@ -1323,8 +1323,13 @@ end
 
 yrp_hud = yrp_hud or {}
 yrp_hud_loaded = yrp_hud_loaded or false
+
+function YRPHudVarsLoaded()
+	return yrp_hud_loaded
+end
+
 function YRPHUD(name, failed)
-	if LocalPlayer():LoadedGamemode() and yrp_hud_loaded then
+	if LocalPlayer():LoadedGamemode() and YRPHudVarsLoaded() then
 		local value = yrp_hud[name]
 		if value != nil then
 			return value

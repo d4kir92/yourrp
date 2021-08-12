@@ -1260,7 +1260,8 @@ end)
 hook.Add("PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
 	if ea(pl) then
 		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_entities", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
-		if worked(_tmp, "PlayerSpawnSENT failed") then
+
+		if wk(_tmp) then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_entities) then
 				return true
@@ -1271,6 +1272,12 @@ hook.Add("PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
 
 				return false
 			end
+		else
+			YRP.msg("note", "[PlayerSpawnSENT] Usergroup not Found")
+
+			net.Start("yrp_message")
+				net.WriteString("[PlayerSpawnSENT] Usergroup not found")
+			net.Send(pl)
 		end
 	end
 end)
