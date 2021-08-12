@@ -20,7 +20,7 @@ function Entity:getDoorData()
 
 	self.DoorData.owner = nil
 
-	local charid = tonumber(self:GetNW2String("ownerCharID", ""))
+	local charid = self:GetNW2Int("ownerCharID", 0)
 	if ea(self:GetRPOwner()) then
 		self.DoorData.owner = self:GetRPOwner():UserID()
 	elseif charid and charid > 0 then

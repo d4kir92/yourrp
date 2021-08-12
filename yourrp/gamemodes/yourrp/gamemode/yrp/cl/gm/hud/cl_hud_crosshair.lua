@@ -30,6 +30,8 @@ end
 local alphaFade = 1
 local reloading = 0
 local aimdownsights = 0
+local ch_attack1 = 1
+local ch_attack1_old = 1
 function HudCrosshair()
 	local lply = LocalPlayer()
 	if lply:Alive() and GetGlobalBool("bool_yrp_crosshair", false) then
@@ -39,15 +41,10 @@ function HudCrosshair()
 				if weapon.DrawCrosshair or isHl2Weapon(weapon) then
 					local nextPrimary = weapon:GetNextPrimaryFire()
 
-					if nextPrimary <= CurTime()+0.1 and lply:KeyDown(IN_ATTACK) then
+					if nextPrimary <= CurTime() + 0.1 and lply:KeyDown(IN_ATTACK) then
 						ch_attack1 = ch_attack1 + 2
 					else
 						ch_attack1 = ch_attack1 - 1
-					end
-					if ch_attack1 < 0 then
-						ch_attack1 = 0
-					elseif ch_attack1 > 6 then
-						ch_attack1 = 6
 					end
 
 					if lply:KeyDown(IN_RELOAD) and aimdownsights == 0 then
@@ -82,6 +79,14 @@ function HudCrosshair()
 						end
 					end
 
+					if math.Clamp then
+						ch_attack1 = math.Clamp(ch_attack1, 0, 6)
+					else
+						ch_attack1 = 1
+					end
+
+					ch_attack1_old = Lerp(7 * FrameTime(), ch_attack1_old, ch_attack1)
+					
 					if lply:GetNW2String("string_hud_design", "notloaded") != "notloaded" then
 						if lply:Alive() then
 							if true then
@@ -97,8 +102,8 @@ function HudCrosshair()
 								local cx, cy = ptr.x, ptr.y
 
 								local gap = (8/2)
-								if ch_attack1 >= 1 then
-									gap = gap * ch_attack1
+								if ch_attack1_old >= 1 then
+									gap = gap * ch_attack1_old
 								end
 
 								local sw = 10
@@ -113,7 +118,7 @@ function HudCrosshair()
 								surface.DrawRect(cx-sh/2-br, cy-sw-gap-br, sh+2*br, sw+2*br)
 								surface.DrawRect(cx-sh/2-br, cy+gap-br, sh+2*br, sw+2*br)
 
-								surface.SetDrawColor(0, 255, 0, 255 * alphaFade)
+								surface.SetDrawColor(255, 255, 255, 255 * alphaFade)
 
 								surface.DrawRect(cx-sw-gap, cy-sh/2, sw, sh)
 								surface.DrawRect(cx+gap, cy-sh/2, sw, sh)

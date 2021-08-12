@@ -251,7 +251,7 @@ function spawnItem(ply, item, duid)
 
 	if item.type == "weapons" then
 		local wep = ply:Give(item.ClassName)
-		if wk(wep) then
+		if wk(wep) and wep != NULL then
 			wep:SetNW2String("item_uniqueID", item.uniqueID)
 			wep:SetNW2Entity("yrp_owner", ply)
 			return true

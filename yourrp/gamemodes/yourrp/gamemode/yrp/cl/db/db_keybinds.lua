@@ -29,7 +29,7 @@ YRPKEYBINDS["toggle_mouse"] = KEY_F3
 YRPKEYBINDS["toggle_map"] = KEY_M
 YRPKEYBINDS["drop_item"] = KEY_G
 
-YRPKEYBINDS["menu_interact"] = KEY_K
+YRPKEYBINDS["menu_interact"] = KEY_E
 
 YRPKEYBINDS["sp_open"] = KEY_UP
 YRPKEYBINDS["sp_close"] = KEY_DOWN
@@ -92,7 +92,7 @@ function set_keybind(name, value, force)
 end
 
 function GetKeybindName(kbname)
-	local _kb = kbname
+	local _kb = kbname or ""
 	if !string.StartWith(kbname, "in_") then
 		_kb = get_keybind(kbname) or "UNKNOWN"
 	end
@@ -102,7 +102,9 @@ function GetKeybindName(kbname)
 	if string.StartWith(kbname, "in_") then
 		_kb = YRP.lang_string("LID_" .. kbname)
 	end
-	_kb = string.upper(_kb)
+	if wk(_kb) then
+		_kb = string.upper(_kb)
+	end
 	return tostring(_kb)
 end
 

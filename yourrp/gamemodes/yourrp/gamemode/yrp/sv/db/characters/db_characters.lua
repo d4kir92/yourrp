@@ -475,6 +475,7 @@ function send_characters(ply)
 						tmpDefault = tmpDefault[1]
 						netTable[_charCount].role = tmpDefault
 					end
+					v.roleID = 1
 				end
 
 				netTable[_charCount].role.string_playermodels = GetPlayermodelsOfRole(v.roleID)
@@ -820,7 +821,7 @@ end)
 util.AddNetworkString("removearrests")
 net.Receive("removearrests", function(len, ply)
 	local p = net.ReadEntity()
-	if wk(p:CharID()) then
+	if IsValid(p) and p:IsPlayer() and p.CharID and wk(p:CharID()) then
 		SQL_UPDATE(DATABASE_NAME, "int_arrests = '" .. 0 .. "'", "uniqueID = '" .. p:CharID() .. "'")
 		p:SetNW2Int("int_arrests", 0)
 	end

@@ -73,7 +73,7 @@ function SetYRPChannel()
 						break
 					end
 				end
-				GAMEMODE.VersionSortWasSet = true
+				yrpversionisset = true
 			end
 		end,
 			function(error)
@@ -95,8 +95,10 @@ function YRPVersion()
 	return GAMEMODE.Version
 end
 
+local yrpoutdated = false
+local yrpversionisset = false
 function IsYRPOutdated()
-	return GAMEMODE.isoutdated or false
+	return yrpoutdated
 end
 
 function GetVersionColor()
@@ -165,7 +167,7 @@ end
 local check = 0
 function YRPCheckVersion(from)
 	if GAMEMODE != nil then
-		if GAMEMODE.VersionSortWasSet then
+		if yrpversionisset then
 			if CurTime() < check then return end
 			check = CurTime() + 1
 			
@@ -176,21 +178,21 @@ function YRPCheckVersion(from)
 
 					if serverart == "OUTDATED" then	
 						GAMEMODE.versioncolor = Color(255, 0, 0)	
-						GAMEMODE.isoutdated = true	
+						yrpoutdated = true	
 						serverart = "CANARY"	
 					else	
-						GAMEMODE.isoutdated = false	
+						yrpoutdated = false	
 					end
-
+					
 					on.stable = GetValue(body, "V" .. serverart .. "STABLE")
 					on.beta = GetValue(body, "V" .. serverart .. "BETA")
 					on.canary = GetValue(body, "V" .. serverart .. "CANARY")
 
 					if on.stable == GAMEMODE.VersionStable and on.beta == GAMEMODE.VersionBeta and on.canary == GAMEMODE.VersionCanary then
 						GAMEMODE.versioncolor = Color(255, 255, 255)
-						GAMEMODE.isoutdated = false
+						yrpoutdated = false
 					else
-						GAMEMODE.isoutdated = true
+						yrpoutdated = true
 						GAMEMODE.versioncolor = Color(255, 0, 0)
 						if CLIENT then
 							VersionWindow()

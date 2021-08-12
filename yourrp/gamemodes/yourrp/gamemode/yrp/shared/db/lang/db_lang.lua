@@ -83,7 +83,7 @@ function YRPTestContentAddons()
 			if addon.wsid == "1189643820" then
 				if addon.mounted and addon.downloaded then
 					hascontent = true
-					SetGlobalBool("hascontent", true)
+					SetGlobalBool("yrp_hascontent", true)
 				else
 					YRP.msg("note", "YOURRP CONTENT IS NOT MOUNTED/DOWNLOADED!")
 				end
@@ -96,10 +96,22 @@ function YRPTestContentAddons()
 end
 YRPTestContentAddons()
 function HasYRPContent()
-	return GetGlobalBool("hascontent", false)
+	return GetGlobalBool("yrp_hascontent", false)
 end
 function HasYRPFakeContent()
 	return GetGlobalBool("hasfakecontent", false)
+end
+
+function YRPTestDarkrpmodification()
+	if file.Exists("addons/darkrpmodification", "GAME") then
+		SetGlobalBool("hasdarkrpmodification", true)
+	else
+		SetGlobalBool("hasdarkrpmodification", false)
+	end
+end
+YRPTestDarkrpmodification()
+function HasDarkrpmodification()
+	return GetGlobalBool("hasdarkrpmodification", false)
 end
 
 function PrintLIDError(var)

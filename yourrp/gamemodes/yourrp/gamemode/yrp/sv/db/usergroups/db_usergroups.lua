@@ -1610,7 +1610,7 @@ end
 local toolantispam = {}
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if ea(pl) and wk(tool) then
-		--YRP.msg("gm", "CanTool: " .. tool)
+		YRP.msg("gm", "CanTool: " .. tool)
 		local tools = {}
 		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(tab) then
@@ -1627,7 +1627,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 
 		if hasright then
 			if tr then
-				if tr.Entity then
+				if tr.Entity and IsValid(tr.Entity) and tr.Entity:GetRPOwner() then
 					local Owner = tr.Entity:GetRPOwner()
 					if Owner == pl or pl:HasAccess() or !ea(Owner) then
 						return true
@@ -1662,6 +1662,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 		else
 			YRPNotiToPlyDisallowed(pl, "Tool: " .. tostring(tool))
 		end
+		YRPNotiToPlyDisallowed(pl, "FAIL FOR TOOL: " .. tostring(tool))
 		YRP.msg("error", "[CanTool] " .. "FAIL FOR TOOL: " .. tool)
 		return false
 	else

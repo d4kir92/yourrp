@@ -114,7 +114,9 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 
-			win.augs:AddItem(line)
+			if pa(win) and pa(win.augs) then
+				win.augs:AddItem(line)
+			end
 		end
 	end)
 	net.Start("yrp_vm_get_active_usergroups")
@@ -154,7 +156,9 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 
-			win.agrps:AddItem(line)
+			if pa(win) and pa(win.agrps) then
+				win.agrps:AddItem(line)
+			end
 		end
 	end)
 	net.Start("yrp_vm_get_active_groups")
@@ -193,8 +197,10 @@ function YRPVoiceChannel(edit, uid)
 					table.insert(arols, ug.uniqueID)
 				end
 			end
-
-			win.arols:AddItem(line)
+			
+			if pa(win) and pa(win.arols) then
+				win.arols:AddItem(line)
+			end
 		end
 	end)
 	net.Start("yrp_vm_get_active_roles")
@@ -237,7 +243,9 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 
-			win.pugs:AddItem(line)	
+			if pa(win) and pa(win.pugs) then
+				win.pugs:AddItem(line)	
+			end
 		end
 	end)
 	net.Start("yrp_vm_get_passive_usergroups")
@@ -277,7 +285,9 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 
-			win.pgrps:AddItem(line)
+			if pa(win) and pa(win.pgrps) then
+				win.pgrps:AddItem(line)
+			end
 		end
 	end)
 	net.Start("yrp_vm_get_passive_groups")
@@ -317,7 +327,9 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 
-			win.prols:AddItem(line)
+			if pa(win) and pa(win.prols) then
+				win.prols:AddItem(line)
+			end
 		end
 	end)
 	net.Start("yrp_vm_get_passive_roles")

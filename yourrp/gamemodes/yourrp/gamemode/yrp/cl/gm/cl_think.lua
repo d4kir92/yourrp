@@ -263,7 +263,7 @@ function keyPressed(key, str, distance)
 		if IsValid(lply) and wk(lply.GetEyeTrace) then
 			local plyTrace = lply:GetEyeTrace()
 			local _return = false
-			if distance and ea(plyTrace.Entity) then
+			if plyTrace and distance and ea(plyTrace.Entity) then
 				if plyTrace.Entity:GetPos():Distance(lply:GetPos()) > distance then
 					_return = true
 				end
@@ -555,7 +555,7 @@ PLAYER.TauntCam = TauntCamera()
 
 -- #THIRDPERSON
 local oldang = Angle(0, 0, 0)
-local function yrpCalcView(lply, pos, angles, fov)
+local function YRP_CalcView(lply, pos, angles, fov)
 	if angles == nil then
 		return view
 	end
@@ -756,8 +756,12 @@ local function yrpCalcView(lply, pos, angles, fov)
 		end
 	end
 end
-hook.Remove("CalcView", "YRP_CV")
-hook.Add("CalcView", "YRP_CV", yrpCalcView)
+
+hook.Remove("CalcView", "AV7View") -- breaks thirdperson, must be removed!
+hook.Remove("CalcView", "YOURRP_ThirdPerson_CalcView")
+timer.Simple(1, function()
+	hook.Add("CalcView", "YOURRP_ThirdPerson_CalcView", YRP_CalcView)
+end)
 
 function showPlayermodel()
 	local lply = LocalPlayer()

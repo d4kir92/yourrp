@@ -113,7 +113,7 @@ if CLIENT then
 				local clip1 = weapon:Clip1()
 				local clip1max = weapon:GetMaxClip1()
 				local ammo1 = self:GetAmmoCount(weapon:GetPrimaryAmmoType())
-				return clip1max > 0
+				return clip1max > 0 or ammo1 > 0
 			end
 			return false
 		elseif element == "WS" then
@@ -122,7 +122,7 @@ if CLIENT then
 				local clip2 = weapon:Clip2()
 				local clip2max = weapon:GetMaxClip2()
 				local ammo2 = self:GetAmmoCount(weapon:GetSecondaryAmmoType())
-				return ammo2 > 0
+				return clip2max > 0 or ammo2 > 0
 			end
 			return false
 		elseif element == "BA" then

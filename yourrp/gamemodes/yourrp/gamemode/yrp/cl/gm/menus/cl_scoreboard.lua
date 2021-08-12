@@ -599,8 +599,11 @@ function YRPScoreboardAddPlayer(ply)
 			end
 		end}
 		btns[2] = {"LID_info", "128_info-circle", false, false, function()
-			if IsValid(ply) then
+			if IsValid(ply) and ply:SteamID() and ply:SteamID64() then
 				SetClipboardText("SteamID: \t" .. ply:SteamID() .. " \nSteamID64: \t" .. ply:SteamID64() .. " \nRPName: \t" .. ply:RPName() .. " \nSteamName: \t" .. ply:SteamName())
+				notification.AddLegacy("[" .. string.upper(YRP.lang_string("LID_info")) .. "] COPIED TO CLIPBOARD", NOTIFY_GENERIC, 3)
+			else
+				notification.AddLegacy("[" .. string.upper(YRP.lang_string("LID_info")) .. "] PLAYER IS NOT VALID", NOTIFY_ERROR, 3)
 			end
 		end}
 		btns[3] = {"LID_tpto", "128_arrow-circle-up", true, true, function()
@@ -726,8 +729,8 @@ function YRPScoreboardAddPlayer(ply)
 			end
 		end}
 		for i, btn in pairs(btns) do
-			if !btn[3] or btn[3] and LocalPlayer():HasAccess() then
-				if !btn[4] or btn[4] and YRPNotSelf(ply) then
+			if !btn[3] or (btn[3] and LocalPlayer():HasAccess()) then
+				if !btn[4] or (btn[4] and YRPNotSelf(ply)) then
 					local b = createD("YButton", plyopt.btns, btnsize, btnsize, 0, 0)
 					b:SetText("")
 					b.icon = btn[2]

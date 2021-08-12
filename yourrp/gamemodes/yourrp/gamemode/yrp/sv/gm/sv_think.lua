@@ -124,7 +124,11 @@ function con_st(ply, _time)
 				newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float("GetMaxStamina", 100)), 1)
 				ply:SetNW2Float("GetCurStamina", newval)
 			elseif ply:GetNW2Float("thirst", 0) > 20 then
-				local newval = ply:GetNW2Float("GetCurStamina", 0) + ply:GetNW2Float("staminup", 1) * GetGlobalFloat("float_scale_stamina_up", 1.0)
+				local factor = 1
+				if ply:GetMoveType() == MOVETYPE_NOCLIP then
+					factor = 10
+				end
+				local newval = ply:GetNW2Float("GetCurStamina", 0) + ply:GetNW2Float("staminup", 1) * GetGlobalFloat("float_scale_stamina_up", 1.0) * factor
 				newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float("GetMaxStamina", 100)), 1)
 				ply:SetNW2Float("GetCurStamina", newval)
 			end
@@ -244,7 +248,7 @@ timer.Create("ServerThink", TICK, 0, function()
 			ply:AddPlayTime()
 
 			if ply:AFK() then
-				if ply:GetNW2Float("afkts") and GetGlobalInt("int_afkkicktime") and CurTime() - ply:GetNW2Float("afkts") >= GetGlobalInt("int_afkkicktime") then
+				if CurTime() - tonumber(ply:GetNW2Float("afkts", 0)) >= tonumber(GetGlobalInt("int_afkkicktime", 0)) then
 					ply:SetNW2Bool("isafk", false)
 					ply:Kick("AFK")
 				end
@@ -401,6 +405,18 @@ timer.Create("ServerThink", TICK, 0, function()
 
 			YRPNotiToPly(_str)
 		end
+	end
+
+	if _time % 1 == 0 and HasDarkrpmodification() then
+		MsgC(Color(255, 0, 0), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color(255, 255, 255), "\n")
+		MsgC(Color(255, 0, 0), "--------------------------------------------------------------------------------", Color(255, 255, 255), "\n")
+		YRPTestDarkrpmodification()
+	end
+
+	if _time % 1 == 0 and !HasYRPContent() then
+		MsgC(Color(255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color(255, 255, 255), "\n")
+		MsgC(Color(255, 255, 0), "--------------------------------------------------------------------------------", Color(255, 255, 255), "\n")
+		YRPTestContentAddons()
 	end
 
 	if _time == 10 then

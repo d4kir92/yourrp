@@ -1294,8 +1294,8 @@ function GM:PlayerCanHearPlayersVoice(listener, talker)
 	if canhear and !talker:GetNW2Bool("mute_voice", false) then
 		return true
 	else
-		if IsInMaxVoiceRange(listener, talker) then
-			if IsInSpeakRange(listener, talker) then
+		if YRPIsInMaxVoiceRange(listener, talker) then
+			if YRPIsInSpeakRange(listener, talker) then
 				return true
 			end
 		end

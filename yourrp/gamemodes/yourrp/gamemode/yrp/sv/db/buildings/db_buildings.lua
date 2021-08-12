@@ -73,7 +73,7 @@ function allowedToUseDoor(id, ply, door)
 					door:SetNW2String("ownerRPName", "")
 					door:SetNW2Int("ownerGroupUID", -99)
 					door:SetNW2String("ownerGroup", "")
-					door:SetNW2String("ownerCharID", "")
+					door:SetNW2Int("ownerCharID", 0)
 					door:SetNW2Bool("bool_hasowner", false)
 					door:Fire("Unlock")
 				else
@@ -148,7 +148,7 @@ function loadDoors()
 							tabChar = tabChar[1]
 							if wk(tabChar.rpname) then
 								v:SetNW2String("ownerRPName", SQL_STR_OUT(tabChar.rpname))
-								v:SetNW2String("ownerCharID", w.ownerCharID)
+								v:SetNW2Int("ownerCharID", tonumber(w.ownerCharID))
 								v:SetNW2Bool("bool_hasowner", true)
 							end
 						end
@@ -302,11 +302,11 @@ function BuildingRemoveOwner(SteamID)
 		for i, c in pairs(chars) do
 			local charid = c.uniqueID
 			for k, v in pairs(GetAllDoors()) do
-				if v:GetNW2String("ownerCharID") == charid then
+				if v:GetNW2Int("ownerCharID") == tonumber(charid) then
 					v:SetNW2String("ownerRPName", "")
 					v:SetNW2Int("ownerGroupUID", -99)
 					v:SetNW2String("ownerGroup", "")
-					v:SetNW2String("ownerCharID", "")
+					v:SetNW2Int("ownerCharID", 0)
 					v:SetNW2Bool("bool_hasowner", false)
 					v:Fire("Unlock")
 					SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetNW2String("uniqueID") .. "'")
@@ -327,7 +327,7 @@ net.Receive("removeOwner", function(len, ply)
 			v:SetNW2String("ownerRPName", "")
 			v:SetNW2Int("ownerGroupUID", -99)
 			v:SetNW2String("ownerGroup", "")
-			v:SetNW2String("ownerCharID", "")
+			v:SetNW2Int("ownerCharID", 0)
 			v:SetNW2Bool("bool_hasowner", false)
 			v:Fire("Unlock")
 		end
@@ -345,7 +345,7 @@ net.Receive("sellBuilding", function(len, ply)
 			v:SetNW2String("ownerRPName", "")
 			v:SetNW2Int("ownerGroupUID", -99)
 			v:SetNW2String("ownerGroup", "")
-			v:SetNW2String("ownerCharID", "")
+			v:SetNW2Int("ownerCharID", 0)
 			v:SetNW2Bool("bool_hasowner", false)
 			v:Fire("Unlock")
 			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "keynr = -1", "buildingID = " .. tonumber(v:GetNW2String("buildingID")))
@@ -371,7 +371,7 @@ net.Receive("buyBuilding", function(len, ply)
 				for k, v in pairs(GetAllDoors()) do
 					if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
 						v:SetNW2String("ownerRPName", SQL_STR_OUT(tabChar.rpname))
-						v:SetNW2String("ownerCharID", ply:CharID())
+						v:SetNW2Int("ownerCharID", tonumber(ply:CharID()))
 						v:SetNW2Bool("bool_hasowner", true)
 					end
 				end

@@ -13,8 +13,10 @@ end
 function closeDoorOptions()
 	closeMenu()
 
-	yrp_door.window:Close()
-	yrp_door.window = nil
+	if yrp_door and pa(yrp_door.window) then
+		yrp_door.window:Close()
+		yrp_door.window = nil
+	end
 end
 
 net.Receive("getBuildingInfo", function(len)
@@ -264,7 +266,7 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 	local lply = LocalPlayer()
 
 	local OWNER = false
-	if door:GetNW2String("ownerGroup", "") == "" and tonumber(door:GetNW2String("ownerCharID")) == tonumber(LocalPlayer():CharID()) then
+	if door:GetNW2String("ownerGroup", "") == "" and door:GetNW2Int("ownerCharID", 0) == LocalPlayer():CharID() then
 		OWNER = true
 	end
 
@@ -412,6 +414,8 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 end
 
 function openDoorOptions(door)
+	closeDoorOptions()
+
 	net.Start("getBuildingInfo")
 		net.WriteEntity(door)
 	net.SendToServer()

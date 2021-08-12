@@ -278,7 +278,7 @@ function YRPHUDThin()
 				WP.max = clip1max
 				WP.valuetext = wpammo
 				YRPDrawThin(WP)
-
+				
 				local wsammo = ""
 				if clip2 >= 0 and clip2max >= 0 then
 					wsammo = wsammo .. clip2 .. "/" .. clip2max
@@ -375,7 +375,4 @@ function YRPHUDThin()
 end
 
 hook.Remove("HUDPaint", "yrp_hud_design_Thin")
-
-timer.Simple(1, function()
-	hook.Add("HUDPaint", "yrp_hud_design_Thin", YRPHUDThin)
-end)
+hook.Add("HUDPaint", "yrp_hud_design_Thin", YRPHUDThin)

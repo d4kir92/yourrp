@@ -267,11 +267,17 @@ end
 util.AddNetworkString("send_team")
 local Player = FindMetaTable("Player")
 function Player:DRPSendTeamsToPlayer()
+	self.yrp_darkrp_index = 0
 	for i, role in pairs(TEAMS) do
-		net.Start("send_team")
-			net.WriteString(i)
-			net.WriteTable(role)
-		net.Send(self)
+		self.yrp_darkrp_index = self.yrp_darkrp_index + 1
+		timer.Simple(self.yrp_darkrp_index * 0.02, function()
+			if IsValid(self) then
+				net.Start("send_team")
+					net.WriteString(i)
+					net.WriteTable(role)
+				net.Send(self)
+			end
+		end)
 	end
 end
 
@@ -290,14 +296,20 @@ util.AddNetworkString("send_categories")
 util.AddNetworkString("drp_combinetabs")
 function Player:DRPSendCategoriesToPlayer()
 	for i, group in pairs(CATEGORIES.jobs) do
-		net.Start("send_categories")
-			net.WriteString(i)
-			net.WriteTable(group)
-		net.Send(self)
+		self.yrp_darkrp_index = self.yrp_darkrp_index + 1
+		timer.Simple(self.yrp_darkrp_index * 0.02, function()
+			if IsValid(self) then
+				net.Start("send_categories")
+					net.WriteString(i)
+					net.WriteTable(group)
+				net.Send(self)
+			end
+		end)
 	end
 
 	net.Start("drp_combinetabs")
 	net.Send(self)
+
 	for i, cat in pairs(CATEGORIES.jobs) do
 		cat.members = {}
 		for i, role in pairs(TEAMS) do
@@ -1643,6 +1655,8 @@ function YRPGetFirstRankUID(ruid)
 end
 
 util.AddNetworkString("invitetogroup")
+util.AddNetworkString("yrp_invite_ply")
+util.AddNetworkString("yrp_invite_accept")
 net.Receive("invitetogroup", function( len, ply )
 	local tmpTargetSteamID = net.ReadString()
 
@@ -1655,26 +1669,64 @@ net.Receive("invitetogroup", function( len, ply )
 
 	local tmpTableInstructorRole = ply:GetRolTab()
 
-	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
-		local firstrankuid = YRPGetFirstRankUID(ply:GetRoleUID())
-		SetRole( tmpTarget, firstrankuid )
+	if tmpTarget != nil then
+		if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
+			local firstrankuid = YRPGetFirstRankUID(ply:GetRoleUID())
+			
+			local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. firstrankuid .. "'")
+			local group = SQL_SELECT(DATABASE_NAME, "*", role.groupID)
+			if wk(role) then
+				role = role[1]
 
-		YRP.msg( "note", ply:Nick() .. " invited " .. tmpTarget:Nick() .. " to " .. ply:GetGroupName() )
-	elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
-		YRP.msg( "note", "Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use invite function! He is not an instructor!" )
+				local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
+
+				if wk(group) then
+					group = group[1]
+
+					net.Start("yrp_invite_ply")
+						net.WriteTable(role)
+						net.WriteTable(group)
+					net.Send(tmpTarget)
+
+					YRP.msg( "note", "[InviteToGroup] " .. ply:Nick() .. " invited " .. tmpTarget:Nick() .. " to " .. ply:GetGroupName() )
+				else
+					YRP.msg( "note", "[InviteToGroup] GROUP DOESN'T EXISTS ANYMORE" )
+				end
+			else
+				YRP.msg( "note", "[InviteToGroup] ROLE DOESN'T EXISTS ANYMORE" )
+			end
+		elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
+			YRP.msg( "note", "[InviteToGroup] Player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ") tried to use invite function! He is not an instructor!" )
+		else
+			YRP.msg( "error", "[InviteToGroup] ELSE invite: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
+		end
 	else
-		YRP.msg( "error", "ELSE invite: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
+		YRP.msg( "note", "[InviteToGroup] TARGET NOT FOUND" )
 	end
 end)
+net.Receive("yrp_invite_accept", function( len, ply )
+	local r = net.ReadTable()
+
+	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. r.uniqueID .. "'")
+	if wk(role) then
+		role = role[1]
+	
+		SetRole( ply, tonumber(role.uniqueID) )
+	else
+		YRP.msg( "note", "[yrp_invite_accept] ROLE DOESN'T EXISTS ANYMORE" )
+	end
+end)
+
+
 
 -- Role Reset
 function CheckIfRoleExists(ply, ruid)
 	local result = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
 
 	if result == nil then
-		YRP.msg("note", "Role not exists anymore! Change back to default role!")
-
-		SQL_UPDATE(DATABASE_NAME, "roleID = '1', groupID = '1'", "roleID = '" .. ruid .. "'")
+		YRP.msg("note", "character role not exists anymore! Change back to default role!")
+		
+		SQL_UPDATE("yrp_characters", "roleID = '1', groupID = '1'", "uniqueID = '" .. ply:CharID() .. "'")
 
 		ply:KillSilent()
 	end

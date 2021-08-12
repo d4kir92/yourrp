@@ -7,21 +7,22 @@ GM.BaseName = "YourRP" -- DO NOT CHANGE THIS, thanks
 DeriveGamemode("sandbox")
 
 -- >>> do NOT change this! (it can cause crashes and more!) <<<
-GM.ShortName = "YRP" --do NOT change this!
-GM.Author = "D4KiR" --do NOT change this!
-GM.Discord = "https://discord.gg/sEgNZxg" --do NOT change this!
-GM.Email = GM.Discord --do NOT change this!
-GM.Website = "" --do NOT change this!
-GM.Youtube = "youtube.com/c/D4KiR" --do NOT change this!
-GM.Twitter = "twitter.com/D4KIR" --do NOT change this!
-GM.Help = "Create your rp you want to make!" --do NOT change this!
-GM.dedicated = "-" --do NOT change this!
-GM.VersionStable = 0 --do NOT change this!
-GM.VersionBeta = 346 --do NOT change this!
-GM.VersionCanary = 695 --do NOT change this!
-GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary --do NOT change this!
-GM.VersionSort = "outdated" --do NOT change this! --stable, beta, canary
-GM.rpbase = "YourRP" --do NOT change this! <- this is not for server browser
+GM.ShortName = "YRP" -- do NOT change this!
+GM.Author = "D4KiR" -- do NOT change this!
+GM.Discord = "https://discord.gg/sEgNZxg" -- do NOT change this!
+GM.Email = GM.Discord -- do NOT change this!
+GM.Website = "" -- do NOT change this!
+GM.Youtube = "youtube.com/c/D4KiR" -- do NOT change this!
+GM.Twitter = "twitter.com/D4KIR" -- do NOT change this!
+GM.Help = "Create your rp you want to make!" -- do NOT change this!
+GM.dedicated = "-" -- do NOT change this!
+GM.VersionStable = 0 -- do NOT change this!
+GM.VersionBeta = 346 -- do NOT change this!
+GM.VersionCanary = 695 -- do NOT change this!
+GM.VersionBuild = 1 -- do NOT change this!
+GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
+GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
+GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
 GM.ServerIsDedicated = game.IsDedicated()
 
 function GetRPBase()
@@ -389,38 +390,53 @@ function IsActiveInChannel(ply, cuid, skip)
 	end
 end
 
-function IsInMaxVoiceRange(listener, talker)
-	local dist = listener:GetPos():Distance(talker:GetPos())
-	local result = dist <= GetGlobalInt("int_voice_max_range", 1)
-	return result
+function YRPGetVoiceRangeText(ply)
+	if IsValid(ply) then
+		local ranges = {
+			[0] = YRP.lang_string("LID_whisper"),
+			[1] = YRP.lang_string("LID_quiet"),
+			[2] = "",
+			[3] = YRP.lang_string("LID_noisy"), 
+			[4] = YRP.lang_string("LID_yell")
+		}
+		return ranges[ply:GetNW2Int("voice_range", 2)]
+	end
+	return "PLY INVALID"
 end
 
-function GetVoiceRangeText(ply)
-	local ranges = {
-		[0] = YRP.lang_string("LID_whisper"),
-		[1] = YRP.lang_string("LID_quiet"),
-		[2] = "",
-		[3] = YRP.lang_string("LID_noisy"), 
-		[4] = YRP.lang_string("LID_yell")
-	}
-	return ranges[ply:GetNW2Int("voice_range", 2)]
+function YRPGetVoiceRange(ply)
+	if IsValid(ply) then
+		local ranges = {
+			[0] = 80,
+			[1] = 120,
+			[2] = 250,
+			[3] = 400, 
+			[4] = GetGlobalInt("int_voice_max_range", 1)
+		}
+		return math.Clamp(ranges[ply:GetNW2Int("voice_range", 2)], 0, GetGlobalInt("int_voice_max_range", 1))
+	else
+		return 400
+	end
 end
 
-function GetVoiceRange(ply)
-	local ranges = {
-		[0] = 80,
-		[1] = 120,
-		[2] = 250,
-		[3] = 400, 
-		[4] = GetGlobalInt("int_voice_max_range", 1)
-	}
-	return math.Clamp(ranges[ply:GetNW2Int("voice_range", 2)], 0, GetGlobalInt("int_voice_max_range", 1))
+function YRPIsInMaxVoiceRange(listener, talker)
+	if IsValid(listener) and IsValid(talker) then
+		local dist = listener:GetPos():Distance(talker:GetPos())
+		if wk(dist) and GetGlobalInt("int_voice_max_range", 1) then
+			return dist <= tonumber(GetGlobalInt("int_voice_max_range", 1))
+		end
+	end
+	return false
 end
 
-function IsInSpeakRange(listener, talker)
-	local dist = listener:GetPos():Distance(talker:GetPos())
-	local result = dist <= GetVoiceRange(talker)
-	return result
+function YRPIsInSpeakRange(listener, talker)
+	if IsValid(listener) and IsValid(talker) then
+		local dist = listener:GetPos():Distance(talker:GetPos())
+		if wk(dist) and YRPGetVoiceRange(talker) then
+			return dist <= YRPGetVoiceRange(talker)
+		end
+	end
+	return false
 end
 
 -- COLORFIX
@@ -664,10 +680,10 @@ local function YRPSaveErrors()
 	file.Write( filename, util.TableToJSON( YRPErrors, true ) )
 end
 
-local function YRPSendError(tab)
+local function YRPSendError(tab, from)
 	local entry = {}
 	local posturl = ""
-
+	
 	if tab.realm == "SERVER" then
 		-- err
 		entry["entry.60824756"] = tostring(tab.err)
@@ -689,6 +705,9 @@ local function YRPSendError(tab)
 
 		-- canary
 		entry["entry.176860124"] = tostring(GAMEMODE.VersionCanary)
+
+		-- build
+		entry["entry.364587527"] = tostring(GAMEMODE.VersionBuild)
 
 		posturl = url_sv
 	elseif tab.realm == "CLIENT" then
@@ -713,17 +732,20 @@ local function YRPSendError(tab)
 		-- canary
 		entry["entry.1848121189"] = tostring(GAMEMODE.VersionCanary)
 
+		-- build
+		entry["entry.1699483827"] = tostring(GAMEMODE.VersionBuild)
+
 		posturl = url_cl
 	else
 		print(">>> [YRPSendError] FAIL! >> Realm: " .. tostring(tab.realm))
 		return
 	end
 
-	if GAMEMODE and GAMEMODE.VersionSortWasSet and IsYRPOutdated then
+	if GAMEMODE and yrpversionisset and IsYRPOutdated then
 		if IsYRPOutdated() then
 			print("[YRPSendError] >> YourRP Is Outdated")
 		else
-			print("[YRPSendError] >> " .. tostring(tab.err))
+			print("[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err))
 			
 			http.Post(posturl, entry,
 			function(body, length, headers, code)
@@ -741,7 +763,7 @@ local function YRPSendError(tab)
 		end
 	else
 		timer.Simple(0.1, function()
-			YRPSendError(tab)
+			YRPSendError(tab, "RETRY")
 		end)
 	end
 end
@@ -755,34 +777,44 @@ local function YRPAddError(err, trace, realm)
 	newerr.ts = os.time()
 	newerr.realm = realm
 	newerr.sended = false
+	newerr.buildnummer = GAMEMODE.VersionBuild
 	table.insert(YRPErrors, newerr)
 
-	YRPSendError(newerr)
+	YRPSendError(newerr, "NEW ERROR")
 
 	YRPSaveErrors()
 end
 
 -- REMOVE OUTDATED ONES
-if YRPErrors then
-	local TMPYRPErrors = {}
-	local changed = false
-	for i, v in pairs(YRPErrors) do
-		if v.ts and os.time() - v.ts < deleteafter then
-			table.insert( TMPYRPErrors, v )
-		else
-			changed = true
+function YRPRemoveOutdatedErrors()
+	if YRPErrors and GAMEMODE then
+		local TMPYRPErrors = {}
+		local changed = false
+		for i, v in pairs(YRPErrors) do
+			if v.buildnummer == nil then
+				v.buildnummer = 0
+				changed = true
+			end
+			if v.ts and os.time() - v.ts < deleteafter and v.buildnummer == GAMEMODE.VersionBuild then
+				table.insert( TMPYRPErrors, v )
+			else
+				changed = true
+			end
+			if !v.sended then
+				timer.Simple(10 * i, function()
+					YRPSendError(v, "Was not sended")
+				end)
+			end
 		end
-		if !v.sended then
-			timer.Simple(10 * i, function()
-				YRPSendError(v)
-			end)
+		if changed then
+			YRPErrors = TMPYRPErrors
+			YRPSaveErrors()
 		end
-	end
-	if changed then
-		YRPErrors = TMPYRPErrors
-		YRPSaveErrors()
+	else
+		timer.Simple(0.01, YRPRemoveOutdatedErrors)
 	end
 end
+YRPRemoveOutdatedErrors()
 
 hook.Add("OnLuaError", "yrp_OnLuaError", function(...)
 	local tab = ...
@@ -790,7 +822,8 @@ hook.Add("OnLuaError", "yrp_OnLuaError", function(...)
 	local trace = tab.trace
 	local realm = tab.realm
 	
-	if err and trace and realm and ( string.find(err, "/yrp/") or string.find(trace, "/yrp/") ) and YRPNewError(err) then
+	--if err and trace and realm and ( string.find(err, "/yrp/") or string.find(trace, "/yrp/") ) and YRPNewError(err) then
+	if err and trace and realm and string.find(err, "/yrp/") and YRPNewError(err) then
 		YRPAddError(err, trace, realm)
 	end
 end)

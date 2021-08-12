@@ -250,11 +250,14 @@ function GetLicenseIDByName(lname)
 		lic.name = SQL_STR_OUT(lic.name)
 		lic.name = string.lower(lic.name)
 
-		if string.find(lic.name, lname) then
+		if lname and lic.name and string.find(lic.name, lname) then
 			lid = lic.uniqueID
 		end
 	end
 
+	if lid == nil then
+		return "FAIL!"
+	end
 	return tonumber(lid)
 end
 

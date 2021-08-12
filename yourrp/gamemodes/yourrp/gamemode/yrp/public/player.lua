@@ -460,8 +460,12 @@ end
 
 --[[ Name ]]--
 function Player:RPName() -- Character Name / Roleplay Name
-	local name = self:YRPRPName()
-	return name -- return string
+	if IsValid(self) then
+		local name = self:YRPRPName()
+		return name -- return string
+	else
+		return self:Nick()
+	end
 end
 
 --[[ UserGroup ]]--

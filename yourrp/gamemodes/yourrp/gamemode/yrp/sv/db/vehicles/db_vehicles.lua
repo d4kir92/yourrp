@@ -22,7 +22,7 @@ function AddVehicle(veh, ply, item)
 	local cname = veh:GetClass()
 	local iuid = item.uniqueID
 
-	veh:SetNW2Int("ownerCharID", charid)
+	veh:SetNW2Int("ownerCharID", tonumber(charid))
 
 	SQL_INSERT_INTO(DATABASE_NAME, "ownerCharID, ClassName, item_id", "'" .. charid .. "', '" .. cname .. "', '" .. iuid .. "'")
 end

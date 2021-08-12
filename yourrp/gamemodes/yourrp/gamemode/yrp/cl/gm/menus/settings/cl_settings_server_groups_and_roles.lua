@@ -351,7 +351,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 		function rs.bac:DoClick()
-			if wk(cur_role.pre) then
+			if wk(cur_role.pre) and wk(cur_role.gro) then
 				if cur_role.pre > 0 then
 					rs.rplist:ClearList()
 					net.Start("settings_unsubscribe_rolelist")
@@ -1575,6 +1575,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								self.sid = self.sid or 0
 								self.sid = self.sid + 1
 								self.searching = true
+
+								pmsel.strsearch = string.Replace(pmsel.strsearch, "[", "")
+								pmsel.strsearch = string.Replace(pmsel.strsearch, "]", "")
+								pmsel.strsearch = string.Replace(pmsel.strsearch, "(", "")
+								pmsel.strsearch = string.Replace(pmsel.strsearch, ")", "")
+
 								for i, v in pairs(cl_pms) do
 									if pa(pmsel) then
 										if self.searching and string.find(string.lower(v.PrintName), pmsel.strsearch) or string.find(string.lower(v.ClassName), pmsel.strsearch) or string.find(string.lower(v.WorldModel), pmsel.strsearch) then
@@ -1735,6 +1741,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								self.nothingfound = true
 								self.px = 0
 								self.py = 0
+
+								pmsel.strsearch = string.Replace(pmsel.strsearch, "[", "")
+								pmsel.strsearch = string.Replace(pmsel.strsearch, "]", "")
+								pmsel.strsearch = string.Replace(pmsel.strsearch, "(", "")
+								pmsel.strsearch = string.Replace(pmsel.strsearch, ")", "")
+
 								for i, v in pairs(cl_pms) do
 									if pa(pmsel) then
 										if string.find(string.lower(v.PrintName), pmsel.strsearch) or string.find(string.lower(v.ClassName), pmsel.strsearch) or string.find(string.lower(v.WorldModel), pmsel.strsearch) then
@@ -1881,6 +1893,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							if CurTime() > self.etime then
 								if pms[self.i] != nil then
 									local pm = pms[self.i]
+
+									self.searchstr = string.Replace(self.searchstr, "[", "")
+									self.searchstr = string.Replace(self.searchstr, "]", "")
+									self.searchstr = string.Replace(self.searchstr, "(", "")
+									self.searchstr = string.Replace(self.searchstr, ")", "")
+
 									if pa(win.dpl) and string.find(string.lower(pm.string_name), self.searchstr) or string.find(string.lower(pm.string_models), self.searchstr) then
 										local line = createD("YButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
 										line.string_name = pm.string_name
@@ -2030,6 +2048,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				function winswep:Search(strsearch)
 					strsearch = string.lower(strsearch)
 
+					strsearch = string.Replace(strsearch, "[", "")
+					strsearch = string.Replace(strsearch, "]", "")
+					strsearch = string.Replace(strsearch, "(", "")
+					strsearch = string.Replace(strsearch, ")", "")
+
 					self.dpl:Clear()
 					for i, v in pairs(cl_sweps) do
 						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
@@ -2095,107 +2118,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			hr.parent = ea.equipment:GetContent()
 			DHr(hr)
 
-			-- Not droppable
-			local ndsweps = {}
-			ndsweps.parent = ea.equipment:GetContent()
-			ndsweps.uniqueID = role.uniqueID
-			ndsweps.header = "LID_ndsweps"
-			ndsweps.netstr = "update_role_string_ndsweps"
-			ndsweps.value = role.string_ndsweps
-			ndsweps.uniqueID = role.uniqueID
-			ndsweps.w = ea.equipment:GetContent():GetWide()
-			ndsweps.h = YRP.ctr(325)
-			ndsweps.doclick = function()
-				local winndswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
-				winndswep:SetTitle("")
-				winndswep:Center()
-				winndswep:MakePopup()
-				function winndswep:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-				end
-
-				local allndsweps = GetSWEPsList()
-				local cl_ndsweps = {}
-				local count = 0
-				for k, v in pairs(allndsweps) do
-					count = count + 1
-					cl_ndsweps[count] = {}
-					cl_ndsweps[count].WorldModel = v.WorldModel or ""
-					cl_ndsweps[count].ClassName = v.ClassName or "NO CLASSNAME"
-					cl_ndsweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
-				end
-
-				winndswep.dpl = createD("DPanelList", winndswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
-				winndswep.dpl:EnableVerticalScrollbar(true)
-				local height = ScrH() - YRP.ctr(100)
-				function winndswep:Search(strsearch)
-					strsearch = string.lower(strsearch)
-
-					self.dpl:Clear()
-					for i, v in pairs(cl_ndsweps) do
-						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
-							local d_ndswep = createD("YButton", nil, winndswep.dpl:GetWide(), height / 4, 0, 0)
-							d_ndswep:SetText(v.PrintName)
-							function d_ndswep:DoClick()
-								net.Start("add_role_ndswep")
-									net.WriteInt(role.uniqueID, 32)
-									net.WriteString(v.ClassName)
-								net.SendToServer()
-								winndswep:Close()
-							end
-
-							if v.WorldModel != "" then
-								d_ndswep.model = createD("DModelPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
-								d_ndswep.model:SetModel(v.WorldModel)
-							else
-								d_ndswep.model = createD("DPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
-								function d_ndswep.model:Paint(pw, ph)
-									draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
-									draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-								end
-							end
-
-							winndswep.dpl:AddItem(d_ndswep)
-						end
-					end
-				end
-				winndswep:Search("")
-
-				winndswep.search = createD("DTextEntry", winndswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
-				function winndswep.search:OnChange()
-					winndswep:Search(self:GetText())
-				end
-			end
-			ea[role.uniqueID].ndsweps = DStringListBox(ndsweps)
-			net.Receive("get_role_ndsweps", function()
-				local tab_pm = net.ReadTable()
-				local cl_ndsweps = {}
-				for i, v in pairs(tab_pm) do
-					local ndswep = {}
-					ndswep.string_models = GetSwepWorldModel(v) or "notfound"
-					ndswep.string_classname = v
-					ndswep.string_name = v
-					ndswep.doclick = function()
-						net.Start("rem_role_ndswep")
-							net.WriteInt(role.uniqueID, 32)
-							net.WriteString(ndswep.string_classname)
-						net.SendToServer()
-					end
-					ndswep.h = YRP.ctr(120)
-					table.insert(cl_ndsweps, ndswep)
-				end
-				if ea[role.uniqueID].ndsweps.dpl.AddLines != nil then
-					ea[role.uniqueID].ndsweps.dpl:AddLines(cl_ndsweps)
-				end
-			end)
-			net.Start("get_role_ndsweps")
-				net.WriteInt(role.uniqueID, 32)
-			net.SendToServer()
-
-			hr.parent = ea.equipment:GetContent()
-			DHr(hr)
-
 			-- Licenses
 			local licenses = {}
 			licenses.parent = ea.equipment:GetContent()
@@ -2234,12 +2156,18 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					function winlicenses:Search(strsearch)
 						strsearch = string.lower(strsearch)
 
+						strsearch = string.Replace(strsearch, "[", "")
+						strsearch = string.Replace(strsearch, "]", "")
+						strsearch = string.Replace(strsearch, "(", "")
+						strsearch = string.Replace(strsearch, ")", "")
+
 						self.dpl:Clear()
 						if strsearch != nil then
 							for i, v in pairs(cl_licenses) do
 								v.PrintName = v.PrintName or ""
 								v.ClassName = v.ClassName or ""
 								v.WorldModel = v.WorldModel or ""
+
 								if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
 									local d_licenses = createD("YButton", nil, winlicenses.dpl:GetWide(), height / 4, 0, 0)
 									d_licenses:SetText(v.PrintName)
@@ -2383,6 +2311,123 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea.equipment:AddItem(ammobg)
 
 			ea.equipment:AutoSize(true)
+
+
+
+			local notequipment = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(450), ea.appearance.x,  ea.appearance.y + ea.appearance:GetTall() + YRP.ctr(20))
+			notequipment:SetText("LID_notequipment")
+			function notequipment:Paint(pw, ph)
+				hook.Run("YGroupBoxPaint", self, pw, ph)
+			end
+			col2:AddItem(notequipment)
+
+			ea[role.uniqueID].notequipment = notequipment
+			ea.notequipment = ea[role.uniqueID].notequipment
+
+			-- Not droppable
+			local ndsweps = {}
+			ndsweps.parent = ea.notequipment:GetContent()
+			ndsweps.uniqueID = role.uniqueID
+			ndsweps.header = "LID_ndsweps"
+			ndsweps.netstr = "update_role_string_ndsweps"
+			ndsweps.value = role.string_ndsweps
+			ndsweps.uniqueID = role.uniqueID
+			ndsweps.w = ea.notequipment:GetContent():GetWide()
+			ndsweps.h = YRP.ctr(325)
+			ndsweps.doclick = function()
+				local winndswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+				winndswep:SetTitle("")
+				winndswep:Center()
+				winndswep:MakePopup()
+				function winndswep:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
+					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+				end
+
+				local allndsweps = GetSWEPsList()
+				local cl_ndsweps = {}
+				local count = 0
+				for k, v in pairs(allndsweps) do
+					count = count + 1
+					cl_ndsweps[count] = {}
+					cl_ndsweps[count].WorldModel = v.WorldModel or ""
+					cl_ndsweps[count].ClassName = v.ClassName or "NO CLASSNAME"
+					cl_ndsweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
+				end
+
+				winndswep.dpl = createD("DPanelList", winndswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+				winndswep.dpl:EnableVerticalScrollbar(true)
+				local height = ScrH() - YRP.ctr(100)
+				function winndswep:Search(strsearch)
+					strsearch = string.lower(strsearch)
+
+					strsearch = string.Replace(strsearch, "[", "")
+					strsearch = string.Replace(strsearch, "]", "")
+					strsearch = string.Replace(strsearch, "(", "")
+					strsearch = string.Replace(strsearch, ")", "")
+
+					self.dpl:Clear()
+					for i, v in pairs(cl_ndsweps) do
+						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
+							local d_ndswep = createD("YButton", nil, winndswep.dpl:GetWide(), height / 4, 0, 0)
+							d_ndswep:SetText(v.PrintName)
+							function d_ndswep:DoClick()
+								net.Start("add_role_ndswep")
+									net.WriteInt(role.uniqueID, 32)
+									net.WriteString(v.ClassName)
+								net.SendToServer()
+								winndswep:Close()
+							end
+
+							if v.WorldModel != "" then
+								d_ndswep.model = createD("DModelPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
+								d_ndswep.model:SetModel(v.WorldModel)
+							else
+								d_ndswep.model = createD("DPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
+								function d_ndswep.model:Paint(pw, ph)
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
+									draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								end
+							end
+
+							winndswep.dpl:AddItem(d_ndswep)
+						end
+					end
+				end
+				winndswep:Search("")
+
+				winndswep.search = createD("DTextEntry", winndswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
+				function winndswep.search:OnChange()
+					winndswep:Search(self:GetText())
+				end
+			end
+			ea[role.uniqueID].ndsweps = DStringListBox(ndsweps)
+			net.Receive("get_role_ndsweps", function()
+				local tab_pm = net.ReadTable()
+				local cl_ndsweps = {}
+				for i, v in pairs(tab_pm) do
+					local ndswep = {}
+					ndswep.string_models = GetSwepWorldModel(v) or "notfound"
+					ndswep.string_classname = v
+					ndswep.string_name = v
+					ndswep.doclick = function()
+						net.Start("rem_role_ndswep")
+							net.WriteInt(role.uniqueID, 32)
+							net.WriteString(ndswep.string_classname)
+						net.SendToServer()
+					end
+					ndswep.h = YRP.ctr(120)
+					table.insert(cl_ndsweps, ndswep)
+				end
+				if ea[role.uniqueID].ndsweps.dpl.AddLines != nil then
+					ea[role.uniqueID].ndsweps.dpl:AddLines(cl_ndsweps)
+				end
+			end)
+			net.Start("get_role_ndsweps")
+				net.WriteInt(role.uniqueID, 32)
+			net.SendToServer()
+
+
 
 			local col3 = createD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 			col3:SetSpacing(YRP.ctr(20))

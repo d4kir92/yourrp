@@ -159,6 +159,8 @@ function GetRPExtraTeams()
 end
 GetRPExtraTeams()
 
+RPExtraTeamDoors = RPExtraTeamDoors or {}
+
 function Player:getPocketItems()
 	--Description: Get a player's pocket items.
 	YRP.msg("darkrp", "getPocketItems()")

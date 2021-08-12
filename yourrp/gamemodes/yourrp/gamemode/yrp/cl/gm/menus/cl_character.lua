@@ -277,10 +277,7 @@ function LoadCharacters()
 										draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
 									end
 		
-									local x = YRP.ctr(30)
-									if !strEmpty(self.factionIcon) then
-										x = ph + YRP.ctr(30)
-									end
+									local x = ph + YRP.ctr(30)
 									draw.SimpleText(YRP.lang_string("LID_event") .. ": " .. self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -298,10 +295,7 @@ function LoadCharacters()
 										draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
 									end
 
-									local x = YRP.ctr(30)
-									if !strEmpty(self.factionIcon) then
-										x = ph + YRP.ctr(30)
-									end
+									local x = ph + YRP.ctr(30)
 									draw.SimpleText(self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -340,7 +334,7 @@ function LoadCharacters()
 								end
 							end
 
-							if !strEmpty(tmpChar.factionIcon) and tmpChar.icon == nil then
+							if !strEmpty(tmpChar.factionIcon) and tmpChar.factionIcon != "http://www.famfamfam.com/lab/icons/silk/icons/group.png" and tmpChar.icon == nil then
 								tmpChar.icon = createD("DHTML", tmpChar, tmpChar:GetTall() * 0.8, tmpChar:GetTall() * 0.8, tmpChar:GetWide() - tmpChar:GetTall() * 0.9, tmpChar:GetTall() * 0.1)
 								tmpChar.icon:SetHTML(GetHTMLImage(tmpChar.factionIcon, tmpChar.icon:GetWide(), tmpChar.icon:GetTall()))
 							end
@@ -607,13 +601,13 @@ function LoadCharacters()
 			end
 		end
 
-		if CharMenu.characterList:GetWide() > CharMenu.characterList:GetCanvas():GetWide() then
+		if pa(CharMenu.characterList) and CharMenu.characterList:GetWide() > CharMenu.characterList:GetCanvas():GetWide() then
 			--CharMenu.characterList:SetWide(CharMenu.characterList:GetCanvas():GetWide()) -- breaks vertical
 			local px, py = CharMenu.characterList:GetPos()
 			CharMenu.characterList:SetPos(CharMenu.charactersBackground:GetWide() / 2 - CharMenu.characterList:GetWide() / 2, py)
 		end
 
-		if pa(CharMenu.frame) then
+		if CharMenu and pa(CharMenu.frame) then
 			CharMenu.frame:Show()
 			CharMenu.frame:MakePopup()
 		end

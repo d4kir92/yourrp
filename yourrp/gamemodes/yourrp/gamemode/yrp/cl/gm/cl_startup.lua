@@ -1591,7 +1591,7 @@ function drawPlates()
 			end
 			render.SetColorMaterial()
 
-			local range = GetVoiceRange(ply)
+			local range = YRPGetVoiceRange(ply)
 			render.DrawSphere(ply:GetPos(), range, 16, 16, col)
 			render.DrawWireframeSphere(ply:GetPos(), range, 16, 16, col, true)
 
@@ -2246,9 +2246,6 @@ function drawIDCard(ply, scale, px, py)
 				if logos[ele] == nil then
 					logos[ele] = true
 
-					w = GetGlobalInt("int_" .. ele .. "_w", 100)
-					h = GetGlobalInt("int_" .. ele .. "_h", 100)
-
 					local test = createD("DHTML", nil, w, h, 0, 0)
 					if string.find(ele, "logo") then
 						test:SetHTML(GetHTMLImage(GetGlobalString("text_server_logo", ""), w, h))
@@ -2258,10 +2255,12 @@ function drawIDCard(ply, scale, px, py)
 					function test:Paint(pw, ph)
 						if pa(test) then
 							test.mat = test:GetHTMLMaterial()
+
 							if test.mat != nil and !test.found then
 								test.found = true
 								timer.Simple(1.0, function()
 									test.matname = test.mat:GetName()
+
 									local matdata =	{
 										["$basetexture"] = test.matname,
 										["$model"] = 1,
@@ -2269,6 +2268,7 @@ function drawIDCard(ply, scale, px, py)
 										["$vertexalpha"] = 1,
 										["$vertexcolor"] = 1
 									}
+
 									local uid = string.Replace(test.matname, "__vgui_texture_", "")
 									mats[ele] = CreateMaterial("WebMaterial_" .. uid, "UnlitGeneric", matdata)
 									test:Remove()

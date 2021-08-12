@@ -137,3 +137,5 @@ concommand.Add("yrp_givelicense", function(ply, cmd, args)
 		YRP.msg("note", "[yrp_givelicense] Not found")
 	end
 end)
+
+

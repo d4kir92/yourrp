@@ -566,10 +566,12 @@ net.Receive("shop_get_tabs", function(len)
 					hook.Add("close_dealerWorldmodel", "close_dealerWorldmodelHook", function()
 						_dealer.WorldModel = LocalPlayer().WorldModel
 
-						net.Start("dealer_edit_worldmodel")
-							net.WriteString(_dealer.uniqueID)
-							net.WriteString(_dealer.WorldModel)
-						net.SendToServer()
+						if wk(_dealer.WorldModel) then
+							net.Start("dealer_edit_worldmodel")
+								net.WriteString(_dealer.uniqueID)
+								net.WriteString(_dealer.WorldModel)
+							net.SendToServer()
+						end
 					end)
 					openSingleSelector(tmpTable, "close_dealerWorldmodel")
 				end

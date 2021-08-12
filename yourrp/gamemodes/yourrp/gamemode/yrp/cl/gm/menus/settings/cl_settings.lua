@@ -107,7 +107,7 @@ function F8RequireUG(site, usergroups)
 	if site == "usergroups" then
 		for i, v in pairs(ugs) do
 			local example = createD("DTextEntry", PARENT, YRP.ctr(1400), YRP.ctr(50), PARENT:GetWide() / 2 - YRP.ctr(1400 / 2), PARENT:GetTall() / 2 + YRP.ctr(300) + (i - 1) * YRP.ctr(60))
-			example:SetText("yrp_usergroup \"" .. lply:RPName() .. "\" " .. v .. "       OR when ULX/ULIB installed: " .. "ulx adduser \"" .. lply:RPName() .. "\" " .. v)
+			example:SetText("ulx adduser \"" .. lply:RPName() .. "\" " .. v)
 		end
 	end
 end

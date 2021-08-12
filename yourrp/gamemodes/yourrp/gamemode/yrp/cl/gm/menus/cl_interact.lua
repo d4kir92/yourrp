@@ -4,6 +4,7 @@ local tmpTargetSteamID = ""
 function toggleInteractMenu()
 	local lply = LocalPlayer()
 	local eyeTrace = lply:GetEyeTrace()
+
 	--openInteractMenu(LocalPlayer():SteamID())
 	if eyeTrace.Entity:IsPlayer() and YRPIsNoMenuOpen() then
 		if eyeTrace.Entity:GetColor().a > 0 then
@@ -206,4 +207,38 @@ net.Receive("openInteractMenu", function(len)
 
 	wInteract:Center()
 	wInteract:MakePopup()
+end)
+
+net.Receive("yrp_invite_ply", function(len)
+	local role = net.ReadTable()
+	local group = net.ReadTable()
+	
+	local win = createD("YFrame", nil, YRP.ctr(600), YRP.ctr(400), 0, 0)
+	win:SetTitle("LID_invitation")
+	win:Center()
+	win:MakePopup()
+
+	local content = win:GetContent()
+
+	function content:Paint(pw, ph)
+		local text = YRP.lang_string("LID_youwereinvited")
+		draw.SimpleText(text .. ":", "Y_16_500", pw / 2, YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(group.string_name, "Y_16_500", pw / 2, YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(role.string_name, "Y_16_500", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+
+	win.accept = createD("YButton", content, YRP.ctr(200), YRP.ctr(50), content:GetWide() / 2 - YRP.ctr(200 + 5), content:GetTall() - YRP.ctr(50 + 10))
+	win.accept:SetText("LID_accept")
+	function win.accept:DoClick()
+		net.Start("yrp_invite_accept")
+			net.WriteTable(role)
+		net.SendToServer()
+		win:Close()
+	end
+
+	win.decline = createD("YButton", content, YRP.ctr(200), YRP.ctr(50), content:GetWide() / 2 + YRP.ctr(5), content:GetTall() - YRP.ctr(50 + 10))
+	win.decline:SetText("LID_decline")
+	function win.decline:DoClick()
+		win:Close()
+	end
 end)

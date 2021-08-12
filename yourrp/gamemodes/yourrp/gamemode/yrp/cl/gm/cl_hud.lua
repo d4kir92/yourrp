@@ -273,15 +273,14 @@ timer.Simple(1, function()
 	HUD_AVATARUpdate()
 end)
 
-SL = SL or vgui.Create("DHTML", nil)
-SL:MoveToBack()
-SL.w = 64
-SL.h = 64
-SL.x = 0
-SL.y = 0
-SL.url = ""
-SL.visible = false
-SL.version = -1
+YRP_SL = YRP_SL or vgui.Create("DHTML", nil)
+YRP_SL.w = 64
+YRP_SL.h = 64
+YRP_SL.x = 0
+YRP_SL.y = 0
+YRP_SL.url = ""
+YRP_SL.visible = false
+YRP_SL.version = -1
 
 YRP_PM = YRP_PM or vgui.Create("DModelPanel", nil)
 YRP_PM.w = 64
@@ -315,7 +314,7 @@ function YRP_PMUpdate()
 					local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
 					if lb != nil then
 						local eyepos = YRP_PM.Entity:GetBonePosition(lb)
-						eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
+						eyepos:Add(Vector(0, 0, 2))	-- Move up YRP_SLightly
 						YRP_PM:SetLookAt(eyepos - Vector(0, 0, 4))
 						YRP_PM:SetCamPos(eyepos - Vector(0, 0, 4) - Vector(-26, 0, 0))	-- Move cam in front of eyes
 						YRP_PM.Entity:SetEyeTarget(eyepos-Vector(-40, 0, 0))
@@ -330,21 +329,21 @@ function YRP_PMUpdate()
 				end
 			end
 
-			if IsValid(SL) and (lply:GetNW2Int("hud_version", 0) != SL.version or SL.url != GetGlobalString("text_server_logo", "")) then
-				SL.version = lply:GetNW2Int("hud_version", 0)
-				SL.visible = lply:HudValue("SL", "VISI")
-				SL.url = GetGlobalString("text_server_logo", "")
+			if IsValid(YRP_SL) and (lply:GetNW2Int("hud_version", 0) != YRP_SL.version or YRP_SL.url != GetGlobalString("text_server_logo", "")) then
+				YRP_SL.version = lply:GetNW2Int("hud_version", 0)
+				YRP_SL.visible = lply:HudValue("SL", "VISI")
+				YRP_SL.url = GetGlobalString("text_server_logo", "")
 
-				SL.w = lply:HudValue("SL", "SIZE_W")
-				SL.h = lply:HudValue("SL", "SIZE_H")
-				SL.x = lply:HudValue("SL", "POSI_X")
-				SL.y = lply:HudValue("SL", "POSI_Y")
+				YRP_SL.w = lply:HudValue("SL", "SIZE_W")
+				YRP_SL.h = lply:HudValue("SL", "SIZE_H")
+				YRP_SL.x = lply:HudValue("SL", "POSI_X")
+				YRP_SL.y = lply:HudValue("SL", "POSI_Y")
 
-				SL:SetPos(SL.x, SL.y)
-				SL:SetSize(SL.h, SL.h)
-				SL:SetHTML(GetHTMLImage(SL.url, SL.h, SL.h))
+				YRP_SL:SetPos(YRP_SL.x, YRP_SL.y)
+				YRP_SL:SetSize(YRP_SL.h, YRP_SL.h)
+				YRP_SL:SetHTML(GetHTMLImage(YRP_SL.url, YRP_SL.h, YRP_SL.h))
 
-				SL:SetVisible(SL.visible)
+				YRP_SL:SetVisible(YRP_SL.visible)
 			end
 		else
 			if lply:GetNW2Int("hud_version", 0) != YRP_PM.version then
@@ -428,8 +427,8 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		if lply:GetNW2Bool("mute_voice", false) then
 			text = text .. " (" .. YRP.lang_string("LID_speaklocal") .. ")"
 		end
-		if GetVoiceRangeText(lply) != "" then
-			text = text .. " (" .. YRP.lang_string("LID_range") .. " " .. GetVoiceRangeText(lply) .. " [" .. GetVoiceRange(lply) .. "])"
+		if YRPGetVoiceRangeText(lply) != "" then
+			text = text .. " (" .. YRP.lang_string("LID_range") .. " " .. YRPGetVoiceRangeText(lply) .. " [" .. YRPGetVoiceRange(lply) .. "])"
 		end
 
 		draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -511,8 +510,13 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	end
 
 	if !HasYRPContent() then
-		draw.SimpleTextOutlined("YOURRP CONTENT IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined("Add YourRP Content to your Collection!", "Y_60_500", ScrW2(), ScrH2() + 40, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined("\"YourRP Content\" IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined("Add \"YourRP Content\" to your Server Collection!", "Y_60_500", ScrW2(), ScrH2() + 50, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
+
+	if HasDarkrpmodification() then
+		draw.SimpleTextOutlined("You have \"darkrpmodification\" (locally) on your Server", "Y_60_500", ScrW2(), ScrH2() - 200, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined("Remove \"darkrpmodification\" to make YourRP work!", "Y_60_500", ScrW2(), ScrH2() - 150, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""

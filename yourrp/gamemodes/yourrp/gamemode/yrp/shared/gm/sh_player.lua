@@ -1,8 +1,18 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function GetPlayerByName(name)
+	if name == nil then
+		return NULL
+	end
+
+	name = string.Replace(name, "[", "")
+	name = string.Replace(name, "]", "")
+	name = string.Replace(name, "(", "")
+	name = string.Replace(name, ")", "")
+	name = string.lower(name)
+
 	for i, ply in pairs(player.GetAll()) do
-		if ply:IsPlayer() and string.find(string.lower(ply:RPName()), string.lower(name)) or string.find(string.lower(ply:SteamName()), string.lower(name)) then
+		if ply:IsPlayer() and string.find(string.lower(ply:RPName()), name) or string.find(string.lower(ply:SteamName()), name) then
 			return ply
 		end
 	end
@@ -557,7 +567,11 @@ function Player:SteamName()
 end
 
 function Player:YRPRPName()
-	return self:GetNW2String("rpname", self:SteamName())
+	if IsValid(self) then
+		return self:GetNW2String("rpname", self:SteamName())
+	else
+		return self:Nick()
+	end
 end
 
 function Player:Name()
@@ -666,17 +680,17 @@ end
 -- DOORS
 function IsOwnedBy(ply, door)
 	if door:isDoor() then
-		return tostring(ply:CharID()) == tostring(door:GetNW2String("ownerCharID", ""))
+		return ply:CharID() == door:GetNW2Int("ownerCharID", 0)
 	elseif door:isVehicle() then
-		return tostring(ply:CharID()) == tostring(door:GetNW2Int("ownerCharID", 0))
+		return ply:CharID() == door:GetNW2Int("ownerCharID", 0)
 	end
 	return false
 end
 
 function canLock(ply, door)
 	if door:isDoor() then
-		if !strEmpty(door:GetNW2String("ownerCharID", "")) then
-			if tostring(ply:CharID()) == tostring(door:GetNW2String("ownerCharID", "")) then
+		if door:GetNW2Int("ownerCharID", 0) > 0 then
+			if ply:CharID() == door:GetNW2Int("ownerCharID", 0) then
 				YRP.msg("note", "[canLock] " .. "IsOwner")
 				return true
 			end
@@ -688,7 +702,7 @@ function canLock(ply, door)
 				return true
 			end
 			return false
-		elseif strEmpty(door:GetNW2String("ownerCharID", "")) and door:GetNW2String("ownerGroup", "") == "" then
+		elseif door:GetNW2Int("ownerCharID", 0) == 0 and door:GetNW2String("ownerGroup", "") == "" then
 			YRP.msg("note", "[canLock] " .. "Building has no owner! (from Player: " .. ply:RPName() .. ")")
 			return false
 		else
@@ -701,12 +715,12 @@ function canLock(ply, door)
 end
 
 function canVehicleLock(ply, veh)
-	if tostring(veh:GetNW2Int("ownerCharID", 0)) != "0" then
-		if tostring(ply:CharID()) == tostring(tab.ownerCharID) then
+	if veh:GetNW2Int("ownerCharID", 0) != 0 then
+		if ply:CharID() == veh:GetNW2Int("ownerCharID", 0) then
 			return true
 		end
 		return false
-	elseif tostring(veh:GetNW2Int("ownerCharID", 0)) == "0" then
+	elseif veh:GetNW2Int("ownerCharID", 0) == 0 then
 		if veh:GetRPOwner() == ply then
 			return true
 		end
