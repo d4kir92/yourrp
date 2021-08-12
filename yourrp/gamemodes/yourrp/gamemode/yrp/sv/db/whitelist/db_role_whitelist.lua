@@ -110,7 +110,9 @@ net.Receive("whitelistPlayerRemove", function(len, ply)
 end)
 
 net.Receive("whitelistPlayer", function(len, ply)
-	if ply:HasAccess() then
+	if !IsValid(ply) then return end
+
+	if ply:GetNW2Bool("bool_whitelist") then
 		local _SteamID = net.ReadString()
 		local _nick = ""
 		local target = ply
@@ -134,6 +136,8 @@ net.Receive("whitelistPlayer", function(len, ply)
 		else
 			YRP.msg("note", "whitelistPlayer FAILED! CALL DEVS")
 		end
+	else
+		YRP.msg("note", ply:RPName() .. " has no right for whitelist!")
 	end
 	sendRoleWhitelist(ply)
 end)
