@@ -2002,6 +2002,14 @@ net.Receive("yrp_message", function(len)
 	end
 end)
 
+net.Receive("yrp_notification", function(len)
+	local lply = LocalPlayer()
+	if IsValid(lply) then
+		local msg = net.ReadString()
+		notification.AddLegacy(msg, NOTIFY_GENERIC, 5)
+	end
+end)
+
 function DrawDoorText(door)
 	local header = SQL_STR_OUT(door:GetNW2String("text_header", ""))
 	surface.SetFont("Y_24_500")

@@ -484,11 +484,15 @@ function LoadCharacters()
 								local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
 								_yesButton:SetText(YRP.lang_string("LID_yes"))
 								function _yesButton:DoClick()
-				
-									net.Start("DeleteCharacter")
-										net.WriteString(tmpChar.charid)
-									net.SendToServer()
-				
+									
+									if wk(tmpChar.charid) then
+										net.Start("DeleteCharacter")
+											net.WriteString(tmpChar.charid)
+										net.SendToServer()
+									else
+										notification.AddLegacy("CHAR ID is invalid", NOTIFY_GENERIC, 5)
+									end
+
 									_window:Close()
 								end
 				

@@ -402,7 +402,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			if pa(rs.rplist) then
 				local _uid = tonumber(net.ReadString())
 				local name = net.ReadString()
-				rs.rplist[_uid].text = name
+				if wk(rs.rplist[_uid]) then
+					rs.rplist[_uid].text = name
+				else
+					YRP.msg("note", "[settings_role_update_name] index is invalid")
+				end
 			end
 		end)
 

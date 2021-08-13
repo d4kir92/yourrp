@@ -263,7 +263,7 @@ function Player:PutInInventory(cname, noammo)
 		local _worked = self:PutInBackpack(item)
 		if _worked then return ent end
 		net.Start("yrp_message")
-		net.WriteString("yourinventoryisfull")
+			net.WriteString("yourinventoryisfull")
 		net.Send(self)
 		self:DropSWEP(item.ClassName)
 

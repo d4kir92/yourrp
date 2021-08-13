@@ -1257,6 +1257,13 @@ hook.Add("PlayerSpawnedRagdoll", "yrp_ragdolls_spawned", function(pl, model, ent
 	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Ragdoll: " .. ent:GetClass() .. "'")
 end)
 
+util.AddNetworkString("yrp_notification")
+function YRPSendNotification(ply, msg)
+	net.Start("yrp_notification")
+		net.WriteString(msg)
+	net.Send(ply)
+end
+
 hook.Add("PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
 	if ea(pl) then
 		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_entities", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
@@ -1274,10 +1281,7 @@ hook.Add("PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
 			end
 		else
 			YRP.msg("note", "[PlayerSpawnSENT] Usergroup not Found")
-
-			net.Start("yrp_message")
-				net.WriteString("[PlayerSpawnSENT] Usergroup not found")
-			net.Send(pl)
+			YRPSendNotification(pl, "[PlayerSpawnSENT] Usergroup not found")
 		end
 	end
 end)
