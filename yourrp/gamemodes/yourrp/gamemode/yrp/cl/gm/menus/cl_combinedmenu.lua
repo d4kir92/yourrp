@@ -578,24 +578,19 @@ function OpenCombinedMenu()
 				function site:Paint(pw, ph)
 					self.aw = self.aw or 0
 
-					if self:GetWide() ~= self:GetTall() then
-						self.animspeed = 14
-					else
-						self.animspeed = 4
-					end
-
 					local lply = LocalPlayer()
+					local target = pw
 					local color = lply:InterfaceValue("YFrame", "HB")
 					if self:IsHovered() then
 						color = lply:InterfaceValue("YButton", "SC")
 						color.a = 120
-						self.aw = math.Clamp(self.aw + self.animspeed, 0, pw)
 					elseif self.selected then
 						color = lply:InterfaceValue("YButton", "SC")
-						self.aw = math.Clamp(self.aw + self.animspeed, 0, pw)
 					else
-						self.aw = math.Clamp(self.aw - self.animspeed, 0, pw)
+						target = 0
 					end
+					self.aw = Lerp(10 * FrameTime(), self.aw, target)
+
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
 
 					if YRP.GetDesignIcon(v.icon) ~= nil then

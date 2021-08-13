@@ -563,19 +563,20 @@ function F8OpenSettings()
 					self.aw = self.aw or 0
 
 					local lply = LocalPlayer()
+					local target = pw
 					local color = lply:InterfaceValue("YFrame", "HB")
 					if self:IsHovered() then
 						color = lply:InterfaceValue("YButton", "SC")
 						color.a = 120
-						self.aw = math.Clamp(self.aw + 20, 0, pw)
 					elseif self.selected then
 						color = lply:InterfaceValue("YButton", "SC")
-						self.aw = math.Clamp(self.aw + 20, 0, pw)
 					else
-						self.aw = math.Clamp(self.aw - 20, 0, pw)
+						target = 0
 					end
-					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
+					self.aw = Lerp(10 * FrameTime(), self.aw, target)
 
+					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
+					
 					if YRP.GetDesignIcon(v.icon) ~= nil then
 						surface.SetDrawColor(255, 255, 255, 255)
 						surface.SetMaterial(YRP.GetDesignIcon(v.icon))

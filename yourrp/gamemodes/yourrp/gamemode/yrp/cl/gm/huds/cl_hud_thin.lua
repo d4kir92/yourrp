@@ -24,38 +24,35 @@ icons["XP"] = "64_atom"
 icons["WP"] = "bullet"
 icons["WS"] = "bullet_secondary"
 
-local nti = 360 / 15
-local noi = 18
-
 local function DrawThinCompass(px, py, sw, sh)
  
-	local lp = LocalPlayer()   
+	local lply = LocalPlayer()   
 	local size = ScrW() * 0.5   
    
-	if IsValid(lp) then
-		local dir = lp:CoordAngle()
+	if IsValid(lply) then
+		local dir = lply:CoordAngle()
 	   
-		for i=0, nti - 1 do
+		for  i= 0, 24 - 1 do
 			local ang = i * 15
 		   
 			local dif = math.AngleDifference(ang, dir)
 		   
-			local numofinst = noi
+			local ndist = 20
 		   
-			local offang = ( numofinst * 12 ) / 2.8
+			local offang = ( ndist * 14 ) / 3
 			
 			if math.abs(dif) < offang then
 				local alpha = math.Clamp( 0.8 - (math.abs(dif)/(offang)) , 0, 1 ) * 255            
 
-				local pos = -dif/15 * sw / 10
+				local pos = -dif / 15 * sw / 10
 			   
 				local text = ang
 			   
 				local font = "Y_16_500"
-				local directionfont = "Y_18_500"
+				local dfont = "Y_18_500"
 			   
-				local clr = Color(200,200,200,alpha)
-				local drt = Color(230,230,230,alpha)
+				local white = Color(200,200,200,alpha)
+				local dwhite = Color(230,230,230,alpha)
 
 				if YRP.GetDesignIcon("keyboard_arrow_down") then
 					surface.SetDrawColor( 100, 100, 255 )
@@ -84,13 +81,13 @@ local function DrawThinCompass(px, py, sw, sh)
 					direction = ""
 				end
 				if ang != 0 then
-					surface.SetDrawColor( clr )
+					surface.SetDrawColor( white )
 				end
 				surface.DrawRect( px + sw / 2 - 25 - pos, py + 38, 50, 3 )		
 				
-				draw.DrawText( text, font, px + sw / 2 - pos, py + 53, clr, TEXT_ALIGN_CENTER )
+				draw.DrawText( text, font, px + sw / 2 - pos, py + 53, white, TEXT_ALIGN_CENTER )
 
-				draw.DrawText( direction, directionfont, px + sw / 2 - pos, py + 10, drt, TEXT_ALIGN_CENTER )
+				draw.DrawText( direction, dfont, px + sw / 2 - pos, py + 10, dwhite, TEXT_ALIGN_CENTER )
 			end          
 		end  
 	end
