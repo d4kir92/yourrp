@@ -273,7 +273,9 @@ function CreateRolePreviewContent()
 			getrole:SetText("LID_getrole")
 			function getrole:DoClick()
 				if LocalPlayer().cc then
-					parent:Clear()
+					if pa(parent) then
+						parent:Clear()
+					end
 
 					CreateCharacterSettingsContent()
 				else
@@ -416,7 +418,9 @@ function CreateRoleSelectionContent(PARENT)
 		end
 		function back:DoClick()
 			if !LocalPlayer().onefaction and (!LocalPlayer().rolepreview and LocalPlayer():GetNW2Int("char_count", 0) > 0) then
-				parent:Clear()
+				if pa(parent) then
+					parent:Clear()
+				end
 
 				CreateFactionSelectionContent()
 			elseif LocalPlayer().onefaction then

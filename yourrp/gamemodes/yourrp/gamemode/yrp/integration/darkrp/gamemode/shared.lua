@@ -266,11 +266,8 @@ jobByCmd = jobByCmd or {}
 function DarkRP.getJobByCommand(command)
 	--Description: Get the job table and number from the command of the job.
 	--YRP.msg("darkrp", "getJobByCommand(" .. command .. ")")
-	if jobByCmd[command] then
-		return jobByCmd[command], jobByCmd[command]
-	else
-		return nil, nil
-	end
+	if not jobByCmd[command] then return nil, nil end
+    return RPExtraTeams[jobByCmd[command]], jobByCmd[command]
 end
 
 function DarkRP.getLaws()

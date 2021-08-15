@@ -419,10 +419,6 @@ hook.Add( "RenderScreenspaceEffects", "BlurTest", HUDPermille)
 hook.Add("HUDPaint", "yrp_hud", function()
 	local lply = LocalPlayer()
 
-	if game.SinglePlayer() then
-		draw.SimpleText("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2(), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	end
-	
 	if lply:GetNW2Bool("yrp_spawning", false) then
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 255)) -- Black Background - Respawning
 
@@ -517,16 +513,6 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		end
 	end
 
-	if !HasYRPContent() then
-		draw.SimpleTextOutlined("\"YourRP Content\" IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined("Add \"YourRP Content\" to your Server Collection!", "Y_60_500", ScrW2(), ScrH2() + 50, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	if HasDarkrpmodification() then
-		draw.SimpleTextOutlined("You have \"darkrpmodification\" (locally) on your Server", "Y_60_500", ScrW2(), ScrH2() - 200, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined("Remove \"darkrpmodification\" to make YourRP work!", "Y_60_500", ScrW2(), ScrH2() - 150, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
 	LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
 	if LocalPlayer().badyourrpcontent != "" then
 		draw.SimpleText("Your addon is outdated, please delete/redownload (addons folder):", "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -534,6 +520,20 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		for i, v in pairs(addons) do
 			draw.SimpleText("• " .. v, "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50) + i * YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
+	end
+
+	if game.SinglePlayer() then
+		draw.SimpleText("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2() - 100, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+	
+	if !HasYRPContent() then
+		draw.SimpleTextOutlined("\"YourRP Content\" IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2() - 250, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined("Add \"YourRP Content\" to your Server Collection!", "Y_60_500", ScrW2(), ScrH2() - 200, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	end
+
+	if HasDarkrpmodification() then
+		draw.SimpleTextOutlined("You have \"darkrpmodification\" (locally) on your Server", "Y_60_500", ScrW2(), ScrH2() - 450, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined("Remove \"darkrpmodification\" to make YourRP work!", "Y_60_500", ScrW2(), ScrH2() - 400, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 
 	if GetGlobalBool("bool_radiation", false) then
@@ -553,7 +553,7 @@ hook.Add("HUDPaint", "yrp_hud_collectionid", function()
 	local lply = LocalPlayer()
 	if lply:HasAccess() and YRPCollectionID() == 0 then
 		local text = YRP.lang_string("LID_thecollectionidismissing") .. " (" .. GetKeybindName("menu_settings") .. " >> " .. YRP.lang_string("LID_server") .. " >> " .. YRP.lang_string("LID_general") .. " >> " .. YRP.lang_string("LID_collectionid") .. ")"
-		draw.SimpleTextOutlined(text, "Y_50_500", ScrW() / 2, ScrH()  * 0.12, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(text, "Y_50_500", ScrW() / 2, ScrH()  * 0.2, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end)
 

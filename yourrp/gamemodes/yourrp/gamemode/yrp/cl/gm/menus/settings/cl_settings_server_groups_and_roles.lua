@@ -2499,18 +2499,20 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 				DHr(hr)
 
-				local securitylevel = {}
-				securitylevel.parent = ea.restriction:GetContent()
-				securitylevel.header = "LID_securitylevel"
-				securitylevel.netstr = "update_role_int_securitylevel"
-				securitylevel.value = role.int_securitylevel
-				securitylevel.uniqueID = role.uniqueID
-				securitylevel.lforce = false
-				securitylevel.min = 0
-				securitylevel.max = 10
-				ea[role.uniqueID].securitylevel = DIntBox(securitylevel)
+				if GetGlobalBool("bool_building_system", false) then
+					local securitylevel = {}
+					securitylevel.parent = ea.restriction:GetContent()
+					securitylevel.header = "LID_securitylevel"
+					securitylevel.netstr = "update_role_int_securitylevel"
+					securitylevel.value = role.int_securitylevel
+					securitylevel.uniqueID = role.uniqueID
+					securitylevel.lforce = false
+					securitylevel.min = 0
+					securitylevel.max = 10
+					ea[role.uniqueID].securitylevel = DIntBox(securitylevel)
 
-				DHr(hr)
+					DHr(hr)
+				end
 			end
 
 			DHr(hr)

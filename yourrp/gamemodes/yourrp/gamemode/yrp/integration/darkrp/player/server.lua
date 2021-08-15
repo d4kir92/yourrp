@@ -220,8 +220,8 @@ end
 
 function Player:setRPName(name, firstrun)
 	--Description: Set the RPName of a player.
-	YRP.msg("darkrp", "setRPName(name, firstrun)")
-	YRP.msg("darkrp", DarkRP._not)
+	--YRP.msg("darkrp", "setRPName(name, firstrun)")
+	self:SetRPName(name)
 end
 
 function Player:setSelfDarkRPVar(variable, value)

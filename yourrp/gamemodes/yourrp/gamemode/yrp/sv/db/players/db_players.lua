@@ -107,7 +107,7 @@ defaultsweps["yrp_key"] = true
 defaultsweps["yrp_unarmed"] = true
 
 function SetRole(ply, rid, force, pmid)
-	if IsVoidCharEnabled() and !ply:Alive() then
+	if (IsVoidCharEnabled() or GetGlobalBool("bool_character_system", true) == false) and !ply:Alive() then
 		ply:Spawn()
 	end
 

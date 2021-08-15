@@ -239,6 +239,7 @@ end
 function ConvertToDarkRPCategory(tab, cat)
 	local t = {}
 
+	t.uniqueID = tab.uniqueID or -1
 	t.name = tab.string_name or "-"
 	t.categorises = cat
 	t.startExpanded = true
@@ -267,8 +268,8 @@ end
 util.AddNetworkString("send_team")
 local Player = FindMetaTable("Player")
 function Player:DRPSendTeamsToPlayer()
-	self.yrp_darkrp_index = 0
-	for i, role in pairs(TEAMS) do
+	self.yrp_darkrp_index = 1
+	for i, role in pairs(RPExtraTeams) do
 		self.yrp_darkrp_index = self.yrp_darkrp_index + 1
 		timer.Simple(self.yrp_darkrp_index * 0.02, function()
 			if IsValid(self) then
@@ -307,33 +308,17 @@ function Player:DRPSendCategoriesToPlayer()
 		end)
 	end
 
-	net.Start("drp_combinetabs")
-	net.Send(self)
+	self.yrp_darkrp_index = self.yrp_darkrp_index + 1
+	timer.Simple(self.yrp_darkrp_index * 0.02 + 1, function()
+		net.Start("drp_combinetabs")
+		net.Send(self)
+	end)
 
 	for i, cat in pairs(CATEGORIES.jobs) do
 		cat.members = {}
 		for i, role in pairs(TEAMS) do
 			if role.int_groupID == cat.uniqueID then
 				table.insert(cat.members, role)
-			end
-		end
-	end
-end
-
-local categories = DarkRP.getCategories()
-if categories then
-	categories = DarkRP.getCategories().jobs -- GROUPS
-	if categories then -- GROUPS
-		for _, group in ipairs(categories) do -- GROUPS
-			bKeypads.DarkRP.JobCategories.Members[group.name] = group
-
-			bKeypads.DarkRP.JobCategories.Teams[group.name] = {}
-			for _, job in ipairs(group.members) do
-				if bKeypads.DarkRP.JobCategories.Teams[group.name][job.team] then
-					bKeypads.DarkRP.JobCategories.Teams[group.name][job.team] = true
-				else
-					--
-				end
 			end
 		end
 	end

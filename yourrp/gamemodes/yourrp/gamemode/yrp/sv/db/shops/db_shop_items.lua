@@ -261,8 +261,9 @@ function spawnItem(ply, item, duid)
 		end
 	end
 
-	local TARGETPOS = nil
-	
+	local TARGETPOS = Vector(0, 0, 0)
+	local TARGETANG = Angle(0, 0, 0)
+
 	local mins = Vector(10, 10, 10)
 	local maxs = Vector(-10, -10, -10)
 
@@ -294,6 +295,9 @@ function spawnItem(ply, item, duid)
 
 			local pos = string.Explode(",", SP.position)
 			TARGETPOS = Vector(pos[1], pos[2], pos[3])
+
+			local ang = string.Explode(",", SP.angle)
+			TARGETANG = Angle(ang[1], ang[2], ang[3])
 		end
 	end
 
@@ -360,6 +364,8 @@ function spawnItem(ply, item, duid)
 				ent:SetNW2Entity("yrp_owner", ply)
 				ent:Activate()
 
+				ent:SetAngles(TARGETANG)
+
 				ent:SetNW2String( "item_uniqueID", item.uniqueID )
 
 				YRP.msg("gm", "[spawnItem] Spawned 1")
@@ -375,7 +381,9 @@ function spawnItem(ply, item, duid)
 
 					ent:Spawn()
 					ent:Activate()
-					
+
+					ent:SetAngles(TARGETANG)
+
 					ent:SetNW2String( "item_uniqueID", item.uniqueID )
 
 					YRP.msg("gm", "[spawnItem] Spawned 2")
@@ -399,6 +407,8 @@ function spawnItem(ply, item, duid)
 
 				ent:Activate()
 
+				ent:SetAngles(TARGETANG)
+
 				return true, ent
 			else
 				ent = ents.Create(item.ClassName)
@@ -420,9 +430,11 @@ function spawnItem(ply, item, duid)
 
 					ent:SetModel(item.WorldModel)
 					ent:SetPos(tr.HitPos)
-
+					
 					ent:Spawn()
 					ent:Activate()
+
+					ent:SetAngles(TARGETANG)
 
 					ent:SetNW2String("item_uniqueID", item.uniqueID)
 			
@@ -437,6 +449,10 @@ function spawnItem(ply, item, duid)
 					return false
 				end
 			end
+		end
+
+		if ea(ent) and TARGETANG then
+			ent:SetAngles(TARGETANG)
 		end
 	else
 		YRP.msg("note", "Not enough space for item")

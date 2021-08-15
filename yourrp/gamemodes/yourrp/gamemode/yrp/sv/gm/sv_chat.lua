@@ -567,130 +567,131 @@ function RN(text)
 	return text
 end
 
-hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
-	local oldtext = text
-	local channel = "SAY"
-	if string.StartWith(text, "!") or string.StartWith(text, "/") then
-		local s, e = string.find(text, " ")
-		if s then
-			channel = string.sub(text, 2, s - 1)
-			text = string.sub(text, s + 1)
-		else
-			channel = string.sub(text, 2)
-			text = ""
-		end
-		channel = string.upper(channel)
-	end
-
-	local tab = SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. channel .. "'")
-	if wk(tab) then
-		tab = tab[1]
-		
-		tab.int_mode = tonumber(tab.int_mode)
-
-		local result = SQL_STR_OUT(tab.string_structure)
-
-		result = string.Replace(result, "%USERGROUP%", string.upper(sender:GetUserGroup()))
-		result = string.Replace(result, "%STEAMNAME%", sender:SteamName())
-		result = string.Replace(result, "%RPNAME%", sender:RPName())
-		result = string.Replace(result, "%IDCARDID%", sender:IDCardID())
-
-		result = string.Replace(result, "%FACTION%", sender:GetFactionName())
-		result = string.Replace(result, "%GROUP%", sender:GetGroupName())
-		result = string.Replace(result, "%ROLE%", sender:GetRoleName())
-
-		result = string.Replace(result, "%TEXT%", text)
-
-		result = RN(result)
-
-		local pk = {}
-		while(!strEmpty(result)) do
-			local cs, ce = string.find(result, "Color(", 1, true)
-			if cs == 1 then
-				local s, e = string.find(result, ")", 1, true)
-				if e then
-					local color = string.sub(result, cs + 6, e - 1)
-					color = string.Explode(",", color)
-					table.insert(pk, Color(color[1], color[2], color[3]))
-
-					result = string.sub(result, e + 1)
-				end
-			elseif cs then
-				local tex = string.sub(result, 1, cs - 1)
-				
-				table.insert(pk, tex)
-
-				result = string.sub(result, cs)
+timer.Simple(4, function() -- must be last hook
+	hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
+		local oldtext = text
+		local channel = "SAY"
+		if string.StartWith(text, "!") or string.StartWith(text, "/") then
+			local s, e = string.find(text, " ")
+			if s then
+				channel = string.sub(text, 2, s - 1)
+				text = string.sub(text, s + 1)
 			else
-				table.insert(pk, result)
-				result = ""
+				channel = string.sub(text, 2)
+				text = ""
 			end
+			channel = string.upper(channel)
 		end
 
-		if channel != "HELP" and !strEmpty(text) then
-			SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', '" .. SQL_STR_IN(text) .. "'")
-		end
+		local tab = SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. channel .. "'")
+		if wk(tab) then
+			tab = tab[1]
+			
+			tab.int_mode = tonumber(tab.int_mode)
 
-		if !tobool(tab.bool_enabled) then
-			return ""
-		end
+			local result = SQL_STR_OUT(tab.string_structure)
 
-		if tab.int_mode == 0 then -- GLOBAL
-			net.Start("yrp_player_say")
-				net.WriteEntity(sender)
-				net.WriteTable(pk)
-			net.Broadcast()
-			return ""
-		elseif tab.int_mode == 1 then -- LOCAL
-			for i, p in pairs(player.GetAll()) do
-				if p:GetPos():Distance(sender:GetPos()) < GetGlobalInt("int_yrp_chat_range_local", 400) then
-					net.Start("yrp_player_say")
-						net.WriteEntity(sender)
-						net.WriteTable(pk)
-					net.Send(p)
+			result = string.Replace(result, "%USERGROUP%", string.upper(sender:GetUserGroup()))
+			result = string.Replace(result, "%STEAMNAME%", sender:SteamName())
+			result = string.Replace(result, "%RPNAME%", sender:RPName())
+			result = string.Replace(result, "%IDCARDID%", sender:IDCardID())
+
+			result = string.Replace(result, "%FACTION%", sender:GetFactionName())
+			result = string.Replace(result, "%GROUP%", sender:GetGroupName())
+			result = string.Replace(result, "%ROLE%", sender:GetRoleName())
+
+			result = string.Replace(result, "%TEXT%", text)
+
+			result = RN(result)
+
+			local pk = {}
+			while(!strEmpty(result)) do
+				local cs, ce = string.find(result, "Color(", 1, true)
+				if cs == 1 then
+					local s, e = string.find(result, ")", 1, true)
+					if e then
+						local color = string.sub(result, cs + 6, e - 1)
+						color = string.Explode(",", color)
+						table.insert(pk, Color(color[1], color[2], color[3]))
+
+						result = string.sub(result, e + 1)
+					end
+				elseif cs then
+					local tex = string.sub(result, 1, cs - 1)
+					
+					table.insert(pk, tex)
+
+					result = string.sub(result, cs)
+				else
+					table.insert(pk, result)
+					result = ""
 				end
 			end
-			return ""
-		elseif tab.int_mode == 2 then -- FACTION
-			for i, v in pairs(player.GetAll()) do
-				if v:GetFactionUID() == sender:GetFactionUID() then
-					net.Start("yrp_player_say")
-						net.WriteEntity(sender)
-						net.WriteTable(pk)
-					net.Send(v)
-				end
+
+			if channel != "HELP" and !strEmpty(text) then
+				SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', '" .. SQL_STR_IN(text) .. "'")
 			end
-			return ""
-		elseif tab.int_mode == 3 then -- GROUP
-			for i, v in pairs(player.GetAll()) do
-				if v:GetGroupUID() == sender:GetGroupUID() then
-					net.Start("yrp_player_say")
-						net.WriteEntity(sender)
-						net.WriteTable(pk)
-					net.Send(v)
-				end
+
+			if !tobool(tab.bool_enabled) then
+				return ""
 			end
-			return ""
-		elseif tab.int_mode == 4 then -- ROLE
-			for i, v in pairs(player.GetAll()) do
-				if v:GetRoleUID() == sender:GetRoleUID() then
-					net.Start("yrp_player_say")
-						net.WriteEntity(sender)
-						net.WriteTable(pk)
-					net.Send(v)
+
+			if tab.int_mode == 0 then -- GLOBAL
+				net.Start("yrp_player_say")
+					net.WriteEntity(sender)
+					net.WriteTable(pk)
+				net.Broadcast()
+				return ""
+			elseif tab.int_mode == 1 then -- LOCAL
+				for i, p in pairs(player.GetAll()) do
+					if tonumber(p:GetPos():Distance(sender:GetPos())) < tonumber(GetGlobalInt("int_yrp_chat_range_local", 400)) then
+						net.Start("yrp_player_say")
+							net.WriteEntity(sender)
+							net.WriteTable(pk)
+						net.Send(p)
+					end
 				end
+				return ""
+			elseif tab.int_mode == 2 then -- FACTION
+				for i, v in pairs(player.GetAll()) do
+					if v:GetFactionUID() == sender:GetFactionUID() then
+						net.Start("yrp_player_say")
+							net.WriteEntity(sender)
+							net.WriteTable(pk)
+						net.Send(v)
+					end
+				end
+				return ""
+			elseif tab.int_mode == 3 then -- GROUP
+				for i, v in pairs(player.GetAll()) do
+					if v:GetGroupUID() == sender:GetGroupUID() then
+						net.Start("yrp_player_say")
+							net.WriteEntity(sender)
+							net.WriteTable(pk)
+						net.Send(v)
+					end
+				end
+				return ""
+			elseif tab.int_mode == 4 then -- ROLE
+				for i, v in pairs(player.GetAll()) do
+					if v:GetRoleUID() == sender:GetRoleUID() then
+						net.Start("yrp_player_say")
+							net.WriteEntity(sender)
+							net.WriteTable(pk)
+						net.Send(v)
+					end
+				end
+				return ""
+			elseif tab.int_mode == 9 then -- Custom
+				-- IN WORK :P
+				return ""
+			else
+				DoCommand(sender, channel, text)
 			end
-			return ""
-		elseif tab.int_mode == 9 then -- Custom
-			-- IN WORK :P
-			return ""
 		else
 			DoCommand(sender, channel, text)
 		end
-	else
-		DoCommand(sender, channel, text)
-	end
-	
-	return ""
-	--return oldtext
+		
+		return ""
+	end)
 end)

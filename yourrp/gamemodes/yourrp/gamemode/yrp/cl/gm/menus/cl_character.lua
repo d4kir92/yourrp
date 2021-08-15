@@ -120,7 +120,11 @@ function LoadCharacters()
 
 		local cache = {}
 
-		curChar = tonumber(LocalPlayer():CharID())
+		if LocalPlayer().CharID then
+			curChar = tonumber(LocalPlayer():CharID())
+		else
+			curChar = -1
+		end
 
 		if pa(CharMenu.charactersBackground) then
 			local i = 1

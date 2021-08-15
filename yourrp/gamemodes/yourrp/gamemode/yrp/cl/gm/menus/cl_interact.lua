@@ -16,10 +16,10 @@ function toggleInteractMenu()
 end
 
 function closeInteractMenu()
-	if wInteract != nil then
+	if yrp_Interact != nil then
 		closeMenu()
-		wInteract:Remove()
-		wInteract = nil
+		yrp_Interact:Remove()
+		yrp_Interact = nil
 	end
 end
 
@@ -48,12 +48,12 @@ net.Receive("openInteractMenu", function(len)
 
 	local licenses = ply:GetLicenseNames()
 
-	wInteract = createD("YFrame", nil, YRP.ctr(1090), YRP.ctr(1360), 0, 0)
-	wInteract:SetHeaderHeight(YRP.ctr(100))
-	function wInteract:OnClose()
+	yrp_Interact = createD("YFrame", nil, YRP.ctr(1090), YRP.ctr(1360), 0, 0)
+	yrp_Interact:SetHeaderHeight(YRP.ctr(100))
+	function yrp_Interact:OnClose()
 		closeMenu()
 	end
-	function wInteract:OnRemove()
+	function yrp_Interact:OnRemove()
 		closeMenu()
 	end
 
@@ -78,13 +78,13 @@ net.Receive("openInteractMenu", function(len)
 			break
 		end
 	end
-	wInteract:SetTitle(YRP.lang_string("LID_interactmenu"))
+	yrp_Interact:SetTitle(YRP.lang_string("LID_interactmenu"))
 
-	function wInteract:Paint(pw, ph)
+	function yrp_Interact:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph)
 	end
 
-	local content = wInteract:GetContent()
+	local content = yrp_Interact:GetContent()
 	function content:Paint(pw, ph)
 		local scaleW = pw / (GetGlobalInt("int_" .. "background" .. "_w", 100) + 20)
 		local scaleH = YRP.ctr(470) / (GetGlobalInt("int_" .. "background" .. "_h", 100) + 20)
@@ -169,7 +169,9 @@ net.Receive("openInteractMenu", function(len)
 				net.Start("promotePlayer")
 					net.WriteString(tmpTargetSteamID)
 				net.SendToServer()
-				wInteract:Close()
+				if pa(yrp_Interact) then
+					yrp_Interact:Close()
+				end
 			end
 			function btnPromote:Paint(pw, ph)
 				hook.Run("YButtonPaint", self, pw, ph)
@@ -183,7 +185,9 @@ net.Receive("openInteractMenu", function(len)
 				net.Start("demotePlayer")
 					net.WriteString(tmpTargetSteamID)
 				net.SendToServer()
-				wInteract:Close()
+				if pa(yrp_Interact) then
+					yrp_Interact:Close()
+				end
 			end
 			function btnDemote:Paint(pw, ph)
 				hook.Run("YButtonPaint", self, pw, ph)
@@ -197,7 +201,9 @@ net.Receive("openInteractMenu", function(len)
 				net.Start("invitetogroup")
 					net.WriteString(tmpTargetSteamID)
 				net.SendToServer()
-				wInteract:Close()
+				if pa(yrp_Interact) then
+					yrp_Interact:Close()
+				end
 			end
 			function btnbtnInviteToGroup:Paint(pw, ph)
 				hook.Run("YButtonPaint", self, pw, ph)
@@ -205,8 +211,8 @@ net.Receive("openInteractMenu", function(len)
 		end
 	end
 
-	wInteract:Center()
-	wInteract:MakePopup()
+	yrp_Interact:Center()
+	yrp_Interact:MakePopup()
 end)
 
 net.Receive("yrp_invite_ply", function(len)

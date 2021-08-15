@@ -2063,9 +2063,11 @@ function loadDoorTexts()
 
 					--render.DrawSphere(pos, 10, 8, 8, Color(0, 255, 0))
 
-					cam.Start3D2D(pos, ang, 0.2)
-						DrawDoorText(door)
-					cam.End3D2D()
+					if GetGlobalBool("bool_building_system", false) then
+						cam.Start3D2D(pos, ang, 0.2)
+							DrawDoorText(door)
+						cam.End3D2D()
+					end
 
 					ang = Angle(0, 180, 0)
 
@@ -2086,9 +2088,11 @@ function loadDoorTexts()
 
 					ang = ang + Angle(0, 180, 0)
 
-					cam.Start3D2D(pos, ang, 0.2)
-						DrawDoorText(door)
-					cam.End3D2D()
+					if GetGlobalBool("bool_building_system", false) then
+						cam.Start3D2D(pos, ang, 0.2)
+							DrawDoorText(door)
+						cam.End3D2D()
+					end
 				end
 			end
 		end)

@@ -128,7 +128,7 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 		YRPSetAllCharsToDefaultRole(ply)
 	end
 
-	if IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) then
+	if IsVoidCharEnabled() or GetGlobalBool("bool_character_system", true) == false then
 		local chars = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 		if !wk(chars) then
 			local tab = {}
@@ -217,17 +217,19 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 
 				local chaTab = ply:GetChaTab()
 				if wk(chaTab) then
-					ply:SetNW2String("money", chaTab.money)
-					ply:SetNW2String("moneybank", chaTab.moneybank)
-					if not IsVoidCharEnabled() then
-						ply:SetNW2String("rpname", SQL_STR_OUT(chaTab.rpname))
-					end
-					ply:SetNW2String("rpdescription", SQL_STR_OUT(chaTab.rpdescription))
-					for i, v in pairs(string.Explode("\n", chaTab.rpdescription)) do
-						ply:SetNW2String("rpdescription" .. i, SQL_STR_OUT(v))
-					end
+					if not IsVoidCharEnabled() or GetGlobalBool("bool_character_system", true) == false then
+						ply:SetNW2String("money", chaTab.money)
+						ply:SetNW2String("moneybank", chaTab.moneybank)
 
-					setbodygroups(ply)
+						ply:SetNW2String("rpname", SQL_STR_OUT(chaTab.rpname))
+					
+						ply:SetNW2String("rpdescription", SQL_STR_OUT(chaTab.rpdescription))
+						for i, v in pairs(string.Explode("\n", chaTab.rpdescription)) do
+							ply:SetNW2String("rpdescription" .. i, SQL_STR_OUT(v))
+						end
+
+						setbodygroups(ply)
+					end
 				else
 					YRP.msg("note", "Give char failed -> KillSilent -> " .. ply:YRPName() .. " char: " .. tostring(chaTab))
 					if !ply:IsBot() then
@@ -649,7 +651,7 @@ hook.Add("EntityTakeDamage", "YRP_EntityTakeDamage", function(ent, dmginfo)
 		dmginfo:ScaleDamage(hitfactor)
 	elseif ent:IsPlayer() then
 		if GetGlobalBool("bool_antipropkill", true) then
-			if dmginfo:GetAttacker():GetClass() == "prop_physics" then
+			if IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():GetClass() == "prop_physics" then
 				dmginfo:ScaleDamage(0)
 			end
 		end
@@ -1350,10 +1352,10 @@ function GM:ShowHelp(ply)
 	return false
 end
 
-function GM:PostCleanupMap()
+hook.Add("PostCleanupMap", "yrp_PostCleanupMap_doors", function()
 	-- Rebuild Doors
 	YRP.msg("note", "RELOAD DOORS")
 
 	loadDoors()
 	LoadWorldStorages()
-end
+end)

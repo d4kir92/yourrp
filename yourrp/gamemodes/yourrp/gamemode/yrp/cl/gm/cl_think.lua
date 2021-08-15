@@ -305,7 +305,7 @@ function KeyPress()
 			hudFail = true
 			net.Start("rebuildHud")
 			net.SendToServer()
-			YRP.msg("error", "HUD Version outdated! " .. tostring(lply:GetNW2Int("hud_version", -1)) .. " " .. printReadyError())
+			YRP.msg("error", "HUD Version outdated! " .. tostring(lply:GetNW2Int("hud_version", -1)))
 		end
 	end
 
@@ -792,7 +792,9 @@ net.Receive("send_team", function(len)
 	local teamuid = teamTab.uniqueID
 
 	_G[string.upper(teamname)] = teamuid
-	RPExtraTeams[teamuid] = teamTab
+	if RPExtraTeams[teamuid] == nil then
+		RPExtraTeams[teamuid] = teamTab
+	end
 
 	jobByCmd[teamTab.command] = teamuid
 
@@ -811,7 +813,8 @@ net.Receive("send_categories", function(len)
 	local catname = net.ReadString()
 	local catTab = net.ReadTable()
 
-	CATEGORIES.jobs[catname] = catTab
+	--CATEGORIES.jobs[catname] = catTab -- ipairs not working with that
+	table.insert(CATEGORIES.jobs, catTab)
 end)
 
 net.Receive("drp_combinetabs", function(len)

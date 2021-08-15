@@ -461,18 +461,20 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		cb:SetChecked(true)
 	end
 	function cb:OnChange(bVal)
-		if bVal then
-			table.insert(UGS[CURRENT_USERGROUP].string_tools, "all")
-		else
-			table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "all")
+		if wk(UGS[CURRENT_USERGROUP]) then
+			if bVal then
+				table.insert(UGS[CURRENT_USERGROUP].string_tools, "all")
+			else
+				table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "all")
+			end
+
+			local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
+
+			net.Start("usergroup_update_string_tools")
+				net.WriteString(CURRENT_USERGROUP)
+				net.WriteString(str)
+			net.SendToServer()
 		end
-
-		local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
-
-		net.Start("usergroup_update_string_tools")
-			net.WriteString(CURRENT_USERGROUP)
-			net.WriteString(str)
-		net.SendToServer()
 	end
 	YTOOLS.plus:AddItem(line)
 

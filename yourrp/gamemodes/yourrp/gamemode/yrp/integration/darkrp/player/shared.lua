@@ -148,6 +148,7 @@ function Player:getJobTable()
 end
 
 RPExtraTeams = RPExtraTeams or {}
+jobByCmd = jobByCmd or {}
 function GetRPExtraTeams()
 	RPExtraTeams = RPExtraTeams or {}
 	for i, ply in pairs(player.GetAll()) do
