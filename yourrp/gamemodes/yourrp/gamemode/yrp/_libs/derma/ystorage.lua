@@ -14,7 +14,7 @@ function GetStoragePanel(storageID)
 		if wk(YRP_STORAGES[storageID]) then
 			return YRP_STORAGES[storageID]
 		else
-			--YRP.msg("note", "[GetStoragePanel] no panel with: " .. tostring(storageID))
+			YRP.msg("note", "[GetStoragePanel] no panel with: " .. tostring(storageID))
 		end
 	else
 		YRP.msg("note", "[GetStoragePanel] storageID is invalid: " .. tostring(storageID))
@@ -22,6 +22,7 @@ function GetStoragePanel(storageID)
 end
 
 function SetStoragePanel(storageID, pnl)
+	
 	if wk(storageID) then
 		storageID = tonumber(storageID)
 		if !wk(YRP_STORAGES[storageID]) then
@@ -136,7 +137,6 @@ function BuildStorage(storage, slots)
 		local sp = (storage:GetWide() - storage:GetCols() * ItemSize()) / (storage:GetCols() - 1)
 
 		storage:SetSpacing(sp)
-
 		for y = 1, 32 do
 			if slots[c] == nil then
 				break

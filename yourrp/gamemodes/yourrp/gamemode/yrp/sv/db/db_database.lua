@@ -129,17 +129,22 @@ function yrp_db_loaded()
 end
 
 function db_init_database()
-	hr_pre("db")
-	YRP.msg("db", "LOAD DATABASES")
+	if SQL_INIT_DATABASE then
+		hr_pre("db")
+		YRP.msg("db", "LOAD DATABASES")
 
-	for i, db in pairs(YRP_DBS) do
-		SQL_INIT_DATABASE(db)
+		for i, db in pairs(YRP_DBS) do
+			SQL_INIT_DATABASE(db)
+		end
+
+		yrp_db.loaded = true
+
+		YRP.msg("db", "DONE Loading DATABASES")
+		hr_pos("db")
+	else
+		YRP.msg("db", "RETRY LOAD DATABASES")
+		timer.Simple(0.01, db_init_database)
 	end
-
-	yrp_db.loaded = true
-
-	YRP.msg("db", "DONE Loading DATABASES")
-	hr_pos("db")
 end
 db_init_database()
 

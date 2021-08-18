@@ -56,7 +56,7 @@ function CreateItem(slotID, tab)
 			return false
 		end
 	
-		SQL_INSERT_INTO(
+		local result = SQL_INSERT_INTO(
 			DATABASE_NAME,
 			"int_slotID, text_classname, text_printname, text_worldmodel, int_storageID, text_type, int_fixed",
 			"'" .. slotID .. "', '" .. tab.text_classname .. "', '" .. tab.text_printname .. "', '" .. tab.text_worldmodel .. "', '" .. tab.int_storageID .. "', '" .. tab.text_type .. "', '" .. tab.int_fixed .. "'"
@@ -111,7 +111,15 @@ end
 function GetItem(slotID)
 	local item = SQL_SELECT(DATABASE_NAME, "*", "int_slotID = '" .. slotID .. "'")
 	if wk(item) then
-		return item[1]
+		item = item[1]
+		if item.text_type == "bag" then
+			local storage = SQL_SELECT("yrp_inventory_storages", "*", "uniqueID = '" .. item.int_storageID .. "'")
+			if !wk(storage) then
+				SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. item.uniqueID .. "'")
+				return false
+			end
+		end
+		return item
 	end
 	--YRP.msg("db", "[GetItem] No item in " .. tostring(slotID))
 	return false
@@ -189,17 +197,21 @@ function DropItem(ply, slotID)
 	RemoveItem(item.uniqueID)
 
 	local e = ents.Create(SQL_STR_OUT(item.text_classname))
-	e:SetModel(SQL_STR_OUT(item.text_worldmodel))
-	local pos = ply:GetPos() + ply:GetForward() * 64
-	local mins = e:OBBMins()
-	local maxs = e:OBBMaxs()
+	if IsValid(e) then
+		e:SetModel(SQL_STR_OUT(item.text_worldmodel))
+		local pos = ply:GetPos() + ply:GetForward() * 64
+		local mins = e:OBBMins()
+		local maxs = e:OBBMaxs()
 
-	if item.text_type == "bag" then
-		e:SetStorage(item.int_storageID)
+		if item.text_type == "bag" then
+			e:SetStorage(item.int_storageID)
+		end
+
+		e:SetPos(ply:GetPos() + ply:GetForward() * 64)
+		e:Spawn()
+	else
+		YRP.msg("note", SQL_STR_OUT(item.text_classname) .. " is not a valid classname")
 	end
-
-	e:SetPos(ply:GetPos() + ply:GetForward() * 64)
-	e:Spawn()
 end	
 
 util.AddNetworkString("yrpclosebag")

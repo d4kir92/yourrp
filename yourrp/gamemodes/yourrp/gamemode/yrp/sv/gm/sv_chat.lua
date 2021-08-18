@@ -548,29 +548,15 @@ function DoCommand(sender, command, text)
 	end
 end
 
-function RN(text)
-	local cs, ce = string.find(text, "RN(", 1, true)
-	if cs then
-		local s, e = string.find(text, ")", cs, true)
-		if e then
-			local pre = string.sub(text, 1, cs - 1)
-			local suf = string.sub(text, e + 1)
-			local ex = string.sub(text, cs + 3, e - 1)
-
-			ex = string.Explode(",", ex)
-
-			local rn = math.random(ex[1], ex[2])
-
-			text = pre .. rn .. suf
-		end
-	end
-	return text
-end
-
 timer.Simple(4, function() -- must be last hook
+	hook.Remove("PlayerSay", "YRP_PlayerSay")
 	hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
 		local oldtext = text
 		local channel = "SAY"
+
+
+
+		-- Find Channel
 		if string.StartWith(text, "!") or string.StartWith(text, "/") then
 			local s, e = string.find(text, " ")
 			if s then
@@ -583,50 +569,23 @@ timer.Simple(4, function() -- must be last hook
 			channel = string.upper(channel)
 		end
 
+
+
+		-- Replace words with names
+		text = YRPReplaceWithPlayerNames(text)
+
+
+
+		-- Channels
 		local tab = SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. channel .. "'")
 		if wk(tab) then
 			tab = tab[1]
 			
 			tab.int_mode = tonumber(tab.int_mode)
 
-			local result = SQL_STR_OUT(tab.string_structure)
+			local structure = SQL_STR_OUT(tab.string_structure)
 
-			result = string.Replace(result, "%USERGROUP%", string.upper(sender:GetUserGroup()))
-			result = string.Replace(result, "%STEAMNAME%", sender:SteamName())
-			result = string.Replace(result, "%RPNAME%", sender:RPName())
-			result = string.Replace(result, "%IDCARDID%", sender:IDCardID())
-
-			result = string.Replace(result, "%FACTION%", sender:GetFactionName())
-			result = string.Replace(result, "%GROUP%", sender:GetGroupName())
-			result = string.Replace(result, "%ROLE%", sender:GetRoleName())
-
-			result = string.Replace(result, "%TEXT%", text)
-
-			result = RN(result)
-
-			local pk = {}
-			while(!strEmpty(result)) do
-				local cs, ce = string.find(result, "Color(", 1, true)
-				if cs == 1 then
-					local s, e = string.find(result, ")", 1, true)
-					if e then
-						local color = string.sub(result, cs + 6, e - 1)
-						color = string.Explode(",", color)
-						table.insert(pk, Color(color[1], color[2], color[3]))
-
-						result = string.sub(result, e + 1)
-					end
-				elseif cs then
-					local tex = string.sub(result, 1, cs - 1)
-					
-					table.insert(pk, tex)
-
-					result = string.sub(result, cs)
-				else
-					table.insert(pk, result)
-					result = ""
-				end
-			end
+			local pk = YRPChatReplaceCMDS(structure, sender, text)
 
 			if channel != "HELP" and !strEmpty(text) then
 				SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', '" .. SQL_STR_IN(text) .. "'")

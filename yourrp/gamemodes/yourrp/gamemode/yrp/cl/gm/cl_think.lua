@@ -792,14 +792,12 @@ net.Receive("send_team", function(len)
 	local teamuid = teamTab.uniqueID
 
 	_G[string.upper(teamname)] = teamuid
-	if RPExtraTeams[teamuid] == nil then
+	if teamuid and teamname and RPExtraTeams[teamuid] == nil then
 		RPExtraTeams[teamuid] = teamTab
+		jobByCmd[teamTab.command] = teamuid
+		--table.insert(RPExtraTeams, teamTab) -- old
+		team.SetUp(teamuid, teamname, teamcolor)
 	end
-
-	jobByCmd[teamTab.command] = teamuid
-
-	--table.insert(RPExtraTeams, teamTab) -- old
-	team.SetUp(teamuid, teamname, teamcolor)
 end)
 
 CATEGORIES = CATEGORIES or {}

@@ -78,7 +78,7 @@ function YRPSendCharCount(ply)
 end
 
 local Player = FindMetaTable("Player")
-function Player:CharacterLoadout()
+function Player:YRPCharacterLoadout()
 	YRP.msg("debug", "[CharacterLoadout] " .. self:YRPName())
 	local chatab = self:GetChaTab()
 	local plytab = self:GetPlyTab()

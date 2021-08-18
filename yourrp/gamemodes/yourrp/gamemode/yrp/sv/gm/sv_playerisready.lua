@@ -37,7 +37,7 @@ function PlayerLoadedGame(ply, tab)
 
 	ply:SetNW2Bool("isserverdedicated", game.IsDedicated())
 
-	ply:DesignLoadout("PlayerLoadedGame")
+	ply:YRPDesignLoadout("PlayerLoadedGame")
 
 	local plyT = ply:GetPlyTab()
 	if wk(plyT) then

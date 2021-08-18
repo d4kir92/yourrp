@@ -235,7 +235,7 @@ else
 		elseif com == "yell" then
 			return YRP.lang_string("LID_yell")
 		elseif com == "advert" then
-			return GetGlobalString("text_chat_advert", YRP.lang_string("LID_advert"))
+			return YRP.lang_string("LID_advert")
 		elseif com == "admin" then
 			return YRP.lang_string("LID_admin")
 		elseif com == "faction" then
@@ -765,6 +765,7 @@ else
 	net.Receive("yrp_player_say", function(len)
 		local sender = net.ReadEntity()
 		local pk = net.ReadTable()
+
 		for i, v in pairs(pk) do
 			if isstring(v) then
 				local s, e = string.find(v, "LID_")

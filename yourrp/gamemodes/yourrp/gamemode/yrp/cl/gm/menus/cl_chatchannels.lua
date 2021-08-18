@@ -82,6 +82,9 @@ function YRPChatChannel(edit, uid)
 	win.structure = createD("DTextEntry", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(200))
 	function win.structure:OnChange()
 		structure = win.structure:GetText()
+		if pa(win.previewrich) then
+			win.previewrich:Think()
+		end
 	end
 	if edit then
 		structure = GetGlobalTable("yrp_chat_channels")[uid].string_structure
@@ -164,6 +167,40 @@ function YRPChatChannel(edit, uid)
 	win.enabledname = createD("YLabel", CON, YRP.ctr(250), YRP.ctr(50), YRP.ctr(50), YRP.ctr(400))
 	win.enabledname:SetText("LID_enabled")
 	
+
+
+	win.preview = createD("YLabel", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(500))
+	win.preview:SetText("LID_preview")
+
+	win.previewtext = createD("DTextEntry", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(550))
+	win.previewtext:SetText("")
+	win.previewtext:SetPlaceholderText("Example Text")
+	function win.previewtext:OnChange()
+		if pa(win.previewrich) then
+			win.previewrich:Think()
+		end
+	end
+
+	win.previewrich = createD("RichText", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(600))
+	win.previewrich:SetText(win.structure:GetText())
+
+	function win.previewrich:Think()
+		if pa(win.previewrich) and pa(win.previewtext) then
+			win.previewrich:SetText("")
+			local pk = YRPChatReplaceCMDS(win.structure:GetText(), LocalPlayer(), YRPReplaceWithPlayerNames(win.previewtext:GetText()))
+			for i, v in pairs(pk) do
+				if type(v) == "string" then
+					win.previewrich:AppendText(v)
+				elseif type(v) == "table" then
+					win.previewrich:InsertColorChange(v.r, v.g, v.b, 255)
+				else
+					YRP.msg( "note", "[previewrich] ELSE: " .. tostring(type(v)) .. " " .. tostring(v) )
+				end
+			end
+		end
+	end
+	win.previewrich:Think()
+
 	--[[
 	-- ACTIVE --
 	-- USERGROUPS
@@ -418,9 +455,9 @@ function YRPChatChannel(edit, uid)
 		end
 		function win.save:DoClick()
 			net.Start("yrp_chat_channel_save")
-				net.WriteString(name)
-				net.WriteString(mode)
-				net.WriteString(structure)
+				net.WriteString(name or "")
+				net.WriteString(mode or "")
+				net.WriteString(structure or "")
 
 				net.WriteString(enabled)
 
@@ -530,9 +567,11 @@ function OpenChatMenu()
 				edit:SetText("")
 				function edit:Paint(pw, ph)
 					local br = YRP.ctr(8)
-					surface.SetMaterial( YRP.GetDesignIcon("edit") )
-					surface.SetDrawColor( 255, 255, 255, 255 )
-					surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+					if YRP.GetDesignIcon("edit") then
+						surface.SetMaterial( YRP.GetDesignIcon("edit") )
+						surface.SetDrawColor( 255, 255, 255, 255 )
+						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+					end
 				end
 				function edit:DoClick()
 					YRPChatChannel(true, channel.uniqueID)

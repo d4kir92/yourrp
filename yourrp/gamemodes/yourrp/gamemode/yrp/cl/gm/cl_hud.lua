@@ -410,9 +410,9 @@ end)
 
 local function HUDPermille()
 	local lply = LocalPlayer()
-    if lply:Permille() > 0 then
-        DrawMotionBlur(0.1, 0.79, 0.05)
-    end
+	if lply:Permille() > 0 then
+		DrawMotionBlur(0.1, 0.79, 0.05)
+	end
 end
 hook.Add( "RenderScreenspaceEffects", "BlurTest", HUDPermille)
 
@@ -778,3 +778,4 @@ hook.Add("HUDPaint", "yrp_voice_module", function()
 	draw.RoundedBox(5, VO.tx - VO.tw / 2, VO.y, VO.tw, VO.h, Color(25, 25, 25))
 	draw.SimpleText(VO.text, VO.font, VO.tx, VO.ty, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end)
+

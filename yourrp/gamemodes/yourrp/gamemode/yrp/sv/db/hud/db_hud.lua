@@ -1051,6 +1051,8 @@ function Player:HudLoadout()
 		net.Start("yrp_hud_info")
 			net.WriteTable(hudeles)
 		net.Send(self)
+	
+		self:SetNW2Bool("yrp_hudloadout", true)
 	end
 	timer.Simple(1, function()
 		self:SetNW2Int("hud_version", self:GetNW2Int("hud_version", 0) + 1)
@@ -1188,6 +1190,6 @@ net.Receive("reset_hud_settings", function(len, ply)
 	YRP.msg("db", "Reset Hud Settings by " .. ply:YRPName())
 	DefaultHUDSettings(true)
 	for i, v in pairs(player.GetAll()) do
-		ply:DesignLoadout("reset_hud_settings")
+		ply:YRPDesignLoadout("reset_hud_settings")
 	end
 end)

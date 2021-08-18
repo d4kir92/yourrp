@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 346 -- do NOT change this!
 GM.VersionCanary = 695 -- do NOT change this!
-GM.VersionBuild = 4 -- do NOT change this!
+GM.VersionBuild = 9 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -641,7 +641,102 @@ function IsVoidCharEnabled()
 	return false
 end
 
+function YRPReplaceWithPlayerNames(text)
+	local found = false
+	for _, p in pairs(player.GetAll()) do
+		local s, e = string.find(string.lower(text), string.lower(p:RPName()))
+		if s then
+			local pre = string.sub(text, 1, s - 1)
+			local pos = string.sub(text, e + 1)
+			text = pre .. p:RPName() .. pos
+			found = true
+		end
+	end
 
+	if !found then
+		local test = string.Explode( " ", text )
+		for i, str in pairs(test) do
+			for _, p in pairs(player.GetAll()) do
+				if #str > 4 and string.StartWith(string.lower(p:RPName()), string.lower(str)) then
+					test[i] = p:RPName()
+				end
+			end
+		end
+		text = table.concat( test, " " )
+	end
+
+	return text
+end
+
+function RN(text)
+	local cs, ce = string.find(text, "RN(", 1, true)
+	if cs then
+		local s, e = string.find(text, ")", cs, true)
+		if e then
+			local pre = string.sub(text, 1, cs - 1)
+			local suf = string.sub(text, e + 1)
+			local ex = string.sub(text, cs + 3, e - 1)
+
+			ex = string.Explode(",", ex)
+
+			local rn = math.random(ex[1], ex[2])
+
+			text = pre .. rn .. suf
+		end
+	end
+	return text
+end
+
+function YRPChatReplaceCMDS(structure, ply, text)
+	local result = structure
+
+	result = string.Replace(result, "%USERGROUP%", string.upper(ply:GetUserGroup()))
+	result = string.Replace(result, "%STEAMNAME%", ply:SteamName())
+	result = string.Replace(result, "%RPNAME%", ply:RPName())
+	result = string.Replace(result, "%IDCARDID%", ply:IDCardID())
+
+	result = string.Replace(result, "%FACTION%", ply:GetFactionName())
+	result = string.Replace(result, "%GROUP%", ply:GetGroupName())
+	result = string.Replace(result, "%ROLE%", ply:GetRoleName())
+
+	result = string.Replace(result, "%TEXT%", text)
+	
+	result = RN(result)
+
+	local pk = {}
+	while(!strEmpty(result)) do
+		local cs, ce = string.find(result, "Color(", 1, true)
+		if cs == 1 then
+			local s, e = string.find(result, ")", 1, true)
+			if e then
+				local color = string.sub(result, cs + 6, e - 1)
+				color = string.Explode(",", color)
+				if isnumber(tonumber(color[1])) and isnumber(tonumber(color[2])) and isnumber(tonumber(color[3])) then
+					table.insert(pk, Color(color[1] or 255, color[2] or 255, color[3] or 255))
+
+					result = string.sub(result, e + 1)
+				else
+					table.insert(pk, result)
+					result = ""
+				end
+			else
+				table.insert(pk, result)
+				result = ""
+			end
+		elseif cs then
+			local tex = string.sub(result, 1, cs - 1)
+			
+			table.insert(pk, tex)
+
+			result = string.sub(result, cs)
+		else
+			table.insert(pk, result)
+			result = ""
+		end
+	end
+
+	return pk
+end
 
 -- ERROR LOGGING
 

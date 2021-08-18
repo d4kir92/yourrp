@@ -320,6 +320,10 @@ function SQL_SELECT(db_table, db_columns, db_where, db_extra)
 			_q = _q .. db_where
 		end
 
+		if db_extra then
+			_q = _q .. " " .. db_extra
+		end
+		
 		_q = _q .. ";"
 
 		return SQL_QUERY(_q)

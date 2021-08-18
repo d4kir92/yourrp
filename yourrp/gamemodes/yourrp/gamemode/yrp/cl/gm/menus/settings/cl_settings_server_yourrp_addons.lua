@@ -112,10 +112,10 @@ net.Receive("Connect_Settings_YourRP_Addons", function(len)
 
 		local YRPA = net.ReadTable()
 
-		local yrp_addons = createD("DPanelList", PARENT, YRP.ctr(1600), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
-		yrp_addons:EnableVerticalScrollbar(true)
-		yrp_addons:SetSpacing(10)
-		function yrp_addons:Paint(pw, ph)
+		local addons = createD("DPanelList", PARENT, YRP.ctr(1600), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+		addons:EnableVerticalScrollbar(true)
+		addons:SetSpacing(10)
+		function addons:Paint(pw, ph)
 			local box = {}
 			box.w = pw
 			box.h = ph
@@ -125,10 +125,10 @@ net.Receive("Connect_Settings_YourRP_Addons", function(len)
 
 		if table.Count(YRPA) > 0 then
 			for i, addon in pairs(YRPA) do
-				AddYRPAddon(yrp_addons, addon)
+				AddYRPAddon(addons, addon)
 			end
 		else
-			local _empty = createD("DPanel", yrp_addons, YRP.ctr(1600), YRP.ctr(4 * 100 + 5 * 20), 0, 0)
+			local _empty = createD("DPanel", addons, YRP.ctr(1600), YRP.ctr(4 * 100 + 5 * 20), 0, 0)
 			function _empty:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 				local tab = {}
@@ -140,7 +140,7 @@ net.Receive("Connect_Settings_YourRP_Addons", function(len)
 				tab.text = "empty"
 				DrawText(tab)
 			end
-			yrp_addons:AddItem(_empty)
+			addons:AddItem(_empty)
 		end
 	end
 end)

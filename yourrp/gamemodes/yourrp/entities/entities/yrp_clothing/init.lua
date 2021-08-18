@@ -6,8 +6,6 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-	print(">>> SPAWN CLOTHING")
-
 	self:SetModel("models/props_wasteland/controlroom_storagecloset001a.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
@@ -22,8 +20,6 @@ function ENT:Initialize()
 			self:DropToFloor()
 		end)
 	end
-
-	print(">>> SPAWNED CLOTHING")
 end
 
 util.AddNetworkString("openAM")

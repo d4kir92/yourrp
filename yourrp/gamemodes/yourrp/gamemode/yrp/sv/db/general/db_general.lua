@@ -70,8 +70,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_group", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_yell", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_service", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_chat_advert", "TEXT DEFAULT 'Advert'")
-
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_removebuildingowner", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_removebuildingownercharswitch", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_removebuildingownertime", "TEXT DEFAULT '600'")

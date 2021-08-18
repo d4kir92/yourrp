@@ -60,7 +60,6 @@ function YRPOpenInventory(target)
 				inv.storage:SetStorageID(storageID)
 
 				local nettab = net.ReadTable()
-				
 				if table.Count(nettab) > 0 and !target then
 					local env = createD("DFrame", nil, 4 * ItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp), 4 * ItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp) + YRP.ctr(50), 0, 0)
 					env:MakePopup()
@@ -68,7 +67,7 @@ function YRPOpenInventory(target)
 					env:SetTitle("")
 					function env:Paint(pw, ph)
 						if !YRPInventory() then
-							self:Remove()
+							--self:Remove()
 						end
 						draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "NC"))
 						draw.SimpleText(YRP.lang_string("LID_environment"), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)

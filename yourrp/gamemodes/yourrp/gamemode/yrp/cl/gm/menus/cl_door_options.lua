@@ -1,6 +1,7 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 local yrp_door = {}
+yrp_door.waitforanswer = false
 
 function toggleDoorOptions(door)
 	if YRPIsNoMenuOpen() then
@@ -20,26 +21,30 @@ function closeDoorOptions()
 end
 
 net.Receive("getBuildingInfo", function(len)
-	local door = net.ReadEntity()
-	local tab = net.ReadTable()
-	if wk(tab) then
-		local tabBuilding = tab["B"]
-		local tabOwner = tab["O"]
-		local tabGroup = tab["G"]
+	if yrp_door.waitforanswer then
+		yrp_door.waitforanswer = false
 
-		if GetGlobalBool("bool_building_system", false) then
-			if ea(door) and !LocalPlayer():GetNW2Bool("bool_" .. "ishobo", false) then
-				if table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
-					optionWindow(door, tabBuilding, tabOwner, tabGroup)
-				else
-					buyWindow(door, tabBuilding)
+		local door = net.ReadEntity()
+		local tab = net.ReadTable()
+		if wk(tab) then
+			local tabBuilding = tab["B"]
+			local tabOwner = tab["O"]
+			local tabGroup = tab["G"]
+
+			if GetGlobalBool("bool_building_system", false) then
+				if ea(door) and !LocalPlayer():GetNW2Bool("bool_" .. "ishobo", false) then
+					if table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
+						optionWindow(door, tabBuilding, tabOwner, tabGroup)
+					else
+						buyWindow(door, tabBuilding)
+					end
 				end
+			else
+				YRP.msg("note", "getBuildingInfo Building System Disabled")
 			end
 		else
-			YRP.msg("note", "getBuildingInfo Building System Disabled")
+			YRP.msg("note", "getBuildingInfo net Table broken")
 		end
-	else
-		YRP.msg("note", "getBuildingInfo net Table broken")
 	end
 end)
 
@@ -322,8 +327,10 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "Y_18_500", YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "Y_18_500", YRP.ctr(540), YRP.ctr(370), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 
-		draw.SimpleTextOutlined("Building-ID: " .. door:GetNW2String("buildingID", "FAILED"), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined("Door-ID: " .. door:GetNW2String("uniqueID", -1), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270 + 40), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		if ea(door) then
+			draw.SimpleTextOutlined("Building-ID: " .. door:GetNW2String("buildingID", "FAILED"), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined("Door-ID: " .. door:GetNW2String("uniqueID", -1), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270 + 40), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		end
 	end
 	function yrp_door.window:OnClose()
 		closeMenu()
@@ -416,7 +423,11 @@ end
 function openDoorOptions(door)
 	closeDoorOptions()
 
-	net.Start("getBuildingInfo")
-		net.WriteEntity(door)
-	net.SendToServer()
+	if !yrp_door.waitforanswer then
+		yrp_door.waitforanswer = true
+
+		net.Start("getBuildingInfo")
+			net.WriteEntity(door)
+		net.SendToServer()
+	end
 end

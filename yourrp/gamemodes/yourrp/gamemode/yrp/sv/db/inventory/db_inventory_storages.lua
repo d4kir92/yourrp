@@ -52,6 +52,22 @@ function CreateCharacterStorages()
 	local chars = SQL_SELECT("yrp_characters", "*", nil)
 	if wk(chars) then
 		for _, char in pairs(chars) do
+			-- Remove wrong ones
+			if isnumber(tonumber(char.int_storageID)) then
+				local tab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'")
+				if wk(tab) then
+					tab = tab[1]
+
+					local slots = SQL_SELECT("yrp_inventory_slots", "*", "int_storageID = '" .. tab.uniqueID .. "'")
+					if wk(slots) and (#slots < 5 or #slots > 5) then
+						SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. char.int_storageID .. "'")
+						SQL_DELETE_FROM("yrp_inventory_slots", "int_storageID = '" .. tab.uniqueID .. "'")
+						SQL_UPDATE("yrp_characters", "int_storageID = '" .. 0 .. "'", "uniqueID = '" .. char.uniqueID .. "'")
+					end
+				end
+			end
+
+			-- Create storage if not exists
 			if strEmpty(char.int_storageID) or tonumber(char.int_storageID) == 0 then
 				YRP.msg("db", "CreateCharacterStorages empty or 0")
 				local bagsStorage = CreateStorage(5, true)
@@ -68,7 +84,7 @@ function CreateCharacterStorages()
 		end
 	end
 end
-timer.Simple(4, function()
+timer.Simple(3, function()
 	CreateCharacterStorages()
 end)
 

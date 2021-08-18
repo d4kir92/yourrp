@@ -95,7 +95,7 @@ end)
 
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
-function Player:DesignLoadout(from)
+function Player:YRPDesignLoadout(from)
 	self:SetNW2Int("yrp_loading", 0)
 	self:HudLoadout()
 	self:InterfaceLoadout()
@@ -116,7 +116,7 @@ end
 util.AddNetworkString("rebuildHud")
 net.Receive("rebuildHud", function(len, ply)
 	YRP.msg("note", "FAILED HUD => REBUILD HUD")
-	ply:DesignLoadout("rebuildHud")
+	ply:YRPDesignLoadout("rebuildHud")
 end)
 
 local once = false
@@ -137,7 +137,7 @@ net.Receive("ply_changed_resolution", function(len, ply)
 			ply:SetNW2Int("hud_version", ply:GetNW2Int("hud_version", 0) + 1)
 		end
 	end)
-	--ply:DesignLoadout("ply_changed_resolution")
+	--ply:YRPDesignLoadout("ply_changed_resolution")
 end)
 
 util.AddNetworkString("change_hud_design")

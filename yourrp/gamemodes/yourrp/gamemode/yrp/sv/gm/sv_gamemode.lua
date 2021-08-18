@@ -167,7 +167,7 @@ function YRP:Loadout(ply)
 	ply:LockdownLoadout()
 
 	ply:LevelSystemLoadout()
-	ply:CharacterLoadout()
+	ply:YRPCharacterLoadout()
 
 	ply:SetNW2Bool("bool_loadouted", true)
 

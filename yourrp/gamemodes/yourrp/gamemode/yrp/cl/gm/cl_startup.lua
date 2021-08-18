@@ -604,6 +604,172 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 	frame:MakePopup()
 end
 
+function YRPOpenSingleSelector(tab, fu)
+	local lply = LocalPlayer()
+	lply.pms = {}
+
+	local br = 10
+
+	local pmsel = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
+	pmsel:SetTitle("")
+	pmsel:Center()
+	pmsel:MakePopup()
+	pmsel.nr = 0
+	function pmsel:Paint(pw, ph)
+		hook.Run("YFramePaint", self, pw, ph)
+
+		if self.nr and self.perpage and pmsel.maxpage then
+			draw.SimpleText(YRP.lang_string("LID_page") .. ": " .. ((pmsel.nr / self.perpage) + 1) .. "/" .. pmsel.maxpage, "DermaDefault", ScrW() / 2, ph - YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
+	end
+
+	local parent = pmsel:GetContent()
+
+	pmsel.height = parent:GetTall() - YRP.ctr(10 + 50 + 10 + 10 + 50 + 10)
+	pmsel.fx = parent:GetWide() - YRP.ctr(br + br)
+	pmsel.size = (pmsel.height - 3 * br) / 4
+	pmsel.space = pmsel.size + br
+	pmsel.x_max = pmsel.fx / pmsel.space - pmsel.fx / pmsel.space % 1
+	pmsel.perpage = pmsel.x_max * 4
+	pmsel.maxpage = math.ceil(#tab / pmsel.perpage)
+	
+
+	function parent:Paint(pw, ph)
+		draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(br + 100), YRP.ctr(br + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+	end
+
+	pmsel.dpl = createD("DPanel", parent, parent:GetWide() - YRP.ctr(br + br), parent:GetTall() - YRP.ctr(br + 50 + br + br + 50 + br), YRP.ctr(br), YRP.ctr(br + 50 + br))
+	function pmsel.dpl:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 120))
+	end
+	--pmsel.dpl:EnableVerticalScrollbar(true)
+	--pmsel.dpl:SetSpacing(10)
+	function pmsel:RefreshPage()
+		pmsel.dpl:Clear()
+		self.count = 0
+		self.fcount = 0
+		self.nothingfound = true
+		self.px = 0
+		self.py = 0
+
+		if pmsel.strsearch != nil then
+			pmsel.strsearch = string.Replace(pmsel.strsearch or "", "[", "")
+			pmsel.strsearch = string.Replace(pmsel.strsearch or "", "]", "")
+			pmsel.strsearch = string.Replace(pmsel.strsearch or "", "(", "")
+			pmsel.strsearch = string.Replace(pmsel.strsearch or "", ")", "")
+		end
+	
+		for i, v in pairs(tab) do
+			if pa(pmsel) then
+				if pmsel.strsearch != nil and v.PrintName and string.find(string.lower(v.PrintName), pmsel.strsearch or "") or string.find(string.lower(v.ClassName), pmsel.strsearch or "") or string.find(string.lower(v.WorldModel), pmsel.strsearch or "") then
+					self.nothingfound = false
+					self.count = self.count + 1
+					if self.count > pmsel.nr and self.count <= pmsel.nr + pmsel.perpage then
+						self.fcount = self.fcount + 1
+						local d_pm = createD("DPanel", pmsel.dpl, pmsel.size, pmsel.size, self.px * pmsel.space, self.py * pmsel.space)
+						d_pm:SetText("")
+						d_pm.WorldModel = v.WorldModel
+						d_pm.ClassName = v.ClassName
+						d_pm.PrintName = v.PrintName
+						function d_pm:Paint(pw, ph)
+							local text = YRP.lang_string("LID_notadded")
+							local col = Color(255, 255, 255)
+							if lply.pms != nil and table.HasValue(lply.pms, self.WorldModel) then
+								col = Color(0, 255, 0)
+								text = YRP.lang_string("LID_added")
+							end
+							draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
+
+							draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+							draw.SimpleText(self.PrintName, "DermaDefault", pw / 2, ph * 0.90, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							draw.SimpleText(self.WorldModel, "DermaDefault", pw / 2, ph * 0.95, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						end
+
+						local msize = d_pm:GetTall() * 0.75
+						local mbr = (d_pm:GetTall() - msize) / 2
+						local my = d_pm:GetTall() * 0.10
+						if v.WorldModel != "" then
+							d_pm.model = createD("DModelPanel", d_pm, msize, msize, mbr, my)
+							timer.Simple(0.1 * self.fcount, function()
+								if pa(d_pm) then
+									d_pm.model:SetModel(v.WorldModel)
+								end
+							end)
+						else
+							d_pm.model = createD("DPanel", d_pm, msize, msize, mbr, my)
+							function d_pm.model:Paint(pw, ph)
+								draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
+								draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							end
+						end
+						d_pm.btn = createD("YButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
+						d_pm.btn:SetText("")
+						function d_pm.btn:DoClick()
+							if !table.HasValue(lply.pms, v.WorldModel) then
+								table.insert(lply.pms, v.WorldModel)
+							elseif table.HasValue(lply.pms, v.WorldModel) then
+								table.remove(lply.pms, v.WorldModel)
+							end
+							if fu then
+								fu()
+							end
+						end
+						function d_pm.btn:Paint(pw, ph)
+
+						end
+
+						self.px = self.px + 1
+						if self.px > pmsel.x_max - 1 then
+							self.px = 0
+							self.py = self.py + 1
+						end
+					end
+				end
+			end
+		end
+		if self.fcount <= 0 then
+			pmsel.nr = pmsel.nr - pmsel.perpage
+			if !self.nothingfound then
+				self:RefreshPage()
+			end
+		end
+	end
+	function pmsel:Search(strsearch)
+		strsearch = string.lower(strsearch)
+
+		pmsel.strsearch = strsearch
+		pmsel.nr = 0
+		pmsel:RefreshPage()
+	end
+
+	pmsel.prev = createD("YButton", parent, YRP.ctr(100), YRP.ctr(50), parent:GetWide() / 2 - YRP.ctr(50 + br) - YRP.ctr(100), parent:GetTall() - YRP.ctr(50 + br))
+	pmsel.prev:SetText("<")
+	function pmsel.prev:DoClick()
+		if pmsel.nr >= pmsel.perpage then
+			pmsel.nr = pmsel.nr - pmsel.perpage
+			pmsel:RefreshPage()
+		end
+	end
+
+	pmsel.next = createD("YButton", parent, YRP.ctr(100), YRP.ctr(50), parent:GetWide() / 2 + YRP.ctr(50 + br), parent:GetTall() - YRP.ctr(50 + br))
+	pmsel.next:SetText(">")
+	function pmsel.next:DoClick()
+		pmsel.nr = pmsel.nr + pmsel.perpage
+		pmsel:RefreshPage()
+	end
+	timer.Simple(1, function()
+		if pa(pmsel) then
+			pmsel:Search("")
+		end
+	end)
+
+	pmsel.search = createD("DTextEntry", parent, parent:GetWide() - YRP.ctr(10 + 100 + 10), YRP.ctr(50), YRP.ctr(10 + 100), YRP.ctr(10))
+	function pmsel.search:OnChange()
+		pmsel:Search(self:GetText())
+	end
+end
+
 function OpenSingleSelector(tab, closeF)
 	local site = {}
 	site.cur = 1
@@ -615,7 +781,7 @@ function OpenSingleSelector(tab, closeF)
 	local _w = ScrW() - YRP.ctr(20)
 	local _h = ScrH() - YRP.ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
 	local _x = YRP.ctr(10)
-	local _y = YRP.ctr(50 + 10 + 50 + 10)
+	local _y = YRP.ctr(10 + 50 + 10)
 	local _cw = _w / YRP.ctr(_item.w + 10)
 	_cw = _cw - _cw % 1
 	local _ch = _h / YRP.ctr(_item.h + 10)
@@ -632,12 +798,12 @@ function OpenSingleSelector(tab, closeF)
 	end
 
 	getMaxSite()
-	local frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+	local frame = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:SetTitle(YRP.lang_string("Item Menu"))
 
 	function frame:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
+		hook.Run("YFramePaint", self, pw, ph)
 		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "Y_24_500", pw / 2, ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 	end
 
@@ -645,14 +811,19 @@ function OpenSingleSelector(tab, closeF)
 		hook.Call(closeF)
 	end
 
-	local PanelSelect = createD("DPanel", frame, _w, _h, _x, _y)
+	local parent = frame:GetContent()
+
+	_w = parent:GetWide()
+	_h = parent:GetTall()
+
+	local PanelSelect = createD("DPanel", parent, _w, _h - YRP.ctr(10 + 50 + 10 + 10 + 50 + 10), _x, _y)
 	PanelSelect:SetText("")
 
 	function PanelSelect:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 	end
 
-	local searchButton = createD("DButton", frame, YRP.ctr(50), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50 + 10))
+	local searchButton = createD("DButton", parent, YRP.ctr(50), YRP.ctr(50), _x, YRP.ctr(10))
 	searchButton:SetText("")
 
 	function searchButton:Paint(pw, ph)
@@ -663,7 +834,7 @@ function OpenSingleSelector(tab, closeF)
 		surface.DrawTexturedRect(YRP.ctr(5), YRP.ctr(5), YRP.ctr(40), YRP.ctr(40))
 	end
 
-	local search = createD("DTextEntry", frame, _w - YRP.ctr(50 + 10), YRP.ctr(50), YRP.ctr(10 + 50 + 10), YRP.ctr(50 + 10))
+	local search = createD("DTextEntry", parent, _w - YRP.ctr(50 + 10), YRP.ctr(50), YRP.ctr(10 + 50 + 10), YRP.ctr(10))
 
 	function search:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
@@ -757,7 +928,7 @@ function OpenSingleSelector(tab, closeF)
 		end
 	end
 
-	local nextB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), ScrW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10))
+	local nextB = createD("DButton", parent, YRP.ctr(300), YRP.ctr(50), parent:GetWide() - YRP.ctr(300 + 10), parent:GetTall() - YRP.ctr(50 + 10))
 	nextB:SetText("")
 
 	function nextB:Paint(pw, ph)
@@ -772,7 +943,7 @@ function OpenSingleSelector(tab, closeF)
 		end
 	end
 
-	local prevB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), YRP.ctr(10), ScrH() - YRP.ctr(50 + 10))
+	local prevB = createD("DButton", parent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(10), parent:GetTall() - YRP.ctr(50 + 10))
 	prevB:SetText("")
 
 	function prevB:Paint(pw, ph)
@@ -2488,7 +2659,7 @@ if pa(yrp_loading_screen) then
 			end
 		end
 
-		if lply:GetNW2Bool("finishedloading", false) and (lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true)) then
+		if lply:GetNW2Bool("yrp_hudloadout", false) and lply:GetNW2Bool("finishedloading", false) and ( lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) ) then
 			if GetGlobalBool("bool_yrp_play_button", false) then
 				if self.logo == nil then
 					local w = YRP.ctr(512)
@@ -2513,7 +2684,7 @@ if pa(yrp_loading_screen) then
 				if self.joinbutton == nil then
 					local w = YRP.ctr(500)
 					local h = YRP.ctr(100)
-					self.joinbutton = createD("YButton", self, w, h, pw / 2 - w / 2, ph / 2 + YRP.ctr(670))
+					self.joinbutton = createD("YButton", self, w, h, pw / 2 - w / 2, ph / 2 + YRP.ctr(540))
 					self.joinbutton:SetText("")
 					self.joinbutton.master = yrp_loading_screen
 					function self.joinbutton:Paint(pw, ph)
@@ -2534,32 +2705,37 @@ if pa(yrp_loading_screen) then
 		else
 			-- LOADING TEXT
 			draw.SimpleText(YRP.lang_string("LID_loading") .. " ... " .. YRP.lang_string("LID_pleasewait"), "Y_50_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			
-
-
-			-- BAR VALUES
-			local w = YRP.ctr(1000)
-			local h = YRP.ctr(60)
-			local cur = 0
-			local max = 2
-			if lply:GetNW2Bool("finishedloading", false) then
-				cur = cur + 1
-			end
-			if lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) then
-				cur = cur + 1
-			end
-			-- BAR BG
-			draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w, h, Color(80, 80, 80, 255))
-			-- BAR
-			draw.RoundedBox(0, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * cur / max, h, Color(100, 100, 255, 255))
-			-- BAR TEXT
-			draw.SimpleText("Global Values: " .. cur / max * 100 .. "%", "Y_20_500", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-
-			
-			-- TIME
-			draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 		end
+
+
+		-- BAR VALUES
+		local w = YRP.ctr(1000)
+		local h = YRP.ctr(60)
+		loading_cur_old = loading_cur_old or 0
+		loading_cur = 0
+		local max = 100
+		if lply:GetNW2Bool("finishedloading", false) then
+			loading_cur = loading_cur + 33
+		end
+		if lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) then
+			loading_cur = loading_cur + 33
+		end
+		if lply:GetNW2Bool("yrp_hudloadout", false) then
+			loading_cur = loading_cur + 34
+		end
+		loading_cur_old = Lerp(2 * FrameTime(), loading_cur_old, loading_cur)
+
+		-- BAR BG
+		draw.RoundedBox(6, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w, h, Color(80, 80, 80, 255))
+		-- BAR
+		draw.RoundedBox(6, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * loading_cur_old / max, h, Color(100, 100, 255, 255))
+		-- BAR TEXT
+		draw.SimpleText(math.ceil(loading_cur_old) / max * 100 .. "%", "Y_26_700", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+
+		
+		-- TIME
+		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 	end
 end
 

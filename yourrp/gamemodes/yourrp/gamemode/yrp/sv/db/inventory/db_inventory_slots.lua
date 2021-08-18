@@ -90,12 +90,12 @@ end
 util.AddNetworkString("yrp_storage_get_slots")
 net.Receive("yrp_storage_get_slots", function(len, ply)
 	local storageID = net.ReadString()
-
 	storageID = tonumber(storageID)
 
 	local slots = GetStorageSlots(storageID)
 	if wk(slots) then
 		local bp = slots[5]
+
 		if !wk(GetItem(bp.uniqueID)) and table.Count(slots) == 5 then
 			local tab = {}
 			tab.text_classname = "bag"
