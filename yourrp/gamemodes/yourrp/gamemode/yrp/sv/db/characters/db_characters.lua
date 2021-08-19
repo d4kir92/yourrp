@@ -431,7 +431,9 @@ function SendLoopCharacterList(ply, tab)
 		end
 
 		timer.Simple(2, function()
-			ply:SetNW2Bool("loadedchars", true)
+			if IsValid(ply) then
+				ply:SetNW2Bool("loadedchars", true)
+			end
 		end)
 	else
 		timer.Simple(0.1, function()

@@ -335,12 +335,15 @@ function YRPCloseSBS()
 	gui.EnableScreenClicker(false)
 end
 
-function YRPOpenSBS()
+function YRPSortScoreboard()
 	if !pa(YRPScoreboard) then return end
-
-	YRPScoreboard:Show()
-
-	gui.EnableScreenClicker(true)
+	local lply = LocalPlayer()
+	if lply.ypr_sb_reverse == nil then
+		lply.ypr_sb_reverse = false
+	end
+	if lply.yrp_sb_sortby == nil then
+		lply.yrp_sb_sortby = "guid"
+	end
 
 	-- Players
 	YRPScoreboard.list:Clear()
@@ -350,16 +353,37 @@ function YRPOpenSBS()
 	for i, ply in pairs(player.GetAll()) do
 		local entry = {}
 		entry.ply = ply
+		entry.ruid = ply:GetRoleUID()
+		if entry.ruid <= 0 then
+			entry.ruid = 999999
+		end
 		entry.guid = ply:GetGroupUID()
 		if entry.guid <= 0 then
 			entry.guid = 999999
 		end
+		entry.usergroup = ply:GetUserGroup()
+		entry.level = ply:Level()
+		entry.idcardid = ply:IDCardID()
+		entry.name = ply:RPName()
+		entry.language = ply:GetLanguage()
 		table.insert(plys, entry)
 	end
-
-	for i, entry in SortedPairsByMemberValue(plys, "guid") do
+	
+	for i, entry in SortedPairsByMemberValue(plys, lply.yrp_sb_sortby, lply.ypr_sb_reverse) do
 		YRPScoreboardAddPlayer(entry.ply)
 	end
+end
+
+function YRPOpenSBS()
+	if !pa(YRPScoreboard) then return end
+
+	local lply = LocalPlayer()
+
+	YRPScoreboard:Show()
+
+	gui.EnableScreenClicker(true)
+
+	YRPSortScoreboard()
 end
 
 local yrptab = {}
@@ -829,7 +853,6 @@ local function YRPBlurScoreboard(panel, amount, density)
 
 	local wasEnabled = DisableClipping( true )
 
-	-- Menu cannot do blur
 	if ( !MENU_DLL ) then
 		surface.SetDrawColor( 255, 255, 255, 255 )
 		surface.SetMaterial( matBlurScreen )
@@ -846,6 +869,35 @@ local function YRPBlurScoreboard(panel, amount, density)
 	surface.DrawRect( x * -1, y * -1, ScrW(), ScrH() )
 
 	DisableClipping( wasEnabled )
+end
+
+function YRPDrawOrder(self, x, y, text, font, art)
+	local lply = LocalPlayer()
+	if lply.yrp_sb_sortby == art then
+		surface.SetFont(font)
+		local sw, sh = surface.GetTextSize(text)
+		local size = 16
+
+		x = x - sw / 2 - size - 10
+		y = y - size / 2
+
+		local triangle = {
+			{ x = x + 0, y = y + size },
+			{ x = x + size / 2, y = y + 0 },
+			{ x = x + size, y = y + size }
+		}
+		if lply.ypr_sb_reverse then
+			triangle = {
+				{ x = x + 0, y = y + 0 },
+				{ x = x + size, y = y + 0},
+				{ x = x + size / 2, y = y + size }
+			}
+		end
+
+		surface.SetDrawColor( 255, 255, 255, 255 )
+		draw.NoTexture()
+		surface.DrawPoly( triangle )
+	end
 end
 
 function YRPInitScoreboard()
@@ -933,28 +985,124 @@ function YRPInitScoreboard()
 		-- Table Header
 		local tx = ScrW() / 2 - sw / 2 + yrptab["avatar"] + sp
 		if GetGlobalBool("bool_yrp_scoreboard_show_level", false) then
+			if self.sortbylevel == nil then
+				self.sortbylevel = createD("DButton", self, 100, 40, 0, 0)
+				self.sortbylevel:SetText("")
+				function self.sortbylevel:Paint(pw, ph)
+					-- 
+				end
+				function self.sortbylevel:DoClick()
+					local lply = LocalPlayer()
+					if lply.yrp_sb_sortby == "level" then
+						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+					end
+					lply.yrp_sb_sortby = "level"
+					YRPSortScoreboard()
+				end
+			end
+			self.sortbylevel:SetSize(yrptab["level"], 40)
+			self.sortbylevel:SetPos(tx, 160 - 20)
+
 			--draw.RoundedBox(0, tx, 160 - 10, yrptab["level"], 1000, Color(255, 0, 0, 100))
-			draw.SimpleText(string.sub(string.upper(YRP.lang_string("LID_level")), 1, 2) .. ".", "Saira_30", tx + yrptab["level"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			local text = string.sub(string.upper(YRP.lang_string("LID_level")), 1, 2) .. "."
+			draw.SimpleText(text, "Saira_30", tx + yrptab["level"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			YRPDrawOrder(self, tx + yrptab["level"] / 2, 160, text, "Saira_30", "level")
 			tx = tx + yrptab["level"] + sp
 		end
 		if GetGlobalBool("bool_yrp_scoreboard_show_idcardid", false) then
+			if self.sortbyidcardid == nil then
+				self.sortbyidcardid = createD("DButton", self, 100, 40, 0, 0)
+				self.sortbyidcardid:SetText("")
+				function self.sortbyidcardid:Paint(pw, ph)
+					-- 
+				end
+				function self.sortbyidcardid:DoClick()
+					local lply = LocalPlayer()
+					if lply.yrp_sb_sortby == "idcardid" then
+						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+					end
+					lply.yrp_sb_sortby = "idcardid"
+					YRPSortScoreboard()
+				end
+			end
+			self.sortbyidcardid:SetSize(yrptab["idcardid"], 40)
+			self.sortbyidcardid:SetPos(tx, 160 - 20)
 			--draw.RoundedBox(0, tx, 160 - 10, yrptab["idcardid"], 1000, Color(255, 0, 0, 100))
-			draw.SimpleText(string.upper(YRP.lang_string("LID_id")), "Saira_30", tx + yrptab["idcardid"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			local text = string.upper(YRP.lang_string("LID_id"))
+			draw.SimpleText(text, "Saira_30", tx + yrptab["idcardid"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			YRPDrawOrder(self, tx + yrptab["idcardid"] / 2, 160, text, "Saira_30", "idcardid")
 			tx = tx + yrptab["idcardid"] + sp
 		end
 		if GetGlobalBool("bool_yrp_scoreboard_show_name", false) then
+			if self.sortbyname == nil then
+				self.sortbyname = createD("DButton", self, 100, 40, 0, 0)
+				self.sortbyname:SetText("")
+				function self.sortbyname:Paint(pw, ph)
+					-- 
+				end
+				function self.sortbyname:DoClick()
+					local lply = LocalPlayer()
+					if lply.yrp_sb_sortby == "name" then
+						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+					end
+					lply.yrp_sb_sortby = "name"
+					YRPSortScoreboard()
+				end
+			end
+			self.sortbyname:SetSize(yrptab["name"], 40)
+			self.sortbyname:SetPos(tx, 160 - 20)
 			--draw.RoundedBox(0, tx, 160 - 10, yrptab["name"], 1000, Color(255, 0, 0, 100))
-			draw.SimpleText(string.upper(YRP.lang_string("LID_name")), "Saira_30", tx + yrptab["name"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			local text = string.upper(YRP.lang_string("LID_name"))
+			draw.SimpleText(text, "Saira_30", tx + yrptab["name"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			YRPDrawOrder(self, tx + yrptab["name"] / 2, 160, text, "Saira_30", "name")
 			tx = tx + yrptab["name"] + sp
 		end
 		if GetGlobalBool("bool_yrp_scoreboard_show_groupname", false) then
+			if self.sortbyguid == nil then
+				self.sortbyguid = createD("DButton", self, 100, 40, 0, 0)
+				self.sortbyguid:SetText("")
+				function self.sortbyguid:Paint(pw, ph)
+					-- 
+				end
+				function self.sortbyguid:DoClick()
+					local lply = LocalPlayer()
+					if lply.yrp_sb_sortby == "guid" then
+						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+					end
+					lply.yrp_sb_sortby = "guid"
+					YRPSortScoreboard()
+				end
+			end
+			self.sortbyguid:SetSize(yrptab["groupname"], 40)
+			self.sortbyguid:SetPos(tx, 160 - 20)
 			--draw.RoundedBox(0, tx, 160 - 10, yrptab["groupname"], 1000, Color(255, 0, 0, 100))
-			draw.SimpleText(string.upper(YRP.lang_string("LID_group")), "Saira_30", tx + yrptab["groupname"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			local text = string.upper(YRP.lang_string("LID_group"))
+			draw.SimpleText(text, "Saira_30", tx + yrptab["groupname"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			YRPDrawOrder(self, tx + yrptab["groupname"] / 2, 160, text, "Saira_30", "guid")
 			tx = tx + yrptab["groupname"] + sp
 		end
 		if GetGlobalBool("bool_yrp_scoreboard_show_rolename", false) then
+			if self.sortbyruid == nil then
+				self.sortbyruid = createD("DButton", self, 100, 40, 0, 0)
+				self.sortbyruid:SetText("")
+				function self.sortbyruid:Paint(pw, ph)
+					-- 
+				end
+				function self.sortbyruid:DoClick()
+					local lply = LocalPlayer()
+					if lply.yrp_sb_sortby == "ruid" then
+						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+					end
+					lply.yrp_sb_sortby = "ruid"
+					YRPSortScoreboard()
+				end
+			end
+			self.sortbyruid:SetSize(yrptab["rolename"], 40)
+			self.sortbyruid:SetPos(tx, 160 - 20)
 			--draw.RoundedBox(0, tx, 160 - 10, yrptab["rolename"], 1000, Color(255, 0, 0, 100))
-			draw.SimpleText(string.upper(YRP.lang_string("LID_role")), "Saira_30", tx + yrptab["rolename"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			local text = string.upper(YRP.lang_string("LID_group"))
+			draw.SimpleText(text, "Saira_30", tx + yrptab["rolename"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			YRPDrawOrder(self, tx + yrptab["rolename"] / 2, 160, text, "Saira_30", "ruid")
 			tx = tx + yrptab["rolename"] + sp
 		end
 
@@ -962,18 +1110,75 @@ function YRPInitScoreboard()
 		local trx = 90 + sp
 		draw.SimpleText(string.upper(YRP.lang_string("LID_ping")), "Saira_30", pr - 20 - size, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		if GetGlobalBool("bool_yrp_scoreboard_show_operating_system", false) then
+			if self.sortbyoperating_system == nil then
+				self.sortbyoperating_system = createD("DButton", self, 100, 40, 0, 0)
+				self.sortbyoperating_system:SetText("")
+				function self.sortbyoperating_system:Paint(pw, ph)
+					-- 
+				end
+				function self.sortbyoperating_system:DoClick()
+					local lply = LocalPlayer()
+					if lply.yrp_sb_sortby == "operating_system" then
+						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+					end
+					lply.yrp_sb_sortby = "operating_system"
+					YRPSortScoreboard()
+				end
+			end
+			self.sortbyoperating_system:SetSize(yrptab["operating_system"], 40)
+			self.sortbyoperating_system:SetPos(pr - trx - yrptab["operating_system"], 160 - 20)
 			--draw.RoundedBox(0, pr - trx - yrptab["operating_system"], 160 - 10, yrptab["operating_system"], 1000, Color(255, 0, 0, 100))
-			draw.SimpleText(string.upper(YRP.lang_string("LID_os")), "Saira_30", pr - trx - yrptab["operating_system"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			local text = string.upper(YRP.lang_string("LID_os"))
+			draw.SimpleText(text, "Saira_30", pr - trx - yrptab["operating_system"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			YRPDrawOrder(self, pr - trx - yrptab["operating_system"] / 2, 160, text, "Saira_30", "operating_system")
 			trx = trx + yrptab["operating_system"] + sp
 		end
 		if GetGlobalBool("bool_yrp_scoreboard_show_language", false) then
+			if self.sortbylanguage == nil then
+				self.sortbylanguage = createD("DButton", self, 100, 40, 0, 0)
+				self.sortbylanguage:SetText("")
+				function self.sortbylanguage:Paint(pw, ph)
+					-- 
+				end
+				function self.sortbylanguage:DoClick()
+					local lply = LocalPlayer()
+					if lply.yrp_sb_sortby == "language" then
+						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+					end
+					lply.yrp_sb_sortby = "language"
+					YRPSortScoreboard()
+				end
+			end
+			self.sortbylanguage:SetSize(yrptab["language"], 40)
+			self.sortbylanguage:SetPos(pr - trx - yrptab["language"], 160 - 20)
 			--draw.RoundedBox(0, pr - trx - yrptab["language"], 160 - 10, yrptab["language"], 1000, Color(255, 0, 0, 100))
-			draw.SimpleText(string.upper(YRP.lang_string("LID_language")), "Saira_30", pr - trx - yrptab["language"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			local text = string.upper(YRP.lang_string("LID_language"))
+			draw.SimpleText(text, "Saira_30", pr - trx - yrptab["language"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			YRPDrawOrder(self, pr - trx - yrptab["language"] / 2, 160, text, "Saira_30", "language")
 			trx = trx + yrptab["language"] + sp
 		end
 		if GetGlobalBool("bool_yrp_scoreboard_show_usergroup", false) then
+			if self.sortbyusergroup == nil then
+				self.sortbyusergroup = createD("DButton", self, 100, 40, 0, 0)
+				self.sortbyusergroup:SetText("")
+				function self.sortbyusergroup:Paint(pw, ph)
+					-- 
+				end
+				function self.sortbyusergroup:DoClick()
+					local lply = LocalPlayer()
+					if lply.yrp_sb_sortby == "usergroup" then
+						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+					end
+					lply.yrp_sb_sortby = "usergroup"
+					YRPSortScoreboard()
+				end
+			end
+			self.sortbyusergroup:SetSize(yrptab["usergroup"], 40)
+			self.sortbyusergroup:SetPos(pr - trx - yrptab["usergroup"], 160 - 20)
 			--draw.RoundedBox(0, pr - trx - yrptab["usergroup"], 160 - 10, yrptab["usergroup"], 1000, Color(255, 0, 0, 100))
-			draw.SimpleText(string.upper(YRP.lang_string("LID_rank")), "Saira_30", pr - trx - yrptab["usergroup"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			local text = string.upper(YRP.lang_string("LID_rank"))
+			draw.SimpleText(text, "Saira_30", pr - trx - yrptab["usergroup"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			YRPDrawOrder(self, pr - trx - yrptab["usergroup"] / 2, 160, text, "Saira_30", "usergroup")
 			trx = trx + yrptab["usergroup"] + sp
 		end
 		draw.RoundedBox(5, pw / 2 - sw / 2, 180, sw, hr, Color(255, 255, 255, 255))

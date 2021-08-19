@@ -571,8 +571,10 @@ net.Receive("yrp_roleselection_getgroups", function(len, ply)
 	local factioncount = 0
 	local fatab = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. 0 .. "'")
 
-	for i, v in pairs(fatab) do
-		factioncount = factioncount + 1
+	if wk(fatab) then
+		for i, v in pairs(fatab) do
+			factioncount = factioncount + 1
+		end
 	end
 
 	net.Start("yrp_roleselection_getgroups")
@@ -640,4 +642,96 @@ net.Receive("yrp_char_getrole", function(len, ply)
 	else
 		YRP.msg("error", "[yrp_char_getrole] ruid not valid: " .. tostring(ruid))
 	end
+end)
+
+
+
+-- SWEPS
+function GetGroup(uid)
+	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	if wk(group) then
+		return group[1]
+	end
+	return nil
+end
+
+function SendSwepsGroup(uid)
+	local group = GetGroup(uid)
+	if wk(group) then
+		local nettab = {}
+		local sweps = string.Explode(",", group.string_sweps)
+		for i, swep in pairs(sweps) do
+			if !strEmpty(swep) then
+				table.insert(nettab, swep)
+			end
+		end
+
+		for i, pl in pairs(HANDLER_GROUPSANDROLES["groups"][uid]) do
+			net.Start("get_group_sweps")
+				net.WriteTable(nettab)
+			net.Send(pl)
+		end
+	end
+end
+
+util.AddNetworkString("get_group_sweps")
+net.Receive("get_group_sweps", function(len, ply)
+	local uid = net.ReadInt(32)
+	SendSwepsGroup(uid)
+end)
+
+function AddSwepToGroup(guid, swepcn)
+	local group = GetGroup(guid)
+	if wk(group) then
+		local sweps = string.Explode(",", group.string_sweps)
+		if !table.HasValue(sweps, tostring(swepcn)) then
+			local oldsweps = {}
+			for i, v in pairs(sweps) do
+				if !strEmpty(v) then
+					table.insert(oldsweps, v)
+				end
+			end
+
+			local newsweps = oldsweps
+			table.insert(newsweps, tostring(swepcn))
+			newsweps = string.Implode(",", newsweps)
+
+			SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. newsweps .. "'", "uniqueID = '" .. guid .. "'")
+			SendSwepsGroup(guid)
+		end
+	end
+end
+
+util.AddNetworkString("add_group_swep")
+net.Receive("add_group_swep", function(len, ply)
+	local guid = net.ReadInt(32)
+	local swepcn = net.ReadString()
+
+	AddSwepToGroup(guid, swepcn)
+end)
+
+function RemSwepFromGroup(guid, swepcn)
+	local group = GetGroup(guid)
+	local sweps = string.Explode(",", group.string_sweps)
+	local oldsweps = {}
+	for i, v in pairs(sweps) do
+		if !strEmpty(v) then
+			table.insert(oldsweps, v)
+		end
+	end
+
+	local newsweps = oldsweps
+	table.RemoveByValue(newsweps, tostring(swepcn))
+	newsweps = string.Implode(",", newsweps)
+
+	SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. newsweps .. "'", "uniqueID = '" .. guid .. "'")
+	SendSwepsGroup(guid)
+end
+
+util.AddNetworkString("rem_group_swep")
+net.Receive("rem_group_swep", function(len, ply)
+	local guid = net.ReadInt(32)
+	local swepcn = net.ReadString()
+
+	RemSwepFromGroup(guid, swepcn)
 end)

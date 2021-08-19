@@ -258,7 +258,7 @@ function keyDown(key, str, distance)
 end
 
 function keyPressed(key, str, distance)
-	if ChatIsClosedForChat() then
+	if ChatIsClosedForChat and ChatIsClosedForChat() then
 		local lply = LocalPlayer()
 		if IsValid(lply) and wk(lply.GetEyeTrace) then
 			local plyTrace = lply:GetEyeTrace()

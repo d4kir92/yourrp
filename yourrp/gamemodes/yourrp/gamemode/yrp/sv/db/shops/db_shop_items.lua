@@ -483,6 +483,7 @@ net.Receive("item_buy", function(len, ply)
 			elseif _item.type == "roles" then
 				local rid = _item.ClassName
 				RemRolVals(ply)
+				RemGroVals(ply)
 				SetRole(ply, rid, true)
 			else
 				local _spawned, ent = spawnItem(ply, _item, _dealer_uid)

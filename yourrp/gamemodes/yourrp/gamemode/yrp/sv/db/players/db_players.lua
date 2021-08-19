@@ -477,6 +477,18 @@ function set_role_values(ply, pmid)
 			ply:SetNW2String("factionUniqueID", faction.uniqueID)
 			ply:SetNW2String("factionColor", faction.string_color)
 
+			ply:SetNW2String("sweps_group", groTab.string_sweps)
+
+			--sweps
+			local tmpSWEPTable = string.Explode(",", SQL_STR_OUT(groTab.string_sweps))
+			for k, swep in pairs(tmpSWEPTable) do
+				if swep != nil and swep != NULL and swep != "" then
+					if ply:Alive() then
+						ply:Give(swep)
+					end
+				end
+			end
+
 			-- ammos
 			local tammos = groTab.string_ammos or ""
 			tammos = string.Explode(";", tammos)
@@ -668,6 +680,7 @@ net.Receive("giveRole", function(len, ply)
 	for k, _ply in pairs(player.GetAll()) do
 		if tostring(_ply:SteamID()) == tostring(_tmpSteamID) then
 			RemRolVals(_ply)
+			RemGroVals(_ply)
 			set_role(_ply, uniqueIDRole)
 			set_role_values(_ply)
 			YRP.msg("note", tostring(_ply:Nick()) .. " is now the role: " .. tostring(uniqueIDRole))
@@ -879,6 +892,16 @@ function RemRolVals(ply)
 	end
 end
 
+function RemGroVals(ply)
+	local groTab = ply:GetGroTab()
+	if wk(groTab) then
+		local _sweps = string.Explode(",", SQL_STR_OUT(groTab.string_sweps))
+		for k, v in pairs(_sweps) do
+			ply:StripWeapon(v)
+		end
+	end
+end
+
 function canVoteRole(ply, roleID)
 	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. roleID)
 
@@ -906,6 +929,7 @@ net.Receive("wantRole", function(len, ply)
 		ply:SetNW2Bool("switchrole", true)
 		--Remove Sweps from old role
 		RemRolVals(ply)
+		RemGroVals(ply)
 
 		if GetGlobalBool("bool_players_die_on_role_switch", false) then
 			ply:Kill()

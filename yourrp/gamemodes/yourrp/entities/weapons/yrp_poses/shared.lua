@@ -10,8 +10,8 @@ SWEP.PrintName = "Pose"
 SWEP.Language = "en"
 SWEP.LanguageString = "LID_poses"
 
-SWEP.Slot = 1
-SWEP.SlotPos = 1
+SWEP.Slot = 5
+SWEP.SlotPos = 0
 
 SWEP.DrawAmmo = false
 
@@ -44,22 +44,36 @@ end
 local yrp_poses = {}
 
 yrp_poses["salute"] = {}
-yrp_poses["salute"]["ValveBiped.Bip01_L_UpperArm"] = {}
-yrp_poses["salute"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-120, -90, 0)
-yrp_poses["salute"]["ValveBiped.Bip01_L_Forearm"] = {}
-yrp_poses["salute"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(10, -110, -90)
+yrp_poses["salute"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["salute"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(120, -90, 0)
+yrp_poses["salute"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["salute"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-10, -116, 90)
 yrp_poses["salute"]["ValveBiped.Bip01_Head1"] = {}
-yrp_poses["salute"]["ValveBiped.Bip01_Head1"].ang = Angle(0, 10, 0)
+yrp_poses["salute"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -10, 0)
 
 yrp_poses["crossarms"] = {}
 yrp_poses["crossarms"]["ValveBiped.Bip01_L_UpperArm"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-20, -40, 0)
+yrp_poses["crossarms"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-20, -65, 0)
 yrp_poses["crossarms"]["ValveBiped.Bip01_L_Forearm"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(50, -80, 0)
+yrp_poses["crossarms"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(55, -90, 0)
+yrp_poses["crossarms"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["crossarms"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 0, -15)
 yrp_poses["crossarms"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -44, -10)
+yrp_poses["crossarms"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -60, -60)
 yrp_poses["crossarms"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-50, -80, 0)
+yrp_poses["crossarms"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(10, -90, 0)
+yrp_poses["crossarms"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["crossarms"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, -30, 15)
+
+yrp_poses["crossarmsbehind"] = {}
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(0, 8, 0)
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(60, 0, 90)
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(0, 10, 0)
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-60, 0, -90)
 
 yrp_poses["handcuffed"] = {}
 yrp_poses["handcuffed"]["ValveBiped.Bip01_L_UpperArm"] = {}
@@ -78,6 +92,20 @@ yrp_poses["surrender"]["ValveBiped.Bip01_R_UpperArm"] = {}
 yrp_poses["surrender"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(135, 0, 0)
 yrp_poses["surrender"]["ValveBiped.Bip01_R_Forearm"] = {}
 yrp_poses["surrender"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(45, 0, 90)
+
+yrp_poses["surrenderbehind"] = {}
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-135, -44, -60)
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(0, -110, 0)
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 10, -20)
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(135, -40, 60)
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, -110, 0)
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 10)
 
 yrp_poses["pointto"] = {}
 yrp_poses["pointto"]["ValveBiped.Bip01_R_UpperArm"] = {}
@@ -105,11 +133,69 @@ yrp_poses["hololink"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 90)
 yrp_poses["hololink"]["ValveBiped.Bip01_Head1"] = {}
 yrp_poses["hololink"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -30, -10)
 
+yrp_poses["comlink"] = {}
+yrp_poses["comlink"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["comlink"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(45, -75, 0)
+yrp_poses["comlink"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["comlink"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-55, -95, 0)
+yrp_poses["comlink"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["comlink"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 0)
+yrp_poses["comlink"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["comlink"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -22, -10)
+
+yrp_poses["typing"] = {}
+yrp_poses["typing"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["typing"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -45, 0)
+yrp_poses["typing"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["typing"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, 0, -45)
+yrp_poses["typing"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["typing"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 15, 0)
+yrp_poses["typing"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["typing"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-20, -45, 0)
+yrp_poses["typing"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["typing"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(0, 0, 45)
+yrp_poses["typing"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["typing"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 25, 0)
+yrp_poses["typing"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["typing"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -32, 0)
+
+yrp_poses["thinking"] = {}
+yrp_poses["thinking"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["thinking"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-20, -65, 0)
+yrp_poses["thinking"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["thinking"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(55, -90, 0)
+yrp_poses["thinking"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["thinking"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 0, -15)
+yrp_poses["thinking"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["thinking"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -65, -60)
+yrp_poses["thinking"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["thinking"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(40, -110, 30)
+yrp_poses["thinking"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["thinking"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 15)
+yrp_poses["thinking"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["thinking"]["ValveBiped.Bip01_Head1"].ang = Angle(0, 12, 0)
+
+yrp_poses["hip"] = {}
+yrp_poses["hip"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["hip"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-45, 0, -30)
+yrp_poses["hip"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["hip"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(90, 0, 90)
+yrp_poses["hip"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["hip"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 45, -45)
+yrp_poses["hip"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["hip"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(45, 0, 20)
+yrp_poses["hip"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["hip"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-90, 0, -90)
+yrp_poses["hip"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["hip"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 45, 45)
+yrp_poses["hip"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["hip"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -6, 0)
+
 function YRPResetPoses(ply)
 	for i = 0, 100 do
 		ply["poses"][i] = ply["poses"][i] or Angle(0, 0, 0)
-		ply["poses"][i] = LerpAngle(12 * FrameTime(), ply["poses"][i], Angle(0, 0, 0))
-
+		ply["poses"][i] = LerpAngle(16 * FrameTime(), ply["poses"][i], Angle(0, 0, 0))
+		
 		ply:ManipulateBonePosition( i, Vector(0, 0, 0) )
 		ply:ManipulateBoneAngles( i, ply["poses"][i] )
 	end
@@ -117,42 +203,44 @@ end
 
 function YRPDoPoses()
 	for i, ply in pairs(player.GetAll()) do
-		ply.pose = ply:GetNW2String("yrp_pose", "")
+		ply.pose = ply:GetNW2String("yrp_pose", "salute")
 		
 		ply.posestatus = ply.posestatus or ""
-
-		local vel = ply:GetVelocity()
-		vel = Vector(vel[1], vel[2], 0)
-		if ply:IsSprinting() or !ply:IsOnGround() or vel:Length() > 110 then
-			ply.posestatus = "reset"
-		elseif yrp_poses[ply.pose] then
-			if ply:GetNW2Bool("yrp_pose_status", false) then
-				ply.posestatus = "do"
-			else
-				ply.posestatus = "reset"
-			end
-		elseif !strEmpty(ply.pose) then
-			MsgC(Color(255, 0, 0), "missing pose: " .. tostring(ply.pose))
-			ply.posestatus = "reset"
-		else
-			ply.posestatus = "reset"
-		end
 
 		local weapon = ply:GetActiveWeapon()
 		if IsValid(weapon) then
 			if weapon:GetClass() != "yrp_poses" then
 				ply.posestatus = "reset"
+			else
+				local vel = ply:GetVelocity()
+				vel = Vector(vel[1], vel[2], 0)
+				if ply:IsSprinting() or !ply:IsOnGround() or vel:Length() > 110 then
+					ply.posestatus = "reset"
+				elseif yrp_poses[ply.pose] then
+					if ply:GetNW2Bool("yrp_pose_status", false) then
+						ply.posestatus = "do"
+					else
+						ply.posestatus = "reset"
+					end
+				elseif !strEmpty(ply.pose) then
+					MsgC(Color(255, 0, 0), "missing pose: " .. tostring(ply.pose))
+					ply.posestatus = "reset"
+				else
+					ply.posestatus = "reset"
+				end
 			end
 		end
 
 		if ply.oldposestatus != ply.posestatus then
 			ply.oldposestatus = ply.posestatus
-			ply.yrp_pose_delay = CurTime() + 1
+			ply.yrp_pose_delay = CurTime() + 0.8
+			ply.yrp_pose_delay_update = 0.02
+		elseif ply.yrp_pose_delay < CurTime() then
+			ply.yrp_pose_delay_update = 0.3
 		end
 		
 		if ply.yrp_pose_delay > CurTime() then
 			ply["poses"] = ply["poses"] or {}
-			
 			if ply.posestatus == "do" then
 				for i, v in pairs(yrp_poses[ply.pose]) do
 					local boneID = ply:LookupBone( i )
@@ -161,14 +249,17 @@ function YRPDoPoses()
 						ply["poses"][boneID] = LerpAngle(12 * FrameTime(), ply["poses"][boneID], v.ang)
 					end
 				end
-				ply.yrp_pose_delay_nw = ply.yrp_pose_delay_nw or 0
-				if ply.yrp_pose_delay_nw < CurTime() then
-					ply.yrp_pose_delay_nw = CurTime() + 0.02
-					for i, v in pairs(yrp_poses[ply.pose]) do
-						local boneID = ply:LookupBone( i )
-						if boneID and v.ang then
-							ply:ManipulateBoneAngles( boneID, ply["poses"][boneID] )
-						end
+			end
+		end
+	
+		ply.yrp_pose_delay_nw = ply.yrp_pose_delay_nw or 0
+		if ply.yrp_pose_delay_nw < CurTime() then
+			ply.yrp_pose_delay_nw = CurTime() + ply.yrp_pose_delay_update
+			if ply.posestatus == "do" then
+				for i, v in pairs(yrp_poses[ply.pose]) do
+					local boneID = ply:LookupBone( i )
+					if boneID and v.ang then
+						ply:ManipulateBoneAngles( boneID, ply["poses"][boneID] )
 					end
 				end
 			else
@@ -193,7 +284,7 @@ if SERVER then
 
 			ply:SetNW2String("yrp_pose", pose)
 
-			timer.Simple(0.2, function()
+			timer.Simple(0.33, function()
 				if IsValid(ply) then
 					ply:SetNW2Bool("yrp_pose_status", true)
 				end
@@ -203,6 +294,14 @@ if SERVER then
 end
 
 function SWEP:Reload()
+	self:SetWeaponHoldType(self.HoldType)
+
+	if SERVER then
+		local ply = self:GetOwner()
+		ply:SetNW2Bool("yrp_pose_status", false)
+		YRPResetPoses(ply)
+	end
+
 	if CLIENT then
 		self.delay = self.delay or 0
 
@@ -293,14 +392,14 @@ function SWEP:Reload()
 			end
 		else
 			if !pa(self.poses) then
-				self.poses = createD("YFrame", nil, YRP.ctr(600), YRP.ctr(600), 0, 0)
+				self.poses = createD("YFrame", nil, YRP.ctr(600), YRP.ctr(960), 0, 0)
 				self.poses:SetTitle("LID_poses")
 				self.poses:Center()
 				self.poses:MakePopup()
 
 				local y = 0
 				for name, values in pairs(yrp_poses) do
-					local btn = createD("YButton", self.poses:GetContent(), YRP.ctr(300), YRP.ctr(50), 0, y * YRP.ctr(50 + 10))
+					local btn = createD("YButton", self.poses:GetContent(), YRP.ctr(560), YRP.ctr(50), 0, y * YRP.ctr(50 + 10))
 					btn:SetText("LID_" .. name)
 					btn.win = self.poses
 					function btn:DoClick()
@@ -328,6 +427,8 @@ end
 
 function SWEP:PrimaryAttack()
 	if SERVER then
+		self:SetWeaponHoldType(self.HoldType)
+	
 		local ply = self:GetOwner()
 		ply:SetNW2Bool("yrp_pose_status", true)
 	end
@@ -335,6 +436,8 @@ end
 
 function SWEP:SecondaryAttack()
 	if SERVER then
+		self:SetWeaponHoldType(self.HoldType)
+	
 		local ply = self:GetOwner()
 		ply:SetNW2Bool("yrp_pose_status", false)
 	end

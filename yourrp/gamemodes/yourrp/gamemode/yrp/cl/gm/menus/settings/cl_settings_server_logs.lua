@@ -56,7 +56,7 @@ function BuildLogs(parent, typ)
 
 						if wk(v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(v.string_source_steamid)
+							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
 							rt:InsertClickableTextStart("Missing Source SteamID")
@@ -64,7 +64,7 @@ function BuildLogs(parent, typ)
 						if source.RPName != nil then
 							rt:AppendText(source:RPName())
 						else
-							rt:AppendText(v.string_source_steamid)
+							rt:AppendText(tostring(v.string_source_steamid))
 						end
 						rt:InsertClickableTextEnd()
 
@@ -92,7 +92,7 @@ function BuildLogs(parent, typ)
 
 						if wk(v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(v.string_source_steamid)
+							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
 							rt:InsertClickableTextStart("Missing Source SteamID")
@@ -100,7 +100,7 @@ function BuildLogs(parent, typ)
 						if source.RPName != nil then
 							rt:AppendText(source:RPName())
 						else
-							rt:AppendText(v.string_source_steamid)
+							rt:AppendText(tostring(v.string_source_steamid))
 						end
 						rt:InsertClickableTextEnd()
 
@@ -128,7 +128,7 @@ function BuildLogs(parent, typ)
 
 						if wk(v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(v.string_source_steamid)
+							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
 							rt:InsertClickableTextStart("Missing Source SteamID")
@@ -136,7 +136,7 @@ function BuildLogs(parent, typ)
 						if source.RPName then
 							rt:AppendText(source:RPName())
 						else
-							rt:AppendText(v.string_source_steamid)
+							rt:AppendText(tostring(v.string_source_steamid))
 						end
 						rt:InsertClickableTextEnd()
 
@@ -173,7 +173,7 @@ function BuildLogs(parent, typ)
 
 						if wk(v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(v.string_source_steamid)
+							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
 							rt:InsertClickableTextStart("Missing Source SteamID")
@@ -181,7 +181,7 @@ function BuildLogs(parent, typ)
 						if source.RPName then
 							rt:AppendText(source:RPName())
 						else
-							rt:AppendText(v.string_source_steamid)
+							rt:AppendText(tostring(v.string_source_steamid))
 						end
 						rt:InsertClickableTextEnd()
 
@@ -221,7 +221,7 @@ function BuildLogs(parent, typ)
 
 						if wk(v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(v.string_source_steamid)
+							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
 							rt:InsertClickableTextStart("Missing Source SteamID")
@@ -229,7 +229,7 @@ function BuildLogs(parent, typ)
 						if source.RPName then
 							rt:AppendText(source:RPName())
 						else
-							rt:AppendText(v.string_source_steamid)
+							rt:AppendText(tostring(v.string_source_steamid))
 						end
 						rt:InsertClickableTextEnd()
 
@@ -266,7 +266,7 @@ function BuildLogs(parent, typ)
 						if source.RPName then
 							if wk(v.string_source_steamid) then
 								rt:InsertColorChange(100, 100, 255, 255)
-								rt:InsertClickableTextStart(v.string_source_steamid)
+								rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 							else
 								rt:InsertColorChange(255, 100, 100, 255)
 								rt:InsertClickableTextStart("Missing Source SteamID")
@@ -274,7 +274,7 @@ function BuildLogs(parent, typ)
 							if source.RPName then
 								rt:AppendText(source:RPName())
 							else
-								rt:AppendText(v.string_source_steamid)
+								rt:AppendText(tostring(v.string_source_steamid))
 							end
 							rt:InsertClickableTextEnd()
 	
@@ -282,7 +282,7 @@ function BuildLogs(parent, typ)
 							rt:AppendText(" does " .. tostring(v.string_value) .. " damage to ")
 
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(v.string_target_steamid)
+							rt:InsertClickableTextStart(tostring(v.string_target_steamid))
 							if target.RPName then
 								rt:AppendText(target:RPName())
 							else
@@ -327,7 +327,7 @@ function BuildLogs(parent, typ)
 
 						if wk(v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(v.string_source_steamid)
+							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
 							rt:InsertClickableTextStart("Missing Source SteamID")
@@ -335,7 +335,7 @@ function BuildLogs(parent, typ)
 						if source.RPName then
 							rt:AppendText(source:RPName())
 						else
-							rt:AppendText(v.string_source_steamid)
+							rt:AppendText(tostring(v.string_source_steamid))
 						end
 						rt:InsertClickableTextEnd()
 

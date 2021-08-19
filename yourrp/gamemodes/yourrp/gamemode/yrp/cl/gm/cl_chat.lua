@@ -168,7 +168,7 @@ else
 	end
 
 	function ChatIsClosedForChat()
-		return chatclosedforkeybinds
+		return chatclosedforkeybinds or !GetGlobalBool("bool_yrp_chat", false)
 	end
 
 	counti = counti or 0
@@ -729,11 +729,18 @@ else
 					notification.AddLegacy(text, NOTIFY_GENERIC, 6)
 				end
 			end
+		else
+			if type == "none" then
+				return true
+			end
+			if type == "joinleave" then
+				return true
+			end
 		end
 	end)
 
-	hook.Remove("HUDShouldDraw", "noMoreDefault")
-	hook.Add("HUDShouldDraw", "noMoreDefault", function(name)
+	hook.Remove("HUDShouldDraw", "yrp_noMoreDefault")
+	hook.Add("HUDShouldDraw", "yrp_noMoreDefault", function(name)
 		local lply = LocalPlayer()
 		if lply:IsValid() and GetGlobalBool("bool_yrp_chat", false) then
 			if name == "CHudChat" then

@@ -852,6 +852,115 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 
 
+				-- SWEPS
+				local sweps = {}
+				sweps.parent = ea.equipment:GetContent()
+				sweps.uniqueID = group.uniqueID
+				sweps.header = "LID_sweps"
+				sweps.netstr = "update_group_string_sweps"
+				sweps.value = group.string_sweps
+				sweps.uniqueID = group.uniqueID
+				sweps.w = ea.equipment:GetContent():GetWide()
+				sweps.h = YRP.ctr(325)
+				sweps.doclick = function()
+					local winswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+					winswep:SetTitle("")
+					winswep:Center()
+					winswep:MakePopup()
+					function winswep:Paint(pw, ph)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
+						draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					end
+
+					local allsweps = GetSWEPsList()
+					local cl_sweps = {}
+					local count = 0
+					for k, v in pairs(allsweps) do
+						count = count + 1
+						cl_sweps[count] = {}
+						cl_sweps[count].WorldModel = v.WorldModel or ""
+						cl_sweps[count].ClassName = v.ClassName or "NO CLASSNAME"
+						cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
+					end
+
+					winswep.dpl = createD("DPanelList", winswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+					winswep.dpl:EnableVerticalScrollbar(true)
+					local height = ScrH() - YRP.ctr(100)
+					function winswep:Search(strsearch)
+						strsearch = string.lower(strsearch)
+
+						strsearch = string.Replace(strsearch, "[", "")
+						strsearch = string.Replace(strsearch, "]", "")
+						strsearch = string.Replace(strsearch, "(", "")
+						strsearch = string.Replace(strsearch, ")", "")
+
+						self.dpl:Clear()
+						for i, v in pairs(cl_sweps) do
+							if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
+								local d_swep = createD("YButton", nil, winswep.dpl:GetWide(), height / 4, 0, 0)
+								d_swep:SetText(v.PrintName)
+								function d_swep:DoClick()
+									net.Start("add_group_swep")
+										net.WriteInt(group.uniqueID, 32)
+										net.WriteString(v.ClassName)
+									net.SendToServer()
+									winswep:Close()
+								end
+
+								if v.WorldModel != "" then
+									d_swep.model = createD("DModelPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
+									d_swep.model:SetModel(v.WorldModel)
+								else
+									d_swep.model = createD("DPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
+									function d_swep.model:Paint(pw, ph)
+										draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
+										draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+									end
+								end
+
+								winswep.dpl:AddItem(d_swep)
+							end
+						end
+					end
+					winswep:Search("")
+
+					winswep.search = createD("DTextEntry", winswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
+					function winswep.search:OnChange()
+						winswep:Search(self:GetText())
+					end
+				end
+				ea[group.uniqueID].sweps = DStringListBox(sweps)
+				net.Receive("get_group_sweps", function()
+					local tab_pm = net.ReadTable()
+					local cl_sweps = {}
+					for i, v in pairs(tab_pm) do
+						local swep = {}
+						swep.uniqueID = i
+						swep.string_models = GetSwepWorldModel(v)
+						swep.string_classname = v
+						swep.string_name = v
+						swep.doclick = function()
+							net.Start("rem_group_swep")
+								net.WriteInt(group.uniqueID, 32)
+								net.WriteString(swep.string_classname)
+							net.SendToServer()
+						end
+						swep.h = YRP.ctr(120)
+						table.insert(cl_sweps, swep)
+					end
+					if ea[group.uniqueID].sweps.dpl.AddLines != nil then
+						ea[group.uniqueID].sweps.dpl:AddLines(cl_sweps)
+					end
+				end)
+				net.Start("get_group_sweps")
+					net.WriteInt(group.uniqueID, 32)
+				net.SendToServer()
+
+				hr.parent = ea.equipment:GetContent()
+				DHr(hr)
+
+
+
 				-- Ammunation
 				local ammobg = createD("YPanel", col2, YRP.ctr(800), YRP.ctr(850), 0, 0)
 				local ammoheader = createD("YLabel", ammobg, YRP.ctr(800), YRP.ctr(50), 0, 0)
@@ -1458,6 +1567,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					win.add:SetText("+")
 					function win.add:DoClick()
 						win:Close()
+						
+						local lply = LocalPlayer()
+						lply.pms = {}
 
 						local pmwin = createD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1400), 0, 0)
 						pmwin:SetHeaderHeight(YRP.ctr(100))
@@ -1535,15 +1647,15 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						pmwin.selpm = createD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
 						pmwin.selpm:SetText(YRP.lang_string("LID_playermodels"))
 						function pmwin.selpm:DoClick()
-							local height = ScH() - YRP.ctr(50 + 20 + 50 + 20 + 20 + 50 + 20)
+							--[[local height = ScH() - YRP.ctr(50 + 20 + 50 + 20 + 20 + 50 + 20)
 							local fx = ScW() - YRP.ctr(20 + 20)
 							local br = YRP.ctr(10)
 							local size = (height - 2 * br) / 3
 							local space = size + br
 							local x_max = fx / space - fx / space % 1
-							local perpage = x_max * 3
+							local perpage = x_max * 3]]
 
-							local pmsel = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+							--[[local pmsel = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 							pmsel:SetTitle("")
 							pmsel:Center()
 							pmsel:MakePopup()
@@ -1553,7 +1665,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
 								draw.SimpleText(YRP.lang_string("LID_page") .. ": " .. ((pmsel.nr / perpage) + 1), "DermaDefault", ScrW() / 2, ScrH() - YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-							end
+							end]]
 
 							local allvalidmodels = player_manager.AllValidModels()
 							local cl_pms = {}
@@ -1565,8 +1677,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								cl_pms[c].ClassName = v
 								cl_pms[c].PrintName = player_manager.TranslateToPlayerModelName(v)
 							end
-
-							pmsel.dpl = createD("DPanel", pmsel, ScrW() - YRP.ctr(20 * 2), height, YRP.ctr(20), YRP.ctr(50 + 20 + 50 + 20))
+							YRPOpenSingleSelector(cl_pms, pmwin.list.RefreshList)
+							--[[pmsel.dpl = createD("DPanel", pmsel, ScrW() - YRP.ctr(20 * 2), height, YRP.ctr(20), YRP.ctr(50 + 20 + 50 + 20))
 							function pmsel.dpl:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 120))
 							end
@@ -1694,7 +1806,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							pmsel.search = createD("DTextEntry", pmsel, ScW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50 + 20))
 							function pmsel.search:OnChange()
 								pmsel:Search(self:GetText())
-							end
+							end]]
 						end
 
 						pmwin.selnpm = createD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20 + 300 + 20), YRP.ctr(50 + 20))
@@ -1721,11 +1833,13 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						pmwin.add:SetText(YRP.lang_string("LID_add"))
 						function pmwin.add:DoClick()
 							if pmwin.WorldModel != "" then
+								local lply = LocalPlayer()
+								lply.pms = lply.pms or {}
 								local min = tonumber(pmwin.float_min:GetValue())
 								local max = tonumber(pmwin.float_max:GetValue())
 								net.Start("add_playermodels")
 									net.WriteInt(role.uniqueID, 32)
-									net.WriteTable(pmwin.pms)
+									net.WriteTable(lply.pms)
 									net.WriteString(pmwin.name:GetText())
 									net.WriteString(min)
 									net.WriteString(max)

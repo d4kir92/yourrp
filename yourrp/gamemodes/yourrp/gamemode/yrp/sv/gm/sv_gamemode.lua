@@ -415,6 +415,22 @@ function IsNoRoleSwep(ply, cname)
 	end
 end
 
+function IsNoGroupSwep(ply, cname)
+	if GetGlobalBool("bool_drop_items_role", false) then
+		local _gro_tab = ply:GetGroTab()
+		if wk(_gro_tab) then
+			local _sweps = string.Explode(",", _gro_tab.string_sweps)
+			if !table.HasValue(_sweps, cname) then
+				return true
+			else
+				return false
+			end
+		end
+	else
+		return true
+	end
+end
+
 function IsNoNotDroppableRoleSwep(ply, cname)
 	local _rol_tab = ply:GetRolTab()
 	if wk(_rol_tab) then
@@ -534,7 +550,7 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 		local _weapons = ply:GetWeapons()
 		local _cooldown_item = 120
 		for i, wep in pairs(_weapons) do
-			if wep:GetModel() != "" and IsNoDefaultWeapon(wep:GetClass()) and IsNoRoleSwep(ply, wep:GetClass()) and IsNoUserGroupWeapon(ply, wep:GetClass()) then
+			if wep:GetModel() != "" and IsNoDefaultWeapon(wep:GetClass()) and IsNoRoleSwep(ply, wep:GetClass()) and IsNoGroupSwep(ply, wep:GetClass()) and IsNoUserGroupWeapon(ply, wep:GetClass()) then
 				ply:DropSWEP(wep:GetClass(), true)
 				timer.Simple(_cooldown_item, function()
 					if wep:IsValid() then

@@ -1317,13 +1317,15 @@ end
 
 function CleanUpLicenses(ruid)
 	local role = GetRole(ruid)
-	local lis = string.Explode(",", role.string_licenses)
+	if wk(role) then
+		local lis = string.Explode(",", role.string_licenses)
 
-	for i, li in pairs(lis) do
-		if li != "" then
-			local found = SQL_SELECT("yrp_licenses", "*", "uniqueID = '" .. li .. "'")
-			if !wk(found) then
-				RemLicenseFromRole(ruid, li)
+		for i, li in pairs(lis) do
+			if li != "" then
+				local found = SQL_SELECT("yrp_licenses", "*", "uniqueID = '" .. li .. "'")
+				if !wk(found) then
+					RemLicenseFromRole(ruid, li)
+				end
 			end
 		end
 	end
@@ -1513,7 +1515,7 @@ function removeFromWhitelist( SteamID, roleID )
 	end
 end
 
-function addToWhitelist( SteamID, roleID, groupID, nick, ply, target )
+function addToWhitelistByPly( SteamID, roleID, groupID, nick, ply, target )
 	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', '" .. roleID .. " " .. groupID .. "'")
 
 	if SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID ) == nil then
@@ -1521,6 +1523,19 @@ function addToWhitelist( SteamID, roleID, groupID, nick, ply, target )
 		local status = "Promoted by " .. ply:SteamName()
 		local name = target:SteamName()
 		SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', '" .. nick .. "', " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
+	else
+		YRP.msg( "note", "is already in whitelist")
+	end
+end
+
+function addToWhitelist( roleID, ply )
+	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. roleID .. "'")
+
+	if SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. roleID ) == nil then
+		local dat = util.DateStamp()
+		local status = "Invited " .. ply:SteamName()
+		local name = ply:SteamName()
+		SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, roleID, date, status, name", "'" .. ply:SteamID() .. "', '" .. ply:RPName() .. "', " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
 	else
 		YRP.msg( "note", "is already in whitelist")
 	end
@@ -1557,7 +1572,7 @@ net.Receive("promotePlayer", function(len, ply)
 
 		for k, v in pairs(player.GetAll()) do
 			if tostring( v:SteamID() ) == tostring( tmpTargetSteamID ) then
-				addToWhitelist( tmpTarget:SteamID(), tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, v:Nick(), ply, v )
+				addToWhitelistByPly( tmpTarget:SteamID(), tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, v:Nick(), ply, v )
 				break
 			end
 		end
@@ -1696,6 +1711,7 @@ net.Receive("yrp_invite_accept", function( len, ply )
 	if wk(role) then
 		role = role[1]
 	
+		addToWhitelist( tonumber(role.uniqueID), ply )
 		SetRole( ply, tonumber(role.uniqueID) )
 	else
 		YRP.msg( "note", "[yrp_invite_accept] ROLE DOESN'T EXISTS ANYMORE" )

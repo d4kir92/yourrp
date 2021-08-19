@@ -606,7 +606,7 @@ end
 
 function YRPOpenSingleSelector(tab, fu)
 	local lply = LocalPlayer()
-	lply.pms = {}
+	lply.pms = lply.pms or {}
 
 	local br = 10
 
@@ -709,7 +709,7 @@ function YRPOpenSingleSelector(tab, fu)
 							if !table.HasValue(lply.pms, v.WorldModel) then
 								table.insert(lply.pms, v.WorldModel)
 							elseif table.HasValue(lply.pms, v.WorldModel) then
-								table.remove(lply.pms, v.WorldModel)
+								table.RemoveByValue(lply.pms, v.WorldModel)
 							end
 							if fu then
 								fu()
