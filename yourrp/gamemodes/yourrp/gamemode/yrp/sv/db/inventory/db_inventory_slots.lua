@@ -93,10 +93,10 @@ net.Receive("yrp_storage_get_slots", function(len, ply)
 	storageID = tonumber(storageID)
 
 	local slots = GetStorageSlots(storageID)
-	if wk(slots) then
+	if wk(slots) and slots[5] then
 		local bp = slots[5]
 
-		if !wk(GetItem(bp.uniqueID)) and table.Count(slots) == 5 then
+		if !wk(bp) and bp.uniqueID and !wk(GetItem(bp.uniqueID)) and table.Count(slots) == 5 then
 			local tab = {}
 			tab.text_classname = "bag"
 			tab.text_printname = "bag"

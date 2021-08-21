@@ -1611,7 +1611,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						pmwin.list:SetSpacing(10)
 						function pmwin.list:RefreshList()
 							local lply = LocalPlayer()
-							if wk(lply.pms) then
+							if wk(lply.pms) and pmwin.list and pa(pmwin.list) then
 								pmwin.list:Clear()
 								for i, pm in pairs(lply.pms) do
 									timer.Simple(i * 0.001, function()

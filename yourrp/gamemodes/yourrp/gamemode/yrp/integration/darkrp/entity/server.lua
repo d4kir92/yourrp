@@ -30,7 +30,7 @@ end
 
 function Entity:isLocked()
 	--Description: Whether this door/vehicle is locked.
-	local locked = ent:GetSaveTable().m_bLocked
+	local locked = self:GetSaveTable().m_bLocked
 	return locked
 end
 

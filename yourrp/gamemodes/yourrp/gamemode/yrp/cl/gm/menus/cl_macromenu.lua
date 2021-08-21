@@ -53,18 +53,20 @@ net.Receive("yrp_get_macros", function(len)
 	if pa(_mm.content) then
 		local content = _mm.content
 
-		_mm.uid = nil
+		_mm.uid = 1
 
 		_mm.list = createD("DScrollPanel", content, YRP.ctr(80 * 7 + 20 * 6 + 36), YRP.ctr(80 * 3 + 20 * 2), 0, 0)
 
 		_mm.tf = createD("DTextEntry", content, YRP.ctr(80 * 7 + 20 * 6 + 36), YRP.ctr(80 * 3 + 20 * 2), 0, YRP.ctr(80 * 3 + 20 * 3))
 		_mm.tf:SetMultiline(true)
 		function _mm.tf:OnTextChanged()
-			net.Start("yrp_update_macro")
-				net.WriteString(_mm.uid)
-				net.WriteString(self:GetText())
-			net.SendToServer()
-			_mm.tab[_mm.uid].value = self:GetText()
+			if _mm.uid then
+				net.Start("yrp_update_macro")
+					net.WriteString(_mm.uid)
+					net.WriteString(self:GetText())
+				net.SendToServer()
+				_mm.tab[_mm.uid].value = self:GetText()
+			end
 		end
 
 		_mm.use = createD("YButton", content, YRP.ctr(300), YRP.ctr(60), YRP.ctr(0), YRP.ctr(600))

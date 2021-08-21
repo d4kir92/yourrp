@@ -1788,7 +1788,7 @@ function drawPlates()
 			ply.sidealpha = ply.sidealpha or 0
 			if GetGlobalBool("bool_tag_on_head_target", false) then
 				local pt = LocalPlayer():GetEyeTrace()
-				if ply == pt.Entity then
+				if pt and IsValid(pt.Entity) and ply == pt.Entity then
 					ply.headalpha = ply.headalpha + 5
 				else
 					ply.headalpha = ply.headalpha - 5

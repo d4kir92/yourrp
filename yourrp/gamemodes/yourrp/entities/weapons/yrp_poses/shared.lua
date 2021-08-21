@@ -58,22 +58,50 @@ yrp_poses["crossarms"]["ValveBiped.Bip01_L_Forearm"] = {}
 yrp_poses["crossarms"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(55, -90, 0)
 yrp_poses["crossarms"]["ValveBiped.Bip01_L_Hand"] = {}
 yrp_poses["crossarms"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 0, -15)
+yrp_poses["crossarms"]["ValveBiped.Bip01_L_Thigh"] = {}
+yrp_poses["crossarms"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(-6, 0, 0)
 yrp_poses["crossarms"]["ValveBiped.Bip01_R_UpperArm"] = {}
 yrp_poses["crossarms"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -60, -60)
 yrp_poses["crossarms"]["ValveBiped.Bip01_R_Forearm"] = {}
 yrp_poses["crossarms"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(10, -90, 0)
 yrp_poses["crossarms"]["ValveBiped.Bip01_R_Hand"] = {}
 yrp_poses["crossarms"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, -30, 15)
-
+yrp_poses["crossarms"]["ValveBiped.Bip01_R_Thigh"] = {}
+yrp_poses["crossarms"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
+--[[
+0		ValveBiped.Bip01_Pelvis
+1       ValveBiped.Bip01_L_Thigh
+2       ValveBiped.Bip01_L_Calf
+3       ValveBiped.Bip01_L_Foot
+4       ValveBiped.Bip01_L_Toe0
+5       LeftAnkle
+6       LeftKneeLow
+7       LeftKneeUp
+8       LeftUpLegRoll
+9       LeftKneeRoll
+10      ValveBiped.Bip01_R_Thigh
+11      ValveBiped.Bip01_R_Calf
+12      ValveBiped.Bip01_R_Foot
+13      ValveBiped.Bip01_R_Toe0
+14      RightAnkle
+15      RightKneeLow
+16      RightKneeUp
+17      RightUpLegRoll
+18      RightKneeRoll
+]]
 yrp_poses["crossarmsbehind"] = {}
 yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_UpperArm"] = {}
 yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(0, 8, 0)
 yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_Forearm"] = {}
 yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(60, 0, 90)
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_Thigh"] = {}
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(-6, 0, 0)
 yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_UpperArm"] = {}
 yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(0, 10, 0)
 yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_Forearm"] = {}
 yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-60, 0, -90)
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_Thigh"] = {}
+yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
 
 yrp_poses["handcuffed"] = {}
 yrp_poses["handcuffed"]["ValveBiped.Bip01_L_UpperArm"] = {}
@@ -182,12 +210,16 @@ yrp_poses["hip"]["ValveBiped.Bip01_L_Forearm"] = {}
 yrp_poses["hip"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(90, 0, 90)
 yrp_poses["hip"]["ValveBiped.Bip01_L_Hand"] = {}
 yrp_poses["hip"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 45, -45)
+yrp_poses["hip"]["ValveBiped.Bip01_L_Thigh"] = {}
+yrp_poses["hip"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(-6, 0, 0)
 yrp_poses["hip"]["ValveBiped.Bip01_R_UpperArm"] = {}
 yrp_poses["hip"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(45, 0, 20)
 yrp_poses["hip"]["ValveBiped.Bip01_R_Forearm"] = {}
 yrp_poses["hip"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-90, 0, -90)
 yrp_poses["hip"]["ValveBiped.Bip01_R_Hand"] = {}
 yrp_poses["hip"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 45, 45)
+yrp_poses["hip"]["ValveBiped.Bip01_R_Thigh"] = {}
+yrp_poses["hip"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
 yrp_poses["hip"]["ValveBiped.Bip01_Head1"] = {}
 yrp_poses["hip"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -6, 0)
 
