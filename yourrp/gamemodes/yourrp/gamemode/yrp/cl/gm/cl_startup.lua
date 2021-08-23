@@ -2684,7 +2684,7 @@ if pa(yrp_loading_screen) then
 				if self.joinbutton == nil then
 					local w = YRP.ctr(500)
 					local h = YRP.ctr(100)
-					self.joinbutton = createD("YButton", self, w, h, pw / 2 - w / 2, ph / 2 + YRP.ctr(540))
+					self.joinbutton = createD("YButton", self, w, h, pw / 2 - w / 2, ph / 2 + YRP.ctr(480))
 					self.joinbutton:SetText("")
 					self.joinbutton.master = yrp_loading_screen
 					function self.joinbutton:Paint(pw, ph)

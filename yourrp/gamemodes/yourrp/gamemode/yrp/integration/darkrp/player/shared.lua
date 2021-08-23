@@ -249,36 +249,40 @@ function Player:nickSortedPlayers()
 	return {}
 end
 
+Player.DarkRPVars = {}
+Player.DarkRPVars.money = 0
+Player.DarkRPVars.job = ""
+
 --
 local function RetrievePlayerVar(userID, var, value)
-		--RetrievePlayerVar
+	--RetrievePlayerVar
 end
 
 local function doRetrieve()
-		local userID = net.ReadUInt(16)
-		local var, value = DarkRP.readNetDarkRPVar()
+	local userID = net.ReadUInt(16)
+	local var, value = DarkRP.readNetDarkRPVar()
 
-		RetrievePlayerVar(userID, var, value)
+	RetrievePlayerVar(userID, var, value)
 end
 net.Receive("DarkRP_PlayerVar", doRetrieve)
 
 local function doRetrieveRemoval()
-		--doRetrieveRemoval
+	--doRetrieveRemoval
 end
 net.Receive("DarkRP_PlayerVarRemoval", doRetrieveRemoval)
 
 local function InitializeDarkRPVars(len)
-		local plyCount = net.ReadUInt(8)
+	local plyCount = net.ReadUInt(8)
 
-		for i = 1, plyCount, 1 do
-				local userID = net.ReadUInt(16)
-				local varCount = net.ReadUInt(DarkRP.DARKRP_ID_BITS + 2)
+	for i = 1, plyCount, 1 do
+			local userID = net.ReadUInt(16)
+			local varCount = net.ReadUInt(DarkRP.DARKRP_ID_BITS + 2)
 
-				for j = 1, varCount, 1 do
-						local var, value = DarkRP.readNetDarkRPVar()
-						RetrievePlayerVar(userID, var, value)
-				end
-		end
+			for j = 1, varCount, 1 do
+					local var, value = DarkRP.readNetDarkRPVar()
+					RetrievePlayerVar(userID, var, value)
+			end
+	end
 end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
 --timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})

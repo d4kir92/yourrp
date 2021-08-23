@@ -63,6 +63,8 @@ function PlayerLoadedGame(ply, tab)
 
 	UpdateDarkRPTable(ply)
 
+	ply:UserGroupLoadout()
+
 	YRP.msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading.")-- Count: " ..  c)
 
 	net.Start("yrp_ready_received")

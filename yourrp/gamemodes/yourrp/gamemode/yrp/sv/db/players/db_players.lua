@@ -378,6 +378,10 @@ function set_role_values(ply, pmid)
 			ply:SetJumpPower(tonumber(rolTab.int_powerjump)) -- * rolTab.playermodelsize)
 			ply:SetNW2String("salary", rolTab.int_salary)
 			ply:SetNW2String("roleName", rolTab.string_name)
+			
+			ply.DarkRPVars = ply.DarkRPVars or {}
+			ply.DarkRPVars.job = rolTab.string_name
+
 			ply:SetNW2Bool("isInstructor", tobool(rolTab.bool_instructor))
 			ply:SetNW2String("roleDescription", rolTab.string_description)
 
@@ -397,6 +401,11 @@ function set_role_values(ply, pmid)
 			ply:SetNW2String("int_roleondeath", rolTab.int_roleondeath)
 
 			ply:SetNW2Int("int_securitylevel", rolTab.int_securitylevel)
+
+			ply:SetNW2Int("int_namelength", rolTab.int_namelength)
+
+			ply:SetNW2String("string_hud", rolTab.string_hud)
+			ply:SetNW2String("string_hud_mask", rolTab.string_hud_mask)
 
 			local _licenseIDs = string.Explode(",", rolTab.string_licenses)
 			for i, lic in pairs(_licenseIDs) do

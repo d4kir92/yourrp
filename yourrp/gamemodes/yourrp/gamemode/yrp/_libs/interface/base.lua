@@ -320,6 +320,77 @@ function YRPDComboBox(tab)
 	return pnl
 end
 
+function YRPDComboBoxHUD(tab)
+	tab = tab or {}
+	tab.parent = tab.parent or nil
+	if tab.parent != nil then
+		tab.w = tab.w or tab.parent:GetWide() or 300
+	else
+		tab.w = tab.w or 300
+	end
+	tab.h = tab.h or YRP.ctr(100)
+	tab.x = tab.x or 0
+	tab.y = tab.y or 0
+	tab.color = tab.color or Color(255, 255, 255)
+
+	tab.header = tab.header or "NOHEADER"
+	tab.value = tab.value or "NOTEXT"
+	tab.lforce = tab.lforce or true
+
+	local pnl = {}
+
+	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	function pnl.line:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
+		local text = {}
+		if tab.lforce then
+			text.text = YRP.lang_string(tab.header) .. ":"
+		else
+			text.text = tab.header .. ":"
+		end
+		text.x = YRP.ctr(10)
+		text.y = ph / 4
+		text.font = "Y_18_500"
+		text.color = Color(255, 255, 255, 255)
+		text.br = 1
+		text.ax = 0
+		DrawText(text)
+	end
+
+	pnl.DComboBox = createD("DComboBox", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	pnl.DComboBox:SetSortItems(false)
+	for i, v in pairs(tab.choices) do
+		if tab.value == v then
+			pnl.DComboBox:AddChoice(v, i, true)
+		else
+			pnl.DComboBox:AddChoice(v, i)
+		end
+	end
+	pnl.DComboBox.serverside = false
+	if tab.netstr != nil and tab.uniqueID != nil then
+		function pnl.DComboBox:OnSelect(index, value, data)
+			net.Start(tab.netstr)
+				net.WriteString(tab.uniqueID)
+				net.WriteString(value)
+			net.SendToServer()
+		end
+		net.Receive(tab.netstr, function(len)
+			local _uid = tonumber(net.ReadString())
+			local _str = net.ReadString()
+			if pa(pnl.DComboBox) then
+				pnl.DComboBox.serverside = true
+				pnl.DComboBox:SetText(_str)
+				pnl.DComboBox.serverside = false
+			end
+		end)
+	end
+
+	if tab.parent != nil and tab.parent.AddItem != nil then
+		tab.parent:AddItem(pnl.line)
+	end
+	return pnl
+end
+
 function DColor(tab)
 	tab = tab or {}
 	tab.parent = tab.parent or nil

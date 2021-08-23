@@ -3,7 +3,9 @@
 hook.Add("PlayerStartTaunt", "yrp_taunt_start", function(ply, act, length)
 	ply:SetNW2Bool("taunting", true)
 	timer.Simple(length, function()
-		ply:SetNW2Bool("taunting", false)
+		if IsValid(ply) then
+			ply:SetNW2Bool("taunting", false)
+		end
 	end)
 end)
 

@@ -4,7 +4,14 @@ local Player = FindMetaTable("Player")
 
 if CLIENT then
 	function Player:GetHudDesignName()
-		return self:GetNW2String("string_hud_design", "notloaded")
+		if self:GetNW2String("string_hud", "serverdefault") != "serverdefault" then
+			return self:GetNW2String("string_hud", "serverdefault")
+		else
+			return self:GetNW2String("string_hud_design", "notloaded")
+		end
+	end
+	function Player:GetHudDesignMask()
+		return self:GetNW2String("string_hud_mask", "serverdefault")
 	end
 
 	-- string element for example "health", art for example "SIZE_W"
@@ -102,7 +109,7 @@ if CLIENT then
 		elseif element == "AL" then
 			return GetGlobalBool("bool_permille", false)
 		elseif element == "ST" then
-			return GetGlobalBool("bool_stamina", false) and self:GetNW2Bool("bool_stamina", false) and self:GetNW2Float("GetCurStamina", 0.0) < self:GetNW2Float("GetMaxStamina", 0.0)
+			return GetGlobalBool("bool_stamina", false) and self:GetNW2Bool("bool_stamina", false)
 		elseif element == "RA" then
 			return GetGlobalBool("bool_radiation", false)
 		elseif element == "XP" then
@@ -126,15 +133,15 @@ if CLIENT then
 			end
 			return false
 		elseif element == "BA" then
-			return system.BatteryPower() < 100
+			return system.BatteryPower() <= 100
 		elseif element == "CON" then
 			return !strEmpty(self:Condition())
 		elseif element == "AB" then
 			return self:GetNW2String("GetAbilityType", "none") != "none"
 		elseif element == "HP" then
-			return self:Health() > 0
+			return self:Health() >= 0
 		elseif element == "AR" then
-			return self:Armor() > 0
+			return self:Armor() >= 0
 		elseif element == "WN" then
 			local weapon = self:GetActiveWeapon()
 			if weapon:IsValid() then

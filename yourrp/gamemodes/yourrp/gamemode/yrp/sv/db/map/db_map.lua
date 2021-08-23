@@ -349,6 +349,8 @@ function YRPUnRegisterObject(obj, uid)
 end
 
 function YRPRegisterObject(obj)
+	if !IsValid(obj) then return end
+
 	table.insert(mapobjects, obj)
 
 	if obj._suid == nil then

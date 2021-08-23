@@ -167,6 +167,8 @@ function changeFontSize()
 		yrp_create_font("ScoreboardPlayerNameBig", YRP.GetFont(), 24, 500, false)
 		yrp_create_font("AckBarWriting", YRP.GetFont(), 20, 500, false)
 		yrp_create_font("DarkRP_tipjar", YRP.GetFont(), 100, 500, false)
+
+		yrp_create_font("Roboto20", YRP.GetFont(), 20, 500, false)
 	end
 end
 changeFontSize()

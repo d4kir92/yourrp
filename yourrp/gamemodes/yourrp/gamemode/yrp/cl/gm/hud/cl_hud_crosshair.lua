@@ -89,7 +89,7 @@ function HudCrosshair()
 
 					ch_attack1_old = Lerp(7 * FrameTime(), ch_attack1_old, ch_attack1)
 					
-					if lply:GetNW2String("string_hud_design", "notloaded") != "notloaded" then
+					if lply:GetHudDesignName() != "notloaded" then
 						if lply:Alive() then
 							if true then
 

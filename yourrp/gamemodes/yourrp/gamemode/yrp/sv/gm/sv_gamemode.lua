@@ -118,8 +118,6 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	ply:resetUptimeCurrent()
 	check_yrp_client(ply, steamid or uniqueID)
 
-	ply:UserGroupLoadout()
-
 	if IsValid(ply) and ply.KillSilent then
 		ply:KillSilent()
 	end
@@ -1298,23 +1296,25 @@ net.Receive("yrp_next_voice_channel", function(len, ply)
 end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
-	if listener == talker then
-		--return false
-	end
-	local canhear = false
-	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
-		if IsActiveInChannel(talker, channel.uniqueID) and IsInChannel(listener, channel.uniqueID) then -- If Talker allowed to talk and both are in that channel
-			canhear = true
-			break
+	if GetGlobalBool("bool_voice", false) then
+		if listener == talker then
+			--return false
 		end
-	end
+		local canhear = false
+		for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+			if IsActiveInChannel(talker, channel.uniqueID) and IsInChannel(listener, channel.uniqueID) then -- If Talker allowed to talk and both are in that channel
+				canhear = true
+				break
+			end
+		end
 
-	if canhear and !talker:GetNW2Bool("mute_voice", false) then
-		return true
-	else
-		if YRPIsInMaxVoiceRange(listener, talker) then
-			if YRPIsInSpeakRange(listener, talker) then
-				return true
+		if canhear and !talker:GetNW2Bool("mute_voice", false) then
+			return true
+		else
+			if YRPIsInMaxVoiceRange(listener, talker) then
+				if YRPIsInSpeakRange(listener, talker) then
+					return true
+				end
 			end
 		end
 	end

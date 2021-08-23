@@ -1178,6 +1178,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local roles = net.ReadTable()
 			local db_ugs = net.ReadTable()
 			local db_groups = net.ReadTable()
+			local db_huds = net.ReadTable()
+			local db_hudmasks = net.ReadTable()
 
 			if !wk(db_groups) or !wk(db_ugs) or !wk(roles) or !wk(role) then
 				return
@@ -1611,7 +1613,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						pmwin.list:SetSpacing(10)
 						function pmwin.list:RefreshList()
 							local lply = LocalPlayer()
-							if wk(lply.pms) and pmwin.list and pa(pmwin.list) then
+							if wk(lply.pms) and pmwin.list != nil and pa(pmwin.list) then
 								pmwin.list:Clear()
 								for i, pm in pairs(lply.pms) do
 									timer.Simple(i * 0.001, function()
@@ -2603,6 +2605,48 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			int_namelength.min = 0
 			int_namelength.max = 64
 			ea[role.uniqueID].int_namelength = DIntBox(int_namelength)
+
+			local abis = {"none", "mana", "force", "rage", "energy"}
+			local tab_a = {}
+			for i, v in pairs(abis) do
+				tab_a[string.lower(v)] = YRP.lang_string("LID_" .. string.lower(v))
+			end
+
+			DHr(hr)
+
+			local huds = {"serverdefault"}
+			for i, v in pairs(db_huds) do
+				table.insert(huds, v.name)
+			end
+
+			local string_hud = {}
+			string_hud.parent = ea.restriction:GetContent()
+			string_hud.uniqueID = role.uniqueID
+			string_hud.header = YRP.lang_string("LID_hud")
+			string_hud.netstr = "update_role_string_hud"
+			string_hud.value = role.string_hud
+			string_hud.uniqueID = role.uniqueID
+			string_hud.lforce = false
+			string_hud.choices = huds
+			ea[role.uniqueID].string_hud = YRPDComboBoxHUD(string_hud)
+
+			DHr(hr)
+	
+			local hudmasks = {"serverdefault"}
+			for i, v in pairs(db_hudmasks) do
+				table.insert(hudmasks, v.name)
+			end
+
+			local string_hud_mask = {}
+			string_hud_mask.parent = ea.restriction:GetContent()
+			string_hud_mask.uniqueID = role.uniqueID
+			string_hud_mask.header = "HUD Mask"
+			string_hud_mask.netstr = "update_role_string_hud_mask"
+			string_hud_mask.value = role.string_hud_mask
+			string_hud_mask.uniqueID = role.uniqueID
+			string_hud_mask.lforce = false
+			string_hud_mask.choices = hudmasks
+			ea[role.uniqueID].string_hud_mask = YRPDComboBoxHUD(string_hud_mask)
 
 			ea.restriction:AutoSize(true)
 

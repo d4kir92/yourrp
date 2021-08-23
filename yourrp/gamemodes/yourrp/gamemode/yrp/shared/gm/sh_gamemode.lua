@@ -17,9 +17,9 @@ GM.Twitter = "twitter.com/D4KIR" -- do NOT change this!
 GM.Help = "Create your rp you want to make!" -- do NOT change this!
 GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
-GM.VersionBeta = 346 -- do NOT change this!
-GM.VersionCanary = 695 -- do NOT change this!
-GM.VersionBuild = 11 -- do NOT change this!
+GM.VersionBeta = 347 -- do NOT change this!
+GM.VersionCanary = 697 -- do NOT change this!
+GM.VersionBuild = 14 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -624,9 +624,7 @@ if system.IsLinux() then
 end
 
 function YRPGetHostName()
-	if !strEmpty(GetGlobalString("ServerName")) then
-		return GetGlobalString("ServerName")
-	elseif !strEmpty(GetGlobalString("text_server_name")) then
+	if !strEmpty(GetGlobalString("text_server_name")) then
 		return GetGlobalString("text_server_name")
 	else
 		return GetHostName()

@@ -519,7 +519,7 @@ icons["NA"] = "64_user"
 function HUDSimple()
 	local lply = LocalPlayer()
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
-		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Simple" then
+		if GetGlobalBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Simple" then
 			local batterypower = system.BatteryPower()
 
 			-- Background

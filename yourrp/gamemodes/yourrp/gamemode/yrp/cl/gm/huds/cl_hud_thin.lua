@@ -238,7 +238,7 @@ function YRPHUDThin()
 	local lply = LocalPlayer()
 
 	if YRPHudVarsLoaded and YRPHudVarsLoaded() and YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
-		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Thin" then
+		if GetGlobalBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Thin" then
 			if lply:HudElementVisible("COM") then
 				DrawThinCompass(lply:HudValue("COM", "POSI_X"), lply:HudValue("COM", "POSI_Y"), lply:HudValue("COM", "SIZE_W"), lply:HudValue("COM", "SIZE_H"))
 			end

@@ -75,6 +75,9 @@ SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_burn", "TEXT DEFAULT '1.0'")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_bullet", "TEXT DEFAULT '1.0'")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_energybeam", "TEXT DEFAULT '1.0'")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "string_hud", "TEXT DEFAULT 'serverdefault'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_mask", "TEXT DEFAULT 'serverdefault'")
+
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	YRP.msg("note", DATABASE_NAME .. " has not the default role")
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "'1', 'Civilian', '0,0,255', '1', '0'")
@@ -818,11 +821,17 @@ net.Receive("settings_subscribe_role", function(len, ply)
 
 	local groups = SQL_SELECT("yrp_ply_groups", "*", nil)
 
+	local huds = YRPGetHUDs()
+
+	local hudmasks = YRPGetHUDMasks()
+
 	net.Start("settings_subscribe_role")
 		net.WriteTable(role)
 		net.WriteTable(roles)
 		net.WriteTable(usergroups)
 		net.WriteTable(groups)
+		net.WriteTable(huds)
+		net.WriteTable(hudmasks)
 	net.Send(ply)
 end)
 

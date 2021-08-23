@@ -496,7 +496,7 @@ function DoCommand(sender, command, text)
 	end
 
 	if command == "rpname" or command == "name" or command == "nick" then
-		if GetGlobalBool("bool_characters_changeable_name", false) or ply:HasAccess() then
+		if GetGlobalBool("bool_characters_changeable_name", false) or sender:HasAccess() then
 			local name = text
 
 			name = string.Replace(name, "!rpname ", "")

@@ -250,7 +250,9 @@ end
 
 function Player:unArrest(Unarrester)
 	--Description: Unarrest a player.
-	YRP.msg("darkrp", "unArrest(" .. Unarrester:YRPName() .. ")")
+	if IsValid(Unarrester) then
+		YRP.msg("darkrp", "unArrest(" .. Unarrester:YRPName() .. ")")
+	end
 	self:SetNW2Bool("injail", false)
 end
 

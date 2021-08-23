@@ -302,7 +302,7 @@ function server_toggled(ply)
 end
 
 function HudPlayer(ply)
-	if ply:GetNW2String("string_hud_design") != "nil" then
+	if ply:GetHudDesignName() != "notloaded" then
 		drawMenuInfo()
 
 		if ply:Alive() then

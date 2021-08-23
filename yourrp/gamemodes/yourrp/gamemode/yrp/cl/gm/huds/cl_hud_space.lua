@@ -25,7 +25,7 @@ function YRPHUDSpace()
 		local RO = YRP.GetDesignIcon("64_user-graduate")
 		local NA = YRP.GetDesignIcon("64_user")
 
-		if GetGlobalBool("bool_yrp_hud", false) and lply:GetNW2String("string_hud_design") == "Space" then
+		if GetGlobalBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Space" then
 			ELES["HP"] = {
 				lply:Health(),
 				lply:GetMaxHealth(),

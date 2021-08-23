@@ -25,6 +25,11 @@ end
 --SQL_DROPTABLE(DATABASE_NAME)
 
 local HUDS = {}
+function YRPGetHUDs()
+	hook.Run("RegisterHUDDesign")
+	return HUDS
+end
+
 function RegisterHUDDesign(tab)
 	if tab.name == nil then
 		YRP.msg("note", "RegisterDesign Failed! Missing Design Name")
@@ -33,7 +38,10 @@ function RegisterHUDDesign(tab)
 		YRP.msg("note", "RegisterDesign Failed! Missing Design Author")
 		return false
 	end
-	HUDS[tab.name] = tab
+	if HUDS[tab.name] == nil then
+		YRP.msg("note", "[RegisterDesign] Registered HUD: " .. tostring(tab.name))
+		HUDS[tab.name] = tab
+	end
 	return true
 end
 
@@ -92,6 +100,27 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_Thin", function()
 	HUD_Thin.progress = 100
 	RegisterHUDDesign(HUD_Thin)
 end)
+
+local HUDMASKS = {}
+function YRPGetHUDMasks()
+	hook.Run("RegisterHUDMASKDesign")
+	return HUDMASKS
+end
+
+function RegisterHUDMASKDesign(tab)
+	if tab.name == nil then
+		YRP.msg("note", "RegisterHUDMASKDesign Failed! Missing Design Name")
+		return false
+	elseif tab.author == nil then
+		YRP.msg("note", "RegisterHUDMASKDesign Failed! Missing Design Author")
+		return false
+	end
+	if HUDMASKS[tab.name] == nil then
+		YRP.msg("note", "[RegisterHUDMASKDesign] Registered HUD: " .. tostring(tab.name))
+		HUDMASKS[tab.name] = tab
+	end
+	return true
+end
 
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")

@@ -1851,13 +1851,15 @@ net.Receive("get_perma_props", function(len, ply)
 		local sortedtab = {}
 		local c = 0
 		for i, v in pairs(tab) do
-			if v.map == game.GetMap() then
+			if v.map == game.GetMap() and v.content then
 				v.content = util.JSONToTable(v.content)
 
-				sortedtab[c] = {}
-				sortedtab[c].id = v.id
-				sortedtab[c].model = v.content.Model
-				sortedtab[c].class = v.content.Class
+				if v.content != nil then
+					sortedtab[c] = {}
+					sortedtab[c].id = v.id
+					sortedtab[c].model = v.content.Model
+					sortedtab[c].class = v.content.Class
+				end
 
 				c = c + 1
 			end
@@ -1959,6 +1961,7 @@ hook.Add("Think", "yrp_usergroup_haschanged", function()
 		ply.yrp_ug = ply.yrp_ug or ply:GetUserGroup()
 		if ply:GetUserGroup() != ply.yrp_ug then
 			ply.yrp_ug = ply:GetUserGroup()
+
 			timer.Simple(0, function()
 				if IsValid(ply) then
 					YRP.msg("note", ply:RPName() .. " has a new usergroup, respawning...")

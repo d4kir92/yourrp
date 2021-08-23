@@ -519,7 +519,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		draw.SimpleText("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2() - 100, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	
-	if !HasYRPContent() then
+	if !HasYRPContent() and VERSIONART and VERSIONART == "workshop" then
 		draw.SimpleTextOutlined("\"YourRP Content\" IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2() - 250, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined("Add \"YourRP Content\" to your Server Collection!", "Y_60_500", ScrW2(), ScrH2() - 200, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
@@ -712,63 +712,64 @@ local VO = {}
 
 hook.Add("HUDPaint", "yrp_voice_module", function()
 	local lply = LocalPlayer()
+	if GetGlobalBool("bool_voice", false) then
+		VO.font = "Y_16_500"
+		surface.SetFont(VO.font)
 
-	VO.font = "Y_16_500"
-	surface.SetFont(VO.font)
-
-	local texta = {}
-	local textp = {}
-	for i, v in pairs(GetGlobalTable("yrp_voice_channels")) do
-		if IsActiveInChannel(lply, v.uniqueID) then
-			table.insert(texta, v.string_name)
+		local texta = {}
+		local textp = {}
+		for i, v in pairs(GetGlobalTable("yrp_voice_channels")) do
+			if IsActiveInChannel(lply, v.uniqueID) then
+				table.insert(texta, v.string_name)
+			end
+			if IsInChannel(lply, v.uniqueID) then
+				table.insert(textp, v.string_name)
+			end
 		end
-		if IsInChannel(lply, v.uniqueID) then
-			table.insert(textp, v.string_name)
+
+		local ca = table.Count(texta)
+		local cp = table.Count(textp)
+
+		if ca == 0 then
+			VO.text = "-"
+		else
+			VO.text = YRP.lang_string("LID_active") .. ": " .. table.concat(texta, ", ")
 		end
+
+		VO.text = VO.text .. " | "
+
+		if cp == 0 then
+			VO.text = VO.text .. "-"
+		elseif cp <= 2 then
+			VO.text = VO.text .. table.concat(textp, ", ")
+		else
+			VO.text = VO.text .. string.Replace(YRP.lang_string("LID_xpassive"), "X", cp)
+		end
+
+		if ca == 0 and cp == 0 then
+			VO.text = "" .. string.Replace(YRP.lang_string("LID_pressvoicetoopenradiomenu"), "KEY", GetKeybindName("voice_menu")) .. ""
+		else
+			VO.text = VO.text .. " (" .. GetKeybindName("voice_menu") .. ")"
+		end
+
+		VO.tw = surface.GetTextSize(VO.text)
+
+		if lply:GetNW2Int("hud_version", 0) != VO.version then
+			VO.version = lply:GetNW2Int("hud_version", 0)
+
+			VO.x = lply:HudValue("VO", "POSI_X")
+			VO.y = lply:HudValue("VO", "POSI_Y")
+			VO.w = lply:HudValue("VO", "SIZE_W")
+			VO.h = lply:HudValue("VO", "SIZE_H")
+
+			VO.tx = VO.x + VO.w / 2
+			VO.ty = VO.y + VO.h / 2
+		end
+
+		VO.tw = VO.tw + VO.h / 2
+
+		draw.RoundedBox(5, VO.tx - VO.tw / 2, VO.y, VO.tw, VO.h, Color(25, 25, 25))
+		draw.SimpleText(VO.text, VO.font, VO.tx, VO.ty, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
-
-	local ca = table.Count(texta)
-	local cp = table.Count(textp)
-
-	if ca == 0 then
-		VO.text = "-"
-	else
-		VO.text = YRP.lang_string("LID_active") .. ": " .. table.concat(texta, ", ")
-	end
-
-	VO.text = VO.text .. " | "
-
-	if cp == 0 then
-		VO.text = VO.text .. "-"
-	elseif cp <= 2 then
-		VO.text = VO.text .. table.concat(textp, ", ")
-	else
-		VO.text = VO.text .. string.Replace(YRP.lang_string("LID_xpassive"), "X", cp)
-	end
-
-	if ca == 0 and cp == 0 then
-		VO.text = "" .. string.Replace(YRP.lang_string("LID_pressvoicetoopenradiomenu"), "KEY", GetKeybindName("voice_menu")) .. ""
-	else
-		VO.text = VO.text .. " (" .. GetKeybindName("voice_menu") .. ")"
-	end
-
-	VO.tw = surface.GetTextSize(VO.text)
-
-	if lply:GetNW2Int("hud_version", 0) != VO.version then
-		VO.version = lply:GetNW2Int("hud_version", 0)
-
-		VO.x = lply:HudValue("VO", "POSI_X")
-		VO.y = lply:HudValue("VO", "POSI_Y")
-		VO.w = lply:HudValue("VO", "SIZE_W")
-		VO.h = lply:HudValue("VO", "SIZE_H")
-
-		VO.tx = VO.x + VO.w / 2
-		VO.ty = VO.y + VO.h / 2
-	end
-
-	VO.tw = VO.tw + VO.h / 2
-
-	draw.RoundedBox(5, VO.tx - VO.tw / 2, VO.y, VO.tw, VO.h, Color(25, 25, 25))
-	draw.SimpleText(VO.text, VO.font, VO.tx, VO.ty, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end)
 
