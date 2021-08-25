@@ -5,8 +5,8 @@
 
 local _db_name = "yrp_players"
 
-SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(_db_name, "SteamName", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(_db_name, "SteamName", "TEXT DEFAULT ''")
 
 SQL_ADD_COLUMN(_db_name, "CurrentCharacter", "INT DEFAULT 1")
 SQL_ADD_COLUMN(_db_name, "NormalCharacter", "INT DEFAULT 1")

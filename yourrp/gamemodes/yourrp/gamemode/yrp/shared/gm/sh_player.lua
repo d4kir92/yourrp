@@ -100,7 +100,7 @@ if SERVER then
 			self:SetNW2Float("thirst", newthirst)
 		end
 
-		if permille != nil then
+		if GetGlobalBool("bool_permille", false) and permille != nil then
 			permille = tonumber(permille)
 			if isnumber(permille) and permille > 0 then
 				local newpermille = math.Clamp(self:GetNW2Float("permille", 0.0) + permille, 0, self:GetMaxPermille())

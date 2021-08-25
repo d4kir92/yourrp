@@ -5,8 +5,8 @@ _text.pre = "#YRP# "
 _text.gmname = "YourRP"
 _text.loaddb = "LOAD DB: "
 _text.successdb = " created successfully."
-_text.spacePre = "\n__________________________________________________________________________[" .. "YRP" .. "]_"
-_text.spacePos = "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯[" .. "YRP" .. "]¯\n"
+_text.spacePre = "\n-------------------------------------------------------------------------[" .. "YRP" .. "]-"
+_text.spacePos = "-------------------------------------------------------------------------[" .. "YRP" .. "]-\n"
 
 function strEmpty(str)
 	if isstring(str) then
@@ -17,29 +17,6 @@ function strEmpty(str)
 		end
 	end
 	return true
-end
-
-function strUrl(str)
-	if !strEmpty(str) and #string.Explode(".", str) > 1 then
-		return true
-	end
-	return false
-end
-
-function hr()
-	print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
-end
-
-function yrpmsg(msg)
-	print(msg)
-end
-
-function bool_status(b)
-	if tobool(b) then
-		return YRP.lang_string("LID_enabled")
-	elseif !tobool(b) then
-		return YRP.lang_string("LID_disabled")
-	end
 end
 
 function GetRealm()
@@ -59,6 +36,29 @@ function GetRealmColor()
 		return Color(255, 222, 102)
 	else
 		return Color(255, 255, 0)
+	end
+end
+
+function strUrl(str)
+	if !strEmpty(str) and #string.Explode(".", str) > 1 then
+		return true
+	end
+	return false
+end
+
+function hr()
+	MsgC(GetRealmColor(), "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" .. "\n")
+end
+
+function yrpmsg(msg)
+	MsgC(GetRealmColor(), msg .. "\n")
+end
+
+function bool_status(b)
+	if tobool(b) then
+		return YRP.lang_string("LID_enabled")
+	elseif !tobool(b) then
+		return YRP.lang_string("LID_disabled")
 	end
 end
 
@@ -149,14 +149,14 @@ end
 function hr_pre(chan)
 	local cn = GetChannelName(chan)
 	if MSGChannelEnabled(cn) then
-		print(_text.spacePre)
+		MsgC(GetRealmColor(), _text.spacePre .. "\n")
 	end
 end
 
 function hr_pos(chan)
 	local cn = GetChannelName(chan)
 	if MSGChannelEnabled(cn) then
-		print(_text.spacePos)
+		MsgC(GetRealmColor(), _text.spacePos .. "\n")
 	end
 end
 

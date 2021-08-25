@@ -387,6 +387,7 @@ function YRPOpenSBS()
 end
 
 local yrptab = {}
+yrptab["avatar"] = 10
 yrptab["level"] = 10
 yrptab["idcardid"] = 10
 yrptab["name"] = 10
@@ -806,9 +807,12 @@ function YRPScoreboardAddPlayer(ply)
 						end
 						local color = self.iconcolor
 						color.a = alpha
-						surface.SetMaterial(YRP.GetDesignIcon(btn[2]))
-						surface.SetDrawColor(color)
-						surface.DrawTexturedRect(br, br, iconsize, iconsize)
+						
+						if YRP.GetDesignIcon(btn[2]) then
+							surface.SetMaterial(YRP.GetDesignIcon(btn[2]))
+							surface.SetDrawColor(color)
+							surface.DrawTexturedRect(br, br, iconsize, iconsize)
+						end
 
 						if btn[6] then
 							btn[6](self)
@@ -823,10 +827,12 @@ function YRPScoreboardAddPlayer(ply)
 			end
 		end
 
-		local csw, csh = plyopt.btns:GetCanvas():GetSize()
-		plyopt.btns:SetWide(csw)
-		plyopt.btns:SetPos(sw / 2 - csw / 2, btnbr)
-
+		if plyopt.btns.GetCanvas then
+			local csw, csh = plyopt.btns:GetCanvas():GetSize()
+			plyopt.btns:SetWide(csw)
+			plyopt.btns:SetPos(sw / 2 - csw / 2, btnbr)
+		end
+		
 		YRPScoreboard.list:AddItem(plyframe)
 	end
 end

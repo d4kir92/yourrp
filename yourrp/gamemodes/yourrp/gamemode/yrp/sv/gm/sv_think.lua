@@ -20,7 +20,7 @@ function YDeath(ply)
 	ply:Kill()
 end
 
-function reg_hp(ply)
+function YRPConHP(ply)
 	local hpreg = ply:GetNW2Int("HealthReg", nil)
 	if wk(hpreg) and ply:Alive() then
 		if ply:Health() <= 0 then
@@ -33,7 +33,7 @@ function reg_hp(ply)
 	end
 end
 
-function reg_ar(ply)
+function YRPConAR(ply)
 	local arreg = ply:GetNW2Int("ArmorReg")
 	if arreg != nil then
 		ply:SetArmor(ply:Armor() + arreg)
@@ -54,7 +54,7 @@ function IsCookPlaying()
 	return false
 end
 
-function con_hg(ply, time)
+function YRPConHG(ply, time)
 	if GetGlobalBool("bool_onlywhencook", false) and !IsCookPlaying() then return false end
 	local newval = tonumber(ply:GetNW2Float("hunger", 0.0)) - 0.01 * GetGlobalFloat("float_scale_hunger", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
@@ -73,7 +73,7 @@ function con_hg(ply, time)
 	end
 end
 
-function con_th(ply)
+function YRPConTH(ply)
 	local newval2 = tonumber(ply:GetNW2Float("permille", 0.0)) - 0.01 * GetGlobalFloat("float_scale_permille", 1.0)
 	newval2 = math.Clamp(newval2, 0.0, ply:GetMaxPermille())
 	ply:SetNW2Float("permille", newval2)
@@ -87,7 +87,7 @@ function con_th(ply)
 	end
 end
 
-function con_ra(ply)
+function YRPConRA(ply)
 	if IsInsideRadiation(ply) then
 		ply:SetNW2Float("GetCurRadiation", math.Clamp(tonumber(ply:GetNW2Float("GetCurRadiation", 0.0)) + 0.01 * GetGlobalFloat("float_scale_radiation_in", 50.0), 0, 100))
 	else
@@ -98,7 +98,7 @@ function con_ra(ply)
 	end
 end
 
-function con_st(ply, _time)
+function YRPConST(ply, _time)
 	if GetGlobalBool("bool_onlywhencook", false) and !IsCookPlaying() then
 		ply:SetNW2Float("GetCurStamina", 100)
 		return false
@@ -163,7 +163,7 @@ function con_st(ply, _time)
 	end
 end
 
-function reg_ab(ply)
+function YRPRegAB(ply)
 	local reg = ply:GetNW2Float("GetRegAbility", 0.0)
 	local tick = ply:GetNW2Float("GetRegTick", 1.0)
 
@@ -176,7 +176,7 @@ function reg_ab(ply)
 	end
 end
 
-function time_jail(ply)
+function YRPTimeJail(ply)
 	if ply:GetNW2Bool("injail", false) then
 		ply:SetNW2Int("jailtime", ply:GetNW2Int("jailtime", 0) - 1)
 		if tonumber(ply:GetNW2Int("jailtime", 0)) <= 0 then
@@ -185,7 +185,7 @@ function time_jail(ply)
 	end
 end
 
-function check_salary(ply)
+function YRPCheckSalary(ply)
 	local _m = ply:GetNW2String("money", "FAILED")
 	local _ms = ply:GetNW2String("salary", "FAILED")
 	if _m != "FAILED" and _ms != "FAILED" then
@@ -200,13 +200,13 @@ function check_salary(ply)
 				ply:UpdateMoney()
 			end
 		else
-			YRP.msg("error", "CheckMoney in check_salary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
+			YRP.msg("error", "CheckMoney in YRPCheckSalary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
 			ply:CheckMoney()
 		end
 	end
 end
 
-function dealerAlive(uid)
+function YRPIsDealerAlive(uid)
 	for j, npc in pairs(ents.GetAll()) do
 		if npc:IsNPC() and tonumber(npc:GetNW2String("dealerID", "0")) == tonumber(uid) then
 			return true
@@ -215,22 +215,10 @@ function dealerAlive(uid)
 	return false
 end
 
-function teleporterAlive(uid)
+function YRPIsTeleporterAlive(uid)
 	for j, tel in pairs(ents.GetAll()) do
 		if tel:GetClass() == "yrp_teleporter" then
-			if tel:GetNW2Int("yrp_teleporter_uid", -1) != -1 and tonumber(tel:GetNW2Int("yrp_teleporter_uid", -1)) == tonumber(uid) then
-				return true
-			end
-			tel.PermaProps = true
-		end
-	end
-	return false
-end
-
-function holoAlive(uid)
-	for j, tel in pairs(ents.GetAll()) do
-		if tel:GetClass() == "yrp_holo" then
-			if tel:GetNW2Int("yrp_holo_uid", nil) != nil and tonumber(tel:GetNW2Int("yrp_holo_uid", nil)) == tonumber(uid) then
+			if tonumber(tel:GetNW2Int("yrp_teleporter_uid", -1)) != -1 and tonumber(tel:GetNW2Int("yrp_teleporter_uid", -1)) == tonumber(uid) then
 				return true
 			end
 			tel.PermaProps = true
@@ -258,8 +246,8 @@ timer.Create("ServerThink", TICK, 0, function()
 
 			if ply:GetNW2Bool("loaded", false) then
 				if !ply:GetNW2Bool("inCombat") then
-					reg_hp(ply)	 --HealthReg
-					reg_ar(ply)	 --ArmorReg
+					YRPConHP(ply)	 --HealthReg
+					YRPConAR(ply)	 --ArmorReg
 					if ply:GetNW2Int("yrp_stars", 0) != 0 then
 						ply:SetNW2Int("yrp_stars", 0)
 					end
@@ -274,24 +262,24 @@ timer.Create("ServerThink", TICK, 0, function()
 				end
 
 				if GetGlobalBool("bool_hunger", false) and ply:GetNW2Bool("bool_hunger", false) then
-					con_hg(ply, _time)
+					YRPConHG(ply, _time)
 				end
 				if GetGlobalBool("bool_thirst", false) and ply:GetNW2Bool("bool_thirst", false) then
-					con_th(ply)
+					YRPConTH(ply)
 				end
 				if GetGlobalBool("bool_radiation", false) then
-					con_ra(ply)
+					YRPConRA(ply)
 				end
 
-				time_jail(ply)
-				check_salary(ply)
+				YRPTimeJail(ply)
+				YRPCheckSalary(ply)
 			end
 		end
 
 		if GetGlobalBool("bool_radiation", false) then
 			for k, ent in pairs(ents.GetAll()) do
 				if ent:IsNPC() then
-					con_ra(ent)
+					YRPConRA(ent)
 				end
 			end
 		end
@@ -300,10 +288,10 @@ timer.Create("ServerThink", TICK, 0, function()
 	for k, ply in pairs(player.GetAll()) do -- Every 0.1 seconds
 		if ply:GetNW2Bool("loaded", false) then
 			-- Every 0.1
-			reg_ab(ply)
+			YRPRegAB(ply)
 
 			if GetGlobalBool("bool_stamina", false) and ply:GetNW2Bool("bool_stamina", false) then
-				con_st(ply, _time)
+				YRPConST(ply, _time)
 			end
 		end
 	end
@@ -325,7 +313,7 @@ timer.Create("ServerThink", TICK, 0, function()
 		local _dealers = SQL_SELECT("yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'")
 		if wk(_dealers) then
 			for i, dealer in pairs(_dealers) do
-				if tonumber(dealer.uniqueID) != 1 and !dealerAlive(dealer.uniqueID) then
+				if tonumber(dealer.uniqueID) != 1 and !YRPIsDealerAlive(dealer.uniqueID) then
 					local _del = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'")
 					if _del != nil then
 						YRP.msg("gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!")
@@ -353,29 +341,35 @@ timer.Create("ServerThink", TICK, 0, function()
 			end
 		end
 
-		local teleporters = SQL_SELECT("yrp_teleporters", "*", "string_map = '" .. game.GetMap() .. "'")
-		if wk(teleporters) then
-			if table.Count(teleporters) < 100 then
-				for i, teleporter in pairs(teleporters) do
-					if !teleporterAlive(teleporter.uniqueID) then
-						local tp = ents.Create("yrp_teleporter")
-						if ( IsValid( tp ) ) then
-							local pos = string.Explode(",", teleporter.string_position)
-							pos = Vector(pos[1], pos[2], pos[3])
-							tp:SetPos(pos - tp:GetUp() * 5)
-							local ang = string.Explode(",", teleporter.string_angle)
-							ang = Angle(ang[1], ang[2], ang[3])
-							tp:SetAngles(ang)
-							tp:SetNW2Int("yrp_teleporter_uid", tonumber(teleporter.uniqueID))
-							tp:SetNW2String("string_name", teleporter.string_name)
-							tp:SetNW2String("string_target", teleporter.string_target)
-							tp:Spawn()
-							tp.PermaProps = true
+		if SQL_TABLE_EXISTS("yrp_teleporters") then
+			local teleporters = SQL_SELECT("yrp_teleporters", "*", "string_map = '" .. game.GetMap() .. "'")
+			if wk(teleporters) then
+				if table.Count(teleporters) < 100 then
+					for i, teleporter in pairs(teleporters) do
+						if !YRPIsTeleporterAlive(teleporter.uniqueID) then
+							local tp = ents.Create("yrp_teleporter")
+							if ( IsValid( tp ) ) then
+								local pos = string.Explode(",", teleporter.string_position)
+								pos = Vector(pos[1], pos[2], pos[3])
+								tp:SetPos(pos - tp:GetUp() * 5)
+								local ang = string.Explode(",", teleporter.string_angle)
+								ang = Angle(ang[1], ang[2], ang[3])
+								tp:SetAngles(ang)
+								tp:SetNW2Int("yrp_teleporter_uid", tonumber(teleporter.uniqueID))
+								tp:SetNW2String("string_name", teleporter.string_name)
+								tp:SetNW2String("string_target", teleporter.string_target)
+								tp:Spawn()
+								tp.PermaProps = true
+
+								YRP.msg("note", "[YourRP Teleporters] " .. "Was dead, respawned")
+							else
+								YRP.msg("note", "[YourRP Teleporters] " .. "FAIL CREATING ONE")
+							end
 						end
 					end
+				else
+					YRP.msg("note", "There are a lot of Teleporters!")
 				end
-			else
-				YRP.msg("note", "There are a lot of Teleporters!")
 			end
 		end
 	end
@@ -411,13 +405,13 @@ timer.Create("ServerThink", TICK, 0, function()
 
 	if _time % 1 == 0 and HasDarkrpmodification() then
 		MsgC(Color(255, 0, 0), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color(255, 255, 255), "\n")
-		MsgC(Color(255, 0, 0), "--------------------------------------------------------------------------------", Color(255, 255, 255), "\n")
+		MsgC(Color(255, 0, 0), "-------------------------------------------------------------------------------", Color(255, 255, 255), "\n")
 		YRPTestDarkrpmodification()
 	end
 
 	if _time % 1 == 0 and !HasYRPContent() then
 		MsgC(Color(255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color(255, 255, 255), "\n")
-		MsgC(Color(255, 255, 0), "--------------------------------------------------------------------------------", Color(255, 255, 255), "\n")
+		MsgC(Color(255, 255, 0), "-------------------------------------------------------------------------------", Color(255, 255, 255), "\n")
 		YRPTestContentAddons()
 	end
 
@@ -430,7 +424,7 @@ timer.Create("ServerThink", TICK, 0, function()
 	_time = math.Round(_time, DEC)
 end)
 
-function RestartServer()
+function YRPRestartServer()
 	game.ConsoleCommand("_restart")
 end
 

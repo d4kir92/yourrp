@@ -43,31 +43,283 @@ end
 -- Poses
 local yrp_poses = {}
 
-yrp_poses["salute"] = {}
-yrp_poses["salute"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["salute"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(120, -90, 0)
-yrp_poses["salute"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["salute"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-10, -116, 90)
-yrp_poses["salute"]["ValveBiped.Bip01_Head1"] = {}
-yrp_poses["salute"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -10, 0)
+-- CATEGORIES
+yrp_poses["standing"] = {}
+yrp_poses["kneeling"] = {}
 
-yrp_poses["crossarms"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_L_UpperArm"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-20, -65, 0)
-yrp_poses["crossarms"]["ValveBiped.Bip01_L_Forearm"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(55, -90, 0)
-yrp_poses["crossarms"]["ValveBiped.Bip01_L_Hand"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 0, -15)
-yrp_poses["crossarms"]["ValveBiped.Bip01_L_Thigh"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(-6, 0, 0)
-yrp_poses["crossarms"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -60, -60)
-yrp_poses["crossarms"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(10, -90, 0)
-yrp_poses["crossarms"]["ValveBiped.Bip01_R_Hand"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, -30, 15)
-yrp_poses["crossarms"]["ValveBiped.Bip01_R_Thigh"] = {}
-yrp_poses["crossarms"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
+
+
+yrp_poses["standing"]["salute"] = {}
+yrp_poses["standing"]["salute"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["salute"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(120, -90, 0)
+yrp_poses["standing"]["salute"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["salute"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-10, -116, 90)
+yrp_poses["standing"]["salute"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["standing"]["salute"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -10, 0)
+
+
+
+yrp_poses["standing"]["crossarms"] = {}
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-20, -65, 0)
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(55, -90, 0)
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 0, -15)
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_L_Thigh"] = {}
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(-6, 0, 0)
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -60, -60)
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(10, -90, 0)
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, -30, 15)
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_R_Thigh"] = {}
+yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
+
+
+
+yrp_poses["standing"]["crossarmsbehind"] = {}
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(0, 8, 0)
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(60, 0, 90)
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_L_Thigh"] = {}
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(-6, 0, 0)
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(0, 10, 0)
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-60, 0, -90)
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_R_Thigh"] = {}
+yrp_poses["standing"]["crossarmsbehind"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
+
+
+
+yrp_poses["standing"]["handcuffed"] = {}
+yrp_poses["standing"]["handcuffed"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["standing"]["handcuffed"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(20, 10, 0)
+yrp_poses["standing"]["handcuffed"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["handcuffed"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(-20, 10, 0)
+yrp_poses["standing"]["handcuffed"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["standing"]["handcuffed"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -20, 0)
+
+
+
+yrp_poses["kneeling"]["handcuffed"] = {}
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(20, 10, 0)
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_L_Thigh"] = {}
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(0, -45, 0)
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_L_Calf"] = {}
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_L_Calf"].ang = Angle(0, 128, 0)
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_L_Foot"] = {}
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_L_Foot"].ang = Angle(0, 45, 0)
+
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(-20, 10, 0)
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_R_Thigh"] = {}
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(0, -50, 0)
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_R_Calf"] = {}
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_R_Calf"].ang = Angle(0, 135, 0)
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_R_Foot"] = {}
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_R_Foot"].ang = Angle(0, 45, 0)
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -20, 0)
+
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_Pelvis"] = {}
+yrp_poses["kneeling"]["handcuffed"]["ValveBiped.Bip01_Pelvis"].pos = Vector(0, 0, -26)
+
+
+
+yrp_poses["standing"]["surrender"] = {}
+yrp_poses["standing"]["surrender"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["standing"]["surrender"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-135, 0, 0)
+yrp_poses["standing"]["surrender"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["standing"]["surrender"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(-45, 0, -90)
+yrp_poses["standing"]["surrender"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["surrender"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(135, 0, 0)
+yrp_poses["standing"]["surrender"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["surrender"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(45, 0, 90)
+
+
+
+yrp_poses["kneeling"]["surrender"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-135, 0, 0)
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(-45, 0, -90)
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_L_Thigh"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(0, -45, 0)
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_L_Calf"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_L_Calf"].ang = Angle(0, 128, 0)
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_L_Foot"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_L_Foot"].ang = Angle(0, 45, 0)
+
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(135, 0, 0)
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(45, 0, 90)
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_R_Thigh"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(0, -50, 0)
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_R_Calf"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_R_Calf"].ang = Angle(0, 135, 0)
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_R_Foot"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_R_Foot"].ang = Angle(0, 45, 0)
+
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_Pelvis"] = {}
+yrp_poses["kneeling"]["surrender"]["ValveBiped.Bip01_Pelvis"].pos = Vector(0, 0, -26)
+
+
+
+yrp_poses["standing"]["surrenderbehind"] = {}
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-135, -44, -60)
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(0, -110, 0)
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 10, -20)
+
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(135, -40, 60)
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, -110, 0)
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["standing"]["surrenderbehind"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 10)
+
+
+
+yrp_poses["kneeling"]["surrenderbehind"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-135, -44, -60)
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(0, -110, 0)
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 10, -20)
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_Thigh"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(0, -45, 0)
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_Calf"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_Calf"].ang = Angle(0, 128, 0)
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_Foot"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_L_Foot"].ang = Angle(0, 45, 0)
+
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(135, -40, 60)
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, -110, 0)
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 10)
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_Thigh"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(0, -50, 0)
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_Calf"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_Calf"].ang = Angle(0, 135, 0)
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_Foot"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_R_Foot"].ang = Angle(0, 45, 0)
+
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_Pelvis"] = {}
+yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_Pelvis"].pos = Vector(0, 0, -26)
+
+
+
+yrp_poses["standing"]["pointto"] = {}
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(30, -90, 0)
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, 0, 0)
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger01"] = {} -- daumen
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger01"].ang = Angle(0, 0, 0)
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger11"] = {} -- zeige finger
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger11"].ang = Angle(0, 0, 0)
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger2"] = {} -- mittel finger
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger2"].ang = Angle(0, -110, 0)
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger3"] = {} -- heirats finger
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger3"].ang = Angle(0, -110, 0)
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger4"] = {} -- kleiner finger
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger4"].ang = Angle(-20, -110, 0)
+
+
+
+yrp_poses["standing"]["hololink"] = {}
+yrp_poses["standing"]["hololink"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["hololink"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(10, -45, 0)
+yrp_poses["standing"]["hololink"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["hololink"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, -45, 0)
+yrp_poses["standing"]["hololink"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["standing"]["hololink"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 90)
+yrp_poses["standing"]["hololink"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["standing"]["hololink"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -30, -10)
+
+
+
+yrp_poses["standing"]["comlink"] = {}
+yrp_poses["standing"]["comlink"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["comlink"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(45, -75, 0)
+yrp_poses["standing"]["comlink"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["comlink"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-55, -95, 0)
+yrp_poses["standing"]["comlink"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["standing"]["comlink"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 0)
+yrp_poses["standing"]["comlink"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["standing"]["comlink"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -22, -10)
+
+
+
+yrp_poses["standing"]["typing"] = {}
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -45, 0)
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, 0, -45)
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 15, 0)
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-20, -45, 0)
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(0, 0, 45)
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 25, 0)
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["standing"]["typing"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -32, 0)
+
+
+
+yrp_poses["standing"]["thinking"] = {}
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-20, -65, 0)
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(55, -90, 0)
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 0, -15)
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -65, -60)
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(40, -110, 30)
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 15)
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["standing"]["thinking"]["ValveBiped.Bip01_Head1"].ang = Angle(0, 12, 0)
+
+
+
+yrp_poses["standing"]["hip"] = {}
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-45, 0, -30)
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(90, 0, 90)
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 45, -45)
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_L_Thigh"] = {}
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(-6, 0, 0)
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(45, 0, 20)
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-90, 0, -90)
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 45, 45)
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_R_Thigh"] = {}
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["standing"]["hip"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -6, 0)
+
+
+
 --[[
 0		ValveBiped.Bip01_Pelvis
 1       ValveBiped.Bip01_L_Thigh
@@ -75,7 +327,7 @@ yrp_poses["crossarms"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
 3       ValveBiped.Bip01_L_Foot
 4       ValveBiped.Bip01_L_Toe0
 5       LeftAnkle
-6       LeftKneeLow
+6       Leftkneelingow
 7       LeftKneeUp
 8       LeftUpLegRoll
 9       LeftKneeRoll
@@ -84,187 +336,59 @@ yrp_poses["crossarms"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
 12      ValveBiped.Bip01_R_Foot
 13      ValveBiped.Bip01_R_Toe0
 14      RightAnkle
-15      RightKneeLow
+15      Rightkneelingow
 16      RightKneeUp
 17      RightUpLegRoll
 18      RightKneeRoll
 ]]
-yrp_poses["crossarmsbehind"] = {}
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_UpperArm"] = {}
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(0, 8, 0)
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_Forearm"] = {}
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(60, 0, 90)
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_Thigh"] = {}
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(-6, 0, 0)
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(0, 10, 0)
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-60, 0, -90)
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_Thigh"] = {}
-yrp_poses["crossarmsbehind"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
-
-yrp_poses["handcuffed"] = {}
-yrp_poses["handcuffed"]["ValveBiped.Bip01_L_UpperArm"] = {}
-yrp_poses["handcuffed"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(20, 10, 0)
-yrp_poses["handcuffed"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["handcuffed"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(-20, 10, 0)
-yrp_poses["handcuffed"]["ValveBiped.Bip01_Head1"] = {}
-yrp_poses["handcuffed"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -20, 0)
-
-yrp_poses["surrender"] = {}
-yrp_poses["surrender"]["ValveBiped.Bip01_L_UpperArm"] = {}
-yrp_poses["surrender"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-135, 0, 0)
-yrp_poses["surrender"]["ValveBiped.Bip01_L_Forearm"] = {}
-yrp_poses["surrender"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(-45, 0, -90)
-yrp_poses["surrender"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["surrender"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(135, 0, 0)
-yrp_poses["surrender"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["surrender"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(45, 0, 90)
-
-yrp_poses["surrenderbehind"] = {}
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_UpperArm"] = {}
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-135, -44, -60)
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_Forearm"] = {}
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(0, -110, 0)
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_Hand"] = {}
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 10, -20)
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(135, -40, 60)
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, -110, 0)
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_Hand"] = {}
-yrp_poses["surrenderbehind"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 10)
-
-yrp_poses["pointto"] = {}
-yrp_poses["pointto"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["pointto"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(30, -90, 0)
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, 0, 0)
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Finger01"] = {} -- daumen
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Finger01"].ang = Angle(0, 0, 0)
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Finger11"] = {} -- zeige finger
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Finger11"].ang = Angle(0, 0, 0)
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Finger2"] = {} -- mittel finger
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Finger2"].ang = Angle(0, -110, 0)
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Finger3"] = {} -- heirats finger
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Finger3"].ang = Angle(0, -110, 0)
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Finger4"] = {} -- kleiner finger
-yrp_poses["pointto"]["ValveBiped.Bip01_R_Finger4"].ang = Angle(-20, -110, 0)
-
-yrp_poses["hololink"] = {}
-yrp_poses["hololink"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["hololink"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(10, -45, 0)
-yrp_poses["hololink"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["hololink"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, -45, 0)
-yrp_poses["hololink"]["ValveBiped.Bip01_R_Hand"] = {}
-yrp_poses["hololink"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 90)
-yrp_poses["hololink"]["ValveBiped.Bip01_Head1"] = {}
-yrp_poses["hololink"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -30, -10)
-
-yrp_poses["comlink"] = {}
-yrp_poses["comlink"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["comlink"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(45, -75, 0)
-yrp_poses["comlink"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["comlink"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-55, -95, 0)
-yrp_poses["comlink"]["ValveBiped.Bip01_R_Hand"] = {}
-yrp_poses["comlink"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 0)
-yrp_poses["comlink"]["ValveBiped.Bip01_Head1"] = {}
-yrp_poses["comlink"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -22, -10)
-
-yrp_poses["typing"] = {}
-yrp_poses["typing"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["typing"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -45, 0)
-yrp_poses["typing"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["typing"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, 0, -45)
-yrp_poses["typing"]["ValveBiped.Bip01_R_Hand"] = {}
-yrp_poses["typing"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 15, 0)
-yrp_poses["typing"]["ValveBiped.Bip01_L_UpperArm"] = {}
-yrp_poses["typing"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-20, -45, 0)
-yrp_poses["typing"]["ValveBiped.Bip01_L_Forearm"] = {}
-yrp_poses["typing"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(0, 0, 45)
-yrp_poses["typing"]["ValveBiped.Bip01_L_Hand"] = {}
-yrp_poses["typing"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 25, 0)
-yrp_poses["typing"]["ValveBiped.Bip01_Head1"] = {}
-yrp_poses["typing"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -32, 0)
-
-yrp_poses["thinking"] = {}
-yrp_poses["thinking"]["ValveBiped.Bip01_L_UpperArm"] = {}
-yrp_poses["thinking"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-20, -65, 0)
-yrp_poses["thinking"]["ValveBiped.Bip01_L_Forearm"] = {}
-yrp_poses["thinking"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(55, -90, 0)
-yrp_poses["thinking"]["ValveBiped.Bip01_L_Hand"] = {}
-yrp_poses["thinking"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 0, -15)
-yrp_poses["thinking"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["thinking"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -65, -60)
-yrp_poses["thinking"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["thinking"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(40, -110, 30)
-yrp_poses["thinking"]["ValveBiped.Bip01_R_Hand"] = {}
-yrp_poses["thinking"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 0, 15)
-yrp_poses["thinking"]["ValveBiped.Bip01_Head1"] = {}
-yrp_poses["thinking"]["ValveBiped.Bip01_Head1"].ang = Angle(0, 12, 0)
-
-yrp_poses["hip"] = {}
-yrp_poses["hip"]["ValveBiped.Bip01_L_UpperArm"] = {}
-yrp_poses["hip"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-45, 0, -30)
-yrp_poses["hip"]["ValveBiped.Bip01_L_Forearm"] = {}
-yrp_poses["hip"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(90, 0, 90)
-yrp_poses["hip"]["ValveBiped.Bip01_L_Hand"] = {}
-yrp_poses["hip"]["ValveBiped.Bip01_L_Hand"].ang = Angle(0, 45, -45)
-yrp_poses["hip"]["ValveBiped.Bip01_L_Thigh"] = {}
-yrp_poses["hip"]["ValveBiped.Bip01_L_Thigh"].ang = Angle(-6, 0, 0)
-yrp_poses["hip"]["ValveBiped.Bip01_R_UpperArm"] = {}
-yrp_poses["hip"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(45, 0, 20)
-yrp_poses["hip"]["ValveBiped.Bip01_R_Forearm"] = {}
-yrp_poses["hip"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(-90, 0, -90)
-yrp_poses["hip"]["ValveBiped.Bip01_R_Hand"] = {}
-yrp_poses["hip"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, 45, 45)
-yrp_poses["hip"]["ValveBiped.Bip01_R_Thigh"] = {}
-yrp_poses["hip"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
-yrp_poses["hip"]["ValveBiped.Bip01_Head1"] = {}
-yrp_poses["hip"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -6, 0)
 
 function YRPResetPoses(ply)
 	for i = 0, 100 do
-		ply["poses"][i] = ply["poses"][i] or Angle(0, 0, 0)
-		ply["poses"][i] = LerpAngle(16 * FrameTime(), ply["poses"][i], Angle(0, 0, 0))
+		ply["posesang"][i] = ply["posesang"][i] or Angle(0, 0, 0)
+		ply["posesang"][i] = LerpAngle(12 * FrameTime(), ply["posesang"][i], Angle(0, 0, 0))
 		
-		ply:ManipulateBonePosition( i, Vector(0, 0, 0) )
-		ply:ManipulateBoneAngles( i, ply["poses"][i] )
+		ply:ManipulateBoneAngles( i, ply["posesang"][i] )
+
+		ply["posespos"][i] = ply["posespos"][i] or Vector(0, 0, 0)
+		ply["posespos"][i] = LerpVector(12 * FrameTime(), ply["posespos"][i], Vector(0, 0, 0))
+		
+		ply:ManipulateBonePosition( i, ply["posespos"][i] )
 	end
 end
 
 function YRPDoPoses()
 	for i, ply in pairs(player.GetAll()) do
-		ply.pose = ply:GetNW2String("yrp_pose", "salute")
+		ply.yrpposeart = ply:GetNW2String("yrp_pose_art", "standing")
+		ply.yrppose = ply:GetNW2String("yrp_pose", "salute")
 		
-		ply.posestatus = ply.posestatus or ""
+		ply.yrpposestatus = ply.yrpposestatus or ""
 
 		local weapon = ply:GetActiveWeapon()
 		if IsValid(weapon) then
 			if weapon:GetClass() != "yrp_poses" then
-				ply.posestatus = "reset"
+				ply.yrpposestatus = "reset"
 			else
 				local vel = ply:GetVelocity()
 				vel = Vector(vel[1], vel[2], 0)
 				if ply:IsSprinting() or !ply:IsOnGround() or vel:Length() > 110 then
-					ply.posestatus = "reset"
-				elseif yrp_poses[ply.pose] then
+					ply.yrpposestatus = "reset"
+				elseif yrp_poses[ply.yrpposeart][ply.yrppose] then
 					if ply:GetNW2Bool("yrp_pose_status", false) then
-						ply.posestatus = "do"
+						ply.yrpposestatus = "do"
 					else
-						ply.posestatus = "reset"
+						ply.yrpposestatus = "reset"
 					end
-				elseif !strEmpty(ply.pose) then
-					MsgC(Color(255, 0, 0), "missing pose: " .. tostring(ply.pose))
-					ply.posestatus = "reset"
+				elseif !strEmpty(ply.yrppose) then
+					MsgC(Color(255, 0, 0), "missing pose: " .. tostring(ply.yrppose) .. "\n")
+					ply.yrpposestatus = "reset"
 				else
-					ply.posestatus = "reset"
+					ply.yrpposestatus = "reset"
 				end
 			end
 		end
 
-		if ply.oldposestatus != ply.posestatus then
-			ply.oldposestatus = ply.posestatus
+		if ply.oldposestatus != ply.yrpposestatus then
+			ply.oldposestatus = ply.yrpposestatus
 			ply.yrp_pose_delay = CurTime() + 0.8
 			ply.yrp_pose_delay_update = 0.02
 		elseif ply.yrp_pose_delay < CurTime() then
@@ -272,13 +396,18 @@ function YRPDoPoses()
 		end
 		
 		if ply.yrp_pose_delay > CurTime() then
-			ply["poses"] = ply["poses"] or {}
-			if ply.posestatus == "do" then
-				for i, v in pairs(yrp_poses[ply.pose]) do
+			ply["posesang"] = ply["posesang"] or {}
+			ply["posespos"] = ply["posespos"] or {}
+			if ply.yrpposestatus == "do" then
+				for i, v in pairs(yrp_poses[ply.yrpposeart][ply.yrppose]) do
 					local boneID = ply:LookupBone( i )
 					if boneID and v.ang then
-						ply["poses"][boneID] = ply["poses"][boneID] or Angle(0, 0, 0)
-						ply["poses"][boneID] = LerpAngle(12 * FrameTime(), ply["poses"][boneID], v.ang)
+						ply["posesang"][boneID] = ply["posesang"][boneID] or Angle(0, 0, 0)
+						ply["posesang"][boneID] = LerpAngle(8 * FrameTime(), ply["posesang"][boneID], v.ang)
+					end
+					if boneID and v.pos then
+						ply["posespos"][boneID] = ply["posespos"][boneID] or Vector(0, 0, 0)
+						ply["posespos"][boneID] = LerpVector(8 * FrameTime(), ply["posespos"][boneID], v.pos)
 					end
 				end
 			end
@@ -287,11 +416,14 @@ function YRPDoPoses()
 		ply.yrp_pose_delay_nw = ply.yrp_pose_delay_nw or 0
 		if ply.yrp_pose_delay_nw < CurTime() then
 			ply.yrp_pose_delay_nw = CurTime() + ply.yrp_pose_delay_update
-			if ply.posestatus == "do" then
-				for i, v in pairs(yrp_poses[ply.pose]) do
+			if ply.yrpposestatus == "do" then
+				for i, v in pairs(yrp_poses[ply.yrpposeart][ply.yrppose]) do
 					local boneID = ply:LookupBone( i )
 					if boneID and v.ang then
-						ply:ManipulateBoneAngles( boneID, ply["poses"][boneID] )
+						ply:ManipulateBoneAngles( boneID, ply["posesang"][boneID] )
+					end
+					if boneID and v.pos then
+						ply:ManipulateBonePosition( boneID, ply["posespos"][boneID] )
 					end
 				end
 			else
@@ -310,10 +442,12 @@ end)
 if SERVER then
 	util.AddNetworkString("yrp_change_pose")
 	net.Receive("yrp_change_pose", function(len, ply)
+		local pose_art = net.ReadString()
 		local pose = net.ReadString()
 		if pose then
 			ply:SetNW2Bool("yrp_pose_status", false)
 
+			ply:SetNW2String("yrp_pose_art", pose_art)
 			ply:SetNW2String("yrp_pose", pose)
 
 			timer.Simple(0.33, function()
@@ -423,31 +557,56 @@ function SWEP:Reload()
 				self.config:Remove()
 			end
 		else
-			if !pa(self.poses) then
-				self.poses = createD("YFrame", nil, YRP.ctr(600), YRP.ctr(960), 0, 0)
-				self.poses:SetTitle("LID_poses")
-				self.poses:Center()
-				self.poses:MakePopup()
-
+			if !pa(self.yrpposes) then
+				self.yrpposes = createD("YFrame", nil, YRP.ctr(10), YRP.ctr(960), 0, 0)
+				self.yrpposes:SetTitle("LID_poses")
+			
+				local x = 0
 				local y = 0
-				for name, values in pairs(yrp_poses) do
-					local btn = createD("YButton", self.poses:GetContent(), YRP.ctr(560), YRP.ctr(50), 0, y * YRP.ctr(50 + 10))
-					btn:SetText("LID_" .. name)
-					btn.win = self.poses
-					function btn:DoClick()
-						net.Start("yrp_change_pose")
-							net.WriteString(name)
-						net.SendToServer()
+				local maxy = 0
+				local maxx = 0
+				for namecategory, categorytab in pairs(yrp_poses) do
+					local btn = createD("YLabel", self.yrpposes:GetContent(), YRP.ctr(560), YRP.ctr(50), x * YRP.ctr(560 + 10), y * YRP.ctr(50 + 10))
+					btn:SetText("LID_" .. namecategory)
+					
+					y = y + 1
 
-						if pa(self.win) then
-							self.win:Close()
+					for name, values in pairs(categorytab) do
+						local btn = createD("YButton", self.yrpposes:GetContent(), YRP.ctr(560), YRP.ctr(50), x * YRP.ctr(560 + 10), y * YRP.ctr(50 + 10))
+						btn:SetText("LID_" .. name)
+						btn.win = self.yrpposes
+						function btn:DoClick()
+							net.Start("yrp_change_pose")
+								net.WriteString(namecategory)
+								net.WriteString(name)
+							net.SendToServer()
+
+							if pa(self.win) then
+								self.win:Close()
+							end
 						end
+
+						y = y + 1
 					end
 
-					y = y + 1
+					if maxy < y then
+						maxy = y
+					end
+
+					x = x + 1
+					y = 0
+
+					if maxx < x then
+						maxx = x
+					end
 				end
-			elseif pa(self.poses) then
-				self.poses:Remove()
+
+				self.yrpposes:SetSize( YRP.ctr(20) + maxx * YRP.ctr(560 + 10) + YRP.ctr(10), self.yrpposes:GetHeaderHeight() + YRP.ctr(10) + maxy * YRP.ctr(50 + 10) + YRP.ctr(20) )
+
+				self.yrpposes:Center()
+				self.yrpposes:MakePopup()
+			elseif pa(self.yrpposes) then
+				self.yrpposes:Remove()
 			end
 		end
 	end

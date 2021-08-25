@@ -322,9 +322,13 @@ net.Receive("shop_get_tabs", function(len)
 						function _cat:DoClick()
 							if self:IsOpen() then
 								net.Receive("yrp_shop_get_items", function(l)
+									local uid = net.ReadString()
 									local _items = net.ReadTable()
-									if IsValid(self) then
-										self.hs = self.hs or {}
+
+									local cat = BUYMENU.cats[uid]
+
+									if IsValid(cat) then
+										cat.hs = cat.hs or {}
 										local hid = 0
 										local id = 0
 										local w = YRP.ctr(600 + BR)
@@ -332,17 +336,18 @@ net.Receive("shop_get_tabs", function(len)
 										for k, item in pairs(_items) do
 											--[[if id == 0 then
 												hid = hid + 1
-												self.hs[hid] = createD("DPanel", nil, w * idmax, YRP.ctr(650 + 2 * 20), 0, 0)
-												local line = self.hs[hid]
+												cat.hs[hid] = createD("DPanel", nil, w * idmax, YRP.ctr(650 + 2 * 20), 0, 0)
+												local line = cat.hs[hid]
 												function line:Paint(pw, ph)
 													--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
 												end
 
-												self:Add(line)
+												cat:Add(line)
 											end]]
 
 											local _item = createShopItem(item, _dealer_uid, nil, id)
-											self:Add(_item)
+
+											cat:Add(_item)
 											id = id + 1
 											if id >= idmax then
 												id = 0
@@ -357,6 +362,9 @@ net.Receive("shop_get_tabs", function(len)
 								self:ClearContent()
 							end
 						end
+						
+						BUYMENU.cats = BUYMENU.cats or {}
+						BUYMENU.cats[cat.uniqueID] = _cat
 						
 						BUYMENU.shop:AddItem(_cat)
 						BUYMENU.shop:Rebuild()

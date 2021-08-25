@@ -637,13 +637,13 @@ local function YRP_CalcView(lply, pos, angles, fov)
 					dist = lply.yrp_view_range * lply:GetModelScale()
 
 					local _tmpThick = 4
-					local _minDistFor = 8
+					local _minDistFor = 2
 					local _minDistBac = 40
 					angles = angles + Angle(0, lply.yrp_view_s, 0)
 					local _pos_change = angles:Up() * lply.yrp_view_z + angles:Right() * lply.yrp_view_x
 
 					local tr = util.TraceHull({
-						start = pos + angles:Forward() * _minDistFor,
+						start = pos - angles:Forward() * _minDistFor,
 						endpos = pos - (angles:Forward() * dist) + _pos_change,
 						filter = function( ent )
 							if ent:GetCollisionGroup() == 20 then

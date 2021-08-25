@@ -360,7 +360,14 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 		end
 
 		_q = _q .. ";"
-		return SQL_QUERY(_q)
+
+		local ret = SQL_QUERY(_q)
+
+		if ret != nil then
+			YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. " lastError: " .. sql_show_last_error())
+		end
+
+		return ret
 	elseif GetSQLMode() == 1 then
 		local _q = "UPDATE "
 		_q = _q .. YRPSQL.schema .. "." .. db_table
@@ -388,11 +395,13 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 			_q = _q .. ") VALUES ("
 			_q = _q .. db_values
 			_q = _q .. ");"
+
 			local _result = SQL_QUERY(_q)
 
 			if _result != nil then
 				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
+
 			return _result
 		end
 	elseif GetSQLMode() == 1 then
@@ -577,16 +586,7 @@ function SQL_HAS_COLUMN(db_table, column_name)
 	return _r
 end
 
-GAMEMODELOADED_SQL = GAMEMODELOADED_SQL or nil
-
-hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded_SQL", function()
-	GAMEMODELOADED_SQL = true -- only runs when startup
-end)
-
 function SQL_ADD_COLUMN(db_table, column_name, datatype)
-	if GAMEMODELOADED_SQL then
-		return -- ALREADY LOADED ALL COLUMNS
-	end
 	if GetSQLMode() == 0 then
 		local _q = "ALTER TABLE " .. db_table .. " ADD " .. column_name .. " " .. datatype .. ";"
 		local _r = SQL_QUERY(_q)

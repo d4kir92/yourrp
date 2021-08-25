@@ -6,10 +6,10 @@
 local _db_name = "yrp_dealers"
 
 SQL_ADD_COLUMN(_db_name, "name", "TEXT DEFAULT 'Unnamed dealer'")
-SQL_ADD_COLUMN(_db_name, "tabs", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(_db_name, "tabs", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(_db_name, "WorldModel", "TEXT DEFAULT 'models/player/skeleton.mdl'")
 SQL_ADD_COLUMN(_db_name, "map", "TEXT DEFAULT 'gm_construct'")
-SQL_ADD_COLUMN(_db_name, "storagepoints", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(_db_name, "storagepoints", "TEXT DEFAULT ''")
 
 --db_drop_table(_db_name)
 --db_is_empty(_db_name)

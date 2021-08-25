@@ -3,7 +3,7 @@
 function AddYRPAddon(parent, tab)
 	local _add_on = createD("DPanel", parent, YRP.ctr(1600), YRP.ctr(6 * 100 + 5 * 20), 0, 0)
 	function _add_on:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40))
 	end
 
 	_add_on.icon = createD("DHTML", _add_on, YRP.ctr(100), YRP.ctr(100), YRP.ctr(20), YRP.ctr(20))
@@ -27,7 +27,7 @@ function AddYRPAddon(parent, tab)
 
 	if !strEmpty(tab.discord) then
 		_add_on.discord = createD("DHTML", _add_on, YRP.ctr(100), YRP.ctr(100), YRP.ctr(20), YRP.ctr(260))
-		_add_on.discord:SetHTML(GetHTMLImage("https://discordapp.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg", YRP.ctr(100), YRP.ctr(100)))
+		_add_on.discord:SetHTML(GetHTMLImage("https://i.imgur.com/rUUpbXO.png", YRP.ctr(100), YRP.ctr(100)))
 		_add_on.discordbutton = createD("DButton", _add_on.discord, YRP.ctr(100), YRP.ctr(100), 0, 0)
 		_add_on.discordbutton:SetText("")
 		function _add_on.discordbutton:Paint(pw, ph)

@@ -121,7 +121,9 @@ function BuildLogs(parent, typ)
 								if ( signalValue == v.string_source_steamid ) and source:IsPlayer() then
 									source:ShowProfile()
 								elseif ( signalValue == v.string_target_steamid ) then
-									target:ShowProfile()
+									if IsValid(target) then
+										target:ShowProfile()
+									end
 								end
 							end
 						end

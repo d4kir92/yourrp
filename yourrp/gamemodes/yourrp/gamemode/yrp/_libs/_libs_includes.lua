@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
-print("Loading _libs_includes.lua")
+MsgC(Color(255, 255, 0), "Loading YourRP: _libs_includes.lua" .. "\n")
 
 add_luas("collect.lua")
 add_luas("output.lua")
@@ -80,4 +80,4 @@ if CLIENT then
 	include("derma/ymodelpanel.lua")
 end
 
-print("Loaded _libs_includes.lua")
+MsgC(Color(255, 255, 0), "Loaded YourRP: _libs_includes.lua" .. "\n")

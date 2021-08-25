@@ -1770,7 +1770,7 @@ end
 util.AddNetworkString("yrp_restartserver")
 net.Receive("yrp_restartserver", function(len, ply)
 	if ply:HasAccess() then
-		RestartServer()
+		YRPRestartServer()
 	end
 end)
 

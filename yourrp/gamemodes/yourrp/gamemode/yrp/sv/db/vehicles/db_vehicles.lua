@@ -10,9 +10,9 @@ util.AddNetworkString("getVehicleInfo")
 local DATABASE_NAME = "yrp_vehicles"
 SQL_ADD_COLUMN(DATABASE_NAME, "keynr", "TEXT DEFAULT '-1'")
 SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "ownerCharID", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT ' '")
-SQL_ADD_COLUMN(DATABASE_NAME, "item_id", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(DATABASE_NAME, "ownerCharID", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "item_id", "TEXT DEFAULT ''")
 
 --db_drop_table(DATABASE_NAME)
 --db_is_empty(DATABASE_NAME)
@@ -123,7 +123,7 @@ net.Receive("removeVehicleOwner", function(len, ply)
 	local _tmpVehicleID = net.ReadString()
 	local _tmpTable = SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. _tmpVehicleID .. "'")
 
-	local result = SQL_UPDATE(DATABASE_NAME, "ownerCharID = ' '", "item_id = '" .. _tmpVehicleID .. "'")
+	local result = SQL_UPDATE(DATABASE_NAME, "ownerCharID = ''", "item_id = '" .. _tmpVehicleID .. "'")
 
 	for k, v in pairs(ents.GetAll()) do
 		if tonumber(v:GetNW2String("item_uniqueID")) == tonumber(_tmpVehicleID) then

@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 347 -- do NOT change this!
 GM.VersionCanary = 697 -- do NOT change this!
-GM.VersionBuild = 14 -- do NOT change this!
+GM.VersionBuild = 15 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -831,15 +831,15 @@ local function YRPSendError(tab, from)
 
 		posturl = url_cl
 	else
-		print(">>> [YRPSendError] FAIL! >> Realm: " .. tostring(tab.realm))
+		MsgC(Color(255, 0, 0), ">>> [YRPSendError] FAIL! >> Realm: " .. tostring(tab.realm) .. "\n")
 		return
 	end
 
 	if GAMEMODE and yrpversionisset and IsYRPOutdated then
 		if IsYRPOutdated() then
-			print("[YRPSendError] >> YourRP Is Outdated")
+			MsgC(Color(255, 0, 0), "[YRPSendError] >> YourRP Is Outdated" .. "\n")
 		else
-			print("[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err))
+			MsgC(Color(255, 0, 0), "[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err) .. "\n")
 			
 			http.Post(posturl, entry,
 			function(body, length, headers, code)
@@ -863,7 +863,7 @@ local function YRPSendError(tab, from)
 end
 
 local function YRPAddError(err, trace, realm)
-	print("[YRPAddError] >> Found a new ERROR")
+	MsgC(Color(255, 0, 0), "[YRPAddError] >> Found a new ERROR" .. "\n")
 
 	local newerr = {}
 	newerr.err = err

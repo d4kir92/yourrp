@@ -195,7 +195,9 @@ function CreateCharacterSettingsContent()
 		if rol.int_namelength > 0 then
 			local name = createD("DTextEntry", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 200))
 			name:SetText("")
-			name:SetPlaceholderText(YRP.lang_string("LID_enteraname"))
+			if name.SetPlaceholderText then
+				name:SetPlaceholderText(YRP.lang_string("LID_enteraname"))
+			end
 			function name:PerformLayout()
 				if self.SetUnderlineFont != nil then
 					self:SetUnderlineFont("Y_18_500")

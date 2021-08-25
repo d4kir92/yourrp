@@ -297,14 +297,16 @@ hook.Add("PostPlayerDeath", "yrp_player_spawn_PostPlayerDeath", function(ply)
 end)
 
 function AddStar(ply)
-	StartCombat(ply)
-	local stars = ply:GetNW2Int("yrp_stars", 0) + 1
-	local rand = math.random(0,100)
-	local chance = 100 / stars
-	if rand <= chance then
-		ply:SetNW2Int("yrp_stars", ply:GetNW2Int("yrp_stars", 0) + 1)
-		if ply:GetNW2Int("yrp_stars", 0) > 5 then
-			ply:SetNW2Int("yrp_stars", 5)
+	if IsValid(ply) then
+		StartCombat(ply)
+		local stars = ply:GetNW2Int("yrp_stars", 0) + 1
+		local rand = math.random(0,100)
+		local chance = 100 / stars
+		if rand <= chance then
+			ply:SetNW2Int("yrp_stars", ply:GetNW2Int("yrp_stars", 0) + 1)
+			if ply:GetNW2Int("yrp_stars", 0) > 5 then
+				ply:SetNW2Int("yrp_stars", 5)
+			end
 		end
 	end
 end

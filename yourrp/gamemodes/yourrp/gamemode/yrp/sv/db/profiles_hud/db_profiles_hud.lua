@@ -37,15 +37,15 @@ net.Receive("change_to_hud_profile", function()
 end)
 
 function HudToCode(name)
-	print("local " .. string.Replace(name, " ", "_") .. " = {}")
+	MsgC(Color(255, 255, 255), "local " .. string.Replace(name, " ", "_") .. " = {}" .. "\n")
 	local tab = SQL_SELECT("yrp_hud", "*", nil)
 	for i, v in SortedPairsByMemberValue(tab, "name") do
 		local prefix = string.Replace(name, " ", "_") .. "." .. ""
 		v.value = tonumber(v.value) or v.value
 		if isnumber(v.value) then
-			print(prefix .. v.name .. " = " .. v.value)
+			MsgC(Color(255, 255, 255), prefix .. v.name .. " = " .. v.value .. "\n")
 		elseif isstring(v.value) then
-			print(prefix .. v.name .. " = '" .. v.value .. "'")
+			MsgC(Color(255, 255, 255), prefix .. v.name .. " = '" .. v.value .. "'" .. "\n")
 		end
 	end
 end

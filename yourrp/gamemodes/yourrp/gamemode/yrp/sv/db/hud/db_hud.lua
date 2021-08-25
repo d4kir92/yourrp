@@ -1054,8 +1054,11 @@ function Player:HudLoadout()
 	
 		self:SetNW2Bool("yrp_hudloadout", true)
 	end
+
 	timer.Simple(1, function()
-		self:SetNW2Int("hud_version", self:GetNW2Int("hud_version", 0) + 1)
+		if IsValid(self) then
+			self:SetNW2Int("hud_version", self:GetNW2Int("hud_version", 0) + 1)
+		end
 	end)
 end
 

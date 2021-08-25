@@ -17,7 +17,7 @@ SQL_ADD_COLUMN(_db_name, "permanent", "INT DEFAULT 0")
 SQL_ADD_COLUMN(_db_name, "type", "TEXT DEFAULT 'weapons'")
 SQL_ADD_COLUMN(_db_name, "ClassName", "TEXT DEFAULT 'weapon_crowbar'")
 SQL_ADD_COLUMN(_db_name, "PrintName", "TEXT DEFAULT 'unnamed item'")
-SQL_ADD_COLUMN(_db_name, "WorldModel", "TEXT DEFAULT ' '")
+SQL_ADD_COLUMN(_db_name, "WorldModel", "TEXT DEFAULT ''")
 
 --db_drop_table(_db_name)
 --db_is_empty(_db_name)
@@ -167,6 +167,7 @@ net.Receive("yrp_shop_get_items", function(len, ply)
 	end
 
 	net.Start("yrp_shop_get_items")
+		net.WriteString(_uid)
 		net.WriteTable(_nw)
 	net.Send(ply)
 end)

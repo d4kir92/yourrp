@@ -400,9 +400,9 @@ GM.Config.allowedProperties = {
 		bodygroups = true,
 }
 
---[[---------------------------------------------------------------------------
-F4 menu
----------------------------------------------------------------------------]]
+
+--F4 menu
+
 -- hide the items that you can't buy and the jobs you can't get (instead of graying them out).
 -- this option hides items when you don't have enough money, when the maximum is reached for a job or any other reason.
 GM.Config.hideNonBuyable = false
@@ -412,17 +412,17 @@ GM.Config.hideNonBuyable = false
 -- but you won't see gundealer shipments when you have the citizen job.
 GM.Config.hideTeamUnbuyable = true
 
---[[---------------------------------------------------------------------------
-AFK module
----------------------------------------------------------------------------]]
+
+--AFK module
+
 -- The time of inactivity before being demoted.
 GM.Config.afkdemotetime = 600
 -- Prevent people from spamming AFK.
 GM.Config.AFKDelay = 300
 
---[[---------------------------------------------------------------------------
-Hitmenu module
----------------------------------------------------------------------------]]
+
+--Hitmenu module
+
 -- The minimum price for a hit.
 GM.Config.minHitPrice = 200
 -- The maximum price for a hit.
@@ -438,9 +438,9 @@ GM.Config.hitTargetCooldown = 120
 -- How long a customer has to wait to be able to buy another hit (from the moment the hit is accepted).
 GM.Config.hitCustomerCooldown = 240
 
---[[---------------------------------------------------------------------------
-Hungermod module
----------------------------------------------------------------------------]]
+
+--Hungermod module
+
 -- hungerspeed <Amount> - Set the rate at which players will become hungry (2 is the default).
 GM.Config.hungerspeed = 2
 -- starverate <Amount> - How much health that is taken away every second the player is starving	(3 is the default).

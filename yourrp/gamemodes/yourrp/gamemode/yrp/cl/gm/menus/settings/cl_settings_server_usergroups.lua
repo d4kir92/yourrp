@@ -19,6 +19,10 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 	local PARENT = GetSettingsSite()
 
+	if !pa(PARENT) then
+		return
+	end
+
 	if pa(PARENT.ug) then
 		PARENT.ug:Remove()
 	end
@@ -461,7 +465,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		cb:SetChecked(true)
 	end
 	function cb:OnChange(bVal)
-		if wk(UGS[CURRENT_USERGROUP]) then
+		if wk(UGS[CURRENT_USERGROUP]) and UGS[CURRENT_USERGROUP].string_tools then
 			if bVal then
 				table.insert(UGS[CURRENT_USERGROUP].string_tools, "all")
 			else
@@ -851,9 +855,11 @@ function AddUG(tbl)
 		if P.int_position > 1 then
 			hook.Run("YButtonPaint", self, pw, ph)
 
-			surface.SetDrawColor(255, 255, 255, 255)
-			surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
-			surface.DrawTexturedRect(0, 0, pw, ph)
+			if YRP.GetDesignIcon("64_angle-up") then
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+				surface.DrawTexturedRect(0, 0, pw, ph)
+			end
 		end
 	end
 	function up:DoClick()
@@ -868,12 +874,14 @@ function AddUG(tbl)
 	DO:SetText("")
 	local dn = DO
 	function dn:Paint(pw, ph)
-		if P.int_position < table.Count(UGS) then
+		if UGS and P.int_position < table.Count(UGS) then
 			hook.Run("YButtonPaint", self, pw, ph)
 
-			surface.SetDrawColor(255, 255, 255, 255)
-			surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
-			surface.DrawTexturedRect(0, 0, pw, ph)
+			if YRP.GetDesignIcon("64_angle-down") then
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+				surface.DrawTexturedRect(0, 0, pw, ph)
+			end
 		end
 	end
 	function dn:DoClick()

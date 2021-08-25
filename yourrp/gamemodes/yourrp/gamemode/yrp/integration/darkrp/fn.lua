@@ -29,9 +29,9 @@ local fp = fp
 
 module("fn")
 
---[[---------------------------------------------------------------------------
-Parameter manipulation
----------------------------------------------------------------------------]]--
+
+--Parameter manipulation
+
 Id = function(...) return ... end
 
 Flip = function(f)
@@ -57,9 +57,9 @@ ReverseArgs = function(...)
 	 return reverse_h(function () return end, ...)
 end
 
---[[---------------------------------------------------------------------------
-Misc functions
----------------------------------------------------------------------------]]--
+
+--Misc functions
+
 -- function composition
 do
 		local function comp_h(a, b, ...)
@@ -127,9 +127,9 @@ Seq = function(f, x) f(x) return x end
 
 GetGlobalVar = function(key) return _G[key] end
 
---[[---------------------------------------------------------------------------
-Mathematical operators and functions
----------------------------------------------------------------------------]]--
+
+--Mathematical operators and functions
+
 Add = function(a, b) return a + b end
 Sub = function(a, b) return a - b end
 Mul = function(a, b) return a * b end
@@ -149,9 +149,9 @@ Pred = Compose{Flip(Sub), 1}
 Even = Compose{fp{Eq, 0}, fp{Flip(Mod), 2}}
 Odd	= Compose{Not, Even}
 
---[[---------------------------------------------------------------------------
-Functional logical operators and conditions
----------------------------------------------------------------------------]]--
+
+--Functional logical operators and conditions
+
 FAnd = function(fns)
 		return function(...)
 				local val
@@ -186,9 +186,9 @@ If = function(f, Then, Else)
 		end
 end
 
---[[---------------------------------------------------------------------------
-List operations
----------------------------------------------------------------------------]]--
+
+--List operations
+
 Map = function(f, xs)
 		for k, v in pairs(xs) do
 				xs[k] = f(v)
@@ -260,9 +260,9 @@ Reverse = function(xs)
 		return res
 end
 
---[[---------------------------------------------------------------------------
-Folds
----------------------------------------------------------------------------]]--
+
+--Folds
+
 Foldr = function(func, val, xs)
 		for i = #xs, 1, -1 do
 				val = func(xs[i], val)
