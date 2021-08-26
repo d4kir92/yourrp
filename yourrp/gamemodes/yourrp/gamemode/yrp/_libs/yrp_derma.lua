@@ -97,8 +97,8 @@ function DrawText(tab)
 	if tab.lforce or tab.lforce == nil then
 		tab.text = YRP.lang_string(tab.text)
 	end
-	tab.font = tab.font or "DermaDefault"
-	draw.SimpleTextOutlined(tab.text, tab.font, tab.x, tab.y, tab.color, tab.ax, tab.ay, tab.br, tab.brcolor)
+	tab.font = tab.font or "Y_14_700"
+	draw.SimpleText(tab.text, tab.font, tab.x, tab.y, TextColor(tab.color), tab.ax, tab.ay)
 end
 
 function DrawPanel(panel, tab)

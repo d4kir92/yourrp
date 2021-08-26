@@ -81,6 +81,9 @@ table.insert(YRP_DBS, "yrp_macros")
 table.insert(YRP_DBS, "yrp_voice_channels")
 table.insert(YRP_DBS, "yrp_chat_channels")
 
+table.insert(YRP_DBS, "yrp_weapon_options")
+table.insert(YRP_DBS, "yrp_weapon_slots")
+
 function GetDBNames()
 	return YRP_DBS
 end
@@ -207,6 +210,8 @@ include("inventory/db_inventory_items.lua")
 include("macros/db_macros.lua")
 
 include("chatchannels/db_chatchannels.lua")
+
+include("weapon/db_weapon.lua")
 
 -- DarkRP
 local DATABASE_NAME = "yrp_darkrp"

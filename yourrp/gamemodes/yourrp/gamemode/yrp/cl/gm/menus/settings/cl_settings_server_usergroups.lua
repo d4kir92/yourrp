@@ -17,6 +17,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	CURRENT_USERGROUP = tonumber(ug.uniqueID)
 	UGS[CURRENT_USERGROUP] = ug
 
+	local w = 800
+	local x = 20
+
 	local PARENT = GetSettingsSite()
 
 	if !pa(PARENT) then
@@ -29,16 +32,16 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 	PARENT.ug = createD("DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(20 + 500 + 20), PARENT:GetTall(), YRP.ctr(20 + 500), YRP.ctr(0))
 
-	PARENT.ugp = createD("DPanel", PARENT, YRP.ctr(3000), PARENT:GetTall(), 0, 0)
+	PARENT.ugp = createD("DPanel", PARENT, YRP.ctr((w + 10) * 4), PARENT:GetTall(), 0, 0)
 	function PARENT.ugp:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color(255, 100, 100, 100))
 	end
 	PARENT.ug:AddPanel(PARENT.ugp)
 
 	PARENT = PARENT.ugp
-
+	
 	-- NAME
-	local NAME = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(100), YRP.ctr(20), YRP.ctr(20))
+	local NAME = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20))
 	NAME:INITPanel("DTextEntry")
 	NAME:SetHeader(YRP.lang_string("LID_name"))
 	NAME:SetText(string.upper(ug.string_name))
@@ -56,7 +59,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end)
 
 	-- COLOR
-	local COLOR = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(100), YRP.ctr(20), YRP.ctr(20 + 100 + 20))
+	local COLOR = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20))
 	COLOR:INITPanel("YButton")
 	COLOR:SetHeader(YRP.lang_string("LID_color"))
 	COLOR.plus:SetText("LID_change")
@@ -93,7 +96,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end)
 
 	-- ICON
-	UGS[CURRENT_USERGROUP].ICON = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(100), YRP.ctr(20), YRP.ctr(20 + 100 + 20 + 100 + 20))
+	UGS[CURRENT_USERGROUP].ICON = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20))
 	local ICON = UGS[CURRENT_USERGROUP].ICON
 	ICON:INITPanel("DTextEntry")
 	ICON:SetHeader(YRP.lang_string("LID_icon"))
@@ -130,7 +133,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end
 	ug.string_sweps = tmp
 
-	local SWEPS = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(50 + 500 + 50), YRP.ctr(20), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20))
+	local SWEPS = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20))
 	SWEPS:INITPanel("DPanel")
 	SWEPS:SetHeader(YRP.lang_string("LID_weapons"))
 	SWEPS:SetText(ug.string_icon)
@@ -138,7 +141,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
 	end
 
-	SWEPS.preview = createD("DModelPanel", SWEPS, YRP.ctr(500), YRP.ctr(500), YRP.ctr(0), YRP.ctr(50))
+	SWEPS.preview = createD("DModelPanel", SWEPS, YRP.ctr(w), YRP.ctr(500), YRP.ctr(0), YRP.ctr(50))
 	if ug.string_sweps[1] != nil then
 		SWEPS.preview:SetModel(GetSWEPWorldModel(ug.string_sweps[1]))
 		SWEPS.preview.cur = 1
@@ -193,7 +196,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		end
 	end
 
-	SWEPS.preview.next = createD("YButton", SWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(500 - 50), YRP.ctr(500 - 50) / 2)
+	SWEPS.preview.next = createD("YButton", SWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(w - 50), YRP.ctr(500 - 50) / 2)
 	SWEPS.preview.next:SetText("")
 	function SWEPS.preview.next:Paint(pw, ph)
 		if SWEPS.preview.cur < SWEPS.preview.max then
@@ -206,7 +209,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		end
 	end
 
-	SWEPS.button = createD("YButton", SWEPS, YRP.ctr(500), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50 + 500))
+	SWEPS.button = createD("YButton", SWEPS, YRP.ctr(w), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50 + 500))
 	SWEPS.button:SetText("LID_change")
 	function SWEPS.button:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)--surfaceButton(self, pw, ph, YRP.lang_string("LID_change"))
@@ -264,7 +267,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end
 	ug.string_nonesweps = tmp
 
-	local NONESWEPS = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(50 + 500 + 50), YRP.ctr(20), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 500 + 50 + 50 + 20))
+	local NONESWEPS = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 500 + 50 + 50 + 20))
 	NONESWEPS:INITPanel("DPanel")
 	NONESWEPS:SetHeader(YRP.lang_string("LID_ndsweps"))
 	NONESWEPS:SetText(ug.string_icon)
@@ -272,7 +275,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
 	end
 
-	NONESWEPS.preview = createD("DModelPanel", NONESWEPS, YRP.ctr(500), YRP.ctr(500), YRP.ctr(0), YRP.ctr(50))
+	NONESWEPS.preview = createD("DModelPanel", NONESWEPS, YRP.ctr(w), YRP.ctr(500), YRP.ctr(0), YRP.ctr(50))
 	if ug.string_nonesweps[1] != nil then
 		NONESWEPS.preview:SetModel(GetSWEPWorldModel(ug.string_nonesweps[1]))
 		NONESWEPS.preview.cur = 1
@@ -327,7 +330,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		end
 	end
 
-	NONESWEPS.preview.next = createD("YButton", NONESWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(500 - 50), YRP.ctr(500 - 50) / 2)
+	NONESWEPS.preview.next = createD("YButton", NONESWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(w - 50), YRP.ctr(500 - 50) / 2)
 	NONESWEPS.preview.next:SetText("")
 	function NONESWEPS.preview.next:Paint(pw, ph)
 		if NONESWEPS.preview.cur < NONESWEPS.preview.max then
@@ -340,7 +343,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		end
 	end
 
-	NONESWEPS.button = createD("YButton", NONESWEPS, YRP.ctr(500), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50 + 500))
+	NONESWEPS.button = createD("YButton", NONESWEPS, YRP.ctr(w), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50 + 500))
 	NONESWEPS.button:SetText("LID_change")
 	function NONESWEPS.button:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)--surfaceButton(self, pw, ph, YRP.lang_string("LID_change"))
@@ -388,8 +391,10 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 
 
+	x = x + w + 10
+
 	-- Licenses
-	local LICENSES = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(50 + 500), YRP.ctr(20 + 500 + 20), YRP.ctr(20))
+	local LICENSES = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(20))
 	LICENSES:INITPanel("DPanelList")
 	LICENSES:SetHeader(YRP.lang_string("LID_licenses"))
 	LICENSES:SetText(ug.string_icon)
@@ -441,7 +446,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 
 	-- YTools
-	local YTOOLS = createD("DYRPPanelPlus", PARENT, YRP.ctr(500), YRP.ctr(50 + 500), YRP.ctr(20 + 500 + 20), YRP.ctr(20 + 550 + 20))
+	local YTOOLS = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(20 + 550 + 20))
 	YTOOLS:INITPanel("DPanelList")
 	YTOOLS:SetHeader(YRP.lang_string("LID_tools"))
 	YTOOLS:SetText(ug.string_icon)
@@ -559,15 +564,15 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 
 	-- Ammunation
-	local ammobg = createD("YPanel", PARENT, YRP.ctr(500), YRP.ctr(50 + 500), YRP.ctr(20 + 500 + 20), YRP.ctr(20 + 550 + 20 + 550 + 20))
-	local ammoheader = createD("YLabel", ammobg, YRP.ctr(500), YRP.ctr(50), 0, 0)
+	local ammobg = createD("YPanel", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(20 + 550 + 20 + 550 + 20))
+	local ammoheader = createD("YLabel", ammobg, YRP.ctr(w), YRP.ctr(50), 0, 0)
 	ammoheader:SetText("LID_ammo")
 	function ammoheader:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	ammolist = createD("DPanelList", ammobg, YRP.ctr(500), YRP.ctr(500), 0, YRP.ctr(50))
+	ammolist = createD("DPanelList", ammobg, YRP.ctr(w), YRP.ctr(500), 0, YRP.ctr(50))
 	ammolist:SetSpacing(2)
 	ammolist:EnableVerticalScrollbar(true)
 	local sbar = ammolist.VBar
@@ -606,16 +611,16 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end
 
 	for i, v in pairs(game.GetAmmoTypes()) do
-		local abg = createD("YPanel", nil, YRP.ctr(500), YRP.ctr(50), 0, 0)
+		local abg = createD("YPanel", nil, YRP.ctr(w), YRP.ctr(50), 0, 0)
 		
-		local ahe = createD("YLabel", abg, YRP.ctr(250), YRP.ctr(50), 0, 0)
+		local ahe = createD("YLabel", abg, YRP.ctr(w / 2), YRP.ctr(50), 0, 0)
 		ahe:SetText(v)
 		function ahe:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255))
 			draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
-		local ava = createD("DNumberWang", abg, YRP.ctr(250), YRP.ctr(50), YRP.ctr(250), 0)
+		local ava = createD("DNumberWang", abg, YRP.ctr(w / 2), YRP.ctr(50), YRP.ctr(w / 2), 0)
 		ava:SetDecimals(0)
 		ava:SetMin(0)
 		ava:SetMax(999)
@@ -630,7 +635,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 
 
-	local ACCESS = createD("YGroupBox", PARENT, YRP.ctr(800), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(20 + 500 + 20 + 500 + 20), YRP.ctr(20))
+	x = x + w + 10
+
+	local ACCESS = createD("YGroupBox", PARENT, YRP.ctr(w), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(x), YRP.ctr(20))
 	ACCESS:SetText("LID_accesssettings")
 	function ACCESS:Paint(pw, ph)
 		hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -703,6 +710,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	ACCESSAddCheckBox("bool_design", "LID_settings_design")
 	ACCESSAddCheckBox("bool_scale", "LID_scale")
 	ACCESSAddCheckBox("bool_money", "LID_money")
+	ACCESSAddCheckBox("bool_weaponsystem", "LID_weaponsystem")
 	
 	ACCESSAddHr()
 	-- LID_server
@@ -717,7 +725,11 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	-- YourRP
 	ACCESSAddCheckBox("bool_yourrp_addons", "LID_settings_yourrp_addons")
 
-	local GAMEPLAY = createD("YGroupBox", PARENT, YRP.ctr(800), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(20 + 500 + 20 + 500 + 20 + 800 + 20), YRP.ctr(20))
+
+
+	x = x + w + 10
+
+	local GAMEPLAY = createD("YGroupBox", PARENT, YRP.ctr(w), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(x), YRP.ctr(20))
 	GAMEPLAY:SetText("LID_gameplayrestrictions")
 	function GAMEPLAY:Paint(pw, ph)
 		hook.Run("YGroupBoxPaint", self, pw, ph)

@@ -40,7 +40,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 1
 				tab2.ay = 1
 				tab2.text = "◀"
-				tab2.font = "Y_18_500"
+				tab2.font = "Y_18_700"
 				DrawText(tab2)
 			else
 				local tab = {}
@@ -70,7 +70,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			tab2.y = ph / 2
 			tab2.ax = 1
 			tab2.ay = 1
-			tab2.font = "Y_18_500"
+			tab2.font = "Y_18_700"
+			tab2.color = YRPGetColor("3")
 			if self.group != nil then
 				if self.group != "" then
 					local inp = {}
@@ -160,8 +161,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 0
 				tab2.ay = 0
 				tab2.text = self.text
-				tab2.font = "Y_18_500"
+				tab2.font = "Y_18_700"
 				tab2.lforce = false
+				tab2.color = gs.gplist[group.uniqueID]["string_color"]
 				DrawText(tab2)
 
 				--[[local tab3 = {}
@@ -170,7 +172,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab3.ax = 0
 				tab3.ay = 4
 				tab3.text = "POSITION: " .. group.int_position
-				tab3.font = "Y_18_500"
+				tab3.font = "Y_18_700"
 				DrawText(tab3)]]
 			end
 			function pnl:DoClick()
@@ -229,7 +231,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			gs.gplist[group.uniqueID].ch = createD("YButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), gs.gplist[group.uniqueID]:GetWide() - YRP.ctr(66), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(60))
 			gs.gplist[group.uniqueID].ch:SetText("")
 			local ch = gs.gplist[group.uniqueID].ch
-			surface.SetFont("Y_14_500")
+			surface.SetFont("Y_14_700")
 			local text = YRP.lang_string("LID_undergroups") .. " ▶"
 			local tw, _ = surface.GetTextSize(text)
 			tw = tw + YRP.ctr(20)
@@ -245,7 +247,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 1
 				tab2.ay = 1
 				tab2.text = text
-				tab2.font = "Y_14_500"
+				tab2.font = "Y_14_700"
+				tab2.color = tab.color
 				DrawText(tab2)
 			end
 			function ch:DoClick()
@@ -307,7 +310,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.y = ph / 2
 				tab2.ax = 1
 				tab2.ay = 1
-				tab2.font = "Y_18_500"
+				tab2.font = "Y_18_700"
+				tab2.color = YRPGetColor("3")
 				if self.headername != nil then
 					local inp = {}
 					inp.group = self.headername
@@ -337,7 +341,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							tab2.ax = 1
 							tab2.ay = 1
 							tab2.text = "◀"
-							tab2.font = "Y_18_500"
+							tab2.font = "Y_18_700"
 							DrawText(tab2)
 							--[[
 						end
@@ -521,7 +525,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					tab2.y = ph / 2
 					tab2.ax = 0
 					tab2.text = "[ ]"
-					tab2.font = "Y_18_500"
+					tab2.font = "Y_18_700"
 					DrawText(tab2)
 				end
 			elseif ea.typ != nil then
@@ -568,7 +572,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				elseif ea.typ == "group" and ea.tab.uniqueID != nil then
 					tab2.text = tab2.text .. "       GroupUID: " .. ea.tab.uniqueID
 				end
-				tab2.font = "Y_18_500"
+				tab2.font = "Y_18_700"
+				tab2.color = tab.color
 				DrawText(tab2)
 			end
 		end
@@ -1066,8 +1071,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 0
 				tab2.ay = 0
 				tab2.text = self.text
-				tab2.font = "Y_18_500"
+				tab2.font = "Y_18_700"
 				tab2.lforce = false
+				tab2.color = rs.rplist[role.uniqueID]["string_color"]
 				DrawText(tab2)
 
 				--[[local tab3 = {}
@@ -1076,7 +1082,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab3.ax = 0
 				tab3.ay = 4
 				tab3.text = "POSITION: " .. role.int_position
-				tab3.font = "Y_18_500"
+				tab3.font = "Y_18_700"
 				DrawText(tab3)]]
 			end
 			function pnl:DoClick()
@@ -1136,7 +1142,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			rs.rplist[role.uniqueID].ch:SetText("")
 			local ch = rs.rplist[role.uniqueID].ch
 			local text = YRP.lang_string("LID_nextranks") .. " ▶"
-			surface.SetFont("Y_14_500")
+			surface.SetFont("Y_14_700")
 			local tw, _ = surface.GetTextSize(text)
 			tw = tw + YRP.ctr(20)
 			ch:SetWide(tw)
@@ -1151,7 +1157,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 1
 				tab2.ay = 1
 				tab2.text = text
-				tab2.font = "Y_14_500"
+				tab2.font = "Y_14_700"
+				tab2.color = tab.color
 				DrawText(tab2)
 			end
 			function ch:DoClick()
@@ -1571,7 +1578,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						win:Close()
 						
 						local lply = LocalPlayer()
-						lply.pms = {}
+						lply.yrpseltab = {}
 
 						local pmwin = createD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1400), 0, 0)
 						pmwin:SetHeaderHeight(YRP.ctr(100))
@@ -1613,9 +1620,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						pmwin.list:SetSpacing(10)
 						function pmwin.list:RefreshList()
 							local lply = LocalPlayer()
-							if wk(lply.pms) and pmwin.list != nil and pa(pmwin.list) then
+							if wk(lply.yrpseltab) and pmwin.list != nil and pa(pmwin.list) then
 								pmwin.list:Clear()
-								for i, pm in pairs(lply.pms) do
+								for i, pm in pairs(lply.yrpseltab) do
 									timer.Simple(i * 0.001, function()
 										if pa(pmwin) and pa(pmwin.list) then
 											local line = createD("DPanel", pmwin.list, YRP.ctr(200), YRP.ctr(64), 0, 0)
@@ -1679,7 +1686,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								cl_pms[c].ClassName = v
 								cl_pms[c].PrintName = player_manager.TranslateToPlayerModelName(v)
 							end
-							YRPOpenSingleSelector(cl_pms, pmwin.list.RefreshList)
+							YRPOpenSelector(cl_pms, true, "worldmodel", pmwin.list.RefreshList)
 							--[[pmsel.dpl = createD("DPanel", pmsel, ScrW() - YRP.ctr(20 * 2), height, YRP.ctr(20), YRP.ctr(50 + 20 + 50 + 20))
 							function pmsel.dpl:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 120))
@@ -1828,7 +1835,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 								cl_pms[c].ClassName = v
 								cl_pms[c].PrintName = v
 							end
-							YRPOpenSingleSelector(cl_pms, pmwin.list.RefreshList)
+							YRPOpenSelector(cl_pms, true, "worldmodel", pmwin.list.RefreshList)
 						end
 
 						pmwin.add = createD("YButton", pmcontent, YRP.ctr(200), YRP.ctr(50), pmcontent:GetWide() / 2 - YRP.ctr(200 / 2), pmcontent:GetTall() - YRP.ctr(50 + 20))
@@ -1836,12 +1843,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						function pmwin.add:DoClick()
 							if pmwin.WorldModel != "" then
 								local lply = LocalPlayer()
-								lply.pms = lply.pms or {}
+								lply.yrpseltab = lply.yrpseltab or {}
 								local min = tonumber(pmwin.float_min:GetValue())
 								local max = tonumber(pmwin.float_max:GetValue())
 								net.Start("add_playermodels")
 									net.WriteInt(role.uniqueID, 32)
-									net.WriteTable(lply.pms)
+									net.WriteTable(lply.yrpseltab)
 									net.WriteString(pmwin.name:GetText())
 									net.WriteString(min)
 									net.WriteString(max)
@@ -1992,21 +1999,21 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local sweps = {}
 			sweps.parent = ea.equipment:GetContent()
 			sweps.uniqueID = role.uniqueID
-			sweps.header = "LID_sweps"
+			sweps.header = YRP.lang_string("LID_possiblesweps") .. " (" .. YRP.lang_string("LID_weaponchest") .. ")"
 			sweps.netstr = "update_role_string_sweps"
 			sweps.value = role.string_sweps
 			sweps.uniqueID = role.uniqueID
 			sweps.w = ea.equipment:GetContent():GetWide()
 			sweps.h = YRP.ctr(325)
 			sweps.doclick = function()
-				local winswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+				--[[local winswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 				winswep:SetTitle("")
 				winswep:Center()
 				winswep:MakePopup()
 				function winswep:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
 					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-				end
+				end]]
 
 				local allsweps = GetSWEPsList()
 				local cl_sweps = {}
@@ -2019,7 +2026,23 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
 				end
 
-				winswep.dpl = createD("DPanelList", winswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+				function YRPAddSwepToRole()
+					local lply = LocalPlayer()
+					if role.uniqueID and lply.yrpseltab[1] then
+						net.Start("add_role_swep")
+							net.WriteInt(role.uniqueID, 32)
+							net.WriteString(lply.yrpseltab[1])
+						net.SendToServer()
+					elseif lply.yrpseltab and lply.yrpseltab[1] then
+						MsgC(Color(255, 0, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]))
+					else
+						MsgC(Color(255, 0, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab))
+					end
+				end
+
+				YRPOpenSelector(cl_sweps, false, "classname", YRPAddSwepToRole)
+
+				--[[winswep.dpl = createD("DPanelList", winswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
 				winswep.dpl:EnableVerticalScrollbar(true)
 				local height = ScrH() - YRP.ctr(100)
 				function winswep:Search(strsearch)
@@ -2063,7 +2086,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				winswep.search = createD("DTextEntry", winswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
 				function winswep.search:OnChange()
 					winswep:Search(self:GetText())
-				end
+				end]]
 			end
 			ea[role.uniqueID].sweps = DStringListBox(sweps)
 			net.Receive("get_role_sweps", function()
@@ -2093,6 +2116,149 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			net.SendToServer()
 
 			hr.parent = ea.equipment:GetContent()
+			DHr(hr)
+
+			local swepsonspawn = {}
+			swepsonspawn.parent = ea.equipment:GetContent()
+			swepsonspawn.uniqueID = role.uniqueID
+			swepsonspawn.header = "LID_swepsatspawn"
+			swepsonspawn.netstr = "update_role_string_sweps_onspawn"
+			swepsonspawn.value = role.string_sweps_onspawn
+			swepsonspawn.uniqueID = role.uniqueID
+			swepsonspawn.w = ea.equipment:GetContent():GetWide()
+			swepsonspawn.h = YRP.ctr(325)
+			swepsonspawn.doclick = function()
+				local allsweps = GetSWEPsList()
+				local cl_sweps = {}
+				local count = 0
+				for k, v in pairs(allsweps) do
+					count = count + 1
+					cl_sweps[count] = {}
+					cl_sweps[count].WorldModel = v.WorldModel or ""
+					cl_sweps[count].ClassName = v.ClassName or "NO CLASSNAME"
+					cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
+				end
+
+				function YRPAddSwepToRoleOnSpawn()
+					local lply = LocalPlayer()
+					if role.uniqueID and lply.yrpseltab[1] then
+						net.Start("add_role_swep_onspawn")
+							net.WriteInt(role.uniqueID, 32)
+							net.WriteString(lply.yrpseltab[1])
+						net.SendToServer()
+					elseif lply.yrpseltab and lply.yrpseltab[1] then
+						MsgC(Color(255, 0, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]))
+					else
+						MsgC(Color(255, 0, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab))
+					end
+				end
+
+				YRPOpenSelector(cl_sweps, false, "classname", YRPAddSwepToRoleOnSpawn)
+			end
+			ea[role.uniqueID].swepsonspawn = DStringListBox(swepsonspawn)
+			net.Receive("get_role_sweps_onspawn", function()
+				local tab_pm = net.ReadTable()
+				local cl_sweps = {}
+				for i, v in pairs(tab_pm) do
+					local swep = {}
+					swep.uniqueID = i
+					swep.string_models = GetSwepWorldModel(v.classname)
+					swep.string_classname = v.classname
+					swep.string_name = v.classname
+					swep.slots = v
+					swep.doclick = function()
+						net.Start("rem_role_swep_onspawn")
+							net.WriteInt(role.uniqueID, 32)
+							net.WriteString(swep.string_classname)
+						net.SendToServer()
+					end
+					swep.h = YRP.ctr(120)
+					table.insert(cl_sweps, swep)
+				end
+				if ea[role.uniqueID].swepsonspawn.dpl.AddLines != nil then
+					ea[role.uniqueID].swepsonspawn.dpl:AddLines(cl_sweps)
+				end
+			end)
+			net.Start("get_role_sweps_onspawn")
+				net.WriteInt(role.uniqueID, 32)
+			net.SendToServer()
+
+			hr.parent = ea.equipment:GetContent()
+			DHr(hr)
+
+			-- Ammunation
+			local ammobg = createD("YPanel", col2, YRP.ctr(800), YRP.ctr(350), 0, 0)
+			local ammoheader = createD("YLabel", ammobg, YRP.ctr(800), YRP.ctr(50), 0, 0)
+			ammoheader:SetText("LID_ammo")
+			function ammoheader:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+				draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+
+			ammolist = createD("DPanelList", ammobg, YRP.ctr(800-23-20), YRP.ctr(300), 0, YRP.ctr(50))
+			ammolist:SetSpacing(2)
+			ammolist:EnableVerticalScrollbar(true)
+			local sbar = ammolist.VBar
+			function sbar:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
+			end
+			function sbar.btnUp:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			end
+			function sbar.btnDown:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			end
+			function sbar.btnGrip:Paint(w, h)
+				draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
+			end
+
+			local tammos = role.string_ammos or ""
+			tammos = string.Explode(";", tammos)
+			local ammos = {}
+			for i, v in pairs(tammos) do
+				local t = string.Split(v, ":")
+				ammos[t[1]] = t[2]
+			end
+
+			function YRPUpdateAmmoAmountRole()
+				local tab = {}
+				for i, v in pairs(ammos) do
+					if tonumber(v) > 0 then
+						table.insert(tab, i .. ":" .. v)
+					end
+				end
+				local result = table.concat(tab, ";")
+				net.Start("update_role_string_ammos")
+					net.WriteString(role.uniqueID)
+					net.WriteString(result)
+				net.SendToServer()
+			end
+
+			for i, v in pairs(game.GetAmmoTypes()) do
+				local abg = createD("YPanel", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
+				
+				local ahe = createD("YLabel", abg, YRP.ctr(400), YRP.ctr(50), 0, 0)
+				ahe:SetText(v)
+				function ahe:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255))
+					draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				end
+
+				local ava = createD("DNumberWang", abg, YRP.ctr(400), YRP.ctr(50), YRP.ctr(400), 0)
+				ava:SetDecimals(0)
+				ava:SetMin(0)
+				ava:SetMax(999)
+				ava:SetValue(ammos[v] or 0)
+				function ava:OnValueChanged(val)
+					ammos[v] = math.Clamp(val, self:GetMin(), self:GetMax())
+					YRPUpdateAmmoAmountRole()
+				end
+
+				ammolist:AddItem(abg)
+			end
+
+			ea.equipment:AddItem(ammobg)
+
 			DHr(hr)
 
 			-- Licenses
@@ -2214,195 +2380,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
-			-- Ammunation
-			local ammobg = createD("YPanel", col2, YRP.ctr(800), YRP.ctr(350), 0, 0)
-			local ammoheader = createD("YLabel", ammobg, YRP.ctr(800), YRP.ctr(50), 0, 0)
-			ammoheader:SetText("LID_ammo")
-			function ammoheader:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
-				draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			end
-
-			ammolist = createD("DPanelList", ammobg, YRP.ctr(800-23-20), YRP.ctr(300), 0, YRP.ctr(50))
-			ammolist:SetSpacing(2)
-			ammolist:EnableVerticalScrollbar(true)
-			local sbar = ammolist.VBar
-			function sbar:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
-			end
-			function sbar.btnUp:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
-			end
-			function sbar.btnDown:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
-			end
-			function sbar.btnGrip:Paint(w, h)
-				draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
-			end
-
-			local tammos = role.string_ammos or ""
-			tammos = string.Explode(";", tammos)
-			local ammos = {}
-			for i, v in pairs(tammos) do
-				local t = string.Split(v, ":")
-				ammos[t[1]] = t[2]
-			end
-
-			function YRPUpdateAmmoAmountRole()
-				local tab = {}
-				for i, v in pairs(ammos) do
-					if tonumber(v) > 0 then
-						table.insert(tab, i .. ":" .. v)
-					end
-				end
-				local result = table.concat(tab, ";")
-				net.Start("update_role_string_ammos")
-					net.WriteString(role.uniqueID)
-					net.WriteString(result)
-				net.SendToServer()
-			end
-
-			for i, v in pairs(game.GetAmmoTypes()) do
-				local abg = createD("YPanel", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
-				
-				local ahe = createD("YLabel", abg, YRP.ctr(400), YRP.ctr(50), 0, 0)
-				ahe:SetText(v)
-				function ahe:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255))
-					draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color(0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				end
-
-				local ava = createD("DNumberWang", abg, YRP.ctr(400), YRP.ctr(50), YRP.ctr(400), 0)
-				ava:SetDecimals(0)
-				ava:SetMin(0)
-				ava:SetMax(999)
-				ava:SetValue(ammos[v] or 0)
-				function ava:OnValueChanged(val)
-					ammos[v] = math.Clamp(val, self:GetMin(), self:GetMax())
-					YRPUpdateAmmoAmountRole()
-				end
-
-				ammolist:AddItem(abg)
-			end
-
-			ea.equipment:AddItem(ammobg)
-
 			ea.equipment:AutoSize(true)
-
-
-
-			local notequipment = createD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(450), ea.appearance.x,  ea.appearance.y + ea.appearance:GetTall() + YRP.ctr(20))
-			notequipment:SetText("LID_notequipment")
-			function notequipment:Paint(pw, ph)
-				hook.Run("YGroupBoxPaint", self, pw, ph)
-			end
-			col2:AddItem(notequipment)
-
-			ea[role.uniqueID].notequipment = notequipment
-			ea.notequipment = ea[role.uniqueID].notequipment
-
-			-- Not droppable
-			local ndsweps = {}
-			ndsweps.parent = ea.notequipment:GetContent()
-			ndsweps.uniqueID = role.uniqueID
-			ndsweps.header = "LID_ndsweps"
-			ndsweps.netstr = "update_role_string_ndsweps"
-			ndsweps.value = role.string_ndsweps
-			ndsweps.uniqueID = role.uniqueID
-			ndsweps.w = ea.notequipment:GetContent():GetWide()
-			ndsweps.h = YRP.ctr(325)
-			ndsweps.doclick = function()
-				local winndswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
-				winndswep:SetTitle("")
-				winndswep:Center()
-				winndswep:MakePopup()
-				function winndswep:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-				end
-
-				local allndsweps = GetSWEPsList()
-				local cl_ndsweps = {}
-				local count = 0
-				for k, v in pairs(allndsweps) do
-					count = count + 1
-					cl_ndsweps[count] = {}
-					cl_ndsweps[count].WorldModel = v.WorldModel or ""
-					cl_ndsweps[count].ClassName = v.ClassName or "NO CLASSNAME"
-					cl_ndsweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
-				end
-
-				winndswep.dpl = createD("DPanelList", winndswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
-				winndswep.dpl:EnableVerticalScrollbar(true)
-				local height = ScrH() - YRP.ctr(100)
-				function winndswep:Search(strsearch)
-					strsearch = string.lower(strsearch)
-
-					strsearch = string.Replace(strsearch, "[", "")
-					strsearch = string.Replace(strsearch, "]", "")
-					strsearch = string.Replace(strsearch, "(", "")
-					strsearch = string.Replace(strsearch, ")", "")
-
-					self.dpl:Clear()
-					for i, v in pairs(cl_ndsweps) do
-						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
-							local d_ndswep = createD("YButton", nil, winndswep.dpl:GetWide(), height / 4, 0, 0)
-							d_ndswep:SetText(v.PrintName)
-							function d_ndswep:DoClick()
-								net.Start("add_role_ndswep")
-									net.WriteInt(role.uniqueID, 32)
-									net.WriteString(v.ClassName)
-								net.SendToServer()
-								winndswep:Close()
-							end
-
-							if v.WorldModel != "" then
-								d_ndswep.model = createD("DModelPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
-								d_ndswep.model:SetModel(v.WorldModel)
-							else
-								d_ndswep.model = createD("DPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
-								function d_ndswep.model:Paint(pw, ph)
-									draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
-									draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-								end
-							end
-
-							winndswep.dpl:AddItem(d_ndswep)
-						end
-					end
-				end
-				winndswep:Search("")
-
-				winndswep.search = createD("DTextEntry", winndswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
-				function winndswep.search:OnChange()
-					winndswep:Search(self:GetText())
-				end
-			end
-			ea[role.uniqueID].ndsweps = DStringListBox(ndsweps)
-			net.Receive("get_role_ndsweps", function()
-				local tab_pm = net.ReadTable()
-				local cl_ndsweps = {}
-				for i, v in pairs(tab_pm) do
-					local ndswep = {}
-					ndswep.string_models = GetSwepWorldModel(v) or "notfound"
-					ndswep.string_classname = v
-					ndswep.string_name = v
-					ndswep.doclick = function()
-						net.Start("rem_role_ndswep")
-							net.WriteInt(role.uniqueID, 32)
-							net.WriteString(ndswep.string_classname)
-						net.SendToServer()
-					end
-					ndswep.h = YRP.ctr(120)
-					table.insert(cl_ndsweps, ndswep)
-				end
-				if ea[role.uniqueID].ndsweps.dpl.AddLines != nil then
-					ea[role.uniqueID].ndsweps.dpl:AddLines(cl_ndsweps)
-				end
-			end)
-			net.Start("get_role_ndsweps")
-				net.WriteInt(role.uniqueID, 32)
-			net.SendToServer()
 
 
 
@@ -2647,6 +2625,111 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			string_hud_mask.lforce = false
 			string_hud_mask.choices = hudmasks
 			ea[role.uniqueID].string_hud_mask = YRPDComboBoxHUD(string_hud_mask)
+
+			DHr(hr)
+
+			-- Not droppable
+			local ndsweps = {}
+			ndsweps.parent = ea.restriction:GetContent()
+			ndsweps.uniqueID = role.uniqueID
+			ndsweps.header = "LID_ndsweps"
+			ndsweps.netstr = "update_role_string_ndsweps"
+			ndsweps.value = role.string_ndsweps
+			ndsweps.uniqueID = role.uniqueID
+			ndsweps.w = ea.restriction:GetContent():GetWide()
+			ndsweps.h = YRP.ctr(325)
+			ndsweps.doclick = function()
+				local winndswep = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
+				winndswep:SetTitle("")
+				winndswep:Center()
+				winndswep:MakePopup()
+				function winndswep:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
+					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+				end
+
+				local allndsweps = GetSWEPsList()
+				local cl_ndsweps = {}
+				local count = 0
+				for k, v in pairs(allndsweps) do
+					count = count + 1
+					cl_ndsweps[count] = {}
+					cl_ndsweps[count].WorldModel = v.WorldModel or ""
+					cl_ndsweps[count].ClassName = v.ClassName or "NO CLASSNAME"
+					cl_ndsweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
+				end
+
+				winndswep.dpl = createD("DPanelList", winndswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+				winndswep.dpl:EnableVerticalScrollbar(true)
+				local height = ScrH() - YRP.ctr(100)
+				function winndswep:Search(strsearch)
+					strsearch = string.lower(strsearch)
+
+					strsearch = string.Replace(strsearch, "[", "")
+					strsearch = string.Replace(strsearch, "]", "")
+					strsearch = string.Replace(strsearch, "(", "")
+					strsearch = string.Replace(strsearch, ")", "")
+
+					self.dpl:Clear()
+					for i, v in pairs(cl_ndsweps) do
+						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
+							local d_ndswep = createD("YButton", nil, winndswep.dpl:GetWide(), height / 4, 0, 0)
+							d_ndswep:SetText(v.PrintName)
+							function d_ndswep:DoClick()
+								net.Start("add_role_ndswep")
+									net.WriteInt(role.uniqueID, 32)
+									net.WriteString(v.ClassName)
+								net.SendToServer()
+								winndswep:Close()
+							end
+
+							if v.WorldModel != "" then
+								d_ndswep.model = createD("DModelPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
+								d_ndswep.model:SetModel(v.WorldModel)
+							else
+								d_ndswep.model = createD("DPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
+								function d_ndswep.model:Paint(pw, ph)
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
+									draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								end
+							end
+
+							winndswep.dpl:AddItem(d_ndswep)
+						end
+					end
+				end
+				winndswep:Search("")
+
+				winndswep.search = createD("DTextEntry", winndswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
+				function winndswep.search:OnChange()
+					winndswep:Search(self:GetText())
+				end
+			end
+			ea[role.uniqueID].ndsweps = DStringListBox(ndsweps)
+			net.Receive("get_role_ndsweps", function()
+				local tab_pm = net.ReadTable()
+				local cl_ndsweps = {}
+				for i, v in pairs(tab_pm) do
+					local ndswep = {}
+					ndswep.string_models = GetSwepWorldModel(v) or "notfound"
+					ndswep.string_classname = v
+					ndswep.string_name = v
+					ndswep.doclick = function()
+						net.Start("rem_role_ndswep")
+							net.WriteInt(role.uniqueID, 32)
+							net.WriteString(ndswep.string_classname)
+						net.SendToServer()
+					end
+					ndswep.h = YRP.ctr(120)
+					table.insert(cl_ndsweps, ndswep)
+				end
+				if ea[role.uniqueID].ndsweps.dpl.AddLines != nil then
+					ea[role.uniqueID].ndsweps.dpl:AddLines(cl_ndsweps)
+				end
+			end)
+			net.Start("get_role_ndsweps")
+				net.WriteInt(role.uniqueID, 32)
+			net.SendToServer()
 
 			ea.restriction:AutoSize(true)
 

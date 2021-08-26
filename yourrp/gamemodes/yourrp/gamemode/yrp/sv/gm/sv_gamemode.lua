@@ -257,7 +257,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 end)
 
 hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
-	YRP.msg("gm", "[PlayerSpawn] " .. tostring(ply:YRPName()) .. " spawned.")
+	--YRP.msg("gm", "[PlayerSpawn] " .. tostring(ply:YRPName()) .. " spawned.")
 	
 	if ply:GetNW2Bool("can_respawn", false) then
 		ply:SetNW2Bool("can_respawn", false)

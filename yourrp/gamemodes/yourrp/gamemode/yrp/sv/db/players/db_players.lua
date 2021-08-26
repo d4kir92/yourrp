@@ -117,6 +117,57 @@ function SetRole(ply, rid, force, pmid)
 		ply:UserGroupLoadout()
 	end
 
+	-- SWEPS
+	local ChaTab = ply:GetChaTab()
+	local rolTab = ply:GetRolTab()
+	if tonumber(ChaTab.roleID) != tonumber(rid) then
+		local tmpSWEPTable = string.Explode(",", SQL_STR_OUT(rolTab.string_sweps_onspawn))
+
+		local pr = 0
+		local se = 0
+		local si = 0
+		local ga = 0
+		
+		local pri = {}
+		local sec = {}
+		local sid = {}
+		local gad = {}
+
+		for k, swep in pairs(tmpSWEPTable) do
+			if swep != nil and swep != NULL and swep != "" then
+				if ply:Alive() then
+					local slots = YRPGetSlotsOfSWEP(swep)
+					if slots.slot_primary and pr + 1 <= GetGlobalInt("yrp_max_slots_primary", 0) then
+						pr = pr + 1
+						table.insert(pri, swep)
+					elseif slots.slot_secondary and se + 1 <= GetGlobalInt("yrp_max_slots_secondary", 0) then
+						se = se + 1
+						table.insert(sec, swep)
+					elseif slots.slot_sidearm and si + 1 <= GetGlobalInt("yrp_max_slots_sidearms", 0) then
+						si = si + 1
+						table.insert(sid, swep)
+					elseif slots.slot_gadget and ga + 1 <= GetGlobalInt("yrp_max_slots_gadgets", 0) then
+						ga = ga + 1
+						table.insert(gad, swep)
+					else
+						YRP.msg("note", "SLOTS OF ROLE FULL! (" .. tostring(rolTab.string_name) .. ")")
+					end
+				end
+			end
+		end
+
+		YRPUpdateCharSlot(ply, "primary", 		pri)
+		YRPUpdateCharSlot(ply, "secondary", 	sec)
+		YRPUpdateCharSlot(ply, "sidearm", 		sid)
+		YRPUpdateCharSlot(ply, "gadget", 		gad)
+	end
+
+	for i, slot in pairs(YRPGetCharSWEPS(ply)) do
+		for x, wep in pairs(slot) do
+			ply:Give(wep)
+		end
+	end
+
 	if canGetRole(ply, rid, false) or force then
 		set_role(ply, rid)
 		set_role_values(ply, pmid)
@@ -417,16 +468,7 @@ function set_role_values(ply, pmid)
 			ply:SetNW2String("maxamount", rolTab.int_maxamount)
 
 			ply:SetNW2String("sweps", rolTab.string_sweps)
-
-			--sweps
-			local tmpSWEPTable = string.Explode(",", SQL_STR_OUT(rolTab.string_sweps))
-			for k, swep in pairs(tmpSWEPTable) do
-				if swep != nil and swep != NULL and swep != "" then
-					if ply:Alive() then
-						ply:Give(swep)
-					end
-				end
-			end
+			ply:SetNW2String("sweps_onspawn", rolTab.string_sweps_onspawn)
 
 			-- ammos
 			local tammos = rolTab.string_ammos or ""
@@ -514,6 +556,7 @@ function set_role_values(ply, pmid)
 			YRP.msg("note", "[SET ROLE VALUES] No group selected -> Suicide")
 			ply:KillSilent()
 		end
+
 		ply:SetNW2Bool("loaded", true)
 	end
 end

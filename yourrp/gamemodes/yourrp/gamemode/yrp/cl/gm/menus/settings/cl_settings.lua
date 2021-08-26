@@ -25,6 +25,8 @@ include("cl_settings_server_groups_and_roles.lua")
 include("cl_settings_server_levelsystem.lua")
 include("cl_settings_server_design.lua")
 
+include("cl_settings_server_weapon.lua")
+
 include("cl_settings_server_database.lua")
 include("cl_settings_server_usergroups.lua")
 include("cl_settings_server_darkrp.lua")
@@ -242,6 +244,12 @@ function SettingsTabsContent()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_scale")))
 			end)
 		end
+		if lply:GetNW2Bool("bool_weaponsystem", false) then
+			tabs:AddOption("LID_weaponsystem", function(parent)
+				OpenSettingsWeaponSystem()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_weaponsystem")))
+			end)
+		end
 
 		tabs:GoToSite("LID_settings_realistic")
 	elseif sm.currentsite == "LID_server" then
@@ -330,7 +338,7 @@ function F8OpenSettings()
 			c = c + 1
 		end
 
-		if lply:GetNW2Bool("bool_realistic", false) or lply:GetNW2Bool("bool_shops", false) or lply:GetNW2Bool("bool_licenses", false) or lply:GetNW2Bool("bool_usergroups", false) or lply:GetNW2Bool("bool_levelsystem", false) or lply:GetNW2Bool("bool_design", false) or lply:GetNW2Bool("bool_scale", false) then
+		if lply:GetNW2Bool("bool_realistic", false) or lply:GetNW2Bool("bool_shops", false) or lply:GetNW2Bool("bool_licenses", false) or lply:GetNW2Bool("bool_usergroups", false) or lply:GetNW2Bool("bool_levelsystem", false) or lply:GetNW2Bool("bool_design", false) or lply:GetNW2Bool("bool_scale", false) or lply:GetNW2Bool("bool_weaponsystem", false) then
 			sites[c] = {}
 			sites[c].name = "LID_administration"
 			sites[c].icon = "64_wrench"

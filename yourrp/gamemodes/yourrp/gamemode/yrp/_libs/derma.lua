@@ -223,7 +223,7 @@ function DrawButton(button, tab)
 	tab.text.text = tab.text.text or "NOTEXT"
 	tab.text.x = tab.text.x or tab.w / 2
 	tab.text.y = tab.text.y or tab.h / 2
-	tab.text.color = tab.text.color or Color(255, 255, 255, 255)
+	tab.text.color = tab.color or Color(255, 255, 255, 255)
 	DrawText(tab.text)
 end
 

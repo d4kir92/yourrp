@@ -245,7 +245,7 @@ function GetSWEPsList()
 end
 
 function GetSwepWorldModel(swepcn)
-	local result = "notfound.mdl"
+	local result = ""
 	local allsweps = GetSWEPsList()
 	for i, swep in pairs(allsweps) do
 		if swep.ClassName == swepcn then
@@ -604,9 +604,13 @@ function OpenSelector(tbl_list, tbl_sele, closeF)
 	frame:MakePopup()
 end
 
-function YRPOpenSingleSelector(tab, fu)
+function YRPOpenSelector(tab, multiple, ret, fu)
 	local lply = LocalPlayer()
-	lply.pms = lply.pms or {}
+	if multiple then
+		lply.yrpseltab = lply.yrpseltab or {}
+	else
+		lply.yrpseltab = {}
+	end
 
 	local br = 10
 
@@ -674,13 +678,15 @@ function YRPOpenSingleSelector(tab, fu)
 						function d_pm:Paint(pw, ph)
 							local text = YRP.lang_string("LID_notadded")
 							local col = Color(255, 255, 255)
-							if lply.pms != nil and table.HasValue(lply.pms, self.WorldModel) then
+							if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.WorldModel) then
 								col = Color(0, 255, 0)
 								text = YRP.lang_string("LID_added")
 							end
 							draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
 
-							draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							if multiple then
+								draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							end
 
 							draw.SimpleText(self.PrintName, "DermaDefault", pw / 2, ph * 0.90, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 							draw.SimpleText(self.WorldModel, "DermaDefault", pw / 2, ph * 0.95, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -706,13 +712,24 @@ function YRPOpenSingleSelector(tab, fu)
 						d_pm.btn = createD("YButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
 						d_pm.btn:SetText("")
 						function d_pm.btn:DoClick()
-							if !table.HasValue(lply.pms, v.WorldModel) then
-								table.insert(lply.pms, v.WorldModel)
-							elseif table.HasValue(lply.pms, v.WorldModel) then
-								table.RemoveByValue(lply.pms, v.WorldModel)
+							if ret == "worldmodel" then
+								if !table.HasValue(lply.yrpseltab, v.WorldModel) then
+									table.insert(lply.yrpseltab, v.WorldModel)
+								elseif table.HasValue(lply.yrpseltab, v.WorldModel) then
+									table.RemoveByValue(lply.yrpseltab, v.WorldModel)
+								end
+							elseif ret == "classname" then
+								if !table.HasValue(lply.yrpseltab, v.ClassName) then
+									table.insert(lply.yrpseltab, v.ClassName)
+								elseif table.HasValue(lply.yrpseltab, v.ClassName) then
+									table.RemoveByValue(lply.yrpseltab, v.ClassName)
+								end
 							end
 							if fu then
 								fu()
+							end
+							if !multiple and pa(pmsel) then
+								pmsel:Close()
 							end
 						end
 						function d_pm.btn:Paint(pw, ph)

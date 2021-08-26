@@ -57,7 +57,7 @@ function YRPDCheckBoxes(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "Y_18_500"
+		text.font = "Y_18_700"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -71,7 +71,7 @@ function YRPDCheckBoxes(tab)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 		local change = {}
 		change.text = "[" .. YRP.lang_string("LID_change") .. "] (" .. tab.value .. ")"
-		change.font = "Y_22_500"
+		change.font = "Y_22_700"
 		change.x = YRP.ctr(10)
 		change.y = ph / 2
 		change.ax = 0
@@ -115,7 +115,7 @@ function YRPDCheckBoxes(tab)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 					local ta = {}
 					ta.text = i
-					ta.font = "Y_22_500"
+					ta.font = "Y_22_700"
 					ta.x = YRP.ctr(60)
 					ta.y = ph / 2
 					ta.ax = 0
@@ -140,7 +140,7 @@ function YRPDCheckBoxes(tab)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 						local ta = {}
 						ta.text = j
-						ta.font = "Y_22_500"
+						ta.font = "Y_22_700"
 						ta.x = YRP.ctr(110)
 						ta.y = ph / 2
 						ta.ax = 0
@@ -208,7 +208,7 @@ function YRPDCheckBox(tab)
 		end
 		text.x = YRP.ctr(60)
 		text.y = ph / 2
-		text.font = "Y_18_500"
+		text.font = "Y_18_700"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -279,7 +279,7 @@ function YRPDComboBox(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "Y_18_500"
+		text.font = "Y_18_700"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -350,7 +350,7 @@ function YRPDComboBoxHUD(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "Y_18_500"
+		text.font = "Y_18_700"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -421,8 +421,8 @@ function DColor(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "Y_18_500"
-		text.color = Color(255, 255, 255, 255)
+		text.font = "Y_18_700"
+		text.color = tab.color
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -435,10 +435,11 @@ function DColor(tab)
 	function pnl.DButton:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
 		local change = {}
-		change.text = "change"
-		change.font = "Y_22_500"
+		change.text = "LID_change"
+		change.font = "Y_22_700"
 		change.x = pw / 2
 		change.y = ph / 2
+		change.color = self.color
 		DrawText(change)
 	end
 	if tab.netstr != nil and tab.uniqueID != nil then
@@ -513,7 +514,7 @@ function DIntBox(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
-		text.font = "Y_18_500"
+		text.font = "Y_18_700"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -588,7 +589,7 @@ function DTextBox(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = YRP.ctr(25)
-		text.font = "Y_18_500"
+		text.font = "Y_18_700"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -599,7 +600,7 @@ function DTextBox(tab)
 			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.lang_string("LID_damage")
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
-			DMG.font = "Y_22_500"
+			DMG.font = "Y_22_700"
 			DMG.color = Color(0, 0, 0, 255)
 			DMG.br = 1
 			DMG.ax = 2
@@ -759,7 +760,7 @@ function DAttributeBar(tab)
 			end
 			text.x = YRP.ctr(10)
 			text.y = ph / 2
-			text.font = "Y_18_500"
+			text.font = "Y_18_700"
 			text.color = Color(255, 255, 255, 255)
 			text.br = 1
 			text.ax = 0
@@ -837,7 +838,7 @@ function DStringListBox(tab)
 		end
 		text.x = YRP.ctr(10)
 		text.y = YRP.ctr(25)
-		text.font = "Y_18_500"
+		text.font = "Y_18_700"
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
@@ -882,6 +883,27 @@ function DStringListBox(tab)
 					line.mod = createD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, YRP.ctr(40) + v.br, v.br)
 				end
 
+				local text = ""
+				if v.slots then
+					local test = {}
+					if tobool(v.slots.slot_primary) then
+						table.insert(test, YRP.lang_string("LID_primary"))
+					end
+					if tobool(v.slots.slot_secondary) then
+						table.insert(test, YRP.lang_string("LID_secondary"))
+					end
+					if tobool(v.slots.slot_sidearm) then
+						table.insert(test, YRP.lang_string("LID_sidearm"))
+					end
+					if tobool(v.slots.slot_gadget) then
+						table.insert(test, YRP.lang_string("LID_gadget"))
+					end
+					text = table.concat(test, ", ")
+					if strEmpty(text) then
+						text = "NO SLOT"
+					end
+				end
+
 				function line:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
 
@@ -897,7 +919,11 @@ function DStringListBox(tab)
 						name = name .. " (" .. self.pmid .. "/" .. table.Count(self.models) .. ")"
 					end
 					draw.SimpleText(name, "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 - YRP.ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-					draw.SimpleText(line.models[line.pmid], "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 + YRP.ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					if v.slots then
+						draw.SimpleText(text, "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 + YRP.ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					else
+						draw.SimpleText(line.models[line.pmid], "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 + YRP.ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					end
 				end
 
 				line.rem = createD("DButton", line, v.h - 2 * v.br, v.h - 2 * v.br, line:GetWide() - v.h - v.br, v.br)

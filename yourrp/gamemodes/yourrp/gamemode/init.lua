@@ -97,6 +97,8 @@ AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_scale.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_darkrp.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_permaprops.lua")
 
+AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_weapon.lua")
+
 AddCSLuaFile("yrp/cl/gm/menus/cl_smartphone.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_emotes.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_laws.lua")

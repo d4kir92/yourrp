@@ -16,6 +16,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "int_groupID", "INTEGER DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps_onspawn", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_ndsweps", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_voteable", "INTEGER DEFAULT 0")
@@ -1199,6 +1200,93 @@ net.Receive("rem_role_swep", function(len, ply)
 
 	RemSwepFromRole(ruid, swepcn)
 end)
+
+
+
+-- sweps on spawn
+function SendSwepsOnSpawn(uid)
+	local role = GetRole(uid)
+	if wk(role) then
+		local nettab = {}
+		local sweps = string.Explode(",", role.string_sweps_onspawn)
+		for i, swep in pairs(sweps) do
+			if !strEmpty(swep) then
+				local entry = YRPGetSlotsOfSWEP(swep)
+				table.insert(nettab, entry)
+			end
+		end
+
+		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
+			net.Start("get_role_sweps_onspawn")
+				net.WriteTable(nettab)
+			net.Send(pl)
+		end
+	end
+end
+
+util.AddNetworkString("get_role_sweps_onspawn")
+net.Receive("get_role_sweps_onspawn", function(len, ply)
+	local uid = net.ReadInt(32)
+	SendSwepsOnSpawn(uid)
+end)
+
+function AddSwepToRoleOnSpawn(ruid, swepcn)
+	local role = GetRole(ruid)
+	if wk(role) then
+		local sweps = string.Explode(",", role.string_sweps_onspawn)
+		if !table.HasValue(sweps, tostring(swepcn)) then
+			local oldsweps = {}
+			for i, v in pairs(sweps) do
+				if !strEmpty(v) then
+					table.insert(oldsweps, v)
+				end
+			end
+
+			local newsweps = oldsweps
+			table.insert(newsweps, tostring(swepcn))
+			newsweps = string.Implode(",", newsweps)
+
+			SQL_UPDATE(DATABASE_NAME, "string_sweps_onspawn = '" .. newsweps .. "'", "uniqueID = '" .. ruid .. "'")
+			SendSwepsOnSpawn(ruid)
+		end
+	end
+end
+
+util.AddNetworkString("add_role_swep_onspawn")
+net.Receive("add_role_swep_onspawn", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local swepcn = net.ReadString()
+
+	AddSwepToRoleOnSpawn(ruid, swepcn)
+end)
+
+function RemSwepFromRoleOnSpawn(ruid, swepcn)
+	local role = GetRole(ruid)
+	local sweps = string.Explode(",", role.string_sweps_onspawn)
+	local oldsweps = {}
+	for i, v in pairs(sweps) do
+		if !strEmpty(v) then
+			table.insert(oldsweps, v)
+		end
+	end
+
+	local newsweps = oldsweps
+	table.RemoveByValue(newsweps, tostring(swepcn))
+	newsweps = string.Implode(",", newsweps)
+
+	SQL_UPDATE(DATABASE_NAME, "string_sweps_onspawn = '" .. newsweps .. "'", "uniqueID = '" .. ruid .. "'")
+	SendSwepsOnSpawn(ruid)
+end
+
+util.AddNetworkString("rem_role_swep_onspawn")
+net.Receive("rem_role_swep_onspawn", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local swepcn = net.ReadString()
+
+	RemSwepFromRoleOnSpawn(ruid, swepcn)
+end)
+
+
 
 --not droppable sweps
 function SendNDSweps(uid)

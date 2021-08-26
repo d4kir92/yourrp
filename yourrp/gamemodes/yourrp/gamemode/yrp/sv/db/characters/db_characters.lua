@@ -65,6 +65,93 @@ if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "1")
 end
 
+-- SLOTS
+SQL_ADD_COLUMN(DATABASE_NAME, "slot_primary", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "slot_secondary", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "slot_sidearm", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "slot_gadget", "TEXT DEFAULT ''")
+
+function YRPUpdateCharSlot(ply, art, pri)
+	local tab = {}
+	for i, v in pairs(pri) do
+		if !strEmpty(v) and !table.HasValue(tab, v) and #tab < GetGlobalInt( "yrp_max_slots_" .. art, 0) then
+			table.insert(tab, v)
+		end
+	end
+
+	local sweps = table.concat( tab, "," )
+	SQL_UPDATE(DATABASE_NAME, "slot_" .. art .. " = '" .. sweps .. "'", "uniqueID = '" .. ply:CharID() .. "'")
+
+	ply:SetNW2String("slot_" .. art, sweps)
+end
+
+function YRPGetCharSWEPS(ply)
+	local tab = {}
+
+	local dbtab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ply:CharID() .. "'")
+	if wk(dbtab) then
+		dbtab = dbtab[1]
+
+		tab["slot_primary"] = string.Explode(",", dbtab.slot_primary)
+		tab["slot_secondary"] = string.Explode(",", dbtab.slot_secondary)
+		tab["slot_sidearm"] = string.Explode(",", dbtab.slot_sidearm)
+		tab["slot_gadget"] = string.Explode(",", dbtab.slot_gadget)
+
+		ply:SetNW2String("slot_primary", dbtab.slot_primary)
+		ply:SetNW2String("slot_secondary", dbtab.slot_secondary)
+		ply:SetNW2String("slot_sidearm", dbtab.slot_sidearm)
+		ply:SetNW2String("slot_gadget", dbtab.slot_gadget)
+	end
+
+	return tab
+end
+
+util.AddNetworkString("yrp_get_sweps_role_art")
+net.Receive("yrp_get_sweps_role_art", function(len, ply)
+	local art = net.ReadString()
+
+	local rolTab = ply:GetRolTab()
+
+	local sweps = {}
+	for i, v in pairs(string.Explode(",", rolTab.string_sweps)) do
+		local tab = SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. v .. "'")
+		if wk(tab) then
+			tab = tab[1]
+			if tobool(tab["slot_" .. art]) then
+				table.insert(sweps, v)
+			end
+		end
+	end
+
+	net.Start("yrp_get_sweps_role_art")
+		net.WriteTable(sweps)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("yrp_slot_swep_add")
+net.Receive("yrp_slot_swep_add", function(len, ply)
+	local art = net.ReadString()
+	local cname = net.ReadString()
+
+	local currentsweps = ply:GetNW2String("slot_" .. art, "")
+	local tab = string.Explode(",", currentsweps)
+	table.insert( tab, cname )
+
+	YRPUpdateCharSlot(ply, art, tab)
+end)
+
+util.AddNetworkString("yrp_slot_swep_rem")
+net.Receive("yrp_slot_swep_rem", function(len, ply)
+	local art = net.ReadString()
+	local cname = net.ReadString()
+
+	local currentsweps = ply:GetNW2String("slot_" .. art, "")
+	local tab = string.Explode(",", currentsweps)
+	table.RemoveByValue(tab, cname)
+
+	YRPUpdateCharSlot(ply, art, tab)
+end)
+
 --db_drop_table(DATABASE_NAME)
 --db_is_empty(DATABASE_NAME)
 
