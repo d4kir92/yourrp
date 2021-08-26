@@ -128,6 +128,15 @@ net.Receive("yrp_get_sweps_role_art", function(len, ply)
 	net.Send(ply)
 end)
 
+function YRPHasWeapon(ply, cname)
+	for i, v in pairs(ply:GetWeapons()) do
+		if v:GetClass() == cname then
+			return true
+		end
+	end
+	return false
+end
+
 util.AddNetworkString("yrp_slot_swep_add")
 net.Receive("yrp_slot_swep_add", function(len, ply)
 	local art = net.ReadString()
@@ -137,7 +146,11 @@ net.Receive("yrp_slot_swep_add", function(len, ply)
 	local tab = string.Explode(",", currentsweps)
 	table.insert( tab, cname )
 
-	YRPUpdateCharSlot(ply, art, tab)
+	if !YRPHasWeapon(ply, cname) then
+		ply:Give(cname)
+
+		YRPUpdateCharSlot(ply, art, tab)
+	end
 end)
 
 util.AddNetworkString("yrp_slot_swep_rem")
@@ -148,6 +161,8 @@ net.Receive("yrp_slot_swep_rem", function(len, ply)
 	local currentsweps = ply:GetNW2String("slot_" .. art, "")
 	local tab = string.Explode(",", currentsweps)
 	table.RemoveByValue(tab, cname)
+
+	ply:StripWeapon(cname)
 
 	YRPUpdateCharSlot(ply, art, tab)
 end)

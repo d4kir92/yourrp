@@ -66,7 +66,7 @@ local function YRPCreateSlot(x, y, art, id)
 		local cname = YRPGetSlotSWEP("slot_" .. art, id)
 		local model = YRPGetModelOfSWEP(cname)
 		local name = YRPGetPrintNameOfSWEP(cname)
-		if model != slot.oldmodel then
+		if model != nil and model != slot.oldmodel then
 			slot.oldmodel = model
 			slot.mdl:SetModel(model)
 
@@ -111,7 +111,7 @@ local function YRPCreateSWEP(x, y, art, cname)
 	function slot.btn:Paint(pw, ph)
 		local model = YRPGetModelOfSWEP(cname)
 		local name = YRPGetPrintNameOfSWEP(cname)
-		if model != slot.oldmodel then
+		if model != nil and model != slot.oldmodel then
 			slot.oldmodel = model
 			slot.mdl:SetModel(model)
 
