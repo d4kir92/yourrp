@@ -143,10 +143,10 @@ function SetRole(ply, rid, force, pmid)
 					elseif slots.slot_secondary and se + 1 <= GetGlobalInt("yrp_max_slots_secondary", 0) then
 						se = se + 1
 						table.insert(sec, swep)
-					elseif slots.slot_sidearm and si + 1 <= GetGlobalInt("yrp_max_slots_sidearms", 0) then
+					elseif slots.slot_sidearm and si + 1 <= GetGlobalInt("yrp_max_slots_sidearm", 0) then
 						si = si + 1
 						table.insert(sid, swep)
-					elseif slots.slot_gadget and ga + 1 <= GetGlobalInt("yrp_max_slots_gadgets", 0) then
+					elseif slots.slot_gadget and ga + 1 <= GetGlobalInt("yrp_max_slots_gadget", 0) then
 						ga = ga + 1
 						table.insert(gad, swep)
 					else

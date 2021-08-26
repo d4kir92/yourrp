@@ -173,15 +173,15 @@ net.Receive("yrp_open_weaponchest", function(len)
 			win.slots:AddItem(slot)
 			slots = slots + 1
 		end
-
-		for i = 1, GetGlobalInt("yrp_max_slots_sidearms", 0) do
+		
+		for i = 1, GetGlobalInt("yrp_max_slots_sidearm", 0) do
 			local slot = YRPCreateSlot(0, 0, "sidearm", i)
 
 			win.slots:AddItem(slot)
 			slots = slots + 1
 		end
 
-		for i = 1, GetGlobalInt("yrp_max_slots_gadgets", 0) do
+		for i = 1, GetGlobalInt("yrp_max_slots_gadget", 0) do
 			local slot = YRPCreateSlot(0, 0, "gadget", i)
 
 			win.slots:AddItem(slot)

@@ -39,8 +39,8 @@ net.Receive("yrp_weapon_menu", function(len)
 	-- parent, x, y, lid, smin, smax, sart, sval
 	YRPWeaponSlotNum(PARENT, 10, 10, 	"LID_primaryslots", 	1, 5, "slots_primary", 		DBTab.slots_primary)
 	YRPWeaponSlotNum(PARENT, 10, 70, 	"LID_secondaryslots", 	1, 5, "slots_secondary", 	DBTab.slots_secondary)
-	YRPWeaponSlotNum(PARENT, 10, 130, 	"LID_sidearmslots", 	1, 5, "slots_sidearms", 	DBTab.slots_sidearms)
-	YRPWeaponSlotNum(PARENT, 10, 190, 	"LID_gadgetslots", 		1, 5, "slots_gadgets", 		DBTab.slots_gadgets)
+	YRPWeaponSlotNum(PARENT, 10, 130, 	"LID_sidearmslots", 	1, 5, "slots_sidearm", 		DBTab.slots_sidearm)
+	YRPWeaponSlotNum(PARENT, 10, 190, 	"LID_gadgetslots", 		1, 5, "slots_gadget", 		DBTab.slots_gadget)
 
 
 

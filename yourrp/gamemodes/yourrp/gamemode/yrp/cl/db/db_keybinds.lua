@@ -112,9 +112,6 @@ end
 function check_yrp_keybinds()
 	SQL_INIT_DATABASE(DATABASE_NAME)
 
-	SQL_UPDATE(DATABASE_NAME, "speak_next = '0'")
-	SQL_UPDATE(DATABASE_NAME, "speak_prev = '0'")
-
 	local _check_version = SQL_SELECT(DATABASE_NAME, "version", "uniqueID = 1")
 	if _check_version != false and _check_version != nil then
 		YRP.msg("note", "Checking keybinds version")
