@@ -10,9 +10,9 @@ function disk_full(error)
 			net.Broadcast()
 		elseif CLIENT then
 			local lply = LocalPlayer()
-			ply:PrintMessage(HUD_PRINTTALK, "database or disk is full, please make more space!")
+			lply:PrintMessage(HUD_PRINTTALK, "database or disk is full, please make more space!")
 			notification.AddLegacy("[YourRP] Database or disk is full, please make more space!", NOTIFY_ERROR, 40)
-			YRP.msg("error", GetSQLModeName() .. ": " .. tostring(ply:SteamID()) .. " (database or disk is full)")
+			YRP.msg("error", GetSQLModeName() .. ": " .. tostring(lply:SteamID()) .. " (database or disk is full)")
 		end
 	end
 end
@@ -27,9 +27,9 @@ function sql_show_last_error()
 	elseif CLIENT then
 		local lply = LocalPlayer()
 
-		if ea(ply) then
-			ply:PrintMessage(HUD_PRINTTALK, "[YourRP|DATABASE] CLIENT-DATABASE:")
-			ply:PrintMessage(HUD_PRINTTALK, _last_error)
+		if ea(lply) then
+			lply:PrintMessage(HUD_PRINTTALK, "[YourRP|DATABASE] CLIENT-DATABASE:")
+			lply:PrintMessage(HUD_PRINTTALK, _last_error)
 		end
 	end
 
@@ -96,19 +96,23 @@ function SQL_STR_IN(str)
 end
 
 function SQL_STR_OUT(str)
-	local _res = tostring(str)
+	local _res = str
 
-	for k, sym in pairs(YRP_DB_DC) do
-		local _pre = ""
+	if type(_res) == "string" then
+		for k, sym in pairs(YRP_DB_DC) do
+			local _pre = ""
 
-		if k < 10 then
-			_pre = "0"
+			if k < 10 then
+				_pre = "0"
+			end
+
+			_res = string.Replace(_res, "%" .. _pre .. k, sym)
 		end
 
-		_res = string.Replace(_res, "%" .. _pre .. k, sym)
+		return _res
+	else
+		return ""
 	end
-
-	return _res
 end
 
 function db_int(int)

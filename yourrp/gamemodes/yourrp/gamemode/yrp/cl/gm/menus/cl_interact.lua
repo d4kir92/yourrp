@@ -5,7 +5,7 @@ function toggleInteractMenu()
 	local lply = LocalPlayer()
 	local eyeTrace = lply:GetEyeTrace()
 
-	--openInteractMenu(LocalPlayer():SteamID())
+	openInteractMenu(LocalPlayer():SteamID())
 	if eyeTrace.Entity:IsPlayer() and YRPIsNoMenuOpen() then
 		if eyeTrace.Entity:GetColor().a > 0 then
 			openInteractMenu(eyeTrace.Entity:SteamID())
@@ -46,6 +46,8 @@ net.Receive("openInteractMenu", function(len)
 	local demoteable = net.ReadBool()
 	local demoteName = net.ReadString()
 
+	local hasspecs = net.ReadBool()
+
 	local licenses = ply:GetLicenseNames()
 
 	yrp_Interact = createD("YFrame", nil, YRP.ctr(1090), YRP.ctr(1360), 0, 0)
@@ -61,6 +63,7 @@ net.Receive("openInteractMenu", function(len)
 	local tmpPly = NULL
 	local tmpGender = ""
 	local tmpID = ""
+	local tmpCharID = 0
 	for k, v in pairs (player.GetAll()) do
 		if tostring(v:SteamID()) == tostring(tmpTargetSteamID) then
 			tmpPly = v
@@ -68,6 +71,7 @@ net.Receive("openInteractMenu", function(len)
 			tmpRPName = v:RPName()
 			tmpGender = v:GetNW2String("Gender")
 			tmpID = v:GetNW2String("idcardid")
+			tmpCharID = v:CharID()
 			tmpRPDescription = ""
 			for i = 1, 10 do
 				if i > 1 then
@@ -110,7 +114,7 @@ net.Receive("openInteractMenu", function(len)
 		local _tmpDescription = createD("DTextEntry", content, content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), YRP.ctr(10), YRP.ctr(640))
 		_tmpDescription:SetMultiline(true)
 		_tmpDescription:SetEditable(false)
-		_tmpDescription:SetText(tmpRPDescription)
+		_tmpDescription:SetText(tmpRPDescription or "")
 	end
 
 	--[[local btnTrade = createVGUI("YButton", content, 500, 50, 10, 1000)
@@ -160,6 +164,10 @@ net.Receive("openInteractMenu", function(len)
 			btnVerstoesse:SetText(YRP.lang_string("LID_violations") .. ": " .. ply:GetNW2Int("int_violations", -1))
 		end
 	end
+
+	isInstructor = true
+	promoteable = true
+	demoteable = true
 
 	if isInstructor then
 		if promoteable then
@@ -211,9 +219,66 @@ net.Receive("openInteractMenu", function(len)
 		end
 	end
 
+	hasspecs = true
+
+	if hasspecs then
+		local btnbtnSpecialization = createVGUI("YButton", content, 500, 50, 520, 1120)
+		btnbtnSpecialization:SetText(YRP.lang_string("LID_specializations"))
+		function btnbtnSpecialization:DoClick()
+			if pa(yrp_Interact) then
+				yrp_Interact:Close()
+			end
+
+			YRPOpenGiveSpec(tmpCharID, LocalPlayer():GetRoleUID())
+		end
+		function btnbtnSpecialization:Paint(pw, ph)
+			hook.Run("YButtonPaint", self, pw, ph)
+		end
+	end
+
 	yrp_Interact:Center()
 	yrp_Interact:MakePopup()
 end)
+
+function YRPOpenGiveSpec(charid, ruid)
+	local win = createD("YFrame", nil, 600, 600, 0, 0)
+	win:SetTitle("LID_specializations")
+	win:Center()
+	win:MakePopup()
+
+	win.dpl = createD("DPanelList", win:GetContent(), 500, 500, 0, 0)
+	win.dpl:EnableVerticalScrollbar()
+	function win.dpl:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
+	end
+
+	net.Receive("get_role_specs", function(len)
+		local nettab = net.ReadTable()
+
+		for i, v in pairs(nettab) do
+			local btn = createD("YButton", nil, 200, 50, 0, 0)
+			btn:SetText(SQL_STR_OUT(v.name))
+
+			function btn:DoClick()
+				net.Start("char_add_spec")
+					net.WriteString(charid)
+					net.WriteString(v.uid)
+				net.SendToServer()
+
+				win:Close()
+			end
+
+			win.dpl:AddItem(btn)
+		end
+	end)
+	if ruid then
+		net.Start("get_role_specs")
+			net.WriteString(ruid)
+		net.SendToServer()
+	else
+		YRP.msg("note", "IN WORK")
+	end
+end
 
 net.Receive("yrp_invite_ply", function(len)
 	local role = net.ReadTable()

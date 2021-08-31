@@ -115,12 +115,16 @@ function SetRole(ply, rid, force, pmid)
 		ply:StripWeapons()
 		ply:StripAmmo()
 		ply:UserGroupLoadout()
+
+		YRPGiveSpecs(ply)
 	end
 
 	-- SWEPS
 	local ChaTab = ply:GetChaTab()
-	local rolTab = ply:GetRolTab()
-	if tonumber(ChaTab.roleID) != tonumber(rid) then
+	local rolTab = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'")
+	if GetGlobalBool("bool_weapon_system", true) and wk(ChaTab) and wk(rolTab) and tonumber(ChaTab.roleID) != tonumber(rid) then
+		rolTab = rolTab[1]
+
 		local tmpSWEPTable = string.Explode(",", SQL_STR_OUT(rolTab.string_sweps_onspawn))
 
 		local pr = 0
@@ -162,9 +166,31 @@ function SetRole(ply, rid, force, pmid)
 		YRPUpdateCharSlot(ply, "gadget", 		gad)
 	end
 
-	for i, slot in pairs(YRPGetCharSWEPS(ply)) do
-		for x, wep in pairs(slot) do
-			ply:Give(wep)
+	if GetGlobalBool("bool_weapon_system", true) then
+		for i, slot in pairs(YRPGetCharSWEPS(ply)) do
+			for x, wep in pairs(slot) do
+				ply:Give(wep)
+			end
+		end
+		local rolTab = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'")
+		if wk(rolTab) then
+			rolTab = rolTab[1]
+			local tmpSWEPTable = string.Explode(",", SQL_STR_OUT(rolTab.string_sweps_onspawn))
+			for k, swep in pairs(tmpSWEPTable) do
+				if swep != nil and swep != NULL and swep != "" then
+					if ply:Alive() then
+						local slots = YRPGetSlotsOfSWEP(swep)
+						if slots.slot_no then
+							ply:Give(swep)
+						end
+					end
+				end
+			end
+		end
+	elseif wk(rolTab) then
+		rolTab = rolTab[1]
+		for i, swep in pairs(string.Explode(",", rolTab.string_sweps)) do
+			ply:Give(swep)
 		end
 	end
 

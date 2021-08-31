@@ -898,9 +898,12 @@ function DStringListBox(tab)
 					if tobool(v.slots.slot_gadget) then
 						table.insert(test, YRP.lang_string("LID_gadget"))
 					end
+					if tobool(v.slots.slot_no) then
+						table.insert(test, YRP.lang_string("LID_noslot"))
+					end
 					text = table.concat(test, ", ")
 					if strEmpty(text) then
-						text = "NO SLOT"
+						text = YRP.lang_string("LID_empty")
 					end
 				end
 

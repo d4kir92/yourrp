@@ -59,6 +59,19 @@ yrp_poses["standing"]["salute"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -10, 0)
 
 
 
+yrp_poses["standing"]["facepalm"] = {}
+yrp_poses["standing"]["facepalm"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["facepalm"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(20, -90, -60)
+yrp_poses["standing"]["facepalm"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["facepalm"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(45, -80, 0)
+yrp_poses["standing"]["facepalm"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["standing"]["facepalm"]["ValveBiped.Bip01_R_Hand"].ang = Angle(0, -30, 80)
+yrp_poses["standing"]["facepalm"]["ValveBiped.Bip01_R_Thigh"] = {}
+yrp_poses["standing"]["facepalm"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
+yrp_poses["standing"]["facepalm"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["standing"]["facepalm"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -20, 0)
+
+
 yrp_poses["standing"]["crossarms"] = {}
 yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_L_UpperArm"] = {}
 yrp_poses["standing"]["crossarms"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-20, -65, 0)
@@ -220,6 +233,26 @@ yrp_poses["kneeling"]["surrenderbehind"]["ValveBiped.Bip01_Pelvis"].pos = Vector
 
 
 
+yrp_poses["standing"]["report"] = {}
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(30, -180, -90)
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, 0, 0)
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Finger01"] = {} -- daumen
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Finger01"].ang = Angle(0, 0, 0)
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Finger11"] = {} -- zeige finger
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Finger11"].ang = Angle(0, 0, 0)
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Finger21"] = {} -- mittel finger
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Finger21"].ang = Angle(0, -110, 0)
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Finger31"] = {} -- heirats finger
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Finger31"].ang = Angle(0, -110, 0)
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Finger41"] = {} -- kleiner finger
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_R_Finger41"].ang = Angle(-20, -110, 0)
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_Head1"] = {}
+yrp_poses["standing"]["report"]["ValveBiped.Bip01_Head1"].ang = Angle(0, 10, 0)
+
+
+
 yrp_poses["standing"]["pointto"] = {}
 yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_UpperArm"] = {}
 yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(30, -90, 0)
@@ -229,12 +262,32 @@ yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger01"] = {} -- daumen
 yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger01"].ang = Angle(0, 0, 0)
 yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger11"] = {} -- zeige finger
 yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger11"].ang = Angle(0, 0, 0)
-yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger2"] = {} -- mittel finger
-yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger2"].ang = Angle(0, -110, 0)
-yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger3"] = {} -- heirats finger
-yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger3"].ang = Angle(0, -110, 0)
-yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger4"] = {} -- kleiner finger
-yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger4"].ang = Angle(-20, -110, 0)
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger21"] = {} -- mittel finger
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger21"].ang = Angle(0, -110, 0)
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger31"] = {} -- heirats finger
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger31"].ang = Angle(0, -110, 0)
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger41"] = {} -- kleiner finger
+yrp_poses["standing"]["pointto"]["ValveBiped.Bip01_R_Finger41"].ang = Angle(-20, -110, 0)
+
+
+
+yrp_poses["standing"]["middlefinger"] = {}
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(30, -90, 0)
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, 0, 0)
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Hand"].ang = Angle(70, 0, 90)
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Finger01"] = {} -- daumen
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Finger01"].ang = Angle(0, 0, 0)
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Finger11"] = {} -- zeige finger
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Finger11"].ang = Angle(20, -90, 0)
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Finger2"] = {} -- mittel finger
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Finger2"].ang = Angle(0, 0, 0)
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Finger31"] = {} -- heirats finger
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Finger31"].ang = Angle(0, -90, 0)
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Finger41"] = {} -- kleiner finger
+yrp_poses["standing"]["middlefinger"]["ValveBiped.Bip01_R_Finger41"].ang = Angle(-20, -90, 0)
 
 
 
@@ -318,6 +371,22 @@ yrp_poses["standing"]["hip"]["ValveBiped.Bip01_R_Thigh"].ang = Angle(6, 0, 0)
 yrp_poses["standing"]["hip"]["ValveBiped.Bip01_Head1"] = {}
 yrp_poses["standing"]["hip"]["ValveBiped.Bip01_Head1"].ang = Angle(0, -6, 0)
 
+
+
+yrp_poses["standing"]["coverears"] = {}
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_L_UpperArm"] = {}
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_L_UpperArm"].ang = Angle(-100, -10, -60)
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_L_Forearm"] = {}
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_L_Forearm"].ang = Angle(0, -110, 0)
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_L_Hand"] = {}
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_L_Hand"].ang = Angle(25, 40, -40)
+
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_R_UpperArm"] = {}
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_R_UpperArm"].ang = Angle(108, -10, 60)
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_R_Forearm"] = {}
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_R_Forearm"].ang = Angle(0, -110, 0)
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_R_Hand"] = {}
+yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_R_Hand"].ang = Angle(-25, 40, 40)
 
 
 --[[

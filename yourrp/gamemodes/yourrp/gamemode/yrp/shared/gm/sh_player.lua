@@ -7,8 +7,7 @@ function GetPlayerByName(name)
 
 	name = string.Replace(name, "[", "")
 	name = string.Replace(name, "]", "")
-	name = string.Replace(name, "(", "")
-	name = string.Replace(name, ")", "")
+	name = string.Replace(name, "%", "")
 	name = string.lower(name)
 
 	for i, ply in pairs(player.GetAll()) do
@@ -590,25 +589,13 @@ function Player:Team()
 	return tonumber(self:GetNW2String("roleUniqueID", "-1"))
 end
 
-timer.Simple(10, function()
+timer.Simple(2, function()
 	function team.GetName(index)
-		for k, v in pairs(player.GetAll()) do
-			if v:Team() == index then
-				return v:GetNW2String("roleName", "NO TEAM") -- darkrp team is role!
-			end
+		if RPExtraTeams[index] then
+			return RPExtraTeams[index].name
+		else
+			return "FAILED TO FIND TEAMNAME"
 		end
-		return "FAILED TO FIND TEAMNAME"
-	end
-
-	function team.GetColor(index)
-		for k, v in pairs(player.GetAll()) do
-			if v:Team() == index then
-				local _color = v:GetNW2String("roleColor", "255,0,0") -- darkrp team is role!
-				_color = string.Explode(",", _color)
-				return Color(_color[1], _color[2], _color[3])
-			end
-		end
-		return Color(255, 0, 0)
 	end
 end)
 

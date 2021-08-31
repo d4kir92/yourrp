@@ -17,9 +17,9 @@ GM.Twitter = "twitter.com/D4KIR" -- do NOT change this!
 GM.Help = "Create your rp you want to make!" -- do NOT change this!
 GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
-GM.VersionBeta = 347 -- do NOT change this!
-GM.VersionCanary = 697 -- do NOT change this!
-GM.VersionBuild = 16 -- do NOT change this!
+GM.VersionBeta = 348 -- do NOT change this!
+GM.VersionCanary = 699 -- do NOT change this!
+GM.VersionBuild = 19 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -95,6 +95,15 @@ function GetMapNameDB()
 	mapname = string.Replace(mapname, "-", "_")
 	mapname = string.Replace(mapname, " ", "_")
 	return string.lower(mapname)
+end
+
+-- bool to number
+function tonum(bo)
+	if bo then
+		return 1
+	else
+		return 0
+	end
 end
 
 function StringToColor(str)
@@ -241,7 +250,11 @@ concommand.Add("yrp__help", function(ply, cmd, args)
 end)
 
 function YRPCollectionID()
-	return tonumber(GetGlobalString("text_server_collectionid", "0"))
+	local collectionid = tonumber(GetGlobalString("text_server_collectionid", "0"))
+	if collectionid > 100000000 then
+		return collectionid
+	end
+	return 0
 end
 
 function PrintCollectionID()

@@ -71,6 +71,9 @@ SQL_ADD_COLUMN(DATABASE_NAME, "slot_secondary", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "slot_sidearm", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "slot_gadget", "TEXT DEFAULT ''")
 
+-- Specs
+SQL_ADD_COLUMN(DATABASE_NAME, "string_specializations", "TEXT DEFAULT ''")
+
 function YRPUpdateCharSlot(ply, art, pri)
 	local tab = {}
 	for i, v in pairs(pri) do
@@ -143,12 +146,12 @@ net.Receive("yrp_slot_swep_add", function(len, ply)
 	local cname = net.ReadString()
 
 	local currentsweps = ply:GetNW2String("slot_" .. art, "")
+
 	local tab = string.Explode(",", currentsweps)
 	table.insert( tab, cname )
 
 	if !YRPHasWeapon(ply, cname) then
 		ply:Give(cname)
-
 		YRPUpdateCharSlot(ply, art, tab)
 	end
 end)
@@ -978,4 +981,67 @@ net.Receive("setting_characters", function(len, ply)
 	net.Start("setting_characters")
 		net.WriteTable(tab)
 	net.Send(ply)
+end)
+
+function YRPGiveSpecs(ply)
+	local charid = ply:CharID()
+	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
+	
+	local prefix = {}
+	local suffix = {}
+
+	if wk(tab) then
+		tab = tab[1]
+
+		for i, v in pairs( string.Explode(",", tab.string_specializations ) ) do
+			local tabSpec = SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
+			if wk(tabSpec) then
+				tabSpec = tabSpec[1]
+		
+				for i, v in pairs( string.Explode(",", tabSpec.sweps ) ) do
+					ply:Give(v)
+				end
+
+				if !strEmpty(tabSpec.prefix) then
+					table.insert( prefix, SQL_STR_OUT( tabSpec.prefix ) )
+				end
+				if !strEmpty(tabSpec.suffix) then
+					table.insert( suffix, SQL_STR_OUT( tabSpec.suffix ) )
+				end
+			end
+		end
+	end
+
+	prefix = table.concat( prefix, " " )
+	suffix = table.concat( suffix, " " )
+
+	ply:SetNW2String( "spec_prefix", prefix )
+	ply:SetNW2String( "spec_suffix", suffix )
+end
+
+util.AddNetworkString("char_add_spec")
+net.Receive("char_add_spec", function(len, ply)
+	local charid = net.ReadString()
+	local specid = net.ReadString()
+
+	local newspecs = {}
+
+	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
+	if wk(tab) then
+		tab = tab[1]
+		for i, v in pairs( string.Explode(",", tab.string_specializations ) ) do
+			if !table.HasValue(newspecs, v) and !strEmpty(v) then
+				table.insert(newspecs, v)
+			end
+		end
+	end
+
+	if !table.HasValue(newspecs, specid) and !strEmpty(specid) then
+		table.insert(newspecs, specid)
+	end
+	newspecs = table.concat( newspecs, "," )
+
+	SQL_UPDATE(DATABASE_NAME, "string_specializations = '" .. newspecs .. "'", "uniqueID = '" .. charid .. "'")
+
+	YRPGiveSpecs(ply)
 end)

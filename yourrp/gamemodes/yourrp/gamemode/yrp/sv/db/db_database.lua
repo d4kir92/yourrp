@@ -62,6 +62,7 @@ table.insert(YRP_DBS, "yrp_characters")
 table.insert(YRP_DBS, "yrp_vehicles")
 table.insert(YRP_DBS, "yrp_agents")
 table.insert(YRP_DBS, "yrp_licenses")
+table.insert(YRP_DBS, "yrp_specializations")
 table.insert(YRP_DBS, "yrp_shops")
 table.insert(YRP_DBS, "yrp_shop_items")
 table.insert(YRP_DBS, "yrp_shop_categories")
@@ -212,6 +213,8 @@ include("macros/db_macros.lua")
 include("chatchannels/db_chatchannels.lua")
 
 include("weapon/db_weapon.lua")
+
+include("specializations/db_specializations.lua")
 
 -- DarkRP
 local DATABASE_NAME = "yrp_darkrp"

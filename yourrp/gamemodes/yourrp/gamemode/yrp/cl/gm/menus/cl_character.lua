@@ -716,14 +716,16 @@ function openCharacterSelection()
 				end
 
 				-- Get Newest Background for the Menu
-				local oldurl = CharMenu.frame.bg.url
-				local newurl = GetGlobalString("text_character_background", "")
-				if oldurl != newurl then
-					CharMenu.frame.bg.url = newurl
-					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
-				end
-				if newurl and strEmpty(newurl) then
-					draw.SimpleText(charbgnotfound, "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				if pa(CharMenu) and pa(CharMenu.frame) then
+					local oldurl = CharMenu.frame.bg.url
+					local newurl = GetGlobalString("text_character_background", "")
+					if oldurl != newurl then
+						CharMenu.frame.bg.url = newurl
+						CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
+					end
+					if newurl and strEmpty(newurl) then
+						draw.SimpleText(charbgnotfound, "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					end
 				end
 			end
 

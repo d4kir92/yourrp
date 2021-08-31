@@ -351,22 +351,24 @@ function YRPSortScoreboard()
 
 	local plys = {}
 	for i, ply in pairs(player.GetAll()) do
-		local entry = {}
-		entry.ply = ply
-		entry.ruid = ply:GetRoleUID()
-		if entry.ruid <= 0 then
-			entry.ruid = 999999
+		if IsValid(ply) then
+			local entry = {}
+			entry.ply = ply
+			entry.ruid = ply:GetRoleUID()
+			if entry.ruid <= 0 then
+				entry.ruid = 999999
+			end
+			entry.guid = ply:GetGroupUID()
+			if entry.guid <= 0 then
+				entry.guid = 999999
+			end
+			entry.usergroup = ply:GetUserGroup()
+			entry.level = ply:Level()
+			entry.idcardid = ply:IDCardID()
+			entry.name = ply:RPName()
+			entry.language = ply:GetLanguage()
+			table.insert(plys, entry)
 		end
-		entry.guid = ply:GetGroupUID()
-		if entry.guid <= 0 then
-			entry.guid = 999999
-		end
-		entry.usergroup = ply:GetUserGroup()
-		entry.level = ply:Level()
-		entry.idcardid = ply:IDCardID()
-		entry.name = ply:RPName()
-		entry.language = ply:GetLanguage()
-		table.insert(plys, entry)
 	end
 	
 	for i, entry in SortedPairsByMemberValue(plys, lply.yrp_sb_sortby, lply.ypr_sb_reverse) do
@@ -551,7 +553,7 @@ function YRPScoreboardAddPlayer(ply)
 					trx = trx + yrptab["language"] + sp
 				end
 				if GetGlobalBool("bool_yrp_scoreboard_show_usergroup", false) then
-					local text = string.upper(ply:GetUserGroup())
+					local text = ply:GetUserGroup()
 					local font = "Saira_24"
 					surface.SetFont(font)
 					local tsw, tsh = surface.GetTextSize(text)

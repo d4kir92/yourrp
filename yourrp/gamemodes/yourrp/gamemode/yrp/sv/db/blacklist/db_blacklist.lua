@@ -13,11 +13,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
 --db_drop_table(DATABASE_NAME)
 --db_is_empty(DATABASE_NAME)
 
---[[
-name		value
-chat		Hammerfall
-inventory	yrp_holo
-]]
 --"yrp_blacklist_chat"
 
 if SQL_SELECT(DATABASE_NAME, "*", "value = 'yrp_teleporter'") == nil then

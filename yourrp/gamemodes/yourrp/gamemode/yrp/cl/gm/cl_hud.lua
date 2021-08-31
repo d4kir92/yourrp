@@ -544,7 +544,7 @@ end)
 
 hook.Add("HUDPaint", "yrp_hud_collectionid", function()
 	local lply = LocalPlayer()
-	if lply:HasAccess() and YRPCollectionID() == 0 then
+	if lply:HasAccess() and YRPCollectionID() < 100000000 then
 		local text = YRP.lang_string("LID_thecollectionidismissing") .. " (" .. GetKeybindName("menu_settings") .. " >> " .. YRP.lang_string("LID_server") .. " >> " .. YRP.lang_string("LID_general") .. " >> " .. YRP.lang_string("LID_collectionid") .. ")"
 		draw.SimpleTextOutlined(text, "Y_50_500", ScrW() / 2, ScrH()  * 0.2, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end

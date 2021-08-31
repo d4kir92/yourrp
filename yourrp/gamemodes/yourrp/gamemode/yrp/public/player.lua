@@ -462,6 +462,16 @@ end
 function Player:RPName() -- Character Name / Roleplay Name
 	if IsValid(self) then
 		local name = self:YRPRPName()
+
+		local prefix = self:GetNW2String( "spec_prefix", "" )
+		local suffix = self:GetNW2String( "spec_suffix", "" )
+
+		if !strEmpty( prefix ) then
+			name = prefix .. " " .. name
+		end
+		if !strEmpty( suffix ) then
+			name = name .. " " .. suffix
+		end
 		return name -- return string
 	else
 		return self:Nick()

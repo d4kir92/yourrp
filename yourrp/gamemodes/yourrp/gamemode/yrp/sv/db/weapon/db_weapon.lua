@@ -47,15 +47,17 @@ SQL_ADD_COLUMN(DATABASE_NAME2, "slot_primary", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME2, "slot_secondary", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME2, "slot_sidearm", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME2, "slot_gadget", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME2, "slot_no", "INT DEFAULT 0")
 
 function YRPGetSlotsOfSWEP(cn)
 	local tab = SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'")
 	if wk(tab) then
 		tab = tab[1]
-		tab.slots_primary = tobool(tab.slots_primary)
+		tab.slot_primary = tobool(tab.slot_primary)
 		tab.slot_secondary = tobool(tab.slot_secondary)
 		tab.slot_sidearm = tobool(tab.slot_sidearm)
 		tab.slot_gadget = tobool(tab.slot_gadget)
+		tab.slot_no = tobool(tab.slot_no)
 	else
 		SQL_INSERT_INTO(DATABASE_NAME2, "'" .. "classname" .. "'", "'" .. cn .. "'")
 		return YRPGetSlotsOfSWEP(cn)
@@ -95,7 +97,7 @@ net.Receive("yrp_set_slot_weapon", function(len, ply)
 		local cn = net.ReadString()
 		local ar = net.ReadString()
 		local bo = net.ReadBool()
-
+		
 		local tab = SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'")
 		if wk(tab) then
 			SQL_UPDATE(DATABASE_NAME2, ar .. " = '" .. tonum(bo) .. "'", "classname = '" .. cn .. "'")

@@ -262,6 +262,7 @@ function spawnItem(ply, item, duid)
 		end
 	end
 
+	local hasstorage = false
 	local TARGETPOS = Vector(0, 0, 0)
 	local TARGETANG = Angle(0, 0, 0)
 
@@ -299,6 +300,8 @@ function spawnItem(ply, item, duid)
 
 			local ang = string.Explode(",", SP.angle)
 			TARGETANG = Angle(ang[1], ang[2], ang[3])
+
+			hasstorage = true
 		end
 	end
 
@@ -366,6 +369,9 @@ function spawnItem(ply, item, duid)
 				ent:Activate()
 
 				ent:SetAngles(TARGETANG)
+				if !hasstorage then
+					ent:SetPos(ply:GetPos() + ply:GetForward() * 64)
+				end
 
 				ent:SetNW2String( "item_uniqueID", item.uniqueID )
 
@@ -384,7 +390,10 @@ function spawnItem(ply, item, duid)
 					ent:Activate()
 
 					ent:SetAngles(TARGETANG)
-
+					if !hasstorage then
+						ent:SetPos(ply:GetPos() + ply:GetForward() * 64)
+					end
+					
 					ent:SetNW2String( "item_uniqueID", item.uniqueID )
 
 					YRP.msg("gm", "[spawnItem] Spawned 2")

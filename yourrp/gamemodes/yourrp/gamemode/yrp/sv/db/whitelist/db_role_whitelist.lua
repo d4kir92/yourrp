@@ -86,21 +86,13 @@ function sendRoleWhitelist(ply)
 			net.Send(ply)
 		else
 			for i, line in pairs(_tmpWhiteList) do
-				--timer.Simple(0.001 * i, function()
-					net.Start("getRoleWhitelist_line")
-						net.WriteString(i)
-						net.WriteTable(line)
-						net.WriteBool(i == #_tmpWhiteList)
-					net.Send(ply)
-				--end)
+				net.Start("getRoleWhitelist_line")
+					net.WriteString(i)
+					net.WriteTable(line)
+					net.WriteBool(i == #_tmpWhiteList)
+				net.Send(ply)
 			end
 		end
-
-		--[[
-		net.Start("getRoleWhitelist")
-			net.WriteTable(_tmpWhiteList)
-		net.Send(ply)
-		]]
 	end
 end
 

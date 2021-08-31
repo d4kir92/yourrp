@@ -252,7 +252,7 @@ net.Receive("getsitecollection", function(len)
 	if pa(HELPMENU.mainmenu.site) then
 		local collectionid = tonumber(net.ReadString())
 
-		if collectionid > 0 then
+		if collectionid > 100000000 then
 			local link = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. collectionid
 			local WorkshopPage = createD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 

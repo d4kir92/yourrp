@@ -1297,7 +1297,7 @@ net.Receive("yrp_next_voice_channel", function(len, ply)
 	end
 end)
 
-function GM:PlayerCanHearPlayersVoice(listener, talker)
+hook.Add("PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, talker)
 	if GetGlobalBool("bool_voice", false) then
 		if listener == talker then
 			--return false
@@ -1319,8 +1319,10 @@ function GM:PlayerCanHearPlayersVoice(listener, talker)
 				end
 			end
 		end
+		return false -- new
 	end
-end
+	return true -- new
+end)
 
 function setbodygroups(ply)
 	local chaTab = ply:GetChaTab()

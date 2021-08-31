@@ -623,7 +623,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		hook.Run("YFramePaint", self, pw, ph)
 
 		if self.nr and self.perpage and pmsel.maxpage then
-			draw.SimpleText(YRP.lang_string("LID_page") .. ": " .. ((pmsel.nr / self.perpage) + 1) .. "/" .. pmsel.maxpage, "DermaDefault", ScrW() / 2, ph - YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string("LID_page") .. ": " .. ((pmsel.nr / self.perpage) + 1) .. "/" .. pmsel.maxpage, "DermaDefault", ScrW() / 2, ph - YRP.ctr(50 + 10), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end
 
@@ -659,8 +659,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		if pmsel.strsearch != nil then
 			pmsel.strsearch = string.Replace(pmsel.strsearch or "", "[", "")
 			pmsel.strsearch = string.Replace(pmsel.strsearch or "", "]", "")
-			pmsel.strsearch = string.Replace(pmsel.strsearch or "", "(", "")
-			pmsel.strsearch = string.Replace(pmsel.strsearch or "", ")", "")
+			pmsel.strsearch = string.Replace(pmsel.strsearch or "", "%", "")
 		end
 	
 		for i, v in pairs(tab) do
@@ -745,6 +744,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 				end
 			end
 		end
+		pmsel.maxpage = math.ceil(self.count / pmsel.perpage)
 		if self.fcount <= 0 then
 			pmsel.nr = pmsel.nr - pmsel.perpage
 			if !self.nothingfound then
@@ -760,7 +760,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		pmsel:RefreshPage()
 	end
 
-	pmsel.prev = createD("YButton", parent, YRP.ctr(100), YRP.ctr(50), parent:GetWide() / 2 - YRP.ctr(50 + br) - YRP.ctr(100), parent:GetTall() - YRP.ctr(50 + br))
+	pmsel.prev = createD("YButton", parent, YRP.ctr(100), YRP.ctr(50), parent:GetWide() / 2 - YRP.ctr(100 + br) - YRP.ctr(100), parent:GetTall() - YRP.ctr(50 + br))
 	pmsel.prev:SetText("<")
 	function pmsel.prev:DoClick()
 		if pmsel.nr >= pmsel.perpage then
@@ -769,7 +769,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		end
 	end
 
-	pmsel.next = createD("YButton", parent, YRP.ctr(100), YRP.ctr(50), parent:GetWide() / 2 + YRP.ctr(50 + br), parent:GetTall() - YRP.ctr(50 + br))
+	pmsel.next = createD("YButton", parent, YRP.ctr(100), YRP.ctr(50), parent:GetWide() / 2 + YRP.ctr(100 + br), parent:GetTall() - YRP.ctr(50 + br))
 	pmsel.next:SetText(">")
 	function pmsel.next:DoClick()
 		pmsel.nr = pmsel.nr + pmsel.perpage

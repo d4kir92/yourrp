@@ -39,7 +39,7 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 			_nw_yourrp["YourRP Content"] = {}
 			_nw_yourrp["YourRP Content"]["LID_missingx"] = Color(255, 0, 0)
 		end
-		if YRPCollectionID() <= 0 then
+		if YRPCollectionID() < 100000000 then
 			_nw_yourrp["Collection ID"] = {}
 			_nw_yourrp["Collection ID"]["LID_thecollectionidismissing"] = Color(255, 0, 0)
 		end

@@ -99,6 +99,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_appearance_system", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_smartphone_system", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic_system", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_level_system", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_weapon_system", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_weapon_system_model", "TEXT DEFAULT 'models/items/ammocrate_smg1.mdl'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_switch_faction", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_switch_role", "INT DEFAULT 1")
@@ -914,6 +916,18 @@ net.Receive("update_bool_level_system", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_level_system", "bool_level_system", b)
 end)
 
+util.AddNetworkString("update_bool_weapon_system")
+net.Receive("update_bool_weapon_system", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_weapon_system", "bool_weapon_system", b)
+end)
+
+util.AddNetworkString("update_text_weapon_system_model")
+net.Receive("update_text_weapon_system_model", function(len, ply)
+	local str = net.ReadString()
+	GeneralUpdateString(ply, "update_text_weapon_system_model", "text_weapon_system_model", str)
+end)
+
 
 
 util.AddNetworkString("update_bool_identity_card")
@@ -1698,7 +1712,7 @@ net.Receive("gethelpmenu", function(len, ply)
 		--[[if !strEmpty(info.text_server_rules) then
 			AddTab(tabs, "LID_rules", "getsiteserverrules")
 		end
-		if !strEmpty(info.text_server_collectionid) and tonumber(info.text_server_collectionid) > 0 then
+		if !strEmpty(info.text_server_collectionid) and tonumber(info.text_server_collectionid) > 100000000 then
 			AddTab(tabs, "LID_collection", "getsitecollection")
 		end]]
 

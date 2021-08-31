@@ -2,61 +2,6 @@
 
 local Player = FindMetaTable("Player")
 
--- GIVE
---[[
-	if Player.OldGive == nil then
-	Player.OldGive = Player.Give
-end
-
-function Player:Give(weaponClassName, bNoAmmo)
-	bNoAmmo = bNoAmmo or false
-	self.canpickup = true
-	local wep = self:OldGive(weaponClassName, false)
-	if wk(wep) then
-		if wep.Clip1 then
-			local clip1 = wep:Clip1()
-			local clip2 = wep:Clip2()
-			local clip1max = wep:GetMaxClip1()
-			local clip2max = wep:GetMaxClip2()
-			wep:SetNW2Int("clip1", clip1)
-			wep:SetNW2Int("clip2", clip2)
-			wep:SetNW2Int("clip1max", clip1max)
-			wep:SetNW2Int("clip2max", clip2max)
-
-			local swep = weapons.GetStored(wep:GetClass())
-			if swep != nil and wk(swep.Primary) then
-				local pammo = swep.Primary.Ammo or wep:GetPrimaryAmmoType()
-				local sammo = swep.Secondary.Ammo or wep:GetSecondaryAmmoType()
-
-				swep.Primary.OldDefaultClip = swep.Primary.OldDefaultClip or swep.Primary.DefaultClip
-				swep.Secondary.OldDefaultClip = swep.Secondary.OldDefaultClip or swep.Secondary.DefaultClip
-				swep.Primary.DefaultClip = 0
-				swep.Secondary.DefaultClip = 0
-
-				self:GiveAmmo(swep.Primary.OldDefaultClip, pammo)
-				self:GiveAmmo(swep.Secondary.OldDefaultClip, sammo)
-			end
-		end
-	else
-		YRP.msg("note", tostring(weaponClassName) .. " must be a none swep or missing from collection.")
-	end
-	return wep
-end
-
-if Player.OldGiveAmmo == nil then
-	Player.OldGiveAmmo = Player.GiveAmmo
-end
-
-function Player:GiveAmmo(amount, typ, hidePopup)
-	hidePopup = hidePopup or false
-	amount = amount or 0
-	if amount > 0 then
-		self:OldGiveAmmo(amount, typ, hidePopup)
-	end
-	return amount
-end
-]]
-
 hook.Add("WeaponEquip", "yrp_weaponequip", function(wep, owner)
 	local atype = wep:GetPrimaryAmmoType()
 	local swep = weapons.GetStored(wep:GetClass())

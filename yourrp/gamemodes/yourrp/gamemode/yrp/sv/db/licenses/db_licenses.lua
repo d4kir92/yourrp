@@ -76,7 +76,6 @@ net.Receive("license_rem", function(len, ply)
 end)
 
 util.AddNetworkString("edit_license_name")
-
 net.Receive("edit_license_name", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_name = SQL_STR_IN(net.ReadString())
@@ -84,26 +83,8 @@ net.Receive("edit_license_name", function(len, ply)
 	YRP.msg("db", "edit_license_name: " .. tostring(SQL_STR_OUT(_new_name)))
 end)
 
-util.AddNetworkString("edit_license_description")
-
-net.Receive("edit_license_description", function(len, ply)
-	local _uid = net.ReadString()
-	local _new_description = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(DATABASE_NAME, "description = '" .. _new_description .. "'", "uniqueID = " .. _uid)
-	YRP.msg("db", "edit_license_description: " .. tostring(SQL_STR_OUT(_new_description)))
-end)
-
-util.AddNetworkString("edit_license_price")
-
-net.Receive("edit_license_price", function(len, ply)
-	local _uid = net.ReadString()
-	local _new_price = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(DATABASE_NAME, "price = " .. _new_price, "uniqueID = " .. _uid)
-	YRP.msg("db", "edit_license_price: " .. tostring(SQL_STR_OUT(_new_price)))
-end)
 
 util.AddNetworkString("get_all_licenses_simple")
-
 net.Receive("get_all_licenses_simple", function(len, ply)
 	local _all = SQL_SELECT(DATABASE_NAME, "name, uniqueID", nil)
 	if _all == false or _all == nil then

@@ -66,6 +66,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "string_specializations", "TEXT DEFAULT ''")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "string_customflags", "TEXT DEFAULT ''")
 
 --SQL_ADD_COLUMN(DATABASE_NAME, "int_cooldown", "INTEGER DEFAULT 1")
@@ -86,17 +88,6 @@ else
 	SQL_UPDATE(DATABASE_NAME, "string_color = '0,0,0'", "uniqueID = '1'")
 end
 
---[[local yrp_ply_roles =  SQL_SELECT(DATABASE_NAME, "*", nil)
-if wk(yrp_ply_roles) then
-	for i, v in pairs(yrp_ply_roles) do
-		local rid = v.uniqueID
-		local idstructure = v.string_idstructure
-		if idstructure == "%%%%-%%%%-%%%%" or strEmpty(idstructure) then
-			SQL_UPDATE("yrp_ply_roles", "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. rid .. "'")
-		end
-	end
-end]]
-
 SQL_UPDATE(DATABASE_NAME, "int_uses = '0'", nil)
 
 function MoveUnusedGroups()
@@ -110,6 +101,9 @@ function MoveUnusedGroups()
 				count = count + 1
 				YRP.msg("note", "Group is out of space: " .. group.string_name)
 				SQL_UPDATE("yrp_ply_groups", "int_parentgroup = '" .. "1" .. "'", "uniqueID = '" .. group.uniqueID .. "'")
+			elseif group.uniqueID == parentgroup[1].int_parentgroup then
+				YRP.msg("note", "YOU MADE A LOOP IN PARENTGROUP!!!")
+				SQL_UPDATE("yrp_ply_groups", "int_parentgroup = '1'", "uniqueID = '" .. parentgroup[1].uniqueID .. "'")
 			end
 		end
 	end
@@ -120,7 +114,7 @@ end
 
 function MoveUnusedRolesToDefault()
 	local changed = false
-	local allroles = SQL_SELECT("yrp_ply_roles", "*", nil)
+	local allroles = SQL_SELECT("yrp_ply_roles", "uniqueID, string_name, int_prerole, int_groupID", nil)
 	if wk(allroles) then
 		for i, role in pairs(allroles) do
 			-- If prerole not exists remove the prerole
@@ -129,6 +123,9 @@ function MoveUnusedRolesToDefault()
 				if !wk(prerole) then
 					changed = true
 					SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+				elseif role.uniqueID == prerole[1].int_prerole then
+					YRP.msg("note", "YOU MADE A LOOP in PREROLES!!!")
+					SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. prerole[1].uniqueID .. "'")
 				end
 			end
 
@@ -137,7 +134,6 @@ function MoveUnusedRolesToDefault()
 			local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
 			if !wk(group) then
 				changed = true
-
 				SQL_UPDATE(DATABASE_NAME, "int_groupID = '1', int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
 			end
 		end
@@ -572,6 +568,7 @@ function SendRoleList(ply, gro, pre)
 				headername = headername[1].string_name
 			end
 		end
+
 		if wk(headername) then
 			if ply != nil then
 				net.Start("settings_subscribe_rolelist")
@@ -1494,6 +1491,136 @@ net.Receive("rem_role_license", function(len, ply)
 	RemLicenseFromRole(ruid, muid)
 end)
 
+
+
+--specializations
+function SendSpecializations(ruid)
+	local role = GetRole(ruid)
+	if wk(role) then
+		local nettab = {}
+		local specializations = string.Explode(",", role.string_specializations)
+		for i, val in pairs(specializations) do
+			local li = SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. val .. "'")
+			if wk(li) then
+				li = li[1]
+				local entry = {}
+				entry.uniqueID = li.uniqueID
+				local name = li.name
+				entry.string_name = name
+				table.insert(nettab, entry)
+			end
+		end
+
+		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][ruid]) do
+			net.Start("get_role_specializations")
+				net.WriteTable(nettab)
+			net.Send(pl)
+		end
+	end
+end
+
+function RemSpecializationFromRole(ruid, muid)
+	local role = GetRole(ruid)
+	local lis = string.Explode(",", role.string_specializations)
+	local oldlis = {}
+	for i, v in pairs(lis) do
+		if !strEmpty(v) then
+			table.insert(oldlis, v)
+		end
+	end
+
+	local newlis = oldlis
+	table.RemoveByValue(newlis, tostring(muid))
+	newlis = string.Implode(",", newlis)
+
+	SQL_UPDATE(DATABASE_NAME, "string_specializations = '" .. newlis .. "'", "uniqueID = '" .. ruid .. "'")
+	SendSpecializations(ruid)
+end
+
+function CleanUpSpecializations(ruid)
+	local role = GetRole(ruid)
+	if wk(role) then
+		local lis = string.Explode(",", role.string_specializations)
+
+		for i, li in pairs(lis) do
+			if li != "" then
+				local found = SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. li .. "'")
+				if !wk(found) then
+					RemSpecializationFromRole(ruid, li)
+				end
+			end
+		end
+	end
+end
+
+util.AddNetworkString("get_role_specializations")
+net.Receive("get_role_specializations", function(len, ply)
+	local uid = net.ReadInt(32)
+	CleanUpSpecializations(uid)
+	SendSpecializations(uid)
+end)
+
+util.AddNetworkString("get_all_specializations")
+net.Receive("get_all_specializations", function(len, ply)
+	local alllis = SQL_SELECT("yrp_specializations", "*", nil)
+	if !wk(alllis) then
+		alllis = {}
+	end
+	net.Start("get_all_specializations")
+		net.WriteTable(alllis)
+	net.Send(ply)
+end)
+
+function AddSpecializationToRole(ruid, muid)
+	local role = GetRole(ruid)
+	local lis = string.Explode(",", role.string_specializations)
+	if !table.HasValue(lis, tostring(muid)) then
+		local oldlis = {}
+		for i, v in pairs(lis) do
+			if !strEmpty(v) then
+				table.insert(oldlis, v)
+			end
+		end
+
+		local newlis = oldlis
+		table.insert(newlis, tostring(muid))
+		newlis = string.Implode(",", newlis)
+
+		SQL_UPDATE(DATABASE_NAME, "string_specializations = '" .. newlis .. "'", "uniqueID = '" .. ruid .. "'")
+		SendSpecializations(ruid)
+	end
+end
+
+util.AddNetworkString("add_role_specialization")
+net.Receive("add_role_specialization", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local muid = tonumber(net.ReadString())
+
+	AddSpecializationToRole(ruid, muid)
+end)
+
+util.AddNetworkString("add_specialization")
+net.Receive("add_specialization", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local WorldModel = net.ReadString()
+	local name = net.ReadString()
+	SQL_INSERT_INTO("yrp_specializations", "string_model, string_name", "'" .. WorldModel .. "', '" .. name .. "'")
+
+	local lastentry = SQL_SELECT("yrp_specializations", "*", nil)
+	lastentry = lastentry[table.Count(lastentry)]
+	AddSpecializationToRole(ruid, lastentry.uniqueID)
+end)
+
+util.AddNetworkString("rem_role_specialization")
+net.Receive("rem_role_specialization", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local muid = tonumber(net.ReadString())
+
+	RemSpecializationFromRole(ruid, muid)
+end)
+
+
+
 util.AddNetworkString("openInteractMenu")
 net.Receive("openInteractMenu", function(len, ply)
 	local tmpTargetSteamID = net.ReadString()
@@ -1906,4 +2033,30 @@ net.Receive("yrp_want_role", function(len, ply)
 	net.Start("yrp_want_role")
 		net.WriteString(result)
 	net.Send(ply)
+end)
+
+util.AddNetworkString("get_role_specs")
+net.Receive("get_role_specs", function(len, ply)
+	local ruid = net.ReadString()
+	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. ruid .. "'")
+	if wk(tab) then
+		tab = tab[1]
+
+		local nettab = {}
+
+		for i, v in pairs( string.Explode( ",", tab.string_specializations ) ) do
+			local dbtab = SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
+			if wk(dbtab) then
+				local entry = {}
+				entry.uid = v
+				entry.name = dbtab[1].name
+
+				table.insert( nettab, entry )
+			end
+		end
+
+		net.Start("get_role_specs")
+			net.WriteTable(nettab)
+		net.Send(ply)
+	end
 end)

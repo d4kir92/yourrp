@@ -71,15 +71,6 @@ function AddHUDElement(tab, reset)
 	end
 end
 
---[[
-local tab = SQL_SELECT(DATABASE_NAME, "*", nil)
-for i, v in pairs(tab) do
-	if string.find(v.name, "LO_") then
-		(i, v.name, v.value)
-	end
-end
-]]
-
 function DefaultHUDSettings(reset)
 	reset = reset or false
 
@@ -1126,15 +1117,6 @@ net.Receive("get_hud_element_settings", function(len, ply)
 		net.WriteTable(nettab)
 	net.Send(ply)
 end)
-
--- bool to number
-function tonum(bo)
-	if bo then
-		return 1
-	else
-		return 0
-	end
-end
 
 util.AddNetworkString("update_hud_bool")
 net.Receive("update_hud_bool", function(len, ply)

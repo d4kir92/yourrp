@@ -8,6 +8,7 @@ include("cl_settings_server_give.lua")
 include("cl_settings_server_characters.lua")
 include("cl_settings_server_events.lua")
 include("cl_settings_server_licenses.lua")
+include("cl_settings_server_specializations.lua")
 include("cl_settings_server_shops.lua")
 include("cl_settings_server_map.lua")
 include("cl_settings_server_whitelist.lua")
@@ -202,6 +203,12 @@ function SettingsTabsContent()
 
 		tabs:GoToSite("LID_settings_status")
 	elseif sm.currentsite == "LID_administration" then
+		if lply:GetNW2Bool("bool_usergroups", false) then
+			tabs:AddOption("LID_settings_usergroups", function(parent)
+				OpenSettingsUsergroups()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_usergroups")))
+			end)
+		end
 		if lply:GetNW2Bool("bool_realistic", false) then
 			tabs:AddOption("LID_settings_realistic", function(parent)
 				OpenSettingsRealistic()
@@ -220,10 +227,10 @@ function SettingsTabsContent()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_licenses")))
 			end)
 		end
-		if lply:GetNW2Bool("bool_usergroups", false) then
-			tabs:AddOption("LID_settings_usergroups", function(parent)
-				OpenSettingsUsergroups()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_usergroups")))
+		if lply:GetNW2Bool("bool_specializations", false) then
+			tabs:AddOption("LID_settings_specializations", function(parent)
+				OpenSettingsSpecializations()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_specializations")))
 			end)
 		end
 		if lply:GetNW2Bool("bool_levelsystem", false) then

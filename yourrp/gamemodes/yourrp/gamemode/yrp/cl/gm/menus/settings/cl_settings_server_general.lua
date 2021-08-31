@@ -290,7 +290,9 @@ function AddToTabRecursive(tab, folder, path, wildcard)
 	if files then
 		for k, v in pairs( files ) do
 			if ( !string.EndsWith( v, ".mdl" ) ) then continue end
-			table.insert( tab, folder .. v )
+			if !table.HasValue( tab, folder .. v ) then
+				table.insert( tab, folder .. v )
+			end
 		end
 	end
 
@@ -341,16 +343,17 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_noclip_tags, "LID_noclipusergroup", "update_bool_noclip_tags")
 		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_noclip_model, "LID_noclipmodel", "update_bool_noclip_model")
 		local noclip_mdl = CreateButtonLine(SERVER_SETTINGS:GetContent(), "LID_noclipmodel", "update_text_noclip_mdl", "LID_change")
-		hook.Add("update_text_noclip_mdl", "yrp_update_text_noclip_mdl", function()
-			local mdl = LocalPlayer().WorldModel or ""
+		function YRPUpdateNoclipMDL()
+			local mdl = LocalPlayer().yrpseltab[1]
 			net.Start("update_text_noclip_mdl")
 				net.WriteString(mdl)
 			net.SendToServer()
-		end)
+		end
 		function noclip_mdl.button:DoClick()
 			local tmpTable = {}
 			local count = 0
 			local noneplayermodels = {}
+			AddToTabRecursive(noneplayermodels, "models/", "GAME", "*.mdl")
 			for _, addon in SortedPairsByMemberValue(engine.GetAddons(), "title") do
 				if (!addon.downloaded or !addon.mounted) then continue end
 				AddToTabRecursive(noneplayermodels, "models/", addon.title, "*.mdl")
@@ -373,13 +376,10 @@ net.Receive("Connect_Settings_General", function(len)
 			end
 
 			count = count + 1
-			tmpTable[count] = {}
-			tmpTable[count].WorldModel = "models/crow.mdl"
-			tmpTable[count].ClassName = "npc_crow"
-			tmpTable[count].PrintName = "CROW"
 
-			LocalPlayer().WorldModel = GEN.bool_noclip_mdl
-			OpenSingleSelector(tmpTable, "update_text_noclip_mdl")
+			--LocalPlayer().WorldModel = GEN.bool_noclip_mdl
+			--OpenSingleSelector(tmpTable, "update_text_noclip_mdl")
+			YRPOpenSelector(tmpTable, false, "worldmodel", YRPUpdateNoclipMDL)
 		end
 		CreateHRLine(SERVER_SETTINGS:GetContent())
 		CreateNumberWangLine(SERVER_SETTINGS:GetContent(), GEN.text_server_collectionid, "LID_collectionid", "update_text_server_collectionid")
@@ -464,6 +464,33 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_inventory_system, "LID_inventorysystem", "update_bool_inventory_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_realistic_system, "LID_realisticsystem", "update_bool_realistic_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_level_system, "LID_levelsystem", "update_bool_level_system")
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_weapon_system, "LID_weaponsystem", "update_bool_weapon_system")
+		local wc_mdl = CreateButtonLine(GAMEMODE_SYSTEMS:GetContent(), YRP.lang_string("LID_weaponchest") .. " (" .. YRP.lang_string("LID_model") .. ")", "update_text_weaponchest_model", "LID_change")
+		function YRPWeaponchestUpdateModel()
+			local mdl = LocalPlayer().yrpseltab[1]
+			net.Start("update_text_weapon_system_model")
+				net.WriteString(mdl)
+			net.SendToServer()
+		end
+		function wc_mdl.button:DoClick()
+			local noneplayermodels = {}
+			AddToTabRecursive(noneplayermodels, "models/", "GAME", "*.mdl")
+			for _, addon in SortedPairsByMemberValue(engine.GetAddons(), "title") do
+				if (!addon.downloaded or !addon.mounted) then continue end
+				AddToTabRecursive(noneplayermodels, "models/", addon.title, "*.mdl")
+			end
+
+			local cl_pms = {}
+			local c = 0
+			for k, v in pairs(noneplayermodels) do
+				c = c + 1
+				cl_pms[c] = {}
+				cl_pms[c].WorldModel = v
+				cl_pms[c].ClassName = v
+				cl_pms[c].PrintName = v
+			end
+			YRPOpenSelector(cl_pms, false, "worldmodel", YRPWeaponchestUpdateModel)
+		end
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_identity_card, "LID_identitycard", "update_bool_identity_card")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_map_system, "LID_map", "update_bool_map_system")
