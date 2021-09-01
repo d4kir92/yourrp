@@ -826,8 +826,10 @@ end
 hook.Remove( "OnPlayerChat", "YRPHideCommands" )
 hook.Add( "OnPlayerChat", "YRPHideCommands", function( ply, strText, bTeam, bDead )
 	if string.StartWith(strText, "!") or string.StartWith(strText, "/") or string.StartWith(strText, "@") then
-		YRP.msg("note", "HIDE COMMANDS: " .. tostring(strText))
-		chat.AddText( Color(255, 255, 0), "Chat Message suppressed: " .. strText .. "" )
+		if ply == LocalPlayer() then
+			chat.AddText( Color(255, 255, 0), "Chat Message suppressed: " .. strText .. "" )
+			YRP.msg("note", "HIDE COMMANDS: " .. tostring(strText))
+		end
 		return true
 	end
 end )

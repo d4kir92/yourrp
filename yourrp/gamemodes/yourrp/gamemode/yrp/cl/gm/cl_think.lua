@@ -686,11 +686,11 @@ local function YRP_CalcView(lply, pos, angles, fov)
 					end
 				elseif tonumber(lply.yrp_view_range) > -200 and tonumber(lply.yrp_view_range) <= 0 then
 					--Disabled
-					view.origin = pos
+					--[[view.origin = pos
 					view.angles = angles
-					view.fov = fov
+					view.fov = fov]]
 					_drawViewmodel = false
-					return view
+					--return view
 				else
 					--Firstperson realistic
 					local dist = lply.yrp_view_range * lply:GetModelScale()
