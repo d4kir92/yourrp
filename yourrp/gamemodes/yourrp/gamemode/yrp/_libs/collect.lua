@@ -20,9 +20,11 @@ if SERVER then
 				-- MaxPlayers
 				entry["entry.1368236947"] = tostring(game.MaxPlayers())
 
+				-- VERSION
 				entry["entry.1556630983"] = tostring(GAMEMODE.VersionStable)
 				entry["entry.1322118780"] = tostring(GAMEMODE.VersionBeta)
 				entry["entry.1406407238"] = tostring(GAMEMODE.VersionCanary)
+				entry["entry.1022287670"] = tostring(GAMEMODE.VersionBuild)
 
 				-- CollectionID
 				entry["entry.1569548085"] = tostring(YRPCollectionID())
