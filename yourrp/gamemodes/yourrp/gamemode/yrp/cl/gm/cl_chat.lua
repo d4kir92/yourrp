@@ -573,7 +573,7 @@ else
 					if t == "string" then
 						if (string.StartWith(obj, ": !") or string.StartWith(obj, ": /")) then
 							YRP.msg("note", "HIDE COMMANDS: " .. tostring(obj))
-							return false
+							--return false
 						end
 					end
 				end
@@ -822,3 +822,12 @@ else
 		end)
 	end)
 end
+
+hook.Remove( "OnPlayerChat", "YRPHideCommands" )
+hook.Add( "OnPlayerChat", "YRPHideCommands", function( ply, strText, bTeam, bDead )
+	if string.StartWith(strText, "!") or string.StartWith(strText, "/") or string.StartWith(strText, "@") then
+		YRP.msg("note", "HIDE COMMANDS: " .. tostring(strText))
+		chat.AddText( Color(255, 255, 0), "Chat Message suppressed: " .. strText .. "" )
+		return true
+	end
+end )

@@ -121,12 +121,18 @@ function RemoveOldBackups()
 	if CreateYRPBackupsFolder() then
 		local backups = file.Find("yrp_backups/sv_backup_*.txt", "DATA")
 		local _remove_after = sql.Query("SELECT int_backup_delete FROM yrp_sql WHERE uniqueID = 1;")
-		_remove_after = tonumber(_remove_after[1].int_backup_delete)
-		for i, fi in pairs(backups) do
-			if os.time() - (_remove_after * 60 * 60 * 24) > file.Time("yrp_backups/" .. fi, "DATA") then
-				file.Delete("yrp_backups/" .. fi, "DATA")
-				YRP.msg("note", "[BACKUP] " .. "Removed: " .. fi)
+
+		if wk(_remove_after) then
+			_remove_after = tonumber(_remove_after[1].int_backup_delete)
+
+			for i, fi in pairs(backups) do
+				if os.time() - (_remove_after * 60 * 60 * 24) > file.Time("yrp_backups/" .. fi, "DATA") then
+					file.Delete("yrp_backups/" .. fi, "DATA")
+					YRP.msg("note", "[BACKUP] " .. "Removed: " .. fi)
+				end
 			end
+		else
+			MsgC( Color(255, 0, 0), "RemoveOldBackups IS BROKEN (Corrupted sv.db file? Modified Gamemode?)\n" )
 		end
 	end
 end

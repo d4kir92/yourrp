@@ -1379,3 +1379,60 @@ hook.Add("PostCleanupMap", "yrp_PostCleanupMap_doors", function()
 	loadDoors()
 	LoadWorldStorages()
 end)
+
+function YRPHR( color )
+	MsgC( color, "-------------------------------------------------------------------------------" .. "\n" )
+end
+
+function YRPWarning( text )
+	MsgC( Color( 255, 0, 0 ), "[WARNING] > " .. text .. "\n")
+			
+end
+
+function YRPInfo( text )
+	MsgC( Color( 255, 255, 0 ), "[INFO] > " .. text .. "\n")
+end
+
+function YRPCheckAddons()
+	YRPHR( Color( 100, 100, 255 ) )
+	YRP.msg("note", "YRPCheckAddons() ...")
+	local count = 0
+	for i, v in pairs( engine.GetAddons() ) do
+		v.wsid = tonumber(v.wsid)
+
+		v.searchtitle = string.lower(v.title)
+
+		v.searchtitle = string.Replace( v.searchtitle, "[", "" )
+		v.searchtitle = string.Replace( v.searchtitle, "]", "" )
+		v.searchtitle = string.Replace( v.searchtitle, "%", "" )
+
+		if ( string.find( v.searchtitle, "workshop" ) and string.find( v.searchtitle, "download" ) ) or string.find( v.searchtitle, "addon share" ) then -- "Workshop Downloader Addons"
+			YRPWarning( "[" .. v.wsid .. "] [" .. v.title .. "] is already implemented in YourRP!" )
+			count = count + 1
+		end
+
+		if string.find( v.searchtitle, "fps" ) and ( string.find( v.searchtitle, "boost" ) or string.find( v.searchtitle, "tweak" ) or string.find( v.searchtitle, "fps+" ) ) then -- "FPS Booster Addons"
+			YRPWarning( "[" .. v.wsid .. "] [" .. v.title .. "] is already implemented in YourRP, if it is improving FPS!" )
+			count = count + 1
+		end
+
+		if string.find( v.searchtitle, "talk icon" ) then -- "Talk Icon Addons"
+			YRPInfo( "[" .. v.wsid .. "] [" .. v.title .. "] YourRP also have an Talk Icon" )
+			count = count + 1
+		end
+	end
+	if count == 0 then
+		YRP.msg("note", "YRPCheckAddons() EVERYTING GOOD.")
+	end
+	YRPHR( Color(100, 100, 255) )
+end
+
+hook.Remove( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckAddons" )
+hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckAddons", function()
+	timer.Simple(1, function()
+		YRPCheckAddons()
+	end)
+end )
+
+	
+

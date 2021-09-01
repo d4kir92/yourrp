@@ -44,8 +44,10 @@ if SERVER then
 				timer.Simple(1, SendServerInfo)
 			end
 		end
-
-		RunConsoleCommand("sv_hibernate_think", 0)
+			
+		if table.Count(player.GetAll()) <= 0 then
+			RunConsoleCommand("sv_hibernate_think", 0)
+		end
 	end
 
 	hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded", function()
