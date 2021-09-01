@@ -773,3 +773,131 @@ hook.Add("HUDPaint", "yrp_voice_module", function()
 	end
 end)
 
+
+
+-- HUD API
+
+local YRPHUDMats = {}
+local YRPHUDAnchors = {}
+local YRPTEMPDATA = {}
+local YRPHUDVersion = 0
+
+function YRPHUDUpdateAnchors()
+	YRP.msg("note", "YRPHUDUpdateAnchors()")
+
+	YRPHUDAnchors["TOPLEFT"] = 		{0, 			0}
+	YRPHUDAnchors["TOPRIGHT"] = 	{ScrW(), 		0}
+
+	YRPHUDAnchors["BOTTOMLEFT"] = 	{0, 			ScrH()}
+	YRPHUDAnchors["BOTTOMRIGHT"] = 	{ScrW(), 		ScrH()}
+
+	YRPHUDAnchors["CENTER"] = 		{ScrW() / 2, 	ScrH() / 2}
+
+	YRPHUDAnchors["TOP"] = 			{ScrW() / 2, 	0}
+
+	YRPHUDAnchors["BOTTOM"] = 		{ScrW() / 2, 	ScrH()}
+
+	YRPHUDAnchors["LEFT"] = 		{0, 			ScrH() / 2}
+
+	YRPHUDAnchors["RIGHT"] = 		{ScrW(), 		ScrH() / 2}
+end
+YRPHUDUpdateAnchors()
+
+function YRPHUDValues(name, anchor, posx, posy, sizew, sizeh)
+	if name == nil then
+		YRP.msg("note", "[YRPHUDDrawTexture] NAME IS INVALID")
+		return false
+	end
+
+	if YRPTEMPDATA[name] == nil or YRPTEMPDATA[name].version < YRPHUDVersion then
+		YRPTEMPDATA[name] = {}
+		YRPTEMPDATA[name].version = YRPHUDVersion
+
+		if anchor == nil then
+			YRP.msg("note", "[YRPHUDDrawTexture] ANCHOR IS INVALID")
+			return false
+		end
+
+		if posx == nil or posy == nil then
+			YRP.msg("note", "[YRPHUDDrawTexture] POSX or POSY IS INVALID")
+			return false
+		end
+	
+		if sizew == nil or sizeh == nil then
+			YRP.msg("note", "[YRPHUDDrawTexture] SIZEW or SIZEH IS INVALID")
+			return false
+		end
+
+		local ax = YRPHUDAnchors[anchor][1]
+		local ay = YRPHUDAnchors[anchor][2]
+
+		YRPTEMPDATA[name].x = ax + posx
+		YRPTEMPDATA[name].y = ay + posy
+
+		YRPTEMPDATA[name].w = sizew
+		YRPTEMPDATA[name].h = sizeh
+	end
+
+	return true
+end
+
+function YRPHUDDrawTexture(name, anchor, posx, posy, sizew, sizeh, material)
+	if !YRPHUDValues(name, anchor, posx, posy, sizew, sizeh) then return end
+
+	if material == nil then
+		YRP.msg("note", "[YRPHUDDrawTexture] MATERIAL IS INVALID")
+		return false
+	end
+
+	if YRPHUDMats[material] == nil then
+		YRPHUDMats[material] = Material(material)
+	end
+
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.SetMaterial( YRPHUDMats[material] ) 
+	surface.DrawTexturedRect( YRPTEMPDATA[name].x, YRPTEMPDATA[name].y, YRPTEMPDATA[name].w, YRPTEMPDATA[name].h )
+end
+
+function YRPHUDDrawText(name, anchor, posx, posy, text, font, textcolor, tax, tay)
+	YRPHUDValues(name, anchor, posx, posy, 10, 10)
+
+	draw.SimpleText( text, font, YRPTEMPDATA[name].x, YRPTEMPDATA[name].y, textcolor or Color(255, 255, 255), tax, tay )
+end
+
+function YRPHUDGetFont(ts, thick)
+	if thick then
+		return "Y_" .. ts .. "_700"
+	else
+		return "Y_" .. ts .. "_500"
+	end
+end
+
+local oldsw = ScrW()
+local oldsh = ScrH()
+hook.Add("HUDPaint", "yrp_hud_api", function()
+	local lply = LocalPlayer()
+
+	if oldsw != ScrW() or oldsh != ScrH() then
+		oldsw = ScrW()
+		oldsh = ScrH()
+
+		YRPHUDUpdateAnchors()
+
+		YRPHUDVersion = YRPHUDVersion + 1
+	end
+
+	if false then
+		--			      name       anchor 		posx		posy 		sizew 	sizeh 	material
+		YRPHUDDrawTexture("tl_icon", "TOPLEFT", 	10, 		10, 		200, 	200, 	"yrp/yrp_icon")
+		YRPHUDDrawTexture("tr_icon", "TOPRIGHT", 	-210, 		10, 		200, 	200, 	"yrp/yrp_icon")
+		YRPHUDDrawTexture("bl_icon", "BOTTOMLEFT", 	10, 		-210, 		200, 	200, 	"yrp/yrp_icon")
+		YRPHUDDrawTexture("br_icon", "BOTTOMRIGHT",	-210, 		-210, 		200, 	200, 	"yrp/yrp_icon")
+		YRPHUDDrawTexture("ce_icon", "CENTER", 		-200 / 2, 	-200 / 2, 	200, 	200, 	"yrp/yrp_icon")
+		YRPHUDDrawTexture("to_icon", "TOP", 		-200 / 2, 	10, 		200, 	200, 	"yrp/yrp_icon")
+		YRPHUDDrawTexture("bo_icon", "BOTTOM", 		-200 / 2, 	-210, 		200, 	200, 	"yrp/yrp_icon")
+		YRPHUDDrawTexture("le_icon", "LEFT", 		10, 		-200 / 2, 	200, 	200, 	"yrp/yrp_icon")
+		YRPHUDDrawTexture("ri_icon", "RIGHT", 		-210, 		-200 / 2, 	200, 	200, 	"yrp/yrp_icon")
+
+		YRPHUDDrawText("ce_text", "CENTER", 0, 0, "TESTTEXT", YRPHUDGetFont(40, false), Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+end)

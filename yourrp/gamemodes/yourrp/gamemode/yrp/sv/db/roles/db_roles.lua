@@ -1167,9 +1167,11 @@ end
 util.AddNetworkString("add_role_swep")
 net.Receive("add_role_swep", function(len, ply)
 	local ruid = net.ReadInt(32)
-	local swepcn = net.ReadString()
+	local swepcn = net.ReadTable()
 
-	AddSwepToRole(ruid, swepcn)
+	for i, swep in pairs(swepcn) do
+		AddSwepToRole(ruid, swep)
+	end
 end)
 
 function RemSwepFromRole(ruid, swepcn)
@@ -1252,9 +1254,11 @@ end
 util.AddNetworkString("add_role_swep_onspawn")
 net.Receive("add_role_swep_onspawn", function(len, ply)
 	local ruid = net.ReadInt(32)
-	local swepcn = net.ReadString()
+	local swepcn = net.ReadTable()
 
-	AddSwepToRoleOnSpawn(ruid, swepcn)
+	for i, swep in pairs(swepcn) do
+		AddSwepToRoleOnSpawn(ruid, swep)
+	end
 end)
 
 function RemSwepFromRoleOnSpawn(ruid, swepcn)
@@ -1704,6 +1708,11 @@ net.Receive("openInteractMenu", function(len, ply)
 					end
 				end
 
+				local tmpHasSpecs = false
+				if !strEmpty(tmpTable.string_specializations) then
+					tmpHasSpecs = true
+				end
+
 				net.Start("openInteractMenu")
 					net.WriteEntity(tmpTarget)
 
@@ -1716,6 +1725,8 @@ net.Receive("openInteractMenu", function(len, ply)
 
 					net.WriteBool(tmpDemote)
 					net.WriteString(tmpDemoteName)
+
+					net.WriteBool(tmpHasSpecs)
 				net.Send(ply)
 			end
 		end

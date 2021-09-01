@@ -412,6 +412,20 @@ end
 
 function Player:GetRoleName() -- Role Name / "Job" Name
 	local RoleName = self:YRPGetRoleName()
+	if IsValid(self) then
+		local prefix = self:GetNW2String( "spec_prefix", "" )
+		local suffix = self:GetNW2String( "spec_suffix", "" )
+
+		if !strEmpty( prefix ) then
+			RoleName = prefix .. " " .. RoleName
+		end
+		if !strEmpty( suffix ) then
+			RoleName = RoleName .. " " .. suffix
+		end
+		return RoleName -- return string
+	else
+		return self:Nick()
+	end
 	return RoleName -- return string
 end
 
@@ -462,16 +476,6 @@ end
 function Player:RPName() -- Character Name / Roleplay Name
 	if IsValid(self) then
 		local name = self:YRPRPName()
-
-		local prefix = self:GetNW2String( "spec_prefix", "" )
-		local suffix = self:GetNW2String( "spec_suffix", "" )
-
-		if !strEmpty( prefix ) then
-			name = prefix .. " " .. name
-		end
-		if !strEmpty( suffix ) then
-			name = name .. " " .. suffix
-		end
 		return name -- return string
 	else
 		return self:Nick()
@@ -481,4 +485,12 @@ end
 --[[ UserGroup ]]--
 function Player:GetUserGroupColor() -- UserGroup Color
 	return self:YRPGetUserGroupColor() -- return Color(int r, int g, int b, int a)
+end
+
+function Player:GetUserGroupNice() -- UserGroup Display Name, displayname
+	if !strEmpty(self:GetNW2String("usergroupDisplayname", "")) then
+		return self:GetNW2String("usergroupDisplayname", "")
+	else
+		return string.upper(self:GetUserGroup())
+	end
 end

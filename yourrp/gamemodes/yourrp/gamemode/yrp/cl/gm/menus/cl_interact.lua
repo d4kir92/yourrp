@@ -5,7 +5,7 @@ function toggleInteractMenu()
 	local lply = LocalPlayer()
 	local eyeTrace = lply:GetEyeTrace()
 
-	openInteractMenu(LocalPlayer():SteamID())
+	--openInteractMenu(LocalPlayer():SteamID())
 	if eyeTrace.Entity:IsPlayer() and YRPIsNoMenuOpen() then
 		if eyeTrace.Entity:GetColor().a > 0 then
 			openInteractMenu(eyeTrace.Entity:SteamID())
@@ -165,10 +165,6 @@ net.Receive("openInteractMenu", function(len)
 		end
 	end
 
-	isInstructor = true
-	promoteable = true
-	demoteable = true
-
 	if isInstructor then
 		if promoteable then
 			local btnPromote = createVGUI("YButton", content, 500, 50, 520, 1000)
@@ -219,8 +215,6 @@ net.Receive("openInteractMenu", function(len)
 		end
 	end
 
-	hasspecs = true
-
 	if hasspecs then
 		local btnbtnSpecialization = createVGUI("YButton", content, 500, 50, 520, 1120)
 		btnbtnSpecialization:SetText(YRP.lang_string("LID_specializations"))
@@ -249,7 +243,7 @@ function YRPOpenGiveSpec(charid, ruid)
 	win.dpl = createD("DPanelList", win:GetContent(), 500, 500, 0, 0)
 	win.dpl:EnableVerticalScrollbar()
 	function win.dpl:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
 	end
 
 	net.Receive("get_role_specs", function(len)

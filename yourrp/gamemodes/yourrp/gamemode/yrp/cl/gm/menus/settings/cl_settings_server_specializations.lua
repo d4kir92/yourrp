@@ -70,13 +70,21 @@ net.Receive("get_specializations", function()
 			sweps.uniqueID = tbl.uniqueID
 			sweps.header = "LID_sweps"
 			sweps.netstr = "edit_specialization_sweps"
-			sweps.value = tbl.string_sweps
+			sweps.value = tbl.sweps or ""
 			sweps.uniqueID = tbl.uniqueID
 			sweps.w = YRP.ctr(800)
 			sweps.h = YRP.ctr(325)
 			sweps.x = YRP.ctr(0)
 			sweps.y = YRP.ctr(330)
 			sweps.doclick = function()
+				local lply = LocalPlayer()
+				lply.yrpseltab = {}
+				for i, v in pairs( string.Explode( ",", tbl.sweps or "" ) ) do
+					if !table.HasValue(lply.yrpseltab) then
+						table.insert(lply.yrpseltab, v)
+					end
+				end
+
 				local allsweps = GetSWEPsList()
 				local cl_sweps = {}
 				local count = 0
@@ -91,11 +99,12 @@ net.Receive("get_specializations", function()
 					local lply = LocalPlayer()
 					net.Start("spec_add_swep")
 						net.WriteInt(tbl.uniqueID, 32)
-						net.WriteString(lply.yrpseltab[1])
+						net.WriteTable(lply.yrpseltab)
 					net.SendToServer()
+					tbl.sweps = table.concat( lply.yrpseltab, "," )
 				end
 
-				YRPOpenSelector(cl_sweps, false, "classname", YRPUpdateSpecSweps)
+				YRPOpenSelector(cl_sweps, true, "classname", YRPUpdateSpecSweps)
 			end
 			_li.sweps = DStringListBox(sweps)
 			net.Receive("get_specialization_sweps", function()
@@ -112,6 +121,14 @@ net.Receive("get_specializations", function()
 							net.WriteInt(tbl.uniqueID, 32)
 							net.WriteString(swep.string_classname)
 						net.SendToServer()
+
+						local tmp = {}
+						for i, v in pairs( string.Explode( ",", tbl.sweps or "" ) ) do
+							if v != swep.string_classname then
+								table.insert( tmp, v )
+							end
+						end
+						tbl.sweps = table.concat( tmp, "," )
 					end
 					swep.h = YRP.ctr(120)
 					table.insert(cl_sweps, swep)

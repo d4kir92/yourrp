@@ -45,12 +45,9 @@ if CLIENT then
 	end)
 
 	hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded_GlobalTable", function()
-		net.Start("YRPGetGlobalTables")
-		net.SendToServer()
-	end)
-
-	timer.Simple(2, function()
-		net.Start("YRPGetGlobalTables")
-		net.SendToServer()
+		timer.Simple(0.1, function()
+			net.Start("YRPGetGlobalTables")
+			net.SendToServer()
+		end)
 	end)
 end

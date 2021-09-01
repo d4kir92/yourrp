@@ -8,6 +8,7 @@ local DATABASE_NAME = "yrp_usergroups"
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'unnamed usergroup'")
+SQL_ADD_COLUMN(DATABASE_NAME, "string_displayname", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0,255'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
@@ -460,6 +461,23 @@ net.Receive("usergroup_update_string_name", function(len, ply)
 		if pl != ply then
 			net.Start("usergroup_update_string_name")
 				net.WriteString(string_name)
+			net.Send(pl)
+		end
+	end
+end)
+
+util.AddNetworkString("usergroup_update_string_displayname")
+net.Receive("usergroup_update_string_displayname", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local string_displayname = net.ReadString()
+	SQL_UPDATE(DATABASE_NAME, "string_displayname = '" .. string_displayname .. "'", "uniqueID = '" .. uid .. "'")
+
+	YRP.msg("db", ply:YRPName() .. " updated display of usergroup (" .. uid .. ") to [" .. string_displayname .. "]")
+
+	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
+		if pl != ply then
+			net.Start("usergroup_update_string_displayname")
+				net.WriteString(string_displayname)
 			net.Send(pl)
 		end
 	end
@@ -1727,6 +1745,7 @@ function Player:UserGroupLoadout()
 	if wk(UG) then
 		UG = UG[1]
 		
+		self:SetNW2String("usergroupDisplayname", UG.string_displayname)
 		self:SetNW2String("usergroupColor", UG.string_color)
 		self:SetNW2Int("int_position", UG.int_position)
 		self:SetNW2Int("int_characters_max", UG.int_characters_max)

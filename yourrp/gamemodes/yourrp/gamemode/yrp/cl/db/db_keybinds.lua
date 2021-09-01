@@ -29,7 +29,7 @@ YRPKEYBINDS["toggle_mouse"] = KEY_F3
 YRPKEYBINDS["toggle_map"] = KEY_M
 YRPKEYBINDS["drop_item"] = KEY_G
 
-YRPKEYBINDS["menu_interact"] = KEY_E
+YRPKEYBINDS["menu_interact"] = KEY_F6
 
 YRPKEYBINDS["sp_open"] = KEY_UP
 YRPKEYBINDS["sp_close"] = KEY_DOWN
@@ -57,7 +57,7 @@ net.Receive("SetServerKeybinds", function(len)
 end)
 
 local yrp_keybinds = {}
-yrp_keybinds.version = 3
+yrp_keybinds.version = 4
 
 function KBTab()
 	return yrp_keybinds

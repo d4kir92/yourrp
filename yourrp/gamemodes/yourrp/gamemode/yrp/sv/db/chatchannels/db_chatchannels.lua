@@ -10,7 +10,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_structure", "TEXT DEFAULT '%TEXT%'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_mode", "TEXT DEFAULT '0'") -- 0 = GLOBAL, 1 = LOKAL, 2 = FACTION, 3 = GROUP, 4 = ROLE, 9 = CUSTOM
+SQL_ADD_COLUMN(DATABASE_NAME, "int_mode", "TEXT DEFAULT '0'") -- 0 = GLOBAL, 1 = LOKAL, 2 = FACTION, 3 = GROUP, 4 = ROLE, 5 = UserGroup, 9 = CUSTOM
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_active_usergroups", "TEXT DEFAULT 'superadmin,user'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_active_groups", "TEXT DEFAULT '1'")
@@ -28,7 +28,10 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbedisabled", "TEXT DEFAULT '1'")
 
 local yrp_chat_channels = {}
 if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "OOC" .. "'") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'OOC', 'Color(100, 255, 100)[OOC] %RPNAME%: Color(255, 255, 255)%TEXT%', 0, 0")
+	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'OOC', 'Color(100, 255, 100)[OOC] %STEAMNAME%: Color(255, 255, 255)%TEXT%', 0, 0")
+end
+if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. SQL_STR_IN("/") .. "'") == nil then
+	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'" .. SQL_STR_IN("/") .. "', 'Color(100, 255, 100)[OOC] %STEAMNAME%: Color(255, 255, 255)%TEXT%', 0, 0")
 end
 if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "LOOC" .. "'") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'LOOC', 'Color(100, 255, 100)[LOOC] %RPNAME%: Color(255, 255, 255)%TEXT%', 1, 0")

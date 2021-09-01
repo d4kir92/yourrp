@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 348 -- do NOT change this!
 GM.VersionCanary = 699 -- do NOT change this!
-GM.VersionBuild = 19 -- do NOT change this!
+GM.VersionBuild = 23 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -122,7 +122,7 @@ end
 
 concommand.Add("yrp_version", function(ply, cmd, args)
 	hr_pre("gm")
-	local _text = "Gamemode - Version:\t" .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")"
+	local _text = "Gamemode-Version: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")" .. "\t BUILDNR.: " .. GAMEMODE.VersionBuild
 	YRP.msg("gm", _text)
 	hr_pos("gm")
 end)

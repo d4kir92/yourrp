@@ -8,6 +8,8 @@ local CURRENT_USERGROUP = nil
 
 local DUGS = DUGS or {}
 
+local SW = 600
+
 local _icon = {}
 _icon.size = YRP.ctr(100 - 16)
 _icon.br = YRP.ctr(8)
@@ -30,7 +32,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		PARENT.ug:Remove()
 	end
 
-	PARENT.ug = createD("DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(20 + 500 + 20), PARENT:GetTall(), YRP.ctr(20 + 500), YRP.ctr(0))
+	PARENT.ug = createD("DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(20 + SW + 20), PARENT:GetTall(), YRP.ctr(20 + SW), YRP.ctr(0))
 
 	PARENT.ugp = createD("DPanel", PARENT, YRP.ctr((w + 10) * 4), PARENT:GetTall(), 0, 0)
 	function PARENT.ugp:Paint(pw, ph)
@@ -58,8 +60,26 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		NAME:SetText(string.upper(UGS[CURRENT_USERGROUP].string_name))
 	end)
 
+	-- DISPLAYNAME
+	local DISPLAYNAME = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20))
+	DISPLAYNAME:INITPanel("DTextEntry")
+	DISPLAYNAME:SetHeader(YRP.lang_string("LID_displayname"))
+	DISPLAYNAME:SetText(ug.string_displayname)
+	function DISPLAYNAME.plus:OnChange()
+		UGS[CURRENT_USERGROUP].string_displayname = self:GetText()
+		net.Start("usergroup_update_string_displayname")
+			net.WriteString(CURRENT_USERGROUP)
+			net.WriteString(self:GetText())
+		net.SendToServer()
+	end
+	net.Receive("usergroup_update_string_displayname", function(len2)
+		local string_displayname = net.ReadString()
+		UGS[CURRENT_USERGROUP].string_displayname = string_displayname
+		DISPLAYNAME:SetText(UGS[CURRENT_USERGROUP].string_displayname)
+	end)
+
 	-- COLOR
-	local COLOR = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20))
+	local COLOR = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20))
 	COLOR:INITPanel("YButton")
 	COLOR:SetHeader(YRP.lang_string("LID_color"))
 	COLOR.plus:SetText("LID_change")
@@ -96,7 +116,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end)
 
 	-- ICON
-	UGS[CURRENT_USERGROUP].ICON = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20))
+	UGS[CURRENT_USERGROUP].ICON = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20))
 	local ICON = UGS[CURRENT_USERGROUP].ICON
 	ICON:INITPanel("DTextEntry")
 	ICON:SetHeader(YRP.lang_string("LID_icon"))
@@ -133,7 +153,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end
 	ug.string_sweps = tmp
 
-	local SWEPS = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20))
+	local SWEPS = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 100 + 20))
 	SWEPS:INITPanel("DPanel")
 	SWEPS:SetHeader(YRP.lang_string("LID_weapons"))
 	SWEPS:SetText(ug.string_icon)
@@ -267,7 +287,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end
 	ug.string_nonesweps = tmp
 
-	local NONESWEPS = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 500 + 50 + 50 + 20))
+	local NONESWEPS = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 500 + 50 + 50 + 20 + 100 + 20))
 	NONESWEPS:INITPanel("DPanel")
 	NONESWEPS:SetHeader(YRP.lang_string("LID_ndsweps"))
 	NONESWEPS:SetText(ug.string_icon)
@@ -705,7 +725,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	ACCESSAddCheckBox("bool_realistic", "LID_settings_realistic")
 	ACCESSAddCheckBox("bool_shops", "LID_settings_shops")
 	ACCESSAddCheckBox("bool_licenses", "LID_settings_licenses")
-	ACCESSAddCheckBox("bool_specializations", "LID_settings_specializations")
+	ACCESSAddCheckBox("bool_specializations", "LID_specializations")
 	ACCESSAddCheckBox("bool_usergroups", "LID_settings_usergroups", Color(255, 0, 0, 255))
 	ACCESSAddCheckBox("bool_levelsystem", "LID_levelsystem")
 	ACCESSAddCheckBox("bool_design", "LID_settings_design")
@@ -835,8 +855,13 @@ function AddUG(tbl)
 	_ug:SetText("")
 	function _ug:Paint(pw, ph)
 		self.string_color = StringToColor(UGS[self.uid].string_color)
-		local text = string.upper(UGS[self.uid].string_name) -- .. " " .. UGS[self.uid].int_position
-		surfaceButton(self, pw, ph, text, self.string_color, ph + YRP.ctr(40 + 20), ph / 2, 0, 1, false)
+		local text = string.upper(UGS[self.uid].string_name)
+		if !strEmpty(UGS[self.uid].string_displayname) then
+			text = text .. " " .. "(" .. tostring(UGS[self.uid].string_displayname) .. ")"
+		end
+		surfaceButton(self, pw, ph, "", self.string_color, ph + YRP.ctr(40 + 20), ph / 2, 0, 1, false)
+
+		draw.SimpleText(text, "Y_16_700", ph + YRP.ctr(40 + 20), ph / 2, TextColor(self.string_color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 		if strEmpty(UGS[tonumber(tbl.uniqueID)].string_icon) then
 			surfaceBox(YRP.ctr(8) + YRP.ctr(40) + YRP.ctr(8), YRP.ctr(4), ph - YRP.ctr(8), ph - YRP.ctr(8), Color(255, 255, 255, 255))
@@ -1002,7 +1027,7 @@ net.Receive("Connect_Settings_UserGroups", function(len)
 			net.SendToServer()
 		end
 		
-		local _ug_rem = createD("YButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20 + 500 - 50), YRP.ctr(20))
+		local _ug_rem = createD("YButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20 + SW - 50), YRP.ctr(20))
 		_ug_rem:SetText("-")
 		function _ug_rem:Paint(pw, ph)
 			if wk(UGS[CURRENT_USERGROUP]) then
@@ -1021,14 +1046,14 @@ net.Receive("Connect_Settings_UserGroups", function(len)
 			end
 		end
 
-		local _ugs_title = createD("DPanel", PARENT, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20 + 50 + 20))
+		local _ugs_title = createD("DPanel", PARENT, YRP.ctr(SW), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20 + 50 + 20))
 		function _ugs_title:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 			surfaceText(YRP.lang_string("LID_usergroups"), "Y_26_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 		end
 
 		--[[ UserGroupsList ]]--
-		PARENT.ugs = createD("DPanelList", PARENT, YRP.ctr(500), PARENT:GetTall() - YRP.ctr(2 * 20 + 120), YRP.ctr(20), YRP.ctr(20 + 50 + 20 + 50))
+		PARENT.ugs = createD("DPanelList", PARENT, YRP.ctr(SW), PARENT:GetTall() - YRP.ctr(2 * 20 + 120), YRP.ctr(20), YRP.ctr(20 + 50 + 20 + 50))
 		function PARENT.ugs:Paint(pw, ph)
 			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
 		end

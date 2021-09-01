@@ -552,12 +552,12 @@ timer.Simple(4, function() -- must be last hook
 	hook.Remove("PlayerSay", "YRP_PlayerSay")
 	hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
 		local oldtext = text
-		local channel = "SAY"
+		local channel = ""
 
 
-
+		
 		-- Find Channel
-		if string.StartWith(text, "!") or string.StartWith(text, "/") then
+		if string.StartWith(text, "!") or string.StartWith(text, "/") or string.StartWith(text, "@") then
 			local s, e = string.find(text, " ")
 			if s then
 				channel = string.sub(text, 2, s - 1)
@@ -577,10 +577,10 @@ timer.Simple(4, function() -- must be last hook
 
 
 		-- Channels
-		local tab = SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. channel .. "'")
+		local tab = SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. SQL_STR_IN(channel) .. "'")
 		if wk(tab) then
 			tab = tab[1]
-			
+
 			tab.int_mode = tonumber(tab.int_mode)
 
 			local structure = SQL_STR_OUT(tab.string_structure)
@@ -641,6 +641,16 @@ timer.Simple(4, function() -- must be last hook
 					end
 				end
 				return ""
+			elseif tab.int_mode == 5 then -- UserGroup
+				for i, v in pairs(player.GetAll()) do
+					if v:GetUserGroup() == sender:GetUserGroup() then
+						net.Start("yrp_player_say")
+							net.WriteEntity(sender)
+							net.WriteTable(pk)
+						net.Send(v)
+					end
+				end
+				return ""
 			elseif tab.int_mode == 9 then -- Custom
 				-- IN WORK :P
 				return ""
@@ -650,7 +660,8 @@ timer.Simple(4, function() -- must be last hook
 		else
 			DoCommand(sender, channel, text)
 		end
-		
-		return ""
+
+		-- RETURN NOTHING SO OTHER ADDONS CAN USE THIS ONE
+		-- return oldtext --""
 	end)
 end)

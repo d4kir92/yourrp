@@ -45,7 +45,7 @@ function SWEP:Reload()
 	for i, v in pairs(GetGlobalTable("yrp_jailpoints")) do
 		pos = v.pos
 	end
-	if pos != "" then
+	if !strEmpty(pos) then
 		self:GetOwner():SetPos(StringToVector(pos))
 	end
 end

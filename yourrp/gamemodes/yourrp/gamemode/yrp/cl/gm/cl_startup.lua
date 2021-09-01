@@ -615,7 +615,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 	local br = 10
 
 	local pmsel = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
-	pmsel:SetTitle("")
+	pmsel:SetTitle(YRP.lang_string("LID_add") .. ": " .. tostring(ret))
 	pmsel:Center()
 	pmsel:MakePopup()
 	pmsel.nr = 0
@@ -677,9 +677,16 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 						function d_pm:Paint(pw, ph)
 							local text = YRP.lang_string("LID_notadded")
 							local col = Color(255, 255, 255)
-							if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.WorldModel) then
-								col = Color(0, 255, 0)
-								text = YRP.lang_string("LID_added")
+							if ret == "worldmodel" then
+								if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.WorldModel) then
+									col = Color(0, 255, 0)
+									text = YRP.lang_string("LID_added")
+								end
+							elseif ret == "classname" then
+								if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.ClassName) then
+									col = Color(0, 255, 0)
+									text = YRP.lang_string("LID_added")
+								end
 							end
 							draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
 
@@ -724,10 +731,10 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 									table.RemoveByValue(lply.yrpseltab, v.ClassName)
 								end
 							end
-							if fu then
-								fu()
-							end
 							if !multiple and pa(pmsel) then
+								if fu then
+									fu()
+								end
 								pmsel:Close()
 							end
 						end
@@ -775,16 +782,30 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		pmsel.nr = pmsel.nr + pmsel.perpage
 		pmsel:RefreshPage()
 	end
-	timer.Simple(1, function()
-		if pa(pmsel) then
-			pmsel:Search("")
+
+	if multiple then
+		pmsel.done = createD("YButton", parent, YRP.ctr(200), YRP.ctr(50), parent:GetWide() - YRP.ctr(200 + br), parent:GetTall() - YRP.ctr(50 + br))
+		pmsel.done:SetText("LID_done")
+		function pmsel.done:DoClick()
+			if fu then
+				fu()
+			end
+			if pa(pmsel) then
+				pmsel:Close()
+			end
 		end
-	end)
+	end
 
 	pmsel.search = createD("DTextEntry", parent, parent:GetWide() - YRP.ctr(10 + 100 + 10), YRP.ctr(50), YRP.ctr(10 + 100), YRP.ctr(10))
 	function pmsel.search:OnChange()
 		pmsel:Search(self:GetText())
 	end
+
+	timer.Simple(1, function()
+		if pa(pmsel) then
+			pmsel:Search("")
+		end
+	end)
 end
 
 function OpenSingleSelector(tab, closeF)
@@ -1740,6 +1761,7 @@ _icons["ar"] = Material("icon16/shield.png")
 _icons["gn"] = Material("icon16/group.png")
 _icons["rn"] = Material("icon16/user_gray.png")
 _icons["na"] = Material("icon16/vcard.png")
+_icons["id"] = Material("icon16/vcard.png")
 _icons["sa"] = Material("icon16/money_add.png")
 _icons["mo"] = Material("icon16/money.png")
 _icons["sn"] = Material("icon16/status_online.png")
@@ -1877,15 +1899,20 @@ function drawPlates()
 					_height = _height + 6
 				end
 
-				if GetGlobalBool("bool_tag_on_head_clan", false) then
+				--[[if GetGlobalBool("bool_tag_on_head_clan", false) then
 					if !strEmpty(ply:GetNW2String("yrp_clan", "")) then
 						drawString(ply, "<" .. ply:GetNW2String("yrp_clan", "") .. ">", _height, color)
 						_height = _height + 5
 					end
-				end
+				end]]
 
 				if GetGlobalBool("bool_tag_on_head_name", false) then
 					drawString(ply, ply:RPName(), _height, color)
+					_height = _height + 5
+				end
+
+				if GetGlobalBool("bool_tag_on_head_idcardid", false) then
+					drawString(ply, ply:IDCardID(), _height, color)
 					_height = _height + 5
 				end
 
@@ -1939,7 +1966,7 @@ function drawPlates()
 				if GetGlobalBool("bool_tag_on_head_usergroup", false) then
 					local ugcolor = ply:GetUserGroupColor()
 					ugcolor.a = color.a
-					drawString(ply, string.upper(ply:GetUserGroup()), _height, ugcolor)
+					drawString(ply, ply:GetUserGroupNice(), _height, ugcolor)
 					_height = _height + 5
 				end
 			end
@@ -1948,7 +1975,7 @@ function drawPlates()
 
 			if ply:GetNW2Bool("tag_ug", false) or (GetGlobalBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and color.a > 10 then
 
-				drawPlate(ply, string.upper(ply:GetUserGroup()), _height, Color(0, 0, 140, color.a))
+				drawPlate(ply, ply:GetUserGroupNice(), _height, Color(0, 0, 140, color.a))
 				_height = _height + 9
 			end
 
@@ -1969,6 +1996,11 @@ function drawPlates()
 
 				if GetGlobalBool("bool_tag_on_side_name", false) then
 					drawPlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["na"])
+					_z = _z + _d
+				end
+
+				if GetGlobalBool("bool_tag_on_side_idcardid", false) then
+					drawPlayerInfo(ply, ply:IDCardID(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["id"])
 					_z = _z + _d
 				end
 
@@ -2023,7 +2055,7 @@ function drawPlates()
 					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sn"])
 					_z = _z + _d
 					local ugcolor = ply:GetUserGroupColor()
-					drawPlayerInfo(ply, string.upper(ply:GetUserGroup()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, _alpha), _alpha, _icons["ug"])
+					drawPlayerInfo(ply, string.upper(ply:GetUserGroupNice()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, _alpha), _alpha, _icons["ug"])
 					_z = _z + _d
 					drawPlayerInfo(ply, "+" .. GetGlobalString("text_money_pre", "") .. ply:GetNW2String("salary", "") .. GetGlobalString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sa"])
 					_z = _z + _d
@@ -2064,7 +2096,7 @@ hook.Add("HUDPaint", "yrp_esp_draw", function()
 				draw3DText(YRP.lang_string("LID_health") .. ": " .. p:Health() .. "/" .. p:GetMaxHealth() .. " [" .. p:Armor() .. "/" .. p:GetMaxArmor() .. "]", ScrCen.x, ScrCen.y - 30)
 				draw3DText(YRP.lang_string("LID_name") .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]", ScrCen.x, ScrCen.y - 10)
 				draw3DText(YRP.lang_string("LID_role") .. ": " .. p:GetRoleName() .. " [" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y + 10)
-				draw3DText(YRP.lang_string("LID_usergroup") .. ": " .. p:GetUserGroup(), ScrCen.x, ScrCen.y + 30)
+				draw3DText(YRP.lang_string("LID_usergroup") .. ": " .. p:GetUserGroupNice(), ScrCen.x, ScrCen.y + 30)
 			--end
 		end
 	end

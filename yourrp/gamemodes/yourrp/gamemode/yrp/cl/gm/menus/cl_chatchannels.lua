@@ -61,7 +61,8 @@ function YRPChatChannel(edit, uid)
 		{"LID_faction", 2},
 		{"LID_group", 3},
 		{"LID_role", 4},
-		--{"LID_custom", 9},
+		{"LID_usergroup", 5},
+		{"LID_custom", 9},
 	}
 	for i, v in pairs(modes) do
 		local selected = false

@@ -39,28 +39,30 @@ end)
 util.AddNetworkString("spec_add_swep")
 net.Receive("spec_add_swep", function(len, ply)
 	local uid = net.ReadInt(32)
-	local swep = net.ReadString()
+	local sweps = net.ReadTable()
 
-	local tab = SQL_SELECT(DATABASE_NAME, "uniqueID, sweps", "uniqueID = '" .. uid .. "'")
-	if wk(tab) then
-		tab = tab[1]
-	else
-		tab = {}
-	end
-	local newtab = {}
-	for i, v in pairs(string.Explode(",", tab.sweps)) do
-		if !table.HasValue( newtab, v ) and !strEmpty(v) then
-			table.insert( newtab, v )
+	for i, swep in pairs( sweps ) do
+		local tab = SQL_SELECT(DATABASE_NAME, "uniqueID, sweps", "uniqueID = '" .. uid .. "'")
+		if wk(tab) then
+			tab = tab[1]
+		else
+			tab = {}
 		end
-	end
-	if !table.HasValue( newtab, swep ) then
-		table.insert( newtab, swep )
-	end
+		local newtab = {}
+		for i, v in pairs(string.Explode(",", tab.sweps)) do
+			if !table.HasValue( newtab, v ) and !strEmpty(v) then
+				table.insert( newtab, v )
+			end
+		end
+		if !table.HasValue( newtab, swep ) then
+			table.insert( newtab, swep )
+		end
 
-	local newsweps = table.concat( newtab, "," )
+		local newsweps = table.concat( newtab, "," )
 
-	SQL_UPDATE(DATABASE_NAME, "sweps = '" .. newsweps .. "'", "uniqueID = '" .. uid .. "'")
-	YRPSendSpecSWEPS(uid, ply)
+		SQL_UPDATE(DATABASE_NAME, "sweps = '" .. newsweps .. "'", "uniqueID = '" .. uid .. "'")
+		YRPSendSpecSWEPS(uid, ply)
+	end
 end)
 
 util.AddNetworkString("spec_rem_swep")
@@ -173,7 +175,7 @@ util.AddNetworkString("edit_specialization_suffix")
 net.Receive("edit_specialization_suffix", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_suffix = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(DATABASE_NAME, "suffix = " .. _new_suffix, "uniqueID = " .. _uid)
+	local _edit = SQL_UPDATE(DATABASE_NAME, "suffix = '" .. _new_suffix .. "'", "uniqueID = " .. _uid)
 	YRP.msg("db", "edit_specialization_suffix: " .. tostring(SQL_STR_OUT(_new_suffix)))
 end)
 

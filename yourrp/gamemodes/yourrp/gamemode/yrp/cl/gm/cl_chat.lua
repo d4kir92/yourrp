@@ -479,7 +479,7 @@ else
 
 									yrpChat.writeField:AddHistory( text )
 
-									if string.StartWith(text, "!") or string.StartWith(text, "/") then
+									if string.StartWith(text, "!") or string.StartWith(text, "/") or string.StartWith(text, "@") then
 										LocalPlayer():ConCommand("say \"".. text .. "\"")
 									else
 										LocalPlayer():ConCommand("say \"!" .. CHATMODE .. " " .. text .. "\"")
@@ -565,6 +565,17 @@ else
 					yrpChat.richText:InsertColorChange(200, 200, 255, 255)
 					yrpChat.richText:AppendText(clock.hours .. ":" .. clock.min .. ":" .. clock.sec .. " ")
 					yrpChat.richText:InsertColorChange(255, 255, 255, 255)
+				end
+
+				-- REMOVE CHAT COMMANDS
+				for i, obj in pairs(args) do
+					local t = string.lower(type(obj))
+					if t == "string" then
+						if (string.StartWith(obj, ": !") or string.StartWith(obj, ": /")) then
+							YRP.msg("note", "HIDE COMMANDS: " .. tostring(obj))
+							return false
+						end
+					end
 				end
 
 				for i, obj in pairs(args) do
@@ -669,8 +680,14 @@ else
 						YRP.msg("error", "chat.addtext (entity): " .. tostring(obj))
 					elseif t == "player" then
 						-- invalid players
+						local col = GAMEMODE:GetTeamColor(obj)
+						if isnumber(tonumber(col.r)) and isnumber(tonumber(col.g)) and isnumber(tonumber(col.b)) then
+							yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
+							yrpChat.richText:AppendText(obj:RPName())
+						end
 					elseif t == "entity" then
 						-- invalid entities
+						yrpChat.richText:AppendText(obj:Nick())
 					else
 						YRP.msg("error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj))
 					end
@@ -789,7 +806,7 @@ else
 		end
 
 		if GetGlobalBool("bool_yrp_chat", false) then
-			chat.AddText(sender, unpack(pk))
+			chat.AddText(unpack(pk))
 		else
 			chat.AddText(unpack(pk))
 		end

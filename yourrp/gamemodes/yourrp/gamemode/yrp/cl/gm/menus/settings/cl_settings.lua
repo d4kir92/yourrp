@@ -228,9 +228,9 @@ function SettingsTabsContent()
 			end)
 		end
 		if lply:GetNW2Bool("bool_specializations", false) then
-			tabs:AddOption("LID_settings_specializations", function(parent)
+			tabs:AddOption("LID_specializations", function(parent)
 				OpenSettingsSpecializations()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_specializations")))
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_specializations")))
 			end)
 		end
 		if lply:GetNW2Bool("bool_levelsystem", false) then
@@ -258,7 +258,7 @@ function SettingsTabsContent()
 			end)
 		end
 
-		tabs:GoToSite("LID_settings_realistic")
+		tabs:GoToSite("LID_settings_usergroups")
 	elseif sm.currentsite == "LID_server" then
 		if lply:GetNW2Bool("bool_general", false) then
 			tabs:AddOption("LID_settings_general", function(parent)

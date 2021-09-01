@@ -362,7 +362,7 @@ function YRPSortScoreboard()
 			if entry.guid <= 0 then
 				entry.guid = 999999
 			end
-			entry.usergroup = ply:GetUserGroup()
+			entry.usergroup = ply:GetUserGroupNice()
 			entry.level = ply:Level()
 			entry.idcardid = ply:IDCardID()
 			entry.name = ply:RPName()
@@ -553,7 +553,7 @@ function YRPScoreboardAddPlayer(ply)
 					trx = trx + yrptab["language"] + sp
 				end
 				if GetGlobalBool("bool_yrp_scoreboard_show_usergroup", false) then
-					local text = ply:GetUserGroup()
+					local text = ply:GetUserGroupNice()
 					local font = "Saira_24"
 					surface.SetFont(font)
 					local tsw, tsh = surface.GetTextSize(text)
@@ -1108,7 +1108,7 @@ function YRPInitScoreboard()
 			self.sortbyruid:SetSize(yrptab["rolename"], 40)
 			self.sortbyruid:SetPos(tx, 160 - 20)
 			--draw.RoundedBox(0, tx, 160 - 10, yrptab["rolename"], 1000, Color(255, 0, 0, 100))
-			local text = string.upper(YRP.lang_string("LID_group"))
+			local text = string.upper(YRP.lang_string("LID_role"))
 			draw.SimpleText(text, "Saira_30", tx + yrptab["rolename"] / 2, 160, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			YRPDrawOrder(self, tx + yrptab["rolename"] / 2, 160, text, "Saira_30", "ruid")
 			tx = tx + yrptab["rolename"] + sp
