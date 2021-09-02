@@ -731,7 +731,7 @@ net.Receive("settings_add_role", function(len, ply)
 
 	--local up = roles[count - 1]
 	if count == 1 then
-		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "', ", "uniqueID = '" .. new_role.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
 	else
 		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
 		--SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_role.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")

@@ -50,10 +50,12 @@ function HUDIconsDrawIcon(ele, icon, perc, text)
 		local size = h
 		--draw.RoundedBox(0, x, y, h, h, Color(0, 0, 0, 60))
 
-		surface.SetDrawColor(0, 0, 0, 200)
-		surface.SetMaterial(icon)
-		surface.DrawTexturedRect(x, y, size, size)
-
+		if icon then
+			surface.SetDrawColor(0, 0, 0, 200)
+			surface.SetMaterial(icon)
+			surface.DrawTexturedRect(x, y, size, size)
+		end
+		
 		render.ClearStencil()
 		render.SetStencilEnable(true)
 			render.SetStencilWriteMask(1)

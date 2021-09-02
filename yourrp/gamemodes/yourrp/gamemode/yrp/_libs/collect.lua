@@ -26,6 +26,9 @@ if SERVER then
 				entry["entry.1406407238"] = tostring(GAMEMODE.VersionCanary)
 				entry["entry.1022287670"] = tostring(GAMEMODE.VersionBuild)
 
+				-- ART (GITHUB, WORKSHOP)
+				entry["entry.858261986"] = "VA:" .. tostring(VERSIONART)
+
 				-- CollectionID
 				entry["entry.1569548085"] = tostring(YRPCollectionID())
 
@@ -53,7 +56,7 @@ if SERVER then
 	hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded", function()
 		RunConsoleCommand("sv_hibernate_think", 1)
 		timer.Simple(2, function()
-			MsgC(Color(255, 255, 0), ">>> Server is online <<<\n")
+			MsgC( Color(255, 255, 0), ">>> Server is online <<<\n" )
 		end)
 		timer.Simple(10, SendServerInfo)
 	end)

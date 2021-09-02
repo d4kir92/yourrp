@@ -87,9 +87,11 @@ function HUDCirclesDrawIcon(ele, icon, perc, text)
 
 		render.SetStencilEnable(false)
 
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(icon)
-		surface.DrawTexturedRect(x + h / 2 - 32, y + h / 2 - 32, 64, 64)
+		if icon then
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetMaterial(icon)
+			surface.DrawTexturedRect(x + h / 2 - 32, y + h / 2 - 32, 64, 64)
+		end
 
 		local fontsize = lply:HudValue(ele, "TS")
 		if fontsize <= 0 then

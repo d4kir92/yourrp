@@ -404,14 +404,14 @@ timer.Create("ServerThink", TICK, 0, function()
 	end
 
 	if _time % 1 == 0 and HasDarkrpmodification() then
-		MsgC(Color(255, 0, 0), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color(255, 255, 255), "\n")
-		MsgC(Color(255, 0, 0), "-------------------------------------------------------------------------------", Color(255, 255, 255), "\n")
+		MsgC( Color(255, 0, 0), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color(255, 255, 255), "\n" )
+		MsgC( Color(255, 0, 0), "-------------------------------------------------------------------------------", Color(255, 255, 255), "\n" )
 		YRPTestDarkrpmodification()
 	end
 
 	if _time % 1 == 0 and !HasYRPContent() then
-		MsgC(Color(255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color(255, 255, 255), "\n")
-		MsgC(Color(255, 255, 0), "-------------------------------------------------------------------------------", Color(255, 255, 255), "\n")
+		MsgC( Color(255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color(255, 255, 255), "\n" )
+		MsgC( Color(255, 255, 0), "-------------------------------------------------------------------------------", Color(255, 255, 255), "\n" )
 		YRPTestContentAddons()
 	end
 
@@ -610,7 +610,7 @@ hook.Add("Think", "yrp_spawner_think", function()
 			end
 		end
 	end
-end)
+end, hook.MONITOR_HIGH)
 
 hook.Add( "KeyPress", "yrp_keypress_use_door", function( ply, key )
 	if ( key == IN_USE ) then

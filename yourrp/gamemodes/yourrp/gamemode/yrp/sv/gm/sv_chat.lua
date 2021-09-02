@@ -28,7 +28,7 @@ hook.Add("Think", "yrp_alerts", function()
 			SetGlobalString("yrp_alert", "")
 		end
 	end
-end)
+end, hook.MONITOR_HIGH)
 
 util.AddNetworkString("yrp_player_say")
 

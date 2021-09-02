@@ -47,11 +47,11 @@ function strUrl(str)
 end
 
 function hr()
-	MsgC(GetRealmColor(), "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" .. "\n")
+	MsgC( GetRealmColor(), "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" .. "\n" )
 end
 
 function yrpmsg(msg)
-	MsgC(GetRealmColor(), msg .. "\n")
+	MsgC( GetRealmColor(), msg .. "\n" )
 end
 
 function bool_status(b)
@@ -149,14 +149,14 @@ end
 function hr_pre(chan)
 	local cn = GetChannelName(chan)
 	if MSGChannelEnabled(cn) then
-		MsgC(GetRealmColor(), _text.spacePre .. "\n")
+		MsgC( GetRealmColor(), _text.spacePre .. "\n" )
 	end
 end
 
 function hr_pos(chan)
 	local cn = GetChannelName(chan)
 	if MSGChannelEnabled(cn) then
-		MsgC(GetRealmColor(), _text.spacePos .. "\n")
+		MsgC( GetRealmColor(), _text.spacePos .. "\n" )
 	end
 end
 
@@ -196,25 +196,25 @@ function YRP.msg(chan, str_msg, tochat, force)
 
 			msgs = string.Explode("\n", str_msg)
 			for i, msg in pairs(msgs) do
-				MsgC(rc, "[")
-				MsgC(_yrpc, _yrp)
-				MsgC(rc, "|")
-				MsgC(cc, cn)
+				MsgC( rc, "[" )
+				MsgC( _yrpc, _yrp )
+				MsgC( rc, "|" )
+				MsgC( cc, cn )
 				if cn == "DB" and GetSQLModeName != nil then
-					MsgC(cc, ":" .. GetSQLModeName())
+					MsgC( cc, ":" .. GetSQLModeName() )
 				elseif cn == "DB" then
-					MsgC(cc, ":" .. "UNKNOWN")
+					MsgC( cc, ":" .. "UNKNOWN" )
 				end
-				MsgC(rc, "] ")
+				MsgC( rc, "] ")
 
-				MsgC(rc, msg)
+				MsgC( rc, msg )
 			
 				if force then
-					MsgC(rc, " ")
-					MsgC(Color(255, 0, 0), "[FORCED]")
+					MsgC( rc, " ")
+					MsgC( Color(255, 0, 0), "[FORCED]" )
 				end
 
-				MsgC("\n")
+				MsgC( "\n" )
 
 				local str = "[" .. _yrp .. "|" .. cn .. "] " .. msg
 				if force then

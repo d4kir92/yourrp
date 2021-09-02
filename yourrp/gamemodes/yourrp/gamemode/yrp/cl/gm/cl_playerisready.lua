@@ -108,7 +108,7 @@ hook.Add("Think", "yrp_think_ready", function()
 			YRP_NOINIT = true
 		end
 	end
-end)
+end, hook.MONITOR_HIGH)
 
 hook.Add("InitPostEntity", "yrp_InitPostEntity_ready", function()
 	YRP.msg("note", "All entities are loaded.")

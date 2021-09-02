@@ -73,11 +73,15 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 	if once then -- Fix tabsorting
 		once = false
 		timer.Simple(0.2, function()
-			g_SpawnMenu:Close(true) -- close it after short time
-			timer.Simple(0.1, function()
-				g_SpawnMenu:Open() -- reopen with handling the tabs
-				hook.Run("SpawnMenuOpen") -- reload the hook
-			end)
+			if pa(g_SpawnMenu) then
+				g_SpawnMenu:Close(true) -- close it after short time
+				timer.Simple(0.1, function()
+					if pa(g_SpawnMenu) then
+						g_SpawnMenu:Open() -- reopen with handling the tabs
+						hook.Run("SpawnMenuOpen") -- reload the hook
+					end
+				end)
+			end
 		end)
 	else -- Handling Tabs
 		local allhidden = true -- for when all disabllowed
@@ -123,21 +127,21 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 	end
 	
 	return LocalPlayer():GetNW2Bool("bool_canusespawnmenu", false)
-end)
+end, hook.MONITOR_HIGH)
 
 hook.Add("SpawnMenuClose", "yrp_spawn_menu_close", function()
 	closeMenu()
-end)
+end, hook.MONITOR_HIGH)
 
 local contextMenuOpen = false
-hook.Add("ContextMenuOpen", "OnContextMenuOpen", function()
+hook.Add("ContextMenuOpen", "YRPOnContextMenuOpen", function()
 	contextMenuOpen = true
 	return LocalPlayer():GetNW2Bool("bool_canusecontextmenu", false)
-end)
+end, hook.MONITOR_HIGH)
 
-hook.Add("ContextMenuClose", "OnContextMenuClose", function()
+hook.Add("ContextMenuClose", "YRPOnContextMenuClose", function()
 	contextMenuOpen = false
-end)
+end, hook.MONITOR_HIGH)
 
 function sText(text, font, x, y, color, ax, ay)
 	surface.SetFont(font)

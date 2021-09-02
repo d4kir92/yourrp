@@ -625,12 +625,13 @@ if SERVER then
 		YRP.msg("db", "Connect to MYSQL Database")
 
 		-- MYSQL
+		MsgC( Color(255, 0, 0), "If Module not found, download it via yourrp discord!\n" )
 		require("mysqloo")
 
 		if (mysqloo.VERSION != "9" or !mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
-			MsgC(Color(255, 0, 0), "You are using an outdated mysqloo version\n")
-			MsgC(Color(255, 0, 0), "Download the latest mysqloo9 from here\n")
-			MsgC(Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases")
+			MsgC( Color(255, 0, 0), "You are using an outdated mysqloo version\n" )
+			MsgC( Color(255, 0, 0), "Download the latest mysqloo9 from here\n" )
+			MsgC( Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases\n" )
 			YRPSQL.outdated = true
 		end
 

@@ -1162,10 +1162,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 			function ch:DoClick()
 				rs.rplist:ClearList()
-				net.Start("settings_unsubscribe_rolelist")
-					net.WriteString(cur_role.gro)
-					net.WriteString(cur_role.pre)
-				net.SendToServer()
+				if cur_role.gro and cur_role.pre then
+					net.Start("settings_unsubscribe_rolelist")
+						net.WriteString(cur_role.gro)
+						net.WriteString(cur_role.pre)
+					net.SendToServer()
+				end
 				timer.Simple(0.1, function()
 					if pa(rs.rplist) then
 						net.Start("settings_subscribe_rolelist")
@@ -1884,9 +1886,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						net.SendToServer()
 						role.string_sweps = table.concat( lply.yrpseltab, "," )
 					elseif lply.yrpseltab and lply.yrpseltab[1] then
-						MsgC(Color(255, 0, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]))
+						MsgC( Color(255, 0, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 					else
-						MsgC(Color(255, 0, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab))
+						MsgC( Color(255, 0, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 					end
 				end
 
@@ -1969,9 +1971,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 							net.SendToServer()
 							role.string_sweps_onspawn = table.concat( lply.yrpseltab, "," )
 						elseif lply.yrpseltab and lply.yrpseltab[1] then
-							MsgC(Color(255, 0, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]))
+							MsgC( Color(255, 0, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 						else
-							MsgC(Color(255, 0, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab))
+							MsgC( Color(255, 0, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 						end
 					end
 

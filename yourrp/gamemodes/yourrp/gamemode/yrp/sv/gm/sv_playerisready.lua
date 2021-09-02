@@ -96,7 +96,7 @@ hook.Add("Think", "yrp_loaded_game", function()
 			end
 		end
 	end
-end)
+end, hook.MONITOR_HIGH)
 
 util.AddNetworkString("yrp_player_is_ready")
 net.Receive("yrp_player_is_ready", function(len, ply)

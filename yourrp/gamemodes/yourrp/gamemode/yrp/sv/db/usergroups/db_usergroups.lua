@@ -1796,6 +1796,10 @@ function Player:UserGroupLoadout()
 				end
 			end
 		end
+
+		YRP.msg("gm", tostring( self:SteamName() ) .. " got his usergroup loadout (" .. tostring( self:GetUserGroup() ) .. ")")
+	else
+		YRP.msg("note", "USERGROUP NOT FOUND, ADD THE USERGROUP!")
 	end
 
 	YRPCountActiveChannels(self)
