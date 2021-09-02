@@ -38,6 +38,8 @@ YRP.AddFont("Mali", 1.6)
 YRP.AddFont("Metro", 0.5)
 YRP.AddFont("Military Font 7", 0.72)
 
+YRP.AddFont("Nunito", 1)
+
 YRP.AddFont("Overseer", 1)
 
 YRP.AddFont("pixelmix", 0.7)
