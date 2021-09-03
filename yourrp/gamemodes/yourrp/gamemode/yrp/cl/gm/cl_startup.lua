@@ -1886,18 +1886,45 @@ if pa(yrp_loading_screen) then
 	function yrp_loading_screen.blur:Paint(pw, ph)
 		local lply = LocalPlayer()
 
+
+
 		-- CENTER
-		local px = ScrW() / 2
-		local py = ScrH() / 2
+		local SCREEN_CENTER_X = ScrW() / 2
+		local SCREEN_CENTER_Y = ScrH() / 2
 
-		-- Panel SW, SH
-		local sw = ScrW() * 0.8 --1500
-		local sh = ScrH() * 0.4222 --1080/ 456
 
-		-- BAR W, H
-		local bw = sw * 0.96 -- 1440
-		local bh = ScrH() * 0.1 --108
 
+		-- CONFIG --------------------------------------------------------------
+		-- Panel
+		local PANEL_W = ScrW() * 0.8 --1500
+		local PANEL_H = ScrH() * 0.4222 --1080/ 456
+		-- Panel SHADOWS
+		PANEL_SHADOW_intensity = 1
+		PANEL_SHADOW_Spread = 2
+		PANEL_SHADOW_Blur = 2
+		PANEL_SHADOW_Opacity = 255
+		PANEL_SHADOW_Direction = 0
+		PANEL_SHADOW_Distance = 0
+
+		-- BAR
+		local BAR_W = PANEL_W * 0.96 -- 1440
+		local BAR_H = ScrH() * 0.1 --108
+		local BAR_SPACE = 20
+		local BAR_FONT_SIZE = 60
+
+		-- Play Button
+		local PLAY_BUTTON_W = BAR_W * 0.3 --YRP.ctr(500)
+		local PLAY_BUTTON_H = ScrH() * 0.1
+		local PLAY_BUTTON_SPACE = 30
+		local PLAY_BUTTON_FONT_SIZE = 60
+
+		-- HOSTNAME
+		HOSTNAME_SPACE = 40
+		HOSTNAME_FONT_SIZE = 80
+		-- CONFIG --------------------------------------------------------------
+
+
+		
 		if lply == NULL then return end
 
 		if pa(yrp_loading_screen) then
@@ -1971,14 +1998,12 @@ if pa(yrp_loading_screen) then
 				end]]
 
 				if self.joinbutton == nil then
-					local w = bw * 0.3 --YRP.ctr(500)
-					local h = ScrH() * 0.1
-					self.joinbutton = createD("YButton", self, w, h, pw / 2 - w / 2, ph / 2 + sh / 2 - h - 30)
+					self.joinbutton = createD("YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ph / 2 + PANEL_H / 2 - PLAY_BUTTON_H - PLAY_BUTTON_SPACE)
 					self.joinbutton:SetText("")
 					self.joinbutton.master = yrp_loading_screen
 					function self.joinbutton:Paint(pw, ph)
 						hook.Run("YButtonAPaint", self, pw, ph)
-						draw.SimpleText(YRP.lang_string("LID_play"), "Y_60_700", pw / 2, ph / 2, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRP.lang_string("LID_play"), "Y_" .. PLAY_BUTTON_FONT_SIZE .. "_700", pw / 2, ph / 2, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 					function self.joinbutton:DoClick()
 						--self.master:Remove()
@@ -2009,29 +2034,34 @@ if pa(yrp_loading_screen) then
 		end
 		loading_cur_old = Lerp(2 * FrameTime(), loading_cur_old, loading_cur)
 
+		-- SHADOW Start
+		BSHADOWS:BeginShadow()
+
 		-- PANEL --
 		-- BG
-		draw.RoundedBox(40, px - sw / 2, py - sh / 2, sw, sh, YRPCPP(255 * 0.8))
-
-
+		draw.RoundedBox(40, SCREEN_CENTER_X - PANEL_W / 2, SCREEN_CENTER_Y - PANEL_H / 2, PANEL_W, PANEL_H, YRPCPP(255 * 0.8))
+		
 
 		-- BAR --
 		-- BG
-		draw.RoundedBox(9, px - bw / 2, py - sh / 2 + 20, bw, bh, Color(80, 80, 80, 255))
+		draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE, BAR_W, BAR_H, Color(80, 80, 80, 255))
 		-- BAR
-		draw.RoundedBox(9, px - bw / 2, py - sh / 2 + 20, bw * loading_cur_old / max, bh, Color(38, 222, 129))
+		draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE, BAR_W * loading_cur_old / max, BAR_H, Color(38, 222, 129))
 		-- BAR TEXT
-		draw.SimpleText(YRP.lang_string("LID_loadingdata") .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_60_700", pw / 2, py - sh / 2 + 20 + bh / 2, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string("LID_loadingdata") .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_" .. BAR_FONT_SIZE .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 
 
 		-- HOSTNAME --
-		draw.SimpleText(YRPGetHostName(), "Y_80_700", px, py - sh / 2 - 40, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, SCREEN_CENTER_Y - PANEL_H / 2 - HOSTNAME_SPACE, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 
 		
 		-- TIME
-		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_18_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_16_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+		-- SHADOW END
+		BSHADOWS.EndShadow(PANEL_SHADOW_intensity, PANEL_SHADOW_Spread, PANEL_SHADOW_Blur, PANEL_SHADOW_Opacity, PANEL_SHADOW_Direction, PANEL_SHADOW_Distance)
 	end
 end
 

@@ -1,9 +1,11 @@
 --Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
 
 function TextColor(bgcol)
-	local sum = bgcol.r + bgcol.g + bgcol.b
-	if sum > 255 then
-		return Color(0, 0, 0)
+	if bgcol.r and bgcol.g and bgcol.b then
+		local sum = bgcol.r + bgcol.g + bgcol.b
+		if sum > 255 then
+			return Color(0, 0, 0)
+		end
 	end
 	return Color(255, 255, 255)
 end
@@ -1650,7 +1652,6 @@ if BSHADOWS == nil then
 			BSHADOWS.ShadowMaterial:SetTexture('$basetexture', BSHADOWS.RenderTarget)
 			render.SetMaterial(BSHADOWS.ShadowMaterial)
 			render.DrawScreenQuad()
-			print("Drew Shadow")
 		end
 	
 		cam.End2D()

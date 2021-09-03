@@ -72,9 +72,11 @@ function HUDIconsDrawIcon(ele, icon, perc, text)
 
 			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
-			surface.SetDrawColor(lply:HudValue(ele, "BA"))
-			surface.SetMaterial(icon)
-			surface.DrawTexturedRect(x, y, size, size)
+			if icon then
+				surface.SetDrawColor(lply:HudValue(ele, "BA"))
+				surface.SetMaterial(icon)
+				surface.DrawTexturedRect(x, y, size, size)
+			end
 
 		render.SetStencilEnable(false)
 
