@@ -320,290 +320,6 @@ function GetSENTsList()
 	return list_entities
 end
 
-function OpenSelector(tbl_list, tbl_sele, closeF)
-	local lply = LocalPlayer()
-	lply.global_working = table.concat(tbl_sele, ",")
-	local site = {}
-	site.cur = 1
-	site.max = 1
-	site.count = #tbl_list
-	local frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
-	frame:SetDraggable(false)
-	frame:Center()
-	frame:SetTitle("")
-
-	function frame:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
-		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "Y_24_500", pw / 2, ph - YRP.ctr(10 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	function frame:OnClose()
-		hook.Call(closeF)
-	end
-
-	local item = {}
-	item.w = 740
-	item.h = 370
-	local _w = ScrW() - YRP.ctr(20)
-	local _h = ScrH() - YRP.ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
-	local _x = YRP.ctr(10)
-	local _y = YRP.ctr(50 + 10 + 50 + 10)
-	local _cw = _w / YRP.ctr(item.w + 10)
-	_cw = _cw - _cw % 1
-	local _ch = _h / YRP.ctr(item.h + 10)
-	_ch = _ch - _ch % 1
-	local _cs = _cw * _ch
-	local searchButton = createD("DButton", frame, YRP.ctr(50), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50 + 10))
-	searchButton:SetText("")
-
-	function searchButton:Paint(pw, ph)
-		local _br = 4
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(searchIcon)
-		surface.DrawTexturedRect(YRP.ctr(5), YRP.ctr(5), YRP.ctr(40), YRP.ctr(40))
-		draw.SimpleText(YRP.lang_string("LID_search") .. ":", "DermaDefault", YRP.ctr(_but_len), YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-	end
-
-	local search = createD("DTextEntry", frame, _w - YRP.ctr(50), YRP.ctr(50), YRP.ctr(10 + 50), YRP.ctr(50 + 10))
-
-	function getMaxSite()
-		site.max = site.count / _cs
-		local _mod = site.max % 1
-		site.max = site.max - _mod
-
-		if site.max + _mod > site.max then
-			site.max = site.max + 1
-		end
-	end
-
-	getMaxSite()
-	local scrollpanel = createD("DPanel", frame, _w, _h, _x, _y)
-
-	function scrollpanel:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
-	end
-
-	local tmpCache = {}
-	local tmpSelected = {}
-
-	function showList()
-		for k, v in pairs(tmpCache) do
-			v:Remove()
-		end
-
-		local tmpBr = 10
-		local tmpX = 0
-		local tmpY = 0
-		site.count = 0
-		local count = 0
-
-		for k, v in pairs(tbl_list) do
-			if v.WorldModel == nil then
-				v.WorldModel = v.Model or ""
-			end
-
-			if v.PrintName == nil then
-				v.PrintName = v.Name or ""
-			end
-
-			if v.ClassName == nil then
-				v.ClassName = v.Class or ""
-			end
-
-			if tmpSelected[k] == nil then
-				tmpSelected[k] = {}
-				tmpSelected[k].ClassName = v.ClassName
-
-				if isInTable(tbl_sele, v) then
-					tmpSelected[k].selected = true
-				else
-					tmpSelected[k].selected = false
-				end
-			end
-
-			local searchtext = search:GetText()
-			if string.find(string.lower(v.WorldModel), searchtext) or string.find(string.lower(v.PrintName), searchtext) or string.find(string.lower(v.ClassName), searchtext) then
-				site.count = site.count + 1
-
-				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
-					count = count + 1
-					tmpCache[k] = createD("DPanel", scrollpanel, YRP.ctr(item.w), YRP.ctr(item.h), tmpX, tmpY)
-					local tmpPointer = tmpCache[k]
-
-					function tmpPointer:Paint(pw, ph)
-						self.text = ""
-						self.color = Color(0, 0, 0)
-
-						if tmpSelected[k].selected then
-							self.color = Color(0, 255, 0)
-							self.tcolor = Color(255, 255, 255, 255)
-
-							if string.find(v.ClassName, "npc_") then
-								self.text = "NPC SWEP"
-								self.color = Color(255, 255, 0, 255)
-								self.tcolor = Color(255, 0, 0, 255)
-							elseif string.find(v.ClassName, "base") then
-								self.text = "Base Entity"
-								self.color = Color(255, 255, 0, 255)
-								self.tcolor = Color(255, 0, 0, 255)
-							elseif v.WorldModel == "" then
-								self.text = "NO MODEL"
-								self.color = Color(255, 255, 0, 255)
-								self.tcolor = Color(255, 255, 0, 255)
-							end
-
-							draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-						else
-							if string.find(v.ClassName, "npc_") then
-								self.text = "NPC SWEP"
-								self.color = Color(255, 0, 0, 255)
-							elseif string.find(v.ClassName, "base") then
-								self.text = "Base Entity"
-								self.color = Color(255, 0, 0, 255)
-							elseif v.WorldModel == "" then
-								self.text = "NO MODEL"
-								self.color = Color(255, 255, 0, 255)
-							end
-
-							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 200))
-
-							if self.text != "" then
-								surfaceText(string.upper(self.text) .. "!", "Y_30_500", pw / 2, ph / 2, self.color, 1, 1)
-							end
-						end
-					end
-
-					if v.WorldModel != nil and v.WorldModel != "" then
-						local icon = createD("SpawnIcon", tmpPointer, YRP.ctr(item.h), YRP.ctr(item.h), 0, 0)
-						icon.item = v
-						icon:SetText("")
-
-						timer.Create("shop" .. count, 0.002 * count, 1, function()
-							if icon != nil and icon != NULL and icon.item != nil then
-								icon:SetModel(icon.item.WorldModel)
-
-								if icon.Entity != nil then
-									icon.Entity:SetModelScale(1, 0)
-									icon:SetLookAt(Vector(0, 0, 0))
-									icon:SetCamPos(Vector(0, -30, 15))
-								end
-							end
-						end)
-					end
-
-					local tmpButton = createD("DButton", tmpPointer, YRP.ctr(item.w), YRP.ctr(item.h), 0, 0)
-					tmpButton:SetText("")
-
-					function tmpButton:Paint(pw, ph)
-						--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 0))
-						local text = "" --YRP.lang_string("LID_notadded")
-
-						if tmpSelected[k].selected then
-							text = "Added"
-
-							if tmpPointer.text != "" then
-								text = text .. " (" .. tmpPointer.text .. ")"
-							end
-						end
-
-						local _test = "HAS NO NAME"
-
-						if v.PrintName != nil and v.PrintName != "" then
-							_test = v.PrintName
-						elseif v.ClassName != nil and v.ClassName != "" then
-							_test = v.ClassName
-						elseif v.WorldModel != nil and v.WorldModel != "" then
-							_test = v.WorldModel
-						elseif v.ViewModel != nil and v.ViewModel != "" then
-							_test = v.ViewModel
-						end
-
-						surface.SetFont("DermaDefaultBold")
-						local _tw, _th = surface.GetTextSize(_test)
-						local _x_ = YRP.ctr(4)
-						local _y_ = YRP.ctr(4)
-						surfaceBox(_x_, _y_, _tw + YRP.ctr(8), _th + YRP.ctr(8), Color(0, 0, 0))
-						surfaceText(_test, "DermaDefaultBold", _x_ + YRP.ctr(4), _y_ + YRP.ctr(15), Color(255, 255, 255, 255), 0, 1)
-						--draw.SimpleTextOutlined(_test, "DermaDefaultBold", pw - YRP.ctr(10), YRP.ctr(10), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, YRP.ctr(1), Color(255, 255, 255, 255))
-						draw.SimpleTextOutlined(text, "Y_24_500", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
-					end
-
-					function tmpButton:DoClick()
-						if tmpSelected[k].selected then
-							tmpSelected[k].selected = false
-						else
-							tmpSelected[k].selected = true
-						end
-
-						local tmpString = ""
-
-						for l, w in pairs(tmpSelected) do
-							if w.selected and w.ClassName != nil then
-								if tmpString == "" then
-									tmpString = w.ClassName
-								else
-									tmpString = tmpString .. "," .. w.ClassName
-								end
-							end
-						end
-
-						lply.global_working = tmpString
-					end
-
-					tmpX = tmpX + YRP.ctr(item.w) + tmpBr
-
-					if tmpX > _w - YRP.ctr(item.w) then
-						tmpX = 0
-						tmpY = tmpY + YRP.ctr(item.h) + tmpBr
-					end
-				end
-			end
-		end
-	end
-
-	local nextB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), ScrW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10))
-	nextB:SetText("")
-
-	function nextB:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_next"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	function nextB:DoClick()
-		if site.max > site.cur then
-			site.cur = site.cur + 1
-			showList()
-		end
-	end
-
-	local prevB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), YRP.ctr(10 + 10), ScrH() - YRP.ctr(50 + 10))
-	prevB:SetText("")
-
-	function prevB:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_prev"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	function prevB:DoClick()
-		site.cur = site.cur - 1
-
-		if site.cur < 1 then
-			site.cur = 1
-		end
-
-		showList()
-	end
-
-	function search:OnChange()
-		site.cur = 1
-		showList()
-		getMaxSite()
-	end
-
-	showList()
-	frame:MakePopup()
-end
-
 function YRPOpenSelector(tab, multiple, ret, fu)
 	local lply = LocalPlayer()
 	if multiple then
@@ -806,504 +522,6 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 			pmsel:Search("")
 		end
 	end)
-end
-
-function OpenSingleSelector(tab, closeF)
-	local site = {}
-	site.cur = 1
-	site.max = 1
-	site.count = #tab
-	local _item = {}
-	_item.w = 740
-	_item.h = 370
-	local _w = ScrW() - YRP.ctr(20)
-	local _h = ScrH() - YRP.ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
-	local _x = YRP.ctr(10)
-	local _y = YRP.ctr(10 + 50 + 10)
-	local _cw = _w / YRP.ctr(_item.w + 10)
-	_cw = _cw - _cw % 1
-	local _ch = _h / YRP.ctr(_item.h + 10)
-	_ch = _ch - _ch % 1
-	local _cs = _cw * _ch
-
-	function getMaxSite()
-		local tmpMax = math.Round(site.count / 20, 0)
-		site.max = math.Round(site.count / 20, 0)
-
-		if tmpMax > site.max then
-			site.max = site.max + 1
-		end
-	end
-
-	getMaxSite()
-	local frame = createD("YFrame", nil, ScrW(), ScrH(), 0, 0)
-	frame:SetDraggable(false)
-	frame:SetTitle(YRP.lang_string("Item Menu"))
-
-	function frame:Paint(pw, ph)
-		hook.Run("YFramePaint", self, pw, ph)
-		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "Y_24_500", pw / 2, ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-	end
-
-	function frame:OnClose()
-		hook.Call(closeF)
-	end
-
-	local parent = frame:GetContent()
-
-	_w = parent:GetWide()
-	_h = parent:GetTall()
-
-	local PanelSelect = createD("DPanel", parent, _w, _h - YRP.ctr(10 + 50 + 10 + 10 + 50 + 10), _x, _y)
-	PanelSelect:SetText("")
-
-	function PanelSelect:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
-	end
-
-	local searchButton = createD("DButton", parent, YRP.ctr(50), YRP.ctr(50), _x, YRP.ctr(10))
-	searchButton:SetText("")
-
-	function searchButton:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
-		local _br = 4
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(searchIcon)
-		surface.DrawTexturedRect(YRP.ctr(5), YRP.ctr(5), YRP.ctr(40), YRP.ctr(40))
-	end
-
-	local search = createD("DTextEntry", parent, _w - YRP.ctr(50 + 10), YRP.ctr(50), YRP.ctr(10 + 50 + 10), YRP.ctr(10))
-
-	function search:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
-		local _string = search:GetText()
-
-		if _string == "" then
-			_string = YRP.lang_string("LID_search")
-		end
-
-		draw.SimpleTextOutlined(_string, "DermaDefault", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
-	end
-
-	function showList()
-		local tmpBr = 10
-		local tmpX = 0
-		local tmpY = 0
-		PanelSelect:Clear()
-		local _cat = nil
-
-		if tab == "vehicles" then
-			_cat = "Category"
-		end
-
-		site.count = 0
-		local count = 0
-
-		for k, item in SortedPairsByMemberValue(tab, _cat, false) do
-			item.PrintName = item.PrintName or item.Name or ""
-			item.ClassName = item.ClassName or item.Class or ""
-			item.WorldModel = item.WorldModel or item.Model or ""
-
-			local searchtext = search:GetText()
-			if string.find(string.lower(item.WorldModel or ""), searchtext) or string.find(string.lower(item.PrintName or ""), searchtext) or string.find(string.lower(item.ClassName or ""), searchtext) then
-				site.count = site.count + 1
-
-				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
-					count = count + 1
-
-					if item.WorldModel == nil then
-						item.WorldModel = item.Model or ""
-					end
-
-					if item.ClassName == nil then
-						item.ClassName = item.Class or ""
-					end
-
-					if item.PrintName == nil then
-						item.PrintName = item.Name or ""
-					end
-
-					local icon = createD("DPanel", PanelSelect, YRP.ctr(_item.w), YRP.ctr(_item.h), tmpX, tmpY)
-
-					function icon:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
-					end
-
-					local spawnicon = createD("SpawnIcon", icon, YRP.ctr(_item.h), YRP.ctr(_item.h), 0, 0)
-					spawnicon.item = item
-					spawnicon:SetText("")
-
-					timer.Create("shop" .. count, 0.002 * count, 1, function()
-						if spawnicon != nil and spawnicon != NULL and spawnicon.item != nil then
-							spawnicon:SetModel(spawnicon.item.WorldModel)
-						end
-					end)
-
-					spawnicon:SetTooltip(item.PrintName)
-					local _tmpName = createD("DButton", icon, YRP.ctr(_item.w), YRP.ctr(_item.h), 0, 0)
-					_tmpName:SetText("")
-
-					function _tmpName:Paint(pw, ph)
-						draw.SimpleTextOutlined(item.PrintName, "Y_18_500", pw - YRP.ctr(10), ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-					end
-
-					function _tmpName:DoClick()
-						LocalPlayer().WorldModel = item.WorldModel
-						LocalPlayer().ClassName = item.ClassName
-						LocalPlayer().PrintName = item.PrintName
-						LocalPlayer().Skin = item.Skin
-						frame:Close()
-					end
-
-					tmpX = tmpX + YRP.ctr(_item.w) + tmpBr
-
-					if tmpX > _w - YRP.ctr(_item.w) then
-						tmpX = 0
-						tmpY = tmpY + YRP.ctr(_item.h) + tmpBr
-					end
-				end
-			end
-		end
-	end
-
-	local nextB = createD("DButton", parent, YRP.ctr(300), YRP.ctr(50), parent:GetWide() - YRP.ctr(300 + 10), parent:GetTall() - YRP.ctr(50 + 10))
-	nextB:SetText("")
-
-	function nextB:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_next"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	function nextB:DoClick()
-		if site.max > site.cur then
-			site.cur = site.cur + 1
-			showList()
-		end
-	end
-
-	local prevB = createD("DButton", parent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(10), parent:GetTall() - YRP.ctr(50 + 10))
-	prevB:SetText("")
-
-	function prevB:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_prev"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	function prevB:DoClick()
-		site.cur = site.cur - 1
-
-		if site.cur < 1 then
-			site.cur = 1
-		end
-
-		showList()
-	end
-
-	function search:OnChange()
-		site.cur = 1
-		showList()
-		getMaxSite()
-	end
-
-	showList()
-	frame:MakePopup()
-end
-
-function openSelector(tab, dbTable, dbSets, dbWhile, closeF)
-	local site = {}
-	site.cur = 1
-	site.max = 1
-	site.count = #tab
-	local table2 = string.Explode(",", _globalWorking)
-	local frame = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
-	frame:SetDraggable(false)
-	frame:Center()
-	frame:SetTitle("")
-
-	function frame:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 254))
-		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "Y_24_500", pw / 2, ph - YRP.ctr(10 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	function frame:OnClose()
-		hook.Call(closeF)
-	end
-
-	local item = {}
-	item.w = 740
-	item.h = 370
-	local _w = ScrW() - YRP.ctr(20)
-	local _h = ScrH() - YRP.ctr(50 + 10 + 50 + 10 + 10 + 50 + 10)
-	local _x = YRP.ctr(10)
-	local _y = YRP.ctr(50 + 10 + 50 + 10)
-	local _cw = _w / YRP.ctr(item.w + 10)
-	_cw = _cw - _cw % 1
-	local _ch = _h / YRP.ctr(item.h + 10)
-	_ch = _ch - _ch % 1
-	local _cs = _cw * _ch
-	local searchButton = createD("DButton", frame, YRP.ctr(50), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50 + 10))
-	searchButton:SetText("")
-
-	function searchButton:Paint(pw, ph)
-		local _br = 4
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(searchIcon)
-		surface.DrawTexturedRect(YRP.ctr(5), YRP.ctr(5), YRP.ctr(40), YRP.ctr(40))
-		draw.SimpleText(YRP.lang_string("LID_search") .. ":", "DermaDefault", YRP.ctr(_but_len), YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-	end
-
-	local search = createD("DTextEntry", frame, _w - YRP.ctr(50), YRP.ctr(50), YRP.ctr(10 + 50), YRP.ctr(50 + 10))
-
-	--[[function search:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
-		local _string = search:GetText()
-		if _string == "" then
-			_string = YRP.lang_string("LID_search")
-		end
-		draw.SimpleTextOutlined(_string, "DermaDefault", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
-	end]]
-	--
-	function getMaxSite()
-		site.max = site.count / _cs
-		local _mod = site.max % 1
-		site.max = site.max - _mod
-
-		if site.max + _mod > site.max then
-			site.max = site.max + 1
-		end
-	end
-
-	getMaxSite()
-	local scrollpanel = createD("DPanel", frame, _w, _h, _x, _y)
-
-	function scrollpanel:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
-	end
-
-	local tmpCache = {}
-	local tmpSelected = {}
-
-	function showList()
-		for k, v in pairs(tmpCache) do
-			v:Remove()
-		end
-
-		local tmpBr = 10
-		local tmpX = 0
-		local tmpY = 0
-		site.count = 0
-		local count = 0
-
-		for k, v in pairs(tab) do
-			if v.WorldModel == nil then
-				v.WorldModel = v.Model or ""
-			end
-
-			if v.PrintName == nil then
-				v.PrintName = v.Name or ""
-			end
-
-			if v.ClassName == nil then
-				v.ClassName = v.Class or ""
-			end
-
-			if tmpSelected[k] == nil then
-				tmpSelected[k] = {}
-				tmpSelected[k].ClassName = v.ClassName
-
-				if isInTable(table2, v) then
-					tmpSelected[k].selected = true
-				else
-					tmpSelected[k].selected = false
-				end
-			end
-
-			local searchtext = search:GetText()
-			if string.find(string.lower(v.WorldModel), searchtext) or string.find(string.lower(v.PrintName), searchtext) or string.find(string.lower(v.ClassName), searchtext) then
-				site.count = site.count + 1
-
-				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
-					count = count + 1
-					tmpCache[k] = createD("DPanel", scrollpanel, YRP.ctr(item.w), YRP.ctr(item.h), tmpX, tmpY)
-					local tmpPointer = tmpCache[k]
-
-					function tmpPointer:Paint(pw, ph)
-						self.text = ""
-						self.color = Color(0, 0, 0)
-
-						if tmpSelected[k].selected then
-							self.color = Color(0, 255, 0)
-							self.tcolor = Color(255, 255, 255, 255)
-
-							if string.find(v.ClassName, "npc_") then
-								self.text = "NPC SWEP"
-								self.color = Color(255, 255, 0, 255)
-								self.tcolor = Color(255, 0, 0, 255)
-							elseif string.find(v.ClassName, "base") then
-								self.text = "Base SWEP"
-								self.color = Color(255, 255, 0, 255)
-								self.tcolor = Color(255, 0, 0, 255)
-							elseif v.WorldModel == "" then
-								self.text = "NO MODEL"
-								self.color = Color(255, 255, 0, 255)
-								self.tcolor = Color(255, 255, 0, 255)
-							end
-
-							draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-						else
-							if string.find(v.ClassName, "npc_") then
-								self.text = "NPC SWEP"
-								self.color = Color(255, 0, 0, 255)
-							elseif string.find(v.ClassName, "base") then
-								self.text = "Base SWEP"
-								self.color = Color(255, 0, 0, 255)
-							elseif v.WorldModel == "" then
-								self.text = "NO MODEL"
-								self.color = Color(255, 255, 0, 255)
-							end
-
-							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 200))
-
-							if self.text != "" then
-								surfaceText(string.upper(self.text) .. "!", "Y_30_500", pw / 2, ph / 2, self.color, 1, 1)
-							end
-						end
-					end
-
-					if v.WorldModel != nil and v.WorldModel != "" then
-						local icon = createD("SpawnIcon", tmpPointer, YRP.ctr(item.h), YRP.ctr(item.h), 0, 0)
-						icon.item = v
-						icon:SetText("")
-
-						timer.Create("shop" .. count, 0.002 * count, 1, function()
-							if icon != nil and icon != NULL and icon.item != nil then
-								icon:SetModel(icon.item.WorldModel)
-
-								if icon.Entity != nil then
-									icon.Entity:SetModelScale(1, 0)
-									icon:SetLookAt(Vector(0, 0, 0))
-									icon:SetCamPos(Vector(0, -30, 15))
-								end
-							end
-						end)
-					end
-
-					local tmpButton = createD("DButton", tmpPointer, YRP.ctr(item.w), YRP.ctr(item.h), 0, 0)
-					tmpButton:SetText("")
-
-					function tmpButton:Paint(pw, ph)
-						--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 0))
-						local text = "" --YRP.lang_string("LID_notadded")
-
-						if tmpSelected[k].selected then
-							text = "Added"
-
-							if tmpPointer.text != "" then
-								text = text .. " (" .. tmpPointer.text .. ")"
-							end
-						end
-
-						local _test = "HAS NO NAME"
-
-						if v.PrintName != nil and v.PrintName != "" then
-							_test = v.PrintName
-						elseif v.ClassName != nil and v.ClassName != "" then
-							_test = v.ClassName
-						elseif v.WorldModel != nil and v.WorldModel != "" then
-							_test = v.WorldModel
-						elseif v.ViewModel != nil and v.ViewModel != "" then
-							_test = v.ViewModel
-						end
-
-						surface.SetFont("DermaDefaultBold")
-						local _tw, _th = surface.GetTextSize(_test)
-						local _x_ = YRP.ctr(4)
-						local _y_ = YRP.ctr(4)
-						surfaceBox(_x_, _y_, _tw + YRP.ctr(8), _th + YRP.ctr(8), Color(0, 0, 0))
-						surfaceText(_test, "DermaDefaultBold", _x_ + YRP.ctr(4), _y_ + YRP.ctr(15), Color(255, 255, 255, 255), 0, 1)
-						--draw.SimpleTextOutlined(_test, "DermaDefaultBold", pw - YRP.ctr(10), YRP.ctr(10), Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, YRP.ctr(1), Color(255, 255, 255, 255))
-						draw.SimpleTextOutlined(text, "Y_24_500", pw / 2, ph / 2, tmpPointer.tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
-					end
-
-					function tmpButton:DoClick()
-						if tmpSelected[k].selected then
-							tmpSelected[k].selected = false
-						else
-							tmpSelected[k].selected = true
-						end
-
-						local tmpString = ""
-
-						for l, w in pairs(tmpSelected) do
-							if w.selected and w.ClassName != nil then
-								if tmpString == "" then
-									tmpString = w.ClassName
-								else
-									tmpString = tmpString .. "," .. w.ClassName
-								end
-							end
-						end
-
-						net.Start("dbUpdate")
-						net.WriteString(dbTable)
-						net.WriteString(dbSets .. " = '" .. tmpString .. "'")
-						net.WriteString(dbWhile)
-						net.SendToServer()
-						_globalWorking = tmpString
-					end
-
-					tmpX = tmpX + YRP.ctr(item.w) + tmpBr
-
-					if tmpX > _w - YRP.ctr(item.w) then
-						tmpX = 0
-						tmpY = tmpY + YRP.ctr(item.h) + tmpBr
-					end
-				end
-			end
-		end
-	end
-
-	local nextB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), ScrW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10))
-	nextB:SetText("")
-
-	function nextB:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_next"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	function nextB:DoClick()
-		if site.max > site.cur then
-			site.cur = site.cur + 1
-			showList()
-		end
-	end
-
-	local prevB = createD("DButton", frame, YRP.ctr(200), YRP.ctr(50), YRP.ctr(10 + 10), ScrH() - YRP.ctr(50 + 10))
-	prevB:SetText("")
-
-	function prevB:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_prev"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-	end
-
-	function prevB:DoClick()
-		site.cur = site.cur - 1
-
-		if site.cur < 1 then
-			site.cur = 1
-		end
-
-		showList()
-	end
-
-	function search:OnChange()
-		site.cur = 1
-		showList()
-		getMaxSite()
-	end
-
-	showList()
-	frame:MakePopup()
 end
 
 local mdllist = {}
@@ -2625,7 +1843,17 @@ hook.Add("Think", "openDeathScreen", function(len)
 	end
 end)
 
+function YRPCPP(a)
+	return Color(43, 61, 79, a)
+end
 
+function YRPCPL(a)
+	return Color(85, 103, 123, a)
+end
+
+function YRPCPD(a)
+	return Color(2, 23, 39, a)
+end
 
 -- #LOADING
 local yrp_icon = Material("yrp/yrp_icon")
@@ -2657,6 +1885,18 @@ if pa(yrp_loading_screen) then
 
 	function yrp_loading_screen.blur:Paint(pw, ph)
 		local lply = LocalPlayer()
+
+		-- CENTER
+		local px = ScrW() / 2
+		local py = ScrH() / 2
+
+		-- Panel SW, SH
+		local sw = ScrW() * 0.8 --1500
+		local sh = ScrH() * 0.4222 --1080/ 456
+
+		-- BAR W, H
+		local bw = sw * 0.96 -- 1440
+		local bh = ScrH() * 0.1 --108
 
 		if lply == NULL then return end
 
@@ -2710,7 +1950,7 @@ if pa(yrp_loading_screen) then
 
 		if lply:GetNW2Bool("yrp_hudloadout", false) and lply:GetNW2Bool("finishedloading", false) and ( lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) ) then
 			if GetGlobalBool("bool_yrp_play_button", false) then
-				if self.logo == nil then
+				--[[if self.logo == nil then
 					local w = YRP.ctr(512)
 					local h = YRP.ctr(512)
 					self.logo = createD("DHTML", self, w, h, pw / 2 - w / 2, ph / 2 - h / 2)
@@ -2728,17 +1968,17 @@ if pa(yrp_loading_screen) then
 							self.logo:Hide()
 						end
 					end
-				end
+				end]]
 
 				if self.joinbutton == nil then
-					local w = YRP.ctr(500)
-					local h = YRP.ctr(100)
-					self.joinbutton = createD("YButton", self, w, h, pw / 2 - w / 2, ph / 2 + YRP.ctr(480))
+					local w = bw * 0.3 --YRP.ctr(500)
+					local h = ScrH() * 0.1
+					self.joinbutton = createD("YButton", self, w, h, pw / 2 - w / 2, ph / 2 + sh / 2 - h - 30)
 					self.joinbutton:SetText("")
 					self.joinbutton.master = yrp_loading_screen
 					function self.joinbutton:Paint(pw, ph)
-						hook.Run("YButtonPaint", self, pw, ph)
-						draw.SimpleText(YRP.lang_string("LID_play"), "Y_30_500", pw / 2, ph / 2, TextColor(lply:InterfaceValue("YButton", "NC")), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						hook.Run("YButtonAPaint", self, pw, ph)
+						draw.SimpleText(YRP.lang_string("LID_play"), "Y_60_700", pw / 2, ph / 2, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 					function self.joinbutton:DoClick()
 						--self.master:Remove()
@@ -2751,15 +1991,10 @@ if pa(yrp_loading_screen) then
 			else
 				yrp_loading_screen:Remove()
 			end
-		else
-			-- LOADING TEXT
-			draw.SimpleText(YRP.lang_string("LID_loading") .. " ... " .. YRP.lang_string("LID_pleasewait"), "Y_50_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 
 		-- BAR VALUES
-		local w = YRP.ctr(1000)
-		local h = YRP.ctr(60)
 		loading_cur_old = loading_cur_old or 0
 		loading_cur = 0
 		local max = 100
@@ -2774,12 +2009,24 @@ if pa(yrp_loading_screen) then
 		end
 		loading_cur_old = Lerp(2 * FrameTime(), loading_cur_old, loading_cur)
 
-		-- BAR BG
-		draw.RoundedBox(6, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w, h, Color(80, 80, 80, 255))
+		-- PANEL --
+		-- BG
+		draw.RoundedBox(40, px - sw / 2, py - sh / 2, sw, sh, YRPCPP(255 * 0.8))
+
+
+
+		-- BAR --
+		-- BG
+		draw.RoundedBox(9, px - bw / 2, py - sh / 2 + 20, bw, bh, Color(80, 80, 80, 255))
 		-- BAR
-		draw.RoundedBox(6, pw / 2 - w / 2, ph / 2 + YRP.ctr(670), w * loading_cur_old / max, h, Color(100, 100, 255, 255))
+		draw.RoundedBox(9, px - bw / 2, py - sh / 2 + 20, bw * loading_cur_old / max, bh, Color(38, 222, 129))
 		-- BAR TEXT
-		draw.SimpleText(math.ceil(loading_cur_old) / max * 100 .. "%", "Y_26_700", pw / 2, ph / 2 + YRP.ctr(695), Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string("LID_loadingdata") .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_60_700", pw / 2, py - sh / 2 + 20 + bh / 2, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+
+
+		-- HOSTNAME --
+		draw.SimpleText(YRPGetHostName(), "Y_80_700", px, py - sh / 2 - 40, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 
 		

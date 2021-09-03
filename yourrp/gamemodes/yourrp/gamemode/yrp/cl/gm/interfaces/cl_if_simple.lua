@@ -116,13 +116,13 @@ hook.Add("YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 	local lply = LocalPlayer()
 	if GetGlobalString("string_interface_design") == "Material" then
 		local color = Color(126, 126, 126)
-		local tcolor = lply:InterfaceValue("YButton", "NT")
+		local tcolor = tab.tcolor
 		if self:IsDown() or self:IsPressed() then
 			if not self.clicked then
 				self.clicked = true
 				surface.PlaySound("garrysmod/ui_click.wav")
 			end
-			color = Color(52, 197, 52)
+			color = Color(38, 222, 129)
 		elseif self:IsHovered() then
 			if not self.hovering then
 				self.hovering = true
@@ -130,9 +130,6 @@ hook.Add("YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 			end
 			color = Color(111, 206, 111)
 		else
-			tcolor.r = 255
-			tcolor.g = 255
-			tcolor.b = 255
 			if tab.force then
 				color = Color(0, 0, 0, 0)
 			end
@@ -140,10 +137,12 @@ hook.Add("YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 			self.clicked = false
 		end
 		color = tab.color or color
-		tcolor = tab.tcolor or tcolor
+		if tcolor == nil then
+			tcolor = TextColor(color) -- lply:InterfaceValue("YButton", "NT")
+		end
 		draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, color.a))
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, TextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor or Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)

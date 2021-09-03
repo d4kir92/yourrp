@@ -234,20 +234,43 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	function SWEPS.button:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)--surfaceButton(self, pw, ph, YRP.lang_string("LID_change"))
 	end
-	hook.Add("selector_usergroup_string_sweps", "selector_usergroup_string_sweps", function()
+	function SWEPS.button:DoClick()
 		local lply = LocalPlayer()
-		if lply.global_working != nil then
-			local string_sweps = lply.global_working
-			if wk(string_sweps) then
-				net.Start("usergroup_update_string_sweps")
-					net.WriteString(CURRENT_USERGROUP)
-					net.WriteString(string_sweps)
-				net.SendToServer()
+		lply.yrpseltab = {}
+
+		for i, v in pairs( UGS[CURRENT_USERGROUP].string_sweps ) do
+			if !table.HasValue(lply.yrpseltab) then
+				table.insert(lply.yrpseltab, v)
 			end
 		end
-	end)
-	function SWEPS.button:DoClick()
-		OpenSelector(GetSWEPsList(), ug.string_sweps, "selector_usergroup_string_sweps")
+		
+		local allsweps = GetSWEPsList()
+		local cl_sweps = {}
+		local count = 0
+		for k, v in pairs(allsweps) do
+			count = count + 1
+			cl_sweps[count] = {}
+			cl_sweps[count].WorldModel = v.WorldModel or ""
+			cl_sweps[count].ClassName = v.ClassName or "NO CLASSNAME"
+			cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
+		end
+
+		function YRPAddSwepToUG()
+			local lply = LocalPlayer()
+			if UGS[CURRENT_USERGROUP] and lply.yrpseltab then
+				net.Start("usergroup_update_string_sweps")
+					net.WriteString(UGS[CURRENT_USERGROUP].uniqueID)
+					net.WriteTable(lply.yrpseltab)
+				net.SendToServer()
+				UGS[CURRENT_USERGROUP].string_sweps = lply.yrpseltab
+			elseif lply.yrpseltab and lply.yrpseltab[1] then
+				MsgC( Color(255, 0, 0), "[YRPAddSwepToUG] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+			else
+				MsgC( Color(255, 0, 0), "[YRPAddSwepToUG] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+			end
+		end
+
+		YRPOpenSelector(cl_sweps, true, "classname", YRPAddSwepToUG)
 	end
 
 	net.Receive("usergroup_update_string_sweps", function(len2)
@@ -368,20 +391,45 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	function NONESWEPS.button:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)--surfaceButton(self, pw, ph, YRP.lang_string("LID_change"))
 	end
-	hook.Add("selector_usergroup_string_nonesweps", "selector_usergroup_string_nonesweps", function()
+	function NONESWEPS.button:DoClick()
 		local lply = LocalPlayer()
-		if lply.global_working != nil then
-			local string_nonesweps = lply.global_working
-			if wk(string_nonesweps) then
-				net.Start("usergroup_update_string_nonesweps")
-					net.WriteString(CURRENT_USERGROUP)
-					net.WriteString(string_nonesweps)
-				net.SendToServer()
+		lply.yrpseltab = {}
+
+		local allsweps = GetSWEPsList()
+		local cl_sweps = {}
+		local count = 0
+		local validate = {}
+		for k, v in pairs(allsweps) do
+			validate[v.ClassName] = true
+			count = count + 1
+			cl_sweps[count] = {}
+			cl_sweps[count].WorldModel = v.WorldModel or ""
+			cl_sweps[count].ClassName = v.ClassName or "NO CLASSNAME"
+			cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
+		end
+
+		for i, v in pairs( UGS[CURRENT_USERGROUP].string_nonesweps ) do
+			if !table.HasValue(lply.yrpseltab) and validate[v] then
+				table.insert(lply.yrpseltab, v)
 			end
 		end
-	end)
-	function NONESWEPS.button:DoClick()
-		OpenSelector(GetSWEPsList(), ug.string_nonesweps, "selector_usergroup_string_nonesweps")
+		
+		function YRPAddSwepToUGNone()
+			local lply = LocalPlayer()
+			if UGS[CURRENT_USERGROUP] and lply.yrpseltab then
+				net.Start("usergroup_update_string_nonesweps")
+					net.WriteString(UGS[CURRENT_USERGROUP].uniqueID)
+					net.WriteTable(lply.yrpseltab)
+				net.SendToServer()
+				UGS[CURRENT_USERGROUP].string_nonesweps = lply.yrpseltab
+			elseif lply.yrpseltab and lply.yrpseltab[1] then
+				MsgC( Color(255, 0, 0), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+			else
+				MsgC( Color(255, 0, 0), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+			end
+		end
+
+		YRPOpenSelector(cl_sweps, true, "classname", YRPAddSwepToUGNone)
 	end
 
 	net.Receive("usergroup_update_string_nonesweps", function(len2)

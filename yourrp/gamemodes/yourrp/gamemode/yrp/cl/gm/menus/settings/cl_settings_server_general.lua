@@ -377,8 +377,6 @@ net.Receive("Connect_Settings_General", function(len)
 
 			count = count + 1
 
-			--LocalPlayer().WorldModel = GEN.bool_noclip_mdl
-			--OpenSingleSelector(tmpTable, "update_text_noclip_mdl")
 			YRPOpenSelector(tmpTable, false, "worldmodel", YRPUpdateNoclipMDL)
 		end
 		CreateHRLine(SERVER_SETTINGS:GetContent())
