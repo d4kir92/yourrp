@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local DATABASE_NAME = "yrp_inventory_items"
 
@@ -43,9 +43,9 @@ function CreateItem(slotID, tab)
 		tab.text_printname = tab.text_printname or "yrp_money_printer"
 		tab.text_worldmodel = tab.text_worldmodel or "models/props_junk/garbage_takeoutcarton001a.mdl"
 
-		tab.text_classname = SQL_STR_IN(tab.text_classname)
-		tab.text_printname = SQL_STR_IN(tab.text_printname)
-		tab.text_worldmodel = SQL_STR_IN(tab.text_worldmodel)
+		tab.text_classname = tab.text_classname
+		tab.text_printname = tab.text_printname
+		tab.text_worldmodel = tab.text_worldmodel
 
 		tab.int_storageID = tab.int_storageID or 0
 		tab.text_type = tab.text_type or "item"
@@ -84,9 +84,9 @@ function CreateItemByEntity(slotID, entity)
 	end
 
 	local tab = {}
-	tab.text_classname = SQL_STR_IN(entity:GetClass())
-	tab.text_printname = SQL_STR_IN(entity:GetName())
-	tab.text_worldmodel = SQL_STR_IN(entity:GetModel())
+	tab.text_classname = entity:GetClass()
+	tab.text_printname = entity:GetName()
+	tab.text_worldmodel = entity:GetModel()
 	tab.text_type = entity.text_type or "item"
 
 	if tab.text_type == "bag" then
@@ -196,9 +196,9 @@ function DropItem(ply, slotID)
 
 	RemoveItem(item.uniqueID)
 
-	local e = ents.Create(SQL_STR_OUT(item.text_classname))
+	local e = ents.Create(item.text_classname)
 	if IsValid(e) then
-		e:SetModel(SQL_STR_OUT(item.text_worldmodel))
+		e:SetModel(item.text_worldmodel)
 		local pos = ply:GetPos() + ply:GetForward() * 64
 		local mins = e:OBBMins()
 		local maxs = e:OBBMaxs()
@@ -210,7 +210,7 @@ function DropItem(ply, slotID)
 		e:SetPos(ply:GetPos() + ply:GetForward() * 64)
 		e:Spawn()
 	else
-		YRP.msg("note", SQL_STR_OUT(item.text_classname) .. " is not a valid classname")
+		YRP.msg("note", item.text_classname .. " is not a valid classname")
 	end
 end	
 
@@ -271,7 +271,7 @@ function MoveItem(itemID, slotID)
 				CloseBag(item.int_storageID)
 			end
 
-			SQL_UPDATE(DATABASE_NAME, "int_slotID = '" .. newslot .. "'", "uniqueID = '" .. item.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_slotID"] = newslot}, "uniqueID = '" .. item.uniqueID .. "'")
 
 			UnstoreItem(oldslot)
 			StoreItem(newslot, item)

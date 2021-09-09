@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -31,7 +31,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
 if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = -1") == nil then
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible_rm, bool_visible_cc", "-1, 'PUBLIC', '255,255,255', -1, 0, 0, 0, 0")
 end
-SQL_UPDATE(DATABASE_NAME, "int_parentgroup = '-1'", "uniqueID = '-1'")
+SQL_UPDATE(DATABASE_NAME, {["int_parentgroup"] = -1}, "uniqueID = '-1'")
 SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '0'")
 
 -- DEFAULT GROUP
@@ -46,7 +46,7 @@ if dbtab then
 		v.uniqueID = tonumber(v.uniqueID)
 		v.int_parentgroup = tonumber(v.int_parentgroup)
 		if v.uniqueID != -1 and v.int_parentgroup == v.uniqueID then
-			SQL_UPDATE(DATABASE_NAME, "int_parentgroup = '0'", "uniqueID = '" .. v.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_parentgroup"] = 0}, "uniqueID = '" .. v.uniqueID .. "'")
 		end
 	end
 end
@@ -245,7 +245,7 @@ function SortGroups(uid)
 		local count = 0
 		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 			count = count + 1
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
 		end
 	end
 end
@@ -345,10 +345,10 @@ net.Receive("settings_add_group", function(len, ply)
 	local new_group = groups[count]
 	local up = groups[count - 1]
 	if count == 1 then
-		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_group.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_group.uniqueID .. "'")
 	else
-		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_group.uniqueID .. "'")
-		--SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_group.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_group.uniqueID .. "'")
+		--SQL_UPDATE(DATABASE_NAME, {["int_dn"] = '" .. new_group.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
 	end
 
 	YRP.msg("db", "Added new group: " .. new_group.uniqueID)
@@ -374,8 +374,8 @@ net.Receive("settings_group_position_up", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == group.int_position - 1 then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. group.int_position .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. sibling.int_position .. "'", "uniqueID = '" .. uid .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = group.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 
@@ -401,8 +401,8 @@ net.Receive("settings_group_position_dn", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == group.int_position + 1 then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. group.int_position .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. sibling.int_position .. "'", "uniqueID = '" .. uid .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = group.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 
@@ -503,7 +503,7 @@ function DeleteGroup(guid, recursive)
 				local count = 0
 				for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 					count = count + 1
-					SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+					SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
 				end
 			end
 		end
@@ -589,22 +589,28 @@ net.Receive("yrp_roleselection_getcontent", function(len, ply)
 	local roltab = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'")
 	local grptab = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. guid .. "'")
 
-	if !wk(roltab) then
-		roltab = {}
-	else
+	if wk(roltab) and wk(grptab) then
 		for i, v in pairs(roltab) do
 			v.pms = GetPlayermodelsOfRole(v.uniqueID)
 			updateRoleUses(v.uniqueID)
 		end
+		net.Start("yrp_roleselection_getcontent")
+			net.WriteTable(roltab)
+			net.WriteTable(grptab)
+		net.Send(ply)
+	elseif !wk(roltab) and wk(grptab) then
+		net.Start("yrp_roleselection_getcontent")
+			net.WriteTable({})
+			net.WriteTable(grptab)
+		net.Send(ply)
+	elseif !wk(grptab) and wk(roltab) then
+		net.Start("yrp_roleselection_getcontent")
+			net.WriteTable(roltab)
+			net.WriteTable({})
+		net.Send(ply)
+	else
+		YRP.msg("note", "[yrp_roleselection_getcontent] Roles and Groups not exists anymore")
 	end
-	if !wk(grptab) then
-		grptab = {}
-	end
-
-	net.Start("yrp_roleselection_getcontent")
-		net.WriteTable(roltab)
-		net.WriteTable(grptab)
-	net.Send(ply)
 end)
 
 util.AddNetworkString("yrp_roleselection_getrole")
@@ -666,6 +672,10 @@ function SendSwepsGroup(uid)
 			end
 		end
 
+		if HANDLER_GROUPSANDROLES["groups"][uid] == nil then
+			HANDLER_GROUPSANDROLES["groups"][uid] = {}
+		end
+
 		for i, pl in pairs(HANDLER_GROUPSANDROLES["groups"][uid]) do
 			net.Start("get_group_sweps")
 				net.WriteTable(nettab)
@@ -696,7 +706,7 @@ function AddSwepToGroup(guid, swepcn)
 			table.insert(newsweps, tostring(swepcn))
 			newsweps = string.Implode(",", newsweps)
 
-			SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. newsweps .. "'", "uniqueID = '" .. guid .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. guid .. "'")
 			SendSwepsGroup(guid)
 		end
 	end
@@ -724,7 +734,7 @@ function RemSwepFromGroup(guid, swepcn)
 	table.RemoveByValue(newsweps, tostring(swepcn))
 	newsweps = string.Implode(",", newsweps)
 
-	SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. newsweps .. "'", "uniqueID = '" .. guid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. guid .. "'")
 	SendSwepsGroup(guid)
 end
 

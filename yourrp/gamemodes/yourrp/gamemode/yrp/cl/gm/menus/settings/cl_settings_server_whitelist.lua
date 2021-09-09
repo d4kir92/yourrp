@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- #WHITELISTESETTINGS
 
@@ -62,7 +62,7 @@ function BuildWhitelist(parent, tab)
 						elseif (rol.uniqueID == whi.roleID) then
 							for m, grp in pairs(tabG) do
 								if (grp.uniqueID == rol.int_groupID) then -- ROLE
-									list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grp.string_name, rol.string_name, whi.date, SQL_STR_OUT(whi.status))
+									list:AddLine(whi.uniqueID, whi.SteamID, whi.nick, whi.name, grp.string_name, rol.string_name, whi.date, whi.status)
 									found = true
 									break
 								end
@@ -72,13 +72,13 @@ function BuildWhitelist(parent, tab)
 				elseif whi.roleID and whi.roleID < 0 and whi.groupID > 0 and (tab == "LID_all" or tab == "LID_groups") then -- GROUP
 					for m, grp in pairs(tabG) do
 						if (grp.uniqueID == whi.groupID) then
-							list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grp.string_name, "-", whi.date, SQL_STR_OUT(whi.status))
+							list:AddLine(whi.uniqueID, whi.SteamID, whi.nick, whi.name, grp.string_name, "-", whi.date, whi.status)
 							found = true
 							break
 						end
 					end
 				elseif (tab == "LID_all") then -- ALL
-					list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), YRP.lang_string("LID_all"), YRP.lang_string("LID_all"), whi.date, SQL_STR_OUT(whi.status))
+					list:AddLine(whi.uniqueID, whi.SteamID, whi.nick, whi.name, YRP.lang_string("LID_all"), YRP.lang_string("LID_all"), whi.date, whi.status)
 					found = true
 				else
 					local rolname = "-"
@@ -103,10 +103,10 @@ function BuildWhitelist(parent, tab)
 						rolname = YRP.lang_string("LID_all")
 					end
 					if string.StartWith(whi.status, "Manually") and tab == "LID_manually" then
-						list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grpname, rolname, whi.date, SQL_STR_OUT(whi.status))
+						list:AddLine(whi.uniqueID, whi.SteamID, whi.nick, whi.name, grpname, rolname, whi.date, whi.status)
 						found = true
 					elseif string.StartWith(whi.status, "Promoted") and tab == "LID_promote" then
-						list:AddLine(whi.uniqueID, whi.SteamID, SQL_STR_OUT(whi.nick), SQL_STR_OUT(whi.name), grpname, rolname, whi.date, SQL_STR_OUT(whi.status))
+						list:AddLine(whi.uniqueID, whi.SteamID, whi.nick, whi.name, grpname, rolname, whi.date, whi.status)
 						found = true
 					end
 				end

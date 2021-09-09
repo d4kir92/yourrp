@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -148,7 +148,7 @@ function loadDoors()
 							if wk(tabChar) then
 								tabChar = tabChar[1]
 								if wk(tabChar.rpname) then
-									v:SetNW2String("ownerRPName", SQL_STR_OUT(tabChar.rpname))
+									v:SetNW2String("ownerRPName", tabChar.rpname)
 									v:SetNW2Int("ownerCharID", tonumber(w.ownerCharID))
 									v:SetNW2Bool("bool_hasowner", true)
 								end
@@ -311,7 +311,7 @@ function BuildingRemoveOwner(SteamID)
 					v:SetNW2Int("ownerCharID", 0)
 					v:SetNW2Bool("bool_hasowner", false)
 					v:Fire("Unlock")
-					SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = ''", "uniqueID = '" .. v:GetNW2String("uniqueID") .. "'")
+					SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {["ownerCharID"] = ""}, "uniqueID = '" .. v:GetNW2String("uniqueID") .. "'")
 				end
 			end
 		end
@@ -322,7 +322,10 @@ net.Receive("removeOwner", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 
-	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '', groupID = 0", "uniqueID = '" .. _tmpBuildingID .. "'")
+	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+		["ownerCharID"] = "",
+		["groupID"] = 0
+	}, "uniqueID = '" .. _tmpBuildingID .. "'")
 
 	for k, v in pairs(GetAllDoors()) do
 		if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
@@ -340,7 +343,10 @@ net.Receive("sellBuilding", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpTable = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 
-	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '', groupID = 0", "uniqueID = '" .. _tmpBuildingID .. "'")
+	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+		["ownerCharID"] = "",
+		["groupID"] = 0
+	}, "uniqueID = '" .. _tmpBuildingID .. "'")
 
 	for k, v in pairs(GetAllDoors()) do
 		if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
@@ -350,7 +356,7 @@ net.Receive("sellBuilding", function(len, ply)
 			v:SetNW2Int("ownerCharID", 0)
 			v:SetNW2Bool("bool_hasowner", false)
 			v:Fire("Unlock")
-			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "keynr = -1", "buildingID = " .. tonumber(v:GetNW2String("buildingID")))
+			SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", {["keynr"] = -1}, "buildingID = " .. tonumber(v:GetNW2String("buildingID")))
 		end
 	end
 
@@ -365,14 +371,14 @@ net.Receive("buyBuilding", function(len, ply)
 		if ply:canAfford(_tmpTable[1].buildingprice) then
 			if (_tmpTable[1].ownerCharID == "" or _tmpTable[1].ownerCharID == " ") and tonumber(_tmpTable[1].groupID) <= 0 then
 				ply:addMoney(- _tmpTable[1].buildingprice)
-				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "ownerCharID = '" .. ply:CharID() .. "'", "uniqueID = '" .. _tmpBuildingID .. "'")
+				SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {["ownerCharID"] = ply:CharID()}, "uniqueID = '" .. _tmpBuildingID .. "'")
 				local tabChar = SQL_SELECT("yrp_characters", "rpname", "uniqueID = " .. ply:CharID())
 				if wk(tabChar) then
 					tabChar = tabChar[1]
 				end
 				for k, v in pairs(GetAllDoors()) do
 					if tonumber(v:GetNW2String("buildingID")) == tonumber(_tmpBuildingID) then
-						v:SetNW2String("ownerRPName", SQL_STR_OUT(tabChar.rpname))
+						v:SetNW2String("ownerRPName", tabChar.rpname)
 						v:SetNW2Int("ownerCharID", tonumber(ply:CharID()))
 						v:SetNW2Bool("bool_hasowner", true)
 					end
@@ -393,7 +399,7 @@ net.Receive("setBuildingOwnerGroup", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpGroupID = net.ReadInt(32)
 
-	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "groupID = " .. _tmpGroupID, "uniqueID = " .. _tmpBuildingID)
+	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {["groupID"] = _tmpGroupID}, "uniqueID = " .. _tmpBuildingID)
 
 	local _tmpGroupName = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", "uniqueID = " .. _tmpGroupID)
 	if wk(_tmpGroupName) then
@@ -420,7 +426,7 @@ net.Receive("changeBuildingPrice", function(len, ply)
 	local _tmpNewPrice = net.ReadString()
 	_tmpNewPrice = tonumber(_tmpNewPrice) or 99
 
-	local _result = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "buildingprice = " .. _tmpNewPrice , "uniqueID = " .. _tmpBuildingID)
+	local _result = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {["buildingprice"] = _tmpNewPrice}, "uniqueID = " .. _tmpBuildingID)
 end)
 
 function SetSecurityLevel(id, sl)
@@ -443,7 +449,7 @@ net.Receive("changeBuildingSL", function(len, ply)
 	local _tmpNewSL = net.ReadString()
 	_tmpNewSL = tonumber(_tmpNewSL) or 0
 
-	local _result = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "int_securitylevel = " .. _tmpNewSL , "uniqueID = " .. _tmpBuildingID)
+	local _result = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {["int_securitylevel"] = _tmpNewSL}, "uniqueID = " .. _tmpBuildingID)
 	SetSecurityLevel(_tmpBuildingID, _tmpNewSL)
 end)
 
@@ -452,7 +458,7 @@ net.Receive("CanBuildingBeOwned", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _canbeowned = tonum(net.ReadBool())
 
-	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "bool_canbeowned = '" .. _canbeowned .. "'", "uniqueID = " .. _tmpBuildingID)
+	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {["bool_canbeowned"] = _canbeowned}, "uniqueID = " .. _tmpBuildingID)
 
 	ChangeBuildingBool(tonumber(_tmpBuildingID), "bool_canbeowned", _canbeowned)
 end)
@@ -485,7 +491,7 @@ net.Receive("changeBuildingID", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 
 	_tmpDoor:SetNW2String("buildingID", _tmpBuildingID)
-	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", "buildingID = " .. tonumber(_tmpBuildingID) , "uniqueID = " .. _tmpDoor:GetNW2String("uniqueID"))
+	SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", {["buildingID"] = tonumber(_tmpBuildingID)}, "uniqueID = " .. _tmpDoor:GetNW2String("uniqueID"))
 
 	lookForEmptyBuildings()
 end)
@@ -495,7 +501,7 @@ net.Receive("changeBuildingName", function(len, ply)
 	local _tmpNewName = net.ReadString()
 	if wk(_tmpBuildingID) then
 		YRP.msg("note", "renamed Building: " .. _tmpNewName)
-		SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "name = '" .. SQL_STR_IN(_tmpNewName) .. "'" , "uniqueID = " .. _tmpBuildingID)
+		SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {["name"] = _tmpNewName}, "uniqueID = " .. _tmpBuildingID)
 	else
 		YRP.msg("note", "changeBuildingName failed")
 	end
@@ -528,7 +534,7 @@ net.Receive("changeBuildingHeader", function(len, ply)
 	local _tmpNewName = net.ReadString()
 	if wk(_tmpBuildingID) then
 		YRP.msg("note", "header Building: " .. _tmpNewName)
-		SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "text_header = '" .. SQL_STR_IN(_tmpNewName) .. "'" , "uniqueID = " .. _tmpBuildingID)
+		SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {["text_header"] = _tmpNewName}, "uniqueID = " .. _tmpBuildingID)
 		ChangeBuildingString(tonumber(_tmpBuildingID), "text_header", _tmpNewName)
 	else
 		YRP.msg("note", "changeBuildingName failed")
@@ -540,7 +546,7 @@ net.Receive("changeBuildingDescription", function(len, ply)
 	local _tmpNewName = net.ReadString()
 	if wk(_tmpBuildingID) then
 		YRP.msg("note", "description Building: " .. _tmpNewName)
-		SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "text_description = '" .. SQL_STR_IN(_tmpNewName) .. "'" , "uniqueID = " .. _tmpBuildingID)
+		SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {["text_description"] = _tmpNewName}, "uniqueID = " .. _tmpBuildingID)
 		ChangeBuildingString(tonumber(_tmpBuildingID), "text_description", _tmpNewName)
 	else
 		YRP.msg("note", "changeBuildingName failed")
@@ -572,7 +578,7 @@ function GetDoors()
 				end
 			end
 
-			building.name = SQL_STR_OUT(building.name)
+			building.name = building.name
 			building.doors = _doors
 		end
 	end
@@ -622,7 +628,7 @@ net.Receive("getBuildingInfo", function(len, ply)
 		--local owner = ""
 		if wk(tabBuilding) then
 			tabBuilding = tabBuilding[1]
-			tabBuilding.name = SQL_STR_OUT(tabBuilding.name)
+			tabBuilding.name = tabBuilding.name
 			tabBuilding.groupID = tonumber(tabBuilding.groupID)
 			if !strEmpty(tabBuilding.ownerCharID) then
 				tabOwner = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. tabBuilding.ownerCharID .. "'")
@@ -639,7 +645,7 @@ net.Receive("getBuildingInfo", function(len, ply)
 					tabGroup = tabGroup[1]
 					--owner = _tmpGroTab.string_name
 				else
-					local test = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", "groupID = '0'", "uniqueID = '" .. buid .. "'")
+					local test = SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {["groupID"] = 0}, "uniqueID = '" .. buid .. "'")
 
 					YRP.msg("note", "[getBuildingInfo] group dont exists.")
 					tabGroup = {}

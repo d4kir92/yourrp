@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
@@ -228,10 +228,11 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 									if dbSelectActivator != nil and dbSelectTarget != nil then
 										if dbSelectTarget[1].SteamID != activator:SteamID() then
 											dbSelectActivator[1].moneybank = dbSelectActivator[1].moneybank-self.money
-											SQL_UPDATE("yrp_characters", "moneybank = " .. dbSelectActivator[1].moneybank, "uniqueID = " .. activator:CharID())
+	
+											SQL_UPDATE("yrp_characters", {["moneybank"] = dbSelectActivator[1].moneybank}, "uniqueID = " .. activator:CharID())
 
 											dbSelectTarget[1].moneybank = dbSelectTarget[1].moneybank+self.money
-											SQL_UPDATE("yrp_characters", "moneybank = " .. dbSelectTarget[1].moneybank, "uniqueID = '" .. self.parent:GetNW2String("SteamID") .. "'")
+											SQL_UPDATE("yrp_characters", {["moneybank"] = dbSelectTarget[1].moneybank}, "uniqueID = '" .. self.parent:GetNW2String("SteamID") .. "'")
 
 											activator:SetNW2String("moneybank", dbSelectActivator[1].moneybank)
 											for k, v in pairs(player.GetAll()) do

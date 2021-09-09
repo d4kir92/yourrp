@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -9,8 +9,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_eventname", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_chars", "TEXT DEFAULT ''")
 
 
---db_drop_table(_db_name)
---db_is_empty(_db_name)
+--db_drop_table(DATABASE_NAME)
+--db_is_empty(DATABASE_NAME)
 
 util.AddNetworkString("setting_events")
 net.Receive("setting_events", function(len, ply)
@@ -116,7 +116,7 @@ net.Receive("yrp_event_char_add", function(len, ply)
 			end
 			str = str .. steamid .. "," .. charuid .. "," .. charname
 
-			SQL_UPDATE(DATABASE_NAME, "string_chars = '" .. str .. "'", "uniqueID = '" .. uid .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["string_chars"] = str}, "uniqueID = '" .. uid .. "'")
 		end
 
 		YRPSendEventChars(ply, uid)
@@ -146,7 +146,7 @@ net.Receive("yrp_event_char_remove", function(len, ply)
 					end
 				end
 
-				SQL_UPDATE(DATABASE_NAME, "string_chars = '" .. newchars .. "'", "uniqueID = '" .. euid .. "'")
+				SQL_UPDATE(DATABASE_NAME, {["string_chars"] = newchars}, "uniqueID = '" .. euid .. "'")
 			end
 
 			YRPSendEventChars(ply, euid)
@@ -157,7 +157,7 @@ end)
 
 
 function YRPSpawnAsCharacter(ply, cuid, force)
-	local roltab = ply:GetRolTab()
+	local roltab = ply:YRPGetRoleTable()
 	if wk(roltab) then
 		updateRoleUses(roltab.uniqueID)
 	end
@@ -171,9 +171,9 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 		hook.Run("yrp_switched_character", ply, ply:CharID(), cuid)
 	end
 	if wk(cuid) then
-		SQL_UPDATE("yrp_players", "CurrentCharacter = '" .. cuid .. "'", "SteamID = '" .. ply:SteamID() .. "'")
+		SQL_UPDATE("yrp_players", {["CurrentCharacter"] = cuid}, "SteamID = '" .. ply:SteamID() .. "'")
 		if !force then
-			SQL_UPDATE("yrp_players", "NormalCharacter = '" .. cuid .. "'", "SteamID = '" .. ply:SteamID() .. "'")
+			SQL_UPDATE("yrp_players", {["NormalCharacter"] = cuid}, "SteamID = '" .. ply:SteamID() .. "'")
 		end
 		ply:SetNW2Bool("yrp_spawning", true)
 		timer.Simple(0.1, function()

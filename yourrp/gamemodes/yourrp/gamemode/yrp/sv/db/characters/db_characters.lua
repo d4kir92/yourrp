@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -83,7 +83,7 @@ function YRPUpdateCharSlot(ply, art, pri)
 	end
 
 	local sweps = table.concat( tab, "," )
-	SQL_UPDATE(DATABASE_NAME, "slot_" .. art .. " = '" .. sweps .. "'", "uniqueID = '" .. ply:CharID() .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["slot_" .. art] = sweps}, "uniqueID = '" .. ply:CharID() .. "'")
 
 	ply:SetNW2String("slot_" .. art, sweps)
 end
@@ -113,7 +113,7 @@ util.AddNetworkString("yrp_get_sweps_role_art")
 net.Receive("yrp_get_sweps_role_art", function(len, ply)
 	local art = net.ReadString()
 
-	local rolTab = ply:GetRolTab()
+	local rolTab = ply:YRPGetRoleTable()
 
 	local sweps = {}
 	for i, v in pairs(string.Explode(",", rolTab.string_sweps)) do
@@ -185,7 +185,7 @@ end
 local Player = FindMetaTable("Player")
 function Player:YRPCharacterLoadout()
 	YRP.msg("debug", "[CharacterLoadout] " .. self:YRPName())
-	local chatab = self:GetChaTab()
+	local chatab = self:YRPGetCharacterTable()
 	local plytab = self:GetPlyTab()
 
 	if wk(chatab) then
@@ -198,7 +198,7 @@ function Player:YRPCharacterLoadout()
 		self:SetNW2Int("int_violations", chatab.int_violations)
 		self:SetNW2Int("int_arrests", chatab.int_arrests)
 
-		self:SetNW2String("string_birthday", SQL_STR_OUT(chatab.string_birthday))
+		self:SetNW2String("string_birthday", chatab.string_birthday)
 		if GetGlobalBool("bool_characters_bodyheight", false) then
 			self:SetNW2Int("int_bodyheight", chatab.int_bodyheight)
 		end
@@ -297,13 +297,13 @@ function Player:UpdateBackpack()
 	return _bp
 end
 
-function Player:SetRPName(str)
+function Player:SetRPName(str, from)
 	if isstring(str) then
 		local oldname = self:Nick()
-		local newname = SQL_STR_IN(str)
-		SQL_UPDATE("yrp_characters", "rpname = '" .. newname .. "'", "uniqueID = " .. self:CharID())
+		local newname = str
+		SQL_UPDATE("yrp_characters", {["rpname"] = newname}, "uniqueID = " .. self:CharID())
 
-		newname = SQL_STR_OUT(newname)
+		newname = newname
 		self:SetNW2String("rpname", newname)
 
 		YRP.msg("note", oldname .. " changed name to " .. newname, true)
@@ -359,8 +359,8 @@ end)
 util.AddNetworkString("moneyreset")
 net.Receive("moneyreset", function(len, ply)
 	YRP.msg("db", "<[MONEY RESET]>")
-	SQL_UPDATE("yrp_characters", "money = '" .. "0" .. "'", nil)
-	SQL_UPDATE("yrp_characters", "moneybank = '" .. "0" .. "'", nil)
+	SQL_UPDATE("yrp_characters", {["money"] = 0}, nil)
+	SQL_UPDATE("yrp_characters", {["moneybank"] = 0}, nil)
 	for i, pl in pairs(player.GetAll()) do
 		pl:SetMoney(0)
 		pl:SetMoneyBank(0)
@@ -376,30 +376,30 @@ end)
 util.AddNetworkString("change_rpdescription")
 net.Receive("change_rpdescription", function(len, ply)
 	local _new_rp_description = net.ReadString()
-	SQL_UPDATE("yrp_characters", "rpdescription = '" .. SQL_STR_IN(_new_rp_description) .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetNW2String("rpdescription", SQL_STR_OUT(_new_rp_description))
+	SQL_UPDATE("yrp_characters", {["rpdescription"] = _new_rp_description}, "uniqueID = " .. ply:CharID())
+	ply:SetNW2String("rpdescription", _new_rp_description)
 	for i, v in pairs(string.Explode("\n", _new_rp_description)) do
-		ply:SetNW2String("rpdescription" .. i, SQL_STR_OUT(v))
+		ply:SetNW2String("rpdescription" .. i, v)
 	end
 end)
 
 util.AddNetworkString("change_birthday")
 net.Receive("change_birthday", function(len, ply)
 	local _new_birthday = net.ReadString()
-	SQL_UPDATE("yrp_characters", "string_birthday = '" .. SQL_STR_IN(_new_birthday) .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetNW2String("string_birthday", SQL_STR_OUT(_new_birthday))
+	SQL_UPDATE("yrp_characters", {["string_birthday"] = _new_birthday}, "uniqueID = " .. ply:CharID())
+	ply:SetNW2String("string_birthday", _new_birthday)
 end)
 util.AddNetworkString("change_bodyheight")
 net.Receive("change_bodyheight", function(len, ply)
 	local _new_bodyheight = net.ReadString()
-	SQL_UPDATE("yrp_characters", "int_bodyheight = '" .. _new_bodyheight .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetNW2Int("int_bodyheight", SQL_STR_OUT(_new_bodyheight))
+	SQL_UPDATE("yrp_characters", {["int_bodyheight"] = _new_bodyheight}, "uniqueID = " .. ply:CharID())
+	ply:SetNW2Int("int_bodyheight", _new_bodyheight)
 end)
 util.AddNetworkString("change_weight")
 net.Receive("change_weight", function(len, ply)
 	local _new_weight = net.ReadString()
-	SQL_UPDATE("yrp_characters", "int_weight = '" .. _new_weight .. "'", "uniqueID = " .. ply:CharID())
-	ply:SetNW2Int("int_weight", SQL_STR_OUT(_new_weight))
+	SQL_UPDATE("yrp_characters", {["int_weight"] = _new_weight}, "uniqueID = " .. ply:CharID())
+	ply:SetNW2Int("int_weight", _new_weight)
 end)
 
 util.AddNetworkString("charGetGroups")
@@ -468,8 +468,8 @@ function GetPlayermodelsOfRole(ruid)
 					tmppms = tmppms[1]
 					tmppms = string.Explode(",", tmppms.string_models)
 					for x, pm in pairs(tmppms) do
-						for y, xpm in pairs(string.Explode(",", SQL_STR_OUT(pm))) do
-							table.insert(tab, SQL_STR_OUT(xpm))
+						for y, xpm in pairs(string.Explode(",", pm)) do
+							table.insert(tab, xpm)
 						end
 					end
 				end
@@ -492,11 +492,11 @@ function GetPMTableOfRole(ruid)
 			if wk(tmppms) then
 				tmppms = tmppms[1]
 				for x, pm in pairs(string.Explode(",", tmppms.string_models)) do
-					for y, xpm in pairs(string.Explode(",", SQL_STR_OUT(pm))) do
+					for y, xpm in pairs(string.Explode(",", pm)) do
 						local entry = {}
 						entry.float_size_min = tmppms.float_size_min
 						entry.float_size_max = tmppms.float_size_max
-						entry.string_model = SQL_STR_OUT(xpm)
+						entry.string_model = xpm
 						table.insert(tab, entry)
 					end
 				end
@@ -561,7 +561,7 @@ function send_characters(ply)
 			if v.roleID != nil and v.groupID != nil then
 				_charCount = _charCount + 1
 				netTable[_charCount] = {}
-				v.rpname = SQL_STR_OUT(v.rpname)
+				v.rpname = v.rpname
 				netTable[_charCount].char = v
 
 				netTable[_charCount].role = {}
@@ -638,7 +638,7 @@ net.Receive("DeleteCharacter", function(len, ply)
 				local _first_character = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. steamid .. "'")
 				if _first_character != nil then
 					_first_character = _first_character[1]
-					SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(_first_character.uniqueID), "SteamID = '" .. steamid .. "'")
+					SQL_UPDATE("yrp_players", {["CurrentCharacter"] = tonumber(_first_character.uniqueID)}, "SteamID = '" .. steamid .. "'")
 					SQL_SELECT("yrp_players", "*", nil)
 				end
 			else
@@ -661,20 +661,20 @@ function CreateCharacter(ply, tab)
 			cols = cols .. ", bg" .. i
 		end
 		local vals = "'" .. steamid .. "', "
-		vals = vals .. "'" .. SQL_STR_IN(tab.rpname) .. "', "
-		vals = vals .. "'" .. SQL_STR_IN(tab.gender) .. "', "
+		vals = vals .. "'" .. tab.rpname .. "', "
+		vals = vals .. "'" .. tab.gender .. "', "
 		vals = vals .. tonumber(role[1].uniqueID) .. ", "
 		vals = vals .. tonumber(role[1].int_groupID) .. ", "
 		vals = vals .. tonumber(tab.playermodelID) .. ", "
 		vals = vals .. GetGlobalString("text_characters_money_start", 0) .. ", "
 		vals = vals .. 0 .. ", "
-		vals = vals .. "'" .. SQL_STR_IN(GetMapNameDB()) .. "', "
+		vals = vals .. "'" .. GetMapNameDB() .. "', "
 		vals = vals .. tonumber(tab.skin) .. ", "
-		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.rpdescription)) .. "', "
+		vals = vals .. "'" .. tostring(tab.rpdescription) .. "', "
 		
-		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.birt)) .. "', "
-		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.bohe)) .. "', "
-		vals = vals .. "'" .. SQL_STR_IN(tostring(tab.weig)) .. "', "
+		vals = vals .. "'" .. tostring(tab.birt) .. "', "
+		vals = vals .. "'" .. tostring(tab.bohe) .. "', "
+		vals = vals .. "'" .. tostring(tab.weig) .. "', "
 		vals = vals .. "'" .. btn(tab.create_eventchar) .. "'"
 
 		for i = 0, 19 do
@@ -684,7 +684,7 @@ function CreateCharacter(ply, tab)
 		if char == nil then
 			local chars = SQL_SELECT("yrp_characters", "*", nil)
 			if worked(chars, "[CreateCharacter] chars") then
-				local result = SQL_UPDATE("yrp_players", "CurrentCharacter = " .. tonumber(chars[#chars].uniqueID), "SteamID = '" .. ply:SteamID() .. "'")
+				local result = SQL_UPDATE("yrp_players", {["CurrentCharacter"] = tonumber(chars[#chars].uniqueID)}, "SteamID = '" .. ply:SteamID() .. "'")
 				if result != nil then
 					YRP.msg("error", "[CreateCharacter] failed @Update!")
 				end
@@ -745,7 +745,7 @@ function SendBodyGroups(ply)
 		local _result = SQL_SELECT("yrp_characters", "bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, skin, playermodelID", "uniqueID = " .. tonumber(charid))
 		if wk(_result) then
 			_result = _result[1]
-			local _role = ply:GetRolTab()
+			local _role = ply:YRPGetRoleTable()
 			if wk(_role) then
 				_result.string_playermodels = GetPlayermodelsOfRole(_role.uniqueID)
 				if _result.string_playermodels != "" then
@@ -776,7 +776,7 @@ net.Receive("inv_bg_up", function(len, ply)
 	local _id = net.ReadInt(16)
 	ply:SetBodygroup(_id, _cur)
 	local _charid = ply:CharID()
-	SQL_UPDATE("yrp_characters", "bg" .. tonumber(_id) .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
+	SQL_UPDATE("yrp_characters", {["bg" .. tonumber(_id)] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 end)
 
 util.AddNetworkString("inv_bg_do")
@@ -786,7 +786,7 @@ net.Receive("inv_bg_do", function(len, ply)
 	local _id = net.ReadInt(16)
 	ply:SetBodygroup(_id, _cur)
 	local _charid = ply:CharID()
-	SQL_UPDATE("yrp_characters", "bg" .. tonumber(_id) .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
+	SQL_UPDATE("yrp_characters", {["bg" .. tonumber(_id)] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 end)
 
 util.AddNetworkString("inv_skin_up")
@@ -796,7 +796,7 @@ net.Receive("inv_skin_up", function(len, ply)
 	ply:SetSkin(_cur)
 	ply:SetupHands()
 	local _charid = ply:CharID()
-	SQL_UPDATE("yrp_characters", "skin" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
+	SQL_UPDATE("yrp_characters", {["skin"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 end)
 
 util.AddNetworkString("inv_skin_do")
@@ -806,20 +806,20 @@ net.Receive("inv_skin_do", function(len, ply)
 	ply:SetSkin(_cur)
 	ply:SetupHands()
 	local _charid = ply:CharID()
-	SQL_UPDATE("yrp_characters", "skin" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
+	SQL_UPDATE("yrp_characters", {["skin"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 end)
 
 util.AddNetworkString("inv_pm_up")
 net.Receive("inv_pm_up", function(len, ply)
 	local _cur = net.ReadInt(16)
-	local _pms = string.Explode(",", GetPlayermodelsOfRole(ply:GetRolTab().uniqueID))
+	local _pms = string.Explode(",", GetPlayermodelsOfRole(ply:YRPGetRoleTable().uniqueID))
 	if wk(_pms) then
 		if wk(_pms[_cur]) then
 			ply:SetNW2String("string_playermodel", _pms[_cur])
 			ply:SetNW2Int("pmid", _cur)
 			ply:SetModel(_pms[_cur])
 			local _charid = ply:CharID()
-			SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
+			SQL_UPDATE("yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 			ply:UpdateBackpack()
 			SendBodyGroups(ply)
 		end
@@ -829,14 +829,14 @@ end)
 util.AddNetworkString("inv_pm_do")
 net.Receive("inv_pm_do", function(len, ply)
 	local _cur = net.ReadInt(16)
-	local _pms = string.Explode(",", GetPlayermodelsOfRole(ply:GetRolTab().uniqueID))
+	local _pms = string.Explode(",", GetPlayermodelsOfRole(ply:YRPGetRoleTable().uniqueID))
 	if wk(_pms) then
 		if wk(_pms[_cur]) then
 			ply:SetNW2String("string_playermodel", _pms[_cur])
 			ply:SetNW2Int("pmid", _cur)
 			ply:SetModel(_pms[_cur])
 			local _charid = ply:CharID()
-			SQL_UPDATE("yrp_characters", "playermodelID" .. " = " .. tonumber(_cur), "uniqueID = " .. tonumber(_charid))
+			SQL_UPDATE("yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 			ply:UpdateBackpack()
 			SendBodyGroups(ply)
 		end
@@ -852,7 +852,7 @@ net.Receive("warning_up", function(len, ply)
 		int_warnings = int_warnings + 1
 		int_warnings = math.Clamp(int_warnings, 0, 10)
 
-		SQL_UPDATE(DATABASE_NAME, "int_warnings = '" .. int_warnings .. "'", "uniqueID = '" .. p:CharID() .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'")
 
 		p:SetNW2Int("int_warnings", int_warnings)
 	end
@@ -867,7 +867,7 @@ net.Receive("warning_dn", function(len, ply)
 		int_warnings = int_warnings - 1
 		int_warnings = math.Clamp(int_warnings, 0, 10)
 
-		SQL_UPDATE(DATABASE_NAME, "int_warnings = '" .. int_warnings .. "'", "uniqueID = '" .. p:CharID() .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'")
 
 		p:SetNW2Int("int_warnings", int_warnings)
 	end
@@ -882,7 +882,7 @@ net.Receive("violation_up", function(len, ply)
 		int_violations = int_violations + 1
 		int_violations = math.Clamp(int_violations, 0, 10)
 
-		SQL_UPDATE(DATABASE_NAME, "int_violations = '" .. int_violations .. "'", "uniqueID = '" .. p:CharID() .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'")
 
 		p:SetNW2Int("int_violations", int_violations)
 	end
@@ -897,7 +897,7 @@ net.Receive("violation_dn", function(len, ply)
 		int_violations = int_violations - 1
 		int_violations = math.Clamp(int_violations, 0, 10)
 
-		SQL_UPDATE(DATABASE_NAME, "int_violations = '" .. int_violations .. "'", "uniqueID = '" .. p:CharID() .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'")
 
 		p:SetNW2Int("int_violations", int_violations)
 	end
@@ -907,9 +907,7 @@ util.AddNetworkString("set_rpname")
 net.Receive("set_rpname", function(len, ply)
 	local p = net.ReadEntity()
 	local rpname = net.ReadString()
-	if ply:HasAccess() then
-		p:SetRPName(rpname)
-	end
+	p:SetRPName(rpname, "set_rpname")
 end)
 
 util.AddNetworkString("set_idcardid")
@@ -919,7 +917,7 @@ net.Receive("set_idcardid", function(len, ply)
 	if wk(p:CharID()) then
 		local ptab = SQL_SELECT(DATABASE_NAME, "text_idcardid", "uniqueID = '" .. p:CharID() .. "'")
 		if wk(ptab) then
-			SQL_UPDATE(DATABASE_NAME, "text_idcardid = '" .. text_idcardid .. "'", "uniqueID = '" .. p:CharID() .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["text_idcardid"] = text_idcardid}, "uniqueID = '" .. p:CharID() .. "'")
 			p:SetNW2String("idcardid", text_idcardid)
 		end
 	end
@@ -929,7 +927,7 @@ util.AddNetworkString("removearrests")
 net.Receive("removearrests", function(len, ply)
 	local p = net.ReadEntity()
 	if IsValid(p) and p:IsPlayer() and p.CharID and wk(p:CharID()) then
-		SQL_UPDATE(DATABASE_NAME, "int_arrests = '" .. 0 .. "'", "uniqueID = '" .. p:CharID() .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_arrests"] = 0}, "uniqueID = '" .. p:CharID() .. "'")
 		p:SetNW2Int("int_arrests", 0)
 	end
 end)
@@ -968,7 +966,7 @@ end)
 
 function YRPSetAllCharsToDefaultRole(ply)
 	if IsValid(ply) then
-		SQL_UPDATE(DATABASE_NAME, "roleID = '1'", "SteamID = '" .. ply:SteamID() .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["roleID"] = 1}, "SteamID = '" .. ply:SteamID() .. "'")
 	end
 end
 
@@ -1003,10 +1001,10 @@ function YRPGiveSpecs(ply)
 				end
 
 				if !strEmpty(tabSpec.prefix) then
-					table.insert( prefix, SQL_STR_OUT( tabSpec.prefix ) )
+					table.insert( prefix, tabSpec.prefix )
 				end
 				if !strEmpty(tabSpec.suffix) then
-					table.insert( suffix, SQL_STR_OUT( tabSpec.suffix ) )
+					table.insert( suffix, tabSpec.suffix )
 				end
 			end
 		end
@@ -1041,7 +1039,7 @@ net.Receive("char_add_spec", function(len, ply)
 	end
 	newspecs = table.concat( newspecs, "," )
 
-	SQL_UPDATE(DATABASE_NAME, "string_specializations = '" .. newspecs .. "'", "uniqueID = '" .. charid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newspecs}, "uniqueID = '" .. charid .. "'")
 
 	YRPGiveSpecs(ply)
 end)

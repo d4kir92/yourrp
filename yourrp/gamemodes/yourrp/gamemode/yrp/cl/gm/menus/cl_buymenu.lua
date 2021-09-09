@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- #buymenu #buy
 
@@ -26,7 +26,7 @@ local lnames = {}
 net.Receive("GetLicenseName", function(len)
 	local id = net.ReadString()
 	local tmp = net.ReadString()
-	lnames[id] = SQL_STR_OUT(tmp)
+	lnames[id] = tmp
 end)
 
 function createShopItem(item, duid, id)
@@ -99,7 +99,7 @@ function createShopItem(item, duid, id)
 
 	if item.name != nil then
 		_i.name = createD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(20))
-		_i.name.name = SQL_STR_OUT(item.name)
+		_i.name.name = item.name
 		if item.type == "licenses" then
 			_i.name.name = YRP.lang_string("LID_license") .. ": " .. _i.name.name
 		end
@@ -110,7 +110,7 @@ function createShopItem(item, duid, id)
 	end
 	if item.description != nil then
 		_i.description = createD("RichText", _i, YRP.ctr(W - H - 20), YRP.ctr(350), YRP.ctr(H), YRP.ctr(20 + HE + 20))
-		_i.description.description = SQL_STR_OUT(item.description)
+		_i.description.description = item.description
 		_i.description:SetText(_i.description.description)
 		function _i.description:PerformLayout()
 			if self.SetUnderlineFont != nil then
@@ -224,7 +224,7 @@ function createStorageItem(item, duid)
 
 	if item.name != nil then
 		_i.name = createD("DPanel", _i, YRP.ctr(W), YRP.ctr(50), 0, 0)
-		_i.name.name = SQL_STR_OUT(item.name)
+		_i.name.name = item.name
 		function _i.name:Paint(pw, ph)
 			draw.SimpleText(self.name, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
@@ -299,7 +299,7 @@ net.Receive("shop_get_tabs", function(len)
 		if !pa(BUYMENU) then return end
 		if !pa(BUYMENU.tabs) then return end
 
-		local _tab = BUYMENU.tabs:AddTab(SQL_STR_OUT(tab.name), tab.uniqueID)
+		local _tab = BUYMENU.tabs:AddTab(tab.name, tab.uniqueID)
 
 		function _tab:GetCategories()
 			net.Receive("yrp_shop_get_categories", function(le)
@@ -315,7 +315,7 @@ net.Receive("shop_get_tabs", function(len)
 						local _cat = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), YRP.ctr(100), 0, 0)
 						_cat.uid = cat.uniqueID
 						_cat:SetHeaderHeight(YRP.ctr(100))
-						_cat:SetHeader(SQL_STR_OUT(cat.name))
+						_cat:SetHeader(cat.name)
 						_cat:SetSpacing(YRP.ctr(BR * 2))
 						_cat.color = lply:InterfaceValue("YFrame", "HI")
 						_cat.color2 = lply:InterfaceValue("YFrame", "HB")
@@ -377,7 +377,7 @@ net.Receive("shop_get_tabs", function(len)
 						_remove.uid = _uid
 						function _remove:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(200, 50, 50))
-							draw.SimpleText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. SQL_STR_OUT(tab.name), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+							draw.SimpleText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. tab.name, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 						end
 						function _remove:DoClick()
 							net.Start("dealer_rem_tab")
@@ -400,7 +400,7 @@ net.Receive("shop_get_tabs", function(len)
 		end
 
 		if tab.haspermanent then
-			local _tab2 = BUYMENU.tabs:AddTab(YRP.lang_string("LID_mystorage") .. ": " .. SQL_STR_OUT(tab.name), tab.uniqueID)
+			local _tab2 = BUYMENU.tabs:AddTab(YRP.lang_string("LID_mystorage") .. ": " .. tab.name, tab.uniqueID)
 			function _tab2:GetCategories()
 				local lply = LocalPlayer()
 				net.Receive("yrp_shop_get_categories", function(le)
@@ -414,7 +414,7 @@ net.Receive("shop_get_tabs", function(len)
 							local _c = createD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), YRP.ctr(100), 0, 0)
 							_c.uid = cat.uniqueID
 							_c:SetHeaderHeight(YRP.ctr(100))
-							_c:SetHeader(SQL_STR_OUT(cat.name))
+							_c:SetHeader(cat.name)
 							_c:SetSpacing(30)
 							_c.color = lply:InterfaceValue("YFrame", "HI")
 							_c.color2 = lply:InterfaceValue("YFrame", "HB")
@@ -487,7 +487,7 @@ net.Receive("shop_get_tabs", function(len)
 			net.Receive("shop_get_all_tabs", function(l)
 				local _ts = net.ReadTable()
 				for i, tab in pairs(_ts) do
-					_tmp.tabs.plus:AddChoice(SQL_STR_OUT(tab.name), tab.uniqueID)
+					_tmp.tabs.plus:AddChoice(tab.name, tab.uniqueID)
 				end
 			end)
 
@@ -531,7 +531,7 @@ net.Receive("shop_get_tabs", function(len)
 		end
 		function BUYMENU.settings:DoClick()
 			net.Receive("dealer_settings", function(le)
-				local _set = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(60 + 110 + 110 + 110), 0, 0)
+				local _set = createD("DFrame", nil, YRP.ctr(700), YRP.ctr(60 + 110 + 110 + 110), 0, 0)
 				_set:SetTitle("")
 				_set:Center()
 				_set:MakePopup()
@@ -540,7 +540,7 @@ net.Receive("shop_get_tabs", function(len)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 				end
 
-				_set.name = createD("DYRPPanelPlus", _set, YRP.ctr(560), YRP.ctr(100), YRP.ctr(20), YRP.ctr(60))
+				_set.name = createD("DYRPPanelPlus", _set, YRP.ctr(660), YRP.ctr(100), YRP.ctr(20), YRP.ctr(60))
 				_set.name:INITPanel("DTextEntry")
 				_set.name:SetHeader(YRP.lang_string("LID_name"))
 				_set.name:SetText(_dealer.name)
@@ -552,7 +552,7 @@ net.Receive("shop_get_tabs", function(len)
 					net.SendToServer()
 				end
 
-				_set.name = createD("DYRPPanelPlus", _set, YRP.ctr(560), YRP.ctr(100), YRP.ctr(20), YRP.ctr(170))
+				_set.name = createD("DYRPPanelPlus", _set, YRP.ctr(660), YRP.ctr(100), YRP.ctr(20), YRP.ctr(170))
 				_set.name:INITPanel("YButton")
 				_set.name:SetHeader(YRP.lang_string("LID_appearance"))
 				_set.name.plus:SetText("LID_change")
@@ -585,9 +585,9 @@ net.Receive("shop_get_tabs", function(len)
 				end
 
 				local _storages = net.ReadTable()
-				_set.storagepoint = createD("DYRPPanelPlus", _set, YRP.ctr(560), YRP.ctr(100), YRP.ctr(20), YRP.ctr(280))
+				_set.storagepoint = createD("DYRPPanelPlus", _set, YRP.ctr(660), YRP.ctr(100), YRP.ctr(20), YRP.ctr(280))
 				_set.storagepoint:INITPanel("DComboBox")
-				_set.storagepoint:SetHeader(YRP.lang_string("LID_storagepoint"))
+				_set.storagepoint:SetHeader(YRP.lang_string("LID_storagepoint") .. " (Where the items should spawn)")
 				for i, storage in pairs(_storages) do
 					local _sp = false
 					if tonumber(storage.uniqueID) == tonumber(_dealer.storagepoints) then

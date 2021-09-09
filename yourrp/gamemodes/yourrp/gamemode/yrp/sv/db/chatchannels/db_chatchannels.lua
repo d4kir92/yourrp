@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -30,8 +30,8 @@ local yrp_chat_channels = {}
 if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "OOC" .. "'") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'OOC', 'Color(100, 255, 100)[OOC] %STEAMNAME%: Color(255, 255, 255)%TEXT%', 0, 0")
 end
-if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. SQL_STR_IN("/") .. "'") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'" .. SQL_STR_IN("/") .. "', 'Color(100, 255, 100)[OOC] %STEAMNAME%: Color(255, 255, 255)%TEXT%', 0, 0")
+if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "/" .. "'") == nil then
+	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'" .. "/" .. "', 'Color(100, 255, 100)[OOC] %STEAMNAME%: Color(255, 255, 255)%TEXT%', 0, 0")
 end
 if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "LOOC" .. "'") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'LOOC', 'Color(100, 255, 100)[LOOC] %RPNAME%: Color(255, 255, 255)%TEXT%', 1, 0")
@@ -76,13 +76,13 @@ function GenerateChatTable()
 			yrp_chat_channels[tonumber(channel.uniqueID)].uniqueID = tonumber(channel.uniqueID)
 
 			-- NAME
-			yrp_chat_channels[tonumber(channel.uniqueID)]["string_name"] = string.upper(SQL_STR_OUT(channel.string_name))
+			yrp_chat_channels[tonumber(channel.uniqueID)]["string_name"] = string.upper(channel.string_name)
 		
 			-- MODE
 			yrp_chat_channels[tonumber(channel.uniqueID)]["int_mode"] = tonumber(channel.int_mode)
 
 			-- STRUCTURE
-			yrp_chat_channels[tonumber(channel.uniqueID)]["string_structure"] = SQL_STR_OUT(channel.string_structure)
+			yrp_chat_channels[tonumber(channel.uniqueID)]["string_structure"] = channel.string_structure
 
 			-- REMOVEABLE
 			yrp_chat_channels[tonumber(channel.uniqueID)]["bool_removeable"] = tobool(channel.bool_removeable)
@@ -229,9 +229,9 @@ end)
 
 util.AddNetworkString("yrp_chat_channel_add")
 net.Receive("yrp_chat_channel_add", function(len, ply)
-	local name = string.upper(SQL_STR_IN(net.ReadString()))
+	local name = string.upper(net.ReadString())
 	local mode = net.ReadString()
-	local structure = SQL_STR_IN(net.ReadString())
+	local structure = net.ReadString()
 
 	local enabled = tonumber(net.ReadString())
 
@@ -254,9 +254,9 @@ end)
 
 util.AddNetworkString("yrp_chat_channel_save")
 net.Receive("yrp_chat_channel_save", function(len, ply)
-	local name = string.upper(SQL_STR_IN(net.ReadString()))
+	local name = string.upper(net.ReadString())
 	local mode = net.ReadString()
-	local structure = SQL_STR_IN(net.ReadString())
+	local structure = net.ReadString()
 
 	local enabled = tonumber(net.ReadString())
 

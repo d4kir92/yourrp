@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local Player = FindMetaTable("Player")
 
@@ -12,8 +12,9 @@ end
 
 function Player:getAgendaTable()
 	--Description: Get the agenda a player can see. Note: when a player is not the manager of an agenda, it returns the agenda of the manager.
-	--YRP.msg("darkrp", "getAgendaTable()")
-	--YRP.msg("darkrp", DarkRP._not)
+	--[[local tab = {}
+	tab.Title = "NICE"
+	return tab]]
 	return false
 end
 
@@ -94,8 +95,7 @@ end
 
 function Player:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 	--Description: Get the entity that is closest to a player's line of sight and its distance.
-	YRP.msg("darkrp", "getEyeSightHitEntity(searchDistance, hitDistance, filter)")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("getEyeSightHitEntity(searchDistance, hitDistance, filter)")
 	return NULL, 0
 end
 
@@ -109,7 +109,7 @@ function Player:getHitTarget()
 	return self:GetNW2Entity("hittarget", NULL)
 end
 
-function ConvertToDarkRPJobName(name)
+function YRPConvertToDarkRPJobName(name)
 	if wk(name) then
 		name = string.Replace(name, " ", "_")
 		local jobname = "TEAM_" .. name
@@ -142,7 +142,7 @@ function Player:getJobTable()
 	end
 	_job.candemote = self:GetNW2Bool("isInstructor") or false
 	_job.category = self:GetNW2String("groupName", "INVALID")
-	_job.command = ConvertToDarkRPJobName(_job.name)
+	_job.command = YRPConvertToDarkRPJobName(_job.name)
 
 	return _job
 end
@@ -164,22 +164,19 @@ RPExtraTeamDoors = RPExtraTeamDoors or {}
 
 function Player:getPocketItems()
 	--Description: Get a player's pocket items.
-	YRP.msg("darkrp", "getPocketItems()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("getPocketItems()")
 	return {}
 end
 
 function Player:getWantedReason()
 	--Description: Get the reason why someone is wanted
-	YRP.msg("darkrp", "getWantedReason()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("getWantedReason()")
 	return "old getWantedReason"
 end
 
 function Player:hasDarkRPPrivilege(priv)
 	--Description: Whether the player has a certain privilege.
-	YRP.msg("darkrp", "hasDarkRPPrivilege(" .. tostring(priv) .. ")")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("hasDarkRPPrivilege(" .. tostring(priv) .. ")")
 	return false
 end
 
@@ -194,21 +191,18 @@ end
 
 function Player:isArrested()
 	--Description: Whether this player is arrested
-	--YRP.msg("darkrp", "isArrested()")
 	return self:GetNW2Bool("injail", false)
 end
 
 function Player:isChief()
 	--Description: Whether this player is a Chief.
-	YRP.msg("darkrp", "isChief()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("isChief()")
 	return false
 end
 
 function Player:isCook()
 	--Description: Whether this player is a cook. This function is only available if hungermod is enabled.
-	YRP.msg("darkrp", "isCook()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("isCook()")
 	return false
 end
 
@@ -244,8 +238,7 @@ end
 
 function Player:nickSortedPlayers()
 	--Description: A table of players sorted by RP name.
-	YRP.msg("darkrp", "nickSortedPlayers()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("nickSortedPlayers()")
 	return {}
 end
 

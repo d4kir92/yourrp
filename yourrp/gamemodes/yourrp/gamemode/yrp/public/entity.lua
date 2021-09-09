@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 --[[ Here are the public functions (FOR DEVELOPERS) ]]
 
@@ -9,6 +9,7 @@ function Entity:GetRPOwner()
 	return self:GetNW2Entity("yrp_owner", NULL)
 end
 
-function Entity:IsDoor()
+function Entity:YRPIsDoor()
+	if self == NULL then return end
 	return self:GetClass() == "prop_door_rotating" or self:GetClass() == "func_door" or self:GetClass() == "func_door_rotating"
 end

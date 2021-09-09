@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -53,7 +53,7 @@ end)
 util.AddNetworkString("add_ticket")
 net.Receive("add_ticket", function(len, ply)
 	local _fb = net.ReadTable()
-	local _insert = SQL_INSERT_INTO(DATABASE_NAME, "title, feedback, contact, steamid, steamname, rpname, timestamp", "'" .. SQL_STR_IN(_fb.title) .. "', '" .. SQL_STR_IN(_fb.feedback) .. "', '" .. SQL_STR_IN(_fb.contact) .. "', '" .. SQL_STR_IN(_fb.steamid) .. "', '" .. SQL_STR_IN(_fb.steamname) .. "', '" .. SQL_STR_IN(_fb.rpname) .. "', '" .. os.time() .. "'")
+	local _insert = SQL_INSERT_INTO(DATABASE_NAME, "title, feedback, contact, steamid, steamname, rpname, timestamp", "'" .. _fb.title .. "', '" .. _fb.feedback .. "', '" .. _fb.contact .. "', '" .. _fb.steamid .. "', '" .. _fb.steamname .. "', '" .. _fb.rpname .. "', '" .. os.time() .. "'")
 	net.Start("yrp_noti")
 		net.WriteString("newfeedback")
 		net.WriteString("")
@@ -64,19 +64,19 @@ util.AddNetworkString("fb_movetoopen")
 net.Receive("fb_movetowip", function(len, ply)
 	local uid = net.ReadString()
 
-	SQL_UPDATE(DATABASE_NAME, "status = 'open'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["status"] = "open"}, "uniqueID = '" .. uid .. "'")
 end)
 
 util.AddNetworkString("fb_movetowip")
 net.Receive("fb_movetowip", function(len, ply)
 	local uid = net.ReadString()
 
-	SQL_UPDATE(DATABASE_NAME, "status = 'wip'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["status"] = "wip"}, "uniqueID = '" .. uid .. "'")
 end)
 
 util.AddNetworkString("fb_movetoclosed")
 net.Receive("fb_movetoclosed", function(len, ply)
 	local uid = net.ReadString()
 
-	SQL_UPDATE(DATABASE_NAME, "status = 'closed'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["status"] = "closed"}, "uniqueID = '" .. uid .. "'")
 end)

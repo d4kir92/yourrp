@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 net.Receive("setting_players", function(len)
 	local PARENT = GetSettingsSite()
@@ -26,6 +26,11 @@ net.Receive("setting_players", function(len)
 					ply = v
 					break
 				end
+			end
+
+			if !IsValid(ply) then
+				
+				return
 			end
 
 			local tmpX, tmpY = gui.MousePos()
@@ -179,7 +184,7 @@ net.Receive("setting_players", function(len)
 				net.Receive("get_licenses_player", function(len)
 					local tab = net.ReadTable()
 					for k, v in pairs(tab) do
-						_newlicense:AddChoice(SQL_STR_OUT(v.name), v.uniqueID)
+						_newlicense:AddChoice(v.name, v.uniqueID)
 					end
 					function _newlicense:OnSelect(index, value, data)
 						license = data
@@ -220,7 +225,7 @@ net.Receive("setting_players", function(len)
 				net.Receive("get_licenses_player", function(len)
 					local tab = net.ReadTable()
 					for k, v in pairs(tab) do
-						_newlicense:AddChoice(SQL_STR_OUT(v.name), v.uniqueID)
+						_newlicense:AddChoice(v.name, v.uniqueID)
 					end
 					function _newlicense:OnSelect(index, value, data)
 						license = data

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local lply = LocalPlayer()
 
@@ -144,7 +144,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end)
 
 	-- SWEPS
-	ug.string_sweps = string.Explode(",", ug.string_sweps)
+	if type(ug.string_sweps) == "string" then
+		ug.string_sweps = string.Explode(",", ug.string_sweps)
+	end
 	local tmp = {}
 	for i, v in pairs(ug.string_sweps) do
 		if v != nil and !strEmpty(v) then
@@ -229,6 +231,10 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		end
 	end
 
+	if type(UGS[CURRENT_USERGROUP].string_sweps) == "string" then
+		UGS[CURRENT_USERGROUP].string_sweps = string.Explode(",", UGS[CURRENT_USERGROUP].string_sweps)
+	end
+
 	SWEPS.button = createD("YButton", SWEPS, YRP.ctr(w), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50 + 500))
 	SWEPS.button:SetText("LID_change")
 	function SWEPS.button:Paint(pw, ph)
@@ -238,6 +244,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		local lply = LocalPlayer()
 		lply.yrpseltab = {}
 
+		if type(UGS[CURRENT_USERGROUP].string_sweps) == "string" then
+			UGS[CURRENT_USERGROUP].string_sweps = string.Explode(",", UGS[CURRENT_USERGROUP].string_sweps)
+		end
 		for i, v in pairs( UGS[CURRENT_USERGROUP].string_sweps ) do
 			if !table.HasValue(lply.yrpseltab) then
 				table.insert(lply.yrpseltab, v)
@@ -277,7 +286,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		if pa(SWEPS) then
 			local string_sweps = net.ReadString()
 
-			UGS[CURRENT_USERGROUP].string_sweps = string.Explode(",", string_sweps)
+			if type(UGS[CURRENT_USERGROUP].string_sweps) == "string" then
+				UGS[CURRENT_USERGROUP].string_sweps = string.Explode(",", string_sweps)
+			end
 			local tmp2 = {}
 			for i, v in pairs(ug.string_sweps) do
 				if v != nil and !strEmpty(v) then
@@ -301,7 +312,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 
 	-- NONEDROPPABLESWEPS
-	ug.string_nonesweps = string.Explode(",", ug.string_nonesweps)
+	if type(ug.string_nonesweps) == "string" then
+		ug.string_nonesweps = string.Explode(",", ug.string_nonesweps)
+	end
 	local tmp = {}
 	for i, v in pairs(ug.string_nonesweps) do
 		if v != nil and !strEmpty(v) then
@@ -436,7 +449,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		if pa(NONESWEPS) then
 			local string_nonesweps = net.ReadString()
 
-			UGS[CURRENT_USERGROUP].string_nonesweps = string.Explode(",", string_nonesweps)
+			if type(UGS[CURRENT_USERGROUP].string_nonesweps) == "string" then
+				UGS[CURRENT_USERGROUP].string_nonesweps = string.Explode(",", string_nonesweps)
+			end
 			local tmp2 = {}
 			for i, v in pairs(ug.string_nonesweps) do
 				if v != nil and !strEmpty(v) then
@@ -471,7 +486,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end
 	LICENSES.plus:EnableVerticalScrollbar(true)
 	
-	UGS[CURRENT_USERGROUP].string_licenses = string.Explode(",", UGS[CURRENT_USERGROUP].string_licenses)
+	if type(UGS[CURRENT_USERGROUP].string_licenses) == "string" then
+		UGS[CURRENT_USERGROUP].string_licenses = string.Explode(",", UGS[CURRENT_USERGROUP].string_licenses)
+	end
 	if table.HasValue(UGS[CURRENT_USERGROUP].string_licenses, "") then
 		table.RemoveByValue(UGS[CURRENT_USERGROUP].string_licenses, "")
 	end
@@ -483,7 +500,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 			local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
 			function line:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
-				draw.SimpleText(SQL_STR_OUT(lic.name), "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(lic.name, "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 			local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
 			if table.HasValue(UGS[CURRENT_USERGROUP].string_licenses, lic.uniqueID) then
@@ -523,7 +540,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end
 	YTOOLS.plus:EnableVerticalScrollbar(true)
 
-	UGS[CURRENT_USERGROUP].string_tools = string.Explode(",", UGS[CURRENT_USERGROUP].string_tools)
+	if type(UGS[CURRENT_USERGROUP].string_tools) == "string" then
+		UGS[CURRENT_USERGROUP].string_tools = string.Explode(",", UGS[CURRENT_USERGROUP].string_tools)
+	end
 	if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, "") then
 		table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "")
 	end
@@ -539,6 +558,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	end
 	function cb:OnChange(bVal)
 		if wk(UGS[CURRENT_USERGROUP]) and UGS[CURRENT_USERGROUP].string_tools then
+			if type(UGS[CURRENT_USERGROUP].string_tools) == "string" then
+				UGS[CURRENT_USERGROUP].string_tools = string.Explode(",", UGS[CURRENT_USERGROUP].string_tools)
+			end
 			if bVal then
 				table.insert(UGS[CURRENT_USERGROUP].string_tools, "all")
 			else
@@ -1021,7 +1043,7 @@ end)
 
 function UpdateUsergroupsList(ugs)
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if pa(PARENT) and pa(PARENT.ugs) then
 		
 		UGS = {}
 		PARENT.ugs:Clear()
@@ -1036,7 +1058,7 @@ function UpdateUsergroupsList(ugs)
 		end
 		for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
 			if ug.int_position >= 10 then
-				if tobool(ug.bool_removeable) then
+				if tobool(ug.bool_removeable) and pa(PARENT.ugs) then
 					AddUG(ug)
 				end
 			end

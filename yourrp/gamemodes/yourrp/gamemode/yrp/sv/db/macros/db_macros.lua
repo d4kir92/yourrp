@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -39,5 +39,5 @@ net.Receive("yrp_update_macro", function(len, ply)
 	local muid = net.ReadString()
 	local value = net.ReadString()
 
-	SQL_UPDATE(DATABASE_NAME, "value = '" .. SQL_STR_IN(value) .. "'", "uniqueID = '" .. muid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "uniqueID = '" .. muid .. "'")
 end)

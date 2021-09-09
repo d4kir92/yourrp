@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local DATABASE_NAME = "yrp_inventory_storages"
 
@@ -34,7 +34,7 @@ function CreateStorage(size, inv)
 end
 
 function GetCharacterStorage(ply)
-	local chaTab = ply:GetChaTab()
+	local chaTab = ply:YRPGetCharacterTable()
 	if wk(chaTab) then
 		local storage = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. chaTab.int_storageID .. "'")
 		if wk(storage) then
@@ -62,7 +62,7 @@ function CreateCharacterStorages()
 					if wk(slots) and (#slots < 5 or #slots > 5) then
 						SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. char.int_storageID .. "'")
 						SQL_DELETE_FROM("yrp_inventory_slots", "int_storageID = '" .. tab.uniqueID .. "'")
-						SQL_UPDATE("yrp_characters", "int_storageID = '" .. 0 .. "'", "uniqueID = '" .. char.uniqueID .. "'")
+						SQL_UPDATE("yrp_characters", {["int_storageID"] = 0}, "uniqueID = '" .. char.uniqueID .. "'")
 					end
 				end
 			end
@@ -72,13 +72,13 @@ function CreateCharacterStorages()
 				YRP.msg("db", "CreateCharacterStorages empty or 0")
 				local bagsStorage = CreateStorage(5, true)
 				if wk(bagsStorage) then
-					SQL_UPDATE("yrp_characters", "int_storageID = '" .. bagsStorage.uniqueID .. "'", "uniqueID = '" .. char.uniqueID .. "'")
+					SQL_UPDATE("yrp_characters", {["int_storageID"] = bagsStorage.uniqueID}, "uniqueID = '" .. char.uniqueID .. "'")
 				end
 			elseif !wk(SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'")) then
 				YRP.msg("db", "CreateCharacterStorages WRONG")
 				local bagsStorage = CreateStorage(5, true)
 				if wk(bagsStorage) then
-					SQL_UPDATE("yrp_characters", "int_storageID = '" .. bagsStorage.uniqueID .. "'", "uniqueID = '" .. char.uniqueID .. "'")
+					SQL_UPDATE("yrp_characters", {["int_storageID"] = bagsStorage.uniqueID}, "uniqueID = '" .. char.uniqueID .. "'")
 				end
 			end
 		end

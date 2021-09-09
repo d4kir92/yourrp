@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 hook.Add("PlayerStartTaunt", "yrp_taunt_start", function(ply, act, length)
 	ply:SetNW2Bool("taunting", true)
@@ -237,7 +237,7 @@ timer.Create("ServerThink", TICK, 0, function()
 
 			ply:AddPlayTime()
 
-			if ply:AFK() then
+			if ply:AFK() and !ply:HasAccess() then
 				if CurTime() - tonumber(ply:GetNW2Float("afkts", 0)) >= tonumber(GetGlobalInt("int_afkkicktime", 0)) then
 					ply:SetNW2Bool("isafk", false)
 					ply:Kick("AFK")

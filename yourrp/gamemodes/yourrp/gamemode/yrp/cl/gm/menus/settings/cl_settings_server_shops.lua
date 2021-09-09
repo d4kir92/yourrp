@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local _sh = {}
 
@@ -37,7 +37,7 @@ net.Receive("get_shops", function()
 			_sh._sho._name = createD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 			_sh._sho._name.textentry.tbl = tbl
 			_sh._sho._name:SetHeader(YRP.lang_string("LID_name"))
-			_sh._sho._name:SetText(SQL_STR_OUT(tbl.name))
+			_sh._sho._name:SetText(tbl.name)
 			function _sh._sho._name.textentry:OnChange()
 				self.tbl.name = self:GetValue()
 				net.Start("shop_edit_name")
@@ -95,7 +95,7 @@ net.Receive("get_shop_categories", function()
 					_sh._cat._name = createD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 					_sh._cat._name.textentry.tbl = tbl
 					_sh._cat._name:SetHeader(YRP.lang_string("LID_name"))
-					_sh._cat._name:SetText(SQL_STR_OUT(tbl.name))
+					_sh._cat._name:SetText(tbl.name)
 					function _sh._cat._name.textentry:OnChange()
 						self.tbl.name = self:GetValue()
 						net.Start("category_edit_name")
@@ -152,7 +152,7 @@ net.Receive("get_shop_items", function()
 				_sh._sit.itemname = createD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(150))
 				_sh._sit.itemname.textentry.tbl = tbl
 				_sh._sit.itemname:SetHeader(YRP.lang_string("LID_name"))
-				_sh._sit.itemname:SetText(SQL_STR_OUT(tbl.name))
+				_sh._sit.itemname:SetText(tbl.name)
 				function _sh._sit.itemname.textentry:SendNewName()
 					if _sh._cat.uid != nil then
 						net.Start("shop_item_edit_name")
@@ -175,7 +175,7 @@ net.Receive("get_shop_items", function()
 				_sh._sit.itemdesc = createD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(400), 0, YRP.ctr(300))
 				_sh._sit.itemdesc.textentry.tbl = tbl
 				_sh._sit.itemdesc:SetHeader(YRP.lang_string("LID_description"))
-				_sh._sit.itemdesc:SetText(SQL_STR_OUT(tbl.description))
+				_sh._sit.itemdesc:SetText(tbl.description)
 				_sh._sit.itemdesc.textentry:SetMultiline(true)
 				function _sh._sit.itemdesc.textentry:SendNewDesc()
 					if _sh._cat.uid != nil then
@@ -297,7 +297,7 @@ net.Receive("get_shop_items", function()
 							if tonumber(lic.uniqueID) == tonumber(tbl.licenseID) then
 								_b = true
 							end
-							_sh._sit.itemlice.plus:AddChoice(SQL_STR_OUT(lic.name), lic.uniqueID, _b)
+							_sh._sit.itemlice.plus:AddChoice(lic.name, lic.uniqueID, _b)
 						end
 					end
 				end)
@@ -400,7 +400,7 @@ net.Receive("get_shop_items", function()
 							local _net_tab = net.ReadTable()
 							_itemlist = _net_tab
 							for i, lic in pairs(_itemlist) do
-								lic.PrintName = SQL_STR_OUT(lic.name)
+								lic.PrintName = lic.name
 								lic.ClassName = lic.uniqueID
 							end
 
@@ -411,7 +411,7 @@ net.Receive("get_shop_items", function()
 							local _net_tab = net.ReadTable()
 							_itemlist = _net_tab
 							for i, rol in pairs(_itemlist) do
-								rol.PrintName = SQL_STR_OUT(rol.string_name)
+								rol.PrintName = rol.string_name
 								rol.WorldModel = rol.WorldModel
 								rol.ClassName = rol.uniqueID
 							end

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local PANEL = {}
 
@@ -415,7 +415,7 @@ function PANEL:Init()
 						elseif LocalPlayer().cc == false and !rol.bool_visible_rm then
 							continue
 						end
-
+						
 						if rol.int_prerole == 0 and rol.bool_eventrole == GetGlobalBool("create_eventchar", false) then
 							w = rw
 							h = rh
@@ -498,9 +498,13 @@ function PANEL:Init()
 					end
 				end
 			end)
-			net.Start("yrp_roleselection_getcontent")
-				net.WriteString(base._guid)
-			net.SendToServer()
+			if base._guid then
+				net.Start("yrp_roleselection_getcontent")
+					net.WriteString(base._guid)
+				net.SendToServer()
+			else
+				YRP.msg("note", "ycollapsiblecategory error, base._guid")
+			end
 		else
 			base:SetTall(YRP.ctr(100))
 			base.btn:SetTall(YRP.ctr(100))

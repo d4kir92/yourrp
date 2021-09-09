@@ -1,19 +1,19 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-local _db_name = "yrp_shops"
+local DATABASE_NAME = "yrp_shops"
 
-SQL_ADD_COLUMN(_db_name, "name", "TEXT DEFAULT 'UNNAMED'")
+SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
 
---db_drop_table(_db_name)
---db_is_empty(_db_name)
+--db_drop_table(DATABASE_NAME)
+--db_is_empty(DATABASE_NAME)
 
 util.AddNetworkString("get_shops")
 
 function send_shops(ply)
-	local _all = SQL_SELECT(_db_name, "*", nil)
+	local _all = SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
 	if _nm == nil or _nm == false then
 		_nm = {}
@@ -32,7 +32,7 @@ end)
 util.AddNetworkString("shop_add")
 
 net.Receive("shop_add", function(len, ply)
-	local _new = SQL_INSERT_INTO(_db_name, "name", "'new shop'")
+	local _new = SQL_INSERT_INTO(DATABASE_NAME, "name", "'new shop'")
 	YRP.msg("db", "shop_add: " .. db_worked(_new))
 
 	send_shops(ply)
@@ -42,7 +42,7 @@ util.AddNetworkString("shop_rem")
 
 net.Receive("shop_rem", function(len, ply)
 	local _uid = net.ReadString()
-	local _new = SQL_DELETE_FROM(_db_name, "uniqueID = " .. _uid)
+	local _new = SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 	YRP.msg("db", "shop_rem: " .. tostring(_uid))
 
 	send_shops(ply)
@@ -53,7 +53,7 @@ util.AddNetworkString("shop_edit_name")
 net.Receive("shop_edit_name", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_name = net.ReadString()
-	local _new = SQL_UPDATE(_db_name, "name = '" .. SQL_STR_IN(_new_name) .. "'", "uniqueID = " .. _uid)
+	local _new = SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
 	YRP.msg("db", "shop_edit_name: " .. tostring(_uid))
 end)
 
@@ -113,7 +113,7 @@ end)
 util.AddNetworkString("shop_get_all_tabs")
 
 net.Receive("shop_get_all_tabs", function(len, ply)
-	local _tabs = SQL_SELECT(_db_name, "name, uniqueID", nil)
+	local _tabs = SQL_SELECT(DATABASE_NAME, "name, uniqueID", nil)
 	local _nw = {}
 	if _tabs != nil then
 		_nw = _tabs

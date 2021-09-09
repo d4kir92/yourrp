@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 --[[ APP ]]--
 local APP = {}
@@ -71,29 +71,29 @@ end
 --[[ Database ]]--
 local yrp_apps = {}
 
-local _db_name = "yrp_apps"
+local DATABASE_NAME = "yrp_apps"
 
 function changeAppPosition(cname, nr)
-	local _upt = SQL_UPDATE(_db_name, "Position = " .. nr, "ClassName = '" .. cname .. "'")
+	local _upt = SQL_UPDATE(DATABASE_NAME, {["Position"] =nr}, "ClassName = '" .. cname .. "'")
 end
 
 function getAllDBApps()
 	for i, app in pairs(getAllApps()) do
-		local _sel = SQL_SELECT(_db_name, "*", "ClassName = '" .. tostring(app.ClassName) .. "'")
+		local _sel = SQL_SELECT(DATABASE_NAME, "*", "ClassName = '" .. tostring(app.ClassName) .. "'")
 		if _sel == nil then
 			local _pos = 1
 			for i=0, 200 do
-				local _p = SQL_SELECT(_db_name, "*", "Position = " .. i)
+				local _p = SQL_SELECT(DATABASE_NAME, "*", "Position = " .. i)
 				if _p == nil then
 					_pos = i
 					break
 				end
 			end
-			local _ins = SQL_INSERT_INTO(_db_name, "ClassName, Position", "'" .. tostring(app.ClassName) .. "', " .. _pos)
+			local _ins = SQL_INSERT_INTO(DATABASE_NAME, "ClassName, Position", "'" .. tostring(app.ClassName) .. "', " .. _pos)
 		end
 	end
 
-	local _apps = SQL_SELECT(_db_name, "*", nil)
+	local _apps = SQL_SELECT(DATABASE_NAME, "*", nil)
 	local apps = {}
 
 	if wk(_apps) then
@@ -113,14 +113,14 @@ function getAllDBApps()
 	return apps
 end
 
---db_drop_table(_db_name)
+--db_drop_table(DATABASE_NAME)
 function check_yrp_apps()
-	SQL_INIT_DATABASE(_db_name)
+	SQL_INIT_DATABASE(DATABASE_NAME)
 
-	SQL_ADD_COLUMN(_db_name, "ClassName", "TEXT DEFAULT 'new'")
-	SQL_ADD_COLUMN(_db_name, "Position", "INT DEFAULT '0'")
+	SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT 'new'")
+	SQL_ADD_COLUMN(DATABASE_NAME, "Position", "INT DEFAULT '0'")
 
-	local _sp = SQL_SELECT(_db_name, "*", nil)
+	local _sp = SQL_SELECT(DATABASE_NAME, "*", nil)
 	if _sp != nil and _sp != false then
 		yrp_apps = _sp[1]
 	end

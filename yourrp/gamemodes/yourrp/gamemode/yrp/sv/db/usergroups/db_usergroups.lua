@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -93,7 +93,7 @@ if wk(yrp_usergroups) then
 	for _i, _ug in pairs(yrp_usergroups) do
 		_ug.string_name = _ug.string_name or "failed"
 		_ug.string_name = string.lower(_ug.string_name)
-		SQL_UPDATE(DATABASE_NAME, "string_name = '" .. _ug.string_name .. "'", "uniqueID = '" .. _ug.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["string_name"] = _ug.string_name}, "uniqueID = '" .. _ug.uniqueID .. "'")
 	end
 end
 yrp_usergroups = SQL_SELECT(DATABASE_NAME, "*", nil)
@@ -232,7 +232,7 @@ function SortUserGroups()
 		local count = 0
 		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 			count = count + 1
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
 		end
 	end
 end
@@ -453,7 +453,7 @@ util.AddNetworkString("usergroup_update_string_name")
 net.Receive("usergroup_update_string_name", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_name = string.lower(net.ReadString())
-	SQL_UPDATE(DATABASE_NAME, "string_name = '" .. string_name .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_name"] = string_name}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated name of usergroup (" .. uid .. ") to [" .. string_name .. "]")
 
@@ -470,7 +470,7 @@ util.AddNetworkString("usergroup_update_string_displayname")
 net.Receive("usergroup_update_string_displayname", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_displayname = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, "string_displayname = '" .. string_displayname .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_displayname"] = string_displayname}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated display of usergroup (" .. uid .. ") to [" .. string_displayname .. "]")
 
@@ -487,7 +487,7 @@ util.AddNetworkString("usergroup_update_string_color")
 net.Receive("usergroup_update_string_color", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_color = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, "string_color = '" .. string_color .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_color"] = string_color}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated color of usergroup (" .. uid .. ") to [" .. string_color .. "]")
 
@@ -504,7 +504,7 @@ util.AddNetworkString("usergroup_update_icon")
 net.Receive("usergroup_update_icon", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_icon = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, "string_icon = '" .. string_icon .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_icon"] = string_icon}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated string_icon of usergroup (" .. uid .. ") to [" .. string_icon .. "]")
 
@@ -522,7 +522,7 @@ net.Receive("usergroup_update_string_sweps", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local sweps = net.ReadTable()
 	local string_sweps = table.concat( sweps, "," )
-	SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. string_sweps .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = string_sweps}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated string_sweps of usergroup (" .. uid .. ") to [" .. string_sweps .. "]")
 
@@ -537,9 +537,9 @@ util.AddNetworkString("usergroup_update_string_nonesweps")
 net.Receive("usergroup_update_string_nonesweps", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local sweps = net.ReadTable()
-	pTab(sweps)
+
 	local string_nonesweps = table.concat( sweps, "," )
-	SQL_UPDATE(DATABASE_NAME, "string_nonesweps = '" .. string_nonesweps .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_nonesweps"] = string_nonesweps}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated string_nonesweps of usergroup (" .. uid .. ") to [" .. string_nonesweps .. "]")
 
@@ -554,7 +554,7 @@ util.AddNetworkString("usergroup_update_string_ammos")
 net.Receive("usergroup_update_string_ammos", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_ammos = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, "string_ammos = '" .. string_ammos .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_ammos"] = string_ammos}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated string_ammos of usergroup (" .. uid .. ") to [" .. string_ammos .. "]")
 
@@ -569,7 +569,7 @@ util.AddNetworkString("usergroup_update_entities")
 net.Receive("usergroup_update_entities", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_entities = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, "string_entities = '" .. string_entities .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_entities"] = string_entities}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated string_entities of usergroup (" .. uid .. ") to [" .. string_entities .. "]")
 
@@ -607,7 +607,7 @@ net.Receive("usergroup_add_sent", function(len, ply)
 	sents = AddSENTToSENTS(sents, sent)
 	sents = SENTSString(sents)
 
-	SQL_UPDATE(DATABASE_NAME, "sents = '" .. sents .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["sents"] = sents}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " added sent [ " .. sent .. " ] for usergroup (" .. uid .. ")")
 
@@ -634,7 +634,7 @@ net.Receive("usergroup_rem_sent", function(len, ply)
 	sents = RemSENTFromSENTS(sents, sent)
 	sents = SENTSString(sents)
 
-	SQL_UPDATE(DATABASE_NAME, "sents = '" .. sents .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["sents"] = sents}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " removed sent [ " .. sent .. " ] for usergroup (" .. uid .. ")")
 
@@ -661,7 +661,7 @@ net.Receive("usergroup_sent_up", function(len, ply)
 	sents[sent] = tonumber(sents[sent]) + 1
 	sents = SENTSString(sents)
 
-	SQL_UPDATE(DATABASE_NAME, "sents = '" .. sents .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["sents"] = sents}, "uniqueID = '" .. uid .. "'")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_sent_up")
@@ -686,7 +686,7 @@ net.Receive("usergroup_sent_dn", function(len, ply)
 	sents[sent] = tonumber(sents[sent]) - 1
 	sents = SENTSString(sents)
 
-	SQL_UPDATE(DATABASE_NAME, "sents = '" .. sents .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["sents"] = sents}, "uniqueID = '" .. uid .. "'")
 
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		net.Start("usergroup_sent_dn")
@@ -698,7 +698,7 @@ end)
 function UGUpdateInt(ply, uid, name, value)
 	name = name or "UNNAMED"
 	name = string.lower(name)
-	SQL_UPDATE(DATABASE_NAME, name .. " = '" .. value .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated " .. name .. " of usergroup (" .. uid .. ") to [" .. value .. "]")
 
@@ -723,7 +723,7 @@ end
 function UGCheckBox(ply, uid, name, value)
 	name = name or "UNNAMED"
 	name = string.lower(name)
-	SQL_UPDATE(DATABASE_NAME, name .. " = '" .. value .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated " .. name .. " of usergroup (" .. uid .. ") to [" .. value .. "]")
 
@@ -1709,9 +1709,11 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 			return true
 		else
 			YRPNotiToPlyDisallowed(pl, "Tool: " .. tostring(tool))
+			YRP.msg("note", "[CanTool] " .. "NO RIGHTS: " .. tostring(tool))
+			return false
 		end
 		YRPNotiToPlyDisallowed(pl, "FAIL FOR TOOL: " .. tostring(tool))
-		YRP.msg("error", "[CanTool] " .. "FAIL FOR TOOL: " .. tool)
+		YRP.msg("note", "[CanTool] " .. "FAIL FOR TOOL: " .. tostring(tool))
 		return false
 	else
 		YRP.msg("error", "[CanTool] Player is not valid!")
@@ -1846,8 +1848,8 @@ net.Receive("settings_usergroup_position_up", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == usergroup.int_position - 1 then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. usergroup.int_position .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. sibling.int_position .. "'", "uniqueID = '" .. uid .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = usergroup.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 	ReloadUsergroupsList()
@@ -1871,8 +1873,8 @@ net.Receive("settings_usergroup_position_dn", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == group.int_position + 1 then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. group.int_position .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. sibling.int_position .. "'", "uniqueID = '" .. uid .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = group.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 	ReloadUsergroupsList()
@@ -1975,7 +1977,7 @@ util.AddNetworkString("usergroup_update_string_licenses")
 net.Receive("usergroup_update_string_licenses", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_licenses = string.lower(net.ReadString())
-	SQL_UPDATE(DATABASE_NAME, "string_licenses = '" .. string_licenses .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_licenses"] = string_licenses}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated licenses of usergroup (" .. uid .. ") to [" .. string_licenses .. "]")
 end)
@@ -1984,7 +1986,7 @@ util.AddNetworkString("usergroup_update_string_tools")
 net.Receive("usergroup_update_string_tools", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_tools = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, "string_tools = '" .. string_tools .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_tools"] = string_tools}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated tools of usergroup (" .. uid .. ") to [" .. string_tools .. "]")
 end)
@@ -1993,7 +1995,7 @@ util.AddNetworkString("usergroup_update_string_ammos")
 net.Receive("usergroup_update_string_ammos", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_ammos = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, "string_ammos = '" .. string_ammos .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_ammos"] = string_ammos}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated ammos of usergroup (" .. uid .. ") to [" .. string_ammos .. "]")
 end)

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -78,25 +78,25 @@ end)
 util.AddNetworkString("edit_license_name")
 net.Receive("edit_license_name", function(len, ply)
 	local _uid = net.ReadString()
-	local _new_name = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(DATABASE_NAME, "name = '" .. _new_name .. "'", "uniqueID = " .. _uid)
-	YRP.msg("db", "edit_license_name: " .. tostring(SQL_STR_OUT(_new_name)))
+	local _new_name = net.ReadString()
+	local _edit = SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
+	YRP.msg("db", "edit_license_name: " .. tostring(_new_name))
 end)
 
 util.AddNetworkString("edit_license_description")
 net.Receive("edit_license_description", function(len, ply)
 	local _uid = net.ReadString()
-	local _new_description = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(DATABASE_NAME, "description = '" .. _new_description .. "'", "uniqueID = " .. _uid)
-	YRP.msg("db", "edit_license_description: " .. tostring(SQL_STR_OUT(_new_description)))
+	local _new_description = net.ReadString()
+	local _edit = SQL_UPDATE(DATABASE_NAME, {["description"] = _new_description}, "uniqueID = " .. _uid)
+	YRP.msg("db", "edit_license_description: " .. tostring(_new_description))
 end)
 
 util.AddNetworkString("edit_license_price")
 net.Receive("edit_license_price", function(len, ply)
 	local _uid = net.ReadString()
-	local _new_price = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(DATABASE_NAME, "price = " .. _new_price, "uniqueID = " .. _uid)
-	YRP.msg("db", "edit_license_price: " .. tostring(SQL_STR_OUT(_new_price)))
+	local _new_price = net.ReadString()
+	local _edit = SQL_UPDATE(DATABASE_NAME, {["price"] = _new_price}, "uniqueID = " .. _uid)
+	YRP.msg("db", "edit_license_price: " .. tostring(_new_price))
 end)
 
 util.AddNetworkString("get_all_licenses_simple")
@@ -126,7 +126,7 @@ net.Receive("role_add_license", function(len, ply)
 			table.insert(_licenseIDs, _license_uid)
 			_licenseIDs = string.Implode(",", _licenseIDs)
 
-			SQL_UPDATE("yrp_ply_roles", "licenseIDs = '" .. _licenseIDs .. "'" ,"uniqueID = " .. _role_uid)
+			SQL_UPDATE("yrp_ply_roles", {["licenseIDs"] = _licenseIDs}, "uniqueID = " .. _role_uid)
 		end
 	end
 end)
@@ -149,7 +149,7 @@ net.Receive("role_rem_license", function(len, ply)
 
 			_licenseIDs = string.Implode(",", _licenseIDs)
 
-			SQL_UPDATE("yrp_ply_roles", "licenseIDs = '" .. _licenseIDs .. "'" ,"uniqueID = " .. _role_uid)
+			SQL_UPDATE("yrp_ply_roles", {["licenseIDs"] = _licenseIDs}, "uniqueID = " .. _role_uid)
 		end
 	end
 end)
@@ -234,7 +234,7 @@ function GetLicenseIDByName(lname)
 		return nil
 	end
 
-	lname = SQL_STR_IN(lname)
+	lname = lname
 	lname = string.lower(lname)
 
 	local tab = SQL_SELECT(DATABASE_NAME, "*")
@@ -243,7 +243,7 @@ function GetLicenseIDByName(lname)
 	if !wk(tab) then return nil end
 
 	for i, lic in pairs(tab) do
-		lic.name = SQL_STR_OUT(lic.name)
+		lic.name = lic.name
 		lic.name = string.lower(lic.name)
 
 		if lname and lic.name and string.find(lic.name, lname) then

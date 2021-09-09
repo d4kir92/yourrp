@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -150,7 +150,7 @@ net.Receive("update_interface_color", function(len, ply)
 	local name = net.ReadString()
 	local color = net.ReadString()
 	YRP.msg("db", "value = '" .. color .. "'" .. "name = '" .. name .. "'")
-	SQL_UPDATE(DATABASE_NAME, "value = '" .. color .. "'", "name = '" .. name .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["value"] = color}, "name = '" .. name .. "'")
 	IFLoadoutAll()
 end)
 
@@ -159,19 +159,19 @@ function ResetDesign()
 	if tab != nil then
 		for name, value in pairs(tab.floats) do
 			local _name = "float_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
-			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.bools) do
 			local _name = "bool_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
-			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.colors) do
 			local _name = "color_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
-			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.ints) do
 			local _name = "int_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
-			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 		end
 	end
 

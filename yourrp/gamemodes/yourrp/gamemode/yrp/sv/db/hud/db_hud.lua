@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -22,7 +22,7 @@ function AddHUDElement(tab, reset)
 		end
 
 		if reset then
-			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 		end
 	end
 	for name, value in pairs(tab.bools) do
@@ -32,7 +32,7 @@ function AddHUDElement(tab, reset)
 		end
 
 		if reset then
-			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 		end
 	end
 	for name, value in pairs(tab.colors) do
@@ -42,7 +42,7 @@ function AddHUDElement(tab, reset)
 		end
 
 		if reset then
-			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 		end
 	end
 	if tab.ints != nil then
@@ -53,7 +53,7 @@ function AddHUDElement(tab, reset)
 			end
 
 			if reset then
-				SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+				SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 			end
 		end
 	end
@@ -65,7 +65,7 @@ function AddHUDElement(tab, reset)
 			end
 
 			if reset then
-				SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. _name .. "'")
+				SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 			end
 		end
 	end
@@ -1073,7 +1073,7 @@ util.AddNetworkString("update_hud_x")
 net.Receive("update_hud_x", function(len, ply)
 	local element = net.ReadString()
 	local x = net.ReadFloat()
-	SQL_UPDATE(DATABASE_NAME, "value = '" .. x .. "'", "name = '" .. "float_HUD_" .. element .. "_POSI_X" .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["value"] = x}, "name = 'float_HUD_" .. element .. "_POSI_X'")
 	HudLoadoutAll()
 end)
 
@@ -1081,7 +1081,7 @@ util.AddNetworkString("update_hud_y")
 net.Receive("update_hud_y", function(len, ply)
 	local element = net.ReadString()
 	local y = net.ReadFloat()
-	SQL_UPDATE(DATABASE_NAME, "value = '" .. y .. "'", "name = '" .. "float_HUD_" .. element .. "_POSI_Y" .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["value"] = y}, "name = 'float_HUD_" .. element .. "_POSI_Y'")
 	HudLoadoutAll()
 end)
 
@@ -1090,7 +1090,7 @@ net.Receive("update_hud_w", function(len, ply)
 	local element = net.ReadString()
 	local w = net.ReadFloat()
 	if w > 0.0 then
-		SQL_UPDATE(DATABASE_NAME, "value = '" .. w .. "'", "name = '" .. "float_HUD_" .. element .. "_SIZE_W" .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["value"] = w}, "name = 'float_HUD_" .. element .. "_SIZE_W'")
 		HudLoadoutAll()
 	end
 end)
@@ -1100,7 +1100,7 @@ net.Receive("update_hud_h", function(len, ply)
 	local element = net.ReadString()
 	local h = net.ReadFloat()
 	if h > 0.0 then
-		SQL_UPDATE(DATABASE_NAME, "value = '" .. h .. "'", "name = '" .. "float_HUD_" .. element .. "_SIZE_H" .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["value"] = h}, "name = 'float_HUD_" .. element .. "_SIZE_H'")
 		HudLoadoutAll()
 	end
 end)
@@ -1123,7 +1123,7 @@ net.Receive("update_hud_bool", function(len, ply)
 	local element = net.ReadString()
 	local art = net.ReadString()
 	local b = net.ReadBool()
-	SQL_UPDATE(DATABASE_NAME, "value = '" .. tonum(b) .. "'", "name = '" .. "bool_HUD_" .. element .. "_" .. art .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["value"] = tonum(b)}, "name = 'bool_HUD_" .. element .. "_" .. art .. "'")
 	HudLoadoutAll()
 end)
 
@@ -1132,7 +1132,7 @@ net.Receive("update_hud_text", function(len, ply)
 	local element = net.ReadString()
 	local text = net.ReadString()
 
-	SQL_UPDATE(DATABASE_NAME, "value = '" .. text .. "'", "name = '" .. "text_HUD_" .. element .. "_" .. "CTEX" .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["value"] = text}, "name = 'text_HUD_" .. element .. "_" .. "CTEX'")
 	HudLoadoutAll()
 end)
 
@@ -1146,8 +1146,8 @@ net.Receive("update_hud_text_position", function(len, ply)
 	elseif ay == 2 then
 		ay = 4
 	end
-	SQL_UPDATE(DATABASE_NAME, "value = '" .. ax .. "'", "name = '" .. "int_HUD_" .. element .. "_" .. "AX" .. "'")
-	SQL_UPDATE(DATABASE_NAME, "value = '" .. ay .. "'", "name = '" .. "int_HUD_" .. element .. "_" .. "AY" .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["value"] = ax}, "name = 'int_HUD_" .. element .. "_" .. "AX'")
+	SQL_UPDATE(DATABASE_NAME, {["value"] = ay}, "name = 'int_HUD_" .. element .. "_" .. "AY'")
 	HudLoadoutAll()
 end)
 
@@ -1156,7 +1156,7 @@ net.Receive("update_hud_ts", function(len, ply)
 	local element = net.ReadString()
 	local ts = net.ReadInt(8)
 	if ts > 0 then
-		SQL_UPDATE(DATABASE_NAME, "value = '" .. ts .. "'", "name = '" .. "int_HUD_" .. element .. "_TS" .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["value"] = ts}, "name = 'int_HUD_" .. element .. "_TS'")
 		HudLoadoutAll()
 	end
 end)
@@ -1166,7 +1166,7 @@ net.Receive("update_hud_color", function(len, ply)
 	local element = net.ReadString()
 	local art = net.ReadString()
 	local color = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, "value = '" .. color .. "'", "name = '" .. "color_HUD_" .. element .. "_" .. art .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["value"] = color}, "name = 'color_HUD_" .. element .. "_" .. art .. "'")
 	HudLoadoutAll()
 end)
 

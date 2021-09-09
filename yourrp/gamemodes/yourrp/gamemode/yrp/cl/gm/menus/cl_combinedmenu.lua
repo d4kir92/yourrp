@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local cm = {}
 cm.open = false
@@ -32,7 +32,7 @@ function CreateForumContent(PARENT)
 end
 
 function CreateRulesContent(PARENT)
-	local serverrules = SQL_STR_OUT(table.concat(GetGlobalTable("text_server_rules", ""), "\n"))
+	local serverrules = table.concat(GetGlobalTable("text_server_rules", ""), "\n")
 
 	local page = createD("DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20))
 	function page:Paint(pw, ph)
@@ -443,13 +443,13 @@ function OpenCombinedMenu()
 		end
 					
 		cm.win = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
-		cm.win:SetTitle(SQL_STR_OUT(GetGlobalString("text_server_name", "")))
+		cm.win:SetTitle(GetGlobalString("text_server_name", ""))
 		cm.win:MakePopup()
 		--cm.win:SetHeaderHeight(YRP.ctr(100))
 		cm.win:SetBorder(0)
 		function cm.win:Paint(pw, ph)
-			if SQL_STR_OUT(GetGlobalString("text_server_name", "")) != self:GetTitle() then
-				self:SetTitle(SQL_STR_OUT(GetGlobalString("text_server_name", "")))
+			if GetGlobalString("text_server_name", "") != self:GetTitle() then
+				self:SetTitle(GetGlobalString("text_server_name", ""))
 			end
 			hook.Run("YFramePaint", self, pw, ph)
 		end

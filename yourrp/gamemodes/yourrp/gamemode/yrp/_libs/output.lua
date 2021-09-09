@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local _text = {}
 _text.pre = "#YRP# "
@@ -174,8 +174,6 @@ function YRP.msg(chan, str_msg, tochat, force)
 	if !isstring(chan) then return false end
 	if !isstring(str_msg) then return false end
 
-	if chan == "debug" then return end
-
 	if force or strEmpty(str_msg) or not table.HasValue(yrpmsgantispam, str_msg) then
 		if not table.HasValue(yrpmsgantispam, str_msg) then
 			table.insert(yrpmsgantispam, str_msg)
@@ -228,11 +226,16 @@ function YRP.msg(chan, str_msg, tochat, force)
 					AddToFakeServerConsole(str)
 				end
 
-				if cn == "ERROR" or cn == "MISSING" then
-					local REALM = "CLIENT"
-					if SERVER then
-						REALM = "SERVER"
+				local REALM = "CLIENT"
+				if SERVER then
+					REALM = "SERVER"
+				end
+
+				if cn == "ERROR" or cn == "MISSING" then			
+					if YRPNewError(str) then
+						YRPAddError(str, str, REALM)
 					end
+
 					if CLIENT and cn == "ERROR" and createD != nil then
 						local err = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400))
 						err:ShowCloseButton(false)
@@ -244,6 +247,10 @@ function YRP.msg(chan, str_msg, tochat, force)
 						timer.Simple(8, function()
 							err:Remove()
 						end)
+					end
+				elseif cn == "DARKRP" then
+					if YRPNewError(str) then
+						YRPAddError(str, str, REALM)
 					end
 				end
 			end

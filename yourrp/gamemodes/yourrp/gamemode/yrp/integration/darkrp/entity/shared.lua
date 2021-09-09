@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local Entity = FindMetaTable("Entity")
 
@@ -41,56 +41,48 @@ end
 
 function Entity:getKeysAllowedToOwn()
 	--Description: The list of people of which the master door owner has added as allowed to own.
-	YRP.msg("darkrp", "getKeysAllowedToOwn()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("getKeysAllowedToOwn()")
 	return {}
 end
 
 function Entity:getKeysCoOwners()
 	--Description: The list of people who co-own the door.
-	YRP.msg("darkrp", "getKeysCoOwners()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("getKeysCoOwners()")
 	return {}
 end
 
 function Entity:getKeysDoorGroup()
 	--Description: The door group of a door if it exists.
-	YRP.msg("darkrp", "getKeysDoorGroup()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("getKeysDoorGroup()")
 	return ""
 end
 
 function Entity:getKeysDoorTeams()
 	--Description: The teams that are allowed to open this door.
-	YRP.msg("darkrp", "getKeysDoorTeams()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("getKeysDoorTeams()")
 	return {}
 end
 
 function Entity:getKeysNonOwnable()
 	--Description: Whether ownability of this door/vehicle is disabled.
-	YRP.msg("darkrp", "getKeysNonOwnable()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("getKeysNonOwnable()")
 	return false
 end
 
 function Entity:getKeysTitle()
 	--Description: Get the title of this door or vehicle.
-	YRP.msg("darkrp", "getKeysTitle()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("getKeysTitle()")
 	return ""
 end
 
-function Entity:isDoor()
+function Entity:IsDoor()
 	--Description: Whether this entity is considered a door in DarkRP.
-	if self == NULL then return end
-	return self:GetClass() == "prop_door_rotating" or self:GetClass() == "func_door" or self:GetClass() == "func_door_rotating"
+	self:YRPIsDoor()
 end
 
 function Entity:isKeysAllowedToOwn(ply)
 	--Description: Whether this player is allowed to co-own a door, as decided by the master door owner.
-	YRP.msg("darkrp", "isKeysAllowedToOwn(ply)")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("isKeysAllowedToOwn(ply)")
 	return false
 end
 
@@ -111,21 +103,18 @@ end
 
 function Entity:isMasterOwner(ply)
 	--Description: Whether the player is the main owner of the door (as opposed to a co-owner).
-	YRP.msg("darkrp", "isMasterOwner(ply)")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("isMasterOwner(ply)")
 	return false
 end
 
 function Entity:isMoneyBag()
 	--Description: Whether this entity is a money bag
-	YRP.msg("darkrp", "isMoneyBag()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("isMoneyBag()")
 	return false
 end
 
 function Entity:Getowning_ent()
 	--Description: Not darkrp
-	--YRP.msg("darkrp", "Getowning_ent()")
 	return self:GetRPOwner()
 end
 

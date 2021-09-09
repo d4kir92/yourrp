@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _la = {}
 
 function ToggleLawsMenu()
@@ -145,7 +145,7 @@ function CreateLawsContent(PARENT)
 					end
 
 					local label = createD("YLabel", line, YRP.ctr(700), YRP.ctr(50), YRP.ctr(60), 0)
-					label:SetText(SQL_STR_OUT(e.name))
+					label:SetText(e.name)
 
 					l_buildings:AddItem(line)
 				end

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 
 function paintDBButton(self, pw, ph, color, text)
@@ -145,7 +145,7 @@ function PANEL:Init()
 			end
 
 			draw.RoundedBox(0, 0, 0, pw, ph, _color)
-			surfaceText(SQL_STR_OUT(self.tbl.name), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			surfaceText(self.tbl.name, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 
 		function _new:DoClick()

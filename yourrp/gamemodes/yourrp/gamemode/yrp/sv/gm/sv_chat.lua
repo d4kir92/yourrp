@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- #CHAT
 
@@ -58,7 +58,7 @@ function print_help(sender)
 	sender:ChatPrint("dropmoney AMOUNT - drop money to ground")
 	sender:ChatPrint("roll - roll a number between 0 and 100")
 	sender:ChatPrint("kill - suicide")
-	sender:ChatPrint("sleep - sleep or wake up")
+	--sender:ChatPrint("sleep - sleep or wake up")
 	sender:ChatPrint("tag_ug - show usergroup tag")
 	sender:ChatPrint("tag_immortal - shows immortal tag")
 	if sender:HasAccess() then
@@ -478,6 +478,11 @@ function DoCommand(sender, command, text)
 		end
 	end
 
+	if command == "esp" then
+		sender:SetNW2Bool("yrp_esp", !sender:GetNW2Bool("yrp_esp", true))
+		return ""
+	end
+
 	if command == "givelicense" then
 		text = string.sub(text, 14)
 		local args = string.Explode(" ", text)
@@ -530,10 +535,10 @@ function DoCommand(sender, command, text)
 
 				if ply != NULL then
 					name = string.Replace(name, tab[1] .. " ", "")
-					ply:SetRPName(name)
+					ply:SetRPName(name, "chat command 1")
 				else
 					if !strEmpty(name) then
-						sender:SetRPName(name)
+						sender:SetRPName(name, "chat command 2")
 						return ""
 					else
 						sender:ChatPrint("\nSetRPName need more text.")
@@ -577,18 +582,18 @@ timer.Simple(4, function() -- must be last hook
 
 
 		-- Channels
-		local tab = SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. SQL_STR_IN(channel) .. "'")
+		local tab = SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. channel .. "'")
 		if wk(tab) then
 			tab = tab[1]
 
 			tab.int_mode = tonumber(tab.int_mode)
 
-			local structure = SQL_STR_OUT(tab.string_structure)
+			local structure = tab.string_structure
 
 			local pk = YRPChatReplaceCMDS(structure, sender, text)
 
 			if channel != "HELP" and !strEmpty(text) then
-				SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', '" .. SQL_STR_IN(text) .. "'")
+				SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', '" .. text .. "'")
 			end
 
 			if !tobool(tab.bool_enabled) then

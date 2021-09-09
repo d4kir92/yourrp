@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- #FEEDBACKSETTINGS
 
@@ -23,7 +23,7 @@ end
 
 function BuildFeedbackLine(parent, tab)
 	for i, v in pairs(tab) do
-		tab[i] = SQL_STR_OUT(v)
+		tab[i] = v
 	end
 
 	tab.rows = string.Explode("\n", tab.feedback)

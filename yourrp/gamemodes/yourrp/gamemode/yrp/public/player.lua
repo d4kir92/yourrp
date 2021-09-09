@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 --[[ Here are the public functions (FOR DEVELOPERS) ]]
 
@@ -383,10 +383,14 @@ function Player:XPMultiplier()
 	return tonumber(math.Round(self:GetNW2String("float_multiplier", "1.5"), 0))
 end
 
-function Player:GetMaxXP()
-	local exp = math.pow(self:Level(), self:XPMultiplier())
+function Player:CalculateMaxXP(lvl)
+	local exp = math.pow(lvl, self:XPMultiplier())
 	local res = math.Round(exp + self:XPForLevelUp(), 1)
 	return tonumber(res)
+end
+
+function Player:GetMaxXP()
+	return self:CalculateMaxXP(self:Level())
 end
 
 function Player:MaxXP()

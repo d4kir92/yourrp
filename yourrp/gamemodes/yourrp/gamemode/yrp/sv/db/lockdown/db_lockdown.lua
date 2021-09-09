@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -23,7 +23,7 @@ function Player:LockdownLoadout()
 		lockdown.bool_lockdown = tobool(lockdown.bool_lockdown)
 		for i, pl in pairs(player.GetAll()) do
 			pl:SetNW2Bool("bool_lockdown", lockdown.bool_lockdown)
-			pl:SetNW2String("string_lockdowntext", SQL_STR_OUT(lockdown.string_lockdowntext))
+			pl:SetNW2String("string_lockdowntext", lockdown.string_lockdowntext)
 		end
 	else
 		YRP.msg("note", "LockdownLoadout FAILED")
@@ -33,9 +33,9 @@ end
 util.AddNetworkString("set_lockdowntext")
 net.Receive("set_lockdowntext", function(len, ply)
 	local string_lockdowntext = net.ReadString()
-	string_lockdowntext = SQL_STR_IN(string_lockdowntext)
+	string_lockdowntext = string_lockdowntext
 	YRP.msg("db", "Changed lockdowntext to: " .. string_lockdowntext)
-	SQL_UPDATE(DATABASE_NAME, "string_lockdowntext = '" .. string_lockdowntext .. "'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["string_lockdowntext"] = string_lockdowntext}, "uniqueID = '1'")
 
 	for i, pl in pairs(player.GetAll()) do
 		pl:LockdownLoadout()
@@ -109,7 +109,7 @@ net.Receive("set_lockdown", function(len, ply)
 	local bool_lockdown = net.ReadBool()
 	int_lockdown = tonum(bool_lockdown)
 	YRP.msg("db", "Changed bool_lockdown to: " .. tostring(int_lockdown))
-	SQL_UPDATE(DATABASE_NAME, "bool_lockdown = '" .. int_lockdown .. "'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["bool_lockdown"] = int_lockdown}, "uniqueID = '1'")
 
 	for i, pl in pairs(player.GetAll()) do
 		pl:LockdownLoadout()

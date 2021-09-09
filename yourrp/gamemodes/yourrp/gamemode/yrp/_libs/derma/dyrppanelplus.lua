@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 
 function PANEL:Init()
@@ -13,7 +13,7 @@ function PANEL:Init()
 
 	function self.header:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-		surfaceText(YRP.lang_string(SQL_STR_OUT(self.text)), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+		surfaceText(YRP.lang_string(self.text), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
 	end
 end
 

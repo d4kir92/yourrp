@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local DATABASE_NAME = "yrp_inventory_slots"
 
@@ -93,26 +93,28 @@ net.Receive("yrp_storage_get_slots", function(len, ply)
 	storageID = tonumber(storageID)
 
 	local slots = GetStorageSlots(storageID)
-	if wk(slots) and slots[5] then
-		local bp = slots[5]
+	if wk(slots) then
+		if slots[5] then
+			local bp = slots[5]
+		
+			if wk(bp) and bp.uniqueID and !wk(GetItem(bp.uniqueID)) and table.Count(slots) == 5 then
+				local tab = {}
+				tab.text_classname = "bag"
+				tab.text_printname = "bag"
+				tab.text_worldmodel = "models/props_junk/garbage_takeoutcarton001a.mdl"
+				tab.text_type = "bag"
+				tab.int_fixed = "1"
 
-		if !wk(bp) and bp.uniqueID and !wk(GetItem(bp.uniqueID)) and table.Count(slots) == 5 then
-			local tab = {}
-			tab.text_classname = "bag"
-			tab.text_printname = "bag"
-			tab.text_worldmodel = "models/props_junk/garbage_takeoutcarton001a.mdl"
-			tab.text_type = "bag"
-			tab.int_fixed = "1"
-
-			local storage = CreateStorage(16)
-			if wk(storage) then
-				tab.int_storageID = storage.uniqueID
-				CreateItem(bp.uniqueID, tab)
-			else
-				YRP.msg("db", "Failed to create backpack")
+				local storage = CreateStorage(16)
+				if wk(storage) then
+					tab.int_storageID = storage.uniqueID
+					CreateItem(bp.uniqueID, tab)
+				else
+					YRP.msg("db", "Failed to create backpack")
+				end
 			end
 		end
-
+	
 		net.Start("yrp_storage_get_slots")
 			net.WriteString(storageID)
 			net.WriteTable(slots)

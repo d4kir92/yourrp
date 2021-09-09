@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 
 function PANEL:Init()
@@ -12,7 +12,7 @@ function PANEL:Init()
 	function self.header:Paint(pw, ph)
 		local color = Color(255, 255, 255)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
-		surfaceText(SQL_STR_OUT(self.text), "Y_24_700", pw / 2, ph / 2, TextColor(color), 1, 1)
+		surfaceText(self.text, "Y_24_700", pw / 2, ph / 2, TextColor(color), 1, 1)
 	end
 
 	self.textentry = createD("DTextEntry", self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, YRP.ctr(50))

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -37,16 +37,16 @@ net.Receive("RemoveJailNote", function(len, ply)
 end)
 
 
-local _db_name = "yrp_jail"
+local DATABASE_NAME = "yrp_jail"
 
-SQL_ADD_COLUMN(_db_name, "SteamID", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(_db_name, "nick", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(_db_name, "reason", "TEXT DEFAULT '-'")
-SQL_ADD_COLUMN(_db_name, "time", "INT DEFAULT 1")
-SQL_ADD_COLUMN(_db_name, "cell", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "nick", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "reason", "TEXT DEFAULT '-'")
+SQL_ADD_COLUMN(DATABASE_NAME, "time", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "cell", "INT DEFAULT 1")
 
---db_drop_table(_db_name)
---db_is_empty(_db_name)
+--db_drop_table(DATABASE_NAME)
+--db_is_empty(DATABASE_NAME)
 
 function teleportToReleasepoint(ply)
 	ply:SetNW2Bool("injail", false)
@@ -112,7 +112,7 @@ function teleportToJailpoint(ply, tim, police)
 				if empty then
 					-- DONE
 					ply:SetNW2Int("int_arrests", ply:GetNW2Int("int_arrests", 0) + 1)
-					SQL_UPDATE("yrp_characters", "int_arrests = '" .. ply:GetNW2Int("int_arrests", 0) .. "'", "uniqueID = '" .. ply:CharID() .. "'")
+					SQL_UPDATE("yrp_characters", {["int_arrests"] = ply:GetNW2Int("int_arrests", 0)}, "uniqueID = '" .. ply:CharID() .. "'")
 					if police and police:IsPlayer() then
 						SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_source_steamid", "'" .. os.time() .. "', 'LID_arrests', '" .. ply:SteamID64() .. "', '" .. police:SteamID64() .. "'")
 					end

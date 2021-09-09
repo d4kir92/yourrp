@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local tmpTargetSteamID = ""
 function toggleInteractMenu()
@@ -77,7 +77,7 @@ net.Receive("openInteractMenu", function(len)
 				if i > 1 then
 					tmpRPDescription = tmpRPDescription .. "\n"
 				end
-				tmpRPDescription = tmpRPDescription .. SQL_STR_OUT(v:GetNW2String("rpdescription" .. i, ""))
+				tmpRPDescription = tmpRPDescription .. v:GetNW2String("rpdescription" .. i, "")
 			end
 			break
 		end
@@ -102,7 +102,7 @@ net.Receive("openInteractMenu", function(len)
 		if LocalPlayer():isCP() or LocalPlayer():GetNW2Bool("bool_canusewarnsystem", false) then
 			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255))
 			draw.SimpleTextOutlined(YRP.lang_string("LID_licenses") .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(470 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
-			draw.SimpleTextOutlined(SQL_STR_OUT(licenses), "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
+			draw.SimpleTextOutlined(licenses, "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0))
 		end
 	
 		--[[ Description ]]--
@@ -251,7 +251,7 @@ function YRPOpenGiveSpec(charid, ruid)
 
 		for i, v in pairs(nettab) do
 			local btn = createD("YButton", nil, 200, 50, 0, 0)
-			btn:SetText(SQL_STR_OUT(v.name))
+			btn:SetText(v.name)
 
 			function btn:DoClick()
 				net.Start("char_add_spec")

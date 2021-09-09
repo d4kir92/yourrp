@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 --cl_think.lua
 
@@ -286,6 +286,11 @@ function keyPressed(key, str, distance)
 	end
 end
 
+function YRPHudFailPrint()
+	local str = "finishedloading = " .. tostring( lply:GetNW2Bool("finishedloading", false) ) .. " loadedchars = " .. tostring( lply:GetNW2Bool("loadedchars", false) ) .. " yrp_hudloadout = " .. tostring( lply:GetNW2Bool("yrp_hudloadout", false) )
+	return str
+end
+
 local clicked = false
 
 local afktime = CurTime()
@@ -305,7 +310,7 @@ function KeyPress()
 			hudFail = true
 			net.Start("rebuildHud")
 			net.SendToServer()
-			YRP.msg("error", "HUD Version outdated! " .. tostring(lply:GetNW2Int("hud_version", -1)))
+			YRP.msg( "error", "HUD Version outdated! " .. tostring( lply:GetNW2Int("hud_version" -1) ) .. " " .. YRPHudFailPrint() )
 		end
 	end
 

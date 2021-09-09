@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local _li = {}
 net.Receive("get_licenses", function()
@@ -28,7 +28,7 @@ net.Receive("get_licenses", function()
 			_li.name = createD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 			_li.name.textentry.tbl = tbl
 			_li.name:SetHeader(YRP.lang_string("LID_name"))
-			_li.name:SetText(SQL_STR_OUT(tbl.name))
+			_li.name:SetText(tbl.name)
 			function _li.name.textentry:OnChange()
 				self.tbl.name = self:GetValue()
 				net.Start("edit_license_name")
@@ -41,7 +41,7 @@ net.Receive("get_licenses", function()
 			_li.desc = createD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(400), 0, YRP.ctr(150))
 			_li.desc.textentry.tbl = tbl
 			_li.desc:SetHeader(YRP.lang_string("LID_description"))
-			_li.desc:SetText(SQL_STR_OUT(tbl.description))
+			_li.desc:SetText(tbl.description)
 			function _li.desc.textentry:OnChange()
 				self.tbl.description = self:GetValue()
 				net.Start("edit_license_description")
@@ -54,7 +54,7 @@ net.Receive("get_licenses", function()
 			_li.price = createD("DYRPNumberWang", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(600))
 			_li.price.numberwang.tbl = tbl
 			_li.price:SetHeader(YRP.lang_string("LID_price"))
-			_li.price:SetValue(SQL_STR_OUT(tbl.price))
+			_li.price:SetValue(tbl.price)
 			function _li.price.numberwang:OnChange()
 				self.tbl.price = self:GetValue()
 				net.Start("edit_license_price")

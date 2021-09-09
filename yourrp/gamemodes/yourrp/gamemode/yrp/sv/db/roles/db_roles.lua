@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -85,10 +85,10 @@ if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	YRP.msg("note", DATABASE_NAME .. " has not the default role")
 	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "'1', 'Civilian', '0,0,255', '1', '0'")
 else
-	SQL_UPDATE(DATABASE_NAME, "string_color = '0,0,0'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["string_color"] = "0,0,0"}, "uniqueID = '1'")
 end
 
-SQL_UPDATE(DATABASE_NAME, "int_uses = '0'", nil)
+SQL_UPDATE(DATABASE_NAME, {["int_uses"] = 0}, nil)
 
 function MoveUnusedGroups()
 	local count = 0
@@ -100,10 +100,10 @@ function MoveUnusedGroups()
 			if parentgroup == nil then
 				count = count + 1
 				YRP.msg("note", "Group is out of space: " .. group.string_name)
-				SQL_UPDATE("yrp_ply_groups", "int_parentgroup = '" .. "1" .. "'", "uniqueID = '" .. group.uniqueID .. "'")
+				SQL_UPDATE("yrp_ply_groups", {["int_parentgroup"] = 1}, "uniqueID = '" .. group.uniqueID .. "'")
 			elseif group.uniqueID == parentgroup[1].int_parentgroup then
 				YRP.msg("note", "YOU MADE A LOOP IN PARENTGROUP!!!")
-				SQL_UPDATE("yrp_ply_groups", "int_parentgroup = '1'", "uniqueID = '" .. parentgroup[1].uniqueID .. "'")
+				SQL_UPDATE("yrp_ply_groups", {["int_parentgroup"] = 1}, "uniqueID = '" .. parentgroup[1].uniqueID .. "'")
 			end
 		end
 	end
@@ -122,10 +122,10 @@ function MoveUnusedRolesToDefault()
 				local prerole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. role.int_prerole .. "'")
 				if !wk(prerole) then
 					changed = true
-					SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+					SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '" .. role.uniqueID .. "'")
 				elseif role.uniqueID == prerole[1].int_prerole then
 					YRP.msg("note", "YOU MADE A LOOP in PREROLES!!!")
-					SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. prerole[1].uniqueID .. "'")
+					SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '" .. prerole[1].uniqueID .. "'")
 				end
 			end
 
@@ -134,7 +134,10 @@ function MoveUnusedRolesToDefault()
 			local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
 			if !wk(group) then
 				changed = true
-				SQL_UPDATE(DATABASE_NAME, "int_groupID = '1', int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+				SQL_UPDATE(DATABASE_NAME, {
+					["int_groupID"] = 1,
+					["int_prerole"] = 0
+				},"uniqueID = '" .. role.uniqueID .. "'")
 			end
 		end
 	end
@@ -150,41 +153,41 @@ MoveUnusedRolesToDefault()
 local wrongprerole = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'")
 if wk(wrongprerole) then
 	for i, role in pairs(wrongprerole) do
-		SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '" .. role.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '" .. role.uniqueID .. "'")
 	end
 end
 
 local wrongmaxamount = SQL_SELECT(DATABASE_NAME, "*", "int_maxamount = -1")
 if wk(wrongmaxamount) then
 	for i, role in pairs(wrongmaxamount) do
-		SQL_UPDATE(DATABASE_NAME, "int_maxamount = 0", "uniqueID = '" .. role.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_maxamount"] = 0}, "uniqueID = '" .. role.uniqueID .. "'")
 	end
 end
 
 local wrongpercentage = SQL_SELECT(DATABASE_NAME, "*", "int_amountpercentage > 100")
 if wk(wrongpercentage) then
 	for i, role in pairs(wrongpercentage) do
-		SQL_UPDATE(DATABASE_NAME, "int_amountpercentage = '100'", "uniqueID = '" .. role.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_amountpercentage"] = 100}, "uniqueID = '" .. role.uniqueID .. "'")
 	end
 end
 
 local wrongmainrole = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if wk(wrongmainrole) then
-	SQL_UPDATE(DATABASE_NAME, "string_usergroups = 'ALL'", "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, "int_maxamount = '0'", "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, "int_amountpercentage = '100'", "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, "int_groupID = '1'", "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, "int_prerole = '0'", "uniqueID = '1'")
-	--SQL_UPDATE(DATABASE_NAME, "bool_visible_rm = '1'", "uniqueID = '1'")
-	--SQL_UPDATE(DATABASE_NAME, "bool_visible_cc = '1'", "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, "bool_locked = '0'", "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, "bool_whitelist = '0'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["string_usergroups"] = "ALL"}, "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["int_maxamount"] = 0}, "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["int_amountpercentage"] = 100}, "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["int_groupID"] = 1}, "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '1'")
+	--SQL_UPDATE(DATABASE_NAME, {["bool_visible_rm"] = 1}, "uniqueID = '1'")
+	--SQL_UPDATE(DATABASE_NAME, {["bool_visible_cc"] = 1}, "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["bool_locked"] = 0}, "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["bool_whitelist"] = 0}, "uniqueID = '1'")
 end
 -- CONVERTING
 
 -- darkrp
 jobByCmd = jobByCmd or {}
-function ConvertToDarkRPJob(tab)
+function YRPConvertToDarkRPJob(tab)
 	local _job = {}
 
 	_job.team = tonumber(tab.uniqueID)
@@ -219,14 +222,19 @@ function ConvertToDarkRPJob(tab)
 		gname = gname[1].string_name
 	end
 	_job.category = gname or "invalid group"
-	_job.command = ConvertToDarkRPJobName(tab.string_name)
+	_job.command = YRPConvertToDarkRPJobName(tab.string_name)
 
 	--_job.RequiresVote = function() end
 
 	-- YRP
 	if tab.string_color then
-		_job.color = string.Explode(",", tab.string_color)
-		_job.color = Color(_job.color[1], _job.color[2], _job.color[3], _job.color[4])
+		_job.color = string.Explode(",", tab.string_color )
+		if _job.color[1] and _job.color[2] and _job.color[3] then
+			_job.color = Color(_job.color[1], _job.color[2], _job.color[3], _job.color[4] or 255)
+		else
+			YRP.msg( "error", "[ConvertToDarkRPJob] color FAIL: " .. tostring(tab.string_color) )
+			YRPRepairSQLDB(true)
+		end
 	else
 		_job.color = Color(0, 0, 0, 255)
 	end
@@ -249,29 +257,33 @@ function ConvertToDarkRPCategory(tab, cat)
 	return t
 end
 
-local drp_allroles = SQL_SELECT(DATABASE_NAME, "*", nil)
 local TEAMS = {}
-if wk(drp_allroles) then
-	for i, role in pairs(drp_allroles) do
-		local teamname = ConvertToDarkRPJobName(role.string_name)
-		local darkrpjob = ConvertToDarkRPJob(role)
-		local darkrpjobuid = darkrpjob.team
-		TEAMS[teamname] = darkrpjob
-		_G[string.upper(teamname)] = tonumber(role.uniqueID) --TEAMS["TEAM_" .. role.string_name]
-		RPExtraTeams[darkrpjobuid] = darkrpjob
-		jobByCmd[darkrpjob.command] = darkrpjobuid
+function YRPBuildDarkrpTeams()
+	local drp_allroles = SQL_SELECT(DATABASE_NAME, "*", nil)
+	if wk(drp_allroles) then
+		for i, role in pairs(drp_allroles) do
+			local teamname = YRPConvertToDarkRPJobName(role.string_name)
+			local darkrpjob = YRPConvertToDarkRPJob(role)
+			local darkrpjobuid = darkrpjob.team
+			TEAMS[teamname] = darkrpjob
+			_G[string.upper(teamname)] = tonumber(role.uniqueID) --TEAMS["TEAM_" .. role.string_name]
+			RPExtraTeams[darkrpjobuid] = darkrpjob
+			jobByCmd[darkrpjob.command] = darkrpjobuid
 
-		team.SetUp(role.uniqueID, role.string_name, darkrpjob.color)
+			team.SetUp(role.uniqueID, role.string_name, darkrpjob.color)
+		end
 	end
 end
+timer.Simple(1.0, YRPBuildDarkrpTeams)
 
 util.AddNetworkString("send_team")
 local Player = FindMetaTable("Player")
+local timerdelay = 0.1
 function Player:DRPSendTeamsToPlayer()
 	self.yrp_darkrp_index = 1
 	for i, role in pairs(RPExtraTeams) do
 		self.yrp_darkrp_index = self.yrp_darkrp_index + 1
-		timer.Simple(self.yrp_darkrp_index * 0.02, function()
+		timer.Simple(self.yrp_darkrp_index * timerdelay, function()
 			if IsValid(self) then
 				net.Start("send_team")
 					net.WriteString(i)
@@ -298,7 +310,7 @@ util.AddNetworkString("drp_combinetabs")
 function Player:DRPSendCategoriesToPlayer()
 	for i, group in pairs(CATEGORIES.jobs) do
 		self.yrp_darkrp_index = self.yrp_darkrp_index + 1
-		timer.Simple(self.yrp_darkrp_index * 0.02, function()
+		timer.Simple(self.yrp_darkrp_index * timerdelay, function()
 			if IsValid(self) then
 				net.Start("send_categories")
 					net.WriteString(i)
@@ -309,18 +321,22 @@ function Player:DRPSendCategoriesToPlayer()
 	end
 
 	self.yrp_darkrp_index = self.yrp_darkrp_index + 1
-	timer.Simple(self.yrp_darkrp_index * 0.02 + 1, function()
+	timer.Simple(self.yrp_darkrp_index * timerdelay + 1, function()
 		net.Start("drp_combinetabs")
 		net.Send(self)
 	end)
 
-	for i, cat in pairs(CATEGORIES.jobs) do
-		cat.members = {}
-		for i, role in pairs(TEAMS) do
-			if role.int_groupID == cat.uniqueID then
-				table.insert(cat.members, role)
+	if wk(TEAMS) then
+		for i, cat in pairs(CATEGORIES.jobs) do
+			cat.members = {}
+			for i, role in pairs(TEAMS) do
+				if role.int_groupID == cat.uniqueID then
+					table.insert(cat.members, role)
+				end
 			end
 		end
+	else
+		YRP.msg("note", "TEAMS not valid")
 	end
 end
 -- darkrp
@@ -329,7 +345,7 @@ function UpdatePrerolesGroupIDs(uid, gid)
 	local preroles = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. uid .. "'")
 	if wk(preroles) then
 		for i, prerole in pairs(preroles) do
-			SQL_UPDATE(DATABASE_NAME, "int_groupID = '" .. gid .. "'", "uniqueID = '" .. prerole.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_groupID"] = gid}, "uniqueID = '" .. prerole.uniqueID .. "'")
 			UpdatePrerolesGroupIDs(prerole.uniqueID, gid)
 		end
 	end
@@ -534,7 +550,7 @@ function SortRoles(gro, pre)
 		local count = 0
 		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 			count = count + 1
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
 		end
 	end
 end
@@ -722,19 +738,19 @@ net.Receive("settings_add_role", function(len, ply)
 		for name, value in pairs(prerole) do
 			local except = {"uniqueID", "int_prerole", "int_position", "int_groupID"}
 			if !table.HasValue(except, name) then
-				SQL_UPDATE(DATABASE_NAME, name .. " = '" .. value .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
+				SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. new_role.uniqueID .. "'")
 			end
 		end
 	--else
-		--SQL_UPDATE(DATABASE_NAME, "string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D" .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
+		--SQL_UPDATE(DATABASE_NAME, {["string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D"}, "uniqueID = '" .. new_role.uniqueID .. "'")
 	end
 
 	--local up = roles[count - 1]
 	if count == 1 then
-		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_role.uniqueID .. "'")
 	else
-		SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. new_role.uniqueID .. "'")
-		--SQL_UPDATE(DATABASE_NAME, "int_dn = '" .. new_role.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_role.uniqueID .. "'")
+		--SQL_UPDATE(DATABASE_NAME, {["int_dn"] = new_role.uniqueID}, "uniqueID = '" .. up.uniqueID .. "'")
 	end
 
 	YRP.msg("db", "Added new role: " .. new_role.uniqueID)
@@ -760,8 +776,8 @@ net.Receive("settings_role_position_up", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == role.int_position - 1 then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. role.int_position .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. sibling.int_position .. "'", "uniqueID = '" .. uid .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = role.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 
@@ -788,8 +804,8 @@ net.Receive("settings_role_position_dn", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == role.int_position + 1 then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. role.int_position .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. sibling.int_position .. "'", "uniqueID = '" .. uid .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = role.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 
@@ -862,7 +878,7 @@ net.Receive("settings_delete_role", function(len, ply)
 			local count = 0
 			for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 				count = count + 1
-				SQL_UPDATE(DATABASE_NAME, "int_position = '" .. count .. "'", "uniqueID = '" .. sibling.uniqueID .. "'")
+				SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
 			end
 		end
 
@@ -954,7 +970,7 @@ net.Receive("add_role_flag", function(len, ply)
 		table.insert(newflags, fuid)
 		newflags = string.Implode(",", newflags)
 
-		SQL_UPDATE(DATABASE_NAME, "string_customflags = '" .. newflags .. "'", "uniqueID = '" .. ruid .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["string_customflags"] = newflags}, "uniqueID = '" .. ruid .. "'")
 		SendCustomFlags(ruid)
 	end
 end)
@@ -977,7 +993,7 @@ net.Receive("rem_role_flag", function(len, ply)
 	table.RemoveByValue(newflags, tostring(fuid))
 	newflags = string.Implode(",", newflags)
 
-	SQL_UPDATE(DATABASE_NAME, "string_customflags = '" .. newflags .. "'", "uniqueID = '" .. ruid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_customflags"] = newflags}, "uniqueID = '" .. ruid .. "'")
 	SendCustomFlags(ruid)
 end)
 
@@ -996,8 +1012,8 @@ function SendPlayermodels(uid)
 				if name == "" or	name == " " then
 					name = pms.string_models
 				end
-				entry.string_name = SQL_STR_OUT(name)
-				entry.string_models = SQL_STR_OUT(pms.string_models)
+				entry.string_name = name
+				entry.string_models = pms.string_models
 				table.insert(nettab, entry)
 			end
 		end
@@ -1025,7 +1041,7 @@ net.Receive("get_all_playermodels", function(len, ply)
 	for x, pm in pairs(allpms) do
 		pm.uses = 0
 
-		pm.string_models = SQL_STR_OUT(pm.string_models)
+		pm.string_models = pm.string_models
 
 		-- Count uses
 		local roles = SQL_SELECT("yrp_ply_roles", "uniqueID, string_name, string_playermodels", "string_playermodels LIKE '%" .. pm.uniqueID .. "%'")
@@ -1063,7 +1079,7 @@ function AddPlayermodelToRole(ruid, muid)
 		table.insert(newpms, tostring(muid))
 		newpms = string.Implode(",", newpms)
 
-		SQL_UPDATE(DATABASE_NAME, "string_playermodels = '" .. newpms .. "'", "uniqueID = '" .. ruid .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["string_playermodels"] = newpms}, "uniqueID = '" .. ruid .. "'")
 		SendPlayermodels(ruid)
 	end
 end
@@ -1083,7 +1099,7 @@ net.Receive("add_playermodels", function(len, ply)
 	local name = net.ReadString()
 	local min = net.ReadString()
 	local max = net.ReadString()
-	pms = SQL_STR_IN(table.concat(pms, ","))
+	pms = table.concat(pms, ",")
 	SQL_INSERT_INTO("yrp_playermodels", "string_models, string_name, float_size_min, float_size_max", "'" .. pms .. "', '" .. name .. "', '" .. min .. "', '" .. max .. "'")
 
 	local lastentry = SQL_SELECT("yrp_playermodels", "*", nil)
@@ -1105,7 +1121,7 @@ function RemPlayermodelFromRole(ruid, muid)
 	table.RemoveByValue(newpms, tostring(muid))
 	newpms = string.Implode(",", newpms)
 
-	SQL_UPDATE(DATABASE_NAME, "string_playermodels = '" .. newpms .. "'", "uniqueID = '" .. ruid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_playermodels"] = newpms}, "uniqueID = '" .. ruid .. "'")
 	SendPlayermodels(ruid)
 end
 
@@ -1158,7 +1174,7 @@ function AddSwepToRole(ruid, swepcn)
 			table.insert(newsweps, tostring(swepcn))
 			newsweps = string.Implode(",", newsweps)
 
-			SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. newsweps .. "'", "uniqueID = '" .. ruid .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. ruid .. "'")
 			SendSweps(ruid)
 		end
 	end
@@ -1188,7 +1204,7 @@ function RemSwepFromRole(ruid, swepcn)
 	table.RemoveByValue(newsweps, tostring(swepcn))
 	newsweps = string.Implode(",", newsweps)
 
-	SQL_UPDATE(DATABASE_NAME, "string_sweps = '" .. newsweps .. "'", "uniqueID = '" .. ruid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. ruid .. "'")
 	SendSweps(ruid)
 end
 
@@ -1245,7 +1261,7 @@ function AddSwepToRoleOnSpawn(ruid, swepcn)
 			table.insert(newsweps, tostring(swepcn))
 			newsweps = string.Implode(",", newsweps)
 
-			SQL_UPDATE(DATABASE_NAME, "string_sweps_onspawn = '" .. newsweps .. "'", "uniqueID = '" .. ruid .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["string_sweps_onspawn"] = newsweps}, "uniqueID = '" .. ruid .. "'")
 			SendSwepsOnSpawn(ruid)
 		end
 	end
@@ -1275,7 +1291,7 @@ function RemSwepFromRoleOnSpawn(ruid, swepcn)
 	table.RemoveByValue(newsweps, tostring(swepcn))
 	newsweps = string.Implode(",", newsweps)
 
-	SQL_UPDATE(DATABASE_NAME, "string_sweps_onspawn = '" .. newsweps .. "'", "uniqueID = '" .. ruid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_sweps_onspawn"] = newsweps}, "uniqueID = '" .. ruid .. "'")
 	SendSwepsOnSpawn(ruid)
 end
 
@@ -1330,7 +1346,7 @@ function AddNDSwepToRole(ruid, ndswepcn)
 		table.insert(newndsweps, tostring(ndswepcn))
 		newndsweps = string.Implode(",", newndsweps)
 
-		SQL_UPDATE(DATABASE_NAME, "string_ndsweps = '" .. newndsweps .. "'", "uniqueID = '" .. ruid .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["string_ndsweps"] = newndsweps}, "uniqueID = '" .. ruid .. "'")
 		SendNDSweps(ruid)
 	end
 end
@@ -1357,7 +1373,7 @@ function RemNDSwepFromRole(ruid, ndswepcn)
 	table.RemoveByValue(newndsweps, tostring(ndswepcn))
 	newndsweps = string.Implode(",", newndsweps)
 
-	SQL_UPDATE(DATABASE_NAME, "string_ndsweps = '" .. newndsweps .. "'", "uniqueID = '" .. ruid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_ndsweps"] = newndsweps}, "uniqueID = '" .. ruid .. "'")
 	SendNDSweps(ruid)
 end
 
@@ -1409,7 +1425,7 @@ function RemLicenseFromRole(ruid, muid)
 	table.RemoveByValue(newlis, tostring(muid))
 	newlis = string.Implode(",", newlis)
 
-	SQL_UPDATE(DATABASE_NAME, "string_licenses = '" .. newlis .. "'", "uniqueID = '" .. ruid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_licenses"] = newlis}, "uniqueID = '" .. ruid .. "'")
 	SendLicenses(ruid)
 end
 
@@ -1462,7 +1478,7 @@ function AddLicenseToRole(ruid, muid)
 		table.insert(newlis, tostring(muid))
 		newlis = string.Implode(",", newlis)
 
-		SQL_UPDATE(DATABASE_NAME, "string_licenses = '" .. newlis .. "'", "uniqueID = '" .. ruid .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["string_licenses"] = newlis}, "uniqueID = '" .. ruid .. "'")
 		SendLicenses(ruid)
 	end
 end
@@ -1537,7 +1553,7 @@ function RemSpecializationFromRole(ruid, muid)
 	table.RemoveByValue(newlis, tostring(muid))
 	newlis = string.Implode(",", newlis)
 
-	SQL_UPDATE(DATABASE_NAME, "string_specializations = '" .. newlis .. "'", "uniqueID = '" .. ruid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newlis}, "uniqueID = '" .. ruid .. "'")
 	SendSpecializations(ruid)
 end
 
@@ -1590,7 +1606,7 @@ function AddSpecializationToRole(ruid, muid)
 		table.insert(newlis, tostring(muid))
 		newlis = string.Implode(",", newlis)
 
-		SQL_UPDATE(DATABASE_NAME, "string_specializations = '" .. newlis .. "'", "uniqueID = '" .. ruid .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newlis}, "uniqueID = '" .. ruid .. "'")
 		SendSpecializations(ruid)
 	end
 end
@@ -1639,12 +1655,12 @@ net.Receive("openInteractMenu", function(len, ply)
 		local idcard = SQL_SELECT("yrp_general", "*", nil)
 		idcard = tobool(idcard[1].bool_identity_card)
 
-		local tmpTargetChaTab = tmpTarget:GetChaTab()
+		local tmpTargetChaTab = tmpTarget:YRPGetCharacterTable()
 		if wk(tmpTargetChaTab) then
 			local tmpTargetRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID)
 
-			local tmpT = ply:GetChaTab()
-			local tmpTable = ply:GetRolTab()
+			local tmpT = ply:YRPGetCharacterTable()
+			local tmpTable = ply:YRPGetRoleTable()
 			if wk(tmpT) and wk(tmpTable) then
 				local isInstructor = false
 
@@ -1787,9 +1803,9 @@ net.Receive("promotePlayer", function(len, ply)
 		end
 	end
 
-	local tmpTableInstructorRole = ply:GetRolTab() --SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
+	local tmpTableInstructorRole = ply:YRPGetRoleTable() --SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
 
-	local tmpTargetChaTab = tmpTarget:GetChaTab()
+	local tmpTargetChaTab = tmpTarget:YRPGetCharacterTable()
 
 	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
 		local tmpTableTargetRole = SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
@@ -1833,9 +1849,9 @@ net.Receive( "demotePlayer", function( len, ply )
 		end
 	end
 
-	local tmpTableInstructorRole = ply:GetRolTab()
+	local tmpTableInstructorRole = ply:YRPGetRoleTable()
 
-	local tmpTargetChaTab = tmpTarget:GetChaTab()
+	local tmpTargetChaTab = tmpTarget:YRPGetCharacterTable()
 
 	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
 		local tmpTableTargetRole = SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
@@ -1902,7 +1918,7 @@ net.Receive("invitetogroup", function( len, ply )
 		end
 	end
 
-	local tmpTableInstructorRole = ply:GetRolTab()
+	local tmpTableInstructorRole = ply:YRPGetRoleTable()
 
 	if tmpTarget != nil then
 		if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
@@ -1962,7 +1978,10 @@ function CheckIfRoleExists(ply, ruid)
 	if result == nil then
 		YRP.msg("note", "character role not exists anymore! Change back to default role!")
 		
-		SQL_UPDATE("yrp_characters", "roleID = '1', groupID = '1'", "uniqueID = '" .. ply:CharID() .. "'")
+		SQL_UPDATE("yrp_characters", {
+			["roleID"] = 1,
+			["groupID"] = 1
+		}, "uniqueID = '" .. ply:CharID() .. "'")
 
 		ply:KillSilent()
 	end

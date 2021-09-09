@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function TextColor(bgcol)
 	if bgcol.r and bgcol.g and bgcol.b then
@@ -1561,6 +1561,13 @@ function HUDMOTIONY(py)
 end
 
 
+-- Panel SHADOWS
+PANEL_SHADOW_intensity = 1
+PANEL_SHADOW_Spread = 2
+PANEL_SHADOW_Blur = 2
+PANEL_SHADOW_Opacity = 255
+PANEL_SHADOW_Direction = 0
+PANEL_SHADOW_Distance = 0
 
 -- FROM: https://gist.github.com/MysteryPancake/a31637af9fd531079236a2577145a754
 

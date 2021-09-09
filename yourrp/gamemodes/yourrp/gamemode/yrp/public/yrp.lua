@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 --[[ Here are the public functions (FOR DEVELOPERS) ]]
 
@@ -15,8 +15,8 @@ function IsLevelSystemEnabled()
 end
 
 if SERVER then
-	function TelportToSpawnpoint(ply)
-		teleportToSpawnpoint(ply)
+	function TeleportToTheSpawnpoint(ply)
+		YRPTeleportToSpawnpoint(ply, "public")
 	end
 
 	function TeleportToJailpoint(ply, time, police)

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 surface.CreateFont("Saira_60", {
 	font = "Saira",
@@ -38,7 +38,9 @@ surface.CreateFont("Saira_100", {
 
 local ypr_logo = Material("yrp/yrp_icon")
 
-local charbgnotfound = "NO BACKGROUND FOUND - F8 General -> Character Background"
+function YRPGetCharBGNotFound()
+	return GetKeybindName("menu_settings") .. " >> " .. YRP.lang_string("LID_server") .. " >> " .. YRP.lang_string("LID_general") .. " >> " .. YRP.lang_string("LID_character_background") .. " (enter a weblink to an image)"
+end
 
 local isEventChar = false
 
@@ -46,6 +48,20 @@ local fw = 860
 local br = YRP.ctr(20)
 
 local trashicon = ""
+
+
+
+local DefaultCharBR = 0
+local DefaultCharW = 0
+local DefaultCharH = 0
+function YRPUpdateCharValues()
+	DefaultCharBR = ScrW() * 0.04
+	DefaultCharW = ScrW() * 0.24 * 2 + DefaultCharBR
+	DefaultCharH = ScrH() * 0.8
+
+	DefaultCharPanelW = DefaultCharW / 2 - DefaultCharBR / 2
+end
+
 
 function openCharacterCreation(from)
 	if IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) then return end
@@ -110,6 +126,8 @@ function closeCharacterSelection()
 end
 
 local curChar = -1
+local curCharName = ""
+local validchar = false
 local _cur = ""
 local chars = {}
 local loading = false
@@ -186,6 +204,12 @@ function LoadCharacters()
 							sh = YRP.ctr(600*2)
 							px = 0
 							py = 0
+						elseif YRP_CharDesign == "default" then
+							YRPUpdateCharValues()
+							sw = DefaultCharW
+							sh = DefaultCharH
+							px = 0
+							py = 0
 						end
 						cache[i].tmpChar = createD("YButton", nil, sw, sh, px, py)
 						local tmpChar = cache[i].tmpChar
@@ -196,10 +220,12 @@ function LoadCharacters()
 						tmpChar.rpname = chars[i].char.rpname or "RPNAME INVALID"
 						tmpChar.level = chars[i].char.int_level or "-1"
 						tmpChar.rolename = chars[i].role.string_name or "ROLE INVALID"
+						tmpChar.health = chars[i].role.int_hpmax or 0
+						tmpChar.armor = chars[i].role.int_armax or 0
 						tmpChar.factionID = chars[i].faction.string_name or "FACTION INVALID"
 						tmpChar.factionIcon = chars[i].faction.string_icon or ""
-						tmpChar.groupID = chars[i].group.string_name or "GROUP INVALID"
-						tmpChar.map = SQL_STR_OUT(chars[i].char.map)
+						tmpChar.groupname = chars[i].group.string_name or "GROUP INVALID"
+						tmpChar.map = chars[i].char.map
 						tmpChar.playermodelID = chars[i].char.playermodelID or 1
 						tmpChar.playermodelID = tonumber(tmpChar.playermodelID)
 						tmpChar.bool_eventchar = chars[i].char.bool_eventchar
@@ -232,7 +258,7 @@ function LoadCharacters()
 						tmpChar.bg18 = chars[i].char.bg18 or 0
 						tmpChar.bg19 = chars[i].char.bg19 or 0
 
-						tmpChar.grp = tmpChar.groupID
+						tmpChar.grp = tmpChar.groupname
 						tmpChar.fac = tmpChar.factionID
 						if tmpChar.grp == tmpChar.fac then
 							tmpChar.grp = ""
@@ -243,106 +269,7 @@ function LoadCharacters()
 							tmpChar.rol = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. "    " .. tmpChar.rol
 						end
 
-						if YRP_CharDesign != "horizontalnew" then
-							tmpChar.mdl = createD("DModelPanel", tmpChar, tmpChar:GetTall(), tmpChar:GetTall(), 0, 0)
-							local pm = tmpChar.playermodels[tmpChar.playermodelID]
-							if strEmpty(pm) then
-								pm = "models/player/skeleton.mdl"
-							end
-							tmpChar.mdl:SetModel(pm)
-							function tmpChar.mdl:LayoutEntity(ent)
-								ent:SetSequence(ent:LookupSequence("menu_gman"))
-								tmpChar.mdl:RunAnimation()		
-								return
-							end
-							if tmpChar.mdl.Entity then
-								local head = tmpChar.mdl.Entity:LookupBone("ValveBiped.Bip01_Head1")
-								if head then
-									local eyepos = tmpChar.mdl.Entity:GetBonePosition(head)
-									if eyepos then
-										eyepos:Add(Vector(0, 0, 3))	-- Move up slightly
-										tmpChar.mdl:SetLookAt(eyepos)
-										tmpChar.mdl:SetCamPos(eyepos-Vector(-20, 0, 0))	-- Move cam in front of eyes
-										tmpChar.mdl.Entity:SetEyeTarget(eyepos-Vector(-20, 0, 0))
-									end
-								end
-							end
-
-							function tmpChar:Paint(pw, ph)
-								if curChar == -1 then
-									curChar = tonumber(LocalPlayer():CharID())
-								end
-
-								if tmpChar.bool_eventchar then
-									if curChar == self.charid then
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255, 160))
-									end
-									if tmpChar:IsHovered() then
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
-									end
-		
-									local x = ph + YRP.ctr(30)
-									draw.SimpleText(YRP.lang_string("LID_event") .. ": " .. self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									draw.SimpleText(self.rol, "Y_18_500", x, YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		
-									if cei > LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
-										draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-									end
-								else
-									if curChar == self.charid then
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255, 160))
-									end
-									if tmpChar:IsHovered() then
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
-									end
-
-									local x = ph + YRP.ctr(30)
-									draw.SimpleText(self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									draw.SimpleText(self.rol, "Y_18_500", x, YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-
-									if cni > LocalPlayer():GetNW2Int("int_characters_max", 1) then
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
-										draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-									end
-								end
-							end
-							function tmpChar:DoClick()
-								isEventChar = self.bool_eventchar
-								if cni <= LocalPlayer():GetNW2Int("int_characters_max", 1) then
-									curChar = tonumber(self.charid)
-									_cur = self.rpname
-									if self.playermodels != nil and self.playermodelID != nil then
-										local _playermodel = self.playermodels[self.playermodelID] or nil
-										if _playermodel != nil and CharMenu.charplayermodel != NULL and pa(CharMenu.charplayermodel) then
-											if !strEmpty(_playermodel) then
-												CharMenu.charplayermodel:SetModel(_playermodel)
-											else
-												CharMenu.charplayermodel:SetModel("models/player/skeleton.mdl")
-											end
-											if CharMenu.charplayermodel.Entity != nil then
-												CharMenu.charplayermodel.Entity:SetModelScale(self.playermodelsize or 1)
-												CharMenu.charplayermodel.Entity:SetSkin(self.skin)
-												for bgx = 0, 19 do
-													CharMenu.charplayermodel.Entity:SetBodygroup(bgx, self["bg" .. bgx])
-												end
-											end
-										end
-									else
-										YRP.msg("note", "Character role has no playermodel!")
-									end
-								end
-							end
-
-							if !strEmpty(tmpChar.factionIcon) and tmpChar.factionIcon != "http://www.famfamfam.com/lab/icons/silk/icons/group.png" and tmpChar.icon == nil then
-								tmpChar.icon = createD("DHTML", tmpChar, tmpChar:GetTall() * 0.8, tmpChar:GetTall() * 0.8, tmpChar:GetWide() - tmpChar:GetTall() * 0.9, tmpChar:GetTall() * 0.1)
-								tmpChar.icon:SetHTML(GetHTMLImage(tmpChar.factionIcon, tmpChar.icon:GetWide(), tmpChar.icon:GetTall()))
-							end
-						else
+						if YRP_CharDesign == "horizontalnew" then
 							function tmpChar:YRPIsHovered()
 								return tmpChar.btnishovered or tmpChar.mdlishovered or self:IsHovered()
 							end
@@ -508,6 +435,263 @@ function LoadCharacters()
 				
 								_window:MakePopup()
 							end
+						elseif YRP_CharDesign == "default" then
+							function tmpChar:YRPIsHovered()
+								return tmpChar.btnishovered or tmpChar.mdlishovered or self:IsHovered()
+							end
+
+							local posx = ScrW() * 0.01
+							local tabw = ScrW() * 0.06
+							local tabh = ScrH() * 0.03
+							tmpChar.id = i
+							function tmpChar:Paint(pw, ph)
+								draw.RoundedBox(50, 4, 4, pw / 2 - DefaultCharBR / 2, ph, Color(0, 0, 0, 40))
+								draw.RoundedBox(50, 0, 0, pw / 2 - DefaultCharBR / 2, ph, YRPCPP())
+								draw.RoundedBox(50, pw / 2 + DefaultCharBR / 2 + 4, 4, pw / 2 - DefaultCharBR / 2, ph, Color(0, 0, 0, 40))
+								draw.RoundedBox(50, pw / 2 + DefaultCharBR / 2, 0, pw / 2 - DefaultCharBR / 2, ph, YRPCPP())
+
+								local py = ScrH() * 0.03
+								draw.SimpleText(self.rpname, "Y_52_700", DefaultCharPanelW / 2, py, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+								if IsLevelSystemEnabled() then
+									py = py + tabh * 2
+									draw.SimpleText(YRP.lang_string("LID_level") .. ": ", "Y_30_500", posx, py, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(self.level, "Y_30_500", posx + tabw, py, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+									local barbr = ScrW() * 0.04
+									local barw = DefaultCharPanelW - posx - tabw - posx - barbr
+									local barh = math.Round( ScrH() * 0.014 )
+									barh = barh - barh % 3
+									local barr = barh / 2
+									local barx = posx + tabw + barbr
+									local bary = py - barr
+									if wk(chars[self.id]) then
+										local cur = tonumber( chars[self.id].char.int_xp )
+										local max = LocalPlayer():CalculateMaxXP( tonumber( chars[self.id].char.int_level ) )
+										if cur > max then
+											cur = max
+										end
+										draw.RoundedBox(barr, barx, bary, barw, barh, YRPCPD())
+										draw.RoundedBox(barr, barx, bary, barw * cur / max, barh, Color(53, 152, 219, 255))
+									end
+								end
+
+								py = py + tabh * 2
+								draw.SimpleText(YRP.lang_string("LID_role") .. ": ", "Y_30_500", posx, py, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(self.rolename, "Y_30_500", posx + tabw, py, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								py = py + tabh
+								draw.SimpleText(YRP.lang_string("LID_group") .. ": ", "Y_30_500", posx, py, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(self.groupname, "Y_30_500", posx + tabw, py, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								
+								py = py + tabh * 2
+								draw.SimpleText(YRP.lang_string("LID_health") .. ": ", "Y_30_500", posx, py, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(self.health, "Y_30_500", posx + tabw, py, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								py = py + tabh
+								draw.SimpleText(YRP.lang_string("LID_armor") .. ": ", "Y_30_500", posx, py, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(self.armor, "Y_30_500", posx + tabw, py, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+								if cni > LocalPlayer():GetNW2Int("int_characters_max", 1) then
+									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
+									draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								end
+
+								if tmpChar:YRPIsHovered() then
+									draw.RoundedBox(50, 0, 0, pw / 2 - DefaultCharBR / 2, ph, Color(255, 255, 255, 10))
+									draw.RoundedBox(50, pw / 2 + DefaultCharBR / 2, 0, pw / 2 - DefaultCharBR / 2, ph, Color(255, 255, 255, 10))
+								end
+							end
+							function tmpChar:DoClick()
+								curChar = tonumber(self.charid)
+							end
+							local mdlsize = CHARACTERW
+							tmpChar.charplayermodel = createD("DModelPanel", tmpChar, DefaultCharH, DefaultCharH, DefaultCharW - (DefaultCharW / 2 - DefaultCharBR / 2) / 2 - DefaultCharH / 2, 0)
+							tmpChar.charplayermodel:SetModel("models/player/skeleton.mdl")
+							tmpChar.charplayermodel:SetAnimated(true)
+							tmpChar.charplayermodel.Angles = Angle(0, 0, 0)
+							tmpChar.charplayermodel:RunAnimation()
+
+							function tmpChar.charplayermodel:DragMousePress()
+								self.PressX, self.PressY = gui.MousePos()
+								self.Pressed = true
+							end
+							function tmpChar.charplayermodel:DragMouseRelease() self.Pressed = false end
+
+							function tmpChar.charplayermodel:LayoutEntity(ent)
+								local _playermodel = tmpChar.playermodels[tmpChar.playermodelID] or nil
+								if _playermodel == nil or strEmpty(_playermodel) then
+									_playermodel = "models/player/skeleton.mdl"
+								end
+								if self.pm != _playermodel then
+									self.pm = _playermodel
+									tmpChar.charplayermodel:SetModel(self.pm)
+								end
+
+								if (self.bAnimated) then self:RunAnimation() end
+
+								if (self.Pressed) then
+									local mx, _ = gui.MousePos()
+									self.Angles = self.Angles - Angle(0, (self.PressX or mx) - mx, 0)
+
+									self.PressX, self.PressY = gui.MousePos()
+									if ent != nil then
+										ent:SetAngles(self.Angles)
+									end
+								end
+							end
+
+							function tmpChar.charplayermodel:PaintOver(pw, ph)
+								if self:IsHovered() then
+									tmpChar.mdlishovered = true
+								else
+									tmpChar.mdlishovered = false
+								end
+							end
+							
+							local deletesize = YRP.ctr(40)
+							local deletebr = YRP.ctr(40)
+							local deleteChar = createD("YButton", tmpChar, deletesize, deletesize, tmpChar:GetWide() - deletesize - deletebr, deletebr)
+							deleteChar:SetText("")
+							function deleteChar:Paint(pw, ph)
+								--hook.Run("YRemovePaint", self, pw, ph)
+								local color = Color(160, 160, 160, 255)
+								if self:IsHovered() then
+									color = Color(255, 255, 255, 255)
+								end
+								if trashicon then
+									surface.SetMaterial(trashicon)
+									surface.SetDrawColor(color)
+									surface.DrawTexturedRect(0, 0, pw, ph)
+								end
+							end
+							function deleteChar:DoClick()
+								local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
+								_window:Center()
+								_window:SetTitle(YRP.lang_string("LID_areyousure"))
+				
+								local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
+								_yesButton:SetText(YRP.lang_string("LID_yes"))
+								function _yesButton:DoClick()
+									
+									if wk(tmpChar.charid) then
+										net.Start("DeleteCharacter")
+											net.WriteString(tmpChar.charid)
+										net.SendToServer()
+									else
+										notification.AddLegacy("CHAR ID is invalid", NOTIFY_GENERIC, 5)
+									end
+
+									_window:Close()
+								end
+				
+								local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
+								_noButton:SetText(YRP.lang_string("LID_no"))
+								function _noButton:DoClick()
+									_window:Close()
+								end
+				
+								_window:MakePopup()
+							end
+						else
+							if YRP_CharDesign != "horizontalnew" then
+								tmpChar.mdl = createD("DModelPanel", tmpChar, tmpChar:GetTall(), tmpChar:GetTall(), 0, 0)
+								local pm = tmpChar.playermodels[tmpChar.playermodelID]
+								if strEmpty(pm) then
+									pm = "models/player/skeleton.mdl"
+								end
+								tmpChar.mdl:SetModel(pm)
+								function tmpChar.mdl:LayoutEntity(ent)
+									ent:SetSequence(ent:LookupSequence("menu_gman"))
+									tmpChar.mdl:RunAnimation()		
+									return
+								end
+								if tmpChar.mdl.Entity then
+									local head = tmpChar.mdl.Entity:LookupBone("ValveBiped.Bip01_Head1")
+									if head then
+										local eyepos = tmpChar.mdl.Entity:GetBonePosition(head)
+										if eyepos then
+											eyepos:Add(Vector(0, 0, 3))	-- Move up slightly
+											tmpChar.mdl:SetLookAt(eyepos)
+											tmpChar.mdl:SetCamPos(eyepos-Vector(-20, 0, 0))	-- Move cam in front of eyes
+											tmpChar.mdl.Entity:SetEyeTarget(eyepos-Vector(-20, 0, 0))
+										end
+									end
+								end
+	
+								function tmpChar:Paint(pw, ph)
+									if curChar == -1 then
+										curChar = tonumber(LocalPlayer():CharID())
+									end
+	
+									if tmpChar.bool_eventchar then
+										if curChar == self.charid then
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255, 160))
+										end
+										if tmpChar:IsHovered() then
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
+										end
+			
+										local x = ph + YRP.ctr(30)
+										draw.SimpleText(YRP.lang_string("LID_event") .. ": " .. self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.rol, "Y_18_500", x, YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			
+										if cei > LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
+											draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										end
+									else
+										if curChar == self.charid then
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255, 160))
+										end
+										if tmpChar:IsHovered() then
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
+										end
+	
+										local x = ph + YRP.ctr(30)
+										draw.SimpleText(self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.rol, "Y_18_500", x, YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	
+										if cni > LocalPlayer():GetNW2Int("int_characters_max", 1) then
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100))
+											draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										end
+									end
+								end
+								function tmpChar:DoClick()
+									isEventChar = self.bool_eventchar
+									if cni <= LocalPlayer():GetNW2Int("int_characters_max", 1) then
+										curChar = tonumber(self.charid)
+										_cur = self.rpname
+										if self.playermodels != nil and self.playermodelID != nil then
+											local _playermodel = self.playermodels[self.playermodelID] or nil
+											if _playermodel != nil and CharMenu.charplayermodel != NULL and pa(CharMenu.charplayermodel) then
+												if !strEmpty(_playermodel) then
+													CharMenu.charplayermodel:SetModel(_playermodel)
+												else
+													CharMenu.charplayermodel:SetModel("models/player/skeleton.mdl")
+												end
+												if CharMenu.charplayermodel.Entity != nil then
+													CharMenu.charplayermodel.Entity:SetModelScale(self.playermodelsize or 1)
+													CharMenu.charplayermodel.Entity:SetSkin(self.skin)
+													for bgx = 0, 19 do
+														CharMenu.charplayermodel.Entity:SetBodygroup(bgx, self["bg" .. bgx])
+													end
+												end
+											end
+										else
+											YRP.msg("note", "Character role has no playermodel!")
+										end
+									end
+								end
+	
+								if !strEmpty(tmpChar.factionIcon) and tmpChar.factionIcon != "http://www.famfamfam.com/lab/icons/silk/icons/group.png" and tmpChar.icon == nil then
+									tmpChar.icon = createD("DHTML", tmpChar, tmpChar:GetTall() * 0.8, tmpChar:GetTall() * 0.8, tmpChar:GetWide() - tmpChar:GetTall() * 0.9, tmpChar:GetTall() * 0.1)
+									tmpChar.icon:SetHTML(GetHTMLImage(tmpChar.factionIcon, tmpChar.icon:GetWide(), tmpChar.icon:GetTall()))
+								end
+							end
 						end
 
 						if chars[i].char.uniqueID == LocalPlayer():CharID() then
@@ -528,16 +712,10 @@ function LoadCharacters()
 				end
 				
 				if YRP_CharDesign == "horizontalnew" then
-					local sw = YRP.ctr(fw) - 2 * br
-					local sh = YRP.ctr(200)
+					local sw = YRP.ctr(350*2)
+					local sh = YRP.ctr(600*2)
 					local px = 0
 					local py = 0
-					if YRP_CharDesign == "horizontalnew" then
-						sw = YRP.ctr(350*2)
-						sh = YRP.ctr(600*2)
-						px = 0
-						py = 0
-					end
 
 					if CharMenu.character.amount < LocalPlayer():GetNW2Int("int_characters_max", 1) then
 						local addChar = createD("YButton", nil, sw, sh, px, py)
@@ -585,6 +763,81 @@ function LoadCharacters()
 								local breite = YRP.ctr(50)
 								if YRP.GetDesignIcon("add") ~= nil then
 									draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sw / 2, breite, sw, Color(102, 102, 102, 255))
+									draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
+								end
+							end
+						end
+						function addCharEvent:DoClick()
+							if CharMenu.character.amountevent < LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
+								if pa(CharMenu.frame) then
+									CharMenu.frame:Close()
+								end
+								SetGlobalBool("create_eventchar", true)
+								openCharacterCreation("add char, event char")
+							end
+						end
+
+						if CharMenu.characterList.AddItem then
+							CharMenu.characterList:AddItem(addCharEvent)
+						else
+							CharMenu.characterList:AddPanel(addCharEvent)
+						end
+					end
+				elseif YRP_CharDesign == "default" then
+					YRPUpdateCharValues()
+					local sw = DefaultCharW
+					local sh = DefaultCharH
+					local px = 0
+					local py = 0
+
+					if CharMenu.character.amount < LocalPlayer():GetNW2Int("int_characters_max", 1) then
+						local addChar = createD("YButton", nil, sw, sh, px, py)
+						addChar:SetText("")
+						function addChar:Paint(pw, ph)
+							if CharMenu.character.amount < LocalPlayer():GetNW2Int("int_characters_max", 1) then
+								draw.RoundedBox(50, 0, 0, pw, ph, Color(51, 51, 51, 200))
+								
+								local sw = pw - 2 * YRP.ctr(180)
+								local sh = ph - 2 * YRP.ctr(180)
+								local breite = YRP.ctr(50)
+								if YRP.GetDesignIcon("add") ~= nil then
+									draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sh / 2, breite, sh, Color(102, 102, 102, 255))
+									draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
+								end
+							end
+						end
+						function addChar:DoClick()
+							isEventChar = self.bool_eventchar
+							if CharMenu.character.amount < LocalPlayer():GetNW2Int("int_characters_max", 1) then
+								if pa(CharMenu.frame) then
+									CharMenu.frame:Close()
+								end
+								SetGlobalBool("create_eventchar", false)
+								openCharacterCreation("add char, not event char")
+							end
+						end
+
+						if CharMenu.characterList.AddItem then
+							CharMenu.characterList:AddItem(addChar)
+						else
+							CharMenu.characterList:AddPanel(addChar)
+						end
+					end
+
+					if CharMenu.character.amountevent < LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
+						local addCharEvent = createD("YButton", nil, sw, sh, px, py)
+						addCharEvent:SetText("")
+						function addCharEvent:Paint(pw, ph)
+							if CharMenu.character.amountevent and CharMenu.character.amountevent < LocalPlayer():GetNW2Int("int_charactersevent_max", 1) then
+								draw.RoundedBox(50, 0, 0, pw, ph, Color(51, 51, 51, 200))
+								
+								draw.SimpleText(YRP.lang_string("LID_event"), "Y_18_500", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+								local sw = pw - 2 * YRP.ctr(180)
+								local sh = ph - 2 * YRP.ctr(180)
+								local breite = YRP.ctr(50)
+								if YRP.GetDesignIcon("add") ~= nil then
+									draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sh / 2, breite, sh, Color(102, 102, 102, 255))
 									draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
 								end
 							end
@@ -724,7 +977,7 @@ function openCharacterSelection()
 						CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
 					end
 					if newurl and strEmpty(newurl) then
-						draw.SimpleText(charbgnotfound, "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRPGetYRPGetCharBGNotFound()(), "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				end
 			end
@@ -981,7 +1234,7 @@ function openCharacterSelection()
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
 				end
 				if newurl and strEmpty(newurl) then
-					draw.SimpleText(charbgnotfound, "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRPGetYRPGetCharBGNotFound()(), "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				local acur = CharMenu.character.amount or -1
@@ -1204,7 +1457,7 @@ function openCharacterSelection()
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
 				end
 				if newurl and strEmpty(newurl) then
-					draw.SimpleText(charbgnotfound, "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRPGetCharBGNotFound(), "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				-- Current and Max Count of Possible Characters
@@ -1282,7 +1535,7 @@ function openCharacterSelection()
 			function CharMenu.characterList:Paint(pw, ph)
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
 			end
-			
+
 
 
 			CharMenu.characterList.OffsetX = 0
@@ -1337,6 +1590,220 @@ function openCharacterSelection()
 					CharMenu.characterList.OffsetX = CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide()
 				end
 				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
+			end
+		elseif YRP_CharDesign == "default" then
+			CharMenu.frame:Hide()
+			CharMenu.frame:SetTitle("")
+			--CharMenu.frame:ShowCloseButton(false)
+			CharMenu.frame:SetDraggable(false)
+			CharMenu.frame:Center()
+			function CharMenu.frame:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255)) -- Dark Background - Character Selection [horizontalnew]
+			end
+			function CharMenu.frame:OnClose()
+				closeMenu()
+			end
+			function CharMenu.frame:OnRemove()
+				closeMenu()
+			end
+
+			CharMenu.frame.bg = createD("DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
+			CharMenu.frame.bg.url = ""
+
+			CharMenu.frame.bgcf = createD("DPanel", CharMenu.frame.bg, CharMenu.frame.bg:GetWide(), CharMenu.frame.bg:GetTall(), 0, 0)
+			function CharMenu.frame.bgcf:Paint(pw, ph)
+				-- Blur Background
+				Derma_DrawBackgroundBlur(self, 0)
+
+				-- Get Newest Background for the Menu
+				local oldurl = CharMenu.frame.bg.url
+				local newurl = GetGlobalString("text_character_background", "")
+				if oldurl != newurl then
+					CharMenu.frame.bg.url = newurl
+					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
+				end
+				if newurl and strEmpty(newurl) then
+					draw.SimpleText(YRPGetCharBGNotFound(), "Y_26_500", pw / 2, ph / 20, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
+
+				-- Current and Max Count of Possible Characters
+				local acur = CharMenu.character.amount or -1
+				local amax = LocalPlayer():GetNW2Int("int_characters_max", 1)
+				local acolor = Color(255, 255, 255, 255)
+				if acur > amax then
+					acolor = Color(255, 100, 100, 255)
+				end
+				draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw / 2 + DefaultCharW / 2 + YRP.ctr(10), ph - YRP.ctr(100), acolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+				-- Current and Max Count of Possible Event Characters
+				local aecur = CharMenu.character.amountevent or -1
+				local aemax = LocalPlayer():GetNW2Int("int_charactersevent_max", 1)
+				local aecolor = Color(255, 255, 255, 255)
+				if aecur > aemax then
+					aecolor = Color(255, 100, 100, 255)
+				end
+				if aemax > 0 then
+					draw.SimpleText(YRP.lang_string("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw / 2 + DefaultCharW / 2 + YRP.ctr(10), ph - YRP.ctr(40), aecolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				end
+			end
+
+			-- Language Changer / LanguageChanger
+			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(64*5.6 + 20), YRP.ctr(20), YRP.ctr(64), true)
+
+			YRPUpdateCharValues()
+			local charw = DefaultCharW
+			local charh = DefaultCharH
+			CharMenu.charactersBackground = createD("DPanel", CharMenu.frame, charw, charh, ScrW() / 2 - charw / 2, ScrH() / 2 - charh / 2)
+			CharMenu.charactersBackground.text = YRP.lang_string("LID_siteisloading")
+			function CharMenu.charactersBackground:Paint(pw, ph)
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
+				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+
+
+
+			CharMenu.characterList = createD("DHorizontalScroller", CharMenu.charactersBackground, charw, charh, 0, 0)
+			CharMenu.characterList.OffsetX = 0
+			--CharMenu.characterList:EnableVerticalScrollbar()
+			CharMenu.characterList:SetOverlap(-YRP.ctr(200))
+			function CharMenu.characterList:Paint(pw, ph)
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
+
+				if CharMenu.characterList.OffsetX then
+					testid = CharMenu.characterList.OffsetX / (charw + YRP.ctr(200))
+					testid = math.Round(testid)
+					testid = testid + 1
+					if chars[testid] and chars[testid].char and !chars[testid].char.bool_eventchar then
+						validchar = true
+						curChar = chars[testid].char.uniqueID
+						curCharName = chars[testid].char.rpname
+					else
+						validchar = false
+					end
+				end
+			end
+			function CharMenu.characterList.btnLeft:Paint( w, h )
+				--draw.RoundedBox( 0, 0, 0, w, h, Color( 200, 100, 0 ) )
+			end
+			function CharMenu.characterList.btnLeft:IsDown()
+				return false
+			end
+			function CharMenu.characterList.btnRight:Paint( w, h )
+				--draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 100, 200 ) )
+			end
+			function CharMenu.characterList.btnRight:IsDown()
+				return false
+			end
+			function CharMenu.characterList:OnMouseWheeled(delta)
+				if delta > 0 then
+					CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX - (charw + YRP.ctr(200))
+				else
+					CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX + (charw + YRP.ctr(200))
+				end
+
+				if CharMenu.characterList.OffsetX <= 0 then
+					CharMenu.characterList.OffsetX = 0
+				end
+				if CharMenu.characterList.OffsetX >= CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide() then
+					CharMenu.characterList.OffsetX = CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide()
+				end
+
+				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
+			end
+
+			
+
+			local arrowbtnsize = YRP.ctr(128)
+
+			CharMenu.prevChar = createD("YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 - DefaultCharW / 2, ScrH() - arrowbtnsize)
+			CharMenu.prevChar:SetText("")
+			function CharMenu.prevChar:Paint(pw, ph)
+				if CharMenu.characterList.OffsetX > 0 then
+					--hook.Run("YButtonPaint", self, pw, ph)
+					local lply = LocalPlayer()
+					local color = Color(255, 255, 255, 255)
+					if self:IsHovered() then
+						color = lply:InterfaceValue("YButton", "NC")
+					end
+					if YRP.GetDesignIcon("64_angle-right") ~= nil then
+						surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+						surface.SetDrawColor(color)
+						surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
+					end
+				end
+			end
+			function CharMenu.prevChar:DoClick()
+				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX - (charw + YRP.ctr(200))
+				if CharMenu.characterList.OffsetX <= 0 then
+					CharMenu.characterList.OffsetX = 0
+				end
+				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
+			end
+
+			CharMenu.nextChar = createD("YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 + DefaultCharW / 2 - arrowbtnsize, ScrH() - arrowbtnsize)
+			CharMenu.nextChar:SetText("")
+			function CharMenu.nextChar:Paint(pw, ph)
+				if CharMenu.characterList.OffsetX < CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide() then
+					--hook.Run("YButtonPaint", self, pw, ph)
+					local lply = LocalPlayer()
+					local color = Color(255, 255, 255, 255)
+					if self:IsHovered() then
+						color = lply:InterfaceValue("YButton", "NC")
+					end
+					if YRP.GetDesignIcon("64_angle-right") ~= nil then
+						surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+						surface.SetDrawColor(color)
+						surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
+					end
+				end
+			end
+			function CharMenu.nextChar:DoClick()
+				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX + (charw + YRP.ctr(200))
+				if CharMenu.characterList.OffsetX >= CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide() then
+					CharMenu.characterList.OffsetX = CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide()
+				end
+				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
+			end
+
+			local bw = ScrW() * 0.1
+			local bh = ScrH() * 0.05
+			local charactersEnter = createD("YButton", CharMenu.frame, bw, bh, ScrW() / 2 - bw / 2, ScrH() - bh - ScrH() * 0.01)
+			function charactersEnter:Paint(pw, ph)
+				local tab = {}
+				local text = math.Round(LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) - CurTime(), 0)
+				tab.color = Color(38, 222, 129)
+				
+				if LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() and validchar then
+					text = YRP.lang_string("LID_play") -- .. " (" .. curCharName .. ")"
+				else
+					text = ""
+				end
+				if LocalPlayer() != nil and LocalPlayer():Alive() then
+					text = YRP.lang_string("LID_suicide") .. " (" .. LocalPlayer():RPName() .. ")"
+					tab.color = Color(120, 0, 0, 255)
+				end
+
+				if !strEmpty(text) then
+					local hasdesign = hook.Run("YButtonAPaint", self, pw, ph, tab)
+					draw.SimpleText(text, "Y_26_700", pw / 2, ph / 2, TextColor(tab.color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
+			end
+
+			charactersEnter:SetText("")
+			function charactersEnter:DoClick()
+				if LocalPlayer() != nil and validchar and curChar > -1 and LocalPlayer():GetNW2Int("int_deathtimestamp_min", 0) <= CurTime() then
+					if LocalPlayer():Alive() then
+						net.Start("LogOut")
+						net.SendToServer()
+					elseif curChar != nil then
+						net.Start("YRP_EnterWorld")
+							net.WriteString(curChar)
+						net.SendToServer()
+						if pa(CharMenu.frame) then
+							CharMenu.frame:Close()
+						end
+					end
+				end
 			end
 		end
 	end

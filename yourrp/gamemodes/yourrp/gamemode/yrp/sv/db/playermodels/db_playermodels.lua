@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -18,7 +18,7 @@ local oldpms = SQL_SELECT(DATABASE_NAME, "*", nil)
 if wk(oldpms) then
 	for i, pm in pairs(oldpms) do
 		if pm.string_model != nil and pm.string_model != "" and pm.string_models == "" then
-			SQL_UPDATE(DATABASE_NAME, "string_models = '" .. pm.string_model .. "'", "uniqueID = '" .. pm.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["string_models"] = pm.string_model}, "uniqueID = '" .. pm.uniqueID .. "'")
 		end
 	end
 end

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function disk_full(error)
 	if string.find(error, "database or disk is full") then
@@ -41,7 +41,7 @@ end
 
 local YRP_DB_DC = {}
 table.insert(YRP_DB_DC, " ")
-table.insert(YRP_DB_DC, "'")
+table.insert(YRP_DB_DC, "\'")
 table.insert(YRP_DB_DC, "´")
 table.insert(YRP_DB_DC, "`")
 table.insert(YRP_DB_DC, "#")
@@ -76,22 +76,14 @@ table.insert(YRP_DB_DC, "Ü")
 table.insert(YRP_DB_DC, "Ö")
 table.insert(YRP_DB_DC, "Ä")
 
-function SQL_STR_IN(str)
-	local _res = tostring(str)
-
-	for k, sym in pairs(YRP_DB_DC) do
-		local _pre = ""
-
-		if k < 10 then
-			_pre = "0"
-		end
-
-		_res = string.Replace(_res, sym, "%" .. _pre .. k)
+function SQL_STR_IN(str, f)
+	if str == nil and f then
+		MsgC(Color(255, 0, 0), f)
+		return str
+	else
+		str = string.Replace(str, "'", "´")
+		return sql.SQLStr(tostring(str))
 	end
-
-	_res = sql.SQLStr(_res, true)
-
-	return _res
 end
 
 function SQL_STR_OUT(str)
@@ -240,7 +232,6 @@ function SQL_QUERY(query)
 		elseif _result == false then
 			return _result
 		else
-			--YRP.msg("db", "ELSE")
 			return _result
 		end
 	elseif GetSQLMode() == 1 then
@@ -352,10 +343,22 @@ end
 
 function SQL_UPDATE(db_table, db_sets, db_where)
 	--YRP.msg("db", "SQL_UPDATE(" .. tostring(db_table) .. ", " .. tostring(db_sets) .. ", " .. tostring(db_where) .. ")")
+	local c = 0
+	if type(db_sets) == "string" then
+		YRP.msg( "note", "[SQL_UPDATE] FAIL: db_table " .. db_table .. " db_sets " .. db_sets .. " db_where " .. db_where .. " " .. type(db_sets) )
+		return
+	end
+	local tmp = {}
+	for i, v in pairs(db_sets) do
+		c = c + 1
+		tmp[c] = i .. " = " .. SQL_STR_IN( v )
+	end
+	local sets = table.concat( tmp, ", " )
+
 	if GetSQLMode() == 0 then
 		local _q = "UPDATE "
 		_q = _q .. db_table
-		_q = _q .. " SET " .. db_sets
+		_q = _q .. " SET " .. sets
 
 		if db_where != nil then
 			_q = _q .. " WHERE "
@@ -371,6 +374,52 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 		end
 
 		return ret
+	elseif GetSQLMode() == 1 then
+		local _q = "UPDATE "
+		_q = _q .. YRPSQL.schema .. "." .. db_table
+		_q = _q .. " SET " .. sets
+
+		if db_where != nil then
+			_q = _q .. " WHERE "
+			_q = _q .. db_where
+		end
+
+		_q = _q .. ";"
+
+		return SQL_QUERY(_q)
+	end
+end
+
+function OLD_SQL_UPDATE(db_table, db_sets, db_where)
+	--YRP.msg("db", "SQL_UPDATE(" .. tostring(db_table) .. ", " .. tostring(db_sets) .. ", " .. tostring(db_where) .. ")")
+	local tmp = {}
+	for i, v in pairs(string.Explode(", ", db_sets)) do
+		v = string.Replace(v, "'", "")
+		v = string.Replace(v, " = ", "=")
+		v = string.Explode("=", v)
+		tmp[i] = v[1] .. "=" .. SQL_STR_IN( v[2], v[1] )
+	end
+	db_sets = table.concat( tmp, "," )
+
+	if GetSQLMode() == 0 then
+		local _q = "UPDATE "
+		_q = _q .. db_table
+		_q = _q .. " SET " .. db_sets
+
+		if db_where != nil then
+			_q = _q .. " WHERE "
+			_q = _q .. db_where
+		end
+
+		_q = _q .. ";"
+
+		--[[local ret = SQL_QUERY(_q)
+
+		if ret != nil then
+			YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. " lastError: " .. sql_show_last_error())
+		end
+
+		return ret]]
 	elseif GetSQLMode() == 1 then
 		local _q = "UPDATE "
 		_q = _q .. YRPSQL.schema .. "." .. db_table
@@ -664,7 +713,7 @@ if SERVER then
 			--SQL_QUERY("SET @@global.sql_mode='MYSQL40'")
 			YRPSQL.db.onConnectionFailed = function(db, serr)
 				YRP.msg("note", ">>> CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!")
-				YRP.msg("error", serr)
+				YRP.msg("error", "[MYSQL onConnectionFailed] " .. tostring(serr))
 				SetSQLMode(0, true)
 			end
 
@@ -700,3 +749,4 @@ function SQL_INIT_DATABASE(db_name)
 		end
 	end
 end
+

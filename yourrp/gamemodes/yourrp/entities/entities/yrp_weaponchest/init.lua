@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
@@ -33,7 +33,7 @@ function ENT:Think()
 end
 
 util.AddNetworkString("yrp_open_weaponchest")
-function ENT:Use(activator, caller)
+function ENT:Use( activator, caller, useType, value )
 	if !activator:GetNW2Bool("wc_clicked", false) then
 		activator:SetNW2Bool("wc_clicked", true)
 		

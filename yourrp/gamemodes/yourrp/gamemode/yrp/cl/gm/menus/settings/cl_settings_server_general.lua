@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 	
 function CreateCheckBoxLine(dpanellist, val, lstr, netstr, fixx, textcolor)
 	textcolor = textcolor or Color(255, 255, 255)
@@ -74,7 +74,7 @@ function CreateTextBoxLine(dpanellist, text, lstr, netstr)
 	end
 
 	local textbox = createD("DTextEntry", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
-	textbox:SetText(SQL_STR_OUT(text))
+	textbox:SetText(text)
 	textbox.serverside = false
 
 	function textbox:OnChange()
@@ -138,7 +138,7 @@ function CreateComboBoxLine(dpanellist, text, lstr, netstr, default, choices)
 end
 
 function CreateTextBoxBox(dpanellist, text, lstr, netstr)
-	text = SQL_STR_OUT(text)
+	text = text
 	local background = createD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(50 + 400 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), YRP.ctr(25), 0, 1)
@@ -531,7 +531,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_background, "LID_character_background", "update_text_character_background")
 
-		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "LID_characterdesign", "update_text_character_design", GetGlobalString("text_character_design", "HorizontalNEW"), {"HorizontalNEW", "Horizontal", "Vertical"})
+		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "LID_characterdesign", "update_text_character_design", GetGlobalString("text_character_design", "Default"), {"Default", "HorizontalNEW", "Horizontal", "Vertical"})
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat, "LID_yourrpchat", "update_bool_yrp_chat")

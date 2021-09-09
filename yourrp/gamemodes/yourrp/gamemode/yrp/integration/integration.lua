@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 DarkRP = DarkRP or {}
 DarkRP.disabledDefaults = DarkRP.disabledDefaults or {}
@@ -125,7 +125,9 @@ DarkRP.disabledDefaults["workarounds"] = {
     ["disable CAC"]                                  = false,
 }
 
-DarkRP._not = "If you see this, please test all your darkrp addons, if some addon is not fully working, please tell D4KiR!"
+function YRPDarkrpNotFound(name)
+    YRP.msg("darkrp", "[COLLECT] " .. name)
+end
 
 AddCSLuaFile("darkrp/fn.lua")
 

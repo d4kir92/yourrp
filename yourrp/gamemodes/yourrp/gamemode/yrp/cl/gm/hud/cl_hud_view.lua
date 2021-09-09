@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function showOwner(eyeTrace)
 	if GetGlobalBool("bool_yrp_showowner", true) then
@@ -40,7 +40,7 @@ function HudView()
 			if entpos:Distance(plypos) > GetGlobalInt("int_door_distance", 200) then
 				return
 			end
-			if GetGlobalBool("bool_building_system", false) and ent:IsDoor() and plypos:Distance(entpos) < GetGlobalInt("int_door_distance", 200) then
+			if GetGlobalBool("bool_building_system", false) and ent:YRPIsDoor() and plypos:Distance(entpos) < GetGlobalInt("int_door_distance", 200) then
 				local tab = {}
 				tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
 				draw.SimpleText(YRP.lang_string("LID_presstoopen", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -17,8 +17,8 @@ if fir == nil then
 elseif wk(fir) then
 	fir = fir[1]
 	if fir.string_interface_design == "Simple" or fir.string_hud_design == "Material" then
-		SQL_UPDATE(DATABASE_NAME, "string_hud_design = 'Simple'", "uniqueID = '" .. "1" .. "'")
-		SQL_UPDATE(DATABASE_NAME, "string_interface_design = 'Material'", "uniqueID = '" .. "1" .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = "Simple"}, "uniqueID = '" .. "1" .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = "Material"}, "uniqueID = '" .. "1" .. "'")
 	end
 end
 
@@ -173,7 +173,7 @@ util.AddNetworkString("change_hud_design")
 net.Receive("change_hud_design", function(len, ply)
 	local string_hud_design = net.ReadString()
 	YRP.msg("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
-	SQL_UPDATE(DATABASE_NAME, "string_hud_design = '" .. string_hud_design .. "'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = string_hud_design}, "uniqueID = '1'")
 	for i, pl in pairs(player.GetAll()) do
 		pl:SetNW2String("string_hud_design", string_hud_design)
 	end
@@ -210,7 +210,7 @@ util.AddNetworkString("change_interface_design")
 net.Receive("change_interface_design", function(len, ply)
 	local string_interface_design = net.ReadString()
 	YRP.msg("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
-	SQL_UPDATE(DATABASE_NAME, "string_interface_design = '" .. string_interface_design .. "'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = string_interface_design}, "uniqueID = '1'")
 	SetGlobalString("string_interface_design", string_interface_design)
 
 	ResetDesign()
@@ -255,7 +255,7 @@ util.AddNetworkString("yrp_update_font")
 net.Receive("yrp_update_font", function(len, ply)
 	local string_fontname = net.ReadString()
 	YRP.msg("db", "[DESIGN] string_fontname changed to " .. string_fontname)
-	SQL_UPDATE(DATABASE_NAME, "string_fontname = '" .. string_fontname .. "'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["string_fontname"] = string_fontname}, "uniqueID = '1'")
 
 	for i, p in pairs(player.GetAll()) do
 		SendFontName(p)
@@ -267,6 +267,6 @@ net.Receive("yrp_change_headerheight", function(len, ply)
 	local newheaderheight = net.ReadString()
 	newheaderheight = tonumber(newheaderheight)
 
-	SQL_UPDATE(DATABASE_NAME, "int_headerheight = '" .. newheaderheight .. "'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {["int_headerheight"] = newheaderheight}, "uniqueID = '1'")
 	SetGlobalInt("int_headerheight", newheaderheight)
 end)

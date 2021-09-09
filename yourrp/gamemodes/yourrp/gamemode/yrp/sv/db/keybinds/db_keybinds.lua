@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -29,7 +29,7 @@ net.Receive("setserverdefaultkeybind", function(len, ply)
 	for name, value in pairs(keybinds) do
 		local selresult = SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'")
 		if selresult != nil then
-			SQL_UPDATE(DATABASE_NAME, "value = '" .. value .. "'", "name = '" .. name .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. name .. "'")
 		else
 			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. value .. "'")
 		end

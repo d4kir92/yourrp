@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -19,7 +19,7 @@ util.AddNetworkString("change_to_hud_profile")
 net.Receive("change_to_hud_profile", function()
 	local profile_name = net.ReadString()
 
-	SQL_UPDATE("yrp_design", "string_hud_profile = '" .. profile_name .. "'", "uniqueID = 1")
+	SQL_UPDATE("yrp_design", {["string_hud_profile"] = profile_name}, "uniqueID = 1")
 	SetGlobalString("string_hud_profile", profile_name)
 
 	local tab = SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. profile_name .. "'")
@@ -27,7 +27,7 @@ net.Receive("change_to_hud_profile", function()
 		for i, v in pairs(tab) do
 			local name = v.name
 			local value = v.value
-			SQL_UPDATE("yrp_hud", "value = '" .. value .. "'", "name = '" .. name .. "'")
+			SQL_UPDATE("yrp_hud", {["value"] = value}, "name = '" .. name .. "'")
 		end
 
 		HudLoadoutAll()
@@ -68,7 +68,7 @@ function HudProfileToDataBase(name, tab)
 		if tab.Version != VERSION then
 			YRP.msg("db", "Updating Hud Profile: " .. name, nil, true)
 			for i, v in pairs(tab) do
-				SQL_UPDATE(DATABASE_NAME, "value = '" .. v .. "'", "name = '" .. i .. "' AND profile_name = '" .. name .. "'")
+				SQL_UPDATE(DATABASE_NAME, {["value"] = v}, "name = '" .. i .. "' AND profile_name = '" .. name .. "'")
 			end
 		end
 	end

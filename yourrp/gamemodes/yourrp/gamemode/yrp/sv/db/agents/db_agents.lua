@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -21,12 +21,12 @@ net.Receive("yrp_placehit", function(len, ply)
 	local _reward = net.ReadString()
 	local _desc = net.ReadString()
 
-	YRP.msg("note", "[AGENTS] received hit info: " .. _steamid .. ", " .. _reward .. ", " .. SQL_STR_IN(_desc))
+	YRP.msg("note", "[AGENTS] received hit info: " .. _steamid .. ", " .. _reward .. ", " .. _desc)
 	_reward = tonumber(_reward)
 	if ply:canAfford(_reward) then
 		ply:addMoney(- _reward)
 		YRP.msg("note", "Set hit")
-		local _res = SQL_INSERT_INTO(DATABASE_NAME, "target, reward, description, contract_SteamID", "'" .. _steamid .. "', " .. _reward .. ", '" .. SQL_STR_IN(_desc) .. "', '" .. ply:SteamID() .. "'")
+		local _res = SQL_INSERT_INTO(DATABASE_NAME, "target, reward, description, contract_SteamID", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "', '" .. ply:SteamID() .. "'")
 
 	else
 		YRP.msg("note", "Cant afford hit")

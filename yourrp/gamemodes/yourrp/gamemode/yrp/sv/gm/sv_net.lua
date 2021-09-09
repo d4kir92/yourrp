@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 util.AddNetworkString("restartServer")
 util.AddNetworkString("updateServer")
@@ -28,7 +28,7 @@ end)
 net.Receive("updateServer", function(len, ply)
 	if ply:HasAccess() then
 		local _tmpString = net.ReadString()
-		local _result = SQL_UPDATE("yrp_general", "text_gamemode_name = '" .. SQL_STR_IN(_tmpString) .. "'")
+		local _result = SQL_UPDATE("yrp_general", {["text_gamemode_name"] = _tmpString})
 		if worked(_result, "text_gamemode_name failed") then
 		end
 		local countdown = net.ReadInt(16)
@@ -106,6 +106,24 @@ function changeUserGroup(ply, cmd, args)
 		end
 	end
 end
+
+concommand.Add("darkrp", function(ply, cmd, args)
+	if args[1] and args[1] == "forcerpname" then
+		local playername = args[2]
+		local newrpname = args[3]
+
+		local player = GetPlayerByName(playername)
+
+		if ea(player) then
+			player:SetRPName(newrpname, "console forcerpname")
+		else
+			YRP.msg("note", "[forcerpname] Player not found")
+		end
+	else
+		YRP.msg("error", "[darkrp] Missing console command in yourrp, please tell dev")
+		YRP.msg("error", "[darkrp] args[1] " .. tostring(args[1]))
+	end
+end)
 
 concommand.Add("yrp_force_sqlite", function(ply, cmd, args)
 	SetSQLMode(0, true)

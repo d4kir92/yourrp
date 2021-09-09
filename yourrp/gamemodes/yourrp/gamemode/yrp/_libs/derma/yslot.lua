@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local PANEL = {}
 
@@ -17,7 +17,8 @@ function GetSlotPanel(slotID)
 		if wk(YRP_SLOTS[slotID]) then
 			return YRP_SLOTS[slotID]
 		else
-			YRP.msg("note", "[GetSlotPanel] no panel with: " .. tostring(slotID))
+			return nil
+			--YRP.msg("note", "[GetSlotPanel] no panel with: " .. tostring(slotID))
 		end
 	else
 		YRP.msg("note", "[GetSlotPanel] slotID is invalid: " .. tostring(slotID))
@@ -114,7 +115,7 @@ net.Receive("yrp_item_store", function(len)
 	if pa(slot) then
 		local i = createD("YItem", nil, ItemSize(), ItemSize(), 0, 0)
 		i:SetItemID(item.uniqueID)
-		i:SetModel(SQL_STR_OUT(item.text_worldmodel))
+		i:SetModel(item.text_worldmodel)
 		if item.isinv then
 			i:DoClick()
 		end

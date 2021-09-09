@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 net.Receive("setting_characters", function(len)
 	local PARENT = GetSettingsSite()
@@ -27,9 +27,9 @@ net.Receive("setting_characters", function(len)
 				if y.rpdescription and y.rpdescription != "nil" then
 					descr = tostring(y.rpdescription)
 				end
-				descr = SQL_STR_OUT(descr)
+				descr = descr
 
-				charlist:AddLine(y.SteamID, SQL_STR_OUT(y.rpname), SQL_STR_OUT(y.text_idcardid), descr, y.groupID, y.roleID, y.money, y.moneybank, y.int_level, event, archi)
+				charlist:AddLine(y.SteamID, y.rpname, y.text_idcardid, descr, y.groupID, y.roleID, y.money, y.moneybank, y.int_level, event, archi)
 			end
 		end
 	end

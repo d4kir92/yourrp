@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local Player = FindMetaTable("Player")
 
@@ -19,8 +19,8 @@ end
 
 function Player:getPreferredJobModel(teamNr)
 	--Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
-	YRP.msg("darkrp", "getPreferredJobModel(" .. tostring(teamNr) .. ")")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("getPreferredJobModel(" .. tostring(teamNr) .. ")")
+
 	return ""
 end
 

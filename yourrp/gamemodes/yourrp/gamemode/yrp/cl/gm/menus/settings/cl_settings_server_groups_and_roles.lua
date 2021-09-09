@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 --#roles #groups #settings
 
@@ -257,9 +257,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					net.WriteString(cur_group.cur)
 				net.SendToServer()
 				timer.Simple(0.1, function()
-					net.Start("settings_subscribe_grouplist")
-						net.WriteString(gs.gplist[group.uniqueID].uniqueID)
-					net.SendToServer()
+					if wk(gs.gplist[group.uniqueID]) and wk(gs.gplist[group.uniqueID].uniqueID) then
+						net.Start("settings_subscribe_grouplist")
+							net.WriteString(gs.gplist[group.uniqueID].uniqueID)
+						net.SendToServer()
+					end
 				end)
 			end
 
@@ -555,6 +557,8 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local tab = {}
 				tab.color = YRPGetColor("3")
 				DrawPanel(self, tab)
+				
+				ea.tab.string_name = tostring(ea.tab.string_name)
 
 				local tab2 = {}
 				tab2.w = pw
@@ -563,12 +567,12 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.y = ph / 2
 				tab2.ax = 0
 				if ea.tab.uniqueID == 1 then
-					tab2.text = "[MAIN] " .. YRP.lang_string("LID_" .. ea.typ) .. ": " .. tostring(ea.tab.string_name)
+					tab2.text = "[MAIN] " .. YRP.lang_string("LID_" .. ea.typ) .. ": " .. ea.tab.string_name
 				else
-					tab2.text = YRP.lang_string("LID_" .. ea.typ) .. ": " .. tostring(ea.tab.string_name)
+					tab2.text = YRP.lang_string("LID_" .. ea.typ) .. ": " .. ea.tab.string_name
 				end
 				if ea.typ == "role" and ea.tab.uniqueID != nil then
-					tab2.text = tab2.text .. "       DarkRP-Job-Name: " .. ConvertToDarkRPJobName(ea.tab.string_name) .. "      RoleUID: " .. ea.tab.uniqueID
+					tab2.text = tab2.text .. "       DarkRP-Job-Name: " .. YRPConvertToDarkRPJobName( ea.tab.string_name ) .. "      RoleUID: " .. ea.tab.uniqueID
 				elseif ea.typ == "group" and ea.tab.uniqueID != nil then
 					tab2.text = tab2.text .. "       GroupUID: " .. ea.tab.uniqueID
 				end
@@ -1074,15 +1078,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.lforce = false
 				tab2.color = rs.rplist[role.uniqueID]["string_color"]
 				DrawText(tab2)
-
-				--[[local tab3 = {}
-				tab3.x = YRP.ctr(182)
-				tab3.y = YRP.ctr(100)
-				tab3.ax = 0
-				tab3.ay = 4
-				tab3.text = "POSITION: " .. role.int_position
-				tab3.font = "Y_18_700"
-				DrawText(tab3)]]
 			end
 			function pnl:DoClick()
 				net.Start("settings_subscribe_role")
@@ -2123,7 +2118,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						cl_licenses[count] = {}
 						cl_licenses[count].WorldModel = v.WorldModel or nil
 						cl_licenses[count].ClassName = v.uniqueID
-						cl_licenses[count].PrintName = SQL_STR_OUT(v.name)
+						cl_licenses[count].PrintName = v.name
 					end
 
 					winlicenses.dpl = createD("DPanelList", winlicenses, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
@@ -2193,7 +2188,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						license.uniqueID = i
 						license.string_models = ""
 						license.string_classname = v.uniqueID
-						license.string_name = SQL_STR_OUT(v.string_name)
+						license.string_name = v.string_name
 						license.doclick = function()
 							net.Start("rem_role_license")
 								net.WriteInt(role.uniqueID, 32)
@@ -2593,7 +2588,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						cl_specializations[count] = {}
 						cl_specializations[count].WorldModel = v.WorldModel or nil
 						cl_specializations[count].ClassName = v.uniqueID
-						cl_specializations[count].PrintName = SQL_STR_OUT(v.name)
+						cl_specializations[count].PrintName = v.name
 					end
 
 					winspecializations.dpl = createD("DPanelList", winspecializations, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
@@ -2663,7 +2658,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						specialization.uniqueID = i
 						specialization.string_models = ""
 						specialization.string_classname = v.uniqueID
-						specialization.string_name = SQL_STR_OUT(v.string_name)
+						specialization.string_name = v.string_name
 						specialization.doclick = function()
 							net.Start("rem_role_specialization")
 								net.WriteInt(role.uniqueID, 32)

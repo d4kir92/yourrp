@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -13,8 +13,8 @@ if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 end
 
 if SQL_SELECT(DATABASE_NAME, "*", "name = 'int_background_x'") != nil then
-	SQL_UPDATE(DATABASE_NAME, "value = '0'", "name = 'int_background_x'")
-	SQL_UPDATE(DATABASE_NAME, "value = '0'", "name = 'int_background_y'")
+	SQL_UPDATE(DATABASE_NAME, {["value"] = 0}, "name = 'int_background_x'")
+	SQL_UPDATE(DATABASE_NAME, {["value"] = 0}, "name = 'int_background_y'")
 else
 	SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_x', '0'")
 	SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_y', '0'")
@@ -104,7 +104,7 @@ function LoadIDCardSetting(force, from)
 						elseif string.StartWith(n, "int_") and GetGlobalInt(n, v) ~= v then
 							SetGlobalInt(n, v)
 						end
-						SQL_UPDATE(DATABASE_NAME, "value = '" .. v .. "'", "name = '" .. n .. "'")
+						SQL_UPDATE(DATABASE_NAME, {["value"] = v}, "name = '" .. n .. "'")
 						LoadIDCardSetting(true, "UPDATED VARIABLE")
 					end)
 				end
@@ -167,7 +167,7 @@ function LoadIDCardSetting(force, from)
 		for i, v in pairs(tab) do
 			v.value = tonumber(v.value)
 			if v.value > 2 then
-				SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
+				SQL_UPDATE(DATABASE_NAME, {["value"] = 1}, "name = '" .. v.name .. "'")
 			end
 		end
 	end
@@ -176,7 +176,7 @@ function LoadIDCardSetting(force, from)
 		for i, v in pairs(tab2) do
 			v.value = tonumber(v.value)
 			if v.value > 2 then
-				SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
+				SQL_UPDATE(DATABASE_NAME, {["value"] = 1}, "name = '" .. v.name .. "'")
 			end
 		end
 	end
@@ -185,7 +185,7 @@ function LoadIDCardSetting(force, from)
 		for i, v in pairs(tab3) do
 			v.value = tonumber(v.value)
 			if v.value > 5 then -- 1 CustomColor, 2 FactionColor, 3 GroupColor, 4 RoleColor, 5 UserGroupColor
-				SQL_UPDATE(DATABASE_NAME, "value = '" .. 1 .. "'", "name = '" .. v.name .. "'")
+				SQL_UPDATE(DATABASE_NAME, {["value"] = 1}, "name = '" .. v.name .. "'")
 			end
 		end
 	end

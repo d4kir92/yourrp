@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local searchIcon = Material("icon16/magnifier.png")
 
@@ -1072,10 +1072,10 @@ function drawPlates()
 			end
 			color2.a = math.Clamp(color2.a, 0, 240)
 
-			if LocalPlayer():GetNW2Bool("bool_canuseesp", false) then
-				render.SetColorMaterial()
+			if LocalPlayer():GetNW2Bool("bool_canuseesp", false) and LocalPlayer():GetNW2Bool("yrp_esp", true) then
 				local cent = ply:OBBCenter()
-				render.DrawSphere(ply:GetPos() + cent, cent.z, 16, 16, Color(0, 255, 0, 1))
+				render.SetColorMaterial()
+				render.DrawSphere(ply:GetPos() + cent, cent.z, 16, 16, Color(0, 255, 0, 10))
 			end
 
 			if GetGlobalBool("bool_tag_on_head", false) then
@@ -1198,7 +1198,7 @@ function drawPlates()
 			end
 
 			if ply:GetNW2Bool("tag_dev", false) and tostring(ply:SteamID64()) == "76561198002066427" then -- D4KIR, Developer of YourRP
-				drawPlate(ply, "DEVELOPER", _height, Color(0, 0, 0, color.a))
+				drawPlate(ply, "GAMEMODE DEVELOPER", _height, Color(0, 0, 0, color.a))
 				_height = _height + 9
 			end
 
@@ -1302,20 +1302,21 @@ function draw3DText(text, x, y, color)
 end
 
 hook.Add("HUDPaint", "yrp_esp_draw", function()
-	if LocalPlayer():GetNW2Bool("bool_canuseesp", false) then
+	if LocalPlayer():GetNW2Bool("bool_canuseesp", false) and LocalPlayer():GetNW2Bool("yrp_esp", true) then
 		for i, p in pairs(player.GetAll()) do
-			--if p != LocalPlayer() then
-				local OBBCen = p:LocalToWorld(p:OBBCenter())
-				local ScrCen = OBBCen:ToScreen()
+			local OBBCen = p:LocalToWorld(p:OBBCenter())
+			local ScrCen = OBBCen:ToScreen()
+			local dist = math.Round(LocalPlayer():GetPos():Distance(p:GetPos()) * 0.019, 0)
 
-				local dist = math.Round(LocalPlayer():GetPos():Distance(p:GetPos()) * 0.019, 0)
-				draw3DText("[F8] " .. YRP.lang_string("LID_usergroups") .. " -> " .. YRP.lang_string("LID_canuseesp"), ScrCen.x, ScrCen.y - 70)
-				draw3DText(YRP.lang_string("LID_distance") .. ": " .. dist .. "m", ScrCen.x, ScrCen.y - 50)
-				draw3DText(YRP.lang_string("LID_health") .. ": " .. p:Health() .. "/" .. p:GetMaxHealth() .. " [" .. p:Armor() .. "/" .. p:GetMaxArmor() .. "]", ScrCen.x, ScrCen.y - 30)
-				draw3DText(YRP.lang_string("LID_name") .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]", ScrCen.x, ScrCen.y - 10)
-				draw3DText(YRP.lang_string("LID_role") .. ": " .. p:GetRoleName() .. " [" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y + 10)
-				draw3DText(YRP.lang_string("LID_usergroup") .. ": " .. p:GetUserGroupNice(), ScrCen.x, ScrCen.y + 30)
-			--end
+			if p == LocalPlayer() then
+				draw3DText("!esp for toggle, turn off?: [F8] " .. YRP.lang_string("LID_usergroups") .. " -> " .. YRP.lang_string("LID_canuseesp"), ScrCen.x, ScrCen.y - 66, Color(255, 255, 0, 100))
+			else
+				draw3DText(YRP.lang_string("LID_distance") .. ": " .. dist .. "m", ScrCen.x, ScrCen.y, Color(255, 255, 100, 100))
+				draw3DText(YRP.lang_string("LID_health") .. ": " .. p:Health() .. "/" .. p:GetMaxHealth() .. " [" .. p:Armor() .. "/" .. p:GetMaxArmor() .. "]", ScrCen.x, ScrCen.y + 22, Color(0, 255, 0, 240))
+				draw3DText(YRP.lang_string("LID_name") .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]", ScrCen.x, ScrCen.y + 44, Color(255, 255, 255, 240))
+				draw3DText(YRP.lang_string("LID_role") .. ": " .. p:GetRoleName() .. " [" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y + 66, Color(255, 255, 255, 240))
+				draw3DText(YRP.lang_string("LID_usergroup") .. ": " .. p:GetUserGroupNice(), ScrCen.x, ScrCen.y + 88, Color(0, 0, 255, 240))
+			end
 		end
 	end
 	if GetGlobalBool("bool_server_debug_voice", false) then
@@ -1449,14 +1450,14 @@ net.Receive("yrp_notification", function(len)
 end)
 
 function DrawDoorText(door)
-	local header = SQL_STR_OUT(door:GetNW2String("text_header", ""))
+	local header = door:GetNW2String("text_header", "")
 	surface.SetFont("Y_24_500")
 	local head_size = surface.GetTextSize(header)
 	surface.SetTextColor(255, 255, 255)
 	surface.SetTextPos(- head_size / 2, -80)
 	surface.DrawText(header)
 
-	local description = SQL_STR_OUT(door:GetNW2String("text_description", ""))
+	local description = door:GetNW2String("text_description", "")
 	surface.SetFont("Y_14_500")
 	local desc_size = surface.GetTextSize(description)
 	surface.SetTextColor(255, 255, 255)
@@ -1898,13 +1899,6 @@ if pa(yrp_loading_screen) then
 		-- Panel
 		local PANEL_W = ScrW() * 0.8 --1500
 		local PANEL_H = ScrH() * 0.4222 --1080/ 456
-		-- Panel SHADOWS
-		PANEL_SHADOW_intensity = 1
-		PANEL_SHADOW_Spread = 2
-		PANEL_SHADOW_Blur = 2
-		PANEL_SHADOW_Opacity = 255
-		PANEL_SHADOW_Direction = 0
-		PANEL_SHADOW_Distance = 0
 
 		-- BAR
 		local BAR_W = PANEL_W * 0.96 -- 1440
@@ -2147,7 +2141,7 @@ net.Receive("openLawBoard", function(len)
 
 				function _add:DoClick()
 					if _SteamID != nil and _Cell != nil then
-						local _insert = "'" .. _SteamID .. "', '" .. SQL_STR_IN(_reason:GetText()) .. "', " .. db_int(_time:GetValue()) .. ", '" .. SQL_STR_IN(_nick) .. "', '" .. _Cell .. "'"
+						local _insert = "'" .. _SteamID .. "', '" .. _reason:GetText() .. "', " .. db_int(_time:GetValue()) .. ", '" .. _nick .. "', '" .. _Cell .. "'"
 						net.Start("dbAddJail")
 							net.WriteString("yrp_jail")
 							net.WriteString("SteamID, reason, time, nick, cell")
@@ -2281,8 +2275,8 @@ net.Receive("openLawBoard", function(len)
 					end
 					draw.RoundedBox(0, 0, 0, pw, ph, color)
 					draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. v.nick, "Y_26_500", YRP.ctr(20), YRP.ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-					draw.SimpleTextOutlined(YRP.lang_string("LID_cell") .. ": " .. SQL_STR_OUT(v.cellname), "Y_24_500", YRP.ctr(20), YRP.ctr(95), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))	
-					draw.SimpleTextOutlined(YRP.lang_string("LID_note") .. ": " .. SQL_STR_OUT(v.reason), "Y_24_500", YRP.ctr(20), YRP.ctr(145), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))	
+					draw.SimpleTextOutlined(YRP.lang_string("LID_cell") .. ": " .. v.cellname, "Y_24_500", YRP.ctr(20), YRP.ctr(95), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))	
+					draw.SimpleTextOutlined(YRP.lang_string("LID_note") .. ": " .. v.reason, "Y_24_500", YRP.ctr(20), YRP.ctr(145), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))	
 					draw.SimpleTextOutlined(YRP.lang_string("LID_time") .. ": " .. v.time, "Y_24_500", YRP.ctr(20), ph - YRP.ctr(45), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 

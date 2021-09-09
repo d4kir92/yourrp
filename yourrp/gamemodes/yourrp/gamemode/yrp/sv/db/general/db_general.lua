@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -9,6 +9,8 @@ local DATABASE_NAME = "yrp_general"
 --db_is_empty(DATABASE_NAME)
 
 --[[ Server Settings ]]--
+SQL_ADD_COLUMN(DATABASE_NAME, "int_version", "INT DEFAULT 1")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_reload", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_model", "INT DEFAULT 1")
@@ -130,7 +132,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_tickets_menu", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "text_character_background", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_loading_background", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_character_design", "TEXT DEFAULT 'HorizontalNEW'")
+SQL_ADD_COLUMN(DATABASE_NAME, "text_character_design", "TEXT DEFAULT 'Default'")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_name", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_rolename", "INT DEFAULT 1")
@@ -150,7 +152,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_showowner", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_crosshair", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_hud", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_swaying", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_hud_swaying", "INT DEFAULT 0")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_yrp_scoreboard_style", "TEXT DEFAULT 'simple'")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_name", "INT DEFAULT 1")
@@ -445,7 +448,7 @@ function SetYRPCollectionID(cid)
 	if cid > 0 then
 		YRP.msg("db", "SetYRPCollectionID(" .. cid .. ")")
 		yrp_general.text_server_collectionid = cid
-		SQL_UPDATE(DATABASE_NAME, "text_server_collectionid = '" .. cid .. "'", "uniqueID = '1'")
+		SQL_UPDATE(DATABASE_NAME, {["text_server_collectionid"] = cid}, "uniqueID = '1'")
 
 		--IsServerInfoOutdated()
 	end
@@ -454,7 +457,7 @@ end
 function GeneralDB()
 	for i, set in pairs(yrp_general) do
 		if string.StartWith(i, "text_") then
-			SetGlobalString(i, SQL_STR_OUT(set))
+			SetGlobalString(i, set)
 		elseif string.StartWith(i, "bool_") then
 			SetGlobalBool(i, tobool(set))
 		elseif string.StartWith(i, "int_") then
@@ -479,7 +482,7 @@ end
 
 function GeneralUpdateValue(ply, netstr, str, value)
 	yrp_general[str] = value
-	SQL_UPDATE(DATABASE_NAME, str .. " = '" .. yrp_general[str] .. "'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {[str] = yrp_general[str]}, "uniqueID = '1'") -- str .. " = '" .. yrp_general[str] .. "'"
 	GeneralSendToOther(ply, netstr, yrp_general[str])
 end
 
@@ -491,14 +494,14 @@ end
 
 function GeneralUpdateString(ply, netstr, str, value)
 	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
-	GeneralUpdateValue(ply, netstr, SQL_STR_IN(str), value)
-	SetGlobalString(str, SQL_STR_OUT(value))
+	GeneralUpdateValue(ply, netstr, str, value)
+	SetGlobalString(str, value)
 end
 
 function GeneralUpdateTable(ply, netstr, str, value)
 	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
-	GeneralUpdateValue(ply, netstr, SQL_STR_IN(str), value)
-	SetGlobalTable(str, string.Explode("\n", SQL_STR_OUT(value)))
+	GeneralUpdateValue(ply, netstr, str, value)
+	SetGlobalTable(str, string.Explode("\n", value))
 end
 
 function GeneralUpdateInt(ply, netstr, str, value)
@@ -515,7 +518,7 @@ end
 
 function GeneralUpdateGlobalValue(ply, netstr, str, value)
 	yrp_general[str] = value
-	SQL_UPDATE(DATABASE_NAME, str .. " = '" .. yrp_general[str] .. "'", "uniqueID = '1'")
+	SQL_UPDATE(DATABASE_NAME, {[str] = yrp_general[str]}, "uniqueID = '1'")
 	GeneralSendToOther(ply, netstr, yrp_general[str])
 end
 
@@ -588,7 +591,7 @@ end)
 
 util.AddNetworkString("update_text_server_rules")
 net.Receive("update_text_server_rules", function(len, ply)
-	local str = SQL_STR_IN(net.ReadString())
+	local str = net.ReadString()
 	GeneralUpdateTable(ply, "update_text_server_rules", "text_server_rules", str)
 end)
 
@@ -1809,7 +1812,7 @@ util.AddNetworkString("getsiteserverrules")
 net.Receive("getsiteserverrules", function(len, ply)
 	local server_rules = SQL_SELECT("yrp_general", "text_server_rules", "uniqueID = '1'")
 	if wk(server_rules) then
-		server_rules = SQL_STR_OUT(server_rules[1].text_server_rules)
+		server_rules = server_rules[1].text_server_rules
 	else
 		server_rules = ""
 	end
@@ -1987,7 +1990,7 @@ net.Receive("dbUpdate", function(len, ply)
 	local _dbWhile = net.ReadString()
 	local _result = SQL_UPDATE(_dbTable, _dbSets, _dbWhile)
 	local _usergroup_ = string.Explode(" ", _dbWhile)
-	local _restriction_ = string.Explode(" ", SQL_STR_IN(_dbSets))
+	local _restriction_ = string.Explode(" ", _dbSets)
 	YRP.msg("note", "[OLD DBUPDATE] " .. ply:SteamName() .. " SETS " .. _dbSets .. " WHERE " .. _dbWhile)
 end)
 
@@ -2234,3 +2237,43 @@ net.Receive("slap", function(len, ply)
 		_target:SetVelocity(Vector(0, 0, 600))
 	end
 end)
+
+
+
+-- YRPRepairSQLDB
+function YRPFixDatabase(tab, name, c)
+	c = c or 0
+	if wk(tab) then
+		for id, value in pairs(tab) do
+			if type(value) == "string" then
+				SQL_UPDATE(name, {[id] = SQL_STR_OUT( value )}, "" .. id .. " = '" .. value .. "'")
+			elseif type(value) == "table" then
+				YRPFixDatabase(value, name, c + 1)
+			end
+		end
+	end
+end
+
+local fixonce = true
+function YRPRepairSQLDB(force) -- Remove %01 - %XX
+	local version = SQL_SELECT(DATABASE_NAME, "int_version", "uniqueID = '1'")
+	if wk(version) then
+		version = tonumber(version[1].int_version)
+		if (version <= 1 or force) and fixonce then
+			fixonce = false
+			local alltables = SQL_QUERY("SELECT * FROM sqlite_master WHERE type='table';")
+			MsgC(Color(0, 255, 0), ">>> REPAIR YourRP DB, START <<<" .. "\n")
+			for i, v in pairs(alltables) do
+				if string.StartWith(v.name, "yrp_") then
+					MsgC(Color(0, 255, 0), "> FIX DB: " .. v.name .. "\n")
+					local tab = SQL_SELECT(v.name, "*", nil)
+					YRPFixDatabase(tab, v.name)
+				end
+			end
+			MsgC(Color(0, 255, 0), ">>> REPAIR YourRP DB, DONE <<<" .. "\n")
+
+			SQL_UPDATE(DATABASE_NAME, {["int_version"] = 2}, "uniqueID = '1'")
+		end
+	end
+end
+timer.Simple(1, YRPRepairSQLDB)

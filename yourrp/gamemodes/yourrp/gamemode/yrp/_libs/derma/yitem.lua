@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local PANEL = {}
 
@@ -71,7 +71,7 @@ net.Receive("yrp_storage_open", function(len)
 
 	local storage = net.ReadTable()
 	local isinv = net.ReadBool()
-
+	
 	local sto = GetStoragePanel(storage.uniqueID)
 
 	if sto != nil then
@@ -80,8 +80,13 @@ net.Receive("yrp_storage_open", function(len)
 		local br = YRP.ctr(20)
 		local sp = YRP.ctr(10)
 
-		local ww = ItemSize() * 4 + br * 2 + sp * 3
-		local wh = ItemSize() * 4 + br * 2 + sp * 3 + YRP.ctr(50)
+		local cols = 4
+
+		local sh = tonumber( storage.int_storage_size )
+		sh = math.ceil(sh / cols)
+
+		local ww = ItemSize() * cols + br * 2 + sp * (cols - 1)
+		local wh = ItemSize() * sh + br * 2 + sp * (sh - 1) + YRP.ctr(50)
 
 		local bag = createD("DFrame", nil, ww, wh, 0, 0)
 		if isinv then
@@ -111,8 +116,8 @@ net.Receive("yrp_storage_open", function(len)
 			end
 		end
 		
-		local sw = ItemSize() * 4 + sp * 3
-		local sh = ItemSize() * 4 + sp * 3
+		local sw = ItemSize() * cols + sp * (cols - 1)
+		local sh = ItemSize() * cols + sp * (cols - 1)
 
 		bag.storage = createD("YStorage", bag, sw, sh, br, br + YRP.ctr(50))
 		bag.storage:SetStorageID(storage.uniqueID)

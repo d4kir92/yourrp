@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function fake_true()
 	return true
@@ -693,7 +693,7 @@ function HUDSimple()
 			SN.element = "SN"
 			SN.cur = 0
 			SN.max = 1
-			SN.text = SQL_STR_OUT(GetGlobalString("text_server_name", "SERVERNAME"))
+			SN.text = GetGlobalString("text_server_name", "SERVERNAME")
 			HUDSimpleBAR(SN)
 			NA = {}
 			NA.element = "NA"

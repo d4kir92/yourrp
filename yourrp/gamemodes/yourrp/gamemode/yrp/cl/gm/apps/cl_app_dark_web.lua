@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local APP = APP or {}
 APP.PrintName = "Dark Web"
@@ -51,7 +51,7 @@ function testApp(display, x, y, w, h)
 		_target_description.description = YRP.lang_string("LID_none")
 		function _target_description:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string("LID_description") .. ":", "Y_24_500", ctrb(300), ph / 2, Color(255, 255, 255), 2, 0)
-			draw.SimpleText(SQL_STR_OUT(self.description), "Y_24_500", ctrb(320), ph / 2, Color(255, 255, 255), 0, 0)
+			draw.SimpleText(self.description, "Y_24_500", ctrb(320), ph / 2, Color(255, 255, 255), 0, 0)
 		end
 
 		local _target_accept = createD("YButton", _dw, ctrb(800), ctrb(50), ctrb(1200), ctrb(550))
@@ -79,7 +79,7 @@ function testApp(display, x, y, w, h)
 			for i, hit in pairs(_hits) do
 				for j, ply in pairs(player.GetAll()) do
 					if ply:SteamID() == hit.target then
-						_target_list:AddLine(ply:RPName(), hit.target, hit.reward, SQL_STR_OUT(hit.description), hit.uniqueID)
+						_target_list:AddLine(ply:RPName(), hit.target, hit.reward, hit.description, hit.uniqueID)
 						break
 					end
 				end
@@ -172,7 +172,7 @@ function testApp(display, x, y, w, h)
 			for i, hit in pairs(_hits) do
 				for j, ply in pairs(player.GetAll()) do
 					if ply:SteamID() == hit.target then
-						_target_list:AddLine(ply:RPName(), hit.target, hit.reward, SQL_STR_OUT(hit.description))
+						_target_list:AddLine(ply:RPName(), hit.target, hit.reward, hit.description)
 						break
 					end
 				end

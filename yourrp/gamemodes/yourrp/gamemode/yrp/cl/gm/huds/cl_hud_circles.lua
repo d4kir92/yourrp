@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local HP = Material("vgui/material/icon_favorite.png")
 local AR = Material("vgui/material/icon_security.png")
@@ -202,7 +202,7 @@ function HUDCircles()
 				HUDCirclesDrawText("WN", wep:GetPrintName())
 			end
 
-			HUDCirclesDrawText("SN", SQL_STR_OUT(GetGlobalString("text_server_name", "SERVERNAME")))
+			HUDCirclesDrawText("SN", GetGlobalString("text_server_name", "SERVERNAME"))
 
 			HUDCirclesDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(2))
 			HUDCirclesDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(2))

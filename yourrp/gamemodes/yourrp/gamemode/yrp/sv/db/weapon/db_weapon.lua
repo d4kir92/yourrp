@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -33,7 +33,7 @@ net.Receive("yrp_set_slot_amount", function(len, ply)
 		local ar = net.ReadString()
 		local va = net.ReadString()
 
-		SQL_UPDATE(DATABASE_NAME, ar .. " = '" .. va .. "'", "uniqueID = '1'")
+		SQL_UPDATE(DATABASE_NAME, {[ar] = va}, "uniqueID = '1'")
 
 		YRPSetWeaponSettings()
 	end
@@ -100,7 +100,7 @@ net.Receive("yrp_set_slot_weapon", function(len, ply)
 		
 		local tab = SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'")
 		if wk(tab) then
-			SQL_UPDATE(DATABASE_NAME2, ar .. " = '" .. tonum(bo) .. "'", "classname = '" .. cn .. "'")
+			SQL_UPDATE(DATABASE_NAME2, {[ar] = tonum(bo)}, "classname = '" .. cn .. "'")
 		else
 			SQL_INSERT_INTO(DATABASE_NAME2, "'" .. "classname" .. "', '" .. ar .. "'", "'" .. cn .. "', '" .. tonum(bo) .. "'")
 		end

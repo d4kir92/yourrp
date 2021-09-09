@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local _sv_outdated = nil
 local _cl_outdated = nil
@@ -92,7 +92,7 @@ end
 SetYRPChannel()
 
 function YRPVersion()
-	return GAMEMODE.Version
+	return GAMEMODE.Version .. ":" .. GAMEMODE.VersionBuild
 end
 
 local yrpoutdated = false

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local yrp_door = {}
 yrp_door.waitforanswer = false
@@ -364,7 +364,7 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 		--end
 
 		local _header = createD("DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(50))
-		_header:SetText(SQL_STR_OUT(tabBuilding.text_header))
+		_header:SetText(tabBuilding.text_header)
 		function _header:OnChange()
 			tabBuilding.text_header = _header:GetText()
 			net.Start("changeBuildingHeader")
@@ -374,7 +374,7 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 		end
 
 		local _description = createD("DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(150))
-		_description:SetText(SQL_STR_OUT(tabBuilding.text_description))
+		_description:SetText(tabBuilding.text_description)
 		function _description:OnChange()
 			tabBuilding.text_description = _description:GetText()
 			net.Start("changeBuildingDescription")
@@ -386,7 +386,7 @@ function optionWindow(door, tabBuilding, tabOwner, tabGroup)
 
 	if lply:HasAccess() then
 		local _TextEntryName = createD("DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(270))
-		_TextEntryName:SetText(SQL_STR_OUT(tabBuilding.name))
+		_TextEntryName:SetText(tabBuilding.name)
 		function _TextEntryName:OnChange()
 			tabBuilding.name = _TextEntryName:GetText()
 			net.Start("changeBuildingName")

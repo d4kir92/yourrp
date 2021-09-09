@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 --#MACROMENU
 
@@ -20,7 +20,7 @@ end
 
 function UseMacro(uid)
 	if wk(uid) and wk(_mm.tab) and wk(_mm.tab[uid]) and wk(_mm.tab[uid].value) then
-		local mtext = SQL_STR_OUT(_mm.tab[uid].value)
+		local mtext = _mm.tab[uid].value
 		local tim = 0
 
 		local tab = string.Explode("\n", mtext)
@@ -92,7 +92,7 @@ net.Receive("yrp_get_macros", function(len)
 				local m = createD("DButton", nil, YRP.ctr(80), YRP.ctr(80), x * YRP.ctr(80 + 20), y * YRP.ctr(80 + 20))
 				m:SetText("")
 				m.name = _mm.tab[c].name
-				m.value = SQL_STR_OUT(_mm.tab[c].value)
+				m.value = _mm.tab[c].value
 				m.uid = c
 				function m:Paint(pw, ph)
 					if self.uid == _mm.uid then

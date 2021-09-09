@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 --here you can change this, but it's dumb, because you can change it ingame
 GM.Name = "DarkRP" -- Is for other addons detecting that the gamemode is "DarkRP" compatible
@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 348 -- do NOT change this!
 GM.VersionCanary = 699 -- do NOT change this!
-GM.VersionBuild = 27 -- do NOT change this!
+GM.VersionBuild = 39 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -295,7 +295,7 @@ if SERVER then
 	local tmp = SQL_SELECT("yrp_general", "text_gamemode_name", nil)
 	if wk(tmp) then
 		tmp = tmp[1]
-		GM.BaseName = SQL_STR_OUT(tmp.text_gamemode_name)
+		GM.BaseName = tmp.text_gamemode_name
 	end
 
 	util.AddNetworkString("getGamemodename")
@@ -768,11 +768,10 @@ local function YRPCheckErrorFile()
 		file.Write( filename, util.TableToJSON( tab, true ) )
 	end
 	YRPErrors = util.JSONToTable( file.Read( filename, "DATA" ) )
-
 end
 YRPCheckErrorFile()
 
-local function YRPNewError(err)
+function YRPNewError(err)
 	YRPCheckErrorFile()
 
 	for i, v in pairs(YRPErrors) do
@@ -850,6 +849,7 @@ local function YRPSendError(tab, from)
 
 	if tab.buildnummer != GAMEMODE.VersionBuild then
 		MsgC( Color(255, 0, 0), ">>> [YRPSendError] FAIL, ERROR IS OUTDATED" .. "\n" )
+		YRPRemoveOutdatedErrors()
 		return
 	end
 
@@ -857,7 +857,7 @@ local function YRPSendError(tab, from)
 		if IsYRPOutdated() then
 			MsgC( Color(255, 0, 0), "[YRPSendError] >> YourRP Is Outdated" .. "\n" )
 		else
-			MsgC( Color(255, 0, 0), "[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err) .. "\n" )
+			--MsgC( Color(255, 0, 0), "[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err) .. "\n" )
 			
 			http.Post(posturl, entry,
 			function(body, length, headers, code)
@@ -870,7 +870,7 @@ local function YRPSendError(tab, from)
 				end
 			end,
 			function( failed )
-				YRP.msg("error", "[YRPSendError] failed: " .. tostring(failed))
+				YRP.msg("note", "[YRPSendError] failed: " .. tostring(failed))
 			end)
 		end
 	else
@@ -880,9 +880,7 @@ local function YRPSendError(tab, from)
 	end
 end
 
-local function YRPAddError(err, trace, realm)
-	MsgC( Color(255, 0, 0), "[YRPAddError] >> Found a new ERROR" .. "\n" )
-
+function YRPAddError(err, trace, realm)
 	local newerr = {}
 	newerr.err = err
 	newerr.trace = trace
@@ -936,6 +934,7 @@ hook.Add("OnLuaError", "yrp_OnLuaError", function(...)
 	
 	--if err and trace and realm and ( string.find(err, "/yrp/") or string.find(trace, "/yrp/") ) and YRPNewError(err) then
 	if err and trace and realm and string.find(err, "/yrp/") and YRPNewError(err) then
+		MsgC( Color(255, 0, 0), "[YRPAddError] >> Found a new ERROR" .. "\n" )
 		YRPAddError(err, trace, realm)
 	end
 end)

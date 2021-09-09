@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- #CHAT
 
@@ -280,7 +280,6 @@ else
 
 			function yrpChat.window:Paint(pw, ph)
 				if IsChatVisible() then
-
 					--DrawRectBlurHUD(0, 0, pw, ph, 100)
 					draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue("Chat", "FG"))
 
@@ -348,6 +347,8 @@ else
 						yrpChat.writeField:SetText("")
 						yrpChat.comboBox:ChooseOption(test)
 					end
+				else
+					self:MoveToBack()
 				end
 			end
 
@@ -507,7 +508,6 @@ else
 
 					yrpChat._chatIsOpen = true
 					gamemode.Call("StartChat", bteam)
-
 
 					chatclosedforkeybinds = false
 					once = false
@@ -687,7 +687,11 @@ else
 						end
 					elseif t == "entity" then
 						-- invalid entities
-						yrpChat.richText:AppendText(obj:Nick())
+						if obj.Nick then
+							yrpChat.richText:AppendText(obj:Nick())
+						else
+							yrpChat.richText:AppendText(obj:GetName())
+						end
 					else
 						YRP.msg("error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj))
 					end

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local leftedPlys = {}
 function GM:PlayerDisconnected(ply)
@@ -7,7 +7,7 @@ function GM:PlayerDisconnected(ply)
 
 	SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "disconnected" .. "'")
 
-	local _rol_tab = ply:GetRolTab()
+	local _rol_tab = ply:YRPGetRoleTable()
 	if wk(_rol_tab) then
 		if tonumber(_rol_tab.int_maxamount) > 0 then
 			ply:SetNW2String("roleUniqueID", "1")
@@ -56,6 +56,22 @@ end
 function GM:PlayerInitialSpawn(ply)
 	--YRP.msg("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
 
+	timer.Simple(0.01, function()
+		if !IsValid(ply) then return end
+
+		if ply.DRPSendTeamsToPlayer and ply.DRPSendCategoriesToPlayer then
+			ply:DRPSendTeamsToPlayer()
+			ply:DRPSendCategoriesToPlayer()
+		end
+		
+		if ply.DRPSendTeamsToPlayer == nil then
+			YRP.msg("error", "Function not found! DRPSendTeamsToPlayer")
+		end
+		if ply.DRPSendCategoriesToPlayer == nil then
+			YRP.msg("error", "Function not found! DRPSendCategoriesToPlayer")
+		end
+	end)
+
 	if ply:IsBot() then
 		check_yrp_client(ply, ply:SteamID())
 
@@ -103,9 +119,6 @@ end
 
 hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	--YRP.msg("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
-
-	ply:DRPSendTeamsToPlayer()
-	ply:DRPSendCategoriesToPlayer()
 
 	if ply:SteamID64() == "76561198334153761" then -- "if Hacker, then ban"
 		ply:Ban(0, true) -- perma + kick
@@ -199,13 +212,13 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 					ply:SetNW2Int("yrp_charid", tonumber(plyT.CurrentCharacter))
 				end
 				
-				local _rol_tab = ply:GetRolTab()
+				local _rol_tab = ply:YRPGetRoleTable()
 				if wk(_rol_tab) then
 					SetRole(ply, _rol_tab.uniqueID)
 				else
 					YRP.msg("note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
 
-					local chatab = ply:GetChaTab()
+					local chatab = ply:YRPGetCharacterTable()
 					if wk(chatab) then
 						CheckIfRoleExists(ply, chatab.roleID)
 					end
@@ -213,17 +226,17 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 					ply:KillSilent()
 				end
 
-				local chaTab = ply:GetChaTab()
+				local chaTab = ply:YRPGetCharacterTable()
 				if wk(chaTab) then
-					if not IsVoidCharEnabled() or GetGlobalBool("bool_character_system", true) == false then
+					if not IsVoidCharEnabled() and GetGlobalBool("bool_character_system", true) == true then
 						ply:SetNW2String("money", chaTab.money)
 						ply:SetNW2String("moneybank", chaTab.moneybank)
 
-						ply:SetNW2String("rpname", SQL_STR_OUT(chaTab.rpname))
+						ply:SetNW2String("rpname", chaTab.rpname)
 					
-						ply:SetNW2String("rpdescription", SQL_STR_OUT(chaTab.rpdescription))
+						ply:SetNW2String("rpdescription", chaTab.rpdescription)
 						for i, v in pairs(string.Explode("\n", chaTab.rpdescription)) do
-							ply:SetNW2String("rpdescription" .. i, SQL_STR_OUT(v))
+							ply:SetNW2String("rpdescription" .. i, v)
 						end
 
 						setbodygroups(ply)
@@ -264,12 +277,14 @@ hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 
 		ply:SetupHands()
 
-		timer.Simple(1.0, function()
-			if ply:HasCharacterSelected() then
-				teleportToSpawnpoint(ply)
-				ply:SetNW2Bool("yrp_spawning", false)
-			end
-		end)
+		if ply:GetNW2Bool("switchrole", false) == false then
+			timer.Simple(1.5, function()
+				if ply:HasCharacterSelected() and ply:LoadedGamemode() then
+					YRPTeleportToSpawnpoint(ply, "playerspawn")
+					ply:SetNW2Bool("yrp_spawning", false)
+				end
+			end)
+		end
 	end
 end)
 
@@ -365,7 +380,7 @@ hook.Add("PlayerDeath", "yrp_stars_playerdeath", function(victim, inflictor, att
 	YRPDoUnRagdoll(ply)
 
 	if GetGlobalBool("bool_characters_removeondeath", false) then
-		local test = SQL_UPDATE("yrp_characters", "bool_archived = '1'", "uniqueID = '" .. victim:CharID() .. "'")
+		local test = SQL_UPDATE("yrp_characters", {["bool_archived"] = 1}, "uniqueID = '" .. victim:CharID() .. "'")
 		victim:SetNW2Bool("yrp_chararchived", true)
 	end
 end)
@@ -401,7 +416,7 @@ end
 
 function IsNoRoleSwep(ply, cname)
 	if GetGlobalBool("bool_drop_items_role", false) then
-		local _rol_tab = ply:GetRolTab()
+		local _rol_tab = ply:YRPGetRoleTable()
 		if wk(_rol_tab) then
 			local _sweps = string.Explode(",", _rol_tab.string_sweps)
 			if !table.HasValue(_sweps, cname) then
@@ -417,7 +432,7 @@ end
 
 function IsNoGroupSwep(ply, cname)
 	if GetGlobalBool("bool_drop_items_role", false) then
-		local _gro_tab = ply:GetGroTab()
+		local _gro_tab = ply:YRPGetGroupTable()
 		if wk(_gro_tab) then
 			local _sweps = string.Explode(",", _gro_tab.string_sweps)
 			if !table.HasValue(_sweps, cname) then
@@ -432,7 +447,7 @@ function IsNoGroupSwep(ply, cname)
 end
 
 function IsNoNotDroppableRoleSwep(ply, cname)
-	local _rol_tab = ply:GetRolTab()
+	local _rol_tab = ply:YRPGetRoleTable()
 	if wk(_rol_tab) then
 		local _sweps = string.Explode(",", _rol_tab.string_ndsweps)
 		if !table.HasValue(_sweps, cname) then
@@ -459,7 +474,7 @@ function PLAYER:AddPlayTime(force)
 			if wk(tab) then
 				local oldplaytime = tab[1].text_playtime
 				
-				SQL_UPDATE("yrp_characters", "text_playtime = '" .. oldplaytime + playtime .. "'", "uniqueID = '" .. self.yrp_ts_oldchar .. "'")
+				SQL_UPDATE("yrp_characters", {["text_playtime"] = oldplaytime + playtime}, "uniqueID = '" .. self.yrp_ts_oldchar .. "'")
 			end
 		end
 
@@ -518,10 +533,14 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 				YRP.msg("note", "GetRagdollEntity does not exists.")
 			end
 		else
+			if !IsValid(ply.rd) then
+				YRP.msg("error", "[DoPlayerDeath] Spawn Defi Ragdoll... FAILED: ply.rd is not valid")
+			elseif ply:GetModel() != nil then
+				YRP.msg("error", "[DoPlayerDeath] GetModel... FAILED: nil")	
+			end
 			if ea(ply.rd) then
 				ply.rd:Remove()
 			end
-			YRP.msg("error", "Spawn Defi Ragdoll... FAILED: ply.rd is not valid")
 		end
 	end
 end
@@ -899,7 +918,7 @@ function GenerateVoiceTable()
 			yrp_voice_channels[tonumber(channel.uniqueID)].uniqueID = tonumber(channel.uniqueID)
 
 			-- NAME
-			yrp_voice_channels[tonumber(channel.uniqueID)]["string_name"] = SQL_STR_OUT(channel.string_name)
+			yrp_voice_channels[tonumber(channel.uniqueID)]["string_name"] = channel.string_name
 
 			-- Hear?
 			yrp_voice_channels[tonumber(channel.uniqueID)]["int_hear"] = tobool(channel.int_hear)
@@ -1048,7 +1067,7 @@ end)
 
 util.AddNetworkString("yrp_voice_channel_add")
 net.Receive("yrp_voice_channel_add", function(len, ply)
-	local name = SQL_STR_IN(net.ReadString())
+	local name = net.ReadString()
 	local hear = tonum(net.ReadBool())
 
 	local augs = table.concat(net.ReadTable(), ",")
@@ -1071,7 +1090,7 @@ net.Receive("yrp_voice_channel_add", function(len, ply)
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
 		channel.int_position = tonumber(channel.int_position)
 		if channel.int_position != c then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
 		end
 
 		c = c + 1
@@ -1082,7 +1101,7 @@ end)
 
 util.AddNetworkString("yrp_voice_channel_save")
 net.Receive("yrp_voice_channel_save", function(len, ply)
-	local name = SQL_STR_IN(net.ReadString())
+	local name = net.ReadString()
 	local hear = tonum(net.ReadBool())
 
 	local augs = table.concat(net.ReadTable(), ",")
@@ -1096,9 +1115,16 @@ net.Receive("yrp_voice_channel_save", function(len, ply)
 	local uid = net.ReadString()
 	
 	SQL_UPDATE(
-		DATABASE_NAME,
-		"string_name = '" .. name .. "', int_hear = '" .. hear .. "', string_active_usergroups = '" .. augs .. "', string_active_groups = '" .. agrps .. "', string_active_roles = '" .. arols .. "', string_passive_usergroups = '" .. pugs .. "', string_passive_groups = '" .. pgrps .. "', string_passive_roles = '" .. prols .. "'",
-		"uniqueID = '" .. uid .. "'"
+		DATABASE_NAME, {
+			["string_name"] = name,
+			["int_hear"] = hear,
+			["string_active_usergroups"] = augs,
+			["string_active_groups"] = agrps,
+			["string_active_roles"] = arols,
+			["string_passive_usergroups"] = pugs,
+			["string_passive_groups"] = pgrps,
+			["string_passive_roles"] = prols,
+		}, "uniqueID = '" .. uid .. "'"
 	)
 
 	GenerateVoiceTable()
@@ -1116,7 +1142,7 @@ net.Receive("yrp_voice_channel_rem", function(len, ply)
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
 		channel.int_position = tonumber(channel.int_position)
 		if channel.int_position != c then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
 		end
 
 		c = c + 1
@@ -1136,11 +1162,11 @@ net.Receive("channel_up", function(len, ply)
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
 		channel.int_position = tonumber(channel.int_position)
 		if c == int_position then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c - 1 .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c - 1}, "uniqueID = '" .. channel.uniqueID .. "'")
 		elseif c == int_position - 1 then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c + 1 .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c + 1}, "uniqueID = '" .. channel.uniqueID .. "'")
 		elseif channel.int_position != c then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
 		end
 
 		c = c + 1
@@ -1165,11 +1191,11 @@ net.Receive("channel_dn", function(len, ply)
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
 		channel.int_position = tonumber(channel.int_position)
 		if c == int_position then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c + 1 .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c + 1}, "uniqueID = '" .. channel.uniqueID .. "'")
 		elseif c == int_position + 1 then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c - 1 .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c - 1}, "uniqueID = '" .. channel.uniqueID .. "'")
 		elseif channel.int_position != c then
-			SQL_UPDATE(DATABASE_NAME, "int_position = '" .. c .. "'", "uniqueID = '" .. channel.uniqueID .. "'")
+			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
 		end
 
 		c = c + 1
@@ -1297,6 +1323,7 @@ net.Receive("yrp_next_voice_channel", function(len, ply)
 	end
 end)
 
+hook.Remove("PlayerCanHearPlayersVoice", "YRP_voicesystem")
 hook.Add("PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, talker)
 	if GetGlobalBool("bool_voice", false) then
 		if listener == talker then
@@ -1321,11 +1348,10 @@ hook.Add("PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, talk
 		end
 		return false -- new
 	end
-	return true -- new
 end)
 
 function setbodygroups(ply)
-	local chaTab = ply:GetChaTab()
+	local chaTab = ply:YRPGetCharacterTable()
 	if wk(chaTab) then
 		ply:SetSkin(chaTab.skin)
 		ply:SetupHands()

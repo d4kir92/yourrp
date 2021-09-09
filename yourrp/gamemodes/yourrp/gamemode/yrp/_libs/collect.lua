@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 if SERVER then
 	local posturl = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSe9Po-FzCYFCNIlXbZfywXOIPooZ48_FqvEAwHrnRdTBolmHg/formResponse"

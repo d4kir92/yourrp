@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -24,18 +24,18 @@ end
 
 util.AddNetworkString("yrp_noti")
 
-function teleportToSpawnpoint(ply)
+function YRPTeleportToSpawnpoint(ply, from)
 	if ply.ignorespawnpoint == true then
-		timer.Simple(0.5, function()
+		timer.Simple(2.0, function()
 			if IsValid(ply) and ply.ignorespawnpoint then
 				ply.ignorespawnpoint = false
 			end
 		end)
 		return false
 	else
-		local rolTab = ply:GetRolTab()
-		local groTab = ply:GetGroTab()
-		local chaTab = ply:GetChaTab()
+		local rolTab = ply:YRPGetRoleTable()
+		local groTab = ply:YRPGetGroupTable()
+		local chaTab = ply:YRPGetCharacterTable()
 
 		if wk(chaTab) and wk(groTab) and wk(rolTab) then
 			local _roleSpawnpoints = SQL_SELECT(DATABASE_NAME, "*", "type = 'RoleSpawnpoint' AND linkID = '" .. rolTab.uniqueID .. "'")
@@ -63,7 +63,7 @@ function teleportToSpawnpoint(ply)
 				if worked then
 					YRP.msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint")
 				else
-					YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to GroupSpawnpoint")
+					YRP.msg("note", "[" .. ply:Nick() .. "] FAILED to teleport to GroupSpawnpoint")
 				end
 				_tmp = string.Explode(",", _randomSpawnPoint.angle)
 				if ply:IsPlayer() then
@@ -111,11 +111,12 @@ function teleportToSpawnpoint(ply)
 				tp_to(ply, ply:GetPos())
 				return false
 			end
-		else
-			YRP.msg("error", "[teleportToSpawnpoint] FAILED! r: " .. tostring(roltab) .. " g: " .. tostring(groTab) .. " c: " .. tostring(chaTab))
+		elseif ply:HasCharacterSelected() == true and ply:LoadedGamemode() == true and ply:GetNW2Bool("yrpspawnedwithcharacter", false) == true then
+			YRP.msg("error", "[YRPTeleportToSpawnpoint] FAILED! ROLE: " .. tostring(roltab) .. " GROUP: " .. tostring(groTab) .. " CHARACTER: " .. tostring(chaTab) .. " from: " .. tostring(from) )
 			return false
 		end
 	end
+	return false
 end
 
 util.AddNetworkString("getMapList")
@@ -232,7 +233,7 @@ net.Receive("update_map_name", function(len, ply)
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
-	SQL_UPDATE(DATABASE_NAME, "name = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["name"] = i}, "uniqueID = '" .. uid .. "'")
 	UpdateJailpointTable()
 end)
 
@@ -241,7 +242,7 @@ net.Receive("update_map_int_respawntime", function(len, ply)
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
-	SQL_UPDATE(DATABASE_NAME, "int_respawntime = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["int_respawntime"] = i}, "uniqueID = '" .. uid .. "'")
 	UpdateSpawnerNPCTable()
 	UpdateSpawnerENTTable()
 end)
@@ -251,7 +252,7 @@ net.Receive("update_map_int_amount", function(len, ply)
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
-	SQL_UPDATE(DATABASE_NAME, "int_amount = '" .. i .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["int_amount"] = i}, "uniqueID = '" .. uid .. "'")
 	UpdateSpawnerNPCTable()
 	UpdateSpawnerENTTable()
 end)
@@ -261,7 +262,7 @@ net.Receive("update_map_string_classname", function(len, ply)
 	local uid = net.ReadString()
 	local s = net.ReadString()
 
-	SQL_UPDATE(DATABASE_NAME, "string_classname = '" .. s .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["string_classname"] = s}, "uniqueID = '" .. uid .. "'")
 	UpdateSpawnerNPCTable()
 	UpdateSpawnerENTTable()
 end)

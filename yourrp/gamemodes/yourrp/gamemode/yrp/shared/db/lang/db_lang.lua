@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 YRP = YRP or {}
 
@@ -171,7 +171,11 @@ function YRP.GetCurrentLanguage()
 end
 
 function YRP.GetCurrentLanguageInEnglish()
-	return yrp_button_info[YRP.GetCurrentLanguage()].inenglish
+	if yrp_button_info[YRP.GetCurrentLanguage()] then
+		return yrp_button_info[YRP.GetCurrentLanguage()].inenglish
+	else
+		return "FAIL!!!"
+	end
 end
 
 function YRP.check_languagepack()

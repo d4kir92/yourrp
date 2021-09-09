@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -123,7 +123,7 @@ net.Receive("whitelistPlayer", function(len, ply)
 			local dat = util.DateStamp()
 			local status = "Manually by " .. ply:SteamName()
 			local name = target:SteamName()
-			SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. SQL_STR_IN(status) .. "', '" .. SQL_STR_IN(name) .. "'")
+			SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', '" .. _nick .. "', " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
 			SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', 'Role: " .. DBRole.string_name .. "'")
 		else
 			YRP.msg("note", "whitelistPlayer FAILED! CALL DEVS")
@@ -152,7 +152,7 @@ net.Receive("whitelistPlayerGroup", function(len, ply)
 		local dat = util.DateStamp()
 		local status = "Manually by " .. ply:SteamName()
 		local name = target:SteamName()
-		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. groupID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
+		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. _SteamID .. "', '" .. _nick .. "', " .. groupID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
 		SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', 'Group: " .. DBGroup.string_name .. "'")
 	end
 	sendRoleWhitelist(ply)
@@ -172,7 +172,7 @@ net.Receive("whitelistPlayerAll", function(len, ply)
 		local dat = util.DateStamp()
 		local status = "Manually by " .. ply:SteamName()
 		local name = target:SteamName()
-		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, roleID, groupID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. "-1" .. ", " .. "-1" .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
+		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, roleID, groupID, date, status, name", "'" .. _SteamID .. "', '" .. _nick .. "', " .. "-1" .. ", " .. "-1" .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
 		SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', '" .. "ALL" .. "'")
 	end
 	sendRoleWhitelist(ply)
@@ -200,7 +200,7 @@ function WhitelistToRole(ply, rid)
 		local dat = util.DateStamp()
 		local status = "WhitelistToRole by " .. ply:SteamName()
 		local name = target:SteamName()
-		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', '" .. SQL_STR_IN(_nick) .. "', " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. SQL_STR_IN(status) .. "', '" .. SQL_STR_IN(name) .. "'")
+		SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', '" .. _nick .. "', " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'")
 		SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', 'Role: " .. DBRole.string_name .. "'")
 	else
 		YRP.msg("note", "WhitelistToRole FAILED! CALL DEVS")

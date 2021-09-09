@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/specializations/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/specializations/gpl.txt)
 
 local _li = {}
 net.Receive("get_specializations", function()
@@ -28,7 +28,7 @@ net.Receive("get_specializations", function()
 			_li.name = createD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 			_li.name.textentry.tbl = tbl
 			_li.name:SetHeader(YRP.lang_string("LID_name"))
-			_li.name:SetText(SQL_STR_OUT(tbl.name))
+			_li.name:SetText(tbl.name)
 			function _li.name.textentry:OnChange()
 				self.tbl.name = self:GetValue()
 				net.Start("edit_specialization_name")
@@ -41,7 +41,7 @@ net.Receive("get_specializations", function()
 			_li.prefix = createD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(110))
 			_li.prefix.textentry.tbl = tbl
 			_li.prefix:SetHeader(YRP.lang_string("LID_prefix"))
-			_li.prefix:SetText(SQL_STR_OUT(tbl.prefix))
+			_li.prefix:SetText(tbl.prefix)
 			function _li.prefix.textentry:OnChange()
 				self.tbl.prefix = self:GetValue()
 				net.Start("edit_specialization_prefix")
@@ -54,7 +54,7 @@ net.Receive("get_specializations", function()
 			_li.suffix = createD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(220))
 			_li.suffix.textentry.tbl = tbl
 			_li.suffix:SetHeader(YRP.lang_string("LID_suffix"))
-			_li.suffix:SetText(SQL_STR_OUT(tbl.suffix))
+			_li.suffix:SetText(tbl.suffix)
 			function _li.suffix.textentry:OnChange()
 				self.tbl.suffix = self:GetValue()
 				net.Start("edit_specialization_suffix")

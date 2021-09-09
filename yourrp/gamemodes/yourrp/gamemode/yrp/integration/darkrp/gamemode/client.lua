@@ -1,109 +1,93 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function DarkRP.addChatReceiver(prefix, text, hearFunc)
 	--Description: Add a chat command with specific receivers
-	YRP.msg("darkrp", "addChatReceiver(" .. prefix .. ", " .. text .. ", " .. tostring(hearFunc) .. ")")
-	YRP.msg("darkrp", DarkRP._not)
+	--YRPDarkrpNotFound("addChatReceiver(" .. prefix .. ", " .. text .. ", " .. tostring(hearFunc) .. ")")
 end
 
 function DarkRP.addF4MenuTab(name, panel)
 	--Description: Add a tab to the F4 menu.
-	YRP.msg("darkrp", "addF4MenuTab(" .. name .. ", panel)")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("addF4MenuTab(" .. tostring(name) .. ", " .. tostring(panel) .. ")")
 end
 
 function DarkRP.closeF1Menu()
 	--Description: Close the F1 help menu.
-	YRP.msg("darkrp", "closeF1Menu()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("closeF1Menu()")
 end
 
 function DarkRP.closeF4Menu()
 	--Description: Close the F4 menu if it's open.
-	YRP.msg("darkrp", "closeF4Menu()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("closeF4Menu()")
 end
 
 function DarkRP.deLocalise(text)
 	--Description: Makes sure the string will not be localised when drawn or printed.
-	YRP.msg("darkrp", "deLocalise(" .. text .. ")")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("deLocalise(" .. text .. ")")
 	return text
 end
 
 function DarkRP.getF4MenuPanel()
 	--Description: Get the F4 menu panel.
-	YRP.msg("darkrp", "getF4MenuPanel(" .. text .. ")")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("getF4MenuPanel(" .. text .. ")")
 	return NULL
 end
 
 function DarkRP.openF1Menu()
 	--Description: Open the F1 help menu.
-	YRP.msg("darkrp", "openF1Menu()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("openF1Menu()")
 end
 
 function DarkRP.openF4Menu()
 	--Description: Open the F4 menu.
-	YRP.msg("darkrp", "openF4Menu()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("openF4Menu()")
 end
 
 function DarkRP.openHitMenu(hitman)
 	--Description: Open the menu that requests a hit.
-	YRP.msg("darkrp", "openHitMenu(hitman)")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("openHitMenu(" .. tostring(hitman) .. ")")
 end
 
 function DarkRP.openKeysMenu()
 	--Description: Open the keys/F2 menu.
-	YRP.msg("darkrp", "openKeysMenu()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("openKeysMenu()")
 end
 
 function DarkRP.openPocketMenu()
 	--Description: Open the DarkRP pocket menu.
-	YRP.msg("darkrp", "openPocketMenu()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("openPocketMenu()")
 end
 
 function DarkRP.readNetDoorVar()
 	--Description: Internal function. You probably shouldn't need this. DarkRP
 	--						 calls this function when reading DoorVar net messages.
 	--						 This function reads the net data for a specific DoorVar.
-	YRP.msg("darkrp", "readNetDoorVar()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("readNetDoorVar()")
 	return "Old readNetDoorVar", nil
 end
 
 function DarkRP.refreshF1Menu()
 	--Description: Close the F1 help menu.
-	YRP.msg("darkrp", "refreshF1Menu()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("refreshF1Menu()")
 end
 
 function DarkRP.removeChatReceiver(prefix)
 	--Description: Remove a chat command receiver
-	YRP.msg("darkrp", "removeChatReceiver(prefix)")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("removeChatReceiver(" .. prefix .. ")")
 end
 
 function DarkRP.removeF4MenuTab(name)
 	--Description: Remove a tab from the F4 menu by name.
-	YRP.msg("darkrp", "removeF4MenuTab(name)")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("removeF4MenuTab(" .. name .. ")")
 end
 
 function DarkRP.setPreferredJobModel(teamNr, model)
 	--Description: Set the model preferred by the player (if the job allows multiple models).
-	--YRP.msg("darkrp", "setPreferredJobModel(" .. tostring(teamNr) .. ", " .. tostring(model) .. ")")
+	--YRPDarkrpNotFound("setPreferredJobModel(" .. tostring(teamNr) .. ", " .. tostring(model) .. ")")
 end
 
 function DarkRP.switchTabOrder(firstTab, secondTab)
 	--Description: Switch the order of two tabs.
-	YRP.msg("darkrp", "switchTabOrder(firstTab, secondTab)")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("switchTabOrder(" .. firstTab .. ", " .. secondTab .. ")")
 end
 
 function DarkRP.textWrap(text, font, maxWidth)
@@ -145,8 +129,7 @@ end
 
 function DarkRP.toggleF4Menu()
 	--Description: Toggle the state of the F4 menu (open or closed).
-	YRP.msg("darkrp", "toggleF4Menu()")
-	YRP.msg("darkrp", DarkRP._not)
+	YRPDarkrpNotFound("toggleF4Menu()")
 	return text
 end
 

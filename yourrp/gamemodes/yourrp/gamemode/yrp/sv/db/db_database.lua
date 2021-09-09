@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 util.AddNetworkString("dbGetGeneral")
 util.AddNetworkString("dbGetQuestions")
@@ -227,12 +227,10 @@ net.Receive("yrp_darkrp_bool", function(len, ply)
 	local name = net.ReadString()
 	local b = net.ReadBool()
 	
-	name = SQL_STR_IN(name)
-	
 	if !wk(SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "bool_" .. name .. "'")) then
 		SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. "bool_" .. name .. "', '" .. tonum(b) .. "'")
 	else
-		SQL_UPDATE(DATABASE_NAME, "value = '" .. tonum(b) .. "'", "name = '" .. "bool_" .. name .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["value"] = tonum(b)}, "name = '" .. "bool_" .. name .. "'")
 	end
 	UpdateDarkRPTable()
 end)
@@ -244,8 +242,8 @@ function UpdateDarkRPTable(ply)
 	if wk(tab) then
 		local yrp_darkrp = {}
 		for i, v in pairs(tab) do
-			local name = SQL_STR_OUT(v.name)
-			local value = SQL_STR_OUT(v.value)
+			local name = v.name
+			local value = v.value
 			if string.StartWith(name, "bool_") then
 				yrp_darkrp[name] = tobool(value)
 			else

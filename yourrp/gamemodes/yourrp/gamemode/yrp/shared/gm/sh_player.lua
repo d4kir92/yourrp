@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function GetPlayerByName(name)
 	if name == nil then
@@ -11,7 +11,7 @@ function GetPlayerByName(name)
 	name = string.lower(name)
 
 	for i, ply in pairs(player.GetAll()) do
-		if ply:IsPlayer() and string.find(string.lower(ply:RPName()), name) or string.find(string.lower(ply:SteamName()), name) then
+		if ply:IsPlayer() and string.find(string.lower(ply:RPName()), name) or string.find(string.lower(ply:SteamName()), name) or string.find(string.lower(ply:Nick()), name) or string.find(string.lower(ply:GetName()), name) then
 			return ply
 		end
 	end
@@ -153,7 +153,7 @@ function Player:IsCharacterValid()
 	if SERVER then
 		if self:IsValid() then
 			if self:GetNW2Bool("finishedloadingcharacter", false) then
-				local _cha_tab = self:GetChaTab()
+				local _cha_tab = self:YRPGetCharacterTable()
 				if _cha_tab == false then
 					return false
 				else
@@ -183,7 +183,7 @@ function Player:HasCharacterSelected()
 	return false
 end
 
-function Player:GetChaTab()
+function Player:YRPGetCharacterTable()
 	if SERVER then
 		if self:IsValid() then
 			if self:GetNW2Bool("finishedloadingcharacter", false) then
@@ -209,11 +209,11 @@ function Player:GetChaTab()
 	return false
 end
 
-function Player:GetRolTab()
+function Player:YRPGetRoleTable()
 	if SERVER then
 		if self:IsValid() then
 			if self:GetNW2Bool("finishedloadingcharacter", false) then
-				local yrp_characters = self:GetChaTab()
+				local yrp_characters = self:YRPGetCharacterTable()
 				if wk(yrp_characters) and wk(yrp_characters.roleID) then
 					local yrp_roles = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. yrp_characters.roleID)
 					if wk(yrp_roles) then
@@ -234,11 +234,11 @@ function Player:GetRolTab()
 	return false
 end
 
-function Player:GetGroTab()
+function Player:YRPGetGroupTable()
 	if SERVER then
 		if self:IsValid() then
 			if self:GetNW2Bool("finishedloadingcharacter", false) then
-				local yrp_characters = self:GetChaTab()
+				local yrp_characters = self:YRPGetCharacterTable()
 				if wk(yrp_characters) and wk(yrp_characters.groupID) then
 					local yrp_groups = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. yrp_characters.groupID)
 					if wk(yrp_groups) then
@@ -272,7 +272,7 @@ function Player:CheckMoney()
 			end
 			local _money = tonumber(_m)
 			if wk(_money) and self:CharID() != false then
-				SQL_UPDATE("yrp_characters", "money = '" .. _money .. "'", "uniqueID = " .. self:CharID()) --attempt to nil value
+				SQL_UPDATE("yrp_characters", {["money"] = _money}, "uniqueID = " .. self:CharID()) --attempt to nil value
 			end
 			_mb = self:GetNW2String("moneybank", "FAILED")
 			if _mb == "FAILED" then
@@ -281,7 +281,7 @@ function Player:CheckMoney()
 			end
 			local _moneybank = tonumber(_mb)
 			if wk(_moneybank) and self:CharID() != false then
-				SQL_UPDATE("yrp_characters", "moneybank = '" .. _moneybank .. "'", "uniqueID = " .. self:CharID())
+				SQL_UPDATE("yrp_characters", {["moneybank"] = _moneybank}, "uniqueID = " .. self:CharID())
 			end
 		end)
 	end
@@ -297,14 +297,14 @@ function Player:UpdateMoney()
 					return false
 				end
 				if worked(money, "ply:money UpdateMoney", true) then
-					SQL_UPDATE("yrp_characters", "money = '" .. money .. "'", "uniqueID = " .. _char_id)
+					SQL_UPDATE("yrp_characters", {["money"] = money}, "uniqueID = " .. _char_id)
 				end
 				local moneybank = tonumber(self:GetNW2String("moneybank", "FAILED"))
 				if moneybank == "FAILED" then
 					return false
 				end
 				if worked(moneybank, "ply:moneybank UpdateMoney", true) then
-					SQL_UPDATE("yrp_characters", "moneybank = '" .. moneybank .. "'", "uniqueID = " .. _char_id)
+					SQL_UPDATE("yrp_characters", {["moneybank"] = moneybank}, "uniqueID = " .. _char_id)
 				end
 			end
 		end
@@ -487,7 +487,7 @@ if SERVER then
 	end
 
 	function Player:resetUptimeCurrent()
-		local _res = SQL_UPDATE("yrp_players", "uptime_current = " .. 0, "SteamID = '" .. self:SteamID() .. "'")
+		local _res = SQL_UPDATE("yrp_players", {["uptime_current"] = 0}, "SteamID = '" .. self:SteamID() .. "'")
 	end
 
 	function Player:getuptimetotal()
@@ -557,14 +557,6 @@ function Player:canAffordBank(money)
 	end
 end
 
-function Player:SteamName()
-	if self:IsValid() then
-		return self:GetName() or "FAILED"
-	else
-		return "FAILED"
-	end
-end
-
 function Player:YRPRPName()
 	if IsValid(self) then
 		return self:GetNW2String("rpname", self:SteamName())
@@ -573,13 +565,12 @@ function Player:YRPRPName()
 	end
 end
 
+Player.SteamName = Player.SteamName or Player.Name
 function Player:Name()
-	return self:GetNW2String("rpname", self:SteamName())
+	return self:YRPRPName()
 end
-
-function Player:Nick()
-	return self:YRPRPName() or "FAILED"
-end
+Player.GetName = Player.Name
+Player.Nick = Player.Name
 
 function Player:YRPName()
 	return "[" .. self:SteamName() .. " (" .. self:RPName() .. ")]"
@@ -666,16 +657,16 @@ end
 
 -- DOORS
 function IsOwnedBy(ply, door)
-	if door:isDoor() then
+	if door:YRPIsDoor() then
 		return ply:CharID() == door:GetNW2Int("ownerCharID", 0)
-	elseif door:isVehicle() then
+	elseif door:IsVehicle() then
 		return ply:CharID() == door:GetNW2Int("ownerCharID", 0)
 	end
 	return false
 end
 
 function canLock(ply, door)
-	if door:isDoor() then
+	if door:YRPIsDoor() then
 		if door:GetNW2Int("ownerCharID", 0) > 0 then
 			if ply:CharID() == door:GetNW2Int("ownerCharID", 0) then
 				YRP.msg("note", "[canLock] " .. "IsOwner")

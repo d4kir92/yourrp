@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -102,7 +102,7 @@ end
 
 function UpdateValue(tab)
 	tab.uniqueID = tab.uniqueID or 1
-	SQL_UPDATE(tab.db, tab.id .. " = '" .. tab.value .. "'", "uniqueID = '" .. tab.uniqueID .. "'")
+	SQL_UPDATE(tab.db, {[tab.id] = tab.value}, "uniqueID = '" .. tab.uniqueID .. "'")
 	--sql.Query("UPDATE " .. tab.db .. " SET " .. tab.id .. " = '" .. tab.value .. "' WHERE uniqueID = '" .. tab.uniqueID .. "'")
 end
 
@@ -131,7 +131,7 @@ function DBUpdateValue(db_name, str, l_db, value)
 	if l_db != nil then
 		l_db[str] = value
 	end
-	sql.Query("UPDATE " .. db_name .. " SET " .. str .. " = '" .. value .. "' WHERE uniqueID = '1'")
+	SQL_UPDATE(db_name, {[str] = value}, "uniqueID = '1'")
 end
 
 function DBUpdateFloat(db_name, ply, netstr, str, l_db, value)

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function BuildTable(tab, parent, name, tabx)
 	local header = createD("DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)

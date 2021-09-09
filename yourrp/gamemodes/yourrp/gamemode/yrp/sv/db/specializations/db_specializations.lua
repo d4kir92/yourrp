@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/specializations/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/specializations/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -60,7 +60,7 @@ net.Receive("spec_add_swep", function(len, ply)
 
 		local newsweps = table.concat( newtab, "," )
 
-		SQL_UPDATE(DATABASE_NAME, "sweps = '" .. newsweps .. "'", "uniqueID = '" .. uid .. "'")
+		SQL_UPDATE(DATABASE_NAME, {["sweps"] = newsweps}, "uniqueID = '" .. uid .. "'")
 		YRPSendSpecSWEPS(uid, ply)
 	end
 end)
@@ -88,7 +88,7 @@ net.Receive("spec_rem_swep", function(len, ply)
 
 	local newsweps = table.concat( newtab, "," )
 
-	SQL_UPDATE(DATABASE_NAME, "sweps = '" .. newsweps .. "'", "uniqueID = '" .. uid .. "'")
+	SQL_UPDATE(DATABASE_NAME, {["sweps"] = newsweps}, "uniqueID = '" .. uid .. "'")
 	YRPSendSpecSWEPS(uid, ply)
 end)
 
@@ -158,25 +158,25 @@ end)
 util.AddNetworkString("edit_specialization_name")
 net.Receive("edit_specialization_name", function(len, ply)
 	local _uid = net.ReadString()
-	local _new_name = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(DATABASE_NAME, "name = '" .. _new_name .. "'", "uniqueID = " .. _uid)
-	YRP.msg("db", "edit_specialization_name: " .. tostring(SQL_STR_OUT(_new_name)))
+	local _new_name = net.ReadString()
+	local _edit = SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
+	YRP.msg("db", "edit_specialization_name: " .. tostring(_new_name))
 end)
 
 util.AddNetworkString("edit_specialization_prefix")
 net.Receive("edit_specialization_prefix", function(len, ply)
 	local _uid = net.ReadString()
-	local _new_prefix = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(DATABASE_NAME, "prefix = '" .. _new_prefix .. "'", "uniqueID = " .. _uid)
-	YRP.msg("db", "edit_specialization_prefix: " .. tostring(SQL_STR_OUT(_new_prefix)))
+	local _new_prefix = net.ReadString()
+	local _edit = SQL_UPDATE(DATABASE_NAME, {["prefix"] = _new_prefix}, "uniqueID = " .. _uid)
+	YRP.msg("db", "edit_specialization_prefix: " .. tostring(_new_prefix))
 end)
 
 util.AddNetworkString("edit_specialization_suffix")
 net.Receive("edit_specialization_suffix", function(len, ply)
 	local _uid = net.ReadString()
-	local _new_suffix = SQL_STR_IN(net.ReadString())
-	local _edit = SQL_UPDATE(DATABASE_NAME, "suffix = '" .. _new_suffix .. "'", "uniqueID = " .. _uid)
-	YRP.msg("db", "edit_specialization_suffix: " .. tostring(SQL_STR_OUT(_new_suffix)))
+	local _new_suffix = net.ReadString()
+	local _edit = SQL_UPDATE(DATABASE_NAME, {["suffix"] = _new_suffix}, "uniqueID = " .. _uid)
+	YRP.msg("db", "edit_specialization_suffix: " .. tostring(_new_suffix))
 end)
 
 util.AddNetworkString("get_all_specializations_simple")
@@ -206,7 +206,7 @@ net.Receive("role_add_specialization", function(len, ply)
 			table.insert(_specializationIDs, _specialization_uid)
 			_specializationIDs = string.Implode(",", _specializationIDs)
 
-			SQL_UPDATE("yrp_ply_roles", "specializationIDs = '" .. _specializationIDs .. "'" ,"uniqueID = " .. _role_uid)
+			SQL_UPDATE("yrp_ply_roles", {["specializationIDs"] = _specializationIDs} ,"uniqueID = " .. _role_uid)
 		end
 	end
 end)
@@ -229,7 +229,7 @@ net.Receive("role_rem_specialization", function(len, ply)
 
 			_specializationIDs = string.Implode(",", _specializationIDs)
 
-			SQL_UPDATE("yrp_ply_roles", "specializationIDs = '" .. _specializationIDs .. "'" ,"uniqueID = " .. _role_uid)
+			SQL_UPDATE("yrp_ply_roles", {["specializationIDs"] = _specializationIDs} ,"uniqueID = " .. _role_uid)
 		end
 	end
 end)
@@ -314,7 +314,7 @@ function GetSpecializationIDByName(lname)
 		return nil
 	end
 
-	lname = SQL_STR_IN(lname)
+	lname = lname
 	lname = string.lower(lname)
 
 	local tab = SQL_SELECT(DATABASE_NAME, "*")
@@ -323,7 +323,7 @@ function GetSpecializationIDByName(lname)
 	if !wk(tab) then return nil end
 
 	for i, spe in pairs(tab) do
-		spe.name = SQL_STR_OUT(spe.name)
+		spe.name = spe.name
 		spe.name = string.lower(spe.name)
 
 		if lname and spe.name and string.find(spe.name, lname) then

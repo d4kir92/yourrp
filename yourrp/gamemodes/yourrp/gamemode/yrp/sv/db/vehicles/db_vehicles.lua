@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
@@ -123,7 +123,7 @@ net.Receive("removeVehicleOwner", function(len, ply)
 	local _tmpVehicleID = net.ReadString()
 	local _tmpTable = SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. _tmpVehicleID .. "'")
 
-	local result = SQL_UPDATE(DATABASE_NAME, "ownerCharID = ''", "item_id = '" .. _tmpVehicleID .. "'")
+	local result = SQL_UPDATE(DATABASE_NAME, {["ownerCharID"] = ""}, "item_id = '" .. _tmpVehicleID .. "'")
 
 	for k, v in pairs(ents.GetAll()) do
 		if tonumber(v:GetNW2String("item_uniqueID")) == tonumber(_tmpVehicleID) then

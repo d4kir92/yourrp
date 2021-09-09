@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- #logs
 
@@ -59,7 +59,7 @@ function BuildLogs(parent, typ)
 							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:InsertClickableTextStart("Missing Source SteamID")
+							rt:AppendText("Missing Source SteamID")
 						end
 						if source.RPName != nil then
 							rt:AppendText(source:RPName())
@@ -69,7 +69,7 @@ function BuildLogs(parent, typ)
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(": " .. SQL_STR_OUT(v.string_value))
+						rt:AppendText(": " .. v.string_value)
 					elseif typ == "LID_connections" then
 						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
@@ -95,7 +95,7 @@ function BuildLogs(parent, typ)
 							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:InsertClickableTextStart("Missing Source SteamID")
+							rt:AppendText("Missing Source SteamID")
 						end
 						if source.RPName != nil then
 							rt:AppendText(source:RPName())
@@ -105,7 +105,7 @@ function BuildLogs(parent, typ)
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(" " .. SQL_STR_OUT(v.string_value))
+						rt:AppendText(" " .. v.string_value)
 					elseif typ == "LID_kills" then
 						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
@@ -133,7 +133,7 @@ function BuildLogs(parent, typ)
 							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:InsertClickableTextStart("Missing Source SteamID")
+							rt:AppendText("Missing Source SteamID")
 						end
 						if source.RPName then
 							rt:AppendText(source:RPName())
@@ -178,7 +178,7 @@ function BuildLogs(parent, typ)
 							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:InsertClickableTextStart("Missing Source SteamID")
+							rt:AppendText("Missing Source SteamID")
 						end
 						if source.RPName then
 							rt:AppendText(source:RPName())
@@ -200,7 +200,7 @@ function BuildLogs(parent, typ)
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(" [" .. SQL_STR_OUT(v.string_value) .. "] ")
+						rt:AppendText(" [" .. v.string_value .. "] ")
 					elseif typ == "LID_spawns" then
 						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
@@ -226,7 +226,7 @@ function BuildLogs(parent, typ)
 							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:InsertClickableTextStart("Missing Source SteamID")
+							rt:AppendText("Missing Source SteamID")
 						end
 						if source.RPName then
 							rt:AppendText(source:RPName())
@@ -237,14 +237,14 @@ function BuildLogs(parent, typ)
 
 						if wk(v.string_value) then
 							rt:InsertColorChange(255, 255, 255, 255)
-							rt:InsertClickableTextStart(" " .. v.string_value)
+							rt:AppendText(" " .. v.string_value)
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:InsertClickableTextStart("Missing VALUE")
+							rt:AppendText("Missing VALUE")
 						end
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(" [" .. SQL_STR_OUT(v.string_value) .. "] ")
+						rt:AppendText(" [" .. v.string_value .. "] ")
 					elseif typ == "LID_health" then
 						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
@@ -271,7 +271,7 @@ function BuildLogs(parent, typ)
 								rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 							else
 								rt:InsertColorChange(255, 100, 100, 255)
-								rt:InsertClickableTextStart("Missing Source SteamID")
+								rt:AppendText("Missing Source SteamID")
 							end
 							if source.RPName then
 								rt:AppendText(source:RPName())
@@ -332,7 +332,7 @@ function BuildLogs(parent, typ)
 							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:InsertClickableTextStart("Missing Source SteamID")
+							rt:AppendText("Missing Source SteamID")
 						end
 						if source.RPName then
 							rt:AppendText(source:RPName())

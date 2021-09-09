@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 Arno Zura (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 YRPKEYBINDS = YRPKEYBINDS or {}
 YRPKEYBINDS["menu_character_selection"] = KEY_F2
@@ -86,7 +86,7 @@ function set_keybind(name, value, force)
 		end
 	end
 
-	local result = SQL_UPDATE(DATABASE_NAME, "'" .. name .. "' = '" .. value .. "'", "uniqueID = '" .. 1 .. "'")
+	local result = SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. 1 .. "'")
 	yrp_keybinds[name] = value
 	return true
 end
