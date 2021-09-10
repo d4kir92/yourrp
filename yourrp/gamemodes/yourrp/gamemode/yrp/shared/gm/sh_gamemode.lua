@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 348 -- do NOT change this!
 GM.VersionCanary = 699 -- do NOT change this!
-GM.VersionBuild = 39 -- do NOT change this!
+GM.VersionBuild = 41 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -751,6 +751,8 @@ end
 
 -- ERROR LOGGING
 
+local bn = GM.VersionBuild
+
 -- CONFIG
 local filename = "yrp/yrp_errors.json"
 local deleteafter = 60 * 60 * 24
@@ -813,7 +815,7 @@ local function YRPSendError(tab, from)
 		entry["entry.176860124"] = tostring(GAMEMODE.VersionCanary)
 
 		-- build
-		entry["entry.364587527"] = tostring(GAMEMODE.VersionBuild)
+		entry["entry.364587527"] = tostring(bn)
 
 		posturl = url_sv
 	elseif tab.realm == "CLIENT" then
@@ -839,7 +841,7 @@ local function YRPSendError(tab, from)
 		entry["entry.1848121189"] = tostring(GAMEMODE.VersionCanary)
 
 		-- build
-		entry["entry.1699483827"] = tostring(GAMEMODE.VersionBuild)
+		entry["entry.1699483827"] = tostring(bn)
 
 		posturl = url_cl
 	else
@@ -847,7 +849,7 @@ local function YRPSendError(tab, from)
 		return
 	end
 
-	if tab.buildnummer != GAMEMODE.VersionBuild then
+	if tab.buildnummer != bn then
 		MsgC( Color(255, 0, 0), ">>> [YRPSendError] FAIL, ERROR IS OUTDATED" .. "\n" )
 		YRPRemoveOutdatedErrors()
 		return
@@ -887,7 +889,7 @@ function YRPAddError(err, trace, realm)
 	newerr.ts = os.time()
 	newerr.realm = realm
 	newerr.sended = false
-	newerr.buildnummer = GAMEMODE.VersionBuild
+	newerr.buildnummer = bn
 	table.insert(YRPErrors, newerr)
 
 	YRPSendError(newerr, "NEW ERROR")
@@ -905,7 +907,7 @@ function YRPRemoveOutdatedErrors()
 				v.buildnummer = 0
 				changed = true
 			end
-			if v.ts and os.time() - v.ts < deleteafter and v.buildnummer == GAMEMODE.VersionBuild then
+			if v.ts and os.time() - v.ts < deleteafter and v.buildnummer == bn then
 				table.insert( TMPYRPErrors, v )
 			else
 				changed = true

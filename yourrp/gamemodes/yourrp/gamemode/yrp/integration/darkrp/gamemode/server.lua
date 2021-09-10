@@ -12,7 +12,7 @@ end
 
 function DarkRP.createMoneyBag(pos, amount)
 	--Description: Create a money bag.
-	YRPDarkrpNotFound("createMoneyBag(" .. tostring(pos) .. ", ".. tostring(amount) .. ")")
+	--YRPDarkrpNotFound("createMoneyBag(" .. tostring(pos) .. ", ".. tostring(amount) .. ")")
 
 	local _moneyEnt = ents.Create("yrp_money")
 	_moneyEnt:SetPos(pos)
@@ -150,7 +150,7 @@ end
 
 function DarkRP.notifyAll(msgType, time, message)
 	--Description: Make a notification pop up on the everyone's screen.
-	YRPDarkrpNotFound("notifyAll(msgType, time, " .. message .. ")")
+	--YRPDarkrpNotFound("notifyAll(msgType, time, " .. message .. ")")
 	net.Start("sendNotify")
 		net.WriteString(message)
 	net.Broadcast()
@@ -184,7 +184,7 @@ end
 
 function DarkRP.printMessageAll(msgType, message)
 	--Description: Make a notification pop up in the middle of everyone's screen.
-	YRPDarkrpNotFound("printMessageAll(msgType, " .. message .. ")")
+	--YRPDarkrpNotFound("printMessageAll(msgType, " .. message .. ")")
 end
 
 function DarkRP.removeTeamSpawnPos(team, pos)

@@ -161,6 +161,8 @@ function Player:setDarkRPVar(variable, value, target)
 		target:SetRPName(value, "setDarkRPVar")
 	elseif variable == "money" then
 		target:SetMoney(value)
+	elseif variable == "wanted" then
+		target:SetNW2Bool("iswanted", value)
 	else
 		YRPDarkrpNotFound("setDarkRPVar(" .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. ")")
 	end
@@ -224,7 +226,8 @@ end
 
 function Player:unWanted(actor)
 	--Description: Clear the wanted status for this person.
-	YRPDarkrpNotFound("unWanted(actor)")
+	--YRPDarkrpNotFound("unWanted(actor)")
+	self:SetNW2Bool("iswanted", false)
 end
 
 function Player:unWarrant(unwarranter)

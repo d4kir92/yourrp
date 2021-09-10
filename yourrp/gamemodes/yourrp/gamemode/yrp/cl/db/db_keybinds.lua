@@ -151,7 +151,7 @@ function check_yrp_keybinds()
 end
 check_yrp_keybinds()
 
-function YResetKeybinds()
+function YRPResetKeybinds()
 	for i, keybind in pairs(YRPKEYBINDS) do
 		set_keybind(i, keybind)
 	end

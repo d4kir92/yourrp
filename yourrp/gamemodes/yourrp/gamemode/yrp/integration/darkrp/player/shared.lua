@@ -95,7 +95,7 @@ end
 
 function Player:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 	--Description: Get the entity that is closest to a player's line of sight and its distance.
-	YRPDarkrpNotFound("getEyeSightHitEntity(searchDistance, hitDistance, filter)")
+	--YRPDarkrpNotFound("getEyeSightHitEntity(searchDistance, hitDistance, filter)")
 	return NULL, 0
 end
 

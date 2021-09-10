@@ -92,7 +92,7 @@ end
 
 function DarkRP.createShipment(name, tbl)
 	--Description: Create a vehicle for DarkRP.
-	YRPDarkrpNotFound("createShipment(" .. name .. ", " .. table.ToString( tbl or {}, "tbl", false ) .. ")")
+	--YRPDarkrpNotFound("createShipment(" .. name .. ", " .. table.ToString( tbl or {}, "tbl", false ) .. ")")
 end
 
 function DarkRP.createVehicle(name, tbl)
@@ -290,7 +290,7 @@ end
 
 function DarkRP.removeChatCommand(command)
 	--Description: Remove a chat command
-	YRPDarkrpNotFound("removeChatCommand(" .. command .. ")")
+	--YRPDarkrpNotFound("removeChatCommand(" .. command .. ")")
 end
 
 function DarkRP.removeDemoteGroup(name)

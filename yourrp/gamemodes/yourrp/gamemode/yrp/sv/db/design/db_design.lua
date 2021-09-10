@@ -236,7 +236,7 @@ net.Receive("get_design_settings", function(len, ply)
 end)
 
 util.AddNetworkString("yrp_set_font")
-function SendFontName(ply)
+function YRPSendFontName(ply)
 	local dbtab = SQL_SELECT(DATABASE_NAME, "string_fontname", "uniqueID = '1'")
 	if wk(dbtab) then
 		dbtab = dbtab[1]
@@ -248,7 +248,7 @@ function SendFontName(ply)
 end
 
 net.Receive("yrp_set_font", function(len, ply)
-	SendFontName(ply)
+	YRPSendFontName(ply)
 end)
 
 util.AddNetworkString("yrp_update_font")
@@ -258,7 +258,7 @@ net.Receive("yrp_update_font", function(len, ply)
 	SQL_UPDATE(DATABASE_NAME, {["string_fontname"] = string_fontname}, "uniqueID = '1'")
 
 	for i, p in pairs(player.GetAll()) do
-		SendFontName(p)
+		YRPSendFontName(p)
 	end
 end)
 

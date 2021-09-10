@@ -36,7 +36,7 @@ end
 
 function Entity:keysOwn(ply)
 	--Description: Make the player the master owner of the door
-	YRPDarkrpNotFound("keysOwn(ply)")
+	--YRPDarkrpNotFound("keysOwn(ply)")
 end
 
 function Entity:keysUnLock()

@@ -588,12 +588,15 @@ net.Receive("yrp_roleselection_getcontent", function(len, ply)
 	local guid = net.ReadString()
 	local roltab = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'")
 	local grptab = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. guid .. "'")
-
-	if wk(roltab) and wk(grptab) then
+	
+	if wk(roltab) then
 		for i, v in pairs(roltab) do
 			v.pms = GetPlayermodelsOfRole(v.uniqueID)
 			updateRoleUses(v.uniqueID)
 		end
+	end
+
+	if wk(roltab) and wk(grptab) then
 		net.Start("yrp_roleselection_getcontent")
 			net.WriteTable(roltab)
 			net.WriteTable(grptab)

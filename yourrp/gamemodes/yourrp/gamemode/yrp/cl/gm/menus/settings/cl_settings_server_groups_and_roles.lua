@@ -595,7 +595,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 
 			group.uniqueID = tonumber(group.uniqueID)
-			if group.uniqueID > 0 then
+			if group.uniqueID and group.uniqueID > 0 then
 				cur_group.edi = group.uniqueID
 
 				ea.typ = "group"

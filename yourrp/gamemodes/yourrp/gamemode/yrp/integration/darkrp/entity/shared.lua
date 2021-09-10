@@ -65,7 +65,7 @@ end
 
 function Entity:getKeysNonOwnable()
 	--Description: Whether ownability of this door/vehicle is disabled.
-	YRPDarkrpNotFound("getKeysNonOwnable()")
+	--YRPDarkrpNotFound("getKeysNonOwnable()")
 	return false
 end
 

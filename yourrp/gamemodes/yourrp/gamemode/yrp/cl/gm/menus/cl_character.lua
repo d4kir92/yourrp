@@ -977,7 +977,7 @@ function openCharacterSelection()
 						CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
 					end
 					if newurl and strEmpty(newurl) then
-						draw.SimpleText(YRPGetYRPGetCharBGNotFound()(), "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRPGetCharBGNotFound(), "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				end
 			end
@@ -1234,7 +1234,7 @@ function openCharacterSelection()
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
 				end
 				if newurl and strEmpty(newurl) then
-					draw.SimpleText(YRPGetYRPGetCharBGNotFound()(), "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRPGetCharBGNotFound(), "Y_26_500", pw / 2, ph / 5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				local acur = CharMenu.character.amount or -1
@@ -1505,11 +1505,11 @@ function openCharacterSelection()
 						end
 					end
 		
-					if !self.logo:IsVisible() then
+					if !self.logo:IsVisible() and ypr_logo then
 						surface.SetMaterial(ypr_logo)
 						surface.SetDrawColor(255, 255, 255, 255)
 						surface.DrawTexturedRect(iconbr, iconbr, iconsize, iconsize)
-					else
+					elseif self.matlogo then
 						surface.SetMaterial(self.matlogo)
 						surface.SetDrawColor(Color(255, 255, 255))
 						surface.DrawTexturedRect(self.br, self.br, ph - 2 * self.br, ph - 2 * self.br)

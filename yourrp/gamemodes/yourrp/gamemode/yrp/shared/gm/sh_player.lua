@@ -170,10 +170,12 @@ function Player:HasCharacterSelected()
 	if SERVER then
 		if self:IsValid() then
 			if self:GetNW2Bool("finishedloadingcharacter", false) then
-				--YRP.msg("note", self:YRPName() .. " HasCharacterSelected?")
 				local _ply_tab = self:GetPlyTab()
 				if wk(_ply_tab) and tostring(_ply_tab.CurrentCharacter) != "NULL" and _ply_tab.CurrentCharacter != NULL then
-					return true
+					local chatab = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _ply_tab.CurrentCharacter .. "'")
+					if wk(chatab) then
+						return true
+					end
 				end
 			end
 		else

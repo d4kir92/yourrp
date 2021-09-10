@@ -69,7 +69,7 @@ function BuildLogs(parent, typ)
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(": " .. v.string_value)
+						rt:AppendText(": " .. tostring(v.string_value))
 					elseif typ == "LID_connections" then
 						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
@@ -105,7 +105,7 @@ function BuildLogs(parent, typ)
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(" " .. v.string_value)
+						rt:AppendText(" " .. tostring(v.string_value))
 					elseif typ == "LID_kills" then
 						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
@@ -200,7 +200,7 @@ function BuildLogs(parent, typ)
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(" [" .. v.string_value .. "] ")
+						rt:AppendText(" [" .. tostring(v.string_value) .. "] ")
 					elseif typ == "LID_spawns" then
 						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
@@ -242,9 +242,6 @@ function BuildLogs(parent, typ)
 							rt:InsertColorChange(255, 100, 100, 255)
 							rt:AppendText("Missing VALUE")
 						end
-
-						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(" [" .. v.string_value .. "] ")
 					elseif typ == "LID_health" then
 						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
