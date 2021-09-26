@@ -99,13 +99,13 @@ function CreateTicketContent(parent)
 			entry["entry.1633448754"] = TICKET.contactT:GetText() or "FAILED"
 			entry["entry.1109864644"] = LocalPlayer():SteamID() or "FAILED"
 
-			http.Post(_url, entry, function(result)
+			--[[http.Post(_url, entry, function(result)
 				if result then
 
 				end
 			end, function(failed)
 				YRP.msg("error", "Ticket: " .. tostring(failed))
-			end)
+			end)]]
 
 			local _net_table = {}
 			_net_table.title = TICKET.titleT:GetText() or "FAILED"

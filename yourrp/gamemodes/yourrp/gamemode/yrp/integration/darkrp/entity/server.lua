@@ -14,7 +14,7 @@ end
 
 function Entity:addKeysDoorTeam(team)
 	--Description: Allow a team to lock/unlock a door..
-	YRPDarkrpNotFound("addKeysDoorTeam(" .. tostring(team) .. ")")
+	--YRPDarkrpNotFound("addKeysDoorTeam(" .. tostring(team) .. ")")
 end
 
 function Entity:doorIndex()
@@ -81,15 +81,15 @@ end
 
 function Entity:setDoorGroup(group)
 	--Description: Set the door group of a door.
-	YRPDarkrpNotFound("setDoorGroup(" .. tostring(group) .. ")")
+	--YRPDarkrpNotFound("setDoorGroup(" .. tostring(group) .. ")")
 end
 
 function Entity:setKeysNonOwnable(ownable)
 	--Description: Set whether this door or vehicle is ownable or not.
-	YRPDarkrpNotFound("setKeysNonOwnable(" .. tostring(ownable) .. ")")
+	--YRPDarkrpNotFound("setKeysNonOwnable(" .. tostring(ownable) .. ")")
 end
 
 function Entity:setKeysTitle(title)
 	--Description: Set the title of a door or vehicle.
-	YRPDarkrpNotFound("setKeysTitle(" .. tostring(title) .. ")")
+	--YRPDarkrpNotFound("setKeysTitle(" .. tostring(title) .. ")")
 end

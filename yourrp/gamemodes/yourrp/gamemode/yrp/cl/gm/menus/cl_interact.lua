@@ -61,7 +61,6 @@ net.Receive("openInteractMenu", function(len)
 
 	local tmpRPName = ""
 	local tmpPly = NULL
-	local tmpGender = ""
 	local tmpID = ""
 	local tmpCharID = 0
 	for k, v in pairs (player.GetAll()) do
@@ -69,7 +68,6 @@ net.Receive("openInteractMenu", function(len)
 			tmpPly = v
 			tmpTargetName = v:Nick()
 			tmpRPName = v:RPName()
-			tmpGender = v:GetNW2String("Gender")
 			tmpID = v:GetNW2String("idcardid")
 			tmpCharID = v:CharID()
 			tmpRPDescription = ""
@@ -235,44 +233,111 @@ net.Receive("openInteractMenu", function(len)
 end)
 
 function YRPOpenGiveSpec(charid, ruid)
+	charid = tonumber(charid)
+	ruid = tonumber(ruid)
+
 	local win = createD("YFrame", nil, 600, 600, 0, 0)
 	win:SetTitle("LID_specializations")
 	win:Center()
 	win:MakePopup()
 
-	win.dpl = createD("DPanelList", win:GetContent(), 500, 500, 0, 0)
+	local content = win:GetContent()
+
+	win.header = createD("YLabel", content, 280, 50, 0, 0)
+	win.header:SetText("LID_add")
+
+	win.headerrem = createD("YLabel", content, 280, 50, 300, 0)
+	win.headerrem:SetText("LID_remove")
+
+	win.dpl = createD("DPanelList", content, 280, content:GetTall() - 50, 0, 50)
 	win.dpl:EnableVerticalScrollbar()
+	win.dpl:SetSpacing(2)
 	function win.dpl:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 80))
+	end
+	
+	win.dplrem = createD("DPanelList", content, 280, content:GetTall() - 50, 300, 50)
+	win.dplrem:EnableVerticalScrollbar()
+	win.dplrem:SetSpacing(2)
+	function win.dplrem:Paint(pw, ph)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 80))
 	end
 
 	net.Receive("get_role_specs", function(len)
 		local nettab = net.ReadTable()
+		
+		local ply = NULL
+		for i, v in pairs(player.GetAll()) do
+			if v:CharID() == charid then
+				ply = v
+				break
+			end
+		end
+
+		local specids = {}
+		if IsValid(ply) then
+			specids = string.Explode( ",", ply:GetNW2String("specializationIDs", "") )
+			for i, v in pairs(specids) do
+				specids[i] = tonumber( v )
+			end
+		end
 
 		for i, v in pairs(nettab) do
-			local btn = createD("YButton", nil, 200, 50, 0, 0)
-			btn:SetText(v.name)
+			v.uid = tonumber( v.uid )
+			if !table.HasValue( specids, v.uid ) then
+				local btn = createD("YButton", nil, 250, 50, 0, 0)
+				btn:SetText(v.name)
 
-			function btn:DoClick()
-				net.Start("char_add_spec")
-					net.WriteString(charid)
-					net.WriteString(v.uid)
-				net.SendToServer()
+				function btn:Paint(pw, ph)
+					hook.Run("YButtonAPaint", self, pw, ph)
+				end
 
-				win:Close()
+				function btn:DoClick()
+					net.Start("char_add_spec")
+						net.WriteString(charid)
+						net.WriteString(v.uid)
+						net.WriteString(ruid)
+					net.SendToServer()
+
+					win:Close()
+				end
+
+				win.dpl:AddItem(btn)
+			else
+				local btn = createD("YButton", nil, 250, 50, 0, 0)
+				btn:SetText(v.name)
+
+				function btn:Paint(pw, ph)
+					hook.Run("YButtonRPaint", self, pw, ph)
+				end
+
+				function btn:DoClick()
+					net.Start("char_rem_spec")
+						net.WriteString(charid)
+						net.WriteString(v.uid)
+						net.WriteString(ruid)
+					net.SendToServer()
+
+					win:Close()
+				end
+
+				win.dplrem:AddItem(btn)
 			end
-
-			win.dpl:AddItem(btn)
 		end
 	end)
 	if ruid then
 		net.Start("get_role_specs")
 			net.WriteString(ruid)
 		net.SendToServer()
-	else
-		YRP.msg("note", "IN WORK")
 	end
 end
+
+net.Receive("yrp_reopen_givespec", function()
+	local charid = net.ReadString()
+	local ruid = net.ReadString()
+
+	YRPOpenGiveSpec(charid, ruid)
+end)
 
 net.Receive("yrp_invite_ply", function(len)
 	local role = net.ReadTable()

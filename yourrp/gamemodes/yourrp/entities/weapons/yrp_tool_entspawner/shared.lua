@@ -47,7 +47,9 @@ function SWEP:Reload()
 		pos = v.pos
 	end
 	if pos != "" then
-		self:GetOwner():SetPos(StringToVector(pos))
+		local s = StringToVector(pos)
+		
+		self:GetOwner():SetPos(s)
 	end
 end
 
@@ -77,7 +79,7 @@ function SWEP:Think()
 			for i, v in pairs(GetGlobalTable("yrp_spawner_ent")) do
 				local p = StringToVector(v.pos)
 				if p:Distance(pos) < size * 2 then
-					YRP.msg("db", "Option Spawner")
+					YRP.msg("db", "Option ENTSpawner")
 
 					local stab = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
 					if wk(stab) then
@@ -207,12 +209,6 @@ function SWEP:SecondaryAttack()
 
 		UpdateSpawnerENTTable()
 	end
-end
-
-function StringToVector(str)
-	local tab = string.Explode(",", str)
-	local vec = Vector(tab[1], tab[2], tab[3])
-	return vec
 end
 
 if CLIENT then

@@ -43,15 +43,11 @@ local HANDLER_REALISTIC = {}
 
 function RemFromHandler_Realistic(ply)
 	table.RemoveByValue(HANDLER_REALISTIC, ply)
-	YRP.msg("gm", ply:YRPName() .. " disconnected from Realistic")
 end
 
 function AddToHandler_Realistic(ply)
 	if !table.HasValue(HANDLER_REALISTIC, ply) then
 		table.insert(HANDLER_REALISTIC, ply)
-		YRP.msg("gm", ply:YRPName() .. " connected to Realistic")
-	else
-		YRP.msg("gm", ply:YRPName() .. " already connected to Realistic")
 	end
 end
 
@@ -102,7 +98,7 @@ end
 
 function YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
 	l_db[str] = value
-	SQL_UPDATE(db_name, str .. " = '" .. l_db[str] .. "'", "uniqueID = '1'")
+	SQL_UPDATE(db_name, {[str] = l_db[str]}, "uniqueID = '1'")
 	YRPSendToOthers(handler, ply, netstr, l_db[str])
 end
 

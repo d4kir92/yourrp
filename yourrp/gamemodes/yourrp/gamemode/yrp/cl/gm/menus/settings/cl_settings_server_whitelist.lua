@@ -11,8 +11,8 @@ local loadedG = false
 local loadedW = false
 
 function BuildWhitelist(parent, tab)
-	if !IsValid(parent) then
-		YRP.msg("error", "[BuildWhitelist] failed! parent: " .. tostring(parent))
+	if !pa( parent ) then
+		YRP.msg("note", "[BuildWhitelist] failed! parent: " .. tostring(parent))
 	end
 
 	if loadedR and loadedG and loadedW and pa(parent) then

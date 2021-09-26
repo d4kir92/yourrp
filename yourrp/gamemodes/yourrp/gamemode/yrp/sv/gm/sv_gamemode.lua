@@ -78,7 +78,6 @@ function GM:PlayerInitialSpawn(ply)
 		local tab = {}
 		tab.roleID = 1
 		tab.rpname = "BOTNAME"
-		tab.gender = "gendermale"
 		tab.playermodelID = 1
 		tab.skin = 1
 		tab.rpdescription = "BOTDESCRIPTION"
@@ -91,7 +90,7 @@ function GM:PlayerInitialSpawn(ply)
 		for i = 0, 19 do
 			tab.bg[i] = 0
 		end
-		CreateCharacter(ply, tab)
+		YRPCreateCharacter(ply, tab)
 
 		ply:SetNW2Bool("yrp_characterselection", false)
 		local tab = {}
@@ -125,8 +124,6 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 		ply:Ban(0, true) -- perma + kick
 	end
 
-	ply:SetNW2Bool("isserverdedicated", game.IsDedicated())
-
 	ply:SetNW2Bool("yrp_characterselection", true)
 
 	ply:resetUptimeCurrent()
@@ -145,9 +142,7 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 		if !wk(chars) then
 			local tab = {}
 			tab.roleID = 1
-			tab.rpname = ply:Nick()
-			tab.gender = "gendermale"
-			
+			tab.rpname = ply:Nick()		
 			tab.playermodelID = 1
 			tab.skin = 1
 			tab.rpdescription = "-"
@@ -162,7 +157,7 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 				tab.bg[i] = 0
 			end
 
-			CreateCharacter(ply, tab)
+			YRPCreateCharacter(ply, tab)
 			yrpmsg("[YourRP] [VOIDCHAR] HAS NO CHAR, create one")
 		end
 	end
@@ -714,9 +709,11 @@ function SlowThink(ent)
 			ent:SetWalkSpeed(speedwalk * GetSlowingFactor())
 			ent:SetNW2Bool("slowed", true)
 			timer.Simple(GetSlowingTime(), function()
-				ent:SetRunSpeed(speedrun)
-				ent:SetWalkSpeed(speedwalk)
-				ent:SetNW2Bool("slowed", false)
+				if IsValid(ent) then
+					ent:SetRunSpeed(speedrun)
+					ent:SetWalkSpeed(speedwalk)
+					ent:SetNW2Bool("slowed", false)
+				end
 			end)
 		end
 	end
@@ -1115,18 +1112,16 @@ net.Receive("yrp_voice_channel_save", function(len, ply)
 
 	local uid = net.ReadString()
 	
-	SQL_UPDATE(
-		DATABASE_NAME, {
-			["string_name"] = name,
-			["int_hear"] = hear,
-			["string_active_usergroups"] = augs,
-			["string_active_groups"] = agrps,
-			["string_active_roles"] = arols,
-			["string_passive_usergroups"] = pugs,
-			["string_passive_groups"] = pgrps,
-			["string_passive_roles"] = prols,
-		}, "uniqueID = '" .. uid .. "'"
-	)
+	SQL_UPDATE(DATABASE_NAME, {
+		["string_name"] 				= name,
+		["int_hear"] 					= hear,
+		["string_active_usergroups"] 	= augs,
+		["string_active_groups"] 		= agrps,
+		["string_active_roles"] 		= arols,
+		["string_passive_usergroups"] 	= pugs,
+		["string_passive_groups"] 		= pgrps,
+		["string_passive_roles"] 		= prols
+	}, "uniqueID = '" .. uid .. "'")
 
 	GenerateVoiceTable()
 end)
@@ -1347,7 +1342,14 @@ hook.Add("PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, talk
 				end
 			end
 		end
+		
 		return false -- new
+	else
+		if YRPIsInMaxVoiceRange(listener, talker) then
+			if YRPIsInSpeakRange(listener, talker) then
+				return true
+			end
+		end
 	end
 end)
 
@@ -1456,7 +1458,7 @@ end
 
 hook.Remove( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckAddons" )
 hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckAddons", function()
-	timer.Simple(1, function()
+	timer.Simple(2.1, function()
 		YRPCheckAddons()
 	end)
 end )

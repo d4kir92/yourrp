@@ -66,7 +66,7 @@ end
 function AddKeybind(plist, keybind, lstr, icon, disabled)
 	local lply = LocalPlayer()
 	if disabled and !lply:HasAccess() then return end
-	local kb = createD("DPanel", nil, YRP.ctr(100), YRP.ctr(50), 0, 0)
+	local kb = createD("DPanel", nil, YRP.ctr(100), YRP.ctr(48), 0, 0)
 	kb.key = keybind
 
 	function kb:Paint(pw, ph)
@@ -82,7 +82,7 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		draw.SimpleText(text, "Y_18_500", ph + YRP.ctr(10), ph / 2, color, 0, 1)
 		YRP.DrawIcon(YRP.GetDesignIcon(icon), ph - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), color)
 
-		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "Y_18_500", ph + YRP.ctr(600), ph / 2, Color(255, 255, 255, 255), 0, 1)
+		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "Y_18_500", ph + YRP.ctr(700), ph / 2, Color(255, 255, 255, 255), 0, 1)
 	end
 
 	plist:AddItem(kb)
@@ -125,7 +125,7 @@ net.Receive("getsitehelp", function(len)
 		end
 
 		local keybinds = createD("DPanelList", HELPMENU.mainmenu.site, YRP.ctr(1200), HELPMENU.content:GetTall(), 0, posy)
-		keybinds:SetSpacing(YRP.ctr(6))
+		keybinds:SetSpacing(YRP.ctr(2))
 
 		AddKeybind(keybinds, "F1", "LID_help", "help")
 		AddKeybind(keybinds, GetKeybindName("menu_role"), "LID_rolemenu", "role", "bool_players_can_switch_role")
@@ -164,8 +164,6 @@ net.Receive("getsitehelp", function(len)
 		AddKeybind(keybinds, input.GetKeyName( KEY_LSHIFT ) .. " + " .. GetKeybindName("voice_menu"), "LID_nextvoicechannel", "voice")
 		AddKeybindBr(keybinds)
 		AddKeybind(keybinds, GetKeybindName("chat_menu"), "LID_chat", "chat")
-		--AddKeybindBr(keybinds)
-		--AddKeybind(keybinds, GetKeybindName("menu_talents"), "LID_talents", "talents")
 
 		HELPMENU.discord = createD("YButton", HELPMENU.mainmenu.site, YRP.ctr(500), YRP.ctr(50), HELPMENU.content:GetWide() - YRP.ctr(560), YRP.ctr(20 + 50 + 20))
 		HELPMENU.discord:SetText("Get Live Support")

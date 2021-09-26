@@ -270,11 +270,18 @@ net.Receive("yrp_chat_channel_save", function(len, ply)
 
 	local uid = net.ReadString()
 	
-	SQL_UPDATE(
-		DATABASE_NAME,
-		"string_name = '" .. name .. "', int_mode = '" .. mode .. "', string_structure = '" .. structure .. "', bool_enabled = '" .. enabled .. "',string_active_usergroups = '" .. augs .. "', string_active_groups = '" .. agrps .. "', string_active_roles = '" .. arols .. "', string_passive_usergroups = '" .. pugs .. "', string_passive_groups = '" .. pgrps .. "', string_passive_roles = '" .. prols .. "'",
-		"uniqueID = '" .. uid .. "'"
-	)
+	SQL_UPDATE(DATABASE_NAME, {
+		["string_name"] 				= name,
+		["int_mode"] 					= mode,
+		["string_structure"] 			= structure,
+		["bool_enabled"] 				= enabled,
+		["string_active_usergroups"] 	= augs,
+		["string_active_groups"] 		= agrps,
+		["string_active_roles"] 		= arols,
+		["string_passive_usergroups"] 	= pugs,
+		["string_passive_groups"] 		= pgrps,
+		["string_passive_roles"] 		= prols
+	}, "uniqueID = '" .. uid .. "'")
 
 	GenerateChatTable()
 end)

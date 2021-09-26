@@ -13,15 +13,11 @@ local HANDLER_DATABASE = {}
 
 function RemFromHandler_Database(ply)
 	table.RemoveByValue(HANDLER_DATABASE, ply)
-	YRP.msg("gm", ply:YRPName() .. " disconnected from Database")
 end
 
 function AddToHandler_Database(ply)
 	if !table.HasValue(HANDLER_DATABASE, ply) then
 		table.insert(HANDLER_DATABASE, ply)
-		YRP.msg("gm", ply:YRPName() .. " connected to Database")
-	else
-		YRP.msg("gm", ply:YRPName() .. " already connected to Database")
 	end
 end
 

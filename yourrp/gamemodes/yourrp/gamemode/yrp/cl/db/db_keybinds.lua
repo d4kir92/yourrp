@@ -1,100 +1,148 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-YRPKEYBINDS = YRPKEYBINDS or {}
-YRPKEYBINDS["menu_character_selection"] = KEY_F2
-YRPKEYBINDS["menu_role"] = KEY_F4
-YRPKEYBINDS["menu_buy"] = KEY_F11
-YRPKEYBINDS["menu_settings"] = KEY_F8
-YRPKEYBINDS["menu_inventory"] = KEY_I
-YRPKEYBINDS["menu_options_vehicle"] = KEY_O
-YRPKEYBINDS["menu_options_door"] = KEY_O
-YRPKEYBINDS["menu_appearance"] = KEY_P
-YRPKEYBINDS["menu_emotes"] = KEY_MINUS
-YRPKEYBINDS["menu_laws"] = KEY_L
+local YRP_KEYBINDS = {}
+YRP_KEYBINDS["menu_character_selection"] = KEY_F2
+YRP_KEYBINDS["menu_role"] = KEY_F4
+YRP_KEYBINDS["menu_buy"] = KEY_F11
+YRP_KEYBINDS["menu_settings"] = KEY_F8
+YRP_KEYBINDS["menu_inventory"] = KEY_I
+YRP_KEYBINDS["menu_options_vehicle"] = KEY_O
+YRP_KEYBINDS["menu_options_door"] = KEY_O
+YRP_KEYBINDS["menu_appearance"] = KEY_P
+YRP_KEYBINDS["menu_emotes"] = KEY_MINUS
+YRP_KEYBINDS["menu_laws"] = KEY_L
 
-YRPKEYBINDS["menu_char"] = KEY_Z
-YRPKEYBINDS["menu_keybinds"] = KEY_J
+YRP_KEYBINDS["menu_char"] = KEY_Z
+YRP_KEYBINDS["menu_keybinds"] = KEY_J
 
-YRPKEYBINDS["view_switch"] = KEY_T
-YRPKEYBINDS["view_zoom_out"] = KEY_PAD_PLUS
-YRPKEYBINDS["view_zoom_in"] = KEY_PAD_MINUS
-YRPKEYBINDS["view_up"] = KEY_PAD_8
-YRPKEYBINDS["view_down"] = KEY_PAD_5
-YRPKEYBINDS["view_right"] = KEY_PAD_6
-YRPKEYBINDS["view_left"] = KEY_PAD_4
-YRPKEYBINDS["view_spin_right"] = KEY_PAD_9
-YRPKEYBINDS["view_spin_left"] = KEY_PAD_7
+YRP_KEYBINDS["view_switch"] = KEY_T
+YRP_KEYBINDS["view_zoom_out"] = KEY_PAD_PLUS
+YRP_KEYBINDS["view_zoom_in"] = KEY_PAD_MINUS
+YRP_KEYBINDS["view_up"] = KEY_PAD_8
+YRP_KEYBINDS["view_down"] = KEY_PAD_5
+YRP_KEYBINDS["view_right"] = KEY_PAD_6
+YRP_KEYBINDS["view_left"] = KEY_PAD_4
+YRP_KEYBINDS["view_spin_right"] = KEY_PAD_9
+YRP_KEYBINDS["view_spin_left"] = KEY_PAD_7
 
-YRPKEYBINDS["toggle_mouse"] = KEY_F3
-YRPKEYBINDS["toggle_map"] = KEY_M
-YRPKEYBINDS["drop_item"] = KEY_G
+YRP_KEYBINDS["toggle_mouse"] = KEY_F3
+YRP_KEYBINDS["toggle_map"] = KEY_M
+YRP_KEYBINDS["drop_item"] = KEY_G
 
-YRPKEYBINDS["menu_interact"] = KEY_F6
+YRP_KEYBINDS["menu_interact"] = KEY_F6
 
-YRPKEYBINDS["sp_open"] = KEY_UP
-YRPKEYBINDS["sp_close"] = KEY_DOWN
+YRP_KEYBINDS["sp_open"] = KEY_UP
+YRP_KEYBINDS["sp_close"] = KEY_DOWN
 
-YRPKEYBINDS["voice_mute"] = KEY_HOME
-YRPKEYBINDS["voice_range_up"] = KEY_PAGEUP
-YRPKEYBINDS["voice_range_dn"] = KEY_PAGEDOWN
+YRP_KEYBINDS["voice_mute"] = KEY_HOME
+YRP_KEYBINDS["voice_range_up"] = KEY_PAGEUP
+YRP_KEYBINDS["voice_range_dn"] = KEY_PAGEDOWN
 
-YRPKEYBINDS["macro_menu"] = KEY_INSERT
+YRP_KEYBINDS["macro_menu"] = KEY_INSERT
 
-YRPKEYBINDS["voice_menu"] = KEY_H
-YRPKEYBINDS["chat_menu"] = KEY_PERIOD
-
-YRPKEYBINDS["menu_talents"] = KEY_N
+YRP_KEYBINDS["voice_menu"] = KEY_H
+YRP_KEYBINDS["chat_menu"] = KEY_PERIOD
 
 for i = 1, 49 do
-	YRPKEYBINDS["m_" .. i] = 0
+	YRP_KEYBINDS["m_" .. i] = 0
 end
-
-net.Receive("SetServerKeybinds", function(len)
-	local keytab = net.ReadTable()
-	for i, ktab in pairs(keytab) do
-		set_keybind(ktab.name, ktab.value)
-	end
-end)
 
 local yrp_keybinds = {}
 yrp_keybinds.version = 4
 
+local yrp_keybinds_loaded = false
+
+local dbfile = "yrp_keybinds/yrp_keybinds.json"
+
+function YRPKeybindsMSG( msg )
+	MsgC( Color( 0, 255, 0 ), "[YourRP] [KEYBINDS] " .. msg .. "\n" )
+end
+
+function YRPKeybindsCheckFile()
+	if !file.Exists( "yrp_keybinds", "DATA" ) then
+		YRPKeybindsMSG( "Created Keybind Folder" )
+		file.CreateDir( "yrp_keybinds" )
+	end
+	if !file.Exists( dbfile, "DATA" ) then
+		YRPKeybindsMSG( "Created New Keybind File" )
+		file.Write( dbfile, util.TableToJSON( YRP_KEYBINDS, true ) )
+	end
+
+	if !file.Exists( "yrp_keybinds", "DATA" ) then
+		YRP.msg("error", "FAILED TO CREATE KEYBIND FOLDER")
+	end
+	if !file.Exists( dbfile, "DATA" ) then
+		YRP.msg("error", "FAILED TO CREATE KEYBIND FILE")
+	end
+end
+
+function YRPKeybindsLoad()
+	YRPKeybindsCheckFile()
+	YRPKeybindsMSG( "Load Keybinds" )
+	
+	yrp_keybinds = util.JSONToTable( file.Read( dbfile, "DATA" ) )
+end
+
+function YRPKeybindsSave()
+	YRPKeybindsCheckFile()
+	YRPKeybindsMSG( "Save Keybinds" )
+	
+	file.Write( dbfile, util.TableToJSON( yrp_keybinds, true ) )
+end
+
 function KBTab()
-	return yrp_keybinds
+	if yrp_keybinds_loaded then
+		return yrp_keybinds
+	else
+		return {}
+	end
 end
 
-function GetKeyBinds()
-	return yrp_keybinds
+function YRPGetKeybinds()
+	if yrp_keybinds_loaded then
+		return yrp_keybinds
+	else
+		return {}
+	end
 end
-
-local DATABASE_NAME = "yrp_keybinds"
 
 function get_keybind(name)
-	name = tostring(name)
-	return tonumber(yrp_keybinds[name]) or -1
+	if yrp_keybinds_loaded then
+		name = tostring(name)
+		return tonumber(yrp_keybinds[name])
+	else
+		return -1
+	end
 end
 
 function set_keybind(name, value, force)
-	if value != 0 then
-		for n, v in pairs(yrp_keybinds) do
-			if n == "version" or force then
-				continue
-			end
-			if tonumber(value) == tonumber(v) and name != n and !string.StartWith(n, "menu_options_") then
-				return false
+	if yrp_keybinds_loaded then
+
+		if value != 0 and yrp_keybinds then
+			for n, v in pairs(yrp_keybinds) do
+				if n == "version" or force then
+					continue
+				end
+				if tonumber(value) == tonumber(v) and name != n and !string.StartWith(n, "menu_options_") then
+					return false
+				end
 			end
 		end
-	end
 
-	local result = SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. 1 .. "'")
-	yrp_keybinds[name] = value
-	return true
+		yrp_keybinds[name] = value
+
+		YRPKeybindsSave()
+
+		return true
+	else
+		return false
+	end
 end
 
-function GetKeybindName(kbname)
+function GetKeybindName(kbname, show)
 	local _kb = kbname or ""
-	if !string.StartWith(kbname, "in_") then
-		_kb = get_keybind(kbname) or "UNKNOWN"
+	if !string.StartWith( kbname, "in_" ) and get_keybind(kbname) then
+		_kb = get_keybind(kbname)
 	end
 	if isnumber(tonumber(_kb)) then
 		_kb = input.GetKeyName(_kb)
@@ -108,51 +156,39 @@ function GetKeybindName(kbname)
 	return tostring(_kb)
 end
 
---db_drop_table("yrp_keybinds")
-function check_yrp_keybinds()
-	SQL_INIT_DATABASE(DATABASE_NAME)
+function YRPCheckKeybinds()
+	YRPKeybindsLoad()
 
-	local _check_version = SQL_SELECT(DATABASE_NAME, "version", "uniqueID = 1")
-	if _check_version != false and _check_version != nil then
-		YRP.msg("note", "Checking keybinds version")
-		_check_version = _check_version[1]
-		if tonumber(_check_version.version) != tonumber(yrp_keybinds.version) then
-
-			YRP.msg("note", "Keybinds OUTDATED!")
-			db_drop_table(DATABASE_NAME)
-			SQL_INIT_DATABASE(DATABASE_NAME)
-		else
-			YRP.msg("note", "Keybinds up to date")
+	if yrp_keybinds then
+		local foundmissing = false
+		for i, v in pairs( YRP_KEYBINDS ) do
+			if yrp_keybinds[i] == nil then
+				foundmissing = true
+				YRPKeybindsMSG( "Missing Keybind, adding it", Color( 255, 255, 0 ) )
+				yrp_keybinds[i] = v
+			end
 		end
+	else
+		YRP.msg( "error", "yrp_keybinds is broken: " .. tostring( file.Read( dbfile, "DATA" ) ) )
 	end
 
-	SQL_ADD_COLUMN(DATABASE_NAME, "version", "INT DEFAULT " .. yrp_keybinds.version)
-	-- Keybind Cols
-	for i, keybind in pairs(YRPKEYBINDS) do
-		SQL_ADD_COLUMN(DATABASE_NAME, i, "INT DEFAULT " .. keybind)
+	if foundmissing then
+		YRPKeybindsSave()
 	end
 
-
-	local _tmp = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
-	if _tmp == nil then
-		local _result = SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
-		_tmp = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
-		if _tmp == nil or _tmp == false then
-			YRP.msg("error", DATABASE_NAME .. " has no entries.")
-		end
-	end
-
-	if !db_is_empty(DATABASE_NAME) then
-		local _tmp2 = SQL_SELECT(DATABASE_NAME, "*", nil)
-		_tmp2 = _tmp2[1]
-
-		yrp_keybinds = _tmp2
-	end
+	yrp_keybinds_loaded = true
 end
-check_yrp_keybinds()
+YRPCheckKeybinds()
 
 function YRPResetKeybinds()
-	for i, keybind in pairs(YRPKEYBINDS) do
+	for i, keybind in pairs(YRP_KEYBINDS) do
 		set_keybind(i, keybind)
 	end
 end
+
+net.Receive("SetServerKeybinds", function(len)
+	local keytab = net.ReadTable()
+	for i, ktab in pairs(keytab) do
+		set_keybind(ktab.name, ktab.value)
+	end
+end)

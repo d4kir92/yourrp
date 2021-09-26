@@ -53,13 +53,13 @@ end
 
 function Entity:getKeysDoorGroup()
 	--Description: The door group of a door if it exists.
-	YRPDarkrpNotFound("getKeysDoorGroup()")
+	--YRPDarkrpNotFound("getKeysDoorGroup()")
 	return ""
 end
 
 function Entity:getKeysDoorTeams()
 	--Description: The teams that are allowed to open this door.
-	YRPDarkrpNotFound("getKeysDoorTeams()")
+	--YRPDarkrpNotFound("getKeysDoorTeams()")
 	return {}
 end
 
@@ -71,7 +71,7 @@ end
 
 function Entity:getKeysTitle()
 	--Description: Get the title of this door or vehicle.
-	YRPDarkrpNotFound("getKeysTitle()")
+	--YRPDarkrpNotFound("getKeysTitle()")
 	return ""
 end
 

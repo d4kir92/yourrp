@@ -498,9 +498,6 @@ function SubscribeRoleList(ply, gro, pre)
 	end
 	if !table.HasValue(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply) then
 		table.insert(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply)
-		YRP.msg("gm", ply:YRPName() .. " subscribed to RoleList " .. gro .. " pre: " .. pre)
-	else
-		YRP.msg("gm", ply:YRPName() .. " already subscribed to RoleList " .. gro .. " pre: " .. pre)
 	end
 end
 
@@ -513,7 +510,6 @@ function UnsubscribeRoleList(ply, gro, pre)
 	end
 	if table.HasValue(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply) then
 		table.RemoveByValue(HANDLER_GROUPSANDROLES["roleslist"][gro][pre], ply)
-		YRP.msg("gm", ply:YRPName() .. " unsubscribed from RoleList " .. gro .. " pre: " .. pre)
 	end
 end
 
@@ -523,9 +519,6 @@ function SubscribeRole(ply, uid)
 	end
 	if !table.HasValue(HANDLER_GROUPSANDROLES["roles"][uid], ply) then
 		table.insert(HANDLER_GROUPSANDROLES["roles"][uid], ply)
-		YRP.msg("gm", ply:YRPName() .. " subscribed to Role " .. uid)
-	else
-		YRP.msg("gm", ply:YRPName() .. " already subscribed to Role " .. uid)
 	end
 end
 
@@ -535,7 +528,6 @@ function UnsubscribeRole(ply, uid)
 	end
 	if table.HasValue(HANDLER_GROUPSANDROLES["roles"][uid], ply) then
 		table.RemoveByValue(HANDLER_GROUPSANDROLES["roles"][uid], ply)
-		YRP.msg("gm", ply:YRPName() .. " unsubscribed from Role " .. uid)
 	end
 end
 
@@ -870,6 +862,11 @@ net.Receive("settings_delete_role", function(len, ply)
 		role = role[1]
 		SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 
+		local roledeleted = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+		if !wk(roledeleted) then
+			YRP.msg("note", "Role deleted (uid: " .. tostring( uid ) .. ")")
+		end
+
 		local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
 		if wk(siblings) then
 			for i, sibling in pairs(siblings) do
@@ -882,6 +879,8 @@ net.Receive("settings_delete_role", function(len, ply)
 			end
 		end
 
+		MoveUnusedRolesToDefault()
+		
 		role.int_groupID = tonumber(role.int_groupID)
 		role.int_prerole = tonumber(role.int_prerole)
 		SendRoleList(nil, role.int_groupID, role.int_prerole)
@@ -1099,8 +1098,18 @@ net.Receive("add_playermodels", function(len, ply)
 	local name = net.ReadString()
 	local min = net.ReadString()
 	local max = net.ReadString()
+
+	for i, v in pairs( pms ) do
+		if string.find( v, "'" ) then
+			YRP.msg( "note", "!!! MODEL HAS > ' < in its path/file -> " .. tostring( v ) )
+			YRP.msg( "note", "!!! CONTACT THE DEVELOPER TO CHANGE THIS" )
+			return
+		end
+	end
+
 	pms = table.concat(pms, ",")
-	SQL_INSERT_INTO("yrp_playermodels", "string_models, string_name, float_size_min, float_size_max", "'" .. pms .. "', '" .. name .. "', '" .. min .. "', '" .. max .. "'")
+
+	SQL_INSERT_INTO("yrp_playermodels", "string_models, string_name, float_size_min, float_size_max", "" .. SQL_STR_IN( pms ) .. ", " .. SQL_STR_IN( name ) .. ", '" .. min .. "', '" .. max .. "'")
 
 	local lastentry = SQL_SELECT("yrp_playermodels", "*", nil)
 	lastentry = lastentry[table.Count(lastentry)]
@@ -2065,9 +2074,7 @@ net.Receive("yrp_want_role", function(len, ply)
 	net.Send(ply)
 end)
 
-util.AddNetworkString("get_role_specs")
-net.Receive("get_role_specs", function(len, ply)
-	local ruid = net.ReadString()
+function YRPSendRoleSpecs(ply, ruid)
 	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. ruid .. "'")
 	if wk(tab) then
 		tab = tab[1]
@@ -2089,4 +2096,10 @@ net.Receive("get_role_specs", function(len, ply)
 			net.WriteTable(nettab)
 		net.Send(ply)
 	end
+end
+
+util.AddNetworkString("get_role_specs")
+net.Receive("get_role_specs", function(len, ply)
+	local ruid = net.ReadString()
+	YRPSendRoleSpecs(ply, ruid)
 end)

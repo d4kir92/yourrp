@@ -11,15 +11,11 @@ local HANDLER_YOURRP_ADDONS = {}
 
 function RemFromHandler_YourRP_Addons(ply)
 	table.RemoveByValue(HANDLER_YOURRP_ADDONS, ply)
-	YRP.msg("gm", ply:YRPName() .. " disconnected from YourRP_Addons")
 end
 
 function AddToHandler_YourRP_Addons(ply)
 	if !table.HasValue(HANDLER_YOURRP_ADDONS, ply) then
 		table.insert(HANDLER_YOURRP_ADDONS, ply)
-		YRP.msg("gm", ply:YRPName() .. " connected to YourRP_Addons")
-	else
-		YRP.msg("gm", ply:YRPName() .. " already connected to YourRP_Addons")
 	end
 end
 

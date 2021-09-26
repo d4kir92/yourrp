@@ -69,60 +69,90 @@ function createApp(app, parent, x, y)
 end
 
 --[[ Database ]]--
+local YRP_APPS = {}
+
 local yrp_apps = {}
 
-local DATABASE_NAME = "yrp_apps"
+local dbfile = "yrp_apps/yrp_apps.json"
 
-function changeAppPosition(cname, nr)
-	local _upt = SQL_UPDATE(DATABASE_NAME, {["Position"] =nr}, "ClassName = '" .. cname .. "'")
+function YRPAppsMSG( msg )
+	MsgC( Color( 0, 255, 0 ), "[YourRP] [TUTORIALS] " .. msg .. "\n" )
+end
+
+function YRPAppsCheckFile()
+	if !file.Exists( "yrp_apps", "DATA" ) then
+		YRPAppsMSG( "Created Apps Folder" )
+		file.CreateDir( "yrp_apps" )
+	end
+	if !file.Exists( dbfile, "DATA" ) then
+		YRPAppsMSG( "Created New Apps File" )
+		file.Write( dbfile, util.TableToJSON( YRP_APPS, true ) )
+	end
+end
+
+function YRPAppsLoad()
+	YRPAppsCheckFile()
+	YRPAppsMSG( "Load Apps" )
+	
+	yrp_apps = util.JSONToTable( file.Read( dbfile, "DATA" ) )
+end
+
+function YRPAppsSave()
+	YRPAppsCheckFile()
+	YRPAppsMSG( "Save Apps" )
+	
+	file.Write( dbfile, util.TableToJSON( yrp_apps, true ) )
+end
+
+function changeAppPosition( cname, nr )
+	yrp_apps[cname]["Position"] = nr
+	YRPAppsSave()
+end
+
+function YRPGetAppAtPosition( pos )
+	for i, v in pairs(yrp_apps) do
+		if pos == v.Position then
+			return v
+		end
+	end
+	return nil
 end
 
 function getAllDBApps()
 	for i, app in pairs(getAllApps()) do
-		local _sel = SQL_SELECT(DATABASE_NAME, "*", "ClassName = '" .. tostring(app.ClassName) .. "'")
+		local _sel = yrp_apps[app.ClassName]
 		if _sel == nil then
 			local _pos = 1
 			for i=0, 200 do
-				local _p = SQL_SELECT(DATABASE_NAME, "*", "Position = " .. i)
+				local _p = YRPGetAppAtPosition( i )
 				if _p == nil then
 					_pos = i
 					break
 				end
 			end
-			local _ins = SQL_INSERT_INTO(DATABASE_NAME, "ClassName, Position", "'" .. tostring(app.ClassName) .. "', " .. _pos)
+			yrp_apps[tostring(app.ClassName)] = {}
+			yrp_apps[tostring(app.ClassName)]["ClassName"] = tostring(app.ClassName)
+			yrp_apps[tostring(app.ClassName)]["Position"] = _pos
 		end
 	end
 
-	local _apps = SQL_SELECT(DATABASE_NAME, "*", nil)
 	local apps = {}
-
-	if wk(_apps) then
-		for i, app in pairs(_apps) do
-			local _app = nil
-			for j, a in pairs(getAllApps()) do
-				if a.ClassName == app.ClassName then
-					_app = a
-					_app.Position = app.Position
-					break
-				end
+	for i, app in pairs(yrp_apps) do
+		local _app = nil
+		for j, a in pairs(getAllApps()) do
+			if a.ClassName == app.ClassName then
+				_app = a
+				_app.Position = app.Position
+				break
 			end
-			table.insert(apps, app.Position, _app)
 		end
+		table.insert(apps, app.Position, _app)
 	end
-	
+
 	return apps
 end
 
---db_drop_table(DATABASE_NAME)
-function check_yrp_apps()
-	SQL_INIT_DATABASE(DATABASE_NAME)
-
-	SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT 'new'")
-	SQL_ADD_COLUMN(DATABASE_NAME, "Position", "INT DEFAULT '0'")
-
-	local _sp = SQL_SELECT(DATABASE_NAME, "*", nil)
-	if _sp != nil and _sp != false then
-		yrp_apps = _sp[1]
-	end
+function YRPCheckApps()
+	YRPAppsLoad()
 end
-check_yrp_apps()
+YRPCheckApps()

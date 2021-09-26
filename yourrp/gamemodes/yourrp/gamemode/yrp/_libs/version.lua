@@ -39,7 +39,7 @@ if CLIENT then
 end
 
 function IsServerDedicated()
-	return GAMEMODE.ServerIsDedicated
+	return GetGlobalBool("isserverdedicated")
 end
 
 function SetYRPChannel()
@@ -68,7 +68,7 @@ function SetYRPChannel()
 
 				for art, tab in pairs(test) do
 					if tab.stable == GAMEMODE.VersionStable and tab.beta == GAMEMODE.VersionBeta and tab.canary == GAMEMODE.VersionCanary then
-						YRP.msg("gm", "Gamemode channel: " .. string.upper(art))
+						--YRP.msg("gm", "Gamemode channel: " .. string.upper(art))
 						GAMEMODE.VersionSort = art
 						break
 					end

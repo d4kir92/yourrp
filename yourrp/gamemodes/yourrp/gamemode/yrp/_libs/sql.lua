@@ -127,11 +127,6 @@ function db_drop_table(db_table)
 	end
 end
 
-function retry_load_database(db_name)
-	YRP.msg("error", GetSQLModeName() .. ": " .. "retry_load_database " .. tostring(db_name))
-	--SQL_INIT_DATABASE(db_name)
-end
-
 local _show_db_if_not_empty = false
 
 function db_is_empty(db_name)
@@ -345,7 +340,7 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 	--YRP.msg("db", "SQL_UPDATE(" .. tostring(db_table) .. ", " .. tostring(db_sets) .. ", " .. tostring(db_where) .. ")")
 	local c = 0
 	if type(db_sets) == "string" then
-		YRP.msg( "note", "[SQL_UPDATE] FAIL: db_table " .. db_table .. " db_sets " .. db_sets .. " db_where " .. db_where .. " " .. type(db_sets) )
+		YRP.msg( "error", "[SQL_UPDATE] FAIL: db_table " .. db_table .. " db_sets " .. db_sets .. " db_where " .. db_where )
 		return
 	end
 	local tmp = {}
@@ -725,6 +720,29 @@ if SERVER then
 end
 YRP.msg("db", "Current SQL Mode: " .. GetSQLModeName())
 
+function YRPTryRepairDatabase()
+	YRP.msg("db", "ERROR!!! >> retry Load Database in 10sec <<")
+	YRP.msg("db", "ERROR!!! >> Your database is maybe broken! <<")
+
+	if timer.Exists("retryLoadDatabase") then
+		timer.Remove("retryLoadDatabase")
+	end
+
+	local integrity_check = sql.Query("pragma integrity_check;")
+	YRP.msg("db", "Integrity_check: " .. tostring(integrity_check))
+
+	local nodes = sql.Query("reindex nodes;")
+	YRP.msg("db", "Nodes: " .. tostring(nodes))
+
+	local pristine = sql.Query("reindex pristine;")
+	YRP.msg("db", "Pristine: " .. tostring(pristine))
+
+	timer.Create("retryLoadDatabase", 10, 1, function()
+		db_init_database()
+		timer.Remove("retryLoadDatabase")
+	end)
+end
+
 function SQL_INIT_DATABASE(db_name)
 	--YRP.msg("db", "SQL_INIT_DATABASE(" .. tostring(db_name) .. ")")
 
@@ -734,7 +752,7 @@ function SQL_INIT_DATABASE(db_name)
 
 			if !SQL_TABLE_EXISTS(db_name) then
 				YRP.msg("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " (table not exists) lastError: " .. sql_show_last_error())
-				retry_load_database(db_name)
+				YRPTryRepairDatabase(db_name)
 			end
 		end
 	elseif GetSQLMode() == 1 then
@@ -744,7 +762,7 @@ function SQL_INIT_DATABASE(db_name)
 			if !SQL_TABLE_EXISTS(db_name) then
 				YRP.msg("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " fail")
 				sql_show_last_error()
-				retry_load_database(db_name)
+				YRPTryRepairDatabase(db_name)
 			end
 		end
 	end

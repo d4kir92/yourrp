@@ -1037,13 +1037,19 @@ util.AddNetworkString("yrp_hud_info")
 local Player = FindMetaTable("Player")
 function Player:HudLoadout()
 	YRP.msg("debug", "[HudLoadout] " .. self:YRPName())
+	self:SetNW2String("yrp_hudloadout_msg", "Started")
+
 	local hudeles = SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(hudeles) then
 		net.Start("yrp_hud_info")
 			net.WriteTable(hudeles)
 		net.Send(self)
-	
+
 		self:SetNW2Bool("yrp_hudloadout", true)
+
+		self:SetNW2String("yrp_hudloadout_msg", "> Sended <")
+	else
+		self:SetNW2String("yrp_hudloadout_msg", "Failed")
 	end
 
 	timer.Simple(1, function()

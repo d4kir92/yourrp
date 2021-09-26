@@ -26,7 +26,7 @@ end
 
 function Player:arrest(time, Arrester)
 	--Description: Arrest a player.
-	YRPDarkrpNotFound("arrest(" .. tostring(time) .. ", " .. Arrester:Nick() .. ")")
+	--YRPDarkrpNotFound("arrest(" .. tostring(time) .. ", " .. Arrester:Nick() .. ")")
 
 	self:SetNW2Int("jailtime", time)
 	timer.Simple(0.02, function()
@@ -163,6 +163,14 @@ function Player:setDarkRPVar(variable, value, target)
 		target:SetMoney(value)
 	elseif variable == "wanted" then
 		target:SetNW2Bool("iswanted", value)
+	elseif variable == "agenda" then
+		--
+	elseif variable == "salary" then
+		--
+	elseif variable == "job" then
+		--
+	elseif variable == "wantedReason" then
+		--
 	else
 		YRPDarkrpNotFound("setDarkRPVar(" .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. ")")
 	end
@@ -219,9 +227,8 @@ end
 function Player:unArrest(Unarrester)
 	--Description: Unarrest a player.
 	if IsValid(Unarrester) then
-		YRPDarkrpNotFound("unArrest(" .. Unarrester:YRPName() .. ")")
+		self:SetNW2Bool("injail", false)
 	end
-	self:SetNW2Bool("injail", false)
 end
 
 function Player:unWanted(actor)

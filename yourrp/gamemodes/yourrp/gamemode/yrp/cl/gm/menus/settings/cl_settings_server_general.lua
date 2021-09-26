@@ -38,10 +38,11 @@ function CreateCheckBoxLine(dpanellist, val, lstr, netstr, fixx, textcolor)
 	return background
 end
 
-function CreateCheckBoxLineTab(dpanellist, val, lstr, netstr)
+function CreateCheckBoxLineTab(dpanellist, val, lstr, netstr, x)
 	local cb = CreateCheckBoxLine(dpanellist, val, lstr, netstr)
-	cb.checkbox:SetPos(YRP.ctr(50), YRP.ctr(0))
-	cb.text_posx = YRP.ctr(50 + 50 + 10)
+	cb.checkbox:SetPos(x or YRP.ctr(50), YRP.ctr(0))
+	cb.text_posx = x or YRP.ctr(50)
+	cb.text_posx = cb.text_posx + YRP.ctr(50 + 10)
 end
 
 function CreateButtonLine(dpanellist, lstr, netstr, lstr2)
@@ -337,6 +338,7 @@ net.Receive("Connect_Settings_General", function(len)
 		General_Slider:AddPanel(SERVER_SETTINGS)
 
 		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_server_reload, "LID_automaticreloadingoftheserver", "update_bool_server_reload")
+		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_server_reload_notification, YRP.lang_string("LID_automaticreloadingoftheserver") .. " (Notification)", "update_bool_server_reload_notification")
 		CreateHRLine(SERVER_SETTINGS:GetContent())
 		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_noclip_effect, "LID_noclipeffect", "update_bool_noclip_effect")
 		CreateCheckBoxLineTab(SERVER_SETTINGS:GetContent(), GEN.bool_noclip_stealth, "LID_noclipcloak", "update_bool_noclip_stealth")
@@ -961,7 +963,12 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_tag_on_head, "LID_overheadinfo", "update_bool_tag_on_head")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_tag_on_head_target, "LID_showonlytarget", "update_bool_tag_on_head_target")
+		
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_tag_on_head_name, "LID_showname", "update_bool_tag_on_head_name")
+		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_tag_on_head_name_onlyfaction, "LID_onlyfaction", "update_bool_tag_on_head_name_onlyfaction", YRP.ctr(100))
+		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_tag_on_head_name_onlygroup, "LID_onlygroup", "update_bool_tag_on_head_name_onlygroup", YRP.ctr(100))
+		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_tag_on_head_name_onlyrole, "LID_onlyrole", "update_bool_tag_on_head_name_onlyrole", YRP.ctr(100))
+
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_tag_on_head_idcardid, "LID_showidcardid", "update_bool_tag_on_head_idcardid")
 		--CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_tag_on_head_clan, "LID_showclan", "update_bool_tag_on_head_clan")
 		CreateCheckBoxLineTab(GAMEMODE_VISUALS:GetContent(), GEN.bool_tag_on_head_level, "LID_showlevel", "update_bool_tag_on_head_level")
@@ -1039,10 +1046,6 @@ net.Receive("Connect_Settings_General", function(len)
 		General_Slider:AddPanel(CHARACTERS_SETTINGS)
 
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.text_characters_money_start, "LID_charactersmoneystart", "update_text_characters_money_start")
-
-		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
-		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_gender, "LID_gender", "update_bool_characters_gender")
-		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_othergender, "LID_genderother", "update_bool_characters_othergender", 50)
 
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_changeable_name, "LID_namechangeable", "update_bool_characters_changeable_name")

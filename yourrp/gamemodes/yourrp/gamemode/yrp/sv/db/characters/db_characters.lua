@@ -35,7 +35,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "storage", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "keynrs", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "rpname", "TEXT DEFAULT 'ID_RPNAME'")
 SQL_ADD_COLUMN(DATABASE_NAME, "rpdescription", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "gender", "TEXT DEFAULT 'gendermale'")
 SQL_ADD_COLUMN(DATABASE_NAME, "money", "TEXT DEFAULT '250'")
 SQL_ADD_COLUMN(DATABASE_NAME, "moneybank", "TEXT DEFAULT '500'")
 SQL_ADD_COLUMN(DATABASE_NAME, "position", "TEXT DEFAULT '0,0,0'")
@@ -122,6 +121,29 @@ net.Receive("yrp_get_sweps_role_art", function(len, ply)
 			tab = tab[1]
 			if tobool(tab["slot_" .. art]) then
 				table.insert(sweps, v)
+			end
+		end
+	end
+
+	local charid = ply:CharID()
+	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
+	if wk(tab) then
+		tab = tab[1]
+
+		for i, v in pairs( string.Explode(",", tab.string_specializations ) ) do
+			local tabSpec = SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
+			if wk(tabSpec) then
+				tabSpec = tabSpec[1]
+		
+				for i, v in pairs( string.Explode(",", tabSpec.sweps ) ) do
+					local tab = SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. v .. "'")
+					if wk(tab) then
+						tab = tab[1]
+						if tobool(tab["slot_" .. art]) then
+							table.insert( sweps, v )
+						end
+					end
+				end
 			end
 		end
 	end
@@ -402,58 +424,10 @@ net.Receive("change_weight", function(len, ply)
 	ply:SetNW2Int("int_weight", _new_weight)
 end)
 
-util.AddNetworkString("charGetGroups")
-util.AddNetworkString("charGetRoles")
-util.AddNetworkString("charGetRoleInfo")
-
 util.AddNetworkString("yrp_get_characters")
 
-util.AddNetworkString("DeleteCharacter")
-util.AddNetworkString("CreateCharacter")
-
-net.Receive("charGetGroups", function(len, ply)
-	local tmpTable = SQL_SELECT("yrp_ply_groups", "*", nil)
-	if tmpTable == nil then
-		tmpTable = {}
-	end
-	net.Start("charGetGroups")
-		net.WriteTable(tmpTable)
-	net.Send(ply)
-end)
-
-net.Receive("charGetRoles", function(len, ply)
-	local groupID = net.ReadString()
-	local netTable = {}
-	local tmpTable = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = " .. tonumber(groupID))
-	if wk(tmpTable) then
-		local count = 1
-		for k, v in pairs(tmpTable) do
-			if canGetRole(ply, v.uniqueID) then
-				netTable[count] = {}
-				netTable[count] = v
-				count = count + 1
-			end
-		end
-	end
-	net.Start("charGetRoles")
-		net.WriteTable(netTable)
-	net.Send(ply)
-end)
-
-net.Receive("charGetRoleInfo", function(len, ply)
-	local roleID = net.ReadString()
-	local tmpTable = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(roleID))
-	if tmpTable == nil then
-		tmpTable = {}
-	else
-		local rpms = GetPlayermodelsOfRole(roleID)
-		tmpTable[1].string_playermodels = rpms -- table.concat(tab,",")
-	end
-
-	net.Start("charGetRoleInfo")
-		net.WriteTable(tmpTable)
-	net.Send(ply)
-end)
+util.AddNetworkString("YRPDeleteCharacter")
+util.AddNetworkString("YRPCreateCharacter")
 
 function GetPlayermodelsOfRole(ruid)
 	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(ruid) .. "'")
@@ -481,6 +455,25 @@ function GetPlayermodelsOfRole(ruid)
 	return ""
 end
 
+function GetPlayermodelsOfCharacter(ply, ruid)
+	local rpms = GetPlayermodelsOfRole(ruid)
+	local spms = YRPGetSpecData(ply)
+
+	local pms = {}
+	for i, v in pairs( string.Explode(",", rpms ) ) do
+		if !table.HasValue(pms, v) then
+			table.insert(pms, v)
+		end
+	end
+	for i, v in pairs( string.Explode(",", spms.pms ) ) do
+		if !table.HasValue(pms, v) then
+			table.insert(pms, v)
+		end
+	end
+
+	return table.concat(pms, ",")
+end
+
 function GetPMTableOfRole(ruid)
 	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(ruid) .. "'")
 	if wk(role) then
@@ -505,13 +498,31 @@ function GetPMTableOfRole(ruid)
 		return tab
 	else
 		YRP.msg("note", "role " .. ruid .. " has no playermodels")
-		return ""
+		return {}
 	end
+end
+
+function GetPMsOfCharacter(ply, ruid)
+	local rpms = GetPMTableOfRole(ruid)
+	local spms = YRPGetSpecData(ply)
+
+	for i, v in pairs( string.Explode(",", spms.pms ) ) do
+		local entry = {}
+		entry.float_size_min = 1
+		entry.float_size_max = 1
+		entry.string_model = v
+		table.insert(rpms, entry)
+	end
+
+	return rpms
 end
 
 --[[ Server Send Characters to Client ]]--
 function SendLoopCharacterList(ply, tab)
+	ply:SetNW2String("loadchars_msg", "SendLoopCharacterList")
 	if net.BytesLeft() == nil and net.BytesWritten() == nil then
+		ply:SetNW2String("loadchars_msg", "net.bytesleft == nil")
+
 		local plyT = ply:GetPlyTab()
 		if wk(plyT) then
 			ply:SetNW2Int("yrp_charid", tonumber(plyT.CurrentCharacter))
@@ -535,20 +546,22 @@ function SendLoopCharacterList(ply, tab)
 			c = c + 1
 		end
 
-		timer.Simple(2, function()
-			if IsValid(ply) then
-				ply:SetNW2Bool("loadedchars", true)
-			end
-		end)
+		ply:SetNW2String("loadchars_msg", "> Done <")
+
+		ply:SetNW2Bool("loadchars_done", true)
 	else
-		timer.Simple(0.1, function()
+		timer.Simple(0.01, function()
 			SendLoopCharacterList(ply, tab)
 		end)
 	end
 end
 
 util.AddNetworkString("OpenCharacterCreation")
-function send_characters(ply)
+function YRPSendCharacters(ply, from)
+	ply:SetNW2Bool("loadchars_start", true)
+
+	ply:SetNW2String("loadchars_msg", "Started")
+
 	YRPSendCharCount(ply)
 
 	local netTable = {}
@@ -557,6 +570,7 @@ function send_characters(ply)
 
 	local _charCount = 0
 	if wk(chaTab) then
+		ply:SetNW2String("loadchars_msg", "Worked")
 		for k, v in pairs(chaTab) do
 			if v.roleID != nil and v.groupID != nil then
 				_charCount = _charCount + 1
@@ -598,34 +612,32 @@ function send_characters(ply)
 					end
 				end
 			else
-				YRP.msg("note", "[send_characters] roleid != nil or groupid != nil")
+				YRP.msg("note", "[YRPSendCharacters] roleid != nil or groupid != nil")
 			end
 		end
+
+		ply:SetNW2String("loadchars_msg", "Start Loop")
 
 		SendLoopCharacterList(ply, netTable)
 	else
 		net.Start("OpenCharacterCreation")
 		net.Send(ply)
 
-		timer.Simple(2, function()
-			if IsValid(ply) then
-				ply:SetNW2Bool("loadedchars", true)
-			end
-		end)
+		ply:SetNW2Bool("loadchars_done", true)
 	end
 end
 
 --[[ Client ask for Characters ]]--
 net.Receive("yrp_get_characters", function(len, ply)
 	--YRP.msg("db", ply:YRPName() .. " ask for characters")
-	send_characters(ply)
+	YRPSendCharacters( ply, "yrp_get_characters" )
 
 	if !ply:Alive() then
 		ply:SetNW2Bool("yrp_characterselection", true)
 	end
 end)
 
-net.Receive("DeleteCharacter", function(len, ply)
+net.Receive("YRPDeleteCharacter", function(len, ply)
 	local charID = net.ReadString()
 
 	if wk(charID) then
@@ -648,21 +660,20 @@ net.Receive("DeleteCharacter", function(len, ply)
 		else
 			YRP.msg("note", "DeleteCharacter: fail")
 		end
-		send_characters(ply)
+		YRPSendCharacters( ply, "YRPDeleteCharacter" )
 	end
 end)
 
-function CreateCharacter(ply, tab)
+function YRPCreateCharacter(ply, tab)
 	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(tab.roleID))
 	if wk(role) then
 		local steamid = ply:SteamID() or ply:UniqueID()
-		local cols = "SteamID, rpname, gender, roleID, groupID, playermodelID, money, moneybank, map, skin, rpdescription, string_birthday, int_bodyheight, int_weight, bool_eventchar"
+		local cols = "SteamID, rpname, roleID, groupID, playermodelID, money, moneybank, map, skin, rpdescription, string_birthday, int_bodyheight, int_weight, bool_eventchar"
 		for i = 0, 19 do
 			cols = cols .. ", bg" .. i
 		end
 		local vals = "'" .. steamid .. "', "
-		vals = vals .. "'" .. tab.rpname .. "', "
-		vals = vals .. "'" .. tab.gender .. "', "
+		vals = vals .. "" .. SQL_STR_IN( tab.rpname ) .. ", "
 		vals = vals .. tonumber(role[1].uniqueID) .. ", "
 		vals = vals .. tonumber(role[1].int_groupID) .. ", "
 		vals = vals .. tonumber(tab.playermodelID) .. ", "
@@ -670,11 +681,11 @@ function CreateCharacter(ply, tab)
 		vals = vals .. 0 .. ", "
 		vals = vals .. "'" .. GetMapNameDB() .. "', "
 		vals = vals .. tonumber(tab.skin) .. ", "
-		vals = vals .. "'" .. tostring(tab.rpdescription) .. "', "
+		vals = vals .. "" .. SQL_STR_IN( tostring(tab.rpdescription) ) .. ", "
 		
-		vals = vals .. "'" .. tostring(tab.birt) .. "', "
-		vals = vals .. "'" .. tostring(tab.bohe) .. "', "
-		vals = vals .. "'" .. tostring(tab.weig) .. "', "
+		vals = vals .. "" .. SQL_STR_IN( tostring(tab.birt) ) .. ", "
+		vals = vals .. "" .. SQL_STR_IN( tostring(tab.bohe) ) .. ", "
+		vals = vals .. "" .. SQL_STR_IN( tostring(tab.weig) ) .. ", "
 		vals = vals .. "'" .. btn(tab.create_eventchar) .. "'"
 
 		for i = 0, 19 do
@@ -683,26 +694,36 @@ function CreateCharacter(ply, tab)
 		local char = SQL_INSERT_INTO("yrp_characters", cols, vals)
 		if char == nil then
 			local chars = SQL_SELECT("yrp_characters", "*", nil)
-			if worked(chars, "[CreateCharacter] chars") then
+			if worked(chars, "[YRPCreateCharacter] chars") then
 				local result = SQL_UPDATE("yrp_players", {["CurrentCharacter"] = tonumber(chars[#chars].uniqueID)}, "SteamID = '" .. ply:SteamID() .. "'")
 				if result != nil then
-					YRP.msg("error", "[CreateCharacter] failed @Update!")
+					YRP.msg("error", "[YRPCreateCharacter] failed @Update!")
 				end
 			else
-				YRP.msg("note", "[CreateCharacter] chars failed: " .. tostring(chars))
+				YRP.msg("note", "[YRPCreateCharacter] chars failed: " .. tostring(chars))
 			end
 		else
-			YRP.msg("error", "[CreateCharacter] failed - char: " .. tostring(char) .. " " .. sql_show_last_error())
+			YRP.msg("error", "[YRPCreateCharacter] failed - char: " .. tostring(char) .. " LastError: " .. sql_show_last_error())
 		end
-		send_characters(ply)
+		YRPSendCharacters( ply, "YRPCreateCharacter" )
 	else
-		YRP.msg("note", "[CreateCharacter] role not found!")
+		YRP.msg("note", "[YRPCreateCharacter] role not found!")
 	end
-	CreateCharacterStorages()
+	YRPCreateCharacterStorages()
 end
 
-net.Receive("CreateCharacter", function(len, ply)
+net.Receive("YRPCreateCharacter", function(len, ply)
 	local tab = net.ReadTable()
+
+	if tab.rpname == nil then
+		YRP.msg( "note", "[YRPCreateCharacter] FAILED, RPNAME is INVALID!" )
+
+		net.Start("YRPCreateCharacter")
+			net.WriteBool(false)
+			net.WriteBool(true)
+		net.Send(ply)
+		return
+	end
 
 	local namealreadyinuse = false
 
@@ -714,13 +735,15 @@ net.Receive("CreateCharacter", function(len, ply)
 	end
 
 	if namealreadyinuse then
-		net.Start("CreateCharacter")
+		net.Start("YRPCreateCharacter")
+			net.WriteBool(false)
 			net.WriteBool(false)
 		net.Send(ply)
 	else
-		CreateCharacter(ply, tab)
-		net.Start("CreateCharacter")
+		YRPCreateCharacter(ply, tab)
+		net.Start("YRPCreateCharacter")
 			net.WriteBool(true)
+			net.WriteBool(false)
 		net.Send(ply)
 	end
 end)
@@ -747,7 +770,9 @@ function SendBodyGroups(ply)
 			_result = _result[1]
 			local _role = ply:YRPGetRoleTable()
 			if wk(_role) then
-				_result.string_playermodels = GetPlayermodelsOfRole(_role.uniqueID)
+				local ruid = _role.uniqueID
+				_result.string_playermodels = GetPlayermodelsOfCharacter(ply, ruid)
+
 				if _result.string_playermodels != "" then
 					net.Start("get_menu_bodygroups")
 						net.WriteTable(_result)
@@ -812,7 +837,7 @@ end)
 util.AddNetworkString("inv_pm_up")
 net.Receive("inv_pm_up", function(len, ply)
 	local _cur = net.ReadInt(16)
-	local _pms = string.Explode(",", GetPlayermodelsOfRole(ply:YRPGetRoleTable().uniqueID))
+	local _pms = string.Explode(",", GetPlayermodelsOfCharacter( ply, ply:YRPGetRoleTable().uniqueID ) )
 	if wk(_pms) then
 		if wk(_pms[_cur]) then
 			ply:SetNW2String("string_playermodel", _pms[_cur])
@@ -829,7 +854,7 @@ end)
 util.AddNetworkString("inv_pm_do")
 net.Receive("inv_pm_do", function(len, ply)
 	local _cur = net.ReadInt(16)
-	local _pms = string.Explode(",", GetPlayermodelsOfRole(ply:YRPGetRoleTable().uniqueID))
+	local _pms = string.Explode(",", GetPlayermodelsOfCharacter( ply, ply:YRPGetRoleTable().uniqueID ) )
 	if wk(_pms) then
 		if wk(_pms[_cur]) then
 			ply:SetNW2String("string_playermodel", _pms[_cur])
@@ -981,15 +1006,19 @@ net.Receive("setting_characters", function(len, ply)
 	net.Send(ply)
 end)
 
-function YRPGiveSpecs(ply)
+function YRPGetSpecData(ply)
 	local charid = ply:CharID()
 	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
 	
 	local prefix = {}
 	local suffix = {}
 
+	local pms = {}
+
 	if wk(tab) then
 		tab = tab[1]
+
+		ply:SetNW2String( "specializationIDs", tab.string_specializations )
 
 		for i, v in pairs( string.Explode(",", tab.string_specializations ) ) do
 			local tabSpec = SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
@@ -998,6 +1027,10 @@ function YRPGiveSpecs(ply)
 		
 				for i, v in pairs( string.Explode(",", tabSpec.sweps ) ) do
 					ply:Give(v)
+				end
+
+				if !strEmpty( tabSpec.pms ) then
+					table.insert( pms, tabSpec.pms )
 				end
 
 				if !strEmpty(tabSpec.prefix) then
@@ -1010,17 +1043,35 @@ function YRPGiveSpecs(ply)
 		end
 	end
 
+	pms = table.concat( pms, "," )
+
 	prefix = table.concat( prefix, " " )
 	suffix = table.concat( suffix, " " )
 
-	ply:SetNW2String( "spec_prefix", prefix )
-	ply:SetNW2String( "spec_suffix", suffix )
+	local tab = {}
+	tab.prefix = prefix
+	tab.suffix = suffix
+	tab.pms = pms
+
+	return tab
 end
+
+function YRPGiveSpecs(ply)
+	local tab = YRPGetSpecData(ply)
+
+	ply:SetNW2String( "spec_prefix", tab.prefix )
+	ply:SetNW2String( "spec_suffix", tab.suffix )
+
+	ply:SetNW2String( "spec_pms", tab.pms )
+end
+
+util.AddNetworkString("yrp_reopen_givespec")
 
 util.AddNetworkString("char_add_spec")
 net.Receive("char_add_spec", function(len, ply)
 	local charid = net.ReadString()
 	local specid = net.ReadString()
+	local ruid = net.ReadString()
 
 	local newspecs = {}
 
@@ -1042,4 +1093,42 @@ net.Receive("char_add_spec", function(len, ply)
 	SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newspecs}, "uniqueID = '" .. charid .. "'")
 
 	YRPGiveSpecs(ply)
+
+	net.Start("yrp_reopen_givespec")
+		net.WriteString(charid)
+		net.WriteString(ruid)
+	net.Send(ply)
+end)
+
+util.AddNetworkString("char_rem_spec")
+net.Receive("char_rem_spec", function(len, ply)
+	local charid = net.ReadString()
+	local specid = net.ReadString()
+	local ruid = net.ReadString()
+
+	local newspecs = {}
+
+	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
+	if wk(tab) then
+		tab = tab[1]
+		for i, v in pairs( string.Explode(",", tab.string_specializations ) ) do
+			if !table.HasValue(newspecs, v) and !strEmpty(v) then
+				table.insert(newspecs, v)
+			end
+		end
+	end
+
+	if table.HasValue(newspecs, specid) and !strEmpty(specid) then
+		table.RemoveByValue(newspecs, specid)
+	end
+	newspecs = table.concat( newspecs, "," )
+
+	SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newspecs}, "uniqueID = '" .. charid .. "'")
+
+	YRPGiveSpecs(ply)
+
+	net.Start("yrp_reopen_givespec")
+		net.WriteString(charid)
+		net.WriteString(ruid)
+	net.Send(ply)
 end)

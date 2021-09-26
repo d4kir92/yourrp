@@ -7,15 +7,11 @@ local HANDLER_STATUS = {}
 
 function RemFromHandler_Status(ply)
 	table.RemoveByValue(HANDLER_STATUS, ply)
-	YRP.msg("gm", ply:YRPName() .. " disconnected from Status")
 end
 
 function AddToHandler_Status(ply)
 	if !table.HasValue(HANDLER_STATUS, ply) then
 		table.insert(HANDLER_STATUS, ply)
-		YRP.msg("gm", ply:YRPName() .. " connected to Status")
-	else
-		YRP.msg("gm", ply:YRPName() .. " already connected to Status")
 	end
 end
 

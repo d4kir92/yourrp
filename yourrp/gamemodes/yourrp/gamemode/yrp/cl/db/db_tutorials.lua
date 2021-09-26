@@ -1,8 +1,55 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
+local YRP_TUTORIALS = {}
+YRP_TUTORIALS["tut_all"] = 1
+YRP_TUTORIALS["tut_cs"] = 1
+YRP_TUTORIALS["tut_mr"] = 1
+YRP_TUTORIALS["tut_mb"] = 1
+YRP_TUTORIALS["tut_ms"] = 1
+YRP_TUTORIALS["tut_tmo"] = 1
+YRP_TUTORIALS["tut_vo"] = 1
+YRP_TUTORIALS["tut_vi"] = 1
+YRP_TUTORIALS["tut_tma"] = 1
+YRP_TUTORIALS["tut_mi"] = 1
+YRP_TUTORIALS["tut_sp"] = 1
+YRP_TUTORIALS["tut_feedback"] = 1
+YRP_TUTORIALS["tut_welcome"] = 1
+YRP_TUTORIALS["tut_hudhelp"] = 1
+YRP_TUTORIALS["tut_f1info"] = 1
+YRP_TUTORIALS["tut_all"] = 1
+
 local yrp_tutorials = {}
 
-local DATABASE_NAME = "yrp_tutorials"
+local dbfile = "yrp_tutorials/yrp_tutorials.json"
+
+function YRPTutorialsMSG( msg )
+	MsgC( Color( 0, 255, 0 ), "[YourRP] [TUTORIALS] " .. msg .. "\n" )
+end
+
+function YRPTutorialsCheckFile()
+	if !file.Exists( "yrp_tutorials", "DATA" ) then
+		YRPTutorialsMSG( "Created Tutorial Folder" )
+		file.CreateDir( "yrp_tutorials" )
+	end
+	if !file.Exists( dbfile, "DATA" ) then
+		YRPTutorialsMSG( "Created New Tutorial File" )
+		file.Write( dbfile, util.TableToJSON( YRP_TUTORIALS, true ) )
+	end
+end
+
+function YRPTutorialsLoad()
+	YRPTutorialsCheckFile()
+	YRPTutorialsMSG( "Load Tutorials" )
+	
+	yrp_tutorials = util.JSONToTable( file.Read( dbfile, "DATA" ) )
+end
+
+function YRPTutorialsSave()
+	YRPTutorialsCheckFile()
+	YRPTutorialsMSG( "Save Tutorials" )
+	
+	file.Write( dbfile, util.TableToJSON( yrp_tutorials, true ) )
+end
 
 function done_tutorial(str, time)
 	if tobool(get_tutorial(str)) then
@@ -11,53 +58,21 @@ function done_tutorial(str, time)
 		end
 		timer.Simple(time, function()
 			yrp_tutorials[str] = 0
-			SQL_UPDATE(DATABASE_NAME, {[str] = 0}, "uniqueID = 1")
+			YRPTutorialsSave()
 		end)
 	end
 end
 
 function reset_tutorial(str)
 	yrp_tutorials[str] = 1
-	SQL_UPDATE(DATABASE_NAME, {[str] = 1}, "uniqueID = 1")
+	YRPTutorialsSave()
 end
 
 function get_tutorial(str)
 	return tobool(yrp_tutorials[str])
 end
 
---db_drop_table(DATABASE_NAME)
-function check_yrp_tutorials()
-	SQL_INIT_DATABASE(DATABASE_NAME)
-
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_all", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_cs", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_mr", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_mb", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_ms", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_tmo", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_vo", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_vi", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_tma", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_mi", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_sn", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_sp", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_feedback", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_welcome", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_hudhelp", "INT DEFAULT 1")
-	SQL_ADD_COLUMN(DATABASE_NAME, "tut_f1info", "INT DEFAULT 1")
-
-	local _tmp = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
-	if _tmp == nil then
-		local _result = SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
-		_tmp = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
-		if _tmp == nil or _tmp == false then
-			YRP.msg("error", DATABASE_NAME .. " has no entries.")
-		end
-	end
-
-	local _tuts = SQL_SELECT(DATABASE_NAME, "*", nil)
-	if _tuts != nil and _tuts != false then
-		yrp_tutorials = _tuts[1]
-	end
+function YRPCheckTutorials()
+	YRPTutorialsLoad()
 end
-check_yrp_tutorials()
+YRPCheckTutorials()

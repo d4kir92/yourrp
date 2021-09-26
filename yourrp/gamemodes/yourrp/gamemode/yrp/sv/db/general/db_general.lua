@@ -11,6 +11,7 @@ local DATABASE_NAME = "yrp_general"
 --[[ Server Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "int_version", "INT DEFAULT 1")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_reload_notification", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_reload", "INT DEFAULT 1")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_model", "INT DEFAULT 1")
@@ -174,7 +175,12 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head", "INT DEFAULT 0")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_target", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_clan", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_idcardid", "INT DEFAULT 1")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name_onlyfaction", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name_onlygroup", "INT DEFAULT 0")
+SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name_onlyrole", "INT DEFAULT 0")
+
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_level", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_rolename", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_factionname", "INT DEFAULT 1")
@@ -214,9 +220,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "bool_money_printer_spawn_money", "INT DEFAULT 1")
 
 --[[ Characters Settings ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "text_characters_money_start", "TEXT DEFAULT '500'")
-
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_gender", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_othergender", "INT DEFAULT 0")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_changeable_name", "INT DEFAULT 1")
 
@@ -263,15 +266,11 @@ local HANDLER_GENERAL = {}
 
 function RemFromHandler_General(ply)
 	table.RemoveByValue(HANDLER_GENERAL, ply)
-	YRP.msg("gm", ply:YRPName() .. " disconnected from General")
 end
 
 function AddToHandler_General(ply)
 	if !table.HasValue(HANDLER_GENERAL, ply) then
 		table.insert(HANDLER_GENERAL, ply)
-		YRP.msg("gm", ply:YRPName() .. " connected to General")
-	else
-		YRP.msg("gm", ply:YRPName() .. " already connected to General")
 	end
 end
 
@@ -531,6 +530,12 @@ end
 
 
 --[[ SERVER SETTINGS ]]--
+util.AddNetworkString("update_bool_server_reload_notification")
+net.Receive("update_bool_server_reload_notification", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_server_reload_notification", "bool_server_reload_notification", b)
+end)
+
 util.AddNetworkString("update_bool_server_reload")
 net.Receive("update_bool_server_reload", function(len, ply)
 	local b = btn(net.ReadBool())
@@ -1307,6 +1312,24 @@ net.Receive("update_bool_tag_on_head_name", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_tag_on_head_name", "bool_tag_on_head_name", b)
 end)
 
+util.AddNetworkString("update_bool_tag_on_head_name_onlyfaction")
+net.Receive("update_bool_tag_on_head_name_onlyfaction", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_tag_on_head_name_onlyfaction", "bool_tag_on_head_name_onlyfaction", b)
+end)
+
+util.AddNetworkString("update_bool_tag_on_head_name_onlygroup")
+net.Receive("update_bool_tag_on_head_name_onlygroup", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_tag_on_head_name_onlygroup", "bool_tag_on_head_name_onlygroup", b)
+end)
+
+util.AddNetworkString("update_bool_tag_on_head_name_onlyrole")
+net.Receive("update_bool_tag_on_head_name_onlyrole", function(len, ply)
+	local b = btn(net.ReadBool())
+	GeneralUpdateBool(ply, "update_bool_tag_on_head_name_onlyrole", "bool_tag_on_head_name_onlyrole", b)
+end)
+
 util.AddNetworkString("update_bool_tag_on_head_clan")
 net.Receive("update_bool_tag_on_head_clan", function(len, ply)
 	local b = btn(net.ReadBool())
@@ -1495,16 +1518,6 @@ net.Receive("update_text_characters_money_start", function(len, ply)
 	GeneralUpdateString(ply, "update_text_characters_money_start", "text_characters_money_start", str)
 end)
 
-util.AddNetworkString("update_bool_characters_gender")
-net.Receive("update_bool_characters_gender", function(len, ply)
-	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "update_bool_characters_gender", "bool_characters_gender", b)
-end)
-util.AddNetworkString("update_bool_characters_othergender")
-net.Receive("update_bool_characters_othergender", function(len, ply)
-	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "update_bool_characters_othergender", "bool_characters_othergender", b)
-end)
 util.AddNetworkString("update_bool_characters_changeable_name")
 net.Receive("update_bool_characters_changeable_name", function(len, ply)
 	local b = btn(net.ReadBool())

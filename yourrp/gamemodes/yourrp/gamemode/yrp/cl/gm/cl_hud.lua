@@ -14,7 +14,7 @@ end)
 
 hook.Add("ResolutionChanged", "Resolution Change", function(w, h)
 	local rw, rh = getResolutionRatio()
-	YRP.msg("gm", "Changed Resolution to " .. w .. "x" .. h .. " (" .. rw .. ":" .. rh .. ")")
+	--YRP.msg("gm", "Changed Resolution to " .. w .. "x" .. h .. " (" .. rw .. ":" .. rh .. ")")
 	changeFontSize()
 
 	net.Start("ply_changed_resolution")
@@ -109,6 +109,24 @@ hook.Add("HUDPaint", "yrp_hud_safezone", function()
 	local lply = LocalPlayer()
 	if IsInsideSafezone(lply) then
 		draw.SimpleText(YRP.lang_string("LID_safezone"), "Y_24_500", ScrW() / 2, YRP.ctr(650), Color(100, 100, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+end)
+
+local lastzone = ""
+local zonedelay = 0
+hook.Add("HUDPaint", "yrp_hud_zone", function()
+	local lply = LocalPlayer()
+	local inzone, zonename, zonecolor = IsInsideZone(lply)
+	if inzone and lastzone != zonename then
+		lastzone = zonename
+		zonedelay = CurTime() + 4
+	end
+
+	if inzone and zonedelay > CurTime() then
+		zonecolor = StringToColor( zonecolor )
+
+		draw.SimpleText(YRP.lang_string("LID_entered") .. ":", "Y_30_500", ScrW() / 2, YRP.ctr(400), zonecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(zonename, "Y_80_500", ScrW() / 2, YRP.ctr(500), zonecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 end)
 
@@ -721,7 +739,7 @@ local VO = {}
 hook.Add("HUDPaint", "yrp_voice_module", function()
 	local lply = LocalPlayer()
 	if GetGlobalBool("bool_voice", false) then
-		VO.font = "Y_16_500"
+		VO.font = "Y_18_700"
 		surface.SetFont(VO.font)
 
 		local texta = {}
@@ -776,7 +794,7 @@ hook.Add("HUDPaint", "yrp_voice_module", function()
 
 		VO.tw = VO.tw + VO.h / 2
 
-		draw.RoundedBox(5, VO.tx - VO.tw / 2, VO.y, VO.tw, VO.h, Color(25, 25, 25))
+		DrawRectBlurHUD(15, VO.tx - VO.tw / 2, VO.y, VO.tw, VO.h, 200)
 		draw.SimpleText(VO.text, VO.font, VO.tx, VO.ty, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 end)
@@ -791,7 +809,7 @@ local YRPTEMPDATA = {}
 local YRPHUDVersion = 0
 
 function YRPHUDUpdateAnchors()
-	YRP.msg("note", "YRPHUDUpdateAnchors()")
+	--YRP.msg("note", "YRPHUDUpdateAnchors()")
 
 	YRPHUDAnchors["TOPLEFT"] = 		{0, 			0}
 	YRPHUDAnchors["TOPRIGHT"] = 	{ScrW(), 		0}
@@ -909,3 +927,70 @@ hook.Add("HUDPaint", "yrp_hud_api", function()
 		YRPHUDDrawText("ce_text", "CENTER", 0, 0, "TESTTEXT", YRPHUDGetFont(40, false), Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 end)
+
+-- AMMO FUNCTIONS
+function YRPGetAWClip1(ply)
+	if IsValid(ply) then
+		local weapon = ply:GetActiveWeapon()
+		if IsValid(weapon) then
+			local clip1 = weapon:Clip1()
+			return clip1
+		end
+	end
+	return -1
+end
+
+function YRPGetAWClip2(ply)
+	if IsValid(ply) then
+		local weapon = ply:GetActiveWeapon()
+		if IsValid(weapon) then
+			local clip2 = weapon:Clip2()
+			return clip2
+		end
+	end
+	return -1
+end
+
+function YRPGetAWClip1Max(ply)
+	if IsValid(ply) then
+		local weapon = ply:GetActiveWeapon()
+		if IsValid(weapon) then
+			local clip1max = weapon:GetMaxClip1()
+			return clip1max
+		end
+	end
+	return -1
+end
+
+function YRPGetAWClip2Max(ply)
+	if IsValid(ply) then
+		local weapon = ply:GetActiveWeapon()
+		if IsValid(weapon) then
+			local clip2max = weapon:GetMaxClip2()
+			return clip2max
+		end
+	end
+	return -1
+end
+
+function YRPGetAWAmmo1(ply)
+	if IsValid(ply) then
+		local weapon = ply:GetActiveWeapon()
+		if IsValid(weapon) then
+			local ammo1 = ply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+			return ammo1
+		end
+	end
+	return -1
+end
+
+function YRPGetAWAmmo2(ply)
+	if IsValid(ply) then
+		local weapon = ply:GetActiveWeapon()
+		if IsValid(weapon) then
+			local ammo2 = ply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+			return ammo2
+		end
+	end
+	return -1
+end

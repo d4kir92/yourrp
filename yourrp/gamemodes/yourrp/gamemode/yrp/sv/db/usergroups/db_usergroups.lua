@@ -243,15 +243,11 @@ local HANDLER_USERGROUPS = {}
 
 function RemFromHandler_UserGroups(ply)
 	table.RemoveByValue(HANDLER_USERGROUPS, ply)
-	YRP.msg("gm", ply:YRPName() .. " disconnected from UserGroups")
 end
 
 function AddToHandler_UserGroups(ply)
 	if !table.HasValue(HANDLER_USERGROUPS, ply) then
 		table.insert(HANDLER_USERGROUPS, ply)
-		YRP.msg("gm", ply:YRPName() .. " connected to UserGroups")
-	else
-		YRP.msg("gm", ply:YRPName() .. " already connected to UserGroups")
 	end
 end
 
@@ -293,7 +289,6 @@ util.AddNetworkString("Connect_Settings_UserGroups")
 net.Receive("Connect_Settings_UserGroups", function(len, ply)
 	GetULXUserGroups()
 
-	YRP.msg("gm", "Connect_Settings_UserGroups => " .. ply:YRPName())
 	if ply:CanAccess("bool_usergroups") then
 		AddToHandler_UserGroups(ply)
 		local _usergroups = {}
@@ -327,9 +322,6 @@ function RemFromHandler_UserGroup(ply, uid)
 	HANDLER_USERGROUP[uid] = HANDLER_USERGROUP[uid] or {}
 	if table.HasValue(HANDLER_USERGROUP[uid], ply) then
 		table.RemoveByValue(HANDLER_USERGROUP[uid], ply)
-		YRP.msg("gm", ply:YRPName() .. " disconnected from UserGroup (" .. uid .. ")")
-	else
-		YRP.msg("gm", ply:YRPName() .. " not connected to UserGroup (" .. uid .. ")")
 	end
 end
 
@@ -337,9 +329,6 @@ function AddToHandler_UserGroup(ply, uid)
 	HANDLER_USERGROUP[uid] = HANDLER_USERGROUP[uid] or {}
 	if !table.HasValue(HANDLER_USERGROUP[uid], ply) then
 		table.insert(HANDLER_USERGROUP[uid], ply)
-		YRP.msg("gm", ply:YRPName() .. " connected to UserGroup (" .. uid .. ")")
-	else
-		YRP.msg("gm", ply:YRPName() .. " already connected to UserGroup (" .. uid .. ")")
 	end
 end
 
@@ -1658,7 +1647,7 @@ end
 local toolantispam = {}
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if ea(pl) and wk(tool) then
-		YRP.msg("gm", "CanTool: " .. tool)
+		--YRP.msg("gm", "CanTool: " .. tool)
 		local tools = {}
 		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(tab) then
@@ -1695,7 +1684,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 								YRPNotiToPlyDisallowed(pl, "Map Entities!")
 							end]]
 
-							timer.Simple(5, function()
+							timer.Simple(2, function()
 								if ea(pl) then
 									table.RemoveByValue(toolantispam, pl)
 								end
@@ -1708,8 +1697,8 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 			end
 			return true
 		else
-			YRPNotiToPlyDisallowed(pl, "Tool: " .. tostring(tool))
-			YRP.msg("note", "[CanTool] " .. "NO RIGHTS: " .. tostring(tool))
+			YRPNotiToPlyDisallowed(pl, "NO RIGHTS - Tool: " .. tostring(tool) .. " >>> " .. "menu_settings" .. " -> " .. "LID_management" .. " -> " .. "LID_usergroups" .. " -> " .. "LID_tools" )
+			YRP.msg("note", "[CanTool] " .. "NO RIGHTS - Tool: " .. tostring(tool))
 			return false
 		end
 		YRPNotiToPlyDisallowed(pl, "FAIL FOR TOOL: " .. tostring(tool))
@@ -1802,7 +1791,7 @@ function Player:UserGroupLoadout()
 			end
 		end
 
-		YRP.msg("gm", tostring( self:SteamName() ) .. " got his usergroup loadout (" .. tostring( self:GetUserGroup() ) .. ")")
+		--YRP.msg("gm", tostring( self:SteamName() ) .. " got his usergroup loadout (" .. tostring( self:GetUserGroup() ) .. ")")
 	else
 		YRP.msg("note", "USERGROUP NOT FOUND, ADD THE USERGROUP!")
 	end

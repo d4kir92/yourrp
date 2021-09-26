@@ -8,6 +8,8 @@ local c = 0
 function PlayerLoadedGame(ply, tab)
 	c = c + 1
 
+	ply:SetNW2Bool("PlayerLoadedGameStart", true)
+
 	local OS_Windows = tab.iswindows
 	local OS_Linux = tab.islinux
 	local OS_OSX = tab.isosx
@@ -34,8 +36,6 @@ function PlayerLoadedGame(ply, tab)
 		_chat = _chat[1]
 		ply:SetNW2Bool("bool_yrp_chat", tobool(_chat.yrp_chat))
 	end
-
-	ply:SetNW2Bool("isserverdedicated", game.IsDedicated())
 
 	ply:YRPDesignLoadout("PlayerLoadedGame")
 
@@ -67,6 +67,8 @@ function PlayerLoadedGame(ply, tab)
 
 	YRP.msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading.")-- Count: " ..  c)
 
+	ply:SetNW2Bool("PlayerLoadedGameEnd", true)
+
 	net.Start("yrp_ready_received")
 	net.Send(ply)
 end
@@ -74,13 +76,15 @@ end
 hook.Add("Think", "yrp_loaded_game", function()
 	for i, ply in pairs(player.GetAll()) do
 		if IsValid(ply) then
-			if ply:GetNW2Bool("finishedloadingcharacter") and ply:SteamID64() != nil and ply.yrploaded == nil then -- Only goes here, when a player fully loaded
+			if ply:GetNW2Bool("finishedloadingcharacter", false) == true and ply:SteamID64() != nil and ply.yrploaded == nil then -- Only goes here, when a player fully loaded
 				ply.yrploaded = true
 
 				ply:SetNW2Bool("finishedloading", true)
 
-				if open_character_selection != nil then
-					open_character_selection(ply)
+				if YRPOpenCharacterSelection != nil then
+					YRPOpenCharacterSelection(ply)
+				else
+					YRP.msg("error", "YRPOpenCharacterSelection is NIL")
 				end
 
 				net.Start("yrp_noti")
@@ -102,10 +106,13 @@ util.AddNetworkString("yrp_player_is_ready")
 net.Receive("yrp_player_is_ready", function(len, ply)
 	local tab = net.ReadTable()
 
-	timer.Simple(2, function()
-		if !IsValid(ply) then return end
+	if !IsValid(ply) then
+		YRP.msg( "error", "[yrp_player_is_ready] player is not valid: " .. tostring( ply ) )
+		return
+	end
 
-		PlayerLoadedGame(ply, tab)
+	if ply:GetNW2Bool("yrp_received_ready", false) == false then
 		ply:SetNW2Bool("yrp_received_ready", true)
-	end)
+		PlayerLoadedGame(ply, tab)
+	end
 end)

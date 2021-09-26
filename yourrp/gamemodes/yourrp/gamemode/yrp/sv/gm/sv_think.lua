@@ -186,9 +186,9 @@ function YRPTimeJail(ply)
 end
 
 function YRPCheckSalary(ply)
-	local _m = ply:GetNW2String("money", "FAILED")
-	local _ms = ply:GetNW2String("salary", "FAILED")
-	if _m != "FAILED" and _ms != "FAILED" then
+	local _m = ply:GetNW2String("money")
+	local _ms = ply:GetNW2String("salary")
+	if ply:Alive() and ply:HasCharacterSelected() and _m and _ms then
 		local _money = tonumber(_m)
 		local _salary = tonumber(_ms)
 
@@ -200,7 +200,7 @@ function YRPCheckSalary(ply)
 				ply:UpdateMoney()
 			end
 		else
-			YRP.msg("error", "CheckMoney in YRPCheckSalary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
+			YRP.msg("note", "CheckMoney in YRPCheckSalary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
 			ply:CheckMoney()
 		end
 	end
@@ -226,6 +226,8 @@ function YRPIsTeleporterAlive(uid)
 	end
 	return false
 end
+
+util.AddNetworkString("yrp_autoreload")
 
 local _time = 0
 local TICK = 0.1
@@ -388,18 +390,23 @@ timer.Create("ServerThink", TICK, 0, function()
 		--SaveStorages(_str)
 	end
 
-	if GAMEMODE:IsAutomaticServerReloadingEnabled() then
-		local _changelevel = 21600
+	local _changelevel = 21600
+	if GetGlobalBool("bool_server_reload", false) then
 		if _time >= _changelevel then
 			YRP.msg("gm", "Auto Reload")
 			timer.Simple(1, function()
 				game.ConsoleCommand("changelevel " .. GetMapNameDB() .. "\n")
 			end)
-		elseif _time >= _changelevel-30 then
-			local _str = "Auto Reload in " .. _changelevel-_time .. " sec"
+		end
+	end
+	if GetGlobalBool("bool_server_reload_notification", false) then
+		if _time >= _changelevel - 30 then
+			local _str = "Auto Reload in " .. _changelevel - _time .. " sec"
 			YRP.msg("gm", _str)
 
-			YRPNotiToPly(_str)
+			net.Start("yrp_autoreload")
+				net.WriteString(_changelevel - _time)
+			net.Broadcast()
 		end
 	end
 
@@ -520,18 +527,37 @@ function UpdateSafezoneTable()
 	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'safezone'")
 	if wk(all) then
 		for i, v in pairs(all) do
-			local spawner = {}
-			spawner.pos = v.position
-			spawner.uniqueID = v.uniqueID
-			spawner.name = v.name
-			if !table.HasValue(t, spawner) then
-				table.insert(t, spawner)
+			local safezone = {}
+			safezone.pos = v.position
+			safezone.uniqueID = v.uniqueID
+			safezone.name = v.name
+			if !table.HasValue(t, safezone) then
+				table.insert(t, safezone)
 			end
 		end
 	end
 	SetGlobalTable("yrp_safezone", t)
 end
 UpdateSafezoneTable()
+
+function UpdateZoneTable()
+	local t = {}
+	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'zone'")
+	if wk(all) then
+		for i, v in pairs(all) do
+			local zone = {}
+			zone.pos = v.position
+			zone.uniqueID = v.uniqueID
+			zone.name = v.name
+			zone.color = v.color
+			if !table.HasValue(t, zone) then
+				table.insert(t, zone)
+			end
+		end
+	end
+	SetGlobalTable("yrp_zone", t)
+end
+UpdateZoneTable()
 
 local YNPCs = {}
 local YENTs = {}

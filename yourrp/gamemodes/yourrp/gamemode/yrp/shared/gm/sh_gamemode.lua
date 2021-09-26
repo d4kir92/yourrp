@@ -17,13 +17,26 @@ GM.Twitter = "twitter.com/D4KIR" -- do NOT change this!
 GM.Help = "Create your rp you want to make!" -- do NOT change this!
 GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
-GM.VersionBeta = 348 -- do NOT change this!
-GM.VersionCanary = 699 -- do NOT change this!
-GM.VersionBuild = 41 -- do NOT change this!
+GM.VersionBeta = 349 -- do NOT change this!
+GM.VersionCanary = 701 -- do NOT change this!
+GM.VersionBuild = 62 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
 GM.ServerIsDedicated = game.IsDedicated()
+
+local gmvs = GM.VersionStable
+local gmvb = GM.VersionBeta
+local gmvc = GM.VersionCanary
+local gmbn = GM.VersionBuild
+
+function YRPGetVersion()
+	return gmvs .. "." .. gmvb .. "." .. gmvc
+end
+
+function YRPGetVersionFull()
+	return YRPGetVersion() .. ":" .. gmbn
+end
 
 function GetRPBase()
 	return GAMEMODE.rpbase
@@ -115,9 +128,27 @@ function StringToColor(str)
 	end
 end
 
-function StringToVector(str)
+function StringToPlayerVector(str)
 	local color = StringToColor(str)
-	return Vector( color.r / 255, color.g / 255, color.b / 255 )
+	return Vector( color.r / 255, color.g / 255, color.b / 255, color.a )
+end
+
+function StringToVector(str)
+	if type(str) == "string" then
+		local _vec = string.Explode(",", str)
+		return Vector(_vec[1] or 0, _vec[2] or 0, _vec[3] or 0)
+	else
+		return Vector(0, 0, 0)
+	end
+end
+
+function StringToVector2(str)
+	if type(str) == "string" then
+		local _vec = string.Explode(",", str)
+		return Vector(_vec[1] or 0, _vec[2] or 0, _vec[3] or 0), Vector(_vec[4] or 0, _vec[5] or 0, _vec[6] or 0)
+	else
+		return Vector(0, 0, 0), Vector(0, 0, 0)
+	end
 end
 
 concommand.Add("yrp_version", function(ply, cmd, args)
@@ -271,7 +302,7 @@ end)
 
 function IsEntityAlive(ply, uid)
 	for i, ent in pairs(ents.GetAll()) do
-		if tostring(ent:GetNW2String("item_uniqueID", "")) == tostring(uid) and ent:GetRPOwner() == ply then
+		if tostring(ent:GetNW2Int("item_uniqueID", "")) == tostring(uid) and ent:GetRPOwner() == ply then
 			return true, ent
 		end
 	end
@@ -751,8 +782,6 @@ end
 
 -- ERROR LOGGING
 
-local bn = GM.VersionBuild
-
 -- CONFIG
 local filename = "yrp/yrp_errors.json"
 local deleteafter = 60 * 60 * 24
@@ -806,16 +835,16 @@ local function YRPSendError(tab, from)
 		entry["entry.482867838"] = tostring(tab.realm)
 
 		-- stable
-		entry["entry.1564591854"] = tostring(GAMEMODE.VersionStable)
+		entry["entry.1564591854"] = tostring(gmvs)
 
 		-- beta
-		entry["entry.1746105951"] = tostring(GAMEMODE.VersionBeta)
+		entry["entry.1746105951"] = tostring(gmvb)
 
 		-- canary
-		entry["entry.176860124"] = tostring(GAMEMODE.VersionCanary)
+		entry["entry.176860124"] = tostring(gmvc)
 
 		-- build
-		entry["entry.364587527"] = tostring(bn)
+		entry["entry.364587527"] = tostring(gmbn)
 
 		posturl = url_sv
 	elseif tab.realm == "CLIENT" then
@@ -832,16 +861,16 @@ local function YRPSendError(tab, from)
 		entry["entry.507913261"] = tostring(tab.realm)
 
 		-- stable
-		entry["entry.933178868"] = tostring(GAMEMODE.VersionStable)
+		entry["entry.933178868"] = tostring(gmvs)
 
 		-- beta
-		entry["entry.625348867"] = tostring(GAMEMODE.VersionBeta)
+		entry["entry.625348867"] = tostring(gmvb)
 
 		-- canary
-		entry["entry.1848121189"] = tostring(GAMEMODE.VersionCanary)
+		entry["entry.1848121189"] = tostring(gmvc)
 
 		-- build
-		entry["entry.1699483827"] = tostring(bn)
+		entry["entry.1699483827"] = tostring(gmbn)
 
 		posturl = url_cl
 	else
@@ -849,7 +878,7 @@ local function YRPSendError(tab, from)
 		return
 	end
 
-	if tab.buildnummer != bn then
+	if tab.buildnummer != gmbn then
 		MsgC( Color(255, 0, 0), ">>> [YRPSendError] FAIL, ERROR IS OUTDATED" .. "\n" )
 		YRPRemoveOutdatedErrors()
 		return
@@ -858,7 +887,7 @@ local function YRPSendError(tab, from)
 	if GAMEMODE and yrpversionisset and IsYRPOutdated then
 		if IsYRPOutdated() then
 			MsgC( Color(255, 0, 0), "[YRPSendError] >> YourRP Is Outdated" .. "\n" )
-		else
+		elseif IsServerDedicated() then
 			--MsgC( Color(255, 0, 0), "[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err) .. "\n" )
 			
 			http.Post(posturl, entry,
@@ -889,7 +918,7 @@ function YRPAddError(err, trace, realm)
 	newerr.ts = os.time()
 	newerr.realm = realm
 	newerr.sended = false
-	newerr.buildnummer = bn
+	newerr.buildnummer = gmbn
 	table.insert(YRPErrors, newerr)
 
 	YRPSendError(newerr, "NEW ERROR")
@@ -907,7 +936,7 @@ function YRPRemoveOutdatedErrors()
 				v.buildnummer = 0
 				changed = true
 			end
-			if v.ts and os.time() - v.ts < deleteafter and v.buildnummer == bn then
+			if v.ts and os.time() - v.ts < deleteafter and v.buildnummer == gmbn then
 				table.insert( TMPYRPErrors, v )
 			else
 				changed = true

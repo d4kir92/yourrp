@@ -63,8 +63,9 @@ net.Receive("get_specializations", function()
 				net.SendToServer()
 			end
 
+
+
 			--[[ sweps ]]--
-			-- SWEPS
 			local sweps = {}
 			sweps.parent = _li.ea
 			sweps.uniqueID = tbl.uniqueID
@@ -140,7 +141,99 @@ net.Receive("get_specializations", function()
 			net.Start("get_specialization_sweps")
 				net.WriteInt(tbl.uniqueID, 32)
 			net.SendToServer()
+
+
+
+			--[[ pms ]]--
+			local pms = {}
+			pms.parent = _li.ea
+			pms.uniqueID = tbl.uniqueID
+			pms.header = "LID_playermodels"
+			pms.netstr = "edit_specialization_pms"
+			pms.value = tbl.pms or ""
+			pms.uniqueID = tbl.uniqueID
+			pms.w = YRP.ctr(800)
+			pms.h = YRP.ctr(600)
+			pms.x = YRP.ctr(0)
+			pms.y = YRP.ctr(665)
+			pms.doclick = function()
+				local lply = LocalPlayer()
+				lply.yrpseltab = {}
+				for i, v in pairs( string.Explode( ",", tbl.pms or "" ) ) do
+					if !table.HasValue(lply.yrpseltab) then
+						table.insert(lply.yrpseltab, v)
+					end
+				end
+
+				local noneplayermodels = {}
+				for _, addon in SortedPairsByMemberValue(engine.GetAddons(), "title") do
+					if (!addon.downloaded or !addon.mounted) then continue end
+					AddToTabRecursive(noneplayermodels, "models/", addon.title, "*.mdl")
+				end
+
+				local allvalidmodels = player_manager.AllValidModels()
+
+				local cl_pms = {}
+				for k, v in pairs(allvalidmodels) do
+					cl_pms[v] = {}
+					cl_pms[v].WorldModel = v
+					cl_pms[v].ClassName = v
+					cl_pms[v].PrintName = player_manager.TranslateToPlayerModelName(v)
+				end
+				for k, v in pairs(noneplayermodels) do
+					cl_pms[v] = {}
+					cl_pms[v].WorldModel = v
+					cl_pms[v].ClassName = v
+					cl_pms[v].PrintName = v
+				end
+				
+				function YRPUpdateSpecPMs()
+					local lply = LocalPlayer()
+					net.Start("spec_add_pm")
+						net.WriteInt(tbl.uniqueID, 32)
+						net.WriteTable(lply.yrpseltab)
+					net.SendToServer()
+					tbl.pms = table.concat( lply.yrpseltab, "," )
+				end
+
+				YRPOpenSelector(cl_pms, true, "classname", YRPUpdateSpecPMs)
+			end
+			_li.pms = DStringListBox(pms)
+			net.Receive("get_specialization_pms", function()
+				local tab_pm = net.ReadTable()
+				local cl_pms = {}
+				for i, v in pairs(tab_pm) do
+					local pms = {}
+					pms.uniqueID = i
+					pms.string_models = v
+					pms.string_classname = v
+					pms.string_name = v
+					pms.doclick = function()
+						net.Start("spec_rem_pm")
+							net.WriteInt(tbl.uniqueID, 32)
+							net.WriteString(pms.string_classname)
+						net.SendToServer()
+
+						local tmp = {}
+						for i, v in pairs( string.Explode( ",", tbl.pms or "" ) ) do
+							if v != pms.string_classname then
+								table.insert( tmp, v )
+							end
+						end
+						tbl.pms = table.concat( tmp, "," )
+					end
+					pms.h = YRP.ctr(120)
+					table.insert(cl_pms, pms)
+				end
+				if _li.pms.dpl.AddLines != nil then
+					_li.pms.dpl:AddLines(cl_pms)
+				end
+			end)
+			net.Start("get_specialization_pms")
+				net.WriteInt(tbl.uniqueID, 32)
+			net.SendToServer()
 		end
+
 		_li._spe:SetEditFunc(_li.eaf)
 		function _li._spe:AddFunction()
 			net.Start("specialization_add")

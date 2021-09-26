@@ -917,6 +917,8 @@ end)
 function AddUG(tbl)
 	local PARENT = GetSettingsSite()
 
+	if !pa(PARENT) or !pa(PARENT.ugs) then return end
+
 	UGS[tonumber(tbl.uniqueID)] = tbl
 
 	DUGS[tonumber(tbl.uniqueID)] = createD("YButton", PARENT.ugs, PARENT.ugs:GetWide(), YRP.ctr(100), 0, 0)

@@ -161,15 +161,11 @@ end
 
 function RemFromHandler_GroupsAndRoles(ply)
 	table.RemoveByValue(HANDLER_GROUPSANDROLES, ply)
-	YRP.msg("gm", ply:YRPName() .. " unsubscribed from GroupsAndRoles")
 end
 
 function AddToHandler_GroupsAndRoles(ply)
 	if !table.HasValue(HANDLER_GROUPSANDROLES, ply) then
 		table.insert(HANDLER_GROUPSANDROLES, ply)
-		YRP.msg("gm", ply:YRPName() .. " subscribed to GroupsAndRoles")
-	else
-		YRP.msg("gm", ply:YRPName() .. " already subscribed to GroupsAndRoles")
 	end
 end
 
@@ -179,9 +175,6 @@ function SubscribeGroupList(ply, uid)
 	end
 	if !table.HasValue(HANDLER_GROUPSANDROLES["groupslist"][uid], ply) then
 		table.insert(HANDLER_GROUPSANDROLES["groupslist"][uid], ply)
-		YRP.msg("gm", ply:YRPName() .. " subscribed to GroupList " .. uid)
-	else
-		YRP.msg("gm", ply:YRPName() .. " already subscribed to GroupList " .. uid)
 	end
 end
 
@@ -191,7 +184,6 @@ function UnsubscribeGroupList(ply, uid)
 	end
 	if table.HasValue(HANDLER_GROUPSANDROLES["groupslist"][uid], ply) then
 		table.RemoveByValue(HANDLER_GROUPSANDROLES["groupslist"][uid], ply)
-		YRP.msg("gm", ply:YRPName() .. " unsubscribed from GroupList " .. uid)
 	end
 end
 
@@ -201,9 +193,6 @@ function SubscribeGroup(ply, uid)
 	end
 	if !table.HasValue(HANDLER_GROUPSANDROLES["groups"][uid], ply) then
 		table.insert(HANDLER_GROUPSANDROLES["groups"][uid], ply)
-		YRP.msg("gm", ply:YRPName() .. " subscribed to Group " .. uid)
-	else
-		YRP.msg("gm", ply:YRPName() .. " already subscribed to Group " .. uid)
 	end
 end
 
@@ -213,7 +202,6 @@ function UnsubscribeGroup(ply, uid)
 	end
 	if table.HasValue(HANDLER_GROUPSANDROLES["groups"][uid], ply) then
 		table.RemoveByValue(HANDLER_GROUPSANDROLES["groups"][uid], ply)
-		YRP.msg("gm", ply:YRPName() .. " unsubscribed from Group " .. uid)
 	end
 end
 

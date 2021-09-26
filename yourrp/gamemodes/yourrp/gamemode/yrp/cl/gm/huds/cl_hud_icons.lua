@@ -116,7 +116,7 @@ function HUDIcons()
 			end
 
 			HUDIconsDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(1))
-			HUDIconsDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(1))
+			HUDIconsDrawIcon("SA", SA, lply:CurrentSalaryTime() / lply:SalaryTime(), lply:FormattedSalaryRounded(1))
 
 			if lply:GetNW2Bool("iscasting", false) then
 				HUDIconsDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName())

@@ -66,7 +66,7 @@ function optionVehicleWindow(vehicle, vehicleTab)
 		_buttonRemoveOwner:SetText("")
 		function _buttonRemoveOwner:DoClick()
 			net.Start("removeVehicleOwner")
-				net.WriteInt(vehicleTab[1].uniqueID, 16)
+				net.WriteString(vehicleTab[1].uniqueID)
 			net.SendToServer()
 			if pa(yrp_vehicle.window) then
 				yrp_vehicle.window:Close()

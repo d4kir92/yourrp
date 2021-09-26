@@ -127,6 +127,10 @@ function Player:NextSalaryTime()
 	return self:GetNW2Int("nextsalarytime", 0)
 end
 
+function Player:CurrentSalaryTime()
+	return CurTime() + self:SalaryTime() - 1 - self:NextSalaryTime()
+end
+
 function Player:GetCastName()
 	return YRP.lang_string(self:GetNW2String("castname", ""))
 end

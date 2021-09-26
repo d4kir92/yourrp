@@ -90,14 +90,32 @@ function DarkRP.switchTabOrder(firstTab, secondTab)
 	YRPDarkrpNotFound("switchTabOrder(" .. firstTab .. ", " .. secondTab .. ")")
 end
 
+local function charWrap(text, remainingWidth, maxWidth)
+	local totalWidth = 0
+
+	text = text:gsub(".", function(char)
+		totalWidth = totalWidth + surface.GetTextSize(char)
+
+		if totalWidth >= remainingWidth then
+			totalWidth = surface.GetTextSize(char)
+			remainingWidth = maxWidth
+			return "\n" .. char
+		end
+
+		return char
+	end)
+
+	return text, totalWidth
+end
+
 function DarkRP.textWrap(text, font, maxWidth)
 	--Description: Wrap a text around when reaching a certain width.
 	local totalWidth = 0
 
-    surface.SetFont(font)
+	surface.SetFont(font)
 
-    local spaceWidth = surface.GetTextSize(' ')
-    text = text:gsub("(%s?[%S]+)", function(word)
+	local spaceWidth = surface.GetTextSize(' ')
+	text = text:gsub("(%s?[%S]+)", function(word)
 		local char = string.sub(word, 1, 1)
 		if char == "\n" or char == "\t" then
 			totalWidth = 0

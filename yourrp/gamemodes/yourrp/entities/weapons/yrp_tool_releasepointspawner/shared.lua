@@ -46,7 +46,9 @@ function SWEP:Reload()
 		pos = v.pos
 	end
 	if pos != "" then
-		self:GetOwner():SetPos(StringToVector(pos))
+		local s = StringToVector(pos)
+		
+		self:GetOwner():SetPos(s)
 	end
 end
 
@@ -120,12 +122,6 @@ function SWEP:SecondaryAttack()
 
 		UpdateReleasepointTable()
 	end
-end
-
-function StringToVector(str)
-	local tab = string.Explode(",", str)
-	local vec = Vector(tab[1], tab[2], tab[3])
-	return vec
 end
 
 if CLIENT then

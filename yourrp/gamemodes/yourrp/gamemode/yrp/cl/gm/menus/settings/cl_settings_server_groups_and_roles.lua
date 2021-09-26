@@ -474,7 +474,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 				local content = win:GetContent()
 				function content:Paint(pw, ph)
-					draw.SimpleText("Recursive", "DermaDefault",  YRP.ctr(60), YRP.ctr(50 + 20 + 25), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText("Recursive" .. " - " .. "If checked, removes everything behind!", "DermaDefault",  YRP.ctr(60), YRP.ctr(50 + 20 + 25), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				local recursive = createD("DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), 0, YRP.ctr(50 + 20))
@@ -1164,7 +1164,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					net.SendToServer()
 				end
 				timer.Simple(0.1, function()
-					if pa(rs.rplist) then
+					if cur_role.gro and rs and pa(rs.rplist) and rs.rplist[role.uniqueID] and rs.rplist[role.uniqueID].uniqueID then
 						net.Start("settings_subscribe_rolelist")
 							net.WriteString(cur_role.gro)
 							net.WriteString(rs.rplist[role.uniqueID].uniqueID)

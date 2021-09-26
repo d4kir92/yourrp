@@ -120,15 +120,23 @@ function lockVehicle(ply, ent, nr)
 end
 
 net.Receive("removeVehicleOwner", function(len, ply)
-	local _tmpVehicleID = net.ReadString()
-	local _tmpTable = SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. _tmpVehicleID .. "'")
+	local _tmpVehicleID = tonumber( net.ReadString() )
+	local _tmpTable = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _tmpVehicleID .. "'")
+	if wk(_tmpTable) then
+		_tmpTable = _tmpTable[1]
+		
+		local item_uniqueID = tonumber( _tmpTable.item_id )
+		local result = SQL_UPDATE(DATABASE_NAME, {["ownerCharID"] = ""}, "uniqueID = '" .. _tmpVehicleID .. "'")
 
-	local result = SQL_UPDATE(DATABASE_NAME, {["ownerCharID"] = ""}, "item_id = '" .. _tmpVehicleID .. "'")
+		for k, v in pairs(ents.GetAll()) do
+			if v:GetNW2Int("item_uniqueID", 0) != 0 and item_uniqueID and v:GetNW2Int("item_uniqueID", 0) == item_uniqueID then
+				v:SetNW2Int("item_uniqueID", 0)
+				v:SetNW2String("ownerRPName", "")
+				v:SetNW2Entity("yrp_owner", NULL)
+				v:SetOwner(NULL)
 
-	for k, v in pairs(ents.GetAll()) do
-		if tonumber(v:GetNW2String("item_uniqueID")) == tonumber(_tmpVehicleID) then
-			v:SetNW2String("ownerRPName", "")
-			v:SetOwner(NULL)
+				v:Fire("Unlock")
+			end
 		end
 	end
 end)

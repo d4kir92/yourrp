@@ -252,23 +252,23 @@ function SpawnVehicle(item, pos, ang)
 	end
 end
 
-function spawnItem(ply, item, duid)
+function YRPSpawnItem(ply, item, duid)
 	ClassName = item.ClassName -- fix for WAC addons, dumb!
 
 	if item.type == "weapons" then
 		local wep = ply:Give(item.ClassName)
 		if wk(wep) and wep != NULL then
-			wep:SetNW2String("item_uniqueID", item.uniqueID)
+			wep:SetNW2Int("item_uniqueID", item.uniqueID)
 			wep:SetNW2Entity("yrp_owner", ply)
 			return true
 		else
-			YRP.msg("note", "Class " .. item.ClassName .. " dont give weapon")
+			YRP.msg("note", "[Spawn Item] Class " .. item.ClassName .. " dont give weapon")
 			return false
 		end
 	end
-
+	
 	local hasstorage = false
-	local TARGETPOS = Vector(0, 0, 0)
+	local TARGETPOS = nil
 	local TARGETANG = Angle(0, 0, 0)
 
 	local mins = Vector(10, 10, 10)
@@ -285,8 +285,8 @@ function spawnItem(ply, item, duid)
 
 		dist = math.max(maxs.x - mins.x, maxs.y - mins.y)
 
-		dist = dist + 10
-		dist = math.Clamp(dist, 32, 4000)
+		dist = dist + 32
+		dist = math.Clamp(dist, 32, 6000)
 
 		wm:Remove()
 	end
@@ -298,7 +298,7 @@ function spawnItem(ply, item, duid)
 		local SP = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. SPUID .. "'")
 		if wk(SP) then
 			SP = SP[1]
-			YRP.msg("gm", "[spawnItem] Item To Storagepoint")
+			YRP.msg("gm", "[Spawn Item] Item To Storagepoint")
 
 			local pos = string.Explode(",", SP.position)
 			TARGETPOS = Vector(pos[1], pos[2], pos[3])
@@ -312,7 +312,7 @@ function spawnItem(ply, item, duid)
 
 	if TARGETPOS == nil then
 		TARGETPOS = ply:GetPos()
-		YRP.msg("gm", "[spawnItem] Item To Player")
+		--YRP.msg("gm", "[Spawn Item] Item To Player")
 	end
 
 	TARGETPOS = TARGETPOS + Vector(0, 0, 50)
@@ -350,6 +350,7 @@ function spawnItem(ply, item, duid)
 	end
 
 	if !foundpos then
+		YRP.msg("note", "[Spawn Item] NOT ENOUGH SPACE? cn: " .. item.ClassName .. " wm: " .. item.WorldModel .. " distance: " .. tostring( dist ) .. " hasstorage: " .. tostring( hasstorage ) )
 		return false
 	end
 
@@ -378,9 +379,9 @@ function spawnItem(ply, item, duid)
 					ent:SetPos(ply:GetPos() + ply:GetForward() * 64 + ply:GetUp() * 64)
 				end
 
-				ent:SetNW2String( "item_uniqueID", item.uniqueID )
+				ent:SetNW2Int( "item_uniqueID", item.uniqueID )
 
-				YRP.msg("gm", "[spawnItem] Spawned 1")
+				--YRP.msg("gm", "[Spawn Item] WORKED #1")
 
 				return true, ent
 			else
@@ -399,12 +400,12 @@ function spawnItem(ply, item, duid)
 						ent:SetPos(ply:GetPos() + ply:GetForward() * 64 + ply:GetUp() * 64)
 					end
 					
-					ent:SetNW2String( "item_uniqueID", item.uniqueID )
+					ent:SetNW2Int( "item_uniqueID", item.uniqueID )
 
-					YRP.msg("gm", "[spawnItem] Spawned 2")
+					--YRP.msg("gm", "[Spawn Item] WORKED #2")
 					return true, ent
 				else
-					YRP.msg("note", "Not valid " .. item.ClassName)
+					YRP.msg("note", "[Spawn Item] Not valid #1: " .. item.ClassName)
 					return false
 				end
 			end
@@ -413,9 +414,9 @@ function spawnItem(ply, item, duid)
 			if vehicle then
 				ent = simfphys.SpawnVehicle(nil, tr.HitPos + Vector(0, 0, 0), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
 
-				ent:SetNW2String("item_uniqueID", item.uniqueID)
+				ent:SetNW2Int("item_uniqueID", item.uniqueID)
 
-				YRP.msg("gm", "[spawnItem] Spawned 3")
+				--YRP.msg("gm", "[Spawn Item] WORKED #3")
 
 				--ent:SetOwner(ply)
 				ent:SetNW2Entity("yrp_owner", ply)
@@ -451,16 +452,16 @@ function spawnItem(ply, item, duid)
 
 					ent:SetAngles(TARGETANG)
 
-					ent:SetNW2String("item_uniqueID", item.uniqueID)
+					ent:SetNW2Int("item_uniqueID", item.uniqueID)
 			
-					YRP.msg("gm", "[spawnItem] Spawned 4")
+					--YRP.msg("gm", "[Spawn Item] WORKED #4")
 
 					--ent:SetOwner(ply)
 					ent:SetNW2Entity("yrp_owner", ply)
 
 					return true, ent
 				else
-					YRP.msg("note", "Not valid " .. item.ClassName)
+					YRP.msg("note", "[Spawn Item] Not valid #2: " .. item.ClassName)
 					return false
 				end
 			end
@@ -470,8 +471,9 @@ function spawnItem(ply, item, duid)
 			ent:SetAngles(TARGETANG)
 		end
 	else
-		YRP.msg("note", "Not enough space for item")
+		YRP.msg("note", "[Spawn Item] Not enough space for item, cn: " .. item.ClassName .. " distance: " .. tostring( dist ) .. " hasstorage: " .. tostring( hasstorage ) )
 	end
+	YRP.msg("note", "[Spawn Item] FAILED! " .. item.ClassName)
 	return false
 end
 
@@ -501,7 +503,7 @@ net.Receive("item_buy", function(len, ply)
 				RemGroVals(ply)
 				SetRole(ply, rid, true)
 			else
-				local _spawned, ent = spawnItem(ply, _item, _dealer_uid)
+				local _spawned, ent = YRPSpawnItem(ply, _item, _dealer_uid)
 
 				if _spawned then
 					if ea(ent) then
@@ -514,7 +516,7 @@ net.Receive("item_buy", function(len, ply)
 
 					ply:SetNW2Float("buy_ts", CurTime() + 2)
 				else
-					YRP.msg("note", "Failed to spawn item from shop " .. tostring(_spawned))
+					YRP.msg("note", "Failed to spawn item from shop, spawned: " .. tostring(_spawned))
 					return false
 				end
 			end
@@ -555,7 +557,7 @@ net.Receive("item_spawn", function(len, ply)
 			_item = _item[1]
 
 			if not IsEntityAlive(ply, _item.uniqueID) then
-				local _spawned, ent = spawnItem(ply, _item, _dealer_uid)
+				local _spawned, ent = YRPSpawnItem(ply, _item, _dealer_uid)
 
 				if _spawned then
 					if ea(ent) then

@@ -10,6 +10,7 @@ SQL_ADD_COLUMN(DATABASE_NAME, "angle", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "type", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "linkID", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "color", "TEXT DEFAULT '255,255,255'")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_respawntime", "TEXT DEFAULT '1'")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_amount", "TEXT DEFAULT '1'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_classname", "TEXT DEFAULT 'npc_zombie'")
@@ -86,9 +87,9 @@ function YRPTeleportToSpawnpoint(ply, from)
 							local _tmp = string.Explode(",", _randomSpawnPoint.position)
 							local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 							if worked then
-								YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENTGroupSpawnpoint")
+								YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENT - GroupSpawnpoint")
 							else
-								YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to PARENTGroupSpawnpoint")
+								YRP.msg("note", "[" .. ply:Nick() .. "] FAILED to teleport to PARENT - GroupSpawnpoint")
 							end
 							_tmp = string.Explode(",", _randomSpawnPoint.angle)
 							if ply:IsPlayer() then
@@ -181,6 +182,16 @@ net.Receive("getMapListRoles", function(len, ply)
 	end
 end)
 
+function YRPUpdateAllDBTables()
+	UpdateSpawnerNPCTable()
+	UpdateSpawnerENTTable()
+	UpdateJailpointTable()
+	UpdateReleasepointTable()
+	UpdateRadiationTable()
+	UpdateSafezoneTable()
+	UpdateZoneTable()
+end
+
 net.Receive("dbInsertIntoMap", function(len, ply)
 	local _tmpDBTable = net.ReadString()
 	local _tmpDBCol = net.ReadString()
@@ -192,12 +203,7 @@ net.Receive("dbInsertIntoMap", function(len, ply)
 		YRP.msg("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
 	end
 
-	UpdateSpawnerNPCTable()
-	UpdateSpawnerENTTable()
-	UpdateJailpointTable()
-	UpdateReleasepointTable()
-	UpdateRadiationTable()
-	UpdateSafezoneTable()
+	YRPUpdateAllDBTables()
 end)
 
 util.AddNetworkString("dealer_settings")
@@ -234,7 +240,16 @@ net.Receive("update_map_name", function(len, ply)
 	local i = net.ReadString()
 
 	SQL_UPDATE(DATABASE_NAME, {["name"] = i}, "uniqueID = '" .. uid .. "'")
-	UpdateJailpointTable()
+	YRPUpdateAllDBTables()
+end)
+
+util.AddNetworkString("update_map_color")
+net.Receive("update_map_color", function(len, ply)
+	local uid = net.ReadString()
+	local i = net.ReadString()
+
+	SQL_UPDATE(DATABASE_NAME, {["color"] = i}, "uniqueID = '" .. uid .. "'")
+	YRPUpdateAllDBTables()
 end)
 
 util.AddNetworkString("update_map_int_respawntime")

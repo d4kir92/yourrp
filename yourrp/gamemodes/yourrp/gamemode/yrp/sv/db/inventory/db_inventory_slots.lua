@@ -60,15 +60,12 @@ function ConnectToSlot(ply, slotID)
 	YRP_SLOTS_PLYS[slotID] = YRP_SLOTS_PLYS[slotID] or {}
 	
 	if !IsConnectedToSlot(ply, slotID) then
-		--YRP.msg("db", ply:RPName() .. " connected to SLOT " .. slotID)
 		table.insert(YRP_SLOTS_PLYS[slotID], ply)
 
 		local item = GetItem(slotID)
 		if wk(item) then
 			StoreItem(slotID, GetItem(slotID), ply)
 		end
-	else
-		YRP.msg("db", ply:RPName() .. " is already connected to SLOT " .. slotID)
 	end
 end
 
@@ -77,10 +74,7 @@ function DisconnectFromSlot(ply, slotID)
 	YRP_SLOTS_PLYS[slotID] = YRP_SLOTS_PLYS[slotID] or {}
 
 	if IsConnectedToSlot(ply, slotID) then
-		--YRP.msg("db", ply:RPName() .. " disconnected to SLOT " .. slotID)
 		table.RemoveByValue(YRP_SLOTS_PLYS[slotID], ply)
-	else
-		YRP.msg("db", ply:RPName() .. " is not connected to SLOT " .. slotID)
 	end
 end
 

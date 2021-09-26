@@ -5,7 +5,7 @@ if SERVER then
 	function SendServerInfo()
 		if game.IsDedicated() then
 			if GAMEMODE then
-				YRP.msg("note", "SendServerInfo")
+				YRP.msg("note", "> Send Server Info <")
 				local entry = {}
 
 				-- IP
@@ -37,11 +37,11 @@ if SERVER then
 					if code == 200 then
 						-- worked
 					else
-						YRP.msg("error", "SendServerInfo failed: " .. "HTTP " .. tostring(code))
+						YRP.msg("error", "Send Server Info failed: " .. "HTTP " .. tostring(code))
 					end
 				end,
 				function( failed )
-					YRP.msg("error", "SendServerInfo failed: " .. tostring(failed))
+					YRP.msg("error", "Send Server Info failed: " .. tostring(failed))
 				end)
 			else
 				timer.Simple(1, SendServerInfo)
@@ -56,7 +56,7 @@ if SERVER then
 	hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded", function()
 		RunConsoleCommand("sv_hibernate_think", 1)
 		timer.Simple(2, function()
-			MsgC( Color(255, 255, 0), ">>> Server is online <<<\n" )
+			MsgC( Color(255, 255, 0), ">>> Server is online <<<" .. "\t\t\tYourRP Version: " .. YRPGetVersionFull() .. "\n" )
 		end)
 		timer.Simple(10, SendServerInfo)
 	end)

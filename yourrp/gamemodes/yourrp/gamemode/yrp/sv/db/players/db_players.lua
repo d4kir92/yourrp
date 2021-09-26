@@ -18,6 +18,13 @@ SQL_ADD_COLUMN(DATABASE_NAME, "uptime_current", "INT DEFAULT 0")
 --db_is_empty(DATABASE_NAME)
 
 util.AddNetworkString("setting_players")
+util.AddNetworkString("YRPOpenCharacterMenu")
+util.AddNetworkString("setPlayerValues")
+util.AddNetworkString("setRoleValues")
+util.AddNetworkString("getPlyList")
+util.AddNetworkString("getCharakterList")
+util.AddNetworkString("getrpdescription")
+
 net.Receive("setting_players", function(len, ply)
 	if ply:CanAccess("bool_players") then
 		net.Start("setting_players")
@@ -28,44 +35,46 @@ end)
 g_db_reseted = false
 function save_clients(str)
 	--YRP.msg("db", string.upper("[Saving all clients] [" .. str .. "]"))
-	if !g_db_reseted then
-		for k, ply in pairs(player.GetAll()) do
+	if SQL_TABLE_EXISTS(DATABASE_NAME) then
+		if !g_db_reseted then
+			for k, ply in pairs(player.GetAll()) do
 
-			local steamid = ply:SteamID() or ply:UniqueID()
-			local _result = SQL_UPDATE(DATABASE_NAME, {["Timestamp"] = os.time()}, "SteamID = '" .. steamid .. "'")
+				local steamid = ply:SteamID() or ply:UniqueID()
+				local _result = SQL_UPDATE(DATABASE_NAME, {["Timestamp"] = os.time()}, "SteamID = '" .. steamid .. "'")
 
-			ply:AddPlayTime(true)
-			
-			if ply:Alive() then
-				local _char_id = ply:CharID()
-				if worked(_char_id, "CharID failed @save_clients") then
-					SQL_UPDATE("yrp_characters", {["position"] = tostring(ply:GetPos())}, "uniqueID = " .. _char_id)
-					SQL_UPDATE("yrp_characters", {["angle"] = tostring(ply:EyeAngles())}, "uniqueID = " .. _char_id)
-					if worked(ply:GetNW2String("money", "0"), "money failed @save_clients") and isnumber(tonumber(ply:GetNW2String("money"))) then
-						local _mo_result = SQL_UPDATE("yrp_characters", {["money"] = ply:GetNW2String("money", "0")}, "uniqueID = " .. _char_id)
-					end
-					if worked(ply:GetNW2String("moneybank", "0"), "moneybank failed @save_clients") and isnumber(tonumber(ply:GetNW2String("moneybank"))) then
-						local _mb_result = SQL_UPDATE("yrp_characters", {["moneybank"] = ply:GetNW2String("moneybank", "0")}, "uniqueID = " .. _char_id)
-					end
-					if worked(GetMapNameDB(), "getmap failed @save_clients") then
-						SQL_UPDATE("yrp_characters", {["map"] = GetMapNameDB()}, "uniqueID = " .. _char_id)
+				ply:AddPlayTime(true)
+				
+				if ply:Alive() and SQL_TABLE_EXISTS("yrp_characters") then
+					local _char_id = ply:CharID()
+					if worked(_char_id, "CharID failed @save_clients") then
+						SQL_UPDATE("yrp_characters", {["position"] = tostring(ply:GetPos())}, "uniqueID = " .. _char_id)
+						SQL_UPDATE("yrp_characters", {["angle"] = tostring(ply:EyeAngles())}, "uniqueID = " .. _char_id)
+						if worked(ply:GetNW2String("money", "0"), "money failed @save_clients") and isnumber(tonumber(ply:GetNW2String("money"))) then
+							local _mo_result = SQL_UPDATE("yrp_characters", {["money"] = ply:GetNW2String("money", "0")}, "uniqueID = " .. _char_id)
+						end
+						if worked(ply:GetNW2String("moneybank", "0"), "moneybank failed @save_clients") and isnumber(tonumber(ply:GetNW2String("moneybank"))) then
+							local _mb_result = SQL_UPDATE("yrp_characters", {["moneybank"] = ply:GetNW2String("moneybank", "0")}, "uniqueID = " .. _char_id)
+						end
+						if worked(GetMapNameDB(), "getmap failed @save_clients") then
+							SQL_UPDATE("yrp_characters", {["map"] = GetMapNameDB()}, "uniqueID = " .. _char_id)
+						end
 					end
 				end
 			end
-		end
-		local _all_players = player.GetCount() or 0
-		if _all_players > 0 then
-			local _text = "=> [Saved " .. tostring(_all_players) .. " client"
-			if _all_players > 1 then
-				_text = _text .. "s"
+			local _all_players = player.GetCount() or 0
+			if _all_players > 0 then
+				local _text = "=> [Saved " .. tostring(_all_players) .. " client"
+				if _all_players > 1 then
+					_text = _text .. "s"
+				end
+				_text = _text .. "]"
+				--YRP.msg("db", string.upper(_text))
+			else
+				--YRP.msg("db", string.upper("=> [No clients on server]"))
 			end
-			_text = _text .. "]"
-			--YRP.msg("db", string.upper(_text))
 		else
-			--YRP.msg("db", string.upper("=> [No clients on server]"))
+			YRP.msg("db", "no saving, because db reset")
 		end
-	else
-		YRP.msg("db", "no saving, because db reset")
 	end
 
 	local pp = {}
@@ -368,8 +377,8 @@ function set_role_values(ply, pmid)
 				end
 			end
 			if ChaTab.playermodelID != nil then
-				pmid = tonumber(pmid) or tonumber(ChaTab.playermodelID)
-				local pms = GetPMTableOfRole(rolTab.uniqueID)
+				pmid = tonumber(pmid) or tonumber( ChaTab.playermodelID )
+				local pms =  GetPMsOfCharacter( ply, rolTab.uniqueID )
 				if pms[pmid] == nil then
 					pmid = 1
 				end
@@ -382,7 +391,6 @@ function set_role_values(ply, pmid)
 					ply:SetModelScale(randsize, 0)
 				end
 			end
-			ply:SetNW2String("Gender", ChaTab.gender)
 		else
 			YRP.msg("note", "[SET ROLE VALUES] No role or/and no character -> Suicide")
 			ply:KillSilent()
@@ -532,7 +540,11 @@ function set_role_values(ply, pmid)
 			ply:SetNW2String("groupIcon", groTab.string_icon)
 
 			if GetGlobalBool("bool_team_color", true) then
-				ply:SetPlayerColor( StringToVector( groTab.string_color) )
+				timer.Simple(0.12, function()
+					if IsValid(ply) then
+						ply:SetPlayerColor( StringToPlayerVector( groTab.string_color) )
+					end
+				end)
 			end
 
 			ply:SetNW2Bool("groupiscp", tobool(groTab.bool_iscp))
@@ -589,16 +601,24 @@ function set_ply_pos(ply, map, pos, ang)
 	end)
 end
 
-function open_character_selection(ply)
+function YRPOpenCharacterSelection(ply)
 	if IsValid(ply) and ply:IsPlayer() and ply:IsFullyAuthenticated() then
 		--YRP.msg("db", "[" .. ply:SteamName() .. "] -> open character selection.")
 		local steamid = ply:SteamID() or ply:UniqueID()
 
-		net.Start("openCharacterMenu")
-		net.Send(ply)
+		local b, bb = net.BytesLeft()
+		local w, ww = net.BytesWritten()
+		if b and b > 0 and w and w > 0 then
+			timer.Simple(0.01, function()
+				YRPOpenCharacterSelection(ply)
+			end)
+		else
+			net.Start("YRPOpenCharacterMenu")
+			net.Send(ply)
+		end
 	else
-		timer.Simple(1, function()
-			open_character_selection(ply)
+		timer.Simple(0.01, function()
+			YRPOpenCharacterSelection(ply)
 		end)
 	end
 end
@@ -674,14 +694,6 @@ function check_yrp_client(ply, steamid)
 	save_clients("check_yrp_client")
 end
 
-util.AddNetworkString("openCharacterMenu")
-util.AddNetworkString("setPlayerValues")
-util.AddNetworkString("setRoleValues")
-
-util.AddNetworkString("getPlyList")
-
-util.AddNetworkString("getCharakterList")
-util.AddNetworkString("getrpdescription")
 net.Receive("getCharakterList", function(len, ply)
 	local _character_table = ply:YRPGetCharacterTable()
 	if wk(_character_table) then
@@ -914,7 +926,7 @@ function canGetRole(ply, roleID, want)
 
 			-- Whitelist + Prerole
 			if tonumber(tmpTableRole.bool_whitelist) == 1 or tonumber(tmpTableRole.int_prerole) > 0 then
-				YRP.msg("gm", "[canGetRole] " .. "Whitelist-Role or Prerole-Role")
+				--YRP.msg("gm", "[canGetRole] " .. "Whitelist-Role or Prerole-Role")
 				if !isWhitelisted(ply, roleID) then
 					local text = ply:YRPName() .. " is not whitelisted."
 					YRP.msg("gm", "[canGetRole] " .. text)

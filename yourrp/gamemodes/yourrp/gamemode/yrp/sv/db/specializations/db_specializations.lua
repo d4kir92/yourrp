@@ -7,10 +7,98 @@ local DATABASE_NAME = "yrp_specializations"
 
 SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
 SQL_ADD_COLUMN(DATABASE_NAME, "sweps", "TEXT DEFAULT ''")
+SQL_ADD_COLUMN(DATABASE_NAME, "pms", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "prefix", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "suffix", "TEXT DEFAULT ''")
 --db_drop_table(DATABASE_NAME)
 
+
+
+-- PMs
+function YRPSendSpecPMs(uid, ply)
+	local tab = SQL_SELECT(DATABASE_NAME, "pms", "uniqueID = '" .. uid .. "'")
+	if wk(tab) then
+		tab = string.Explode( ",", tab[1].pms )
+	else
+		tab = {}
+	end
+	local newtab = {}
+	for i, v in pairs(tab) do
+		if !table.HasValue( newtab, v ) and !strEmpty(v) then
+			table.insert( newtab, v )
+		end
+	end
+
+	net.Start("get_specialization_pms")
+		net.WriteTable(newtab)
+	net.Send(ply)
+end
+
+util.AddNetworkString("get_specialization_pms")
+net.Receive("get_specialization_pms", function(len, ply)
+	local uid = net.ReadInt(32)
+	YRPSendSpecPMs(uid, ply)
+end)
+
+util.AddNetworkString("spec_add_pm")
+net.Receive("spec_add_pm", function(len, ply)
+	local uid = net.ReadInt(32)
+	local pms = net.ReadTable()
+
+	for i, pm in pairs( pms ) do
+		local tab = SQL_SELECT(DATABASE_NAME, "uniqueID, pms", "uniqueID = '" .. uid .. "'")
+		if wk(tab) then
+			tab = tab[1]
+		else
+			tab = {}
+		end
+		local newtab = {}
+		for i, v in pairs(string.Explode(",", tab.pms)) do
+			if !table.HasValue( newtab, v ) and !strEmpty(v) then
+				table.insert( newtab, v )
+			end
+		end
+		if !table.HasValue( newtab, pm ) then
+			table.insert( newtab, pm )
+		end
+
+		local newpms = table.concat( newtab, "," )
+
+		SQL_UPDATE(DATABASE_NAME, {["pms"] = newpms}, "uniqueID = '" .. uid .. "'")
+		YRPSendSpecPMs(uid, ply)
+	end
+end)
+
+util.AddNetworkString("spec_rem_pm")
+net.Receive("spec_rem_pm", function(len, ply)
+	local uid = net.ReadInt(32)
+	local pm = net.ReadString()
+
+	local tab = SQL_SELECT(DATABASE_NAME, "uniqueID, pms", "uniqueID = '" .. uid .. "'")
+	if wk(tab) then
+		tab = tab[1]
+	else
+		tab = {}
+	end
+	local newtab = {}
+	for i, v in pairs(string.Explode(",", tab.pms)) do
+		if !table.HasValue( newtab, v ) and !strEmpty(v) then
+			table.insert( newtab, v )
+		end
+	end
+	if table.HasValue( newtab, pm ) then
+		table.RemoveByValue( newtab, pm )
+	end
+
+	local newpms = table.concat( newtab, "," )
+
+	SQL_UPDATE(DATABASE_NAME, {["pms"] = newpms}, "uniqueID = '" .. uid .. "'")
+	YRPSendSpecPMs(uid, ply)
+end)
+
+
+
+-- SWEPS
 function YRPSendSpecSWEPS(uid, ply)
 	local tab = SQL_SELECT(DATABASE_NAME, "sweps", "uniqueID = '" .. uid .. "'")
 	if wk(tab) then
@@ -247,7 +335,7 @@ function Player:AddSpecialization(specialization)
 		if table.HasValue(_specializationIDs, "") then
 			table.RemoveByValue(_specializationIDs, "")
 		end
-		_specializationIDs = string.Implode(",", _specializationIDs)
+		_specializationIDs = table.concat(_specializationIDs, ",")
 
 		self:SetNW2String("specializationIDs", tostring(_specializationIDs))
 
@@ -277,7 +365,7 @@ function Player:RemoveSpecialization(specialization)
 		if table.HasValue(_specializationIDs, "") then
 			table.RemoveByValue(_specializationIDs, "")
 		end
-		_specializationIDs = string.Implode(",", _specializationIDs)
+		_specializationIDs = table.concat(_specializationIDs, ",")
 		
 		self:SetNW2String("specializationIDs", tostring(_specializationIDs))
 

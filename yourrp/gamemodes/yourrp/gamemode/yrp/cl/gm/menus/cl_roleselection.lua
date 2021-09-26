@@ -277,7 +277,7 @@ function CreateRolePreviewContent()
 						parent:Clear()
 					end
 
-					CreateCharacterSettingsContent()
+					YRPCreateCharacterSettingsContent()
 				else
 					net.Start("wantRole")
 						net.WriteInt(LocalPlayer().charcreate_ruid, 16)

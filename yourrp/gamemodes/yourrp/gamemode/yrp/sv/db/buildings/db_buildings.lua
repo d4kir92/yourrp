@@ -68,7 +68,7 @@ function allowedToUseDoor(id, ply, door)
 
 				local removeowner = false
 				if !wk(_tmpChaTab) then -- If char not available anymore => remove ownership
-					SQL_UPDATE(DATABASE_NAME_BUILDINGS, "ownerCharID = '" .. "" .. "'", "uniqueID = '" .. id .. "'")
+					SQL_UPDATE(DATABASE_NAME_BUILDINGS, {["ownerCharID"] = ""}, "uniqueID = '" .. id .. "'")
 					
 					door:SetNW2String("ownerRPName", "")
 					door:SetNW2Int("ownerGroupUID", -99)
@@ -671,5 +671,5 @@ net.Receive("update_lockdown_buildings", function(len, ply)
 	local buid = net.ReadString()
 	local checked = net.ReadBool()
 
-	SQL_UPDATE(DATABASE_NAME_BUILDINGS, "bool_lockdown = '" .. tonum(checked) .. "'", "uniqueID = '" .. buid .. "'")
+	SQL_UPDATE(DATABASE_NAME_BUILDINGS, {["bool_lockdown"] = tonum(checked)}, "uniqueID = '" .. buid .. "'")
 end)

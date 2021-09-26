@@ -17,9 +17,9 @@ config.hh = 80
 
 
 
-function CreateCharacterSettingsContent()
+function YRPCreateCharacterSettingsContent()
 	if LocalPlayer() == NULL then
-		timer.Simple(1, CreateCharacterSettingsContent)
+		timer.Simple(1, YRPCreateCharacterSettingsContent)
 		return
 	end
 
@@ -152,7 +152,6 @@ function CreateCharacterSettingsContent()
 				character.roleID = LocalPlayer().charcreate_ruid
 				character.rpname = LocalPlayer().charcreate_name
 				character.rpdescription = LocalPlayer().charcreate_desc
-				character.gender = "male"
 				character.playermodelID = LocalPlayer().charcreate_rpmid
 				character.skin = 1
 				character.bg = {}
@@ -166,7 +165,7 @@ function CreateCharacterSettingsContent()
 				character.nati = LocalPlayer().charcreate_nati
 				character.create_eventchar = GetGlobalBool("create_eventchar", false)
 
-				net.Receive("CreateCharacter", function(len)
+				net.Receive("YRPCreateCharacter", function(len)
 					local success = net.ReadBool()
 					if success then
 						if pa(CharacterMenu) then
@@ -179,12 +178,18 @@ function CreateCharacterSettingsContent()
 						win:Center()
 						win:MakePopup()
 
+						local invalid = net.ReadBool()
+
 						win.warning = createD("YLabel", win, 380, 200 - win:GetHeaderHeight() - 20, 10, win:GetHeaderHeight() + 10)
-						win.warning:SetText("LID_nameisalreadyinuse")
+						if invalid then
+							win.warning:SetText("RPNAME IS NIL, please talk to DEVELOPER")
+						else
+							win.warning:SetText("LID_nameisalreadyinuse")
+						end
 					end
 				end)
 
-				net.Start("CreateCharacter")
+				net.Start("YRPCreateCharacter")
 					net.WriteTable(character)
 				net.SendToServer()
 			end

@@ -106,9 +106,9 @@ end)
 function Player:ClearXP()
 	if !self:Alive() then return end
 	local charid = self:CharID()
-	local result = SQL_UPDATE("yrp_characters", {["int_xp"] = 0}, "uniqueID = '" .. charid)
+	local result = SQL_UPDATE("yrp_characters", {["int_xp"] = 0}, "uniqueID = '" .. charid .. "'")
 	if result != nil then
-		YRP.msg("error", "ClearXP FAILED #1: " .. tostring(result))
+		YRP.msg("note", "ClearXP FAILED #1: " .. tostring(result))
 	else
 		self:SetNW2Int("int_xp", 0)
 	end
@@ -122,7 +122,7 @@ function Player:AddLevel(level)
 	local maxlvl = self:GetMaxLevel()
 
 	if charid <= 0 then
-		YRP.msg("error", "AddLevel FAILED #3: charid <= 0: " .. tostring(charid))
+		YRP.msg("note", "AddLevel FAILED #3: charid <= 0: " .. tostring(charid))
 		return
 	end
 

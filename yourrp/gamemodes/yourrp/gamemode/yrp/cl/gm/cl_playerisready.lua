@@ -14,7 +14,11 @@ local serverreceived = false
 local YRP_COUNT = 0
 local YRP_INIT = false
 local YRP_NOINIT = false
-local wassendtoserver = false
+YRPWasReadySendToServer = YRPWasReadySendToServer or false
+
+function WasReadySendToServer()
+	return YRPWasReadySendToServer
+end
 
 function YRPSendIsReadyPingPong()	-- IMPORTANT
 	local lply = LocalPlayer()
@@ -32,26 +36,26 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 		local w, ww = net.BytesWritten()
 		if b and b > 0 and w and w > 0 then
 			YRP.msg("note", "[YRPSendIsReadyPingPong] Already running a net message, retry sending ready message.")
-			timer.Simple(0.01, function()
-				YRPSendIsReadyPingPong()
-			end)
+			YRPSendIsReadyPingPong()
 		else
-			YRP.msg("note", "[YRPSendIsReadyPingPong] SEND TO SERVER (WORKED).")
+			YRP.msg("note", "[YRPSendIsReadyPingPong] SEND TO SERVER.")
 			net.Start("yrp_player_is_ready")
 				net.WriteTable(info)
 			net.SendToServer()
-			wassendtoserver = true
+			YRPWasReadySendToServer = true
 
-			timer.Simple(19.9, function()
+			timer.Simple(3.9, function()
+				if !IsValid(lply) then return end
+
 				if !lply:GetNW2Bool("yrp_received_ready") then
-					YRP.msg("note", "[YRPSendIsReadyPingPong] Retry sending ready message.")
+					YRP.msg("note", "[YRPSendIsReadyPingPong] >> Retry sending ready message <<")
 					YRPSendIsReadyPingPong()
 				end
 			end)
 		end
 	else
 		YRP.msg("note", "[YRPSendIsReadyPingPong] System/os not ready, retry.")
-		timer.Simple(0.01, function()
+		timer.Simple(0.001, function()
 			YRPSendIsReadyPingPong()
 		end)
 	end
@@ -61,7 +65,7 @@ function YRPSendIsReady()
 	if !yrp_rToSv then
 		yrp_rToSv = true
 
-		YRP.msg("note", "[YRPSendIsReady] Start")
+		YRP.msg("note", "[YRPSendIsReady]")
 
 		-- IMPORTANT
 		YRPSendIsReadyPingPong()
@@ -84,11 +88,8 @@ function YRPSendIsReady()
 		end
 
 		YRP.msg("note", "Workshop Addons Done")
-		playerfullready = true
 
 		YRP.LoadDesignIcon()
-
-		--TestYourRPContent()
 	end
 end
 
@@ -111,13 +112,13 @@ hook.Add("Think", "yrp_think_ready", function()
 end, hook.MONITOR_HIGH)
 
 hook.Add("InitPostEntity", "yrp_InitPostEntity_ready", function()
-	YRP.msg("note", "All entities are loaded.")
+	--YRP.msg("note", "All entities are loaded.")
 
 	yrp_hookinitpostentity = true
 end)
 
 function GM:InitPostEntity()
-	YRP.msg("note", "All Entities have initialized.")
+	--YRP.msg("note", "All Entities have initialized.")
 
 	yrp_initpostentity = true
 end

@@ -60,8 +60,7 @@ function APP:OpenApp(display, x, y, w, h)
 		_ccm:SetWangs(true)
 		_ccm:SetColor(getSpCaseColor())
 		function _ccm:ValueChanged(col)
-			local _str_col = col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a
-			setSpCaseColor(_str_col)
+			setSpCaseColor(col)
 		end
 
 		--[[ Background Color ]]--
@@ -76,8 +75,7 @@ function APP:OpenApp(display, x, y, w, h)
 		_bcm:SetWangs(true)
 		_bcm:SetColor(getSpBackColor())
 		function _bcm:ValueChanged(col)
-			local _str_col = col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a
-			setSpBackColor(_str_col)
+			setSpBackColor(col)
 		end
 
 		_tmp.menu_color:AddItem(_cc)

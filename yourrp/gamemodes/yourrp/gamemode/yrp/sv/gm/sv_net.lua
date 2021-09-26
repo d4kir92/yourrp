@@ -119,9 +119,18 @@ concommand.Add("darkrp", function(ply, cmd, args)
 		else
 			YRP.msg("note", "[forcerpname] Player not found")
 		end
+	elseif args[1] and args[1] == "wanted" then
+		YRP.msg( "error", "[darkrp] wanted: args[1]: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
+	elseif args[1] and args[1] == "unwanted" then
+		YRP.msg( "error", "[darkrp] unwanted: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
+	elseif args[1] and args[1] == "warrant" then
+		YRP.msg( "error", "[darkrp] warrant: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
+	elseif args[1] and args[1] == "unwarrant" then
+		YRP.msg( "error", "[darkrp] unwarrant: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
+	elseif args[1] and args[1] == "addjailpos" then
+		--
 	else
-		YRP.msg("error", "[darkrp] Missing console command in yourrp, please tell dev")
-		YRP.msg("error", "[darkrp] args[1] " .. tostring(args[1]))
+		YRP.msg( "error", "[darkrp] console command: args[1]: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
 	end
 end)
 

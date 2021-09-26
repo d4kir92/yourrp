@@ -118,7 +118,7 @@ function toggleCharacterSelection()
 end
 
 function closeCharacterSelection()
-	if CharMenu.frame != nil and LocalPlayer():GetNW2Bool("loadedchars", false) == true and LocalPlayer():Alive() then
+	if CharMenu.frame != nil and LocalPlayer():GetNW2Bool("loadchars_done", false) == true and LocalPlayer():Alive() then
 		closeMenu()
 		CharMenu.frame:Remove()
 		CharMenu.frame = nil
@@ -132,7 +132,7 @@ local _cur = ""
 local chars = {}
 local loading = false
 function LoadCharacters()
-	YRP.msg("gm", "received characterlist")
+	--YRP.msg("gm", "received characterlist")
 	if !IsVoidCharEnabled() and GetGlobalBool("bool_character_system", true) then
 		trashicon = YRP.GetDesignIcon("64_trash")
 
@@ -417,7 +417,7 @@ function LoadCharacters()
 								function _yesButton:DoClick()
 									
 									if wk(tmpChar.charid) then
-										net.Start("DeleteCharacter")
+										net.Start("YRPDeleteCharacter")
 											net.WriteString(tmpChar.charid)
 										net.SendToServer()
 									else
@@ -573,7 +573,7 @@ function LoadCharacters()
 								function _yesButton:DoClick()
 									
 									if wk(tmpChar.charid) then
-										net.Start("DeleteCharacter")
+										net.Start("YRPDeleteCharacter")
 											net.WriteString(tmpChar.charid)
 										net.SendToServer()
 									else
@@ -888,6 +888,20 @@ net.Receive("yrp_get_characters", function(len)
 	end
 end)
 
+function YRPGetCharacters()
+	local b, bb = net.BytesLeft()
+	local w, ww = net.BytesWritten()
+	if b and b > 0 and w and w > 0 then
+		timer.Simple(0.01, function()
+			YRPGetCharacters()
+		end)
+	else
+		net.Start("yrp_get_characters")
+		net.SendToServer()
+		
+	end
+end
+
 function openCharacterSelection()
 	if IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) then return end
 
@@ -983,7 +997,7 @@ function openCharacterSelection()
 			end
 
 			-- Language Changer / LanguageChanger
-			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(64*5.6 + 20), YRP.ctr(20), YRP.ctr(64), true)
+			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32*5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
 
 			local border = YRP.ctr(50)
 			CharMenu.charactersBackground = createD("DPanel", CharMenu.frame, YRP.ctr(fw), ScrH() - (2 * border), (ScrW() - ScW()) / 2 + border, border)
@@ -1147,7 +1161,7 @@ function openCharacterSelection()
 				_yesButton:SetText(YRP.lang_string("LID_yes"))
 				function _yesButton:DoClick()
 
-					net.Start("DeleteCharacter")
+					net.Start("YRPDeleteCharacter")
 						net.WriteString(curChar)
 					net.SendToServer()
 
@@ -1261,7 +1275,7 @@ function openCharacterSelection()
 			end
 
 			-- Language Changer / LanguageChanger
-			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(64*5.6 + 20), YRP.ctr(20), YRP.ctr(64), true)
+			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32*5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
 
 			local border = YRP.ctr(50)
 			CharMenu.charactersBackground = createD("DPanel", CharMenu.frame, ScrW() - (2 * br), YRP.ctr(200) + (2 * br), br, ScrH() - YRP.ctr(200) - 2 * br - br)
@@ -1373,7 +1387,7 @@ function openCharacterSelection()
 				_yesButton:SetText(YRP.lang_string("LID_yes"))
 				function _yesButton:DoClick()
 
-					net.Start("DeleteCharacter")
+					net.Start("YRPDeleteCharacter")
 						net.WriteString(curChar)
 					net.SendToServer()
 
@@ -1482,7 +1496,7 @@ function openCharacterSelection()
 			end
 
 			-- Language Changer / LanguageChanger
-			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(64*5.6 + 20), YRP.ctr(20), YRP.ctr(64), true)
+			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32*5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
 
 			local iconsize = YRP.ctr(120*2)
 			local iconbr = YRP.ctr(30)
@@ -1648,7 +1662,7 @@ function openCharacterSelection()
 			end
 
 			-- Language Changer / LanguageChanger
-			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(64*5.6 + 20), YRP.ctr(20), YRP.ctr(64), true)
+			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32*5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
 
 			YRPUpdateCharValues()
 			local charw = DefaultCharW
@@ -1808,16 +1822,10 @@ function openCharacterSelection()
 		end
 	end
 
-	
-	timer.Simple(0.01, function()
-		--YRP.msg("gm", "ask for characterlist")
-
-		net.Start("yrp_get_characters")
-		net.SendToServer()
-	end)
+	YRPGetCharacters()
 end
 
-net.Receive("openCharacterMenu", function(len, ply)
+net.Receive("YRPOpenCharacterMenu", function(len, ply)
 	timer.Simple(1, function()
 		openCharacterSelection()
 	end)

@@ -48,7 +48,7 @@ function GetCharacterStorage(ply)
 	return {}
 end
 
-function CreateCharacterStorages()
+function YRPCreateCharacterStorages()
 	local chars = SQL_SELECT("yrp_characters", "*", nil)
 	if wk(chars) then
 		for _, char in pairs(chars) do
@@ -69,13 +69,13 @@ function CreateCharacterStorages()
 
 			-- Create storage if not exists
 			if strEmpty(char.int_storageID) or tonumber(char.int_storageID) == 0 then
-				YRP.msg("db", "CreateCharacterStorages empty or 0")
+				YRP.msg("db", "YRPCreateCharacterStorages empty or 0")
 				local bagsStorage = CreateStorage(5, true)
 				if wk(bagsStorage) then
 					SQL_UPDATE("yrp_characters", {["int_storageID"] = bagsStorage.uniqueID}, "uniqueID = '" .. char.uniqueID .. "'")
 				end
 			elseif !wk(SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'")) then
-				YRP.msg("db", "CreateCharacterStorages WRONG")
+				YRP.msg("db", "YRPCreateCharacterStorages WRONG")
 				local bagsStorage = CreateStorage(5, true)
 				if wk(bagsStorage) then
 					SQL_UPDATE("yrp_characters", {["int_storageID"] = bagsStorage.uniqueID}, "uniqueID = '" .. char.uniqueID .. "'")
@@ -85,7 +85,7 @@ function CreateCharacterStorages()
 	end
 end
 timer.Simple(3, function()
-	CreateCharacterStorages()
+	YRPCreateCharacterStorages()
 end)
 
 

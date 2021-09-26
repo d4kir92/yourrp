@@ -20,12 +20,15 @@ end
 
 function DarkRP.addLanguage(Languagename, Languagecontents)
 	--Description: Create a language/translation.
-	YRPDarkrpNotFound("addLanguage(" .. Languagename .. ", table)")
+	--YRPDarkrpNotFound("addLanguage(" .. Languagename .. ", table)")
 end
 
 function DarkRP.addPhrase(Languagename, key, translation)
 	--Description: Add a phrase to the existing translation.
-	YRPDarkrpNotFound("addPhrase(" .. Languagename .. ", " .. key .. ", " .. translation .. ")")
+	--YRPDarkrpNotFound("addPhrase(" .. Languagename .. ", " .. key .. ", " .. translation .. ")")
+	if Languagename == "en" and !string.StartWith( YRP.lang_string("LID_" .. key), "LID_" ) then
+		YRP.set_lang_string("LID_" .. key, translation)
+	end
 end
 
 function DarkRP.addPlayerGesture(anim, text)
@@ -50,7 +53,7 @@ end
 
 function DarkRP.createAmmoType(name, tbl)
 	--Description: Create an ammo type.
-	YRPDarkrpNotFound("createAmmoType(" .. name .. ", tbl)")
+	--YRPDarkrpNotFound("createAmmoType(" .. name .. ", tbl)")
 end
 
 function DarkRP.createCategory(tbl)
@@ -86,7 +89,7 @@ end
 
 function DarkRP.createJob(name, tbl)
 	--Description: Create a job for DarkRP.
-	YRPDarkrpNotFound("createJob(" .. name .. ", tbl)")
+	--YRPDarkrpNotFound("createJob(" .. name .. ", tbl)")
 	return -1
 end
 
@@ -239,7 +242,7 @@ end
 
 function DarkRP.getLaws()
 	--Description: Get the table of all current laws.
-	YRPDarkrpNotFound("getLaws()")
+	--YRPDarkrpNotFound("getLaws()")
 	return {}
 end
 
@@ -259,7 +262,7 @@ function DarkRP.getPhrase(key, parameters)
 	elseif key == "wallet" then
 		key = "money"
 	end
-	local _translation = YRP.lang_string(key)
+	local _translation = YRP.lang_string( "LID_" .. key )
 	return _translation
 end
 

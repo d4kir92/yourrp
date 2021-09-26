@@ -2,6 +2,7 @@
 
 local colr = Color(200, 0, 0)
 local colg = Color(0, 200, 0)
+local colb = Color(100, 100, 255)
 
 local vm = {}
 
@@ -24,6 +25,9 @@ function YRPVoiceChannel(edit, uid)
 	local prols = {}
 
 	local win = createD("YFrame", nil, YRP.ctr(1600), YRP.ctr(1210), 0, 0)
+	function win:Paint(pw, ph)
+		DrawRectBlurHUD(5, 0, 0, pw, ph, 255)
+	end
 	win:Center()
 	win:MakePopup()
 	if edit then
@@ -410,6 +414,16 @@ function OpenVoiceMenu()
 	local lply = LocalPlayer()
 
 	vm.win = createD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1600), 0, 0)
+	function vm.win:Paint(pw, ph)
+		DrawRectBlurHUD(5, 0, 0, pw, ph, 255)
+		
+		local hh = 24
+		if self.GetHeaderHeight != nil then
+			hh = self:GetHeaderHeight()
+		end
+		draw.SimpleText(YRP.lang_string(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	end
+	vm.win:SetLanguageChanger(false)
 	vm.win:Center()
 	vm.win:MakePopup()
 	vm.win:SetTitle("LID_voicechat")
@@ -439,16 +453,16 @@ function OpenVoiceMenu()
 
 			local bg = createD("DPanel", line, CONTENT:GetWide() - YRP.ctr(26), h, 0, 0)
 			function bg:Paint(pw, ph)
-				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "PC"))
+				DrawRectBlurHUD(YRP.ctr(10), 0, 0, pw, ph, 255) --draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "PC"))
 			end
 
 			local status = createD("DPanel", bg, h, h, 0, 0)
 			function status:Paint(pw, ph)
-				local color = Color(255, 100, 100, 255)
+				local color = colr
 				if IsActiveInChannel(lply, channel.uniqueID, true) then
-					color = Color(100, 255, 100, 255)
+					color = colg
 				elseif IsInChannel(lply, channel.uniqueID, true) then
-					color = Color(100, 100, 255, 255)
+					color = colb
 				end
 				draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 			end
@@ -611,27 +625,6 @@ function OpenVoiceMenu()
 		net.Start("mute_channel_all")
 		net.SendToServer()
 	end
-
-	--[[vm.win.mutemicall = createD("YButton", CONTENT, size, size, CONTENT:GetWide() - size - YRP.ctr(10) - size, CONTENT:GetTall() - YRP.ctr(50))
-	vm.win.mutemicall:SetText("+")
-	function vm.win.mutemicall:Paint(pw, ph)
-		local color = colg
-		if lply:GetNW2Bool("mutemic_channel_all", false) then
-			color = colr
-		end
-		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
-
-		local br = YRP.ctr(8)
-		if YRP.GetDesignIcon("mic") then
-			surface.SetMaterial( YRP.GetDesignIcon("mic") )
-			surface.SetDrawColor( 255, 255, 255, 255 )
-			surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
-		end
-	end
-	function vm.win.mutemicall:DoClick()
-		net.Start("mutemic_channel_all")
-		net.SendToServer()
-	end]]
 end
 
 net.Receive("channel_dn", function(len)

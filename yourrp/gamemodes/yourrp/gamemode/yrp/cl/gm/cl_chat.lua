@@ -280,7 +280,6 @@ else
 
 			function yrpChat.window:Paint(pw, ph)
 				if IsChatVisible() then
-					--DrawRectBlurHUD(0, 0, pw, ph, 100)
 					draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue("Chat", "FG"))
 
 					if self.logo then
@@ -692,6 +691,8 @@ else
 						else
 							yrpChat.richText:AppendText(obj:GetName())
 						end
+					elseif t == "panel" then
+						--
 					else
 						YRP.msg("error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj))
 					end

@@ -2,7 +2,7 @@
 
 function DarkRP.addJailPos(pos)
 	--Description: Add a jail position to the map. This jail position will be saved in the database.
-	YRPDarkrpNotFound("addJailPos(" .. tostring(pos) .. ")")
+	--YRPDarkrpNotFound("addJailPos(" .. tostring(pos) .. ")")
 end
 
 function DarkRP.addTeamSpawnPos(team, pos)
@@ -262,7 +262,7 @@ function DarkRP.storeMoney(ply, amount)
 	--Description: Internal function. Store a player's money in the database. Do
 	--						 not call this if you just want to set someone's money, the
 	--						 player will not see the change!
-	YRPDarkrpNotFound("storeMoney(ply, amount)")
+	--YRPDarkrpNotFound("storeMoney(ply, amount)")
 end
 
 function DarkRP.storeOfflineMoney(sid64, amount)
@@ -289,7 +289,7 @@ end
 
 function DarkRP.talkToPerson(receiver, col1, text1, col2, text2, sender)
 	--Description: Send a chat message to a player.
-	YRPDarkrpNotFound("talkToPerson(receiver, col1, text1, col2, text2, sender)")
+	--YRPDarkrpNotFound("talkToPerson(receiver, col1, text1, col2, text2, sender)")
 end
 
 function DarkRP.talkToRange(ply, playerName, message, size)

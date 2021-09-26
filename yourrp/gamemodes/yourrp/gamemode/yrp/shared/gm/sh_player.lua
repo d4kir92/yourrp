@@ -267,9 +267,11 @@ end
 function Player:CheckMoney()
 	if SERVER then
 		timer.Simple(4, function()
+			if !IsValid(self) then return end
+			
 			local _m = self:GetNW2String("money", "FAILED")
 			if _m == "FAILED" then
-				YRP.msg("error", "CheckMoney failed")
+				YRP.msg("note", "CheckMoney failed")
 				return false
 			end
 			local _money = tonumber(_m)
@@ -575,6 +577,9 @@ Player.GetName = Player.Name
 Player.Nick = Player.Name
 
 function Player:YRPName()
+	if !IsValid(self) then
+		return "FAIL"
+	end
 	return "[" .. self:SteamName() .. " (" .. self:RPName() .. ")]"
 end
 

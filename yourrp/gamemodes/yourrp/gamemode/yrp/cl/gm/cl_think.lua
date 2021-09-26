@@ -119,8 +119,6 @@ function useFunction(str)
 			toggleMap()
 		elseif str == "openInteractMenu" then
 			toggleInteractMenu()
-		--elseif str == "menu_talents" then
-			--ToggleTalentsMenu()
 		elseif str == "voice_mute" then
 			net.Start("yrp_mute_voice")
 			net.SendToServer()
@@ -258,6 +256,10 @@ function keyDown(key, str, distance)
 end
 
 function keyPressed(key, str, distance)
+	if key == nil then
+		return
+	end
+
 	if ChatIsClosedForChat and ChatIsClosedForChat() then
 		local lply = LocalPlayer()
 		if IsValid(lply) and wk(lply.GetEyeTrace) then
@@ -272,6 +274,7 @@ function keyPressed(key, str, distance)
 				if keys[tostring(key)] == nil then
 					keys[tostring(key)] = false
 				end
+				key = tonumber(key)
 				if input.IsKeyDown(key) and !keys[tostring(key)] then
 					keys[tostring(key)] = true
 					timer.Simple(0.14, function()
@@ -284,11 +287,6 @@ function keyPressed(key, str, distance)
 			end
 		end
 	end
-end
-
-function YRPHudFailPrint()
-	local str = "finishedloading = " .. tostring( lply:GetNW2Bool("finishedloading", false) ) .. " loadedchars = " .. tostring( lply:GetNW2Bool("loadedchars", false) ) .. " yrp_hudloadout = " .. tostring( lply:GetNW2Bool("yrp_hudloadout", false) )
-	return str
 end
 
 local clicked = false
@@ -310,7 +308,7 @@ function KeyPress()
 			hudFail = true
 			net.Start("rebuildHud")
 			net.SendToServer()
-			YRP.msg( "error", "HUD Version outdated! " .. tostring( lply:GetNW2Int("hud_version" -1) ) .. " " .. YRPHudFailPrint() )
+			YRP.msg( "error", "HUD Version outdated! " .. tostring( lply:GetNW2Int("hud_version", -1) ) .. " " .. YRPCreateLoadingInfo() )
 		end
 	end
 
@@ -381,7 +379,8 @@ function KeyPress()
 		end
 		
 		if !vgui.CursorVisible() then
-			if input.IsKeyDown(get_keybind("view_switch")) then
+
+			if get_keybind("view_switch") and input.IsKeyDown(get_keybind("view_switch")) then
 				--[[ When toggle view ]]--
 				if _view_delay then
 					_view_delay = false
@@ -408,7 +407,7 @@ function KeyPress()
 					lply.yrp_view_range = lply.yrp_view_range + lply.yrp_view_range_view / 16
 				else
 
-					if input.IsKeyDown(get_keybind("view_zoom_out")) then
+					if get_keybind("view_zoom_out") and input.IsKeyDown(get_keybind("view_zoom_out")) then
 						done_tutorial("tut_vo", 5)
 
 						lply.yrp_view_range_view = lply.yrp_view_range_view + 1
@@ -417,7 +416,7 @@ function KeyPress()
 							lply.yrp_view_range_view = tonumber(GetGlobalString("text_view_distance", "200"))
 						end
 						lply.yrp_view_range_old = lply.yrp_view_range_view
-					elseif input.IsKeyDown(get_keybind("view_zoom_in")) then
+					elseif get_keybind("view_zoom_in") and input.IsKeyDown(get_keybind("view_zoom_in")) then
 						done_tutorial("tut_vi", 5)
 
 						lply.yrp_view_range_view = lply.yrp_view_range_view - 1
@@ -432,9 +431,9 @@ function KeyPress()
 			end
 
 			--[[ Up and down ]]--
-			if input.IsKeyDown(get_keybind("view_up")) then
+			if get_keybind("view_up") and input.IsKeyDown(get_keybind("view_up")) then
 				lply.yrp_view_z_c = lply.yrp_view_z_c + 0.1
-			elseif input.IsKeyDown(get_keybind("view_down")) then
+			elseif get_keybind("view_down") and input.IsKeyDown(get_keybind("view_down")) then
 				lply.yrp_view_z_c = lply.yrp_view_z_c - 0.1
 			end
 			if tonumber(lply.yrp_view_z_c) > 100 then
@@ -449,9 +448,9 @@ function KeyPress()
 			end
 
 			--[[ Left and right ]]--
-			if input.IsKeyDown(get_keybind("view_right")) then
+			if get_keybind("view_right") and input.IsKeyDown(get_keybind("view_right")) then
 				lply.yrp_view_x_c = lply.yrp_view_x_c + 0.1
-			elseif input.IsKeyDown(get_keybind("view_left")) then
+			elseif get_keybind("view_left") and input.IsKeyDown(get_keybind("view_left")) then
 				lply.yrp_view_x_c = lply.yrp_view_x_c - 0.1
 			end
 			if tonumber(lply.yrp_view_x_c) > 300 then
@@ -466,9 +465,9 @@ function KeyPress()
 			end
 
 			--[[ spin right and spin left ]]--
-			if input.IsKeyDown(get_keybind("view_spin_right")) then
+			if get_keybind("view_spin_right") and input.IsKeyDown(get_keybind("view_spin_right")) then
 				lply.yrp_view_s_c = lply.yrp_view_s_c + 0.4
-			elseif input.IsKeyDown(get_keybind("view_spin_left")) then
+			elseif get_keybind("view_spin_left") and input.IsKeyDown(get_keybind("view_spin_left")) then
 				lply.yrp_view_s_c = lply.yrp_view_s_c - 0.4
 			end
 			if tonumber(lply.yrp_view_s_c) > 360 or tonumber(lply.yrp_view_s_c) < -360 then
@@ -526,8 +525,6 @@ function KeyPress()
 	keyPressed(get_keybind("voice_menu"), "voice_menu")
 
 	keyPressed(get_keybind("chat_menu"), "chat_menu")
-
-	--keyPressed(get_keybind("menu_talents"), "menu_talents")
 
 	keyPressed(get_keybind("macro_menu"), "macro_menu")
 	for i = 1, 49 do

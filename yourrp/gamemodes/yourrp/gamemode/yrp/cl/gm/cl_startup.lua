@@ -618,6 +618,10 @@ function openSingleSelector(tab, closeF, web)
 
 			local searchtext = search:GetText()
 
+			searchtext = string.Replace(searchtext or "", "[", "")
+			searchtext = string.Replace(searchtext or "", "]", "")
+			searchtext = string.Replace(searchtext or "", "%", "")
+			
 			if string.find(string.lower(item.WorldModel or ""), searchtext) or string.find(string.lower(item.PrintName or ""), searchtext) or string.find(string.lower(item.ClassName or ""), searchtext) then
 				site.count = site.count + 1
 
@@ -1125,8 +1129,26 @@ function drawPlates()
 				end]]
 
 				if GetGlobalBool("bool_tag_on_head_name", false) then
-					drawString(ply, ply:RPName(), _height, color)
-					_height = _height + 5
+					local drawname = false
+					if GetGlobalBool("bool_tag_on_head_name_onlyrole", false) then
+						if LocalPlayer():GetRoleUID() == ply:GetRoleUID() then
+							drawname = true
+						end
+					elseif GetGlobalBool("bool_tag_on_head_name_onlygroup", false) then
+						if LocalPlayer():GetGroupUID() == ply:GetGroupUID() then
+							drawname = true
+						end
+					elseif GetGlobalBool("bool_tag_on_head_name_onlyfaction", false) then
+						if LocalPlayer():GetFactionUID() == ply:GetFactionUID() then
+							drawname = true
+						end
+					else
+						drawname = true
+					end
+					if drawname then
+						drawString(ply, ply:RPName(), _height, color)
+						_height = _height + 5
+					end
 				end
 
 				if GetGlobalBool("bool_tag_on_head_idcardid", false) then
@@ -1278,7 +1300,7 @@ function drawPlates()
 					drawPlayerInfo(ply, "+" .. GetGlobalString("text_money_pre", "") .. ply:GetNW2String("salary", "") .. GetGlobalString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sa"])
 					_z = _z + _d
 					local _motext = GetGlobalString("text_money_pre", "") .. ply:GetNW2String("money", "") .. GetGlobalString("text_money_pos", "")
-					local _mMin = CurTime() + ply:GetNW2Int("salarytime", 0) - ply:GetNW2Int("nextsalarytime", 0)
+					local _mMin = ply:CurrentSalaryTime()
 					local _mMax = ply:GetNW2Int("salarytime", 0) + 1
 					drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
 					_z = _z + _d
@@ -1391,14 +1413,36 @@ net.Receive("yrp_noti", function(len)
 	end
 end)
 
+function YRPReplaceLIDs(str)
+	local tmpstr = string.Explode( " ", str )
+	for i, v in pairs(tmpstr) do
+		if string.StartWith( string.lower( v ), "lid_" ) then
+			tmpstr[i] = YRP.lang_string( v )
+		end
+	end
+	return table.concat( tmpstr, " " )
+end
+
+function YRPReplaceKEYs(str)
+	local tmpstr = string.Explode( " ", str )
+	for i, v in pairs(tmpstr) do
+		if string.StartWith( string.lower( v ), "menu_" ) then
+			tmpstr[i] = GetKeybindName( get_keybind( v ) )
+		end
+	end
+	return table.concat( tmpstr, " " )
+end
+
 local delay = 0
 net.Receive("yrp_info", function(len)
 	local lply = LocalPlayer()
 	if lply:IsValid() and delay < CurTime() then
 		delay = CurTime() + 1
 		local _str = net.ReadString()
+		_str = YRPReplaceLIDs(_str)
+		_str = YRPReplaceKEYs(_str)
 		_str = YRP.lang_string("LID_notallowed") .. " (" .. YRP.lang_string(_str) .. ")"
-		notification.AddLegacy(_str, NOTIFY_GENERIC, 3)
+		notification.AddLegacy(_str, NOTIFY_GENERIC, 6)
 	end
 end)
 
@@ -1447,6 +1491,13 @@ net.Receive("yrp_notification", function(len)
 		local msg = net.ReadString()
 		notification.AddLegacy(msg, NOTIFY_GENERIC, 5)
 	end
+end)
+
+net.Receive("yrp_autoreload", function(len, ply)
+	local t = net.ReadString()
+	local str = YRP.lang_string("LID_automaticmapchangeinx")
+	str = string.Replace(str, "X", t)
+	notification.AddLegacy(str, NOTIFY_GENERIC, 5)
 end)
 
 function DrawDoorText(door)
@@ -1856,6 +1907,47 @@ function YRPCPD(a)
 	return Color(2, 23, 39, a)
 end
 
+local spacer = " | "
+function YRPCreateLoadingInfo()
+	local lply = LocalPlayer()
+	if IsValid(lply) then
+		local text = ""
+
+		local yrp1 = lply:GetNW2Bool("finishedloading") == false or WasReadySendToServer() == false or lply:GetNW2Bool("PlayerLoadedGameStart") == false or lply:GetNW2Bool("PlayerLoadedGameEnd") == false
+		local yrp2 = lply:GetNW2Bool("loadchars_start") == false or lply:GetNW2Bool("loadchars_done") == false or lply:GetNW2String("loadchars_msg", "X") == "X"
+		local yrp3 = lply:GetNW2Bool("yrp_hudloadout") == false or lply:GetNW2String("yrp_hudloadout_msg", "X") == "X"
+
+		if yrp1 then
+			if !strEmpty(text) then
+				text = text .. spacer
+			end
+			text = text .. "FinishedLoading: " .. tostring( lply:GetNW2Bool("finishedloading") )
+			text = text .. " " .. "WasSendToServer: " .. tostring( WasReadySendToServer() ) .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
+		end
+		if yrp2 then
+			if !strEmpty(text) then
+				text = text .. spacer
+			end
+			text = text .. "loadchars_done: " .. tostring( lply:GetNW2Bool("loadchars_done") ) .. " loadchars_start: " .. tostring( lply:GetNW2Bool("loadchars_start") ) .. " char_msg: " .. lply:GetNW2String("loadchars_msg", "X")
+			if GetGlobalBool("bool_character_system") == false then
+				text = text .. " " .. "bool_character_system: " .. tostring( !GetGlobalBool("bool_character_system") )
+			end
+		end
+		if yrp3 then
+			if !strEmpty(text) then
+				text = text .. spacer
+			end
+			text = text .. "HudLoadout: " .. tostring( lply:GetNW2Bool("yrp_hudloadout") ) .. " hud_msg: " .. lply:GetNW2String("yrp_hudloadout_msg", "X")
+		end
+		if !strEmpty(text) then
+			text = "[Loading]" .. text
+		end
+
+		return text
+	end
+	return "ply not valid"
+end
+
 -- #LOADING
 local yrp_icon = Material("yrp/yrp_icon")
 
@@ -1953,7 +2045,7 @@ if pa(yrp_loading_screen) then
 
 
 		-- LOGO
-		local logosize = 512 / 4
+		local logosize = YRP.ctr(128)
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(yrp_icon)
 		surface.DrawTexturedRectRotated(YRP.ctr(logosize) * 0.8, YRP.ctr(logosize) * 0.8, YRP.ctr(logosize), YRP.ctr(logosize), self.r)
@@ -1969,28 +2061,8 @@ if pa(yrp_loading_screen) then
 			end
 		end
 
-		if lply:GetNW2Bool("yrp_hudloadout", false) and lply:GetNW2Bool("finishedloading", false) and ( lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) ) then
-			if GetGlobalBool("bool_yrp_play_button", false) then
-				--[[if self.logo == nil then
-					local w = YRP.ctr(512)
-					local h = YRP.ctr(512)
-					self.logo = createD("DHTML", self, w, h, pw / 2 - w / 2, ph / 2 - h / 2)
-					self.logo.w = w
-					self.logo.h = h
-				end
-				if self.logo then
-					if self.logo.svlogo != GetGlobalString("text_server_logo", "") then
-						self.logo.svlogo = GetGlobalString("text_server_logo", "")
-	
-						if !strEmpty(GetGlobalString("text_server_logo", "")) then
-							self.logo:SetHTML(GetHTMLImage(GetGlobalString("text_server_logo", ""), self.logo.w, self.logo.h))
-							self.logo:Show()
-						else
-							self.logo:Hide()
-						end
-					end
-				end]]
-
+		if lply:GetNW2Bool("yrp_hudloadout") and lply:GetNW2Bool("finishedloading") and ( lply:GetNW2Bool("loadchars_done") or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system") ) then
+			if GetGlobalBool("bool_yrp_play_button") then
 				if self.joinbutton == nil then
 					self.joinbutton = createD("YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ph / 2 + PANEL_H / 2 - PLAY_BUTTON_H - PLAY_BUTTON_SPACE)
 					self.joinbutton:SetText("")
@@ -2017,13 +2089,16 @@ if pa(yrp_loading_screen) then
 		loading_cur_old = loading_cur_old or 0
 		loading_cur = 0
 		local max = 100
-		if lply:GetNW2Bool("finishedloading", false) then
+		local t1 = lply:GetNW2Bool("finishedloading")
+		local t2 = lply:GetNW2Bool("loadchars_done") or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system")
+		local t3 = lply:GetNW2Bool("yrp_hudloadout")
+		if t1 then
 			loading_cur = loading_cur + 33
 		end
-		if lply:GetNW2Bool("loadedchars", false) or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) then
+		if t2 then
 			loading_cur = loading_cur + 33
 		end
-		if lply:GetNW2Bool("yrp_hudloadout", false) then
+		if t3 then
 			loading_cur = loading_cur + 34
 		end
 		loading_cur_old = Lerp(2 * FrameTime(), loading_cur_old, loading_cur)
@@ -2052,7 +2127,27 @@ if pa(yrp_loading_screen) then
 
 		
 		-- TIME
-		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_16_500", YRP.ctr(10), ph - YRP.ctr(0), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_14_700", YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		if self.t > 10 then -- 40
+			local text = YRPCreateLoadingInfo()
+			if !strEmpty(text) then
+				draw.SimpleText( text, "Y_18_700", pw - YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM )
+				
+				self.counttext = self.counttext or 0
+				if self.counttext < 1 then
+					self.counttext = self.counttext + 1
+					YRP.msg( "error", text ) -- Loading Error
+				end
+
+				if self.discord == nil then
+					self.discord = createD( "YButton", self, 300, 60, ScrW() / 2 - 300 / 2, ScrH() * 0.8 )
+					self.discord:SetText( "If you are stuck here, please click me" )
+					function self.discord:DoClick()
+						gui.OpenURL("https://discord.gg/mxDMPMXGy8")
+					end
+				end
+			end
+		end
 
 		-- SHADOW END
 		BSHADOWS.EndShadow(PANEL_SHADOW_intensity, PANEL_SHADOW_Spread, PANEL_SHADOW_Blur, PANEL_SHADOW_Opacity, PANEL_SHADOW_Direction, PANEL_SHADOW_Distance)

@@ -205,7 +205,7 @@ function HUDCircles()
 			HUDCirclesDrawText("SN", GetGlobalString("text_server_name", "SERVERNAME"))
 
 			HUDCirclesDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(2))
-			HUDCirclesDrawIcon("SA", SA, (CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()) / lply:SalaryTime(), lply:FormattedSalaryRounded(2))
+			HUDCirclesDrawIcon("SA", SA, lply:CurrentSalaryTime() / lply:SalaryTime(), lply:FormattedSalaryRounded(2))
 
 			HUDSimpleCompass()
 		end

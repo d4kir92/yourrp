@@ -8,29 +8,6 @@ local yrp_db = {}
 yrp_db.version = 1
 yrp_db.loaded = false
 
-function retry_load_database()
-	YRP.msg("db", "ERROR!!! >> retry Load Database in 10sec <<")
-	YRP.msg("db", "ERROR!!! >> Your database is maybe broken! <<")
-
-	if timer.Exists("retryLoadDatabase") then
-		timer.Remove("retryLoadDatabase")
-	end
-
-	local integrity_check = sql.Query("pragma integrity_check;")
-	YRP.msg("db", "Integrity_check: " .. tostring(integrity_check))
-
-	local nodes = sql.Query("reindex nodes;")
-	YRP.msg("db", "Nodes: " .. tostring(nodes))
-
-	local pristine = sql.Query("reindex pristine;")
-	YRP.msg("db", "Pristine: " .. tostring(pristine))
-
-	timer.Create("retryLoadDatabase", 10, 1, function()
-		db_init_database()
-		timer.Remove("retryLoadDatabase")
-	end)
-end
-
 local YRP_DBS = {}
 table.insert(YRP_DBS, "yrp_usergroups")
 table.insert(YRP_DBS, "yrp_general")

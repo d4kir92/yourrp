@@ -81,7 +81,7 @@ function YRP.SetFont(fontname)
 			YRP.msg("note", "Changed font to: " .. font .. " Scale(" .. fontscale .. ")")
 			changeFontSize()
 		else
-			YRP.msg("error", "fontname: " .. tostring(fontname) .. " fontTab: " .. tostring(fontTab))
+			YRP.msg("note", "fontname: " .. tostring(fontname) .. " fontTab: " .. tostring(fontTab))
 		end
 	end
 end

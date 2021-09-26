@@ -285,7 +285,7 @@ function BuildLogs(parent, typ)
 							if target.RPName then
 								rt:AppendText(target:RPName())
 							else
-								rt:AppendText(v.string_target_steamid)
+								rt:AppendText(tostring( v.string_target_steamid ))
 							end
 							rt:InsertClickableTextEnd()
 						else

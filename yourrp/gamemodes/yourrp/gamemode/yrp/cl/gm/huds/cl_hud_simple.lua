@@ -39,7 +39,7 @@ function HUDSimpleBG(tab)
 				end
 				Simple[tab.element]["background"].x = HUDMOTIONX(Simple[tab.element]["background"].fx)
 				Simple[tab.element]["background"].y = HUDMOTIONY(Simple[tab.element]["background"].fy)
-				--DrawRectBlurHUD(Simple[tab.element]["background"].x, Simple[tab.element]["background"].y, Simple[tab.element]["background"].w, Simple[tab.element]["background"].h, Simple[tab.element]["background"].color.a)
+				
 				draw.RoundedBox(Simple[tab.element]["background"].r, Simple[tab.element]["background"].x, Simple[tab.element]["background"].y, Simple[tab.element]["background"].w, Simple[tab.element]["background"].h, Simple[tab.element]["background"].color)
 			end
 		end
@@ -760,7 +760,7 @@ function HUDSimple()
 			HUDSimpleBAR(MO)
 			SA = {}
 			SA.element = "SA"
-			SA.cur = CurTime() + lply:SalaryTime() - 1 - lply:NextSalaryTime()
+			SA.cur = lply:CurrentSalaryTime()
 			SA.max = lply:SalaryTime()
 			SA.text = "+" .. lply:FormattedSalaryRounded(1)
 			SA.icon = icons["SA"]
