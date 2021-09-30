@@ -713,10 +713,16 @@ net.Receive("settings_add_role", function(len, ply)
 	local pre = tonumber(net.ReadString())
 
 	local prerole = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
+
 	local has_prerole = false
 	if pre > 0 then
 		-- Has Prerole
 		has_prerole = true
+		if !wk(prerole) then
+			YRP.msg( "note", "[settings_add_role] Prerole dont Exists anymore" )
+			SendRoleList(nil, gro, pre)
+			return
+		end
 	end
 
 	SQL_INSERT_INTO(DATABASE_NAME, "int_groupID, int_prerole", "'" .. gro .. "', '" .. pre .. "'")
@@ -733,8 +739,6 @@ net.Receive("settings_add_role", function(len, ply)
 				SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. new_role.uniqueID .. "'")
 			end
 		end
-	--else
-		--SQL_UPDATE(DATABASE_NAME, {["string_idstructure = '" .. "!D!D!D!D-!D!D!D!D-!D!D!D!D"}, "uniqueID = '" .. new_role.uniqueID .. "'")
 	end
 
 	--local up = roles[count - 1]

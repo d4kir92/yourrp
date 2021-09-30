@@ -298,7 +298,9 @@ function open_appearance()
 	_yrp_appearance.window:SetSizable(true)
 	_yrp_appearance.window:SetHeaderHeight(YRP.ctr(100))
 	function _yrp_appearance.window:OnClose()
-		_yrp_appearance.window:Remove()
+		if pa( _yrp_appearance.window ) then
+			_yrp_appearance.window:Remove()
+		end
 	end
 	function _yrp_appearance.window:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_appearance") .. " - " .. YRP.lang_string("LID_menu") .. " [PROTOTYPE]")

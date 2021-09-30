@@ -94,7 +94,7 @@ function GM:PlayerInitialSpawn(ply)
 
 		ply:SetNW2Bool("yrp_characterselection", false)
 		local tab = {}
-		PlayerLoadedGame(ply, tab)
+		YRPPlayerLoadedGame(ply, tab)
 	end
 
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do

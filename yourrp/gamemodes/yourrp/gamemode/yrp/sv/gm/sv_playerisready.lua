@@ -4,7 +4,7 @@
 
 util.AddNetworkString("yrp_ready_received")
 
-function PlayerLoadedGame(ply, tab)
+function YRPPlayerLoadedGame(ply, tab)
 	ply:SetNW2Bool("PlayerLoadedGameStart", true)
 
 	local OS_Windows = tab.iswindows
@@ -100,7 +100,7 @@ end, hook.MONITOR_HIGH)
 util.AddNetworkString("yrp_player_is_ready")
 net.Receive("yrp_player_is_ready", function(len, ply)
 	local tab = net.ReadTable()
-
+	
 	if !IsValid(ply) then
 		YRP.msg( "error", "[yrp_player_is_ready] player is not valid: " .. tostring( ply ) )
 		return
@@ -108,7 +108,7 @@ net.Receive("yrp_player_is_ready", function(len, ply)
 
 	if ply:GetNW2Bool("yrp_received_ready", false) == false then
 		ply:SetNW2Bool("yrp_received_ready", true)
-		PlayerLoadedGame(ply, tab)
+		YRPPlayerLoadedGame(ply, tab)
 	else
 		YRP.msg( "note", "[yrp_player_is_ready] Already got the ready message" )
 	end
