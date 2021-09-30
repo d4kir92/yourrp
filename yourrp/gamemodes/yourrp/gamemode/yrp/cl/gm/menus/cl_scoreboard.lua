@@ -927,8 +927,8 @@ function YRPInitScoreboard()
 		YRPBlurScoreboard(self, 10, 3)
 		--DrawBlurRect(0, 0, pw, ph, 3, 6)
 		
-		if self.amount != table.Count(player.GetAll()) then
-			self.amount = table.Count(player.GetAll())
+		if self.amount != player.GetCount() then
+			self.amount = player.GetCount()
 			YRPOpenSBS()
 		end
 
@@ -1200,7 +1200,7 @@ function YRPInitScoreboard()
 			server = " [Dedicated]"
 		end
 		draw.SimpleText(string.upper(YRP.lang_string("LID_map")) .. ": " .. GetNiceMapName(), 															"Saira_30", pw / 2 - sw / 2, ScrH() - 20, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText(table.Count(player.GetAll()) .. "/" .. game.MaxPlayers() .. " (" .. string.upper(YRP.lang_string("LID_players")) .. ")", 		"Saira_30", pw / 2 + sw / 2, ScrH() - 20, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers() .. " (" .. string.upper(YRP.lang_string("LID_players")) .. ")", 		"Saira_30", pw / 2 + sw / 2, ScrH() - 20, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		
 		
 

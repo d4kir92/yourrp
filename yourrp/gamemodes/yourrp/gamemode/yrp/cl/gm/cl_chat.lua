@@ -307,7 +307,7 @@ else
 					end
 					draw.SimpleText(name, "Y_16_500", pw / 2, YRP.ctr(BR + H / 2), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-					draw.SimpleText(table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_16_500", pw - YRP.ctr(BR), YRP.ctr(BR + H / 2), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers(), "Y_16_500", pw - YRP.ctr(BR), YRP.ctr(BR + H / 2), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
 					local x, y = yrpChat.window:GetPos()
 					local w, h = yrpChat.window:GetSize()

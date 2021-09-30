@@ -50,13 +50,13 @@ end
 
 function GM:PlayerConnect(name, ip)
 	YRP.msg("gm", "[PlayerConnect] Name: " .. name .. " (IP: " .. ip .. ")")
-	PrintMessage(HUD_PRINTTALK, name .. " is connecting to the Server.")
+	--PrintMessage(HUD_PRINTTALK, name .. " is connecting to the Server.")
 end
 
 function GM:PlayerInitialSpawn(ply)
 	--YRP.msg("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
 
-	timer.Simple(0.01, function()
+	timer.Simple(0.001, function()
 		if !IsValid(ply) then return end
 
 		if ply.DRPSendTeamsToPlayer and ply.DRPSendCategoriesToPlayer then
@@ -97,8 +97,9 @@ function GM:PlayerInitialSpawn(ply)
 		PlayerLoadedGame(ply, tab)
 	end
 
-	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
 		ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, !tobool(channel.int_hear))
+		ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true)
 	end
 
 	if !IsValid(ply) then
@@ -1208,7 +1209,7 @@ end)
 function YRPCountActiveChannels(ply)
 	local c = 0
 	local cm = 0
-	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
 		if IsActiveInChannel(ply, channel.uniqueID, true) then
 			c = c + 1
 			if IsActiveInChannel(ply, channel.uniqueID) then
@@ -1223,7 +1224,7 @@ end
 function YRPCountPassiveChannels(ply)
 	local c = 0
 	local cm = 0
-	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
 		if IsInChannel(ply, channel.uniqueID, true) then
 			c = c + 1
 			if IsInChannel(ply, channel.uniqueID) then
@@ -1239,9 +1240,16 @@ function YRPSwitchToVoiceChannel(ply, uid)
 	if !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. uid, true) then
 		ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. uid, true) 
 	else
-		for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+		--[[for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
+			if !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
+				ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false)
+			end
+		end]]
+	
+		for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
 			if channel.uniqueID == uid then
 				ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, false)
+				ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, true)
 			else
 				ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true)
 			end
@@ -1249,6 +1257,7 @@ function YRPSwitchToVoiceChannel(ply, uid)
 	end
 
 	YRPCountActiveChannels(ply)
+	YRPCountPassiveChannels(ply)
 end
 
 util.AddNetworkString("mutemic_channel")
@@ -1256,15 +1265,28 @@ net.Receive("mutemic_channel", function(len, ply)
 	local uid = net.ReadString()
 	uid = uid or "0"
 	uid = tonumber(uid)
+	
+	if !ply:GetNW2Bool("yrp_voice_channel_mute_" .. uid, false) then
+		ply:SetNW2Bool("yrp_voice_channel_mute_" .. uid, true)
+	end
 
-	YRPSwitchToVoiceChannel(ply, uid)
+	ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. uid, !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. uid, false))
+
+	YRPCountActiveChannels(ply)
+	YRPCountPassiveChannels(ply)
 end)
 
 util.AddNetworkString("mute_channel")
 net.Receive("mute_channel", function(len, ply)
 	local uid = net.ReadString()
+	
+	if !ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. uid, false) then
+		ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. uid, true) 
+	end
 
 	ply:SetNW2Bool("yrp_voice_channel_mute_" .. uid, !ply:GetNW2Bool("yrp_voice_channel_mute_" .. uid, false))
+
+	YRPCountActiveChannels(ply)
 	YRPCountPassiveChannels(ply)
 end)
 
@@ -1272,62 +1294,105 @@ util.AddNetworkString("mutemic_channel_all")
 net.Receive("mutemic_channel_all", function(len, ply)
 	ply:SetNW2Bool("mutemic_channel_all", !ply:GetNW2Bool("mutemic_channel_all", false))
 
-	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
 		ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, ply:GetNW2Bool("mutemic_channel_all", false))
 	end
 	YRPCountActiveChannels(ply)
+	YRPCountPassiveChannels(ply)
 end)
 
 util.AddNetworkString("mute_channel_all")
 net.Receive("mute_channel_all", function(len, ply)
 	ply:SetNW2Bool("mute_channel_all", !ply:GetNW2Bool("mute_channel_all", false))
 
-	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
+	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
 		ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, ply:GetNW2Bool("mute_channel_all", false))
 	end
+	YRPCountActiveChannels(ply)
 	YRPCountPassiveChannels(ply)
 end)
 
+function YRPMoveAllToNext( ply )
+	local found = false
+	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
+		if IsActiveInChannel(ply, channel.uniqueID, true) then
+			if !found and ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID) == false then
+				ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true)
+				ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false)
+
+				found = true
+			elseif found and ply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID) == false then
+				ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, false)
+				ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, true)
+
+				found = false
+			end
+		end
+	end
+
+	if found then
+		for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
+			if IsActiveInChannel(ply, channel.uniqueID, true) then
+				if found and ply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID) == false then
+					ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, false)
+					ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, true)
+	
+					found = false
+				end
+			end
+		end
+	end
+
+	if !found then
+		for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
+			if IsActiveInChannel(ply, channel.uniqueID, true) then
+				if ply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID) == false then
+					ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, false)
+					ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, true)
+					break
+				end
+			end
+		end
+	end
+end
+
 util.AddNetworkString("yrp_next_voice_channel")
 net.Receive("yrp_next_voice_channel", function(len, ply)
-	local chan = -1
-	local found = false
-	
-	for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
-		if IsInChannel(ply, channel.uniqueID) then
-			if IsActiveInChannel(ply, channel.uniqueID, true) and ply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) == false then
-				found = true
-			elseif found and IsActiveInChannel(ply, channel.uniqueID, true) then
-				chan = channel.uniqueID
-				break
-			end
-		end
-	end
+	YRPMoveAllToNext( ply )
 
-	if chan <= -1 then -- when not after
-		for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
-			if IsActiveInChannel(ply, channel.uniqueID, true) and ply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) == false then
-				found = true
-				chan = channel.uniqueID
-				break
-			end
-		end
-	end
+	YRPCountActiveChannels(ply)
+	YRPCountPassiveChannels(ply)
+end)
 
-	if chan > -1 then
-		YRPSwitchToVoiceChannel(ply, chan)
-	end
+util.AddNetworkString("yrp_togglevoicemenu")
+net.Receive("yrp_togglevoicemenu", function(len, ply)
+	ply:SetNW2Bool( "yrp_togglevoicemenu", !ply:GetNW2Bool( "yrp_togglevoicemenu", true ) )
+end)
+
+util.AddNetworkString("yrp_voice_set_max_active")
+net.Receive("yrp_voice_set_max_active", function(len, ply)
+	local maxi = tonumber( net.ReadString() )
+	SQL_UPDATE("yrp_general", {["int_max_channels_active"] = maxi}, "uniqueID = '1'")
+	SetGlobalInt("int_max_channels_active", maxi)
+end)
+
+util.AddNetworkString("yrp_voice_set_max_passive")
+net.Receive("yrp_voice_set_max_passive", function(len, ply)
+	local maxi = tonumber( net.ReadString() )
+	SQL_UPDATE("yrp_general", {["int_max_channels_passive"] = maxi}, "uniqueID = '1'")
+	SetGlobalInt("int_max_channels_passive", maxi)
 end)
 
 hook.Remove("PlayerCanHearPlayersVoice", "YRP_voicesystem")
 hook.Add("PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, talker)
 	if GetGlobalBool("bool_voice", false) then
 		if listener == talker then
-			--return false
+			return false
 		end
+
 		local canhear = false
-		for i, channel in pairs(GetGlobalTable("yrp_voice_channels", {})) do
-			if IsActiveInChannel(talker, channel.uniqueID) and IsInChannel(listener, channel.uniqueID) then -- If Talker allowed to talk and both are in that channel
+		for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
+			if IsActiveInChannel(talker, channel.uniqueID) and ( IsInChannel(listener, channel.uniqueID) or IsActiveInChannel(listener, channel.uniqueID) ) then -- If Talker allowed to talk and both are in that channel
 				canhear = true
 				break
 			end

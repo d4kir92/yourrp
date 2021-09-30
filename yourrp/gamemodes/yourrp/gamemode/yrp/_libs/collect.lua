@@ -48,7 +48,7 @@ if SERVER then
 			end
 		end
 			
-		if table.Count(player.GetAll()) <= 0 then
+		if player.GetCount() <= 0 then
 			RunConsoleCommand("sv_hibernate_think", 0)
 		end
 	end

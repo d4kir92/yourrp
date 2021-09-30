@@ -2,23 +2,11 @@
 
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
-yrp_rToSv = yrp_rToSv or false
-
-yrp_initpostentity = yrp_initpostentity or false
-yrp_hookinitpostentity = yrp_hookinitpostentity or false
-
-local d = d or 0
-
+local YRPHookInitPostEntity = false
+local YRPHookInitPostEntityFAKE = false
 local serverreceived = false
 
-local YRP_COUNT = 0
-local YRP_INIT = false
-local YRP_NOINIT = false
 YRPWasReadySendToServer = YRPWasReadySendToServer or false
-
-function WasReadySendToServer()
-	return YRPWasReadySendToServer
-end
 
 function YRPSendIsReadyPingPong()	-- IMPORTANT
 	local lply = LocalPlayer()
@@ -31,42 +19,36 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 		info.country = system.GetCountry()
 		info.branch = GetBranch()
 		info.uptime = os.clock()
-		
-		local b, bb = net.BytesLeft()
-		local w, ww = net.BytesWritten()
-		if b and b > 0 and w and w > 0 then
-			YRP.msg("note", "[YRPSendIsReadyPingPong] Already running a net message, retry sending ready message.")
-			YRPSendIsReadyPingPong()
-		else
+			
+		if YRPWasReadySendToServer == false then
 			YRP.msg("note", "[YRPSendIsReadyPingPong] SEND TO SERVER.")
 			net.Start("yrp_player_is_ready")
 				net.WriteTable(info)
 			net.SendToServer()
 			YRPWasReadySendToServer = true
 
-			timer.Simple(3.9, function()
+			timer.Simple(13, function()
 				if !IsValid(lply) then return end
 
-				if !lply:GetNW2Bool("yrp_received_ready") then
-					YRP.msg("note", "[YRPSendIsReadyPingPong] >> Retry sending ready message <<")
+				if lply:GetNW2Bool("yrp_received_ready", false) == false then
+					YRPWasReadySendToServer = false
+					YRP.msg("note", "[YRPSendIsReadyPingPong] Retry sending ready message...")
 					YRPSendIsReadyPingPong()
 				end
 			end)
 		end
 	else
-		YRP.msg("note", "[YRPSendIsReadyPingPong] System/os not ready, retry.")
-		timer.Simple(0.001, function()
+		YRP.msg( "error", "[YRPSendIsReadyPingPong] System/os not ready, retry. win " .. tostring(system.IsWindows) .. " os " .. tostring(os.clock) .. " country " .. tostring(system.GetCountry) )
+		timer.Simple(0.01, function()
 			YRPSendIsReadyPingPong()
 		end)
 	end
 end
 
 function YRPSendIsReady()
-	if !yrp_rToSv then
-		yrp_rToSv = true
-
-		YRP.msg("note", "[YRPSendIsReady]")
-
+	if YRPHookInitPostEntity or YRPHookInitPostEntityFAKE then
+		YRP.msg("note", "[YRPSendIsReady] START")
+		
 		-- IMPORTANT
 		YRPSendIsReadyPingPong()
 
@@ -87,39 +69,24 @@ function YRPSendIsReady()
 			end
 		end
 
-		YRP.msg("note", "Workshop Addons Done")
+		YRP.msg("note", ">> Workshop Addons Done <<")
 
 		YRP.LoadDesignIcon()
+	else
+		if hook.GetTable()["InitPostEntity"]["yrp_InitPostEntity_ISREADY"] == nil then
+			timer.Simple( 33, function()
+				YRPHookInitPostEntityFAKE = true
+			end )
+		else
+			timer.Simple( 0.1, YRPSendIsReady )
+		end
 	end
 end
 
-hook.Add("Think", "yrp_think_ready", function()
-	if yrp_rToSv then return end
-
-	if YRP_INIT or YRP_NOINIT then
-		if !yrp_rToSv then
-			YRPSendIsReady()
-		end
-	elseif yrp_hookinitpostentity or yrp_initpostentity then
-		YRP_INIT = true
-	elseif d < CurTime() then
-		d = CurTime() + 1
-		YRP_COUNT = YRP_COUNT + 1
-		if YRP_COUNT > 10 and wk(system.GetCountry()) then
-			YRP_NOINIT = true
-		end
-	end
-end, hook.MONITOR_HIGH)
-
-hook.Add("InitPostEntity", "yrp_InitPostEntity_ready", function()
-	--YRP.msg("note", "All entities are loaded.")
-
-	yrp_hookinitpostentity = true
+hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded_ISREADY", function()
+	YRPSendIsReady()
 end)
 
-function GM:InitPostEntity()
-	--YRP.msg("note", "All Entities have initialized.")
-
-	yrp_initpostentity = true
-end
-
+hook.Add("InitPostEntity", "yrp_InitPostEntity_ISREADY", function()
+	YRPHookInitPostEntity = true
+end)

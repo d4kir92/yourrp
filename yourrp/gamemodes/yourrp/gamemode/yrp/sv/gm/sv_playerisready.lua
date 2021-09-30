@@ -4,10 +4,7 @@
 
 util.AddNetworkString("yrp_ready_received")
 
-local c = 0
 function PlayerLoadedGame(ply, tab)
-	c = c + 1
-
 	ply:SetNW2Bool("PlayerLoadedGameStart", true)
 
 	local OS_Windows = tab.iswindows
@@ -47,8 +44,6 @@ function PlayerLoadedGame(ply, tab)
 		end
 	end
 
-	--SendDGlobals(ply)
-
 	ply:SetNW2Bool("finishedloadingcharacter", true)
 
 	YRPSendCharCount(ply)
@@ -65,7 +60,7 @@ function PlayerLoadedGame(ply, tab)
 
 	ply:UserGroupLoadout()
 
-	YRP.msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading.")-- Count: " ..  c)
+	YRP.msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading.")
 
 	ply:SetNW2Bool("PlayerLoadedGameEnd", true)
 
@@ -114,5 +109,7 @@ net.Receive("yrp_player_is_ready", function(len, ply)
 	if ply:GetNW2Bool("yrp_received_ready", false) == false then
 		ply:SetNW2Bool("yrp_received_ready", true)
 		PlayerLoadedGame(ply, tab)
+	else
+		YRP.msg( "note", "[yrp_player_is_ready] Already got the ready message" )
 	end
 end)

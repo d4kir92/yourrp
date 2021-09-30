@@ -34,7 +34,7 @@ local ch_attack1 = 1
 local ch_attack1_old = 1
 local oldx = ScrW() / 2
 local oldy = ScrH() / 2
-function HudCrosshair()
+function YRPHudCrosshair()
 	local lply = LocalPlayer()
 	if lply:Alive() and GetGlobalBool("bool_yrp_crosshair", false) then
 		if true or !contextMenuOpen then
@@ -91,45 +91,42 @@ function HudCrosshair()
 					
 					if lply:GetHudDesignName() != "notloaded" then
 						if lply:Alive() then
-							if true then
-
-								if weapon:GetNetworkedBool("Ironsights") then
-									alphaFade = 0
-									return
-								end
-
-								-- Render Errors break this, restart game fix that
-								local ptr = lply:GetEyeTrace().HitPos:ToScreen()
-
-								local cx, cy = ptr.x, ptr.y
-								oldx = Lerp(8 * FrameTime(), oldx, cx)
-								oldy = Lerp(8 * FrameTime(), oldy, cy)
-					
-								local gap = (8/2)
-								if ch_attack1_old >= 1 then
-									gap = gap * ch_attack1_old
-								end
-
-								local sw = 10
-								local sh = 1
-
-								surface.SetDrawColor(0, 0, 0, 255 * alphaFade)
-
-								local br = 1
-								surface.DrawRect(oldx-sw-gap-br, oldy-sh/2-br, sw+2*br, sh+2*br)
-								surface.DrawRect(oldx+gap-br, oldy-sh/2-br, sw+2*br, sh+2*br)
-
-								surface.DrawRect(oldx-sh/2-br, oldy-sw-gap-br, sh+2*br, sw+2*br)
-								surface.DrawRect(oldx-sh/2-br, oldy+gap-br, sh+2*br, sw+2*br)
-
-								surface.SetDrawColor(255, 255, 255, 255 * alphaFade)
-
-								surface.DrawRect(oldx-sw-gap, oldy-sh/2, sw, sh)
-								surface.DrawRect(oldx+gap, oldy-sh/2, sw, sh)
-
-								surface.DrawRect(oldx-sh/2, oldy-sw-gap, sh, sw)
-								surface.DrawRect(oldx-sh/2, oldy+gap, sh, sw)
+							if weapon:GetNetworkedBool("Ironsights") then
+								alphaFade = 0
+								return
 							end
+
+							-- Render Errors break this, restart game fix that
+							local ptr = lply:GetEyeTrace().HitPos:ToScreen()
+
+							local cx, cy = ptr.x, ptr.y
+							oldx = Lerp(8 * FrameTime(), oldx, cx)
+							oldy = Lerp(8 * FrameTime(), oldy, cy)
+				
+							local gap = (8/2)
+							if ch_attack1_old >= 1 then
+								gap = gap * ch_attack1_old
+							end
+
+							local sw = 10
+							local sh = 1
+
+							surface.SetDrawColor(0, 0, 0, 255 * alphaFade)
+
+							local br = 1
+							surface.DrawRect(oldx-sw-gap-br, oldy-sh/2-br, sw+2*br, sh+2*br)
+							surface.DrawRect(oldx+gap-br, oldy-sh/2-br, sw+2*br, sh+2*br)
+
+							surface.DrawRect(oldx-sh/2-br, oldy-sw-gap-br, sh+2*br, sw+2*br)
+							surface.DrawRect(oldx-sh/2-br, oldy+gap-br, sh+2*br, sw+2*br)
+
+							surface.SetDrawColor(255, 255, 255, 255 * alphaFade)
+
+							surface.DrawRect(oldx-sw-gap, oldy-sh/2, sw, sh)
+							surface.DrawRect(oldx+gap, oldy-sh/2, sw, sh)
+
+							surface.DrawRect(oldx-sh/2, oldy-sw-gap, sh, sw)
+							surface.DrawRect(oldx-sh/2, oldy+gap, sh, sw)
 						end
 					end
 				end

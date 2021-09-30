@@ -1907,13 +1907,15 @@ function YRPCPD(a)
 	return Color(2, 23, 39, a)
 end
 
+YRPWasReadySendToServer = YRPWasReadySendToServer or false
+
 local spacer = " | "
-function YRPCreateLoadingInfo()
+function YRPCreateLoadingInfo( ti )
 	local lply = LocalPlayer()
 	if IsValid(lply) then
 		local text = ""
 
-		local yrp1 = lply:GetNW2Bool("finishedloading") == false or WasReadySendToServer() == false or lply:GetNW2Bool("PlayerLoadedGameStart") == false or lply:GetNW2Bool("PlayerLoadedGameEnd") == false
+		local yrp1 = lply:GetNW2Bool("finishedloading") == false or YRPWasReadySendToServer == false or lply:GetNW2Bool("PlayerLoadedGameStart") == false or lply:GetNW2Bool("PlayerLoadedGameEnd") == false
 		local yrp2 = lply:GetNW2Bool("loadchars_start") == false or lply:GetNW2Bool("loadchars_done") == false or lply:GetNW2String("loadchars_msg", "X") == "X"
 		local yrp3 = lply:GetNW2Bool("yrp_hudloadout") == false or lply:GetNW2String("yrp_hudloadout_msg", "X") == "X"
 
@@ -1922,7 +1924,7 @@ function YRPCreateLoadingInfo()
 				text = text .. spacer
 			end
 			text = text .. "FinishedLoading: " .. tostring( lply:GetNW2Bool("finishedloading") )
-			text = text .. " " .. "WasSendToServer: " .. tostring( WasReadySendToServer() ) .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
+			text = text .. " " .. "YRPWasReadySendToServer: " .. tostring( YRPWasReadySendToServer ) .. " received_ready: " .. tostring( lply:GetNW2Bool("yrp_received_ready") ) .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
 		end
 		if yrp2 then
 			if !strEmpty(text) then
@@ -1940,7 +1942,7 @@ function YRPCreateLoadingInfo()
 			text = text .. "HudLoadout: " .. tostring( lply:GetNW2Bool("yrp_hudloadout") ) .. " hud_msg: " .. lply:GetNW2String("yrp_hudloadout_msg", "X")
 		end
 		if !strEmpty(text) then
-			text = "[Loading]" .. text
+			text = "[Loading] " .. text .. " | time: " .. tostring( ti ) .. " plys: " .. player.GetCount() .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" )
 		end
 
 		return text
@@ -2118,6 +2120,43 @@ if pa(yrp_loading_screen) then
 		draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE, BAR_W * loading_cur_old / max, BAR_H, Color(38, 222, 129))
 		-- BAR TEXT
 		draw.SimpleText(YRP.lang_string("LID_loadingdata") .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_" .. BAR_FONT_SIZE .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		
+
+
+		-- RETRY MESSAGE
+		local py = 0.08
+		if lply:GetNW2Bool("yrp_received_ready", false) == false then
+			draw.SimpleText("RETRY SENDING READY MESSAGE", "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			py = py + 0.03
+		end
+		if !t1 then
+			yrpt1text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
+		else
+			yrpt1text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
+		end
+		if !strEmpty(yrpt1text) then
+			draw.SimpleText(YRP.lang_string( "LID_ready" ) .. yrpt1text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			py = py + 0.03
+		end
+
+		if !t2 then
+			yrpt2text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
+		else
+			yrpt2text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
+		end
+		if !strEmpty(yrpt2text) then
+			draw.SimpleText(YRP.lang_string( "LID_characters" ) .. yrpt2text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			py = py + 0.03
+		end
+		if !t3 then
+			yrpt3text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
+		else
+			yrpt3text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
+		end
+		if !strEmpty(yrpt3text) then
+			draw.SimpleText(YRP.lang_string( "LID_hud" ) .. yrpt3text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			py = py + 0.03
+		end
 
 
 
@@ -2128,8 +2167,8 @@ if pa(yrp_loading_screen) then
 		
 		-- TIME
 		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_14_700", YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-		if self.t > 10 then -- 40
-			local text = YRPCreateLoadingInfo()
+		if self.t > 40 then
+			local text = YRPCreateLoadingInfo(self.t)
 			if !strEmpty(text) then
 				draw.SimpleText( text, "Y_18_700", pw - YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM )
 				

@@ -271,7 +271,7 @@ function drawHUDElementBr(dbV)
 	end
 end
 
-function hudThirdperson(ply, color)
+function YRPHudThirdperson(ply, color)
 	if get_keybind("view_zoom_in") and get_keybind("view_zoom_out") and ( input.IsKeyDown(get_keybind("view_zoom_in")) or input.IsKeyDown(get_keybind("view_zoom_out")) ) then
 		ply.yrp_view_range = ply.yrp_view_range or 0
 		ply.yrp_view_range_view = ply.yrp_view_range_view or 0
@@ -305,13 +305,13 @@ function server_toggled(ply)
 	return GetGlobalBool("bool_yrp_hud", false)
 end
 
-function HudPlayer(ply)
+function YRPHudPlayer(ply)
 	if ply:GetHudDesignName() != "notloaded" then
 		drawMenuInfo()
 
 		if ply:Alive() then
 			if !contextMenuOpen then
-				hudThirdperson(ply)
+				YRPHudThirdperson(ply)
 			end
 		end
 	else

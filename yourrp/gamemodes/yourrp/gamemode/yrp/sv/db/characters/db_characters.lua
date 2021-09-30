@@ -550,7 +550,7 @@ function SendLoopCharacterList(ply, tab)
 
 		ply:SetNW2Bool("loadchars_done", true)
 	else
-		timer.Simple(0.01, function()
+		timer.Simple(0.001, function()
 			SendLoopCharacterList(ply, tab)
 		end)
 	end

@@ -45,7 +45,7 @@ function SWEP:Reload()
 end
 
 function SWEP:Think()
-
+	self:SetWeaponHoldType(self.HoldType)
 end
 
 function SWEP:PrimaryAttack()

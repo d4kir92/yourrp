@@ -1,10 +1,11 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-local colr = Color(200, 0, 0)
+local colr = Color(170, 0, 0)
 local colg = Color(0, 200, 0)
 local colb = Color(100, 100, 255)
 
 local vm = {}
+vm.adminmode = false
 
 function CloseVoiceMenu()
 	vm.win:Remove()
@@ -410,13 +411,189 @@ function YRPVoiceChannel(edit, uid)
 	end
 end
 
+function YRPUpdateVoiceList()
+	local lply = LocalPlayer()
+	local CONTENT = vm.win:GetContent()
+
+	vm.win.list:Clear()
+
+	if lply:GetNW2Bool( "yrp_togglevoicemenu", true ) then
+		local h = YRP.ctr(66)
+		local pbr = YRP.ctr(10)
+		for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
+			if IsInChannel(lply, channel.uniqueID, true) or (vm.adminmode and lply:HasAccess()) then
+				local line = createD("DPanel", nil, CONTENT:GetWide(), h, 0, 0)
+				function line:Paint(pw, ph)
+				end
+
+				local bg = createD("DPanel", line, CONTENT:GetWide() - YRP.ctr(26), h, 0, 0)
+				function bg:Paint(pw, ph)
+					DrawRectBlurHUD(YRP.ctr(10), 0, 0, pw, ph, 255) --draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "PC"))
+				end
+
+				local status = createD("DPanel", bg, h, h, 0, 0)
+				function status:Paint(pw, ph)
+					local color = colr
+					if IsActiveInChannel(lply, channel.uniqueID, true) then
+						color = colg
+					elseif IsInChannel(lply, channel.uniqueID, true) then
+						color = colb
+					end
+					draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
+				end
+
+				if (vm.adminmode and lply:HasAccess()) then
+					local edit = createD("DButton", bg, h , h, 0, 0)
+					edit:SetText("")
+					function edit:Paint(pw, ph)
+						local br = YRP.ctr(8)
+						if YRP.GetDesignIcon("edit") then
+							surface.SetMaterial( YRP.GetDesignIcon("edit") )
+							surface.SetDrawColor( 255, 255, 255, 255 )
+							surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+						end
+					end
+					function edit:DoClick()
+						YRPVoiceChannel(true, channel.uniqueID)
+					end
+				end
+
+				local name = createD("DPanel", bg, YRP.ctr(800), h, h + pbr, 0)
+				function name:Paint(pw, ph)
+					draw.SimpleText(channel.string_name, "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				end
+
+				
+
+				if IsActiveInChannel(lply, channel.uniqueID, true) then
+					local br = YRP.ctr(8)
+					local mutemic = createD("YButton", bg, h * 2 + br, h, bg:GetWide() - h * 3 - YRP.ctr(20), 0)
+					mutemic:SetText("")
+					function mutemic:Paint(pw, ph)
+						local color = colg
+						if lply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
+							color = colr
+						end
+						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
+
+						local br = YRP.ctr(8)
+						if YRP.GetDesignIcon("mic") then
+							surface.SetMaterial( YRP.GetDesignIcon("mic") )
+							surface.SetDrawColor( 255, 255, 255, 255 )
+							surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+						end
+						draw.SimpleText("+", "Y_24_700", pw / 2, ph / 2 - 1, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						if YRP.GetDesignIcon("voice") then
+							surface.SetMaterial( YRP.GetDesignIcon("voice") )
+							surface.SetDrawColor( 255, 255, 255, 255 )
+							surface.DrawTexturedRect(br + ph + br, br, ph - 2 * br, ph - 2 * br)
+						end
+					end
+					function mutemic:DoClick()
+						if !lply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, false) or (lply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, false) and lply:GetNW2Int("yrp_voice_channel_active_mic", 0) < GetGlobalInt( "int_max_channels_active", 1 )) then
+							net.Start("mutemic_channel")
+								net.WriteString(channel.uniqueID)
+							net.SendToServer()
+						end
+					end
+				end
+
+				if IsInChannel(lply, channel.uniqueID, true) then
+					local mute = createD("YButton", bg, h, h, bg:GetWide() - h, 0)
+					mute:SetText("")
+					function mute:Paint(pw, ph)
+						local icon = "64_volume-up"
+						local color = colg
+						if lply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
+							icon = "64_volume-mute"
+							color = colr
+						end
+						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
+
+						local br = YRP.ctr(8)
+						if YRP.GetDesignIcon(icon) then
+							surface.SetMaterial(YRP.GetDesignIcon(icon))
+							surface.SetDrawColor( 255, 255, 255, 255 )
+							surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+						end
+					end
+					function mute:DoClick()
+						if !lply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) or (lply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) and lply:GetNW2Int("yrp_voice_channel_passive_voice", 0) < GetGlobalInt( "int_max_channels_passive", 3 )) then
+							net.Start("mute_channel")
+								net.WriteString(channel.uniqueID)
+							net.SendToServer()
+						end
+					end
+				end
+
+				if (vm.adminmode and lply:HasAccess()) then
+					local dn = createD("YButton", bg, h, h, bg:GetWide() - 4 * h - 2 * YRP.ctr(20), 0)
+					dn:SetText("")
+					function dn:Paint(pw, ph)
+						if channel.int_position < table.Count(GetGlobalTable("yrp_voice_channels", {})) - 1 then
+							local color = lply:InterfaceValue("YButton", "NC")
+							draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
+
+							local br = YRP.ctr(8)
+							if YRP.GetDesignIcon("64_angle-down") then
+								surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+								surface.SetDrawColor( 255, 255, 255, 255 )
+								surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+							end
+						end
+					end
+					function dn:DoClick()
+						CloseVoiceMenu()
+						net.Start("channel_dn")
+							net.WriteString(channel.uniqueID)
+						net.SendToServer()
+					end
+
+					local up = createD("YButton", bg, h, h, bg:GetWide() - 5 * h - 3 * YRP.ctr(20), 0)
+					up:SetText("")
+					function up:Paint(pw, ph)
+						if channel.int_position > 0 then
+							local color = lply:InterfaceValue("YButton", "NC")
+							draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
+
+							local br = YRP.ctr(8)
+							if YRP.GetDesignIcon("64_angle-up") then
+								surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+								surface.SetDrawColor( 255, 255, 255, 255 )
+								surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+							end
+						end
+					end
+					function up:DoClick()
+						CloseVoiceMenu()
+						net.Start("channel_up")
+							net.WriteString(channel.uniqueID)
+						net.SendToServer()
+					end
+				end
+
+				vm.win.list:AddItem(line)
+			end
+		end
+	end
+end
+
 function OpenVoiceMenu()
 	local lply = LocalPlayer()
 
-	vm.win = createD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1600), 0, 0)
+	vm.win = createD("YFrame", nil, YRP.ctr(1200), YRP.ctr(1400), 0, 0)
 	function vm.win:Paint(pw, ph)
 		DrawRectBlurHUD(5, 0, 0, pw, ph, 255)
 		
+		if self.toggle != lply:GetNW2Bool( "yrp_togglevoicemenu", true ) then
+			self.toggle = lply:GetNW2Bool( "yrp_togglevoicemenu", true )
+			YRPUpdateVoiceList()
+		end
+
+		if !self.toggle then
+			draw.SimpleText(string.Replace(YRP.lang_string("LID_presskeytoenablevoicemenu"), "KEY", GetKeybindName("voice_menu")), "Y_30_500", pw / 2, ph / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
+
 		local hh = 24
 		if self.GetHeaderHeight != nil then
 			hh = self:GetHeaderHeight()
@@ -433,162 +610,32 @@ function OpenVoiceMenu()
 	-- HEADER
 	vm.win.listheader = createD("DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(50 + 20), 0, 0)
 	function vm.win.listheader:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string("LID_name"), "Y_20_500", YRP.ctr(100), ph / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText(lply:GetNW2Int("yrp_voice_channel_active_mic", 0) .. "/" .. "1", "Y_20_500", YRP.ctr(1190), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(lply:GetNW2Int("yrp_voice_channel_passive_voice", 0), "Y_20_500", YRP.ctr(1290), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		if lply:GetNW2Bool( "yrp_togglevoicemenu", true ) then
+			draw.SimpleText(YRP.lang_string("LID_name"), "Y_20_500", YRP.ctr(80), ph / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(lply:GetNW2Int("yrp_voice_channel_active_mic", 0) .. "/" .. GetGlobalInt( "int_max_channels_active", 1 ), "Y_20_500", YRP.ctr(990), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(lply:GetNW2Int("yrp_voice_channel_passive_voice", 0) .. "/" .. GetGlobalInt( "int_max_channels_passive", 3 ), "Y_20_500", YRP.ctr(1100), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
 	end
 
 	-- LIST
-	vm.win.list = createD("DPanelList", CONTENT, CONTENT:GetWide(), CONTENT:GetTall() - YRP.ctr(50 + 20), 0, YRP.ctr(50 + 20))
+	vm.win.list = createD("DPanelList", CONTENT, CONTENT:GetWide(), CONTENT:GetTall() - YRP.ctr(40 + 20 + 50 + 20), 0, YRP.ctr(50 + 20))
 	vm.win.list:EnableVerticalScrollbar()
 	vm.win.list:SetSpacing(YRP.ctr(10))
-
-	local h = YRP.ctr(80)
-	local pbr = YRP.ctr(20)
-	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
-		if IsInChannel(lply, channel.uniqueID, true) or lply:HasAccess() then
-			local line = createD("DPanel", nil, CONTENT:GetWide(), h, 0, 0)
-			function line:Paint(pw, ph)
-			end
-
-			local bg = createD("DPanel", line, CONTENT:GetWide() - YRP.ctr(26), h, 0, 0)
-			function bg:Paint(pw, ph)
-				DrawRectBlurHUD(YRP.ctr(10), 0, 0, pw, ph, 255) --draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "PC"))
-			end
-
-			local status = createD("DPanel", bg, h, h, 0, 0)
-			function status:Paint(pw, ph)
-				local color = colr
-				if IsActiveInChannel(lply, channel.uniqueID, true) then
-					color = colg
-				elseif IsInChannel(lply, channel.uniqueID, true) then
-					color = colb
-				end
-				draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
-			end
-
-			if lply:HasAccess() then
-				local edit = createD("DButton", bg, h , h, 0, 0)
-				edit:SetText("")
-				function edit:Paint(pw, ph)
-					local br = YRP.ctr(8)
-					if YRP.GetDesignIcon("edit") then
-						surface.SetMaterial( YRP.GetDesignIcon("edit") )
-						surface.SetDrawColor( 255, 255, 255, 255 )
-						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
-					end
-				end
-				function edit:DoClick()
-					YRPVoiceChannel(true, channel.uniqueID)
-				end
-			end
-
-			local name = createD("DPanel", bg, YRP.ctr(800), h, h + pbr, 0)
-			function name:Paint(pw, ph)
-				draw.SimpleText(channel.string_name, "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
-
-			
-
-			if IsActiveInChannel(lply, channel.uniqueID, true) then
-				local mutemic = createD("YButton", bg, h, h, bg:GetWide() - h * 2 - YRP.ctr(20), 0)
-				mutemic:SetText("")
-				function mutemic:Paint(pw, ph)
-					local color = colg
-					if lply:GetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
-						color = colr
-					end
-					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
-
-					local br = YRP.ctr(8)
-					if YRP.GetDesignIcon("mic") then
-						surface.SetMaterial( YRP.GetDesignIcon("mic") )
-						surface.SetDrawColor( 255, 255, 255, 255 )
-						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
-					end
-				end
-				function mutemic:DoClick()
-					net.Start("mutemic_channel")
-						net.WriteString(channel.uniqueID)
-					net.SendToServer()
-				end
-			end
-
-			if IsInChannel(lply, channel.uniqueID, true) then
-				local mute = createD("YButton", bg, h, h, bg:GetWide() - h, 0)
-				mute:SetText("")
-				function mute:Paint(pw, ph)
-					local icon = "64_volume-up"
-					local color = colg
-					if lply:GetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, false) then
-						icon = "64_volume-mute"
-						color = colr
-					end
-					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
-
-					local br = YRP.ctr(8)
-					if YRP.GetDesignIcon(icon) then
-						surface.SetMaterial(YRP.GetDesignIcon(icon))
-						surface.SetDrawColor( 255, 255, 255, 255 )
-						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
-					end
-				end
-				function mute:DoClick()
-					net.Start("mute_channel")
-						net.WriteString(channel.uniqueID)
-					net.SendToServer()
-				end
-			end
-
-			if lply:HasAccess() then
-				local dn = createD("YButton", bg, h, h, bg:GetWide() - 3 * h - 2 * YRP.ctr(20), 0)
-				dn:SetText("")
-				function dn:Paint(pw, ph)
-					if channel.int_position < table.Count(GetGlobalTable("yrp_voice_channels", {})) - 1 then
-						local color = lply:InterfaceValue("YButton", "NC")
-						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
-
-						local br = YRP.ctr(8)
-						if YRP.GetDesignIcon("64_angle-down") then
-							surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
-							surface.SetDrawColor( 255, 255, 255, 255 )
-							surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
-						end
-					end
-				end
-				function dn:DoClick()
-					CloseVoiceMenu()
-					net.Start("channel_dn")
-						net.WriteString(channel.uniqueID)
-					net.SendToServer()
-				end
-
-				local up = createD("YButton", bg, h, h, bg:GetWide() - 4 * h - 3 * YRP.ctr(20), 0)
-				up:SetText("")
-				function up:Paint(pw, ph)
-					if channel.int_position > 0 then
-						local color = lply:InterfaceValue("YButton", "NC")
-						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
-
-						local br = YRP.ctr(8)
-						if YRP.GetDesignIcon("64_angle-up") then
-							surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
-							surface.SetDrawColor( 255, 255, 255, 255 )
-							surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
-						end
-					end
-				end
-				function up:DoClick()
-					CloseVoiceMenu()
-					net.Start("channel_up")
-						net.WriteString(channel.uniqueID)
-					net.SendToServer()
-				end
-			end
-
-			vm.win.list:AddItem(line)
-		end
+	local sbar = vm.win.list.VBar
+	function sbar:Paint(w, h)
+		draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "NC"))
 	end
+	function sbar.btnUp:Paint(w, h)
+		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+	end
+	function sbar.btnDown:Paint(w, h)
+		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+	end
+	function sbar.btnGrip:Paint(w, h)
+		draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue("YFrame", "HI"))
+	end
+
+	YRPUpdateVoiceList()
 
 	if lply:HasAccess() then
 		local size = YRP.ctr(50)
@@ -600,6 +647,60 @@ function OpenVoiceMenu()
 		function vm.win.add:DoClick()
 			YRPVoiceChannel(false)
 		end
+
+
+
+		-- ADMIN MODE
+		vm.win.showall = createD("DCheckBox", CONTENT, size, size, YRP.ctr(40 + 20), CONTENT:GetTall() - YRP.ctr(50))
+		vm.win.showall:SetChecked( vm.adminmode )
+		function vm.win.showall:OnChange()
+			vm.adminmode = !vm.adminmode
+
+			if vm.adminmode then
+				vm.win.maxactive:Show()
+				vm.win.maxpassive:Show()
+			else
+				vm.win.maxactive:Hide()
+				vm.win.maxpassive:Hide()
+			end
+
+			YRPUpdateVoiceList()
+		end
+
+		vm.win.showalllabel = createD("DLabel", CONTENT, YRP.ctr(200), size, YRP.ctr(40 + 20 + 40 + 20), CONTENT:GetTall() - YRP.ctr(50))
+		vm.win.showalllabel:SetText("")
+		function vm.win.showalllabel:Paint(pw, ph)
+			draw.SimpleText( YRP.lang_string( "LID_adminmode" ), "Y_16_700", 0, ph / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+		end
+
+
+
+		-- MAX ACTIVE
+		vm.win.maxactive = createD("DNumSlider", CONTENT, YRP.ctr(380), size, YRP.ctr(40 + 20 + 40 + 20 + 200 + 20), CONTENT:GetTall() - YRP.ctr(50))
+		vm.win.maxactive:SetText( YRP.lang_string("LID_maxactive") )
+		vm.win.maxactive:SetDecimals( 0 )
+		vm.win.maxactive:SetMinMax( 0, 10 )
+		vm.win.maxactive:SetValue( GetGlobalInt( "int_max_channels_active", 1 ) )
+		function vm.win.maxactive:OnValueChanged( value )
+			net.Start("yrp_voice_set_max_active")
+				net.WriteString( math.floor(value, self:GetDecimals()) )
+			net.SendToServer()
+		end
+
+		-- MAX Passive
+		vm.win.maxpassive = createD("DNumSlider", CONTENT, YRP.ctr(380), size, YRP.ctr(40 + 20 + 40 + 20 + 200 + 20 + 350 + 20), CONTENT:GetTall() - YRP.ctr(50))
+		vm.win.maxpassive:SetText( YRP.lang_string("LID_maxpassive") )
+		vm.win.maxpassive:SetDecimals( 0 )
+		vm.win.maxpassive:SetMinMax( 0, 10 )
+		vm.win.maxpassive:SetValue( GetGlobalInt( "int_max_channels_passive", 3 ) )
+		function vm.win.maxpassive:OnValueChanged( value )
+			net.Start("yrp_voice_set_max_passive")
+				net.WriteString( math.floor(value, self:GetDecimals()) )
+			net.SendToServer()
+		end
+
+		vm.win.maxactive:Hide()
+		vm.win.maxpassive:Hide()
 	end
 
 	local size = YRP.ctr(50)
@@ -651,3 +752,4 @@ function NextVoiceChannel()
 	net.Start("yrp_next_voice_channel")
 	net.SendToServer()
 end
+

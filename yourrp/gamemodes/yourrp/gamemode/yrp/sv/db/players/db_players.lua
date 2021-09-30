@@ -292,7 +292,6 @@ end
 
 function set_role(ply, rid)
 	hook.Run("yrp_get_role_pre", ply, rid)
-	ply:SetNW2Bool("serverdedicated", game.IsDedicated())
 
 	local _char_id = ply:CharID()
 	if _char_id != nil then
@@ -609,7 +608,7 @@ function YRPOpenCharacterSelection(ply)
 		local b, bb = net.BytesLeft()
 		local w, ww = net.BytesWritten()
 		if b and b > 0 and w and w > 0 then
-			timer.Simple(0.01, function()
+			timer.Simple(0.001, function()
 				YRPOpenCharacterSelection(ply)
 			end)
 		else
@@ -617,7 +616,7 @@ function YRPOpenCharacterSelection(ply)
 			net.Send(ply)
 		end
 	else
-		timer.Simple(0.01, function()
+		timer.Simple(0.001, function()
 			YRPOpenCharacterSelection(ply)
 		end)
 	end
@@ -986,7 +985,7 @@ function canVoteRole(ply, roleID)
 	if worked(tmpTableRole, "tmpTableRole") then
 		local uses = tonumber(tmpTableRole[1].int_uses)
 		local maxamount = tonumber(tmpTableRole[1].int_maxamount)
-		if uses < tonumber(#player.GetAll()) * (tonumber(tmpTableRole[1].int_amountpercentage) / 100) and uses < maxamount or maxamount <= 0 then
+		if uses < tonumber(player.GetCount()) * (tonumber(tmpTableRole[1].int_amountpercentage) / 100) and uses < maxamount or maxamount <= 0 then
 			if tonumber(tmpTableRole[1].bool_voteable) == 1 then
 				return true
 			end

@@ -38,8 +38,8 @@ if CLIENT then
 	end)
 end
 
-function IsServerDedicated()
-	return GetGlobalBool("isserverdedicated")
+function YRPIsServerDedicated()
+	return GetGlobalBool( "isserverdedicated" )
 end
 
 function SetYRPChannel()

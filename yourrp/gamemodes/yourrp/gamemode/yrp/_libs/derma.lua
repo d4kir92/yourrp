@@ -11,14 +11,14 @@ function TextColor(bgcol)
 end
 
 function YRPAreYouSure(yes, no)
-	local win = createVGUI("YFrame", nil, 630, 50 + 10 + 50 + 10, 0, 0)
+	local win = createVGUI("YFrame", nil, 630, 100 + 10 + 50 + 10, 0, 0)
 	win:Center()
 	win:SetTitle(YRP.lang_string("LID_areyousure"))
 	function win:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph)
 	end
 
-	local _yes = createVGUI("DButton", win, 300, 50, 10, 60)
+	local _yes = createVGUI("DButton", win, 300, 50, 10, 110)
 	_yes:SetText(YRP.lang_string("LID_yes"))
 	function _yes:DoClick()
 		if yes != nil then
@@ -27,7 +27,7 @@ function YRPAreYouSure(yes, no)
 		win:Close()
 	end
 
-	local _no = createVGUI("DButton", win, 300, 50, 10 + 300 + 10, 60)
+	local _no = createVGUI("DButton", win, 300, 50, 10 + 300 + 10, 110)
 	_no:SetText(YRP.lang_string("LID_no"))
 	function _no:DoClick()
 		if no != nil then
@@ -1141,7 +1141,7 @@ function createMDMenu(parent, w, h, x, y)
 
 		draw.SimpleText(GetGlobalString("text_server_name", "-"), "Y_18_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, GetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.lang_string("LID_players") .. ": " .. table.Count(player.GetAll()) .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.lang_string("LID_players") .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 	function tmp.bot:Think()
 		if self.w != tmp:GetWide() or self.h != YRP.ctr(50) or self.px != 0 or self.py != tmp:GetTall() - YRP.ctr(50) then
@@ -1429,21 +1429,19 @@ end
 
 function drawRoundedBoxStencil(r, x, y, w, h, color, max)
 	--drawRoundedBox(0, x, y, max, h, Color(255, 0, 255, 100))
-	if true then
-		render.ClearStencil()
-		render.SetStencilEnable(true)
-		render.SetStencilWriteMask(99)
-		render.SetStencilTestMask(99)
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
-		render.SetStencilFailOperation(STENCILOPERATION_INCR)
-		render.SetStencilPassOperation(STENCILOPERATION_KEEP)
-		render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
-		drawRoundedBox(0, x, y, max, h, Color(255, 0, 0, 255))
-		render.SetStencilReferenceValue(1)
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
-		draw.RoundedBox(0, x, y, w, h, color)
-		render.SetStencilEnable(false)
-	end
+	render.ClearStencil()
+	render.SetStencilEnable(true)
+	render.SetStencilWriteMask(99)
+	render.SetStencilTestMask(99)
+	render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
+	render.SetStencilFailOperation(STENCILOPERATION_INCR)
+	render.SetStencilPassOperation(STENCILOPERATION_KEEP)
+	render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
+	drawRoundedBox(0, x, y, max, h, Color(255, 0, 0, 255))
+	render.SetStencilReferenceValue(1)
+	render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
+	draw.RoundedBox(0, x, y, w, h, color)
+	render.SetStencilEnable(false)
 end
 
 function drawRBBR(r, x, y, w, h, color, br)
@@ -1460,21 +1458,20 @@ function drawRoundedBoxBR(r, x, y, w, h, color, br)
 	--drawRoundedBox(0, x+_br, y+_br, w-_br*2, h-_br*2, Color(255, 0, 255, 255))
 	--drawRoundedBox(r, x+_br, y+_br, w-_br*2, h-_br*2, Color(255, 0, 0, 100))
 	--drawRoundedBox(r, x-_br, y-_br, w+_br*2, h+_br*2, Color(0, 255, 0, 100))
-	if true then
-		render.ClearStencil()
-		render.SetStencilEnable(true)
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
-		render.SetStencilFailOperation(STENCILOPERATION_INCR)
-		render.SetStencilPassOperation(STENCILOPERATION_INCR)
-		render.SetStencilZFailOperation(STENCILOPERATION_INCR)
-		render.SetStencilTestMask(1)
-		drawRoundedBox(r, x + _br, y + _br, w - _br * 2, h - _br * 2, Color(255, 0, 255, 200))
-		render.SetStencilReferenceValue(1)
-		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
-		render.SetStencilWriteMask(1)
-		drawRoundedBox(r, x - _br, y - _br, w + _br * 2, h + _br * 2, color)
-		render.SetStencilEnable(false)
-	end
+
+	render.ClearStencil()
+	render.SetStencilEnable(true)
+	render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
+	render.SetStencilFailOperation(STENCILOPERATION_INCR)
+	render.SetStencilPassOperation(STENCILOPERATION_INCR)
+	render.SetStencilZFailOperation(STENCILOPERATION_INCR)
+	render.SetStencilTestMask(1)
+	drawRoundedBox(r, x + _br, y + _br, w - _br * 2, h - _br * 2, Color(255, 0, 255, 200))
+	render.SetStencilReferenceValue(1)
+	render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
+	render.SetStencilWriteMask(1)
+	drawRoundedBox(r, x - _br, y - _br, w + _br * 2, h + _br * 2, color)
+	render.SetStencilEnable(false)
 end
 
 function TestHTML(pnl, url, rem)

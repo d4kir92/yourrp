@@ -441,7 +441,7 @@ function LoadCharacters()
 							end
 
 							local posx = ScrW() * 0.01
-							local tabw = ScrW() * 0.06
+							local tabw = ScrW() * 0.1
 							local tabh = ScrH() * 0.03
 							tmpChar.id = i
 							function tmpChar:Paint(pw, ph)
@@ -892,7 +892,7 @@ function YRPGetCharacters()
 	local b, bb = net.BytesLeft()
 	local w, ww = net.BytesWritten()
 	if b and b > 0 and w and w > 0 then
-		timer.Simple(0.01, function()
+		timer.Simple(0.001, function()
 			YRPGetCharacters()
 		end)
 	else
@@ -1779,7 +1779,7 @@ function openCharacterSelection()
 				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
 			end
 
-			local bw = ScrW() * 0.1
+			local bw = ScrW() * 0.14
 			local bh = ScrH() * 0.05
 			local charactersEnter = createD("YButton", CharMenu.frame, bw, bh, ScrW() / 2 - bw / 2, ScrH() - bh - ScrH() * 0.01)
 			function charactersEnter:Paint(pw, ph)

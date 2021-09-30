@@ -1,14 +1,24 @@
 local PANEL = {}
 local PlayerVoicePanels = {}
 
-local br = 5
-local sw = 300
-local sh = 64
+local br = YRP.ctr( 5 )
+local sw = YRP.ctr( 680 )
+local sh = YRP.ctr( 128 )
 local px = ScrW() - sw + br
 local py = 2.5 * sh
 local iconsize = sh - 2 * br
 
+function PANEL:UpdateValues()
+	br = YRP.ctr( 5 )
+	sw = YRP.ctr( 680 )
+	sh = YRP.ctr( 128 )
+	px = ScrW() - sw + br
+	py = 2.5 * sh
+	iconsize = sh - 2 * br
+end
+
 function PANEL:Init()
+	self:UpdateValues()
 
 	--[[
 	self.Avatar = vgui.Create( "AvatarImage", self )
@@ -26,13 +36,13 @@ function PANEL:Init()
 	end
 
 	self.PlayerName = vgui.Create( "DLabel", self )
-	self.PlayerName:SetFont( "Y_26_500" )
+	self.PlayerName:SetFont( "Y_24_500" )
 	self.PlayerName:SetSize(sw - br - sh - br - br, sh / 2 - 2 * br)
 	self.PlayerName:SetPos(sh + br, br)
 	self.PlayerName:SetTextColor( color_white )
 
 	self.Channels = vgui.Create( "DLabel", self )
-	self.Channels:SetFont( "Y_22_500" )
+	self.Channels:SetFont( "Y_20_500" )
 	self.Channels:SetSize(sw - br - sh - br - br, sh / 2 - 2 * br)
 	self.Channels:SetPos(sh + br, sh / 2 + br)
 	self.Channels:SetTextColor( color_white )
@@ -47,6 +57,10 @@ function PANEL:Init()
 end
 
 function PANEL:Setup( ply )
+	self:UpdateValues()
+
+	yrp_VoicePanelList:SetPos( px, py )
+	yrp_VoicePanelList:SetSize( sw, ScrH() - 5 * sh )
 
 	if GetGlobalBool("bool_voice_module") then
 		self.ply = ply
@@ -55,7 +69,7 @@ function PANEL:Setup( ply )
 
 		local channels = {}
 		for i, v in pairs(GetGlobalTable("yrp_voice_channels")) do
-			if IsActiveInChannel(ply, v.uniqueID) and IsInChannel(LocalPlayer(), v.uniqueID) then
+			if IsActiveInChannel(ply, v.uniqueID) and ( IsInChannel(LocalPlayer(), v.uniqueID) or IsActiveInChannel(LocalPlayer(), v.uniqueID) ) then
 				table.insert(channels, v.string_name)
 			end
 		end
@@ -94,6 +108,7 @@ function PANEL:Setup( ply )
 end
 
 function PANEL:Paint( w, h )
+	--self:UpdateValues()
 
 	if ( !IsValid( self.ply ) ) then return end
 
@@ -205,7 +220,6 @@ hook.Add("PlayerEndVoice", "YRP_VOICE_MODULE_PlayerEndVoice", function(ply)
 end)
 
 local function YRPCreateVoiceVGUI()
-	
 	if pa(yrp_VoicePanelList) then
 		yrp_VoicePanelList:Remove()
 	end
@@ -214,7 +228,7 @@ local function YRPCreateVoiceVGUI()
 
 	yrp_VoicePanelList:ParentToHUD()
 	yrp_VoicePanelList:SetPos( px, py )
-	yrp_VoicePanelList:SetSize( sw, ScrH() - 5 * sh)
+	yrp_VoicePanelList:SetSize( sw, ScrH() - 5 * sh )
 	yrp_VoicePanelList:SetPaintBackground( false )
 
 end

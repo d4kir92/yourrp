@@ -1003,6 +1003,7 @@ function SendPlayermodels(uid)
 		local flags = string.Explode(",", role.string_playermodels)
 		for i, val in pairs(flags) do
 			local pms = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. val .. "'")
+
 			if wk(pms) then
 				pms = pms[1]
 				local entry = {}

@@ -230,8 +230,7 @@ function PANEL:Think()
 		self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
 		self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
 
-		if self.canmiximise then--self:GetSizable() then
-			--self.btnmax:SetVisible(true)
+		if self.canmiximise then
 			self.btnmax:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
 			self.btnmax:SetPos(self.close:GetPos() - self.btnmax:GetWide() - YRP.ctr(20), self:GetHeaderHeight() * 0.2)
 
@@ -240,10 +239,9 @@ function PANEL:Think()
 				self.langu:SetPos(self.btnmax:GetPos() - self.langu:GetWide() - YRP.ctr(20), self:GetHeaderHeight() * 0.7 / 2)
 			end
 		else
-			--self.btnmax:SetVisible(false)
 			if IsValid(self.langu) then
 				self.langu:SetTall(self:GetHeaderHeight() * 0.3)
-				self.langu:SetPos(self:GetWide() - self.langu:GetWide() - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.2)
+				self.langu:SetPos(self:GetWide() - self.langu:GetWide() - self:GetHeaderHeight() * 0.8 - self:GetHeaderHeight() * 0.2, self:GetHeaderHeight() * 0.7 / 2)
 			end
 		end
 	end

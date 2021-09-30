@@ -1752,10 +1752,16 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 										line.remove = createD("YButton", line, YRP.ctr(300), YRP.ctr(100), win.dpl:GetWide() - YRP.ctr(350), YRP.ctr(50))
 										line.remove:SetText("LID_remove")
 										function line.remove:DoClick()
-											net.Start("rem_playermodel")
-												net.WriteInt(pm.uniqueID, 32)
-											net.SendToServer()
-											line:Remove()
+											function YRPNoDeletePMS()
+												--
+											end
+											function YRPYesDeletePMS()
+												net.Start("rem_playermodel")
+													net.WriteInt(pm.uniqueID, 32)
+												net.SendToServer()
+												line:Remove()
+											end
+											YRPAreYouSure(YRPYesDeletePMS, YRPNoDeletePMS)
 										end
 										function line.remove:Paint(pw, ph)
 											draw.RoundedBox(16, 0, 0, pw, ph, Color(255, 140, 140))

@@ -130,9 +130,12 @@ function useFunction(str)
 			net.SendToServer()
 		elseif str == "voice_menu" then
 			if input.IsShiftDown() then
+				ToggleVoiceMenu()
+			elseif input.IsKeyDown( KEY_LALT ) then
 				NextVoiceChannel()
 			else
-				ToggleVoiceMenu()
+				net.Start("yrp_togglevoicemenu")
+				net.SendToServer()
 			end
 		elseif str == "chat_menu" then
 			ToggleChatMenu()

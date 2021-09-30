@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 349 -- do NOT change this!
 GM.VersionCanary = 701 -- do NOT change this!
-GM.VersionBuild = 62 -- do NOT change this!
+GM.VersionBuild = 69 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -401,6 +401,10 @@ end
 function IsInChannel(ply, cuid, skip)
 	skip = skip or false
 
+	if ply:GetNW2Bool( "yrp_togglevoicemenu", true ) == false then
+		return false
+	end
+
 	local channel = GetGlobalTable("yrp_voice_channels", {})[cuid]
 	if channel then
 		local ug = ply:GetUserGroup()
@@ -419,6 +423,10 @@ end
 
 function IsActiveInChannel(ply, cuid, skip)
 	skip = skip or false
+
+	if ply:GetNW2Bool( "yrp_togglevoicemenu", true ) == false then
+		return false
+	end
 
 	local channel = GetGlobalTable("yrp_voice_channels", {})[cuid]
 	if channel then
@@ -887,7 +895,7 @@ local function YRPSendError(tab, from)
 	if GAMEMODE and yrpversionisset and IsYRPOutdated then
 		if IsYRPOutdated() then
 			MsgC( Color(255, 0, 0), "[YRPSendError] >> YourRP Is Outdated" .. "\n" )
-		elseif IsServerDedicated() then
+		elseif YRPIsServerDedicated() and !string.StartWith( GetGlobalString( "serverip", "0.0.0.0:27015" ), "0.0.0.0:" ) then
 			--MsgC( Color(255, 0, 0), "[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err) .. "\n" )
 			
 			http.Post(posturl, entry,

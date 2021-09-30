@@ -14,7 +14,7 @@ local function YRPWeaponSlotNum(parent, x, y, lid, smin, smax, sart, sval)
 	function slider:OnValueChanged( value )
 		net.Start("yrp_set_slot_amount")
 			net.WriteString(sart)
-			net.WriteString(math.Round(value, self:GetDecimals()))
+			net.WriteString(math.floor(value, self:GetDecimals()))
 		net.SendToServer()
 	end
 

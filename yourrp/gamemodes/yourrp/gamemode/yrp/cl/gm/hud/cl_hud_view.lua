@@ -26,7 +26,7 @@ function showSecurityLevel(door)
 	end
 end
 
-function HudView()
+function YRPHudView()
 	local lply = LocalPlayer()
 	local _eyeTrace = lply:GetEyeTrace()
 	if _eyeTrace.Entity and ea(_eyeTrace.Entity) then

@@ -467,9 +467,9 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	DrawEquipment(lply, "backpack")
 
 	if !lply:InVehicle() then
-		HudPlayer(lply)
-		HudView()
-		HudCrosshair()
+		YRPHudPlayer(lply)
+		YRPHudView()
+		YRPHudCrosshair()
 	end
 
 	local _target = LocalPlayer():GetNW2String("hittargetName", "")
@@ -744,7 +744,7 @@ hook.Add("HUDPaint", "yrp_voice_module", function()
 
 		local texta = {}
 		local textp = {}
-		for i, v in pairs(GetGlobalTable("yrp_voice_channels")) do
+		for i, v in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
 			if IsActiveInChannel(lply, v.uniqueID) then
 				table.insert(texta, v.string_name)
 			end
@@ -762,20 +762,20 @@ hook.Add("HUDPaint", "yrp_voice_module", function()
 			VO.text = YRP.lang_string("LID_active") .. ": " .. table.concat(texta, ", ")
 		end
 
-		VO.text = VO.text .. " | "
+		VO.text = VO.text .. " | " .. YRP.lang_string("LID_passive") .. ": "
 
 		if cp == 0 then
 			VO.text = VO.text .. "-"
-		elseif cp <= 2 then
+		elseif cp <= 3 then
 			VO.text = VO.text .. table.concat(textp, ", ")
 		else
 			VO.text = VO.text .. string.Replace(YRP.lang_string("LID_xpassive"), "X", cp)
 		end
 
 		if ca == 0 and cp == 0 then
-			VO.text = "" .. string.Replace(YRP.lang_string("LID_pressvoicetoopenradiomenu"), "KEY", GetKeybindName("voice_menu")) .. ""
+			VO.text = "" .. string.Replace(YRP.lang_string("LID_presskeytoenablevoicemenu"), "KEY", GetKeybindName("voice_menu")) .. ""
 		else
-			VO.text = VO.text .. " (" .. GetKeybindName("voice_menu") .. ")"
+			VO.text = VO.text .. " (" .. input.GetKeyName( KEY_LSHIFT ) .. " + " .. GetKeybindName("voice_menu") .. ")"
 		end
 
 		VO.tw = surface.GetTextSize(VO.text)

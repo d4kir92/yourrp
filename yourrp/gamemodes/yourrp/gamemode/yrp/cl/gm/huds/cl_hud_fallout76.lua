@@ -69,13 +69,13 @@ function FO76Element(tab)
 		tab.br = 0.08
 
 		FO76["BG"][tab.element].r = 0
-		if lply:HudValue(tab.element, "TEXT") or true then
+		if lply:HudValue(tab.element, "TEXT") then
 			FO76["BG"][tab.element].w = w - h
 		else
 			FO76["BG"][tab.element].w = w
 		end
 		FO76["BG"][tab.element].h = tab.thickness
-		if lply:HudValue(tab.element, "TEXT") or true then
+		if lply:HudValue(tab.element, "TEXT") then
 			FO76["BG"][tab.element].x = x + h
 		else
 			FO76["BG"][tab.element].x = x
@@ -93,13 +93,13 @@ function FO76Element(tab)
 		FO76["BGBar"][tab.element].color = FOColorBG()
 
 		local m = {}
-		if lply:HudValue(tab.element, "TEXT") or true then
+		if lply:HudValue(tab.element, "TEXT") then
 			m.x = x + h
 		else
 			m.x = x
 		end
 		m.y = y + (h - tab.thickness) / 2
-		if lply:HudValue(tab.element, "TEXT") or true then
+		if lply:HudValue(tab.element, "TEXT") then
 			m.w = w - h
 		else
 			m.w = w
@@ -131,13 +131,13 @@ function FO76Element(tab)
 		FO76["CENTERTEXT"][tab.element].color = Color(0, 0, 0)
 
 		FO76["BR"][tab.element].r = 0
-		if lply:HudValue(tab.element, "TEXT") or true then
+		if lply:HudValue(tab.element, "TEXT") then
 			FO76["BR"][tab.element].w = w - h
 		else
 			FO76["BR"][tab.element].w = w
 		end
 		FO76["BR"][tab.element].h = tab.thickness
-		if lply:HudValue(tab.element, "TEXT") or true then
+		if lply:HudValue(tab.element, "TEXT") then
 			FO76["BR"][tab.element].x = x + h
 		else
 			FO76["BR"][tab.element].x = x
@@ -153,7 +153,7 @@ function FO76Element(tab)
 		end
 		HudBox(FO76["Bar"][tab.element])
 
-		if tab.text != nil and lply:HudValue(tab.element, "TEXT") or true then
+		if tab.text != nil and lply:HudValue(tab.element, "TEXT") then
 			FO76["TEXT"][tab.element].text = tab.text
 			HudText(FO76["TEXT"][tab.element])
 		else

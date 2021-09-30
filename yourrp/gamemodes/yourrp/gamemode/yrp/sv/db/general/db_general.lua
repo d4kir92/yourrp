@@ -250,9 +250,6 @@ SQL_ADD_COLUMN(DATABASE_NAME, "text_social_instagram", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_youtube", "TEXT DEFAULT ''")
 SQL_ADD_COLUMN(DATABASE_NAME, "text_social_steamgroup", "TEXT DEFAULT ''")
 
---[[ OLD ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "access_jail", "TEXT DEFAULT -1")
-
 --[[ SCALE ]]--
 SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_hunger", "TEXT DEFAULT '1.0'")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_thirst", "TEXT DEFAULT '1.5'")
@@ -261,6 +258,10 @@ SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_down", "TEXT DEFAULT '1.0'")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_in", "TEXT DEFAULT '50.0'")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_out", "TEXT DEFAULT '8.0'")
 SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_jump", "TEXT DEFAULT '30.0'")
+
+-- VOICE
+SQL_ADD_COLUMN(DATABASE_NAME, "int_max_channels_active", "INT DEFAULT 1")
+SQL_ADD_COLUMN(DATABASE_NAME, "int_max_channels_passive", "INT DEFAULT 3")
 
 local HANDLER_GENERAL = {}
 
@@ -1985,16 +1986,6 @@ net.Receive("getsiteyourrptranslations", function(len, ply)
 end)
 
 --[[ OLD GETTER BELOW ]]--
-util.AddNetworkString("db_jailaccess")
-net.Receive("db_jailaccess", function(len, ply)
-	local _dbTable = net.ReadString()
-	local _dbSets = net.ReadString()
-
-	local _result = SQL_UPDATE(_dbTable, _dbSets, "uniqueID = 1")
-	if _result != nil then
-		YRP.msg("error", "access_jail failed! " .. tostring(_dbTable) .. " | " .. tostring(_dbSets))
-	end
-end)
 
 util.AddNetworkString("dbUpdate")
 net.Receive("dbUpdate", function(len, ply)
