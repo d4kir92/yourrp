@@ -2,9 +2,9 @@
 
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
-local YRPHookInitPostEntity = false
 local serverreceived = false
 
+YRPHookInitPostEntity = YRPHookInitPostEntity or false
 YRPWasReadySendToServer = YRPWasReadySendToServer or false
 YRPReadyTest = YRPReadyTest or false
 
@@ -62,6 +62,13 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 	end
 end
 
+function YRPHasHookIsReady()
+	if hook.GetTable() and hook.GetTable()["InitPostEntity"] and hook.GetTable()["InitPostEntity"]["yrp_InitPostEntity_ISREADY"] != nil then
+		return true
+	end
+	return false
+end
+
 function YRPSendIsReady()
 	YRPReadyTest = true
 	if YRPHookInitPostEntity then
@@ -91,7 +98,7 @@ function YRPSendIsReady()
 
 		YRP.LoadDesignIcon()
 	else
-		if hook.GetTable()["InitPostEntity"]["yrp_InitPostEntity_ISREADY"] == nil then
+		if !YRPHasHookIsReady() then
 			YRP.msg( "error", ">>> [yrp_InitPostEntity_ISREADY] WAS REMOVED! CollectionID: " .. YRPCollectionID() )
 		end
 		timer.Simple( 0.1, YRPSendIsReady )

@@ -507,6 +507,9 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 				cb:SetChecked(true)
 			end
 			function cb:OnChange(bVal)
+				if type(UGS[CURRENT_USERGROUP].string_licenses) == "string" then
+					UGS[CURRENT_USERGROUP].string_licenses = string.Explode(",", UGS[CURRENT_USERGROUP].string_licenses)
+				end
 				if bVal then
 					table.insert(UGS[CURRENT_USERGROUP].string_licenses, lic.uniqueID)
 				else

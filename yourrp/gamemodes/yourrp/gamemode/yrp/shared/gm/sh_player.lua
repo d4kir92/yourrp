@@ -280,7 +280,7 @@ function Player:CheckMoney()
 			end
 			_mb = self:GetNW2String("moneybank", "FAILED")
 			if _mb == "FAILED" then
-				YRP.msg("error", "CheckMoney failed")
+				YRP.msg("note", "CheckMoney failed")
 				return false
 			end
 			local _moneybank = tonumber(_mb)

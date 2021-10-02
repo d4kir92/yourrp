@@ -1923,7 +1923,7 @@ function YRPCreateLoadingInfo( ti )
 			if !strEmpty(text) then
 				text = text .. spacer
 			end
-			text = text .. "FinishedLoading: " .. tostring( lply:GetNW2Bool("finishedloading") ) .. " YRPHookInitPostEntity: " .. tostring( YRPHookInitPostEntity ) .. " YRPReadyTest: " .. tostring( YRPReadyTest )
+			text = text .. "FinishedLoading: " .. tostring( lply:GetNW2Bool("finishedloading") ) .. " YRPHookInitPostEntity: " .. tostring( YRPHookInitPostEntity ) .. " YRPHasHookIsReady(): " .. tostring( YRPHasHookIsReady() ) .. " YRPReadyTest: " .. tostring( YRPReadyTest )
 			text = text .. " " .. "YRPWasReadySendToServer: " .. tostring( YRPWasReadySendToServer ) .. " received_ready: " .. tostring( lply:GetNW2Bool("yrp_received_ready") ) .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
 		end
 		if yrp2 then

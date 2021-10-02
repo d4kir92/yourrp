@@ -158,7 +158,7 @@ end
 
 function DarkRP.offlinePlayerData(SteamID, callback, failure)
 	--Description: Get a player's information from the database using a SteamID for use when the player is offline.
-	YRPDarkrpNotFound("offlinePlayerData(SteamID, callback, " .. tostring(failure) .. ")")
+	--YRPDarkrpNotFound("offlinePlayerData(SteamID, callback, " .. tostring(failure) .. ")")
 	--return?
 end
 

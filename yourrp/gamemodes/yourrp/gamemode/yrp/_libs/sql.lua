@@ -39,49 +39,12 @@ function sql_show_last_error()
 	return _last_error
 end
 
-local YRP_DB_DC = {}
-table.insert(YRP_DB_DC, " ")
-table.insert(YRP_DB_DC, "\'")
-table.insert(YRP_DB_DC, "´")
-table.insert(YRP_DB_DC, "`")
-table.insert(YRP_DB_DC, "#")
-table.insert(YRP_DB_DC, "*")
-table.insert(YRP_DB_DC, "+")
-table.insert(YRP_DB_DC, "-")
-table.insert(YRP_DB_DC, "(")
-table.insert(YRP_DB_DC, ")")
-table.insert(YRP_DB_DC, "[")
-table.insert(YRP_DB_DC, "]")
-table.insert(YRP_DB_DC, "{")
-table.insert(YRP_DB_DC, "}")
-table.insert(YRP_DB_DC, "^")
-table.insert(YRP_DB_DC, "°")
-table.insert(YRP_DB_DC, "!")
-table.insert(YRP_DB_DC, "§")
-table.insert(YRP_DB_DC, "$")
-table.insert(YRP_DB_DC, "&")
-table.insert(YRP_DB_DC, "/")
-table.insert(YRP_DB_DC, "=")
-table.insert(YRP_DB_DC, "\"")
-table.insert(YRP_DB_DC, "?")
-table.insert(YRP_DB_DC, ".")
-table.insert(YRP_DB_DC, ",")
-table.insert(YRP_DB_DC, ";")
-table.insert(YRP_DB_DC, "<")
-table.insert(YRP_DB_DC, ">")
-table.insert(YRP_DB_DC, "ü")
-table.insert(YRP_DB_DC, "ö")
-table.insert(YRP_DB_DC, "ä")
-table.insert(YRP_DB_DC, "Ü")
-table.insert(YRP_DB_DC, "Ö")
-table.insert(YRP_DB_DC, "Ä")
-
 function SQL_STR_IN(str, f)
 	if str == nil and f then
 		MsgC(Color(255, 0, 0), f)
 		return str
 	else
-		str = string.Replace(str, "'", "´")
+		str = string.Replace(str, "'", "§01§")
 		return sql.SQLStr(tostring(str))
 	end
 end
@@ -90,15 +53,7 @@ function SQL_STR_OUT(str)
 	local _res = str
 
 	if type(_res) == "string" then
-		for k, sym in pairs(YRP_DB_DC) do
-			local _pre = ""
-
-			if k < 10 then
-				_pre = "0"
-			end
-
-			_res = string.Replace(_res, "%" .. _pre .. k, sym)
-		end
+		_res = string.Replace(_res, "§01§", "'")
 
 		return _res
 	else
