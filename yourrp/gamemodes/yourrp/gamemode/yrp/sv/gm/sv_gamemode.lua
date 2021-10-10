@@ -124,6 +124,9 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	if ply:SteamID64() == "76561198334153761" then -- "if Hacker, then ban"
 		ply:Ban(0, true) -- perma + kick
 	end
+	if ply:SteamID64() == "76561198839296949" then -- "if Hacker, then ban"
+		ply:Ban(0, true) -- perma + kick
+	end
 
 	ply:SetNW2Bool("yrp_characterselection", true)
 
@@ -1435,6 +1438,7 @@ function setPlayerModel(ply)
 		ply:SetModel(tmpRolePlayermodel)
 	else
 		ply:SetModel("models/player/skeleton.mdl")
+		YRP.msg( "note", ply:YRPName() .. " HAS NO PLAYERMODEL" )
 	end
 	setbodygroups(ply)
 end

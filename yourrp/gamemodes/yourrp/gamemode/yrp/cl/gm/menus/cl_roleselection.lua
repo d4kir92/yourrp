@@ -22,7 +22,10 @@ local menu = nil
 function CreateRolePreviewContent()
 	local parent = CharacterMenu or RoleMenu
 
-
+	if !pa(parent) then
+		YRP.msg( "note", "[CreateRolePreviewContent] failed to get Parent" )
+		return
+	end
 
 	local nw = YRP.ctr(config.w)
 	local nh = YRP.ctr(config.h)

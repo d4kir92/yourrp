@@ -638,7 +638,7 @@ function add_yrp_player(ply, steamid)
 		cols = cols .. "Timestamp"
 
 		local vals = "'" .. steamid .. "', "
-		vals = vals .. "'" .. _SteamName .. "', "
+		vals = vals .. "" .. SQL_STR_IN( _SteamName ) .. ", "
 		vals = vals .. "'" .. _ostime .. "'"
 
 		local _insert = SQL_INSERT_INTO("yrp_players", cols, vals)
@@ -871,6 +871,11 @@ function startVote(ply, table)
 end
 
 function canGetRole(ply, roleID, want)
+	if roleID == nil then
+		YRP.msg( "note", "[canGetRole] roleID is nil" )
+		return
+	end
+
 	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = '" .. roleID .. "'")
 	local chatab = ply:YRPGetCharacterTable()
 

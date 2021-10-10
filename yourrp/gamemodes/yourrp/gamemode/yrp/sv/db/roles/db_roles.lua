@@ -827,22 +827,26 @@ net.Receive("settings_subscribe_role", function(len, ply)
 		roles = {}
 	end
 
-	local usergroups = SQL_SELECT("yrp_usergroups", "*", nil)
+	local usergroups = SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
 
-	local groups = SQL_SELECT("yrp_ply_groups", "*", nil)
+	local groups = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
 
 	local huds = YRPGetHUDs()
 
 	local hudmasks = YRPGetHUDMasks()
 
-	net.Start("settings_subscribe_role")
-		net.WriteTable(role)
-		net.WriteTable(roles)
-		net.WriteTable(usergroups)
-		net.WriteTable(groups)
-		net.WriteTable(huds)
-		net.WriteTable(hudmasks)
-	net.Send(ply)
+	if wk(role) and wk(roles) and wk(usergroups) and wk(groups) and wk(huds) and wk(hudmasks) then
+		net.Start("settings_subscribe_role")
+			net.WriteTable(role)
+			net.WriteTable(roles)
+			net.WriteTable(usergroups)
+			net.WriteTable(groups)
+			net.WriteTable(huds)
+			net.WriteTable(hudmasks)
+		net.Send(ply)
+	else
+		YRP.msg( "error", "[settings_subscribe_role] " .. tostring( huds ) .. " " .. tostring( hudmasks ) )
+	end
 end)
 
 util.AddNetworkString("settings_unsubscribe_role")
@@ -1143,6 +1147,16 @@ util.AddNetworkString("rem_role_playermodel")
 net.Receive("rem_role_playermodel", function(len, ply)
 	local ruid = net.ReadInt(32)
 	local muid = net.ReadInt(32)
+
+	local pms = muid
+
+	local test = SQL_SELECT( "yrp_playermodels", "*", "uniqueID = '" .. muid .. "'")
+
+	if wk(test) then
+		pms = test[1].string_models
+	end
+
+	YRP.log( ply:RPName() .. " removed playermodels (" .. pms .. ") from Role " .. ruid )
 
 	RemPlayermodelFromRole(ruid, muid)
 end)

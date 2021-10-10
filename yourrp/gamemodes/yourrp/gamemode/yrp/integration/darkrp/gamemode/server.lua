@@ -92,7 +92,7 @@ end
 
 function DarkRP.findEmptyPos(pos, ignore, distance, step, area)
 	--Description: Find an empty position as close as possible to the given position (Note: this algorithm is slow!).
-	YRPDarkrpNotFound("findEmptyPos(pos, ignore, distance, step, area)")
+	--YRPDarkrpNotFound("findEmptyPos(pos, ignore, distance, step, area)")
 	return Vector(0, 0, 0)
 end
 

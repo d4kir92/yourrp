@@ -14,6 +14,7 @@ include("cl_settings_server_map.lua")
 include("cl_settings_server_whitelist.lua")
 include("cl_settings_server_blacklist.lua")
 include("cl_settings_server_logs.lua")
+include("cl_settings_server_logs_settings.lua")
 include("cl_settings_server_scale.lua")
 
 include("cl_settings_server_console.lua")
@@ -186,6 +187,12 @@ function SettingsTabsContent()
 			tabs:AddOption("LID_logs", function(parent)
 				OpenSettingsLogs()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_logs")))
+			end)
+		end
+		if lply:GetNW2Bool("bool_logs", false) then
+			tabs:AddOption("LID_logs_settings", function(parent)
+				OpenSettingsLogsSettings()
+				sm.win:SetTitle(string.upper(YRP.lang_string("LID_logs_settings")))
 			end)
 		end
 		if lply:GetNW2Bool("bool_blacklist", false) then

@@ -131,6 +131,11 @@ function PANEL:Init()
 		local nex = NEXTS[tonumber(rols[1].int_prerole)]
 		local rlist = nex.rlist
 
+		if !pa(rlist) then
+			YRP.msg( "note", "rlist invalid" )
+			return
+		end
+
 		local list = createD("DPanelList", nil, YRP.ctr(w + 80 + 30), YRP.ctr(h), 0, 0)
 		list:EnableVerticalScrollbar()
 		rlist:AddPanel(list)

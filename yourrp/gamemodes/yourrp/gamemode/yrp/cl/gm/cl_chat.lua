@@ -47,7 +47,7 @@ else
 		"!givelicense NAME LICENSENAME"
 	}
 
-	local ypr_logo = Material("yrp/yrp_icon")
+	local yrp_logo = Material("yrp/yrp_icon")
 
 	local words = 0
 	local _delay = 4
@@ -295,7 +295,7 @@ else
 						end
 			
 						if !self.logo:IsVisible() then
-							surface.SetMaterial(ypr_logo)
+							surface.SetMaterial(yrp_logo)
 							surface.SetDrawColor(255, 255, 255, 255)
 							surface.DrawTexturedRect(YRP.ctr(BR), YRP.ctr(BR), YRP.ctr(H), YRP.ctr(H))
 						end
@@ -688,7 +688,7 @@ else
 						-- invalid entities
 						if obj.Nick then
 							yrpChat.richText:AppendText(obj:Nick())
-						else
+						elseif obj.GetName then
 							yrpChat.richText:AppendText(obj:GetName())
 						end
 					elseif t == "panel" then

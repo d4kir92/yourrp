@@ -64,7 +64,7 @@ net.Receive("cancelRestartServer", function(len, ply)
 	end
 end)
 
-function changeUserGroup(ply, cmd, args)
+function YRPChangeUserGroup(ply, cmd, args)
 	YRP.msg("note", "This Command (yrp_usergroup) is only for this round!")
 	YRP.msg("note", "Use an admin tool to make yourself permanent to an UserGroup")
 	local _cmdpre = "[" .. string.upper("yrp_usergroup") .. "] "
@@ -143,7 +143,7 @@ concommand.Add("yrp_force_sqlite", function(ply, cmd, args)
 end)
 
 concommand.Add("yrp_usergroup", function(ply, cmd, args)
-	changeUserGroup(ply, cmd, args)
+	YRPChangeUserGroup(ply, cmd, args)
 end)
 
 concommand.Add("yrp_givelicense", function(ply, cmd, args)

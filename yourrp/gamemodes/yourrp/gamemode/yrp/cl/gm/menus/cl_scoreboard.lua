@@ -338,8 +338,8 @@ end
 function YRPSortScoreboard()
 	if !pa(YRPScoreboard) then return end
 	local lply = LocalPlayer()
-	if lply.ypr_sb_reverse == nil then
-		lply.ypr_sb_reverse = false
+	if lply.yrp_sb_reverse == nil then
+		lply.yrp_sb_reverse = false
 	end
 	if lply.yrp_sb_sortby == nil then
 		lply.yrp_sb_sortby = "guid"
@@ -371,7 +371,7 @@ function YRPSortScoreboard()
 		end
 	end
 	
-	for i, entry in SortedPairsByMemberValue(plys, lply.yrp_sb_sortby, lply.ypr_sb_reverse) do
+	for i, entry in SortedPairsByMemberValue(plys, lply.yrp_sb_sortby, lply.yrp_sb_reverse) do
 		YRPScoreboardAddPlayer(entry.ply)
 	end
 end
@@ -839,7 +839,7 @@ function YRPScoreboardAddPlayer(ply)
 	end
 end
 
-local ypr_logo = Material("yrp/yrp_icon")
+local yrp_logo = Material("yrp/yrp_icon")
 local matBlurScreen = Material( "pp/blurscreen" )
 
 local function DrawBlurRect(x, y, w, h, amount, density)
@@ -894,7 +894,7 @@ function YRPDrawOrder(self, x, y, text, font, art)
 			{ x = x + size / 2, y = y + 0 },
 			{ x = x + size, y = y + size }
 		}
-		if lply.ypr_sb_reverse then
+		if lply.yrp_sb_reverse then
 			triangle = {
 				{ x = x + 0, y = y + 0 },
 				{ x = x + size, y = y + 0},
@@ -945,7 +945,7 @@ function YRPInitScoreboard()
 			end
 
 			if !self.logo:IsVisible() then
-				surface.SetMaterial(ypr_logo)
+				surface.SetMaterial(yrp_logo)
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.DrawTexturedRect(ScrW() / 2 - sw / 2, 20, 128, 128)
 			end
@@ -1002,7 +1002,7 @@ function YRPInitScoreboard()
 				function self.sortbylevel:DoClick()
 					local lply = LocalPlayer()
 					if lply.yrp_sb_sortby == "level" then
-						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+						lply.yrp_sb_reverse = !lply.yrp_sb_reverse
 					end
 					lply.yrp_sb_sortby = "level"
 					YRPSortScoreboard()
@@ -1027,7 +1027,7 @@ function YRPInitScoreboard()
 				function self.sortbyidcardid:DoClick()
 					local lply = LocalPlayer()
 					if lply.yrp_sb_sortby == "idcardid" then
-						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+						lply.yrp_sb_reverse = !lply.yrp_sb_reverse
 					end
 					lply.yrp_sb_sortby = "idcardid"
 					YRPSortScoreboard()
@@ -1051,7 +1051,7 @@ function YRPInitScoreboard()
 				function self.sortbyname:DoClick()
 					local lply = LocalPlayer()
 					if lply.yrp_sb_sortby == "name" then
-						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+						lply.yrp_sb_reverse = !lply.yrp_sb_reverse
 					end
 					lply.yrp_sb_sortby = "name"
 					YRPSortScoreboard()
@@ -1075,7 +1075,7 @@ function YRPInitScoreboard()
 				function self.sortbyguid:DoClick()
 					local lply = LocalPlayer()
 					if lply.yrp_sb_sortby == "guid" then
-						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+						lply.yrp_sb_reverse = !lply.yrp_sb_reverse
 					end
 					lply.yrp_sb_sortby = "guid"
 					YRPSortScoreboard()
@@ -1099,7 +1099,7 @@ function YRPInitScoreboard()
 				function self.sortbyruid:DoClick()
 					local lply = LocalPlayer()
 					if lply.yrp_sb_sortby == "ruid" then
-						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+						lply.yrp_sb_reverse = !lply.yrp_sb_reverse
 					end
 					lply.yrp_sb_sortby = "ruid"
 					YRPSortScoreboard()
@@ -1127,7 +1127,7 @@ function YRPInitScoreboard()
 				function self.sortbyoperating_system:DoClick()
 					local lply = LocalPlayer()
 					if lply.yrp_sb_sortby == "operating_system" then
-						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+						lply.yrp_sb_reverse = !lply.yrp_sb_reverse
 					end
 					lply.yrp_sb_sortby = "operating_system"
 					YRPSortScoreboard()
@@ -1151,7 +1151,7 @@ function YRPInitScoreboard()
 				function self.sortbylanguage:DoClick()
 					local lply = LocalPlayer()
 					if lply.yrp_sb_sortby == "language" then
-						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+						lply.yrp_sb_reverse = !lply.yrp_sb_reverse
 					end
 					lply.yrp_sb_sortby = "language"
 					YRPSortScoreboard()
@@ -1175,7 +1175,7 @@ function YRPInitScoreboard()
 				function self.sortbyusergroup:DoClick()
 					local lply = LocalPlayer()
 					if lply.yrp_sb_sortby == "usergroup" then
-						lply.ypr_sb_reverse = !lply.ypr_sb_reverse
+						lply.yrp_sb_reverse = !lply.yrp_sb_reverse
 					end
 					lply.yrp_sb_sortby = "usergroup"
 					YRPSortScoreboard()

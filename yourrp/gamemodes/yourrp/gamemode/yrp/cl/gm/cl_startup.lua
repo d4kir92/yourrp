@@ -1907,8 +1907,6 @@ function YRPCPD(a)
 	return Color(2, 23, 39, a)
 end
 
-YRPWasReadySendToServer = YRPWasReadySendToServer or false
-
 local spacer = " | "
 function YRPCreateLoadingInfo( ti )
 	local lply = LocalPlayer()
@@ -1923,8 +1921,8 @@ function YRPCreateLoadingInfo( ti )
 			if !strEmpty(text) then
 				text = text .. spacer
 			end
-			text = text .. "FinishedLoading: " .. tostring( lply:GetNW2Bool("finishedloading") ) .. " YRPHookInitPostEntity: " .. tostring( YRPHookInitPostEntity ) .. " YRPHasHookIsReady(): " .. tostring( YRPHasHookIsReady() ) .. " YRPReadyTest: " .. tostring( YRPReadyTest )
-			text = text .. " " .. "YRPWasReadySendToServer: " .. tostring( YRPWasReadySendToServer ) .. " received_ready: " .. tostring( lply:GetNW2Bool("yrp_received_ready") ) .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
+			text = text .. table.concat( YRPReadyStuck, ", " ) .. " " .. "Counter: " .. tostring( YRPReadyStuckCounter )
+			text = text .. " " .. "received_ready: " .. tostring( lply:GetNW2Bool("yrp_received_ready") ) .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
 		end
 		if yrp2 then
 			if !strEmpty(text) then
@@ -2167,7 +2165,7 @@ if pa(yrp_loading_screen) then
 		
 		-- TIME
 		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_14_700", YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-		if self.t > 40 then
+		if self.t >= 40 then
 			local text = YRPCreateLoadingInfo(self.t)
 			if !strEmpty(text) then
 				draw.SimpleText( text, "Y_18_700", pw - YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM )

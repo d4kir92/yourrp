@@ -17,9 +17,9 @@ GM.Twitter = "twitter.com/D4KIR" -- do NOT change this!
 GM.Help = "Create your rp you want to make!" -- do NOT change this!
 GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
-GM.VersionBeta = 349 -- do NOT change this!
-GM.VersionCanary = 701 -- do NOT change this!
-GM.VersionBuild = 71 -- do NOT change this!
+GM.VersionBeta = 350 -- do NOT change this!
+GM.VersionCanary = 703 -- do NOT change this!
+GM.VersionBuild = 77 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -977,3 +977,102 @@ hook.Add("OnLuaError", "yrp_OnLuaError", function(...)
 		YRPAddError(err, trace, realm)
 	end
 end)
+
+
+
+-- FIND BACKDOORS
+local function YRPCBMsg( msg, col )
+	local color = col or Color( 0, 255, 0 )
+	MsgC( color, msg .. "\n" )
+end
+
+local function YRPCBHR( col )
+	YRPCBMsg( "-------------------------------------------------------------------------------", col )
+end
+
+local maybebackdoors = {
+	--"RunString",
+	--"CompileString",
+	--"http.Fetch"
+}
+
+local backdoors = {
+	"SetUsergroup(",
+	"RunConsoleCommand(\"ulx",
+	"RunConsoleCommand( \"ulx",
+	"RunConsoleCommand('ulx",
+	"RunConsoleCommand( 'ulx",
+	"SteamID() == ",
+	"SteamID()=="
+}
+
+local foundbackdoor = false
+
+local function YRPCheckFile( fi )
+	local text = file.Read( fi, "GAME" )
+	if text then
+		for i, v in pairs( maybebackdoors ) do
+			local s, e = string.find( text, v )
+			if s then
+				YRPCBHR( Color( 255, 255, 0 ) )
+				YRPCBMsg( "Possible Backdoor [" .. v .. "]", Color( 255, 255, 0 ) )
+				--YRPCBMsg( "CODE[\n" .. string.sub( text, s, s + 100 ) .. "\n]", Color( 255, 255, 0 ) )
+				YRPCBMsg( "FILE[" .. fi .. "]", Color( 255, 255, 0 ) )
+				YRPCBHR( Color( 255, 255, 0 ) )
+				YRPCBMsg( "" )
+
+				foundbackdoor = true
+			end
+		end
+		for i, v in pairs( backdoors ) do
+			local s, e = string.find( text, v )
+			if s then
+				YRPCBHR( Color( 255, 0, 0 ) )
+				YRPCBMsg( "Possible Backdoor [" .. v .. "]", Color( 255, 0, 0 ) )
+				--YRPCBMsg( "CODE[\n" .. string.sub( text, s, s + 100 ) .. "\n]", Color( 255, 0, 0 ) )
+				YRPCBMsg( "FILE[" .. fi .. "]", Color( 255, 0, 0 ) )
+				YRPCBHR( Color( 255, 0, 0 ) )
+				YRPCBMsg( "" )
+
+				foundbackdoor = true
+			end
+		end
+	end
+end
+
+local function YRPCheckFolders( path )
+	local files, directories = file.Find( path .. "/*", "GAME" )
+	if wk( directories ) then
+		for i, fo in pairs( directories ) do
+			YRPCheckFolders( path .. "/" .. fo, false )
+		end
+	end
+	if wk( files ) then
+		for i, fi in pairs( files ) do
+			YRPCheckFile( path .. "/" .. fi )
+		end
+	end
+end
+
+local function YRPCheckBackdoors()
+	YRPCBHR()
+	YRPCBMsg( "[YourRP] Checking for Backdoors" )
+	YRPCBMsg( "" )
+
+	YRPCBMsg( ">>> Checking Local Addons for Backdoors <<<" )
+	YRPCheckFolders( "addons" )
+	if !foundbackdoor then
+		YRPCBMsg( ">>> No Backdoors found, but there might be some left" )
+	else
+		YRPCBMsg( "" )
+	end
+
+	YRPCBHR()
+end
+
+hook.Remove( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckBackdoors" )
+hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckBackdoors", function()
+	if SERVER then
+		timer.Simple( 4, YRPCheckBackdoors )
+	end
+end )

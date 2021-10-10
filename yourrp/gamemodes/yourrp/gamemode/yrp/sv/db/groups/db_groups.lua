@@ -713,20 +713,24 @@ end)
 
 function RemSwepFromGroup(guid, swepcn)
 	local group = GetGroup(guid)
-	local sweps = string.Explode(",", group.string_sweps)
-	local oldsweps = {}
-	for i, v in pairs(sweps) do
-		if !strEmpty(v) then
-			table.insert(oldsweps, v)
+	if wk(group) then
+		local sweps = string.Explode(",", group.string_sweps)
+		local oldsweps = {}
+		for i, v in pairs(sweps) do
+			if !strEmpty(v) then
+				table.insert(oldsweps, v)
+			end
 		end
+
+		local newsweps = oldsweps
+		table.RemoveByValue(newsweps, tostring(swepcn))
+		newsweps = string.Implode(",", newsweps)
+
+		SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. guid .. "'")
+		SendSwepsGroup(guid)
+	else
+		YRP.msg( "note", "[RemSwepFromGroup] Group not exists anymore?" )
 	end
-
-	local newsweps = oldsweps
-	table.RemoveByValue(newsweps, tostring(swepcn))
-	newsweps = string.Implode(",", newsweps)
-
-	SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. guid .. "'")
-	SendSwepsGroup(guid)
 end
 
 util.AddNetworkString("rem_group_swep")

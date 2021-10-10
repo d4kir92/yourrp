@@ -656,12 +656,14 @@ function OpenVoiceMenu()
 		function vm.win.showall:OnChange()
 			vm.adminmode = !vm.adminmode
 
-			if vm.adminmode then
-				vm.win.maxactive:Show()
-				vm.win.maxpassive:Show()
-			else
-				vm.win.maxactive:Hide()
-				vm.win.maxpassive:Hide()
+			if vm.win.maxactive and vm.win.maxpassive then
+				if vm.adminmode then
+					vm.win.maxactive:Show()
+					vm.win.maxpassive:Show()
+				else
+					vm.win.maxactive:Hide()
+					vm.win.maxpassive:Hide()
+				end
 			end
 
 			YRPUpdateVoiceList()

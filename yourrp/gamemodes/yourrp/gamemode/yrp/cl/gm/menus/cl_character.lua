@@ -36,7 +36,7 @@ surface.CreateFont("Saira_100", {
 	outline = false
 })
 
-local ypr_logo = Material("yrp/yrp_icon")
+local yrp_logo = Material("yrp/yrp_icon")
 
 function YRPGetCharBGNotFound()
 	return GetKeybindName("menu_settings") .. " >> " .. YRP.lang_string("LID_server") .. " >> " .. YRP.lang_string("LID_general") .. " >> " .. YRP.lang_string("LID_character_background") .. " (enter a weblink to an image)"
@@ -1519,8 +1519,8 @@ function openCharacterSelection()
 						end
 					end
 		
-					if !self.logo:IsVisible() and ypr_logo then
-						surface.SetMaterial(ypr_logo)
+					if !self.logo:IsVisible() and yrp_logo then
+						surface.SetMaterial(yrp_logo)
 						surface.SetDrawColor(255, 255, 255, 255)
 						surface.DrawTexturedRect(iconbr, iconbr, iconsize, iconsize)
 					elseif self.matlogo then

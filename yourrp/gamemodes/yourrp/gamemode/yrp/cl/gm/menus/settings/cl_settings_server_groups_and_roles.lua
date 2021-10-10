@@ -1081,7 +1081,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 			function pnl:DoClick()
 				net.Start("settings_subscribe_role")
-					net.WriteString(role.uniqueID)
+					net.WriteString(role.uniqueID .. "")
 				net.SendToServer()
 			end
 

@@ -54,5 +54,15 @@ net.Receive("rem_playermodel", function(len, ply)
 
 	if muid == nil then return end
 
-	SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. muid .. "'")
+	local pms = muid
+
+	local test = SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. muid .. "'")
+
+	if wk(test) then
+		pms = test[1].string_models
+	end
+
+	YRP.log( ply:RPName() .. " removed PUBLIC ENTRY (playermodels: " .. pms .. ")" )
+
+	--SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. muid .. "'")
 end)

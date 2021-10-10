@@ -316,7 +316,12 @@ function Player:UpdateMoney()
 end
 
 function Player:GetPlayerModel()
-	return self:GetNW2String("string_playermodel", "models/player/skeleton.mdl")
+	if self:GetNW2String("string_playermodel", "models/player/skeleton.mdl") != "models/player/skeleton.mdl" then
+		return self:GetNW2String("string_playermodel", "models/player/skeleton.mdl")
+	else
+		YRP.msg( "note", "NO PLAYERMODEL SELECTED" )
+		return "models/player/skeleton.mdl"
+	end
 end
 
 function Player:IsAgent()

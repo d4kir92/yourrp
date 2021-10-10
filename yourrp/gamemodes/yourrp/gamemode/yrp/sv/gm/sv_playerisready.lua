@@ -97,10 +97,10 @@ hook.Add("Think", "yrp_loaded_game", function()
 	end
 end, hook.MONITOR_HIGH)
 
-util.AddNetworkString("yrp_player_is_ready")
-net.Receive("yrp_player_is_ready", function(len, ply)
+util.AddNetworkString("yrp_is_ready_player")
+net.Receive("yrp_is_ready_player", function(len, ply)
 	local tab = net.ReadTable()
-	
+
 	if !IsValid(ply) then
 		YRP.msg( "error", "[yrp_player_is_ready] player is not valid: " .. tostring( ply ) )
 		return

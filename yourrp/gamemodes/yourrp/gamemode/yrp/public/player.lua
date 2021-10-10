@@ -265,11 +265,19 @@ end
 
 --[[ Money ]]--
 function Player:GetMoney() -- Money that the character is holding
-	return math.Round(tonumber(self:GetNW2String("money", "0")), 2) -- return float
+	if self:GetNW2String("money", "0") != nil then
+		return math.Round(tonumber(self:GetNW2String("money", "0")), 2) -- return float
+	else
+		return -1
+	end
 end
 
 function Player:GetMoneyBank() -- Money that the bank is holding
-	return math.Round(tonumber(self:GetNW2String("moneybank", "0")), 2) -- return float
+	if self:GetNW2String("moneybank", "0") != nil then
+		return math.Round(tonumber(self:GetNW2String("moneybank", "0")), 2) -- return float
+	else
+		return -1
+	end
 end
 
 function Player:Money()

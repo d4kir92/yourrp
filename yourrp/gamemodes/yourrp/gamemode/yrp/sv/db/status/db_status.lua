@@ -65,10 +65,10 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 					_nw_roles[role.string_name] = _nw_roles[role.string_name] or {}
 					_nw_roles[role.string_name]["LID_hasnoplayermodel"] = Color(220, 220, 0)
 				end
-				if role.string_sweps == "" or role.string_sweps == " " then
+				--[[if role.string_sweps == "" or role.string_sweps == " " then
 					_nw_roles[role.string_name] = _nw_roles[role.string_name] or {}
 					_nw_roles[role.string_name]["LID_hasnoswep"] = Color(220, 220, 0)
-				end
+				end]]
 			end
 		end
 
