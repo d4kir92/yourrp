@@ -20,8 +20,8 @@ end)
 --Restart Server
 net.Receive("restartServer", function(len, ply)
 	if ply:HasAccess() then
-		YRP.msg("gm", "RunConsoleCommand(_restart)")
-		RunConsoleCommand("_restart")
+		YRP.msg("gm", "RunConsoleCommand(map)")
+		RunConsoleCommand( "map", game.GetMap() )
 	end
 end)
 
@@ -165,4 +165,15 @@ concommand.Add("yrp_givelicense", function(ply, cmd, args)
 	end
 end)
 
+concommand.Add("yrp_allowallcountries", function(ply, cmd, args)
+	SetGlobalBool( "yrp_allowallcountries", !GetGlobalBool( "yrp_allowallcountries", false ) )
+
+	MsgC( Color( 255, 255, 0 ), "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" .. "\n" )
+	if GetGlobalBool( "yrp_allowallcountries", false ) then
+		MsgC( Color( 0, 255, 0 ), "[YourRP] Allow All Countries is Enabled." .. "\n" )
+	else
+		MsgC( Color( 255, 0, 0 ), "[YourRP] Allow All Countries is Disabled." .. "\n" )
+	end
+	MsgC( Color( 255, 255, 0 ), "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" .. "\n" )
+end)
 

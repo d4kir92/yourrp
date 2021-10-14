@@ -187,8 +187,9 @@ end
 
 -- darkrp
 jobByCmd = jobByCmd or {}
+
 function YRPConvertToDarkRPJob(tab)
-	local _job = {}
+	local _job = YRPMakeJobTable( tonumber( tab.uniqueID ) )
 
 	_job.team = tonumber(tab.uniqueID)
 	
@@ -241,6 +242,8 @@ function YRPConvertToDarkRPJob(tab)
 	_job.uniqueID = tonumber(tab.uniqueID)
 	_job.int_groupID = tab.int_groupID
 
+	_job.fake = false
+
 	return _job
 end
 
@@ -273,12 +276,20 @@ function YRPBuildDarkrpTeams()
 			team.SetUp(role.uniqueID, role.string_name, darkrpjob.color)
 		end
 	end
+
+	local TEMPRPExtraTeams = {}
+	for i, v in pairs(RPExtraTeams) do
+		if v.fake == false then
+			TEMPRPExtraTeams[tonumber(i)] = v
+		end
+	end
+	RPExtraTeams = TEMPRPExtraTeams
 end
 timer.Simple(1.0, YRPBuildDarkrpTeams)
 
 util.AddNetworkString("send_team")
 local Player = FindMetaTable("Player")
-local timerdelay = 0.16
+local timerdelay = 0.02
 function Player:DRPSendTeamsToPlayer()
 	self.yrp_darkrp_index = 1
 	for i, role in pairs(RPExtraTeams) do

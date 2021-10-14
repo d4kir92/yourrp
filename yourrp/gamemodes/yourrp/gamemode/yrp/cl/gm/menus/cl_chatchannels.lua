@@ -12,6 +12,7 @@ function YRPChatChannel(edit, uid)
 	local name = ""
 	local mode = ""
 	local structure = ""
+	local structure2 = ""
 
 	local enabled = 1
 
@@ -54,6 +55,15 @@ function YRPChatChannel(edit, uid)
 	win.mode = createD("DComboBox", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50))
 	function win.mode:OnSelect(index, value, data)		
 		mode = data
+		if pa( win.structure2 ) then
+			if mode == 6 then
+				win.structure2header:Show()
+				win.structure2:Show()
+			else
+				win.structure2header:Hide()
+				win.structure2:Hide()
+			end
+		end
 	end
 	local modes = {
 		{"LID_globalchat", 0},
@@ -62,6 +72,7 @@ function YRPChatChannel(edit, uid)
 		{"LID_group", 3},
 		{"LID_role", 4},
 		{"LID_usergroup", 5},
+		{"LID_whisper", 6},
 		{"LID_custom", 9},
 	}
 	for i, v in pairs(modes) do
@@ -151,8 +162,41 @@ function YRPChatChannel(edit, uid)
 		structure = win.structure:GetText()
 	end
 
+	-- TARGET
+	win.target = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(0), YRP.ctr(350))
+	win.target:SetText("LID_target")
+	function win.target:DoClick()
+		win.structure:SetText(win.structure:GetText() .. "%TARGET%")
+		structure = win.structure:GetText()
+	end
+
+	-- STRUCTURE 2
+	win.structure2header = createD("YLabel", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(450))
+	win.structure2header:SetText("BACK")
+
+	win.structure2 = createD("DTextEntry", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(500))
+	function win.structure2:OnChange()
+		structure2 = win.structure2:GetText()
+		if pa(win.previewrich) then
+			win.previewrich:Think()
+		end
+	end
+	if edit then
+		structure2 = GetGlobalTable("yrp_chat_channels")[uid].string_structure2
+		if isstring(structure2) then
+			win.structure2:SetText(structure2)
+		end
+	end
+	if mode == 6 then
+		win.structure2header:Show()
+		win.structure2:Show()
+	else
+		win.structure2header:Hide()
+		win.structure2:Hide()
+	end
+
 	-- enabled
-	win.enabled = createD("DCheckBox", CON, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(400))
+	win.enabled = createD("DCheckBox", CON, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(600))
 	if edit then
 		win.enabled:SetChecked(tobool(GetGlobalTable("yrp_chat_channels")[uid].bool_enabled))
 	else
@@ -165,15 +209,15 @@ function YRPChatChannel(edit, uid)
 			enabled = 0
 		end
 	end
-	win.enabledname = createD("YLabel", CON, YRP.ctr(250), YRP.ctr(50), YRP.ctr(50), YRP.ctr(400))
+	win.enabledname = createD("YLabel", CON, YRP.ctr(250), YRP.ctr(50), YRP.ctr(50), YRP.ctr(600))
 	win.enabledname:SetText("LID_enabled")
 	
 
 
-	win.preview = createD("YLabel", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(500))
+	win.preview = createD("YLabel", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(700))
 	win.preview:SetText("LID_preview")
 
-	win.previewtext = createD("DTextEntry", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(550))
+	win.previewtext = createD("DTextEntry", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(750))
 	win.previewtext:SetText("")
 	win.previewtext:SetPlaceholderText("Example Text")
 	function win.previewtext:OnChange()
@@ -182,13 +226,17 @@ function YRPChatChannel(edit, uid)
 		end
 	end
 
-	win.previewrich = createD("RichText", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(600))
+	win.previewrich = createD("RichText", CON, YRP.ctr(1600), YRP.ctr(200), YRP.ctr(0), YRP.ctr(800))
 	win.previewrich:SetText(win.structure:GetText())
 
 	function win.previewrich:Think()
 		if pa(win.previewrich) and pa(win.previewtext) then
 			win.previewrich:SetText("")
 			local pk = YRPChatReplaceCMDS(win.structure:GetText(), LocalPlayer(), YRPReplaceWithPlayerNames(win.previewtext:GetText()))
+			if mode == 6 then
+				win.previewrich:InsertColorChange(255, 255, 255, 255)
+				win.previewrich:AppendText("Target chat:\n")
+			end
 			for i, v in pairs(pk) do
 				if type(v) == "string" then
 					win.previewrich:AppendText(v)
@@ -198,255 +246,27 @@ function YRPChatChannel(edit, uid)
 					YRP.msg( "note", "[previewrich] ELSE: " .. tostring(type(v)) .. " " .. tostring(v) )
 				end
 			end
+
+			if mode == 6 then
+				win.previewrich:AppendText("\n")
+				if mode == 6 then
+					win.previewrich:InsertColorChange(255, 255, 255, 255)
+					win.previewrich:AppendText("Own chat:\n")
+				end
+				local pk2 = YRPChatReplaceCMDS(win.structure2:GetText(), LocalPlayer(), YRPReplaceWithPlayerNames(win.previewtext:GetText()))
+				for i, v in pairs(pk2) do
+					if type(v) == "string" then
+						win.previewrich:AppendText(v)
+					elseif type(v) == "table" then
+						win.previewrich:InsertColorChange(v.r, v.g, v.b, 255)
+					else
+						YRP.msg( "note", "[previewrich] ELSE: " .. tostring(type(v)) .. " " .. tostring(v) )
+					end
+				end
+			end
 		end
 	end
 	win.previewrich:Think()
-
-	--[[
-	-- ACTIVE --
-	-- USERGROUPS
-	win.augsheader = createD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(300))
-	win.augsheader:SetText("[" .. YRP.lang_string("LID_active") .. "] " .. YRP.lang_string("LID_usergroups"))
-
-	win.augsbg = createD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(350))
-	function win.augsbg:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20))
-	end
-	win.augs = createD("DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(350))
-	win.augs:EnableVerticalScrollbar()
-	net.Receive("yrp_cm_get_active_usergroups", function(len)
-		local taugs = net.ReadTable()
-
-		for i, ug in pairs(taugs) do
-			local line = createD("DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
-
-			line.cb = createD("DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line.cb:OnChange(bVal)
-				if bVal then
-					table.insert(augs, ug.string_name)
-				else
-					table.RemoveByValue(augs, ug.string_name)
-				end
-			end
-			if edit then
-				if GetGlobalTable("yrp_chat_channels")[uid]["string_active_usergroups"][ug.string_name] then
-					line.cb:SetChecked(true)
-					table.insert(augs, ug.string_name)
-				end
-			end
-
-			win.augs:AddItem(line)
-		end
-	end)
-	net.Start("yrp_cm_get_active_usergroups")
-	net.SendToServer()
-
-	-- GROUPS
-	win.agrpsheader = createD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(600))
-	win.agrpsheader:SetText("[" .. YRP.lang_string("LID_active") .. "] " .. YRP.lang_string("LID_groups"))
-
-	win.agrpsbg = createD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(650))
-	function win.agrpsbg:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20))
-	end
-	win.agrps = createD("DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(650))
-	win.agrps:EnableVerticalScrollbar()
-	net.Receive("yrp_cm_get_active_groups", function(len)
-		local tagrps = net.ReadTable()
-
-		for i, ug in pairs(tagrps) do
-			local line = createD("DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
-
-			line.cb = createD("DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line.cb:OnChange(bVal)
-				if bVal then
-					table.insert(agrps, ug.uniqueID)
-				else
-					table.RemoveByValue(agrps, ug.uniqueID)
-				end
-			end
-			if edit then
-				if GetGlobalTable("yrp_chat_channels")[uid]["string_active_groups"][tonumber(ug.uniqueID)] then
-					line.cb:SetChecked(true)
-					table.insert(agrps, ug.uniqueID)
-				end
-			end
-
-			win.agrps:AddItem(line)
-		end
-	end)
-	net.Start("yrp_cm_get_active_groups")
-	net.SendToServer()
-
-	-- ROLES
-	win.arolsheader = createD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(900))
-	win.arolsheader:SetText("[" .. YRP.lang_string("LID_active") .. "] " .. YRP.lang_string("LID_roles"))
-
-	win.arolsbg = createD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(950))
-	function win.arolsbg:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20))
-	end
-	win.arols = createD("DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(950))
-	win.arols:EnableVerticalScrollbar()
-	net.Receive("yrp_cm_get_active_roles", function(len)
-		local tarols = net.ReadTable()
-
-		for i, ug in pairs(tarols) do
-			local line = createD("DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
-
-			line.cb = createD("DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line.cb:OnChange(bVal)
-				if bVal then
-					table.insert(arols, ug.uniqueID)
-				else
-					table.RemoveByValue(arols, ug.uniqueID)
-				end
-			end
-			if edit then
-				if GetGlobalTable("yrp_chat_channels")[uid]["string_active_roles"][tonumber(ug.uniqueID)] then
-					line.cb:SetChecked(true)
-					table.insert(arols, ug.uniqueID)
-				end
-			end
-
-			win.arols:AddItem(line)
-		end
-	end)
-	net.Start("yrp_cm_get_active_roles")
-	net.SendToServer()
-
-
-
-	-- PASSIVE --
-	-- USERGROUPS
-	win.pugsheader = createD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(300))
-	win.pugsheader:SetText("[" .. YRP.lang_string("LID_passive") .. "] " .. YRP.lang_string("LID_usergroups"))
-
-	win.pugsbg = createD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(350))
-	function win.pugsbg:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20))
-	end
-	win.pugs = createD("DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(350))
-	win.pugs:EnableVerticalScrollbar()
-	net.Receive("yrp_cm_get_passive_usergroups", function(len)
-		local tpugs = net.ReadTable()
-
-		for i, ug in pairs(tpugs) do
-			local line = createD("DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
-
-			line.cb = createD("DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line.cb:OnChange(bVal)
-				if bVal then
-					table.insert(pugs, ug.string_name)
-				else
-					table.RemoveByValue(pugs, ug.string_name)
-				end
-			end
-			if edit then
-				if GetGlobalTable("yrp_chat_channels")[uid]["string_passive_usergroups"][ug.string_name] then
-					line.cb:SetChecked(true)
-					table.insert(pugs, ug.string_name)
-				end
-			end
-
-			win.pugs:AddItem(line)	
-		end
-	end)
-	net.Start("yrp_cm_get_passive_usergroups")
-	net.SendToServer()
-
-	-- GROUPS
-	win.pgrpsheader = createD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(600))
-	win.pgrpsheader:SetText("[" .. YRP.lang_string("LID_passive") .. "] " .. YRP.lang_string("LID_groups"))
-
-	win.pgrpsbg = createD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(650))
-	function win.pgrpsbg:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20))
-	end
-	win.pgrps = createD("DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(650))
-	win.pgrps:EnableVerticalScrollbar()
-	net.Receive("yrp_cm_get_passive_groups", function(len)
-		local tpgrps = net.ReadTable()
-
-		for i, ug in pairs(tpgrps) do
-			local line = createD("DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
-
-			line.cb = createD("DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line.cb:OnChange(bVal)
-				if bVal then
-					table.insert(pgrps, ug.uniqueID)
-				else
-					table.RemoveByValue(pgrps, ug.uniqueID)
-				end
-			end
-			if edit then
-				if GetGlobalTable("yrp_chat_channels")[uid]["string_passive_groups"][tonumber(ug.uniqueID)] then
-					line.cb:SetChecked(true)
-					table.insert(pgrps, ug.uniqueID)
-				end
-			end
-
-			win.pgrps:AddItem(line)
-		end
-	end)
-	net.Start("yrp_cm_get_passive_groups")
-	net.SendToServer()
-
-	-- ROLES
-	win.prolsheader = createD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(900))
-	win.prolsheader:SetText("[" .. YRP.lang_string("LID_passive") .. "] " .. YRP.lang_string("LID_roles"))
-
-	win.prolsbg = createD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(950))
-	function win.prolsbg:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20))
-	end
-	win.prols = createD("DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(950))
-	win.prols:EnableVerticalScrollbar()
-	net.Receive("yrp_cm_get_passive_roles", function(len)
-		local tprols = net.ReadTable()
-
-		for i, ug in pairs(tprols) do
-			local line = createD("DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
-
-			line.cb = createD("DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function line.cb:OnChange(bVal)
-				if bVal then
-					table.insert(prols, ug.uniqueID)
-				else
-					table.RemoveByValue(prols, ug.uniqueID)
-				end
-			end
-			if edit then
-				if GetGlobalTable("yrp_chat_channels")[uid]["string_passive_roles"][tonumber(ug.uniqueID)] then
-					line.cb:SetChecked(true)
-					table.insert(prols, ug.uniqueID)
-				end
-			end
-
-			win.prols:AddItem(line)
-		end
-	end)
-	net.Start("yrp_cm_get_passive_roles")
-	net.SendToServer()
-	]]
 
 	if edit then
 		win.save = createD("YButton", CON, YRP.ctr(760), YRP.ctr(50), 0, YRP.ctr(1170))
@@ -459,6 +279,7 @@ function YRPChatChannel(edit, uid)
 				net.WriteString(name or "")
 				net.WriteString(mode or "")
 				net.WriteString(structure or "")
+				net.WriteString(structure2 or "")
 
 				net.WriteString(enabled)
 
@@ -507,6 +328,7 @@ function YRPChatChannel(edit, uid)
 				net.WriteString(name)
 				net.WriteString(mode)
 				net.WriteString(structure)
+				net.WriteString(structure2)
 
 				net.WriteString(enabled)
 

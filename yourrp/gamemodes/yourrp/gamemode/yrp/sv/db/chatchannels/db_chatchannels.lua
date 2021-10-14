@@ -10,7 +10,9 @@ SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_structure", "TEXT DEFAULT '%TEXT%'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_mode", "TEXT DEFAULT '0'") -- 0 = GLOBAL, 1 = LOKAL, 2 = FACTION, 3 = GROUP, 4 = ROLE, 5 = UserGroup, 9 = CUSTOM
+SQL_ADD_COLUMN(DATABASE_NAME, "string_structure2", "TEXT DEFAULT '%TEXT%'")
+
+SQL_ADD_COLUMN(DATABASE_NAME, "int_mode", "TEXT DEFAULT '0'") -- 0 = GLOBAL, 1 = LOKAL, 2 = FACTION, 3 = GROUP, 4 = ROLE, 5 = UserGroup, 6 = WHISPER, 9 = CUSTOM
 
 SQL_ADD_COLUMN(DATABASE_NAME, "string_active_usergroups", "TEXT DEFAULT 'superadmin,user'")
 SQL_ADD_COLUMN(DATABASE_NAME, "string_active_groups", "TEXT DEFAULT '1'")
@@ -34,7 +36,7 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "/" .. "'") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'" .. "/" .. "', 'Color(100, 255, 100)[OOC] %STEAMNAME%: Color(255, 255, 255)%TEXT%', 0, 0")
 end
 if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "LOOC" .. "'") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'LOOC', 'Color(100, 255, 100)[LOOC] %RPNAME%: Color(255, 255, 255)%TEXT%', 1, 0")
+	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'LOOC', 'Color(100, 255, 100)[LOOC] %STEAMNAME%: Color(255, 255, 255)%TEXT%', 1, 0")
 end
 if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "SAY" .. "'") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable, bool_canbedisabled", "'SAY', 'Color(100, 255, 100)%RPNAME%: Color(255, 255, 255)%TEXT%', 1, 0, 0")
@@ -67,6 +69,13 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ID" .. "'") == nil then
 	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ID', 'Color(255, 0, 0)%RPNAME% Color(255, 255, 255)shows his ID, it says: Color(255, 0, 0)%IDCARDID%', 1, 0")
 end
 
+if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "W" .. "'") == nil then
+	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, string_structure2, int_mode, bool_removeable", "'W', 'Color(255, 100, 255)von %RPNAME%: %TEXT%', 'Color(255, 100, 255)zu %TARGET%: %TEXT%', 6, 0")
+end
+if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "PM" .. "'") == nil then
+	SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, string_structure2, int_mode, bool_removeable", "'PM', 'Color(255, 100, 255)von %RPNAME%: %TEXT%', 'Color(255, 100, 255)zu %TARGET%: %TEXT%', 6, 0")
+end
+
 function GenerateChatTable()
 	yrp_chat_channels = {}
 	local channels = SQL_SELECT(DATABASE_NAME, "*")
@@ -83,6 +92,9 @@ function GenerateChatTable()
 
 			-- STRUCTURE
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_structure"] = channel.string_structure
+
+			-- STRUCTURE2
+			yrp_chat_channels[tonumber(channel.uniqueID)]["string_structure2"] = channel.string_structure2
 
 			-- REMOVEABLE
 			yrp_chat_channels[tonumber(channel.uniqueID)]["bool_removeable"] = tobool(channel.bool_removeable)
@@ -257,6 +269,7 @@ net.Receive("yrp_chat_channel_save", function(len, ply)
 	local name = string.upper(net.ReadString())
 	local mode = net.ReadString()
 	local structure = net.ReadString()
+	local structure2 = net.ReadString()
 
 	local enabled = tonumber(net.ReadString())
 
@@ -274,6 +287,7 @@ net.Receive("yrp_chat_channel_save", function(len, ply)
 		["string_name"] 				= name,
 		["int_mode"] 					= mode,
 		["string_structure"] 			= structure,
+		["string_structure2"] 			= structure2,
 		["bool_enabled"] 				= enabled,
 		["string_active_usergroups"] 	= augs,
 		["string_active_groups"] 		= agrps,

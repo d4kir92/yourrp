@@ -199,9 +199,6 @@ function YRPCheckSalary(ply)
 				ply:SetNW2String("money", _money + _salary)
 				ply:UpdateMoney()
 			end
-		else
-			YRP.msg("note", "CheckMoney in YRPCheckSalary [ money: " .. tostring(_money) .. " salary: " .. tostring(_salary) .. " ]")
-			ply:CheckMoney()
 		end
 	end
 end
@@ -432,7 +429,7 @@ timer.Create("ServerThink", TICK, 0, function()
 end)
 
 function YRPRestartServer()
-	game.ConsoleCommand("_restart")
+	RunConsoleCommand( "map", game.GetMap() )
 end
 
 function UpdateSpawnerNPCTable()

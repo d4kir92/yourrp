@@ -41,7 +41,7 @@ if SERVER then
 					if code == 200 then
 						-- worked
 					else
-						YRP.msg("error", "Send Server Info failed: " .. "HTTP " .. tostring(code))
+						YRP.msg("error", "Send Server Info HTTP CODE: " .. tostring(code))
 					end
 				end,
 				function( failed )

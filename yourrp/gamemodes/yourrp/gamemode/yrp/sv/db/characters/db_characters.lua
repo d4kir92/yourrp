@@ -461,12 +461,12 @@ function GetPlayermodelsOfCharacter(ply, ruid)
 
 	local pms = {}
 	for i, v in pairs( string.Explode(",", rpms ) ) do
-		if !table.HasValue(pms, v) then
+		if !strEmpty(v) and !table.HasValue(pms, v) then
 			table.insert(pms, v)
 		end
 	end
 	for i, v in pairs( string.Explode(",", spms.pms ) ) do
-		if !table.HasValue(pms, v) then
+		if !strEmpty(v) and !table.HasValue(pms, v) then
 			table.insert(pms, v)
 		end
 	end

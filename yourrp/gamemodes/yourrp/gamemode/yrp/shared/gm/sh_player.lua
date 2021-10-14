@@ -20,8 +20,17 @@ function GetPlayerByName(name)
 end
 
 function GetPlayerByRPName(name)
+	if name == nil then
+		return NULL
+	end
+
+	name = string.Replace(name, "[", "")
+	name = string.Replace(name, "]", "")
+	name = string.Replace(name, "%", "")
+	name = string.lower(name)
+
 	for i, ply in pairs(player.GetAll()) do
-		if string.find(ply:RPName(), name) then
+		if string.find(string.lower(ply:RPName()), name) then
 			return ply
 		end
 	end
@@ -30,8 +39,17 @@ function GetPlayerByRPName(name)
 end
 
 function GetPlayerBySteamName(name)
+	if name == nil then
+		return NULL
+	end
+
+	name = string.Replace(name, "[", "")
+	name = string.Replace(name, "]", "")
+	name = string.Replace(name, "%", "")
+	name = string.lower(name)
+
 	for i, ply in pairs(player.GetAll()) do
-		if string.find(ply:SteamName(), name) then
+		if string.find(string.lower(ply:SteamName()), name) then
 			return ply
 		end
 	end
@@ -264,33 +282,6 @@ function Player:CharID()
 	end
 end
 
-function Player:CheckMoney()
-	if SERVER then
-		timer.Simple(4, function()
-			if !IsValid(self) then return end
-			
-			local _m = self:GetNW2String("money", "FAILED")
-			if _m == "FAILED" then
-				YRP.msg("note", "CheckMoney failed")
-				return false
-			end
-			local _money = tonumber(_m)
-			if wk(_money) and self:CharID() != false then
-				SQL_UPDATE("yrp_characters", {["money"] = _money}, "uniqueID = " .. self:CharID()) --attempt to nil value
-			end
-			_mb = self:GetNW2String("moneybank", "FAILED")
-			if _mb == "FAILED" then
-				YRP.msg("note", "CheckMoney failed")
-				return false
-			end
-			local _moneybank = tonumber(_mb)
-			if wk(_moneybank) and self:CharID() != false then
-				SQL_UPDATE("yrp_characters", {["moneybank"] = _moneybank}, "uniqueID = " .. self:CharID())
-			end
-		end)
-	end
-end
-
 function Player:UpdateMoney()
 	if SERVER then
 		if self:HasCharacterSelected() then
@@ -319,7 +310,6 @@ function Player:GetPlayerModel()
 	if self:GetNW2String("string_playermodel", "models/player/skeleton.mdl") != "models/player/skeleton.mdl" then
 		return self:GetNW2String("string_playermodel", "models/player/skeleton.mdl")
 	else
-		YRP.msg( "note", "NO PLAYERMODEL SELECTED" )
 		return "models/player/skeleton.mdl"
 	end
 end
@@ -589,7 +579,7 @@ function Player:YRPName()
 end
 
 function Player:Team()
-	return tonumber(self:GetNW2String("roleUniqueID", "-1"))
+	return tonumber(self:GetNW2String("roleUniqueID", "0"))
 end
 
 timer.Simple(2, function()

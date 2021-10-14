@@ -1090,6 +1090,13 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_instagram, "Instagram", "update_text_social_instagram")
 		CreateHRLine(SOCIAL_SETTINGS:GetContent())
 		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_steamgroup, "SteamGroup", "update_text_social_steamgroup")
+
+		CreateHRLine(SOCIAL_SETTINGS:GetContent())
+		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_whitelist_countries, "ALLOWED COUNTRIES (Empty = ALL) Seperator: ,", "update_text_whitelist_countries")
+		local countrieslink = CreateButtonLine(SOCIAL_SETTINGS:GetContent(), "COUNTRY IDS", "")
+		function countrieslink.button:DoClick()
+			gui.OpenURL( "https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" )
+		end
 	end
 end)
 

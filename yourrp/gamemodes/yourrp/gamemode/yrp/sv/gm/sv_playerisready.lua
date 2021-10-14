@@ -5,6 +5,8 @@
 util.AddNetworkString("yrp_ready_received")
 
 function YRPPlayerLoadedGame(ply, tab)
+	MsgC( Color( 0, 0, 255 ), "###############################################################################" .. "\n" )--##########
+	
 	ply:SetNW2Bool("PlayerLoadedGameStart", true)
 
 	local OS_Windows = tab.iswindows
@@ -26,6 +28,33 @@ function YRPPlayerLoadedGame(ply, tab)
 	ply:SetNW2String("gmod_branch", Branch or "Unknown")
 	ply:SetNW2String("yrp_country", Country or "Unknown")
 	ply:SetNW2Float("uptime_current", os.clock())
+
+	YRP.msg( "note", ply:SteamName() .. " is using OS: " .. ply:GetNW2String("yrp_os", "-") )
+	YRP.msg( "note", ply:SteamName() .. " is using Branch: " .. tostring( Branch ) )
+	YRP.msg( "note", ply:SteamName() .. " is from Country: " .. GetCountryName( Country ) )
+
+	local country = string.lower( ply:GetNW2String("yrp_country") )
+	local countries = GetGlobalString( "text_whitelist_countries", "" )
+	countries = string.Explode( ",", countries, false )
+	if GetGlobalBool( "yrp_allowallcountries", false ) or table.Count( countries ) == 0 or ( countries[1] and strEmpty( countries[1] ) ) then
+		-- ALL ALLOWED
+	else
+		local found = false
+		for i, v in pairs( countries ) do
+			if string.lower( v ) == country then
+				found = true
+			end
+			if string.lower( v ) == "all" then
+				found = true
+			end
+		end
+		if !found then
+			YRP.msg( "note", "[Whitelist Countries] " .. ply:RPName() .. " was kicked, wrong country (" .. tostring( country ) .. ")" )
+			YRP.msg( "note", "[Whitelist Countries] F8 -> General -> Allowed Countries" )
+			ply:Kick( "NOT ALLOWED TO ENTER THIS SERVER, SORRY (:" )
+			return false
+		end
+	end
 
 	-- YRP Chat?
 	local _chat = SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")
@@ -60,12 +89,16 @@ function YRPPlayerLoadedGame(ply, tab)
 
 	ply:UserGroupLoadout()
 
+	MsgC( Color( 0, 0, 255 ), "###############################################################################" .. "\n" )--##########
+	
 	YRP.msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading.")
 
 	ply:SetNW2Bool("PlayerLoadedGameEnd", true)
 
 	net.Start("yrp_ready_received")
 	net.Send(ply)
+
+	return true
 end
 
 hook.Add("Think", "yrp_loaded_game", function()
@@ -108,8 +141,11 @@ net.Receive("yrp_is_ready_player", function(len, ply)
 
 	if ply:GetNW2Bool("yrp_received_ready", false) == false then
 		ply:SetNW2Bool("yrp_received_ready", true)
-		YRPPlayerLoadedGame(ply, tab)
-	else
-		YRP.msg( "note", "[yrp_player_is_ready] Already got the ready message" )
+
+		YRP.msg( "note", ply:YRPName() .. " is ready for getting Data." )
+
+		timer.Simple( 0.1, function()
+			YRPPlayerLoadedGame( ply, tab )
+		end )
 	end
 end)

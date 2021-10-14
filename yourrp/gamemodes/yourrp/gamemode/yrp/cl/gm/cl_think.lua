@@ -311,7 +311,7 @@ function KeyPress()
 			hudFail = true
 			net.Start("rebuildHud")
 			net.SendToServer()
-			YRP.msg( "error", "HUD Version outdated! " .. tostring( lply:GetNW2Int("hud_version", -1) ) .. " " .. YRPCreateLoadingInfo() )
+			YRP.msg( "note", "HUD Version outdated! " .. tostring( lply:GetNW2Int("hud_version", -1) ) .. " " .. YRPCreateLoadingInfo() )
 		end
 	end
 
@@ -800,10 +800,10 @@ net.Receive("send_team", function(len)
 	local teamname = net.ReadString()
 	local teamTab = net.ReadTable()
 	local teamcolor = teamTab.color
-	local teamuid = teamTab.uniqueID
-
+	local teamuid = tonumber( teamTab.uniqueID )
+	
 	_G[string.upper(teamname)] = teamuid
-	if teamuid and teamname and RPExtraTeams[teamuid] == nil then
+	if teamuid and teamname then
 		RPExtraTeams[teamuid] = teamTab
 		jobByCmd[teamTab.command] = teamuid
 		--table.insert(RPExtraTeams, teamTab) -- old
@@ -827,6 +827,14 @@ net.Receive("send_categories", function(len)
 end)
 
 net.Receive("drp_combinetabs", function(len)
+	local TEMPRPExtraTeams = {}
+	for i, v in pairs(RPExtraTeams) do
+		if v.fake == false then
+			TEMPRPExtraTeams[tonumber(i)] = v
+		end
+	end
+	RPExtraTeams = TEMPRPExtraTeams
+
 	for i, cat in pairs(CATEGORIES.jobs) do
 		cat.members = {}
 		for i, role in pairs(RPExtraTeams) do

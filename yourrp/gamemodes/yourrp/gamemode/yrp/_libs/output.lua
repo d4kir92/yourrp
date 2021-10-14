@@ -219,8 +219,8 @@ function YRP.msg(chan, str_msg, tochat, force)
 					str = str .. " [FORCED]"
 				end
 				if tochat and SERVER then
-					PrintMessage(3, "\n ")
-					PrintMessage(3, str)
+					PrintMessage( 3, "\n" )
+					PrintMessage( 3, msg )
 				end
 				if SERVER and AddToFakeServerConsole != nil then
 					AddToFakeServerConsole(str)
@@ -375,12 +375,13 @@ countries["VN"] = "Vietnam"
 
 countries["ZA"] = "South Africa"
 
-function GetCountryName(id)
-	id = string.upper(id)
+function GetCountryName( id )
+	id = string.upper( id )
 	local countryname = countries[id]
-	if wk(countryname) then
+	if wk( countryname ) then
 		return countryname
 	else
+		YRP.msg( "error", "Missing Country: " .. tostring( id ) )
 		return id
 	end
 end

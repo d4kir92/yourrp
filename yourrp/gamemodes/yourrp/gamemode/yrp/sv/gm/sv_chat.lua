@@ -298,9 +298,9 @@ net.Receive("set_chat_mode", function(len, ply)
 	ply:SetNW2String("chat_mode", string.upper(_str))
 end)
 
-util.AddNetworkString("sendanim")
-function SendAnim(ply, slot, activity, loop)
-	net.Start("sendanim")
+util.AddNetworkString("yrpsendanim")
+function YRPSendAnim(ply, slot, activity, loop)
+	net.Start("yrpsendanim")
 		net.WriteEntity(ply)
 		net.WriteInt(slot, 32)
 		net.WriteInt(activity, 32)
@@ -308,9 +308,9 @@ function SendAnim(ply, slot, activity, loop)
 	net.Broadcast()
 end
 
-util.AddNetworkString("stopanim")
-function StopAnim(ply, slot)
-	net.Start("stopanim")
+util.AddNetworkString("yrpstopanim")
+function YRPStopAnim(ply, slot)
+	net.Start("yrpstopanim")
 		net.WriteEntity(ply)
 		net.WriteInt(slot, 32)
 	net.Broadcast()
@@ -321,14 +321,14 @@ function Player:SetAFK(bo)
 	self:SetNW2Float("afkts", CurTime())
 	self:SetNW2Bool("isafk", bo)
 	
-	SendAnim(self, GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_SIT, false)
+	YRPSendAnim(self, GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_SIT, false)
 end
 
 util.AddNetworkString("notafk")
 net.Receive("notafk", function(len, ply)
 	if ply:AFK() then
 		ply:SetAFK(false)
-		StopAnim(ply, GESTURE_SLOT_ATTACK_AND_RELOAD)
+		YRPStopAnim(ply, GESTURE_SLOT_ATTACK_AND_RELOAD)
 	end
 end)
 
@@ -355,40 +355,6 @@ function strTrimRight(str, cha)
 	end
 end
 
-function SendPM(sender, msg)
-	local name = strTrimLeft(msg, " ")
-	msg = strTrimRight(msg, " ")
-	local target = GetPlayerByName(name)
-
-	if target != NULL then
-		local pk = {}
-		table.insert(pk, Color(255, 100, 255))
-		table.insert(pk, "LID_to;")
-		table.insert(pk, " ")
-		table.insert(pk, target:RPName())
-		table.insert(pk, ": ")
-		table.insert(pk, msg)
-		net.Start("yrp_player_say")
-			net.WriteEntity(sender)
-			net.WriteTable(pk)
-		net.Send(sender)
-
-		local pk2 = {}
-		table.insert(pk2, Color(255, 100, 255))
-		table.insert(pk2, "LID_from;")
-		table.insert(pk2, " ")
-		table.insert(pk2, sender:RPName())
-		table.insert(pk2, ": ")
-		table.insert(pk2, msg)
-		net.Start("yrp_player_say")
-			net.WriteEntity(target)
-			net.WriteTable(pk2)
-		net.Send(target)
-	else
-		sender:ChatPrint("TARGET NOT FOUND")
-	end
-end
-
 function DoCommand(sender, command, text)
 	command = string.lower(command)
 	text = text or ""
@@ -396,10 +362,6 @@ function DoCommand(sender, command, text)
 	local purtext = text
 
 	text = command .. " " .. text
-
-	if command == "pm" or command == "w" then
-		SendPM(sender, purtext)
-	end
 
 	if command == "afk" then
 		sender:SetAFK(!sender:AFK())
@@ -576,6 +538,15 @@ timer.Simple(4, function() -- must be last hook
 
 
 
+		-- TARGET
+		local target = NULL
+		local texttab = string.Explode( " ", text, false )
+		if texttab[1] then
+			target = GetPlayerByRPName( texttab[1] )
+		end
+
+
+
 		-- Replace words with names
 		text = YRPReplaceWithPlayerNames(text)
 
@@ -589,8 +560,10 @@ timer.Simple(4, function() -- must be last hook
 			tab.int_mode = tonumber(tab.int_mode)
 
 			local structure = tab.string_structure
+			local structure2 = tab.string_structure2
 
 			local pk = YRPChatReplaceCMDS(structure, sender, text)
+			local pk2 = YRPChatReplaceCMDS(structure2, sender, text)
 
 			if channel != "HELP" and !strEmpty(text) then
 				SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', " .. SQL_STR_IN(text) .. "")
@@ -656,6 +629,24 @@ timer.Simple(4, function() -- must be last hook
 					end
 				end
 				return ""
+			elseif tab.int_mode == 6 then -- Whisper
+				if ea(target) then
+					net.Start("yrp_player_say")
+						net.WriteEntity(sender)
+						net.WriteTable(pk2)
+					net.Send(sender)
+
+					net.Start("yrp_player_say")
+						net.WriteEntity(target)
+						net.WriteTable(pk)
+					net.Send(target)
+				elseif texttab[1] then
+					pk2[2] = "\"" .. texttab[1] .. "\" is not on this server."
+					net.Start("yrp_player_say")
+						net.WriteEntity(sender)
+						net.WriteTable(pk2)
+					net.Send(sender)
+				end
 			elseif tab.int_mode == 9 then -- Custom
 				-- IN WORK :P
 				return ""
@@ -668,5 +659,6 @@ timer.Simple(4, function() -- must be last hook
 
 		-- RETURN NOTHING SO OTHER ADDONS CAN USE THIS ONE
 		-- return oldtext --""
+		return "" -- may break other addons?
 	end)
 end)

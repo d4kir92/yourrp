@@ -1851,7 +1851,11 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local sweps = {}
 			sweps.parent = ea.equipment:GetContent()
 			sweps.uniqueID = role.uniqueID
-			sweps.header = YRP.lang_string("LID_possiblesweps") .. " (" .. YRP.lang_string("LID_weaponchest") .. ")"
+			if GetGlobalBool("bool_weapon_system", true) then
+				sweps.header = YRP.lang_string("LID_possiblesweps") .. ": Not Equipped => " .. YRP.lang_string("LID_weaponchest") .. ""
+			else
+				sweps.header = YRP.lang_string("LID_sweps")
+			end
 			sweps.netstr = "update_role_string_sweps"
 			sweps.value = role.string_sweps
 			sweps.uniqueID = role.uniqueID
@@ -1937,7 +1941,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local swepsonspawn = {}
 				swepsonspawn.parent = ea.equipment:GetContent()
 				swepsonspawn.uniqueID = role.uniqueID
-				swepsonspawn.header = "LID_swepsatspawn"
+				swepsonspawn.header = YRP.lang_string("LID_swepsatspawn") .. " (Equipped if slot is not full)"
 				swepsonspawn.netstr = "update_role_string_sweps_onspawn"
 				swepsonspawn.value = role.string_sweps_onspawn
 				swepsonspawn.uniqueID = role.uniqueID

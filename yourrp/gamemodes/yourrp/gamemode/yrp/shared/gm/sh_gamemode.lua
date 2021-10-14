@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 350 -- do NOT change this!
 GM.VersionCanary = 703 -- do NOT change this!
-GM.VersionBuild = 77 -- do NOT change this!
+GM.VersionBuild = 84 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -749,6 +749,18 @@ function YRPChatReplaceCMDS(structure, ply, text)
 	result = string.Replace(result, "%GROUP%", ply:GetGroupName())
 	result = string.Replace(result, "%ROLE%", ply:GetRoleName())
 
+	local newtext = string.Explode( " ", text, false )
+	if newtext[1] then
+		local target = GetPlayerByRPName( newtext[1] )
+		if ea( target ) then
+			result = string.Replace(result, "%TARGET%", target:RPName())
+			table.remove( newtext, 1 )
+			if table.Count( newtext ) > 0 then
+				text = table.concat( newtext, " " )
+			end
+		end
+	end
+
 	result = string.Replace(result, "%TEXT%", text)
 	
 	result = RN(result)
@@ -990,33 +1002,114 @@ local function YRPCBHR( col )
 	YRPCBMsg( "-------------------------------------------------------------------------------", col )
 end
 
+local ignoredefaultfiles = {
+	-- GMOD
+	"lua/autorun/client/demo_recording.lua",
+	"lua/autorun/client/gm_demo.lua",
+	"lua/autorun/server/sensorbones/css.lua",
+	"lua/autorun/server/sensorbones/eli.lua",
+	"lua/autorun/server/sensorbones/tf2_engineer.lua",
+	"lua/autorun/server/sensorbones/tf2_heavy.lua",
+	"lua/autorun/server/sensorbones/tf2_medic.lua",
+	"lua/autorun/server/sensorbones/tf2_pyro_demo.lua",
+	"lua/autorun/server/sensorbones/tf2_scount.lua",
+	"lua/autorun/server/sensorbones/tf2_sniper.lua",
+	"lua/autorun/server/sensorbones/tf2_spy_soldier.lua",
+	"lua/autorun/server/sensorbones/valvebiped.lua",
+	"lua/autorun/server/admin_functions",
+	"lua/autorun/properties/bodygroups.lua",
+	"lua/autorun/properties/bone_manipulate.lua",
+	"lua/autorun/properties/collisions.lua",
+	"lua/autorun/properties/drive.lua",
+	"lua/autorun/properties/editentity.lua",
+	"lua/autorun/properties/gravity.lua",
+	"lua/autorun/properties/ignite.lua",
+	"lua/autorun/properties/keep_upright.lua",
+	"lua/autorun/properties/kinect_controller.lua",
+	"lua/autorun/properties/npc_scale.lua",
+	"lua/autorun/properties/persist.lua",
+	"lua/autorun/properties/remove.lua",
+	"lua/autorun/properties/skin.lua",
+	"lua/autorun/properties/statue.lua",
+	"lua/autorun/base_npcs.lua",
+	"lua/autorun/base_vehicles.lua",
+	"lua/autorun/developer_functions.lua",
+	"lua/autorun/game_hl2.lua",
+	"lua/autorun/menubar.lua",
+	"lua/autorun/properties.lua",
+	"lua/autorun/utilities_menu.lua",
+	"lua/entities/sent_ball.lua",
+	"lua/entities/widget_arrow.lua",
+	"lua/entities/widget_axis.lua",
+	"lua/entities/widget_base.lua",
+	"lua/entities/widget_bones.lua",
+	"lua/entities/widget_disc.lua",
+	"lua/includes/extensions/player.lua",
+	"lua/vgui/dhtml.lua",
+
+	-- ULX
+	"lua/ulib/server/player.lua",
+	"lua/ulx/modules/sh/util.lua",
+	"lua/ulx/xgui/server/sv_groups.lua",
+	"lua/ulx/xgui/bans.lua",
+	"lua/ulx/xgui/groups.lua",
+	"lua/ulx/modules/sh/rcon.lua",
+	"lua/ulx/modules/sh/cc_rcon.lua",
+	"lua/ulx/modules/sh/cc_hook.lua",
+	"lua/ulx/modules/sh/cc_commandtable.lua",
+	"lua/ulib/shared/plugin.lua"
+}
+
 local maybebackdoors = {
-	--"RunString",
-	--"CompileString",
-	--"http.Fetch"
+	--"RunString(",
+	--"CompileString(",
+	--"http.Fetch(",
+	":SteamID() == \"STEAM_0",
+	":SteamID() ==\"STEAM_0",
+	":SteamID()== \"STEAM_0",
+	":SteamID()==\"STEAM_0",
+	":SteamID64() == \"",
+	":SteamID64() ==\"",
+	":SteamID64()== \"",
+	":SteamID64()==\""
 }
 
 local backdoors = {
-	"SetUsergroup(",
-	"RunConsoleCommand(\"ulx",
-	"RunConsoleCommand( \"ulx",
-	"RunConsoleCommand('ulx",
-	"RunConsoleCommand( 'ulx",
-	"SteamID() == ",
-	"SteamID()=="
+	"SetUsergroup",
+	"RunConsoleCommand(\"ulx\",\"unban",
+	"RunConsoleCommand(\"ulx\", \"unban",
+	"RunConsoleCommand( \"ulx\", \"unban",
+	"RunConsoleCommand('ulx','unban",
+	"RunConsoleCommand('ulx', 'unban",
+	"RunConsoleCommand( 'ulx', 'unban",
+	"removeid",
+	"sv_allowcslua",
+	"STEAM_0:1:186944016",
+	"76561198334153761",
+	"STEAM_0:1:439515610",
+	"76561198839296949"
 }
 
 local foundbackdoor = false
 
 local function YRPCheckFile( fi )
 	local text = file.Read( fi, "GAME" )
-	if text then
+
+	if table.HasValue( ignoredefaultfiles, fi ) or string.StartWith( fi, "data/yrp_backups/" ) then
+		return
+	end
+
+	if wk( text ) then
 		for i, v in pairs( maybebackdoors ) do
-			local s, e = string.find( text, v )
+			local s, e = string.find( text, v, 1, true )
 			if s then
+				s = s - 100
+				if s < 1 then
+					s = 1
+				end
 				YRPCBHR( Color( 255, 255, 0 ) )
-				YRPCBMsg( "Possible Backdoor [" .. v .. "]", Color( 255, 255, 0 ) )
-				--YRPCBMsg( "CODE[\n" .. string.sub( text, s, s + 100 ) .. "\n]", Color( 255, 255, 0 ) )
+				YRPCBMsg( "[MAYBE] Possible Backdoor [" .. v .. "]", Color( 255, 255, 0 ) )
+				YRPCBMsg( "CODE[\n" .. string.sub( text, s, s + 200 ) .. "\n]", Color( 255, 255, 0 ) )
 				YRPCBMsg( "FILE[" .. fi .. "]", Color( 255, 255, 0 ) )
 				YRPCBHR( Color( 255, 255, 0 ) )
 				YRPCBMsg( "" )
@@ -1025,11 +1118,15 @@ local function YRPCheckFile( fi )
 			end
 		end
 		for i, v in pairs( backdoors ) do
-			local s, e = string.find( text, v )
+			local s, e = string.find( text, v, 1, true )
 			if s then
+				s = s - 100
+				if s < 1 then
+					s = 1
+				end
 				YRPCBHR( Color( 255, 0, 0 ) )
 				YRPCBMsg( "Possible Backdoor [" .. v .. "]", Color( 255, 0, 0 ) )
-				--YRPCBMsg( "CODE[\n" .. string.sub( text, s, s + 100 ) .. "\n]", Color( 255, 0, 0 ) )
+				YRPCBMsg( "CODE[\n" .. string.sub( text, s, s + 200 ) .. "\n]", Color( 255, 0, 0 ) )
 				YRPCBMsg( "FILE[" .. fi .. "]", Color( 255, 0, 0 ) )
 				YRPCBHR( Color( 255, 0, 0 ) )
 				YRPCBMsg( "" )
@@ -1049,23 +1146,34 @@ local function YRPCheckFolders( path )
 	end
 	if wk( files ) then
 		for i, fi in pairs( files ) do
-			YRPCheckFile( path .. "/" .. fi )
+			if string.EndsWith( fi, ".lua" ) or string.EndsWith( fi, ".vtf" ) or string.EndsWith( fi, ".vmt" ) or string.EndsWith( fi, ".db" ) or string.EndsWith( fi, ".json" ) or string.EndsWith( fi, ".cfg" ) then
+				YRPCheckFile( path .. "/" .. fi )
+			end
 		end
+	end
+end
+
+local function YRPCheckFolder( fol )
+	foundbackdoor = false
+
+	YRPCheckFolders( fol )
+
+	if foundbackdoor then
+		YRPCBMsg( "[YourRP] > Maybe Found backdoor/s in " .. fol .. " folder!", Color( 255, 0, 0 ) )
+	else
+		YRPCBMsg( "[YourRP] > Found NO backdoor in " .. fol .. " folder." )
 	end
 end
 
 local function YRPCheckBackdoors()
 	YRPCBHR()
-	YRPCBMsg( "[YourRP] Checking for Backdoors" )
+	YRPCBMsg( "[YourRP] Fast Check for Backdoors" )
 	YRPCBMsg( "" )
 
-	YRPCBMsg( ">>> Checking Local Addons for Backdoors <<<" )
-	YRPCheckFolders( "addons" )
-	if !foundbackdoor then
-		YRPCBMsg( ">>> No Backdoors found, but there might be some left" )
-	else
-		YRPCBMsg( "" )
-	end
+	YRPCheckFolder( "addons" )
+	YRPCheckFolder( "lua" )
+	YRPCheckFolder( "cfg" )
+	YRPCheckFolder( "data" )
 
 	YRPCBHR()
 end
@@ -1073,6 +1181,6 @@ end
 hook.Remove( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckBackdoors" )
 hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckBackdoors", function()
 	if SERVER then
-		timer.Simple( 4, YRPCheckBackdoors )
+		timer.Simple( 3, YRPCheckBackdoors )
 	end
 end )

@@ -147,14 +147,47 @@ function Player:getJobTable()
 	return _job
 end
 
-RPExtraTeams = RPExtraTeams or {}
+function YRPMakeJobTable( id )
+	local job = {}
+
+	job.team = id
+	job.name = "LOADING"
+	job.model = ""
+	job.description = ""
+	job.weapons = ""
+	job.max = 1
+	job.salary = 0
+	job.admin = 0
+	job.vote = false
+	job.hasLicense = false
+	job.candemote = false
+	job.category = ""
+	job.command = ""
+	
+	job.color = Color(0, 0, 0, 255)
+	job.uniqueID = id
+	job.int_groupID = 1
+
+	job.fake = true
+
+	return job
+end
+
+if RPExtraTeams == nil then
+	RPExtraTeams = {}
+	for i = 0, 2000 do
+		RPExtraTeams[i] = YRPMakeJobTable( i )
+		if i == 0 then
+			RPExtraTeams[i].name = "LOADING"
+			RPExtraTeams[i].fake = false
+		end
+	end
+end
 jobByCmd = jobByCmd or {}
 function GetRPExtraTeams()
-	RPExtraTeams = RPExtraTeams or {}
 	for i, ply in pairs(player.GetAll()) do
 		local _job = ply:getJobTable()
 		RPExtraTeams[ply:Team()] = _job
-		--table.insert(RPExtraTeams, _job) -- old
 	end
 	return RPExtraTeams
 end
@@ -268,30 +301,30 @@ local function InitializeDarkRPVars(len)
 	local plyCount = net.ReadUInt(8)
 
 	for i = 1, plyCount, 1 do
-			local userID = net.ReadUInt(16)
-			local varCount = net.ReadUInt(DarkRP.DARKRP_ID_BITS + 2)
+		local userID = net.ReadUInt(16)
+		local varCount = net.ReadUInt(DarkRP.DARKRP_ID_BITS + 2)
 
-			for j = 1, varCount, 1 do
-					local var, value = DarkRP.readNetDarkRPVar()
-					RetrievePlayerVar(userID, var, value)
-			end
+		for j = 1, varCount, 1 do
+				local var, value = DarkRP.readNetDarkRPVar()
+				RetrievePlayerVar(userID, var, value)
+		end
 	end
 end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
 --timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
 
 net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
-		local userID = net.ReadUInt(16)
-		DarkRPVars[userID] = nil
+	local userID = net.ReadUInt(16)
+	DarkRPVars[userID] = nil
 end)
 
 timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
-		for _, v in ipairs(player.GetAll()) do
-				if v:getDarkRPVar("rpname") then continue end
+	for _, v in ipairs(player.GetAll()) do
+		if v:getDarkRPVar("rpname") then continue end
 
-				RunConsoleCommand("_sendDarkRPvars")
-				return
-		end
+		RunConsoleCommand("_sendDarkRPvars")
+		return
+	end
 
-		timer.Remove("DarkRPCheckifitcamethrough")
+	timer.Remove("DarkRPCheckifitcamethrough")
 end)

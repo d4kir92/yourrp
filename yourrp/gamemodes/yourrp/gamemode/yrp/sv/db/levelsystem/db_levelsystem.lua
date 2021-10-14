@@ -121,8 +121,8 @@ function Player:AddLevel(level)
 	local minlvl = self:GetMinLevel()
 	local maxlvl = self:GetMaxLevel()
 
-	if charid <= 0 then
-		YRP.msg("note", "AddLevel FAILED #3: charid <= 0: " .. tostring(charid))
+	if charid <= 0 and self:IsPlayer() and !self:IsBot() then
+		YRP.msg( "note", "AddLevel FAILED #3: charid <= 0: " .. tostring(charid) .. " ply: " .. self:YRPName() )
 		return
 	end
 

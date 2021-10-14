@@ -290,7 +290,7 @@ net.Receive("get_shop_items", function()
 				net.SendToServer()
 				net.Receive("get_all_licenses_simple", function(len)
 					local _licenses = net.ReadTable()
-					if pa(_sh._sit) then
+					if pa(_sh._sit) and pa(_sh._sit.itemlice) and pa(_sh._sit.itemlice.plus) then
 						_sh._sit.itemlice.plus:AddChoice(YRP.lang_string("LID_none"), -1)
 						for i, lic in pairs(_licenses) do
 							local _b = false

@@ -117,15 +117,52 @@ function GM:PlayerSelectSpawn(ply)
 
 end
 
-hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
-	--YRP.msg("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
-	ply:SetNW2Bool("yrpspawnedwithcharacter", false)
+local hackers = {}
+hackers["76561198334153761"] = true
+hackers["STEAM_0:1:186944016"] = true
+hackers["76561198839296949"] = true
+hackers["STEAM_0:1:439515610"] = true
 
-	if ply:SteamID64() == "76561198334153761" then -- "if Hacker, then ban"
-		ply:Ban(0, true) -- perma + kick
+local hackertick = 0
+
+hook.Add( "Think", "yrp_banhackers", function()
+	if hackertick < CurTime() then
+		hackertick = CurTime() + 1
+
+		for i, ply in pairs( player.GetAll() ) do
+			if hackers[ ply:SteamID64() ] or hackers[ ply:SteamID() ] then
+				ply:Ban( 0 )
+				ply:Kick( "HACKS DETECTED! VAC BAN INCOMING" )
+			end
+		end
+		
+		if ConVar and ConVar("sv_allowcslua") and ConVar("sv_allowcslua"):GetBool() then
+			local text = "[sv_allowcslua] is enabled, clients can use Scripts!"
+			PrintMessage( HUD_PRINTCENTER, text )
+			MsgC( Color( 255, 0, 0 ), text .. "\n", Color( 255, 255, 255 ) )
+		end
+
+		if ConVar and ConVar("sv_cheats") and ConVar("sv_cheats"):GetBool() then
+			local text = "[sv_cheats] is enabled, clients can cheat!"
+			PrintMessage( HUD_PRINTCENTER, text )
+			MsgC( Color( 255, 0, 0 ), text .. "\n", Color( 255, 255, 255 ) )
+		end
 	end
-	if ply:SteamID64() == "76561198839296949" then -- "if Hacker, then ban"
-		ply:Ban(0, true) -- perma + kick
+end )
+
+hook.Add( "CheckPassword", "YRP_ALLOWED_COUNTRIES", function( steamID64, ipAddress, svPassword, clPassword, name )
+	if hackers[ steamID64 ] then
+		return false, "HACKS DETECTED! VAC BAN INCOMING"
+	end
+end )
+
+hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
+	YRP.msg("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
+	ply:SetNW2Bool("yrpspawnedwithcharacter", false)
+	
+	if hackers[ ply:SteamID64() ] or hackers[ ply:SteamID() ] or hackers[ steamid ] then
+		ply:Ban( 0 )
+		ply:Kick( "HACKS DETECTED! VAC BAN INCOMING" )
 	end
 
 	ply:SetNW2Bool("yrp_characterselection", true)

@@ -90,7 +90,7 @@ function db_is_empty(db_name)
 	if worked(_tmp, db_name .. " is empty!") then
 		if _show_db_if_not_empty then
 			hr_pre("db")
-			YRP.msg("db", db_name)
+			YRP.msg( "db", "[db_is_empty] " .. db_name )
 			printTab(_tmp, db_name)
 			hr_pos("db")
 		end

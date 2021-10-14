@@ -165,9 +165,12 @@ function SetRole(ply, rid, force, pmid)
 	if GetGlobalBool("bool_weapon_system", true) then
 		for i, slot in pairs(YRPGetCharSWEPS(ply)) do
 			for x, wep in pairs(slot) do
-				ply:Give(wep)
+				if !strEmpty( wep ) then
+					ply:Give(wep)
+				end
 			end
 		end
+		
 		local rolTab = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'")
 		if wk(rolTab) then
 			rolTab = rolTab[1]

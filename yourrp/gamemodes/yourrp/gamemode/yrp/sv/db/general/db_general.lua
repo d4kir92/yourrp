@@ -263,6 +263,8 @@ SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_jump", "TEXT DEFAULT '30.0'")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_max_channels_active", "INT DEFAULT 1")
 SQL_ADD_COLUMN(DATABASE_NAME, "int_max_channels_passive", "INT DEFAULT 3")
 
+SQL_ADD_COLUMN(DATABASE_NAME, "text_whitelist_countries", "TEXT DEFAULT ''")
+
 local HANDLER_GENERAL = {}
 
 function RemFromHandler_General(ply)
@@ -1666,6 +1668,14 @@ net.Receive("update_text_social_steamgroup", function(len, ply)
 end)
 
 
+util.AddNetworkString("update_text_whitelist_countries")
+net.Receive("update_text_whitelist_countries", function(len, ply)
+	local str = net.ReadString()
+	str = string.Replace(str, " ", "")
+	GeneralUpdateString(ply, "update_text_whitelist_countries", "text_whitelist_countries", str)
+end)
+
+
 
 util.AddNetworkString("update_float_scale_hunger")
 net.Receive("update_float_scale_hunger", function(len, ply)
@@ -1740,52 +1750,7 @@ net.Receive("gethelpmenu", function(len, ply)
 
 		AddTab(tabs, "LID_help", "getsitehelp")
 		AddTab(tabs, "LID_staff", "getsitestaff")
-		--[[if !strEmpty(info.text_server_rules) then
-			AddTab(tabs, "LID_rules", "getsiteserverrules")
-		end
-		if !strEmpty(info.text_server_collectionid) and tonumber(info.text_server_collectionid) > 100000000 then
-			AddTab(tabs, "LID_collection", "getsitecollection")
-		end]]
-
-		--[[if !strEmpty(info.text_social_website) or
-			!strEmpty(info.text_social_forum) or
-			!strEmpty(info.text_social_discord) or
-			!strEmpty(info.text_social_teamspeak_ip) or
-			!strEmpty(info.text_social_twitter) or
-			!strEmpty(info.text_social_youtube) or
-			!strEmpty(info.text_social_facebook) or
-			!strEmpty(info.text_social_steamgroup) then
-			--!strEmpty(info.text_social_servers) then
-			AddTab(tabs, "LID_community", "")
-			if !strEmpty(info.text_social_website) then
-				AddSubTab(subtabs, "LID_community", "Website", "getsitecommunitywebsite")
-			end
-			if !strEmpty(info.text_social_forum) then
-				AddSubTab(subtabs, "LID_community", "Forum", "getsitecommunityforum")
-			end
-			if !strEmpty(info.text_social_discord) then
-				AddSubTab(subtabs, "LID_community", "Discord", "getsitecommunitydiscord")
-			end
-			if !strEmpty(info.text_social_teamspeak_ip) then
-				AddSubTab(subtabs, "LID_community", "Teamspeak", "getsitecommunityteamspeak")
-			end
-			if !strEmpty(info.text_social_twitter) then
-				AddSubTab(subtabs, "LID_community", "Twitter", "getsitecommunitytwitter")
-			end
-			if !strEmpty(info.text_social_youtube) then
-				AddSubTab(subtabs, "LID_community", "Youtube", "getsitecommunityyoutube")
-			end
-			if !strEmpty(info.text_social_facebook) then
-				AddSubTab(subtabs, "LID_community", "Facebook", "getsitecommunityfacebook")
-			end
-			if !strEmpty(info.text_social_steamgroup) then
-				AddSubTab(subtabs, "LID_community", "SteamGroup", "getsitecommunitysteamgroup")
-			end
-			--if info.text_social_servers) then
-				--AddSubTab(subtabs, "LID_community", "servers", "getsitecommunityservers")
-			--end
-		end]]
-
+	
 		AddTab(tabs, "YourRP", "")
 		AddSubTab(subtabs, "YourRP", "Whats New", "getsiteyourrpwhatsnew")
 		AddSubTab(subtabs, "YourRP", "Discord", "getsiteyourrpdiscord")

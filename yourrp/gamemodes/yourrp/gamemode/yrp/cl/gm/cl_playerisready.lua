@@ -7,6 +7,8 @@ local serverreceived = false
 YRPReadyStuck = YRPReadyStuck or {}
 YRPReadyStuckCounter = YRPReadyStuckCounter or 0
 
+YRPReadyHook = YRPReadyHook or false
+
 function YRPReadyAddEvent( msg )
 	if !table.HasValue( YRPReadyStuck, msg ) then
 		table.insert( YRPReadyStuck, msg )
@@ -33,8 +35,6 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 		YRPReadyAddEvent( "LocalPlayer INVALID" )
 		timer.Simple( 0.1, YRPSendIsReadyPingPong )
 	else
-		YRPReadyAddEvent( "LocalPlayer VALID" )
-
 		if system.IsWindows and os.clock and system.GetCountry and GetBranch then
 			YRPReadyAddEvent( "OSReady" )
 			local info = {}
@@ -64,7 +64,7 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 						YRPReadyStuckCounter = YRPReadyStuckCounter + 1
 						YRPSendIsReadyPingPong()
 					else
-						YRPReadyMSG( "Server received the ready message.", Color( 0, 255, 0 ) )
+						YRPReadyMSG( "Server received the ready message!", Color( 0, 255, 0 ) )
 					end
 				end )
 			else
@@ -81,9 +81,8 @@ end
 function YRPSendIsReady()
 	YRPReadyAddEvent( "SendIsReady" )
 	YRPReadyMSG( "SETUP READY MESSAGE", Color( 0, 255, 0 ) )
-	
-	-- IMPORTANT
-	timer.Simple( 0.1, YRPSendIsReadyPingPong )
+
+	YRPSendIsReadyPingPong()
 
 	YRP.initLang()
 
@@ -109,6 +108,8 @@ end
 
 hook.Add("InitPostEntity", "yrp_InitPostEntity_ISREADY", function()
 	YRP.msg( "note", "InitPostEntity -> ISREADY" )
+
+	YRPReadyHook = true
 
 	YRPReadyAddEvent( "InitPostEntity" )
 
