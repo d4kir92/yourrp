@@ -139,8 +139,8 @@ net.Receive("yrp_is_ready_player", function(len, ply)
 		return
 	end
 
-	if ply:GetNW2Bool("yrp_received_ready", false) == false then
-		ply:SetNW2Bool("yrp_received_ready", true)
+	if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
+		ply:SetNW2Bool( "yrp_received_ready", true )
 
 		YRP.msg( "note", ply:YRPName() .. " is ready for getting Data." )
 

@@ -862,7 +862,7 @@ function LoadCharacters()
 			end
 		end
 
-		if pa(CharMenu.characterList) and CharMenu.characterList:GetWide() > CharMenu.characterList:GetCanvas():GetWide() then
+		if pa(CharMenu.characterList) and CharMenu.characterList.GetCanvas and CharMenu.characterList:GetWide() > CharMenu.characterList:GetCanvas():GetWide() then
 			--CharMenu.characterList:SetWide(CharMenu.characterList:GetCanvas():GetWide()) -- breaks vertical
 			local px, py = CharMenu.characterList:GetPos()
 			CharMenu.characterList:SetPos(CharMenu.charactersBackground:GetWide() / 2 - CharMenu.characterList:GetWide() / 2, py)

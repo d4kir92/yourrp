@@ -1062,6 +1062,7 @@ function UpdateUsergroupsList(ugs)
 			end
 		end
 		for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
+			ug.int_position = tonumber(ug.int_position)
 			if ug.int_position >= 10 then
 				if tobool(ug.bool_removeable) and pa(PARENT.ugs) then
 					AddUG(ug)

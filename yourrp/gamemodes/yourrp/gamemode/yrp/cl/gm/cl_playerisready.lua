@@ -45,20 +45,17 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 			info.branch = GetBranch()
 			info.uptime = os.clock()
 			
-			if lply:GetNW2Bool("yrp_received_ready", false) == false then
+			if lply:GetNW2Bool( "yrp_received_ready", false ) == false then
 				YRPReadyAddEvent( "Sended" )
 				YRPReadyMSG( "SEND READY MESSAGE TO SERVER.", Color( 0, 255, 0 ) )
 				net.Start("yrp_is_ready_player")
 					net.WriteTable(info)
 				net.SendToServer()
 
-				timer.Simple( 1.0, function()
-					if !IsValid(lply) then
-						timer.Simple( 0.1, YRPSendIsReadyPingPong )
-						return
-					end
-
-					if lply:GetNW2Bool("yrp_received_ready", false) == false then
+				timer.Simple( 1, function()
+					lply = LocalPlayer()
+					
+					if lply:GetNW2Bool( "yrp_received_ready", false ) == false then
 						YRPReadyMSG( "Retry sending ready message..." )
 						YRPReadyAddEvent( "Retry" )
 						YRPReadyStuckCounter = YRPReadyStuckCounter + 1

@@ -177,7 +177,9 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 		end
 		ply:SetNW2Bool("yrp_spawning", true)
 		timer.Simple(0.1, function()
-			ply:Spawn()
+			if ea( ply ) then
+				ply:Spawn()
+			end
 		end)
 	else
 		YRP.msg("gm", "No valid character selected (" .. tostring(char) .. ")")

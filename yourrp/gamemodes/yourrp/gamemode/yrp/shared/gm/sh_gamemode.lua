@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 350 -- do NOT change this!
 GM.VersionCanary = 703 -- do NOT change this!
-GM.VersionBuild = 84 -- do NOT change this!
+GM.VersionBuild = 85 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -718,7 +718,7 @@ function YRPReplaceWithPlayerNames(text)
 	return text
 end
 
-function RN(text)
+function YRP_RN(text)
 	local cs, ce = string.find(text, "RN(", 1, true)
 	if cs then
 		local s, e = string.find(text, ")", cs, true)
@@ -728,10 +728,15 @@ function RN(text)
 			local ex = string.sub(text, cs + 3, e - 1)
 
 			ex = string.Explode(",", ex)
+			if ex[1] and ex[2] then
+				local rn = math.random(ex[1], ex[2])
 
-			local rn = math.random(ex[1], ex[2])
-
-			text = pre .. rn .. suf
+				text = pre .. rn .. suf
+			else
+				local s1 = ex[1]
+				local s2 = ex[2]
+				MsgC( Color( 255, 0, 0 ), "ROLL FAILED: " .. tostring( s1 ) .. " " .. tostring( s2 ) .. "\n" )
+			end
 		end
 	end
 	return text
@@ -763,7 +768,7 @@ function YRPChatReplaceCMDS(structure, ply, text)
 
 	result = string.Replace(result, "%TEXT%", text)
 	
-	result = RN(result)
+	result = YRP_RN(result)
 
 	local pk = {}
 	while(!strEmpty(result)) do

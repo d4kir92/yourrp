@@ -1923,7 +1923,7 @@ function YRPCreateLoadingInfo( ti, rti )
 			end
 			text = text .. "YRPReadyHook: " .. tostring( YRPReadyHook ) .. " HookExists: " .. tostring( hook.GetTable()["InitPostEntity"]["yrp_InitPostEntity_ISREADY"] )
 			text = text .. " YRPReadyStuck: " .. table.concat( YRPReadyStuck, ", " ) .. " Counter: " .. tostring( YRPReadyStuckCounter )
-			text = text .. " received_ready: " .. tostring( lply:GetNW2Bool("yrp_received_ready") ) .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
+			text = text .. " received_ready: " .. tostring( lply:GetNW2Bool( "yrp_received_ready" ) ) .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
 		end
 		if yrp2 and GetGlobalBool("bool_character_system") and !IsVoidCharEnabled() then
 			if !strEmpty(text) then
@@ -2133,7 +2133,7 @@ if pa(yrp_loading_screen) then
 		-- RETRY MESSAGE
 		if self.t > 8 or self.rt >= 8 then
 			local py = 0.08
-			if lply:GetNW2Bool("yrp_received_ready", false) == false then
+			if lply:GetNW2Bool( "yrp_received_ready", false ) == false then
 				draw.SimpleText("RETRY SENDING READY MESSAGE", "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				py = py + 0.03
 			end
