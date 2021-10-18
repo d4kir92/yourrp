@@ -106,7 +106,7 @@ function YRPGetKeybinds()
 	end
 end
 
-function get_keybind(name)
+function YRPGetKeybind(name)
 	if yrp_keybinds_loaded then
 		name = tostring(name)
 		return tonumber(yrp_keybinds[name])
@@ -115,7 +115,7 @@ function get_keybind(name)
 	end
 end
 
-function set_keybind(name, value, force)
+function YRPSetKeybind(name, value, force)
 	if yrp_keybinds_loaded then
 
 		if value != 0 and yrp_keybinds then
@@ -139,10 +139,10 @@ function set_keybind(name, value, force)
 	end
 end
 
-function GetKeybindName(kbname, show)
+function YRPGetKeybindName(kbname, show)
 	local _kb = kbname or ""
-	if !string.StartWith( kbname, "in_" ) and get_keybind(kbname) then
-		_kb = get_keybind(kbname)
+	if !string.StartWith( kbname, "in_" ) and YRPGetKeybind(kbname) then
+		_kb = YRPGetKeybind(kbname)
 	end
 	if isnumber(tonumber(_kb)) then
 		_kb = input.GetKeyName(_kb)
@@ -182,13 +182,13 @@ YRPCheckKeybinds()
 
 function YRPResetKeybinds()
 	for i, keybind in pairs(YRP_KEYBINDS) do
-		set_keybind(i, keybind)
+		YRPSetKeybind(i, keybind)
 	end
 end
 
 net.Receive("SetServerKeybinds", function(len)
 	local keytab = net.ReadTable()
 	for i, ktab in pairs(keytab) do
-		set_keybind(ktab.name, ktab.value)
+		YRPSetKeybind(ktab.name, ktab.value)
 	end
 end)

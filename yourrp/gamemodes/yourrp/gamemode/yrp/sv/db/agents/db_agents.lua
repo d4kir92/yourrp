@@ -4,13 +4,10 @@
 -- https://discord.gg/sEgNZxg
 
 local DATABASE_NAME = "yrp_agents"
-SQL_ADD_COLUMN(DATABASE_NAME, "target", "TEXT DEFAULT 'No Target'")
-SQL_ADD_COLUMN(DATABASE_NAME, "reward", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT 'NO DESCRIPTION'")
-SQL_ADD_COLUMN(DATABASE_NAME, "contract_SteamID", "TEXT DEFAULT ''")
-
---db_drop_table(DATABASE_NAME)
---db_is_empty(DATABASE_NAME)
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "target", "TEXT DEFAULT 'No Target'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "reward", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT 'NO DESCRIPTION'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "contract_SteamID", "TEXT DEFAULT ''")
 
 util.AddNetworkString("yrp_placehit")
 util.AddNetworkString("yrp_gethits")
@@ -26,7 +23,7 @@ net.Receive("yrp_placehit", function(len, ply)
 	if ply:canAfford(_reward) then
 		ply:addMoney(- _reward)
 		YRP.msg("note", "Set hit")
-		local _res = SQL_INSERT_INTO(DATABASE_NAME, "target, reward, description, contract_SteamID", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "', '" .. ply:SteamID() .. "'")
+		local _res = YRP_SQL_INSERT_INTO(DATABASE_NAME, "target, reward, description, contract_SteamID", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "', '" .. ply:SteamID() .. "'")
 
 	else
 		YRP.msg("note", "Cant afford hit")
@@ -34,7 +31,7 @@ net.Receive("yrp_placehit", function(len, ply)
 end)
 
 net.Receive("yrp_gethits", function(len, ply)
-	local _hits = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local _hits = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if _hits != nil then
 		net.Start("yrp_gethits")
 			net.WriteTable(_hits)
@@ -44,7 +41,7 @@ end)
 
 util.AddNetworkString("yrp_get_contracts")
 net.Receive("yrp_get_contracts", function(len, ply)
-	local _hits = SQL_SELECT(DATABASE_NAME, "*", "contract_SteamID = '" .. ply:SteamID() .. "'")
+	local _hits = YRP_SQL_SELECT(DATABASE_NAME, "*", "contract_SteamID = '" .. ply:SteamID() .. "'")
 	if _hits != nil then
 		net.Start("yrp_get_contracts")
 			net.WriteTable(_hits)
@@ -53,7 +50,7 @@ net.Receive("yrp_get_contracts", function(len, ply)
 end)
 
 function hitdone(target, agent)
-	SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. target:GetNW2String("hituid"))
+	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. target:GetNW2String("hituid"))
 
 	target:SetNW2Bool("iswanted", false)
 	target:SetNW2String("hitreward", "")
@@ -69,7 +66,7 @@ end
 
 net.Receive("yrp_accepthit", function(len, ply)
 	local _uid = net.ReadString()
-	local _hit = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _uid)
+	local _hit = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _uid)
 
 	if _hit != nil then
 		_hit = _hit[1]

@@ -2,9 +2,9 @@
 
 local DATABASE_NAME = "yrp_inventory_slots"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
---SQL_DROP_TABLE(DATABASE_NAME)
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
+--YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
 
 
@@ -12,9 +12,9 @@ function CreateSlot(storageID, inv)
 	storageID = tonumber(storageID)
 	if wk(storageID) then
 		if inv then
-			SQL_INSERT_INTO(DATABASE_NAME, "int_storageID, text_type", "'" .. storageID .. "', '" .. "bag" .. "'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_storageID, text_type", "'" .. storageID .. "', '" .. "bag" .. "'")
 		else
-			SQL_INSERT_INTO(DATABASE_NAME, "int_storageID", "'" .. storageID .. "'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_storageID", "'" .. storageID .. "'")
 		end
 	else
 		YRP.msg("db", "[CreateSlot] storageID is invalid")
@@ -26,7 +26,7 @@ function GetStorageSlots(storageID)
 	if wk(storageID) then
 		local slots = {}
 
-		local yrp_slots = SQL_SELECT(DATABASE_NAME, "*", "int_storageID = '" .. storageID .. "'")
+		local yrp_slots = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_storageID = '" .. storageID .. "'")
 		if wk(yrp_slots) then
 			slots = yrp_slots
 		else

@@ -8,14 +8,11 @@ util.AddNetworkString("removeVehicleOwner")
 util.AddNetworkString("getVehicleInfo")
 
 local DATABASE_NAME = "yrp_vehicles"
-SQL_ADD_COLUMN(DATABASE_NAME, "keynr", "TEXT DEFAULT '-1'")
-SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "ownerCharID", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "item_id", "TEXT DEFAULT ''")
-
---db_drop_table(DATABASE_NAME)
---db_is_empty(DATABASE_NAME)
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "keynr", "TEXT DEFAULT '-1'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT 100")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "ownerCharID", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "item_id", "TEXT DEFAULT ''")
 
 function AddVehicle(veh, ply, item)
 	local charid = ply:CharID()
@@ -24,14 +21,14 @@ function AddVehicle(veh, ply, item)
 
 	veh:SetNW2Int("ownerCharID", tonumber(charid))
 
-	SQL_INSERT_INTO(DATABASE_NAME, "ownerCharID, ClassName, item_id", "'" .. charid .. "', '" .. cname .. "', '" .. iuid .. "'")
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "ownerCharID, ClassName, item_id", "'" .. charid .. "', '" .. cname .. "', '" .. iuid .. "'")
 end
 
 function allowedToUseVehicle(id, ply)
 	if ply:HasAccess() then
 		return true
 	else
-		local _tmpVehicleTable = SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. id .. "'")
+		local _tmpVehicleTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. id .. "'")
 		if _tmpVehicleTable[1] != nil then
 			if tostring(_tmpVehicleTable[1].ownerCharID) == ply:CharID() then
 				return true
@@ -46,7 +43,7 @@ net.Receive("getVehicleInfo", function(len, ply)
 
 	local _vehicleID = net.ReadString()
 
-	local _vehicleTab = SQL_SELECT(DATABASE_NAME, "*", "ownerCharID = '" .. _vehicle:GetNW2Int("ownerCharID", 0) .. "' AND item_id = " .. _vehicleID)
+	local _vehicleTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "ownerCharID = '" .. _vehicle:GetNW2Int("ownerCharID", 0) .. "' AND item_id = " .. _vehicleID)
 
 	if worked(_vehicleTab, "getVehicleInfo | No buyed vehicle! Dont work on spawnmenu vehicle") then
 		local owner = ""
@@ -81,7 +78,7 @@ function unlockVehicle(ply, ent, nr)
 		end
 		return true
 	end
-	local _tmpVehicleTable = SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. nr .. "'")
+	local _tmpVehicleTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. nr .. "'")
 	if _tmpVehicleTable != nil then
 		_tmpVehicleTable = _tmpVehicleTable[1]
 		if canVehicleLock(ply, ent) then
@@ -104,7 +101,7 @@ function lockVehicle(ply, ent, nr)
 		end
 		return true
 	end
-	local _tmpVehicleTable = SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. nr .. "'")
+	local _tmpVehicleTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. nr .. "'")
 	if _tmpVehicleTable != nil then
 		_tmpVehicleTable = _tmpVehicleTable[1]
 		if canVehicleLock(ply, ent) then
@@ -121,12 +118,12 @@ end
 
 net.Receive("removeVehicleOwner", function(len, ply)
 	local _tmpVehicleID = tonumber( net.ReadString() )
-	local _tmpTable = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _tmpVehicleID .. "'")
+	local _tmpTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _tmpVehicleID .. "'")
 	if wk(_tmpTable) then
 		_tmpTable = _tmpTable[1]
 		
 		local item_uniqueID = tonumber( _tmpTable.item_id )
-		local result = SQL_UPDATE(DATABASE_NAME, {["ownerCharID"] = ""}, "uniqueID = '" .. _tmpVehicleID .. "'")
+		local result = YRP_SQL_UPDATE(DATABASE_NAME, {["ownerCharID"] = ""}, "uniqueID = '" .. _tmpVehicleID .. "'")
 
 		for k, v in pairs(ents.GetAll()) do
 			if v:GetNW2Int("item_uniqueID", 0) != 0 and item_uniqueID and v:GetNW2Int("item_uniqueID", 0) == item_uniqueID then

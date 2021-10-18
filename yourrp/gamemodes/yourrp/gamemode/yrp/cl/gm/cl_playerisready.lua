@@ -3,6 +3,7 @@
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
 local serverreceived = false
+local YRPRetryCurtime = 0
 
 YRPReadyStuck = YRPReadyStuck or {}
 YRPReadyStuckCounter = YRPReadyStuckCounter or 0
@@ -32,10 +33,10 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 	local lply = LocalPlayer()
 
 	if !IsValid(lply) then
-		YRPReadyAddEvent( "LocalPlayer INVALID" )
+		YRPReadyAddEvent( "LocalPlayer INVALID #1" )
 		timer.Simple( 0.1, YRPSendIsReadyPingPong )
 	else
-		if system.IsWindows and os.clock and system.GetCountry and GetBranch then
+		if system.IsWindows and os.clock and system.GetCountry and GetBranch and os.clock() and system.GetCountry() and GetBranch() then
 			YRPReadyAddEvent( "OSReady" )
 			local info = {}
 			info.iswindows = system.IsWindows()
@@ -49,19 +50,30 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 				YRPReadyAddEvent( "Sended" )
 				YRPReadyMSG( "SEND READY MESSAGE TO SERVER.", Color( 0, 255, 0 ) )
 				net.Start("yrp_is_ready_player")
-					net.WriteTable(info)
+					net.WriteTable( info )
 				net.SendToServer()
+
+				YRPRetryCurtime = CurTime() + 4
 
 				timer.Simple( 1, function()
 					lply = LocalPlayer()
-					
-					if lply:GetNW2Bool( "yrp_received_ready", false ) == false then
-						YRPReadyMSG( "Retry sending ready message..." )
-						YRPReadyAddEvent( "Retry" )
-						YRPReadyStuckCounter = YRPReadyStuckCounter + 1
+
+					YRPReadyAddEvent( "Timer" )
+
+					if !IsValid(lply) then
+						YRPReadyAddEvent( "LocalPlayer INVALID #2" )
 						YRPSendIsReadyPingPong()
 					else
-						YRPReadyMSG( "Server received the ready message!", Color( 0, 255, 0 ) )
+						YRPReadyAddEvent( "received: " .. tostring( lply:GetNW2Bool( "yrp_received_ready", false ) ) )
+						
+						if lply:GetNW2Bool( "yrp_received_ready", false ) == false then
+							YRPReadyMSG( "Retry sending ready message..." )
+							YRPReadyAddEvent( "Retry #1" )
+							YRPReadyStuckCounter = YRPReadyStuckCounter + 1
+							YRPSendIsReadyPingPong()
+						else
+							YRPReadyMSG( "Server received the ready message!", Color( 0, 255, 0 ) )
+						end
 					end
 				end )
 			else
@@ -74,6 +86,23 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 		end
 	end
 end
+
+local delay = 0
+hook.Add( "Think", "YRP_RETRYSENDMESSAGE", function()
+	if CurTime() < delay then
+		return
+	end
+	delay = CurTime() + 4
+
+	lply = LocalPlayer()
+
+	if IsValid(lply) and lply:GetNW2Bool( "yrp_received_ready", false ) == false and YRPRetryCurtime < CurTime() then
+		YRPReadyAddEvent( "Retry #2" )
+		YRPSendIsReadyPingPong()
+	elseif lply:GetNW2Bool( "yrp_received_ready", false ) == true then
+		hook.Remove( "Think", "YRP_RETRYSENDMESSAGE" )
+	end
+end )
 
 function YRPSendIsReady()
 	YRPReadyAddEvent( "SendIsReady" )

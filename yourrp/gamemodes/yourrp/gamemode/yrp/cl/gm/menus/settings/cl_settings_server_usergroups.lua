@@ -697,10 +697,12 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 			end
 		end
 		local result = table.concat(tab, ";")
-		net.Start("usergroup_update_string_ammos")
-			net.WriteString(CURRENT_USERGROUP)
-			net.WriteString(result)
-		net.SendToServer()
+		if CURRENT_USERGROUP then
+			net.Start("usergroup_update_string_ammos")
+				net.WriteString(CURRENT_USERGROUP)
+				net.WriteString(result)
+			net.SendToServer()
+		end
 	end
 
 	for i, v in pairs(game.GetAmmoTypes()) do

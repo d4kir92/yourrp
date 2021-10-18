@@ -78,9 +78,9 @@ net.Receive("yrp_get_macros", function(len)
 		_mm.bind = createD("DBinder", content, YRP.ctr(300), YRP.ctr(60), YRP.ctr(320), YRP.ctr(600))
 		_mm.bind.keybind = nil
 		function _mm.bind:OnChange(num)
-			if num != -1 and get_keybind(self.keybind) != nil then
-				if self.keybind != nil and !set_keybind(self.keybind, num) and num != 0 then
-					_mm.bind:SetSelectedNumber(get_keybind(self.keybind))
+			if num != -1 and YRPGetKeybind(self.keybind) != nil then
+				if self.keybind != nil and !YRPSetKeybind(self.keybind, num) and num != 0 then
+					_mm.bind:SetSelectedNumber(YRPGetKeybind(self.keybind))
 					Derma_Message(YRP.lang_string("LID_hotkeyinuse") .. "!", YRP.lang_string("LID_error"), YRP.lang_string("LID_ok"))
 				end
 			end
@@ -108,7 +108,7 @@ net.Receive("yrp_get_macros", function(len)
 					_mm.uid = self.uid
 					_mm.bind.keybind = "m_" .. self.uid
 
-					local keybind = get_keybind(_mm.bind.keybind)
+					local keybind = YRPGetKeybind(_mm.bind.keybind)
 
 					if keybind != nil then
 						_mm.bind:SetValue(keybind)

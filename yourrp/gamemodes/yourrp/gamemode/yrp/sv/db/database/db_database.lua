@@ -6,7 +6,7 @@
 util.AddNetworkString("yrp_drop_table")
 net.Receive("yrp_drop_table", function(len, ply)
 	local tab = net.ReadString()
-	db_drop_table(tab)
+	YRP_SQL_DROP_TABLE(tab)
 end)
 
 local HANDLER_DATABASE = {}
@@ -68,13 +68,13 @@ util.AddNetworkString("yrp_drop_tables")
 net.Receive("yrp_drop_tables", function(len, ply)
 	local _drop_tables = net.ReadTable()
 	local _ug = string.lower(ply:GetUserGroup())
-	local _can = SQL_SELECT("yrp_usergroups", "bool_ac_database", "string_name = '" .. _ug .. "'")
+	local _can = YRP_SQL_SELECT("yrp_usergroups", "bool_ac_database", "string_name = '" .. _ug .. "'")
 	if wk(_can) then
 		_can = _can[1]
 		CreateBackup()
 		if tobool(_can.bool_ac_database) then
 			for i, tab in pairs(_drop_tables) do
-				SQL_DROP_TABLE(tab)
+				YRP_SQL_DROP_TABLE(tab)
 			end
 			game.ConsoleCommand("changelevel " .. GetMapNameDB() .. "\n")
 		end

@@ -5,36 +5,36 @@
 
 local DATABASE_NAME = "yrp_interface"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
 
---SQL_DROP_TABLE(DATABASE_NAME)
+--YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
 local INTERFACES = {}
 function AddIFElement(tab)
 	for name, value in pairs(tab.floats) do
 		local _name = "float_IF_" .. tab.element .. "_" .. name
-		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
-			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
 	end
 	for name, value in pairs(tab.bools) do
 		local _name = "bool_IF_" .. tab.element .. "_" .. name
-		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
-			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
 	end
 	for name, value in pairs(tab.colors) do
 		local _name = "color_IF_" .. tab.element .. "_" .. name
-		if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
-			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
 	end
 	if tab.ints != nil then
 		for name, value in pairs(tab.ints) do
 			local _name = "int_IF_" .. tab.element .. "_" .. name
-			if SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
-				SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
+			if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
+				YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 			end
 		end
 	end
@@ -106,7 +106,7 @@ AddIFElement(Blur)
 local Player = FindMetaTable("Player")
 function Player:InterfaceLoadout()
 	YRP.msg("debug", "[InterfaceLoadout] " .. self:YRPName())
-	local ifeles = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local ifeles = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(ifeles) then
 		for i, ele in pairs(ifeles) do
 			if ele.name != nil then
@@ -135,7 +135,7 @@ util.AddNetworkString("get_interface_settings")
 net.Receive("get_interface_settings", function(len, ply)
 	local element = net.ReadString()
 
-	local tab = SQL_SELECT(DATABASE_NAME, "*", "name LIKE '" .. "%_IF_" .. element .. "_%'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '" .. "%_IF_" .. element .. "_%'")
 
 	if wk(tab) then
 		table.SortByMember(tab, "name", true)
@@ -150,7 +150,7 @@ net.Receive("update_interface_color", function(len, ply)
 	local name = net.ReadString()
 	local color = net.ReadString()
 	YRP.msg("db", "value = '" .. color .. "'" .. "name = '" .. name .. "'")
-	SQL_UPDATE(DATABASE_NAME, {["value"] = color}, "name = '" .. name .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = color}, "name = '" .. name .. "'")
 	IFLoadoutAll()
 end)
 
@@ -159,19 +159,19 @@ function ResetDesign()
 	if tab != nil then
 		for name, value in pairs(tab.floats) do
 			local _name = "float_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
-			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.bools) do
 			local _name = "bool_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
-			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.colors) do
 			local _name = "color_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
-			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 		end
 		for name, value in pairs(tab.ints) do
 			local _name = "int_IF_" .. GetGlobalString("string_interface_design", "Material") .. "_" .. name
-			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'")
 		end
 	end
 

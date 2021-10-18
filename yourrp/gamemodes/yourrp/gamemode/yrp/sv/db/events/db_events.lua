@@ -5,12 +5,8 @@
 
 local DATABASE_NAME = "yrp_events"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_eventname", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_chars", "TEXT DEFAULT ''")
-
-
---db_drop_table(DATABASE_NAME)
---db_is_empty(DATABASE_NAME)
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_eventname", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_chars", "TEXT DEFAULT ''")
 
 util.AddNetworkString("setting_events")
 net.Receive("setting_events", function(len, ply)
@@ -21,7 +17,7 @@ net.Receive("setting_events", function(len, ply)
 end)
 
 function YRPSendEvents(ply)
-	local tab = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
 	if !wk(tab) then -- when empty, send empty
 		tab = {}
@@ -45,7 +41,7 @@ net.Receive("yrp_event_add", function(len, ply)
 		local name = net.ReadString()
 
 		if name and name != "" then
-			SQL_INSERT_INTO(DATABASE_NAME, "string_eventname", "'" .. name .. "'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_eventname", "'" .. name .. "'")
 			YRPSendEvents(ply)
 		end
 	end
@@ -57,14 +53,14 @@ net.Receive("yrp_event_remove", function(len, ply)
 		local uid = net.ReadString()
 
 		if uid and uid != "" then
-			SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
+			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 			YRPSendEvents(ply)
 		end
 	end
 end)
 
 function YRPSendEventChars(ply, uid)
-	local tab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 
 	if wk(tab) then
 		tab = tab[1]
@@ -86,7 +82,7 @@ end)
 util.AddNetworkString("yrp_event_get_chars")
 net.Receive("yrp_event_get_chars", function(len, ply)
 	local steamid = net.ReadString()
-	local tab = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. steamid .. "' AND bool_eventchar = '1'")
+	local tab = YRP_SQL_SELECT("yrp_characters", "*", "SteamID = '" .. steamid .. "' AND bool_eventchar = '1'")
 
 	if !wk(tab) then
 		tab = {}
@@ -105,7 +101,7 @@ net.Receive("yrp_event_char_add", function(len, ply)
 		local charuid = net.ReadString()
 		local charname = net.ReadString()
 
-		local tab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 
 		if wk(tab) then
 			tab = tab[1]
@@ -116,7 +112,7 @@ net.Receive("yrp_event_char_add", function(len, ply)
 			end
 			str = str .. steamid .. "," .. charuid .. "," .. charname
 
-			SQL_UPDATE(DATABASE_NAME, {["string_chars"] = str}, "uniqueID = '" .. uid .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["string_chars"] = str}, "uniqueID = '" .. uid .. "'")
 		end
 
 		YRPSendEventChars(ply, uid)
@@ -130,7 +126,7 @@ net.Receive("yrp_event_char_remove", function(len, ply)
 		local cuid = net.ReadString()
 
 		if euid and euid != "" then
-			local tab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'")
+			local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'")
 
 			if wk(tab) then
 				tab = tab[1]
@@ -146,7 +142,7 @@ net.Receive("yrp_event_char_remove", function(len, ply)
 					end
 				end
 
-				SQL_UPDATE(DATABASE_NAME, {["string_chars"] = newchars}, "uniqueID = '" .. euid .. "'")
+				YRP_SQL_UPDATE(DATABASE_NAME, {["string_chars"] = newchars}, "uniqueID = '" .. euid .. "'")
 			end
 
 			YRPSendEventChars(ply, euid)
@@ -171,9 +167,9 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 		hook.Run("yrp_switched_character", ply, ply:CharID(), cuid)
 	end
 	if wk(cuid) then
-		SQL_UPDATE("yrp_players", {["CurrentCharacter"] = cuid}, "SteamID = '" .. ply:SteamID() .. "'")
+		YRP_SQL_UPDATE("yrp_players", {["CurrentCharacter"] = cuid}, "SteamID = '" .. ply:SteamID() .. "'")
 		if !force then
-			SQL_UPDATE("yrp_players", {["NormalCharacter"] = cuid}, "SteamID = '" .. ply:SteamID() .. "'")
+			YRP_SQL_UPDATE("yrp_players", {["NormalCharacter"] = cuid}, "SteamID = '" .. ply:SteamID() .. "'")
 		end
 		ply:SetNW2Bool("yrp_spawning", true)
 		timer.Simple(0.1, function()
@@ -208,7 +204,7 @@ util.AddNetworkString("yrp_event_start")
 net.Receive("yrp_event_start", function(len, ply)
 	local euid = net.ReadString()
 
-	local tab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'")
 	if wk(tab) then
 		tab = tab[1]
 
@@ -233,7 +229,7 @@ util.AddNetworkString("yrp_event_end")
 net.Receive("yrp_event_end", function(len, ply)
 	local euid = net.ReadString()
 
-	local tab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'")
 	if wk(tab) then
 		tab = tab[1]
 

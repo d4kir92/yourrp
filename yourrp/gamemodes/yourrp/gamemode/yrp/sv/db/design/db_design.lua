@@ -5,24 +5,24 @@
 
 local DATABASE_NAME = "yrp_design"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Impact'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_profile", "TEXT DEFAULT 'YourRP Default'")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Impact'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_profile", "TEXT DEFAULT 'YourRP Default'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'")
 
-local fir = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
+local fir = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
 if fir == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Material', 'Roboto'")
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Material', 'Roboto'")
 elseif wk(fir) then
 	fir = fir[1]
 	if fir.string_interface_design == "Simple" or fir.string_hud_design == "Material" then
-		SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = "Simple"}, "uniqueID = '" .. "1" .. "'")
-		SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = "Material"}, "uniqueID = '" .. "1" .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = "Simple"}, "uniqueID = '" .. "1" .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = "Material"}, "uniqueID = '" .. "1" .. "'")
 	end
 end
 
---SQL_DROPTABLE(DATABASE_NAME)
+--YRP_SQL_DROPTABLE(DATABASE_NAME)
 
 local HUDS = {}
 function YRPGetHUDs()
@@ -129,7 +129,7 @@ function Player:YRPDesignLoadout(from)
 	self:HudLoadout()
 	self:InterfaceLoadout()
 	YRP.msg("debug", "[DesignLoadout] " .. self:YRPName() .. " " .. tostring(from))
-	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+	local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(setting) then
 		setting = setting[1]
 		self:SetNW2String("string_hud_design", setting.string_hud_design)
@@ -173,7 +173,7 @@ util.AddNetworkString("change_hud_design")
 net.Receive("change_hud_design", function(len, ply)
 	local string_hud_design = net.ReadString()
 	YRP.msg("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
-	SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = string_hud_design}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = string_hud_design}, "uniqueID = '1'")
 	for i, pl in pairs(player.GetAll()) do
 		pl:SetNW2String("string_hud_design", string_hud_design)
 	end
@@ -210,7 +210,7 @@ util.AddNetworkString("change_interface_design")
 net.Receive("change_interface_design", function(len, ply)
 	local string_interface_design = net.ReadString()
 	YRP.msg("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
-	SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = string_interface_design}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = string_interface_design}, "uniqueID = '1'")
 	SetGlobalString("string_interface_design", string_interface_design)
 
 	ResetDesign()
@@ -221,7 +221,7 @@ util.AddNetworkString("get_design_settings")
 net.Receive("get_design_settings", function(len, ply)
 	if ply:CanAccess("bool_design") then
 		hook.Call("RegisterHUDDesign")
-		local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 		local hud_profiles = GetHudProfiles()
 		if wk(setting) then
 			setting = setting[1]
@@ -237,7 +237,7 @@ end)
 
 util.AddNetworkString("yrp_set_font")
 function YRPSendFontName(ply)
-	local dbtab = SQL_SELECT(DATABASE_NAME, "string_fontname", "uniqueID = '1'")
+	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "string_fontname", "uniqueID = '1'")
 	if wk(dbtab) then
 		dbtab = dbtab[1]
 
@@ -255,7 +255,7 @@ util.AddNetworkString("yrp_update_font")
 net.Receive("yrp_update_font", function(len, ply)
 	local string_fontname = net.ReadString()
 	YRP.msg("db", "[DESIGN] string_fontname changed to " .. string_fontname)
-	SQL_UPDATE(DATABASE_NAME, {["string_fontname"] = string_fontname}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_fontname"] = string_fontname}, "uniqueID = '1'")
 
 	for i, p in pairs(player.GetAll()) do
 		YRPSendFontName(p)
@@ -267,6 +267,6 @@ net.Receive("yrp_change_headerheight", function(len, ply)
 	local newheaderheight = net.ReadString()
 	newheaderheight = tonumber(newheaderheight)
 
-	SQL_UPDATE(DATABASE_NAME, {["int_headerheight"] = newheaderheight}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_headerheight"] = newheaderheight}, "uniqueID = '1'")
 	SetGlobalInt("int_headerheight", newheaderheight)
 end)

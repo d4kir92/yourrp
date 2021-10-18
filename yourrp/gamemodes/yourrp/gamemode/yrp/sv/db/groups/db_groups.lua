@@ -5,56 +5,55 @@
 
 local DATABASE_NAME = "yrp_ply_groups"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'GroupName'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_description", "TEXT DEFAULT '-'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/group.png'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_ents", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'GroupName'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_description", "TEXT DEFAULT '-'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/group.png'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ents", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_parentgroup", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_parentgroup", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_cc", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_rm", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_cc", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_rm", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_iscp", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_iscp", "INTEGER DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
 
 -- PUBLIC GROUP
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = -1") == nil then
-	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible_rm, bool_visible_cc", "-1, 'PUBLIC', '255,255,255', -1, 0, 0, 0, 0")
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = -1") == nil then
+	local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible_rm, bool_visible_cc", "-1, 'PUBLIC', '255,255,255', -1, 0, 0, 0, 0")
 end
-SQL_UPDATE(DATABASE_NAME, {["int_parentgroup"] = -1}, "uniqueID = '-1'")
-SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '0'")
+YRP_SQL_UPDATE(DATABASE_NAME, {["int_parentgroup"] = -1}, "uniqueID = '-1'")
+YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '0'")
 
 -- DEFAULT GROUP
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	YRP.msg("note", DATABASE_NAME .. " has not the default group")
-	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "'1', 'Civilians', '0,0,255', '0', '0'")
+	local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "'1', 'Civilians', '0,0,255', '0', '0'")
 end
 
-local dbtab = SQL_SELECT(DATABASE_NAME, "*", nil)
+local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 if dbtab then
-	for i, v in pairs(SQL_SELECT(DATABASE_NAME, "*", nil)) do
+	for i, v in pairs(YRP_SQL_SELECT(DATABASE_NAME, "*", nil)) do
 		v.uniqueID = tonumber(v.uniqueID)
 		v.int_parentgroup = tonumber(v.int_parentgroup)
 		if v.uniqueID != -1 and v.int_parentgroup == v.uniqueID then
-			SQL_UPDATE(DATABASE_NAME, {["int_parentgroup"] = 0}, "uniqueID = '" .. v.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_parentgroup"] = 0}, "uniqueID = '" .. v.uniqueID .. "'")
 		end
 	end
 end
---db_drop_table(DATABASE_NAME)
 
 -- Local Table
 local yrp_ply_groups = {}
-local _init_ply_groups = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+local _init_ply_groups = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if wk(_init_ply_groups) then
 	yrp_ply_groups = _init_ply_groups[1]
 end
@@ -83,7 +82,7 @@ for str, val in pairs(yrp_ply_groups) do
 			BroadcastString(tab)
 			if tab.netstr == "update_group_string_name" then
 				util.AddNetworkString("settings_group_update_name")
-				local puid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 				if wk(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
@@ -94,7 +93,7 @@ for str, val in pairs(yrp_ply_groups) do
 				end
 			elseif tab.netstr == "update_group_string_color" then
 				util.AddNetworkString("settings_group_update_color")
-				local puid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 				if wk(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
@@ -105,7 +104,7 @@ for str, val in pairs(yrp_ply_groups) do
 				end
 			elseif tab.netstr == "update_group_string_icon" then
 				util.AddNetworkString("settings_group_update_icon")
-				local puid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 				if wk(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
@@ -123,7 +122,7 @@ for str, val in pairs(yrp_ply_groups) do
 		net.Receive(tab.netstr, function(len, ply)
 			local uid = tonumber(net.ReadString())
 			local int = tonumber(net.ReadString())
-			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+			local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 			tab.ply = ply
 			tab.id = str
 			tab.value = int
@@ -223,7 +222,7 @@ net.Receive("Unsubscribe_Settings_GroupsAndRoles", function(len, ply)
 end)
 
 function SortGroups(uid)
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. uid .. "'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. uid .. "'")
 
 	if wk(siblings) then
 		for i, sibling in pairs(siblings) do
@@ -233,7 +232,7 @@ function SortGroups(uid)
 		local count = 0
 		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 			count = count + 1
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
 		end
 	end
 end
@@ -242,19 +241,19 @@ function SendGroupList(uid)
 	uid = tonumber(uid)
 	SortGroups(uid)
 
-	local tbl_parentgroup = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local tbl_parentgroup = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	if !wk(tbl_parentgroup) or uid < 1 then
 		tbl_parentgroup = {}
 	else
 		tbl_parentgroup = tbl_parentgroup[1]
 	end
 
-	local tbl_groups = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. uid .. "'")
+	local tbl_groups = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. uid .. "'")
 	if !wk(tbl_groups) then
 		tbl_groups = {}
 	end
 	local currentuid = uid
-	local parentuid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local parentuid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	if wk(parentuid) then
 		parentuid = parentuid[1].int_parentgroup
 	else
@@ -275,7 +274,7 @@ end
 -- Duplicate
 function DuplicateGroup(guid)
 	guid = tonumber(guid)
-	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. guid .. "'")
+	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. guid .. "'")
 	if wk(group) then
 		group = group[1]
 
@@ -291,11 +290,11 @@ function DuplicateGroup(guid)
 		cols = table.concat(cols, ", ")
 		vals = table.concat(vals, ", ")
 
-		SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
-		local last = SQL_SELECT(DATABASE_NAME, "*", nil)
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
+		local last = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 		last = last[table.Count(last)]
 
-		local roles = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'")
+		local roles = YRP_SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'")
 		if wk(roles) then
 			for i, role in pairs(roles) do
 				DuplicateRole(role.uniqueID, last.uniqueID)
@@ -325,18 +324,18 @@ end)
 util.AddNetworkString("settings_add_group")
 net.Receive("settings_add_group", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	SQL_INSERT_INTO(DATABASE_NAME, "int_parentgroup", "'" .. uid .. "'")
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_parentgroup", "'" .. uid .. "'")
 
-	local groups = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. uid .. "'")
+	local groups = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. uid .. "'")
 
 	local count = tonumber(table.Count(groups))
 	local new_group = groups[count]
 	local up = groups[count - 1]
 	if count == 1 then
-		SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_group.uniqueID .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_group.uniqueID .. "'")
 	else
-		SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_group.uniqueID .. "'")
-		--SQL_UPDATE(DATABASE_NAME, {["int_dn"] = '" .. new_group.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_group.uniqueID .. "'")
+		--YRP_SQL_UPDATE(DATABASE_NAME, {["int_dn"] = '" .. new_group.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'")
 	end
 
 	YRP.msg("db", "Added new group: " .. new_group.uniqueID)
@@ -347,12 +346,12 @@ end)
 util.AddNetworkString("settings_group_position_up")
 net.Receive("settings_group_position_up", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	group = group[1]
 
 	group.int_position = tonumber(group.int_position)
 
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. group.int_parentgroup .. "'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. group.int_parentgroup .. "'")
 
 	for i, sibling in pairs(siblings) do
 		sibling.int_position = tonumber(sibling.int_position)
@@ -362,8 +361,8 @@ net.Receive("settings_group_position_up", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == group.int_position - 1 then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = group.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = group.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 
@@ -374,12 +373,12 @@ end)
 util.AddNetworkString("settings_group_position_dn")
 net.Receive("settings_group_position_dn", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	group = group[1]
 
 	group.int_position = tonumber(group.int_position)
 
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. group.int_parentgroup .. "'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. group.int_parentgroup .. "'")
 
 	for i, sibling in pairs(siblings) do
 		sibling.int_position = tonumber(sibling.int_position)
@@ -389,8 +388,8 @@ net.Receive("settings_group_position_dn", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == group.int_position + 1 then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = group.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = group.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 
@@ -403,16 +402,16 @@ net.Receive("settings_subscribe_group", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	SubscribeGroup(ply, uid)
 
-	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	if !wk(group) then
 		group = {}
 	else
 		group = group[1]
 	end
 
-	local groups = SQL_SELECT(DATABASE_NAME, "string_name, uniqueID", nil)
+	local groups = YRP_SQL_SELECT(DATABASE_NAME, "string_name, uniqueID", nil)
 
-	local usergroups = SQL_SELECT("yrp_usergroups", "*", nil)
+	local usergroups = YRP_SQL_SELECT("yrp_usergroups", "*", nil)
 
 	net.Start("settings_subscribe_group")
 		net.WriteTable(group)
@@ -435,14 +434,14 @@ end)
 
 function RemoveUnusedGroups()
 	local count = 0
-	local all_groups = SQL_SELECT("yrp_ply_groups", "*", nil)
+	local all_groups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
 	for i, grp in pairs(all_groups) do
 		grp.int_parentgroup = tonumber(grp.int_parentgroup)
 		if grp.int_parentgroup > 0 then
-			local parentgroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. grp.int_parentgroup .. "'")
+			local parentgroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. grp.int_parentgroup .. "'")
 			if parentgroup == nil then
 				count = count + 1
-				SQL_DELETE_FROM("yrp_ply_groups", "uniqueID = '" .. grp.uniqueID .. "'")
+				YRP_SQL_DELETE_FROM("yrp_ply_groups", "uniqueID = '" .. grp.uniqueID .. "'")
 			end
 		end
 	end
@@ -453,14 +452,14 @@ end
 
 function RemoveUnusedRoles()
 	local count = 0
-	local all_roles = SQL_SELECT("yrp_ply_roles", "*", nil)
+	local all_roles = YRP_SQL_SELECT("yrp_ply_roles", "*", nil)
 	for i, rol in pairs(all_roles) do
 		rol.int_groupID = tonumber(rol.int_groupID)
 		if rol.int_groupID > 0 then
-			local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. rol.int_groupID .. "'")
+			local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. rol.int_groupID .. "'")
 			if group == nil then
 				count = count + 1
-				SQL_DELETE_FROM("yrp_ply_roles", "uniqueID = '" .. rol.uniqueID .. "'")
+				YRP_SQL_DELETE_FROM("yrp_ply_roles", "uniqueID = '" .. rol.uniqueID .. "'")
 			end
 		end
 	end
@@ -470,10 +469,10 @@ function RemoveUnusedRoles()
 end
 
 function DeleteGroup(guid, recursive)
-	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. guid .. "'")
+	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. guid .. "'")
 	if wk(group) then
 		group = group[1]
-		SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. guid .. "'")
+		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. guid .. "'")
 
 		if recursive then
 			-- Delete Groups Recursive
@@ -483,7 +482,7 @@ function DeleteGroup(guid, recursive)
 			RemoveUnusedRoles()
 		else
 			-- Position richtig anordnen
-			local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. group.int_parentgroup .. "'")
+			local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. group.int_parentgroup .. "'")
 			if wk(siblings) then
 				for i, sibling in pairs(siblings) do
 					sibling.int_position = tonumber(sibling.int_position)
@@ -491,7 +490,7 @@ function DeleteGroup(guid, recursive)
 				local count = 0
 				for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 					count = count + 1
-					SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
+					YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
 				end
 			end
 		end
@@ -515,7 +514,7 @@ util.AddNetworkString("get_grps")
 net.Receive("get_grps", function(len, ply)
 	local _uid = tonumber(net.ReadString())
 
-	local _get_grps = SQL_SELECT("yrp_ply_groups", "*", "int_parentgroup = " .. _uid)
+	local _get_grps = YRP_SQL_SELECT("yrp_ply_groups", "*", "int_parentgroup = " .. _uid)
 	if wk(_get_grps) then
 		net.Start("get_grps")
 			net.WriteTable(_get_grps)
@@ -524,7 +523,7 @@ net.Receive("get_grps", function(len, ply)
 end)
 
 function GetGroupTable(gid)
-	local result = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. gid .. "'")
+	local result = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. gid .. "'")
 	if wk(result) then
 		result = result[1]
 	end
@@ -534,7 +533,7 @@ end
 -- Faction Selection
 util.AddNetworkString("yrp_factionselection_getfactions")
 net.Receive("yrp_factionselection_getfactions", function(len, ply)
-	local dbtab = SQL_SELECT(DATABASE_NAME, "uniqueID, string_icon, string_name, string_description, bool_visible_cc, bool_visible_rm", "int_parentgroup = '0'")
+	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_icon, string_name, string_description, bool_visible_cc, bool_visible_rm", "int_parentgroup = '0'")
 
 	local nettab = {}
 	if wk(dbtab) then
@@ -549,7 +548,7 @@ end)
 util.AddNetworkString("yrp_roleselection_getgroups")
 net.Receive("yrp_roleselection_getgroups", function(len, ply)
 	local fuid = net.ReadString()
-	local dbtab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. fuid .. "'")
+	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. fuid .. "'")
 
 	local nettab = {}
 	if wk(dbtab) then
@@ -557,7 +556,7 @@ net.Receive("yrp_roleselection_getgroups", function(len, ply)
 	end
 
 	local factioncount = 0
-	local fatab = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. 0 .. "'")
+	local fatab = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. 0 .. "'")
 
 	if wk(fatab) then
 		for i, v in pairs(fatab) do
@@ -574,8 +573,8 @@ end)
 util.AddNetworkString("yrp_roleselection_getcontent")
 net.Receive("yrp_roleselection_getcontent", function(len, ply)
 	local guid = net.ReadString()
-	local roltab = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'")
-	local grptab = SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. guid .. "'")
+	local roltab = YRP_SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'")
+	local grptab = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. guid .. "'")
 	
 	if wk(roltab) then
 		for i, v in pairs(roltab) do
@@ -607,7 +606,7 @@ end)
 util.AddNetworkString("yrp_roleselection_getrole")
 net.Receive("yrp_roleselection_getrole", function(len, ply)
 	local ruid = net.ReadString()
-	local roltab = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'")
+	local roltab = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'")
 	if wk(roltab) then
 		for i, v in pairs(roltab) do
 			v.pms = GetPlayermodelsOfRole(v.uniqueID)
@@ -625,7 +624,7 @@ end)
 util.AddNetworkString("yrp_char_getrole")
 net.Receive("yrp_char_getrole", function(len, ply)
 	local ruid = net.ReadString()
-	local roltab = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'")
+	local roltab = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'")
 	
 	if wk(roltab) then
 		for i, v in pairs(roltab) do
@@ -645,7 +644,7 @@ end)
 
 -- SWEPS
 function GetGroup(uid)
-	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	if wk(group) then
 		return group[1]
 	end
@@ -697,7 +696,7 @@ function AddSwepToGroup(guid, swepcn)
 			table.insert(newsweps, tostring(swepcn))
 			newsweps = string.Implode(",", newsweps)
 
-			SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. guid .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. guid .. "'")
 			SendSwepsGroup(guid)
 		end
 	end
@@ -726,7 +725,7 @@ function RemSwepFromGroup(guid, swepcn)
 		table.RemoveByValue(newsweps, tostring(swepcn))
 		newsweps = string.Implode(",", newsweps)
 
-		SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. guid .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. guid .. "'")
 		SendSwepsGroup(guid)
 	else
 		YRP.msg( "note", "[RemSwepFromGroup] Group not exists anymore?" )

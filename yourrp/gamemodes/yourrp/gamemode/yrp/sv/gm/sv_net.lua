@@ -6,7 +6,7 @@ util.AddNetworkString("cancelRestartServer")
 
 util.AddNetworkString("get_workshop_collection")
 net.Receive("get_workshop_collection", function(len, ply)
-	local _wscnr = SQL_SELECT("yrp_general", "text_server_collectionid", "uniqueID = '1'")
+	local _wscnr = YRP_SQL_SELECT("yrp_general", "text_server_collectionid", "uniqueID = '1'")
 	if wk(_wscnr) then
 		_wscnr = _wscnr[1].text_server_collectionid
 	end
@@ -28,7 +28,7 @@ end)
 net.Receive("updateServer", function(len, ply)
 	if ply:HasAccess() then
 		local _tmpString = net.ReadString()
-		local _result = SQL_UPDATE("yrp_general", {["text_gamemode_name"] = _tmpString})
+		local _result = YRP_SQL_UPDATE("yrp_general", {["text_gamemode_name"] = _tmpString})
 		if worked(_result, "text_gamemode_name failed") then
 		end
 		local countdown = net.ReadInt(16)

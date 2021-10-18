@@ -5,19 +5,19 @@
 
 local DATABASE_NAME = "yrp_lockdown"
 
---SQL_DROP_TABLE(DATABASE_NAME)
+--YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_lockdowntext", "TEXT DEFAULT 'LockdownText'")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_lockdown", "INT DEFAULT '0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_lockdowntext", "TEXT DEFAULT 'LockdownText'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_lockdown", "INT DEFAULT '0'")
 
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_lockdowntext", "'LockdownText'")
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_lockdowntext", "'LockdownText'")
 end
 
 local Player = FindMetaTable("Player")
 function Player:LockdownLoadout()
 	--YRP.msg("gm", self:SteamName() .. " LockdownLoadout")
-	local lockdown = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+	local lockdown = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(lockdown) then
 		lockdown = lockdown[1]
 		lockdown.bool_lockdown = tobool(lockdown.bool_lockdown)
@@ -35,7 +35,7 @@ net.Receive("set_lockdowntext", function(len, ply)
 	local string_lockdowntext = net.ReadString()
 	string_lockdowntext = string_lockdowntext
 	YRP.msg("db", "Changed lockdowntext to: " .. string_lockdowntext)
-	SQL_UPDATE(DATABASE_NAME, {["string_lockdowntext"] = string_lockdowntext}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_lockdowntext"] = string_lockdowntext}, "uniqueID = '1'")
 
 	for i, pl in pairs(player.GetAll()) do
 		pl:LockdownLoadout()
@@ -109,7 +109,7 @@ net.Receive("set_lockdown", function(len, ply)
 	local bool_lockdown = net.ReadBool()
 	int_lockdown = tonum(bool_lockdown)
 	YRP.msg("db", "Changed bool_lockdown to: " .. tostring(int_lockdown))
-	SQL_UPDATE(DATABASE_NAME, {["bool_lockdown"] = int_lockdown}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["bool_lockdown"] = int_lockdown}, "uniqueID = '1'")
 
 	for i, pl in pairs(player.GetAll()) do
 		pl:LockdownLoadout()
@@ -132,7 +132,7 @@ net.Receive("set_lockdown", function(len, ply)
 			speaker:EmitSound("sound_lockdown")
 		end
 
-		local buildings = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'")
+		local buildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'")
 		local lockdoors = {}
 		if pa(buildings) then
 			for i, v in pairs(buildings) do
@@ -159,7 +159,7 @@ net.Receive("set_lockdown", function(len, ply)
 			speaker:StopSound("sound_lockdown")
 		end
 
-		local buildings = SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'")
+		local buildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'")
 		local lockdoors = {}
 		if pa(buildings) then
 			for i, v in pairs(buildings) do

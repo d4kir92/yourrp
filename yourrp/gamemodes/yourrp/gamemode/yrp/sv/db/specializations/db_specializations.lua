@@ -5,18 +5,15 @@
 
 local DATABASE_NAME = "yrp_specializations"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
-SQL_ADD_COLUMN(DATABASE_NAME, "sweps", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "pms", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "prefix", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "suffix", "TEXT DEFAULT ''")
---db_drop_table(DATABASE_NAME)
-
-
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "sweps", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "pms", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "prefix", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "suffix", "TEXT DEFAULT ''")
 
 -- PMs
 function YRPSendSpecPMs(uid, ply)
-	local tab = SQL_SELECT(DATABASE_NAME, "pms", "uniqueID = '" .. uid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "pms", "uniqueID = '" .. uid .. "'")
 	if wk(tab) then
 		tab = string.Explode( ",", tab[1].pms )
 	else
@@ -46,7 +43,7 @@ net.Receive("spec_add_pm", function(len, ply)
 	local pms = net.ReadTable()
 
 	for i, pm in pairs( pms ) do
-		local tab = SQL_SELECT(DATABASE_NAME, "uniqueID, pms", "uniqueID = '" .. uid .. "'")
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, pms", "uniqueID = '" .. uid .. "'")
 		if wk(tab) then
 			tab = tab[1]
 		else
@@ -64,7 +61,7 @@ net.Receive("spec_add_pm", function(len, ply)
 
 		local newpms = table.concat( newtab, "," )
 
-		SQL_UPDATE(DATABASE_NAME, {["pms"] = newpms}, "uniqueID = '" .. uid .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["pms"] = newpms}, "uniqueID = '" .. uid .. "'")
 		YRPSendSpecPMs(uid, ply)
 	end
 end)
@@ -74,7 +71,7 @@ net.Receive("spec_rem_pm", function(len, ply)
 	local uid = net.ReadInt(32)
 	local pm = net.ReadString()
 
-	local tab = SQL_SELECT(DATABASE_NAME, "uniqueID, pms", "uniqueID = '" .. uid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, pms", "uniqueID = '" .. uid .. "'")
 	if wk(tab) then
 		tab = tab[1]
 	else
@@ -92,7 +89,7 @@ net.Receive("spec_rem_pm", function(len, ply)
 
 	local newpms = table.concat( newtab, "," )
 
-	SQL_UPDATE(DATABASE_NAME, {["pms"] = newpms}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["pms"] = newpms}, "uniqueID = '" .. uid .. "'")
 	YRPSendSpecPMs(uid, ply)
 end)
 
@@ -100,7 +97,7 @@ end)
 
 -- SWEPS
 function YRPSendSpecSWEPS(uid, ply)
-	local tab = SQL_SELECT(DATABASE_NAME, "sweps", "uniqueID = '" .. uid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "sweps", "uniqueID = '" .. uid .. "'")
 	if wk(tab) then
 		tab = string.Explode( ",", tab[1].sweps )
 	else
@@ -130,7 +127,7 @@ net.Receive("spec_add_swep", function(len, ply)
 	local sweps = net.ReadTable()
 
 	for i, swep in pairs( sweps ) do
-		local tab = SQL_SELECT(DATABASE_NAME, "uniqueID, sweps", "uniqueID = '" .. uid .. "'")
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, sweps", "uniqueID = '" .. uid .. "'")
 		if wk(tab) then
 			tab = tab[1]
 		else
@@ -148,7 +145,7 @@ net.Receive("spec_add_swep", function(len, ply)
 
 		local newsweps = table.concat( newtab, "," )
 
-		SQL_UPDATE(DATABASE_NAME, {["sweps"] = newsweps}, "uniqueID = '" .. uid .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["sweps"] = newsweps}, "uniqueID = '" .. uid .. "'")
 		YRPSendSpecSWEPS(uid, ply)
 	end
 end)
@@ -158,7 +155,7 @@ net.Receive("spec_rem_swep", function(len, ply)
 	local uid = net.ReadInt(32)
 	local swep = net.ReadString()
 
-	local tab = SQL_SELECT(DATABASE_NAME, "uniqueID, sweps", "uniqueID = '" .. uid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, sweps", "uniqueID = '" .. uid .. "'")
 	if wk(tab) then
 		tab = tab[1]
 	else
@@ -176,12 +173,12 @@ net.Receive("spec_rem_swep", function(len, ply)
 
 	local newsweps = table.concat( newtab, "," )
 
-	SQL_UPDATE(DATABASE_NAME, {["sweps"] = newsweps}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["sweps"] = newsweps}, "uniqueID = '" .. uid .. "'")
 	YRPSendSpecSWEPS(uid, ply)
 end)
 
 function send_specializations(ply)
-	local _all = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
 	if _nm == nil or _nm == false then
 		_nm = {}
@@ -193,7 +190,7 @@ end
 
 util.AddNetworkString("get_all_specializations")
 net.Receive("get_all_specializations", function(len, ply)
-	local _all = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
 	if _nm == nil or _nm == false then
 		_nm = {}
@@ -211,7 +208,7 @@ net.Receive("get_specializations", function(len, ply)
 end)
 
 function sendspecializations(ply)
-	local _all = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
 	if _nm == nil or _nm == false then
 		_nm = {}
@@ -228,7 +225,7 @@ end)
 
 util.AddNetworkString("specialization_add")
 net.Receive("specialization_add", function(len, ply)
-	local _new = SQL_INSERT_INTO(DATABASE_NAME, "name", "'new specialization'")
+	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new specialization'")
 	YRP.msg("db", "Add new specialization: " .. tostring(_new))
 
 	send_specializations(ply)
@@ -237,7 +234,7 @@ end)
 util.AddNetworkString("specialization_rem")
 net.Receive("specialization_rem", function(len, ply)
 	local _uid = net.ReadString()
-	local _new = SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
+	local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 	YRP.msg("db", "Removed specialization: " .. tostring(_uid))
 
 	send_specializations(ply)
@@ -247,7 +244,7 @@ util.AddNetworkString("edit_specialization_name")
 net.Receive("edit_specialization_name", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_name = net.ReadString()
-	local _edit = SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
+	local _edit = YRP_SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
 	YRP.msg("db", "edit_specialization_name: " .. tostring(_new_name))
 end)
 
@@ -255,7 +252,7 @@ util.AddNetworkString("edit_specialization_prefix")
 net.Receive("edit_specialization_prefix", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_prefix = net.ReadString()
-	local _edit = SQL_UPDATE(DATABASE_NAME, {["prefix"] = _new_prefix}, "uniqueID = " .. _uid)
+	local _edit = YRP_SQL_UPDATE(DATABASE_NAME, {["prefix"] = _new_prefix}, "uniqueID = " .. _uid)
 	YRP.msg("db", "edit_specialization_prefix: " .. tostring(_new_prefix))
 end)
 
@@ -263,13 +260,13 @@ util.AddNetworkString("edit_specialization_suffix")
 net.Receive("edit_specialization_suffix", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_suffix = net.ReadString()
-	local _edit = SQL_UPDATE(DATABASE_NAME, {["suffix"] = _new_suffix}, "uniqueID = " .. _uid)
+	local _edit = YRP_SQL_UPDATE(DATABASE_NAME, {["suffix"] = _new_suffix}, "uniqueID = " .. _uid)
 	YRP.msg("db", "edit_specialization_suffix: " .. tostring(_new_suffix))
 end)
 
 util.AddNetworkString("get_all_specializations_simple")
 net.Receive("get_all_specializations_simple", function(len, ply)
-	local _all = SQL_SELECT(DATABASE_NAME, "name, uniqueID", nil)
+	local _all = YRP_SQL_SELECT(DATABASE_NAME, "name, uniqueID", nil)
 	if _all == false or _all == nil then
 		_all = {}
 	end
@@ -283,7 +280,7 @@ net.Receive("role_add_specialization", function(len, ply)
 	local _role_uid = net.ReadString()
 	local _specialization_uid = net.ReadString()
 
-	local _role = SQL_SELECT("yrp_ply_roles", "specializationIDs", "uniqueID = " .. _role_uid)
+	local _role = YRP_SQL_SELECT("yrp_ply_roles", "specializationIDs", "uniqueID = " .. _role_uid)
 	if _role != nil then
 		_role = _role[1]
 		local _specializationIDs = {}
@@ -294,7 +291,7 @@ net.Receive("role_add_specialization", function(len, ply)
 			table.insert(_specializationIDs, _specialization_uid)
 			_specializationIDs = string.Implode(",", _specializationIDs)
 
-			SQL_UPDATE("yrp_ply_roles", {["specializationIDs"] = _specializationIDs} ,"uniqueID = " .. _role_uid)
+			YRP_SQL_UPDATE("yrp_ply_roles", {["specializationIDs"] = _specializationIDs} ,"uniqueID = " .. _role_uid)
 		end
 	end
 end)
@@ -304,7 +301,7 @@ net.Receive("role_rem_specialization", function(len, ply)
 	local _role_uid = net.ReadString()
 	local _specialization_uid = net.ReadString()
 
-	local _role = SQL_SELECT("yrp_ply_roles", "specializationIDs", "uniqueID = " .. _role_uid)
+	local _role = YRP_SQL_SELECT("yrp_ply_roles", "specializationIDs", "uniqueID = " .. _role_uid)
 	if _role != nil then
 		_role = _role[1]
 		local _specializationIDs = {}
@@ -317,7 +314,7 @@ net.Receive("role_rem_specialization", function(len, ply)
 
 			_specializationIDs = string.Implode(",", _specializationIDs)
 
-			SQL_UPDATE("yrp_ply_roles", {["specializationIDs"] = _specializationIDs} ,"uniqueID = " .. _role_uid)
+			YRP_SQL_UPDATE("yrp_ply_roles", {["specializationIDs"] = _specializationIDs} ,"uniqueID = " .. _role_uid)
 		end
 	end
 end)
@@ -342,7 +339,7 @@ function Player:AddSpecialization(specialization)
 		local ids = string.Explode(",", _specializationIDs)
 		local lnames = {}
 		for i, id in pairs(ids) do
-			local spe = SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'")
+			local spe = YRP_SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'")
 			if wk(spe) then
 				spe = spe[1]
 				table.insert(lnames, spe.name)
@@ -372,7 +369,7 @@ function Player:RemoveSpecialization(specialization)
 		local ids = string.Explode(",", _specializationIDs)
 		local lnames = {}
 		for i, id in pairs(ids) do
-			local spe = SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'")
+			local spe = YRP_SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'")
 			if wk(spe) then
 				spe = spe[1]
 				table.insert(lnames, spe.name)
@@ -386,7 +383,7 @@ end
 util.AddNetworkString("GetSpecializationName")
 net.Receive("GetSpecializationName", function(len, ply)
 	local id = net.ReadInt(32)
-	local spe = SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'")
+	local spe = YRP_SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'")
 	if wk(spe) then
 		spe = spe[1]
 		net.Start("GetSpecializationName")
@@ -405,7 +402,7 @@ function GetSpecializationIDByName(lname)
 	lname = lname
 	lname = string.lower(lname)
 
-	local tab = SQL_SELECT(DATABASE_NAME, "*")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*")
 	local lid = nil
 
 	if !wk(tab) then return nil end

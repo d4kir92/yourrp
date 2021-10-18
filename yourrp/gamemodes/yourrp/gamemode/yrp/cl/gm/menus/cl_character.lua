@@ -39,7 +39,7 @@ surface.CreateFont("Saira_100", {
 local yrp_logo = Material("yrp/yrp_icon")
 
 function YRPGetCharBGNotFound()
-	return GetKeybindName("menu_settings") .. " >> " .. YRP.lang_string("LID_server") .. " >> " .. YRP.lang_string("LID_general") .. " >> " .. YRP.lang_string("LID_character_background") .. " (enter a weblink to an image)"
+	return YRPGetKeybindName("menu_settings") .. " >> " .. YRP.lang_string("LID_server") .. " >> " .. YRP.lang_string("LID_general") .. " >> " .. YRP.lang_string("LID_character_background") .. " (enter a weblink to an image)"
 end
 
 local isEventChar = false

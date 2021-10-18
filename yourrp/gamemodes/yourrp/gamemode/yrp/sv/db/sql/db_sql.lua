@@ -8,7 +8,7 @@ util.AddNetworkString("get_sql_info")
 local DATABASE_NAME = "yrp_sql"
 
 function SQLITE_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
-	--YRP.msg("db", "SQL_CHECK_IF_COLUMN_EXISTS(" .. tostring(db_name) .. ", " .. tostring(column_name) .. ")")
+	--YRP.msg("db", "YRP_SQL_CHECK_IF_COLUMN_EXISTS(" .. tostring(db_name) .. ", " .. tostring(column_name) .. ")")
 	local _result = sql.Query("SELECT " .. column_name .. " FROM " .. db_name)
 	if _result == false then
 		return false
@@ -18,7 +18,7 @@ function SQLITE_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 end
 
 function SQLITE_ADD_COLUMN(table_name, column_name, datatype)
-	--YRP.msg("db", "SQL_ADD_COLUMN(" .. tostring(table_name) .. ", " .. tostring(column_name) .. ", " .. tostring(datatype) .. ")")
+	--YRP.msg("db", "YRP_SQL_ADD_COLUMN(" .. tostring(table_name) .. ", " .. tostring(column_name) .. ", " .. tostring(datatype) .. ")")
 	local _result = SQLITE_CHECK_IF_COLUMN_EXISTS(table_name, column_name)
 	if !_result then
 		local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ""
@@ -102,7 +102,7 @@ end
 
 function UpdateValue(tab)
 	tab.uniqueID = tab.uniqueID or 1
-	SQL_UPDATE(tab.db, {[tab.id] = tab.value}, "uniqueID = '" .. tab.uniqueID .. "'")
+	YRP_SQL_UPDATE(tab.db, {[tab.id] = tab.value}, "uniqueID = '" .. tab.uniqueID .. "'")
 	--sql.Query("UPDATE " .. tab.db .. " SET " .. tab.id .. " = '" .. tab.value .. "' WHERE uniqueID = '" .. tab.uniqueID .. "'")
 end
 
@@ -131,7 +131,7 @@ function DBUpdateValue(db_name, str, l_db, value)
 	if l_db != nil then
 		l_db[str] = value
 	end
-	SQL_UPDATE(db_name, {[str] = value}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(db_name, {[str] = value}, "uniqueID = '1'")
 end
 
 function DBUpdateFloat(db_name, ply, netstr, str, l_db, value)

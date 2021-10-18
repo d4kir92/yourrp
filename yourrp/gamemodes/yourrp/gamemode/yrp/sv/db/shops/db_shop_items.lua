@@ -5,27 +5,24 @@
 -- #buymenu #shops
 
 local DATABASE_NAME = "yrp_shop_items"
-SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
-SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT 'UNNAMED'")
-SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT '100'")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_level", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "categoryID", "INT DEFAULT -1")
-SQL_ADD_COLUMN(DATABASE_NAME, "quantity", "INT DEFAULT -1")
-SQL_ADD_COLUMN(DATABASE_NAME, "cooldown", "INT DEFAULT -1")
-SQL_ADD_COLUMN(DATABASE_NAME, "licenseID", "INT DEFAULT -1")
-SQL_ADD_COLUMN(DATABASE_NAME, "permanent", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "type", "TEXT DEFAULT 'weapons'")
-SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT 'weapon_crowbar'")
-SQL_ADD_COLUMN(DATABASE_NAME, "PrintName", "TEXT DEFAULT 'unnamed item'")
-SQL_ADD_COLUMN(DATABASE_NAME, "WorldModel", "TEXT DEFAULT ''")
-
---db_drop_table(DATABASE_NAME)
---db_is_empty(DATABASE_NAME)
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT 'UNNAMED'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT '100'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "categoryID", "INT DEFAULT -1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "quantity", "INT DEFAULT -1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "cooldown", "INT DEFAULT -1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "licenseID", "INT DEFAULT -1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "permanent", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "type", "TEXT DEFAULT 'weapons'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT 'weapon_crowbar'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "PrintName", "TEXT DEFAULT 'unnamed item'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "WorldModel", "TEXT DEFAULT ''")
 
 util.AddNetworkString("get_shop_items")
 
 function send_shop_items(ply, uid)
-	local _s_items = SQL_SELECT(DATABASE_NAME, "*", "categoryID = " .. uid)
+	local _s_items = YRP_SQL_SELECT(DATABASE_NAME, "*", "categoryID = " .. uid)
 	local _nw = _s_items
 
 	if _nw == nil then
@@ -45,7 +42,7 @@ end)
 util.AddNetworkString("shop_item_add")
 net.Receive("shop_item_add", function(len, ply)
 	local _catID = net.ReadString()
-	local _new = SQL_INSERT_INTO(DATABASE_NAME, "categoryID", _catID)
+	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "categoryID", _catID)
 	YRP.msg("db", "shop_item_add: " .. db_worked(_new))
 	send_shop_items(ply, _catID)
 end)
@@ -54,7 +51,7 @@ util.AddNetworkString("shop_item_rem")
 net.Receive("shop_item_rem", function(len, ply)
 	local _uid = net.ReadString()
 	local _catID = net.ReadString()
-	local _new = SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
+	local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 	YRP.msg("db", "shop_item_rem: " .. db_worked(_new))
 	send_shop_items(ply, _catID)
 end)
@@ -64,7 +61,7 @@ net.Receive("shop_item_edit_name", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_name = net.ReadString()
 	local _catID = net.ReadString()
-	local _new = SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
+	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
 	YRP.msg("db", "shop_item_edit_name: " .. db_worked(_new))
 end)
 
@@ -73,7 +70,7 @@ net.Receive("shop_item_edit_desc", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_desc = net.ReadString()
 	local _catID = net.ReadString()
-	local _new = SQL_UPDATE(DATABASE_NAME, {["description"] = _new_desc}, "uniqueID = " .. _uid)
+	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["description"] = _new_desc}, "uniqueID = " .. _uid)
 	YRP.msg("db", "shop_item_edit_desc: " .. db_worked(_new))
 end)
 
@@ -82,7 +79,7 @@ net.Receive("shop_item_edit_price", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_price = net.ReadString()
 	local _catID = net.ReadString()
-	local _new = SQL_UPDATE(DATABASE_NAME, {["price"] = _new_price}, "uniqueID = " .. _uid)
+	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["price"] = _new_price}, "uniqueID = " .. _uid)
 	YRP.msg("db", "shop_item_edit_price: " .. db_worked(_new))
 end)
 
@@ -91,7 +88,7 @@ net.Receive("shop_item_edit_level", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_level = net.ReadString()
 	local _catID = net.ReadString()
-	local _new = SQL_UPDATE(DATABASE_NAME, {["int_level"] = _new_level}, "uniqueID = " .. _uid)
+	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["int_level"] = _new_level}, "uniqueID = " .. _uid)
 	YRP.msg("db", "shop_item_edit_level: " .. db_worked(_new))
 end)
 
@@ -100,7 +97,7 @@ net.Receive("shop_item_edit_quan", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_quan = net.ReadString()
 	local _catID = net.ReadString()
-	local _new = SQL_UPDATE(DATABASE_NAME, {["quantity"] = _new_quan}, "uniqueID = " .. _uid)
+	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["quantity"] = _new_quan}, "uniqueID = " .. _uid)
 	YRP.msg("db", "shop_item_edit_quan: " .. db_worked(_new))
 end)
 
@@ -109,7 +106,7 @@ net.Receive("shop_item_edit_cool", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_cool = net.ReadString()
 	local _catID = net.ReadString()
-	local _new = SQL_UPDATE(DATABASE_NAME, {["cooldown"] = _new_cool}, "uniqueID = " .. _uid)
+	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["cooldown"] = _new_cool}, "uniqueID = " .. _uid)
 	YRP.msg("db", "shop_item_edit_cool: " .. db_worked(_new))
 end)
 
@@ -118,9 +115,9 @@ net.Receive("shop_item_edit_lice", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_lice = net.ReadString()
 	local _catID = net.ReadString()
-	local _new = SQL_UPDATE(DATABASE_NAME, {["licenseID"] = _new_lice}, "uniqueID = " .. _uid)
+	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["licenseID"] = _new_lice}, "uniqueID = " .. _uid)
 	YRP.msg("db", "shop_item_edit_lice: " .. db_worked(_new))
-	local _test = SQL_SELECT(DATABASE_NAME, "licenseID", "uniqueID = " .. _uid)
+	local _test = YRP_SQL_SELECT(DATABASE_NAME, "licenseID", "uniqueID = " .. _uid)
 end)
 
 util.AddNetworkString("shop_item_edit_perm")
@@ -128,14 +125,14 @@ net.Receive("shop_item_edit_perm", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_perm = net.ReadString()
 	local _catID = net.ReadString()
-	local _new = SQL_UPDATE(DATABASE_NAME, {["permanent"] = _new_perm}, "uniqueID = " .. _uid)
+	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["permanent"] = _new_perm}, "uniqueID = " .. _uid)
 	YRP.msg("db", "shop_item_edit_perm: " .. db_worked(_new))
 end)
 
 util.AddNetworkString("shop_get_items_storage")
 net.Receive("shop_get_items_storage", function(len, ply)
 	local _uid = net.ReadString()
-	local _cha_perm = SQL_SELECT("yrp_characters", "storage", "uniqueID = '" .. ply:CharID() .. "'")
+	local _cha_perm = YRP_SQL_SELECT("yrp_characters", "storage", "uniqueID = '" .. ply:CharID() .. "'")
 
 	if _cha_perm ~= nil and _cha_perm ~= false then
 		_cha_perm = _cha_perm[1].storage
@@ -143,7 +140,7 @@ net.Receive("shop_get_items_storage", function(len, ply)
 		local _nw = {}
 
 		for i, item in pairs(_cha_perm) do
-			local _item = SQL_SELECT(DATABASE_NAME, "*", "categoryID = '" .. _uid .. "' AND uniqueID = '" .. item .. "'")
+			local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "categoryID = '" .. _uid .. "' AND uniqueID = '" .. item .. "'")
 
 			if _item ~= nil and _item ~= false then
 				table.insert(_nw, _item[1])
@@ -159,7 +156,7 @@ end)
 util.AddNetworkString("yrp_shop_get_items")
 net.Receive("yrp_shop_get_items", function(len, ply)
 	local _uid = net.ReadString()
-	local _items = SQL_SELECT(DATABASE_NAME, "*", "categoryID = '" .. _uid .. "'")
+	local _items = YRP_SQL_SELECT(DATABASE_NAME, "*", "categoryID = '" .. _uid .. "'")
 	local _nw = {}
 
 	if _items ~= nil then
@@ -180,7 +177,7 @@ net.Receive("shop_item_edit_base", function(len, ply)
 	local _pn = net.ReadString()
 	local _type = net.ReadString()
 
-	local _new = SQL_UPDATE(DATABASE_NAME, {
+	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {
 		["WorldModel"] = _wm,
 		["ClassName"] = _cn,
 		["PrintName"] = _pn,
@@ -291,11 +288,11 @@ function YRPSpawnItem(ply, item, duid)
 		wm:Remove()
 	end
 
-	local DEALER = SQL_SELECT("yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'")
+	local DEALER = YRP_SQL_SELECT("yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'")
     if wk(DEALER) then
 		DEALER = DEALER[1]
 		local SPUID = DEALER.storagepoints
-		local SP = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. SPUID .. "'")
+		local SP = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. SPUID .. "'")
 		if wk(SP) then
 			SP = SP[1]
 			YRP.msg("gm", "[Spawn Item] Item To Storagepoint")
@@ -481,7 +478,7 @@ util.AddNetworkString("item_buy")
 net.Receive("item_buy", function(len, ply)
 	local _tab = net.ReadTable()
 	local _dealer_uid = net.ReadString()
-	local _item = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
+	local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
 
 	if wk(_item) then
 		_item = _item[1]
@@ -536,7 +533,7 @@ net.Receive("item_buy", function(len, ply)
 				end
 
 				_stor = string.Implode(",", _stor)
-				local _result = SQL_UPDATE("yrp_characters", {["storage"] = _stor}, "uniqueID = '" .. ply:CharID() .. "'")
+				local _result = YRP_SQL_UPDATE("yrp_characters", {["storage"] = _stor}, "uniqueID = '" .. ply:CharID() .. "'")
 			end
 
 			-- Remove money if everything works
@@ -551,7 +548,7 @@ net.Receive("item_spawn", function(len, ply)
 	local _dealer_uid = net.ReadString()
 
 	if wk(_tab) and wk(_dealer_uid) then
-		local _item = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
+		local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
 
 		if wk(_item) then
 			_item = _item[1]
@@ -577,7 +574,7 @@ end)
 util.AddNetworkString("item_despawn")
 net.Receive("item_despawn", function(len, ply)
 	local _tab = net.ReadTable()
-	local _item = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
+	local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
 
 	if _item ~= nil then
 		_item = _item[1]

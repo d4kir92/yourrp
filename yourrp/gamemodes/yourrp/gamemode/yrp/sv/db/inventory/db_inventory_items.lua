@@ -2,20 +2,20 @@
 
 local DATABASE_NAME = "yrp_inventory_items"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_slotID", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_slotID", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_fixed", "INT DEFAULT 0")		-- Fixed = not moveable
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_fixed", "INT DEFAULT 0")		-- Fixed = not moveable
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0")		-- storageID
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0")		-- storageID
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_printname", "TEXT DEFAULT 'Unnamed'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_classname", "TEXT DEFAULT 'yrp_money_printer'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props_junk/garbage_takeoutcarton001a.mdl'")
---SQL_ADD_COLUMN(DATABASE_NAME, "tab_properties", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_printname", "TEXT DEFAULT 'Unnamed'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_classname", "TEXT DEFAULT 'yrp_money_printer'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props_junk/garbage_takeoutcarton001a.mdl'")
+--YRP_SQL_ADD_COLUMN(DATABASE_NAME, "tab_properties", "TEXT DEFAULT ''")
 
---SQL_DROP_TABLE(DATABASE_NAME)
+--YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
 
 
@@ -56,7 +56,7 @@ function CreateItem(slotID, tab)
 			return false
 		end
 	
-		local result = SQL_INSERT_INTO(
+		local result = YRP_SQL_INSERT_INTO(
 			DATABASE_NAME,
 			"int_slotID, text_classname, text_printname, text_worldmodel, int_storageID, text_type, int_fixed",
 			"'" .. slotID .. "', '" .. tab.text_classname .. "', '" .. tab.text_printname .. "', '" .. tab.text_worldmodel .. "', '" .. tab.int_storageID .. "', '" .. tab.text_type .. "', '" .. tab.int_fixed .. "'"
@@ -66,7 +66,7 @@ function CreateItem(slotID, tab)
 		return false
 	end
 
-	local last = SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
+	local last = YRP_SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
 	if wk(last) then
 		last = last[1]
 		StoreItem(slotID, last)
@@ -109,13 +109,13 @@ function CreateItemByEntity(slotID, entity)
 end
 
 function GetItem(slotID)
-	local item = SQL_SELECT(DATABASE_NAME, "*", "int_slotID = '" .. slotID .. "'")
+	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_slotID = '" .. slotID .. "'")
 	if wk(item) then
 		item = item[1]
 		if item.text_type == "bag" then
-			local storage = SQL_SELECT("yrp_inventory_storages", "*", "uniqueID = '" .. item.int_storageID .. "'")
+			local storage = YRP_SQL_SELECT("yrp_inventory_storages", "*", "uniqueID = '" .. item.int_storageID .. "'")
 			if !wk(storage) then
-				SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. item.uniqueID .. "'")
+				YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. item.uniqueID .. "'")
 				return false
 			end
 		end
@@ -150,7 +150,7 @@ function StoreItem(slotID, itemTable, ply)
 	if ply then
 		itemTable.int_slotID = tonumber(itemTable.int_slotID)
 		local invstor = GetCharacterStorage(ply)
-		local invslots = SQL_SELECT("yrp_inventory_slots", "*", "int_storageID = '" .. invstor.uniqueID .. "'")
+		local invslots = YRP_SQL_SELECT("yrp_inventory_slots", "*", "int_storageID = '" .. invstor.uniqueID .. "'")
 		for i, v in pairs(invslots) do
 			v.uniqueID = tonumber(v.uniqueID)
 			if itemTable.int_slotID == v.uniqueID then
@@ -179,7 +179,7 @@ end
 function RemoveItem(itemID)
 	itemID = tonumber(itemID)
 
-	SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. itemID .. "'")
+	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. itemID .. "'")
 end
 
 function DropItem(ply, slotID)
@@ -225,9 +225,9 @@ function MoveItem(itemID, slotID)
 	itemID = tonumber(itemID)
 	slotID = tonumber(slotID)
 
-	local item = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
+	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
 
-	local slot = SQL_SELECT("yrp_inventory_slots", "*", "uniqueID = '" .. slotID .. "'")
+	local slot = YRP_SQL_SELECT("yrp_inventory_slots", "*", "uniqueID = '" .. slotID .. "'")
 
 	if wk(item) and wk(slot) then -- if both exists
 		item = item[1]
@@ -254,7 +254,7 @@ function MoveItem(itemID, slotID)
 
 		if item.text_type == "bag" then
 			for i, slot in pairs(GetStorageSlots(item.int_storageID)) do
-				local ite = SQL_SELECT(DATABASE_NAME, "*", "int_slotID = '" .. slot.uniqueID .. "'")
+				local ite = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_slotID = '" .. slot.uniqueID .. "'")
 				if wk(ite) then
 					YRP.msg("db", "Bag is not empty")
 					return
@@ -271,7 +271,7 @@ function MoveItem(itemID, slotID)
 				CloseBag(item.int_storageID)
 			end
 
-			SQL_UPDATE(DATABASE_NAME, {["int_slotID"] = newslot}, "uniqueID = '" .. item.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_slotID"] = newslot}, "uniqueID = '" .. item.uniqueID .. "'")
 
 			UnstoreItem(oldslot)
 			StoreItem(newslot, item)
@@ -300,7 +300,7 @@ net.Receive("yrp_item_clicked", function(len, ply)
 
 	itemID = tonumber(itemID)
 
-	local item = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
+	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
 
 	if wk(item) then
 		item = item[1]
@@ -334,7 +334,7 @@ net.Receive("yrp_item_drop", function(len, ply)
 
 	itemID = tonumber(itemID)
 
-	local item = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
+	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
 	if wk(item) then
 		item = item[1]
 		DropItem(ply, item.int_slotID)

@@ -74,7 +74,7 @@ function reset_database()
 	_db_reseted = true
 
 	for k, v in pairs(YRP_DBS) do
-		db_drop_table(v)
+		YRP_SQL_DROP_TABLE(v)
 	end
 	YRP.msg("db", "DONE reset Database")
 end
@@ -111,12 +111,12 @@ function yrp_db_loaded()
 end
 
 function db_init_database()
-	if SQL_INIT_DATABASE then
+	if YRP_SQL_INIT_DATABASE then
 		hr_pre("db")
 		YRP.msg("db", "LOAD DATABASES")
 
 		for i, db in pairs(YRP_DBS) do
-			SQL_INIT_DATABASE(db)
+			YRP_SQL_INIT_DATABASE(db)
 		end
 
 		yrp_db.loaded = true
@@ -198,25 +198,25 @@ include("specializations/db_specializations.lua")
 -- DarkRP
 local DATABASE_NAME = "yrp_darkrp"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
 
 util.AddNetworkString("yrp_darkrp_bool")
 net.Receive("yrp_darkrp_bool", function(len, ply)
 	local name = net.ReadString()
 	local b = net.ReadBool()
 	
-	if !wk(SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "bool_" .. name .. "'")) then
-		SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. "bool_" .. name .. "', '" .. tonum(b) .. "'")
+	if !wk(YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "bool_" .. name .. "'")) then
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. "bool_" .. name .. "', '" .. tonum(b) .. "'")
 	else
-		SQL_UPDATE(DATABASE_NAME, {["value"] = tonum(b)}, "name = '" .. "bool_" .. name .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = tonum(b)}, "name = '" .. "bool_" .. name .. "'")
 	end
 	UpdateDarkRPTable()
 end)
 
 util.AddNetworkString("update_yrp_darkrp")
 function UpdateDarkRPTable(ply)
-	local tab = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
 	if wk(tab) then
 		local yrp_darkrp = {}

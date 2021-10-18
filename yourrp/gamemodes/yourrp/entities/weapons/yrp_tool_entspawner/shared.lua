@@ -81,7 +81,7 @@ function SWEP:Think()
 				if p:Distance(pos) < size * 2 then
 					YRP.msg("db", "Option ENTSpawner")
 
-					local stab = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
+					local stab = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
 					if wk(stab) then
 						stab = stab[1]
 						net.Start("yrp_spawner_ent_options")
@@ -166,7 +166,7 @@ function SWEP:PrimaryAttack()
 			} )
 			pos = tr.HitPos or pos
 
-			SQL_INSERT_INTO("yrp_" .. GetMapNameDB(), "position, type, name, string_classname", "'" .. string.Replace(tostring(pos), " ", ",") .. "', '" .. "spawner_ent" .. "', 'Spawner', 'item_ammo_ar2'")
+			YRP_SQL_INSERT_INTO("yrp_" .. GetMapNameDB(), "position, type, name, string_classname", "'" .. string.Replace(tostring(pos), " ", ",") .. "', '" .. "spawner_ent" .. "', 'Spawner', 'item_ammo_ar2'")
 
 			YRP.msg("db", "Added ENT Spawner")
 
@@ -191,7 +191,7 @@ function SWEP:SecondaryAttack()
 		for i, v in pairs(GetGlobalTable("yrp_spawner_ent")) do
 			local p = StringToVector(v.pos)
 			if p:Distance(pos) < size * 2 then
-				SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
+				YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
 				YRP.msg("db", "Removed Spawner")
 				found = true
 			end
@@ -201,7 +201,7 @@ function SWEP:SecondaryAttack()
 			for i, v in pairs(GetGlobalTable("yrp_spawner_ent")) do
 				local p = StringToVector(v.pos)
 				if p:Distance(ply:GetPos()) < 160 then
-					SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
+					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
 					YRP.msg("db", "Removed Spawner")
 				end
 			end

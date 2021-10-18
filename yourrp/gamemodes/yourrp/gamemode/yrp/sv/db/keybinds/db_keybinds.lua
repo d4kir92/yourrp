@@ -5,19 +5,19 @@
 
 local DATABASE_NAME = "yrp_keybinds"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "value", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "INT DEFAULT 0")
 
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
 end
 
---SQL_DROP_TABLE(DATABASE_NAME)
+--YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
 util.AddNetworkString("SetServerKeybinds")
 local PLAYER = FindMetaTable("Player")
 function PLAYER:SetServerKeybinds()
-	local selresult = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local selresult = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	net.Start("SetServerKeybinds")
 		net.WriteTable(selresult)
 	net.Send(self)
@@ -27,11 +27,11 @@ util.AddNetworkString("setserverdefaultkeybind")
 net.Receive("setserverdefaultkeybind", function(len, ply)
 	local keybinds = net.ReadTable()
 	for name, value in pairs(keybinds) do
-		local selresult = SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'")
+		local selresult = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'")
 		if selresult != nil then
-			SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. name .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. name .. "'")
 		else
-			SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. value .. "'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. value .. "'")
 		end
 	end
 end)

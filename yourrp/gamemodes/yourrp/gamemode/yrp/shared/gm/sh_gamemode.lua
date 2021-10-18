@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 350 -- do NOT change this!
 GM.VersionCanary = 703 -- do NOT change this!
-GM.VersionBuild = 85 -- do NOT change this!
+GM.VersionBuild = 88 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -282,7 +282,7 @@ end)
 
 function YRPCollectionID()
 	local collectionid = tonumber(GetGlobalString("text_server_collectionid", "0"))
-	if collectionid > 100000000 then
+	if collectionid and collectionid > 100000000 then
 		return collectionid
 	end
 	return 0
@@ -310,40 +310,42 @@ function IsEntityAlive(ply, uid)
 end
 
 if SERVER then
-	util.AddNetworkString("GetServerInfo")
-	net.Receive("GetServerInfo", function(len, ply)
+	util.AddNetworkString("YRPGetServerInfo")
+	net.Receive("YRPGetServerInfo", function(len, ply)
 		local tab = {}
 		tab.Version = GAMEMODE.Version
 		tab.VersionStable = GAMEMODE.VersionStable
 		tab.VersionBeta = GAMEMODE.VersionBeta
 		tab.VersionCanary = GAMEMODE.VersionCanary
 		tab.isdedicated = game.IsDedicated()
-		net.Start("GetServerInfo")
+		net.Start("YRPGetServerInfo")
 			net.WriteTable(tab)
 		net.Send(ply)
 	end)
 
-	local tmp = SQL_SELECT("yrp_general", "text_gamemode_name", nil)
+	local tmp = YRP_SQL_SELECT("yrp_general", "text_gamemode_name", nil)
 	if wk(tmp) then
 		tmp = tmp[1]
 		GM.BaseName = tmp.text_gamemode_name
 	end
 
-	util.AddNetworkString("getGamemodename")
-	net.Receive("getGamemodename", function(len, ply)
-		net.Start("getGamemodename")
-			net.WriteString(GAMEMODE.BaseName)
-		net.Send(ply)
+	util.AddNetworkString("YRPGetGamemodename")
+	net.Receive("YRPGetGamemodename", function(len, ply)
+		if GAMEMODE and GAMEMODE.BaseName then
+			net.Start("YRPGetGamemodename")
+				net.WriteString(GAMEMODE.BaseName)
+			net.Send(ply)
+		end
 	end)
 end
 
 if CLIENT then
-	net.Receive("getGamemodename", function(len)
+	net.Receive("YRPGetGamemodename", function(len)
 		GAMEMODE.BaseName = net.ReadString()
 	end)
 
 	timer.Simple(1, function()
-		net.Start("getGamemodename")
+		net.Start("YRPGetGamemodename")
 		net.SendToServer()
 	end)
 end
@@ -1100,7 +1102,7 @@ local foundbackdoor = false
 local function YRPCheckFile( fi )
 	local text = file.Read( fi, "GAME" )
 
-	if table.HasValue( ignoredefaultfiles, fi ) or string.StartWith( fi, "data/yrp_backups/" ) then
+	if table.HasValue( ignoredefaultfiles, fi ) or string.StartWith( fi, "data/yrp_backups/" ) or string.find( fi, "/yrp/", 1, true ) then
 		return
 	end
 

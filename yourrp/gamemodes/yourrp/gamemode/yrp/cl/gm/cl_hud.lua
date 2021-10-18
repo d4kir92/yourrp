@@ -563,7 +563,7 @@ end, hook.MONITOR_HIGH)
 hook.Add("HUDPaint", "yrp_hud_collectionid", function()
 	local lply = LocalPlayer()
 	if lply:HasAccess() and YRPCollectionID() < 100000000 then
-		local text = "[STEAM] " .. YRP.lang_string("LID_thecollectionidismissing") .. " (" .. GetKeybindName("menu_settings") .. " >> " .. YRP.lang_string("LID_server") .. " >> " .. YRP.lang_string("LID_general") .. " >> " .. YRP.lang_string("LID_collectionid") .. ")"
+		local text = "[STEAM] " .. YRP.lang_string("LID_thecollectionidismissing") .. " (" .. YRPGetKeybindName("menu_settings") .. " >> " .. YRP.lang_string("LID_server") .. " >> " .. YRP.lang_string("LID_general") .. " >> " .. YRP.lang_string("LID_collectionid") .. ")"
 		draw.SimpleTextOutlined(text, "Y_50_500", ScrW() / 2, ScrH()  * 0.2, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end, hook.MONITOR_HIGH)
@@ -773,9 +773,9 @@ hook.Add("HUDPaint", "yrp_voice_module", function()
 		end
 
 		if ca == 0 and cp == 0 then
-			VO.text = "" .. string.Replace(YRP.lang_string("LID_presskeytoenablevoicemenu"), "KEY", GetKeybindName("voice_menu")) .. ""
+			VO.text = "" .. string.Replace(YRP.lang_string("LID_presskeytoenablevoicemenu"), "KEY", YRPGetKeybindName("voice_menu")) .. ""
 		else
-			VO.text = VO.text .. " (" .. input.GetKeyName( KEY_LSHIFT ) .. " + " .. GetKeybindName("voice_menu") .. ")"
+			VO.text = VO.text .. " (" .. input.GetKeyName( KEY_LSHIFT ) .. " + " .. YRPGetKeybindName("voice_menu") .. ")"
 		end
 
 		VO.tw = surface.GetTextSize(VO.text)

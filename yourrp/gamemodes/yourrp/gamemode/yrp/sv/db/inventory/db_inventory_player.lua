@@ -94,7 +94,7 @@ function Player:DropSWEPSilence(cname)
 end
 
 function Player:IsAllowedToDropSWEPRole(cname)
-	local ndsweps = SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetNW2String("roleUniqueID", "0") .. "'")
+	local ndsweps = YRP_SQL_SELECT("yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetNW2String("roleUniqueID", "0") .. "'")
 	if wk(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode(",", ndsweps.string_ndsweps)
@@ -108,7 +108,7 @@ function Player:IsAllowedToDropSWEPRole(cname)
 end
 
 function Player:IsAllowedToDropSWEPUG(cname)
-	local ndsweps = SQL_SELECT("yrp_usergroups", "string_nonesweps", "string_name = '" .. string.lower(self:GetUserGroup()) .. "'")
+	local ndsweps = YRP_SQL_SELECT("yrp_usergroups", "string_nonesweps", "string_name = '" .. string.lower(self:GetUserGroup()) .. "'")
 	if wk(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode(",", ndsweps.string_nonesweps)

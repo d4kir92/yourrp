@@ -82,7 +82,7 @@ function SWEP:Think()
 				if p:Distance(pos) < size * 2 then
 					YRP.msg("db", "Option Safezone")
 
-					local stab = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
+					local stab = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
 					if wk(stab) then
 						stab = stab[1]
 						net.Start("yrp_safezone_options")
@@ -201,7 +201,7 @@ function SWEP:SecondaryAttack()
 			inbox = ents.FindInBox(spos, epos)
 			for i, e in pairs(inbox) do
 				if e == ply then
-					SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
+					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
 					YRP.msg("db", "Removed Safezone")
 				end
 			end

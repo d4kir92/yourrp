@@ -5,17 +5,14 @@
 
 local DATABASE_NAME = "yrp_players"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "SteamName", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamName", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "CurrentCharacter", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "NormalCharacter", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "Timestamp", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "uptime_total", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "uptime_current", "INT DEFAULT 0")
-
---db_drop_table(DATABASE_NAME)
---db_is_empty(DATABASE_NAME)
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "CurrentCharacter", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "NormalCharacter", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "Timestamp", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_total", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_current", "INT DEFAULT 0")
 
 util.AddNetworkString("setting_players")
 util.AddNetworkString("YRPOpenCharacterMenu")
@@ -35,28 +32,28 @@ end)
 g_db_reseted = false
 function save_clients(str)
 	--YRP.msg("db", string.upper("[Saving all clients] [" .. str .. "]"))
-	if SQL_TABLE_EXISTS(DATABASE_NAME) then
+	if YRP_SQL_TABLE_EXISTS(DATABASE_NAME) then
 		if !g_db_reseted then
 			for k, ply in pairs(player.GetAll()) do
 
 				local steamid = ply:SteamID() or ply:UniqueID()
-				local _result = SQL_UPDATE(DATABASE_NAME, {["Timestamp"] = os.time()}, "SteamID = '" .. steamid .. "'")
+				local _result = YRP_SQL_UPDATE(DATABASE_NAME, {["Timestamp"] = os.time()}, "SteamID = '" .. steamid .. "'")
 
 				ply:AddPlayTime(true)
 				
-				if ply:Alive() and SQL_TABLE_EXISTS("yrp_characters") then
+				if ply:Alive() and YRP_SQL_TABLE_EXISTS("yrp_characters") then
 					local _char_id = ply:CharID()
 					if worked(_char_id, "CharID failed @save_clients") then
-						SQL_UPDATE("yrp_characters", {["position"] = tostring(ply:GetPos())}, "uniqueID = " .. _char_id)
-						SQL_UPDATE("yrp_characters", {["angle"] = tostring(ply:EyeAngles())}, "uniqueID = " .. _char_id)
+						YRP_SQL_UPDATE("yrp_characters", {["position"] = tostring(ply:GetPos())}, "uniqueID = " .. _char_id)
+						YRP_SQL_UPDATE("yrp_characters", {["angle"] = tostring(ply:EyeAngles())}, "uniqueID = " .. _char_id)
 						if worked(ply:GetNW2String("money", "0"), "money failed @save_clients") and isnumber(tonumber(ply:GetNW2String("money"))) then
-							local _mo_result = SQL_UPDATE("yrp_characters", {["money"] = ply:GetNW2String("money", "0")}, "uniqueID = " .. _char_id)
+							local _mo_result = YRP_SQL_UPDATE("yrp_characters", {["money"] = ply:GetNW2String("money", "0")}, "uniqueID = " .. _char_id)
 						end
 						if worked(ply:GetNW2String("moneybank", "0"), "moneybank failed @save_clients") and isnumber(tonumber(ply:GetNW2String("moneybank"))) then
-							local _mb_result = SQL_UPDATE("yrp_characters", {["moneybank"] = ply:GetNW2String("moneybank", "0")}, "uniqueID = " .. _char_id)
+							local _mb_result = YRP_SQL_UPDATE("yrp_characters", {["moneybank"] = ply:GetNW2String("moneybank", "0")}, "uniqueID = " .. _char_id)
 						end
 						if worked(GetMapNameDB(), "getmap failed @save_clients") then
-							SQL_UPDATE("yrp_characters", {["map"] = GetMapNameDB()}, "uniqueID = " .. _char_id)
+							YRP_SQL_UPDATE("yrp_characters", {["map"] = GetMapNameDB()}, "uniqueID = " .. _char_id)
 						end
 					end
 				end
@@ -78,11 +75,11 @@ function save_clients(str)
 	end
 
 	local pp = {}
-	if SQL_TABLE_EXISTS("permaprops") then
-		pp = SQL_SELECT("permaprops", "*")
+	if YRP_SQL_TABLE_EXISTS("permaprops") then
+		pp = YRP_SQL_SELECT("permaprops", "*")
 		if pp then
-			SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")
-			SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_holo%'")
+			YRP_SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")
+			YRP_SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_holo%'")
 		end
 	end
 end
@@ -95,7 +92,7 @@ function updateRoleUses(rid)
 			_count = _count + 1
 		end
 	end
-	SQL_UPDATE("yrp_ply_roles", {["int_uses"] = _count}, "uniqueID = '" .. rid .. "'")
+	YRP_SQL_UPDATE("yrp_ply_roles", {["int_uses"] = _count}, "uniqueID = '" .. rid .. "'")
 end
 
 local defaultsweps = {}
@@ -117,7 +114,7 @@ function SetRole(ply, rid, force, pmid)
 
 	-- SWEPS
 	local ChaTab = ply:YRPGetCharacterTable()
-	local rolTab = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'")
+	local rolTab = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'")
 	if GetGlobalBool("bool_weapon_system", true) and wk(ChaTab) and wk(rolTab) and tonumber(ChaTab.roleID) != tonumber(rid) then
 		rolTab = rolTab[1]
 
@@ -171,7 +168,7 @@ function SetRole(ply, rid, force, pmid)
 			end
 		end
 		
-		local rolTab = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'")
+		local rolTab = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'")
 		if wk(rolTab) then
 			rolTab = rolTab[1]
 			local tmpSWEPTable = string.Explode(",", rolTab.string_sweps_onspawn)
@@ -220,7 +217,7 @@ function YFAR(str, f, r)
 end
 
 function IsCardIDUnique(id)
-	local charTab = SQL_SELECT("yrp_characters", "*", "text_idcardid = '" .. id .. "'" )
+	local charTab = YRP_SQL_SELECT("yrp_characters", "*", "text_idcardid = '" .. id .. "'" )
 	if wk(charTab) then
 		return false
 	end
@@ -261,7 +258,7 @@ function CreateNewIDCardID(charid, try)
 	local idcardid = table.concat(result, "")
 
 	if IsCardIDUnique(idstructure) then
-		SQL_UPDATE("yrp_characters", {["text_idcardid"] = idcardid}, "uniqueID = '" .. charid .. "'")
+		YRP_SQL_UPDATE("yrp_characters", {["text_idcardid"] = idcardid}, "uniqueID = '" .. charid .. "'")
 	elseif try < 32 then
 		try = try + 1
 		CreateNewIDCardID(charid, try)
@@ -269,12 +266,12 @@ function CreateNewIDCardID(charid, try)
 end
 
 function RecreateNewIDCardID()
-	for i, char in pairs(SQL_SELECT("yrp_characters", "*", nil)) do
+	for i, char in pairs(YRP_SQL_SELECT("yrp_characters", "*", nil)) do
 		CreateNewIDCardID(char.uniqueID)
 	end
 
 	for i, ply in pairs(player.GetAll()) do
-		local char = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. ply:CharID() .. "'")
+		local char = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. ply:CharID() .. "'")
 		if wk(char) then
 			char = char[1]
 			ply:SetNW2String("idcardid", char.text_idcardid)
@@ -286,7 +283,7 @@ function SetIDCardID(ply)
 	local char = ply:YRPGetCharacterTable()
 	local idstructure = GetIDStructure()
 	if idstructure != char.text_idstructure then
-		SQL_UPDATE("yrp_characters", {["text_idstructure"] = idstructure}, "uniqueID = '" .. ply:CharID() .. "'")
+		YRP_SQL_UPDATE("yrp_characters", {["text_idstructure"] = idstructure}, "uniqueID = '" .. ply:CharID() .. "'")
 		CreateNewIDCardID(ply:CharID())
 	end
 	char = ply:YRPGetCharacterTable()
@@ -301,8 +298,8 @@ function set_role(ply, rid)
 		local old_rid = ply:YRPGetCharacterTable()
 		if wk(old_rid) then
 			old_rid = old_rid.roleID
-			local _result = SQL_UPDATE("yrp_characters", {["roleID"] = rid}, "uniqueID = " .. ply:CharID())
-			local _role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. rid)
+			local _result = YRP_SQL_UPDATE("yrp_characters", {["roleID"] = rid}, "uniqueID = " .. ply:CharID())
+			local _role = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. rid)
 			local _old_uid = ply:GetNW2String("roleUniqueID", "1")
 			ply:SetNW2String("roleUniqueID", rid)
 
@@ -311,7 +308,7 @@ function set_role(ply, rid)
 			if _role != nil then
 				_role = tonumber(_role[1].int_groupID)
 				if isnumber(_role) then
-					local _result2 = SQL_UPDATE("yrp_characters", {["groupID"] = _role}, "uniqueID = " .. ply:CharID())
+					local _result2 = YRP_SQL_UPDATE("yrp_characters", {["groupID"] = _role}, "uniqueID = " .. ply:CharID())
 					ply:SetNW2String("groupUniqueID", _role)
 				else
 					YRP.msg("note", "_role = " .. _role)
@@ -327,19 +324,19 @@ function set_role(ply, rid)
 end
 
 function GetFactionTable(uid)
-	local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'")
+	local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'")
 	if wk(group) then
 		group = group[1]
 		group.int_parentgroup = tonumber(group.int_parentgroup)
 		group.uniqueID = tonumber(group.uniqueID)
 		if group.int_parentgroup == group.uniqueID then
-			local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. "0" .. "'")
+			local undergroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. "0" .. "'")
 			if wk(undergroup) then
 				undergroup = undergroup[1]
 				return undergroup
 			end
 		elseif group.int_parentgroup != 0 then
-			local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
+			local undergroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
 			if wk(undergroup) then
 				undergroup = undergroup[1]
 				return GetFactionTable(undergroup.uniqueID)
@@ -347,7 +344,7 @@ function GetFactionTable(uid)
 		end
 		return group
 	end
-	local undergroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. "0" .. "'")
+	local undergroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. "0" .. "'")
 	if wk(undergroup) then
 		undergroup = undergroup[1]
 		return undergroup
@@ -371,7 +368,7 @@ function set_role_values(ply, pmid)
 				local _storage = string.Explode(",", ChaTab.storage)
 				YRP.msg("debug", "[set_role_values] " .. ply:YRPName() .. " give permanent Licenses")
 				for i, lic in pairs(_storage) do
-					local _lic = SQL_SELECT("yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'")
+					local _lic = YRP_SQL_SELECT("yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'")
 					if _lic != nil and _lic != false then
 						_lic = _lic[1]
 						ply:AddLicense(_lic.ClassName)
@@ -508,7 +505,7 @@ function set_role_values(ply, pmid)
 			end
 
 			--custom flags
-			local allflags = SQL_SELECT("yrp_flags", "*", nil)
+			local allflags = YRP_SQL_SELECT("yrp_flags", "*", nil)
 			for i, flag in pairs(allflags) do
 				ply:SetNW2Bool("bool_" .. flag.string_name, false)
 			end
@@ -516,7 +513,7 @@ function set_role_values(ply, pmid)
 			local customflags = string.Explode(",", rolTab.string_customflags)
 			for i, flag in pairs(customflags) do
 				if wk(flag) then
-					local fl = SQL_SELECT("yrp_flags", "*", "uniqueID = '" .. flag .. "'")
+					local fl = YRP_SQL_SELECT("yrp_flags", "*", "uniqueID = '" .. flag .. "'")
 					if wk(fl) then
 						fl = fl[1]
 						ply:SetNW2Bool("bool_" .. fl.string_name, true)
@@ -641,10 +638,10 @@ function add_yrp_player(ply, steamid)
 		cols = cols .. "Timestamp"
 
 		local vals = "'" .. steamid .. "', "
-		vals = vals .. "" .. SQL_STR_IN( _SteamName ) .. ", "
+		vals = vals .. "" .. YRP_SQL_STR_IN( _SteamName ) .. ", "
 		vals = vals .. "'" .. _ostime .. "'"
 
-		local _insert = SQL_INSERT_INTO("yrp_players", cols, vals)
+		local _insert = YRP_SQL_INSERT_INTO("yrp_players", cols, vals)
 		if _insert == nil then
 			YRP.msg("db", "[" .. ply:SteamName() .. "] -> Successfully added player to database.")
 
@@ -661,7 +658,7 @@ function check_yrp_player(ply, steamid)
 	steamid = steamid or ply:SteamID() or ply:UniqueID()
 
 	if steamid != nil and steamid != false or game.SinglePlayer() then
-		local _result = SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamid .. "'")
+		local _result = YRP_SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamid .. "'")
 
 		if _result == nil then
 			add_yrp_player(ply, steamid)
@@ -672,7 +669,7 @@ function check_yrp_player(ply, steamid)
 				for k, v in pairs(_result) do
 					if k > 1 then
 						YRP.msg("db", "[" .. ply:SteamName() .. "] delete other entry.")
-						SQL_DELETE_FROM("yrp_players", "uniqueID = " .. v.uniqueID)
+						YRP_SQL_DELETE_FROM("yrp_players", "uniqueID = " .. v.uniqueID)
 					end
 				end
 			end
@@ -712,7 +709,7 @@ end)
 util.AddNetworkString("give_getGroTab")
 
 net.Receive("give_getGroTab", function(len, ply)
-	local _tmpGroupList = SQL_SELECT("yrp_ply_groups", "*", nil)
+	local _tmpGroupList = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
 	if _tmpGroupList != nil then
 		net.Start("give_getGroTab")
 			net.WriteTable(_tmpGroupList)
@@ -726,7 +723,7 @@ util.AddNetworkString("give_getRolTab")
 
 net.Receive("give_getRolTab", function(len, ply)
 	local _groupID = net.ReadString()
-	local _tmpRolTab = SQL_SELECT("yrp_ply_roles", "*", "int_groupID = " .. tonumber(_groupID))
+	local _tmpRolTab = YRP_SQL_SELECT("yrp_ply_roles", "*", "int_groupID = " .. tonumber(_groupID))
 	if _tmpRolTab != nil then
 		net.Start("give_getRolTab")
 			net.WriteTable(_tmpRolTab)
@@ -737,9 +734,9 @@ net.Receive("give_getRolTab", function(len, ply)
 end)
 
 net.Receive("getPlyList", function(len, ply)
-	local _tmpChaList = SQL_SELECT("yrp_characters", "*", nil)
-	local _tmpRoleList = SQL_SELECT("yrp_ply_roles", "*", nil)
-	local _tmpGroupList = SQL_SELECT("yrp_ply_groups", "*", nil)
+	local _tmpChaList = YRP_SQL_SELECT("yrp_characters", "*", nil)
+	local _tmpRoleList = YRP_SQL_SELECT("yrp_ply_roles", "*", nil)
+	local _tmpGroupList = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
 	if _tmpChaList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
 
 		net.Start("getPlyList")
@@ -777,13 +774,13 @@ function YRPWhitelistInfoPlayer(ply, msg)
 end
 
 function isWhitelisted(ply, id)
-	local _role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. id)
+	local _role = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. id)
 	if wk(_role) then
 		_role = _role[1]
 
 		if tonumber(_role.bool_whitelist) == 1 or tonumber(_role.int_prerole) > 0 then
 			local steamid = ply:SteamID() or ply:UniqueID()
-			local _plyAllowedAll = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "'")
+			local _plyAllowedAll = YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "'")
 			if worked(_plyAllowedAll, "_plyAllowedAll", true) then
 				_plyAllowedAll = _plyAllowedAll[1]
 				if _plyAllowedAll.roleID == "-1" or _plyAllowedAll.groupID == "-1" then
@@ -792,8 +789,8 @@ function isWhitelisted(ply, id)
 				end
 			end
 
-			local _plyAllowedRole = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND roleID = " .. id)
-			local _plyAllowedGroup = SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND groupID = " .. _role.int_groupID .. " AND roleID = -1")
+			local _plyAllowedRole = YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND roleID = " .. id)
+			local _plyAllowedGroup = YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND groupID = " .. _role.int_groupID .. " AND roleID = -1")
 			if ply:HasAccess() then
 				YRP.msg("gm", ply:RPName() .. " has access.")
 				return true
@@ -879,7 +876,7 @@ function canGetRole(ply, roleID, want)
 		return
 	end
 
-	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = '" .. roleID .. "'")
+	local tmpTableRole = YRP_SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = '" .. roleID .. "'")
 	local chatab = ply:YRPGetCharacterTable()
 
 	if wk(tmpTableRole) then
@@ -988,7 +985,7 @@ function RemGroVals(ply)
 end
 
 function canVoteRole(ply, roleID)
-	local tmpTableRole = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. roleID)
+	local tmpTableRole = YRP_SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. roleID)
 
 	if worked(tmpTableRole, "tmpTableRole") then
 		local uses = tonumber(tmpTableRole[1].int_uses)
@@ -1033,7 +1030,7 @@ net.Receive("wantRole", function(len, ply)
 
 		ply:SetNW2Bool("switchrole", false)
 	elseif canVoteRole(ply, uniqueIDRole) then
-		local _role = SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. uniqueIDRole)
+		local _role = YRP_SQL_SELECT("yrp_ply_roles" , "*", "uniqueID = " .. uniqueIDRole)
 		startVote(ply, _role)
 	else
 		YRPNotiToPly(text, "not allowed to get this role")

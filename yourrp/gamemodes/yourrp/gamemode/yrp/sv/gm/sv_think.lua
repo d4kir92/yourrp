@@ -309,11 +309,11 @@ timer.Create("ServerThink", TICK, 0, function()
 			SetGlobalBool("yrp_update_teleporters", false)
 		end
 
-		local _dealers = SQL_SELECT("yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'")
+		local _dealers = YRP_SQL_SELECT("yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'")
 		if wk(_dealers) then
 			for i, dealer in pairs(_dealers) do
 				if tonumber(dealer.uniqueID) != 1 and !YRPIsDealerAlive(dealer.uniqueID) then
-					local _del = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'")
+					local _del = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'")
 					if _del != nil then
 						YRP.msg("gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!")
 						_del = _del[1]
@@ -340,8 +340,8 @@ timer.Create("ServerThink", TICK, 0, function()
 			end
 		end
 
-		if SQL_TABLE_EXISTS("yrp_teleporters") then
-			local teleporters = SQL_SELECT("yrp_teleporters", "*", "string_map = '" .. game.GetMap() .. "'")
+		if YRP_SQL_TABLE_EXISTS("yrp_teleporters") then
+			local teleporters = YRP_SQL_SELECT("yrp_teleporters", "*", "string_map = '" .. game.GetMap() .. "'")
 			if wk(teleporters) then
 				if table.Count(teleporters) < 100 then
 					for i, teleporter in pairs(teleporters) do
@@ -434,7 +434,7 @@ end
 
 function UpdateSpawnerNPCTable()
 	local t = {}
-	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_npc'")
+	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_npc'")
 	if wk(all) then
 		for i, v in pairs(all) do
 			local spawner = {}
@@ -451,7 +451,7 @@ UpdateSpawnerNPCTable()
 
 function UpdateSpawnerENTTable()
 	local t = {}
-	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_ent'")
+	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_ent'")
 	if wk(all) then
 		for i, v in pairs(all) do
 			local spawner = {}
@@ -468,7 +468,7 @@ UpdateSpawnerENTTable()
 
 function UpdateJailpointTable()
 	local t = {}
-	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint'")
+	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint'")
 	if wk(all) then
 		for i, v in pairs(all) do
 			local spawner = {}
@@ -486,7 +486,7 @@ UpdateJailpointTable()
 
 function UpdateReleasepointTable()
 	local t = {}
-	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'releasepoint'")
+	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'releasepoint'")
 	if wk(all) then
 		for i, v in pairs(all) do
 			local spawner = {}
@@ -503,7 +503,7 @@ UpdateReleasepointTable()
 
 function UpdateRadiationTable()
 	local t = {}
-	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'radiation'")
+	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'radiation'")
 	if wk(all) then
 		for i, v in pairs(all) do
 			local spawner = {}
@@ -521,7 +521,7 @@ UpdateRadiationTable()
 
 function UpdateSafezoneTable()
 	local t = {}
-	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'safezone'")
+	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'safezone'")
 	if wk(all) then
 		for i, v in pairs(all) do
 			local safezone = {}
@@ -539,7 +539,7 @@ UpdateSafezoneTable()
 
 function UpdateZoneTable()
 	local t = {}
-	local all = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'zone'")
+	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'zone'")
 	if wk(all) then
 		for i, v in pairs(all) do
 			local zone = {}
@@ -572,7 +572,7 @@ hook.Add("Think", "yrp_spawner_think", function()
 				YNPCs[v.uniqueID].delay = CurTime()
 			end
 
-			local npc_spawner = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_npc' AND uniqueID = '" .. v.uniqueID .. "'")
+			local npc_spawner = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_npc' AND uniqueID = '" .. v.uniqueID .. "'")
 			if wk(npc_spawner) then
 				npc_spawner = npc_spawner[1]
 				npc_spawner.int_amount = tonumber(npc_spawner.int_amount)
@@ -607,7 +607,7 @@ hook.Add("Think", "yrp_spawner_think", function()
 				YENTs[v.uniqueID].delay = CurTime()
 			end
 
-			local ent_spawner = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_ent' AND uniqueID = '" .. v.uniqueID .. "'")
+			local ent_spawner = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_ent' AND uniqueID = '" .. v.uniqueID .. "'")
 			if wk(ent_spawner) then
 				ent_spawner = ent_spawner[1]
 				ent_spawner.int_amount = tonumber(ent_spawner.int_amount)

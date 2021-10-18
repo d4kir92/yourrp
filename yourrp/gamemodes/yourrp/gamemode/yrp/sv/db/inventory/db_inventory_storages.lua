@@ -2,21 +2,21 @@
 
 local DATABASE_NAME = "yrp_inventory_storages"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1")
 
---SQL_DROP_TABLE(DATABASE_NAME)
+--YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
 
 
 function CreateStorage(size, inv)
 	if !wk(size) then return end
 	
-	local result = SQL_INSERT_INTO(DATABASE_NAME, "int_storage_size", "'" .. size .. "'")
+	local result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_storage_size", "'" .. size .. "'")
 
 	if result == nil then
 		YRP.msg("db", "Created Storage")
 
-		local last = SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
+		local last = YRP_SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
 		if wk(last) then
 			last = last[1]
 
@@ -36,7 +36,7 @@ end
 function GetCharacterStorage(ply)
 	local chaTab = ply:YRPGetCharacterTable()
 	if wk(chaTab) then
-		local storage = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. chaTab.int_storageID .. "'")
+		local storage = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. chaTab.int_storageID .. "'")
 		if wk(storage) then
 			storage = storage[1]
 			return storage
@@ -49,20 +49,20 @@ function GetCharacterStorage(ply)
 end
 
 function YRPCreateCharacterStorages()
-	local chars = SQL_SELECT("yrp_characters", "*", nil)
+	local chars = YRP_SQL_SELECT("yrp_characters", "*", nil)
 	if wk(chars) then
 		for _, char in pairs(chars) do
 			-- Remove wrong ones
 			if isnumber(tonumber(char.int_storageID)) then
-				local tab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'")
+				local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'")
 				if wk(tab) then
 					tab = tab[1]
 
-					local slots = SQL_SELECT("yrp_inventory_slots", "*", "int_storageID = '" .. tab.uniqueID .. "'")
+					local slots = YRP_SQL_SELECT("yrp_inventory_slots", "*", "int_storageID = '" .. tab.uniqueID .. "'")
 					if wk(slots) and (#slots < 5 or #slots > 5) then
-						SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. char.int_storageID .. "'")
-						SQL_DELETE_FROM("yrp_inventory_slots", "int_storageID = '" .. tab.uniqueID .. "'")
-						SQL_UPDATE("yrp_characters", {["int_storageID"] = 0}, "uniqueID = '" .. char.uniqueID .. "'")
+						YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. char.int_storageID .. "'")
+						YRP_SQL_DELETE_FROM("yrp_inventory_slots", "int_storageID = '" .. tab.uniqueID .. "'")
+						YRP_SQL_UPDATE("yrp_characters", {["int_storageID"] = 0}, "uniqueID = '" .. char.uniqueID .. "'")
 					end
 				end
 			end
@@ -72,13 +72,13 @@ function YRPCreateCharacterStorages()
 				YRP.msg("db", "YRPCreateCharacterStorages empty or 0")
 				local bagsStorage = CreateStorage(5, true)
 				if wk(bagsStorage) then
-					SQL_UPDATE("yrp_characters", {["int_storageID"] = bagsStorage.uniqueID}, "uniqueID = '" .. char.uniqueID .. "'")
+					YRP_SQL_UPDATE("yrp_characters", {["int_storageID"] = bagsStorage.uniqueID}, "uniqueID = '" .. char.uniqueID .. "'")
 				end
-			elseif !wk(SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'")) then
+			elseif !wk(YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'")) then
 				YRP.msg("db", "YRPCreateCharacterStorages WRONG")
 				local bagsStorage = CreateStorage(5, true)
 				if wk(bagsStorage) then
-					SQL_UPDATE("yrp_characters", {["int_storageID"] = bagsStorage.uniqueID}, "uniqueID = '" .. char.uniqueID .. "'")
+					YRP_SQL_UPDATE("yrp_characters", {["int_storageID"] = bagsStorage.uniqueID}, "uniqueID = '" .. char.uniqueID .. "'")
 				end
 			end
 		end
@@ -120,19 +120,19 @@ util.AddNetworkString("yrp_storage_open")
 function OpenStorage(ply, storageID)
 	storageID = tonumber(storageID)
 
-	local storage = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. storageID .. "'")
+	local storage = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. storageID .. "'")
 
 	if wk(storage) then
 		storage = storage[1]
 
 		local isinv = false
-		local item = SQL_SELECT("yrp_inventory_items", "*", "int_storageID = '" .. storage.uniqueID .. "'")
+		local item = YRP_SQL_SELECT("yrp_inventory_items", "*", "int_storageID = '" .. storage.uniqueID .. "'")
 		if wk(item) then
 			item = item[1]
 
 			item.int_slotID = tonumber(item.int_slotID)
 			local invstor = GetCharacterStorage(ply)
-			local invslots = SQL_SELECT("yrp_inventory_slots", "*", "int_storageID = '" .. invstor.uniqueID .. "'")
+			local invslots = YRP_SQL_SELECT("yrp_inventory_slots", "*", "int_storageID = '" .. invstor.uniqueID .. "'")
 			for i, v in pairs(invslots) do
 				v.uniqueID = tonumber(v.uniqueID)
 				if item.int_slotID == v.uniqueID then

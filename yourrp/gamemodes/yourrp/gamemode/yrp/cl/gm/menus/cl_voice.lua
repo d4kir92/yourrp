@@ -591,7 +591,7 @@ function OpenVoiceMenu()
 		end
 
 		if !self.toggle then
-			draw.SimpleText(string.Replace(YRP.lang_string("LID_presskeytoenablevoicemenu"), "KEY", GetKeybindName("voice_menu")), "Y_30_500", pw / 2, ph / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(string.Replace(YRP.lang_string("LID_presskeytoenablevoicemenu"), "KEY", YRPGetKeybindName("voice_menu")), "Y_30_500", pw / 2, ph / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local hh = 24

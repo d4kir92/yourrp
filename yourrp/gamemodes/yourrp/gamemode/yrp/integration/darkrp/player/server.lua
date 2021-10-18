@@ -171,6 +171,8 @@ function Player:setDarkRPVar(variable, value, target)
 		--
 	elseif variable == "wantedReason" then
 		--
+	elseif variable == "HasGunlicense" then
+		--
 	else
 		YRPDarkrpNotFound("setDarkRPVar(" .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. ")")
 	end

@@ -4,18 +4,18 @@
 -- https://discord.gg/sEgNZxg
 
 local DATABASE_NAME = "yrp_weapon_options"
-SQL_ADD_COLUMN(DATABASE_NAME, "slots_primary", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "slots_secondary", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "slots_sidearm", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "slots_gadget", "INT DEFAULT 2")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_primary", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_secondary", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_sidearm", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_gadget", "INT DEFAULT 2")
 
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID == '1'") == nil then
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID == '1'") == nil then
 	YRP.msg("db", "Set Default Weapon Settings")
-	SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
+	YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 end
 
 function YRPSetWeaponSettings()
-	local tab = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(tab) then
 		tab = tab[1]
 		
@@ -33,7 +33,7 @@ net.Receive("yrp_set_slot_amount", function(len, ply)
 		local ar = net.ReadString()
 		local va = net.ReadString()
 
-		SQL_UPDATE(DATABASE_NAME, {[ar] = va}, "uniqueID = '1'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {[ar] = va}, "uniqueID = '1'")
 
 		YRPSetWeaponSettings()
 	end
@@ -42,15 +42,15 @@ end)
 
 
 local DATABASE_NAME2 = "yrp_weapon_slots"
-SQL_ADD_COLUMN(DATABASE_NAME2, "classname", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME2, "slot_primary", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME2, "slot_secondary", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME2, "slot_sidearm", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME2, "slot_gadget", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME2, "slot_no", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "classname", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_primary", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_secondary", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_sidearm", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_gadget", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_no", "INT DEFAULT 0")
 
 function YRPGetSlotsOfSWEP(cn)
-	local tab = SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'")
 	if wk(tab) then
 		tab = tab[1]
 		tab.slot_primary = tobool(tab.slot_primary)
@@ -59,7 +59,7 @@ function YRPGetSlotsOfSWEP(cn)
 		tab.slot_gadget = tobool(tab.slot_gadget)
 		tab.slot_no = tobool(tab.slot_no)
 	else
-		SQL_INSERT_INTO(DATABASE_NAME2, "'" .. "classname" .. "'", "'" .. cn .. "'")
+		YRP_SQL_INSERT_INTO(DATABASE_NAME2, "'" .. "classname" .. "'", "'" .. cn .. "'")
 		return YRPGetSlotsOfSWEP(cn)
 	end
 
@@ -69,14 +69,14 @@ end
 util.AddNetworkString("yrp_weapon_menu")
 net.Receive("yrp_weapon_menu", function(len, ply)
 	if ply:CanAccess("bool_weapons") then
-		local tab = SQL_SELECT(DATABASE_NAME, "*", nil)
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 		if wk(tab) then
 			tab = tab[1]
 		else
 			tab = {}
 		end
 
-		local tab2 = SQL_SELECT(DATABASE_NAME2, "*", nil)
+		local tab2 = YRP_SQL_SELECT(DATABASE_NAME2, "*", nil)
 		local tab2s = {}
 		if wk(tab2) then
 			for i, v in pairs(tab2) do
@@ -98,11 +98,11 @@ net.Receive("yrp_set_slot_weapon", function(len, ply)
 		local ar = net.ReadString()
 		local bo = net.ReadBool()
 		
-		local tab = SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'")
+		local tab = YRP_SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'")
 		if wk(tab) then
-			SQL_UPDATE(DATABASE_NAME2, {[ar] = tonum(bo)}, "classname = '" .. cn .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME2, {[ar] = tonum(bo)}, "classname = '" .. cn .. "'")
 		else
-			SQL_INSERT_INTO(DATABASE_NAME2, "'" .. "classname" .. "', '" .. ar .. "'", "'" .. cn .. "', '" .. tonum(bo) .. "'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME2, "'" .. "classname" .. "', '" .. ar .. "'", "'" .. cn .. "', '" .. tonum(bo) .. "'")
 		end
 	end
 end)

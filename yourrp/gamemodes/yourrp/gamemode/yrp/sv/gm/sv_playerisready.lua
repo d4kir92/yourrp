@@ -25,6 +25,12 @@ function YRPPlayerLoadedGame(ply, tab)
 	else
 		ply:SetNW2String("yrp_os", "other")
 	end
+
+	if Country == nil then
+		YRP.msg( "error", ply:YRPName() .. " Client is broken, Country = " .. tostring( Country ) )
+		ply:Kick( "YOUR GAME IS BROKEN! PLEASE VERIFY DATA" )
+	end
+
 	ply:SetNW2String("gmod_branch", Branch or "Unknown")
 	ply:SetNW2String("yrp_country", Country or "Unknown")
 	ply:SetNW2Float("uptime_current", os.clock())
@@ -57,7 +63,7 @@ function YRPPlayerLoadedGame(ply, tab)
 	end
 
 	-- YRP Chat?
-	local _chat = SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")
+	local _chat = YRP_SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")
 	if _chat != nil and _chat != false then
 		_chat = _chat[1]
 		ply:SetNW2Bool("bool_yrp_chat", tobool(_chat.yrp_chat))
@@ -122,8 +128,8 @@ hook.Add("Think", "yrp_loaded_game", function()
 
 				ply:ChatPrint("!help for help")
 
-				if os.time() != nil and SQL_INSERT_INTO != nil then
-					SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "connected" .. "'")
+				if os.time() != nil and YRP_SQL_INSERT_INTO != nil then
+					YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "connected" .. "'")
 				end
 			end
 		end
@@ -132,8 +138,6 @@ end, hook.MONITOR_HIGH)
 
 util.AddNetworkString("yrp_is_ready_player")
 net.Receive("yrp_is_ready_player", function(len, ply)
-	local tab = net.ReadTable()
-
 	if !IsValid(ply) then
 		YRP.msg( "error", "[yrp_player_is_ready] player is not valid: " .. tostring( ply ) )
 		return
@@ -141,6 +145,8 @@ net.Receive("yrp_is_ready_player", function(len, ply)
 
 	if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
 		ply:SetNW2Bool( "yrp_received_ready", true )
+
+		local tab = net.ReadTable()
 
 		YRP.msg( "note", ply:YRPName() .. " is ready for getting Data." )
 

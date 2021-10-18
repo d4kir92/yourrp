@@ -5,10 +5,10 @@ KEYBINDS.open = false
 
 function createDKeybinder(parent, w, h, x, y, keybind)
 	local _tmp = createD("DBinder", parent, w, h, x, y)
-	_tmp:SetValue(get_keybind(keybind))
+	_tmp:SetValue(YRPGetKeybind(keybind))
 	function _tmp:OnChange(num)
-		if !set_keybind(keybind, num) and num != 0 then
-			--_tmp:SetSelectedNumber(get_keybind(keybind))
+		if !YRPSetKeybind(keybind, num) and num != 0 then
+			--_tmp:SetSelectedNumber(YRPGetKeybind(keybind))
 			Derma_Message(YRP.lang_string("LID_hotkeyinuse") .. "!", YRP.lang_string("LID_error"), YRP.lang_string("LID_ok"))
 		end
 	end

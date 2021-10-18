@@ -5,29 +5,29 @@
 
 local DATABASE_NAME = "yrp_profiles_hud"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "profile_name", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "profile_name", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
 
---SQL_DROP_TABLE(DATABASE_NAME)
+--YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
 function GetHudProfiles()
-	return SQL_SELECT(DATABASE_NAME, "*", "name = 'name'")
+	return YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'name'")
 end
 
 util.AddNetworkString("change_to_hud_profile")
 net.Receive("change_to_hud_profile", function()
 	local profile_name = net.ReadString()
 
-	SQL_UPDATE("yrp_design", {["string_hud_profile"] = profile_name}, "uniqueID = 1")
+	YRP_SQL_UPDATE("yrp_design", {["string_hud_profile"] = profile_name}, "uniqueID = 1")
 	SetGlobalString("string_hud_profile", profile_name)
 
-	local tab = SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. profile_name .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. profile_name .. "'")
 	if wk(tab) then
 		for i, v in pairs(tab) do
 			local name = v.name
 			local value = v.value
-			SQL_UPDATE("yrp_hud", {["value"] = value}, "name = '" .. name .. "'")
+			YRP_SQL_UPDATE("yrp_hud", {["value"] = value}, "name = '" .. name .. "'")
 		end
 
 		HudLoadoutAll()
@@ -38,7 +38,7 @@ end)
 
 function HudToCode(name)
 	MsgC( Color(255, 255, 255), "local " .. string.Replace(name, " ", "_") .. " = {}" .. "\n" )
-	local tab = SQL_SELECT("yrp_hud", "*", nil)
+	local tab = YRP_SQL_SELECT("yrp_hud", "*", nil)
 	for i, v in SortedPairsByMemberValue(tab, "name") do
 		local prefix = string.Replace(name, " ", "_") .. "." .. ""
 		v.value = tonumber(v.value) or v.value
@@ -57,18 +57,18 @@ YRPHUDS = YRPHUDS or {}
 
 function HudProfileToDataBase(name, tab)
 	YRP.msg("db", "Load Hud Profile: " .. name, nil)
-	local dbtab = SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. name .. "'")
+	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. name .. "'")
 	if dbtab == nil then
 		YRP.msg("db", "Missing Hud Profile: " .. name, nil, true)
-		SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. "name" .. "', '" .. name .. "'")
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. "name" .. "', '" .. name .. "'")
 		for i, v in pairs(tab) do
-			SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. i .. "', '" .. v .. "'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. i .. "', '" .. v .. "'")
 		end
 	else
 		if tab.Version != VERSION then
 			YRP.msg("db", "Updating Hud Profile: " .. name, nil, true)
 			for i, v in pairs(tab) do
-				SQL_UPDATE(DATABASE_NAME, {["value"] = v}, "name = '" .. i .. "' AND profile_name = '" .. name .. "'")
+				YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = v}, "name = '" .. i .. "' AND profile_name = '" .. name .. "'")
 			end
 		end
 	end

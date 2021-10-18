@@ -272,7 +272,7 @@ function drawHUDElementBr(dbV)
 end
 
 function YRPHudThirdperson(ply, color)
-	if get_keybind("view_zoom_in") and get_keybind("view_zoom_out") and ( input.IsKeyDown(get_keybind("view_zoom_in")) or input.IsKeyDown(get_keybind("view_zoom_out")) ) then
+	if YRPGetKeybind("view_zoom_in") and YRPGetKeybind("view_zoom_out") and ( input.IsKeyDown(YRPGetKeybind("view_zoom_in")) or input.IsKeyDown(YRPGetKeybind("view_zoom_out")) ) then
 		ply.yrp_view_range = ply.yrp_view_range or 0
 		ply.yrp_view_range_view = ply.yrp_view_range_view or 0
 		
@@ -286,13 +286,13 @@ function YRPHudThirdperson(ply, color)
 		end
 		draw.SimpleText(_3PText .. " (" .. math.Round(ply.yrp_view_range, -1) .. ")", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
-	if get_keybind("view_up") and get_keybind("view_down") and ( input.IsKeyDown(get_keybind("view_up")) or input.IsKeyDown(get_keybind("view_down")) ) then
+	if YRPGetKeybind("view_up") and YRPGetKeybind("view_down") and ( input.IsKeyDown(YRPGetKeybind("view_up")) or input.IsKeyDown(YRPGetKeybind("view_down")) ) then
 		draw.SimpleText(YRP.lang_string("LID_viewingheight") .. " (" .. math.Round(ply.yrp_view_z, 0) .. ")", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
-	if get_keybind("view_right") and get_keybind("view_left") and ( input.IsKeyDown(get_keybind("view_right")) or input.IsKeyDown(get_keybind("view_left")) ) then
+	if YRPGetKeybind("view_right") and YRPGetKeybind("view_left") and ( input.IsKeyDown(YRPGetKeybind("view_right")) or input.IsKeyDown(YRPGetKeybind("view_left")) ) then
 		draw.SimpleText(YRP.lang_string("LID_viewingposition") .. " (" .. math.Round(ply.yrp_view_x, 0) .. ")", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
-	if get_keybind("view_spin_right") and get_keybind("view_spin_left") and ( input.IsKeyDown(get_keybind("view_spin_right")) or input.IsKeyDown(get_keybind("view_spin_left")) ) then
+	if YRPGetKeybind("view_spin_right") and YRPGetKeybind("view_spin_left") and ( input.IsKeyDown(YRPGetKeybind("view_spin_right")) or input.IsKeyDown(YRPGetKeybind("view_spin_left")) ) then
 		draw.SimpleText(YRP.lang_string("LID_viewingangle") .. " (" .. math.Round(ply.yrp_view_s, 0) .. ")", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end

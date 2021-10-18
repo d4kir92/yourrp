@@ -5,112 +5,112 @@
 
 local DATABASE_NAME = "yrp_usergroups"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'unnamed usergroup'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_displayname", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0,255'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_nonesweps", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_sents", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_tools", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'unnamed usergroup'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_displayname", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0,255'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_nonesweps", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sents", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_tools", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_characters_max", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_charactersevent_max", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_characters_max", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_charactersevent_max", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminaccess", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminaccess", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_ac_database", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_console", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_status", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yourrp_addons", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_levelsystem", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_design", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_weaponsystem", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_general", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_groupsandroles", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_events", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_players", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_money", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_licenses", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_specializations", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_shops", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_map", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_feedback", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_usergroups", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_logs", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_blacklist", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_scale", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_darkrp", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_permaprops", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_ac_database", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_console", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_status", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yourrp_addons", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_levelsystem", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_design", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_weaponsystem", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_general", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_groupsandroles", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_events", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_money", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_licenses", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_specializations", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_shops", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_map", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_feedback", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_usergroups", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_logs", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_blacklist", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_scale", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_darkrp", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_permaprops", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_vehicles", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_weapons", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_entities", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_effects", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_npcs", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_props", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_ragdolls", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_postprocess", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_dupes", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_saves", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_vehicles", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_weapons", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_entities", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_effects", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_npcs", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_props", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_ragdolls", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_postprocess", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_dupes", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_saves", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_ignite", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_drive", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_flashlight", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_collision", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_gravity", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_keepupright", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_bodygroups", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickup", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupplayer", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupworld", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupotherowner", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupignoreblacklist", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_gravgunpunt", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeteammatesonmap", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeenemiesonmap", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_canuseesp", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusewarnsystem", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_ignite", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_drive", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_flashlight", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_collision", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_gravity", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_keepupright", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_bodygroups", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickup", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupplayer", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupworld", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupotherowner", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupignoreblacklist", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_gravgunpunt", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeteammatesonmap", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeenemiesonmap", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canuseesp", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusewarnsystem", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusecontextmenu", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusespawnmenu", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusecontextmenu", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusespawnmenu", "INT DEFAULT 1")
 
---SQL_DROP_TABLE(DATABASE_NAME)
+--YRP_SQL_DROP_TABLE(DATABASE_NAME)
 --db_is_empty(DATABASE_NAME)
 
-local yrp_usergroups = SQL_SELECT(DATABASE_NAME, "*", nil)
+local yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 if wk(yrp_usergroups) then
 	for _i, _ug in pairs(yrp_usergroups) do
 		_ug.string_name = _ug.string_name or "failed"
 		_ug.string_name = string.lower(_ug.string_name)
-		SQL_UPDATE(DATABASE_NAME, {["string_name"] = _ug.string_name}, "uniqueID = '" .. _ug.uniqueID .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["string_name"] = _ug.string_name}, "uniqueID = '" .. _ug.uniqueID .. "'")
 	end
 end
-yrp_usergroups = SQL_SELECT(DATABASE_NAME, "*", nil)
+yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 if wk(yrp_usergroups) then
 	for _i, _ug in pairs(yrp_usergroups) do
-		local tmp = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug.string_name .. "'")
+		local tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug.string_name .. "'")
 		if wk(tmp) and #tmp > 1 then
 			for i, ug in pairs(tmp) do
 				if i > 1 then
-					SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. ug.uniqueID .. "'")
+					YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. ug.uniqueID .. "'")
 				end
 			end
 		end
 	end
 end
 
-if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
 	local _str = "string_name, "
 	_str = _str .. "bool_vehicles, "
 	_str = _str .. "bool_weapons, "
@@ -153,27 +153,27 @@ if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 
-	SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
 end
 
-if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'admin'") == nil then
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'admin'") == nil then
 	local _str = "string_name"
 
 	local _str2 = "'admin'"
 
-	SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
 end
 
-if SQL_SELECT(DATABASE_NAME, "*", "string_name = 'user'") == nil then
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'user'") == nil then
 	local _str = "string_name"
 
 	local _str2 = "'user'"
 
-	SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
 end
 
-SQL_DELETE_FROM(DATABASE_NAME, "string_name = 'yrp_usergroups'")
-local unremoveable = SQL_SELECT(DATABASE_NAME, "*", "string_name = 'yrp_usergroups'")
+YRP_SQL_DELETE_FROM(DATABASE_NAME, "string_name = 'yrp_usergroups'")
+local unremoveable = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'yrp_usergroups'")
 if unremoveable == nil then
 	local _str = "string_name, "
 	_str = _str .. "bool_vehicles, "
@@ -218,11 +218,11 @@ if unremoveable == nil then
 	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 	_str2 = _str2 .. ", 0, 0"
 
-	SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
 end
 
 function SortUserGroups()
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 
 	if wk(siblings) then
 		for i, sibling in pairs(siblings) do
@@ -232,7 +232,7 @@ function SortUserGroups()
 		local count = 0
 		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 			count = count + 1
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
 		end
 	end
 end
@@ -278,9 +278,9 @@ function GetULXUserGroups()
 	f = string.Explode("\n", f)
 	f = ConvertToMains(f)
 	for i, v in pairs(f) do
-		local dbug = SQL_SELECT("yrp_usergroups", "*", "string_name = '" .. v .. "'")
+		local dbug = YRP_SQL_SELECT("yrp_usergroups", "*", "string_name = '" .. v .. "'")
 		if dbug == nil then
-			SQL_INSERT_INTO("yrp_usergroups", "string_name", "'" .. v .. "'")
+			YRP_SQL_INSERT_INTO("yrp_usergroups", "string_name", "'" .. v .. "'")
 		end
 	end
 end
@@ -294,13 +294,13 @@ net.Receive("Connect_Settings_UserGroups", function(len, ply)
 		local _usergroups = {}
 		for k, v in pairs(player.GetAll()) do
 			local _ug = string.lower(v:GetUserGroup())
-			if SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug .. "'") == nil then
+			if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug .. "'") == nil then
 				YRP.msg("note", "usergroup: " .. _ug .. " not found, adding to db")
-				SQL_INSERT_INTO(DATABASE_NAME, "string_name", "'" .. _ug .. "'")
+				YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name", "'" .. _ug .. "'")
 			end
 		end
 
-		local _tmp = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
+		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 		local _ugs = {}
 		for i, ug in pairs(_tmp) do
 			_ugs[tonumber(ug.uniqueID)] = ug
@@ -343,7 +343,7 @@ net.Receive("Connect_Settings_UserGroup", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	AddToHandler_UserGroup(ply, uid)
 
-	local _tmp = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. uid)
+	local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. uid)
 	if wk(_tmp) then
 		_tmp = _tmp[1]
 	end
@@ -359,12 +359,12 @@ end)
 
 util.AddNetworkString("usergroup_add")
 net.Receive("usergroup_add", function(len, ply)
-	SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
+	YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 	YRP.msg("gm", ply:YRPName() .. " added a new UserGroup")
 
 	SortUserGroups()
 
-	local _tmp = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
+	local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 	local _ugs = {}
 	for i, ug in pairs(_tmp) do
 		_ugs[tonumber(ug.uniqueID)] = ug
@@ -379,7 +379,7 @@ end)
 util.AddNetworkString("usergroup_rem")
 net.Receive("usergroup_rem", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 
 	SortUserGroups()
 
@@ -411,11 +411,11 @@ function Player:CanAccess(site)
 
 	local _ug = self:GetUserGroup() or "failed"
 	_ug = string.lower(_ug)
-	local _b = SQL_SELECT(DATABASE_NAME, site, "string_name = '" .. _ug .. "'")
+	local _b = YRP_SQL_SELECT(DATABASE_NAME, site, "string_name = '" .. _ug .. "'")
 	if wk(_b) then
 		_b = tobool(_b[1][site])
 		if !_b then
-			local _ugs = SQL_SELECT(DATABASE_NAME, "string_name", "bool_usergroups = '1'")
+			local _ugs = YRP_SQL_SELECT(DATABASE_NAME, "string_name", "bool_usergroups = '1'")
 			if wk(_ugs) then
 				for i, ug in pairs(_ugs) do
 					if usergroups == "" then
@@ -442,7 +442,7 @@ util.AddNetworkString("usergroup_update_string_name")
 net.Receive("usergroup_update_string_name", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_name = string.lower(net.ReadString())
-	SQL_UPDATE(DATABASE_NAME, {["string_name"] = string_name}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_name"] = string_name}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated name of usergroup (" .. uid .. ") to [" .. string_name .. "]")
 
@@ -459,7 +459,7 @@ util.AddNetworkString("usergroup_update_string_displayname")
 net.Receive("usergroup_update_string_displayname", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_displayname = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["string_displayname"] = string_displayname}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_displayname"] = string_displayname}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated display of usergroup (" .. uid .. ") to [" .. string_displayname .. "]")
 
@@ -476,7 +476,7 @@ util.AddNetworkString("usergroup_update_string_color")
 net.Receive("usergroup_update_string_color", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_color = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["string_color"] = string_color}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_color"] = string_color}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated color of usergroup (" .. uid .. ") to [" .. string_color .. "]")
 
@@ -493,7 +493,7 @@ util.AddNetworkString("usergroup_update_icon")
 net.Receive("usergroup_update_icon", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_icon = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["string_icon"] = string_icon}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_icon"] = string_icon}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated string_icon of usergroup (" .. uid .. ") to [" .. string_icon .. "]")
 
@@ -511,7 +511,7 @@ net.Receive("usergroup_update_string_sweps", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local sweps = net.ReadTable()
 	local string_sweps = table.concat( sweps, "," )
-	SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = string_sweps}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = string_sweps}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated string_sweps of usergroup (" .. uid .. ") to [" .. string_sweps .. "]")
 
@@ -528,7 +528,7 @@ net.Receive("usergroup_update_string_nonesweps", function(len, ply)
 	local sweps = net.ReadTable()
 
 	local string_nonesweps = table.concat( sweps, "," )
-	SQL_UPDATE(DATABASE_NAME, {["string_nonesweps"] = string_nonesweps}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_nonesweps"] = string_nonesweps}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated string_nonesweps of usergroup (" .. uid .. ") to [" .. string_nonesweps .. "]")
 
@@ -543,7 +543,7 @@ util.AddNetworkString("usergroup_update_string_ammos")
 net.Receive("usergroup_update_string_ammos", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_ammos = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["string_ammos"] = string_ammos}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_ammos"] = string_ammos}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated string_ammos of usergroup (" .. uid .. ") to [" .. string_ammos .. "]")
 
@@ -554,140 +554,10 @@ net.Receive("usergroup_update_string_ammos", function(len, ply)
 	end
 end)
 
-util.AddNetworkString("usergroup_update_entities")
-net.Receive("usergroup_update_entities", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	local string_entities = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["string_entities"] = string_entities}, "uniqueID = '" .. uid .. "'")
-
-	YRP.msg("db", ply:YRPName() .. " updated string_entities of usergroup (" .. uid .. ") to [" .. string_entities .. "]")
-
-	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
-		net.Start("usergroup_update_entities")
-			net.WriteString(string_entities)
-		net.Send(pl)
-	end
-end)
-
-function AddSENTToSENTS(tbl, sent)
-	local tmp = string.Explode(",", sent)
-	tbl[tmp[2]] = tmp[1]
-	return tbl
-end
-
-function RemSENTFromSENTS(tbl, sent)
-	tbl[sent] = nil
-	return tbl
-end
-
-util.AddNetworkString("usergroup_add_sent")
-net.Receive("usergroup_add_sent", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	local sent = "1," .. net.ReadString()
-
-	local sents = SQL_SELECT(DATABASE_NAME, "sents", "uniqueID = '" .. uid .. "'")
-	if wk(sents) then
-		sents = sents[1].sents
-	else
-		sents = ""
-	end
-
-	sents = SENTSTable(sents)
-	sents = AddSENTToSENTS(sents, sent)
-	sents = SENTSString(sents)
-
-	SQL_UPDATE(DATABASE_NAME, {["sents"] = sents}, "uniqueID = '" .. uid .. "'")
-
-	YRP.msg("db", ply:YRPName() .. " added sent [ " .. sent .. " ] for usergroup (" .. uid .. ")")
-
-	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
-		net.Start("usergroup_add_sent")
-			net.WriteString(sents)
-		net.Send(pl)
-	end
-end)
-
-util.AddNetworkString("usergroup_rem_sent")
-net.Receive("usergroup_rem_sent", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	local sent = net.ReadString()
-
-	local sents = SQL_SELECT(DATABASE_NAME, "sents", "uniqueID = '" .. uid .. "'")
-	if wk(sents) then
-		sents = sents[1].sents
-	else
-		sents = ""
-	end
-
-	sents = SENTSTable(sents)
-	sents = RemSENTFromSENTS(sents, sent)
-	sents = SENTSString(sents)
-
-	SQL_UPDATE(DATABASE_NAME, {["sents"] = sents}, "uniqueID = '" .. uid .. "'")
-
-	YRP.msg("db", ply:YRPName() .. " removed sent [ " .. sent .. " ] for usergroup (" .. uid .. ")")
-
-	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
-		net.Start("usergroup_rem_sent")
-			net.WriteString(sent)
-		net.Send(pl)
-	end
-end)
-
-util.AddNetworkString("usergroup_sent_up")
-net.Receive("usergroup_sent_up", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	local sent = net.ReadString()
-
-	local sents = SQL_SELECT(DATABASE_NAME, "sents", "uniqueID = '" .. uid .. "'")
-	if wk(sents) then
-		sents = sents[1].sents
-	else
-		sents = ""
-	end
-
-	sents = SENTSTable(sents)
-	sents[sent] = tonumber(sents[sent]) + 1
-	sents = SENTSString(sents)
-
-	SQL_UPDATE(DATABASE_NAME, {["sents"] = sents}, "uniqueID = '" .. uid .. "'")
-
-	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
-		net.Start("usergroup_sent_up")
-			net.WriteString(sents)
-		net.Send(pl)
-	end
-end)
-
-util.AddNetworkString("usergroup_sent_dn")
-net.Receive("usergroup_sent_dn", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	local sent = net.ReadString()
-
-	local sents = SQL_SELECT(DATABASE_NAME, "sents", "uniqueID = '" .. uid .. "'")
-	if wk(sents) then
-		sents = sents[1].sents
-	else
-		sents = ""
-	end
-
-	sents = SENTSTable(sents)
-	sents[sent] = tonumber(sents[sent]) - 1
-	sents = SENTSString(sents)
-
-	SQL_UPDATE(DATABASE_NAME, {["sents"] = sents}, "uniqueID = '" .. uid .. "'")
-
-	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
-		net.Start("usergroup_sent_dn")
-			net.WriteString(sents)
-		net.Send(pl)
-	end
-end)
-
 function UGUpdateInt(ply, uid, name, value)
 	name = name or "UNNAMED"
 	name = string.lower(name)
-	SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated " .. name .. " of usergroup (" .. uid .. ") to [" .. value .. "]")
 
@@ -697,7 +567,7 @@ function UGUpdateInt(ply, uid, name, value)
 		net.Send(pl)
 	end
 
-	local ug = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local ug = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	if wk(ug) then
 		ug = ug[1]
 		ug.string_name = string.lower(ug.string_name)
@@ -712,7 +582,7 @@ end
 function UGCheckBox(ply, uid, name, value)
 	name = name or "UNNAMED"
 	name = string.lower(name)
-	SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated " .. name .. " of usergroup (" .. uid .. ") to [" .. value .. "]")
 
@@ -722,7 +592,7 @@ function UGCheckBox(ply, uid, name, value)
 		net.Send(pl)
 	end
 
-	local ug = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local ug = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	if wk(ug) then
 		ug = ug[1]
 		ug.string_name = string.lower(ug.string_name)
@@ -1183,7 +1053,7 @@ end
 -- Functions
 hook.Add("PlayerSpawnVehicle", "yrp_vehicles_restriction", function(pl, model, name, tab)
 	if ea(pl) then
-		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_vehicles", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_vehicles", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if worked(_tmp, "PlayerSpawnVehicle failed") then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_vehicles) then
@@ -1201,7 +1071,7 @@ end)
 
 hook.Add("PlayerGiveSWEP", "yrp_weapons_restriction", function(pl)
 	if ea(pl) then
-		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_weapons", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_weapons", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if worked(_tmp, "PlayerGiveSWEP failed") then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_weapons) then
@@ -1238,49 +1108,49 @@ hook.Add("PlayerSpawnedVehicle", "yrp_vehicles_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Vehicle: " .. ent:GetClass() .. "'")
+	YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Vehicle: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedSWEP", "yrp_entities_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Weapon: " .. ent:GetClass() .. "'")
+	YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Weapon: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedSENT", "yrp_entities_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Entity: " .. ent:GetClass() .. "'")
+	YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Entity: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedEffect", "yrp_effects_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Effect: " .. ent:GetClass() .. "'")
+	YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Effect: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedNPC", "yrp_npcs_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'NPC: " .. ent:GetClass() .. "'")
+	YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'NPC: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedProp", "yrp_props_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'PROP: " .. ent:GetClass() .. "'")
+	YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'PROP: " .. ent:GetClass() .. "'")
 end)
 
 hook.Add("PlayerSpawnedRagdoll", "yrp_ragdolls_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Ragdoll: " .. ent:GetClass() .. "'")
+	YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Ragdoll: " .. ent:GetClass() .. "'")
 end)
 
 util.AddNetworkString("yrp_notification")
@@ -1292,7 +1162,7 @@ end
 
 hook.Add("PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
 	if ea(pl) then
-		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_entities", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_entities", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 
 		if wk(_tmp) then
 			_tmp = _tmp[1]
@@ -1314,7 +1184,7 @@ end)
 
 hook.Add("PlayerSpawnEffect", "yrp_effects_restriction", function(pl)
 	if ea(pl) then
-		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_effects", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_effects", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if worked(_tmp, "PlayerSpawnEffect failed") then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_effects) then
@@ -1332,7 +1202,7 @@ end)
 
 hook.Add("PlayerSpawnNPC", "yrp_npcs_restriction", function(pl)
 	if ea(pl) then
-		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_npcs", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_npcs", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if worked(_tmp, "PlayerSpawnNPC failed") then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_npcs) then
@@ -1350,7 +1220,7 @@ end)
 
 hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl)
 	if ea(pl) then
-		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_props", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_props", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(_tmp, "PlayerSpawnProp failed") then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_props) then
@@ -1371,7 +1241,7 @@ end)
 
 hook.Add("PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function(pl, model)
 	if ea(pl) then
-		local _tmp = SQL_SELECT(DATABASE_NAME, "bool_ragdolls", "string_name = '" .. tostring(string.lower(pl:GetUserGroup())) .. "'")
+		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_ragdolls", "string_name = '" .. tostring(string.lower(pl:GetUserGroup())) .. "'")
 		if wk(_tmp) then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_ragdolls) then
@@ -1538,7 +1408,7 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 			return true
 		else
 			-- TURNED ON
-			local _tmp = SQL_SELECT(DATABASE_NAME, "bool_noclip", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+			local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_noclip", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 			if wk(_tmp) then
 				_tmp = _tmp[1]
 				if tobool(_tmp.bool_noclip) then
@@ -1583,7 +1453,7 @@ function GM:PhysgunPickup(pl, ent)
 	if ent:IsDealer() then
 		return false
 	end
-	local tabUsergroup = SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer, bool_physgunpickupignoreblacklist", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+	local tabUsergroup = YRP_SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer, bool_physgunpickupignoreblacklist", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 	if wk(tabUsergroup) then
 		tabUsergroup = tabUsergroup[1]
 		if tobool(tabUsergroup.bool_physgunpickup) then
@@ -1627,7 +1497,7 @@ function GM:PhysgunPickup(pl, ent)
 end
 
 function GM:GravGunPunt(pl, ent)
-	local tabUsergroup = SQL_SELECT(DATABASE_NAME, "bool_gravgunpunt", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+	local tabUsergroup = YRP_SQL_SELECT(DATABASE_NAME, "bool_gravgunpunt", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 	if wk(tabUsergroup) then
 		tabUsergroup = tabUsergroup[1]
 		if tobool(tabUsergroup.bool_gravgunpunt) then
@@ -1649,7 +1519,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if ea(pl) and wk(tool) then
 		--YRP.msg("gm", "CanTool: " .. tool)
 		local tools = {}
-		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(tab) then
 			tab = tab[1]
 			tools = string.Explode(",", tab.string_tools)
@@ -1713,7 +1583,7 @@ hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
 	if ea(pl) and wk(property) and pl.GetUserGroup != nil then
 		--YRP.msg("gm", "CanProperty: " .. property)
 		local tools = {}
-		local tab = SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 		if wk(tab) then
 			tab = tab[1]
 			tools = string.Explode(",", tab.string_tools)
@@ -1735,7 +1605,7 @@ end)
 
 function Player:UserGroupLoadout()
 	--YRP.msg("gm", self:SteamName() .. " UserGroupLoadout")
-	local UG = SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. string.lower(self:GetUserGroup()) .. "'")
+	local UG = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. string.lower(self:GetUserGroup()) .. "'")
 	if wk(UG) then
 		UG = UG[1]
 		
@@ -1811,7 +1681,7 @@ util.AddNetworkString("UpdateUsergroupsList")
 function ReloadUsergroupsList()
 	SortUserGroups()
 	
-	local ugs = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
+	local ugs = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 	for i, pl in pairs(HANDLER_USERGROUPS) do
 		net.Start("UpdateUsergroupsList")
 			net.WriteTable(ugs)
@@ -1822,12 +1692,12 @@ end
 util.AddNetworkString("settings_usergroup_position_up")
 net.Receive("settings_usergroup_position_up", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local usergroup = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local usergroup = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	usergroup = usergroup[1]
 
 	usergroup.int_position = tonumber(usergroup.int_position)
 
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 
 	for i, sibling in pairs(siblings) do
 		sibling.int_position = tonumber(sibling.int_position)
@@ -1837,8 +1707,8 @@ net.Receive("settings_usergroup_position_up", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == usergroup.int_position - 1 then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = usergroup.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = usergroup.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 	ReloadUsergroupsList()
@@ -1847,12 +1717,12 @@ end)
 util.AddNetworkString("settings_usergroup_position_dn")
 net.Receive("settings_usergroup_position_dn", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local group = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	group = group[1]
 
 	group.int_position = tonumber(group.int_position)
 
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 
 	for i, sibling in pairs(siblings) do
 		sibling.int_position = tonumber(sibling.int_position)
@@ -1862,8 +1732,8 @@ net.Receive("settings_usergroup_position_dn", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == group.int_position + 1 then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = group.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = group.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 	ReloadUsergroupsList()
@@ -1872,8 +1742,8 @@ end)
 util.AddNetworkString("get_perma_props")
 net.Receive("get_perma_props", function(len, ply)
 	local tab = {}
-	if SQL_TABLE_EXISTS("permaprops") then
-		tab = SQL_SELECT("permaprops", "*", nil)
+	if YRP_SQL_TABLE_EXISTS("permaprops") then
+		tab = YRP_SQL_SELECT("permaprops", "*", nil)
 	end
 
 	ply.ppid = ply.ppid or 0
@@ -1924,8 +1794,8 @@ util.AddNetworkString("yrp_pp_remove")
 net.Receive("yrp_pp_remove", function(len, ply)
 	local ppid = net.ReadString()
 
-	if SQL_TABLE_EXISTS("permaprops") then
-		SQL_DELETE_FROM("permaprops", "id = '" .. ppid .. "'")
+	if YRP_SQL_TABLE_EXISTS("permaprops") then
+		YRP_SQL_DELETE_FROM("permaprops", "id = '" .. ppid .. "'")
 	end
 end)
 
@@ -1939,8 +1809,8 @@ util.AddNetworkString("yrp_pp_teleport")
 net.Receive("yrp_pp_teleport", function(len, ply)
 	local ppid = net.ReadString()
 
-	if SQL_TABLE_EXISTS("permaprops") then
-		local tab = SQL_SELECT("permaprops", "*", "id = '" .. ppid .. "'")
+	if YRP_SQL_TABLE_EXISTS("permaprops") then
+		local tab = YRP_SQL_SELECT("permaprops", "*", "id = '" .. ppid .. "'")
 		if wk(tab) then
 			tab = tab[1]
 
@@ -1953,7 +1823,7 @@ end)
 
 util.AddNetworkString("get_usergroup_licenses")
 net.Receive("get_usergroup_licenses", function(len, ply)
-	local licenses = SQL_SELECT("yrp_licenses", "*", nil)
+	local licenses = YRP_SQL_SELECT("yrp_licenses", "*", nil)
 
 	if wk(licenses) then
 		net.Start("get_usergroup_licenses")
@@ -1966,7 +1836,7 @@ util.AddNetworkString("usergroup_update_string_licenses")
 net.Receive("usergroup_update_string_licenses", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_licenses = string.lower(net.ReadString())
-	SQL_UPDATE(DATABASE_NAME, {["string_licenses"] = string_licenses}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_licenses"] = string_licenses}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated licenses of usergroup (" .. uid .. ") to [" .. string_licenses .. "]")
 end)
@@ -1975,7 +1845,7 @@ util.AddNetworkString("usergroup_update_string_tools")
 net.Receive("usergroup_update_string_tools", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_tools = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["string_tools"] = string_tools}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_tools"] = string_tools}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated tools of usergroup (" .. uid .. ") to [" .. string_tools .. "]")
 end)
@@ -1984,7 +1854,7 @@ util.AddNetworkString("usergroup_update_string_ammos")
 net.Receive("usergroup_update_string_ammos", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local string_ammos = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["string_ammos"] = string_ammos}, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_ammos"] = string_ammos}, "uniqueID = '" .. uid .. "'")
 
 	YRP.msg("db", ply:YRPName() .. " updated ammos of usergroup (" .. uid .. ") to [" .. string_ammos .. "]")
 end)

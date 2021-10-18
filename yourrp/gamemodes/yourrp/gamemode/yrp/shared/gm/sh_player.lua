@@ -5,13 +5,10 @@ function GetPlayerByName(name)
 		return NULL
 	end
 
-	name = string.Replace(name, "[", "")
-	name = string.Replace(name, "]", "")
-	name = string.Replace(name, "%", "")
 	name = string.lower(name)
 
 	for i, ply in pairs(player.GetAll()) do
-		if ply:IsPlayer() and string.find(string.lower(ply:RPName()), name) or string.find(string.lower(ply:SteamName()), name) or string.find(string.lower(ply:Nick()), name) or string.find(string.lower(ply:GetName()), name) then
+		if ply:IsPlayer() and string.find(string.lower(ply:RPName()), name, 1, true) or string.find(string.lower(ply:SteamName()), name, 1, true) or string.find(string.lower(ply:Nick()), name, 1, true) or string.find(string.lower(ply:GetName()), name, 1, true) then
 			return ply
 		end
 	end
@@ -24,13 +21,10 @@ function GetPlayerByRPName(name)
 		return NULL
 	end
 
-	name = string.Replace(name, "[", "")
-	name = string.Replace(name, "]", "")
-	name = string.Replace(name, "%", "")
 	name = string.lower(name)
 
 	for i, ply in pairs(player.GetAll()) do
-		if string.find(string.lower(ply:RPName()), name) then
+		if string.find(string.lower(ply:RPName()), name, 1, true) then
 			return ply
 		end
 	end
@@ -43,13 +37,10 @@ function GetPlayerBySteamName(name)
 		return NULL
 	end
 
-	name = string.Replace(name, "[", "")
-	name = string.Replace(name, "]", "")
-	name = string.Replace(name, "%", "")
 	name = string.lower(name)
 
 	for i, ply in pairs(player.GetAll()) do
-		if string.find(string.lower(ply:SteamName()), name) then
+		if string.find(string.lower(ply:SteamName()), name, 1, true) then
 			return ply
 		end
 	end
@@ -149,7 +140,7 @@ function Player:GetPlyTab()
 			if self:GetNW2Bool("finishedloadingcharacter", false) then
 				local steamid = self:SteamID() or self:UniqueID()
 				if steamid != nil and steamid != false and steamid != "" then
-					local yrp_players = SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamid .. "'")
+					local yrp_players = YRP_SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamid .. "'")
 					if wk(yrp_players) then
 						self.plytab = yrp_players[1]
 						return self.plytab
@@ -190,7 +181,7 @@ function Player:HasCharacterSelected()
 			if self:GetNW2Bool("finishedloadingcharacter", false) then
 				local _ply_tab = self:GetPlyTab()
 				if wk(_ply_tab) and tostring(_ply_tab.CurrentCharacter) != "NULL" and _ply_tab.CurrentCharacter != NULL then
-					local chatab = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _ply_tab.CurrentCharacter .. "'")
+					local chatab = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _ply_tab.CurrentCharacter .. "'")
 					if wk(chatab) then
 						return true
 					end
@@ -209,7 +200,7 @@ function Player:YRPGetCharacterTable()
 			if self:GetNW2Bool("finishedloadingcharacter", false) then
 				local _tmp = self:GetPlyTab()
 				if wk(_tmp) then
-					local yrp_characters = SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _tmp.CurrentCharacter .. "'")
+					local yrp_characters = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _tmp.CurrentCharacter .. "'")
 					if wk(yrp_characters) then
 						self.chatab = yrp_characters[1]
 						return self.chatab
@@ -235,7 +226,7 @@ function Player:YRPGetRoleTable()
 			if self:GetNW2Bool("finishedloadingcharacter", false) then
 				local yrp_characters = self:YRPGetCharacterTable()
 				if wk(yrp_characters) and wk(yrp_characters.roleID) then
-					local yrp_roles = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. yrp_characters.roleID)
+					local yrp_roles = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. yrp_characters.roleID)
 					if wk(yrp_roles) then
 						self.roltab = yrp_roles[1]
 
@@ -260,7 +251,7 @@ function Player:YRPGetGroupTable()
 			if self:GetNW2Bool("finishedloadingcharacter", false) then
 				local yrp_characters = self:YRPGetCharacterTable()
 				if wk(yrp_characters) and wk(yrp_characters.groupID) then
-					local yrp_groups = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. yrp_characters.groupID)
+					local yrp_groups = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. yrp_characters.groupID)
 					if wk(yrp_groups) then
 						self.grotab = yrp_groups[1]
 						return self.grotab
@@ -292,14 +283,14 @@ function Player:UpdateMoney()
 					return false
 				end
 				if worked(money, "ply:money UpdateMoney", true) then
-					SQL_UPDATE("yrp_characters", {["money"] = money}, "uniqueID = " .. _char_id)
+					YRP_SQL_UPDATE("yrp_characters", {["money"] = money}, "uniqueID = " .. _char_id)
 				end
 				local moneybank = tonumber(self:GetNW2String("moneybank", "FAILED"))
 				if moneybank == "FAILED" then
 					return false
 				end
 				if worked(moneybank, "ply:moneybank UpdateMoney", true) then
-					SQL_UPDATE("yrp_characters", {["moneybank"] = moneybank}, "uniqueID = " .. _char_id)
+					YRP_SQL_UPDATE("yrp_characters", {["moneybank"] = moneybank}, "uniqueID = " .. _char_id)
 				end
 			end
 		end
@@ -486,11 +477,11 @@ if SERVER then
 	end
 
 	function Player:resetUptimeCurrent()
-		local _res = SQL_UPDATE("yrp_players", {["uptime_current"] = 0}, "SteamID = '" .. self:SteamID() .. "'")
+		local _res = YRP_SQL_UPDATE("yrp_players", {["uptime_current"] = 0}, "SteamID = '" .. self:SteamID() .. "'")
 	end
 
 	function Player:getuptimetotal()
-		local _ret = SQL_SELECT("yrp_players", "uptime_total", "SteamID = '" .. self:SteamID() .. "'")
+		local _ret = YRP_SQL_SELECT("yrp_players", "uptime_total", "SteamID = '" .. self:SteamID() .. "'")
 		if _ret != nil and _ret != false then
 			return _ret[1].uptime_total
 		end

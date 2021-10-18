@@ -5,105 +5,105 @@
 
 local DATABASE_NAME = "yrp_ply_roles"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'NewRole'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D!D-!D!D!D!D'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/user.png'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_description", "TEXT DEFAULT '-'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_playermodels", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_salary", "INTEGER DEFAULT 50")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_groupID", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps_onspawn", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_ndsweps", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_voteable", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_eventrole", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminonly", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_maxamount", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_amountpercentage", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_hp", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_hpmax", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_hpup", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_ar", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_armax", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_arup", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_st", "INTEGER DEFAULT 50")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_stmax", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_stup", "TEXT DEFAULT '1'")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_stdn", "TEXT DEFAULT '0.5'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'NewRole'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D!D-!D!D!D!D'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/user.png'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_description", "TEXT DEFAULT '-'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_playermodels", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_salary", "INTEGER DEFAULT 50")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_groupID", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps_onspawn", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ndsweps", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_voteable", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_eventrole", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminonly", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_maxamount", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_amountpercentage", "INTEGER DEFAULT 100")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hp", "INTEGER DEFAULT 100")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hpmax", "INTEGER DEFAULT 100")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hpup", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_ar", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_armax", "INTEGER DEFAULT 100")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_arup", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_st", "INTEGER DEFAULT 50")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_stmax", "INTEGER DEFAULT 100")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_stup", "TEXT DEFAULT '1'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_stdn", "TEXT DEFAULT '0.5'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_namelength", "INTEGER DEFAULT 20")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirst", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_stamina", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_namelength", "INTEGER DEFAULT 20")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirst", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_stamina", "INTEGER DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_ability", "TEXT DEFAULT 'none'")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_ab", "INTEGER DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_abmax", "INTEGER DEFAULT 100")
---SQL_ADD_COLUMN(DATABASE_NAME, "float_abup", "TEXT DEFAULT '5'")
---SQL_ADD_COLUMN(DATABASE_NAME, "float_abdn", "TEXT DEFAULT '5'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ability", "TEXT DEFAULT 'none'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_ab", "INTEGER DEFAULT 100")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_abmax", "INTEGER DEFAULT 100")
+--YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_abup", "TEXT DEFAULT '5'")
+--YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_abdn", "TEXT DEFAULT '5'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_speedwalk", "INTEGER DEFAULT 160")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_speedrun", "INTEGER DEFAULT 240")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_powerjump", "INTEGER DEFAULT 200")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_prerole", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_roleondeath", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_instructor", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_uses", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_salarytime", "INTEGER DEFAULT 120")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_securitylevel", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_speedwalk", "INTEGER DEFAULT 160")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_speedrun", "INTEGER DEFAULT 240")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_powerjump", "INTEGER DEFAULT 200")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_prerole", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_roleondeath", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_instructor", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_uses", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_salarytime", "INTEGER DEFAULT 120")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_securitylevel", "INTEGER DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbeagent", "INTEGER DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_cc", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_rm", "INTEGER DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbeagent", "INTEGER DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_cc", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_rm", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_specializations", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_specializations", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_customflags", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_customflags", "TEXT DEFAULT ''")
 
---SQL_ADD_COLUMN(DATABASE_NAME, "int_cooldown", "INTEGER DEFAULT 1")
+--YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_cooldown", "INTEGER DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_burn", "TEXT DEFAULT '1.0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_bullet", "TEXT DEFAULT '1.0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_energybeam", "TEXT DEFAULT '1.0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_burn", "TEXT DEFAULT '1.0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_bullet", "TEXT DEFAULT '1.0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_energybeam", "TEXT DEFAULT '1.0'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_hud", "TEXT DEFAULT 'serverdefault'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_mask", "TEXT DEFAULT 'serverdefault'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud", "TEXT DEFAULT 'serverdefault'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_mask", "TEXT DEFAULT 'serverdefault'")
 
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	YRP.msg("note", DATABASE_NAME .. " has not the default role")
-	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "'1', 'Civilian', '0,0,255', '1', '0'")
+	local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "'1', 'Civilian', '0,0,255', '1', '0'")
 else
-	SQL_UPDATE(DATABASE_NAME, {["string_color"] = "0,0,0"}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_color"] = "0,0,0"}, "uniqueID = '1'")
 end
 
-SQL_UPDATE(DATABASE_NAME, {["int_uses"] = 0}, nil)
+YRP_SQL_UPDATE(DATABASE_NAME, {["int_uses"] = 0}, nil)
 
 function MoveUnusedGroups()
 	local count = 0
-	local all_groups = SQL_SELECT("yrp_ply_groups", "*", nil)
+	local all_groups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
 	for i, group in pairs(all_groups) do
 		group.int_parentgroup = tonumber(group.int_parentgroup)
 		if group.int_parentgroup > 0 then
-			local parentgroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
+			local parentgroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
 			if parentgroup == nil then
 				count = count + 1
 				YRP.msg("note", "Group is out of space: " .. group.string_name)
-				SQL_UPDATE("yrp_ply_groups", {["int_parentgroup"] = 1}, "uniqueID = '" .. group.uniqueID .. "'")
+				YRP_SQL_UPDATE("yrp_ply_groups", {["int_parentgroup"] = 1}, "uniqueID = '" .. group.uniqueID .. "'")
 			elseif group.uniqueID == parentgroup[1].int_parentgroup then
 				YRP.msg("note", "YOU MADE A LOOP IN PARENTGROUP!!!")
-				SQL_UPDATE("yrp_ply_groups", {["int_parentgroup"] = 1}, "uniqueID = '" .. parentgroup[1].uniqueID .. "'")
+				YRP_SQL_UPDATE("yrp_ply_groups", {["int_parentgroup"] = 1}, "uniqueID = '" .. parentgroup[1].uniqueID .. "'")
 			end
 		end
 	end
@@ -114,27 +114,27 @@ end
 
 function MoveUnusedRolesToDefault()
 	local changed = false
-	local allroles = SQL_SELECT("yrp_ply_roles", "uniqueID, string_name, int_prerole, int_groupID", nil)
+	local allroles = YRP_SQL_SELECT("yrp_ply_roles", "uniqueID, string_name, int_prerole, int_groupID", nil)
 	if wk(allroles) then
 		for i, role in pairs(allroles) do
 			-- If prerole not exists remove the prerole
 			if tonumber(role.int_prerole) != 0 then
-				local prerole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. role.int_prerole .. "'")
+				local prerole = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. role.int_prerole .. "'")
 				if !wk(prerole) then
 					changed = true
-					SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '" .. role.uniqueID .. "'")
+					YRP_SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '" .. role.uniqueID .. "'")
 				elseif role.uniqueID == prerole[1].int_prerole then
 					YRP.msg("note", "YOU MADE A LOOP in PREROLES!!!")
-					SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '" .. prerole[1].uniqueID .. "'")
+					YRP_SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '" .. prerole[1].uniqueID .. "'")
 				end
 			end
 
 			MoveUnusedGroups()
 			-- if group not exists move it to default group
-			local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
+			local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
 			if !wk(group) then
 				changed = true
-				SQL_UPDATE(DATABASE_NAME, {
+				YRP_SQL_UPDATE(DATABASE_NAME, {
 					["int_groupID"] = 1,
 					["int_prerole"] = 0
 				},"uniqueID = '" .. role.uniqueID .. "'")
@@ -150,38 +150,38 @@ MoveUnusedRolesToDefault()
 
 
 -- CONVERTING
-local wrongprerole = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'")
+local wrongprerole = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'")
 if wk(wrongprerole) then
 	for i, role in pairs(wrongprerole) do
-		SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '" .. role.uniqueID .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '" .. role.uniqueID .. "'")
 	end
 end
 
-local wrongmaxamount = SQL_SELECT(DATABASE_NAME, "*", "int_maxamount = -1")
+local wrongmaxamount = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_maxamount = -1")
 if wk(wrongmaxamount) then
 	for i, role in pairs(wrongmaxamount) do
-		SQL_UPDATE(DATABASE_NAME, {["int_maxamount"] = 0}, "uniqueID = '" .. role.uniqueID .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_maxamount"] = 0}, "uniqueID = '" .. role.uniqueID .. "'")
 	end
 end
 
-local wrongpercentage = SQL_SELECT(DATABASE_NAME, "*", "int_amountpercentage > 100")
+local wrongpercentage = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_amountpercentage > 100")
 if wk(wrongpercentage) then
 	for i, role in pairs(wrongpercentage) do
-		SQL_UPDATE(DATABASE_NAME, {["int_amountpercentage"] = 100}, "uniqueID = '" .. role.uniqueID .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_amountpercentage"] = 100}, "uniqueID = '" .. role.uniqueID .. "'")
 	end
 end
 
-local wrongmainrole = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+local wrongmainrole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if wk(wrongmainrole) then
-	SQL_UPDATE(DATABASE_NAME, {["string_usergroups"] = "ALL"}, "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, {["int_maxamount"] = 0}, "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, {["int_amountpercentage"] = 100}, "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, {["int_groupID"] = 1}, "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '1'")
-	--SQL_UPDATE(DATABASE_NAME, {["bool_visible_rm"] = 1}, "uniqueID = '1'")
-	--SQL_UPDATE(DATABASE_NAME, {["bool_visible_cc"] = 1}, "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, {["bool_locked"] = 0}, "uniqueID = '1'")
-	SQL_UPDATE(DATABASE_NAME, {["bool_whitelist"] = 0}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_usergroups"] = "ALL"}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_maxamount"] = 0}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_amountpercentage"] = 100}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_groupID"] = 1}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '1'")
+	--YRP_SQL_UPDATE(DATABASE_NAME, {["bool_visible_rm"] = 1}, "uniqueID = '1'")
+	--YRP_SQL_UPDATE(DATABASE_NAME, {["bool_visible_cc"] = 1}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["bool_locked"] = 0}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["bool_whitelist"] = 0}, "uniqueID = '1'")
 end
 -- CONVERTING
 
@@ -218,7 +218,7 @@ function YRPConvertToDarkRPJob(tab)
 		_job.hasLicense = false
 	end
 	_job.candemote = tobool(tab.bool_instructor) or false
-	local gname = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tab.int_groupID .. "'")
+	local gname = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tab.int_groupID .. "'")
 	if wk(gname) then
 		gname = gname[1].string_name
 	end
@@ -262,7 +262,7 @@ end
 
 local TEAMS = {}
 function YRPBuildDarkrpTeams()
-	local drp_allroles = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local drp_allroles = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(drp_allroles) then
 		for i, role in pairs(drp_allroles) do
 			local teamname = YRPConvertToDarkRPJobName(role.string_name)
@@ -305,7 +305,7 @@ function Player:DRPSendTeamsToPlayer()
 	end
 end
 
-local drp_allgroups = SQL_SELECT("yrp_ply_groups", "*", nil)
+local drp_allgroups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
 local CATEGORIES = {}
 CATEGORIES.jobs = {}
 if wk(drp_allgroups) then
@@ -353,17 +353,17 @@ end
 -- darkrp
 
 function UpdatePrerolesGroupIDs(uid, gid)
-	local preroles = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. uid .. "'")
+	local preroles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. uid .. "'")
 	if wk(preroles) then
 		for i, prerole in pairs(preroles) do
-			SQL_UPDATE(DATABASE_NAME, {["int_groupID"] = gid}, "uniqueID = '" .. prerole.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_groupID"] = gid}, "uniqueID = '" .. prerole.uniqueID .. "'")
 			UpdatePrerolesGroupIDs(prerole.uniqueID, gid)
 		end
 	end
 end
 
 local yrp_ply_roles = {}
-local _init_ply_roles = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+local _init_ply_roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if wk(_init_ply_roles) then
 	yrp_ply_roles = _init_ply_roles[1]
 end
@@ -390,7 +390,7 @@ for str, val in pairs(yrp_ply_roles) do
 			BroadcastString(tab)
 			if tab.netstr == "update_role_string_name" then
 				util.AddNetworkString("settings_role_update_name")
-				local puid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 				if wk(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
@@ -401,7 +401,7 @@ for str, val in pairs(yrp_ply_roles) do
 				end
 			elseif tab.netstr == "update_role_string_color" then
 				util.AddNetworkString("settings_role_update_color")
-				local puid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 				if wk(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
@@ -412,7 +412,7 @@ for str, val in pairs(yrp_ply_roles) do
 				end
 			elseif tab.netstr == "update_role_string_icon" then
 				util.AddNetworkString("settings_role_update_icon")
-				local puid = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 				if wk(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
@@ -430,7 +430,7 @@ for str, val in pairs(yrp_ply_roles) do
 		net.Receive(tab.netstr, function(len, ply)
 			local uid = tonumber(net.ReadString())
 			local int = tonumber(net.ReadString())
-			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+			local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 			tab.ply = ply
 			tab.id = str
 			tab.value = int
@@ -456,7 +456,7 @@ for str, val in pairs(yrp_ply_roles) do
 		net.Receive(tab.netstr, function(len, ply)
 			local uid = tonumber(net.ReadString())
 			local float = tonumber(net.ReadString())
-			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+			local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 			tab.ply = ply
 			tab.id = str
 			tab.value = float
@@ -480,7 +480,7 @@ for str, val in pairs(yrp_ply_roles) do
 		net.Receive(tab.netstr, function(len, ply)
 			local uid = tonumber(net.ReadString())
 			local int = tonumber(net.ReadString())
-			local cur = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+			local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 			tab.ply = ply
 			tab.id = str
 			tab.value = int
@@ -543,7 +543,7 @@ function UnsubscribeRole(ply, uid)
 end
 
 function SortRoles(gro, pre)
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
 
 	if wk(siblings) then
 		for i, sibling in pairs(siblings) do
@@ -553,7 +553,7 @@ function SortRoles(gro, pre)
 		local count = 0
 		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 			count = count + 1
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
 		end
 	end
 end
@@ -566,9 +566,9 @@ function SendRoleList(ply, gro, pre)
 
 		local tbl_roles = nil
 		if pre > 0 then
-			tbl_roles = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. pre .. "'")
+			tbl_roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. pre .. "'")
 		else
-			tbl_roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
+			tbl_roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
 		end
 
 		if !wk(tbl_roles) then
@@ -577,12 +577,12 @@ function SendRoleList(ply, gro, pre)
 
 		local headername = "NOT FOUND"
 		if pre > 0 then
-			headername = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
+			headername = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
 			if worked(headername) then
 				headername = headername[1].string_name
 			end
 		else
-			headername = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. gro .. "'")
+			headername = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. gro .. "'")
 			if worked(headername) then
 				headername = headername[1].string_name
 			end
@@ -621,7 +621,7 @@ function DuplicateRole(ruid, guid)
 	ruid = tonumber(ruid)
 
 	if ruid > -1 then
-		local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
+		local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
 		if wk(role) then
 			role = role[1]
 
@@ -643,7 +643,7 @@ function DuplicateRole(ruid, guid)
 			cols = table.concat(cols, ", ")
 			vals = table.concat(vals, ", ")
 
-			SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
 			
 			if guid and role.int_prerole then
 				SendRoleList(nil, guid, role.int_prerole)
@@ -664,7 +664,7 @@ end)
 util.AddNetworkString("get_grp_roles")
 net.Receive("get_grp_roles", function(len, ply)
 	local _uid = net.ReadString()
-	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. _uid .. "'")
+	local _roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. _uid .. "'")
 	if wk(_roles) then
 		for i, ro in pairs(_roles) do
 			updateRoleUses(ro.uniqueID)
@@ -681,7 +681,7 @@ end)
 util.AddNetworkString("get_rol_prerole")
 net.Receive("get_rol_prerole", function(len, ply)
 	local _uid = net.ReadString()
-	local _roles = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. _uid .. "'")
+	local _roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. _uid .. "'")
 
 	if wk(_roles) then
 		for i, ro in pairs(_roles) do
@@ -710,7 +710,7 @@ net.Receive("settings_subscribe_prerolelist", function(len, ply)
 	local gro = tonumber(net.ReadString())
 	local pre = tonumber(net.ReadString())
 
-	pre = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
+	pre = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
 	if wk(pre) then
 		pre = tonumber(pre[1].int_prerole)
 		SubscribeRoleList(ply, gro, pre)
@@ -723,7 +723,7 @@ net.Receive("settings_add_role", function(len, ply)
 	local gro = tonumber(net.ReadString())
 	local pre = tonumber(net.ReadString())
 
-	local prerole = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
+	local prerole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
 
 	local has_prerole = false
 	if pre > 0 then
@@ -736,9 +736,9 @@ net.Receive("settings_add_role", function(len, ply)
 		end
 	end
 
-	SQL_INSERT_INTO(DATABASE_NAME, "int_groupID, int_prerole", "'" .. gro .. "', '" .. pre .. "'")
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_groupID, int_prerole", "'" .. gro .. "', '" .. pre .. "'")
 
-	local roles = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
+	local roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'")
 
 	local count = tonumber(table.Count(roles))
 	local new_role = roles[count]
@@ -747,17 +747,17 @@ net.Receive("settings_add_role", function(len, ply)
 		for name, value in pairs(prerole) do
 			local except = {"uniqueID", "int_prerole", "int_position", "int_groupID"}
 			if !table.HasValue(except, name) then
-				SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. new_role.uniqueID .. "'")
+				YRP_SQL_UPDATE(DATABASE_NAME, {[name] = value}, "uniqueID = '" .. new_role.uniqueID .. "'")
 			end
 		end
 	end
 
 	--local up = roles[count - 1]
 	if count == 1 then
-		SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_role.uniqueID .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_role.uniqueID .. "'")
 	else
-		SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_role.uniqueID .. "'")
-		--SQL_UPDATE(DATABASE_NAME, {["int_dn"] = new_role.uniqueID}, "uniqueID = '" .. up.uniqueID .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. new_role.uniqueID .. "'")
+		--YRP_SQL_UPDATE(DATABASE_NAME, {["int_dn"] = new_role.uniqueID}, "uniqueID = '" .. up.uniqueID .. "'")
 	end
 
 	YRP.msg("db", "Added new role: " .. new_role.uniqueID)
@@ -768,12 +768,12 @@ end)
 util.AddNetworkString("settings_role_position_up")
 net.Receive("settings_role_position_up", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	role = role[1]
 
 	role.int_position = tonumber(role.int_position)
 
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
 
 	for i, sibling in pairs(siblings) do
 		sibling.int_position = tonumber(sibling.int_position)
@@ -783,8 +783,8 @@ net.Receive("settings_role_position_up", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == role.int_position - 1 then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = role.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = role.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 
@@ -796,12 +796,12 @@ end)
 util.AddNetworkString("settings_role_position_dn")
 net.Receive("settings_role_position_dn", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	role = role[1]
 
 	role.int_position = tonumber(role.int_position)
 
-	local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
 
 	for i, sibling in pairs(siblings) do
 		sibling.int_position = tonumber(sibling.int_position)
@@ -811,8 +811,8 @@ net.Receive("settings_role_position_dn", function(len, ply)
 	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 		count = count + 1
 		if tonumber(sibling.int_position) == role.int_position + 1 then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = role.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = role.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'")
 		end
 	end
 
@@ -826,21 +826,21 @@ net.Receive("settings_subscribe_role", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	SubscribeRole(ply, uid)
 
-	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	if !wk(role) then
 		role = {}
 	else
 		role = role[1]
 	end
 
-	local roles = SQL_SELECT(DATABASE_NAME, "string_name, uniqueID, int_groupID", nil)
+	local roles = YRP_SQL_SELECT(DATABASE_NAME, "string_name, uniqueID, int_groupID", nil)
 	if !wk(roles) then
 		roles = {}
 	end
 
-	local usergroups = SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
+	local usergroups = YRP_SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
 
-	local groups = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
+	local groups = YRP_SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
 
 	local huds = YRPGetHUDs()
 
@@ -876,17 +876,17 @@ end)
 util.AddNetworkString("settings_delete_role")
 net.Receive("settings_delete_role", function(len, ply)
 	local uid = tonumber(net.ReadString())
-	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	if wk(role) then
 		role = role[1]
-		SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
+		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 
-		local roledeleted = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+		local roledeleted = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 		if !wk(roledeleted) then
 			YRP.msg("note", "Role deleted (uid: " .. tostring( uid ) .. ")")
 		end
 
-		local siblings = SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
+		local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
 		if wk(siblings) then
 			for i, sibling in pairs(siblings) do
 				sibling.int_position = tonumber(sibling.int_position)
@@ -894,7 +894,7 @@ net.Receive("settings_delete_role", function(len, ply)
 			local count = 0
 			for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 				count = count + 1
-				SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
+				YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
 			end
 		end
 
@@ -908,7 +908,7 @@ end)
 
 util.AddNetworkString("getScoreboardGroups")
 net.Receive("getScoreboardGroups", function(len, ply)
-	local _tmpGroups = SQL_SELECT("yrp_ply_groups", "*", nil)
+	local _tmpGroups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
 	if wk(_tmpGroups) then
 		net.Start("getScoreboardGroups")
 			net.WriteTable(_tmpGroups)
@@ -920,7 +920,7 @@ net.Receive("getScoreboardGroups", function(len, ply)
 end)
 
 function GetRole(uid)
-	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 	if wk(role) then
 		return role[1]
 	end
@@ -933,7 +933,7 @@ function SendCustomFlags(uid)
 		local nettab = {}
 		local flags = string.Explode(",", role.string_customflags)
 		for i, val in pairs(flags) do
-			local flag = SQL_SELECT("yrp_flags", "*", "uniqueID = '" .. val .. "'")
+			local flag = YRP_SQL_SELECT("yrp_flags", "*", "uniqueID = '" .. val .. "'")
 			if wk(flag) then
 				flag = flag[1]
 				local entry = {}
@@ -959,7 +959,7 @@ end)
 
 util.AddNetworkString("get_all_role_customflags")
 net.Receive("get_all_role_customflags", function(len, ply)
-	local allflags = SQL_SELECT("yrp_flags", "*", "string_type = 'role'")
+	local allflags = YRP_SQL_SELECT("yrp_flags", "*", "string_type = 'role'")
 	if !wk(allflags) then
 		allflags = {}
 	end
@@ -988,7 +988,7 @@ net.Receive("add_role_flag", function(len, ply)
 		table.insert(newflags, fuid)
 		newflags = string.Implode(",", newflags)
 
-		SQL_UPDATE(DATABASE_NAME, {["string_customflags"] = newflags}, "uniqueID = '" .. ruid .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["string_customflags"] = newflags}, "uniqueID = '" .. ruid .. "'")
 		SendCustomFlags(ruid)
 	end
 end)
@@ -1011,7 +1011,7 @@ net.Receive("rem_role_flag", function(len, ply)
 	table.RemoveByValue(newflags, tostring(fuid))
 	newflags = string.Implode(",", newflags)
 
-	SQL_UPDATE(DATABASE_NAME, {["string_customflags"] = newflags}, "uniqueID = '" .. ruid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_customflags"] = newflags}, "uniqueID = '" .. ruid .. "'")
 	SendCustomFlags(ruid)
 end)
 
@@ -1021,7 +1021,7 @@ function SendPlayermodels(uid)
 		local nettab = {}
 		local flags = string.Explode(",", role.string_playermodels)
 		for i, val in pairs(flags) do
-			local pms = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. val .. "'")
+			local pms = YRP_SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. val .. "'")
 
 			if wk(pms) then
 				pms = pms[1]
@@ -1053,7 +1053,7 @@ end)
 
 util.AddNetworkString("get_all_playermodels")
 net.Receive("get_all_playermodels", function(len, ply)
-	local allpms = SQL_SELECT("yrp_playermodels", "*", nil)
+	local allpms = YRP_SQL_SELECT("yrp_playermodels", "*", nil)
 	if !wk(allpms) then
 		allpms = {}
 	end
@@ -1063,7 +1063,7 @@ net.Receive("get_all_playermodels", function(len, ply)
 		pm.string_models = pm.string_models
 
 		-- Count uses
-		local roles = SQL_SELECT("yrp_ply_roles", "uniqueID, string_name, string_playermodels", "string_playermodels LIKE '%" .. pm.uniqueID .. "%'")
+		local roles = YRP_SQL_SELECT("yrp_ply_roles", "uniqueID, string_name, string_playermodels", "string_playermodels LIKE '%" .. pm.uniqueID .. "%'")
 		if roles then
 			for y, role in pairs(roles) do
 				local rolepms = string.Explode(",", role.string_playermodels)
@@ -1098,7 +1098,7 @@ function AddPlayermodelToRole(ruid, muid)
 		table.insert(newpms, tostring(muid))
 		newpms = string.Implode(",", newpms)
 
-		SQL_UPDATE(DATABASE_NAME, {["string_playermodels"] = newpms}, "uniqueID = '" .. ruid .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["string_playermodels"] = newpms}, "uniqueID = '" .. ruid .. "'")
 		SendPlayermodels(ruid)
 	end
 end
@@ -1129,9 +1129,9 @@ net.Receive("add_playermodels", function(len, ply)
 
 	pms = table.concat(pms, ",")
 
-	SQL_INSERT_INTO("yrp_playermodels", "string_models, string_name, float_size_min, float_size_max", "" .. SQL_STR_IN( pms ) .. ", " .. SQL_STR_IN( name ) .. ", '" .. min .. "', '" .. max .. "'")
+	YRP_SQL_INSERT_INTO("yrp_playermodels", "string_models, string_name, float_size_min, float_size_max", "" .. YRP_SQL_STR_IN( pms ) .. ", " .. YRP_SQL_STR_IN( name ) .. ", '" .. min .. "', '" .. max .. "'")
 
-	local lastentry = SQL_SELECT("yrp_playermodels", "*", nil)
+	local lastentry = YRP_SQL_SELECT("yrp_playermodels", "*", nil)
 	lastentry = lastentry[table.Count(lastentry)]
 	AddPlayermodelToRole(ruid, lastentry.uniqueID)
 end)
@@ -1150,7 +1150,7 @@ function RemPlayermodelFromRole(ruid, muid)
 	table.RemoveByValue(newpms, tostring(muid))
 	newpms = string.Implode(",", newpms)
 
-	SQL_UPDATE(DATABASE_NAME, {["string_playermodels"] = newpms}, "uniqueID = '" .. ruid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_playermodels"] = newpms}, "uniqueID = '" .. ruid .. "'")
 	SendPlayermodels(ruid)
 end
 
@@ -1161,7 +1161,7 @@ net.Receive("rem_role_playermodel", function(len, ply)
 
 	local pms = muid
 
-	local test = SQL_SELECT( "yrp_playermodels", "*", "uniqueID = '" .. muid .. "'")
+	local test = YRP_SQL_SELECT( "yrp_playermodels", "*", "uniqueID = '" .. muid .. "'")
 
 	if wk(test) then
 		pms = test[1].string_models
@@ -1213,7 +1213,7 @@ function AddSwepToRole(ruid, swepcn)
 			table.insert(newsweps, tostring(swepcn))
 			newsweps = string.Implode(",", newsweps)
 
-			SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. ruid .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. ruid .. "'")
 			SendSweps(ruid)
 		end
 	end
@@ -1243,7 +1243,7 @@ function RemSwepFromRole(ruid, swepcn)
 	table.RemoveByValue(newsweps, tostring(swepcn))
 	newsweps = string.Implode(",", newsweps)
 
-	SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. ruid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. ruid .. "'")
 	SendSweps(ruid)
 end
 
@@ -1300,7 +1300,7 @@ function AddSwepToRoleOnSpawn(ruid, swepcn)
 			table.insert(newsweps, tostring(swepcn))
 			newsweps = string.Implode(",", newsweps)
 
-			SQL_UPDATE(DATABASE_NAME, {["string_sweps_onspawn"] = newsweps}, "uniqueID = '" .. ruid .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["string_sweps_onspawn"] = newsweps}, "uniqueID = '" .. ruid .. "'")
 			SendSwepsOnSpawn(ruid)
 		end
 	end
@@ -1330,7 +1330,7 @@ function RemSwepFromRoleOnSpawn(ruid, swepcn)
 	table.RemoveByValue(newsweps, tostring(swepcn))
 	newsweps = string.Implode(",", newsweps)
 
-	SQL_UPDATE(DATABASE_NAME, {["string_sweps_onspawn"] = newsweps}, "uniqueID = '" .. ruid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_sweps_onspawn"] = newsweps}, "uniqueID = '" .. ruid .. "'")
 	SendSwepsOnSpawn(ruid)
 end
 
@@ -1385,7 +1385,7 @@ function AddNDSwepToRole(ruid, ndswepcn)
 		table.insert(newndsweps, tostring(ndswepcn))
 		newndsweps = string.Implode(",", newndsweps)
 
-		SQL_UPDATE(DATABASE_NAME, {["string_ndsweps"] = newndsweps}, "uniqueID = '" .. ruid .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["string_ndsweps"] = newndsweps}, "uniqueID = '" .. ruid .. "'")
 		SendNDSweps(ruid)
 	end
 end
@@ -1412,7 +1412,7 @@ function RemNDSwepFromRole(ruid, ndswepcn)
 	table.RemoveByValue(newndsweps, tostring(ndswepcn))
 	newndsweps = string.Implode(",", newndsweps)
 
-	SQL_UPDATE(DATABASE_NAME, {["string_ndsweps"] = newndsweps}, "uniqueID = '" .. ruid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_ndsweps"] = newndsweps}, "uniqueID = '" .. ruid .. "'")
 	SendNDSweps(ruid)
 end
 
@@ -1431,7 +1431,7 @@ function SendLicenses(ruid)
 		local nettab = {}
 		local licenses = string.Explode(",", role.string_licenses)
 		for i, val in pairs(licenses) do
-			local li = SQL_SELECT("yrp_licenses", "*", "uniqueID = '" .. val .. "'")
+			local li = YRP_SQL_SELECT("yrp_licenses", "*", "uniqueID = '" .. val .. "'")
 			if wk(li) then
 				li = li[1]
 				local entry = {}
@@ -1464,7 +1464,7 @@ function RemLicenseFromRole(ruid, muid)
 	table.RemoveByValue(newlis, tostring(muid))
 	newlis = string.Implode(",", newlis)
 
-	SQL_UPDATE(DATABASE_NAME, {["string_licenses"] = newlis}, "uniqueID = '" .. ruid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_licenses"] = newlis}, "uniqueID = '" .. ruid .. "'")
 	SendLicenses(ruid)
 end
 
@@ -1475,7 +1475,7 @@ function CleanUpLicenses(ruid)
 
 		for i, li in pairs(lis) do
 			if li != "" then
-				local found = SQL_SELECT("yrp_licenses", "*", "uniqueID = '" .. li .. "'")
+				local found = YRP_SQL_SELECT("yrp_licenses", "*", "uniqueID = '" .. li .. "'")
 				if !wk(found) then
 					RemLicenseFromRole(ruid, li)
 				end
@@ -1493,7 +1493,7 @@ end)
 
 util.AddNetworkString("get_all_licenses")
 net.Receive("get_all_licenses", function(len, ply)
-	local alllis = SQL_SELECT("yrp_licenses", "*", nil)
+	local alllis = YRP_SQL_SELECT("yrp_licenses", "*", nil)
 	if !wk(alllis) then
 		alllis = {}
 	end
@@ -1517,7 +1517,7 @@ function AddLicenseToRole(ruid, muid)
 		table.insert(newlis, tostring(muid))
 		newlis = string.Implode(",", newlis)
 
-		SQL_UPDATE(DATABASE_NAME, {["string_licenses"] = newlis}, "uniqueID = '" .. ruid .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["string_licenses"] = newlis}, "uniqueID = '" .. ruid .. "'")
 		SendLicenses(ruid)
 	end
 end
@@ -1535,9 +1535,9 @@ net.Receive("add_license", function(len, ply)
 	local ruid = net.ReadInt(32)
 	local WorldModel = net.ReadString()
 	local name = net.ReadString()
-	SQL_INSERT_INTO("yrp_licenses", "string_model, string_name", "'" .. WorldModel .. "', '" .. name .. "'")
+	YRP_SQL_INSERT_INTO("yrp_licenses", "string_model, string_name", "'" .. WorldModel .. "', '" .. name .. "'")
 
-	local lastentry = SQL_SELECT("yrp_licenses", "*", nil)
+	local lastentry = YRP_SQL_SELECT("yrp_licenses", "*", nil)
 	lastentry = lastentry[table.Count(lastentry)]
 	AddLicenseToRole(ruid, lastentry.uniqueID)
 end)
@@ -1559,7 +1559,7 @@ function SendSpecializations(ruid)
 		local nettab = {}
 		local specializations = string.Explode(",", role.string_specializations)
 		for i, val in pairs(specializations) do
-			local li = SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. val .. "'")
+			local li = YRP_SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. val .. "'")
 			if wk(li) then
 				li = li[1]
 				local entry = {}
@@ -1592,7 +1592,7 @@ function RemSpecializationFromRole(ruid, muid)
 	table.RemoveByValue(newlis, tostring(muid))
 	newlis = string.Implode(",", newlis)
 
-	SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newlis}, "uniqueID = '" .. ruid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newlis}, "uniqueID = '" .. ruid .. "'")
 	SendSpecializations(ruid)
 end
 
@@ -1603,7 +1603,7 @@ function CleanUpSpecializations(ruid)
 
 		for i, li in pairs(lis) do
 			if li != "" then
-				local found = SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. li .. "'")
+				local found = YRP_SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. li .. "'")
 				if !wk(found) then
 					RemSpecializationFromRole(ruid, li)
 				end
@@ -1621,7 +1621,7 @@ end)
 
 util.AddNetworkString("get_all_specializations")
 net.Receive("get_all_specializations", function(len, ply)
-	local alllis = SQL_SELECT("yrp_specializations", "*", nil)
+	local alllis = YRP_SQL_SELECT("yrp_specializations", "*", nil)
 	if !wk(alllis) then
 		alllis = {}
 	end
@@ -1645,7 +1645,7 @@ function AddSpecializationToRole(ruid, muid)
 		table.insert(newlis, tostring(muid))
 		newlis = string.Implode(",", newlis)
 
-		SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newlis}, "uniqueID = '" .. ruid .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newlis}, "uniqueID = '" .. ruid .. "'")
 		SendSpecializations(ruid)
 	end
 end
@@ -1663,9 +1663,9 @@ net.Receive("add_specialization", function(len, ply)
 	local ruid = net.ReadInt(32)
 	local WorldModel = net.ReadString()
 	local name = net.ReadString()
-	SQL_INSERT_INTO("yrp_specializations", "string_model, string_name", "'" .. WorldModel .. "', '" .. name .. "'")
+	YRP_SQL_INSERT_INTO("yrp_specializations", "string_model, string_name", "'" .. WorldModel .. "', '" .. name .. "'")
 
-	local lastentry = SQL_SELECT("yrp_specializations", "*", nil)
+	local lastentry = YRP_SQL_SELECT("yrp_specializations", "*", nil)
 	lastentry = lastentry[table.Count(lastentry)]
 	AddSpecializationToRole(ruid, lastentry.uniqueID)
 end)
@@ -1691,12 +1691,12 @@ net.Receive("openInteractMenu", function(len, ply)
 		end
 	end
 	if ea(tmpTarget) and tmpTarget:IsPlayer() then
-		local idcard = SQL_SELECT("yrp_general", "*", nil)
+		local idcard = YRP_SQL_SELECT("yrp_general", "*", nil)
 		idcard = tobool(idcard[1].bool_identity_card)
 
 		local tmpTargetChaTab = tmpTarget:YRPGetCharacterTable()
 		if wk(tmpTargetChaTab) then
-			local tmpTargetRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID)
+			local tmpTargetRole = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID)
 
 			local tmpT = ply:YRPGetCharacterTable()
 			local tmpTable = ply:YRPGetRoleTable()
@@ -1713,7 +1713,7 @@ net.Receive("openInteractMenu", function(len, ply)
 					isInstructor = true
 
 					local tmpSearch = true	--tmpTargetSteamID
-					local tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
+					local tmpTableSearch = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
 					if wk(tmpTableSearch) then
 						local tmpSearchUniqueID = tmpTableSearch[1].int_prerole
 
@@ -1724,7 +1724,7 @@ net.Receive("openInteractMenu", function(len, ply)
 
 								if tonumber(tmpTargetRole[1].int_prerole) != 0 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
 									tmpDemote = true
-									local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetRole[1].int_prerole)
+									local tmp = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTargetRole[1].int_prerole)
 									tmpDemoteName = tmp[1].string_name
 								end
 
@@ -1737,7 +1737,7 @@ net.Receive("openInteractMenu", function(len, ply)
 									if !tmpDemote and tonumber(tmpTargetRole[1].uniqueID) != 1 and tonumber(tmpTargetRole[1].int_groupID) == ply:GetGroupUID() then
 										-- von First Role to CIV
 										tmpDemote = true
-										local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '1'")
+										local tmp = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '1'")
 										tmpDemoteName = tmp[1].string_name
 									end
 									if !tmpPromote and tonumber(tmpTargetRole[1].uniqueID) == 1 then
@@ -1751,7 +1751,7 @@ net.Receive("openInteractMenu", function(len, ply)
 									tmpSearch = false
 								end
 							end
-							tmpTableSearch = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
+							tmpTableSearch = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
 
 							--Only look for 30 preroles
 							tmpCounter = tmpCounter + 1
@@ -1790,7 +1790,7 @@ end)
 
 util.AddNetworkString("isidcardenabled")
 net.Receive("isidcardenabled", function(len, ply)
-	local idcard = SQL_SELECT("yrp_general", "*", nil)
+	local idcard = YRP_SQL_SELECT("yrp_general", "*", nil)
 	idcard = tobool(idcard[1].bool_identity_card)
 
 	net.Start("isidcardenabled")
@@ -1799,33 +1799,33 @@ net.Receive("isidcardenabled", function(len, ply)
 end)
 
 function removeFromWhitelist( SteamID, roleID )
-	local _result = SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID )
+	local _result = YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID )
 	if _result != nil then
-		SQL_DELETE_FROM( "yrp_role_whitelist", "uniqueID = " .. _result[1].uniqueID )
+		YRP_SQL_DELETE_FROM( "yrp_role_whitelist", "uniqueID = " .. _result[1].uniqueID )
 	end
 end
 
 function addToWhitelistByPly( SteamID, roleID, groupID, nick, ply, target )
-	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', '" .. roleID .. " " .. groupID .. "'")
+	YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', '" .. roleID .. " " .. groupID .. "'")
 
-	if SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID ) == nil then
+	if YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID ) == nil then
 		local dat = util.DateStamp()
 		local status = "Promoted by " .. ply:SteamName()
 		local name = target:SteamName()
-		SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', '" .. nick .. "', " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
+		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', '" .. nick .. "', " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
 	else
 		YRP.msg( "note", "is already in whitelist")
 	end
 end
 
 function addToWhitelist( roleID, ply )
-	SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. roleID .. "'")
+	YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. roleID .. "'")
 
-	if SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. roleID ) == nil then
+	if YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. roleID ) == nil then
 		local dat = util.DateStamp()
 		local status = "Invited " .. ply:SteamName()
 		local name = ply:SteamName()
-		SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, roleID, date, status, name", "'" .. ply:SteamID() .. "', '" .. ply:RPName() .. "', " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
+		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, roleID, date, status, name", "'" .. ply:SteamID() .. "', '" .. ply:RPName() .. "', " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
 	else
 		YRP.msg( "note", "is already in whitelist")
 	end
@@ -1842,19 +1842,19 @@ net.Receive("promotePlayer", function(len, ply)
 		end
 	end
 
-	local tmpTableInstructorRole = ply:YRPGetRoleTable() --SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
+	local tmpTableInstructorRole = ply:YRPGetRoleTable() --YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
 
 	local tmpTargetChaTab = tmpTarget:YRPGetCharacterTable()
 
 	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
-		local tmpTableTargetRole = SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
-		local tmpTableTargetPromoteRole = SQL_SELECT( "yrp_ply_roles", "*", "int_prerole = '" .. tmpTableTargetRole[1].uniqueID .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'" )
+		local tmpTableTargetRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
+		local tmpTableTargetPromoteRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "int_prerole = '" .. tmpTableTargetRole[1].uniqueID .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'" )
 		local tmpTableTargetGroup = nil
 		if tmpTableTargetPromoteRole != nil then
-			tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].int_groupID )
+			tmpTableTargetGroup = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].int_groupID )
 		else
-			tmpTableTargetPromoteRole = SQL_SELECT( "yrp_ply_roles", "*", "int_prerole = '" .. 0 .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'" )
-			tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].int_groupID )
+			tmpTableTargetPromoteRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "int_prerole = '" .. 0 .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'" )
+			tmpTableTargetGroup = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].int_groupID )
 		end
 
 		tmpTableTargetPromoteRole = tmpTableTargetPromoteRole[1]
@@ -1893,14 +1893,14 @@ net.Receive( "demotePlayer", function( len, ply )
 	local tmpTargetChaTab = tmpTarget:YRPGetCharacterTable()
 
 	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
-		local tmpTableTargetRole = SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
-		local tmpTableTargetDemoteRole = SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTableTargetRole[1].int_prerole )
+		local tmpTableTargetRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
+		local tmpTableTargetDemoteRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTableTargetRole[1].int_prerole )
 		local tmpTableTargetGroup = nil
 		if tmpTableTargetDemoteRole != nil then
-			tmpTableTargetGroup = SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetDemoteRole[1].int_groupID )
+			tmpTableTargetGroup = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetDemoteRole[1].int_groupID )
 		else
-			tmpTableTargetDemoteRole = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '1'")
-			tmpTableTargetGroup = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '1'")
+			tmpTableTargetDemoteRole = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '1'")
+			tmpTableTargetGroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '1'")
 		end
 		tmpTableTargetDemoteRole = tmpTableTargetDemoteRole[1]
 		tmpTableTargetGroup = tmpTableTargetGroup[1]
@@ -1924,11 +1924,11 @@ function YRPGetFirstRankUID(ruid)
 
 	local Search = true
 	while (Search) do
-		local int_prerole = SQL_SELECT(DATABASE_NAME, "uniqueID, int_prerole", "uniqueID = '" .. lastuid .. "'")
+		local int_prerole = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, int_prerole", "uniqueID = '" .. lastuid .. "'")
 		if wk(int_prerole) then
 			int_prerole = int_prerole[1].int_prerole
 
-			local prerole = SQL_SELECT(DATABASE_NAME, "uniqueID, int_prerole", "uniqueID = '" .. int_prerole .. "'")
+			local prerole = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, int_prerole", "uniqueID = '" .. int_prerole .. "'")
 			if wk(prerole) then
 				lastuid = prerole[1].uniqueID
 
@@ -1963,12 +1963,12 @@ net.Receive("invitetogroup", function( len, ply )
 		if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
 			local firstrankuid = YRPGetFirstRankUID(ply:GetRoleUID())
 			
-			local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. firstrankuid .. "'")
-			local group = SQL_SELECT(DATABASE_NAME, "*", role.groupID)
+			local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. firstrankuid .. "'")
+			local group = YRP_SQL_SELECT(DATABASE_NAME, "*", role.groupID)
 			if wk(role) then
 				role = role[1]
 
-				local group = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
+				local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
 
 				if wk(group) then
 					group = group[1]
@@ -1997,7 +1997,7 @@ end)
 net.Receive("yrp_invite_accept", function( len, ply )
 	local r = net.ReadTable()
 
-	local role = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. r.uniqueID .. "'")
+	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. r.uniqueID .. "'")
 	if wk(role) then
 		role = role[1]
 	
@@ -2012,12 +2012,12 @@ end)
 
 -- Role Reset
 function CheckIfRoleExists(ply, ruid)
-	local result = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
+	local result = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
 
 	if result == nil then
 		YRP.msg("note", "character role not exists anymore! Change back to default role!")
 		
-		SQL_UPDATE("yrp_characters", {
+		YRP_SQL_UPDATE("yrp_characters", {
 			["roleID"] = 1,
 			["groupID"] = 1
 		}, "uniqueID = '" .. ply:CharID() .. "'")
@@ -2027,7 +2027,7 @@ function CheckIfRoleExists(ply, ruid)
 end
 
 function GetRoleTable(rid)
-	local result = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. rid .. "'")
+	local result = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. rid .. "'")
 	if wk(result) then
 		result = result[1]
 	end
@@ -2036,7 +2036,7 @@ end
 
 util.AddNetworkString("getallroles")
 net.Receive("getallroles", function(len, ply)
-	local dbtab = SQL_SELECT(DATABASE_NAME, "uniqueID, string_name", nil)
+	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_name", nil)
 	if wk(dbtab) then
 		for i, v in pairs(dbtab) do
 			local pms = string.Explode(",", GetPlayermodelsOfRole(v.uniqueID))
@@ -2056,7 +2056,7 @@ end)
 util.AddNetworkString("get_next_ranks")
 net.Receive("get_next_ranks", function(len, ply)
 	local ruid = net.ReadString()
-	local rols = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'")
+	local rols = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'")
 
 	if wk(rols) then
 		for i, rol in pairs(rols) do
@@ -2072,7 +2072,7 @@ end)
 util.AddNetworkString("yrp_hasnext_ranks")
 net.Receive("yrp_hasnext_ranks", function(len, ply)
 	local ruid = net.ReadString()
-	local rols = SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'")
+	local rols = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'")
 
 	local has = false
 	if wk(rols) then
@@ -2089,7 +2089,7 @@ util.AddNetworkString("yrp_want_role")
 net.Receive("yrp_want_role", function(len, ply)
 	local ruid = net.ReadString()
 	ruid = tonumber(ruid)
-	local rol = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
+	local rol = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
 	local result = "Role dont exists anymore"
 	if wk(rol) then
 		if canGetRole(ply, ruid, true) then
@@ -2105,14 +2105,14 @@ net.Receive("yrp_want_role", function(len, ply)
 end)
 
 function YRPSendRoleSpecs(ply, ruid)
-	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. ruid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. ruid .. "'")
 	if wk(tab) then
 		tab = tab[1]
 
 		local nettab = {}
 
 		for i, v in pairs( string.Explode( ",", tab.string_specializations ) ) do
-			local dbtab = SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
+			local dbtab = YRP_SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
 			if wk(dbtab) then
 				local entry = {}
 				entry.uid = v

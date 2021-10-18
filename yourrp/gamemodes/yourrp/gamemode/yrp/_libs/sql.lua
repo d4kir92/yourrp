@@ -39,7 +39,7 @@ function sql_show_last_error()
 	return _last_error
 end
 
-function SQL_STR_IN(str, f)
+function YRP_SQL_STR_IN(str, f)
 	if str == nil and f then
 		MsgC(Color(255, 0, 0), f)
 		return str
@@ -49,7 +49,7 @@ function SQL_STR_IN(str, f)
 	end
 end
 
-function SQL_STR_OUT(str)
+function YRP_SQL_STR_OUT(str)
 	local _res = str
 
 	if type(_res) == "string" then
@@ -73,19 +73,10 @@ function db_int(int)
 	end
 end
 
-function db_drop_table(db_table)
-	local _result = sql.Query("DROP TABLE " .. db_table)
-
-	if _result != nil then
-		YRP.msg("error", GetSQLModeName() .. ": " .. "db_drop_table " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
-		sql_show_last_error()
-	end
-end
-
 local _show_db_if_not_empty = false
 
 function db_is_empty(db_name)
-	local _tmp = SQL_SELECT(db_name, "*", nil)
+	local _tmp = YRP_SQL_SELECT(db_name, "*", nil)
 
 	if worked(_tmp, db_name .. " is empty!") then
 		if _show_db_if_not_empty then
@@ -139,10 +130,10 @@ function SetSQLMode(sqlmode, force)
 	end
 end
 
-function SQL_TABLE_EXISTS(db_table)
-	-- YRP.msg("db", "SQL_TABLE_EXISTS(" .. tostring(db_table) .. ")")
+function YRP_SQL_TABLE_EXISTS(db_table)
+	-- YRP.msg("db", "YRP_SQL_TABLE_EXISTS(" .. tostring(db_table) .. ")")
 	if GetSQLMode() == 0 then
-		local _r = SQL_SELECT(db_table, "*", nil)
+		local _r = YRP_SQL_SELECT(db_table, "*", nil)
 
 		if _r == nil or istable(_r) then
 			return true
@@ -152,7 +143,7 @@ function SQL_TABLE_EXISTS(db_table)
 			return false
 		end
 	elseif GetSQLMode() == 1 then
-		local _r = SQL_SELECT(db_table, "*", nil)
+		local _r = YRP_SQL_SELECT(db_table, "*", nil)
 
 		if _r == nil or istable(_r) then
 			return true
@@ -164,10 +155,10 @@ function SQL_TABLE_EXISTS(db_table)
 	end
 end
 
-function SQL_QUERY(query)
+function YRP_SQL_QUERY(query)
 	query = tostring(query)
 
-	--YRP.msg("db", "SQL_QUERY(" .. tostring(query) .. ")")
+	--YRP.msg("db", "YRP_SQL_QUERY(" .. tostring(query) .. ")")
 	if !string.find(query, ";") then
 		YRP.msg("error", GetSQLModeName() .. ": " .. "Query has no ; [" .. query .. "]")
 
@@ -190,7 +181,7 @@ function SQL_QUERY(query)
 
 			que.onError = function(q, e)
 				if string.find(e, "Unknown column") == nil and string.find(e, "doesn't exist") == nil then
-					YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_QUERY - ERROR: " .. tostring(e) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(query))
+					YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_QUERY - ERROR: " .. tostring(e) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(query))
 					q:error()
 				end
 			end
@@ -200,14 +191,14 @@ function SQL_QUERY(query)
 			local _test = que:getData()
 
 			if istable(_test) then
-				if #_test == 0 then return nil end --YRP.msg("db", "SQL_QUERY TABLE EMPTY 1")
+				if #_test == 0 then return nil end --YRP.msg("db", "YRP_SQL_QUERY TABLE EMPTY 1")
 
 				return _test
 			elseif _test == nil then
-				--YRP.msg("db", "SQL_QUERY TABLE EMPTY 2")
+				--YRP.msg("db", "YRP_SQL_QUERY TABLE EMPTY 2")
 				return false
 			else
-				YRP.msg("db", "SQL_QUERY TABLE MISSING (" .. tostring(_test) .. ")")
+				YRP.msg("db", "YRP_SQL_QUERY TABLE MISSING (" .. tostring(_test) .. ")")
 
 				return false
 			end
@@ -217,18 +208,18 @@ function SQL_QUERY(query)
 	end
 end
 
-function SQL_DROP_TABLE(db_table)
-	local _result = SQL_QUERY("DROP TABLE " .. db_table .. ";")
+function YRP_SQL_DROP_TABLE(db_table)
+	local _result = YRP_SQL_QUERY("DROP TABLE " .. db_table .. ";")
 
 	if _result != nil then
-		YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_DROP_TABLE " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
+		YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_DROP_TABLE " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. ")")
 		sql_show_last_error()
 	else
 		YRP.msg("db", "DROPPED " .. tostring(db_table) .. " TABLE")
 	end
 end
 
-function SQL_CREATE_TABLE(db_table)
+function YRP_SQL_CREATE_TABLE(db_table)
 	YRP.msg("db", "Create Table (" .. tostring(db_table) .. ")")
 
 	if GetSQLMode() == 0 then
@@ -237,7 +228,7 @@ function SQL_CREATE_TABLE(db_table)
 		_q = _q .. "uniqueID		INTEGER				 PRIMARY KEY autoincrement"
 		_q = _q .. ")"
 		_q = _q .. ";"
-		local _result = SQL_QUERY(_q)
+		local _result = YRP_SQL_QUERY(_q)
 
 		return _result
 	elseif GetSQLMode() == 1 then
@@ -246,14 +237,14 @@ function SQL_CREATE_TABLE(db_table)
 		_q = _q .. "uniqueID		INTEGER				 PRIMARY KEY AUTO_INCREMENT"
 		_q = _q .. ")"
 		_q = _q .. ";"
-		local _result = SQL_QUERY(_q)
+		local _result = YRP_SQL_QUERY(_q)
 
 		return _result
 	end
 end
 
-function SQL_SELECT(db_table, db_columns, db_where, db_extra)
-	--YRP.msg("db", "SQL_SELECT(" .. tostring(db_table) .. ", " .. tostring(db_columns) .. ", " .. tostring(db_where) .. ")")
+function YRP_SQL_SELECT(db_table, db_columns, db_where, db_extra)
+	--YRP.msg("db", "YRP_SQL_SELECT(" .. tostring(db_table) .. ", " .. tostring(db_columns) .. ", " .. tostring(db_where) .. ")")
 	if GetSQLMode() == 0 then
 		local _q = "SELECT "
 		_q = _q .. db_columns
@@ -270,7 +261,7 @@ function SQL_SELECT(db_table, db_columns, db_where, db_extra)
 		
 		_q = _q .. ";"
 
-		return SQL_QUERY(_q)
+		return YRP_SQL_QUERY(_q)
 	elseif GetSQLMode() == 1 then
 		local _q = "SELECT "
 		_q = _q .. db_columns
@@ -287,21 +278,21 @@ function SQL_SELECT(db_table, db_columns, db_where, db_extra)
 
 		_q = _q .. ";"
 
-		return SQL_QUERY(_q)
+		return YRP_SQL_QUERY(_q)
 	end
 end
 
-function SQL_UPDATE(db_table, db_sets, db_where)
-	--YRP.msg("db", "SQL_UPDATE(" .. tostring(db_table) .. ", " .. tostring(db_sets) .. ", " .. tostring(db_where) .. ")")
+function YRP_SQL_UPDATE(db_table, db_sets, db_where)
+	--YRP.msg("db", "YRP_SQL_UPDATE(" .. tostring(db_table) .. ", " .. tostring(db_sets) .. ", " .. tostring(db_where) .. ")")
 	local c = 0
 	if type(db_sets) == "string" then
-		YRP.msg( "error", "[SQL_UPDATE] FAIL: db_table " .. db_table .. " db_sets " .. db_sets .. " db_where " .. db_where )
+		YRP.msg( "error", "[YRP_SQL_UPDATE] FAIL: db_table " .. db_table .. " db_sets " .. db_sets .. " db_where " .. db_where )
 		return
 	end
 	local tmp = {}
 	for i, v in pairs(db_sets) do
 		c = c + 1
-		tmp[c] = i .. " = " .. SQL_STR_IN( v )
+		tmp[c] = i .. " = " .. YRP_SQL_STR_IN( v )
 	end
 	local sets = table.concat( tmp, ", " )
 
@@ -317,10 +308,10 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 
 		_q = _q .. ";"
 
-		local ret = SQL_QUERY(_q)
+		local ret = YRP_SQL_QUERY(_q)
 
 		if ret != nil then
-			YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. " lastError: " .. sql_show_last_error())
+			YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. " lastError: " .. sql_show_last_error())
 		end
 
 		return ret
@@ -336,18 +327,18 @@ function SQL_UPDATE(db_table, db_sets, db_where)
 
 		_q = _q .. ";"
 
-		return SQL_QUERY(_q)
+		return YRP_SQL_QUERY(_q)
 	end
 end
 
-function OLD_SQL_UPDATE(db_table, db_sets, db_where)
-	--YRP.msg("db", "SQL_UPDATE(" .. tostring(db_table) .. ", " .. tostring(db_sets) .. ", " .. tostring(db_where) .. ")")
+function OLD_YRP_SQL_UPDATE(db_table, db_sets, db_where)
+	--YRP.msg("db", "YRP_SQL_UPDATE(" .. tostring(db_table) .. ", " .. tostring(db_sets) .. ", " .. tostring(db_where) .. ")")
 	local tmp = {}
 	for i, v in pairs(string.Explode(", ", db_sets)) do
 		v = string.Replace(v, "'", "")
 		v = string.Replace(v, " = ", "=")
 		v = string.Explode("=", v)
-		tmp[i] = v[1] .. "=" .. SQL_STR_IN( v[2], v[1] )
+		tmp[i] = v[1] .. "=" .. YRP_SQL_STR_IN( v[2], v[1] )
 	end
 	db_sets = table.concat( tmp, "," )
 
@@ -363,10 +354,10 @@ function OLD_SQL_UPDATE(db_table, db_sets, db_where)
 
 		_q = _q .. ";"
 
-		--[[local ret = SQL_QUERY(_q)
+		--[[local ret = YRP_SQL_QUERY(_q)
 
 		if ret != nil then
-			YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. " lastError: " .. sql_show_last_error())
+			YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. " lastError: " .. sql_show_last_error())
 		end
 
 		return ret]]
@@ -382,14 +373,14 @@ function OLD_SQL_UPDATE(db_table, db_sets, db_where)
 
 		_q = _q .. ";"
 
-		return SQL_QUERY(_q)
+		return YRP_SQL_QUERY(_q)
 	end
 end
 
-function SQL_INSERT_INTO(db_table, db_columns, db_values)
-	YRP.msg("debug", "SQL_INSERT_INTO(" .. tostring(db_table) .. " | " .. tostring(db_columns) .. " | " .. tostring(db_values) .. ")")
+function YRP_SQL_INSERT_INTO(db_table, db_columns, db_values)
+	YRP.msg("debug", "YRP_SQL_INSERT_INTO(" .. tostring(db_table) .. " | " .. tostring(db_columns) .. " | " .. tostring(db_values) .. ")")
 	if GetSQLMode() == 0 then
-		if SQL_TABLE_EXISTS(db_table) then
+		if YRP_SQL_TABLE_EXISTS(db_table) then
 			local _q = "INSERT INTO "
 			_q = _q .. db_table
 			_q = _q .. " ("
@@ -398,16 +389,16 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 			_q = _q .. db_values
 			_q = _q .. ");"
 
-			local _result = SQL_QUERY(_q)
+			local _result = YRP_SQL_QUERY(_q)
 
 			if _result != nil then
-				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+				YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 
 			return _result
 		end
 	elseif GetSQLMode() == 1 then
-		if SQL_TABLE_EXISTS(db_table) then
+		if YRP_SQL_TABLE_EXISTS(db_table) then
 			local _q = "INSERT INTO "
 			_q = _q .. db_table
 			_q = _q .. " ("
@@ -415,10 +406,10 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 			_q = _q .. ") VALUES ("
 			_q = _q .. db_values
 			_q = _q .. ");"
-			local _result = SQL_QUERY(_q)
+			local _result = YRP_SQL_QUERY(_q)
 
 			if _result != nil then
-				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+				YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 			return _result
 
@@ -452,7 +443,7 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 						val = string.sub(db_values, 1, _e - 1)
 						db_values = string.sub(db_values, _e + 1)
 					else
-						YRP.msg("note", "[SQL_INSERT_INTO] ELSE")
+						YRP.msg("note", "[YRP_SQL_INSERT_INTO] ELSE")
 					end
 				elseif value != nil then
 					db_values = string.sub(db_values, value + 1)
@@ -485,10 +476,10 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 			_q = _q .. ") VALUES ("
 			_q = _q .. db_values
 			_q = _q .. ");"
-			local _result = SQL_QUERY(_q)
+			local _result = YRP_SQL_QUERY(_q)
 
 			if _result != nil then
-				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO: has failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(_q))
+				YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO: has failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(_q))
 			end
 
 			return _result]]
@@ -496,27 +487,27 @@ function SQL_INSERT_INTO(db_table, db_columns, db_values)
 	end
 end
 
-function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
-	--YRP.msg("db", "SQL_INSERT_INTO_DEFAULTVALUES(" .. tostring(db_table) .. ")")
+function YRP_SQL_INSERT_INTO_DEFAULTVALUES(db_table)
+	--YRP.msg("db", "YRP_SQL_INSERT_INTO_DEFAULTVALUES(" .. tostring(db_table) .. ")")
 	if GetSQLMode() == 0 then
-		if SQL_TABLE_EXISTS(db_table) then
+		if YRP_SQL_TABLE_EXISTS(db_table) then
 			local _q = "INSERT INTO "
 			_q = _q .. db_table
 			_q = _q .. " DEFAULT VALUES;"
-			local _result = SQL_QUERY(_q)
+			local _result = YRP_SQL_QUERY(_q)
 
 			if _result != nil then
-				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+				YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 
 			return _result
 		end
 	elseif GetSQLMode() == 1 then
-		if SQL_TABLE_EXISTS(db_table) then
-			local _result = SQL_QUERY("INSERT INTO " .. db_table .. " VALUES();")
+		if YRP_SQL_TABLE_EXISTS(db_table) then
+			local _result = YRP_SQL_QUERY("INSERT INTO " .. db_table .. " VALUES();")
 
 			if _result != nil then
-				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_INSERT_INTO_DEFAULTVALUES failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+				YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO_DEFAULTVALUES failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 
 			return _result
@@ -524,9 +515,9 @@ function SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 	end
 end
 
-function SQL_DELETE_FROM(db_table, db_where)
+function YRP_SQL_DELETE_FROM(db_table, db_where)
 	if GetSQLMode() == 0 then
-		if SQL_TABLE_EXISTS(db_table) then
+		if YRP_SQL_TABLE_EXISTS(db_table) then
 			local _q = "DELETE FROM "
 			_q = _q .. db_table
 
@@ -536,14 +527,14 @@ function SQL_DELETE_FROM(db_table, db_where)
 				_q = _q .. ";"
 			end
 
-			local _result = SQL_QUERY(_q)
+			local _result = YRP_SQL_QUERY(_q)
 
 			if _result != nil then
-				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
+				YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error())
 			end
 		end
 	elseif GetSQLMode() == 1 then
-		if SQL_TABLE_EXISTS(db_table) then
+		if YRP_SQL_TABLE_EXISTS(db_table) then
 			local _q = "DELETE FROM "
 			_q = _q .. db_table
 
@@ -553,19 +544,19 @@ function SQL_DELETE_FROM(db_table, db_where)
 				_q = _q .. ";"
 			end
 
-			local _result = SQL_QUERY(_q)
+			local _result = YRP_SQL_QUERY(_q)
 
 			if _result != nil then
-				YRP.msg("error", GetSQLModeName() .. ": " .. "SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result))
+				YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result))
 			end
 		end
 	end
 end
 
-function SQL_CHECK_IF_COLUMN_EXISTS(db_table, column_name)
-	--YRP.msg("db", "SQL_CHECK_IF_COLUMN_EXISTS(" .. tostring(db_table) .. ", " .. tostring(column_name) .. ")")
+function YRP_SQL_CHECK_IF_COLUMN_EXISTS(db_table, column_name)
+	--YRP.msg("db", "YRP_SQL_CHECK_IF_COLUMN_EXISTS(" .. tostring(db_table) .. ", " .. tostring(column_name) .. ")")
 	if GetSQLMode() == 0 then
-		local _result = SQL_SELECT(db_table, column_name, nil)
+		local _result = YRP_SQL_SELECT(db_table, column_name, nil)
 
 		if _result == false then
 			return false
@@ -573,7 +564,7 @@ function SQL_CHECK_IF_COLUMN_EXISTS(db_table, column_name)
 			return true
 		end
 	elseif GetSQLMode() == 1 then
-		local _result = SQL_SELECT(db_table, column_name, nil)
+		local _result = YRP_SQL_SELECT(db_table, column_name, nil)
 
 		if _result == false then
 			return false
@@ -583,15 +574,15 @@ function SQL_CHECK_IF_COLUMN_EXISTS(db_table, column_name)
 	end
 end
 
-function SQL_HAS_COLUMN(db_table, column_name)
-	local _r = SQL_QUERY("SHOW COLUMNS FROM " .. YRPSQL.schema .. "." .. tostring(db_table) .. " LIKE '" .. column_name .. "';")
+function YRP_SQL_HAS_COLUMN(db_table, column_name)
+	local _r = YRP_SQL_QUERY("SHOW COLUMNS FROM " .. YRPSQL.schema .. "." .. tostring(db_table) .. " LIKE '" .. column_name .. "';")
 	return _r
 end
 
-function SQL_ADD_COLUMN(db_table, column_name, datatype)
+function YRP_SQL_ADD_COLUMN(db_table, column_name, datatype)
 	if GetSQLMode() == 0 then
 		local _q = "ALTER TABLE " .. db_table .. " ADD " .. column_name .. " " .. datatype .. ";"
-		local _r = SQL_QUERY(_q)
+		local _r = YRP_SQL_QUERY(_q)
 
 		return _r
 	elseif GetSQLMode() == 1 then
@@ -599,12 +590,12 @@ function SQL_ADD_COLUMN(db_table, column_name, datatype)
 			datatype = string.Replace(datatype, "TEXT", "VARCHAR(255)")
 		end
 		local _r = nil
-		if !SQL_HAS_COLUMN(db_table, column_name) then
+		if !YRP_SQL_HAS_COLUMN(db_table, column_name) then
 			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring(db_table) .. " ADD " .. column_name .. " " .. datatype .. ";" -- FAST
-			_r = SQL_QUERY(_q)
+			_r = YRP_SQL_QUERY(_q)
 		else
 			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring(db_table) .. " CHANGE " .. column_name .. " " .. column_name .. " " .. datatype .. ";" -- SLOW
-			_r = SQL_QUERY(_q)
+			_r = YRP_SQL_QUERY(_q)
 		end
 
 		return _r
@@ -660,7 +651,7 @@ if SERVER then
 				SetSQLMode(1)
 			end
 
-			--SQL_QUERY("SET @@global.sql_mode='MYSQL40'")
+			--YRP_SQL_QUERY("SET @@global.sql_mode='MYSQL40'")
 			YRPSQL.db.onConnectionFailed = function(db, serr)
 				YRP.msg("note", ">>> CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!")
 				YRP.msg("error", "[MYSQL onConnectionFailed] " .. tostring(serr))
@@ -698,23 +689,23 @@ function YRPTryRepairDatabase()
 	end)
 end
 
-function SQL_INIT_DATABASE(db_name)
-	--YRP.msg("db", "SQL_INIT_DATABASE(" .. tostring(db_name) .. ")")
+function YRP_SQL_INIT_DATABASE(db_name)
+	--YRP.msg("db", "YRP_SQL_INIT_DATABASE(" .. tostring(db_name) .. ")")
 
 	if GetSQLMode() == 0 then
-		if !SQL_TABLE_EXISTS(db_name) then
-			local _result = SQL_CREATE_TABLE(db_name)
+		if !YRP_SQL_TABLE_EXISTS(db_name) then
+			local _result = YRP_SQL_CREATE_TABLE(db_name)
 
-			if !SQL_TABLE_EXISTS(db_name) then
+			if !YRP_SQL_TABLE_EXISTS(db_name) then
 				YRP.msg("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " (table not exists) lastError: " .. sql_show_last_error())
 				YRPTryRepairDatabase(db_name)
 			end
 		end
 	elseif GetSQLMode() == 1 then
-		if !SQL_TABLE_EXISTS(db_name) then
-			local _result = SQL_CREATE_TABLE(db_name)
+		if !YRP_SQL_TABLE_EXISTS(db_name) then
+			local _result = YRP_SQL_CREATE_TABLE(db_name)
 
-			if !SQL_TABLE_EXISTS(db_name) then
+			if !YRP_SQL_TABLE_EXISTS(db_name) then
 				YRP.msg("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " fail")
 				sql_show_last_error()
 				YRPTryRepairDatabase(db_name)

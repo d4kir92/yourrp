@@ -991,15 +991,17 @@ _icons["ug"] = Material("icon16/group_key.png")
 _icons["ms"] = Material("icon16/lightning.png")
 _icons["le"] = Material("icon16/layers.png")
 
-function Debug3DText(ply, str, pos, color)
+function YRPDebug3DText(ply, str, pos, color)
 	local _tw, _th = surface.GetTextSize(str)
-	local yaw = LocalPlayer():GetAngles().y
-	cam.Start3D2D(pos + Vector(0, 0, _th), Angle(0, yaw - 90, 90), 1)
-		surface.SetFont("Y_22_500")
-		_tw = math.Round(_tw * 1.08, 0)
-		_th = _th
-		surfaceText(str, "Y_22_500", 0, _th / 2 + 1, color, 1, 1)
-	cam.End3D2D()
+	if _tw and _th then
+		local yaw = LocalPlayer():GetAngles().y
+		cam.Start3D2D(pos + Vector(0, 0, _th), Angle(0, yaw - 90, 90), 1)
+			surface.SetFont("Y_22_500")
+			_tw = math.Round(_tw * 1.08, 0)
+			_th = _th
+			surfaceText(str, "Y_22_500", 0, _th / 2 + 1, color, 1, 1)
+		cam.End3D2D()
+	end
 end
 
 function drawPlates()
@@ -1034,7 +1036,7 @@ function drawPlates()
 
 			render.DrawSphere(ply:GetPos(), GetGlobalInt("int_voice_max_range", 1), 16, 16, col)
 			render.DrawWireframeSphere(ply:GetPos(), GetGlobalInt("int_voice_max_range", 1), 16, 16, col, true)
-			Debug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
+			YRPDebug3DText(ply, "Max Voice Range", ply:GetPos() + Vector(0, 0, GetGlobalInt("int_voice_max_range", 1)), Color(255, 100, 100, 200))
 		end
 
 		if LocalPlayer():GetPos():Distance(ply:GetPos()) < renderdist and ply:Alive() and !ply:InVehicle() then
@@ -1427,7 +1429,7 @@ function YRPReplaceKEYs(str)
 	local tmpstr = string.Explode( " ", str )
 	for i, v in pairs(tmpstr) do
 		if string.StartWith( string.lower( v ), "menu_" ) then
-			tmpstr[i] = GetKeybindName( get_keybind( v ) )
+			tmpstr[i] = YRPGetKeybindName( YRPGetKeybind( v ) )
 		end
 	end
 	return table.concat( tmpstr, " " )
@@ -1921,7 +1923,7 @@ function YRPCreateLoadingInfo( ti, rti )
 			if !strEmpty(text) then
 				text = text .. spacer
 			end
-			text = text .. "YRPReadyHook: " .. tostring( YRPReadyHook ) .. " HookExists: " .. tostring( hook.GetTable()["InitPostEntity"]["yrp_InitPostEntity_ISREADY"] )
+			text = text .. "YRPReadyHook: " .. tostring( YRPReadyHook )
 			text = text .. " YRPReadyStuck: " .. table.concat( YRPReadyStuck, ", " ) .. " Counter: " .. tostring( YRPReadyStuckCounter )
 			text = text .. " received_ready: " .. tostring( lply:GetNW2Bool( "yrp_received_ready" ) ) .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
 		end
@@ -2194,6 +2196,18 @@ if pa(yrp_loading_screen) then
 					self.discord:SetText( "If you are stuck here, please click me" )
 					function self.discord:DoClick()
 						gui.OpenURL("https://discord.gg/mxDMPMXGy8")
+					end
+				end
+			end
+		end
+
+		if self.t > 0 and self.rt > 90 or self.rt >= 100 then
+			if self.closeloading == nil then
+				self.closeloading = createD( "DButton", self, 300, 60, ScrW() / 2 - 300 / 2, ScrH() * 0.9 )
+				self.closeloading:SetText( "Close Loading" )
+				function self.closeloading:DoClick()
+					if pa( yrp_loading_screen ) then
+						yrp_loading_screen:Close()
 					end
 				end
 			end

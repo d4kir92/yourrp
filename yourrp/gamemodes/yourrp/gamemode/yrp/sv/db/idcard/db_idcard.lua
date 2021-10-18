@@ -5,22 +5,22 @@
 
 local DATABASE_NAME = "yrp_idcard"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
 
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
 end
 
-if SQL_SELECT(DATABASE_NAME, "*", "name = 'int_background_x'") != nil then
-	SQL_UPDATE(DATABASE_NAME, {["value"] = 0}, "name = 'int_background_x'")
-	SQL_UPDATE(DATABASE_NAME, {["value"] = 0}, "name = 'int_background_y'")
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'int_background_x'") != nil then
+	YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = 0}, "name = 'int_background_x'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = 0}, "name = 'int_background_y'")
 else
-	SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_x', '0'")
-	SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_y', '0'")
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_x', '0'")
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_y', '0'")
 end
 
---SQL_DROP_TABLE(DATABASE_NAME)
+--YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
 local elements = {
 	"background",
@@ -78,7 +78,7 @@ function LoadIDCardSetting(force, from)
 	for i, ele in pairs(elements) do
 		for j, name in pairs(names) do
 			name = string.Replace(name, "ELEMENT", ele)
-			local value = SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'")
+			local value = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'")
 			if wk(value) then
 				-- FOUND DATABASE VALUE
 				value = value[1]
@@ -104,38 +104,38 @@ function LoadIDCardSetting(force, from)
 						elseif string.StartWith(n, "int_") and GetGlobalInt(n, v) ~= v then
 							SetGlobalInt(n, v)
 						end
-						SQL_UPDATE(DATABASE_NAME, {["value"] = v}, "name = '" .. n .. "'")
+						YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = v}, "name = '" .. n .. "'")
 						LoadIDCardSetting(true, "UPDATED VARIABLE")
 					end)
 				end
 			else
 				-- Missed DB Value, add them
 				if string.StartWith(name, "bool_") then
-					SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
+					YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
 					missing = true
 				elseif string.StartWith(name, "int_") then
 					if string.EndsWith(name, "_r") then
-						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
+						YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
 					elseif string.EndsWith(name, "_g") then
-						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
+						YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
 					elseif string.EndsWith(name, "_b") then
-						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
+						YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
 					elseif string.EndsWith(name, "_a") then
-						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
+						YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '255'")
 					elseif string.EndsWith(name, "_ax") then
-						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
+						YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
 					elseif string.EndsWith(name, "_ay") then
-						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
+						YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
 					elseif string.EndsWith(name, "_colortype") then
-						SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
+						YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '1'")
 					elseif string.EndsWith(name, "_x") then
 						if i > 1 then
-							SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. cx * 180 .. "'")
+							YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. cx * 180 .. "'")
 							cx = cx + 1
 						end
 					elseif string.EndsWith(name, "_y") then
 						if i > 1 then
-							SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. 600 + cy * 180 .. "'")
+							YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. 600 + cy * 180 .. "'")
 							if cx > 9 then
 								cx = 0
 								cy = cy + 1
@@ -144,14 +144,14 @@ function LoadIDCardSetting(force, from)
 					else
 						if string.find(name, "background") then
 							if string.EndsWith(name, "_w") then
-								SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '600'")
+								YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '600'")
 							elseif string.EndsWith(name, "_h") then
-								SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '400'")
+								YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '400'")
 							else
-								SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '160'")
+								YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '160'")
 							end
 						else
-							SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '160'")
+							YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '160'")
 						end
 					end
 					missing = true
@@ -162,30 +162,30 @@ function LoadIDCardSetting(force, from)
 		end
 	end
 
-	local tab = SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ax'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ax'")
 	if wk(tab) then
 		for i, v in pairs(tab) do
 			v.value = tonumber(v.value)
 			if v.value > 2 then
-				SQL_UPDATE(DATABASE_NAME, {["value"] = 1}, "name = '" .. v.name .. "'")
+				YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = 1}, "name = '" .. v.name .. "'")
 			end
 		end
 	end
-	local tab2 = SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ay'")
+	local tab2 = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ay'")
 	if wk(tab2) then
 		for i, v in pairs(tab2) do
 			v.value = tonumber(v.value)
 			if v.value > 2 then
-				SQL_UPDATE(DATABASE_NAME, {["value"] = 1}, "name = '" .. v.name .. "'")
+				YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = 1}, "name = '" .. v.name .. "'")
 			end
 		end
 	end
-	local tab3 = SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_colortype'")
+	local tab3 = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_colortype'")
 	if wk(tab3) then
 		for i, v in pairs(tab3) do
 			v.value = tonumber(v.value)
 			if v.value > 5 then -- 1 CustomColor, 2 FactionColor, 3 GroupColor, 4 RoleColor, 5 UserGroupColor
-				SQL_UPDATE(DATABASE_NAME, {["value"] = 1}, "name = '" .. v.name .. "'")
+				YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = 1}, "name = '" .. v.name .. "'")
 			end
 		end
 	end

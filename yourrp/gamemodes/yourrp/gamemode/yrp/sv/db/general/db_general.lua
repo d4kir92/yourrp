@@ -5,265 +5,262 @@
 
 local DATABASE_NAME = "yrp_general"
 
---db_drop_table(DATABASE_NAME)
---db_is_empty(DATABASE_NAME)
-
 --[[ Server Settings ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "int_version", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_version", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_reload_notification", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_reload", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_reload_notification", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_reload", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_model", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_stealth", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_tags", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_effect", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_noclip_mdl", "TEXT DEFAULT 'models/crow.mdl'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_model", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_stealth", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_tags", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_effect", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_noclip_mdl", "TEXT DEFAULT 'models/crow.mdl'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_server_collectionid", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_server_collectionid", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_community_servers", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_community_servers", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_server_name", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_server_logo", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_server_name", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_server_logo", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_server_rules", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_server_rules", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_server_welcome_message", "TEXT DEFAULT 'Welcome'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_server_message_of_the_day", "TEXT DEFAULT 'Today'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_server_welcome_message", "TEXT DEFAULT 'Welcome'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_server_message_of_the_day", "TEXT DEFAULT 'Today'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug_voice", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug_voice", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_gm", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_db", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_noti", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_lang", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_darkrp", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_chat", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_debug", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_gm", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_db", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_noti", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_lang", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_darkrp", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_chat", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_debug", "INT DEFAULT 0")
 
 
 
 --[[ Gamemode Settings ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "text_gamemode_name", "TEXT DEFAULT 'YourRP'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_gamemode_name", "TEXT DEFAULT 'YourRP'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_graffiti_disabled", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_suicide_disabled", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_team_color", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_graffiti_disabled", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_suicide_disabled", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_team_color", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_antipropkill", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_items_on_death", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_items_role", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_antipropkill", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_items_on_death", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_items_role", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_need_to_introduce", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_drop_weapons", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_start_with_default_role", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_need_to_introduce", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_drop_weapons", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_start_with_default_role", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_dealers_can_take_damage", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_dealers_can_take_damage", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirdperson", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_view_distance", "TEXT DEFAULT '200'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirdperson", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_view_distance", "TEXT DEFAULT '200'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_ooc", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_looc", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_role", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_group", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_yell", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_service", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_ooc", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_looc", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_role", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_group", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_yell", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_chat_service", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_removebuildingowner", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_removebuildingownercharswitch", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_removebuildingownertime", "TEXT DEFAULT '600'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removebuildingowner", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removebuildingownercharswitch", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_removebuildingownertime", "TEXT DEFAULT '600'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_ttlsweps", "INT DEFAULT 60")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_ttlsweps", "INT DEFAULT 60")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_afkkicktime", "INT DEFAULT 300")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_afkkicktime", "INT DEFAULT 300")
 
 
 
 --[[ Gamemode Systems ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_onlywhencook", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger_health_regeneration", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_hunger_health_regeneration_tickrate", "TEXT DEFAULT '10'")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirst", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_permille", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_stamina", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_radiation", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_onlywhencook", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger_health_regeneration", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_hunger_health_regeneration_tickrate", "TEXT DEFAULT '10'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirst", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_permille", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_stamina", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_radiation", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_identity_card", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_map_system", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_character_system", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_building_system", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_inventory_system", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_appearance_system", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_smartphone_system", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic_system", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_level_system", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_weapon_system", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_weapon_system_model", "TEXT DEFAULT 'models/items/ammocrate_smg1.mdl'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_identity_card", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_map_system", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_character_system", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_building_system", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_inventory_system", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_appearance_system", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_smartphone_system", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic_system", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_level_system", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_weapon_system", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_weapon_system_model", "TEXT DEFAULT 'models/items/ammocrate_smg1.mdl'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_switch_faction", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_switch_role", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_die_on_role_switch", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_switch_faction", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_switch_role", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_die_on_role_switch", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_wanted_system", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_wanted_system", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_module", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_module_locally", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_module", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_module_locally", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_max_range", "INT DEFAULT 900")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_max_range", "INT DEFAULT 900")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_gmod_voice_module", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_gmod_voice_module", "INT DEFAULT 0")
 
 
 
 
 --[[ Gamemode Visuals ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_combined_menu", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_role_menu", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_help_menu", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_buy_menu", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_char_menu", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_keybinds_menu", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_tickets_menu", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_combined_menu", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_role_menu", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_help_menu", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_buy_menu", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_char_menu", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_keybinds_menu", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_tickets_menu", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_character_background", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_loading_background", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_character_design", "TEXT DEFAULT 'Default'")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_name", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_rolename", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_factionname", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_groupname", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_usergroup", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_yrp_chat_range_local", "INT DEFAULT 400")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D!D-!D!D!D!D'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_idcard_background", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_idcardid", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_show_securitylevel", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_character_background", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_loading_background", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_character_design", "TEXT DEFAULT 'Default'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_name", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_rolename", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_factionname", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_groupname", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_usergroup", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_yrp_chat_range_local", "INT DEFAULT 400")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D!D-!D!D!D!D'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_idcard_background", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat_show_idcardid", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_show_securitylevel", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_play_button", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_play_button", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_showowner", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_showowner", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_crosshair", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_crosshair", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_hud", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_hud_swaying", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_hud", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_hud_swaying", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_yrp_scoreboard_style", "TEXT DEFAULT 'simple'")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_name", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_rolename", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_factionname", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_groupname", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_level", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_usergroup", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_language", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_country", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_frags", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_deaths", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_playtime", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_operating_system", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_idcardid", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_yrp_scoreboard_style", "TEXT DEFAULT 'simple'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_name", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_rolename", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_factionname", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_groupname", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_level", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_usergroup", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_language", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_country", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_frags", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_deaths", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_playtime", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_operating_system", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_scoreboard_show_idcardid", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_target", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_clan", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_idcardid", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_target", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_clan", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_idcardid", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name_onlyfaction", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name_onlygroup", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name_onlyrole", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name_onlyfaction", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name_onlygroup", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_name_onlyrole", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_level", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_rolename", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_factionname", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_groupname", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_health", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_armor", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_usergroup", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_target_forced", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_voice", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_chat", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_level", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_rolename", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_factionname", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_groupname", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_health", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_armor", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_usergroup", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_target_forced", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_voice", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_head_chat", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_target", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_name", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_idcardid", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_clan", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_level", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_rolename", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_factionname", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_groupname", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_health", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_armor", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_usergroup", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_target", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_name", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_idcardid", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_clan", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_level", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_rolename", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_factionname", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_groupname", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_health", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_armor", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_usergroup", "INT DEFAULT 1")
 
 
 
 --[[ Money Settings ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_money_on_death", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_money_max_amount_of_dropped_money", "TEXT DEFAULT '1000'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pre", "TEXT DEFAULT '$'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pos", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_money_model", "TEXT DEFAULT 'models/props/cs_assault/money.mdl'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_money_on_death", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_money_max_amount_of_dropped_money", "TEXT DEFAULT '1000'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pre", "TEXT DEFAULT '$'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pos", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_money_model", "TEXT DEFAULT 'models/props/cs_assault/money.mdl'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_money_printer_spawn_money", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_money_printer_spawn_money", "INT DEFAULT 1")
 
 
 
 --[[ Characters Settings ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "text_characters_money_start", "TEXT DEFAULT '500'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_characters_money_start", "TEXT DEFAULT '500'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_changeable_name", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_changeable_name", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_removeondeath", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_removeondeath", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_birthday", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_bodyheight", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_weight", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_birthday", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_bodyheight", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_weight", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_min", "INT DEFAULT 6")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_max", "INT DEFAULT 30")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_min", "INT DEFAULT 6")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_max", "INT DEFAULT 30")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_spawncorpseondeath", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_deathscreen", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_spawncorpseondeath", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_deathscreen", "INT DEFAULT 1")
 
 --[[ Social Settings ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_forum", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord_widgetid", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_ip", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_port", "TEXT DEFAULT '9987'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_query_port", "TEXT DEFAULT '10011'")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitch", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitter", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_facebook", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_instagram", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_youtube", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_social_steamgroup", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_website", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_forum", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_discord_widgetid", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_ip", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_port", "TEXT DEFAULT '9987'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_teamspeak_query_port", "TEXT DEFAULT '10011'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitch", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_twitter", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_facebook", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_instagram", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_youtube", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_social_steamgroup", "TEXT DEFAULT ''")
 
 --[[ SCALE ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_hunger", "TEXT DEFAULT '1.0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_thirst", "TEXT DEFAULT '1.5'")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_up", "TEXT DEFAULT '1.0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_down", "TEXT DEFAULT '1.0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_in", "TEXT DEFAULT '50.0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_out", "TEXT DEFAULT '8.0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_jump", "TEXT DEFAULT '30.0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_hunger", "TEXT DEFAULT '1.0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_thirst", "TEXT DEFAULT '1.5'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_up", "TEXT DEFAULT '1.0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_down", "TEXT DEFAULT '1.0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_in", "TEXT DEFAULT '50.0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_radiation_out", "TEXT DEFAULT '8.0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_jump", "TEXT DEFAULT '30.0'")
 
 -- VOICE
-SQL_ADD_COLUMN(DATABASE_NAME, "int_max_channels_active", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_max_channels_passive", "INT DEFAULT 3")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_max_channels_active", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_max_channels_passive", "INT DEFAULT 3")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_whitelist_countries", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_whitelist_countries", "TEXT DEFAULT ''")
 
 local HANDLER_GENERAL = {}
 
@@ -282,7 +279,7 @@ net.Receive("Connect_Settings_General", function(len, ply)
 	if ply:CanAccess("bool_general") then
 		AddToHandler_General(ply)
 
-		local _yrp_general = SQL_SELECT(DATABASE_NAME, "*", nil)
+		local _yrp_general = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 		if wk(_yrp_general) then
 			_yrp_general = _yrp_general[1]
 		else
@@ -303,11 +300,11 @@ end)
 
 local yrp_general = {}
 
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
-	SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
+	YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 end
 
-local _init_general = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+local _init_general = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if wk(_init_general) then
 	yrp_general = _init_general[1]
 
@@ -450,7 +447,7 @@ function SetYRPCollectionID(cid)
 	if cid > 0 then
 		YRP.msg("db", "SetYRPCollectionID(" .. cid .. ")")
 		yrp_general.text_server_collectionid = cid
-		SQL_UPDATE(DATABASE_NAME, {["text_server_collectionid"] = cid}, "uniqueID = '1'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["text_server_collectionid"] = cid}, "uniqueID = '1'")
 
 		--IsServerInfoOutdated()
 	end
@@ -484,7 +481,7 @@ end
 
 function GeneralUpdateValue(ply, netstr, str, value)
 	yrp_general[str] = value
-	SQL_UPDATE(DATABASE_NAME, {[str] = yrp_general[str]}, "uniqueID = '1'") -- str .. " = '" .. yrp_general[str] .. "'"
+	YRP_SQL_UPDATE(DATABASE_NAME, {[str] = yrp_general[str]}, "uniqueID = '1'") -- str .. " = '" .. yrp_general[str] .. "'"
 	GeneralSendToOther(ply, netstr, yrp_general[str])
 end
 
@@ -520,7 +517,7 @@ end
 
 function GeneralUpdateGlobalValue(ply, netstr, str, value)
 	yrp_general[str] = value
-	SQL_UPDATE(DATABASE_NAME, {[str] = yrp_general[str]}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {[str] = yrp_general[str]}, "uniqueID = '1'")
 	GeneralSendToOther(ply, netstr, yrp_general[str])
 end
 
@@ -800,12 +797,6 @@ util.AddNetworkString("update_bool_chat_service")
 net.Receive("update_bool_chat_service", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_chat_service", "bool_chat_service", b)
-end)
-
-util.AddNetworkString("update_text_chat_advert")
-net.Receive("update_text_chat_advert", function(len, ply)
-	local str = net.ReadString()
-	GeneralUpdateString(ply, "update_text_chat_advert", "text_chat_advert", str)
 end)
 
 util.AddNetworkString("update_bool_removebuildingowner")
@@ -1741,7 +1732,7 @@ end
 
 util.AddNetworkString("gethelpmenu")
 net.Receive("gethelpmenu", function(len, ply)
-	local info = SQL_SELECT("yrp_general", "*", "uniqueID = '1'")
+	local info = YRP_SQL_SELECT("yrp_general", "*", "uniqueID = '1'")
 	if wk(info) then
 		info = info[1]
 
@@ -1789,7 +1780,7 @@ end)
 
 util.AddNetworkString("getsiteserverrules")
 net.Receive("getsiteserverrules", function(len, ply)
-	local server_rules = SQL_SELECT("yrp_general", "text_server_rules", "uniqueID = '1'")
+	local server_rules = YRP_SQL_SELECT("yrp_general", "text_server_rules", "uniqueID = '1'")
 	if wk(server_rules) then
 		server_rules = server_rules[1].text_server_rules
 	else
@@ -1802,7 +1793,7 @@ end)
 
 util.AddNetworkString("getsitecollection")
 net.Receive("getsitecollection", function(len, ply)
-	local collectionid = SQL_SELECT("yrp_general", "text_server_collectionid", "uniqueID = '1'")
+	local collectionid = YRP_SQL_SELECT("yrp_general", "text_server_collectionid", "uniqueID = '1'")
 	if wk(collectionid) then
 		collectionid = collectionid[1].text_server_collectionid
 	else
@@ -1815,7 +1806,7 @@ end)
 
 util.AddNetworkString("getsitecommunitywebsite")
 net.Receive("getsitecommunitywebsite", function(len, ply)
-	local link = SQL_SELECT("yrp_general", "text_social_website", "uniqueID = '1'")
+	local link = YRP_SQL_SELECT("yrp_general", "text_social_website", "uniqueID = '1'")
 	if wk(link) then
 		link = link[1].text_social_website
 	else
@@ -1828,7 +1819,7 @@ end)
 
 util.AddNetworkString("getsitecommunityforum")
 net.Receive("getsitecommunityforum", function(len, ply)
-	local link = SQL_SELECT("yrp_general", "text_social_forum", "uniqueID = '1'")
+	local link = YRP_SQL_SELECT("yrp_general", "text_social_forum", "uniqueID = '1'")
 	if wk(link) then
 		link = link[1].text_social_forum
 	else
@@ -1841,7 +1832,7 @@ end)
 
 util.AddNetworkString("getsitecommunitydiscord")
 net.Receive("getsitecommunitydiscord", function(len, ply)
-	local sql_select = SQL_SELECT("yrp_general", "text_social_discord, text_social_discord_widgetid", "uniqueID = '1'")
+	local sql_select = YRP_SQL_SELECT("yrp_general", "text_social_discord, text_social_discord_widgetid", "uniqueID = '1'")
 	local link = ""
 	local widgetid = ""
 	if wk(link) then
@@ -1856,7 +1847,7 @@ end)
 
 util.AddNetworkString("getsitecommunityteamspeak")
 net.Receive("getsitecommunityteamspeak", function(len, ply)
-	local sql_select = SQL_SELECT("yrp_general", "text_social_teamspeak_ip, text_social_teamspeak_port, text_social_teamspeak_query_port", "uniqueID = '1'")
+	local sql_select = YRP_SQL_SELECT("yrp_general", "text_social_teamspeak_ip, text_social_teamspeak_port, text_social_teamspeak_query_port", "uniqueID = '1'")
 	local ip = ""
 	local port = ""
 	local query_port = ""
@@ -1874,7 +1865,7 @@ end)
 
 util.AddNetworkString("getsitecommunitytwitter")
 net.Receive("getsitecommunitytwitter", function(len, ply)
-	local link = SQL_SELECT("yrp_general", "text_social_twitter", "uniqueID = '1'")
+	local link = YRP_SQL_SELECT("yrp_general", "text_social_twitter", "uniqueID = '1'")
 	if wk(link) then
 		link = link[1].text_social_twitter
 	else
@@ -1887,7 +1878,7 @@ end)
 
 util.AddNetworkString("getsitecommunityyoutube")
 net.Receive("getsitecommunityyoutube", function(len, ply)
-	local link = SQL_SELECT("yrp_general", "text_social_youtube", "uniqueID = '1'")
+	local link = YRP_SQL_SELECT("yrp_general", "text_social_youtube", "uniqueID = '1'")
 	if wk(link) then
 		link = link[1].text_social_youtube
 	else
@@ -1900,7 +1891,7 @@ end)
 
 util.AddNetworkString("getsitecommunityfacebook")
 net.Receive("getsitecommunityfacebook", function(len, ply)
-	local link = SQL_SELECT("yrp_general", "text_social_facebook", "uniqueID = '1'")
+	local link = YRP_SQL_SELECT("yrp_general", "text_social_facebook", "uniqueID = '1'")
 	if wk(link) then
 		link = link[1].text_social_facebook
 	else
@@ -1913,7 +1904,7 @@ end)
 
 util.AddNetworkString("getsitecommunitysteamgroup")
 net.Receive("getsitecommunitysteamgroup", function(len, ply)
-	local link = SQL_SELECT("yrp_general", "text_social_steamgroup", "uniqueID = '1'")
+	local link = YRP_SQL_SELECT("yrp_general", "text_social_steamgroup", "uniqueID = '1'")
 	if wk(link) then
 		link = link[1].text_social_steamgroup
 	else
@@ -1957,7 +1948,7 @@ net.Receive("dbUpdate", function(len, ply)
 	local _dbTable = net.ReadString()
 	local _dbSets = net.ReadString()
 	local _dbWhile = net.ReadString()
-	local _result = SQL_UPDATE(_dbTable, _dbSets, _dbWhile)
+	local _result = YRP_SQL_UPDATE(_dbTable, _dbSets, _dbWhile)
 	local _usergroup_ = string.Explode(" ", _dbWhile)
 	local _restriction_ = string.Explode(" ", _dbSets)
 	YRP.msg("note", "[OLD DBUPDATE] " .. ply:SteamName() .. " SETS " .. _dbSets .. " WHERE " .. _dbWhile)
@@ -2215,7 +2206,7 @@ function YRPFixDatabase(tab, name, c)
 	if wk(tab) then
 		for id, value in pairs(tab) do
 			if type(value) == "string" then
-				SQL_UPDATE(name, {[id] = SQL_STR_OUT( value )}, "" .. id .. " = '" .. value .. "'")
+				YRP_SQL_UPDATE(name, {[id] = YRP_SQL_STR_OUT( value )}, "" .. id .. " = '" .. value .. "'")
 			elseif type(value) == "table" then
 				YRPFixDatabase(value, name, c + 1)
 			end
@@ -2225,23 +2216,23 @@ end
 
 local fixonce = true
 function YRPRepairSQLDB(force) -- Remove %01 - %XX
-	local version = SQL_SELECT(DATABASE_NAME, "int_version", "uniqueID = '1'")
+	local version = YRP_SQL_SELECT(DATABASE_NAME, "int_version", "uniqueID = '1'")
 	if wk(version) then
 		version = tonumber(version[1].int_version)
 		if (version <= 1 or force) and fixonce then
 			fixonce = false
-			local alltables = SQL_QUERY("SELECT * FROM sqlite_master WHERE type='table';")
+			local alltables = YRP_SQL_QUERY("SELECT * FROM sqlite_master WHERE type='table';")
 			MsgC(Color(0, 255, 0), ">>> REPAIR YourRP DB, START <<<" .. "\n")
 			for i, v in pairs(alltables) do
 				if string.StartWith(v.name, "yrp_") then
 					MsgC(Color(0, 255, 0), "> FIX DB: " .. v.name .. "\n")
-					local tab = SQL_SELECT(v.name, "*", nil)
+					local tab = YRP_SQL_SELECT(v.name, "*", nil)
 					YRPFixDatabase(tab, v.name)
 				end
 			end
 			MsgC(Color(0, 255, 0), ">>> REPAIR YourRP DB, DONE <<<" .. "\n")
 
-			SQL_UPDATE(DATABASE_NAME, {["int_version"] = 2}, "uniqueID = '1'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_version"] = 2}, "uniqueID = '1'")
 		end
 	end
 end

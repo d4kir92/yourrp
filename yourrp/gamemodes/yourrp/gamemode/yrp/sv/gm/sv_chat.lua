@@ -553,7 +553,7 @@ timer.Simple(4, function() -- must be last hook
 
 
 		-- Channels
-		local tab = SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. channel .. "'")
+		local tab = YRP_SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. channel .. "'")
 		if wk(tab) then
 			tab = tab[1]
 
@@ -566,7 +566,7 @@ timer.Simple(4, function() -- must be last hook
 			local pk2 = YRPChatReplaceCMDS(structure2, sender, text)
 
 			if channel != "HELP" and !strEmpty(text) then
-				SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', " .. SQL_STR_IN(text) .. "")
+				YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', " .. YRP_SQL_STR_IN(text) .. "")
 			end
 			
 			if !tobool(tab.bool_enabled) then

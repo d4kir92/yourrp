@@ -5,7 +5,7 @@ function GM:PlayerDisconnected(ply)
 	YRP.msg("gm", "[PlayerDisconnected] " .. ply:YRPName())
 	save_clients("PlayerDisconnected")
 
-	SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "disconnected" .. "'")
+	YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "disconnected" .. "'")
 
 	local _rol_tab = ply:YRPGetRoleTable()
 	if wk(_rol_tab) then
@@ -179,7 +179,7 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	end
 
 	if IsVoidCharEnabled() or GetGlobalBool("bool_character_system", true) == false then
-		local chars = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
+		local chars = YRP_SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 		if !wk(chars) then
 			local tab = {}
 			tab.roleID = 1
@@ -417,7 +417,7 @@ hook.Add("PlayerDeath", "yrp_stars_playerdeath", function(victim, inflictor, att
 	YRPDoUnRagdoll(ply)
 
 	if GetGlobalBool("bool_characters_removeondeath", false) then
-		local test = SQL_UPDATE("yrp_characters", {["bool_archived"] = 1}, "uniqueID = '" .. victim:CharID() .. "'")
+		local test = YRP_SQL_UPDATE("yrp_characters", {["bool_archived"] = 1}, "uniqueID = '" .. victim:CharID() .. "'")
 		victim:SetNW2Bool("yrp_chararchived", true)
 	end
 end)
@@ -507,11 +507,11 @@ function PLAYER:AddPlayTime(force)
 		if self.yrp_ts_oldchar then -- ADD TIME FOR OLD CHAR
 			local playtime = os.time() - self:GetNW2Int("ts_spawned", os.time())
 			
-			local tab = SQL_SELECT("yrp_characters", "uniqueID, text_playtime", "uniqueID = '" .. self.yrp_ts_oldchar .. "'")
+			local tab = YRP_SQL_SELECT("yrp_characters", "uniqueID, text_playtime", "uniqueID = '" .. self.yrp_ts_oldchar .. "'")
 			if wk(tab) then
 				local oldplaytime = tab[1].text_playtime
 				
-				SQL_UPDATE("yrp_characters", {["text_playtime"] = oldplaytime + playtime}, "uniqueID = '" .. self.yrp_ts_oldchar .. "'")
+				YRP_SQL_UPDATE("yrp_characters", {["text_playtime"] = oldplaytime + playtime}, "uniqueID = '" .. self.yrp_ts_oldchar .. "'")
 			end
 		end
 
@@ -584,7 +584,7 @@ end
 
 hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attacker, dmg)
 	if attacker.SteamID64 and ply.SteamID64 then
-		SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value",	"'" .. os.time() .. "' ,'LID_kills', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmg:GetDamage() .. "'")
+		YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value",	"'" .. os.time() .. "' ,'LID_kills', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmg:GetDamage() .. "'")
 	end
 
 	--YRP.msg("gm", "[DoPlayerDeath] " .. tostring(ply:YRPName()) .. " do death.")
@@ -862,9 +862,9 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 			local damage = dmginfo:GetDamage()
 			damage = math.Round(damage, 2)
 			if attacker:IsPlayer() then
-				SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmginfo:GetDamage() .. "'")
+				YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmginfo:GetDamage() .. "'")
 			else
-				SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID64() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'")	
+				YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID64() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'")	
 			end
 		end
 	end
@@ -926,31 +926,31 @@ end)
 -- VOICE CHANNELS
 local DATABASE_NAME = "yrp_voice_channels"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_hear", "INTEGER DEFAULT '0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hear", "INTEGER DEFAULT '0'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_mode", "TEXT DEFAULT '0'") -- 0 = Normal, 1 = Global
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_mode", "TEXT DEFAULT '0'") -- 0 = Normal, 1 = Global
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT '0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT '0'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_active_usergroups", "TEXT DEFAULT 'superadmin,user'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_active_groups", "TEXT DEFAULT '1'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_active_roles", "TEXT DEFAULT '1'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_usergroups", "TEXT DEFAULT 'superadmin,user'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_groups", "TEXT DEFAULT '1'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_roles", "TEXT DEFAULT '1'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_usergroups", "TEXT DEFAULT 'superadmin,user'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_groups", "TEXT DEFAULT '1'")
-SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_roles", "TEXT DEFAULT '1'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_usergroups", "TEXT DEFAULT 'superadmin,user'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_groups", "TEXT DEFAULT '1'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_roles", "TEXT DEFAULT '1'")
 
---SQL_DROP_TABLE(DATABASE_NAME)
+--YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
 local yrp_voice_channels = {}
-if SQL_SELECT(DATABASE_NAME, "*") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_hear, string_mode, string_active_usergroups, string_passive_usergroups", "'DEFAULT', '1', '0', 'superadmin, admin, user', 'superadmin, admin, user'")
+if YRP_SQL_SELECT(DATABASE_NAME, "*") == nil then
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_hear, string_mode, string_active_usergroups, string_passive_usergroups", "'DEFAULT', '1', '0', 'superadmin, admin, user', 'superadmin, admin, user'")
 end
 
 function GenerateVoiceTable()
 	yrp_voice_channels = {}
-	local channels = SQL_SELECT(DATABASE_NAME, "*")
+	local channels = YRP_SQL_SELECT(DATABASE_NAME, "*")
 	if wk(channels) then
 		for i, channel in pairs(channels) do
 			yrp_voice_channels[tonumber(channel.uniqueID)] = {}
@@ -1046,7 +1046,7 @@ GenerateVoiceTable()
 
 util.AddNetworkString("yrp_vm_get_active_usergroups")
 net.Receive("yrp_vm_get_active_usergroups", function(len, ply)
-	local ugs = SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
+	local ugs = YRP_SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
 	if wk(ugs) then
 		net.Start("yrp_vm_get_active_usergroups")
 			net.WriteTable(ugs)
@@ -1056,7 +1056,7 @@ end)
 
 util.AddNetworkString("yrp_vm_get_active_groups")
 net.Receive("yrp_vm_get_active_groups", function(len, ply)
-	local grps = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
+	local grps = YRP_SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
 	if wk(grps) then
 		net.Start("yrp_vm_get_active_groups")
 			net.WriteTable(grps)
@@ -1066,7 +1066,7 @@ end)
 
 util.AddNetworkString("yrp_vm_get_active_roles")
 net.Receive("yrp_vm_get_active_roles", function(len, ply)
-	local rols = SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
+	local rols = YRP_SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
 	if wk(rols) then
 		net.Start("yrp_vm_get_active_roles")
 			net.WriteTable(rols)
@@ -1076,7 +1076,7 @@ end)
 
 util.AddNetworkString("yrp_vm_get_passive_usergroups")
 net.Receive("yrp_vm_get_passive_usergroups", function(len, ply)
-	local ugs = SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
+	local ugs = YRP_SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
 	if wk(ugs) then
 		net.Start("yrp_vm_get_passive_usergroups")
 			net.WriteTable(ugs)
@@ -1086,7 +1086,7 @@ end)
 
 util.AddNetworkString("yrp_vm_get_passive_groups")
 net.Receive("yrp_vm_get_passive_groups", function(len, ply)
-	local grps = SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
+	local grps = YRP_SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
 	if wk(grps) then
 		net.Start("yrp_vm_get_passive_groups")
 			net.WriteTable(grps)
@@ -1096,7 +1096,7 @@ end)
 
 util.AddNetworkString("yrp_vm_get_passive_roles")
 net.Receive("yrp_vm_get_passive_roles", function(len, ply)
-	local rols = SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
+	local rols = YRP_SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
 	if wk(rols) then
 		net.Start("yrp_vm_get_passive_roles")
 			net.WriteTable(rols)
@@ -1117,7 +1117,7 @@ net.Receive("yrp_voice_channel_add", function(len, ply)
 	local pgrps = table.concat(net.ReadTable(), ",")
 	local prols = table.concat(net.ReadTable(), ",")
 
-	SQL_INSERT_INTO(
+	YRP_SQL_INSERT_INTO(
 		DATABASE_NAME,
 		"string_name, int_hear, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles, int_position",
 		"'" .. name .. "', '" .. hear .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols	.. "', '" .. table.Count(GetGlobalTable("yrp_voice_channels", {})) .. "'"
@@ -1129,7 +1129,7 @@ net.Receive("yrp_voice_channel_add", function(len, ply)
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
 		channel.int_position = tonumber(channel.int_position)
 		if channel.int_position != c then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
 		end
 
 		c = c + 1
@@ -1153,7 +1153,7 @@ net.Receive("yrp_voice_channel_save", function(len, ply)
 
 	local uid = net.ReadString()
 	
-	SQL_UPDATE(DATABASE_NAME, {
+	YRP_SQL_UPDATE(DATABASE_NAME, {
 		["string_name"] 				= name,
 		["int_hear"] 					= hear,
 		["string_active_usergroups"] 	= augs,
@@ -1171,7 +1171,7 @@ util.AddNetworkString("yrp_voice_channel_rem")
 net.Receive("yrp_voice_channel_rem", function(len, ply)
 	local uid = net.ReadString()
 
-	SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
+	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 
 	GenerateVoiceTable()
 	
@@ -1179,7 +1179,7 @@ net.Receive("yrp_voice_channel_rem", function(len, ply)
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
 		channel.int_position = tonumber(channel.int_position)
 		if channel.int_position != c then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
 		end
 
 		c = c + 1
@@ -1199,11 +1199,11 @@ net.Receive("channel_up", function(len, ply)
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
 		channel.int_position = tonumber(channel.int_position)
 		if c == int_position then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c - 1}, "uniqueID = '" .. channel.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c - 1}, "uniqueID = '" .. channel.uniqueID .. "'")
 		elseif c == int_position - 1 then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c + 1}, "uniqueID = '" .. channel.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c + 1}, "uniqueID = '" .. channel.uniqueID .. "'")
 		elseif channel.int_position != c then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
 		end
 
 		c = c + 1
@@ -1228,11 +1228,11 @@ net.Receive("channel_dn", function(len, ply)
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position") do
 		channel.int_position = tonumber(channel.int_position)
 		if c == int_position then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c + 1}, "uniqueID = '" .. channel.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c + 1}, "uniqueID = '" .. channel.uniqueID .. "'")
 		elseif c == int_position + 1 then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c - 1}, "uniqueID = '" .. channel.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c - 1}, "uniqueID = '" .. channel.uniqueID .. "'")
 		elseif channel.int_position != c then
-			SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'")
 		end
 
 		c = c + 1
@@ -1412,14 +1412,14 @@ end)
 util.AddNetworkString("yrp_voice_set_max_active")
 net.Receive("yrp_voice_set_max_active", function(len, ply)
 	local maxi = tonumber( net.ReadString() )
-	SQL_UPDATE("yrp_general", {["int_max_channels_active"] = maxi}, "uniqueID = '1'")
+	YRP_SQL_UPDATE("yrp_general", {["int_max_channels_active"] = maxi}, "uniqueID = '1'")
 	SetGlobalInt("int_max_channels_active", maxi)
 end)
 
 util.AddNetworkString("yrp_voice_set_max_passive")
 net.Receive("yrp_voice_set_max_passive", function(len, ply)
 	local maxi = tonumber( net.ReadString() )
-	SQL_UPDATE("yrp_general", {["int_max_channels_passive"] = maxi}, "uniqueID = '1'")
+	YRP_SQL_UPDATE("yrp_general", {["int_max_channels_passive"] = maxi}, "uniqueID = '1'")
 	SetGlobalInt("int_max_channels_passive", maxi)
 end)
 
@@ -1493,7 +1493,7 @@ function GM:PlayerSpray(ply)
 end
 
 function GM:PlayerSwitchFlashlight(pl, enabled)
-	local _tmp = SQL_SELECT("yrp_usergroups", "*", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
+	local _tmp = YRP_SQL_SELECT("yrp_usergroups", "*", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 	if wk(_tmp) then
 		_tmp = _tmp[1]
 		if tobool(_tmp.bool_flashlight) then

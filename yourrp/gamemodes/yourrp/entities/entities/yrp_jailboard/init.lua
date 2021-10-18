@@ -20,14 +20,14 @@ function ENT:Initialize()
 end
 
 function ENT:Use(activator, caller)
-	local tmpTable = SQL_SELECT("yrp_jail", "*", nil)
+	local tmpTable = YRP_SQL_SELECT("yrp_jail", "*", nil)
 
 	if !wk(tmpTable) then
 		tmpTable = {}
 	end
 
 	for i, v in pairs(tmpTable) do
-		local cells = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' and uniqueID = '" .. v.cell .. "'")
+		local cells = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' and uniqueID = '" .. v.cell .. "'")
 		if wk(cells) then
 			cells = cells[1]
 			v.cellname = cells.name
@@ -49,7 +49,7 @@ util.AddNetworkString("jail")
 net.Receive("jail", function(len, ply)
 	local target = net.ReadEntity()
 
-	local jail = SQL_SELECT("yrp_jail", "*", "SteamID = '" .. target:SteamID() .. "'")
+	local jail = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. target:SteamID() .. "'")
 	if wk(jail) then
 		jail = jail[1]
 		local tim = jail.time or 2*60
@@ -61,7 +61,7 @@ util.AddNetworkString("unjail")
 net.Receive("unjail", function(len, ply)
 	local target = net.ReadEntity()
 
-	SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. target:SteamID() .. "'")
+	YRP_SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. target:SteamID() .. "'")
 
 	teleportToReleasepoint(target)
 end)

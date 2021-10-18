@@ -5,24 +5,24 @@
 
 local DATABASE_NAME = "yrp_levelsystem"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_level_min", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_level_max", "INT DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_level_start", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_for_levelup", "INT DEFAULT 100")
-SQL_ADD_COLUMN(DATABASE_NAME, "float_multiplier", "TEXT DEFAULT '1.5'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level_min", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level_max", "INT DEFAULT 100")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level_start", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_for_levelup", "INT DEFAULT 100")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_multiplier", "TEXT DEFAULT '1.5'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_kill", "TEXT DEFAULT '20'")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_minute", "TEXT DEFAULT '10'")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_revive", "TEXT DEFAULT '30'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_kill", "TEXT DEFAULT '20'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_minute", "TEXT DEFAULT '10'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_revive", "TEXT DEFAULT '30'")
 
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "'1'")
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "'1'")
 end
 
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:LevelSystemLoadout()
-	local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+	local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if wk(setting) then
 		setting = setting[1]
 		self:SetNW2String("int_level_min", setting.int_level_min)
@@ -34,7 +34,7 @@ util.AddNetworkString("get_levelsystem_settings")
 net.Receive("get_levelsystem_settings", function(len, ply)
 	if ply:CanAccess("bool_levelsystem") then
 
-		local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 		if wk(setting) then
 			setting = setting[1]
 			net.Start("get_levelsystem_settings")
@@ -44,7 +44,7 @@ net.Receive("get_levelsystem_settings", function(len, ply)
 	end
 end)
 
-local yrp_levelsystem = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+local yrp_levelsystem = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if wk(yrp_levelsystem) then
 	yrp_levelsystem = yrp_levelsystem[1]
 
@@ -56,31 +56,31 @@ end
 util.AddNetworkString("update_ls_int_level_min")
 net.Receive("update_ls_int_level_min", function(len, ply)
 	yrp_levelsystem.int_level_min = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["int_level_min"] = yrp_levelsystem.int_level_min}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_level_min"] = yrp_levelsystem.int_level_min}, "uniqueID = '1'")
 end)
 
 util.AddNetworkString("update_ls_int_level_max")
 net.Receive("update_ls_int_level_max", function(len, ply)
 	yrp_levelsystem.int_level_max = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["int_level_max"] = yrp_levelsystem.int_level_max}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_level_max"] = yrp_levelsystem.int_level_max}, "uniqueID = '1'")
 end)
 
 util.AddNetworkString("update_ls_int_level_start")
 net.Receive("update_ls_int_level_start", function(len, ply)
 	yrp_levelsystem.int_level_start = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["int_level_start"] = yrp_levelsystem.int_level_start}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_level_start"] = yrp_levelsystem.int_level_start}, "uniqueID = '1'")
 end)
 
 util.AddNetworkString("update_ls_float_multiplier")
 net.Receive("update_ls_float_multiplier", function(len, ply)
 	yrp_levelsystem.float_multiplier = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["float_multiplier"] = yrp_levelsystem.float_multiplier}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["float_multiplier"] = yrp_levelsystem.float_multiplier}, "uniqueID = '1'")
 end)
 
 util.AddNetworkString("update_ls_int_xp_for_levelup")
 net.Receive("update_ls_int_xp_for_levelup", function(len, ply)
 	yrp_levelsystem.int_xp_for_levelup = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["int_xp_for_levelup"] = yrp_levelsystem.int_xp_for_levelup}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_xp_for_levelup"] = yrp_levelsystem.int_xp_for_levelup}, "uniqueID = '1'")
 end)
 
 
@@ -88,25 +88,25 @@ end)
 util.AddNetworkString("update_ls_int_xp_per_kill")
 net.Receive("update_ls_int_xp_per_kill", function(len, ply)
 	yrp_levelsystem.int_xp_per_kill = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["int_xp_per_kill"] = yrp_levelsystem.int_xp_per_kill}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_xp_per_kill"] = yrp_levelsystem.int_xp_per_kill}, "uniqueID = '1'")
 end)
 
 util.AddNetworkString("update_ls_int_xp_per_minute")
 net.Receive("update_ls_int_xp_per_minute", function(len, ply)
 	yrp_levelsystem.int_xp_per_minute = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["int_xp_per_minute"] = yrp_levelsystem.int_xp_per_minute}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_xp_per_minute"] = yrp_levelsystem.int_xp_per_minute}, "uniqueID = '1'")
 end)
 
 util.AddNetworkString("update_ls_int_xp_per_revive")
 net.Receive("update_ls_int_xp_per_revive", function(len, ply)
 	yrp_levelsystem.int_xp_per_revive = net.ReadString()
-	SQL_UPDATE(DATABASE_NAME, {["int_xp_per_revive"] = yrp_levelsystem.int_xp_per_revive}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_xp_per_revive"] = yrp_levelsystem.int_xp_per_revive}, "uniqueID = '1'")
 end)
 
 function Player:ClearXP()
 	if !self:Alive() then return end
 	local charid = self:CharID()
-	local result = SQL_UPDATE("yrp_characters", {["int_xp"] = 0}, "uniqueID = '" .. charid .. "'")
+	local result = YRP_SQL_UPDATE("yrp_characters", {["int_xp"] = 0}, "uniqueID = '" .. charid .. "'")
 	if result != nil then
 		YRP.msg("note", "ClearXP FAILED #1: " .. tostring(result))
 	else
@@ -131,7 +131,7 @@ function Player:AddLevel(level)
 		local newlvl = curlvl + 1
 		if newlvl <= maxlvl then
 
-			local result = SQL_UPDATE("yrp_characters", {["int_level"] = newlvl}, "uniqueID = '" .. charid .. "'")
+			local result = YRP_SQL_UPDATE("yrp_characters", {["int_level"] = newlvl}, "uniqueID = '" .. charid .. "'")
 			if result != nil then
 				YRP.msg("error", "AddLevel FAILED #1: " .. tostring(result))
 			else
@@ -144,7 +144,7 @@ function Player:AddLevel(level)
 		local newlvl = curlvl - 1
 		if newlvl >= minlvl then
 
-			local result = SQL_UPDATE("yrp_characters", {["int_level"] = newlvl}, "uniqueID = '" .. charid .. "'")
+			local result = YRP_SQL_UPDATE("yrp_characters", {["int_level"] = newlvl}, "uniqueID = '" .. charid .. "'")
 			if result != nil then
 				YRP.msg("error", "AddLevel FAILED #2: " .. tostring(result))
 			else
@@ -163,9 +163,14 @@ function Player:SetLevel(level)
 end
 
 function Player:AddXP(xp)
-	if !self:Alive() then return end
+	if xp == nil then
+		return
+	end
+	if !self:Alive() then
+		return
+	end
 	xp = tonumber(xp)
-	local lvltab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+	local lvltab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	lvltab = lvltab[1]
 	local chatab = self:YRPGetCharacterTable()
 	local charid = self:CharID()
@@ -185,7 +190,7 @@ function Player:AddXP(xp)
 			if curlvl < maxlvl then
 				if newxp > maxxp then
 					newxp = newxp - maxxp
-					local result = SQL_UPDATE("yrp_characters", {["int_xp"] = 0}, "uniqueID = '" .. charid .. "'")
+					local result = YRP_SQL_UPDATE("yrp_characters", {["int_xp"] = 0}, "uniqueID = '" .. charid .. "'")
 					if result != nil then
 						YRP.msg("error", "AddXP FAILED #1: " .. tostring(result))
 					else
@@ -193,7 +198,7 @@ function Player:AddXP(xp)
 						self:AddXP(newxp)
 					end
 				else
-					local result = SQL_UPDATE("yrp_characters", {["int_xp"] = newxp}, "uniqueID = '" .. charid .. "'")
+					local result = YRP_SQL_UPDATE("yrp_characters", {["int_xp"] = newxp}, "uniqueID = '" .. charid .. "'")
 					if result != nil then
 						YRP.msg("error", "AddXP FAILED #2: " .. tostring(result))
 					else
@@ -203,7 +208,7 @@ function Player:AddXP(xp)
 			elseif curlvl > maxlvl then
 				self:SetLevel(maxlvl)
 			elseif newxp > maxxp then
-				local result = SQL_UPDATE("yrp_characters", {["int_xp"] = maxxp}, "uniqueID = '" .. charid .. "'")
+				local result = YRP_SQL_UPDATE("yrp_characters", {["int_xp"] = maxxp}, "uniqueID = '" .. charid .. "'")
 				if result != nil then
 					YRP.msg("error", "AddXP FAILED #5: " .. tostring(result))
 				else
@@ -219,7 +224,7 @@ function Player:AddXP(xp)
 					maxxp = math.Round(math.pow(lvl - 1, lvlmulti), 0) + xpforlvl
 					newxp = newxp + maxxp
 
-					local result = SQL_UPDATE("yrp_characters", {["int_xp"] = 0}, "uniqueID = '" .. charid .. "'")
+					local result = YRP_SQL_UPDATE("yrp_characters", {["int_xp"] = 0}, "uniqueID = '" .. charid .. "'")
 					if result != nil then
 						YRP.msg("error", "AddXP FAILED #3: " .. tostring(result))
 					else
@@ -227,7 +232,7 @@ function Player:AddXP(xp)
 						self:AddXP(newxp)
 					end
 				else
-					local result = SQL_UPDATE("yrp_characters", {["int_xp"] = newxp}, "uniqueID = '" .. charid .. "'")
+					local result = YRP_SQL_UPDATE("yrp_characters", {["int_xp"] = newxp}, "uniqueID = '" .. charid .. "'")
 					if result != nil then
 						YRP.msg("error", "AddXP FAILED #4: " .. tostring(result))
 					else
@@ -241,7 +246,7 @@ end
 
 hook.Add("PlayerDeath", "yrp_xp_playerdeath", function(victim, inflictor, attacker)
 	if attacker:IsPlayer() then
-		local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 		setting = setting[1]
 		attacker:AddXP(setting.int_xp_per_kill)
 	end
@@ -249,7 +254,7 @@ end)
 
 hook.Add("OnNPCKilled", "yrp_xp_onnpckilled", function(npc, attacker, inflictor)
 	if attacker:IsPlayer() then
-		local setting = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 		setting = setting[1]
 		attacker:AddXP(setting.int_xp_per_kill)
 	end

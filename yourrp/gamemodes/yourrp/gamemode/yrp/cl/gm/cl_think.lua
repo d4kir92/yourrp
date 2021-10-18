@@ -383,7 +383,7 @@ function KeyPress()
 		
 		if !vgui.CursorVisible() then
 
-			if get_keybind("view_switch") and input.IsKeyDown(get_keybind("view_switch")) then
+			if YRPGetKeybind("view_switch") and input.IsKeyDown(YRPGetKeybind("view_switch")) then
 				--[[ When toggle view ]]--
 				if _view_delay then
 					_view_delay = false
@@ -410,7 +410,7 @@ function KeyPress()
 					lply.yrp_view_range = lply.yrp_view_range + lply.yrp_view_range_view / 16
 				else
 
-					if get_keybind("view_zoom_out") and input.IsKeyDown(get_keybind("view_zoom_out")) then
+					if YRPGetKeybind("view_zoom_out") and input.IsKeyDown(YRPGetKeybind("view_zoom_out")) then
 						done_tutorial("tut_vo", 5)
 
 						lply.yrp_view_range_view = lply.yrp_view_range_view + 1
@@ -419,7 +419,7 @@ function KeyPress()
 							lply.yrp_view_range_view = tonumber(GetGlobalString("text_view_distance", "200"))
 						end
 						lply.yrp_view_range_old = lply.yrp_view_range_view
-					elseif get_keybind("view_zoom_in") and input.IsKeyDown(get_keybind("view_zoom_in")) then
+					elseif YRPGetKeybind("view_zoom_in") and input.IsKeyDown(YRPGetKeybind("view_zoom_in")) then
 						done_tutorial("tut_vi", 5)
 
 						lply.yrp_view_range_view = lply.yrp_view_range_view - 1
@@ -434,9 +434,9 @@ function KeyPress()
 			end
 
 			--[[ Up and down ]]--
-			if get_keybind("view_up") and input.IsKeyDown(get_keybind("view_up")) then
+			if YRPGetKeybind("view_up") and input.IsKeyDown(YRPGetKeybind("view_up")) then
 				lply.yrp_view_z_c = lply.yrp_view_z_c + 0.1
-			elseif get_keybind("view_down") and input.IsKeyDown(get_keybind("view_down")) then
+			elseif YRPGetKeybind("view_down") and input.IsKeyDown(YRPGetKeybind("view_down")) then
 				lply.yrp_view_z_c = lply.yrp_view_z_c - 0.1
 			end
 			if tonumber(lply.yrp_view_z_c) > 100 then
@@ -451,9 +451,9 @@ function KeyPress()
 			end
 
 			--[[ Left and right ]]--
-			if get_keybind("view_right") and input.IsKeyDown(get_keybind("view_right")) then
+			if YRPGetKeybind("view_right") and input.IsKeyDown(YRPGetKeybind("view_right")) then
 				lply.yrp_view_x_c = lply.yrp_view_x_c + 0.1
-			elseif get_keybind("view_left") and input.IsKeyDown(get_keybind("view_left")) then
+			elseif YRPGetKeybind("view_left") and input.IsKeyDown(YRPGetKeybind("view_left")) then
 				lply.yrp_view_x_c = lply.yrp_view_x_c - 0.1
 			end
 			if tonumber(lply.yrp_view_x_c) > 300 then
@@ -468,9 +468,9 @@ function KeyPress()
 			end
 
 			--[[ spin right and spin left ]]--
-			if get_keybind("view_spin_right") and input.IsKeyDown(get_keybind("view_spin_right")) then
+			if YRPGetKeybind("view_spin_right") and input.IsKeyDown(YRPGetKeybind("view_spin_right")) then
 				lply.yrp_view_s_c = lply.yrp_view_s_c + 0.4
-			elseif get_keybind("view_spin_left") and input.IsKeyDown(get_keybind("view_spin_left")) then
+			elseif YRPGetKeybind("view_spin_left") and input.IsKeyDown(YRPGetKeybind("view_spin_left")) then
 				lply.yrp_view_s_c = lply.yrp_view_s_c - 0.4
 			end
 			if tonumber(lply.yrp_view_s_c) > 360 or tonumber(lply.yrp_view_s_c) < -360 then
@@ -489,50 +489,50 @@ function KeyPress()
 	keyPressed(KEY_F1, "OpenHelpMenu")
 	keyPressed(KEY_F7, "openTicketMenu")
 
-	keyPressed(get_keybind("menu_char"), "openCharMenu")
-	keyPressed(get_keybind("menu_keybinds"), "openKeybindsMenu")
+	keyPressed(YRPGetKeybind("menu_char"), "openCharMenu")
+	keyPressed(YRPGetKeybind("menu_keybinds"), "openKeybindsMenu")
 
-	keyPressed(get_keybind("menu_emotes"), "ToggleEmotesMenu")
+	keyPressed(YRPGetKeybind("menu_emotes"), "ToggleEmotesMenu")
 
-	keyPressed(get_keybind("menu_laws"), "ToggleLawsMenu")
+	keyPressed(YRPGetKeybind("menu_laws"), "ToggleLawsMenu")
 
-	keyPressed(get_keybind("menu_settings"), "openSettings")
+	keyPressed(YRPGetKeybind("menu_settings"), "openSettings")
 
-	keyPressed(get_keybind("menu_inventory"), "openInventory")
-	keyPressed(get_keybind("menu_appearance"), "openAppearance")
+	keyPressed(YRPGetKeybind("menu_inventory"), "openInventory")
+	keyPressed(YRPGetKeybind("menu_appearance"), "openAppearance")
 
-	keyPressed(get_keybind("menu_character_selection"), "openCharacterMenu")
-	keyPressed(get_keybind("menu_role"), "OpenRoleMenu")
-	keyPressed(get_keybind("menu_buy"), "OpenBuyMenu")
+	keyPressed(YRPGetKeybind("menu_character_selection"), "openCharacterMenu")
+	keyPressed(YRPGetKeybind("menu_role"), "OpenRoleMenu")
+	keyPressed(YRPGetKeybind("menu_buy"), "OpenBuyMenu")
 
-	keyPressed(get_keybind("menu_interact"), "openInteractMenu", GetGlobalInt("int_door_distance", 200))
+	keyPressed(YRPGetKeybind("menu_interact"), "openInteractMenu", GetGlobalInt("int_door_distance", 200))
 
-	keyPressed(get_keybind("menu_options_door"), "openOptions", GetGlobalInt("int_door_distance", 200))
-	keyPressed(get_keybind("menu_options_vehicle"), "openOptions", GetGlobalInt("int_door_distance", 200))
+	keyPressed(YRPGetKeybind("menu_options_door"), "openOptions", GetGlobalInt("int_door_distance", 200))
+	keyPressed(YRPGetKeybind("menu_options_vehicle"), "openOptions", GetGlobalInt("int_door_distance", 200))
 
-	keyPressed(get_keybind("toggle_map"), "openMap")
+	keyPressed(YRPGetKeybind("toggle_map"), "openMap")
 
-	keyPressed(get_keybind("toggle_mouse"), "F11Toggle")
+	keyPressed(YRPGetKeybind("toggle_mouse"), "F11Toggle")
 
 	--keyPressed(KEY_PAGEUP, "vyes")
 	--keyPressed(KEY_PAGEDOWN, "vno")
 
-	keyPressed(get_keybind("drop_item"), "dropitem")
+	keyPressed(YRPGetKeybind("drop_item"), "dropitem")
 
 	keyPressed(KEY_UP, "openSP")
 	keyPressed(KEY_DOWN, "closeSP")
 
-	keyPressed(get_keybind("voice_mute"), "voice_mute")
-	keyPressed(get_keybind("voice_range_up"), "voice_range_up")
-	keyPressed(get_keybind("voice_range_dn"), "voice_range_dn")
-	keyPressed(get_keybind("voice_menu"), "voice_menu")
+	keyPressed(YRPGetKeybind("voice_mute"), "voice_mute")
+	keyPressed(YRPGetKeybind("voice_range_up"), "voice_range_up")
+	keyPressed(YRPGetKeybind("voice_range_dn"), "voice_range_dn")
+	keyPressed(YRPGetKeybind("voice_menu"), "voice_menu")
 
-	keyPressed(get_keybind("chat_menu"), "chat_menu")
+	keyPressed(YRPGetKeybind("chat_menu"), "chat_menu")
 
-	keyPressed(get_keybind("macro_menu"), "macro_menu")
+	keyPressed(YRPGetKeybind("macro_menu"), "macro_menu")
 	for i = 1, 49 do
-		if get_keybind("m_" .. i) != 0 then
-			keyPressed(get_keybind("m_" .. i), "m_" .. i)
+		if YRPGetKeybind("m_" .. i) != 0 then
+			keyPressed(YRPGetKeybind("m_" .. i), "m_" .. i)
 		end
 	end
 end

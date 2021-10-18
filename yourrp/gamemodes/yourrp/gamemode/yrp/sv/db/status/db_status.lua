@@ -56,9 +56,9 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 			_nw_yourrp["backgroundcharacter"]["Character Background is missing"] = Color(255, 255, 0)
 		end
 
-		local _roles = SQL_SELECT("yrp_ply_roles", "*", nil)
-		local _groups = SQL_SELECT("yrp_ply_groups", "*", nil)
-		local _map = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", nil)
+		local _roles = YRP_SQL_SELECT("yrp_ply_roles", "*", nil)
+		local _groups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
+		local _map = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", nil)
 		if wk(_roles) then
 			for i, role in pairs(_roles) do
 				if role.string_playermodels == "" or role.string_playermodels == " " then

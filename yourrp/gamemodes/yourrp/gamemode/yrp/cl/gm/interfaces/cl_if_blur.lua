@@ -59,7 +59,7 @@ hook.Add("YButtonPaint", "YButton_Blur", function(self, pw, ph, tab)
 	end
 end)
 
---[[hook.Add("YButtonAPaint", "YButtonA_Blur", function(self, pw, ph, tab)
+hook.Add("YButtonAPaint", "YButtonA_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
@@ -89,7 +89,7 @@ end)
 		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
-end)]]
+end)
 
 hook.Add("YButtonRPaint", "YButtonR_Blur", function(self, pw, ph, tab)
 	tab = tab or {}

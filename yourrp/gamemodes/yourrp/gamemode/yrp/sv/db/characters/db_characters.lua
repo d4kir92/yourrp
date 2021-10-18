@@ -5,73 +5,73 @@
 
 local DATABASE_NAME = "yrp_characters"
 
-SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT 'UNKNOWN'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT 'UNKNOWN'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "roleID", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "groupID", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "roleID", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "groupID", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_idstructure", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "text_idcardid", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_idstructure", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_idcardid", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "playermodelID", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "skin", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "playermodelID", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "skin", "INT DEFAULT 1")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "string_birthday", "TEXT DEFAULT '01.01.2000'")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_bodyheight", "INT DEFAULT 180")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_weight", "INT DEFAULT 80")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_birthday", "TEXT DEFAULT '01.01.2000'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_bodyheight", "INT DEFAULT 180")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_weight", "INT DEFAULT 80")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_eventchar", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_eventchar", "INT DEFAULT 0")
 
 --[[ LEVEL ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "int_level", "INT DEFAULT 1")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_xp", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp", "INT DEFAULT 0")
 
 for i = 0, 19 do
-	SQL_ADD_COLUMN(DATABASE_NAME, "bg" .. i, "INT DEFAULT 0")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bg" .. i, "INT DEFAULT 0")
 end
 
-SQL_ADD_COLUMN(DATABASE_NAME, "storage", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "storage", "TEXT DEFAULT ''")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "keynrs", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "rpname", "TEXT DEFAULT 'ID_RPNAME'")
-SQL_ADD_COLUMN(DATABASE_NAME, "rpdescription", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "money", "TEXT DEFAULT '250'")
-SQL_ADD_COLUMN(DATABASE_NAME, "moneybank", "TEXT DEFAULT '500'")
-SQL_ADD_COLUMN(DATABASE_NAME, "position", "TEXT DEFAULT '0,0,0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "angle", "TEXT DEFAULT '0,0,0'")
-SQL_ADD_COLUMN(DATABASE_NAME, "map", "TEXT DEFAULT 'gm_construct'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "keynrs", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "rpname", "TEXT DEFAULT 'ID_RPNAME'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "rpdescription", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "money", "TEXT DEFAULT '250'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "moneybank", "TEXT DEFAULT '500'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "position", "TEXT DEFAULT '0,0,0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "angle", "TEXT DEFAULT '0,0,0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "map", "TEXT DEFAULT 'gm_construct'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "int_warnings", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_violations", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_arrests", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_warnings", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_violations", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_arrests", "INT DEFAULT 0")
 
 -- ATTRIBUTES
-SQL_ADD_COLUMN(DATABASE_NAME, "int_strength", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_agility", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_stamina", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_intellect", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_spirit", "INT DEFAULT 0")
-SQL_ADD_COLUMN(DATABASE_NAME, "int_armor", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_strength", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_agility", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_stamina", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_intellect", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_spirit", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_armor", "INT DEFAULT 0")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "text_playtime", "TEXT DEFAULT '0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_playtime", "TEXT DEFAULT '0'")
 
 --[[ EQUIPMENT NEW ]]--
-SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "TEXT DEFAULT '0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "TEXT DEFAULT '0'")
 
-SQL_ADD_COLUMN(DATABASE_NAME, "bool_archived", "TEXT DEFAULT '0'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_archived", "TEXT DEFAULT '0'")
 
-if SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	local _result = SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "1")
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+	local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "1")
 end
 
 -- SLOTS
-SQL_ADD_COLUMN(DATABASE_NAME, "slot_primary", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "slot_secondary", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "slot_sidearm", "TEXT DEFAULT ''")
-SQL_ADD_COLUMN(DATABASE_NAME, "slot_gadget", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slot_primary", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slot_secondary", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slot_sidearm", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slot_gadget", "TEXT DEFAULT ''")
 
 -- Specs
-SQL_ADD_COLUMN(DATABASE_NAME, "string_specializations", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_specializations", "TEXT DEFAULT ''")
 
 function YRPUpdateCharSlot(ply, art, pri)
 	local tab = {}
@@ -82,7 +82,7 @@ function YRPUpdateCharSlot(ply, art, pri)
 	end
 
 	local sweps = table.concat( tab, "," )
-	SQL_UPDATE(DATABASE_NAME, {["slot_" .. art] = sweps}, "uniqueID = '" .. ply:CharID() .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["slot_" .. art] = sweps}, "uniqueID = '" .. ply:CharID() .. "'")
 
 	ply:SetNW2String("slot_" .. art, sweps)
 end
@@ -90,7 +90,7 @@ end
 function YRPGetCharSWEPS(ply)
 	local tab = {}
 
-	local dbtab = SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ply:CharID() .. "'")
+	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ply:CharID() .. "'")
 	if wk(dbtab) then
 		dbtab = dbtab[1]
 
@@ -116,7 +116,7 @@ net.Receive("yrp_get_sweps_role_art", function(len, ply)
 
 	local sweps = {}
 	for i, v in pairs(string.Explode(",", rolTab.string_sweps)) do
-		local tab = SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. v .. "'")
+		local tab = YRP_SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. v .. "'")
 		if wk(tab) then
 			tab = tab[1]
 			if tobool(tab["slot_" .. art]) then
@@ -126,17 +126,17 @@ net.Receive("yrp_get_sweps_role_art", function(len, ply)
 	end
 
 	local charid = ply:CharID()
-	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
 	if wk(tab) then
 		tab = tab[1]
 
 		for i, v in pairs( string.Explode(",", tab.string_specializations ) ) do
-			local tabSpec = SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
+			local tabSpec = YRP_SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
 			if wk(tabSpec) then
 				tabSpec = tabSpec[1]
 		
 				for i, v in pairs( string.Explode(",", tabSpec.sweps ) ) do
-					local tab = SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. v .. "'")
+					local tab = YRP_SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. v .. "'")
 					if wk(tab) then
 						tab = tab[1]
 						if tobool(tab["slot_" .. art]) then
@@ -192,12 +192,9 @@ net.Receive("yrp_slot_swep_rem", function(len, ply)
 	YRPUpdateCharSlot(ply, art, tab)
 end)
 
---db_drop_table(DATABASE_NAME)
---db_is_empty(DATABASE_NAME)
-
 function YRPSendCharCount(ply)
 	local count = 0
-	local result = SQL_SELECT(DATABASE_NAME, "*", "SteamID = '" .. ply:SteamID() .. "'")
+	local result = YRP_SQL_SELECT(DATABASE_NAME, "*", "SteamID = '" .. ply:SteamID() .. "'")
 	if wk(result) then
 		count = table.Count(result)
 	end
@@ -232,7 +229,7 @@ function Player:YRPCharacterLoadout()
 			self:SetNW2String("eqbag" .. i, chatab["eqbag" .. i])
 		end
 
-		local levelsystem = SQL_SELECT("yrp_levelsystem", "*", nil)
+		local levelsystem = YRP_SQL_SELECT("yrp_levelsystem", "*", nil)
 		if wk(levelsystem) then
 			levelsystem = levelsystem[1]
 			self:SetNW2String("int_xp_for_levelup", levelsystem.int_xp_for_levelup)
@@ -247,11 +244,11 @@ function Player:VisualEquipment(name, slot)
 	if self:HasCharacterSelected() then
 		local _charid = self:CharID()
 		if wk(_charid) then
-			local _uid = SQL_SELECT("yrp_characters", slot, "uniqueID = '" .. _charid .. "'")
+			local _uid = YRP_SQL_SELECT("yrp_characters", slot, "uniqueID = '" .. _charid .. "'")
 			if wk(_uid) then
 				_uid = _uid[1][slot]
 				if wk(_uid) then
-					local _item = SQL_SELECT("yrp_items", "*", "storageID = '" .. _uid .. "'")
+					local _item = YRP_SQL_SELECT("yrp_items", "*", "storageID = '" .. _uid .. "'")
 					if wk(_item) then
 						_item = _item[1]
 						local _model = _item.WorldModel
@@ -323,7 +320,7 @@ function Player:SetRPName(str, from)
 	if isstring(str) then
 		local oldname = self:Nick()
 		local newname = str
-		SQL_UPDATE("yrp_characters", {["rpname"] = newname}, "uniqueID = " .. self:CharID())
+		YRP_SQL_UPDATE("yrp_characters", {["rpname"] = newname}, "uniqueID = " .. self:CharID())
 
 		newname = newname
 		self:SetNW2String("rpname", newname)
@@ -340,7 +337,7 @@ net.Receive("update_backpack", function(len, ply)
 		if _bp != nil then
 			local _uid = _bp.intern_storageID
 
-			local _stor = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
+			local _stor = YRP_SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
 			if _stor != nil then
 				_stor = _stor[1]
 				net.Start("update_backpack")
@@ -362,13 +359,13 @@ util.AddNetworkString("update_slot_backpack")
 net.Receive("update_slot_backpack", function(len, ply)
 	if ea(ply) then
 		local _charid = ply:CharID()
-		local _uid = SQL_SELECT(DATABASE_NAME, "eqbp", "uniqueID = '" .. _charid .. "'")
+		local _uid = YRP_SQL_SELECT(DATABASE_NAME, "eqbp", "uniqueID = '" .. _charid .. "'")
 		if _uid != nil then
 			_uid = _uid[1].eqbp
-			local _backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
+			local _backpack_storage = YRP_SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _uid .. "'")
 			if _backpack_storage == nil then
 				_backpack_storage = CreateEquipmentStorage(ply, "eqbp", _charid, 1, 1)
-				_backpack_storage = SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'")
+				_backpack_storage = YRP_SQL_SELECT("yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'")
 			end
 			_backpack_storage = _backpack_storage[1]
 			net.Start("update_slot_backpack")
@@ -381,8 +378,8 @@ end)
 util.AddNetworkString("moneyreset")
 net.Receive("moneyreset", function(len, ply)
 	YRP.msg("db", "<[MONEY RESET]>")
-	SQL_UPDATE("yrp_characters", {["money"] = 0}, nil)
-	SQL_UPDATE("yrp_characters", {["moneybank"] = 0}, nil)
+	YRP_SQL_UPDATE("yrp_characters", {["money"] = 0}, nil)
+	YRP_SQL_UPDATE("yrp_characters", {["moneybank"] = 0}, nil)
 	for i, pl in pairs(player.GetAll()) do
 		pl:SetMoney(0)
 		pl:SetMoneyBank(0)
@@ -398,7 +395,7 @@ end)
 util.AddNetworkString("change_rpdescription")
 net.Receive("change_rpdescription", function(len, ply)
 	local _new_rp_description = net.ReadString()
-	SQL_UPDATE("yrp_characters", {["rpdescription"] = _new_rp_description}, "uniqueID = " .. ply:CharID())
+	YRP_SQL_UPDATE("yrp_characters", {["rpdescription"] = _new_rp_description}, "uniqueID = " .. ply:CharID())
 	ply:SetNW2String("rpdescription", _new_rp_description)
 	for i, v in pairs(string.Explode("\n", _new_rp_description)) do
 		ply:SetNW2String("rpdescription" .. i, v)
@@ -408,19 +405,19 @@ end)
 util.AddNetworkString("change_birthday")
 net.Receive("change_birthday", function(len, ply)
 	local _new_birthday = net.ReadString()
-	SQL_UPDATE("yrp_characters", {["string_birthday"] = _new_birthday}, "uniqueID = " .. ply:CharID())
+	YRP_SQL_UPDATE("yrp_characters", {["string_birthday"] = _new_birthday}, "uniqueID = " .. ply:CharID())
 	ply:SetNW2String("string_birthday", _new_birthday)
 end)
 util.AddNetworkString("change_bodyheight")
 net.Receive("change_bodyheight", function(len, ply)
 	local _new_bodyheight = net.ReadString()
-	SQL_UPDATE("yrp_characters", {["int_bodyheight"] = _new_bodyheight}, "uniqueID = " .. ply:CharID())
+	YRP_SQL_UPDATE("yrp_characters", {["int_bodyheight"] = _new_bodyheight}, "uniqueID = " .. ply:CharID())
 	ply:SetNW2Int("int_bodyheight", _new_bodyheight)
 end)
 util.AddNetworkString("change_weight")
 net.Receive("change_weight", function(len, ply)
 	local _new_weight = net.ReadString()
-	SQL_UPDATE("yrp_characters", {["int_weight"] = _new_weight}, "uniqueID = " .. ply:CharID())
+	YRP_SQL_UPDATE("yrp_characters", {["int_weight"] = _new_weight}, "uniqueID = " .. ply:CharID())
 	ply:SetNW2Int("int_weight", _new_weight)
 end)
 
@@ -430,14 +427,14 @@ util.AddNetworkString("YRPDeleteCharacter")
 util.AddNetworkString("YRPCreateCharacter")
 
 function GetPlayermodelsOfRole(ruid)
-	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(ruid) .. "'")
+	local role = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(ruid) .. "'")
 	if wk(role) then
 		role = role[1]
 		if role.string_playermodels then
 			local rpms = string.Explode(",", role.string_playermodels)
 			local tab = {}
 			for i, id in pairs(rpms) do
-				local tmppms = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
+				local tmppms = YRP_SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
 				if wk(tmppms) then
 					tmppms = tmppms[1]
 					tmppms = string.Explode(",", tmppms.string_models)
@@ -475,13 +472,13 @@ function GetPlayermodelsOfCharacter(ply, ruid)
 end
 
 function GetPMTableOfRole(ruid)
-	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(ruid) .. "'")
+	local role = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(ruid) .. "'")
 	if wk(role) then
 		role = role[1]
 		local rpms = string.Explode(",", role.string_playermodels)
 		local tab = {}
 		for i, id in pairs(rpms) do
-			local tmppms = SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
+			local tmppms = YRP_SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
 			if wk(tmppms) then
 				tmppms = tmppms[1]
 				for x, pm in pairs(string.Explode(",", tmppms.string_models)) do
@@ -566,7 +563,7 @@ function YRPSendCharacters(ply, from)
 
 	local netTable = {}
 
-	local chaTab = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
+	local chaTab = YRP_SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
 
 	local _charCount = 0
 	if wk(chaTab) then
@@ -586,12 +583,12 @@ function YRPSendCharacters(ply, from)
 				netTable[_charCount].faction.string_name = "INVALID FACTION"
 				netTable[_charCount].faction.string_icon = ""
 
-				local tmp = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(v.roleID))
+				local tmp = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(v.roleID))
 				if worked(tmp, "charGetCharacters role") then
 					tmp = tmp[1]
 					netTable[_charCount].role = tmp
 				else
-					local tmpDefault = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. "1")
+					local tmpDefault = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. "1")
 					if worked(tmpDefault, "charGetCharacters tmpDefault") then
 						tmpDefault = tmpDefault[1]
 						netTable[_charCount].role = tmpDefault
@@ -601,10 +598,10 @@ function YRPSendCharacters(ply, from)
 
 				netTable[_charCount].role.string_playermodels = GetPlayermodelsOfRole(v.roleID)
 
-				local tmp2 = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(v.roleID) .. "'")
+				local tmp2 = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(v.roleID) .. "'")
 				if tmp2 != nil and tmp2 != false then
 					tmp2 = tmp2[1]
-					local tmp3 = SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tonumber(tmp2.int_groupID) .. "'")
+					local tmp3 = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tonumber(tmp2.int_groupID) .. "'")
 					if worked(tmp3, "charGetCharacters group") then
 						tmp3 = tmp3[1]
 						netTable[_charCount].group = tmp3
@@ -641,17 +638,17 @@ net.Receive("YRPDeleteCharacter", function(len, ply)
 	local charID = net.ReadString()
 
 	if wk(charID) then
-		local result = SQL_DELETE_FROM("yrp_characters", "uniqueID = '" .. tonumber(charID) .. "'")
+		local result = YRP_SQL_DELETE_FROM("yrp_characters", "uniqueID = '" .. tonumber(charID) .. "'")
 		if result == nil then
 			YRP.msg("db", "DeleteCharacter: success"	)
 			ply:KillSilent()
 			local steamid = ply:SteamID()
 			if wk(steamid) then
-				local _first_character = SQL_SELECT("yrp_characters", "*", "SteamID = '" .. steamid .. "'")
+				local _first_character = YRP_SQL_SELECT("yrp_characters", "*", "SteamID = '" .. steamid .. "'")
 				if _first_character != nil then
 					_first_character = _first_character[1]
-					SQL_UPDATE("yrp_players", {["CurrentCharacter"] = tonumber(_first_character.uniqueID)}, "SteamID = '" .. steamid .. "'")
-					SQL_SELECT("yrp_players", "*", nil)
+					YRP_SQL_UPDATE("yrp_players", {["CurrentCharacter"] = tonumber(_first_character.uniqueID)}, "SteamID = '" .. steamid .. "'")
+					YRP_SQL_SELECT("yrp_players", "*", nil)
 				end
 			else
 				YRP.msg("error", "STEAMID FAILED => " .. tostring(steamid) .. " [" .. tostring(ply) .. "]")
@@ -665,7 +662,7 @@ net.Receive("YRPDeleteCharacter", function(len, ply)
 end)
 
 function YRPCreateCharacter(ply, tab)
-	local role = SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(tab.roleID))
+	local role = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(tab.roleID))
 	if wk(role) then
 		local steamid = ply:SteamID() or ply:UniqueID()
 		local cols = "SteamID, rpname, roleID, groupID, playermodelID, money, moneybank, map, skin, rpdescription, string_birthday, int_bodyheight, int_weight, bool_eventchar"
@@ -673,7 +670,7 @@ function YRPCreateCharacter(ply, tab)
 			cols = cols .. ", bg" .. i
 		end
 		local vals = "'" .. steamid .. "', "
-		vals = vals .. "" .. SQL_STR_IN( tab.rpname ) .. ", "
+		vals = vals .. "" .. YRP_SQL_STR_IN( tab.rpname ) .. ", "
 		vals = vals .. tonumber(role[1].uniqueID) .. ", "
 		vals = vals .. tonumber(role[1].int_groupID) .. ", "
 		vals = vals .. tonumber(tab.playermodelID) .. ", "
@@ -681,21 +678,21 @@ function YRPCreateCharacter(ply, tab)
 		vals = vals .. 0 .. ", "
 		vals = vals .. "'" .. GetMapNameDB() .. "', "
 		vals = vals .. tonumber(tab.skin) .. ", "
-		vals = vals .. "" .. SQL_STR_IN( tostring(tab.rpdescription) ) .. ", "
+		vals = vals .. "" .. YRP_SQL_STR_IN( tostring(tab.rpdescription) ) .. ", "
 		
-		vals = vals .. "" .. SQL_STR_IN( tostring(tab.birt) ) .. ", "
-		vals = vals .. "" .. SQL_STR_IN( tostring(tab.bohe) ) .. ", "
-		vals = vals .. "" .. SQL_STR_IN( tostring(tab.weig) ) .. ", "
+		vals = vals .. "" .. YRP_SQL_STR_IN( tostring(tab.birt) ) .. ", "
+		vals = vals .. "" .. YRP_SQL_STR_IN( tostring(tab.bohe) ) .. ", "
+		vals = vals .. "" .. YRP_SQL_STR_IN( tostring(tab.weig) ) .. ", "
 		vals = vals .. "'" .. btn(tab.create_eventchar) .. "'"
 
 		for i = 0, 19 do
 			vals = vals .. ", " .. tonumber(tab.bg[i])
 		end
-		local char = SQL_INSERT_INTO("yrp_characters", cols, vals)
+		local char = YRP_SQL_INSERT_INTO("yrp_characters", cols, vals)
 		if char == nil then
-			local chars = SQL_SELECT("yrp_characters", "*", nil)
+			local chars = YRP_SQL_SELECT("yrp_characters", "*", nil)
 			if worked(chars, "[YRPCreateCharacter] chars") then
-				local result = SQL_UPDATE("yrp_players", {["CurrentCharacter"] = tonumber(chars[#chars].uniqueID)}, "SteamID = '" .. ply:SteamID() .. "'")
+				local result = YRP_SQL_UPDATE("yrp_players", {["CurrentCharacter"] = tonumber(chars[#chars].uniqueID)}, "SteamID = '" .. ply:SteamID() .. "'")
 				if result != nil then
 					YRP.msg("error", "[YRPCreateCharacter] failed @Update!")
 				end
@@ -727,7 +724,7 @@ net.Receive("YRPCreateCharacter", function(len, ply)
 
 	local namealreadyinuse = false
 
-	local allchars = SQL_SELECT(DATABASE_NAME, "*", nil)
+	local allchars = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	for i, v in pairs(allchars) do
 		if string.lower(v.rpname) == string.lower(tab.rpname) then
 			namealreadyinuse = true
@@ -765,7 +762,7 @@ end)
 function SendBodyGroups(ply)
 	local charid = ply:CharID()
 	if wk(charid) then
-		local _result = SQL_SELECT("yrp_characters", "bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, skin, playermodelID", "uniqueID = " .. tonumber(charid))
+		local _result = YRP_SQL_SELECT("yrp_characters", "bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, skin, playermodelID", "uniqueID = " .. tonumber(charid))
 		if wk(_result) then
 			_result = _result[1]
 			local _role = ply:YRPGetRoleTable()
@@ -801,7 +798,7 @@ net.Receive("inv_bg_up", function(len, ply)
 	local _id = net.ReadInt(16)
 	ply:SetBodygroup(_id, _cur)
 	local _charid = ply:CharID()
-	SQL_UPDATE("yrp_characters", {["bg" .. tonumber(_id)] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
+	YRP_SQL_UPDATE("yrp_characters", {["bg" .. tonumber(_id)] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 end)
 
 util.AddNetworkString("inv_bg_do")
@@ -811,7 +808,7 @@ net.Receive("inv_bg_do", function(len, ply)
 	local _id = net.ReadInt(16)
 	ply:SetBodygroup(_id, _cur)
 	local _charid = ply:CharID()
-	SQL_UPDATE("yrp_characters", {["bg" .. tonumber(_id)] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
+	YRP_SQL_UPDATE("yrp_characters", {["bg" .. tonumber(_id)] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 end)
 
 util.AddNetworkString("inv_skin_up")
@@ -821,7 +818,7 @@ net.Receive("inv_skin_up", function(len, ply)
 	ply:SetSkin(_cur)
 	ply:SetupHands()
 	local _charid = ply:CharID()
-	SQL_UPDATE("yrp_characters", {["skin"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
+	YRP_SQL_UPDATE("yrp_characters", {["skin"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 end)
 
 util.AddNetworkString("inv_skin_do")
@@ -831,7 +828,7 @@ net.Receive("inv_skin_do", function(len, ply)
 	ply:SetSkin(_cur)
 	ply:SetupHands()
 	local _charid = ply:CharID()
-	SQL_UPDATE("yrp_characters", {["skin"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
+	YRP_SQL_UPDATE("yrp_characters", {["skin"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 end)
 
 util.AddNetworkString("inv_pm_up")
@@ -844,7 +841,7 @@ net.Receive("inv_pm_up", function(len, ply)
 			ply:SetNW2Int("pmid", _cur)
 			ply:SetModel(_pms[_cur])
 			local _charid = ply:CharID()
-			SQL_UPDATE("yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
+			YRP_SQL_UPDATE("yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 			ply:UpdateBackpack()
 			SendBodyGroups(ply)
 		end
@@ -861,7 +858,7 @@ net.Receive("inv_pm_do", function(len, ply)
 			ply:SetNW2Int("pmid", _cur)
 			ply:SetModel(_pms[_cur])
 			local _charid = ply:CharID()
-			SQL_UPDATE("yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
+			YRP_SQL_UPDATE("yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid))
 			ply:UpdateBackpack()
 			SendBodyGroups(ply)
 		end
@@ -871,13 +868,13 @@ end)
 util.AddNetworkString("warning_up")
 net.Receive("warning_up", function(len, ply)
 	local p = net.ReadEntity()
-	local ptab = SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'")
+	local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'")
 	if wk(ptab) then
 		local int_warnings = ptab[1].int_warnings
 		int_warnings = int_warnings + 1
 		int_warnings = math.Clamp(int_warnings, 0, 10)
 
-		SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'")
 
 		p:SetNW2Int("int_warnings", int_warnings)
 	end
@@ -886,13 +883,13 @@ end)
 util.AddNetworkString("warning_dn")
 net.Receive("warning_dn", function(len, ply)
 	local p = net.ReadEntity()
-	local ptab = SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'")
+	local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'")
 	if wk(ptab) then
 		local int_warnings = ptab[1].int_warnings
 		int_warnings = int_warnings - 1
 		int_warnings = math.Clamp(int_warnings, 0, 10)
 
-		SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'")
 
 		p:SetNW2Int("int_warnings", int_warnings)
 	end
@@ -901,13 +898,13 @@ end)
 util.AddNetworkString("violation_up")
 net.Receive("violation_up", function(len, ply)
 	local p = net.ReadEntity()
-	local ptab = SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'")
+	local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'")
 	if wk(ptab) then
 		local int_violations = ptab[1].int_violations
 		int_violations = int_violations + 1
 		int_violations = math.Clamp(int_violations, 0, 10)
 
-		SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'")
 
 		p:SetNW2Int("int_violations", int_violations)
 	end
@@ -916,13 +913,13 @@ end)
 util.AddNetworkString("violation_dn")
 net.Receive("violation_dn", function(len, ply)
 	local p = net.ReadEntity()
-	local ptab = SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'")
+	local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'")
 	if wk(ptab) then
 		local int_violations = ptab[1].int_violations
 		int_violations = int_violations - 1
 		int_violations = math.Clamp(int_violations, 0, 10)
 
-		SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'")
 
 		p:SetNW2Int("int_violations", int_violations)
 	end
@@ -940,9 +937,9 @@ net.Receive("set_idcardid", function(len, ply)
 	local p = net.ReadEntity()
 	local text_idcardid = net.ReadString()
 	if wk(p:CharID()) then
-		local ptab = SQL_SELECT(DATABASE_NAME, "text_idcardid", "uniqueID = '" .. p:CharID() .. "'")
+		local ptab = YRP_SQL_SELECT(DATABASE_NAME, "text_idcardid", "uniqueID = '" .. p:CharID() .. "'")
 		if wk(ptab) then
-			SQL_UPDATE(DATABASE_NAME, {["text_idcardid"] = text_idcardid}, "uniqueID = '" .. p:CharID() .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["text_idcardid"] = text_idcardid}, "uniqueID = '" .. p:CharID() .. "'")
 			p:SetNW2String("idcardid", text_idcardid)
 		end
 	end
@@ -952,14 +949,14 @@ util.AddNetworkString("removearrests")
 net.Receive("removearrests", function(len, ply)
 	local p = net.ReadEntity()
 	if IsValid(p) and p:IsPlayer() and p.CharID and wk(p:CharID()) then
-		SQL_UPDATE(DATABASE_NAME, {["int_arrests"] = 0}, "uniqueID = '" .. p:CharID() .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["int_arrests"] = 0}, "uniqueID = '" .. p:CharID() .. "'")
 		p:SetNW2Int("int_arrests", 0)
 	end
 end)
 
 util.AddNetworkString("get_licenses_player")
 net.Receive("get_licenses_player", function(len, ply)
-	local tab = SQL_SELECT("yrp_licenses", "*", nil)
+	local tab = YRP_SQL_SELECT("yrp_licenses", "*", nil)
 	if wk(tab) then
 		net.Start("get_licenses_player")
 			net.WriteTable(tab)
@@ -991,13 +988,13 @@ end)
 
 function YRPSetAllCharsToDefaultRole(ply)
 	if IsValid(ply) then
-		SQL_UPDATE(DATABASE_NAME, {["roleID"] = 1}, "SteamID = '" .. ply:SteamID() .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["roleID"] = 1}, "SteamID = '" .. ply:SteamID() .. "'")
 	end
 end
 
 util.AddNetworkString("setting_characters")
 net.Receive("setting_characters", function(len, ply)
-	local tab = SQL_SELECT(DATABASE_NAME, "SteamID, rpname, text_idcardid, rpdescription, groupID, roleID, money, moneybank, int_level, bool_eventchar, bool_archived", nil)
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "SteamID, rpname, text_idcardid, rpdescription, groupID, roleID, money, moneybank, int_level, bool_eventchar, bool_archived", nil)
 	if !wk(tab) then
 		tab = {}
 	end
@@ -1008,7 +1005,7 @@ end)
 
 function YRPGetSpecData(ply)
 	local charid = ply:CharID()
-	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
 	
 	local prefix = {}
 	local suffix = {}
@@ -1021,7 +1018,7 @@ function YRPGetSpecData(ply)
 		ply:SetNW2String( "specializationIDs", tab.string_specializations )
 
 		for i, v in pairs( string.Explode(",", tab.string_specializations ) ) do
-			local tabSpec = SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
+			local tabSpec = YRP_SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
 			if wk(tabSpec) then
 				tabSpec = tabSpec[1]
 		
@@ -1075,7 +1072,7 @@ net.Receive("char_add_spec", function(len, ply)
 
 	local newspecs = {}
 
-	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
 	if wk(tab) then
 		tab = tab[1]
 		for i, v in pairs( string.Explode(",", tab.string_specializations ) ) do
@@ -1090,7 +1087,7 @@ net.Receive("char_add_spec", function(len, ply)
 	end
 	newspecs = table.concat( newspecs, "," )
 
-	SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newspecs}, "uniqueID = '" .. charid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newspecs}, "uniqueID = '" .. charid .. "'")
 
 	YRPGiveSpecs(ply)
 
@@ -1108,7 +1105,7 @@ net.Receive("char_rem_spec", function(len, ply)
 
 	local newspecs = {}
 
-	local tab = SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
 	if wk(tab) then
 		tab = tab[1]
 		for i, v in pairs( string.Explode(",", tab.string_specializations ) ) do
@@ -1123,7 +1120,7 @@ net.Receive("char_rem_spec", function(len, ply)
 	end
 	newspecs = table.concat( newspecs, "," )
 
-	SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newspecs}, "uniqueID = '" .. charid .. "'")
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newspecs}, "uniqueID = '" .. charid .. "'")
 
 	YRPGiveSpecs(ply)
 

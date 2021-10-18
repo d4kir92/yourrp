@@ -376,6 +376,9 @@ countries["VN"] = "Vietnam"
 countries["ZA"] = "South Africa"
 
 function GetCountryName( id )
+	if id == nil then
+		return ""
+	end
 	id = string.upper( id )
 	local countryname = countries[id]
 	if wk( countryname ) then

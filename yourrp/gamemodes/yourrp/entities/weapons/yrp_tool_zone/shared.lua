@@ -74,7 +74,7 @@ function SWEP:Think()
 			local inzone, zonename, zonecolor, zoneuid = IsInsideZone(ply) 
 			if inzone then
 				YRP.msg("db", "Option Zone")
-				local stab = SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. zoneuid .. "'")
+				local stab = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. zoneuid .. "'")
 				if wk(stab) then
 					stab = stab[1]
 					net.Start("yrp_zone_options")
@@ -208,7 +208,7 @@ function SWEP:SecondaryAttack()
 			inbox = ents.FindInBox(spos, epos)
 			for i, e in pairs(inbox) do
 				if e == ply then
-					SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
+					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
 					YRP.msg("db", "Removed Zone")
 				end
 			end

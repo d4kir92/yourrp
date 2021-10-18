@@ -42,23 +42,23 @@ function YRPHudView()
 			end
 			if GetGlobalBool("bool_building_system", false) and ent:YRPIsDoor() and plypos:Distance(entpos) < GetGlobalInt("int_door_distance", 200) then
 				local tab = {}
-				tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+				tab["KEY"] = "[" .. string.upper(YRPGetKeybindName("in_use")) .. "]"
 				draw.SimpleText(YRP.lang_string("LID_presstoopen", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				local canbeowned = ent:GetNW2Bool("bool_canbeowned", false)
 				if canbeowned or lply:HasAccess() then
 					local tab2 = {}
-					tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_door")) .. "]"
+					tab2["KEY"] = "[" .. string.upper(YRPGetKeybindName("menu_options_door")) .. "]"
 					draw.SimpleText(YRP.lang_string("LID_presstoopensettings", tab2), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 					showOwner(_eyeTrace)
 					showSecurityLevel(ent)
 				end
 			elseif ent:IsVehicle() and !lply:InVehicle() then
 				local tab = {}
-				tab["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+				tab["KEY"] = "[" .. string.upper(YRPGetKeybindName("in_use")) .. "]"
 				draw.SimpleText(YRP.lang_string("LID_presstogetin", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				if ent:GetNW2String("ownerRPName") == lply:Nick() then
 					local tab2 = {}
-					tab2["KEY"] = "[" .. string.upper(GetKeybindName("menu_options_vehicle")) .. "]"
+					tab2["KEY"] = "[" .. string.upper(YRPGetKeybindName("menu_options_vehicle")) .. "]"
 					draw.SimpleText(YRP.lang_string("LID_presstoopensettings", tab2), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 				showOwner(_eyeTrace)
@@ -67,27 +67,27 @@ function YRPHudView()
 					local plycol = ent:GetColor()
 					local tab = {}
 					tab["NAME"] = tostring(ent:RPName())
-					tab["KEY"] = "[" .. string.upper(GetKeybindName("menu_interact")) .. "]"
+					tab["KEY"] = "[" .. string.upper(YRPGetKeybindName("menu_interact")) .. "]"
 					--draw.SimpleText(YRP.lang_string("LID_presstointeractwith", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, plycol.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 			elseif ent:IsNPC() then
 				if ent:IsDealer() then
 					draw.SimpleText(ent:GetNW2String("name", ""), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 					local key = {}
-					key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+					key["KEY"] = "[" .. string.upper(YRPGetKeybindName("in_use")) .. "]"
 					draw.SimpleText(YRP.lang_string("LID_presstotrade", key), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 				end
 			elseif ent:GetClass() == "yrp_clothing" and plypos:Distance(entpos) < 150 then
 				local key = {}
-				key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+				key["KEY"] = "[" .. string.upper(YRPGetKeybindName("in_use")) .. "]"
 				draw.SimpleText(YRP.lang_string("LID_presstochangeyourclothes", key), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			elseif ent:HasStorage() and plypos:Distance(entpos) < 150 then
 				local key = {}
-				key["KEY"] = "[" .. string.upper(GetKeybindName("in_use")) .. "]"
+				key["KEY"] = "[" .. string.upper(YRPGetKeybindName("in_use")) .. "]"
 				key["NAME"] = ent:StorageName()
 				draw.SimpleText(YRP.lang_string("LID_presstoopenname", key), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 			elseif ent:GetNW2Bool("yrp_has_use", false) then
-				local text = "PRESS [" .. string.upper(GetKeybindName("in_use")) .. "]"
+				local text = "PRESS [" .. string.upper(YRPGetKeybindName("in_use")) .. "]"
 				if ent:GetNW2String("yrp_use_message", "") != "" then
 					text = text .. ": " .. ent:GetNW2String("yrp_use_message", "")
 				end
