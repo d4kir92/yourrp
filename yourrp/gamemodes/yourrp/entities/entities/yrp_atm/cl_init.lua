@@ -2,11 +2,6 @@
 
 include("shared.lua")
 
-timer.Simple(2, function()
-	net.Start("ATMPressPrev")
-	net.SendToServer()
-end)
-
 ent = ENT
 
 ENT.name = {}

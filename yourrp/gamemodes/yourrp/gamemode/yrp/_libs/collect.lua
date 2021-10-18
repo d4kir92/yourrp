@@ -40,6 +40,7 @@ if SERVER then
 				function(body, length, headers, code)
 					if code == 200 then
 						-- worked
+						YRP.msg("note", "Send Server Info: Success")
 					else
 						YRP.msg("error", "Send Server Info HTTP CODE: " .. tostring(code))
 					end
@@ -52,9 +53,7 @@ if SERVER then
 			end
 		end
 			
-		if player.GetCount() <= 0 then
-			RunConsoleCommand("sv_hibernate_think", 0)
-		end
+		RunConsoleCommand("sv_hibernate_think", 0)
 	end
 
 	hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded", function()
