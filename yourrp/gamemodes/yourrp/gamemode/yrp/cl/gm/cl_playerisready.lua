@@ -27,6 +27,17 @@ local function YRPReadyMSG( msg, col )
 	YRPReadyHR( col )
 end
 
+function YRPGetClientInfo()
+	local info = {}
+	info.iswindows = system.IsWindows()
+	info.islinux = system.IsLinux()
+	info.isosx = system.IsOSX()
+	info.country = system.GetCountry()
+	info.branch = GetBranch()
+	info.uptime = os.clock()
+	return info
+end
+
 function YRPSendIsReadyPingPong()	-- IMPORTANT
 	YRPReadyAddEvent( "PingPong" )
 
@@ -38,21 +49,15 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 	else
 		if system.IsWindows and os.clock and system.GetCountry and GetBranch and os.clock() and system.GetCountry() and GetBranch() then
 			YRPReadyAddEvent( "OSReady" )
-			local info = {}
-			info.iswindows = system.IsWindows()
-			info.islinux = system.IsLinux()
-			info.isosx = system.IsOSX()
-			info.country = system.GetCountry()
-			info.branch = GetBranch()
-			info.uptime = os.clock()
+			local info = YRPGetClientInfo()
 			
 			if lply:GetNW2Bool( "yrp_received_ready", false ) == false then
 				YRPReadyAddEvent( "Sended" )
-				YRPReadyMSG( "SEND READY MESSAGE TO SERVER.", Color( 0, 255, 0 ) )
 				net.Start("yrp_is_ready_player")
 					net.WriteTable( info )
 				net.SendToServer()
-
+				YRPReadyMSG( "SEND READY MESSAGE TO SERVER.", Color( 0, 255, 0 ) )
+				
 				YRPRetryCurtime = CurTime() + 3
 			else
 				YRPReadyMSG( "Server received the ready message.", Color( 0, 255, 0 ) )

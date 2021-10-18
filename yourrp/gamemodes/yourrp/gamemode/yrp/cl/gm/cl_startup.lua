@@ -1926,6 +1926,7 @@ function YRPCreateLoadingInfo( ti, rti )
 			text = text .. "YRPReadyHook: " .. tostring( YRPReadyHook )
 			text = text .. " YRPReadyStuck: " .. table.concat( YRPReadyStuck, ", " ) .. " Counter: " .. tostring( YRPReadyStuckCounter )
 			text = text .. " received_ready: " .. tostring( lply:GetNW2Bool( "yrp_received_ready" ) ) .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
+			text = text .. " " .. table.ToString( YRPGetClientInfo(), "YRPGetClientInfo" )
 		end
 		if yrp2 and GetGlobalBool("bool_character_system") and !IsVoidCharEnabled() then
 			if !strEmpty(text) then
