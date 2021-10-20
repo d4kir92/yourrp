@@ -113,14 +113,15 @@ net.Receive("yrp_get_sweps_role_art", function(len, ply)
 	local art = net.ReadString()
 
 	local rolTab = ply:YRPGetRoleTable()
-
-	local sweps = {}
-	for i, v in pairs(string.Explode(",", rolTab.string_sweps)) do
-		local tab = YRP_SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. v .. "'")
-		if wk(tab) then
-			tab = tab[1]
-			if tobool(tab["slot_" .. art]) then
-				table.insert(sweps, v)
+	if wk( rolTab ) then
+		local sweps = {}
+		for i, v in pairs(string.Explode(",", rolTab.string_sweps)) do
+			local tab = YRP_SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. v .. "'")
+			if wk(tab) then
+				tab = tab[1]
+				if tobool(tab["slot_" .. art]) then
+					table.insert(sweps, v)
+				end
 			end
 		end
 	end

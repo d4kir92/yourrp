@@ -150,7 +150,6 @@ else
 		end
 	end
 
-	hook.Remove("Think", "yrp_think_chat_choices")
 	hook.Add("Think", "yrp_think_chat_choices", function()
 		if GetGlobalTable("yrp_chat_channels", {}) != oldchoices then
 			oldchoices = GetGlobalTable("yrp_chat_channels", {})
@@ -158,7 +157,6 @@ else
 		end
 	end)
 
-	hook.Remove("yrp_language_changed", "chat_language_changed")
 	hook.Add("yrp_language_changed", "chat_language_changed", function()
 		update_chat_choices()
 	end)
@@ -665,32 +663,32 @@ else
 							end
 						end
 					elseif t == "entity" and obj:IsPlayer() then
-						local col = GAMEMODE:GetTeamColor(obj)
+						--[[local col = GAMEMODE:GetTeamColor(obj)
 						if isnumber(tonumber(col.r)) and isnumber(tonumber(col.g)) and isnumber(tonumber(col.b)) then
 							yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
 							yrpChat.richText:AppendText(obj:Nick())
-						end
+						end]]
 					elseif t == "number" then
-						yrpChat.richText:AppendText(obj)
-						words = words + 1
+						--[[yrpChat.richText:AppendText(obj)
+						words = words + 1]]
 					elseif t == "boolean" then
-						YRP.msg("note", "chat.addtext (boolean): " .. tostring(obj))
+						--YRP.msg("note", "chat.addtext (boolean): " .. tostring(obj))
 					elseif t == "entity" and IsValid(obj) then
-						YRP.msg("error", "chat.addtext (entity): " .. tostring(obj))
+						--YRP.msg("error", "chat.addtext (entity): " .. tostring(obj))
 					elseif t == "player" then
 						-- invalid players
-						local col = GAMEMODE:GetTeamColor(obj)
+						--[[local col = GAMEMODE:GetTeamColor(obj)
 						if isnumber(tonumber(col.r)) and isnumber(tonumber(col.g)) and isnumber(tonumber(col.b)) then
 							yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
 							yrpChat.richText:AppendText(obj:RPName())
-						end
+						end]]
 					elseif t == "entity" then
-						-- invalid entities
+						--[[-- invalid entities
 						if obj.Nick then
 							yrpChat.richText:AppendText(obj:Nick())
 						elseif obj.GetName then
 							yrpChat.richText:AppendText(obj:GetName())
-						end
+						end]]
 					elseif t == "panel" then
 						--
 					else
@@ -721,7 +719,6 @@ else
 		end
 	end
 
-	hook.Remove("PlayerBindPress", "yrp_overrideChatbind")
 	hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
 		if GetGlobalBool("bool_yrp_chat", false) then
 			local bTeam = nil
@@ -742,7 +739,6 @@ else
 		end
 	end)
 
-	hook.Remove("ChatText", "yrp_serverNotifications")
 	hook.Add("ChatText", "yrp_serverNotifications", function(index, name, text, type)
 		local lply = LocalPlayer()
 		if lply:IsValid() and GetGlobalBool("bool_yrp_chat", false) then
@@ -761,7 +757,6 @@ else
 		end
 	end)
 
-	hook.Remove("HUDShouldDraw", "yrp_noMoreDefault")
 	hook.Add("HUDShouldDraw", "yrp_noMoreDefault", function(name)
 		local lply = LocalPlayer()
 		if lply:IsValid() and GetGlobalBool("bool_yrp_chat", false) then
@@ -828,7 +823,6 @@ else
 	end)
 end
 
-hook.Remove( "OnPlayerChat", "YRPHideCommands" )
 hook.Add( "OnPlayerChat", "YRPHideCommands", function( ply, strText, bTeam, bDead )
 	if string.StartWith(strText, "!") or string.StartWith(strText, "/") or string.StartWith(strText, "@") then
 		if ply == LocalPlayer() then

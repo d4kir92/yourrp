@@ -27,7 +27,6 @@ function isMainMenuOpen()
 end
 
 local wasgroup = false
-hook.Remove("StartChat", "yrp_startchat")
 hook.Add("StartChat", "yrp_startchat", function(isTeamChat)
 	chatisopen = true
 	net.Start("startchat")
@@ -769,7 +768,6 @@ local function YRP_CalcView(lply, pos, angles, fov)
 end
 
 hook.Remove("CalcView", "AV7View") -- breaks thirdperson, must be removed!
-hook.Remove("CalcView", "YOURRP_ThirdPerson_CalcView")
 timer.Simple(1, function()
 	hook.Add("CalcView", "YOURRP_ThirdPerson_CalcView", YRP_CalcView)
 end)
@@ -792,7 +790,6 @@ function showPlayermodel()
 		return false
 	end
 end
-hook.Remove("ShouldDrawLocalPlayer", "ShowPlayermodel")
 hook.Add("ShouldDrawLocalPlayer", "ShowPlayermodel", showPlayermodel)
 
 jobByCmd = jobByCmd or {}

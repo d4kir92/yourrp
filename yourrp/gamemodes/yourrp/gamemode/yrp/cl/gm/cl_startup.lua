@@ -1532,7 +1532,6 @@ local loadattempts = 0
 function loadDoorTexts()
 	loadattempts = loadattempts + 1
 	if GetGlobalBool("loaded_doors", false) and (table.Count(ents.FindByClass("prop_door_rotating")) > 0 or table.Count(ents.FindByClass("func_door")) > 0 or table.Count(ents.FindByClass("func_door_rotating")) > 0) then
-		hook.Remove("PostDrawOpaqueRenderables", "yrp_door_info")
 		hook.Add("PostDrawOpaqueRenderables", "yrp_door_info", function()
 			local DOORS = GetAllDoors()
 			for i, door in pairs(DOORS) do
@@ -1944,7 +1943,8 @@ function YRPCreateLoadingInfo( ti, rti )
 			text = text .. "HudLoadout: " .. tostring( lply:GetNW2Bool("yrp_hudloadout") ) .. " hud_msg: " .. lply:GetNW2String("yrp_hudloadout_msg", "X")
 		end
 		if !strEmpty(text) then
-			text = "[Loading] " .. text .. " | time: " .. tostring( ti ) .. " rtime: " .. tostring( rti ) .. " plys: " .. player.GetCount() .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" )
+			text = "[Loading] " .. text .. " | time: " .. tostring( ti ) .. " rtime: " .. tostring( rti ) .. " plys: " .. player.GetCount()
+			text = text .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" )
 		end
 
 		return text
@@ -2202,15 +2202,12 @@ if pa(yrp_loading_screen) then
 			end
 		end
 
-		if self.t > 0 and self.rt > 90 or self.rt >= 100 then
-			if self.closeloading == nil then
-				self.closeloading = createD( "DButton", self, 300, 60, ScrW() / 2 - 300 / 2, ScrH() * 0.9 )
-				self.closeloading:SetText( "Close Loading" )
-				function self.closeloading:DoClick()
-					if pa( yrp_loading_screen ) then
-						yrp_loading_screen:Close()
-					end
-				end
+		if (self.t >= 10 or self.rt >= 10) and self.disconnect == nil then
+			local br = ScrH() * 0.010
+			self.disconnect = createD( "YButton", self, 300, 60, ScrW() - br - 300, ScrH() - br - 60 )
+			self.disconnect:SetText( "LID_disconnect" )
+			function self.disconnect:DoClick()
+				RunConsoleCommand( "disconnect" )
 			end
 		end
 

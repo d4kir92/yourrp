@@ -516,7 +516,6 @@ function DoCommand(sender, command, text)
 end
 
 timer.Simple(4, function() -- must be last hook
-	hook.Remove("PlayerSay", "YRP_PlayerSay")
 	hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
 		local oldtext = text
 		local channel = ""

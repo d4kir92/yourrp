@@ -232,5 +232,4 @@ local function YRPCreateVoiceVGUI()
 	yrp_VoicePanelList:SetPaintBackground( false )
 
 end
-hook.Remove( "InitPostEntity", "YRPCreateVoiceVGUI" )
 hook.Add( "InitPostEntity", "YRPCreateVoiceVGUI", YRPCreateVoiceVGUI )

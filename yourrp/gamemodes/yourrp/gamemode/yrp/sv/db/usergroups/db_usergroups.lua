@@ -172,55 +172,6 @@ if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'user'") == nil then
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
 end
 
-YRP_SQL_DELETE_FROM(DATABASE_NAME, "string_name = 'yrp_usergroups'")
-local unremoveable = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'yrp_usergroups'")
-if unremoveable == nil then
-	local _str = "string_name, "
-	_str = _str .. "bool_vehicles, "
-	_str = _str .. "bool_weapons, "
-	_str = _str .. "bool_entities, "
-	_str = _str .. "bool_effects, "
-	_str = _str .. "bool_npcs, "
-	_str = _str .. "bool_props, "
-	_str = _str .. "bool_ragdolls, "
-	_str = _str .. "bool_noclip, "
-	_str = _str .. "bool_ignite, "
-	_str = _str .. "bool_drive, "
-	_str = _str .. "bool_flashlight, "
-	_str = _str .. "bool_collision, "
-	_str = _str .. "bool_gravity, "
-	_str = _str .. "bool_keepupright, "
-	_str = _str .. "bool_bodygroups, "
-	_str = _str .. "bool_physgunpickup, "
-	_str = _str .. "bool_physgunpickupplayer, "
-	_str = _str .. "bool_physgunpickupworld, "
-	_str = _str .. "bool_adminaccess, "
-	_str = _str .. "bool_design, "
-	_str = _str .. "bool_general, "
-	_str = _str .. "bool_realistic, "
-	_str = _str .. "bool_groupsandroles, "
-	_str = _str .. "bool_players, "
-	_str = _str .. "bool_money, "
-	_str = _str .. "bool_licenses, "
-	_str = _str .. "bool_shops, "
-	_str = _str .. "bool_map, "
-	_str = _str .. "bool_whitelist, "
-	_str = _str .. "bool_feedback, "
-	_str = _str .. "bool_usergroups, "
-	_str = _str .. "bool_ac_database, "
-	_str = _str .. "bool_status, "
-	_str = _str .. "bool_yourrp_addons, "
-	_str = _str .. "bool_removeable, "
-	_str = _str .. "int_position"
-
-	local _str2 = "'yrp_usergroups', 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 0, 0"
-
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
-end
-
 function SortUserGroups()
 	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
 
@@ -237,6 +188,57 @@ function SortUserGroups()
 	end
 end
 SortUserGroups()
+
+timer.Simple( 4, function()
+	YRP_SQL_DELETE_FROM(DATABASE_NAME, "string_name = 'yrp_usergroups'")
+	local unremoveable = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'yrp_usergroups'")
+	if unremoveable == nil then
+		local _str = "string_name, "
+		_str = _str .. "bool_vehicles, "
+		_str = _str .. "bool_weapons, "
+		_str = _str .. "bool_entities, "
+		_str = _str .. "bool_effects, "
+		_str = _str .. "bool_npcs, "
+		_str = _str .. "bool_props, "
+		_str = _str .. "bool_ragdolls, "
+		_str = _str .. "bool_noclip, "
+		_str = _str .. "bool_ignite, "
+		_str = _str .. "bool_drive, "
+		_str = _str .. "bool_flashlight, "
+		_str = _str .. "bool_collision, "
+		_str = _str .. "bool_gravity, "
+		_str = _str .. "bool_keepupright, "
+		_str = _str .. "bool_bodygroups, "
+		_str = _str .. "bool_physgunpickup, "
+		_str = _str .. "bool_physgunpickupplayer, "
+		_str = _str .. "bool_physgunpickupworld, "
+		_str = _str .. "bool_adminaccess, "
+		_str = _str .. "bool_design, "
+		_str = _str .. "bool_general, "
+		_str = _str .. "bool_realistic, "
+		_str = _str .. "bool_groupsandroles, "
+		_str = _str .. "bool_players, "
+		_str = _str .. "bool_money, "
+		_str = _str .. "bool_licenses, "
+		_str = _str .. "bool_shops, "
+		_str = _str .. "bool_map, "
+		_str = _str .. "bool_whitelist, "
+		_str = _str .. "bool_feedback, "
+		_str = _str .. "bool_usergroups, "
+		_str = _str .. "bool_ac_database, "
+		_str = _str .. "bool_status, "
+		_str = _str .. "bool_yourrp_addons, "
+		_str = _str .. "bool_removeable, "
+		_str = _str .. "int_position"
+
+		local _str2 = "'yrp_usergroups', 1, 1, 1, 1, 1, 1, 1, 1"
+		_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+		_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+		_str2 = _str2 .. ", 0, 0"
+
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
+	end
+end )
 
 --[[ Global Handler ]]--
 local HANDLER_USERGROUPS = {}

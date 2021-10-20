@@ -14,8 +14,8 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_value", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_timestamp", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_alttarget", "TEXT DEFAULT ''")
 
-local showafter =	60*60*12
-local deleteafter =	60*60*24
+local showafter =	60*60*2
+local deleteafter =	60*60*12
 
 local logTab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 if wk(logTab) then

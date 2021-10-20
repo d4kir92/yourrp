@@ -10,8 +10,8 @@ local DATABASE_NAME = "yrp_logs_settings"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_text", "TEXT DEFAULT 'unknown'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_timestamp", "TEXT DEFAULT ''")
 
-local showafter =	60*60*12
-local deleteafter =	60*60*24
+local showafter =	60*60*2
+local deleteafter =	60*60*12
 
 local logTab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 if wk(logTab) then

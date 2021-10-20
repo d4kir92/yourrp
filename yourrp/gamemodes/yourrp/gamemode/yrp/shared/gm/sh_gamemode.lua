@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 350 -- do NOT change this!
 GM.VersionCanary = 703 -- do NOT change this!
-GM.VersionBuild = 90 -- do NOT change this!
+GM.VersionBuild = 94 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -1185,9 +1185,68 @@ local function YRPCheckBackdoors()
 	YRPCBHR()
 end
 
-hook.Remove( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckBackdoors" )
 hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckBackdoors", function()
 	if SERVER then
 		timer.Simple( 3, YRPCheckBackdoors )
 	end
 end )
+
+function YRPCheckReadyTable( tab )
+	if !wk( tab ) then
+		YRP.msg( "error", "[CheckReadyTable] Table INVALID: " .. tostring( tab ) )
+		return false
+	end
+	if table.Count( tab ) != 3 then
+		YRP.msg( "error", "[CheckReadyTable] Table is size: " .. table.Count( tab ) )
+		return false
+	end
+	for i, v in pairs( tab ) do
+		if v == nil then
+			YRP.msg( "error", "[CheckReadyTable] Table-Entry is nil at index: " .. tostring( i ) )
+			return false
+		end
+	end
+	return true
+end
+
+if false then
+	local nettab = {}
+	function net.Incoming(len, client)
+		local i = net.ReadHeader()
+		local strName = util.NetworkIDToString( i )
+		
+		if ( !strName ) then return end
+
+		-- NEW
+		local plyNick = IsValid(client) and client:Nick() or "UNKNOWN PLAYER NAME"
+		
+		if strName then
+			MsgC( Color( 0, 255, 0 ), string.format("Message: %s Client: %s\n", strName, plyNick) )
+		else
+			MsgC( Color( 0, 255, 0 ), string.format("Client: %s\n", plyNick) )
+		end
+		-- NEW
+
+		local func = net.Receivers[ strName:lower() ]
+		if ( !func ) then return end
+
+		--
+		-- len includes the 16 bit int which told us the message name
+		--
+		len = len - 16
+		
+		-- NEW
+		nettab[strName] = nettab[strName] or 0
+		nettab[strName] = nettab[strName] + len / 8
+		
+		MsgC( Color( 0, 255, 0 ), "#####     #####     #####     #####     #####     #####     #####" .. "\n" )
+		for i, v in SortedPairsByValue( nettab, true ) do
+			if v > 0 then
+				MsgC( Color( 0, 255, 0 ), i .. " " .. tostring( v ) .. "\n" )
+			end
+		end
+
+		-- NEW
+		func( len, client )
+	end
+end

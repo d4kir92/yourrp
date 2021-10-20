@@ -24,6 +24,7 @@ function InventoryBlacklisted(cname)
 	
 	for i, black in pairs(blacklist) do
 		if string.find(cname, black.value) then
+			YRP.msg( "note", "Blacklisted for inventory: " .. cname )
 			return true
 		end
 	end
@@ -51,8 +52,8 @@ function CreateItem(slotID, tab)
 		tab.text_type = tab.text_type or "item"
 		tab.int_fixed = tab.int_fixed or "0"
 		
-		if InventoryBlacklisted(tab.text_classname) then
-			YRP.msg("note", "[CreateItem] blacklisted item! " .. tab.text_classname)
+		if InventoryBlacklisted(tab.text_classname) or InventoryBlacklisted(tab.text_worldmodel) then
+			YRP.msg("note", "[CreateItem] blacklisted item!")
 			return false
 		end
 	

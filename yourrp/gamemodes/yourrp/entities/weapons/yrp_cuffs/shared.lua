@@ -78,7 +78,6 @@ if CLIENT then
 			end
 		end
 	end
-	hook.Remove("PrePlayerDraw", "YRP_DrawCuff")
 	hook.Add("PrePlayerDraw", "YRP_DrawCuff", YRP_DrawCuff)
 end
 

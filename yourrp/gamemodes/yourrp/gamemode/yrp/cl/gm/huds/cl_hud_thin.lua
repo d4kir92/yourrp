@@ -447,6 +447,5 @@ function YRPHUDThin()
 	end
 end
 
-hook.Remove("HUDPaint", "yrp_hud_design_Thin")
 hook.Add("HUDPaint", "yrp_hud_design_Thin", YRPHUDThin)
 

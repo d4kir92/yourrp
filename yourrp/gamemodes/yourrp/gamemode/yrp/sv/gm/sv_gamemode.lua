@@ -93,8 +93,12 @@ function GM:PlayerInitialSpawn(ply)
 		YRPCreateCharacter(ply, tab)
 
 		ply:SetNW2Bool("yrp_characterselection", false)
+		
 		local tab = {}
-		YRPPlayerLoadedGame(ply, tab)
+		tab.os = "other"
+		tab.branch = "64bit"
+		tab.country = "US"
+		YRPPlayerLoadedGame( ply, tab )
 	end
 
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
@@ -784,7 +788,6 @@ function StartCombat(ply)
 	end
 end
 
-hook.Remove("ScalePlayerDamage", "YRP_ScalePlayerDamage")
 hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, dmginfo)
 	if ply:IsFullyAuthenticated() then
 
@@ -1423,7 +1426,6 @@ net.Receive("yrp_voice_set_max_passive", function(len, ply)
 	SetGlobalInt("int_max_channels_passive", maxi)
 end)
 
-hook.Remove("PlayerCanHearPlayersVoice", "YRP_voicesystem")
 hook.Add("PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, talker)
 	if GetGlobalBool("bool_voice", false) then
 		if listener == talker then
@@ -1562,7 +1564,6 @@ function YRPCheckAddons()
 	YRPHR( Color(100, 100, 255) )
 end
 
-hook.Remove( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckAddons" )
 hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckAddons", function()
 	timer.Simple(2.1, function()
 		YRPCheckAddons()

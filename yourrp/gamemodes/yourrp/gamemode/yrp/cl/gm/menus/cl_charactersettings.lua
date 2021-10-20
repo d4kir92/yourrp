@@ -61,7 +61,7 @@ function YRPCreateCharacterSettingsContent()
 	btn.w = 500
 	btn.h = 75
 	local back = createD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
-	back:SetText("LID_back")
+	back:SetText("LID_back" .. "3")
 	function back:Paint(pw, ph)
 		hook.Run("YButtonRPaint", self, pw, ph)
 	end

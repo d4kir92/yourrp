@@ -21,7 +21,7 @@ local function YRPReadyHR( col )
 end
 
 local function YRPReadyMSG( msg, col )
-	col = col or Color( 255, 0, 0 )
+	col = col or Color( 255, 100, 100 )
 	YRPReadyHR( col )
 	MsgC( col, "> " .. msg .. "\n" )
 	YRPReadyHR( col )
@@ -29,12 +29,17 @@ end
 
 function YRPGetClientInfo()
 	local info = {}
-	info.iswindows = system.IsWindows()
-	info.islinux = system.IsLinux()
-	info.isosx = system.IsOSX()
+	if system.IsWindows() then
+		info.os = 0
+	elseif system.IsLinux() then
+		info.os = 1
+	elseif system.IsOSX() then
+		info.os = 2
+	else
+		info.os = 3
+	end
 	info.country = system.GetCountry()
 	info.branch = GetBranch()
-	info.uptime = os.clock()
 	return info
 end
 
@@ -47,24 +52,44 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 		YRPReadyAddEvent( "LocalPlayer INVALID #1" )
 		timer.Simple( 0.1, YRPSendIsReadyPingPong )
 	else
-		if system.IsWindows and os.clock and system.GetCountry and GetBranch and os.clock() and system.GetCountry() and GetBranch() then
+		
+		if system.IsWindows and system.GetCountry and GetBranch and system.GetCountry() and GetBranch() then
 			YRPReadyAddEvent( "OSReady" )
 			local info = YRPGetClientInfo()
 			
 			if lply:GetNW2Bool( "yrp_received_ready", false ) == false then
-				YRPReadyAddEvent( "Sended" )
-				net.Start("yrp_is_ready_player")
-					net.WriteTable( info )
-				net.SendToServer()
-				YRPReadyMSG( "SEND READY MESSAGE TO SERVER.", Color( 0, 255, 0 ) )
-				
-				YRPRetryCurtime = CurTime() + 3
+				YRPReadyAddEvent( "Send" )
+				YRPCheckReadyTable( info )
+
+				if YRPReadyStuckCounter <= 6 then
+					net.Start("yrp_is_ready_player" .. YRPReadyStuckCounter)
+						net.WriteUInt( info.os, 2 )
+						net.WriteString( info.branch )
+						net.WriteString( info.country )
+					net.SendToServer()
+					YRPReadyAddEvent( "Sended" )
+					YRPReadyMSG( "SENDED READY MESSAGE TO SERVER.", Color( 0, 255, 0 ) )
+					YRPReadyStuckCounter = YRPReadyStuckCounter + 1
+				elseif YRPReadyStuckCounter <= 7 then
+					net.Start("yrp_is_ready_player" .. "extra1")
+						net.WriteTable( info )
+					net.SendToServer()
+					YRPReadyAddEvent( "Alternative1" )
+					YRPReadyMSG( "SENDED READY MESSAGE TO SERVER. EXTRA1", Color( 255, 255, 0 ) )
+				else
+					net.Start("yrp_is_ready_player" .. "extra2")
+					net.SendToServer()
+					YRPReadyAddEvent( "Alternative2" )
+					YRPReadyMSG( "SENDED READY MESSAGE TO SERVER. EXTRA2", Color( 255, 255, 0 ) )
+				end
+
+				YRPRetryCurtime = CurTime() + 6 + YRPReadyStuckCounter
 			else
 				YRPReadyMSG( "Server received the ready message.", Color( 0, 255, 0 ) )
 			end
 		else
 			YRPReadyAddEvent( "OSNOTReady" )
-			YRP.msg( "error", ">>> [YRPSendIsReadyPingPong] System/os not ready, retry. win " .. tostring(system.IsWindows) .. " os " .. tostring(os.clock) .. " country " .. tostring(system.GetCountry) )
+			YRP.msg( "error", ">>> [YRPSendIsReadyPingPong] System/os not ready, retry. win " .. tostring(system.IsWindows) .. " country " .. tostring(system.GetCountry) )
 			timer.Simple( 0.1, YRPSendIsReadyPingPong )
 		end
 	end
@@ -75,14 +100,13 @@ hook.Add( "Think", "YRP_RETRYSENDMESSAGE", function()
 	if CurTime() < delay then
 		return
 	end
-	delay = CurTime() + 4
+	delay = CurTime() + 0.1
 
-	lply = LocalPlayer()
+	local lply = LocalPlayer()
 
 	if IsValid(lply) and lply:GetNW2Bool( "yrp_received_ready", false ) == false and YRPRetryCurtime < CurTime() then
 		YRPReadyMSG( "Retry sending ready message..." )
 		YRPReadyAddEvent( "Retry" )
-		YRPReadyStuckCounter = YRPReadyStuckCounter + 1
 		YRPSendIsReadyPingPong()
 	elseif lply:GetNW2Bool( "yrp_received_ready", false ) == true then
 		YRPReadyMSG( "Server received the ready message!", Color( 0, 255, 0 ) )
