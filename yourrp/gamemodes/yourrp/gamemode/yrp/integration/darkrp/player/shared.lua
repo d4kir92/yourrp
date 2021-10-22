@@ -21,13 +21,13 @@ end
 function Player:canKeysLock(door)
 	--Description: Whether the player can lock a given door.
 	if door == NULL then return end
-	return canLock(self, door)
+	return YRPCanLock(self, door)
 end
 
 function Player:canKeysUnlock(door)
 	--Description: Whether the player can unlock a given door.
 	if door == NULL then return end
-	return canLock(self, door)	
+	return YRPCanLock(self, door)	
 end
 
 SetGlobalBool("DarkRP_LockDown", false)

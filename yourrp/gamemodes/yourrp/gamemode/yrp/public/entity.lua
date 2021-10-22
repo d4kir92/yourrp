@@ -13,3 +13,11 @@ function Entity:YRPIsDoor()
 	if self == NULL then return end
 	return self:GetClass() == "prop_door_rotating" or self:GetClass() == "func_door" or self:GetClass() == "func_door_rotating"
 end
+
+function Entity:SecurityLevel()
+	return self:GetNW2Int( "int_securitylevel", -1 )
+end
+
+function Entity:GetSecurityLevel()
+	return self:SecurityLevel()
+end

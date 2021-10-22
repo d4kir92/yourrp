@@ -535,13 +535,14 @@ timer.Simple(4, function() -- must be last hook
 			channel = string.upper(channel)
 		end
 
-
-
 		-- TARGET
 		local target = NULL
 		local texttab = string.Explode( " ", text, false )
 		if texttab[1] then
-			target = GetPlayerByRPName( texttab[1] )
+			local tar = GetPlayerByRPName( texttab[1] )
+			if tar then
+				target = tar
+			end
 		end
 
 

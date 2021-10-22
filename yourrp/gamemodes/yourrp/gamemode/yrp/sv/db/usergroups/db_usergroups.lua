@@ -88,89 +88,91 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusespawnmenu", "INT DEFAULT 1")
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 --db_is_empty(DATABASE_NAME)
 
-local yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-if wk(yrp_usergroups) then
-	for _i, _ug in pairs(yrp_usergroups) do
-		_ug.string_name = _ug.string_name or "failed"
-		_ug.string_name = string.lower(_ug.string_name)
-		YRP_SQL_UPDATE(DATABASE_NAME, {["string_name"] = _ug.string_name}, "uniqueID = '" .. _ug.uniqueID .. "'")
+timer.Simple( 1, function()
+	local yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+	if wk(yrp_usergroups) then
+		for _i, _ug in pairs(yrp_usergroups) do
+			_ug.string_name = _ug.string_name or "failed"
+			_ug.string_name = string.lower(_ug.string_name)
+			YRP_SQL_UPDATE(DATABASE_NAME, {["string_name"] = _ug.string_name}, "uniqueID = '" .. _ug.uniqueID .. "'")
+		end
 	end
-end
-yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-if wk(yrp_usergroups) then
-	for _i, _ug in pairs(yrp_usergroups) do
-		local tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug.string_name .. "'")
-		if wk(tmp) and #tmp > 1 then
-			for i, ug in pairs(tmp) do
-				if i > 1 then
-					YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. ug.uniqueID .. "'")
+	yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+	if wk(yrp_usergroups) then
+		for _i, _ug in pairs(yrp_usergroups) do
+			local tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug.string_name .. "'")
+			if wk(tmp) and #tmp > 1 then
+				for i, ug in pairs(tmp) do
+					if i > 1 then
+						YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. ug.uniqueID .. "'")
+					end
 				end
 			end
 		end
 	end
-end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
-	local _str = "string_name, "
-	_str = _str .. "bool_vehicles, "
-	_str = _str .. "bool_weapons, "
-	_str = _str .. "bool_entities, "
-	_str = _str .. "bool_effects, "
-	_str = _str .. "bool_npcs, "
-	_str = _str .. "bool_props, "
-	_str = _str .. "bool_ragdolls, "
-	_str = _str .. "bool_noclip, "
-	_str = _str .. "bool_ignite, "
-	_str = _str .. "bool_drive, "
-	_str = _str .. "bool_flashlight, "
-	_str = _str .. "bool_collision, "
-	_str = _str .. "bool_gravity, "
-	_str = _str .. "bool_keepupright, "
-	_str = _str .. "bool_bodygroups, "
-	_str = _str .. "bool_physgunpickup, "
-	_str = _str .. "bool_physgunpickupplayer, "
-	_str = _str .. "bool_physgunpickupworld, "
-	_str = _str .. "bool_adminaccess, "
-	_str = _str .. "bool_design, "
-	_str = _str .. "bool_general, "
-	_str = _str .. "bool_realistic, "
-	_str = _str .. "bool_groupsandroles, "
-	_str = _str .. "bool_players, "
-	_str = _str .. "bool_money, "
-	_str = _str .. "bool_licenses, "
-	_str = _str .. "bool_shops, "
-	_str = _str .. "bool_map, "
-	_str = _str .. "bool_whitelist, "
-	_str = _str .. "bool_feedback, "
-	_str = _str .. "bool_usergroups, "
-	_str = _str .. "bool_ac_database, "
-	_str = _str .. "bool_status, "
-	_str = _str .. "bool_yourrp_addons, "
-	_str = _str .. "int_position"
+	if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
+		local _str = "string_name, "
+		_str = _str .. "bool_vehicles, "
+		_str = _str .. "bool_weapons, "
+		_str = _str .. "bool_entities, "
+		_str = _str .. "bool_effects, "
+		_str = _str .. "bool_npcs, "
+		_str = _str .. "bool_props, "
+		_str = _str .. "bool_ragdolls, "
+		_str = _str .. "bool_noclip, "
+		_str = _str .. "bool_ignite, "
+		_str = _str .. "bool_drive, "
+		_str = _str .. "bool_flashlight, "
+		_str = _str .. "bool_collision, "
+		_str = _str .. "bool_gravity, "
+		_str = _str .. "bool_keepupright, "
+		_str = _str .. "bool_bodygroups, "
+		_str = _str .. "bool_physgunpickup, "
+		_str = _str .. "bool_physgunpickupplayer, "
+		_str = _str .. "bool_physgunpickupworld, "
+		_str = _str .. "bool_adminaccess, "
+		_str = _str .. "bool_design, "
+		_str = _str .. "bool_general, "
+		_str = _str .. "bool_realistic, "
+		_str = _str .. "bool_groupsandroles, "
+		_str = _str .. "bool_players, "
+		_str = _str .. "bool_money, "
+		_str = _str .. "bool_licenses, "
+		_str = _str .. "bool_shops, "
+		_str = _str .. "bool_map, "
+		_str = _str .. "bool_whitelist, "
+		_str = _str .. "bool_feedback, "
+		_str = _str .. "bool_usergroups, "
+		_str = _str .. "bool_ac_database, "
+		_str = _str .. "bool_status, "
+		_str = _str .. "bool_yourrp_addons, "
+		_str = _str .. "int_position"
 
-	local _str2 = "'superadmin', "
-	_str2 = _str2 .. "1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-	_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+		local _str2 = "'superadmin', "
+		_str2 = _str2 .. "1, 1, 1, 1, 1, 1, 1, 1"
+		_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+		_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
 
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
-end
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
+	end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'admin'") == nil then
-	local _str = "string_name"
+	if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'admin'") == nil then
+		local _str = "string_name"
 
-	local _str2 = "'admin'"
+		local _str2 = "'admin'"
 
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
-end
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
+	end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'user'") == nil then
-	local _str = "string_name"
+	if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'user'") == nil then
+		local _str = "string_name"
 
-	local _str2 = "'user'"
+		local _str2 = "'user'"
 
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
-end
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
+	end
+end )
 
 function SortUserGroups()
 	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
@@ -187,7 +189,7 @@ function SortUserGroups()
 		end
 	end
 end
-SortUserGroups()
+timer.Simple( 1, SortUserGroups )
 
 timer.Simple( 4, function()
 	YRP_SQL_DELETE_FROM(DATABASE_NAME, "string_name = 'yrp_usergroups'")

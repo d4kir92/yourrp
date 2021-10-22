@@ -640,15 +640,14 @@ hook.Add( "KeyPress", "yrp_keypress_use_door", function( ply, key )
 		local tr = util.TraceLine( {
 			start = ply:EyePos(),
 			endpos = ply:EyePos() + ply:EyeAngles():Forward() * GetGlobalInt("int_door_distance", 200),
-			filter = function( ent ) if ( ent:GetClass() == "func_door" ) then return true end end
+			filter = function( ent ) if ( ent:YRPIsDoor() ) then return true end end
 		} )
 
 		local ent = tr.Entity
 		if IsValid(ent) then
-			local hitclass = ent:GetClass()
-			if hitclass == "func_door" then
+			if ent:YRPIsDoor() then
 				local door = ent
-				openDoor(ply, door)
+				YRPOpenDoor(ply, door)
 			end
 		end
 	end

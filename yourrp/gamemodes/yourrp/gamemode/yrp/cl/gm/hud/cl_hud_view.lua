@@ -21,8 +21,8 @@ function showOwner(eyeTrace)
 end
 
 function showSecurityLevel(door)
-	if door:GetNW2Int("int_securitylevel", 0) > 0 and GetGlobalBool("bool_building_system", false) and GetGlobalBool("bool_show_securitylevel", true) then
-		draw.SimpleText(YRP.lang_string("LID_securitylevel") .. ": " ..	door:GetNW2Int("int_securitylevel", 0), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	if door:SecurityLevel() > 0 and GetGlobalBool("bool_building_system", false) and GetGlobalBool("bool_show_securitylevel", true) then
+		draw.SimpleText(YRP.lang_string("LID_securitylevel") .. ": " ..	door:SecurityLevel(), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end
 end
 

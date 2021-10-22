@@ -658,31 +658,48 @@ function IsOwnedBy(ply, door)
 	return false
 end
 
-function canLock(ply, door)
+function YRPCanLock(ply, door, open)
 	if door:YRPIsDoor() then
-		if door:GetNW2Int("ownerCharID", 0) > 0 then
-			if ply:CharID() == door:GetNW2Int("ownerCharID", 0) then
-				YRP.msg("note", "[canLock] " .. "IsOwner")
-				return true
+		if ply:GetSecurityLevel() >= door:SecurityLevel() then
+			if door:GetNW2Int("ownerCharID", 0) > 0 then
+				if ply:CharID() == door:GetNW2Int("ownerCharID", 0) then
+					YRP.msg("note", "[canLock] " .. "IsOwner")
+					return true
+				end
+				YRP.msg("note", "[canLock] " .. "Building has owner, but not this one! (from Player: " .. ply:RPName() .. ")")
+				return false
+			elseif door:GetNW2String("ownerGroup", "") != "" then
+				if tonumber(ply:GetNW2String("groupUniqueID", "-98")) == tonumber(door:GetNW2Int("ownerGroupUID", -99)) then
+					return true
+				elseif IsUnderGroupOf(ply, tonumber(door:GetNW2Int("ownerGroupUID", -99))) then
+					return true
+				elseif open and door:GetNW2String("ownerGroup", "") == "PUBLIC" then
+					return true
+				end
+				if open == nil then
+					YRP.msg("note", "[canLock] " .. "Building has group owner, but not this group! (from Player: " .. ply:RPName() .. ")")
+				end
+				return false
+			elseif door:GetNW2Int("ownerCharID", 0) == 0 and door:GetNW2String("ownerGroup", "") == "" then
+				if open then
+					return true
+				else
+					YRP.msg("note", "[canLock] " .. "Building has no owner! (from Player: " .. ply:RPName() .. ")")
+					return false
+				end
+			else
+				YRP.msg("error", "[canLock] " .. "Unknown Error")
+				return false
 			end
-			return false
-		elseif door:GetNW2String("ownerGroup", "") != "" then
-			if tonumber(ply:GetNW2String("groupUniqueID", "-98")) == tonumber(door:GetNW2Int("ownerGroupUID", -99)) then
-				return true
-			elseif IsUnderGroupOf(ply, tonumber(door:GetNW2Int("ownerGroupUID", -99))) then
-				return true
-			end
-			return false
-		elseif door:GetNW2Int("ownerCharID", 0) == 0 and door:GetNW2String("ownerGroup", "") == "" then
-			YRP.msg("note", "[canLock] " .. "Building has no owner! (from Player: " .. ply:RPName() .. ")")
-			return false
+			return true
 		else
-			YRP.msg("error", "[canLock] " .. "Unknown Error")
+			YRP.msg("note", "[canLock] " .. "Building has higher securitylevel! (from Player: " .. ply:RPName() .. ")")
 			return false
 		end
 	else
 		return canVehicleLock(ply, door)
 	end
+	return false
 end
 
 function canVehicleLock(ply, veh)

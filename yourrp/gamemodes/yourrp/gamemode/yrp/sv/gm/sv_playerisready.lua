@@ -2,7 +2,7 @@
 
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
-util.AddNetworkString("yrp_ready_received")
+util.AddNetworkString("yrp_chat_ready")
 
 local ostab = {}
 ostab[0] = "windows"
@@ -15,48 +15,6 @@ function YRPPlayerLoadedGame(ply, tab)
 	
 	ply:SetNW2Bool("PlayerLoadedGameStart", true)
 
-	local OS = tab.os
-	local Country = tab.country
-	local Branch = tab.branch
-
-	ply:SetNW2String("yrp_os", OS)
-
-	if Country == nil then
-		YRP.msg( "error", ply:YRPName() .. " Client is broken, Country = " .. tostring( Country ) )
-		ply:Kick( "YOUR GAME IS BROKEN! PLEASE VERIFY DATA" )
-	end
-
-	ply:SetNW2String("gmod_branch", Branch or "Unknown")
-	ply:SetNW2String("yrp_country", Country or "Unknown")
-	ply:SetNW2Float("uptime_current", os.clock())
-
-	YRP.msg( "note", ply:SteamName() .. " is using OS: " .. ply:GetNW2String("yrp_os", "-") )
-	YRP.msg( "note", ply:SteamName() .. " is using Branch: " .. tostring( Branch ) )
-	YRP.msg( "note", ply:SteamName() .. " is from Country: " .. GetCountryName( Country ) )
-
-	local country = string.lower( ply:GetNW2String("yrp_country") )
-	local countries = GetGlobalString( "text_whitelist_countries", "" )
-	countries = string.Explode( ",", countries, false )
-	if GetGlobalBool( "yrp_allowallcountries", false ) or table.Count( countries ) == 0 or ( countries[1] and strEmpty( countries[1] ) ) then
-		-- ALL ALLOWED
-	else
-		local found = false
-		for i, v in pairs( countries ) do
-			if string.lower( v ) == country then
-				found = true
-			end
-			if string.lower( v ) == "all" then
-				found = true
-			end
-		end
-		if !found then
-			YRP.msg( "note", "[Whitelist Countries] " .. ply:RPName() .. " was kicked, wrong country (" .. tostring( country ) .. ")" )
-			YRP.msg( "note", "[Whitelist Countries] F8 -> General -> Allowed Countries" )
-			ply:Kick( "NOT ALLOWED TO ENTER THIS SERVER, SORRY (:" )
-			return false
-		end
-	end
-
 	-- YRP Chat?
 	local _chat = YRP_SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")
 	if _chat != nil and _chat != false then
@@ -64,7 +22,9 @@ function YRPPlayerLoadedGame(ply, tab)
 		ply:SetNW2Bool("bool_yrp_chat", tobool(_chat.yrp_chat))
 	end
 
-	ply:YRPDesignLoadout("PlayerLoadedGame")
+	timer.Simple( 1, function()
+		ply:YRPDesignLoadout("PlayerLoadedGame")
+	end )
 
 	local plyT = ply:GetPlyTab()
 	if wk(plyT) then
@@ -96,8 +56,21 @@ function YRPPlayerLoadedGame(ply, tab)
 
 	ply:SetNW2Bool("PlayerLoadedGameEnd", true)
 
-	net.Start("yrp_ready_received")
-	net.Send(ply)
+	timer.Simple( 2, function()
+		if !IsValid(ply) then return end
+
+		if ply.DRPSendTeamsToPlayer and ply.DRPSendCategoriesToPlayer then
+			ply:DRPSendTeamsToPlayer()
+			ply:DRPSendCategoriesToPlayer()
+		end
+		
+		if ply.DRPSendTeamsToPlayer == nil then
+			YRP.msg("error", "Function not found! DRPSendTeamsToPlayer")
+		end
+		if ply.DRPSendCategoriesToPlayer == nil then
+			YRP.msg("error", "Function not found! DRPSendCategoriesToPlayer")
+		end
+	end )
 
 	return true
 end
@@ -153,16 +126,54 @@ local function YRPReceivedReadyMessage( len, ply, tab, nr )
 	if ply:GetNW2Bool( "yrp_received_ready", false ) == false or ply.yrp_received_ready == nil then
 		ply:SetNW2Bool( "yrp_received_ready", true )
 		ply.yrp_received_ready = true
-		
-		--YRP.msg( "note", ply:YRPName() .. " is ready for getting Data." )
 
-		YRPPlayerLoadedGame( ply, tab )
+		local OS = tab.os
+		local Country = tab.country
+		local Branch = tab.branch
+	
+		ply:SetNW2String("yrp_os", OS)
+	
+		if Country == nil then
+			YRP.msg( "error", ply:YRPName() .. " Client is broken, Country = " .. tostring( Country ) )
+			ply:Kick( "YOUR GAME IS BROKEN! PLEASE VERIFY DATA" )
+		end
+	
+		ply:SetNW2String("gmod_branch", Branch or "Unknown")
+		ply:SetNW2String("yrp_country", Country or "Unknown")
+		ply:SetNW2Float("uptime_current", os.clock())
+	
+		YRP.msg( "note", ply:SteamName() .. " is using OS: " .. ply:GetNW2String("yrp_os", "-") )
+		YRP.msg( "note", ply:SteamName() .. " is using Branch: " .. tostring( Branch ) )
+		YRP.msg( "note", ply:SteamName() .. " is from Country: " .. GetCountryName( Country ) )
+	
+		local country = string.lower( ply:GetNW2String("yrp_country") )
+		local countries = GetGlobalString( "text_whitelist_countries", "" )
+		countries = string.Explode( ",", countries, false )
+		if GetGlobalBool( "yrp_allowallcountries", false ) or table.Count( countries ) == 0 or ( countries[1] and strEmpty( countries[1] ) ) then
+			-- ALL ALLOWED
+		else
+			local found = false
+			for i, v in pairs( countries ) do
+				if string.lower( v ) == country then
+					found = true
+				end
+				if string.lower( v ) == "all" then
+					found = true
+				end
+			end
+			if !found then
+				YRP.msg( "note", "[Whitelist Countries] " .. ply:RPName() .. " was kicked, wrong country (" .. tostring( country ) .. ")" )
+				YRP.msg( "note", "[Whitelist Countries] F8 -> General -> Allowed Countries" )
+				ply:Kick( "NOT ALLOWED TO ENTER THIS SERVER, SORRY (:" )
+				return false
+			end
+		end
 	end
 end
 
 for i = 0, 6 do
-	util.AddNetworkString("yrp_is_ready_player" .. i)
-	net.Receive("yrp_is_ready_player" .. i, function( len, ply )
+	util.AddNetworkString("yrpisreadyplayer" .. i)
+	net.Receive("yrpisreadyplayer" .. i, function( len, ply )
 		local osid = net.ReadUInt( 2 )
 		local branch = net.ReadString()
 		local country = net.ReadString()
@@ -181,8 +192,8 @@ for i = 0, 6 do
 	end)
 end
 
-util.AddNetworkString("yrp_is_ready_player" .. "extra1")
-net.Receive("yrp_is_ready_player" .. "extra1", function( len, ply )
+util.AddNetworkString("yrpisreadyplayer" .. "extra1")
+net.Receive("yrpisreadyplayer" .. "extra1", function( len, ply )
 	local tab = net.ReadTable()
 
 	if !YRPCheckReadyTable( tab ) then
@@ -193,9 +204,9 @@ net.Receive("yrp_is_ready_player" .. "extra1", function( len, ply )
 	YRPReceivedReadyMessage( len, ply, tab, "extra1" )
 end)
 
-util.AddNetworkString("yrp_is_ready_player" .. "extra2")
-net.Receive("yrp_is_ready_player" .. "extra2", function( len, ply )
-	YRP.msg( "error", "[yrp_player_is_ready] UNKNOWN DATA: EXTRA2!" )
+util.AddNetworkString("yrpisreadyplayer" .. "extra2")
+net.Receive("yrpisreadyplayer" .. "extra2", function( len, ply )
+	YRP.msg( "error", "[yrp_player_is_ready] UNKNOWN DATA: EXTRA2!: " .. ply:YRPName() )
 
 	local tab = {}
 	tab["os"] = 3

@@ -1517,7 +1517,7 @@ function DrawDoorText(door)
 	surface.SetTextPos(- desc_size / 2, -50)
 	surface.DrawText(description)
 
-	local sl = door:GetNW2Int("int_securitylevel", 0)
+	local sl = door:SecurityLevel()
 	if sl > 0 and GetGlobalBool("bool_show_securitylevel", true) then
 		local int_securitylevel = YRP.lang_string("LID_securitylevel") .. ": " .. sl
 		surface.SetFont("Y_24_500")
@@ -1689,7 +1689,7 @@ function drawIDCard(ply, scale, px, py)
 						end
 						text = text .. ply:RPName()
 					elseif ele == "securitylevel" then
-						text = YRP.lang_string("LID_" .. ele) .. " " .. ply:GetNW2Int("int_securitylevel", 0)
+						text = YRP.lang_string("LID_" .. ele) .. " " .. ply:SecurityLevel()
 					elseif ele == "faction" then
 						if GetGlobalBool("bool_" .. ele .. "_title", false) then
 							text = YRP.lang_string("LID_faction") .. ": "
@@ -1909,7 +1909,7 @@ function YRPCPD(a)
 end
 
 local spacer = " | "
-function YRPCreateLoadingInfo( ti, rti )
+function YRPCreateLoadingInfo( ti )
 	local lply = LocalPlayer()
 	if IsValid(lply) then
 		local text = ""
@@ -1922,11 +1922,12 @@ function YRPCreateLoadingInfo( ti, rti )
 			if !strEmpty(text) then
 				text = text .. spacer
 			end
-			text = text .. "YRPReadyHook: " .. tostring( YRPReadyHook )
-			text = text .. " YRPReadyStuck: " .. table.concat( YRPReadyStuck, ", " ) .. " Counter: " .. tostring( YRPReadyStuckCounter )
-			text = text .. " received_ready: " .. tostring( lply:GetNW2Bool( "yrp_received_ready" ) ) .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
+			--text = text .. "YRPReadyHook: " .. tostring( YRPReadyHook ) .. " "
+			text = text .. "YRPReadyStuck: " .. table.concat( YRPReadyStuck, ", " ) .. " Counter: " .. tostring( YRPReadyStuckCounter )
+			text = text .. " received_ready: " .. tostring( lply:GetNW2Bool( "yrp_received_ready" ) ) -- .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
 			text = text .. " " .. table.ToString( YRPGetClientInfo(), "YRPGetClientInfo" )
 		end
+		--[[
 		if yrp2 and GetGlobalBool("bool_character_system") and !IsVoidCharEnabled() then
 			if !strEmpty(text) then
 				text = text .. spacer
@@ -1942,8 +1943,9 @@ function YRPCreateLoadingInfo( ti, rti )
 			end
 			text = text .. "HudLoadout: " .. tostring( lply:GetNW2Bool("yrp_hudloadout") ) .. " hud_msg: " .. lply:GetNW2String("yrp_hudloadout_msg", "X")
 		end
+		]]
 		if !strEmpty(text) then
-			text = "[Loading] " .. text .. " | time: " .. tostring( ti ) .. " rtime: " .. tostring( rti ) .. " plys: " .. player.GetCount()
+			text = "[Loading] " .. text .. " | time: " .. tostring( ti ) .. " plys: " .. player.GetCount() .. " Ver.: " .. YRPGetVersionFull()
 			text = text .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" )
 		end
 
@@ -1974,7 +1976,6 @@ if pa(yrp_loading_screen) then
 	yrp_loading_screen.blur = createD("DPanel", yrp_loading_screen, yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall(), 0, 0)
 	yrp_loading_screen.blur.d = CurTime() + 1
 	yrp_loading_screen.blur.t = 0
-	yrp_loading_screen.blur.rt = 0
 	yrp_loading_screen.blur.tmax = 120
 	yrp_loading_screen.blur.r = 0
 	yrp_loading_screen.blur.rdir = 1
@@ -2045,11 +2046,8 @@ if pa(yrp_loading_screen) then
 		if self.d < CurTime() then
 			self.d = CurTime() + 1
 			self.t = self.t + 1
-			self.rt = self.rt + 1
 
-			if hook.GetTable() and hook.GetTable()["InitPostEntity"] and hook.GetTable()["InitPostEntity"]["yrp_InitPostEntity_ISREADY"] == nil then
-				YRP.msg( "error", "HOOK WAS REMOVED [yrp_InitPostEntity_ISREADY]" )
-			elseif !YRPReadyHook then
+			if YRPReadyHook == false or YRP_NETWORKSTATEREADY == false then
 				self.t = 0
 			end
 		end
@@ -2134,39 +2132,49 @@ if pa(yrp_loading_screen) then
 
 
 		-- RETRY MESSAGE
-		if self.t > 8 or self.rt >= 8 then
+		if self.t >= 10 then
 			local py = 0.08
-			if lply:GetNW2Bool( "yrp_received_ready", false ) == false then
-				draw.SimpleText("RETRY SENDING READY MESSAGE", "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			if !YRP_NETWORKSTATEREADY then
+				draw.SimpleText("NOT READY FOR NETWORKING (SSD should help)", "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				py = py + 0.03
-			end
-			if !t1 then
-				yrpt1text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
 			else
-				yrpt1text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
-			end
-			if !strEmpty(yrpt1text) then
-				draw.SimpleText(YRP.lang_string( "LID_ready" ) .. yrpt1text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				py = py + 0.03
-			end
+				if YRPReadyAlready then
+					draw.SimpleText("THERE IS ALREADY A NET MESSAGE GOING ON", "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					py = py + 0.03
+				else
+					if lply:GetNW2Bool( "yrp_received_ready", false ) == false then
+						draw.SimpleText("RETRY SENDING READY MESSAGE", "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						py = py + 0.03
+					end
+					if !t1 then
+						yrpt1text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
+					else
+						yrpt1text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
+					end
+					if !strEmpty(yrpt1text) then
+						draw.SimpleText(YRP.lang_string( "LID_ready" ) .. yrpt1text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						py = py + 0.03
+					end
 
-			if !t2 then
-				yrpt2text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
-			else
-				yrpt2text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
-			end
-			if !strEmpty(yrpt2text) then
-				draw.SimpleText(YRP.lang_string( "LID_characters" ) .. yrpt2text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				py = py + 0.03
-			end
-			if !t3 then
-				yrpt3text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
-			else
-				yrpt3text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
-			end
-			if !strEmpty(yrpt3text) then
-				draw.SimpleText(YRP.lang_string( "LID_hud" ) .. yrpt3text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				py = py + 0.03
+					if !t2 then
+						yrpt2text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
+					else
+						yrpt2text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
+					end
+					if !strEmpty(yrpt2text) then
+						draw.SimpleText(YRP.lang_string( "LID_characters" ) .. yrpt2text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						py = py + 0.03
+					end
+					if !t3 then
+						yrpt3text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
+					else
+						yrpt3text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
+					end
+					if !strEmpty(yrpt3text) then
+						draw.SimpleText(YRP.lang_string( "LID_hud" ) .. yrpt3text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						py = py + 0.03
+					end
+				end
 			end
 		end
 
@@ -2178,15 +2186,15 @@ if pa(yrp_loading_screen) then
 
 		
 		-- TIME
-		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax .. "    (r): " .. self.rt, "Y_14_700", YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-		if self.t > 0 and self.rt >= 60 or self.rt >= 70 then
-			local text = YRPCreateLoadingInfo(self.t, self.rt)
+		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_14_700", YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		if self.t > 60 then
+			local text = YRPCreateLoadingInfo(self.t)
 			if !strEmpty(text) then
 				draw.SimpleText( text, "Y_18_700", pw - YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM )
 				
 				self.counttext = self.counttext or 0
 				self.countdelay = self.countdelay or 0
-				if self.counttext < 10 and self.countdelay < CurTime() then
+				if self.counttext < 20 and self.countdelay < CurTime() then
 					self.countdelay = CurTime() + 1
 					self.counttext = self.counttext + 1
 					YRP.msg( "error", text ) -- Loading Error
@@ -2202,7 +2210,7 @@ if pa(yrp_loading_screen) then
 			end
 		end
 
-		if (self.t >= 10 or self.rt >= 10) and self.disconnect == nil then
+		if self.t >= 10 and self.disconnect == nil then
 			local br = ScrH() * 0.010
 			self.disconnect = createD( "YButton", self, 300, 60, ScrW() - br - 300, ScrH() - br - 60 )
 			self.disconnect:SetText( "LID_disconnect" )

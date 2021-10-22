@@ -24,7 +24,7 @@ if SERVER then
 				-- MaxPlayers
 				entry["entry.1368236947"] = tostring(game.MaxPlayers())
 
-				-- VERSION
+				-- Version
 				entry["entry.1556630983"] = tostring(GAMEMODE.VersionStable)
 				entry["entry.1322118780"] = tostring(GAMEMODE.VersionBeta)
 				entry["entry.1406407238"] = tostring(GAMEMODE.VersionCanary)

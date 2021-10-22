@@ -127,6 +127,8 @@ function YRPLoadServerInfo()
 		timer.Simple( 0.1, function()
 			SetGlobalBool( "isserverdedicated", game.IsDedicated() )
 			SetGlobalString( "serverip", game.GetIPAddress() )
+			SetGlobalString( "serverversion", VERSION )
+			SetGlobalString( "serverversionstr", VERSIONSTR )
 		end )
 	else
 		timer.Simple( 0.1, YRPLoadServerInfo )

@@ -289,7 +289,7 @@ timer.Simple(1.0, YRPBuildDarkrpTeams)
 
 util.AddNetworkString("send_team")
 local Player = FindMetaTable("Player")
-local timerdelay = 0.02
+local timerdelay = 0.3
 function Player:DRPSendTeamsToPlayer()
 	self.yrp_darkrp_index = 1
 	for i, role in pairs(RPExtraTeams) do

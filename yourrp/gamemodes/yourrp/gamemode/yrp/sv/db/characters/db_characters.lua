@@ -654,6 +654,7 @@ net.Receive("YRPDeleteCharacter", function(len, ply)
 			else
 				YRP.msg("error", "STEAMID FAILED => " .. tostring(steamid) .. " [" .. tostring(ply) .. "]")
 			end
+
 			ply:Spawn()
 		else
 			YRP.msg("note", "DeleteCharacter: fail")

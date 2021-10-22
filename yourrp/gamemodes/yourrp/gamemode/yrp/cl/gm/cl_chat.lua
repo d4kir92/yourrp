@@ -310,39 +310,41 @@ else
 					local x, y = yrpChat.window:GetPos()
 					local w, h = yrpChat.window:GetSize()
 
-					local px = lply:HudValue("CH", "POSI_X")
-					local py = lply:HudValue("CH", "POSI_Y")
-					local sw = lply:HudValue("CH", "SIZE_W")
-					local sh = lply:HudValue("CH", "SIZE_H")
-					--YRP.msg("deb", "InitYRPChat x " .. x .. ", y " .. y .. ", w " .. w .. ", h " .. h .. ", px " .. px .. ", py " .. py .. ", sw " .. sw ..", sh " .. sh)
-					if px != x or py != y or sw != w or sh != h then
-						yrpChat.window:SetPos(px, py)
-						yrpChat.window:SetSize(sw, sh)
+					if lply.HudValue then
+						local px = lply:HudValue("CH", "POSI_X")
+						local py = lply:HudValue("CH", "POSI_Y")
+						local sw = lply:HudValue("CH", "SIZE_W")
+						local sh = lply:HudValue("CH", "SIZE_H")
+						--YRP.msg("deb", "InitYRPChat x " .. x .. ", y " .. y .. ", w " .. w .. ", h " .. h .. ", px " .. px .. ", py " .. py .. ", sw " .. sw ..", sh " .. sh)
+						if px != x or py != y or sw != w or sh != h then
+							yrpChat.window:SetPos(px, py)
+							yrpChat.window:SetSize(sw, sh)
 
-						yrpChat.window.logo:SetPos(YRP.ctr(BR), YRP.ctr(BR))
-						yrpChat.window.logo:SetSize(YRP.ctr(H), YRP.ctr(H))
-				
-						yrpChat.comboBox:SetPos(YRP.ctr(BR), sh - YRP.ctr(H + BR))
-						yrpChat.comboBox:SetSize(YRP.ctr(120), YRP.ctr(H))
+							yrpChat.window.logo:SetPos(YRP.ctr(BR), YRP.ctr(BR))
+							yrpChat.window.logo:SetSize(YRP.ctr(H), YRP.ctr(H))
+					
+							yrpChat.comboBox:SetPos(YRP.ctr(BR), sh - YRP.ctr(H + BR))
+							yrpChat.comboBox:SetSize(YRP.ctr(120), YRP.ctr(H))
 
-						yrpChat.writeField:SetPos(YRP.ctr(BR + 120), sh - YRP.ctr(H + BR))
-						yrpChat.writeField:SetSize(sw - YRP.ctr(2 * BR + 120 + H + BR), YRP.ctr(H))
+							yrpChat.writeField:SetPos(YRP.ctr(BR + 120), sh - YRP.ctr(H + BR))
+							yrpChat.writeField:SetSize(sw - YRP.ctr(2 * BR + 120 + H + BR), YRP.ctr(H))
 
-						yrpChat.richText:SetPos(YRP.ctr(BR), YRP.ctr(BR + H + BR))
-						yrpChat.richText:SetSize(sw - YRP.ctr(2 * BR), sh - YRP.ctr(BR + H + BR + BR + H + BR))
+							yrpChat.richText:SetPos(YRP.ctr(BR), YRP.ctr(BR + H + BR))
+							yrpChat.richText:SetSize(sw - YRP.ctr(2 * BR), sh - YRP.ctr(BR + H + BR + BR + H + BR))
 
-						yrpChat.settings:SetPos(sw - YRP.ctr(BR + H), sh - YRP.ctr(H + BR))
-						yrpChat.settings:SetSize(YRP.ctr(H), YRP.ctr(H))
+							yrpChat.settings:SetPos(sw - YRP.ctr(BR + H), sh - YRP.ctr(H + BR))
+							yrpChat.settings:SetSize(YRP.ctr(H), YRP.ctr(H))
 
-						--yrpChat.tabs:SetPos(YRP.ctr(BR), YRP.ctr(BR))
-						--yrpChat.tabs:SetSize(sw - YRP.ctr(2 * BR), YRP.ctr(H))
-					end
-					local _com = yrpChat.writeField:GetText()
-					_com = string.upper(_com)
-					local test = string.sub(_com, 3)
-					if (string.StartWith(_com, "!S") or string.StartWith(_com, "/S")) and test != nil and chatids[test] != nil then
-						yrpChat.writeField:SetText("")
-						yrpChat.comboBox:ChooseOption(test)
+							--yrpChat.tabs:SetPos(YRP.ctr(BR), YRP.ctr(BR))
+							--yrpChat.tabs:SetSize(sw - YRP.ctr(2 * BR), YRP.ctr(H))
+						end
+						local _com = yrpChat.writeField:GetText()
+						_com = string.upper(_com)
+						local test = string.sub(_com, 3)
+						if (string.StartWith(_com, "!S") or string.StartWith(_com, "/S")) and test != nil and chatids[test] != nil then
+							yrpChat.writeField:SetText("")
+							yrpChat.comboBox:ChooseOption(test)
+						end
 					end
 				else
 					self:MoveToBack()
@@ -815,7 +817,7 @@ else
 
 
 
-	net.Receive("yrp_ready_received", function(len)
+	net.Receive("yrp_chat_ready", function(len)
 		InitYRPChat()
 		timer.Simple(2, function()
 			_fadeout = CurTime() + 0.1

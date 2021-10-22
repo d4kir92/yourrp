@@ -170,7 +170,7 @@ function loadDoors()
 						timer.Simple(10, function()
 							v:Fire("Close")
 						end)]]
-						if v:GetNW2Int("int_securitylevel", 0) > 0 then
+						if v:SecurityLevel() > 0 then
 							v:Fire("Lock")
 						else
 							v:Fire("Unlock")
@@ -232,61 +232,47 @@ util.AddNetworkString("buyBuilding")
 util.AddNetworkString("removeOwner")
 util.AddNetworkString("sellBuilding")
 
-util.AddNetworkString("lockDoor")
-
 util.AddNetworkString("addnewbuilding")
 net.Receive("addnewbuilding", function()
 	YRP_SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
 end)
 
-function unlockDoor(ply, ent, nr)
-	if canLock(ply, ent) then
+function YRPUnYRPLockDoor(ply, ent, nr)
+	if YRPCanLock(ply, ent) then
 		ent:Fire("Unlock")
 		return true
 	end
 	return false
 end
 
-function lockDoor(ply, ent, nr)
-	if canLock(ply, ent) then
+function YRPLockDoor(ply, ent, nr)
+	if YRPCanLock(ply, ent) then
 		ent:Fire("Lock")
 		return true
 	end
 	return false
 end
 
-function openDoor(ply, ent, nr)
-	local _tmpBuildingTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. ent:GetNW2String("buildingID", "-1") .. "'")
-	if wk(_tmpBuildingTable) then
-		_tmpBuildingTable = _tmpBuildingTable[1]
+function YRPOpenDoor(ply, ent, nr)
 
-		_tmpBuildingTable.bool_canbeowned = tonumber(_tmpBuildingTable.bool_canbeowned)
-		_tmpBuildingTable.groupID = tonumber(_tmpBuildingTable.groupID)
-
-		if canLock(ply, ent) then
+	if YRPCanLock(ply, ent, true) then
+		if ply:SecurityLevel() >= ent:SecurityLevel() then
+			local locked = ent:GetSaveTable().m_bLocked
+			if locked then
+				ent:Fire("Unlock")
+			end
 			ent:Fire("Toggle")
-		elseif _tmpBuildingTable.bool_canbeowned == 0 or _tmpBuildingTable.groupID == -1 then
-			_tmpBuildingTable.int_securitylevel = tonumber(_tmpBuildingTable.int_securitylevel)
-			if ply:GetNW2Int("int_securitylevel", 0) >= _tmpBuildingTable.int_securitylevel and ply:HasWeapon("yrp_idcard") then
-				local locked = ent:GetSaveTable().m_bLocked
-				if locked then
-					ent:Fire("Unlock")
-				end
-				ent:Fire("Toggle")
-				if locked then
-					ent:Fire("Lock")
-				end
-			else
-				--YRP.msg("note", "Building: NOT ALLOWED TO OPEN")
-				local filename = "doors/default_locked.wav"
-				util.PrecacheSound(filename)
-				ent:EmitSound(filename, 75, 100, 1, CHAN_AUTO )
+			if locked then
+				ent:Fire("Lock")
 			end
 		else
-			YRP.msg("note", "Building must be not ownable or PUBLIC")
+			ent:Fire("Toggle")
 		end
 	else
-		YRP.msg("note", "Building not found!")
+		--YRP.msg("note", "Building: NOT ALLOWED TO OPEN")
+		local filename = "doors/default_locked.wav"
+		util.PrecacheSound(filename)
+		ent:EmitSound(filename, 75, 100, 1, CHAN_AUTO )
 	end
 end
 
@@ -428,7 +414,7 @@ function SetSecurityLevel(id, sl)
 		for i, door in pairs(GetAllDoors()) do
 			if door:GetNW2String("buildingID", -1) == id then
 				door:SetNW2Int("int_securitylevel", sl)
-				if door:GetNW2Int("int_securitylevel", 0) > 0 then
+				if door:SecurityLevel() > 0 then
 					door:Fire("Lock")
 				else
 					door:Fire("Unlock")

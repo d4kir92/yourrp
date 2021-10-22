@@ -54,23 +54,7 @@ function GM:PlayerConnect(name, ip)
 end
 
 function GM:PlayerInitialSpawn(ply)
-	--YRP.msg("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
-
-	timer.Simple(0.001, function()
-		if !IsValid(ply) then return end
-
-		if ply.DRPSendTeamsToPlayer and ply.DRPSendCategoriesToPlayer then
-			ply:DRPSendTeamsToPlayer()
-			ply:DRPSendCategoriesToPlayer()
-		end
-		
-		if ply.DRPSendTeamsToPlayer == nil then
-			YRP.msg("error", "Function not found! DRPSendTeamsToPlayer")
-		end
-		if ply.DRPSendCategoriesToPlayer == nil then
-			YRP.msg("error", "Function not found! DRPSendCategoriesToPlayer")
-		end
-	end)
+	YRP.msg("gm", "[PlayerInitialSpawn] " .. ply:YRPName())
 
 	if ply:IsBot() then
 		check_yrp_client(ply, ply:SteamID())
@@ -93,18 +77,24 @@ function GM:PlayerInitialSpawn(ply)
 		YRPCreateCharacter(ply, tab)
 
 		ply:SetNW2Bool("yrp_characterselection", false)
-		
-		local tab = {}
-		tab.os = "other"
-		tab.branch = "64bit"
-		tab.country = "US"
-		YRPPlayerLoadedGame( ply, tab )
+	else
+		YRPPlayerLoadedGame( ply )
 	end
 
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
 		ply:SetNW2Bool("yrp_voice_channel_mute_" .. channel.uniqueID, !tobool(channel.int_hear))
 		ply:SetNW2Bool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true)
 	end
+
+	timer.Simple( 1, function()
+		if IsValid(ply) and ply.KillSilent then
+			if GetGlobalBool("bool_character_system", true) then
+				ply:KillSilent()
+			else
+				ply:Spawn()
+			end
+		end
+	end )
 
 	if !IsValid(ply) then
 		return
@@ -312,7 +302,6 @@ end)
 
 hook.Add("PlayerSpawn", "yrp_player_spawn_PlayerSpawn", function(ply)
 	--YRP.msg("gm", "[PlayerSpawn] " .. tostring(ply:YRPName()) .. " spawned.")
-	
 	if ply:GetNW2Bool("can_respawn", false) then
 		ply:SetNW2Bool("can_respawn", false)
 

@@ -51,7 +51,7 @@ function HudToCode(name)
 end
 --HudToCode("Identifycard")
 
-local VERSION = 1
+local HUDPROFILEVERSION = 1
 
 YRPHUDS = YRPHUDS or {}
 
@@ -65,7 +65,7 @@ function HudProfileToDataBase(name, tab)
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. i .. "', '" .. v .. "'")
 		end
 	else
-		if tab.Version != VERSION then
+		if tab.Version != HUDPROFILEVERSION then
 			YRP.msg("db", "Updating Hud Profile: " .. name, nil, true)
 			for i, v in pairs(tab) do
 				YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = v}, "name = '" .. i .. "' AND profile_name = '" .. name .. "'")

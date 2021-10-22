@@ -17,9 +17,9 @@ GM.Twitter = "twitter.com/D4KIR" -- do NOT change this!
 GM.Help = "Create your rp you want to make!" -- do NOT change this!
 GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
-GM.VersionBeta = 350 -- do NOT change this!
-GM.VersionCanary = 703 -- do NOT change this!
-GM.VersionBuild = 94 -- do NOT change this!
+GM.VersionBeta = 351 -- do NOT change this!
+GM.VersionCanary = 705 -- do NOT change this!
+GM.VersionBuild = 106 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -167,7 +167,7 @@ concommand.Add("yrp_status", function(ply, cmd, args)
 	end
 
 	hr_pre("gm")
-	YRP.msg("gm", "    Version: " .. GAMEMODE.Version)
+	YRP.msg("gm", "    Version: " .. YRPGetVersionFull() )
 	YRP.msg("gm", "    Channel: " .. string.upper(GAMEMODE.VersionSort))
 	YRP.msg("gm", " Servername: " .. YRPGetHostName())
 	YRP.msg("gm", "         IP: " .. game.GetIPAddress())
@@ -210,33 +210,28 @@ concommand.Add("yrp_map", function(ply, cmd, args)
 	hr_pos("gm")
 end)
 
-function makeString(tab, str_len, cut)
-	local _result = ""
-	for i = 1, str_len do
-		if tab[i] != nil then
-			_result = _result .. tab[i]
-		elseif i >= str_len-3 and cut then
-			_result = _result .. "."
-		else
-			_result = _result .. " "
-		end
-	end
-	return _result
+function makeString(str, len)
+	str = string.sub( str, 1, len )
+	str = string.format( "%-" .. len .. "s", str )
+	return str
 end
 
 concommand.Add("yrp_players", function(ply, cmd, args)
-	hr_pre("gm")
-	YRP.msg("gm", "Players:\t" .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()))
-	YRP.msg("gm", "ID   SteamID              Name                     Money")
+	local structure = "%-4s %-20s %-20s %-10s %-10s"
+	hr_pre( "gm" )
+	YRP.msg( "gm", "Players:\t" .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()) )
+	YRP.msg( "gm", string.format( structure,"ID", "SteamID", "Name", "Money", "OS" ) )
+	YRP.msg( "gm", "----------------------------------------------------------------------" )
 	for i, pl in pairs(player.GetAll()) do
-		local _id = makeString(string.ToTable(pl:UserID()), 4, false)
-		local _steamid = makeString(string.ToTable(pl:SteamID()), 20, false)
-		local _name = makeString(string.ToTable(pl:YRPName()), 24, true)
-		local _money = makeString(string.ToTable(pl:GetNW2String("money", -1)), 12, false)
-		local _str = string.format("%s %s %s %s", _id, _steamid, _name, _money)
-		YRP.msg("gm", _str)
+		local _id = 		makeString( pl:UserID(), 4 )
+		local _steamid = 	makeString( pl:SteamID(), 20 )
+		local _name = 		makeString( pl:YRPName(), 20 )
+		local _money = 		makeString( pl:GetNW2String("money", -1), 10 )
+		local _os = 		makeString( pl:GetNW2String("yrp_os"), 10 )
+		local _str = string.format( structure, _id, _steamid, _name, _money, _os )
+		YRP.msg( "gm", _str )
 	end
-	hr_pos("gm")
+	hr_pos( "gm" )
 end)
 
 function PrintHelp()
@@ -709,7 +704,7 @@ function YRPReplaceWithPlayerNames(text)
 		local test = string.Explode( " ", text )
 		for i, str in pairs(test) do
 			for _, p in pairs(player.GetAll()) do
-				if #str > 4 and string.StartWith(string.lower(p:RPName()), string.lower(str)) then
+				if #str >= 4 and string.StartWith(string.lower(p:RPName()), string.lower(str)) then
 					test[i] = p:RPName()
 				end
 			end
@@ -757,7 +752,7 @@ function YRPChatReplaceCMDS(structure, ply, text)
 	result = string.Replace(result, "%ROLE%", ply:GetRoleName())
 
 	local newtext = string.Explode( " ", text, false )
-	if newtext[1] then
+	if newtext[1] and #newtext[1] >= 4 then
 		local target = GetPlayerByRPName( newtext[1] )
 		if ea( target ) then
 			result = string.Replace(result, "%TARGET%", target:RPName())
@@ -847,7 +842,13 @@ end
 local function YRPSendError(tab, from)
 	local entry = {}
 	local posturl = ""
-	
+
+	if tab.buildnummer != gmbn then
+		MsgC( Color(255, 0, 0), ">>> [YRPSendError] FAIL, ERROR IS OUTDATED" .. "\n" )
+		YRPRemoveOutdatedErrors()
+		return
+	end
+
 	if tab.realm == "SERVER" then
 		-- err
 		entry["entry.60824756"] = tostring(tab.err)
@@ -905,12 +906,6 @@ local function YRPSendError(tab, from)
 		return
 	end
 
-	if tab.buildnummer != gmbn then
-		MsgC( Color(255, 0, 0), ">>> [YRPSendError] FAIL, ERROR IS OUTDATED" .. "\n" )
-		YRPRemoveOutdatedErrors()
-		return
-	end
-
 	if GAMEMODE and yrpversionisset and IsYRPOutdated then
 		if IsYRPOutdated() then
 			MsgC( Color(255, 0, 0), "[YRPSendError] >> YourRP Is Outdated" .. "\n" )
@@ -938,22 +933,6 @@ local function YRPSendError(tab, from)
 	end
 end
 
-function YRPAddError(err, trace, realm)
-	local newerr = {}
-	newerr.err = err
-	newerr.trace = trace
-	newerr.ts = os.time()
-	newerr.realm = realm
-	newerr.sended = false
-	newerr.buildnummer = gmbn
-	table.insert(YRPErrors, newerr)
-
-	YRPSendError(newerr, "NEW ERROR")
-
-	YRPSaveErrors()
-end
-
--- REMOVE OUTDATED ONES
 function YRPRemoveOutdatedErrors()
 	if YRPErrors and GAMEMODE then
 		local TMPYRPErrors = {}
@@ -982,7 +961,22 @@ function YRPRemoveOutdatedErrors()
 		timer.Simple(0.01, YRPRemoveOutdatedErrors)
 	end
 end
-YRPRemoveOutdatedErrors()
+timer.Simple(0.1, YRPRemoveOutdatedErrors)
+
+function YRPAddError(err, trace, realm)
+	local newerr = {}
+	newerr.err = err
+	newerr.trace = trace
+	newerr.ts = os.time()
+	newerr.realm = realm
+	newerr.sended = false
+	newerr.buildnummer = gmbn
+	table.insert(YRPErrors, newerr)
+
+	YRPSendError(newerr, "NEW ERROR")
+
+	YRPSaveErrors()
+end
 
 hook.Add("OnLuaError", "yrp_OnLuaError", function(...)
 	local tab = ...
@@ -1209,8 +1203,11 @@ function YRPCheckReadyTable( tab )
 	return true
 end
 
-if false then
+local shownetstats = false
+
+if true then
 	local nettab = {}
+	local nettab2 = {}
 	function net.Incoming(len, client)
 		local i = net.ReadHeader()
 		local strName = util.NetworkIDToString( i )
@@ -1220,11 +1217,18 @@ if false then
 		-- NEW
 		local plyNick = IsValid(client) and client:Nick() or "UNKNOWN PLAYER NAME"
 		
-		if strName then
-			MsgC( Color( 0, 255, 0 ), string.format("Message: %s Client: %s\n", strName, plyNick) )
-		else
-			MsgC( Color( 0, 255, 0 ), string.format("Client: %s\n", plyNick) )
+		if shownetstats then
+			MsgC( Color( 0, 255, 0 ), "\n" )
+			MsgC( Color( 0, 255, 0 ), "-NETSTATS-------------------------------------------------------------" .. "\n" )
 		end
+
+		--[[
+			if strName then
+			MsgC( Color( 255, 255, 255 ), string.format("Message: %s Client: %s\n", strName, plyNick) )
+		else
+			MsgC( Color( 255, 255, 255 ), string.format("Client: %s\n", plyNick) )
+		end
+		]]
 		-- NEW
 
 		local func = net.Receivers[ strName:lower() ]
@@ -1238,15 +1242,74 @@ if false then
 		-- NEW
 		nettab[strName] = nettab[strName] or 0
 		nettab[strName] = nettab[strName] + len / 8
-		
-		MsgC( Color( 0, 255, 0 ), "#####     #####     #####     #####     #####     #####     #####" .. "\n" )
-		for i, v in SortedPairsByValue( nettab, true ) do
-			if v > 0 then
-				MsgC( Color( 0, 255, 0 ), i .. " " .. tostring( v ) .. "\n" )
+
+		nettab2[strName] = nettab2[strName] or 0
+		nettab2[strName] = nettab2[strName] + 1
+
+		if shownetstats then
+			MsgC( Color( 0, 255, 0 ), "     DATA | NETNAME" .. "\n" )
+			MsgC( Color( 0, 255, 0 ), "----------------------------------------" .. "\n" )
+
+			local count = 0
+			local found = false
+			for i, v in SortedPairsByValue( nettab, true ) do
+				if v > 10 and count < 14 then
+					count = count + 1
+					found = true
+					MsgC( Color( 0, 255, 0 ), string.format("%9d ", tostring( v ) ) .. "| " .. i .. "\n" )
+				end
+			end
+			if !found then
+				MsgC( Color( 0, 255, 0 ), " > EMPTY <" .. "\n" )
+			end
+
+			MsgC( Color( 0, 255, 0 ), "\n" )
+
+			MsgC( Color( 0, 255, 0 ), "    CALLS | NETNAME" .. "\n" )
+			MsgC( Color( 0, 255, 0 ), "----------------------------------------" .. "\n" )
+
+			count = 0
+			found = false
+			for i, v in SortedPairsByValue( nettab2, true ) do
+				if v > 10 and count < 14 then
+					count = count + 1
+					found = true
+					MsgC( Color( 0, 255, 0 ), string.format("%9d ", tostring( v ) ) .. "| " .. i .. "\n" )
+				end
+			end
+			if !found then
+				MsgC( Color( 0, 255, 0 ), "> EMPTY <" .. "\n" )
+			end
+
+			if shownetstats then
+				MsgC( Color( 0, 255, 0 ), "-NETSTATS-------------------------------------------------------------" .. "\n" )
+				MsgC( Color( 0, 255, 0 ), "\n" )
 			end
 		end
 
 		-- NEW
 		func( len, client )
 	end
+end
+
+concommand.Add("yrp_netstats", function( ply, cmd, args )
+    shownetstats = !shownetstats
+	if shownetstats then
+		MsgC( Color( 0, 255, 0 ), "[yrp_netstats] Enabled" .. "\n" )
+	else
+		MsgC( Color( 255, 0, 0 ), "[yrp_netstats] Disabled" .. "\n" )
+	end
+end)
+
+if CLIENT then
+	timer.Simple(1, function()
+		MsgC( Color( 255, 255, 0 ), "Server: " .. GetGlobalString( "serverversion", VERSION ) .. "\n" )
+		MsgC( Color( 255, 255, 0 ), "Client: " .. VERSION .. "\n" )
+
+		if GetGlobalString( "serverversion", VERSION ) != VERSION then
+			MsgC( Color( 255, 0, 0 ), "YOUR GAME IS OUTDATED!" .. "\n" )
+		else
+			MsgC( Color( 0, 255, 0 ), "YOUR GAME IS UP-To-Date!" .. "\n" )
+		end
+	end)
 end

@@ -9,8 +9,11 @@ YRPReadyStuck = YRPReadyStuck or {}
 YRPReadyStuckCounter = YRPReadyStuckCounter or 0
 
 YRPReadyHook = YRPReadyHook or false
+YRPReadyRetry = YRPReadyRetry or false
 
-function YRPReadyAddEvent( msg )
+YRPReadyAlready = YRPReadyAlready or false
+
+local function YRPReadyAddEvent( msg )
 	if !table.HasValue( YRPReadyStuck, msg ) then
 		table.insert( YRPReadyStuck, msg )
 	end
@@ -43,7 +46,7 @@ function YRPGetClientInfo()
 	return info
 end
 
-function YRPSendIsReadyPingPong()	-- IMPORTANT
+local function YRPSendIsReadyPingPong( from )	-- IMPORTANT
 	YRPReadyAddEvent( "PingPong" )
 
 	local lply = LocalPlayer()
@@ -54,36 +57,58 @@ function YRPSendIsReadyPingPong()	-- IMPORTANT
 	else
 		
 		if system.IsWindows and system.GetCountry and GetBranch and system.GetCountry() and GetBranch() then
-			YRPReadyAddEvent( "OSReady" )
+			--YRPReadyAddEvent( "OSReady" )
 			local info = YRPGetClientInfo()
 			
 			if lply:GetNW2Bool( "yrp_received_ready", false ) == false then
-				YRPReadyAddEvent( "Send" )
+				--YRPReadyAddEvent( "Send" )
 				YRPCheckReadyTable( info )
 
-				if YRPReadyStuckCounter <= 6 then
-					net.Start("yrp_is_ready_player" .. YRPReadyStuckCounter)
-						net.WriteUInt( info.os, 2 )
-						net.WriteString( info.branch )
-						net.WriteString( info.country )
-					net.SendToServer()
-					YRPReadyAddEvent( "Sended" )
-					YRPReadyMSG( "SENDED READY MESSAGE TO SERVER.", Color( 0, 255, 0 ) )
-					YRPReadyStuckCounter = YRPReadyStuckCounter + 1
-				elseif YRPReadyStuckCounter <= 7 then
-					net.Start("yrp_is_ready_player" .. "extra1")
-						net.WriteTable( info )
-					net.SendToServer()
-					YRPReadyAddEvent( "Alternative1" )
-					YRPReadyMSG( "SENDED READY MESSAGE TO SERVER. EXTRA1", Color( 255, 255, 0 ) )
+				local b, bb = net.BytesLeft()
+				local w, ww = net.BytesWritten()
+				if b and b > 0 and w and w > 0 then
+					YRPReadyAlready = true
+					YRPReadyMSG( "Already running a net message, retry sending ready message.", Color( 0, 255, 0 ) )
+					timer.Simple(0.01, function()
+						YRPSendIsReadyPingPong()
+					end)
+					YRPRetryCurtime = YRPRetryCurtime + 0.01
 				else
-					net.Start("yrp_is_ready_player" .. "extra2")
-					net.SendToServer()
-					YRPReadyAddEvent( "Alternative2" )
-					YRPReadyMSG( "SENDED READY MESSAGE TO SERVER. EXTRA2", Color( 255, 255, 0 ) )
+					YRPReadyAlready = false
+					if YRPReadyStuckCounter <= 6 then
+						net.Start("yrpisreadyplayer" .. YRPReadyStuckCounter)
+							net.WriteUInt( info.os, 2 )
+							net.WriteString( info.branch )
+							net.WriteString( info.country )
+						net.SendToServer()
+						YRPReadyAddEvent( "Sended" )
+						YRPReadyMSG( "SENDED READY MESSAGE TO SERVER.", Color( 0, 255, 0 ) )
+						YRPReadyStuckCounter = YRPReadyStuckCounter + 1
+					elseif YRPReadyStuckCounter <= 7 then
+						net.Start("yrpisreadyplayer" .. "extra1", true)
+							net.WriteTable( info )
+						net.SendToServer()
+						
+						--YRP.msg( "error", lply:YRPName() .. " 1 LOADING STUCK osid: " .. tostring( info.os ) .. " country: " .. tostring( info.country ) )
+						--YRP.msg( "error", lply:YRPName() .. " 1 LOADING STUCK GAME: " .. tostring( VERSION ) .. " " .. tostring( BRANCH ) )
+	
+						YRPReadyAddEvent( "Alternative1" )
+						YRPReadyMSG( "SENDED READY MESSAGE TO SERVER. EXTRA1", Color( 255, 255, 0 ) )
+						YRPReadyStuckCounter = YRPReadyStuckCounter + 1
+					else
+						net.Start("yrpisreadyplayer" .. "extra2")
+						net.SendToServer()
+						
+						--YRP.msg( "error", lply:YRPName() .. " 2 LOADING STUCK osid: " .. tostring( info.os ) .. " country: " .. tostring( info.country ) )
+						--YRP.msg( "error", lply:YRPName() .. " 2 LOADING STUCK GAME: " .. tostring( VERSION ) .. " " .. tostring( BRANCH ) )
+						
+						YRPReadyAddEvent( "Alternative2" )
+						YRPReadyMSG( "SENDED READY MESSAGE TO SERVER. EXTRA2", Color( 255, 255, 0 ) )
+					end
+					
+					YRPRetryCurtime = CurTime() + 6 + YRPReadyStuckCounter
+					YRPReadyRetry = true
 				end
-
-				YRPRetryCurtime = CurTime() + 6 + YRPReadyStuckCounter
 			else
 				YRPReadyMSG( "Server received the ready message.", Color( 0, 255, 0 ) )
 			end
@@ -104,50 +129,59 @@ hook.Add( "Think", "YRP_RETRYSENDMESSAGE", function()
 
 	local lply = LocalPlayer()
 
-	if IsValid(lply) and lply:GetNW2Bool( "yrp_received_ready", false ) == false and YRPRetryCurtime < CurTime() then
+	if YRPReadyRetry and IsValid(lply) and lply:GetNW2Bool( "yrp_received_ready", false ) == false and YRPRetryCurtime < CurTime() then
 		YRPReadyMSG( "Retry sending ready message..." )
 		YRPReadyAddEvent( "Retry" )
-		YRPSendIsReadyPingPong()
+		YRPSendIsReadyPingPong( "Retry" )
 	elseif lply:GetNW2Bool( "yrp_received_ready", false ) == true then
 		YRPReadyMSG( "Server received the ready message!", Color( 0, 255, 0 ) )
 		hook.Remove( "Think", "YRP_RETRYSENDMESSAGE" )
 	end
 end )
 
-function YRPSendIsReady()
-	YRPReadyAddEvent( "SendIsReady" )
+local function YRPSendIsReady( from )
+	YRPReadyAddEvent( "Start" )
 	YRPReadyMSG( "SETUP READY MESSAGE", Color( 0, 255, 0 ) )
 
-	YRPSendIsReadyPingPong()
-
-	YRP.initLang()
-
-	local _wsitems = engine.GetAddons()
-	YRP.msg("note", "[" .. #_wsitems .. " Workshop items]")
-	YRP.msg("note", " Nr.\tID\t\tName Mounted")
-
-	for k, ws in pairs(_wsitems) do
-		if !ws.mounted then
-			YRP.msg("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
-			if IsValid(ws.path) then
-				game.MountGMA(tostring(ws.path))
-			else
-				YRP.msg("note", "Path is not valid! [" .. tostring(ws.path) .. "]")
-			end
-		end
-	end
-
-	YRP.msg("note", ">> Workshop Addons Done <<")
-
-	YRP.LoadDesignIcon()
+	YRPSendIsReadyPingPong( "SendIsReady" )
 end
 
-hook.Add("InitPostEntity", "yrp_InitPostEntity_ISREADY", function()
-	YRP.msg( "note", "InitPostEntity -> ISREADY" )
-
+YRP_NETWORKSTATEREADY = YRP_NETWORKSTATEREADY or false
+hook.Add( "HUDPaint", "yrp_HUDPaint_ISREADY", function()
 	YRPReadyHook = true
 
-	YRPReadyAddEvent( "InitPostEntity" )
+	if YRP_NETWORKSTATEREADY then
+		YRPReadyAddEvent( "HUDPaint" )
 
-	YRPSendIsReady()
-end)
+		YRPSendIsReady( "HUDPaint" )
+
+		YRP.initLang()
+
+		local _wsitems = engine.GetAddons()
+		YRP.msg("note", "[" .. #_wsitems .. " Workshop items]")
+		YRP.msg("note", " Nr.\tID\t\tName Mounted")
+
+		for k, ws in pairs(_wsitems) do
+			if !ws.mounted then
+				YRP.msg("note", "+[" .. k .. "]\t[" .. tostring(ws.wsid) .. "]\t[" .. tostring(ws.title) .. "] Mounting")
+				if IsValid(ws.path) then
+					game.MountGMA(tostring(ws.path))
+				else
+					YRP.msg("note", "Path is not valid! [" .. tostring(ws.path) .. "]")
+				end
+			end
+		end
+
+		YRP.msg("note", ">> Workshop Addons Done <<")
+
+		YRP.LoadDesignIcon()
+
+		hook.Remove( "HUDPaint", "yrp_HUDPaint_ISREADY" )
+	end
+end )
+
+hook.Add( "ClientSignOnStateChanged", "yrp_ClientSignOnStateChanged_ISREADY", function( userID, oldState, newState )
+	if newState == SIGNONSTATE_FULL then
+		YRP_NETWORKSTATEREADY = true
+	end
+end )

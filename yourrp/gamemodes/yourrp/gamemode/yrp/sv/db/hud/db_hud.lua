@@ -1048,6 +1048,11 @@ function Player:HudLoadout()
 		self:SetNW2Bool("yrp_hudloadout", true)
 
 		self:SetNW2String("yrp_hudloadout_msg", "> Sended <")
+
+		timer.Simple( 1, function()
+			net.Start("yrp_chat_ready")
+			net.Send(self)
+		end )
 	else
 		self:SetNW2String("yrp_hudloadout_msg", "Failed")
 	end

@@ -67,7 +67,7 @@ function SWEP:PrimaryAttack()
 		local ent = self:GetOwner():GetEyeTrace().Entity
 		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalInt("int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
-				if unlockDoor(self:GetOwner(), ent, ent:GetNW2String("buildingID", "Failed")) then
+				if YRPUnYRPLockDoor(self:GetOwner(), ent, ent:GetNW2String("buildingID", "Failed")) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_unlockeddoor"))
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_youdonthaveakey"))
@@ -88,7 +88,7 @@ function SWEP:SecondaryAttack()
 		local ent = self:GetOwner():GetEyeTrace().Entity
 		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalInt("int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
-				if lockDoor(self:GetOwner(), ent, ent:GetNW2String("buildingID", "Failed")) then
+				if YRPLockDoor(self:GetOwner(), ent, ent:GetNW2String("buildingID", "Failed")) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_lockeddoor"))
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string("LID_youdonthaveakey"))
