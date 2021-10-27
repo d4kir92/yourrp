@@ -774,20 +774,20 @@ function YRPHUD(name, failed)
 end
 
 net.Receive("yrp_hud_info", function(len)
-	local hud = net.ReadTable()
+	local name = net.ReadString()
+	local value = net.ReadString()
 
-	for i, v in pairs(hud) do
-		if string.StartWith(v.name, "float_") or string.StartWith(v.name, "int_") then
-			yrp_hud[v.name] = tonumber(v.value)
-		elseif string.StartWith(v.name, "bool_") then
-			yrp_hud[v.name] = tobool(v.value)
-		else
-			yrp_hud[v.name] = v.value
-		end
+	if string.StartWith(name, "float_") or string.StartWith(name, "int_") then
+		yrp_hud[name] = tonumber(value)
+	elseif string.StartWith(name, "bool_") then
+		yrp_hud[name] = tobool(value)
+	else
+		yrp_hud[name] = value
 	end
+end)
 
+net.Receive("yrp_hud_info_end", function(len)
 	yrp_hud_loaded = true
-	--changeFontSize()
 end)
 
 --Remove Ragdolls after 60 sec
@@ -829,7 +829,7 @@ function YRP.DrawSymbol(ply, str, z, color)
 	cam.End3D2D()
 end
 
-function drawStringBox(ent, instr, z, color)
+function YRPDrawNamePlateStringBox(ent, instr, z, color)
 	local pos = ent:GetPos() + Vector(0, 0, ent:OBBMaxs().z)
 
 	if ent:LookupBone("ValveBiped.Bip01_Head1") then
@@ -863,7 +863,7 @@ function drawStringBox(ent, instr, z, color)
 	cam.End3D2D()
 end
 
-function drawString(ply, instr, z, color)
+function YRPDrawNamePlateString(ply, instr, z, color)
 	local pos = ply:GetPos() + Vector(0, 0, ply:OBBMaxs().z)
 
 	if ply:LookupBone("ValveBiped.Bip01_Head1") then
@@ -871,18 +871,19 @@ function drawString(ply, instr, z, color)
 	end
 
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
-	local sca = ply:GetModelScale() / 4
+	local sca = ply:GetModelScale() / 4 / 5
 	local str = instr
 	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
-		surface.SetFont("Y_22_500")
+		surface.SetFont("Y_100_500")
 		local _tw, _th = surface.GetTextSize(str)
 		_tw = math.Round(_tw * 1.08, 0)
 		_th = _th
-		surfaceText(str, "Y_22_500", 0, _th / 2 + 1, color, 1, 1)
+		draw.SimpleText(str, "Y_100_500", 0, _th / 2 + 1, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	cam.End3D2D()
 end
 
-function drawBar(ply, stri, z, color, cur, max, barcolor)
+local lerptab = {}
+function YRPDrawNamePlateBar(ply, stri, z, color, cur, max, barcolor, name)
 	local pos = ply:GetPos() + Vector(0, 0, ply:OBBMaxs().z)
 
 	if ply:LookupBone("ValveBiped.Bip01_Head1") then
@@ -890,21 +891,29 @@ function drawBar(ply, stri, z, color, cur, max, barcolor)
 	end
 
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
-	local sca = ply:GetModelScale() / 4
+	local sca = ply:GetModelScale() / 4 / 5
 	local str = stri
 	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
-		surface.SetFont("Y_22_500")
+		surface.SetFont("Y_100_500")
 		local _tw, _th = surface.GetTextSize(str)
 		_th = _th
-		local w = 200
-		local r = 4
-		draw.RoundedBox(r, -w / 2 - 2, 2 - 2, w + 4, 20 + 4, Color(0, 0, 0, barcolor.a))
-		draw.RoundedBox(r / 2, -w / 2, 2, w * cur / max, 20, barcolor)
-		surfaceText(str, "Y_22_500", 0, _th / 2 - 0.2, color, 1, 1)
+		local w = 1000
+		local r = 18
+		local br = 10
+
+		lerptab[name] = lerptab[name] or 0
+		lerptab[name] = Lerp( FrameTime() * 2, lerptab[name], cur )
+		
+		draw.RoundedBox(r, -w / 2 - br, 2 - br, w + br * 2, 100 + br * 2, Color(0, 0, 0, barcolor.a))
+		draw.RoundedBox(r / 2, -w / 2, 2, w * lerptab[name] / max, 100, barcolor)
+		surfaceText(str, "Y_100_500", 0, _th / 2 - 0.2, color, 1, 1)
 	cam.End3D2D()
 end
 
-function drawPlate(ply, stri, z, color)
+function YRPDrawNamePlate( ply, stri, z, color )
+	local br = 2
+	local font = "Y_100_700"
+	local textcolor = TextColor( color )
 	local pos = ply:GetPos() + Vector(0, 0, ply:OBBMaxs().z)
 
 	if ply:LookupBone("ValveBiped.Bip01_Head1") then
@@ -912,20 +921,24 @@ function drawPlate(ply, stri, z, color)
 	end
 
 	local ang = Angle(0, LocalPlayer():GetAngles().y - 90, 90)
-	local sca = ply:GetModelScale() / 4
+	local sca = ply:GetModelScale() / 4 / 4
 	local str = stri
+
 	cam.Start3D2D(pos + Vector(0, 0, z * ply:GetModelScale()), ang, sca)
-	surface.SetFont("Y_30_500")
-	local _tw, _th = surface.GetTextSize(str)
-	_tw = math.Round(_tw * 1.08, 0)
-	_th = _th
-	color.a = math.Round(color.a * 0.5, 0)
-	surfaceBox(-_tw / 2, 0, _tw, _th, color)
-	surfaceText(str, "Y_30_500", 0, _th / 2 + 1, Color(255, 255, 255, color.a + 1), 1, 1)
+		surface.SetFont( font )
+		local _tw, _th = surface.GetTextSize( str )
+		_tw = _tw + _th + 2 * br
+		_th = _th + 2 * br
+
+		textcolor.a = color.a
+		color.a = color.a / 2
+
+		draw.RoundedBox( _th, - _tw / 2, 0, _tw, _th, color )
+		draw.SimpleText( str, font, 0, _th / 2, textcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	cam.End3D2D()
 end
 
-function drawPlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur, _max, color2)
+function YRPDrawNamePlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, icon, _cur, _max, color2)
 	local x = tonumber(_x)
 	local y = tonumber(_y)
 	local z = tonumber(_z)
@@ -1004,7 +1017,19 @@ function YRPDebug3DText(ply, str, pos, color)
 	end
 end
 
-function drawPlates()
+local translatorsteamids = {
+	-- DE
+	["76561198002066427"] = true, -- D4KiR
+
+	-- RU
+	["76561198219530143"] = true, -- Aimatt
+	["76561198349004756"] = true, -- Uzlovskii
+
+	-- TR
+	["76561198064891084"] = true, -- KAEL
+}
+
+function YRPDrawNamePlates()
 	local renderdist = 550
 	local _distance = 200
 
@@ -1111,7 +1136,7 @@ function drawPlates()
 					_height = _height + 1
 					local str = ply:Armor() .. "/" .. ply:GetNW2Int("MaxArmor", 100)
 					local col = ply:HudValue("AR", "BA")
-					drawBar(ply, str, _height, color, ply:Armor(), ply:GetNW2Int("MaxArmor", 100), Color(col.r, col.g, col.b, color.a))
+					YRPDrawNamePlateBar(ply, str, _height, color, ply:Armor(), ply:GetNW2Int("MaxArmor", 100), Color(col.r, col.g, col.b, color.a), "AR")
 					_height = _height + 6
 				end
 
@@ -1119,13 +1144,13 @@ function drawPlates()
 					_height = _height + 1
 					local str = ply:Health() .. "/" .. ply:GetMaxHealth()
 					local col = ply:HudValue("HP", "BA")
-					drawBar(ply, str, _height, color, ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, color.a))
+					YRPDrawNamePlateBar(ply, str, _height, color, ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, color.a), "HP")
 					_height = _height + 6
 				end
 
 				--[[if GetGlobalBool("bool_tag_on_head_clan", false) then
 					if !strEmpty(ply:GetNW2String("yrp_clan", "")) then
-						drawString(ply, "<" .. ply:GetNW2String("yrp_clan", "") .. ">", _height, color)
+						YRPDrawNamePlateString(ply, "<" .. ply:GetNW2String("yrp_clan", "") .. ">", _height, color)
 						_height = _height + 5
 					end
 				end]]
@@ -1148,13 +1173,13 @@ function drawPlates()
 						drawname = true
 					end
 					if drawname then
-						drawString(ply, ply:RPName(), _height, color)
+						YRPDrawNamePlateString(ply, ply:RPName(), _height, color)
 						_height = _height + 5
 					end
 				end
 
 				if GetGlobalBool("bool_tag_on_head_idcardid", false) then
-					drawString(ply, ply:IDCardID(), _height, color)
+					YRPDrawNamePlateString(ply, ply:IDCardID(), _height, color)
 					_height = _height + 5
 				end
 
@@ -1162,7 +1187,7 @@ function drawPlates()
 					local lvl = ply:Level()
 					local t = {}
 					t["LEVEL"] = lvl
-					drawString(ply, YRP.lang_string("LID_levelx", t), _height, color)
+					YRPDrawNamePlateString(ply, YRP.lang_string("LID_levelx", t), _height, color)
 					_height = _height + 5
 				end
 
@@ -1180,35 +1205,35 @@ function drawPlates()
 						onlinecolor = Color(255, 0, 0, 255)
 					end
 					onlinecolor.a = color.a
-					drawString(ply, "<" .. string.upper(onlinestatus) .. ">", _height, onlinecolor)
+					YRPDrawNamePlateString(ply, "<" .. string.upper(onlinestatus) .. ">", _height, onlinecolor)
 					_height = _height + 5
 				end
 
 				if GetGlobalBool("bool_tag_on_head_rolename", false) then
 					local rc = ply:GetRoleColor()
 					rc.a = color.a
-					drawString(ply, ply:GetRoleName(), _height, rc)
+					YRPDrawNamePlateString(ply, ply:GetRoleName(), _height, rc)
 					_height = _height + 5
 				end
 
 				if GetGlobalBool("bool_tag_on_head_groupname", false) then
 					local gc = ply:GetGroupColor()
 					gc.a = color.a
-					drawString(ply, ply:GetGroupName(), _height, gc)
+					YRPDrawNamePlateString(ply, ply:GetGroupName(), _height, gc)
 					_height = _height + 5
 				end
 
 				if GetGlobalBool("bool_tag_on_head_factionname", false) then
 					local fc = ply:GetFactionColor()
 					fc.a = color.a
-					drawString(ply, "[" .. ply:GetFactionName() .. "]", _height, fc)
+					YRPDrawNamePlateString(ply, "[" .. ply:GetFactionName() .. "]", _height, fc)
 					_height = _height + 5
 				end
 
 				if GetGlobalBool("bool_tag_on_head_usergroup", false) then
 					local ugcolor = ply:GetUserGroupColor()
 					ugcolor.a = color.a
-					drawString(ply, ply:GetUserGroupNice(), _height, ugcolor)
+					YRPDrawNamePlateString(ply, ply:GetUserGroupNice(), _height, ugcolor)
 					_height = _height + 5
 				end
 			end
@@ -1216,14 +1241,20 @@ function drawPlates()
 			_height = _height + 2
 
 			if ply:GetNW2Bool("tag_ug", false) or (GetGlobalBool("show_tags", false) and ply:GetMoveType() == MOVETYPE_NOCLIP and !ply:InVehicle()) and color.a > 10 then
+				local ugcolor = ply:GetUserGroupColor()
+				ugcolor.a = color.a
+				YRPDrawNamePlate( ply, ply:GetUserGroupNice(), _height, ugcolor )
+				_height = _height + 7
+			end
 
-				drawPlate(ply, ply:GetUserGroupNice(), _height, Color(0, 0, 140, color.a))
-				_height = _height + 9
+			if ply:GetNW2Bool("tag_tra", false) and translatorsteamids[tostring(ply:SteamID64())] then -- Translators of YourRP
+				YRPDrawNamePlate( ply, YRP.lang_string("LID_gamemodetranslator"), _height, Color(100, 100, 255, color.a) )
+				_height = _height + 7
 			end
 
 			if ply:GetNW2Bool("tag_dev", false) and tostring(ply:SteamID64()) == "76561198002066427" then -- D4KIR, Developer of YourRP
-				drawPlate(ply, "GAMEMODE DEVELOPER", _height, Color(0, 0, 0, color.a))
-				_height = _height + 9
+				YRPDrawNamePlate( ply, YRP.lang_string("LID_gamemodedeveloper"), _height, Color(255, 165, 0, color.a) )
+				_height = _height + 7
 			end
 
 			if GetGlobalBool("bool_tag_on_side", false) then
@@ -1237,18 +1268,18 @@ function drawPlates()
 				local _d = 2
 
 				if GetGlobalBool("bool_tag_on_side_name", false) then
-					drawPlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["na"])
+					YRPDrawNamePlayerInfo(ply, ply:RPName(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["na"])
 					_z = _z + _d
 				end
 
 				if GetGlobalBool("bool_tag_on_side_idcardid", false) then
-					drawPlayerInfo(ply, ply:IDCardID(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["id"])
+					YRPDrawNamePlayerInfo(ply, ply:IDCardID(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["id"])
 					_z = _z + _d
 				end
 
 				if GetGlobalBool("bool_tag_on_side_rolename", false) then
 					local rc = ply:GetRoleColor()
-					drawPlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(rc.r, rc.g, rc.b, _alpha), _alpha, _icons["rn"])
+					YRPDrawNamePlayerInfo(ply, ply:GetRoleName(), _x, _y, _z, _w, _h, Color(rc.r, rc.g, rc.b, _alpha), _alpha, _icons["rn"])
 					_z = _z + _d
 				end
 
@@ -1257,7 +1288,7 @@ function drawPlates()
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					local gc = ply:GetGroupColor()
-					drawPlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(gc.r, gc.g, gc.b, _alpha), _alpha, _icons["gn"])
+					YRPDrawNamePlayerInfo(ply, ply:GetGroupName(), _x, _y, _z, _w, _h, Color(gc.r, gc.g, gc.b, _alpha), _alpha, _icons["gn"])
 					_z = _z + _d
 				end
 
@@ -1266,7 +1297,7 @@ function drawPlates()
 					_color = string.Explode(",", _color)
 					_color = Color(_color[1], _color[2], _color[3])
 					local fc = ply:GetFactionColor()
-					drawPlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(fc.r, fc.g, fc.b, _alpha), _alpha, _icons["gn"])
+					YRPDrawNamePlayerInfo(ply, "[" .. ply:GetFactionName() .. "]", _x, _y, _z, _w, _h, Color(fc.r, fc.g, fc.b, _alpha), _alpha, _icons["gn"])
 					_z = _z + _d
 				end
 
@@ -1274,37 +1305,37 @@ function drawPlates()
 					local lvl = ply:Level()
 					local t = {}
 					t["LEVEL"] = lvl
-					drawPlayerInfo(ply, YRP.lang_string("LID_levelx", t), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["le"])
+					YRPDrawNamePlayerInfo(ply, YRP.lang_string("LID_levelx", t), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["le"])
 					_z = _z + _d
 				end
 
 				if GetGlobalBool("bool_tag_on_side_health", false) then
 					local col = ply:HudValue("HP", "BA")
-					drawPlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
+					YRPDrawNamePlayerInfo(ply, ply:Health() .. "/" .. ply:GetMaxHealth(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["hp"], ply:Health(), ply:GetMaxHealth(), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
 				if GetGlobalBool("bool_tag_on_side_armor", false) then
 					local col = ply:HudValue("AR", "BA")
-					drawPlayerInfo(ply, ply:Armor() .. "/" .. ply:GetNW2Int("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ar"], ply:Armor(), ply:GetNW2Int("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
+					YRPDrawNamePlayerInfo(ply, ply:Armor() .. "/" .. ply:GetNW2Int("MaxArmor", 100), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ar"], ply:Armor(), ply:GetNW2Int("MaxArmor", ""), Color(col.r, col.g, col.b, 200))
 					_z = _z + _d
 				end
 
 				if LocalPlayer():HasAccess() then
 					local col = ply:HudValue("ST", "BA")
-					drawPlayerInfo(ply, ply:GetNW2Float("GetCurStamina", 0.0) .. "/" .. ply:GetNW2Float("GetMaxStamina", 1.0), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ms"], ply:GetNW2Float("GetCurStamina", 0.0), ply:GetNW2Float("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
+					YRPDrawNamePlayerInfo(ply, ply:GetNW2Float("GetCurStamina", 0.0) .. "/" .. ply:GetNW2Float("GetMaxStamina", 1.0), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["ms"], ply:GetNW2Float("GetCurStamina", 0.0), ply:GetNW2Float("GetMaxStamina", ""), Color(col.r, col.g, col.b, _alpha))
 					_z = _z + _d
-					drawPlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sn"])
+					YRPDrawNamePlayerInfo(ply, ply:SteamName(), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sn"])
 					_z = _z + _d
 					local ugcolor = ply:GetUserGroupColor()
-					drawPlayerInfo(ply, string.upper(ply:GetUserGroupNice()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, _alpha), _alpha, _icons["ug"])
+					YRPDrawNamePlayerInfo(ply, string.upper(ply:GetUserGroupNice()), _x, _y, _z, _w, _h, Color(ugcolor.r, ugcolor.g, ugcolor.b, _alpha), _alpha, _icons["ug"])
 					_z = _z + _d
-					drawPlayerInfo(ply, "+" .. GetGlobalString("text_money_pre", "") .. ply:GetNW2String("salary", "") .. GetGlobalString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sa"])
+					YRPDrawNamePlayerInfo(ply, "+" .. GetGlobalString("text_money_pre", "") .. ply:GetNW2String("salary", "") .. GetGlobalString("text_money_pos", ""), _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["sa"])
 					_z = _z + _d
 					local _motext = GetGlobalString("text_money_pre", "") .. ply:GetNW2String("money", "") .. GetGlobalString("text_money_pos", "")
 					local _mMin = ply:CurrentSalaryTime()
 					local _mMax = ply:GetNW2Int("salarytime", 0) + 1
-					drawPlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
+					YRPDrawNamePlayerInfo(ply, _motext, _x, _y, _z, _w, _h, Color(0, 0, 0, _alpha), _alpha, _icons["mo"], _mMin, _mMax, Color(33, 108, 42, _alpha))
 					_z = _z + _d
 				end
 			end
@@ -1314,7 +1345,7 @@ function drawPlates()
 		ply:drawWantedInfo()
 	end
 end
-hook.Add("PostDrawTranslucentRenderables", "yrp_draw_plates", drawPlates)
+hook.Add("PostDrawTranslucentRenderables", "yrp_draw_plates", YRPDrawNamePlates)
 
 function draw3DText(text, x, y, color)
 	color = color or Color(255, 255, 255, 255)
@@ -1371,7 +1402,7 @@ hook.Add("PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 		if ent:IsNPC() and !ent:IsPlayer() and ent:IsDealer() then
 			local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 			if dist < 300 then
-				drawStringBox(ent, ent:GetNW2String("name", "Unnamed"), 20, Color(255, 255, 255))
+				YRPDrawNamePlateStringBox(ent, ent:GetNW2String("name", "Unnamed"), 20, Color(255, 255, 255))
 			end
 		end
 	end
@@ -1914,7 +1945,7 @@ function YRPCreateLoadingInfo( ti )
 	if IsValid(lply) then
 		local text = ""
 
-		local yrp1 = lply:GetNW2Bool("finishedloading") == false or YRPWasReadySendToServer == false or lply:GetNW2Bool("PlayerLoadedGameStart") == false or lply:GetNW2Bool("PlayerLoadedGameEnd") == false
+		local yrp1 = YRPReceivedStartData == false or lply:GetNW2Bool( "yrp_received_ready" ) == false or lply:GetNW2Bool("PlayerLoadedGameStart") == false or lply:GetNW2Bool("PlayerLoadedGameEnd") == false
 		local yrp2 = lply:GetNW2Bool("loadchars_start") == false or lply:GetNW2Bool("loadchars_done") == false or lply:GetNW2String("loadchars_msg", "X") == "X"
 		local yrp3 = lply:GetNW2Bool("yrp_hudloadout") == false or lply:GetNW2String("yrp_hudloadout_msg", "X") == "X"
 
@@ -1922,13 +1953,13 @@ function YRPCreateLoadingInfo( ti )
 			if !strEmpty(text) then
 				text = text .. spacer
 			end
-			--text = text .. "YRPReadyHook: " .. tostring( YRPReadyHook ) .. " "
-			text = text .. "YRPReadyStuck: " .. table.concat( YRPReadyStuck, ", " ) .. " Counter: " .. tostring( YRPReadyStuckCounter )
-			text = text .. " received_ready: " .. tostring( lply:GetNW2Bool( "yrp_received_ready" ) ) -- .. " Start: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameStart") ) .. " End: " .. tostring( lply:GetNW2Bool("PlayerLoadedGameEnd") )
+			text = text .. "ReceiveFromServer: " .. tostring( YRPReceivedStartData )
+			text = text .. " " .. "ReceivedInServer: " .. tostring( lply:GetNW2Bool( "yrp_received_ready" ) )
+			text = text .. " " .. "YRPRetryCounter: " .. tostring( YRPRetryCounter )
 			text = text .. " " .. table.ToString( YRPGetClientInfo(), "YRPGetClientInfo" )
+			text = text .. " " .. "Status: " .. tostring( YRPStartDataStatus )
 		end
-		--[[
-		if yrp2 and GetGlobalBool("bool_character_system") and !IsVoidCharEnabled() then
+		if !yrp1 and yrp2 and GetGlobalBool("bool_character_system") and !IsVoidCharEnabled() then
 			if !strEmpty(text) then
 				text = text .. spacer
 			end
@@ -1937,13 +1968,12 @@ function YRPCreateLoadingInfo( ti )
 				text = text .. " " .. "bool_character_system: " .. tostring( !GetGlobalBool("bool_character_system") )
 			end
 		end
-		if yrp3 then
+		if !yrp1 and !yrp2 and yrp3 then
 			if !strEmpty(text) then
 				text = text .. spacer
 			end
 			text = text .. "HudLoadout: " .. tostring( lply:GetNW2Bool("yrp_hudloadout") ) .. " hud_msg: " .. lply:GetNW2String("yrp_hudloadout_msg", "X")
 		end
-		]]
 		if !strEmpty(text) then
 			text = "[Loading] " .. text .. " | time: " .. tostring( ti ) .. " plys: " .. player.GetCount() .. " Ver.: " .. YRPGetVersionFull()
 			text = text .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" )
@@ -1957,6 +1987,10 @@ end
 -- #LOADING
 local yrp_icon = Material("yrp/yrp_icon")
 
+if pa(yrp_loading_screen) then
+	yrp_loading_screen:Remove()
+end
+
 if tostring(yrp_loading_screen) != "[NULL Panel]" then
 	yrp_loading_screen = createD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 end
@@ -1967,7 +2001,12 @@ if pa(yrp_loading_screen) then
 	yrp_loading_screen:MakePopup()
 	function yrp_loading_screen:Paint(pw, ph)
 		-- BG, Background
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, 255))
+		local alpha = 255
+		if yrp_loading_screen.blur and yrp_loading_screen.blur.t and yrp_loading_screen.blur.t >= 30 then
+			alpha = 100
+		end
+
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, alpha))
 	end
 
 	yrp_loading_screen.bg = createD("DHTML", yrp_loading_screen, yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall(), 0, 0)
@@ -2036,6 +2075,8 @@ if pa(yrp_loading_screen) then
 						yrp_loading_screen.bg:Show()
 					end
 				end
+			elseif pa( yrp_loading_screen.bg ) and self.t >= 30 then
+				yrp_loading_screen.bg:Hide()
 			end
 		end
 
@@ -2046,10 +2087,6 @@ if pa(yrp_loading_screen) then
 		if self.d < CurTime() then
 			self.d = CurTime() + 1
 			self.t = self.t + 1
-
-			if YRPReadyHook == false or YRP_NETWORKSTATEREADY == false then
-				self.t = 0
-			end
 		end
 
 
@@ -2099,7 +2136,7 @@ if pa(yrp_loading_screen) then
 		loading_cur_old = loading_cur_old or 0
 		loading_cur = 0
 		local max = 100
-		local t1 = lply:GetNW2Bool("finishedloading")
+		local t1 = lply:GetNW2Bool( "yrp_received_ready", false ) or YRPReceivedStartData
 		local t2 = lply:GetNW2Bool("loadchars_done") or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system")
 		local t3 = lply:GetNW2Bool("yrp_hudloadout")
 		if t1 then
@@ -2132,50 +2169,30 @@ if pa(yrp_loading_screen) then
 
 
 		-- RETRY MESSAGE
-		if self.t >= 10 then
-			local py = 0.08
-			if !YRP_NETWORKSTATEREADY then
-				draw.SimpleText("NOT READY FOR NETWORKING (SSD should help)", "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				py = py + 0.03
-			else
-				if YRPReadyAlready then
-					draw.SimpleText("THERE IS ALREADY A NET MESSAGE GOING ON", "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-					py = py + 0.03
-				else
-					if lply:GetNW2Bool( "yrp_received_ready", false ) == false then
-						draw.SimpleText("RETRY SENDING READY MESSAGE", "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-						py = py + 0.03
-					end
-					if !t1 then
-						yrpt1text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
-					else
-						yrpt1text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
-					end
-					if !strEmpty(yrpt1text) then
-						draw.SimpleText(YRP.lang_string( "LID_ready" ) .. yrpt1text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-						py = py + 0.03
-					end
-
-					if !t2 then
-						yrpt2text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
-					else
-						yrpt2text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
-					end
-					if !strEmpty(yrpt2text) then
-						draw.SimpleText(YRP.lang_string( "LID_characters" ) .. yrpt2text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-						py = py + 0.03
-					end
-					if !t3 then
-						yrpt3text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
-					else
-						yrpt3text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
-					end
-					if !strEmpty(yrpt3text) then
-						draw.SimpleText(YRP.lang_string( "LID_hud" ) .. yrpt3text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-						py = py + 0.03
-					end
-				end
-			end
+		local py = 0.08
+		
+		if !t1 then
+			draw.SimpleText("START DATA STATUS: " .. tostring( YRPStartDataStatus ) .. " Counter: " .. tostring( YRPRetryCounter ), "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			py = py + 0.03
+		end
+		
+		if t1 and !t2 then
+			yrpt2text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
+		else
+			yrpt2text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
+		end
+		if !strEmpty(yrpt2text) then
+			draw.SimpleText(YRP.lang_string( "LID_characters" ) .. yrpt2text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			py = py + 0.03
+		end
+		if t1 and t2 and !t3 then
+			yrpt3text = " (" .. YRP.lang_string( "LID_loading" ) .. ")"
+		else
+			yrpt3text = "" -- " (" .. YRP.lang_string( "LID_done" ) .. ")"
+		end
+		if !strEmpty(yrpt3text) then
+			draw.SimpleText(YRP.lang_string( "LID_hud" ) .. yrpt3text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			py = py + 0.03
 		end
 
 
@@ -2187,14 +2204,14 @@ if pa(yrp_loading_screen) then
 		
 		-- TIME
 		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_14_700", YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-		if self.t > 60 then
+		if self.t > 150 then
 			local text = YRPCreateLoadingInfo(self.t)
 			if !strEmpty(text) then
 				draw.SimpleText( text, "Y_18_700", pw - YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM )
 				
 				self.counttext = self.counttext or 0
 				self.countdelay = self.countdelay or 0
-				if self.counttext < 20 and self.countdelay < CurTime() then
+				if self.counttext < 30 and self.countdelay < CurTime() then
 					self.countdelay = CurTime() + 1
 					self.counttext = self.counttext + 1
 					YRP.msg( "error", text ) -- Loading Error

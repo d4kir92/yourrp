@@ -5,12 +5,19 @@ local _cl_outdated = nil
 local _version_client = {}
 local _version_server = {}
 
+local yrpoutdated = false
+local yrpversionisset = false
+
+function YRPIsVersionSet()
+	return yrpversionisset
+end
+
 local _version_online = {}
 function YRPOnlineVersion()
 	return _version_online
 end
 
-function GetValue(body, name)
+function YRPGetVersionValue(body, name)
 	local keys = "*" .. name .. "*"
 	local keye = "*/" .. name .. "*"
 	local spos = string.find(body, keys, 1, false)
@@ -42,61 +49,68 @@ function YRPIsServerDedicated()
 	return GetGlobalBool( "isserverdedicated" )
 end
 
-function SetYRPChannel()
+function SetYRPChannel( from )
 	if GAMEMODE != nil then
 		if CLIENT then
 			net.Start("YRPGetServerInfo")
 			net.SendToServer()
 		end
-		http.Fetch("https://docs.google.com/spreadsheets/d/1ImHeLchvq2D_1DJHrHepF3WuncxIU4N431pzXOLNr8M/edit?usp=sharing",
+		http.Fetch( "https://docs.google.com/spreadsheets/d/e/2PACX-1vR3aN8b4y0qZbZBBQLkqBy4dKFzKCnPt4cOMp7ghUaq5Bzxf-BtlEc0fruUI18IK-csODjrK6wcpFCX/pubhtml?gid=0&single=true",
 		function(body, len, headers, code)
 			if body != nil then
-				test["stable"] = {}
-				test["stable"].stable = GetValue(body, "V" .. "STABLE" .. "STABLE")
-				test["stable"].beta = GetValue(body, "V" .. "STABLE" .. "BETA")
-				test["stable"].canary = GetValue(body, "V" .. "STABLE" .. "CANARY")
-
-				test["beta"] = {}
-				test["beta"].stable = GetValue(body, "V" .. "BETA" .. "STABLE")
-				test["beta"].beta = GetValue(body, "V" .. "BETA" .. "BETA")
-				test["beta"].canary = GetValue(body, "V" .. "BETA" .. "CANARY")
-
-				test["canary"] = {}
-				test["canary"].stable = GetValue(body, "V" .. "CANARY" .. "STABLE")
-				test["canary"].beta = GetValue(body, "V" .. "CANARY" .. "BETA")
-				test["canary"].canary = GetValue(body, "V" .. "CANARY" .. "CANARY")
-
-				for art, tab in pairs(test) do
-					if tab.stable == GAMEMODE.VersionStable and tab.beta == GAMEMODE.VersionBeta and tab.canary == GAMEMODE.VersionCanary then
-						--YRP.msg("gm", "Gamemode channel: " .. string.upper(art))
-						GAMEMODE.VersionSort = art
-						break
+				if code == 200 then
+					local cs, ce = string.find( body, "VSTABLE" )
+					if ce then
+						body = string.sub( body, ce )
 					end
+
+					test["stable"] = {}
+					test["stable"].stable = YRPGetVersionValue(body, "V" .. "STABLE" .. "STABLE")
+					test["stable"].beta = YRPGetVersionValue(body, "V" .. "STABLE" .. "BETA")
+					test["stable"].canary = YRPGetVersionValue(body, "V" .. "STABLE" .. "CANARY")
+
+					test["beta"] = {}
+					test["beta"].stable = YRPGetVersionValue(body, "V" .. "BETA" .. "STABLE")
+					test["beta"].beta = YRPGetVersionValue(body, "V" .. "BETA" .. "BETA")
+					test["beta"].canary = YRPGetVersionValue(body, "V" .. "BETA" .. "CANARY")
+
+					test["canary"] = {}
+					test["canary"].stable = YRPGetVersionValue(body, "V" .. "CANARY" .. "STABLE")
+					test["canary"].beta = YRPGetVersionValue(body, "V" .. "CANARY" .. "BETA")
+					test["canary"].canary = YRPGetVersionValue(body, "V" .. "CANARY" .. "CANARY")
+
+					for art, tab in pairs(test) do
+						if tab.stable == GAMEMODE.VersionStable and tab.beta == GAMEMODE.VersionBeta and tab.canary == GAMEMODE.VersionCanary then
+							YRP.msg("gm", "Gamemode channel: " .. string.upper(art))
+							GAMEMODE.VersionSort = art
+							break
+						end
+					end
+
+					yrpversionisset = true
+				else
+					YRP.msg("note", "SetYRPChannel Code: " .. code)
 				end
-				yrpversionisset = true
 			end
 		end,
-			function(error)
-				YRP.msg("note", "SetYRPChannel: " .. error)
-				timer.Simple(1, function()
-					SetYRPChannel()
-				end)
-			end
-		)
+		function(error)
+			YRP.msg("note", "SetYRPChannel: " .. error)
+			timer.Simple(1, function()
+				SetYRPChannel( "RETRY ERROR")
+			end)
+		end )
 	else
 		timer.Simple(2, function()
-			SetYRPChannel()
+			SetYRPChannel( "RETRY GM" )
 		end)
 	end
 end
-SetYRPChannel()
+SetYRPChannel( "Init" )
 
 function YRPVersion()
 	return GAMEMODE.Version .. ":" .. GAMEMODE.VersionBuild
 end
 
-local yrpoutdated = false
-local yrpversionisset = false
 function IsYRPOutdated()
 	return yrpoutdated
 end
@@ -167,46 +181,49 @@ end
 local check = 0
 function YRPCheckVersion(from)
 	if GAMEMODE != nil then
-		if yrpversionisset then
+		if YRPIsVersionSet() then
 			if CurTime() < check then return end
 			check = CurTime() + 1
-			
-			http.Fetch("https://docs.google.com/spreadsheets/d/1ImHeLchvq2D_1DJHrHepF3WuncxIU4N431pzXOLNr8M/edit?usp=sharing",
+			http.Fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vR3aN8b4y0qZbZBBQLkqBy4dKFzKCnPt4cOMp7ghUaq5Bzxf-BtlEc0fruUI18IK-csODjrK6wcpFCX/pubhtml?gid=0&single=true",
 			function(body, len, headers, code)
 				if body != nil then
-					local serverart = string.upper(GAMEMODE.VersionSort)
+					if code == 200 then
+						local serverart = string.upper(GAMEMODE.VersionSort)
 
-					if serverart == "OUTDATED" then	
-						GAMEMODE.versioncolor = Color(255, 0, 0)	
-						yrpoutdated = true	
-						serverart = "CANARY"	
-					else	
-						yrpoutdated = false	
-					end
-					
-					on.stable = GetValue(body, "V" .. serverart .. "STABLE")
-					on.beta = GetValue(body, "V" .. serverart .. "BETA")
-					on.canary = GetValue(body, "V" .. serverart .. "CANARY")
-
-					if on.stable == GAMEMODE.VersionStable and on.beta == GAMEMODE.VersionBeta and on.canary == GAMEMODE.VersionCanary then
-						GAMEMODE.versioncolor = Color(255, 255, 255)
-						yrpoutdated = false
-					else
-						yrpoutdated = true
-						GAMEMODE.versioncolor = Color(255, 0, 0)
-						if CLIENT then
-							VersionWindow()
+						if serverart == "OUTDATED" then	
+							GAMEMODE.versioncolor = Color(255, 0, 0)	
+							yrpoutdated = true	
+							serverart = "CANARY"	
+						else	
+							yrpoutdated = false	
 						end
+						
+						on.stable = YRPGetVersionValue(body, "V" .. serverart .. "STABLE")
+						on.beta = YRPGetVersionValue(body, "V" .. serverart .. "BETA")
+						on.canary = YRPGetVersionValue(body, "V" .. serverart .. "CANARY")
+
+						if on.stable == GAMEMODE.VersionStable and on.beta == GAMEMODE.VersionBeta and on.canary == GAMEMODE.VersionCanary then
+							GAMEMODE.versioncolor = Color(255, 255, 255)
+							yrpoutdated = false
+						else
+							yrpoutdated = true
+							GAMEMODE.versioncolor = Color(255, 0, 0)
+							if CLIENT then
+								VersionWindow()
+							end
+						end
+					else
+						YRP.msg("note", "[CheckVersion] CODE: " .. code)
 					end
 				end
 			end,
 				function(error)
-					--
+					YRP.msg("note", "[CheckVersion] ERROR: " .. error)
 				end
 			)
 		else
 			timer.Simple(4, function()
-				SetYRPChannel()
+				SetYRPChannel( "CheckVersion" )
 			end)
 		end
 	else
@@ -215,4 +232,7 @@ function YRPCheckVersion(from)
 		end)
 	end
 end
-YRPCheckVersion("init")
+
+timer.Simple(1, function()
+	YRPCheckVersion("init")
+end)

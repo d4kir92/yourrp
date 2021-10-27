@@ -5,8 +5,6 @@
 
 -- #Resources #Content #Addons
 
-hr_pre("gm")
-
 YRP.msg("gm", "Loading Resources (Workshop-Downloader)")
 YRP.msg("gm", "")
 
@@ -60,4 +58,3 @@ YRP.msg("gm", "=> " .. tostring(d) .. "/" .. tostring(i) .. " Workshop files tha
 YRP.msg("gm", "")
 
 YRP.msg("gm", "Loaded Resources (Workshop-Downloader)")
-hr_pos("gm")

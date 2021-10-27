@@ -129,6 +129,20 @@ concommand.Add("darkrp", function(ply, cmd, args)
 		YRP.msg( "error", "[darkrp] unwarrant: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
 	elseif args[1] and args[1] == "addjailpos" then
 		--
+	elseif args[1] and args[1] == "drop" then
+		local _weapon = ply:GetActiveWeapon()
+		if _weapon != nil and PlayersCanDropWeapons() then
+			if ea(_weapon) then
+				ply:DropSWEP( _weapon:GetClass() )
+			end
+		else
+			YRP.msg("note", ply:YRPName() .. " drop weapon is disabled!")
+		end
+	elseif args[1] and jobByCmd[args[1]] then
+		local jobtab = RPExtraTeams[jobByCmd[args[1]]]
+		if jobtab then
+			SetRole(ply, jobtab.uniqueID)
+		end
 	else
 		YRP.msg( "error", "[darkrp] console command: args[1]: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
 	end

@@ -153,6 +153,25 @@ function show_tag_dev(sender)
 	else
 		sender:SetNW2Bool("tag_dev", false)
 	end
+	if sender:GetNW2Bool("tag_dev", false) then
+		sender:ChatPrint("[tag_dev] enabled")
+	else
+		sender:ChatPrint("[tag_dev] disabled")
+	end
+	return ""
+end
+
+function show_tag_tra(sender)
+	if !sender:GetNW2Bool("tag_tra", false) then
+		sender:SetNW2Bool("tag_tra", true)
+	else
+		sender:SetNW2Bool("tag_tra", false)
+	end
+	if sender:GetNW2Bool("tag_tra", false) then
+		sender:ChatPrint("[tag_tra] enabled")
+	else
+		sender:ChatPrint("[tag_tra] disabled")
+	end
 	return ""
 end
 
@@ -161,6 +180,11 @@ function show_tag_ug(sender)
 		sender:SetNW2Bool("tag_ug", true)
 	else
 		sender:SetNW2Bool("tag_ug", false)
+	end
+	if sender:GetNW2Bool("tag_ug", false) then
+		sender:ChatPrint("[tag_ug] enabled")
+	else
+		sender:ChatPrint("[tag_ug] disabled")
 	end
 	return ""
 end
@@ -395,6 +419,11 @@ function DoCommand(sender, command, text)
 
 	if command == "tag_dev" then
 		show_tag_dev(sender)
+		return ""
+	end
+
+	if command == "tag_tra" then
+		show_tag_tra(sender)
 		return ""
 	end
 
@@ -659,6 +688,5 @@ timer.Simple(4, function() -- must be last hook
 
 		-- RETURN NOTHING SO OTHER ADDONS CAN USE THIS ONE
 		-- return oldtext --""
-		return "" -- may break other addons?
 	end)
 end)

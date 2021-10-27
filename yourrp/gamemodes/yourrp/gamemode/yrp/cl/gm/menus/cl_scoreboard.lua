@@ -491,7 +491,19 @@ function YRPScoreboardAddPlayer(ply)
 						x = x + yrptab["rolename"] + sp
 					end
 				elseif ply:GetNW2Bool("yrp_characterselection", true) then
-					draw.SimpleText("[" .. YRP.lang_string("LID_characterselection") .. "]", "Saira_24", x, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					local text = "[" .. YRP.lang_string("LID_characterselection") .. "]" .. " " .. "LOADING DONE"
+					local font = "Saira_24"
+
+					local ready = ply:GetNW2Bool( "yrp_received_ready", false )
+					local t2 = ply:GetNW2Bool("loadchars_done") or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system")
+					local t3 = ply:GetNW2Bool("yrp_hudloadout")
+					if !ready or !t2 or !t3 then
+						local svstatus = ply:GetNW2String( "yrp_ready_status", "X" )
+						text = string.format("[LOADING] Ready: %s      Characters: %s      HUD: %s      Server-Status: %s", ready, t2, t3, svstatus )
+						font = "Saira_24"
+					end
+
+					draw.SimpleText(text, font, x, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				else
 					draw.SimpleText("[" .. "FAIL" .. "]", "Saira_24", x, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
@@ -976,7 +988,7 @@ function YRPInitScoreboard()
 		if !GetGlobalBool("bool_yrp_scoreboard_show_level", false) and !GetGlobalBool("bool_yrp_scoreboard_show_idcardid", false) then
 			yrptab["name"] = 260
 		else
-			yrptab["name"] = 160
+			yrptab["name"] = 180
 		end
 		yrptab["groupname"] = 320
 		if !GetGlobalBool("bool_yrp_scoreboard_show_groupname", false) then

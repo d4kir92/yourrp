@@ -903,9 +903,9 @@ function surfaceText(mytext, font, x, y, color, ax, ay, br)
 	end
 
 	if not br then
-		draw.SimpleTextOutlined(mytext, font, x, y, color, ax, ay, 0, Color(0, 0, 0, 0))
+		draw.SimpleText(mytext, font, x, y, color, ax, ay, 0, Color(0, 0, 0, 0))
 	else
-		draw.SimpleTextOutlined(mytext, font, x, y, color, ax, ay, 1, col_br)
+		draw.SimpleText(mytext, font, x, y, color, ax, ay, 1, col_br)
 	end
 end
 
@@ -1140,7 +1140,7 @@ function createMDMenu(parent, w, h, x, y)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 20))
 
 		draw.SimpleText(GetGlobalString("text_server_name", "-"), "Y_18_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText("YourRP Version.: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, GetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText("YourRP Version.: " .. YRPGetVersionFull() .. " (" .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, GetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.lang_string("LID_players") .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 	function tmp.bot:Think()

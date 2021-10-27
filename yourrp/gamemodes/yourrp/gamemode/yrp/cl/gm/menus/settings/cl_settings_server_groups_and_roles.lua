@@ -571,8 +571,13 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				else
 					tab2.text = YRP.lang_string("LID_" .. ea.typ) .. ": " .. ea.tab.string_name
 				end
+				local darkrpjobname = YRPConvertToDarkRPJobName( ea.tab.string_name )
+
+				if ea.tab.string_identifier and !strEmpty( ea.tab.string_identifier ) then
+					darkrpjobname = ea.tab.string_identifier
+				end
 				if ea.typ == "role" and ea.tab.uniqueID != nil then
-					tab2.text = tab2.text .. "       DarkRP-Job-Name: " .. YRPConvertToDarkRPJobName( ea.tab.string_name ) .. "      RoleUID: " .. ea.tab.uniqueID
+					tab2.text = tab2.text .. "       DarkRP-Job-Name: " .. string.upper( darkrpjobname ) .. "      RoleUID: " .. ea.tab.uniqueID
 				elseif ea.typ == "group" and ea.tab.uniqueID != nil then
 					tab2.text = tab2.text .. "       GroupUID: " .. ea.tab.uniqueID
 				end
@@ -1253,6 +1258,24 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local hr = {}
 			hr.h = YRP.ctr(16)
 			hr.parent = ea.info:GetContent()
+			DHr(hr)
+
+			local identifier = {}
+			identifier.parent = ea.info:GetContent()
+			identifier.uniqueID = role.uniqueID
+			identifier.header = "LID_identifier"
+			identifier.netstr = "update_role_string_identifier"
+			identifier.value = role.string_identifier
+			identifier.uniqueID = role.uniqueID
+			identifier.lforce = false
+			identifier.placeholder = "NO SPECIAL IDENTIFIER"
+			identifier.hardmode = true
+			ea[role.uniqueID].identifier = DTextBox(identifier)
+			local ident = ea[role.uniqueID].identifier
+			function ident:OnChange()
+				role.string_identifier = self:GetText()
+			end
+			
 			DHr(hr)
 
 			--[[local idstructure = {}
@@ -2822,7 +2845,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			local string_ability = {}
 			string_ability.parent = ea.attributes:GetContent()
 			string_ability.uniqueID = role.uniqueID
-			string_ability.header = YRP.lang_string("LID_ability")
+			string_ability.header = YRP.lang_string("LID_ability") .. " (for addons)"
 			string_ability.netstr = "update_role_string_ability"
 			string_ability.value = role.string_ability
 			string_ability.uniqueID = role.uniqueID

@@ -1033,6 +1033,7 @@ end
 DefaultHUDSettings()
 
 util.AddNetworkString("yrp_hud_info")
+util.AddNetworkString("yrp_hud_info_end")
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:HudLoadout()
@@ -1041,27 +1042,31 @@ function Player:HudLoadout()
 
 	local hudeles = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(hudeles) then
-		net.Start("yrp_hud_info")
-			net.WriteTable(hudeles)
-		net.Send(self)
+		for i, v in pairs( hudeles ) do
+			timer.Simple(i * 0.005, function()
+				if ea( self ) then
+					net.Start("yrp_hud_info")
+						net.WriteString(v.name)
+						net.WriteString(v.value)
+					net.Send(self)
+					if i == #hudeles then
+						net.Start("yrp_hud_info_end")
+						net.Send(self)
 
-		self:SetNW2Bool("yrp_hudloadout", true)
+						self:SetNW2Bool("yrp_hudloadout", true)
+						self:SetNW2String("yrp_hudloadout_msg", "> Sended <")
 
-		self:SetNW2String("yrp_hudloadout_msg", "> Sended <")
+						net.Start("yrp_chat_ready")
+						net.Send(self)
 
-		timer.Simple( 1, function()
-			net.Start("yrp_chat_ready")
-			net.Send(self)
-		end )
+						self:SetNW2Int("hud_version", self:GetNW2Int("hud_version", 0) + 1)
+					end
+				end
+			end)
+		end
 	else
 		self:SetNW2String("yrp_hudloadout_msg", "Failed")
 	end
-
-	timer.Simple(1, function()
-		if IsValid(self) then
-			self:SetNW2Int("hud_version", self:GetNW2Int("hud_version", 0) + 1)
-		end
-	end)
 end
 
 local hud_f = 0

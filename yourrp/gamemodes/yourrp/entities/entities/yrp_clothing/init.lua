@@ -6,19 +6,23 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-	self:SetModel("models/props_wasteland/controlroom_storagecloset001a.mdl")
+	self:SetModel("")
+
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 
-	self:SetPos(self:GetPos() + Vector(0,0,100))
+	self:SetPos(self:GetPos())
 
 	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
-		timer.Simple(0.0, function()
-			phys:Wake()
-			self:DropToFloor()
-		end)
+		phys:Wake()
+	end
+end
+
+function ENT:Think()
+	if string.lower(GetGlobalString("text_appearance_model", "models/props_wasteland/controlroom_storagecloset001a.mdl")) != self:GetModel() then
+		self:SetModel(string.lower(GetGlobalString("text_appearance_model", "models/props_wasteland/controlroom_storagecloset001a.mdl")))
 	end
 end
 

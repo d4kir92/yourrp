@@ -179,7 +179,7 @@ net.Receive("getsitehelp", function(len)
 		local version = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - YRP.ctr(50))
 
 		function version:Paint(pw, ph)
-			draw.SimpleText("(" .. string.upper(GAMEMODE.dedicated) .. " Server) (" .. string.upper(GAMEMODE.Art) .. ") YourRP V.: " .. GAMEMODE.Version .. " by D4KiR", "Y_22_500", pw, ph / 2, GetVersionColor(), 2, 1)
+			draw.SimpleText("(" .. string.upper(GAMEMODE.dedicated) .. " Server) (" .. string.upper(GAMEMODE.Art) .. ") YourRP V.: " .. YRPGetVersionFull() .. " by D4KiR", "Y_22_500", pw, ph / 2, GetVersionColor(), 2, 1)
 		end
 		YRPCheckVersion("help")
 	end

@@ -19,7 +19,8 @@ end
 
 function PANEL:INITPanel(derma)
 	self.plus = createD(derma, self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, self.header:GetTall())
-
+	self.plus.getclass = derma
+	
 	function self:SetText(text)
 		self.plus:SetText(text)
 	end
@@ -30,8 +31,10 @@ function PANEL:Think()
 		self.header:SetWide(self:GetWide())
 	end
 
-	if self.plus:GetWide() ~= self:GetWide() then
+	if self.plus.getclass != "DCheckBox" then
 		self.plus:SetWide(self:GetWide())
+	else
+		self.plus:SetWide(self:GetTall())
 	end
 
 	if self.plus:GetTall() ~= self:GetTall() - self.header:GetTall() then

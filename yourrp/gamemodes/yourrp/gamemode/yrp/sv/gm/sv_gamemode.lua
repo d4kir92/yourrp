@@ -77,8 +77,6 @@ function GM:PlayerInitialSpawn(ply)
 		YRPCreateCharacter(ply, tab)
 
 		ply:SetNW2Bool("yrp_characterselection", false)
-	else
-		YRPPlayerLoadedGame( ply )
 	end
 
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable("yrp_voice_channels", {}), "int_position", false) do
@@ -293,7 +291,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 
 		ply:UpdateBackpack()
 
-		RenderNormal(ply)
+		YRPRenderNormal(ply)
 	else
 		YRP.msg("note", "[PlayerLoadout] is invalid or bot.")
 	end
@@ -1506,10 +1504,6 @@ hook.Add("PostCleanupMap", "yrp_PostCleanupMap_doors", function()
 	LoadWorldStorages()
 end)
 
-function YRPHR( color )
-	MsgC( color, "-------------------------------------------------------------------------------" .. "\n" )
-end
-
 function YRPWarning( text )
 	MsgC( Color( 255, 0, 0 ), "[WARNING] > " .. text .. "\n")
 			
@@ -1550,7 +1544,7 @@ function YRPCheckAddons()
 	if count == 0 then
 		YRP.msg("note", "YRPCheckAddons() EVERYTING GOOD.")
 	end
-	YRPHR( Color(100, 100, 255) )
+	YRPHR( Color( 100, 100, 255 ) )
 end
 
 hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckAddons", function()

@@ -146,20 +146,6 @@ function MSGChannelEnabled(chan)
 	end
 end
 
-function hr_pre(chan)
-	local cn = GetChannelName(chan)
-	if MSGChannelEnabled(cn) then
-		MsgC( GetRealmColor(), _text.spacePre .. "\n" )
-	end
-end
-
-function hr_pos(chan)
-	local cn = GetChannelName(chan)
-	if MSGChannelEnabled(cn) then
-		MsgC( GetRealmColor(), _text.spacePos .. "\n" )
-	end
-end
-
 function GetGamemodeShortname()
 	return "YRP"
 end
@@ -259,7 +245,6 @@ function YRP.msg(chan, str_msg, tochat, force)
 end
 
 function printTab(table, name)
-	hr_pre("debug")
 	local _header = "PrintTable: "
 	name = name or ""
 	if !strEmpty(name) then
@@ -273,7 +258,6 @@ function printTab(table, name)
 	else
 		YRP.msg("note", "printTab " .. tostring(table) .. " is not a table!")
 	end
-	hr_pos("debug")
 end
 
 local countries = {}

@@ -125,6 +125,9 @@ end
 --[[ LOADOUT ]]--
 local Player = FindMetaTable("Player")
 function Player:YRPDesignLoadout(from)
+	if !IsValid(self) then
+		return
+	end
 	self:SetNW2Int("yrp_loading", 0)
 	self:HudLoadout()
 	self:InterfaceLoadout()

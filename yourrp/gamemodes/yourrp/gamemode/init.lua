@@ -123,7 +123,7 @@ include("shared.lua")
 include("yrp/sv/sv_includes.lua")
 
 function YRPLoadServerInfo()
-	if !string.StartWith( game.GetIPAddress(), "0.0.0.0:" ) then
+	if game.GetIPAddress() and game.IsDedicated() and !string.StartWith( game.GetIPAddress(), "0.0.0.0:" ) then
 		timer.Simple( 0.1, function()
 			SetGlobalBool( "isserverdedicated", game.IsDedicated() )
 			SetGlobalString( "serverip", game.GetIPAddress() )

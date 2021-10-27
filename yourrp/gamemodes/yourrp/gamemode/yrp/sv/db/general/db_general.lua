@@ -96,6 +96,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_character_system", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_building_system", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_inventory_system", "INT DEFAULT 0")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_appearance_system", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_appearance_model", "TEXT DEFAULT 'models/props_wasteland/controlroom_storagecloset001a.mdl'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_smartphone_system", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic_system", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_level_system", "INT DEFAULT 1")
@@ -944,6 +945,12 @@ util.AddNetworkString("update_bool_appearance_system")
 net.Receive("update_bool_appearance_system", function(len, ply)
 	local b = btn(net.ReadBool())
 	GeneralUpdateBool(ply, "update_bool_appearance_system", "bool_appearance_system", b)
+end)
+
+util.AddNetworkString("update_text_appearance_model")
+net.Receive("update_text_appearance_model", function(len, ply)
+	local str = net.ReadString()
+	GeneralUpdateString(ply, "update_text_appearance_model", "text_appearance_model", str)
 end)
 
 util.AddNetworkString("update_bool_smartphone_system")
@@ -2070,7 +2077,7 @@ function YRPDoRagdoll(ply)
 
 		ply:Freeze( true )
 
-		RenderCloaked(ply)
+		YRPRenderCloaked(ply)
 	end
 end
 
@@ -2087,7 +2094,7 @@ function YRPDoUnRagdoll(ply)
 
 		ply:Freeze( false )
 
-		RenderNormal(ply)
+		YRPRenderNormal(ply)
 	end
 end
 
@@ -2110,7 +2117,7 @@ net.Receive("freeze", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
 		_target:Freeze(true)
-		RenderFrozen(_target)
+		YRPRenderFrozen(_target)
 	end
 end)
 util.AddNetworkString("unfreeze")
@@ -2118,7 +2125,7 @@ net.Receive("unfreeze", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
 		_target:Freeze(false)
-		RenderNormal(_target)
+		YRPRenderNormal(_target)
 	end
 end)
 util.AddNetworkString("god")
@@ -2144,7 +2151,7 @@ net.Receive("cloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
 		_target:SetNW2Bool("cloaked", true)
-		RenderCloaked(_target)
+		YRPRenderCloaked(_target)
 	end
 end)
 util.AddNetworkString("uncloak")
@@ -2152,7 +2159,7 @@ net.Receive("uncloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
 		_target:SetNW2Bool("cloaked", false)
-		RenderNormal(_target)
+		YRPRenderNormal(_target)
 	end
 end)
 util.AddNetworkString("blind")

@@ -61,7 +61,7 @@ function YRPCreateCharacterSettingsContent()
 	btn.w = 500
 	btn.h = 75
 	local back = createD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
-	back:SetText("LID_back" .. "3")
+	back:SetText("LID_back")
 	function back:Paint(pw, ph)
 		hook.Run("YButtonRPaint", self, pw, ph)
 	end
@@ -88,16 +88,16 @@ function YRPCreateCharacterSettingsContent()
 		local pmsheader = createD("YLabel", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(20 + config.hh + 20))
 		pmsheader:SetText("LID_character")
 
-		local pmsbg = createD("YPanel", win, ew, YRP.ctr(config.h - 420), ew + 2 * YRP.ctr(20), YRP.ctr(200))
+		local pmsbg = createD("YPanel", win, ew, YRP.ctr(config.h - 520), ew + 2 * YRP.ctr(20), YRP.ctr(200))
 		function pmsbg:Paint(pw, ph)
 			hook.Run("YTextFieldPaint", self, pw, ph)
 		end
 
-		local pms = createD("DModelPanel", win, ew, YRP.ctr(config.h - 420), ew + 2 * YRP.ctr(20), YRP.ctr(200))
+		local pms = createD("DModelPanel", win, pmsbg:GetWide(), pmsbg:GetTall(), ew + 2 * YRP.ctr(20), YRP.ctr(200))
 		pms.models = string.Explode(",", tostring(rol.pms))
 		pms:SetCamPos( Vector( 50, 50, 50 ) )
 		pms:SetLookAt( Vector( 0, 0, 40 ) )
-		pms:SetFOV( 50 )
+		pms:SetFOV( 60 )
 		pms:SetAnimated(true)
 		pms.Angles = Angle(0, 0, 0)
 		function pms:DragMousePress()
@@ -124,6 +124,7 @@ function YRPCreateCharacterSettingsContent()
 		end
 
 		LocalPlayer().charcreate_name = ""
+		LocalPlayer().charcreate_namelast = ""
 		local confirm = createD("YButton", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 100))
 		confirm:SetText("LID_enteraname")
 		function confirm:Paint(pw, ph)
@@ -150,7 +151,11 @@ function YRPCreateCharacterSettingsContent()
 			if string.len(sname) <= rol.int_namelength and string.len(sname) > 0 or rol.int_namelength == 0 then
 				local character = {}
 				character.roleID = LocalPlayer().charcreate_ruid
-				character.rpname = LocalPlayer().charcreate_name
+				local name = LocalPlayer().charcreate_name
+				if !strEmpty( LocalPlayer().charcreate_namelast ) then
+					name = name .. " " .. LocalPlayer().charcreate_namelast
+				end
+				character.rpname = name
 				character.rpdescription = LocalPlayer().charcreate_desc
 				character.playermodelID = LocalPlayer().charcreate_rpmid
 				character.skin = 1
@@ -198,10 +203,10 @@ function YRPCreateCharacterSettingsContent()
 
 
 		if rol.int_namelength > 0 then
-			local name = createD("DTextEntry", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 200))
+			local name = createD("DTextEntry", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 200) - YRP.ctr(config.hh) - YRP.ctr(20) )
 			name:SetText("")
 			if name.SetPlaceholderText then
-				name:SetPlaceholderText(YRP.lang_string("LID_enteraname"))
+				name:SetPlaceholderText(YRP.lang_string("LID_enteryourfirstname"))
 			end
 			function name:PerformLayout()
 				if self.SetUnderlineFont != nil then
@@ -215,6 +220,28 @@ function YRPCreateCharacterSettingsContent()
 			function name:OnChange()
 				local nam = self:GetText()
 				LocalPlayer().charcreate_name = nam
+				if #nam > rol.int_namelength then
+					--name:SetText(string.sub(nam, 1, rol.int_namelength))
+				end
+			end
+
+			local surname = createD("DTextEntry", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 200))
+			surname:SetText("")
+			if surname.SetPlaceholderText then
+				surname:SetPlaceholderText(YRP.lang_string("LID_enteryoursurname"))
+			end
+			function surname:PerformLayout()
+				if self.SetUnderlineFont != nil then
+					self:SetUnderlineFont("Y_18_500")
+				end
+				self:SetFontInternal("Y_18_500")
+
+				self:SetFGColor(Color(255, 255, 255))
+				self:SetBGColor(Color(0, 0, 0))
+			end
+			function surname:OnChange()
+				local nam = self:GetText()
+				LocalPlayer().charcreate_namelast = nam
 				if #nam > rol.int_namelength then
 					--name:SetText(string.sub(nam, 1, rol.int_namelength))
 				end

@@ -6,6 +6,7 @@
 local DATABASE_NAME = "yrp_ply_roles"
 
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'NewRole'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_identifier", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D!D-!D!D!D!D'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/user.png'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
@@ -194,6 +195,7 @@ function YRPConvertToDarkRPJob(tab)
 	_job.team = tonumber(tab.uniqueID)
 	
 	_job.name = tab.string_name
+	_job.identifier = tab.string_identifier
 	local pms = GetPlayermodelsOfRole(tab.uniqueID)
 	if string.find(pms, ",") then
 		pms = string.Explode(",", GetPlayermodelsOfRole(tab.uniqueID))
@@ -266,6 +268,9 @@ function YRPBuildDarkrpTeams()
 	if wk(drp_allroles) then
 		for i, role in pairs(drp_allroles) do
 			local teamname = YRPConvertToDarkRPJobName(role.string_name)
+			if !strEmpty( role.string_identifier ) then
+				teamname = role.string_identifier
+			end
 			local darkrpjob = YRPConvertToDarkRPJob(role)
 			local darkrpjobuid = darkrpjob.team
 			TEAMS[teamname] = darkrpjob
@@ -289,7 +294,7 @@ timer.Simple(1.0, YRPBuildDarkrpTeams)
 
 util.AddNetworkString("send_team")
 local Player = FindMetaTable("Player")
-local timerdelay = 0.3
+local timerdelay = 0.1
 function Player:DRPSendTeamsToPlayer()
 	self.yrp_darkrp_index = 1
 	for i, role in pairs(RPExtraTeams) do
@@ -297,7 +302,6 @@ function Player:DRPSendTeamsToPlayer()
 		timer.Simple(self.yrp_darkrp_index * timerdelay, function()
 			if IsValid(self) then
 				net.Start("send_team")
-					net.WriteString(i)
 					net.WriteTable(role)
 				net.Send(self)
 			end

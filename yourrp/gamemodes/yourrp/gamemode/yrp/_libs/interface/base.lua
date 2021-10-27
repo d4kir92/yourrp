@@ -576,6 +576,9 @@ function DTextBox(tab)
 	tab.value = tab.value or "NOTEXT"
 	tab.lforce = tab.lforce or true
 
+	tab.placeholder = tab.placeholder or ""
+	tab.hardmode = tab.hardmode or false
+
 	local pnl = {}
 
 	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
@@ -608,16 +611,28 @@ function DTextBox(tab)
 		end
 	end
 
+	function pnl:GetText()
+		return pnl.DTextEntry:GetText()
+	end
+
 	pnl.DTextEntry = createD("DTextEntry", pnl.line, tab.w, tab.h - YRP.ctr(50), tab.brx, YRP.ctr(50))
 	pnl.DTextEntry:SetText(tab.value)
 	pnl.DTextEntry:SetMultiline(tab.multiline or false)
 	pnl.DTextEntry.serverside = false
 	if tab.netstr != nil and tab.uniqueID != nil then
 		function pnl.DTextEntry:OnChange()
+			if tab.hardmode and string.find( self:GetText(), "^[a-zA-Z0-9_]*$" ) == nil then
+				self:SetPlaceholderText( "ONLY: a-z, A-Z, _" )
+				self:SetText( "" )
+			end
 			net.Start(tab.netstr)
 				net.WriteString(tab.uniqueID)
 				net.WriteString(self:GetText())
 			net.SendToServer()
+
+			if pnl.OnChange then
+				pnl:OnChange()
+			end
 		end
 		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString())
@@ -629,7 +644,8 @@ function DTextBox(tab)
 			end
 		end)
 	end
-
+	pnl.DTextEntry:SetPlaceholderText(tab.placeholder)
+	
 	if tab.parent != nil and tab.parent.AddItem != nil then
 		tab.parent:AddItem(pnl.line)
 	end

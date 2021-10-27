@@ -794,11 +794,15 @@ hook.Add("ShouldDrawLocalPlayer", "ShowPlayermodel", showPlayermodel)
 
 jobByCmd = jobByCmd or {}
 net.Receive("send_team", function(len)
-	local teamname = net.ReadString()
 	local teamTab = net.ReadTable()
 	local teamcolor = teamTab.color
 	local teamuid = tonumber( teamTab.uniqueID )
-	
+
+	local teamname = teamTab.name
+	if !strEmpty( teamTab.identifier ) then
+		teamname = teamTab.identifier
+	end
+
 	_G[string.upper(teamname)] = teamuid
 	if teamuid and teamname then
 		RPExtraTeams[teamuid] = teamTab

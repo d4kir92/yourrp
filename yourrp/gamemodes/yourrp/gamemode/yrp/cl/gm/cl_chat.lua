@@ -31,6 +31,8 @@ else
 	local admincommands= {
 		"/tag_ug",
 		"!tag_ug",
+		"/tag_tra",
+		"!tag_tra",
 		"/setmoney NAME AMOUNT",
 		"!setmoney NAME AMOUNT",
 		"/addxp NAME AMOUNT",

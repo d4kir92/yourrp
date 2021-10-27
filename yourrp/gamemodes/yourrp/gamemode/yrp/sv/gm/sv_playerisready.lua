@@ -4,15 +4,17 @@
 
 util.AddNetworkString("yrp_chat_ready")
 
+util.AddNetworkString( "askforstartdata" )
+util.AddNetworkString( "sendstartdata" )
+util.AddNetworkString( "receivedstartdata" )
+
 local ostab = {}
 ostab[0] = "windows"
 ostab[1] = "linux"
 ostab[2] = "osx"
 ostab[3] = "other"
 
-function YRPPlayerLoadedGame(ply, tab)
-	MsgC( Color( 0, 0, 255 ), "###############################################################################" .. "\n" )--##########
-	
+function YRPPlayerLoadedGame(ply)
 	ply:SetNW2Bool("PlayerLoadedGameStart", true)
 
 	-- YRP Chat?
@@ -50,13 +52,11 @@ function YRPPlayerLoadedGame(ply, tab)
 
 	ply:UserGroupLoadout()
 
-	MsgC( Color( 0, 0, 255 ), "###############################################################################" .. "\n" )--##########
-	
 	YRP.msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading.")
 
 	ply:SetNW2Bool("PlayerLoadedGameEnd", true)
 
-	timer.Simple( 2, function()
+	timer.Simple( 3, function()
 		if !IsValid(ply) then return end
 
 		if ply.DRPSendTeamsToPlayer and ply.DRPSendCategoriesToPlayer then
@@ -104,7 +104,7 @@ hook.Add("Think", "yrp_loaded_game", function()
 	end
 end, hook.MONITOR_HIGH)
 
-local function YRPReceivedReadyMessage( len, ply, tab, nr )
+local function YRPReceivedReadyMessage( len, ply, tab )
 	if !IsValid(ply) then
 		YRP.msg( "error", "[yrp_player_is_ready] player is not valid: " .. tostring( ply ) )
 		return
@@ -121,17 +121,16 @@ local function YRPReceivedReadyMessage( len, ply, tab, nr )
 	local Country = tab.country
 	local Branch = tab.branch
 
-	YRP.msg( "note", "RECEIVED Client Info:" .. ply:YRPName() .. ": " .. OS .. " (" .. Branch .. ")" .. " " .. "[" .. Country .. "]" .. " len: " .. tostring( len ) .. " #" .. tostring( nr ) )
+	YRP.msg( "note", "RECEIVED Client Info:" .. ply:YRPName() .. ": " .. OS .. " (" .. Branch .. ")" .. " " .. "[" .. Country .. "]" .. " len: " .. tostring( len ) )
 	
-	if ply:GetNW2Bool( "yrp_received_ready", false ) == false or ply.yrp_received_ready == nil then
+	if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
 		ply:SetNW2Bool( "yrp_received_ready", true )
-		ply.yrp_received_ready = true
 
 		local OS = tab.os
 		local Country = tab.country
 		local Branch = tab.branch
 	
-		ply:SetNW2String("yrp_os", OS)
+		ply:SetNW2String( "yrp_os", OS )
 	
 		if Country == nil then
 			YRP.msg( "error", ply:YRPName() .. " Client is broken, Country = " .. tostring( Country ) )
@@ -141,10 +140,13 @@ local function YRPReceivedReadyMessage( len, ply, tab, nr )
 		ply:SetNW2String("gmod_branch", Branch or "Unknown")
 		ply:SetNW2String("yrp_country", Country or "Unknown")
 		ply:SetNW2Float("uptime_current", os.clock())
-	
-		YRP.msg( "note", ply:SteamName() .. " is using OS: " .. ply:GetNW2String("yrp_os", "-") )
-		YRP.msg( "note", ply:SteamName() .. " is using Branch: " .. tostring( Branch ) )
-		YRP.msg( "note", ply:SteamName() .. " is from Country: " .. GetCountryName( Country ) )
+
+		MsgC( Color( 0, 0, 255 ), "###############################################################################" .. "\n" )--##########
+
+		MsgC( Color( 0, 0, 255 ), ply:SteamName() .. " is using OS: " .. ply:GetNW2String("yrp_os", "-") .. " (" .. tostring( Branch ) .. ")" .. "\n" )
+		MsgC( Color( 0, 0, 255 ), ply:SteamName() .. " is from Country: " .. GetCountryName( Country ) .. "\n" )
+
+		MsgC( Color( 0, 0, 255 ), "###############################################################################" .. "\n" )--##########
 	
 		local country = string.lower( ply:GetNW2String("yrp_country") )
 		local countries = GetGlobalString( "text_whitelist_countries", "" )
@@ -168,15 +170,73 @@ local function YRPReceivedReadyMessage( len, ply, tab, nr )
 				return false
 			end
 		end
+
+		YRPPlayerLoadedGame( ply )
 	end
 end
 
-for i = 0, 6 do
-	util.AddNetworkString("yrpisreadyplayer" .. i)
-	net.Receive("yrpisreadyplayer" .. i, function( len, ply )
-		local osid = net.ReadUInt( 2 )
-		local branch = net.ReadString()
-		local country = net.ReadString()
+local function YRPAddReadyStatusMsg( ply, msg )
+	ply.tabreadystatus = ply.tabreadystatus or {}
+	if !table.HasValue( ply.tabreadystatus, msg ) then
+		table.insert( ply.tabreadystatus, msg )
+	end
+	ply:SetNW2String( "yrp_ready_status", table.concat( ply.tabreadystatus, ", " ) )
+end
+
+function YRPAskForStartData( data )
+	for i, ply in pairs( player.GetAll() ) do
+		if ply:SteamID() == data.networkid then
+			if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
+				YRPAddReadyStatusMsg( ply, "Send" )
+
+				ply.readycounter = ply.readycounter or 0
+				ply.readycounter = ply.readycounter + 1
+
+				MsgC( Color( 0, 255, 0 ), "[START] [" .. ply:SteamName() .. "] Ask for StartData" .. " #" .. ply.readycounter .. "\n" )
+
+				net.Start("askforstartdata")
+				net.Send(ply)
+
+				YRPAddReadyStatusMsg( ply, "Sended" )
+
+				if ply.readycounter >= ( 150 / 3 ) and ply.readycounter < ( 180 / 3 ) then
+					YRP.msg( "error", "[START] Stuck: " .. ply:GetNW2String( "yrp_ready_status", "X" ) .. " Counter: " .. tostring( ply.readycounter ) .. " ply: " .. tostring( ply:YRPName() .. " Ver.: " .. YRPGetVersionFull() .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" ) ) )
+				end
+
+				timer.Simple( 3, function()
+					if IsValid( ply ) then
+						if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
+							MsgC( Color( 255, 255, 0 ), "[START] [" .. ply:SteamName() .. "] RETRY Ask for StartData" .. " #" .. ply.readycounter .. "\n" )
+							YRPAddReadyStatusMsg( ply, "RETRY" )
+							YRPAskForStartData( data )
+						end
+					end
+				end )
+			end
+		end
+	end
+end
+
+gameevent.Listen( "OnRequestFullUpdate" )
+hook.Add( "OnRequestFullUpdate", "yrp_OnRequestFullUpdate_ISREADY", function( data )
+	YRPAskForStartData( data )
+end)
+
+net.Receive( "sendstartdata", function( len, ply )
+	local osid = net.ReadUInt( 2 )
+	local branch = net.ReadString()
+	local country = net.ReadString()
+
+	YRPAddReadyStatusMsg( ply, "Received" )
+
+	if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
+		ply.readycounter = ply.readycounter or 0
+		MsgC( Color( 0, 255, 0 ), "[START] [" .. ply:SteamName() .. "] RECEIVED StartData" .. " #" .. ply.readycounter .. "\n" )
+
+		net.Start( "receivedstartdata" )
+		net.Send( ply )
+
+		YRPAddReadyStatusMsg( ply, "Once" )
 
 		local tab = {}
 		tab["os"] = osid
@@ -188,30 +248,8 @@ for i = 0, 6 do
 			return
 		end
 
-		YRPReceivedReadyMessage( len, ply, tab, i )
-	end)
-end
+		YRPAddReadyStatusMsg( ply, "DONE" )
 
-util.AddNetworkString("yrpisreadyplayer" .. "extra1")
-net.Receive("yrpisreadyplayer" .. "extra1", function( len, ply )
-	local tab = net.ReadTable()
-
-	if !YRPCheckReadyTable( tab ) then
-		YRP.msg( "error", "[yrp_player_is_ready] Ready Table is broken! #Extra1" )
-		return
+		YRPReceivedReadyMessage( len, ply, tab )
 	end
-
-	YRPReceivedReadyMessage( len, ply, tab, "extra1" )
-end)
-
-util.AddNetworkString("yrpisreadyplayer" .. "extra2")
-net.Receive("yrpisreadyplayer" .. "extra2", function( len, ply )
-	YRP.msg( "error", "[yrp_player_is_ready] UNKNOWN DATA: EXTRA2!: " .. ply:YRPName() )
-
-	local tab = {}
-	tab["os"] = 3
-	tab["branch"] = "0Bit"
-	tab["country"] = "UNKNOWN"
-	
-	YRPReceivedReadyMessage( len, ply, tab, "extra2" )
-end)
+end )

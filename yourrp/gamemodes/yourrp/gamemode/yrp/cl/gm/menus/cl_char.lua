@@ -139,7 +139,7 @@ function CreateCharContent(parent)
 
 
 
-	local attr = createD("YPanel", parent, YRP.ctr(300), YRP.ctr(260), YRP.ctr(20), YRP.ctr(Y))
+	--[[local attr = createD("YPanel", parent, YRP.ctr(300), YRP.ctr(260), YRP.ctr(20), YRP.ctr(Y))
 	function attr:Paint(pw, ph)
 		hook.Run("YPanelPaint", self, pw, ph)
 
@@ -158,7 +158,7 @@ function CreateCharContent(parent)
 		draw.SimpleText(lply:GetNW2Int("int_armor", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(220), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 	end
 
-	Y = Y + 400 + 20
+	Y = Y + 400 + 20]]
 
 
 

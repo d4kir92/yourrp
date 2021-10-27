@@ -259,7 +259,7 @@ function YRPSpawnItem(ply, item, duid)
 			wep:SetNW2Entity("yrp_owner", ply)
 			return true
 		else
-			YRP.msg("note", "[Spawn Item] Class " .. item.ClassName .. " dont give weapon")
+			YRP.msg("note", "[Spawn Item] Class " .. item.ClassName .. " Give() FAILED (already have it?)")
 			return false
 		end
 	end

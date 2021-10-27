@@ -108,10 +108,10 @@ if CLIENT then
 
 		-- Respawn time
 		w.respawntext = createD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
-		w.respawntext:SetText("LID_respawntime")
+		w.respawntext:SetText( YRP.lang_string( "LID_respawntime" ) .. " (" .. YRP.lang_string( "LID_seconds" ) .. ")" )
 		w.respawn = createD("DNumberWang", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
 		w.respawn:SetMin(1)
-		w.respawn:SetMax(600)
+		w.respawn:SetMax(60 * 60 * 6)
 		w.respawn:SetValue(stab.int_respawntime)
 		function w.respawn:OnValueChanged()
 			net.Start("update_map_int_respawntime")

@@ -1263,7 +1263,7 @@ hook.Add("PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function(pl, model)
 	end
 end)
 
-function RenderEquipment(ply, name, mode, color)
+function YRPRenderEquipment(ply, name, mode, color)
 	local _eq = ply:GetNW2Entity(name)
 	if ea(_eq) then
 		_eq:SetRenderMode(mode)
@@ -1273,29 +1273,29 @@ function RenderEquipment(ply, name, mode, color)
 	end
 end
 
-function RenderEquipments(ply, mode, color)
-	RenderEquipment(ply, "backpack", mode, color)
+function YRPRenderEquipments(ply, mode, color)
+	YRPRenderEquipment(ply, "backpack", mode, color)
 end
 
-function RenderCloaked(ply)
+function YRPRenderCloaked(ply)
 	if IsValid(ply) and ply:IsPlayer() and ply:Alive() and ply:GetWeapons() then
 		local _alpha = 0
-		ply:SetRenderMode(RENDERMODE_TRANSALPHA)
+		ply:SetRenderMode(RENDERMODE_TRANSCOLOR)
 		ply:SetColor(Color(255, 255, 255, _alpha))
 		for i, wp in pairs(ply:GetWeapons()) do
-			wp:SetRenderMode(RENDERMODE_TRANSALPHA)
+			wp:SetRenderMode(RENDERMODE_TRANSCOLOR)
 			wp:SetColor(Color(255, 255, 255, _alpha))
 		end
-		RenderEquipments(ply, RENDERMODE_TRANSALPHA, Color(255, 255, 255, _alpha))
+		--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, Color(255, 255, 255, _alpha))
 	end
 end
 
-function RenderNoClip(ply, alpha)
+function YRPRenderNoClip(ply, alpha)
 	if ea(ply) then
 		if ply:GetNW2Bool("cloaked", false) then
-			RenderCloaked(ply)
+			YRPRenderCloaked(ply)
 		else
-			local _alpha = 255
+			local _alpha = 200
 			if IsNoClipEffectEnabled() then
 				if IsNoClipStealthEnabled() then
 					_alpha = 0
@@ -1303,45 +1303,40 @@ function RenderNoClip(ply, alpha)
 					_alpha = 120
 				end
 			end
-
-			ply:SetRenderMode(RENDERMODE_TRANSALPHA)
+			
+			ply:SetRenderMode(RENDERMODE_TRANSCOLOR)
 			ply:SetColor(Color(255, 255, 255, _alpha))
 			for i, wp in pairs(ply:GetWeapons()) do
-				wp:SetRenderMode(RENDERMODE_TRANSALPHA)
+				wp:SetRenderMode(RENDERMODE_TRANSCOLOR)
 				wp:SetColor(Color(255, 255, 255, _alpha))
 			end
-			RenderEquipments(ply, RENDERMODE_TRANSALPHA, Color(255, 255, 255, _alpha))
+			--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, Color(255, 255, 255, _alpha))
 		end
-
-		--local model = GetGlobalString("text_noclip_mdl", "")
-		--if !strEmpty(model) then
-			--ply:SetModel(model)
-		--end
 	end
 end
 
-function RenderFrozen(ply)
+function YRPRenderFrozen(ply)
 	if ea(ply) then
 		if ply:GetNW2Bool("cloaked", false) then
-			RenderCloaked(ply)
+			YRPRenderCloaked(ply)
 		else
 			ply:SetRenderMode(RENDERMODE_NORMAL)
 			ply:SetColor(Color(0, 0, 255))
 			for i, wp in pairs(ply:GetWeapons()) do
-				wp:SetRenderMode(RENDERMODE_TRANSALPHA)
+				wp:SetRenderMode(RENDERMODE_TRANSCOLOR)
 				wp:SetColor(Color(0, 0, 255))
 			end
-			RenderEquipments(ply, RENDERMODE_TRANSALPHA, Color(0, 0, 255))
+			--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, Color(0, 0, 255))
 		end
 	end
 end
 
-function RenderNormal(ply)
+function YRPRenderNormal(ply)
 	if ea(ply) then
 		if ply:GetNW2Bool("cloaked", false) then
-			RenderCloaked(ply)
+			YRPRenderCloaked(ply)
 		elseif ply:IsFlagSet(FL_FROZEN) then
-			RenderFrozen(ply)
+			YRPRenderFrozen(ply)
 		else
 			setPlayerModel(ply)
 			ply:SetRenderMode(RENDERMODE_NORMAL)
@@ -1350,7 +1345,7 @@ function RenderNormal(ply)
 				wp:SetRenderMode(RENDERMODE_NORMAL)
 				wp:SetColor(Color(255, 255, 255, 255))
 			end
-			RenderEquipments(ply, RENDERMODE_NORMAL, Color(255, 255, 255, 255))
+			--YRPRenderEquipments(ply, RENDERMODE_NORMAL, Color(255, 255, 255, 255))
 		end
 	end
 end
@@ -1359,7 +1354,7 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 	if ea(pl) then
 		if !bool then
 			-- TURNED OFF
-			RenderNormal(pl)
+			YRPRenderNormal(pl)
 
 			local _pos = pl:GetPos()
 
@@ -1424,7 +1419,7 @@ hook.Add("PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
 						end
 					end
 
-					RenderNoClip(pl)
+					YRPRenderNoClip(pl)
 					return true
 				else
 					YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to noclip.")

@@ -293,7 +293,7 @@ function CreateRolePreviewContent()
 		end
 
 		local back = createD("YButton", win, ew, YRP.ctr(hh), nw - ew - YRP.ctr(20), nh - YRP.ctr(hh + 20))
-		back:SetText("LID_back" .. "2")
+		back:SetText("LID_back")
 		function back:Paint(pw, ph)
 			if LocalPlayer().rolepreview then
 				hook.Run("YButtonRPaint", self, pw, ph)
@@ -415,7 +415,7 @@ function CreateRoleSelectionContent(PARENT)
 		btn.h = 75
 
 		local back = createD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
-		back:SetText("LID_back" .. "1")
+		back:SetText("LID_back")
 		function back:Paint(pw, ph)
 			hook.Run("YButtonRPaint", self, pw, ph)
 		end

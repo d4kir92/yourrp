@@ -328,3 +328,6 @@ timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
 
 	timer.Remove("DarkRPCheckifitcamethrough")
 end)
+
+CustomVehicles = {}
+CustomShipments = {}

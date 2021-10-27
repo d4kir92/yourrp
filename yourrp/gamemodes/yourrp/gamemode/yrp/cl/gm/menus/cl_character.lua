@@ -441,7 +441,7 @@ function LoadCharacters()
 							end
 
 							local posx = ScrW() * 0.01
-							local tabw = ScrW() * 0.1
+							local tabw = ScrW() * 0.075
 							local tabh = ScrH() * 0.03
 							tmpChar.id = i
 							function tmpChar:Paint(pw, ph)

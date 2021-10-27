@@ -112,7 +112,6 @@ end
 
 function db_init_database()
 	if YRP_SQL_INIT_DATABASE then
-		hr_pre("db")
 		YRP.msg("db", "LOAD DATABASES")
 
 		for i, db in pairs(YRP_DBS) do
@@ -122,7 +121,6 @@ function db_init_database()
 		yrp_db.loaded = true
 
 		YRP.msg("db", "DONE Loading DATABASES")
-		hr_pos("db")
 	else
 		YRP.msg("db", "RETRY LOAD DATABASES")
 		timer.Simple(0.01, db_init_database)

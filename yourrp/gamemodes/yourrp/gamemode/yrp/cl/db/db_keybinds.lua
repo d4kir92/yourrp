@@ -169,7 +169,8 @@ function YRPCheckKeybinds()
 			end
 		end
 	else
-		YRP.msg( "error", "yrp_keybinds is broken: " .. tostring( file.Read( dbfile, "DATA" ) ) )
+		YRP.msg( "error", "yrp_keybinds is broken" )
+		YRP.msg( "error", "yrp_keybinds: " .. tostring( file.Read( dbfile, "DATA" ) ) )
 	end
 
 	if foundmissing then

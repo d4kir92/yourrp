@@ -6,7 +6,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-	self:SetModel("models/Items/ammocrate_smg1.mdl")
+	self:SetModel("")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -22,13 +22,6 @@ end
 function ENT:Think()
 	if string.lower(GetGlobalString("text_weapon_system_model", "models/items/ammocrate_smg1.mdl")) != self:GetModel() then
 		self:SetModel(string.lower(GetGlobalString("text_weapon_system_model", "models/items/ammocrate_smg1.mdl")))
-		self:PhysicsInit(SOLID_VPHYSICS)
-		self:SetMoveType(MOVETYPE_VPHYSICS)
-		self:SetSolid(SOLID_VPHYSICS)
-		local phys = self:GetPhysicsObject()
-		if (phys:IsValid()) then
-			phys:Wake()
-		end
 	end
 end
 

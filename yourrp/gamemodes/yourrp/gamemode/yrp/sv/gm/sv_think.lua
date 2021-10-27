@@ -13,6 +13,7 @@ util.AddNetworkString("client_lang")
 net.Receive("client_lang", function(len, ply)
 	local _lang = net.ReadString()
 	--YRP.msg("db", ply:YRPName() .. " using language: " .. string.upper(_lang))
+
 	ply:SetNW2String("client_lang", _lang or "NONE")
 end)
 

@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 351 -- do NOT change this!
 GM.VersionCanary = 705 -- do NOT change this!
-GM.VersionBuild = 106 -- do NOT change this!
+GM.VersionBuild = 114 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -151,45 +151,52 @@ function StringToVector2(str)
 	end
 end
 
+function YRPHR( color )
+	color = color or GetRealmColor()
+	MsgC( color, "-------------------------------------------------------------------------------" .. "\n" )
+end
+
+function YRPMsg( text, color )
+	color = color or GetRealmColor()
+	MsgC( color, text .. "\n" )
+end
+
 concommand.Add("yrp_version", function(ply, cmd, args)
-	hr_pre("gm")
-	local _text = "Gamemode-Version: " .. GAMEMODE.Version .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")" .. "\t BUILDNR.: " .. GAMEMODE.VersionBuild
-	YRP.msg("gm", _text)
-	hr_pos("gm")
+	local _text = "Gamemode-Version: " .. YRPGetVersionFull() .. " (" .. string.upper( GAMEMODE.VersionSort ) .. ")"
+	local _color = Color( 0, 255, 0 )
+	if string.upper( GAMEMODE.VersionSort ) == "OUTDATED" then
+		_color = Color( 255, 0, 0 )
+	end
+
+	YRPHR( _color )
+	YRPMsg( _text, _color )
+	YRPHR( _color )
 end)
 
 concommand.Add("yrp_status", function(ply, cmd, args)
-	local _text = "Gamemode - Version:\t" .. GAMEMODE.Version
-	if IsYRPOutdated() == nil then
-		_text = _text .. " (Checking)"
-	elseif IsYRPOutdated() then
-		_text = _text .. " (OUTDATED!)"
-	end
-
-	hr_pre("gm")
-	YRP.msg("gm", "    Version: " .. YRPGetVersionFull() )
-	YRP.msg("gm", "    Channel: " .. string.upper(GAMEMODE.VersionSort))
-	YRP.msg("gm", " Servername: " .. YRPGetHostName())
-	YRP.msg("gm", "         IP: " .. game.GetIPAddress())
-	YRP.msg("gm", "        Map: " .. GetMapNameDB())
-	YRP.msg("gm", "    Players: " .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()))
-	hr_pos("gm")
+	YRPHR()
+	YRPMsg( string.format("%14s %s", "Version:", YRPGetVersionFull() .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")" ) )
+	YRPMsg( string.format("%14s %s", "Servername:", YRPGetHostName() ) )
+	YRPMsg( string.format("%14s %s", "IP:", game.GetIPAddress() ) )
+	YRPMsg( string.format("%14s %s", "Map:", GetMapNameDB() ) )
+	YRPMsg( string.format("%14s %s", "Players:", tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()) ) )
+	YRPHR()
 end)
 
 concommand.Add("yrp_maps", function(ply, cmd, args)
-	hr_pre("gm")
-	YRP.msg("gm", "[MAPS ON SERVER]")
+	YRPHR()
+	YRPMsg("[MAPS ON SERVER]")
 	local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
 	for i, map in pairs(allmaps) do
 		local mapname = string.Replace(map, ".bsp", "")
-		YRP.msg("gm", i .. "\t" .. mapname)
+		YRPMsg(i .. "\t" .. mapname)
 	end
-	hr_pos("gm")
+	YRPHR()
 end)
 
 concommand.Add("yrp_map", function(ply, cmd, args)
-	hr_pre("gm")
-	YRP.msg("gm", "[Changelevel]")
+	YRPHR()
+	YRPMsg("[Changelevel]")
 	local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
 	for i, map in pairs(allmaps) do
 		local mapname = string.Replace(map, ".bsp", "")
@@ -199,15 +206,15 @@ concommand.Add("yrp_map", function(ply, cmd, args)
 	local map = allmaps[id]
 	if map != nil then
 		if SERVER then
-			YRP.msg("gm", "Changelevel to " .. map)
+			YRPMsg("Changelevel to " .. map)
 			RunConsoleCommand("changelevel", map)
 		else
-			YRP.msg("gm", "ONLY AVAILABLE ON SERVER")
+			YRPMsg("ONLY AVAILABLE ON SERVER")
 		end
 	else
-		YRP.msg("gm", "ID OUT OF RANGE")
+		YRPMsg("ID OUT OF RANGE")
 	end
-	hr_pos("gm")
+	YRPHR()
 end)
 
 function makeString(str, len)
@@ -217,25 +224,24 @@ function makeString(str, len)
 end
 
 concommand.Add("yrp_players", function(ply, cmd, args)
-	local structure = "%-4s %-20s %-20s %-10s %-10s"
-	hr_pre( "gm" )
-	YRP.msg( "gm", "Players:\t" .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()) )
-	YRP.msg( "gm", string.format( structure,"ID", "SteamID", "Name", "Money", "OS" ) )
-	YRP.msg( "gm", "----------------------------------------------------------------------" )
+	YRPHR( Color( 255, 255, 0 ) )
+	local structure = "%-4s %-20s %-10s %-10s %-20s"
+	MsgC( Color( 255, 255, 0 ), "Players:\t" .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()) .. "\n" )
+	MsgC( Color( 255, 255, 0 ), string.format( structure,"ID", "SteamID", "Ready?", "OS", "Name" ) .. "\n" )
+	MsgC( Color( 255, 255, 0 ), "-------------------------------------------------------------------------------" .. "\n" )
 	for i, pl in pairs(player.GetAll()) do
 		local _id = 		makeString( pl:UserID(), 4 )
 		local _steamid = 	makeString( pl:SteamID(), 20 )
-		local _name = 		makeString( pl:YRPName(), 20 )
-		local _money = 		makeString( pl:GetNW2String("money", -1), 10 )
+		local _ready = 		tostring( pl:GetNW2Bool( "yrp_received_ready", false ) )
 		local _os = 		makeString( pl:GetNW2String("yrp_os"), 10 )
-		local _str = string.format( structure, _id, _steamid, _name, _money, _os )
-		YRP.msg( "gm", _str )
+		local _name = 		makeString( pl:YRPName(), 20 )
+		local _str = string.format( structure, _id, _steamid, _ready, _os, _name )
+		MsgC( Color( 255, 255, 0 ), _str .. "\n" )
 	end
-	hr_pos( "gm" )
+	YRPHR( Color( 255, 255, 0 ) )
 end)
 
 function PrintHelp()
-	hr_pre("note")
 	YRP.msg("note", "Shared Commands:")
 	YRP.msg("note", "yrp_status")
 	YRP.msg("note", "	Shows info")
@@ -251,20 +257,15 @@ function PrintHelp()
 	YRP.msg("note", "	Changelevel to map ID")
 	YRP.msg("note", "yrp_collection / yrp_collectionid")
 	YRP.msg("note", "	Shows servers collectionid")
-	hr_pos("note")
 
-	hr_pre("note")
 	YRP.msg("note", "Client Commands:")
 	YRP.msg("note", "yrp_cl_hud X")
 	YRP.msg("note", "	1: Shows hud, 0: Hide hud")
 	YRP.msg("note", "yrp_togglesettings")
 	YRP.msg("note", "	Toggle settings menu")
-	hr_pos("note")
 
-	hr_pre("note")
 	YRP.msg("note", "Server Commands:")
 	YRP.msg("note", "yrp_givelicense NAME LICENSENAME")
-	hr_pos("note")
 end
 
 concommand.Add("yrp_help", function(ply, cmd, args)
@@ -284,9 +285,7 @@ function YRPCollectionID()
 end
 
 function PrintCollectionID()
-	hr_pre("note")
 	YRP.msg("note", "Server - CollectionID: " .. YRPCollectionID())
-	hr_pos("note")
 end
 concommand.Add("yrp_collectionid", function(ply, cmd, args)
 	PrintCollectionID()
@@ -836,7 +835,14 @@ function YRPNewError(err)
 end
 
 local function YRPSaveErrors()
-	file.Write( filename, util.TableToJSON( YRPErrors, true ) )
+	if YRPErrors != nil then
+		YRP.msg( "note", "Saved Errors" )
+		file.Write( filename, util.TableToJSON( YRPErrors, true ) )
+	else
+		YRP.msg( "note", "Failed to save Errors" )
+		YRPCheckErrorFile()
+		timer.Simple( 0.1, YRPSaveErrors )
+	end
 end
 
 local function YRPSendError(tab, from)
@@ -906,7 +912,7 @@ local function YRPSendError(tab, from)
 		return
 	end
 
-	if GAMEMODE and yrpversionisset and IsYRPOutdated then
+	if GAMEMODE and YRPIsVersionSet and YRPIsVersionSet() and IsYRPOutdated != nil then
 		if IsYRPOutdated() then
 			MsgC( Color(255, 0, 0), "[YRPSendError] >> YourRP Is Outdated" .. "\n" )
 		elseif YRPIsServerDedicated() and !string.StartWith( GetGlobalString( "serverip", "0.0.0.0:27015" ), "0.0.0.0:" ) then
@@ -934,10 +940,11 @@ local function YRPSendError(tab, from)
 end
 
 function YRPRemoveOutdatedErrors()
+	YRP.msg("note", "[ERRORS] Remove Outdated Errors")
 	if YRPErrors and GAMEMODE then
 		local TMPYRPErrors = {}
 		local changed = false
-		for i, v in pairs(YRPErrors) do
+		for i, v in pairs( YRPErrors ) do
 			if v.buildnummer == nil then
 				v.buildnummer = 0
 				changed = true
@@ -954,10 +961,14 @@ function YRPRemoveOutdatedErrors()
 			end
 		end
 		if changed then
+			YRP.msg("note", "[ERRORS] Found Outdated Errors")
 			YRPErrors = TMPYRPErrors
 			YRPSaveErrors()
+		else
+			YRP.msg("note", "[ERRORS] No Outdated Errors found")
 		end
 	else
+		YRP.msg("note", "Failed to remove outdated errors")
 		timer.Simple(0.01, YRPRemoveOutdatedErrors)
 	end
 end
@@ -983,7 +994,7 @@ hook.Add("OnLuaError", "yrp_OnLuaError", function(...)
 	local err = tab.path
 	local trace = tab.trace
 	local realm = tab.realm
-	
+
 	--if err and trace and realm and ( string.find(err, "/yrp/") or string.find(trace, "/yrp/") ) and YRPNewError(err) then
 	if err and trace and realm and string.find(err, "/yrp/") and YRPNewError(err) then
 		MsgC( Color(255, 0, 0), "[YRPAddError] >> Found a new ERROR" .. "\n" )
@@ -994,12 +1005,12 @@ end)
 
 
 -- FIND BACKDOORS
-local function YRPCBMsg( msg, col )
+function YRPCBMsg( msg, col )
 	local color = col or Color( 0, 255, 0 )
 	MsgC( color, msg .. "\n" )
 end
 
-local function YRPCBHR( col )
+function YRPCBHR( col )
 	YRPCBMsg( "-------------------------------------------------------------------------------", col )
 end
 
@@ -1303,9 +1314,11 @@ end)
 
 if CLIENT then
 	timer.Simple(1, function()
-		MsgC( Color( 255, 255, 0 ), "Server: " .. GetGlobalString( "serverversion", VERSION ) .. "\n" )
-		MsgC( Color( 255, 255, 0 ), "Client: " .. VERSION .. "\n" )
-
+		YRPHR( Color( 255, 255, 0 ) )
+		MsgC( Color( 255, 255, 0 ), "[GAME VERSION] Server: " .. GetGlobalString( "serverversion", VERSION ) .. "\n" )
+		MsgC( Color( 255, 255, 0 ), "[GAME VERSION] Client: " .. VERSION .. "\n" )
+		YRPHR( Color( 255, 255, 0 ) )
+		
 		if GetGlobalString( "serverversion", VERSION ) != VERSION then
 			MsgC( Color( 255, 0, 0 ), "YOUR GAME IS OUTDATED!" .. "\n" )
 		else

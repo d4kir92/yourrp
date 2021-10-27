@@ -190,6 +190,7 @@ function YRP.send_lang(short)
 	-- send info to server, to let others know what language i chose
 	if CLIENT then
 		YRP.msg("lang", "Send Language to Server: [" .. tostring(short) .. "]")
+
 		net.Start("client_lang")
 		net.WriteString(tostring(short))
 		net.SendToServer()
@@ -252,8 +253,6 @@ function YRP.LoadLanguage(short, init)
 	if (init) then
 		YRP.read_language(short, init)
 	else
-		hr_pre("lang")
-
 		if short == "auto" then
 			YRP.msg("lang", "[AUTOMATIC DETECTION]")
 			YRP.search_language()
@@ -290,7 +289,6 @@ function YRP.LoadLanguage(short, init)
 		YRP.msg("lang", "Language changed to [" .. YRP.lang_string("LID_initshort") .. "] " .. YRP.lang_string("LID_initlanguage"))
 		YRP.send_lang(short) -- Send To Server
 		hook.Run("yrp_current_language_changed") -- Update Chat
-		hr_pos("lang")
 	end
 
 	return true
@@ -334,9 +332,7 @@ if CLIENT then
 end
 
 function YRP.initLang()
-	hr_pre("lang")
-	YRP.msg("lang", "... SEARCHING FOR LANGUAGE ...")
+	--YRP.msg("lang", "... SEARCHING FOR LANGUAGE ...")
 	YRP.LoadLanguage("auto", false)
-	hr_pos("lang")
 end
-YRP.initLang()
+timer.Simple(0.1, YRP.initLang )

@@ -495,6 +495,32 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_identity_card, "LID_identitycard", "update_bool_identity_card")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_map_system, "LID_map", "update_bool_map_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_appearance_system, "LID_appearancesystem", "update_bool_appearance_system")
+		local wc_mdl = CreateButtonLine(GAMEMODE_SYSTEMS:GetContent(), YRP.lang_string("LID_appearance") .. " (" .. YRP.lang_string("LID_model") .. ")", "update_text_appearance_model", "LID_change")
+		function YRPAppearanceUpdateModel()
+			local mdl = LocalPlayer().yrpseltab[1]
+			net.Start("update_text_appearance_model")
+				net.WriteString(mdl)
+			net.SendToServer()
+		end
+		function wc_mdl.button:DoClick()
+			local noneplayermodels = {}
+			AddToTabRecursive(noneplayermodels, "models/", "GAME", "*.mdl")
+			for _, addon in SortedPairsByMemberValue(engine.GetAddons(), "title") do
+				if (!addon.downloaded or !addon.mounted) then continue end
+				AddToTabRecursive(noneplayermodels, "models/", addon.title, "*.mdl")
+			end
+
+			local cl_pms = {}
+			local c = 0
+			for k, v in pairs(noneplayermodels) do
+				c = c + 1
+				cl_pms[c] = {}
+				cl_pms[c].WorldModel = v
+				cl_pms[c].ClassName = v
+				cl_pms[c].PrintName = v
+			end
+			YRPOpenSelector(cl_pms, false, "worldmodel", YRPAppearanceUpdateModel)
+		end
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_smartphone_system, "LID_smartphonesystem", "update_bool_smartphone_system")
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_wanted_system, "LID_wantedsystem", "update_bool_wanted_system")
