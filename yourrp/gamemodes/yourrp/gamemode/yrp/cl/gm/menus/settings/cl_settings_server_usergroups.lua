@@ -919,7 +919,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	GAMEPLAYAddIntBox("int_charactersevent_max", YRP.lang_string("LID_charactersmax") .. " (EVENT)")
 end)
 
-function AddUG(tbl)
+function YRPAddUG(tbl)
 	local PARENT = GetSettingsSite()
 
 	if !pa(PARENT) or !pa(PARENT.ugs) then return end
@@ -1043,7 +1043,7 @@ net.Receive("usergroup_add", function(len)
 	local ugs = net.ReadTable()
 	for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
 		if DUGS[tonumber(ug.uniqueID)] == nil and tobool(ug.bool_removeable) then
-			AddUG(ug)
+			YRPAddUG(ug)
 		end
 	end
 end)
@@ -1059,7 +1059,7 @@ function UpdateUsergroupsList(ugs)
 			ug.int_position = tonumber(ug.int_position)
 			if ug.int_position < 10 then
 				if tobool(ug.bool_removeable) then
-					AddUG(ug)
+					YRPAddUG(ug)
 				end
 			end
 		end
@@ -1067,7 +1067,7 @@ function UpdateUsergroupsList(ugs)
 			ug.int_position = tonumber(ug.int_position)
 			if ug.int_position >= 10 then
 				if tobool(ug.bool_removeable) and pa(PARENT.ugs) then
-					AddUG(ug)
+					YRPAddUG(ug)
 				end
 			end
 		end

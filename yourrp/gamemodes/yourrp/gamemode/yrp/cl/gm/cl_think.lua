@@ -14,15 +14,15 @@ local _thirdpersonC = 0
 local _lastkey = nil
 ch_attack1 = 0
 
-function isChatOpen()
+function YRPIsChatOpen()
 	return chatisopen or false
 end
 
-function isConsoleOpen()
+function YRPIsConsoleOpen()
 	return gui.IsConsoleVisible()
 end
 
-function isMainMenuOpen()
+function YRPIsMainMenuOpen()
 	return gui.IsGameUIVisible()
 end
 
@@ -63,7 +63,7 @@ function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 	end
 end
 
-function close_all()
+function YRPCloseAllMenues()
 	CloseCombinedMenu()
 	CloseHelpMenu()
 	CloseEmotesMenu()
@@ -81,7 +81,7 @@ function close_all()
 	closeSP()
 end
 
-function useFunction(str)
+function YRPUseFunction(str)
 	if str == nil then
 		return
 	end
@@ -89,10 +89,10 @@ function useFunction(str)
 	local eyeTrace = lply:GetEyeTrace()
 
 	if str == "close_all" then
-		close_all()
+		YRPCloseAllMenues()
 	end
 
-	if !isChatOpen() and !isConsoleOpen() and !isMainMenuOpen() then
+	if !YRPIsChatOpen() and !YRPIsConsoleOpen() and !YRPIsMainMenuOpen() then
 		--Menues
 		if str == "openSP" then
 			openSP()
@@ -232,7 +232,7 @@ function useFunction(str)
 	end
 end
 
-function keyDown(key, str, distance)
+function YRPKeyDown(key, str, distance)
 	local lply = LocalPlayer()
 	local plyTrace = lply:GetEyeTrace()
 	local _return = false
@@ -249,7 +249,7 @@ function keyDown(key, str, distance)
 			keys[tostring(key)] = true
 			timer.Simple(0.2, function()
 				if str != nil then
-					useFunction(str)
+					YRPUseFunction(str)
 				end
 				keys[tostring(key)] = false
 			end)
@@ -257,7 +257,7 @@ function keyDown(key, str, distance)
 	end
 end
 
-function keyPressed(key, str, distance)
+function YRPKeyPressed(key, str, distance)
 	if key == nil then
 		return
 	end
@@ -281,7 +281,7 @@ function keyPressed(key, str, distance)
 					keys[tostring(key)] = true
 					timer.Simple(0.14, function()
 						if str != nil then
-							useFunction(str)
+							YRPUseFunction(str)
 						end
 						keys[tostring(key)] = false
 					end)
@@ -299,7 +299,7 @@ local blink_delay = 0
 local setup = false
 local hudD = nil
 local hudFail = hudFail or false
-function KeyPress()
+function YRPKeyPress()
 	local lply = LocalPlayer()
 
 	hudD = hudD or CurTime() + 240
@@ -483,59 +483,59 @@ function KeyPress()
 		end
 	end
 
-	keyPressed(KEY_ESCAPE, "close_all")
+	YRPKeyPressed(KEY_ESCAPE, "close_all")
 
-	keyPressed(KEY_F1, "OpenHelpMenu")
-	keyPressed(KEY_F7, "openTicketMenu")
+	YRPKeyPressed(KEY_F1, "OpenHelpMenu")
+	YRPKeyPressed(KEY_F7, "openTicketMenu")
 
-	keyPressed(YRPGetKeybind("menu_char"), "openCharMenu")
-	keyPressed(YRPGetKeybind("menu_keybinds"), "openKeybindsMenu")
+	YRPKeyPressed(YRPGetKeybind("menu_char"), "openCharMenu")
+	YRPKeyPressed(YRPGetKeybind("menu_keybinds"), "openKeybindsMenu")
 
-	keyPressed(YRPGetKeybind("menu_emotes"), "ToggleEmotesMenu")
+	YRPKeyPressed(YRPGetKeybind("menu_emotes"), "ToggleEmotesMenu")
 
-	keyPressed(YRPGetKeybind("menu_laws"), "ToggleLawsMenu")
+	YRPKeyPressed(YRPGetKeybind("menu_laws"), "ToggleLawsMenu")
 
-	keyPressed(YRPGetKeybind("menu_settings"), "openSettings")
+	YRPKeyPressed(YRPGetKeybind("menu_settings"), "openSettings")
 
-	keyPressed(YRPGetKeybind("menu_inventory"), "openInventory")
-	keyPressed(YRPGetKeybind("menu_appearance"), "openAppearance")
+	YRPKeyPressed(YRPGetKeybind("menu_inventory"), "openInventory")
+	YRPKeyPressed(YRPGetKeybind("menu_appearance"), "openAppearance")
 
-	keyPressed(YRPGetKeybind("menu_character_selection"), "openCharacterMenu")
-	keyPressed(YRPGetKeybind("menu_role"), "OpenRoleMenu")
-	keyPressed(YRPGetKeybind("menu_buy"), "OpenBuyMenu")
+	YRPKeyPressed(YRPGetKeybind("menu_character_selection"), "openCharacterMenu")
+	YRPKeyPressed(YRPGetKeybind("menu_role"), "OpenRoleMenu")
+	YRPKeyPressed(YRPGetKeybind("menu_buy"), "OpenBuyMenu")
 
-	keyPressed(YRPGetKeybind("menu_interact"), "openInteractMenu", GetGlobalInt("int_door_distance", 200))
+	YRPKeyPressed(YRPGetKeybind("menu_interact"), "openInteractMenu", GetGlobalInt("int_door_distance", 200))
 
-	keyPressed(YRPGetKeybind("menu_options_door"), "openOptions", GetGlobalInt("int_door_distance", 200))
-	keyPressed(YRPGetKeybind("menu_options_vehicle"), "openOptions", GetGlobalInt("int_door_distance", 200))
+	YRPKeyPressed(YRPGetKeybind("menu_options_door"), "openOptions", GetGlobalInt("int_door_distance", 200))
+	YRPKeyPressed(YRPGetKeybind("menu_options_vehicle"), "openOptions", GetGlobalInt("int_door_distance", 200))
 
-	keyPressed(YRPGetKeybind("toggle_map"), "openMap")
+	YRPKeyPressed(YRPGetKeybind("toggle_map"), "openMap")
 
-	keyPressed(YRPGetKeybind("toggle_mouse"), "F11Toggle")
+	YRPKeyPressed(YRPGetKeybind("toggle_mouse"), "F11Toggle")
 
-	--keyPressed(KEY_PAGEUP, "vyes")
-	--keyPressed(KEY_PAGEDOWN, "vno")
+	--YRPKeyPressed(KEY_PAGEUP, "vyes")
+	--YRPKeyPressed(KEY_PAGEDOWN, "vno")
 
-	keyPressed(YRPGetKeybind("drop_item"), "dropitem")
+	YRPKeyPressed(YRPGetKeybind("drop_item"), "dropitem")
 
-	keyPressed(KEY_UP, "openSP")
-	keyPressed(KEY_DOWN, "closeSP")
+	YRPKeyPressed(KEY_UP, "openSP")
+	YRPKeyPressed(KEY_DOWN, "closeSP")
 
-	keyPressed(YRPGetKeybind("voice_mute"), "voice_mute")
-	keyPressed(YRPGetKeybind("voice_range_up"), "voice_range_up")
-	keyPressed(YRPGetKeybind("voice_range_dn"), "voice_range_dn")
-	keyPressed(YRPGetKeybind("voice_menu"), "voice_menu")
+	YRPKeyPressed(YRPGetKeybind("voice_mute"), "voice_mute")
+	YRPKeyPressed(YRPGetKeybind("voice_range_up"), "voice_range_up")
+	YRPKeyPressed(YRPGetKeybind("voice_range_dn"), "voice_range_dn")
+	YRPKeyPressed(YRPGetKeybind("voice_menu"), "voice_menu")
 
-	keyPressed(YRPGetKeybind("chat_menu"), "chat_menu")
+	YRPKeyPressed(YRPGetKeybind("chat_menu"), "chat_menu")
 
-	keyPressed(YRPGetKeybind("macro_menu"), "macro_menu")
+	YRPKeyPressed(YRPGetKeybind("macro_menu"), "macro_menu")
 	for i = 1, 49 do
 		if YRPGetKeybind("m_" .. i) != 0 then
-			keyPressed(YRPGetKeybind("m_" .. i), "m_" .. i)
+			YRPKeyPressed(YRPGetKeybind("m_" .. i), "m_" .. i)
 		end
 	end
 end
-hook.Add("Think", "Thinker", KeyPress)
+hook.Add("Think", "Thinker", YRPKeyPress)
 
 local _savePos = Vector(0, 0, 0)
 _lookAtEnt = nil
@@ -772,7 +772,7 @@ timer.Simple(1, function()
 	hook.Add("CalcView", "YOURRP_ThirdPerson_CalcView", YRP_CalcView)
 end)
 
-function showPlayermodel()
+function YRPShowPlayermodel()
 	local lply = LocalPlayer()
 
 	if !lply:InVehicle() then
@@ -790,7 +790,7 @@ function showPlayermodel()
 		return false
 	end
 end
-hook.Add("ShouldDrawLocalPlayer", "ShowPlayermodel", showPlayermodel)
+hook.Add("ShouldDrawLocalPlayer", "ShowPlayermodel", YRPShowPlayermodel)
 
 jobByCmd = jobByCmd or {}
 net.Receive("send_team", function(len)
