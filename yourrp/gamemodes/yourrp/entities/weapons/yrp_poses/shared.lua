@@ -545,7 +545,7 @@ function SWEP:Reload()
 		end	
 		self.delay = CurTime() + 1
 
-		if input.IsShiftDown() and LocalPlayer():HasAccess() then
+		if input.IsShiftDown() and LocalPlayer():SteamID64() == "76561198002066427" then
 			if !pa(self.config) then
 				local ply = LocalPlayer()
 				ply.yrp_ang = Angle(0, 0, 0)

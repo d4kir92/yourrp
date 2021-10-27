@@ -199,7 +199,7 @@ function YRPAskForStartData( data )
 
 				YRPAddReadyStatusMsg( ply, "Sended" )
 
-				if ply.readycounter >= ( 150 / 3 ) and ply.readycounter < ( 180 / 3 ) then
+				if ply:GetNW2Bool( "yrp_received_ready", false ) == false and ply.readycounter >= ( 180 / 3 ) and ply.readycounter <= ( 210 / 3 ) then
 					YRP.msg( "error", "[START] Stuck: " .. ply:GetNW2String( "yrp_ready_status", "X" ) .. " Counter: " .. tostring( ply.readycounter ) .. " ply: " .. tostring( ply:YRPName() .. " Ver.: " .. YRPGetVersionFull() .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" ) ) )
 				end
 

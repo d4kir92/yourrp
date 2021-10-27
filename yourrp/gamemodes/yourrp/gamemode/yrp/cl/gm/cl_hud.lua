@@ -738,7 +738,8 @@ local VO = {}
 
 hook.Add("HUDPaint", "yrp_voice_module", function()
 	local lply = LocalPlayer()
-	if GetGlobalBool("bool_voice", false) then
+
+	if GetGlobalBool("bool_voice", false) and lply:HudValue("VO", "VISI") then
 		VO.font = "Y_18_700"
 		surface.SetFont(VO.font)
 

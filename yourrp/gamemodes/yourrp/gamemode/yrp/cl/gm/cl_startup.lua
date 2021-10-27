@@ -1950,14 +1950,18 @@ function YRPCreateLoadingInfo( ti )
 		local yrp3 = lply:GetNW2Bool("yrp_hudloadout") == false or lply:GetNW2String("yrp_hudloadout_msg", "X") == "X"
 
 		if yrp1 then
-			if !strEmpty(text) then
-				text = text .. spacer
+			if YRPReceivedStartData or lply:GetNW2Bool( "yrp_received_ready" ) then
+				--
+			else
+				if !strEmpty(text) then
+					text = text .. spacer
+				end
+				text = text .. "ReceiveFromServer: " .. tostring( YRPReceivedStartData )
+				text = text .. " " .. "ReceivedInServer: " .. tostring( lply:GetNW2Bool( "yrp_received_ready" ) )
+				text = text .. " " .. "YRPRetryCounter: " .. tostring( YRPRetryCounter )
+				text = text .. " " .. table.ToString( YRPGetClientInfo(), "YRPGetClientInfo" )
+				text = text .. " " .. "Status: " .. tostring( YRPStartDataStatus )
 			end
-			text = text .. "ReceiveFromServer: " .. tostring( YRPReceivedStartData )
-			text = text .. " " .. "ReceivedInServer: " .. tostring( lply:GetNW2Bool( "yrp_received_ready" ) )
-			text = text .. " " .. "YRPRetryCounter: " .. tostring( YRPRetryCounter )
-			text = text .. " " .. table.ToString( YRPGetClientInfo(), "YRPGetClientInfo" )
-			text = text .. " " .. "Status: " .. tostring( YRPStartDataStatus )
 		end
 		if !yrp1 and yrp2 and GetGlobalBool("bool_character_system") and !IsVoidCharEnabled() then
 			if !strEmpty(text) then
@@ -1975,7 +1979,7 @@ function YRPCreateLoadingInfo( ti )
 			text = text .. "HudLoadout: " .. tostring( lply:GetNW2Bool("yrp_hudloadout") ) .. " hud_msg: " .. lply:GetNW2String("yrp_hudloadout_msg", "X")
 		end
 		if !strEmpty(text) then
-			text = "[Loading] " .. text .. " | time: " .. tostring( ti ) .. " plys: " .. player.GetCount() .. " Ver.: " .. YRPGetVersionFull()
+			text = "[Loading] " .. text .. " ply: " .. lply:YRPName() .. " | time: " .. tostring( ti ) .. " plys: " .. player.GetCount() .. " Ver.: " .. YRPGetVersionFull()
 			text = text .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" )
 		end
 
@@ -2204,7 +2208,7 @@ if pa(yrp_loading_screen) then
 		
 		-- TIME
 		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_14_700", YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-		if self.t > 150 then
+		if self.t >= 180 and self.t <= 210 then
 			local text = YRPCreateLoadingInfo(self.t)
 			if !strEmpty(text) then
 				draw.SimpleText( text, "Y_18_700", pw - YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM )
