@@ -523,6 +523,8 @@ function DoCommand(sender, command, text)
 
 			if tab[#tab] != nil then
 				name = tab[#tab]
+				
+				name = YRPCleanUpName( name )
 
 				if ply != NULL then
 					name = string.Replace(name, tab[1] .. " ", "")

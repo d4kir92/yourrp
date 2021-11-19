@@ -134,28 +134,28 @@ function YRPChatChannel(edit, uid)
 	end
 
 	-- FACTION
-	win.faction = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(0), YRP.ctr(300))
+	win.faction = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(0), YRP.ctr(310))
 	win.faction:SetText("LID_faction")
 	function win.faction:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%FACTION%")
 		structure = win.structure:GetText()
 	end
 	-- GROUP
-	win.group = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), YRP.ctr(300))
+	win.group = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), YRP.ctr(310))
 	win.group:SetText("LID_group")
 	function win.group:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%GROUP%")
 		structure = win.structure:GetText()
 	end
 	-- ROLE
-	win.role = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(640), YRP.ctr(300))
+	win.role = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(640), YRP.ctr(310))
 	win.role:SetText("LID_role")
 	function win.role:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%ROLE%")
 		structure = win.structure:GetText()
 	end
 	-- TEXT
-	win.text = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(960), YRP.ctr(300))
+	win.text = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(960), YRP.ctr(310))
 	win.text:SetText("LID_text")
 	function win.text:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%TEXT%")
@@ -163,10 +163,18 @@ function YRPChatChannel(edit, uid)
 	end
 
 	-- TARGET
-	win.target = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(0), YRP.ctr(350))
+	win.target = createD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(0), YRP.ctr(370))
 	win.target:SetText("LID_target")
 	function win.target:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%TARGET%")
+		structure = win.structure:GetText()
+	end
+
+	-- USERGROUPCOLOr
+	win.usergroupcolor = createD("YButton", CON, YRP.ctr(620), YRP.ctr(50), YRP.ctr(320), YRP.ctr(370))
+	win.usergroupcolor:SetText(YRP.lang_string("LID_usergroup") .. " (" .. YRP.lang_string("LID_color") .. ")")
+	function win.usergroupcolor:DoClick()
+		win.structure:SetText(win.structure:GetText() .. "%UGCOLOR%")
 		structure = win.structure:GetText()
 	end
 

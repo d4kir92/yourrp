@@ -1,53 +1,82 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
+local function YRPHasPassword()
+	local pw = GetConVar("sv_password")
+	if pw then
+		pw = pw:GetString()
+		if pw == "" then
+			return false
+		else
+			return true
+		end
+	end
+	return false
+end
+
 if SERVER then
-	local posturl = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSe9Po-FzCYFCNIlXbZfywXOIPooZ48_FqvEAwHrnRdTBolmHg/formResponse"
+	YRP_INFO_WAS_SENDED = YRP_INFO_WAS_SENDED or false
+
+	local posturl = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScCz8AxHm8xMqiPUKWyhHf9qsAWxMcNX1Hy9PvQI5MIcFsh0A/formResponse"
 	function SendServerInfo()
 		if game.IsDedicated() then
 			if GAMEMODE then
 				YRP.msg("note", "> Send Server Info <")
 				local entry = {}
 
+
+
 				-- IP
-				entry["entry.447060141"] = tostring(game.GetIPAddress())
+				entry["entry.2055994870"] = tostring(game.GetIPAddress())
 
 				-- Servername
-				if !strEmpty(GetHostName()) then
-					entry["entry.38355044"] = "SN:" .. tostring(GetHostName())
+				if !strEmpty( GetHostName() ) then
+					entry["entry.1657413344"] = "SN:" .. tostring( GetHostName() )
+				elseif !strEmpty( YRPGetHostName() ) then
+					entry["entry.1657413344"] = "SN:" .. tostring( YRPGetHostName() )
 				else
-					entry["entry.38355044"] = "SN:" .. tostring(YRPGetHostName())
+					entry["entry.1657413344"] = "SN:" .. "BROKEN"
 				end
 
 				-- Gamemodename
-				entry["entry.809731523"] = "GN:" .. GetGlobalString("text_gamemode_name", "lol")
+				entry["entry.893976623"] = "GN:" .. GetGlobalString("text_gamemode_name", "lol")
 
 				-- MaxPlayers
-				entry["entry.1368236947"] = tostring(game.MaxPlayers())
+				entry["entry.1756035654"] = tostring(game.MaxPlayers())
 
 				-- Version
-				entry["entry.1556630983"] = tostring(GAMEMODE.VersionStable)
-				entry["entry.1322118780"] = tostring(GAMEMODE.VersionBeta)
-				entry["entry.1406407238"] = tostring(GAMEMODE.VersionCanary)
-				entry["entry.1022287670"] = tostring(GAMEMODE.VersionBuild)
+				entry["entry.1557578272"] = tostring(GAMEMODE.VersionStable)
+				entry["entry.1794275840"] = tostring(GAMEMODE.VersionBeta)
+				entry["entry.2054105289"] = tostring(GAMEMODE.VersionCanary)
+				entry["entry.422385934"] = tostring(GAMEMODE.VersionBuild)
 
 				-- ART (GITHUB, WORKSHOP)
-				entry["entry.858261986"] = "VA:" .. tostring(VERSIONART)
+				entry["entry.646409012"] = "VA:" .. GetGlobalString( "YRP_VERSIONART", "X" )
 
 				-- CollectionID
-				entry["entry.1569548085"] = tostring(YRPCollectionID())
+				entry["entry.976366368"] = tostring(YRPCollectionID())
 
-				http.Post(posturl, entry,
-				function(body, length, headers, code)
-					if code == 200 then
-						-- worked
-						YRP.msg("note", "Send Server Info: Success")
-					else
-						YRP.msg("error", "Send Server Info HTTP CODE: " .. tostring(code))
-					end
-				end,
-				function( failed )
-					YRP.msg("error", "Send Server Info failed: " .. tostring(failed))
-				end)
+				-- Has Password? -- NO SERVER PASSWORD WILL BE SEND HERE, just if it has a password or not
+				entry["entry.2007904323"] = string.upper( tostring( YRPHasPassword() ) )
+
+
+				
+				if !YRP_INFO_WAS_SENDED then
+					http.Post(posturl, entry,
+					function(body, length, headers, code)
+						if code == 200 then
+							-- worked
+							YRP.msg("note", "[Send Server] Info: Success")
+							YRP_INFO_WAS_SENDED = true
+						else
+							YRP.msg("error", "[Send Server] Info HTTP CODE: " .. tostring(code))
+						end
+					end,
+					function( failed )
+						YRP.msg("error", "[Send Server] Info failed: " .. tostring(failed))
+					end)
+				else
+					YRP.msg("note", "[Send Server] Already Send")
+				end
 			else
 				timer.Simple(1, SendServerInfo)
 			end

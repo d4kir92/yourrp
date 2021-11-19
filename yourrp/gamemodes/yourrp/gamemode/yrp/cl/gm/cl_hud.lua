@@ -487,7 +487,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 
 		local _sp = GetSpTable()
 
-		draw.RoundedBox(ctrb(_r), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2 * _br.x, _sp.h + 2 * _br.y, getSpCaseColor())
+		draw.RoundedBox(ctrb(_r), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2 * _br.x, _sp.h + 2 * _br.y, getSpCaseColor() )
 
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(_yrp_icon	)
@@ -537,7 +537,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		draw.SimpleText("[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2() - 100, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	
-	if !HasYRPContent() and VERSIONART and VERSIONART == "workshop" then
+	if !HasYRPContent() and GetGlobalString( "YRP_VERSIONART", "X" ) == "workshop" then
 		draw.SimpleTextOutlined("\"YourRP Content\" IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2() - 250, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 		draw.SimpleTextOutlined("Add \"YourRP Content\" to your Server Collection!", "Y_60_500", ScrW2(), ScrH2() - 200, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 	end

@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 351 -- do NOT change this!
 GM.VersionCanary = 705 -- do NOT change this!
-GM.VersionBuild = 115 -- do NOT change this!
+GM.VersionBuild = 140 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -49,21 +49,51 @@ function GetBranch()
 	return branch
 end
 
-VERSIONART = "github"
-for i, wsi in pairs(engine.GetAddons()) do
-	if tostring(wsi.wsid) == "1114204152" then
-		VERSIONART = "workshop"
+function YRPIsDoubleInstalled()
+	return GetGlobalBool( "yrp_double_installed", false )
+end
+
+if SERVER then
+	local doubleinstalledpath = ""
+	SetGlobalString( "YRP_VERSIONART", "GITHUB" )
+
+	for i, wsi in pairs( engine.GetAddons() ) do
+		if tostring( wsi.wsid ) == "1114204152" then
+			SetGlobalString( "YRP_VERSIONART", "WORKSHOP" )
+
+			if file.Exists( "gamemodes/yourrp/yourrp.txt", "MOD" ) then
+				SetGlobalBool( "yrp_double_installed", true )
+				doubleinstalledpath = "yourrp"
+			end
+			if file.Exists( "gamemodes/militaryrp/militaryrp.txt", "MOD" ) then
+				SetGlobalBool( "yrp_double_installed", true )
+				doubleinstalledpath = "militaryrp"
+			end
+			if file.Exists( "gamemodes/starwarsrp/starwarsrp.txt", "MOD" ) then
+				SetGlobalBool( "yrp_double_installed", true )
+				doubleinstalledpath = "starwarsrp"
+			end
+		end
 	end
 end
-GM.Art = VERSIONART
 
-function ChangeChannel(channel)
-	if channel == "stable" or channel == "beta" or channel == "canary" then
-		GAMEMODE.VersionSort = channel
-		YRP.msg("gm", "Switched to " .. tostring(channel))
-	else
-		YRP.msg("error", "Switched to not available channel (" .. tostring(channel) .. ")")
-	end
+if SERVER then
+	local delay = 0
+	hook.Remove( "Think", "yrp_double_installed" )
+	hook.Add( "Think", "yrp_double_installed", function()
+		if CurTime() < delay then
+			return
+		end
+		delay = CurTime() + 1
+
+		if YRPIsDoubleInstalled() then
+			YRPHR( Color( 255, 0, 0 ) )
+			MsgC( Color( 255, 0, 0 ), "[YourRP] YourRP is DOUBLE installed!" .. "\n" )
+			MsgC( Color( 255, 0, 0 ), "[YourRP] Please REMOVE the folder: Server/garrysmod/gamemodes/" .. tostring( doubleinstalledpath ) .. " <-" .. "\n" )
+			MsgC( Color( 255, 0, 0 ), "[YourRP] You will not lose your Data (Data is saved in: Server/garrysmod/sv.db)" .. "\n" )
+			YRPHR( Color( 255, 0, 0 ) )
+		end
+	end)
 end
 
 function GM:Initialize()
@@ -162,7 +192,7 @@ function YRPMsg( text, color )
 end
 
 concommand.Add("yrp_version", function(ply, cmd, args)
-	local _text = "Gamemode-Version: " .. YRPGetVersionFull() .. " (" .. string.upper( GAMEMODE.VersionSort ) .. ")"
+	local _text = "Gamemode-Version: " .. YRPGetVersionFull() .. " (" .. string.upper( GAMEMODE.VersionSort ) .. ") [" .. GetGlobalString( "YRP_VERSIONART", "X" ) .. "]"
 	local _color = Color( 0, 255, 0 )
 	if string.upper( GAMEMODE.VersionSort ) == "OUTDATED" then
 		_color = Color( 255, 0, 0 )
@@ -175,7 +205,7 @@ end)
 
 concommand.Add("yrp_status", function(ply, cmd, args)
 	YRPHR()
-	YRPMsg( string.format("%14s %s", "Version:", YRPGetVersionFull() .. " (" .. string.upper(GAMEMODE.VersionSort) .. ")" ) )
+	YRPMsg( string.format("%14s %s", "Version:", YRPGetVersionFull() .. " (" .. string.upper(GAMEMODE.VersionSort) .. ") [" .. GetGlobalString( "YRP_VERSIONART", "X" ) .. "]" ) )
 	YRPMsg( string.format("%14s %s", "Servername:", YRPGetHostName() ) )
 	YRPMsg( string.format("%14s %s", "IP:", game.GetIPAddress() ) )
 	YRPMsg( string.format("%14s %s", "Map:", GetMapNameDB() ) )
@@ -725,7 +755,7 @@ function YRP_RN(text)
 
 			ex = string.Explode(",", ex)
 			if ex[1] and ex[2] then
-				local rn = math.random(ex[1], ex[2])
+				local rn = math.random( tonumber( ex[1] ), tonumber( ex[2] ) )
 
 				text = pre .. rn .. suf
 			else
@@ -741,7 +771,19 @@ end
 function YRPChatReplaceCMDS(structure, ply, text)
 	local result = structure
 
-	result = string.Replace(result, "%USERGROUP%", string.upper(ply:GetUserGroup()))
+	local ugcolor = ply:GetUserGroupColor()
+
+	result = string.Replace( result, "%UGCOLOR%", "Color(" .. ugcolor.r .. "," .. ugcolor.g .. "," .. ugcolor.b .. ")" )
+
+	if ply:GetNW2Bool("bool_chat") then
+		result = string.Replace(result, "%USERGROUP%", string.upper(ply:GetUserGroup()))
+	else
+		result = string.Replace(result, "[%USERGROUP%] ", "")
+		result = string.Replace(result, "[%USERGROUP%]", "")
+		result = string.Replace(result, "%USERGROUP% ", "")
+		result = string.Replace(result, "%USERGROUP%", "")
+	end
+
 	result = string.Replace(result, "%STEAMNAME%", ply:SteamName())
 	result = string.Replace(result, "%RPNAME%", ply:RPName())
 	result = string.Replace(result, "%IDCARDID%", ply:IDCardID())
@@ -810,6 +852,11 @@ local url_cl = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdsvTPwNqIDBPE-UcJL
 local url_sv = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSecLLX255Pvm-uMPtgG-1deTdT5KJuAikz75mfZBbytbG93vg/formResponse"
 -- CONFIG
 
+local function YRPErrorMSG( msg, color )
+	color = color or Color( 255, 0, 0 )
+	MsgC( color, "[COLLECT-ERRORS] " .. msg .. "\n" )
+end
+
 local YRPErrors = {}
 local function YRPCheckErrorFile()
 	if !file.Exists( "yrp", "DATA" ) then
@@ -836,10 +883,10 @@ end
 
 local function YRPSaveErrors()
 	if YRPErrors != nil then
-		YRP.msg( "note", "Saved Errors" )
+		YRPErrorMSG( "Saved Errors", Color( 0, 255, 0 ) )
 		file.Write( filename, util.TableToJSON( YRPErrors, true ) )
 	else
-		YRP.msg( "note", "Failed to save Errors" )
+		YRPErrorMSG( "Failed to save Errors" )
 		YRPCheckErrorFile()
 		timer.Simple( 0.1, YRPSaveErrors )
 	end
@@ -929,7 +976,7 @@ local function YRPSendError(tab, from)
 				end
 			end,
 			function( failed )
-				YRP.msg("note", "[YRPSendError] failed: " .. tostring(failed))
+				YRPErrorMSG( "[YRPSendError] failed: " .. tostring(failed))
 			end)
 		end
 	else
@@ -940,7 +987,6 @@ local function YRPSendError(tab, from)
 end
 
 function YRPRemoveOutdatedErrors()
-	YRP.msg("note", "[ERRORS] Remove Outdated Errors")
 	if YRPErrors and GAMEMODE then
 		local TMPYRPErrors = {}
 		local changed = false
@@ -961,14 +1007,14 @@ function YRPRemoveOutdatedErrors()
 			end
 		end
 		if changed then
-			YRP.msg("note", "[ERRORS] Found Outdated Errors")
+			YRPErrorMSG( "Found Outdated Errors", Color( 0, 255, 0 ) )
 			YRPErrors = TMPYRPErrors
 			YRPSaveErrors()
 		else
-			YRP.msg("note", "[ERRORS] No Outdated Errors found")
+			-- YRPErrorMSG( "No Outdated Errors found", Color( 0, 255, 0 ) )
 		end
 	else
-		YRP.msg("note", "Failed to remove outdated errors")
+		YRPErrorMSG( "Failed to remove outdated errors" )
 		timer.Simple(0.01, YRPRemoveOutdatedErrors)
 	end
 end
@@ -978,6 +1024,8 @@ function YRPAddError(err, trace, realm)
 	local newerr = {}
 	newerr.err = err
 	newerr.trace = trace
+	newerr.trace = newerr.trace .. "\n" .. "err: /yrp/ ".. tostring( string.find( err, "/yrp/", 1, true ) ) .. "      trace: /yrp/ " .. tostring( string.find( trace, "/yrp/", 1, true ) ) .. "      trace: [YourRP] " .. tostring( string.find( trace, "[YourRP]", 1, true ) )
+	newerr.trace = newerr.trace .. "\n" .. "IP: " .. GetGlobalString( "serverip", "0.0.0.0:27015" ) .. "      collectionid: " .. YRPCollectionID()
 	newerr.ts = os.time()
 	newerr.realm = realm
 	newerr.sended = false
@@ -995,206 +1043,26 @@ hook.Add("OnLuaError", "yrp_OnLuaError", function(...)
 	local trace = tab.trace
 	local realm = tab.realm
 
+	local tabtrace = string.Explode( "\n", trace )
+	local newtrace = {}
+	for i, v in pairs( tabtrace ) do
+		if string.find( v, "stack traceback:", 1, true ) or string.find( v, "lua/autorun/sh_yrp_senderrors.lua", 1, true ) then
+			
+		else
+			table.insert( newtrace, v )
+		end
+	end
+	trace = table.concat( newtrace, "\n" )
+	trace = string.Replace( trace, "\t", "" )
+
 	--if err and trace and realm and ( string.find(err, "/yrp/") or string.find(trace, "/yrp/") ) and YRPNewError(err) then
-	if err and trace and realm and string.find(err, "/yrp/") and YRPNewError(err) then
+	if err and trace and realm and ( string.find( err, "/yrp/", 1, true ) or string.find( trace, "/yrp/", 1, true ) or string.find( trace, "[YourRP]", 1, true ) ) and YRPNewError(err) then
 		MsgC( Color(255, 0, 0), "[YRPAddError] >> Found a new ERROR" .. "\n" )
 		YRPAddError(err, trace, realm)
 	end
 end)
 
 
-
--- FIND BACKDOORS
-function YRPCBMsg( msg, col )
-	local color = col or Color( 0, 255, 0 )
-	MsgC( color, msg .. "\n" )
-end
-
-function YRPCBHR( col )
-	YRPCBMsg( "-------------------------------------------------------------------------------", col )
-end
-
-local ignoredefaultfiles = {
-	-- GMOD
-	"lua/autorun/client/demo_recording.lua",
-	"lua/autorun/client/gm_demo.lua",
-	"lua/autorun/server/sensorbones/css.lua",
-	"lua/autorun/server/sensorbones/eli.lua",
-	"lua/autorun/server/sensorbones/tf2_engineer.lua",
-	"lua/autorun/server/sensorbones/tf2_heavy.lua",
-	"lua/autorun/server/sensorbones/tf2_medic.lua",
-	"lua/autorun/server/sensorbones/tf2_pyro_demo.lua",
-	"lua/autorun/server/sensorbones/tf2_scount.lua",
-	"lua/autorun/server/sensorbones/tf2_sniper.lua",
-	"lua/autorun/server/sensorbones/tf2_spy_soldier.lua",
-	"lua/autorun/server/sensorbones/valvebiped.lua",
-	"lua/autorun/server/admin_functions",
-	"lua/autorun/properties/bodygroups.lua",
-	"lua/autorun/properties/bone_manipulate.lua",
-	"lua/autorun/properties/collisions.lua",
-	"lua/autorun/properties/drive.lua",
-	"lua/autorun/properties/editentity.lua",
-	"lua/autorun/properties/gravity.lua",
-	"lua/autorun/properties/ignite.lua",
-	"lua/autorun/properties/keep_upright.lua",
-	"lua/autorun/properties/kinect_controller.lua",
-	"lua/autorun/properties/npc_scale.lua",
-	"lua/autorun/properties/persist.lua",
-	"lua/autorun/properties/remove.lua",
-	"lua/autorun/properties/skin.lua",
-	"lua/autorun/properties/statue.lua",
-	"lua/autorun/base_npcs.lua",
-	"lua/autorun/base_vehicles.lua",
-	"lua/autorun/developer_functions.lua",
-	"lua/autorun/game_hl2.lua",
-	"lua/autorun/menubar.lua",
-	"lua/autorun/properties.lua",
-	"lua/autorun/utilities_menu.lua",
-	"lua/entities/sent_ball.lua",
-	"lua/entities/widget_arrow.lua",
-	"lua/entities/widget_axis.lua",
-	"lua/entities/widget_base.lua",
-	"lua/entities/widget_bones.lua",
-	"lua/entities/widget_disc.lua",
-	"lua/includes/extensions/player.lua",
-	"lua/vgui/dhtml.lua",
-
-	-- ULX
-	"lua/ulib/server/player.lua",
-	"lua/ulx/modules/sh/util.lua",
-	"lua/ulx/xgui/server/sv_groups.lua",
-	"lua/ulx/xgui/bans.lua",
-	"lua/ulx/xgui/groups.lua",
-	"lua/ulx/modules/sh/rcon.lua",
-	"lua/ulx/modules/sh/cc_rcon.lua",
-	"lua/ulx/modules/sh/cc_hook.lua",
-	"lua/ulx/modules/sh/cc_commandtable.lua",
-	"lua/ulib/shared/plugin.lua"
-}
-
-local maybebackdoors = {
-	--"RunString(",
-	--"CompileString(",
-	--"http.Fetch(",
-	":SteamID() == \"STEAM_0",
-	":SteamID() ==\"STEAM_0",
-	":SteamID()== \"STEAM_0",
-	":SteamID()==\"STEAM_0",
-	":SteamID64() == \"",
-	":SteamID64() ==\"",
-	":SteamID64()== \"",
-	":SteamID64()==\""
-}
-
-local backdoors = {
-	"SetUsergroup",
-	"RunConsoleCommand(\"ulx\",\"unban",
-	"RunConsoleCommand(\"ulx\", \"unban",
-	"RunConsoleCommand( \"ulx\", \"unban",
-	"RunConsoleCommand('ulx','unban",
-	"RunConsoleCommand('ulx', 'unban",
-	"RunConsoleCommand( 'ulx', 'unban",
-	"removeid",
-	"sv_allowcslua",
-	"STEAM_0:1:186944016",
-	"76561198334153761",
-	"STEAM_0:1:439515610",
-	"76561198839296949"
-}
-
-local foundbackdoor = false
-
-local function YRPCheckFile( fi )
-	local text = file.Read( fi, "GAME" )
-
-	if table.HasValue( ignoredefaultfiles, fi ) or string.StartWith( fi, "data/yrp_backups/" ) or string.find( fi, "/yrp/", 1, true ) then
-		return
-	end
-
-	if wk( text ) then
-		for i, v in pairs( maybebackdoors ) do
-			local s, e = string.find( text, v, 1, true )
-			if s then
-				s = s - 100
-				if s < 1 then
-					s = 1
-				end
-				YRPCBHR( Color( 255, 255, 0 ) )
-				YRPCBMsg( "[MAYBE] Possible Backdoor [" .. v .. "]", Color( 255, 255, 0 ) )
-				YRPCBMsg( "CODE[\n" .. string.sub( text, s, s + 200 ) .. "\n]", Color( 255, 255, 0 ) )
-				YRPCBMsg( "FILE[" .. fi .. "]", Color( 255, 255, 0 ) )
-				YRPCBHR( Color( 255, 255, 0 ) )
-				YRPCBMsg( "" )
-
-				foundbackdoor = true
-			end
-		end
-		for i, v in pairs( backdoors ) do
-			local s, e = string.find( text, v, 1, true )
-			if s then
-				s = s - 100
-				if s < 1 then
-					s = 1
-				end
-				YRPCBHR( Color( 255, 0, 0 ) )
-				YRPCBMsg( "Possible Backdoor [" .. v .. "]", Color( 255, 0, 0 ) )
-				YRPCBMsg( "CODE[\n" .. string.sub( text, s, s + 200 ) .. "\n]", Color( 255, 0, 0 ) )
-				YRPCBMsg( "FILE[" .. fi .. "]", Color( 255, 0, 0 ) )
-				YRPCBHR( Color( 255, 0, 0 ) )
-				YRPCBMsg( "" )
-
-				foundbackdoor = true
-			end
-		end
-	end
-end
-
-local function YRPCheckFolders( path )
-	local files, directories = file.Find( path .. "/*", "GAME" )
-	if wk( directories ) then
-		for i, fo in pairs( directories ) do
-			YRPCheckFolders( path .. "/" .. fo, false )
-		end
-	end
-	if wk( files ) then
-		for i, fi in pairs( files ) do
-			if string.EndsWith( fi, ".lua" ) or string.EndsWith( fi, ".vtf" ) or string.EndsWith( fi, ".vmt" ) or string.EndsWith( fi, ".db" ) or string.EndsWith( fi, ".json" ) or string.EndsWith( fi, ".cfg" ) then
-				YRPCheckFile( path .. "/" .. fi )
-			end
-		end
-	end
-end
-
-local function YRPCheckFolder( fol )
-	foundbackdoor = false
-
-	YRPCheckFolders( fol )
-
-	if foundbackdoor then
-		YRPCBMsg( "[YourRP] > Maybe Found backdoor/s in " .. fol .. " folder!", Color( 255, 0, 0 ) )
-	else
-		YRPCBMsg( "[YourRP] > Found NO backdoor in " .. fol .. " folder." )
-	end
-end
-
-local function YRPCheckBackdoors()
-	YRPCBHR()
-	YRPCBMsg( "[YourRP] Fast Check for Backdoors" )
-	YRPCBMsg( "" )
-
-	YRPCheckFolder( "addons" )
-	YRPCheckFolder( "lua" )
-	YRPCheckFolder( "cfg" )
-	YRPCheckFolder( "data" )
-
-	YRPCBHR()
-end
-
-hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckBackdoors", function()
-	if SERVER then
-		timer.Simple( 3, YRPCheckBackdoors )
-	end
-end )
 
 function YRPCheckReadyTable( tab )
 	if !wk( tab ) then
@@ -1216,7 +1084,7 @@ end
 
 local shownetstats = false
 
-if true then
+if false then
 	local nettab = {}
 	local nettab2 = {}
 	function net.Incoming(len, client)
@@ -1225,23 +1093,6 @@ if true then
 		
 		if ( !strName ) then return end
 
-		-- NEW
-		local plyNick = IsValid(client) and client:Nick() or "UNKNOWN PLAYER NAME"
-		
-		if shownetstats then
-			MsgC( Color( 0, 255, 0 ), "\n" )
-			MsgC( Color( 0, 255, 0 ), "-NETSTATS-------------------------------------------------------------" .. "\n" )
-		end
-
-		--[[
-			if strName then
-			MsgC( Color( 255, 255, 255 ), string.format("Message: %s Client: %s\n", strName, plyNick) )
-		else
-			MsgC( Color( 255, 255, 255 ), string.format("Client: %s\n", plyNick) )
-		end
-		]]
-		-- NEW
-
 		local func = net.Receivers[ strName:lower() ]
 		if ( !func ) then return end
 
@@ -1249,8 +1100,15 @@ if true then
 		-- len includes the 16 bit int which told us the message name
 		--
 		len = len - 16
-		
+
+		func( len, client )
+
 		-- NEW
+		if shownetstats then
+			MsgC( Color( 0, 255, 0 ), "\n" )
+			MsgC( Color( 0, 255, 0 ), "-NETSTATS-------------------------------------------------------------" .. "\n" )
+		end
+		
 		nettab[strName] = nettab[strName] or 0
 		nettab[strName] = nettab[strName] + len / 8
 
@@ -1297,9 +1155,6 @@ if true then
 				MsgC( Color( 0, 255, 0 ), "\n" )
 			end
 		end
-
-		-- NEW
-		func( len, client )
 	end
 end
 
@@ -1325,4 +1180,11 @@ if CLIENT then
 			MsgC( Color( 0, 255, 0 ), "YOUR GAME IS UP-To-Date!" .. "\n" )
 		end
 	end)
+end
+
+function YRPCleanUpName( name )
+	if name then
+		name = string.Replace( name, "'", "" )
+	end
+	return name
 end

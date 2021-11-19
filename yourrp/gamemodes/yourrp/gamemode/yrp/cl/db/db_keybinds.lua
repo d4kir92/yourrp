@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
+local YRP_KeybindsLoaded = false
+
 local YRP_KEYBINDS = {}
 YRP_KEYBINDS["menu_character_selection"] = KEY_F2
 YRP_KEYBINDS["menu_role"] = KEY_F4
@@ -50,8 +52,6 @@ end
 local yrp_keybinds = {}
 yrp_keybinds.version = 4
 
-local yrp_keybinds_loaded = false
-
 local dbfile = "yrp_keybinds/yrp_keybinds.json"
 
 function YRPKeybindsMSG( msg )
@@ -66,21 +66,26 @@ function YRPKeybindsCheckFile()
 	if !file.Exists( dbfile, "DATA" ) then
 		YRPKeybindsMSG( "Created New Keybind File" )
 		file.Write( dbfile, util.TableToJSON( YRP_KEYBINDS, true ) )
+	else
+		local testfile = util.JSONToTable( file.Read( dbfile, "DATA" ) )
+		if testfile == nil or table.Count( testfile ) <= 0 then
+			YRP.msg( "note", "[KEYBINDS] File is empty." )
+			file.Write( dbfile, util.TableToJSON( YRP_KEYBINDS, true ) )
+
+			testfile = util.JSONToTable( file.Read( dbfile, "DATA" ) )
+			if testfile == nil or table.Count( testfile ) <= 0 then
+				YRP.msg( "error", "[KEYBINDS] File is still empty." )
+			end
+		end
 	end
 
 	if !file.Exists( "yrp_keybinds", "DATA" ) then
-		YRP.msg("error", "FAILED TO CREATE KEYBIND FOLDER")
+		YRP.msg("error", "[KEYBINDS] FAILED TO CREATE KEYBIND FOLDER")
 	end
 	if !file.Exists( dbfile, "DATA" ) then
-		YRP.msg("error", "FAILED TO CREATE KEYBIND FILE")
+		YRP.msg("error", "[KEYBINDS] FAILED TO CREATE KEYBIND FILE")
 	end
-end
 
-function YRPKeybindsLoad()
-	YRPKeybindsCheckFile()
-	YRPKeybindsMSG( "Load Keybinds" )
-	
-	yrp_keybinds = util.JSONToTable( file.Read( dbfile, "DATA" ) )
 end
 
 function YRPKeybindsSave()
@@ -90,8 +95,44 @@ function YRPKeybindsSave()
 	file.Write( dbfile, util.TableToJSON( yrp_keybinds, true ) )
 end
 
+function YRPKeybindsLoad()
+	if !IsValid(LocalPlayer()) then
+		timer.Simple( 0.1, YRPKeybindsLoad )
+		return false
+	end
+	YRPKeybindsCheckFile()
+	YRPKeybindsMSG( "Load Keybinds" )
+
+	if file.Exists( dbfile, "DATA" ) then
+		yrp_keybinds = util.JSONToTable( file.Read( dbfile, "DATA" ) )
+		for name, key in pairs( yrp_keybinds ) do
+			yrp_keybinds[name] = tonumber( key )
+		end
+
+		local missing = false
+		for name, key in pairs( YRP_KEYBINDS ) do
+			if yrp_keybinds[name] == nil then -- missing entry
+				yrp_keybinds[name] = tonumber( key )
+				missing = true
+			end
+		end
+		if missing then
+			YRPKeybindsSave()
+		end
+	else
+		YRP.msg( "error", "[KEYBINDS] FILE DOESN'T EXISTS" )
+	end
+
+	if type( yrp_keybinds ) != "table" then
+		YRP.msg( "error", "[KEYBINDS] [" .. LocalPlayer():YRPName() .. "|" .. LocalPlayer():SteamID64() .. "] KeybindsLoad FAILED, broken file?: " .. tostring( yrp_keybinds ) )
+	else
+		YRP_KeybindsLoaded = true
+	end
+end
+YRPKeybindsLoad()
+
 function KBTab()
-	if yrp_keybinds_loaded then
+	if YRP_KeybindsLoaded then
 		return yrp_keybinds
 	else
 		return {}
@@ -99,7 +140,7 @@ function KBTab()
 end
 
 function YRPGetKeybinds()
-	if yrp_keybinds_loaded then
+	if YRP_KeybindsLoaded then
 		return yrp_keybinds
 	else
 		return {}
@@ -107,16 +148,29 @@ function YRPGetKeybinds()
 end
 
 function YRPGetKeybind(name)
-	if yrp_keybinds_loaded then
+	if YRP_KeybindsLoaded then
+		if name == nil then
+			return -1
+		end
+		if name and type( tonumber( name ) ) == "number" then
+			return name
+		end
 		name = tostring(name)
-		return tonumber(yrp_keybinds[name])
+		if YRP_KeybindsLoaded and yrp_keybinds and name and yrp_keybinds[name] != nil then
+			return tonumber(yrp_keybinds[name])
+		elseif YRP_KeybindsLoaded and yrp_keybinds then
+			local dbf = util.JSONToTable( file.Read( dbfile, "DATA" ) )
+			YRP.msg( "error", "[KEYBINDS] Failed to get Keybind: " .. tostring( name ) .. " result: " .. tostring( yrp_keybinds[name] ) )
+			YRP.msg( "error", "[KEYBINDS] Content: " .. tostring( table.ToString( dbf, "File" ) ) )
+			return -1
+		end
 	else
 		return -1
 	end
 end
 
 function YRPSetKeybind(name, value, force)
-	if yrp_keybinds_loaded then
+	if YRP_KeybindsLoaded then
 
 		if value != 0 and yrp_keybinds then
 			for n, v in pairs(yrp_keybinds) do
@@ -141,45 +195,22 @@ end
 
 function YRPGetKeybindName(kbname, show)
 	local _kb = kbname or ""
-	if !string.StartWith( kbname, "in_" ) and YRPGetKeybind(kbname) then
-		_kb = YRPGetKeybind(kbname)
-	end
-	if isnumber(tonumber(_kb)) then
-		_kb = input.GetKeyName(_kb)
-	end
-	if string.StartWith(kbname, "in_") then
-		_kb = YRP.lang_string("LID_" .. kbname)
-	end
-	if wk(_kb) then
-		_kb = string.upper(_kb)
+	if YRP_KeybindsLoaded then
+		if !string.StartWith( kbname, "in_" ) and YRPGetKeybind(kbname) then
+			_kb = YRPGetKeybind( kbname )
+		end
+		if isnumber(tonumber(_kb)) then
+			_kb = input.GetKeyName(_kb)
+		end
+		if string.StartWith(kbname, "in_") then
+			_kb = YRP.lang_string("LID_" .. kbname)
+		end
+		if wk(_kb) then
+			_kb = string.upper(_kb)
+		end
 	end
 	return tostring(_kb)
 end
-
-function YRPCheckKeybinds()
-	YRPKeybindsLoad()
-
-	if yrp_keybinds then
-		local foundmissing = false
-		for i, v in pairs( YRP_KEYBINDS ) do
-			if yrp_keybinds[i] == nil then
-				foundmissing = true
-				YRPKeybindsMSG( "Missing Keybind, adding it", Color( 255, 255, 0 ) )
-				yrp_keybinds[i] = v
-			end
-		end
-	else
-		YRP.msg( "error", "yrp_keybinds is broken" )
-		YRP.msg( "error", "yrp_keybinds: " .. tostring( file.Read( dbfile, "DATA" ) ) )
-	end
-
-	if foundmissing then
-		YRPKeybindsSave()
-	end
-
-	yrp_keybinds_loaded = true
-end
-YRPCheckKeybinds()
 
 function YRPResetKeybinds()
 	for i, keybind in pairs(YRP_KEYBINDS) do

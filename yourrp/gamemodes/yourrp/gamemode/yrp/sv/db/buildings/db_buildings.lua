@@ -254,19 +254,38 @@ function YRPLockDoor(ply, ent, nr)
 end
 
 function YRPOpenDoor(ply, ent, nr)
-
 	if YRPCanLock(ply, ent, true) then
-		if ply:SecurityLevel() >= ent:SecurityLevel() then
+		if ent:SecurityLevel() > 0 and ply:SecurityLevel() >= ent:SecurityLevel() then
 			local locked = ent:GetSaveTable().m_bLocked
 			if locked then
 				ent:Fire("Unlock")
 			end
-			ent:Fire("Toggle")
+
+			local currentstate = ent:GetSaveTable().m_toggle_state
+			if currentstate == 0 then
+				ent:Fire("close")
+			elseif currentstate == 1 then
+				ent:Fire("open")
+			else -- NO TOGGLE DOOR
+				ent:Fire("open")
+			end
+
 			if locked then
 				ent:Fire("Lock")
 			end
 		else
-			ent:Fire("Toggle")
+			--[[
+			local tab = ent:GetSaveTable()
+			if true or tab.spawnflags == 256 then
+				local currentstate = ent:GetSaveTable().m_toggle_state
+				if currentstate == 0 then
+					ent:Fire("close")
+				elseif currentstate == 1 then
+					ent:Fire("open")
+				else -- NO TOGGLE DOOR
+					ent:Fire("open")
+				end
+			end]]
 		end
 	else
 		--YRP.msg("note", "Building: NOT ALLOWED TO OPEN")

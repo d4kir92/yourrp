@@ -87,13 +87,18 @@ function CreateRolePreviewContent()
 		end
 		desc:SetText(tostring(rol.string_description))
 
-		local salaryheader = createD("YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), nh - YRP.ctr(hh + 20 + hh))
-		salaryheader:SetText("LID_salary")
+		if tonumber(rol.int_salary) > 0 then
+			local salaryheader = createD("YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), nh - YRP.ctr(hh + 20 + hh))
+			salaryheader:SetText("LID_salary")
 
-		local salary = createD("YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), nh - YRP.ctr(20 + hh))
-		salary:SetText(MoneyFormat(rol.int_salary))
-		function salary:Paint(pw, ph)
-			hook.Run("YTextFieldPaint", self, pw, ph)
+			local salary = createD("YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), nh - YRP.ctr(20 + hh))
+			salary:SetText(MoneyFormat(rol.int_salary) .. "TEST")
+			function salary:Paint(pw, ph)
+				hook.Run("YTextFieldPaint", self, pw, ph)
+			end
+		else
+			descbg:SetTall( nh - YRP.ctr(20 + hh + 20 + hh + 20) )
+			desc:SetTall( nh - YRP.ctr(20 + hh + 20 + hh + 20 + 20) )
 		end
 
 

@@ -81,6 +81,8 @@ local hr = 2
 local br = 1
 local sp = 10
 
+local xn = 0 -- X Name
+
 function YRPTextColor(bgcolor, a)
 	local brightness = (bgcolor.r * 299 + bgcolor.g * 587 + bgcolor.b * 114) / 1000
 	if brightness > 125 then
@@ -433,7 +435,7 @@ function YRPScoreboardAddPlayer(ply)
 		function plypnl:Paint(pw, ph)
 			draw.RoundedBox(0, avbr, avbr, avsize, avsize, Color(255, 255, 255, 255))
 		end
-		plypnl.infos = createD("DPanel", plypnl, sw - 13, size, 13, 0)
+		plypnl.infos = createD("DPanel", plypnl, sw, size, 0, 0)
 
 		function plypnl.infos:Paint(pw, ph)
 			if IsValid(ply) then
@@ -442,7 +444,7 @@ function YRPScoreboardAddPlayer(ply)
 				local circlesize = 12
 				local circlebr = 6
 
-				local x = yrptab["avatar"] - 2
+				local x = yrptab["avatar"] - 2 + 13
 				if !ply:GetNW2Bool("yrp_characterselection", true) or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system", true) then
 					if GetGlobalBool("bool_yrp_scoreboard_show_level", false) then
 						draw.SimpleText(ply:Level(), "Saira_24", x + yrptab["level"] / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -457,7 +459,8 @@ function YRPScoreboardAddPlayer(ply)
 						if ply:IsBot() then
 							name = ply:SteamName()
 						end
-						draw.SimpleText(name, "Saira_24", x + yrptab["name"] / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						xn = x + yrptab["name"] / 2
+						draw.SimpleText( name, "Saira_24", xn, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 						x = x + yrptab["name"] + sp
 					end
 					if GetGlobalBool("bool_yrp_scoreboard_show_groupname", false) then
@@ -513,28 +516,39 @@ function YRPScoreboardAddPlayer(ply)
 
 				local trx = 90 + sp
 				draw.SimpleText(ply:Ping(), "Saira_24", pw - 20 - size, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				if self.Mute and (self.Muted == nil or self.Muted != ply:IsMuted()) then
+				if IsValid(ply) and self.Mute and (self.Muted == nil or self.Muted != ply:IsMuted()) then
 					self.Muted = ply:IsMuted()
-					if ( self.Muted ) then
-						self.Mute:SetImage( "vgui/material/icon_mute.png" )
-					else
-						self.Mute:SetImage( "vgui/material/icon_voice.png" )
+							
+					self.Mute.DoClick = function( s )
+						ply:SetMuted( !self.Muted )
 					end
-		
-					self.Mute.DoClick = function( s ) ply:SetMuted( !self.Muted ) end
 					self.Mute.OnMouseWheeled = function( s, delta )
 						ply:SetVoiceVolumeScale( ply:GetVoiceVolumeScale() + ( delta / 100 * 5 ) )
 						s.LastTick = CurTime()
 					end
 		
-					self.Mute.PaintOver = function( s, w, h )
+					self.Mute.Paint = function( s, w, h )
+						local img = YRP.GetDesignIcon( "voice" )
+						if IsValid(ply) and ply:IsMuted() then
+							img = YRP.GetDesignIcon( "mute" )
+						end
+						if img then
+							local size = math.ceil( ph * 0.75 )
+							local br = (ph - size) / 2
+							surface.SetMaterial( img )
+							surface.SetDrawColor(255, 255, 255, 255)
+							surface.DrawTexturedRect( br, br, size, size)
+						end
+
 						if !IsValid(ply) then return end
 						if s:IsHovered() then
 							s.LastTick = CurTime()
 						end
 						local a = 255 - math.Clamp( CurTime() - ( s.LastTick or 0 ), 0, 3 ) * 255
-						draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0, a * 0.75 ) )
-						draw.SimpleText( math.ceil( ply:GetVoiceVolumeScale() * 100 ) .. "%", "DermaDefaultBold", w / 2, h / 2, Color( 255, 255, 255, a ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						if a > 0 then
+							draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0, a * 0.75 ) )
+							draw.SimpleText( math.ceil( ply:GetVoiceVolumeScale() * 100 ) .. "%", "DermaDefaultBold", w / 2, h / 2, Color( 255, 255, 255, a ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						end
 					end
 				end
 				if ply:IsBot() then
@@ -543,12 +557,12 @@ function YRPScoreboardAddPlayer(ply)
 					self.Mute:Show()
 				end
 				if GetGlobalBool("bool_yrp_scoreboard_show_operating_system", false) then
-					--draw.SimpleText(string.upper(ply:GetNW2String("yrp_os", "")), "Saira_24", pw - trx, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					self.lang = YRP.GetDesignIcon("os_" .. ply:GetNW2String("yrp_os", ""))
 					if self.lang ~= nil then
 						if !ply:IsBot() then
-							local sh = size * 0.8
+							local sh = math.ceil( size * 0.6 )
 							YRP.DrawIcon(self.lang, sh, sh, pw - trx - yrptab["operating_system"] / 2 - sh / 2, size / 2 - sh / 2, Color(255, 255, 255, 255))
+							--draw.SimpleText(string.upper(ply:GetNW2String("yrp_os", "")), "Saira_24", pw - trx - yrptab["operating_system"] / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						end
 					end
 					trx = trx + yrptab["operating_system"] + sp
@@ -558,7 +572,7 @@ function YRPScoreboardAddPlayer(ply)
 					if !ply:IsBot() then 
 						self.lang = YRP.GetDesignIcon("lang_" .. ply:GetLanguageShort())
 						if self.lang ~= nil then
-							local sh = size * 0.8
+							local sh = math.ceil( size * 0.6 )
 							YRP.DrawIcon(self.lang, sh * 1.49, sh, pw - trx - yrptab["language"] / 2 - sh * 1.49 / 2, size / 2 - sh / 2, Color(255, 255, 255, 255))
 						end
 					end
@@ -600,7 +614,8 @@ function YRPScoreboardAddPlayer(ply)
 			--YRPOpenPlayerOptions(ply)
 		end
 
-		plypnl.infos.Mute = createD("DImageButton", plypnl, size, size, 0, 0)
+		plypnl.infos.Mute = createD("DButton", plypnl, size, size, 0, 0)
+		plypnl.infos.Mute:SetText( "" )
 		plypnl.infos.Mute:Dock( RIGHT )
 
 
@@ -610,8 +625,8 @@ function YRPScoreboardAddPlayer(ply)
 		plyopt:Dock( TOP )
 		function plyopt:Paint(pw, ph)
 			if IsValid(ply) and LocalPlayer():HasAccess() then
-				local br = ph * 0.1
-				local iconsize = ph * 0.8
+				local iconsize = math.ceil( ph * 0.666 )
+				local br = (ph - iconsize) / 2
 				local ts = math.Round(math.Clamp(ph * 0.5, 6, 100), 0)
 
 				-- Money
@@ -621,7 +636,8 @@ function YRPScoreboardAddPlayer(ply)
 					surface.DrawTexturedRect(br, br, iconsize, iconsize)
 				end
 
-				draw.SimpleText(ply:FormattedMoney(), "Y_" .. ts .. "_500", ph + br, ph / 2 * 0.9, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText( ply:FormattedMoney(), "Saira_24", ph + br, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+				draw.SimpleText( ply:SteamName(), "Saira_24", xn, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 			end
 		end
 
@@ -775,8 +791,8 @@ function YRPScoreboardAddPlayer(ply)
 					b.icon = btn[2]
 					b.iconcolor = Color(255, 255, 255)
 					function b:Paint(pw, ph)
-						local br = ph * 0.1
-						local iconsize = ph * 0.8
+						local iconsize = math.ceil( ph * 0.666 )
+						local br = (ph - iconsize) / 2
 
 						if self:IsDown() or self:IsPressed() then
 							if not self.clicked then
@@ -1217,7 +1233,7 @@ function YRPInitScoreboard()
 		
 
 		-- BOTTOM LEFT
-		draw.SimpleText("v" .. YRPVersion() .. " (" .. string.upper(VERSIONART) .. ")" .. string.upper(server), "Saira_16", 6, ScrH() - 8, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("v" .. YRPVersion() .. " (" .. GetGlobalString( "YRP_VERSIONART", "X" ) .. ")" .. string.upper(server), "Saira_16", 6, ScrH() - 8, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 

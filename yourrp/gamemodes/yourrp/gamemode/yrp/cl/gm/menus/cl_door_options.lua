@@ -98,16 +98,10 @@ function buyWindow(door, tabBuilding)
 	end
 	function yrp_door.window.con:Paint(pw, ph)
 		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ": " .. tabBuilding.name, "Y_24_500", br, br, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ": " .. GetGlobalString("text_money_pre", "") .. tabBuilding.buildingprice .. GetGlobalString("text_money_pos", ""), "Y_24_500", br, YRP.ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_doors") .. ": " .. _doors, "Y_24_500", br, YRP.ctr(20 + 100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
-
-		draw.RoundedBox(0, 0, YRP.ctr(200), pw, ph - YRP.ctr(200), Color(255, 255, 100, 200))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "Y_18_500", br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_building") .. ":", "Y_18_500", br, YRP.ctr(350), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_group") .. ":", "Y_18_500", br, YRP.ctr(450), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ":", "Y_18_500", br, YRP.ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_canbeowned") .. ":", "Y_18_500", pw - YRP.ctr(450 - 10) - br, YRP.ctr(475), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "Y_18_500", pw - YRP.ctr(500) - br, YRP.ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_doors") .. ": " .. _doors, "Y_24_500", br, YRP.ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		if GetGlobalBool( "bool_canbeowned", true ) and tabBuilding.bool_canbeowned then
+			draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ": " .. GetGlobalString("text_money_pre", "") .. tabBuilding.buildingprice .. GetGlobalString("text_money_pos", ""), "Y_24_500", br, YRP.ctr(20 + 100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+		end
 
 		if tostring(door:GetNW2String("buildingID", "-1")) == "-1" then
 			draw.SimpleTextOutlined("Loading IDs", "Y_18_500", pw - br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
@@ -115,23 +109,39 @@ function buyWindow(door, tabBuilding)
 			draw.SimpleTextOutlined("Building-ID: " .. door:GetNW2String("buildingID", "-1"), "Y_18_500", pw - br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 			draw.SimpleTextOutlined("Door-ID: " .. door:GetNW2String("uniqueID", "-1"), "Y_18_500", pw - br, YRP.ctr(290), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
 		end
+
+
+
+		draw.RoundedBox(0, 0, YRP.ctr(200), pw, ph - YRP.ctr(200), Color(255, 255, 100, 200))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "Y_18_500", br, YRP.ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(YRP.lang_string("LID_building") .. ":", "Y_18_500", br, YRP.ctr(350), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		if GetGlobalBool( "bool_canbeowned", true ) and tabBuilding.bool_canbeowned then
+			draw.SimpleTextOutlined(YRP.lang_string("LID_group") .. ":", "Y_18_500", br, YRP.ctr(450), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+			draw.SimpleTextOutlined(YRP.lang_string("LID_price") .. ":", "Y_18_500", br, YRP.ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))
+		end
+		if GetGlobalBool( "bool_canbeowned", true ) then
+			draw.SimpleTextOutlined(YRP.lang_string("LID_canbeowned"), "Y_18_500", pw - YRP.ctr(450 - 10) - br, YRP.ctr(475), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		end
+		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "Y_18_500", pw - YRP.ctr(500) - br, YRP.ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0))	
 	end
 
-	local _buyButton = createD("YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, br)
-	_buyButton:SetText("LID_buy")
-	function _buyButton:DoClick()
-		if tabBuilding.bool_canbeowned then
-			net.Start("buyBuilding")
-				net.WriteString(tabBuilding.uniqueID)
-			net.SendToServer()
-			if yrp_door.window.Close != nil then
-				yrp_door.window:Close()
+	if GetGlobalBool( "bool_canbeowned", true ) then
+		local _buyButton = createD("YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, br)
+		_buyButton:SetText("LID_buy")
+		function _buyButton:DoClick()
+			if tabBuilding.bool_canbeowned then
+				net.Start("buyBuilding")
+					net.WriteString(tabBuilding.uniqueID)
+				net.SendToServer()
+				if yrp_door.window.Close != nil then
+					yrp_door.window:Close()
+				end
 			end
 		end
-	end
-	function _buyButton:Paint(pw, ph)
-		if tabBuilding.bool_canbeowned then
-			hook.Run("YButtonPaint", self, pw, ph)
+		function _buyButton:Paint(pw, ph)
+			if tabBuilding.bool_canbeowned then
+				hook.Run("YButtonPaint", self, pw, ph)
+			end
 		end
 	end
 
@@ -195,48 +205,75 @@ function buyWindow(door, tabBuilding)
 			end
 		end
 
-		local _ComboBoxGroupName = createD("DComboBox", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(450))
-		net.Start("getBuildingGroups")
-		net.SendToServer()
+		if GetGlobalBool( "bool_canbeowned", true ) then
+			local _ComboBoxGroupName = createD("DComboBox", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(450))
+			net.Start("getBuildingGroups")
+			net.SendToServer()
 
-		net.Receive("getBuildingGroups", function()
-			local _tmpGroups = net.ReadTable()
+			net.Receive("getBuildingGroups", function()
+				local _tmpGroups = net.ReadTable()
 
-			if pa(_ComboBoxGroupName) then
-				for k, v in pairs(_tmpGroups) do
-					if pa(_ComboBoxGroupName) then
-						v.uniqueID = tonumber(v.uniqueID)
-						if v.uniqueID == 0 then
-							_ComboBoxGroupName:AddChoice(YRP.lang_string("LID_public"), v.uniqueID, false)
+				if pa(_ComboBoxGroupName) then
+					for k, v in pairs(_tmpGroups) do
+						if pa(_ComboBoxGroupName) then
+							v.uniqueID = tonumber(v.uniqueID)
+							if v.uniqueID == 0 then
+								_ComboBoxGroupName:AddChoice(YRP.lang_string("LID_public"), v.uniqueID, false)
+							else
+								_ComboBoxGroupName:AddChoice(v.string_name, v.uniqueID, false)
+							end
 						else
-							_ComboBoxGroupName:AddChoice(v.string_name, v.uniqueID, false)
+							break
 						end
-					else
-						break
 					end
 				end
+			end)
+			function _ComboBoxGroupName:OnSelect(index, value, data)
+				local _tmpData = _ComboBoxGroupName:GetOptionData(index)
+				if _tmpData != nil then
+					net.Start("setBuildingOwnerGroup")
+						net.WriteString(tabBuilding.uniqueID)
+						net.WriteInt(_tmpData, 32)
+					net.SendToServer()
+					yrp_door.window:Close()
+				end
 			end
-		end)
-		function _ComboBoxGroupName:OnSelect(index, value, data)
-			local _tmpData = _ComboBoxGroupName:GetOptionData(index)
-			if _tmpData != nil then
-				net.Start("setBuildingOwnerGroup")
-					net.WriteString(tabBuilding.uniqueID)
-					net.WriteInt(_tmpData, 32)
-				net.SendToServer()
-				yrp_door.window:Close()
-			end
-		end
 
-		local _TextEntryPrice = createD("DNumberWang", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(550))
-		_TextEntryPrice:SetText(tabBuilding.buildingprice)
-		function _TextEntryPrice:OnChange()
-			tabBuilding.buildingprice = _TextEntryPrice:GetValue()
-			if tabBuilding.buildingprice != nil then
-				net.Start("changeBuildingPrice")
+
+
+			local _TextEntryPrice = createD("DNumberWang", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(550))
+			_TextEntryPrice:SetText(tabBuilding.buildingprice)
+			function _TextEntryPrice:OnChange()
+				tabBuilding.buildingprice = _TextEntryPrice:GetValue()
+				if tabBuilding.buildingprice != nil then
+					net.Start("changeBuildingPrice")
+						net.WriteString(tabBuilding.uniqueID)
+						net.WriteString(tabBuilding.buildingprice)
+					net.SendToServer()
+				end
+			end
+
+			local function YRPUpdateDoorVisi()
+				if tabBuilding.bool_canbeowned then
+					_ComboBoxGroupName:Show()
+					_TextEntryPrice:Show()
+				else
+					_ComboBoxGroupName:Hide()
+					_TextEntryPrice:Hide()
+				end
+			end
+			YRPUpdateDoorVisi()
+
+			local cb_canbeowned = createD("DCheckBox", yrp_door.window.con, YRP.ctr(50), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, YRP.ctr(450))
+			cb_canbeowned:SetValue(tabBuilding.bool_canbeowned)
+			function cb_canbeowned:OnChange(bVal)
+				tabBuilding.bool_canbeowned = bVal
+				net.Start("CanBuildingBeOwned")
 					net.WriteString(tabBuilding.uniqueID)
-					net.WriteString(tabBuilding.buildingprice)
+					net.WriteBool(tabBuilding.bool_canbeowned)
 				net.SendToServer()
+
+				YRPUpdateDoorVisi()
 			end
 		end
 
@@ -250,16 +287,6 @@ function buyWindow(door, tabBuilding)
 					net.WriteString(tabBuilding.int_securitylevel)
 				net.SendToServer()
 			end
-		end
-
-		local cb_canbeowned = createD("DCheckBox", yrp_door.window.con, YRP.ctr(50), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, YRP.ctr(450))
-		cb_canbeowned:SetValue(tabBuilding.bool_canbeowned)
-		function cb_canbeowned:OnChange(bVal)
-			tabBuilding.bool_canbeowned = bVal
-			net.Start("CanBuildingBeOwned")
-				net.WriteString(tabBuilding.uniqueID)
-				net.WriteBool(tabBuilding.bool_canbeowned)
-			net.SendToServer()
 		end
 
 		yrp_door.window:Center()

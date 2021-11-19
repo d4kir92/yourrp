@@ -62,7 +62,7 @@ function YRPConHG(ply, time)
 	ply:SetNW2Float("hunger", newval, 500)
 
 	if tonumber(ply:GetNW2Float("hunger", 0.0)) < 20.0 then
-		ply:TakeDamage(ply:GetMaxHealth() / 50)
+		ply:TakeDamage( ply:GetMaxHealth() / 50, ply )
 	elseif GetGlobalBool("bool_hunger_health_regeneration", false) then
 		local tickrate = tonumber(GetGlobalString("text_hunger_health_regeneration_tickrate", 1))
 		if tickrate >= 1 and time % tickrate == 0 then
@@ -75,6 +75,7 @@ function YRPConHG(ply, time)
 end
 
 function YRPConTH(ply)
+	if !IsValid(ply) then return end
 	local newval2 = tonumber(ply:GetNW2Float("permille", 0.0)) - 0.01 * GetGlobalFloat("float_scale_permille", 1.0)
 	newval2 = math.Clamp(newval2, 0.0, ply:GetMaxPermille())
 	ply:SetNW2Float("permille", newval2)
@@ -84,7 +85,7 @@ function YRPConTH(ply)
 	newval = math.Clamp(newval, 0.0, 100.0)
 	ply:SetNW2Float("thirst", newval)
 	if tonumber(ply:GetNW2Float("thirst", 0.0)) < 20.0 then
-		ply:TakeDamage(ply:GetMaxHealth() / 50)
+		ply:TakeDamage( ply:GetMaxHealth() / 50, ply )
 	end
 end
 
@@ -95,23 +96,30 @@ function YRPConRA(ply)
 		ply:SetNW2Float("GetCurRadiation", math.Clamp(tonumber(ply:GetNW2Float("GetCurRadiation", 0.0)) - 0.01 * GetGlobalFloat("float_scale_radiation_out", 8.0), 0, 100))
 	end
 	if tonumber(ply:GetNW2Float("GetCurRadiation", 0.0)) > 80.0 then
-		ply:TakeDamage(ply:GetMaxHealth() / 50)
+		ply:TakeDamage( ply:GetMaxHealth() / 50, ply )
 	end
 end
 
-function YRPConST(ply, _time)
+function YRPConST( ply, _time )
 	if GetGlobalBool("bool_onlywhencook", false) and !IsCookPlaying() then
 		ply:SetNW2Float("GetCurStamina", 100)
 		return false
 	end
-	ply.jumping = ply.jumping or false
+	ply.jumping = ply.jumping or fals
 
-	if ply:GetMoveType() != MOVETYPE_NOCLIP then
-		if ply:IsOnGround() and ply.jumping then
+	if ply:GetMoveType() == MOVETYPE_NOCLIP then
+		local newval = ply:GetNW2Float("GetCurStamina", 0) + 20
+		newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float("GetMaxStamina", 100)), 1)
+		ply:SetNW2Float( "GetCurStamina", newval )
+	end
+
+	if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:InVehicle() then
+		local tr = util.QuickTrace( ply:GetPos(), -ply:GetUp() * 8, nil )
+		if tr.Hit and ply.jumping then
 			ply.jumping = false
 		end
 
-		if !ply:InVehicle() and !ply:IsOnGround() and !ply.jumping then
+		if !tr.Hit and !ply.jumping then
 			ply.jumping = true
 
 			local newval = ply:GetNW2Float("GetCurStamina", 0) - GetGlobalFloat("float_scale_stamina_jump", 30)
@@ -121,7 +129,7 @@ function YRPConST(ply, _time)
 	end
 
 	if _time % 1.0 == 0 then
-		if !ply:InVehicle() then
+		if !ply:InVehicle() and ply:IsOnGround() then
 			if ply:GetMoveType() != MOVETYPE_NOCLIP and (ply:KeyDown(IN_SPEED) and (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT))) then
 				local newval = ply:GetNW2Float("GetCurStamina", 0) - (ply:GetNW2Float("stamindown", 1)) * GetGlobalFloat("float_scale_stamina_down", 1.0)
 				newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float("GetMaxStamina", 100)), 1)
@@ -258,7 +266,7 @@ timer.Create("ServerThink", TICK, 0, function()
 					effect:SetOrigin(ply:GetPos() - ply:GetBleedingPosition())
 					effect:SetScale(1)
 					util.Effect("bloodimpact", effect)
-					ply:TakeDamage(0.5, ply, ply)
+					ply:TakeDamage( 0.5, ply )
 				end
 
 				if GetGlobalBool("bool_hunger", false) and ply:GetNW2Bool("bool_hunger", false) then
@@ -409,15 +417,22 @@ timer.Create("ServerThink", TICK, 0, function()
 	end
 
 	if _time % 1 == 0 and HasDarkrpmodification() then
+		YRPHR( Color(255, 0, 0) )
 		MsgC( Color(255, 0, 0), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color(255, 255, 255), "\n" )
-		MsgC( Color(255, 0, 0), "-------------------------------------------------------------------------------", Color(255, 255, 255), "\n" )
+		YRPHR( Color(255, 0, 0) )
 		YRPTestDarkrpmodification()
 	end
 
 	if _time % 1 == 0 and !HasYRPContent() then
+		YRPHR( Color(255, 255, 0) )
 		MsgC( Color(255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color(255, 255, 255), "\n" )
-		MsgC( Color(255, 255, 0), "-------------------------------------------------------------------------------", Color(255, 255, 255), "\n" )
+		MsgC( Color(255, 255, 0), "Or is STEAM down?", Color(255, 255, 255), "\n" )
+		YRPHR( Color(255, 255, 0) )
 		YRPTestContentAddons()
+	end
+
+	if _time % 60 == 0 then
+		YRPCheckAddons()
 	end
 
 	if _time == 10 then

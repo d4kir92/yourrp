@@ -47,16 +47,25 @@ end
 function YRPSendAskData()
 	YRPRetryCounter = YRPRetryCounter + 1
 	if CurTime() <= 0 then
+		YRPAddReadyStatusMsg( "CurTime() is 0" )
 		YRPHR( Color( 255, 0, 0 ) )
 		MsgC( Color( 255, 0, 0 ), "[START] CurTime() is 0, Retry..." .. "\n" )
 		YRPHR( Color( 255, 0, 0 ) )
+		timer.Simple( 0.01, function()
+			YRPSendAskData()
+		end )
 		return
 	end
 
 	if !IsValid( LocalPlayer() ) then
+		YRPAddReadyStatusMsg( "LocalPlayer() is Invalid" )
 		YRPHR( Color( 255, 0, 0 ) )
 		MsgC( Color( 255, 0, 0 ), "[START] LocalPlayer() is Invalid, Retry..." .. "\n" )
 		YRPHR( Color( 255, 0, 0 ) )
+
+		timer.Simple( 0.01, function()
+			YRPSendAskData()
+		end )
 		return
 	end
 

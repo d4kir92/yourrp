@@ -320,6 +320,8 @@ end
 
 function Player:SetRPName(str, from)
 	if isstring(str) then
+		str = YRPCleanUpName( str )
+
 		local oldname = self:Nick()
 		local newname = str
 		YRP_SQL_UPDATE("yrp_characters", {["rpname"] = newname}, "uniqueID = " .. self:CharID())
@@ -519,40 +521,35 @@ end
 --[[ Server Send Characters to Client ]]--
 function SendLoopCharacterList(ply, tab)
 	ply:SetNW2String("loadchars_msg", "SendLoopCharacterList")
-	if net.BytesLeft() == nil and net.BytesWritten() == nil then
-		ply:SetNW2String("loadchars_msg", "net.bytesleft == nil")
-
-		local plyT = ply:GetPlyTab()
-		if wk(plyT) then
-			ply:SetNW2Int("yrp_charid", tonumber(plyT.CurrentCharacter))
-		end
-
-		local c = 1
-		for i, char in pairs(tab) do
-			local last = false
-			local first = false
-			if c == 1 then
-				first = true
-			end
-			if c == table.Count(tab) then
-				last = true
-			end
-			net.Start("yrp_get_characters")
-				net.WriteBool(first)
-				net.WriteTable(char)
-				net.WriteBool(last)
-			net.Send(ply)
-			c = c + 1
-		end
-
-		ply:SetNW2String("loadchars_msg", "> Done <")
-
-		ply:SetNW2Bool("loadchars_done", true)
-	else
-		timer.Simple(0.001, function()
-			SendLoopCharacterList(ply, tab)
-		end)
+	
+	local plyT = ply:GetPlyTab()
+	if wk(plyT) then
+		ply:SetNW2Int("yrp_charid", tonumber(plyT.CurrentCharacter))
 	end
+
+	local c = 1
+	for i, char in pairs(tab) do
+		local last = false
+		local first = false
+		if c == 1 then
+			first = true
+		end
+		if c == table.Count(tab) then
+			last = true
+		end
+
+		net.Start( "yrp_get_characters" )
+			net.WriteBool( first )
+			net.WriteTable( char )
+			net.WriteBool( last )
+		net.Send( ply )
+
+		c = c + 1
+	end
+
+	ply:SetNW2String("loadchars_msg", "> Done <")
+
+	ply:SetNW2Bool( "loadchars_done", true )
 end
 
 util.AddNetworkString("OpenCharacterCreation")
@@ -673,7 +670,7 @@ function YRPCreateCharacter(ply, tab)
 			cols = cols .. ", bg" .. i
 		end
 		local vals = "'" .. steamid .. "', "
-		vals = vals .. "" .. YRP_SQL_STR_IN( tab.rpname ) .. ", "
+		vals = vals .. "" .. YRP_SQL_STR_IN( YRPCleanUpName( tab.rpname ) ) .. ", "
 		vals = vals .. tonumber(role[1].uniqueID) .. ", "
 		vals = vals .. tonumber(role[1].int_groupID) .. ", "
 		vals = vals .. tonumber(tab.playermodelID) .. ", "
@@ -932,6 +929,9 @@ util.AddNetworkString("set_rpname")
 net.Receive("set_rpname", function(len, ply)
 	local p = net.ReadEntity()
 	local rpname = net.ReadString()
+
+	rpname = YRPCleanUpName( rpname )
+
 	p:SetRPName(rpname, "set_rpname")
 end)
 
@@ -990,8 +990,10 @@ net.Receive("removelicense", function(len, ply)
 end)
 
 function YRPSetAllCharsToDefaultRole(ply)
-	if IsValid(ply) then
+	if IsValid(ply) and GetGlobalBool("bool_players_start_with_default_role", false) then
 		YRP_SQL_UPDATE(DATABASE_NAME, {["roleID"] = 1}, "SteamID = '" .. ply:SteamID() .. "'")
+
+		YRP.msg("note", "SET PLAYER TO DEFAULT ROLE -> players_start_with_default_role: enabled")
 	end
 end
 

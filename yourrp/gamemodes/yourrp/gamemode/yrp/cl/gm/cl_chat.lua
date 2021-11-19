@@ -829,25 +829,22 @@ end
 
 hook.Add( "OnPlayerChat", "YRPHideCommands", function( ply, strText, bTeam, bDead )
 	if string.StartWith(strText, "!") or string.StartWith(strText, "/") or string.StartWith(strText, "@") then
-		if ply == LocalPlayer() then
-			local channel = string.Explode( " ", strText, false )
-			channel = channel[1] or ""
-			channel = string.Replace( channel, "!", "")
-			channel = string.Replace( channel, "/", "")
-			channel = string.lower( channel )
+		local channel = string.Explode( " ", strText, false )
+		channel = channel[1] or ""
+		channel = string.Replace( channel, "!", "")
+		channel = string.Replace( channel, "/", "")
+		channel = string.lower( channel )
 
-			local ischannel = false
-			for i, v in pairs( GetGlobalTable("yrp_chat_channels") ) do
-				if string.lower( v.string_name ) == channel then
-					ischannel = true
-				end
+		local ischannel = false
+		for i, v in pairs( GetGlobalTable("yrp_chat_channels") ) do
+			if string.lower( v.string_name ) == channel then
+				ischannel = true
 			end
-
-			if !ischannel then
-				chat.AddText( Color(255, 255, 0), "Chat Message suppressed: " .. strText .. "" )
-				YRP.msg("note", "HIDE COMMANDS: " .. tostring(strText))
-			end
-			return true
 		end
+		
+		if !ischannel then
+			YRP.msg("note", "HIDE COMMANDS: " .. tostring(strText))
+		end
+		return true
 	end
 end )

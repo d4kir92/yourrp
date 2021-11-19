@@ -217,7 +217,6 @@ net.Receive("update_yrp_darkrp", function(len)
 	UpdateDarkRP(DarkRP)
 end)
 
-function loadCustomDarkRPItems()
-    hook.Run("loadCustomDarkRPItems")
+function AddExtraTeam(...)
+	--
 end
-timer.Simple(1, loadCustomDarkRPItems)

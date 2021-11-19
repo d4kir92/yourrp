@@ -8,8 +8,9 @@ local yrp_smartphone = {}
 
 local dbfile = "yrp_smartphone/yrp_smartphone.json"
 
-function YRPSmartphoneMSG( msg )
-	MsgC( Color( 0, 255, 0 ), "[YourRP] [SMARTPHONE] " .. msg .. "\n" )
+function YRPSmartphoneMSG( msg, col )
+	local color = col or Color( 0, 255, 0 )
+	MsgC( color, "[YourRP] [SMARTPHONE] " .. msg .. "\n" )
 end
 
 function YRPSmartphoneCheckFile()
@@ -27,7 +28,14 @@ function YRPSmartphoneLoad()
 	YRPSmartphoneCheckFile()
 	YRPSmartphoneMSG( "Load Smartphone" )
 	
-	yrp_smartphone = util.JSONToTable( file.Read( dbfile, "DATA" ) )
+	if file.Exists( dbfile, "DATA" ) then
+		yrp_smartphone = util.JSONToTable( file.Read( dbfile, "DATA" ) )
+		for i, v in pairs( yrp_smartphone ) do
+			yrp_smartphone[i] = YRPTableToColor( v )
+		end
+	else
+		YRPSmartphoneMSG( "FAILED TO LOAD SMARTPHONE COLORS", Color( 255, 0, 0 ) )
+	end
 end
 
 function YRPSmartphoneSave()
@@ -37,31 +45,33 @@ function YRPSmartphoneSave()
 	file.Write( dbfile, util.TableToJSON( yrp_smartphone, true ) )
 end
 
-function setSpBackColor(color)
-	yrp_smartphone["color_back"] = StringToColor( color )
+function setSpBackColor( color )
+	yrp_smartphone["color_back"] = color
 	YRPSmartphoneSave()
 end
 
 function getSpBackColor()
-	if yrp_smartphone["color_back"] != nil then
+	if yrp_smartphone["color_back"] != nil and type( yrp_smartphone["color_back"] ) == "table" then
 		return Color( yrp_smartphone["color_back"] )
 	else
 		return Color( 255, 0, 0, 255 )
 	end
 end
 
-function setSpCaseColor(color)
-	yrp_smartphone["color_case"] = StringToColor( color )
+function setSpCaseColor( color )
+	yrp_smartphone["color_case"] = color
 	YRPSmartphoneSave()
 end
 
 function getSpCaseColor()
-	if yrp_smartphone["color_case"] != nil then
+	if yrp_smartphone["color_case"] != nil and type( yrp_smartphone["color_case"] ) == "table" then
 		return Color( yrp_smartphone["color_case"] )
 	else
 		return Color( 255, 0, 0, 255 )
 	end
 end
+
+
 
 function YRPCheckSmartphone()
 	YRPSmartphoneLoad()

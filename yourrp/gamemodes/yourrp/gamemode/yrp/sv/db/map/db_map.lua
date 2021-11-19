@@ -46,7 +46,7 @@ function YRPTeleportToSpawnpoint(ply, from)
 				if worked then
 					YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint")
 				else
-					YRP.msg("error", "[" .. ply:Nick() .. "] FAILED to teleport to RoleSpawnpoint")
+					YRP.msg("note", "[" .. ply:Nick() .. "] FAILED to teleport to RoleSpawnpoint")
 				end
 				_tmp = string.Explode(",", _randomSpawnPoint.angle)
 				if ply:IsPlayer() then

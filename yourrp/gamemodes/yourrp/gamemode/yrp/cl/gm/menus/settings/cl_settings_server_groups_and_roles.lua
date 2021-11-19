@@ -256,7 +256,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.Start("settings_unsubscribe_grouplist")
 					net.WriteString(cur_group.cur)
 				net.SendToServer()
-				timer.Simple(0.1, function()
+				timer.Simple(0.001, function()
 					if wk(gs.gplist[group.uniqueID]) and wk(gs.gplist[group.uniqueID].uniqueID) then
 						net.Start("settings_subscribe_grouplist")
 							net.WriteString(gs.gplist[group.uniqueID].uniqueID)
@@ -1168,7 +1168,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 						net.WriteString(cur_role.pre)
 					net.SendToServer()
 				end
-				timer.Simple(0.1, function()
+				timer.Simple(0.001, function()
 					if cur_role.gro and rs and pa(rs.rplist) and rs.rplist[role.uniqueID] and rs.rplist[role.uniqueID].uniqueID then
 						net.Start("settings_subscribe_rolelist")
 							net.WriteString(cur_role.gro)
@@ -1580,259 +1580,265 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			playermodels.w = ea.appearance:GetContent():GetWide()
 			playermodels.h = YRP.ctr(425)
 			playermodels.doclick = function()
-				net.Receive("get_all_playermodels", function(len)
-					YRP.msg("note", "[get_all_playermodels] len: " .. len)
-					local pms = net.ReadTable()
+				local pms = {}
 
-					local win = createD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1400), 0, 0)
-					win:SetHeaderHeight(YRP.ctr(100))
-					win:SetTitle("LID_search")
-					win:Center()
-					win:MakePopup()
+				local win = createD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1400), 0, 0)
+				win:SetHeaderHeight(YRP.ctr(100))
+				win:SetTitle("LID_search")
+				win:Center()
+				win:MakePopup()
+				
+				local content = win:GetContent()
+				win.add = createD("YButton", content, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
+				win.add:SetText("+")
+				function win.add:DoClick()
+					win:Close()
 					
-					local content = win:GetContent()
-					win.add = createD("YButton", content, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
-					win.add:SetText("+")
-					function win.add:DoClick()
-						win:Close()
-						
+					local lply = LocalPlayer()
+					lply.yrpseltab = {}
+
+					local pmwin = createD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1400), 0, 0)
+					pmwin:SetHeaderHeight(YRP.ctr(100))
+					pmwin:Center()
+					pmwin:MakePopup()
+					pmwin:SetTitle("")
+
+					local pmcontent = pmwin:GetContent()
+
+					pmwin.pms = {}
+					pmwin.name = createD("DTextEntry", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20 + 300 + 20 + 300 + 20 + 100), YRP.ctr(50 + 20))
+
+					pmwin.float_min = createD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(210))
+					pmwin.float_max = createD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(210))
+
+					pmwin.float_min:SetMinMax(0.1, 100.0)
+					pmwin.float_max:SetMinMax(0.1, 100.0)
+
+					pmwin.float_min:SetValue(1.0)
+					pmwin.float_max:SetValue(1.0)
+
+					function pmwin.float_min:OnValueChange(val)
+						val = tonumber(val)
+						maxval = tonumber(pmwin.float_max:GetValue())
+						if isnumber(val) and isnumber(maxval) and val > maxval then
+							pmwin.float_max:SetValue(val)
+						end
+					end
+					function pmwin.float_max:OnValueChange(val)
+						val = tonumber(val)
+						minval = tonumber(pmwin.float_min:GetValue())
+						if isnumber(val) and isnumber(minval) and val < minval then
+							pmwin.float_min:SetValue(val)
+						end
+					end
+
+					pmwin.list = createD("DPanelList", pmcontent, pmcontent:GetWide() - YRP.ctr(40), pmcontent:GetTall() - YRP.ctr(20 + 50 + 20 + 300 + 20 + 20), YRP.ctr(20), YRP.ctr(300 + 20))
+					pmwin.list:EnableVerticalScrollbar(true)
+					pmwin.list:SetSpacing(10)
+					function pmwin.list:RefreshList()
 						local lply = LocalPlayer()
-						lply.yrpseltab = {}
-
-						local pmwin = createD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1400), 0, 0)
-						pmwin:SetHeaderHeight(YRP.ctr(100))
-						pmwin:Center()
-						pmwin:MakePopup()
-						pmwin:SetTitle("")
-
-						local pmcontent = pmwin:GetContent()
-
-						pmwin.pms = {}
-						pmwin.name = createD("DTextEntry", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20 + 300 + 20 + 300 + 20 + 100), YRP.ctr(50 + 20))
-
-						pmwin.float_min = createD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(210))
-						pmwin.float_max = createD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(210))
-
-						pmwin.float_min:SetMinMax(0.1, 100.0)
-						pmwin.float_max:SetMinMax(0.1, 100.0)
-
-						pmwin.float_min:SetValue(1.0)
-						pmwin.float_max:SetValue(1.0)
-
-						function pmwin.float_min:OnValueChange(val)
-							val = tonumber(val)
-							maxval = tonumber(pmwin.float_max:GetValue())
-							if isnumber(val) and isnumber(maxval) and val > maxval then
-								pmwin.float_max:SetValue(val)
-							end
-						end
-						function pmwin.float_max:OnValueChange(val)
-							val = tonumber(val)
-							minval = tonumber(pmwin.float_min:GetValue())
-							if isnumber(val) and isnumber(minval) and val < minval then
-								pmwin.float_min:SetValue(val)
-							end
-						end
-
-						pmwin.list = createD("DPanelList", pmcontent, pmcontent:GetWide() - YRP.ctr(40), pmcontent:GetTall() - YRP.ctr(20 + 50 + 20 + 300 + 20 + 20), YRP.ctr(20), YRP.ctr(300 + 20))
-						pmwin.list:EnableVerticalScrollbar(true)
-						pmwin.list:SetSpacing(10)
-						function pmwin.list:RefreshList()
-							local lply = LocalPlayer()
-							if wk(lply.yrpseltab) and pmwin.list != nil and pa(pmwin.list) then
-								pmwin.list:Clear()
-								for i, pm in pairs(lply.yrpseltab) do
-									timer.Simple(i * 0.001, function()
-										if pa(pmwin) and pa(pmwin.list) then
-											local line = createD("DPanel", pmwin.list, YRP.ctr(200), YRP.ctr(64), 0, 0)
-											line.pm = pm
-											function line:Paint(pw, ph)
-												draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255))
-												draw.SimpleText(self.pm, "DermaDefault", ph + YRP.ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-											end
-
-											line.dmp = createD("DModelPanel", line, YRP.ctr(64), YRP.ctr(64), 0, 0)
-											line.dmp:SetModel(pm)
-
-											pmwin.list:AddItem(line)
+						if wk(lply.yrpseltab) and pmwin.list != nil and pa(pmwin.list) then
+							pmwin.list:Clear()
+							for i, pm in pairs( lply.yrpseltab ) do
+								timer.Simple( i * 0.001, function()
+									if pa(pmwin) and pa(pmwin.list) then
+										local line = createD("DPanel", pmwin.list, YRP.ctr(200), YRP.ctr(64), 0, 0)
+										line.pm = pm
+										function line:Paint(pw, ph)
+											draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255))
+											draw.SimpleText(self.pm, "DermaDefault", ph + YRP.ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 										end
-									end)
-								end
-							end
-						end
 
-						function pmwin:Paint(pw, ph)
-							hook.Run("YFramePaint", self, pw, ph)
+										line.dmp = createD("DModelPanel", line, YRP.ctr(64), YRP.ctr(64), 0, 0)
+										line.dmp:SetModel(pm)
 
-							draw.SimpleText(YRP.lang_string("LID_name") .. ": ", "DermaDefault", YRP.ctr(20 + 300 + 20 + 300 + 20 + 120), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-
-							draw.SimpleText(YRP.lang_string("LID_minimumsize") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-							draw.SimpleText(YRP.lang_string("LID_maximumsize") .. ":", "DermaDefault", YRP.ctr(40 + 200 + 20), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-
-							draw.SimpleText(YRP.lang_string("LID_models") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(410), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-						end
-
-						pmwin.selpm = createD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
-						pmwin.selpm:SetText(YRP.lang_string("LID_playermodels"))
-						function pmwin.selpm:DoClick()
-							local allvalidmodels = player_manager.AllValidModels()
-							local cl_pms = {}
-							local c = 0
-							for k, v in pairs(allvalidmodels) do
-								c = c + 1
-								cl_pms[c] = {}
-								cl_pms[c].WorldModel = v
-								cl_pms[c].ClassName = v
-								cl_pms[c].PrintName = player_manager.TranslateToPlayerModelName(v)
-							end
-							YRPOpenSelector(cl_pms, true, "worldmodel", pmwin.list.RefreshList)
-						end
-
-						pmwin.selnpm = createD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20 + 300 + 20), YRP.ctr(50 + 20))
-						pmwin.selnpm:SetText(YRP.lang_string("LID_othermodels"))
-						function pmwin.selnpm:DoClick()
-							local noneplayermodels = {}
-							for _, addon in SortedPairsByMemberValue(engine.GetAddons(), "title") do
-								if (!addon.downloaded or !addon.mounted) then continue end
-								AddToTabRecursive(noneplayermodels, "models/", addon.title, "*.mdl")
-							end
-							local cl_pms = {}
-							local c = 0
-							for k, v in pairs(noneplayermodels) do
-								c = c + 1
-								cl_pms[c] = {}
-								cl_pms[c].WorldModel = v
-								cl_pms[c].ClassName = v
-								cl_pms[c].PrintName = v
-							end
-							YRPOpenSelector(cl_pms, true, "worldmodel", pmwin.list.RefreshList)
-						end
-
-						pmwin.add = createD("YButton", pmcontent, YRP.ctr(200), YRP.ctr(50), pmcontent:GetWide() / 2 - YRP.ctr(200 / 2), pmcontent:GetTall() - YRP.ctr(50 + 20))
-						pmwin.add:SetText(YRP.lang_string("LID_add"))
-						function pmwin.add:DoClick()
-							if pmwin.WorldModel != "" then
-								local lply = LocalPlayer()
-								lply.yrpseltab = lply.yrpseltab or {}
-								local min = tonumber(pmwin.float_min:GetValue())
-								local max = tonumber(pmwin.float_max:GetValue())
-								net.Start("add_playermodels")
-									net.WriteInt(role.uniqueID, 32)
-									net.WriteTable(lply.yrpseltab)
-									net.WriteString(pmwin.name:GetText())
-									net.WriteString(min)
-									net.WriteString(max)
-								net.SendToServer()
-								pmwin:Close()
+										pmwin.list:AddItem(line)
+									end
+								end )
 							end
 						end
 					end
-					function win.add:Paint(pw, ph)
-						hook.Run("YButtonAPaint", self, pw, ph)
-					end
 
-					win.dpl = createD("DPanelList", content, content:GetWide() - YRP.ctr(20 * 2), content:GetTall() - YRP.ctr(20 + 50 + 20 + 20), YRP.ctr(20), YRP.ctr(20 + 50 + 20))
-					win.dpl:EnableVerticalScrollbar(true)
-					function win.dpl:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
-					end
-
-					win.delay = 0.2
-					win.i = 1
-					win.etime = CurTime()
-					win.searching = false
-					function win:Paint(pw, ph)
+					function pmwin:Paint(pw, ph)
 						hook.Run("YFramePaint", self, pw, ph)
-						if self.searching then
-							if CurTime() > self.etime then
-								if pms[self.i] != nil then
-									local pm = pms[self.i]
 
-									self.searchstr = string.Replace(self.searchstr, "[", "")
-									self.searchstr = string.Replace(self.searchstr, "]", "")
-									self.searchstr = string.Replace(self.searchstr, "%", "")
+						draw.SimpleText(YRP.lang_string("LID_name") .. ": ", "DermaDefault", YRP.ctr(20 + 300 + 20 + 300 + 20 + 120), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-									if pa(win.dpl) and string.find(string.lower(pm.string_name), self.searchstr) or string.find(string.lower(pm.string_models), self.searchstr) then
-										local line = createD("YButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
-										line.string_name = pm.string_name
-										line.models = string.Explode(",", pm.string_models)
-										line:SetText("")
-										function line:DoClick()
-											net.Start("add_role_playermodel")
-												net.WriteInt(role.uniqueID, 32)
+						draw.SimpleText(YRP.lang_string("LID_minimumsize") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText(YRP.lang_string("LID_maximumsize") .. ":", "DermaDefault", YRP.ctr(40 + 200 + 20), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+						draw.SimpleText(YRP.lang_string("LID_models") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(410), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+					end
+
+					pmwin.selpm = createD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
+					pmwin.selpm:SetText(YRP.lang_string("LID_playermodels"))
+					function pmwin.selpm:DoClick()
+						local allvalidmodels = player_manager.AllValidModels()
+						local cl_pms = {}
+						local c = 0
+						for k, v in pairs(allvalidmodels) do
+							c = c + 1
+							cl_pms[c] = {}
+							cl_pms[c].WorldModel = v
+							cl_pms[c].ClassName = v
+							cl_pms[c].PrintName = player_manager.TranslateToPlayerModelName(v)
+						end
+						YRPOpenSelector(cl_pms, true, "worldmodel", pmwin.list.RefreshList)
+					end
+
+					pmwin.selnpm = createD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20 + 300 + 20), YRP.ctr(50 + 20))
+					pmwin.selnpm:SetText(YRP.lang_string("LID_othermodels"))
+					function pmwin.selnpm:DoClick()
+						local noneplayermodels = {}
+						for _, addon in SortedPairsByMemberValue(engine.GetAddons(), "title") do
+							if (!addon.downloaded or !addon.mounted) then continue end
+							AddToTabRecursive(noneplayermodels, "models/", addon.title, "*.mdl")
+						end
+						local cl_pms = {}
+						local c = 0
+						for k, v in pairs(noneplayermodels) do
+							c = c + 1
+							cl_pms[c] = {}
+							cl_pms[c].WorldModel = v
+							cl_pms[c].ClassName = v
+							cl_pms[c].PrintName = v
+						end
+						YRPOpenSelector(cl_pms, true, "worldmodel", pmwin.list.RefreshList)
+					end
+
+					pmwin.add = createD("YButton", pmcontent, YRP.ctr(200), YRP.ctr(50), pmcontent:GetWide() / 2 - YRP.ctr(200 / 2), pmcontent:GetTall() - YRP.ctr(50 + 20))
+					pmwin.add:SetText(YRP.lang_string("LID_add"))
+					function pmwin.add:DoClick()
+						if pmwin.WorldModel != "" then
+							local lply = LocalPlayer()
+							lply.yrpseltab = lply.yrpseltab or {}
+							local min = tonumber(pmwin.float_min:GetValue())
+							local max = tonumber(pmwin.float_max:GetValue())
+							net.Start("add_playermodels")
+								net.WriteInt(role.uniqueID, 32)
+								net.WriteTable(lply.yrpseltab)
+								net.WriteString(pmwin.name:GetText())
+								net.WriteString(min)
+								net.WriteString(max)
+							net.SendToServer()
+							pmwin:Close()
+						end
+					end
+				end
+				function win.add:Paint(pw, ph)
+					hook.Run("YButtonAPaint", self, pw, ph)
+				end
+
+				win.dpl = createD("DPanelList", content, content:GetWide() - YRP.ctr(20 * 2), content:GetTall() - YRP.ctr(20 + 50 + 20 + 20), YRP.ctr(20), YRP.ctr(20 + 50 + 20))
+				win.dpl:EnableVerticalScrollbar(true)
+				function win.dpl:Paint(pw, ph)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+				end
+
+				win.delay = 0.02
+				win.i = 1
+				win.etime = CurTime()
+				win.searching = false
+				function win:Paint(pw, ph)
+					hook.Run("YFramePaint", self, pw, ph)
+					if self.searching then
+						if CurTime() > self.etime then
+							if pms[self.i] != nil then
+								local pm = pms[self.i]
+
+								self.searchstr = string.Replace(self.searchstr, "[", "")
+								self.searchstr = string.Replace(self.searchstr, "]", "")
+								self.searchstr = string.Replace(self.searchstr, "%", "")
+
+								if pa(win.dpl) and string.find(string.lower(pm.string_name), self.searchstr) or string.find(string.lower(pm.string_models), self.searchstr) then
+									local line = createD("YButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
+									line.string_name = pm.string_name
+									line.models = string.Explode(",", pm.string_models)
+									line:SetText("")
+									function line:DoClick()
+										net.Start("add_role_playermodel")
+											net.WriteInt(role.uniqueID, 32)
+											net.WriteInt(pm.uniqueID, 32)
+										net.SendToServer()
+										win:Close()
+									end
+									function line:Paint(pw, ph)
+										draw.RoundedBox(0, 0, 0, pw, ph, Color(140, 140, 140))
+										draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									end
+
+
+
+									line.remove = createD("YButton", line, YRP.ctr(300), YRP.ctr(100), win.dpl:GetWide() - YRP.ctr(350), YRP.ctr(50))
+									line.remove:SetText("LID_remove")
+									function line.remove:DoClick()
+										function YRPNoDeletePMS()
+											--
+										end
+										function YRPYesDeletePMS()
+											net.Start("rem_playermodel")
 												net.WriteInt(pm.uniqueID, 32)
 											net.SendToServer()
-											win:Close()
+											line:Remove()
 										end
-										function line:Paint(pw, ph)
-											draw.RoundedBox(0, 0, 0, pw, ph, Color(140, 140, 140))
-											draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-											draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-										end
-
-
-
-										line.remove = createD("YButton", line, YRP.ctr(300), YRP.ctr(100), win.dpl:GetWide() - YRP.ctr(350), YRP.ctr(50))
-										line.remove:SetText("LID_remove")
-										function line.remove:DoClick()
-											function YRPNoDeletePMS()
-												--
-											end
-											function YRPYesDeletePMS()
-												net.Start("rem_playermodel")
-													net.WriteInt(pm.uniqueID, 32)
-												net.SendToServer()
-												line:Remove()
-											end
-											YRPAreYouSure(YRPYesDeletePMS, YRPNoDeletePMS)
-										end
-										function line.remove:Paint(pw, ph)
-											draw.RoundedBox(16, 0, 0, pw, ph, Color(255, 140, 140))
-											draw.SimpleText(YRP.lang_string("LID_remove") .. " (" .. pm.uses .. " " .. "uses" .. ")", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-										end
-
-
-
-										if line.models[1] != nil then
-											line.model = createD("DModelPanel", line, line:GetTall(), line:GetTall(), 0, 0)
-											line.model:SetModel(line.models[1])
-										else
-											line.model = createD("DPanel", line, line:GetTall(), line:GetTall(), 0, 0)
-											function line.model:Paint(pw, ph)
-												draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
-												draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-											end
-										end
-
-										win.dpl:AddItem(line)
+										YRPAreYouSure(YRPYesDeletePMS, YRPNoDeletePMS)
 									end
-									self.etime = CurTime() + self.delay
-									self.i = self.i + 1
-								else
-									self.searching = false
+									function line.remove:Paint(pw, ph)
+										draw.RoundedBox(16, 0, 0, pw, ph, Color(255, 140, 140))
+										draw.SimpleText(YRP.lang_string("LID_remove") .. " (" .. pm.uses .. " " .. "uses" .. ")", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+									end
+
+
+
+									if line.models[1] != nil then
+										line.model = createD("DModelPanel", line, line:GetTall(), line:GetTall(), 0, 0)
+										line.model:SetModel(line.models[1])
+									else
+										line.model = createD("DPanel", line, line:GetTall(), line:GetTall(), 0, 0)
+										function line.model:Paint(pw, ph)
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
+											draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										end
+									end
+
+									win.dpl:AddItem(line)
 								end
+								self.etime = CurTime() + self.delay
+								self.i = self.i + 1
+							else
+								self.searching = false
 							end
-						else
-							self.i = 1
 						end
-					end
-				
-					function win:Search(strsearch)
-						self.searchstr = string.lower(strsearch)
-
-						self.searching = false
-
+					else
 						self.i = 1
-						self.dpl:Clear()
-						self.searching = true
 					end
-					win:Search("")
+				end
+			
+				function win:Search(strsearch)
+					self.searchstr = string.lower(strsearch)
 
-					win.search = createD("DTextEntry", content, content:GetWide() - YRP.ctr(20 + 50 + 20 + 20), YRP.ctr(50), YRP.ctr(20 + 50 + 20), YRP.ctr(20))
-					function win.search:OnChange()
-						win:Search(self:GetText())
-					end
+					self.searching = false
+
+					self.i = 1
+					self.dpl:Clear()
+					self.searching = true
+				end
+				win:Search("")
+
+				win.search = createD("DTextEntry", content, content:GetWide() - YRP.ctr(20 + 50 + 20 + 20), YRP.ctr(50), YRP.ctr(20 + 50 + 20), YRP.ctr(20))
+				function win.search:OnChange()
+					win:Search(self:GetText())
+				end
+
+				net.Receive("get_all_playermodels", function(len)
+					YRP.msg("note", "[get_all_playermodels] len: " .. len)
+					local tab = net.ReadTable()
+					table.insert( pms, tab )
+
+					win:Search( win:GetText() )
 				end)
+
 				net.Start("get_all_playermodels")
 				net.SendToServer()
 			end
@@ -1870,6 +1876,14 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			ea[role.uniqueID].equipment = equipment
 			ea.equipment = ea[role.uniqueID].equipment
+
+			if GetGlobalBool( "bool_weapon_system", true ) then
+				local info = createD( "DPanel", equipment, 100, 32, 0, 0 )
+				function info:Paint( pw, ph )
+					draw.SimpleText( "First Go to F8 -> " .. YRP.lang_string( "LID_administration" ) .. " -> " .. YRP.lang_string( "LID_weaponsystem" ), "Y_18_700", pw / 2, ph / 2, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				end
+				equipment:AddItem(info)
+			end
 
 			local sweps = {}
 			sweps.parent = ea.equipment:GetContent()
@@ -1964,7 +1978,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				local swepsonspawn = {}
 				swepsonspawn.parent = ea.equipment:GetContent()
 				swepsonspawn.uniqueID = role.uniqueID
-				swepsonspawn.header = YRP.lang_string("LID_swepsatspawn") .. " (Equipped if slot is not full)"
+				swepsonspawn.header = YRP.lang_string("LID_swepsatspawn") .. " (Equipped if slot is not full!)"
 				swepsonspawn.netstr = "update_role_string_sweps_onspawn"
 				swepsonspawn.value = role.string_sweps_onspawn
 				swepsonspawn.uniqueID = role.uniqueID
@@ -2011,7 +2025,7 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				net.Receive("get_role_sweps_onspawn", function()
 					local tab_pm = net.ReadTable()
 					local cl_sweps = {}
-					for i, v in pairs(tab_pm) do
+					for i, v in pairs( tab_pm ) do
 						local swep = {}
 						swep.uniqueID = i
 						swep.string_models = GetSwepWorldModel(v.classname)
@@ -2325,8 +2339,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					DHr(hr)
 				end
 			end
-
-			DHr(hr)
 
 			if role.uniqueID > 1 then
 				local whitelist = {}
@@ -2795,46 +2807,48 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
-			local stamina = {}
-			stamina.parent = ea.attributes:GetContent()
-			stamina.uniqueID = role.uniqueID
-			stamina.header = "LID_stamina"
-			stamina.netstr = "st"
-			stamina.uniqueID = role.uniqueID
-			stamina.lforce = false
+			if GetGlobalBool("bool_stamina", false) then
+				local stamina = {}
+				stamina.parent = ea.attributes:GetContent()
+				stamina.uniqueID = role.uniqueID
+				stamina.header = "LID_stamina"
+				stamina.netstr = "st"
+				stamina.uniqueID = role.uniqueID
+				stamina.lforce = false
 
-			stamina.dnw = {}
+				stamina.dnw = {}
 
-			stamina.dnw[1] = {}
-			stamina.dnw[1].value = role.int_st
-			stamina.dnw[1].min = 1
-			stamina.dnw[1].max = GetMaxInt()
-			stamina.dnw[1].netstr = "update_role_" .. "int_" .. "st"
+				stamina.dnw[1] = {}
+				stamina.dnw[1].value = role.int_st
+				stamina.dnw[1].min = 1
+				stamina.dnw[1].max = GetMaxInt()
+				stamina.dnw[1].netstr = "update_role_" .. "int_" .. "st"
 
-			stamina.dnw[2] = {}
-			stamina.dnw[2].value = role.int_stmax
-			stamina.dnw[2].min = 1
-			stamina.dnw[2].max = GetMaxInt()
-			stamina.dnw[2].netstr = "update_role_" .. "int_" .. "stmax"
+				stamina.dnw[2] = {}
+				stamina.dnw[2].value = role.int_stmax
+				stamina.dnw[2].min = 1
+				stamina.dnw[2].max = GetMaxInt()
+				stamina.dnw[2].netstr = "update_role_" .. "int_" .. "stmax"
 
-			stamina.dnw[3] = {}
-			stamina.dnw[3].value = role.float_stup
-			stamina.dnw[3].min = -GetMaxFloat()
-			stamina.dnw[3].max = GetMaxFloat()
-			stamina.dnw[3].netstr = "update_role_" .. "float_" .. "stup"
+				stamina.dnw[3] = {}
+				stamina.dnw[3].value = role.float_stup
+				stamina.dnw[3].min = -GetMaxFloat()
+				stamina.dnw[3].max = GetMaxFloat()
+				stamina.dnw[3].netstr = "update_role_" .. "float_" .. "stup"
 
-			stamina.dnw[4] = {}
-			stamina.dnw[4].value = role.float_stdn
-			stamina.dnw[4].min = -GetMaxFloat()
-			stamina.dnw[4].max = GetMaxFloat()
-			stamina.dnw[4].netstr = "update_role_" .. "float_" .. "stdn"
+				stamina.dnw[4] = {}
+				stamina.dnw[4].value = role.float_stdn
+				stamina.dnw[4].min = -GetMaxFloat()
+				stamina.dnw[4].max = GetMaxFloat()
+				stamina.dnw[4].netstr = "update_role_" .. "float_" .. "stdn"
 
-			stamina.color = Color(255, 255, 0)
-			stamina.color2 = Color(200, 200, 0)
-			stamina.color3 = Color(160, 160, 0)
-			ea[role.uniqueID].stamina = DAttributeBar(stamina)
+				stamina.color = Color(255, 255, 0)
+				stamina.color2 = Color(200, 200, 0)
+				stamina.color3 = Color(160, 160, 0)
+				ea[role.uniqueID].stamina = DAttributeBar(stamina)
 
-			DHr(hr)
+				DHr(hr)
+			end
 
 			local abis = {"none", "mana", "force", "rage", "energy"}
 			local tab_a = {}

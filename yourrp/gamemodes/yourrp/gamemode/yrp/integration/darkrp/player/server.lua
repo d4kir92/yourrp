@@ -202,6 +202,7 @@ end
 function Player:setRPName(name, firstrun)
 	--Description: Set the RPName of a player.
 	--YRPDarkrpNotFound("setRPName(name, firstrun)")
+	name = YRPCleanUpName( name )
 	self:SetRPName(name, "darkrp setRPName")
 end
 

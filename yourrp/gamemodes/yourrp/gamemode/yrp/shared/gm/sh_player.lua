@@ -549,9 +549,9 @@ end
 
 function Player:YRPRPName()
 	if IsValid(self) then
-		return self:GetNW2String("rpname", self:SteamName())
+		return string.Replace( self:GetNW2String("rpname", self:SteamName()), "'", "" )
 	else
-		return self:Nick()
+		return string.Replace( self:Nick(), "'", "" )
 	end
 end
 

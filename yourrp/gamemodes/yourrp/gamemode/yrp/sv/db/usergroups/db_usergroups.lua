@@ -5,85 +5,97 @@
 
 local DATABASE_NAME = "yrp_usergroups"
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INT DEFAULT 1")
+local sts = {
+	["string_ammos"] = '',
+	["string_color"] = '0,0,0,255',
+	["string_displayname"] = '',
+	["string_icon"] = 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png',
+	["string_licenses"] = '',
+	["string_name"] = 'unnamed usergroup',
+	["string_nonesweps"] = '',
+	["string_sents"] = '',
+	["string_sweps"] = '',
+	["string_tools"] = '',
+}
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'unnamed usergroup'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_displayname", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0,255'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_nonesweps", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sents", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_tools", "TEXT DEFAULT ''")
+local bos = {
+	["bool_ac_database"] = '0',
+	["bool_adminaccess"] = '0',
+	["bool_blacklist"] = '0',
+	["bool_bodygroups"] = '0',
+	["bool_canseeenemiesonmap"] = '0',
+	["bool_canseeteammatesonmap"] = '0',
+	["bool_canusecontextmenu"] = '0',
+	["bool_canuseesp"] = '0',
+	["bool_canusespawnmenu"] = '0',
+	["bool_canusewarnsystem"] = '0',
+	["bool_chat"] = '1',
+	["bool_collision"] = '0',
+	["bool_console"] = '0',
+	["bool_darkrp"] = '0',
+	["bool_design"] = '0',
+	["bool_drive"] = '0',
+	["bool_dupes"] = '0',
+	["bool_effects"] = '0',
+	["bool_entities"] = '0',
+	["bool_events"] = '0',
+	["bool_feedback"] = '0',
+	["bool_flashlight"] = '0',
+	["bool_general"] = '0',
+	["bool_gravgunpunt"] = '0',
+	["bool_gravity"] = '0',
+	["bool_groupsandroles"] = '0',
+	["bool_ignite"] = '0',
+	["bool_keepupright"] = '0',
+	["bool_levelsystem"] = '0',
+	["bool_licenses"] = '0',
+	["bool_logs"] = '0',
+	["bool_map"] = '0',
+	["bool_money"] = '0',
+	["bool_noclip"] = '0',
+	["bool_npcs"] = '0',
+	["bool_permaprops"] = '0',
+	["bool_physgunpickup"] = '0',
+	["bool_physgunpickupignoreblacklist"] = '0',
+	["bool_physgunpickupotherowner"] = '0',
+	["bool_physgunpickupplayer"] = '0',
+	["bool_physgunpickupworld"] = '0',
+	["bool_players"] = '0',
+	["bool_postprocess"] = '0',
+	["bool_props"] = '0',
+	["bool_ragdolls"] = '0',
+	["bool_realistic"] = '0',
+	["bool_removeable"] = '1',
+	["bool_saves"] = '0',
+	["bool_scale"] = '0',
+	["bool_shops"] = '0',
+	["bool_specializations"] = '0',
+	["bool_status"] = '0',
+	["bool_usergroups"] = '0',
+	["bool_vehicles"] = '0',
+	["bool_weapons"] = '0',
+	["bool_weaponsystem"] = '0',
+	["bool_whitelist"] = '0',
+	["bool_yourrp_addons"] = '0',
+}
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT 1")
+local ins = {
+	["int_characters_max"] = '1',
+	["int_charactersevent_max"] = '1',
+	["int_position"] = '1',
+}
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_characters_max", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_charactersevent_max", "INT DEFAULT 1")
+for i, v in SortedPairs( sts ) do
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, i, "TEXT DEFAULT '" .. v .. "'")
+end
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminaccess", "INT DEFAULT 0")
+for i, v in SortedPairs( bos ) do
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, i, "INT DEFAULT " .. v .. "")
+end
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_ac_database", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_console", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_status", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yourrp_addons", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_levelsystem", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_design", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_weaponsystem", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_general", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_realistic", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_groupsandroles", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_events", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_money", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_licenses", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_specializations", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_shops", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_map", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_feedback", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_usergroups", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_logs", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_blacklist", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_scale", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_darkrp", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_permaprops", "INT DEFAULT 0")
-
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_vehicles", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_weapons", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_entities", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_effects", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_npcs", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_props", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_ragdolls", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_postprocess", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_dupes", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_saves", "INT DEFAULT 0")
-
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_ignite", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_drive", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_flashlight", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_collision", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_gravity", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_keepupright", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_bodygroups", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickup", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupplayer", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupworld", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupotherowner", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_physgunpickupignoreblacklist", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_gravgunpunt", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeteammatesonmap", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canseeenemiesonmap", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canuseesp", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusewarnsystem", "INT DEFAULT 0")
-
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusecontextmenu", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canusespawnmenu", "INT DEFAULT 1")
+for i, v in SortedPairs( ins ) do
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, i, "INT DEFAULT " .. v .."")
+end
 
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 --db_is_empty(DATABASE_NAME)
@@ -112,49 +124,52 @@ timer.Simple( 1, function()
 	end
 
 	if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
-		local _str = "string_name, "
-		_str = _str .. "bool_vehicles, "
-		_str = _str .. "bool_weapons, "
-		_str = _str .. "bool_entities, "
-		_str = _str .. "bool_effects, "
-		_str = _str .. "bool_npcs, "
-		_str = _str .. "bool_props, "
-		_str = _str .. "bool_ragdolls, "
-		_str = _str .. "bool_noclip, "
-		_str = _str .. "bool_ignite, "
-		_str = _str .. "bool_drive, "
-		_str = _str .. "bool_flashlight, "
-		_str = _str .. "bool_collision, "
-		_str = _str .. "bool_gravity, "
-		_str = _str .. "bool_keepupright, "
-		_str = _str .. "bool_bodygroups, "
-		_str = _str .. "bool_physgunpickup, "
-		_str = _str .. "bool_physgunpickupplayer, "
-		_str = _str .. "bool_physgunpickupworld, "
-		_str = _str .. "bool_adminaccess, "
-		_str = _str .. "bool_design, "
-		_str = _str .. "bool_general, "
-		_str = _str .. "bool_realistic, "
-		_str = _str .. "bool_groupsandroles, "
-		_str = _str .. "bool_players, "
-		_str = _str .. "bool_money, "
-		_str = _str .. "bool_licenses, "
-		_str = _str .. "bool_shops, "
-		_str = _str .. "bool_map, "
-		_str = _str .. "bool_whitelist, "
-		_str = _str .. "bool_feedback, "
-		_str = _str .. "bool_usergroups, "
-		_str = _str .. "bool_ac_database, "
-		_str = _str .. "bool_status, "
-		_str = _str .. "bool_yourrp_addons, "
-		_str = _str .. "int_position"
+		local cols = {}
+		local vals = {}
 
-		local _str2 = "'superadmin', "
-		_str2 = _str2 .. "1, 1, 1, 1, 1, 1, 1, 1"
-		_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-		_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
+		table.insert( cols, "string_name" )
+		table.insert( vals, "'superadmin'" )
 
-		YRP_SQL_INSERT_INTO(DATABASE_NAME, _str , _str2)
+		table.insert( cols, "string_tools" )
+		table.insert( vals, "'all'" )
+
+		table.insert( cols, "int_position" )
+		table.insert( vals, 2 )
+
+		for i, v in pairs( bos ) do
+			if i == "bool_removeable" or i == "bool_canuseesp" then
+				table.insert( cols, i )
+				table.insert( vals, 0 )
+			else
+				table.insert( cols, i )
+				table.insert( vals, 1 )
+			end
+		end
+
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, table.concat( cols, "," ), table.concat( vals, "," ))
+	else
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'")
+		if tab and tab[1] then
+			tab = tab[1]
+
+			local vals = {}
+
+			vals["string_name"] = "superadmin"
+
+			vals["string_tools"] = "all"
+
+			vals["int_position"] = 2
+
+			for i, v in pairs( bos ) do
+				if i == "bool_removeable" or i == "bool_canuseesp" then
+					vals[i] = 0
+				else
+					vals[i] = 1
+				end
+			end
+
+			YRP_SQL_UPDATE( DATABASE_NAME, vals, "uniqueID = '" .. tab.uniqueID .. "'" )
+		end
 	end
 
 	if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'admin'") == nil then
@@ -175,14 +190,22 @@ timer.Simple( 1, function()
 end )
 
 function SortUserGroups()
-	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
 	if wk(siblings) then
+		for i, sibling in pairs(siblings) do
+			if sibling.string_name == "yrp_usergroups" then
+				table.remove( siblings, i )
+			elseif sibling.string_name == "superadmin" then
+				table.remove( siblings, i )
+			end
+		end
+
 		for i, sibling in pairs(siblings) do
 			sibling.int_position = tonumber(sibling.int_position)
 		end
 
-		local count = 0
+		local count = 2
 		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
 			count = count + 1
 			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = count}, "uniqueID = '" .. sibling.uniqueID .. "'")
@@ -191,54 +214,35 @@ function SortUserGroups()
 end
 timer.Simple( 1, SortUserGroups )
 
-timer.Simple( 4, function()
+timer.Simple( 3, function()
 	YRP_SQL_DELETE_FROM(DATABASE_NAME, "string_name = 'yrp_usergroups'")
 	local unremoveable = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'yrp_usergroups'")
 	if unremoveable == nil then
-		local _str = "string_name, "
-		_str = _str .. "bool_vehicles, "
-		_str = _str .. "bool_weapons, "
-		_str = _str .. "bool_entities, "
-		_str = _str .. "bool_effects, "
-		_str = _str .. "bool_npcs, "
-		_str = _str .. "bool_props, "
-		_str = _str .. "bool_ragdolls, "
-		_str = _str .. "bool_noclip, "
-		_str = _str .. "bool_ignite, "
-		_str = _str .. "bool_drive, "
-		_str = _str .. "bool_flashlight, "
-		_str = _str .. "bool_collision, "
-		_str = _str .. "bool_gravity, "
-		_str = _str .. "bool_keepupright, "
-		_str = _str .. "bool_bodygroups, "
-		_str = _str .. "bool_physgunpickup, "
-		_str = _str .. "bool_physgunpickupplayer, "
-		_str = _str .. "bool_physgunpickupworld, "
-		_str = _str .. "bool_adminaccess, "
-		_str = _str .. "bool_design, "
-		_str = _str .. "bool_general, "
-		_str = _str .. "bool_realistic, "
-		_str = _str .. "bool_groupsandroles, "
-		_str = _str .. "bool_players, "
-		_str = _str .. "bool_money, "
-		_str = _str .. "bool_licenses, "
-		_str = _str .. "bool_shops, "
-		_str = _str .. "bool_map, "
-		_str = _str .. "bool_whitelist, "
-		_str = _str .. "bool_feedback, "
-		_str = _str .. "bool_usergroups, "
-		_str = _str .. "bool_ac_database, "
-		_str = _str .. "bool_status, "
-		_str = _str .. "bool_yourrp_addons, "
-		_str = _str .. "bool_removeable, "
-		_str = _str .. "int_position"
+		local cols = {}
+		local vals = {}
 
-		local _str2 = "'yrp_usergroups', 1, 1, 1, 1, 1, 1, 1, 1"
-		_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-		_str2 = _str2 .. ", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1"
-		_str2 = _str2 .. ", 0, 0"
+		table.insert( cols, "string_name" )
+		table.insert( vals, "'yrp_usergroups'" )
 
-		YRP_SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
+		table.insert( cols, "string_tools" )
+		table.insert( vals, "'all'" )
+
+		table.insert( cols, "int_position" )
+		table.insert( vals, 1 )
+
+		for i, v in pairs( bos ) do
+			if i == "bool_removeable" then
+				table.insert( cols, i )
+				table.insert( vals, 0 )
+			else
+				table.insert( cols, i )
+				table.insert( vals, 1 )
+			end
+		end
+
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, table.concat( cols, "," ), table.concat( vals, "," ))
+
+		SortUserGroups()
 	end
 end )
 
@@ -275,6 +279,23 @@ local function ConvertToMains(tab)
 end
 
 function GetULXUserGroups()
+	-- DAM
+	if DAMVERSION then
+		local tab = YRP_SQL_SELECT( "DAM_UGS", "*", nil )
+
+		for i, v in pairs( tab ) do
+			local ug = YRP_SQL_SELECT( "yrp_usergroups", "*", "string_name = '" .. string.lower( v.name ) .. "'" )
+			if ug == nil then
+				YRP_SQL_INSERT_INTO("yrp_usergroups", "string_name", "'" .. string.lower( v.name ) .. "'")
+				SortUserGroups()
+			end
+		end
+	end
+
+
+
+
+	-- ULX
 	local f = file.Read("ulib/groups.txt", "DATA")
 
 	if !wk(f) then return end
@@ -285,9 +306,11 @@ function GetULXUserGroups()
 		local dbug = YRP_SQL_SELECT("yrp_usergroups", "*", "string_name = '" .. v .. "'")
 		if dbug == nil then
 			YRP_SQL_INSERT_INTO("yrp_usergroups", "string_name", "'" .. v .. "'")
+			SortUserGroups()
 		end
 	end
 end
+timer.Simple( 1, GetULXUserGroups )
 
 util.AddNetworkString("Connect_Settings_UserGroups")
 net.Receive("Connect_Settings_UserGroups", function(len, ply)
@@ -304,11 +327,12 @@ net.Receive("Connect_Settings_UserGroups", function(len, ply)
 			end
 		end
 
-		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
+		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 		local _ugs = {}
 		for i, ug in pairs(_tmp) do
 			_ugs[tonumber(ug.uniqueID)] = ug
 		end
+
 		net.Start("Connect_Settings_UserGroups")
 			if _tmp != nil then
 				net.WriteTable(_tmp)
@@ -366,34 +390,16 @@ net.Receive("usergroup_add", function(len, ply)
 	YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 	YRP.msg("gm", ply:YRPName() .. " added a new UserGroup")
 
-	SortUserGroups()
-
-	local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
-	local _ugs = {}
-	for i, ug in pairs(_tmp) do
-		_ugs[tonumber(ug.uniqueID)] = ug
-	end
-	for i, pl in pairs(HANDLER_USERGROUPS) do
-		net.Start("usergroup_add")
-			net.WriteTable(_ugs)
-		net.Send(pl)
-	end
+	ReloadUsergroupsList()
 end)
 
 util.AddNetworkString("usergroup_rem")
 net.Receive("usergroup_rem", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
-
-	SortUserGroups()
-
 	YRP.msg("gm", ply:YRPName() .. " removed UserGroup (" .. uid .. ")")
 
-	for i, pl in pairs(HANDLER_USERGROUPS) do
-		net.Start("usergroup_rem")
-			net.WriteString(uid)
-		net.Send(pl)
-	end
+	ReloadUsergroupsList()
 end)
 
 --[[ Access Functions ]]--
@@ -590,10 +596,12 @@ function UGCheckBox(ply, uid, name, value)
 
 	YRP.msg("db", ply:YRPName() .. " updated " .. name .. " of usergroup (" .. uid .. ") to [" .. value .. "]")
 
-	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
-		net.Start("usergroup_update_" .. name)
-			net.WriteString(value)
-		net.Send(pl)
+	if wk(HANDLER_USERGROUP[uid]) then
+		for i, pl in pairs(HANDLER_USERGROUP[uid]) do
+			net.Start("usergroup_update_" .. name)
+				net.WriteString(value)
+			net.Send(pl)
+		end
 	end
 
 	local ug = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
@@ -613,6 +621,13 @@ net.Receive("usergroup_update_bool_ac_database", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local bool_ac_database = net.ReadString()
 	UGCheckBox(ply, uid, "bool_ac_database", bool_ac_database)
+end)
+
+util.AddNetworkString("usergroup_update_bool_chat")
+net.Receive("usergroup_update_bool_chat", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_chat = net.ReadString()
+	UGCheckBox(ply, uid, "bool_chat", bool_chat)
 end)
 
 util.AddNetworkString("usergroup_update_bool_darkrp")
@@ -1610,6 +1625,7 @@ function Player:UserGroupLoadout()
 		
 		self:SetNW2String("usergroupDisplayname", UG.string_displayname)
 		self:SetNW2String("usergroupColor", UG.string_color)
+		self:SetNW2Bool("ugchat", tobool( UG.bool_chat ))
 		self:SetNW2Int("int_position", UG.int_position)
 		self:SetNW2Int("int_characters_max", UG.int_characters_max)
 		self:SetNW2Int("int_charactersevent_max", UG.int_charactersevent_max)
@@ -1680,12 +1696,16 @@ util.AddNetworkString("UpdateUsergroupsList")
 function ReloadUsergroupsList()
 	SortUserGroups()
 	
-	local ugs = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
-	for i, pl in pairs(HANDLER_USERGROUPS) do
-		net.Start("UpdateUsergroupsList")
-			net.WriteTable(ugs)
-		net.Send(pl)
-	end
+	timer.Simple( 0.1, function()
+		local ugs = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+		for i, pl in pairs(HANDLER_USERGROUPS) do
+			if IsValid( pl ) then
+				net.Start("UpdateUsergroupsList")
+					net.WriteTable(ugs)
+				net.Send(pl)
+			end
+		end
+	end )
 end
 
 util.AddNetworkString("settings_usergroup_position_up")
@@ -1696,7 +1716,7 @@ net.Receive("settings_usergroup_position_up", function(len, ply)
 
 	usergroup.int_position = tonumber(usergroup.int_position)
 
-	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
 	for i, sibling in pairs(siblings) do
 		sibling.int_position = tonumber(sibling.int_position)
@@ -1721,7 +1741,7 @@ net.Receive("settings_usergroup_position_dn", function(len, ply)
 
 	group.int_position = tonumber(group.int_position)
 
-	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name != 'yrp_usergroups'")
+	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
 	for i, sibling in pairs(siblings) do
 		sibling.int_position = tonumber(sibling.int_position)
@@ -1859,17 +1879,21 @@ net.Receive("usergroup_update_string_ammos", function(len, ply)
 end)
 
 hook.Add("Think", "yrp_usergroup_haschanged", function()
-	for i, ply in pairs(player.GetAll()) do
+	for i, ply in pairs( player.GetAll() ) do
 		ply.yrp_ug = ply.yrp_ug or ply:GetUserGroup()
-		if ply:GetUserGroup() != ply.yrp_ug then
-			ply.yrp_ug = ply:GetUserGroup()
+		if ply.yrpauthed then
+			if ply:GetUserGroup() != ply.yrp_ug then
+				ply.yrp_ug = ply:GetUserGroup()
 
-			timer.Simple(0, function()
-				if IsValid(ply) then
-					YRP.msg("note", ply:RPName() .. " has a new usergroup, respawning...")
-					ply:Kill()
-				end
-			end)
+				timer.Simple(0, function()
+					if IsValid(ply) then
+						YRP.msg("note", ply:RPName() .. " has a new usergroup, respawning...")
+						ply:Kill()
+					end
+				end)
+			end
+		else
+			ply.yrp_ug = ply:GetUserGroup()
 		end
 	end
 end)

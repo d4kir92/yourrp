@@ -53,7 +53,7 @@ function YRP_SQL_STR_OUT(str)
 	local _res = str
 
 	if type(_res) == "string" then
-		_res = string.Replace(_res, "§01§", "'")
+		_res = string.Replace( _res, "§01§", "'" )
 
 		return _res
 	else
@@ -317,52 +317,6 @@ function YRP_SQL_UPDATE(db_table, db_sets, db_where)
 		local _q = "UPDATE "
 		_q = _q .. YRPSQL.schema .. "." .. db_table
 		_q = _q .. " SET " .. sets
-
-		if db_where != nil then
-			_q = _q .. " WHERE "
-			_q = _q .. db_where
-		end
-
-		_q = _q .. ";"
-
-		return YRP_SQL_QUERY(_q)
-	end
-end
-
-function OLD_YRP_SQL_UPDATE(db_table, db_sets, db_where)
-	--YRP.msg("db", "YRP_SQL_UPDATE(" .. tostring(db_table) .. ", " .. tostring(db_sets) .. ", " .. tostring(db_where) .. ")")
-	local tmp = {}
-	for i, v in pairs(string.Explode(", ", db_sets)) do
-		v = string.Replace(v, "'", "")
-		v = string.Replace(v, " = ", "=")
-		v = string.Explode("=", v)
-		tmp[i] = v[1] .. "=" .. YRP_SQL_STR_IN( v[2], v[1] )
-	end
-	db_sets = table.concat( tmp, "," )
-
-	if GetSQLMode() == 0 then
-		local _q = "UPDATE "
-		_q = _q .. db_table
-		_q = _q .. " SET " .. db_sets
-
-		if db_where != nil then
-			_q = _q .. " WHERE "
-			_q = _q .. db_where
-		end
-
-		_q = _q .. ";"
-
-		--[[local ret = YRP_SQL_QUERY(_q)
-
-		if ret != nil then
-			YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. " lastError: " .. sql_show_last_error())
-		end
-
-		return ret]]
-	elseif GetSQLMode() == 1 then
-		local _q = "UPDATE "
-		_q = _q .. YRPSQL.schema .. "." .. db_table
-		_q = _q .. " SET " .. db_sets
 
 		if db_where != nil then
 			_q = _q .. " WHERE "

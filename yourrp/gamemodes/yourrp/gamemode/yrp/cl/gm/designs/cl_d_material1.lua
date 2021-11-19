@@ -104,14 +104,6 @@ function _mat1.DrawWindow(window, pw, ph, title)
 	end
 	surfaceBox(0, 0, pw, YRP.ctr(50), _color_bar)
 	surfaceBox(0, YRP.ctr(50), pw, ph - YRP.ctr(50), _color_bg)
-	if InterfaceBorder() then
-		local _br = 2
-		surfaceBox(0, 0, pw, YRP.ctr(_br), _color_br)
-		surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), _color_br)
-
-		surfaceBox(pw - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2*_br), _color_br)
-		surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2*_br), _color_br)
-	end
 
 	--[[ Title ]]--
 	surfaceText(YRP.lang_string(_title), "Y_22_500", YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255), 0, 1, 1)
@@ -136,14 +128,6 @@ function _mat1.DrawButton(btn, pw, ph, text, color, px, py, ax, ah, forcelang)
 	end
 	local _color = color or _color_bar
 	surfaceBox(0, 0, pw, ph, _color)
-	if InterfaceBorder() then
-		local _br = 2
-		surfaceBox(0, 0, pw, YRP.ctr(_br), _color_br)
-		surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), _color_br)
-
-		surfaceBox(pw - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2 * _br), _color_br)
-		surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2 * _br), _color_br)
-	end
 
 	--[[ text ]]--
 	if forcelang then
@@ -165,15 +149,7 @@ function _mat1.DrawPanel(pnl, pw, ph, text, color, px, py, ax, ah)
 	else
 		_color_bar.a = 255
 	end
-	surfaceBox(0, 0, pw, ph,_color_bar)
-	if InterfaceBorder() then
-		local _br = 2
-		surfaceBox(0, 0, pw, YRP.ctr(_br), _color_br)
-		surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), _color_br)
-
-		surfaceBox(pw - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2*_br), _color_br)
-		surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(2*_br), _color_br)
-	end
+	surfaceBox(0, 0, pw, ph, _color_bar)
 
 	--[[ text ]]--
 	surfaceText(YRP.lang_string(_text), _mat1.textFont, px or pw/2, py or ph/2, color or Color(255, 255, 255, 255), ax or 1, ay or 1, 1)

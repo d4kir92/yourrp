@@ -259,6 +259,12 @@ function YRPSpawnItem(ply, item, duid)
 			wep:SetNW2Entity("yrp_owner", ply)
 			return true
 		else
+			for i, ws in pairs( engine.GetAddons() ) do
+				if ws.wsid == "167545348" then
+					YRP.msg("note", "[Spawn Item] [IMPORTANT] Addon: " .. ws.title .. " is installed, which is overriding the GIVE function")
+					return false
+				end
+			end
 			YRP.msg("note", "[Spawn Item] Class " .. item.ClassName .. " Give() FAILED (already have it?)")
 			return false
 		end

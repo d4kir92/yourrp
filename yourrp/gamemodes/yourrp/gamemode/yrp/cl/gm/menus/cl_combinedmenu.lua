@@ -33,6 +33,7 @@ end
 
 function CreateRulesContent(PARENT)
 	local serverrules = table.concat(GetGlobalTable("text_server_rules", ""), "\n")
+	serverrules = YRP_SQL_STR_OUT( serverrules )
 
 	local page = createD("DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20))
 	function page:Paint(pw, ph)

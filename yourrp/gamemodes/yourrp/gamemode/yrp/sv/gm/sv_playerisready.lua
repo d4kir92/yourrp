@@ -17,13 +17,6 @@ ostab[3] = "other"
 function YRPPlayerLoadedGame(ply)
 	ply:SetNW2Bool("PlayerLoadedGameStart", true)
 
-	-- YRP Chat?
-	local _chat = YRP_SQL_SELECT("yrp_general", "bool_yrp_chat", "uniqueID = 1")
-	if _chat != nil and _chat != false then
-		_chat = _chat[1]
-		ply:SetNW2Bool("bool_yrp_chat", tobool(_chat.yrp_chat))
-	end
-
 	timer.Simple( 1, function()
 		ply:YRPDesignLoadout("PlayerLoadedGame")
 	end )
@@ -48,7 +41,9 @@ function YRPPlayerLoadedGame(ply)
 		end
 	end
 
-	UpdateDarkRPTable(ply)
+	timer.Simple( 2, function()
+		UpdateDarkRPTable(ply)
+	end )
 
 	ply:UserGroupLoadout()
 
@@ -188,25 +183,37 @@ function YRPAskForStartData( data )
 		if ply:SteamID() == data.networkid then
 			if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
 				YRPAddReadyStatusMsg( ply, "Send" )
-
 				ply.readycounter = ply.readycounter or 0
 				ply.readycounter = ply.readycounter + 1
 
-				MsgC( Color( 0, 255, 0 ), "[START] [" .. ply:SteamName() .. "] Ask for StartData" .. " #" .. ply.readycounter .. "\n" )
+				if ply.readycounter >= 10 then
+					MsgC( Color( 0, 255, 0 ), "[START] [" .. ply:SteamName() .. "] Ask for StartData" .. " - try #" .. ply.readycounter .. "\n" )
+				end
 
 				net.Start("askforstartdata")
 				net.Send(ply)
 
 				YRPAddReadyStatusMsg( ply, "Sended" )
 
-				if ply:GetNW2Bool( "yrp_received_ready", false ) == false and ply.readycounter >= ( 180 / 3 ) and ply.readycounter <= ( 210 / 3 ) then
-					YRP.msg( "error", "[START] Stuck: " .. ply:GetNW2String( "yrp_ready_status", "X" ) .. " Counter: " .. tostring( ply.readycounter ) .. " ply: " .. tostring( ply:YRPName() .. " Ver.: " .. YRPGetVersionFull() .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" ) ) )
+				if !YRPIsDoubleInstalled() and ply:GetNW2Bool( "yrp_received_ready", false ) == false and ply.readycounter >= ( 360 / 3 ) and ply.readycounter <= ( 390 / 3 ) then
+					local text = "[START] [STUCK]"
+					text = text .. " Status: " .. ply:GetNW2String( "yrp_ready_status", "X" )
+					text = text .. " Counter: " .. tostring( ply.readycounter )
+					text = text .. " ply: " .. ply:YRPName()
+					text = text .. " Ver.: " .. YRPGetVersionFull()
+					text = text .. " collectionid: " .. YRPCollectionID()
+					text = text .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" )
+					text = text .. " DI: "	.. tostring( YRPIsDoubleInstalled() )
+					text = text .. " plys: " .. #player.GetAll() .. "/" .. game.MaxPlayers()
+					YRP.msg( "error", text )
 				end
 
 				timer.Simple( 3, function()
 					if IsValid( ply ) then
 						if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
-							MsgC( Color( 255, 255, 0 ), "[START] [" .. ply:SteamName() .. "] RETRY Ask for StartData" .. " #" .. ply.readycounter .. "\n" )
+							if ply.readycounter >= 10 then
+								MsgC( Color( 255, 255, 0 ), "[START] [" .. ply:SteamName() .. "] RETRY Ask for StartData" .. " - try #" .. ply.readycounter .. "\n" )
+							end
 							YRPAddReadyStatusMsg( ply, "RETRY" )
 							YRPAskForStartData( data )
 						end
@@ -231,7 +238,7 @@ net.Receive( "sendstartdata", function( len, ply )
 
 	if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
 		ply.readycounter = ply.readycounter or 0
-		MsgC( Color( 0, 255, 0 ), "[START] [" .. ply:SteamName() .. "] RECEIVED StartData" .. " #" .. ply.readycounter .. "\n" )
+		MsgC( Color( 0, 255, 0 ), "[START] [" .. ply:SteamName() .. "] RECEIVED StartData" .. " at try #" .. ply.readycounter .. "\n" )
 
 		net.Start( "receivedstartdata" )
 		net.Send( ply )

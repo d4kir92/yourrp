@@ -453,7 +453,7 @@ function DColor(tab)
 			end
 			window.cm = createD("DColorMixer", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20))
 			function window.cm:ValueChanged(col)
-				local colstr = TableToColorStr(col)
+				local colstr = YRPTableToColorStr(col)
 				if pnl.DButton:IsValid() then
 					pnl.DButton.tabcolor = colstr
 					pnl.DButton.color = StringToColor(pnl.DButton.tabcolor)
@@ -919,7 +919,7 @@ function DStringListBox(tab)
 					end
 					text = table.concat(test, ", ")
 					if strEmpty(text) then
-						text = YRP.lang_string("LID_empty")
+						text = "WEAPON NEED CONFIGURATION!"
 					end
 				end
 

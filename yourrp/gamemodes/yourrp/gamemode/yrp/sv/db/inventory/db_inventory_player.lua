@@ -7,24 +7,34 @@ hook.Add("WeaponEquip", "yrp_weaponequip", function(wep, owner)
 	local swep = weapons.GetStored(wep:GetClass())
 	local oldammo = owner:GetAmmoCount(atype)
 
-	local ENT = weapons.GetStored(wep:GetClass())
-	if wk(ENT) then
-		timer.Simple(0, function()
+	timer.Simple(0, function()
+		if IsValid(wep) and wep:GetNW2Bool( "yrpdropped", false ) then
 			owner:SetAmmo(owner:GetAmmoCount(atype) - (owner:GetAmmoCount(atype) - oldammo), atype)
-		end)
-	end
+		end
+	end)
 end)
 
 
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if ( ply:HasWeapon( wep:GetClass() ) ) then return false end
 
-	if wep.dropped and wep:GetNW2Bool("canpickup", false) or wep.dropped == nil then
-		return true
-	elseif ply:KeyPressed(IN_USE) then
-		ply.noammo = true
-		return true
+	if wep:GetNW2Bool("yrpdropped", false) then
+		if wep:GetNW2Bool("canpickup", false) then
+			if GetGlobalBool("bool_autopickup", true) then
+				return true
+			else
+				if ply:KeyPressed(IN_USE) then
+					ply.noammo = true
+					return true
+				else
+					return false
+				end
+			end
+		else
+			return false
+		end
 	end
+	return true
 end
 
 function Player:RemoveWeapon(cname)
@@ -46,11 +56,6 @@ function Player:DropSWEP(cname, force)
 			self.dropdelay = CurTime() + 1
 			local wep = self:GetWeapon(cname)
 			wep:SetNW2Bool("canpickup", false)
-			--[[local clip1 = wep:Clip1()
-			local clip2 = wep:Clip2()
-			local clip1max = wep:GetMaxClip1()
-			local clip2max = wep:GetMaxClip2()
-			]]
 			self:RemoveWeapon(cname)
 
 			local ent = ents.Create(cname)
@@ -61,24 +66,32 @@ function Player:DropSWEP(cname, force)
 
 			ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
 			ent:SetAngles(self:GetAngles())
+			ent:SetNW2Bool("yrpdropped", true)
 			ent:SetNW2Bool("canpickup", false)
-			ent.dropped = true
-			ent:Spawn()
-			--[[ent:SetNW2Int("clip1", clip1)
-			ent:SetNW2Int("clip2", clip2)
-			ent:SetNW2Int("clip1max", clip1max)
-			ent:SetNW2Int("clip2max", clip2max)]]
-
-			local ttl = math.Clamp(GetGlobalInt("int_ttlsweps", 60), 1, 3600)
-			timer.Simple(ttl, function()
-				if ea(ent) and !ent:GetOwner():IsValid() then
-					ent:Remove()
+			timer.Simple(1, function()
+				if IsValid(ent) then
+					ent:SetNW2Bool("canpickup", true)
 				end
 			end)
+			timer.Simple(0, function()
+				if IsValid( ent ) then
+					ent:Spawn()
 
-			if ent:GetPhysicsObject():IsValid() then
-				ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
-			end
+					if ent:GetPhysicsObject():IsValid() then
+						ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
+					end
+
+					local ttl = math.Clamp(GetGlobalInt("int_ttlsweps", 60), 0, 3600)
+					timer.Simple( ttl, function()
+						if ea( ent ) and !ent:GetOwner():IsValid() then
+							if ttl <= 1 then
+								YRP.msg("note", "SWEP was removed TTL: " .. ttl)
+							end
+							ent:Remove()
+						end
+					end )
+				end
+			end)
 		else
 			-- on cooldown
 		end

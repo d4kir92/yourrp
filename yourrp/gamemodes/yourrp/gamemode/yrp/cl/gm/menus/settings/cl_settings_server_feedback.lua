@@ -7,7 +7,7 @@ function GetAvatarUrl(steamid)
 	local steamid64 = util.SteamIDTo64(steamid)
 	http.Fetch("http://steamcommunity.com/profiles/" .. steamid64,
 		function(body, len, headers, code)
-			_avatars[steamid] = "test"
+			_avatars[steamid] = "TEST"
 			local str_start = string.find(body, "<div class=\"playerAvatarAutoSizeInner\"><img src=")
 			if str_start != nil then
 				local str_end = string.find(body, ".jpg\">", str_start)

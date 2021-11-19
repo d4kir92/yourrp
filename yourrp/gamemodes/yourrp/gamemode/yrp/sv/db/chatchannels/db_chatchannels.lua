@@ -28,7 +28,21 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbedisabled", "TEXT DEFAULT '1'")
 
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
+local all = YRP_SQL_SELECT( DATABASE_NAME, "*", nil )
+if wk( all ) then
+	local tab = {}
+	for i, v in pairs( all ) do
+		if !table.HasValue( tab, v.string_name ) then
+			table.insert( tab, v.string_name ) -- INSERT UNIQUE
+		else
+			YRP_SQL_DELETE_FROM( DATABASE_NAME, "uniqueID = '" .. v.uniqueID .. "'" ) -- DELETE DOUBLE ONCES
+		end
+	end
+end
+
 local yrp_chat_channels = {}
+
+-- CREATE DEFAULT CHANNELS
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "OOC" .. "'") == nil then
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'OOC', 'Color(100, 255, 100)[OOC] %STEAMNAME%: Color(255, 255, 255)%TEXT%', 0, 0")
 end
@@ -71,9 +85,13 @@ end
 
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "W" .. "'") == nil then
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, string_structure2, int_mode, bool_removeable", "'W', 'Color(255, 100, 255)von %RPNAME%: %TEXT%', 'Color(255, 100, 255)zu %TARGET%: %TEXT%', 6, 0")
+else
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_mode"] = 6}, "string_name = 'W'")
 end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "PM" .. "'") == nil then
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, string_structure2, int_mode, bool_removeable", "'PM', 'Color(255, 100, 255)von %RPNAME%: %TEXT%', 'Color(255, 100, 255)zu %TARGET%: %TEXT%', 6, 0")
+else
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_mode"] = 6}, "string_name = 'PM'")
 end
 
 function GenerateChatTable()
@@ -244,6 +262,7 @@ net.Receive("yrp_chat_channel_add", function(len, ply)
 	local name = string.upper(net.ReadString())
 	local mode = net.ReadString()
 	local structure = net.ReadString()
+	local structure2 = net.ReadString()
 
 	local enabled = tonumber(net.ReadString())
 
@@ -257,8 +276,8 @@ net.Receive("yrp_chat_channel_add", function(len, ply)
 
 	YRP_SQL_INSERT_INTO(
 		DATABASE_NAME,
-		"string_name, int_mode, string_structure, bool_enabled, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles",
-		"'" .. name .. "', '" .. mode .. "', '" .. structure .. "', '" .. enabled .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols	.. "'"
+		"string_name, int_mode, string_structure, string_structure2, bool_enabled, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles",
+		"'" .. name .. "', '" .. mode .. "', '" .. structure .. "', '" .. structure2 .. "', '" .. enabled .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols	.. "'"
 	)
 
 	GenerateChatTable()

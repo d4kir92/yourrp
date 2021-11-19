@@ -146,10 +146,10 @@ function BuildLogs(parent, typ)
 						rt:AppendText(" " .. "killed" .. " ")
 
 						rt:InsertColorChange(100, 100, 255, 255)
-						rt:InsertClickableTextStart(v.string_target_steamid)
 						if target.RPName then
 							rt:AppendText(target:RPName())
 						else
+							rt:InsertClickableTextStart(v.string_target_steamid)
 							rt:AppendText(v.string_target_steamid)
 						end
 						rt:InsertClickableTextEnd()
@@ -190,14 +190,13 @@ function BuildLogs(parent, typ)
 						rt:InsertColorChange(255, 255, 255, 255)
 						rt:AppendText(" " .. "whitelisted" .. " ")
 
-						rt:InsertColorChange(100, 100, 255, 255)
-						rt:InsertClickableTextStart(v.string_target_steamid)
-						if target.RPName then
+						if wk(v.string_source_steamid) then
+							rt:InsertColorChange(100, 100, 255, 255)
+							rt:InsertClickableTextStart(tostring(v.string_target_steamid))
+							rt:InsertClickableTextEnd()
+						elseif target.RPName then
 							rt:AppendText(target:RPName())
-						else
-							rt:AppendText(v.string_target_steamid)
 						end
-						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
 						rt:AppendText(" [" .. tostring(v.string_value) .. "] ")

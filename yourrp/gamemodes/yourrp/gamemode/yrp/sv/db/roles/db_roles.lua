@@ -226,7 +226,9 @@ function YRPConvertToDarkRPJob(tab)
 	end
 	_job.category = gname or "invalid group"
 	_job.command = YRPConvertToDarkRPJobName(tab.string_name)
-
+	if !strEmpty( tab.string_identifier ) then
+		_job.command = tab.string_identifier
+	end
 	--_job.RequiresVote = function() end
 
 	-- YRP
@@ -263,6 +265,7 @@ function ConvertToDarkRPCategory(tab, cat)
 end
 
 local TEAMS = {}
+YRPDarkRPJobsData = YRPDarkRPJobsData or {}
 function YRPBuildDarkrpTeams()
 	local drp_allroles = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(drp_allroles) then
@@ -289,12 +292,20 @@ function YRPBuildDarkrpTeams()
 		end
 	end
 	RPExtraTeams = TEMPRPExtraTeams
+
+
+
+	-- FOR CLIENTS
+	for i, v in pairs( RPExtraTeams ) do
+		YRPDarkRPJobsData[i] = v.command
+	end
+	-- FOR CLIENTS
 end
-timer.Simple(1.0, YRPBuildDarkrpTeams)
+YRPBuildDarkrpTeams()
 
 util.AddNetworkString("send_team")
 local Player = FindMetaTable("Player")
-local timerdelay = 0.1
+local timerdelay = 0.3
 function Player:DRPSendTeamsToPlayer()
 	self.yrp_darkrp_index = 1
 	for i, role in pairs(RPExtraTeams) do
@@ -1041,10 +1052,12 @@ function SendPlayermodels(uid)
 			end
 		end
 
-		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
-			net.Start("get_role_playermodels")
-				net.WriteTable(nettab)
-			net.Send(pl)
+		if HANDLER_GROUPSANDROLES and HANDLER_GROUPSANDROLES["roles"] and HANDLER_GROUPSANDROLES["roles"][uid] then
+			for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
+				net.Start("get_role_playermodels")
+					net.WriteTable(nettab)
+				net.Send(pl)
+			end
 		end
 	end
 end
@@ -1082,9 +1095,13 @@ net.Receive("get_all_playermodels", function(len, ply)
 		end
 	end
 
-	net.Start("get_all_playermodels")
-		net.WriteTable(allpms)
-	net.Send(ply)
+	if wk( allpms ) then
+		for i, v in pairs( allpms ) do
+			net.Start( "get_all_playermodels" )
+				net.WriteTable( v )
+			net.Send( ply )
+		end
+	end
 end)
 
 function AddPlayermodelToRole(ruid, muid)
@@ -1816,7 +1833,7 @@ function addToWhitelistByPly( SteamID, roleID, groupID, nick, ply, target )
 		local dat = util.DateStamp()
 		local status = "Promoted by " .. ply:SteamName()
 		local name = target:SteamName()
-		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', '" .. nick .. "', " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
+		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', " .. YRP_SQL_STR_IN( nick ) .. ", " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
 	else
 		YRP.msg( "note", "is already in whitelist")
 	end
@@ -1829,7 +1846,7 @@ function addToWhitelist( roleID, ply )
 		local dat = util.DateStamp()
 		local status = "Invited " .. ply:SteamName()
 		local name = ply:SteamName()
-		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, roleID, date, status, name", "'" .. ply:SteamID() .. "', '" .. ply:RPName() .. "', " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
+		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, roleID, date, status, name", "'" .. ply:SteamID() .. "', " .. YRP_SQL_STR_IN( ply:RPName() ) .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
 	else
 		YRP.msg( "note", "is already in whitelist")
 	end

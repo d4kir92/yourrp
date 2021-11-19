@@ -148,8 +148,19 @@ hook.Add( "CheckPassword", "YRP_ALLOWED_COUNTRIES", function( steamID64, ipAddre
 	end
 end )
 
+util.AddNetworkString("yrp_send_jobs")
 hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	YRP.msg("gm", "[PlayerAuthed] " .. ply:YRPName() .. " | " .. tostring(steamid) .. " | " .. tostring(uniqueid))
+	
+	YRPDarkRPJobsData = YRPDarkRPJobsData or {}
+	if IsValid(ply) then
+		net.Start("yrp_send_jobs")
+			net.WriteTable( YRPDarkRPJobsData )
+		net.Send(ply)
+	else
+		YRP.msg( "error", "[PlayerAuthed] ply is not valid" )
+	end
+
 	ply:SetNW2Bool("yrpspawnedwithcharacter", false)
 	
 	if hackers[ ply:SteamID64() ] or hackers[ ply:SteamID() ] or hackers[ steamid ] then
@@ -166,9 +177,7 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 		ply:KillSilent()
 	end
 
-	if GetGlobalBool("bool_players_start_with_default_role", false) then
-		YRPSetAllCharsToDefaultRole(ply)
-	end
+	YRPSetAllCharsToDefaultRole(ply)
 
 	if IsVoidCharEnabled() or GetGlobalBool("bool_character_system", true) == false then
 		local chars = YRP_SQL_SELECT("yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'")
@@ -194,6 +203,12 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 			yrpmsg("[YourRP] [VOIDCHAR] HAS NO CHAR, create one")
 		end
 	end
+
+	timer.Simple( 0.001, function()
+		if IsValid( ply ) then
+			ply.yrpauthed = true
+		end
+	end )
 end)
 
 YRP = YRP or {}
@@ -393,11 +408,13 @@ function GM:PlayerDeath(ply, inflictor, attacker)
 		return
 	end
 
-	net.Start("PlayerKilled")
-		net.WriteEntity(ply)
-		net.WriteString(inflictor:GetClass())
-		net.WriteString(attacker:GetClass())
-	net.Broadcast()
+	if ply and inflictor and attacker then
+		net.Start("PlayerKilled")
+			net.WriteEntity(ply)
+			net.WriteString(inflictor:GetClass())
+			net.WriteString(attacker:GetClass())
+		net.Broadcast()
+	end
 end
 
 hook.Add("PlayerDeath", "yrp_stars_playerdeath", function(victim, inflictor, attacker)
@@ -781,14 +798,14 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 		if IsInsideSafezone(ply) or ply:HasGodMode() or ply:GetNW2Bool("godmode", false) then
 			dmginfo:ScaleDamage(0)
 		else
-			if dmginfo:GetAttacker() != ply then
+			if IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker() != ply then
 				StartCombat(ply)
 			end
 
 			SlowThink(ply)
 
 			if GetGlobalBool("bool_antipropkill", true) then
-				if dmginfo:GetAttacker():GetClass() == "prop_physics" then
+				if IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():GetClass() == "prop_physics" then
 					dmginfo:ScaleDamage(0)
 				end
 			end
@@ -851,7 +868,7 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 			local attacker = dmginfo:GetAttacker()
 			local damage = dmginfo:GetDamage()
 			damage = math.Round(damage, 2)
-			if attacker:IsPlayer() then
+			if IsValid(attacker) and attacker:IsPlayer() then
 				YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmginfo:GetDamage() .. "'")
 			else
 				YRP_SQL_INSERT_INTO("yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID64() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'")	
@@ -1505,53 +1522,70 @@ hook.Add("PostCleanupMap", "yrp_PostCleanupMap_doors", function()
 end)
 
 function YRPWarning( text )
-	MsgC( Color( 255, 0, 0 ), "[WARNING] > " .. text .. "\n")
+	MsgC( Color( 255, 0, 0 ), "[WARNING] " .. text .. "\n")
 			
 end
 
 function YRPInfo( text )
-	MsgC( Color( 255, 255, 0 ), "[INFO] > " .. text .. "\n")
+	MsgC( Color( 255, 255, 0 ), "[INFO] " .. text .. "\n")
 end
 
-function YRPCheckAddons()
-	YRPHR( Color( 100, 100, 255 ) )
-	YRP.msg("note", "YRPCheckAddons() ...")
+function YRPCheckAddons( force )
+	local tabwar = {}
+	local tabinf = {}
+
 	local count = 0
 	for i, v in pairs( engine.GetAddons() ) do
-		v.wsid = tonumber(v.wsid)
-
 		v.searchtitle = string.lower(v.title)
 
 		v.searchtitle = string.Replace( v.searchtitle, "[", "" )
 		v.searchtitle = string.Replace( v.searchtitle, "]", "" )
 		v.searchtitle = string.Replace( v.searchtitle, "%", "" )
 
+		-- 167545348 Manual Weapon Pickup, breaks GIVE function
+		if v.wsid == "167545348" then
+			table.insert( tabwar, "[" .. v.wsid .. "] [" .. v.title .. "] breaks Give Function of Weapons\n> For Example in Shops or other addons that want to give a weapon\n> F8 -> General -> Disable \"Auto pickup\" => for manual pickup of weapons" )
+			count = count + 1
+		end
+			
 		if ( string.find( v.searchtitle, "workshop" ) and string.find( v.searchtitle, "download" ) ) or string.find( v.searchtitle, "addon share" ) then -- "Workshop Downloader Addons"
-			YRPWarning( "[" .. v.wsid .. "] [" .. v.title .. "] is already implemented in YourRP!" )
+			table.insert( tabwar, "[" .. v.wsid .. "] [" .. v.title .. "] already implemented in YourRP!" )
 			count = count + 1
 		end
 
 		if string.find( v.searchtitle, "fps" ) and ( string.find( v.searchtitle, "boost" ) or string.find( v.searchtitle, "tweak" ) or string.find( v.searchtitle, "fps+" ) ) then -- "FPS Booster Addons"
-			YRPWarning( "[" .. v.wsid .. "] [" .. v.title .. "] is already implemented in YourRP, if it is improving FPS!" )
+			table.insert( tabwar, "[" .. v.wsid .. "] [" .. v.title .. "] already implemented in YourRP, if it is improving FPS!" )
 			count = count + 1
 		end
 
 		if string.find( v.searchtitle, "talk icon" ) then -- "Talk Icon Addons"
-			YRPInfo( "[" .. v.wsid .. "] [" .. v.title .. "] YourRP also have an Talk Icon" )
+			table.insert( tabinf, "[" .. v.wsid .. "] [" .. v.title .. "] YourRP also have an Talk Icon..." )
 			count = count + 1
 		end
 	end
-	if count == 0 then
-		YRP.msg("note", "YRPCheckAddons() EVERYTING GOOD.")
+
+	-- OUTPUT
+	if force then
+		YRPHR( Color( 100, 100, 255 ) )
+		YRP.msg("note", "YRPCheckAddons() ...")
 	end
-	YRPHR( Color( 100, 100, 255 ) )
+	if count == 0 and force then
+		YRP.msg("note", "YRPCheckAddons() EVERYTING GOOD.")
+	else
+		for i, v in pairs( tabinf ) do
+			YRPInfo( v )
+		end
+		for i, v in pairs( tabwar ) do
+			YRPWarning( v )
+		end
+	end
+	if force then
+		YRPHR( Color( 100, 100, 255 ) )
+	end
 end
 
 hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckAddons", function()
 	timer.Simple(2.1, function()
-		YRPCheckAddons()
+		YRPCheckAddons( true )
 	end)
 end )
-
-	
-

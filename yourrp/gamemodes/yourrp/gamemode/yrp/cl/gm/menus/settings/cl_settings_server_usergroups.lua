@@ -44,6 +44,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	
 	-- NAME
 	local NAME = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20))
+	NAME.strname = true
 	NAME:INITPanel("DTextEntry")
 	NAME:SetHeader(YRP.lang_string("LID_name"))
 	NAME:SetText(string.upper(ug.string_name))
@@ -57,11 +58,17 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	net.Receive("usergroup_update_string_name", function(len2)
 		local string_name = net.ReadString()
 		UGS[CURRENT_USERGROUP].string_name = string.upper(string_name)
-		NAME:SetText(string.upper(UGS[CURRENT_USERGROUP].string_name))
+		if pa(NAME) then
+			NAME:SetText(string.upper(UGS[CURRENT_USERGROUP].string_name))
+		end
 	end)
+	if tonumber( ug.bool_removeable ) == 0 then
+		NAME.plus:SetDisabled( true )
+	end
 
 	-- DISPLAYNAME
 	local DISPLAYNAME = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20))
+	DISPLAYNAME.displayname = true
 	DISPLAYNAME:INITPanel("DTextEntry")
 	DISPLAYNAME:SetHeader(YRP.lang_string("LID_displayname"))
 	DISPLAYNAME:SetText(ug.string_displayname)
@@ -101,7 +108,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		end
 		window.cm = createD("DColorMixer", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20))
 		function window.cm:ValueChanged(col)
-			UGS[CURRENT_USERGROUP].string_color = TableToColorStr(col)
+			UGS[CURRENT_USERGROUP].string_color = YRPTableToColorStr(col)
 			net.Start("usergroup_update_string_color")
 				net.WriteString(CURRENT_USERGROUP)
 				net.WriteString(UGS[CURRENT_USERGROUP].string_color)
@@ -421,9 +428,11 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 			cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
 		end
 
-		for i, v in pairs( UGS[CURRENT_USERGROUP].string_nonesweps ) do
-			if !table.HasValue(lply.yrpseltab) and validate[v] then
-				table.insert(lply.yrpseltab, v)
+		if UGS[CURRENT_USERGROUP] and UGS[CURRENT_USERGROUP].string_nonesweps then
+			for i, v in pairs( UGS[CURRENT_USERGROUP].string_nonesweps ) do
+				if !table.HasValue(lply.yrpseltab) and validate[v] then
+					table.insert(lply.yrpseltab, v)
+				end
 			end
 		end
 		
@@ -477,7 +486,8 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 	x = x + w + 10
 
 	-- Licenses
-	local LICENSES = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(20))
+	y = 20
+	local LICENSES = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(y))
 	LICENSES:INITPanel("DPanelList")
 	LICENSES:SetHeader(YRP.lang_string("LID_licenses"))
 	LICENSES:SetText(ug.string_icon)
@@ -534,130 +544,134 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 
 	-- YTools
-	local YTOOLS = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(20 + 550 + 20))
-	YTOOLS:INITPanel("DPanelList")
-	YTOOLS:SetHeader(YRP.lang_string("LID_tools"))
-	YTOOLS:SetText(ug.string_icon)
-	function YTOOLS.plus:Paint(pw, ph)
-		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
-	end
-	YTOOLS.plus:EnableVerticalScrollbar(true)
-
-	if type(UGS[CURRENT_USERGROUP].string_tools) == "string" then
-		UGS[CURRENT_USERGROUP].string_tools = string.Explode(",", UGS[CURRENT_USERGROUP].string_tools)
-	end
-	if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, "") then
-		table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "")
-	end
-
-	local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
-	function line:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
-		draw.SimpleText("all", "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-	end
-	local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
-	if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, "all") then
-		cb:SetChecked(true)
-	end
-	function cb:OnChange(bVal)
-		if wk(UGS[CURRENT_USERGROUP]) and UGS[CURRENT_USERGROUP].string_tools then
-			if type(UGS[CURRENT_USERGROUP].string_tools) == "string" then
-				UGS[CURRENT_USERGROUP].string_tools = string.Explode(",", UGS[CURRENT_USERGROUP].string_tools)
-			end
-			if bVal then
-				table.insert(UGS[CURRENT_USERGROUP].string_tools, "all")
-			else
-				table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "all")
-			end
-
-			local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
-
-			net.Start("usergroup_update_string_tools")
-				net.WriteString(CURRENT_USERGROUP)
-				net.WriteString(str)
-			net.SendToServer()
+	if tonumber( ug.bool_removeable ) == 1 then
+		y = y + 550 + 20
+		local YTOOLS = createD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(y))
+		YTOOLS:INITPanel("DPanelList")
+		YTOOLS:SetHeader(YRP.lang_string("LID_tools"))
+		YTOOLS:SetText(ug.string_icon)
+		function YTOOLS.plus:Paint(pw, ph)
+			surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255))
 		end
-	end
-	YTOOLS.plus:AddItem(line)
+		YTOOLS.plus:EnableVerticalScrollbar(true)
 
-	local tools = spawnmenu.GetTools()
-	for i, cat in pairs(tools) do
-		for j, cat2 in pairs(cat.Items) do
-			for k, too in pairs(cat2) do
-				if type(too) == "table" then
-					too.ItemName = string.lower(too.ItemName)
-					local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
-					function line:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
-						draw.SimpleText(too.ItemName, "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-					end
-					local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
-					if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, too.ItemName) then
-						cb:SetChecked(true)
-					end
-					function cb:OnChange(bVal)
-						if bVal then
-							table.insert(UGS[CURRENT_USERGROUP].string_tools, too.ItemName)
-						else
-							table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, too.ItemName)
-						end
-
-						local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
-
-						net.Start("usergroup_update_string_tools")
-							net.WriteString(CURRENT_USERGROUP)
-							net.WriteString(str)
-						net.SendToServer()
-					end
-					
-					YTOOLS.plus:AddItem(line)
-				end
-			end
+		if type(UGS[CURRENT_USERGROUP].string_tools) == "string" then
+			UGS[CURRENT_USERGROUP].string_tools = string.Explode(",", UGS[CURRENT_USERGROUP].string_tools)
 		end
-	end
-	local properties = {
-		"ignite",
-		"extinguish",
-		"remover",
-		"drive",
-		"collision",
-		"keepupright",
-		"bodygroups",
-		"gravity",
-		"persist"
-	}
-	for i, v in pairs(properties) do
+		if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, "") then
+			table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "")
+		end
+
 		local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
 		function line:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
-			draw.SimpleText(v, "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText("all", "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 		local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
-		if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, v) then
+		if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, "all") then
 			cb:SetChecked(true)
 		end
 		function cb:OnChange(bVal)
-			if bVal then
-				table.insert(UGS[CURRENT_USERGROUP].string_tools, v)
-			else
-				table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, v)
+			if wk(UGS[CURRENT_USERGROUP]) and UGS[CURRENT_USERGROUP].string_tools then
+				if type(UGS[CURRENT_USERGROUP].string_tools) == "string" then
+					UGS[CURRENT_USERGROUP].string_tools = string.Explode(",", UGS[CURRENT_USERGROUP].string_tools)
+				end
+				if bVal then
+					table.insert(UGS[CURRENT_USERGROUP].string_tools, "all")
+				else
+					table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "all")
+				end
+
+				local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
+
+				net.Start("usergroup_update_string_tools")
+					net.WriteString(CURRENT_USERGROUP)
+					net.WriteString(str)
+				net.SendToServer()
 			end
-
-			local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
-
-			net.Start("usergroup_update_string_tools")
-				net.WriteString(CURRENT_USERGROUP)
-				net.WriteString(str)
-			net.SendToServer()
 		end
-		
 		YTOOLS.plus:AddItem(line)
+
+		local tools = spawnmenu.GetTools()
+		for i, cat in pairs(tools) do
+			for j, cat2 in pairs(cat.Items) do
+				for k, too in pairs(cat2) do
+					if type(too) == "table" then
+						too.ItemName = string.lower(too.ItemName)
+						local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
+						function line:Paint(pw, ph)
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
+							draw.SimpleText(too.ItemName, "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						end
+						local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+						if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, too.ItemName) then
+							cb:SetChecked(true)
+						end
+						function cb:OnChange(bVal)
+							if bVal then
+								table.insert(UGS[CURRENT_USERGROUP].string_tools, too.ItemName)
+							else
+								table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, too.ItemName)
+							end
+
+							local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
+
+							net.Start("usergroup_update_string_tools")
+								net.WriteString(CURRENT_USERGROUP)
+								net.WriteString(str)
+							net.SendToServer()
+						end
+						
+						YTOOLS.plus:AddItem(line)
+					end
+				end
+			end
+		end
+		local properties = {
+			"ignite",
+			"extinguish",
+			"remover",
+			"drive",
+			"collision",
+			"keepupright",
+			"bodygroups",
+			"gravity",
+			"persist"
+		}
+		for i, v in pairs(properties) do
+			local line = createD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
+			function line:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
+				draw.SimpleText(v, "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
+			local cb = createD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+			if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, v) then
+				cb:SetChecked(true)
+			end
+			function cb:OnChange(bVal)
+				if bVal then
+					table.insert(UGS[CURRENT_USERGROUP].string_tools, v)
+				else
+					table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, v)
+				end
+
+				local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
+
+				net.Start("usergroup_update_string_tools")
+					net.WriteString(CURRENT_USERGROUP)
+					net.WriteString(str)
+				net.SendToServer()
+			end
+			
+			YTOOLS.plus:AddItem(line)
+		end
 	end
 
 
 
 	-- Ammunation
-	local ammobg = createD("YPanel", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(20 + 550 + 20 + 550 + 20))
+	y = y + 550 + 20
+	local ammobg = createD("YPanel", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(y))
 	local ammoheader = createD("YLabel", ammobg, YRP.ctr(w), YRP.ctr(50), 0, 0)
 	ammoheader:SetText("LID_ammo")
 	function ammoheader:Paint(pw, ph)
@@ -732,6 +746,7 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 
 	x = x + w + 10
 
+	
 	local ACCESS = createD("YGroupBox", PARENT, YRP.ctr(w), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(x), YRP.ctr(20))
 	ACCESS:SetText("LID_accesssettings")
 	function ACCESS:Paint(pw, ph)
@@ -777,53 +792,58 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		ACCESS:AddItem(tmp)
 	end
 
-	ACCESSAddCheckBox("bool_adminaccess", "LID_yrp_adminaccess", Color(255, 255, 0, 255))
+	if tonumber( ug.bool_removeable ) == 1 then
+		ACCESSAddCheckBox("bool_adminaccess", "LID_yrp_adminaccess", Color(255, 255, 0, 255))
+
+		ACCESSAddHr()
+	end
+	ACCESSAddCheckBox("bool_chat", "LID_chat")
 
 	ACCESSAddHr()
-	-- LID_usermanagement
-	ACCESSAddCheckBox("bool_events", "LID_event")
-	ACCESSAddCheckBox("bool_players", "LID_settings_players")
-	ACCESSAddCheckBox("bool_whitelist", "LID_whitelist")
+	if tonumber( ug.bool_removeable ) == 1 then
+		-- LID_usermanagement
+		ACCESSAddCheckBox("bool_events", "LID_event")
+		ACCESSAddCheckBox("bool_players", "LID_settings_players")
+		ACCESSAddCheckBox("bool_whitelist", "LID_whitelist")
 
-	ACCESSAddHr()
-	-- LID_moderation
-	ACCESSAddCheckBox("bool_status", "LID_settings_status")
-	ACCESSAddCheckBox("bool_groupsandroles", "LID_settings_groupsandroles")
-	ACCESSAddCheckBox("bool_map", "LID_settings_map")
-	-- >> character 
-	ACCESSAddCheckBox("bool_logs", "LID_logs")
-	ACCESSAddCheckBox("bool_blacklist", "LID_blacklist")
-	ACCESSAddCheckBox("bool_feedback", "LID_tickets")
+		ACCESSAddHr()
+		-- LID_moderation
+		ACCESSAddCheckBox("bool_status", "LID_settings_status")
+		ACCESSAddCheckBox("bool_groupsandroles", "LID_settings_groupsandroles")
+		ACCESSAddCheckBox("bool_map", "LID_settings_map")
+		-- >> character 
+		ACCESSAddCheckBox("bool_logs", "LID_logs")
+		ACCESSAddCheckBox("bool_blacklist", "LID_blacklist")
+		ACCESSAddCheckBox("bool_feedback", "LID_tickets")
 
-	ACCESSAddHr()
-	-- LID_administration
-	ACCESSAddCheckBox("bool_realistic", "LID_settings_realistic")
-	ACCESSAddCheckBox("bool_shops", "LID_settings_shops")
-	ACCESSAddCheckBox("bool_licenses", "LID_settings_licenses")
-	ACCESSAddCheckBox("bool_specializations", "LID_specializations")
-	ACCESSAddCheckBox("bool_usergroups", "LID_settings_usergroups", Color(255, 0, 0, 255))
-	ACCESSAddCheckBox("bool_levelsystem", "LID_levelsystem")
-	ACCESSAddCheckBox("bool_design", "LID_settings_design")
-	ACCESSAddCheckBox("bool_scale", "LID_scale")
-	ACCESSAddCheckBox("bool_money", "LID_money")
-	ACCESSAddCheckBox("bool_weaponsystem", "LID_weaponsystem")
-	
-	ACCESSAddHr()
-	-- LID_server
-	ACCESSAddCheckBox("bool_general", "LID_settings_general")
-	ACCESSAddCheckBox("bool_console", "LID_server_console", Color(255, 0, 0, 255))
-	ACCESSAddCheckBox("bool_ac_database", "LID_settings_database", Color(255, 0, 0, 255))
-	-- Socials [television.png]
-	ACCESSAddCheckBox("bool_darkrp", "DarkRP", Color(255, 0, 0, 255))
-	ACCESSAddCheckBox("bool_permaprops", "Perma Props", Color(255, 0, 0, 255))
-	
-	ACCESSAddHr()
-	-- YourRP
-	ACCESSAddCheckBox("bool_yourrp_addons", "LID_settings_yourrp_addons")
-
-
-
+		ACCESSAddHr()
+		-- LID_administration
+		ACCESSAddCheckBox("bool_realistic", "LID_settings_realistic")
+		ACCESSAddCheckBox("bool_shops", "LID_settings_shops")
+		ACCESSAddCheckBox("bool_licenses", "LID_settings_licenses")
+		ACCESSAddCheckBox("bool_specializations", "LID_specializations")
+		ACCESSAddCheckBox("bool_usergroups", "LID_settings_usergroups", Color(255, 0, 0, 255))
+		ACCESSAddCheckBox("bool_levelsystem", "LID_levelsystem")
+		ACCESSAddCheckBox("bool_design", "LID_settings_design")
+		ACCESSAddCheckBox("bool_scale", "LID_scale")
+		ACCESSAddCheckBox("bool_money", "LID_money")
+		ACCESSAddCheckBox("bool_weaponsystem", "LID_weaponsystem")
+		
+		ACCESSAddHr()
+		-- LID_server
+		ACCESSAddCheckBox("bool_general", "LID_settings_general")
+		ACCESSAddCheckBox("bool_console", "LID_server_console", Color(255, 0, 0, 255))
+		ACCESSAddCheckBox("bool_ac_database", "LID_settings_database", Color(255, 0, 0, 255))
+		-- Socials [television.png]
+		ACCESSAddCheckBox("bool_darkrp", "DarkRP", Color(255, 0, 0, 255))
+		ACCESSAddCheckBox("bool_permaprops", "Perma Props", Color(255, 0, 0, 255))
+		
+		ACCESSAddHr()
+		-- YourRP
+		ACCESSAddCheckBox("bool_yourrp_addons", "LID_settings_yourrp_addons")
+	end
 	x = x + w + 10
+
 
 	local GAMEPLAY = createD("YGroupBox", PARENT, YRP.ctr(w), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(x), YRP.ctr(20))
 	GAMEPLAY:SetText("LID_gameplayrestrictions")
@@ -882,38 +902,39 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		end
 		GAMEPLAY:AddItem(tmp)
 	end
-	GAMEPLAYAddCheckBox("bool_vehicles", "LID_gp_vehicles")
-	GAMEPLAYAddCheckBox("bool_weapons", "LID_gp_weapons")
-	GAMEPLAYAddCheckBox("bool_entities", "LID_gp_entities")
-	GAMEPLAYAddCheckBox("bool_effects", "LID_gp_effects")
-	GAMEPLAYAddCheckBox("bool_npcs", "LID_gp_npcs")
-	GAMEPLAYAddCheckBox("bool_props", "LID_gp_props")
-	GAMEPLAYAddCheckBox("bool_ragdolls", "LID_gp_ragdolls")
-	GAMEPLAYAddCheckBox("bool_postprocess", "LID_gp_postprocess")
-	GAMEPLAYAddCheckBox("bool_dupes", "LID_gp_dupes")
-	GAMEPLAYAddCheckBox("bool_saves", "LID_gp_saves")
-	GAMEPLAYAddHr()
-	GAMEPLAYAddCheckBox("bool_noclip", "LID_gp_noclip")
-	GAMEPLAYAddCheckBox("bool_flashlight", "LID_gp_flashlight")
-	GAMEPLAYAddHr()
-	GAMEPLAYAddCheckBox("bool_physgunpickup", "LID_gp_physgunpickup")
-	GAMEPLAYAddCheckBox("bool_physgunpickupplayer", "LID_gp_physgunpickupplayers")
-	GAMEPLAYAddCheckBox("bool_physgunpickupworld", "LID_gp_physgunpickupworld")
-	GAMEPLAYAddCheckBox("bool_physgunpickupotherowner", "LID_gp_physgunpickupotherowner")
-	GAMEPLAYAddCheckBox("bool_physgunpickupignoreblacklist", "LID_physgunpickupignoreblacklist")
-	GAMEPLAYAddHr()
-	GAMEPLAYAddCheckBox("bool_gravgunpunt", "LID_gravgunpunt")
+	if tonumber( ug.bool_removeable ) == 1 then
+		GAMEPLAYAddCheckBox("bool_vehicles", "LID_gp_vehicles")
+		GAMEPLAYAddCheckBox("bool_weapons", "LID_gp_weapons")
+		GAMEPLAYAddCheckBox("bool_entities", "LID_gp_entities")
+		GAMEPLAYAddCheckBox("bool_effects", "LID_gp_effects")
+		GAMEPLAYAddCheckBox("bool_npcs", "LID_gp_npcs")
+		GAMEPLAYAddCheckBox("bool_props", "LID_gp_props")
+		GAMEPLAYAddCheckBox("bool_ragdolls", "LID_gp_ragdolls")
+		GAMEPLAYAddCheckBox("bool_postprocess", "LID_gp_postprocess")
+		GAMEPLAYAddCheckBox("bool_dupes", "LID_gp_dupes")
+		GAMEPLAYAddCheckBox("bool_saves", "LID_gp_saves")
+		GAMEPLAYAddHr()
+		GAMEPLAYAddCheckBox("bool_noclip", "LID_gp_noclip")
+		GAMEPLAYAddCheckBox("bool_flashlight", "LID_gp_flashlight")
+		GAMEPLAYAddHr()
+		GAMEPLAYAddCheckBox("bool_physgunpickup", "LID_gp_physgunpickup")
+		GAMEPLAYAddCheckBox("bool_physgunpickupplayer", "LID_gp_physgunpickupplayers")
+		GAMEPLAYAddCheckBox("bool_physgunpickupworld", "LID_gp_physgunpickupworld")
+		GAMEPLAYAddCheckBox("bool_physgunpickupotherowner", "LID_gp_physgunpickupotherowner")
+		GAMEPLAYAddCheckBox("bool_physgunpickupignoreblacklist", "LID_physgunpickupignoreblacklist")
+		GAMEPLAYAddHr()
+		GAMEPLAYAddCheckBox("bool_gravgunpunt", "LID_gravgunpunt")
+		GAMEPLAYAddHr()
+		GAMEPLAYAddCheckBox("bool_canusewarnsystem", "Can use WarnSystem")
+		GAMEPLAYAddHr()
+		GAMEPLAYAddCheckBox("bool_canusecontextmenu", "LID_gp_canusecontextmenu")
+		GAMEPLAYAddCheckBox("bool_canusespawnmenu", "LID_gp_canusespawnmenu")
+		GAMEPLAYAddHr()
+	end
+	GAMEPLAYAddCheckBox("bool_canuseesp", "LID_gp_canuseesp")
 	GAMEPLAYAddHr()
 	GAMEPLAYAddCheckBox("bool_canseeteammatesonmap", "LID_gp_canseeteammatesonmap")
 	GAMEPLAYAddCheckBox("bool_canseeenemiesonmap", "LID_gp_canseeenemiesonmap")
-	GAMEPLAYAddHr()
-	GAMEPLAYAddCheckBox("bool_canuseesp", "LID_gp_canuseesp")
-	GAMEPLAYAddHr()
-	GAMEPLAYAddCheckBox("bool_canusewarnsystem", "Can use WarnSystem")
-	GAMEPLAYAddHr()
-	GAMEPLAYAddCheckBox("bool_canusecontextmenu", "LID_gp_canusecontextmenu")
-	GAMEPLAYAddCheckBox("bool_canusespawnmenu", "LID_gp_canusespawnmenu")
-
 	GAMEPLAYAddHr()
 	GAMEPLAYAddIntBox("int_characters_max", "LID_charactersmax")
 	GAMEPLAYAddIntBox("int_charactersevent_max", YRP.lang_string("LID_charactersmax") .. " (EVENT)")
@@ -967,7 +988,7 @@ function YRPAddUG(tbl)
 	UP:SetText("")
 	local up = UP
 	function up:Paint(pw, ph)
-		if P.int_position > 1 then
+		if P.int_position > 3 then
 			hook.Run("YButtonPaint", self, pw, ph)
 
 			if YRP.GetDesignIcon("64_angle-up") then
@@ -989,7 +1010,7 @@ function YRPAddUG(tbl)
 	DO:SetText("")
 	local dn = DO
 	function dn:Paint(pw, ph)
-		if UGS and P.int_position < table.Count(UGS) then
+		if UGS and P.int_position > 2 and P.int_position < table.Count(UGS) then
 			hook.Run("YButtonPaint", self, pw, ph)
 
 			if YRP.GetDesignIcon("64_angle-down") then
@@ -1000,24 +1021,42 @@ function YRPAddUG(tbl)
 		end
 	end
 	function dn:DoClick()
-		if P.int_position < table.Count(UGS) then
+		if P.int_position > 2 and P.int_position < table.Count(UGS) then
 			net.Start("settings_usergroup_position_dn")
 				net.WriteString(P.uniqueID)
 			net.SendToServer()
 		end
 	end
 
-	--if !strEmpty(UGS[tonumber(tbl.uniqueID)].string_icon != "" then
-		local HTMLCODE = GetHTMLImage(tbl.string_icon, _icon.size, _icon.size)
-		UGS[tonumber(tbl.uniqueID)].icon = createD("DHTML", _ug, _icon.size, _icon.size, _icon.br + UP:GetWide() + _icon.br, _icon.br)
-		local icon = UGS[tonumber(tbl.uniqueID)].icon
-		if strEmpty(HTMLCODE) then
-			icon:SetHTML("")
-		else
-			icon:SetHTML(HTMLCODE)
+	local HTMLCODE = GetHTMLImage(tbl.string_icon, _icon.size, _icon.size)
+	UGS[tonumber(tbl.uniqueID)].icon = createD("DHTML", _ug, _icon.size, _icon.size, _icon.br + UP:GetWide() + _icon.br, _icon.br)
+	local icon = UGS[tonumber(tbl.uniqueID)].icon
+	if strEmpty(HTMLCODE) then
+		icon:SetHTML("")
+	else
+		icon:SetHTML(HTMLCODE)
+	end
+	TestHTML(icon, tbl.string_icon, false)
+
+	if !tobool(UGS[tonumber( tbl.uniqueID )].bool_removeable) then
+		local protsize = 24
+		UGS[tonumber( tbl.uniqueID )].iconprot = createD( "DPanel", _ug, protsize, protsize, 2, _ug:GetTall() / 2 - protsize / 2 )
+		UGS[tonumber( tbl.uniqueID )].iconprot.Paint = function( self, pw, ph )
+			if YRP.GetDesignIcon("security") then
+				surface.SetDrawColor(0, 0, 0, 255)
+				surface.SetMaterial(YRP.GetDesignIcon("security"))
+				surface.DrawTexturedRect(0, 0, pw, ph)
+
+				if UGS[tonumber( tbl.uniqueID )].string_name == "yrp_usergroups" then
+					surface.SetDrawColor(255, 255, 0, 255)
+				else
+					surface.SetDrawColor(255, 136, 0, 255)
+				end
+				surface.SetMaterial(YRP.GetDesignIcon("security"))
+				surface.DrawTexturedRect(1, 1, pw - 2, ph - 2)
+			end
 		end
-		TestHTML(icon, tbl.string_icon, false)
-	--end
+	end
 
 	PARENT.ugs:AddItem(_ug)
 end
@@ -1042,7 +1081,7 @@ end)
 net.Receive("usergroup_add", function(len)
 	local ugs = net.ReadTable()
 	for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
-		if DUGS[tonumber(ug.uniqueID)] == nil and tobool(ug.bool_removeable) then
+		if DUGS[tonumber(ug.uniqueID)] == nil then
 			YRPAddUG(ug)
 		end
 	end
@@ -1051,25 +1090,12 @@ end)
 function UpdateUsergroupsList(ugs)
 	local PARENT = GetSettingsSite()
 	if pa(PARENT) and pa(PARENT.ugs) then
-		
-		UGS = {}
 		PARENT.ugs:Clear()
-
+		UGS = {}
+		
 		for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
 			ug.int_position = tonumber(ug.int_position)
-			if ug.int_position < 10 then
-				if tobool(ug.bool_removeable) then
-					YRPAddUG(ug)
-				end
-			end
-		end
-		for i, ug in SortedPairsByMemberValue(ugs, "int_position", false) do
-			ug.int_position = tonumber(ug.int_position)
-			if ug.int_position >= 10 then
-				if tobool(ug.bool_removeable) and pa(PARENT.ugs) then
-					YRPAddUG(ug)
-				end
-			end
+			YRPAddUG(ug)
 		end
 	end
 end
@@ -1110,7 +1136,10 @@ net.Receive("Connect_Settings_UserGroups", function(len)
 		function _ug_rem:Paint(pw, ph)
 			if wk(UGS[CURRENT_USERGROUP]) then
 				if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
-					hook.Run("YButtonRPaint", self, pw, ph)--surfaceButton(self, pw, ph, "-", Color(255, 0, 0, 255))
+					hook.Run("YButtonRPaint", self, pw, ph)
+				else
+					draw.RoundedBox( 13, 0, 0, pw, ph, Color( 100, 100, 100, 255 ) )
+					draw.SimpleText( "X", "Y_14_700", pw / 2, ph / 2, Color( 255, 0, 0 ), 1, 1 )
 				end
 			end
 		end
@@ -1120,6 +1149,16 @@ net.Receive("Connect_Settings_UserGroups", function(len)
 					net.Start("usergroup_rem")
 						net.WriteString(CURRENT_USERGROUP)
 					net.SendToServer()
+				else
+					local win = createD( "YFrame", nil, 400, 120, 0, 0 )
+					print(UGS[CURRENT_USERGROUP].string_name)
+					if UGS[CURRENT_USERGROUP].string_name == "yrp_usergroups" then
+						win:SetTitle( "Backup Usergroup!" )
+					else
+						win:SetTitle( "Protected Usergroup!" )
+					end
+					win:Center()
+					win:MakePopup()
 				end
 			end
 		end

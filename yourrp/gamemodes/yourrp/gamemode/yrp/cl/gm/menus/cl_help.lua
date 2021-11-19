@@ -137,9 +137,13 @@ net.Receive("getsitehelp", function(len)
 		AddKeybind(keybinds, YRPGetKeybindName("menu_settings"), "LID_settings", "settings")
 		AddKeybind(keybinds, YRPGetKeybindName("toggle_map"), "LID_map", "map", "bool_map_system")
 		--AddKeybind(keybinds, YRPGetKeybindName("menu_inventory"), "LID_inventory", "work", "bool_inventory_system")
-		AddKeybind(keybinds, YRPGetKeybindName("menu_appearance"), "LID_appearance", "face", "bool_appearance_system")
+		if GetGlobalBool("bool_appearance_system", false) then
+			AddKeybind(keybinds, YRPGetKeybindName("menu_appearance"), "LID_appearance", "face", "bool_appearance_system")
+		end
 		AddKeybind(keybinds, YRPGetKeybindName("menu_emotes"), "LID_emotes", "smile")
-		AddKeybind(keybinds, YRPGetKeybindName("menu_laws"), "LID_laws", "list")
+		if GetGlobalBool("bool_laws_system", false) then
+			AddKeybind(keybinds, YRPGetKeybindName("menu_laws"), "LID_laws", "list")
+		end
 		AddKeybindBr(keybinds)
 		AddKeybind(keybinds, YRPGetKeybindName("menu_interact"), "LID_interact", "role")
 		AddKeybind(keybinds, YRPGetKeybindName("drop_item"), "LID_drop", "pin_drop", "bool_players_can_drop_weapons")
@@ -179,7 +183,7 @@ net.Receive("getsitehelp", function(len)
 		local version = createD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - YRP.ctr(50))
 
 		function version:Paint(pw, ph)
-			draw.SimpleText("(" .. string.upper(GAMEMODE.dedicated) .. " Server) (" .. string.upper(GAMEMODE.Art) .. ") YourRP V.: " .. YRPGetVersionFull() .. " by D4KiR", "Y_22_500", pw, ph / 2, GetVersionColor(), 2, 1)
+			draw.SimpleText("(" .. string.upper(GAMEMODE.dedicated) .. " Server) (" .. GetGlobalString( "YRP_VERSIONART", "X" ) .. ") YourRP V.: " .. YRPGetVersionFull() .. " by D4KiR", "Y_22_500", pw, ph / 2, GetVersionColor(), 2, 1)
 		end
 		YRPCheckVersion("help")
 	end

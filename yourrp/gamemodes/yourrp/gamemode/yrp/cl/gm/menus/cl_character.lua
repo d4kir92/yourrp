@@ -889,17 +889,8 @@ net.Receive("yrp_get_characters", function(len)
 end)
 
 function YRPGetCharacters()
-	local b, bb = net.BytesLeft()
-	local w, ww = net.BytesWritten()
-	if b and b > 0 and w and w > 0 then
-		timer.Simple(0.001, function()
-			YRPGetCharacters()
-		end)
-	else
-		net.Start("yrp_get_characters")
-		net.SendToServer()
-		
-	end
+	net.Start("yrp_get_characters")
+	net.SendToServer()
 end
 
 function openCharacterSelection()

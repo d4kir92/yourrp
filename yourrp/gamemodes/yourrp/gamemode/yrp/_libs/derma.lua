@@ -242,7 +242,11 @@ function GetHTMLImage(url, w, h)
 	return "<style type=\"text/css\"> body { padding: 0; margin: 0; border:0; } img { padding: 0; margin: 0; border:0; } </style> <body> <img src=\"" .. url .. "\"width=\"" .. w .. "\" height=\"" .. h .. "\" /> </body>"
 end
 
-function TableToColorStr(tbl)
+function YRPTableToColor( tbl )
+	return Color( tbl.r , tbl.g , tbl.b, tbl.a )
+end
+
+function YRPTableToColorStr(tbl)
 	return tbl.r .. "," .. tbl.g .. "," .. tbl.b .. "," .. tbl.a
 end
 
@@ -554,7 +558,7 @@ function surfaceCheckBox(derma, pw, ph, icon)
 			yrp_if[interfaceDesign()]["DCheckBox"](derma, pw, ph, icon)
 		else
 			local th = 4
-			local br = 8
+			local br = 4
 			local color = Color(0, 0, 0, 255)
 			surfaceBox(YRP.ctr(br), YRP.ctr(br), pw - YRP.ctr(br * 2), YRP.ctr(th), color)
 			surfaceBox(YRP.ctr(br), YRP.ctr(br), YRP.ctr(th), ph - YRP.ctr(br * 2), color)
@@ -1108,7 +1112,7 @@ function createMDMenu(parent, w, h, x, y)
 
 				local tmpHr = createD("DPanel", nil, IconSize, YRP.ctr(0), 0, YRP.ctr(posY))
 				function tmpHr:Paint(pw, ph)
-					--draw.SimpleTextOutlined("test", "Y_18_500", YRP.ctr(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					--
 				end
 
 				tmp.menulist:AddItem(tmpHr)

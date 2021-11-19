@@ -32,6 +32,41 @@ net.Receive("setting_characters", function(len)
 				charlist:AddLine(y.SteamID, y.rpname, y.text_idcardid, descr, y.groupID, y.roleID, y.money, y.moneybank, y.int_level, event, archi)
 			end
 		end
+
+		function charlist:OnRowRightClick(lineID, line)
+			local _tmpSteamID = line:GetValue(1)
+			local ply = nil
+			for i, v in pairs(player.GetAll()) do
+				if v:SteamID() == _tmpSteamID then
+					ply = v
+					break
+				end
+			end
+
+			local tmpX, tmpY = gui.MousePos()
+			tmpX = tmpX - YRP.ctr(4)
+			tmpY = tmpY - YRP.ctr(4)
+			local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
+			_tmpPanel:SetPos(tmpX, tmpY)
+			_tmpPanel.ready = false
+			timer.Simple(0.2, function()
+				_tmpPanel.ready = true
+			end)
+
+			local _buttonGetSteamID = createVGUI("DButton", _tmpPanel, 400, 50, 10, 10)
+			_buttonGetSteamID:SetText( "SteamID" )
+			function _buttonGetSteamID:DoClick()
+				SetClipboardText( line:GetValue(1) )
+			end
+
+			function _tmpPanel:Paint(pw, ph)
+				draw.RoundedBox(0, 0, 0, pw, ph, get_ds_col())
+				if !_tmpPanel:IsHovered() and !_buttonGetSteamID:IsHovered() and _tmpPanel.ready == true then
+					_tmpPanel:Remove()
+				end
+			end
+			_tmpPanel:MakePopup()
+		end
 	end
 end)
 

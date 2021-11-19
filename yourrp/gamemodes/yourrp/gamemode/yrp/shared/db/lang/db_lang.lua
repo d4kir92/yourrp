@@ -76,30 +76,32 @@ local hascontent = false
 local hasfakecontent = false
 local searchedforcontent = false
 function YRPTestContentAddons()
-	if !searchedforcontent and SERVER then
+	if engine.GetAddons() and table.Count( engine.GetAddons() ) <= 0 then
+		YRP.msg( "note", "CAN'T GET ADDON LIST" )
+	end
+
+	if (!searchedforcontent or hascontent == false) and SERVER and engine.GetAddons() and table.Count( engine.GetAddons() ) > 0 then
 		searchedforcontent = true
-		for i, addon in pairs(engine.GetAddons()) do
-			addon.wsid = tostring(addon.wsid)
-			if addon.wsid == "1189643820" then
-				if addon.mounted and addon.downloaded then
+		for i, addon in pairs( engine.GetAddons() ) do
+			if addon.wsid then
+				addon.wsid = tostring(addon.wsid)
+				if addon.wsid == "1189643820" then
 					hascontent = true
 					SetGlobalBool("yrp_hascontent", true)
-				else
-					YRP.msg("note", "YOURRP CONTENT IS NOT MOUNTED/DOWNLOADED!")
+					if addon.mounted and addon.downloaded then
+						--
+					else
+						YRP.msg("note", "YOURRP CONTENT IS NOT MOUNTED/DOWNLOADED!")
+					end
+				elseif addon.wsid == "1964961396" and addon.mounted and addon.downloaded then
+					hasfakecontent = true
+					SetGlobalBool("hasfakecontent", true)
 				end
-			elseif addon.wsid == "1964961396" and addon.mounted and addon.downloaded then
-				hasfakecontent = true
-				SetGlobalBool("hasfakecontent", true)
+			else
+				YRP.msg( "note", "Addon list is broken?" )
 			end
 		end
 	end
-end
-YRPTestContentAddons()
-function HasYRPContent()
-	return GetGlobalBool("yrp_hascontent", false)
-end
-function HasYRPFakeContent()
-	return GetGlobalBool("hasfakecontent", false)
 end
 
 function YRPTestDarkrpmodification()
@@ -109,7 +111,19 @@ function YRPTestDarkrpmodification()
 		SetGlobalBool("hasdarkrpmodification", false)
 	end
 end
-YRPTestDarkrpmodification()
+
+hook.Add( "PostGamemodeLoaded", "Check_YourRP_Content", function()
+	YRPTestContentAddons()
+	YRPTestDarkrpmodification()
+end )
+
+function HasYRPContent()
+	return GetGlobalBool("yrp_hascontent", false) or hascontent
+end
+function HasYRPFakeContent()
+	return GetGlobalBool("hasfakecontent", false) or hasfakecontent
+end
+
 function HasDarkrpmodification()
 	return GetGlobalBool("hasdarkrpmodification", false)
 end

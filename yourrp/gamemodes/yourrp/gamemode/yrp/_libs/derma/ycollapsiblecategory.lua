@@ -190,7 +190,9 @@ function PANEL:Init()
 			draw.RoundedBox(diameter / 2, YRP.ctr(20), YRP.ctr(10), diameter, diameter, LocalPlayer():InterfaceValue("YFrame", "PC"))
 
 			draw.SimpleText(rol.string_name, "Y_26_500", ph + YRP.ctr(20), ph / 3, TextColor(LocalPlayer():InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP.ctr(20), ph / 3 * 2, TextColor(LocalPlayer():InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			if tonumber( rol.int_salary ) > 0 then
+				draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP.ctr(20), ph / 3 * 2, TextColor(LocalPlayer():InterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
 			if rol.int_maxamount > 0 then
 				local radius = ph / 2 - 1 * YRP.ctr(10)
 				local rcol = StringToColor(rol.string_color)
@@ -396,7 +398,7 @@ function PANEL:Init()
 				local grptab = net.ReadTable()
 				
 				if pa(base) then
-					local rw = 660
+					local rw = 800
 					local rh = 160
 					for i, rol in pairs(roltab) do
 						rol.string_usergroups = string.Explode(",", rol.string_usergroups)

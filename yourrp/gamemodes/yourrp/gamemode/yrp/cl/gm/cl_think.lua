@@ -272,12 +272,12 @@ function YRPKeyPressed(key, str, distance)
 					_return = true
 				end
 			end
-			if !_return then
+			if !_return and key then
 				if keys[tostring(key)] == nil then
 					keys[tostring(key)] = false
 				end
 				key = tonumber(key)
-				if input.IsKeyDown(key) and !keys[tostring(key)] then
+				if key and input.IsKeyDown(key) and !keys[tostring(key)] then
 					keys[tostring(key)] = true
 					timer.Simple(0.14, function()
 						if str != nil then
@@ -792,8 +792,20 @@ function YRPShowPlayermodel()
 end
 hook.Add("ShouldDrawLocalPlayer", "ShowPlayermodel", YRPShowPlayermodel)
 
+
+
 jobByCmd = jobByCmd or {}
-net.Receive("send_team", function(len)
+
+-- FOR CLIENTS
+net.Receive("yrp_send_jobs", function(len, ply)
+	local tab = net.ReadTable()
+	for id, name in pairs( tab ) do
+		_G[string.upper(name)] = tonumber( id )
+	end
+end)
+-- FOR CLIENTS
+
+net.Receive("send_team", function(len) -- full jobs data
 	local teamTab = net.ReadTable()
 	local teamcolor = teamTab.color
 	local teamuid = tonumber( teamTab.uniqueID )
