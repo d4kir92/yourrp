@@ -502,7 +502,7 @@ net.Receive("item_buy", function(len, ply)
 				ply:AddLicense(_item.ClassName)
 			elseif _item.type == "roles" then
 				local rid = _item.ClassName
-				RemRolVals(ply)
+				YRPRemRolVals(ply)
 				RemGroVals(ply)
 				SetRole(ply, rid, true)
 			else

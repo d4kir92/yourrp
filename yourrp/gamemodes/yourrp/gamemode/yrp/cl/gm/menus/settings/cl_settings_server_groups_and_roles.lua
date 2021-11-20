@@ -1836,7 +1836,9 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 					local tab = net.ReadTable()
 					table.insert( pms, tab )
 
-					win:Search( win:GetText() )
+					if pa( win ) then
+						win:Search( win:GetText() )
+					end
 				end)
 
 				net.Start("get_all_playermodels")

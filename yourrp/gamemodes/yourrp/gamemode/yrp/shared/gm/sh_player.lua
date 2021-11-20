@@ -548,10 +548,10 @@ function Player:canAffordBank(money)
 end
 
 function Player:YRPRPName()
-	if IsValid(self) then
+	if IsValid( self ) then
 		return string.Replace( self:GetNW2String("rpname", self:SteamName()), "'", "" )
 	else
-		return string.Replace( self:Nick(), "'", "" )
+		return "INVALID PLAYER"
 	end
 end
 

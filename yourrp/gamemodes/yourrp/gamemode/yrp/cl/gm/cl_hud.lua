@@ -485,13 +485,17 @@ hook.Add("HUDPaint", "yrp_hud", function()
 
 		local _r = 60
 
-		local _sp = GetSpTable()
+		if GetSpTable then
+			local _sp = GetSpTable()
 
-		draw.RoundedBox(ctrb(_r), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2 * _br.x, _sp.h + 2 * _br.y, getSpCaseColor() )
+			if getSpCaseColor then
+				draw.RoundedBox(ctrb(_r), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2 * _br.x, _sp.h + 2 * _br.y, getSpCaseColor() )
+			end
 
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(_yrp_icon	)
-		surface.DrawTexturedRect(_sp.x + _sp.w / 2 - ctrb(246) / 2, _sp.y - ctrb(80 + 10), ctrb(246), ctrb(80))
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetMaterial(_yrp_icon	)
+			surface.DrawTexturedRect(_sp.x + _sp.w / 2 - ctrb(246) / 2, _sp.y - ctrb(80 + 10), ctrb(246), ctrb(80))
+		end
 	end
 
 	if GetGlobalBool("bool_wanted_system", false) and false then

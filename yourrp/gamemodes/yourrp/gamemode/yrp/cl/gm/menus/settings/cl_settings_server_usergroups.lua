@@ -1151,7 +1151,7 @@ net.Receive("Connect_Settings_UserGroups", function(len)
 					net.SendToServer()
 				else
 					local win = createD( "YFrame", nil, 400, 120, 0, 0 )
-					print(UGS[CURRENT_USERGROUP].string_name)
+
 					if UGS[CURRENT_USERGROUP].string_name == "yrp_usergroups" then
 						win:SetTitle( "Backup Usergroup!" )
 					else

@@ -401,7 +401,11 @@ function PANEL:Init()
 					local rw = 800
 					local rh = 160
 					for i, rol in pairs(roltab) do
-						rol.string_usergroups = string.Explode(",", rol.string_usergroups)
+						if rol.string_usergroups then
+							rol.string_usergroups = string.Explode(",", rol.string_usergroups)
+						else
+							rol.string_usergroups = {}
+						end
 						rol.bool_visible_cc = tobool(rol.bool_visible_cc)
 						rol.bool_visible_rm = tobool(rol.bool_visible_rm)
 						rol.bool_locked = tobool(rol.bool_locked)

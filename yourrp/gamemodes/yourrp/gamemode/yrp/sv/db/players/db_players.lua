@@ -748,7 +748,7 @@ net.Receive("giveRole", function(len, ply)
 	local uniqueIDRole = net.ReadInt(16)
 	for k, _ply in pairs(player.GetAll()) do
 		if tostring(_ply:SteamID()) == tostring(_tmpSteamID) then
-			RemRolVals(_ply)
+			YRPRemRolVals(_ply)
 			RemGroVals(_ply)
 			set_role(_ply, uniqueIDRole)
 			set_role_values(_ply)
@@ -956,12 +956,14 @@ function canGetRole(ply, roleID, want)
 	return false
 end
 
-function RemRolVals(ply)
+function YRPRemRolVals(ply)
 	local rolTab = ply:YRPGetRoleTable()
 	if wk(rolTab) then
 		local _sweps = string.Explode(",", rolTab.string_sweps)
 		for k, v in pairs(_sweps) do
-			ply:StripWeapon(v)
+			if ply:HasWeapon( v ) then
+				ply:StripWeapon( v )
+			end
 		end
 	end
 end
@@ -1002,7 +1004,7 @@ net.Receive("wantRole", function(len, ply)
 	if canGetRole(ply, uniqueIDRole, true) then
 		ply:SetNW2Bool("switchrole", true)
 		--Remove Sweps from old role
-		RemRolVals(ply)
+		YRPRemRolVals(ply)
 		RemGroVals(ply)
 
 		if GetGlobalBool("bool_players_die_on_role_switch", false) then
