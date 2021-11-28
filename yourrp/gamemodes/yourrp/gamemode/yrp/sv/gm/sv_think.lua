@@ -55,6 +55,8 @@ function IsCookPlaying()
 	return false
 end
 
+
+
 function YRPConHG(ply, time)
 	if GetGlobalBool("bool_onlywhencook", false) and !IsCookPlaying() then return false end
 	local newval = tonumber(ply:GetNW2Float("hunger", 0.0)) - 0.01 * GetGlobalFloat("float_scale_hunger", 1.0)
@@ -66,13 +68,12 @@ function YRPConHG(ply, time)
 	elseif GetGlobalBool("bool_hunger_health_regeneration", false) then
 		local tickrate = tonumber(GetGlobalString("text_hunger_health_regeneration_tickrate", 1))
 		if tickrate >= 1 and time % tickrate == 0 then
-			ply:SetHealth(ply:Health() + 1)
-			if ply:Health() > ply:GetMaxHealth() then
-				ply:SetHealth(ply:GetMaxHealth())
-			end
+			ply:SetHealth( math.Clamp( ply:Health() + 1, 0, ply:GetMaxHealth() ) )
 		end
 	end
 end
+
+
 
 function YRPConTH(ply)
 	if !IsValid(ply) then return end
@@ -85,9 +86,11 @@ function YRPConTH(ply)
 	newval = math.Clamp(newval, 0.0, 100.0)
 	ply:SetNW2Float("thirst", newval)
 	if tonumber(ply:GetNW2Float("thirst", 0.0)) < 20.0 then
-		ply:TakeDamage( ply:GetMaxHealth() / 50, ply )
+		ply:TakeDamage( ply:GetMaxHealth() / 50 )
 	end
 end
+
+
 
 function YRPConRA(ply)
 	if IsInsideRadiation(ply) then
@@ -99,6 +102,8 @@ function YRPConRA(ply)
 		ply:TakeDamage( ply:GetMaxHealth() / 50, ply )
 	end
 end
+
+
 
 function YRPConST( ply, _time )
 	if GetGlobalBool("bool_onlywhencook", false) and !IsCookPlaying() then
@@ -171,6 +176,8 @@ function YRPConST( ply, _time )
 		end
 	end
 end
+
+
 
 function YRPRegAB(ply)
 	local reg = ply:GetNW2Float("GetRegAbility", 0.0)
@@ -272,9 +279,11 @@ timer.Create("ServerThink", TICK, 0, function()
 				if GetGlobalBool("bool_hunger", false) and ply:GetNW2Bool("bool_hunger", false) then
 					YRPConHG(ply, _time)
 				end
+
 				if GetGlobalBool("bool_thirst", false) and ply:GetNW2Bool("bool_thirst", false) then
 					YRPConTH(ply)
 				end
+
 				if GetGlobalBool("bool_radiation", false) then
 					YRPConRA(ply)
 				end

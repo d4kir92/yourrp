@@ -85,8 +85,8 @@ net.Receive("yrp_storage_open", function(len)
 		local sh = tonumber( storage.int_storage_size )
 		sh = math.ceil(sh / cols)
 
-		local ww = ItemSize() * cols + br * 2 + sp * (cols - 1)
-		local wh = ItemSize() * sh + br * 2 + sp * (sh - 1) + YRP.ctr(50)
+		local ww = YRPItemSize() * cols + br * 2 + sp * (cols - 1)
+		local wh = YRPItemSize() * sh + br * 2 + sp * (sh - 1) + YRP.ctr(50)
 
 		local bag = createD("DFrame", nil, ww, wh, 0, 0)
 		if isinv then
@@ -94,7 +94,7 @@ net.Receive("yrp_storage_open", function(len)
 
 			if lply.invy - wh - YRP.ctr(20) < YRP.ctr(20) then
 				lply.invx = lply.invx - ww - YRP.ctr(20)
-				lply.invy = ScH() - (ItemSize() + YRP.ctr(60))
+				lply.invy = ScH() - (YRPItemSize() + YRP.ctr(60))
 
 				bag:SetPos(lply.invx - ww, lply.invy - wh)
 
@@ -116,8 +116,8 @@ net.Receive("yrp_storage_open", function(len)
 			end
 		end
 		
-		local sw = ItemSize() * cols + sp * (cols - 1)
-		local sh = ItemSize() * cols + sp * (cols - 1)
+		local sw = YRPItemSize() * cols + sp * (cols - 1)
+		local sh = YRPItemSize() * cols + sp * (cols - 1)
 
 		bag.storage = createD("YStorage", bag, sw, sh, br, br + YRP.ctr(50))
 		bag.storage:SetStorageID(storage.uniqueID)

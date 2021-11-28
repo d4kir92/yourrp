@@ -1,14 +1,5 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
---[[function tableRemoveByKey(tab, key)
-	local index = table.KeyFromValue(tab, key)
-	if ( !index ) then
-		tab[key] = nil
-		return false
-	end
-	return table.remove(tab, index)
-end]]
-
 function pTab(table, name)
 	name = name or ""
 	if name != "" then

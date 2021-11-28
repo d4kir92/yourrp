@@ -17,7 +17,6 @@ include("cl_settings_server_logs.lua")
 include("cl_settings_server_logs_settings.lua")
 include("cl_settings_server_scale.lua")
 
-include("cl_settings_server_console.lua")
 include("cl_settings_server_status.lua")
 include("cl_settings_server_feedback.lua")
 
@@ -178,11 +177,6 @@ function SettingsTabsContent()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_map")))
 			end)
 		end
-		--if lply:GetNW2Bool("bool_status", false) then
-		--[[tabs:AddOption("LID_character", function(parent)
-
-		end)]]
-		--end
 		if lply:GetNW2Bool("bool_logs", false) then
 			tabs:AddOption("LID_logs", function(parent)
 				OpenSettingsLogs()
@@ -273,23 +267,12 @@ function SettingsTabsContent()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_general")))
 			end)
 		end
-		if lply:GetNW2Bool("bool_console", false) then
-			tabs:AddOption("LID_server_console", function(parent)
-				OpenSettingsConsole()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_server_console")))
-			end)
-		end
 		if lply:GetNW2Bool("bool_ac_database", false) then
 			tabs:AddOption("LID_settings_database", function(parent)
 				OpenSettingsDatabase()
 				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_database")))
 			end)
 		end
-		--if lply:GetNW2Bool("bool_status", false) then
-			--[[tabs:AddOption("LID_settings_socials", function(parent)
-				
-			end)]]
-		--end
 		if lply:GetNW2Bool("bool_darkrp", false) then
 			tabs:AddOption("DarkRP", function(parent)
 				OpenSettingsDarkRP()
@@ -360,7 +343,7 @@ function F8OpenSettings()
 			c = c + 1
 		end
 
-		if lply:GetNW2Bool("bool_general", false) or lply:GetNW2Bool("bool_console", false) or lply:GetNW2Bool("bool_ac_database", false) or lply:GetNW2Bool("bool_darkrp", false) or lply:GetNW2Bool("bool_permaprops", false) then
+		if lply:GetNW2Bool("bool_general", false) or lply:GetNW2Bool("bool_ac_database", false) or lply:GetNW2Bool("bool_darkrp", false) or lply:GetNW2Bool("bool_permaprops", false) then
 			sites[c] = {}
 			sites[c].name = "LID_server"
 			sites[c].icon = "64_server"
@@ -661,7 +644,6 @@ settings_shops			-- Manage Shops
 logs					-- LOGS: Kills, connections, spawns, ...
 scale?					-- NEW! Scale hunger, thirst, radiation
 
-server_console			-- Server console, commands, ...
 settings_status			-- Status about the gamemode, whats missing, ...
 settings_feedback		-- Tickets from players, ...
 

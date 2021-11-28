@@ -1,9 +1,6 @@
 
 include("shared.lua")
 
---local logos = {}
---local mats = {}
-
 function YDrawIDCards()
 	for _, ply in pairs(player.GetAll()) do
 		if ply:GetPos():Distance(LocalPlayer():GetPos()) < 400 and ply:GetActiveWeapon().ClassName == "yrp_idcard" then

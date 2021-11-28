@@ -47,7 +47,10 @@ function CreateRolePreviewContent()
 	-- Fake POPUP
 	local win = createD("DPanel", parent, nw, nh, 0, 0)
 	function win:Paint(pw, ph)
-		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, LocalPlayer():InterfaceValue("YFrame", "NC"))
+		local color = LocalPlayer():InterfaceValue("YFrame", "NC")
+		if color then
+			draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
+		end
 	end
 	win:Center()
 

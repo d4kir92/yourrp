@@ -227,8 +227,8 @@ function Player:YRPCharacterLoadout()
 			self:SetNW2Int("int_weight", chatab.int_weight)
 		end
 
-		for i = 0, 4 do
-			self:SetNW2String("eqbag" .. i, chatab["eqbag" .. i])
+		for i = 0, 19 do
+			self:SetNW2String("bg" .. i, chatab["bg" .. i])
 		end
 
 		local levelsystem = YRP_SQL_SELECT("yrp_levelsystem", "*", nil)
@@ -522,10 +522,7 @@ end
 function SendLoopCharacterList(ply, tab)
 	ply:SetNW2String("loadchars_msg", "SendLoopCharacterList")
 	
-	local plyT = ply:GetPlyTab()
-	if wk(plyT) then
-		ply:SetNW2Int("yrp_charid", tonumber(plyT.CurrentCharacter))
-	end
+	ply:SetupCharID()
 
 	local c = 1
 	for i, char in pairs(tab) do
@@ -619,7 +616,7 @@ function YRPSendCharacters(ply, from)
 		net.Start("OpenCharacterCreation")
 		net.Send(ply)
 
-		ply:SetNW2Bool("loadchars_done", true)
+		ply:SetNW2Bool( "loadchars_done", true )
 	end
 end
 
@@ -730,7 +727,7 @@ net.Receive("YRPCreateCharacter", function(len, ply)
 			namealreadyinuse = true
 		end
 	end
-
+	
 	if namealreadyinuse then
 		net.Start("YRPCreateCharacter")
 			net.WriteBool(false)
@@ -754,8 +751,12 @@ util.AddNetworkString("YRP_EnterWorld")
 net.Receive("YRP_EnterWorld", function(len, ply)
 	local cuid = net.ReadString()
 
-	YRPSpawnAsCharacter(ply, cuid, false)
+	if ply:Alive() then
+		ply:KillSilent()
+	end
 
+	YRPSpawnAsCharacter(ply, cuid, false)
+	
 	ply:SetNW2Bool("yrp_characterselection", false)
 end)
 

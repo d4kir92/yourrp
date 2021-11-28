@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 351 -- do NOT change this!
 GM.VersionCanary = 705 -- do NOT change this!
-GM.VersionBuild = 141 -- do NOT change this!
+GM.VersionBuild = 145 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -75,10 +75,10 @@ if SERVER then
 			end
 		end
 	end
-end
 
-if SERVER then
 	local delay = 0
+	local count = 0
+	local dir = 1
 	hook.Remove( "Think", "yrp_double_installed" )
 	hook.Add( "Think", "yrp_double_installed", function()
 		if CurTime() < delay then
@@ -86,7 +86,16 @@ if SERVER then
 		end
 		delay = CurTime() + 1
 
-		if YRPIsDoubleInstalled() then
+		count = count + dir
+
+		if count > 3 then
+			dir = -1
+			count = 20
+		elseif count == 0 then
+			dir = 1
+		end
+
+		if YRPIsDoubleInstalled() and dir == 1 then
 			YRPHR( Color( 255, 0, 0 ) )
 			MsgC( Color( 255, 0, 0 ), "[YourRP] YourRP is DOUBLE installed!" .. "\n" )
 			MsgC( Color( 255, 0, 0 ), "[YourRP] Please REMOVE the folder: Server/garrysmod/gamemodes/" .. tostring( doubleinstalledpath ) .. " <-" .. "\n" )

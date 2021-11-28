@@ -568,9 +568,8 @@ if CLIENT then
 		
 	end
 
-	--[[
-		Global utility code
-	]]--
+	-- Global utility code
+
 
 	-- Fully copies the table, meaning all tables inside this table are copied too and so on (normal table.Copy copies only their reference).
 	-- Does not copy entities of course, only copies their reference.

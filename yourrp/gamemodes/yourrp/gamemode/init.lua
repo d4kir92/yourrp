@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program.	If not, see < http://www.gnu.org/licenses/ >.
 ]]--
 
---[[ AddCSLuaFiles ]]--
+-- AddCSLuaFiles
 AddCSLuaFile("shared.lua")
 AddCSLuaFile("cl_init.lua")
 
@@ -67,7 +67,6 @@ AddCSLuaFile("yrp/cl/gm/menus/cl_factionselection.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_roleselection.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_charactersettings.lua")
 
-AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_console.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_status.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_feedback.lua")
 
@@ -117,7 +116,7 @@ AddCSLuaFile("yrp/cl/gm/menus/cl_macromenu.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_voice.lua")
 AddCSLuaFile("yrp/cl/gm/menus/cl_chatchannels.lua")
 
---[[ includes ]]--
+-- includes 
 include("shared.lua")
 
 include("yrp/sv/sv_includes.lua")

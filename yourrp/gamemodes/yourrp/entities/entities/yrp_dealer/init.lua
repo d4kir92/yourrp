@@ -72,19 +72,6 @@ function ENT:OpenBuyMenu(pl)
 	net.Start("open_buy_menu")
 		net.WriteString(self:GetNW2String("dealerID", "-1"))
 	net.Send(pl)
-
-	--[[
-	local hisounds = {
-		"vo/npc/male01/hi01.wav",
-		"vo/npc/male01/hi02.wav",
-		"vo/npc/male01/heydoc01.wav",
-		"vo/npc/male01/heydoc02.wav"
-	}
-
-	local s = table.Random(hisounds)
-	util.PrecacheSound(s)
-	self:EmitSound(s)
-	]]--
 end
 
 function ENT:AcceptInput(input, entActivator, entCaller, data)

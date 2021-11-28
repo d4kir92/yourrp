@@ -165,15 +165,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.lforce = false
 				tab2.color = gs.gplist[group.uniqueID]["string_color"]
 				DrawText(tab2)
-
-				--[[local tab3 = {}
-				tab3.x = YRP.ctr(182)
-				tab3.y = YRP.ctr(100)
-				tab3.ax = 0
-				tab3.ay = 4
-				tab3.text = "POSITION: " .. group.int_position
-				tab3.font = "Y_18_700"
-				DrawText(tab3)]]
 			end
 			function pnl:DoClick()
 				net.Start("settings_subscribe_group")
@@ -1277,18 +1268,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 			
 			DHr(hr)
-
-			--[[local idstructure = {}
-			idstructure.parent = ea.info:GetContent()
-			idstructure.uniqueID = role.uniqueID
-			idstructure.header = YRP.lang_string("LID_idstructure") .. " (!D 1Dig., !L 1Let., !N 1Num.)"
-			idstructure.netstr = "update_role_string_idstructure"
-			idstructure.value = role.string_idstructure
-			idstructure.uniqueID = role.uniqueID
-			idstructure.lforce = false
-			ea[role.uniqueID].idstructure = DTextBox(idstructure)
-
-			DHr(hr)]]
 
 			local color = {}
 			color.parent = ea.info:GetContent()
@@ -2433,19 +2412,6 @@ net.Receive("Subscribe_Settings_GroupsAndRoles", function(len)
 			ea[role.uniqueID].bool_eventrole = YRPDCheckBox(bool_eventrole)
 
 			DHr(hr)
-
-			--[[local cooldown = {}
-			cooldown.parent = ea.restriction:GetContent()
-			cooldown.header = "LID_cooldown"
-			cooldown.netstr = "update_role_int_cooldown"
-			cooldown.value = role.int_cooldown
-			cooldown.uniqueID = role.uniqueID
-			cooldown.lforce = false
-			cooldown.min = 0
-			cooldown.max = 360
-			ea[role.uniqueID].cooldown = DIntBox(cooldown)
-
-			DHr(hr)]]
 
 			local int_namelength = {}
 			int_namelength.parent = ea.restriction:GetContent()

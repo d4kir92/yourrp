@@ -33,62 +33,6 @@ function PANEL:SetModel(mdl)
 end
 
 function PANEL:Paint( w, h )
-	--[[render.ClearStencil()
-	render.SetStencilEnable( true )
-
-	render.SetStencilWriteMask( 1 )
-	render.SetStencilTestMask( 1 )
-
-	render.SetStencilFailOperation( STENCILOPERATION_REPLACE )
-	render.SetStencilPassOperation( STENCILOPERATION_ZERO )
-	render.SetStencilZFailOperation( STENCILOPERATION_ZERO )
-	render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_NEVER )
-	render.SetStencilReferenceValue( 1 )
-
-	draw.NoTexture()
-	surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
-	local diameter = h / 2
-	drawCircle(diameter, diameter, diameter, math.max(w, h))
-
-	render.SetStencilFailOperation( STENCILOPERATION_ZERO )
-	render.SetStencilPassOperation( STENCILOPERATION_REPLACE )
-	render.SetStencilZFailOperation( STENCILOPERATION_ZERO )
-	render.SetStencilCompareFunction( STENCILCOMPARISONFUNCTION_EQUAL )
-	render.SetStencilReferenceValue( 1 )
-
-	self.panel:PaintManual()
-
-	render.SetStencilEnable(false)]]
-
-
-	--[[
-render.ClearStencil();
-render.SetStencilEnable(true);
-render.SetStencilWriteMask(1);
-render.SetStencilTestMask(1);
-render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER);
-render.SetStencilFailOperation(STENCILOPERATION_REPLACE);
-render.SetStencilZFailOperation(STENCILOPERATION_KEEP);
-render.SetStencilPassOperation(STENCILOPERATION_KEEP);
-render.SetStencilReferenceValue(1);
-
-draw.NoTexture()
-surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
-local diameter = h / 2
-drawCircle(diameter, diameter, diameter, math.max(w, h))
-
-render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL);
-render.SetStencilReferenceValue(1);
-render.SetStencilFailOperation(STENCILOPERATION_ZERO);
-render.SetStencilZFailOperation(STENCILOPERATION_ZERO);
-render.SetStencilPassOperation(STENCILOPERATION_KEEP);
-
-self.panel:PaintManual()
-
-render.SetStencilEnable(false);
-render.ClearStencil();
-	]]
-
 	render.SetStencilWriteMask( 0xFF )
 	render.SetStencilTestMask( 0xFF )
 	render.SetStencilReferenceValue( 0 )

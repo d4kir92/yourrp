@@ -166,10 +166,6 @@ function loadDoors()
 							v:SetNW2Int("int_securitylevel", w.int_securitylevel)
 						end
 
-						--[[v:Fire("Open")
-						timer.Simple(10, function()
-							v:Fire("Close")
-						end)]]
 						if v:SecurityLevel() > 0 then
 							v:Fire("Lock")
 						else

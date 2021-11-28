@@ -143,7 +143,7 @@ function YRPOpenPlayerOptions(ply)
 			_menu:AddOption(YRP.lang_string("LID_language") .. ": " .. ply:GetLanguage(), "icon16/map.png")
 			_menu:AddSpacer()
 
-			_menu:AddOption(YRP.lang_string("LID_country") .. ": " .. ply:GetCountry(), "icon16/map.png")
+			_menu:AddOption(YRP.lang_string("LID_country") .. ": " .. ply:YRPGetCountry(), "icon16/map.png")
 			_menu:AddSpacer()
 
 			if YRPNotSelf(ply) then

@@ -359,16 +359,20 @@ countries["VN"] = "Vietnam"
 
 countries["ZA"] = "South Africa"
 
-function GetCountryName( id )
+function YRPGetCountryName( id, from )
 	if id == nil then
+		YRP.msg( "error", "[YRPGetCountryName] NO INPUT: " .. tostring( id ) .. " from: " .. tostring( from ) )
 		return ""
 	end
 	id = string.upper( id )
 	local countryname = countries[id]
 	if wk( countryname ) then
 		return countryname
+	elseif string.len( id ) == 2 then
+		YRP.msg( "error", "[YRPGetCountryName] Missing Country: " .. tostring( id ) )
+		return id
 	else
-		YRP.msg( "error", "Missing Country: " .. tostring( id ) )
+		YRP.msg( "error", "[YRPGetCountryName] Input Wrong: " .. tostring( id ) .. " from: " .. tostring( from ) )
 		return id
 	end
 end

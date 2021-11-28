@@ -57,7 +57,7 @@ hook.Add("HUDWeaponPickedUp", "yrp_translate_weaponname", function(wep)
 end)
 
 function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
-	--[[ Change language ]]--
+	-- Change language
 	if newWeapon.LanguageString != nil then
 		newWeapon.PrintName = YRP.lang_string(newWeapon.LanguageString)
 	end
@@ -177,7 +177,7 @@ function YRPUseFunction(str)
 		--Mouse changer
 		elseif str == "F11Toggle" then
 			done_tutorial("tut_tmo")
-			gui.EnableScreenClicker(!vgui.CursorVisible())
+			--gui.EnableScreenClicker(!vgui.CursorVisible())
 
 		elseif str == "vyes" and !mouseVisible() then
 			net.Start("voteYes")
@@ -383,7 +383,7 @@ function YRPKeyPress()
 		if !vgui.CursorVisible() then
 
 			if YRPGetKeybind("view_switch") and input.IsKeyDown(YRPGetKeybind("view_switch")) then
-				--[[ When toggle view ]]--
+				-- When toggle view
 				if _view_delay then
 					_view_delay = false
 					timer.Simple(0.16, function()
@@ -404,7 +404,7 @@ function YRPKeyPress()
 					lply.yrp_view_range = lply.yrp_view_range_view
 				end
 			else
-				--[[ smoothing ]]--
+				-- smoothing
 				if tonumber(lply.yrp_view_range) < tonumber(lply.yrp_view_range_view) then
 					lply.yrp_view_range = lply.yrp_view_range + lply.yrp_view_range_view / 16
 				else
@@ -432,7 +432,7 @@ function YRPKeyPress()
 				end
 			end
 
-			--[[ Up and down ]]--
+			-- Up and down
 			if YRPGetKeybind("view_up") and input.IsKeyDown(YRPGetKeybind("view_up")) then
 				lply.yrp_view_z_c = lply.yrp_view_z_c + 0.1
 			elseif YRPGetKeybind("view_down") and input.IsKeyDown(YRPGetKeybind("view_down")) then
@@ -449,7 +449,7 @@ function YRPKeyPress()
 				lply.yrp_view_z = lply.yrp_view_z_c
 			end
 
-			--[[ Left and right ]]--
+			-- Left and right
 			if YRPGetKeybind("view_right") and input.IsKeyDown(YRPGetKeybind("view_right")) then
 				lply.yrp_view_x_c = lply.yrp_view_x_c + 0.1
 			elseif YRPGetKeybind("view_left") and input.IsKeyDown(YRPGetKeybind("view_left")) then
@@ -466,7 +466,7 @@ function YRPKeyPress()
 				lply.yrp_view_x = lply.yrp_view_x_c
 			end
 
-			--[[ spin right and spin left ]]--
+			-- spin right and spin left
 			if YRPGetKeybind("view_spin_right") and input.IsKeyDown(YRPGetKeybind("view_spin_right")) then
 				lply.yrp_view_s_c = lply.yrp_view_s_c + 0.4
 			elseif YRPGetKeybind("view_spin_left") and input.IsKeyDown(YRPGetKeybind("view_spin_left")) then
@@ -539,7 +539,6 @@ hook.Add("Think", "Thinker", YRPKeyPress)
 
 local _savePos = Vector(0, 0, 0)
 _lookAtEnt = nil
-_drawViewmodel = false
 
 local PLAYER = FindMetaTable("Player")
 function TauntCamera()
@@ -557,17 +556,11 @@ function TauntCamera()
 end
 PLAYER.TauntCam = TauntCamera()
 
-function YRPInThirdperson()
-	local lply = LocalPlayer()
-	lply.yrp_view_range = lply.yrp_view_range or 0
-	return lply.yrp_view_range > 0
-end
-
 -- #THIRDPERSON
 local oldang = Angle(0, 0, 0)
-local function YRP_CalcView(lply, pos, angles, fov)
+function YRP_CalcView(lply, pos, angles, fov)
 	if angles == nil then
-		return view
+		return
 	end
 
 	lply.yrp_view_range = lply.yrp_view_range or 0
@@ -582,6 +575,7 @@ local function YRP_CalcView(lply, pos, angles, fov)
 	lply.yrp_view_s_c = lply.yrp_view_s_c or 0
 
 	if lply:Alive() then --and !lply:IsPlayingTaunt() then
+		local view = {}
 
 		if lply:AFK() then
 			if (oldang.p + 1 < angles.p and oldang.p - 1 < angles.p) or (oldang.y + 1 < angles.y and oldang.y - 1 < angles.y) or (oldang.r + 1 < angles.r and oldang.r - 1 < angles.r) then
@@ -611,8 +605,7 @@ local function YRP_CalcView(lply, pos, angles, fov)
 			_view_range = 200
 		end
 		local dist = _view_range * lply:GetModelScale()
-
-		local view = {}
+	
 		if lply:GetModel() != "models/player.mdl" and !lply:InVehicle() and !disablethirdperson and GetGlobalBool("bool_thirdperson", false) then
 			if lply:LookupBone("ValveBiped.Bip01_Head1") != nil then
 				pos2 = lply:GetBonePosition(lply:LookupBone("ValveBiped.Bip01_Head1")) + (angles:Forward() * 12 * lply:GetModelScale())
@@ -622,9 +615,9 @@ local function YRP_CalcView(lply, pos, angles, fov)
 				local _minDistFor = 8
 				local _minDistBac = 40
 				if dist > 0 then
-					_drawViewmodel = true
+					view.drawviewer = true
 				else
-					_drawViewmodel = false
+					view.drawviewer = false
 				end
 				view.origin = pos - (angles:Forward() * dist) - Vector(0, 0, 58)
 				view.angles = angles
@@ -673,28 +666,25 @@ local function YRP_CalcView(lply, pos, angles, fov)
 						_savePos = view.origin
 						view.angles = angles
 						view.fov = fov
-						_drawViewmodel = true
+						view.drawviewer = true
 						return view
 					elseif tr.Hit and tr.HitPos:Distance(pos) <= _minDistBac then
 						view.origin = pos
 						view.angles = angles
 						view.fov = fov
-						_drawViewmodel = false
+						view.drawviewer = false
 						return view
 					else
 						view.origin = pos - (angles:Forward() * dist) + _pos_change
 						view.angles = angles
 						view.fov = fov
-						_drawViewmodel = true
+						view.drawviewer = true
 						return view
 					end
 				elseif tonumber(lply.yrp_view_range) > -200 and tonumber(lply.yrp_view_range) <= 0 then
 					--Disabled
-					--[[view.origin = pos
-					view.angles = angles
-					view.fov = fov]]
-					_drawViewmodel = false
-					--return view
+					--view.drawviewer = false
+					--
 				else
 					--Firstperson realistic
 					local dist = lply.yrp_view_range * lply:GetModelScale()
@@ -718,21 +708,21 @@ local function YRP_CalcView(lply, pos, angles, fov)
 							_savePos = pos2
 							view.angles = angles
 							view.fov = fov
-							_drawViewmodel = true
+							view.drawviewer = true
 
 							return view
 						else
 							view.origin = pos
 							view.angles = angles
 							view.fov = fov
-							_drawViewmodel = false
+							view.drawviewer = false
 							return view
 						end
 					else
 						view.origin = pos
 						view.angles = angles
 						view.fov = fov
-						_drawViewmodel = false
+						view.drawviewer = false
 						return view
 					end
 				end
@@ -768,31 +758,20 @@ local function YRP_CalcView(lply, pos, angles, fov)
 end
 
 hook.Remove("CalcView", "AV7View") -- breaks thirdperson, must be removed!
-timer.Simple(1, function()
+if hook.GetTable()["CalcView"]["YOURRP_ThirdPerson_CalcView"] == nil then
+	print("CREATED")
+	print("CREATED")
+	print("CREATED")
+	print("CREATED")
+	print("CREATED")
+	print("CREATED")
+	print("CREATED")
+	print("CREATED")
+	print("CREATED")
+	print("CREATED")
+	print("CREATED")
 	hook.Add("CalcView", "YOURRP_ThirdPerson_CalcView", YRP_CalcView)
-end)
-
-function YRPShowPlayermodel()
-	local lply = LocalPlayer()
-
-	if !lply:InVehicle() then
-		if _drawViewmodel then-- or LocalPlayer():IsPlayingTaunt() then
-			return true
-		else
-			return false
-		end
-	else
-		if _drawViewmodel then-- or LocalPlayer():IsPlayingTaunt() then
-			--
-		else
-			
-		end
-		return false
-	end
 end
-hook.Add("ShouldDrawLocalPlayer", "ShowPlayermodel", YRPShowPlayermodel)
-
-
 
 jobByCmd = jobByCmd or {}
 

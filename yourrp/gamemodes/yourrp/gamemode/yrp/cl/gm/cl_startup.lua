@@ -236,7 +236,7 @@ function GetSWEPsList()
 	local list_weapon = list.Get("Weapon")
 
 	for k, v in pairs(list_weapon) do
-		if v.Category == "Half-Life 2" or string.find(v.ClassName, "weapon_physgun") then
+		if v.Category == "Half-Life 2" or string.find(v.ClassName, "weapon_physgun", 1, true) then
 			table.insert(SWEPS, v)
 		end
 	end
@@ -380,7 +380,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 	
 		for i, v in pairs(tab) do
 			if pa(pmsel) then
-				if pmsel.strsearch != nil and v.PrintName and string.find(string.lower(v.PrintName), pmsel.strsearch or "") or string.find(string.lower(v.ClassName), pmsel.strsearch or "") or string.find(string.lower(v.WorldModel), pmsel.strsearch or "") then
+				if pmsel.strsearch != nil and v.PrintName and string.find(string.lower(v.PrintName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.ClassName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.WorldModel), pmsel.strsearch or "", 1, true) then
 					self.nothingfound = false
 					self.count = self.count + 1
 					if self.count > pmsel.nr and self.count <= pmsel.nr + pmsel.perpage then
@@ -622,7 +622,7 @@ function openSingleSelector(tab, closeF, web)
 			searchtext = string.Replace(searchtext or "", "]", "")
 			searchtext = string.Replace(searchtext or "", "%", "")
 			
-			if string.find(string.lower(item.WorldModel or ""), searchtext) or string.find(string.lower(item.PrintName or ""), searchtext) or string.find(string.lower(item.ClassName or ""), searchtext) then
+			if string.find(string.lower(item.WorldModel or ""), searchtext, 1, true) or string.find(string.lower(item.PrintName or ""), searchtext, 1, true) or string.find(string.lower(item.ClassName or ""), searchtext, 1, true) then
 				site.count = site.count + 1
 
 				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
@@ -1702,8 +1702,8 @@ function drawIDCard(ply, scale, px, py)
 			x = x + px
 			y = y + py
 
-			if !string.find(ele, "logo") and !string.find(ele, "background") then
-				if string.find(ele, "box") then
+			if !string.find(ele, "logo", 1, true) and !string.find(ele, "background", 1, true) then
+				if string.find(ele, "box", 1, true) then
 					draw.RoundedBox(0, x, y, w, h, color)
 				else
 					local text = ""
@@ -1779,14 +1779,14 @@ function drawIDCard(ply, scale, px, py)
 					draw.SimpleText(text, "Y_" .. fs .. "_500", tx, ty, color, ax, ay)
 				end
 			else
-				if string.find(ele, "background") and strEmpty(GetGlobalString("text_idcard_background", "")) then
+				if string.find(ele, "background", 1, true) and strEmpty(GetGlobalString("text_idcard_background", "")) then
 					draw.RoundedBox(0, x, y, w, h, color)
 				end
 				if logos[ele] == nil then
 					logos[ele] = true
 
 					local test = createD("DHTML", nil, w, h, 0, 0)
-					if string.find(ele, "logo") then
+					if string.find(ele, "logo", 1, true) then
 						test:SetHTML(GetHTMLImage(GetGlobalString("text_server_logo", ""), w, h))
 					else
 						test:SetHTML(GetHTMLImage(GetGlobalString("text_idcard_background", ""), w, h))

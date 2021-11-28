@@ -2,9 +2,8 @@
 
 net.Receive("setting_characters", function(len)
 	local PARENT = GetSettingsSite()
-	local tab = net.ReadTable()
-
 	if pa(PARENT) then
+		local tab = net.ReadTable()
 
 		local charlist = createD("DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 		charlist:AddColumn("SteamID")

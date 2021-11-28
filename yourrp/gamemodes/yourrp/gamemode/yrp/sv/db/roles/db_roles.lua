@@ -2154,3 +2154,51 @@ net.Receive("get_role_specs", function(len, ply)
 	local ruid = net.ReadString()
 	YRPSendRoleSpecs(ply, ruid)
 end)
+
+
+
+-- For Custom Charsystems
+util.AddNetworkString( "yrp_getallroles" )
+net.Receive( "yrp_getallroles", function( len, ply )
+	local roles = YRP_SQL_SELECT( DATABASE_NAME, "*", nil )
+
+	if wk( roles ) then
+		for i, role in pairs( roles ) do
+			role.pms = GetPlayermodelsOfRole( role.uniqueID )
+			net.Start( "yrp_getallroles" )
+				net.WriteTable( role )
+			net.Send( ply )
+		end
+	end
+end )
+
+util.AddNetworkString( "yrp_getallroles_whitelisted" )
+net.Receive( "yrp_getallroles_whitelisted", function( len, ply )
+	local roles = YRP_SQL_SELECT( DATABASE_NAME, "*", nil )
+
+	if wk( roles ) then
+		for i, role in pairs( roles ) do
+			role.pms = GetPlayermodelsOfRole( role.uniqueID )
+			if YRPIsWhitelisted( ply, role.uniqueID ) then
+				net.Start( "yrp_getallroles_whitelisted" )
+					net.WriteTable( role )
+				net.Send( ply )
+			end
+		end
+	end
+end )
+
+util.AddNetworkString( "yrp_getcharacters" )
+net.Receive( "yrp_getcharacters", function( len, ply )
+	local chars = YRP_SQL_SELECT( "yrp_characters", "*", "steamid = '" .. ply:SteamID() .. "'" )
+
+	if wk( chars ) then
+		for i, char in pairs( chars ) do
+			char.playermodels = GetPlayermodelsOfRole(char.roleID)
+
+			net.Start( "yrp_getcharacters" )
+				net.WriteTable( char )
+			net.Send( ply )
+		end
+	end
+end )

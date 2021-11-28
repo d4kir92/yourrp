@@ -54,10 +54,7 @@ function YRPSendAskData()
 		timer.Simple( 0.01, function()
 			YRPSendAskData()
 		end )
-		return
-	end
-
-	if !IsValid( LocalPlayer() ) then
+	elseif !IsValid( LocalPlayer() ) then
 		YRPAddReadyStatusMsg( "LocalPlayer() is Invalid" )
 		YRPHR( Color( 255, 0, 0 ) )
 		MsgC( Color( 255, 0, 0 ), "[START] LocalPlayer() is Invalid, Retry..." .. "\n" )
@@ -66,34 +63,33 @@ function YRPSendAskData()
 		timer.Simple( 0.01, function()
 			YRPSendAskData()
 		end )
-		return
-	end
+	else
+		local info = YRPGetClientInfo()
 
-	local info = YRPGetClientInfo()
+		YRPAddReadyStatusMsg( "Send" )
+		
+		net.Start("sendstartdata")
+			net.WriteUInt( info.os, 2 )
+			net.WriteString( info.branch )
+			net.WriteString( info.country )
+		net.SendToServer()
 
-	YRPAddReadyStatusMsg( "Send" )
-	
-	net.Start("sendstartdata")
-		net.WriteUInt( info.os, 2 )
-		net.WriteString( info.branch )
-		net.WriteString( info.country )
-	net.SendToServer()
+		MsgC( Color( 0, 255, 0 ), "[START] Sended StartData" .. "\n" )
 
-	MsgC( Color( 0, 255, 0 ), "[START] Sended StartData" .. "\n" )
+		timer.Simple( 1, function()
+			if YRPReceivedStartData or LocalPlayer():GetNW2Bool( "yrp_received_ready", false ) then
+				--
+			elseif YRPReceivedStartData == false and LocalPlayer():GetNW2Bool( "yrp_received_ready", false ) == false then
+				YRPAddReadyStatusMsg( "SERVER NOT RECEIVED -> RETRY" )
+				local text = "[START] Server not received the StartData, retry..."
+				MsgC( Color( 255, 255, 0 ), text .. "\n" )
+			end
+		end )
 
-	timer.Simple( 1, function()
-		if YRPReceivedStartData or LocalPlayer():GetNW2Bool( "yrp_received_ready", false ) then
-			--
-		elseif YRPReceivedStartData == false and LocalPlayer():GetNW2Bool( "yrp_received_ready", false ) == false then
-			YRPAddReadyStatusMsg( "SERVER NOT RECEIVED -> RETRY" )
-			local text = "[START] Server not received the StartData, retry..."
-			MsgC( Color( 255, 255, 0 ), text .. "\n" )
+		if langonce then
+			langonce = false
+			YRP.initLang()
 		end
-	end )
-
-	if langonce then
-		langonce = false
-		YRP.initLang()
 	end
 end
 

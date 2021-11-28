@@ -83,7 +83,7 @@ function createSmartphone(parent, w, h, x, y)
 	--[[ Elements ]]--
 	_tmp.display = createD("DPanel", _tmp, w, h, 0, 0)
 	function _tmp.display:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, getSpBackColor())
+		draw.RoundedBox(0, 0, 0, pw, ph, YRPGetSpBackColor())
 
 		if self.apps != nil then
 			for i, app in pairs(getAllDBApps()) do

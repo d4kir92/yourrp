@@ -1030,3 +1030,14 @@ net.Receive("wantRole", function(len, ply)
 		YRPNotiToPly(text, "not allowed to get this role")
 	end
 end)
+
+local Player = FindMetaTable("Player")
+
+function Player:SetupCharID()
+	local charid = YRP_SQL_SELECT( DATABASE_NAME, "*", "steamid = '" .. self:SteamID() .. "'" )
+	
+	if charid and charid[1] then
+		charid = charid[1].CurrentCharacter
+		self:SetNW2Int("yrp_charid", tonumber( charid ) )
+	end
+end

@@ -50,9 +50,9 @@ function setSpBackColor( color )
 	YRPSmartphoneSave()
 end
 
-function getSpBackColor()
+function YRPGetSpBackColor()
 	if yrp_smartphone["color_back"] != nil and type( yrp_smartphone["color_back"] ) == "table" then
-		return Color( yrp_smartphone["color_back"] )
+		return yrp_smartphone["color_back"]
 	else
 		return Color( 255, 0, 0, 255 )
 	end
@@ -63,9 +63,9 @@ function setSpCaseColor( color )
 	YRPSmartphoneSave()
 end
 
-function getSpCaseColor()
+function YRPGetSpCaseColor()
 	if yrp_smartphone["color_case"] != nil and type( yrp_smartphone["color_case"] ) == "table" then
-		return Color( yrp_smartphone["color_case"] )
+		return yrp_smartphone["color_case"]
 	else
 		return Color( 255, 0, 0, 255 )
 	end

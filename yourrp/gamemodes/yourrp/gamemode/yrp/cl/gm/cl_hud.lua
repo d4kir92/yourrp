@@ -328,6 +328,8 @@ function YRP_PMUpdate()
 				YRP_PM:SetSize(YRP_PM.h, YRP_PM.h)
 				YRP_PM:SetModel(YRP_PM.model)
 				
+				
+
 				if ea(YRP_PM.Entity) then
 					YRP_PM.Entity:SetSkin(lply:GetSkin())
 					local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
@@ -340,6 +342,10 @@ function YRP_PMUpdate()
 					else
 						YRP_PM:SetLookAt(Vector(0, 0, 40))
 						YRP_PM:SetCamPos(Vector(50, 50, 50))
+					end
+
+					for i, v in pairs( YRP_PM.Entity:GetBodyGroups() ) do
+						YRP_PM.Entity:SetBodygroup( v.id, LocalPlayer():GetNW2String("bg" .. v.id, 0 ) )
 					end
 				end
 
@@ -488,8 +494,8 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		if GetSpTable then
 			local _sp = GetSpTable()
 
-			if getSpCaseColor then
-				draw.RoundedBox(ctrb(_r), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2 * _br.x, _sp.h + 2 * _br.y, getSpCaseColor() )
+			if YRPGetSpCaseColor then
+				draw.RoundedBox(ctrb(_r), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2 * _br.x, _sp.h + 2 * _br.y, YRPGetSpCaseColor() )
 			end
 
 			surface.SetDrawColor(255, 255, 255, 255)

@@ -136,7 +136,6 @@ include("database/db_database.lua")
 
 include("general/db_general.lua") -- First Database
 
-include("console/db_console.lua")
 include("status/db_status.lua")
 include("yourrp_addons/db_yourrp_addons.lua")
 

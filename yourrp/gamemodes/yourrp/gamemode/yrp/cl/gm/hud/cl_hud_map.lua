@@ -104,7 +104,9 @@ function openMap()
 					render.Clear(0, 0, 0, 0)
 
 						cam.Start2D()
-							render.RenderView( CamDataMap )
+							if CamDataMap then
+								render.RenderView( CamDataMap )
+							end
 						cam.End2D()
 
 					render.SetViewPort(0, 0, old_w, old_h)

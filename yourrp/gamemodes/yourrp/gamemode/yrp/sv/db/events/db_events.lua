@@ -171,6 +171,7 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 		if !force then
 			YRP_SQL_UPDATE("yrp_players", {["NormalCharacter"] = cuid}, "SteamID = '" .. ply:SteamID() .. "'")
 		end
+		ply:SetNW2Int("yrp_charid", cuid)
 		ply:SetNW2Bool("yrp_spawning", true)
 		timer.Simple(0.1, function()
 			if ea( ply ) then

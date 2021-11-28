@@ -31,7 +31,6 @@ local bos = {
 	["bool_canusewarnsystem"] = '0',
 	["bool_chat"] = '1',
 	["bool_collision"] = '0',
-	["bool_console"] = '0',
 	["bool_darkrp"] = '0',
 	["bool_design"] = '0',
 	["bool_drive"] = '0',
@@ -642,13 +641,6 @@ net.Receive("usergroup_update_bool_permaprops", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local bool_permaprops = net.ReadString()
 	UGCheckBox(ply, uid, "bool_permaprops", bool_permaprops)
-end)
-
-util.AddNetworkString("usergroup_update_bool_console")
-net.Receive("usergroup_update_bool_console", function(len, ply)
-	local uid = tonumber(net.ReadString())
-	local bool_console = net.ReadString()
-	UGCheckBox(ply, uid, "bool_console", bool_console)
 end)
 
 util.AddNetworkString("usergroup_update_bool_status")

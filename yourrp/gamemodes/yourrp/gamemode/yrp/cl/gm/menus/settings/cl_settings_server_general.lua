@@ -537,6 +537,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateCheckBoxLineTab(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_module, YRP.lang_string("LID_voicemodule") .. " (YourRP)", "update_bool_voice_module")
 		CreateCheckBoxLineTab(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_module_locally, YRP.lang_string("LID_voicemodule") .. " (YourRP) [" .. YRP.lang_string("local") .. "]", "update_bool_voice_module_locally")
 		CreateNumberWangLine(GAMEMODE_SYSTEMS:GetContent(), GEN.int_voice_max_range, YRP.lang_string("LID_maxvoicerange"), "update_int_voice_max_range", 50)
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_3d, YRP.lang_string("LID_voicechat") .. " (3D)", "update_bool_voice_3d")
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_gmod_voice_module, YRP.lang_string("LID_voicemodule") .. " (GMOD)", "update_bool_gmod_voice_module")
 
@@ -1092,6 +1093,7 @@ net.Receive("Connect_Settings_General", function(len)
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_min, YRP.lang_string("LID_respawntime") .. " [" .. YRP.lang_string("LID_min") .. "]", "update_int_deathtimestamp_min")
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_max, YRP.lang_string("LID_respawntime") .. " [" .. YRP.lang_string("LID_max") .. "]", "update_int_deathtimestamp_max")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_spawncorpseondeath, "LID_spawncorpseondeath", "update_bool_spawncorpseondeath")
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_spawncorpseondeath_gmod, YRP.lang_string("LID_spawncorpseondeath") .. "GMOD", "update_bool_spawncorpseondeath_gmod")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_deathscreen, "LID_deathscreen", "update_bool_deathscreen")
 
 

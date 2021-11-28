@@ -59,7 +59,7 @@ function PANEL:SetStorageID(storageID, slots)
 			net.SendToServer()
 		else
 			local c = 1
-			local sp = (self:GetWide() - self:GetCols() * ItemSize()) / (self:GetCols() - 1)
+			local sp = (self:GetWide() - self:GetCols() * YRPItemSize()) / (self:GetCols() - 1)
 	
 			self:SetSpacing(sp)
 	
@@ -67,7 +67,7 @@ function PANEL:SetStorageID(storageID, slots)
 				if slots[c] == nil then
 					break
 				end
-				local line = createD("DHorizontalScroller", nil, ItemSize(), ItemSize(), 0, 0)
+				local line = createD("DHorizontalScroller", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 				line:SetOverlap(-sp)
 	
 				self:AddItem(line)
@@ -79,13 +79,13 @@ function PANEL:SetStorageID(storageID, slots)
 					local s = slots[c]
 					
 					--if s.uniqueID then
-						local slot = createD("YSlot", nil, ItemSize(), ItemSize(), 0, 0)
+						local slot = createD("YSlot", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 						--slot:SetSlotID()
 						
 						line:AddPanel(slot)
 						c = c + 1
 						if ea(s) then
-							local i = createD("YItem", nil, ItemSize(), ItemSize(), 0, 0)
+							local i = createD("YItem", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 							i:SetModel(s:GetModel())
 							i:SetE(s)
 							slot:AddItem(i)
@@ -134,14 +134,14 @@ end)
 function BuildStorage(storage, slots)
 	if pa(storage) then
 		local c = 1
-		local sp = (storage:GetWide() - storage:GetCols() * ItemSize()) / (storage:GetCols() - 1)
+		local sp = (storage:GetWide() - storage:GetCols() * YRPItemSize()) / (storage:GetCols() - 1)
 
 		storage:SetSpacing(sp)
 		for y = 1, 32 do
 			if slots[c] == nil then
 				break
 			end
-			local line = createD("DHorizontalScroller", nil, ItemSize(), ItemSize(), 0, 0)
+			local line = createD("DHorizontalScroller", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 			line:SetOverlap(-sp)
 
 			storage:AddItem(line)
@@ -152,7 +152,7 @@ function BuildStorage(storage, slots)
 
 				local s = slots[c]
 
-				local slot = createD("YSlot", nil, ItemSize(), ItemSize(), 0, 0)
+				local slot = createD("YSlot", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 				slot:SetSlotID(s.uniqueID)
 	
 				line:AddPanel(slot)
@@ -162,7 +162,7 @@ function BuildStorage(storage, slots)
 		end
 		storage:EnableVerticalScrollbar()
 		local ph = math.Round(c / 4)
-		storage:SetTall(ph * ItemSize() + (ph - 1) * sp)
+		storage:SetTall(ph * YRPItemSize() + (ph - 1) * sp)
 		storage:GetParent():SetTall(storage:GetTall() + YRP.ctr(50 + 20 + 20))
 	else
 		YRP.msg("note", "Storage is closed.")

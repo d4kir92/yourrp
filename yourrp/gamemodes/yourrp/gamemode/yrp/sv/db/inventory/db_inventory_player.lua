@@ -2,14 +2,18 @@
 
 local Player = FindMetaTable("Player")
 
+hook.Remove("WeaponEquip", "yrp_weaponequip")
 hook.Add("WeaponEquip", "yrp_weaponequip", function(wep, owner)
 	local atype = wep:GetPrimaryAmmoType()
 	local swep = weapons.GetStored(wep:GetClass())
 	local oldammo = owner:GetAmmoCount(atype)
 
+	local clip1 = wep:GetNW2Int("clip1", -1)
+
 	timer.Simple(0, function()
 		if IsValid(wep) and wep:GetNW2Bool( "yrpdropped", false ) then
 			owner:SetAmmo(owner:GetAmmoCount(atype) - (owner:GetAmmoCount(atype) - oldammo), atype)
+			wep:SetClip1( clip1 )
 		end
 	end)
 end)
@@ -55,9 +59,11 @@ function Player:DropSWEP(cname, force)
 		if self.dropdelay < CurTime() or force then
 			self.dropdelay = CurTime() + 1
 			local wep = self:GetWeapon(cname)
-			wep:SetNW2Bool("canpickup", false)
+			if IsValid(wep) then
+				wep:SetNW2Bool("canpickup", false)
+			end
 			self:RemoveWeapon(cname)
-
+			
 			local ent = ents.Create(cname)
 
 			if ent.WorldModel == "" then
@@ -68,16 +74,21 @@ function Player:DropSWEP(cname, force)
 			ent:SetAngles(self:GetAngles())
 			ent:SetNW2Bool("yrpdropped", true)
 			ent:SetNW2Bool("canpickup", false)
-			timer.Simple(1, function()
+			timer.Simple(0.8, function()
 				if IsValid(ent) then
 					ent:SetNW2Bool("canpickup", true)
 				end
 			end)
+
 			timer.Simple(0, function()
 				if IsValid( ent ) then
 					ent:Spawn()
 
-					if ent:GetPhysicsObject():IsValid() then
+					if IsValid(wep) and wep.GetClip1 then
+						ent:SetNW2Int("clip1", wep:GetClip1())
+					end
+
+					if ent:GetPhysicsObject():IsValid() and IsValid(self) then
 						ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
 					end
 

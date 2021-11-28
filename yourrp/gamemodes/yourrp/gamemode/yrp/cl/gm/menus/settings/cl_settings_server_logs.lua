@@ -20,8 +20,9 @@ function BuildLogs(parent, typ)
 	net.SendToServer()
 
 	net.Receive("yrp_get_logs", function(len)
-		local tab = net.ReadTable()
 		if pa(parent) then
+			local tab = net.ReadTable()
+		
 			for i, v in pairs(tab) do
 				local source = GetPlayerBySteamID64(v.string_source_steamid)
 				local target = GetPlayerBySteamID64(v.string_target_steamid)

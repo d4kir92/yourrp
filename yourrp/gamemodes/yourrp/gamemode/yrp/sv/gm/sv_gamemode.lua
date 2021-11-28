@@ -251,10 +251,7 @@ hook.Add("PlayerLoadout", "yrp_PlayerLoadout", function(ply)
 
 			local plyT = ply:GetPlyTab()
 			if wk(plyT) then
-				plyT.CurrentCharacter = tonumber(plyT.CurrentCharacter)
-				if plyT.CurrentCharacter != -1 then
-					ply:SetNW2Int("yrp_charid", tonumber(plyT.CurrentCharacter))
-				end
+				ply:SetupCharID()
 				
 				local _rol_tab = ply:YRPGetRoleTable()
 				if wk(_rol_tab) then
@@ -392,14 +389,14 @@ function GM:PlayerDeath(ply, inflictor, attacker)
 		end
 	end
 
-	if (attacker == ply) then
+	if IsValid( attacker ) and attacker == ply then
 		net.Start("PlayerKilledSelf")
 			net.WriteEntity(ply)
 		net.Broadcast()
 		return
 	end
 
-	if (attacker:IsPlayer()) then
+	if IsValid( attacker ) and attacker:IsPlayer() then
 		net.Start("PlayerKilledByPlayer")
 			net.WriteEntity(ply)
 			net.WriteString(inflictor:GetClass())
@@ -408,7 +405,7 @@ function GM:PlayerDeath(ply, inflictor, attacker)
 		return
 	end
 
-	if ply and inflictor and attacker then
+	if ply and IsValid( inflictor ) and IsValid( attacker ) then
 		net.Start("PlayerKilled")
 			net.WriteEntity(ply)
 			net.WriteString(inflictor:GetClass())
@@ -533,7 +530,9 @@ end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
-	ply:CreateRagdoll()
+	if GetGlobalBool( "bool_spawncorpseondeath_gmod", true ) then
+		ply:CreateRagdoll()
+	end
 
 	ply:AddDeaths( 1 )
 
@@ -574,8 +573,6 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 				if oldragdoll.removeable == nil then
 					oldragdoll:Remove() -- Removes Default one
 				end
-			else
-				YRP.msg("note", "GetRagdollEntity does not exists.")
 			end
 		else
 			if !IsValid(ply.rd) then
@@ -843,7 +840,7 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 							ply:SetNW2Bool("broken_arm_right", true)
 
 							if !ply:HasWeapon("yrp_unarmed") then
-								ply:Give("yrp_unarmed")
+								ply:Give("yrp_unarmed", true)
 							end
 							ply:SelectWeapon("yrp_unarmed")
 						end
@@ -1455,12 +1452,13 @@ hook.Add("PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, talk
 		end
 		
 		return false -- new
-	else
+	elseif GetGlobalBool("bool_voice_3d", false) then
 		if YRPIsInMaxVoiceRange(listener, talker) then
 			if YRPIsInSpeakRange(listener, talker) then
 				return true
 			end
 		end
+		return false
 	end
 end)
 
@@ -1538,27 +1536,23 @@ function YRPCheckAddons( force )
 	for i, v in pairs( engine.GetAddons() ) do
 		v.searchtitle = string.lower(v.title)
 
-		v.searchtitle = string.Replace( v.searchtitle, "[", "" )
-		v.searchtitle = string.Replace( v.searchtitle, "]", "" )
-		v.searchtitle = string.Replace( v.searchtitle, "%", "" )
-
 		-- 167545348 Manual Weapon Pickup, breaks GIVE function
 		if v.wsid == "167545348" then
 			table.insert( tabwar, "[" .. v.wsid .. "] [" .. v.title .. "] breaks Give Function of Weapons\n> For Example in Shops or other addons that want to give a weapon\n> F8 -> General -> Disable \"Auto pickup\" => for manual pickup of weapons" )
 			count = count + 1
 		end
 			
-		if ( string.find( v.searchtitle, "workshop" ) and string.find( v.searchtitle, "download" ) ) or string.find( v.searchtitle, "addon share" ) then -- "Workshop Downloader Addons"
+		if ( string.find( v.searchtitle, "workshop", 1, true ) and string.find( v.searchtitle, "download", 1, true ) ) or string.find( v.searchtitle, "addon share", 1, true ) or string.find( v.searchtitle, "fastdl", 1, true ) then -- "Workshop Downloader Addons"
 			table.insert( tabwar, "[" .. v.wsid .. "] [" .. v.title .. "] already implemented in YourRP!" )
 			count = count + 1
 		end
 
-		if string.find( v.searchtitle, "fps" ) and ( string.find( v.searchtitle, "boost" ) or string.find( v.searchtitle, "tweak" ) or string.find( v.searchtitle, "fps+" ) ) then -- "FPS Booster Addons"
+		if !string.find( v.searchtitle, "afps", 1, true ) and string.find( v.searchtitle, "fps", 1, true ) and ( string.find( v.searchtitle, "boost", 1, true ) or string.find( v.searchtitle, "tweak", 1, true ) or string.find( v.searchtitle, "fps+", 1, true ) ) then -- "FPS Booster Addons"
 			table.insert( tabwar, "[" .. v.wsid .. "] [" .. v.title .. "] already implemented in YourRP, if it is improving FPS!" )
 			count = count + 1
 		end
 
-		if string.find( v.searchtitle, "talk icon" ) then -- "Talk Icon Addons"
+		if string.find( v.searchtitle, "talk icon", 1, true ) then -- "Talk Icon Addons"
 			table.insert( tabinf, "[" .. v.wsid .. "] [" .. v.title .. "] YourRP also have an Talk Icon..." )
 			count = count + 1
 		end
@@ -1588,4 +1582,10 @@ hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_CheckAddons", function()
 	timer.Simple(2.1, function()
 		YRPCheckAddons( true )
 	end)
+end )
+
+
+
+hook.Add( "PlayerShouldTaunt", "yrp_allowtaunts", function( ply, act )
+	return true
 end )

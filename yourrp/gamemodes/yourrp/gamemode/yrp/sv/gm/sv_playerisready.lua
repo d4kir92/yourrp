@@ -21,13 +21,7 @@ function YRPPlayerLoadedGame(ply)
 		ply:YRPDesignLoadout("PlayerLoadedGame")
 	end )
 
-	local plyT = ply:GetPlyTab()
-	if wk(plyT) then
-		plyT.CurrentCharacter = tonumber(plyT.CurrentCharacter)
-		if plyT.CurrentCharacter != -1 then
-			ply:SetNW2Int("yrp_charid", tonumber(plyT.CurrentCharacter))
-		end
-	end
+	ply:SetupCharID()
 
 	ply:SetNW2Bool("finishedloadingcharacter", true)
 
@@ -139,7 +133,7 @@ local function YRPReceivedReadyMessage( len, ply, tab )
 		MsgC( Color( 0, 0, 255 ), "###############################################################################" .. "\n" )--##########
 
 		MsgC( Color( 0, 0, 255 ), ply:SteamName() .. " is using OS: " .. ply:GetNW2String("yrp_os", "-") .. " (" .. tostring( Branch ) .. ")" .. "\n" )
-		MsgC( Color( 0, 0, 255 ), ply:SteamName() .. " is from Country: " .. GetCountryName( Country ) .. "\n" )
+		MsgC( Color( 0, 0, 255 ), ply:SteamName() .. " is from Country: " .. YRPGetCountryName( Country, "IS READY" ) .. "\n" )
 
 		MsgC( Color( 0, 0, 255 ), "###############################################################################" .. "\n" )--##########
 	
@@ -190,8 +184,8 @@ function YRPAskForStartData( data )
 					MsgC( Color( 0, 255, 0 ), "[START] [" .. ply:SteamName() .. "] Ask for StartData" .. " - try #" .. ply.readycounter .. "\n" )
 				end
 
-				net.Start("askforstartdata")
-				net.Send(ply)
+				net.Start( "askforstartdata" )
+				net.Send( ply )
 
 				YRPAddReadyStatusMsg( ply, "Sended" )
 

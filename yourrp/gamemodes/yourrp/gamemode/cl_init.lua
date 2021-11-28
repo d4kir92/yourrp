@@ -15,9 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program.	If not, see < http://www.gnu.org/licenses/ >.
 ]]--
 
---[[
-includes
-]]--
+-- includes
+
 include("shared.lua")
 
 include("yrp/cl/cl_includes.lua")
