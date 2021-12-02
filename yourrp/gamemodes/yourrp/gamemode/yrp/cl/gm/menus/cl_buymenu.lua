@@ -92,7 +92,7 @@ function createShopItem(item, duid, id)
 			function w.cc:ValueChanged(col)
 				_i.modelc.color = col
 				_i.model:SetColor(_i.modelc.color)
-				lply.item_color = ColorToString(col)
+				lply.item_color = YRPColorToString(col)
 			end
 		end
 	end

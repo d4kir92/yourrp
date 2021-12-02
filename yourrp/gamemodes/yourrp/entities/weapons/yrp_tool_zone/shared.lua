@@ -121,7 +121,7 @@ if CLIENT then
 			w.name:SetWangs(true)
 			w.name:SetColor( StringToColor( stab.color ) )
 			function w.name:ValueChanged(col)
-				local color = ColorToString(col)
+				local color = YRPColorToString(col)
 				net.Start("update_map_color")
 					net.WriteString(stab.uniqueID)
 					net.WriteString(color)

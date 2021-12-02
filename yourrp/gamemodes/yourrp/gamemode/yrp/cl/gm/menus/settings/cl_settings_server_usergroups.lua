@@ -837,8 +837,12 @@ net.Receive("Connect_Settings_UserGroup", function(len)
 		ACCESSAddCheckBox("bool_darkrp", "DarkRP", Color(255, 0, 0, 255))
 		ACCESSAddCheckBox("bool_permaprops", "Perma Props", Color(255, 0, 0, 255))
 		
+		-- Import
 		ACCESSAddHr()
+		ACCESSAddCheckBox("bool_import_darkrp", YRP.lang_string("LID_import") .. " DarkRP", Color(255, 255, 0, 255))
+		
 		-- YourRP
+		ACCESSAddHr()
 		ACCESSAddCheckBox("bool_yourrp_addons", "LID_settings_yourrp_addons")
 	end
 	x = x + w + 10

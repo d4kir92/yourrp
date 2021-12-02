@@ -17,9 +17,9 @@ GM.Twitter = "twitter.com/D4KIR" -- do NOT change this!
 GM.Help = "Create your rp you want to make!" -- do NOT change this!
 GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
-GM.VersionBeta = 351 -- do NOT change this!
-GM.VersionCanary = 705 -- do NOT change this!
-GM.VersionBuild = 145 -- do NOT change this!
+GM.VersionBeta = 352 -- do NOT change this!
+GM.VersionCanary = 707 -- do NOT change this!
+GM.VersionBuild = 149 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -192,12 +192,12 @@ end
 
 function YRPHR( color )
 	color = color or GetRealmColor()
-	MsgC( color, "-------------------------------------------------------------------------------" .. "\n" )
+	MsgC( color, "--------------------------------------------------------------------------------" .. "\n" )
 end
 
 function YRPMsg( text, color )
 	color = color or GetRealmColor()
-	MsgC( color, text .. "\n" )
+	MsgC( color, text, "\n" )
 end
 
 concommand.Add("yrp_version", function(ply, cmd, args)
@@ -267,7 +267,7 @@ concommand.Add("yrp_players", function(ply, cmd, args)
 	local structure = "%-4s %-20s %-10s %-10s %-20s"
 	MsgC( Color( 255, 255, 0 ), "Players:\t" .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()) .. "\n" )
 	MsgC( Color( 255, 255, 0 ), string.format( structure,"ID", "SteamID", "Ready?", "OS", "Name" ) .. "\n" )
-	MsgC( Color( 255, 255, 0 ), "-------------------------------------------------------------------------------" .. "\n" )
+	MsgC( Color( 255, 255, 0 ), "--------------------------------------------------------------------------------" .. "\n" )
 	for i, pl in pairs(player.GetAll()) do
 		local _id = 		makeString( pl:UserID(), 4 )
 		local _steamid = 	makeString( pl:SteamID(), 20 )
@@ -1055,7 +1055,7 @@ hook.Add("OnLuaError", "yrp_OnLuaError", function(...)
 	local tabtrace = string.Explode( "\n", trace )
 	local newtrace = {}
 	for i, v in pairs( tabtrace ) do
-		if string.find( v, "stack traceback:", 1, true ) or string.find( v, "lua/autorun/sh_yrp_senderrors.lua", 1, true ) then
+		if string.find( v, "stack traceback:", 1, true ) or string.find( v, "lua/autorun/sh_d4_senderrors.lua", 1, true ) then
 			
 		else
 			table.insert( newtrace, v )

@@ -56,9 +56,25 @@ function DarkRP.createAmmoType(name, tbl)
 	--YRPDarkrpNotFound("createAmmoType(" .. name .. ", tbl)")
 end
 
-function DarkRP.createCategory(tbl)
+function DarkRP.createCategory( tbl )
 	--Description: Create a category for the F4 menu.
 	--YRPDarkrpNotFound("createCategory(" .. table.ToString( tbl or {}, "tbl", false ) ..")")
+	if SERVER then
+		if YRPIMPORTDARKRP then
+			if tbl.categorises == "jobs" then
+				local group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "string_name = '" .. tbl.name .. "'" )
+				if group == nil then
+					MsgC( Color( 0, 255, 0 ), "[YRPImportCategory]", " Add Group (", tbl.name, ")", "\n" )
+					local res = YRP_SQL_INSERT_INTO( "yrp_ply_groups", "string_name, string_color", YRP_SQL_STR_IN( tbl.name ) .. ", " .. YRP_SQL_STR_IN( YRPColorToString( tbl.color ) ) )
+					if res != nil then
+						MsgC( Color( 255, 0, 0 ), "[YRPImportCategory]", " FAILED? (", res, ")", "\n" )
+					end
+				else
+					MsgC( Color( 255, 0, 0 ), "[YRPImportCategory]", " Already Added? (", tbl.name, ")", "\n" )
+				end
+			end
+		end
+	end
 end
 
 function DarkRP.createDemoteGroup(name, tbl)
@@ -90,6 +106,66 @@ end
 function DarkRP.createJob(name, tbl)
 	--Description: Create a job for DarkRP.
 	--YRPDarkrpNotFound("createJob(" .. name .. ", tbl)")
+	if SERVER then
+		if YRPIMPORTDARKRP then
+			local groupid = 1
+			local group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "string_name = '" .. tbl.category .. "'" )
+			if group == nil then
+				MsgC( Color( 255, 0, 0 ), "[YRPImportJob]", " Group not found (", tbl.category, ")", "\n" )
+			elseif group and group[1] then
+				group = group[1]
+				groupid = tonumber( group.uniqueID )
+			end
+
+			if YRP_SQL_SELECT( "yrp_ply_roles", "*", "string_name = '" .. name .. "' AND int_groupID = '" .. groupid .. "'" ) == nil then
+				MsgC( Color( 255, 255, 0 ), "[YRPImportJob]", " Add Role: ", name, "\n" )
+				
+				local cols = "string_name, string_identifier, string_color, int_salary, int_groupID, string_description, int_maxamount"
+
+				name = name or "unnamed"
+				tbl.command =  tbl.command or ""
+				tbl.color = YRPColorToString( tbl.color )
+				tbl.salary = tbl.salary or 0
+				tbl.description = tbl.description or "-"
+				tbl.max = tbl.max or 0
+
+				local vals = ""
+				vals = vals .. YRP_SQL_STR_IN( name )
+				vals = vals .. ","
+				vals = vals .. YRP_SQL_STR_IN( tbl.command )
+				vals = vals .. ","
+				vals = vals .. YRP_SQL_STR_IN( tbl.color )
+				vals = vals .. ","
+				vals = vals .. YRP_SQL_STR_IN( tbl.salary )
+				vals = vals .. ","
+				vals = vals .. YRP_SQL_STR_IN( groupid )
+				vals = vals .. ","
+				vals = vals .. YRP_SQL_STR_IN( tbl.description )
+				vals = vals .. ","
+				vals = vals .. YRP_SQL_STR_IN( tbl.max )
+
+				local res = YRP_SQL_INSERT_INTO( "yrp_ply_roles", cols, vals )
+				if res == nil then
+					local rols = YRP_SQL_SELECT( "yrp_ply_roles", "string_name, uniqueID", nil )
+					local rol = rols[#rols]
+					local ruid = rol.uniqueID
+
+					-- SWEPS
+					for i, swepcn in pairs( tbl.weapons ) do
+						AddSwepToRole( ruid, swepcn )
+					end
+
+					-- Playermodels
+					if type( tbl.model ) == "string" then
+						tbl.model = { tbl.model }
+					end
+					YRPAddPlayermodelsToRole( tbl.model, "pms for " .. name, 1, 1, ruid )
+				end
+			else
+				MsgC( Color( 255, 255, 0 ), "[YRPImportJob]", " Already added? (", name, ")", "\n" )
+			end
+		end
+	end
 	return -1
 end
 

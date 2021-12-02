@@ -33,10 +33,15 @@ net.Receive("yrp_get_logs", function(len, ply)
 	if ply:CanAccess("bool_logs") then
 		local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_typ = '" .. tab .. "'")
 		local nettab = {}
+		local count = 0
 		if wk(dbtab) then
-			for i, t in pairs(dbtab) do
+			for i, t in SortedPairsByMemberValue( dbtab, "string_timestamp", true ) do
 				if os.time() - showafter < tonumber(t.string_timestamp) then
-					table.insert(nettab, t)
+					if count < 60 then
+						table.insert(nettab, t)
+
+						count = count + 1
+					end
 				else
 					YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. t.uniqueID .. "'")
 				end

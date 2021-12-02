@@ -559,158 +559,162 @@ PLAYER.TauntCam = TauntCamera()
 -- #THIRDPERSON
 local oldang = Angle(0, 0, 0)
 function YRP_CalcView(lply, pos, angles, fov)
-	if angles == nil then
-		return
-	end
+	if angles != nil then	
+		lply.yrp_view_range = lply.yrp_view_range or 0
+		lply.yrp_view_range_view = lply.yrp_view_range_view or 0
 
-	lply.yrp_view_range = lply.yrp_view_range or 0
-	lply.yrp_view_range_view = lply.yrp_view_range_view or 0
+		lply.yrp_view_z = lply.yrp_view_z or 0
+		lply.yrp_view_x = lply.yrp_view_x or 0
+		lply.yrp_view_s = lply.yrp_view_s or 0
 
-	lply.yrp_view_z = lply.yrp_view_z or 0
-	lply.yrp_view_x = lply.yrp_view_x or 0
-	lply.yrp_view_s = lply.yrp_view_s or 0
+		lply.yrp_view_z_c = lply.yrp_view_z_c or 0
+		lply.yrp_view_x_c = lply.yrp_view_x_c or 0
+		lply.yrp_view_s_c = lply.yrp_view_s_c or 0
 
-	lply.yrp_view_z_c = lply.yrp_view_z_c or 0
-	lply.yrp_view_x_c = lply.yrp_view_x_c or 0
-	lply.yrp_view_s_c = lply.yrp_view_s_c or 0
+		if lply:Alive() then --and !lply:IsPlayingTaunt() then
+			local view = {}
 
-	if lply:Alive() then --and !lply:IsPlayingTaunt() then
-		local view = {}
-
-		if lply:AFK() then
-			if (oldang.p + 1 < angles.p and oldang.p - 1 < angles.p) or (oldang.y + 1 < angles.y and oldang.y - 1 < angles.y) or (oldang.r + 1 < angles.r and oldang.r - 1 < angles.r) then
-				net.Start("notafk")
-				net.SendToServer()
-			end
-		end
-		oldang = angles
-
-		local disablethirdperson = false
-		local weapon = lply:GetActiveWeapon()
-		if weapon != NULL and weapon:GetClass() != nil then
-			local _weaponName = string.lower(tostring(lply:GetActiveWeapon():GetClass()))
-			if _weaponName == "yrp_lightsaber_base" then
-				
-			elseif string.find(_weaponName, "lightsaber", 0, false) then
-				disablethirdperson = true
-			end
-		end
-
-		local _view_range = lply.yrp_view_range or 0
-		if _view_range < 0 then
-			_view_range = 0
-		end
-		if lply:IsPlayingTaunt() then
-			disablethirdperson = false
-			_view_range = 200
-		end
-		local dist = _view_range * lply:GetModelScale()
-	
-		if lply:GetModel() != "models/player.mdl" and !lply:InVehicle() and !disablethirdperson and GetGlobalBool("bool_thirdperson", false) then
-			if lply:LookupBone("ValveBiped.Bip01_Head1") != nil then
-				pos2 = lply:GetBonePosition(lply:LookupBone("ValveBiped.Bip01_Head1")) + (angles:Forward() * 12 * lply:GetModelScale())
-			end
-			if lply:GetMoveType() == MOVETYPE_NOCLIP and lply:GetModel() == "models/crow.mdl" then
-				local _tmpThick = 4
-				local _minDistFor = 8
-				local _minDistBac = 40
-				if dist > 0 then
-					view.drawviewer = true
-				else
-					view.drawviewer = false
+			if lply:AFK() then
+				if (oldang.p + 1 < angles.p and oldang.p - 1 < angles.p) or (oldang.y + 1 < angles.y and oldang.y - 1 < angles.y) or (oldang.r + 1 < angles.r and oldang.r - 1 < angles.r) then
+					net.Start("notafk")
+					net.SendToServer()
 				end
-				view.origin = pos - (angles:Forward() * dist) - Vector(0, 0, 58)
-				view.angles = angles
-				view.fov = fov
-				return view
-			else
-			--if _thirdperson == 2 then
-				if tonumber(lply.yrp_view_range or 0) > 0 then
-					if lply:LookupBone("ValveBiped.Bip01_Head1") != nil then
-						local _head = lply:GetPos().z + lply:OBBMaxs().z
-						pos.z = _head
-					end
-					--Thirdperson
-					dist = lply.yrp_view_range * lply:GetModelScale()
+			end
+			oldang = angles
 
+			local disablethirdperson = false
+			local weapon = lply:GetActiveWeapon()
+			if weapon != NULL and weapon:GetClass() != nil then
+				local _weaponName = string.lower(tostring(lply:GetActiveWeapon():GetClass()))
+				if _weaponName == "yrp_lightsaber_base" then
+					
+				elseif string.find(_weaponName, "lightsaber", 0, false) then
+					disablethirdperson = true
+				end
+			end
+
+			local _view_range = lply.yrp_view_range or 0
+			if _view_range < 0 then
+				_view_range = 0
+			end
+			if lply:IsPlayingTaunt() then
+				disablethirdperson = false
+				_view_range = 200
+			end
+			local dist = _view_range * lply:GetModelScale()
+		
+			if lply:GetModel() != "models/player.mdl" and !lply:InVehicle() and !disablethirdperson and GetGlobalBool("bool_thirdperson", false) then
+				if lply:LookupBone("ValveBiped.Bip01_Head1") != nil then
+					pos2 = lply:GetBonePosition(lply:LookupBone("ValveBiped.Bip01_Head1")) + (angles:Forward() * 12 * lply:GetModelScale())
+				end
+				if lply:GetMoveType() == MOVETYPE_NOCLIP and lply:GetModel() == "models/crow.mdl" then
 					local _tmpThick = 4
-					local _minDistFor = 2
+					local _minDistFor = 8
 					local _minDistBac = 40
-					angles = angles + Angle(0, lply.yrp_view_s, 0)
-					local _pos_change = angles:Up() * lply.yrp_view_z + angles:Right() * lply.yrp_view_x
-
-					local tr = util.TraceHull({
-						start = pos - angles:Forward() * _minDistFor,
-						endpos = pos - (angles:Forward() * dist) + _pos_change,
-						filter = function( ent )
-							if ent:GetCollisionGroup() == 20 then
-								return false
-							elseif ent == LocalPlayer() then
-								return false
-							elseif ent == weapon then
-								return false
-							end
-							return true
-						end,
-						mins = Vector(-_tmpThick, -_tmpThick, -_tmpThick),
-						maxs = Vector(_tmpThick, _tmpThick, _tmpThick),
-						mask = MASK_SHOT_HULL
-					})
-
-					if tr.HitPos:Distance(pos) < dist and !tr.HitNonWorld then
-						dist = tr.HitPos:Distance(pos) -- _tmpThick
-					end
-
-					if tr.Hit and tr.HitPos:Distance(pos) > _minDistBac then
-						view.origin = tr.HitPos
-						_savePos = view.origin
-						view.angles = angles
-						view.fov = fov
+					if dist > 0 then
 						view.drawviewer = true
-						return view
-					elseif tr.Hit and tr.HitPos:Distance(pos) <= _minDistBac then
-						view.origin = pos
-						view.angles = angles
-						view.fov = fov
-						view.drawviewer = false
-						return view
 					else
-						view.origin = pos - (angles:Forward() * dist) + _pos_change
-						view.angles = angles
-						view.fov = fov
-						view.drawviewer = true
-						return view
+						view.drawviewer = false
 					end
-				elseif tonumber(lply.yrp_view_range) > -200 and tonumber(lply.yrp_view_range) <= 0 then
-					--Disabled
-					--view.drawviewer = false
-					--
+					view.origin = pos - (angles:Forward() * dist) - Vector(0, 0, 58)
+					view.angles = angles
+					view.fov = fov
+					return view
 				else
-					--Firstperson realistic
-					local dist = lply.yrp_view_range * lply:GetModelScale()
+				--if _thirdperson == 2 then
+					if tonumber(lply.yrp_view_range or 0) > 0 then
+						if lply:LookupBone("ValveBiped.Bip01_Head1") != nil then
+							local _head = lply:GetPos().z + lply:OBBMaxs().z
+							pos.z = _head
+						end
+						--Thirdperson
+						dist = lply.yrp_view_range * lply:GetModelScale()
 
-					local _tmpThick = 16
-					local _head = lply:LookupBone("ValveBiped.Bip01_Head1")
+						local _tmpThick = 4
+						local _minDistFor = 2
+						local _minDistBac = 40
+						angles = angles + Angle(0, lply.yrp_view_s, 0)
+						local _pos_change = angles:Up() * lply.yrp_view_z + angles:Right() * lply.yrp_view_x
 
-					if worked(_head, "_head failed @cl_think.lua") then
 						local tr = util.TraceHull({
-							start = lply:GetBonePosition(_head) + angles:Forward() * 4,
-							endpos = lply:GetBonePosition(_head) - angles:Forward() * 4,
-							filter = {LocalPlayer(),weapon},
+							start = pos - angles:Forward() * _minDistFor,
+							endpos = pos - (angles:Forward() * dist) + _pos_change,
+							filter = function( ent )
+								if ent:GetCollisionGroup() == 20 then
+									return false
+								elseif ent == LocalPlayer() then
+									return false
+								elseif ent == weapon then
+									return false
+								end
+								return true
+							end,
 							mins = Vector(-_tmpThick, -_tmpThick, -_tmpThick),
 							maxs = Vector(_tmpThick, _tmpThick, _tmpThick),
 							mask = MASK_SHOT_HULL
 						})
 
-						if !tr.Hit then
-							pos2 = lply:GetBonePosition(_head) + (angles:Forward() * 5 * lply:GetModelScale()) - Vector(0, 0, 1.4) * lply:GetModelScale() + (angles:Up() * 6 * lply:GetModelScale())
-							view.origin = pos2
-							_savePos = pos2
+						if tr.HitPos:Distance(pos) < dist and !tr.HitNonWorld then
+							dist = tr.HitPos:Distance(pos) -- _tmpThick
+						end
+
+						if tr.Hit and tr.HitPos:Distance(pos) > _minDistBac then
+							view.origin = tr.HitPos
+							_savePos = view.origin
 							view.angles = angles
 							view.fov = fov
 							view.drawviewer = true
-
 							return view
+						elseif tr.Hit and tr.HitPos:Distance(pos) <= _minDistBac then
+							view.origin = pos
+							view.angles = angles
+							view.fov = fov
+							view.drawviewer = false
+							return view
+						else
+							view.origin = pos - (angles:Forward() * dist) + _pos_change
+							view.angles = angles
+							view.fov = fov
+							view.drawviewer = true
+							return view
+						end
+					elseif tonumber(lply.yrp_view_range) > -200 and tonumber(lply.yrp_view_range) <= 0 then
+						--Disabled
+						--view.drawviewer = false
+						--
+					else
+						--Firstperson realistic
+						local dist = lply.yrp_view_range * lply:GetModelScale()
+
+						local _tmpThick = 16
+						local _head = lply:LookupBone("ValveBiped.Bip01_Head1")
+
+						if worked(_head, "_head failed @cl_think.lua") then
+							local tr = util.TraceHull({
+								start = lply:GetBonePosition(_head) + angles:Forward() * 4,
+								endpos = lply:GetBonePosition(_head) - angles:Forward() * 4,
+								filter = {LocalPlayer(),weapon},
+								mins = Vector(-_tmpThick, -_tmpThick, -_tmpThick),
+								maxs = Vector(_tmpThick, _tmpThick, _tmpThick),
+								mask = MASK_SHOT_HULL
+							})
+
+							if !tr.Hit then
+								pos2 = lply:GetBonePosition(_head) + (angles:Forward() * 5 * lply:GetModelScale()) - Vector(0, 0, 1.4) * lply:GetModelScale() + (angles:Up() * 6 * lply:GetModelScale())
+								view.origin = pos2
+								_savePos = pos2
+								view.angles = angles
+								view.fov = fov
+								view.drawviewer = true
+
+								return view
+							else
+								view.origin = pos
+								view.angles = angles
+								view.fov = fov
+								view.drawviewer = false
+								return view
+							end
 						else
 							view.origin = pos
 							view.angles = angles
@@ -718,59 +722,48 @@ function YRP_CalcView(lply, pos, angles, fov)
 							view.drawviewer = false
 							return view
 						end
-					else
-						view.origin = pos
-						view.angles = angles
-						view.fov = fov
-						view.drawviewer = false
-						return view
 					end
 				end
 			end
-		end
-	else
-		local entindex = lply:GetNW2Int("ent_ragdollindex")
+		else
+			local entindex = lply:GetNW2Int("ent_ragdollindex")
 
-		if entindex then
-			local ent = Entity(entindex)
-			if !IsValid(ent) then
-				return
+			if entindex then
+				local ent = Entity(entindex)
+				if !IsValid(ent) then
+					return
+				end
+				if ent:LookupBone("ValveBiped.Bip01_Head1") != nil then
+					pos, angles = ent:GetBonePosition(ent:LookupBone("ValveBiped.Bip01_Head1"))
+					pos = pos + angles:Forward() * 10
+
+					angles:RotateAroundAxis(angles:Forward(), -90)--90)
+					angles:RotateAroundAxis(angles:Right(), -90)--90)
+					angles:RotateAroundAxis(angles:Up(), 0)
+				end
+		
+				local view = {}
+
+				view.origin = pos
+				view.angles = angles
+				view.fov = fov
+				view.drawviewer = true
+
+				return view
 			end
-			if ent:LookupBone("ValveBiped.Bip01_Head1") != nil then
-				pos, angles = ent:GetBonePosition(ent:LookupBone("ValveBiped.Bip01_Head1"))
-				pos = pos + angles:Forward() * 10
-
-				angles:RotateAroundAxis(angles:Forward(), -90)--90)
-				angles:RotateAroundAxis(angles:Right(), -90)--90)
-				angles:RotateAroundAxis(angles:Up(), 0)
-			end
-	
-			local view = {}
-
-			view.origin = pos
-			view.angles = angles
-			view.fov = fov
-			view.drawviewer = true
-
-			return view
 		end
 	end
 end
 
-hook.Remove("CalcView", "AV7View") -- breaks thirdperson, must be removed!
-if hook.GetTable()["CalcView"]["YOURRP_ThirdPerson_CalcView"] == nil then
-	print("CREATED")
-	print("CREATED")
-	print("CREATED")
-	print("CREATED")
-	print("CREATED")
-	print("CREATED")
-	print("CREATED")
-	print("CREATED")
-	print("CREATED")
-	print("CREATED")
-	print("CREATED")
-	hook.Add("CalcView", "YOURRP_ThirdPerson_CalcView", YRP_CalcView)
+if hook.GetTable()["CalcView"] and hook.GetTable()["CalcView"]["AV7View"] then
+	hook.Remove("CalcView", "AV7View") -- breaks thirdperson, must be removed!
+end
+if hook.GetTable()["CalcView"] == nil or ( hook.GetTable()["CalcView"] and hook.GetTable()["CalcView"]["YOURRP_ThirdPerson_CalcView"] == nil ) then
+	hook.Add("CalcView", "YOURRdP_ThirdPerson_CalcView", YRP_CalcView)
+end
+
+function GM:ShouldDrawLocalPlayer( ply )
+	-- NOTHING
 end
 
 jobByCmd = jobByCmd or {}

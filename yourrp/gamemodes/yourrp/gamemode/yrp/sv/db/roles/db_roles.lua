@@ -1132,14 +1132,7 @@ net.Receive("add_role_playermodel", function(len, ply)
 	AddPlayermodelToRole(ruid, muid)
 end)
 
-util.AddNetworkString("add_playermodels")
-net.Receive("add_playermodels", function(len, ply)
-	local ruid = net.ReadInt(32)
-	local pms = net.ReadTable()
-	local name = net.ReadString()
-	local min = net.ReadString()
-	local max = net.ReadString()
-
+function YRPAddPlayermodelsToRole( pms, name, min, max, ruid )
 	for i, v in pairs( pms ) do
 		if string.find( v, "'" ) then
 			YRP.msg( "note", "!!! MODEL HAS > ' < in its path/file -> " .. tostring( v ) )
@@ -1155,6 +1148,17 @@ net.Receive("add_playermodels", function(len, ply)
 	local lastentry = YRP_SQL_SELECT("yrp_playermodels", "*", nil)
 	lastentry = lastentry[table.Count(lastentry)]
 	AddPlayermodelToRole(ruid, lastentry.uniqueID)
+end
+
+util.AddNetworkString("add_playermodels")
+net.Receive("add_playermodels", function(len, ply)
+	local ruid = net.ReadInt(32)
+	local pms = net.ReadTable()
+	local name = net.ReadString()
+	local min = net.ReadString()
+	local max = net.ReadString()
+
+	YRPAddPlayermodelsToRole( pms, name, min, max, ruid )
 end)
 
 function RemPlayermodelFromRole(ruid, muid)
@@ -1203,12 +1207,16 @@ function SendSweps(uid)
 				table.insert(nettab, swep)
 			end
 		end
-
-		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
-			net.Start("get_role_sweps")
-				net.WriteTable(nettab)
-			net.Send(pl)
+		
+		if HANDLER_GROUPSANDROLES and HANDLER_GROUPSANDROLES["roles"] and HANDLER_GROUPSANDROLES["roles"][uid] then
+			for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
+				net.Start("get_role_sweps")
+					net.WriteTable(nettab)
+				net.Send(pl)
+			end
 		end
+	else
+		YRP.msg("note", "Role not Found")
 	end
 end
 
@@ -1237,6 +1245,8 @@ function AddSwepToRole(ruid, swepcn)
 			YRP_SQL_UPDATE(DATABASE_NAME, {["string_sweps"] = newsweps}, "uniqueID = '" .. ruid .. "'")
 			SendSweps(ruid)
 		end
+	else
+		YRP.msg("note", "Role not found")
 	end
 end
 

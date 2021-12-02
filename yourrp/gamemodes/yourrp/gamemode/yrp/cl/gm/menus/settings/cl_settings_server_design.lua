@@ -1056,7 +1056,7 @@ net.Receive("get_design_settings", function(len)
 							function ycol.cm:ColorChanged(col)
 								net.Start("update_interface_color")
 									net.WriteString(ift.name)
-									net.WriteString(ColorToString(col))
+									net.WriteString(YRPColorToString(col))
 								net.SendToServer()
 							end
 
@@ -1079,7 +1079,7 @@ net.Receive("get_design_settings", function(len)
 							function ycol.cm:ColorChanged(col)
 								net.Start("update_interface_color")
 									net.WriteString(ift.name)
-									net.WriteString(ColorToString(col))
+									net.WriteString(YRPColorToString(col))
 								net.SendToServer()
 							end
 

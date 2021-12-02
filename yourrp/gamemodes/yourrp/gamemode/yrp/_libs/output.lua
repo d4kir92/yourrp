@@ -5,8 +5,6 @@ _text.pre = "#YRP# "
 _text.gmname = "YourRP"
 _text.loaddb = "LOAD DB: "
 _text.successdb = " created successfully."
-_text.spacePre = "\n-------------------------------------------------------------------------[" .. "YRP" .. "]-"
-_text.spacePos = "-------------------------------------------------------------------------[" .. "YRP" .. "]-\n"
 
 function strEmpty(str)
 	if isstring(str) then
@@ -46,12 +44,8 @@ function strUrl(str)
 	return false
 end
 
-function hr()
-	MsgC( GetRealmColor(), "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" .. "\n" )
-end
-
 function yrpmsg(msg)
-	MsgC( GetRealmColor(), msg .. "\n" )
+	MsgC( GetRealmColor(), msg, "\n" )
 end
 
 function bool_status(b)
@@ -242,6 +236,19 @@ function YRP.msg(chan, str_msg, tochat, force)
 			end
 		end
 	end
+end
+
+function YRPTableToColor( tbl )
+	return Color( tbl.r , tbl.g , tbl.b, tbl.a )
+end
+
+function YRPTableToColorStr(tbl)
+	return tbl.r .. "," .. tbl.g .. "," .. tbl.b .. "," .. tbl.a
+end
+
+function YRPColorToString(col)
+	col.a = col.a or 255
+	return col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a
 end
 
 function printTab(table, name)

@@ -10,7 +10,7 @@ YRPReceivedStartData = YRPReceivedStartData or false
 local langonce = true
 
 local function YRPReadyHR( col )
-	MsgC( col, "-------------------------------------------------------------------------------" .. "\n" )
+	MsgC( col, "--------------------------------------------------------------------------------" .. "\n" )
 end
 
 local function YRPReadyMSG( msg, col )

@@ -1589,3 +1589,80 @@ end )
 hook.Add( "PlayerShouldTaunt", "yrp_allowtaunts", function( ply, act )
 	return true
 end )
+
+
+
+function YRPRemoveEmptyLines( str )
+	local tab = string.Explode( "\n", str, false )
+	local newtab = {}
+	for i, v in pairs( tab ) do
+		if !strEmpty( v ) then
+			table.insert( newtab, v )
+		end
+	end
+	str = table.concat( newtab, "\n" )
+	return str
+end
+
+function YRPRemoveCommentsShort( str )
+	local tab = string.Explode( "\n", str, false )
+	for i, v in pairs( tab ) do
+		if string.StartWith( v, "--" ) then
+			tab[i] = ""
+		end
+	end
+	str = table.concat( tab, "\n" )
+	return str
+end
+
+function YRPRemoveCommentsLong( str, c )
+	local res = str
+	c = c + 1
+	if c > 9999 then
+		return res
+	end
+	local s1, e1 = string.find( res, "--[[", 1, true )
+	if s1 then
+		local s2, e2 = string.find( res, "]]", s1, true )
+		if e2 then
+			local remstr = string.sub( res, s1, e2 )
+			if remstr and !strEmpty( remstr ) then
+				res = string.Replace( res, remstr, "" )
+				res = YRPRemoveCommentsLong( res, c )
+			end
+		end
+	end
+	return res
+end
+
+function YRPImportDarkrp( str, name )
+	YRPIMPORTDARKRP = true
+	local err = RunString( str, "YRPIMPORTDARKRP_RS" .. name, false )
+	if err then
+		MsgC( Color( 255, 0, 0 ), "ERROR: ", err, "\n" )
+	end
+	YRPIMPORTDARKRP = false
+end
+
+function YRPImportFileToTable( filename, name )
+	local str = file.Read( filename, "GAME" )
+	if str then
+		str = YRPRemoveCommentsLong( str, 0 )
+		str = YRPRemoveCommentsShort( str )
+		str = YRPRemoveEmptyLines( str )
+
+		YRPImportDarkrp( str, name )
+	end
+end
+
+util.AddNetworkString( "yrp_import_darkrp" )
+net.Receive( "yrp_import_darkrp", function( len, ply )
+	YRPHR()
+	YRPMsg( "[START IMPORT DARKRP]", Color( 0, 255, 0 ) )
+
+	YRPImportFileToTable( "lua/darkrp_customthings/categories.lua", "categories" )
+	YRPImportFileToTable( "lua/darkrp_customthings/jobs.lua", "jobs" )
+	
+	YRPMsg( "[DONE IMPORT DARKRP]", Color( 0, 255, 0 ) )
+	YRPHR()
+end )

@@ -339,7 +339,7 @@ if CLIENT then
 	--[[ FLAGS ]]
 	--
 	for i, short in pairs(yrp_shorts) do
-		if short != nil then
+		if short != nil and YRP.AddDesignIcon then
 			YRP.AddDesignIcon("lang_" .. short, "vgui/iso_639/" .. short .. ".png")
 		end
 	end

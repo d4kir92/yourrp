@@ -220,7 +220,7 @@ end
 
 net.Receive("SetServerKeybinds", function(len)
 	local keytab = net.ReadTable()
-	for i, ktab in pairs(keytab) do
-		YRPSetKeybind(ktab.name, ktab.value)
+	for i, ktab in pairs( keytab ) do
+		YRPSetKeybind( ktab.name, ktab.value )
 	end
 end)

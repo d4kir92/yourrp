@@ -33,6 +33,8 @@ include("cl_settings_server_usergroups.lua")
 include("cl_settings_server_darkrp.lua")
 include("cl_settings_server_permaprops.lua")
 
+include("cl_settings_server_importexport.lua")
+
 include("cl_settings_server_yourrp_addons.lua")
 
 local sm = {}
@@ -110,7 +112,13 @@ function F8RequireUG(site, usergroups)
 	if site == "usergroups" then
 		for i, v in pairs(ugs) do
 			local example = createD("DTextEntry", PARENT, YRP.ctr(1400), YRP.ctr(50), PARENT:GetWide() / 2 - YRP.ctr(1400 / 2), PARENT:GetTall() / 2 + YRP.ctr(300) + (i - 1) * YRP.ctr(60))
-			example:SetText("ulx adduser \"" .. lply:RPName() .. "\" " .. v)
+			if DAMVERSION then
+				example:SetText("dam addply \"" .. lply:RPName() .. "\" " .. v)
+			elseif SAM_LOADED then
+				example:SetText("sam setrank \"" .. lply:RPName() .. "\" " .. v)
+			else
+				example:SetText("ulx adduser \"" .. lply:RPName() .. "\" " .. v)
+			end
 		end
 	end
 end
@@ -287,6 +295,14 @@ function SettingsTabsContent()
 		end
 
 		tabs:GoToSite("LID_settings_general")
+	elseif sm.currentsite == "LID_import" then
+		if lply:GetNW2Bool("bool_import_darkrp", false) then
+			tabs:AddOption("DarkRP", function(parent)
+				OpenSettingsImportDarkRP()
+				sm.win:SetTitle(string.upper(("DarkRP")))
+			end)
+		end
+		tabs:GoToSite("DarkRP")
 	elseif sm.currentsite == "YourRP" then
 		if lply:GetNW2Bool("bool_yourrp_addons", false) then
 			tabs:AddOption("LID_settings_yourrp_addons", function(parent)
@@ -350,7 +366,15 @@ function F8OpenSettings()
 			sites[c].content = SettingsTabsContent
 			c = c + 1
 		end
-	
+
+		if lply:GetNW2Bool("bool_import_darkrp", false) then
+			sites[c] = {}
+			sites[c].name = "LID_import"
+			sites[c].icon = "importexport"
+			sites[c].content = SettingsTabsContent
+			c = c + 1
+		end
+
 		if lply:GetNW2Bool("bool_yourrp_addons", false) then
 			sites[c] = {}
 			sites[c].name = "YourRP"

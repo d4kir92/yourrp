@@ -79,6 +79,8 @@ AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_design.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_database.lua")
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_usergroups.lua")
 
+AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_importexport.lua")
+
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_server_yourrp_addons.lua")
 
 AddCSLuaFile("yrp/cl/gm/menus/settings/cl_settings_client_charakter.lua")

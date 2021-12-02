@@ -2041,7 +2041,8 @@ if pa(yrp_loading_screen) then
 
 
 
-		-- CONFIG --------------------------------------------------------------
+		-- CONFIG -----------------------------------------------
+		-- CONFIG CENTER
 		-- Panel
 		local PANEL_W = ScrW() * 0.8 --1500
 		local PANEL_H = ScrH() * 0.4222 --1080/ 456
@@ -2053,7 +2054,7 @@ if pa(yrp_loading_screen) then
 		local BAR_FONT_SIZE = 60
 
 		-- Play Button
-		local PLAY_BUTTON_W = BAR_W * 0.3 --YRP.ctr(500)
+		local PLAY_BUTTON_W = BAR_W * 0.3
 		local PLAY_BUTTON_H = ScrH() * 0.1
 		local PLAY_BUTTON_SPACE = 30
 		local PLAY_BUTTON_FONT_SIZE = 60
@@ -2061,7 +2062,37 @@ if pa(yrp_loading_screen) then
 		-- HOSTNAME
 		HOSTNAME_SPACE = 40
 		HOSTNAME_FONT_SIZE = 80
-		-- CONFIG --------------------------------------------------------------
+		SetGlobalString("text_loading_design", "Default")
+		if GetGlobalString("text_loading_design") == "Bottom" then
+			BAR_W = PANEL_W * 0.7 -- 1440
+			BAR_H = ScrH() * 0.06 --108
+			BAR_SPACE = 20
+			BAR_FONT_SIZE = 40
+
+			HOSTNAME_SPACE = 60
+			HOSTNAME_FONT_SIZE = 60
+
+			PLAY_BUTTON_W = PANEL_W * 0.2
+			PLAY_BUTTON_H = ScrH() * 0.06
+			PLAY_BUTTON_SPACE = 110
+			PLAY_BUTTON_FONT_SIZE = 40
+		elseif GetGlobalString("text_loading_design") == "BottomRight" then
+			BAR_W = PANEL_W * 0.2 -- 1440
+			BAR_H = ScrH() * 0.04 --108
+			BAR_SPACE = 20
+			BAR_FONT_SIZE = 30
+
+			HOSTNAME_SPACE = 60
+			HOSTNAME_FONT_SIZE = 60
+
+			PLAY_BUTTON_W = PANEL_W * 0.14
+			PLAY_BUTTON_H = ScrH() * 0.04
+			PLAY_BUTTON_SPACE = 20
+			PLAY_BUTTON_FONT_SIZE = 30
+		end
+		-- CONFIG ---------------------------------------------
+
+
 
 		if lply == NULL then return end
 
@@ -2137,7 +2168,13 @@ if pa(yrp_loading_screen) then
 		if lply:GetNW2Bool("yrp_hudloadout") and lply:GetNW2Bool("finishedloading") and ( lply:GetNW2Bool("loadchars_done") or IsVoidCharEnabled() or !GetGlobalBool("bool_character_system") ) then
 			if GetGlobalBool("bool_yrp_play_button") then
 				if self.joinbutton == nil then
-					self.joinbutton = createD("YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ph / 2 + PANEL_H / 2 - PLAY_BUTTON_H - PLAY_BUTTON_SPACE)
+					if GetGlobalString("text_loading_design") == "Default" then
+						self.joinbutton = createD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ph / 2 + PANEL_H / 2 - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
+					elseif GetGlobalString("text_loading_design") == "Bottom" then
+						self.joinbutton = createD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ScrH() - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
+					elseif GetGlobalString("text_loading_design") == "BottomRight" then
+						self.joinbutton = createD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ScrH() - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
+					end
 					self.joinbutton:SetText("")
 					self.joinbutton.master = yrp_loading_screen
 					function self.joinbutton:Paint(pw, ph)
@@ -2162,17 +2199,24 @@ if pa(yrp_loading_screen) then
 
 		-- PANEL --
 		-- BG
-		draw.RoundedBox(40, SCREEN_CENTER_X - PANEL_W / 2, SCREEN_CENTER_Y - PANEL_H / 2, PANEL_W, PANEL_H, YRPCPP(255 * 0.8))
-		
+		if GetGlobalString("text_loading_design") == "Default" then
+			draw.RoundedBox(40, SCREEN_CENTER_X - PANEL_W / 2, SCREEN_CENTER_Y - PANEL_H / 2, PANEL_W, PANEL_H, YRPCPP(255 * 0.8))
+		end
 
 		-- BAR --
-		-- BG
-		draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE, BAR_W, BAR_H, Color(80, 80, 80, 255))
-		-- BAR
-		draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE, BAR_W * loading_cur_old / max, BAR_H, Color(38, 222, 129))
-		-- BAR TEXT
-		draw.SimpleText(YRP.lang_string("LID_loadingdata") .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_" .. BAR_FONT_SIZE .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		
+		if GetGlobalString("text_loading_design") == "Default" then
+			draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE, BAR_W, BAR_H, Color(80, 80, 80, 255))
+			draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE, BAR_W * loading_cur_old / max, BAR_H, Color(38, 222, 129))
+			draw.SimpleText(YRP.lang_string("LID_loadingdata") .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_" .. BAR_FONT_SIZE .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		elseif GetGlobalString("text_loading_design") == "Bottom" then
+			draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, ScrH() - BAR_H - BAR_SPACE, BAR_W, BAR_H, Color(80, 80, 80, 255))
+			draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, ScrH() - BAR_H - BAR_SPACE, BAR_W * loading_cur_old / max, BAR_H, Color(38, 222, 129))
+			draw.SimpleText(YRP.lang_string("LID_loadingdata") .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_" .. BAR_FONT_SIZE .. "_700", pw / 2, ScrH() - BAR_H / 2 - BAR_SPACE, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		elseif GetGlobalString("text_loading_design") == "BottomRight" then
+			draw.RoundedBox(9, ScrW() - BAR_W - BAR_SPACE, ScrH() - BAR_H - BAR_SPACE, BAR_W, BAR_H, Color(80, 80, 80, 255))
+			draw.RoundedBox(9, ScrW() - BAR_W - BAR_SPACE, ScrH() - BAR_H - BAR_SPACE, BAR_W * loading_cur_old / max, BAR_H, Color(38, 222, 129))
+			draw.SimpleText(YRP.lang_string("LID_loadingdata") .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_" .. BAR_FONT_SIZE .. "_700", ScrW() - BAR_W / 2 - BAR_SPACE, ScrH() - BAR_H / 2 - BAR_SPACE, TextColor(YRPCPP()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
 
 
 		-- RETRY MESSAGE
@@ -2207,9 +2251,13 @@ if pa(yrp_loading_screen) then
 
 
 		-- HOSTNAME --
-		draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, SCREEN_CENTER_Y - PANEL_H / 2 - HOSTNAME_SPACE, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-
+		if GetGlobalString("text_loading_design") == "Default" then
+			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, SCREEN_CENTER_Y - PANEL_H / 2 - HOSTNAME_SPACE, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		elseif GetGlobalString("text_loading_design") == "Bottom" then
+			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, HOSTNAME_SPACE, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		elseif GetGlobalString("text_loading_design") == "BottomRight" then
+			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, HOSTNAME_SPACE, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
 		
 		-- TIME
 		draw.SimpleText(YRP.lang_string("LID_time") .. ": " .. self.t .. "/" .. self.tmax, "Y_14_700", YRP.ctr(10), ph - YRP.ctr(2), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
@@ -2236,9 +2284,9 @@ if pa(yrp_loading_screen) then
 			end
 		end
 
-		if self.t >= 30 and self.disconnect == nil then
+		if self.t >= 40 and self.disconnect == nil then
 			local br = ScrH() * 0.010
-			self.disconnect = createD( "DButton", self, 300, 60, ScrW() - br - 300, ScrH() - br - 60 )
+			self.disconnect = createD( "DButton", self, 300, 60, ScrW() - br - 300, br )
 			self.disconnect:SetText( YRP.lang_string( "LID_disconnect" ) )
 			function self.disconnect:DoClick()
 				RunConsoleCommand( "disconnect" )

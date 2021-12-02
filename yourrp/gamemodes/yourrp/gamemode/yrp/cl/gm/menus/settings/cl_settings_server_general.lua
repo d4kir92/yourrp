@@ -560,10 +560,10 @@ net.Receive("Connect_Settings_General", function(len)
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_background, "LID_loadingbackground", "update_text_loading_background")
+		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_design, "LID_loadingdesign", "update_text_loading_design", GetGlobalString("text_loading_design", "Default"), {"Default", "Bottom", "BottomRight"})
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_background, "LID_character_background", "update_text_character_background")
-
 		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "LID_characterdesign", "update_text_character_design", GetGlobalString("text_character_design", "Default"), {"Default", "HorizontalNEW", "Horizontal", "Vertical"})
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())

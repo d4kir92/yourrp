@@ -242,19 +242,6 @@ function GetHTMLImage(url, w, h)
 	return "<style type=\"text/css\"> body { padding: 0; margin: 0; border:0; } img { padding: 0; margin: 0; border:0; } </style> <body> <img src=\"" .. url .. "\"width=\"" .. w .. "\" height=\"" .. h .. "\" /> </body>"
 end
 
-function YRPTableToColor( tbl )
-	return Color( tbl.r , tbl.g , tbl.b, tbl.a )
-end
-
-function YRPTableToColorStr(tbl)
-	return tbl.r .. "," .. tbl.g .. "," .. tbl.b .. "," .. tbl.a
-end
-
-function ColorToString(col)
-	col.a = col.a or 255
-	return col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a
-end
-
 function RegisterDesign(tab)
 	if tab.name ~= nil then
 		yrp_if[tab.name] = {}
@@ -437,6 +424,8 @@ YRP.AddDesignIcon("discord_white", "vgui/material/icon_discord_white.png")
 YRP.AddDesignIcon("os_windows", "vgui/material/icon_os_windows.png")
 YRP.AddDesignIcon("os_linux", "vgui/material/icon_os_linux.png")
 YRP.AddDesignIcon("os_osx", "vgui/material/icon_os_osx.png")
+
+YRP.AddDesignIcon("importexport", "vgui/material/icon_import_export.png")
 
 local files, folders = file.Find("materials/icons/*", "GAME")
 for _, folder in pairs(folders) do

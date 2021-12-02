@@ -75,6 +75,7 @@ local bos = {
 	["bool_weapons"] = '0',
 	["bool_weaponsystem"] = '0',
 	["bool_whitelist"] = '0',
+	["bool_import_darkrp"] = '0',
 	["bool_yourrp_addons"] = '0',
 }
 
@@ -648,6 +649,13 @@ net.Receive("usergroup_update_bool_status", function(len, ply)
 	local uid = tonumber(net.ReadString())
 	local bool_status = net.ReadString()
 	UGCheckBox(ply, uid, "bool_status", bool_status)
+end)
+
+util.AddNetworkString("usergroup_update_bool_import_darkrp")
+net.Receive("usergroup_update_bool_import_darkrp", function(len, ply)
+	local uid = tonumber(net.ReadString())
+	local bool_import_darkrp = net.ReadString()
+	UGCheckBox(ply, uid, "bool_import_darkrp", bool_import_darkrp)
 end)
 
 util.AddNetworkString("usergroup_update_bool_yourrp_addons")
