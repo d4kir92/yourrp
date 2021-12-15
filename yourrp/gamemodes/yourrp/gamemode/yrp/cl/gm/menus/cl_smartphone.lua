@@ -11,12 +11,12 @@ function GetSpTable()
 end
 
 function openSP()
-	if GetGlobalBool("bool_smartphone_system") then
+	if GetGlobalBool( "bool_smartphone_system" ) then
 		if YRPIsNoMenuOpen() and (!sp.visible or sp.visible == nil) then
 			openMenu()
 			local _w = ctrb(560)
 			local _h = ctrb(1000)
-			local _x = ScrW() - (_w + ctrb(25))
+			local _x = ScrW() - (_w + ctrb(25) )
 			local _y = ScrH() - (_h)
 			sp = createSmartphone(nil, _w, _h, _x, _y)
 			sp.visible = true

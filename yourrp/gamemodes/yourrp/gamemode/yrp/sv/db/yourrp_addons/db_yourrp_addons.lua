@@ -19,31 +19,31 @@ function AddToHandler_YourRP_Addons(ply)
 	end
 end
 
-util.AddNetworkString("Connect_Settings_YourRP_Addons")
-net.Receive("Connect_Settings_YourRP_Addons", function(len, ply)
-	if ply:CanAccess("bool_yourrp_addons") then
+util.AddNetworkString( "Connect_Settings_YourRP_Addons" )
+net.Receive( "Connect_Settings_YourRP_Addons", function(len, ply)
+	if ply:CanAccess( "bool_yourrp_addons" ) then
 		AddToHandler_YourRP_Addons(ply)
 
 		if table.Count(yrp_addons) == 0 then
-			hook.Run("get_yourrp_addons")
+			hook.Run( "get_yourrp_addons" )
 		end
 
-		net.Start("Connect_Settings_YourRP_Addons")
+		net.Start( "Connect_Settings_YourRP_Addons" )
 			net.WriteTable(yrp_addons)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString("Disconnect_Settings_YourRP_Addons")
-net.Receive("Disconnect_Settings_YourRP_Addons", function(len, ply)
+util.AddNetworkString( "Disconnect_Settings_YourRP_Addons" )
+net.Receive( "Disconnect_Settings_YourRP_Addons", function(len, ply)
 	RemFromHandler_YourRP_Addons(ply)
 end)
 
 function YRP:AddYRPAddon(tab)
-	YRP.msg("db", "Add YourRP Addon(" .. tostring(tab.name) .. " by " .. tostring(tab.author) .. ")")
+	YRP.msg( "db", "Add YourRP Addon( " .. tostring(tab.name) .. " by " .. tostring(tab.author) .. " )" )
 
 	if type(tab) != "table" then
-		YRP.msg("note", "[AddYRPAddon] invalid arguments!")
+		YRP.msg( "note", "[AddYRPAddon] invalid arguments!" )
 		return false
 	end
 
@@ -56,28 +56,28 @@ function YRP:AddYRPAddon(tab)
 	tab.settings = tab.settings or ""
 
 	if strEmpty(tab.name) then
-		YRP.msg("note", "[AddYRPAddon] [" .. tab.name .. "] name is wrong!")
+		YRP.msg( "note", "[AddYRPAddon] [" .. tab.name .. "] name is wrong!" )
 		return false
 	end
 
 	if strEmpty(tab.author) then
-		YRP.msg("note", "[AddYRPAddon] [" .. tab.name .. "] author is wrong!")
+		YRP.msg( "note", "[AddYRPAddon] [" .. tab.name .. "] author is wrong!" )
 		return false
 	end
 
-	if !strEmpty(tab.workshopid) and !isnumber(tonumber(tab.workshopid)) then
-		YRP.msg("note", "[AddYRPAddon] [" .. tab.name .. "] WorkshopID is wrong!")
+	if !strEmpty(tab.workshopid) and !isnumber(tonumber(tab.workshopid) ) then
+		YRP.msg( "note", "[AddYRPAddon] [" .. tab.name .. "] WorkshopID is wrong!" )
 		return false
 	end
 
-	if !strEmpty(tab.discord) and !string.find(tab.discord, "discord.gg") then
-		YRP.msg("note", "[AddYRPAddon] [" .. tab.name .. "] Discord link is wrong!")
+	if !strEmpty(tab.discord) and !string.find(tab.discord, "discord.gg" ) then
+		YRP.msg( "note", "[AddYRPAddon] [" .. tab.name .. "] Discord link is wrong!" )
 		return false
 	end
 
 	if tab.name != "" then
 		yrp_addons[tab.name .. " by " .. tab.author] = tab
-		YRP.msg("db", "Added YourRP Addon(" .. tostring(tab.name) .. " by " .. tostring(tab.author) .. ")")
+		YRP.msg( "db", "Added YourRP Addon( " .. tostring(tab.name) .. " by " .. tostring(tab.author) .. " )" )
 		return true
 	end
 end

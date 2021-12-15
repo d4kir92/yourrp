@@ -15,7 +15,7 @@ function worked(obj, name, _silence)
 		return true
 	else
 		if !_silence then
-			YRP.msg("note", "NOT WORKED: " .. tostring(obj) .. " " .. tostring(name))
+			YRP.msg( "note", "NOT WORKED: " .. tostring(obj) .. " " .. tostring(name) )
 		end
 		return false
 	end
@@ -38,5 +38,5 @@ function pa(panel)
 end
 
 function yts(str , str2)
-	return string.find(string.lower(str), string.lower(str2))
+	return string.find(string.lower(str), string.lower(str2) )
 end

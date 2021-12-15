@@ -35,14 +35,14 @@ local function DrawThinCompass(px, py, sw, sh)
 		for  i= 0, 24 - 1 do
 			local ang = i * 15
 		   
-			local dif = math.AngleDifference(ang, dir)
+			local dif = math.AngleDifference( ang, dir)
 		   
 			local ndist = 20
 		   
 			local offang = ( ndist * 14 ) / 3
 			
-			if math.abs(dif) < offang then
-				local alpha = math.Clamp( 0.8 - (math.abs(dif)/(offang)) , 0, 1 ) * 255            
+			if math.abs( dif) < offang then
+				local alpha = math.Clamp( 0.8 - (math.abs( dif)/(offang) ) , 0, 1 ) * 255            
 
 				local pos = -dif / 15 * sw / 10
 			   
@@ -54,29 +54,29 @@ local function DrawThinCompass(px, py, sw, sh)
 				local white = Color(200,200,200,alpha)
 				local dwhite = Color(230,230,230,alpha)
 
-				if YRP.GetDesignIcon("keyboard_arrow_down") then
+				if YRP.GetDesignIcon( "keyboard_arrow_down" ) then
 					surface.SetDrawColor( 100, 100, 255 )
-					surface.SetMaterial( YRP.GetDesignIcon("keyboard_arrow_down") )
+					surface.SetMaterial( YRP.GetDesignIcon( "keyboard_arrow_down" ) )
 					surface.DrawTexturedRect( ScrW()/2 - 24 / 2, py - 6, 24, 24 )
 				end
 	
 				if ang == 0 then
-					direction = YRP.lang_string("LID_north_short")
+					direction = YRP.lang_string( "LID_north_short" )
 					surface.SetDrawColor( 100, 100, 255, alpha )
 				elseif ang == 180 then
-					direction = YRP.lang_string("LID_south_short")
+					direction = YRP.lang_string( "LID_south_short" )
 				elseif ang == 90 then
-					direction = YRP.lang_string("LID_east_short")
+					direction = YRP.lang_string( "LID_east_short" )
 				elseif ang == 270 then
-					direction = YRP.lang_string("LID_west_short")
+					direction = YRP.lang_string( "LID_west_short" )
 				elseif ang == 45 then
-					direction = YRP.lang_string("LID_north_short") .. YRP.lang_string("LID_east_short")
+					direction = YRP.lang_string( "LID_north_short" ) .. YRP.lang_string( "LID_east_short" )
 				elseif ang == 135 then
-					direction = YRP.lang_string("LID_south_short") .. YRP.lang_string("LID_east_short")
+					direction = YRP.lang_string( "LID_south_short" ) .. YRP.lang_string( "LID_east_short" )
 				elseif ang == 225 then
-					direction = YRP.lang_string("LID_south_short") .. YRP.lang_string("LID_west_short")
+					direction = YRP.lang_string( "LID_south_short" ) .. YRP.lang_string( "LID_west_short" )
 				elseif ang == 315 then
-					direction = YRP.lang_string("LID_north_short") .. YRP.lang_string("LID_west_short")
+					direction = YRP.lang_string( "LID_north_short" ) .. YRP.lang_string( "LID_west_short" )
 				else
 					direction = ""
 				end
@@ -85,9 +85,9 @@ local function DrawThinCompass(px, py, sw, sh)
 				end
 				surface.DrawRect( px + sw / 2 - 25 - pos, py + 38, 50, 3 )		
 				
-				draw.DrawText( text, font, px + sw / 2 - pos, py + 53, white, TEXT_ALIGN_CENTER )
+				draw.DrawText( text, font, px + sw / 2 - pos, py + 53, Color( 255, 255, 255, 250 ), TEXT_ALIGN_CENTER )
 
-				draw.DrawText( direction, dfont, px + sw / 2 - pos, py + 10, dwhite, TEXT_ALIGN_CENTER )
+				draw.DrawText( direction, dfont, px + sw / 2 - pos, py + 10, Color( 255, 255, 255, 250 ), TEXT_ALIGN_CENTER )
 			end          
 		end  
 	end
@@ -113,21 +113,21 @@ function YRPDrawThin(tab)
 		HUD_THIN[name].oldcur = tab.max
 	end
 
-	if lply:GetNW2Int("hud_version", 0) != HUD_THIN[name]["hud_version"] then
-		HUD_THIN[name]["hud_version"] = lply:GetNW2Int("hud_version", 0)
+	if lply:GetNW2Int( "hud_version", 0) != HUD_THIN[name]["hud_version"] then
+		HUD_THIN[name]["hud_version"] = lply:GetNW2Int( "hud_version", 0)
 
-		HUD_THIN[name].x = tab.x or lply:HudValue(name, "POSI_X")
-		HUD_THIN[name].y = tab.y or lply:HudValue(name, "POSI_Y")
-		HUD_THIN[name].w = tab.w or lply:HudValue(name, "SIZE_W")
-		HUD_THIN[name].h = tab.h or lply:HudValue(name, "SIZE_H")
+		HUD_THIN[name].x = tab.x or lply:HudValue(name, "POSI_X" )
+		HUD_THIN[name].y = tab.y or lply:HudValue(name, "POSI_Y" )
+		HUD_THIN[name].w = tab.w or lply:HudValue(name, "SIZE_W" )
+		HUD_THIN[name].h = tab.h or lply:HudValue(name, "SIZE_H" )
 
-		HUD_THIN[name].sicon = lply:HudValue(name, "ICON")
-		HUD_THIN[name].stext = lply:HudValue(name, "TEXT")
-		HUD_THIN[name].sback = lply:HudValue(name, "BACK")
+		HUD_THIN[name].sicon = lply:HudValue(name, "ICON" )
+		HUD_THIN[name].stext = lply:HudValue(name, "TEXT" )
+		HUD_THIN[name].sback = lply:HudValue(name, "BACK" )
 
-		HUD_THIN[name].colorbg = lply:HudValue(name, "BG")
-		HUD_THIN[name].colorbar = lply:HudValue(name, "BA")
-		HUD_THIN[name].colortext = lply:HudValue(name, "TE")
+		HUD_THIN[name].colorbg = lply:HudValue(name, "BG" )
+		HUD_THIN[name].colorbar = lply:HudValue(name, "BA" )
+		HUD_THIN[name].colortext = lply:HudValue(name, "TE" )
 
 		HUD_THIN[name].iconmat = icons[name]
 		HUD_THIN[name].ix = HUD_THIN[name].x + HUD_THIN[name].h * 0.2
@@ -218,15 +218,15 @@ function YRPDrawThin(tab)
 			local cur = tab.cur
 			if tab.ignorepercent then
 				--
-			elseif lply:HudValue(name, "PERC") then
+			elseif lply:HudValue(name, "PERC" ) then
 				cur = math.Round(tab.cur / tab.max * 100, 1) .. "%"
 			end
-			draw.SimpleText(cur, HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tvx), HUDMOTIONY(HUD_THIN[name].tvy), HUD_THIN[name].colortext, HUD_THIN[name].tvax, HUD_THIN[name].tvay)
+			draw.SimpleText( cur, HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tvx), HUDMOTIONY(HUD_THIN[name].tvy), HUD_THIN[name].colortext, HUD_THIN[name].tvax, HUD_THIN[name].tvay)
 		end
 
 		-- BAR
 		if tab.cur and tab.max then
-			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].vx), HUDMOTIONY(HUD_THIN[name].vy), HUD_THIN[name].vw, 2, Color(0, 0, 0, 100))
+			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].vx), HUDMOTIONY(HUD_THIN[name].vy), HUD_THIN[name].vw, 2, Color(0, 0, 0, 100) )
 			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].vx), HUDMOTIONY(HUD_THIN[name].vy), HUD_THIN[name].vw * HUD_THIN[name].oldcur / tab.max, 2, HUD_THIN[name].colorbar)
 		end
 	end
@@ -238,15 +238,15 @@ function YRPHUDThin()
 	local lply = LocalPlayer()
 
 	if YRPHudVarsLoaded and YRPHudVarsLoaded() and YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
-		if GetGlobalBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Thin" then
-			if lply:HudElementVisible("COM") then
-				DrawThinCompass(lply:HudValue("COM", "POSI_X"), lply:HudValue("COM", "POSI_Y"), lply:HudValue("COM", "SIZE_W"), lply:HudValue("COM", "SIZE_H"))
+		if GetGlobalBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Thin" then
+			if lply:HudElementVisible( "COM" ) then
+				DrawThinCompass(lply:HudValue( "COM", "POSI_X" ), lply:HudValue( "COM", "POSI_Y" ), lply:HudValue( "COM", "SIZE_W" ), lply:HudValue( "COM", "SIZE_H" ) )
 			end
 
 			for i = 1, 10 do
 				local BOX = {}
 				BOX.name = "BOX" .. i
-				BOX.valuetext = lply:HudValue(BOX.name, "CTEX")
+				BOX.valuetext = lply:HudValue(BOX.name, "CTEX" )
 				YRPDrawThin(BOX)
 			end
 
@@ -306,7 +306,7 @@ function YRPHUDThin()
 			XP.text = "LID_xp"
 			XP.cur = lply:XP()
 			XP.max = lply:GetMaxXP()
-			XP.valuetext = lply:XP() .. "/" .. lply:MaxXP() .. " (" .. math.Round(lply:XP() / lply:MaxXP() * 100, 1) .. "%)"
+			XP.valuetext = lply:XP() .. "/" .. lply:MaxXP() .. " ( " .. math.Round(lply:XP() / lply:MaxXP() * 100, 1) .. "%)"
 			YRPDrawThin(XP)
 
 			local BA = {}
@@ -328,11 +328,11 @@ function YRPHUDThin()
 			if IsValid(weapon) then
 				local clip1 = weapon:Clip1()
 				local clip1max = weapon:GetMaxClip1()
-				local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+				local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType() )
 
 				local clip2 = weapon:Clip2()
 				local clip2max = weapon:GetMaxClip2()
-				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType() )
 				
 				local wpammo = ""
 				if clip1 >= 0 and clip1max >= 0 then
@@ -428,9 +428,9 @@ function YRPHUDThin()
 			local CR = {}
 			CR.name = "CR"
 			CR.text = "LID_clock"
-			CR.cur = os.date("%H" , os.time()) * 60 * 60 + os.date("%M" , os.time()) * 60
+			CR.cur = os.date( "%H" , os.time() ) * 60 * 60 + os.date( "%M" , os.time() ) * 60
 			CR.max = 60 * 60 * 24
-			CR.valuetext = os.date("%H:%M" , os.time())
+			CR.valuetext = os.date( "%H:%M" , os.time() )
 			YRPDrawThin(CR)
 
 			local CC = {}
@@ -441,11 +441,11 @@ function YRPHUDThin()
 
 			local LO = {}
 			LO.name = "LO"
-			LO.valuetext = "[" .. GTS("lockdown") .. "] " .. lply:LockdownText()
+			LO.valuetext = "[" .. GTS( "lockdown" ) .. "] " .. lply:LockdownText()
 			YRPDrawThin(LO)
 		end
 	end
 end
 
-hook.Add("HUDPaint", "yrp_hud_design_Thin", YRPHUDThin)
+hook.Add( "HUDPaint", "yrp_hud_design_Thin", YRPHUDThin)
 

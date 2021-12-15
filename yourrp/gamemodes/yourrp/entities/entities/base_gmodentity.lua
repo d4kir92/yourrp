@@ -1,6 +1,6 @@
 
 AddCSLuaFile()
-DEFINE_BASECLASS("base_anim")
+DEFINE_BASECLASS( "base_anim" )
 
 ENT.PrintName		= ""
 ENT.Author			= ""
@@ -17,7 +17,7 @@ if (CLIENT) then
 	function ENT:BeingLookedAtByLocalPlayer()
 	
 		if (LocalPlayer():GetEyeTrace().Entity != self) then return false end
-		if (EyePos():Distance(self:GetPos()) > 256) then return false end
+		if (EyePos():Distance(self:GetPos() ) > 256) then return false end
 		
 		return true
 	
@@ -38,36 +38,36 @@ function ENT:Think()
 end
 
 function ENT:SetOverlayText(text)
-	self:SetNetworkedString("GModOverlayText", text)
+	self:SetNetworkedString( "GModOverlayText", text)
 end
 
 function ENT:GetOverlayText()
 
-	local txt = self:GetNetworkedString("GModOverlayText")
+	local txt = self:GetNetworkedString( "GModOverlayText" )
 	
-	if (txt == "") then
+	if (txt == "" ) then
 		return ""
 	end
 	
-	if (game.SinglePlayer()) then
+	if (game.SinglePlayer() ) then
 		return txt
 	end
 
 	local PlayerName = self:GetPlayerName()
 
-	return txt .. "\n(" .. PlayerName .. ")"
+	return txt .. "\n( " .. PlayerName .. " )"
 	
 end
 
 
 function ENT:SetPlayer(ply)
 
-	if (IsValid(ply)) then
+	if (IsValid(ply) ) then
 
-		self:SetVar("Founder", ply)
-		self:SetVar("FounderIndex", ply:UniqueID())
+		self:SetVar( "Founder", ply)
+		self:SetVar( "FounderIndex", ply:UniqueID() )
 	
-		self:SetNetworkedString("FounderName", ply:Nick())
+		self:SetNetworkedString( "FounderName", ply:Nick() )
 
 	end
 	
@@ -75,23 +75,23 @@ end
 
 function ENT:GetPlayer()
 
-	return self:GetVar("Founder", NULL)
+	return self:GetVar( "Founder", NULL)
 	
 end
 
 function ENT:GetPlayerIndex()
 
-	return self:GetVar("FounderIndex", 0)
+	return self:GetVar( "FounderIndex", 0)
 	
 end
 
 function ENT:GetPlayerName()
 
 	local ply = self:GetPlayer()
-	if (IsValid(ply)) then
+	if (IsValid(ply) ) then
 		return ply:Nick()
 	end
 
-	return self:GetNetworkedString("FounderName")
+	return self:GetNetworkedString( "FounderName" )
 	
 end

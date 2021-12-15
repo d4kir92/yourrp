@@ -2,7 +2,7 @@
 
 AddCSLuaFile()
 
-DEFINE_BASECLASS("base_ai")
+DEFINE_BASECLASS( "base_ai" )
 
 ENT.Type = "ai"
 ENT.Base = "base_gmodentity"

@@ -15,50 +15,50 @@ function YRP.AddFont(fontname, scale)
 	end
 end
 
-YRP.AddFont("AmazDooMLeft", 1)
-YRP.AddFont("Aniron", 1.2)
-YRP.AddFont("Arial", 0.94)
+YRP.AddFont( "AmazDooMLeft", 1)
+YRP.AddFont( "Aniron", 1.2)
+YRP.AddFont( "Arial", 0.94)
 
-YRP.AddFont("bf4 numbers", 1)
+YRP.AddFont( "bf4 numbers", 1)
 
-YRP.AddFont("Caribbean", 0.7)
-YRP.AddFont("Comfortaa", 1.1)
+YRP.AddFont( "Caribbean", 0.7)
+YRP.AddFont( "Comfortaa", 1.1)
 
-YRP.AddFont("Gang of Three", 0.9)
+YRP.AddFont( "Gang of Three", 0.9)
 
-YRP.AddFont("Halo", 0.58)
-YRP.AddFont("Harry Potter", 1)
+YRP.AddFont( "Halo", 0.58)
+YRP.AddFont( "Harry Potter", 1)
 
-YRP.AddFont("Impact", 1)
+YRP.AddFont( "Impact", 1)
 
-YRP.AddFont("Kelt", 1)
-YRP.AddFont("Kimberley Bl", 0.96)
+YRP.AddFont( "Kelt", 1)
+YRP.AddFont( "Kimberley Bl", 0.96)
 
-YRP.AddFont("Mali", 1.6)
-YRP.AddFont("Metro", 0.5)
-YRP.AddFont("Military Font 7", 0.72)
+YRP.AddFont( "Mali", 1.6)
+YRP.AddFont( "Metro", 0.5)
+YRP.AddFont( "Military Font 7", 0.72)
 
-YRP.AddFont("Nunito", 1)
+YRP.AddFont( "Nunito", 1)
 
-YRP.AddFont("Overseer", 1)
+YRP.AddFont( "Overseer", 1)
 
-YRP.AddFont("pixelmix", 0.7)
-YRP.AddFont("Pokemon Solid", 2)
-YRP.AddFont("pricedown bl", 1.34)
+YRP.AddFont( "pixelmix", 0.7)
+YRP.AddFont( "Pokemon Solid", 2)
+YRP.AddFont( "pricedown bl", 1.34)
 
-YRP.AddFont("Roboto", 1)
+YRP.AddFont( "Roboto", 1)
 
-YRP.AddFont("Sci-Fi [Rus by me] Normal", 0.6)
-YRP.AddFont("Space Age", 1.1)
-YRP.AddFont("Star Jedi", 1.3)
-YRP.AddFont("Starcraft", 0.72)
-YRP.AddFont("Swanky and Moo Moo", 1.3)
+YRP.AddFont( "Sci-Fi [Rus by me] Normal", 0.6)
+YRP.AddFont( "Space Age", 1.1)
+YRP.AddFont( "Star Jedi", 1.3)
+YRP.AddFont( "Starcraft", 0.72)
+YRP.AddFont( "Swanky and Moo Moo", 1.3)
 
-YRP.AddFont("Tahoma", 1)
+YRP.AddFont( "Tahoma", 1)
 
-YRP.AddFont("Ubuntu", 1)
+YRP.AddFont( "Ubuntu", 1)
 
-YRP.AddFont("ZombieA", 0.74)
+YRP.AddFont( "ZombieA", 0.74)
 
 function YRP.GetFonts()
 	return fonts
@@ -78,20 +78,20 @@ function YRP.SetFont(fontname)
 			font = fontTab.name or ""
 			fontscale = fontTab.scale or ""
 			table.Empty(savedfonts)
-			YRP.msg("note", "Changed font to: " .. font .. " Scale(" .. fontscale .. ")")
+			YRP.msg( "note", "Changed font to: " .. font .. " Scale( " .. fontscale .. " )" )
 			changeFontSize()
 		else
-			YRP.msg("note", "fontname: " .. tostring(fontname) .. " fontTab: " .. tostring(fontTab))
+			YRP.msg( "note", "fontname: " .. tostring(fontname) .. " fontTab: " .. tostring(fontTab) )
 		end
 	end
 end
 
-net.Receive("yrp_set_font", function(len)
+net.Receive( "yrp_set_font", function(len)
 	local fname = net.ReadString()
 	YRP.SetFont(fname)
 end)
 timer.Simple(4, function()
-	net.Start("yrp_set_font")
+	net.Start( "yrp_set_font" )
 	net.SendToServer()
 end)
 
@@ -145,40 +145,40 @@ local oldfont = ""
 function changeFontSize()
 	if YRP.GetFont() != oldfont then
 		oldfont = YRP.GetFont()
-		YRP.msg("db", "changeFontSize")
+		YRP.msg( "db", "changeFontSize" )
 
 		for s = 4, 100 do
-			yrp_create_font("Y_" .. s .. "_500", YRP.GetFont(), s, 500, false)
-			yrp_create_font("Y_" .. s .. "_700", YRP.GetFont(), s, 700, false)
+			yrp_create_font( "Y_" .. s .. "_500", YRP.GetFont(), s, 500, false)
+			yrp_create_font( "Y_" .. s .. "_700", YRP.GetFont(), s, 700, false)
 		end
 
 		--DarkRP Fonts
-		yrp_create_font("DarkRPHUD1", YRP.GetFont(), 16, 500, false)
-		yrp_create_font("DarkRPHUD2", YRP.GetFont(), 24, 500, false)
-		yrp_create_font("Trebuchet18", YRP.GetFont(), 16, 500, false)
-		yrp_create_font("Trebuchet20", YRP.GetFont(), 20, 500, false)
-		yrp_create_font("Trebuchet24", YRP.GetFont(), 24, 500, false)
-		yrp_create_font("Trebuchet48", YRP.GetFont(), 48, 500, false)
-		yrp_create_font("TabLarge", YRP.GetFont(), 16, 700, false)
-		yrp_create_font("UiBold", YRP.GetFont(), 16, 700, false)
-		yrp_create_font("HUDNumber5", YRP.GetFont(), 30, 700, false)
-		yrp_create_font("ScoreboardHeader", YRP.GetFont(), 32, 500, false)
-		yrp_create_font("ScoreboardSubtitle", YRP.GetFont(), 24, 500, false)
-		yrp_create_font("ScoreboardPlayerName", YRP.GetFont(), 19, 500, false)
-		yrp_create_font("ScoreboardPlayerName2", YRP.GetFont(), 15, 500, false)
-		yrp_create_font("ScoreboardPlayerNameBig", YRP.GetFont(), 24, 500, false)
-		yrp_create_font("AckBarWriting", YRP.GetFont(), 20, 500, false)
-		yrp_create_font("DarkRP_tipjar", YRP.GetFont(), 100, 500, false)
+		yrp_create_font( "DarkRPHUD1", YRP.GetFont(), 16, 500, false)
+		yrp_create_font( "DarkRPHUD2", YRP.GetFont(), 24, 500, false)
+		yrp_create_font( "Trebuchet18", YRP.GetFont(), 16, 500, false)
+		yrp_create_font( "Trebuchet20", YRP.GetFont(), 20, 500, false)
+		yrp_create_font( "Trebuchet24", YRP.GetFont(), 24, 500, false)
+		yrp_create_font( "Trebuchet48", YRP.GetFont(), 48, 500, false)
+		yrp_create_font( "TabLarge", YRP.GetFont(), 16, 700, false)
+		yrp_create_font( "UiBold", YRP.GetFont(), 16, 700, false)
+		yrp_create_font( "HUDNumber5", YRP.GetFont(), 30, 700, false)
+		yrp_create_font( "ScoreboardHeader", YRP.GetFont(), 32, 500, false)
+		yrp_create_font( "ScoreboardSubtitle", YRP.GetFont(), 24, 500, false)
+		yrp_create_font( "ScoreboardPlayerName", YRP.GetFont(), 19, 500, false)
+		yrp_create_font( "ScoreboardPlayerName2", YRP.GetFont(), 15, 500, false)
+		yrp_create_font( "ScoreboardPlayerNameBig", YRP.GetFont(), 24, 500, false)
+		yrp_create_font( "AckBarWriting", YRP.GetFont(), 20, 500, false)
+		yrp_create_font( "DarkRP_tipjar", YRP.GetFont(), 100, 500, false)
 
-		yrp_create_font("Roboto20", YRP.GetFont(), 20, 500, false)
+		yrp_create_font( "Roboto20", YRP.GetFont(), 20, 500, false)
 	end
 end
 changeFontSize()
 
-local files, _ = file.Find("resource/fonts/*.ttf", "GAME")
+local files, _ = file.Find( "resource/fonts/*.ttf", "GAME" )
 for i, f in pairs(files) do
-	if string.EndsWith(f, "-regular.ttf") then
-		local fo = string.Replace(f, "-regular.ttf", "")
+	if string.EndsWith(f, "-regular.ttf" ) then
+		local fo = string.Replace(f, "-regular.ttf", "" )
 		YRP.AddFont(fo, 1)
 	end
 end

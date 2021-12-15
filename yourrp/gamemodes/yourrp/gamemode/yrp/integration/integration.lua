@@ -126,38 +126,38 @@ DarkRP.disabledDefaults["workarounds"] = {
 }
 
 function YRPDarkrpNotFound(name)
-    YRP.msg("darkrp", "[COLLECT] " .. name)
+    YRP.msg( "darkrp", "[COLLECT] " .. name)
 end
 
-AddCSLuaFile("darkrp/fn.lua")
+AddCSLuaFile( "darkrp/fn.lua" )
 
-AddCSLuaFile("darkrp/darkrp/shared.lua")
-AddCSLuaFile("darkrp/gamemode/shared.lua")
-AddCSLuaFile("darkrp/player/shared.lua")
-AddCSLuaFile("darkrp/entity/shared.lua")
+AddCSLuaFile( "darkrp/darkrp/shared.lua" )
+AddCSLuaFile( "darkrp/gamemode/shared.lua" )
+AddCSLuaFile( "darkrp/player/shared.lua" )
+AddCSLuaFile( "darkrp/entity/shared.lua" )
 
-AddCSLuaFile("darkrp/config/config.lua")
+AddCSLuaFile( "darkrp/config/config.lua" )
 
-AddCSLuaFile("darkrp/drawfunction.lua")
+AddCSLuaFile( "darkrp/drawfunction.lua" )
 
---AddCSLuaFile("darkrp/scoreboard/sh_scoreboard.lua")
+--AddCSLuaFile( "darkrp/scoreboard/sh_scoreboard.lua" )
 
-include("darkrp/fn.lua")
+include( "darkrp/fn.lua" )
 
-include("darkrp/darkrp/shared.lua")
-include("darkrp/gamemode/shared.lua")
-include("darkrp/player/shared.lua")
-include("darkrp/entity/shared.lua")
+include( "darkrp/darkrp/shared.lua" )
+include( "darkrp/gamemode/shared.lua" )
+include( "darkrp/player/shared.lua" )
+include( "darkrp/entity/shared.lua" )
 
-include("darkrp/config/config.lua")
+include( "darkrp/config/config.lua" )
 
---include("darkrp/scoreboard/sh_scoreboard.lua")
+--include( "darkrp/scoreboard/sh_scoreboard.lua" )
 
 if CLIENT then
-	include("darkrp/drawfunction.lua")
+	include( "darkrp/drawfunction.lua" )
 end
 
-local Vector = FindMetaTable("Vector")
+local Vector = FindMetaTable( "Vector" )
 
 function Vector:isInSight(filter, ply)
 	--Description: Decides whether the vector could be seen by the player if they
@@ -175,7 +175,7 @@ end
 
 -- Neurotec fix
 if SERVER then
-	include("neurotanks/sv_fix.lua")
+	include( "neurotanks/sv_fix.lua" )
 end
 
 
@@ -191,26 +191,26 @@ function GetDarkRPVar(name, var)
 	if value != nil then
 		return value
 	else
-		--YRP.msg("note", "[GetDarkRPVar] FAIL " .. tostring(name) .. ", " .. tostring(var))
+		--YRP.msg( "note", "[GetDarkRPVar] FAIL " .. tostring(name) .. ", " .. tostring( var) )
 		return var
 	end
 end
 
 function UpdateDarkRP(tab)
 	for i, v in pairs(tab) do
-		if type(v) == "function" then
+		if type( v) == "function" then
 			continue
-		elseif type(v) == "table" then
-			UpdateDarkRP(v)
-		elseif type(v) == "boolean" then
-			tab[i] = GetDarkRPVar("bool_" .. i, v)
+		elseif type( v) == "table" then
+			UpdateDarkRP( v)
+		elseif type( v) == "boolean" then
+			tab[i] = GetDarkRPVar( "bool_" .. i, v)
 		else
-			--YRP.msg("note", "[DarkRP-FAIL] Type: " .. type(v) .. " Name: " .. i .. " Value: " .. v)
+			--YRP.msg( "note", "[DarkRP-FAIL] Type: " .. type( v) .. " Name: " .. i .. " Value: " .. v)
 		end
 	end
 end
 
-net.Receive("update_yrp_darkrp", function(len)
+net.Receive( "update_yrp_darkrp", function(len)
 	local tab = net.ReadTable()
 
 	SetDarkRPTab(tab)

@@ -19,13 +19,13 @@ function FO76BG(tab)
 	local lply = LocalPlayer()
 	FO76["BG"][tab.element] = FO76["BG"][tab.element] or {}
 	FO76["BR"][tab.element] = FO76["BR"][tab.element] or {}
-	if lply:HudValue("hud_version", 0) != FO76["BG"][tab.element]["version"] then
-		FO76["BG"][tab.element]["version"] = lply:HudValue("hud_version", 0)
+	if lply:HudValue( "hud_version", 0) != FO76["BG"][tab.element]["version"] then
+		FO76["BG"][tab.element]["version"] = lply:HudValue( "hud_version", 0)
 
-		local w = lply:HudValue(tab.element, "SIZE_W")
-		local h = lply:HudValue(tab.element, "SIZE_H")
-		local x = lply:HudValue(tab.element, "POSI_X")
-		local y = lply:HudValue(tab.element, "POSI_Y")
+		local w = lply:HudValue(tab.element, "SIZE_W" )
+		local h = lply:HudValue(tab.element, "SIZE_H" )
+		local x = lply:HudValue(tab.element, "POSI_X" )
+		local y = lply:HudValue(tab.element, "POSI_Y" )
 
 		tab.thickness = ScrV(0.016)
 		tab.br = 0.08
@@ -57,25 +57,25 @@ function FO76Element(tab)
 	FO76["TEXT"][tab.element] = FO76["TEXT"][tab.element] or {}
 	FO76["CENTERTEXT"][tab.element] = FO76["CENTERTEXT"][tab.element] or {}
 	FO76["BR"][tab.element] = FO76["BR"][tab.element] or {}
-	if lply:HudValue("hud_version", 0) != FO76["BGBar"][tab.element]["version"] then
-		FO76["BGBar"][tab.element]["version"] = lply:HudValue("hud_version", 0)
+	if lply:HudValue( "hud_version", 0) != FO76["BGBar"][tab.element]["version"] then
+		FO76["BGBar"][tab.element]["version"] = lply:HudValue( "hud_version", 0)
 
-		local w = lply:HudValue(tab.element, "SIZE_W")
-		local h = lply:HudValue(tab.element, "SIZE_H")
-		local x = lply:HudValue(tab.element, "POSI_X")
-		local y = lply:HudValue(tab.element, "POSI_Y")
+		local w = lply:HudValue(tab.element, "SIZE_W" )
+		local h = lply:HudValue(tab.element, "SIZE_H" )
+		local x = lply:HudValue(tab.element, "POSI_X" )
+		local y = lply:HudValue(tab.element, "POSI_Y" )
 
 		tab.thickness = ScrV(0.016)
 		tab.br = 0.08
 
 		FO76["BG"][tab.element].r = 0
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT" ) then
 			FO76["BG"][tab.element].w = w - h
 		else
 			FO76["BG"][tab.element].w = w
 		end
 		FO76["BG"][tab.element].h = tab.thickness
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT" ) then
 			FO76["BG"][tab.element].x = x + h
 		else
 			FO76["BG"][tab.element].x = x
@@ -93,13 +93,13 @@ function FO76Element(tab)
 		FO76["BGBar"][tab.element].color = FOColorBG()
 
 		local m = {}
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT" ) then
 			m.x = x + h
 		else
 			m.x = x
 		end
 		m.y = y + (h - tab.thickness) / 2
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT" ) then
 			m.w = w - h
 		else
 			m.w = w
@@ -131,13 +131,13 @@ function FO76Element(tab)
 		FO76["CENTERTEXT"][tab.element].color = Color(0, 0, 0)
 
 		FO76["BR"][tab.element].r = 0
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT" ) then
 			FO76["BR"][tab.element].w = w - h
 		else
 			FO76["BR"][tab.element].w = w
 		end
 		FO76["BR"][tab.element].h = tab.thickness
-		if lply:HudValue(tab.element, "TEXT") then
+		if lply:HudValue(tab.element, "TEXT" ) then
 			FO76["BR"][tab.element].x = x + h
 		else
 			FO76["BR"][tab.element].x = x
@@ -153,14 +153,14 @@ function FO76Element(tab)
 		end
 		HudBox(FO76["Bar"][tab.element])
 
-		if tab.text != nil and lply:HudValue(tab.element, "TEXT") then
+		if tab.text != nil and lply:HudValue(tab.element, "TEXT" ) then
 			FO76["TEXT"][tab.element].text = tab.text
 			HudText(FO76["TEXT"][tab.element])
 		else
 			FO76["TEXT"][tab.element].text = ""
 		end
 
-		if tab.centertext != nil and lply:HudValue(tab.element, "TEXT") then
+		if tab.centertext != nil and lply:HudValue(tab.element, "TEXT" ) then
 			FO76["CENTERTEXT"][tab.element].text = tab.centertext
 			HudText(FO76["CENTERTEXT"][tab.element])
 		else
@@ -175,17 +175,17 @@ FO76["NAME"] = {}
 function FO76Name(tab)
 	local lply = LocalPlayer()
 	FO76["NAME"][tab.element] = FO76["NAME"][tab.element] or {}
-	if lply:HudValue("hud_version", 0) != FO76["NAME"][tab.element]["version"] then
-		FO76["NAME"][tab.element]["version"] = lply:HudValue("hud_version", 0)
+	if lply:HudValue( "hud_version", 0) != FO76["NAME"][tab.element]["version"] then
+		FO76["NAME"][tab.element]["version"] = lply:HudValue( "hud_version", 0)
 
-		local w = lply:HudValue(tab.element, "SIZE_W")
-		local h = lply:HudValue(tab.element, "SIZE_H")
-		local x = lply:HudValue(tab.element, "POSI_X")
-		local y = lply:HudValue(tab.element, "POSI_Y")
-		local ax = lply:HudValue(tab.element, "AX")
-		local ay = lply:HudValue(tab.element, "AY")
+		local w = lply:HudValue(tab.element, "SIZE_W" )
+		local h = lply:HudValue(tab.element, "SIZE_H" )
+		local x = lply:HudValue(tab.element, "POSI_X" )
+		local y = lply:HudValue(tab.element, "POSI_Y" )
+		local ax = lply:HudValue(tab.element, "AX" )
+		local ay = lply:HudValue(tab.element, "AY" )
 
-		local fontsize = lply:HudValue(tab.element, "TS")
+		local fontsize = lply:HudValue(tab.element, "TS" )
 		if fontsize <= 0 then
 			fontsize = 14
 		end
@@ -217,15 +217,15 @@ FO76["NUM"] = {}
 function FO76Numbers(tab)
 	local lply = LocalPlayer()
 	FO76["NUM"][tab.element] = FO76["NUM"][tab.element] or {}
-	if lply:HudValue("hud_version", 0) != FO76["NUM"][tab.element]["version"] then
-		FO76["NUM"][tab.element]["version"] = lply:HudValue("hud_version", 0)
+	if lply:HudValue( "hud_version", 0) != FO76["NUM"][tab.element]["version"] then
+		FO76["NUM"][tab.element]["version"] = lply:HudValue( "hud_version", 0)
 
-		local w = lply:HudValue(tab.element, "SIZE_W")
-		local h = lply:HudValue(tab.element, "SIZE_H")
-		local x = lply:HudValue(tab.element, "POSI_X")
-		local y = lply:HudValue(tab.element, "POSI_Y")
+		local w = lply:HudValue(tab.element, "SIZE_W" )
+		local h = lply:HudValue(tab.element, "SIZE_H" )
+		local x = lply:HudValue(tab.element, "POSI_X" )
+		local y = lply:HudValue(tab.element, "POSI_Y" )
 
-		local fontsize = lply:HudValue(tab.element, "TS")
+		local fontsize = lply:HudValue(tab.element, "TS" )
 		if fontsize <= 0 then
 			fontsize = 14
 		end
@@ -247,13 +247,13 @@ FO76["CHAT"] = {}
 function FO76Chat(tab)
 	local lply = LocalPlayer()
 	FO76["CHAT"][tab.element] = FO76["CHAT"][tab.element] or {}
-	if lply:HudValue("hud_version", 0) != FO76["CHAT"][tab.element]["version"] then
-		FO76["CHAT"][tab.element]["version"] = lply:HudValue("hud_version", 0)
+	if lply:HudValue( "hud_version", 0) != FO76["CHAT"][tab.element]["version"] then
+		FO76["CHAT"][tab.element]["version"] = lply:HudValue( "hud_version", 0)
 
-		local w = lply:HudValue(tab.element, "SIZE_W")
-		local h = lply:HudValue(tab.element, "SIZE_H")
-		local x = lply:HudValue(tab.element, "POSI_X")
-		local y = lply:HudValue(tab.element, "POSI_Y")
+		local w = lply:HudValue(tab.element, "SIZE_W" )
+		local h = lply:HudValue(tab.element, "SIZE_H" )
+		local x = lply:HudValue(tab.element, "POSI_X" )
+		local y = lply:HudValue(tab.element, "POSI_Y" )
 
 		FO76["CHAT"][tab.element].r = 0
 		FO76["CHAT"][tab.element].w = w
@@ -269,7 +269,7 @@ end
 local test = true
 function HUDFO76Compass(tab)
 	local lply = LocalPlayer()
-	if lply:HudValue(tab.element, "VISI") then
+	if lply:HudValue(tab.element, "VISI" ) then
 		FO76[tab.element] = FO76[tab.element] or {}
 		FO76[tab.element]["BG"] = FO76[tab.element]["BG"] or {}
 		FO76[tab.element]["Bar"] = FO76[tab.element]["Bar"] or {}
@@ -279,14 +279,14 @@ function HUDFO76Compass(tab)
 		FO76[tab.element]["east"] = FO76[tab.element]["east"] or {}
 		FO76[tab.element]["west"] = FO76[tab.element]["west"] or {}
 
-		if lply:HudValue("hud_version", 0) != FO76[tab.element]["degree"]["version"] or test then
+		if lply:HudValue( "hud_version", 0) != FO76[tab.element]["degree"]["version"] or test then
 			test = false
-			FO76[tab.element]["degree"]["version"] = lply:HudValue("hud_version", 0)
+			FO76[tab.element]["degree"]["version"] = lply:HudValue( "hud_version", 0)
 
-			local w = lply:HudValue(tab.element, "SIZE_W")
-			local h = lply:HudValue(tab.element, "SIZE_H")
-			local x = lply:HudValue(tab.element, "POSI_X")
-			local y = lply:HudValue(tab.element, "POSI_Y")
+			local w = lply:HudValue(tab.element, "SIZE_W" )
+			local h = lply:HudValue(tab.element, "SIZE_H" )
+			local x = lply:HudValue(tab.element, "POSI_X" )
+			local y = lply:HudValue(tab.element, "POSI_Y" )
 
 			FO76[tab.element]["BG"].r = 0
 			FO76[tab.element]["BG"].w = w
@@ -321,7 +321,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["north"].font = "Y_14_500"
 			FO76[tab.element]["north"].color = FOColor()
 			FO76[tab.element]["north"].brcolor = Color(0, 0, 0)
-			FO76[tab.element]["north"].text = YRP.lang_string("LID_north_short")
+			FO76[tab.element]["north"].text = YRP.lang_string( "LID_north_short" )
 
 			FO76[tab.element]["south"].w = h / 8
 			FO76[tab.element]["south"].h = h
@@ -332,7 +332,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["south"].font = "Y_14_500"
 			FO76[tab.element]["south"].color = FOColor()
 			FO76[tab.element]["south"].brcolor = Color(0, 0, 0)
-			FO76[tab.element]["south"].text = YRP.lang_string("LID_south_short")
+			FO76[tab.element]["south"].text = YRP.lang_string( "LID_south_short" )
 
 			FO76[tab.element]["east"].w = h / 8
 			FO76[tab.element]["east"].h = h
@@ -343,7 +343,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["east"].font = "Y_14_500"
 			FO76[tab.element]["east"].color = FOColor()
 			FO76[tab.element]["east"].brcolor = Color(0, 0, 0)
-			FO76[tab.element]["east"].text = YRP.lang_string("LID_east_short")
+			FO76[tab.element]["east"].text = YRP.lang_string( "LID_east_short" )
 
 			FO76[tab.element]["west"].w = h / 8
 			FO76[tab.element]["west"].h = h
@@ -354,7 +354,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["west"].font = "Y_14_500"
 			FO76[tab.element]["west"].color = FOColor()
 			FO76[tab.element]["west"].brcolor = Color(0, 0, 0)
-			FO76[tab.element]["west"].text = YRP.lang_string("LID_west_short")
+			FO76[tab.element]["west"].text = YRP.lang_string( "LID_west_short" )
 		else
 			HudBox(FO76[tab.element]["BG"])
 
@@ -362,7 +362,7 @@ function HUDFO76Compass(tab)
 
 			local x = FO76[tab.element]["degree"].x - FO76[tab.element]["degree"].w / 2
 			local w = FO76[tab.element]["degree"].w
-			local fw = (w * (lply:CoordAngle() / 360)) * -1
+			local fw = (w * (lply:CoordAngle() / 360) ) * -1
 
 			-- North
 			FO76[tab.element]["north"].x = x + (fw + w * 0.5) % w
@@ -433,52 +433,52 @@ function HUD_FO76()
 	local lply = LocalPlayer()
 
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
-		if GetGlobalBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Fallout 76" then
+		if GetGlobalBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Fallout 76" then
 			local HP = {}
 			HP.element = "HP"
-			HP.text = YRP.lang_string("LID_hp")
+			HP.text = YRP.lang_string( "LID_hp" )
 			HP.cur = lply:Health()
 			HP.max = lply:GetMaxHealth()
 			FO76Element(HP)
 
 			local AR = {}
 			AR.element = "AR"
-			AR.text = YRP.lang_string("LID_ar")
+			AR.text = YRP.lang_string( "LID_ar" )
 			AR.cur = lply:Armor()
 			AR.max = lply:GetMaxArmor()
 			FO76Element(AR)
 
 			local ST = {}
 			ST.element = "ST"
-			ST.text = YRP.lang_string("LID_st")
+			ST.text = YRP.lang_string( "LID_st" )
 			ST.cur = lply:Stamina()
 			ST.max = lply:GetMaxStamina()
 			FO76Element(ST)
 
 			local HU = {}
 			HU.element = "HU"
-			HU.text = YRP.lang_string("LID_hu")
+			HU.text = YRP.lang_string( "LID_hu" )
 			HU.cur = lply:Hunger()
 			HU.max = lply:GetMaxHunger()
 			FO76Element(HU)
 
 			local TH = {}
 			TH.element = "TH"
-			TH.text = YRP.lang_string("LID_th")
+			TH.text = YRP.lang_string( "LID_th" )
 			TH.cur = lply:Hunger()
 			TH.max = lply:GetMaxHunger()
 			FO76Element(TH)
 
 			local RA = {}
 			RA.element = "RA"
-			RA.text = YRP.lang_string("LID_ra")
+			RA.text = YRP.lang_string( "LID_ra" )
 			RA.cur = lply:Radiation()
 			RA.max = lply:GetMaxRadiation()
 			FO76Element(RA)
 		
 			local AB = {}
 			AB.element = "AB"
-			AB.text = YRP.lang_string("LID_ab")
+			AB.text = YRP.lang_string( "LID_ab" )
 			AB.cur = lply:Ability()
 			AB.max = lply:GetMaxAbility()
 			FO76Element(AB)
@@ -487,7 +487,7 @@ function HUD_FO76()
 			local XP = {}
 			if IsLevelSystemEnabled() then
 				XP.element = "XP"
-				XP.text = YRP.lang_string("LID_xp")
+				XP.text = YRP.lang_string( "LID_xp" )
 				XP.cur = lply:XP()
 				XP.max = lply:GetMaxXP()
 				XP.centertext = lply:Level()
@@ -504,8 +504,8 @@ function HUD_FO76()
 				local clip1max = weapon:GetMaxClip1()
 				local clip2 = weapon:Clip2()
 				local clip2max = weapon:GetMaxClip2()
-				local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
-				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+				local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType() )
+				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType() )
 				if ammo1 != nil then
 					local WP = {}
 					WP.element = "WP"
@@ -555,7 +555,7 @@ function HUD_FO76()
 			end
 			local NE = {}
 			NE.element = "NE"
-			NE.text = YRP.lang_string("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. ")"
+			NE.text = YRP.lang_string( "LID_ping" ) .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. " )"
 			NE.tcolor = pingcolor
 			FO76Name(NE)
 
@@ -586,18 +586,18 @@ function HUD_FO76()
 					fpscolor = Color(0, 255, 0)
 				end
 			end
-			PE.text = YRP.lang_string("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. ")"
+			PE.text = YRP.lang_string( "LID_fps" ) .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. " )"
 			PE.tcolor = fpscolor
 			FO76Name(PE)
 
 			local MO = {}
 			MO.element = "MO"
-			MO.text = lply:FormattedMoneyRounded(3) .. " (+" .. lply:FormattedSalaryRounded(3) .. ")"
+			MO.text = lply:FormattedMoneyRounded(3) .. " (+" .. lply:FormattedSalaryRounded(3) .. " )"
 			FO76Name(MO)
 
 			local CR = {}
 			CR.element = "CR"
-			CR.text = os.date("%H:%M" , os.time())
+			CR.text = os.date( "%H:%M" , os.time() )
 			FO76Name(CR)
 
 			local CC = {}
@@ -607,20 +607,20 @@ function HUD_FO76()
 
 			local ID = {}
 			ID.element = "ID"
-			ID.text = lply:GetNW2String("idcardid", "")
+			ID.text = lply:GetNW2String( "idcardid", "" )
 			FO76Name(ID)
 
 			local batterypower = system.BatteryPower()
 			if batterypower <= 100 then
 				local BA = {}
 				BA.element = "BA"
-				BA.text = YRP.lang_string("LID_ba")
+				BA.text = YRP.lang_string( "LID_ba" )
 				BA.cur = batterypower
 				BA.max = 100
 				FO76Element(BA)
 			end
 
-			if !strEmpty(lply:Condition()) then
+			if !strEmpty(lply:Condition() ) then
 				local CON = {}
 				CON.element = "CON"
 				CON.text = lply:Condition()
@@ -630,19 +630,19 @@ function HUD_FO76()
 			if lply:Lockdown() then
 				local LO = {}
 				LO.element = "LO"
-				LO.text = "[" .. GTS("lockdown") .. "] " .. lply:LockdownText()
+				LO.text = "[" .. GTS( "lockdown" ) .. "] " .. lply:LockdownText()
 				LO.tcolor = Color(255, 0, 0)
 				FO76Name(LO)
 			end
 
-			if lply:GetNW2Bool("iscasting", false) then
+			if lply:GetNW2Bool( "iscasting", false) then
 				local CA = {}
 				CA.element = "CA"
 				CA.cur = lply:CastTimeCurrent()
 				CA.max = lply:CastTimeMax()
 				CA.percentage = math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 0) .. "%"
-				CA.text = string.upper(lply:GetCastName()) .. " " .. CA.percentage
-				CA.icon = Material("icon16/hourglass.png")
+				CA.text = string.upper(lply:GetCastName() ) .. " " .. CA.percentage
+				CA.icon = Material( "icon16/hourglass.png" )
 				FO76Name(CA)
 			end
 		end
@@ -650,5 +650,5 @@ function HUD_FO76()
 end
 
 timer.Simple(1, function()
-	hook.Add("HUDPaint", "yrp_hud_design_Fallout76", HUD_FO76)
+	hook.Add( "HUDPaint", "yrp_hud_design_Fallout76", HUD_FO76)
 end)

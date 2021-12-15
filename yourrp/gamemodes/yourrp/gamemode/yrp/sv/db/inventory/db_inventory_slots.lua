@@ -2,8 +2,8 @@
 
 local DATABASE_NAME = "yrp_inventory_slots"
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0" )
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'" )
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
 
@@ -12,12 +12,12 @@ function CreateSlot(storageID, inv)
 	storageID = tonumber(storageID)
 	if wk(storageID) then
 		if inv then
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_storageID, text_type", "'" .. storageID .. "', '" .. "bag" .. "'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_storageID, text_type", "'" .. storageID .. "', '" .. "bag" .. "'" )
 		else
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_storageID", "'" .. storageID .. "'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_storageID", "'" .. storageID .. "'" )
 		end
 	else
-		YRP.msg("db", "[CreateSlot] storageID is invalid")
+		YRP.msg( "db", "[CreateSlot] storageID is invalid" )
 	end
 end
 
@@ -26,15 +26,15 @@ function GetStorageSlots(storageID)
 	if wk(storageID) then
 		local slots = {}
 
-		local yrp_slots = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_storageID = '" .. storageID .. "'")
+		local yrp_slots = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_storageID = '" .. storageID .. "'" )
 		if wk(yrp_slots) then
 			slots = yrp_slots
 		else
-			YRP.msg("db", "[GetStorageSlots] there are no slots")
+			YRP.msg( "db", "[GetStorageSlots] there are no slots" )
 		end
 		return slots
 	else
-		YRP.msg("db", "[GetStorageSlots] storageID invalid")
+		YRP.msg( "db", "[GetStorageSlots] storageID invalid" )
 		return {}
 	end
 end
@@ -81,8 +81,8 @@ end
 
 
 -- Networking
-util.AddNetworkString("yrp_storage_get_slots")
-net.Receive("yrp_storage_get_slots", function(len, ply)
+util.AddNetworkString( "yrp_storage_get_slots" )
+net.Receive( "yrp_storage_get_slots", function(len, ply)
 	local storageID = net.ReadString()
 	storageID = tonumber(storageID)
 
@@ -91,7 +91,7 @@ net.Receive("yrp_storage_get_slots", function(len, ply)
 		if slots[5] then
 			local bp = slots[5]
 		
-			if wk(bp) and bp.uniqueID and !wk(GetItem(bp.uniqueID)) and table.Count(slots) == 5 then
+			if wk( bp) and bp.uniqueID and !wk(GetItem( bp.uniqueID) ) and table.Count(slots) == 5 then
 				local tab = {}
 				tab.text_classname = "bag"
 				tab.text_printname = "bag"
@@ -102,31 +102,31 @@ net.Receive("yrp_storage_get_slots", function(len, ply)
 				local storage = CreateStorage(16)
 				if wk(storage) then
 					tab.int_storageID = storage.uniqueID
-					CreateItem(bp.uniqueID, tab)
+					CreateItem( bp.uniqueID, tab)
 				else
-					YRP.msg("db", "Failed to create backpack")
+					YRP.msg( "db", "Failed to create backpack" )
 				end
 			end
 		end
 	
-		net.Start("yrp_storage_get_slots")
+		net.Start( "yrp_storage_get_slots" )
 			net.WriteString(storageID)
 			net.WriteTable(slots)
 		net.Send(ply)
 	else
-		YRP.msg("db", "yrp_storage_get_slots failed")
+		YRP.msg( "db", "yrp_storage_get_slots failed" )
 	end
 end)
 
-util.AddNetworkString("yrp_slot_connect")
-net.Receive("yrp_slot_connect", function(len, ply)
+util.AddNetworkString( "yrp_slot_connect" )
+net.Receive( "yrp_slot_connect", function(len, ply)
 	local slotID = net.ReadString()
 
 	ConnectToSlot(ply, slotID)
 end)
 
-util.AddNetworkString("yrp_slot_disconnect")
-net.Receive("yrp_slot_disconnect", function(len, ply)
+util.AddNetworkString( "yrp_slot_disconnect" )
+net.Receive( "yrp_slot_disconnect", function(len, ply)
 	local slotID = net.ReadString()
 
 	DisconnectFromSlot(ply, slotID)

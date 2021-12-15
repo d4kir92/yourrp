@@ -4,7 +4,7 @@ Copyright (C) 2017-2021 D4KiR
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+( at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,16 +25,16 @@ function add_luas(str)
 	include(str)
 end
 
-add_luas("yrp/net/entity.lua")
-add_luas("yrp/net/global.lua")
+add_luas( "yrp/net/entity.lua" )
+add_luas( "yrp/net/global.lua" )
 
-add_luas("yrp/_libs/_libs_includes.lua")
+add_luas( "yrp/_libs/_libs_includes.lua" )
 
-add_luas("yrp/shared/sh_includes.lua")
+add_luas( "yrp/shared/sh_includes.lua" )
 
-add_luas("yrp/integration/integration.lua")
+add_luas( "yrp/integration/integration.lua" )
 
-add_luas("yrp/public/yrp.lua")
-add_luas("yrp/public/player.lua")
-add_luas("yrp/public/entity.lua")
-add_luas("yrp/public/gamemode.lua")
+add_luas( "yrp/public/yrp.lua" )
+add_luas( "yrp/public/player.lua" )
+add_luas( "yrp/public/entity.lua" )
+add_luas( "yrp/public/gamemode.lua" )

@@ -3,7 +3,7 @@
 --[[ Here are the public functions (FOR DEVELOPERS) ]]
 
 function GTS(id)
-	return YRP.lang_string("LID_" .. id)
+	return YRP.lang_string( "LID_" .. id)
 end
 
 function GetTranslation(id)
@@ -11,12 +11,12 @@ function GetTranslation(id)
 end
 
 function IsLevelSystemEnabled()
-	return GetGlobalBool("bool_level_system", true)
+	return GetGlobalBool( "bool_level_system", true)
 end
 
 if SERVER then
 	function TeleportToTheSpawnpoint(ply)
-		YRPTeleportToSpawnpoint(ply, "public")
+		YRPTeleportToSpawnpoint(ply, "public" )
 	end
 
 	function TeleportToJailpoint(ply, time, police)

@@ -15,37 +15,37 @@ end
 
 function CloseCombinedMenu()
 	cm.open = false
-	if pa(cm.win) then
+	if pa( cm.win) then
 		cm.win:Hide()
 	end
 end
 
 function CreateWebsiteContent(PARENT)
-	local site = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
-	site:OpenURL(GetGlobalString("text_social_website", ""))
+	local site = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	site:OpenURL(GetGlobalString( "text_social_website", "" ) )
 end
 
 function CreateForumContent(PARENT)
-	local site = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local site = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	
-	site:OpenURL(GetGlobalString("text_social_forum", ""))
+	site:OpenURL(GetGlobalString( "text_social_forum", "" ) )
 end
 
 function CreateRulesContent(PARENT)
-	local serverrules = table.concat(GetGlobalTable("text_server_rules", ""), "\n")
+	local serverrules = table.concat(GetGlobalTable( "text_server_rules", "" ), "\n" )
 	serverrules = YRP_SQL_STR_OUT( serverrules )
 
-	local page = createD("DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20))
+	local page = createD( "DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20) )
 	function page:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string("LID_rules"), "Y_22_500", 0, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.SimpleText(YRP.lang_string( "LID_rules" ), "Y_22_500", 0, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 	end
 
-	page.serverrules = createD("RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(70), 0, YRP.ctr(70))
+	page.serverrules = createD( "RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(70), 0, YRP.ctr(70) )
 	function page.serverrules:PerformLayout()
 		if self.SetUnderlineFont != nil then
-			self:SetUnderlineFont("Y_18_500")
+			self:SetUnderlineFont( "Y_18_500" )
 		end
-		self:SetFontInternal("Y_18_500")
+		self:SetFontInternal( "Y_18_500" )
 	end
 
 	page.serverrules:InsertColorChange(255, 255, 255, 255)
@@ -53,25 +53,25 @@ function CreateRulesContent(PARENT)
 end
 
 function CreateDiscordContent(PARENT)
-	local link = GetGlobalString("text_social_discord", "")
-	local widgetid = GetGlobalString("text_social_discord_widgetid", "")
+	local link = GetGlobalString( "text_social_discord", "" )
+	local widgetid = GetGlobalString( "text_social_discord_widgetid", "" )
 
-	local page = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local page = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function page:Paint(pw, ph)
-		--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color(255, 255, 255, 255))
+		--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color(255, 255, 255, 255) )
 	end
 
 	local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. PARENT:GetWide() - YRP.ctr(2 * 20) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
 	page:SetHTML(widgetlink)
 
-	local openLink = createD("YButton", page, YRP.ctr(240), YRP.ctr(54), PARENT:GetWide() - YRP.ctr(280), page:GetTall() - YRP.ctr(92))
-	openLink:SetText("")
+	local openLink = createD( "YButton", page, YRP.ctr(240), YRP.ctr(54), PARENT:GetWide() - YRP.ctr(280), page:GetTall() - YRP.ctr(92) )
+	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
-		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		hook.Run( "YButtonPaint", self, pw, ph)
+		if YRP.GetDesignIcon( "launch" ) ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
-		draw.SimpleText("Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
+		draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 	end
 
 	function openLink:DoClick()
@@ -80,27 +80,27 @@ function CreateDiscordContent(PARENT)
 end
 
 function CreateTeamspeakContent(PARENT)
-	local ip = GetGlobalString("text_social_teamspeak_ip", "")
-	local port = GetGlobalString("text_social_teamspeak_port", "")
-	local query_port = GetGlobalString("text_social_teamspeak_query_port", "")
-	YRP.msg("gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
+	local ip = GetGlobalString( "text_social_teamspeak_ip", "" )
+	local port = GetGlobalString( "text_social_teamspeak_port", "" )
+	local query_port = GetGlobalString( "text_social_teamspeak_query_port", "" )
+	YRP.msg( "gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
 
 	if !strEmpty(ip) then
 		if !strEmpty(port) and !strEmpty(query_port) then
-			local page = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+			local page = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
 			function page:Paint(pw, ph)
-				--surfaceBox(0, 0, pw, ph, Color(40, 40, 40, 255))
+				--surfaceBox(0, 0, pw, ph, Color(40, 40, 40, 255) )
 			end
 
 			local widgetlink = "<span id=\"its402545\"><a href=\"https://www.teamspeak3.com/\">teamspeak</a> Hosting by TeamSpeak3.com</span><script type=\"text/javascript\" src=\"https://view.light-speed.com/teamspeak3.php?IP=" .. ip .. "&PORT=" .. port .. "&QUERY= " .. query_port .. "&UID=402545&display=block&font=11px&background=transparent&server_info_background=transparent&server_info_text=%23ffffff&server_name_background=transparent&server_name_text=%23ffffff&info_background=transparent&channel_background=transparent&channel_text=%23ffffff&username_background=transparent&username_text=%23ffffff\"></script>"
 			page:SetHTML(widgetlink)
 
-			local ipport = createD("DTextEntry", PARENT, YRP.ctr(400), YRP.ctr(50), PARENT:GetWide() - YRP.ctr(420), YRP.ctr(20))
+			local ipport = createD( "DTextEntry", PARENT, YRP.ctr(400), YRP.ctr(50), PARENT:GetWide() - YRP.ctr(420), YRP.ctr(20) )
 			ipport:SetText(ip .. ":" .. port)
 			ipport:SetEditable(true)
 		else
-			YRP.msg("note", "missing Port and QueryPort")
+			YRP.msg( "note", "missing Port and QueryPort" )
 		end
 	end
 end
@@ -110,20 +110,20 @@ function CreateCollectionContent(PARENT)
 
 	if collectionid > 100000000 then
 		local link = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. collectionid
-		local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+		local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
 		function WorkshopPage:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
 		end
 
 		WorkshopPage:OpenURL(link)
-		local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20 + 20), 0)
-		openLink:SetText("")
+		local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+		openLink:SetText( "" )
 
 		function openLink:Paint(pw, ph)
-			hook.Run("YButtonPaint", self, pw, ph)
-			if YRP.GetDesignIcon("launch") ~= nil then
-				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+			hook.Run( "YButtonPaint", self, pw, ph)
+			if YRP.GetDesignIcon( "launch" ) ~= nil then
+				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 			end
 		end
 
@@ -134,19 +134,19 @@ function CreateCollectionContent(PARENT)
 end
 
 function CreateTwitchContent(PARENT)
-	local link = GetGlobalString("text_social_twitch", "")
-	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local link = GetGlobalString( "text_social_twitch", "" )
+	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
-	openLink:SetText("")
+	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
-		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		hook.Run( "YButtonPaint", self, pw, ph)
+		if YRP.GetDesignIcon( "launch" ) ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 	end
 	function openLink:DoClick()
@@ -155,18 +155,18 @@ function CreateTwitchContent(PARENT)
 end
 
 function CreateYoutubeContent(PARENT)
-	local link = GetGlobalString("text_social_youtube", "")
-	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local link = GetGlobalString( "text_social_youtube", "" )
+	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
-	openLink:SetText("")
+	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
-		hook.Run("YButtonPaint", self, pw, ph)
-		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		hook.Run( "YButtonPaint", self, pw, ph)
+		YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 	end
 	function openLink:DoClick()
 		gui.OpenURL(link)
@@ -174,19 +174,19 @@ function CreateYoutubeContent(PARENT)
 end
 
 function CreateTwitterContent(PARENT)
-	local link = GetGlobalString("text_social_twitter", "")
-	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local link = GetGlobalString( "text_social_twitter", "" )
+	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
-	openLink:SetText("")
+	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
-		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		hook.Run( "YButtonPaint", self, pw, ph)
+		if YRP.GetDesignIcon( "launch" ) ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 	end
 	function openLink:DoClick()
@@ -195,19 +195,19 @@ function CreateTwitterContent(PARENT)
 end
 
 function CreateSteamGroupContent(PARENT)
-	local link = GetGlobalString("text_social_steamgroup", "")
-	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local link = GetGlobalString( "text_social_steamgroup", "" )
+	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
-	openLink:SetText("")
+	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
-		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		hook.Run( "YButtonPaint", self, pw, ph)
+		if YRP.GetDesignIcon( "launch" ) ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 	end
 	function openLink:DoClick()
@@ -216,19 +216,19 @@ function CreateSteamGroupContent(PARENT)
 end
 
 function CreateFacebookContent(PARENT)
-	local link = GetGlobalString("text_social_facebook", "")
-	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local link = GetGlobalString( "text_social_facebook", "" )
+	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
-	openLink:SetText("")
+	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
-		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		hook.Run( "YButtonPaint", self, pw, ph)
+		if YRP.GetDesignIcon( "launch" ) ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 	end
 	function openLink:DoClick()
@@ -237,19 +237,19 @@ function CreateFacebookContent(PARENT)
 end
 
 function CreateInstagramContent(PARENT)
-	local link = GetGlobalString("text_social_instagram", "")
-	local WorkshopPage = createD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local link = GetGlobalString( "text_social_instagram", "" )
+	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255))
+		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
-	openLink:SetText("")
+	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
-		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		hook.Run( "YButtonPaint", self, pw, ph)
+		if YRP.GetDesignIcon( "launch" ) ~= nil then
+			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 	end
 	function openLink:DoClick()
@@ -261,7 +261,7 @@ function OpenCombinedMenu()
 	local lply = LocalPlayer()
 	cm.open = true
 	local br = YRP.ctr(20)
-	if pa(cm.win) == false then
+	if pa( cm.win) == false then
 
 		local sites = {}
 		
@@ -272,7 +272,7 @@ function OpenCombinedMenu()
 		sites[c].content = CreateHelpMenuContent
 		c = c + 1
 
-		if GetGlobalBool("bool_yrp_role_menu", false) then
+		if GetGlobalBool( "bool_yrp_role_menu", false) then
 			sites[c] = {}
 			sites[c].name = "LID_roles"
 			sites[c].icon = "person_pin"
@@ -280,7 +280,7 @@ function OpenCombinedMenu()
 			c = c + 1
 		end
 		
-		if GetGlobalBool("bool_yrp_buy_menu", false) then
+		if GetGlobalBool( "bool_yrp_buy_menu", false) then
 			sites[c] = {}
 			sites[c].name = "LID_shop"
 			sites[c].icon = "shopping_cart"
@@ -288,7 +288,7 @@ function OpenCombinedMenu()
 			c = c + 1
 		end
 
-		if GetGlobalBool("bool_yrp_char_menu", false) then
+		if GetGlobalBool( "bool_yrp_char_menu", false) then
 			sites[c] = {}
 			sites[c].name = "LID_character"
 			sites[c].icon = "accessibility"
@@ -296,7 +296,7 @@ function OpenCombinedMenu()
 			c = c + 1
 		end
 
-		if !strEmpty(GetGlobalString("sting_laws", "")) or lply:GetNW2Bool("bool_" .. "ismayor", false) then
+		if !strEmpty(GetGlobalString( "sting_laws", "" ) ) or lply:GetNW2Bool( "bool_" .. "ismayor", false) then
 			sites[c] = {}
 			sites[c].name = "LID_laws"
 			sites[c].icon = "gavel"
@@ -309,7 +309,7 @@ function OpenCombinedMenu()
 		c = c + 1
 
 		local community = false
-		if !strEmpty(GetGlobalString("text_social_website", "")) then
+		if !strEmpty(GetGlobalString( "text_social_website", "" ) ) then
 			sites[c] = {}
 			sites[c].name = "LID_website"
 			sites[c].icon = "web"
@@ -318,7 +318,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalString("text_social_forum", "")) then
+		if !strEmpty(GetGlobalString( "text_social_forum", "" ) ) then
 			sites[c] = {}
 			sites[c].name = "LID_forum"
 			sites[c].icon = "forum"
@@ -327,7 +327,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if table.Count(GetGlobalTable("text_server_rules", {})) > 1 then
+		if table.Count(GetGlobalTable( "text_server_rules", {}) ) > 1 then
 			sites[c] = {}
 			sites[c].name = "LID_rules"
 			sites[c].icon = "policy"
@@ -336,7 +336,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalString("text_social_discord", "")) then
+		if !strEmpty(GetGlobalString( "text_social_discord", "" ) ) then
 			sites[c] = {}
 			sites[c].name = "LID_discord"
 			sites[c].icon = "discord_white"
@@ -345,7 +345,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 		
-		if !strEmpty(GetGlobalString("text_social_teamspeak_ip", "")) then
+		if !strEmpty(GetGlobalString( "text_social_teamspeak_ip", "" ) ) then
 			sites[c] = {}
 			sites[c].name = "LID_teamspeak"
 			sites[c].icon = "ts_white"
@@ -363,7 +363,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalString("text_social_youtube", "")) then
+		if !strEmpty(GetGlobalString( "text_social_youtube", "" ) ) then
 			sites[c] = {}
 			sites[c].name = "LID_youtube"
 			sites[c].icon = "64_youtube"
@@ -372,7 +372,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalString("text_social_twitch", "")) then
+		if !strEmpty(GetGlobalString( "text_social_twitch", "" ) ) then
 			sites[c] = {}
 			sites[c].name = "LID_twitch"
 			sites[c].icon = "64_twitch"
@@ -381,7 +381,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalString("text_social_twitter", "")) then
+		if !strEmpty(GetGlobalString( "text_social_twitter", "" ) ) then
 			sites[c] = {}
 			sites[c].name = "LID_twitter"
 			sites[c].icon = "64_twitter-square"
@@ -390,7 +390,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalString("text_social_steamgroup", "")) then
+		if !strEmpty(GetGlobalString( "text_social_steamgroup", "" ) ) then
 			sites[c] = {}
 			sites[c].name = "LID_steamgroup"
 			sites[c].icon = "64_steam-square"
@@ -399,7 +399,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalString("text_social_facebook", "")) then
+		if !strEmpty(GetGlobalString( "text_social_facebook", "" ) ) then
 			sites[c] = {}
 			sites[c].name = "LID_facebook"
 			sites[c].icon = "64_facebook-square"
@@ -408,7 +408,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if !strEmpty(GetGlobalString("text_social_instagram", "")) then
+		if !strEmpty(GetGlobalString( "text_social_instagram", "" ) ) then
 			sites[c] = {}
 			sites[c].name = "Instagram"
 			sites[c].icon = "64_instagram"
@@ -423,7 +423,7 @@ function OpenCombinedMenu()
 			c = c + 1
 		end
 
-		if GetGlobalBool("bool_yrp_keybinds_menu", false) then
+		if GetGlobalBool( "bool_yrp_keybinds_menu", false) then
 			sites[c] = {}
 			sites[c].name = "LID_keybinds"
 			sites[c].icon = "keyboard"
@@ -435,7 +435,7 @@ function OpenCombinedMenu()
 			c = c + 1
 		end
 
-		if GetGlobalBool("bool_yrp_tickets_menu", false) then
+		if GetGlobalBool( "bool_yrp_tickets_menu", false) then
 			sites[c] = {}
 			sites[c].name = "LID_ticket"
 			sites[c].icon = "feedback"
@@ -443,65 +443,65 @@ function OpenCombinedMenu()
 			c = c + 1
 		end
 					
-		cm.win = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
-		cm.win:SetTitle(GetGlobalString("text_server_name", ""))
+		cm.win = createD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
+		cm.win:SetTitle(GetGlobalString( "text_server_name", "" ) )
 		cm.win:MakePopup()
-		--cm.win:SetHeaderHeight(YRP.ctr(100))
+		--cm.win:SetHeaderHeight(YRP.ctr(100) )
 		cm.win:SetBorder(0)
 		function cm.win:Paint(pw, ph)
-			if GetGlobalString("text_server_name", "") != self:GetTitle() then
-				self:SetTitle(GetGlobalString("text_server_name", ""))
+			if GetGlobalString( "text_server_name", "" ) != self:GetTitle() then
+				self:SetTitle(GetGlobalString( "text_server_name", "" ) )
 			end
-			hook.Run("YFramePaint", self, pw, ph)
+			hook.Run( "YFramePaint", self, pw, ph)
 		end
 		if LocalPlayer().combinedmaximised == nil then
 			LocalPlayer().combinedmaximised = false
 		end
 		cm.win:CanMaximise()
-		cm.win:SetMaximised(LocalPlayer().combinedmaximised, "COMBINED")
+		cm.win:SetMaximised(LocalPlayer().combinedmaximised, "COMBINED" )
 		cm.win:SetSizable(true)
 		cm.win:SetMinWidth(700)
 		cm.win:SetMinHeight(700)
 
 		local content = cm.win:GetContent()
 		-- MENU
-		cm.menu = createD("DPanelList", content, 10, BFH() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br, 0, 0)
+		cm.menu = createD( "DPanelList", content, 10, BFH() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br, 0, 0)
 		cm.menu:EnableVerticalScrollbar()
 		local sbar = cm.menu.VBar
 		function sbar:Paint(w, h)
 			local lply = LocalPlayer()
-			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue("YFrame", "NC"), 0)
+			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue( "YFrame", "NC" ), 0)
 		end
 		function sbar.btnUp:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
 		end
 		function sbar.btnDown:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
 		end
 		function sbar.btnGrip:Paint(w, h)
 			local lply = LocalPlayer()
-			draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue("YFrame", "HI"))
+			draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue( "YFrame", "HI" ) )
 		end
-		cm.menu:SetText("")
+		cm.menu:SetText( "" )
 		cm.menu.pw = 10
 		cm.menu.ph = YRP.ctr(64) + 2 * br
 		cm.menu.expanded = lply.combined_expanded or true
-		local font = "Y_" .. math.Clamp(math.Round(cm.menu.ph - 2 * br), 4, 100) ..  "_500"
+		local font = "Y_" .. math.Clamp(math.Round( cm.menu.ph - 2 * br), 4, 100) ..  "_500"
 		function cm.menu:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"))
+			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "HB" ) )
 		end
-		cm.menu:SetSpacing(YRP.ctr(10))
+		cm.menu:SetSpacing(YRP.ctr(10) )
 		if cm.menu.expanded then
-			cm.win:UpdateSize(cm.menu.ph)
+			cm.win:UpdateSize( cm.menu.ph)
 		else
 			cm.win:UpdateSize()
 		end
 
-		cm.menu.expander = createD("DButton", cm.win, cm.menu.ph, cm.menu.ph, 0, cm.win:GetHeaderHeight() + cm.menu:GetTall())
-		cm.menu.expander:SetText("")
+		cm.menu.expander = createD( "DButton", cm.win, cm.menu.ph, cm.menu.ph, 0, cm.win:GetHeaderHeight() + cm.menu:GetTall() )
+		cm.menu.expander:SetText( "" )
 		function cm.menu.expander:DoClick()
 			if cm.menu.expanded then
-				cm.win:UpdateSize(cm.menu.ph)
+				cm.win:UpdateSize( cm.menu.ph)
 
 				cm.menu.expanded = false
 			else
@@ -512,40 +512,40 @@ function OpenCombinedMenu()
 			lply.combined_expanded = cm.menu.expanded
 		end
 		function cm.menu.expander:Paint(pw, ph)
-			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), false, false, true, false)
+			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "HB" ), false, false, true, false)
 
 			if cm.menu.expanded then
-				if YRP.GetDesignIcon("64_angle-left") ~= nil then
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+				if YRP.GetDesignIcon( "64_angle-left" ) ~= nil then
+					surface.SetMaterial(YRP.GetDesignIcon( "64_angle-left" ) )
 				end
 			else
-				if YRP.GetDesignIcon("64_angle-right") ~= nil then
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+				if YRP.GetDesignIcon( "64_angle-right" ) ~= nil then
+					surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
 				end
 			end
 			surface.SetDrawColor(255, 255, 255, 255)
-			surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+			surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 		end
 		
 		-- SITE
-		cm.site = createD("YPanel", content, BFW() - 10, BFH() - cm.win:GetHeaderHeight(), 10, 0)
-		cm.site:SetText("")
-		cm.site:SetHeaderHeight(cm.win:GetHeaderHeight())
+		cm.site = createD( "YPanel", content, BFW() - 10, BFH() - cm.win:GetHeaderHeight(), 10, 0)
+		cm.site:SetText( "" )
+		cm.site:SetHeaderHeight( cm.win:GetHeaderHeight() )
 		function cm.site:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255) )
 			local tab = {}
-			tab.color = lply:InterfaceValue("YFrame", "BG")
-			hook.Run("YPanelPaint", self, pw, ph, tab) --draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255))
+			tab.color = lply:InterfaceValue( "YFrame", "BG" )
+			hook.Run( "YPanelPaint", self, pw, ph, tab) --draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255) )
 		end
 
 		-- SITES
 		cm.sites = {}
 		function cm.menu:ClearSelection()
-			for i, child in pairs(cm.site:GetChildren()) do
+			for i, child in pairs( cm.site:GetChildren() ) do
 				child:Remove()
 			end
 
-			for i, v in pairs(cm.sites) do
+			for i, v in pairs( cm.sites) do
 				v.selected = false
 			end
 		end
@@ -554,39 +554,39 @@ function OpenCombinedMenu()
 			cm.menu.pw = 240
 			local sw = pw or cm.menu.pw + cm.menu.ph + 2 * br
 			cm.menu:SetWide(sw)
-			cm.menu:SetTall(cm.win:GetTall() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br)
+			cm.menu:SetTall( cm.win:GetTall() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br)
 
-			cm.menu.expander:SetPos(0, cm.win:GetHeaderHeight() + cm.menu:GetTall())
+			cm.menu.expander:SetPos(0, cm.win:GetHeaderHeight() + cm.menu:GetTall() )
 			cm.menu.expander:SetWide(sw)
 
-			cm.site:SetPos(cm.menu:GetWide(), 0)
-			cm.site:SetWide(cm.win:GetWide() - cm.menu:GetWide())
-			cm.site:SetTall(cm.win:GetTall() - cm.win:GetHeaderHeight())
+			cm.site:SetPos( cm.menu:GetWide(), 0)
+			cm.site:SetWide( cm.win:GetWide() - cm.menu:GetWide() )
+			cm.site:SetTall( cm.win:GetTall() - cm.win:GetHeaderHeight() )
 		end
 
 		surface.SetFont(font)
 		for i, v in pairs(sites) do
 			if v.name != "hr" then
-				local tw, th = surface.GetTextSize(YRP.lang_string(v.name))
+				local tw, th = surface.GetTextSize(YRP.lang_string( v.name) )
 				if tw > cm.menu.pw then
 					cm.menu.pw = tw
 				end
 
-				cm.sites[v.name] = createD("YButton", cm.menu, cm.menu.pw, cm.menu.ph, 0, 0)
+				cm.sites[v.name] = createD( "YButton", cm.menu, cm.menu.pw, cm.menu.ph, 0, 0)
 				local site = cm.sites[v.name]
-				site:SetText("")
+				site:SetText( "" )
 				site.id = tonumber(i)
 				function site:Paint(pw, ph)
 					self.aw = self.aw or 0
 
 					local lply = LocalPlayer()
 					local target = pw
-					local color = lply:InterfaceValue("YFrame", "HB")
+					local color = lply:InterfaceValue( "YFrame", "HB" )
 					if self:IsHovered() then
-						color = lply:InterfaceValue("YButton", "SC")
+						color = lply:InterfaceValue( "YButton", "SC" )
 						color.a = 120
 					elseif self.selected then
-						color = lply:InterfaceValue("YButton", "SC")
+						color = lply:InterfaceValue( "YButton", "SC" )
 					else
 						target = 0
 					end
@@ -594,26 +594,26 @@ function OpenCombinedMenu()
 
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
 
-					if YRP.GetDesignIcon(v.icon) ~= nil then
+					if YRP.GetDesignIcon( v.icon) ~= nil then
 						surface.SetDrawColor(255, 255, 255, 255)
-						surface.SetMaterial(YRP.GetDesignIcon(v.icon))
-						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
+						surface.SetMaterial(YRP.GetDesignIcon( v.icon) )
+						surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 					end
 
 					surface.SetFont(font)
-					local tw, th = surface.GetTextSize(YRP.lang_string(v.name))
+					local tw, th = surface.GetTextSize(YRP.lang_string( v.name) )
 					if tw > cm.menu.pw then
 						cm.menu.pw = tw
 						--cm.win:UpdateSize()
 					end
-					draw.SimpleText(YRP.lang_string(v.name), font, ph, ph / 2, lply:InterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string( v.name), font, ph, ph / 2, lply:InterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 				function site:DoClick()
 					cm.menu:ClearSelection()
 					cm.currentsite = self.id
 					self.selected = true
 					if v.content != nil then
-						v.content(cm.site) --CreateHelpMenuContent(cm.site)
+						v.content( cm.site) --CreateHelpMenuContent( cm.site)
 					end
 				end
 
@@ -623,11 +623,11 @@ function OpenCombinedMenu()
 
 				cm.menu:AddItem(site)
 			else
-				cm.sites[v.name] = createD("DPanel", cm.menu, cm.menu.pw, YRP.ctr(20), 0, 0)
+				cm.sites[v.name] = createD( "DPanel", cm.menu, cm.menu.pw, YRP.ctr(20), 0, 0)
 				local site = cm.sites[v.name]
 				function site:Paint(pw, ph)
 					local hr = YRP.ctr(2)
-					draw.RoundedBox(0, br, ph / 2 - hr / 2, pw - br * 2, hr, Color(255, 255, 255, 255))
+					draw.RoundedBox(0, br, ph / 2 - hr / 2, pw - br * 2, hr, Color(255, 255, 255, 255) )
 				end
 
 				cm.menu:AddItem(site)
@@ -636,11 +636,11 @@ function OpenCombinedMenu()
 		if cm.menu.expanded == true then
 			cm.win:UpdateSize()
 		else
-			cm.win:UpdateSize(cm.menu.ph)
+			cm.win:UpdateSize( cm.menu.ph)
 		end
-	elseif pa(cm.win) then
+	elseif pa( cm.win) then
 		cm.win:Show()
-		for i, site in pairs(cm.sites) do
+		for i, site in pairs( cm.sites) do
 			if cm.currentsite == site.id then
 				site:DoClick()
 			end

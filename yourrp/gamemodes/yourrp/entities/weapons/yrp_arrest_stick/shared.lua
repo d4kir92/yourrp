@@ -44,8 +44,8 @@ function SWEP:Think()
 
 end
 
-local swingsound = Sound("Weapon_Stunstick.Single")
-local hitsound = Sound("Weapon_Stunstick.Melee_Hit")
+local swingsound = Sound( "Weapon_Stunstick.Single" )
+local hitsound = Sound( "Weapon_Stunstick.Melee_Hit" )
 
 SWEP.delay = 0
 SWEP.cooldown = 0.4

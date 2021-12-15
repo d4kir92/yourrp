@@ -3,33 +3,33 @@
 -- #logs
 
 function BuildLogsSettings(parent, typ)
-	parent.list = createD("DPanelList", parent, parent:GetWide(), parent:GetTall(), 0, 0)
+	parent.list = createD( "DPanelList", parent, parent:GetWide(), parent:GetTall(), 0, 0)
 	parent.list:EnableVerticalScrollbar()
 
-	net.Start("yrp_get_logs_settings")
+	net.Start( "yrp_get_logs_settings" )
 		net.WriteString(typ)
 	net.SendToServer()
 
-	net.Receive("yrp_get_logs_settings", function(len)
+	net.Receive( "yrp_get_logs_settings", function(len)
 		local tab = net.ReadTable()
 
 		if pa(parent) then
 			for i, v in pairs(tab) do
-				local line = createD("YPanel", nil, parent:GetWide(), YRP.ctr(60))
+				local line = createD( "YPanel", nil, parent:GetWide(), YRP.ctr(60) )
 
-				local ts = createD("YLabel", line, YRP.ctr(500), line:GetTall(), 0, 0)
-				ts:SetText(os.date("%H:%M:%S - %d/%m/%Y", tonumber(v.string_timestamp)))
+				local ts = createD( "YLabel", line, YRP.ctr(500), line:GetTall(), 0, 0)
+				ts:SetText(os.date( "%H:%M:%S - %d/%m/%Y", tonumber( v.string_timestamp) ))
 
 				if typ == "LID_settings" then
-					local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+					local rt = createD( "RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 					function rt:PerformLayout()
 						if self.SetUnderlineFont != nil then
-							self:SetUnderlineFont("Y_18_500")
+							self:SetUnderlineFont( "Y_18_500" )
 						end
-						self:SetFontInternal("Y_18_500")
-						self:SetBGColor(Color(0, 0, 0))
+						self:SetFontInternal( "Y_18_500" )
+						self:SetBGColor(Color(0, 0, 0) )
 					end
-					rt:AppendText(v.string_text)
+					rt:AppendText( v.string_text)
 				end
 
 				parent.list:AddItem(line)
@@ -43,13 +43,13 @@ function BuildLogsSiteSettings()
 	if pa(PARENT) then
 
 		-- TABS
-		local tabs = createD("YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+		local tabs = createD( "YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
-		tabs:AddOption("LID_settings", function(parent)
-			BuildLogsSettings(parent, "LID_settings")
+		tabs:AddOption( "LID_settings", function(parent)
+			BuildLogsSettings(parent, "LID_settings" )
 		end)
 
-		tabs:GoToSite("LID_settings")		
+		tabs:GoToSite( "LID_settings" )		
 	end
 end
 

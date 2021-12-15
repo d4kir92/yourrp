@@ -52,7 +52,7 @@ function YRPTutorialsSave()
 end
 
 function done_tutorial(str, time)
-	if tobool(get_tutorial(str)) then
+	if tobool(get_tutorial(str) ) then
 		if time == nil then
 			time = 0
 		end

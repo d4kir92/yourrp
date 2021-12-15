@@ -16,30 +16,30 @@ function PANEL:Init()
 	local _pnl = self
 	--[[ Header ]]
 	--
-	self.header = createD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
+	self.header = createD( "DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 
 	function self.header:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0))
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0) )
 	end
 
 	self.panels = {}
-	self.header.add = createD("DButton", self.header, self:GetWide() / 5, self:GetTall(), 0, 0)
-	self.header.add:SetText("")
+	self.header.add = createD( "DButton", self.header, self:GetWide() / 5, self:GetTall(), 0, 0)
+	self.header.add:SetText( "" )
 
 	function self.header.add:Paint(pw, ph)
-		paintDBButton(self, pw, ph, Color(0, 255, 0), "+")
+		paintDBButton(self, pw, ph, Color(0, 255, 0), "+" )
 	end
 
 	function self.header.add:DoClick()
 		_pnl:AddFunction()
 	end
 
-	self.header.rem = createD("DButton", self.header, self:GetWide() / 5, self:GetTall(), 4 * (self:GetWide() / 5), 0)
-	self.header.rem:SetText("")
+	self.header.rem = createD( "DButton", self.header, self:GetWide() / 5, self:GetTall(), 4 * (self:GetWide() / 5), 0)
+	self.header.rem:SetText( "" )
 
 	function self.header.rem:Paint(pw, ph)
 		if _pnl.uid ~= nil then
-			paintDBButton(self, pw, ph, Color(255, 0, 0), "-")
+			paintDBButton(self, pw, ph, Color(255, 0, 0), "-" )
 		end
 	end
 
@@ -67,36 +67,36 @@ function PANEL:Init()
 		end
 
 		if self.add:GetTall() ~= self:GetTall() then
-			self.add:SetTall(self:GetTall())
+			self.add:SetTall(self:GetTall() )
 		end
 
 		if self.rem:GetTall() ~= self:GetTall() then
-			self.rem:SetTall(self:GetTall())
+			self.rem:SetTall(self:GetTall() )
 		end
 	end
 
 	--[[ List Header ]]
 	--
-	self.listheader = createD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
+	self.listheader = createD( "DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 	self.listheader.textpre = ""
 	self.listheader.text = "UNNAMED"
 	self.listheader.textpos = ""
 
 	function self.listheader:Paint(pw, ph)
 		local color = Color(0, 255, 0)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0) )
 		surfaceText(self.textpre .. " " .. YRP.lang_string(self.text) .. " " .. self.textpos, "Y_24_500", pw / 2, ph / 2, TextColor( color ), 1, 1)
 	end
 
 	--[[ List ]]
 	--
-	self.list = createD("DPanelList", self, self:GetWide(), self:GetTall() - YRP.ctr(110), 0, 0)
+	self.list = createD( "DPanelList", self, self:GetWide(), self:GetTall() - YRP.ctr(110), 0, 0)
 	self.list:EnableVerticalScrollbar(true)
 	self.list:SetSpacing(2)
 
 	--self.list:SetNoSizing(true)
 	function self.list:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 100) )
 	end
 
 	--[[ Public functions ]]
@@ -124,7 +124,7 @@ function PANEL:Init()
 				self.height = self.height + panel:GetTall()
 			end
 
-			panel:SetPos(0, self.height - panel:GetTall())
+			panel:SetPos(0, self.height - panel:GetTall() )
 		end
 	end
 
@@ -134,8 +134,8 @@ function PANEL:Init()
 	end
 
 	function self:AddEntry(tbl)
-		local _new = createD("DButton", nil, self:GetWide(), YRP.ctr(50), 0, 0)
-		_new:SetText("")
+		local _new = createD( "DButton", nil, self:GetWide(), YRP.ctr(50), 0, 0)
+		_new:SetText( "" )
 		_new.tbl = tbl
 
 		function _new:Paint(pw, ph)
@@ -179,34 +179,34 @@ function PANEL:Think()
 	local _x = self.listheader:GetPos()
 
 	if YRP.ctr(60) ~= _x then
-		self.listheader:SetPos(0, YRP.ctr(60))
+		self.listheader:SetPos(0, YRP.ctr(60) )
 	end
 
 	_x = self.list:GetPos()
 
 	if YRP.ctr(110) ~= _x then
-		self.list:SetPos(0, YRP.ctr(110))
+		self.list:SetPos(0, YRP.ctr(110) )
 	end
 
 	if self:GetWide() ~= self.header:GetWide() then
-		self.header:SetWide(self:GetWide())
+		self.header:SetWide(self:GetWide() )
 	end
 
 	if self:GetWide() ~= self.listheader:GetWide() then
-		self.listheader:SetWide(self:GetWide())
+		self.listheader:SetWide(self:GetWide() )
 	end
 
 	if self:GetWide() ~= self.list:GetWide() then
-		self.list:SetWide(self:GetWide())
+		self.list:SetWide(self:GetWide() )
 	end
 
 	if self.list:GetTall() ~= self:GetTall() - YRP.ctr(120) then
-		self.list:SetTall(self:GetTall() - YRP.ctr(120))
+		self.list:SetTall(self:GetTall() - YRP.ctr(120) )
 	end
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0))
+	--draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0) )
 end
 
-vgui.Register("DYRPDBList", PANEL, "Panel")
+vgui.Register( "DYRPDBList", PANEL, "Panel" )

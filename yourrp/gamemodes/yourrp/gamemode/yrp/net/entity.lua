@@ -1,2 +1,2 @@
 -- Networking
-local ENTITY = FindMetaTable("Entity")
+local ENTITY = FindMetaTable( "Entity" )

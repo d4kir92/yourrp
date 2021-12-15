@@ -445,3 +445,7 @@ GM.Config.hitCustomerCooldown = 240
 GM.Config.hungerspeed = 2
 -- starverate <Amount> - How much health that is taken away every second the player is starving	(3 is the default).
 GM.Config.starverate = 3
+
+
+
+GM.CivilProtection = GM.CivilProtection or {}

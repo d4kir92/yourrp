@@ -3,7 +3,7 @@
 local PANEL = {}
 
 function PANEL:Paint(pw, ph)
-	draw.RoundedBox(5, 0, 0, pw, ph, Color(80, 80, 80, 255))
+	draw.RoundedBox(5, 0, 0, pw, ph, Color(80, 80, 80, 255) )
 	if self.name != nil then
 		--draw.SimpleText(self.name, "DermaDefault", pw / 2, ph / 2, Color(255, 0, 0, 200), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
@@ -18,10 +18,10 @@ function GetSlotPanel(slotID)
 			return YRP_SLOTS[slotID]
 		else
 			return nil
-			--YRP.msg("note", "[GetSlotPanel] no panel with: " .. tostring(slotID))
+			--YRP.msg( "note", "[GetSlotPanel] no panel with: " .. tostring(slotID) )
 		end
 	else
-		YRP.msg("note", "[GetSlotPanel] slotID is invalid: " .. tostring(slotID))
+		YRP.msg( "note", "[GetSlotPanel] slotID is invalid: " .. tostring(slotID) )
 	end
 end
 
@@ -31,10 +31,10 @@ function SetSlotPanel(slotID, pnl)
 		if !wk(YRP_SLOTS[slotID]) then
 			YRP_SLOTS[slotID] = pnl
 		else
-			YRP.msg("note", "[SetSlotPanel] there is already a Slot with slotID: " .. tostring(slotID))
+			YRP.msg( "note", "[SetSlotPanel] there is already a Slot with slotID: " .. tostring(slotID) )
 		end
 	else
-		YRP.msg("note", "[SetSlotPanel] slotID is invalid: " .. tostring(slotID))
+		YRP.msg( "note", "[SetSlotPanel] slotID is invalid: " .. tostring(slotID) )
 	end
 end
 
@@ -58,7 +58,7 @@ function PANEL:SetSlotID(slotID)
 
 		self.name = "ID: " .. slotID -- REMOVEME
 
-		net.Start("yrp_slot_connect")
+		net.Start( "yrp_slot_connect" )
 			net.WriteString(self._slotID)
 		net.SendToServer()
 	end
@@ -66,7 +66,7 @@ end
 
 function PANEL:OnRemove()
 	if wk(self._slotID) then
-		net.Start("yrp_slot_disconnect")
+		net.Start( "yrp_slot_disconnect" )
 			net.WriteString(self._slotID)
 		net.SendToServer()
 		RemoveSlotPanel(self:GetSlotID(), self)
@@ -74,12 +74,12 @@ function PANEL:OnRemove()
 end
 
 function PANEL:Init()
-	--[[self:SetText("")
+	--[[self:SetText( "" )
 
 	self._slotid = 0
 	]]
 
-	self:Receiver("yrp_slot",
+	self:Receiver( "yrp_slot",
 	function(receiver, panels, bDoDrop, Command, x, y)
 		if bDoDrop then
 			local item = panels[1]
@@ -89,13 +89,13 @@ function PANEL:Init()
 			local e = item.main:GetE()
 
 			if slotID != nil then
-				net.Start("yrp_item_move")
-					net.WriteString(itemID or "0")
+				net.Start( "yrp_item_move" )
+					net.WriteString(itemID or "0" )
 					net.WriteString(slotID)
 					net.WriteEntity(e)
 				net.SendToServer()
 			elseif itemID != nil then
-				net.Start("yrp_item_drop")
+				net.Start( "yrp_item_drop" )
 					net.WriteString(itemID)
 				net.SendToServer()
 
@@ -105,7 +105,7 @@ function PANEL:Init()
 	end, {})
 end
 
-net.Receive("yrp_item_store", function(len)
+net.Receive( "yrp_item_store", function(len)
 	local slotID = net.ReadString()
 	local item = net.ReadTable()
 
@@ -113,7 +113,7 @@ net.Receive("yrp_item_store", function(len)
 
 	local slot = GetSlotPanel(slotID)
 	if pa(slot) then
-		local i = createD("YItem", nil, YRPItemSize(), YRPItemSize(), 0, 0)
+		local i = createD( "YItem", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 		i:SetItemID(item.uniqueID)
 		i:SetModel(item.text_worldmodel)
 		if item.isinv then
@@ -124,7 +124,7 @@ net.Receive("yrp_item_store", function(len)
 	end
 end)
 
-net.Receive("yrp_item_unstore", function(len)
+net.Receive( "yrp_item_unstore", function(len)
 	local slotID = net.ReadString()
 
 	slotID = tonumber(slotID)
@@ -134,4 +134,4 @@ net.Receive("yrp_item_unstore", function(len)
 	slot:Clear()
 end)
 
-vgui.Register("YSlot", PANEL, "DScrollPanel")
+vgui.Register( "YSlot", PANEL, "DScrollPanel" )

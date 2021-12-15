@@ -50,7 +50,7 @@ function SWEP:PrimaryAttack()
 	if tr.Hit then
 		self.target = tr.Entity
 		if tr.Entity:IsPlayer() then
-			--YRP.msg("note", "bandaging")
+			--YRP.msg( "note", "bandaging" )
 		end
 	end
 end

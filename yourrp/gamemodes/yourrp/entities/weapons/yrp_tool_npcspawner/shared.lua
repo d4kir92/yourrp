@@ -44,7 +44,7 @@ end
 function SWEP:Reload()
 	local pos = ""
 
-	for i, v in pairs(GetGlobalTable("yrp_spawner_npc")) do
+	for i, v in pairs(GetGlobalTable( "yrp_spawner_npc" ) ) do
 		pos = v.pos
 	end
 	if pos != "" then
@@ -55,7 +55,7 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	util.AddNetworkString("yrp_spawner_npc_options")
+	util.AddNetworkString( "yrp_spawner_npc_options" )
 end
 
 local size = 8
@@ -77,15 +77,15 @@ function SWEP:Think()
 			} )
 			pos = tr.HitPos or pos
 
-			for i, v in pairs(GetGlobalTable("yrp_spawner_npc")) do
-				local p = StringToVector(v.pos)
+			for i, v in pairs(GetGlobalTable( "yrp_spawner_npc" ) ) do
+				local p = StringToVector( v.pos)
 				if p:Distance(pos) < size * 2 then
-					YRP.msg("db", "Option NPCSpawner")
+					YRP.msg( "db", "Option NPCSpawner" )
 
-					local stab = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
+					local stab = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'" )
 					if wk(stab) then
 						stab = stab[1]
-						net.Start("yrp_spawner_npc_options")
+						net.Start( "yrp_spawner_npc_options" )
 							net.WriteTable(stab)
 						net.Send(ply)
 					end
@@ -98,55 +98,55 @@ function SWEP:Think()
 end
 
 if CLIENT then
-	net.Receive("yrp_spawner_npc_options", function()
+	net.Receive( "yrp_spawner_npc_options", function()
 		local stab = net.ReadTable()
 
-		local w = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+		local w = createD( "YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
 		w:Center()
 		w:MakePopup()
-		w:SetHeaderHeight(YRP.ctr(100))
-		w:SetTitle("LID_npcspawner")
+		w:SetHeaderHeight(YRP.ctr(100) )
+		w:SetTitle( "LID_npcspawner" )
 
 		-- Respawn time
-		w.respawntext = createD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
-		w.respawntext:SetText( YRP.lang_string( "LID_respawntime" ) .. " (" .. YRP.lang_string( "LID_seconds" ) .. ")" )
-		w.respawn = createD("DNumberWang", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
+		w.respawntext = createD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0) )
+		w.respawntext:SetText( YRP.lang_string( "LID_respawntime" ) .. " ( " .. YRP.lang_string( "LID_seconds" ) .. " )" )
+		w.respawn = createD( "DNumberWang", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
 		w.respawn:SetMin(1)
 		w.respawn:SetMax(60 * 60 * 6)
 		w.respawn:SetValue(stab.int_respawntime)
 		function w.respawn:OnValueChanged()
-			net.Start("update_map_int_respawntime")
+			net.Start( "update_map_int_respawntime" )
 				net.WriteString(stab.uniqueID)
-				net.WriteString(self:GetValue())
+				net.WriteString(self:GetValue() )
 			net.SendToServer()
 		end
 
 		-- Amount
-		w.amounttext = createD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(150))
-		w.amounttext:SetText("LID_quantity")
-		w.amount = createD("DNumberWang", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(200))
+		w.amounttext = createD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(150) )
+		w.amounttext:SetText( "LID_quantity" )
+		w.amount = createD( "DNumberWang", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(200) )
 		w.amount:SetMin(1)
 		w.amount:SetMax(10)
 		w.amount:SetValue(stab.int_amount)
 		function w.amount:OnValueChanged()
-			net.Start("update_map_int_amount")
+			net.Start( "update_map_int_amount" )
 				net.WriteString(stab.uniqueID)
-				net.WriteString(self:GetValue())
+				net.WriteString(self:GetValue() )
 			net.SendToServer()
 		end
 
 		-- ClassName
-		w.classnametext = createD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(300))
-		w.classnametext:SetText("LID_npc")
-		w.classname = createD("DComboBox", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(350))
+		w.classnametext = createD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(300) )
+		w.classnametext:SetText( "LID_npc" )
+		w.classname = createD( "DComboBox", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(350) )
 		w.classname:SetText(stab.string_classname)
-		for i, v in pairs(list.Get("NPC")) do
+		for i, v in pairs(list.Get( "NPC" ) ) do
 			w.classname:AddChoice(i, i)
 		end
 		function w.classname:OnSelect()
-			net.Start("update_map_string_classname")
+			net.Start( "update_map_string_classname" )
 				net.WriteString(stab.uniqueID)
-				net.WriteString(self:GetText())
+				net.WriteString(self:GetText() )
 			net.SendToServer()
 		end
 	end)
@@ -168,9 +168,9 @@ function SWEP:PrimaryAttack()
 
 			pos = tr.HitPos or pos
 
-			YRP_SQL_INSERT_INTO("yrp_" .. GetMapNameDB(), "position, type, name", "'" .. string.Replace(tostring(pos), " ", ",") .. "', '" .. "spawner_npc" .. "', 'Spawner'")
+			YRP_SQL_INSERT_INTO( "yrp_" .. GetMapNameDB(), "position, type, name", "'" .. string.Replace(tostring(pos), " ", "," ) .. "', '" .. "spawner_npc" .. "', 'Spawner'" )
 
-			YRP.msg("db", "Added NPC Spawner")
+			YRP.msg( "db", "Added NPC Spawner" )
 
 			UpdateSpawnerNPCTable()
 		end
@@ -190,21 +190,21 @@ function SWEP:SecondaryAttack()
 		pos = tr.HitPos or pos
 
 		local found = false
-		for i, v in pairs(GetGlobalTable("yrp_spawner_npc")) do
-			local p = StringToVector(v.pos)
+		for i, v in pairs(GetGlobalTable( "yrp_spawner_npc" ) ) do
+			local p = StringToVector( v.pos)
 			if p:Distance(pos) < size * 2 then
-				YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
-				YRP.msg("db", "Removed Spawner")
+				YRP_SQL_DELETE_FROM( "yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'" )
+				YRP.msg( "db", "Removed Spawner" )
 				found = true
 			end
 		end
 
 		if !found then
-			for i, v in pairs(GetGlobalTable("yrp_spawner_npc")) do
-				local p = StringToVector(v.pos)
-				if p:Distance(ply:GetPos()) < 160 then
-					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
-					YRP.msg("db", "Removed Spawner")
+			for i, v in pairs(GetGlobalTable( "yrp_spawner_npc" ) ) do
+				local p = StringToVector( v.pos)
+				if p:Distance(ply:GetPos() ) < 160 then
+					YRP_SQL_DELETE_FROM( "yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'" )
+					YRP.msg( "db", "Removed Spawner" )
 				end
 			end
 		end
@@ -218,7 +218,7 @@ if CLIENT then
 	local g = math.random(0, 255)
 	local b = math.random(0, 255)
 	local delay = CurTime()
-	hook.Add("PostDrawTranslucentRenderables", "yrp_draw_spawner_npc", function()
+	hook.Add( "PostDrawTranslucentRenderables", "yrp_draw_spawner_npc", function()
 		if LocalPlayer():GetActiveWeapon():IsValid() and LocalPlayer():GetActiveWeapon():GetClass() == "yrp_tool_npcspawner" then
 			if delay < CurTime() then
 				delay = CurTime() + 0.1
@@ -226,8 +226,8 @@ if CLIENT then
 				g = math.random(0, 255)
 				b = math.random(0, 255)
 			end
-			for i, v in pairs(GetGlobalTable("yrp_spawner_npc")) do
-				local pos = StringToVector(v.pos)
+			for i, v in pairs(GetGlobalTable( "yrp_spawner_npc" ) ) do
+				local pos = StringToVector( v.pos)
 				if LocalPlayer():GetPos():Distance(pos) < 6000 then
 					render.SetColorMaterial()
 					render.DrawSphere(pos, size, 16, 16, Color(r, g, b, 200) )

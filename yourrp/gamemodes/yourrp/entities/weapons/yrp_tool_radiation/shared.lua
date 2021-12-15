@@ -42,7 +42,7 @@ end
 
 function SWEP:Reload()
 	local pos = ""
-	for i, v in pairs(GetGlobalTable("yrp_radiation")) do
+	for i, v in pairs(GetGlobalTable( "yrp_radiation" ) ) do
 		pos = v.pos
 	end
 	if pos != "" then
@@ -55,7 +55,7 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	util.AddNetworkString("yrp_radiation_options")
+	util.AddNetworkString( "yrp_radiation_options" )
 end
 
 local size = 128
@@ -77,15 +77,15 @@ function SWEP:Think()
 			} )
 			pos = tr.HitPos or pos
 
-			for i, v in pairs(GetGlobalTable("yrp_radiation")) do
-				local p = StringToVector(v.pos)
+			for i, v in pairs(GetGlobalTable( "yrp_radiation" ) ) do
+				local p = StringToVector( v.pos)
 				if p:Distance(pos) < size * 2 then
-					YRP.msg("db", "Option Radiation")
+					YRP.msg( "db", "Option Radiation" )
 
-					local stab = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
+					local stab = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'" )
 					if wk(stab) then
 						stab = stab[1]
-						net.Start("yrp_radiation_options")
+						net.Start( "yrp_radiation_options" )
 							net.WriteTable(stab)
 						net.Send(ply)
 					end
@@ -98,24 +98,24 @@ function SWEP:Think()
 end
 
 if CLIENT then
-	net.Receive("yrp_radiation_options", function()
+	net.Receive( "yrp_radiation_options", function()
 		if YRPIsNoMenuOpen() then
 			local stab = net.ReadTable()
 
-			local w = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+			local w = createD( "YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
 			w:Center()
 			w:MakePopup()
-			w:SetHeaderHeight(YRP.ctr(100))
-			w:SetTitle("LID_radiation")
+			w:SetHeaderHeight(YRP.ctr(100) )
+			w:SetTitle( "LID_radiation" )
 
 			-- name time
-			w.nametext = createD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
-			w.nametext:SetText("LID_name")
-			w.name = createD("DTextEntry", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
+			w.nametext = createD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0) )
+			w.nametext:SetText( "LID_name" )
+			w.name = createD( "DTextEntry", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
 			w.name:SetText(stab.name)
 			function w.name:OnChange()
 				local name = self:GetText()
-				net.Start("update_map_name")
+				net.Start( "update_map_name" )
 					net.WriteString(stab.uniqueID)
 					net.WriteString(name)
 				net.SendToServer()
@@ -131,15 +131,15 @@ function SWEP:PrimaryAttack()
 		if CLIENT then
 			local lply = LocalPlayer()
 			if self.startpos == nil then
-				self.startpos = string.Explode(" ", tostring(lply:GetPos()))
-				self.startang = string.Explode(" ", tostring(lply:GetAngles()))
+				self.startpos = string.Explode( " ", tostring(lply:GetPos() ))
+				self.startang = string.Explode( " ", tostring(lply:GetAngles() ))
 			else
-				self.endpos = string.Explode(" ", tostring(lply:GetPos()))
-				self.endang = string.Explode(" ", tostring(lply:GetAngles()))
+				self.endpos = string.Explode( " ", tostring(lply:GetPos() ))
+				self.endang = string.Explode( " ", tostring(lply:GetAngles() ))
 
-				net.Start("dbInsertIntoMap")
-					net.WriteString("yrp_" .. GetMapNameDB())
-					net.WriteString("position, angle, type")
+				net.Start( "dbInsertIntoMap" )
+					net.WriteString( "yrp_" .. GetMapNameDB() )
+					net.WriteString( "position, angle, type" )
 					
 					local tmpString = "'" .. self.startpos[1] .. "," .. self.startpos[2] .. "," .. self.startpos[3] .. "," .. self.endpos[1] .. "," .. self.endpos[2] .. "," .. self.endpos[3] .. "',"
 					tmpString = tmpString .. " '" .. self.startang[1] .. "," .. self.startang[2] .. "," .. self.startang[3] .. "," .. self.endang[1] .. "," .. self.endang[2] .. "," .. self.endang[3] .. "',"
@@ -158,8 +158,8 @@ function SWEP:PrimaryAttack()
 end
 
 function IsInsideRadiation(ply)
-	for i, v in pairs(GetGlobalTable("yrp_radiation")) do
-		local pos = string.Explode(",", v.pos)
+	for i, v in pairs(GetGlobalTable( "yrp_radiation" ) ) do
+		local pos = string.Explode( ",", v.pos)
 		local spos = Vector(pos[1], pos[2], pos[3])
 		local epos = Vector(pos[4], pos[5], pos[6])
 		
@@ -183,16 +183,16 @@ function SWEP:SecondaryAttack()
 	if SERVER then
 		local ply = self:GetOwner()
 
-		for i, v in pairs(GetGlobalTable("yrp_radiation")) do
-			local pos = string.Explode(",", v.pos)
+		for i, v in pairs(GetGlobalTable( "yrp_radiation" ) ) do
+			local pos = string.Explode( ",", v.pos)
 			local spos = Vector(pos[1], pos[2], pos[3])
 			local epos = Vector(pos[4], pos[5], pos[6])
 
 			inbox = ents.FindInBox(spos, epos)
 			for i, e in pairs(inbox) do
 				if e == ply then
-					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
-					YRP.msg("db", "Removed Radiation")
+					YRP_SQL_DELETE_FROM( "yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'" )
+					YRP.msg( "db", "Removed Radiation" )
 				end
 			end
 		end
@@ -206,7 +206,7 @@ if CLIENT then
 	local g = math.random(0, 255)
 	local b = math.random(0, 255)
 	local delay = CurTime()
-	hook.Add("PostDrawTranslucentRenderables", "yrp_draw_radiation", function()
+	hook.Add( "PostDrawTranslucentRenderables", "yrp_draw_radiation", function()
 		if LocalPlayer():GetActiveWeapon():IsValid() and LocalPlayer():GetActiveWeapon():GetClass() == "yrp_tool_radiation" then
 			if delay < CurTime() then
 				delay = CurTime() + 0.1
@@ -214,14 +214,14 @@ if CLIENT then
 				g = math.random(0, 255)
 				b = math.random(0, 255)
 			end
-			for i, v in pairs(GetGlobalTable("yrp_radiation")) do
-				local pos = string.Explode(",", v.pos)
+			for i, v in pairs(GetGlobalTable( "yrp_radiation" ) ) do
+				local pos = string.Explode( ",", v.pos)
 				local spos = Vector(pos[1], pos[2], pos[3])
 				local epos = Vector(pos[4], pos[5], pos[6])
 
 				if LocalPlayer():GetPos():Distance(spos) < 6000 then
 					render.SetColorMaterial()
-					render.DrawBox(spos, Angle(0, 0, 0), Vector(0, 0, 0), epos-spos, Color(40, 223, 40, 100))
+					render.DrawBox(spos, Angle(0, 0, 0), Vector(0, 0, 0), epos-spos, Color(40, 223, 40, 100) )
 					--render.DrawSphere(spos, size, 16, 16, Color(r, g, b, 200) )
 				end
 			end

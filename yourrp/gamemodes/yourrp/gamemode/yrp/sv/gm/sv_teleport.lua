@@ -2,7 +2,7 @@
 
 function YRPIsValidEntityForTeleport(ent)
 	if !IsValid(ent) then
-		YRP.msg("note", "[YRPIsValidEntityForTeleport] Entity is not valid to teleport >>> ent: " .. tostring(ent))
+		YRP.msg( "note", "[YRPIsValidEntityForTeleport] Entity is not valid to teleport >>> ent: " .. tostring(ent) )
 		return false
 	end
 	return true
@@ -63,8 +63,8 @@ function tp_to(ply, pos)
 		else
 			ply:SetAngles(_angle)
 		end
-		if enough_space(ply, _pos + Vector(0, 0, 2)) then
-			local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2))
+		if enough_space(ply, _pos + Vector(0, 0, 2) ) then
+			local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2) )
 
 			ply:SetPos(__pos)
 			if ply:IsPlayer() then
@@ -95,9 +95,9 @@ function tp_to(ply, pos)
 		end
 	end
 	if ply.RPName then
-		YRP.msg("note", "[tp_to] >>> FAILED TO TELEPORT! " .. ply:RPName() .. " (not enough space!) <<<")
+		YRP.msg( "note", "[tp_to] >>> FAILED TO TELEPORT! " .. ply:RPName() .. " (not enough space!) <<<" )
 	else
-		YRP.msg("note", "[tp_to] >>> FAILED! TELEPORTED TO EARLY?")
+		YRP.msg( "note", "[tp_to] >>> FAILED! TELEPORTED TO EARLY?" )
 	end
 	return false
 end

@@ -19,7 +19,7 @@ function draw.DrawNonParsedSimpleTextOutlined(text, font, x, y, color, xAlign, y
 end
 
 function surface.DrawNonParsedText(text)
-		return surface.DrawText(safeText(text))
+		return surface.DrawText(safeText(text) )
 end
 
 function chat.AddNonParsedText(...)
@@ -27,5 +27,5 @@ function chat.AddNonParsedText(...)
 	for i = 2, #tbl, 2 do
 			tbl[i] = safeText(tbl[i])
 	end
-	return chat.AddText(unpack(tbl))
+	return chat.AddText(unpack(tbl) )
 end

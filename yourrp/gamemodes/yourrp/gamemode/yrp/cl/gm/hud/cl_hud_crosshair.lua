@@ -1,27 +1,27 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local _hl2Weapons = {}
-table.insert(_hl2Weapons, "weapon_357")
-table.insert(_hl2Weapons, "weapon_alyxgun")
-table.insert(_hl2Weapons, "weapon_annabelle")
-table.insert(_hl2Weapons, "weapon_ar2")
-table.insert(_hl2Weapons, "weapon_brickbat")
-table.insert(_hl2Weapons, "weapon_bugbait")
-table.insert(_hl2Weapons, "weapon_crossbow")
-table.insert(_hl2Weapons, "weapon_crowbar")
-table.insert(_hl2Weapons, "weapon_frag")
-table.insert(_hl2Weapons, "weapon_physgun")
-table.insert(_hl2Weapons, "weapon_physcannon")
-table.insert(_hl2Weapons, "weapon_pistol")
-table.insert(_hl2Weapons, "weapon_rpg")
-table.insert(_hl2Weapons, "weapon_shotgun")
-table.insert(_hl2Weapons, "weapon_smg1")
-table.insert(_hl2Weapons, "weapon_striderbuster")
-table.insert(_hl2Weapons, "weapon_stunstick")
-table.insert(_hl2Weapons, "weapon_slam")
+table.insert(_hl2Weapons, "weapon_357" )
+table.insert(_hl2Weapons, "weapon_alyxgun" )
+table.insert(_hl2Weapons, "weapon_annabelle" )
+table.insert(_hl2Weapons, "weapon_ar2" )
+table.insert(_hl2Weapons, "weapon_brickbat" )
+table.insert(_hl2Weapons, "weapon_bugbait" )
+table.insert(_hl2Weapons, "weapon_crossbow" )
+table.insert(_hl2Weapons, "weapon_crowbar" )
+table.insert(_hl2Weapons, "weapon_frag" )
+table.insert(_hl2Weapons, "weapon_physgun" )
+table.insert(_hl2Weapons, "weapon_physcannon" )
+table.insert(_hl2Weapons, "weapon_pistol" )
+table.insert(_hl2Weapons, "weapon_rpg" )
+table.insert(_hl2Weapons, "weapon_shotgun" )
+table.insert(_hl2Weapons, "weapon_smg1" )
+table.insert(_hl2Weapons, "weapon_striderbuster" )
+table.insert(_hl2Weapons, "weapon_stunstick" )
+table.insert(_hl2Weapons, "weapon_slam" )
 
 function isHl2Weapon(weapon)
-	if table.HasValue(_hl2Weapons, weapon:GetClass()) then
+	if table.HasValue(_hl2Weapons, weapon:GetClass() ) then
 		return true
 	end
 	return false
@@ -36,7 +36,7 @@ local oldx = ScrW() / 2
 local oldy = ScrH() / 2
 function YRPHudCrosshair()
 	local lply = LocalPlayer()
-	if lply:Alive() and GetGlobalBool("bool_yrp_crosshair", false) then
+	if lply:Alive() and GetGlobalBool( "bool_yrp_crosshair", false) then
 		if true or !contextMenuOpen then
 			local weapon = lply:GetActiveWeapon()
 			if weapon != NULL then
@@ -82,7 +82,7 @@ function YRPHudCrosshair()
 					end
 
 					if math.Clamp then
-						ch_attack1 = math.Clamp(ch_attack1, 0, 6)
+						ch_attack1 = math.Clamp( ch_attack1, 0, 6)
 					else
 						ch_attack1 = 1
 					end
@@ -91,7 +91,7 @@ function YRPHudCrosshair()
 					
 					if lply:GetHudDesignName() != "notloaded" then
 						if lply:Alive() then
-							if weapon:GetNetworkedBool("Ironsights") then
+							if weapon:GetNetworkedBool( "Ironsights" ) then
 								alphaFade = 0
 								return
 							end

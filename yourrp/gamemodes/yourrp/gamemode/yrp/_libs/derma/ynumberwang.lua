@@ -3,15 +3,15 @@
 local PANEL = {}
 
 function PANEL:Paint(pw, ph)
-	draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 10))
+	draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 10) )
 end
 
 function PANEL:OnSizeChanged(nw, nh)
 	local br = YRP.ctr(0)
 
-	self.header:SetSize(nw, YRP.ctr(50))
+	self.header:SetSize(nw, YRP.ctr(50) )
 	self.numberwang:SetSize(nw - 2 * br, nh - YRP.ctr(50) - 2 * br)
-	self.numberwang:SetPos(br, YRP.ctr(50) + br)
+	self.numberwang:SetPos( br, YRP.ctr(50) + br)
 end
 
 function PANEL:GetHeader()
@@ -38,36 +38,36 @@ function PANEL:SetMax(max)
 	self.numberwang:SetMax(max)
 end
 
-function PANEL:SetValue(val)
-	val = math.Clamp(val, self:GetMin(), self:GetMax())
-	self.numberwang:SetValue(val)
+function PANEL:SetValue( val)
+	val = math.Clamp( val, self:GetMin(), self:GetMax() )
+	self.numberwang:SetValue( val)
 end
 
-function PANEL:OnValueChanged(val)
+function PANEL:OnValueChanged( val)
 
 end
 
 function PANEL:Init()
-	self.header = createD("DPanel", self, 10, 10, 0, 0)
+	self.header = createD( "DPanel", self, 10, 10, 0, 0)
 	function self.header:Paint(pw, ph)
 		draw.SimpleText(YRP.lang_string(self.name) or "UNNAMED", "Y_" .. math.Round(ph / 3 * 2) .. "_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	self.numberwang = createD("DNumberWang", self, 10, 10, 0, 10)
+	self.numberwang = createD( "DNumberWang", self, 10, 10, 0, 10)
 	self.numberwang.main = self
 
 	function self.numberwang:PerformLayout()
 		local lply = LocalPlayer()
-		self:SetFontInternal("Y_18_500")
+		self:SetFontInternal( "Y_18_500" )
 
 		self:SetPaintBackgroundEnabled(true)
 
-		local color = lply:InterfaceValue("YFrame", "HI")
-		local tcolor = TextColor(color)
+		local color = lply:InterfaceValue( "YFrame", "HI" )
+		local tcolor = TextColor( color)
 
 		self:SetTextColor(tcolor)
 		self:SetFGColor(tcolor)
-		self:SetBGColor(color)
+		self:SetBGColor( color)
 
 		local s = math.floor( self:GetTall() * 0.5 )
 
@@ -80,9 +80,9 @@ function PANEL:Init()
 		self.Down:AlignBottom( 2 )
 	end
 
-	function self.numberwang:OnValueChanged(val)
-		val = tonumber(val)
-		local newval = math.Clamp(val, self:GetMin(), self:GetMax())
+	function self.numberwang:OnValueChanged( val)
+		val = tonumber( val)
+		local newval = math.Clamp( val, self:GetMin(), self:GetMax() )
 		if newval == val then
 			self.main:OnValueChanged(newval)
 		else
@@ -92,4 +92,4 @@ function PANEL:Init()
 	end
 end
 
-vgui.Register("YNumberWang", PANEL, "DPanel")
+vgui.Register( "YNumberWang", PANEL, "DPanel" )

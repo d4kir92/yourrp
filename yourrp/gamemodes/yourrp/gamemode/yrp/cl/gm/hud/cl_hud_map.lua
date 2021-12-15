@@ -8,7 +8,7 @@ local _map = _map or {}
 _map.open = false
 
 function getCoords()
-	net.Start("askCoords")
+	net.Start( "askCoords" )
 	net.SendToServer()
 end
 
@@ -16,7 +16,7 @@ function toggleMap()
 	if YRPIsNoMenuOpen() and !_map.open then
 		_map.open = true
 		openMenu()
-		net.Start("askCoords")
+		net.Start( "askCoords" )
 		net.SendToServer()
 	else
 		_map.open = false
@@ -36,20 +36,20 @@ end
 local CamDataMap = {}
 function openMap()
 	local lply = LocalPlayer()
-	if GetGlobalBool("bool_map_system", false) then
+	if GetGlobalBool( "bool_map_system", false) then
 		map.open = true
 
-		_map.window = vgui.Create("DFrame")
-		_map.window:SetTitle("")
+		_map.window = vgui.Create( "DFrame" )
+		_map.window:SetTitle( "" )
 		_map.window:SetPos(0, 0)
-		_map.window:SetSize(ScrW(), ScrH())
+		_map.window:SetSize(ScrW(), ScrH() )
 		_map.window:ShowCloseButton(false)
 		_map.window:SetDraggable(false)
 
 		_map.window.tick = CurTime()
 		function _map.window:Paint(pw, ph)
 			if self.tick < CurTime() and input.IsMouseDown(MOUSE_RIGHT) or input.IsMouseDown(MOUSE_MIDDLE) then
-				gui.EnableScreenClicker(!vgui.CursorVisible())
+				gui.EnableScreenClicker(!vgui.CursorVisible() )
 				self.tick = CurTime() + 0.4
 			end
 			if vgui.CursorVisible() then
@@ -58,15 +58,15 @@ function openMap()
 				self:ShowCloseButton(false)
 			end
 			if map != nil then
-				draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 254))					 --_map.window of Map
+				draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 254) )					 --_map.window of Map
 
 				local win = {}
 				win.w, win.h = lowerToScreen(map.sizeX, map.sizeY)
 				win.x = (ScrW() / 2) - (win.w / 2)
 				win.y = (ScrH() / 2) - (win.h / 2)
 
-				draw.RoundedBox(0, win.x - YRP.ctr(2), win.y - YRP.ctr(2), win.w + YRP.ctr(4), win.h + YRP.ctr(4), Color(255, 255, 0, 240))
-				draw.RoundedBox(0, win.x, win.y, win.w, win.h, Color(0, 0, 0, 255))
+				draw.RoundedBox(0, win.x - YRP.ctr(2), win.y - YRP.ctr(2), win.w + YRP.ctr(4), win.h + YRP.ctr(4), Color(255, 255, 0, 240) )
+				draw.RoundedBox(0, win.x, win.y, win.w, win.h, Color(0, 0, 0, 255) )
 
 				local _mapName = GetNiceMapName()
 
@@ -94,8 +94,8 @@ function openMap()
 				CamDataMap.orthotop = map.sizeS
 				CamDataMap.orthobottom = map.sizeN
 
-				map_RT = GetRenderTarget("YRP_Map", win.w, win.h, true)
-				map_RT_mat = CreateMaterial("YRP_Map", "UnlitGeneric", { ["$basetexture"] = "YRP_Map" })
+				map_RT = GetRenderTarget( "YRP_Map", win.w, win.h, true)
+				map_RT_mat = CreateMaterial( "YRP_Map", "UnlitGeneric", { ["$basetexture"] = "YRP_Map" })
 				local old_RT = render.GetRenderTarget()
 				local old_w, old_h = ScrW(), ScrH()
 				render.SetRenderTarget(map_RT)
@@ -171,11 +171,11 @@ function openMap()
 					draw.RoundedBox(0, win.x, y, win.w, YRP.ctr(2), color)
 				end
 				for y = nulPos.y - YRP.ctr(100), 0, -YRP.ctr(200) do
-					draw.SimpleText(math.abs(c - fixc) + 1, "Y_24_500", win.x + YRP.ctr(20), y, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(math.abs( c - fixc) + 1, "Y_24_500", win.x + YRP.ctr(20), y, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c = c + 1
 				end
 				for y = nulPos.y - YRP.ctr(100), win.h, YRP.ctr(200) do
-					draw.SimpleText(c, "Y_24_500", win.x + YRP.ctr(20), y, Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText( c, "Y_24_500", win.x + YRP.ctr(20), y, Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c = c + 1
 				end
 				
@@ -200,7 +200,7 @@ function openMap()
 					draw.RoundedBox(0, x, win.y, YRP.ctr(2), win.h, color)
 				end
 				for x = nulPos.x - YRP.ctr(100), win.x, -YRP.ctr(200) do
-					draw.SimpleText(let[math.abs(c2 - fixc2) + 1], "Y_24_500", x, win.y + YRP.ctr(20), Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(let[math.abs( c2 - fixc2) + 1], "Y_24_500", x, win.y + YRP.ctr(20), Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c2 = c2 + 1
 				end
 				for x = nulPos.x + YRP.ctr(100), win.x + win.w, YRP.ctr(200) do
@@ -218,19 +218,19 @@ function openMap()
 				local rot = lply:EyeAngles().y - 90
 
 				surface.SetDrawColor(100, 100, 255, 255)
-				surface.SetMaterial(YRP.GetDesignIcon("navigation"))
+				surface.SetMaterial(YRP.GetDesignIcon( "navigation" ) )
 				surface.DrawTexturedRectRotated(x, y, w, h, rot)
-				draw.SimpleText(YRP.lang_string("LID_you"), "Y_24_500", plyPos.x, plyPos.y-YRP.ctr(50), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleText(YRP.lang_string( "LID_you" ), "Y_24_500", plyPos.x, plyPos.y-YRP.ctr(50), Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
 
 				--Coords
-				draw.SimpleText(math.Round(lply:GetPos().x, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
-				draw.SimpleText(", " .. math.Round(lply:GetPos().y, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleText(math.Round(lply:GetPos().x, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
+				draw.SimpleText( ", " .. math.Round(lply:GetPos().y, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
 
-				draw.SimpleText("[M] - " .. YRP.lang_string("LID_map") .. ": " .. _mapName, "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+				draw.SimpleText( "[M] - " .. YRP.lang_string( "LID_map" ) .. ": " .. _mapName, "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0) )
 
-				if lply:GetNW2Bool("bool_canseeteammatesonmap", false) or lply:GetNW2Bool("bool_canseeenemiesonmap", false) then
-					for k, pl in pairs(player.GetAll()) do
-						if pl != lply and (pl:GetGroupName() == lply:GetGroupName() and lply:GetNW2Bool("bool_canseeteammatesonmap", false)) or (pl:GetGroupName() != lply:GetGroupName() and lply:GetNW2Bool("bool_canseeenemiesonmap", false)) then
+				if lply:GetNW2Bool( "bool_canseeteammatesonmap", false) or lply:GetNW2Bool( "bool_canseeenemiesonmap", false) then
+					for k, pl in pairs(player.GetAll() ) do
+						if pl != lply and (pl:GetGroupName() == lply:GetGroupName() and lply:GetNW2Bool( "bool_canseeteammatesonmap", false) ) or (pl:GetGroupName() != lply:GetGroupName() and lply:GetNW2Bool( "bool_canseeenemiesonmap", false) ) then
 							local tmp = {}
 							tmp.xMax = map.sizeX
 							tmp.yMax = map.sizeY
@@ -261,9 +261,9 @@ function openMap()
 								pl_col = Color(255, 100, 100, 255)
 							end
 							surface.SetDrawColor(pl_col)
-							surface.SetMaterial(YRP.GetDesignIcon("navigation"))
+							surface.SetMaterial(YRP.GetDesignIcon( "navigation" ) )
 							surface.DrawTexturedRectRotated(ppx, ppy, psw, psh, prot)
-							draw.SimpleText(pl:Nick(), "Y_24_500", tmp.x, tmp.y - YRP.ctr(50), Color(0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+							draw.SimpleText(pl:Nick(), "Y_24_500", tmp.x, tmp.y - YRP.ctr(50), Color(0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
 						end
 					end
 				end
@@ -282,11 +282,11 @@ function openMap()
 	end
 end
 
-net.Receive("sendCoords", function()
+net.Receive( "sendCoords", function()
 	if net.ReadBool() then
 		map = net.ReadTable()
 		openMap()
 	else
-		YRP.msg("note", "wait for server coords")
+		YRP.msg( "note", "wait for server coords" )
 	end
 end)

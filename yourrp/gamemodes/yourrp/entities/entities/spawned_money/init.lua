@@ -1,38 +1,38 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
+AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "shared.lua" )
 
-include("shared.lua")
+include( "shared.lua" )
 
-resource.AddFile("models/props/cs_assault/money.mdl")
+resource.AddFile( "models/props/cs_assault/money.mdl" )
 
 function ENT:Initialize()
-	if table.HasValue(GetWorkshopIDs(), "1189643820") then
-		self:SetModel("models/props/cs_assault/money.mdl")
+	if table.HasValue(GetWorkshopIDs(), "1189643820" ) then
+		self:SetModel( "models/props/cs_assault/money.mdl" )
 	else
-		self:SetModel("models/props_junk/garbage_newspaper001a.mdl")
+		self:SetModel( "models/props_junk/garbage_newspaper001a.mdl" )
 	end
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 
 	local phys = self:GetPhysicsObject()
-	if (phys:IsValid()) then
+	if (phys:IsValid() ) then
 		phys:Wake()
 	end
 end
 
 function ENT:Getamount()
-	return self:GetNW2String("money")
+	return self:GetNW2String( "money" )
 end
 
 function ENT:Setamount(money)
-	self:SetNW2String("money", money)
+	self:SetNW2String( "money", money)
 end
 
-function ENT:Use(activator, caller)
-	caller:addMoney(self:Getamount())
+function ENT:Use( activator, caller)
+	caller:addMoney(self:Getamount() )
 	self:Remove()
 end
 

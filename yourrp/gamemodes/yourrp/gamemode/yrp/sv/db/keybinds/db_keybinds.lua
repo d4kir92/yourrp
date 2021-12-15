@@ -5,17 +5,17 @@
 
 local DATABASE_NAME = "yrp_keybinds"
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''" )
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "INT DEFAULT 0" )
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
+if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1" ) == nil then
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'" )
 end
 
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
-util.AddNetworkString("SetServerKeybinds")
-local PLAYER = FindMetaTable("Player")
+util.AddNetworkString( "SetServerKeybinds" )
+local PLAYER = FindMetaTable( "Player" )
 function PLAYER:SetServerKeybinds()
 	local selresult = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk( selresult ) then
@@ -27,22 +27,22 @@ function PLAYER:SetServerKeybinds()
 	end
 end
 
-util.AddNetworkString("setserverdefaultkeybind")
-net.Receive("setserverdefaultkeybind", function(len, ply)
+util.AddNetworkString( "setserverdefaultkeybind" )
+net.Receive( "setserverdefaultkeybind", function(len, ply)
 	local keybinds = net.ReadTable()
 	for name, value in pairs(keybinds) do
-		local selresult = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'")
+		local selresult = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'" )
 		if selresult != nil then
-			YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. name .. "'")
+			YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. name .. "'" )
 		else
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. value .. "'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. value .. "'" )
 		end
 	end
 end)
 
-util.AddNetworkString("forcesetkeybinds")
-net.Receive("forcesetkeybinds", function(len, ply)
-	for i, p in pairs(player.GetAll()) do
+util.AddNetworkString( "forcesetkeybinds" )
+net.Receive( "forcesetkeybinds", function(len, ply)
+	for i, p in pairs(player.GetAll() ) do
 		p:SetServerKeybinds()
 	end
 end)

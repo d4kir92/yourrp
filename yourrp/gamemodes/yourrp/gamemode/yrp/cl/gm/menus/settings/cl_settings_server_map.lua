@@ -4,21 +4,21 @@ function mapPNG()
 	local _mapName = GetMapNameDB()
 	local _map_png = _mapName .. ".png"
 
-	local _mapPNG = Material("../maps/no_image.png", "noclamp smooth")
+	local _mapPNG = Material( "../maps/no_image.png", "noclamp smooth" )
 
 	local _pre = "../"
 	local _maps = "maps/"
 	local _data = "data/maps/"
 	local _mapthumb = "maps/thumb/"
 
-	if file.Exists(_maps .. _map_png, "GAME") then
-		_mapPNG = Material(_pre .. _maps .. _map_png, "noclamp smooth")
+	if file.Exists(_maps .. _map_png, "GAME" ) then
+		_mapPNG = Material(_pre .. _maps .. _map_png, "noclamp smooth" )
 		return _mapPNG
-	elseif file.Exists(_data .. _map_png, "GAME") then
-		_mapPNG = Material(_pre .. _data .. _map_png, "noclamp smooth")
+	elseif file.Exists(_data .. _map_png, "GAME" ) then
+		_mapPNG = Material(_pre .. _data .. _map_png, "noclamp smooth" )
 		return _mapPNG
-	elseif file.Exists(_mapthumb .. _map_png, "GAME") then
-		_mapPNG = Material(_pre .. _mapthumb .. _map_png, "noclamp smooth")
+	elseif file.Exists(_mapthumb .. _map_png, "GAME" ) then
+		_mapPNG = Material(_pre .. _mapthumb .. _map_png, "noclamp smooth" )
 		return _mapPNG
 	end
 	return false
@@ -37,96 +37,96 @@ function getCopyMapPNG()
 	local _mapPicturePath = "maps/" .. _mapName .. ".png"
 	local _mapPictureDesti = _mapPicturePath
 
-	local _mapPNG = Material("../maps/no_image.png", "noclamp smooth")
-	if file.Exists(_mapPicturePath, "GAME") then
-		if !file.Exists("maps", "DATA") then
-			file.CreateDir("maps")
+	local _mapPNG = Material( "../maps/no_image.png", "noclamp smooth" )
+	if file.Exists(_mapPicturePath, "GAME" ) then
+		if !file.Exists( "maps", "DATA" ) then
+			file.CreateDir( "maps" )
 		end
-		file.Write(_mapPicturePath, file.Read(_mapPicturePath, "GAME"))
-		if file.Exists(_mapPicturePath, "DATA") then
-			_mapPNG =	Material("../data/" .. _mapPicturePath, "noclamp smooth")
+		file.Write(_mapPicturePath, file.Read(_mapPicturePath, "GAME" ) )
+		if file.Exists(_mapPicturePath, "DATA" ) then
+			_mapPNG =	Material( "../data/" .. _mapPicturePath, "noclamp smooth" )
 		end
 	else
 		_mapPicturePath = "maps/thumb/" .. _mapName .. ".png"
-		if file.Exists(_mapPicturePath, "GAME") then
-			if !file.Exists("maps", "DATA") then
-				file.CreateDir("maps")
+		if file.Exists(_mapPicturePath, "GAME" ) then
+			if !file.Exists( "maps", "DATA" ) then
+				file.CreateDir( "maps" )
 			end
-			file.Write(_mapPictureDesti, file.Read(_mapPicturePath, "GAME"))
-			if file.Exists(_mapPictureDesti, "DATA") then
-				_mapPNG = Material("../data/" .. _mapPictureDesti, "noclamp smooth")
+			file.Write(_mapPictureDesti, file.Read(_mapPicturePath, "GAME" ) )
+			if file.Exists(_mapPictureDesti, "DATA" ) then
+				_mapPNG = Material( "../data/" .. _mapPictureDesti, "noclamp smooth" )
 			end
 		end
 	end
 	return _mapPNG
 end
 
-net.Receive("getMapSite", function(len)
+net.Receive( "getMapSite", function(len)
 	local PARENT = GetSettingsSite()
 	if pa(PARENT) then
 		if len > 512000 then
-			YRP.msg("note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)")
+			YRP.msg( "note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)" )
 		end
 		local lply = LocalPlayer()
 
-		local tabs = createD("YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+		local tabs = createD( "YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 		tabs:SetTabWide(540)
 		function tabs:Think()
 			if pa(PARENT) then
-				self:SetSize(PARENT:GetWide(), PARENT:GetTall())
+				self:SetSize(PARENT:GetWide(), PARENT:GetTall() )
 			end
 		end
 		PARENT.maptabs = tabs
 
 		-- GROUPS AND ROLES
-		tabs:AddOption("LID_groupspawnpoints", function(parent)
-			net.Start("getMapTab")
-				net.WriteString("groupspawnpoints")
+		tabs:AddOption( "LID_groupspawnpoints", function(parent)
+			net.Start( "getMapTab" )
+				net.WriteString( "groupspawnpoints" )
 			net.SendToServer()
 		end)
-		tabs:AddOption("LID_rolespawnpoints", function(parent)
-			net.Start("getMapTab")
-				net.WriteString("rolespawnpoints")
+		tabs:AddOption( "LID_rolespawnpoints", function(parent)
+			net.Start( "getMapTab" )
+				net.WriteString( "rolespawnpoints" )
 			net.SendToServer()
 		end)
 
 		-- SHOPS
-		tabs:AddOption("LID_dealers", function(parent)
-			net.Start("getMapTab")
-				net.WriteString("dealers")
+		tabs:AddOption( "LID_dealers", function(parent)
+			net.Start( "getMapTab" )
+				net.WriteString( "dealers" )
 			net.SendToServer()
 		end)
-		tabs:AddOption("LID_storagepoints", function(parent)
-			net.Start("getMapTab")
-				net.WriteString("storagepoints")
+		tabs:AddOption( "LID_storagepoints", function(parent)
+			net.Start( "getMapTab" )
+				net.WriteString( "storagepoints" )
 			net.SendToServer()
 		end)
 
 		-- JAIL
-		tabs:AddOption("LID_jailpoint", function(parent)
-			net.Start("getMapTab")
-				net.WriteString("jailpoints")
+		tabs:AddOption( "LID_jailpoint", function(parent)
+			net.Start( "getMapTab" )
+				net.WriteString( "jailpoints" )
 			net.SendToServer()
 		end)
-		tabs:AddOption("LID_releasepoint", function(parent)
-			net.Start("getMapTab")
-				net.WriteString("releasepoints")
+		tabs:AddOption( "LID_releasepoint", function(parent)
+			net.Start( "getMapTab" )
+				net.WriteString( "releasepoints" )
 			net.SendToServer()
 		end)
 
 		-- OTHER THINGS
-		tabs:AddOption("LID_other", function(parent)
-			net.Start("getMapTab")
-				net.WriteString("other")
+		tabs:AddOption( "LID_other", function(parent)
+			net.Start( "getMapTab" )
+				net.WriteString( "other" )
 			net.SendToServer()
 		end)
 
-		tabs:GoToSite("LID_groupspawnpoints")
+		tabs:GoToSite( "LID_groupspawnpoints" )
 	end
 end)
 
 -- #F8Map
-net.Receive("getMapTab", function(len)
+net.Receive( "getMapTab", function(len)
 	local lply = LocalPlayer()
 
 	local tab = net.ReadString()
@@ -143,12 +143,12 @@ net.Receive("getMapTab", function(len)
 	if !wk(parent) or !pa(parent) then return end
 	parent:Clear()
 
-	local mapList = createD("DListView", parent, parent:GetWide() - YRP.ctr(660), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
-	mapList:AddColumn("uniqueID"):SetFixedWidth(YRP.ctr(120))
-	mapList:AddColumn(YRP.lang_string("LID_position")):SetFixedWidth(YRP.ctr(600))
-	mapList:AddColumn(YRP.lang_string("LID_angle")):SetFixedWidth(YRP.ctr(500))
-	mapList:AddColumn(YRP.lang_string("LID_type")):SetFixedWidth(YRP.ctr(600))
-	mapList:AddColumn(YRP.lang_string("LID_name"))
+	local mapList = createD( "DListView", parent, parent:GetWide() - YRP.ctr(660), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20) )
+	mapList:AddColumn( "uniqueID" ):SetFixedWidth(YRP.ctr(120) )
+	mapList:AddColumn(YRP.lang_string( "LID_position" ) ):SetFixedWidth(YRP.ctr(600) )
+	mapList:AddColumn(YRP.lang_string( "LID_angle" ) ):SetFixedWidth(YRP.ctr(500) )
+	mapList:AddColumn(YRP.lang_string( "LID_type" ) ):SetFixedWidth(YRP.ctr(600) )
+	mapList:AddColumn(YRP.lang_string( "LID_name" ) )
 	function mapList:Think()
 		if self.w != parent:GetWide() - YRP.ctr(660) or self.h != parent:GetTall() - YRP.ctr(140) or self.x != YRP.ctr(20) or self.y != YRP.ctr(20) then
 			self.w = parent:GetWide() - YRP.ctr(660)
@@ -161,24 +161,24 @@ net.Receive("getMapTab", function(len)
 		end
 	end
 
-	for k, v in pairs(dbTab) do
-		mapList:AddLine(v.uniqueID, v.position, v.angle, v.type, v.name)
+	for k, v in pairs( dbTab) do
+		mapList:AddLine( v.uniqueID, v.position, v.angle, v.type, v.name)
 	end
 
 	local PY = 20
 
 	-- ADD
 	--if tab == "groupspawnpoints" or tab == "rolespawnpoints" or tab == "dealers" or tab == "storagepoints" then
-		local btnAdd = createD("YButton", parent, YRP.ctr(600), YRP.ctr(50), parent:GetWide() - YRP.ctr(620), YRP.ctr(PY))
-		btnAdd:SetText(YRP.lang_string("LID_add"))
+		local btnAdd = createD( "YButton", parent, YRP.ctr(600), YRP.ctr(50), parent:GetWide() - YRP.ctr(620), YRP.ctr(PY) )
+		btnAdd:SetText(YRP.lang_string( "LID_add" ) )
 		btnAdd.py = YRP.ctr(PY)
 		function btnAdd:DoClick()
 			if tab == "groupspawnpoints" or tab == "rolespawnpoints" or tab == "dealers" or tab == "storagepoints" then
-				local addWin = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
-				addWin:SetHeaderHeight(YRP.ctr(100))
+				local addWin = createD( "YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+				addWin:SetHeaderHeight(YRP.ctr(100) )
 				addWin:Center()
 				addWin:MakePopup()
-				addWin:SetTitle("")
+				addWin:SetTitle( "" )
 				if tab == "groupspawnpoints" then
 					addWin.type = "GroupSpawnpoint"
 				elseif tab == "rolespawnpoints" then
@@ -194,14 +194,14 @@ net.Receive("getMapTab", function(len)
 				
 				local Y = 0
 				if tab == "groupspawnpoints" or tab == "rolespawnpoints" then
-					addWin.addGrpHeader = createD("YLabel", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addGrpHeader = createD( "YLabel", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y) )
 					Y = Y + 50
-					addWin.addGrpHeader:SetText("LID_group")
+					addWin.addGrpHeader:SetText( "LID_group" )
 
-					addWin.addGrp = createD("DComboBox", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addGrp = createD( "DComboBox", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y) )
 					Y = Y + 50
-					for k, v in pairs(dbGrp) do
-						addWin.addGrp:AddChoice(v.string_name, v.uniqueID)
+					for k, v in pairs( dbGrp) do
+						addWin.addGrp:AddChoice( v.string_name, v.uniqueID)
 					end
 					function addWin.addGrp:OnSelect(index, value, data)
 						if tab == "groupspawnpoints" then
@@ -209,7 +209,7 @@ net.Receive("getMapTab", function(len)
 						end
 						if addWin.addRol then
 							addWin.addRol:Clear()
-							for k, r in pairs(dbRol) do
+							for k, r in pairs( dbRol) do
 								if r.int_groupID == data then
 									addWin.addRol:AddChoice(r.string_name, r.uniqueID)
 								end
@@ -220,11 +220,11 @@ net.Receive("getMapTab", function(len)
 					Y = Y + 50
 				end
 				if tab == "rolespawnpoints" then
-					addWin.addRolHeader = createD("YLabel", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addRolHeader = createD( "YLabel", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y) )
 					Y = Y + 50
-					addWin.addRolHeader:SetText("LID_role")
+					addWin.addRolHeader:SetText( "LID_role" )
 
-					addWin.addRol = createD("DComboBox", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addRol = createD( "DComboBox", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y) )
 					Y = Y + 50
 					function addWin.addRol:OnSelect(index, value, data)
 						if tab == "rolespawnpoints" then
@@ -235,13 +235,13 @@ net.Receive("getMapTab", function(len)
 					Y = Y + 50
 				end
 				if tab == "storagepoints" then
-					addWin.addNameHeader = createD("YLabel", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addNameHeader = createD( "YLabel", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y) )
 					Y = Y + 50
-					addWin.addNameHeader:SetText("LID_name")
+					addWin.addNameHeader:SetText( "LID_name" )
 
-					addWin.addName = createD("DTextEntry", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addName = createD( "DTextEntry", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y) )
 					Y = Y + 50
-					addWin.addName:SetText(addWin.name)
+					addWin.addName:SetText( addWin.name)
 					function addWin.addName:OnChange()
 						addWin.name = self:GetText()
 					end
@@ -249,46 +249,46 @@ net.Receive("getMapTab", function(len)
 					Y = Y + 50
 				end
 
-				local addBtn = createD("YButton", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
-				addBtn:SetText(YRP.lang_string("LID_add"))
+				local addBtn = createD( "YButton", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y) )
+				addBtn:SetText(YRP.lang_string( "LID_add" ) )
 				function addBtn:DoClick()
-					local addPos = string.Explode(" ", tostring(lply:GetPos()))
-					local addAng = string.Explode(" ", tostring(lply:GetAngles()))
+					local addPos = string.Explode( " ", tostring(lply:GetPos() ))
+					local addAng = string.Explode( " ", tostring(lply:GetAngles() ))
 					if addWin.linkID != nil then
 						if tab == "groupspawnpoints" or tab == "rolespawnpoints" then
-							net.Start("dbInsertIntoMap")
-								net.WriteString("yrp_" .. GetMapNameDB())
-								net.WriteString("position, angle, linkID, type")
-								local addStr = "'" .. tonumber(addPos[1]) .. "," .. tonumber(addPos[2]) .. "," .. tonumber(addPos[3] + 4) .. "', '" .. tonumber(addAng[1]) .. "," .. tonumber(addAng[2]) .. "," .. tonumber(addAng[3]) .. "', " .. tostring(addWin.linkID) .. ", '" .. addWin.type .. "'"
-								net.WriteString(addStr)
+							net.Start( "dbInsertIntoMap" )
+								net.WriteString( "yrp_" .. GetMapNameDB() )
+								net.WriteString( "position, angle, linkID, type" )
+								local addStr = "'" .. tonumber( addPos[1]) .. "," .. tonumber( addPos[2]) .. "," .. tonumber( addPos[3] + 4) .. "', '" .. tonumber( addAng[1]) .. "," .. tonumber( addAng[2]) .. "," .. tonumber( addAng[3]) .. "', " .. tostring( addWin.linkID) .. ", '" .. addWin.type .. "'"
+								net.WriteString( addStr)
 							net.SendToServer()
 						end
 					elseif tab == "dealers" then
-						net.Start("dealer_add")
+						net.Start( "dealer_add" )
 						net.SendToServer()
 					elseif tab == "storagepoints" then
-						net.Start("dbInsertIntoMap")
-							net.WriteString("yrp_" .. GetMapNameDB())
-							net.WriteString("position, angle, name, type")
-							local addStr = "'" .. tonumber(addPos[1]) .. "," .. tonumber(addPos[2]) .. "," .. tonumber(addPos[3] + 4) .. "', '" .. tonumber(addAng[1]) .. "," .. tonumber(addAng[2]) .. "," .. tonumber(addAng[3]) .. "', '" .. tostring(addWin.name) .. "', '" .. addWin.type .. "'"
-							net.WriteString(addStr)
+						net.Start( "dbInsertIntoMap" )
+							net.WriteString( "yrp_" .. GetMapNameDB() )
+							net.WriteString( "position, angle, name, type" )
+							local addStr = "'" .. tonumber( addPos[1]) .. "," .. tonumber( addPos[2]) .. "," .. tonumber( addPos[3] + 4) .. "', '" .. tonumber( addAng[1]) .. "," .. tonumber( addAng[2]) .. "," .. tonumber( addAng[3]) .. "', " .. YRP_SQL_STR_IN( tostring( addWin.name ) ) .. ", '" .. addWin.type .. "'"
+							net.WriteString( addStr)
 						net.SendToServer()
 					end
 
-					net.Start("getMapTab")
+					net.Start( "getMapTab" )
 						net.WriteString(tab)
 					net.SendToServer()
 
 					addWin:Close()
 				end
 				function addBtn:Paint(pw, ph)
-					hook.Run("YButtonPaint", self, pw, ph)
+					hook.Run( "YButtonPaint", self, pw, ph)
 				end
 			end
 		end
 		function btnAdd:Paint(pw, ph)
 			if tab == "groupspawnpoints" or tab == "rolespawnpoints" or tab == "dealers" or tab == "storagepoints" then
-				hook.Run("YButtonPaint", self, pw, ph)
+				hook.Run( "YButtonPaint", self, pw, ph)
 			end
 		end
 		function btnAdd:Think()
@@ -307,22 +307,22 @@ net.Receive("getMapTab", function(len)
 	--end
 
 	-- DELETE
-	local btnDelete = createD("YButton", parent, YRP.ctr(600), YRP.ctr(50), parent:GetWide() - YRP.ctr(620), YRP.ctr(PY))
-	btnDelete:SetText(YRP.lang_string("LID_deleteentry"))
+	local btnDelete = createD( "YButton", parent, YRP.ctr(600), YRP.ctr(50), parent:GetWide() - YRP.ctr(620), YRP.ctr(PY) )
+	btnDelete:SetText(YRP.lang_string( "LID_deleteentry" ) )
 	btnDelete.py = YRP.ctr(PY)
 	function btnDelete:DoClick()
 		if mapList:GetSelectedLine() != nil then
-			net.Start("removeMapEntry")
-				net.WriteString(mapList:GetLine(mapList:GetSelectedLine()):GetValue(1))
+			net.Start( "removeMapEntry" )
+				net.WriteString(mapList:GetLine(mapList:GetSelectedLine() ):GetValue(1) )
 			net.SendToServer()
-			mapList:RemoveLine(mapList:GetSelectedLine())
+			mapList:RemoveLine(mapList:GetSelectedLine() )
 		end
 	end
 	function btnDelete:Paint(pw, ph)
 		if mapList:GetSelectedLine() != nil then
 			local t = {}
 			t.color = Color(255, 100, 100, 255)
-			hook.Run("YButtonPaint", self, pw, ph, t)
+			hook.Run( "YButtonPaint", self, pw, ph, t)
 		end
 	end
 	function btnDelete:Think()
@@ -339,13 +339,13 @@ net.Receive("getMapTab", function(len)
 	PY = PY + 50 + 20
 
 	-- TeleportToPoint
-	local btnTeleport = createD("YButton", parent, YRP.ctr(600), YRP.ctr(50), parent:GetWide() - YRP.ctr(620), YRP.ctr(PY))
-	btnTeleport:SetText(YRP.lang_string("LID_tpto"))
+	local btnTeleport = createD( "YButton", parent, YRP.ctr(600), YRP.ctr(50), parent:GetWide() - YRP.ctr(620), YRP.ctr(PY) )
+	btnTeleport:SetText(YRP.lang_string( "LID_tpto" ) )
 	btnTeleport.py = YRP.ctr(PY)
 	function btnTeleport:DoClick()
 		if mapList:GetSelectedLine() != nil then
-			net.Start("teleportto")
-				net.WriteString(mapList:GetLine(mapList:GetSelectedLine()):GetValue(1))
+			net.Start( "teleportto" )
+				net.WriteString(mapList:GetLine(mapList:GetSelectedLine() ):GetValue(1) )
 			net.SendToServer()
 		end
 	end
@@ -353,7 +353,7 @@ net.Receive("getMapTab", function(len)
 		if mapList:GetSelectedLine() != nil then
 			local t = {}
 			t.color = Color(255, 255, 100, 255)
-			hook.Run("YButtonPaint", self, pw, ph, t)
+			hook.Run( "YButtonPaint", self, pw, ph, t)
 		end
 	end
 	function btnTeleport:Think()
@@ -370,6 +370,6 @@ net.Receive("getMapTab", function(len)
 end)
 
 function OpenSettingsMap()
-	net.Start("getMapSite")
+	net.Start( "getMapSite" )
 	net.SendToServer()
 end

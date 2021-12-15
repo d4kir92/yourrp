@@ -57,12 +57,12 @@ function SWEP:PrimaryAttack()
 			self.target = tr.Entity
 			local ent = tr.Entity
 			local class = tr.Entity:GetClass()
-			if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalInt("int_door_distance", 200) then
+			if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos() ) < GetGlobalInt( "int_door_distance", 200) then
 				if ent.isFadingDoor and ent.fadeActivate then
 					ent:fadeActivate()
 				else
-					self.target:Fire("Unlock")
-					self.target:Fire("Open")
+					self.target:Fire( "Unlock" )
+					self.target:Fire( "Open" )
 				end
 
 				local filename = "physics/wood/wood_box_impact_hard2.wav"

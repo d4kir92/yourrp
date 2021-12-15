@@ -1,9 +1,9 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-include("shared.lua")
+include( "shared.lua" )
 
 function ENT:Draw()
-	if LocalPlayer():GetPos():Distance(self:GetPos()) < 2000 then
+	if LocalPlayer():GetPos():Distance(self:GetPos() ) < 2000 then
 		self:DrawModel()
 	end
 end

@@ -42,8 +42,8 @@ function SWEP:Think()
 
 end
 
-local swingsound = Sound("Weapon_Stunstick.Single")
-local hitsound = Sound("Weapon_Stunstick.Melee_Hit")
+local swingsound = Sound( "Weapon_Stunstick.Single" )
+local hitsound = Sound( "Weapon_Stunstick.Melee_Hit" )
 
 SWEP.delay = 0
 SWEP.cooldown = 0.5
@@ -65,19 +65,19 @@ function SWEP:PrimaryAttack()
 
 		if tr.Entity:IsPlayer() then
 			if CLIENT then
-				chat.AddText("--- --- --- --- --- --- --- --- ---")
-				chat.AddText(YRP.lang_string("LID_weapons") .. " (" .. tr.Entity:RPName() .. ")" .. ":")
+				chat.AddText( "--- --- --- --- --- --- --- --- ---" )
+				chat.AddText(YRP.lang_string( "LID_weapons" ) .. " ( " .. tr.Entity:RPName() .. " )" .. ":" )
 			end
-			for i, w in pairs(tr.Entity:GetWeapons()) do
+			for i, w in pairs(tr.Entity:GetWeapons() ) do
 				if CLIENT then
 					local wn = w:GetPrintName() or w.PrintName
-					local pa = tr.Entity:GetAmmoCount(w:GetPrimaryAmmoType())
-					local sa = tr.Entity:GetAmmoCount(w:GetSecondaryAmmoType())
+					local pa = tr.Entity:GetAmmoCount(w:GetPrimaryAmmoType() )
+					local sa = tr.Entity:GetAmmoCount(w:GetSecondaryAmmoType() )
 					chat.AddText(wn, " | PA: ", pa, " | SA: ", sa)
 				end
 			end
 			if CLIENT then
-				chat.AddText("--- --- --- --- --- --- --- --- ---")
+				chat.AddText( "--- --- --- --- --- --- --- --- ---" )
 			end
 		end
 	else
@@ -102,18 +102,18 @@ function SWEP:SecondaryAttack()
 	ply:EmitSound(hitsound)
 
 	if CLIENT then
-		chat.AddText("--- --- --- --- --- --- --- --- ---")
-		chat.AddText(YRP.lang_string("LID_weapons") .. " (" .. ply:RPName() .. ")" .. ":")
+		chat.AddText( "--- --- --- --- --- --- --- --- ---" )
+		chat.AddText(YRP.lang_string( "LID_weapons" ) .. " ( " .. ply:RPName() .. " )" .. ":" )
 	end
-	for i, w in pairs(ply:GetWeapons()) do
+	for i, w in pairs(ply:GetWeapons() ) do
 		if CLIENT then
 			local wn = w:GetPrintName() or w.PrintName
-			local pa = ply:GetAmmoCount(w:GetPrimaryAmmoType())
-			local sa = ply:GetAmmoCount(w:GetSecondaryAmmoType())
+			local pa = ply:GetAmmoCount(w:GetPrimaryAmmoType() )
+			local sa = ply:GetAmmoCount(w:GetSecondaryAmmoType() )
 			chat.AddText(wn, " | PA: ", pa, " | SA: ", sa)
 		end
 	end
 	if CLIENT then
-		chat.AddText("--- --- --- --- --- --- --- --- ---")
+		chat.AddText( "--- --- --- --- --- --- --- --- ---" )
 	end
 end

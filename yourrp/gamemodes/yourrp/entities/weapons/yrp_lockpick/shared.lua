@@ -57,12 +57,12 @@ function SWEP:PrimaryAttack()
 			self.target = tr.Entity
 			local ent = tr.Entity
 			local class = tr.Entity:GetClass()
-			if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalInt("int_door_distance", 200) and (class ==  "func_door_rotating" or class ==  "func_door" or class == "prop_door_rotating") then
-				ply:StartCasting("lockpick", "LID_lockpicking", 0, self.target, 3, 50, 1, false)
+			if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos() ) < GetGlobalInt( "int_door_distance", 200) and ( class ==  "func_door_rotating" or class ==  "func_door" or class == "prop_door_rotating" ) then
+				ply:StartCasting( "lockpick", "LID_lockpicking", 0, self.target, 3, 50, 1, false)
 				local filename = "doors/door_locked2.wav"
 				util.PrecacheSound(filename)
 				ply:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
-				timer.Create("lockpick_loop", 2, 3, function()
+				timer.Create( "lockpick_loop", 2, 3, function()
 					filename = "doors/door_locked2.wav"
 					util.PrecacheSound(filename)
 					ply:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
@@ -73,13 +73,13 @@ function SWEP:PrimaryAttack()
 end
 
 if SERVER then
-	hook.Add("yrp_castdone_lockpick", "lockpick", function(args)
-		timer.Remove("lockpick_loop")
-		args.target:Fire("Unlock")
+	hook.Add( "yrp_castdone_lockpick", "lockpick", function( args)
+		timer.Remove( "lockpick_loop" )
+		args.target:Fire( "Unlock" )
 	end)
 
-	hook.Add("yrp_interupt_lockpick", "lockpick", function(args)
-		timer.Remove("lockpick_loop")
+	hook.Add( "yrp_interupt_lockpick", "lockpick", function( args)
+		timer.Remove( "lockpick_loop" )
 	end)
 end
 

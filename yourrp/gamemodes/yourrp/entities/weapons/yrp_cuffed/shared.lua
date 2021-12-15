@@ -49,22 +49,22 @@ function SWEP:Think()
 			self.hp = 30
 		end
 
-		self.Owner:ShowStatus("LID_unleash", 30 - self.hp, 30)
+		self.Owner:ShowStatus( "LID_unleash", 30 - self.hp, 30)
 	end
 end
 
 function SWEP:DestroyCuffs()
 	self.Owner:InteruptCasting()
-	if !self.Owner:HasWeapon("yrp_unarmed") then
-		self.Owner:Give("yrp_unarmed")
+	if !self.Owner:HasWeapon( "yrp_unarmed" ) then
+		self.Owner:Give( "yrp_unarmed" )
 	end
-	self.Owner:SelectWeapon("yrp_unarmed")
+	self.Owner:SelectWeapon( "yrp_unarmed" )
 	self:Remove()
 end
 
 function SWEP:LowerHP()
 	if SERVER then
-		self.Owner:ShowStatus("LID_unleash", 30 - self.hp, 30)
+		self.Owner:ShowStatus( "LID_unleash", 30 - self.hp, 30)
 		self.hp = self.hp - 1
 		if self.hp <= 0 then
 			self:DestroyCuffs()

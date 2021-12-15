@@ -5,20 +5,20 @@
 
 local DATABASE_NAME = "yrp_design"
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Impact'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_profile", "TEXT DEFAULT 'YourRP Default'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ''" )
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ''" )
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Impact'" )
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_profile", "TEXT DEFAULT 'YourRP Default'" )
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'" )
 
-local fir = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
+local fir = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1" )
 if fir == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Material', 'Roboto'")
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Material', 'Roboto'" )
 elseif wk(fir) then
 	fir = fir[1]
 	if fir.string_interface_design == "Simple" or fir.string_hud_design == "Material" then
-		YRP_SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = "Simple"}, "uniqueID = '" .. "1" .. "'")
-		YRP_SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = "Material"}, "uniqueID = '" .. "1" .. "'")
+		YRP_SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = "Simple"}, "uniqueID = '" .. "1" .. "'" )
+		YRP_SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = "Material"}, "uniqueID = '" .. "1" .. "'" )
 	end
 end
 
@@ -26,26 +26,26 @@ end
 
 local HUDS = {}
 function YRPGetHUDs()
-	hook.Run("RegisterHUDDesign")
+	hook.Run( "RegisterHUDDesign" )
 	return HUDS
 end
 
 function RegisterHUDDesign(tab)
 	if tab.name == nil then
-		YRP.msg("note", "RegisterDesign Failed! Missing Design Name")
+		YRP.msg( "note", "RegisterDesign Failed! Missing Design Name" )
 		return false
 	elseif tab.author == nil then
-		YRP.msg("note", "RegisterDesign Failed! Missing Design Author")
+		YRP.msg( "note", "RegisterDesign Failed! Missing Design Author" )
 		return false
 	end
 	if HUDS[tab.name] == nil then
-		YRP.msg("note", "[RegisterDesign] Registered HUD: " .. tostring(tab.name))
+		YRP.msg( "note", "[RegisterDesign] Registered HUD: " .. tostring(tab.name) )
 		HUDS[tab.name] = tab
 	end
 	return true
 end
 
-hook.Add("RegisterHUDDesign", "RegisterHUDDesign_none", function()
+hook.Add( "RegisterHUDDesign", "RegisterHUDDesign_none", function()
 	local HUD_None = {}
 	HUD_None.name = "Disabled"
 	HUD_None.author = "YourRP"
@@ -53,7 +53,7 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_none", function()
 	RegisterHUDDesign(HUD_None)
 end)
 
-hook.Add("RegisterHUDDesign", "RegisterHUDDesign_simple", function()
+hook.Add( "RegisterHUDDesign", "RegisterHUDDesign_simple", function()
 	local HUD_Simple = {}
 	HUD_Simple.name = "Simple"
 	HUD_Simple.author = "D4KiR"
@@ -61,7 +61,7 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_simple", function()
 	RegisterHUDDesign(HUD_Simple)
 end)
 
-hook.Add("RegisterHUDDesign", "RegisterHUDDesign_space", function()
+hook.Add( "RegisterHUDDesign", "RegisterHUDDesign_space", function()
 	local HUD_Space = {}
 	HUD_Space.name = "Space"
 	HUD_Space.author = "D4KiR"
@@ -69,7 +69,7 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_space", function()
 	RegisterHUDDesign(HUD_Space)
 end)
 
-hook.Add("RegisterHUDDesign", "RegisterHUDDesign_fallout_76", function()
+hook.Add( "RegisterHUDDesign", "RegisterHUDDesign_fallout_76", function()
 	local HUD_FO76 = {}
 	HUD_FO76.name = "Fallout 76"
 	HUD_FO76.author = "D4KiR"
@@ -77,7 +77,7 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_fallout_76", function()
 	RegisterHUDDesign(HUD_FO76)
 end)
 
-hook.Add("RegisterHUDDesign", "RegisterHUDDesign_icons", function()
+hook.Add( "RegisterHUDDesign", "RegisterHUDDesign_icons", function()
 	local HUD_Icons = {}
 	HUD_Icons.name = "Icons"
 	HUD_Icons.author = "D4KiR"
@@ -85,7 +85,7 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_icons", function()
 	RegisterHUDDesign(HUD_Icons)
 end)
 
-hook.Add("RegisterHUDDesign", "RegisterHUDDesign_circles", function()
+hook.Add( "RegisterHUDDesign", "RegisterHUDDesign_circles", function()
 	local HUD_Circles = {}
 	HUD_Circles.name = "Circles"
 	HUD_Circles.author = "D4KiR"
@@ -93,7 +93,7 @@ hook.Add("RegisterHUDDesign", "RegisterHUDDesign_circles", function()
 	RegisterHUDDesign(HUD_Circles)
 end)
 
-hook.Add("RegisterHUDDesign", "RegisterHUDDesign_Thin", function()
+hook.Add( "RegisterHUDDesign", "RegisterHUDDesign_Thin", function()
 	local HUD_Thin = {}
 	HUD_Thin.name = "Thin"
 	HUD_Thin.author = "D4KiR"
@@ -103,82 +103,82 @@ end)
 
 local HUDMASKS = {}
 function YRPGetHUDMasks()
-	hook.Run("RegisterHUDMASKDesign")
+	hook.Run( "RegisterHUDMASKDesign" )
 	return HUDMASKS
 end
 
 function RegisterHUDMASKDesign(tab)
 	if tab.name == nil then
-		YRP.msg("note", "RegisterHUDMASKDesign Failed! Missing Design Name")
+		YRP.msg( "note", "RegisterHUDMASKDesign Failed! Missing Design Name" )
 		return false
 	elseif tab.author == nil then
-		YRP.msg("note", "RegisterHUDMASKDesign Failed! Missing Design Author")
+		YRP.msg( "note", "RegisterHUDMASKDesign Failed! Missing Design Author" )
 		return false
 	end
 	if HUDMASKS[tab.name] == nil then
-		YRP.msg("note", "[RegisterHUDMASKDesign] Registered HUD: " .. tostring(tab.name))
+		YRP.msg( "note", "[RegisterHUDMASKDesign] Registered HUD: " .. tostring(tab.name) )
 		HUDMASKS[tab.name] = tab
 	end
 	return true
 end
 
 --[[ LOADOUT ]]--
-local Player = FindMetaTable("Player")
+local Player = FindMetaTable( "Player" )
 function Player:YRPDesignLoadout(from)
 	if !IsValid(self) then
 		return
 	end
-	self:SetNW2Int("yrp_loading", 0)
+	self:SetNW2Int( "yrp_loading", 0)
 	self:HudLoadout()
 	self:InterfaceLoadout()
-	YRP.msg("debug", "[DesignLoadout] " .. self:YRPName() .. " " .. tostring(from))
-	local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+	YRP.msg( "debug", "[DesignLoadout] " .. self:YRPName() .. " " .. tostring(from) )
+	local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
 	if wk(setting) then
 		setting = setting[1]
-		self:SetNW2String("string_hud_design", setting.string_hud_design)
-		SetGlobalString("string_interface_design", setting.string_interface_design)
-		SetGlobalString("string_hud_profile", setting.string_hud_profile)
-		SetGlobalInt("int_headerheight", setting.int_headerheight)
+		self:SetNW2String( "string_hud_design", setting.string_hud_design)
+		SetGlobalString( "string_interface_design", setting.string_interface_design)
+		SetGlobalString( "string_hud_profile", setting.string_hud_profile)
+		SetGlobalInt( "int_headerheight", setting.int_headerheight)
 	else
-		YRP.msg("note", "Fatal Error: Design Settings not found")
+		YRP.msg( "note", "Fatal Error: Design Settings not found" )
 	end
-	self:SetNW2Int("yrp_loading", 100)
+	self:SetNW2Int( "yrp_loading", 100)
 end
 
-util.AddNetworkString("rebuildHud")
-net.Receive("rebuildHud", function(len, ply)
-	YRP.msg("note", "FAILED HUD => REBUILD HUD")
-	ply:YRPDesignLoadout("rebuildHud")
+util.AddNetworkString( "rebuildHud" )
+net.Receive( "rebuildHud", function(len, ply)
+	YRP.msg( "note", "FAILED HUD => REBUILD HUD" )
+	ply:YRPDesignLoadout( "rebuildHud" )
 end)
 
 local once = false
-util.AddNetworkString("ply_changed_resolution")
-net.Receive("ply_changed_resolution", function(len, ply)
-	--YRP.msg("note", ply:YRPName() .. " changed the Resolution.")
+util.AddNetworkString( "ply_changed_resolution" )
+net.Receive( "ply_changed_resolution", function(len, ply)
+	--YRP.msg( "note", ply:YRPName() .. " changed the Resolution." )
 	if !once then
 		once = true
 		return
 	end
 	timer.Simple(1, function()
 		if IsValid(ply) then
-			ply:SetNW2Int("hud_version", ply:GetNW2Int("hud_version", 0) + 1)
+			ply:SetNW2Int( "hud_version", ply:GetNW2Int( "hud_version", 0) + 1)
 		end
 	end)
 	timer.Simple(30, function()
 		if IsValid(ply) then
-			ply:SetNW2Int("hud_version", ply:GetNW2Int("hud_version", 0) + 1)
+			ply:SetNW2Int( "hud_version", ply:GetNW2Int( "hud_version", 0) + 1)
 		end
 	end)
-	--ply:YRPDesignLoadout("ply_changed_resolution")
+	--ply:YRPDesignLoadout( "ply_changed_resolution" )
 end)
 
-util.AddNetworkString("change_hud_design")
-net.Receive("change_hud_design", function(len, ply)
+util.AddNetworkString( "change_hud_design" )
+net.Receive( "change_hud_design", function(len, ply)
 	local string_hud_design = net.ReadString()
-	YRP.msg("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
-	YRP_SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = string_hud_design}, "uniqueID = '1'")
-	for i, pl in pairs(player.GetAll()) do
-		pl:SetNW2String("string_hud_design", string_hud_design)
+	YRP.msg( "db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = string_hud_design}, "uniqueID = '1'" )
+	for i, pl in pairs(player.GetAll() ) do
+		pl:SetNW2String( "string_hud_design", string_hud_design)
 	end
 end)
 
@@ -186,14 +186,14 @@ end)
 INTERFACES = INTERFACES or {}
 function RegisterInterfaceDesign(tab)
 	if tab.name == nil then
-		YRP.msg("note", "RegisterDesign Failed! Missing Design Name")
+		YRP.msg( "note", "RegisterDesign Failed! Missing Design Name" )
 		return false
 	elseif tab.author == nil then
-		YRP.msg("note", "RegisterDesign Failed! Missing Design Author")
+		YRP.msg( "note", "RegisterDesign Failed! Missing Design Author" )
 		return false
 	end
 	INTERFACES[tab.name] = tab
-	--YRP.msg("db", "Added Interface Design (" .. tostring(tab.name) .. ")")
+	--YRP.msg( "db", "Added Interface Design ( " .. tostring(tab.name) .. " )" )
 	return true
 end
 
@@ -209,26 +209,26 @@ IF_Blur.author = "D4KiR"
 IF_Blur.progress = 50
 RegisterInterfaceDesign(IF_Blur)
 
-util.AddNetworkString("change_interface_design")
-net.Receive("change_interface_design", function(len, ply)
+util.AddNetworkString( "change_interface_design" )
+net.Receive( "change_interface_design", function(len, ply)
 	local string_interface_design = net.ReadString()
-	YRP.msg("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
-	YRP_SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = string_interface_design}, "uniqueID = '1'")
-	SetGlobalString("string_interface_design", string_interface_design)
+	YRP.msg( "db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = string_interface_design}, "uniqueID = '1'" )
+	SetGlobalString( "string_interface_design", string_interface_design)
 
 	ResetDesign()
 end)
 
 -- F8 Design Page
-util.AddNetworkString("get_design_settings")
-net.Receive("get_design_settings", function(len, ply)
-	if ply:CanAccess("bool_design") then
-		hook.Call("RegisterHUDDesign")
-		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+util.AddNetworkString( "get_design_settings" )
+net.Receive( "get_design_settings", function(len, ply)
+	if ply:CanAccess( "bool_design" ) then
+		hook.Call( "RegisterHUDDesign" )
+		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
 		local hud_profiles = GetHudProfiles()
 		if wk(setting) then
 			setting = setting[1]
-			net.Start("get_design_settings")
+			net.Start( "get_design_settings" )
 				net.WriteTable(setting)
 				net.WriteTable(HUDS)
 				net.WriteTable(INTERFACES)
@@ -238,38 +238,38 @@ net.Receive("get_design_settings", function(len, ply)
 	end
 end)
 
-util.AddNetworkString("yrp_set_font")
+util.AddNetworkString( "yrp_set_font" )
 function YRPSendFontName(ply)
-	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "string_fontname", "uniqueID = '1'")
-	if wk(dbtab) then
+	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "string_fontname", "uniqueID = '1'" )
+	if wk( dbtab) then
 		dbtab = dbtab[1]
 
-		net.Start("yrp_set_font")
-			net.WriteString(dbtab.string_fontname)
+		net.Start( "yrp_set_font" )
+			net.WriteString( dbtab.string_fontname)
 		net.Send(ply)
 	end
 end
 
-net.Receive("yrp_set_font", function(len, ply)
+net.Receive( "yrp_set_font", function(len, ply)
 	YRPSendFontName(ply)
 end)
 
-util.AddNetworkString("yrp_update_font")
-net.Receive("yrp_update_font", function(len, ply)
+util.AddNetworkString( "yrp_update_font" )
+net.Receive( "yrp_update_font", function(len, ply)
 	local string_fontname = net.ReadString()
-	YRP.msg("db", "[DESIGN] string_fontname changed to " .. string_fontname)
-	YRP_SQL_UPDATE(DATABASE_NAME, {["string_fontname"] = string_fontname}, "uniqueID = '1'")
+	YRP.msg( "db", "[DESIGN] string_fontname changed to " .. string_fontname)
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_fontname"] = string_fontname}, "uniqueID = '1'" )
 
-	for i, p in pairs(player.GetAll()) do
+	for i, p in pairs(player.GetAll() ) do
 		YRPSendFontName(p)
 	end
 end)
 
-util.AddNetworkString("yrp_change_headerheight")
-net.Receive("yrp_change_headerheight", function(len, ply)
+util.AddNetworkString( "yrp_change_headerheight" )
+net.Receive( "yrp_change_headerheight", function(len, ply)
 	local newheaderheight = net.ReadString()
 	newheaderheight = tonumber(newheaderheight)
 
-	YRP_SQL_UPDATE(DATABASE_NAME, {["int_headerheight"] = newheaderheight}, "uniqueID = '1'")
-	SetGlobalInt("int_headerheight", newheaderheight)
+	YRP_SQL_UPDATE(DATABASE_NAME, {["int_headerheight"] = newheaderheight}, "uniqueID = '1'" )
+	SetGlobalInt( "int_headerheight", newheaderheight)
 end)

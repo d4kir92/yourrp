@@ -53,7 +53,7 @@ function SWEP:PrimaryAttack()
 				self.target = tr.Entity
 				if tr.Entity:IsPlayer() then
 					--StartCasting(net_str, lang_str, mode, target, duration, range, cost, canmove)
-					ply:StartCasting("bandage", "LID_bandaging", 0, self.target, 3, 100, 1, false)
+					ply:StartCasting( "bandage", "LID_bandaging", 0, self.target, 3, 100, 1, false)
 				end
 			end
 		end
@@ -61,7 +61,7 @@ function SWEP:PrimaryAttack()
 end
 
 if SERVER then
-	hook.Add("yrp_castdone_bandage", "bandage", function(args)
+	hook.Add( "yrp_castdone_bandage", "bandage", function( args)
 		args.target:Heal(10)
 		args.target:StopBleeding()
 		args.attacker:GetActiveWeapon():TakePrimaryAmmo(1)
@@ -74,7 +74,7 @@ function SWEP:SecondaryAttack()
 		if self:Clip1() > 0 then
 			local ply = self:GetOwner()
 			_target = ply
-			ply:StartCasting("bandage", "LID_bandaging", 0, _target, 3, 100, 1, false)
+			ply:StartCasting( "bandage", "LID_bandaging", 0, _target, 3, 100, 1, false)
 		end
 	end
 end

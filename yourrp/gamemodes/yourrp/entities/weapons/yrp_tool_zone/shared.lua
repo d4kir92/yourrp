@@ -42,7 +42,7 @@ end
 
 function SWEP:Reload()
 	local pos = ""
-	for i, v in pairs(GetGlobalTable("yrp_zone")) do
+	for i, v in pairs(GetGlobalTable( "yrp_zone" ) ) do
 		pos = v.pos
 	end
 
@@ -56,7 +56,7 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	util.AddNetworkString("yrp_zone_options")
+	util.AddNetworkString( "yrp_zone_options" )
 end
 
 local size = 8
@@ -73,11 +73,11 @@ function SWEP:Think()
 
 			local inzone, zonename, zonecolor, zoneuid = IsInsideZone(ply) 
 			if inzone then
-				YRP.msg("db", "Option Zone")
-				local stab = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. zoneuid .. "'")
+				YRP.msg( "db", "Option Zone" )
+				local stab = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. zoneuid .. "'" )
 				if wk(stab) then
 					stab = stab[1]
-					net.Start("yrp_zone_options")
+					net.Start( "yrp_zone_options" )
 						net.WriteTable(stab)
 					net.Send(ply)
 				end
@@ -89,42 +89,42 @@ function SWEP:Think()
 end
 
 if CLIENT then
-	net.Receive("yrp_zone_options", function()
+	net.Receive( "yrp_zone_options", function()
 		if YRPIsNoMenuOpen() then
 			local stab = net.ReadTable()
 
-			local w = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+			local w = createD( "YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
 			w:Center()
 			w:MakePopup()
-			w:SetHeaderHeight(YRP.ctr(100))
-			w:SetTitle("LID_zone")
+			w:SetHeaderHeight(YRP.ctr(100) )
+			w:SetTitle( "LID_zone" )
 
 			-- name time
-			w.nametext = createD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
-			w.nametext:SetText("LID_name")
-			w.name = createD("DTextEntry", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
+			w.nametext = createD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0) )
+			w.nametext:SetText( "LID_name" )
+			w.name = createD( "DTextEntry", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
 			w.name:SetText(stab.name)
 			function w.name:OnChange()
 				local name = self:GetText()
-				net.Start("update_map_name")
+				net.Start( "update_map_name" )
 					net.WriteString(stab.uniqueID)
 					net.WriteString(name)
 				net.SendToServer()
 			end
 
 			-- color
-			w.nametext = createD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(150))
-			w.nametext:SetText("LID_color")
-			w.name = createD("DColorMixer", w:GetContent(), YRP.ctr(400), YRP.ctr(400), YRP.ctr(10), YRP.ctr(200))
+			w.nametext = createD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(150) )
+			w.nametext:SetText( "LID_color" )
+			w.name = createD( "DColorMixer", w:GetContent(), YRP.ctr(400), YRP.ctr(400), YRP.ctr(10), YRP.ctr(200) )
 			w.name:SetPalette(true)
 			w.name:SetAlphaBar(false)
 			w.name:SetWangs(true)
 			w.name:SetColor( StringToColor( stab.color ) )
-			function w.name:ValueChanged(col)
-				local color = YRPColorToString(col)
-				net.Start("update_map_color")
+			function w.name:ValueChanged( col)
+				local color = YRPColorToString( col)
+				net.Start( "update_map_color" )
 					net.WriteString(stab.uniqueID)
-					net.WriteString(color)
+					net.WriteString( color)
 				net.SendToServer()
 			end
 		end
@@ -138,15 +138,15 @@ function SWEP:PrimaryAttack()
 		if CLIENT then
 			local lply = LocalPlayer()
 			if self.startpos == nil then
-				self.startpos = string.Explode(" ", tostring(lply:GetPos()))
-				self.startang = string.Explode(" ", tostring(lply:GetAngles()))
+				self.startpos = string.Explode( " ", tostring(lply:GetPos() ))
+				self.startang = string.Explode( " ", tostring(lply:GetAngles() ))
 			else
-				self.endpos = string.Explode(" ", tostring(lply:GetPos()))
-				self.endang = string.Explode(" ", tostring(lply:GetAngles()))
+				self.endpos = string.Explode( " ", tostring(lply:GetPos() ))
+				self.endang = string.Explode( " ", tostring(lply:GetAngles() ))
 
-				net.Start("dbInsertIntoMap")
-					net.WriteString("yrp_" .. GetMapNameDB())
-					net.WriteString("position, angle, type")
+				net.Start( "dbInsertIntoMap" )
+					net.WriteString( "yrp_" .. GetMapNameDB() )
+					net.WriteString( "position, angle, type" )
 					
 					local tmpString = "'" .. self.startpos[1] .. "," .. self.startpos[2] .. "," .. self.startpos[3] .. "," .. self.endpos[1] .. "," .. self.endpos[2] .. "," .. self.endpos[3] .. "',"
 					tmpString = tmpString .. " '" .. self.startang[1] .. "," .. self.startang[2] .. "," .. self.startang[3] .. "," .. self.endang[1] .. "," .. self.endang[2] .. "," .. self.endang[3] .. "',"
@@ -165,8 +165,8 @@ function SWEP:PrimaryAttack()
 end
 
 function IsInsideZone(ply)
-	for i, v in pairs(GetGlobalTable("yrp_zone")) do
-		local pos = string.Explode(",", v.pos)
+	for i, v in pairs(GetGlobalTable( "yrp_zone" ) ) do
+		local pos = string.Explode( ",", v.pos)
 		local spos = Vector(pos[1], pos[2], pos[3])
 		local epos = Vector(pos[4], pos[5], pos[6])
 		
@@ -200,16 +200,16 @@ function SWEP:SecondaryAttack()
 	if SERVER then
 		local ply = self:GetOwner()
 
-		for i, v in pairs(GetGlobalTable("yrp_zone")) do
-			local pos = string.Explode(",", v.pos)
+		for i, v in pairs(GetGlobalTable( "yrp_zone" ) ) do
+			local pos = string.Explode( ",", v.pos)
 			local spos = Vector(pos[1], pos[2], pos[3])
 			local epos = Vector(pos[4], pos[5], pos[6])
 
 			inbox = ents.FindInBox(spos, epos)
 			for i, e in pairs(inbox) do
 				if e == ply then
-					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
-					YRP.msg("db", "Removed Zone")
+					YRP_SQL_DELETE_FROM( "yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'" )
+					YRP.msg( "db", "Removed Zone" )
 				end
 			end
 		end
@@ -220,13 +220,13 @@ end
 
 if CLIENT then
 	local delay = CurTime()
-	hook.Add("PostDrawTranslucentRenderables", "yrp_draw_zone", function()
+	hook.Add( "PostDrawTranslucentRenderables", "yrp_draw_zone", function()
 		if LocalPlayer():GetActiveWeapon():IsValid() and LocalPlayer():GetActiveWeapon():GetClass() == "yrp_tool_zone" then
 			if delay < CurTime() then
 				delay = CurTime() + 0.1
 			end
-			for i, v in pairs(GetGlobalTable("yrp_zone")) do
-				local pos = string.Explode(",", v.pos)
+			for i, v in pairs(GetGlobalTable( "yrp_zone" ) ) do
+				local pos = string.Explode( ",", v.pos)
 				local spos = Vector(pos[1], pos[2], pos[3])
 				local epos = Vector(pos[4], pos[5], pos[6])
 

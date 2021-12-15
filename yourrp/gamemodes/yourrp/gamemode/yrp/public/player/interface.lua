@@ -1,9 +1,9 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-local Player = FindMetaTable("Player")
+local Player = FindMetaTable( "Player" )
 
 function Player:GetInterfaceDesign()
-	return GetGlobalString("string_interface_design", "Material")
+	return GetGlobalString( "string_interface_design", "Material" )
 end
 
 function Player:InterfaceValue(element, art)
@@ -16,13 +16,15 @@ function Player:InterfaceValue(element, art)
 	elseif table.HasValue(ibools, art) then
 		return false
 	elseif table.HasValue(icolors, art) then
-		local icolor = self:GetNW2String("color_IF_" .. self:GetInterfaceDesign() .. "_" .. element .. "_" .. art, "0, 0, 0, 100")
-		icolor = string.Explode(",", icolor)
+		local icolor = self:GetNW2String( "color_IF_" .. self:GetInterfaceDesign() .. "_" .. element .. "_" .. art, "0, 0, 0, 100" )
+		icolor = string.Explode( ",", icolor)
 		return Color(icolor[1], icolor[2], icolor[3], icolor[4] or 255)
 	elseif table.HasValue(iints, art) then
 		return 0
 	end
-	return "Element: " .. element .. " ART: " .. art .. " not found."
+	local text = "Element: " .. element .. " ART: " .. art .. " not found."
+	YRP.msg( "error", text )
+	return text
 end
 
 function Player:InterfaceElement(element)

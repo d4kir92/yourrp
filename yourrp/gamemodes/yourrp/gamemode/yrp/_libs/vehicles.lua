@@ -17,24 +17,24 @@ function get_vehicles_custom(s_list, s_custom)
 end
 
 function get_all_vehicles()
-	local _getVehicles = list.Get("Vehicles")
+	local _getVehicles = list.Get( "Vehicles" )
 
-	local _simfphys = get_vehicles_custom("simfphys_vehicles", "simfphys")
+	local _simfphys = get_vehicles_custom( "simfphys_vehicles", "simfphys" )
 	for k, v in pairs(_simfphys) do
 		table.insert(_getVehicles, v)
 	end
 
-	local _scars = get_vehicles_custom("SCarVehicles", "scars")
+	local _scars = get_vehicles_custom( "SCarVehicles", "scars" )
 	for k, v in pairs(_scars) do
 		table.insert(_getVehicles, v)
 	end
 
-	local _swvehicles = get_vehicles_custom("SWVehicles", "swvehicles")
+	local _swvehicles = get_vehicles_custom( "SWVehicles", "swvehicles" )
 	for k, v in pairs(_swvehicles) do
 		table.insert(_getVehicles, v)
 	end
 
-	local _halovehicles = get_vehicles_custom("HaloVehicles", "halo")
+	local _halovehicles = get_vehicles_custom( "HaloVehicles", "halo" )
 	for k, v in pairs(_halovehicles) do
 		table.insert(_getVehicles, v)
 	end

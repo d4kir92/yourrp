@@ -5,13 +5,13 @@ function pTab(table, name)
 	if name != "" then
 		name = name .. " "
 	end
-	name = name .. "(" .. tostring(table) .. ")"
-	YRP.msg("ptab", name)
+	name = name .. "( " .. tostring(table) .. " )"
+	YRP.msg( "ptab", name)
 
 	if istable(table) then
 		PrintTable(table)
 	else
-		YRP.msg("ptab", "printTab " .. tostring(table) .. " is not a table!")
+		YRP.msg( "ptab", "printTab " .. tostring(table) .. " is not a table!" )
 	end
 end
 
@@ -25,30 +25,30 @@ function combineTables(tab1, tab2)
 			if item != nil and item != "nil" then
 				table.insert(tab1, item)
 			else
-				YRP.msg("note", "combineTables: i: " .. tostring(i) .. " " .. tostring(item) .. " is nil")
+				YRP.msg( "note", "combineTables: i: " .. tostring(i) .. " " .. tostring(item) .. " is nil" )
 			end
 		end
 		for i, item in pairs(tab1) do
-			table.RemoveByValue(tab1, "")
-			table.RemoveByValue(tab1, " ")
+			table.RemoveByValue(tab1, "" )
+			table.RemoveByValue(tab1, " " )
 		end
 		return tab1
 	else
-		YRP.msg("note", tostring(tab1) .. " and " .. tostring(tab2) .. " are not tables")
+		YRP.msg( "note", tostring(tab1) .. " and " .. tostring(tab2) .. " are not tables" )
 		return {}
 	end
 end
 
 function combineStringTables(str1, str2)
 	if str1 != nil and str2 != nil then
-		local _tab1 = string.Explode(",", str1)
-		local _tab2 = string.Explode(",", str2)
+		local _tab1 = string.Explode( ",", str1)
+		local _tab2 = string.Explode( ",", str2)
 		return combineTables(_tab1, _tab2)
 	else
-		local _tab1 = string.Explode(",", tostring(str1))
-		local _tab2 = string.Explode(",", tostring(str2))
+		local _tab1 = string.Explode( ",", tostring(str1) )
+		local _tab2 = string.Explode( ",", tostring(str2) )
 		local tab = combineTables(_tab1, _tab2)
-		YRP.msg("note", "combineStringTables ERROR str1: " .. tostring(str1) .. " str2: " .. tostring(str2))
+		YRP.msg( "note", "combineStringTables ERROR str1: " .. tostring(str1) .. " str2: " .. tostring(str2) )
 		return ""
 	end
 end
@@ -64,11 +64,11 @@ function GetWorkshopIDs()
 end
 
 function SENTSTable(str)
-	local se = string.Explode(";", str)
+	local se = string.Explode( ";", str)
 	local tbl = {}
 	for i, senttbl in pairs(se) do
 		if senttbl != "" then
-			senttbl = string.Explode(",", senttbl)
+			senttbl = string.Explode( ",", senttbl)
 			if senttbl[1] != nil and senttbl[2] != nil then
 				tbl[senttbl[2]] = senttbl[1]
 			end

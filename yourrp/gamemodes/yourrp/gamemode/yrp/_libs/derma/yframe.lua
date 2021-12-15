@@ -6,7 +6,7 @@ function PANEL:GetLanguageChanger()
 	return self._lc or true
 end
 
-function PANEL:SetLanguageChanger(b)
+function PANEL:SetLanguageChanger( b)
 	self._lc = b
 end
 
@@ -18,7 +18,7 @@ function PANEL:SetHeaderHeight(num)
 	if isnumber(num) then
 		self._headerheight = num
 	else
-		YRP.msg("note", "SetHeaderHeight | num is not a number: " .. tostring(num) .. "!")
+		YRP.msg( "note", "SetHeaderHeight | num is not a number: " .. tostring(num) .. "!" )
 	end
 
 	self:InternalUpdateSize()
@@ -29,7 +29,7 @@ function PANEL:GetBorder()
 	return self._headerheight
 end
 
-function PANEL:SetBorder(b)
+function PANEL:SetBorder( b)
 	self._border = b
 
 	self:InternalUpdateSize()
@@ -63,7 +63,7 @@ end
 
 function PANEL:SetTitle(str)
 	self._text = str
-	self.lblTitle:SetText("")
+	self.lblTitle:SetText( "" )
 end
 
 function PANEL:FullScreen()
@@ -79,7 +79,7 @@ function PANEL:CanMaximise()
 	self.btnmax:SetVisible(true)
 end
 
-function PANEL:SetMaximised(b, von)
+function PANEL:SetMaximised( b, von)
 	if von != nil then
 		if b != nil then
 			self.maximised = b
@@ -89,9 +89,9 @@ function PANEL:SetMaximised(b, von)
 
 		if self.maximised then
 			self:SetPos(0, 0)
-			self:SetSize(ScrW(), ScrH())
+			self:SetSize(ScrW(), ScrH() )
 		else
-			self:SetSize(BFW(), BFH())
+			self:SetSize(BFW(), BFH() )
 			self:Center()
 		end
 
@@ -100,7 +100,7 @@ function PANEL:SetMaximised(b, von)
 	end
 end
 
-function PANEL:Sizable(b)
+function PANEL:Sizable( b)
 	self.btnMaxim:SetDisabled(!b)
 
 	local panel = self
@@ -108,17 +108,17 @@ function PANEL:Sizable(b)
 		panel.fullscreen = !panel.fullscreen or false
 
 		if panel.fullscreen then
-			panel:SetSize(ScW(), ScH())
+			panel:SetSize(ScW(), ScH() )
 			panel:Center()
 		else
-			panel:SetSize(panel:GetMinWidth(), panel:GetMinHeight())
+			panel:SetSize(panel:GetMinWidth(), panel:GetMinHeight() )
 			panel:Center()
 		end
 
 		panel:ChangedSize()
 	end
 
-	self:SetSizable(b)
+	self:SetSizable( b)
 end
 
 function PANEL:UpdateSize()
@@ -130,7 +130,7 @@ function PANEL:InternalUpdateSize()
 	local pw = self:GetWide()
 	local ph = self:GetTall()
 	self.con:SetSize(pw - 2 * br - 2, ph - header - 2 * br)
-	self.con:SetPos(br, header + br)
+	self.con:SetPos( br, header + br)
 	self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
 	self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
 	if self.langu then
@@ -154,7 +154,7 @@ function PANEL:GetContent()
 end
 
 function PANEL:Paint(pw, ph)
-	hook.Run("YFramePaint", self, pw, ph)
+	hook.Run( "YFramePaint", self, pw, ph)
 end
 
 function PANEL:Init()
@@ -167,37 +167,37 @@ function PANEL:Init()
 		self._cb = true
 	end
 
-	self._headerheight = YRP.ctr(GetGlobalInt("int_headerheight", 100))
+	self._headerheight = YRP.ctr(GetGlobalInt( "int_headerheight", 100) )
 	self._border = 20
 
 	self:ShowCloseButton(false)
 
-	self.close = createD("YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
-	self.close:SetText("X")
+	self.close = createD( "YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
+	self.close:SetText( "X" )
 	self.close.main = self
 	function self.close:Paint(pw, ph)
-		hook.Run("YClosePaint", self, pw, ph)
+		hook.Run( "YClosePaint", self, pw, ph)
 	end
 	function self.close:DoClick()
 		self.main:Close()
 	end
 
-	self.btnmax = createD("YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
-	self.btnmax:SetText("[ ]")
+	self.btnmax = createD( "YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
+	self.btnmax:SetText( "[ ]" )
 	self.btnmax.main = self
 	self.btnmax:SetVisible(self.maximised)
 	function self.btnmax:Paint(pw, ph)
-		hook.Run("YMaxPaint", self, pw, ph)
+		hook.Run( "YMaxPaint", self, pw, ph)
 	end
 	function self.btnmax:DoClick()
-		self.main:SetMaximised(nil, "BTN")
+		self.main:SetMaximised(nil, "BTN" )
 	end
 
 	self.langu = YRP.DChangeLanguage(self, self:GetWide() - self:GetHeaderHeight() * 0.3 * 5.6, self:GetHeaderHeight() * 0.7 / 2, self:GetHeaderHeight() * 0.3, true)
 
-	self.con = createD("YPanel", self, 1000, 1000, 0, 0)
+	self.con = createD( "YPanel", self, 1000, 1000, 0, 0)
 	function self.con:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0) )
 	end
 
 	self.sw = self:GetWide()
@@ -209,8 +209,8 @@ function PANEL:Init()
 end
 
 function PANEL:Think()
-	if self._headerheight != YRP.ctr(GetGlobalInt("int_headerheight", 100)) then
-		self._headerheight = YRP.ctr(GetGlobalInt("int_headerheight", 100))
+	if self._headerheight != YRP.ctr(GetGlobalInt( "int_headerheight", 100) ) then
+		self._headerheight = YRP.ctr(GetGlobalInt( "int_headerheight", 100) )
 
 		self:InternalUpdateSize()
 		self:UpdateSize()
@@ -304,4 +304,4 @@ function PANEL:Think()
 
 end
 
-vgui.Register("YFrame", PANEL, "DFrame")
+vgui.Register( "YFrame", PANEL, "DFrame" )

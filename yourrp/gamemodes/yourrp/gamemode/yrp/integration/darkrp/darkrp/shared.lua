@@ -1,11 +1,11 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-AddCSLuaFile("client.lua")
+AddCSLuaFile( "client.lua" )
 
 if CLIENT then
-	include("client.lua")
+	include( "client.lua" )
 else
-	include("server.lua")
+	include( "server.lua" )
 end
 
 local maxId = 0

@@ -2,7 +2,7 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self.header = createD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
+	self.header = createD( "DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 	self.header.text = "UNNAMED"
 
 	function self:SetHeader(text)
@@ -17,8 +17,8 @@ function PANEL:Init()
 	end
 end
 
-function PANEL:INITPanel(derma)
-	self.plus = createD(derma, self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, self.header:GetTall())
+function PANEL:INITPanel( derma)
+	self.plus = createD( derma, self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, self.header:GetTall() )
 	self.plus.getclass = derma
 	
 	function self:SetText(text)
@@ -28,28 +28,28 @@ end
 
 function PANEL:Think()
 	if self.header:GetWide() ~= self:GetWide() then
-		self.header:SetWide(self:GetWide())
+		self.header:SetWide(self:GetWide() )
 	end
 
 	if self.plus.getclass != "DCheckBox" then
-		self.plus:SetWide(self:GetWide())
+		self.plus:SetWide(self:GetWide() )
 	else
-		self.plus:SetWide(self:GetTall())
+		self.plus:SetWide(self:GetTall() )
 	end
 
 	if self.plus:GetTall() ~= self:GetTall() - self.header:GetTall() then
-		self.plus:SetTall(self:GetTall() - self.header:GetTall())
+		self.plus:SetTall(self:GetTall() - self.header:GetTall() )
 	end
 
 	local _px, _py = self.plus:GetPos()
 
 	if _py ~= self.header:GetTall() then
-		self.plus:SetPos(0, self.header:GetTall())
+		self.plus:SetPos(0, self.header:GetTall() )
 	end
 end
 
 function PANEL:Paint(w, h)
-	draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0, 0))
+	draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0, 0) )
 end
 
-vgui.Register("DYRPPanelPlus", PANEL, "Panel")
+vgui.Register( "DYRPPanelPlus", PANEL, "Panel" )

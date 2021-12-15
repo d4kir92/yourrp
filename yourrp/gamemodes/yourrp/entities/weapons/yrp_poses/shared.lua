@@ -414,21 +414,21 @@ yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_R_Hand"].ang = Angle(-25, 4
 function YRPResetPoses(ply)
 	for i = 0, 100 do
 		ply["posesang"][i] = ply["posesang"][i] or Angle(0, 0, 0)
-		ply["posesang"][i] = LerpAngle(12 * FrameTime(), ply["posesang"][i], Angle(0, 0, 0))
+		ply["posesang"][i] = LerpAngle(12 * FrameTime(), ply["posesang"][i], Angle(0, 0, 0) )
 		
 		ply:ManipulateBoneAngles( i, ply["posesang"][i] )
 
 		ply["posespos"][i] = ply["posespos"][i] or Vector(0, 0, 0)
-		ply["posespos"][i] = LerpVector(12 * FrameTime(), ply["posespos"][i], Vector(0, 0, 0))
+		ply["posespos"][i] = LerpVector(12 * FrameTime(), ply["posespos"][i], Vector(0, 0, 0) )
 		
 		ply:ManipulateBonePosition( i, ply["posespos"][i] )
 	end
 end
 
 function YRPDoPoses()
-	for i, ply in pairs(player.GetAll()) do
-		ply.yrpposeart = ply:GetNW2String("yrp_pose_art", "standing")
-		ply.yrppose = ply:GetNW2String("yrp_pose", "salute")
+	for i, ply in pairs(player.GetAll() ) do
+		ply.yrpposeart = ply:GetNW2String( "yrp_pose_art", "standing" )
+		ply.yrppose = ply:GetNW2String( "yrp_pose", "salute" )
 		
 		ply.yrpposestatus = ply.yrpposestatus or ""
 
@@ -438,11 +438,11 @@ function YRPDoPoses()
 				ply.yrpposestatus = "reset"
 			else
 				local vel = ply:GetVelocity()
-				vel = Vector(vel[1], vel[2], 0)
+				vel = Vector( vel[1], vel[2], 0)
 				if ply:IsSprinting() or !ply:IsOnGround() or vel:Length() > 110 then
 					ply.yrpposestatus = "reset"
 				elseif yrp_poses[ply.yrpposeart][ply.yrppose] then
-					if ply:GetNW2Bool("yrp_pose_status", false) then
+					if ply:GetNW2Bool( "yrp_pose_status", false) then
 						ply.yrpposestatus = "do"
 					else
 						ply.yrpposestatus = "reset"
@@ -502,26 +502,26 @@ function YRPDoPoses()
 	end
 end
 
-hook.Add("Think", "yrp_pose_think", function()
+hook.Add( "Think", "yrp_pose_think", function()
 	if SERVER then
 		YRPDoPoses()
 	end
 end)
 
 if SERVER then
-	util.AddNetworkString("yrp_change_pose")
-	net.Receive("yrp_change_pose", function(len, ply)
+	util.AddNetworkString( "yrp_change_pose" )
+	net.Receive( "yrp_change_pose", function(len, ply)
 		local pose_art = net.ReadString()
 		local pose = net.ReadString()
 		if pose then
-			ply:SetNW2Bool("yrp_pose_status", false)
+			ply:SetNW2Bool( "yrp_pose_status", false)
 
-			ply:SetNW2String("yrp_pose_art", pose_art)
-			ply:SetNW2String("yrp_pose", pose)
+			ply:SetNW2String( "yrp_pose_art", pose_art)
+			ply:SetNW2String( "yrp_pose", pose)
 
 			timer.Simple(0.33, function()
 				if IsValid(ply) then
-					ply:SetNW2Bool("yrp_pose_status", true)
+					ply:SetNW2Bool( "yrp_pose_status", true)
 				end
 			end)
 		end
@@ -533,7 +533,7 @@ function SWEP:Reload()
 
 	if SERVER then
 		local ply = self:GetOwner()
-		ply:SetNW2Bool("yrp_pose_status", false)
+		ply:SetNW2Bool( "yrp_pose_status", false)
 		YRPResetPoses(ply)
 	end
 
@@ -550,8 +550,8 @@ function SWEP:Reload()
 				local ply = LocalPlayer()
 				ply.yrp_ang = Angle(0, 0, 0)
 
-				self.config = createD("YFrame", nil, YRP.ctr(600), YRP.ctr(1000), 0, 0)
-				self.config:SetTitle("CONFIG")
+				self.config = createD( "YFrame", nil, YRP.ctr(600), YRP.ctr(1000), 0, 0)
+				self.config:SetTitle( "CONFIG" )
 				self.config:Center()
 				self.config:MakePopup()
 
@@ -572,16 +572,16 @@ function SWEP:Reload()
 				bones["ValveBiped.Bip01_L_Finger02"] = {}
 
 				local y = 0
-				for name, values in pairs(bones) do
-					local btn = createD("YButton", self.config:GetContent(), YRP.ctr(500), YRP.ctr(50), 0, y * YRP.ctr(50 + 10))
+				for name, values in pairs( bones) do
+					local btn = createD( "YButton", self.config:GetContent(), YRP.ctr(500), YRP.ctr(50), 0, y * YRP.ctr(50 + 10) )
 					btn:SetText(name)
 					btn.win = self.config
 					function btn:DoClick()
-						local win = createD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), YRP.ctr(800), YRP.ctr(800))
+						local win = createD( "YFrame", nil, YRP.ctr(800), YRP.ctr(800), YRP.ctr(800), YRP.ctr(800) )
 						win:SetTitle(name)
 						win:MakePopup()
 
-						win.pit = createD("DNumSlider", win:GetContent(), YRP.ctr(700), YRP.ctr(50), 0, 0)
+						win.pit = createD( "DNumSlider", win:GetContent(), YRP.ctr(700), YRP.ctr(50), 0, 0)
 						win.pit:SetMin(-360)
 						win.pit:SetMax(360)
 						win.pit:SetValue(0)
@@ -593,7 +593,7 @@ function SWEP:Reload()
 							end
 						end
 
-						win.yaw = createD("DNumSlider", win:GetContent(), YRP.ctr(700), YRP.ctr(50), 0, YRP.ctr(50 + 10))
+						win.yaw = createD( "DNumSlider", win:GetContent(), YRP.ctr(700), YRP.ctr(50), 0, YRP.ctr(50 + 10) )
 						win.yaw:SetMin(-360)
 						win.yaw:SetMax(360)
 						win.yaw:SetValue(0)
@@ -605,7 +605,7 @@ function SWEP:Reload()
 							end
 						end
 
-						win.rol = createD("DNumSlider", win:GetContent(), YRP.ctr(700), YRP.ctr(50), 0, YRP.ctr(50 + 10 + 50 + 10))
+						win.rol = createD( "DNumSlider", win:GetContent(), YRP.ctr(700), YRP.ctr(50), 0, YRP.ctr(50 + 10 + 50 + 10) )
 						win.rol:SetMin(-360)
 						win.rol:SetMax(360)
 						win.rol:SetValue(0)
@@ -627,25 +627,25 @@ function SWEP:Reload()
 			end
 		else
 			if !pa(self.yrpposes) then
-				self.yrpposes = createD("YFrame", nil, YRP.ctr(10), YRP.ctr(960), 0, 0)
-				self.yrpposes:SetTitle("LID_poses")
+				self.yrpposes = createD( "YFrame", nil, YRP.ctr(10), YRP.ctr(960), 0, 0)
+				self.yrpposes:SetTitle( "LID_poses" )
 			
 				local x = 0
 				local y = 0
 				local maxy = 0
 				local maxx = 0
 				for namecategory, categorytab in pairs(yrp_poses) do
-					local btn = createD("YLabel", self.yrpposes:GetContent(), YRP.ctr(560), YRP.ctr(50), x * YRP.ctr(560 + 10), y * YRP.ctr(50 + 10))
-					btn:SetText("LID_" .. namecategory)
+					local btn = createD( "YLabel", self.yrpposes:GetContent(), YRP.ctr(560), YRP.ctr(50), x * YRP.ctr(560 + 10), y * YRP.ctr(50 + 10) )
+					btn:SetText( "LID_" .. namecategory)
 					
 					y = y + 1
 
-					for name, values in pairs(categorytab) do
-						local btn = createD("YButton", self.yrpposes:GetContent(), YRP.ctr(560), YRP.ctr(50), x * YRP.ctr(560 + 10), y * YRP.ctr(50 + 10))
-						btn:SetText("LID_" .. name)
+					for name, values in pairs( categorytab) do
+						local btn = createD( "YButton", self.yrpposes:GetContent(), YRP.ctr(560), YRP.ctr(50), x * YRP.ctr(560 + 10), y * YRP.ctr(50 + 10) )
+						btn:SetText( "LID_" .. name)
 						btn.win = self.yrpposes
 						function btn:DoClick()
-							net.Start("yrp_change_pose")
+							net.Start( "yrp_change_pose" )
 								net.WriteString(namecategory)
 								net.WriteString(name)
 							net.SendToServer()
@@ -690,7 +690,7 @@ function SWEP:PrimaryAttack()
 		self:SetWeaponHoldType(self.HoldType)
 	
 		local ply = self:GetOwner()
-		ply:SetNW2Bool("yrp_pose_status", true)
+		ply:SetNW2Bool( "yrp_pose_status", true)
 	end
 end
 
@@ -699,6 +699,6 @@ function SWEP:SecondaryAttack()
 		self:SetWeaponHoldType(self.HoldType)
 	
 		local ply = self:GetOwner()
-		ply:SetNW2Bool("yrp_pose_status", false)
+		ply:SetNW2Bool( "yrp_pose_status", false)
 	end
 end

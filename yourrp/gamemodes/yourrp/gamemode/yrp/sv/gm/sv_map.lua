@@ -27,50 +27,50 @@ _map_size.error = 0
 
 local skyCamera = nil
 
-util.AddNetworkString("askCoords")
-util.AddNetworkString("sendCoords")
-util.AddNetworkString("askCoordsMM")
-util.AddNetworkString("sendCoordsMM")
+util.AddNetworkString( "askCoords" )
+util.AddNetworkString( "sendCoords" )
+util.AddNetworkString( "askCoordsMM" )
+util.AddNetworkString( "sendCoordsMM" )
 
-net.Receive("askCoords", function(len, ply)
+net.Receive( "askCoords", function(len, ply)
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
-		net.Start("sendCoords")
+		net.Start( "sendCoords" )
 			net.WriteBool(false)
 			net.WriteTable(_map_size)
 		net.Send(ply)
 
 		YRPGetMapDoors()
 	else
-		net.Start("sendCoords")
+		net.Start( "sendCoords" )
 			net.WriteBool(true)
 			net.WriteTable(_map_size)
 		net.Send(ply)
 	end
 end)
 
-net.Receive("askCoordsMM", function(len, ply)
+net.Receive( "askCoordsMM", function(len, ply)
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
-		net.Start("sendCoordsMM")
+		net.Start( "sendCoordsMM" )
 			net.WriteBool(false)
 			net.WriteTable(_map_size)
 		net.Send(ply)
 
 		YRPGetMapDoors()
 	else
-		net.Start("sendCoordsMM")
+		net.Start( "sendCoordsMM" )
 			net.WriteBool(true)
 			net.WriteTable(_map_size)
 		net.Send(ply)
 	end
 end)
 
-function try_new_pos(dir, size, space, tmpX, tmpY, tmpZ)
+function try_new_pos( dir, size, space, tmpX, tmpY, tmpZ)
 	local _fails = 3
 	local _tmpEnd = 0
 	local _result = dir
 
 	for i = dir, size, space do
-		if util.IsInWorld(Vector(tmpX or i, tmpY or i, tmpZ or i)) and _tmpEnd < _fails then
+		if util.IsInWorld( Vector(tmpX or i, tmpY or i, tmpZ or i) ) and _tmpEnd < _fails then
 			_result = i
 			if _tmpEnd > 0 then
 				_tmpEnd = 0
@@ -83,7 +83,7 @@ function try_new_pos(dir, size, space, tmpX, tmpY, tmpZ)
 		end
 	end
 	if skyCamera != nil then
-		if skyCamera:GetPos():Distance(Vector(tmpX, tmpY, _result)) < 500 then
+		if skyCamera:GetPos():Distance( Vector(tmpX, tmpY, _result) ) < 500 then
 			if _result != nil then
 				return _result
 			end
@@ -128,12 +128,12 @@ local tries = 0
 function get_coords()
 	tries = tries + 1
 	if skyCamera == nil then
-		skyCamera = ents.FindByClass("sky_camera")
+		skyCamera = ents.FindByClass( "sky_camera" )
 		skyCamera = skyCamera[1]
 	end
 
 	if _map_size.hasFog == nil then
-		local tmpTable = ents.FindByClass("fog_controller")
+		local tmpTable = ents.FindByClass( "fog_controller" )
 		if tmpTable[1] != nil then
 			_map_size.hasFog = true
 		else
@@ -142,38 +142,38 @@ function get_coords()
 	end
 
 	local _hasNoSpawnpoints = true
-	for k, v in pairs(ents.GetAll()) do
-		if ea(v) and (v:GetClass() == "info_player_teamspawn"
+	for k, v in pairs(ents.GetAll() ) do
+		if ea( v) and ( v:GetClass() == "info_player_teamspawn"
 			or v:GetClass() == "info_player_terrorist"
-			or v:GetClass() == "info_player_counterterrorist")
+			or v:GetClass() == "info_player_counterterrorist" )
 			then
 			_hasNoSpawnpoints = true
 		end
 	end
 
-	for k, v in pairs(ents.GetAll()) do
+	for k, v in pairs(ents.GetAll() ) do
 		if _hasNoSpawnpoints then
 			if v:GetClass() == "info_player_start" then
-				search_coords(v)
+				search_coords( v)
 			end
 		else
 			if v:GetClass() == "info_player_teamspawn" then
-				search_coords(v)
+				search_coords( v)
 			elseif v:GetClass() == "info_player_terrorist" then
-				search_coords(v)
+				search_coords( v)
 			elseif v:GetClass() == "info_player_counterterrorist" then
-				search_coords(v)
+				search_coords( v)
 			end
 		end
 
 		if v:GetClass() == "prop_door_rotating" then
-			search_coords(v)
+			search_coords( v)
 		end
 		if v:GetClass() == "func_door" then
-			search_coords(v)
+			search_coords( v)
 		end
 		if v:GetClass() == "func_door_rotating" then
-			search_coords(v)
+			search_coords( v)
 		end
 	end
 
@@ -216,7 +216,7 @@ function get_coords()
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
 		if tries < 5 then
 			timer.Simple(5, function()
-				YRP.msg("note", "YRPGetMapDoors() retry")
+				YRP.msg( "note", "YRPGetMapDoors() retry" )
 				YRPGetMapDoors()
 			end)
 		end

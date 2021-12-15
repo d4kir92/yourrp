@@ -22,15 +22,15 @@ function PANEL:Init()
 
 	--[[
 	self.Avatar = vgui.Create( "AvatarImage", self )
-	self.Avatar:SetPos(br, br)
+	self.Avatar:SetPos( br, br)
 	self.Avatar:SetSize( iconsize, iconsize )
 	]]
 
-	self.mdl = vgui.Create("DModelPanel", self)
-	self.mdl:SetPos(br, br)
+	self.mdl = vgui.Create( "DModelPanel", self)
+	self.mdl:SetPos( br, br)
 	self.mdl:SetSize( iconsize, iconsize )
 	function self.mdl:LayoutEntity(ent)
-		ent:SetSequence(ent:LookupSequence("menu_gman"))
+		ent:SetSequence(ent:LookupSequence( "menu_gman" ) )
 		self:RunAnimation()
 		return
 	end
@@ -62,23 +62,23 @@ function PANEL:Setup( ply )
 	yrp_VoicePanelList:SetPos( px, py )
 	yrp_VoicePanelList:SetSize( sw, ScrH() - 5 * sh )
 
-	if GetGlobalBool("bool_voice_module") then
+	if GetGlobalBool( "bool_voice_module" ) then
 		self.ply = ply
 
 		self.PlayerName:SetText( ply:IDCardID() .. " " .. ply:RPName() )
 
 		local channels = {}
-		for i, v in pairs(GetGlobalTable("yrp_voice_channels")) do
+		for i, v in pairs(GetGlobalTable( "yrp_voice_channels" ) ) do
 			if IsActiveInChannel(ply, v.uniqueID) and ( IsInChannel(LocalPlayer(), v.uniqueID) or IsActiveInChannel(LocalPlayer(), v.uniqueID) ) then
-				table.insert(channels, v.string_name)
+				table.insert( channels, v.string_name)
 			end
 		end
 		local text = ""
-		if table.Count(channels) > 0 then
+		if table.Count( channels) > 0 then
 			text = table.concat( channels, ", " )
 		else
-			if GetGlobalBool("bool_voice_module_locally") then
-				text = YRP.lang_string("LID_environment")
+			if GetGlobalBool( "bool_voice_module_locally" ) then
+				text = YRP.lang_string( "LID_environment" )
 			else
 				self:Remove()
 			end
@@ -89,14 +89,14 @@ function PANEL:Setup( ply )
 	
 		self.mdl:SetModel( ply:GetModel() )
 		if self.mdl.Entity and ea(self.mdl.Entity) then
-			local head = self.mdl.Entity:LookupBone("ValveBiped.Bip01_Head1")
+			local head = self.mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" )
 			if head then
 				local eyepos = self.mdl.Entity:GetBonePosition(head) + Vector(0, 0, 3)
 				if eyepos then
-					eyepos:Add(Vector(0, 0, 2))	-- Move up slightly
+					eyepos:Add( Vector(0, 0, 2) )	-- Move up slightly
 					self.mdl:SetLookAt(eyepos)
-					self.mdl:SetCamPos(eyepos-Vector(-16, 0, 0))	-- Move cam in front of eyes
-					self.mdl.Entity:SetEyeTarget(eyepos-Vector(-16, 0, 0))
+					self.mdl:SetCamPos(eyepos-Vector(-16, 0, 0) )	-- Move cam in front of eyes
+					self.mdl.Entity:SetEyeTarget(eyepos-Vector(-16, 0, 0) )
 				end
 			end
 		end
@@ -117,10 +117,10 @@ function PANEL:Paint( w, h )
 	draw.RoundedBox( br, 0, 0, w, h, Color( 0, vol * 255, 0, 240 ) )
 
 	local circlesize = 10
-	if YRP.GetDesignIcon("circle") then
-		surface.SetDrawColor(self.ply:GetFactionColor())
-		surface.SetMaterial(YRP.GetDesignIcon("circle"))
-		surface.DrawTexturedRect(br, br, circlesize, circlesize)
+	if YRP.GetDesignIcon( "circle" ) then
+		surface.SetDrawColor(self.ply:GetFactionColor() )
+		surface.SetMaterial(YRP.GetDesignIcon( "circle" ) )
+		surface.DrawTexturedRect( br, br, circlesize, circlesize)
 	end
 
 	--draw.RoundedBox( br, br, br, iconsize, iconsize, self.ply:GetFactionColor() )
@@ -159,9 +159,9 @@ derma.DefineControl( "VoiceNotifyYRP", "", PANEL, "DPanel" )
 
 
 
-hook.Add("PlayerStartVoice", "YRP_VOICE_MODULE_PlayerStartVoice", function(ply)
+hook.Add( "PlayerStartVoice", "YRP_VOICE_MODULE_PlayerStartVoice", function(ply)
 
-	if !GetGlobalBool("bool_voice_module") then return end
+	if !GetGlobalBool( "bool_voice_module" ) then return end
 
 	if ( !IsValid( yrp_VoicePanelList ) ) then return end
 	
@@ -204,9 +204,9 @@ local function VoiceClean()
 end
 timer.Create( "VoiceClean", 10, 0, VoiceClean )
 
-hook.Add("PlayerEndVoice", "YRP_VOICE_MODULE_PlayerEndVoice", function(ply)
+hook.Add( "PlayerEndVoice", "YRP_VOICE_MODULE_PlayerEndVoice", function(ply)
 
-	if !GetGlobalBool("bool_voice_module") then return end
+	if !GetGlobalBool( "bool_voice_module" ) then return end
 
 	if ( IsValid( PlayerVoicePanels[ ply ] ) ) then
 

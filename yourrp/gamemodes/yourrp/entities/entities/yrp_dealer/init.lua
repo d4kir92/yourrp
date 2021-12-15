@@ -1,8 +1,8 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
+AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "shared.lua" )
 
-include("shared.lua")
+include( "shared.lua" )
 
 function ENT:Initialize()
 	self:SetHullType(HULL_HUMAN)
@@ -17,24 +17,24 @@ function ENT:Initialize()
 
 	self:SetUseType(SIMPLE_USE)
 	if IsDealerImmortal() then
-		self:SetNW2Bool("immortal", true)
+		self:SetNW2Bool( "immortal", true)
 	else
-		self:SetNW2Bool("immortal", false)
+		self:SetNW2Bool( "immortal", false)
 	end
 end
 
-function ENT:OnTakeDamage(dmg)
-	self:SetHealth(self:Health() - dmg:GetDamage())
+function ENT:OnTakeDamage( dmg)
+	self:SetHealth(self:Health() - dmg:GetDamage() )
 	if IsDealerImmortal() then
-		self:SetNW2Bool("immortal", true)
+		self:SetNW2Bool( "immortal", true)
 	else
-		self:SetNW2Bool("immortal", false)
+		self:SetNW2Bool( "immortal", false)
 		if self:Health() <= 0 then
 			self:SetSchedule(SCHED_FALL_TO_GROUND)
-			local _rd = ents.Create("prop_ragdoll")
-			_rd:SetModel(self:GetModel())
-			_rd:SetPos(self:GetPos())
-			_rd:SetAngles(self:GetAngles())
+			local _rd = ents.Create( "prop_ragdoll" )
+			_rd:SetModel(self:GetModel() )
+			_rd:SetPos(self:GetPos() )
+			_rd:SetAngles(self:GetAngles() )
 			_rd:Spawn()
 			self:Remove()
 			timer.Simple(9, function()
@@ -50,27 +50,27 @@ function ENT:SelectSchedule()
 	//self:StartSchedule(schdChase)
 end
 
-function ENT:Open(activator, caller)
+function ENT:Open( activator, caller)
 	if IsDealerImmortal() then
-		self:SetNW2Bool("immortal", true)
+		self:SetNW2Bool( "immortal", true)
 	else
-		self:SetNW2Bool("immortal", false)
+		self:SetNW2Bool( "immortal", false)
 	end
-	if !activator:GetNW2Bool("open_menu", false) then
-		activator:SetNW2Bool("open_menu", true)
+	if !activator:GetNW2Bool( "open_menu", false) then
+		activator:SetNW2Bool( "open_menu", true)
 
-		self:OpenBuyMenu(activator)
+		self:OpenBuyMenu( activator)
 
 		timer.Simple(1, function()
-			activator:SetNW2Bool("open_menu", false)
+			activator:SetNW2Bool( "open_menu", false)
 		end)
 	end
 end
 
-util.AddNetworkString("open_buy_menu")
+util.AddNetworkString( "open_buy_menu" )
 function ENT:OpenBuyMenu(pl)
-	net.Start("open_buy_menu")
-		net.WriteString(self:GetNW2String("dealerID", "-1"))
+	net.Start( "open_buy_menu" )
+		net.WriteString(self:GetNW2String( "dealerID", "-1" ) )
 	net.Send(pl)
 end
 

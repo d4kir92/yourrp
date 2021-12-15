@@ -1,32 +1,32 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-local HP = Material("vgui/material/icon_favorite.png")
-local AR = Material("vgui/material/icon_security.png")
-local ST = Material("vgui/material/icon_flash.png")
-local BA = Material("vgui/material/icon_battery.png")
-local HU = Material("vgui/material/icon_restaurant.png")
-local TH = Material("vgui/material/icon_drink.png")
-local XP = Material("vgui/material/icon_star.png")
-local MO = Material("icon16/money.png")
-local SA = Material("icon16/money_add.png")
-local CA = Material("vgui/material/icon_timer.png")
+local HP = Material( "vgui/material/icon_favorite.png" )
+local AR = Material( "vgui/material/icon_security.png" )
+local ST = Material( "vgui/material/icon_flash.png" )
+local BA = Material( "vgui/material/icon_battery.png" )
+local HU = Material( "vgui/material/icon_restaurant.png" )
+local TH = Material( "vgui/material/icon_drink.png" )
+local XP = Material( "vgui/material/icon_star.png" )
+local MO = Material( "icon16/money.png" )
+local SA = Material( "icon16/money_add.png" )
+local CA = Material( "vgui/material/icon_timer.png" )
 
-local RA = YRP.GetDesignIcon("radiation")
+local RA = YRP.GetDesignIcon( "radiation" )
 
 function HUDIconsDrawText(ele, text)
 	local lply = LocalPlayer()
 	if lply:HudElementVisible(ele) then
-		local w = lply:HudValue(ele, "SIZE_W")
-		local h = lply:HudValue(ele, "SIZE_H")
-		local x = lply:HudValue(ele, "POSI_X")
-		local y = lply:HudValue(ele, "POSI_Y")
+		local w = lply:HudValue(ele, "SIZE_W" )
+		local h = lply:HudValue(ele, "SIZE_H" )
+		local x = lply:HudValue(ele, "POSI_X" )
+		local y = lply:HudValue(ele, "POSI_Y" )
 
-		local fontsize = lply:HudValue(ele, "TS")
+		local fontsize = lply:HudValue(ele, "TS" )
 		if fontsize <= 0 then
 			fontsize = 14
 		end
-		local ax = lply:HudValue(ele, "AX")
-		local ay = lply:HudValue(ele, "AY")
+		local ax = lply:HudValue(ele, "AX" )
+		local ay = lply:HudValue(ele, "AY" )
 		if ay == 3 then
 			ay = 0
 		elseif ay == 4 then
@@ -36,7 +36,7 @@ function HUDIconsDrawText(ele, text)
 		y = y + h / 16 + (h - h / 8) / 2 * ay
 		local font = "Y_" .. fontsize .. "_500"
 
-		draw.SimpleText(text, font, x, y, Color(255, 255, 255, 255), ax, ay, 1, Color(0, 0, 0))
+		draw.SimpleText(text, font, x, y, Color(255, 255, 255, 255), ax, ay, 1, Color(0, 0, 0) )
 	end
 end
 
@@ -44,11 +44,11 @@ function HUDIconsDrawIcon(ele, icon, perc, text)
 	perc = math.Round(perc, 3)
 	local lply = LocalPlayer()
 	if lply:HudElementVisible(ele) then
-		local h = lply:HudValue(ele, "SIZE_H")
-		local x = lply:HudValue(ele, "POSI_X")
-		local y = lply:HudValue(ele, "POSI_Y")
+		local h = lply:HudValue(ele, "SIZE_H" )
+		local x = lply:HudValue(ele, "POSI_X" )
+		local y = lply:HudValue(ele, "POSI_Y" )
 		local size = h
-		--draw.RoundedBox(0, x, y, h, h, Color(0, 0, 0, 60))
+		--draw.RoundedBox(0, x, y, h, h, Color(0, 0, 0, 60) )
 
 		if icon then
 			surface.SetDrawColor(0, 0, 0, 200)
@@ -67,26 +67,26 @@ function HUDIconsDrawIcon(ele, icon, perc, text)
 			render.SetStencilReferenceValue(1)
 
 			draw.NoTexture()
-			surface.SetDrawColor(Color(255, 0, 0))
+			surface.SetDrawColor(Color(255, 0, 0) )
 			surface.DrawTexturedRect(x, y + size - size * perc, size, size * perc)
 
 			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
 			if icon then
-				surface.SetDrawColor(lply:HudValue(ele, "BA"))
+				surface.SetDrawColor(lply:HudValue(ele, "BA" ) )
 				surface.SetMaterial(icon)
 				surface.DrawTexturedRect(x, y, size, size)
 			end
 
 		render.SetStencilEnable(false)
 
-		local fontsize = lply:HudValue(ele, "TS")
+		local fontsize = lply:HudValue(ele, "TS" )
 		if fontsize <= 0 then
 			fontsize = 14
 		end
 		local font = "Y_" .. fontsize .. "_500"
 
-		draw.SimpleText(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleText(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
 	end
 end
 
@@ -99,65 +99,65 @@ function HUDIcons()
 	local lply = LocalPlayer()
 
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
-		if GetGlobalBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Icons" then
-			HUDIconsDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
-			HUDIconsDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())
+		if GetGlobalBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Icons" then
+			HUDIconsDrawIcon( "HP", HP, lply:Health() / lply:GetMaxHealth() )
+			HUDIconsDrawIcon( "AR", AR, lply:Armor() / lply:GetMaxArmor() )
 
-			HUDIconsDrawIcon("ST", ST, lply:Stamina() / lply:GetMaxStamina())
-			HUDIconsDrawIcon("HU", HU, lply:Hunger() / lply:GetMaxStamina())
-			HUDIconsDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxStamina())
+			HUDIconsDrawIcon( "ST", ST, lply:Stamina() / lply:GetMaxStamina() )
+			HUDIconsDrawIcon( "HU", HU, lply:Hunger() / lply:GetMaxStamina() )
+			HUDIconsDrawIcon( "TH", TH, lply:Thirst() / lply:GetMaxStamina() )
 
-			HUDIconsDrawIcon("RA", RA, lply:Radiation() / lply:GetMaxRadiation())
+			HUDIconsDrawIcon( "RA", RA, lply:Radiation() / lply:GetMaxRadiation() )
 
 			if IsLevelSystemEnabled() then
 				local tab = {}
 				tab["LEVEL"] = lply:Level()
-				HUDIconsDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.lang_string("LID_levelx", tab) .. " (" .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%)")
+				HUDIconsDrawIcon( "XP", XP, lply:XP() / lply:GetMaxXP(), YRP.lang_string( "LID_levelx", tab) .. " ( " .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%)" )
 			end
 
-			HUDIconsDrawIcon("MO", MO, 1, lply:FormattedMoneyRounded(1))
-			HUDIconsDrawIcon("SA", SA, lply:CurrentSalaryTime() / lply:SalaryTime(), lply:FormattedSalaryRounded(1))
+			HUDIconsDrawIcon( "MO", MO, 1, lply:FormattedMoneyRounded(1) )
+			HUDIconsDrawIcon( "SA", SA, lply:CurrentSalaryTime() / lply:SalaryTime(), lply:FormattedSalaryRounded(1) )
 
-			if lply:GetNW2Bool("iscasting", false) then
-				HUDIconsDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName())
+			if lply:GetNW2Bool( "iscasting", false) then
+				HUDIconsDrawIcon( "CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName() )
 			end
 
 			local battery = system.BatteryPower()
-			HUDIconsDrawIcon("BA", BA, battery / 255)
+			HUDIconsDrawIcon( "BA", BA, battery / 255)
 
-			HUDIconsDrawText("CR", os.date("%H:%M" , os.time()))
-			HUDIconsDrawText("CC", lply:FormattedCharPlayTime())
-			HUDIconsDrawText("RO", lply:GetRoleName())
-			HUDIconsDrawText("NA", lply:RPName())
+			HUDIconsDrawText( "CR", os.date( "%H:%M" , os.time() ))
+			HUDIconsDrawText( "CC", lply:FormattedCharPlayTime() )
+			HUDIconsDrawText( "RO", lply:GetRoleName() )
+			HUDIconsDrawText( "NA", lply:RPName() )
 
 			if CurTime() > fps_delay then
 				fps_delay = CurTime() + 0.5
 				fps = GetFPS()
 			end
-			HUDIconsDrawText("PE", YRP.lang_string("LID_fps") .. ": " .. fps)
+			HUDIconsDrawText( "PE", YRP.lang_string( "LID_fps" ) .. ": " .. fps)
 			if CurTime() > ping_delay then
 				ping_delay = CurTime() + 0.5
 				ping = lply:Ping()
 			end
-			HUDIconsDrawText("NE", YRP.lang_string("LID_ping") .. ": " .. ping)
+			HUDIconsDrawText( "NE", YRP.lang_string( "LID_ping" ) .. ": " .. ping)
 
 			local weapon = lply:GetActiveWeapon()
 			if IsValid(weapon) then
 				local wpname = weapon:GetPrintName()
 				local clip1 = weapon:Clip1()
 				local clip1max = weapon:GetMaxClip1()
-				local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+				local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType() )
 
 				local clip2 = weapon:Clip2()
 				local clip2max = weapon:GetMaxClip2()
-				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
-				HUDIconsDrawText("WN", wpname)
-				HUDIconsDrawText("WP", clip1 .. "/" .. clip1max .. " | " .. ammo1)
-				HUDIconsDrawText("WS", clip2 .. "/" .. clip2max .. " | " .. ammo2)
+				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType() )
+				HUDIconsDrawText( "WN", wpname)
+				HUDIconsDrawText( "WP", clip1 .. "/" .. clip1max .. " | " .. ammo1)
+				HUDIconsDrawText( "WS", clip2 .. "/" .. clip2max .. " | " .. ammo2)
 			end
 
 			if lply:Lockdown() then
-				HUDIconsDrawText("LO", "[" .. GTS("lockdown") .. "] " .. lply:LockdownText())
+				HUDIconsDrawText( "LO", "[" .. GTS( "lockdown" ) .. "] " .. lply:LockdownText() )
 			end
 
 			local COM = {}
@@ -175,5 +175,5 @@ function HUDIcons()
 end
 
 timer.Simple(1, function()
-	hook.Add("HUDPaint", "yrp_hud_design_Icons", HUDIcons)
+	hook.Add( "HUDPaint", "yrp_hud_design_Icons", HUDIcons)
 end)

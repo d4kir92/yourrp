@@ -7,27 +7,29 @@
 
 YRPWDLOADED = YRPWDLOADED or false
 
+YRPLOADEDGMAS = YRPLOADEDGMAS or {}
+
 if YRPWDLOADED == false then
 	YRPWDLOADED = true
-	YRP.msg("gm", "Loading Resources (Workshop-Downloader)")
-	YRP.msg("gm", "")
-
+	YRPHR()
+	YRP.msg( "gm", "Loading Resources (Workshop-Downloader)" )
+	YRPSP()
 
 
 	-- YourRP Content
-	resource.AddWorkshop("1189643820")
+	resource.AddWorkshop( "1189643820" )
 
 	-- Food and Household items
-	resource.AddWorkshop("108024198")
+	resource.AddWorkshop( "108024198" )
 
 	-- Bandage
-	resource.AddWorkshop("816191432")
+	resource.AddWorkshop( "816191432" )
 
 	-- Cuffs
-	resource.AddWorkshop("314312925")
+	resource.AddWorkshop( "314312925" )
 
 	-- Key
-	resource.AddWorkshop("182308069")
+	resource.AddWorkshop( "182308069" )
 
 	--Server Workshop Collection
 	local _wsitems = engine.GetAddons()
@@ -41,25 +43,41 @@ if YRPWDLOADED == false then
 		header = header .. " "
 	end
 	header = header .. " NAME"
-	YRP.msg("gm", header)
+	YRP.msg( "gm", header)
 
 	local i = 0
 	local d = 0
 	for k, ws in pairs(_wsitems) do
 		i = i + 1
+		
+		if ws.mounted or ws.downloaded then
+			YRP.msg( "gm", "+[" .. string.format( "%0" .. form .. "d", k) .. "] [" .. tostring(ws.title) .. "]" )
 
-		if ws.mounted and ws.downloaded then
-			YRP.msg("gm", "+[" .. string.format("%0" .. form .. "d", k) .. "] [" .. tostring(ws.title) .. "]")
-
-			resource.AddWorkshop(tostring(ws.wsid))
+			resource.AddWorkshop( tostring(ws.wsid) )
+			YRPLOADEDGMAS[ tonumber( ws.wsid ) ] = true
 			d = d + 1
 		else
-			YRP.msg("gm", ">>> Addon [" .. ws.title .. "] not mounted or downloaded <<<")
+			YRP.msg( "gm", ">>> Addon [" .. ws.title .. "] not mounted or not downloaded <<<" )
 		end
 	end
-	YRP.msg("gm", "")
-	YRP.msg("gm", "=> " .. tostring(d) .. "/" .. tostring(i) .. " Workshop files that will be send to Clients")
-	YRP.msg("gm", "")
 
-	YRP.msg("gm", "Loaded Resources (Workshop-Downloader)")
+	--[[local gmas, ordner = file.Find( "cache/srcds/*.gma", "GAME"  )
+	if gmas then
+		for i, gma in pairs( gmas ) do
+			gma = string.Replace( gma, ".gma", "" )
+			gma = tonumber( gma )
+			if not YRPLOADEDGMAS[gma] then
+				resource.AddWorkshop( tostring( gma ) )
+				YRPLOADEDGMAS[gma] = true
+				d = d + 1
+				i = i + 1
+			end
+		end
+	end]]
+
+	YRPSP()
+	YRP.msg( "gm", "=> " .. tostring( d ) .. "/" .. tostring( i ) .. " Workshop files that will be send to Clients" )
+	YRPSP()
+	YRP.msg( "gm", "Loaded Resources (Workshop-Downloader)" )
+	YRPHR()
 end

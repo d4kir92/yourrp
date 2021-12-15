@@ -38,7 +38,7 @@ function GetRealmColor()
 end
 
 function strUrl(str)
-	if !strEmpty(str) and #string.Explode(".", str) > 1 then
+	if !strEmpty(str) and #string.Explode( ".", str) > 1 then
 		return true
 	end
 	return false
@@ -48,16 +48,16 @@ function yrpmsg(msg)
 	MsgC( GetRealmColor(), msg, "\n" )
 end
 
-function bool_status(b)
-	if tobool(b) then
-		return YRP.lang_string("LID_enabled")
-	elseif !tobool(b) then
-		return YRP.lang_string("LID_disabled")
+function bool_status( b)
+	if tobool( b) then
+		return YRP.lang_string( "LID_enabled" )
+	elseif !tobool( b) then
+		return YRP.lang_string( "LID_disabled" )
 	end
 end
 
-function GetChannelName(chan)
-	chan = string.lower(chan)
+function GetChannelName( chan)
+	chan = string.lower( chan)
 	if chan == "noti" or chan == "note" or chan == "notification" then
 		return "NOTI"
 	elseif chan == "db" or chan == "database" then
@@ -79,7 +79,7 @@ function GetChannelName(chan)
 	elseif chan == "err" or chan == "error" then
 		return "ERROR"
 	else
-		return string.upper(chan)
+		return string.upper( chan)
 	end
 end
 
@@ -93,8 +93,8 @@ channelcolors["debug"] = Color(255, 255, 255)
 channelcolors["printtable"] = Color(255, 255, 255)
 channelcolors["missing"] = Color(255, 100, 100)
 channelcolors["error"] = Color(255, 0, 0)
-function GetChannelColor(chan)
-	chan = string.lower(chan)
+function GetChannelColor( chan)
+	chan = string.lower( chan)
 	if channelcolors[chan] != nil then
 		return channelcolors[chan]
 	else
@@ -113,8 +113,8 @@ msgchannels["printtable"] = true
 msgchannels["missing"] = true
 msgchannels["error"] = true
 msgchannels["darkrp"] = true
-function IsChannelRegistered(chan)
-	chan = string.lower(chan)
+function IsChannelRegistered( chan)
+	chan = string.lower( chan)
 	if msgchannels[chan] then
 		return true
 	else
@@ -122,16 +122,16 @@ function IsChannelRegistered(chan)
 	end
 end
 
-function MSGChannelEnabled(chan)
-	if !isstring(chan) then return false end
+function MSGChannelEnabled( chan)
+	if !isstring( chan) then return false end
 
-	chan = string.lower(chan)
+	chan = string.lower( chan)
 	if chan == "printtable" or chan == "missing" or chan == "error" then
 		return true
-	elseif GetGlobalBool("yrp_general_loaded") then
-		if !IsChannelRegistered(chan) then
-			YRP.msg("error", "!!!" .. chan .. "!!!")
-		elseif GetGlobalBool("bool_msg_channel_" .. chan) == true then
+	elseif GetGlobalBool( "yrp_general_loaded" ) then
+		if !IsChannelRegistered( chan) then
+			YRP.msg( "error", "!!!" .. chan .. "!!!" )
+		elseif GetGlobalBool( "bool_msg_channel_" .. chan) == true then
 			return true
 		end
 		return false
@@ -150,8 +150,8 @@ local _msgcache = {}
 
 local yrpmsgantispam = {}
 
-function YRP.msg(chan, str_msg, tochat, force)
-	if !isstring(chan) then return false end
+function YRP.msg( chan, str_msg, tochat, force)
+	if !isstring( chan) then return false end
 	if !isstring(str_msg) then return false end
 
 	if force or strEmpty(str_msg) or not table.HasValue(yrpmsgantispam, str_msg) then
@@ -163,16 +163,16 @@ function YRP.msg(chan, str_msg, tochat, force)
 			end)
 		end
 
-		local cn = GetChannelName(chan)
-		if force or MSGChannelEnabled(cn) then
+		local cn = GetChannelName( chan)
+		if force or MSGChannelEnabled( cn) then
 			if str_msg == nil or str_msg == false then
 				str_msg = tostring(str_msg)
 			end
-			local cc = GetChannelColor(cn)
+			local cc = GetChannelColor( cn)
 			local _yrp = GetGamemodeShortname()
 			local _yrpc = Color(0, 100, 225)
 
-			msgs = string.Explode("\n", str_msg)
+			msgs = string.Explode( "\n", str_msg)
 			for i, msg in pairs(msgs) do
 				MsgC( rc, "[" )
 				MsgC( _yrpc, _yrp )
@@ -183,12 +183,12 @@ function YRP.msg(chan, str_msg, tochat, force)
 				elseif cn == "DB" then
 					MsgC( cc, ":" .. "UNKNOWN" )
 				end
-				MsgC( rc, "] ")
+				MsgC( rc, "] " )
 
 				MsgC( rc, msg )
 			
 				if force then
-					MsgC( rc, " ")
+					MsgC( rc, " " )
 					MsgC( Color(255, 0, 0), "[FORCED]" )
 				end
 
@@ -217,12 +217,12 @@ function YRP.msg(chan, str_msg, tochat, force)
 					end
 
 					if CLIENT and cn == "ERROR" and createD != nil then
-						local err = createD("DFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400))
+						local err = createD( "DFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400) )
 						err:ShowCloseButton(false)
 						err:SetDraggable(false)
-						err:SetTitle("")
+						err:SetTitle( "" )
 						function err:Paint(pw, ph)
-							draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string("LID_error") .. "] " .. "Look into the console!", "Y_14_500", Color(255, 0, 0), Color(0, 0, 0))
+							draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string( "LID_error" ) .. "] " .. "Look into the console!", "Y_14_500", Color(255, 0, 0), Color(0, 0, 0) )
 						end
 						timer.Simple(8, function()
 							err:Remove()
@@ -246,7 +246,7 @@ function YRPTableToColorStr(tbl)
 	return tbl.r .. "," .. tbl.g .. "," .. tbl.b .. "," .. tbl.a
 end
 
-function YRPColorToString(col)
+function YRPColorToString( col)
 	col.a = col.a or 255
 	return col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a
 end
@@ -257,13 +257,13 @@ function printTab(table, name)
 	if !strEmpty(name) then
 		name = name .. " "
 	end
-	_header = _header .. name .. "(" .. tostring(table) .. ")"
-	YRP.msg("note", _header)
+	_header = _header .. name .. "( " .. tostring(table) .. " )"
+	YRP.msg( "note", _header)
 
 	if istable(table) then
 		PrintTable(table)
 	else
-		YRP.msg("note", "printTab " .. tostring(table) .. " is not a table!")
+		YRP.msg( "note", "printTab " .. tostring(table) .. " is not a table!" )
 	end
 end
 

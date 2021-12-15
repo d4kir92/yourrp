@@ -29,5 +29,5 @@ if SERVER then
 end
 
 function IsInventorySystemEnabled()
-	return GetGlobalBool("bool_inventory_system", false)
+	return GetGlobalBool( "bool_inventory_system", false)
 end

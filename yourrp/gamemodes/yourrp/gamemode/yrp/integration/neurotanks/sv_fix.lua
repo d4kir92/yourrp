@@ -1,15 +1,15 @@
 
 timer.Simple(1, function()
-	hook.Remove("PlayerLeaveVehicle", "FixWeaponsInRides")
+	hook.Remove( "PlayerLeaveVehicle", "FixWeaponsInRides" )
 end)
 
-local Meta = FindMetaTable("Entity")
+local Meta = FindMetaTable( "Entity" )
 
 function Meta:TankExitVehicle()
 
-	if(!IsValid(self)) then return end
+	if(!IsValid(self) ) then return end
 
-	if (!IsValid(self.Pilot)) then
+	if (!IsValid(self.Pilot) ) then
 
 		return
 
@@ -19,7 +19,7 @@ function Meta:TankExitVehicle()
 
 		for i=1,#self.RotorWashPoints do
 
-			if(IsValid(self.RotorWashPoints[i])) then
+			if(IsValid(self.RotorWashPoints[i]) ) then
 
 				TankRemoveHoverDust(self.RotorWashPoints[i])
 
@@ -31,11 +31,11 @@ function Meta:TankExitVehicle()
 
 	CorrectPlayerObject(self.Pilot)
 
-	-- self.Pilot:ConCommand("jet_cockpitview 0")
+	-- self.Pilot:ConCommand( "jet_cockpitview 0" )
 	-- self.Pilot.ClientVector = nil
 
-	-- self.Pilot:SetColor(Color(255,255,255,255))
-	self:SetNetworkedEntity("Pilot", NULL)
+	-- self.Pilot:SetColor(Color(255,255,255,255) )
+	self:SetNetworkedEntity( "Pilot", NULL)
 
 	if(self.TowerSound) then
 
@@ -51,7 +51,7 @@ function Meta:TankExitVehicle()
 
 	end
 
-	self:SetNetworkedBool("IsStarted", false)
+	self:SetNetworkedBool( "IsStarted", false)
 
 	for i=1,#self.EngineMux do
 
@@ -66,13 +66,13 @@ function Meta:TankExitVehicle()
 		end
 
 	--[[ uncomment this if you want headlights to turn off when you exit the tank.
-	if(type(self.HeadLights) == "table"	&& GetConVarNumber("tank_allowheadlights", 0) > 0) then
+	if(type(self.HeadLights) == "table"	&& GetConVarNumber( "tank_allowheadlights", 0) > 0) then
 
 		for i=1,#self.HeadLights.Lamps do
 
-			if(IsValid(self.HeadLights.Lamps[i])) then
+			if(IsValid(self.HeadLights.Lamps[i]) ) then
 
-				self.HeadLights.Lamps[i]:Fire("TurnOff","",0)
+				self.HeadLights.Lamps[i]:Fire( "TurnOff","",0)
 
 			end
 
@@ -93,11 +93,11 @@ function Meta:TankExitVehicle()
 	self.Pilot:DrawViewModel(true)
 	self.Pilot:DrawWorldModel(true)
 -- */
-	-- self.Pilot:SetNetworkedBool("InFlight", false)
-	-- self.Pilot:SetNetworkedEntity("Tank", NULL)
-	-- self.Pilot:SetNetworkedEntity("Barrel", NULL)
-	-- self.Pilot:SetNetworkedEntity("Weapon", NULL)
-	-- self:SetNetworkedEntity("Pilot", NULL)
+	-- self.Pilot:SetNetworkedBool( "InFlight", false)
+	-- self.Pilot:SetNetworkedEntity( "Tank", NULL)
+	-- self.Pilot:SetNetworkedEntity( "Barrel", NULL)
+	-- self.Pilot:SetNetworkedEntity( "Weapon", NULL)
+	-- self:SetNetworkedEntity( "Pilot", NULL)
 
 	local tr, trace = {},{}
 	tr.start = self:GetPos() + Vector(0,0,250)
@@ -111,7 +111,7 @@ function Meta:TankExitVehicle()
 	end
 
 	-- self.Pilot:SetColor(self.Pilot.Col)
-	-- if(self.Pilot:Alive()) then
+	-- if(self.Pilot:Alive() ) then
 
 		-- for i=1,#self.Pilot.Weapons do
 			-- self.Pilot:Give(self.Pilot.Weapons[i])
@@ -125,13 +125,13 @@ function Meta:TankExitVehicle()
 	if(!self.AdvancedCommando) then
 
 		self.Pilot:SetPos(p)
-		self.Pilot:SetAngles(Angle(0, self:GetAngles().y,0))
+		self.Pilot:SetAngles(Angle(0, self:GetAngles().y,0) )
 		self.yrpowner = NULL
 
 	end
 
 	local ma = self:GetAngles()
-	self.Pilot:SetEyeAngles(Angle(0, ma.y, 0))
+	self.Pilot:SetEyeAngles(Angle(0, ma.y, 0) )
 
 	self.Pilot:SetScriptedVehicle(NULL)
 
@@ -143,7 +143,7 @@ function Meta:TankExitVehicle()
 
 	self.Speed = 0
 	self.IsDriving = false
-	self:SetLocalVelocity(Vector(0,0,0))
+	self:SetLocalVelocity( Vector(0,0,0) )
 	self.Yaw = 0
 	self.Pilot = NULL
 
@@ -151,7 +151,7 @@ function Meta:TankExitVehicle()
 
 	if(self.Fuel >	 0) then
 
-		self:EmitSound(shtdwn, 511, math.random(95,100))
+		self:EmitSound(shtdwn, 511, math.random(95,100) )
 
 	end
 

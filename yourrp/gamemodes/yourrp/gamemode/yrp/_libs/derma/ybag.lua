@@ -5,7 +5,7 @@ local PANEL = {}
 itemsize = itemsize or 100
 
 function PANEL:Paint(pw, ph)
-	draw.RoundedBox(10, 0, 0, pw, ph, Color(40, 40, 40, 254))
+	draw.RoundedBox(10, 0, 0, pw, ph, Color(40, 40, 40, 254) )
 end
 
 function PANEL:SetStorage(uid)
@@ -13,12 +13,12 @@ function PANEL:SetStorage(uid)
 end
 
 function PANEL:Init()
-	self:SetTitle("")
+	self:SetTitle( "" )
 
-	self.storage = createD("YStorage", self, YRP.ctr(100), YRP.ctr(100), 0, YRP.ctr(50))
+	self.storage = createD( "YStorage", self, YRP.ctr(100), YRP.ctr(100), 0, YRP.ctr(50) )
 	self.storage:SetBag(self)
 
 	self:MakePopup()
 end
 
-vgui.Register("YBag", PANEL, "DFrame")
+vgui.Register( "YBag", PANEL, "DFrame" )

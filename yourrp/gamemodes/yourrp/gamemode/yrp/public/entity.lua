@@ -3,10 +3,10 @@
 --[[ Here are the public functions (FOR DEVELOPERS) ]]
 
 --[[ Entity Functions ]]--
-local Entity = FindMetaTable("Entity")
+local Entity = FindMetaTable( "Entity" )
 
 function Entity:GetRPOwner()
-	return self:GetNW2Entity("yrp_owner", NULL)
+	return self:GetNW2Entity( "yrp_owner", NULL)
 end
 
 function Entity:YRPIsDoor()

@@ -51,15 +51,15 @@ function SWEP:PrimaryAttack()
 
 		local ply = self:GetOwner()
 
-		local tmpTable = YRP_SQL_SELECT("yrp_jail", "*", nil)
+		local tmpTable = YRP_SQL_SELECT( "yrp_jail", "*", nil)
 
 		if !wk(tmpTable) then
 			tmpTable = {}
 		end
 
 		for i, v in pairs(tmpTable) do
-			local cells = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' and uniqueID = '" .. v.cell .. "'")
-			if wk(cells) then
+			local cells = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' and uniqueID = '" .. v.cell .. "'" )
+			if wk( cells) then
 				cells = cells[1]
 				v.cellname = cells.name
 			else
@@ -67,7 +67,7 @@ function SWEP:PrimaryAttack()
 			end
 		end
 
-		net.Start("openLawBoard")
+		net.Start( "openLawBoard" )
 			net.WriteTable(tmpTable)
 		net.Send(ply)
 	end

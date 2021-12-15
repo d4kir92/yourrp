@@ -9,9 +9,9 @@ function fp(tbl)
 		local tblN = table.maxn(tbl)
 
 		for i = 2, tblN do fnArgs[i - 1] = tbl[i] end
-		for i = 1, table.maxn(arg) do fnArgs[tblN + i - 1] = arg[i] end
+		for i = 1, table.maxn( arg) do fnArgs[tblN + i - 1] = arg[i] end
 
-		return func(unpack(fnArgs, 1, table.maxn(fnArgs)))
+		return func(unpack(fnArgs, 1, table.maxn(fnArgs) ))
 	end
 end
 
@@ -27,7 +27,7 @@ local _G = _G
 local fp = fp
 
 
-module("fn")
+module( "fn" )
 
 
 --Parameter manipulation
@@ -35,9 +35,9 @@ module("fn")
 Id = function(...) return ... end
 
 Flip = function(f)
-	if not f then error("not a function") end
-	return function(b, a, ...)
-		return f(a, b, ...)
+	if not f then error( "not a function" ) end
+	return function( b, a, ...)
+		return f( a, b, ...)
 	end
 end
 
@@ -45,7 +45,7 @@ end
 ReverseArgs = function(...)
 
 	--reverse args by building a function to do it, similar to the unpack() example
-	local function reverse_h(acc, v, ...)
+	local function reverse_h( acc, v, ...)
 		if select('#', ...) == 0 then
 			return v, acc()
 		else
@@ -62,16 +62,16 @@ end
 
 -- function composition
 do
-	local function comp_h(a, b, ...)
+	local function comp_h( a, b, ...)
 		if b == nil then return a end
-		b = comp_h(b, ...)
+		b = comp_h( b, ...)
 		return function(...)
-			return a(b(...))
+			return a( b(...) )
 		end
 	end
 	Compose = function(funcs, ...)
 		if type(funcs) == "table" then
-			return comp_h(unpack(funcs))
+			return comp_h(unpack(funcs) )
 		else
 			return comp_h(funcs, ...)
 		end
@@ -82,15 +82,15 @@ _G.fc = Compose
 
 -- Definition from http://lua-users.org/wiki/CurriedLua
 Curry = function(func, num_args)
-	if not num_args then error("Missing argument #2: num_args") end
-	if not func then error("Function does not exist!", 2) end
+	if not num_args then error( "Missing argument #2: num_args" ) end
+	if not func then error( "Function does not exist!", 2) end
 	-- helper
-	local function curry_h(argtrace, n)
+	local function curry_h( argtrace, n)
 		if n == 0 then
 			-- reverse argument list and call function
-			return func(ReverseArgs(argtrace()))
+			return func(ReverseArgs( argtrace() ))
 		else
-			-- "push" argument (by building a wrapper function) and decrement n
+			-- "push" argument ( by building a wrapper function) and decrement n
 			return function(x)
 				return curry_h(function() return x, argtrace() end, n - 1)
 			end
@@ -109,18 +109,18 @@ end
 Partial = function(func, ...)
 	local args = {...}
 	return function(...)
-		return func(unpack(table.Add(args, {...})))
+		return func(unpack(table.Add( args, {...}) ))
 	end
 end
 
 Apply = function(f, ...) return f(...) end
 
-Const = function(a, b) return a end
-Until = function(cmp, fn, val)
-	if cmp(val) then
+Const = function( a, b) return a end
+Until = function( cmp, fn, val)
+	if cmp( val) then
 		return val
 	end
-	return Until(cmp, fn, fn(val))
+	return Until( cmp, fn, fn( val) )
 end
 
 Seq = function(f, x) f(x) return x end
@@ -130,19 +130,19 @@ GetGlobalVar = function(key) return _G[key] end
 
 --Mathematical operators and functions
 
-Add = function(a, b) return a + b end
-Sub = function(a, b) return a - b end
-Mul = function(a, b) return a * b end
-Div = function(a, b) return a / b end
-Mod = function(a, b) return a % b end
-Neg = function(a)		return -a		end
+Add = function( a, b) return a + b end
+Sub = function( a, b) return a - b end
+Mul = function( a, b) return a * b end
+Div = function( a, b) return a / b end
+Mod = function( a, b) return a % b end
+Neg = function( a)		return -a		end
 
-Eq	= function(a, b) return a == b end
-Neq = function(a, b) return a ~= b end
-Gt	= function(a, b) return a > b	end
-Lt	= function(a, b) return a < b	end
-Gte = function(a, b) return a >= b end
-Lte = function(a, b) return a <= b end
+Eq	= function( a, b) return a == b end
+Neq = function( a, b) return a ~= b end
+Gt	= function( a, b) return a > b	end
+Lt	= function( a, b) return a < b	end
+Gte = function( a, b) return a >= b end
+Lte = function( a, b) return a <= b end
 
 Succ = Compose{Add, 1}
 Pred = Compose{Flip(Sub), 1}
@@ -157,9 +157,9 @@ FAnd = function(fns)
 		local val
 		for _, f in pairs(fns) do
 			val = {f(...)}
-			if not val[1] then return unpack(val) end
+			if not val[1] then return unpack( val) end
 		end
-		if val then return unpack(val) end
+		if val then return unpack( val) end
 	end
 end
 
@@ -168,9 +168,9 @@ FOr = function(fns)
 		local val
 		for _, f in pairs(fns) do
 			val = {f(...)}
-			if val[1] then return unpack(val) end
+			if val[1] then return unpack( val) end
 		end
-		return false, unpack(val, 2)
+		return false, unpack( val, 2)
 	end
 end
 
@@ -191,7 +191,7 @@ end
 
 Map = function(f, xs)
 	for k, v in pairs(xs) do
-		xs[k] = f(v)
+		xs[k] = f( v)
 	end
 	return xs
 end
@@ -203,7 +203,7 @@ end
 Filter = function(f, xs)
 	local res = {}
 	for k,v in pairs(xs) do
-		if f(v) then res[k] = v end
+		if f( v) then res[k] = v end
 	end
 	return res
 end
@@ -273,7 +273,7 @@ end
 
 Foldl = function(func, val, xs)
 	for k, v in ipairs(xs) do
-		val = func(val, v)
+		val = func( val, v)
 	end
 
 	return val
@@ -295,14 +295,14 @@ end
 
 Any = function(func, xs)
 	for k, v in pairs(xs) do
-		if func(v) == true then return true end
+		if func( v) == true then return true end
 	end
 	return false
 end
 
 All = function(func, xs)
 	for k, v in pairs(xs) do
-			if func(v) ~= true then return false end
+			if func( v) ~= true then return false end
 	end
 	return true
 end

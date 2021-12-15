@@ -13,11 +13,11 @@ function PANEL:NewSetText(str)
 	self._hovertext = str
 	self._selectedtext = str
 
-	self:OldSetText("")
+	self:OldSetText( "" )
 end
 
 function PANEL:Paint(pw, ph)
-	hook.Run("YLabelPaint", self, pw, ph)
+	hook.Run( "YLabelPaint", self, pw, ph)
 end
 
 function PANEL:Init()
@@ -27,4 +27,4 @@ function PANEL:Init()
 	end
 end
 
-vgui.Register("YLabel", PANEL, "DLabel")
+vgui.Register( "YLabel", PANEL, "DLabel" )

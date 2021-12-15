@@ -1,15 +1,15 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-include("shared.lua")
+include( "shared.lua" )
 
-local yrp_icon = Material("yrp/yrp_icon")
+local yrp_icon = Material( "yrp/yrp_icon" )
 
 local white =  Color(255, 255, 255, 255)
 local mocolor = Color(6, 92, 39, 255)
 
 function ENT:Draw()
 	local lply = LocalPlayer()
-	if lply:GetPos():Distance(self:GetPos()) < 2200 then
+	if lply:GetPos():Distance(self:GetPos() ) < 2200 then
 		self:DrawModel()
 		local money = self:GetMoney()
 		if money != nil then
@@ -28,12 +28,12 @@ function ENT:Draw()
 					surface.SetMaterial(yrp_icon)
 					surface.DrawTexturedRect(-180, -72, 40, 40)
 				end
-				draw.SimpleTextOutlined(money, "Y_72_500", 0, 0, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(money, "Y_72_500", 0, 0, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
 			cam.End3D2D()
 
-			local up = ang:RotateAroundAxis(ang:Up(), 180)
-			local right = ang:RotateAroundAxis(ang:Right(), 0)
-			local forward = ang:RotateAroundAxis(ang:Forward(), 180)
+			local up = ang:RotateAroundAxis( ang:Up(), 180)
+			local right = ang:RotateAroundAxis( ang:Right(), 0)
+			local forward = ang:RotateAroundAxis( ang:Forward(), 180)
 			cam.Start3D2D(pos + self:GetUp() * 0.05, ang, 0.02 )
 				if self:GetModel() == "models/props/cs_assault/money.mdl" then
 					draw.RoundedBox(0, -200, -92, 200 * 2, 92 * 2, mocolor)
@@ -41,14 +41,14 @@ function ENT:Draw()
 					surface.SetMaterial(yrp_icon)
 					surface.DrawTexturedRect(-180, -72, 40, 40)
 				end
-				draw.SimpleTextOutlined(money, "Y_72_500", 0, 0, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+				draw.SimpleTextOutlined(money, "Y_72_500", 0, 0, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
 			cam.End3D2D()
 
-			if GetGlobalBool("bool_tag_on_head_name", false) then
+			if GetGlobalBool( "bool_tag_on_head_name", false) then
 				ang = lply:GetAngles()
 				ang = Angle(0, ang.y - 90, 90)
 				cam.Start3D2D(pos + Vector(0, 0, 4), ang, 0.04 )
-					draw.SimpleTextOutlined(money, "Y_72_500", 0, 0, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+					draw.SimpleTextOutlined(money, "Y_72_500", 0, 0, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
 				cam.End3D2D()
 			end
 		end

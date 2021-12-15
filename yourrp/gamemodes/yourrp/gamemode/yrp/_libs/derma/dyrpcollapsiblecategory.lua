@@ -2,13 +2,13 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self.header = createD("DButton", self, 100, 50, 0, 0)
-	self.header:SetText("")
-	self.content = createD("DPanelList", self, 100, 50, 0, 100)
+	self.header = createD( "DButton", self, 100, 50, 0, 0)
+	self.header:SetText( "" )
+	self.content = createD( "DPanelList", self, 100, 50, 0, 100)
 	self.color = Color(255, 0, 0)
 	self.color2 = Color(255, 0, 0)
-	self.header:SetTall(self:GetHeaderHeight())
-	self:SetTall(self:GetHeaderHeight())
+	self.header:SetTall(self:GetHeaderHeight() )
+	self:SetTall(self:GetHeaderHeight() )
 	self.open = false
 	self.panels = {}
 	self.headerheight = 30
@@ -24,12 +24,12 @@ function PANEL:Init()
 			_hl = 70
 		end
 
-		draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl, self.color.a), true, true, not self:IsOpen(), not self:IsOpen())
+		draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl, self.color.a), true, true, not self:IsOpen(), not self:IsOpen() )
 		draw.SimpleText(self.headertext, "Y_24_500", ph / 2, ph / 2, Color(255, 255, 255), 0, 1)
 		
-		local icon = YRP.GetDesignIcon("64_angle-down")
+		local icon = YRP.GetDesignIcon( "64_angle-down" )
 		if self:IsOpen() then
-			icon = YRP.GetDesignIcon("64_angle-up")
+			icon = YRP.GetDesignIcon( "64_angle-up" )
 		end
 
 		if wk(icon) then
@@ -39,7 +39,7 @@ function PANEL:Init()
 		end
 		
 		if tobool(self.locked) then
-			YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), Color(255, 0, 0))
+			YRP.DrawIcon(YRP.GetDesignIcon( "lock" ), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), Color(255, 0, 0) )
 		end
 	end
 
@@ -48,7 +48,7 @@ function PANEL:Init()
 	end
 
 	function self.header:DoClick()
-		if pa(self:GetParent()) and not self:GetParent().locked then
+		if pa(self:GetParent() ) and not self:GetParent().locked then
 			self:GetParent().open = not self:GetParent().open
 			self:GetParent():ReSize()
 			self:GetParent():DoClick()
@@ -92,21 +92,21 @@ function PANEL:ReSize()
 
 	for i, panel in pairs(_tab) do
 		if i > 1 then
-			self.height = self.height + panel:GetTall() + ctrb(self:GetSpacing())
+			self.height = self.height + panel:GetTall() + ctrb(self:GetSpacing() )
 		else
-			self.height = self.height + panel:GetTall() + ctrb(2 * self:GetSpacing())
+			self.height = self.height + panel:GetTall() + ctrb(2 * self:GetSpacing() )
 		end
 
-		panel:SetPos(ctrb(self:GetSpacing()), self.height - panel:GetTall() - ctrb(self:GetSpacing()))
+		panel:SetPos( ctrb(self:GetSpacing() ), self.height - panel:GetTall() - ctrb(self:GetSpacing() ))
 	end
 
 	if self.open then
-		self.content:SetPos(0, self:GetHeaderHeight())
+		self.content:SetPos(0, self:GetHeaderHeight() )
 		self.content:SetTall(self.height)
 		self:SetTall(self:GetHeaderHeight() + self.height)
 	else
-		self.content:SetPos(0, self:GetHeaderHeight())
-		self:SetTall(self:GetHeaderHeight())
+		self.content:SetPos(0, self:GetHeaderHeight() )
+		self:SetTall(self:GetHeaderHeight() )
 	end
 
 	local _grandparent = self:GetParent():GetParent()
@@ -149,24 +149,24 @@ end
 
 function PANEL:Think()
 	if self:GetWide() ~= self.content:GetWide() then
-		self.content:SetWide(self:GetWide())
+		self.content:SetWide(self:GetWide() )
 	end
 
 	if self:GetWide() ~= self.header:GetWide() then
-		self.header:SetWide(self:GetWide())
+		self.header:SetWide(self:GetWide() )
 	end
 
 	if self:GetTall() - self:GetHeaderHeight() ~= self.content:GetTall() or self.content:GetTall() < 0 then
-		self.content:SetTall(self:GetTall() - self:GetHeaderHeight())
+		self.content:SetTall(self:GetTall() - self:GetHeaderHeight() )
 	end
 
 	if self:GetHeaderHeight() ~= self.header:GetTall() then
-		self.header:SetTall(self:GetHeaderHeight())
+		self.header:SetTall(self:GetHeaderHeight() )
 	end
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0))
+	--draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0) )
 end
 
-vgui.Register("DYRPCollapsibleCategory", PANEL, "Panel")
+vgui.Register( "DYRPCollapsibleCategory", PANEL, "Panel" )

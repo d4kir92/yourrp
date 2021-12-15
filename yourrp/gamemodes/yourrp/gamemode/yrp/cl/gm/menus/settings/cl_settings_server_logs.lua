@@ -3,7 +3,7 @@
 -- #logs
 
 function GetPlayerBySteamID64(steamid64)
-	for i, ply in pairs(player.GetAll()) do
+	for i, ply in pairs(player.GetAll() ) do
 		if ply:SteamID64() == steamid64 then
 			return ply
 		end
@@ -12,38 +12,38 @@ function GetPlayerBySteamID64(steamid64)
 end
 
 function BuildLogs(parent, typ)
-	parent.list = createD("DPanelList", parent, parent:GetWide(), parent:GetTall(), 0, 0)
+	parent.list = createD( "DPanelList", parent, parent:GetWide(), parent:GetTall(), 0, 0)
 	parent.list:EnableVerticalScrollbar()
 
-	net.Start("yrp_get_logs")
+	net.Start( "yrp_get_logs" )
 		net.WriteString(typ)
 	net.SendToServer()
 
-	net.Receive("yrp_get_logs", function(len)
+	net.Receive( "yrp_get_logs", function(len)
 		if pa(parent) then
 			local tab = net.ReadTable()
 		
 			for i, v in pairs(tab) do
-				local source = GetPlayerBySteamID64(v.string_source_steamid)
-				local target = GetPlayerBySteamID64(v.string_target_steamid)
+				local source = GetPlayerBySteamID64( v.string_source_steamid)
+				local target = GetPlayerBySteamID64( v.string_target_steamid)
 				if wk(source) then
-					local line = createD("YPanel", nil, parent:GetWide(), YRP.ctr(50))
+					local line = createD( "YPanel", nil, parent:GetWide(), YRP.ctr(50) )
 
 
 
-					local ts = createD("YLabel", line, YRP.ctr(500), line:GetTall(), 0, 0)
-					ts:SetText(os.date("%H:%M:%S - %d/%m/%Y", tonumber(v.string_timestamp)))
+					local ts = createD( "YLabel", line, YRP.ctr(500), line:GetTall(), 0, 0)
+					ts:SetText(os.date( "%H:%M:%S - %d/%m/%Y", tonumber( v.string_timestamp) ))
 
 
 
 					if typ == "LID_chat" then
-						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+						local rt = createD( "RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
 							if self.SetUnderlineFont != nil then
-								self:SetUnderlineFont("Y_18_500")
+								self:SetUnderlineFont( "Y_18_500" )
 							end
-							self:SetFontInternal("Y_18_500")
-							self:SetBGColor(Color(0, 0, 0))
+							self:SetFontInternal( "Y_18_500" )
+							self:SetBGColor(Color(0, 0, 0) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
@@ -55,31 +55,31 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk(v.string_source_steamid) then
+						if wk( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
+							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:AppendText("Missing Source SteamID")
+							rt:AppendText( "Missing Source SteamID" )
 						end
 						if source.RPName != nil then
-							rt:AppendText(source:RPName())
+							rt:AppendText(source:RPName() )
 						else
-							rt:AppendText(tostring(v.string_source_steamid))
+							rt:AppendText(tostring( v.string_source_steamid) )
 						end
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(": " .. tostring(v.string_value))
+						rt:AppendText( ": " .. tostring( v.string_value) )
 					elseif typ == "LID_connections" then
-						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+						local rt = createD( "RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
 							self.m_FontName = "Y_18_500"
 							if self.SetUnderlineFont != nil then
-								self:SetUnderlineFont("Y_18_500")
+								self:SetUnderlineFont( "Y_18_500" )
 							end
-							self:SetFontInternal("Y_18_500")
-							self:SetBGColor(Color(0, 0, 0))
+							self:SetFontInternal( "Y_18_500" )
+							self:SetBGColor(Color(0, 0, 0) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
@@ -91,31 +91,31 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk(v.string_source_steamid) then
+						if wk( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
+							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:AppendText("Missing Source SteamID")
+							rt:AppendText( "Missing Source SteamID" )
 						end
 						if source.RPName != nil then
-							rt:AppendText(source:RPName())
+							rt:AppendText(source:RPName() )
 						else
-							rt:AppendText(tostring(v.string_source_steamid))
+							rt:AppendText(tostring( v.string_source_steamid) )
 						end
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(" " .. tostring(v.string_value))
+						rt:AppendText( " " .. tostring( v.string_value) )
 					elseif typ == "LID_kills" then
-						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+						local rt = createD( "RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
 							self.m_FontName = "Y_18_500"
 							if self.SetUnderlineFont != nil then
-								self:SetUnderlineFont("Y_18_500")
+								self:SetUnderlineFont( "Y_18_500" )
 							end
-							self:SetFontInternal("Y_18_500")
-							self:SetBGColor(Color(0, 0, 0))
+							self:SetFontInternal( "Y_18_500" )
+							self:SetBGColor(Color(0, 0, 0) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
@@ -129,43 +129,43 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk(v.string_source_steamid) then
+						if wk( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
+							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:AppendText("Missing Source SteamID")
+							rt:AppendText( "Missing Source SteamID" )
 						end
 						if source.RPName then
-							rt:AppendText(source:RPName())
+							rt:AppendText(source:RPName() )
 						else
-							rt:AppendText(tostring(v.string_source_steamid))
+							rt:AppendText(tostring( v.string_source_steamid) )
 						end
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(" " .. "killed" .. " ")
+						rt:AppendText( " " .. "killed" .. " " )
 
 						rt:InsertColorChange(100, 100, 255, 255)
 						if target.RPName then
-							rt:AppendText(target:RPName())
+							rt:AppendText(target:RPName() )
 						else
-							rt:InsertClickableTextStart(v.string_target_steamid)
-							rt:AppendText(v.string_target_steamid)
+							rt:InsertClickableTextStart( v.string_target_steamid)
+							rt:AppendText( v.string_target_steamid)
 						end
 						rt:InsertClickableTextEnd()
 					elseif typ == "LID_whitelist" then
-						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+						local rt = createD( "RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
 							self.m_FontName = "Y_18_500"
 							if self.SetUnderlineFont != nil then
-								self:SetUnderlineFont("Y_18_500")
+								self:SetUnderlineFont( "Y_18_500" )
 							end
-							self:SetFontInternal("Y_18_500")
-							self:SetBGColor(Color(0, 0, 0))
+							self:SetFontInternal( "Y_18_500" )
+							self:SetBGColor(Color(0, 0, 0) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
-							if ( signalName == "TextClicked" ) then
+							if ( signalName == "TextClicked" ) and IsValid( target ) then
 								if ( signalValue == v.string_source_steamid ) and source:IsPlayer() then
 									source:ShowProfile()
 								elseif ( signalValue == v.string_target_steamid ) then
@@ -174,42 +174,42 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk(v.string_source_steamid) then
+						if wk( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
+							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:AppendText("Missing Source SteamID")
+							rt:AppendText( "Missing Source SteamID" )
 						end
 						if source.RPName then
-							rt:AppendText(source:RPName())
+							rt:AppendText(source:RPName() )
 						else
-							rt:AppendText(tostring(v.string_source_steamid))
+							rt:AppendText(tostring( v.string_source_steamid) )
 						end
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(" " .. "whitelisted" .. " ")
+						rt:AppendText( " " .. "whitelisted" .. " " )
 
-						if wk(v.string_source_steamid) then
+						if wk( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(tostring(v.string_target_steamid))
+							rt:InsertClickableTextStart(tostring( v.string_target_steamid) )
 							rt:InsertClickableTextEnd()
 						elseif target.RPName then
-							rt:AppendText(target:RPName())
+							rt:AppendText(target:RPName() )
 						end
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(" [" .. tostring(v.string_value) .. "] ")
+						rt:AppendText( " [" .. tostring( v.string_value) .. "] " )
 					elseif typ == "LID_spawns" then
-						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+						local rt = createD( "RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
 							self.m_FontName = "Y_18_500"
 							if self.SetUnderlineFont != nil then
-								self:SetUnderlineFont("Y_18_500")
+								self:SetUnderlineFont( "Y_18_500" )
 							end
-							self:SetFontInternal("Y_18_500")
-							self:SetBGColor(Color(0, 0, 0))
+							self:SetFontInternal( "Y_18_500" )
+							self:SetBGColor(Color(0, 0, 0) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
@@ -221,36 +221,36 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk(v.string_source_steamid) then
+						if wk( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
+							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:AppendText("Missing Source SteamID")
+							rt:AppendText( "Missing Source SteamID" )
 						end
 						if source.RPName then
-							rt:AppendText(source:RPName())
+							rt:AppendText(source:RPName() )
 						else
-							rt:AppendText(tostring(v.string_source_steamid))
+							rt:AppendText(tostring( v.string_source_steamid) )
 						end
 						rt:InsertClickableTextEnd()
 
-						if wk(v.string_value) then
+						if wk( v.string_value) then
 							rt:InsertColorChange(255, 255, 255, 255)
-							rt:AppendText(" " .. v.string_value)
+							rt:AppendText( " " .. v.string_value)
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:AppendText("Missing VALUE")
+							rt:AppendText( "Missing VALUE" )
 						end
 					elseif typ == "LID_health" then
-						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+						local rt = createD( "RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
 							self.m_FontName = "Y_18_500"
 							if self.SetUnderlineFont != nil then
-								self:SetUnderlineFont("Y_18_500")
+								self:SetUnderlineFont( "Y_18_500" )
 							end
-							self:SetFontInternal("Y_18_500")
-							self:SetBGColor(Color(0, 0, 0))
+							self:SetFontInternal( "Y_18_500" )
+							self:SetBGColor(Color(0, 0, 0) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
@@ -263,56 +263,56 @@ function BuildLogs(parent, typ)
 						end
 
 						if source.RPName then
-							if wk(v.string_source_steamid) then
+							if wk( v.string_source_steamid) then
 								rt:InsertColorChange(100, 100, 255, 255)
-								rt:InsertClickableTextStart(tostring(v.string_source_steamid))
+								rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 							else
 								rt:InsertColorChange(255, 100, 100, 255)
-								rt:AppendText("Missing Source SteamID")
+								rt:AppendText( "Missing Source SteamID" )
 							end
 							if source.RPName then
-								rt:AppendText(source:RPName())
+								rt:AppendText(source:RPName() )
 							else
-								rt:AppendText(tostring(v.string_source_steamid))
+								rt:AppendText(tostring( v.string_source_steamid) )
 							end
 							rt:InsertClickableTextEnd()
 	
 							rt:InsertColorChange(255, 255, 255, 255)
-							rt:AppendText(" does " .. tostring(v.string_value) .. " damage to ")
+							rt:AppendText( " does " .. tostring( v.string_value) .. " damage to " )
 
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(tostring(v.string_target_steamid))
+							rt:InsertClickableTextStart(tostring( v.string_target_steamid) )
 							if target.RPName then
-								rt:AppendText(target:RPName())
+								rt:AppendText(target:RPName() )
 							else
-								rt:AppendText(tostring( v.string_target_steamid ))
+								rt:AppendText(tostring( v.string_target_steamid ) )
 							end
 							rt:InsertClickableTextEnd()
 						else
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:AppendText(tostring(v.string_alttarget))
+							rt:AppendText(tostring( v.string_alttarget) )
 	
 							rt:InsertColorChange(255, 255, 255, 255)
-							rt:AppendText(" does " .. tostring(v.string_value) .. " damage to ")
+							rt:AppendText( " does " .. tostring( v.string_value) .. " damage to " )
 
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(tostring(v.string_target_steamid))
+							rt:InsertClickableTextStart(tostring( v.string_target_steamid) )
 							if target.RPName then
-								rt:AppendText(target:RPName())
+								rt:AppendText(target:RPName() )
 							else
-								rt:AppendText(tostring(v.string_target_steamid))
+								rt:AppendText(tostring( v.string_target_steamid) )
 							end
 							rt:InsertClickableTextEnd()
 						end
 					elseif typ == "LID_health" then
-						local rt = createD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+						local rt = createD( "RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
 						function rt:PerformLayout()
 							self.m_FontName = "Y_18_500"
 							if self.SetUnderlineFont != nil then
-								self:SetUnderlineFont("Y_18_500")
+								self:SetUnderlineFont( "Y_18_500" )
 							end
-							self:SetFontInternal("Y_18_500")
-							self:SetBGColor(Color(0, 0, 0))
+							self:SetFontInternal( "Y_18_500" )
+							self:SetBGColor(Color(0, 0, 0) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
@@ -324,29 +324,29 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk(v.string_source_steamid) then
+						if wk( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
-							rt:InsertClickableTextStart(tostring(v.string_source_steamid))
+							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
 							rt:InsertColorChange(255, 100, 100, 255)
-							rt:AppendText("Missing Source SteamID")
+							rt:AppendText( "Missing Source SteamID" )
 						end
 						if source.RPName then
-							rt:AppendText(source:RPName())
+							rt:AppendText(source:RPName() )
 						else
-							rt:AppendText(tostring(v.string_source_steamid))
+							rt:AppendText(tostring( v.string_source_steamid) )
 						end
 						rt:InsertClickableTextEnd()
 
 						rt:InsertColorChange(255, 255, 255, 255)
-						rt:AppendText(" arrested ")
+						rt:AppendText( " arrested " )
 
 						rt:InsertColorChange(100, 100, 255, 255)
-						rt:InsertClickableTextStart(v.string_target_steamid)
+						rt:InsertClickableTextStart( v.string_target_steamid)
 						if target.RPName then
-							rt:AppendText(target:RPName())
+							rt:AppendText(target:RPName() )
 						else
-							rt:AppendText(v.string_target_steamid)
+							rt:AppendText( v.string_target_steamid)
 						end
 						rt:InsertClickableTextEnd()
 					end
@@ -363,31 +363,31 @@ function BuildLogsSite()
 	if pa(PARENT) then
 
 		-- TABS
-		local tabs = createD("YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+		local tabs = createD( "YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
-		tabs:AddOption("LID_kills", function(parent)
-			BuildLogs(parent, "LID_kills")
+		tabs:AddOption( "LID_kills", function(parent)
+			BuildLogs(parent, "LID_kills" )
 		end)
-		tabs:AddOption("LID_health", function(parent)
-			BuildLogs(parent, "LID_health")
+		tabs:AddOption( "LID_health", function(parent)
+			BuildLogs(parent, "LID_health" )
 		end)
-		tabs:AddOption("LID_chat", function(parent)
-			BuildLogs(parent, "LID_chat")
+		tabs:AddOption( "LID_chat", function(parent)
+			BuildLogs(parent, "LID_chat" )
 		end)
-		tabs:AddOption("LID_arrests", function(parent)
-			BuildLogs(parent, "LID_arrests")
+		tabs:AddOption( "LID_arrests", function(parent)
+			BuildLogs(parent, "LID_arrests" )
 		end)
-		tabs:AddOption("LID_connections", function(parent)
-			BuildLogs(parent, "LID_connections")
+		tabs:AddOption( "LID_connections", function(parent)
+			BuildLogs(parent, "LID_connections" )
 		end)
-		tabs:AddOption("LID_whitelist", function(parent)
-			BuildLogs(parent, "LID_whitelist")
+		tabs:AddOption( "LID_whitelist", function(parent)
+			BuildLogs(parent, "LID_whitelist" )
 		end)
-		tabs:AddOption("LID_spawns", function(parent)
-			BuildLogs(parent, "LID_spawns")
+		tabs:AddOption( "LID_spawns", function(parent)
+			BuildLogs(parent, "LID_spawns" )
 		end)
 
-		tabs:GoToSite("LID_kills")		
+		tabs:GoToSite( "LID_kills" )		
 	end
 end
 

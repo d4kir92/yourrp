@@ -6,26 +6,26 @@ function YRPHUDSpace()
 	local lply = LocalPlayer()
 
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() then
-		local HP = YRP.GetDesignIcon("64_heart")
-		local AR = YRP.GetDesignIcon("64_shield-alt")
-		local ST = YRP.GetDesignIcon("64_running")
-		local BA = YRP.GetDesignIcon("64_battery-full")
-		local HU = YRP.GetDesignIcon("64_hamburger")
-		local TH = YRP.GetDesignIcon("64_glass-cheers")
-		local AL = YRP.GetDesignIcon("64_wine-bottle")
-		local XP = YRP.GetDesignIcon("64_atom")
-		local MO = YRP.GetDesignIcon("64_money-bill")
-		local SA = YRP.GetDesignIcon("64_money-bill-alt")
-		local CA = YRP.GetDesignIcon("64_magic")
-		local AB = YRP.GetDesignIcon("64_tint")
-		local RA = YRP.GetDesignIcon("64_radiation")
-		local ID = YRP.GetDesignIcon("64_address-card")
-		local CR = YRP.GetDesignIcon("64_clock")
-		local CC = YRP.GetDesignIcon("64_clock")
-		local RO = YRP.GetDesignIcon("64_user-graduate")
-		local NA = YRP.GetDesignIcon("64_user")
+		local HP = YRP.GetDesignIcon( "64_heart" )
+		local AR = YRP.GetDesignIcon( "64_shield-alt" )
+		local ST = YRP.GetDesignIcon( "64_running" )
+		local BA = YRP.GetDesignIcon( "64_battery-full" )
+		local HU = YRP.GetDesignIcon( "64_hamburger" )
+		local TH = YRP.GetDesignIcon( "64_glass-cheers" )
+		local AL = YRP.GetDesignIcon( "64_wine-bottle" )
+		local XP = YRP.GetDesignIcon( "64_atom" )
+		local MO = YRP.GetDesignIcon( "64_money-bill" )
+		local SA = YRP.GetDesignIcon( "64_money-bill-alt" )
+		local CA = YRP.GetDesignIcon( "64_magic" )
+		local AB = YRP.GetDesignIcon( "64_tint" )
+		local RA = YRP.GetDesignIcon( "64_radiation" )
+		local ID = YRP.GetDesignIcon( "64_address-card" )
+		local CR = YRP.GetDesignIcon( "64_clock" )
+		local CC = YRP.GetDesignIcon( "64_clock" )
+		local RO = YRP.GetDesignIcon( "64_user-graduate" )
+		local NA = YRP.GetDesignIcon( "64_user" )
 
-		if GetGlobalBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Space" then
+		if GetGlobalBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Space" then
 			ELES["HP"] = {
 				lply:Health(),
 				lply:GetMaxHealth(),
@@ -70,11 +70,11 @@ function YRPHUDSpace()
 			if weapon:IsValid() then
 				local clip1 = weapon:Clip1()
 				local clip1max = weapon:GetMaxClip1()
-				local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+				local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType() )
 
 				local clip2 = weapon:Clip2()
 				local clip2max = weapon:GetMaxClip2()
-				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType() )
 				ELES["WP"] = {
 					clip1,
 					clip1max,
@@ -133,7 +133,7 @@ function YRPHUDSpace()
 				lply:XP(),
 				lply:GetMaxXP(),
 				XP,
-				YRP.lang_string("LID_levelx", t) .. " (" .. lply:XP() .. "/" .. lply:GetMaxXP() .. ")"
+				YRP.lang_string( "LID_levelx", t) .. " ( " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " )"
 			}
 
 			ELES["CH"] = {
@@ -148,7 +148,7 @@ function YRPHUDSpace()
 				0,
 				nil,
 				CR,
-				os.date("%H:%M" , os.time()),
+				os.date( "%H:%M" , os.time() ),
 				--2
 			}
 			ELES["CC"] = {
@@ -162,14 +162,14 @@ function YRPHUDSpace()
 				0,
 				nil,
 				nil,
-				YRP.lang_string("LID_fps") .. ": " .. GetFPS(),
+				YRP.lang_string( "LID_fps" ) .. ": " .. GetFPS(),
 				2
 			}
 			ELES["NE"] = {
 				0,
 				nil,
 				nil,
-				YRP.lang_string("LID_ping") .. ": " .. lply:Ping(),
+				YRP.lang_string( "LID_ping" ) .. ": " .. lply:Ping(),
 				2
 			}
 
@@ -177,7 +177,7 @@ function YRPHUDSpace()
 				0,
 				nil,
 				nil,
-				GetGlobalString("text_server_name", "SERVERNAME"),
+				GetGlobalString( "text_server_name", "SERVERNAME" ),
 				2
 			}
 
@@ -191,7 +191,7 @@ function YRPHUDSpace()
 				0,
 				nil,
 				nil,
-				"[" .. GTS("lockdown") .. "] " .. lply:LockdownText(),
+				"[" .. GTS( "lockdown" ) .. "] " .. lply:LockdownText(),
 				2
 			}
 
@@ -213,7 +213,7 @@ function YRPHUDSpace()
 				0,
 				nil,
 				ID,
-				lply:GetNW2String("idcardid", ""),
+				lply:GetNW2String( "idcardid", "" ),
 				--2
 			}
 
@@ -234,9 +234,9 @@ function YRPHUDSpace()
 				}
 			end
 
-			if lply:GetNW2Int("hud_version", 0) != SPACE["version"] then
+			if lply:GetNW2Int( "hud_version", 0) != SPACE["version"] then
 				-- LOAD VARIABLES
-				SPACE["version"] = lply:GetNW2Int("hud_version", 0)
+				SPACE["version"] = lply:GetNW2Int( "hud_version", 0)
 				for ele, etab in pairs(ELES) do
 					local DB = lply:HudElement(ele)
 
@@ -306,7 +306,7 @@ function YRPHUDSpace()
 						SPACE[ele].YFontCenter = SPACE[ele].BackgroundY + ay
 						SPACE[ele].fs = math.Clamp(DB.SIZE_H * 0.8, 4, 72)
 						SPACE[ele].fs = math.Round(SPACE[ele].fs, 0)
-						SPACE[ele].fs = lply:HudValue(ele, "TS")
+						SPACE[ele].fs = lply:HudValue(ele, "TS" )
 						SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_500"
 					elseif etab[5] == 1 then
 						--
@@ -331,7 +331,7 @@ function YRPHUDSpace()
 						SPACE[ele].YFontCenter = SPACE[ele].y + ay
 						SPACE[ele].fs = math.Clamp(DB.SIZE_H * 0.8, 4, 72)
 						SPACE[ele].fs = math.Round(SPACE[ele].fs, 0)
-						SPACE[ele].fs = lply:HudValue(ele, "TS")
+						SPACE[ele].fs = lply:HudValue(ele, "TS" )
 						SPACE[ele].font = "Y_" .. SPACE[ele].fs .. "_500"
 					elseif etab[5] == 3 then
 						
@@ -394,11 +394,11 @@ function YRPHUDSpace()
 								local IconMaterial = SPACE[ele].IconMaterial
 
 								-- Background
-								draw.RoundedBox(h / 4, BackgroundX, BackgroundY, BackgroundW, BackgroundH, Color(0, 0, 0, 160))
+								draw.RoundedBox(h / 4, BackgroundX, BackgroundY, BackgroundW, BackgroundH, Color(0, 0, 0, 160) )
 
 								-- BAR
-								draw.RoundedBox(BarH / 4, BarX, BarY, BarW, BarH, Color(BarColor.r, BarColor.g, BarColor.b, 30))
-								draw.RoundedBox(BarH / 4, BarX, BarY, BarW * SPACE[ele].oldc, BarH, Color(BarColor.r, BarColor.g, BarColor.b, 180))
+								draw.RoundedBox(BarH / 4, BarX, BarY, BarW, BarH, Color(BarColor.r, BarColor.g, BarColor.b, 30) )
+								draw.RoundedBox(BarH / 4, BarX, BarY, BarW * SPACE[ele].oldc, BarH, Color(BarColor.r, BarColor.g, BarColor.b, 180) )
 
 								-- ICON
 								if etab[3] != nil then
@@ -412,11 +412,11 @@ function YRPHUDSpace()
 								-- TEXT
 								draw.SimpleText(text, font, XFontCenter, YFontCenter, Color(255,255,255,255), AX, AY)
 							elseif etab[5] == 1 then
-								draw.RoundedBox(6, x, y, w, h, Color(0, 0, 0, Alpha))
+								draw.RoundedBox(6, x, y, w, h, Color(0, 0, 0, Alpha) )
 							elseif etab[5] == 2 then
 								draw.SimpleText(text, font, XFontCenter, YFontCenter, Color(255,255,255,255), AX, AY)
 							elseif etab[5] == 3 then
-								draw.RoundedBox(0, x, y, w, h, Color(BarColor.r, BarColor.g, BarColor.b, BarColor.a))
+								draw.RoundedBox(0, x, y, w, h, Color(BarColor.r, BarColor.g, BarColor.b, BarColor.a) )
 							end
 						end
 					else
@@ -428,4 +428,4 @@ function YRPHUDSpace()
 		end
 	end
 end
-hook.Add("HUDPaint", "yrp_hud_design_Space", YRPHUDSpace)
+hook.Add( "HUDPaint", "yrp_hud_design_Space", YRPHUDSpace)

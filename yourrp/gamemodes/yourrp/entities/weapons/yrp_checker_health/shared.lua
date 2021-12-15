@@ -42,8 +42,8 @@ function SWEP:Think()
 
 end
 
-local swingsound = Sound("Weapon_Stunstick.Single")
-local hitsound = Sound("Weapon_Stunstick.Melee_Hit")
+local swingsound = Sound( "Weapon_Stunstick.Single" )
+local hitsound = Sound( "Weapon_Stunstick.Melee_Hit" )
 
 SWEP.delay = 0
 SWEP.cooldown = 0.4
@@ -65,10 +65,10 @@ function SWEP:PrimaryAttack()
 
 		if tr.Entity:IsPlayer() then
 			if CLIENT then
-				chat.AddText("--- --- --- --- --- --- --- --- ---")
-				chat.AddText(YRP.lang_string("LID_health") .. " (" .. tr.Entity:RPName() .. ")" .. ": " .. tr.Entity:Health())
-				chat.AddText(YRP.lang_string("LID_armor") .. " (" .. tr.Entity:RPName() .. ")" .. ": " .. tr.Entity:Armor())
-				chat.AddText("--- --- --- --- --- --- --- --- ---")
+				chat.AddText( "--- --- --- --- --- --- --- --- ---" )
+				chat.AddText(YRP.lang_string( "LID_health" ) .. " ( " .. tr.Entity:RPName() .. " )" .. ": " .. tr.Entity:Health() )
+				chat.AddText(YRP.lang_string( "LID_armor" ) .. " ( " .. tr.Entity:RPName() .. " )" .. ": " .. tr.Entity:Armor() )
+				chat.AddText( "--- --- --- --- --- --- --- --- ---" )
 			end
 		end
 	else
@@ -93,9 +93,9 @@ function SWEP:SecondaryAttack()
 	ply:EmitSound(hitsound)
 
 	if CLIENT then
-		chat.AddText("--- --- --- --- --- --- --- --- ---")
-		chat.AddText(YRP.lang_string("LID_health") .. " (" .. ply:RPName() .. ")" .. ": " .. ply:Health())
-		chat.AddText(YRP.lang_string("LID_armor") .. " (" .. ply:RPName() .. ")" .. ": " .. ply:Armor())
-		chat.AddText("--- --- --- --- --- --- --- --- ---")
+		chat.AddText( "--- --- --- --- --- --- --- --- ---" )
+		chat.AddText(YRP.lang_string( "LID_health" ) .. " ( " .. ply:RPName() .. " )" .. ": " .. ply:Health() )
+		chat.AddText(YRP.lang_string( "LID_armor" ) .. " ( " .. ply:RPName() .. " )" .. ": " .. ply:Armor() )
+		chat.AddText( "--- --- --- --- --- --- --- --- ---" )
 	end
 end

@@ -2,7 +2,7 @@
 
 AddCSLuaFile()
 
-DEFINE_BASECLASS("yrp_money")
+DEFINE_BASECLASS( "yrp_money" )
 
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"

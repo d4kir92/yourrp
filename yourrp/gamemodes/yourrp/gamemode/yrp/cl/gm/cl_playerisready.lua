@@ -49,18 +49,19 @@ function YRPSendAskData()
 	if CurTime() <= 0 then
 		YRPAddReadyStatusMsg( "CurTime() is 0" )
 		YRPHR( Color( 255, 0, 0 ) )
-		MsgC( Color( 255, 0, 0 ), "[START] CurTime() is 0, Retry..." .. "\n" )
+		MsgC( Color( 255, 0, 0 ), "[START] CurTime() <= 0, Retry..." .. "\n" )
 		YRPHR( Color( 255, 0, 0 ) )
 		timer.Simple( 0.01, function()
 			YRPSendAskData()
 		end )
 	elseif !IsValid( LocalPlayer() ) then
-		YRPAddReadyStatusMsg( "LocalPlayer() is Invalid" )
+		YRPAddReadyStatusMsg( "LocalPlayer() is Invalid: " .. tostring( LocalPlayer() ) )
 		YRPHR( Color( 255, 0, 0 ) )
 		MsgC( Color( 255, 0, 0 ), "[START] LocalPlayer() is Invalid, Retry..." .. "\n" )
 		YRPHR( Color( 255, 0, 0 ) )
 
 		timer.Simple( 0.01, function()
+			YRPAddReadyStatusMsg( "LocalPlayer() Retry: " .. tostring( LocalPlayer() ) )
 			YRPSendAskData()
 		end )
 	else
@@ -68,7 +69,7 @@ function YRPSendAskData()
 
 		YRPAddReadyStatusMsg( "Send" )
 		
-		net.Start("sendstartdata")
+		net.Start( "sendstartdata" )
 			net.WriteUInt( info.os, 2 )
 			net.WriteString( info.branch )
 			net.WriteString( info.country )

@@ -29,16 +29,16 @@ end
 
 local _pr = {}
 
-local _adminonly = Material("icon16/shield.png")
+local _adminonly = Material( "icon16/shield.png" )
 local pmid = 1
 function createRoleBox(rol, parent, mainparent)
 	if rol != nil then
 		local BR = 0
 		local RW = YRP.ctr(600)
 		local RH = YRP.ctr(150)
-		local _rol = createD("DPanel", parent, RW, RH, 0, 0)
+		local _rol = createD( "DPanel", parent, RW, RH, 0, 0)
 		function _rol:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "BG"))
+			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "BG" ) )
 			--drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
 		end
 		_rol.tbl = rol
@@ -46,14 +46,14 @@ function createRoleBox(rol, parent, mainparent)
 		-- Role Playermodel --
 		local pm = _rol.tbl.pms[1] or {}
 		if pm.string_model != nil and pm.string_model != "" then
-			local p = createD("DModelPanel", _rol, _rol:GetTall() - 2 * BR, _rol:GetTall() - 2 * BR, BR, BR)
+			local p = createD( "DModelPanel", _rol, _rol:GetTall() - 2 * BR, _rol:GetTall() - 2 * BR, BR, BR)
 			p:SetModel(pm.string_model)
 			--local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
 			--p.Entity:SetModelScale(randsize, 0)
 
 			if p.Entity:IsValid() then
 				function p:LayoutEntity( ent )
-					ent:SetSequence( ent:LookupSequence("menu_gman") )
+					ent:SetSequence( ent:LookupSequence( "menu_gman" ) )
 					p:RunAnimation()
 					return
 				end
@@ -71,7 +71,7 @@ function createRoleBox(rol, parent, mainparent)
 		end
 
 		-- Role Name --
-		_rol.rn = createD("DPanel", _rol, _rol:GetWide(), RH, 0, 0)
+		_rol.rn = createD( "DPanel", _rol, _rol:GetWide(), RH, 0, 0)
 		_rol.rn.rolename = _rol.rn:GetParent().tbl.string_name
 		_rol.rn.rolecolor = StringToColor(_rol.rn:GetParent().tbl.string_color)
 		function _rol.rn:Paint(pw, ph)
@@ -79,7 +79,7 @@ function createRoleBox(rol, parent, mainparent)
 		end
 
 		-- Role Salary --
-		_rol.rs = createD("DPanel", _rol, _rol:GetWide(), RH, 0, 0)
+		_rol.rs = createD( "DPanel", _rol, _rol:GetWide(), RH, 0, 0)
 		_rol.rs.rolesalary = _rol.rs:GetParent().tbl.int_salary
 		_rol.rs.rolecolor = StringToColor(_rol.rn:GetParent().tbl.string_color)
 		function _rol.rs:Paint(pw, ph)
@@ -88,7 +88,7 @@ function createRoleBox(rol, parent, mainparent)
 
 		-- Role MaxAmount --
 		if tonumber(rol.int_maxamount) > 0 then
-			_rol.ma = createD("DPanel", _rol, _rol:GetWide(), RH, 0, 0)
+			_rol.ma = createD( "DPanel", _rol, _rol:GetWide(), RH, 0, 0)
 			function _rol.ma:Paint(pw, ph)
 				local _br = 4
 				pw = pw - 2 * YRP.ctr(4)
@@ -98,10 +98,10 @@ function createRoleBox(rol, parent, mainparent)
 				local w = 80
 				local h = 40
 				local br = 20
-				draw.RoundedBox(4, pw - YRP.ctr(w + br), ph - YRP.ctr(h + br), YRP.ctr(w), YRP.ctr(h), Color(200, 200, 200, 60))
+				draw.RoundedBox(4, pw - YRP.ctr(w + br), ph - YRP.ctr(h + br), YRP.ctr(w), YRP.ctr(h), Color(200, 200, 200, 60) )
 
 				--Maxamount
-				--draw.RoundedBox(0, YRP.ctr(_br), 0, (rol.int_uses / rol.int_maxamount) * pw, ph, Color(255, 0, 0, 255))
+				--draw.RoundedBox(0, YRP.ctr(_br), 0, (rol.int_uses / rol.int_maxamount) * pw, ph, Color(255, 0, 0, 255) )
 				local color = Color(255, 255, 255)
 				if tonumber(rol.int_uses) == tonumber(rol.int_maxamount) then
 					color = Color(255, 0, 0)
@@ -109,46 +109,46 @@ function createRoleBox(rol, parent, mainparent)
 				draw.SimpleText(self:GetParent().tbl.int_uses .. "/" .. self:GetParent().tbl.int_maxamount, "Y_20_500", pw - YRP.ctr(w / 2 + br), ph - YRP.ctr(h / 2 + br) * 1.1, color, 1, 1)
 
 				--BR
-				--drawRBBR(0, YRP.ctr(_br), 0, pw, ph, Color(0, 0, 0, 255), YRP.ctr(4))
+				--drawRBBR(0, YRP.ctr(_br), 0, pw, ph, Color(0, 0, 0, 255), YRP.ctr(4) )
 			end
 		end
 
 		-- Role Button --
-		_rol.gr = createD("YButton", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0)
+		_rol.gr = createD( "YButton", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0)
 		function _rol.gr:Paint(pw, ph)
-			--hook.Run("YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string("LID_moreinformation"))
+			--hook.Run( "YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string( "LID_moreinformation" ) )
 			if self:IsHovered() then
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 60))
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 60) )
 			end
 		end
-		_rol.gr:SetText("")
+		_rol.gr:SetText( "" )
 		function _rol.gr:DoClick()
 			pmid = 1
 			ROLEMENU.pms:Clear()
 			for i, pmtab in pairs(rol.pms) do
-				local bgpm = createD("DPanel", ROLEMENU.pms, YRP.ctr(200), YRP.ctr(400), (i - 1) * YRP.ctr(200), 0)
+				local bgpm = createD( "DPanel", ROLEMENU.pms, YRP.ctr(200), YRP.ctr(400), (i - 1) * YRP.ctr(200), 0)
 				bgpm.id = i
 				function bgpm:Paint(pw, ph)
 					if self.id == pmid then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10) )
 					end
 				end
 
-				local dmp = createD("DModelPanel", bgpm, YRP.ctr(200), YRP.ctr(400), 0, 0)
+				local dmp = createD( "DModelPanel", bgpm, YRP.ctr(200), YRP.ctr(400), 0, 0)
 				timer.Simple(i * 0.3, function()
-					if IsValid(dmp) then
+					if IsValid( dmp) then
 						dmp:SetModel(pmtab.string_model)
 						local randsize = math.Rand(pmtab.float_size_min, pmtab.float_size_max)
-						if wk(dmp.Entity) then
+						if wk( dmp.Entity) then
 							dmp.Entity:SetModelScale(randsize + 1, 0)
-							dmp.Entity:SetPos(Vector(0, 0, - 40))
+							dmp.Entity:SetPos( Vector(0, 0, - 40) )
 						end
 					end
 				end)
 
-				local bpm = createD("DButton", dmp, YRP.ctr(200), YRP.ctr(400), 0, 0)
+				local bpm = createD( "DButton", dmp, YRP.ctr(200), YRP.ctr(400), 0, 0)
 				bpm.id = i
-				bpm:SetText("")
+				bpm:SetText( "" )
 				function bpm:Paint(pw, ph)
 					--
 				end
@@ -156,27 +156,27 @@ function createRoleBox(rol, parent, mainparent)
 					pmid = self.id
 				end
 
-				ROLEMENU.pms:AddPanel(bgpm)
+				ROLEMENU.pms:AddPanel( bgpm)
 			end
 
 			ROLEMENU.info.rolename = rol.string_name
 			ROLEMENU.info.rolecolor = rol.string_color
 
-			ROLEMENU.infodesc:SetText("")
+			ROLEMENU.infodesc:SetText( "" )
 			if ROLEMENU.infodesc.SetUnderlineFont != nil then
-				ROLEMENU.infodesc:SetUnderlineFont("Y_20_500")
+				ROLEMENU.infodesc:SetUnderlineFont( "Y_20_500" )
 			end
-			ROLEMENU.infodesc:SetFontInternal("Y_20_500")
+			ROLEMENU.infodesc:SetFontInternal( "Y_20_500" )
 			ROLEMENU.infodesc:InsertColorChange(255, 255, 255, 255)
 			ROLEMENU.infodesc:AppendText(rol.string_description)
 
-			ROLEMENU.infosweps:SetText("")
+			ROLEMENU.infosweps:SetText( "" )
 			if ROLEMENU.infosweps.SetUnderlineFont != nil then
-				ROLEMENU.infosweps:SetUnderlineFont("Y_20_500")
+				ROLEMENU.infosweps:SetUnderlineFont( "Y_20_500" )
 			end
-			ROLEMENU.infosweps:SetFontInternal("Y_20_500")
+			ROLEMENU.infosweps:SetFontInternal( "Y_20_500" )
 			ROLEMENU.infosweps:InsertColorChange(255, 255, 255, 255)
-			ROLEMENU.infosweps:AppendText(string.Implode(", ", string.Explode(",", rol.string_sweps)))
+			ROLEMENU.infosweps:AppendText(string.Implode( ", ", string.Explode( ",", rol.string_sweps) ))
 
 			ROLEMENU.info.rolesala = rol.int_salary
 			ROLEMENU.info.roleswep = rol.string_sweps
@@ -197,10 +197,10 @@ end
 
 function createBouncer(parent, mainparent)
 	if parent:IsValid() and mainparent:IsValid() then
-		parent:SetWide(mainparent:GetWide() - YRP.ctr(140))
-		local _bou = createD("DPanel", parent, YRP.ctr(50), YRP.ctr(200), 0, 0)
+		parent:SetWide(mainparent:GetWide() - YRP.ctr(140) )
+		local _bou = createD( "DPanel", parent, YRP.ctr(50), YRP.ctr(200), 0, 0)
 		function _bou:Paint(pw, ph)
-			surfaceText("➔", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			surfaceText( "➔", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
 		end
 		if parent.AddPanel != nil then
 			parent:AddPanel(_bou)
@@ -217,14 +217,14 @@ function addPreRole(rol, parent, mainparent)
 end
 
 function getPreRole(uid, parent, mainparent)
-	net.Receive("get_rol_prerole", function(len)
+	net.Receive( "get_rol_prerole", function(len)
 		local _prerole = net.ReadTable()
 		if _prerole.int_prerole != nil then
 			addPreRole(_prerole, _pr[_prerole.int_prerole], mainparent)
 		end
 	end)
 
-	net.Start("get_rol_prerole")
+	net.Start( "get_rol_prerole" )
 		net.WriteString(uid)
 	net.SendToServer()
 end
@@ -239,10 +239,10 @@ function addRoleRow(rol, parent)
 	if pa(parent) then
 		local RRW = YRP.ctr(600)
 		local RRH = YRP.ctr(150)
-		local _rr = createD("DHorizontalScroller", parent.content, RRW, RRH, 0, 0) --parent:GetWide() - 2*YRP.ctr(parent:GetSpacing()), YRP.ctr(400), 0, 0)
-		_rr:SetOverlap(YRP.ctr(-30))
+		local _rr = createD( "DHorizontalScroller", parent.content, RRW, RRH, 0, 0) --parent:GetWide() - 2*YRP.ctr(parent:GetSpacing() ), YRP.ctr(400), 0, 0)
+		_rr:SetOverlap(YRP.ctr(-30) )
 		function _rr:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 0))
+			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 0) )
 		end
 
 		addRole(rol, _rr, parent)
@@ -252,7 +252,7 @@ function addRoleRow(rol, parent)
 end
 
 function getRoles(uid, parent)
-	net.Receive("get_grp_roles", function(len)
+	net.Receive( "get_grp_roles", function(len)
 		local _roles = net.ReadTable()
 
 		for i, rol in pairs(_roles) do
@@ -263,7 +263,7 @@ function getRoles(uid, parent)
 		--getGroups(uid, parent)
 	end)
 
-	net.Start("get_grp_roles")
+	net.Start( "get_grp_roles" )
 		net.WriteString(uid)
 	net.SendToServer()
 
@@ -272,13 +272,13 @@ end
 
 function addGroup(grp, parent)
 	if parent != NULL and pa(parent) then
-		local _grp = createD("DYRPCollapsibleCategory", parent, parent:GetWide() - YRP.ctr(80), YRP.ctr(200), YRP.ctr(0), YRP.ctr(0))
+		local _grp = createD( "DYRPCollapsibleCategory", parent, parent:GetWide() - YRP.ctr(80), YRP.ctr(200), YRP.ctr(0), YRP.ctr(0) )
 		_grp:SetHeader(grp.string_name)
 		_grp:SetSpacing(30)
-		_grp.color = string.Explode(",", grp.string_color)
+		_grp.color = string.Explode( ",", grp.string_color)
 		_grp.color = Color(_grp.color[1], _grp.color[2], _grp.color[3])
-		local headeralpha = lply:InterfaceValue("YButton", "HC").a
-		local contentalpha = lply:InterfaceValue("YFrame", "BG").a
+		local headeralpha = lply:InterfaceValue( "YButton", "HC" ).a
+		local contentalpha = lply:InterfaceValue( "YFrame", "BG" ).a
 		local contentdarker = 8
 		_grp.tbl = grp
 		_grp.locked = tobool(grp.bool_locked)
@@ -288,14 +288,14 @@ function addGroup(grp, parent)
 			if self.header:IsHovered() then
 				_hl = 70
 			end
-			draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl, headeralpha), true, true, !self:IsOpen(), !self:IsOpen())
+			draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl, headeralpha), true, true, !self:IsOpen(), !self:IsOpen() )
 			local _x = ph / 2
 			if strUrl(grp.string_icon) then
 				_x = ph
 			end
 			local name = self.tbl.string_name
 			if tonumber(self.tbl.int_parentgroup) == 0 then
-				name = YRP.lang_string("LID_faction") .. ": " .. name
+				name = YRP.lang_string( "LID_faction" ) .. ": " .. name
 			end
 			draw.SimpleText(name, "Y_24_500", _x, ph / 2, Color(255, 255, 255), 0, 1)
 
@@ -306,16 +306,16 @@ function addGroup(grp, parent)
 			if self:IsOpen() then
 				_tog = "▲"
 			end
-			draw.RoundedBox(0, pw - _box - _br, _br, _box, _box, Color(self.color.r - _dif, self.color.g - _dif, self.color.b - _dif, headeralpha))
+			draw.RoundedBox(0, pw - _box - _br, _br, _box, _box, Color(self.color.r - _dif, self.color.g - _dif, self.color.b - _dif, headeralpha) )
 			draw.SimpleText(_tog, "Y_24_500", pw - _box / 2 - _br, _br + _box / 2, Color(255, 255, 255), 1, 1)
 			if tobool(grp.bool_locked) then
-				YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), Color(255, 0, 0, 200))
+				YRP.DrawIcon(YRP.GetDesignIcon( "lock" ), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), Color(255, 0, 0, 200) )
 			end
 		end
 		function _grp:PaintContent(pw, ph)
 			draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r - contentdarker, self.color.g - contentdarker, self.color.b - contentdarker, contentalpha), false, false, true, true)
 		end
-		_grp:SetHeaderHeight(YRP.ctr(100))
+		_grp:SetHeaderHeight(YRP.ctr(100) )
 
 		function _grp:DoClick()
 			if !tobool(grp.bool_locked) then
@@ -328,8 +328,8 @@ function addGroup(grp, parent)
 		end
 		
 		if strUrl(grp.string_icon) then
-			_grp.icon = createD("DHTML", _grp, _grp:GetTall() - 2 * BR, _grp:GetTall() - 2 * BR, BR, BR)
-			_grp.icon:SetHTML(GetHTMLImage(grp.string_icon, _grp.icon:GetWide(), _grp.icon:GetTall()))
+			_grp.icon = createD( "DHTML", _grp, _grp:GetTall() - 2 * BR, _grp:GetTall() - 2 * BR, BR, BR)
+			_grp.icon:SetHTML(GetHTMLImage(grp.string_icon, _grp.icon:GetWide(), _grp.icon:GetTall() ))
 		end
 
 		if pa(parent) then
@@ -339,11 +339,11 @@ function addGroup(grp, parent)
 				elseif parent.Add then
 					parent:Add(_grp)
 				else
-					YRP.msg("error", "grp.int_parentgroup: " .. type(grp.int_parentgroup) .. " | " .. "parent.Add: " .. tostring(parent.Add))
+					YRP.msg( "error", "grp.int_parentgroup: " .. type(grp.int_parentgroup) .. " | " .. "parent.Add: " .. tostring(parent.Add) )
 				end
 			--end
 		else
-			YRP.msg("note", "parent not valid")
+			YRP.msg( "note", "parent not valid" )
 		end
 
 		if parent.Rebuild then
@@ -357,10 +357,10 @@ function addGroup(grp, parent)
 end
 
 function getGroups(uid, parent)
-	net.Receive("get_grps", function(len)
+	net.Receive( "get_grps", function(len)
 		local _groups = net.ReadTable()
 		local dg = nil -- Default Group
-		for i, grp in SortedPairsByMemberValue(_groups, "int_position") do
+		for i, grp in SortedPairsByMemberValue(_groups, "int_position" ) do
 			grp.uniqueID = tonumber(grp.uniqueID)
 			local g = addGroup(grp, parent)
 			if grp.uniqueID == 1 then
@@ -368,34 +368,34 @@ function getGroups(uid, parent)
 			end
 		end
 		timer.Simple(0.2, function()
-			if wk(dg) and wk(dg.header) then
+			if wk( dg) and wk( dg.header) then
 				dg.header:DoClick()
 			end
 		end)
 	end)
 
-	net.Start("get_grps")
+	net.Start( "get_grps" )
 		net.WriteString(uid)
 	net.SendToServer()
 end
 
 function OpenRoleMenu()
 	openMenu()
-	if GetGlobalBool("bool_players_can_switch_role", false) then
+	if GetGlobalBool( "bool_players_can_switch_role", false) then
 		ROLEMENU.open = true
-		ROLEMENU.window = createD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
-		ROLEMENU.window:SetMinWidth(BFW())
-		ROLEMENU.window:SetMinHeight(BFH())
+		ROLEMENU.window = createD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
+		ROLEMENU.window:SetMinWidth(BFW() )
+		ROLEMENU.window:SetMinHeight(BFH() )
 		ROLEMENU.window:Center()
 		ROLEMENU.window:Sizable(true)
-		ROLEMENU.window:SetTitle("LID_rolemenu")
+		ROLEMENU.window:SetTitle( "LID_rolemenu" )
 		ROLEMENU.window:SetHeaderHeight(50)
 		ROLEMENU.window:SetBackgroundBlur(true)
 		ROLEMENU.window.systime = SysTime()
 
 		function ROLEMENU.window:Paint(pw, ph)
 			Derma_DrawBackgroundBlur(self, self.systime)
-			hook.Run("YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string("LID_ROLEMENU.window") .. " [PROTOTYPE]")
+			hook.Run( "YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string( "LID_ROLEMENU.window" ) .. " [PROTOTYPE]" )
 		end
 
 		ROLEMENU.window:MakePopup()

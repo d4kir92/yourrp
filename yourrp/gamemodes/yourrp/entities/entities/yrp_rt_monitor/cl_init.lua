@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-include("shared.lua")
+include( "shared.lua" )
 
 local renw = 240
 local renh = 200
@@ -12,11 +12,11 @@ local scrw = ScH() * 2.4 --renw * 4
 local scrh = ScH() * 2 --renh * 4
 
 function ENT:Draw()
-	if LocalPlayer():GetPos():Distance(self:GetPos()) < 2000 then
+	if LocalPlayer():GetPos():Distance(self:GetPos() ) < 2000 then
 		self:DrawModel()
 
 		if self.camera == NULL or self.camera == nil then
-			for i, ent in pairs(ents.GetAll()) do
+			for i, ent in pairs(ents.GetAll() ) do
 				if ent:GetClass() == "yrp_rt_camera" then
 					if ent.monitor == nil then
 						ent.monitor = self
@@ -26,7 +26,7 @@ function ENT:Draw()
 				end
 			end
 		end
-		if LocalPlayer():GetPos():Distance(self:GetPos()) < 300 then
+		if LocalPlayer():GetPos():Distance(self:GetPos() ) < 300 then
 			local monitor = self
 			local monpos = monitor:GetPos() + monitor:GetUp() * -7.1 + monitor:GetForward() * 12 + monitor:GetRight() * -1.2
 			local monang = monitor:GetAngles()
@@ -47,8 +47,8 @@ function ENT:Draw()
 
 				local index = self:EntIndex()
 
-				self.map_RT = GetRenderTarget("YRP_RT_CAM" .. index, tarw, tarh, true)
-				self.map_RT_mat = CreateMaterial("YRP_RT_CAM" .. index, "UnlitGeneric", { ["$basetexture"] = "YRP_RT_CAM" .. index })
+				self.map_RT = GetRenderTarget( "YRP_RT_CAM" .. index, tarw, tarh, true)
+				self.map_RT_mat = CreateMaterial( "YRP_RT_CAM" .. index, "UnlitGeneric", { ["$basetexture"] = "YRP_RT_CAM" .. index })
 				self.old_RT = render.GetRenderTarget()
 
 				self.delay = self.delay or 0
@@ -68,7 +68,7 @@ function ENT:Draw()
 						CamData.h = scrh
 						CamData.fov = 130
 						render.RenderView( CamData )
-						--render.SetViewPort(0, 0, ScW(), ScH())
+						--render.SetViewPort(0, 0, ScW(), ScH() )
 					cam.End2D()
 					render.SetRenderTarget(self.old_RT)
 				else

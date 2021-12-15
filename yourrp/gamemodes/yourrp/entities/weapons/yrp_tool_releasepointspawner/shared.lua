@@ -42,7 +42,7 @@ end
 
 function SWEP:Reload()
 	local pos = ""
-	for i, v in pairs(GetGlobalTable("yrp_releasepoints")) do
+	for i, v in pairs(GetGlobalTable( "yrp_releasepoints" ) ) do
 		pos = v.pos
 	end
 	if pos != "" then
@@ -60,11 +60,11 @@ function SWEP:PrimaryAttack()
 		self.pdelay = CurTime() + 0.4
 		if CLIENT then
 			local lply = LocalPlayer()
-			net.Start("dbInsertIntoMap")
-				net.WriteString("yrp_" .. GetMapNameDB())
-				net.WriteString("position, angle, type")
-				local tmpPos = string.Explode(" ", tostring(lply:GetPos()))
-				local tmpAng = string.Explode(" ", tostring(lply:GetAngles()))
+			net.Start( "dbInsertIntoMap" )
+				net.WriteString( "yrp_" .. GetMapNameDB() )
+				net.WriteString( "position, angle, type" )
+				local tmpPos = string.Explode( " ", tostring(lply:GetPos() ))
+				local tmpAng = string.Explode( " ", tostring(lply:GetAngles() ))
 				local tmpString = "'" .. tonumber(tmpPos[1]) .. "," .. tonumber(tmpPos[2]) .. "," .. tonumber(tmpPos[3] + 4) .. "', '" .. tonumber(tmpAng[1]) .. "," .. tonumber(tmpAng[2]) .. "," .. tonumber(tmpAng[3]) .. "', 'releasepoint'"
 				net.WriteString(tmpString)
 			net.SendToServer()
@@ -81,7 +81,7 @@ function SWEP:PrimaryAttack()
 			} )
 			pos = tr.HitPos or pos
 
-			YRP.msg("db", "Added Releasepoint")
+			YRP.msg( "db", "Added Releasepoint" )
 
 			UpdateReleasepointTable()
 		end
@@ -101,21 +101,21 @@ function SWEP:SecondaryAttack()
 		pos = tr.HitPos or pos
 
 		local found = false
-		for i, v in pairs(GetGlobalTable("yrp_releasepoints")) do
-			local p = StringToVector(v.pos)
+		for i, v in pairs(GetGlobalTable( "yrp_releasepoints" ) ) do
+			local p = StringToVector( v.pos)
 			if p:Distance(pos) < size * 2 then
-				YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
-				YRP.msg("db", "Removed Spawner")
+				YRP_SQL_DELETE_FROM( "yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'" )
+				YRP.msg( "db", "Removed Spawner" )
 				found = true
 			end
 		end
 
 		if !found then
-			for i, v in pairs(GetGlobalTable("yrp_releasepoints")) do
-				local p = StringToVector(v.pos)
-				if p:Distance(ply:GetPos()) < 160 then
-					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
-					YRP.msg("db", "Removed Spawner")
+			for i, v in pairs(GetGlobalTable( "yrp_releasepoints" ) ) do
+				local p = StringToVector( v.pos)
+				if p:Distance(ply:GetPos() ) < 160 then
+					YRP_SQL_DELETE_FROM( "yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'" )
+					YRP.msg( "db", "Removed Spawner" )
 				end
 			end
 		end
@@ -129,7 +129,7 @@ if CLIENT then
 	local g = math.random(0, 255)
 	local b = math.random(0, 255)
 	local delay = CurTime()
-	hook.Add("PostDrawTranslucentRenderables", "yrp_draw_releasepoint", function()
+	hook.Add( "PostDrawTranslucentRenderables", "yrp_draw_releasepoint", function()
 		if LocalPlayer():GetActiveWeapon():IsValid() and LocalPlayer():GetActiveWeapon():GetClass() == "yrp_tool_releasepointspawner" then
 			if delay < CurTime() then
 				delay = CurTime() + 0.1
@@ -137,8 +137,8 @@ if CLIENT then
 				g = math.random(0, 255)
 				b = math.random(0, 255)
 			end
-			for i, v in pairs(GetGlobalTable("yrp_releasepoints")) do
-				local pos = StringToVector(v.pos)
+			for i, v in pairs(GetGlobalTable( "yrp_releasepoints" ) ) do
+				local pos = StringToVector( v.pos)
 				if LocalPlayer():GetPos():Distance(pos) < 6000 then
 					render.SetColorMaterial()
 					render.DrawSphere(pos, size, 16, 16, Color(r, g, b, 200) )

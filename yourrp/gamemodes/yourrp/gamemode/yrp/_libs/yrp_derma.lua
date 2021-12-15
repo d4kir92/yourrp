@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-local MaterialBlur = Material("pp/blurscreen.png", "noclamp")
+local MaterialBlur = Material( "pp/blurscreen.png", "noclamp" )
 function DrawRectBlur(pnl, px, py, sw, sh, blur)
     render.ClearStencil()
 	render.SetStencilEnable(true)
@@ -26,10 +26,10 @@ function DrawRectBlur(pnl, px, py, sw, sh, blur)
 		surface.SetDrawColor(255, 255, 255)
 		surface.SetMaterial(MaterialBlur)
 		for i = 1, 3 do
-			MaterialBlur:SetFloat("$blur", (i / 3) * blur)
+			MaterialBlur:SetFloat( "$blur", (i / 3) * blur)
 			MaterialBlur:Recompute()
 			render.UpdateScreenEffectTexture()
-			surface.DrawTexturedRect(x * -1, y * -1, ScrW(), ScrH())
+			surface.DrawTexturedRect(x * -1, y * -1, ScrW(), ScrH() )
 		end
 	
     render.SetStencilEnable(false)
@@ -37,13 +37,13 @@ end
 
 local steps = 3
 --local multiplier = 6
-local mat = Material("pp/blurscreen")
-mat:SetFloat("$blur", 3)
+local mat = Material( "pp/blurscreen" )
+mat:SetFloat( "$blur", 3)
 mat:Recompute()
 local function DrawBlur(r, px, py, sw, sh, alpha)
 
 	alpha = alpha or 100
-	alpha = math.Clamp(alpha, 0, 100)
+	alpha = math.Clamp( alpha, 0, 100)
 
 	if alpha > 0 then
 		render.ClearStencil()
@@ -57,20 +57,20 @@ local function DrawBlur(r, px, py, sw, sh, alpha)
 			render.SetStencilFailOperation( STENCIL_KEEP )
 			render.SetStencilZFailOperation( STENCIL_KEEP )
 			
-			draw.RoundedBox(r, px, py, sw, sh, Color(50, 50, 50, 10))
+			draw.RoundedBox(r, px, py, sw, sh, Color(50, 50, 50, 10) )
 
 			render.SetStencilCompareFunction( STENCIL_EQUAL )
 			render.SetStencilPassOperation( STENCIL_KEEP )
 			
 			render.SetMaterial(mat)
 			for i = 1, steps do
-				mat:SetFloat("$blur", (i / steps) * (6))
+				mat:SetFloat( "$blur", (i / steps) * (6) )
 				mat:Recompute()
 				render.UpdateScreenEffectTexture()
 				render.DrawScreenQuad()
 			end
 
-			draw.RoundedBox(r, 0, 0, ScrW(), ScrH(), Color(50, 50, 50, alpha))
+			draw.RoundedBox(r, 0, 0, ScrW(), ScrH(), Color(50, 50, 50, alpha) )
 			
 		render.SetStencilEnable( false )
 	end
@@ -117,7 +117,7 @@ function DHorizontalScroller(tab)
 	tab.h = tab.h or 100
 	tab.br = tab.br or 10
 	tab.color = tab.color or Color(255, 0, 0, 0)
-	local dhorizontalscroller = createD("DHorizontalScroller", tab.parent, tab.w, tab.h, tab.x, tab.y)
+	local dhorizontalscroller = createD( "DHorizontalScroller", tab.parent, tab.w, tab.h, tab.x, tab.y)
 	function dhorizontalscroller:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 	end
@@ -138,7 +138,7 @@ function DGroup(tab)
 	tab.bgcolor = tab.bgcolor or Color(80, 80, 80)
 	tab.name = tab.name or "Unnamed Header"
 	local dgroup = {}
-	dgroup.header = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
+	dgroup.header = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
 	function dgroup.header:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		ph = YRP.ctr(50)
@@ -154,7 +154,7 @@ function DGroup(tab)
 		DrawText(text)
 	end
 
-	dgroup.content = createD("DPanelList", dgroup.header, tab.w - 2 * tab.br, tab.h - 1 * tab.br - YRP.ctr(50), tab.br, YRP.ctr(50))
+	dgroup.content = createD( "DPanelList", dgroup.header, tab.w - 2 * tab.br, tab.h - 1 * tab.br - YRP.ctr(50), tab.br, YRP.ctr(50) )
 	dgroup.content:EnableVerticalScrollbar(true)
 	function dgroup.content:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.bgcolor)
@@ -162,19 +162,19 @@ function DGroup(tab)
 
 	if tab.parent != nil then
 		if tab.parent.AddPanel != nil then
-			tab.parent:AddPanel(dgroup.header)
+			tab.parent:AddPanel( dgroup.header)
 		elseif tab.parent.AddItem != nil then
-			tab.parent:AddItem(dgroup.header)
+			tab.parent:AddItem( dgroup.header)
 		end
 	end
 
 	function dgroup.content:AutoSize()
 		dgroup.content.height = 0
-		for i, child in pairs(dgroup.content:GetItems()) do
+		for i, child in pairs( dgroup.content:GetItems() ) do
 			dgroup.content.height = dgroup.content.height + child:GetTall()
 		end
-		dgroup.header:SetTall(dgroup.content.height + YRP.ctr(50 + 20))
-		dgroup.content:SetTall(dgroup.content.height)
+		dgroup.header:SetTall( dgroup.content.height + YRP.ctr(50 + 20) )
+		dgroup.content:SetTall( dgroup.content.height)
 	end
 	return dgroup.content
 end
@@ -190,7 +190,7 @@ function DName(tab)
 	tab.color = tab.color or Color(255, 255, 255)
 	tab.bgcolor = tab.bgcolor or Color(80, 80, 80)
 	tab.name = tab.name or "Unnamed"
-	local dname = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
+	local dname = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
 	function dname:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -205,7 +205,7 @@ function DName(tab)
 	end
 
 	if tab.parent != nil then
-		tab.parent:AddItem(dname)
+		tab.parent:AddItem( dname)
 	end
 	return dname
 end
@@ -225,7 +225,7 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 
 	local dintcomboboxbox = {}
 
-	dintcomboboxbox.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	dintcomboboxbox.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function dintcomboboxbox.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -239,28 +239,28 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 		DrawText(text)
 	end
 
-	dintcomboboxbox.dcombobox = createD("DComboBox", dintcomboboxbox.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	dintcomboboxbox.dcombobox = createD( "DComboBox", dintcomboboxbox.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	dintcomboboxbox.dcombobox:SetSortItems(false)
 	dintcomboboxbox.dcombobox.serverside = false
 	if choices != nil then
-		for i, choice in pairs(choices) do
+		for i, choice in pairs( choices) do
 			local _sel = false
 			if selected == choice.data then
 				_sel = true
 			end
-			dintcomboboxbox.dcombobox:AddChoice(choice.name, choice.data, _sel)
+			dintcomboboxbox.dcombobox:AddChoice( choice.name, choice.data, _sel)
 		end
 	end
 	function dintcomboboxbox.dcombobox:OnSelect(index, value, data)
 		if netstr != nil then
 			net.Start(netstr)
-				net.WriteInt(data, 32)
+				net.WriteInt( data, 32)
 			net.SendToServer()
 		end
 	end
 
 	if tab.parent != nil then
-		tab.parent:AddItem(dintcomboboxbox.line)
+		tab.parent:AddItem( dintcomboboxbox.line)
 	end
 	return dintcomboboxbox.dcombobox
 end
@@ -281,7 +281,7 @@ function DBoolLine(tab, value, str, netstr)
 
 	local dboolline = {}
 
-	dboolline.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	dboolline.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function dboolline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -295,32 +295,32 @@ function DBoolLine(tab, value, str, netstr)
 		DrawText(text)
 	end
 
-	dboolline.dcheckbox = createD("DCheckBox", dboolline.line, tab.h, tab.h, tab.brx, 0)
-	dboolline.dcheckbox:SetValue(value)
+	dboolline.dcheckbox = createD( "DCheckBox", dboolline.line, tab.h, tab.h, tab.brx, 0)
+	dboolline.dcheckbox:SetValue( value)
 	function dboolline.dcheckbox:Paint(pw, ph)
-		surfaceCheckBox(self, ph, ph, "done")
+		surfaceCheckBox(self, ph, ph, "done" )
 	end
 	dboolline.dcheckbox.serverside = false
 	if netstr != nil then
-		function dboolline.dcheckbox:OnChange(bVal)
+		function dboolline.dcheckbox:OnChange( bVal)
 			if !self.serverside and netstr != "" then
 				net.Start(netstr)
-					net.WriteBool(bVal)
+					net.WriteBool( bVal)
 				net.SendToServer()
 			end
 		end
 		net.Receive(netstr, function(len)
-			local b = btn(net.ReadString())
-			if pa(dboolline.dcheckbox) then
+			local b = btn(net.ReadString() )
+			if pa( dboolline.dcheckbox) then
 				dboolline.dcheckbox.serverside = true
-				dboolline.dcheckbox:SetValue(b)
+				dboolline.dcheckbox:SetValue( b)
 				dboolline.dcheckbox.serverside = false
 			end
 		end)
 	end
 
 	if tab.parent != nil then
-		tab.parent:AddItem(dboolline.line)
+		tab.parent:AddItem( dboolline.line)
 	end
 	return dboolline.dcheckbox
 end
@@ -341,7 +341,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 
 	local dfloatline = {}
 
-	dfloatline.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	dfloatline.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function dfloatline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -356,7 +356,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 
 		if dmg != nil and dfloatline.dnumberwang != nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. YRP.lang_string("LID_damage")
+			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. YRP.lang_string( "LID_damage" )
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "Y_22_500"
@@ -367,11 +367,11 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 		end
 	end
 
-	dfloatline.dnumberwang = createD("DNumberWang", dfloatline.line, YRP.ctr(200), tab.h, tab.brx, 0)
+	dfloatline.dnumberwang = createD( "DNumberWang", dfloatline.line, YRP.ctr(200), tab.h, tab.brx, 0)
 	dfloatline.dnumberwang:SetMax(max or 100)
 	dfloatline.dnumberwang:SetMin(min or 0)
 	dfloatline.dnumberwang:SetDecimals(6)
-	dfloatline.dnumberwang:SetValue(value)
+	dfloatline.dnumberwang:SetValue( value)
 	dfloatline.dnumberwang.serverside = false
 	function dfloatline.dnumberwang:OnChange()
 		local val = self:GetValue()
@@ -379,19 +379,19 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 			if val <= self:GetMax() then
 				if !self.serverside and netstr != "" then
 					net.Start(netstr)
-						net.WriteFloat(val)
+						net.WriteFloat( val)
 					net.SendToServer()
 				end
 			else
-				dfloatline.dnumberwang:SetText(self:GetMax())
+				dfloatline.dnumberwang:SetText(self:GetMax() )
 			end
 		else
-			dfloatline.dnumberwang:SetText(self:GetMin())
+			dfloatline.dnumberwang:SetText(self:GetMin() )
 		end
 	end
 	net.Receive(netstr, function(len)
 		local f = net.ReadFloat()
-		if pa(dfloatline.dnumberwang) then
+		if pa( dfloatline.dnumberwang) then
 			dfloatline.dnumberwang.serverside = true
 			dfloatline.dnumberwang:SetValue(f)
 			dfloatline.dnumberwang.serverside = false
@@ -399,7 +399,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 	end)
 
 	if tab.parent != nil then
-		tab.parent:AddItem(dfloatline.line)
+		tab.parent:AddItem( dfloatline.line)
 	end
 	return dfloatline.dnumberwang
 end
@@ -419,7 +419,7 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 
 	local dintline = {}
 
-	dintline.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	dintline.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function dintline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -433,11 +433,11 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 		DrawText(text)
 	end
 
-	dintline.dnumberwang = createD("DNumberWang", dintline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	dintline.dnumberwang = createD( "DNumberWang", dintline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	dintline.dnumberwang:SetMax(max or 100)
 	dintline.dnumberwang:SetMin(min or 0)
 	dintline.dnumberwang:SetDecimals(0)
-	dintline.dnumberwang:SetValue(value)
+	dintline.dnumberwang:SetValue( value)
 	dintline.dnumberwang.serverside = false
 	function dintline.dnumberwang:OnChange()
 		local val = self:GetValue()
@@ -445,19 +445,19 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 			if val <= self:GetMax() then
 				if !self.serverside and netstr != "" then
 					net.Start(netstr)
-						net.WriteInt(val, 32)
+						net.WriteInt( val, 32)
 					net.SendToServer()
 				end
 			else
-				dintline.dnumberwang:SetText(self:GetMax())
+				dintline.dnumberwang:SetText(self:GetMax() )
 			end
 		else
-			dintline.dnumberwang:SetText(self:GetMin())
+			dintline.dnumberwang:SetText(self:GetMin() )
 		end
 	end
 	net.Receive(netstr, function(len)
 		local f = net.ReadInt(32)
-		if pa(dintline.dnumberwang) then
+		if pa( dintline.dnumberwang) then
 			dintline.dnumberwang.serverside = true
 			dintline.dnumberwang:SetValue(f)
 			dintline.dnumberwang.serverside = false
@@ -465,7 +465,7 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 	end)
 
 	if tab.parent != nil then
-		tab.parent:AddItem(dintline.line)
+		tab.parent:AddItem( dintline.line)
 	end
 	return dintline.dnumberwang
 end
@@ -487,7 +487,7 @@ function DStringBox(tab, str, name, netstr)
 
 	local dstringline = {}
 
-	dstringline.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	dstringline.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function dstringline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -502,7 +502,7 @@ function DStringBox(tab, str, name, netstr)
 
 		if dmg != nil and dstringline.dtextentry != nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * dstringline.dtextentry:GetValue() .. " " .. YRP.lang_string("LID_damage")
+			DMG.text = dmg:GetValue() * dstringline.dtextentry:GetValue() .. " " .. YRP.lang_string( "LID_damage" )
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "Y_22_500"
@@ -513,17 +513,17 @@ function DStringBox(tab, str, name, netstr)
 		end
 	end
 
-	dstringline.dtextentry = createD("DTextEntry", dstringline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	dstringline.dtextentry = createD( "DTextEntry", dstringline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	dstringline.dtextentry:SetText(str)
 	dstringline.dtextentry.serverside = false
 	function dstringline.dtextentry:OnChange()
 		net.Start(netstr)
-			net.WriteString(self:GetText())
+			net.WriteString(self:GetText() )
 		net.SendToServer()
 	end
 	net.Receive(netstr, function(len)
 		local t = net.ReadString()
-		if pa(dstringline.dtextentry) then
+		if pa( dstringline.dtextentry) then
 			dstringline.dtextentry.serverside = true
 			dstringline.dtextentry:SetText(t)
 			dstringline.dtextentry.serverside = false
@@ -531,7 +531,7 @@ function DStringBox(tab, str, name, netstr)
 	end)
 
 	if tab.parent != nil then
-		tab.parent:AddItem(dstringline.line)
+		tab.parent:AddItem( dstringline.line)
 	end
 	return dstringline.dtextentry
 end
@@ -549,10 +549,10 @@ function DHR(tab)
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255)
 
-	local hr = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	local hr = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function hr:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
-		draw.RoundedBox(0, 0, ph / 3, pw, ph / 3, Color(0, 0, 0, 255))
+		draw.RoundedBox(0, 0, ph / 3, pw, ph / 3, Color(0, 0, 0, 255) )
 	end
 
 	if tab.parent != nil then
@@ -574,7 +574,7 @@ function DHeader(tab, header)
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255)
 
-	local hea = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	local hea = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function hea:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local head = {}

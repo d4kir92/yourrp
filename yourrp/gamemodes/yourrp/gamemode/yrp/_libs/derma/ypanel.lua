@@ -10,7 +10,7 @@ function PANEL:SetHeaderHeight(num)
 	if isnumber(num) then
 		self._headerheight = num
 	else
-		YRP.msg("note", "SetHeaderHeight | num is not a number: " .. tostring(num) .. "!")
+		YRP.msg( "note", "SetHeaderHeight | num is not a number: " .. tostring(num) .. "!" )
 	end
 end
 
@@ -19,7 +19,7 @@ function PANEL:Init()
 end
 
 function PANEL:Paint(pw, ph)
-	hook.Run("YPanelPaint", self, pw, ph)
+	hook.Run( "YPanelPaint", self, pw, ph)
 end
 
-vgui.Register("YPanel", PANEL, "DPanel")
+vgui.Register( "YPanel", PANEL, "DPanel" )

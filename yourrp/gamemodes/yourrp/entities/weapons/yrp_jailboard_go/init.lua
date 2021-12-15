@@ -1,8 +1,8 @@
 --This makes sure clients download the file
-AddCSLuaFile ("shared.lua")
-AddCSLuaFile ("cl_init.lua")
+AddCSLuaFile ( "shared.lua" )
+AddCSLuaFile ( "cl_init.lua" )
 
-include("shared.lua")
+include( "shared.lua" )
 
 --How heavy the SWep is
 SWEP.Weight = 5

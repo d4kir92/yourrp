@@ -2,18 +2,18 @@
 local PANEL = {}
 
 function PANEL:UPDATESIZE()
-	self.hs:SetSize(self:GetWide(), YRP.ctr(self.height))
-	self.site:SetSize(self:GetWide(), self:GetTall() - YRP.ctr(self.height))
+	self.hs:SetSize(self:GetWide(), YRP.ctr(self.height) )
+	self.site:SetSize(self:GetWide(), self:GetTall() - YRP.ctr(self.height) )
 
-	self.site:SetPos(0, YRP.ctr(self.height))
+	self.site:SetPos(0, YRP.ctr(self.height) )
 end
 
 function PANEL:Init()
-	self.hs = createD("DHorizontalScroller", self, 0, 0, 0, 0)
-	self.hs:SetOverlap(-YRP.ctr(20))
-	self.site = createD("DPanel", self, 0, 0, 0, 0)
+	self.hs = createD( "DHorizontalScroller", self, 0, 0, 0, 0)
+	self.hs:SetOverlap(-YRP.ctr(20) )
+	self.site = createD( "DPanel", self, 0, 0, 0, 0)
 	function self.site:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 200))
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 200) )
 	end
 
 	self.auto = true
@@ -26,7 +26,7 @@ function PANEL:SetTabWide(num)
 	self.tabwide = num
 end
 
-function PANEL:SetAutoTab(b)
+function PANEL:SetAutoTab( b)
 	self.auto = b
 end
 
@@ -37,8 +37,8 @@ function PANEL:AddOption(name, func, height)
 	self.height = height
 	self:UPDATESIZE()
 
-	local tab = createD("DButton", nil, YRP.ctr(400), YRP.ctr(height), 0, 0)
-	tab:SetText("")
+	local tab = createD( "DButton", nil, YRP.ctr(400), YRP.ctr(height), 0, 0)
+	tab:SetText( "" )
 	tab.tabs = self
 	function tab:DoClick()
 		if wk(name) then
@@ -47,11 +47,11 @@ function PANEL:AddOption(name, func, height)
 	end
 	function tab:Paint(pw, ph)
 		if self.tabs.auto then
-			surface.SetFont("Y_26_500")
-			local tw, th = surface.GetTextSize(YRP.lang_string(name))
-			self:SetWide(tw + YRP.ctr(80))
+			surface.SetFont( "Y_26_500" )
+			local tw, th = surface.GetTextSize(YRP.lang_string(name) )
+			self:SetWide(tw + YRP.ctr(80) )
 		else
-			self:SetWide(YRP.ctr(self.tabs.tabwide))
+			self:SetWide(YRP.ctr(self.tabs.tabwide) )
 		end
 		self.color = Color(100, 100, 255)
 		self.h = self.h or 0
@@ -67,7 +67,7 @@ function PANEL:AddOption(name, func, height)
 		end
 		self.h = math.Clamp(self.h, 0, 10)
 	
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100))
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100) )
 
 		draw.RoundedBox(0, YRP.ctr(20), ph - YRP.ctr(self.h), pw - YRP.ctr(40), YRP.ctr(self.h), self.color)
 
@@ -101,4 +101,4 @@ function PANEL:Paint(w, h)
 	end
 end
 
-vgui.Register("YTabs", PANEL, "Panel")
+vgui.Register( "YTabs", PANEL, "Panel" )

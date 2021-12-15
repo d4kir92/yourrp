@@ -15,9 +15,9 @@ function DHr(tab)
 
 	local pnl = {}
 
-	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function pnl.line:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255) )
 		draw.RoundedBox(0, 0, ph / 4, pw, ph / 2, tab.color)
 	end
 
@@ -46,7 +46,7 @@ function YRPDCheckBoxes(tab)
 
 	local pnl = {}
 
-	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function pnl.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -64,29 +64,29 @@ function YRPDCheckBoxes(tab)
 		DrawText(text)
 	end
 
-	pnl.DButton = createD("DButton", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
-	pnl.DButton:SetText("")
+	pnl.DButton = createD( "DButton", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	pnl.DButton:SetText( "" )
 	pnl.DButton.serverside = false
 	function pnl.DButton:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255) )
 		local change = {}
-		change.text = "[" .. YRP.lang_string("LID_change") .. "] (" .. tab.value .. ")"
+		change.text = "[" .. YRP.lang_string( "LID_change" ) .. "] ( " .. tab.value .. " )"
 		change.font = "Y_22_700"
 		change.x = YRP.ctr(10)
 		change.y = ph / 2
 		change.ax = 0
-		DrawText(change)
+		DrawText( change)
 	end
 	if tab.netstr != nil and tab.uniqueID != nil then
 		function pnl.DButton:DoClick()
-			local window = createD("DFrame", nil, YRP.ctr(20 + 500 + 20), YRP.ctr(50 + 20 + 500 + 20), 0, 0)
+			local window = createD( "DFrame", nil, YRP.ctr(20 + 500 + 20), YRP.ctr(50 + 20 + 500 + 20), 0, 0)
 			window:Center()
 			window:MakePopup()
-			window:SetTitle("")
+			window:SetTitle( "" )
 			function window:Paint(pw, ph)
-				surfaceWindow(self, pw, ph, YRP.lang_string("LID_usergroups"))
+				surfaceWindow(self, pw, ph, YRP.lang_string( "LID_usergroups" ) )
 			end
-			window.cm = createD("DPanelList", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20))
+			window.cm = createD( "DPanelList", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20) )
 			window.cm:EnableVerticalScrollbar()
 			
 			function window:sendtoserver()
@@ -95,13 +95,13 @@ function YRPDCheckBoxes(tab)
 					if choice.checked then
 						table.insert(str, i)
 					end
-					for j, cho in pairs(choice.choices) do
+					for j, cho in pairs( choice.choices) do
 						if cho.checked then
 							table.insert(str, j)
 						end
 					end
 				end
-				str = table.concat(str, ",")
+				str = table.concat(str, "," )
 				tab.value = str
 				net.Start(tab.netstr)
 					net.WriteString(tab.uniqueID)
@@ -110,9 +110,9 @@ function YRPDCheckBoxes(tab)
 			end
 
 			for i, choice in pairs(tab.choices) do
-				local ch = createD("DPanel", window.cm, YRP.ctr(500), YRP.ctr(50), 0, 0)
+				local ch = createD( "DPanel", window.cm, YRP.ctr(500), YRP.ctr(50), 0, 0)
 				function ch:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255) )
 					local ta = {}
 					ta.text = i
 					ta.font = "Y_22_700"
@@ -121,23 +121,23 @@ function YRPDCheckBoxes(tab)
 					ta.ax = 0
 					DrawText(ta)
 				end
-				ch.ch = createD("DCheckBox", ch, YRP.ctr(50), YRP.ctr(50), 0, 0)
-				ch.ch:SetChecked(choice.checked)
-				function ch.ch:OnChange(bo)
+				ch.ch = createD( "DCheckBox", ch, YRP.ctr(50), YRP.ctr(50), 0, 0)
+				ch.ch:SetChecked( choice.checked)
+				function ch.ch:OnChange( bo)
 					choice.checked = bo
-					for j, cho in pairs(choice.choices) do
+					for j, cho in pairs( choice.choices) do
 						cho.checked = bo
-						ch.subchoices[j].ch:SetChecked(bo)
+						ch.subchoices[j].ch:SetChecked( bo)
 					end
 					window:sendtoserver()
 				end
-				window.cm:AddItem(ch)
+				window.cm:AddItem( ch)
 				ch.subchoices = {}
-				for j, cho in pairs(choice.choices) do
-					ch.subchoices[j] = createD("DPanel", window.cm, YRP.ctr(500), YRP.ctr(50), 0, 0)
+				for j, cho in pairs( choice.choices) do
+					ch.subchoices[j] = createD( "DPanel", window.cm, YRP.ctr(500), YRP.ctr(50), 0, 0)
 					local sch = ch.subchoices[j]
 					function sch:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255) )
 						local ta = {}
 						ta.text = j
 						ta.font = "Y_22_700"
@@ -147,9 +147,9 @@ function YRPDCheckBoxes(tab)
 						ta.lforce = false
 						DrawText(ta)
 					end
-					sch.ch = createD("DCheckBox", sch, YRP.ctr(50), YRP.ctr(50), YRP.ctr(50), 0)
-					sch.ch:SetChecked(cho.checked)
-					function sch.ch:OnChange(bo)
+					sch.ch = createD( "DCheckBox", sch, YRP.ctr(50), YRP.ctr(50), YRP.ctr(50), 0)
+					sch.ch:SetChecked( cho.checked)
+					function sch.ch:OnChange( bo)
 						cho.checked = bo
 						if !bo then
 							choice.checked = false
@@ -162,7 +162,7 @@ function YRPDCheckBoxes(tab)
 			end
 		end
 		net.Receive(tab.netstr, function(len)
-			local _uid = tonumber(net.ReadString())
+			local _uid = tonumber(net.ReadString() )
 			local _str = net.ReadString()
 			if pa(pnl.DButton) then
 				pnl.DButton.serverside = true
@@ -197,7 +197,7 @@ function YRPDCheckBox(tab)
 
 	local pnl = {}
 
-	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function pnl.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -215,14 +215,14 @@ function YRPDCheckBox(tab)
 		DrawText(text)
 	end
 
-	pnl.DCheckBox = createD("DCheckBox", pnl.line, tab.h, tab.h, 0, 0)
+	pnl.DCheckBox = createD( "DCheckBox", pnl.line, tab.h, tab.h, 0, 0)
 	pnl.DCheckBox:SetValue(tab.value)
 	pnl.DCheckBox.serverside = false
 	function pnl.DCheckBox:Paint(pw, ph)
-		surfaceCheckBox(self, pw, ph, "done")
+		surfaceCheckBox(self, pw, ph, "done" )
 	end
 	if tab.netstr != nil and tab.uniqueID != nil then
-		function pnl.DCheckBox:OnChange(bo)
+		function pnl.DCheckBox:OnChange( bo)
 			local int = 0
 			if bo then
 				int = 1
@@ -233,8 +233,8 @@ function YRPDCheckBox(tab)
 			net.SendToServer()
 		end
 		net.Receive(tab.netstr, function(len)
-			local _uid = tonumber(net.ReadString())
-			local _int = tonumber(net.ReadString())
+			local _uid = tonumber(net.ReadString() )
+			local _int = tonumber(net.ReadString() )
 			if pa(pnl.DButton) then
 				pnl.DButton.serverside = true
 				tab.value = _int
@@ -268,7 +268,7 @@ function YRPDComboBox(tab)
 
 	local pnl = {}
 
-	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function pnl.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -286,13 +286,13 @@ function YRPDComboBox(tab)
 		DrawText(text)
 	end
 
-	pnl.DComboBox = createD("DComboBox", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	pnl.DComboBox = createD( "DComboBox", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	pnl.DComboBox:SetSortItems(false)
 	for i, v in pairs(tab.choices) do
 		if tab.value == i then
-			pnl.DComboBox:AddChoice(v, i, true)
+			pnl.DComboBox:AddChoice( v, i, true)
 		else
-			pnl.DComboBox:AddChoice(v, i)
+			pnl.DComboBox:AddChoice( v, i)
 		end
 	end
 	pnl.DComboBox.serverside = false
@@ -300,11 +300,11 @@ function YRPDComboBox(tab)
 		function pnl.DComboBox:OnSelect(index, value, data)
 			net.Start(tab.netstr)
 				net.WriteString(tab.uniqueID)
-				net.WriteString(pnl.DComboBox:GetOptionData(pnl.DComboBox:GetSelectedID()))
+				net.WriteString(pnl.DComboBox:GetOptionData(pnl.DComboBox:GetSelectedID() ))
 			net.SendToServer()
 		end
 		net.Receive(tab.netstr, function(len)
-			local _uid = tonumber(net.ReadString())
+			local _uid = tonumber(net.ReadString() )
 			local _str = net.ReadString()
 			if pa(pnl.DComboBox) then
 				pnl.DComboBox.serverside = true
@@ -339,7 +339,7 @@ function YRPDComboBoxHUD(tab)
 
 	local pnl = {}
 
-	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function pnl.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -357,13 +357,13 @@ function YRPDComboBoxHUD(tab)
 		DrawText(text)
 	end
 
-	pnl.DComboBox = createD("DComboBox", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	pnl.DComboBox = createD( "DComboBox", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	pnl.DComboBox:SetSortItems(false)
 	for i, v in pairs(tab.choices) do
 		if tab.value == v then
-			pnl.DComboBox:AddChoice(v, i, true)
+			pnl.DComboBox:AddChoice( v, i, true)
 		else
-			pnl.DComboBox:AddChoice(v, i)
+			pnl.DComboBox:AddChoice( v, i)
 		end
 	end
 	pnl.DComboBox.serverside = false
@@ -371,11 +371,11 @@ function YRPDComboBoxHUD(tab)
 		function pnl.DComboBox:OnSelect(index, value, data)
 			net.Start(tab.netstr)
 				net.WriteString(tab.uniqueID)
-				net.WriteString(value)
+				net.WriteString( value)
 			net.SendToServer()
 		end
 		net.Receive(tab.netstr, function(len)
-			local _uid = tonumber(net.ReadString())
+			local _uid = tonumber(net.ReadString() )
 			local _str = net.ReadString()
 			if pa(pnl.DComboBox) then
 				pnl.DComboBox.serverside = true
@@ -410,7 +410,7 @@ function DColor(tab)
 
 	local pnl = {}
 
-	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function pnl.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -428,8 +428,8 @@ function DColor(tab)
 		DrawText(text)
 	end
 
-	pnl.DButton = createD("DButton", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
-	pnl.DButton:SetText("")
+	pnl.DButton = createD( "DButton", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	pnl.DButton:SetText( "" )
 	pnl.DButton.serverside = false
 	pnl.DButton.color = stc(tab.value)
 	function pnl.DButton:Paint(pw, ph)
@@ -440,32 +440,32 @@ function DColor(tab)
 		change.x = pw / 2
 		change.y = ph / 2
 		change.color = self.color
-		DrawText(change)
+		DrawText( change)
 	end
 	if tab.netstr != nil and tab.uniqueID != nil then
 		function pnl.DButton:DoClick()
-			local window = createD("DFrame", nil, YRP.ctr(20 + 500 + 20), YRP.ctr(50 + 20 + 500 + 20), 0, 0)
+			local window = createD( "DFrame", nil, YRP.ctr(20 + 500 + 20), YRP.ctr(50 + 20 + 500 + 20), 0, 0)
 			window:Center()
 			window:MakePopup()
-			window:SetTitle("")
+			window:SetTitle( "" )
 			function window:Paint(pw, ph)
-				surfaceWindow(self, pw, ph, YRP.lang_string("LID_color"))
+				surfaceWindow(self, pw, ph, YRP.lang_string( "LID_color" ) )
 			end
-			window.cm = createD("DColorMixer", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20))
-			function window.cm:ValueChanged(col)
-				local colstr = YRPTableToColorStr(col)
+			window.cm = createD( "DColorMixer", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20) )
+			function window.cm:ValueChanged( col)
+				local colstr = YRPTableToColorStr( col)
 				if pnl.DButton:IsValid() then
 					pnl.DButton.tabcolor = colstr
 					pnl.DButton.color = StringToColor(pnl.DButton.tabcolor)
 				end
 				net.Start(tab.netstr)
 					net.WriteString(tab.uniqueID)
-					net.WriteString(colstr)
+					net.WriteString( colstr)
 				net.SendToServer()
 			end
 		end
 		net.Receive(tab.netstr, function(len)
-			local _uid = tonumber(net.ReadString())
+			local _uid = tonumber(net.ReadString() )
 			local _str = net.ReadString()
 			if pa(pnl.DButton) then
 				pnl.DButton.serverside = true
@@ -503,7 +503,7 @@ function DIntBox(tab)
 
 	local pnl = {}
 
-	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function pnl.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -521,30 +521,30 @@ function DIntBox(tab)
 		DrawText(text)
 	end
 
-	pnl.DNumberWang = createD("DNumberWang", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	pnl.DNumberWang = createD( "DNumberWang", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	pnl.DNumberWang:SetMin(tab.min)
 	pnl.DNumberWang:SetMax(tab.max)
 	pnl.DNumberWang:SetValue(tab.value)
 	pnl.DNumberWang.serverside = false
 	if tab.netstr != nil and tab.uniqueID != nil then
-		function pnl.DNumberWang:OnValueChanged(val)
-			val = tonumber(val)
+		function pnl.DNumberWang:OnValueChanged( val)
+			val = tonumber( val)
 			if val <= self:GetMax() and val >= self:GetMin() then
 				net.Start(tab.netstr)
 					net.WriteString(tab.uniqueID)
-					net.WriteString(val)
+					net.WriteString( val)
 				net.SendToServer()
 			elseif val > self:GetMax() then
-				self:SetValue(self:GetMax())
-				self:SetText(self:GetMax())
+				self:SetValue(self:GetMax() )
+				self:SetText(self:GetMax() )
 			elseif val < self:GetMin() then
-				self:SetValue(self:GetMin())
-				self:SetText(self:GetMin())
+				self:SetValue(self:GetMin() )
+				self:SetText(self:GetMin() )
 			end
 		end
 		net.Receive(tab.netstr, function(len)
-			local _uid = tonumber(net.ReadString())
-			local _val = tonumber(net.ReadString())
+			local _uid = tonumber(net.ReadString() )
+			local _val = tonumber(net.ReadString() )
 			if pa(pnl.DNumberWang) then
 				pnl.DNumberWang.serverside = true
 				pnl.DNumberWang:SetValue(_val)
@@ -581,7 +581,7 @@ function DTextBox(tab)
 
 	local pnl = {}
 
-	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function pnl.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -600,7 +600,7 @@ function DTextBox(tab)
 
 		if dmg != nil and pnl.dtextentry != nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.lang_string("LID_damage")
+			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.lang_string( "LID_damage" )
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "Y_22_700"
@@ -615,7 +615,7 @@ function DTextBox(tab)
 		return pnl.DTextEntry:GetText()
 	end
 
-	pnl.DTextEntry = createD("DTextEntry", pnl.line, tab.w, tab.h - YRP.ctr(50), tab.brx, YRP.ctr(50))
+	pnl.DTextEntry = createD( "DTextEntry", pnl.line, tab.w, tab.h - YRP.ctr(50), tab.brx, YRP.ctr(50) )
 	pnl.DTextEntry:SetText(tab.value)
 	pnl.DTextEntry:SetMultiline(tab.multiline or false)
 	pnl.DTextEntry.serverside = false
@@ -627,7 +627,7 @@ function DTextBox(tab)
 			end
 			net.Start(tab.netstr)
 				net.WriteString(tab.uniqueID)
-				net.WriteString(self:GetText())
+				net.WriteString(self:GetText() )
 			net.SendToServer()
 
 			if pnl.OnChange then
@@ -635,7 +635,7 @@ function DTextBox(tab)
 			end
 		end
 		net.Receive(tab.netstr, function(len)
-			local _uid = tonumber(net.ReadString())
+			local _uid = tonumber(net.ReadString() )
 			local _str = net.ReadString()
 			if pa(pnl.DTextEntry) then
 				pnl.DTextEntry.serverside = true
@@ -658,18 +658,18 @@ function YRPDNumberWang(tab)
 	tab.h = tab.h or 10
 	tab.min = tonumber(tab.min) or 0
 	tab.max = tonumber(tab.max) or 100
-	local dnw = createD("DNumberWang", tab.parent, tab.w, tab.h / 2, tab.x, tab.h / 2)
+	local dnw = createD( "DNumberWang", tab.parent, tab.w, tab.h / 2, tab.x, tab.h / 2)
 	dnw:SetMin(tab.min)
 	dnw:SetMax(tab.max)
 	dnw:SetValue(tab.value)
 	dnw.serverside = false
 	if tab.netstr != nil and tab.uniqueID != nil then
-		function dnw:OnValueChanged(val)
-			val = tonumber(val)
+		function dnw:OnValueChanged( val)
+			val = tonumber( val)
 			if val <= tab.max and val >= tab.min then
 				net.Start(tab.netstr)
 					net.WriteString(tab.uniqueID)
-					net.WriteString(val)
+					net.WriteString( val)
 				net.SendToServer()
 			elseif val > tab.max then
 				self:SetValue(tab.max)
@@ -680,9 +680,9 @@ function YRPDNumberWang(tab)
 			end
 		end
 		net.Receive(tab.netstr, function(len)
-			local _uid = tonumber(net.ReadString())
-			local _val = tonumber(net.ReadString())
-			if pa(dnw) then
+			local _uid = tonumber(net.ReadString() )
+			local _val = tonumber(net.ReadString() )
+			if pa( dnw) then
 				dnw.serverside = true
 				dnw:SetValue(_val)
 				dnw.serverside = false
@@ -715,7 +715,7 @@ function DAttributeBar(tab)
 
 	local pnl = {}
 
-	pnl.line = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	pnl.val3 = 0
 	pnl.val4 = 0
 	pnl.delay = 0
@@ -765,12 +765,12 @@ function DAttributeBar(tab)
 			if tab.lforce then
 				text.text = YRP.lang_string(tab.header) .. ": " .. tab.dnw[1].value .. "/" .. tab.dnw[2].value
 				if tab.dnw[3] != nil then
-					text.text = text.text .. " (" .. tab.dnw[3].value
+					text.text = text.text .. " ( " .. tab.dnw[3].value
 					if tab.dnw[4] != nil then
 						text.text = text.text .. " | " .. tab.dnw[4].value
 					end
 				end
-				text.text = text.text .. ")"
+				text.text = text.text .. " )"
 			else
 				text.text = tab.header .. ":"
 			end
@@ -843,7 +843,7 @@ function DStringListBox(tab)
 	tab.lforce = tab.lforce or true
 
 	local pnl = {}
-	pnl.bg = createD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
+	pnl.bg = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
 	function pnl.bg:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -861,70 +861,70 @@ function DStringListBox(tab)
 		DrawText(text)
 	end
 
-	pnl.add = createD("DButton", pnl.bg, YRP.ctr(50), YRP.ctr(50), tab.w - YRP.ctr(50), 0)
-	pnl.add:SetText("")
+	pnl.add = createD( "DButton", pnl.bg, YRP.ctr(50), YRP.ctr(50), tab.w - YRP.ctr(50), 0)
+	pnl.add:SetText( "" )
 	function pnl.add:Paint(pw, ph)
 		self.color = Color(80, 255, 80)
 		if self:IsHovered() then
 			self.color = Color(100, 255, 100)
 		end
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-		draw.SimpleText("+", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText( "+", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	function pnl.add:DoClick()
 		tab.doclick()
 	end
 
-	pnl.dpl = createD("DPanelList", pnl.bg, tab.w, tab.h - YRP.ctr(50), 0, YRP.ctr(50))
+	pnl.dpl = createD( "DPanelList", pnl.bg, tab.w, tab.h - YRP.ctr(50), 0, YRP.ctr(50) )
 	pnl.dpl:EnableVerticalScrollbar(true)
 	pnl.dpl:SetSpacing(1)
 	function pnl.dpl:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
+		draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
 	end
 	function pnl.dpl:AddLines(t)
 		pnl.dpl:Clear()
 
 		for i, v in pairs(t) do
-			if type(v) == "table" then
+			if type( v) == "table" then
 				v.h = v.h or YRP.ctr(70)
 				v.br = v.br or YRP.ctr(10)
 
-				local line = createD("DButton", nil, pnl.dpl:GetWide(), v.h, 0, 0)
-				line:SetText("")
+				local line = createD( "DButton", nil, pnl.dpl:GetWide(), v.h, 0, 0)
+				line:SetText( "" )
 				line.uniqueID = v.uniqueID
-				line.models = string.Explode(",", v.string_models or "")
+				line.models = string.Explode( ",", v.string_models or "" )
 				line.pmid = 1
 
 				if table.Count(line.models) > 1 or !strEmpty(line.models[1]) then
-					line.mod = createD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, YRP.ctr(40) + v.br, v.br)
+					line.mod = createD( "DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, YRP.ctr(40) + v.br, v.br)
 				end
 
 				local text = ""
 				if v.slots then
 					local test = {}
-					if tobool(v.slots.slot_primary) then
-						table.insert(test, YRP.lang_string("LID_primary"))
+					if tobool( v.slots.slot_primary) then
+						table.insert(test, YRP.lang_string( "LID_primary" ) )
 					end
-					if tobool(v.slots.slot_secondary) then
-						table.insert(test, YRP.lang_string("LID_secondary"))
+					if tobool( v.slots.slot_secondary) then
+						table.insert(test, YRP.lang_string( "LID_secondary" ) )
 					end
-					if tobool(v.slots.slot_sidearm) then
-						table.insert(test, YRP.lang_string("LID_sidearm"))
+					if tobool( v.slots.slot_sidearm) then
+						table.insert(test, YRP.lang_string( "LID_sidearm" ) )
 					end
-					if tobool(v.slots.slot_gadget) then
-						table.insert(test, YRP.lang_string("LID_gadget"))
+					if tobool( v.slots.slot_gadget) then
+						table.insert(test, YRP.lang_string( "LID_gadget" ) )
 					end
-					if tobool(v.slots.slot_no) then
-						table.insert(test, YRP.lang_string("LID_noslot"))
+					if tobool( v.slots.slot_no) then
+						table.insert(test, YRP.lang_string( "LID_noslot" ) )
 					end
-					text = table.concat(test, ", ")
+					text = table.concat(test, ", " )
 					if strEmpty(text) then
 						text = "WEAPON NEED CONFIGURATION!"
 					end
 				end
 
 				function line:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255))
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255) )
 
 					if self.mod != nil then
 						if self.oldpmid != self.pmid then
@@ -935,7 +935,7 @@ function DStringListBox(tab)
 
 					local name = v.string_name
 					if table.Count(self.models) > 1 then
-						name = name .. " (" .. self.pmid .. "/" .. table.Count(self.models) .. ")"
+						name = name .. " ( " .. self.pmid .. "/" .. table.Count(self.models) .. " )"
 					end
 					draw.SimpleText(name, "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 - YRP.ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					if v.slots then
@@ -945,22 +945,22 @@ function DStringListBox(tab)
 					end
 				end
 
-				line.rem = createD("DButton", line, v.h - 2 * v.br, v.h - 2 * v.br, line:GetWide() - v.h - v.br, v.br)
-				line.rem:SetText("")
+				line.rem = createD( "DButton", line, v.h - 2 * v.br, v.h - 2 * v.br, line:GetWide() - v.h - v.br, v.br)
+				line.rem:SetText( "" )
 				function line.rem:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
-					draw.SimpleText("-", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0) )
+					draw.SimpleText( "-", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 				function line.rem:DoClick()
 					v.doclick()
 				end
 
-				line.next = createD("DButton", line, YRP.ctr(40), v.h - 2 * v.br, YRP.ctr(40) + v.h, v.br)
-				line.next:SetText("")
+				line.next = createD( "DButton", line, YRP.ctr(40), v.h - 2 * v.br, YRP.ctr(40) + v.h, v.br)
+				line.next:SetText( "" )
 				function line.next:Paint(pw, ph)
 					if line.pmid < table.Count(line.models) then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0, 200))
-						draw.SimpleText(">", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0, 200) )
+						draw.SimpleText( ">", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				end
 				function line.next:DoClick()
@@ -969,12 +969,12 @@ function DStringListBox(tab)
 					end
 				end
 
-				line.prev = createD("DButton", line, YRP.ctr(40), v.h - 2 * v.br, 0, v.br)
-				line.prev:SetText("")
+				line.prev = createD( "DButton", line, YRP.ctr(40), v.h - 2 * v.br, 0, v.br)
+				line.prev:SetText( "" )
 				function line.prev:Paint(pw, ph)
 					if line.pmid > 1 then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0, 200))
-						draw.SimpleText("<", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0, 200) )
+						draw.SimpleText( "<", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				end
 				function line.prev:DoClick()

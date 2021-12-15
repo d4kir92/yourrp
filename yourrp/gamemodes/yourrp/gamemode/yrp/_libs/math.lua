@@ -19,7 +19,7 @@ end
 
 function ScreenFix()
 	if BiggerThen16_9() then
-		return (ScrW() - (ScrH() / 9 * 16)) / 2
+		return (ScrW() - (ScrH() / 9 * 16) ) / 2
 	else
 		return 0
 	end
@@ -94,7 +94,7 @@ function GetMaxFloat()
 	return 999999999.0
 end
 
-function btn(bool)
+function btn( bool)
 	if bool then
 		return 1
 	else
@@ -114,7 +114,7 @@ function ggT(_num1, _num2)
 end
 
 function getResolutionRatio()
-	local _ggt = ggT(ScrW(), ScrH())
+	local _ggt = ggT(ScrW(), ScrH() )
 	return ScrW() / _ggt, ScrH() / _ggt
 end
 
@@ -147,7 +147,7 @@ end
 YRP = YRP or {}
 function YRP.ctr(input)
 	if input != nil then
-		return math.Round((tonumber(input) / 2160) * ScrH(), 0)
+		return math.Round( (tonumber(input) / 2160) * ScrH(), 0)
 	else
 		return -1
 	end
@@ -191,7 +191,7 @@ end
 
 function formatMoney(money)
 	if wk(money) then
-		return GetGlobalString("text_money_pre", "") .. money .. GetGlobalString("text_money_pos", "")
+		return GetGlobalString( "text_money_pre", "" ) .. money .. GetGlobalString( "text_money_pos", "" )
 	else
 		return "[FAILED: formatMoney]"
 	end

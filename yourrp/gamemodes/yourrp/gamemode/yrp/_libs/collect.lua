@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local function YRPHasPassword()
-	local pw = GetConVar("sv_password")
+	local pw = GetConVar( "sv_password" )
 	if pw then
 		pw = pw:GetString()
 		if pw == "" then
@@ -20,13 +20,13 @@ if SERVER then
 	function SendServerInfo()
 		if game.IsDedicated() then
 			if GAMEMODE then
-				YRP.msg("note", "> Send Server Info <")
+				YRP.msg( "note", "> Send Server Info <" )
 				local entry = {}
 
 
 
 				-- IP
-				entry["entry.2055994870"] = tostring(game.GetIPAddress())
+				entry["entry.2055994870"] = tostring(game.GetIPAddress() )
 
 				-- Servername
 				if !strEmpty( GetHostName() ) then
@@ -38,10 +38,10 @@ if SERVER then
 				end
 
 				-- Gamemodename
-				entry["entry.893976623"] = "GN:" .. GetGlobalString("text_gamemode_name", "lol")
+				entry["entry.893976623"] = "GN:" .. GetGlobalString( "text_gamemode_name", "lol" )
 
 				-- MaxPlayers
-				entry["entry.1756035654"] = tostring(game.MaxPlayers())
+				entry["entry.1756035654"] = tostring(game.MaxPlayers() )
 
 				-- Version
 				entry["entry.1557578272"] = tostring(GAMEMODE.VersionStable)
@@ -53,7 +53,7 @@ if SERVER then
 				entry["entry.646409012"] = "VA:" .. GetGlobalString( "YRP_VERSIONART", "X" )
 
 				-- CollectionID
-				entry["entry.976366368"] = tostring(YRPCollectionID())
+				entry["entry.976366368"] = tostring(YRPCollectionID() )
 
 				-- Has Password? -- NO SERVER PASSWORD WILL BE SEND HERE, just if it has a password or not
 				entry["entry.2007904323"] = string.upper( tostring( YRPHasPassword() ) )
@@ -62,31 +62,31 @@ if SERVER then
 				
 				if !YRP_INFO_WAS_SENDED then
 					http.Post(posturl, entry,
-					function(body, length, headers, code)
+					function( body, length, headers, code)
 						if code == 200 then
 							-- worked
-							YRP.msg("note", "[Send Server] Info: Success")
+							YRP.msg( "note", "[Send Server] Info: Success" )
 							YRP_INFO_WAS_SENDED = true
 						else
-							YRP.msg("error", "[Send Server] Info HTTP CODE: " .. tostring(code))
+							YRP.msg( "error", "[Send Server] Info HTTP CODE: " .. tostring( code) )
 						end
 					end,
 					function( failed )
-						YRP.msg("error", "[Send Server] Info failed: " .. tostring(failed))
+						YRP.msg( "error", "[Send Server] Info failed: " .. tostring(failed) )
 					end)
 				else
-					YRP.msg("note", "[Send Server] Already Send")
+					YRP.msg( "note", "[Send Server] Already Send" )
 				end
 			else
 				timer.Simple(1, SendServerInfo)
 			end
 		end
 			
-		RunConsoleCommand("sv_hibernate_think", 0)
+		RunConsoleCommand( "sv_hibernate_think", 0)
 	end
 
-	hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded", function()
-		RunConsoleCommand("sv_hibernate_think", 1)
+	hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded", function()
+		RunConsoleCommand( "sv_hibernate_think", 1)
 		timer.Simple(2, function()
 			MsgC( Color(255, 255, 0), ">>> Server is online <<<" .. "\t\t\tYourRP Version: " .. YRPGetVersionFull() .. "\n" )
 		end)

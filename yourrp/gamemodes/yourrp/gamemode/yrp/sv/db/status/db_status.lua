@@ -15,9 +15,9 @@ function AddToHandler_Status(ply)
 	end
 end
 
-util.AddNetworkString("Connect_Settings_Status")
-net.Receive("Connect_Settings_Status", function(len, ply)
-	if ply:CanAccess("bool_status") then
+util.AddNetworkString( "Connect_Settings_Status" )
+net.Receive( "Connect_Settings_Status", function(len, ply)
+	if ply:CanAccess( "bool_status" ) then
 		AddToHandler_Status(ply)
 		local _nw_yourrp = {}
 		local _nw_roles = {}
@@ -26,7 +26,7 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 		_nw_map["jail"] = {}
 
 		local _yourrp_content_found = false
-		for i, addon in pairs(engine.GetAddons()) do
+		for i, addon in pairs(engine.GetAddons() ) do
 			if addon.wsid == "1189643820" then
 				_yourrp_content_found = true
 			end
@@ -39,26 +39,26 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 			_nw_yourrp["Collection ID"] = {}
 			_nw_yourrp["Collection ID"]["LID_thecollectionidismissing"] = Color(255, 0, 0)
 		end
-		if strEmpty(GetGlobalString("text_server_name")) then
+		if strEmpty(GetGlobalString( "text_server_name" ) ) then
 			_nw_yourrp["Hostname"] = {}
 			_nw_yourrp["Hostname"]["Hostname is missing/empty"] = Color(255, 255, 0)
 		end
-		if strEmpty(GetGlobalString("text_server_logo")) then
+		if strEmpty(GetGlobalString( "text_server_logo" ) ) then
 			_nw_yourrp["ServerLogo"] = {}
 			_nw_yourrp["ServerLogo"]["Server Logo is missing/empty"] = Color(255, 255, 0)
 		end
-		if strEmpty(GetGlobalString("text_loading_background")) then
+		if strEmpty(GetGlobalString( "text_loading_background" ) ) then
 			_nw_yourrp["backgroundloading"] = {}
 			_nw_yourrp["backgroundloading"]["Loadingscreen Background is missing"] = Color(255, 255, 0)
 		end
-		if strEmpty(GetGlobalString("text_character_background")) then
+		if strEmpty(GetGlobalString( "text_character_background" ) ) then
 			_nw_yourrp["backgroundcharacter"] = {}
 			_nw_yourrp["backgroundcharacter"]["Character Background is missing"] = Color(255, 255, 0)
 		end
 
-		local _roles = YRP_SQL_SELECT("yrp_ply_roles", "*", nil)
-		local _groups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
-		local _map = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", nil)
+		local _roles = YRP_SQL_SELECT( "yrp_ply_roles", "*", nil)
+		local _groups = YRP_SQL_SELECT( "yrp_ply_groups", "*", nil)
+		local _map = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", nil)
 		if wk(_roles) then
 			for i, role in pairs(_roles) do
 				if role.string_playermodels == "" or role.string_playermodels == " " then
@@ -105,7 +105,7 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 			end
 		end
 
-		net.Start("Connect_Settings_Status")
+		net.Start( "Connect_Settings_Status" )
 			net.WriteTable(_nw_yourrp)
 			net.WriteTable(_nw_roles)
 			net.WriteTable(_nw_groups)
@@ -114,7 +114,7 @@ net.Receive("Connect_Settings_Status", function(len, ply)
 	end
 end)
 
-util.AddNetworkString("Disconnect_Settings_Status")
-net.Receive("Disconnect_Settings_Status", function(len, ply)
+util.AddNetworkString( "Disconnect_Settings_Status" )
+net.Receive( "Disconnect_Settings_Status", function(len, ply)
 	RemFromHandler_Status(ply)
 end)

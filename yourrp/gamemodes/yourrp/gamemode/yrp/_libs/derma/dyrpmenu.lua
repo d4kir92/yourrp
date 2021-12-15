@@ -34,20 +34,20 @@ function PANEL:UpdateMenu()
 		Height = Height + ele.size
 	end
 
-	self:SetTall(YRP.ctr(Height))
+	self:SetTall(YRP.ctr(Height) )
 	local _x, _y = self:GetPos()
 	if _y + self:GetTall() > ScrH() then
-		self:SetPos(_x, ScrH() - self:GetTall())
+		self:SetPos(_x, ScrH() - self:GetTall() )
 	end
 end
 
 function PANEL:AddSpacer()
 	local Entry = {}
 	Entry.size = 10
-	Entry.spacer = createD("DPanel", self, self:GetWide(), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight))
+	Entry.spacer = createD( "DPanel", self, self:GetWide(), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight) )
 
 	function Entry.spacer:Paint(pw, ph)
-		surfaceBox(0, ph / 4, pw, ph / 2, Color(0, 0, 0))
+		surfaceBox(0, ph / 4, pw, ph / 2, Color(0, 0, 0) )
 	end
 
 	self.lastheight = self.lastheight + Entry.size
@@ -65,21 +65,21 @@ function PANEL:AddOption(name, icon)
 	end
 
 	Entry.size = 50
-	Entry.icon = createD("YPanel", self, YRP.ctr(Entry.size), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight))
+	Entry.icon = createD( "YPanel", self, YRP.ctr(Entry.size), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight) )
 
 	function Entry.icon:Paint(pw, ph)
 		if Entry.iconpng ~= "" then
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.SetMaterial(Entry.iconmat)
-			surface.DrawTexturedRect(YRP.ctr(9), YRP.ctr(9), YRP.ctr(32), YRP.ctr(32))
+			surface.DrawTexturedRect(YRP.ctr(9), YRP.ctr(9), YRP.ctr(32), YRP.ctr(32) )
 		end
 	end
 
-	Entry.button = createD("YButton", self, self:GetWide() - YRP.ctr(Entry.size), YRP.ctr(Entry.size), YRP.ctr(Entry.size), YRP.ctr(self.lastheight))
+	Entry.button = createD( "YButton", self, self:GetWide() - YRP.ctr(Entry.size), YRP.ctr(Entry.size), YRP.ctr(Entry.size), YRP.ctr(self.lastheight) )
 	Entry.button:SetText(Entry.name)
 
 	function Entry.button:Paint(pw, ph)
-		hook.Run("YButtonPaint", self, pw, ph) --surfaceButton(self, pw, ph, Entry.name)
+		hook.Run( "YButtonPaint", self, pw, ph) --surfaceButton(self, pw, ph, Entry.name)
 	end
 
 	self.lastheight = self.lastheight + Entry.size
@@ -89,4 +89,4 @@ function PANEL:AddOption(name, icon)
 	return Entry.button
 end
 
-vgui.Register("DYRPMenu", PANEL, "YPanel")
+vgui.Register( "DYRPMenu", PANEL, "YPanel" )

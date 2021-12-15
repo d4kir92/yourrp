@@ -80,10 +80,10 @@ function YRPKeybindsCheckFile()
 	end
 
 	if !file.Exists( "yrp_keybinds", "DATA" ) then
-		YRP.msg("error", "[KEYBINDS] FAILED TO CREATE KEYBIND FOLDER")
+		YRP.msg( "error", "[KEYBINDS] FAILED TO CREATE KEYBIND FOLDER" )
 	end
 	if !file.Exists( dbfile, "DATA" ) then
-		YRP.msg("error", "[KEYBINDS] FAILED TO CREATE KEYBIND FILE")
+		YRP.msg( "error", "[KEYBINDS] FAILED TO CREATE KEYBIND FILE" )
 	end
 
 end
@@ -96,7 +96,7 @@ function YRPKeybindsSave()
 end
 
 function YRPKeybindsLoad()
-	if !IsValid(LocalPlayer()) then
+	if !IsValid(LocalPlayer() ) then
 		timer.Simple( 0.1, YRPKeybindsLoad )
 		return false
 	end
@@ -177,7 +177,7 @@ function YRPSetKeybind(name, value, force)
 				if n == "version" or force then
 					continue
 				end
-				if tonumber(value) == tonumber(v) and name != n and !string.StartWith(n, "menu_options_") then
+				if tonumber( value) == tonumber( v) and name != n and !string.StartWith(n, "menu_options_" ) then
 					return false
 				end
 			end
@@ -199,11 +199,11 @@ function YRPGetKeybindName(kbname, show)
 		if !string.StartWith( kbname, "in_" ) and YRPGetKeybind(kbname) then
 			_kb = YRPGetKeybind( kbname )
 		end
-		if isnumber(tonumber(_kb)) then
+		if isnumber(tonumber(_kb) ) then
 			_kb = input.GetKeyName(_kb)
 		end
-		if string.StartWith(kbname, "in_") then
-			_kb = YRP.lang_string("LID_" .. kbname)
+		if string.StartWith(kbname, "in_" ) then
+			_kb = YRP.lang_string( "LID_" .. kbname)
 		end
 		if wk(_kb) then
 			_kb = string.upper(_kb)
@@ -218,7 +218,7 @@ function YRPResetKeybinds()
 	end
 end
 
-net.Receive("SetServerKeybinds", function(len)
+net.Receive( "SetServerKeybinds", function(len)
 	local keytab = net.ReadTable()
 	for i, ktab in pairs( keytab ) do
 		YRPSetKeybind( ktab.name, ktab.value )

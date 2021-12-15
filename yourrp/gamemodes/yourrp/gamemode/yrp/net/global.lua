@@ -3,8 +3,8 @@
 YRP_Global_Tables = YRP_Global_Tables or {}
 
 if SERVER then
-	util.AddNetworkString("YRPSetGlobalTable")
-	util.AddNetworkString("YRPGetGlobalTables")
+	util.AddNetworkString( "YRPSetGlobalTable" )
+	util.AddNetworkString( "YRPGetGlobalTables" )
 end
 
 function GetGlobalTable(key, value)
@@ -12,12 +12,12 @@ function GetGlobalTable(key, value)
 end
 
 function SetGlobalTable(key, value)
-	if type(key) == "string" and type(value) == "table" then
+	if type(key) == "string" and type( value) == "table" then
 		YRP_Global_Tables[key] = value
 		if SERVER then
-			net.Start("YRPSetGlobalTable")
+			net.Start( "YRPSetGlobalTable" )
 				net.WriteString(key)
-				net.WriteTable(value)
+				net.WriteTable( value)
 			net.Broadcast()
 		end
 	else
@@ -26,27 +26,27 @@ function SetGlobalTable(key, value)
 end
 
 if SERVER then
-	net.Receive("YRPGetGlobalTables", function(len, ply)
+	net.Receive( "YRPGetGlobalTables", function(len, ply)
 		for key, value in pairs(YRP_Global_Tables) do
-			net.Start("YRPSetGlobalTable")
+			net.Start( "YRPSetGlobalTable" )
 				net.WriteString(key)
-				net.WriteTable(value)
+				net.WriteTable( value)
 			net.Send(ply)
 		end
 	end)
 end
 
 if CLIENT then
-	net.Receive("YRPSetGlobalTable", function(len)
+	net.Receive( "YRPSetGlobalTable", function(len)
 		local key = net.ReadString()
 		local tab = net.ReadTable()
 
 		SetGlobalTable(key, tab)
 	end)
 
-	hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded_GlobalTable", function()
+	hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded_GlobalTable", function()
 		timer.Simple(0.1, function()
-			net.Start("YRPGetGlobalTables")
+			net.Start( "YRPGetGlobalTables" )
 			net.SendToServer()
 		end)
 	end)

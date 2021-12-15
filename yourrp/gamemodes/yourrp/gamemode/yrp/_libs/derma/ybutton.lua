@@ -16,7 +16,7 @@ function PANEL:NewSetText(str)
 	self._hovertext = str
 	self._selectedtext = str
 
-	self:OldSetText("")
+	self:OldSetText( "" )
 end
 
 function PANEL:GetHoverText()
@@ -44,7 +44,7 @@ function PANEL:SetPressed(selected)
 end
 
 function PANEL:Paint(pw, ph)
-	hook.Run("YButtonPaint", self, pw, ph)
+	hook.Run( "YButtonPaint", self, pw, ph)
 end
 
 function PANEL:Init()
@@ -54,4 +54,4 @@ function PANEL:Init()
 	end
 end
 
-vgui.Register("YButton", PANEL, "DButton")
+vgui.Register( "YButton", PANEL, "DButton" )

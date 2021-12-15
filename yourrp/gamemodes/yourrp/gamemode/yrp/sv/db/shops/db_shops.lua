@@ -5,9 +5,9 @@
 
 local DATABASE_NAME = "yrp_shops"
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'" )
 
-util.AddNetworkString("get_shops")
+util.AddNetworkString( "get_shops" )
 
 function send_shops(ply)
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
@@ -15,54 +15,54 @@ function send_shops(ply)
 	if _nm == nil or _nm == false then
 		_nm = {}
 	end
-	net.Start("get_shops")
+	net.Start( "get_shops" )
 		net.WriteTable(_nm)
 	net.Send(ply)
 end
 
-net.Receive("get_shops", function(len, ply)
-	if ply:CanAccess("bool_shops") then
+net.Receive( "get_shops", function(len, ply)
+	if ply:CanAccess( "bool_shops" ) then
 		send_shops(ply)
 	end
 end)
 
-util.AddNetworkString("shop_add")
+util.AddNetworkString( "shop_add" )
 
-net.Receive("shop_add", function(len, ply)
-	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new shop'")
-	YRP.msg("db", "shop_add: " .. db_worked(_new))
+net.Receive( "shop_add", function(len, ply)
+	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new shop'" )
+	YRP.msg( "db", "shop_add: " .. db_worked(_new) )
 
 	send_shops(ply)
 end)
 
-util.AddNetworkString("shop_rem")
+util.AddNetworkString( "shop_rem" )
 
-net.Receive("shop_rem", function(len, ply)
+net.Receive( "shop_rem", function(len, ply)
 	local _uid = net.ReadString()
 	local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
-	YRP.msg("db", "shop_rem: " .. tostring(_uid))
+	YRP.msg( "db", "shop_rem: " .. tostring(_uid) )
 
 	send_shops(ply)
 end)
 
-util.AddNetworkString("shop_edit_name")
+util.AddNetworkString( "shop_edit_name" )
 
-net.Receive("shop_edit_name", function(len, ply)
+net.Receive( "shop_edit_name", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_name = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
-	YRP.msg("db", "shop_edit_name: " .. tostring(_uid))
+	YRP.msg( "db", "shop_edit_name: " .. tostring(_uid) )
 end)
 
 function HasShopPermanent(tab)
-	local _cats = YRP_SQL_SELECT("yrp_shop_categories", "*", "shopID = '" .. tab .. "'")
+	local _cats = YRP_SQL_SELECT( "yrp_shop_categories", "*", "shopID = '" .. tab .. "'" )
 	local _nw = {}
 	if _cats != nil then
 		_nw = _cats
 	end
 
 	for i, cat in pairs(_nw) do
-		local _s_items = YRP_SQL_SELECT("yrp_shop_items", "*", "categoryID = " .. cat.uniqueID)
+		local _s_items = YRP_SQL_SELECT( "yrp_shop_items", "*", "categoryID = " .. cat.uniqueID)
 		if wk(_s_items) then
 			for j, item in pairs(_s_items) do
 				if tonumber(item.permanent) == 1 then --or item.permanent == "1" then
@@ -74,17 +74,17 @@ function HasShopPermanent(tab)
 	return false
 end
 
-util.AddNetworkString("shop_get_tabs")
+util.AddNetworkString( "shop_get_tabs" )
 function YRPOpenBuyMenu(ply, uid)
-	--YRP.msg("note", "OpenBuyMenu | ply: " .. tostring(ply:RPName()) .. " | uid: " .. tostring(uid))
-	local _dealer = YRP_SQL_SELECT("yrp_dealers", "*", "uniqueID = '" .. uid .. "'")
+	--YRP.msg( "note", "OpenBuyMenu | ply: " .. tostring(ply:RPName() ) .. " | uid: " .. tostring(uid) )
+	local _dealer = YRP_SQL_SELECT( "yrp_dealers", "*", "uniqueID = '" .. uid .. "'" )
 	if _dealer != nil then
 		_dealer = _dealer[1]
-		local _tabs = string.Explode(",", _dealer.tabs)
+		local _tabs = string.Explode( ",", _dealer.tabs)
 		local _nw_tabs = {}
 		if _tabs[1] != "" then
 			for i, tab in pairs(_tabs) do
-				local _tab = YRP_SQL_SELECT("yrp_shops", "*", "uniqueID = '" .. tab .. "'")
+				local _tab = YRP_SQL_SELECT( "yrp_shops", "*", "uniqueID = '" .. tab .. "'" )
 				if _tab != false and _tab != nil then
 					_tab = _tab[1]
 					_tab.haspermanent = HasShopPermanent(tab)
@@ -93,29 +93,29 @@ function YRPOpenBuyMenu(ply, uid)
 			end
 		end
 
-		net.Start("shop_get_tabs")
+		net.Start( "shop_get_tabs" )
 			net.WriteTable(_dealer)
 			net.WriteTable(_nw_tabs)
 		net.Send(ply)
 	else
-		YRP.msg("note", "Dealer not found")
+		YRP.msg( "note", "Dealer not found" )
 	end
 end
 
-net.Receive("shop_get_tabs", function(len, ply)
+net.Receive( "shop_get_tabs", function(len, ply)
 	local _uid = net.ReadString()
 	YRPOpenBuyMenu(ply, _uid)
 end)
 
-util.AddNetworkString("shop_get_all_tabs")
+util.AddNetworkString( "shop_get_all_tabs" )
 
-net.Receive("shop_get_all_tabs", function(len, ply)
+net.Receive( "shop_get_all_tabs", function(len, ply)
 	local _tabs = YRP_SQL_SELECT(DATABASE_NAME, "name, uniqueID", nil)
 	local _nw = {}
 	if _tabs != nil then
 		_nw = _tabs
 	end
-	net.Start("shop_get_all_tabs")
+	net.Start( "shop_get_all_tabs" )
 		net.WriteTable(_nw)
 	net.Send(ply)
 end)

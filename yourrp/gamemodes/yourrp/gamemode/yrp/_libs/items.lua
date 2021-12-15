@@ -10,7 +10,7 @@ ICON_SIZE = 100
 --[[ SHARED ]]--
 
 function PrintStorage(tab)
-	YRP.msg("db", tostring(tab))
+	YRP.msg( "db", tostring(tab) )
 	for y=1, #tab do
 		local _row = ""
 		for x=1, INV_MAXW do
@@ -20,9 +20,9 @@ function PrintStorage(tab)
 			end
 			_row = _row .. tostring(_item) .. "\t"
 		end
-		YRP.msg("db", _row)
+		YRP.msg( "db", _row)
 	end
-	YRP.msg("db", "________________________________")
+	YRP.msg( "db", "________________________________" )
 end
 
 function distance(num1, num2)
@@ -59,10 +59,10 @@ function GetEntityItemSize(ent)
 			local _maxs = ent:OBBMaxs()
 			local _mins = ent:OBBMins()
 			local _axis = {}
-			AddTableAxis(_axis, "x", distance(_mins.x, _maxs.x))
-			AddTableAxis(_axis, "y", distance(_mins.y, _maxs.y))
-			AddTableAxis(_axis, "z", distance(_mins.z, _maxs.z))
-			table.SortByMember(_axis, "value")
+			AddTableAxis(_axis, "x", distance(_mins.x, _maxs.x) )
+			AddTableAxis(_axis, "y", distance(_mins.y, _maxs.y) )
+			AddTableAxis(_axis, "z", distance(_mins.z, _maxs.z) )
+			table.SortByMember(_axis, "value" )
 
 			local _result = {}
 			local _scale = 6
@@ -89,13 +89,13 @@ function GetEntityItemSize(ent)
 			return _result
 		end
 	else
-		YRP.msg("error", "GetEntityItemSize failed => ent not alive")
+		YRP.msg( "error", "GetEntityItemSize failed => ent not alive" )
 	end
 	return false
 end
 
 function IsViewModel(ent)
-	if string.find(ent:GetClass(), "viewmodel") or string.find(ent:GetModel(), "/c_") or ent:GetNW2Bool("isviewmodel", false) or string.find(string.lower(ent:GetClass()), "c_baseflex") then
+	if string.find(ent:GetClass(), "viewmodel" ) or string.find(ent:GetModel(), "/c_" ) or ent:GetNW2Bool( "isviewmodel", false) or string.find(string.lower(ent:GetClass() ), "c_baseflex" ) then
 		return true
 	end
 	return false
@@ -110,7 +110,7 @@ function GetSurroundingEntities(ply)
 				if !ent:IsWorld() then
 					if !ent:GetPersistent() then
 						if ent:GetParent() != ply then
-							if !ent:GetParent():IsVehicle() and !string.find(ent:GetClass(), "wheel") then
+							if !ent:GetParent():IsVehicle() and !string.find(ent:GetClass(), "wheel" ) then
 								if !ent:IsWorldStorage() then
 									if !IsViewModel(ent) then
 										table.insert(_tab, ent)
@@ -151,7 +151,7 @@ function GetSurroundingItems(ply)
 	local _items = {}
 	for i, ent in pairs(_ents) do
 		if ent:GetClass() != "prop_dynamic" then
-			table.insert(_items, FormatEntityToItem(ent))
+			table.insert(_items, FormatEntityToItem(ent) )
 		end
 	end
 	return _items
@@ -200,7 +200,7 @@ function FindPlace(stor, w, h)
 	for y = 1, #stor do
 		for x = 1, #stor[y] do
 			if stor[y][x].value == "" then
-				if IsEnoughSpace(stor, w, h, x, y, "") then
+				if IsEnoughSpace(stor, w, h, x, y, "" ) then
 					return true, x, y
 				end
 			end
@@ -216,7 +216,7 @@ function AddToStorage(stor, item)
 	for y = 1, #stor do
 		for x = 1, #stor[y] do
 			if stor[y][x].value == "" then
-				if IsEnoughSpace(stor, _w, _h, x, y, "") then
+				if IsEnoughSpace(stor, _w, _h, x, y, "" ) then
 					item.posx = x
 					item.posy = y
 					--[[ Add to stor ]]--
@@ -315,19 +315,19 @@ if CLIENT then
 			item_handler[tonumber(uid)].pnl = pnl
 			pnl.uid = uid
 			if pa(item_handler[tonumber(uid)].pnl) then
-				item_handler[tonumber(uid)].pnl:SetSize(YRP.ctr(ICON_SIZE*w), YRP.ctr(ICON_SIZE*h))
+				item_handler[tonumber(uid)].pnl:SetSize(YRP.ctr(ICON_SIZE*w), YRP.ctr(ICON_SIZE*h) )
 				for y = 1, h do
 					item_handler[tonumber(uid)][y] = {}
 					for x = 1, w do
 						item_handler[tonumber(uid)][y][x] = {}
-						item_handler[tonumber(uid)][y][x].slot = createD("DPanel", item_handler[tonumber(uid)].pnl, YRP.ctr(ICON_SIZE), YRP.ctr(ICON_SIZE), YRP.ctr((x-1)*ICON_SIZE), YRP.ctr((y-1)*ICON_SIZE))
+						item_handler[tonumber(uid)][y][x].slot = createD( "DPanel", item_handler[tonumber(uid)].pnl, YRP.ctr(ICON_SIZE), YRP.ctr(ICON_SIZE), YRP.ctr( (x-1)*ICON_SIZE), YRP.ctr( (y-1)*ICON_SIZE) )
 						local _edit_slot = item_handler[tonumber(uid)][y][x].slot
 						item_handler[tonumber(uid)][y][x].value = ""
 						_edit_slot.storageID = uid
 						_edit_slot.posy = y
 						_edit_slot.posx = x
 						_edit_slot.type = typ
-						_edit_slot:Receiver("slot", function(receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY)
+						_edit_slot:Receiver( "slot", function(receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY)
 							if isDropped then
 								local _item = tableOfDroppedPanels[1].item
 								local _slot1 = {}
@@ -340,14 +340,14 @@ if CLIENT then
 								_slot2.posx = receiver.posx
 								_slot2.type = receiver.type or "world"
 
-								net.Start("moveitem")
+								net.Start( "moveitem" )
 									net.WriteTable(_slot1)
 									net.WriteTable(_slot2)
 									net.WriteTable(_item)
 								net.SendToServer()
 
 								if tostring(_item.intern_storageID) != "" then
-									net.Start("update_backpack")
+									net.Start( "update_backpack" )
 									net.SendToServer()
 								end
 							end
@@ -358,7 +358,7 @@ if CLIENT then
 								self.color = Color(255, 255, 255, 10)
 							end
 							surfaceBox(0, 0, pw, ph, self.color)
-							drawRBBR(0, 0, 0, pw, ph, Color(0, 0, 0), YRP.ctr(4))
+							drawRBBR(0, 0, 0, pw, ph, Color(0, 0, 0), YRP.ctr(4) )
 						end
 					end
 				end
@@ -387,7 +387,7 @@ if CLIENT then
 					local _center = (_mins + _maxs)/2
 					pnl:SetFOV(90)
 					pnl:SetLookAt(_center)
-					pnl:SetCamPos(_center - Vector(0, item.sizew*6, 0))
+					pnl:SetCamPos(_center - Vector(0, item.sizew*6, 0) )
 				end
 			end
 		end
@@ -395,35 +395,35 @@ if CLIENT then
 
 	function AddItemToStorage(tab)
 		if tab.entity != nil then
-			tab.intern_storageID = tab.entity:GetNW2String("storage_uid", "")
+			tab.intern_storageID = tab.entity:GetNW2String( "storage_uid", "" )
 		end
 		local _storage = item_handler[tonumber(tab.storageID)].pnl
 		if pa(_storage) then
 			local _parent = item_handler[tonumber(tab.storageID)].pnl:GetParent()
 			local _x, _y = item_handler[tonumber(tab.storageID)].pnl:GetPos()
 
-			local _bg = createD("DPanel", _parent, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), _x + YRP.ctr((tab.posx-1)*ICON_SIZE), _y + YRP.ctr((tab.posy-1)*ICON_SIZE))
+			local _bg = createD( "DPanel", _parent, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), _x + YRP.ctr( (tab.posx-1)*ICON_SIZE), _y + YRP.ctr( (tab.posy-1)*ICON_SIZE) )
 			function _bg:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 200))
+				surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 200) )
 			end
 			function _bg:PaintOver(pw, ph)
 				local _br = 2
-				surfaceBox(0, 0, pw, YRP.ctr(_br), Color(0, 0, 255, 255))
-				surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), Color(0, 0, 255, 255))
+				surfaceBox(0, 0, pw, YRP.ctr(_br), Color(0, 0, 255, 255) )
+				surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), Color(0, 0, 255, 255) )
 
-				surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255))
-				surfaceBox(pw-YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255))
+				surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255) )
+				surfaceBox(pw-YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255) )
 
 				surfaceText(tab.PrintName, "Y_18_500", YRP.ctr(20), YRP.ctr(10), Color(255, 255, 255), 0, 0)
 			end
 
-			local _item = createD("DModelPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
+			local _item = createD( "DModelPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
 			_item:InvalidateLayout(true)
 			_item:SetModel(tab.WorldModel)
 			SetCamPosition(_item, tab)
 			function _item:LayoutEntity(Entity) return end
 
-			local _item2 = createD("DPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
+			local _item2 = createD( "DPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
 			if item_handler[tonumber(tab.storageID)][tonumber(tab.posy)] != nil then
 				if item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)] != nil then
 					item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item = _item2
@@ -431,18 +431,18 @@ if CLIENT then
 					local _i = item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item
 					_i.item = tab
 					function _i:Paint(pw, ph)
-						--surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 240))
+						--surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 240) )
 					end
 					function _i:PaintOver(pw, ph)
 						local _br = 2
-						surfaceBox(0, 0, pw, YRP.ctr(_br), Color(0, 0, 255, 255))
-						surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), Color(0, 0, 255, 255))
+						surfaceBox(0, 0, pw, YRP.ctr(_br), Color(0, 0, 255, 255) )
+						surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), Color(0, 0, 255, 255) )
 
-						surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255))
-						surfaceBox(pw-YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255))
+						surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255) )
+						surfaceBox(pw-YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255) )
 					end
-					_i:Droppable("slot")
-					_i:SetToolTip("PrintName: " .. _i.item.PrintName .. "\n" .. "ClassName: " .. _i.item.ClassName .. "\n" .. "WorldModel: " .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh)
+					_i:Droppable( "slot" )
+					_i:SetToolTip( "PrintName: " .. _i.item.PrintName .. "\n" .. "ClassName: " .. _i.item.ClassName .. "\n" .. "WorldModel: " .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh)
 
 					return _item
 				end
@@ -450,12 +450,12 @@ if CLIENT then
 		end
 	end
 
-	net.Receive("additemtostorage", function(len)
+	net.Receive( "additemtostorage", function(len)
 		local _item = net.ReadTable()
 		AddItemToStorage(_item)
 	end)
 
-	net.Receive("moveitem_slot1", function(len)
+	net.Receive( "moveitem_slot1", function(len)
 		if IsInventoryOpen() then
 			local _s1 = net.ReadTable()
 
@@ -470,7 +470,7 @@ if CLIENT then
 		end
 	end)
 
-	net.Receive("moveitem_slot2", function(len)
+	net.Receive( "moveitem_slot2", function(len)
 		if IsInventoryOpen() then
 			local _s2 = net.ReadTable()
 			local _i = net.ReadTable()

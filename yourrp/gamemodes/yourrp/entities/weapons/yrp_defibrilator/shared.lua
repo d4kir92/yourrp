@@ -45,7 +45,7 @@ function SWEP:PrimaryAttack()
 	if CLIENT and !GetGlobalBool( "bool_spawncorpseondeath", true ) then
 		if self.delay < CurTime() then
 			self.delay = CurTime() + 1
-			notification.AddLegacy("[Spawn Corpse On Death] is disabled, which is needed for the defi", NOTIFY_HINT, 3)
+			notification.AddLegacy( "[Spawn Corpse On Death] is disabled, which is needed for the defi", NOTIFY_HINT, 3)
 		end
 	end
 	if SERVER then
@@ -54,25 +54,25 @@ function SWEP:PrimaryAttack()
 		if tr.Hit then
 			self.target = tr.Entity
 			if self.target:GetClass() == "prop_ragdoll" then
-				ply:StartCasting("revive", "LID_revive", 0, self.target, 0.1, 200, 1, false)
+				ply:StartCasting( "revive", "LID_revive", 0, self.target, 0.1, 200, 1, false)
 			end
 		end
 	end
 end
 
 if SERVER then
-	hook.Add("yrp_castdone_revive", "revive", function(args)
-		if IsValid(args.target.ply) then
+	hook.Add( "yrp_castdone_revive", "revive", function( args)
+		if IsValid( args.target.ply) then
 			local ragdoll = args.target
 			local ply = args.target.ply
 			local pos = ragdoll:GetPos()
 			if pos != nil then
 				ply:Revive(pos)
 			else
-				YRP.msg("note", "[REVIVE] Ragdoll is not valid")
+				YRP.msg( "note", "[REVIVE] Ragdoll is not valid" )
 			end
 		else
-			YRP.msg("note", "[REVIVE] target player is not valid")
+			YRP.msg( "note", "[REVIVE] target player is not valid" )
 		end
 	end)
 end

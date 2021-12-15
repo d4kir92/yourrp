@@ -49,7 +49,7 @@ function PANEL:Paint( w, h )
 	draw.NoTexture()
 	surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
 	local diameter = h / 2
-	drawCircle(diameter, diameter, diameter, math.max(w, h))
+	drawCircle( diameter, diameter, diameter, math.max(w, h) )
 
 	render.SetStencilCompareFunction( STENCIL_EQUAL )
 	render.SetStencilFailOperation( STENCIL_KEEP )
@@ -59,4 +59,4 @@ function PANEL:Paint( w, h )
 	render.SetStencilEnable( false )
 end
  
-vgui.Register("YModelPanel", PANEL, "PANEL")
+vgui.Register( "YModelPanel", PANEL, "PANEL" )

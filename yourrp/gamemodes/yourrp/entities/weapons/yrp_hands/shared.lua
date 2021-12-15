@@ -44,7 +44,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:Think()
-	if self.Drag and (not self.Owner:KeyDown(IN_ATTACK) or not IsValid(self.Drag.Entity)) then
+	if self.Drag and (not self.Owner:KeyDown(IN_ATTACK) or not IsValid(self.Drag.Entity) ) then
 		self.Drag = nil
 	end
 end
@@ -87,7 +87,7 @@ function SWEP:PrimaryAttack()
 		local Pos2 = Pos + Aim * self.Range * self.Drag.Fraction
 		local OffPos = HitEnt:LocalToWorld( self.Drag.OffPos )
 		local Dif = Pos2 - OffPos
-		local Nom = (Dif:GetNormal() *math.min(1, Dif:Length() / 100) * 500 -Phys:GetVelocity()) * Phys:GetMass()
+		local Nom = (Dif:GetNormal() *math.min(1, Dif:Length() / 100) * 500 -Phys:GetVelocity() ) * Phys:GetMass()
 
 		Phys:ApplyForceOffset( Nom, OffPos )
 		Phys:AddAngleVelocity( -Phys:GetAngleVelocity() /4 )
@@ -119,7 +119,7 @@ if CLIENT then
 			not self.rDag and
 			not HitEnt:IsVehicle() and
 			not IsValid( HitEnt:GetParent() ) and
-			not HitEnt:GetNWBool("NoDrag", false) then
+			not HitEnt:GetNWBool( "NoDrag", false) then
 
 			self.Time = math.min( 1, self.Time +2 *FrameTime() )
 		else
@@ -129,7 +129,7 @@ if CLIENT then
 		if self.Time > 0 and !self.Drag then
 			textColor.a = mainColor.a *self.Time
 
-			draw.SimpleText(YRP.lang_string("LID_drag"), "Y_30_500", x, y, textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_drag" ), "Y_30_500", x, y, textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		if self.Drag and IsValid( self.Drag.Entity ) then

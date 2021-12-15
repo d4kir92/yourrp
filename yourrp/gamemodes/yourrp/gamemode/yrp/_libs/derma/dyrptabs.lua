@@ -6,17 +6,17 @@ function PANEL:Init()
 	self.color_sel = Color(0, 0, 255)
 	self.color_uns = Color(255, 255, 0)
 
-	function self:SetSelectedColor(col)
+	function self:SetSelectedColor( col)
 		self.color_sel = col
 	end
 
-	function self:SetUnselectedColor(col)
+	function self:SetUnselectedColor( col)
 		self.color_uns = col
 	end
 
 	self.tabs = {}
 
-	self.slider = createD("DHorizontalScroller", self, self:GetWide(), self:GetTall(), 0, 0)
+	self.slider = createD( "DHorizontalScroller", self, self:GetWide(), self:GetTall(), 0, 0)
 
 	self.OldSetSize = self.OldSetSize or self.SetSize
 	function self:SetSize(w, h)
@@ -25,12 +25,12 @@ function PANEL:Init()
 	end
 
 	function self.slider:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0))
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0) )
 	end
 
 	function self:AddTab(str, tbl)
 		local lply = LocalPlayer()
-		surface.SetFont("Y_24_500")
+		surface.SetFont( "Y_24_500" )
 		local _tw, _th = surface.GetTextSize(str)
 		local _w = self:GetTall()
 
@@ -39,9 +39,9 @@ function PANEL:Init()
 		end
 
 		_w = _w * 1.4
-		local _tmp = createD("DButton", self, _w, self:GetTall(), _x, ctrb(0))
+		local _tmp = createD( "DButton", self, _w, self:GetTall(), _x, ctrb(0) )
 		_tmp.tbl = tbl
-		_tmp:SetText("")
+		_tmp:SetText( "" )
 		_tmp.name = str
 		_tmp.selected = false
 		_tmp.base = self
@@ -50,13 +50,13 @@ function PANEL:Init()
 				draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(255, 255, 255, 254), true, true)
 			end
 
-			draw.RoundedBoxEx(0, 0, 0, pw, ph, lply:InterfaceValue("YFrame", "HB"), true, true)
+			draw.RoundedBoxEx(0, 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "HB" ), true, true)
 
 			local _color = Color(255, 255, 255)
 			local font = "Y_24_500"
 			if self.selected then
 				font = "Y_24_500"
-				_color = lply:InterfaceValue("YButton", "SC")
+				_color = lply:InterfaceValue( "YButton", "SC" )
 				draw.RoundedBox(0, YRP.ctr(2), ph - YRP.ctr(4 + 2), pw - 2 * YRP.ctr(2), YRP.ctr(4), _color)
 			end
 
@@ -84,7 +84,7 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0))
+	--draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0) )
 end
 
-vgui.Register("DYRPTabs", PANEL, "Panel")
+vgui.Register( "DYRPTabs", PANEL, "Panel" )

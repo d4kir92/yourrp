@@ -6,15 +6,15 @@ local DBTab2 = {}
 local cbs = {}
 
 local function YRPWeaponSlotNum(parent, x, y, lid, smin, smax, sart, sval)
-	local slider = createD("DNumSlider", parent, 400, 50, x, y)
-	slider:SetText(YRP.lang_string(lid))
+	local slider = createD( "DNumSlider", parent, 400, 50, x, y)
+	slider:SetText(YRP.lang_string(lid) )
 	slider:SetDecimals(0)
 	slider:SetMinMax( smin, smax )
 	slider:SetValue( sval )
 	function slider:OnValueChanged( value )
-		net.Start("yrp_set_slot_amount")
+		net.Start( "yrp_set_slot_amount" )
 			net.WriteString(sart)
-			net.WriteString(math.floor(value, self:GetDecimals()))
+			net.WriteString(math.floor( value, self:GetDecimals() ))
 		net.SendToServer()
 	end
 
@@ -22,7 +22,7 @@ local function YRPWeaponSlotNum(parent, x, y, lid, smin, smax, sart, sval)
 end
 
 local function YRPWeaponSlotCB(parent, x, y, cname, art, sval)
-	local cb = createD("DCheckBox", parent, 30, 30, x + 5, y + 5)
+	local cb = createD( "DCheckBox", parent, 30, 30, x + 5, y + 5)
 	cb:SetChecked(sval)
 	function cb:OnChange( bVal )
 		if art == "slot_no" and bVal then
@@ -49,26 +49,26 @@ local function YRPWeaponSlotCB(parent, x, y, cname, art, sval)
 			end
 		end
 
-		DBTab2[cname][art] = tonum(bVal)
+		DBTab2[cname][art] = tonum( bVal)
 
- 		net.Start("yrp_set_slot_weapon")
-			net.WriteString(cname)
-			net.WriteString(art)
-			net.WriteBool(bVal)
+ 		net.Start( "yrp_set_slot_weapon" )
+			net.WriteString( cname)
+			net.WriteString( art)
+			net.WriteBool( bVal)
 		net.SendToServer()
 	end
 
 	return cb
 end
 
-local function YRPWeaponNoEntry(cname)
+local function YRPWeaponNoEntry( cname)
 	if DBTab2[cname] and DBTab2[cname].slot_primary == 0 and DBTab2[cname].slot_secondary == 0 and DBTab2[cname].slot_sidearm == 0 and DBTab2[cname].slot_gadget == 0 and DBTab2[cname].slot_no == 0 then
 		return true
 	end
 	return false
 end
 
-net.Receive("yrp_weapon_menu", function(len)
+net.Receive( "yrp_weapon_menu", function(len)
 	local lply = LocalPlayer()
 
 	local spacer = 80
@@ -92,7 +92,7 @@ net.Receive("yrp_weapon_menu", function(len)
 	local allsweps = GetSWEPsList()
 	local cl_sweps = {}
 	local count = 0
-	for k, v in pairs(allsweps) do
+	for k, v in pairs( allsweps) do
 		count = count + 1
 		cl_sweps[count] = {}
 		cl_sweps[count].WorldModel = v.WorldModel or ""
@@ -102,26 +102,26 @@ net.Receive("yrp_weapon_menu", function(len)
 
 	local sw = 640
 
-	local search = createD("DTextEntry", PARENT, sw, 30, 400 + 10, 10)
-	search:SetPlaceholderText("Enter Weapon Name (Example: food, drink, physgun, ...)")
+	local search = createD( "DTextEntry", PARENT, sw, 30, 400 + 10, 10)
+	search:SetPlaceholderText( "Enter Weapon Name (Example: food, drink, physgun, ...)" )
 	function search:OnTextChanged()
 		YRPWeaponUpdateList()
 	end
 
-	local header = createD("DPanel", PARENT, sw, 30, 400 + 10, 10 + 30)
+	local header = createD( "DPanel", PARENT, sw, 30, 400 + 10, 10 + 30)
 	function header:Paint(pw, ph)
 		local color = Color(80, 80, 80)
 		draw.RoundedBox(3, 0, 0, pw, ph, color)
-		draw.SimpleText(YRP.lang_string("LID_name"), "Y_16_700", ph / 2, ph / 2, TextColor(color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_name" ), "Y_16_700", ph / 2, ph / 2, TextColor( color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		
-		draw.SimpleText(YRP.lang_string("LID_primary"), 	"Y_16_700", pw - 60 - spacer * 4 + 8, ph / 2, TextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string("LID_secondary"), 	"Y_16_700", pw - 60 - spacer * 3 + 8, ph / 2, TextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string("LID_sidearm"), 	"Y_16_700", pw - 60 - spacer * 2 + 8, ph / 2, TextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string("LID_gadget"), 		"Y_16_700", pw - 60 - spacer * 1 + 8, ph / 2, TextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string("LID_noslot"), 		"Y_16_700", pw - 60 - spacer * 0 + 8, ph / 2, TextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_primary" ), 	"Y_16_700", pw - 60 - spacer * 4 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_secondary" ), 	"Y_16_700", pw - 60 - spacer * 3 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_sidearm" ), 	"Y_16_700", pw - 60 - spacer * 2 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_gadget" ), 		"Y_16_700", pw - 60 - spacer * 1 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_noslot" ), 		"Y_16_700", pw - 60 - spacer * 0 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	local list = createD("DPanelList", PARENT, sw, PARENT:GetTall() - 10 - 30 - 30 - 10, 400 + 10, 10 + 30 + 30)
+	local list = createD( "DPanelList", PARENT, sw, PARENT:GetTall() - 10 - 30 - 30 - 10, 400 + 10, 10 + 30 + 30)
 	list:EnableVerticalScrollbar()
 	list:SetSpacing(2)
 	function list:Paint(pw, ph)
@@ -131,14 +131,14 @@ net.Receive("yrp_weapon_menu", function(len)
 
 	function YRPWeaponUpdateList()
 		list:Clear()
-		for i, swep in SortedPairsByMemberValue(cl_sweps, "PrintName") do
-			local searchstr = string.lower(search:GetText())
-			searchstr = string.Replace(searchstr, "[", "")
-			searchstr = string.Replace(searchstr, "]", "")
-			searchstr = string.Replace(searchstr, "%", "")
+		for i, swep in SortedPairsByMemberValue( cl_sweps, "PrintName" ) do
+			local searchstr = string.lower(search:GetText() )
+			searchstr = string.Replace(searchstr, "[", "" )
+			searchstr = string.Replace(searchstr, "]", "" )
+			searchstr = string.Replace(searchstr, "%", "" )
 			if string.find(string.lower(swep.PrintName), searchstr) or string.find(string.lower(swep.ClassName), searchstr) then
-				local weapon = createD("DLabel", nil, list:GetWide(), 40, 0, 0)
-				weapon:SetText("")
+				local weapon = createD( "DLabel", nil, list:GetWide(), 40, 0, 0)
+				weapon:SetText( "" )
 				function weapon:Paint(pw, ph)
 					local color = Color(40, 160, 40)
 					if DBTab2[swep.ClassName].slot_no == 1 then
@@ -152,10 +152,10 @@ net.Receive("yrp_weapon_menu", function(len)
 					if strEmpty(text) then
 						text = "ClassName: " .. swep.ClassName
 					end
-					if string.find(string.lower(swep.ClassName), "base") or string.find(string.lower(swep.PrintName), "base") then
+					if string.find(string.lower(swep.ClassName), "base" ) or string.find(string.lower(swep.PrintName), "base" ) then
 						text = text .. " [MAYBE A BASE]"
 					end
-					draw.SimpleText(text, "Y_16_700", ph / 2, ph / 2, TextColor(color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(text, "Y_16_700", ph / 2, ph / 2, TextColor( color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				if DBTab2[swep.ClassName] == nil then
@@ -189,6 +189,6 @@ net.Receive("yrp_weapon_menu", function(len)
 end)
 
 function OpenSettingsWeaponSystem()
-	net.Start("yrp_weapon_menu")
+	net.Start( "yrp_weapon_menu" )
 	net.SendToServer()
 end

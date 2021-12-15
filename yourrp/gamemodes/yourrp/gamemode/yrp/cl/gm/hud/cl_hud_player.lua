@@ -41,7 +41,7 @@ end
 function showIcon(str, material)
 	surface.SetDrawColor(255, 255, 255, 255)
 	surface.SetMaterial(material)
-	surface.DrawTexturedRect(anchorW(HudV(str .. "aw")) + YRP.ctr(HudV(str .. "px")) + YRP.ctr(30) - YRP.ctr(16), anchorH(HudV(str .. "ah")) + YRP.ctr(HudV(str .. "py")) + YRP.ctr(HudV(str .. "sh")/2) - YRP.ctr(16), YRP.ctr(32), YRP.ctr(32))
+	surface.DrawTexturedRect( anchorW(HudV(str .. "aw" ) ) + YRP.ctr(HudV(str .. "px" ) ) + YRP.ctr(30) - YRP.ctr(16), anchorH(HudV(str .. "ah" ) ) + YRP.ctr(HudV(str .. "py" ) ) + YRP.ctr(HudV(str .. "sh" )/2) - YRP.ctr(16), YRP.ctr(32), YRP.ctr(32) )
 end
 
 local once = true
@@ -61,7 +61,7 @@ local tabs = {
 	["spawnmenu.category.dupes"] = "bool_dupes",
 	["spawnmenu.category.saves"] = "bool_saves"
 }
-hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
+hook.Add( "SpawnMenuOpen", "yrp_spawn_menu_open", function()
 	openMenu()
 
 	local lply = LocalPlayer()
@@ -78,7 +78,7 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 				timer.Simple(0.1, function()
 					if pa(g_SpawnMenu) then
 						g_SpawnMenu:Open() -- reopen with handling the tabs
-						hook.Run("SpawnMenuOpen") -- reload the hook
+						hook.Run( "SpawnMenuOpen" ) -- reload the hook
 					end
 				end)
 			end
@@ -93,8 +93,8 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 			local text = tab:GetText() -- tab name
 			for lstr, bstr in pairs(tabs) do
 				if text == language.GetPhrase(lstr) then -- if tabtext == tabletabtext
-					tab:SetVisible(LocalPlayer():GetNW2Bool(bstr, false)) -- set visible if allowed to
-					if LocalPlayer():GetNW2Bool(bstr) then -- if allowed
+					tab:SetVisible(LocalPlayer():GetNW2Bool( bstr, false) ) -- set visible if allowed to
+					if LocalPlayer():GetNW2Bool( bstr) then -- if allowed
 						allhidden = false -- then disable hiding the whole element
 						if firsttab == nil then -- if not firsttab found
 							firsttab = lstr -- set it
@@ -109,13 +109,13 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 		local changefirstpage = false
 		for lstr, bstr in pairs(tabs) do
 			if language.GetPhrase(text) == language.GetPhrase(lstr) then -- if active tab text == table tab text
-				if !lply:GetNW2Bool(bstr) then -- is not allowed
+				if !lply:GetNW2Bool( bstr) then -- is not allowed
 					changefirstpage = true -- then change tab
 				end
 			end
 		end
 		if changefirstpage and firsttab then -- change first tab page, because currently on unallowed
-			g_SpawnMenu:OpenCreationMenuTab("#" .. firsttab) -- changes to new tab page
+			g_SpawnMenu:OpenCreationMenuTab( "#" .. firsttab) -- changes to new tab page
 		end
 
 		-- Hide the whole element when all disallowed
@@ -126,20 +126,20 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 		end
 	end
 	
-	return LocalPlayer():GetNW2Bool("bool_canusespawnmenu", false)
+	return LocalPlayer():GetNW2Bool( "bool_canusespawnmenu", false)
 end, hook.MONITOR_HIGH)
 
-hook.Add("SpawnMenuClose", "yrp_spawn_menu_close", function()
+hook.Add( "SpawnMenuClose", "yrp_spawn_menu_close", function()
 	closeMenu()
 end, hook.MONITOR_HIGH)
 
 local contextMenuOpen = false
-hook.Add("ContextMenuOpen", "YRPOnContextMenuOpen", function()
+hook.Add( "ContextMenuOpen", "YRPOnContextMenuOpen", function()
 	contextMenuOpen = true
-	return LocalPlayer():GetNW2Bool("bool_canusecontextmenu", false)
+	return LocalPlayer():GetNW2Bool( "bool_canusecontextmenu", false)
 end, hook.MONITOR_HIGH)
 
-hook.Add("ContextMenuClose", "YRPOnContextMenuClose", function()
+hook.Add( "ContextMenuClose", "YRPOnContextMenuClose", function()
 	contextMenuOpen = false
 end, hook.MONITOR_HIGH)
 
@@ -155,13 +155,13 @@ function sText(text, font, x, y, color, ax, ay)
 		_ay = h / 2
 	end
 
-	surface.SetTextColor(color or Color(255, 255, 255, 255))
+	surface.SetTextColor( color or Color(255, 255, 255, 255) )
 	surface.SetTextPos(x - _ax, y - _ay)
 	surface.DrawText(text)
 end
 
 function drawMenuInfo()
-	if get_tutorial("tut_f1info") then
+	if get_tutorial( "tut_f1info" ) then
 		local isize = YRP.ctr(48)
 		local ibr = YRP.ctr(10)
 		local color = Color(255, 255, 255, 20)
@@ -170,13 +170,13 @@ function drawMenuInfo()
 		local y = ibr
 
 		--[[ F1 ]]--
-		if wk(YRP.GetDesignIcon("help")) then
-			surface.SetDrawColor(color)
-			surface.SetMaterial(YRP.GetDesignIcon("help"))
+		if wk(YRP.GetDesignIcon( "help" ) ) then
+			surface.SetDrawColor( color)
+			surface.SetMaterial(YRP.GetDesignIcon( "help" ) )
 			surface.DrawTexturedRect(x, y, isize, isize)
 		end
 		x = x + isize + ibr
-		local text = "[" .. "F1" .. "] " .. YRP.lang_string("LID_help")
+		local text = "[" .. "F1" .. "] " .. YRP.lang_string( "LID_help" )
 		sText(text, "Y_18_500", x, y + isize / 2, color, 0, 1)
 	end
 end
@@ -194,11 +194,11 @@ function HudRefreshDisable()
 	HUD.refresh = false
 end
 
-function drawHUDElement(dbV, cur, max, text, icon, color)
-	if tobool(HudV(dbV .. "to")) then
+function drawHUDElement( dbV, cur, max, text, icon, color)
+	if tobool(HudV( dbV .. "to" ) ) then
 		local _r = 0
 		if color != nil and cur != nil and max != nil then
-			if tonumber(cur) > tonumber(max) then
+			if tonumber( cur) > tonumber(max) then
 				cur = max
 			end
 			if HUD[dbV] == nil or HUD.refresh then
@@ -206,11 +206,11 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 				HUD[dbV] = {}
 				HUD[dbV].id = HUD.count
 				HUD[dbV].delay = CurTime()
-				HUD[dbV].x = anchorW(HudV(dbV .. "aw")) + YRP.ctr(HudV(dbV .. "px"))
-				HUD[dbV].y = anchorH(HudV(dbV .. "ah")) + YRP.ctr(HudV(dbV .. "py"))
-				HUD[dbV].w = YRP.ctr(HudV(dbV .. "sw"))
+				HUD[dbV].x = anchorW(HudV( dbV .. "aw" ) ) + YRP.ctr(HudV( dbV .. "px" ) )
+				HUD[dbV].y = anchorH(HudV( dbV .. "ah" ) ) + YRP.ctr(HudV( dbV .. "py" ) )
+				HUD[dbV].w = YRP.ctr(HudV( dbV .. "sw" ) )
 				HUD[dbV].barw = cur / max * HUD[dbV].w
-				HUD[dbV].h = YRP.ctr(HudV(dbV .. "sh"))
+				HUD[dbV].h = YRP.ctr(HudV( dbV .. "sh" ) )
 				HUD[dbV].r = HUD[dbV].h / 2
 			end
 			if CurTime() > HUD[dbV].delay then
@@ -218,91 +218,91 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 				HUD[dbV].barw = cur / max * HUD[dbV].w
 			end
 
-			if tobool(HudV(dbV .. "tr")) then
-				_r = YRP.ctr(HudV(dbV .. "sh")) / 2
+			if tobool(HudV( dbV .. "tr" ) ) then
+				_r = YRP.ctr(HudV( dbV .. "sh" ) ) / 2
 			end
-			draw.RoundedBox(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color(HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga")))
+			draw.RoundedBox(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color(HudV( "colbgr" ), HudV( "colbgg" ), HudV( "colbgb" ), HudV( "colbga" ) ))
 			if tonumber(max) >= 0 then
-				if !tobool(HudV(dbV .. "tr")) then
+				if !tobool(HudV( dbV .. "tr" ) ) then
 					draw.RoundedBox(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color)
 				else
-					drawRoundedBoxStencil(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color, YRP.ctr(HudV(dbV .. "sw")))
+					drawRoundedBoxStencil(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color, YRP.ctr(HudV( dbV .. "sw" ) ))
 				end
 			end
 
 			local _st = {}
-			if text != nil and HudV(dbV .. "tt") == 1 then
+			if text != nil and HudV( dbV .. "tt" ) == 1 then
 				_st.br = 10
 				local _pw = 0
-				if HudV(dbV .. "tx") == 0 then
+				if HudV( dbV .. "tx" ) == 0 then
 					_pw = YRP.ctr(_st.br)
-				elseif HudV(dbV .. "tx") == 1 then
-					_pw = YRP.ctr(HudV(dbV .. "sw")) / 2
-				elseif HudV(dbV .. "tx") == 2 then
-					_pw = YRP.ctr(HudV(dbV .. "sw")) - YRP.ctr(_st.br)
+				elseif HudV( dbV .. "tx" ) == 1 then
+					_pw = YRP.ctr(HudV( dbV .. "sw" ) ) / 2
+				elseif HudV( dbV .. "tx" ) == 2 then
+					_pw = YRP.ctr(HudV( dbV .. "sw" ) ) - YRP.ctr(_st.br)
 				end
 				local _ph = 0
-				if HudV(dbV .. "ty") == 3 then
+				if HudV( dbV .. "ty" ) == 3 then
 					_ph = YRP.ctr(_st.br)
-				elseif HudV(dbV .. "ty") == 1 then
-					_ph = YRP.ctr(HudV(dbV .. "sh")) / 2
-				elseif HudV(dbV .. "ty") == 4 then
-					_ph = YRP.ctr(HudV(dbV .. "sh")) - YRP.ctr(_st.br)
+				elseif HudV( dbV .. "ty" ) == 1 then
+					_ph = YRP.ctr(HudV( dbV .. "sh" ) ) / 2
+				elseif HudV( dbV .. "ty" ) == 4 then
+					_ph = YRP.ctr(HudV( dbV .. "sh" ) ) - YRP.ctr(_st.br)
 				end
-				_st.x = anchorW(HudV(dbV .. "aw")) + YRP.ctr(HudV(dbV .. "px")) + _pw
-				_st.y = anchorH(HudV(dbV .. "ah")) + YRP.ctr(HudV(dbV .. "py")) + _ph
-				draw.SimpleText(text, dbV .. "sf", _st.x, _st.y, Color(255, 255, 255, 255), HudV(dbV .. "tx"), HudV(dbV .. "ty"), 1, Color(0, 0, 0))
+				_st.x = anchorW(HudV( dbV .. "aw" ) ) + YRP.ctr(HudV( dbV .. "px" ) ) + _pw
+				_st.y = anchorH(HudV( dbV .. "ah" ) ) + YRP.ctr(HudV( dbV .. "py" ) ) + _ph
+				draw.SimpleText(text, dbV .. "sf", _st.x, _st.y, Color(255, 255, 255, 255), HudV( dbV .. "tx" ), HudV( dbV .. "ty" ), 1, Color(0, 0, 0) )
 			end
 
-			if icon != nil and HudV(dbV .. "it") == 1	then
-				showIcon(dbV, icon)
+			if icon != nil and HudV( dbV .. "it" ) == 1	then
+				showIcon( dbV, icon)
 			end
 		end
 	end
 end
 
-function drawHUDElementBr(dbV)
-	if tobool(HudV(dbV .. "to")) and HUD[dbV] != nil then
-		if !tobool(HudV(dbV .. "tr")) then
-			drawRBoxBr2(0, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color(HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra")), 1)
+function drawHUDElementBr( dbV)
+	if tobool(HudV( dbV .. "to" ) ) and HUD[dbV] != nil then
+		if !tobool(HudV( dbV .. "tr" ) ) then
+			drawRBoxBr2(0, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color(HudV( "colbrr" ), HudV( "colbrg" ), HudV( "colbrb" ), HudV( "colbra" ) ), 1)
 		else
-			drawRoundedBoxBR(HUD[dbV].r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color(HudV("colbrr"), HudV("colbrg"), HudV("colbrb"), HudV("colbra")), 1)
+			drawRoundedBoxBR(HUD[dbV].r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color(HudV( "colbrr" ), HudV( "colbrg" ), HudV( "colbrb" ), HudV( "colbra" ) ), 1)
 		end
 	end
 end
 
 function YRPHudThirdperson(ply, color)
-	if YRPGetKeybind("view_zoom_in") and YRPGetKeybind("view_zoom_out") and ( input.IsKeyDown(YRPGetKeybind("view_zoom_in")) or input.IsKeyDown(YRPGetKeybind("view_zoom_out")) ) then
+	if YRPGetKeybind( "view_zoom_in" ) and YRPGetKeybind( "view_zoom_out" ) and ( input.IsKeyDown(YRPGetKeybind( "view_zoom_in" ) ) or input.IsKeyDown(YRPGetKeybind( "view_zoom_out" ) ) ) then
 		ply.yrp_view_range = ply.yrp_view_range or 0
 		ply.yrp_view_range_view = ply.yrp_view_range_view or 0
 		
 		local _3PText = ""
 		if ply.yrp_view_range <= -200 then
-			_3PText = YRP.lang_string("LID_fppr")
+			_3PText = YRP.lang_string( "LID_fppr" )
 		elseif ply.yrp_view_range > -200 and ply.yrp_view_range < 0 then
-			_3PText = YRP.lang_string("LID_fpp")
+			_3PText = YRP.lang_string( "LID_fpp" )
 		elseif ply.yrp_view_range > 0 then
-			_3PText = YRP.lang_string("LID_tpp")
+			_3PText = YRP.lang_string( "LID_tpp" )
 		end
-		draw.SimpleText(_3PText .. " (" .. math.Round(ply.yrp_view_range, -1) .. ")", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+		draw.SimpleText(_3PText .. " ( " .. math.Round(ply.yrp_view_range, -1) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
 	end
-	if YRPGetKeybind("view_up") and YRPGetKeybind("view_down") and ( input.IsKeyDown(YRPGetKeybind("view_up")) or input.IsKeyDown(YRPGetKeybind("view_down")) ) then
-		draw.SimpleText(YRP.lang_string("LID_viewingheight") .. " (" .. math.Round(ply.yrp_view_z, 0) .. ")", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	if YRPGetKeybind( "view_up" ) and YRPGetKeybind( "view_down" ) and ( input.IsKeyDown(YRPGetKeybind( "view_up" ) ) or input.IsKeyDown(YRPGetKeybind( "view_down" ) ) ) then
+		draw.SimpleText(YRP.lang_string( "LID_viewingheight" ) .. " ( " .. math.Round(ply.yrp_view_z, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
 	end
-	if YRPGetKeybind("view_right") and YRPGetKeybind("view_left") and ( input.IsKeyDown(YRPGetKeybind("view_right")) or input.IsKeyDown(YRPGetKeybind("view_left")) ) then
-		draw.SimpleText(YRP.lang_string("LID_viewingposition") .. " (" .. math.Round(ply.yrp_view_x, 0) .. ")", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	if YRPGetKeybind( "view_right" ) and YRPGetKeybind( "view_left" ) and ( input.IsKeyDown(YRPGetKeybind( "view_right" ) ) or input.IsKeyDown(YRPGetKeybind( "view_left" ) ) ) then
+		draw.SimpleText(YRP.lang_string( "LID_viewingposition" ) .. " ( " .. math.Round(ply.yrp_view_x, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
 	end
-	if YRPGetKeybind("view_spin_right") and YRPGetKeybind("view_spin_left") and ( input.IsKeyDown(YRPGetKeybind("view_spin_right")) or input.IsKeyDown(YRPGetKeybind("view_spin_left")) ) then
-		draw.SimpleText(YRP.lang_string("LID_viewingangle") .. " (" .. math.Round(ply.yrp_view_s, 0) .. ")", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+	if YRPGetKeybind( "view_spin_right" ) and YRPGetKeybind( "view_spin_left" ) and ( input.IsKeyDown(YRPGetKeybind( "view_spin_right" ) ) or input.IsKeyDown(YRPGetKeybind( "view_spin_left" ) ) ) then
+		draw.SimpleText(YRP.lang_string( "LID_viewingangle" ) .. " ( " .. math.Round(ply.yrp_view_s, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
 	end
 end
 
 function client_toggled()
-	return tobool(GetConVar("yrp_cl_hud"):GetInt())
+	return tobool(GetConVar( "yrp_cl_hud" ):GetInt() )
 end
 
 function server_toggled(ply)
-	return GetGlobalBool("bool_yrp_hud", false)
+	return GetGlobalBool( "bool_yrp_hud", false)
 end
 
 function YRPHudPlayer(ply)
@@ -315,7 +315,7 @@ function YRPHudPlayer(ply)
 			end
 		end
 	else
-		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 100))
-		draw.SimpleText(YRP.lang_string("LID_loading") .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 100) )
+		draw.SimpleText(YRP.lang_string( "LID_loading" ) .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255) )
 	end
 end
