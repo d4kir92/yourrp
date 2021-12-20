@@ -619,8 +619,12 @@ function Player:YRPGetRoleColor()
 end
 
 function Player:YRPGetRoleName()
-	local _rn = self:GetNW2String( "roleName", "" )
-	return _rn
+	if IsValid( self ) then
+		local _rn = self:GetNW2String( "roleName", "" )
+		return _rn
+	else
+		return "PLAYER INVALID"
+	end
 end
 
 function Player:YRPGetFactionUID()

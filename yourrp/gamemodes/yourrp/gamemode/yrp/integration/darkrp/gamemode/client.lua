@@ -152,8 +152,7 @@ end
 
 function DarkRP.toggleF4Menu()
 	--Description: Toggle the state of the F4 menu (open or closed).
-	YRPDarkrpNotFound( "toggleF4Menu()" )
-	return text
+	--YRPDarkrpNotFound( "toggleF4Menu()" )
 end
 
 net.Receive( "sendNotify", function()

@@ -744,7 +744,7 @@ net.Receive( "giveRole", function(len, ply)
 	local _tmpSteamID = net.ReadString()
 	local uniqueIDRole = net.ReadInt(16)
 	for k, _ply in pairs(player.GetAll() ) do
-		if tostring(_ply:SteamID() ) == tostring(_tmpSteamID) then
+		if IsValid(_ply) and tostring(_ply:SteamID() ) == tostring(_tmpSteamID) then
 			YRPRemRolVals(_ply)
 			RemGroVals(_ply)
 			set_role(_ply, uniqueIDRole)

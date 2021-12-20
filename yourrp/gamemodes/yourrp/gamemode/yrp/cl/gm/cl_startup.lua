@@ -2656,7 +2656,7 @@ net.Receive( "openLawBoard", function(len)
 			-- Playerinfo
 			local pinfo = createD( "YPanel", parent, YRP.ctr(800), YRP.ctr(800), YRP.ctr(20), YRP.ctr(890) )
 			function pinfo:Paint(pw, ph)
-				if plist.ply:IsPlayer() then
+				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
 					local scale = self:GetWide() / GetGlobalInt( "int_" .. "background" .. "_w", 100)
 					drawIDCard(plist.ply, scale, 0, 0)
 				end
@@ -2665,7 +2665,7 @@ net.Receive( "openLawBoard", function(len)
 			local btnVerwarnungUp = createVGUI( "YButton", parent, 50, 50, 20, 1310)
 			btnVerwarnungUp:SetText( "⮝" )
 			function btnVerwarnungUp:DoClick()
-				if plist.ply:IsPlayer() then
+				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
 					net.Start( "warning_up" )
 						net.WriteEntity(plist.ply)
 					net.SendToServer()
@@ -2674,7 +2674,7 @@ net.Receive( "openLawBoard", function(len)
 			local btnVerwarnungDn = createVGUI( "YButton", parent, 50, 50, 20, 1360)
 			btnVerwarnungDn:SetText( "⮟" )
 			function btnVerwarnungDn:DoClick()
-				if plist.ply:IsPlayer() then
+				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
 					net.Start( "warning_dn" )
 						net.WriteEntity(plist.ply)
 					net.SendToServer()
@@ -2683,7 +2683,7 @@ net.Receive( "openLawBoard", function(len)
 			local btnVerwarnung = createVGUI( "YLabel", parent, 450, 100, 70, 1310)
 			btnVerwarnung:SetText( "" )
 			function btnVerwarnung:Paint(pw, ph)
-				if plist.ply:IsPlayer() then
+				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
 					hook.Run( "YLabelPaint", self, pw, ph)
 					btnVerwarnung:SetText(YRP.lang_string( "LID_warnings" ) .. ": " .. plist.ply:GetNW2Int( "int_warnings", -1) )
 				end
@@ -2692,7 +2692,7 @@ net.Receive( "openLawBoard", function(len)
 			local btnVerstoesseUp = createVGUI( "YButton", parent, 50, 50, 20, 1430)
 			btnVerstoesseUp:SetText( "⮝" )
 			function btnVerstoesseUp:DoClick()
-				if plist.ply:IsPlayer() then
+				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
 					net.Start( "violation_up" )
 						net.WriteEntity(plist.ply)
 					net.SendToServer()
@@ -2701,7 +2701,7 @@ net.Receive( "openLawBoard", function(len)
 			local btnVerstoesseDn = createVGUI( "YButton", parent, 50, 50, 20, 1480)
 			btnVerstoesseDn:SetText( "⮟" )
 			function btnVerstoesseDn:DoClick()
-				if plist.ply:IsPlayer() then
+				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
 					net.Start( "violation_dn" )
 						net.WriteEntity(plist.ply)
 					net.SendToServer()
@@ -2709,8 +2709,8 @@ net.Receive( "openLawBoard", function(len)
 			end
 			local btnVerstoesse = createVGUI( "YLabel", parent, 450, 100, 70, 1430)
 			btnVerstoesse:SetText( "" )
-			function btnVerstoesse:Paint(pw, ph)
-				if plist.ply:IsPlayer() then
+			function btnVerstoesse:Paint( pw, ph )
+				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
 					hook.Run( "YLabelPaint", self, pw, ph)
 					btnVerstoesse:SetText(YRP.lang_string( "LID_violations" ) .. ": " .. plist.ply:GetNW2Int( "int_violations", -1) )
 				end
@@ -2719,7 +2719,7 @@ net.Receive( "openLawBoard", function(len)
 			local btnArrests = createVGUI( "YLabel", parent, 450, 100, 70, 1550)
 			btnArrests:SetText( "" )
 			function btnArrests:Paint(pw, ph)
-				if plist.ply:IsPlayer() then
+				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
 					hook.Run( "YLabelPaint", self, pw, ph)
 					btnArrests:SetText(YRP.lang_string( "LID_arrests" ) .. ": " .. plist.ply:GetNW2Int( "int_arrests", -1) )
 				end

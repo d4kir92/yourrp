@@ -871,82 +871,94 @@ end)
 util.AddNetworkString( "warning_up" )
 net.Receive( "warning_up", function(len, ply)
 	local p = net.ReadEntity()
-	local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'" )
-	if wk(ptab) then
-		local int_warnings = ptab[1].int_warnings
-		int_warnings = int_warnings + 1
-		int_warnings = math.Clamp(int_warnings, 0, 10)
+	if IsValid( p ) then
+		local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'" )
+		if wk(ptab) then
+			local int_warnings = ptab[1].int_warnings
+			int_warnings = int_warnings + 1
+			int_warnings = math.Clamp(int_warnings, 0, 10)
 
-		YRP_SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'" )
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'" )
 
-		p:SetNW2Int( "int_warnings", int_warnings)
+			p:SetNW2Int( "int_warnings", int_warnings)
+		end
 	end
 end)
 
 util.AddNetworkString( "warning_dn" )
 net.Receive( "warning_dn", function(len, ply)
 	local p = net.ReadEntity()
-	local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'" )
-	if wk(ptab) then
-		local int_warnings = ptab[1].int_warnings
-		int_warnings = int_warnings - 1
-		int_warnings = math.Clamp(int_warnings, 0, 10)
+	if IsValid( p ) then
+		local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'" )
+		if wk(ptab) then
+			local int_warnings = ptab[1].int_warnings
+			int_warnings = int_warnings - 1
+			int_warnings = math.Clamp(int_warnings, 0, 10)
 
-		YRP_SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'" )
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'" )
 
-		p:SetNW2Int( "int_warnings", int_warnings)
+			p:SetNW2Int( "int_warnings", int_warnings)
+		end
 	end
 end)
 
 util.AddNetworkString( "violation_up" )
 net.Receive( "violation_up", function(len, ply)
 	local p = net.ReadEntity()
-	local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'" )
-	if wk(ptab) then
-		local int_violations = ptab[1].int_violations
-		int_violations = int_violations + 1
-		int_violations = math.Clamp(int_violations, 0, 10)
+	if IsValid( p ) then
+		local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'" )
+		if wk(ptab) then
+			local int_violations = ptab[1].int_violations
+			int_violations = int_violations + 1
+			int_violations = math.Clamp(int_violations, 0, 10)
 
-		YRP_SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'" )
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'" )
 
-		p:SetNW2Int( "int_violations", int_violations)
+			p:SetNW2Int( "int_violations", int_violations)
+		end
 	end
 end)
 
 util.AddNetworkString( "violation_dn" )
 net.Receive( "violation_dn", function(len, ply)
 	local p = net.ReadEntity()
-	local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'" )
-	if wk(ptab) then
-		local int_violations = ptab[1].int_violations
-		int_violations = int_violations - 1
-		int_violations = math.Clamp(int_violations, 0, 10)
+	if IsValid( p ) then
+		local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'" )
+		if wk(ptab) then
+			local int_violations = ptab[1].int_violations
+			int_violations = int_violations - 1
+			int_violations = math.Clamp(int_violations, 0, 10)
 
-		YRP_SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'" )
+			YRP_SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'" )
 
-		p:SetNW2Int( "int_violations", int_violations)
+			p:SetNW2Int( "int_violations", int_violations)
+		end
 	end
 end)
 
 util.AddNetworkString( "set_rpname" )
 net.Receive( "set_rpname", function(len, ply)
 	local p = net.ReadEntity()
-	local rpname = net.ReadString()
+	if IsValid( p ) then
+		local rpname = net.ReadString()
 
-	rpname = YRPCleanUpName( rpname )
+		rpname = YRPCleanUpName( rpname )
 
-	p:SetRPName(rpname, "set_rpname" )
+		p:SetRPName(rpname, "set_rpname" )
+	end
 end)
 
 util.AddNetworkString( "set_idcardid" )
 net.Receive( "set_idcardid", function(len, ply)
 	local p = net.ReadEntity()
-	local text_idcardid = net.ReadString()
-	if wk(p:CharID() ) then
-		local ptab = YRP_SQL_SELECT(DATABASE_NAME, "text_idcardid", "uniqueID = '" .. p:CharID() .. "'" )
-		if wk(ptab) then
-			YRP_SQL_UPDATE(DATABASE_NAME, {["text_idcardid"] = text_idcardid}, "uniqueID = '" .. p:CharID() .. "'" )
-			p:SetNW2String( "idcardid", text_idcardid)
+	if IsValid( p ) then
+		local text_idcardid = net.ReadString()
+		if wk(p:CharID() ) then
+			local ptab = YRP_SQL_SELECT(DATABASE_NAME, "text_idcardid", "uniqueID = '" .. p:CharID() .. "'" )
+			if wk(ptab) then
+				YRP_SQL_UPDATE(DATABASE_NAME, {["text_idcardid"] = text_idcardid}, "uniqueID = '" .. p:CharID() .. "'" )
+				p:SetNW2String( "idcardid", text_idcardid)
+			end
 		end
 	end
 end)
