@@ -42,7 +42,13 @@ end
 function Player:changeTeam(team, force, suppressNotification)
 	--Description: Change the team of a player.
 	if canGetRole(self, team) then
+		if GetGlobalBool( "bool_players_die_on_role_switch", false) then
+			self:KillSilent()
+		end
 		SetRole(self, team, false, nil)
+		if GetGlobalBool( "bool_players_die_on_role_switch", false) then
+			self:Spawn()
+		end
 		return true
 	end
 	return false
@@ -147,7 +153,7 @@ function Player:sendDoorData()
 	YRPDarkrpNotFound( "sendDoorData()" )
 end
 
-function Player:setDarkRPVar( variable, value, target)
+function Player:setDarkRPVar( variable, value, target )
 	--Description: Set a shared variable. Make sure the variable is registered with DarkRP.registerDarkRPVar!
 	if value == nil then return false end
 
@@ -175,6 +181,11 @@ function Player:setDarkRPVar( variable, value, target)
 		--
 	else
 		YRPDarkrpNotFound( "setDarkRPVar( " .. tostring( variable) .. ", " .. tostring( value) .. ", " .. tostring(target) .. " )" )
+		if target == self then
+			self[ variable ] = value
+		else
+			target[ variable ] = value
+		end
 	end
 
 	if isnumber( value) then

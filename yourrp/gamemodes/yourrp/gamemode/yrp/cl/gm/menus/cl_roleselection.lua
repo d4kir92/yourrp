@@ -95,7 +95,7 @@ function CreateRolePreviewContent()
 			salaryheader:SetText( "LID_salary" )
 
 			local salary = createD( "YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), nh - YRP.ctr(20 + hh) )
-			salary:SetText(MoneyFormat(rol.int_salary) .. "TEST" )
+			salary:SetText( MoneyFormat(rol.int_salary) )
 			function salary:Paint(pw, ph)
 				hook.Run( "YTextFieldPaint", self, pw, ph)
 			end
@@ -159,9 +159,11 @@ function CreateRolePreviewContent()
 			if pms.id + 1 <= table.Count(pms.models) then
 				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
 				
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
-				surface.DrawTexturedRect(0, 0, pw, ph)
+				if YRP.GetDesignIcon( "64_angle-right" ) then
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-right" ) )
+					surface.DrawTexturedRect(0, 0, pw, ph)
+				end
 			end
 		end
 		function nextpm:DoClick()
@@ -178,9 +180,11 @@ function CreateRolePreviewContent()
 			if pms.id - 1 > 0 then
 				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
 				
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(YRP.GetDesignIcon( "64_angle-left" ) )
-				surface.DrawTexturedRect(0, 0, pw, ph)
+				if YRP.GetDesignIcon( "64_angle-left" ) then
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-left" ) )
+					surface.DrawTexturedRect(0, 0, pw, ph)
+				end
 			end
 		end
 		function prevpm:DoClick()
@@ -247,9 +251,11 @@ function CreateRolePreviewContent()
 			if sweps.id + 1 <= table.Count(sweps.models) then
 				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
 				
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
-				surface.DrawTexturedRect(0, 0, pw, ph)
+				if YRP.GetDesignIcon( "64_angle-right" ) then
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-right" ) )
+					surface.DrawTexturedRect(0, 0, pw, ph)
+				end
 			end
 		end
 		function nextpm:DoClick()
@@ -265,10 +271,12 @@ function CreateRolePreviewContent()
 		function prevpm:Paint(pw, ph)
 			if sweps.id - 1 > 0 then
 				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
-			
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(YRP.GetDesignIcon( "64_angle-left" ) )
-				surface.DrawTexturedRect(0, 0, pw, ph)
+				
+				if YRP.GetDesignIcon( "64_angle-left" ) then
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-left" ) )
+					surface.DrawTexturedRect(0, 0, pw, ph)
+				end
 			end
 		end
 		function prevpm:DoClick()

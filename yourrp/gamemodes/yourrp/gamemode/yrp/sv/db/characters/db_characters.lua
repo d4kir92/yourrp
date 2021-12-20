@@ -1006,9 +1006,11 @@ net.Receive( "setting_characters", function(len, ply)
 	if !wk(tab) then
 		tab = {}
 	end
-	net.Start( "setting_characters" )
-		net.WriteTable(tab)
-	net.Send(ply)
+	for i, chartab in pairs( tab ) do
+		net.Start( "setting_characters" )
+			net.WriteTable( chartab )
+		net.Send(ply)
+	end
 end)
 
 function YRPGetSpecData(ply)

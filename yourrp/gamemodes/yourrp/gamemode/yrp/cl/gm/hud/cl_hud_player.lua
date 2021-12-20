@@ -76,7 +76,7 @@ hook.Add( "SpawnMenuOpen", "yrp_spawn_menu_open", function()
 			if pa(g_SpawnMenu) then
 				g_SpawnMenu:Close(true) -- close it after short time
 				timer.Simple(0.1, function()
-					if pa(g_SpawnMenu) then
+					if pa(g_SpawnMenu) and g_SpawnMenu.Open then
 						g_SpawnMenu:Open() -- reopen with handling the tabs
 						hook.Run( "SpawnMenuOpen" ) -- reload the hook
 					end

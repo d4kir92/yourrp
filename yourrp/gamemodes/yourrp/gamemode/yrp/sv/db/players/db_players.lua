@@ -107,6 +107,7 @@ function SetRole(ply, rid, force, pmid)
 	if true then
 		ply:StripWeapons()
 		--ply:StripAmmo()
+
 		ply:UserGroupLoadout()
 
 		YRPGiveSpecs(ply)
@@ -355,10 +356,6 @@ end
 function set_role_values(ply, pmid)
 	hitquit(ply)
 	if yrp_db_loaded() then
-		if IsNoClipTagsEnabled() then
-			ply:SetNW2Bool( "show_tags", true)
-		end
-
 		local rolTab = ply:YRPGetRoleTable()
 		local groTab = ply:YRPGetGroupTable()
 		local ChaTab = ply:YRPGetCharacterTable()

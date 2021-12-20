@@ -70,8 +70,8 @@ function Player:getDarkRPVar( var)
 	elseif var == "Thirst" then
 		return self:Thirst()
 	else
-		local _nw_var = self:GetNW2Int( var)
-		local _nw_var2 = self:GetNW2String( var)
+		local _nw_var = self:GetNW2Int( var )
+		local _nw_var2 = self:GetNW2String( var )
 		if _nw_var != nil then
 			if tonumber(_nw_var) == nil then
 				return _nw_var
@@ -81,7 +81,9 @@ function Player:getDarkRPVar( var)
 				return _nw_var
 			end
 		else
-			if tonumber(_nw_var2) == nil then
+			if self[ var ] then
+				return self[ var ]
+			elseif tonumber(_nw_var2) == nil then
 				return _nw_var2
 			elseif isnumber(_nw_var2) != nil then
 				return tonumber(_nw_var2)

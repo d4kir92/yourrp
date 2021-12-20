@@ -494,7 +494,7 @@ function YRPScoreboardAddPlayer(ply)
 						x = x + yrptab["rolename"] + sp
 					end
 				elseif ply:GetNW2Bool( "yrp_characterselection", true) then
-					local text = "[" .. YRP.lang_string( "LID_characterselection" ) .. "]" .. " " .. "LOADING DONE"
+					local text = "[" .. YRP.lang_string( "LID_characterselection" ) .. "]" --.. " " .. "LOADING DONE"
 					local font = "Saira_24"
 
 					local ready = ply:GetNW2Bool( "yrp_received_ready", false )
@@ -502,7 +502,7 @@ function YRPScoreboardAddPlayer(ply)
 					local t3 = ply:GetNW2Bool( "yrp_hudloadout" )
 					if !ready or !t2 or !t3 then
 						local svstatus = ply:GetNW2String( "yrp_ready_status", "X" )
-						text = string.format( "[LOADING] Ready: %s      Characters: %s      HUD: %s      Server-Status: %s", ready, t2, t3, svstatus )
+						text = "[LOADING]" -- string.format( "[LOADING] Ready: %s      Characters: %s      HUD: %s      Server-Status: %s", ready, t2, t3, svstatus )
 						font = "Saira_24"
 					end
 
@@ -1251,9 +1251,26 @@ function YRPInitScoreboard()
 	function YRPScoreboard.list:Paint(pw, ph)
 		--draw.RoundedBox(5, 0, 0, pw, ph, Color(255, 100, 100, 100) )
 	end
+	local sbar = YRPScoreboard.list.VBar
+	if IsValid( sbar ) then
+		function sbar:Paint(w, h)
+			local lply = LocalPlayer()
+			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue( "YFrame", "NC" ) )
+		end
+		function sbar.btnUp:Paint(w, h)
+			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+		end
+		function sbar.btnDown:Paint(w, h)
+			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+		end
+		function sbar.btnGrip:Paint(w, h)
+			local lply = LocalPlayer()
+			draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue( "YFrame", "HI" ) )
+		end
+	end
 
 
-
+	
 	YRPScoreboard:Hide()
 end
 YRPInitScoreboard()

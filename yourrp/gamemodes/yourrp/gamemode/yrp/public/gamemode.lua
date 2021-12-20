@@ -7,25 +7,6 @@ if SERVER then
 	function GM:IsAutomaticServerReloadingEnabled()
 		return YRPIsAutomaticServerReloadingEnabled()
 	end
-
-
-	function GM:IsNoclipEffectEnabled()
-		return IsNoClipEffectEnabled()
-	end
-
-	function GM:IsNoclipStealthEnabled()
-		return IsNoClipStealthEnabled()
-	end
-
-	function GM:IsNoclipUsergroupEnabled()
-		return IsNoClipTagsEnabled()
-	end
-
-	function GM:IsNoclipModelEnabled()
-		return IsNoClipModelEnabled()
-	end
-
-
 end
 
 function IsInventorySystemEnabled()

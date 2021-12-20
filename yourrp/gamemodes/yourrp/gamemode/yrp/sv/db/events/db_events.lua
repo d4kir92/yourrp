@@ -158,7 +158,7 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 		updateRoleUses(roltab.uniqueID)
 	end
 
-	ply:SetNW2Bool( "yrp_chararchived", false)
+	ply:SetNW2Bool( "yrp_chararchived", false )
 
 	if cuid != ply:CharID() then
 		if GetGlobalBool( "bool_removebuildingownercharswitch", false) then

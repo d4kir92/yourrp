@@ -474,11 +474,6 @@ function DoCommand(sender, command, text)
 		end
 	end
 
-	if command == "esp" then
-		sender:SetNW2Bool( "yrp_esp", !sender:GetNW2Bool( "yrp_esp", true) )
-		return ""
-	end
-
 	if command == "givelicense" then
 		text = string.sub(text, 14)
 		local args = string.Explode( " ", text)

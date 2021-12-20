@@ -26,7 +26,6 @@ local bos = {
 	["bool_canseeenemiesonmap"] = '0',
 	["bool_canseeteammatesonmap"] = '0',
 	["bool_canusecontextmenu"] = '0',
-	["bool_canuseesp"] = '0',
 	["bool_canusespawnmenu"] = '0',
 	["bool_canusewarnsystem"] = '0',
 	["bool_chat"] = '1',
@@ -51,7 +50,6 @@ local bos = {
 	["bool_logs"] = '0',
 	["bool_map"] = '0',
 	["bool_money"] = '0',
-	["bool_noclip"] = '0',
 	["bool_npcs"] = '0',
 	["bool_permaprops"] = '0',
 	["bool_physgunpickup"] = '0',
@@ -137,7 +135,7 @@ timer.Simple( 1, function()
 		table.insert( vals, 2 )
 
 		for i, v in pairs( bos ) do
-			if i == "bool_removeable" or i == "bool_canuseesp" then
+			if i == "bool_removeable" then
 				table.insert( cols, i )
 				table.insert( vals, 0 )
 			else
@@ -161,7 +159,7 @@ timer.Simple( 1, function()
 			vals["int_position"] = 2
 
 			for i, v in pairs( bos ) do
-				if i == "bool_removeable" or i == "bool_canuseesp" then
+				if i == "bool_removeable" then
 					vals[i] = 0
 				else
 					vals[i] = 1
@@ -875,13 +873,6 @@ net.Receive( "usergroup_update_bool_saves", function(len, ply)
 	UGCheckBox(ply, uid, "bool_saves", bool_saves)
 end)
 
-util.AddNetworkString( "usergroup_update_bool_noclip" )
-net.Receive( "usergroup_update_bool_noclip", function(len, ply)
-	local uid = tonumber(net.ReadString() )
-	local bool_noclip = net.ReadString()
-	UGCheckBox(ply, uid, "bool_noclip", bool_noclip)
-end)
-
 util.AddNetworkString( "usergroup_update_bool_ignite" )
 net.Receive( "usergroup_update_bool_ignite", function(len, ply)
 	local uid = tonumber(net.ReadString() )
@@ -987,13 +978,6 @@ net.Receive( "usergroup_update_bool_canseeenemiesonmap", function(len, ply)
 	local uid = tonumber(net.ReadString() )
 	local bool_canseeenemiesonmap = net.ReadString()
 	UGCheckBox(ply, uid, "bool_canseeenemiesonmap", bool_canseeenemiesonmap)
-end)
-
-util.AddNetworkString( "usergroup_update_bool_canuseesp" )
-net.Receive( "usergroup_update_bool_canuseesp", function(len, ply)
-	local uid = tonumber(net.ReadString() )
-	local bool_canuseesp = net.ReadString()
-	UGCheckBox(ply, uid, "bool_canuseesp", bool_canuseesp)
 end)
 
 util.AddNetworkString( "usergroup_update_bool_canusewarnsystem" )
@@ -1305,41 +1289,16 @@ function YRPRenderCloaked(ply)
 	end
 end
 
-function YRPRenderNoClip(ply, alpha)
-	if ea(ply) then
-		if ply:GetNW2Bool( "cloaked", false) then
-			YRPRenderCloaked(ply)
-		else
-			local _alpha = 200
-			if IsNoClipEffectEnabled() then
-				if IsNoClipStealthEnabled() then
-					_alpha = 0
-				else
-					_alpha = 120
-				end
-			end
-			
-			ply:SetRenderMode(RENDERMODE_TRANSCOLOR)
-			ply:SetColor(Color(255, 255, 255, _alpha) )
-			for i, wp in pairs(ply:GetWeapons() ) do
-				wp:SetRenderMode(RENDERMODE_TRANSCOLOR)
-				wp:SetColor(Color(255, 255, 255, _alpha) )
-			end
-			--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, Color(255, 255, 255, _alpha) )
-		end
-	end
-end
-
 function YRPRenderFrozen(ply)
 	if ea(ply) then
 		if ply:GetNW2Bool( "cloaked", false) then
 			YRPRenderCloaked(ply)
 		else
 			ply:SetRenderMode(RENDERMODE_NORMAL)
-			ply:SetColor(Color(0, 0, 255) )
+			ply:SetColor( Color(0, 0, 255) )
 			for i, wp in pairs(ply:GetWeapons() ) do
 				wp:SetRenderMode(RENDERMODE_TRANSCOLOR)
-				wp:SetColor(Color(0, 0, 255) )
+				wp:SetColor( Color(0, 0, 255) )
 			end
 			--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, Color(0, 0, 255) )
 		end
@@ -1364,92 +1323,6 @@ function YRPRenderNormal(ply)
 		end
 	end
 end
-
-hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function(pl, bool)
-	if ea(pl) then
-		if !bool then
-			-- TURNED OFF
-			YRPRenderNormal(pl)
-
-			local _pos = pl:GetPos()
-
-			-- Stuck?
-			local tr = {
-				start = _pos,
-				endpos = _pos,
-				mins = pl:OBBMins(),
-				maxs = pl:OBBMaxs(),
-				filter = pl
-			}
-			local _t = util.TraceHull(tr)
-
-			if _t.Hit then
-				-- Up
-				local trup = {
-					start = _pos + Vector(0,0,100),
-					endpos = _pos,
-					mins = Vector(1,1,0),
-					maxs = Vector(-1,-1,0),
-					filter = pl
-				}
-				local _tup = util.TraceHull(trup)
-
-				-- Down
-				local trdn = {
-					start = _pos,
-					endpos = _pos + Vector(0,0,100),
-					mins = Vector(1,1,0),
-					maxs = Vector(-1,-1,0),
-					filter = pl
-				}
-				local _tdn = util.TraceHull(trdn)
-
-				timer.Simple(0.001, function()
-					if !_tup.StartSolid and _tdn.StartSolid then
-						pl:SetPos(_tup.HitPos + Vector(0, 0, 6) )
-					elseif _tup.StartSolid and !_tdn.StartSolid then
-						pl:SetPos(_tdn.HitPos - Vector(0, 0, 72 + 6) )
-					elseif !_tup.StartSolid and !_tdn.StartSolid then
-						_pos = _pos + Vector(0, 0, 36) -- Mid of Player
-						if _pos:Distance(_tup.HitPos) < _pos:Distance(_tdn.HitPos) then
-							pl:SetPos(_tup.HitPos + Vector(0, 0, 6) )
-						elseif _pos:Distance(_tup.HitPos) > _pos:Distance(_tdn.HitPos) then
-							pl:SetPos(_tdn.HitPos - Vector(0, 0, 72 + 6) )
-						end
-					end
-				end)
-			end
-			return true
-		else
-			-- TURNED ON
-			local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_noclip", "string_name = '" .. string.lower(pl:GetUserGroup() ) .. "'" )
-			if wk(_tmp) then
-				_tmp = _tmp[1]
-				if tobool(_tmp.bool_noclip) then
-
-					if IsNoClipModelEnabled() then
-						local mdl = GetGlobalString( "text_noclip_mdl", "" )
-						if !strEmpty(mdl) then
-							pl:SetModel(mdl)
-						end
-					end
-
-					YRPRenderNoClip(pl)
-					return true
-				else
-					YRP.msg( "note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup() ) .. "] tried to noclip." )
-
-					YRPNotiToPlyDisallowed(pl, "noclip" )
-
-					return false
-				end
-			else
-				YRP.msg( "db", "[noclip] failed! UserGroup not found in database." )
-				return false
-			end
-		end
-	end
-end)
 
 function EntBlacklisted(ent)
 	local blacklist = GetGlobalTable( "yrp_blacklist_entities", {})
@@ -1619,10 +1492,10 @@ end)
 
 function Player:UserGroupLoadout()
 	--YRP.msg( "gm", self:SteamName() .. " UserGroupLoadout" )
-	local UG = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. string.lower(self:GetUserGroup() ) .. "'" )
+	local UG = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. string.lower( self:GetUserGroup() ) .. "'" )
 	if wk(UG) then
 		UG = UG[1]
-		
+
 		self:SetNW2String( "usergroupDisplayname", UG.string_displayname)
 		self:SetNW2String( "usergroupColor", UG.string_color)
 		self:SetNW2Bool( "ugchat", tobool( UG.bool_chat ) )

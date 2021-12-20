@@ -141,7 +141,13 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 	elseif args[1] and jobByCmd[args[1]] then
 		local jobtab = RPExtraTeams[jobByCmd[args[1]]]
 		if jobtab then
+			if GetGlobalBool( "bool_players_die_on_role_switch", false) then
+				ply:KillSilent()
+			end
 			SetRole(ply, jobtab.uniqueID)
+			if GetGlobalBool( "bool_players_die_on_role_switch", false) then
+				ply:Spawn()
+			end
 		end
 	else
 		YRP.msg( "error", "[darkrp] console command: args[1]: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )

@@ -11,12 +11,6 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_version", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_reload_notification", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_reload", "INT DEFAULT 1" )
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_model", "INT DEFAULT 1" )
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_stealth", "INT DEFAULT 0" )
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_tags", "INT DEFAULT 1" )
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_noclip_effect", "INT DEFAULT 1" )
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_noclip_mdl", "TEXT DEFAULT 'models/crow.mdl'" )
-
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_server_collectionid", "INT DEFAULT 0" )
 
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_community_servers", "TEXT DEFAULT ''" )
@@ -267,8 +261,6 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_scale_stamina_jump", "TEXT DEFAULT '30.
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_max_channels_active", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_max_channels_passive", "INT DEFAULT 3" )
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_whitelist_countries", "TEXT DEFAULT ''" )
-
 local HANDLER_GENERAL = {}
 
 function RemFromHandler_General(ply)
@@ -311,6 +303,11 @@ if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" ) == nil then
 	YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 end
 
+local ld = YRP_SQL_SELECT( DATABASE_NAME, "*", "text_loading_design = 'Bottom'" )
+if ld then
+	YRP_SQL_UPDATE( DATABASE_NAME, {["text_loading_design"] = "Default"}, "text_loading_design = 'Bottom'" )
+end
+
 local _init_general = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
 if wk(_init_general) then
 	yrp_general = _init_general[1]
@@ -346,23 +343,6 @@ end
 
 function YRPIsAutomaticServerReloadingEnabled()
 	return GetGlobalBool( "bool_server_reload", false)
-end
-
-
-function IsNoClipEffectEnabled()
-	return GetGlobalBool( "bool_noclip_effect", false)
-end
-
-function IsNoClipStealthEnabled()
-	return GetGlobalBool( "bool_noclip_stealth", false)
-end
-
-function IsNoClipTagsEnabled()
-	return GetGlobalBool( "bool_noclip_tags", false)
-end
-
-function IsNoClipModelEnabled()
-	return GetGlobalBool( "bool_noclip_model", false)
 end
 
 function YRPGetMoneyModel()
@@ -548,37 +528,6 @@ net.Receive( "update_bool_server_reload", function(len, ply)
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "update_bool_server_reload", "bool_server_reload", b)
 end)
-
-util.AddNetworkString( "update_bool_noclip_effect" )
-net.Receive( "update_bool_noclip_effect", function(len, ply)
-	local b = btn(net.ReadBool() )
-	GeneralUpdateBool(ply, "update_bool_noclip_effect", "bool_noclip_effect", b)
-end)
-
-util.AddNetworkString( "update_bool_noclip_model" )
-net.Receive( "update_bool_noclip_model", function(len, ply)
-	local b = btn(net.ReadBool() )
-	GeneralUpdateBool(ply, "update_bool_noclip_model", "bool_noclip_model", b)
-end)
-
-util.AddNetworkString( "update_text_noclip_mdl" )
-net.Receive( "update_text_noclip_mdl", function(len, ply)
-	local str = net.ReadString()
-	GeneralUpdateString(ply, "update_text_noclip_mdl", "text_noclip_mdl", str)
-end)
-
-util.AddNetworkString( "update_bool_noclip_tags" )
-net.Receive( "update_bool_noclip_tags", function(len, ply)
-	local b = btn(net.ReadBool() )
-	GeneralUpdateBool(ply, "update_bool_noclip_tags", "bool_noclip_tags", b)
-end)
-
-util.AddNetworkString( "update_bool_noclip_stealth" )
-net.Receive( "update_bool_noclip_stealth", function(len, ply)
-	local b = btn(net.ReadBool() )
-	GeneralUpdateBool(ply, "update_bool_noclip_stealth", "bool_noclip_stealth", b)
-end)
-
 
 util.AddNetworkString( "update_text_server_collectionid" )
 net.Receive( "update_text_server_collectionid", function(len, ply)
@@ -1705,14 +1654,6 @@ net.Receive( "update_text_social_steamgroup", function(len, ply)
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "update_text_social_steamgroup", "text_social_steamgroup", str)
-end)
-
-
-util.AddNetworkString( "update_text_whitelist_countries" )
-net.Receive( "update_text_whitelist_countries", function(len, ply)
-	local str = net.ReadString()
-	str = string.Replace(str, " ", "" )
-	GeneralUpdateString(ply, "update_text_whitelist_countries", "text_whitelist_countries", str)
 end)
 
 

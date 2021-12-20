@@ -341,48 +341,6 @@ net.Receive( "Connect_Settings_General", function(len)
 		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_server_reload, "LID_automaticreloadingoftheserver", "update_bool_server_reload" )
 		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_server_reload_notification, YRP.lang_string( "LID_automaticreloadingoftheserver" ) .. " (Notification)", "update_bool_server_reload_notification" )
 		CreateHRLine(SERVER_SETTINGS:GetContent() )
-		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_noclip_effect, "LID_noclipeffect", "update_bool_noclip_effect" )
-		CreateCheckBoxLineTab(SERVER_SETTINGS:GetContent(), GEN.bool_noclip_stealth, "LID_noclipcloak", "update_bool_noclip_stealth" )
-		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_noclip_tags, "LID_noclipusergroup", "update_bool_noclip_tags" )
-		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_noclip_model, "LID_noclipmodel", "update_bool_noclip_model" )
-		local noclip_mdl = CreateButtonLine(SERVER_SETTINGS:GetContent(), "LID_noclipmodel", "update_text_noclip_mdl", "LID_change" )
-		function YRPUpdateNoclipMDL()
-			local mdl = LocalPlayer().yrpseltab[1]
-			net.Start( "update_text_noclip_mdl" )
-				net.WriteString(mdl)
-			net.SendToServer()
-		end
-		function noclip_mdl.button:DoClick()
-			local tmpTable = {}
-			local count = 0
-			local noneplayermodels = {}
-			AddToTabRecursive(noneplayermodels, "models/", "GAME", "*.mdl" )
-			for _, addon in SortedPairsByMemberValue(engine.GetAddons(), "title" ) do
-				if (!addon.downloaded or !addon.mounted) then continue end
-				AddToTabRecursive(noneplayermodels, "models/", addon.title, "*.mdl" )
-			end
-			for k, v in pairs(noneplayermodels) do
-				count = count + 1
-				tmpTable[count] = {}
-				tmpTable[count].WorldModel = v
-				tmpTable[count].ClassName = v
-				tmpTable[count].PrintName = v
-			end
-
-			local allvalidmodels = player_manager.AllValidModels()
-			for k, v in pairs( allvalidmodels) do
-				count = count + 1
-				tmpTable[count] = {}
-				tmpTable[count].WorldModel = v
-				tmpTable[count].ClassName = v
-				tmpTable[count].PrintName = player_manager.TranslateToPlayerModelName( v)
-			end
-
-			count = count + 1
-
-			YRPOpenSelector(tmpTable, false, "worldmodel", YRPUpdateNoclipMDL)
-		end
-		CreateHRLine(SERVER_SETTINGS:GetContent() )
 		CreateNumberWangLine(SERVER_SETTINGS:GetContent(), GEN.text_server_collectionid, "LID_collectionid", "update_text_server_collectionid" )
 		CreateHRLine(SERVER_SETTINGS:GetContent() )
 		CreateTextBoxLine(SERVER_SETTINGS:GetContent(), GEN.text_server_name, "LID_hostname", "update_text_server_name" )
@@ -560,7 +518,7 @@ net.Receive( "Connect_Settings_General", function(len)
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent() )
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_background, "LID_loadingbackground", "update_text_loading_background" )
-		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_design, "LID_loadingdesign", "update_text_loading_design", GetGlobalString( "text_loading_design", "Default" ), {"Default", "Bottom", "BottomRight"})
+		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_design, "LID_loadingdesign", "update_text_loading_design", GetGlobalString( "text_loading_design", "Default" ), {"Default", "Center", "BottomRight"})
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent() )
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_background, "LID_character_background", "update_text_character_background" )
@@ -1122,13 +1080,6 @@ net.Receive( "Connect_Settings_General", function(len)
 		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_instagram, "Instagram", "update_text_social_instagram" )
 		CreateHRLine(SOCIAL_SETTINGS:GetContent() )
 		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_steamgroup, "SteamGroup", "update_text_social_steamgroup" )
-
-		CreateHRLine(SOCIAL_SETTINGS:GetContent() )
-		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_whitelist_countries, "ALLOWED COUNTRIES (Empty = ALL) Seperator: ,", "update_text_whitelist_countries" )
-		local countrieslink = CreateButtonLine(SOCIAL_SETTINGS:GetContent(), "COUNTRY IDS", "" )
-		function countrieslink.button:DoClick()
-			gui.OpenURL( "https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" )
-		end
 	end
 end)
 

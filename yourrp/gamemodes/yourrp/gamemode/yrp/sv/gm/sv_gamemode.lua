@@ -77,6 +77,12 @@ function GM:PlayerInitialSpawn(ply)
 		YRPCreateCharacter(ply, tab)
 
 		ply:SetNW2Bool( "yrp_characterselection", false)
+
+		timer.Simple( 0.1, function()
+			if IsValid( ply ) then
+				ply:UserGroupLoadout()
+			end
+		end )
 	end
 
 	for i, channel in SortedPairsByMemberValue(GetGlobalTable( "yrp_voice_channels", {}), "int_position", false) do
@@ -519,10 +525,16 @@ function PLAYER:CreateRagdoll()
 	end
 	local rd = ents.Create( "prop_ragdoll" )
 	if IsValid(rd) and ply:GetModel() != nil then
-		rd:SetModel(ply:GetModel() )
-		rd:SetPos(ply:GetPos() )
-		rd:SetAngles(ply:GetAngles() )
-		rd:SetVelocity(ply:GetVelocity() )
+		rd:SetModel( ply:GetModel() )
+		for id = 1, 19 do
+			local val = ply:GetBodygroup( id )
+			if val then
+				rd:SetBodygroup( id, val )
+			end
+		end
+		rd:SetPos( ply:GetPos() )
+		rd:SetAngles( ply:GetAngles() )
+		rd:SetVelocity( ply:GetVelocity() )
 		rd:Spawn()
 		rd.ply = ply
 		rd.index = rd:EntIndex()

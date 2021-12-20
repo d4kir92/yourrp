@@ -272,6 +272,7 @@ countries["AE"] = "United Arab Emirates"
 countries["AR"] = "Argentina"
 countries["AT"] = "Austria"
 countries["AU"] = "Australia"
+countries["AZ"] = "Azerbaijani"
 
 countries["BE"] = "Belgium"
 countries["BG"] = "Bulgaria"

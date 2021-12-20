@@ -982,15 +982,6 @@ function YRPDrawNamePlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, ico
 	cam.End3D2D()
 end
 
-hook.Add( "PlayerNoClip", "yrp_noclip_restriction", function(ply, bool)
-	if bool and ply:GetNW2Bool( "bool_noclip", false) then
-		return true
-	elseif !bool then
-		return true
-	end
-	return false
-end)
-
 local _icons = {}
 _icons["hp"] = Material( "icon16/heart.png" )
 _icons["ar"] = Material( "icon16/shield.png" )
@@ -1107,14 +1098,8 @@ function YRPDrawNamePlates()
 				end
 				color2.a = math.Clamp( color2.a, 0, 240)
 
-				if LocalPlayer():GetNW2Bool( "bool_canuseesp", false) and LocalPlayer():GetNW2Bool( "yrp_esp", true) then
-					local cent = ply:OBBCenter()
-					render.SetColorMaterial()
-					render.DrawSphere(ply:GetPos() + cent, cent.z, 16, 16, Color(0, 255, 0, 10) )
-				end
-
 				if GetGlobalBool( "bool_tag_on_head", false) then
-					if GetGlobalBool( "bool_tag_on_head_voice", false) and ply:GetNW2Bool( "yrp_speaking", false) then
+					if GetGlobalBool( "bool_tag_on_head_voice", false) and ply:GetNW2Bool( "yrp_speaking", false) and color.a > 0 then
 						local plyvol = ply:VoiceVolume() * 200
 						plyvol = 125 + plyvol
 						if GetGlobalBool( "bool_tag_on_head_target_forced", false) then
@@ -1146,7 +1131,7 @@ function YRPDrawNamePlates()
 						YRP.DrawSymbol(ply, sym, 20, voicecolor, x)
 					end
 
-					if GetGlobalBool( "bool_tag_on_head_chat", false) and ply:GetNW2Bool( "istyping", false) then
+					if GetGlobalBool( "bool_tag_on_head_chat", false) and ply:GetNW2Bool( "istyping", false) and color.a > 0 then
 						local chatalpha = 150
 						if GetGlobalBool( "bool_tag_on_head_target_forced", false) then
 							chatalpha = math.Clamp( chatalpha, 0, color.a)
@@ -1388,47 +1373,6 @@ function draw3DText(text, x, y, color)
 	surface.SetTextPos(x - tw / 2, y)
 	surface.DrawText(text)
 end
-
-hook.Add( "HUDPaint", "yrp_esp_draw", function()
-	if LocalPlayer():GetNW2Bool( "bool_canuseesp", false) and LocalPlayer():GetNW2Bool( "yrp_esp", true) then
-		for i, p in pairs(player.GetAll() ) do
-			local OBBCen = p:LocalToWorld(p:OBBCenter() )
-			local ScrCen = OBBCen:ToScreen()
-			local dist = math.Round(LocalPlayer():GetPos():Distance(p:GetPos() ) * 0.019, 0)
-
-			if p == LocalPlayer() then
-				draw3DText( "!esp for toggle, turn off?: [F8] " .. YRP.lang_string( "LID_usergroups" ) .. " -> " .. YRP.lang_string( "LID_canuseesp" ), ScrCen.x, ScrCen.y - 66, Color(255, 255, 0, 100) )
-			else
-				draw3DText(YRP.lang_string( "LID_distance" ) .. ": " .. dist .. "m", ScrCen.x, ScrCen.y, Color(255, 255, 100, 100) )
-				draw3DText(YRP.lang_string( "LID_health" ) .. ": " .. p:Health() .. "/" .. p:GetMaxHealth() .. " [" .. p:Armor() .. "/" .. p:GetMaxArmor() .. "]", ScrCen.x, ScrCen.y + 22, Color(0, 255, 0, 240) )
-				draw3DText(YRP.lang_string( "LID_name" ) .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]", ScrCen.x, ScrCen.y + 44, Color(255, 255, 255, 240) )
-				draw3DText(YRP.lang_string( "LID_role" ) .. ": " .. p:GetRoleName() .. " [" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y + 66, Color(255, 255, 255, 240) )
-				draw3DText(YRP.lang_string( "LID_usergroup" ) .. ": " .. p:GetUserGroupNice(), ScrCen.x, ScrCen.y + 88, Color(0, 0, 255, 240) )
-			end
-		end
-	end
-	if GetGlobalBool( "bool_server_debug_voice", false) then
-		for i, p in pairs(player.GetAll() ) do
-			local OBBCen = p:LocalToWorld(p:OBBCenter() )
-			local ScrCen = OBBCen:ToScreen()
-
-			local dist = math.Round(LocalPlayer():GetPos():Distance(p:GetPos() ) * 0.019, 0)
-			if dist > 0 then
-				draw3DText(YRP.lang_string( "LID_distance" ) .. ": " .. dist .. "m", ScrCen.x, ScrCen.y - 40)
-			end
-
-			draw3DText(YRP.lang_string( "LID_name" ) .. ": " .. p:SteamName() .. " [" .. p:RPName() .. "]" .. " GROUP: " .. "[" .. p:GetGroupName() .. "]", ScrCen.x, ScrCen.y - 20)
-
-			if p:GetNW2Bool( "yrp_speaking", false) then
-				local text = "IS SPEAKING!"
-				if p != LocalPlayer() then
-					text = text .. " [Volume: " .. math.Round(p:VoiceVolume(), 2) .. "]"
-				end
-				draw3DText(text, ScrCen.x, ScrCen.y + 20, Color(0, 255, 0, 255) )
-			end
-		end
-	end
-end)
 
 hook.Add( "PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	for i, ent in pairs(ents.GetAll() ) do
@@ -2081,33 +2025,33 @@ if pa(yrp_loading_screen) then
 		local PANEL_H = ScrH() * 0.4222 --1080/ 456
 
 		-- BAR
-		local BAR_W = PANEL_W * 0.96 -- 1440
-		local BAR_H = ScrH() * 0.1 --108
-		local BAR_SPACE = 20
-		local BAR_FONT_SIZE = 60
+		local BAR_W = 10
+		local BAR_H = 10
+		local BAR_SPACE = 10
+		local BAR_FONT_SIZE = 10
 
 		-- Play Button
-		local PLAY_BUTTON_W = BAR_W * 0.3
-		local PLAY_BUTTON_H = ScrH() * 0.1
-		local PLAY_BUTTON_SPACE = 30
-		local PLAY_BUTTON_FONT_SIZE = 60
+		local PLAY_BUTTON_W = 10
+		local PLAY_BUTTON_H = 10
+		local PLAY_BUTTON_SPACE = 10
+		local PLAY_BUTTON_FONT_SIZE = 10
 
 		-- HOSTNAME
 		HOSTNAME_SPACE = 40
 		HOSTNAME_FONT_SIZE = 80
-		if GetGlobalString( "text_loading_design" ) == "Bottom" then
-			BAR_W = PANEL_W * 0.7 -- 1440
-			BAR_H = ScrH() * 0.06 --108
+		if GetGlobalString( "text_loading_design" ) == "Center" then
+			BAR_W = PANEL_W * 0.96 -- 1440
+			BAR_H = ScrH() * 0.1 --108
 			BAR_SPACE = 20
-			BAR_FONT_SIZE = 40
+			BAR_FONT_SIZE = 60
 
-			HOSTNAME_SPACE = 60
-			HOSTNAME_FONT_SIZE = 60
+			PLAY_BUTTON_W = BAR_W * 0.3
+			PLAY_BUTTON_H = ScrH() * 0.1
+			PLAY_BUTTON_SPACE = 30
+			PLAY_BUTTON_FONT_SIZE = 60
 
-			PLAY_BUTTON_W = PANEL_W * 0.2
-			PLAY_BUTTON_H = ScrH() * 0.06
-			PLAY_BUTTON_SPACE = 110
-			PLAY_BUTTON_FONT_SIZE = 40
+			HOSTNAME_SPACE = 40
+			HOSTNAME_FONT_SIZE = 80
 		elseif GetGlobalString( "text_loading_design" ) == "BottomRight" then
 			BAR_W = PANEL_W * 0.2 -- 1440
 			BAR_H = ScrH() * 0.04 --108
@@ -2121,6 +2065,19 @@ if pa(yrp_loading_screen) then
 			PLAY_BUTTON_H = ScrH() * 0.04
 			PLAY_BUTTON_SPACE = 20
 			PLAY_BUTTON_FONT_SIZE = 30
+		else
+			BAR_W = PANEL_W * 0.7 -- 1440
+			BAR_H = ScrH() * 0.06 --108
+			BAR_SPACE = 20
+			BAR_FONT_SIZE = 40
+
+			HOSTNAME_SPACE = 60
+			HOSTNAME_FONT_SIZE = 60
+
+			PLAY_BUTTON_W = PANEL_W * 0.2
+			PLAY_BUTTON_H = ScrH() * 0.06
+			PLAY_BUTTON_SPACE = 110
+			PLAY_BUTTON_FONT_SIZE = 40
 		end
 		-- CONFIG ---------------------------------------------
 
@@ -2200,11 +2157,11 @@ if pa(yrp_loading_screen) then
 		if lply:GetNW2Bool( "yrp_hudloadout" ) and lply:GetNW2Bool( "finishedloading" ) and ( lply:GetNW2Bool( "loadchars_done" ) or IsVoidCharEnabled() or !GetGlobalBool( "bool_character_system" ) ) then
 			if GetGlobalBool( "bool_yrp_play_button" ) then
 				if self.joinbutton == nil then
-					if GetGlobalString( "text_loading_design" ) == "Default" then
+					if GetGlobalString( "text_loading_design" ) == "Center" then
 						self.joinbutton = createD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ph / 2 + PANEL_H / 2 - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
-					elseif GetGlobalString( "text_loading_design" ) == "Bottom" then
-						self.joinbutton = createD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ScrH() - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
 					elseif GetGlobalString( "text_loading_design" ) == "BottomRight" then
+						self.joinbutton = createD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ScrH() - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
+					else
 						self.joinbutton = createD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ScrH() - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
 					end
 					self.joinbutton:SetText( "" )
@@ -2231,23 +2188,23 @@ if pa(yrp_loading_screen) then
 
 		-- PANEL --
 		-- BG
-		if GetGlobalString( "text_loading_design" ) == "Default" then
+		if GetGlobalString( "text_loading_design" ) == "Center" then
 			draw.RoundedBox(40, SCREEN_CENTER_X - PANEL_W / 2, SCREEN_CENTER_Y - PANEL_H / 2, PANEL_W, PANEL_H, YRPCPP(255 * 0.8) )
 		end
 
 		-- BAR --
-		if GetGlobalString( "text_loading_design" ) == "Default" then
+		if GetGlobalString( "text_loading_design" ) == "Center" then
 			draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE, BAR_W, BAR_H, Color(80, 80, 80, 255) )
 			draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE, BAR_W * loading_cur_old / max, BAR_H, Color(38, 222, 129) )
 			draw.SimpleText(YRP.lang_string( "LID_loadingdata" ) .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_" .. BAR_FONT_SIZE .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		elseif GetGlobalString( "text_loading_design" ) == "Bottom" then
-			draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, ScrH() - BAR_H - BAR_SPACE, BAR_W, BAR_H, Color(80, 80, 80, 255) )
-			draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, ScrH() - BAR_H - BAR_SPACE, BAR_W * loading_cur_old / max, BAR_H, Color(38, 222, 129) )
-			draw.SimpleText(YRP.lang_string( "LID_loadingdata" ) .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_" .. BAR_FONT_SIZE .. "_700", pw / 2, ScrH() - BAR_H / 2 - BAR_SPACE, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		elseif GetGlobalString( "text_loading_design" ) == "BottomRight" then
 			draw.RoundedBox(9, ScrW() - BAR_W - BAR_SPACE, ScrH() - BAR_H - BAR_SPACE, BAR_W, BAR_H, Color(80, 80, 80, 255) )
 			draw.RoundedBox(9, ScrW() - BAR_W - BAR_SPACE, ScrH() - BAR_H - BAR_SPACE, BAR_W * loading_cur_old / max, BAR_H, Color(38, 222, 129) )
 			draw.SimpleText(YRP.lang_string( "LID_loadingdata" ) .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_" .. BAR_FONT_SIZE .. "_700", ScrW() - BAR_W / 2 - BAR_SPACE, ScrH() - BAR_H / 2 - BAR_SPACE, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		else
+			draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, ScrH() - BAR_H - BAR_SPACE, BAR_W, BAR_H, Color(80, 80, 80, 255) )
+			draw.RoundedBox(9, SCREEN_CENTER_X - BAR_W / 2, ScrH() - BAR_H - BAR_SPACE, BAR_W * loading_cur_old / max, BAR_H, Color(38, 222, 129) )
+			draw.SimpleText(YRP.lang_string( "LID_loadingdata" ) .. " ... " .. math.ceil(loading_cur_old) / max * 100 .. "%", "Y_" .. BAR_FONT_SIZE .. "_700", pw / 2, ScrH() - BAR_H / 2 - BAR_SPACE, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 
@@ -2283,11 +2240,11 @@ if pa(yrp_loading_screen) then
 
 
 		-- HOSTNAME --
-		if GetGlobalString( "text_loading_design" ) == "Default" then
+		if GetGlobalString( "text_loading_design" ) == "Center" then
 			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, SCREEN_CENTER_Y - PANEL_H / 2 - HOSTNAME_SPACE, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		elseif GetGlobalString( "text_loading_design" ) == "Bottom" then
-			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, HOSTNAME_SPACE, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		elseif GetGlobalString( "text_loading_design" ) == "BottomRight" then
+			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, HOSTNAME_SPACE, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		else
 			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, HOSTNAME_SPACE, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		
@@ -2303,7 +2260,7 @@ if pa(yrp_loading_screen) then
 				if self.counttext < 30 and self.countdelay < CurTime() then
 					self.countdelay = CurTime() + 1
 					self.counttext = self.counttext + 1
-					YRP.msg( "error", text ) -- Loading Error
+					YRP.msg( "note", text ) -- Loading Error
 				end
 
 				if self.discord == nil then

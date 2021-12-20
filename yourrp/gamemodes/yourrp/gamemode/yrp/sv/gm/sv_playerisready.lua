@@ -8,12 +8,6 @@ util.AddNetworkString( "askforstartdata" )
 util.AddNetworkString( "sendstartdata" )
 util.AddNetworkString( "receivedstartdata" )
 
-local ostab = {}
-ostab[0] = "windows"
-ostab[1] = "linux"
-ostab[2] = "osx"
-ostab[3] = "other"
-
 function YRPPlayerLoadedGame(ply)
 	ply:SetNW2Bool( "PlayerLoadedGameStart", true)
 
@@ -98,6 +92,12 @@ local function YRPReceivedReadyMessage( len, ply, tab )
 		YRP.msg( "error", "[yrp_player_is_ready] player is not valid: " .. tostring( ply ) )
 		return
 	end
+	
+	local ostab = {}
+	ostab[0] = "windows"
+	ostab[1] = "linux"
+	ostab[2] = "osx"
+	ostab[3] = "other"
 
 	if ostab[tab.os] == nil then
 		YRP.msg( "error", "[yrp_player_is_ready] OS is invalid: " .. tostring( tab.os ) )
@@ -137,29 +137,6 @@ local function YRPReceivedReadyMessage( len, ply, tab )
 
 		MsgC( Color( 0, 0, 255 ), "###############################################################################" .. "\n" )--##########
 	
-		local country = string.lower( ply:GetNW2String( "yrp_country" ) )
-		local countries = GetGlobalString( "text_whitelist_countries", "" )
-		countries = string.Explode( ",", countries, false )
-		if GetGlobalBool( "yrp_allowallcountries", false ) or table.Count( countries ) == 0 or ( countries[1] and strEmpty( countries[1] ) ) then
-			-- ALL ALLOWED
-		else
-			local found = false
-			for i, v in pairs( countries ) do
-				if string.lower( v ) == country then
-					found = true
-				end
-				if string.lower( v ) == "all" then
-					found = true
-				end
-			end
-			if !found then
-				YRP.msg( "note", "[Whitelist Countries] " .. ply:RPName() .. " was kicked, wrong country ( " .. tostring( country ) .. " )" )
-				YRP.msg( "note", "[Whitelist Countries] F8 -> General -> Allowed Countries" )
-				ply:Kick( "NOT ALLOWED TO ENTER THIS SERVER, SORRY (:" )
-				return false
-			end
-		end
-
 		YRPPlayerLoadedGame( ply )
 	end
 end
@@ -199,7 +176,7 @@ function YRPAskForStartData( data )
 					text = text .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" )
 					text = text .. " DI: "	.. tostring( YRPIsDoubleInstalled() )
 					text = text .. " plys: " .. #player.GetAll() .. "/" .. game.MaxPlayers()
-					YRP.msg( "error", text )
+					YRP.msg( "note", text )
 				end
 
 				timer.Simple( 3, function()
