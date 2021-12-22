@@ -149,7 +149,7 @@ local function YRPAddReadyStatusMsg( ply, msg )
 	ply:SetNW2String( "yrp_ready_status", table.concat( ply.tabreadystatus, ", " ) )
 end
 
-function YRPAskForStartData( data )
+function YRPAskForStartData( data, from )
 	for i, ply in pairs( player.GetAll() ) do
 		if ply:SteamID() == data.networkid then
 			if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
@@ -162,6 +162,7 @@ function YRPAskForStartData( data )
 				end
 
 				net.Start( "askforstartdata" )
+					net.WriteString( from )
 				net.Send( ply )
 
 				YRPAddReadyStatusMsg( ply, "Sended" )
@@ -176,7 +177,7 @@ function YRPAskForStartData( data )
 					text = text .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" )
 					text = text .. " DI: "	.. tostring( YRPIsDoubleInstalled() )
 					text = text .. " plys: " .. #player.GetAll() .. "/" .. game.MaxPlayers()
-					YRP.msg( "note", text )
+					YRP.msg( "error", text )
 				end
 
 				timer.Simple( 3, function()
@@ -186,7 +187,7 @@ function YRPAskForStartData( data )
 								MsgC( Color( 255, 255, 0 ), "[START] [" .. ply:SteamName() .. "] RETRY Ask for StartData" .. " - try #" .. ply.readycounter .. "\n" )
 							end
 							YRPAddReadyStatusMsg( ply, "RETRY" )
-							YRPAskForStartData( data )
+							YRPAskForStartData( data, "RETRY" )
 						end
 					end
 				end )
@@ -197,7 +198,7 @@ end
 
 gameevent.Listen( "OnRequestFullUpdate" )
 hook.Add( "OnRequestFullUpdate", "yrp_OnRequestFullUpdate_ISREADY", function( data )
-	YRPAskForStartData( data )
+	YRPAskForStartData( data, "OnRequestFullUpdate" )
 end)
 
 net.Receive( "sendstartdata", function( len, ply )

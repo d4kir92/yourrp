@@ -2260,7 +2260,7 @@ if pa(yrp_loading_screen) then
 				if self.counttext < 30 and self.countdelay < CurTime() then
 					self.countdelay = CurTime() + 1
 					self.counttext = self.counttext + 1
-					YRP.msg( "note", text ) -- Loading Error
+					YRP.msg( "error", text ) -- Loading Error
 				end
 
 				if self.discord == nil then

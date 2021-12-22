@@ -19,19 +19,27 @@ function appSize()
 	return 64
 end
 
-function addApp( app)
-	YRP.msg( "db", "Add App: " .. tostring( app.PrintName) .. " [" .. tostring( app.ClassName).. "]" )
-	if app.PrintName == nil then
-		YRP.msg( "note", "-> app.PrintName is missing!" )
-	end
-	if app.ClassName == nil then
-		YRP.msg( "note", "-> app.ClassName is missing!" )
-	end
-	if app.OpenApp == nil then
-		YRP.msg( "note", "-> function app:OpenApp is missing!" )
+function addApp( app )
+	if app == nil then
+		YRP.msg( "note", "[addApp] -> app is missing!" )
 	end
 
-	list.Add( "yrp_apps", app)
+	if type( app ) == "table" then
+		if app.PrintName == nil then
+			YRP.msg( "note", "[addApp] -> app.PrintName is missing!" )
+		end
+		if app.ClassName == nil then
+			YRP.msg( "note", "[addApp] -> app.ClassName is missing!" )
+		end
+		if app.OpenApp == nil then
+			YRP.msg( "note", "[addApp] -> function app:OpenApp is missing!" )
+		end
+
+		YRP.msg( "db", "[addApp] Add App: " .. tostring( app.PrintName ) .. " [" .. tostring( app.ClassName ).. "]" )
+		list.Add( "yrp_apps", app)
+	else
+		YRP.msg( "note", "[addApp] -> Wrong Parameters!" )
+	end
 end
 
 function getAllApps()

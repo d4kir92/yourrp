@@ -386,7 +386,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 
 								YRP.msg( "note", "[YourRP Teleporters] " .. "Was dead, respawned" )
 							else
-								YRP.msg( "note", "[YourRP Teleporters] " .. "FAIL CREATING ONE" )
+								YRP.msg( "note", "FAILED TO CREATE TELEPORTER, is [YourRP Teleporters] missing?" )
 							end
 						end
 					end

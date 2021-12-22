@@ -199,8 +199,8 @@ RPExtraTeamDoors = RPExtraTeamDoors or {}
 
 function Player:getPocketItems()
 	--Description: Get a player's pocket items.
-	YRPDarkrpNotFound( "getPocketItems()" )
-	return {}
+	--YRPDarkrpNotFound( "getPocketItems()" )
+	return self:GetWeapons()
 end
 
 function Player:getWantedReason()

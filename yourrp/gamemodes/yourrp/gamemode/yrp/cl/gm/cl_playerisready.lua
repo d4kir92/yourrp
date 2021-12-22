@@ -44,15 +44,17 @@ local function YRPAddReadyStatusMsg( msg )
 	YRPStartDataStatus = table.concat( YRPStartDataTab, ", " )
 end
 
-function YRPSendAskData()
+function YRPSendAskData( from )
 	YRPRetryCounter = YRPRetryCounter + 1
 	if CurTime() <= 0 then
-		YRPAddReadyStatusMsg( "CurTime() is 0" )
+		YRPAddReadyStatusMsg( "CurTime() is <= 0" )
 		YRPHR( Color( 255, 0, 0 ) )
 		MsgC( Color( 255, 0, 0 ), "[START] CurTime() <= 0, Retry..." .. "\n" )
 		YRPHR( Color( 255, 0, 0 ) )
+
+		YRP.msg( "error", "[START] Curtime is <= 0" )
 		timer.Simple( 0.01, function()
-			YRPSendAskData()
+			YRPSendAskData( from )
 		end )
 	elseif !IsValid( LocalPlayer() ) then
 		YRPAddReadyStatusMsg( "LocalPlayer() is Invalid: " .. tostring( LocalPlayer() ) )
@@ -60,9 +62,10 @@ function YRPSendAskData()
 		MsgC( Color( 255, 0, 0 ), "[START] LocalPlayer() is Invalid, Retry..." .. "\n" )
 		YRPHR( Color( 255, 0, 0 ) )
 
+		YRP.msg( "error", "[START] LocalPlayer(): " .. tostring( LocalPlayer() ) )
 		timer.Simple( 0.01, function()
 			YRPAddReadyStatusMsg( "LocalPlayer() Retry: " .. tostring( LocalPlayer() ) )
-			YRPSendAskData()
+			YRPSendAskData( from )
 		end )
 	else
 		local info = YRPGetClientInfo()
@@ -95,7 +98,13 @@ function YRPSendAskData()
 end
 
 net.Receive( "askforstartdata", function( len )
-	YRPSendAskData()
+	local from = net.ReadString()
+	if LocalPlayer and LocalPlayer() and IsValid( LocalPlayer() ) then
+		YRPSendAskData( from )
+	else
+		YRPAddReadyStatusMsg( "[ask] LocalPlayer() is Invalid: " .. tostring( LocalPlayer() ) )
+		YRP.msg( "note", "LocalPlayer Is Broken: " .. tostring( LocalPlayer() ) .. " from: " .. tostring( from ) )
+	end
 end )
 
 net.Receive( "YRPReceivedStartData", function( len )
