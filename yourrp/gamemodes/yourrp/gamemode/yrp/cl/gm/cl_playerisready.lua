@@ -2,14 +2,31 @@
 
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
-YRPReady = YRPReady or false
+local YRPReady = false
+local YRPReadyFake = false
 
-YRPStartDataStatus = YRPStartDataStatus or "WAITING"
-YRPStartDataTab = YRPStartDataTab or {}
-YRPRetryCounter = YRPRetryCounter or 0
+local YRPStartDataStatus = "WAITING"
+local YRPStartDataTab = {}
+local YRPRetryCounter = 0
 
-YRPReceivedStartData = YRPReceivedStartData or false
+local YRPReceivedStartData = false
 local langonce = true
+
+function YRPGetYRPStartDataStatus()
+	return YRPStartDataStatus
+end
+
+function YRPGetYRPRetryCounter()
+	return YRPRetryCounter
+end
+
+function YRPGetYRPReceivedStartData()
+	return YRPReceivedStartData
+end
+
+function YRPGetYRPReady()
+	return YRPReady
+end
 
 local function YRPReadyHR( col )
 	MsgC( col, "--------------------------------------------------------------------------------" .. "\n" )
@@ -101,15 +118,15 @@ end
 
 net.Receive( "askforstartdata", function( len )
 	local from = net.ReadString()
-	if YRPReady or ( LocalPlayer and LocalPlayer() and IsValid( LocalPlayer() ) ) then
+	if YRPReady or YRPReadyFake or ( LocalPlayer and LocalPlayer() and IsValid( LocalPlayer() ) ) then
 		if LocalPlayer and LocalPlayer() and IsValid( LocalPlayer() ) then
 			YRPSendAskData( from )
 		else
-			YRPAddReadyStatusMsg( "[START] LocalPlayer() is Invalid: " .. tostring( LocalPlayer() ) )
+			YRPAddReadyStatusMsg( "LocalPlayer() is Invalid: " .. tostring( LocalPlayer() ) .. ", this mostly happens when you get lua errors" )
 			YRP.msg( "note", "LocalPlayer Is Broken: " .. tostring( LocalPlayer() ) .. " from: " .. tostring( from ) )
 		end
-	else
-		YRPAddReadyStatusMsg( "[START] NOT ALL ENTITIES ARE LOADED!" )
+	elseif !YRPReady then
+		YRPAddReadyStatusMsg( "NOT ALL ENTITIES ARE LOADED, this mostly happens when the map is still loading" )
 		YRP.msg( "note", "NOT ALL ENTITIES ARE LOADED!" )
 	end
 end )
@@ -126,6 +143,15 @@ net.Receive( "YRPReceivedStartData", function( len )
 end )
 
 hook.Add( "InitPostEntity", "YRP_INITPOSTENTITY", function()
-	YRP.msg( "note", "ALL ENTITIES ARE LOADED!" )
+	YRP.msg( "note", "ALL ENTITIES ARE LOADED! #1" )
 	YRPReady = true
+end )
+
+function GM:InitPostEntity()
+	YRP.msg( "note", "ALL ENTITIES ARE LOADED! #2" )
+	YRPReady = true
+end
+
+timer.Simple( 15, function()
+	YRPReadyFake = true
 end )

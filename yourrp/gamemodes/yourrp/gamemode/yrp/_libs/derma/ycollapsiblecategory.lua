@@ -267,8 +267,8 @@ function PANEL:Init()
 		if type(rol.pms) == "table" then
 			if !strEmpty(rol.pms[1]) then
 				local pm = createD( "YModelPanel", bg, diameter, diameter, YRP.ctr(20), YRP.ctr(10) )
-				pm:SetModel(rol.pms[1])
-				if false then--pm.panel.Entity:IsValid() then
+				pm:SetModel( rol.pms[1] )
+				if pm.panel and pm.panel.Entity and pm.panel.Entity:IsValid() then
 					function pm.panel:LayoutEntity( ent )
 						ent:SetSequence( ent:LookupSequence( "menu_gman" ) )
 						pm.panel:RunAnimation()
@@ -280,8 +280,8 @@ function PANEL:Init()
 						local eyepos = pm.panel.Entity:GetBonePosition( head )
 						if eyepos then
 							pm.panel:SetLookAt( eyepos )
-							pm.panel:SetCamPos( eyepos-Vector( -20, 0, 0 ) )	-- Move cam in front of eyes
-							pm.panel.Entity:SetEyeTarget( eyepos-Vector( -20, 0, 0 ) )
+							pm.panel:SetCamPos( eyepos - Vector( -20, 0, 0 ) )
+							pm.panel.Entity:SetEyeTarget( eyepos - Vector( -20, 0, 0 ) )
 						end
 					end
 				end

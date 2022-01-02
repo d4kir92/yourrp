@@ -1922,22 +1922,22 @@ function YRPCreateLoadingInfo( ti )
 	if IsValid(lply) then
 		local text = ""
 
-		local yrp1 = YRPReceivedStartData == false or lply:GetNW2Bool( "yrp_received_ready" ) == false or lply:GetNW2Bool( "PlayerLoadedGameStart" ) == false or lply:GetNW2Bool( "PlayerLoadedGameEnd" ) == false
+		local yrp1 = YRPGetYRPReceivedStartData() == false or lply:GetNW2Bool( "yrp_received_ready" ) == false or lply:GetNW2Bool( "PlayerLoadedGameStart" ) == false or lply:GetNW2Bool( "PlayerLoadedGameEnd" ) == false
 		local yrp2 = lply:GetNW2Bool( "loadchars_start" ) == false or lply:GetNW2Bool( "loadchars_done" ) == false or lply:GetNW2String( "loadchars_msg", "X" ) == "X"
 		local yrp3 = lply:GetNW2Bool( "yrp_hudloadout" ) == false or lply:GetNW2String( "yrp_hudloadout_msg", "X" ) == "X"
 
 		if yrp1 then
-			if YRPReceivedStartData or lply:GetNW2Bool( "yrp_received_ready" ) then
+			if YRPGetYRPReceivedStartData() or lply:GetNW2Bool( "yrp_received_ready" ) then
 				--
 			else
 				if !strEmpty(text) then
 					text = text .. spacer
 				end
-				text = text .. "ReceiveFromServer: " .. tostring( YRPReceivedStartData )
+				text = text .. "ReceiveFromServer: " .. tostring( YRPGetYRPReceivedStartData() )
 				text = text .. " " .. "ReceivedInServer: " .. tostring( lply:GetNW2Bool( "yrp_received_ready" ) )
-				text = text .. " " .. "YRPRetryCounter: " .. tostring( YRPRetryCounter )
+				text = text .. " " .. "YRPRetryCounter: " .. tostring( YRPGetYRPRetryCounter() )
 				text = text .. " " .. table.ToString( YRPGetClientInfo(), "YRPGetClientInfo" )
-				text = text .. " " .. "Status: " .. tostring( YRPStartDataStatus )
+				text = text .. " " .. "Status: " .. tostring( YRPGetYRPStartDataStatus() )
 			end
 		end
 		if !yrp1 and yrp2 and GetGlobalBool( "bool_character_system" ) and !IsVoidCharEnabled() then
@@ -1957,7 +1957,7 @@ function YRPCreateLoadingInfo( ti )
 		end
 		if !strEmpty(text) then
 			text = "[START] " .. text .. " ply: " .. lply:YRPName() .. " | time: " .. tostring( ti ) .. " plys: " .. player.GetCount() .. " Ver.: " .. YRPGetVersionFull()
-			text = text .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" ) .. " BRANCH: " .. tostring( BRANCH ) .. " ENTITIESLOADED: " .. tostring( YRPReady )
+			text = text .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" ) .. " BRANCH: " .. tostring( BRANCH ) .. " ENTITIESLOADED: " .. tostring( YRPGetYRPReady() )
 		end
 		
 		return text
@@ -2089,7 +2089,7 @@ if pa(yrp_loading_screen) then
 		loading_cur_old = loading_cur_old or 0
 		loading_cur = 0
 		local max = 100
-		local t1 = lply:GetNW2Bool( "yrp_received_ready", false ) or YRPReceivedStartData
+		local t1 = lply:GetNW2Bool( "yrp_received_ready", false ) or YRPGetYRPReceivedStartData()
 		local t2 = lply:GetNW2Bool( "loadchars_done" ) or IsVoidCharEnabled() or !GetGlobalBool( "bool_character_system" )
 		local t3 = lply:GetNW2Bool( "yrp_hudloadout" )
 		if t1 then
@@ -2213,7 +2213,7 @@ if pa(yrp_loading_screen) then
 			local py = 0.08
 			
 			if !t1 then
-				draw.SimpleText( "START DATA STATUS: " .. tostring( YRPStartDataStatus ) .. " Counter: " .. tostring( YRPRetryCounter ), "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText( "START DATA STATUS: " .. tostring( YRPGetYRPStartDataStatus() ) .. " Counter: " .. tostring( YRPGetYRPRetryCounter() ), "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				py = py + 0.03
 			end
 			

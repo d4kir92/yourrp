@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 164 -- do NOT change this!
+GM.VersionBuild = 165 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -1189,9 +1189,11 @@ if CLIENT then
 		MsgC( Color( 255, 255, 0 ), "[GAME VERSION] Server: " .. GetGlobalString( "serverversion", VERSION ) .. "\n" )
 		MsgC( Color( 255, 255, 0 ), "[GAME VERSION] Client: " .. VERSION .. "\n" )
 		YRPHR( Color( 255, 255, 0 ) )
-		
-		if GetGlobalString( "serverversion", VERSION ) != VERSION then
+
+		if GetGlobalString( "serverversion", VERSION ) > VERSION then
 			MsgC( Color( 255, 0, 0 ), "YOUR GAME IS OUTDATED!" .. "\n" )
+		elseif GetGlobalString( "serverversion", VERSION ) < VERSION and BRANCH == "unknown" then
+			MsgC( Color( 255, 0, 0 ), "SERVER IS OUTDATED!" .. "\n" )
 		else
 			MsgC( Color( 0, 255, 0 ), "YOUR GAME IS UP-To-Date!" .. "\n" )
 		end

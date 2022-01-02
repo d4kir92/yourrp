@@ -19,17 +19,38 @@ end
 
 local PANEL = {}
 
+function PANEL:LayoutEntity( ent )
+	--
+end
+
 function PANEL:Init()
-	self.panel = vgui.Create( "SpawnIcon", self )
+	self.panel = vgui.Create( "DModelPanel", self )
 	self.panel:SetPaintedManually( true )
+	function self.panel:LayoutEntity( ent )
+		PANEL:LayoutEntity( ent )
+	end
+	self.Entity = self.panel.Entity
 end
 
 function PANEL:PerformLayout()
 	self.panel:SetSize( self:GetWide(), self:GetTall() )
 end
 
+function PANEL:GetModel()
+	return self.panel:GetModel()
+end
+
 function PANEL:SetModel(mdl)
 	self.panel:SetModel(mdl)
+	self.Entity = self.panel.Entity
+end
+
+function PANEL:SetLookAt(...)
+	self.panel:SetLookAt(...)
+end
+
+function PANEL:SetCamPos(...)
+	self.panel:SetCamPos(...)
 end
 
 function PANEL:Paint( w, h )
