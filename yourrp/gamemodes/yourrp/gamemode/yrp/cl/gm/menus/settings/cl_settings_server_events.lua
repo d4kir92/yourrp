@@ -53,9 +53,11 @@ net.Receive( "setting_events", function(len)
 				Frame.Char = createD( "DComboBox", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20 + 60 + 20) )
 				net.Receive( "yrp_event_get_chars", function()
 					local tab = net.ReadTable()
-					Frame.Char:Clear()
-					for i, v in pairs(tab) do
-						Frame.Char:AddChoice( v.rpname, v.uniqueID)
+					if pa( Frame ) and pa( Frame.Char ) then
+						Frame.Char:Clear()
+						for i, v in pairs(tab) do
+							Frame.Char:AddChoice( v.rpname, v.uniqueID)
+						end
 					end
 				end)
 

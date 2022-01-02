@@ -686,17 +686,21 @@ function paintInv( derma, pw, ph, text1, text2)
 	end
 end
 
-function createD( derma, parent, w, h, x, y)
+function createD( class, parent, w, h, x, y )
 	local _parent = parent or nil
 	local _w = w or 100
 	local _h = h or 100
 	local _x = x or 0
 	local _y = y or 0
-	local tmpD = vgui.Create( derma, parent)
-	tmpD:SetSize(_w, _h)
-	tmpD:SetPos(_x, _y)
+	local tmpD = vgui.Create( class, parent )
+	if IsValid( tmpD ) then
+		tmpD:SetSize(_w, _h)
+		tmpD:SetPos(_x, _y)
 
-	return tmpD
+		return tmpD
+	else
+		return NULL
+	end
 end
 
 local _yrp_derma = {}

@@ -1957,9 +1957,9 @@ function YRPCreateLoadingInfo( ti )
 		end
 		if !strEmpty(text) then
 			text = "[Loading] " .. text .. " ply: " .. lply:YRPName() .. " | time: " .. tostring( ti ) .. " plys: " .. player.GetCount() .. " Ver.: " .. YRPGetVersionFull()
-			text = text .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" )
+			text = text .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" ) .. " BRANCH: " .. tostring( BRANCH )
 		end
-
+		
 		return text
 	end
 	return "ply not valid"

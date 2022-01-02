@@ -68,11 +68,11 @@ if SERVER then
 							YRP.msg( "note", "[Send Server] Info: Success" )
 							YRP_INFO_WAS_SENDED = true
 						else
-							YRP.msg( "error", "[Send Server] Info HTTP CODE: " .. tostring( code) )
+							YRP.msg( "error", "[Send Server] Info HTTP CODE: " .. tostring( code ) )
 						end
 					end,
 					function( failed )
-						YRP.msg( "error", "[Send Server] Info failed: " .. tostring(failed) )
+						YRP.msg( "note", "[Send Server] Info failed: " .. tostring( failed ) )
 					end)
 				else
 					YRP.msg( "note", "[Send Server] Already Send" )
