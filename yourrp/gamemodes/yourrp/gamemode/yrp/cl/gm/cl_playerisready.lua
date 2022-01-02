@@ -131,12 +131,14 @@ hook.Add( "InitPostEntity", "YRP_INITPOSTENTITY", function()
 	YRP.msg( "note", "ALL ENTITIES ARE LOADED! #1" )
 	YRPAddReadyStatusMsg( "ALL ENTITIES ARE LOADED! #1" )
 	YRPReady = true
+	YRPSendAskData( "HOOK InitPostEntity" )
 end )
 
 function GM:InitPostEntity()
 	YRP.msg( "note", "ALL ENTITIES ARE LOADED! #2" )
 	YRPAddReadyStatusMsg( "ALL ENTITIES ARE LOADED! #2" )
 	YRPReady = true
+	YRPSendAskData( "GM InitPostEntity" )
 end
 
 timer.Simple( 60, function()

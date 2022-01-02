@@ -110,8 +110,10 @@ local function YRPReceivedReadyMessage( len, ply, tab )
 	local Country = tab.country
 	local Branch = tab.branch
 
-	YRP.msg( "note", "RECEIVED Client Info:" .. ply:YRPName() .. ": " .. OS .. " ( " .. Branch .. " )" .. " " .. "[" .. Country .. "]" .. " len: " .. tostring( len ) )
-	
+	if ply.readycounter > 0 then
+		YRP.msg( "note", "RECEIVED Client Info " .. ply:YRPName() .. " " .. OS .. " (" .. Branch .. ")" .. " " .. "[" .. Country .. "]" )
+	end
+
 	if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
 		ply:SetNW2Bool( "yrp_received_ready", true )
 
@@ -196,9 +198,18 @@ function YRPAskForStartData( data, from )
 	end
 end
 
+local plydata = {}
 gameevent.Listen( "OnRequestFullUpdate" )
 hook.Add( "OnRequestFullUpdate", "yrp_OnRequestFullUpdate_ISREADY", function( data )
-	YRPAskForStartData( data, "OnRequestFullUpdate" )
+	plydata[data.networkid] = plydata[data.networkid] or 0
+
+	plydata[data.networkid] = plydata[data.networkid] + 1
+	SetGlobalInt( "plydata_" .. data.networkid, plydata[data.networkid] )
+	if plydata[data.networkid] > 1 then
+		timer.Simple( 0, function()
+			YRPAskForStartData( data, "OnRequestFullUpdate" )
+		end )
+	end
 end)
 
 net.Receive( "sendstartdata", function( len, ply )
@@ -210,7 +221,10 @@ net.Receive( "sendstartdata", function( len, ply )
 
 	if ply:GetNW2Bool( "yrp_received_ready", false ) == false then
 		ply.readycounter = ply.readycounter or 0
-		MsgC( Color( 0, 255, 0 ), "[START] [" .. ply:SteamName() .. "] RECEIVED StartData" .. " at try #" .. ply.readycounter .. "\n" )
+
+		if ply.readycounter > 0 then
+			MsgC( Color( 0, 255, 0 ), "[START] [" .. ply:SteamName() .. "] RECEIVED StartData" .. " at try #" .. ply.readycounter .. "\n" )
+		end
 
 		net.Start( "receivedstartdata" )
 		net.Send( ply )

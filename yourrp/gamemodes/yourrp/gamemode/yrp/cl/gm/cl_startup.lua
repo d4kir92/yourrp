@@ -1922,10 +1922,14 @@ function YRPCreateLoadingInfo( ti )
 	if IsValid(lply) then
 		local text = ""
 
+		local yrp0 = GetGlobalInt( "plydata_" .. lply:SteamID(), -1 )
 		local yrp1 = YRPGetYRPReceivedStartData() == false or lply:GetNW2Bool( "yrp_received_ready" ) == false or lply:GetNW2Bool( "PlayerLoadedGameStart" ) == false or lply:GetNW2Bool( "PlayerLoadedGameEnd" ) == false
 		local yrp2 = lply:GetNW2Bool( "loadchars_start" ) == false or lply:GetNW2Bool( "loadchars_done" ) == false or lply:GetNW2String( "loadchars_msg", "X" ) == "X"
 		local yrp3 = lply:GetNW2Bool( "yrp_hudloadout" ) == false or lply:GetNW2String( "yrp_hudloadout_msg", "X" ) == "X"
 
+		if yrp0 then
+			text = text .. "GAME LOADING: " .. tostring( yrp0 )
+		end
 		if yrp1 then
 			if YRPGetYRPReceivedStartData() or lply:GetNW2Bool( "yrp_received_ready" ) then
 				--
@@ -2089,17 +2093,21 @@ if pa(yrp_loading_screen) then
 		loading_cur_old = loading_cur_old or 0
 		loading_cur = 0
 		local max = 100
-		local t1 = lply:GetNW2Bool( "yrp_received_ready", false ) or YRPGetYRPReceivedStartData()
-		local t2 = lply:GetNW2Bool( "loadchars_done" ) or IsVoidCharEnabled() or !GetGlobalBool( "bool_character_system" )
-		local t3 = lply:GetNW2Bool( "yrp_hudloadout" )
+		local t1 = GetGlobalInt( "plydata_" .. lply:SteamID(), -1 )
+		local t2 = lply:GetNW2Bool( "yrp_received_ready", false ) or YRPGetYRPReceivedStartData()
+		local t3 = lply:GetNW2Bool( "loadchars_done" ) or IsVoidCharEnabled() or !GetGlobalBool( "bool_character_system" )
+		local t4 = lply:GetNW2Bool( "yrp_hudloadout" )
 		if t1 then
-			loading_cur = loading_cur + 33
+			loading_cur = loading_cur + 25
 		end
 		if t2 then
-			loading_cur = loading_cur + 33
+			loading_cur = loading_cur + 25
 		end
 		if t3 then
-			loading_cur = loading_cur + 34
+			loading_cur = loading_cur + 25
+		end
+		if t4 then
+			loading_cur = loading_cur + 25
 		end
 		loading_cur_old = Lerp(2 * FrameTime(), loading_cur_old, loading_cur)
 
@@ -2213,26 +2221,30 @@ if pa(yrp_loading_screen) then
 			local py = 0.08
 			
 			if !t1 then
+				draw.SimpleText( "GAME/MAP IS LOADING: " .. tostring( t1 ), "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+
+			if t1 and !t2 then
 				draw.SimpleText( "START DATA STATUS: " .. tostring( YRPGetYRPStartDataStatus() ) .. " Counter: " .. tostring( YRPGetYRPRetryCounter() ), "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				py = py + 0.03
 			end
 			
-			if t1 and !t2 then
-				yrpt2text = " ( " .. YRP.lang_string( "LID_loading" ) .. " )"
-			else
-				yrpt2text = "" -- " ( " .. YRP.lang_string( "LID_done" ) .. " )"
-			end
-			if !strEmpty(yrpt2text) then
-				draw.SimpleText(YRP.lang_string( "LID_characters" ) .. yrpt2text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				py = py + 0.03
-			end
-			if t1 and t2 and !t3 then
+			if t2 and !t3 then
 				yrpt3text = " ( " .. YRP.lang_string( "LID_loading" ) .. " )"
 			else
 				yrpt3text = "" -- " ( " .. YRP.lang_string( "LID_done" ) .. " )"
 			end
-			if !strEmpty(yrpt3text) then
-				draw.SimpleText(YRP.lang_string( "LID_hud" ) .. yrpt3text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			if !strEmpty(yrpt2text) then
+				draw.SimpleText(YRP.lang_string( "LID_characters" ) .. yrpt3text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				py = py + 0.03
+			end
+			if t2 and t3 and !t4 then
+				yrpt4text = " ( " .. YRP.lang_string( "LID_loading" ) .. " )"
+			else
+				yrpt4text = "" -- " ( " .. YRP.lang_string( "LID_done" ) .. " )"
+			end
+			if !strEmpty(yrpt4text) then
+				draw.SimpleText(YRP.lang_string( "LID_hud" ) .. yrpt4text, "Y_" .. 20 .. "_700", pw / 2, SCREEN_CENTER_Y - PANEL_H / 2 + BAR_SPACE + BAR_H / 2 + ScrH() * py, TextColor(YRPCPP() ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				py = py + 0.03
 			end
 		end
