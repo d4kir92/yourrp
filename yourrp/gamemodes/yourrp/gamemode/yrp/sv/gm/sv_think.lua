@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 hook.Add( "PlayerStartTaunt", "yrp_taunt_start", function(ply, act, length)
 	ply:SetNW2Bool( "taunting", true)

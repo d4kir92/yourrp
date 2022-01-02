@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function AddYRPAddon(parent, tab)
 	local _add_on = createD( "DPanel", parent, YRP.ctr(1600), YRP.ctr(6 * 100 + 5 * 20), 0, 0)

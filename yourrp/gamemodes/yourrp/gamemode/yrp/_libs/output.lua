@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local _text = {}
 _text.pre = "#YRP# "
@@ -330,6 +330,7 @@ countries["MA"] = "Morocco"
 countries["MD"] = "Moldova"
 countries["ME"] = "Montenegro"
 countries["MK"] = "North Macedonia"
+countries["MT"] = "The Republic of Malta"
 countries["MX"] = "Mexico"
 countries["MY"] = "Malaysia"
 

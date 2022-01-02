@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 --here you can change this, but it's dumb, because you can change it ingame
 GM.Name = "DarkRP" -- Is for other addons detecting that the gamemode is "DarkRP" compatible

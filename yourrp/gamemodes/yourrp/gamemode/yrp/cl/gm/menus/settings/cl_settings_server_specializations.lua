@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/specializations/gpl.txt)
+--Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/specializations/gpl.txt)
 
 local _li = {}
 net.Receive( "get_specializations", function()

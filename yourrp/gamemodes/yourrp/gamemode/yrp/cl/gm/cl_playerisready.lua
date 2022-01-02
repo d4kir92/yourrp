@@ -1,6 +1,8 @@
---Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
+
+YRPReady = YRPReady or false
 
 YRPStartDataStatus = YRPStartDataStatus or "WAITING"
 YRPStartDataTab = YRPStartDataTab or {}
@@ -99,11 +101,16 @@ end
 
 net.Receive( "askforstartdata", function( len )
 	local from = net.ReadString()
-	if LocalPlayer and LocalPlayer() and IsValid( LocalPlayer() ) then
-		YRPSendAskData( from )
+	if YRPReady or ( LocalPlayer and LocalPlayer() and IsValid( LocalPlayer() ) ) then
+		if LocalPlayer and LocalPlayer() and IsValid( LocalPlayer() ) then
+			YRPSendAskData( from )
+		else
+			YRPAddReadyStatusMsg( "[START] LocalPlayer() is Invalid: " .. tostring( LocalPlayer() ) )
+			YRP.msg( "note", "LocalPlayer Is Broken: " .. tostring( LocalPlayer() ) .. " from: " .. tostring( from ) )
+		end
 	else
-		YRPAddReadyStatusMsg( "[ask] LocalPlayer() is Invalid: " .. tostring( LocalPlayer() ) )
-		YRP.msg( "note", "LocalPlayer Is Broken: " .. tostring( LocalPlayer() ) .. " from: " .. tostring( from ) )
+		YRPAddReadyStatusMsg( "[START] NOT ALL ENTITIES ARE LOADED!" )
+		YRP.msg( "note", "NOT ALL ENTITIES ARE LOADED!" )
 	end
 end )
 
@@ -116,4 +123,9 @@ net.Receive( "YRPReceivedStartData", function( len )
 	YRPHR( Color( 0, 255, 0 ) )
 
 	YRP.initLang()
+end )
+
+hook.Add( "InitPostEntity", "YRP_INITPOSTENTITY", function()
+	YRP.msg( "note", "ALL ENTITIES ARE LOADED!" )
+	YRPReady = true
 end )

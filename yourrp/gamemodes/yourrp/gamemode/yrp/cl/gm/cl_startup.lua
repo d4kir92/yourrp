@@ -1,4 +1,4 @@
---Copyright (C) 2017-2021 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local searchIcon = Material( "icon16/magnifier.png" )
 
@@ -1956,8 +1956,8 @@ function YRPCreateLoadingInfo( ti )
 			text = text .. "HudLoadout: " .. tostring( lply:GetNW2Bool( "yrp_hudloadout" ) ) .. " hud_msg: " .. lply:GetNW2String( "yrp_hudloadout_msg", "X" )
 		end
 		if !strEmpty(text) then
-			text = "[Loading] " .. text .. " ply: " .. lply:YRPName() .. " | time: " .. tostring( ti ) .. " plys: " .. player.GetCount() .. " Ver.: " .. YRPGetVersionFull()
-			text = text .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" ) .. " BRANCH: " .. tostring( BRANCH )
+			text = "[START] " .. text .. " ply: " .. lply:YRPName() .. " | time: " .. tostring( ti ) .. " plys: " .. player.GetCount() .. " Ver.: " .. YRPGetVersionFull()
+			text = text .. " collectionid: " .. YRPCollectionID() .. " serverip: " .. GetGlobalString( "serverip", "0.0.0.0:27015" ) .. " BRANCH: " .. tostring( BRANCH ) .. " ENTITIESLOADED: " .. tostring( YRPReady )
 		end
 		
 		return text
