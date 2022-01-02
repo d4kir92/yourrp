@@ -75,17 +75,6 @@ function YRPSendAskData( from )
 		timer.Simple( 0.01, function()
 			YRPSendAskData( from )
 		end )
-	elseif !IsValid( LocalPlayer() ) then
-		YRPAddReadyStatusMsg( "LocalPlayer() is Invalid: " .. tostring( LocalPlayer() ) )
-		YRPHR( Color( 255, 0, 0 ) )
-		MsgC( Color( 255, 0, 0 ), "[START] LocalPlayer() is Invalid, Retry..." .. "\n" )
-		YRPHR( Color( 255, 0, 0 ) )
-
-		YRP.msg( "error", "[START] LocalPlayer(): " .. tostring( LocalPlayer() ) )
-		timer.Simple( 0.01, function()
-			YRPAddReadyStatusMsg( "LocalPlayer() Retry: " .. tostring( LocalPlayer() ) )
-			YRPSendAskData( from )
-		end )
 	else
 		local info = YRPGetClientInfo()
 
@@ -100,9 +89,9 @@ function YRPSendAskData( from )
 		MsgC( Color( 0, 255, 0 ), "[START] Sended StartData" .. "\n" )
 
 		timer.Simple( 1, function()
-			if YRPReceivedStartData or LocalPlayer():GetNW2Bool( "yrp_received_ready", false ) then
+			if YRPReceivedStartData then
 				--
-			elseif YRPReceivedStartData == false and LocalPlayer():GetNW2Bool( "yrp_received_ready", false ) == false then
+			elseif YRPReceivedStartData == false then
 				YRPAddReadyStatusMsg( "SERVER NOT RECEIVED -> RETRY" )
 				local text = "[START] Server not received the StartData, retry..."
 				MsgC( Color( 255, 255, 0 ), text .. "\n" )
@@ -117,15 +106,10 @@ function YRPSendAskData( from )
 end
 
 net.Receive( "askforstartdata", function( len )
-	if YRPReady or YRPReadyFake or ( LocalPlayer and LocalPlayer() and IsValid( LocalPlayer() ) ) then
+	if YRPReady or YRPReadyFake then
 		local from = net.ReadString()
 
-		if LocalPlayer and LocalPlayer() and IsValid( LocalPlayer() ) then
-			YRPSendAskData( from )
-		else
-			YRPAddReadyStatusMsg( "LocalPlayer() is Invalid: " .. tostring( LocalPlayer() ) .. ", this mostly happens when you get lua errors" )
-			YRP.msg( "note", "LocalPlayer Is Broken: " .. tostring( LocalPlayer() ) .. " from: " .. tostring( from ) )
-		end
+		YRPSendAskData( from )
 	elseif !YRPReady then
 		YRPAddReadyStatusMsg( "MAP IS LOADING!" )
 		YRP.msg( "note", "MAP IS LOADING!" )
@@ -155,7 +139,7 @@ function GM:InitPostEntity()
 	YRPReady = true
 end
 
-timer.Simple( 15, function()
+timer.Simple( 60, function()
 	YRPAddReadyStatusMsg( "FAKE LOADED!" )
 	YRPReadyFake = true
 end )
