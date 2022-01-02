@@ -117,8 +117,9 @@ function YRPSendAskData( from )
 end
 
 net.Receive( "askforstartdata", function( len )
-	local from = net.ReadString()
 	if YRPReady or YRPReadyFake or ( LocalPlayer and LocalPlayer() and IsValid( LocalPlayer() ) ) then
+		local from = net.ReadString()
+
 		if LocalPlayer and LocalPlayer() and IsValid( LocalPlayer() ) then
 			YRPSendAskData( from )
 		else
@@ -126,8 +127,8 @@ net.Receive( "askforstartdata", function( len )
 			YRP.msg( "note", "LocalPlayer Is Broken: " .. tostring( LocalPlayer() ) .. " from: " .. tostring( from ) )
 		end
 	elseif !YRPReady then
-		YRPAddReadyStatusMsg( "NOT ALL ENTITIES ARE LOADED, this mostly happens when the map is still loading" )
-		YRP.msg( "note", "NOT ALL ENTITIES ARE LOADED!" )
+		YRPAddReadyStatusMsg( "MAP IS LOADING!" )
+		YRP.msg( "note", "MAP IS LOADING!" )
 	end
 end )
 
@@ -144,14 +145,17 @@ end )
 
 hook.Add( "InitPostEntity", "YRP_INITPOSTENTITY", function()
 	YRP.msg( "note", "ALL ENTITIES ARE LOADED! #1" )
+	YRPAddReadyStatusMsg( "ALL ENTITIES ARE LOADED! #1" )
 	YRPReady = true
 end )
 
 function GM:InitPostEntity()
 	YRP.msg( "note", "ALL ENTITIES ARE LOADED! #2" )
+	YRPAddReadyStatusMsg( "ALL ENTITIES ARE LOADED! #2" )
 	YRPReady = true
 end
 
 timer.Simple( 15, function()
+	YRPAddReadyStatusMsg( "FAKE LOADED!" )
 	YRPReadyFake = true
 end )

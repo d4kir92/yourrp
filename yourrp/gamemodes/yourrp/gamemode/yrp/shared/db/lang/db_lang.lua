@@ -61,7 +61,7 @@ function YRP.get_language_name(ls)
 end
 
 function YRP.search_language()
-	yrp_current_lang.get_language = string.lower(GetConVar( "gmod_language" ):GetString() )
+	yrp_current_lang.get_language = string.lower( GetConVar( "gmod_language" ):GetString() )
 end
 
 function YRP.replace_string(in_str, tab)
