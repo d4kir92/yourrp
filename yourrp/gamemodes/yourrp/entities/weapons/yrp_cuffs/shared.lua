@@ -58,7 +58,7 @@ end
 
 if CLIENT then
 	function YRP_DrawCuff(ply)
-		if ply:GetNW2Bool( "cuffed", false) then
+		if ply:GetYRPBool( "cuffed", false) then
 			local _r_hand = ply:LookupBone( "ValveBiped.Bip01_R_Hand" )
 			if _r_hand != nil then
 				local startPos = ply:GetBonePosition(ply:LookupBone( "ValveBiped.Bip01_R_Hand" ) )
@@ -69,8 +69,8 @@ if CLIENT then
 				end
 			end
 
-			local t1 = ply:GetNW2Entity( "cuff_target" )
-			local t2 = t1:GetNW2Entity( "cuff_target" )
+			local t1 = ply:GetYRPEntity( "cuff_target" )
+			local t2 = t1:GetYRPEntity( "cuff_target" )
 			if t1:LookupBone( "ValveBiped.Bip01_R_Hand" ) and t2:LookupBone( "ValveBiped.Bip01_R_Hand" ) then
 				t1 = t1:GetBonePosition(t1:LookupBone( "ValveBiped.Bip01_R_Hand" ) )
 				t2 = t2:GetBonePosition(t2:LookupBone( "ValveBiped.Bip01_R_Hand" ) )
@@ -83,27 +83,27 @@ end
 
 if SERVER then
 	hook.Add( "yrp_castdone_tieup", "tieup", function( args)
-		if !args.target:GetNW2Bool( "cuffed", false) then
+		if !args.target:GetYRPBool( "cuffed", false) then
 			args.target:Give( "yrp_cuffed" )
 			-- args.target:SetActiveWeapon( "yrp_cuffed" )
 			args.target:SelectWeapon( "yrp_cuffed" )
-			args.target:SetNW2Bool( "cuffed", true)
+			args.target:SetYRPBool( "cuffed", true)
 
 
 
 			local ply = args.attacker
 			local target = args.target
 
-			ply:SetNW2Entity( "cuff_target", target)
-			target:SetNW2Entity( "cuff_target", ply)
+			ply:SetYRPEntity( "cuff_target", target)
+			target:SetYRPEntity( "cuff_target", ply)
 		end
 	end)
 end
 
 if SERVER then
 	hook.Add( "yrp_castdone_unleash", "unleash", function( args)
-		if args.target:GetNW2Bool( "cuffed", false) then
-			args.target:SetNW2Bool( "cuffed", false)
+		if args.target:GetYRPBool( "cuffed", false) then
+			args.target:SetYRPBool( "cuffed", false)
 			local _weapon = args.target:GetActiveWeapon()
 			if ea(_weapon) then
 				_weapon:Remove()
@@ -137,9 +137,9 @@ function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
 end
 
 hook.Add( "SetupMove", "YRP_SetupMove_Cuffs", function(ply, mv, cmd)
-	if not ply:GetNW2Bool( "cuffed", false) then return end
+	if not ply:GetYRPBool( "cuffed", false) then return end
 
-	local target = ply:GetNW2Entity( "cuff_target" )
+	local target = ply:GetYRPEntity( "cuff_target" )
 
 	if target then
 		local TargetPoint = (target:IsPlayer() and target:GetShootPos() ) or target:GetPos()

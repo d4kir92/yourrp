@@ -323,7 +323,7 @@ local Player = FindMetaTable( "Player" )
 function Player:AddSpecialization(specialization)
 	specialization = tostring(specialization)
 	if tonumber(specialization) != nil then
-		local _specializationIDs = self:GetNW2String( "specializationIDs", "" )
+		local _specializationIDs = self:GetYRPString( "specializationIDs", "" )
 
 		_specializationIDs = string.Explode( ",", _specializationIDs)
 		if !table.HasValue(_specializationIDs, specialization) then
@@ -334,7 +334,7 @@ function Player:AddSpecialization(specialization)
 		end
 		_specializationIDs = table.concat(_specializationIDs, "," )
 
-		self:SetNW2String( "specializationIDs", tostring(_specializationIDs) )
+		self:SetYRPString( "specializationIDs", tostring(_specializationIDs) )
 
 		local ids = string.Explode( ",", _specializationIDs)
 		local lnames = {}
@@ -346,14 +346,14 @@ function Player:AddSpecialization(specialization)
 			end
 		end
 		lnames = table.concat(lnames, ", " )
-		self:SetNW2String( "specializationNames", lnames)
+		self:SetYRPString( "specializationNames", lnames)
 	end
 end
 
 function Player:RemoveSpecialization(specialization)
 	specialization = tostring(specialization)
 	if tonumber(specialization) != nil then
-		local _specializationIDs = self:GetNW2String( "specializationIDs", "" )
+		local _specializationIDs = self:GetYRPString( "specializationIDs", "" )
 
 		_specializationIDs = string.Explode( ",", _specializationIDs)
 		if table.HasValue(_specializationIDs, specialization) then
@@ -364,7 +364,7 @@ function Player:RemoveSpecialization(specialization)
 		end
 		_specializationIDs = table.concat(_specializationIDs, "," )
 		
-		self:SetNW2String( "specializationIDs", tostring(_specializationIDs) )
+		self:SetYRPString( "specializationIDs", tostring(_specializationIDs) )
 
 		local ids = string.Explode( ",", _specializationIDs)
 		local lnames = {}
@@ -376,7 +376,7 @@ function Player:RemoveSpecialization(specialization)
 			end
 		end
 		lnames = table.concat(lnames, ", " )
-		self:SetNW2String( "specializationNames", lnames)
+		self:SetYRPString( "specializationNames", lnames)
 	end
 end
 

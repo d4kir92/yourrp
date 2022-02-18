@@ -24,11 +24,11 @@ function ENT:Initialize()
 end
 
 function ENT:Getamount()
-	return self:GetNW2String( "money" )
+	return self:GetYRPString( "money" )
 end
 
 function ENT:Setamount(money)
-	self:SetNW2String( "money", money)
+	self:SetYRPString( "money", money)
 end
 
 function ENT:Use( activator, caller)

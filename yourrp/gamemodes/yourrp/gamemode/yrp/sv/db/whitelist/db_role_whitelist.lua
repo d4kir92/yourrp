@@ -101,12 +101,12 @@ end)
 net.Receive( "whitelistPlayer", function(len, ply)
 	if !IsValid(ply) then return end
 
-	if ply:GetNW2Bool( "bool_whitelist" ) then
+	if ply:GetYRPBool( "bool_whitelist" ) then
 		local _SteamID = net.ReadString()
 		local _nick = ""
 		local target = ply
 		for k, v in pairs(player.GetAll() ) do
-			if v:SteamID() == _SteamID then
+			if v:YRPSteamID() == _SteamID then
 				_nick = v:Nick()
 				target = v
 			end
@@ -136,7 +136,7 @@ net.Receive( "whitelistPlayerGroup", function(len, ply)
 		local _SteamID = net.ReadString()
 		local _nick = ""
 		for k, v in pairs(player.GetAll() ) do
-			if v:SteamID() == _SteamID then
+			if v:YRPSteamID() == _SteamID then
 				_nick = v:Nick()
 				target = v
 			end
@@ -160,7 +160,7 @@ net.Receive( "whitelistPlayerAll", function(len, ply)
 		local _SteamID = net.ReadString()
 		local _nick = ""
 		for k, v in pairs(player.GetAll() ) do
-			if v:SteamID() == _SteamID then
+			if v:YRPSteamID() == _SteamID then
 				_nick = v:Nick()
 				target = v
 			end
@@ -184,7 +184,7 @@ end)
 -- for itzonelightning
 function WhitelistToRole(ply, rid)
 
-	local _SteamID = ply:SteamID()
+	local _SteamID = ply:YRPSteamID()
 	local _nick = ply:Nick()
 	local target = ply
 	local roleID = rid

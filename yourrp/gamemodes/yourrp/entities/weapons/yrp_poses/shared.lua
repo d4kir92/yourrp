@@ -427,8 +427,8 @@ end
 
 function YRPDoPoses()
 	for i, ply in pairs(player.GetAll() ) do
-		ply.yrpposeart = ply:GetNW2String( "yrp_pose_art", "standing" )
-		ply.yrppose = ply:GetNW2String( "yrp_pose", "salute" )
+		ply.yrpposeart = ply:GetYRPString( "yrp_pose_art", "standing" )
+		ply.yrppose = ply:GetYRPString( "yrp_pose", "salute" )
 		
 		ply.yrpposestatus = ply.yrpposestatus or ""
 
@@ -442,13 +442,13 @@ function YRPDoPoses()
 				if ply:IsSprinting() or !ply:IsOnGround() or vel:Length() > 110 then
 					ply.yrpposestatus = "reset"
 				elseif yrp_poses[ply.yrpposeart][ply.yrppose] then
-					if ply:GetNW2Bool( "yrp_pose_status", false) then
+					if ply:GetYRPBool( "yrp_pose_status", false) then
 						ply.yrpposestatus = "do"
 					else
 						ply.yrpposestatus = "reset"
 					end
 				elseif !strEmpty(ply.yrppose) then
-					MsgC( Color(255, 0, 0), "missing pose: " .. tostring(ply.yrppose) .. "\n" )
+					MsgC( Color( 255, 0, 0), "missing pose: " .. tostring(ply.yrppose) .. "\n" )
 					ply.yrpposestatus = "reset"
 				else
 					ply.yrpposestatus = "reset"
@@ -514,14 +514,14 @@ if SERVER then
 		local pose_art = net.ReadString()
 		local pose = net.ReadString()
 		if pose then
-			ply:SetNW2Bool( "yrp_pose_status", false)
+			ply:SetYRPBool( "yrp_pose_status", false)
 
-			ply:SetNW2String( "yrp_pose_art", pose_art)
-			ply:SetNW2String( "yrp_pose", pose)
+			ply:SetYRPString( "yrp_pose_art", pose_art)
+			ply:SetYRPString( "yrp_pose", pose)
 
 			timer.Simple(0.33, function()
 				if IsValid(ply) then
-					ply:SetNW2Bool( "yrp_pose_status", true)
+					ply:SetYRPBool( "yrp_pose_status", true)
 				end
 			end)
 		end
@@ -533,7 +533,7 @@ function SWEP:Reload()
 
 	if SERVER then
 		local ply = self:GetOwner()
-		ply:SetNW2Bool( "yrp_pose_status", false)
+		ply:SetYRPBool( "yrp_pose_status", false)
 		YRPResetPoses(ply)
 	end
 
@@ -690,7 +690,7 @@ function SWEP:PrimaryAttack()
 		self:SetWeaponHoldType(self.HoldType)
 	
 		local ply = self:GetOwner()
-		ply:SetNW2Bool( "yrp_pose_status", true)
+		ply:SetYRPBool( "yrp_pose_status", true)
 	end
 end
 
@@ -699,6 +699,6 @@ function SWEP:SecondaryAttack()
 		self:SetWeaponHoldType(self.HoldType)
 	
 		local ply = self:GetOwner()
-		ply:SetNW2Bool( "yrp_pose_status", false)
+		ply:SetYRPBool( "yrp_pose_status", false)
 	end
 end

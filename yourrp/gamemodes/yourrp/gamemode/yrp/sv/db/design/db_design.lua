@@ -123,33 +123,22 @@ function RegisterHUDMASKDesign(tab)
 end
 
 --[[ LOADOUT ]]--
-local Player = FindMetaTable( "Player" )
-function Player:YRPDesignLoadout(from)
-	if !IsValid(self) then
-		return
-	end
-	self:SetNW2Int( "yrp_loading", 0)
-	self:HudLoadout()
-	self:InterfaceLoadout()
-	YRP.msg( "debug", "[DesignLoadout] " .. self:YRPName() .. " " .. tostring(from) )
+function YRPDesignLoadout(from)
+	--self:HudLoadout()
+	--self:InterfaceLoadout()
 	local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
 	if wk(setting) then
 		setting = setting[1]
-		self:SetNW2String( "string_hud_design", setting.string_hud_design)
-		SetGlobalString( "string_interface_design", setting.string_interface_design)
-		SetGlobalString( "string_hud_profile", setting.string_hud_profile)
-		SetGlobalInt( "int_headerheight", setting.int_headerheight)
+	
+		SetGlobalYRPString( "string_hud_design", setting.string_hud_design)
+		SetGlobalYRPString( "string_interface_design", setting.string_interface_design)
+		SetGlobalYRPString( "string_hud_profile", setting.string_hud_profile)
+		SetGlobalYRPInt( "int_headerheight", setting.int_headerheight)
 	else
 		YRP.msg( "note", "Fatal Error: Design Settings not found" )
 	end
-	self:SetNW2Int( "yrp_loading", 100)
 end
-
-util.AddNetworkString( "rebuildHud" )
-net.Receive( "rebuildHud", function(len, ply)
-	YRP.msg( "note", "FAILED HUD => REBUILD HUD" )
-	ply:YRPDesignLoadout( "rebuildHud" )
-end)
+YRPDesignLoadout("Init")
 
 local once = false
 util.AddNetworkString( "ply_changed_resolution" )
@@ -161,15 +150,14 @@ net.Receive( "ply_changed_resolution", function(len, ply)
 	end
 	timer.Simple(1, function()
 		if IsValid(ply) then
-			ply:SetNW2Int( "hud_version", ply:GetNW2Int( "hud_version", 0) + 1)
+			SetGlobalYRPInt( "YRPHUDVersion", -2 )
 		end
 	end)
-	timer.Simple(30, function()
+	timer.Simple(2, function()
 		if IsValid(ply) then
-			ply:SetNW2Int( "hud_version", ply:GetNW2Int( "hud_version", 0) + 1)
+			SetGlobalYRPInt( "YRPHUDVersion", -1 )
 		end
 	end)
-	--ply:YRPDesignLoadout( "ply_changed_resolution" )
 end)
 
 util.AddNetworkString( "change_hud_design" )
@@ -177,9 +165,8 @@ net.Receive( "change_hud_design", function(len, ply)
 	local string_hud_design = net.ReadString()
 	YRP.msg( "db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = string_hud_design}, "uniqueID = '1'" )
-	for i, pl in pairs(player.GetAll() ) do
-		pl:SetNW2String( "string_hud_design", string_hud_design)
-	end
+	
+	SetGlobalYRPString( "string_hud_design", string_hud_design )
 end)
 
 -- Interface
@@ -214,7 +201,7 @@ net.Receive( "change_interface_design", function(len, ply)
 	local string_interface_design = net.ReadString()
 	YRP.msg( "db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = string_interface_design}, "uniqueID = '1'" )
-	SetGlobalString( "string_interface_design", string_interface_design)
+	SetGlobalYRPString( "string_interface_design", string_interface_design)
 
 	ResetDesign()
 end)
@@ -271,5 +258,5 @@ net.Receive( "yrp_change_headerheight", function(len, ply)
 	newheaderheight = tonumber(newheaderheight)
 
 	YRP_SQL_UPDATE(DATABASE_NAME, {["int_headerheight"] = newheaderheight}, "uniqueID = '1'" )
-	SetGlobalInt( "int_headerheight", newheaderheight)
+	SetGlobalYRPInt( "int_headerheight", newheaderheight)
 end)

@@ -19,8 +19,8 @@ function drawBattery(x)
 	_ba.ws = 8
 
 	--Grey Form of Battery
-	draw.RoundedBox(0, x + ctrb(_ba.w-_ba.ws)/2, y, ctrb(_ba.ws), ctrb(_ba.hs), Color(100, 100, 100, 200) )
-	draw.RoundedBox(0, x, y + ctrb(_ba.hs), ctrb(_ba.w), ctrb(_ba.h-_ba.hs), Color(100, 100, 100, 200) )
+	draw.RoundedBox(0, x + ctrb(_ba.w-_ba.ws)/2, y, ctrb(_ba.ws), ctrb(_ba.hs), Color( 100, 100, 100, 200) )
+	draw.RoundedBox(0, x, y + ctrb(_ba.hs), ctrb(_ba.w), ctrb(_ba.h-_ba.hs), Color( 100, 100, 100, 200) )
 
 	if _bp > 100 then
 		_bp = _load
@@ -37,18 +37,18 @@ function drawBattery(x)
 		render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
 
 		--Form of Battery
-		draw.RoundedBox(0, x + ctrb(_ba.w-_ba.ws)/2, y, ctrb(_ba.ws), ctrb(_ba.hs), Color(255, 255, 255, 255) )
-		draw.RoundedBox(0, x, y + ctrb(_ba.hs), ctrb(_ba.w), ctrb(_ba.h-_ba.hs), Color(255, 255, 255, 255) )
+		draw.RoundedBox(0, x + ctrb(_ba.w-_ba.ws)/2, y, ctrb(_ba.ws), ctrb(_ba.hs), Color( 255, 255, 255, 255) )
+		draw.RoundedBox(0, x, y + ctrb(_ba.hs), ctrb(_ba.w), ctrb(_ba.h-_ba.hs), Color( 255, 255, 255, 255) )
 
 		render.SetStencilReferenceValue(1)
 		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
 		--Percent of Form
-		draw.RoundedBox(0, x, y + ctrb(_ba.h - _ba.h * (_bp/100) ), ctrb(_ba.w), ctrb(_ba.h), Color(255, 255, 255, 255) )
+		draw.RoundedBox(0, x, y + ctrb(_ba.h - _ba.h * (_bp/100) ), ctrb(_ba.w), ctrb(_ba.h), Color( 255, 255, 255, 255) )
 
 	render.SetStencilEnable(false)
 
-	draw.SimpleTextOutlined(	_text .. "%", "DermaDefault", x - ctrb(10), ctrb(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, ctrb(1), Color(0, 0, 0, 255) )
+	draw.SimpleTextOutlined(	_text .. "%", "DermaDefault", x - ctrb(10), ctrb(20), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255) )
 end
 
 function appPosition(parent, x, y, nr)
@@ -56,7 +56,7 @@ function appPosition(parent, x, y, nr)
 	_tmp.nr = nr
 	function _tmp:Paint(pw, ph)
 		if self:IsHovered() then
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 1) )
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 1) )
 		end
 	end
 	_tmp:Receiver( "APP", function(receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY)
@@ -100,7 +100,7 @@ function createSmartphone(parent, w, h, x, y)
 				if #_appName > 8 then
 					_appName = string.sub(_appName, 1, 8) .. "..."
 				end
-				draw.SimpleTextOutlined(_appName, "Y_14_500", ctrb(40) + _x*ctrb(64) + _x*ctrb(40) + ctrb(64/2), ctrb(40) + ctrb(40) + _y*ctrb(64) + _y*ctrb(40+30) + ctrb(64+20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color(0, 0, 0, 255) )
+				draw.SimpleTextOutlined(_appName, "Y_14_500", ctrb(40) + _x*ctrb(64) + _x*ctrb(40) + ctrb(64/2), ctrb(40) + ctrb(40) + _y*ctrb(64) + _y*ctrb(40+30) + ctrb(64+20), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255) )
 			end
 		end
 	end
@@ -108,7 +108,7 @@ function createSmartphone(parent, w, h, x, y)
 	--[[ TOP BAR ]]--
 	_tmp.topbar = createD( "DPanel", _tmp, w, ctrb(40), 0, 0)
 	function _tmp.topbar:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255) )
 
 		local _clock = {}
 		_clock.sec = os.date( "%S" )
@@ -120,24 +120,24 @@ function createSmartphone(parent, w, h, x, y)
 
 		drawBattery(pw - ctrb(90) )
 
-		draw.SimpleTextOutlined(_clock.hours .. ":" .. _clock.min, "DermaDefault", pw - ctrb(10), ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, ctrb(1), Color(0, 0, 0, 255) )
+		draw.SimpleTextOutlined(_clock.hours .. ":" .. _clock.min, "DermaDefault", pw - ctrb(10), ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255) )
 	end
 
 	--[[ BOT BAR ]]--
 	_tmp.botbar = createD( "DPanel", _tmp, w, ctrb(40), 0, h - ctrb(40) )
 	function _tmp.botbar:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 100, 255) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 100, 100, 100, 255) )
 	end
 
 	_tmp.botbar.buttonhome = createD( "DButton", _tmp.botbar, w/3, ctrb(40), w/3, 0)
 	_tmp.botbar.buttonhome:SetText( "" )
 	function _tmp.botbar.buttonhome:Paint(pw, ph)
 		if self:IsHovered() then
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 100, 255) )
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 100, 255) )
 		else
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255) )
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255) )
 		end
-		draw.SimpleTextOutlined( "O", "DermaDefault", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color(0, 0, 0, 255) )
+		draw.SimpleTextOutlined( "O", "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255) )
 	end
 	function _tmp.botbar.buttonhome:DoClick()
 		_tmp.display:HomeScreen()
@@ -147,22 +147,22 @@ function createSmartphone(parent, w, h, x, y)
 	_tmp.botbar.buttonback:SetText( "" )
 	function _tmp.botbar.buttonback:Paint(pw, ph)
 		if self:IsHovered() then
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 100, 255) )
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 100, 255) )
 		else
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255) )
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255) )
 		end
-		--draw.SimpleTextOutlined(YRP.lang_string( "LID_wip" ), "DermaDefault", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color(0, 0, 0, 255) )
+		--draw.SimpleTextOutlined(YRP.lang_string( "LID_wip" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255) )
 	end
 
 	_tmp.botbar.buttonapps = createD( "DButton", _tmp.botbar, w/3, ctrb(40), 0, 0)
 	_tmp.botbar.buttonapps:SetText( "" )
 	function _tmp.botbar.buttonapps:Paint(pw, ph)
 		if self:IsHovered() then
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 100, 255) )
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 100, 255) )
 		else
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255) )
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255) )
 		end
-		--draw.SimpleTextOutlined(YRP.lang_string( "LID_wip" ), "DermaDefault", pw/2, ph/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color(0, 0, 0, 255) )
+		--draw.SimpleTextOutlined(YRP.lang_string( "LID_wip" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255) )
 	end
 
 	--[[ Clear Display ]]--

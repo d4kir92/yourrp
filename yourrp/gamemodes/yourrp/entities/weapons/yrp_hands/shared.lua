@@ -14,26 +14,24 @@ SWEP.Slot = 1
 SWEP.SlotPos = 1
 
 SWEP.DrawAmmo = false
-
 SWEP.DrawCrosshair = false
+
+SWEP.UseHands = true
 
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/c_medkit.mdl"
+SWEP.ViewModel = Model( "models/weapons/c_arms.mdl" )
 SWEP.WorldModel = ""
-SWEP.notdropable = true
+SWEP.ViewModelFOV = 54
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "none"
-
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Ammo = "none"
-
-SWEP.DrawCrosshair = false
 
 SWEP.HoldType = "normal"
 function SWEP:Initialize()
@@ -64,7 +62,7 @@ function SWEP:PrimaryAttack()
 		HitEnt = self.Drag.Entity
 	else
 		if not IsValid( HitEnt ) or HitEnt:GetMoveType() ~= MOVETYPE_VPHYSICS or
-			HitEnt:IsVehicle() or HitEnt:GetNWBool( "NoDrag", false ) or
+			HitEnt:IsVehicle() or HitEnt:GetYRPBool( "NoDrag", false ) or
 			HitEnt.BlockDrag or
 			IsValid( HitEnt:GetParent() ) then
 			return
@@ -119,7 +117,7 @@ if CLIENT then
 			not self.rDag and
 			not HitEnt:IsVehicle() and
 			not IsValid( HitEnt:GetParent() ) and
-			not HitEnt:GetNWBool( "NoDrag", false) then
+			not HitEnt:GetYRPBool( "NoDrag", false) then
 
 			self.Time = math.min( 1, self.Time +2 *FrameTime() )
 		else
@@ -151,6 +149,6 @@ if CLIENT then
 	end
 end
 
-function SWEP:PreDrawViewModel( vm, pl, wep )
+--[[function SWEP:PreDrawViewModel( vm, pl, wep )
 	return true
-end
+end]]

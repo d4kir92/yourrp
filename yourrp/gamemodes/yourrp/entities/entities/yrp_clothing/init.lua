@@ -28,12 +28,12 @@ end
 
 util.AddNetworkString( "openAM" )
 function ENT:Use( activator, caller)
-	if !activator:GetNW2Bool( "clicked", false) then
-		activator:SetNW2Bool( "clicked", true)
+	if !activator:GetYRPBool( "clicked", false) then
+		activator:SetYRPBool( "clicked", true)
 		net.Start( "openAM" )
 		net.Send( activator)
 		timer.Simple(0.4, function()
-			activator:SetNW2Bool( "clicked", false)
+			activator:SetYRPBool( "clicked", false)
 		end)
 	end
 end

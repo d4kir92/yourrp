@@ -9,37 +9,44 @@ function AddAlert(str)
 	table.insert( alerts, str)
 end
 
-local d = 0
-hook.Add( "Think", "yrp_alerts", function()
-	if d < CurTime() then
-		if net.BytesLeft() != nil then
-			return
+YRPAlertsHOOKED = YRPAlertsHOOKED or false
+if !YRPAlertsHOOKED then
+	YRPAlertsHOOKED = true
+	
+	local d = 0
+
+	local function YRPSetAlerts()
+		if d < CurTime() then
+			if net.BytesLeft() != nil then
+				return
+			end
+			
+			if table.Count( alerts) > 0 then
+				local first = table.GetFirstValue( alerts)
+				d = CurTime() + math.Clamp(string.len(tostring(first) ) / 2, 3, 10)
+
+				SetGlobalYRPString( "yrp_alert", first)
+
+				local result = table.RemoveByValue( alerts, first)
+			elseif GetGlobalYRPString( "yrp_alert" ) != "" then
+				SetGlobalYRPString( "yrp_alert", "" )
+			end
 		end
-
-		if table.Count( alerts) > 0 then
-			local first = table.GetFirstValue( alerts)
-
-			d = CurTime() + math.Clamp(string.len(tostring(first) ) / 2, 3, 10)
-
-			SetGlobalString( "yrp_alert", first)
-
-			local result = table.RemoveByValue( alerts, first)
-		else
-			SetGlobalString( "yrp_alert", "" )
-		end
+		timer.Simple( 0.1, YRPSetAlerts )
 	end
-end, hook.MONITOR_HIGH)
+	YRPSetAlerts()
+end
 
 util.AddNetworkString( "yrp_player_say" )
 
 util.AddNetworkString( "startchat" )
 net.Receive( "startchat", function(len, ply)
-	ply:SetNW2Bool( "istyping", true)
+	ply:SetYRPBool( "istyping", true)
 end)
 
 util.AddNetworkString( "finishchat" )
 net.Receive( "finishchat", function(len, ply)
-	ply:SetNW2Bool( "istyping", false)
+	ply:SetYRPBool( "istyping", false)
 end)
 
 function print_help(sender)
@@ -148,12 +155,12 @@ function do_suicide(sender)
 end
 
 function show_tag_dev(sender)
-	if !sender:GetNW2Bool( "tag_dev", false) then
-		sender:SetNW2Bool( "tag_dev", true)
+	if !sender:GetYRPBool( "tag_dev", false) then
+		sender:SetYRPBool( "tag_dev", true)
 	else
-		sender:SetNW2Bool( "tag_dev", false)
+		sender:SetYRPBool( "tag_dev", false)
 	end
-	if sender:GetNW2Bool( "tag_dev", false) then
+	if sender:GetYRPBool( "tag_dev", false) then
 		sender:ChatPrint( "[tag_dev] enabled" )
 	else
 		sender:ChatPrint( "[tag_dev] disabled" )
@@ -162,12 +169,12 @@ function show_tag_dev(sender)
 end
 
 function show_tag_tra(sender)
-	if !sender:GetNW2Bool( "tag_tra", false) then
-		sender:SetNW2Bool( "tag_tra", true)
+	if !sender:GetYRPBool( "tag_tra", false) then
+		sender:SetYRPBool( "tag_tra", true)
 	else
-		sender:SetNW2Bool( "tag_tra", false)
+		sender:SetYRPBool( "tag_tra", false)
 	end
-	if sender:GetNW2Bool( "tag_tra", false) then
+	if sender:GetYRPBool( "tag_tra", false) then
 		sender:ChatPrint( "[tag_tra] enabled" )
 	else
 		sender:ChatPrint( "[tag_tra] disabled" )
@@ -176,12 +183,12 @@ function show_tag_tra(sender)
 end
 
 function show_tag_ug(sender)
-	if !sender:GetNW2Bool( "tag_ug", false) then
-		sender:SetNW2Bool( "tag_ug", true)
+	if !sender:GetYRPBool( "tag_ug", false) then
+		sender:SetYRPBool( "tag_ug", true)
 	else
-		sender:SetNW2Bool( "tag_ug", false)
+		sender:SetYRPBool( "tag_ug", false)
 	end
-	if sender:GetNW2Bool( "tag_ug", false) then
+	if sender:GetYRPBool( "tag_ug", false) then
 		sender:ChatPrint( "[tag_ug] enabled" )
 	else
 		sender:ChatPrint( "[tag_ug] disabled" )
@@ -324,7 +331,7 @@ end
 util.AddNetworkString( "set_chat_mode" )
 net.Receive( "set_chat_mode", function(len, ply)
 	local _str = net.ReadString() or "say"
-	ply:SetNW2String( "chat_mode", string.upper(_str) )
+	ply:SetYRPString( "chat_mode", string.upper(_str) )
 end)
 
 util.AddNetworkString( "yrpsendanim" )
@@ -347,8 +354,8 @@ end
 
 local Player = FindMetaTable( "Player" )
 function Player:SetAFK( bo)
-	self:SetNW2Float( "afkts", CurTime() )
-	self:SetNW2Bool( "isafk", bo)
+	self:SetYRPFloat( "afkts", CurTime() )
+	self:SetYRPBool( "isafk", bo)
 	
 	YRPSendAnim(self, GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_SIT, false)
 end
@@ -398,7 +405,7 @@ function DoCommand(sender, command, text)
 	end
 
 	if command == "dnd" then
-		sender:SetNW2Bool( "isdnd", !sender:GetNW2Bool( "isdnd", false) )
+		sender:SetYRPBool( "isdnd", !sender:GetYRPBool( "isdnd", false) )
 		return ""
 	end
 

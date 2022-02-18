@@ -19,7 +19,7 @@ function AddVehicle( veh, ply, item)
 	local cname = veh:GetClass()
 	local iuid = item.uniqueID
 
-	veh:SetNW2Int( "ownerCharID", tonumber( charid) )
+	veh:SetYRPInt( "ownerCharID", tonumber( charid) )
 
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, "ownerCharID, ClassName, item_id", "'" .. charid .. "', '" .. cname .. "', '" .. iuid .. "'" )
 end
@@ -43,7 +43,7 @@ net.Receive( "getVehicleInfo", function(len, ply)
 
 	local _vehicleID = net.ReadString()
 
-	local _vehicleTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "ownerCharID = '" .. _vehicle:GetNW2Int( "ownerCharID", 0) .. "' AND item_id = " .. _vehicleID)
+	local _vehicleTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "ownerCharID = '" .. _vehicle:GetYRPInt( "ownerCharID", 0) .. "' AND item_id = " .. _vehicleID)
 
 	if worked(_vehicleTab, "getVehicleInfo | No buyed vehicle! Dont work on spawnmenu vehicle" ) then
 		local owner = ""
@@ -126,10 +126,10 @@ net.Receive( "removeVehicleOwner", function(len, ply)
 		local result = YRP_SQL_UPDATE(DATABASE_NAME, {["ownerCharID"] = ""}, "uniqueID = '" .. _tmpVehicleID .. "'" )
 
 		for k, v in pairs(ents.GetAll() ) do
-			if v:GetNW2Int( "item_uniqueID", 0) != 0 and item_uniqueID and v:GetNW2Int( "item_uniqueID", 0) == item_uniqueID then
-				v:SetNW2Int( "item_uniqueID", 0)
-				v:SetNW2String( "ownerRPName", "" )
-				v:SetNW2Entity( "yrp_owner", NULL)
+			if v:GetYRPInt( "item_uniqueID", 0) != 0 and item_uniqueID and v:GetYRPInt( "item_uniqueID", 0) == item_uniqueID then
+				v:SetYRPInt( "item_uniqueID", 0)
+				v:SetYRPString( "ownerRPName", "" )
+				v:SetYRPEntity( "yrp_owner", NULL)
 				v:SetOwner(NULL)
 
 				v:Fire( "Unlock" )

@@ -5,7 +5,7 @@
 	"maps"		"^rp_"
 	"category"	"rp"
 	"menusystem"	"1"
-	"workshopid"	"1114204152"
+	"workshopid"	""
 
 	"settings"
 	{

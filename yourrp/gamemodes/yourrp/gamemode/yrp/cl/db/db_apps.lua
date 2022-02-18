@@ -8,9 +8,9 @@ function APP:Init()
 end
 
 function APP:Paint(w, h)
-	draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0, 255) )
-	draw.SimpleTextOutlined( "NO", "HudHintTextSmall", w/2, h/3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color(0, 0, 0, 255) )
-	draw.SimpleTextOutlined( "ICON", "HudHintTextSmall", w/2, h*2/3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color(0, 0, 0, 255) )
+	draw.RoundedBox(0, 0, 0, w, h, Color( 255, 0, 0, 255) )
+	draw.SimpleTextOutlined( "NO", "HudHintTextSmall", w/2, h/3, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255) )
+	draw.SimpleTextOutlined( "ICON", "HudHintTextSmall", w/2, h*2/3, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255) )
 end
 
 vgui.Register( "YRPAPP", APP, "DButton" )
@@ -102,7 +102,12 @@ function YRPAppsLoad()
 	YRPAppsCheckFile()
 	YRPAppsMSG( "Load Apps" )
 	
-	yrp_apps = util.JSONToTable( file.Read( dbfile, "DATA" ) )
+	local dbfile = file.Read( dbfile, "DATA" )
+	if dbfile then
+		yrp_apps = util.JSONToTable( dbfile )
+	else
+		YRP.msg( "note", "APPS BROKEN?" )
+	end
 end
 
 function YRPAppsSave()

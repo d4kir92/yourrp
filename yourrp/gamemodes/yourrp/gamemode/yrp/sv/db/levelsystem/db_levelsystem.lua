@@ -25,8 +25,8 @@ function Player:LevelSystemLoadout()
 	local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
 	if wk(setting) then
 		setting = setting[1]
-		self:SetNW2String( "int_level_min", setting.int_level_min)
-		self:SetNW2String( "int_level_max", setting.int_level_max)
+		self:SetYRPString( "int_level_min", setting.int_level_min)
+		self:SetYRPString( "int_level_max", setting.int_level_max)
 	end
 end
 
@@ -110,7 +110,7 @@ function Player:ClearXP()
 	if result != nil then
 		YRP.msg( "note", "ClearXP FAILED #1: " .. tostring(result) )
 	else
-		self:SetNW2Int( "int_xp", 0)
+		self:SetYRPInt( "int_xp", 0)
 	end
 end
 
@@ -135,7 +135,7 @@ function Player:AddLevel(level)
 			if result != nil then
 				YRP.msg( "error", "AddLevel FAILED #1: " .. tostring(result) )
 			else
-				self:SetNW2String( "int_level", newlvl)
+				self:SetYRPString( "int_level", newlvl)
 				self:AddLevel(level)
 			end
 		end
@@ -148,7 +148,7 @@ function Player:AddLevel(level)
 			if result != nil then
 				YRP.msg( "error", "AddLevel FAILED #2: " .. tostring(result) )
 			else
-				self:SetNW2String( "int_level", newlvl)
+				self:SetYRPString( "int_level", newlvl)
 				self:AddLevel(level)
 			end
 		end
@@ -202,7 +202,7 @@ function Player:AddXP(xp)
 					if result != nil then
 						YRP.msg( "error", "AddXP FAILED #2: " .. tostring(result) )
 					else
-						self:SetNW2Int( "int_xp", newxp)
+						self:SetYRPInt( "int_xp", newxp)
 					end
 				end
 			elseif curlvl > maxlvl then
@@ -212,7 +212,7 @@ function Player:AddXP(xp)
 				if result != nil then
 					YRP.msg( "error", "AddXP FAILED #5: " .. tostring(result) )
 				else
-					self:SetNW2Int( "int_xp", maxxp)
+					self:SetYRPInt( "int_xp", maxxp)
 				end
 			else
 				--YRP.msg( "error", "AddXP ELSE " .. tostring( curlvl) .. " | " .. tostring(maxlvl) .. " | " .. tostring(newxp) .. " | " .. tostring(maxxp) )
@@ -236,7 +236,7 @@ function Player:AddXP(xp)
 					if result != nil then
 						YRP.msg( "error", "AddXP FAILED #4: " .. tostring(result) )
 					else
-						self:SetNW2Int( "int_xp", newxp)
+						self:SetYRPInt( "int_xp", newxp)
 					end
 				end
 			end

@@ -106,7 +106,7 @@ function YRPUpdateBool(handler, db_name, ply, netstr, str, l_db, value)
 	YRP.msg( "db", ply:YRPName() .. " updated bool " .. str .. " to: " .. tostring(tobool( value) ))
 	YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
 	for i, pl in pairs(player.GetAll() ) do
-		pl:SetNW2Bool(str, tobool( value) )
+		pl:SetYRPBool(str, tobool( value) )
 	end
 end
 
@@ -114,7 +114,7 @@ function YRPUpdateFloat(handler, db_name, ply, netstr, str, l_db, value)
 	YRP.msg( "db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring( value) )
 	YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
 	for i, pl in pairs(player.GetAll() ) do
-		pl:SetNW2Float(str, value)
+		pl:SetYRPFloat(str, value)
 	end
 end
 

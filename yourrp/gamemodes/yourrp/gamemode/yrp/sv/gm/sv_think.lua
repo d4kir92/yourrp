@@ -1,10 +1,10 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 hook.Add( "PlayerStartTaunt", "yrp_taunt_start", function(ply, act, length)
-	ply:SetNW2Bool( "taunting", true)
+	ply:SetYRPBool( "taunting", true)
 	timer.Simple(length, function()
 		if IsValid(ply) then
-			ply:SetNW2Bool( "taunting", false)
+			ply:SetYRPBool( "taunting", false)
 		end
 	end)
 end)
@@ -14,7 +14,7 @@ net.Receive( "client_lang", function(len, ply)
 	local _lang = net.ReadString()
 	--YRP.msg( "db", ply:YRPName() .. " using language: " .. string.upper(_lang) )
 
-	ply:SetNW2String( "client_lang", _lang or "NONE" )
+	ply:SetYRPString( "client_lang", _lang or "NONE" )
 end)
 
 function YDeath(ply)
@@ -22,7 +22,7 @@ function YDeath(ply)
 end
 
 function YRPConHP(ply)
-	local hpreg = ply:GetNW2Int( "HealthReg", nil)
+	local hpreg = ply:GetYRPInt( "HealthReg", nil)
 	if wk(hpreg) and ply:Alive() then
 		if ply:Health() <= 0 then
 			YDeath(ply)
@@ -35,11 +35,11 @@ function YRPConHP(ply)
 end
 
 function YRPConAR(ply)
-	local arreg = ply:GetNW2Int( "ArmorReg" )
+	local arreg = ply:GetYRPInt( "ArmorReg" )
 	if arreg != nil then
 		ply:SetArmor(ply:Armor() + arreg)
-		if ply:Armor() > ply:GetNW2Int( "MaxArmor" ) then
-			ply:SetArmor(ply:GetNW2Int( "MaxArmor" ) )
+		if ply:Armor() > ply:GetYRPInt( "MaxArmor" ) then
+			ply:SetArmor(ply:GetYRPInt( "MaxArmor" ) )
 		elseif ply:Armor() < 0 then
 			ply:SetArmor(0)
 		end
@@ -59,11 +59,11 @@ end
 
 function YRPConHG(ply, time)
 	if GetGlobalBool( "bool_onlywhencook", false) and !IsCookPlaying() then return false end
-	local newval = tonumber(ply:GetNW2Float( "hunger", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_hunger", 1.0)
+	local newval = tonumber(ply:GetYRPFloat( "hunger", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_hunger", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
-	ply:SetNW2Float( "hunger", newval, 500)
+	ply:SetYRPFloat( "hunger", newval, 500)
 
-	if tonumber(ply:GetNW2Float( "hunger", 0.0) ) < 20.0 then
+	if tonumber(ply:GetYRPFloat( "hunger", 0.0) ) < 20.0 then
 		ply:TakeDamage( ply:GetMaxHealth() / 50, ply )
 	elseif GetGlobalBool( "bool_hunger_health_regeneration", false) then
 		local tickrate = tonumber(GetGlobalString( "text_hunger_health_regeneration_tickrate", 1) )
@@ -77,15 +77,18 @@ end
 
 function YRPConTH(ply)
 	if !IsValid(ply) then return end
-	local newval2 = tonumber(ply:GetNW2Float( "permille", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_permille", 1.0)
-	newval2 = math.Clamp(newval2, 0.0, ply:GetMaxPermille() )
-	ply:SetNW2Float( "permille", newval2)
+	local newval2 = tonumber(ply:GetYRPFloat( "permille", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_permille", 1.0)
+	newval2 = math.Clamp( newval2, 0.0, ply:GetMaxPermille() )
+	
+	if ply:GetYRPFloat( "permille" ) != newval2 then
+		ply:SetYRPFloat( "permille", newval2 )
+	end
 
 	if GetGlobalBool( "bool_onlywhencook", false) and !IsCookPlaying() then return false end
-	local newval = tonumber(ply:GetNW2Float( "thirst", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_thirst", 1.0)
+	local newval = tonumber(ply:GetYRPFloat( "thirst", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_thirst", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
-	ply:SetNW2Float( "thirst", newval)
-	if tonumber(ply:GetNW2Float( "thirst", 0.0) ) < 20.0 then
+	ply:SetYRPFloat( "thirst", newval)
+	if tonumber(ply:GetYRPFloat( "thirst", 0.0) ) < 20.0 then
 		ply:TakeDamage( ply:GetMaxHealth() / 50 )
 	end
 end
@@ -94,11 +97,11 @@ end
 
 function YRPConRA(ply)
 	if IsInsideRadiation(ply) then
-		ply:SetNW2Float( "GetCurRadiation", math.Clamp(tonumber(ply:GetNW2Float( "GetCurRadiation", 0.0) ) + 0.01 * GetGlobalFloat( "float_scale_radiation_in", 50.0), 0, 100) )
+		ply:SetYRPFloat( "GetCurRadiation", math.Clamp(tonumber(ply:GetYRPFloat( "GetCurRadiation", 0.0) ) + 0.01 * GetGlobalFloat( "float_scale_radiation_in", 50.0), 0, 100) )
 	else
-		ply:SetNW2Float( "GetCurRadiation", math.Clamp(tonumber(ply:GetNW2Float( "GetCurRadiation", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_radiation_out", 8.0), 0, 100) )
+		ply:SetYRPFloat( "GetCurRadiation", math.Clamp(tonumber(ply:GetYRPFloat( "GetCurRadiation", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_radiation_out", 8.0), 0, 100) )
 	end
-	if tonumber(ply:GetNW2Float( "GetCurRadiation", 0.0) ) > 80.0 then
+	if tonumber(ply:GetYRPFloat( "GetCurRadiation", 0.0) ) > 80.0 then
 		ply:TakeDamage( ply:GetMaxHealth() / 50, ply )
 	end
 end
@@ -107,15 +110,19 @@ end
 
 function YRPConST( ply, _time )
 	if GetGlobalBool( "bool_onlywhencook", false) and !IsCookPlaying() then
-		ply:SetNW2Float( "GetCurStamina", 100)
+		if ply:GetYRPFloat( "GetCurStamina" ) != 100 then
+			ply:SetYRPFloat( "GetCurStamina", 100)
+		end
 		return false
 	end
 	ply.jumping = ply.jumping or fals
 
 	if ply:GetMoveType() == MOVETYPE_NOCLIP then
-		local newval = ply:GetNW2Float( "GetCurStamina", 0) + 20
-		newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float( "GetMaxStamina", 100) ), 1)
-		ply:SetNW2Float( "GetCurStamina", newval )
+		local newval = ply:GetYRPFloat( "GetCurStamina", 0) + 20
+		newval = math.Round(math.Clamp(newval, 0, ply:GetYRPFloat( "GetMaxStamina", 100) ), 1)
+		if ply:GetYRPFloat( "GetCurStamina" ) != newval then
+			ply:SetYRPFloat( "GetCurStamina", newval )
+		end
 	end
 
 	if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:InVehicle() then
@@ -127,41 +134,47 @@ function YRPConST( ply, _time )
 		if !tr.Hit and !ply.jumping then
 			ply.jumping = true
 
-			local newval = ply:GetNW2Float( "GetCurStamina", 0) - GetGlobalFloat( "float_scale_stamina_jump", 30)
-			newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float( "GetMaxStamina", 100) ), 1)
-			ply:SetNW2Float( "GetCurStamina", newval)
+			local newval = ply:GetYRPFloat( "GetCurStamina", 0) - GetGlobalFloat( "float_scale_stamina_jump", 30)
+			newval = math.Round(math.Clamp(newval, 0, ply:GetYRPFloat( "GetMaxStamina", 100) ), 1)
+			if ply:GetYRPFloat( "GetCurStamina" ) != newval then
+				ply:SetYRPFloat( "GetCurStamina", newval)
+			end
 		end
 	end
 
 	if _time % 1.0 == 0 then
 		if !ply:InVehicle() and ply:IsOnGround() then
 			if ply:GetMoveType() != MOVETYPE_NOCLIP and (ply:KeyDown(IN_SPEED) and (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT) )) then
-				local newval = ply:GetNW2Float( "GetCurStamina", 0) - (ply:GetNW2Float( "stamindown", 1) ) * GetGlobalFloat( "float_scale_stamina_down", 1.0)
-				newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float( "GetMaxStamina", 100) ), 1)
-				ply:SetNW2Float( "GetCurStamina", newval)
-			elseif ply:GetNW2Float( "thirst", 0) > 20 then
+				local newval = ply:GetYRPFloat( "GetCurStamina", 0) - (ply:GetYRPFloat( "stamindown", 1) ) * GetGlobalFloat( "float_scale_stamina_down", 1.0)
+				newval = math.Round(math.Clamp(newval, 0, ply:GetYRPFloat( "GetMaxStamina", 100) ), 1)
+				if ply:GetYRPFloat( "GetCurStamina" ) != newval then
+					ply:SetYRPFloat( "GetCurStamina", newval)
+				end
+			elseif ply:GetYRPFloat( "thirst", 0) > 20 then
 				local factor = 1
 				if ply:GetMoveType() == MOVETYPE_NOCLIP then
 					factor = 10
 				end
-				local newval = ply:GetNW2Float( "GetCurStamina", 0) + ply:GetNW2Float( "staminup", 1) * GetGlobalFloat( "float_scale_stamina_up", 1.0) * factor
-				newval = math.Round(math.Clamp(newval, 0, ply:GetNW2Float( "GetMaxStamina", 100) ), 1)
-				ply:SetNW2Float( "GetCurStamina", newval)
+				local newval = ply:GetYRPFloat( "GetCurStamina", 0) + ply:GetYRPFloat( "staminup", 1) * GetGlobalFloat( "float_scale_stamina_up", 1.0) * factor
+				newval = math.Round(math.Clamp(newval, 0, ply:GetYRPFloat( "GetMaxStamina", 100) ), 1)
+				if ply:GetYRPFloat( "GetCurStamina" ) != newval then
+					ply:SetYRPFloat( "GetCurStamina", newval)
+				end
 			end
 		end
 
 		if !ply:Slowed() then
-			local rs = ply:GetNW2Int( "speedrun", 0)
-			local ws = ply:GetNW2Int( "speedwalk", 0)
+			local rs = ply:GetYRPInt( "speedrun", 0)
+			local ws = ply:GetYRPInt( "speedwalk", 0)
 			local factor = 1
-			if ply:GetNW2Float( "GetCurStamina", 0) <= 20 or ply:GetNW2Float( "thirst", 0) < 20 then
+			if ply:GetYRPFloat( "GetCurStamina", 0) <= 20 or ply:GetYRPFloat( "thirst", 0) < 20 then
 				factor = 0.6
 			end
 
 			if IsBonefracturingEnabled() and !ply:Slowed() then
-				if ply:GetNW2Bool( "broken_leg_left" ) and ply:GetNW2Bool( "broken_leg_right" ) then
+				if ply:GetYRPBool( "broken_leg_left" ) and ply:GetYRPBool( "broken_leg_right" ) then
 					factor = 0.5
-				elseif ply:GetNW2Bool( "broken_leg_left" ) or ply:GetNW2Bool( "broken_leg_right" ) then
+				elseif ply:GetYRPBool( "broken_leg_left" ) or ply:GetYRPBool( "broken_leg_right" ) then
 					factor = 0.25
 				end
 			end
@@ -180,40 +193,40 @@ end
 
 
 function YRPRegAB(ply)
-	local reg = ply:GetNW2Float( "GetRegAbility", 0.0)
-	local tick = ply:GetNW2Float( "GetRegTick", 1.0)
+	local reg = ply:GetYRPFloat( "GetRegAbility", 0.0)
+	local tick = ply:GetYRPFloat( "GetRegTick", 1.0)
 
 	ply.abdelay = ply.abdelay or 0
 	ply.abdelay = math.Round(ply.abdelay, 1)
 
 	if reg != 0.0 and ply.abdelay < CurTime() then
 		ply.abdelay = CurTime() + tick
-		ply:SetNW2Int( "GetCurAbility", math.Clamp(ply:GetNW2Int( "GetCurAbility", 0) + reg, 0, ply:GetNW2Int( "GetMaxAbility" ) ))
+		ply:SetYRPInt( "GetCurAbility", math.Clamp(ply:GetYRPInt( "GetCurAbility", 0) + reg, 0, ply:GetYRPInt( "GetMaxAbility" ) ))
 	end
 end
 
 function YRPTimeJail(ply)
-	if ply:GetNW2Bool( "injail", false) then
-		ply:SetNW2Int( "jailtime", ply:GetNW2Int( "jailtime", 0) - 1)
-		if tonumber(ply:GetNW2Int( "jailtime", 0) ) <= 0 then
+	if ply:GetYRPBool( "injail", false) then
+		ply:SetYRPInt( "jailtime", ply:GetYRPInt( "jailtime", 0) - 1)
+		if tonumber(ply:GetYRPInt( "jailtime", 0) ) <= 0 then
 			clean_up_jail(ply)
 		end
 	end
 end
 
 function YRPCheckSalary(ply)
-	if ply:GetNW2Bool( "moneyready", false ) then
-		local _m = ply:GetNW2String( "money" )
-		local _ms = ply:GetNW2String( "salary" )
+	if ply:GetYRPBool( "moneyready", false ) then
+		local _m = ply:GetYRPString( "money" )
+		local _ms = ply:GetYRPString( "salary" )
 		if ply:Alive() and ply:HasCharacterSelected() and _m and _ms then
 			local _money = tonumber(_m)
 			local _salary = tonumber(_ms)
 
 			if _money != nil and _salary != nil then
-				if CurTime() >= ply:GetNW2Int( "nextsalarytime", 0) and ply:HasCharacterSelected() and ply:Alive() then
-					ply:SetNW2Int( "nextsalarytime", CurTime() + ply:GetNW2Int( "salarytime" ) )
+				if CurTime() >= ply:GetYRPInt( "nextsalarytime", 0) and ply:HasCharacterSelected() and ply:Alive() then
+					ply:SetYRPInt( "nextsalarytime", CurTime() + ply:GetYRPInt( "salarytime" ) )
 
-					ply:SetNW2String( "money", _money + _salary)
+					ply:SetYRPString( "money", _money + _salary)
 					ply:UpdateMoney()
 				end
 			end
@@ -225,7 +238,7 @@ end
 
 function YRPIsDealerAlive(uid)
 	for j, npc in pairs(ents.GetAll() ) do
-		if npc:IsNPC() and tonumber(npc:GetNW2String( "dealerID", "0" ) ) == tonumber(uid) then
+		if npc:IsNPC() and tonumber(npc:GetYRPString( "dealerID", "0" ) ) == tonumber(uid) then
 			return true
 		end
 	end
@@ -235,11 +248,11 @@ end
 function YRPIsTeleporterAlive(uid)
 	for j, tel in pairs(ents.GetAll() ) do
 		if tel:GetClass() == "yrp_teleporter" then
-			if tonumber(tel:GetNW2Int( "yrp_teleporter_uid", -1) ) != -1 and tonumber(tel:GetNW2Int( "yrp_teleporter_uid", -1) ) == tonumber(uid) then
+			if tonumber(tel:GetYRPInt( "yrp_teleporter_uid", -1) ) != -1 and tonumber(tel:GetYRPInt( "yrp_teleporter_uid", -1) ) == tonumber(uid) then
 				return true
 			end
 			tel.PermaProps = true
-			tel.PermaPropID = -1
+			tel.PermaPropID = 0
 		end
 	end
 	return false
@@ -258,18 +271,18 @@ timer.Create( "ServerThink", TICK, 0, function()
 			ply:AddPlayTime()
 
 			if ply:AFK() and !ply:HasAccess() then
-				if CurTime() - tonumber(ply:GetNW2Float( "afkts", 0) ) >= tonumber(GetGlobalInt( "int_afkkicktime", 0) ) then
-					ply:SetNW2Bool( "isafk", false)
+				if CurTime() - tonumber(ply:GetYRPFloat( "afkts", 0) ) >= tonumber(GetGlobalInt( "int_afkkicktime", 0) ) then
+					ply:SetYRPBool( "isafk", false)
 					ply:Kick( "AFK" )
 				end
 			end
 
-			if ply:GetNW2Bool( "loaded", false) then
-				if !ply:GetNW2Bool( "inCombat" ) then
+			if ply:GetYRPBool( "loaded", false) then
+				if !ply:GetYRPBool( "inCombat" ) then
 					YRPConHP(ply)	 --HealthReg
 					YRPConAR(ply)	 --ArmorReg
-					if ply:GetNW2Int( "yrp_stars", 0) != 0 then
-						ply:SetNW2Int( "yrp_stars", 0)
+					if ply:GetYRPInt( "yrp_stars", 0) != 0 then
+						ply:SetYRPInt( "yrp_stars", 0)
 					end
 				end
 
@@ -281,11 +294,11 @@ timer.Create( "ServerThink", TICK, 0, function()
 					ply:TakeDamage( 0.5, ply )
 				end
 
-				if GetGlobalBool( "bool_hunger", false) and ply:GetNW2Bool( "bool_hunger", false) then
+				if GetGlobalBool( "bool_hunger", false) and ply:GetYRPBool( "bool_hunger", false) then
 					YRPConHG(ply, _time)
 				end
 
-				if GetGlobalBool( "bool_thirst", false) and ply:GetNW2Bool( "bool_thirst", false) then
+				if GetGlobalBool( "bool_thirst", false) and ply:GetYRPBool( "bool_thirst", false) then
 					YRPConTH(ply)
 				end
 
@@ -308,11 +321,11 @@ timer.Create( "ServerThink", TICK, 0, function()
 	end
 
 	for k, ply in pairs(player.GetAll() ) do -- Every 0.1 seconds
-		if ply:GetNW2Bool( "loaded", false) then
+		if ply:GetYRPBool( "loaded", false) then
 			-- Every 0.1
 			YRPRegAB(ply)
 
-			if GetGlobalBool( "bool_stamina", false) and ply:GetNW2Bool( "bool_stamina", false) then
+			if GetGlobalBool( "bool_stamina", false) and ply:GetYRPBool( "bool_stamina", false) then
 				YRPConST(ply, _time)
 			end
 		end
@@ -329,7 +342,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 
 	if _time % 30.0 == 1 or GetGlobalBool( "yrp_update_teleporters", false) then
 		if GetGlobalBool( "yrp_update_teleporters", true) != false then
-			SetGlobalBool( "yrp_update_teleporters", false)
+			SetGlobalYRPBool( "yrp_update_teleporters", false)
 		end
 
 		local _dealers = YRP_SQL_SELECT( "yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'" )
@@ -341,8 +354,8 @@ timer.Create( "ServerThink", TICK, 0, function()
 						YRP.msg( "gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!" )
 						_del = _del[1]
 						local _dealer = ents.Create( "yrp_dealer" )
-						_dealer:SetNW2String( "dealerID", dealer.uniqueID)
-						_dealer:SetNW2String( "name", dealer.name)
+						_dealer:SetYRPString( "dealerID", dealer.uniqueID)
+						_dealer:SetYRPString( "name", dealer.name)
 						local _pos = string.Explode( ",", _del.position)
 						_pos = Vector(_pos[1], _pos[2], _pos[3])
 						_dealer:SetPos(_pos)
@@ -367,22 +380,22 @@ timer.Create( "ServerThink", TICK, 0, function()
 			local teleporters = YRP_SQL_SELECT( "yrp_teleporters", "*", "string_map = '" .. game.GetMap() .. "'" )
 			if wk(teleporters) then
 				if table.Count(teleporters) < 100 then
-					for i, teleporter in pairs(teleporters) do
+					for i, teleporter in pairs( teleporters ) do
 						if !YRPIsTeleporterAlive(teleporter.uniqueID) then
 							local tp = ents.Create( "yrp_teleporter" )
-							if ( IsValid( tp ) ) then
+							if IsValid( tp ) then
 								local pos = string.Explode( ",", teleporter.string_position)
 								pos = Vector(pos[1], pos[2], pos[3])
 								tp:SetPos(pos - tp:GetUp() * 5)
 								local ang = string.Explode( ",", teleporter.string_angle)
 								ang = Angle( ang[1], ang[2], ang[3])
 								tp:SetAngles( ang)
-								tp:SetNW2Int( "yrp_teleporter_uid", tonumber(teleporter.uniqueID) )
-								tp:SetNW2String( "string_name", teleporter.string_name)
-								tp:SetNW2String( "string_target", teleporter.string_target)
+								tp:SetYRPInt( "yrp_teleporter_uid", tonumber(teleporter.uniqueID) )
+								tp:SetYRPString( "string_name", teleporter.string_name)
+								tp:SetYRPString( "string_target", teleporter.string_target)
 								tp:Spawn()
 								tp.PermaProps = true
-								tp.PermaPropID = -1
+								tp.PermaPropID = 0
 
 								YRP.msg( "note", "[YourRP Teleporters] " .. "Was dead, respawned" )
 							else
@@ -432,17 +445,17 @@ timer.Create( "ServerThink", TICK, 0, function()
 	end
 
 	if _time % 1 == 0 and HasDarkrpmodification() then
-		YRPHR( Color(255, 0, 0) )
-		MsgC( Color(255, 0, 0), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color(255, 255, 255), "\n" )
-		YRPHR( Color(255, 0, 0) )
+		YRPHR( Color( 255, 0, 0) )
+		MsgC( Color( 255, 0, 0), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color( 255, 255, 255), "\n" )
+		YRPHR( Color( 255, 0, 0) )
 		YRPTestDarkrpmodification()
 	end
 
 	if _time % 1 == 0 and !HasYRPContent() then
-		YRPHR( Color(255, 255, 0) )
-		MsgC( Color(255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color(255, 255, 255), "\n" )
-		MsgC( Color(255, 255, 0), "Or is STEAM down?", Color(255, 255, 255), "\n" )
-		YRPHR( Color(255, 255, 0) )
+		YRPHR( Color( 255, 255, 0) )
+		MsgC( Color( 255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color( 255, 255, 255), "\n" )
+		MsgC( Color( 255, 255, 0), "Or is STEAM down?", Color( 255, 255, 255), "\n" )
+		YRPHR( Color( 255, 255, 0) )
 		YRPTestContentAddons()
 	end
 
@@ -476,7 +489,7 @@ function UpdateSpawnerNPCTable()
 			end
 		end
 	end
-	SetGlobalTable( "yrp_spawner_npc", t)
+	SetGlobalYRPTable( "yrp_spawner_npc", t)
 end
 UpdateSpawnerNPCTable()
 
@@ -493,7 +506,7 @@ function UpdateSpawnerENTTable()
 			end
 		end
 	end
-	SetGlobalTable( "yrp_spawner_ent", t)
+	SetGlobalYRPTable( "yrp_spawner_ent", t)
 end
 UpdateSpawnerENTTable()
 
@@ -511,7 +524,7 @@ function UpdateJailpointTable()
 			end
 		end
 	end
-	SetGlobalTable( "yrp_jailpoints", t)
+	SetGlobalYRPTable( "yrp_jailpoints", t)
 end
 UpdateJailpointTable()
 
@@ -528,7 +541,7 @@ function UpdateReleasepointTable()
 			end
 		end
 	end
-	SetGlobalTable( "yrp_releasepoints", t)
+	SetGlobalYRPTable( "yrp_releasepoints", t)
 end
 UpdateReleasepointTable()
 
@@ -546,7 +559,7 @@ function UpdateRadiationTable()
 			end
 		end
 	end
-	SetGlobalTable( "yrp_radiation", t)
+	SetGlobalYRPTable( "yrp_radiation", t)
 end
 UpdateRadiationTable()
 
@@ -564,7 +577,7 @@ function UpdateSafezoneTable()
 			end
 		end
 	end
-	SetGlobalTable( "yrp_safezone", t)
+	SetGlobalYRPTable( "yrp_safezone", t)
 end
 UpdateSafezoneTable()
 
@@ -583,7 +596,7 @@ function UpdateZoneTable()
 			end
 		end
 	end
-	SetGlobalTable( "yrp_zone", t)
+	SetGlobalYRPTable( "yrp_zone", t)
 end
 UpdateZoneTable()
 
@@ -594,7 +607,7 @@ hook.Add( "Think", "yrp_spawner_think", function()
 	if delay < CurTime() then
 		delay = CurTime() + 1
 
-		local t = GetGlobalTable( "yrp_spawner_npc" )
+		local t = GetGlobalYRPTable( "yrp_spawner_npc" )
 		for _, v in pairs(t) do
 			local pos = StringToVector( v.pos)
 			if YNPCs[v.uniqueID] == nil then
@@ -629,7 +642,7 @@ hook.Add( "Think", "yrp_spawner_think", function()
 			end
 		end
 
-		local t = GetGlobalTable( "yrp_spawner_ent" )
+		local t = GetGlobalYRPTable( "yrp_spawner_ent" )
 		for _, v in pairs(t) do
 			local pos = StringToVector( v.pos)
 			if YENTs[v.uniqueID] == nil then

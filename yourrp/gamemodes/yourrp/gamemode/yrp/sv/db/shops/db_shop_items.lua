@@ -255,8 +255,8 @@ function YRPSpawnItem(ply, item, duid)
 	if item.type == "weapons" then
 		local wep = ply:Give(item.ClassName)
 		if wk(wep) and wep != NULL then
-			wep:SetNW2Int( "item_uniqueID", item.uniqueID)
-			wep:SetNW2Entity( "yrp_owner", ply)
+			wep:SetYRPInt( "item_uniqueID", item.uniqueID)
+			wep:SetYRPEntity( "yrp_owner", ply)
 			return true
 		else
 			for i, ws in pairs( engine.GetAddons() ) do
@@ -374,7 +374,7 @@ function YRPSpawnItem(ply, item, duid)
 				ent = ENT.t:SpawnFunction(ply, tr, item.ClassName)
 
 				--ent:SetOwner(ply)
-				ent:SetNW2Entity( "yrp_owner", ply)
+				ent:SetYRPEntity( "yrp_owner", ply)
 				ent:Activate()
 
 				ent:SetAngles(TARGETANG)
@@ -382,7 +382,7 @@ function YRPSpawnItem(ply, item, duid)
 					ent:SetPos(ply:GetPos() + ply:GetForward() * 64 + ply:GetUp() * 64)
 				end
 
-				ent:SetNW2Int( "item_uniqueID", item.uniqueID )
+				ent:SetYRPInt( "item_uniqueID", item.uniqueID )
 
 				--YRP.msg( "gm", "[Spawn Item] WORKED #1" )
 
@@ -393,7 +393,7 @@ function YRPSpawnItem(ply, item, duid)
 					ent:SetPos(tr.HitPos)
 
 					--ent:SetOwner(ply)
-					ent:SetNW2Entity( "yrp_owner", ply)
+					ent:SetYRPEntity( "yrp_owner", ply)
 
 					ent:Spawn()
 					ent:Activate()
@@ -403,7 +403,7 @@ function YRPSpawnItem(ply, item, duid)
 						ent:SetPos(ply:GetPos() + ply:GetForward() * 64 + ply:GetUp() * 64)
 					end
 					
-					ent:SetNW2Int( "item_uniqueID", item.uniqueID )
+					ent:SetYRPInt( "item_uniqueID", item.uniqueID )
 
 					--YRP.msg( "gm", "[Spawn Item] WORKED #2" )
 					return true, ent
@@ -417,12 +417,12 @@ function YRPSpawnItem(ply, item, duid)
 			if vehicle then
 				ent = simfphys.SpawnVehicle(nil, tr.HitPos + Vector(0, 0, 0), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
 
-				ent:SetNW2Int( "item_uniqueID", item.uniqueID)
+				ent:SetYRPInt( "item_uniqueID", item.uniqueID)
 
 				--YRP.msg( "gm", "[Spawn Item] WORKED #3" )
 
 				--ent:SetOwner(ply)
-				ent:SetNW2Entity( "yrp_owner", ply)
+				ent:SetYRPEntity( "yrp_owner", ply)
 
 				ent:Activate()
 
@@ -455,12 +455,12 @@ function YRPSpawnItem(ply, item, duid)
 
 					ent:SetAngles(TARGETANG)
 
-					ent:SetNW2Int( "item_uniqueID", item.uniqueID)
+					ent:SetYRPInt( "item_uniqueID", item.uniqueID)
 			
 					--YRP.msg( "gm", "[Spawn Item] WORKED #4" )
 
 					--ent:SetOwner(ply)
-					ent:SetNW2Entity( "yrp_owner", ply)
+					ent:SetYRPEntity( "yrp_owner", ply)
 
 					return true, ent
 				else
@@ -490,7 +490,7 @@ net.Receive( "item_buy", function(len, ply)
 		_item = _item[1]
 		_item.name = tostring(_item.name)
 
-		if ply:GetNW2Float( "buy_ts", 0.0) > CurTime() then
+		if ply:GetYRPFloat( "buy_ts", 0.0) > CurTime() then
 			YRP.msg( "note", "[item_buy] On Cooldown" )
 			return
 		end
@@ -510,14 +510,14 @@ net.Receive( "item_buy", function(len, ply)
 
 				if _spawned then
 					if ea(ent) then
-						ent:SetNW2Int( "item_uniqueID", _item.uniqueID)
+						ent:SetYRPInt( "item_uniqueID", _item.uniqueID)
 						ent:SetColor(StringToColor(_tab.color) )
 						if ent:IsVehicle() then
 							AddVehicle(ent, ply, _item)
 						end
 					end
 
-					ply:SetNW2Float( "buy_ts", CurTime() + 2)
+					ply:SetYRPFloat( "buy_ts", CurTime() + 2)
 				else
 					YRP.msg( "note", "Failed to spawn item from shop, spawned: " .. tostring(_spawned) )
 					return false
@@ -564,7 +564,7 @@ net.Receive( "item_spawn", function(len, ply)
 
 				if _spawned then
 					if ea(ent) then
-						ent:SetNW2Int( "item_uniqueID", _item.uniqueID)
+						ent:SetYRPInt( "item_uniqueID", _item.uniqueID)
 						if ent:IsVehicle() then
 							AddVehicle(ent, ply, _item)
 						end

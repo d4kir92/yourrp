@@ -13,7 +13,7 @@ function PANEL:Init()
 	self.hs:SetOverlap(-YRP.ctr(20) )
 	self.site = createD( "DPanel", self, 0, 0, 0, 0)
 	function self.site:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 200) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 100, 100, 200) )
 	end
 
 	self.auto = true
@@ -53,25 +53,25 @@ function PANEL:AddOption(name, func, height)
 		else
 			self:SetWide(YRP.ctr(self.tabs.tabwide) )
 		end
-		self.color = Color(100, 100, 255)
+		self.color = Color( 100, 100, 255)
 		self.h = self.h or 0
 		self.delay = 0.8
 		if self.tabs.current == name then
 			self.h = self.h + self.delay
-			self.color = Color(100, 100, 255)
+			self.color = Color( 100, 100, 255)
 		elseif self:IsHovered() then
 			self.h = self.h + self.delay
-			self.color = Color(200, 200, 255)
+			self.color = Color( 200, 200, 255)
 		else
 			self.h = self.h - self.delay
 		end
 		self.h = math.Clamp(self.h, 0, 10)
 	
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 100) )
 
 		draw.RoundedBox(0, YRP.ctr(20), ph - YRP.ctr(self.h), pw - YRP.ctr(40), YRP.ctr(self.h), self.color)
 
-		draw.SimpleText(YRP.lang_string(name), "Y_26_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(name), "Y_26_500", pw / 2, ph / 2, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	self.tabs[name] = func

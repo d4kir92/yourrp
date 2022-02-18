@@ -27,21 +27,21 @@ end
 
 util.AddNetworkString( "yrp_open_weaponchest" )
 function ENT:Use( activator, caller, useType, value )
-	if !activator:GetNW2Bool( "wc_clicked", false) then
-		activator:SetNW2Bool( "wc_clicked", true)
+	if !activator:GetYRPBool( "wc_clicked", false) then
+		activator:SetYRPBool( "wc_clicked", true)
 		
 		net.Start( "yrp_open_weaponchest" )
 		net.Send( activator)
 
 		timer.Simple(0.4, function()
 			if IsValid( activator) then
-				activator:SetNW2Bool( "wc_clicked", false)
+				activator:SetYRPBool( "wc_clicked", false)
 			end
 		end)
 	end
 	timer.Simple(1, function()
-		if IsValid( activator) and activator:GetNW2Bool( "wc_clicked", false) then
-			activator:SetNW2Bool( "wc_clicked", false)
+		if IsValid( activator) and activator:GetYRPBool( "wc_clicked", false) then
+			activator:SetYRPBool( "wc_clicked", false)
 		end
 	end)
 end

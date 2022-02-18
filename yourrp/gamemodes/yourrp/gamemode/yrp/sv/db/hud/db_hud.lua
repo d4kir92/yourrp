@@ -1032,58 +1032,32 @@ function DefaultHUDSettings(reset)
 end
 DefaultHUDSettings()
 
-util.AddNetworkString( "yrp_hud_info" )
-util.AddNetworkString( "yrp_hud_info_end" )
 --[[ LOADOUT ]]--
-local Player = FindMetaTable( "Player" )
-function Player:HudLoadout()
-	YRP.msg( "debug", "[HudLoadout] " .. self:YRPName() )
-	self:SetNW2String( "yrp_hudloadout_msg", "Started" )
-
+YRPHUDVersion = YRPHUDVersion or -1
+function HudLoadoutAll()
 	local hudeles = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(hudeles) then
 		for i, v in pairs( hudeles ) do
-			timer.Simple(i * 0.005, function()
-				if ea( self ) then
-					net.Start( "yrp_hud_info" )
-						net.WriteString( v.name)
-						net.WriteString( v.value)
-					net.Send(self)
-					if i == #hudeles then
-						net.Start( "yrp_hud_info_end" )
-						net.Send(self)
-
-						self:SetNW2Bool( "yrp_hudloadout", true)
-						self:SetNW2String( "yrp_hudloadout_msg", "> Sended <" )
-
-						net.Start( "yrp_chat_ready" )
-						net.Send(self)
-
-						self:SetNW2Int( "hud_version", self:GetNW2Int( "hud_version", 0) + 1)
-					end
-				end
-			end)
-		end
-	else
-		self:SetNW2String( "yrp_hudloadout_msg", "Failed" )
-	end
-end
-
-local hud_f = 0
-local hud_c = 0
-function HudLoadoutAll()
-	hud_c = hud_c + 1
-	local c = hud_c
-	local t = CurTime()
-	hud_f = CurTime()
-	timer.Simple(1, function()
-		if t == hud_f and c == hud_c then
-			for i, ply in pairs(player.GetAll() ) do
-				ply:HudLoadout()
+			if string.StartWith( v.name, "float_HUD_" ) then
+				SetGlobalYRPFloat( v.name, tonumber( v.value ) )
+			elseif string.StartWith( v.name, "int_HUD_" ) then
+				SetGlobalYRPInt( v.name, tonumber( v.value ) )
+			elseif string.StartWith( v.name, "bool_HUD_" ) then
+				SetGlobalYRPBool( v.name, tobool( v.value ) )
+			elseif string.StartWith( v.name, "text_HUD_" ) then
+				SetGlobalYRPString( v.name, tostring( v.value ) )
+			elseif string.StartWith( v.name, "color_HUD_" ) then
+				SetGlobalYRPString( v.name, tostring( v.value ) )
+			elseif v.name == "Version" then
+				YRPHUDVersion = YRPHUDVersion + 1
+				SetGlobalYRPInt( "YRPHUDVersion", YRPHUDVersion )
+			else
+				MsgC( Color( 255, 0, 0 ), "Failed To HUD", v.name, v.value, "\n" )
 			end
 		end
-	end)
+	end
 end
+HudLoadoutAll()
 
 util.AddNetworkString( "update_hud_x" )
 net.Receive( "update_hud_x", function(len, ply)
@@ -1190,7 +1164,5 @@ util.AddNetworkString( "reset_hud_settings" )
 net.Receive( "reset_hud_settings", function(len, ply)
 	YRP.msg( "db", "Reset Hud Settings by " .. ply:YRPName() )
 	DefaultHUDSettings(true)
-	for i, v in pairs(player.GetAll() ) do
-		ply:YRPDesignLoadout( "reset_hud_settings" )
-	end
+	YRPDesignLoadout( "reset_hud_settings" )
 end)

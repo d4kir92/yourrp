@@ -22,7 +22,7 @@ SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
 SWEP.ViewModel = "models/weapons/c_medkit.mdl"
-SWEP.WorldModel = "models/healthvial.mdl"
+SWEP.WorldModel = "models/weapons/w_medkit.mdl"
 
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.DefaultClip = 1

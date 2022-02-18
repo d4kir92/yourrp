@@ -91,7 +91,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 						Text:SetFont( "TabLarge" )
 						Text:SetText( v.name .. ": " .. Value)
 						Text:SizeToContents()
-						Text:SetColor(Color(200,200,200,200) )
+						Text:SetColor(Color( 200,200,200,200) )
 						Text:SetTooltip( "Click to copy " .. v.name .. " to clipboard" )
 						Text:SetMouseInputEnabled(true)
 
@@ -129,9 +129,9 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 
 		local CatColor = team.GetColor(ply:Team() )
 		if GAMEMODE.Name == "Sandbox" then
-			CatColor = Color(100, 150, 245, 255)
+			CatColor = Color( 100, 150, 245, 255)
 			if ply:Team() == TEAM_CONNECTING then
-					CatColor = Color(200, 120, 50, 255)
+					CatColor = Color( 200, 120, 50, 255)
 			elseif ply:IsAdmin() then
 					CatColor = Color(30, 200, 50, 255)
 			end
@@ -207,7 +207,7 @@ FAdmin.ScoreBoard.Player:AddInformation( "Kills", function(ply) return ply:Frags
 FAdmin.ScoreBoard.Player:AddInformation( "Deaths", function(ply) return ply:Deaths() end)
 FAdmin.ScoreBoard.Player:AddInformation( "Health", function(ply) return ply:Health() end)
 FAdmin.ScoreBoard.Player:AddInformation( "Ping", function(ply) return ply:Ping() end)
-FAdmin.ScoreBoard.Player:AddInformation( "SteamID", function(ply) return ply:SteamID() end, true)
+FAdmin.ScoreBoard.Player:AddInformation( "SteamID", function(ply) return ply:YRPSteamID() end, true)
 
 FAdmin.ScoreBoard.Server.Information = {} -- Compatibility for autoreload
 FAdmin.ScoreBoard.Server.ActionButtons = {} -- Refresh server buttons when reloading gamemode
@@ -234,7 +234,7 @@ local function MakeServerOptions()
 
 		FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat = FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat or vgui.Create( "FAdminPlayerCatagory" )
 		FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:SetLabel( "	Player Actions" )
-		FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat.CatagoryColor = Color(0, 155, 0, 255)
+		FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat.CatagoryColor = Color( 0, 155, 0, 255)
 		FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:SetSize(Width-5, FAdmin.ScoreBoard.Height - 20 - YPos)
 		FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:SetPos(FAdmin.ScoreBoard.X + 20 + Width, YPos)
 		FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:SetVisible(true)
@@ -251,7 +251,7 @@ local function MakeServerOptions()
 
 		FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat = FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat or vgui.Create( "FAdminPlayerCatagory" )
 		FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:SetLabel( "	Server Settings" )
-		FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat.CatagoryColor = Color(0, 0, 155, 255)
+		FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat.CatagoryColor = Color( 0, 0, 155, 255)
 		FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:SetSize(Width-5, FAdmin.ScoreBoard.Height - 20 - YPos)
 		FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:SetPos(FAdmin.ScoreBoard.X + 20 + Width * 2, YPos)
 		FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:SetVisible(true)
@@ -345,7 +345,7 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 		for _, v in pairs(FAdmin.ScoreBoard.Server.Information) do
 				local Text = vgui.Create( "DLabel" )
 				Text:SetFont( "TabLarge" )
-				Text:SetColor(Color(255,255,255,200) )
+				Text:SetColor(Color( 255,255,255,200) )
 				Text:Dock(TOP)
 				Text.Func = v.Func
 

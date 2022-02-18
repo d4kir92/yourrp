@@ -47,7 +47,7 @@ function PANEL:AddSpacer()
 	Entry.spacer = createD( "DPanel", self, self:GetWide(), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight) )
 
 	function Entry.spacer:Paint(pw, ph)
-		surfaceBox(0, ph / 4, pw, ph / 2, Color(0, 0, 0) )
+		surfaceBox(0, ph / 4, pw, ph / 2, Color( 0, 0, 0) )
 	end
 
 	self.lastheight = self.lastheight + Entry.size
@@ -69,7 +69,7 @@ function PANEL:AddOption(name, icon)
 
 	function Entry.icon:Paint(pw, ph)
 		if Entry.iconpng ~= "" then
-			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetDrawColor( 255, 255, 255, 255)
 			surface.SetMaterial(Entry.iconmat)
 			surface.DrawTexturedRect(YRP.ctr(9), YRP.ctr(9), YRP.ctr(32), YRP.ctr(32) )
 		end

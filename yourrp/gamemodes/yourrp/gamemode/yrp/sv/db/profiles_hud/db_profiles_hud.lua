@@ -20,7 +20,7 @@ net.Receive( "change_to_hud_profile", function()
 	local profile_name = net.ReadString()
 
 	YRP_SQL_UPDATE( "yrp_design", {["string_hud_profile"] = profile_name}, "uniqueID = 1" )
-	SetGlobalString( "string_hud_profile", profile_name)
+	SetGlobalYRPString( "string_hud_profile", profile_name)
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. profile_name .. "'" )
 	if wk(tab) then
@@ -37,15 +37,15 @@ net.Receive( "change_to_hud_profile", function()
 end)
 
 function HudToCode(name)
-	MsgC( Color(255, 255, 255), "local " .. string.Replace(name, " ", "_" ) .. " = {}" .. "\n" )
+	MsgC( Color( 255, 255, 255), "local " .. string.Replace(name, " ", "_" ) .. " = {}" .. "\n" )
 	local tab = YRP_SQL_SELECT( "yrp_hud", "*", nil)
 	for i, v in SortedPairsByMemberValue(tab, "name" ) do
 		local prefix = string.Replace(name, " ", "_" ) .. "." .. ""
 		v.value = tonumber( v.value) or v.value
 		if isnumber( v.value) then
-			MsgC( Color(255, 255, 255), prefix .. v.name .. " = " .. v.value .. "\n" )
+			MsgC( Color( 255, 255, 255), prefix .. v.name .. " = " .. v.value .. "\n" )
 		elseif isstring( v.value) then
-			MsgC( Color(255, 255, 255), prefix .. v.name .. " = '" .. v.value .. "'" .. "\n" )
+			MsgC( Color( 255, 255, 255), prefix .. v.name .. " = '" .. v.value .. "'" .. "\n" )
 		end
 	end
 end

@@ -1,8 +1,8 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local colr = Color(170, 0, 0)
-local colg = Color(0, 200, 0)
-local colb = Color(100, 100, 255)
+local colg = Color( 0, 200, 0)
+local colb = Color( 100, 100, 255)
 
 local vm = {}
 vm.adminmode = false
@@ -47,8 +47,8 @@ function YRPVoiceChannel(edit, uid)
 	function win.name:OnChange()
 		name = win.name:GetText()
 	end
-	if edit and GetGlobalTable( "yrp_voice_channels" )[uid] then
-		name = GetGlobalTable( "yrp_voice_channels" )[uid].string_name
+	if edit and GetGlobalYRPTable( "yrp_voice_channels" )[uid] then
+		name = GetGlobalYRPTable( "yrp_voice_channels" )[uid].string_name
 		win.name:SetText(name)
 	end
 	
@@ -66,7 +66,7 @@ function YRPVoiceChannel(edit, uid)
 	-- Hear?
 	local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 	function line:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string( "LID_hearq" ), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_hearq" ), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -74,8 +74,8 @@ function YRPVoiceChannel(edit, uid)
 		hear = bVal
 	end
 	
-	if edit and GetGlobalTable( "yrp_voice_channels" )[uid] then
-		hear = GetGlobalTable( "yrp_voice_channels" )[uid].int_hear
+	if edit and GetGlobalYRPTable( "yrp_voice_channels" )[uid] then
+		hear = GetGlobalYRPTable( "yrp_voice_channels" )[uid].int_hear
 		if hear then
 			line.cb:SetChecked(hear)
 		end
@@ -101,7 +101,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(taugs) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -112,8 +112,8 @@ function YRPVoiceChannel(edit, uid)
 					table.RemoveByValue( augs, ug.string_name)
 				end
 			end
-			if edit and GetGlobalTable( "yrp_voice_channels" )[uid] then
-				if GetGlobalTable( "yrp_voice_channels" )[uid]["string_active_usergroups"][ug.string_name] then
+			if edit and GetGlobalYRPTable( "yrp_voice_channels" )[uid] then
+				if GetGlobalYRPTable( "yrp_voice_channels" )[uid]["string_active_usergroups"][ug.string_name] then
 					line.cb:SetChecked(true)
 					table.insert( augs, ug.string_name)
 				end
@@ -143,7 +143,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(tagrps) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -154,8 +154,8 @@ function YRPVoiceChannel(edit, uid)
 					table.RemoveByValue( agrps, ug.uniqueID)
 				end
 			end
-			if edit and GetGlobalTable( "yrp_voice_channels" )[uid] then
-				if GetGlobalTable( "yrp_voice_channels" )[uid]["string_active_groups"][tonumber(ug.uniqueID)] then
+			if edit and GetGlobalYRPTable( "yrp_voice_channels" )[uid] then
+				if GetGlobalYRPTable( "yrp_voice_channels" )[uid]["string_active_groups"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert( agrps, ug.uniqueID)
 				end
@@ -185,7 +185,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(tarols) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -196,8 +196,8 @@ function YRPVoiceChannel(edit, uid)
 					table.RemoveByValue( arols, ug.uniqueID)
 				end
 			end
-			if edit and GetGlobalTable( "yrp_voice_channels" )[uid] then
-				if GetGlobalTable( "yrp_voice_channels" )[uid]["string_active_roles"][tonumber(ug.uniqueID)] then
+			if edit and GetGlobalYRPTable( "yrp_voice_channels" )[uid] then
+				if GetGlobalYRPTable( "yrp_voice_channels" )[uid]["string_active_roles"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert( arols, ug.uniqueID)
 				end
@@ -230,7 +230,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(tpugs) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -241,8 +241,8 @@ function YRPVoiceChannel(edit, uid)
 					table.RemoveByValue(pugs, ug.string_name)
 				end
 			end
-			if edit and GetGlobalTable( "yrp_voice_channels" )[uid] then
-				if GetGlobalTable( "yrp_voice_channels" )[uid]["string_passive_usergroups"][ug.string_name] then
+			if edit and GetGlobalYRPTable( "yrp_voice_channels" )[uid] then
+				if GetGlobalYRPTable( "yrp_voice_channels" )[uid]["string_passive_usergroups"][ug.string_name] then
 					line.cb:SetChecked(true)
 					table.insert(pugs, ug.string_name)
 				end
@@ -272,7 +272,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(tpgrps) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -283,8 +283,8 @@ function YRPVoiceChannel(edit, uid)
 					table.RemoveByValue(pgrps, ug.uniqueID)
 				end
 			end
-			if edit and GetGlobalTable( "yrp_voice_channels" )[uid] then
-				if GetGlobalTable( "yrp_voice_channels" )[uid]["string_passive_groups"][tonumber(ug.uniqueID)] then
+			if edit and GetGlobalYRPTable( "yrp_voice_channels" )[uid] then
+				if GetGlobalYRPTable( "yrp_voice_channels" )[uid]["string_passive_groups"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert(pgrps, ug.uniqueID)
 				end
@@ -314,7 +314,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(tprols) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -325,8 +325,8 @@ function YRPVoiceChannel(edit, uid)
 					table.RemoveByValue(prols, ug.uniqueID)
 				end
 			end
-			if edit and GetGlobalTable( "yrp_voice_channels" )[uid] then
-				if GetGlobalTable( "yrp_voice_channels" )[uid]["string_passive_roles"][tonumber(ug.uniqueID)] then
+			if edit and GetGlobalYRPTable( "yrp_voice_channels" )[uid] then
+				if GetGlobalYRPTable( "yrp_voice_channels" )[uid]["string_passive_roles"][tonumber(ug.uniqueID)] then
 					line.cb:SetChecked(true)
 					table.insert(prols, ug.uniqueID)
 				end
@@ -351,13 +351,13 @@ function YRPVoiceChannel(edit, uid)
 				net.WriteString(name)
 				net.WriteBool(hear)
 
-				net.WriteTable( augs)
-				net.WriteTable( agrps)
-				net.WriteTable( arols)
+				net.WriteTable( augs )
+				net.WriteTable( agrps )
+				net.WriteTable( arols )
 
-				net.WriteTable(pugs)
-				net.WriteTable(pgrps)
-				net.WriteTable(prols)
+				net.WriteTable( pugs )
+				net.WriteTable( pgrps )
+				net.WriteTable( prols )
 
 				net.WriteString(uid)
 			net.SendToServer()
@@ -398,9 +398,9 @@ function YRPVoiceChannel(edit, uid)
 				net.WriteTable( agrps)
 				net.WriteTable( arols)
 
-				net.WriteTable(pugs)
-				net.WriteTable(pgrps)
-				net.WriteTable(prols)
+				net.WriteTable( pugs )
+				net.WriteTable( pgrps )
+				net.WriteTable( prols )
 			net.SendToServer()
 
 			win:Remove()
@@ -417,10 +417,10 @@ function YRPUpdateVoiceList()
 
 	vm.win.list:Clear()
 
-	if lply:GetNW2Bool( "yrp_togglevoicemenu", true ) then
+	if lply:GetYRPBool( "yrp_togglevoicemenu", true ) then
 		local h = YRP.ctr(66)
 		local pbr = YRP.ctr(10)
-		for i, channel in SortedPairsByMemberValue(GetGlobalTable( "yrp_voice_channels", {}), "int_position" ) do
+		for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable( "yrp_voice_channels", {}), "int_position" ) do
 			if IsInChannel(lply, channel.uniqueID, true) or ( vm.adminmode and lply:HasAccess() ) then
 				local line = createD( "DPanel", nil, CONTENT:GetWide(), h, 0, 0)
 				function line:Paint(pw, ph)
@@ -428,7 +428,7 @@ function YRPUpdateVoiceList()
 
 				local bg = createD( "DPanel", line, CONTENT:GetWide() - YRP.ctr(26), h, 0, 0)
 				function bg:Paint(pw, ph)
-					DrawRectBlurHUD(YRP.ctr(10), 0, 0, pw, ph, 255) --draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "PC" ) )
+					DrawRectBlurHUD(YRP.ctr(10), 0, 0, pw, ph, 255) --draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "PC" ) )
 				end
 
 				local status = createD( "DPanel", bg, h, h, 0, 0)
@@ -460,7 +460,7 @@ function YRPUpdateVoiceList()
 
 				local name = createD( "DPanel", bg, YRP.ctr(800), h, h + pbr, 0)
 				function name:Paint(pw, ph)
-					draw.SimpleText( channel.string_name, "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText( channel.string_name, "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				
@@ -471,7 +471,7 @@ function YRPUpdateVoiceList()
 					mutemic:SetText( "" )
 					function mutemic:Paint(pw, ph)
 						local color = colg
-						if lply:GetNW2Bool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
+						if lply:GetYRPBool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
 							color = colr
 						end
 						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
@@ -490,7 +490,7 @@ function YRPUpdateVoiceList()
 						end
 					end
 					function mutemic:DoClick()
-						if !lply:GetNW2Bool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, false) or (lply:GetNW2Bool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, false) and lply:GetNW2Int( "yrp_voice_channel_active_mic", 0) < GetGlobalInt( "int_max_channels_active", 1 ) ) then
+						if !lply:GetYRPBool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, false) or (lply:GetYRPBool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, false) and lply:GetYRPInt( "yrp_voice_channel_active_mic", 0) < GetGlobalInt( "int_max_channels_active", 1 ) ) then
 							net.Start( "mutemic_channel" )
 								net.WriteString( channel.uniqueID)
 							net.SendToServer()
@@ -504,7 +504,7 @@ function YRPUpdateVoiceList()
 					function mute:Paint(pw, ph)
 						local icon = "64_volume-up"
 						local color = colg
-						if lply:GetNW2Bool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) then
+						if lply:GetYRPBool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) then
 							icon = "64_volume-mute"
 							color = colr
 						end
@@ -518,7 +518,7 @@ function YRPUpdateVoiceList()
 						end
 					end
 					function mute:DoClick()
-						if !lply:GetNW2Bool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) or (lply:GetNW2Bool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) and lply:GetNW2Int( "yrp_voice_channel_passive_voice", 0) < GetGlobalInt( "int_max_channels_passive", 3 ) ) then
+						if !lply:GetYRPBool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) or (lply:GetYRPBool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) and lply:GetYRPInt( "yrp_voice_channel_passive_voice", 0) < GetGlobalInt( "int_max_channels_passive", 3 ) ) then
 							net.Start( "mute_channel" )
 								net.WriteString( channel.uniqueID)
 							net.SendToServer()
@@ -530,8 +530,8 @@ function YRPUpdateVoiceList()
 					local dn = createD( "YButton", bg, h, h, bg:GetWide() - 4 * h - 2 * YRP.ctr(20), 0)
 					dn:SetText( "" )
 					function dn:Paint(pw, ph)
-						if channel.int_position < table.Count(GetGlobalTable( "yrp_voice_channels", {}) ) - 1 then
-							local color = lply:InterfaceValue( "YButton", "NC" )
+						if channel.int_position < table.Count(GetGlobalYRPTable( "yrp_voice_channels", {}) ) - 1 then
+							local color = YRPInterfaceValue( "YButton", "NC" )
 							draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
 							local br = YRP.ctr(8)
@@ -553,7 +553,7 @@ function YRPUpdateVoiceList()
 					up:SetText( "" )
 					function up:Paint(pw, ph)
 						if channel.int_position > 0 then
-							local color = lply:InterfaceValue( "YButton", "NC" )
+							local color = YRPInterfaceValue( "YButton", "NC" )
 							draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, color)
 
 							local br = YRP.ctr(8)
@@ -585,20 +585,20 @@ function OpenVoiceMenu()
 	function vm.win:Paint(pw, ph)
 		DrawRectBlurHUD(5, 0, 0, pw, ph, 255)
 		
-		if self.toggle != lply:GetNW2Bool( "yrp_togglevoicemenu", true ) then
-			self.toggle = lply:GetNW2Bool( "yrp_togglevoicemenu", true )
+		if self.toggle != lply:GetYRPBool( "yrp_togglevoicemenu", true ) then
+			self.toggle = lply:GetYRPBool( "yrp_togglevoicemenu", true )
 			YRPUpdateVoiceList()
 		end
 
 		if !self.toggle then
-			draw.SimpleText(string.Replace(YRP.lang_string( "LID_presskeytoenablevoicemenu" ), "KEY", YRPGetKeybindName( "voice_menu" ) ), "Y_30_500", pw / 2, ph / 2, lply:InterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(string.Replace(YRP.lang_string( "LID_presskeytoenablevoicemenu" ), "KEY", YRPGetKeybindName( "voice_menu" ) ), "Y_30_500", pw / 2, ph / 2, YRPInterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local hh = 24
 		if self.GetHeaderHeight != nil then
 			hh = self:GetHeaderHeight()
 		end
-		draw.SimpleText(YRP.lang_string(self:GetTitle() ), "Y_18_500", hh / 2, hh / 2, lply:InterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(self:GetTitle() ), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 	vm.win:SetLanguageChanger(false)
 	vm.win:Center()
@@ -610,10 +610,10 @@ function OpenVoiceMenu()
 	-- HEADER
 	vm.win.listheader = createD( "DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(50 + 20), 0, 0)
 	function vm.win.listheader:Paint(pw, ph)
-		if lply:GetNW2Bool( "yrp_togglevoicemenu", true ) then
-			draw.SimpleText(YRP.lang_string( "LID_name" ), "Y_20_500", YRP.ctr(80), ph / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText(lply:GetNW2Int( "yrp_voice_channel_active_mic", 0) .. "/" .. GetGlobalInt( "int_max_channels_active", 1 ), "Y_20_500", YRP.ctr(990), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(lply:GetNW2Int( "yrp_voice_channel_passive_voice", 0) .. "/" .. GetGlobalInt( "int_max_channels_passive", 3 ), "Y_20_500", YRP.ctr(1100), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		if lply:GetYRPBool( "yrp_togglevoicemenu", true ) then
+			draw.SimpleText(YRP.lang_string( "LID_name" ), "Y_20_500", YRP.ctr(80), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_active_mic", 0) .. "/" .. GetGlobalInt( "int_max_channels_active", 1 ), "Y_20_500", YRP.ctr(990), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_passive_voice", 0) .. "/" .. GetGlobalInt( "int_max_channels_passive", 3 ), "Y_20_500", YRP.ctr(1100), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end
 
@@ -623,7 +623,7 @@ function OpenVoiceMenu()
 	vm.win.list:SetSpacing(YRP.ctr(10) )
 	local sbar = vm.win.list.VBar
 	function sbar:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "NC" ) )
+		draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 	end
 	function sbar.btnUp:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
@@ -632,7 +632,7 @@ function OpenVoiceMenu()
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
 	end
 	function sbar.btnGrip:Paint(w, h)
-		draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "HI" ) )
+		draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
 	end
 
 	YRPUpdateVoiceList()
@@ -682,7 +682,7 @@ function OpenVoiceMenu()
 		vm.win.showalllabel = createD( "DLabel", CONTENT, YRP.ctr(200), size, YRP.ctr(40 + 20), CONTENT:GetTall() - YRP.ctr(50) )
 		vm.win.showalllabel:SetText( "" )
 		function vm.win.showalllabel:Paint(pw, ph)
-			draw.SimpleText( YRP.lang_string( "LID_adminmode" ), "Y_16_700", 0, ph / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+			draw.SimpleText( YRP.lang_string( "LID_adminmode" ), "Y_16_700", 0, ph / 2, Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 		end
 
 
@@ -725,7 +725,7 @@ function OpenVoiceMenu()
 	function vm.win.muteall:Paint(pw, ph)
 		local icon = "64_volume-up"
 		local color = colg
-		if lply:GetNW2Bool( "mute_channel_all", false) then
+		if lply:GetYRPBool( "mute_channel_all", false) then
 			icon = "64_volume-mute"
 			color = colr
 		end

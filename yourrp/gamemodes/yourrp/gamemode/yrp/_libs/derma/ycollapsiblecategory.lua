@@ -37,7 +37,7 @@ end
 
 function PANEL:Paint(pw, ph)
 	draw.RoundedBoxEx(YRP.ctr(14), 0, YRP.ctr(10), YRP.ctr(20), ph - YRP.ctr(10), self._ccol, false, false, true, false)--self._ccol)
-	draw.RoundedBoxEx(YRP.ctr(14), YRP.ctr(10), YRP.ctr(10), pw - 1 * YRP.ctr(10), ph - 1 * YRP.ctr(10), LocalPlayer():InterfaceValue( "YFrame", "NC" ), false, false, false, true)--self._ccol)
+	draw.RoundedBoxEx(YRP.ctr(14), YRP.ctr(10), YRP.ctr(10), pw - 1 * YRP.ctr(10), ph - 1 * YRP.ctr(10), YRPInterfaceValue( "YFrame", "NC" ), false, false, false, true)--self._ccol)
 end
 
 function PANEL:SetList(list)
@@ -78,8 +78,8 @@ function PANEL:Init()
 
 	local base = self
 
-	self._hcol = Color(255, 0, 0)
-	self._ccol = Color(255, 0, 0)
+	self._hcol = Color( 255, 0, 0)
+	self._ccol = Color( 255, 0, 0)
 
 	self._htext = ""
 
@@ -88,11 +88,11 @@ function PANEL:Init()
 	self.con:EnableVerticalScrollbar()
 	self.con:SetSpacing(YRP.ctr(20) )
 	function self.con:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 255) )
 	end
 	local sbar = self.con.VBar
 	function sbar:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "NC" ) )
+		draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 	end
 	function sbar.btnUp:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
@@ -101,7 +101,7 @@ function PANEL:Init()
 		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
 	end
 	function sbar.btnGrip:Paint(w, h)
-		draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "HI" ) )
+		draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
 	end
 
 	-- BTN
@@ -109,7 +109,7 @@ function PANEL:Init()
 	self.btn:SetText( "" )
 	function self.btn:Paint(pw, ph)
 		draw.RoundedBoxEx(YRP.ctr(10), 0, 0, YRP.ctr(20), ph, base._hcol, true, false, false, false)
-		draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, LocalPlayer():InterfaceValue( "YFrame", "PC" ), false, true, false, false)
+		draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, YRPInterfaceValue( "YFrame", "PC" ), false, true, false, false)
 
 		local x = 0
 		if !strEmpty( base._icon) then
@@ -122,7 +122,7 @@ function PANEL:Init()
 			x = ph / 2
 		end
 
-		draw.SimpleText( base._htext, "Y_" .. math.Clamp(math.Round(ph - 2 * YRP.ctr(20), 0), 4, 100) .. "_500", x, ph / 2, TextColor(LocalPlayer():InterfaceValue( "YFrame", "PC" ) ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText( base._htext, "Y_" .. math.Clamp(math.Round(ph - 2 * YRP.ctr(20), 0), 4, 100) .. "_500", x, ph / 2, TextColor(YRPInterfaceValue( "YFrame", "PC" ) ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	net.Receive( "get_next_ranks", function(len)
@@ -142,7 +142,7 @@ function PANEL:Init()
 
 		local sbar = list.VBar
 		function sbar:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "NC" ) )
+			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 		end
 		function sbar.btnUp:Paint(w, h)
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
@@ -151,7 +151,7 @@ function PANEL:Init()
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
 		end
 		function sbar.btnGrip:Paint(w, h)
-			draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "HI" ) )
+			draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
 		end
 
 		for i, r in pairs(rols) do
@@ -177,21 +177,21 @@ function PANEL:Init()
 
 		local r = createD( "DPanel", nil, YRP.ctr(w) + YRP.ctr(80), YRP.ctr(h), 0, 0)
 		function r:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0) )
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0) )
 		end
 	
 		local bg = createD( "DPanel", r, YRP.ctr(w), YRP.ctr(h), 0, 0)
 		function bg:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, YRP.ctr(20), ph, StringToColor(rol.string_color), true, false, true, false)
-			draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, LocalPlayer():InterfaceValue( "YFrame", "PC" ), false, true, false, true)
+			draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, YRPInterfaceValue( "YFrame", "PC" ), false, true, false, true)
 
 			local diameter = ph - 2 * YRP.ctr(10)
 			draw.RoundedBox( diameter / 2, YRP.ctr(18), YRP.ctr(8), diameter + YRP.ctr(4), diameter + YRP.ctr(4), StringToColor(rol.string_color) )
-			draw.RoundedBox( diameter / 2, YRP.ctr(20), YRP.ctr(10), diameter, diameter, LocalPlayer():InterfaceValue( "YFrame", "PC" ) )
+			draw.RoundedBox( diameter / 2, YRP.ctr(20), YRP.ctr(10), diameter, diameter, YRPInterfaceValue( "YFrame", "PC" ) )
 
-			draw.SimpleText(rol.string_name, "Y_26_500", ph + YRP.ctr(20), ph / 3, TextColor(LocalPlayer():InterfaceValue( "YFrame", "PC" ) ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(rol.string_name, "Y_26_500", ph + YRP.ctr(20), ph / 3, TextColor(YRPInterfaceValue( "YFrame", "PC" ) ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			if tonumber( rol.int_salary ) > 0 then
-				draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP.ctr(20), ph / 3 * 2, TextColor(LocalPlayer():InterfaceValue( "YFrame", "PC" ) ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP.ctr(20), ph / 3 * 2, TextColor(YRPInterfaceValue( "YFrame", "PC" ) ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 			if rol.int_maxamount > 0 then
 				local radius = ph / 2 - 1 * YRP.ctr(10)
@@ -223,13 +223,13 @@ function PANEL:Init()
 					render.SetStencilPassOperation(STENCILOPERATION_KEEP)
 					render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
 
-					surface.SetDrawColor(LocalPlayer():InterfaceValue( "YFrame", "PC" ) )
+					surface.SetDrawColor(YRPInterfaceValue( "YFrame", "PC" ) )
 					surface.DrawPoly(self.circ2bg)
 
 					render.SetStencilReferenceValue(12)
 					render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
 
-					surface.SetDrawColor(LocalPlayer():InterfaceValue( "YFrame", "BG" ) )
+					surface.SetDrawColor(YRPInterfaceValue( "YFrame", "BG" ) )
 					surface.DrawPoly(self.circbg)
 
 					render.SetStencilEnable(false)
@@ -244,19 +244,19 @@ function PANEL:Init()
 					render.SetStencilPassOperation(STENCILOPERATION_KEEP)
 					render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
 
-					surface.SetDrawColor(LocalPlayer():InterfaceValue( "YFrame", "PC" ) )
+					surface.SetDrawColor(YRPInterfaceValue( "YFrame", "PC" ) )
 					surface.DrawPoly(self.circ2)
 
 					render.SetStencilReferenceValue(12)
 					render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
 
-					surface.SetDrawColor(Color(100, 255, 100, 100) )
+					surface.SetDrawColor(Color( 100, 255, 100, 100) )
 					surface.DrawPoly(self.circ)
 
 					render.SetStencilEnable(false)
 				end
 
-				draw.SimpleText(rol.int_uses .. "/" .. rol.int_maxamount, "Y_" .. 20 .. "_500", pw - ph / 2, ph / 2, TextColor(LocalPlayer():InterfaceValue( "YFrame", "PC" ) ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(rol.int_uses .. "/" .. rol.int_maxamount, "Y_" .. 20 .. "_500", pw - ph / 2, ph / 2, TextColor(YRPInterfaceValue( "YFrame", "PC" ) ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 
@@ -293,13 +293,13 @@ function PANEL:Init()
 		function btn:Paint(pw, ph)
 			if rol.int_prerole == 0 and (!rol.bool_locked or LocalPlayer():HasAccess() ) and rol.int_requireslevel <= LocalPlayer():Level() then
 				if self:IsHovered() then
-					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 10) )
+					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 255, 255, 255, 10) )
 				end
 			end
 			if rol.bool_locked or rol.int_requireslevel > LocalPlayer():Level() then
 				YRP.DrawIcon(YRP.GetDesignIcon( "lock" ), ph - 2 * YRP.ctr(40), ph - 2 * YRP.ctr(40), YRP.ctr(50), YRP.ctr(40), TextColor(StringToColor(rol.string_color) ))
 				if rol.int_requireslevel > LocalPlayer():Level() then
-					draw.SimpleText(rol.int_requireslevel, "Y_40_500", ph / 2 + YRP.ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(rol.int_requireslevel, "Y_40_500", ph / 2 + YRP.ctr(10), ph / 2, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 		end
@@ -319,12 +319,12 @@ function PANEL:Init()
 		nex:SetText( "" )
 		function nex:Paint(pw, ph)
 			if self:IsHovered() then
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20) )
+				draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 20) )
 			end
 			local br = YRP.ctr(10)
 			if YRP.GetDesignIcon( "64_angle-right" ) ~= nil then
 				surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
-				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetDrawColor( 255, 255, 255, 255)
 				surface.DrawTexturedRect( br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
 			end
 		end
@@ -432,7 +432,7 @@ function PANEL:Init()
 							h = rh
 							local rlist = createD( "DHorizontalScroller", nil, 10, YRP.ctr(h), 0, 0)
 							function rlist:Paint(pw, ph)
-								draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 10) )
+								draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 10) )
 							end
 
 							base.con:AddItem(rlist)

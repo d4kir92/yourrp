@@ -4,19 +4,6 @@ util.AddNetworkString( "restartServer" )
 util.AddNetworkString( "updateServer" )
 util.AddNetworkString( "cancelRestartServer" )
 
-util.AddNetworkString( "get_workshop_collection" )
-net.Receive( "get_workshop_collection", function(len, ply)
-	local _wscnr = YRP_SQL_SELECT( "yrp_general", "text_server_collectionid", "uniqueID = '1'" )
-	if wk(_wscnr) then
-		_wscnr = _wscnr[1].text_server_collectionid
-	end
-	local _wsc = engine.GetAddons()
-	net.Start( "get_workshop_collection" )
-		net.WriteString(_wscnr)
-		net.WriteTable(_wsc)
-	net.Send(ply)
-end)
-
 --Restart Server
 net.Receive( "restartServer", function(len, ply)
 	if ply:HasAccess() then
@@ -142,7 +129,7 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 		local jobtab = RPExtraTeams[jobByCmd[args[1]]]
 		if jobtab then
 			if GetGlobalBool( "bool_players_die_on_role_switch", false) then
-				ply:KillSilent()
+				ply:OldKillSilent()
 			end
 			SetRole(ply, jobtab.uniqueID)
 			if GetGlobalBool( "bool_players_die_on_role_switch", false) then
@@ -186,7 +173,7 @@ concommand.Add( "yrp_givelicense", function(ply, cmd, args)
 end)
 
 concommand.Add( "yrp_allowallcountries", function(ply, cmd, args)
-	SetGlobalBool( "yrp_allowallcountries", !GetGlobalBool( "yrp_allowallcountries", false ) )
+	SetGlobalYRPBool( "yrp_allowallcountries", !GetGlobalBool( "yrp_allowallcountries", false ) )
 
 	MsgC( Color( 255, 255, 0 ), "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" .. "\n" )
 	if GetGlobalBool( "yrp_allowallcountries", false ) then

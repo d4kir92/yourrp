@@ -17,7 +17,7 @@ end
 local laws = YRP_SQL_SELECT(DATABASE_NAME, "*" )
 if wk(laws) then
 	laws = laws[1]
-	SetGlobalString( "sting_laws", laws.string_laws)
+	SetGlobalYRPString( "sting_laws", laws.string_laws)
 end
 
 util.AddNetworkString( "yrp_get_laws" )

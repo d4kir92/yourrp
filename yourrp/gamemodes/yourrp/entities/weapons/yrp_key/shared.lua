@@ -43,10 +43,10 @@ SWEP.ShowViewModel = true
 SWEP.ShowWorldModel = true
 SWEP.ViewModelBoneMods = {}
 SWEP.VElements = {
-	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "static_prop", rel = "", pos = Vector(8.831, 3.635, -2.597), angle = Angle(-90, -70, 0), size = Vector(0.5, 0.5, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "static_prop", rel = "", pos = Vector(8.831, 3.635, -2.597), angle = Angle(-90, -70, 0), size = Vector(0.5, 0.5, 0.5), color = Color( 255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }
 SWEP.WElements = {
-	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.635, 1.557, -2), angle = Angle(90, -110, 0), size = Vector(1.21, 1.21, 1.21), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.635, 1.557, -2), angle = Angle(90, -110, 0), size = Vector(1.21, 1.21, 1.21), color = Color( 255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }
 
 function SWEP:Reload()
@@ -67,13 +67,13 @@ function SWEP:PrimaryAttack()
 		local ent = self:GetOwner():GetEyeTrace().Entity
 		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos() ) < GetGlobalInt( "int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
-				if YRPUnYRPLockDoor(self:GetOwner(), ent, ent:GetNW2String( "buildingID", "Failed" ) ) then
+				if YRPUnYRPLockDoor(self:GetOwner(), ent, ent:GetYRPString( "buildingID", "Failed" ) ) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_unlockeddoor" ) )
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_youdonthaveakey" ) )
 				end
-			elseif ent:GetNW2Int( "item_uniqueID", 0) != 0 then
-				if unlockVehicle(self:GetOwner(), ent, ent:GetNW2Int( "item_uniqueID", 0) ) then
+			elseif ent:GetYRPInt( "item_uniqueID", 0) != 0 then
+				if unlockVehicle(self:GetOwner(), ent, ent:GetYRPInt( "item_uniqueID", 0) ) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_unlockedvehicle" ) )
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_youdonthaveakey" ) )
@@ -88,13 +88,13 @@ function SWEP:SecondaryAttack()
 		local ent = self:GetOwner():GetEyeTrace().Entity
 		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos() ) < GetGlobalInt( "int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
-				if YRPLockDoor(self:GetOwner(), ent, ent:GetNW2String( "buildingID", "Failed" ) ) then
+				if YRPLockDoor(self:GetOwner(), ent, ent:GetYRPString( "buildingID", "Failed" ) ) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_lockeddoor" ) )
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_youdonthaveakey" ) )
 				end
-			elseif ent:IsVehicle() and ent:GetNW2Int( "item_uniqueID", 0) != 0 then
-				if lockVehicle(self:GetOwner(), ent, ent:GetNW2Int( "item_uniqueID", 0) ) then
+			elseif ent:IsVehicle() and ent:GetYRPInt( "item_uniqueID", 0) != 0 then
+				if lockVehicle(self:GetOwner(), ent, ent:GetYRPInt( "item_uniqueID", 0) ) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_lockedvehicle" ) )
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_youdonthaveakey" ) )
@@ -134,10 +134,10 @@ function SWEP:Initialize()
 				
 				-- Init viewmodel visibility
 				if (self.ShowViewModel == nil or self.ShowViewModel) then
-					vm:SetColor(Color(255,255,255,255) )
+					vm:SetColor(Color( 255,255,255,255) )
 				else
 					-- we set the alpha to 1 instead of 0 because else ViewModelDrawn stops being called
-					vm:SetColor(Color(255,255,255,1) )
+					vm:SetColor(Color( 255,255,255,1) )
 					-- ^ stopped working in GMod 13 because you have to do Entity:SetRenderMode(1) for translucency to kick in
 					-- however for some reason the view model resets to render mode 0 every frame so we just apply a debug material to prevent it from drawing
 					vm:SetMaterial( "Debug/hsv" )			

@@ -36,7 +36,7 @@ function IsUnderGroup(uid, tuid)
 end
 
 function IsUnderGroupOf(ply, uid)
-	local ply_group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. ply:GetNW2String( "groupUniqueID", "Failed" ) .. "'" )
+	local ply_group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. ply:GetGroupUID() .. "'" )
 	if wk(ply_group) then
 		ply_group = ply_group[1]
 		local group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. ply_group.uniqueID .. "'" )
@@ -64,11 +64,11 @@ function allowedToUseDoor(id, ply, door)
 				if !wk(_tmpChaTab) then -- If char not available anymore => remove ownership
 					YRP_SQL_UPDATE(DATABASE_NAME_BUILDINGS, {["ownerCharID"] = ""}, "uniqueID = '" .. id .. "'" )
 					
-					door:SetNW2String( "ownerRPName", "" )
-					door:SetNW2Int( "ownerGroupUID", -99)
-					door:SetNW2String( "ownerGroup", "" )
-					door:SetNW2Int( "ownerCharID", 0)
-					door:SetNW2Bool( "bool_hasowner", false)
+					door:SetYRPString( "ownerRPName", "" )
+					door:SetYRPInt( "ownerGroupUID", -99)
+					door:SetYRPString( "ownerGroup", "" )
+					door:SetYRPInt( "ownerCharID", 0)
+					door:SetYRPBool( "bool_hasowner", false)
 					door:Fire( "Unlock" )
 				else
 					local grp_id = ply:GetGroupUID()
@@ -121,8 +121,8 @@ function loadDoors()
 		if wk(_tmpDoors) then
 			for i, door in pairs(GetAllDoors() ) do
 				if worked(_tmpDoors[i], "loadDoors 2" ) then
-					door:SetNW2String( "buildingID", _tmpDoors[i].buildingID)
-					door:SetNW2String( "uniqueID", i)
+					door:SetYRPString( "buildingID", _tmpDoors[i].buildingID)
+					door:SetYRPString( "uniqueID", i)
 					HasUseFunction( door)
 				else
 					YRP.msg( "note", "[Buildings] more doors, then in list!" )
@@ -134,17 +134,17 @@ function loadDoors()
 		if wk(_tmpBuildings) then
 			for k, v in pairs(GetAllDoors() ) do
 				for l, w in pairs(_tmpBuildings) do
-					if tonumber(w.uniqueID) == tonumber( v:GetNW2String( "buildingID" ) ) then
-						v:SetNW2Bool( "bool_canbeowned", w.bool_canbeowned)
-						v:SetNW2Bool( "bool_hasowner", false)
+					if tonumber(w.uniqueID) == tonumber( v:GetYRPString( "buildingID" ) ) then
+						v:SetYRPBool( "bool_canbeowned", w.bool_canbeowned)
+						v:SetYRPBool( "bool_hasowner", false)
 						if !strEmpty(w.ownerCharID) then
 							local tabChar = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. w.ownerCharID)
 							if wk(tabChar) then
 								tabChar = tabChar[1]
 								if wk(tabChar.rpname) then
-									v:SetNW2String( "ownerRPName", tabChar.rpname)
-									v:SetNW2Int( "ownerCharID", tonumber(w.ownerCharID) )
-									v:SetNW2Bool( "bool_hasowner", true)
+									v:SetYRPString( "ownerRPName", tabChar.rpname)
+									v:SetYRPInt( "ownerCharID", tonumber(w.ownerCharID) )
+									v:SetYRPBool( "bool_hasowner", true)
 								end
 							end
 						else
@@ -153,9 +153,9 @@ function loadDoors()
 								if wk(_tmpGroupName) then
 									_tmpGroupName = _tmpGroupName[1]
 									if wk(_tmpGroupName) then
-										v:SetNW2Int( "ownerGroupUID", _tmpGroupName.uniqueID)
-										v:SetNW2String( "ownerGroup", tostring(_tmpGroupName.string_name) )
-										v:SetNW2Bool( "bool_hasowner", true)
+										v:SetYRPInt( "ownerGroupUID", _tmpGroupName.uniqueID)
+										v:SetYRPString( "ownerGroup", tostring(_tmpGroupName.string_name) )
+										v:SetYRPBool( "bool_hasowner", true)
 									end
 								end
 							end
@@ -163,7 +163,7 @@ function loadDoors()
 
 						w.int_securitylevel = tonumber(w.int_securitylevel)
 						if w.int_securitylevel > 0 then
-							v:SetNW2Int( "int_securitylevel", w.int_securitylevel)
+							v:SetYRPInt( "int_securitylevel", w.int_securitylevel)
 						end
 
 						if v:SecurityLevel() > 0 then
@@ -173,10 +173,10 @@ function loadDoors()
 						end
 
 						if !strEmpty(w.text_header) then
-							v:SetNW2String( "text_header", w.text_header)
+							v:SetYRPString( "text_header", w.text_header)
 						end
 						if !strEmpty(w.text_description) then
-							v:SetNW2String( "text_description", w.text_description)
+							v:SetYRPString( "text_description", w.text_description)
 						end
 
 						break
@@ -186,7 +186,7 @@ function loadDoors()
 		end
 
 		--YRP.msg( "db", "[Buildings] Map Doors are now available!" )
-		SetGlobalBool( "loaded_doors", true)
+		SetGlobalYRPBool( "loaded_doors", true)
 		net.Start( "loaded_doors" )
 		net.Broadcast()
 	end
@@ -299,14 +299,14 @@ function BuildingRemoveOwner(SteamID)
 		for i, c in pairs( chars) do
 			local charid = c.uniqueID
 			for k, v in pairs(GetAllDoors() ) do
-				if v:GetNW2Int( "ownerCharID" ) == tonumber( charid) then
-					v:SetNW2String( "ownerRPName", "" )
-					v:SetNW2Int( "ownerGroupUID", -99)
-					v:SetNW2String( "ownerGroup", "" )
-					v:SetNW2Int( "ownerCharID", 0)
-					v:SetNW2Bool( "bool_hasowner", false)
+				if v:GetYRPInt( "ownerCharID" ) == tonumber( charid) then
+					v:SetYRPString( "ownerRPName", "" )
+					v:SetYRPInt( "ownerGroupUID", -99)
+					v:SetYRPString( "ownerGroup", "" )
+					v:SetYRPInt( "ownerCharID", 0)
+					v:SetYRPBool( "bool_hasowner", false)
 					v:Fire( "Unlock" )
-					YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", {["ownerCharID"] = ""}, "uniqueID = '" .. v:GetNW2String( "uniqueID" ) .. "'" )
+					YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", {["ownerCharID"] = ""}, "uniqueID = '" .. v:GetYRPString( "uniqueID" ) .. "'" )
 				end
 			end
 		end
@@ -323,12 +323,12 @@ net.Receive( "removeOwner", function(len, ply)
 	}, "uniqueID = '" .. _tmpBuildingID .. "'" )
 
 	for k, v in pairs(GetAllDoors() ) do
-		if tonumber( v:GetNW2String( "buildingID" ) ) == tonumber(_tmpBuildingID) then
-			v:SetNW2String( "ownerRPName", "" )
-			v:SetNW2Int( "ownerGroupUID", -99)
-			v:SetNW2String( "ownerGroup", "" )
-			v:SetNW2Int( "ownerCharID", 0)
-			v:SetNW2Bool( "bool_hasowner", false)
+		if tonumber( v:GetYRPString( "buildingID" ) ) == tonumber(_tmpBuildingID) then
+			v:SetYRPString( "ownerRPName", "" )
+			v:SetYRPInt( "ownerGroupUID", -99)
+			v:SetYRPString( "ownerGroup", "" )
+			v:SetYRPInt( "ownerCharID", 0)
+			v:SetYRPBool( "bool_hasowner", false)
 			v:Fire( "Unlock" )
 		end
 	end
@@ -344,18 +344,20 @@ net.Receive( "sellBuilding", function(len, ply)
 	}, "uniqueID = '" .. _tmpBuildingID .. "'" )
 
 	for k, v in pairs(GetAllDoors() ) do
-		if tonumber( v:GetNW2String( "buildingID" ) ) == tonumber(_tmpBuildingID) then
-			v:SetNW2String( "ownerRPName", "" )
-			v:SetNW2Int( "ownerGroupUID", -99)
-			v:SetNW2String( "ownerGroup", "" )
-			v:SetNW2Int( "ownerCharID", 0)
-			v:SetNW2Bool( "bool_hasowner", false)
+		if tonumber( v:GetYRPString( "buildingID" ) ) == tonumber(_tmpBuildingID) then
+			v:SetYRPString( "ownerRPName", "" )
+			v:SetYRPInt( "ownerGroupUID", -99)
+			v:SetYRPString( "ownerGroup", "" )
+			v:SetYRPInt( "ownerCharID", 0)
+			v:SetYRPBool( "bool_hasowner", false)
 			v:Fire( "Unlock" )
-			YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_doors", {["keynr"] = -1}, "buildingID = " .. tonumber( v:GetNW2String( "buildingID" ) ))
+			YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_doors", {["keynr"] = -1}, "buildingID = " .. tonumber( v:GetYRPString( "buildingID" ) ))
 		end
 	end
 
-	ply:addMoney(_tmpTable[1].buildingprice / 2)
+	if _tmpTable and _tmpTable[1] then
+		ply:addMoney(_tmpTable[1].buildingprice / 2)
+	end
 end)
 
 net.Receive( "buyBuilding", function(len, ply)
@@ -372,10 +374,10 @@ net.Receive( "buyBuilding", function(len, ply)
 					tabChar = tabChar[1]
 				end
 				for k, v in pairs(GetAllDoors() ) do
-					if tonumber( v:GetNW2String( "buildingID" ) ) == tonumber(_tmpBuildingID) then
-						v:SetNW2String( "ownerRPName", tabChar.rpname)
-						v:SetNW2Int( "ownerCharID", tonumber(ply:CharID() ))
-						v:SetNW2Bool( "bool_hasowner", true)
+					if tonumber( v:GetYRPString( "buildingID" ) ) == tonumber(_tmpBuildingID) then
+						v:SetYRPString( "ownerRPName", tabChar.rpname)
+						v:SetYRPInt( "ownerCharID", tonumber(ply:CharID() ))
+						v:SetYRPBool( "bool_hasowner", true)
 					end
 				end
 				YRP.msg( "gm", ply:RPName() .. " has buyed a door" )
@@ -399,10 +401,10 @@ net.Receive( "setBuildingOwnerGroup", function(len, ply)
 	local _tmpGroupName = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", "uniqueID = " .. _tmpGroupID)
 	if wk(_tmpGroupName) then
 		for k, v in pairs(GetAllDoors() ) do
-			if tonumber( v:GetNW2String( "buildingID" ) ) == tonumber(_tmpBuildingID) then
-				v:SetNW2Int( "ownerGroupUID", _tmpGroupName[1].uniqueID)
-				v:SetNW2String( "ownerGroup", _tmpGroupName[1].string_name)
-				v:SetNW2Bool( "bool_hasowner", true)
+			if tonumber( v:GetYRPString( "buildingID" ) ) == tonumber(_tmpBuildingID) then
+				v:SetYRPInt( "ownerGroupUID", _tmpGroupName[1].uniqueID)
+				v:SetYRPString( "ownerGroup", _tmpGroupName[1].string_name)
+				v:SetYRPBool( "bool_hasowner", true)
 			end
 		end
 	end
@@ -427,8 +429,8 @@ end)
 function SetSecurityLevel(id, sl)
 	if GetGlobalBool( "bool_building_system", false) then
 		for i, door in pairs(GetAllDoors() ) do
-			if door:GetNW2String( "buildingID", -1) == id then
-				door:SetNW2Int( "int_securitylevel", sl)
+			if door:GetYRPString( "buildingID", -1) == id then
+				door:SetYRPInt( "int_securitylevel", sl)
 				if door:SecurityLevel() > 0 then
 					door:Fire( "Lock" )
 				else
@@ -485,8 +487,8 @@ net.Receive( "changeBuildingID", function(len, ply)
 	local _tmpDoor = net.ReadEntity()
 	local _tmpBuildingID = net.ReadString()
 
-	_tmpDoor:SetNW2String( "buildingID", _tmpBuildingID)
-	YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_doors", {["buildingID"] = tonumber(_tmpBuildingID)}, "uniqueID = " .. _tmpDoor:GetNW2String( "uniqueID" ) )
+	_tmpDoor:SetYRPString( "buildingID", _tmpBuildingID)
+	YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_doors", {["buildingID"] = tonumber(_tmpBuildingID)}, "uniqueID = " .. _tmpDoor:GetYRPString( "uniqueID" ) )
 
 	lookForEmptyBuildings()
 end)
@@ -504,8 +506,8 @@ end)
 
 function ChangeBuildingString(uid, net_str, new_str)
 	for i, v in pairs(GetAllDoors() ) do
-		if uid == tonumber( v:GetNW2String( "buildingID" ) ) then
-			v:SetNW2String(net_str, new_str)
+		if uid == tonumber( v:GetYRPString( "buildingID" ) ) then
+			v:SetYRPString(net_str, new_str)
 		end
 	end
 end
@@ -518,8 +520,8 @@ function ChangeBuildingBool(uid, net_str, new_boo)
 		tabBuilding = {}
 	end
 	for i, v in pairs(GetAllDoors() ) do
-		if uid == tonumber( v:GetNW2String( "buildingID" ) ) then
-			v:SetNW2Bool(net_str, new_boo)
+		if uid == tonumber( v:GetYRPString( "buildingID" ) ) then
+			v:SetYRPBool(net_str, new_boo)
 		end
 	end
 end
@@ -556,19 +558,19 @@ function GetDoors()
 			local _doors = 0
 			_tmpDoors = ents.FindByClass( "prop_door_rotating" )
 			for j, d in pairs(_tmpDoors) do
-				if tonumber( d:GetNW2String( "buildingID", "-1" ) ) == tonumber( building.uniqueID) then
+				if tonumber( d:GetYRPString( "buildingID", "-1" ) ) == tonumber( building.uniqueID) then
 					_doors = _doors + 1
 				end
 			end
 			_tmpFDoors = ents.FindByClass( "func_door" )
 			for j, d in pairs(_tmpFDoors) do
-				if tonumber( d:GetNW2String( "buildingID", "-1" ) ) == tonumber( building.uniqueID) then
+				if tonumber( d:GetYRPString( "buildingID", "-1" ) ) == tonumber( building.uniqueID) then
 					_doors = _doors + 1
 				end
 			end
 			_tmpFRDoors = ents.FindByClass( "func_door_rotating" )
 			for j, d in pairs(_tmpFRDoors) do
-				if tonumber( d:GetNW2String( "buildingID", "-1" ) ) == tonumber( building.uniqueID) then
+				if tonumber( d:GetYRPString( "buildingID", "-1" ) ) == tonumber( building.uniqueID) then
 					_doors = _doors + 1
 				end
 			end
@@ -608,9 +610,9 @@ end
 
 net.Receive( "getBuildingInfo", function(len, ply)
 	local door = net.ReadEntity()
-	local buid = door:GetNW2String( "buildingID" )
+	local buid = door:GetYRPString( "buildingID" )
 
-	if ply:GetNW2Bool( "bool_" .. "ishobo", false) then
+	if ply:GetYRPBool( "bool_" .. "ishobo", false) then
 		YRP.msg( "note", "[getBuildingInfo] Is Hobo, not possible to buy as hobo" )
 		return
 	end

@@ -23,7 +23,7 @@ net.Receive( "yrp_placehit", function(len, ply)
 	if ply:canAfford(_reward) then
 		ply:addMoney(- _reward)
 		YRP.msg( "note", "Set hit" )
-		local _res = YRP_SQL_INSERT_INTO(DATABASE_NAME, "target, reward, description, contract_SteamID", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "', '" .. ply:SteamID() .. "'" )
+		local _res = YRP_SQL_INSERT_INTO(DATABASE_NAME, "target, reward, description, contract_SteamID", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "', '" .. ply:YRPSteamID() .. "'" )
 
 	else
 		YRP.msg( "note", "Cant afford hit" )
@@ -41,7 +41,7 @@ end)
 
 util.AddNetworkString( "yrp_get_contracts" )
 net.Receive( "yrp_get_contracts", function(len, ply)
-	local _hits = YRP_SQL_SELECT(DATABASE_NAME, "*", "contract_SteamID = '" .. ply:SteamID() .. "'" )
+	local _hits = YRP_SQL_SELECT(DATABASE_NAME, "*", "contract_SteamID = '" .. ply:YRPSteamID() .. "'" )
 	if _hits != nil then
 		net.Start( "yrp_get_contracts" )
 			net.WriteTable(_hits)
@@ -49,19 +49,19 @@ net.Receive( "yrp_get_contracts", function(len, ply)
 	end
 end)
 
-function hitdone(target, agent)
-	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. target:GetNW2String( "hituid" ) )
+function hitdone( target, agent )
+	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. target:GetYRPString( "hituid" ) )
 
-	target:SetNW2Bool( "iswanted", false)
-	target:SetNW2String( "hitreward", "" )
-	target:SetNW2String( "hituid", "" )
-	agent:SetNW2String( "hittargetName", "" )
-	agent:SetNW2Entity( "hittarget", NULL)
+	target:SetYRPBool( "iswanted", false)
+	target:SetYRPString( "hitreward", "" )
+	target:SetYRPString( "hituid", "" )
+	agent:SetYRPString( "hittargetName", "" )
+	agent:SetYRPEntity( "hittarget", NULL)
 end
 
-function hitquit( agent)
-	agent:SetNW2String( "hittargetName", "" )
-	agent:SetNW2Entity( "hittarget", NULL)
+function hitquit( agent )
+	agent:SetYRPString( "hittargetName", "" )
+	agent:SetYRPEntity( "hittarget", NULL)
 end
 
 net.Receive( "yrp_accepthit", function(len, ply)
@@ -71,12 +71,12 @@ net.Receive( "yrp_accepthit", function(len, ply)
 	if _hit != nil then
 		_hit = _hit[1]
 		for i, p in pairs(player.GetAll() ) do
-			if _hit.target == p:SteamID() then
-				p:SetNW2Bool( "iswanted", true)
-				p:SetNW2String( "hitreward", _hit.reward)
-				p:SetNW2String( "hituid", _hit.uniqueID)
-				ply:SetNW2String( "hittargetName", p:RPName() )
-				ply:SetNW2Entity( "hittarget", p)
+			if _hit.target == p:YRPSteamID() then
+				p:SetYRPBool( "iswanted", true)
+				p:SetYRPString( "hitreward", _hit.reward)
+				p:SetYRPString( "hituid", _hit.uniqueID)
+				ply:SetYRPString( "hittargetName", p:RPName() )
+				ply:SetYRPEntity( "hittarget", p)
 				break
 			end
 		end

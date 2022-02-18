@@ -124,7 +124,7 @@ function BuildWhitelist(parent, tab)
 
 			local _whitelistComboBoxPlys = createVGUI( "DComboBox", _whitelistFrame, 380, 50, 10, 100)
 			for k, v in pairs(player.GetAll() ) do
-				_whitelistComboBoxPlys:AddChoice( v:Nick(), v:SteamID() )
+				_whitelistComboBoxPlys:AddChoice( v:Nick(), v:YRPSteamID() )
 			end
 
 			local _whitelistComboBox = createVGUI( "DComboBox", _whitelistFrame, 380, 50, 10, 200)
@@ -167,9 +167,9 @@ function BuildWhitelist(parent, tab)
 			function _whitelistFrame:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col() )
 
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_player" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0) )
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_group" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(85+65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0) )
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_role" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(185+65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_player" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_group" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(85+65), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_role" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(185+65), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
 			end
 
 			_whitelistFrame:MakePopup()
@@ -197,7 +197,7 @@ function BuildWhitelist(parent, tab)
 
 			local _whitelistComboBoxPlys = createVGUI( "DComboBox", _whitelistFrame, 380, 50, 10, 100)
 			for k, v in pairs(player.GetAll() ) do
-				_whitelistComboBoxPlys:AddChoice( v:Nick(), v:SteamID() )
+				_whitelistComboBoxPlys:AddChoice( v:Nick(), v:YRPSteamID() )
 			end
 
 			local _whitelistComboBox = createVGUI( "DComboBox", _whitelistFrame, 380, 50, 10, 200)
@@ -221,8 +221,8 @@ function BuildWhitelist(parent, tab)
 			function _whitelistFrame:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col() )
 
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_player" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0) )
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_group" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(85+65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_player" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_group" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(85+65), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
 			end
 
 			_whitelistFrame:MakePopup()
@@ -250,7 +250,7 @@ function BuildWhitelist(parent, tab)
 
 			local _whitelistComboBoxPlys = createVGUI( "DComboBox", _whitelistFrame, 380, 50, 10, 100)
 			for k, v in pairs(player.GetAll() ) do
-				_whitelistComboBoxPlys:AddChoice( v:Nick(), v:SteamID() )
+				_whitelistComboBoxPlys:AddChoice( v:Nick(), v:YRPSteamID() )
 			end
 
 			local _whitelistButton = createVGUI( "DButton", _whitelistFrame, 380, 50, 10, 400)
@@ -268,7 +268,7 @@ function BuildWhitelist(parent, tab)
 			function _whitelistFrame:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col() )
 
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_player" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_player" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
 			end
 
 			_whitelistFrame:MakePopup()
@@ -389,15 +389,15 @@ function OpenSettingsWhitelist()
 	loadedR = false
 	loadedG = false
 
-	timer.Simple(0.0, function()
+	timer.Simple(0.1, function()
 		net.Start( "getGroupsWhitelist" )
 		net.SendToServer()
 	end)
-	timer.Simple(0.1, function()
+	timer.Simple(0.2, function()
 		net.Start( "getRolesWhitelist" )
 		net.SendToServer()
 	end)
-	timer.Simple(0.2, function()
+	timer.Simple(0.3, function()
 		net.Start( "getRoleWhitelist" )
 		net.SendToServer()
 	end)

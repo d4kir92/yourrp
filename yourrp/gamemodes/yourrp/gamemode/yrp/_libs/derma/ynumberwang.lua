@@ -3,7 +3,7 @@
 local PANEL = {}
 
 function PANEL:Paint(pw, ph)
-	draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 10) )
+	draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 100, 100, 10) )
 end
 
 function PANEL:OnSizeChanged(nw, nh)
@@ -50,7 +50,7 @@ end
 function PANEL:Init()
 	self.header = createD( "DPanel", self, 10, 10, 0, 0)
 	function self.header:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string(self.name) or "UNNAMED", "Y_" .. math.Round(ph / 3 * 2) .. "_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(self.name) or "UNNAMED", "Y_" .. math.Round(ph / 3 * 2) .. "_500", pw / 2, ph / 2, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	self.numberwang = createD( "DNumberWang", self, 10, 10, 0, 10)
@@ -62,7 +62,7 @@ function PANEL:Init()
 
 		self:SetPaintBackgroundEnabled(true)
 
-		local color = lply:InterfaceValue( "YFrame", "HI" )
+		local color = YRPInterfaceValue( "YFrame", "HI" )
 		local tcolor = TextColor( color)
 
 		self:SetTextColor(tcolor)

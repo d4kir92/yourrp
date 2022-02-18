@@ -41,7 +41,7 @@ function OpenSettingsCharacters()
 			local _tmpSteamID = line:GetValue(1)
 			local ply = nil
 			for i, v in pairs(player.GetAll() ) do
-				if v:SteamID() == _tmpSteamID then
+				if v:YRPSteamID() == _tmpSteamID then
 					ply = v
 					break
 				end

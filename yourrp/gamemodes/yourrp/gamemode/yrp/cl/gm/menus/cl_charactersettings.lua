@@ -38,7 +38,7 @@ function YRPCreateCharacterSettingsContent()
 
 	local win = createD( "DPanel", site, YRP.ctr( config.w), YRP.ctr( config.h), 0, 0)
 	function win:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue( "YFrame", "NC" ) )
+		draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ) )
 	end
 	win:Center()
 	
@@ -54,7 +54,7 @@ function YRPCreateCharacterSettingsContent()
 
 	local header = createD( "DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200) )
 	function header:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string( "LID_charactercreation" ), "Y_36_500", pw / 2, ph / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_charactercreation" ), "Y_36_500", pw / 2, ph / 2, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	local btn = {}
@@ -129,19 +129,19 @@ function YRPCreateCharacterSettingsContent()
 		confirm:SetText( "LID_enteraname" )
 		function confirm:Paint(pw, ph)
 			local tab = {}
-			tab.color = LocalPlayer():InterfaceValue( "YButton", "NC" )
+			tab.color = YRPInterfaceValue( "YButton", "NC" )
 			local nam = LocalPlayer().charcreate_name
 			if rol.int_namelength == 0 then
-				tab.color = Color(100, 255, 100)
+				tab.color = Color( 100, 255, 100)
 				confirm:SetText( "LID_confirm" )
 			elseif string.len(nam) > rol.int_namelength then
-				tab.color = Color(255, 100, 100)
+				tab.color = Color( 255, 100, 100)
 				confirm:SetText( "LID_nameistolong" )
 			elseif string.len(nam) <= 0 then
-				tab.color = Color(255, 255, 100)
+				tab.color = Color( 255, 255, 100)
 				confirm:SetText( "LID_nameistoshort" )
 			else
-				tab.color = Color(100, 255, 100)
+				tab.color = Color( 100, 255, 100)
 				confirm:SetText( "LID_confirm" )
 			end
 			hook.Run( "YButtonPaint", self, pw, ph, tab)
@@ -176,7 +176,7 @@ function YRPCreateCharacterSettingsContent()
 						if pa(CharacterMenu) then
 							CharacterMenu:Remove()
 						end
-						openCharacterSelection()
+						YRPOpenCharacterSelection()
 					else
 						local win = createD( "YFrame", nil, 400, 200, 0, 0)
 						win:SetTitle( "LID_warning" )
@@ -195,7 +195,7 @@ function YRPCreateCharacterSettingsContent()
 				end)
 
 				net.Start( "YRPCreateCharacter" )
-					net.WriteTable( character)
+					net.WriteTable( character )
 				net.SendToServer()
 			end
 		end
@@ -214,8 +214,8 @@ function YRPCreateCharacterSettingsContent()
 				end
 				self:SetFontInternal( "Y_18_500" )
 
-				self:SetFGColor(Color(255, 255, 255) )
-				self:SetBGColor(Color(0, 0, 0) )
+				self:SetFGColor(Color( 255, 255, 255) )
+				self:SetBGColor(Color( 0, 0, 0) )
 			end
 			function name:OnChange()
 				local nam = self:GetText()
@@ -236,8 +236,8 @@ function YRPCreateCharacterSettingsContent()
 				end
 				self:SetFontInternal( "Y_18_500" )
 
-				self:SetFGColor(Color(255, 255, 255) )
-				self:SetBGColor(Color(0, 0, 0) )
+				self:SetFGColor(Color( 255, 255, 255) )
+				self:SetBGColor(Color( 0, 0, 0) )
 			end
 			function surname:OnChange()
 				local nam = self:GetText()
@@ -257,11 +257,11 @@ function YRPCreateCharacterSettingsContent()
 			local appe = createD( "DPanelList", win, ew, YRP.ctr( config.h - 2 * config.hh - 3 * config.br), YRP.ctr(20), YRP.ctr(20 + config.hh + 20 + config.hh) )
 			appe:EnableVerticalScrollbar()
 			function appe:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue( "YFrame", "BG" ) )
+				draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "BG" ) )
 			end
 			local sbar = appe.VBar
 			function sbar:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "NC" ) )
+				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 			end
 			function sbar.btnUp:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
@@ -270,7 +270,7 @@ function YRPCreateCharacterSettingsContent()
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
 			end
 			function sbar.btnGrip:Paint(w, h)
-				draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "HI" ) )
+				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
 			end
 			appe:SetSpacing(YRP.ctr( config.br) )
 
@@ -279,8 +279,8 @@ function YRPCreateCharacterSettingsContent()
 				if table.Count( bg.submodels) > 1 then
 					local pbg = createD( "DPanel", nil, ew, YRP.ctr( config.hh * 2), 0, 0)
 					function pbg:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue( "YFrame", "PC" ) )
-						draw.SimpleText(LocalPlayer()["charcreate_bg" .. bg.id] + 1 .. "/" .. table.Count( bg.submodels) .. " " .. bg["name"], "Y_18_500", YRP.ctr( config.hh + config.br), ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "PC" ) )
+						draw.SimpleText(LocalPlayer()["charcreate_bg" .. bg.id] + 1 .. "/" .. table.Count( bg.submodels) .. " " .. bg["name"], "Y_18_500", YRP.ctr( config.hh + config.br), ph / 2, Color( 255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 
 					local skinup = createD( "YButton", pbg, YRP.ctr( config.hh * 0.8), YRP.ctr( config.hh * 0.8), YRP.ctr( config.hh * 0.1), YRP.ctr( config.hh * 0.1) )
@@ -289,7 +289,7 @@ function YRPCreateCharacterSettingsContent()
 						if LocalPlayer()["charcreate_bg" .. bg.id] + 1 < table.Count( bg.submodels) then
 							hook.Run( "YButtonPaint", self, pw, ph)
 
-							surface.SetDrawColor(255, 255, 255, 255)
+							surface.SetDrawColor( 255, 255, 255, 255)
 							surface.SetMaterial(YRP.GetDesignIcon( "64_angle-up" ) )
 							surface.DrawTexturedRect(0, 0, pw, ph)
 						end
@@ -307,7 +307,7 @@ function YRPCreateCharacterSettingsContent()
 						if LocalPlayer()["charcreate_bg" .. bg.id] > 0 then
 							hook.Run( "YButtonPaint", self, pw, ph)
 
-							surface.SetDrawColor(255, 255, 255, 255)
+							surface.SetDrawColor( 255, 255, 255, 255)
 							surface.SetMaterial(YRP.GetDesignIcon( "64_angle-down" ) )
 							surface.DrawTexturedRect(0, 0, pw, ph)
 						end
@@ -330,11 +330,11 @@ function YRPCreateCharacterSettingsContent()
 		local list = createD( "DPanelList", win, ew, YRP.ctr( config.h - config.br * 2 - config.hh - config.br), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120) )
 		list:EnableVerticalScrollbar()
 		function list:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, LocalPlayer():InterfaceValue( "YFrame", "BG" ) )
+			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "BG" ) )
 		end
 		local sbar = list.VBar
 		function sbar:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "NC" ) )
+			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 		end
 		function sbar.btnUp:Paint(w, h)
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
@@ -343,7 +343,7 @@ function YRPCreateCharacterSettingsContent()
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
 		end
 		function sbar.btnGrip:Paint(w, h)
-			draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "HI" ) )
+			draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
 		end
 
 		local hr = createD( "DPanel", nil, ew, YRP.ctr( config.br), 0, 0)
@@ -364,8 +364,8 @@ function YRPCreateCharacterSettingsContent()
 				end
 				self:SetFontInternal( "Y_18_500" )
 
-				self:SetFGColor(Color(255, 255, 255) )
-				self:SetBGColor(Color(0, 0, 0) )
+				self:SetFGColor(Color( 255, 255, 255) )
+				self:SetBGColor(Color( 0, 0, 0) )
 			end
 			function birt:OnChange()
 				LocalPlayer().charcreate_birt = self:GetText()
@@ -420,8 +420,8 @@ function YRPCreateCharacterSettingsContent()
 			end
 			self:SetFontInternal( "Y_18_500" )
 
-			self:SetFGColor(Color(255, 255, 255) )
-			self:SetBGColor(Color(0, 0, 0) )
+			self:SetFGColor(Color( 255, 255, 255) )
+			self:SetBGColor(Color( 0, 0, 0) )
 		end
 		function desc:OnChange()
 			LocalPlayer().charcreate_desc = self:GetText()

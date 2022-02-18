@@ -42,7 +42,7 @@ end
 
 function SWEP:Reload()
 	local pos = ""
-	for i, v in pairs(GetGlobalTable( "yrp_zone" ) ) do
+	for i, v in pairs(GetGlobalYRPTable( "yrp_zone" ) ) do
 		pos = v.pos
 	end
 
@@ -165,7 +165,7 @@ function SWEP:PrimaryAttack()
 end
 
 function IsInsideZone(ply)
-	for i, v in pairs(GetGlobalTable( "yrp_zone" ) ) do
+	for i, v in pairs(GetGlobalYRPTable( "yrp_zone" ) ) do
 		local pos = string.Explode( ",", v.pos)
 		local spos = Vector(pos[1], pos[2], pos[3])
 		local epos = Vector(pos[4], pos[5], pos[6])
@@ -200,7 +200,7 @@ function SWEP:SecondaryAttack()
 	if SERVER then
 		local ply = self:GetOwner()
 
-		for i, v in pairs(GetGlobalTable( "yrp_zone" ) ) do
+		for i, v in pairs(GetGlobalYRPTable( "yrp_zone" ) ) do
 			local pos = string.Explode( ",", v.pos)
 			local spos = Vector(pos[1], pos[2], pos[3])
 			local epos = Vector(pos[4], pos[5], pos[6])
@@ -225,7 +225,7 @@ if CLIENT then
 			if delay < CurTime() then
 				delay = CurTime() + 0.1
 			end
-			for i, v in pairs(GetGlobalTable( "yrp_zone" ) ) do
+			for i, v in pairs(GetGlobalYRPTable( "yrp_zone" ) ) do
 				local pos = string.Explode( ",", v.pos)
 				local spos = Vector(pos[1], pos[2], pos[3])
 				local epos = Vector(pos[4], pos[5], pos[6])

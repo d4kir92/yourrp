@@ -68,7 +68,7 @@ function PANEL:Setup( ply )
 		self.PlayerName:SetText( ply:IDCardID() .. " " .. ply:RPName() )
 
 		local channels = {}
-		for i, v in pairs(GetGlobalTable( "yrp_voice_channels" ) ) do
+		for i, v in pairs(GetGlobalYRPTable( "yrp_voice_channels" ) ) do
 			if IsActiveInChannel(ply, v.uniqueID) and ( IsInChannel(LocalPlayer(), v.uniqueID) or IsActiveInChannel(LocalPlayer(), v.uniqueID) ) then
 				table.insert( channels, v.string_name)
 			end

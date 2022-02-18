@@ -36,7 +36,7 @@ function ENT:Draw()
 			monang:RotateAroundAxis(monang:Forward(), 90)
 
 			cam.Start3D2D(monpos, monang, 0.1)
-				surface.SetDrawColor(255, 255, 255, 10)
+				surface.SetDrawColor( 255, 255, 255, 10)
 				surface.DrawRect(-renw / 2, -renh / 2, renw, renh)
 			cam.End3D2D()
 
@@ -73,7 +73,7 @@ function ENT:Draw()
 					render.SetRenderTarget(self.old_RT)
 				else
 					cam.Start3D2D(monpos, monang, 0.1)
-						surface.SetDrawColor(255, 255, 255, 255)
+						surface.SetDrawColor( 255, 255, 255, 255)
 						surface.SetMaterial(self.map_RT_mat)
 						surface.DrawTexturedRect(-renw / 2, -renh / 2, renw, renh)
 					cam.End3D2D()

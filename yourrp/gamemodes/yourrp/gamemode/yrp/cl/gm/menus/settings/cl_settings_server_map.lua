@@ -321,7 +321,7 @@ net.Receive( "getMapTab", function(len)
 	function btnDelete:Paint(pw, ph)
 		if mapList:GetSelectedLine() != nil then
 			local t = {}
-			t.color = Color(255, 100, 100, 255)
+			t.color = Color( 255, 100, 100, 255)
 			hook.Run( "YButtonPaint", self, pw, ph, t)
 		end
 	end
@@ -352,7 +352,7 @@ net.Receive( "getMapTab", function(len)
 	function btnTeleport:Paint(pw, ph)
 		if mapList:GetSelectedLine() != nil then
 			local t = {}
-			t.color = Color(255, 255, 100, 255)
+			t.color = Color( 255, 255, 100, 255)
 			hook.Run( "YButtonPaint", self, pw, ph, t)
 		end
 	end

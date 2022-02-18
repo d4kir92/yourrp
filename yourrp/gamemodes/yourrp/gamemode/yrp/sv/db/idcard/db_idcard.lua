@@ -83,9 +83,9 @@ function LoadIDCardSetting(force, from)
 				-- FOUND DATABASE VALUE
 				value = value[1]
 				if string.StartWith(name, "bool_" ) then
-					SetGlobalBool(name, tobool( value.value) )
+					SetGlobalYRPBool(name, tobool( value.value) )
 				elseif string.StartWith(name, "int_" ) then
-					SetGlobalInt(name, tonumber( value.value) )
+					SetGlobalYRPInt(name, tonumber( value.value) )
 				end
 				register[name] = register[name] or nil
 				if register[name] == nil then
@@ -100,9 +100,9 @@ function LoadIDCardSetting(force, from)
 							v = 0
 						end
 						if string.StartWith(n, "bool_" ) and GetGlobalBool(n, tobool( v) ) ~= tobool( v) then
-							SetGlobalBool(n, tobool( v) )
+							SetGlobalYRPBool(n, tobool( v) )
 						elseif string.StartWith(n, "int_" ) and GetGlobalInt(n, v) ~= v then
-							SetGlobalInt(n, v)
+							SetGlobalYRPInt(n, v)
 						end
 						YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = v}, "name = '" .. n .. "'" )
 						LoadIDCardSetting(true, "UPDATED VARIABLE" )

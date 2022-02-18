@@ -199,17 +199,19 @@ function YRPConvertToDarkRPJob(tab)
 	_job.name = tab.string_name
 	_job.identifier = tab.string_identifier
 	local pms = GetPlayermodelsOfRole(tab.uniqueID)
-	if string.find(pms, "," ) then
-		pms = string.Explode( ",", GetPlayermodelsOfRole(tab.uniqueID) )
+	if string.find( pms, "," ) then
+		pms = string.Explode( ",", pms )
 	end
 	if type(pms) == "string" and strEmpty(pms) then
-		pms = "models/player/skeleton.mdl"
+		pms = { "models/player/skeleton.mdl" }
+	elseif type(pms) == "string" then
+		pms = { pms }
 	end
 	_job.model = pms
 	_job.description = tab.string_description or ""
-	local _weapons = ""
+	local _weapons = {}
 	if tab.string_sweps then
-		_weapons = string.Explode( ",", tab.string_sweps)
+		_weapons = string.Explode( ",", tab.string_sweps )
 	end
 	_job.weapons = _weapons
 	_job.max = tonumber(tab.int_maxamount)
@@ -243,7 +245,7 @@ function YRPConvertToDarkRPJob(tab)
 			YRPRepairSQLDB(true)
 		end
 	else
-		_job.color = Color(0, 0, 0, 255)
+		_job.color = Color( 0, 0, 0, 255)
 	end
 	_job.uniqueID = tonumber(tab.uniqueID)
 	_job.int_groupID = tab.int_groupID
@@ -253,21 +255,7 @@ function YRPConvertToDarkRPJob(tab)
 	return _job
 end
 
-function ConvertToDarkRPCategory(tab, cat)
-	local t = {}
-
-	t.uniqueID = tab.uniqueID or -1
-	t.name = tab.string_name or "-"
-	t.categorises = cat
-	t.startExpanded = true
-	t.color = StringToColor(tab.string_color) or Color(0, 107, 0, 255)
-	t.sortOrder = 100
-
-	return t
-end
-
 local TEAMS = {}
-YRPDarkRPJobsData = YRPDarkRPJobsData or {}
 function YRPBuildDarkrpTeams()
 	local drp_allroles = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk( drp_allroles) then
@@ -294,48 +282,60 @@ function YRPBuildDarkrpTeams()
 		end
 	end
 	RPExtraTeams = TEMPRPExtraTeams
-
-
-
-	-- FOR CLIENTS
-	for i, v in pairs( RPExtraTeams ) do
-		YRPDarkRPJobsData[i] = v.command
-	end
-	-- FOR CLIENTS
 end
 YRPBuildDarkrpTeams()
 
-util.AddNetworkString( "send_team" )
+util.AddNetworkString( "YRP_Send_DarkRP_Jobs" )
 local Player = FindMetaTable( "Player" )
-local timerdelay = 0.11
+local timerdelay = 0.26
 function Player:DRPSendTeamsToPlayer()
 	self.yrp_darkrp_index = 1
 	for i, role in pairs(RPExtraTeams) do
-		self.yrp_darkrp_index = self.yrp_darkrp_index + 1
-		timer.Simple(self.yrp_darkrp_index * timerdelay, function()
-			if IsValid(self) then
-				net.Start( "send_team" )
-					net.WriteTable(role)
-				net.Send(self)
+		if IsValid(self) then
+			if type( role.model ) == "string" then
+				role.model = string.Explode( ",", role.model )
 			end
-		end)
+			if type( role.weapons ) == "string" then
+				role.weapons = string.Explode( ",", role.weapons )
+			end
+			net.Start( "YRP_Send_DarkRP_Jobs" )
+				net.WriteUInt( role.admin, 2 )
+				net.WriteBool( role.candemote )
+				net.WriteString( role.category )
+				net.WriteColor( role.color )
+				net.WriteString( role.command )
+				net.WriteString( role.description )
+				net.WriteBool( role.fake )
+				net.WriteBool( role.hasLicense )
+				net.WriteUInt( role.int_groupID, 16 )
+				net.WriteUInt( role.max, 8 )
+				net.WriteTable( role.model )
+				net.WriteString( role.name )
+				net.WriteUInt( role.salary, 16 )
+				net.WriteUInt( role.team, 16 )
+				net.WriteUInt( role.uniqueID, 16 )
+				net.WriteBool( role.vote )
+				net.WriteTable( role.weapons )
+			net.Send(self)
+		end
 	end
 end
 
 local drp_allgroups = YRP_SQL_SELECT( "yrp_ply_groups", "*", nil)
 CATEGORIES = CATEGORIES or {}
-CATEGORIES.jobs = CATEGORIES.jobs or {}
-CATEGORIES.entities = CATEGORIES.entities or {}
-CATEGORIES.shipments = CATEGORIES.shipments or {}
-CATEGORIES.weapons = CATEGORIES.weapons or {}
-CATEGORIES.ammo = CATEGORIES.ammo or {}
-CATEGORIES.vehicles = CATEGORIES.vehicles or {}
-if wk( drp_allgroups) then
+CATEGORIES.jobs = {}
+CATEGORIES.entities = {}
+CATEGORIES.shipments = {}
+CATEGORIES.weapons = {}
+CATEGORIES.ammo = {}
+CATEGORIES.vehicles = {}
+if wk( drp_allgroups ) then
 	for i, group in pairs( drp_allgroups) do
 		local catname = group.string_name
-		local tab = ConvertToDarkRPCategory(group, "jobs" )
+		local tab = YRPConvertToDarkRPCategory( group, "jobs" )
+	
 		--CATEGORIES.jobs[catname] = tab -- break ipairs
-		table.insert(CATEGORIES.jobs, tab)
+		table.insert( CATEGORIES.jobs, tab )
 	end
 
 	for i, cat in pairs(CATEGORIES.jobs) do
@@ -348,26 +348,27 @@ if wk( drp_allgroups) then
 	end
 end
 
-util.AddNetworkString( "send_categories" )
-util.AddNetworkString( "drp_combinetabs" )
+util.AddNetworkString( "YRP_Send_DarkRP_Categories" )
+util.AddNetworkString( "YRP_Combine_DarkRPTables" )
 function Player:DRPSendCategoriesToPlayer()
+	local count = 0
 	for i, group in pairs(CATEGORIES.jobs) do
-		self.yrp_darkrp_index = self.yrp_darkrp_index + 1
-		timer.Simple(self.yrp_darkrp_index * timerdelay, function()
-			if IsValid(self) and i and group then
-				net.Start( "send_categories" )
-					net.WriteString(i)
-					net.WriteTable(group)
-				net.Send(self)
-			end
-		end)
+		if IsValid( self ) and i and group then
+			local gro = YRPConvertToDarkRPCategory( group, "jobs" )
+			count = count + 1
+			net.Start( "YRP_Send_DarkRP_Categories" )
+				net.WriteUInt( gro.uniqueID, 16 )
+				net.WriteString( gro.name )
+				net.WriteString( gro.categorises )
+				net.WriteBool( gro.startExpanded )
+				net.WriteColor( gro.color )
+				net.WriteUInt( gro.sortOrder, 7 )
+			net.Send( self )
+		end
 	end
 
-	self.yrp_darkrp_index = self.yrp_darkrp_index + 1
-	timer.Simple(self.yrp_darkrp_index * timerdelay + 1, function()
-		net.Start( "drp_combinetabs" )
-		net.Send(self)
-	end)
+	net.Start( "YRP_Combine_DarkRPTables" )
+	net.Send(self)
 
 	if wk(TEAMS) then
 		for i, cat in pairs(CATEGORIES.jobs) do
@@ -1734,7 +1735,7 @@ net.Receive( "openInteractMenu", function(len, ply)
 
 	local tmpTarget = nil
 	for k, v in pairs(player.GetAll() ) do
-		if v:SteamID() == tmpTargetSteamID then
+		if v:YRPSteamID() == tmpTargetSteamID then
 			tmpTarget = v
 		end
 	end
@@ -1869,11 +1870,11 @@ end
 function addToWhitelist( roleID, ply )
 	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. roleID .. "'" )
 
-	if YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND roleID = " .. roleID ) == nil then
+	if YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:YRPSteamID() .. "' AND roleID = " .. roleID ) == nil then
 		local dat = util.DateStamp()
 		local status = "Invited " .. ply:SteamName()
 		local name = ply:SteamName()
-		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, roleID, date, status, name", "'" .. ply:SteamID() .. "', " .. YRP_SQL_STR_IN( ply:RPName() ) .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
+		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, roleID, date, status, name", "'" .. ply:YRPSteamID() .. "', " .. YRP_SQL_STR_IN( ply:RPName() ) .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
 	else
 		YRP.msg( "note", "is already in whitelist" )
 	end
@@ -1882,11 +1883,11 @@ end
 function addToWhitelistGroup( groupID, ply )
 	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. groupID .. "'" )
 
-	if YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:SteamID() .. "' AND groupID = " .. groupID ) == nil then
+	if YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:YRPSteamID() .. "' AND groupID = " .. groupID ) == nil then
 		local dat = util.DateStamp()
 		local status = "Invited " .. ply:SteamName()
 		local name = ply:SteamName()
-		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. ply:SteamID() .. "', " .. YRP_SQL_STR_IN( ply:RPName() ) .. ", " .. groupID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
+		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. ply:YRPSteamID() .. "', " .. YRP_SQL_STR_IN( ply:RPName() ) .. ", " .. groupID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
 	else
 		YRP.msg( "note", "is already in whitelist" )
 	end
@@ -1898,7 +1899,7 @@ net.Receive( "promotePlayer", function(len, ply)
 
 	local tmpTarget = nil
 	for k, v in pairs( player.GetAll() ) do
-		if v:SteamID() == tmpTargetSteamID then
+		if v:YRPSteamID() == tmpTargetSteamID then
 			tmpTarget = v
 		end
 	end
@@ -1922,8 +1923,8 @@ net.Receive( "promotePlayer", function(len, ply)
 		tmpTableTargetGroup = tmpTableTargetGroup[1]
 
 		for k, v in pairs(player.GetAll() ) do
-			if tostring( v:SteamID() ) == tostring( tmpTargetSteamID ) then
-				addToWhitelistByPly( tmpTarget:SteamID(), tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, v:Nick(), ply, v )
+			if tostring( v:YRPSteamID() ) == tostring( tmpTargetSteamID ) then
+				addToWhitelistByPly( tmpTarget:YRPSteamID(), tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, v:Nick(), ply, v )
 				break
 			end
 		end
@@ -1932,7 +1933,7 @@ net.Receive( "promotePlayer", function(len, ply)
 
 		YRP.msg( "note", ply:Nick() .. " promoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetPromoteRole.uniqueID )
 	elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
-		YRP.msg( "error", "Player: " .. ply:Nick() .. " ( " .. ply:SteamID() .. " ) tried to use promote function! He is not an instructor!" )
+		YRP.msg( "error", "Player: " .. ply:Nick() .. " ( " .. ply:YRPSteamID() .. " ) tried to use promote function! He is not an instructor!" )
 	else
 		YRP.msg( "error", "ELSE promote: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
 	end
@@ -1944,7 +1945,7 @@ net.Receive( "demotePlayer", function( len, ply )
 
 	local tmpTarget = nil
 	for k, v in pairs( player.GetAll() ) do
-		if v:SteamID() == tmpTargetSteamID then
+		if v:YRPSteamID() == tmpTargetSteamID then
 			tmpTarget = v
 		end
 	end
@@ -1966,12 +1967,12 @@ net.Receive( "demotePlayer", function( len, ply )
 		tmpTableTargetDemoteRole = tmpTableTargetDemoteRole[1]
 		tmpTableTargetGroup = tmpTableTargetGroup[1]
 
-		removeFromWhitelist( tmpTarget:SteamID(), tmpTableTargetRole[1].uniqueID )
+		removeFromWhitelist( tmpTarget:YRPSteamID(), tmpTableTargetRole[1].uniqueID )
 		SetRole( tmpTarget, tmpTableTargetDemoteRole.uniqueID )
 
 		YRP.msg( "note", ply:Nick() .. " demoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetDemoteRole.uniqueID )
 	elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
-		YRP.msg( "note", "Player: " .. ply:Nick() .. " ( " .. ply:SteamID() .. " ) tried to use demote function! He is not an instructor!" )
+		YRP.msg( "note", "Player: " .. ply:Nick() .. " ( " .. ply:YRPSteamID() .. " ) tried to use demote function! He is not an instructor!" )
 	else
 		YRP.msg( "error", "ELSE demote: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
 	end
@@ -2013,7 +2014,7 @@ net.Receive( "invitetogroup", function( len, ply )
 
 	local tmpTarget = nil
 	for k, v in pairs( player.GetAll() ) do
-		if v:SteamID() == tmpTargetSteamID then
+		if v:YRPSteamID() == tmpTargetSteamID then
 			tmpTarget = v
 		end
 	end
@@ -2047,7 +2048,7 @@ net.Receive( "invitetogroup", function( len, ply )
 				YRP.msg( "note", "[InviteToGroup] ROLE DOESN'T EXISTS ANYMORE" )
 			end
 		elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
-			YRP.msg( "note", "[InviteToGroup] Player: " .. ply:Nick() .. " ( " .. ply:SteamID() .. " ) tried to use invite function! He is not an instructor!" )
+			YRP.msg( "note", "[InviteToGroup] Player: " .. ply:Nick() .. " ( " .. ply:YRPSteamID() .. " ) tried to use invite function! He is not an instructor!" )
 		else
 			YRP.msg( "error", "[InviteToGroup] ELSE invite: " .. tostring( tmpTableInstructorRole.bool_instructor ) )
 		end
@@ -2085,7 +2086,7 @@ function CheckIfRoleExists(ply, ruid)
 			["groupID"] = 1
 		}, "uniqueID = '" .. ply:CharID() .. "'" )
 
-		ply:KillSilent()
+		ply:OldKillSilent()
 	end
 end
 
@@ -2232,11 +2233,21 @@ end )
 
 util.AddNetworkString( "yrp_getcharacters" )
 net.Receive( "yrp_getcharacters", function( len, ply )
-	local chars = YRP_SQL_SELECT( "yrp_characters", "*", "steamid = '" .. ply:SteamID() .. "'" )
+	local chars = YRP_SQL_SELECT( "yrp_characters", "*", "steamid = '" .. ply:YRPSteamID() .. "'" )
 
 	if wk( chars ) then
 		for i, char in pairs( chars ) do
-			char.playermodels = GetPlayermodelsOfRole( char.roleID)
+			local role = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name, string_color", "uniqueID = '" .. char.roleID .. "'" )
+			if role and role[1] then
+				char.rolename = role[1].string_name
+				char.rolecolor = StringToColor( role[1].string_color )
+			end
+			local group = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name, string_color", "uniqueID = '" .. char.groupID .. "'" )
+			if group and group[1] then
+				char.groupname = group[1].string_name
+				char.groupcolor = StringToColor( group[1].string_color )
+			end
+			char.playermodels = GetPlayermodelsOfRole( char.roleID )
 
 			net.Start( "yrp_getcharacters" )
 				net.WriteTable( char )

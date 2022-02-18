@@ -42,7 +42,7 @@ end
 
 function SWEP:Reload()
 	local pos = ""
-	for i, v in pairs(GetGlobalTable( "yrp_safezone" ) ) do
+	for i, v in pairs(GetGlobalYRPTable( "yrp_safezone" ) ) do
 		pos = v.pos
 	end
 	if pos != "" then
@@ -77,7 +77,7 @@ function SWEP:Think()
 			} )
 			pos = tr.HitPos or pos
 
-			for i, v in pairs(GetGlobalTable( "yrp_safezone" ) ) do
+			for i, v in pairs(GetGlobalYRPTable( "yrp_safezone" ) ) do
 				local p = StringToVector( v.pos)
 				if p:Distance(pos) < size * 2 then
 					YRP.msg( "db", "Option Safezone" )
@@ -158,7 +158,7 @@ function SWEP:PrimaryAttack()
 end
 
 function IsInsideSafezone(ply)
-	for i, v in pairs(GetGlobalTable( "yrp_safezone" ) ) do
+	for i, v in pairs(GetGlobalYRPTable( "yrp_safezone" ) ) do
 		local pos = string.Explode( ",", v.pos)
 		local spos = Vector(pos[1], pos[2], pos[3])
 		local epos = Vector(pos[4], pos[5], pos[6])
@@ -193,7 +193,7 @@ function SWEP:SecondaryAttack()
 	if SERVER then
 		local ply = self:GetOwner()
 
-		for i, v in pairs(GetGlobalTable( "yrp_safezone" ) ) do
+		for i, v in pairs(GetGlobalYRPTable( "yrp_safezone" ) ) do
 			local pos = string.Explode( ",", v.pos)
 			local spos = Vector(pos[1], pos[2], pos[3])
 			local epos = Vector(pos[4], pos[5], pos[6])
@@ -218,7 +218,7 @@ if CLIENT then
 			if delay < CurTime() then
 				delay = CurTime() + 0.1
 			end
-			for i, v in pairs(GetGlobalTable( "yrp_safezone" ) ) do
+			for i, v in pairs(GetGlobalYRPTable( "yrp_safezone" ) ) do
 				local pos = string.Explode( ",", v.pos)
 				local spos = Vector(pos[1], pos[2], pos[3])
 				local epos = Vector(pos[4], pos[5], pos[6])

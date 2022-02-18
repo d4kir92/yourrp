@@ -109,7 +109,7 @@ function YRPTeleportToSpawnpoint(ply, from)
 				tp_to(ply, ply:GetPos() )
 				return false
 			end
-		elseif ply:HasCharacterSelected() == true and ply:LoadedGamemode() == true and ply:GetNW2Bool( "yrpspawnedwithcharacter", false) == true then
+		elseif ply:HasCharacterSelected() == true and ply:LoadedGamemode() == true and ply:GetYRPBool( "yrpspawnedwithcharacter", false) == true then
 			YRP.msg( "error", "[YRPTeleportToSpawnpoint] FAILED! ROLE: " .. tostring(roltab) .. " GROUP: " .. tostring(groTab) .. " CHARACTER: " .. tostring( chaTab) .. " from: " .. tostring(from) )
 			return false
 		end

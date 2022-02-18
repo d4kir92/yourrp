@@ -155,7 +155,7 @@ local Player = FindMetaTable( "Player" )
 function Player:AddLicense(license)
 	license = tostring(license)
 	if tonumber(license) != nil then
-		local _licenseIDs = self:GetNW2String( "licenseIDs", "" )
+		local _licenseIDs = self:GetYRPString( "licenseIDs", "" )
 
 		_licenseIDs = string.Explode( ",", _licenseIDs)
 		if !table.HasValue(_licenseIDs, license) then
@@ -166,7 +166,7 @@ function Player:AddLicense(license)
 		end
 		_licenseIDs = string.Implode( ",", _licenseIDs)
 
-		self:SetNW2String( "licenseIDs", tostring(_licenseIDs) )
+		self:SetYRPString( "licenseIDs", tostring(_licenseIDs) )
 
 		local ids = string.Explode( ",", _licenseIDs)
 		local lnames = {}
@@ -178,14 +178,14 @@ function Player:AddLicense(license)
 			end
 		end
 		lnames = table.concat(lnames, ", " )
-		self:SetNW2String( "licenseNames", lnames)
+		self:SetYRPString( "licenseNames", lnames)
 	end
 end
 
 function Player:RemoveLicense(license)
 	license = tostring(license)
 	if tonumber(license) != nil then
-		local _licenseIDs = self:GetNW2String( "licenseIDs", "" )
+		local _licenseIDs = self:GetYRPString( "licenseIDs", "" )
 
 		_licenseIDs = string.Explode( ",", _licenseIDs)
 		if table.HasValue(_licenseIDs, license) then
@@ -196,7 +196,7 @@ function Player:RemoveLicense(license)
 		end
 		_licenseIDs = string.Implode( ",", _licenseIDs)
 		
-		self:SetNW2String( "licenseIDs", tostring(_licenseIDs) )
+		self:SetYRPString( "licenseIDs", tostring(_licenseIDs) )
 
 		local ids = string.Explode( ",", _licenseIDs)
 		local lnames = {}
@@ -208,7 +208,7 @@ function Player:RemoveLicense(license)
 			end
 		end
 		lnames = table.concat(lnames, ", " )
-		self:SetNW2String( "licenseNames", lnames)
+		self:SetYRPString( "licenseNames", lnames)
 	end
 end
 

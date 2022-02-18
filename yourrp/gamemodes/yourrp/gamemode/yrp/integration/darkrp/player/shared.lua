@@ -30,17 +30,17 @@ function Player:canKeysUnlock( door)
 	return YRPCanLock(self, door)	
 end
 
-SetGlobalBool( "DarkRP_LockDown", false)
+SetGlobalYRPBool( "DarkRP_LockDown", false)
 function Player:getDarkRPVar( var)
 	--Description: Get the value of a DarkRPVar, which is shared between server and client.
 	local notavailable = "feature not available yet"
 
 	if var == "money" then
-		return tonumber(self:GetNW2String( "money", "-1" ) )
+		return tonumber(self:GetYRPString( "money", "-1" ) )
 	elseif var == "salary" then
-		return tonumber(self:GetNW2String( "salary", "-1" ) )
+		return tonumber(self:GetYRPString( "salary", "-1" ) )
 	elseif var == "job" then
-		return self:GetNW2String( "roleName", "" )
+		return self:GetYRPString( "roleName", "" )
 	elseif var == "rpname" then
 		return self:RPName() or self:SteamName()
 	elseif var == "HasGunlicense" then
@@ -48,7 +48,7 @@ function Player:getDarkRPVar( var)
 	elseif var == "Energy" then
 		return self:Hunger()
 	elseif var == "wanted" then
-		return self:GetNW2Bool( "iswanted", false)
+		return self:GetYRPBool( "iswanted", false)
 	elseif var == "wantedReason" then
 		return notavailable
 	elseif var == "agenda" then
@@ -60,18 +60,18 @@ function Player:getDarkRPVar( var)
 	elseif var == "Arrested" then
 		return self:isArrested()
 	elseif var == "hasHit" then
-		return self:GetNW2Bool( "iswanted", false)
+		return self:GetYRPBool( "iswanted", false)
 	elseif var == "hitTarget" then
-		return self:GetNW2Entity( "hittarget" )
+		return self:GetYRPEntity( "hittarget" )
 	elseif var == "hitPrice" then
-		return tonumber(self:GetNW2String( "hitreward" ) )
+		return tonumber(self:GetYRPString( "hitreward" ) )
 	elseif var == "lastHitTime" then
 		return 0 -- notavailable
 	elseif var == "Thirst" then
 		return self:Thirst()
 	else
-		local _nw_var = self:GetNW2Int( var )
-		local _nw_var2 = self:GetNW2String( var )
+		local _nw_var = self:GetYRPInt( var )
+		local _nw_var2 = self:GetYRPString( var )
 		if _nw_var != nil then
 			if tonumber(_nw_var) == nil then
 				return _nw_var
@@ -103,12 +103,12 @@ end
 
 function Player:getHitPrice()
 	--Description: Get the price the hitman demands for his work.
-	return self:getHitTarget():GetNW2String( "hitreward", -1)
+	return self:getHitTarget():GetYRPString( "hitreward", -1)
 end
 
 function Player:getHitTarget()
 	--Description: Get the target of a hitman.
-	return self:GetNW2Entity( "hittarget", NULL)
+	return self:GetYRPEntity( "hittarget", NULL)
 end
 
 function YRPConvertToDarkRPJobName(name)
@@ -121,30 +121,50 @@ function YRPConvertToDarkRPJobName(name)
 	end
 end
 
+function YRPConvertToDarkRPCategory( tab, cat )
+	local t = {}
+
+	t.uniqueID = tab.uniqueID or -1
+	t.name = tab.name or tab.string_name or "-"
+	t.categorises = cat
+	t.startExpanded = true
+	if tab.string_color and type( tab.string_color ) == "string" then
+		t.color = StringToColor(tab.string_color)
+	elseif tab.color then
+		t.color = tab.color
+	else
+		t.color = Color( 0, 255, 0, 255)
+	end
+	t.sortOrder = 100
+
+	return t
+end
+
 function Player:getJobTable()
 	--Description: Get the job table of a player.
 	local _job = {}
 
 	_job.team = self:GetRoleUID()
 
-	_job.name = self:GetNW2String( "roleName", "INVALID" )
-	local _pms = string.Explode( ",", self:GetNW2String( "playermodels", "INVALID" ) )
+	_job.name = self:GetYRPString( "roleName", "INVALID" )
+	local _pms = string.Explode( ",", self:GetYRPString( "playermodels", "INVALID" ) )
 	_job.model = _pms
-	_job.description = self:GetNW2String( "roleDescription", "INVALID" )
-	local _weapons = string.Explode( ",", self:GetNW2String( "sweps", "INVALID" ) )
+	_job.description = self:GetYRPString( "roleDescription", "INVALID" )
+	local _weapons = string.Explode( ",", self:GetYRPString( "sweps", "INVALID" ) )
 	_job.weapons = _weapons
-	_job.max = tonumber(self:GetNW2String( "maxamount", -1) )
-	_job.salary = tonumber(self:GetNW2String( "salary", "INVALID" ) )
-	_job.admin = tonumber(self:GetNW2Bool( "isadminonly" ) ) or 0
-	_job.vote = self:GetNW2Bool( "isVoteable" ) or false
-	if self:GetNW2String( "licenseIDs", "" ) != "" then
+	_job.max = tonumber(self:GetYRPString( "maxamount", -1) )
+	_job.salary = tonumber(self:GetYRPString( "salary", "INVALID" ) )
+	_job.admin = tonumber(self:GetYRPBool( "isadminonly" ) ) or 0
+	_job.vote = self:GetYRPBool( "isVoteable" ) or false
+	if self:GetYRPString( "licenseIDs", "" ) != "" then
 		_job.hasLicense = true
 	else
 		_job.hasLicense = false
 	end
-	_job.candemote = self:GetNW2Bool( "isInstructor" ) or false
-	_job.category = self:GetNW2String( "groupName", "INVALID" )
+	_job.candemote = self:GetYRPBool( "isInstructor" ) or false
+	_job.category = self:GetYRPString( "groupName", "INVALID" )
 	_job.command = YRPConvertToDarkRPJobName(_job.name)
+	_job.color = self:GetRoleColor()
 
 	return _job
 end
@@ -166,7 +186,7 @@ function YRPMakeJobTable( id )
 	job.category = ""
 	job.command = ""
 	
-	job.color = Color(0, 0, 0, 255)
+	job.color = Color( 0, 0, 0, 255)
 	job.uniqueID = id
 	job.int_groupID = 1
 
@@ -226,7 +246,7 @@ end
 
 function Player:isArrested()
 	--Description: Whether this player is arrested
-	return self:GetNW2Bool( "injail", false)
+	return self:GetYRPBool( "injail", false)
 end
 
 function Player:isChief()
@@ -243,32 +263,32 @@ end
 
 function Player:isCP()
 	--Description: Whether this player is part of the police force (mayor, cp, chief).
-	return self:GetNW2Bool( "bool_iscp", false) or self:GetNW2Bool( "groupiscp", false)
+	return self:GetYRPBool( "bool_iscp", false) or self:GetYRPBool( "groupiscp", false)
 end
 
 function Player:isHitman()
 	--Description: Whether this player is a hitman.
-	return self:GetNW2Bool( "bool_canbeagent", false)
+	return self:GetYRPBool( "bool_canbeagent", false)
 end
 
 function Player:isMayor()
 	--Description: Whether this player is a mayor.
-	return self:GetNW2Bool( "bool_ismayor", false)
+	return self:GetYRPBool( "bool_ismayor", false)
 end
 
 function Player:isMedic()
 	--Description: Whether this player is a medic.
-	return self:GetNW2Bool( "bool_ismedic", false)
+	return self:GetYRPBool( "bool_ismedic", false)
 end
 
 function Player:isCook()
 	--Description: Whether this player is a cook.
-	return self:GetNW2Bool( "bool_iscook", false)
+	return self:GetYRPBool( "bool_iscook", false)
 end
 
 function Player:isWanted()
 	--Description: Whether this player is wanted
-	return self:GetNW2Bool( "iswanted", false)
+	return self:GetYRPBool( "iswanted", false)
 end
 
 function Player:nickSortedPlayers()

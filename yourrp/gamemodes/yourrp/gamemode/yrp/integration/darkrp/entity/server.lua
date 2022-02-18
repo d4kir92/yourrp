@@ -20,7 +20,7 @@ end
 function Entity:doorIndex()
 	--Description: Get the door index of a door. Use this to store door
 	--						 information in the database.
-	return self:GetNW2Int( "uniqueID", -1)
+	return self:GetYRPInt( "uniqueID", -1)
 end
 
 function Entity:isLocked()

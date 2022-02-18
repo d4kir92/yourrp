@@ -6,18 +6,18 @@ hook.Add( "YFramePaint", "YFrame_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
+	if YRPGetInterfaceDesign() == "Blur" then
 		local hh = 24
 		if self.GetHeaderHeight != nil then
 			hh = self:GetHeaderHeight()
 		end
 
-		DrawRectBlur(self, 0, 0, pw, ph, 5) --draw.RoundedBox(0, 0, 0, pw, hh, lply:InterfaceValue( "YFrame", "HB" ) )
+		DrawRectBlur(self, 0, 0, pw, ph, 5) --draw.RoundedBox(0, 0, 0, pw, hh, YRPInterfaceValue( "YFrame", "HB" ) )
 
-		draw.RoundedBox(0, 0, 0, pw, hh, lply:InterfaceValue( "YFrame", "HB" ) ) --lply:InterfaceValue( "YFrame", "BG" ) )
+		draw.RoundedBox(0, 0, 0, pw, hh, YRPInterfaceValue( "YFrame", "HB" ) ) --YRPInterfaceValue( "YFrame", "BG" ) )
 
 		if self.GetTitle != nil then
-			draw.SimpleText(YRP.lang_string(self:GetTitle() ), "Y_18_500", hh / 2, hh / 2, lply:InterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string(self:GetTitle() ), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 		return true
 	end
@@ -27,9 +27,9 @@ hook.Add( "YButtonPaint", "YButton_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
-		local color = lply:InterfaceValue( "YButton", "NC" )
-		local tcolor = lply:InterfaceValue( "YButton", "NT" )
+	if YRPGetInterfaceDesign() == "Blur" then
+		local color = YRPInterfaceValue( "YButton", "NC" )
+		local tcolor = YRPInterfaceValue( "YButton", "NT" )
 		if self:IsDown() or self:IsPressed() then
 			if not self.clicked then
 				self.clicked = true
@@ -63,9 +63,9 @@ hook.Add( "YButtonAPaint", "YButtonA_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
+	if YRPGetInterfaceDesign() == "Blur" then
 		local color = Color(126, 126, 126)
-		local tcolor = lply:InterfaceValue( "YButton", "NT" )
+		local tcolor = YRPInterfaceValue( "YButton", "NT" )
 		if self:IsDown() or self:IsPressed() then
 			if not self.clicked then
 				self.clicked = true
@@ -95,9 +95,9 @@ hook.Add( "YButtonRPaint", "YButtonR_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
+	if YRPGetInterfaceDesign() == "Blur" then
 		local color = Color(126, 126, 126)
-		local tcolor = lply:InterfaceValue( "YButton", "NT" )
+		local tcolor = YRPInterfaceValue( "YButton", "NT" )
 		if self:IsDown() or self:IsPressed() then
 			if not self.clicked then
 				self.clicked = true
@@ -127,11 +127,11 @@ hook.Add( "YLabelPaint", "YLabel_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
-		local color = lply:InterfaceValue( "YFrame", "BG" )
-		local tcolor = lply:InterfaceValue( "YFrame", "HT" )
+	if YRPGetInterfaceDesign() == "Blur" then
+		local color = YRPInterfaceValue( "YFrame", "BG" )
+		local tcolor = YRPInterfaceValue( "YFrame", "HT" )
 
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 10) )
 
 		local ax = tab.ax or TEXT_ALIGN_CENTER
 		local ay = tab.ay or TEXT_ALIGN_CENTER
@@ -154,11 +154,11 @@ hook.Add( "YTextFieldPaint", "YTextFieldPaint_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
-		local color = lply:InterfaceValue( "YFrame", "NC" )
-		local tcolor = lply:InterfaceValue( "YFrame", "HT" )
+	if YRPGetInterfaceDesign() == "Blur" then
+		local color = YRPInterfaceValue( "YFrame", "NC" )
+		local tcolor = YRPInterfaceValue( "YFrame", "HT" )
 
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 10) )
 		
 		local ax = tab.ax or TEXT_ALIGN_CENTER
 		local ay = tab.ay or TEXT_ALIGN_CENTER
@@ -181,10 +181,10 @@ hook.Add( "YPanelPaint", "YPanel_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
-		local color = lply:InterfaceValue( "YFrame", "HI" )
+	if YRPGetInterfaceDesign() == "Blur" then
+		local color = YRPInterfaceValue( "YFrame", "HI" )
 
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 10) )
 		return true
 	end
 end)
@@ -192,8 +192,8 @@ end)
 hook.Add( "YAddPaint", "YAdd_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
-		local color = Color(100, 205, 100)
+	if YRPGetInterfaceDesign() == "Blur" then
+		local color = Color( 100, 205, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
 			color.g = color.g - 50
@@ -208,7 +208,7 @@ hook.Add( "YAddPaint", "YAdd_Blur", function(self, pw, ph, tab)
 		surface.DrawTexturedRect(0, 0, pw, ph)
 
 		local br = ph * 0.1
-		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetDrawColor( 255, 255, 255, 255)
 		surface.SetMaterial(YRP.GetDesignIcon( "add" ) )
 		surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		return true
@@ -218,7 +218,7 @@ end)
 hook.Add( "YRemovePaint", "YRemove_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
+	if YRPGetInterfaceDesign() == "Blur" then
 		local color = Color(205, 100, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -234,7 +234,7 @@ hook.Add( "YRemovePaint", "YRemove_Blur", function(self, pw, ph, tab)
 		surface.DrawTexturedRect(0, 0, pw, ph)
 
 		local br = ph * 0.1
-		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetDrawColor( 255, 255, 255, 255)
 		surface.SetMaterial(YRP.GetDesignIcon( "remove" ) )
 		surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		return true
@@ -244,7 +244,7 @@ end)
 hook.Add( "YClosePaint", "YClose_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
+	if YRPGetInterfaceDesign() == "Blur" then
 		local color = Color(205, 100, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -260,7 +260,7 @@ hook.Add( "YClosePaint", "YClose_Blur", function(self, pw, ph, tab)
 		surface.DrawTexturedRect(0, 0, pw, ph)
 
 		local br = ph * 0.1
-		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetDrawColor( 255, 255, 255, 255)
 		surface.SetMaterial(YRP.GetDesignIcon( "clear" ) )
 		surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		return true
@@ -270,7 +270,7 @@ end)
 hook.Add( "YMaxPaint", "YMax_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
+	if YRPGetInterfaceDesign() == "Blur" then
 		local color = Color(205, 205, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -286,7 +286,7 @@ hook.Add( "YMaxPaint", "YMax_Blur", function(self, pw, ph, tab)
 		surface.DrawTexturedRect(0, 0, pw, ph)
 
 		local br = ph * 0.1
-		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetDrawColor( 255, 255, 255, 255)
 		surface.SetMaterial(YRP.GetDesignIcon( "mat_square" ) )
 		surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		return true
@@ -296,7 +296,7 @@ end)
 hook.Add( "YGroupBoxPaint", "YGroupBox_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalString( "string_interface_design" ) == "Blur" then
+	if YRPGetInterfaceDesign() == "Blur" then
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 60) )
 
 		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 60, 60, 60) )
@@ -304,7 +304,7 @@ hook.Add( "YGroupBoxPaint", "YGroupBox_Blur", function(self, pw, ph, tab)
 		local x, y = self.con:GetPos()
 		draw.RoundedBox(0, x, y, self.con:GetWide(), self.con:GetTall(), Color(20, 20, 20, 60) )
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)

@@ -11,13 +11,13 @@ function DHr(tab)
 	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(0, 0, 0)
+	tab.color = tab.color or Color( 0, 0, 0)
 
 	local pnl = {}
 
 	pnl.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function pnl.line:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
 		draw.RoundedBox(0, 0, ph / 4, pw, ph / 2, tab.color)
 	end
 
@@ -38,7 +38,7 @@ function YRPDCheckBoxes(tab)
 	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -58,7 +58,7 @@ function YRPDCheckBoxes(tab)
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_700"
-		text.color = Color(255, 255, 255, 255)
+		text.color = Color( 255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -68,7 +68,7 @@ function YRPDCheckBoxes(tab)
 	pnl.DButton:SetText( "" )
 	pnl.DButton.serverside = false
 	function pnl.DButton:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
 		local change = {}
 		change.text = "[" .. YRP.lang_string( "LID_change" ) .. "] ( " .. tab.value .. " )"
 		change.font = "Y_22_700"
@@ -112,7 +112,7 @@ function YRPDCheckBoxes(tab)
 			for i, choice in pairs(tab.choices) do
 				local ch = createD( "DPanel", window.cm, YRP.ctr(500), YRP.ctr(50), 0, 0)
 				function ch:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255) )
+					draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
 					local ta = {}
 					ta.text = i
 					ta.font = "Y_22_700"
@@ -137,7 +137,7 @@ function YRPDCheckBoxes(tab)
 					ch.subchoices[j] = createD( "DPanel", window.cm, YRP.ctr(500), YRP.ctr(50), 0, 0)
 					local sch = ch.subchoices[j]
 					function sch:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255) )
+						draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
 						local ta = {}
 						ta.text = j
 						ta.font = "Y_22_700"
@@ -189,7 +189,7 @@ function YRPDCheckBox(tab)
 	tab.h = tab.h or YRP.ctr(50)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tonumber(tab.value) or 1
@@ -209,7 +209,7 @@ function YRPDCheckBox(tab)
 		text.x = YRP.ctr(60)
 		text.y = ph / 2
 		text.font = "Y_18_700"
-		text.color = Color(255, 255, 255, 255)
+		text.color = Color( 255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -260,7 +260,7 @@ function YRPDComboBox(tab)
 	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -280,7 +280,7 @@ function YRPDComboBox(tab)
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_700"
-		text.color = Color(255, 255, 255, 255)
+		text.color = Color( 255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -331,7 +331,7 @@ function YRPDComboBoxHUD(tab)
 	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -351,7 +351,7 @@ function YRPDComboBoxHUD(tab)
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_700"
-		text.color = Color(255, 255, 255, 255)
+		text.color = Color( 255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -402,7 +402,7 @@ function DColor(tab)
 	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -492,7 +492,7 @@ function DIntBox(tab)
 	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or -1
@@ -515,7 +515,7 @@ function DIntBox(tab)
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_700"
-		text.color = Color(255, 255, 255, 255)
+		text.color = Color( 255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -570,7 +570,7 @@ function DTextBox(tab)
 	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -593,7 +593,7 @@ function DTextBox(tab)
 		text.x = YRP.ctr(10)
 		text.y = YRP.ctr(25)
 		text.font = "Y_18_700"
-		text.color = Color(255, 255, 255, 255)
+		text.color = Color( 255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -604,7 +604,7 @@ function DTextBox(tab)
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "Y_22_700"
-			DMG.color = Color(0, 0, 0, 255)
+			DMG.color = Color( 0, 0, 0, 255)
 			DMG.br = 1
 			DMG.ax = 2
 			DrawText(DMG)
@@ -703,7 +703,7 @@ function DAttributeBar(tab)
 	tab.h = tab.h or YRP.ctr(120)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 	tab.len = table.Count(tab.dnw)
 
 	tab.header = tab.header or "NOHEADER"
@@ -777,7 +777,7 @@ function DAttributeBar(tab)
 			text.x = YRP.ctr(10)
 			text.y = ph / 2
 			text.font = "Y_18_700"
-			text.color = Color(255, 255, 255, 255)
+			text.color = Color( 255, 255, 255, 255)
 			text.br = 1
 			text.ax = 0
 			DrawText(text)
@@ -836,7 +836,7 @@ function DStringListBox(tab)
 	tab.h = tab.h or YRP.ctr(120)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	tab.header = tab.header or "NOHEADER"
 	tab.value = tab.value or "NOTEXT"
@@ -855,7 +855,7 @@ function DStringListBox(tab)
 		text.x = YRP.ctr(10)
 		text.y = YRP.ctr(25)
 		text.font = "Y_18_700"
-		text.color = Color(255, 255, 255, 255)
+		text.color = Color( 255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -866,10 +866,10 @@ function DStringListBox(tab)
 	function pnl.add:Paint(pw, ph)
 		self.color = Color(80, 255, 80)
 		if self:IsHovered() then
-			self.color = Color(100, 255, 100)
+			self.color = Color( 100, 255, 100)
 		end
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-		draw.SimpleText( "+", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText( "+", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	function pnl.add:DoClick()
 		tab.doclick()
@@ -924,7 +924,7 @@ function DStringListBox(tab)
 				end
 
 				function line:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255) )
+					draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
 
 					if self.mod != nil then
 						if self.oldpmid != self.pmid then
@@ -937,19 +937,19 @@ function DStringListBox(tab)
 					if table.Count(self.models) > 1 then
 						name = name .. " ( " .. self.pmid .. "/" .. table.Count(self.models) .. " )"
 					end
-					draw.SimpleText(name, "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 - YRP.ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(name, "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 - YRP.ctr(25), Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					if v.slots then
-						draw.SimpleText(text, "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 + YRP.ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(text, "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 + YRP.ctr(25), Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					else
-						draw.SimpleText(line.models[line.pmid], "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 + YRP.ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(line.models[line.pmid], "DermaDefault", YRP.ctr(40) + v.h + YRP.ctr(40) + YRP.ctr(20), ph / 2 + YRP.ctr(25), Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 				end
 
 				line.rem = createD( "DButton", line, v.h - 2 * v.br, v.h - 2 * v.br, line:GetWide() - v.h - v.br, v.br)
 				line.rem:SetText( "" )
 				function line.rem:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0) )
-					draw.SimpleText( "-", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0) )
+					draw.SimpleText( "-", "DermaDefault", pw / 2, ph / 2, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 				function line.rem:DoClick()
 					v.doclick()
@@ -959,8 +959,8 @@ function DStringListBox(tab)
 				line.next:SetText( "" )
 				function line.next:Paint(pw, ph)
 					if line.pmid < table.Count(line.models) then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0, 200) )
-						draw.SimpleText( ">", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0, 200) )
+						draw.SimpleText( ">", "DermaDefault", pw / 2, ph / 2, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				end
 				function line.next:DoClick()
@@ -973,8 +973,8 @@ function DStringListBox(tab)
 				line.prev:SetText( "" )
 				function line.prev:Paint(pw, ph)
 					if line.pmid > 1 then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0, 200) )
-						draw.SimpleText( "<", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0, 200) )
+						draw.SimpleText( "<", "DermaDefault", pw / 2, ph / 2, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				end
 				function line.prev:DoClick()

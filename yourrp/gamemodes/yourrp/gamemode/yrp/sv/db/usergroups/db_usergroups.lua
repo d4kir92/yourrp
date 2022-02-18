@@ -167,6 +167,8 @@ timer.Simple( 1, function()
 			end
 
 			YRP_SQL_UPDATE( DATABASE_NAME, vals, "uniqueID = '" .. tab.uniqueID .. "'" )
+		else
+			YRP.msg( "error", "superadmin is missing" )
 		end
 	end
 
@@ -189,7 +191,6 @@ end )
 
 function SortUserGroups()
 	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-
 	if wk(siblings) then
 		for i, sibling in pairs(siblings) do
 			if sibling.string_name == "yrp_usergroups" then
@@ -281,11 +282,13 @@ function GetULXUserGroups()
 	if DAMVERSION then
 		local tab = YRP_SQL_SELECT( "DAM_UGS", "*", nil )
 
-		for i, v in pairs( tab ) do
-			local ug = YRP_SQL_SELECT( "yrp_usergroups", "*", "string_name = '" .. string.lower( v.name ) .. "'" )
-			if ug == nil then
-				YRP_SQL_INSERT_INTO( "yrp_usergroups", "string_name", "'" .. string.lower( v.name ) .. "'" )
-				SortUserGroups()
+		if tab then
+			for i, v in pairs( tab ) do
+				local ug = YRP_SQL_SELECT( "yrp_usergroups", "*", "string_name = '" .. string.lower( v.name ) .. "'" )
+				if ug == nil then
+					YRP_SQL_INSERT_INTO( "yrp_usergroups", "string_name", "'" .. string.lower( v.name ) .. "'" )
+					SortUserGroups()
+				end
 			end
 		end
 	end
@@ -325,19 +328,26 @@ net.Receive( "Connect_Settings_UserGroups", function(len, ply)
 			end
 		end
 
-		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_name, string_color, string_icon, bool_removeable, int_position", nil)
 		local _ugs = {}
 		for i, ug in pairs(_tmp) do
 			_ugs[tonumber(ug.uniqueID)] = ug
 		end
 
-		net.Start( "Connect_Settings_UserGroups" )
-			if _tmp != nil then
-				net.WriteTable(_tmp)
-			else
-				net.WriteTable({})
+		if _tmp and _tmp[1] then
+			for i, v in pairs( _tmp ) do
+				net.Start( "Connect_Settings_UserGroups" )
+					net.WriteBool(i == 1)					
+					net.WriteUInt( v.uniqueID, 16 )
+					net.WriteString( v.string_name )
+					net.WriteString( v.string_color )
+					net.WriteString( v.string_icon )
+					net.WriteBool( tobool( v.bool_removeable ) )
+					net.WriteUInt( v.int_position, 8 )
+					net.WriteBool( i == #_tmp )
+				net.Send( ply )
 			end
-		net.Send(ply)
+		end
 	end
 end)
 
@@ -581,7 +591,7 @@ function UGUpdateInt(ply, uid, name, value)
 		ug.string_name = string.lower(ug.string_name)
 		for i, pl in pairs(player.GetAll() ) do
 			if string.lower(pl:GetUserGroup() ) == ug.string_name then
-				pl:SetNW2Int(name, value)
+				pl:SetYRPInt(name, value)
 			end
 		end
 	end
@@ -608,7 +618,7 @@ function UGCheckBox(ply, uid, name, value)
 		ug.string_name = string.lower(ug.string_name)
 		for i, pl in pairs(player.GetAll() ) do
 			if string.lower(pl:GetUserGroup() ) == ug.string_name then
-				pl:SetNW2Bool(name, tobool( value) )
+				pl:SetYRPBool(name, tobool( value) )
 			end
 		end
 	end
@@ -1092,17 +1102,17 @@ end)
 
 local Entity = FindMetaTable( "Entity" )
 function Entity:YRPSetOwner(ply)
-	self:SetNW2Entity( "yrp_owner", ply)
+	self:SetYRPEntity( "yrp_owner", ply)
 end
 
 function Entity:YRPRemoveOwner()
-	self:SetNW2Entity( "yrp_owner", NULL)
+	self:SetYRPEntity( "yrp_owner", NULL)
 end
 
 function HasUseFunction(ent)
 	if IsEntity(ent) then
 		if ent.Use != nil then
-			ent:SetNW2Bool( "yrp_has_use", true)
+			ent:SetYRPBool( "yrp_has_use", true)
 		end
 	end
 end
@@ -1263,12 +1273,12 @@ hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function(pl, model)
 end)
 
 function YRPRenderEquipment(ply, name, mode, color)
-	local _eq = ply:GetNW2Entity(name)
+	local _eq = ply:GetYRPEntity(name)
 	if ea(_eq) then
 		_eq:SetRenderMode(mode)
 		_eq:SetColor( color)
-		_eq:SetNW2Int(name .. "mode", mode)
-		_eq:SetNW2String(name .. "color", color.r .. "," .. color.g .. "," .. color.b .. "," .. color.a)
+		_eq:SetYRPInt(name .. "mode", mode)
+		_eq:SetYRPString(name .. "color", color.r .. "," .. color.g .. "," .. color.b .. "," .. color.a)
 	end
 end
 
@@ -1280,52 +1290,52 @@ function YRPRenderCloaked(ply)
 	if IsValid(ply) and ply:IsPlayer() and ply:Alive() and ply:GetWeapons() then
 		local _alpha = 0
 		ply:SetRenderMode(RENDERMODE_TRANSCOLOR)
-		ply:SetColor(Color(255, 255, 255, _alpha) )
+		ply:SetColor(Color( 255, 255, 255, _alpha) )
 		for i, wp in pairs(ply:GetWeapons() ) do
 			wp:SetRenderMode(RENDERMODE_TRANSCOLOR)
-			wp:SetColor(Color(255, 255, 255, _alpha) )
+			wp:SetColor(Color( 255, 255, 255, _alpha) )
 		end
-		--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, Color(255, 255, 255, _alpha) )
+		--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, Color( 255, 255, 255, _alpha) )
 	end
 end
 
 function YRPRenderFrozen(ply)
 	if ea(ply) then
-		if ply:GetNW2Bool( "cloaked", false) then
+		if ply:GetYRPBool( "cloaked", false) then
 			YRPRenderCloaked(ply)
 		else
 			ply:SetRenderMode(RENDERMODE_NORMAL)
-			ply:SetColor( Color(0, 0, 255) )
+			ply:SetColor( Color( 0, 0, 255) )
 			for i, wp in pairs(ply:GetWeapons() ) do
 				wp:SetRenderMode(RENDERMODE_TRANSCOLOR)
-				wp:SetColor( Color(0, 0, 255) )
+				wp:SetColor( Color( 0, 0, 255) )
 			end
-			--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, Color(0, 0, 255) )
+			--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, Color( 0, 0, 255) )
 		end
 	end
 end
 
 function YRPRenderNormal(ply)
 	if ea(ply) then
-		if ply:GetNW2Bool( "cloaked", false) then
+		if ply:GetYRPBool( "cloaked", false) then
 			YRPRenderCloaked(ply)
 		elseif ply:IsFlagSet(FL_FROZEN) then
 			YRPRenderFrozen(ply)
 		else
 			setPlayerModel(ply)
 			ply:SetRenderMode(RENDERMODE_NORMAL)
-			ply:SetColor(Color(255, 255, 255, 255) )
+			ply:SetColor(Color( 255, 255, 255, 255) )
 			for i, wp in pairs(ply:GetWeapons() ) do
 				wp:SetRenderMode(RENDERMODE_NORMAL)
-				wp:SetColor(Color(255, 255, 255, 255) )
+				wp:SetColor(Color( 255, 255, 255, 255) )
 			end
-			--YRPRenderEquipments(ply, RENDERMODE_NORMAL, Color(255, 255, 255, 255) )
+			--YRPRenderEquipments(ply, RENDERMODE_NORMAL, Color( 255, 255, 255, 255) )
 		end
 	end
 end
 
 function EntBlacklisted(ent)
-	local blacklist = GetGlobalTable( "yrp_blacklist_entities", {})
+	local blacklist = GetGlobalYRPTable( "yrp_blacklist_entities", {})
 
 	for i, black in pairs( blacklist) do
 		if string.find(ent:GetClass(), black.value) or string.find(ent:GetModel(), black.value) then
@@ -1348,7 +1358,7 @@ function GM:PhysgunPickup(pl, ent)
 				return false
 			elseif ent:IsPlayer() then
 				if tobool(tabUsergroup.bool_physgunpickupplayer) then
-					if ent:GetNW2Int( "int_position", 0) >= pl:GetNW2Int( "int_position", 0) then -- ent (target) > position as pl
+					if ent:GetYRPInt( "int_position", 0) >= pl:GetYRPInt( "int_position", 0) then -- ent (target) > position as pl
 						return true
 					end
 				else
@@ -1496,18 +1506,18 @@ function Player:UserGroupLoadout()
 	if wk(UG) then
 		UG = UG[1]
 
-		self:SetNW2String( "usergroupDisplayname", UG.string_displayname)
-		self:SetNW2String( "usergroupColor", UG.string_color)
-		self:SetNW2Bool( "ugchat", tobool( UG.bool_chat ) )
-		self:SetNW2Int( "int_position", UG.int_position)
-		self:SetNW2Int( "int_characters_max", UG.int_characters_max)
-		self:SetNW2Int( "int_charactersevent_max", UG.int_charactersevent_max)
+		self:SetYRPString( "usergroupDisplayname", UG.string_displayname)
+		self:SetYRPString( "usergroupColor", UG.string_color)
+		self:SetYRPBool( "ugchat", tobool( UG.bool_chat ) )
+		self:SetYRPInt( "int_position", tonumber( UG.int_position ) )
+		self:SetYRPInt( "int_characters_max", tonumber( UG.int_characters_max ) )
+		self:SetYRPInt( "int_charactersevent_max", tonumber( UG.int_charactersevent_max ) )
 
 
 
 		-- sweps
 		local SWEPS = UG.string_sweps
-		self:SetNW2String( "usergroup_sweps", UG.string_sweps)
+		self:SetYRPString( "usergroup_sweps", UG.string_sweps)
 		if SWEPS then
 			SWEPS = string.Explode( ",", SWEPS)
 			for i, swep in pairs(SWEPS) do
@@ -1534,7 +1544,7 @@ function Player:UserGroupLoadout()
 
 		for i, v in pairs(UG) do
 			if string.StartWith(i, "bool_" ) then
-				self:SetNW2Bool(i, tobool( v) )
+				self:SetYRPBool(i, tobool( v) )
 			end
 		end
 
@@ -1571,11 +1581,22 @@ function ReloadUsergroupsList()
 	
 	timer.Simple( 0.1, function()
 		local ugs = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		for i, pl in pairs(HANDLER_USERGROUPS) do
+		for ip, pl in pairs(HANDLER_USERGROUPS) do
 			if IsValid( pl ) then
-				net.Start( "UpdateUsergroupsList" )
-					net.WriteTable(ugs)
-				net.Send(pl)
+				if ugs and ugs[1] then
+					for i, v in pairs( ugs ) do
+						net.Start( "UpdateUsergroupsList" )
+							net.WriteBool(i == 1)					
+							net.WriteUInt( v.uniqueID, 16 )
+							net.WriteString( v.string_name )
+							net.WriteString( v.string_color )
+							net.WriteString( v.string_icon )
+							net.WriteBool( tobool( v.bool_removeable ) )
+							net.WriteUInt( v.int_position, 8 )
+							net.WriteBool( i == #ugs )
+						net.Send(pl)
+					end
+				end
 			end
 		end
 	end )
@@ -1634,14 +1655,8 @@ end)
 util.AddNetworkString( "get_perma_props" )
 net.Receive( "get_perma_props", function(len, ply)
 	local tab = {}
-	if PermaPropsSystem then
-		if YRP_SQL_TABLE_EXISTS( "permaprops_system" ) then
-			tab = YRP_SQL_SELECT( "permaprops_system", "*", nil)
-		end
-	else
-		if YRP_SQL_TABLE_EXISTS( "permaprops" ) then
-			tab = YRP_SQL_SELECT( "permaprops", "*", nil)
-		end
+	if YRP_SQL_TABLE_EXISTS( "permaprops" ) then
+		tab = YRP_SQL_SELECT( "permaprops", "*", nil)
 	end
 
 	ply.ppid = ply.ppid or 0
@@ -1722,6 +1737,92 @@ net.Receive( "yrp_pp_teleport", function(len, ply)
 	end
 end)
 
+util.AddNetworkString( "get_perma_props2" )
+net.Receive( "get_perma_props2", function(len, ply)
+	local tab = {}
+	if YRP_SQL_TABLE_EXISTS( "permaprops_system" ) then
+		tab = YRP_SQL_SELECT( "permaprops_system", "*", nil)
+	end
+
+	ply.ppid = ply.ppid or 0
+
+	if wk(tab) then
+		ply.ppid = ply.ppid + 1
+		local ppid = ply.ppid
+		local sortedtab = {}
+		local c = 0
+		for i, v in pairs(tab) do
+			if v.map == game.GetMap() then
+				if v.content then
+					v.content = util.JSONToTable( v.content)
+				else
+					v.content = util.JSONToTable( v.data)
+				end
+				if v.content != nil then
+					sortedtab[c] = {}
+					sortedtab[c].id = v.id
+					sortedtab[c].model = v.content.Model or v.model
+					sortedtab[c].class = v.content.Class or v.class
+				end
+
+				c = c + 1
+			end
+		end
+
+		local c = 0
+		for i, v in pairs(sortedtab) do --SortedPairsByMemberValue(sortedtab, "model" ) do
+			if ply.ppid != ppid then
+				break
+			end
+			timer.Simple( c * 0.01, function()
+				if IsValid(ply) then
+					if ply.ppid != ppid then
+						return
+					end
+					v.max = table.Count(sortedtab)
+
+					net.Start( "get_perma_props2" )
+						net.WriteString( c)
+						net.WriteTable( v)
+					net.Send(ply)
+				end
+			end)
+			c = c + 1
+		end
+	end
+end)
+
+util.AddNetworkString( "yrp_pp_remove2" )
+net.Receive( "yrp_pp_remove2", function(len, ply)
+	local ppid = net.ReadString()
+
+	if YRP_SQL_TABLE_EXISTS( "permaprops_system" ) then
+		YRP_SQL_DELETE_FROM( "permaprops_system", "id = '" .. ppid .. "'" )
+	end
+end)
+
+util.AddNetworkString( "yrp_pp_close2" )
+net.Receive( "yrp_pp_close2", function(len, ply)
+	ply.ppid = ply.ppid or 0
+	ply.ppid = ply.ppid + 1
+end)
+
+util.AddNetworkString( "yrp_pp_teleport2" )
+net.Receive( "yrp_pp_teleport2", function(len, ply)
+	local ppid = net.ReadString()
+
+	if YRP_SQL_TABLE_EXISTS( "permaprops_system" ) then
+		local tab = YRP_SQL_SELECT( "permaprops_system", "*", "id = '" .. ppid .. "'" )
+		if wk(tab) then
+			tab = tab[1]
+
+			tab.data = util.JSONToTable(tab.data)
+
+			ply:SetPos(tab.data.pos)
+		end
+	end
+end)
+
 util.AddNetworkString( "get_usergroup_licenses" )
 net.Receive( "get_usergroup_licenses", function(len, ply)
 	local licenses = YRP_SQL_SELECT( "yrp_licenses", "*", nil)
@@ -1770,7 +1871,7 @@ hook.Add( "Think", "yrp_usergroup_haschanged", function()
 				timer.Simple(0, function()
 					if IsValid(ply) then
 						YRP.msg( "note", ply:RPName() .. " has a new usergroup, respawning..." )
-						ply:KillSilent()
+						ply:OldKillSilent()
 					end
 				end)
 			end

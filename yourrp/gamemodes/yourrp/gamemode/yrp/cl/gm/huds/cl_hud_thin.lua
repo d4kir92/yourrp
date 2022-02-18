@@ -51,7 +51,7 @@ local function DrawThinCompass(px, py, sw, sh)
 				local font = "Y_16_500"
 				local dfont = "Y_18_500"
 			   
-				local white = Color(200,200,200,alpha)
+				local white = Color( 200,200,200,alpha)
 				local dwhite = Color(230,230,230,alpha)
 
 				if YRP.GetDesignIcon( "keyboard_arrow_down" ) then
@@ -113,8 +113,8 @@ function YRPDrawThin(tab)
 		HUD_THIN[name].oldcur = tab.max
 	end
 
-	if lply:GetNW2Int( "hud_version", 0) != HUD_THIN[name]["hud_version"] then
-		HUD_THIN[name]["hud_version"] = lply:GetNW2Int( "hud_version", 0)
+	if GetGlobalInt( "YRPHUDVersion", -1 ) != HUD_THIN[name]["hud_version"] then
+		HUD_THIN[name]["hud_version"] = GetGlobalInt( "YRPHUDVersion", -1 )
 
 		HUD_THIN[name].x = tab.x or lply:HudValue(name, "POSI_X" )
 		HUD_THIN[name].y = tab.y or lply:HudValue(name, "POSI_Y" )
@@ -196,7 +196,7 @@ function YRPDrawThin(tab)
 		if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
 			local iconmat = YRP.GetDesignIcon(HUD_THIN[name].iconmat)
 			if iconmat then
-				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetDrawColor( 255, 255, 255, 255)
 				surface.SetMaterial(iconmat)
 				surface.DrawTexturedRect(HUDMOTIONX(HUD_THIN[name].ix), HUDMOTIONY(HUD_THIN[name].iy), HUD_THIN[name].ih, HUD_THIN[name].ih)
 			end
@@ -226,7 +226,7 @@ function YRPDrawThin(tab)
 
 		-- BAR
 		if tab.cur and tab.max then
-			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].vx), HUDMOTIONY(HUD_THIN[name].vy), HUD_THIN[name].vw, 2, Color(0, 0, 0, 100) )
+			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].vx), HUDMOTIONY(HUD_THIN[name].vy), HUD_THIN[name].vw, 2, Color( 0, 0, 0, 100) )
 			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].vx), HUDMOTIONY(HUD_THIN[name].vy), HUD_THIN[name].vw * HUD_THIN[name].oldcur / tab.max, 2, HUD_THIN[name].colorbar)
 		end
 	end
@@ -236,8 +236,7 @@ local ox = 0
 local oy = 0
 function YRPHUDThin()
 	local lply = LocalPlayer()
-
-	if YRPHudVarsLoaded and YRPHudVarsLoaded() and YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
+	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
 		if GetGlobalBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Thin" then
 			if lply:HudElementVisible( "COM" ) then
 				DrawThinCompass(lply:HudValue( "COM", "POSI_X" ), lply:HudValue( "COM", "POSI_Y" ), lply:HudValue( "COM", "SIZE_W" ), lply:HudValue( "COM", "SIZE_H" ) )

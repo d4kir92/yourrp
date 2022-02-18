@@ -50,7 +50,11 @@ end)
 util.AddNetworkString( "add_ticket" )
 net.Receive( "add_ticket", function(len, ply)
 	local _fb = net.ReadTable()
-	local _insert = YRP_SQL_INSERT_INTO(DATABASE_NAME, "title, feedback, contact, steamid, steamname, rpname, timestamp", "'" .. _fb.title .. "', '" .. _fb.feedback .. "', '" .. _fb.contact .. "', '" .. _fb.steamid .. "', '" .. _fb.steamname .. "', '" .. _fb.rpname .. "', '" .. os.time() .. "'" )
+	local _insert = YRP_SQL_INSERT_INTO(
+		DATABASE_NAME,
+		"title, feedback, contact, steamid, steamname, rpname, timestamp",
+		"" .. YRP_SQL_STR_IN( _fb.title ) .. ", " .. YRP_SQL_STR_IN( _fb.feedback ) .. ", " .. YRP_SQL_STR_IN( _fb.contact ) .. ", '" .. _fb.steamid .. "', " .. YRP_SQL_STR_IN( _fb.steamname ) .. ", " .. YRP_SQL_STR_IN( _fb.rpname ) .. ", '" .. os.time() .. "'"
+	)
 	net.Start( "yrp_noti" )
 		net.WriteString( "newfeedback" )
 		net.WriteString( "" )

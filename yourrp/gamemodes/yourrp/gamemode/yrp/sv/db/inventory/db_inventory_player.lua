@@ -8,10 +8,10 @@ hook.Add( "WeaponEquip", "yrp_weaponequip", function(wep, owner)
 	local swep = weapons.GetStored(wep:GetClass() )
 	local oldammo = owner:GetAmmoCount( atype)
 
-	local clip1 = wep:GetNW2Int( "clip1", -1)
+	local clip1 = wep:GetYRPInt( "clip1", -1)
 
 	timer.Simple(0, function()
-		if IsValid(wep) and wep:GetNW2Bool( "yrpdropped", false ) then
+		if IsValid(wep) and wep:GetYRPBool( "yrpdropped", false ) then
 			owner:SetAmmo(owner:GetAmmoCount( atype) - (owner:GetAmmoCount( atype) - oldammo), atype)
 			wep:SetClip1( clip1 )
 		end
@@ -22,8 +22,8 @@ end)
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if ( ply:HasWeapon( wep:GetClass() ) ) then return false end
 
-	if wep:GetNW2Bool( "yrpdropped", false) then
-		if wep:GetNW2Bool( "canpickup", false) then
+	if wep:GetYRPBool( "yrpdropped", false) then
+		if wep:GetYRPBool( "canpickup", false) then
 			if GetGlobalBool( "bool_autopickup", true) then
 				return true
 			else
@@ -53,18 +53,18 @@ function Player:RemoveWeapon( cname)
 	return false
 end
 
-function Player:DropSWEP( cname, force)
+function Player:DropSWEP( cname, force )
 	if (self:IsAllowedToDropSWEPRole( cname) and self:IsAllowedToDropSWEPUG( cname) ) or force then
 		self.dropdelay = self.dropdelay or CurTime() - 1
 		if self.dropdelay < CurTime() or force then
 			self.dropdelay = CurTime() + 1
-			local wep = self:GetWeapon( cname)
+			local wep = self:GetWeapon( cname )
 			if IsValid(wep) then
-				wep:SetNW2Bool( "canpickup", false)
+				wep:SetYRPBool( "canpickup", false)
 			end
-			self:RemoveWeapon( cname)
+			self:RemoveWeapon( cname )
 			
-			local ent = ents.Create( cname)
+			local ent = ents.Create( cname )
 
 			if ent.WorldModel == "" then
 				ent.WorldModel = "models/props_junk/garbage_takeoutcarton001a.mdl"
@@ -72,20 +72,20 @@ function Player:DropSWEP( cname, force)
 
 			ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
 			ent:SetAngles(self:GetAngles() )
-			ent:SetNW2Bool( "yrpdropped", true)
-			ent:SetNW2Bool( "canpickup", false)
+			ent:SetYRPBool( "yrpdropped", true)
+			ent:SetYRPBool( "canpickup", false)
 			timer.Simple(0.8, function()
 				if IsValid(ent) then
-					ent:SetNW2Bool( "canpickup", true)
+					ent:SetYRPBool( "canpickup", true)
 				end
 			end)
 
-			timer.Simple(0, function()
+			timer.Simple( 0.0, function()
 				if IsValid( ent ) then
 					ent:Spawn()
 
 					if IsValid(wep) and wep.GetClip1 then
-						ent:SetNW2Int( "clip1", wep:GetClip1() )
+						ent:SetYRPInt( "clip1", wep:GetClip1() )
 					end
 
 					if ent:GetPhysicsObject():IsValid() and IsValid(self) then
@@ -102,7 +102,7 @@ function Player:DropSWEP( cname, force)
 						end
 					end )
 				end
-			end)
+			end )
 		else
 			-- on cooldown
 		end
@@ -118,7 +118,7 @@ function Player:DropSWEPSilence( cname)
 end
 
 function Player:IsAllowedToDropSWEPRole( cname)
-	local ndsweps = YRP_SQL_SELECT( "yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetNW2String( "roleUniqueID", "0" ) .. "'" )
+	local ndsweps = YRP_SQL_SELECT( "yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetYRPString( "roleUniqueID", "0" ) .. "'" )
 	if wk(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode( ",", ndsweps.string_ndsweps)

@@ -145,7 +145,7 @@ net.Receive( "yrp_weapon_menu", function(len)
 						color = Color(20, 20, 20)
 					end
 					if YRPWeaponNoEntry(swep.ClassName) then
-						color = Color(160, 0, 0)
+						color = Color( 160, 0, 0)
 					end
 					draw.RoundedBox(3, 0, 0, pw, ph, color)
 					local text = swep.PrintName

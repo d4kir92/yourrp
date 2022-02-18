@@ -1,12 +1,11 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-local Player = FindMetaTable( "Player" )
-
-function Player:GetInterfaceDesign()
+function YRPGetInterfaceDesign()
 	return GetGlobalString( "string_interface_design", "Material" )
 end
 
-function Player:InterfaceValue(element, art)
+local tabifcolors = {}
+function YRPInterfaceValue( element, art )
 	local ifloats = {}
 	local ibools = {}
 	local icolors = {"BG", "HT", "HI", "HB", "NC", "HC", "PC", "SC", "NT", "HT", "ST", "FG"}
@@ -16,9 +15,21 @@ function Player:InterfaceValue(element, art)
 	elseif table.HasValue(ibools, art) then
 		return false
 	elseif table.HasValue(icolors, art) then
-		local icolor = self:GetNW2String( "color_IF_" .. self:GetInterfaceDesign() .. "_" .. element .. "_" .. art, "0, 0, 0, 100" )
-		icolor = string.Explode( ",", icolor)
-		return Color(icolor[1], icolor[2], icolor[3], icolor[4] or 255)
+		local icolor = GetGlobalString( "color_IF_" .. YRPGetInterfaceDesign() .. "_" .. element .. "_" .. art, "0, 0, 0, 100" )
+		if icolor and type( icolor ) == "string" then
+			if tabifcolors[icolor] == nil then
+				tabifcolors[icolor] = StringToColor( icolor )
+			end
+			local col = tabifcolors[icolor]
+			if col and col.r and col.g and col.b then
+				col.a = col.a or 255
+				return Color( col.r, col.g, col.b, col.a )
+			else
+				return Color( 255, 0, 0, 255 )
+			end
+		else
+			return Color( 255, 0, 0, 200 )
+		end
 	elseif table.HasValue(iints, art) then
 		return 0
 	end
@@ -27,7 +38,7 @@ function Player:InterfaceValue(element, art)
 	return text
 end
 
-function Player:InterfaceElement(element)
+function YRPInterfaceElement(element)
 	local ifloats = {}
 	local ibools = {}
 	local icolors = {"BG", "HT", "HI", "HB", "NC", "HC", "PC", "SC", "NT", "HT", "ST"}
@@ -35,16 +46,16 @@ function Player:InterfaceElement(element)
 
 	local ele = {}
 	for i, v in pairs(ifloats) do
-		ele[v] = self:InterfaceValue(element, v)
+		ele[v] = YRPInterfaceValue(element, v)
 	end
 	for i, v in pairs(ibools) do
-		ele[v] = self:InterfaceValue(element, v)
+		ele[v] = YRPInterfaceValue(element, v)
 	end
 	for i, v in pairs(icolors) do
-		ele[v] = self:InterfaceValue(element, v)
+		ele[v] = YRPInterfaceValue(element, v)
 	end
 	for i, v in pairs(iints) do
-		ele[v] = self:InterfaceValue(element, v)
+		ele[v] = YRPInterfaceValue(element, v)
 	end
 	return ele
 end

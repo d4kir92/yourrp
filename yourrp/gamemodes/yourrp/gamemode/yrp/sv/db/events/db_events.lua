@@ -158,24 +158,26 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 		updateRoleUses(roltab.uniqueID)
 	end
 
-	ply:SetNW2Bool( "yrp_chararchived", false )
+	ply:SetYRPBool( "yrp_chararchived", false )
 
 	if cuid != ply:CharID() then
 		if GetGlobalBool( "bool_removebuildingownercharswitch", false) then
-			BuildingRemoveOwner(ply:SteamID() )
+			BuildingRemoveOwner(ply:YRPSteamID() )
 		end
 		hook.Run( "yrp_switched_character", ply, ply:CharID(), cuid)
 	end
-	if wk( cuid) then
-		YRP_SQL_UPDATE( "yrp_players", {["CurrentCharacter"] = cuid}, "SteamID = '" .. ply:SteamID() .. "'" )
+	if wk( cuid ) then
+		YRP_SQL_UPDATE( "yrp_players", {["CurrentCharacter"] = cuid}, "SteamID = '" .. ply:YRPSteamID() .. "'" )
 		if !force then
-			YRP_SQL_UPDATE( "yrp_players", {["NormalCharacter"] = cuid}, "SteamID = '" .. ply:SteamID() .. "'" )
+			YRP_SQL_UPDATE( "yrp_players", {["NormalCharacter"] = cuid}, "SteamID = '" .. ply:YRPSteamID() .. "'" )
 		end
-		ply:SetNW2Int( "yrp_charid", cuid)
-		ply:SetNW2Bool( "yrp_spawning", true)
+		ply:SetYRPInt( "yrp_charid", cuid)
+		ply:SetYRPBool( "yrp_spawning", true)
 
 		YRPPlayerLoadout( ply )
-		
+
+		ply:SetYRPBool( "yrp_characterselection", false )
+
 		timer.Simple(0.1, function()
 			if ea( ply ) then
 				ply:Spawn()
@@ -212,14 +214,14 @@ net.Receive( "yrp_event_start", function(len, ply)
 	if wk(tab) then
 		tab = tab[1]
 
-		SetGlobalBool( "yrp_event_running", true)
+		SetGlobalYRPBool( "yrp_event_running", true)
 
 		local chars = string.Explode( ";", tab.string_chars)
 		for i, charstring in pairs( chars) do
 			local chartab = string.Explode( ",", charstring)
 			for n, p in pairs(player.GetAll() ) do
-				if p:SteamID() == chartab[1] then
-					p:KillSilent()
+				if p:YRPSteamID() == chartab[1] then
+					p:OldKillSilent()
 					YRPSpawnAsCharacter(p, chartab[2], true)
 				end
 			end
@@ -237,14 +239,14 @@ net.Receive( "yrp_event_end", function(len, ply)
 	if wk(tab) then
 		tab = tab[1]
 
-		SetGlobalBool( "yrp_event_running", false)
+		SetGlobalYRPBool( "yrp_event_running", false)
 
 		local chars = string.Explode( ";", tab.string_chars)
 		for i, charstring in pairs( chars) do
 			local chartab = string.Explode( ",", charstring)
 			for n, p in pairs(player.GetAll() ) do
-				if p:SteamID() == chartab[1] then
-					p:KillSilent()
+				if p:YRPSteamID() == chartab[1] then
+					p:OldKillSilent()
 					local plytab = p:GetPlyTab()
 					if plytab then
 						YRPSpawnAsCharacter(p, plytab.NormalCharacter)

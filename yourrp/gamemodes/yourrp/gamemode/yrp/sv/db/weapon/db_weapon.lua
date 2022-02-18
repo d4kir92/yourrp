@@ -19,10 +19,10 @@ function YRPSetWeaponSettings()
 	if wk(tab) then
 		tab = tab[1]
 		
-		SetGlobalInt( "yrp_max_slots_primary", 		tonumber(tab.slots_primary) )
-		SetGlobalInt( "yrp_max_slots_secondary", 	tonumber(tab.slots_secondary) )
-		SetGlobalInt( "yrp_max_slots_sidearm",		tonumber(tab.slots_sidearm) )
-		SetGlobalInt( "yrp_max_slots_gadget", 		tonumber(tab.slots_gadget) )
+		SetGlobalYRPInt( "yrp_max_slots_primary", 		tonumber(tab.slots_primary) )
+		SetGlobalYRPInt( "yrp_max_slots_secondary", 	tonumber(tab.slots_secondary) )
+		SetGlobalYRPInt( "yrp_max_slots_sidearm",		tonumber(tab.slots_sidearm) )
+		SetGlobalYRPInt( "yrp_max_slots_gadget", 		tonumber(tab.slots_gadget) )
 	end
 end
 YRPSetWeaponSettings()

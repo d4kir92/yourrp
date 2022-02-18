@@ -113,8 +113,8 @@ net.Receive( "dealer_edit_name", function(len, ply)
 
 	local _dealer = YRP_SQL_UPDATE(DATABASE_NAME, {["name"] = _dealer_new_name}, "uniqueID = " .. _dealer_uid)
 	for i, npc in pairs(ents.GetAll() ) do
-		if npc:GetNW2String( "dealerID", "FAILED" ) == tostring(_dealer_uid) then
-			npc:SetNW2String( "name", _dealer_new_name)
+		if npc:GetYRPString( "dealerID", "FAILED" ) == tostring(_dealer_uid) then
+			npc:SetYRPString( "name", _dealer_new_name)
 		end
 	end
 end)
@@ -126,7 +126,7 @@ net.Receive( "dealer_edit_worldmodel", function(len, ply)
 
 	local _dealer = YRP_SQL_UPDATE(DATABASE_NAME, {["WorldModel"] = _dealer_new_wm}, "uniqueID = " .. _dealer_uid)
 	for i, npc in pairs(ents.GetAll() ) do
-		if npc:GetNW2String( "dealerID", "FAILED" ) == tostring(_dealer_uid) then
+		if npc:GetYRPString( "dealerID", "FAILED" ) == tostring(_dealer_uid) then
 			npc:SetModel(_dealer_new_wm)
 
 			npc:LookupSequence( "idle_all_01" )

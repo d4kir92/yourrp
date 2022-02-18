@@ -36,7 +36,7 @@ function HUDIconsDrawText(ele, text)
 		y = y + h / 16 + (h - h / 8) / 2 * ay
 		local font = "Y_" .. fontsize .. "_500"
 
-		draw.SimpleText(text, font, x, y, Color(255, 255, 255, 255), ax, ay, 1, Color(0, 0, 0) )
+		draw.SimpleText(text, font, x, y, Color( 255, 255, 255, 255), ax, ay, 1, Color( 0, 0, 0) )
 	end
 end
 
@@ -48,10 +48,10 @@ function HUDIconsDrawIcon(ele, icon, perc, text)
 		local x = lply:HudValue(ele, "POSI_X" )
 		local y = lply:HudValue(ele, "POSI_Y" )
 		local size = h
-		--draw.RoundedBox(0, x, y, h, h, Color(0, 0, 0, 60) )
+		--draw.RoundedBox(0, x, y, h, h, Color( 0, 0, 0, 60) )
 
 		if icon then
-			surface.SetDrawColor(0, 0, 0, 200)
+			surface.SetDrawColor( 0, 0, 0, 200)
 			surface.SetMaterial(icon)
 			surface.DrawTexturedRect(x, y, size, size)
 		end
@@ -67,7 +67,7 @@ function HUDIconsDrawIcon(ele, icon, perc, text)
 			render.SetStencilReferenceValue(1)
 
 			draw.NoTexture()
-			surface.SetDrawColor(Color(255, 0, 0) )
+			surface.SetDrawColor(Color( 255, 0, 0) )
 			surface.DrawTexturedRect(x, y + size - size * perc, size, size * perc)
 
 			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
@@ -86,7 +86,7 @@ function HUDIconsDrawIcon(ele, icon, perc, text)
 		end
 		local font = "Y_" .. fontsize .. "_500"
 
-		draw.SimpleText(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0) )
+		draw.SimpleText(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 	end
 end
 
@@ -118,7 +118,7 @@ function HUDIcons()
 			HUDIconsDrawIcon( "MO", MO, 1, lply:FormattedMoneyRounded(1) )
 			HUDIconsDrawIcon( "SA", SA, lply:CurrentSalaryTime() / lply:SalaryTime(), lply:FormattedSalaryRounded(1) )
 
-			if lply:GetNW2Bool( "iscasting", false) then
+			if lply:GetYRPBool( "iscasting", false) then
 				HUDIconsDrawIcon( "CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName() )
 			end
 

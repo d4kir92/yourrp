@@ -128,7 +128,7 @@ function RemoveOldBackups()
 				end
 			end
 		else
-			MsgC( Color(255, 0, 0), "RemoveOldBackups IS BROKEN (Corrupted sv.db file? Modified Gamemode?)\n" )
+			MsgC( Color( 255, 0, 0), "RemoveOldBackups IS BROKEN (Corrupted sv.db file? Modified Gamemode?)\n" )
 		end
 	end
 end

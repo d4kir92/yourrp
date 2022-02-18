@@ -3,8 +3,8 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self.color_sel = Color(0, 0, 255)
-	self.color_uns = Color(255, 255, 0)
+	self.color_sel = Color( 0, 0, 255)
+	self.color_uns = Color( 255, 255, 0)
 
 	function self:SetSelectedColor( col)
 		self.color_sel = col
@@ -25,7 +25,7 @@ function PANEL:Init()
 	end
 
 	function self.slider:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0) )
 	end
 
 	function self:AddTab(str, tbl)
@@ -47,16 +47,16 @@ function PANEL:Init()
 		_tmp.base = self
 		function _tmp:Paint(pw, ph)
 			if self:IsHovered() then
-				draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(255, 255, 255, 254), true, true)
+				draw.RoundedBoxEx(0, 0, 0, pw, ph, Color( 255, 255, 255, 254), true, true)
 			end
 
-			draw.RoundedBoxEx(0, 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "HB" ), true, true)
+			draw.RoundedBoxEx(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HB" ), true, true)
 
-			local _color = Color(255, 255, 255)
+			local _color = Color( 255, 255, 255)
 			local font = "Y_24_500"
 			if self.selected then
 				font = "Y_24_500"
-				_color = lply:InterfaceValue( "YButton", "SC" )
+				_color = YRPInterfaceValue( "YButton", "SC" )
 				draw.RoundedBox(0, YRP.ctr(2), ph - YRP.ctr(4 + 2), pw - 2 * YRP.ctr(2), YRP.ctr(4), _color)
 			end
 
@@ -84,7 +84,7 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0) )
+	--draw.RoundedBox(0, 0, 0, w, h, Color( 255, 0, 0) )
 end
 
 vgui.Register( "DYRPTabs", PANEL, "Panel" )

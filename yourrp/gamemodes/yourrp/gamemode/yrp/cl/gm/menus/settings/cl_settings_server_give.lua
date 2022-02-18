@@ -15,14 +15,14 @@ net.Receive( "setting_players", function(len)
 		_giveListView:AddColumn(YRP.lang_string( "LID_money" ) )
 
 		for n, y in pairs(player.GetAll() ) do
-			_giveListView:AddLine(y:SteamID(), y:SteamName(), y:RPName(), y:IDCardID(), y:GetNW2String( "groupName" ), y:GetNW2String( "roleName" ), y:GetNW2String( "money" ) )
+			_giveListView:AddLine(y:YRPSteamID(), y:SteamName(), y:RPName(), y:IDCardID(), y:GetYRPString( "groupName" ), y:GetYRPString( "roleName" ), y:GetYRPString( "money" ) )
 		end
 
 		function _giveListView:OnRowRightClick(lineID, line)
 			local _tmpSteamID = line:GetValue(1)
 			local ply = nil
 			for i, v in pairs(player.GetAll() ) do
-				if v:SteamID() == _tmpSteamID then
+				if v:YRPSteamID() == _tmpSteamID then
 					ply = v
 					break
 				end
@@ -53,7 +53,7 @@ net.Receive( "setting_players", function(len)
 				_rpnameFrame:SetTitle(YRP.lang_string( "LID_rpname" ) )
 
 				local _newrpname = createVGUI( "DTextEntry", _rpnameFrame, 380, 50, 10, 60)
-				_newrpname:SetText(ply:GetNW2String( "rpname", "FAILED" ) )
+				_newrpname:SetText(ply:GetYRPString( "rpname", "FAILED" ) )
 
 				local _rpnameButton = createVGUI( "DButton", _rpnameFrame, 380, 50, 10, 60 + 10 + 50)
 				_rpnameButton:SetText(YRP.lang_string( "LID_rpname" ) )
@@ -125,8 +125,8 @@ net.Receive( "setting_players", function(len)
 				function _giveFrame:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col() )
 
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_group" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0) )
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_role" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(85 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0) )
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_group" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_role" ) .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(85 + 65), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
 				end
 
 				_giveFrame:MakePopup()
@@ -142,7 +142,7 @@ net.Receive( "setting_players", function(len)
 				_idcardidFrame:SetTitle(YRP.lang_string( "LID_setidcardid" ) )
 
 				local _newidcardid = createVGUI( "DTextEntry", _idcardidFrame, 380, 50, 10, 60)
-				_newidcardid:SetText(ply:GetNW2String( "idcardid", "FAILED" ) )
+				_newidcardid:SetText(ply:GetYRPString( "idcardid", "FAILED" ) )
 
 				local _idcardidButton = createVGUI( "DButton", _idcardidFrame, 380, 50, 10, 60 + 10 + 50)
 				_idcardidButton:SetText(YRP.lang_string( "LID_setidcardid" ) )

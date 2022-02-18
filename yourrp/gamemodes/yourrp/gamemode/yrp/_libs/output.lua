@@ -29,11 +29,11 @@ end
 
 function GetRealmColor()
 	if SERVER then
-		return Color(137, 222, 255)
+		return Color( 137, 222, 255 )
 	elseif CLIENT then
-		return Color(255, 222, 102)
+		return Color( 255, 222, 102 )
 	else
-		return Color(255, 255, 0)
+		return Color( 255, 255, 0 )
 	end
 end
 
@@ -84,21 +84,21 @@ function GetChannelName( chan)
 end
 
 local channelcolors = {}
-channelcolors["noti"] = Color(255, 255, 0)
-channelcolors["db"] = Color(0, 255, 0)
-channelcolors["gm"] = Color(0, 100, 225)
-channelcolors["lang"] = Color(100, 255, 100)
-channelcolors["chat"] = Color(0, 0, 255)
-channelcolors["debug"] = Color(255, 255, 255)
-channelcolors["printtable"] = Color(255, 255, 255)
-channelcolors["missing"] = Color(255, 100, 100)
-channelcolors["error"] = Color(255, 0, 0)
+channelcolors["noti"] = Color( 255, 255, 0)
+channelcolors["db"] = Color( 0, 255, 0)
+channelcolors["gm"] = Color( 0, 100, 225)
+channelcolors["lang"] = Color( 100, 255, 100)
+channelcolors["chat"] = Color( 0, 0, 255)
+channelcolors["debug"] = Color( 255, 255, 255)
+channelcolors["printtable"] = Color( 255, 255, 255)
+channelcolors["missing"] = Color( 255, 100, 100)
+channelcolors["error"] = Color( 255, 0, 0)
 function GetChannelColor( chan)
 	chan = string.lower( chan)
 	if channelcolors[chan] != nil then
 		return channelcolors[chan]
 	else
-		return Color(255, 0, 0)
+		return Color( 255, 0, 0)
 	end
 end
 
@@ -149,10 +149,9 @@ local rc = GetRealmColor()
 local _msgcache = {}
 
 local yrpmsgantispam = {}
-
-function YRP.msg( chan, str_msg, tochat, force)
-	if !isstring( chan) then return false end
-	if !isstring(str_msg) then return false end
+function YRP.msg( chan, str_msg, tochat, force )
+	if !isstring( chan ) then return false end
+	if !isstring( str_msg ) then return false end
 
 	if force or strEmpty(str_msg) or not table.HasValue(yrpmsgantispam, str_msg) then
 		if not table.HasValue(yrpmsgantispam, str_msg) then
@@ -170,7 +169,7 @@ function YRP.msg( chan, str_msg, tochat, force)
 			end
 			local cc = GetChannelColor( cn)
 			local _yrp = GetGamemodeShortname()
-			local _yrpc = Color(0, 100, 225)
+			local _yrpc = Color( 0, 100, 225)
 
 			msgs = string.Explode( "\n", str_msg)
 			for i, msg in pairs(msgs) do
@@ -189,7 +188,7 @@ function YRP.msg( chan, str_msg, tochat, force)
 			
 				if force then
 					MsgC( rc, " " )
-					MsgC( Color(255, 0, 0), "[FORCED]" )
+					MsgC( Color( 255, 0, 0), "[FORCED]" )
 				end
 
 				MsgC( "\n" )
@@ -222,7 +221,7 @@ function YRP.msg( chan, str_msg, tochat, force)
 						err:SetDraggable(false)
 						err:SetTitle( "" )
 						function err:Paint(pw, ph)
-							draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string( "LID_error" ) .. "] " .. "Look into the console!", "Y_14_500", Color(255, 0, 0), Color(0, 0, 0) )
+							draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string( "LID_error" ) .. "] " .. "Look into the console!", "Y_14_500", Color( 255, 0, 0), Color( 0, 0, 0) )
 						end
 						timer.Simple(8, function()
 							err:Remove()
@@ -283,6 +282,7 @@ countries["CA"] = "Canada"
 countries["CH"] = "Switzerland"
 countries["CL"] = "Chile"
 countries["CN"] = "China"
+countries["CY"] = "Zypern"
 countries["CZ"] = "Czech Republic"
 
 countries["DE"] = "Germany"

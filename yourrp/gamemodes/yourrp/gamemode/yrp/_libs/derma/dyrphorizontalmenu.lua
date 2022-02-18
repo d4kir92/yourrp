@@ -4,7 +4,7 @@ function DrawSelector( btn, w, h, text, selected, hassubtabs)
 	if hassubtabs then
 		spacer = YRP.ctr(100)
 	end
-	draw.SimpleText(text, "Y_22_500", w / 2 - spacer / 2, h / 2, Color(255, 255, 255, 255), 1, 1)
+	draw.SimpleText(text, "Y_22_500", w / 2 - spacer / 2, h / 2, Color( 255, 255, 255, 255), 1, 1)
 
 	if btn.ani_h == nil then
 		btn.ani_h = 0
@@ -38,7 +38,7 @@ function PANEL:Init()
 	self.hscroller = createD( "DHorizontalScroller", self, self:GetWide(), YRP.ctr(100), 0, 0)
 
 	function self.hscroller:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 	end
 
 	self.w = 0
@@ -46,7 +46,7 @@ function PANEL:Init()
 	self.site = createD( "DPanel", self, 0, 0, 0, 0)
 
 	function self.site:Paint(pw, ph)
-		surfaceBox(0, 0, pw, ph, Color(255, 0, 0, 100) )
+		surfaceBox(0, 0, pw, ph, Color( 255, 0, 0, 100) )
 	end
 end
 
@@ -88,8 +88,8 @@ function PANEL:SiteNotFound()
 	self:ClearSite()
 
 	function self.site:Paint(pw, ph)
-		draw.SimpleText( "[Site Not Found]", "Y_18_500", pw / 2, ph / 2, Color(255, 255, 0, 255), 1, 1)
-		draw.SimpleText( "[" .. YRP.lang_string( "LID_wip" ) .. "]", "Y_18_500", pw / 2, ph / 2 + YRP.ctr(50), Color(255, 255, 0, 255), 1, 1)
+		draw.SimpleText( "[Site Not Found]", "Y_18_500", pw / 2, ph / 2, Color( 255, 255, 0, 255), 1, 1)
+		draw.SimpleText( "[" .. YRP.lang_string( "LID_wip" ) .. "]", "Y_18_500", pw / 2, ph / 2 + YRP.ctr(50), Color( 255, 255, 0, 255), 1, 1)
 	end
 end
 
@@ -141,7 +141,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 				elseif my < py and mx > px + self:GetParent():GetWide() then
 					self:GetParent():HideSubTabs()
 				end
-				--surfaceBox(0, YRP.ctr(4), pw, ph - YRP.ctr(8), Color(0, 0, 255, 255) )
+				--surfaceBox(0, YRP.ctr(4), pw, ph - YRP.ctr(8), Color( 0, 0, 255, 255) )
 			end
 
 			self.stabs.pl = createD( "DPanelList", self.stabs, self.stabs:GetWide(), self.stabs:GetTall(), 0, 0)
@@ -324,11 +324,11 @@ function PANEL:GetHeaderHeight()
 end
 
 function PANEL:Paint(w, h)
-	--surfaceBox(0, 0, w, YRP.ctr(100), Color(255, 255, 255, 10) )
-	--surfaceBox(0, 0, w, h, Color(255, 255, 0, 100) )
+	--surfaceBox(0, 0, w, YRP.ctr(100), Color( 255, 255, 255, 10) )
+	--surfaceBox(0, 0, w, h, Color( 255, 255, 0, 100) )
 	--hook.Run( "YFramePaint", self, w, h)
 	local lply = LocalPlayer()
-	draw.RoundedBox(0, 0, 0, w, self:GetHeaderHeight(), lply:InterfaceValue( "YFrame", "HI" ) )
+	draw.RoundedBox(0, 0, 0, w, self:GetHeaderHeight(), YRPInterfaceValue( "YFrame", "HI" ) )
 end
 
 vgui.Register( "DYRPHorizontalMenu", PANEL, "Panel" )

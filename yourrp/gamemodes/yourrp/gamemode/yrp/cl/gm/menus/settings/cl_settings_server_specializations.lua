@@ -12,7 +12,7 @@ net.Receive( "get_specializations", function()
 
 		_li.ea = createD( "DPanel", PARENT, ScW() - YRP.ctr(40 + 480 + 40 + 40), sph - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
 		function _li.ea:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200) )
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 200) )
 		end
 
 		_li._spe = createD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40) )

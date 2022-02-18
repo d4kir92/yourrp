@@ -103,33 +103,28 @@ AddIFElement(Blur)
 
 
 --[[ LOADOUT ]]--
-local Player = FindMetaTable( "Player" )
-function Player:InterfaceLoadout()
-	YRP.msg( "debug", "[InterfaceLoadout] " .. self:YRPName() )
+YRPIFVersion = YRPIFVersion or -1
+function IFLoadoutAll()
 	local ifeles = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if wk(ifeles) then
 		for i, ele in pairs(ifeles) do
 			if ele.name != nil then
-				if string.StartWith(ele.name, "float_" ) then
-					self:SetNW2Float(ele.name, tonumber(ele.value) )
-				elseif string.StartWith(ele.name, "bool_" ) then
-					self:SetNW2Bool(ele.name, tobool(ele.value) )
-				elseif string.StartWith(ele.name, "color_" ) then
-					self:SetNW2String(ele.name, ele.value)
-				elseif string.StartWith(ele.name, "int_" ) then
-					self:SetNW2Int(ele.name, ele.value)
+				if string.StartWith( ele.name, "float_" ) then
+					SetGlobalYRPFloat( ele.name, tonumber( ele.value ) )
+				elseif string.StartWith( ele.name, "bool_" ) then
+					SetGlobalYRPBool( ele.name, tobool( ele.value ) )
+				elseif string.StartWith( ele.name, "color_" ) then
+					SetGlobalYRPString( ele.name, tostring( ele.value ) )
+				elseif string.StartWith( ele.name, "int_" ) then
+					SetGlobalYRPInt( ele.name, tonumber( ele.value ) )
 				end
 			end
 		end
 	end
-	self:SetNW2Int( "interface_version", self:GetNW2Int( "interface_version", 0) + 1)
+	YRPIFVersion = YRPIFVersion + 1
+	SetGlobalYRPInt( "interface_version", YRPIFVersion )
 end
-
-function IFLoadoutAll()
-	for i, ply in pairs(player.GetAll() ) do
-		ply:InterfaceLoadout()
-	end
-end
+IFLoadoutAll()
 
 util.AddNetworkString( "get_interface_settings" )
 net.Receive( "get_interface_settings", function(len, ply)

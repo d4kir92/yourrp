@@ -95,7 +95,7 @@ function GetEntityItemSize(ent)
 end
 
 function IsViewModel(ent)
-	if string.find(ent:GetClass(), "viewmodel" ) or string.find(ent:GetModel(), "/c_" ) or ent:GetNW2Bool( "isviewmodel", false) or string.find(string.lower(ent:GetClass() ), "c_baseflex" ) then
+	if string.find(ent:GetClass(), "viewmodel" ) or string.find(ent:GetModel(), "/c_" ) or ent:GetYRPBool( "isviewmodel", false) or string.find(string.lower(ent:GetClass() ), "c_baseflex" ) then
 		return true
 	end
 	return false
@@ -265,7 +265,7 @@ end
 function GetSurroundingStorage(ply)
 	local _sur = {}
 	_sur.ClassName = "WORLD"
-	_sur.ParentID = ply:SteamID()
+	_sur.ParentID = ply:YRPSteamID()
 	_sur.name = "NearbyItems"
 	_sur.posx = ply:GetPos().x
 	_sur.posy = ply:GetPos().y
@@ -353,12 +353,12 @@ if CLIENT then
 							end
 						end, {})
 						function _edit_slot:Paint(pw, ph)
-							self.color = Color(0, 0, 0, 0)
+							self.color = Color( 0, 0, 0, 0)
 							if self:IsHovered() then
-								self.color = Color(255, 255, 255, 10)
+								self.color = Color( 255, 255, 255, 10)
 							end
 							surfaceBox(0, 0, pw, ph, self.color)
-							drawRBBR(0, 0, 0, pw, ph, Color(0, 0, 0), YRP.ctr(4) )
+							drawRBBR(0, 0, 0, pw, ph, Color( 0, 0, 0), YRP.ctr(4) )
 						end
 					end
 				end
@@ -395,7 +395,7 @@ if CLIENT then
 
 	function AddItemToStorage(tab)
 		if tab.entity != nil then
-			tab.intern_storageID = tab.entity:GetNW2String( "storage_uid", "" )
+			tab.intern_storageID = tab.entity:GetYRPString( "storage_uid", "" )
 		end
 		local _storage = item_handler[tonumber(tab.storageID)].pnl
 		if pa(_storage) then
@@ -404,17 +404,17 @@ if CLIENT then
 
 			local _bg = createD( "DPanel", _parent, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), _x + YRP.ctr( (tab.posx-1)*ICON_SIZE), _y + YRP.ctr( (tab.posy-1)*ICON_SIZE) )
 			function _bg:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 200) )
+				surfaceBox(0, 0, pw, ph, Color( 0, 0, 0, 200) )
 			end
 			function _bg:PaintOver(pw, ph)
 				local _br = 2
-				surfaceBox(0, 0, pw, YRP.ctr(_br), Color(0, 0, 255, 255) )
-				surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), Color(0, 0, 255, 255) )
+				surfaceBox(0, 0, pw, YRP.ctr(_br), Color( 0, 0, 255, 255) )
+				surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), Color( 0, 0, 255, 255) )
 
-				surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255) )
-				surfaceBox(pw-YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255) )
+				surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color( 0, 0, 255, 255) )
+				surfaceBox(pw-YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color( 0, 0, 255, 255) )
 
-				surfaceText(tab.PrintName, "Y_18_500", YRP.ctr(20), YRP.ctr(10), Color(255, 255, 255), 0, 0)
+				surfaceText(tab.PrintName, "Y_18_500", YRP.ctr(20), YRP.ctr(10), Color( 255, 255, 255), 0, 0)
 			end
 
 			local _item = createD( "DModelPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
@@ -431,15 +431,15 @@ if CLIENT then
 					local _i = item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item
 					_i.item = tab
 					function _i:Paint(pw, ph)
-						--surfaceBox(0, 0, pw, ph, Color(0, 0, 0, 240) )
+						--surfaceBox(0, 0, pw, ph, Color( 0, 0, 0, 240) )
 					end
 					function _i:PaintOver(pw, ph)
 						local _br = 2
-						surfaceBox(0, 0, pw, YRP.ctr(_br), Color(0, 0, 255, 255) )
-						surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), Color(0, 0, 255, 255) )
+						surfaceBox(0, 0, pw, YRP.ctr(_br), Color( 0, 0, 255, 255) )
+						surfaceBox(0, ph-YRP.ctr(_br), pw, YRP.ctr(_br), Color( 0, 0, 255, 255) )
 
-						surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255) )
-						surfaceBox(pw-YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color(0, 0, 255, 255) )
+						surfaceBox(0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color( 0, 0, 255, 255) )
+						surfaceBox(pw-YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br*2), Color( 0, 0, 255, 255) )
 					end
 					_i:Droppable( "slot" )
 					_i:SetToolTip( "PrintName: " .. _i.item.PrintName .. "\n" .. "ClassName: " .. _i.item.ClassName .. "\n" .. "WorldModel: " .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh)

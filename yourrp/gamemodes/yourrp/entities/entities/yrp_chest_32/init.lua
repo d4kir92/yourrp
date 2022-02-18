@@ -40,7 +40,7 @@ end
 
 function ENT:Think()
 	self.PermaProps = true
-	self.PermaPropID = -1
+	self.PermaPropID = 0
 
 	if self:GetPersistent() then
 		self:SetPersistent( false )

@@ -36,7 +36,7 @@ function save_clients(str)
 		if !g_db_reseted then
 			for k, ply in pairs(player.GetAll() ) do
 
-				local steamid = ply:SteamID() or ply:UniqueID()
+				local steamid = ply:YRPSteamID()
 				local _result = YRP_SQL_UPDATE(DATABASE_NAME, {["Timestamp"] = os.time()}, "SteamID = '" .. steamid .. "'" )
 
 				ply:AddPlayTime(true)
@@ -46,11 +46,11 @@ function save_clients(str)
 					if worked(_char_id, "CharID failed @save_clients" ) then
 						YRP_SQL_UPDATE( "yrp_characters", {["position"] = tostring(ply:GetPos() )}, "uniqueID = " .. _char_id)
 						YRP_SQL_UPDATE( "yrp_characters", {["angle"] = tostring(ply:EyeAngles() )}, "uniqueID = " .. _char_id)
-						if worked(ply:GetNW2String( "money", "0" ), "money failed @save_clients" ) and isnumber(tonumber(ply:GetNW2String( "money" ) )) then
-							local _mo_result = YRP_SQL_UPDATE( "yrp_characters", {["money"] = ply:GetNW2String( "money", "0" )}, "uniqueID = " .. _char_id)
+						if worked(ply:GetYRPString( "money", "0" ), "money failed @save_clients" ) and isnumber(tonumber(ply:GetYRPString( "money" ) )) then
+							local _mo_result = YRP_SQL_UPDATE( "yrp_characters", {["money"] = ply:GetYRPString( "money", "0" )}, "uniqueID = " .. _char_id)
 						end
-						if worked(ply:GetNW2String( "moneybank", "0" ), "moneybank failed @save_clients" ) and isnumber(tonumber(ply:GetNW2String( "moneybank" ) )) then
-							local _mb_result = YRP_SQL_UPDATE( "yrp_characters", {["moneybank"] = ply:GetNW2String( "moneybank", "0" )}, "uniqueID = " .. _char_id)
+						if worked(ply:GetYRPString( "moneybank", "0" ), "moneybank failed @save_clients" ) and isnumber(tonumber(ply:GetYRPString( "moneybank" ) )) then
+							local _mb_result = YRP_SQL_UPDATE( "yrp_characters", {["moneybank"] = ply:GetYRPString( "moneybank", "0" )}, "uniqueID = " .. _char_id)
 						end
 						if worked(GetMapNameDB(), "getmap failed @save_clients" ) then
 							YRP_SQL_UPDATE( "yrp_characters", {["map"] = GetMapNameDB()}, "uniqueID = " .. _char_id)
@@ -88,7 +88,7 @@ function updateRoleUses(rid)
 	rid = tonumber(rid)
 	local _count = 0
 	for k, p in pairs(player.GetAll() ) do
-		if tonumber(p:GetNW2String( "roleUniqueID" ) ) == rid then
+		if tonumber(p:GetYRPString( "roleUniqueID" ) ) == rid then
 			_count = _count + 1
 		end
 	end
@@ -199,7 +199,7 @@ function SetRole(ply, rid, force, pmid)
 		set_role_values(ply)
 	end
 
-	ply:SetNW2Bool( "yrpspawnedwithcharacter", true)
+	ply:SetYRPBool( "yrpspawnedwithcharacter", true)
 end
 
 function GiveRole(ply, rid, force)
@@ -275,7 +275,7 @@ function RecreateNewIDCardID()
 		local char = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = '" .. ply:CharID() .. "'" )
 		if wk( char) then
 			char = char[1]
-			ply:SetNW2String( "idcardid", char.text_idcardid)
+			ply:SetYRPString( "idcardid", char.text_idcardid)
 		end
 	end
 end
@@ -288,7 +288,7 @@ function SetIDCardID(ply)
 		CreateNewIDCardID(ply:CharID() )
 	end
 	char = ply:YRPGetCharacterTable()
-	ply:SetNW2String( "idcardid", char.text_idcardid)
+	ply:SetYRPString( "idcardid", char.text_idcardid)
 end
 
 function set_role(ply, rid)
@@ -300,19 +300,19 @@ function set_role(ply, rid)
 		if wk(old_rid) then
 			old_rid = old_rid.roleID
 			local _result = YRP_SQL_UPDATE( "yrp_characters", {["roleID"] = rid}, "uniqueID = " .. ply:CharID() )
-			local _role = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. rid)
-			local _old_uid = ply:GetNW2String( "roleUniqueID", "1" )
-			ply:SetNW2String( "roleUniqueID", rid)
+			local gid = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. rid)
+			local _old_uid = ply:GetYRPString( "roleUniqueID", "1" )
+			ply:SetYRPString( "roleUniqueID", rid)
 
 			SetIDCardID(ply)
 
-			if _role != nil then
-				_role = tonumber(_role[1].int_groupID)
-				if isnumber(_role) then
-					local _result2 = YRP_SQL_UPDATE( "yrp_characters", {["groupID"] = _role}, "uniqueID = " .. ply:CharID() )
-					ply:SetNW2String( "groupUniqueID", _role)
+			if gid and gid[1] then
+				gid = tonumber(gid[1].int_groupID)
+				if isnumber(gid) then
+					local _result2 = YRP_SQL_UPDATE( "yrp_characters", {["groupID"] = gid}, "uniqueID = " .. ply:CharID() )
+					ply:SetYRPString( "groupUniqueID", gid)
 				else
-					YRP.msg( "note", "_role = " .. _role)
+					YRP.msg( "note", "_role = " .. tostring( gid ) )
 				end
 			else
 				YRP.msg( "note", "_role failed" )
@@ -380,7 +380,7 @@ function set_role_values(ply, pmid)
 				end
 				local pm = pms[pmid]
 				if wk(pm) and pm.string_model then
-					ply:SetNW2String( "string_playermodel", pm.string_model)
+					ply:SetYRPString( "string_playermodel", pm.string_model)
 					ply:SetModel(pm.string_model)
 
 					local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
@@ -389,92 +389,92 @@ function set_role_values(ply, pmid)
 			end
 		else
 			YRP.msg( "note", "[SET ROLE VALUES] No role or/and no character -> Suicide" )
-			ply:KillSilent()
+			ply:OldKillSilent()
 		end
 
 		--[RE]--check_inv(ply, ply:CharID() )
 
 		if worked(rolTab, "set_role_values rolTab" ) then
-			ply:SetNW2String( "roleIcon", rolTab.string_icon)
-			ply:SetNW2String( "roleColor", rolTab.string_color)
-			ply:SetNW2Int( "speedwalk", rolTab.int_speedwalk)
-			ply:SetNW2Int( "speedrun", rolTab.int_speedrun)
-			ply:SetWalkSpeed(ply:GetNW2Int( "speedwalk" ) )
-			ply:SetRunSpeed(ply:GetNW2Int( "speedrun" ) )
+			ply:SetYRPString( "roleIcon", rolTab.string_icon)
+			ply:SetYRPString( "roleColor", rolTab.string_color)
+			ply:SetYRPInt( "speedwalk", tonumber( rolTab.int_speedwalk ) )
+			ply:SetYRPInt( "speedrun", tonumber( rolTab.int_speedrun ) )
+			ply:SetWalkSpeed(ply:GetYRPInt( "speedwalk" ) )
+			ply:SetRunSpeed(ply:GetYRPInt( "speedrun" ) )
 
-			ply:SetMaxHealth(tonumber(rolTab.int_hpmax) )
-			ply:SetHealth(tonumber(rolTab.int_hp) )
-			ply:SetNW2Int( "HealthReg", tonumber(rolTab.int_hpup) )
+			ply:SetMaxHealth( tonumber( rolTab.int_hpmax ) )
+			ply:SetHealth( tonumber(rolTab.int_hp) )
+			ply:SetYRPInt( "HealthReg", tonumber( rolTab.int_hpup ) )
 
-			ply:SetNW2Int( "MaxArmor", tonumber(rolTab.int_armax) )
-			ply:SetNW2Int( "ArmorReg", tonumber(rolTab.int_arup) )
+			ply:SetYRPInt( "MaxArmor", tonumber( rolTab.int_armax ) )
+			ply:SetYRPInt( "ArmorReg", tonumber( rolTab.int_arup ) )
 			ply:SetArmor(tonumber(rolTab.int_ar) )
 
-			ply:SetNW2Float( "GetMaxStamina", tonumber(rolTab.int_stmax) )
-			ply:SetNW2Float( "GetCurStamina", tonumber(rolTab.int_st) )
-			ply:SetNW2Float( "staminup", tonumber(rolTab.float_stup) )
-			ply:SetNW2Float( "stamindown", tonumber(rolTab.float_stdn) )
+			ply:SetYRPFloat( "GetMaxStamina", tonumber(rolTab.int_stmax) )
+			ply:SetYRPFloat( "GetCurStamina", tonumber(rolTab.int_st) )
+			ply:SetYRPFloat( "staminup", tonumber(rolTab.float_stup) )
+			ply:SetYRPFloat( "stamindown", tonumber(rolTab.float_stdn) )
 
 			local abtype = rolTab.string_ability
-			ply:SetNW2String( "GetAbilityType", abtype)
+			ply:SetYRPString( "GetAbilityType", abtype)
 			if abtype == "none" then
-				ply:SetNW2Int( "GetMaxAbility", 1)
-				ply:SetNW2Int( "GetCurAbility", 0)
-				ply:SetNW2Float( "GetRegAbility", 0)
-				ply:SetNW2Float( "GetRegTick", 0)
+				ply:SetYRPInt( "GetMaxAbility", 1)
+				ply:SetYRPInt( "GetCurAbility", 0)
+				ply:SetYRPFloat( "GetRegAbility", 0)
+				ply:SetYRPFloat( "GetRegTick", 0)
 			elseif abtype == "rage" then
-				ply:SetNW2Int( "GetMaxAbility", 100)
-				ply:SetNW2Int( "GetCurAbility", 0)
-				ply:SetNW2Float( "GetRegAbility", 0)
-				ply:SetNW2Float( "GetRegTick", 0)
+				ply:SetYRPInt( "GetMaxAbility", 100)
+				ply:SetYRPInt( "GetCurAbility", 0)
+				ply:SetYRPFloat( "GetRegAbility", 0)
+				ply:SetYRPFloat( "GetRegTick", 0)
 			elseif abtype == "mana" then
-				ply:SetNW2Int( "GetMaxAbility", 100)
-				ply:SetNW2Int( "GetCurAbility", 0)
-				ply:SetNW2Float( "GetRegAbility", 0.4)
-				ply:SetNW2Float( "GetRegTick", 1)
+				ply:SetYRPInt( "GetMaxAbility", 100)
+				ply:SetYRPInt( "GetCurAbility", 0)
+				ply:SetYRPFloat( "GetRegAbility", 0.4)
+				ply:SetYRPFloat( "GetRegTick", 1)
 			elseif abtype == "energy" then
-				ply:SetNW2Int( "GetMaxAbility", 100)
-				ply:SetNW2Int( "GetCurAbility", 0)
-				ply:SetNW2Float( "GetRegAbility", 1)
-				ply:SetNW2Float( "GetRegTick", 0.1)
+				ply:SetYRPInt( "GetMaxAbility", 100)
+				ply:SetYRPInt( "GetCurAbility", 0)
+				ply:SetYRPFloat( "GetRegAbility", 1)
+				ply:SetYRPFloat( "GetRegTick", 0.1)
 			elseif abtype == "force" then
-				ply:SetNW2Int( "GetMaxAbility", 100)
-				ply:SetNW2Int( "GetCurAbility", 0)
-				ply:SetNW2Float( "GetRegAbility", 1)
-				ply:SetNW2Float( "GetRegTick", 0.1)
+				ply:SetYRPInt( "GetMaxAbility", 100)
+				ply:SetYRPInt( "GetCurAbility", 0)
+				ply:SetYRPFloat( "GetRegAbility", 1)
+				ply:SetYRPFloat( "GetRegTick", 0.1)
 			end
 
 			ply:SetJumpPower(tonumber(rolTab.int_powerjump) ) -- * rolTab.playermodelsize)
-			ply:SetNW2String( "salary", rolTab.int_salary)
-			ply:SetNW2String( "roleName", rolTab.string_name)
+			ply:SetYRPString( "salary", rolTab.int_salary)
+			ply:SetYRPString( "roleName", rolTab.string_name)
 			
 			ply.DarkRPVars = ply.DarkRPVars or {}
 			ply.DarkRPVars.job = rolTab.string_name
 
-			ply:SetNW2Bool( "isInstructor", tobool(rolTab.bool_instructor) )
-			ply:SetNW2String( "roleDescription", rolTab.string_description)
+			ply:SetYRPBool( "isInstructor", tobool(rolTab.bool_instructor) )
+			ply:SetYRPString( "roleDescription", rolTab.string_description)
 
-			ply:SetNW2Bool( "isVoteable", tobool(rolTab.bool_voteable) )
+			ply:SetYRPBool( "isVoteable", tobool(rolTab.bool_voteable) )
 
-			ply:SetNW2Int( "salarytime", rolTab.int_salarytime)
-			ply:SetNW2Int( "nextsalarytime", CurTime() + rolTab.int_salarytime)
+			ply:SetYRPInt( "salarytime", tonumber( rolTab.int_salarytime ) )
+			ply:SetYRPInt( "nextsalarytime", CurTime() + tonumber( rolTab.int_salarytime ) )
 
-			ply:SetNW2Bool( "bool_hunger", tobool(rolTab.bool_hunger) )
-			ply:SetNW2Bool( "bool_thirst", tobool(rolTab.bool_thirst) )
-			ply:SetNW2Bool( "bool_stamina", tobool(rolTab.bool_stamina) )
+			ply:SetYRPBool( "bool_hunger", tobool(rolTab.bool_hunger) )
+			ply:SetYRPBool( "bool_thirst", tobool(rolTab.bool_thirst) )
+			ply:SetYRPBool( "bool_stamina", tobool(rolTab.bool_stamina) )
 
-			ply:SetNW2Bool( "bool_canbeagent", tobool(rolTab.bool_canbeagent) )
-			ply:SetNW2Bool( "isadminonly", tobool(rolTab.bool_adminonly) )
+			ply:SetYRPBool( "bool_canbeagent", tobool(rolTab.bool_canbeagent) )
+			ply:SetYRPBool( "isadminonly", tobool(rolTab.bool_adminonly) )
 
-			--ply:SetNW2Int( "int_role_cooldown", tonumber(rolTab.int_cooldown) )
-			ply:SetNW2String( "int_roleondeath", rolTab.int_roleondeath)
+			--ply:SetYRPInt( "int_role_cooldown", tonumber(rolTab.int_cooldown) )
+			ply:SetYRPString( "int_roleondeath", rolTab.int_roleondeath)
 
-			ply:SetNW2Int( "int_securitylevel", rolTab.int_securitylevel)
+			ply:SetYRPInt( "int_securitylevel", rolTab.int_securitylevel )
 
-			ply:SetNW2Int( "int_namelength", rolTab.int_namelength)
+			ply:SetYRPInt( "int_namelength", rolTab.int_namelength )
 
-			ply:SetNW2String( "string_hud", rolTab.string_hud)
-			ply:SetNW2String( "string_hud_mask", rolTab.string_hud_mask)
+			ply:SetYRPString( "string_hud", rolTab.string_hud)
+			ply:SetYRPString( "string_hud_mask", rolTab.string_hud_mask)
 
 			local _licenseIDs = string.Explode( ",", rolTab.string_licenses)
 			for i, lic in pairs(_licenseIDs) do
@@ -483,10 +483,10 @@ function set_role_values(ply, pmid)
 				end
 			end
 
-			ply:SetNW2String( "maxamount", rolTab.int_maxamount)
+			ply:SetYRPString( "maxamount", rolTab.int_maxamount)
 
-			ply:SetNW2String( "sweps", rolTab.string_sweps)
-			ply:SetNW2String( "sweps_onspawn", rolTab.string_sweps_onspawn)
+			ply:SetYRPString( "sweps", rolTab.string_sweps)
+			ply:SetYRPString( "sweps_onspawn", rolTab.string_sweps_onspawn)
 
 			-- ammos
 			local tammos = rolTab.string_ammos or ""
@@ -504,7 +504,7 @@ function set_role_values(ply, pmid)
 			--custom flags
 			local allflags = YRP_SQL_SELECT( "yrp_flags", "*", nil)
 			for i, flag in pairs( allflags) do
-				ply:SetNW2Bool( "bool_" .. flag.string_name, false)
+				ply:SetYRPBool( "bool_" .. flag.string_name, false)
 			end
 
 			local customflags = string.Explode( ",", rolTab.string_customflags)
@@ -513,27 +513,27 @@ function set_role_values(ply, pmid)
 					local fl = YRP_SQL_SELECT( "yrp_flags", "*", "uniqueID = '" .. flag .. "'" )
 					if wk(fl) then
 						fl = fl[1]
-						ply:SetNW2Bool( "bool_" .. fl.string_name, true)
+						ply:SetYRPBool( "bool_" .. fl.string_name, true)
 					end
 				end
 			end
 
-			ply:SetNW2Float( "float_dmgtype_burn", tonumber(rolTab.float_dmgtype_burn) )
-			ply:SetNW2Float( "float_dmgtype_bullet", tonumber(rolTab.float_dmgtype_bullet) )
-			ply:SetNW2Float( "float_dmgtype_energybeam", tonumber(rolTab.float_dmgtype_energybeam) )
+			ply:SetYRPFloat( "float_dmgtype_burn", tonumber(rolTab.float_dmgtype_burn) )
+			ply:SetYRPFloat( "float_dmgtype_bullet", tonumber(rolTab.float_dmgtype_bullet) )
+			ply:SetYRPFloat( "float_dmgtype_energybeam", tonumber(rolTab.float_dmgtype_energybeam) )
 
 			-- Darkrp Team
 			ply:SetTeam(rolTab.uniqueID) -- disables damage against npcs
 		else
 			YRP.msg( "note", "[SET ROLE VALUES] No role selected -> Suicide" )
-			ply:KillSilent()
+			ply:OldKillSilent()
 		end
 
 		if wk(groTab) then
-			ply:SetNW2String( "groupName", groTab.string_name)
-			ply:SetNW2String( "groupUniqueID", groTab.uniqueID)
-			ply:SetNW2String( "groupColor", groTab.string_color)
-			ply:SetNW2String( "groupIcon", groTab.string_icon)
+			ply:SetYRPString( "groupName", groTab.string_name)
+			ply:SetYRPString( "groupUniqueID", groTab.uniqueID)
+			ply:SetYRPString( "groupColor", groTab.string_color)
+			ply:SetYRPString( "groupIcon", groTab.string_icon)
 
 			if GetGlobalBool( "bool_team_color", true) then
 				timer.Simple(0.12, function()
@@ -543,14 +543,14 @@ function set_role_values(ply, pmid)
 				end)
 			end
 
-			ply:SetNW2Bool( "groupiscp", tobool(groTab.bool_iscp) )
+			ply:SetYRPBool( "groupiscp", tobool(groTab.bool_iscp) )
 
 			local faction = GetFactionTable(groTab.uniqueID)
-			ply:SetNW2String( "factionName", faction.string_name )
-			ply:SetNW2String( "factionUniqueID", faction.uniqueID)
-			ply:SetNW2String( "factionColor", faction.string_color )
+			ply:SetYRPString( "factionName", faction.string_name )
+			ply:SetYRPString( "factionUniqueID", faction.uniqueID)
+			ply:SetYRPString( "factionColor", faction.string_color )
 
-			ply:SetNW2String( "sweps_group", groTab.string_sweps)
+			ply:SetYRPString( "sweps_group", groTab.string_sweps)
 
 			--sweps
 			local tmpSWEPTable = string.Explode( ",", groTab.string_sweps)
@@ -576,10 +576,10 @@ function set_role_values(ply, pmid)
 			end
 		else
 			YRP.msg( "note", "[SET ROLE VALUES] No group selected -> Suicide" )
-			ply:KillSilent()
+			ply:OldKillSilent()
 		end
 
-		ply:SetNW2Bool( "loaded", true)
+		ply:SetYRPBool( "loaded", true)
 	end
 end
 
@@ -597,16 +597,16 @@ function set_ply_pos(ply, map, pos, ang)
 	end)
 end
 
-function YRPOpenCharacterSelection(ply)
+function YRPCLIENTOpenCharacterSelection(ply)
 	if IsValid(ply) and ply:IsPlayer() and ply:IsFullyAuthenticated() then
-		--YRP.msg( "db", "[" .. ply:SteamName() .. "] -> open character selection." )
-		local steamid = ply:SteamID() or ply:UniqueID()
-
+		YRP.msg( "db", "[" .. ply:SteamName() .. "] -> open character selection." )
+		local steamid = ply:YRPSteamID()
+		
 		net.Start( "YRPOpenCharacterMenu" )
 		net.Send(ply)
 	else
-		timer.Simple(0.001, function()
-			YRPOpenCharacterSelection(ply)
+		timer.Simple(0.01, function()
+			YRPCLIENTOpenCharacterSelection(ply)
 		end)
 	end
 end
@@ -614,9 +614,9 @@ end
 function add_yrp_player(ply, steamid)
 	YRP.msg( "db", "[" .. ply:SteamName() .. "] -> Add player to database." )
 
-	steamid = steamid or ply:SteamID() or ply:UniqueID()
+	steamid = steamid or ply:YRPSteamID()
 
-	ply:KillSilent()
+	ply:OldKillSilent()
 
 	if steamid != nil and steamid != false then
 		local _SteamName = tostring(ply:SteamName() )
@@ -630,7 +630,7 @@ function add_yrp_player(ply, steamid)
 		vals = vals .. "" .. YRP_SQL_STR_IN( _SteamName ) .. ", "
 		vals = vals .. "'" .. _ostime .. "'"
 
-		local _insert = YRP_SQL_INSERT_INTO( "yrp_players", cols, vals)
+		local _insert = YRP_SQL_INSERT_INTO( "yrp_players", cols, vals )
 		if _insert == nil then
 			YRP.msg( "db", "[" .. ply:SteamName() .. "] -> Successfully added player to database." )
 
@@ -644,7 +644,7 @@ end
 function check_yrp_player(ply, steamid)
 	--YRP.msg( "db", "[" .. ply:SteamName() .. "] -> Checking if player is in database." )
 
-	steamid = steamid or ply:SteamID() or ply:UniqueID()
+	steamid = steamid or ply:YRPSteamID()
 
 	if steamid != nil and steamid != false or game.SinglePlayer() then
 		local _result = YRP_SQL_SELECT( "yrp_players", "*", "SteamID = '" .. steamid .. "'" )
@@ -675,7 +675,7 @@ function check_yrp_player(ply, steamid)
 end
 
 function check_yrp_client(ply, steamid)
-	--YRP.msg( "db", "[" .. ply:SteamName() .. "] -> Check client ( " .. ply:SteamID() .. " )" )
+	--YRP.msg( "db", "[" .. ply:SteamName() .. "] -> Check client ( " .. ply:YRPSteamID() .. " )" )
 
 	check_yrp_player(ply, steamid)
 
@@ -744,7 +744,7 @@ net.Receive( "giveRole", function(len, ply)
 	local _tmpSteamID = net.ReadString()
 	local uniqueIDRole = net.ReadInt(16)
 	for k, _ply in pairs(player.GetAll() ) do
-		if IsValid(_ply) and tostring(_ply:SteamID() ) == tostring(_tmpSteamID) then
+		if IsValid(_ply) and tostring(_ply:YRPSteamID() ) == tostring(_tmpSteamID) then
 			YRPRemRolVals(_ply)
 			RemGroVals(_ply)
 			set_role(_ply, uniqueIDRole)
@@ -767,7 +767,7 @@ function YRPIsWhitelisted( ply, id )
 	if wk(_role) then
 		_role = _role[1]
 		
-		local steamid = ply:SteamID() or ply:UniqueID()
+		local steamid = ply:YRPSteamID()
 		local _plyAllowedAll = YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "'" )
 		if worked(_plyAllowedAll, "_plyAllowedAll", true) then
 			_plyAllowedAll = _plyAllowedAll[1]
@@ -819,12 +819,12 @@ end
 
 util.AddNetworkString( "voteNo" )
 net.Receive( "voteNo", function(len, ply)
-	ply:SetNW2String( "voteStatus", "no" )
+	ply:SetYRPString( "voteStatus", "no" )
 end)
 
 util.AddNetworkString( "voteYes" )
 net.Receive( "voteYes", function(len, ply)
-	ply:SetNW2String( "voteStatus", "yes" )
+	ply:SetYRPString( "voteStatus", "yes" )
 end)
 
 local voting = false
@@ -834,26 +834,26 @@ function startVote(ply, table)
 	if !voting then
 		voting = true
 		for k, v in pairs(player.GetAll() ) do
-			v:SetNW2String( "voteStatus", "not voted" )
-			v:SetNW2Bool( "voting", true)
-			v:SetNW2String( "voteName", ply:RPName() )
-			v:SetNW2String( "voteRole", table[1].string_name)
+			v:SetYRPString( "voteStatus", "not voted" )
+			v:SetYRPBool( "voting", true)
+			v:SetYRPString( "voteName", ply:RPName() )
+			v:SetYRPString( "voteRole", table[1].string_name)
 		end
 		votePly = ply
 		voteCount = 30
 		timer.Create( "voteRunning", 1, 0, function()
 			for k, v in pairs(player.GetAll() ) do
-				v:SetNW2Int( "voteCD", voteCount)
+				v:SetYRPInt( "voteCD", voteCount)
 			end
 			if voteCount <= 0 then
 				voting = false
 				local _yes = 0
 				local _no = 0
 				for k, v in pairs(player.GetAll() ) do
-					v:SetNW2Bool( "voting", false)
-					if v:GetNW2String( "voteStatus", "not voted" ) == "yes" then
+					v:SetYRPBool( "voting", false)
+					if v:GetYRPString( "voteStatus", "not voted" ) == "yes" then
 						_yes = _yes + 1
-					elseif v:GetNW2String( "voteStatus", "not voted" ) == "no" then
+					elseif v:GetYRPString( "voteStatus", "not voted" ) == "no" then
 						_no = _no + 1
 					end
 				end
@@ -921,7 +921,7 @@ function canGetRole(ply, roleID, want)
 				end
 			end
 
-			if tonumber(ply:GetNW2Int( "ts_role_" .. ply:GetRoleUID(), 0) ) > CurTime() and want then
+			if tonumber(ply:GetYRPInt( "ts_role_" .. ply:GetRoleUID(), 0) ) > CurTime() and want then
 				local text = ply:YRPName() .. " is on cooldown for this role!"
 				YRP.msg( "gm", "[canGetRole] " .. text)
 				
@@ -1011,13 +1011,13 @@ net.Receive( "wantRole", function(len, ply)
 	YRP.msg( "note", ply:YRPName() .. " wants the role " .. uniqueIDRole)
 
 	if canGetRole(ply, uniqueIDRole, true) then
-		ply:SetNW2Bool( "switchrole", true)
+		ply:SetYRPBool( "switchrole", true)
 		--Remove Sweps from old role
 		YRPRemRolVals(ply)
 		RemGroVals(ply)
 
 		if GetGlobalBool( "bool_players_die_on_role_switch", false) then
-			ply:KillSilent()
+			ply:OldKillSilent()
 		end
 
 		--New role
@@ -1029,9 +1029,9 @@ net.Receive( "wantRole", function(len, ply)
 		end
 	
 		local reusetime = math.Round(CurTime() + ply:GetRoleCooldown(), 0)
-		ply:SetNW2Int( "ts_role_" .. ply:GetRoleUID(), reusetime)
+		ply:SetYRPInt( "ts_role_" .. ply:GetRoleUID(), reusetime)
 
-		ply:SetNW2Bool( "switchrole", false)
+		ply:SetYRPBool( "switchrole", false)
 	elseif canVoteRole(ply, uniqueIDRole) then
 		local _role = YRP_SQL_SELECT( "yrp_ply_roles" , "*", "uniqueID = " .. uniqueIDRole)
 		startVote(ply, _role)
@@ -1043,10 +1043,12 @@ end)
 local Player = FindMetaTable( "Player" )
 
 function Player:SetupCharID()
-	local charid = YRP_SQL_SELECT( DATABASE_NAME, "*", "steamid = '" .. self:SteamID() .. "'" )
-	
-	if charid and charid[1] then
-		charid = charid[1].CurrentCharacter
-		self:SetNW2Int( "yrp_charid", tonumber( charid ) )
+	if IsValid( self ) then
+		local charid = YRP_SQL_SELECT( DATABASE_NAME, "*", "steamid = '" .. self:YRPSteamID() .. "'" )
+		
+		if charid and charid[1] then
+			charid = charid[1].CurrentCharacter
+			self:SetYRPInt( "yrp_charid", tonumber( charid ) )
+		end
 	end
 end

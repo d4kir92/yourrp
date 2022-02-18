@@ -84,7 +84,7 @@ function YRPUpdateCharSlot(ply, art, pri)
 	local sweps = table.concat( tab, "," )
 	YRP_SQL_UPDATE(DATABASE_NAME, {["slot_" .. art] = sweps}, "uniqueID = '" .. ply:CharID() .. "'" )
 
-	ply:SetNW2String( "slot_" .. art, sweps)
+	ply:SetYRPString( "slot_" .. art, sweps)
 end
 
 function YRPGetCharSWEPS(ply)
@@ -99,10 +99,10 @@ function YRPGetCharSWEPS(ply)
 		tab["slot_sidearm"] = string.Explode( ",", dbtab.slot_sidearm)
 		tab["slot_gadget"] = string.Explode( ",", dbtab.slot_gadget)
 
-		ply:SetNW2String( "slot_primary", dbtab.slot_primary)
-		ply:SetNW2String( "slot_secondary", dbtab.slot_secondary)
-		ply:SetNW2String( "slot_sidearm", dbtab.slot_sidearm)
-		ply:SetNW2String( "slot_gadget", dbtab.slot_gadget)
+		ply:SetYRPString( "slot_primary", dbtab.slot_primary)
+		ply:SetYRPString( "slot_secondary", dbtab.slot_secondary)
+		ply:SetYRPString( "slot_sidearm", dbtab.slot_sidearm)
+		ply:SetYRPString( "slot_gadget", dbtab.slot_gadget)
 	end
 
 	return tab
@@ -169,7 +169,7 @@ net.Receive( "yrp_slot_swep_add", function(len, ply)
 	local art = net.ReadString()
 	local cname = net.ReadString()
 
-	local currentsweps = ply:GetNW2String( "slot_" .. art, "" )
+	local currentsweps = ply:GetYRPString( "slot_" .. art, "" )
 
 	local tab = string.Explode( ",", currentsweps)
 	table.insert( tab, cname )
@@ -185,7 +185,7 @@ net.Receive( "yrp_slot_swep_rem", function(len, ply)
 	local art = net.ReadString()
 	local cname = net.ReadString()
 
-	local currentsweps = ply:GetNW2String( "slot_" .. art, "" )
+	local currentsweps = ply:GetYRPString( "slot_" .. art, "" )
 	local tab = string.Explode( ",", currentsweps)
 	table.RemoveByValue(tab, cname)
 
@@ -194,13 +194,15 @@ net.Receive( "yrp_slot_swep_rem", function(len, ply)
 	YRPUpdateCharSlot(ply, art, tab)
 end)
 
-function YRPSendCharCount(ply)
-	local count = 0
-	local result = YRP_SQL_SELECT(DATABASE_NAME, "*", "SteamID = '" .. ply:SteamID() .. "'" )
-	if wk(result) then
-		count = table.Count(result)
+function YRPSendCharCount( ply )
+	if IsValid( ply ) then
+		local count = 0
+		local result = YRP_SQL_SELECT( DATABASE_NAME, "*", "SteamID = '" .. ply:YRPSteamID() .. "'" )
+		if wk(result) then
+			count = table.Count( result )
+		end
+		ply:SetYRPInt( "char_count", count )
 	end
-	ply:SetNW2Int( "char_count", count)
 end
 
 local Player = FindMetaTable( "Player" )
@@ -210,35 +212,35 @@ function Player:YRPCharacterLoadout()
 	local plytab = self:GetPlyTab()
 
 	if wk( chatab) then
-		self:SetNW2Int( "int_xp", chatab.int_xp)
-		self:SetNW2String( "int_level", chatab.int_level)
+		self:SetYRPInt( "int_xp", chatab.int_xp)
+		self:SetYRPString( "int_level", chatab.int_level)
 
-		self:SetNW2Int( "pmid", tonumber( chatab.playermodelID) )
+		self:SetYRPInt( "pmid", tonumber( chatab.playermodelID) )
 
-		self:SetNW2Int( "int_warnings", chatab.int_warnings)
-		self:SetNW2Int( "int_violations", chatab.int_violations)
-		self:SetNW2Int( "int_arrests", chatab.int_arrests)
+		self:SetYRPInt( "int_warnings", chatab.int_warnings)
+		self:SetYRPInt( "int_violations", chatab.int_violations)
+		self:SetYRPInt( "int_arrests", chatab.int_arrests)
 
-		self:SetNW2String( "string_birthday", chatab.string_birthday)
+		self:SetYRPString( "string_birthday", chatab.string_birthday)
 		if GetGlobalBool( "bool_characters_bodyheight", false) then
-			self:SetNW2Int( "int_bodyheight", chatab.int_bodyheight)
+			self:SetYRPInt( "int_bodyheight", chatab.int_bodyheight)
 		end
 		if GetGlobalBool( "bool_characters_weight", false) then
-			self:SetNW2Int( "int_weight", chatab.int_weight)
+			self:SetYRPInt( "int_weight", chatab.int_weight)
 		end
 
 		for i = 0, 19 do
-			self:SetNW2String( "bg" .. i, chatab["bg" .. i])
+			self:SetYRPString( "bg" .. i, chatab["bg" .. i])
 		end
 
 		local levelsystem = YRP_SQL_SELECT( "yrp_levelsystem", "*", nil)
 		if wk(levelsystem) then
 			levelsystem = levelsystem[1]
-			self:SetNW2String( "int_xp_for_levelup", levelsystem.int_xp_for_levelup)
-			self:SetNW2String( "float_multiplier", levelsystem.float_multiplier)
+			self:SetYRPString( "int_xp_for_levelup", levelsystem.int_xp_for_levelup)
+			self:SetYRPString( "float_multiplier", levelsystem.float_multiplier)
 		end
 
-		self:SetNW2String( "text_playtime", chatab.text_playtime)
+		self:SetYRPString( "text_playtime", chatab.text_playtime)
 	end
 end
 
@@ -255,19 +257,19 @@ function Player:VisualEquipment(name, slot)
 						_item = _item[1]
 						local _model = _item.WorldModel
 
-						local _old = self:GetNW2Entity(name)
+						local _old = self:GetYRPEntity(name)
 						if ea(_old) then
 							_old:Remove()
 						end
-						self:SetNW2String(name, _model)
+						self:SetYRPString(name, _model)
 						local _visual = ents.Create( "prop_dynamic" )
 						_visual:SetModel(_item.WorldModel)
 						_visual:SetOwner(self)
-						_visual:SetNW2Bool( "isviewmodel", true)
+						_visual:SetYRPBool( "isviewmodel", true)
 						_visual:Spawn()
 
-						self:SetNW2Entity(name, _visual)
-						self:SetNW2String(name .. "ClassName", _item.ClassName)
+						self:SetYRPEntity(name, _visual)
+						self:SetYRPString(name .. "ClassName", _item.ClassName)
 
 						local _maxs = _visual:OBBMaxs()
 						local _mins = _visual:OBBMins()
@@ -283,27 +285,27 @@ function Player:VisualEquipment(name, slot)
 							corax = 0
 							coray = -90
 							coraz = 90
-							self:SetNW2String(name .. "thick", _x)
+							self:SetYRPString(name .. "thick", _x)
 						elseif _x >= _z and _y >= _z then
 							corax = 0
 							coray = 0
 							coraz = 0
-							self:SetNW2String(name .. "thick", _z)
+							self:SetYRPString(name .. "thick", _z)
 						elseif _x >= _y and _z >= _y then
 							corax = 90
 							coray = 90
 							coraz = 90
-							self:SetNW2String(name .. "thick", _y)
+							self:SetYRPString(name .. "thick", _y)
 						end
-						self:SetNW2String(name .. "corax", corax)
-						self:SetNW2String(name .. "coray", coray)
-						self:SetNW2String(name .. "coraz", coraz)
+						self:SetYRPString(name .. "corax", corax)
+						self:SetYRPString(name .. "coray", coray)
+						self:SetYRPString(name .. "coraz", coraz)
 					else
-						local _old = self:GetNW2Entity(name)
+						local _old = self:GetYRPEntity(name)
 						if ea(_old) then
 							_old:Remove()
-							self:SetNW2Entity(name, NULL)
-							self:SetNW2String(name .. "ClassName", "" )
+							self:SetYRPEntity(name, NULL)
+							self:SetYRPString(name .. "ClassName", "" )
 						end
 					end
 					return _item
@@ -327,7 +329,7 @@ function Player:SetRPName(str, from)
 		YRP_SQL_UPDATE( "yrp_characters", {["rpname"] = newname}, "uniqueID = " .. self:CharID() )
 
 		newname = newname
-		self:SetNW2String( "rpname", newname)
+		self:SetYRPString( "rpname", newname)
 
 		YRP.msg( "note", oldname .. " changed name to " .. newname, true)
 	end
@@ -400,9 +402,9 @@ util.AddNetworkString( "change_rpdescription" )
 net.Receive( "change_rpdescription", function(len, ply)
 	local _new_rp_description = net.ReadString()
 	YRP_SQL_UPDATE( "yrp_characters", {["rpdescription"] = _new_rp_description}, "uniqueID = " .. ply:CharID() )
-	ply:SetNW2String( "rpdescription", _new_rp_description)
+	ply:SetYRPString( "rpdescription", _new_rp_description)
 	for i, v in pairs(string.Explode( "\n", _new_rp_description) ) do
-		ply:SetNW2String( "rpdescription" .. i, v)
+		ply:SetYRPString( "rpdescription" .. i, v)
 	end
 end)
 
@@ -410,19 +412,19 @@ util.AddNetworkString( "change_birthday" )
 net.Receive( "change_birthday", function(len, ply)
 	local _new_birthday = net.ReadString()
 	YRP_SQL_UPDATE( "yrp_characters", {["string_birthday"] = _new_birthday}, "uniqueID = " .. ply:CharID() )
-	ply:SetNW2String( "string_birthday", _new_birthday)
+	ply:SetYRPString( "string_birthday", _new_birthday)
 end)
 util.AddNetworkString( "change_bodyheight" )
 net.Receive( "change_bodyheight", function(len, ply)
 	local _new_bodyheight = net.ReadString()
 	YRP_SQL_UPDATE( "yrp_characters", {["int_bodyheight"] = _new_bodyheight}, "uniqueID = " .. ply:CharID() )
-	ply:SetNW2Int( "int_bodyheight", _new_bodyheight)
+	ply:SetYRPInt( "int_bodyheight", _new_bodyheight)
 end)
 util.AddNetworkString( "change_weight" )
 net.Receive( "change_weight", function(len, ply)
 	local _new_weight = net.ReadString()
 	YRP_SQL_UPDATE( "yrp_characters", {["int_weight"] = _new_weight}, "uniqueID = " .. ply:CharID() )
-	ply:SetNW2Int( "int_weight", _new_weight)
+	ply:SetYRPInt( "int_weight", _new_weight)
 end)
 
 util.AddNetworkString( "yrp_get_characters" )
@@ -518,52 +520,77 @@ function GetPMsOfCharacter(ply, ruid)
 	return rpms
 end
 
+util.AddNetworkString( "yrp_received_chars" )
+net.Receive( "yrp_received_chars", function( len , ply )
+	MsgC( Color( 0, 255, 0 ), "Player Received Charlist", "\n")
+	ply.receivedchars = true
+end )
+
 --[[ Server Send Characters to Client ]]--
 function SendLoopCharacterList(ply, tab)
-	ply:SetNW2String( "loadchars_msg", "SendLoopCharacterList" )
-	
+	if ply:IsBot() then
+		return
+	end
 	ply:SetupCharID()
 
 	local c = 1
-	for i, char in pairs(tab) do
-		local last = false
-		local first = false
-		if c == 1 then
-			first = true
-		end
-		if c == table.Count(tab) then
-			last = true
-		end
+	for i, char in pairs( tab ) do
+		char.c = c
+		timer.Simple( char.c * 0.25, function()
+			if IsValid( ply ) and tab and char then
+				local last = false
+				local first = false
+				if char.c == 1 then
+					first = true
+				end
+				if char.c == table.Count(tab) then
+					last = true
+				end
 
-		net.Start( "yrp_get_characters" )
-			net.WriteBool( first )
-			net.WriteTable( char )
-			net.WriteBool( last )
-		net.Send( ply )
-
+				net.Start( "yrp_get_characters" )
+					net.WriteBool( first )
+					net.WriteTable( char ) // TODO WriteTable get rid off
+					net.WriteBool( last )
+				net.Send( ply )
+				if last then
+					net.Start( "yrp_received_chars" )
+					net.Send( ply )
+					--YRP.msg( "note", "Player Send Charlist: " .. tostring( char.c ) .. "/" .. tostring( #tab ) )
+							
+					timer.Simple( 10, function()
+						if IsValid( ply ) and ply.receivedchars == nil then
+							YRP.msg( "note", "[" .. ply:SteamName() .. "] not Received Charlist, retry: " .. tostring( char.c ) .. "/" .. tostring( #tab ) )
+							SendLoopCharacterList( ply, tab )
+						end
+					end )
+				end
+			else
+				if not tab then
+					YRP.msg( "error", "[SendLoopCharacterList] tab is invalid: " .. tostring( tab ) )
+				end
+				if not char then
+					YRP.msg( "error", "[SendLoopCharacterList] char is invalid: " .. tostring( char ) )
+				end
+			end
+		end )
 		c = c + 1
 	end
-
-	ply:SetNW2String( "loadchars_msg", "> Done <" )
-
-	ply:SetNW2Bool( "loadchars_done", true )
 end
 
 util.AddNetworkString( "OpenCharacterCreation" )
 function YRPSendCharacters(ply, from)
-	ply:SetNW2Bool( "loadchars_start", true)
-
-	ply:SetNW2String( "loadchars_msg", "Started" )
+	if ply:IsBot() then
+		return
+	end
 
 	YRPSendCharCount(ply)
 
 	local netTable = {}
 
-	local chaTab = YRP_SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. ply:SteamID() .. "'" )
+	local chaTab = YRP_SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. ply:YRPSteamID() .. "'" )
 
 	local _charCount = 0
 	if wk( chaTab) then
-		ply:SetNW2String( "loadchars_msg", "Worked" )
 		for k, v in pairs( chaTab) do
 			if v.roleID != nil and v.groupID != nil then
 				_charCount = _charCount + 1
@@ -609,24 +636,27 @@ function YRPSendCharacters(ply, from)
 			end
 		end
 
-		ply:SetNW2String( "loadchars_msg", "Start Loop" )
-
-		SendLoopCharacterList(ply, netTable)
+		if ply.receivedchars then
+			ply.receivedchars = nil
+		end
+		SendLoopCharacterList( ply, netTable )
 	else
 		net.Start( "OpenCharacterCreation" )
 		net.Send(ply)
-
-		ply:SetNW2Bool( "loadchars_done", true )
 	end
 end
 
 --[[ Client ask for Characters ]]--
 net.Receive( "yrp_get_characters", function(len, ply)
 	--YRP.msg( "db", ply:YRPName() .. " ask for characters" )
+	if ply:IsBot() then
+		return
+	end
+
 	YRPSendCharacters( ply, "yrp_get_characters" )
 
 	if !ply:Alive() then
-		ply:SetNW2Bool( "yrp_characterselection", true)
+		ply:SetYRPBool( "yrp_characterselection", true )
 	end
 end)
 
@@ -637,8 +667,8 @@ net.Receive( "YRPDeleteCharacter", function(len, ply)
 		local result = YRP_SQL_DELETE_FROM( "yrp_characters", "uniqueID = '" .. tonumber( charID) .. "'" )
 		if result == nil then
 			YRP.msg( "db", "DeleteCharacter: success"	)
-			ply:KillSilent()
-			local steamid = ply:SteamID()
+			ply:OldKillSilent()
+			local steamid = ply:YRPSteamID()
 			if wk(steamid) then
 				local _first_character = YRP_SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. steamid .. "'" )
 				if _first_character != nil then
@@ -658,11 +688,11 @@ net.Receive( "YRPDeleteCharacter", function(len, ply)
 	end
 end)
 
-function YRPCreateCharacter(ply, tab)
+function YRPCreateCharacter( ply, tab )
 	if tab then
 		local role = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tonumber( tab.roleID ) )
 		if wk(role) then
-			local steamid = ply:SteamID() or ply:UniqueID()
+			local steamid = ply:YRPSteamID()
 			local cols = "SteamID, rpname, roleID, groupID, playermodelID, money, moneybank, map, skin, rpdescription, string_birthday, int_bodyheight, int_weight, bool_eventchar"
 			for i = 0, 19 do
 				cols = cols .. ", bg" .. i
@@ -690,22 +720,30 @@ function YRPCreateCharacter(ply, tab)
 			if char == nil then
 				local chars = YRP_SQL_SELECT( "yrp_characters", "*", nil)
 				if worked( chars, "[YRPCreateCharacter] chars" ) then
-					local result = YRP_SQL_UPDATE( "yrp_players", {["CurrentCharacter"] = tonumber( chars[#chars].uniqueID)}, "SteamID = '" .. ply:SteamID() .. "'" )
+					local charid = tonumber( chars[#chars].uniqueID )
+					local result = YRP_SQL_UPDATE( "yrp_players", {["CurrentCharacter"] = charid}, "SteamID = '" .. ply:YRPSteamID() .. "'" )
 					if result != nil then
 						YRP.msg( "error", "[YRPCreateCharacter] failed @Update!" )
+						return false
+					else
+						YRPSendCharacters( ply, "YRPCreateCharacter" )
+						return charid
 					end
 				else
 					YRP.msg( "note", "[YRPCreateCharacter] chars failed: " .. tostring( chars) )
+					return false
 				end
 			else
-				YRP.msg( "error", "[YRPCreateCharacter] failed - char: " .. tostring( char) .. " LastError: " .. sql_show_last_error() )
+				YRP.msg( "error", "[YRPCreateCharacter] failed - char: " .. tostring( char) .. " LastError: " .. YRP_SQL_Show_Last_Error() )
+				return false
 			end
-			YRPSendCharacters( ply, "YRPCreateCharacter" )
 		else
 			YRP.msg( "note", "[YRPCreateCharacter] role not found!" )
+			return false
 		end
 		YRPCreateCharacterStorages()
 	end
+	return false
 end
 
 net.Receive( "YRPCreateCharacter", function(len, ply)
@@ -744,9 +782,19 @@ net.Receive( "YRPCreateCharacter", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "LogOut" )
-net.Receive( "LogOut", function(len, ply)
-	ply:KillSilent()
+util.AddNetworkString( "YRP_LogOut" )
+net.Receive( "YRP_LogOut", function(len, ply)
+	ply:OldKillSilent()
+	if ply:Alive() then
+		ply:Kill()
+	end
+
+	timer.Simple(0.1, function()
+		if IsValid( ply ) then
+			net.Start( "YRP_LogOut" )
+			net.Send( ply )
+		end
+	end )
 end)
 
 util.AddNetworkString( "YRP_EnterWorld" )
@@ -754,12 +802,10 @@ net.Receive( "YRP_EnterWorld", function(len, ply)
 	local cuid = net.ReadString()
 
 	if ply:Alive() then
-		ply:KillSilent()
+		ply:OldKillSilent()
 	end
 	
 	YRPSpawnAsCharacter(ply, cuid, false)
-	
-	ply:SetNW2Bool( "yrp_characterselection", false)
 end)
 
 function SendBodyGroups(ply)
@@ -840,8 +886,8 @@ net.Receive( "inv_pm_up", function(len, ply)
 	local _pms = string.Explode( ",", GetPlayermodelsOfCharacter( ply, ply:YRPGetRoleTable().uniqueID ) )
 	if wk(_pms) then
 		if wk(_pms[_cur]) then
-			ply:SetNW2String( "string_playermodel", _pms[_cur])
-			ply:SetNW2Int( "pmid", _cur)
+			ply:SetYRPString( "string_playermodel", _pms[_cur])
+			ply:SetYRPInt( "pmid", _cur)
 			ply:SetModel(_pms[_cur])
 			local _charid = ply:CharID()
 			YRP_SQL_UPDATE( "yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
@@ -857,8 +903,8 @@ net.Receive( "inv_pm_do", function(len, ply)
 	local _pms = string.Explode( ",", GetPlayermodelsOfCharacter( ply, ply:YRPGetRoleTable().uniqueID ) )
 	if wk(_pms) then
 		if wk(_pms[_cur]) then
-			ply:SetNW2String( "string_playermodel", _pms[_cur])
-			ply:SetNW2Int( "pmid", _cur)
+			ply:SetYRPString( "string_playermodel", _pms[_cur])
+			ply:SetYRPInt( "pmid", _cur)
 			ply:SetModel(_pms[_cur])
 			local _charid = ply:CharID()
 			YRP_SQL_UPDATE( "yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
@@ -880,7 +926,7 @@ net.Receive( "warning_up", function(len, ply)
 
 			YRP_SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'" )
 
-			p:SetNW2Int( "int_warnings", int_warnings)
+			p:SetYRPInt( "int_warnings", int_warnings)
 		end
 	end
 end)
@@ -897,7 +943,7 @@ net.Receive( "warning_dn", function(len, ply)
 
 			YRP_SQL_UPDATE(DATABASE_NAME, {["int_warnings"] = int_warnings}, "uniqueID = '" .. p:CharID() .. "'" )
 
-			p:SetNW2Int( "int_warnings", int_warnings)
+			p:SetYRPInt( "int_warnings", int_warnings)
 		end
 	end
 end)
@@ -914,7 +960,7 @@ net.Receive( "violation_up", function(len, ply)
 
 			YRP_SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'" )
 
-			p:SetNW2Int( "int_violations", int_violations)
+			p:SetYRPInt( "int_violations", int_violations)
 		end
 	end
 end)
@@ -931,7 +977,7 @@ net.Receive( "violation_dn", function(len, ply)
 
 			YRP_SQL_UPDATE(DATABASE_NAME, {["int_violations"] = int_violations}, "uniqueID = '" .. p:CharID() .. "'" )
 
-			p:SetNW2Int( "int_violations", int_violations)
+			p:SetYRPInt( "int_violations", int_violations)
 		end
 	end
 end)
@@ -957,7 +1003,7 @@ net.Receive( "set_idcardid", function(len, ply)
 			local ptab = YRP_SQL_SELECT(DATABASE_NAME, "text_idcardid", "uniqueID = '" .. p:CharID() .. "'" )
 			if wk(ptab) then
 				YRP_SQL_UPDATE(DATABASE_NAME, {["text_idcardid"] = text_idcardid}, "uniqueID = '" .. p:CharID() .. "'" )
-				p:SetNW2String( "idcardid", text_idcardid)
+				p:SetYRPString( "idcardid", text_idcardid)
 			end
 		end
 	end
@@ -968,7 +1014,7 @@ net.Receive( "removearrests", function(len, ply)
 	local p = net.ReadEntity()
 	if IsValid(p) and p:IsPlayer() and p.CharID and wk(p:CharID() ) then
 		YRP_SQL_UPDATE(DATABASE_NAME, {["int_arrests"] = 0}, "uniqueID = '" .. p:CharID() .. "'" )
-		p:SetNW2Int( "int_arrests", 0)
+		p:SetYRPInt( "int_arrests", 0)
 	end
 end)
 
@@ -1006,7 +1052,7 @@ end)
 
 function YRPSetAllCharsToDefaultRole(ply)
 	if IsValid(ply) and GetGlobalBool( "bool_players_start_with_default_role", false) then
-		YRP_SQL_UPDATE(DATABASE_NAME, {["roleID"] = 1}, "SteamID = '" .. ply:SteamID() .. "'" )
+		YRP_SQL_UPDATE(DATABASE_NAME, {["roleID"] = 1}, "SteamID = '" .. ply:YRPSteamID() .. "'" )
 
 		YRP.msg( "note", "SET PLAYER TO DEFAULT ROLE -> players_start_with_default_role: enabled" )
 	end
@@ -1037,7 +1083,7 @@ function YRPGetSpecData(ply)
 	if wk(tab) then
 		tab = tab[1]
 
-		ply:SetNW2String( "specializationIDs", tab.string_specializations )
+		ply:SetYRPString( "specializationIDs", tab.string_specializations )
 
 		for i, v in pairs( string.Explode( ",", tab.string_specializations ) ) do
 			local tabSpec = YRP_SQL_SELECT( "yrp_specializations", "*", "uniqueID = '" .. v .. "'" )
@@ -1078,10 +1124,10 @@ end
 function YRPGiveSpecs(ply)
 	local tab = YRPGetSpecData(ply)
 
-	ply:SetNW2String( "spec_prefix", tab.prefix )
-	ply:SetNW2String( "spec_suffix", tab.suffix )
+	ply:SetYRPString( "spec_prefix", tab.prefix )
+	ply:SetYRPString( "spec_suffix", tab.suffix )
 
-	ply:SetNW2String( "spec_pms", tab.pms )
+	ply:SetYRPString( "spec_pms", tab.pms )
 end
 
 util.AddNetworkString( "yrp_reopen_givespec" )

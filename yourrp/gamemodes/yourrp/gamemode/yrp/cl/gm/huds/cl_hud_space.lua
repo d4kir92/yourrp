@@ -213,7 +213,7 @@ function YRPHUDSpace()
 				0,
 				nil,
 				ID,
-				lply:GetNW2String( "idcardid", "" ),
+				lply:GetYRPString( "idcardid", "" ),
 				--2
 			}
 
@@ -234,9 +234,9 @@ function YRPHUDSpace()
 				}
 			end
 
-			if lply:GetNW2Int( "hud_version", 0) != SPACE["version"] then
+			if GetGlobalInt( "YRPHUDVersion", -1 ) != SPACE["version"] then
 				-- LOAD VARIABLES
-				SPACE["version"] = lply:GetNW2Int( "hud_version", 0)
+				SPACE["version"] = GetGlobalInt( "YRPHUDVersion", -1 )
 				for ele, etab in pairs(ELES) do
 					local DB = lply:HudElement(ele)
 
@@ -394,7 +394,7 @@ function YRPHUDSpace()
 								local IconMaterial = SPACE[ele].IconMaterial
 
 								-- Background
-								draw.RoundedBox(h / 4, BackgroundX, BackgroundY, BackgroundW, BackgroundH, Color(0, 0, 0, 160) )
+								draw.RoundedBox(h / 4, BackgroundX, BackgroundY, BackgroundW, BackgroundH, Color( 0, 0, 0, 160) )
 
 								-- BAR
 								draw.RoundedBox(BarH / 4, BarX, BarY, BarW, BarH, Color(BarColor.r, BarColor.g, BarColor.b, 30) )
@@ -410,11 +410,11 @@ function YRPHUDSpace()
 								end
 
 								-- TEXT
-								draw.SimpleText(text, font, XFontCenter, YFontCenter, Color(255,255,255,255), AX, AY)
+								draw.SimpleText(text, font, XFontCenter, YFontCenter, Color( 255,255,255,255), AX, AY)
 							elseif etab[5] == 1 then
-								draw.RoundedBox(6, x, y, w, h, Color(0, 0, 0, Alpha) )
+								draw.RoundedBox(6, x, y, w, h, Color( 0, 0, 0, Alpha) )
 							elseif etab[5] == 2 then
-								draw.SimpleText(text, font, XFontCenter, YFontCenter, Color(255,255,255,255), AX, AY)
+								draw.SimpleText(text, font, XFontCenter, YFontCenter, Color( 255,255,255,255), AX, AY)
 							elseif etab[5] == 3 then
 								draw.RoundedBox(0, x, y, w, h, Color(BarColor.r, BarColor.g, BarColor.b, BarColor.a) )
 							end

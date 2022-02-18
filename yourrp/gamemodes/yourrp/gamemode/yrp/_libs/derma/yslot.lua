@@ -5,7 +5,7 @@ local PANEL = {}
 function PANEL:Paint(pw, ph)
 	draw.RoundedBox(5, 0, 0, pw, ph, Color(80, 80, 80, 255) )
 	if self.name != nil then
-		--draw.SimpleText(self.name, "DermaDefault", pw / 2, ph / 2, Color(255, 0, 0, 200), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		--draw.SimpleText(self.name, "DermaDefault", pw / 2, ph / 2, Color( 255, 0, 0, 200), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 end
 

@@ -71,18 +71,18 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 
 	function kb:Paint(pw, ph)
 		local text = ""
-		local color = Color(255, 255, 255, 255)
+		local color = Color( 255, 255, 255, 255)
 
 		if disabled != nil and !GetGlobalBool( disabled) then
 			text = "[" .. YRP.lang_string( "LID_disabled" ) .. "] "
-			color = Color(255, 255, 100, 255)
+			color = Color( 255, 255, 100, 255)
 		end
 
 		text = text .. YRP.lang_string(lstr)
 		draw.SimpleText(text, "Y_18_500", ph + YRP.ctr(10), ph / 2, color, 0, 1)
 		YRP.DrawIcon(YRP.GetDesignIcon(icon), ph - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), color)
 
-		draw.SimpleText(string.upper( "[" .. nicekey(self.key) .. "]" ), "Y_18_500", ph + YRP.ctr(700), ph / 2, Color(255, 255, 255, 255), 0, 1)
+		draw.SimpleText(string.upper( "[" .. nicekey(self.key) .. "]" ), "Y_18_500", ph + YRP.ctr(700), ph / 2, Color( 255, 255, 255, 255), 0, 1)
 	end
 
 	plist:AddItem(kb)
@@ -92,7 +92,7 @@ function AddKeybindBr(plist)
 	local kb = createD( "DPanel", nil, YRP.ctr(100), YRP.ctr(4), 0, 0)
 
 	function kb:Paint(pw, ph)
-		draw.RoundedBox(0, 0, ph / 4, pw, ph / 2, Color(255, 255, 255, 255) )
+		draw.RoundedBox(0, 0, ph / 4, pw, ph / 2, Color( 255, 255, 255, 255) )
 	end
 
 	plist:AddItem(kb)
@@ -108,7 +108,7 @@ net.Receive( "getsitehelp", function(len)
 			local wm = createD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(60), 0, posy)
 
 			function wm:Paint(pw, ph)
-				draw.SimpleText(welcome_message, "Y_22_500", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
+				draw.SimpleText(welcome_message, "Y_22_500", 0, ph / 2, Color( 255, 255, 255, 255), 0, 1)
 			end
 
 			posy = posy + wm:GetTall() + YRP.ctr(20)
@@ -118,7 +118,7 @@ net.Receive( "getsitehelp", function(len)
 			local mo = createD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(60), 0, posy)
 
 			function mo:Paint(pw, ph)
-				draw.SimpleText(YRP.lang_string( "LID_motd" ) .. ": " .. motd, "Y_22_500", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
+				draw.SimpleText(YRP.lang_string( "LID_motd" ) .. ": " .. motd, "Y_22_500", 0, ph / 2, Color( 255, 255, 255, 255), 0, 1)
 			end
 
 			posy = posy + mo:GetTall() + YRP.ctr(20)
@@ -200,10 +200,10 @@ net.Receive( "getsitestaff", function(len)
 			tmp:SetText( "" )
 
 			function tmp:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 255, 200) )
+				draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 255, 200) )
 				if ea(pl) then
-					draw.SimpleText(YRP.lang_string( "LID_name" ) .. ": " .. pl:RPName(), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
-					draw.SimpleText(YRP.lang_string( "LID_usergroup" ) .. ": " .. string.upper(pl:GetUserGroup() ), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(50 + 25), Color(255, 255, 255, 255), 0, 1)
+					draw.SimpleText(YRP.lang_string( "LID_name" ) .. ": " .. pl:RPName(), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(25), Color( 255, 255, 255, 255), 0, 1)
+					draw.SimpleText(YRP.lang_string( "LID_usergroup" ) .. ": " .. string.upper(pl:GetUserGroup() ), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(50 + 25), Color( 255, 255, 255, 255), 0, 1)
 				end
 			end
 
@@ -233,7 +233,7 @@ net.Receive( "getsiteserverrules", function(len)
 		local page = createD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 		function page:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string( "LID_rules" ), "Y_22_500", 0, 0, Color(255, 255, 255, 255), 0, 0)
+			draw.SimpleText(YRP.lang_string( "LID_rules" ), "Y_22_500", 0, 0, Color( 255, 255, 255, 255), 0, 0)
 		end
 
 		page.serverrules = createD( "RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(50), 0, YRP.ctr(50) )
@@ -259,7 +259,7 @@ net.Receive( "getsitecollection", function(len)
 			local WorkshopPage = createD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function WorkshopPage:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 			end
 
 			WorkshopPage:OpenURL(link)
@@ -285,7 +285,7 @@ net.Receive( "getsitecommunitywebsite", function(len)
 			local page = createD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 			end
 
 			page:OpenURL(link)
@@ -312,7 +312,7 @@ net.Receive( "getsitecommunityforum", function(len)
 			local page = createD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 			end
 
 			page:OpenURL(link)
@@ -340,7 +340,7 @@ net.Receive( "getsitecommunitydiscord", function(len)
 			local page = createD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color(255, 255, 255, 255) )
+				--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255) )
 			end
 
 			local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. YRP.ctr(1000) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
@@ -351,7 +351,7 @@ net.Receive( "getsitecommunitydiscord", function(len)
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "" )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
-				draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
+				draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), 1, 1)
 			end
 
 			function openLink:DoClick()
@@ -397,7 +397,7 @@ net.Receive( "getsitecommunitytwitter", function(len)
 			local page = createD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 			end
 
 			page:OpenURL(link)
@@ -424,7 +424,7 @@ net.Receive( "getsitecommunityyoutube", function(len)
 			local page = createD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 			end
 
 			page:OpenURL(link)
@@ -451,7 +451,7 @@ net.Receive( "getsitecommunityfacebook", function(len)
 			local page = createD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 			end
 
 			page:OpenURL(link)
@@ -478,7 +478,7 @@ net.Receive( "getsitecommunitysteamgroup", function(len)
 			local page = createD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 			end
 
 			page:OpenURL(link)
@@ -529,7 +529,7 @@ net.Receive( "getsiteyourrpdiscord", function(len)
 			local page = createD( "DHTML", HELPMENU.mainmenu.site, YRP.ctr(1040), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				--surfaceBox(0, 0, pw, ph, Color(255, 0, 0, 255) )
+				--surfaceBox(0, 0, pw, ph, Color( 255, 0, 0, 255) )
 			end
 
 			local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=322771229213851648&theme=dark\" width=\"" .. YRP.ctr(1000) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
@@ -540,7 +540,7 @@ net.Receive( "getsiteyourrpdiscord", function(len)
 			function openLink:Paint(pw, ph)
 				surfaceButton(self, pw, ph, "" )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
-				draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
+				draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), 1, 1)
 			end
 
 			function openLink:DoClick()
@@ -626,23 +626,23 @@ net.Receive( "getsiteyourrptranslations", function(len)
 			lan.language = language
 
 			function lan:Paint(pw, ph)
-				self.textcol = Color(255, 255, 255)
+				self.textcol = Color( 255, 255, 255)
 
 				if language.percentage != nil then
 					local colper = 255 / 100 * language.percentage
 					if colper < 120 then
 						colper = 120
 					end
-					self.textcol = Color(255 - colper, colper, 0)
+					self.textcol = Color( 255 - colper, colper, 0)
 				end
 				if language.author == "" then
-					self.textcol = Color(255, 255, 0)
+					self.textcol = Color( 255, 255, 0)
 				end
 
 				hook.Run( "YButtonPaint", self, pw, ph)
 				--surfaceButton(self, pw, ph, "" )
 				draw.SimpleText(_allProgressTexts[sho], "Y_18_500", YRP.ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
-				YRP.DrawIcon(YRP.GetDesignIcon( "lang_" .. tostring(self.language.short) ), YRP.ctr(_icon_w), YRP.ctr(_icon_h), YRP.ctr(_br), YRP.ctr( (_h - _icon_h) / 2), Color(255, 255, 255, 255) )
+				YRP.DrawIcon(YRP.GetDesignIcon( "lang_" .. tostring(self.language.short) ), YRP.ctr(_icon_w), YRP.ctr(_icon_h), YRP.ctr(_br), YRP.ctr( (_h - _icon_h) / 2), Color( 255, 255, 255, 255) )
 			end
 
 			function lan:DoClick()

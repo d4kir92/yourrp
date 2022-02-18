@@ -42,7 +42,7 @@ end
 
 function SWEP:Reload()
 	local pos = ""
-	for i, v in pairs(GetGlobalTable( "yrp_jailpoints" ) ) do
+	for i, v in pairs(GetGlobalYRPTable( "yrp_jailpoints" ) ) do
 		pos = v.pos
 	end
 	if !strEmpty(pos) then
@@ -75,7 +75,7 @@ function SWEP:Think()
 			} )
 			pos = tr.HitPos or pos
 
-			for i, v in pairs(GetGlobalTable( "yrp_jailpoints" ) ) do
+			for i, v in pairs(GetGlobalYRPTable( "yrp_jailpoints" ) ) do
 				local p = StringToVector( v.pos)
 				if p:Distance(pos) < size * 2 then
 					YRP.msg( "db", "Option Jailpoint" )
@@ -169,7 +169,7 @@ function SWEP:SecondaryAttack()
 		pos = tr.HitPos or pos
 
 		local found = false
-		for i, v in pairs(GetGlobalTable( "yrp_jailpoints" ) ) do
+		for i, v in pairs(GetGlobalYRPTable( "yrp_jailpoints" ) ) do
 			local p = StringToVector( v.pos)
 			if p:Distance(pos) < size * 2 then
 				YRP_SQL_DELETE_FROM( "yrp_" .. GetMapNameDB(), "type = 'jailpoint' AND uniqueID = '" .. v.uniqueID .. "'" )
@@ -179,7 +179,7 @@ function SWEP:SecondaryAttack()
 		end
 
 		if !found then
-			for i, v in pairs(GetGlobalTable( "yrp_jailpoints" ) ) do
+			for i, v in pairs(GetGlobalYRPTable( "yrp_jailpoints" ) ) do
 				local p = StringToVector( v.pos)
 				if p:Distance(ply:GetPos() ) < 160 then
 					YRP_SQL_DELETE_FROM( "yrp_" .. GetMapNameDB(), "type = 'jailpoint' AND uniqueID = '" .. v.uniqueID .. "'" )
@@ -205,7 +205,7 @@ if CLIENT then
 				g = math.random(0, 255)
 				b = math.random(0, 255)
 			end
-			for i, v in pairs(GetGlobalTable( "yrp_jailpoints" ) ) do
+			for i, v in pairs(GetGlobalYRPTable( "yrp_jailpoints" ) ) do
 				local pos = StringToVector( v.pos)
 				if LocalPlayer():GetPos():Distance(pos) < 6000 then
 					render.SetColorMaterial()

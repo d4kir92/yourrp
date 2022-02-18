@@ -49,7 +49,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 
 				function _yrp_appearance.left:Paint(pw, ph)
 					--surfacePanel(self, pw, ph)
-					--draw.SimpleTextOutlined(YRP.lang_string( "LID_appearance" ), "Y_24_500", pw/2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255) )
+					--draw.SimpleTextOutlined(YRP.lang_string( "LID_appearance" ), "Y_24_500", pw/2, YRP.ctr(50), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255) )
 				end
 
 				_appe.r.play = createD( "DButton", _yrp_appearance.left, YRP.ctr(100), YRP.ctr(100), ScW() / 4, ScrH() - YRP.ctr(200) )
@@ -62,13 +62,13 @@ net.Receive( "get_menu_bodygroups", function(len)
 					tab.text.text = ""
 					DrawButton(self, tab)
 					local symbol = "pause"
-					local color = Color(255, 0, 0)
+					local color = Color( 255, 0, 0)
 					if !self:IsHovered() and play then
 						symbol = "play"
-						color = Color(0, 255, 0)
+						color = Color( 0, 255, 0)
 					elseif self:IsHovered() and !play then
 						symbol = "play"
-						color = Color(0, 255, 0)
+						color = Color( 0, 255, 0)
 					end
 					YRP.DrawIcon(YRP.GetDesignIcon(symbol), pw, ph, 0, 0, color)
 				end
@@ -76,11 +76,10 @@ net.Receive( "get_menu_bodygroups", function(len)
 					play = !play
 				end
 
-				_appe.r.pm = createD( "DModelPanel", _yrp_appearance.left, ScrH() - _yrp_appearance.window:GetHeaderHeight(), ScW() / 2, 0, _yrp_appearance.window:GetHeaderHeight() )
+				_appe.r.pm = createD( "DModelPanel", _yrp_appearance.left, ScrH() - _yrp_appearance.window:GetHeaderHeight() - YRP.ctr(100), ScW() / 2, 0, 0 )
 				_appe.r.pm:SetModel(_pm)
 				_appe.r.pm:SetAnimated(true)
 				_appe.r.pm.Angles = Angle(0, 0, 0)
-				_appe.r.pm:RunAnimation()
 
 				function _appe.r.pm:DragMousePress()
 					self.PressX, self.PressY = gui.MousePos()
@@ -110,7 +109,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 				_tmpPM.name = YRP.lang_string( "LID_appearance" )
 				function _tmpPM:Paint(pw, ph)
 					surfacePanel(self, pw, ph)
-					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpPM.cur .. "/" .. _tmpPM.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255) )
+					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpPM.cur .. "/" .. _tmpPM.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255) )
 				end
 
 				local _tmpPMUp = createD( "DButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
@@ -127,7 +126,9 @@ net.Receive( "get_menu_bodygroups", function(len)
 					net.Start( "inv_pm_up" )
 						net.WriteInt(_tmpPM.cur, 16)
 					net.SendToServer()
-					_appe.r.pm.Entity:SetModel(_pms[_tmpPM.cur])
+					if _appe.r.pm.Entity then
+						_appe.r.pm.Entity:SetModel(_pms[_tmpPM.cur])
+					end
 				end
 
 				local _tmpPMDo = createD( "DButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40) )
@@ -144,20 +145,26 @@ net.Receive( "get_menu_bodygroups", function(len)
 					net.Start( "inv_pm_do" )
 						net.WriteInt(_tmpPM.cur, 16)
 					net.SendToServer()
-					_appe.r.pm.Entity:SetModel(_pms[_tmpPM.cur])
+					if _appe.r.pm.Entity then
+						_appe.r.pm.Entity:SetModel(_pms[_tmpPM.cur])
+					end
 				end
 
 				--[[ Skin changing ]]--
-				_tbl.bgs = _appe.r.pm.Entity:GetBodyGroups()
+				if _appe.r.pm.Entity then
+					_tbl.bgs = _appe.r.pm.Entity:GetBodyGroups()
+				end
 
 				local _tmpSkin = createD( "DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(80), ScW() / 2, YRP.ctr(200) )
 				_tmpSkin.cur = _skin--_appe.r.pm.Entity:GetSkin()
-				_appe.r.pm.Entity:SetSkin(_tmpSkin.cur)
-				_tmpSkin.max = _appe.r.pm.Entity:SkinCount()
+				if _appe.r.pm.Entity then
+					_appe.r.pm.Entity:SetSkin(_tmpSkin.cur)
+					_tmpSkin.max = _appe.r.pm.Entity:SkinCount()
+				end
 				_tmpSkin.name = YRP.lang_string( "LID_skin" )
 				function _tmpSkin:Paint(pw, ph)
 					surfacePanel(self, pw, ph)
-					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpSkin.cur + 1 .. "/" .. _tmpSkin.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255) )
+					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpSkin.cur + 1 .. "/" .. _tmpSkin.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255) )
 				end
 
 				local _tmpSkinUp = createD( "DButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
@@ -174,7 +181,9 @@ net.Receive( "get_menu_bodygroups", function(len)
 					net.Start( "inv_skin_up" )
 						net.WriteInt(_tmpSkin.cur, 16)
 					net.SendToServer()
-					_appe.r.pm.Entity:SetSkin(_tmpSkin.cur)
+					if _appe.r.pm.Entity then
+						_appe.r.pm.Entity:SetSkin(_tmpSkin.cur)
+					end
 				end
 
 				local _tmpSkinDo = createD( "DButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40) )
@@ -197,54 +206,62 @@ net.Receive( "get_menu_bodygroups", function(len)
 				end
 
 				-- Bodygroups changing
-				for k, v in pairs(_tbl.bgs) do
-					if _cbg[k] != nil then
-						_cbg[k] = tonumber(_cbg[k])
-						_appe.r.pm.Entity:SetBodygroup(k-1, tonumber(_cbg[k]) )
-						local _height = 80
-						local _tmpBg = createD( "DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(_height), ScW() / 2, YRP.ctr(300) + k * YRP.ctr(_height + 2) )
-						_tmpBg.name = v.name
-						_tmpBg.max = v.num
-						_tmpBg.cur = _cbg[k]
-						_tmpBg.id = v.id
-						function _tmpBg:Paint(pw, ph)
-							surfacePanel(self, pw, ph)
-							draw.SimpleTextOutlined(self.name .. " ( " .. _tmpBg.cur + 1 .. "/" .. _tmpBg.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255) )
-						end
-						_tmpBgUp = createD( "DButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
-						_tmpBgUp:SetText( "" )
-						function _tmpBgUp:Paint(pw, ph)
-							if _tmpBg.cur < _tmpBg.max - 1 then
-								surfaceButton(self, pw, ph, "↑" )
+				if _tbl.bgs then
+					for k, v in pairs(_tbl.bgs) do
+						if _cbg[k] != nil then
+							_cbg[k] = tonumber(_cbg[k])
+							if _appe.r.pm.Entity then
+								_appe.r.pm.Entity:SetBodygroup(k-1, tonumber(_cbg[k]) )
 							end
-						end
-						function _tmpBgUp:DoClick()
-							if _tmpBg.cur < _tmpBg.max-1 then
-								_tmpBg.cur = _tmpBg.cur + 1
+							local _height = 80
+							local _tmpBg = createD( "DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(_height), ScW() / 2, YRP.ctr(300) + k * YRP.ctr(_height + 2) )
+							_tmpBg.name = v.name
+							_tmpBg.max = v.num
+							_tmpBg.cur = _cbg[k]
+							_tmpBg.id = v.id
+							function _tmpBg:Paint(pw, ph)
+								surfacePanel(self, pw, ph)
+								draw.SimpleTextOutlined(self.name .. " ( " .. _tmpBg.cur + 1 .. "/" .. _tmpBg.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255) )
 							end
-							net.Start( "inv_bg_up" )
-								net.WriteInt(_tmpBg.cur, 16)
-								net.WriteInt(_tmpBg.id, 16)
-							net.SendToServer()
-							_appe.r.pm.Entity:SetBodygroup(_tmpBg.id, _tmpBg.cur)
-						end
+							_tmpBgUp = createD( "DButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
+							_tmpBgUp:SetText( "" )
+							function _tmpBgUp:Paint(pw, ph)
+								if _tmpBg.cur < _tmpBg.max - 1 then
+									surfaceButton(self, pw, ph, "↑" )
+								end
+							end
+							function _tmpBgUp:DoClick()
+								if _tmpBg.cur < _tmpBg.max-1 then
+									_tmpBg.cur = _tmpBg.cur + 1
+								end
+								net.Start( "inv_bg_up" )
+									net.WriteInt(_tmpBg.cur, 16)
+									net.WriteInt(_tmpBg.id, 16)
+								net.SendToServer()
+								if _appe.r.pm.Entity then
+									_appe.r.pm.Entity:SetBodygroup(_tmpBg.id, _tmpBg.cur)
+								end
+							end
 
-						_tmpBgDo = createD( "DButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(_height / 2 - 2) )
-						_tmpBgDo:SetText( "" )
-						function _tmpBgDo:Paint(pw, ph)
-							if _tmpBg.cur > 0 then
-								surfaceButton(self, pw, ph, "↓" )
+							_tmpBgDo = createD( "DButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(_height / 2 - 2) )
+							_tmpBgDo:SetText( "" )
+							function _tmpBgDo:Paint(pw, ph)
+								if _tmpBg.cur > 0 then
+									surfaceButton(self, pw, ph, "↓" )
+								end
 							end
-						end
-						function _tmpBgDo:DoClick()
-							if _tmpBg.cur > 0 then
-								_tmpBg.cur = _tmpBg.cur - 1
+							function _tmpBgDo:DoClick()
+								if _tmpBg.cur > 0 then
+									_tmpBg.cur = _tmpBg.cur - 1
+								end
+								net.Start( "inv_bg_do" )
+									net.WriteInt(_tmpBg.cur, 16)
+									net.WriteInt(_tmpBg.id, 16)
+								net.SendToServer()
+								if _appe.r.pm.Entity then
+									_appe.r.pm.Entity:SetBodygroup(_tmpBg.id, _tmpBg.cur)
+								end
 							end
-							net.Start( "inv_bg_do" )
-								net.WriteInt(_tmpBg.cur, 16)
-								net.WriteInt(_tmpBg.id, 16)
-							net.SendToServer()
-							_appe.r.pm.Entity:SetBodygroup(_tmpBg.id, _tmpBg.cur)
 						end
 					end
 				end
@@ -309,7 +326,7 @@ function open_appearance()
 	_yrp_appearance.left = createD( "DPanel", _yrp_appearance.window, ScW(), ScrH() - _yrp_appearance.window:GetHeaderHeight(), 0, _yrp_appearance.window:GetHeaderHeight() )
 	function _yrp_appearance.left:Paint(pw, ph)
 		--surfacePanel(self, pw, ph)
-		--paintBr(pw, ph, Color(255, 0, 0, 255) )
+		--paintBr(pw, ph, Color( 255, 0, 0, 255) )
 	end
 
 	net.Start( "get_menu_bodygroups" )

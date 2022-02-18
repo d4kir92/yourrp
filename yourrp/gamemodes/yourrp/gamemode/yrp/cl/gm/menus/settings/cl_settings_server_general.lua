@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 	
 function CreateCheckBoxLine( dpanellist, val, lstr, netstr, fixx, textcolor)
-	textcolor = textcolor or Color(255, 255, 255)
+	textcolor = textcolor or Color( 255, 255, 255)
 	fixx = fixx or 0
 	local background = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(50), 0, 0)
 	background.text_posx = YRP.ctr(50 + 10)
@@ -55,7 +55,7 @@ function CreateButtonLine( dpanellist, lstr, netstr, lstr2)
 	background.button:SetText( "" )
 	background.button.text = lstr2 or lstr
 	function background.button:Paint(pw, ph)
-		surfaceButton(self, pw, ph, YRP.lang_string(self.text), Color(200, 200, 200, 255) )
+		surfaceButton(self, pw, ph, YRP.lang_string(self.text), Color( 200, 200, 200, 255) )
 	end
 
 	function background.button:DoClick()
@@ -281,7 +281,7 @@ function CreateHRLine( dpanellist)
 	local hr = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(20), 0, 0)
 	function hr:Paint(pw, ph)
 		surfacePanel(self, pw, ph, "" )
-		surfaceBox(YRP.ctr(10), hr:GetTall() / 4, hr:GetWide() - YRP.ctr(2 * 10), hr:GetTall() / 2, Color(0, 0, 0, 255) )
+		surfaceBox(YRP.ctr(10), hr:GetTall() / 4, hr:GetWide() - YRP.ctr(2 * 10), hr:GetTall() / 2, Color( 0, 0, 0, 255) )
 	end
 	dpanellist:AddItem(hr)
 	return hr
@@ -385,7 +385,7 @@ net.Receive( "Connect_Settings_General", function(len)
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent() )
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_players_can_drop_weapons, "LID_playerscandropweapons", "update_bool_players_can_drop_weapons" )
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent() )
-		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_players_start_with_default_role, "LID_playersstartwithdefaultrole", "update_bool_players_start_with_default_role", nil, Color(255, 0, 0, 255) )
+		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_players_start_with_default_role, "LID_playersstartwithdefaultrole", "update_bool_players_start_with_default_role", nil, Color( 255, 0, 0, 255) )
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent() )
 		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_dealers_can_take_damage, "LID_dealerscantakedamage", "update_bool_dealers_can_take_damage" )
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent() )
@@ -460,9 +460,11 @@ net.Receive( "Connect_Settings_General", function(len)
 		local wc_mdl = CreateButtonLine(GAMEMODE_SYSTEMS:GetContent(), YRP.lang_string( "LID_appearance" ) .. " ( " .. YRP.lang_string( "LID_model" ) .. " )", "update_text_appearance_model", "LID_change" )
 		function YRPAppearanceUpdateModel()
 			local mdl = LocalPlayer().yrpseltab[1]
-			net.Start( "update_text_appearance_model" )
-				net.WriteString(mdl)
-			net.SendToServer()
+			if mdl then
+				net.Start( "update_text_appearance_model" )
+					net.WriteString(mdl)
+				net.SendToServer()
+			end
 		end
 		function wc_mdl.button:DoClick()
 			local noneplayermodels = {}
@@ -540,12 +542,12 @@ net.Receive( "Connect_Settings_General", function(len)
 			idbg:SetTitle( "" )
 			idbg:SetDraggable(false)
 			function idbg:Paint(pw, ph)
-				--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255) )
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255) )
 				for y = 0, ScrH(), gs do
-					draw.RoundedBox(0, 0, y, pw, 1, Color(255, 255, 255, 255) )
+					draw.RoundedBox(0, 0, y, pw, 1, Color( 255, 255, 255, 255) )
 				end
 				for x = 0, ScrW(), gs do
-					draw.RoundedBox(0, x, 0, 1, ph, Color(255, 255, 255, 255) )
+					draw.RoundedBox(0, x, 0, 1, ph, Color( 255, 255, 255, 255) )
 				end
 				drawIDCard(LocalPlayer(), 1)
 			end
@@ -640,25 +642,25 @@ net.Receive( "Connect_Settings_General", function(len)
 						a3 = 0
 					end
 					local br = 2
-					draw.RoundedBox(0, 0, 0, pw, br, Color(0, 0, 0, a3) )
-					draw.RoundedBox(0, 0, ph - br, pw, br, Color(0, 0, 0, a3) )
-					draw.RoundedBox(0, 0, 0, br, ph, Color(0, 0, 0, a3) )
-					draw.RoundedBox(0, pw - br, 0, br, ph, Color(0, 0, 0, a3) )
+					draw.RoundedBox(0, 0, 0, pw, br, Color( 0, 0, 0, a3) )
+					draw.RoundedBox(0, 0, ph - br, pw, br, Color( 0, 0, 0, a3) )
+					draw.RoundedBox(0, 0, 0, br, ph, Color( 0, 0, 0, a3) )
+					draw.RoundedBox(0, pw - br, 0, br, ph, Color( 0, 0, 0, a3) )
 					local lon = pw
 					if ph > pw then
 						lon = ph
 					end
 					if pw == ph then
-						surface.SetDrawColor(255, 255, 255, a3)
+						surface.SetDrawColor( 255, 255, 255, a3)
 						surface.DrawLine(pw / 2, 0, pw / 2, ph)
 						surface.DrawLine(0, ph / 2, pw, ph / 2)
 						surface.DrawLine(0, 0, lon, lon)
 					end
 					--if ele != "background" and !string.find(ele,  "box" ) then
 						if !string.find(ele, "logo" ) or GetGlobalBool( "bool_" .. ele .. "_visible", false) == false then
-							local bgcolor = Color(255, 0, 0, a1)
+							local bgcolor = Color( 255, 0, 0, a1)
 							if GetGlobalBool( "bool_" .. ele .. "_visible", false) == true then
-								bgcolor = Color(0, 255, 0, 1)
+								bgcolor = Color( 0, 255, 0, 1)
 							end
 							draw.RoundedBox(0, 0, 0, pw, ph, bgcolor)
 						end
@@ -668,7 +670,7 @@ net.Receive( "Connect_Settings_General", function(len)
 						draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 255, 60, a2) )
 					end
 
-					draw.SimpleTextOutlined(name, "Y_24_700", pw / 2, ph / 2, Color(255, 255, 255, a3), 1, 1, 1, Color(0, 0, 0, a3) )
+					draw.SimpleTextOutlined(name, "Y_24_700", pw / 2, ph / 2, Color( 255, 255, 255, a3), 1, 1, 1, Color( 0, 0, 0, a3) )
 
 					-- SIZE
 					local w, h = self:GetSize()
@@ -851,9 +853,9 @@ net.Receive( "Connect_Settings_General", function(len)
 					end
 					local content = win:GetContent()
 					function content:Paint(pw, ph)
-						draw.SimpleText( "TEXT ALIGN", "DermaDefault", YRP.ctr(10), YRP.ctr(560), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-						draw.SimpleText( "TEXT HEIGHT", "DermaDefault", YRP.ctr(10), YRP.ctr(680), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-						draw.SimpleText(YRP.lang_string( "LID_title" ), "DermaDefault", YRP.ctr(60), YRP.ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText( "TEXT ALIGN", "DermaDefault", YRP.ctr(10), YRP.ctr(560), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText( "TEXT HEIGHT", "DermaDefault", YRP.ctr(10), YRP.ctr(680), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText(YRP.lang_string( "LID_title" ), "DermaDefault", YRP.ctr(60), YRP.ctr(800), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 					win.ele = ele
 
@@ -1040,13 +1042,16 @@ net.Receive( "Connect_Settings_General", function(len)
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_changeable_name, "LID_namechangeable", "update_bool_characters_changeable_name" )
 		
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent() )
-		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_removeondeath, "LID_removeondeath", "update_bool_characters_removeondeath" )
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_removeondeath, YRP.lang_string( "LID_removeondeath" ) .. " (REMOVES CHAR ON DEATH)", "update_bool_characters_removeondeath", nil, Color( 255, 0, 0 ) )
 
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent() )	
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_birthday, "LID_birthday", "update_bool_characters_birthday" )
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_bodyheight, "LID_bodyheight", "update_bool_characters_bodyheight" )
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_weight, "LID_weight", "update_bool_characters_weight" )
 
+		CreateHRLine(CHARACTERS_SETTINGS:GetContent() )
+		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_logouttime, YRP.lang_string( "LID_logouttime" ), "update_int_logouttime" )
+		
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent() )
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_min, YRP.lang_string( "LID_respawntime" ) .. " [" .. YRP.lang_string( "LID_min" ) .. "]", "update_int_deathtimestamp_min" )
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_max, YRP.lang_string( "LID_respawntime" ) .. " [" .. YRP.lang_string( "LID_max" ) .. "]", "update_int_deathtimestamp_max" )

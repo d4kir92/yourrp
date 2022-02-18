@@ -3,7 +3,7 @@
 local PANEL = {}
 
 function PANEL:Paint(pw, ph)
-	--draw.RoundedBox(5, 0, 0, pw, ph, Color(255, 255, 255, 100) )
+	--draw.RoundedBox(5, 0, 0, pw, ph, Color( 255, 255, 255, 100) )
 
 	if self.mdl:GetWide() != pw or self.mdl:GetTall() != ph then
 		self.mdl:SetSize(pw, ph)
@@ -60,7 +60,7 @@ function PANEL:Init()
 	end
 
 	function self.mdl:PaintOver(pw, ph)
-		--draw.RoundedBox(5, 0, 0, pw, ph, Color(255, 255, 255, 1) )
+		--draw.RoundedBox(5, 0, 0, pw, ph, Color( 255, 255, 255, 1) )
 	end
 
 	self.mdl:Droppable( "yrp_slot" )
@@ -108,8 +108,8 @@ net.Receive( "yrp_storage_open", function(len)
 		bag:MakePopup()
 		bag:SetTitle( "" )
 		function bag:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "NC" ) )
-			draw.SimpleText(YRP.lang_string( "LID_bag" ), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ) )
+			draw.SimpleText(YRP.lang_string( "LID_bag" ), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color( 255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 			if YRPInventory() == nil then
 				self:Remove()

@@ -19,14 +19,14 @@ _mat1.color = {}
 
 _mat1.color["bg"] = {}
 _mat1.color["bg"]["dark"] = Color(90, 90, 90)
-_mat1.color["bg"]["light"] = Color(255, 255, 255)
+_mat1.color["bg"]["light"] = Color( 255, 255, 255)
 
 _mat1.color["br"] = {}
-_mat1.color["br"]["dark"] = Color(255, 255, 255)
-_mat1.color["br"]["light"] = Color(0, 0, 0)
+_mat1.color["br"]["dark"] = Color( 255, 255, 255)
+_mat1.color["br"]["light"] = Color( 0, 0, 0)
 
 _mat1.color["blue"] = {}
-_mat1.color["blue"]["dark"] = Color(0, 57, 203)
+_mat1.color["blue"]["dark"] = Color( 0, 57, 203)
 _mat1.color["blue"]["light"] = Color(118, 143, 255)
 
 YRPAddColor(_mat1.name, "blue", "1", Color(46, 135, 255) )	 -- Hovered
@@ -34,49 +34,49 @@ YRPAddColor(_mat1.name, "blue", "2", Color(26, 121, 255) )	 -- Normal
 YRPAddColor(_mat1.name, "blue", "3", Color(13, 63, 135) )		-- Selected
 YRPAddColor(_mat1.name, "blue", "4", Color(90, 90, 90) )		 -- Background Highlight
 YRPAddColor(_mat1.name, "blue", "5", Color(51, 51, 51) )		 -- Background
-YRPAddColor(_mat1.name, "blue", "6", Color(255, 255, 255) )	-- Border/Icon
+YRPAddColor(_mat1.name, "blue", "6", Color( 255, 255, 255) )	-- Border/Icon
 
-YRPAddColor(_mat1.name, "red", "1", Color(255, 81, 49) )	 -- Hovered
+YRPAddColor(_mat1.name, "red", "1", Color( 255, 81, 49) )	 -- Hovered
 YRPAddColor(_mat1.name, "red", "2", Color(155, 0, 0) )	 -- Normal
 YRPAddColor(_mat1.name, "red", "3", Color(13, 63, 135) )		-- Selected
 YRPAddColor(_mat1.name, "red", "4", Color(90, 90, 90) )		 -- Background Highlight
 YRPAddColor(_mat1.name, "red", "5", Color(51, 51, 51) )		 -- Background
-YRPAddColor(_mat1.name, "red", "6", Color(255, 255, 255) )	-- Border
+YRPAddColor(_mat1.name, "red", "6", Color( 255, 255, 255) )	-- Border
 
 YRPAddColor(_mat1.name, "green", "1", Color(94, 252, 130) )	 -- Hovered
-YRPAddColor(_mat1.name, "green", "2", Color(0, 150, 36) )	 -- Normal
+YRPAddColor(_mat1.name, "green", "2", Color( 0, 150, 36) )	 -- Normal
 YRPAddColor(_mat1.name, "green", "3", Color(13, 63, 135) )		-- Selected
 YRPAddColor(_mat1.name, "green", "4", Color(90, 90, 90) )		 -- Background Highlight
 YRPAddColor(_mat1.name, "green", "5", Color(51, 51, 51) )		 -- Background
-YRPAddColor(_mat1.name, "green", "6", Color(255, 255, 255) )	-- Border
+YRPAddColor(_mat1.name, "green", "6", Color( 255, 255, 255) )	-- Border
 
-YRPAddColor(_mat1.name, "yellow", "1", Color(255, 255, 82) )	 -- Hovered
+YRPAddColor(_mat1.name, "yellow", "1", Color( 255, 255, 82) )	 -- Hovered
 YRPAddColor(_mat1.name, "yellow", "2", Color(199, 165, 0) )	 -- Normal
 YRPAddColor(_mat1.name, "yellow", "3", Color(179, 125, 0) )		-- Selected
 YRPAddColor(_mat1.name, "yellow", "4", Color(90, 90, 90) )		 -- Background Highlight
 YRPAddColor(_mat1.name, "yellow", "5", Color(51, 51, 51) )		 -- Background
-YRPAddColor(_mat1.name, "yellow", "6", Color(0, 0, 0) )	-- Border
+YRPAddColor(_mat1.name, "yellow", "6", Color( 0, 0, 0) )	-- Border
 
 YRPAddColor(_mat1.name, "brown", "1", Color(106, 79, 75) )	 -- Hovered
 YRPAddColor(_mat1.name, "brown", "2", Color(27, 0, 0) )	 -- Normal
 YRPAddColor(_mat1.name, "brown", "3", Color(13, 63, 135) )		-- Selected
 YRPAddColor(_mat1.name, "brown", "4", Color(90, 90, 90) )		 -- Background Highlight
 YRPAddColor(_mat1.name, "brown", "5", Color(51, 51, 51) )		 -- Background
-YRPAddColor(_mat1.name, "brown", "6", Color(255, 255, 255) )	-- Border
+YRPAddColor(_mat1.name, "brown", "6", Color( 255, 255, 255) )	-- Border
 
-YRPAddColor(_mat1.name, "orange", "1", Color(255, 158, 64) )	 -- Hovered
+YRPAddColor(_mat1.name, "orange", "1", Color( 255, 158, 64) )	 -- Hovered
 YRPAddColor(_mat1.name, "orange", "2", Color(196, 60, 0) )	 -- Normal
 YRPAddColor(_mat1.name, "orange", "3", Color(13, 63, 135) )		-- Selected
 YRPAddColor(_mat1.name, "orange", "4", Color(90, 90, 90) )		 -- Background Highlight
 YRPAddColor(_mat1.name, "orange", "5", Color(51, 51, 51) )		 -- Background
-YRPAddColor(_mat1.name, "orange", "6", Color(0, 0, 0) )	-- Border
+YRPAddColor(_mat1.name, "orange", "6", Color( 0, 0, 0) )	-- Border
 
 YRPAddColor(_mat1.name, "purple", "1", Color(226, 84, 255) )	 -- Hovered
 YRPAddColor(_mat1.name, "purple", "2", Color(114, 0, 202) )	 -- Normal
 YRPAddColor(_mat1.name, "purple", "3", Color(13, 63, 135) )		-- Selected
 YRPAddColor(_mat1.name, "purple", "4", Color(90, 90, 90) )		 -- Background Highlight
 YRPAddColor(_mat1.name, "purple", "5", Color(51, 51, 51) )		 -- Background
-YRPAddColor(_mat1.name, "purple", "6", Color(255, 255, 255) )	-- Border
+YRPAddColor(_mat1.name, "purple", "6", Color( 255, 255, 255) )	-- Border
 
 function _mat1.GetColor( color, style)
 	return _mat1.color[color][style]
@@ -106,7 +106,7 @@ function _mat1.DrawWindow(window, pw, ph, title)
 	surfaceBox(0, YRP.ctr(50), pw, ph - YRP.ctr(50), _color_bg)
 
 	--[[ Title ]]--
-	surfaceText(YRP.lang_string(_title), "Y_22_500", YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255), 0, 1, 1)
+	surfaceText(YRP.lang_string(_title), "Y_22_500", YRP.ctr(10), YRP.ctr(25), Color( 255, 255, 255), 0, 1, 1)
 end
 
 RegisterWindowFunction(_mat1.name, _mat1.DrawWindow)
@@ -133,7 +133,7 @@ function _mat1.DrawButton( btn, pw, ph, text, color, px, py, ax, ah, forcelang)
 	if forcelang then
 		_text = YRP.lang_string(_text)
 	end
-	surfaceText(_text, _mat1.textFont, px or pw / 2, py or ph / 2, Color(255, 255, 255), ax or 1, ay or 1, 1)
+	surfaceText(_text, _mat1.textFont, px or pw / 2, py or ph / 2, Color( 255, 255, 255), ax or 1, ay or 1, 1)
 end
 RegisterButtonFunction(_mat1.name, _mat1.DrawButton)
 
@@ -152,6 +152,6 @@ function _mat1.DrawPanel(pnl, pw, ph, text, color, px, py, ax, ah)
 	surfaceBox(0, 0, pw, ph, _color_bar)
 
 	--[[ text ]]--
-	surfaceText(YRP.lang_string(_text), _mat1.textFont, px or pw/2, py or ph/2, color or Color(255, 255, 255, 255), ax or 1, ay or 1, 1)
+	surfaceText(YRP.lang_string(_text), _mat1.textFont, px or pw/2, py or ph/2, color or Color( 255, 255, 255, 255), ax or 1, ay or 1, 1)
 end
 RegisterPanelFunction(_mat1.name, _mat1.DrawPanel)

@@ -13,8 +13,8 @@ function HUDSimpleBG(tab)
 			Simple[tab.element] = Simple[tab.element] or {}
 			Simple[tab.element]["background"] = Simple[tab.element]["background"] or {}
 
-			if lply:GetNW2Int( "hud_version", 0) != Simple[tab.element]["background"]["version"] then
-				Simple[tab.element]["background"]["version"] = lply:GetNW2Int( "hud_version", 0)
+			if GetGlobalInt( "YRPHUDVersion", -1 ) != Simple[tab.element]["background"]["version"] then
+				Simple[tab.element]["background"]["version"] = GetGlobalInt( "YRPHUDVersion", -1 )
 
 				local w = lply:HudValue(tab.element, "SIZE_W" )
 				local h = lply:HudValue(tab.element, "SIZE_H" )
@@ -54,8 +54,8 @@ function HUDSimpleBAR(tab)
 		Simple[tab.element]["icon"] = Simple[tab.element]["icon"] or {}
 		Simple[tab.element]["text"] = Simple[tab.element]["text"] or {}
 
-		if lply:GetNW2Int( "hud_version", 0) != Simple[tab.element]["bar"]["version"] then
-			Simple[tab.element]["bar"]["version"] = lply:GetNW2Int( "hud_version", 0)
+		if GetGlobalInt( "YRPHUDVersion", -1 ) != Simple[tab.element]["bar"]["version"] then
+			Simple[tab.element]["bar"]["version"] = GetGlobalInt( "YRPHUDVersion", -1 )
 
 			local w = lply:HudValue(tab.element, "SIZE_W" )
 			local h = lply:HudValue(tab.element, "SIZE_H" )
@@ -143,7 +143,7 @@ function HUDSimpleBAR(tab)
 
 			if lply:HudValue(tab.element, "ICON" ) and tab.icon and YRP.GetDesignIcon(tab.icon) then
 				local ico = tab.icon
-				YRP.DrawIcon(YRP.GetDesignIcon(ico), Simple[tab.element]["icon"].w, Simple[tab.element]["icon"].h, Simple[tab.element]["icon"].x, Simple[tab.element]["icon"].y, Color(255, 255, 255) )
+				YRP.DrawIcon(YRP.GetDesignIcon(ico), Simple[tab.element]["icon"].w, Simple[tab.element]["icon"].h, Simple[tab.element]["icon"].x, Simple[tab.element]["icon"].y, Color( 255, 255, 255) )
 			end
 
 			Simple[tab.element]["text"].text = ""
@@ -177,8 +177,8 @@ function HUDSimpleBR(tab)
 				Simple[tab.element]["border"].y = HUDMOTIONY(Simple[tab.element]["border"].fy)
 			end
 
-			if lply:GetNW2Int( "hud_version", 0) != Simple[tab.element]["border"]["version"] then
-				Simple[tab.element]["border"]["version"] = lply:GetNW2Int( "hud_version", 0)
+			if GetGlobalInt( "YRPHUDVersion", -1 ) != Simple[tab.element]["border"]["version"] then
+				Simple[tab.element]["border"]["version"] = GetGlobalInt( "YRPHUDVersion", -1 )
 
 				local w = lply:HudValue(tab.element, "SIZE_W" )
 				local h = lply:HudValue(tab.element, "SIZE_H" )
@@ -256,8 +256,8 @@ function HUDSimpleCompass()
 		Simple["COM"]["east"] = Simple["COM"]["east"] or {}
 		Simple["COM"]["west"] = Simple["COM"]["west"] or {}
 
-		if lply:GetNW2Int( "hud_version", 0) != Simple["COM"]["degree"]["version"] then
-			Simple["COM"]["degree"]["version"] = lply:GetNW2Int( "hud_version", 0)
+		if GetGlobalInt( "YRPHUDVersion", -1 ) != Simple["COM"]["degree"]["version"] then
+			Simple["COM"]["degree"]["version"] = GetGlobalInt( "YRPHUDVersion", -1 )
 
 			local w = lply:HudValue( "COM", "SIZE_W" )
 			local h = lply:HudValue( "COM", "SIZE_H" )
@@ -269,7 +269,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["needle"].h = h / 4
 			Simple["COM"]["needle"].fx = x + w / 2
 			Simple["COM"]["needle"].fy = y
-			Simple["COM"]["needle"].color = Color(255, 255, 255)
+			Simple["COM"]["needle"].color = Color( 255, 255, 255)
 
 			local fontsize = lply:HudValue( "COM", "TS" )
 			if fontsize <= 0 then
@@ -354,7 +354,7 @@ function HUDSimpleCompass()
 					Simple["COM"][i .. "num"].ax = 1
 					Simple["COM"][i .. "num"].ay = 1
 					Simple["COM"][i .. "num"].text = (i + 180) % 360
-					Simple["COM"][i .. "num"].color = Color(255, 255, 255, 200)
+					Simple["COM"][i .. "num"].color = Color( 255, 255, 255, 200)
 					Simple["COM"][i .. "num"].font = "Y_" .. fontsize .. "_500"
 					Simple["COM"][i .. "num"].color = lply:HudValue( "COM", "TE" )
 					Simple["COM"][i .. "num"].brcolor = lply:HudValue( "COM", "TB" )
@@ -385,8 +385,8 @@ function HUDSimpleCompass()
 				end
 			end
 
-			draw.RoundedBox(0, HUDMOTIONX(x), HUDMOTIONY(y + YRP.ctr(12) ), w, YRP.ctr(4), Color(255, 255, 255, 50) )
-			draw.RoundedBox(0, HUDMOTIONX(x), HUDMOTIONY(y + h - YRP.ctr(12) - YRP.ctr(4) ), w, YRP.ctr(4), Color(255, 255, 255, 50) )
+			draw.RoundedBox(0, HUDMOTIONX(x), HUDMOTIONY(y + YRP.ctr(12) ), w, YRP.ctr(4), Color( 255, 255, 255, 50) )
+			draw.RoundedBox(0, HUDMOTIONX(x), HUDMOTIONY(y + h - YRP.ctr(12) - YRP.ctr(4) ), w, YRP.ctr(4), Color( 255, 255, 255, 50) )
 
 			x = Simple["COM"]["degree"].x - Simple["COM"]["north"].w / 2
 			w = Simple["COM"]["north"].w
@@ -400,8 +400,8 @@ function HUDSimpleCompass()
 					Simple["COM"][i .. "num"].x = x + (fw + w * i / 360) % w
 
 					local alpha = GetFadeAlpha(x, Simple["COM"][i .. "num"].x, w)
-					Simple["COM"][i .. "num"].color = Color(255, 255, 255, alpha * 255)
-					Simple["COM"][i .. "num"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
+					Simple["COM"][i .. "num"].color = Color( 255, 255, 255, alpha * 255)
+					Simple["COM"][i .. "num"].brcolor = Color( 0, 0, 0, alpha * 255 * 0.7)
 					HudText(Simple["COM"][i .. "num"])
 				end
 			end
@@ -410,32 +410,32 @@ function HUDSimpleCompass()
 			Simple["COM"]["north"].x = x + (fw + w * 0.5) % w
 			Simple["COM"]["north"].text = YRP.lang_string( "LID_north_short" )
 			local alpha = GetFadeAlpha(x, Simple["COM"]["north"].x, w)
-			Simple["COM"]["north"].color = Color(255, 255, 255, alpha * 255)
-			Simple["COM"]["north"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
+			Simple["COM"]["north"].color = Color( 255, 255, 255, alpha * 255)
+			Simple["COM"]["north"].brcolor = Color( 0, 0, 0, alpha * 255 * 0.7)
 			HudText(Simple["COM"]["north"])
 
 			-- South
 			Simple["COM"]["south"].x = x + (fw + w * 0.0) % w
 			Simple["COM"]["south"].text = YRP.lang_string( "LID_south_short" )
 			alpha = GetFadeAlpha(x, Simple["COM"]["south"].x, w)
-			Simple["COM"]["south"].color = Color(255, 255, 255, alpha * 255)
-			Simple["COM"]["south"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
+			Simple["COM"]["south"].color = Color( 255, 255, 255, alpha * 255)
+			Simple["COM"]["south"].brcolor = Color( 0, 0, 0, alpha * 255 * 0.7)
 			HudText(Simple["COM"]["south"])
 
 			-- East
 			Simple["COM"]["east"].x = x + (fw + w * 0.75) % w
 			Simple["COM"]["east"].text = YRP.lang_string( "LID_east_short" )
 			alpha = GetFadeAlpha(x, Simple["COM"]["east"].x, w)
-			Simple["COM"]["east"].color = Color(255, 255, 255, alpha * 255)
-			Simple["COM"]["east"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
+			Simple["COM"]["east"].color = Color( 255, 255, 255, alpha * 255)
+			Simple["COM"]["east"].brcolor = Color( 0, 0, 0, alpha * 255 * 0.7)
 			HudText(Simple["COM"]["east"])
 
 			-- West
 			Simple["COM"]["west"].x = x + (fw + w * 0.25) % w
 			Simple["COM"]["west"].text = YRP.lang_string( "LID_west_short" )
 			alpha = GetFadeAlpha(x, Simple["COM"]["west"].x, w)
-			Simple["COM"]["west"].color = Color(255, 255, 255, alpha * 255)
-			Simple["COM"]["west"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
+			Simple["COM"]["west"].color = Color( 255, 255, 255, alpha * 255)
+			Simple["COM"]["west"].brcolor = Color( 0, 0, 0, alpha * 255 * 0.7)
 			HudText(Simple["COM"]["west"])
 
 			-- Degree Number
@@ -449,7 +449,7 @@ function HUDSimpleCompass()
 				{ x = Simple["COM"]["needle"].x, y = Simple["COM"]["needle"].y + h - 7 - 8 },
 				{ x = Simple["COM"]["needle"].x + 5, y = Simple["COM"]["needle"].y + h - 7 }
 			}
-			surface.SetDrawColor(255, 255, 255, 180)
+			surface.SetDrawColor( 255, 255, 255, 180)
 			draw.NoTexture()
 			surface.DrawPoly(triangle)
 
@@ -458,7 +458,7 @@ function HUDSimpleCompass()
 				{ x = Simple["COM"]["needle"].x + 5, y = Simple["COM"]["needle"].y + 7 },
 				{ x = Simple["COM"]["needle"].x, y = Simple["COM"]["needle"].y + 7 + 8 },
 			}
-			surface.SetDrawColor(255, 255, 255, 180)
+			surface.SetDrawColor( 255, 255, 255, 180)
 			draw.NoTexture()
 			surface.DrawPoly(triangle2)
 		end
@@ -486,7 +486,7 @@ local fpsavg = fps
 local fpstavg = 0
 local fpscou = 0
 local fps_delay = 0
-local fpscolor = Color(0, 0, 0)
+local fpscolor = Color( 0, 0, 0)
 
 local ping = 0
 local pingmin = 9999
@@ -495,7 +495,7 @@ local pingavg = ping
 local pingtavg = 0
 local pingcou = 0
 local ping_delay = 0
-local pingcolor = Color(0, 0, 0)
+local pingcolor = Color( 0, 0, 0)
 
 local icons = {}
 icons["RA"] = "64_radiation"
@@ -587,7 +587,7 @@ function HUDSimple()
 				AL.element = "AL"
 				HUDSimpleBG(AL)
 			end
-			if lply:GetNW2Bool( "iscasting", false) then
+			if lply:GetYRPBool( "iscasting", false) then
 				local CA = {}
 				CA.element = "CA"
 				HUDSimpleBG(CA)
@@ -706,7 +706,7 @@ function HUDSimple()
 			ID.element = "ID"
 			ID.cur = 0
 			ID.max = 1
-			ID.text = lply:GetNW2String( "idcardid", "" )
+			ID.text = lply:GetYRPString( "idcardid", "" )
 			ID.icon = icons["ID"]
 			HUDSimpleBAR(ID)
 			CR = {}
@@ -823,7 +823,7 @@ function HUDSimple()
 				RA.icon = icons["RA"]
 				HUDSimpleBAR(RA)
 			end
-			if lply:GetNW2Bool( "iscasting", false) then
+			if lply:GetYRPBool( "iscasting", false) then
 				local CA = {}
 				CA.element = "CA"
 				CA.cur = lply:CastTimeCurrent()
@@ -896,11 +896,11 @@ function HUDSimple()
 				end
 
 				if fps < 30 then
-					fpscolor = Color(255, 0, 0)
+					fpscolor = Color( 255, 0, 0)
 				elseif fps < 60 then
-					fpscolor = Color(255, 255, 0)
+					fpscolor = Color( 255, 255, 0)
 				else
-					fpscolor = Color(0, 255, 0)
+					fpscolor = Color( 0, 255, 0)
 				end
 			end
 			PE.text = YRP.lang_string( "LID_fps" ) .. ": " .. fps
@@ -930,11 +930,11 @@ function HUDSimple()
 				end
 
 				if ping > 100 then
-					pingcolor = Color(255, 0, 0)
+					pingcolor = Color( 255, 0, 0)
 				elseif ping > 50 then
-					pingcolor = Color(255, 255, 0)
+					pingcolor = Color( 255, 255, 0)
 				else
-					pingcolor = Color(0, 255, 0)
+					pingcolor = Color( 0, 255, 0)
 				end
 			end
 			NE = {}
@@ -1019,7 +1019,7 @@ function HUDSimple()
 				AL.element = "AL"
 				HUDSimpleBR(AL)
 			end
-			if lply:GetNW2Bool( "iscasting", false) then
+			if lply:GetYRPBool( "iscasting", false) then
 				local CA = {}
 				CA.element = "CA"
 				HUDSimpleBR(CA)

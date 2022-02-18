@@ -454,7 +454,7 @@ function OpenSettingsShops()
 
 	_sh.ea = createD( "DPanel", GetSettingsSite(), ScW() - YRP.ctr(40 + 480 + 40 + 40), h - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
 	function _sh.ea:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 200) )
 	end
 
 	net.Start( "get_shops" )

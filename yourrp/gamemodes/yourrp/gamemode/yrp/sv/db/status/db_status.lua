@@ -33,27 +33,27 @@ net.Receive( "Connect_Settings_Status", function(len, ply)
 		end
 		if !_yourrp_content_found then
 			_nw_yourrp["YourRP Content"] = {}
-			_nw_yourrp["YourRP Content"]["LID_missingx"] = Color(255, 0, 0)
+			_nw_yourrp["YourRP Content"]["LID_missingx"] = Color( 255, 0, 0)
 		end
 		if YRPCollectionID() < 100000000 then
 			_nw_yourrp["Collection ID"] = {}
-			_nw_yourrp["Collection ID"]["LID_thecollectionidismissing"] = Color(255, 0, 0)
+			_nw_yourrp["Collection ID"]["LID_thecollectionidismissing"] = Color( 255, 0, 0)
 		end
 		if strEmpty(GetGlobalString( "text_server_name" ) ) then
 			_nw_yourrp["Hostname"] = {}
-			_nw_yourrp["Hostname"]["Hostname is missing/empty"] = Color(255, 255, 0)
+			_nw_yourrp["Hostname"]["Hostname is missing/empty"] = Color( 255, 255, 0)
 		end
 		if strEmpty(GetGlobalString( "text_server_logo" ) ) then
 			_nw_yourrp["ServerLogo"] = {}
-			_nw_yourrp["ServerLogo"]["Server Logo is missing/empty"] = Color(255, 255, 0)
+			_nw_yourrp["ServerLogo"]["Server Logo is missing/empty"] = Color( 255, 255, 0)
 		end
 		if strEmpty(GetGlobalString( "text_loading_background" ) ) then
 			_nw_yourrp["backgroundloading"] = {}
-			_nw_yourrp["backgroundloading"]["Loadingscreen Background is missing"] = Color(255, 255, 0)
+			_nw_yourrp["backgroundloading"]["Loadingscreen Background is missing"] = Color( 255, 255, 0)
 		end
 		if strEmpty(GetGlobalString( "text_character_background" ) ) then
 			_nw_yourrp["backgroundcharacter"] = {}
-			_nw_yourrp["backgroundcharacter"]["Character Background is missing"] = Color(255, 255, 0)
+			_nw_yourrp["backgroundcharacter"]["Character Background is missing"] = Color( 255, 255, 0)
 		end
 
 		local _roles = YRP_SQL_SELECT( "yrp_ply_roles", "*", nil)

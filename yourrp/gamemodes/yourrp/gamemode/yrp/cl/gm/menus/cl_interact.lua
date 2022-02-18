@@ -5,10 +5,10 @@ function toggleInteractMenu()
 	local lply = LocalPlayer()
 	local eyeTrace = lply:GetEyeTrace()
 
-	--openInteractMenu(LocalPlayer():SteamID() )
+	--openInteractMenu(LocalPlayer():YRPSteamID() )
 	if eyeTrace.Entity:IsPlayer() and YRPIsNoMenuOpen() then
 		if eyeTrace.Entity:GetColor().a > 0 then
-			openInteractMenu(eyeTrace.Entity:SteamID() )
+			openInteractMenu(eyeTrace.Entity:YRPSteamID() )
 		end
 	else
 		closeInteractMenu()
@@ -64,18 +64,18 @@ net.Receive( "openInteractMenu", function(len)
 	local tmpID = ""
 	local tmpCharID = 0
 	for k, v in pairs (player.GetAll() ) do
-		if tostring( v:SteamID() ) == tostring(tmpTargetSteamID) then
+		if tostring( v:YRPSteamID() ) == tostring(tmpTargetSteamID) then
 			tmpPly = v
 			tmpTargetName = v:Nick()
 			tmpRPName = v:RPName()
-			tmpID = v:GetNW2String( "idcardid" )
+			tmpID = v:GetYRPString( "idcardid" )
 			tmpCharID = v:CharID()
 			tmpRPDescription = ""
 			for i = 1, 10 do
 				if i > 1 then
 					tmpRPDescription = tmpRPDescription .. "\n"
 				end
-				tmpRPDescription = tmpRPDescription .. v:GetNW2String( "rpdescription" .. i, "" )
+				tmpRPDescription = tmpRPDescription .. v:GetYRPString( "rpdescription" .. i, "" )
 			end
 			break
 		end
@@ -97,15 +97,15 @@ net.Receive( "openInteractMenu", function(len)
 		drawIDCard(ply, scale, YRP.ctr(10), YRP.ctr(10) )
 		
 		--[[ Licenses ]]--
-		if LocalPlayer():isCP() or LocalPlayer():GetNW2Bool( "bool_canusewarnsystem", false) then
-			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255) )
-			draw.SimpleTextOutlined(YRP.lang_string( "LID_licenses" ) .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(470 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0) )
-			draw.SimpleTextOutlined(licenses, "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0) )
+		if LocalPlayer():isCP() or LocalPlayer():GetYRPBool( "bool_canusewarnsystem", false) then
+			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color( 255, 255, 255, 255) )
+			draw.SimpleTextOutlined(YRP.lang_string( "LID_licenses" ) .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(470 + 5 + 25), Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0) )
+			draw.SimpleTextOutlined(licenses, "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0) )
 		end
 	
 		--[[ Description ]]--
-		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(590), content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), Color(255, 255, 255, 255) )
-		draw.SimpleTextOutlined(YRP.lang_string( "LID_description" ) .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(610), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 0) )
+		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(590), content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), Color( 255, 255, 255, 255) )
+		draw.SimpleTextOutlined(YRP.lang_string( "LID_description" ) .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(610), Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0) )
 	end
 
 	if idcard then
@@ -121,7 +121,7 @@ net.Receive( "openInteractMenu", function(len)
 		hook.Run( "YButtonPaint", self, pw, ph)
 	end]]
 
-	if LocalPlayer():isCP() or LocalPlayer():GetNW2Bool( "bool_canusewarnsystem", false) then
+	if LocalPlayer():isCP() or LocalPlayer():GetYRPBool( "bool_canusewarnsystem", false) then
 		local btnVerwarnungUp = createVGUI( "YButton", content, 50, 50, 10, 1000)
 		btnVerwarnungUp:SetText( "⮝" )
 		function btnVerwarnungUp:DoClick()
@@ -139,7 +139,7 @@ net.Receive( "openInteractMenu", function(len)
 		local btnVerwarnung = createVGUI( "YLabel", content, 450, 100, 60, 1000)
 		function btnVerwarnung:Paint(pw, ph)
 			hook.Run( "YLabelPaint", self, pw, ph)
-			btnVerwarnung:SetText(YRP.lang_string( "LID_warnings" ) .. ": " .. ply:GetNW2Int( "int_warnings", -1) )
+			btnVerwarnung:SetText(YRP.lang_string( "LID_warnings" ) .. ": " .. ply:GetYRPInt( "int_warnings", -1) )
 		end
 
 		local btnVerstoesseUp = createVGUI( "YButton", content, 50, 50, 10, 1110)
@@ -159,7 +159,7 @@ net.Receive( "openInteractMenu", function(len)
 		local btnVerstoesse = createVGUI( "YLabel", content, 450, 100, 60, 1110)
 		function btnVerstoesse:Paint(pw, ph)
 			hook.Run( "YLabelPaint", self, pw, ph)
-			btnVerstoesse:SetText(YRP.lang_string( "LID_violations" ) .. ": " .. ply:GetNW2Int( "int_violations", -1) )
+			btnVerstoesse:SetText(YRP.lang_string( "LID_violations" ) .. ": " .. ply:GetYRPInt( "int_violations", -1) )
 		end
 	end
 
@@ -253,75 +253,76 @@ function YRPOpenGiveSpec( charid, ruid)
 	win.dpl:EnableVerticalScrollbar()
 	win.dpl:SetSpacing(2)
 	function win.dpl:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 80) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 80) )
 	end
 	
 	win.dplrem = createD( "DPanelList", content, 280, content:GetTall() - 50, 300, 50)
 	win.dplrem:EnableVerticalScrollbar()
 	win.dplrem:SetSpacing(2)
 	function win.dplrem:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 80) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 80) )
 	end
 
 	net.Receive( "get_role_specs", function(len)
 		local nettab = net.ReadTable()
-		
-		local ply = NULL
-		for i, v in pairs(player.GetAll() ) do
-			if v:CharID() == charid then
-				ply = v
-				break
+		if pa( win ) and pa( win.dpl ) then
+			local ply = NULL
+			for i, v in pairs(player.GetAll() ) do
+				if v:CharID() == charid then
+					ply = v
+					break
+				end
 			end
-		end
 
-		local specids = {}
-		if IsValid(ply) then
-			specids = string.Explode( ",", ply:GetNW2String( "specializationIDs", "" ) )
-			for i, v in pairs(specids) do
-				specids[i] = tonumber( v )
+			local specids = {}
+			if IsValid(ply) then
+				specids = string.Explode( ",", ply:GetYRPString( "specializationIDs", "" ) )
+				for i, v in pairs(specids) do
+					specids[i] = tonumber( v )
+				end
 			end
-		end
 
-		for i, v in pairs(nettab) do
-			v.uid = tonumber( v.uid )
-			if !table.HasValue( specids, v.uid ) then
-				local btn = createD( "YButton", nil, 250, 50, 0, 0)
-				btn:SetText( v.name)
+			for i, v in pairs(nettab) do
+				v.uid = tonumber( v.uid )
+				if !table.HasValue( specids, v.uid ) then
+					local btn = createD( "YButton", nil, 250, 50, 0, 0)
+					btn:SetText( v.name)
 
-				function btn:Paint(pw, ph)
-					hook.Run( "YButtonAPaint", self, pw, ph)
+					function btn:Paint(pw, ph)
+						hook.Run( "YButtonAPaint", self, pw, ph)
+					end
+
+					function btn:DoClick()
+						net.Start( "char_add_spec" )
+							net.WriteString( charid)
+							net.WriteString( v.uid)
+							net.WriteString(ruid)
+						net.SendToServer()
+
+						win:Close()
+					end
+
+					win.dpl:AddItem( btn)
+				else
+					local btn = createD( "YButton", nil, 250, 50, 0, 0)
+					btn:SetText( v.name)
+
+					function btn:Paint(pw, ph)
+						hook.Run( "YButtonRPaint", self, pw, ph)
+					end
+
+					function btn:DoClick()
+						net.Start( "char_rem_spec" )
+							net.WriteString( charid)
+							net.WriteString( v.uid)
+							net.WriteString(ruid)
+						net.SendToServer()
+
+						win:Close()
+					end
+
+					win.dplrem:AddItem( btn)
 				end
-
-				function btn:DoClick()
-					net.Start( "char_add_spec" )
-						net.WriteString( charid)
-						net.WriteString( v.uid)
-						net.WriteString(ruid)
-					net.SendToServer()
-
-					win:Close()
-				end
-
-				win.dpl:AddItem( btn)
-			else
-				local btn = createD( "YButton", nil, 250, 50, 0, 0)
-				btn:SetText( v.name)
-
-				function btn:Paint(pw, ph)
-					hook.Run( "YButtonRPaint", self, pw, ph)
-				end
-
-				function btn:DoClick()
-					net.Start( "char_rem_spec" )
-						net.WriteString( charid)
-						net.WriteString( v.uid)
-						net.WriteString(ruid)
-					net.SendToServer()
-
-					win:Close()
-				end
-
-				win.dplrem:AddItem( btn)
 			end
 		end
 	end)
@@ -352,9 +353,9 @@ net.Receive( "yrp_invite_ply", function(len)
 
 	function content:Paint(pw, ph)
 		local text = YRP.lang_string( "LID_youwereinvited" )
-		draw.SimpleText(text .. ":", "Y_16_500", pw / 2, YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(group.string_name, "Y_16_500", pw / 2, YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(role.string_name, "Y_16_500", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(text .. ":", "Y_16_500", pw / 2, YRP.ctr(20), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(group.string_name, "Y_16_500", pw / 2, YRP.ctr(60), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(role.string_name, "Y_16_500", pw / 2, YRP.ctr(100), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	win.accept = createD( "YButton", content, YRP.ctr(200), YRP.ctr(50), content:GetWide() / 2 - YRP.ctr(200 + 5), content:GetTall() - YRP.ctr(50 + 10) )

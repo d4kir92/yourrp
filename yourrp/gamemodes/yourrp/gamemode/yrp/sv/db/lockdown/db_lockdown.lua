@@ -22,8 +22,8 @@ function Player:LockdownLoadout()
 		lockdown = lockdown[1]
 		lockdown.bool_lockdown = tobool(lockdown.bool_lockdown)
 		for i, pl in pairs(player.GetAll() ) do
-			pl:SetNW2Bool( "bool_lockdown", lockdown.bool_lockdown)
-			pl:SetNW2String( "string_lockdowntext", lockdown.string_lockdowntext)
+			pl:SetYRPBool( "bool_lockdown", lockdown.bool_lockdown)
+			pl:SetYRPString( "string_lockdowntext", lockdown.string_lockdowntext)
 		end
 	else
 		YRP.msg( "note", "LockdownLoadout FAILED" )
@@ -51,7 +51,7 @@ function AddLockDownAlarm( alarm, name, enabled)
 	entry.name = name
 	entry.enabled = enabled
 	table.insert( alarms, entry)
-	SetGlobalTable( "lockdown_alarms", alarms)
+	SetGlobalYRPTable( "lockdown_alarms", alarms)
 end
 
 AddLockDownAlarm([[ambient\alarms\alarm_citizen_loop1.wav]], "alarm_citizen_loop1" )
@@ -91,7 +91,7 @@ net.Receive( "update_lockdown_alarms", function(len, ply)
 			e.enabled = checked
 		end
 	end
-	SetGlobalTable( "lockdown_alarms", alarms)
+	SetGlobalYRPTable( "lockdown_alarms", alarms)
 end)
 
 _G["LOCKDOWN_ENTITIES"] = _G["LOCKDOWN_ENTITIES"] or {}
@@ -116,7 +116,7 @@ net.Receive( "set_lockdown", function(len, ply)
 	end
 
 	if bool_lockdown then
-		SetGlobalBool( "DarkRP_LockDown", true)
+		SetGlobalYRPBool( "DarkRP_LockDown", true)
 		
 		-- LOCKDOWN START
 		YRP.msg( "note", ply:RPName() .. " started a lockdown!" )
@@ -143,7 +143,7 @@ net.Receive( "set_lockdown", function(len, ply)
 
 			local doors = GetAllDoors()
 			for i, door in pairs( doors) do
-				local buid = tonumber( door:GetNW2String( "buildingID", "-1" ) )
+				local buid = tonumber( door:GetYRPString( "buildingID", "-1" ) )
 				if table.HasValue(lockdoors, buid) then
 					door:Fire( "Close" )
 					door:Fire( "Lock" )
@@ -151,7 +151,7 @@ net.Receive( "set_lockdown", function(len, ply)
 			end
 		end
 	else
-		SetGlobalBool( "DarkRP_LockDown", false)
+		SetGlobalYRPBool( "DarkRP_LockDown", false)
 
 		--LOCKDOWN END
 		YRP.msg( "note", ply:RPName() .. " stopped the lockdown!" )
@@ -170,7 +170,7 @@ net.Receive( "set_lockdown", function(len, ply)
 
 			local doors = GetAllDoors()
 			for i, door in pairs( doors) do
-				local buid = tonumber( door:GetNW2String( "buildingID", "-1" ) )
+				local buid = tonumber( door:GetYRPString( "buildingID", "-1" ) )
 				if table.HasValue(lockdoors, buid) then
 					door:Fire( "Unlock" )
 					door:Fire( "Open" )

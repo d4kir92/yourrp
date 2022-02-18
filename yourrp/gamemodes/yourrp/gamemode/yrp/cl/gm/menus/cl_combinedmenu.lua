@@ -32,12 +32,12 @@ function CreateForumContent(PARENT)
 end
 
 function CreateRulesContent(PARENT)
-	local serverrules = table.concat(GetGlobalTable( "text_server_rules", "" ), "\n" )
+	local serverrules = table.concat(GetGlobalYRPTable( "text_server_rules", "" ), "\n" )
 	serverrules = YRP_SQL_STR_OUT( serverrules )
 
 	local page = createD( "DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20) )
 	function page:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string( "LID_rules" ), "Y_22_500", 0, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.SimpleText(YRP.lang_string( "LID_rules" ), "Y_22_500", 0, YRP.ctr(50), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 	end
 
 	page.serverrules = createD( "RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(70), 0, YRP.ctr(70) )
@@ -58,7 +58,7 @@ function CreateDiscordContent(PARENT)
 
 	local page = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function page:Paint(pw, ph)
-		--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color(255, 255, 255, 255) )
+		--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255) )
 	end
 
 	local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. PARENT:GetWide() - YRP.ctr(2 * 20) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
@@ -71,7 +71,7 @@ function CreateDiscordContent(PARENT)
 		if YRP.GetDesignIcon( "launch" ) ~= nil then
 			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
-		draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
+		draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), 1, 1)
 	end
 
 	function openLink:DoClick()
@@ -113,7 +113,7 @@ function CreateCollectionContent(PARENT)
 		local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
 		function WorkshopPage:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+			surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 		end
 
 		WorkshopPage:OpenURL(link)
@@ -137,7 +137,7 @@ function CreateTwitchContent(PARENT)
 	local link = GetGlobalString( "text_social_twitch", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -158,7 +158,7 @@ function CreateYoutubeContent(PARENT)
 	local link = GetGlobalString( "text_social_youtube", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -177,7 +177,7 @@ function CreateTwitterContent(PARENT)
 	local link = GetGlobalString( "text_social_twitter", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -198,7 +198,7 @@ function CreateSteamGroupContent(PARENT)
 	local link = GetGlobalString( "text_social_steamgroup", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -219,7 +219,7 @@ function CreateFacebookContent(PARENT)
 	local link = GetGlobalString( "text_social_facebook", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -240,7 +240,7 @@ function CreateInstagramContent(PARENT)
 	local link = GetGlobalString( "text_social_instagram", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color(255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -296,7 +296,7 @@ function OpenCombinedMenu()
 			c = c + 1
 		end
 
-		if !strEmpty(GetGlobalString( "sting_laws", "" ) ) or lply:GetNW2Bool( "bool_" .. "ismayor", false) then
+		if !strEmpty(GetGlobalString( "sting_laws", "" ) ) or lply:GetYRPBool( "bool_" .. "ismayor", false) then
 			sites[c] = {}
 			sites[c].name = "LID_laws"
 			sites[c].icon = "gavel"
@@ -327,7 +327,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if table.Count(GetGlobalTable( "text_server_rules", {}) ) > 1 then
+		if table.Count(GetGlobalYRPTable( "text_server_rules", {}) ) > 1 then
 			sites[c] = {}
 			sites[c].name = "LID_rules"
 			sites[c].icon = "policy"
@@ -470,7 +470,7 @@ function OpenCombinedMenu()
 		local sbar = cm.menu.VBar
 		function sbar:Paint(w, h)
 			local lply = LocalPlayer()
-			draw.RoundedBox(0, 0, 0, w, h, lply:InterfaceValue( "YFrame", "NC" ), 0)
+			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ), 0)
 		end
 		function sbar.btnUp:Paint(w, h)
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
@@ -480,7 +480,7 @@ function OpenCombinedMenu()
 		end
 		function sbar.btnGrip:Paint(w, h)
 			local lply = LocalPlayer()
-			draw.RoundedBox(w / 2, 0, 0, w, h, lply:InterfaceValue( "YFrame", "HI" ) )
+			draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
 		end
 		cm.menu:SetText( "" )
 		cm.menu.pw = 10
@@ -488,7 +488,7 @@ function OpenCombinedMenu()
 		cm.menu.expanded = lply.combined_expanded or true
 		local font = "Y_" .. math.Clamp(math.Round( cm.menu.ph - 2 * br), 4, 100) ..  "_500"
 		function cm.menu:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "HB" ) )
+			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HB" ) )
 		end
 		cm.menu:SetSpacing(YRP.ctr(10) )
 		if cm.menu.expanded then
@@ -512,7 +512,7 @@ function OpenCombinedMenu()
 			lply.combined_expanded = cm.menu.expanded
 		end
 		function cm.menu.expander:Paint(pw, ph)
-			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "HB" ), false, false, true, false)
+			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HB" ), false, false, true, false)
 
 			if cm.menu.expanded then
 				if YRP.GetDesignIcon( "64_angle-left" ) ~= nil then
@@ -523,7 +523,7 @@ function OpenCombinedMenu()
 					surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
 				end
 			end
-			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetDrawColor( 255, 255, 255, 255)
 			surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 		end
 		
@@ -532,9 +532,9 @@ function OpenCombinedMenu()
 		cm.site:SetText( "" )
 		cm.site:SetHeaderHeight( cm.win:GetHeaderHeight() )
 		function cm.site:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255) )
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
 			local tab = {}
-			tab.color = lply:InterfaceValue( "YFrame", "BG" )
+			tab.color = YRPInterfaceValue( "YFrame", "BG" )
 			hook.Run( "YPanelPaint", self, pw, ph, tab) --draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255) )
 		end
 
@@ -581,12 +581,12 @@ function OpenCombinedMenu()
 
 					local lply = LocalPlayer()
 					local target = pw
-					local color = lply:InterfaceValue( "YFrame", "HB" )
+					local color = YRPInterfaceValue( "YFrame", "HB" )
 					if self:IsHovered() then
-						color = lply:InterfaceValue( "YButton", "SC" )
+						color = YRPInterfaceValue( "YButton", "SC" )
 						color.a = 120
 					elseif self.selected then
-						color = lply:InterfaceValue( "YButton", "SC" )
+						color = YRPInterfaceValue( "YButton", "SC" )
 					else
 						target = 0
 					end
@@ -595,7 +595,7 @@ function OpenCombinedMenu()
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
 
 					if YRP.GetDesignIcon( v.icon) ~= nil then
-						surface.SetDrawColor(255, 255, 255, 255)
+						surface.SetDrawColor( 255, 255, 255, 255)
 						surface.SetMaterial(YRP.GetDesignIcon( v.icon) )
 						surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 					end
@@ -606,7 +606,7 @@ function OpenCombinedMenu()
 						cm.menu.pw = tw
 						--cm.win:UpdateSize()
 					end
-					draw.SimpleText(YRP.lang_string( v.name), font, ph, ph / 2, lply:InterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string( v.name), font, ph, ph / 2, YRPInterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 				function site:DoClick()
 					cm.menu:ClearSelection()
@@ -627,7 +627,7 @@ function OpenCombinedMenu()
 				local site = cm.sites[v.name]
 				function site:Paint(pw, ph)
 					local hr = YRP.ctr(2)
-					draw.RoundedBox(0, br, ph / 2 - hr / 2, pw - br * 2, hr, Color(255, 255, 255, 255) )
+					draw.RoundedBox(0, br, ph / 2 - hr / 2, pw - br * 2, hr, Color( 255, 255, 255, 255) )
 				end
 
 				cm.menu:AddItem(site)

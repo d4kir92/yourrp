@@ -39,9 +39,9 @@ function createShopItem(item, duid, id)
 	local HE = 60
 	local _i = createD( "DPanel", nil, YRP.ctr(W), YRP.ctr(H), YRP.ctr(BR), 0)
 	function _i:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "HI" ) )
+		draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HI" ) )
 
-		draw.RoundedBox(0, YRP.ctr(20), YRP.ctr(20), YRP.ctr(H - 2 * BR), YRP.ctr(H - 2 * BR), lply:InterfaceValue( "YFrame", "PC" ) )
+		draw.RoundedBox(0, YRP.ctr(20), YRP.ctr(20), YRP.ctr(H - 2 * BR), YRP.ctr(H - 2 * BR), YRPInterfaceValue( "YFrame", "PC" ) )
 	end
 	_i.item = item
 	if item.WorldModel != nil and !strEmpty(item.WorldModel) then
@@ -63,7 +63,7 @@ function createShopItem(item, duid, id)
 
 		_i.modelc = createD( "DButton", _i.model, YRP.ctr(40), YRP.ctr(40), YRP.ctr(20), _i.model:GetTall() - YRP.ctr(40 + 20) )
 		_i.modelc:SetText( "" )
-		_i.modelc.color = Color(255, 255, 255)
+		_i.modelc.color = Color( 255, 255, 255)
 		function _i.modelc:Paint(pw, ph)
 			draw.RoundedBox(ph / 2, 0, 0, pw, ph, self.color)
 		end
@@ -74,7 +74,7 @@ function createShopItem(item, duid, id)
 			w:SetTitle( "" )
 			w:ShowCloseButton(false)
 			function w:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0) )
+				draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0) )
 				if self.cc != nil then
 					mx, my = gui.MousePos()
 					local px, py = self:GetPos()
@@ -88,7 +88,7 @@ function createShopItem(item, duid, id)
 			w.cc:SetPalette(false)
 			w.cc:SetAlphaBar(false)
 			w.cc:SetWangs(true)
-			w.cc:SetColor(Color(255, 255, 255) )
+			w.cc:SetColor(Color( 255, 255, 255) )
 			function w.cc:ValueChanged( col)
 				_i.modelc.color = col
 				_i.model:SetColor(_i.modelc.color)
@@ -104,8 +104,8 @@ function createShopItem(item, duid, id)
 			_i.name.name = YRP.lang_string( "LID_license" ) .. ": " .. _i.name.name
 		end
 		function _i.name:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0) )
-			draw.SimpleText(self.name, "Y_36_500", 0, ph / 2, Color(255, 255, 255), 0, 1)
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 0) )
+			draw.SimpleText(self.name, "Y_36_500", 0, ph / 2, Color( 255, 255, 255), 0, 1)
 		end
 	end
 	if item.description != nil then
@@ -119,21 +119,21 @@ function createShopItem(item, duid, id)
 			self:SetFontInternal( "Y_18_500" )
 
 			--self:SetBGColor(Color(50, 50, 50) )
-			self:SetFGColor(Color(255, 255, 255) )
+			self:SetFGColor(Color( 255, 255, 255) )
 		end
 	end
 	if item.price != nil then
 		_i.price = createD( "DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE - 20 - HE) )
 		function _i.price:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0) )
-			draw.SimpleText(formatMoney(item.price, LocalPlayer() ), "Y_36_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 0) )
+			draw.SimpleText(formatMoney(item.price, LocalPlayer() ), "Y_36_500", pw / 2, ph / 2, Color( 255, 255, 255), 1, 1)
 		end
 	end
 	if tonumber(item.permanent) == 1 then
 		_i.permanent = createD( "DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE - 20 - HE - 20 - HE) )
 		function _i.permanent:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 0) )
-			draw.SimpleText( "[" .. YRP.lang_string( "LID_permanent" ) .. "]", "Y_36_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 0) )
+			draw.SimpleText( "[" .. YRP.lang_string( "LID_permanent" ) .. "]", "Y_36_500", pw / 2, ph / 2, Color( 255, 255, 255), 1, 1)
 		end
 	end
 
@@ -142,11 +142,11 @@ function createShopItem(item, duid, id)
 			_i.require = createD( "DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE) )
 			_i.require.level = item.int_level
 			function _i.require:Paint(pw, ph)
-				local _color = Color(255, 100, 100)
+				local _color = Color( 255, 100, 100)
 				draw.RoundedBox(0, 0, 0, pw, ph, _color)
 				local tab = {}
 				tab["LEVEL"] = self.level
-				draw.SimpleText(YRP.lang_string( "LID_requires" ) .. ": " .. YRP.lang_string( "LID_levelx", tab), "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+				draw.SimpleText(YRP.lang_string( "LID_requires" ) .. ": " .. YRP.lang_string( "LID_levelx", tab), "Y_24_500", pw / 2, ph / 2, Color( 0, 0, 0), 1, 1)
 			end
 		else
 			_i.buy = createD( "YButton", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE) )
@@ -156,13 +156,13 @@ function createShopItem(item, duid, id)
 				local _color = Color(34, 139, 34)
 				local _text = YRP.lang_string( "LID_buy" )
 				if !LocalPlayer():canAfford(item.price) then
-					_color = Color(255, 100, 100)
+					_color = Color( 255, 100, 100)
 				end
 				if self:IsHovered() then
-					_color = Color(255, 255, 100)
+					_color = Color( 255, 255, 100)
 				end
-				if LocalPlayer():GetNW2Float( "buy_ts", 0.0) > CurTime() then
-					_color = Color(255, 0, 0)
+				if LocalPlayer():GetYRPFloat( "buy_ts", 0.0) > CurTime() then
+					_color = Color( 255, 0, 0)
 					_text = YRP.lang_string( "LID_oncooldown" )
 				end
 				self:SetText(_text)
@@ -170,7 +170,7 @@ function createShopItem(item, duid, id)
 				hook.Run( "YButtonAPaint", self, pw, ph)
 			end
 			function _i.buy:DoClick()
-				if LocalPlayer():GetNW2Float( "buy_ts", 0.0) < CurTime() then
+				if LocalPlayer():GetYRPFloat( "buy_ts", 0.0) < CurTime() then
 					net.Start( "item_buy" )
 						self.item.color = lply.item_color or "255, 255, 255"
 						net.WriteTable(self.item)
@@ -187,9 +187,9 @@ function createShopItem(item, duid, id)
 			net.WriteInt(item.licenseID, 32)
 		net.SendToServer()
 		function _i.require:Paint(pw, ph)
-			local _color = Color(255, 100, 100)
+			local _color = Color( 255, 100, 100)
 			draw.RoundedBox(0, 0, 0, pw, ph, _color)
-			draw.SimpleText(YRP.lang_string( "LID_requires" ) .. ": " .. lnames[item.licenseID], "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0), 1, 1)
+			draw.SimpleText(YRP.lang_string( "LID_requires" ) .. ": " .. lnames[item.licenseID], "Y_24_500", pw / 2, ph / 2, Color( 0, 0, 0), 1, 1)
 		end
 	end
 	return _i
@@ -201,8 +201,8 @@ function createStorageItem(item, duid)
 	local H = 400
 	local _i = createD( "DPanel", nil, YRP.ctr(W), YRP.ctr(H), 0, 0)
 	function _i:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "HB" ) )
-		drawRBBR(0, 0, 0, pw, ph, Color(160, 160, 160, 255), 1)
+		draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HB" ) )
+		drawRBBR(0, 0, 0, pw, ph, Color( 160, 160, 160, 255), 1)
 	end
 	_i.item = item
 	if item.WorldModel != nil and item.WorldModel != "" then
@@ -226,7 +226,7 @@ function createStorageItem(item, duid)
 		_i.name = createD( "DPanel", _i, YRP.ctr(W), YRP.ctr(50), 0, 0)
 		_i.name.name = item.name
 		function _i.name:Paint(pw, ph)
-			draw.SimpleText(self.name, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(self.name, "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255), 1, 1)
 		end
 	end
 
@@ -241,15 +241,15 @@ function createStorageItem(item, duid)
 			_i.spawn.name = "LID_tostore"
 		end
 		function _i.spawn:Paint(pw, ph)
-			local _color = Color(100, 255, 100)
+			local _color = Color( 100, 255, 100)
 			if !LocalPlayer():canAfford(item.price) then
-				_color = Color(255, 100, 100)
+				_color = Color( 255, 100, 100)
 			end
 			if self:IsHovered() then
-				_color = Color(255, 255, 100)
+				_color = Color( 255, 255, 100)
 			end
 			draw.RoundedBox(0, 0, 0, pw, ph, _color)
-			draw.SimpleText(YRP.lang_string(self.name), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText(YRP.lang_string(self.name), "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255), 1, 1)
 		end
 		function _i.spawn:DoClick()
 			if self.action == 0 then
@@ -317,8 +317,8 @@ net.Receive( "shop_get_tabs", function(len)
 						_cat:SetHeaderHeight(YRP.ctr(100) )
 						_cat:SetHeader( cat.name)
 						_cat:SetSpacing(YRP.ctr(BR * 2) )
-						_cat.color = lply:InterfaceValue( "YFrame", "HI" )
-						_cat.color2 = lply:InterfaceValue( "YFrame", "HB" )
+						_cat.color = YRPInterfaceValue( "YFrame", "HI" )
+						_cat.color2 = YRPInterfaceValue( "YFrame", "HB" )
 						function _cat:DoClick()
 							if self:IsOpen() then
 								net.Receive( "yrp_shop_get_items", function(l)
@@ -339,7 +339,7 @@ net.Receive( "shop_get_tabs", function(len)
 												cat.hs[hid] = createD( "DPanel", nil, w * idmax, YRP.ctr(650 + 2 * 20), 0, 0)
 												local line = cat.hs[hid]
 												function line:Paint(pw, ph)
-													--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 100) )
+													--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 100) )
 												end
 
 												cat:Add(line)
@@ -376,8 +376,8 @@ net.Receive( "shop_get_tabs", function(len)
 						_remove:SetText( "" )
 						_remove.uid = _uid
 						function _remove:Paint(pw, ph)
-							draw.RoundedBox(0, 0, 0, pw, ph, Color(200, 50, 50) )
-							draw.SimpleText(YRP.lang_string( "LID_remove" ) .. " [" .. YRP.lang_string( "LID_tab" ) .. "] => " .. tab.name, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+							draw.RoundedBox(0, 0, 0, pw, ph, Color( 200, 50, 50) )
+							draw.SimpleText(YRP.lang_string( "LID_remove" ) .. " [" .. YRP.lang_string( "LID_tab" ) .. "] => " .. tab.name, "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255), 1, 1)
 						end
 						function _remove:DoClick()
 							net.Start( "dealer_rem_tab" )
@@ -416,8 +416,8 @@ net.Receive( "shop_get_tabs", function(len)
 							_c:SetHeaderHeight(YRP.ctr(100) )
 							_c:SetHeader( cat.name)
 							_c:SetSpacing(30)
-							_c.color = lply:InterfaceValue( "YFrame", "HI" )
-							_c.color2 = lply:InterfaceValue( "YFrame", "HB" )
+							_c.color = YRPInterfaceValue( "YFrame", "HI" )
+							_c.color2 = YRPInterfaceValue( "YFrame", "HB" )
 							function _c:DoClick()
 								if self:IsOpen() then
 									net.Receive( "shop_get_items_storage", function(l)
@@ -463,10 +463,10 @@ net.Receive( "shop_get_tabs", function(len)
 		function BUYMENU.addtab:Paint(pw, ph)
 			local _color = Color(50, 200, 50, 255)
 			if self:IsHovered() then
-				_color = Color(200, 200, 50, 255)
+				_color = Color( 200, 200, 50, 255)
 			end
 			draw.RoundedBoxEx(ph / 2, 0, 0, pw, ph, _color, true, true)
-			draw.SimpleText( " + ", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255), 1, 1)
+			draw.SimpleText( " + ", "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255), 1, 1)
 		end
 		function BUYMENU.addtab:DoClick()
 			local _tmp = createD( "DFrame", nil, YRP.ctr(420), YRP.ctr(50 + 10 + 100 + 10 + 50 + 10), 0, 0)
@@ -474,7 +474,7 @@ net.Receive( "shop_get_tabs", function(len)
 				if !pa(BUYMENU.tabs) then
 					self:Remove()
 				end
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200) )
+				draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 200) )
 			end
 			_tmp:SetTitle( "" )
 			_tmp:Center()
@@ -525,7 +525,7 @@ net.Receive( "shop_get_tabs", function(len)
 		function BUYMENU.settings:Paint(pw, ph)
 			hook.Run( "YButtonPaint", self, pw, ph)
 			local _br = 4
-			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetDrawColor( 255, 255, 255, 255)
 			surface.SetMaterial(_mat_set)
 			surface.DrawTexturedRect(YRP.ctr(_br), YRP.ctr(_br), pw-YRP.ctr(2 * _br), ph-YRP.ctr(2 * _br) )
 		end
@@ -537,7 +537,7 @@ net.Receive( "shop_get_tabs", function(len)
 				_set:MakePopup()
 				function _set:Paint(pw, ph)
 					YRPCloseBuyMenu()
-					draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200) )
+					draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 200) )
 				end
 
 				_set.name = createD( "DYRPPanelPlus", _set, YRP.ctr(660), YRP.ctr(100), YRP.ctr(20), YRP.ctr(60) )
@@ -625,13 +625,13 @@ function CreateBuyMenuContent(parent, uid)
 			if pa(BUYMENU.content) then
 				self:SetWide(BUYMENU.content:GetWide() )
 				self:SetTall(BUYMENU.content:GetTall() - YRP.ctr(100) )
-				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 100, 240) )
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 100, 240) )
 			end
 		end
 
 		BUYMENU.tabs = createD( "DYRPTabs", BUYMENU.content, BUYMENU.content:GetWide(), YRP.ctr(100), 0, 0)
-		BUYMENU.tabs:SetSelectedColor(lply:InterfaceValue( "YButton", "SC" ) )
-		BUYMENU.tabs:SetUnselectedColor(lply:InterfaceValue( "YButton", "NC" ) )
+		BUYMENU.tabs:SetSelectedColor(YRPInterfaceValue( "YButton", "SC" ) )
+		BUYMENU.tabs:SetUnselectedColor(YRPInterfaceValue( "YButton", "NC" ) )
 		BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide(), YRP.ctr(100) )
 		if LocalPlayer():HasAccess() then
 			BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide() - YRP.ctr(220), YRP.ctr(100) )

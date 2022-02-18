@@ -11,24 +11,26 @@ function disk_full(error)
 		elseif CLIENT then
 			local lply = LocalPlayer()
 			notification.AddLegacy( "[YourRP] Database or disk is full, please make more space!", NOTIFY_ERROR, 40)
-			YRP.msg( "error", GetSQLModeName() .. ": " .. tostring(lply:SteamID() ) .. " ( database or disk is full)" )
+			YRP.msg( "error", GetSQLModeName() .. ": " .. tostring(lply:YRPSteamID() ) .. " ( database or disk is full)" )
 		end
 	end
 end
 
-function sql_show_last_error()
-	--YRP.msg( "db", "sql_show_last_error()" )
-	local _last_error = tostring(sql.LastError() ) or ""
+function YRP_SQL_Show_Last_Error()
+	--YRP.msg( "db", "YRP_SQL_Show_Last_Error()" )
+	local _last_error = tostring( sql.LastError() ) or ""
 
+	MsgC( Color( 255, 0, 0 ), "DATABASE HAS ERROR: " .. _last_error )
+	
 	if SERVER then
-		PrintMessage(HUD_PRINTCENTER, "[YourRP|DATABASE] SERVER-DATABASE:" )
-		PrintMessage(HUD_PRINTCENTER, _last_error)
+		PrintMessage( HUD_PRINTCENTER, "[YourRP|DATABASE] SERVER-DATABASE:" )
+		PrintMessage( HUD_PRINTCENTER, _last_error )
 	elseif CLIENT then
 		local lply = LocalPlayer()
 
 		if ea(lply) then
-			lply:PrintMessage(HUD_PRINTTALK, "[YourRP|DATABASE] CLIENT-DATABASE:" )
-			lply:PrintMessage(HUD_PRINTTALK, _last_error)
+			lply:PrintMessage( HUD_PRINTTALK, "[YourRP|DATABASE] CLIENT-DATABASE:" )
+			lply:PrintMessage( HUD_PRINTTALK, _last_error )
 		end
 	end
 
@@ -41,11 +43,11 @@ end
 
 function YRP_SQL_STR_IN(str, f)
 	if str == nil and f then
-		MsgC(Color(255, 0, 0), f)
+		MsgC(Color( 255, 0, 0), f)
 		return str
 	else
-		str = string.Replace(str, "'", "§01§" )
-		return sql.SQLStr(tostring(str) )
+		str = string.Replace( str, "'", "§01§" )
+		return sql.SQLStr( tostring(str) )
 	end
 end
 
@@ -179,7 +181,7 @@ function YRP_SQL_QUERY(query)
 
 			que.onError = function(q, e)
 				if string.find(e, "Unknown column" ) == nil and string.find(e, "doesn't exist" ) == nil then
-					YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_QUERY - ERROR: " .. tostring(e) .. " lastError: " .. sql_show_last_error() .. " query: " .. tostring(query) )
+					YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_QUERY - ERROR: " .. tostring(e) .. " lastError: " .. YRP_SQL_Show_Last_Error() .. " query: " .. tostring(query) )
 					q:error()
 				end
 			end
@@ -211,7 +213,7 @@ function YRP_SQL_DROP_TABLE( db_table)
 
 	if _result != nil then
 		YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_DROP_TABLE " .. tostring( db_table) .. " failed! (result: " .. tostring(_result) .. " )" )
-		sql_show_last_error()
+		YRP_SQL_Show_Last_Error()
 	else
 		YRP.msg( "db", "DROPPED " .. tostring( db_table) .. " TABLE" )
 	end
@@ -309,7 +311,7 @@ function YRP_SQL_UPDATE( db_table, db_sets, db_where)
 		local ret = YRP_SQL_QUERY(_q)
 
 		if ret != nil then
-			YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. " lastError: " .. sql_show_last_error() )
+			YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. " lastError: " .. YRP_SQL_Show_Last_Error() )
 		end
 
 		return ret
@@ -344,7 +346,7 @@ function YRP_SQL_INSERT_INTO( db_table, db_columns, db_values)
 			local _result = YRP_SQL_QUERY(_q)
 
 			if _result != nil then
-				YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() )
+				YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. YRP_SQL_Show_Last_Error() )
 			end
 
 			return _result
@@ -361,7 +363,7 @@ function YRP_SQL_INSERT_INTO( db_table, db_columns, db_values)
 			local _result = YRP_SQL_QUERY(_q)
 
 			if _result != nil then
-				YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() )
+				YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. YRP_SQL_Show_Last_Error() )
 			end
 			return _result
 		end
@@ -378,7 +380,7 @@ function YRP_SQL_INSERT_INTO_DEFAULTVALUES( db_table)
 			local _result = YRP_SQL_QUERY(_q)
 
 			if _result != nil then
-				YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() )
+				YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO_DEFAULTVALUES failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. YRP_SQL_Show_Last_Error() )
 			end
 
 			return _result
@@ -388,7 +390,7 @@ function YRP_SQL_INSERT_INTO_DEFAULTVALUES( db_table)
 			local _result = YRP_SQL_QUERY( "INSERT INTO " .. db_table .. " VALUES();" )
 
 			if _result != nil then
-				YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO_DEFAULTVALUES failed! result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() )
+				YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO_DEFAULTVALUES failed! result: " .. tostring(_result) .. " lastError: " .. YRP_SQL_Show_Last_Error() )
 			end
 
 			return _result
@@ -411,7 +413,7 @@ function YRP_SQL_DELETE_FROM( db_table, db_where)
 			local _result = YRP_SQL_QUERY(_q)
 
 			if _result != nil then
-				YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. sql_show_last_error() )
+				YRP.msg( "error", GetSQLModeName() .. ": " .. "YRP_SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. YRP_SQL_Show_Last_Error() )
 			end
 		end
 	elseif GetSQLMode() == 1 then
@@ -496,12 +498,12 @@ if SERVER then
 		YRP.msg( "db", "Connect to MYSQL Database" )
 
 		-- MYSQL
-		MsgC( Color(255, 0, 0), "If Module not found, download it via yourrp discord!\n" )
+		MsgC( Color( 255, 0, 0), "If Module not found, download it via yourrp discord!\n" )
 		require( "mysqloo" )
 
 		if (mysqloo.VERSION != "9" or !mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
-			MsgC( Color(255, 0, 0), "You are using an outdated mysqloo version\n" )
-			MsgC( Color(255, 0, 0), "Download the latest mysqloo9 from here\n" )
+			MsgC( Color( 255, 0, 0), "You are using an outdated mysqloo version\n" )
+			MsgC( Color( 255, 0, 0), "Download the latest mysqloo9 from here\n" )
 			MsgC( Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases\n" )
 			YRPSQL.outdated = true
 		end
@@ -578,7 +580,7 @@ function YRP_SQL_INIT_DATABASE( db_name)
 			local _result = YRP_SQL_CREATE_TABLE( db_name)
 
 			if !YRP_SQL_TABLE_EXISTS( db_name) then
-				YRP.msg( "error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring( db_name) .. " (table not exists) lastError: " .. sql_show_last_error() )
+				YRP.msg( "error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring( db_name) .. " (table not exists) lastError: " .. YRP_SQL_Show_Last_Error() )
 				YRPTryRepairDatabase( db_name)
 			end
 		end
@@ -588,7 +590,7 @@ function YRP_SQL_INIT_DATABASE( db_name)
 
 			if !YRP_SQL_TABLE_EXISTS( db_name) then
 				YRP.msg( "error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring( db_name) .. " fail" )
-				sql_show_last_error()
+				YRP_SQL_Show_Last_Error()
 				YRPTryRepairDatabase( db_name)
 			end
 		end

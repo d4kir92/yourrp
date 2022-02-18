@@ -67,15 +67,25 @@ function YRPKeybindsCheckFile()
 		YRPKeybindsMSG( "Created New Keybind File" )
 		file.Write( dbfile, util.TableToJSON( YRP_KEYBINDS, true ) )
 	else
-		local testfile = util.JSONToTable( file.Read( dbfile, "DATA" ) )
-		if testfile == nil or table.Count( testfile ) <= 0 then
-			YRP.msg( "note", "[KEYBINDS] File is empty." )
-			file.Write( dbfile, util.TableToJSON( YRP_KEYBINDS, true ) )
-
-			testfile = util.JSONToTable( file.Read( dbfile, "DATA" ) )
+		local data = file.Read( dbfile, "DATA" )
+		if data then
+			local testfile = util.JSONToTable( data )
 			if testfile == nil or table.Count( testfile ) <= 0 then
-				YRP.msg( "error", "[KEYBINDS] File is still empty." )
+				YRP.msg( "note", "[KEYBINDS] File is empty." )
+				file.Write( dbfile, util.TableToJSON( YRP_KEYBINDS, true ) )
+
+				data = file.Read( dbfile, "DATA" )
+				if data then
+					testfile = util.JSONToTable( data )
+					if testfile == nil or table.Count( testfile ) <= 0 then
+						YRP.msg( "error", "[KEYBINDS] File is still empty." )
+					end
+				else
+					YRP.msg( "note", "[KEYBINDS] FAILED TO READ KEYBINDS FILE #2" )
+				end
 			end
+		else
+			YRP.msg( "note", "[KEYBINDS] FAILED TO READ KEYBINDS FILE #1" )
 		end
 	end
 
@@ -105,19 +115,23 @@ function YRPKeybindsLoad()
 
 	if file.Exists( dbfile, "DATA" ) then
 		yrp_keybinds = util.JSONToTable( file.Read( dbfile, "DATA" ) )
-		for name, key in pairs( yrp_keybinds ) do
-			yrp_keybinds[name] = tonumber( key )
-		end
-
-		local missing = false
-		for name, key in pairs( YRP_KEYBINDS ) do
-			if yrp_keybinds[name] == nil then -- missing entry
+		if yrp_keybinds then
+			for name, key in pairs( yrp_keybinds ) do
 				yrp_keybinds[name] = tonumber( key )
-				missing = true
 			end
-		end
-		if missing then
-			YRPKeybindsSave()
+
+			local missing = false
+			for name, key in pairs( YRP_KEYBINDS ) do
+				if yrp_keybinds[name] == nil then -- missing entry
+					yrp_keybinds[name] = tonumber( key )
+					missing = true
+				end
+			end
+			if missing then
+				YRPKeybindsSave()
+			end
+		else
+			YRP.msg( "note", "FAILED TO LOAD KEYBINDS!!!" )
 		end
 	else
 		YRP.msg( "error", "[KEYBINDS] FILE DOESN'T EXISTS" )

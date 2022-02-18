@@ -49,7 +49,7 @@ util.AddNetworkString( "jail" )
 net.Receive( "jail", function(len, ply)
 	local target = net.ReadEntity()
 
-	local jail = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. target:SteamID() .. "'" )
+	local jail = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. target:YRPSteamID() .. "'" )
 	if wk(jail) then
 		jail = jail[1]
 		local tim = jail.time or 2*60
@@ -61,7 +61,7 @@ util.AddNetworkString( "unjail" )
 net.Receive( "unjail", function(len, ply)
 	local target = net.ReadEntity()
 
-	YRP_SQL_DELETE_FROM( "yrp_jail", "SteamID = '" .. target:SteamID() .. "'" )
+	YRP_SQL_DELETE_FROM( "yrp_jail", "SteamID = '" .. target:YRPSteamID() .. "'" )
 
 	teleportToReleasepoint(target)
 end)

@@ -58,7 +58,7 @@ function YRPOpenInventory(target)
 		inv.win:ShowCloseButton(true)
 		inv.win:SetDraggable(false)
 		function inv.win:Paint(pw, ph)
-			draw.RoundedBoxEx(12, 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "NC" ), true, true, false, false)
+			draw.RoundedBoxEx(12, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ), true, true, false, false)
 		end
 
 		net.Receive( "get_inventory", function(len)
@@ -78,8 +78,8 @@ function YRPOpenInventory(target)
 						if !YRPInventory() then
 							--self:Remove()
 						end
-						draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "NC" ) )
-						draw.SimpleText(YRP.lang_string( "LID_environment" ), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ) )
+						draw.SimpleText(YRP.lang_string( "LID_environment" ), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color( 255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 					local envsto = createD( "YStorage", env, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRP.ctr(inv.sp), YRP.ctr(50) + YRP.ctr(inv.sp) )
 					envsto:SetStorageID(0, nettab)
@@ -109,8 +109,8 @@ net.Receive( "yrp_open_storage", function(len)
 			if !YRPInventory() then
 				self:Remove()
 			end
-			draw.RoundedBox(0, 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "NC" ) )
-			draw.SimpleText(name, "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ) )
+			draw.SimpleText(name, "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color( 255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 		local storage = createD( "YStorage", env, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRP.ctr(inv.sp), YRP.ctr(50) + YRP.ctr(inv.sp) )
 		storage:SetStorageID(wsuid)
@@ -119,7 +119,7 @@ end)
 
 YRPDropItem = YRPDropItem or createD( "DPanelList", nil, ScrW(), ScrH(), 0, 0)
 function YRPDropItem:Paint(pw, ph)
-	draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255, 4) )
+	draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 255, 4) )
 end
 YRPDropItem:Hide()
 YRPDropItem:Receiver( "yrp_slot", function( receiver, panels, bDoDrop, Command, x, y )

@@ -27,7 +27,7 @@ net.Receive( "setting_events", function(len)
 					chartab = string.Explode( ",", chartab)
 					local rpname = chartab[1]
 					for i, v in pairs(player.GetAll() ) do
-						if v:SteamID() == chartab[1] then
+						if v:YRPSteamID() == chartab[1] then
 							rpname = v:RPName()
 						end
 					end
@@ -63,7 +63,7 @@ net.Receive( "setting_events", function(len)
 
 				Frame.Player = createD( "DComboBox", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20 + 60 + 20 + 60 + 20 + 60 + 20) )
 				for i, v in pairs(player.GetAll() ) do
-					Frame.Player:AddChoice( v:RPName(), v:SteamID() )
+					Frame.Player:AddChoice( v:RPName(), v:YRPSteamID() )
 				end
 				function Frame.Player:OnSelect(index, rpname, steamid)
 					net.Start( "yrp_event_get_chars" )
@@ -74,19 +74,21 @@ net.Receive( "setting_events", function(len)
 				Frame.Add = createD( "YButton", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20) )
 				Frame.Add:SetText( "LID_add" )
 				function Frame.Add:DoClick()
-					local uid = EVENT.EventList:GetLine(EVENT.EventList:GetSelectedLine() ):GetValue(1)
-					local _, steamid = Frame.Player:GetSelected()
-					local charname, charuid = Frame.Char:GetSelected()
-					if Frame.Char:GetSelected() then
-						net.Start( "yrp_event_char_add" )
-							net.WriteString(uid)
-							net.WriteString(steamid)
-							net.WriteString( charuid)
-							net.WriteString( charname)
-						net.SendToServer()
-					end
+					if EVENT.EventList:GetSelectedLine() then
+						local uid = EVENT.EventList:GetLine( EVENT.EventList:GetSelectedLine() ):GetValue(1)
+						local _, steamid = Frame.Player:GetSelected()
+						local charname, charuid = Frame.Char:GetSelected()
+						if Frame.Char:GetSelected() then
+							net.Start( "yrp_event_char_add" )
+								net.WriteString(uid)
+								net.WriteString(steamid)
+								net.WriteString( charuid)
+								net.WriteString( charname)
+							net.SendToServer()
+						end
 
-					Frame:Close()
+						Frame:Close()
+					end
 				end
 			end
 		end
@@ -99,9 +101,9 @@ net.Receive( "setting_events", function(len)
 			end
 		end
 		function EVENT.RemoveChar:DoClick()
-			if EVENT.EventChars:GetSelectedLine() then
-				local euid = EVENT.EventList:GetLine(EVENT.EventList:GetSelectedLine() ):GetValue(1)
-				local cuid = EVENT.EventChars:GetLine(EVENT.EventChars:GetSelectedLine() ):GetValue(2)
+			if EVENT.EventChars:GetSelectedLine() and EVENT.EventChars:GetSelectedLine() then
+				local euid = EVENT.EventList:GetLine( EVENT.EventList:GetSelectedLine() ):GetValue(1)
+				local cuid = EVENT.EventChars:GetLine( EVENT.EventChars:GetSelectedLine() ):GetValue(2)
 
 				net.Start( "yrp_event_char_remove" )
 					net.WriteString(euid)
@@ -165,7 +167,7 @@ net.Receive( "setting_events", function(len)
 			if EVENT.EventList:GetSelectedLine() then
 				F8CloseSettings()
 
-				local uid = EVENT.EventList:GetLine(EVENT.EventList:GetSelectedLine() ):GetValue(1)
+				local uid = EVENT.EventList:GetLine( EVENT.EventList:GetSelectedLine() ):GetValue(1)
 
 				net.Start( "yrp_event_start" )
 					net.WriteString(uid)
@@ -184,7 +186,7 @@ net.Receive( "setting_events", function(len)
 			if EVENT.EventList:GetSelectedLine() then
 				F8CloseSettings()
 
-				local uid = EVENT.EventList:GetLine(EVENT.EventList:GetSelectedLine() ):GetValue(1)
+				local uid = EVENT.EventList:GetLine( EVENT.EventList:GetSelectedLine() ):GetValue(1)
 
 				net.Start( "yrp_event_end" )
 					net.WriteString(uid)
@@ -196,7 +198,7 @@ net.Receive( "setting_events", function(len)
 		EVENT.EventList:AddColumn(YRP.lang_string( "LID_id" ) ):SetFixedWidth(80)
 		EVENT.EventList:AddColumn(YRP.lang_string( "LID_name" ) )
 		function EVENT.EventList:OnRowSelected(rowIndex, row)
-			local uid = EVENT.EventList:GetLine(EVENT.EventList:GetSelectedLine() ):GetValue(1)
+			local uid = EVENT.EventList:GetLine( EVENT.EventList:GetSelectedLine() ):GetValue(1)
 
 			net.Start( "yrp_get_event_chars" )
 				net.WriteString(uid)

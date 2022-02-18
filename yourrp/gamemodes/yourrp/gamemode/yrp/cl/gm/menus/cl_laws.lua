@@ -24,7 +24,7 @@ function CreateLawsContent(PARENT)
 		local lockdowntext = lawtab.string_lockdowntext
 		local lockdown = tobool(lawtab.bool_lockdown)
 
-		if !lply:GetNW2Bool( "bool_" .. "ismayor", false) then
+		if !lply:GetYRPBool( "bool_" .. "ismayor", false) then
 			if PARENT:IsValid() then
 				_la.laws = createD( "RichText", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 				for i, v in pairs(string.Explode( "\n", laws) ) do
@@ -91,17 +91,17 @@ function CreateLawsContent(PARENT)
 			end
 
 			-- Lockdown Alarms
-			local alarms = GetGlobalTable( "lockdown_alarms" )
+			local alarms = GetGlobalYRPTable( "lockdown_alarms" )
 			local l_alarms = createD( "DPanelList", PARENT, YRP.ctr(760), YRP.ctr(400), YRP.ctr(800), YRP.ctr(120 + 50 + 20) )
 			l_alarms:EnableVerticalScrollbar()
 			l_alarms:SetSpacing(4)
 			function l_alarms:Paint(pw, ph)
-				--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0) )
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0) )
 			end
 			for i, e in pairs( alarms) do
 				local line = createD( "DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 				function line:Paint(pw, ph)
-					--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0) )
+					--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0) )
 				end
 
 				local a = createD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -126,13 +126,13 @@ function CreateLawsContent(PARENT)
 				l_buildings:EnableVerticalScrollbar()
 				l_buildings:SetSpacing(4)
 				function l_buildings:Paint(pw, ph)
-					--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0) )
+					--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0) )
 				end
 
 				for i, e in pairs( buildings) do
 					local line = createD( "DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 					function line:Paint(pw, ph)
-						--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0) )
+						--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0) )
 					end
 
 					local a = createD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)

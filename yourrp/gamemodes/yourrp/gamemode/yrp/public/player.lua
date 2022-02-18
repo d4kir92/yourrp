@@ -11,7 +11,7 @@ include( "player/interface.lua" )
 local Player = FindMetaTable( "Player" )
 
 function Player:GetRagdollEntity()
-	return self:GetNW2Entity( "yrp_ragdoll", NULL )
+	return self:GetYRPEntity( "yrp_ragdoll", NULL )
 end
 
 function Player:Revive(pos)
@@ -35,15 +35,33 @@ function Player:GetMaxBattery()
 end
 
 function Player:AFK()
-	return self:GetNW2Bool( "isafk", false)
+	return self:GetYRPBool( "isafk", false)
 end
 
 function Player:DND()
-	return self:GetNW2Bool( "isdnd", false)
+	return self:GetYRPBool( "isdnd", false)
 end
 
 function Player:IDCardID()
-	return self:GetNW2String( "idcardid", "" )
+	return self:GetYRPString( "idcardid", "" )
+end
+
+function Player:HasOS()
+	if self:IsBot() then
+		return true
+	end
+	return self:GetYRPString( "yrp_os", "" ) != ""
+end
+
+function Player:OS()
+	if self:IsBot() then
+		return "windows"
+	end
+	return self:GetYRPString( "yrp_os", "" )
+end
+
+function Player:HasLanguage()
+	return self:GetYRPString( "client_lang", "" ) != ""
 end
 
 function Player:GetLanguage() -- The Language the player selected
@@ -55,7 +73,7 @@ function Player:GetLanguageShort() -- The Language the player selected (shortkey
 end
 
 function Player:YRPGetCountryShort()
-	return string.upper(self:GetNW2String( "yrp_country", "LOADING" ) )
+	return string.upper(self:GetYRPString( "yrp_country", "LOADING" ) )
 end
 
 function Player:YRPGetCountry() -- The Language the player selected
@@ -63,36 +81,36 @@ function Player:YRPGetCountry() -- The Language the player selected
 end
 
 function Player:Slowed()
-	return self:GetNW2Bool( "slowed", false)
+	return self:GetYRPBool( "slowed", false)
 end
 
 function Player:IsInCombat()
-	return self:GetNW2Bool( "inCombat", false)
+	return self:GetYRPBool( "inCombat", false)
 end
 
 --[[ Stats ]]--
 function Player:GetMaxArmor()
-	return tonumber(self:GetNW2Int( "MaxArmor", 100) )
+	return tonumber(self:GetYRPInt( "MaxArmor", 100) )
 end
 
 function Player:GetMinLevel()
-	return tonumber(self:GetNW2String( "int_level_min", "1" ) )
+	return tonumber(self:GetYRPString( "int_level_min", "1" ) )
 end
 
 function Player:GetMaxLevel()
-	return tonumber(self:GetNW2String( "int_level_max", "100" ) )
+	return tonumber(self:GetYRPString( "int_level_max", "100" ) )
 end
 
 function Player:Stamina()
-	return math.Round(self:GetNW2Float( "GetCurStamina", 1), 2)
+	return math.Round(self:GetYRPFloat( "GetCurStamina", 1), 2)
 end
 
 function Player:GetMaxStamina()
-	return  math.Round(self:GetNW2Float( "GetMaxStamina", 10), 2)
+	return  math.Round(self:GetYRPFloat( "GetMaxStamina", 10), 2)
 end
 
 function Player:Hunger()
-	return math.Round(self:GetNW2Float( "hunger", 100.0), 1)
+	return math.Round(self:GetYRPFloat( "hunger", 100.0), 1)
 end
 
 function Player:GetMaxHunger()
@@ -100,7 +118,7 @@ function Player:GetMaxHunger()
 end
 
 function Player:Thirst()
-	return math.Round(self:GetNW2Float( "thirst", 100.0), 1)
+	return math.Round(self:GetYRPFloat( "thirst", 100.0), 1)
 end
 
 function Player:GetMaxThirst()
@@ -108,7 +126,7 @@ function Player:GetMaxThirst()
 end
 
 function Player:Permille()
-	return math.Round(self:GetNW2Float( "permille", 0.0), 1)
+	return math.Round(self:GetYRPFloat( "permille", 0.0), 1)
 end
 
 function Player:GetMaxPermille()
@@ -116,19 +134,19 @@ function Player:GetMaxPermille()
 end
 
 function Player:Radiation()
-	return math.Round(self:GetNW2Float( "GetCurRadiation", 1), 1)
+	return math.Round(self:GetYRPFloat( "GetCurRadiation", 1), 1)
 end
 
 function Player:GetMaxRadiation()
-	return math.Round(self:GetNW2Float( "GetMaxRadiation", 100), 1)
+	return math.Round(self:GetYRPFloat( "GetMaxRadiation", 100), 1)
 end
 
 function Player:SalaryTime()
-	return self:GetNW2Int( "salarytime", 0)
+	return self:GetYRPInt( "salarytime", 0)
 end
 
 function Player:NextSalaryTime()
-	return self:GetNW2Int( "nextsalarytime", 0)
+	return self:GetYRPInt( "nextsalarytime", 0)
 end
 
 function Player:CurrentSalaryTime()
@@ -136,59 +154,59 @@ function Player:CurrentSalaryTime()
 end
 
 function Player:GetCastName()
-	return YRP.lang_string(self:GetNW2String( "castname", "" ) )
+	return YRP.lang_string(self:GetYRPString( "castname", "" ) )
 end
 
 function Player:CastTimeCurrent()
-	return math.Round(self:GetNW2Float( "castcur", 0.0), 1)
+	return math.Round(self:GetYRPFloat( "castcur", 0.0), 1)
 end
 
 function Player:CastTimeMax()
-	return math.Round(self:GetNW2Float( "castmax", 1.0), 1)
+	return math.Round(self:GetYRPFloat( "castmax", 1.0), 1)
 end
 
 function Player:Ability()
-	return self:GetNW2Int( "GetCurAbility", 0)
+	return self:GetYRPInt( "GetCurAbility", 0)
 end
 
 function Player:GetMaxAbility()
-	return self:GetNW2Int( "GetMaxAbility", 100)
+	return self:GetYRPInt( "GetMaxAbility", 100)
 end
 
 function Player:IsBleeding()
-	return self:GetNW2Bool( "isbleeding", false)
+	return self:GetYRPBool( "isbleeding", false)
 end
 
 function Player:IsCuffed()
-	return self:GetNW2Bool( "cuffed" )
+	return self:GetYRPBool( "cuffed" )
 end
 
 function Player:IsHungry()
-	return self:GetNW2Float( "hunger", 100.0) < 20.0
+	return self:GetYRPFloat( "hunger", 100.0) < 20.0
 end
 
 function Player:IsThirsty()
-	return self:GetNW2Float( "thirst", 100.0) < 20.0
+	return self:GetYRPFloat( "thirst", 100.0) < 20.0
 end
 
 function Player:IsRightLegBroken()
-	return self:GetNW2Bool( "broken_leg_right", false)
+	return self:GetYRPBool( "broken_leg_right", false)
 end
 
 function Player:IsLeftLegBroken()
-	return self:GetNW2Bool( "broken_leg_left", false)
+	return self:GetYRPBool( "broken_leg_left", false)
 end
 
 function Player:IsRightArmBroken()
-	return self:GetNW2Bool( "broken_arm_right", false)
+	return self:GetYRPBool( "broken_arm_right", false)
 end
 
 function Player:IsLeftArmBroken()
-	return self:GetNW2Bool( "broken_arm_left", false)
+	return self:GetYRPBool( "broken_arm_left", false)
 end
 
 function Player:InJail()
-	return self:GetNW2Bool( "injail", false)
+	return self:GetYRPBool( "injail", false)
 end
 
 function Player:Condition()
@@ -199,53 +217,53 @@ function Player:Condition()
 		end
 		_sttext = _sttext .. YRP.lang_string( "LID_youarebleeding" )
 	end
-	if self:GetNW2Bool( "cuffed" ) then
+	if self:GetYRPBool( "cuffed" ) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string( "LID_cuffed" )
 	end
-	if self:GetNW2Float( "hunger", 100) < 20 then
+	if self:GetYRPFloat( "hunger", 100) < 20 then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string( "LID_hungry" )
 	end
-	if self:GetNW2Float( "thirst", 100) < 20.0 then
+	if self:GetYRPFloat( "thirst", 100) < 20.0 then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string( "LID_thirsty" )
 	end
-	if self:GetNW2Bool( "broken_leg_right", false) then
+	if self:GetYRPBool( "broken_leg_right", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string( "LID_yourrightlegisbroken" )
 	end
-	if self:GetNW2Bool( "broken_leg_left", false) then
+	if self:GetYRPBool( "broken_leg_left", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string( "LID_yourleftlegisbroken" )
 	end
-	if self:GetNW2Bool( "broken_arm_right", false) then
+	if self:GetYRPBool( "broken_arm_right", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string( "LID_yourrightarmisbroken" )
 	end
-	if self:GetNW2Bool( "broken_arm_left", false) then
+	if self:GetYRPBool( "broken_arm_left", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
 		_sttext = _sttext .. YRP.lang_string( "LID_yourleftarmisbroken" )
 	end
-	if self:GetNW2Bool( "injail", false) then
+	if self:GetYRPBool( "injail", false) then
 		if _sttext != "" then
 			_sttext = _sttext .. ", "
 		end
-		_sttext = _sttext .. YRP.lang_string( "LID_jail" ) .. ": " .. self:GetNW2Int( "jailtime", 0)
+		_sttext = _sttext .. YRP.lang_string( "LID_jail" ) .. ": " .. self:GetYRPInt( "jailtime", 0)
 	end
 	return _sttext
 end
@@ -269,16 +287,16 @@ end
 
 --[[ Money ]]--
 function Player:GetMoney() -- Money that the character is holding
-	if self:GetNW2String( "money", "0" ) != nil then
-		return math.Round(tonumber(self:GetNW2String( "money", "0" ) ), 2) -- return float
+	if self:GetYRPString( "money", "0" ) != nil then
+		return math.Round(tonumber(self:GetYRPString( "money", "0" ) ), 2) -- return float
 	else
 		return -1
 	end
 end
 
 function Player:GetMoneyBank() -- Money that the bank is holding
-	if self:GetNW2String( "moneybank", "0" ) != nil then
-		return math.Round(tonumber(self:GetNW2String( "moneybank", "0" ) ), 2) -- return float
+	if self:GetYRPString( "moneybank", "0" ) != nil then
+		return math.Round(tonumber(self:GetYRPString( "moneybank", "0" ) ), 2) -- return float
 	else
 		return -1
 	end
@@ -293,7 +311,7 @@ function Player:MoneyBank()
 end
 
 function Player:Salary()
-	return tonumber(self:GetNW2String( "salary", "0" ) )
+	return tonumber(self:GetYRPString( "salary", "0" ) )
 end
 
 function string.point(num)
@@ -384,19 +402,19 @@ end
 
 --[[ Character ]]--
 function Player:Level()
-	return tonumber(self:GetNW2String( "int_level", "1" ) )
+	return tonumber(self:GetYRPString( "int_level", "1" ) )
 end
 
 function Player:XP()
-	return tonumber(math.Round(self:GetNW2Int( "int_xp", "1" ), 0) )
+	return tonumber(math.Round(self:GetYRPInt( "int_xp", "1" ), 0) )
 end
 
 function Player:XPForLevelUp()
-	return tonumber(math.Round(self:GetNW2String( "int_xp_for_levelup", "10" ), 0) )
+	return tonumber(math.Round(self:GetYRPString( "int_xp_for_levelup", "10" ), 0) )
 end
 
 function Player:XPMultiplier()
-	return tonumber(math.Round(self:GetNW2String( "float_multiplier", "1.5" ), 0) )
+	return tonumber(math.Round(self:GetYRPString( "float_multiplier", "1.5" ), 0) )
 end
 
 function Player:CalculateMaxXP(lvl)
@@ -419,46 +437,49 @@ function Player:GetRoleColor() -- Group Color
 end
 
 function Player:GetRoleUID()
-	return tonumber(self:GetNW2String( "roleUniqueID", "0" ) )
+	return tonumber(self:GetYRPString( "roleUniqueID", "0" ) )
 end
 
 function Player:GetRoleCooldown()
-	return tonumber(self:GetNW2Int( "int_role_cooldown", "1" ) )
+	return tonumber(self:GetYRPInt( "int_role_cooldown", "1" ) )
 end
 
 function Player:GetRoleOnDeathRoleUID()
-	return tonumber(self:GetNW2String( "int_roleondeath", "0" ) )
+	return tonumber(self:GetYRPString( "int_roleondeath", "0" ) )
 end
 
 function Player:GetRoleName() -- Role Name / "Job" Name
-	local RoleName = self:YRPGetRoleName()
-	if IsValid(self) then
-		local prefix = self:GetNW2String( "spec_prefix", "" )
-		local suffix = self:GetNW2String( "spec_suffix", "" )
+	if self.YRPGetRoleName then
+		local RoleName = self:YRPGetRoleName()
+		if IsValid(self) then
+			local prefix = self:GetYRPString( "spec_prefix", "" )
+			local suffix = self:GetYRPString( "spec_suffix", "" )
 
-		if !strEmpty( prefix ) then
-			RoleName = prefix .. " " .. RoleName
-		end
-		if !strEmpty( suffix ) then
-			RoleName = RoleName .. " " .. suffix
+			if !strEmpty( prefix ) then
+				RoleName = prefix .. " " .. RoleName
+			end
+			if !strEmpty( suffix ) then
+				RoleName = RoleName .. " " .. suffix
+			end
+			return RoleName -- return string
+		else
+			return self:Nick()
 		end
 		return RoleName -- return string
-	else
-		return self:Nick()
 	end
-	return RoleName -- return string
+	return "BROKEN"
 end
 
 function Player:GetLicenseIDs()
-	return self:GetNW2String( "licenseIDs", "" )
+	return self:GetYRPString( "licenseIDs", "" )
 end
 
 function Player:GetLicenseNames()
-	return self:GetNW2String( "licenseNames", "" )
+	return self:GetYRPString( "licenseNames", "" )
 end
 
 function Player:GetRoleSweps()
-	return self:GetNW2String( "sweps", "" )
+	return self:GetYRPString( "sweps", "" )
 end
 
 --[[ Faction ]]--
@@ -508,8 +529,8 @@ function Player:GetUserGroupColor() -- UserGroup Color
 end
 
 function Player:GetUserGroupNice() -- UserGroup Display Name, displayname
-	if !strEmpty(self:GetNW2String( "usergroupDisplayname", "" ) ) then
-		return self:GetNW2String( "usergroupDisplayname", "" )
+	if !strEmpty(self:GetYRPString( "usergroupDisplayname", "" ) ) then
+		return self:GetYRPString( "usergroupDisplayname", "" )
 	else
 		return string.upper(self:GetUserGroup() )
 	end

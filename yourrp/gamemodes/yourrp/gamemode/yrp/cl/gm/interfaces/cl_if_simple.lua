@@ -6,18 +6,18 @@ hook.Add( "YFramePaint", "YFrame_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Material" then
+	if YRPGetInterfaceDesign() == "Material" then
 		local hh = 24
 		if self.GetHeaderHeight != nil then
 			hh = self:GetHeaderHeight()
 		end
 
-		draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, hh, lply:InterfaceValue( "YFrame", "HB" ), true, true)
+		draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, hh, YRPInterfaceValue( "YFrame", "HB" ), true, true)
 
-		draw.RoundedBoxEx(YRP.ctr(10), 0, hh, pw, ph - hh, lply:InterfaceValue( "YFrame", "BG" ), false, false, true, true) --lply:InterfaceValue( "YFrame", "BG" ) )
+		draw.RoundedBoxEx(YRP.ctr(10), 0, hh, pw, ph - hh, YRPInterfaceValue( "YFrame", "BG" ), false, false, true, true) --YRPInterfaceValue( "YFrame", "BG" ) )
 
 		if self.GetTitle != nil then
-			draw.SimpleText(YRP.lang_string(self:GetTitle() ), "Y_18_500", hh / 2, hh / 2, lply:InterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string(self:GetTitle() ), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		return true
@@ -31,9 +31,9 @@ hook.Add( "YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 	tab.y = tab.y or 0
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Material" then
-		local color = lply:InterfaceValue( "YButton", "NC" )
-		local tcolor = lply:InterfaceValue( "YButton", "NT" )
+	if YRPGetInterfaceDesign() == "Material" then
+		local color = YRPInterfaceValue( "YButton", "NC" )
+		local tcolor = YRPInterfaceValue( "YButton", "NT" )
 		if self:IsDown() or self:IsPressed() then
 			if not self.clicked then
 				self.clicked = true
@@ -55,7 +55,7 @@ hook.Add( "YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 			tcolor.g = 255
 			tcolor.b = 255
 			if tab.force then
-				color = Color(0, 0, 0, 0)
+				color = Color( 0, 0, 0, 0)
 			end
 			self.hovering = false
 			self.clicked = false
@@ -76,9 +76,9 @@ hook.Add( "YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 	tab.y = tab.y or 0
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Material" then
+	if YRPGetInterfaceDesign() == "Material" then
 		local color = Color(126, 126, 126)
-		local tcolor = lply:InterfaceValue( "YButton", "NT" )
+		local tcolor = YRPInterfaceValue( "YButton", "NT" )
 		if self:IsDown() or self:IsPressed() then
 			if not self.clicked then
 				self.clicked = true
@@ -96,7 +96,7 @@ hook.Add( "YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 			tcolor.g = 255
 			tcolor.b = 255
 			if tab.force then
-				color = Color(0, 0, 0, 0)
+				color = Color( 0, 0, 0, 0)
 			end
 			self.hovering = false
 			self.clicked = false
@@ -114,7 +114,7 @@ hook.Add( "YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Material" then
+	if YRPGetInterfaceDesign() == "Material" then
 		local color = Color(126, 126, 126)
 		local tcolor = tab.tcolor
 		if self:IsDown() or self:IsPressed() then
@@ -131,18 +131,18 @@ hook.Add( "YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 			color = Color(111, 206, 111)
 		else
 			if tab.force then
-				color = Color(0, 0, 0, 0)
+				color = Color( 0, 0, 0, 0)
 			end
 			self.hovering = false
 			self.clicked = false
 		end
 		color = tab.color or color
 		if tcolor == nil then
-			tcolor = TextColor( color) -- lply:InterfaceValue( "YButton", "NT" )
+			tcolor = TextColor( color) -- YRPInterfaceValue( "YButton", "NT" )
 		end
 		draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color( color.r, color.g, color.b, color.a) )
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, ph / 2, tcolor or Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, ph / 2, tcolor or Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)
@@ -151,9 +151,9 @@ hook.Add( "YLabelPaint", "YLabel_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Material" then
-		local color = lply:InterfaceValue( "YFrame", "HI" )
-		local tcolor = lply:InterfaceValue( "YFrame", "HT" )
+	if YRPGetInterfaceDesign() == "Material" then
+		local color = YRPInterfaceValue( "YFrame", "HI" )
+		local tcolor = YRPInterfaceValue( "YFrame", "HT" )
 
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( color.r, color.g, color.b, 255) )
 
@@ -178,9 +178,9 @@ hook.Add( "YTextFieldPaint", "YTextFieldPaint_Material", function(self, pw, ph, 
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Material" then
+	if YRPGetInterfaceDesign() == "Material" then
 		local color = Color(50, 50, 50)
-		local tcolor = lply:InterfaceValue( "YFrame", "HT" )
+		local tcolor = YRPInterfaceValue( "YFrame", "HT" )
 
 		draw.RoundedBox(0, 0, 0, pw, ph, Color( color.r, color.g, color.b, 255) )
 
@@ -205,8 +205,8 @@ hook.Add( "YPanelPaint", "YPanel_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
-	if GetGlobalString( "string_interface_design" ) == "Material" then
-		local color = tab.color or lply:InterfaceValue( "YFrame", "HI" )
+	if YRPGetInterfaceDesign() == "Material" then
+		local color = tab.color or YRPInterfaceValue( "YFrame", "HI" )
 
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( color.r, color.g, color.b, 255) )
 		return true
@@ -216,8 +216,8 @@ end)
 hook.Add( "YAddPaint", "YAdd_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalString( "string_interface_design" ) == "Material" then
-		local color = Color(100, 205, 100)
+	if YRPGetInterfaceDesign() == "Material" then
+		local color = Color( 100, 205, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
 			color.g = color.g - 50
@@ -236,7 +236,7 @@ hook.Add( "YAddPaint", "YAdd_Material", function(self, pw, ph, tab)
 
 		local br = ph * 0.1
 		if YRP.GetDesignIcon( "add" ) ~= nil then
-			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetDrawColor( 255, 255, 255, 255)
 			surface.SetMaterial(YRP.GetDesignIcon( "add" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		end
@@ -247,7 +247,7 @@ end)
 hook.Add( "YRemovePaint", "YRemove_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalString( "string_interface_design" ) == "Material" then
+	if YRPGetInterfaceDesign() == "Material" then
 		local color = Color(126, 126, 126)
 		if self:IsDown() or self:IsPressed() then
 			color = Color(197, 52, 52)
@@ -263,7 +263,7 @@ hook.Add( "YRemovePaint", "YRemove_Material", function(self, pw, ph, tab)
 
 		local br = ph * 0.1
 		if YRP.GetDesignIcon( "remove" ) ~= nil then
-			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetDrawColor( 255, 255, 255, 255)
 			surface.SetMaterial(YRP.GetDesignIcon( "remove" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		end
@@ -274,7 +274,7 @@ end)
 hook.Add( "YClosePaint", "YClose_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalString( "string_interface_design" ) == "Material" then
+	if YRPGetInterfaceDesign() == "Material" then
 		local color = Color(205, 100, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -285,7 +285,7 @@ hook.Add( "YClosePaint", "YClose_Material", function(self, pw, ph, tab)
 			color.g = color.g + 50
 			color.b = color.b + 50
 		else
-			color = Color(0, 0, 0, 0)
+			color = Color( 0, 0, 0, 0)
 		end
 
 		if YRP.GetDesignIcon( "circle" ) ~= nil then
@@ -296,7 +296,7 @@ hook.Add( "YClosePaint", "YClose_Material", function(self, pw, ph, tab)
 
 		local br = ph * 0.1
 		if YRP.GetDesignIcon( "clear" ) ~= nil then
-			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetDrawColor( 255, 255, 255, 255)
 			surface.SetMaterial(YRP.GetDesignIcon( "clear" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		end
@@ -307,7 +307,7 @@ end)
 hook.Add( "YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalString( "string_interface_design" ) == "Material" then
+	if YRPGetInterfaceDesign() == "Material" then
 		local color = Color(205, 205, 100)
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
@@ -318,7 +318,7 @@ hook.Add( "YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 			color.g = color.g + 50
 			color.b = color.b + 50
 		else
-			color = Color(0, 0, 0, 0)
+			color = Color( 0, 0, 0, 0)
 		end
 
 		if YRP.GetDesignIcon( "circle" ) ~= nil then
@@ -329,7 +329,7 @@ hook.Add( "YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 
 		local br = ph * 0.1
 		if YRP.GetDesignIcon( "mat_square" ) ~= nil then
-			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetDrawColor( 255, 255, 255, 255)
 			surface.SetMaterial(YRP.GetDesignIcon( "mat_square" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		end
@@ -340,7 +340,7 @@ end)
 hook.Add( "YGroupBoxPaint", "YGroupBox_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	if GetGlobalString( "string_interface_design" ) == "Material" then
+	if YRPGetInterfaceDesign() == "Material" then
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255) )
 
 		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 60, 60, 255) )
@@ -348,7 +348,7 @@ hook.Add( "YGroupBoxPaint", "YGroupBox_Material", function(self, pw, ph, tab)
 		local x, y = self.con:GetPos()
 		draw.RoundedBox(0, x, y, self.con:GetWide(), self.con:GetTall(), Color(20, 20, 20, 255) )
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)

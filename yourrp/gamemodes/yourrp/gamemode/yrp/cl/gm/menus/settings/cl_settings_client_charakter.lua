@@ -31,8 +31,8 @@ net.Receive( "getCharakterList", function()
 			if CurTime() > save_delay then
 				hook.Run( "YButtonPaint", self, pw, ph)
 			else
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255) )
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_cooldown" ), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255) )
+				draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_cooldown" ), "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255) )
 			end
 		end
 		function cl_save:DoClick()

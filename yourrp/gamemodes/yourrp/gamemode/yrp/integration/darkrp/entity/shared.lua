@@ -20,7 +20,7 @@ function Entity:getDoorData()
 
 	self.DoorData.owner = nil
 
-	local charid = self:GetNW2Int( "ownerCharID", 0)
+	local charid = self:GetYRPInt( "ownerCharID", 0)
 	if ea(self:GetRPOwner() ) then
 		self.DoorData.owner = self:GetRPOwner():UserID()
 	elseif charid and charid > 0 then
@@ -88,12 +88,12 @@ end
 
 function Entity:isKeysOwnable()
 	--Description: Whether this door can be bought.
-	return self:GetNW2Bool( "bool_canbeowned", true)
+	return self:GetYRPBool( "bool_canbeowned", true)
 end
 
 function Entity:isKeysOwned()
 	--Description: Whether this door is owned by someone.
-	return self:GetNW2Bool( "bool_hasowner", false) == true
+	return self:GetYRPBool( "bool_hasowner", false) == true
 end
 
 function Entity:isKeysOwnedBy(ply)
@@ -120,10 +120,10 @@ end
 
 if SERVER then
 	function Entity:CPPISetOwner(ent)
-		self:SetNWEntity( "cppiowner", ent)
+		self:SetYRPEntity( "cppiowner", ent)
 	end
 end
 
 function Entity:CPPIGetOwner()
-	return self:GetNWEntity( "cppiowner" )
+	return self:GetYRPEntity( "cppiowner" )
 end

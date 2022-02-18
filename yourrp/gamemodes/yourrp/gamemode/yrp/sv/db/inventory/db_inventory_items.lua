@@ -20,7 +20,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props
 
 
 function InventoryBlacklisted( cname)
-	local blacklist = GetGlobalTable( "yrp_blacklist_inventory", {})
+	local blacklist = GetGlobalYRPTable( "yrp_blacklist_inventory", {})
 	
 	for i, black in pairs( blacklist) do
 		if string.find( cname, black.value) then

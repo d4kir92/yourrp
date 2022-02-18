@@ -243,9 +243,14 @@ function DarkRP.getAvailableVehicles()
 end
 
 CATEGORIES = CATEGORIES or {}
+CATEGORIES.jobs = CATEGORIES.jobs or {}
+CATEGORIES.entities = CATEGORIES.entities or {}
+CATEGORIES.shipments = CATEGORIES.shipments or {}
+CATEGORIES.weapons = CATEGORIES.weapons or {}
+CATEGORIES.ammo = CATEGORIES.ammo or {}
+CATEGORIES.vehicles = CATEGORIES.vehicles or {}
 
 function DarkRP.getCategories()
-	--Description: Get all categories for all F4 menu tabs.
 	return CATEGORIES
 end
 
@@ -313,7 +318,11 @@ jobByCmd = jobByCmd or {}
 function DarkRP.getJobByCommand( command)
 	--Description: Get the job table and number from the command of the job.
 	if not jobByCmd[command] then return nil, nil end
-    return RPExtraTeams[jobByCmd[command]], jobByCmd[command]
+	if RPExtraTeams[jobByCmd[command]] or jobByCmd[command] then
+    	return RPExtraTeams[jobByCmd[command]], jobByCmd[command]
+	else
+		return RPExtraTeams[1], 1
+	end
 end
 
 function DarkRP.getLaws()
@@ -483,8 +492,8 @@ local function loadMySQLModule()
     if MySQLite_config.Preferred_module == "tmysql4" then
 
         if not tmysql.Version or tmysql.Version < 4.1 then
-            MsgC(Color(255, 0, 0), "Using older tmysql version, please consider updating!\n")
-            MsgC(Color(255, 0, 0), "Newer Version: https://github.com/SuperiorServers/gm_tmysql4\n")
+            MsgC(Color( 255, 0, 0), "Using older tmysql version, please consider updating!\n")
+            MsgC(Color( 255, 0, 0), "Newer Version: https://github.com/SuperiorServers/gm_tmysql4\n")
         end
 
         -- Turns tmysql.Connect into tmysql.Initialize if they're using an older version.
@@ -716,9 +725,9 @@ local function tmsqlConnect(host, username, password, database_name, database_po
     onConnected()
 
     if (TMySQL.Version and TMySQL.Version >= 4.1) then
-        hook.Add("Think", "MySQLite:tmysqlPoll", function()
+        hook.Add( "Think", "MySQLite:tmysqlPoll", function()
             db:Poll()
-        end)
+        end )
     end
 end
 

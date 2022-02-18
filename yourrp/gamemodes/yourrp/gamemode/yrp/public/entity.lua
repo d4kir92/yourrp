@@ -6,7 +6,7 @@
 local Entity = FindMetaTable( "Entity" )
 
 function Entity:GetRPOwner()
-	return self:GetNW2Entity( "yrp_owner", NULL)
+	return self:GetYRPEntity( "yrp_owner", NULL)
 end
 
 function Entity:YRPIsDoor()
@@ -15,7 +15,7 @@ function Entity:YRPIsDoor()
 end
 
 function Entity:SecurityLevel()
-	return self:GetNW2Int( "int_securitylevel", -1 )
+	return self:GetYRPInt( "int_securitylevel", -1 )
 end
 
 function Entity:GetSecurityLevel()

@@ -90,10 +90,10 @@ net.Receive( "yrp_set_font", function(len)
 	local fname = net.ReadString()
 	YRP.SetFont(fname)
 end)
-timer.Simple(4, function()
+timer.Simple( 10, function()
 	net.Start( "yrp_set_font" )
 	net.SendToServer()
-end)
+end )
 
 function GetFontSizeTable()
 	local tab = {}

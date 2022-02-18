@@ -44,7 +44,7 @@ function YRPChatChannel(edit, uid)
 		name = win.name:GetText()
 	end
 	if edit then
-		name = GetGlobalTable( "yrp_chat_channels" )[uid].string_name
+		name = GetGlobalYRPTable( "yrp_chat_channels" )[uid].string_name
 		win.name:SetText(name)
 	end
 
@@ -78,7 +78,7 @@ function YRPChatChannel(edit, uid)
 	for i, v in pairs(modes) do
 		local selected = false
 		if edit then
-			mode = tonumber(GetGlobalTable( "yrp_chat_channels" )[uid].int_mode)
+			mode = tonumber(GetGlobalYRPTable( "yrp_chat_channels" )[uid].int_mode)
 			if isnumber(mode) and v[2] == mode then
 				selected = true
 			end
@@ -99,7 +99,7 @@ function YRPChatChannel(edit, uid)
 		end
 	end
 	if edit then
-		structure = GetGlobalTable( "yrp_chat_channels" )[uid].string_structure
+		structure = GetGlobalYRPTable( "yrp_chat_channels" )[uid].string_structure
 		if isstring(structure) then
 			win.structure:SetText(structure)
 		end
@@ -199,7 +199,7 @@ function YRPChatChannel(edit, uid)
 		end
 	end
 	if edit then
-		structure2 = GetGlobalTable( "yrp_chat_channels" )[uid].string_structure2
+		structure2 = GetGlobalYRPTable( "yrp_chat_channels" )[uid].string_structure2
 		if isstring(structure2) then
 			win.structure2:SetText(structure2)
 		end
@@ -215,7 +215,7 @@ function YRPChatChannel(edit, uid)
 	-- enabled
 	win.enabled = createD( "DCheckBox", CON, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(600) )
 	if edit then
-		win.enabled:SetChecked(tobool(GetGlobalTable( "yrp_chat_channels" )[uid].bool_enabled) )
+		win.enabled:SetChecked(tobool(GetGlobalYRPTable( "yrp_chat_channels" )[uid].bool_enabled) )
 	else
 		win.enabled:SetChecked(true)
 	end
@@ -300,13 +300,13 @@ function YRPChatChannel(edit, uid)
 
 				net.WriteString(enabled)
 
-				net.WriteTable( augs)
-				net.WriteTable( agrps)
-				net.WriteTable( arols)
+				net.WriteTable( augs )
+				net.WriteTable( agrps )
+				net.WriteTable( arols )
 
-				net.WriteTable(pugs)
-				net.WriteTable(pgrps)
-				net.WriteTable(prols)
+				net.WriteTable( pugs )
+				net.WriteTable( pgrps )
+				net.WriteTable( prols )
 
 				net.WriteString(uid)
 			net.SendToServer()
@@ -317,7 +317,7 @@ function YRPChatChannel(edit, uid)
 			end)
 		end
 
-		if GetGlobalTable( "yrp_chat_channels" )[uid]["bool_removeable"] then
+		if GetGlobalYRPTable( "yrp_chat_channels" )[uid]["bool_removeable"] then
 			win.rem = createD( "YButton", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(1170) )
 			win.rem:SetText( "LID_remove" )
 			function win.rem:Paint(pw, ph)
@@ -349,13 +349,13 @@ function YRPChatChannel(edit, uid)
 
 				net.WriteString(enabled)
 
-				net.WriteTable( augs)
-				net.WriteTable( agrps)
-				net.WriteTable( arols)
+				net.WriteTable( augs )
+				net.WriteTable( agrps )
+				net.WriteTable( arols )
 
-				net.WriteTable(pugs)
-				net.WriteTable(pgrps)
-				net.WriteTable(prols)
+				net.WriteTable( pugs )
+				net.WriteTable( pgrps )
+				net.WriteTable( prols )
 			net.SendToServer()
 
 			win:Remove()
@@ -382,7 +382,7 @@ function OpenChatMenu()
 
 	local h = YRP.ctr(80)
 	local pbr = YRP.ctr(20)
-	for i, channel in pairs(GetGlobalTable( "yrp_chat_channels", {}) ) do
+	for i, channel in pairs(GetGlobalYRPTable( "yrp_chat_channels", {}) ) do
 		if lply:HasAccess() then
 			local line = createD( "DPanel", nil, CONTENT:GetWide(), h, 0, 0)
 			function line:Paint(pw, ph)
@@ -390,14 +390,14 @@ function OpenChatMenu()
 
 			local bg = createD( "DPanel", line, CONTENT:GetWide() - YRP.ctr(26), h, 0, 0)
 			function bg:Paint(pw, ph)
-				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "PC" ) )
+				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "PC" ) )
 			end
 
 			local status = createD( "DPanel", bg, h, h, 0, 0)
 			function status:Paint(pw, ph)
-				local color = Color(255, 0, 0, 255)
+				local color = Color( 255, 0, 0, 255)
 				if channel.bool_enabled == 1 then
-					color = Color(0, 255, 0, 255)
+					color = Color( 0, 255, 0, 255)
 				end
 				draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 			end
@@ -420,7 +420,7 @@ function OpenChatMenu()
 
 			local name = createD( "DPanel", bg, YRP.ctr(800), h, h + pbr, 0)
 			function name:Paint(pw, ph)
-				draw.SimpleText( channel.string_name, "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText( channel.string_name, "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			vm.win.list:AddItem(line)

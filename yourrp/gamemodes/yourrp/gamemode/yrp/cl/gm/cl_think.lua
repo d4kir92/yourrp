@@ -145,7 +145,7 @@ function YRPUseFunction(str)
 				if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
 					toggleDoorOptions(eyeTrace.Entity)
 				elseif eyeTrace.Entity:IsVehicle() then
-					toggleVehicleOptions(eyeTrace.Entity, eyeTrace.Entity:GetNW2Int( "item_uniqueID" ) )
+					toggleVehicleOptions(eyeTrace.Entity, eyeTrace.Entity:GetYRPInt( "item_uniqueID" ) )
 				end
 			end
 
@@ -304,18 +304,6 @@ local hudD = nil
 local hudFail = hudFail or false
 function YRPKeyPress()
 	local lply = LocalPlayer()
-
-	hudD = hudD or CurTime() + 240
-
-	if hudD < CurTime() then
-		hudD = CurTime() + 240
-		if lply:GetNW2Int( "hud_version", -1) < 0 and !hudFail then
-			hudFail = true
-			net.Start( "rebuildHud" )
-			net.SendToServer()
-			YRP.msg( "note", "HUD Version outdated! " .. tostring( lply:GetNW2Int( "hud_version", -1) ) .. " " .. YRPCreateLoadingInfo() )
-		end
-	end
 
 	lply.yrp_view_range = lply.yrp_view_range or 0
 	lply.yrp_view_range_view = lply.yrp_view_range_view or 0
@@ -729,7 +717,7 @@ function YRP_CalcView(lply, pos, angles, fov)
 				end
 			end
 		else
-			local entindex = lply:GetNW2Int( "ent_ragdollindex" )
+			local entindex = lply:GetYRPInt( "ent_ragdollindex" )
 
 			if entindex then
 				local ent = Entity(entindex)
@@ -780,9 +768,26 @@ net.Receive( "yrp_send_jobs", function(len, ply)
 	end
 end)
 -- FOR CLIENTS
+net.Receive( "YRP_Send_DarkRP_Jobs", function(len) -- full jobs data
+	local teamTab = {}
+	teamTab.admin = net.ReadUInt( 2 )
+	teamTab.candemote = net.ReadBool()
+	teamTab.category = net.ReadString()
+	teamTab.color = net.ReadColor()
+	teamTab.command = net.ReadString()
+	teamTab.description = net.ReadString()
+	teamTab.fake = net.ReadBool()
+	teamTab.hasLicense = net.ReadBool()
+	teamTab.int_groupID = net.ReadUInt( 16 )
+	teamTab.max = net.ReadUInt( 8 )
+	teamTab.model = net.ReadTable()
+	teamTab.name = net.ReadString()
+	teamTab.salary = net.ReadUInt( 16 )
+	teamTab.team = net.ReadUInt( 16 )
+	teamTab.uniqueID = net.ReadUInt( 16 )
+	teamTab.vote = net.ReadBool()
+	teamTab.weapons = net.ReadTable()
 
-net.Receive( "send_team", function(len) -- full jobs data
-	local teamTab = net.ReadTable()
 	local teamcolor = teamTab.color
 	local teamuid = tonumber( teamTab.uniqueID )
 
@@ -807,15 +812,22 @@ CATEGORIES.shipments = CATEGORIES.shipments or {}
 CATEGORIES.weapons = CATEGORIES.weapons or {}
 CATEGORIES.ammo = CATEGORIES.ammo or {}
 CATEGORIES.vehicles = CATEGORIES.vehicles or {}
-net.Receive( "send_categories", function(len)
-	local catname = net.ReadString()
-	local catTab = net.ReadTable()
+net.Receive( "YRP_Send_DarkRP_Categories", function(len)
+	local catTab = {}
+	catTab.uniqueID = net.ReadUInt( 16 )
+	catTab.name = net.ReadString()
+	catTab.categorises = net.ReadString()
+	catTab.startExpanded = net.ReadBool()
+	catTab.color = net.ReadColor()
+	catTab.sortOrder = net.ReadUInt( 7 )
+
+	catTab = YRPConvertToDarkRPCategory( catTab, "jobs" )
 
 	--CATEGORIES.jobs[catname] = catTab -- ipairs not working with that
-	table.insert(CATEGORIES.jobs, catTab)
+	table.insert( CATEGORIES.jobs, catTab )
 end)
 
-net.Receive( "drp_combinetabs", function(len)
+net.Receive( "YRP_Combine_DarkRPTables", function(len)
 	local TEMPRPExtraTeams = {}
 	for i, v in pairs(RPExtraTeams) do
 		if v.fake == false then
@@ -828,8 +840,10 @@ net.Receive( "drp_combinetabs", function(len)
 		cat.members = {}
 		for i, role in pairs(RPExtraTeams) do
 			if role and cat and role.int_groupID == cat.uniqueID then
-				table.insert( cat.members, role)
+				table.insert( cat.members, role )
 			end
 		end
 	end
+
+	hook.Run( "bKeypads.ConfigUpdated" )
 end)

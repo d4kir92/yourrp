@@ -111,7 +111,7 @@ function YRPHudCrosshair()
 							local sw = 10
 							local sh = 1
 
-							surface.SetDrawColor(0, 0, 0, 255 * alphaFade)
+							surface.SetDrawColor( 0, 0, 0, 255 * alphaFade)
 
 							local br = 1
 							surface.DrawRect(oldx-sw-gap-br, oldy-sh/2-br, sw+2*br, sh+2*br)
@@ -120,7 +120,7 @@ function YRPHudCrosshair()
 							surface.DrawRect(oldx-sh/2-br, oldy-sw-gap-br, sh+2*br, sw+2*br)
 							surface.DrawRect(oldx-sh/2-br, oldy+gap-br, sh+2*br, sw+2*br)
 
-							surface.SetDrawColor(255, 255, 255, 255 * alphaFade)
+							surface.SetDrawColor( 255, 255, 255, 255 * alphaFade)
 
 							surface.DrawRect(oldx-sw-gap, oldy-sh/2, sw, sh)
 							surface.DrawRect(oldx+gap, oldy-sh/2, sw, sh)

@@ -28,9 +28,9 @@ function Player:arrest(time, Arrester)
 	--Description: Arrest a player.
 	--YRPDarkrpNotFound( "arrest( " .. tostring(time) .. ", " .. Arrester:Nick() .. " )" )
 
-	self:SetNW2Int( "jailtime", time)
+	self:SetYRPInt( "jailtime", time)
 	timer.Simple(0.02, function()
-		self:SetNW2Bool( "injail", true)
+		self:SetYRPBool( "injail", true)
 	end)
 end
 
@@ -43,7 +43,7 @@ function Player:changeTeam(team, force, suppressNotification)
 	--Description: Change the team of a player.
 	if canGetRole(self, team) then
 		if GetGlobalBool( "bool_players_die_on_role_switch", false) then
-			self:KillSilent()
+			self:OldKillSilent()
 		end
 		SetRole(self, team, false, nil)
 		if GetGlobalBool( "bool_players_die_on_role_switch", false) then
@@ -160,15 +160,15 @@ function Player:setDarkRPVar( variable, value, target )
 	target = target or self
 
 	if variable == "Thirst" then
-		target:Drink( value - target:GetNW2Float( "thirst", 0.0) )
+		target:Drink( value - target:GetYRPFloat( "thirst", 0.0) )
 	elseif variable == "Energy" then
-		target:Eat( value - target:GetNW2Float( "hunger", 0.0) )
+		target:Eat( value - target:GetYRPFloat( "hunger", 0.0) )
 	elseif variable == "rpname" then
 		target:SetRPName( value, "setDarkRPVar" )
 	elseif variable == "money" then
 		target:SetMoney( value)
 	elseif variable == "wanted" then
-		target:SetNW2Bool( "iswanted", value)
+		target:SetYRPBool( "iswanted", value)
 	elseif variable == "agenda" then
 		--
 	elseif variable == "salary" then
@@ -189,9 +189,9 @@ function Player:setDarkRPVar( variable, value, target )
 	end
 
 	if isnumber( value) then
-		target:SetNWInt( variable, value)
+		target:SetYRPInt( variable, value)
 	else
-		target:SetNWString( variable, value)
+		target:SetYRPString( variable, value)
 	end
 end
 
@@ -225,7 +225,7 @@ end
 
 function Player:teamBan(team, time)
 	--Description: Ban someone from getting a certain job.
-	YRPDarkrpNotFound( "teamBan(team, time)" )
+	--YRPDarkrpNotFound( "teamBan(team, time)" )
 end
 
 function Player:teamBanTimeLeft(team)
@@ -241,14 +241,14 @@ end
 function Player:unArrest(Unarrester)
 	--Description: Unarrest a player.
 	if IsValid(Unarrester) then
-		self:SetNW2Bool( "injail", false)
+		self:SetYRPBool( "injail", false)
 	end
 end
 
 function Player:unWanted( actor)
 	--Description: Clear the wanted status for this person.
 	--YRPDarkrpNotFound( "unWanted( actor)" )
-	self:SetNW2Bool( "iswanted", false)
+	self:SetYRPBool( "iswanted", false)
 end
 
 function Player:unWarrant(unwarranter)

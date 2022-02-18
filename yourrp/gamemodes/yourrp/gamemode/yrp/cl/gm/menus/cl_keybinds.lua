@@ -99,7 +99,7 @@ function CreateKeybindsContent(parent)
 
 	function background:Paint(pw, ph)
 		for i, v in pairs(keybinds) do
-			draw.SimpleTextOutlined(YRP.lang_string( v[1]), "Y_24_500", YRP.ctr(_wide), YRP.ctr(20) + (i - 1) * YRP.ctr(50 + 4), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0) )
+			draw.SimpleTextOutlined(YRP.lang_string( v[1]), "Y_24_500", YRP.ctr(_wide), YRP.ctr(20) + (i - 1) * YRP.ctr(50 + 4), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
 		end
 	end
 
@@ -114,8 +114,8 @@ function CreateKeybindsContent(parent)
 	reset:SetText( "" )
 	function reset:Paint(pw, ph)
 		local tab = {}
-		tab.color = Color(255, 0, 0)
-		tab.hovercolor = Color(255, 100, 100)
+		tab.color = Color( 255, 0, 0)
+		tab.hovercolor = Color( 255, 100, 100)
 		tab.text = {}
 		tab.text.text = YRP.lang_string( "LID_settodefault" )
 		DrawButton(self, tab)
@@ -148,8 +148,8 @@ function CreateKeybindsContent(parent)
 		setsvkeybind:SetText( "" )
 		function setsvkeybind:Paint(pw, ph)
 			local tab = {}
-			tab.color = Color(255, 0, 0)
-			tab.hovercolor = Color(255, 100, 100)
+			tab.color = Color( 255, 0, 0)
+			tab.hovercolor = Color( 255, 100, 100)
 			tab.text = {}
 			tab.text.text = YRP.lang_string( "LID_setasserverdefault" )
 			DrawButton(self, tab)
@@ -181,8 +181,8 @@ function CreateKeybindsContent(parent)
 		forcesetkeybinds:SetText( "" )
 		function forcesetkeybinds:Paint(pw, ph)
 			local tab = {}
-			tab.color = Color(255, 0, 0)
-			tab.hovercolor = Color(255, 100, 100)
+			tab.color = Color( 255, 0, 0)
+			tab.hovercolor = Color( 255, 100, 100)
 			tab.text = {}
 			tab.text.text = YRP.lang_string( "LID_forcesetkeybinds" )
 			DrawButton(self, tab)

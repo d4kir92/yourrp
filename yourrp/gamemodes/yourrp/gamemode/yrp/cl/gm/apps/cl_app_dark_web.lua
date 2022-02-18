@@ -8,11 +8,11 @@ APP.ClassName = "yrp_dark_web"
 APP.Icon = Material( "yrp/yrp_anonymous.png" )
 
 function APP:AppIcon(pw, ph)
-	surface.SetDrawColor(255, 255, 255, 255)
+	surface.SetDrawColor( 255, 255, 255, 255)
 	surface.SetMaterial(self.Icon	)
 	surface.DrawTexturedRect(0, 0, pw, ph)
 
-	--draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255) )
+	--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 255) )
 end
 
 APP.Fullscreen = true
@@ -28,7 +28,7 @@ function testApp( display, x, y, w, h)
 		function _we:Paint(pw, ph)
 			local tab = {}
 			tab["NAME"] = LocalPlayer():RPName()
-			draw.SimpleText(YRP.lang_string( "LID_welcomeagentx", tab), "Y_24_500", ctrb(10), ph / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, 0)
+			draw.SimpleText(YRP.lang_string( "LID_welcomeagentx", tab), "Y_24_500", ctrb(10), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_LEFT, 0)
 		end
 
 		local _target_model = createD( "DModelPanel", _dw, ctrb(800), ctrb(800), ctrb(400), ctrb(100) )
@@ -36,22 +36,22 @@ function testApp( display, x, y, w, h)
 		local _target_rpname = createD( "DPanel", _dw, ctrb(800), ctrb(100), ctrb(1200), ctrb(100) )
 		_target_rpname.rpname = YRP.lang_string( "LID_none" )
 		function _target_rpname:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string( "LID_target" ) .. ":", "Y_24_500", ctrb(300), ph / 2, Color(255, 255, 255), 2, 0)
-			draw.SimpleText(self.rpname, "Y_24_500", ctrb(320), ph / 2, Color(255, 255, 255), 0, 0)
+			draw.SimpleText(YRP.lang_string( "LID_target" ) .. ":", "Y_24_500", ctrb(300), ph / 2, Color( 255, 255, 255), 2, 0)
+			draw.SimpleText(self.rpname, "Y_24_500", ctrb(320), ph / 2, Color( 255, 255, 255), 0, 0)
 		end
 
 		local _target_reward = createD( "DPanel", _dw, ctrb(800), ctrb(100), ctrb(1200), ctrb(250) )
 		_target_reward.reward = YRP.lang_string( "LID_none" )
 		function _target_reward:Paint(pw, ph)
-			draw.SimpleText( "Reward" .. ":", "Y_24_500", ctrb(300), ph / 2, Color(255, 255, 255), 2, 0)
-			draw.SimpleText(self.reward, "Y_24_500", ctrb(320), ph / 2, Color(255, 255, 255), 0, 0)
+			draw.SimpleText( "Reward" .. ":", "Y_24_500", ctrb(300), ph / 2, Color( 255, 255, 255), 2, 0)
+			draw.SimpleText(self.reward, "Y_24_500", ctrb(320), ph / 2, Color( 255, 255, 255), 0, 0)
 		end
 
 		local _target_description = createD( "DPanel", _dw, ctrb(800), ctrb(100), ctrb(1200), ctrb(400) )
 		_target_description.description = YRP.lang_string( "LID_none" )
 		function _target_description:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string( "LID_description" ) .. ":", "Y_24_500", ctrb(300), ph / 2, Color(255, 255, 255), 2, 0)
-			draw.SimpleText(self.description, "Y_24_500", ctrb(320), ph / 2, Color(255, 255, 255), 0, 0)
+			draw.SimpleText(YRP.lang_string( "LID_description" ) .. ":", "Y_24_500", ctrb(300), ph / 2, Color( 255, 255, 255), 2, 0)
+			draw.SimpleText(self.description, "Y_24_500", ctrb(320), ph / 2, Color( 255, 255, 255), 0, 0)
 		end
 
 		local _target_accept = createD( "YButton", _dw, ctrb(800), ctrb(50), ctrb(1200), ctrb(550) )
@@ -78,7 +78,7 @@ function testApp( display, x, y, w, h)
 			local _hits = net.ReadTable()
 			for i, hit in pairs(_hits) do
 				for j, ply in pairs(player.GetAll() ) do
-					if ply:SteamID() == hit.target then
+					if ply:YRPSteamID() == hit.target then
 						_target_list:AddLine(ply:RPName(), hit.target, hit.reward, hit.description, hit.uniqueID)
 						break
 					end
@@ -95,7 +95,7 @@ function testApp( display, x, y, w, h)
 			hit.reward = pnl:GetColumnText(3)
 			hit.description = pnl:GetColumnText(4)
 			for i, ply in pairs(player.GetAll() ) do
-				if ply:SteamID() == hit.steamid then
+				if ply:YRPSteamID() == hit.steamid then
 
 					_target_model:SetModel(ply:GetModel() )
 
@@ -124,7 +124,7 @@ function testApp( display, x, y, w, h)
 
 			local _pb = createD( "DComboBox", _newhit:GetContent(), ctrb(400), ctrb(50), ctrb(20), ctrb(20) )
 			for i, ply in pairs(player.GetAll() ) do
-				_pb:AddChoice(ply:RPName(), ply:SteamID() )
+				_pb:AddChoice(ply:RPName(), ply:YRPSteamID() )
 			end
 			function _pb:OnSelect(index, value, data)
 				if self._hi != nil then
@@ -134,11 +134,11 @@ function testApp( display, x, y, w, h)
 				self._hi = createD( "DPanel", _newhit:GetContent(), ctrb(600), ctrb(1000), ctrb(500), ctrb(20) )
 				self._hi.target = value
 				function self._hi:Paint(pw, ph)
-					draw.SimpleText(YRP.lang_string( "LID_target" ) .. ": " .. self.target, "Y_36_500", ctrb(20), ctrb(100), Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+					draw.SimpleText(YRP.lang_string( "LID_target" ) .. ": " .. self.target, "Y_36_500", ctrb(20), ctrb(100), Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 					
-					draw.SimpleText(YRP.lang_string( "LID_reward" ) .. ":", "Y_36_500", ctrb(20), ctrb(200), Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+					draw.SimpleText(YRP.lang_string( "LID_reward" ) .. ":", "Y_36_500", ctrb(20), ctrb(200), Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
-					draw.SimpleText(YRP.lang_string( "LID_description" ) .. ":", "Y_36_500", ctrb(20), ctrb(350), Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+					draw.SimpleText(YRP.lang_string( "LID_description" ) .. ":", "Y_36_500", ctrb(20), ctrb(350), Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 				end
 
 				local _hr = createD( "DNumberWang", self._hi, ctrb(400), ctrb(50), ctrb(20), ctrb(200) )
@@ -171,7 +171,7 @@ function testApp( display, x, y, w, h)
 			local _hits = net.ReadTable()
 			for i, hit in pairs(_hits) do
 				for j, ply in pairs(player.GetAll() ) do
-					if ply:SteamID() == hit.target then
+					if ply:YRPSteamID() == hit.target then
 						_target_list:AddLine(ply:RPName(), hit.target, hit.reward, hit.description)
 						break
 					end

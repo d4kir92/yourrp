@@ -67,20 +67,20 @@ function CreateTicketContent(parent)
 
 	TICKET.titleP = createD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(170) )
 	function TICKET.titleP:Paint(pw, ph)
-		surfaceText(YRP.lang_string( "LID_title" ), "Y_25_500", YRP.ctr(0), ph / 2, Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string( "LID_title" ), "Y_25_500", YRP.ctr(0), ph / 2, Color( 255, 255, 255), 0, 1)
 	end
 	TICKET.titleT = createD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(220) )
 
 	TICKET.ticketP = createD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(300) )
 	function TICKET.ticketP:Paint(pw, ph)
-		surfaceText(YRP.lang_string( "LID_ticket" ) .. " ( " .. YRP.lang_string( "LID_problems" ) .. ", " .. YRP.lang_string( "LID_suggestions" ) .. ", ...)", "Y_25_500", YRP.ctr(0), ph/2, Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string( "LID_ticket" ) .. " ( " .. YRP.lang_string( "LID_problems" ) .. ", " .. YRP.lang_string( "LID_suggestions" ) .. ", ...)", "Y_25_500", YRP.ctr(0), ph/2, Color( 255, 255, 255), 0, 1)
 	end
 	TICKET.ticketT = createD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(500), YRP.ctr(20), YRP.ctr(350) )
 	TICKET.ticketT:SetMultiline(true)
 
 	TICKET.contactP = createD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(900) )
 	function TICKET.contactP:Paint(pw, ph)
-		surfaceText(YRP.lang_string( "LID_contact" ) .. " ( " .. YRP.lang_string( "LID_notrequired" ) .. " )", "Y_25_500", YRP.ctr(0), ph/2, Color(255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string( "LID_contact" ) .. " ( " .. YRP.lang_string( "LID_notrequired" ) .. " )", "Y_25_500", YRP.ctr(0), ph/2, Color( 255, 255, 255), 0, 1)
 	end
 	TICKET.contactT = createD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(950) )
 
@@ -97,13 +97,13 @@ function CreateTicketContent(parent)
 			entry["entry.1141598078"] = TICKET.titleT:GetText() or "FAILED"
 			entry["entry.761186932"] = TICKET.ticketT:GetText() or "FAILED"
 			entry["entry.1633448754"] = TICKET.contactT:GetText() or "FAILED"
-			entry["entry.1109864644"] = LocalPlayer():SteamID() or "FAILED"
+			entry["entry.1109864644"] = LocalPlayer():YRPSteamID() or "FAILED"
 
 			local _net_table = {}
 			_net_table.title = TICKET.titleT:GetText() or "FAILED"
 			_net_table.feedback = TICKET.ticketT:GetText() or "FAILED"
 			_net_table.contact = TICKET.contactT:GetText() or "FAILED"
-			_net_table.steamid = LocalPlayer():SteamID() or "FAILED"
+			_net_table.steamid = LocalPlayer():YRPSteamID() or "FAILED"
 			_net_table.steamname = LocalPlayer():SteamName() or "FAILED"
 			_net_table.rpname = LocalPlayer():RPName() or "FAILED"
 			net.Start( "add_ticket" )

@@ -19,14 +19,14 @@ function ENT:Initialize()
 		phys:Wake()
 	end
 
-	self:SetNW2String( "status", "startup" )
+	self:SetYRPString( "status", "startup" )
 	timer.Simple(4, function()
 		if self:IsValid() then
-			self:SetNW2String( "status", "logo" )
+			self:SetYRPString( "status", "logo" )
 		end
 		timer.Simple(3, function()
 			if self:IsValid() then
-				self:SetNW2String( "status", "home" )
+				self:SetYRPString( "status", "home" )
 			end
 		end)
 	end)
@@ -41,7 +41,7 @@ function ENT:Initialize()
 
 	self.namePos = 1
 
-	self:SetNW2String( "prevstatus", "" )
+	self:SetYRPString( "prevstatus", "" )
 
 	ent = self
 end
@@ -100,14 +100,14 @@ function ENT:ATMPressPrev(ply)
 			end
 		end
 	end
-	self:SetNW2String( "name1", tostring(names[1]) )
-	self:SetNW2String( "SteamID1", tostring(SteamIDs[1]) )
-	self:SetNW2String( "name2", tostring(names[2]) )
-	self:SetNW2String( "SteamID2", tostring(SteamIDs[2]) )
-	self:SetNW2String( "name3", tostring(names[3]) )
-	self:SetNW2String( "SteamID3", tostring(SteamIDs[3]) )
-	self:SetNW2String( "name4", tostring(names[4]) )
-	self:SetNW2String( "SteamID4", tostring(SteamIDs[4]) )
+	self:SetYRPString( "name1", tostring(names[1]) )
+	self:SetYRPString( "SteamID1", tostring(SteamIDs[1]) )
+	self:SetYRPString( "name2", tostring(names[2]) )
+	self:SetYRPString( "SteamID2", tostring(SteamIDs[2]) )
+	self:SetYRPString( "name3", tostring(names[3]) )
+	self:SetYRPString( "SteamID3", tostring(SteamIDs[3]) )
+	self:SetYRPString( "name4", tostring(names[4]) )
+	self:SetYRPString( "SteamID4", tostring(SteamIDs[4]) )
 end
 
 function ENT:ATMPressNext(ply)
@@ -133,14 +133,14 @@ function ENT:ATMPressNext(ply)
 			end
 		end
 	end
-	self:SetNW2String( "name1", tostring(names[1]) )
-	self:SetNW2String( "SteamID1", tostring(SteamIDs[1]) )
-	self:SetNW2String( "name2", tostring(names[2]) )
-	self:SetNW2String( "SteamID2", tostring(SteamIDs[2]) )
-	self:SetNW2String( "name3", tostring(names[3]) )
-	self:SetNW2String( "SteamID3", tostring(SteamIDs[3]) )
-	self:SetNW2String( "name4", tostring(names[4]) )
-	self:SetNW2String( "SteamID4", tostring(SteamIDs[4]) )
+	self:SetYRPString( "name1", tostring(names[1]) )
+	self:SetYRPString( "SteamID1", tostring(SteamIDs[1]) )
+	self:SetYRPString( "name2", tostring(names[2]) )
+	self:SetYRPString( "SteamID2", tostring(SteamIDs[2]) )
+	self:SetYRPString( "name3", tostring(names[3]) )
+	self:SetYRPString( "SteamID3", tostring(SteamIDs[3]) )
+	self:SetYRPString( "name4", tostring(names[4]) )
+	self:SetYRPString( "SteamID4", tostring(SteamIDs[4]) )
 end
 
 function ENT:createButtonNumber(parent, up, forward, right, add)
@@ -149,7 +149,7 @@ function ENT:createButtonNumber(parent, up, forward, right, add)
 	tmp:SetAngles(parent:GetAngles() + Angle(45, 0, 0) )
 	tmp:SetParent(parent)
 	tmp:Spawn()
-	tmp:SetColor(Color(255, 0, 0, 0) )
+	tmp:SetColor(Color( 255, 0, 0, 0) )
 	tmp:SetRenderMode(RENDERMODE_TRANSALPHA)
 	tmp.parent = parent
 
@@ -162,10 +162,10 @@ function ENT:createButtonNumber(parent, up, forward, right, add)
 			self:EmitSound(filename, 75, 100, 1, CHAN_AUTO )
 
 			if add != "<" then
-				tmp.parent:SetNW2String( "othermoney", tmp.parent:GetNW2String( "othermoney", "" ) .. add)
+				tmp.parent:SetYRPString( "othermoney", tmp.parent:GetYRPString( "othermoney", "" ) .. add)
 			else
-				local stringExp = string.sub(tmp.parent:GetNW2String( "othermoney" ), 1, string.len(tmp.parent:GetNW2String( "othermoney" ) ) - 1)
-				tmp.parent:SetNW2String( "othermoney", stringExp)
+				local stringExp = string.sub(tmp.parent:GetYRPString( "othermoney" ), 1, string.len(tmp.parent:GetYRPString( "othermoney" ) ) - 1)
+				tmp.parent:SetYRPString( "othermoney", stringExp)
 			end
 			timer.Simple(0.2, function()
 				pressed = false
@@ -182,7 +182,7 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 	tmp:SetAngles(parent:GetAngles() + Angle(45, 0, 0) )
 	tmp:SetParent(parent)
 	tmp:Spawn()
-	tmp:SetColor(Color(255, 0, 0, 0) )
+	tmp:SetColor(Color( 255, 0, 0, 0) )
 	tmp:SetRenderMode(RENDERMODE_TRANSALPHA)
 	tmp.parent = parent
 	tmp.money = tonumber(_money)
@@ -201,43 +201,43 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 				elseif func == "ATMPressPrev" then
 					self.parent:ATMPressPrev( activator)
 				elseif func == "ATMPressPlayer1" then
-					self.parent:SetNW2String( "name", self.parent:GetNW2String( "name1" ) )
-					self.parent:SetNW2String( "SteamID", self.parent:GetNW2String( "SteamID1" ) )
+					self.parent:SetYRPString( "name", self.parent:GetYRPString( "name1" ) )
+					self.parent:SetYRPString( "SteamID", self.parent:GetYRPString( "SteamID1" ) )
 				elseif func == "ATMPressPlayer2" then
-					self.parent:SetNW2String( "name", self.parent:GetNW2String( "name2" ) )
-					self.parent:SetNW2String( "SteamID", self.parent:GetNW2String( "SteamID2" ) )
+					self.parent:SetYRPString( "name", self.parent:GetYRPString( "name2" ) )
+					self.parent:SetYRPString( "SteamID", self.parent:GetYRPString( "SteamID2" ) )
 				elseif func == "ATMPressPlayer3" then
-					self.parent:SetNW2String( "name", self.parent:GetNW2String( "name3" ) )
-					self.parent:SetNW2String( "SteamID", self.parent:GetNW2String( "SteamID3" ) )
+					self.parent:SetYRPString( "name", self.parent:GetYRPString( "name3" ) )
+					self.parent:SetYRPString( "SteamID", self.parent:GetYRPString( "SteamID3" ) )
 				elseif func == "ATMPressPlayer4" then
-					self.parent:SetNW2String( "name", self.parent:GetNW2String( "name4" ) )
-					self.parent:SetNW2String( "SteamID", self.parent:GetNW2String( "SteamID4" ) )
+					self.parent:SetYRPString( "name", self.parent:GetYRPString( "name4" ) )
+					self.parent:SetYRPString( "SteamID", self.parent:GetYRPString( "SteamID4" ) )
 				elseif func == "confirm" then
-					if self.parent:GetNW2String( "prevstatus" ) == "withdraw" then
-						self.money = -tonumber(self.parent:GetNW2String( "othermoney", "0" ) )
-					elseif self.parent:GetNW2String( "prevstatus" ) == "deposit" then
-						self.money = tonumber(self.parent:GetNW2String( "othermoney", "0" ) )
-					elseif self.parent:GetNW2String( "prevstatus" ) == "transfer" then
-						self.money = tonumber(self.parent:GetNW2String( "othermoney", "0" ) )
+					if self.parent:GetYRPString( "prevstatus" ) == "withdraw" then
+						self.money = -tonumber(self.parent:GetYRPString( "othermoney", "0" ) )
+					elseif self.parent:GetYRPString( "prevstatus" ) == "deposit" then
+						self.money = tonumber(self.parent:GetYRPString( "othermoney", "0" ) )
+					elseif self.parent:GetYRPString( "prevstatus" ) == "transfer" then
+						self.money = tonumber(self.parent:GetYRPString( "othermoney", "0" ) )
 
 						if self.money != nil and isnumber(self.money) then
 							if self.money > 0 then
 								if activator:canAffordBank(self.money) then
 									local dbSelectActivator = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. activator:CharID() )
-									local dbSelectTarget = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. tostring(self.parent:GetNW2String( "SteamID" ) ))
+									local dbSelectTarget = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. tostring(self.parent:GetYRPString( "SteamID" ) ))
 									if dbSelectActivator != nil and dbSelectTarget != nil then
-										if dbSelectTarget[1].SteamID != activator:SteamID() then
+										if dbSelectTarget[1].SteamID != activator:YRPSteamID() then
 											dbSelectActivator[1].moneybank = dbSelectActivator[1].moneybank-self.money
 	
 											YRP_SQL_UPDATE( "yrp_characters", {["moneybank"] = dbSelectActivator[1].moneybank}, "uniqueID = " .. activator:CharID() )
 
 											dbSelectTarget[1].moneybank = dbSelectTarget[1].moneybank+self.money
-											YRP_SQL_UPDATE( "yrp_characters", {["moneybank"] = dbSelectTarget[1].moneybank}, "uniqueID = '" .. self.parent:GetNW2String( "SteamID" ) .. "'" )
+											YRP_SQL_UPDATE( "yrp_characters", {["moneybank"] = dbSelectTarget[1].moneybank}, "uniqueID = '" .. self.parent:GetYRPString( "SteamID" ) .. "'" )
 
-											activator:SetNW2String( "moneybank", dbSelectActivator[1].moneybank)
+											activator:SetYRPString( "moneybank", dbSelectActivator[1].moneybank)
 											for k, v in pairs(player.GetAll() ) do
-												if v:SteamID() == dbSelectTarget[1].SteamID then
-													v:SetNW2String( "moneybank", dbSelectTarget[1].moneybank)
+												if v:YRPSteamID() == dbSelectTarget[1].SteamID then
+													v:SetYRPString( "moneybank", dbSelectTarget[1].moneybank)
 													break
 												end
 											end
@@ -256,7 +256,7 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 			end
 
 			if status != nil then
-				self.parent:SetNW2String( "status", status)
+				self.parent:SetYRPString( "status", status)
 			end
 			timer.Simple(0.2, function()
 				pressed = false
@@ -284,7 +284,7 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 end
 
 function ENT:Think()
-	if self:GetNW2String( "status" ) == "home" then
+	if self:GetYRPString( "status" ) == "home" then
 		if !self.menu.home then
 			self.menu.home = true
 
@@ -292,11 +292,11 @@ function ENT:Think()
 			self.buttons.deposit = self:createButton(self, 48.0, 8.84, 8.8, "deposit", nil, nil)
 			self.buttons.transfer = self:createButton(self, 46.36, 10.54, 8.8, "transfer", nil, "ATMPressPrev" )
 		end
-	elseif self:GetNW2String( "status" ) == "withdraw" then
+	elseif self:GetYRPString( "status" ) == "withdraw" then
 		if !self.menu.withdraw then
 			self.menu.withdraw = true
 
-			self:SetNW2String( "prevstatus", "withdraw" )
+			self:SetYRPString( "prevstatus", "withdraw" )
 
 			self.buttons.withdraw5 = self:createButton(self, 49.74, 7.14, 8.8, "home", -5, nil)
 			self.buttons.withdraw10 = self:createButton(self, 48.0, 8.84, 8.8, "home", -10, nil)
@@ -308,11 +308,11 @@ function ENT:Think()
 
 			self.buttons.withdrawBack = self:createButton(self, 43.48, 13.32, 8.8, "home", nil, nil)
 		end
-	elseif self:GetNW2String( "status" ) == "deposit" then
+	elseif self:GetYRPString( "status" ) == "deposit" then
 		if !self.menu.deposit then
 			self.menu.deposit = true
 
-			self:SetNW2String( "prevstatus", "deposit" )
+			self:SetYRPString( "prevstatus", "deposit" )
 
 			self.buttons.deposit5 = self:createButton(self, 49.74, 7.14, 8.8, "home", 5, nil)
 			self.buttons.deposit10 = self:createButton(self, 48.0, 8.84, 8.8, "home", 10, nil)
@@ -324,31 +324,31 @@ function ENT:Think()
 
 			self.buttons.depositBack = self:createButton(self, 43.48, 13.32, 8.8, "home", nil, nil)
 		end
-	elseif self:GetNW2String( "status" ) == "transfer" then
+	elseif self:GetYRPString( "status" ) == "transfer" then
 		if !self.menu.transfer then
 			self.menu.transfer = true
 
-			self:SetNW2String( "prevstatus", "transfer" )
+			self:SetYRPString( "prevstatus", "transfer" )
 
-			if self:GetNW2String( "name1" ) != "nil" then
+			if self:GetYRPString( "name1" ) != "nil" then
 				self.buttons.transferName1 = self:createButton(self, 49.74, 7.14, 8.8, "other", nil, "ATMPressPlayer1" )
 			end
-			if self:GetNW2String( "name2" ) != "nil" then
+			if self:GetYRPString( "name2" ) != "nil" then
 				self.buttons.transferName2 = self:createButton(self, 48.0, 8.84, 8.8, "other", nil, "ATMPressPlayer2" )
 			end
 			self.buttons.transferPrev = self:createButton(self, 46.36, 10.54, 8.8, nil, nil, "ATMPressPrev" )
 
-			if self:GetNW2String( "name3" ) != "nil" then
+			if self:GetYRPString( "name3" ) != "nil" then
 				self.buttons.transferName3 = self:createButton(self, 49.74, 7.14, -0.8, "other", nil, "ATMPressPlayer3" )
 			end
-			if self:GetNW2String( "name4" ) != "nil" then
+			if self:GetYRPString( "name4" ) != "nil" then
 				self.buttons.transferName4 = self:createButton(self, 48.0, 8.84, -0.8, "other", nil, "ATMPressPlayer4" )
 			end
 			self.buttons.transferNext = self:createButton(self, 46.36, 10.54, -0.8, nil, nil, "ATMPressNext" )
 
 			self.buttons.transferBack = self:createButton(self, 43.48, 13.32, 8.8, "home", nil, nil)
 		end
-	elseif self:GetNW2String( "status" ) == "other" then
+	elseif self:GetYRPString( "status" ) == "other" then
 		if !self.menu.other then
 			self.menu.other = true
 
@@ -370,7 +370,7 @@ function ENT:Think()
 			self.buttons.otherBack = self:createButton(self, 43.48, 13.32, 8.8, "home", nil, nil)
 		end
 	else
-		if self:GetNW2String( "status" ) != "startup" and self:GetNW2String( "status" ) != "logo" then
+		if self:GetYRPString( "status" ) != "startup" and self:GetYRPString( "status" ) != "logo" then
 			if !self.menu.fail then
 				self.buttons.failBack = self:createButton(self, 43.48, 13.32, 8.8, "home", nil)
 			end

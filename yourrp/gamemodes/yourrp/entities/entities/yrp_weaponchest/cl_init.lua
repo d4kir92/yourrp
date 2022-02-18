@@ -9,7 +9,7 @@ function ENT:Draw()
 end
 
 local function YRPGetSlotSWEP( art, id)
-	local sweps = LocalPlayer():GetNW2String( art, "" )
+	local sweps = LocalPlayer():GetYRPString( art, "" )
 	local tab = string.Explode( ",", sweps)
 
 	if tab[id] and !strEmpty(tab[id]) then
@@ -74,13 +74,13 @@ local function YRPCreateSlot(x, y, art, id)
 			slot.mdl:SetCamPos( Vector(0, 0, 0) - Vector(-40, 0, -20) )
 		end
 
-		draw.SimpleText(YRP.lang_string( "LID_" .. art), "Y_20_500", 10, 16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string(name), "Y_20_500", pw - 10, 16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_" .. art), "Y_20_500", 10, 16, Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(name), "Y_20_500", pw - 10, 16, Color( 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
 		if cname and !strEmpty( cname) and cname != "LID_empty" and self:IsHovered() then
 			local text = YRP.lang_string( "LID_tostore" )
 			local font = "Y_40_500"
-			local color = Color(160, 0, 0, 120)
+			local color = Color( 160, 0, 0, 120)
 
 			surface.SetFont(font)
 			local sw, sh = surface.GetTextSize(text)
@@ -142,13 +142,13 @@ local function YRPCreateSWEP(x, y, art, cname)
 			slot.mdl:SetCamPos( Vector(0, 0, 0) - Vector(-40, 0, -20) )
 		end
 
-		draw.SimpleText(YRP.lang_string( "LID_" .. art), "Y_20_500", 10, 16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string(name), "Y_20_500", pw - 10, 16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_" .. art), "Y_20_500", 10, 16, Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(name), "Y_20_500", pw - 10, 16, Color( 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
 		if self:IsHovered() then
 			local text = YRP.lang_string( "LID_equip" )
 			local font = "Y_40_500"
-			local color = Color(0, 160, 0, 120)
+			local color = Color( 0, 160, 0, 120)
 
 			surface.SetFont(font)
 			local sw, sh = surface.GetTextSize(text)
@@ -196,11 +196,11 @@ net.Receive( "yrp_open_weaponchest", function(len)
 		win.slots:EnableVerticalScrollbar()
 		win.slots:SetSpacing(10)
 		function win.slots:Paint(pw, ph)
-			draw.RoundedBox(3, 0, 0, pw, ph, Color(0, 0, 0, 20) )
+			draw.RoundedBox(3, 0, 0, pw, ph, Color( 0, 0, 0, 20) )
 		end
 		local sbar = win.slots.VBar
 		function sbar:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "NC" ) )
+			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 		end
 		function sbar.btnUp:Paint(w, h)
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
@@ -209,7 +209,7 @@ net.Receive( "yrp_open_weaponchest", function(len)
 			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
 		end
 		function sbar.btnGrip:Paint(w, h)
-			draw.RoundedBox(w / 2, 0, 0, w, h, LocalPlayer():InterfaceValue( "YFrame", "HI" ) )
+			draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
 		end
 
 		for i = 1, GetGlobalInt( "yrp_max_slots_primary", 0) do
@@ -253,7 +253,7 @@ net.Receive( "yrp_open_weaponchest", function(len)
 		win.selectionlist:EnableVerticalScrollbar()
 		win.selectionlist:SetSpacing(10)
 		function win.selectionlist:Paint(pw, ph)
-			draw.RoundedBox(3, 0, 0, pw, ph, Color(0, 0, 0, 20) )
+			draw.RoundedBox(3, 0, 0, pw, ph, Color( 0, 0, 0, 20) )
 		end
 
 		net.Receive( "yrp_get_sweps_role_art", function(len)

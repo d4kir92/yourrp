@@ -12,7 +12,7 @@ ENT.Spawnable			= false
 
 if (CLIENT) then
 
-	ENT.LabelColor = Color(255, 255, 255, 255)
+	ENT.LabelColor = Color( 255, 255, 255, 255)
 	
 	function ENT:BeingLookedAtByLocalPlayer()
 	
@@ -31,7 +31,7 @@ function ENT:Think()
 	
 		AddWorldTip(self:EntIndex(), self:GetOverlayText(), 0.5, self:GetPos(), self.Entity	)
 
-		halo.Add({ self }, Color(255, 255, 255, 255), 1, 1, 1, true, true)
+		halo.Add({ self }, Color( 255, 255, 255, 255), 1, 1, 1, true, true)
 		
 	end
 

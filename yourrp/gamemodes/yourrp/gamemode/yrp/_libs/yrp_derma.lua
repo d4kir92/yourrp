@@ -13,7 +13,7 @@ function DrawRectBlur(pnl, px, py, sw, sh, blur)
 		render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
 		render.SetStencilZFailOperation(STENCILOPERATION_REPLACE)
 
-		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetDrawColor( 255, 255, 255, 255)
 		draw.NoTexture() 
     	surface.DrawRect(px, py, sw, sh)
 
@@ -23,7 +23,7 @@ function DrawRectBlur(pnl, px, py, sw, sh, blur)
 		render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
 
 		local x, y = pnl:LocalToScreen(0, 0)
-		surface.SetDrawColor(255, 255, 255)
+		surface.SetDrawColor( 255, 255, 255)
 		surface.SetMaterial(MaterialBlur)
 		for i = 1, 3 do
 			MaterialBlur:SetFloat( "$blur", (i / 3) * blur)
@@ -84,9 +84,9 @@ function DrawText(tab)
 	tab = tab or {}
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 	tab.br = tab.br or 1
-	tab.brcolor = tab.brcolor or Color(0, 0, 0)
+	tab.brcolor = tab.brcolor or Color( 0, 0, 0)
 	tab.ax = tab.ax or 1
 	tab.ay = tab.ay or 1
 	tab.text = tab.text or "NoText"
@@ -104,7 +104,7 @@ function DrawPanel(panel, tab)
 	tab.y = tab.y or 0
 	tab.w = tab.w or panel:GetWide()
 	tab.h = tab.h or panel:GetTall()
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 	draw.RoundedBox(tab.r, tab.x, tab.y, tab.w, tab.h, tab.color)
 end
 
@@ -116,7 +116,7 @@ function DHorizontalScroller(tab)
 	tab.w = tab.w or 100
 	tab.h = tab.h or 100
 	tab.br = tab.br or 10
-	tab.color = tab.color or Color(255, 0, 0, 0)
+	tab.color = tab.color or Color( 255, 0, 0, 0)
 	local dhorizontalscroller = createD( "DHorizontalScroller", tab.parent, tab.w, tab.h, tab.x, tab.y)
 	function dhorizontalscroller:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
@@ -134,7 +134,7 @@ function DGroup(tab)
 	tab.w = tab.w or 100
 	tab.h = tab.h or 100
 	tab.br = tab.br or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 	tab.bgcolor = tab.bgcolor or Color(80, 80, 80)
 	tab.name = tab.name or "Unnamed Header"
 	local dgroup = {}
@@ -147,7 +147,7 @@ function DGroup(tab)
 		text.x = pw / 2
 		text.y = ph / 2
 		text.font = "Y_22_500"
-		text.color = Color(0, 0, 0, 255)
+		text.color = Color( 0, 0, 0, 255)
 		text.br = 0
 		text.ax = 1
 		text.ay = 1
@@ -187,7 +187,7 @@ function DName(tab)
 	tab.w = tab.w or YRP.ctr(50)
 	tab.h = tab.h or YRP.ctr(50)
 	tab.br = tab.br or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 	tab.bgcolor = tab.bgcolor or Color(80, 80, 80)
 	tab.name = tab.name or "Unnamed"
 	local dname = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
@@ -198,7 +198,7 @@ function DName(tab)
 		text.x = YRP.ctr(10)
 		text.y = ph / 2
 		text.font = "Y_18_500"
-		text.color = Color(255, 255, 255, 255)
+		text.color = Color( 255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -221,7 +221,7 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	local dintcomboboxbox = {}
 
@@ -233,7 +233,7 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_500"
-		text.color = Color(255, 255, 255, 255)
+		text.color = Color( 255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -276,7 +276,7 @@ function DBoolLine(tab, value, str, netstr)
 	tab.h = tab.h or YRP.ctr(50)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 	tab.brx = tab.brx or 0
 
 	local dboolline = {}
@@ -289,7 +289,7 @@ function DBoolLine(tab, value, str, netstr)
 		text.x = tab.brx + tab.h + YRP.ctr(10)
 		text.y = ph / 2
 		text.font = "Y_22_500"
-		text.color = Color(0, 0, 0, 255)
+		text.color = Color( 0, 0, 0, 255)
 		text.br = 0
 		text.ax = 0
 		DrawText(text)
@@ -336,7 +336,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 	tab.h = tab.h or YRP.ctr(50)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 	tab.brx = tab.brx or 0
 
 	local dfloatline = {}
@@ -349,7 +349,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 		text.x = tab.brx + YRP.ctr(200) + YRP.ctr(10)
 		text.y = ph / 2
 		text.font = "Y_22_500"
-		text.color = Color(0, 0, 0, 255)
+		text.color = Color( 0, 0, 0, 255)
 		text.br = 0
 		text.ax = 0
 		DrawText(text)
@@ -360,7 +360,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "Y_22_500"
-			DMG.color = Color(0, 0, 0, 255)
+			DMG.color = Color( 0, 0, 0, 255)
 			DMG.br = 0
 			DMG.ax = 2
 			DrawText(DMG)
@@ -415,7 +415,7 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	local dintline = {}
 
@@ -427,7 +427,7 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_500"
-		text.color = Color(255, 255, 255, 255)
+		text.color = Color( 255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -481,7 +481,7 @@ function DStringBox(tab, str, name, netstr)
 	tab.h = tab.h or YRP.ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	str = str or ""
 
@@ -495,7 +495,7 @@ function DStringBox(tab, str, name, netstr)
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_500"
-		text.color = Color(255, 255, 255, 255)
+		text.color = Color( 255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
@@ -506,7 +506,7 @@ function DStringBox(tab, str, name, netstr)
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "Y_22_500"
-			DMG.color = Color(0, 0, 0, 255)
+			DMG.color = Color( 0, 0, 0, 255)
 			DMG.br = 1
 			DMG.ax = 2
 			DrawText(DMG)
@@ -547,12 +547,12 @@ function DHR(tab)
 	tab.h = tab.h or YRP.ctr(30)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	local hr = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function hr:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
-		draw.RoundedBox(0, 0, ph / 3, pw, ph / 3, Color(0, 0, 0, 255) )
+		draw.RoundedBox(0, 0, ph / 3, pw, ph / 3, Color( 0, 0, 0, 255) )
 	end
 
 	if tab.parent != nil then
@@ -572,7 +572,7 @@ function DHeader(tab, header)
 	tab.h = tab.h or YRP.ctr(50)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255)
+	tab.color = tab.color or Color( 255, 255, 255)
 
 	local hea = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function hea:Paint(pw, ph)
@@ -582,7 +582,7 @@ function DHeader(tab, header)
 		head.x = YRP.ctr(10)
 		head.y = ph / 2
 		head.font = "Y_22_500"
-		head.color = Color(0, 0, 0, 255)
+		head.color = Color( 0, 0, 0, 255)
 		head.br = 0
 		head.ax = 0
 		DrawText(head)

@@ -42,7 +42,7 @@ function AddYRPAddon(parent, tab)
 		_add_on.settings = createD( "DButton", _add_on, YRP.ctr(100), YRP.ctr(100), YRP.ctr(20), YRP.ctr(380) )
 		_add_on.settings:SetText( "" )
 		function _add_on.settings:Paint(pw, ph)
-			surface.SetDrawColor(0, 0, 0, 255)
+			surface.SetDrawColor( 0, 0, 0, 255)
 			surface.SetMaterial(YRP.GetDesignIcon( "settings" ) )
 			surface.DrawTexturedRect(0, 0, pw, ph)
 		end
@@ -130,7 +130,7 @@ net.Receive( "Connect_Settings_YourRP_Addons", function(len)
 		else
 			local _empty = createD( "DPanel", addons, YRP.ctr(1600), YRP.ctr(4 * 100 + 5 * 20), 0, 0)
 			function _empty:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255) )
+				draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
 				local tab = {}
 				tab.x = pw / 2
 				tab.y = ph / 2

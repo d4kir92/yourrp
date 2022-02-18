@@ -3,7 +3,7 @@
 local PANEL = {}
 
 function PANEL:Paint(pw, ph)
-	--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 200) )
+	--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 200) )
 end
 
 local YRP_STORAGES = YRP_STORAGES or {}

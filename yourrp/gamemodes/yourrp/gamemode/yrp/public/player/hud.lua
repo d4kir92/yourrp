@@ -4,14 +4,14 @@ local Player = FindMetaTable( "Player" )
 
 if CLIENT then
 	function Player:GetHudDesignName()
-		if self:GetNW2String( "string_hud", "serverdefault" ) != "serverdefault" then
-			return self:GetNW2String( "string_hud", "serverdefault" )
+		if self:GetYRPString( "string_hud", "serverdefault" ) != "serverdefault" then
+			return self:GetYRPString( "string_hud", "serverdefault" )
 		else
-			return self:GetNW2String( "string_hud_design", "notloaded" )
+			return GetGlobalString( "string_hud_design", "notloaded" )
 		end
 	end
 	function Player:GetHudDesignMask()
-		return self:GetNW2String( "string_hud_mask", "serverdefault" )
+		return self:GetYRPString( "string_hud_mask", "serverdefault" )
 	end
 
 	-- string element for example "health", art for example "SIZE_W"
@@ -24,7 +24,7 @@ if CLIENT then
 
 		if YRPHUD != nil then
 			if table.HasValue(hfloats, art) then
-				--local f_val = self:GetNW2Float( "float_HUD_" .. element .. "_" .. art, -1.0)
+				--local f_val = self:GetYRPFloat( "float_HUD_" .. element .. "_" .. art, -1.0)
 				local f_val = YRPHUD( "float_HUD_" .. element .. "_" .. art, -1.0)
 				if art == "POSI_X" or  art == "SIZE_W" then
 					f_val = f_val * ScW()
@@ -36,20 +36,19 @@ if CLIENT then
 				end
 				return math.Round(f_val, 0)
 			elseif table.HasValue(hbools, art) then
-				return YRPHUD( "bool_HUD_" .. element .. "_" .. art, false) --self:GetNW2Bool( "bool_HUD_" .. element .. "_" .. art, false)
+				return YRPHUD( "bool_HUD_" .. element .. "_" .. art, false) --self:GetYRPBool( "bool_HUD_" .. element .. "_" .. art, false)
 			elseif table.HasValue(hcolors, art) then
 				if element == "AB" then
 					local abcolors = {}
-					abcolors["none"] = Color(0, 0, 0, 0)
-					abcolors["mana"] = Color(100, 100, 255, 255)
-					abcolors["rage"] = Color(255, 0, 0, 255)
-					abcolors["energy"] = Color(255, 255, 0, 255)
-					abcolors["force"] = Color(100, 100, 255, 255)
-					return abcolors[self:GetNW2String( "GetAbilityType", "none" )]
+					abcolors["none"] = Color( 0, 0, 0, 0)
+					abcolors["mana"] = Color( 100, 100, 255, 255)
+					abcolors["rage"] = Color( 255, 0, 0, 255)
+					abcolors["energy"] = Color( 255, 255, 0, 255)
+					abcolors["force"] = Color( 100, 100, 255, 255)
+					return abcolors[self:GetYRPString( "GetAbilityType", "none" )]
 				else
-					local hcolor = YRPHUD( "color_HUD_" .. element .. "_" .. art, "255, 0, 0" ) -- self:GetNW2String( "color_HUD_" .. element .. "_" .. art, "255, 0, 0" )
-					hcolor = string.Explode( ",", hcolor)
-					return Color(hcolor[1], hcolor[2], hcolor[3], hcolor[4] or 255)
+					local hcolor = YRPHUD( "color_HUD_" .. element .. "_" .. art, Color( 255, 0, 0 ) ) -- self:GetYRPString( "color_HUD_" .. element .. "_" .. art, "255, 0, 0" )
+					return hcolor
 				end
 			elseif table.HasValue(hints, art) then
 				local ay = YRPHUD( "int_HUD_" .. element .. "_" .. art, -1)
@@ -99,17 +98,17 @@ if CLIENT then
 		if !self:Alive() then
 			return false
 		elseif element == "CA" then
-			return self:GetNW2Bool( "iscasting", false)
+			return self:GetYRPBool( "iscasting", false)
 		elseif element == "LO" then
 			return self:Lockdown()
 		elseif element == "HU" then
-			return GetGlobalBool( "bool_hunger", false) and self:GetNW2Bool( "bool_hunger", false)
+			return GetGlobalBool( "bool_hunger", false) and self:GetYRPBool( "bool_hunger", false)
 		elseif element == "TH" then
-			return GetGlobalBool( "bool_thirst", false) and self:GetNW2Bool( "bool_thirst", false)
+			return GetGlobalBool( "bool_thirst", false) and self:GetYRPBool( "bool_thirst", false)
 		elseif element == "AL" then
 			return GetGlobalBool( "bool_permille", false)
 		elseif element == "ST" then
-			return GetGlobalBool( "bool_stamina", false) and self:GetNW2Bool( "bool_stamina", false)
+			return GetGlobalBool( "bool_stamina", false) and self:GetYRPBool( "bool_stamina", false)
 		elseif element == "RA" then
 			return GetGlobalBool( "bool_radiation", false)
 		elseif element == "XP" then
@@ -137,7 +136,7 @@ if CLIENT then
 		elseif element == "CON" then
 			return !strEmpty(self:Condition() )
 		elseif element == "AB" then
-			return self:GetNW2String( "GetAbilityType", "none" ) != "none"
+			return self:GetYRPString( "GetAbilityType", "none" ) != "none"
 		elseif element == "HP" then
 			return self:Health() >= 0
 		elseif element == "AR" then
@@ -166,9 +165,9 @@ if CLIENT then
 end
 
 function Player:Lockdown()
-	return self:GetNW2Bool( "bool_lockdown", false)
+	return self:GetYRPBool( "bool_lockdown", false)
 end
 
 function Player:LockdownText()
-	return self:GetNW2String( "string_lockdowntext", "" )
+	return self:GetYRPString( "string_lockdowntext", "" )
 end

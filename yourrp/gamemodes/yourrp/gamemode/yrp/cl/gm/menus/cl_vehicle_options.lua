@@ -58,7 +58,7 @@ function optionVehicleWindow( vehicle, vehicleTab)
 	function yrp_vehicle.window:Paint(pw, ph)
 		hook.Run( "YFramePaint", self, pw, ph)
 
-		draw.RoundedBox(0, YRP.ctr(4), YRP.ctr(160), pw - YRP.ctr(8), YRP.ctr(70-4), Color(255, 255, 0, 200) )
+		draw.RoundedBox(0, YRP.ctr(4), YRP.ctr(160), pw - YRP.ctr(8), YRP.ctr(70-4), Color( 255, 255, 0, 200) )
 	end
 
 	if lply:HasAccess() then

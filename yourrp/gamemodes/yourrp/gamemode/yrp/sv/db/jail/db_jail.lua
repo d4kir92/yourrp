@@ -11,7 +11,7 @@ util.AddNetworkString( "getPlayerNotes" )
 net.Receive( "getPlayerNotes", function(len, ply)
 	local p = net.ReadEntity()
 
-	local notes = YRP_SQL_SELECT(DBNotes, "*", "SteamID = '" .. p:SteamID() .. "'" )
+	local notes = YRP_SQL_SELECT(DBNotes, "*", "SteamID = '" .. p:YRPSteamID() .. "'" )
 
 	if !wk(notes) then
 		notes = {}
@@ -46,8 +46,8 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "time", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "cell", "INT DEFAULT 1" )
 
 function teleportToReleasepoint(ply)
-	ply:SetNW2Bool( "injail", false)
-	ply:SetNW2Int( "jailtime", 0)
+	ply:SetYRPBool( "injail", false)
+	ply:SetYRPInt( "jailtime", 0)
 
 	local _tmpTele = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "releasepoint" .. "'" )
 
@@ -70,13 +70,13 @@ end
 
 function teleportToJailpoint(ply, tim, police)
 	if tim != nil then
-		ply:SetNW2Int( "jailtime", tim)
+		ply:SetYRPInt( "jailtime", tim)
 		timer.Simple(0.2, function()
-			ply:SetNW2Bool( "injail", true)
+			ply:SetYRPBool( "injail", true)
 		end)
 
 		-- CELL
-		local _tmpTable = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. ply:SteamID() .. "'" )
+		local _tmpTable = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. ply:YRPSteamID() .. "'" )
 		local uid = 0
 		if wk(_tmpTable) then
 			uid = _tmpTable[1].cell
@@ -108,8 +108,8 @@ function teleportToJailpoint(ply, tim, police)
 				end
 				if empty then
 					-- DONE
-					ply:SetNW2Int( "int_arrests", ply:GetNW2Int( "int_arrests", 0) + 1)
-					YRP_SQL_UPDATE( "yrp_characters", {["int_arrests"] = ply:GetNW2Int( "int_arrests", 0)}, "uniqueID = '" .. ply:CharID() .. "'" )
+					ply:SetYRPInt( "int_arrests", ply:GetYRPInt( "int_arrests", 0) + 1)
+					YRP_SQL_UPDATE( "yrp_characters", {["int_arrests"] = ply:GetYRPInt( "int_arrests", 0)}, "uniqueID = '" .. ply:CharID() .. "'" )
 					if police and police:IsPlayer() then
 						YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_source_steamid", "'" .. os.time() .. "', 'LID_arrests', '" .. ply:SteamID64() .. "', '" .. police:SteamID64() .. "'" )
 					end
@@ -138,9 +138,9 @@ end
 
 
 function clean_up_jail(ply)
-	local _tmpTable = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. ply:SteamID() .. "'" )
+	local _tmpTable = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. ply:YRPSteamID() .. "'" )
 	if wk(_tmpTable) then
-		YRP_SQL_DELETE_FROM( "yrp_jail", "SteamID = '" .. ply:SteamID() .. "'" )
+		YRP_SQL_DELETE_FROM( "yrp_jail", "SteamID = '" .. ply:YRPSteamID() .. "'" )
 	end
 
 	teleportToReleasepoint(ply)
@@ -155,7 +155,7 @@ net.Receive( "dbAddJail", function(len, ply)
 	
 	local _SteamID = net.ReadString()
 	for i, p in pairs(player.GetAll() ) do
-		if _SteamID == p:SteamID() then
+		if _SteamID == p:YRPSteamID() then
 			if sql.TableExists(_tmpDBTable) then
 				YRP_SQL_INSERT_INTO(_tmpDBTable, _tmpDBCol, _tmpDBVal)
 
@@ -163,9 +163,9 @@ net.Receive( "dbAddJail", function(len, ply)
 
 				YRP.msg( "note", p:Nick() .. " added to jail" )
 
-				p:SetNW2Int( "jailtime", _tmpTable[1].time)
+				p:SetYRPInt( "jailtime", _tmpTable[1].time)
 				timer.Simple(0.02, function()
-					p:SetNW2Bool( "injail", true)
+					p:SetYRPBool( "injail", true)
 				end)
 			else
 				YRP.msg( "error", "dbInsertInto: " .. _tmpDBTable .. " is not existing" )
@@ -191,18 +191,18 @@ net.Receive( "dbRemJail", function(len, ply)
 		local _in_jailboard = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
 		if _in_jailboard != nil then
 			for k, v in pairs(player.GetAll() ) do
-				if v:SteamID() == _SteamID then
-					v:SetNW2Int( "jailtime", _in_jailboard[1].time)
+				if v:YRPSteamID() == _SteamID then
+					v:SetYRPInt( "jailtime", _in_jailboard[1].time)
 					timer.Simple(0.02, function()
-						v:SetNW2Bool( "injail", true)
+						v:SetYRPBool( "injail", true)
 					end)
 				end
 			end
 		else
 			for k, v in pairs(player.GetAll() ) do
-				if v:SteamID() == _SteamID then
-					v:SetNW2Bool( "injail", false)
-					v:SetNW2Int( "jailtime", 0)
+				if v:YRPSteamID() == _SteamID then
+					v:SetYRPBool( "injail", false)
+					v:SetYRPInt( "jailtime", 0)
 				end
 			end
 		end

@@ -118,6 +118,11 @@ AddCSLuaFile( "yrp/cl/gm/menus/cl_macromenu.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/cl_voice.lua" )
 AddCSLuaFile( "yrp/cl/gm/menus/cl_chatchannels.lua" )
 
+local PLAYER = FindMetaTable( "Player" )
+if PLAYER.OldKillSilent == nil then
+	PLAYER.OldKillSilent = PLAYER.KillSilent
+end
+
 -- includes 
 include( "shared.lua" )
 
@@ -126,10 +131,10 @@ include( "yrp/sv/sv_includes.lua" )
 function YRPLoadServerInfo()
 	if game.GetIPAddress() and game.IsDedicated() and !string.StartWith( game.GetIPAddress(), "0.0.0.0:" ) then
 		timer.Simple( 0.1, function()
-			SetGlobalBool( "isserverdedicated", game.IsDedicated() )
-			SetGlobalString( "serverip", game.GetIPAddress() )
-			SetGlobalString( "serverversion", VERSION )
-			SetGlobalString( "serverversionstr", VERSIONSTR )
+			SetGlobalYRPBool( "isserverdedicated", game.IsDedicated() )
+			SetGlobalYRPString( "serverip", game.GetIPAddress() )
+			SetGlobalYRPString( "serverversion", VERSION )
+			SetGlobalYRPString( "serverversionstr", VERSIONSTR )
 		end )
 	else
 		timer.Simple( 0.1, YRPLoadServerInfo )

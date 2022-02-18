@@ -96,12 +96,12 @@ net.Receive( "yrp_get_macros", function(len)
 				m.uid = c
 				function m:Paint(pw, ph)
 					if self.uid == _mm.uid then
-						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue( "YButton", "SC" ) )
+						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue( "YButton", "SC" ) )
 					else
-						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, lply:InterfaceValue( "YFrame", "HI" ) )
+						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HI" ) )
 					end
 
-					draw.SimpleText(self.name, "Y_12_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(self.name, "Y_12_500", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 				function m:DoClick()
 					_mm.tf:SetText(self.value)
@@ -123,10 +123,10 @@ net.Receive( "yrp_get_macros", function(len)
 	end
 end)
 
-timer.Simple(4, function()
+timer.Simple( 10, function()
 	net.Start( "yrp_get_macros" )
 	net.SendToServer()
-end)
+end )
 
 function OpenMacroMenu()
 	openMenu()

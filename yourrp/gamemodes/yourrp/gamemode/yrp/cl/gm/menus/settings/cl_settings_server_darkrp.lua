@@ -3,8 +3,8 @@
 function BuildTable(tab, parent, name, tabx)
 	local header = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 	function header:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(0,0,255,100) )
-		draw.SimpleText(name .. ":", "Y_14_500", tabx + YRP.ctr(10), ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0,0,255,100) )
+		draw.SimpleText(name .. ":", "Y_14_500", tabx + YRP.ctr(10), ph / 2, Color( 255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 	parent:AddItem(header)
 
@@ -16,7 +16,7 @@ function BuildTable(tab, parent, name, tabx)
 		elseif type( v) == "boolean" then
 			local pnl = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function pnl:Paint(pw, ph)
-				draw.SimpleText(i, "Y_18_500", tabx + YRP.ctr(40) + YRP.ctr(40 + 20), ph / 2, Color(255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(i, "Y_18_500", tabx + YRP.ctr(40) + YRP.ctr(40 + 20), ph / 2, Color( 255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			local check = createD( "DCheckBox", pnl, YRP.ctr(40), YRP.ctr(40), tabx + YRP.ctr(40), 0)
@@ -39,7 +39,7 @@ function CreateDarkRPSetting()
 		local list = createD( "DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
 		list:EnableVerticalScrollbar()
 		function list:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 100) )
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 100, 100, 100) )
 		end
 
 		BuildTable(DarkRP, list, "DarkRP", 0)

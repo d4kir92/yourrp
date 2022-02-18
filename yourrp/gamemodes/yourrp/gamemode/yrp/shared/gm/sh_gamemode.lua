@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 167 -- do NOT change this!
+GM.VersionBuild = 203 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -55,22 +55,22 @@ end
 
 if SERVER then
 	local doubleinstalledpath = ""
-	SetGlobalString( "YRP_VERSIONART", "GITHUB" )
+	SetGlobalYRPString( "YRP_VERSIONART", "GITHUB" )
 
 	for i, wsi in pairs( engine.GetAddons() ) do
 		if tostring( wsi.wsid ) == "1114204152" then
-			SetGlobalString( "YRP_VERSIONART", "WORKSHOP" )
+			SetGlobalYRPString( "YRP_VERSIONART", "WORKSHOP" )
 
 			if file.Exists( "gamemodes/yourrp/yourrp.txt", "MOD" ) then
-				SetGlobalBool( "yrp_double_installed", true )
+				SetGlobalYRPBool( "yrp_double_installed", true )
 				doubleinstalledpath = "yourrp"
 			end
 			if file.Exists( "gamemodes/militaryrp/militaryrp.txt", "MOD" ) then
-				SetGlobalBool( "yrp_double_installed", true )
+				SetGlobalYRPBool( "yrp_double_installed", true )
 				doubleinstalledpath = "militaryrp"
 			end
 			if file.Exists( "gamemodes/starwarsrp/starwarsrp.txt", "MOD" ) then
-				SetGlobalBool( "yrp_double_installed", true )
+				SetGlobalYRPBool( "yrp_double_installed", true )
 				doubleinstalledpath = "starwarsrp"
 			end
 		end
@@ -163,7 +163,7 @@ function StringToColor(str)
 		local _col = string.Explode( ",", str)
 		return Color(_col[1] or 0, _col[2] or 0, _col[3] or 0, _col[4] or 255)
 	else
-		return Color(255, 0, 0, 255)
+		return Color( 255, 0, 0, 255)
 	end
 end
 
@@ -274,9 +274,9 @@ concommand.Add( "yrp_players", function(ply, cmd, args)
 	MsgC( Color( 255, 255, 0 ), "--------------------------------------------------------------------------------" .. "\n" )
 	for i, pl in pairs(player.GetAll() ) do
 		local _id = 		makeString( pl:UserID(), 4 )
-		local _steamid = 	makeString( pl:SteamID(), 20 )
-		local _ready = 		tostring( pl:GetNW2Bool( "yrp_received_ready", false ) )
-		local _os = 		makeString( pl:GetNW2String( "yrp_os" ), 10 )
+		local _steamid = 	makeString( pl:YRPSteamID(), 20 )
+		local _ready = 		tostring( pl:GetYRPBool( "yrp_received_ready", false ) )
+		local _os = 		makeString( pl:GetYRPString( "yrp_os" ), 10 )
 		local _name = 		makeString( pl:YRPName(), 20 )
 		local _str = string.format( structure, _id, _steamid, _ready, _os, _name )
 		MsgC( Color( 255, 255, 0 ), _str .. "\n" )
@@ -339,7 +339,7 @@ end)
 
 function IsEntityAlive(ply, uid)
 	for i, ent in pairs(ents.GetAll() ) do
-		if tostring(ent:GetNW2Int( "item_uniqueID", "" ) ) == tostring(uid) and ent:GetRPOwner() == ply then
+		if tostring(ent:GetYRPInt( "item_uniqueID", "" ) ) == tostring(uid) and ent:GetRPOwner() == ply then
 			return true, ent
 		end
 	end
@@ -440,17 +440,17 @@ end
 function IsInChannel(ply, cuid, skip)
 	skip = skip or false
 
-	if ply:GetNW2Bool( "yrp_togglevoicemenu", true ) == false then
+	if ply:GetYRPBool( "yrp_togglevoicemenu", true ) == false then
 		return false
 	end
 
-	local channel = GetGlobalTable( "yrp_voice_channels", {})[cuid]
+	local channel = GetGlobalYRPTable( "yrp_voice_channels", {})[cuid]
 	if channel then
 		local ug = ply:GetUserGroup()
 		local grp = ply:GetGroupUID()
 		local rol = ply:GetRoleUID()
 		
-		if !skip and ply:GetNW2Bool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) then
+		if !skip and ply:GetYRPBool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) then
 			return false
 		end
 
@@ -463,17 +463,17 @@ end
 function IsActiveInChannel(ply, cuid, skip)
 	skip = skip or false
 
-	if ply:GetNW2Bool( "yrp_togglevoicemenu", true ) == false then
+	if ply:GetYRPBool( "yrp_togglevoicemenu", true ) == false then
 		return false
 	end
 
-	local channel = GetGlobalTable( "yrp_voice_channels", {})[cuid]
+	local channel = GetGlobalYRPTable( "yrp_voice_channels", {})[cuid]
 	if channel then
 		local ug = ply:GetUserGroup()
 		local grp = ply:GetGroupUID()
 		local rol = ply:GetRoleUID()
 
-		if !skip and ply:GetNW2Bool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
+		if !skip and ply:GetYRPBool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
 			return false
 		end
 		return IsInTable( channel.string_active_usergroups, ug) or IsInTable( channel.string_active_groups, grp) or IsInTable( channel.string_active_roles, rol) or false
@@ -491,7 +491,7 @@ function YRPGetVoiceRangeText(ply)
 			[3] = YRP.lang_string( "LID_noisy" ), 
 			[4] = YRP.lang_string( "LID_yell" )
 		}
-		return ranges[ply:GetNW2Int( "voice_range", 2)]
+		return ranges[ply:GetYRPInt( "voice_range", 2)]
 	end
 	return "PLY INVALID"
 end
@@ -505,7 +505,7 @@ function YRPGetVoiceRange(ply)
 			[3] = 400, 
 			[4] = GetGlobalInt( "int_voice_max_range", 1)
 		}
-		return math.Clamp(ranges[ply:GetNW2Int( "voice_range", 2)], 0, GetGlobalInt( "int_voice_max_range", 1) )
+		return math.Clamp(ranges[ply:GetYRPInt( "voice_range", 2)], 0, GetGlobalInt( "int_voice_max_range", 1) )
 	else
 		return 400
 	end
@@ -537,24 +537,24 @@ if system.IsLinux() then
 	_ErrorNoHalt                = _ErrorNoHalt  or ErrorNoHalt
 
 	local available_colors      = {
-	Color(0, 0, 0),       Color(128, 0, 0),     Color(0, 128, 0),
-	Color(128, 128, 0),   Color(0, 0, 128),     Color(128, 0, 128),
-	Color(0, 128, 128),   Color(192, 192, 192), Color(128, 128, 128),
-	Color(255, 0, 0),     Color(0, 255, 0),     Color(255, 255, 0),
-	Color(0, 0, 255),     Color(255, 0, 255),   Color(0, 255, 255),
-	Color(255, 255, 255), Color(0, 0, 0),       Color(0, 0, 95),
-	Color(0, 0, 135),     Color(0, 0, 175),     Color(0, 0, 215),
-	Color(0, 0, 255),     Color(0, 95, 0),      Color(0, 95, 95),
-	Color(0, 95, 135),    Color(0, 95, 175),    Color(0, 95, 215),
-	Color(0, 95, 255),    Color(0, 135, 0),     Color(0, 135, 95),
-	Color(0, 135, 135),   Color(0, 135, 175),   Color(0, 135, 215),
-	Color(0, 135, 255),   Color(0, 175, 0),     Color(0, 175, 95),
-	Color(0, 175, 135),   Color(0, 175, 175),   Color(0, 175, 215),
-	Color(0, 175, 255),   Color(0, 215, 0),     Color(0, 215, 95),
-	Color(0, 215, 135),   Color(0, 215, 175),   Color(0, 215, 215),
-	Color(0, 215, 255),   Color(0, 255, 0),     Color(0, 255, 95),
-	Color(0, 255, 135),   Color(0, 255, 175),   Color(0, 255, 215),
-	Color(0, 255, 255),   Color(95, 0, 0),      Color(95, 0, 95),
+	Color( 0, 0, 0),       Color(128, 0, 0),     Color( 0, 128, 0),
+	Color(128, 128, 0),   Color( 0, 0, 128),     Color(128, 0, 128),
+	Color( 0, 128, 128),   Color(192, 192, 192), Color(128, 128, 128),
+	Color( 255, 0, 0),     Color( 0, 255, 0),     Color( 255, 255, 0),
+	Color( 0, 0, 255),     Color( 255, 0, 255),   Color( 0, 255, 255),
+	Color( 255, 255, 255), Color( 0, 0, 0),       Color( 0, 0, 95),
+	Color( 0, 0, 135),     Color( 0, 0, 175),     Color( 0, 0, 215),
+	Color( 0, 0, 255),     Color( 0, 95, 0),      Color( 0, 95, 95),
+	Color( 0, 95, 135),    Color( 0, 95, 175),    Color( 0, 95, 215),
+	Color( 0, 95, 255),    Color( 0, 135, 0),     Color( 0, 135, 95),
+	Color( 0, 135, 135),   Color( 0, 135, 175),   Color( 0, 135, 215),
+	Color( 0, 135, 255),   Color( 0, 175, 0),     Color( 0, 175, 95),
+	Color( 0, 175, 135),   Color( 0, 175, 175),   Color( 0, 175, 215),
+	Color( 0, 175, 255),   Color( 0, 215, 0),     Color( 0, 215, 95),
+	Color( 0, 215, 135),   Color( 0, 215, 175),   Color( 0, 215, 215),
+	Color( 0, 215, 255),   Color( 0, 255, 0),     Color( 0, 255, 95),
+	Color( 0, 255, 135),   Color( 0, 255, 175),   Color( 0, 255, 215),
+	Color( 0, 255, 255),   Color(95, 0, 0),      Color(95, 0, 95),
 	Color(95, 0, 135),    Color(95, 0, 175),    Color(95, 0, 215),
 	Color(95, 0, 255),    Color(95, 95, 0),     Color(95, 95, 95),
 	Color(95, 95, 135),   Color(95, 95, 175),   Color(95, 95, 215),
@@ -602,19 +602,19 @@ if system.IsLinux() then
 	Color(215, 215, 135), Color(215, 215, 175), Color(215, 215, 215),
 	Color(215, 215, 255), Color(215, 255, 0),   Color(215, 255, 95),
 	Color(215, 255, 135), Color(215, 255, 175), Color(215, 255, 215),
-	Color(215, 255, 255), Color(255, 0, 0),     Color(255, 0, 95),
-	Color(255, 0, 135),   Color(255, 0, 175),   Color(255, 0, 215),
-	Color(255, 0, 255),   Color(255, 95, 0),    Color(255, 95, 95),
-	Color(255, 95, 135),  Color(255, 95, 175),  Color(255, 95, 215),
-	Color(255, 95, 255),  Color(255, 135, 0),   Color(255, 135, 95),
-	Color(255, 135, 135), Color(255, 135, 175), Color(255, 135, 215),
-	Color(255, 135, 255), Color(255, 175, 0),   Color(255, 175, 95),
-	Color(255, 175, 135), Color(255, 175, 175), Color(255, 175, 215),
-	Color(255, 175, 255), Color(255, 215, 0),   Color(255, 215, 95),
-	Color(255, 215, 135), Color(255, 215, 175), Color(255, 215, 215),
-	Color(255, 215, 255), Color(255, 255, 0),   Color(255, 255, 95),
-	Color(255, 255, 135), Color(255, 255, 175), Color(255, 255, 215),
-	Color(255, 255, 255), Color(8, 8, 8),       Color(18, 18, 18),
+	Color(215, 255, 255), Color( 255, 0, 0),     Color( 255, 0, 95),
+	Color( 255, 0, 135),   Color( 255, 0, 175),   Color( 255, 0, 215),
+	Color( 255, 0, 255),   Color( 255, 95, 0),    Color( 255, 95, 95),
+	Color( 255, 95, 135),  Color( 255, 95, 175),  Color( 255, 95, 215),
+	Color( 255, 95, 255),  Color( 255, 135, 0),   Color( 255, 135, 95),
+	Color( 255, 135, 135), Color( 255, 135, 175), Color( 255, 135, 215),
+	Color( 255, 135, 255), Color( 255, 175, 0),   Color( 255, 175, 95),
+	Color( 255, 175, 135), Color( 255, 175, 175), Color( 255, 175, 215),
+	Color( 255, 175, 255), Color( 255, 215, 0),   Color( 255, 215, 95),
+	Color( 255, 215, 135), Color( 255, 215, 175), Color( 255, 215, 215),
+	Color( 255, 215, 255), Color( 255, 255, 0),   Color( 255, 255, 95),
+	Color( 255, 255, 135), Color( 255, 255, 175), Color( 255, 255, 215),
+	Color( 255, 255, 255), Color(8, 8, 8),       Color(18, 18, 18),
 	Color(28, 28, 28),    Color(38, 38, 38),    Color(48, 48, 48),
 	Color(58, 58, 58),    Color(68, 68, 68),    Color(78, 78, 78),
 	Color(88, 88, 88),    Color(98, 98, 98),    Color(108, 108, 108),
@@ -718,7 +718,7 @@ function YRPGetHostName()
 	if !strEmpty(GetGlobalString( "text_server_name" ) ) then
 		return GetGlobalString( "text_server_name" )
 	else
-		return GetHostName()
+		return GetGlobalString( "ServerName" )
 	end
 	return ""
 end
@@ -746,7 +746,7 @@ function YRPReplaceWithPlayerNames(text)
 		local test = string.Explode( " ", text )
 		for i, str in pairs(test) do
 			for _, p in pairs(player.GetAll() ) do
-				if #str >= 4 and string.StartWith(string.lower(p:RPName() ), string.lower(str) ) then
+				if #str >= 5 and string.StartWith(string.lower(p:RPName() ), string.lower(str) ) then
 					test[i] = p:RPName()
 				end
 			end
@@ -791,7 +791,7 @@ function YRPChatReplaceCMDS(structure, ply, text)
 	local rocolor = ply:GetRoleColor()
 	result = string.Replace( result, "%ROCOLOR%", "Color( " .. rocolor.r .. "," .. rocolor.g .. "," .. rocolor.b .. " )" )
 
-	if ply:GetNW2Bool( "bool_chat" ) then
+	if ply:GetYRPBool( "bool_chat" ) then
 		result = string.Replace(result, "%USERGROUP%", string.upper(ply:GetUserGroup() ))
 	else
 		result = string.Replace(result, "[%USERGROUP%] ", "" )
@@ -913,7 +913,7 @@ local function YRPSendError(tab, from)
 	local posturl = ""
 
 	if tab.buildnummer != gmbn then
-		MsgC( Color(255, 0, 0), ">>> [YRPSendError] FAIL, ERROR IS OUTDATED" .. "\n" )
+		MsgC( Color( 255, 0, 0), ">>> [YRPSendError] FAIL, ERROR IS OUTDATED" .. "\n" )
 		YRPRemoveOutdatedErrors()
 		return
 	end
@@ -971,15 +971,15 @@ local function YRPSendError(tab, from)
 
 		posturl = url_cl
 	else
-		MsgC( Color(255, 0, 0), ">>> [YRPSendError] FAIL! >> Realm: " .. tostring(tab.realm) .. "\n" )
+		MsgC( Color( 255, 0, 0), ">>> [YRPSendError] FAIL! >> Realm: " .. tostring(tab.realm) .. "\n" )
 		return
 	end
 
 	if GAMEMODE and YRPIsVersionSet and YRPIsVersionSet() and IsYRPOutdated != nil then
 		if IsYRPOutdated() then
-			MsgC( Color(255, 0, 0), "[YRPSendError] >> YourRP Is Outdated" .. "\n" )
+			MsgC( Color( 255, 0, 0), "[YRPSendError] >> YourRP Is Outdated" .. "\n" )
 		elseif YRPIsServerDedicated() and !string.StartWith( GetGlobalString( "serverip", "0.0.0.0:27015" ), "0.0.0.0:" ) then
-			--MsgC( Color(255, 0, 0), "[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err) .. "\n" )
+			--MsgC( Color( 255, 0, 0), "[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err) .. "\n" )
 			
 			http.Post(posturl, entry,
 			function( body, length, headers, code)
@@ -1073,7 +1073,7 @@ hook.Add( "OnLuaError", "yrp_OnLuaError", function(...)
 
 	--if err and trace and realm and ( string.find(err, "/yrp/" ) or string.find(trace, "/yrp/" ) ) and YRPNewError(err) then
 	if err and trace and realm and ( string.find( err, "/yrp/", 1, true ) or string.find( trace, "/yrp/", 1, true ) or string.find( trace, "[YourRP]", 1, true ) ) and YRPNewError(err) then
-		MsgC( Color(255, 0, 0), "[YRPAddError] >> Found a new ERROR" .. "\n" )
+		MsgC( Color( 255, 0, 0), "[YRPAddError] >> Found a new ERROR" .. "\n" )
 		YRPAddError(err, trace, realm)
 	end
 end)
@@ -1085,7 +1085,7 @@ function YRPCheckReadyTable( tab )
 		YRP.msg( "error", "[CheckReadyTable] Table INVALID: " .. tostring( tab ) )
 		return false
 	end
-	if table.Count( tab ) != 3 then
+	if table.Count( tab ) != 4 then
 		YRP.msg( "error", "[CheckReadyTable] Table is size: " .. table.Count( tab ) )
 		return false
 	end
@@ -1097,91 +1097,6 @@ function YRPCheckReadyTable( tab )
 	end
 	return true
 end
-
-local shownetstats = false
-
-if false then
-	local nettab = {}
-	local nettab2 = {}
-	function net.Incoming(len, client)
-		local i = net.ReadHeader()
-		local strName = util.NetworkIDToString( i )
-		
-		if ( !strName ) then return end
-
-		local func = net.Receivers[ strName:lower() ]
-		if ( !func ) then return end
-
-		--
-		-- len includes the 16 bit int which told us the message name
-		--
-		len = len - 16
-
-		func( len, client )
-
-		-- NEW
-		if shownetstats then
-			MsgC( Color( 0, 255, 0 ), "\n" )
-			MsgC( Color( 0, 255, 0 ), "-NETSTATS-------------------------------------------------------------" .. "\n" )
-		end
-		
-		nettab[strName] = nettab[strName] or 0
-		nettab[strName] = nettab[strName] + len / 8
-
-		nettab2[strName] = nettab2[strName] or 0
-		nettab2[strName] = nettab2[strName] + 1
-
-		if shownetstats then
-			MsgC( Color( 0, 255, 0 ), "     DATA | NETNAME" .. "\n" )
-			MsgC( Color( 0, 255, 0 ), "----------------------------------------" .. "\n" )
-
-			local count = 0
-			local found = false
-			for i, v in SortedPairsByValue( nettab, true ) do
-				if v > 10 and count < 14 then
-					count = count + 1
-					found = true
-					MsgC( Color( 0, 255, 0 ), string.format( "%9d ", tostring( v ) ) .. "| " .. i .. "\n" )
-				end
-			end
-			if !found then
-				MsgC( Color( 0, 255, 0 ), " > EMPTY <" .. "\n" )
-			end
-
-			MsgC( Color( 0, 255, 0 ), "\n" )
-
-			MsgC( Color( 0, 255, 0 ), "    CALLS | NETNAME" .. "\n" )
-			MsgC( Color( 0, 255, 0 ), "----------------------------------------" .. "\n" )
-
-			count = 0
-			found = false
-			for i, v in SortedPairsByValue( nettab2, true ) do
-				if v > 10 and count < 14 then
-					count = count + 1
-					found = true
-					MsgC( Color( 0, 255, 0 ), string.format( "%9d ", tostring( v ) ) .. "| " .. i .. "\n" )
-				end
-			end
-			if !found then
-				MsgC( Color( 0, 255, 0 ), "> EMPTY <" .. "\n" )
-			end
-
-			if shownetstats then
-				MsgC( Color( 0, 255, 0 ), "-NETSTATS-------------------------------------------------------------" .. "\n" )
-				MsgC( Color( 0, 255, 0 ), "\n" )
-			end
-		end
-	end
-end
-
-concommand.Add( "yrp_netstats", function( ply, cmd, args )
-    shownetstats = !shownetstats
-	if shownetstats then
-		MsgC( Color( 0, 255, 0 ), "[yrp_netstats] Enabled" .. "\n" )
-	else
-		MsgC( Color( 255, 0, 0 ), "[yrp_netstats] Disabled" .. "\n" )
-	end
-end)
 
 if CLIENT then
 	timer.Simple(1, function()
@@ -1206,3 +1121,17 @@ function YRPCleanUpName( name )
 	end
 	return name
 end
+
+function GM:DarkRPFinishedLoading()
+    -- GAMEMODE gets set after the last statement in the gamemode files is run. That is not the case in this hook
+    GAMEMODE = GAMEMODE or GM
+	
+    --loadLanguages()
+    --loadModules()
+    --loadCustomDarkRPItems()
+    hook.Call( "loadCustomDarkRPItems", self )
+    hook.Call( "postLoadCustomDarkRPItems", self )
+end
+timer.Simple(0, function()
+	GAMEMODE:DarkRPFinishedLoading()
+end)

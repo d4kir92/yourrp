@@ -226,6 +226,8 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_birthday", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_bodyheight", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_characters_weight", "INT DEFAULT 1" )
 
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_logouttime", "INT DEFAULT 5" )
+
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_min", "INT DEFAULT 6" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_max", "INT DEFAULT 30" )
 
@@ -317,17 +319,17 @@ if wk(_init_general) then
 
 	for name, value in pairs(yrp_general) do
 		if string.StartWith(name, "bool_" ) then
-			SetGlobalBool(name, tobool( value) )
+			SetGlobalYRPBool(name, tobool( value) )
 		elseif name == "text_server_rules" then
-			SetGlobalTable(name, string.Explode( "\n", tostring( value) ))
+			SetGlobalYRPTable(name, string.Explode( "\n", tostring( value) ))
 		elseif string.StartWith(name, "int_" ) then
-			SetGlobalInt(name, tonumber( value) )
+			SetGlobalYRPInt(name, tonumber( value) )
 		elseif string.StartWith(name, "text_" ) then
-			SetGlobalString(name, tostring( value) )
+			SetGlobalYRPString(name, tostring( value) )
 		end
 	end
 
-	SetGlobalBool( "yrp_general_loaded", true)
+	SetGlobalYRPBool( "yrp_general_loaded", true)
 end
 
 
@@ -443,13 +445,13 @@ end
 function GeneralDB()
 	for i, set in pairs(yrp_general) do
 		if string.StartWith(i, "text_" ) then
-			SetGlobalString(i, set)
+			SetGlobalYRPString(i, set)
 		elseif string.StartWith(i, "bool_" ) then
-			SetGlobalBool(i, tobool(set) )
+			SetGlobalYRPBool(i, tobool(set) )
 		elseif string.StartWith(i, "int_" ) then
-			SetGlobalInt(i, tonumber(set) )
+			SetGlobalYRPInt(i, tonumber(set) )
 		elseif string.StartWith(i, "float_" ) then
-			SetGlobalFloat(i, tonumber(set) )
+			SetGlobalYRPFloat(i, tonumber(set) )
 		end
 	end
 end
@@ -475,31 +477,31 @@ end
 function GeneralUpdateBool(ply, netstr, str, value)
 	YRP.msg( "db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(tobool( value) ))
 	GeneralUpdateValue(ply, netstr, str, value)
-	SetGlobalBool(str, tobool( value) )
+	SetGlobalYRPBool(str, tobool( value) )
 end
 
 function GeneralUpdateString(ply, netstr, str, value)
 	YRP.msg( "db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring( value) )
 	GeneralUpdateValue(ply, netstr, str, value)
-	SetGlobalString(str, value)
+	SetGlobalYRPString(str, value)
 end
 
 function GeneralUpdateTable(ply, netstr, str, value)
 	YRP.msg( "db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring( value) )
 	GeneralUpdateValue(ply, netstr, str, value)
-	SetGlobalTable(str, string.Explode( "\n", value) )
+	SetGlobalYRPTable(str, string.Explode( "\n", value) )
 end
 
 function GeneralUpdateInt(ply, netstr, str, value)
 	YRP.msg( "db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring( value) )
 	GeneralUpdateValue(ply, netstr, str, value)
-	SetGlobalInt(str, value)
+	SetGlobalYRPInt(str, value)
 end
 
 function GeneralUpdateFloat(ply, netstr, str, value)
 	YRP.msg( "db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring( value) )
 	GeneralUpdateValue(ply, netstr, str, value)
-	SetGlobalFloat(str, value)
+	SetGlobalYRPFloat(str, value)
 end
 
 function GeneralUpdateGlobalValue(ply, netstr, str, value)
@@ -511,7 +513,7 @@ end
 function GeneralUpdateGlobalBool(ply, netstr, str, value)
 	YRP.msg( "db", ply:YRPName() .. " updated global " .. str .. " to: " .. tostring(tobool( value) ))
 	GeneralUpdateGlobalValue(ply, netstr, str, value)
-	SetGlobalBool(str, tobool( value) )
+	SetGlobalYRPBool(str, tobool( value) )
 end
 
 
@@ -1533,6 +1535,14 @@ net.Receive( "update_bool_characters_weight", function(len, ply)
 	GeneralUpdateBool(ply, "update_bool_characters_weight", "bool_characters_weight", b)
 end)
 
+util.AddNetworkString( "update_int_logouttime" )
+net.Receive( "update_int_logouttime", function(len, ply)
+	local int = net.ReadString()
+	if isnumber(tonumber(int) ) then
+		GeneralUpdateInt(ply, "update_int_logouttime", "int_logouttime", int)
+	end
+end)
+
 util.AddNetworkString( "update_int_deathtimestamp_min" )
 net.Receive( "update_int_deathtimestamp_min", function(len, ply)
 	local int = net.ReadString()
@@ -1999,17 +2009,19 @@ end)
 
 util.AddNetworkString( "tp_tpto" )
 net.Receive( "tp_tpto", function(len, ply)
-	if ply:HasAccess() then
+	if IsValid( ply ) and ply:HasAccess() then
 		local _target = net.ReadEntity()
-		ply:SetNW2Vector( "yrpoldpos", ply:GetPos() )
-		teleportToPoint(ply, _target:GetPos() )
+		if IsValid( _target ) then
+			ply:SetYRPVector( "yrpoldpos", ply:GetPos() )
+			teleportToPoint(ply, _target:GetPos() )
+		end
 	end
 end)
 util.AddNetworkString( "tp_bring" )
 net.Receive( "tp_bring", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetNW2Vector( "yrpoldpos", _target:GetPos() )
+		_target:SetYRPVector( "yrpoldpos", _target:GetPos() )
 		teleportToPoint(_target, ply:GetPos() )
 	end
 end)
@@ -2017,10 +2029,10 @@ util.AddNetworkString( "tp_return" )
 net.Receive( "tp_return", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if _target:GetNW2Vector( "yrpoldpos" ) != Vector(0, 0, 0) then
-			teleportToPoint(_target, _target:GetNW2Vector( "yrpoldpos" ) )
+		if _target:GetYRPVector( "yrpoldpos" ) != Vector(0, 0, 0) then
+			teleportToPoint(_target, _target:GetYRPVector( "yrpoldpos" ) )
 
-			_target:SetNW2Vector( "yrpoldpos", Vector(0, 0, 0) ) -- RESET
+			_target:SetYRPVector( "yrpoldpos", Vector(0, 0, 0) ) -- RESET
 		end
 	end
 end)
@@ -2040,12 +2052,12 @@ net.Receive( "tp_unjail", function(len, ply)
 end)
 
 function YRPIsRagdoll(ply)
-	return ply:GetNW2Bool( "ragdolled", false)
+	return ply:GetYRPBool( "ragdolled", false)
 end
 
 function YRPDoRagdoll(ply)
 	if IsValid(ply) and ply:IsPlayer() and not YRPIsRagdoll(ply) then
-		ply:SetNW2Bool( "ragdolled", true)
+		ply:SetYRPBool( "ragdolled", true)
 
 		local scale = ply:GetModelScale() or 1
 
@@ -2056,7 +2068,7 @@ function YRPDoRagdoll(ply)
 		tmp:Spawn()
 
 		ply:SetParent(tmp)
-		ply:SetNW2Entity( "ragdoll", tmp)
+		ply:SetYRPEntity( "ragdoll", tmp)
 
 		ply:Freeze( true )
 
@@ -2066,10 +2078,10 @@ end
 
 function YRPDoUnRagdoll(ply)
 	if IsValid(ply) and ply:IsPlayer() and YRPIsRagdoll(ply) then
-		ply:SetNW2Bool( "ragdolled", false)
+		ply:SetYRPBool( "ragdolled", false)
 		ply:SetParent(nil)
 
-		local ragdoll = ply:GetNW2Entity( "ragdoll" )
+		local ragdoll = ply:GetYRPEntity( "ragdoll" )
 		if ea(ragdoll) then
 			ply:SetPos(ragdoll:GetPos() )
 			ragdoll:Remove()
@@ -2117,7 +2129,7 @@ net.Receive( "god", function(len, ply)
 		local _target = net.ReadEntity()
 		_target:GodEnable()
 		_target:AddFlags(FL_GODMODE)
-		_target:SetNW2Bool( "godmode", true)
+		_target:SetYRPBool( "godmode", true)
 	end
 end)
 util.AddNetworkString( "ungod" )
@@ -2126,14 +2138,14 @@ net.Receive( "ungod", function(len, ply)
 		local _target = net.ReadEntity()
 		_target:GodDisable()
 		_target:RemoveFlags(FL_GODMODE)
-		_target:SetNW2Bool( "godmode", false)
+		_target:SetYRPBool( "godmode", false)
 	end
 end)
 util.AddNetworkString( "cloak" )
 net.Receive( "cloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetNW2Bool( "cloaked", true)
+		_target:SetYRPBool( "cloaked", true)
 		YRPRenderCloaked(_target)
 	end
 end)
@@ -2141,7 +2153,7 @@ util.AddNetworkString( "uncloak" )
 net.Receive( "uncloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetNW2Bool( "cloaked", false)
+		_target:SetYRPBool( "cloaked", false)
 		YRPRenderNormal(_target)
 	end
 end)
@@ -2149,14 +2161,14 @@ util.AddNetworkString( "blind" )
 net.Receive( "blind", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetNW2Bool( "blinded", true)
+		_target:SetYRPBool( "blinded", true)
 	end
 end)
 util.AddNetworkString( "unblind" )
 net.Receive( "unblind", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetNW2Bool( "blinded", false)
+		_target:SetYRPBool( "blinded", false)
 	end
 end)
 util.AddNetworkString( "ignite" )
@@ -2212,15 +2224,15 @@ function YRPRepairSQLDB(force) -- Remove %01 - %XX
 		if ( version <= 1 or force) and fixonce then
 			fixonce = false
 			local alltables = YRP_SQL_QUERY( "SELECT * FROM sqlite_master WHERE type='table';" )
-			MsgC(Color(0, 255, 0), ">>> REPAIR YourRP DB, START <<<" .. "\n" )
+			MsgC(Color( 0, 255, 0), ">>> REPAIR YourRP DB, START <<<" .. "\n" )
 			for i, v in pairs( alltables) do
 				if string.StartWith( v.name, "yrp_" ) then
-					MsgC(Color(0, 255, 0), "> FIX DB: " .. v.name .. "\n" )
+					MsgC(Color( 0, 255, 0), "> FIX DB: " .. v.name .. "\n" )
 					local tab = YRP_SQL_SELECT( v.name, "*", nil)
 					YRPFixDatabase(tab, v.name)
 				end
 			end
-			MsgC(Color(0, 255, 0), ">>> REPAIR YourRP DB, DONE <<<" .. "\n" )
+			MsgC(Color( 0, 255, 0), ">>> REPAIR YourRP DB, DONE <<<" .. "\n" )
 
 			YRP_SQL_UPDATE(DATABASE_NAME, {["int_version"] = 2}, "uniqueID = '1'" )
 		end
