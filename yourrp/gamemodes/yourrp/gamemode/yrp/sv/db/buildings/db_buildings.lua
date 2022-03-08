@@ -114,7 +114,7 @@ end
 
 util.AddNetworkString( "loaded_doors" )
 function loadDoors()
-	if GetGlobalBool( "bool_building_system", false) then
+	if GetGlobalYRPBool( "bool_building_system", false) then
 		YRP.msg( "db", "[Buildings] Setting up Doors!" )
 		local _tmpDoors = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 
@@ -361,7 +361,7 @@ net.Receive( "sellBuilding", function(len, ply)
 end)
 
 net.Receive( "buyBuilding", function(len, ply)
-	if GetGlobalBool( "bool_building_system", false) then
+	if GetGlobalYRPBool( "bool_building_system", false) then
 		local _tmpBuildingID = net.ReadString()
 		local _tmpTable = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
@@ -427,7 +427,7 @@ net.Receive( "changeBuildingPrice", function(len, ply)
 end)
 
 function SetSecurityLevel(id, sl)
-	if GetGlobalBool( "bool_building_system", false) then
+	if GetGlobalYRPBool( "bool_building_system", false) then
 		for i, door in pairs(GetAllDoors() ) do
 			if door:GetYRPString( "buildingID", -1) == id then
 				door:SetYRPInt( "int_securitylevel", sl)

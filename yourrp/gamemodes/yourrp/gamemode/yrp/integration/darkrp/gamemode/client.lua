@@ -37,13 +37,13 @@ end
 function DarkRP.openF1Menu()
 	--Description: Open the F1 help menu.
 	--YRPDarkrpNotFound( "openF1Menu()" )
-	ToggleCombinedMenu(1)
+	YRPToggleCombinedMenu(1)
 end
 
 function DarkRP.openF4Menu()
 	--Description: Open the F4 menu.
 	--YRPDarkrpNotFound( "openF4Menu()" )
-	--ToggleCombinedMenu(2)
+	--YRPToggleCombinedMenu(2)
 	--F4Menu:OpenMenu()
 end
 

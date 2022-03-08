@@ -86,7 +86,7 @@ local function YRPIsElementEnabled( name )
 	if alwaysshow[name] then
 		return true
 	end
-	return GetGlobalBool( "bool_yrp_scoreboard_show_" .. name, false )
+	return GetGlobalYRPBool( "bool_yrp_scoreboard_show_" .. name, false )
 end
 
 local eles = {
@@ -240,7 +240,7 @@ function YRPSortScoreboard()
 	local c = 0
 	for i, entry in SortedPairsByMemberValue(plys, lply.yrp_sb_sortby, lply.yrp_sb_reverse) do
 		c = c + 1
-		timer.Simple( c * 0.1, function()
+		timer.Simple( c * 0.02, function()
 			if YRPScoreboard and YRPScoreboard.id == id and entry and entry.ply then
 				YRPScoreboardAddPlayer( entry.ply )
 			end
@@ -517,8 +517,8 @@ function YRPScoreboardAddPlayer(ply)
 			end
 		end}
 		btns[2] = {"LID_info", "128_info-circle", false, false, function()
-			if IsValid(ply) and ply:YRPSteamID() and ply:SteamID64() then
-				SetClipboardText( "SteamID: \t" .. ply:YRPSteamID() .. " \nSteamID64: \t" .. ply:SteamID64() .. " \nRPName: \t" .. ply:RPName() .. " \nSteamName: \t" .. ply:SteamName() )
+			if IsValid(ply) and ply:YRPSteamID() and ply:SteamID() then
+				SetClipboardText( "SteamID: \t" .. ply:YRPSteamID() .. " \nRPName: \t" .. ply:RPName() .. " \nSteamName: \t" .. ply:SteamName() )
 				notification.AddLegacy( "[" .. string.upper(YRP.lang_string( "LID_info" ) ) .. "] COPIED TO CLIPBOARD", NOTIFY_GENERIC, 3)
 			else
 				notification.AddLegacy( "[" .. string.upper(YRP.lang_string( "LID_info" ) ) .. "] PLAYER IS NOT VALID", NOTIFY_ERROR, 3)
@@ -850,11 +850,11 @@ function YRPInitScoreboard()
 		end
 
 		if self.logo then
-			if self.logo.svlogo != GetGlobalString( "text_server_logo", "" ) then
-				self.logo.svlogo = GetGlobalString( "text_server_logo", "" )
+			if self.logo.svlogo != GetGlobalYRPString( "text_server_logo", "" ) then
+				self.logo.svlogo = GetGlobalYRPString( "text_server_logo", "" )
 
-				if !strEmpty(GetGlobalString( "text_server_logo", "" ) ) then
-					YRPScoreboard.logo:SetHTML(GetHTMLImage(GetGlobalString( "text_server_logo", "" ), 128, 128) )
+				if !strEmpty(GetGlobalYRPString( "text_server_logo", "" ) ) then
+					YRPScoreboard.logo:SetHTML(GetHTMLImage(GetGlobalYRPString( "text_server_logo", "" ), 128, 128) )
 					YRPScoreboard.logo:Show()
 				else
 					YRPScoreboard.logo:Hide()
@@ -883,7 +883,7 @@ function YRPInitScoreboard()
 		if GAMEMODE.dedicated then
 			server = " [Dedicated]"
 		end
-		draw.SimpleText( "v" .. YRPVersion() .. " ( " .. GetGlobalString( "YRP_VERSIONART", "X" ) .. " )" .. string.upper(server), "Open Sans_16", pw - br, br, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText( "v" .. YRPVersion() .. " ( " .. GetGlobalYRPString( "YRP_VERSIONART", "X" ) .. " )" .. string.upper(server), "Open Sans_16", pw - br, br, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 	end
 
 	YRPScoreboard.BotBar = createD( "DPanel", YRPScoreboard, 128, 32, 0, 0 )
@@ -903,7 +903,7 @@ function YRPInitScoreboard()
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
 
 		-- NAME
-		local name = GetGlobalString( "text_server_name", "" )
+		local name = GetGlobalYRPString( "text_server_name", "" )
 		if strEmpty(name) then
 			name = YRPGetHostName()
 		end
@@ -949,7 +949,7 @@ end
 YRPInitScoreboard()
 
 function GM:ScoreboardShow()
-	if GetGlobalBool( "bool_yrp_scoreboard" ) then
+	if GetGlobalYRPBool( "bool_yrp_scoreboard" ) then
 		YRPOpenSBS()
 	end
 end

@@ -280,9 +280,9 @@ net.Receive( "get_menu_bodygroups", function(len)
 	end
 end)
 
-function toggleAppearanceMenu()
+function YRPToggleAppearanceMenu()
 	if YRPIsNoMenuOpen() then
-		if GetGlobalBool( "bool_appearance_system", false) then
+		if GetGlobalYRPBool( "bool_appearance_system", false) then
 			open_appearance()
 		end
 	else

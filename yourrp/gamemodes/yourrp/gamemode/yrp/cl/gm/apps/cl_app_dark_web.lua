@@ -101,8 +101,8 @@ function testApp( display, x, y, w, h)
 
 					_target_rpname.rpname = ply:RPName()
 
-					local _pre = GetGlobalString( "text_money_pre", "" )
-					local _pos = GetGlobalString( "text_money_pos", "" )
+					local _pre = GetGlobalYRPString( "text_money_pre", "" )
+					local _pos = GetGlobalYRPString( "text_money_pos", "" )
 					_target_reward.reward = _pre .. hit.reward .. _pos
 
 					_target_description.description = hit.description

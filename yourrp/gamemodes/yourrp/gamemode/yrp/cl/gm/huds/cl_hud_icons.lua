@@ -99,7 +99,7 @@ function HUDIcons()
 	local lply = LocalPlayer()
 
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
-		if GetGlobalBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Icons" then
+		if GetGlobalYRPBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Icons" then
 			HUDIconsDrawIcon( "HP", HP, lply:Health() / lply:GetMaxHealth() )
 			HUDIconsDrawIcon( "AR", AR, lply:Armor() / lply:GetMaxArmor() )
 

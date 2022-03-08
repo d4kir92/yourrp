@@ -4,7 +4,7 @@
 
 local yrp_vehicle = {}
 
-function toggleVehicleOptions( vehicle, vehicleID)
+function YRPToggleVehicleOptions( vehicle, vehicleID)
 	if YRPIsNoMenuOpen() and !pa(yrp_vehicle.window) then
 		openVehicleOptions( vehicle, vehicleID)
 	else

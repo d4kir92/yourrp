@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function showOwner(eyeTrace)
-	if GetGlobalBool( "bool_yrp_showowner", true) then
+	if GetGlobalYRPBool( "bool_yrp_showowner", true) then
 		if eyeTrace.Entity:GetOwner() != nil and eyeTrace.Entity:GetOwner() != NULL then
 			draw.SimpleText(YRP.lang_string( "LID_owner" ) .. ": " .. tostring(eyeTrace.Entity:GetOwner() ), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 		else
@@ -21,7 +21,7 @@ function showOwner(eyeTrace)
 end
 
 function showSecurityLevel( door)
-	if door:SecurityLevel() > 0 and GetGlobalBool( "bool_building_system", false) and GetGlobalBool( "bool_show_securitylevel", true) then
+	if door:SecurityLevel() > 0 and GetGlobalYRPBool( "bool_building_system", false) and GetGlobalYRPBool( "bool_show_securitylevel", true) then
 		draw.SimpleText(YRP.lang_string( "LID_securitylevel" ) .. ": " ..	door:SecurityLevel(), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(800), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 	end
 end
@@ -37,10 +37,10 @@ function YRPHudView()
 			if entpos == Vector(0, 0, 0) then
 				entpos = ent:GetPos()
 			end
-			if entpos:Distance(plypos) > GetGlobalInt( "int_door_distance", 200) then
+			if entpos:Distance(plypos) > GetGlobalYRPInt( "int_door_distance", 200) then
 				return
 			end
-			if GetGlobalBool( "bool_building_system", false) and ent:YRPIsDoor() and plypos:Distance(entpos) < GetGlobalInt( "int_door_distance", 200) and GetGlobalBool( "bool_canbeowned", true ) then
+			if GetGlobalYRPBool( "bool_building_system", false) and ent:YRPIsDoor() and plypos:Distance(entpos) < GetGlobalYRPInt( "int_door_distance", 200) and GetGlobalYRPBool( "bool_canbeowned", true ) then
 				local tab = {}
 				tab["KEY"] = "[" .. string.upper(YRPGetKeybindName( "in_use" ) ) .. "]"
 				draw.SimpleText(YRP.lang_string( "LID_presstoopen", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )

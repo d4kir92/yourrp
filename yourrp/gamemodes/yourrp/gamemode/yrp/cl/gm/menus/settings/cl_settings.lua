@@ -53,7 +53,7 @@ function F8CheckUsergroup()
 	return false
 end
 
-function ToggleSettings(id)
+function YRPToggleSettings(id)
 	local usergroupchanged = F8CheckUsergroup()
 	if usergroupchanged then
 		F8HardCloseSettings()
@@ -434,7 +434,7 @@ function F8OpenSettings()
 			F8HardCloseSettings()
 			
 			timer.Simple(0.1, function()
-				ToggleSettings()
+				YRPToggleSettings()
 			end)
 		end
 
@@ -505,7 +505,7 @@ function F8OpenSettings()
 			self:SetPos(0, sm.win:GetTall() - YRP.ctr(50) )
 			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ) )
 
-			draw.SimpleText(GetGlobalString( "text_server_name", "-" ), "Y_18_500", ph / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(GetGlobalYRPString( "text_server_name", "-" ), "Y_18_500", ph / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			draw.SimpleText( "YourRP Version.: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, GetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			draw.SimpleText(YRP.lang_string( "LID_map" ) .. ": " .. game.GetMap() .. "        " .. YRP.lang_string( "LID_players" ) .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end]]

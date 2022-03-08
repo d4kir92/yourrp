@@ -168,7 +168,7 @@ function YRPCreateCharacterSettingsContent()
 				character.bohe = LocalPlayer().charcreate_bohe or 0
 				character.weig = LocalPlayer().charcreate_weig or 0
 				character.nati = LocalPlayer().charcreate_nati
-				character.create_eventchar = GetGlobalBool( "create_eventchar", false)
+				character.create_eventchar = GetGlobalYRPBool( "create_eventchar", false)
 
 				net.Receive( "YRPCreateCharacter", function(len)
 					local success = net.ReadBool()
@@ -351,7 +351,7 @@ function YRPCreateCharacterSettingsContent()
 		end
 	
 		-- Birthday
-		if GetGlobalBool( "bool_characters_birthday", false) then
+		if GetGlobalYRPBool( "bool_characters_birthday", false) then
 			local birtheader = createD( "YLabel", nil, ew, YRP.ctr( config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			birtheader:SetText( "LID_birthday" )
 			list:AddItem( birtheader)
@@ -375,7 +375,7 @@ function YRPCreateCharacterSettingsContent()
 		end
 		
 		-- Bodyheight
-		if GetGlobalBool( "bool_characters_bodyheight", false) then
+		if GetGlobalYRPBool( "bool_characters_bodyheight", false) then
 			local boheheader = createD( "YLabel", nil, ew, YRP.ctr( config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			boheheader:SetText( "LID_bodyheight" )
 			list:AddItem( boheheader)
@@ -391,7 +391,7 @@ function YRPCreateCharacterSettingsContent()
 		end
 
 		-- Weight
-		if GetGlobalBool( "bool_characters_weight", false) then
+		if GetGlobalYRPBool( "bool_characters_weight", false) then
 			local weigheader = createD( "YLabel", nil, ew, YRP.ctr( config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			weigheader:SetText( "LID_weight" )
 			list:AddItem(weigheader)

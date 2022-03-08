@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function YRPIsChatEnabled( from )
-	return GetGlobalBool( "bool_yrp_chat", false)
+	return GetGlobalYRPBool( "bool_yrp_chat", false)
 end
 
 function GetPlayerByName(name)
@@ -115,7 +115,7 @@ if SERVER then
 			self:SetYRPFloat( "thirst", newthirst)
 		end
 
-		if GetGlobalBool( "bool_permille", false) and permille != nil then
+		if GetGlobalYRPBool( "bool_permille", false) and permille != nil then
 			permille = tonumber(permille)
 			if isnumber(permille) and permille > 0 then
 				local newpermille = math.Clamp(self:GetYRPFloat( "permille", 0.0) + permille, 0, self:GetMaxPermille() )
@@ -148,7 +148,7 @@ function Player:IsInCharacterSelection()
 	if self:IsBot() then
 		return false
 	end
-	if GetGlobalBool( "bool_character_system" ) and !IsVoidCharEnabled() then
+	if GetGlobalYRPBool( "bool_character_system" ) and !IsVoidCharEnabled() then
 		return self:GetYRPBool( "yrp_characterselection", false )
 	else
 		return false
@@ -182,7 +182,7 @@ end
 function Player:IsCharacterValid()
 	if SERVER then
 		if self:IsValid() then
-			if not GetGlobalBool( "bool_character_system" ) then
+			if not GetGlobalYRPBool( "bool_character_system" ) then
 				return true
 			else
 				if self:GetYRPBool( "finishedloadingcharacter", false) then
@@ -203,7 +203,7 @@ end
 function Player:HasCharacterSelected()
 	if SERVER then
 		if self:IsValid() then
-			if not GetGlobalBool( "bool_character_system" ) then
+			if not GetGlobalYRPBool( "bool_character_system" ) then
 				return true
 			else
 				if self:GetYRPBool( "finishedloadingcharacter", false) then
@@ -686,10 +686,7 @@ function Player:YRPGetUserGroupColor()
 end
 
 function Player:HasLicense(license)
-	local _licenseIDs = self:GetYRPString( "licenseIDs", "" )
-
-	local _licenses = string.Explode( ",", _licenseIDs)
-	if table.HasValue(_licenses, license) then
+	if table.HasValue(self:GetLicenseIDs(), license) then
 		return true
 	elseif tonumber(license) == -1 then
 		return true
@@ -767,3 +764,9 @@ function canVehicleLock(ply, veh)
 		return false
 	end
 end
+
+hook.Add( "StartCommand", "YRP_StartCommand", function( ply, cmd )
+	if ply and ply:GetYRPBool( "ragdolled", false ) and cmd:KeyDown( IN_ATTACK ) then
+		cmd:RemoveKey( IN_ATTACK )
+	end
+end )

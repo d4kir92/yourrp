@@ -1121,49 +1121,49 @@ hook.Add( "PlayerSpawnedVehicle", "yrp_vehicles_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Vehicle: " .. ent:GetClass() .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Vehicle: " .. ent:GetClass() .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedSWEP", "yrp_entities_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Weapon: " .. ent:GetClass() .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Weapon: " .. ent:GetClass() .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedSENT", "yrp_entities_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Entity: " .. ent:GetClass() .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Entity: " .. ent:GetClass() .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedEffect", "yrp_effects_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Effect: " .. ent:GetClass() .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Effect: " .. ent:GetClass() .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedNPC", "yrp_npcs_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'NPC: " .. ent:GetClass() .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'NPC: " .. ent:GetClass() .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedProp", "yrp_props_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'PROP: " .. ent:GetClass() .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'PROP: " .. ent:GetClass() .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedRagdoll", "yrp_ragdolls_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID64() .. "', 'Ragdoll: " .. ent:GetClass() .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Ragdoll: " .. ent:GetClass() .. "'" )
 end)
 
 util.AddNetworkString( "yrp_notification" )
@@ -1557,6 +1557,7 @@ function Player:UserGroupLoadout()
 					self:AddLicense(lic)
 				end
 			end
+			self:SetYRPInt( "licenseIDsVersion", self:GetYRPInt( "licenseIDsVersion", 0 ) + 1 )
 		end
 
 		--YRP.msg( "gm", tostring( self:SteamName() ) .. " got his usergroup loadout ( " .. tostring( self:GetUserGroup() ) .. " )" )

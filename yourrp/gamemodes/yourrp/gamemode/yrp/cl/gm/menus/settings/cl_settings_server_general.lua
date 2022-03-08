@@ -176,7 +176,7 @@ end
 function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr2)
 	local background = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ": ( " .. GetGlobalString( "text_money_pre", "" ) .. "100" .. GetGlobalString( "text_money_pos", "" ) .. " )", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ": ( " .. GetGlobalYRPString( "text_money_pre", "" ) .. "100" .. GetGlobalYRPString( "text_money_pos", "" ) .. " )", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
 	background.textbox = createD( "DTextEntry", background, YRP.ctr(400) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
@@ -520,11 +520,11 @@ net.Receive( "Connect_Settings_General", function(len)
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent() )
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_background, "LID_loadingbackground", "update_text_loading_background" )
-		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_design, "LID_loadingdesign", "update_text_loading_design", GetGlobalString( "text_loading_design", "Default" ), {"Default", "Center", "BottomRight"})
+		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_design, "LID_loadingdesign", "update_text_loading_design", GetGlobalYRPString( "text_loading_design", "Default" ), {"Default", "Center", "BottomRight"})
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent() )
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_background, "LID_character_background", "update_text_character_background" )
-		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "LID_characterdesign", "update_text_character_design", GetGlobalString( "text_character_design", "Default" ), {"Default", "HorizontalNEW", "Horizontal", "Vertical"})
+		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "LID_characterdesign", "update_text_character_design", GetGlobalYRPString( "text_character_design", "Default" ), {"Default", "HorizontalNEW", "Horizontal", "Vertical"})
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent() )
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat, "LID_yourrpchat", "update_bool_yrp_chat" )
@@ -581,7 +581,7 @@ net.Receive( "Connect_Settings_General", function(len)
 				if !string.find(ele, "box" ) then
 					name = YRP.lang_string( "LID_" .. ele)
 				end
-				local e = createD( "YFrame", idbg, GetGlobalInt( "int_" .. ele .. "_w", 10), GetGlobalInt( "int_" .. ele .. "_h", 10), GetGlobalInt( "int_" .. ele .. "_x", 10), GetGlobalInt( "int_" .. ele .. "_y", 10) )
+				local e = createD( "YFrame", idbg, GetGlobalYRPInt( "int_" .. ele .. "_w", 10), GetGlobalYRPInt( "int_" .. ele .. "_h", 10), GetGlobalYRPInt( "int_" .. ele .. "_x", 10), GetGlobalYRPInt( "int_" .. ele .. "_y", 10) )
 				if string.find(ele, "background" ) then
 					e:SetDraggable(false)
 					e.draggable = false
@@ -602,22 +602,22 @@ net.Receive( "Connect_Settings_General", function(len)
 				e.ts3 = CurTime() + 1
 				function e:Paint(pw, ph)
 					--[[if ele == "background" or string.find(ele,  "box" ) then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(GetGlobalInt( "int_" .. ele .. "_r", 0), GetGlobalInt( "int_" .. ele .. "_g", 0), GetGlobalInt( "int_" .. ele .. "_b", 0), GetGlobalInt( "int_" .. ele .. "_a", 0) ))
+						draw.RoundedBox(0, 0, 0, pw, ph, Color(GetGlobalYRPInt( "int_" .. ele .. "_r", 0), GetGlobalYRPInt( "int_" .. ele .. "_g", 0), GetGlobalYRPInt( "int_" .. ele .. "_b", 0), GetGlobalYRPInt( "int_" .. ele .. "_a", 0) ))
 					end]]
 					local visible = false
 					local mx, my = gui.MousePos()
 					local px, py = self:GetPos()
 					self.inbg = false
-					if GetGlobalInt( "int_" .. ele .. "_x", 0) < GetGlobalInt( "int_" .. "background" .. "_w", 0) and GetGlobalInt( "int_" .. ele .. "_y", 0) < GetGlobalInt( "int_" .. "background" .. "_h", 0) then
+					if GetGlobalYRPInt( "int_" .. ele .. "_x", 0) < GetGlobalYRPInt( "int_" .. "background" .. "_w", 0) and GetGlobalYRPInt( "int_" .. ele .. "_y", 0) < GetGlobalYRPInt( "int_" .. "background" .. "_h", 0) then
 						self.inbg = true
 					end
 					if self:IsHovered() then
 						visible = true
 					elseif mx > px and mx < px + pw and my > py and my < py + ph then
 						visible = true
-					elseif GetGlobalBool( "bool_" .. ele .. "_visible", false) == false then
+					elseif GetGlobalYRPBool( "bool_" .. ele .. "_visible", false) == false then
 						visible = true
-					elseif GetGlobalInt( "int_" .. ele .. "_x", 0) > GetGlobalInt( "int_" .. "background" .. "_w", 0) or GetGlobalInt( "int_" .. ele .. "_y", 0) > GetGlobalInt( "int_" .. "background" .. "_h", 0) then
+					elseif GetGlobalYRPInt( "int_" .. ele .. "_x", 0) > GetGlobalYRPInt( "int_" .. "background" .. "_w", 0) or GetGlobalYRPInt( "int_" .. ele .. "_y", 0) > GetGlobalYRPInt( "int_" .. "background" .. "_h", 0) then
 						visible = true
 					end
 
@@ -636,7 +636,7 @@ net.Receive( "Connect_Settings_General", function(len)
 						a2 = 100
 						a3 = 200
 					end
-					if self.inbg and (mx > GetGlobalInt( "int_" .. "background" .. "_w", 0) or my > GetGlobalInt( "int_" .. "background" .. "_h", 0) ) then
+					if self.inbg and (mx > GetGlobalYRPInt( "int_" .. "background" .. "_w", 0) or my > GetGlobalYRPInt( "int_" .. "background" .. "_h", 0) ) then
 						a1 = 0
 						a2 = 0
 						a3 = 0
@@ -657,9 +657,9 @@ net.Receive( "Connect_Settings_General", function(len)
 						surface.DrawLine(0, 0, lon, lon)
 					end
 					--if ele != "background" and !string.find(ele,  "box" ) then
-						if !string.find(ele, "logo" ) or GetGlobalBool( "bool_" .. ele .. "_visible", false) == false then
+						if !string.find(ele, "logo" ) or GetGlobalYRPBool( "bool_" .. ele .. "_visible", false) == false then
 							local bgcolor = Color( 255, 0, 0, a1)
-							if GetGlobalBool( "bool_" .. ele .. "_visible", false) == true then
+							if GetGlobalYRPBool( "bool_" .. ele .. "_visible", false) == true then
 								bgcolor = Color( 0, 255, 0, 1)
 							end
 							draw.RoundedBox(0, 0, 0, pw, ph, bgcolor)
@@ -830,7 +830,7 @@ net.Receive( "Connect_Settings_General", function(len)
 				local X = 0
 				if ele != "background" then
 					e.toggle = createD( "DCheckBox", e, YRP.ctr(50), YRP.ctr(50), 0, 0)
-					e.toggle:SetChecked(GetGlobalBool( "bool_" .. ele .. "_visible", false) )
+					e.toggle:SetChecked(GetGlobalYRPBool( "bool_" .. ele .. "_visible", false) )
 					function e.toggle:OnChange( bVal)
 						net.Start( "update_idcard_" .. "bool_" .. ele .. "_visible" )
 							net.WriteString( "bool_" .. ele .. "_visible" )
@@ -868,7 +868,7 @@ net.Receive( "Connect_Settings_General", function(len)
 					cho[5] = YRP.lang_string( "LID_usergroup" ) .. "-" .. YRP.lang_string( "LID_color" )
 					for id, v in pairs( cho) do
 						local selected = false
-						if id == GetGlobalInt( "int_" .. ele .. "_colortype", 0) then
+						if id == GetGlobalYRPInt( "int_" .. ele .. "_colortype", 0) then
 							selected = true
 						end
 						win.colortype:AddChoice(YRP.lang_string( v), id, selected)
@@ -881,7 +881,7 @@ net.Receive( "Connect_Settings_General", function(len)
 					end
 
 					win.color = createD( "DColorMixer", win:GetContent(), YRP.ctr(400), YRP.ctr(400), 0, YRP.ctr(50) )
-					win.color:SetColor(Color(GetGlobalInt( "int_" .. ele .. "_r", 0), GetGlobalInt( "int_" .. ele .. "_g", 0), GetGlobalInt( "int_" .. ele .. "_b", 0), GetGlobalInt( "int_" .. ele .. "_a", 0) ))
+					win.color:SetColor(Color(GetGlobalYRPInt( "int_" .. ele .. "_r", 0), GetGlobalYRPInt( "int_" .. ele .. "_g", 0), GetGlobalYRPInt( "int_" .. ele .. "_b", 0), GetGlobalYRPInt( "int_" .. ele .. "_a", 0) ))
 					function win.color:ValueChanged( colo)
 						e.col = colo
 					end
@@ -917,7 +917,7 @@ net.Receive( "Connect_Settings_General", function(len)
 					X = X + YRP.ctr(50 + 2)
 
 					e.title = createD( "DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), 0, YRP.ctr(780) )
-					e.title:SetChecked(GetGlobalBool( "bool_" .. ele .. "_title", false) )
+					e.title:SetChecked(GetGlobalYRPBool( "bool_" .. ele .. "_title", false) )
 					function e.title:OnChange( bVal)
 						net.Start( "update_idcard_" .. "bool_" .. ele .. "_title" )
 							net.WriteString( "bool_" .. ele .. "_title" )

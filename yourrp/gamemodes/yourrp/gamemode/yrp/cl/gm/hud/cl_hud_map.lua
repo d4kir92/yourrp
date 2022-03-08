@@ -12,7 +12,7 @@ function getCoords()
 	net.SendToServer()
 end
 
-function toggleMap()
+function YRPToggleMap()
 	if YRPIsNoMenuOpen() and !_map.open then
 		_map.open = true
 		openMenu()
@@ -36,7 +36,7 @@ end
 local CamDataMap = {}
 function openMap()
 	local lply = LocalPlayer()
-	if GetGlobalBool( "bool_map_system", false) then
+	if GetGlobalYRPBool( "bool_map_system", false) then
 		map.open = true
 
 		_map.window = vgui.Create( "DFrame" )

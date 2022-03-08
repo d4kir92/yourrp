@@ -500,6 +500,7 @@ net.Receive( "item_buy", function(len, ply)
 
 			if _item.type == "licenses" then
 				ply:AddLicense(_item.ClassName)
+				ply:SetYRPInt( "licenseIDsVersion", ply:GetYRPInt( "licenseIDsVersion", 0 ) + 1 )
 			elseif _item.type == "roles" then
 				local rid = _item.ClassName
 				YRPRemRolVals(ply)

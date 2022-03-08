@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function YRPGetInterfaceDesign()
-	return GetGlobalString( "string_interface_design", "Material" )
+	return GetGlobalYRPString( "string_interface_design", "Material" )
 end
 
 local tabifcolors = {}
@@ -15,7 +15,7 @@ function YRPInterfaceValue( element, art )
 	elseif table.HasValue(ibools, art) then
 		return false
 	elseif table.HasValue(icolors, art) then
-		local icolor = GetGlobalString( "color_IF_" .. YRPGetInterfaceDesign() .. "_" .. element .. "_" .. art, "0, 0, 0, 100" )
+		local icolor = GetGlobalYRPString( "color_IF_" .. YRPGetInterfaceDesign() .. "_" .. element .. "_" .. art, "0, 0, 0, 100" )
 		if icolor and type( icolor ) == "string" then
 			if tabifcolors[icolor] == nil then
 				tabifcolors[icolor] = StringToColor( icolor )

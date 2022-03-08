@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 203 -- do NOT change this!
+GM.VersionBuild = 206 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -50,7 +50,7 @@ function GetBranch()
 end
 
 function YRPIsDoubleInstalled()
-	return GetGlobalBool( "yrp_double_installed", false )
+	return GetGlobalYRPBool( "yrp_double_installed", false )
 end
 
 if SERVER then
@@ -205,7 +205,7 @@ function YRPMsg( text, color )
 end
 
 concommand.Add( "yrp_version", function(ply, cmd, args)
-	local _text = "Gamemode-Version: " .. YRPGetVersionFull() .. " ( " .. string.upper( GAMEMODE.VersionSort ) .. " ) [" .. GetGlobalString( "YRP_VERSIONART", "X" ) .. "]"
+	local _text = "Gamemode-Version: " .. YRPGetVersionFull() .. " ( " .. string.upper( GAMEMODE.VersionSort ) .. " ) [" .. GetGlobalYRPString( "YRP_VERSIONART", "X" ) .. "]"
 	local _color = Color( 0, 255, 0 )
 	if string.upper( GAMEMODE.VersionSort ) == "OUTDATED" then
 		_color = Color( 255, 0, 0 )
@@ -218,7 +218,7 @@ end)
 
 concommand.Add( "yrp_status", function(ply, cmd, args)
 	YRPHR()
-	YRPMsg( string.format( "%14s %s", "Version:", YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " ) [" .. GetGlobalString( "YRP_VERSIONART", "X" ) .. "]" ) )
+	YRPMsg( string.format( "%14s %s", "Version:", YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " ) [" .. GetGlobalYRPString( "YRP_VERSIONART", "X" ) .. "]" ) )
 	YRPMsg( string.format( "%14s %s", "Servername:", YRPGetHostName() ) )
 	YRPMsg( string.format( "%14s %s", "IP:", game.GetIPAddress() ) )
 	YRPMsg( string.format( "%14s %s", "Map:", GetMapNameDB() ) )
@@ -304,7 +304,7 @@ function PrintHelp()
 	YRP.msg( "note", "Client Commands:" )
 	YRP.msg( "note", "yrp_cl_hud X" )
 	YRP.msg( "note", "	1: Shows hud, 0: Hide hud" )
-	YRP.msg( "note", "yrp_togglesettings" )
+	YRP.msg( "note", "yrp_YRPToggleSettings" )
 	YRP.msg( "note", "	Toggle settings menu" )
 
 	YRP.msg( "note", "Server Commands:" )
@@ -320,7 +320,7 @@ concommand.Add( "yrp__help", function(ply, cmd, args)
 end)
 
 function YRPCollectionID()
-	local collectionid = tonumber(GetGlobalString( "text_server_collectionid", "0" ) )
+	local collectionid = tonumber(GetGlobalYRPString( "text_server_collectionid", "0" ) )
 	if collectionid and collectionid > 100000000 then
 		return collectionid
 	end
@@ -440,7 +440,7 @@ end
 function IsInChannel(ply, cuid, skip)
 	skip = skip or false
 
-	if ply:GetYRPBool( "yrp_togglevoicemenu", true ) == false then
+	if ply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) == false then
 		return false
 	end
 
@@ -463,7 +463,7 @@ end
 function IsActiveInChannel(ply, cuid, skip)
 	skip = skip or false
 
-	if ply:GetYRPBool( "yrp_togglevoicemenu", true ) == false then
+	if ply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) == false then
 		return false
 	end
 
@@ -503,9 +503,9 @@ function YRPGetVoiceRange(ply)
 			[1] = 120,
 			[2] = 250,
 			[3] = 400, 
-			[4] = GetGlobalInt( "int_voice_max_range", 1)
+			[4] = GetGlobalYRPInt( "int_voice_max_range", 1)
 		}
-		return math.Clamp(ranges[ply:GetYRPInt( "voice_range", 2)], 0, GetGlobalInt( "int_voice_max_range", 1) )
+		return math.Clamp(ranges[ply:GetYRPInt( "voice_range", 2)], 0, GetGlobalYRPInt( "int_voice_max_range", 1) )
 	else
 		return 400
 	end
@@ -514,8 +514,8 @@ end
 function YRPIsInMaxVoiceRange(listener, talker)
 	if IsValid(listener) and IsValid(talker) then
 		local dist = listener:GetPos():Distance(talker:GetPos() )
-		if wk( dist) and GetGlobalInt( "int_voice_max_range", 1) then
-			return dist <= tonumber(GetGlobalInt( "int_voice_max_range", 1) )
+		if wk( dist) and GetGlobalYRPInt( "int_voice_max_range", 1) then
+			return dist <= tonumber(GetGlobalYRPInt( "int_voice_max_range", 1) )
 		end
 	end
 	return false
@@ -715,10 +715,10 @@ if system.IsLinux() then
 end
 
 function YRPGetHostName()
-	if !strEmpty(GetGlobalString( "text_server_name" ) ) then
-		return GetGlobalString( "text_server_name" )
+	if !strEmpty(GetGlobalYRPString( "text_server_name" ) ) then
+		return GetGlobalYRPString( "text_server_name" )
 	else
-		return GetGlobalString( "ServerName" )
+		return GetGlobalYRPString( "ServerName" )
 	end
 	return ""
 end
@@ -978,7 +978,7 @@ local function YRPSendError(tab, from)
 	if GAMEMODE and YRPIsVersionSet and YRPIsVersionSet() and IsYRPOutdated != nil then
 		if IsYRPOutdated() then
 			MsgC( Color( 255, 0, 0), "[YRPSendError] >> YourRP Is Outdated" .. "\n" )
-		elseif YRPIsServerDedicated() and !string.StartWith( GetGlobalString( "serverip", "0.0.0.0:27015" ), "0.0.0.0:" ) then
+		elseif YRPIsServerDedicated() and !string.StartWith( GetGlobalYRPString( "serverip", "0.0.0.0:27015" ), "0.0.0.0:" ) then
 			--MsgC( Color( 255, 0, 0), "[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err) .. "\n" )
 			
 			http.Post(posturl, entry,
@@ -1041,7 +1041,7 @@ function YRPAddError(err, trace, realm)
 	newerr.err = err
 	newerr.trace = trace
 	newerr.trace = newerr.trace .. "\n" .. "err: /yrp/ ".. tostring( string.find( err, "/yrp/", 1, true ) ) .. "      trace: /yrp/ " .. tostring( string.find( trace, "/yrp/", 1, true ) ) .. "      trace: [YourRP] " .. tostring( string.find( trace, "[YourRP]", 1, true ) )
-	newerr.trace = newerr.trace .. "\n" .. "IP: " .. GetGlobalString( "serverip", "0.0.0.0:27015" ) .. "      collectionid: " .. YRPCollectionID()
+	newerr.trace = newerr.trace .. "\n" .. "IP: " .. GetGlobalYRPString( "serverip", "0.0.0.0:27015" ) .. "      collectionid: " .. YRPCollectionID()
 	newerr.ts = os.time()
 	newerr.realm = realm
 	newerr.sended = false
@@ -1053,30 +1053,38 @@ function YRPAddError(err, trace, realm)
 	YRPSaveErrors()
 end
 
-hook.Add( "OnLuaError", "yrp_OnLuaError", function(...)
-	local tab = ...
-	local err = tab.path
-	local trace = tab.trace
-	local realm = tab.realm
 
-	local tabtrace = string.Explode( "\n", trace )
-	local newtrace = {}
-	for i, v in pairs( tabtrace ) do
-		if string.find( v, "stack traceback:", 1, true ) or string.find( v, "lua/autorun/sh_d4_senderrors.lua", 1, true ) then
-			
-		else
-			table.insert( newtrace, v )
+
+function YRPAddLuaErrorHook()
+	hook.Remove( "OnLuaError", "yrp_OnLuaError" )
+
+	hook.Add( "OnLuaError", "yrp_OnLuaError", function(...)
+		local tab = ...
+		local err = tab.path
+		local trace = tab.trace
+		local realm = tab.realm
+
+		local tabtrace = string.Explode( "\n", trace )
+		local newtrace = {}
+		for i, v in pairs( tabtrace ) do
+			if string.find( v, "stack traceback:", 1, true ) or string.find( v, "lua/autorun/sh_d4_senderrors.lua", 1, true ) then
+				
+			else
+				table.insert( newtrace, v )
+			end
 		end
-	end
-	trace = table.concat( newtrace, "\n" )
-	trace = string.Replace( trace, "\t", "" )
+		trace = table.concat( newtrace, "\n" )
+		trace = string.Replace( trace, "\t", "" )
 
-	--if err and trace and realm and ( string.find(err, "/yrp/" ) or string.find(trace, "/yrp/" ) ) and YRPNewError(err) then
-	if err and trace and realm and ( string.find( err, "/yrp/", 1, true ) or string.find( trace, "/yrp/", 1, true ) or string.find( trace, "[YourRP]", 1, true ) ) and YRPNewError(err) then
-		MsgC( Color( 255, 0, 0), "[YRPAddError] >> Found a new ERROR" .. "\n" )
-		YRPAddError(err, trace, realm)
-	end
-end)
+		--if err and trace and realm and ( string.find(err, "/yrp/" ) or string.find(trace, "/yrp/" ) ) and YRPNewError(err) then
+		if err and trace and realm and ( string.find( err, "/yrp/", 1, true ) or string.find( trace, "/yrp/", 1, true ) or string.find( trace, "[YourRP]", 1, true ) ) and YRPNewError(err) then
+			MsgC( Color( 255, 0, 0), "[YRPAddError] >> Found a new ERROR" .. "\n" )
+			YRPAddError(err, trace, realm)
+		end
+	end)
+end
+YRPAddLuaErrorHook()
+timer.Simple( 10, YRPAddLuaErrorHook )
 
 
 
@@ -1101,13 +1109,13 @@ end
 if CLIENT then
 	timer.Simple(1, function()
 		YRPHR( Color( 255, 255, 0 ) )
-		MsgC( Color( 255, 255, 0 ), "[GAME VERSION] Server: " .. GetGlobalString( "serverversion", VERSION ) .. "\n" )
+		MsgC( Color( 255, 255, 0 ), "[GAME VERSION] Server: " .. GetGlobalYRPString( "serverversion", VERSION ) .. "\n" )
 		MsgC( Color( 255, 255, 0 ), "[GAME VERSION] Client: " .. VERSION .. "\n" )
 		YRPHR( Color( 255, 255, 0 ) )
 
-		if GetGlobalString( "serverversion", VERSION ) > VERSION then
+		if GetGlobalYRPString( "serverversion", VERSION ) > VERSION then
 			MsgC( Color( 255, 0, 0 ), "YOUR GAME IS OUTDATED!" .. "\n" )
-		elseif GetGlobalString( "serverversion", VERSION ) < VERSION and BRANCH == "unknown" then
+		elseif GetGlobalYRPString( "serverversion", VERSION ) < VERSION and BRANCH == "unknown" then
 			MsgC( Color( 255, 0, 0 ), "SERVER IS OUTDATED!" .. "\n" )
 		else
 			MsgC( Color( 0, 255, 0 ), "YOUR GAME IS UP-To-Date!" .. "\n" )

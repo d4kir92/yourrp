@@ -20,8 +20,8 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-	if string.lower(GetGlobalString( "text_weapon_system_model", "models/items/ammocrate_smg1.mdl" ) ) != self:GetModel() then
-		self:SetModel(string.lower(GetGlobalString( "text_weapon_system_model", "models/items/ammocrate_smg1.mdl" ) ))
+	if string.lower(GetGlobalYRPString( "text_weapon_system_model", "models/items/ammocrate_smg1.mdl" ) ) != self:GetModel() then
+		self:SetModel(string.lower(GetGlobalYRPString( "text_weapon_system_model", "models/items/ammocrate_smg1.mdl" ) ))
 	end
 end
 

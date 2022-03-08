@@ -38,7 +38,7 @@ if SERVER then
 				end
 
 				-- Gamemodename
-				entry["entry.893976623"] = "GN:" .. GetGlobalString( "text_gamemode_name", "lol" )
+				entry["entry.893976623"] = "GN:" .. GetGlobalYRPString( "text_gamemode_name", "lol" )
 
 				-- MaxPlayers
 				entry["entry.1756035654"] = tostring(game.MaxPlayers() )
@@ -50,7 +50,7 @@ if SERVER then
 				entry["entry.422385934"] = tostring(GAMEMODE.VersionBuild)
 
 				-- ART (GITHUB, WORKSHOP)
-				entry["entry.646409012"] = "VA:" .. GetGlobalString( "YRP_VERSIONART", "X" )
+				entry["entry.646409012"] = "VA:" .. GetGlobalYRPString( "YRP_VERSIONART", "X" )
 
 				-- CollectionID
 				entry["entry.976366368"] = tostring(YRPCollectionID() )

@@ -739,3 +739,133 @@ net.Receive( "rem_group_swep", function(len, ply)
 
 	RemSwepFromGroup(guid, swepcn)
 end)
+
+
+
+function YRPSendGroupMembers( ply )
+	local members = YRP_SQL_SELECT( "yrp_characters", "uniqueID, rpname, groupID", "groupID = '" .. ply:GetGroupUID() .. "'" )
+	if members then
+		net.Start( "yrp_group_getmembers" )
+			net.WriteTable( members )
+		net.Send( ply )
+	end
+end
+
+function YRPUpdateGroupMemberLists()
+	for i, v in pairs( player.GetAll() ) do
+		YRPSendGroupMembers( v )
+	end
+end
+
+util.AddNetworkString( "yrp_group_getmembers" )
+net.Receive( "yrp_group_getmembers", function( len, ply )
+	YRPSendGroupMembers( ply )
+end )
+
+function YRPGetRoleNameByID( id )
+	if id == nil then
+		return "NO ID"
+	end
+	local role = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name", "uniqueID = '" .. id .. "'" )
+	if role and role[1] then
+		role = role[1]
+		return role.string_name
+	end
+	return "NOT FOUND"
+end
+
+function YRPGetGroupNameByID( id )
+	if id == nil then
+		return "NO ID"
+	end
+	local group = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", "uniqueID = '" .. id .. "'" )
+	if group and group[1] then
+		group = group[1]
+		return group.string_name
+	end
+	return "NOT FOUND"
+end
+
+function YRPGetNextRankByID( id )
+	local role = YRP_SQL_SELECT( "yrp_ply_roles", "*", "int_prerole = '" .. id .. "'"  )
+	if role and role[1] then
+		return role[1]
+	end
+	return nil
+end
+
+function YRPGetPrevRankByID( id )
+	local trole = YRP_SQL_SELECT( "yrp_ply_roles", "int_prerole", "uniqueID = '" .. id .. "'"  )
+	if trole and trole[1] then
+		trole = trole[1]
+
+		local role = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. trole.int_prerole .. "'"  )
+		if role and role[1] then
+			return role[1]
+		end
+	end
+	return nil
+end
+
+function YRPSendGroupMember( ply, uid )
+	local char = YRP_SQL_SELECT( "yrp_characters", "uniqueID, rpname, roleID, groupID", "uniqueID = '" .. uid .. "'" )
+	if char then
+		char = char[1]
+
+		char.uniqueID = tonumber( char.uniqueID )
+		char.roleID = tonumber( char.roleID )
+		char.groupID = tonumber( char.groupID )
+
+		local nextrank = YRPGetNextRankByID( char.roleID )
+		local prevrank = YRPGetPrevRankByID( char.roleID )
+
+		local canpromote = false
+		if nextrank then
+			nextrank.uniqueID = tonumber( nextrank.uniqueID )
+			canpromote = nextrank.uniqueID != ply:GetRoleUID()
+		end
+
+		local candemote = false
+		if prevrank then
+			candemote = true
+		end
+
+		local isinstructor = tobool( ply:YRPGetRoleTable().bool_instructor )
+
+		local nettab = {}
+		nettab.uniqueID = char.uniqueID
+		nettab.name = char.rpname
+		nettab.roleID = char.roleID
+		nettab.roleName = YRPGetRoleNameByID( char.roleID )
+		nettab.groupID = char.groupID
+		nettab.groupName = YRPGetGroupNameByID( char.groupID )
+		nettab.canpromote = isinstructor and canpromote
+		nettab.candemote = isinstructor and candemote
+		nettab.canspecs = isinstructor
+
+		net.Start( "yrp_group_getmember" )
+			net.WriteTable( nettab )
+		net.Send( ply )
+	end
+end
+
+util.AddNetworkString( "yrp_group_getmember" )
+net.Receive( "yrp_group_getmember", function( len, ply )
+	local uid = net.ReadUInt( 24 )
+	YRPSendGroupMember( ply, uid )
+end )
+
+util.AddNetworkString( "yrp_group_delmember" )
+net.Receive( "yrp_group_delmember", function( len, ply )
+	local uid = net.ReadUInt( 24 )
+	YRP_SQL_UPDATE( "yrp_characters", {
+		["roleID"] = 1,
+		["groupID"] = 1
+	}, "uniqueID = '" .. uid .. "'" )
+	local target = YRPGetPlayerByCharID( uid )
+	if IsValid( target ) then
+		SetRole( target, 1, force )
+	end
+	YRPSendGroupMember( ply, uid )
+	YRPSendGroupMembers( ply )
+end )

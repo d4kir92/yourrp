@@ -75,7 +75,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 140), "printer", "upgradePrinter",YRP.lang_string( "LID_printer" ),YRP.lang_string( "LID_upgrade" ),YRP.lang_string( "LID_max" ) )
 
 		--Printer
-		if !GetGlobalBool( "bool_money_printer_spawn_money", false) then
+		if !GetGlobalYRPBool( "bool_money_printer_spawn_money", false) then
 			moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 220), "storage", "upgradeStorage",YRP.lang_string( "LID_storage" ),YRP.lang_string( "LID_upgrade" ),YRP.lang_string( "LID_max" ) )
 		end
 
@@ -91,7 +91,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 		--gather
 		local moneyInfo = createD( "DPanel", upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 690) )
 		function moneyInfo:Paint(pw, ph)
-			if !GetGlobalBool( "bool_money_printer_spawn_money", false) then
+			if !GetGlobalYRPBool( "bool_money_printer_spawn_money", false) then
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 0, 0, 0, 200) )
 
 				draw.RoundedBox(0, 0, 0, (mp:GetYRPInt( "money", -1) / mp:GetYRPInt( "moneyMax", -1) ) * YRP.ctr(360) , ph, Color( 0, 0, 255, 200) )
@@ -103,7 +103,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 		local gatherMoney = createD( "DButton", moneyInfo, YRP.ctr(220), YRP.ctr(60), YRP.ctr(540), YRP.ctr(0) )
 		gatherMoney:SetText( "" )
 		function gatherMoney:Paint(pw, ph)
-			if !GetGlobalBool( "bool_money_printer_spawn_money", false) then
+			if !GetGlobalYRPBool( "bool_money_printer_spawn_money", false) then
 				if self:IsHovered() then
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 255, 255, 0, 200) )
 					draw.SimpleTextOutlined(YRP.lang_string( "LID_gather" ), "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
@@ -114,7 +114,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 			end
 		end
 		function gatherMoney:DoClick()
-			if !GetGlobalBool( "bool_money_printer_spawn_money", false) then
+			if !GetGlobalYRPBool( "bool_money_printer_spawn_money", false) then
 				net.Start( "withdrawMoney" )
 					net.WriteEntity(mp)
 				net.SendToServer()

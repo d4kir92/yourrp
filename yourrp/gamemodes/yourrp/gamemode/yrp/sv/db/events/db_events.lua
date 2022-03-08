@@ -161,7 +161,7 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 	ply:SetYRPBool( "yrp_chararchived", false )
 
 	if cuid != ply:CharID() then
-		if GetGlobalBool( "bool_removebuildingownercharswitch", false) then
+		if GetGlobalYRPBool( "bool_removebuildingownercharswitch", false) then
 			BuildingRemoveOwner(ply:YRPSteamID() )
 		end
 		hook.Run( "yrp_switched_character", ply, ply:CharID(), cuid)

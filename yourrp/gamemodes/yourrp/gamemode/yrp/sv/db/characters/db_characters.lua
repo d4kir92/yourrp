@@ -76,7 +76,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_specializations", "TEXT DEFAULT ''" )
 function YRPUpdateCharSlot(ply, art, pri)
 	local tab = {}
 	for i, v in pairs(pri) do
-		if !strEmpty( v) and !table.HasValue(tab, v) and #tab < GetGlobalInt( "yrp_max_slots_" .. art, 0) then
+		if !strEmpty( v) and !table.HasValue(tab, v) and #tab < GetGlobalYRPInt( "yrp_max_slots_" .. art, 0) then
 			table.insert(tab, v)
 		end
 	end
@@ -206,31 +206,40 @@ function YRPSendCharCount( ply )
 end
 
 local Player = FindMetaTable( "Player" )
+function Player:YRPUpdateAppearance()
+	local chatab = self:YRPGetCharacterTable()
+
+	if wk( chatab) then
+		self:SetYRPInt( "pmid", tonumber( chatab.playermodelID ) )
+		self:SetYRPInt( "skin", tonumber( chatab.skin ) )
+
+		for i = 0, 19 do
+			self:SetYRPInt( "bg" .. i, chatab["bg" .. i])
+		end
+	end
+end
+
 function Player:YRPCharacterLoadout()
 	YRP.msg( "debug", "[CharacterLoadout] " .. self:YRPName() )
 	local chatab = self:YRPGetCharacterTable()
 	local plytab = self:GetPlyTab()
 
+	self:YRPUpdateAppearance()
+
 	if wk( chatab) then
 		self:SetYRPInt( "int_xp", chatab.int_xp)
 		self:SetYRPString( "int_level", chatab.int_level)
-
-		self:SetYRPInt( "pmid", tonumber( chatab.playermodelID) )
 
 		self:SetYRPInt( "int_warnings", chatab.int_warnings)
 		self:SetYRPInt( "int_violations", chatab.int_violations)
 		self:SetYRPInt( "int_arrests", chatab.int_arrests)
 
 		self:SetYRPString( "string_birthday", chatab.string_birthday)
-		if GetGlobalBool( "bool_characters_bodyheight", false) then
+		if GetGlobalYRPBool( "bool_characters_bodyheight", false) then
 			self:SetYRPInt( "int_bodyheight", chatab.int_bodyheight)
 		end
-		if GetGlobalBool( "bool_characters_weight", false) then
+		if GetGlobalYRPBool( "bool_characters_weight", false) then
 			self:SetYRPInt( "int_weight", chatab.int_weight)
-		end
-
-		for i = 0, 19 do
-			self:SetYRPString( "bg" .. i, chatab["bg" .. i])
 		end
 
 		local levelsystem = YRP_SQL_SELECT( "yrp_levelsystem", "*", nil)
@@ -702,7 +711,7 @@ function YRPCreateCharacter( ply, tab )
 			vals = vals .. tonumber(role[1].uniqueID) .. ", "
 			vals = vals .. tonumber(role[1].int_groupID) .. ", "
 			vals = vals .. tonumber(tab.playermodelID) .. ", "
-			vals = vals .. GetGlobalString( "text_characters_money_start", 0) .. ", "
+			vals = vals .. GetGlobalYRPString( "text_characters_money_start", 0) .. ", "
 			vals = vals .. 0 .. ", "
 			vals = vals .. "'" .. GetMapNameDB() .. "', "
 			vals = vals .. tonumber(tab.skin) .. ", "
@@ -784,6 +793,8 @@ end)
 
 util.AddNetworkString( "YRP_LogOut" )
 net.Receive( "YRP_LogOut", function(len, ply)
+	ply:SetYRPBool( "yrp_reset_charloadout", true )
+
 	ply:OldKillSilent()
 	if ply:Alive() then
 		ply:Kill()
@@ -796,6 +807,11 @@ net.Receive( "YRP_LogOut", function(len, ply)
 		end
 	end )
 end)
+
+util.AddNetworkString( "YRPResetCharLoadout" )
+net.Receive( "YRPResetCharLoadout", function(len, ply)
+	ply:SetYRPBool( "yrp_reset_charloadout", true )
+end )
 
 util.AddNetworkString( "YRP_EnterWorld" )
 net.Receive( "YRP_EnterWorld", function(len, ply)
@@ -812,6 +828,7 @@ function SendBodyGroups(ply)
 	local charid = ply:CharID()
 	if wk( charid) then
 		local _result = YRP_SQL_SELECT( "yrp_characters", "bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, skin, playermodelID", "uniqueID = " .. tonumber( charid) )
+
 		if wk(_result) then
 			_result = _result[1]
 			local _role = ply:YRPGetRoleTable()
@@ -845,6 +862,7 @@ util.AddNetworkString( "inv_bg_up" )
 net.Receive( "inv_bg_up", function(len, ply)
 	local _cur = net.ReadInt(16)
 	local _id = net.ReadInt(16)
+
 	ply:SetBodygroup(_id, _cur)
 	local _charid = ply:CharID()
 	YRP_SQL_UPDATE( "yrp_characters", {["bg" .. tonumber(_id)] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
@@ -855,6 +873,7 @@ util.AddNetworkString( "inv_bg_do" )
 net.Receive( "inv_bg_do", function(len, ply)
 	local _cur = net.ReadInt(16)
 	local _id = net.ReadInt(16)
+
 	ply:SetBodygroup(_id, _cur)
 	local _charid = ply:CharID()
 	YRP_SQL_UPDATE( "yrp_characters", {["bg" .. tonumber(_id)] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
@@ -1051,7 +1070,7 @@ net.Receive( "removelicense", function(len, ply)
 end)
 
 function YRPSetAllCharsToDefaultRole(ply)
-	if IsValid(ply) and GetGlobalBool( "bool_players_start_with_default_role", false) then
+	if IsValid(ply) and GetGlobalYRPBool( "bool_players_start_with_default_role", false) then
 		YRP_SQL_UPDATE(DATABASE_NAME, {["roleID"] = 1}, "SteamID = '" .. ply:YRPSteamID() .. "'" )
 
 		YRP.msg( "note", "SET PLAYER TO DEFAULT ROLE -> players_start_with_default_role: enabled" )
@@ -1138,6 +1157,8 @@ net.Receive( "char_add_spec", function(len, ply)
 	local specid = net.ReadString()
 	local ruid = net.ReadString()
 
+	charid = tonumber(charid)
+
 	local newspecs = {}
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'" )
@@ -1157,12 +1178,19 @@ net.Receive( "char_add_spec", function(len, ply)
 
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newspecs}, "uniqueID = '" .. charid .. "'" )
 
-	YRPGiveSpecs(ply)
+	local target = YRPGetPlayerByCharID( charid )
+	if IsValid( target ) then
+		YRPGiveSpecs( target )
+	end
 
-	net.Start( "yrp_reopen_givespec" )
-		net.WriteString( charid)
-		net.WriteString(ruid)
-	net.Send(ply)
+	timer.Simple( 0.1, function()
+		if ply and charid then
+			net.Start( "yrp_reopen_givespec" )
+				net.WriteString( charid)
+				net.WriteString(ruid)
+			net.Send(ply)
+		end
+	end )
 end)
 
 util.AddNetworkString( "char_rem_spec" )
@@ -1170,6 +1198,8 @@ net.Receive( "char_rem_spec", function(len, ply)
 	local charid = net.ReadString()
 	local specid = net.ReadString()
 	local ruid = net.ReadString()
+
+	charid = tonumber(charid)
 
 	local newspecs = {}
 
@@ -1189,11 +1219,18 @@ net.Receive( "char_rem_spec", function(len, ply)
 	newspecs = table.concat( newspecs, "," )
 
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_specializations"] = newspecs}, "uniqueID = '" .. charid .. "'" )
+	
+	local target = YRPGetPlayerByCharID( charid )
+	if IsValid( target ) then
+		YRPGiveSpecs(target)
+	end
 
-	YRPGiveSpecs(ply)
-
-	net.Start( "yrp_reopen_givespec" )
-		net.WriteString( charid)
-		net.WriteString(ruid)
-	net.Send(ply)
+	timer.Simple( 0.1, function()
+		if ply and charid then
+			net.Start( "yrp_reopen_givespec" )
+				net.WriteString( charid)
+				net.WriteString(ruid)
+			net.Send(ply)
+		end
+	end )
 end)

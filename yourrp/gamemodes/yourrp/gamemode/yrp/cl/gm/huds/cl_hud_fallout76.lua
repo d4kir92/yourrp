@@ -433,7 +433,7 @@ function HUD_FO76()
 	local lply = LocalPlayer()
 
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
-		if GetGlobalBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Fallout 76" then
+		if GetGlobalYRPBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Fallout 76" then
 			local HP = {}
 			HP.element = "HP"
 			HP.text = YRP.lang_string( "LID_hp" )

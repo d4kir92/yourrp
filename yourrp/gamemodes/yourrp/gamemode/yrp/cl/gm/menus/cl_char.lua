@@ -3,7 +3,7 @@
 CHAR = CHAR or {}
 CHAR.open = false
 
-function toggleCharMenu()
+function YRPToggleCharMenu()
 	if !CHAR.open and YRPIsNoMenuOpen() then
 		openCharMenu()
 	end
@@ -50,7 +50,7 @@ function CreateCharContent(parent)
 
 	local Y = 20
 	local cl_rpName = nil
-	if GetGlobalBool( "bool_characters_changeable_name", false) then
+	if GetGlobalYRPBool( "bool_characters_changeable_name", false) then
 		local cl_rpNamelabel = createD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 		cl_rpNamelabel:SetText( "" )
 		function cl_rpNamelabel:Paint(pw, ph)
@@ -86,7 +86,7 @@ function CreateCharContent(parent)
 
 
 	local cl_birthday = nil
-	if GetGlobalBool( "bool_characters_birthday", false) then
+	if GetGlobalYRPBool( "bool_characters_birthday", false) then
 		local cl_birthdayheader = createD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 		cl_birthdayheader:SetText( "" )
 		function cl_birthdayheader:Paint(pw, ph)
@@ -104,7 +104,7 @@ function CreateCharContent(parent)
 
 
 	local cl_bodyheight = nil
-	if GetGlobalBool( "bool_characters_bodyheight", false) then
+	if GetGlobalYRPBool( "bool_characters_bodyheight", false) then
 		local cl_bodyheightheader = createD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 		cl_bodyheightheader:SetText( "" )
 		function cl_bodyheightheader:Paint(pw, ph)
@@ -122,7 +122,7 @@ function CreateCharContent(parent)
 
 
 	local cl_weight = nil
-	if GetGlobalBool( "bool_characters_weight", false) then
+	if GetGlobalYRPBool( "bool_characters_weight", false) then
 		local cl_weightheader = createD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 		cl_weightheader:SetText( "" )
 		function cl_weightheader:Paint(pw, ph)
@@ -175,7 +175,7 @@ function CreateCharContent(parent)
 	function cl_save:DoClick()
 		if CurTime() > save_delay then
 			save_delay = CurTime() + 4
-			if GetGlobalBool( "bool_characters_changeable_name", false) then
+			if GetGlobalYRPBool( "bool_characters_changeable_name", false) then
 				net.Start( "change_rpname" )
 					net.WriteString( cl_rpName:GetText() )
 				net.SendToServer()
@@ -185,17 +185,17 @@ function CreateCharContent(parent)
 				net.WriteString( cl_rpDescription:GetText() )
 			net.SendToServer()
 
-			if GetGlobalBool( "bool_characters_birthday", false) then
+			if GetGlobalYRPBool( "bool_characters_birthday", false) then
 				net.Start( "change_birthday" )
 					net.WriteString( cl_birthday:GetText() )
 				net.SendToServer()
 			end
-			if GetGlobalBool( "bool_characters_bodyheight", false) then
+			if GetGlobalYRPBool( "bool_characters_bodyheight", false) then
 				net.Start( "change_bodyheight" )
 					net.WriteString( cl_bodyheight:GetText() )
 				net.SendToServer()
 			end
-			if GetGlobalBool( "bool_characters_weight", false) then
+			if GetGlobalYRPBool( "bool_characters_weight", false) then
 				net.Start( "change_weight" )
 					net.WriteString( cl_weight:GetText() )
 				net.SendToServer()

@@ -62,7 +62,7 @@ function PANEL:Setup( ply )
 	yrp_VoicePanelList:SetPos( px, py )
 	yrp_VoicePanelList:SetSize( sw, ScrH() - 5 * sh )
 
-	if GetGlobalBool( "bool_voice_module" ) then
+	if GetGlobalYRPBool( "bool_voice_module" ) then
 		self.ply = ply
 
 		self.PlayerName:SetText( ply:IDCardID() .. " " .. ply:RPName() )
@@ -77,7 +77,7 @@ function PANEL:Setup( ply )
 		if table.Count( channels) > 0 then
 			text = table.concat( channels, ", " )
 		else
-			if GetGlobalBool( "bool_voice_module_locally" ) then
+			if GetGlobalYRPBool( "bool_voice_module_locally" ) then
 				text = YRP.lang_string( "LID_environment" )
 			else
 				self:Remove()
@@ -161,7 +161,7 @@ derma.DefineControl( "VoiceNotifyYRP", "", PANEL, "DPanel" )
 
 hook.Add( "PlayerStartVoice", "YRP_VOICE_MODULE_PlayerStartVoice", function(ply)
 
-	if !GetGlobalBool( "bool_voice_module" ) then return end
+	if !GetGlobalYRPBool( "bool_voice_module" ) then return end
 
 	if ( !IsValid( yrp_VoicePanelList ) ) then return end
 	
@@ -206,7 +206,7 @@ timer.Create( "VoiceClean", 10, 0, VoiceClean )
 
 hook.Add( "PlayerEndVoice", "YRP_VOICE_MODULE_PlayerEndVoice", function(ply)
 
-	if !GetGlobalBool( "bool_voice_module" ) then return end
+	if !GetGlobalYRPBool( "bool_voice_module" ) then return end
 
 	if ( IsValid( PlayerVoicePanels[ ply ] ) ) then
 

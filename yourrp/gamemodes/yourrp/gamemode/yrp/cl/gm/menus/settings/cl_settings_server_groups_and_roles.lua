@@ -583,463 +583,465 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local groups = net.ReadTable()
 			local db_ugs = net.ReadTable()
 
-			if group.uniqueID != nil then
-				net.Start( "settings_subscribe_rolelist" )
-					net.WriteString(group.uniqueID)
-					net.WriteString( "0" )
-				net.SendToServer()
-			end
-
-			group.uniqueID = tonumber(group.uniqueID)
-			if group.uniqueID and group.uniqueID > 0 then
-				cur_group.edi = group.uniqueID
-
-				ea.typ = "group"
-				ea.tab = group
-
-				ea[group.uniqueID] = ea[group.uniqueID] or {}
-
-				ea.background:Clear()
-
-				local col1 = createD( "DPanelList", ea.background, YRP.ctr(1000), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
-				col1:SetSpacing(YRP.ctr(20) )
-
-				local info = createD( "YGroupBox", col1, YRP.ctr(1000), YRP.ctr(920), YRP.ctr(0), YRP.ctr(0) )
-				info:SetText( "LID_general" )
-				function info:Paint(pw, ph)
-					hook.Run( "YGroupBoxPaint", self, pw, ph)
-				end
-				col1:AddItem(info)
-
-				ea[group.uniqueID].info = info
-				ea.info = ea[group.uniqueID].info
-				function ea.info:OnRemove()
-					if cur_group.edi != group.uniqueID then
-						net.Start( "settings_unsubscribe_group" )
-							net.WriteString(group.uniqueID)
-						net.SendToServer()
-					end
-				end
-
-				local name = {}
-				name.parent = ea.info:GetContent()
-				name.uniqueID = group.uniqueID
-				name.header = "LID_name"
-				name.netstr = "update_group_string_name"
-				name.value = group.string_name
-				name.uniqueID = group.uniqueID
-				name.lforce = false
-				ea[group.uniqueID].name = DTextBox(name)
-
-				local hr = {}
-				hr.h = YRP.ctr(16)
-				hr.parent = ea.info:GetContent()
-				DHr(hr)
-
-				local color = {}
-				color.parent = ea.info:GetContent()
-				color.uniqueID = group.uniqueID
-				color.header = "LID_color"
-				color.netstr = "update_group_string_color"
-				color.value = group.string_color
-				color.uniqueID = group.uniqueID
-				color.lforce = false
-				ea[group.uniqueID].color = DColor( color)
-
-				DHr(hr)
-
-				local icon = {}
-				icon.parent = ea.info:GetContent()
-				icon.uniqueID = group.uniqueID
-				icon.header = "LID_icon"
-				icon.netstr = "update_group_string_icon"
-				icon.value = group.string_icon
-				icon.uniqueID = group.uniqueID
-				icon.lforce = false
-				ea[group.uniqueID].icon = DTextBox(icon)
-
-				DHr(hr)
-
-				local desc = {}
-				desc.parent = ea.info:GetContent()
-				desc.uniqueID = group.uniqueID
-				desc.header = "LID_description"
-				desc.netstr = "update_group_string_description"
-				desc.value = group.string_description
-				desc.uniqueID = group.uniqueID
-				desc.lforce = false
-				desc.multiline = true
-				desc.h = 140
-				ea[group.uniqueID].desc = DTextBox( desc)
-
-				DHr(hr)
-
-				local othergroups = {}
-				othergroups[0] = YRP.lang_string( "LID_factions" )
-				for i, tab in pairs(groups) do
-					tab.uniqueID = tonumber(tab.uniqueID)
-					group.uniqueID = tonumber(group.uniqueID)
-					if tab.uniqueID > 0 and tab.uniqueID != group.uniqueID then
-						othergroups[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
-					end
-				end
-
-				if group.uniqueID > 1 then
-					local parentgroup = {}
-					parentgroup.parent = ea.info:GetContent()
-					parentgroup.uniqueID = group.uniqueID
-					parentgroup.header = "LID_parentgroup"
-					parentgroup.netstr = "update_group_int_parentgroup"
-					parentgroup.value = tonumber(group.int_parentgroup)
-					parentgroup.uniqueID = group.uniqueID
-					parentgroup.lforce = false
-					parentgroup.choices = othergroups
-					ea[group.uniqueID].parentgroup = YRPDComboBox(parentgroup)
-				end
-
-				DHr(hr)
-
-				local iscp = {}
-				iscp.parent = ea.info:GetContent()
-				iscp.uniqueID = group.uniqueID
-				iscp.header = "LID_iscp"
-				iscp.netstr = "update_group_bool_iscp"
-				iscp.value = group.bool_iscp
-				iscp.uniqueID = group.uniqueID
-				ea[group.uniqueID].iscp = YRPDCheckBox(iscp)
-
-
-
-				local restriction = createD( "YGroupBox", col1, YRP.ctr(1000), YRP.ctr(570), YRP.ctr(0), YRP.ctr(0) )
-				restriction:SetText( "LID_restriction" )
-				function restriction:Paint(pw, ph)
-					hook.Run( "YGroupBoxPaint", self, pw, ph)
-				end
-				col1:AddItem(restriction)
-
-				ea.background:AddPanel( col1)
-
-				ea[group.uniqueID].restriction = restriction
-				ea.restriction = ea[group.uniqueID].restriction
-
-				hr.parent = ea.restriction:GetContent()
-
-				if group.uniqueID > 1 then
-					local gugs = string.Explode( ",", group.string_usergroups)
-
-					local ugs = {}
-					ugs["ALL"] = {}
-					ugs["ALL"].checked = table.HasValue(gugs, "ALL" )
-					ugs["ALL"]["choices"] = {}
-					for i, pl in pairs(player.GetAll() ) do
-						ugs["ALL"]["choices"][string.upper(pl:GetUserGroup() )] = ugs["ALL"]["choices"][string.upper(pl:GetUserGroup() )] or {}
-						ugs["ALL"]["choices"][string.upper(pl:GetUserGroup() )].checked = table.HasValue(gugs, string.upper(pl:GetUserGroup() ))
-					end
-
-					for i, ug in pairs( db_ugs) do
-						if ug.string_name != nil then
-							ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
-							ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name) )
-						else
-							YRP.msg( "note", "WHATS THAT? #1" )
-							pFTab(ug)
-						end
-					end
-
-					local usergroups = {}
-					usergroups.parent = ea.restriction:GetContent()
-					usergroups.uniqueID = group.uniqueID
-					usergroups.header = "LID_usergroups"
-					usergroups.netstr = "update_group_string_usergroups"
-					usergroups.value = group.string_usergroups
-					usergroups.uniqueID = group.uniqueID
-					usergroups.lforce = false
-					usergroups.choices = ugs
-					ea[group.uniqueID].usergroups = YRPDCheckBoxes(usergroups)
-
-					DHr(hr)
-				end
-
-				if group.uniqueID > 1 then
-					local requireslevel = {}
-					requireslevel.parent = ea.restriction:GetContent()
-					requireslevel.header = "LID_requireslevel"
-					requireslevel.netstr = "update_group_int_requireslevel"
-					requireslevel.value = group.int_requireslevel
-					requireslevel.uniqueID = group.uniqueID
-					requireslevel.lforce = false
-					requireslevel.min = 1
-					requireslevel.max = 100
-					ea[group.uniqueID].requireslevel = DIntBox(requireslevel)
-
-					DHr(hr)
-				end
-
-				if group.uniqueID > 1 then
-					local whitelist = {}
-					whitelist.parent = ea.restriction:GetContent()
-					whitelist.uniqueID = group.uniqueID
-					whitelist.header = "LID_useswhitelist"
-					whitelist.netstr = "update_group_bool_whitelist"
-					whitelist.value = group.bool_whitelist
-					whitelist.uniqueID = group.uniqueID
-					whitelist.lforce = false
-					ea[group.uniqueID].whitelist = YRPDCheckBox(whitelist)
-
-					DHr(hr)
-				end
-
-				if group.uniqueID != 1 then
-					local locked = {}
-					locked.parent = ea.restriction:GetContent()
-					locked.uniqueID = group.uniqueID
-					locked.header = "LID_locked"
-					locked.netstr = "update_group_bool_locked"
-					locked.value = group.bool_locked
-					locked.uniqueID = group.uniqueID
-					locked.lforce = false
-					ea[group.uniqueID].locked = YRPDCheckBox(locked)
-
-					DHr(hr)
-				end
-				
-				local visible = {}
-				visible.parent = ea.restriction:GetContent()
-				visible.uniqueID = group.uniqueID
-				visible.header = YRP.lang_string( "LID_visible" ) .. " ( " .. YRP.lang_string( "LID_charactercreation" ) .. " )"
-				visible.netstr = "update_group_bool_visible_cc"
-				visible.value = group.bool_visible_cc
-				visible.uniqueID = group.uniqueID
-				visible.lforce = false
-				ea[group.uniqueID].visible = YRPDCheckBox( visible)
-
-				DHr(hr)
-
-				local visible2 = {}
-				visible2.parent = ea.restriction:GetContent()
-				visible2.uniqueID = group.uniqueID
-				visible2.header = YRP.lang_string( "LID_visible" ) .. " ( " .. YRP.lang_string( "LID_rolemenu" ) .. " )"
-				visible2.netstr = "update_group_bool_visible_rm"
-				visible2.value = group.bool_visible_rm
-				visible2.uniqueID = group.uniqueID
-				visible2.lforce = false
-				ea[group.uniqueID].visible2 = YRPDCheckBox( visible2)
-
-
-
-				local col2 = createD( "DPanelList", ea.background, YRP.ctr(800+24), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
-				col2:EnableVerticalScrollbar(true)
-				col2:SetSpacing(YRP.ctr(20) )
-				local sbar = col2.VBar
-				function sbar:Paint(w, h)
-					draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
-				end
-				function sbar.btnUp:Paint(w, h)
-					draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
-				end
-				function sbar.btnDown:Paint(w, h)
-					draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
-				end
-				function sbar.btnGrip:Paint(w, h)
-					draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
-				end
-
-				local equipment = createD( "YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1250), 0, 0)
-				equipment:SetText( "LID_equipment" )
-				function equipment:Paint(pw, ph)
-					hook.Run( "YGroupBoxPaint", self, pw, ph)
-				end
-				col2:AddItem(equipment)
-				ea.background:AddPanel( col2)
-
-				ea[group.uniqueID].equipment = equipment
-				ea.equipment = ea[group.uniqueID].equipment
-
-
-
-				-- SWEPS
-				local sweps = {}
-				sweps.parent = ea.equipment:GetContent()
-				sweps.uniqueID = group.uniqueID
-				sweps.header = "LID_sweps"
-				sweps.netstr = "update_group_string_sweps"
-				sweps.value = group.string_sweps
-				sweps.uniqueID = group.uniqueID
-				sweps.w = ea.equipment:GetContent():GetWide()
-				sweps.h = YRP.ctr(325)
-				sweps.doclick = function()
-					local winswep = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
-					winswep:SetTitle( "" )
-					winswep:Center()
-					winswep:MakePopup()
-					function winswep:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255) )
-						draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-					end
-
-					local allsweps = GetSWEPsList()
-					local cl_sweps = {}
-					local count = 0
-					for k, v in pairs( allsweps) do
-						count = count + 1
-						cl_sweps[count] = {}
-						cl_sweps[count].WorldModel = v.WorldModel or ""
-						cl_sweps[count].ClassName = v.ClassName or "NO CLASSNAME"
-						cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
-					end
-
-					winswep.dpl = createD( "DPanelList", winswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100) )
-					winswep.dpl:EnableVerticalScrollbar(true)
-					local height = ScrH() - YRP.ctr(100)
-					function winswep:Search(strsearch)
-						strsearch = string.lower(strsearch)
-
-						strsearch = string.Replace(strsearch, "[", "" )
-						strsearch = string.Replace(strsearch, "]", "" )
-						strsearch = string.Replace(strsearch, "%", "" )
-
-						self.dpl:Clear()
-						for i, v in pairs( cl_sweps) do
-							if string.find(string.lower( v.PrintName), strsearch) or string.find(string.lower( v.ClassName), strsearch) or string.find(string.lower( v.WorldModel), strsearch) then
-								local d_swep = createD( "YButton", nil, winswep.dpl:GetWide(), height / 4, 0, 0)
-								d_swep:SetText( v.PrintName)
-								function d_swep:DoClick()
-									net.Start( "add_group_swep" )
-										net.WriteInt(group.uniqueID, 32)
-										net.WriteString( v.ClassName)
-									net.SendToServer()
-									winswep:Close()
-								end
-
-								if v.WorldModel != "" then
-									d_swep.model = createD( "DModelPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
-									d_swep.model:SetModel( v.WorldModel)
-								else
-									d_swep.model = createD( "DPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
-									function d_swep.model:Paint(pw, ph)
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
-										draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-									end
-								end
-
-								winswep.dpl:AddItem( d_swep)
-							end
-						end
-					end
-					winswep:Search( "" )
-
-					winswep.search = createD( "DTextEntry", winswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50) )
-					function winswep.search:OnChange()
-						winswep:Search(self:GetText() )
-					end
-				end
-				ea[group.uniqueID].sweps = DStringListBox(sweps)
-				net.Receive( "get_group_sweps", function()
-					local tab_pm = net.ReadTable()
-					local cl_sweps = {}
-					for i, v in pairs(tab_pm) do
-						local swep = {}
-						swep.uniqueID = i
-						swep.string_models = GetSwepWorldModel( v)
-						swep.string_classname = v
-						swep.string_name = v
-						swep.doclick = function()
-							net.Start( "rem_group_swep" )
-								net.WriteInt(group.uniqueID, 32)
-								net.WriteString(swep.string_classname)
-							net.SendToServer()
-						end
-						swep.h = YRP.ctr(120)
-						table.insert( cl_sweps, swep)
-					end
-					if ea[group.uniqueID].sweps.dpl.AddLines != nil then
-						ea[group.uniqueID].sweps.dpl:AddLines( cl_sweps)
-					end
-				end)
-				net.Start( "get_group_sweps" )
-					net.WriteInt(group.uniqueID, 32)
-				net.SendToServer()
-
-				hr.parent = ea.equipment:GetContent()
-				DHr(hr)
-
-
-
-				-- Ammunation
-				local ammobg = createD( "YPanel", col2, YRP.ctr(800), YRP.ctr(850), 0, 0)
-				local ammoheader = createD( "YLabel", ammobg, YRP.ctr(800), YRP.ctr(50), 0, 0)
-				ammoheader:SetText( "LID_ammo" )
-				function ammoheader:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
-					draw.SimpleText(YRP.lang_string(self:GetText() ), "Y_18_700", pw / 2, ph / 2, Color( 0, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				end
-
-				ammolist = createD( "DPanelList", ammobg, YRP.ctr(800-23-20), YRP.ctr(800), 0, YRP.ctr(50) )
-				ammolist:SetSpacing(2)
-				ammolist:EnableVerticalScrollbar(true)
-				local sbar = ammolist.VBar
-				function sbar:Paint(w, h)
-					draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
-				end
-				function sbar.btnUp:Paint(w, h)
-					draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
-				end
-				function sbar.btnDown:Paint(w, h)
-					draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
-				end
-				function sbar.btnGrip:Paint(w, h)
-					draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
-				end
-
-				local tammos = group.string_ammos or ""
-				tammos = string.Explode( ";", tammos)
-				local ammos = {}
-				for i, v in pairs(tammos) do
-					local t = string.Split( v, ":" )
-					ammos[t[1]] = t[2]
-				end
-
-				function YRPUpdateAmmoAmountGroup()
-					local tab = {}
-					for i, v in pairs( ammos) do
-						if tonumber( v) > 0 then
-							table.insert(tab, i .. ":" .. v)
-						end
-					end
-					local result = table.concat(tab, ";" )
-					net.Start( "update_group_string_ammos" )
+			if pa( ea.background ) then
+				if group.uniqueID != nil then
+					net.Start( "settings_subscribe_rolelist" )
 						net.WriteString(group.uniqueID)
-						net.WriteString(result)
+						net.WriteString( "0" )
 					net.SendToServer()
 				end
 
-				for i, v in pairs(game.GetAmmoTypes() ) do
-					local abg = createD( "YPanel", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
+				group.uniqueID = tonumber(group.uniqueID)
+				if group.uniqueID and group.uniqueID > 0 then
+					cur_group.edi = group.uniqueID
+
+					ea.typ = "group"
+					ea.tab = group
+
+					ea[group.uniqueID] = ea[group.uniqueID] or {}
+
+					ea.background:Clear()
+
+					local col1 = createD( "DPanelList", ea.background, YRP.ctr(1000), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
+					col1:SetSpacing(YRP.ctr(20) )
+
+					local info = createD( "YGroupBox", col1, YRP.ctr(1000), YRP.ctr(920), YRP.ctr(0), YRP.ctr(0) )
+					info:SetText( "LID_general" )
+					function info:Paint(pw, ph)
+						hook.Run( "YGroupBoxPaint", self, pw, ph)
+					end
+					col1:AddItem(info)
+
+					ea[group.uniqueID].info = info
+					ea.info = ea[group.uniqueID].info
+					function ea.info:OnRemove()
+						if cur_group.edi != group.uniqueID then
+							net.Start( "settings_unsubscribe_group" )
+								net.WriteString(group.uniqueID)
+							net.SendToServer()
+						end
+					end
+
+					local name = {}
+					name.parent = ea.info:GetContent()
+					name.uniqueID = group.uniqueID
+					name.header = "LID_name"
+					name.netstr = "update_group_string_name"
+					name.value = group.string_name
+					name.uniqueID = group.uniqueID
+					name.lforce = false
+					ea[group.uniqueID].name = DTextBox(name)
+
+					local hr = {}
+					hr.h = YRP.ctr(16)
+					hr.parent = ea.info:GetContent()
+					DHr(hr)
+
+					local color = {}
+					color.parent = ea.info:GetContent()
+					color.uniqueID = group.uniqueID
+					color.header = "LID_color"
+					color.netstr = "update_group_string_color"
+					color.value = group.string_color
+					color.uniqueID = group.uniqueID
+					color.lforce = false
+					ea[group.uniqueID].color = DColor( color)
+
+					DHr(hr)
+
+					local icon = {}
+					icon.parent = ea.info:GetContent()
+					icon.uniqueID = group.uniqueID
+					icon.header = "LID_icon"
+					icon.netstr = "update_group_string_icon"
+					icon.value = group.string_icon
+					icon.uniqueID = group.uniqueID
+					icon.lforce = false
+					ea[group.uniqueID].icon = DTextBox(icon)
+
+					DHr(hr)
+
+					local desc = {}
+					desc.parent = ea.info:GetContent()
+					desc.uniqueID = group.uniqueID
+					desc.header = "LID_description"
+					desc.netstr = "update_group_string_description"
+					desc.value = group.string_description
+					desc.uniqueID = group.uniqueID
+					desc.lforce = false
+					desc.multiline = true
+					desc.h = 140
+					ea[group.uniqueID].desc = DTextBox( desc)
+
+					DHr(hr)
+
+					local othergroups = {}
+					othergroups[0] = YRP.lang_string( "LID_factions" )
+					for i, tab in pairs(groups) do
+						tab.uniqueID = tonumber(tab.uniqueID)
+						group.uniqueID = tonumber(group.uniqueID)
+						if tab.uniqueID > 0 and tab.uniqueID != group.uniqueID then
+							othergroups[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
+						end
+					end
+
+					if group.uniqueID > 1 then
+						local parentgroup = {}
+						parentgroup.parent = ea.info:GetContent()
+						parentgroup.uniqueID = group.uniqueID
+						parentgroup.header = "LID_parentgroup"
+						parentgroup.netstr = "update_group_int_parentgroup"
+						parentgroup.value = tonumber(group.int_parentgroup)
+						parentgroup.uniqueID = group.uniqueID
+						parentgroup.lforce = false
+						parentgroup.choices = othergroups
+						ea[group.uniqueID].parentgroup = YRPDComboBox(parentgroup)
+					end
+
+					DHr(hr)
+
+					local iscp = {}
+					iscp.parent = ea.info:GetContent()
+					iscp.uniqueID = group.uniqueID
+					iscp.header = "LID_iscp"
+					iscp.netstr = "update_group_bool_iscp"
+					iscp.value = group.bool_iscp
+					iscp.uniqueID = group.uniqueID
+					ea[group.uniqueID].iscp = YRPDCheckBox(iscp)
+
+
+
+					local restriction = createD( "YGroupBox", col1, YRP.ctr(1000), YRP.ctr(570), YRP.ctr(0), YRP.ctr(0) )
+					restriction:SetText( "LID_restriction" )
+					function restriction:Paint(pw, ph)
+						hook.Run( "YGroupBoxPaint", self, pw, ph)
+					end
+					col1:AddItem(restriction)
+
+					ea.background:AddPanel( col1)
+
+					ea[group.uniqueID].restriction = restriction
+					ea.restriction = ea[group.uniqueID].restriction
+
+					hr.parent = ea.restriction:GetContent()
+
+					if group.uniqueID > 1 then
+						local gugs = string.Explode( ",", group.string_usergroups)
+
+						local ugs = {}
+						ugs["ALL"] = {}
+						ugs["ALL"].checked = table.HasValue(gugs, "ALL" )
+						ugs["ALL"]["choices"] = {}
+						for i, pl in pairs(player.GetAll() ) do
+							ugs["ALL"]["choices"][string.upper(pl:GetUserGroup() )] = ugs["ALL"]["choices"][string.upper(pl:GetUserGroup() )] or {}
+							ugs["ALL"]["choices"][string.upper(pl:GetUserGroup() )].checked = table.HasValue(gugs, string.upper(pl:GetUserGroup() ))
+						end
+
+						for i, ug in pairs( db_ugs) do
+							if ug.string_name != nil then
+								ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
+								ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name) )
+							else
+								YRP.msg( "note", "WHATS THAT? #1" )
+								pFTab(ug)
+							end
+						end
+
+						local usergroups = {}
+						usergroups.parent = ea.restriction:GetContent()
+						usergroups.uniqueID = group.uniqueID
+						usergroups.header = "LID_usergroups"
+						usergroups.netstr = "update_group_string_usergroups"
+						usergroups.value = group.string_usergroups
+						usergroups.uniqueID = group.uniqueID
+						usergroups.lforce = false
+						usergroups.choices = ugs
+						ea[group.uniqueID].usergroups = YRPDCheckBoxes(usergroups)
+
+						DHr(hr)
+					end
+
+					if group.uniqueID > 1 then
+						local requireslevel = {}
+						requireslevel.parent = ea.restriction:GetContent()
+						requireslevel.header = "LID_requireslevel"
+						requireslevel.netstr = "update_group_int_requireslevel"
+						requireslevel.value = group.int_requireslevel
+						requireslevel.uniqueID = group.uniqueID
+						requireslevel.lforce = false
+						requireslevel.min = 1
+						requireslevel.max = 100
+						ea[group.uniqueID].requireslevel = DIntBox(requireslevel)
+
+						DHr(hr)
+					end
+
+					if group.uniqueID > 1 then
+						local whitelist = {}
+						whitelist.parent = ea.restriction:GetContent()
+						whitelist.uniqueID = group.uniqueID
+						whitelist.header = "LID_useswhitelist"
+						whitelist.netstr = "update_group_bool_whitelist"
+						whitelist.value = group.bool_whitelist
+						whitelist.uniqueID = group.uniqueID
+						whitelist.lforce = false
+						ea[group.uniqueID].whitelist = YRPDCheckBox(whitelist)
+
+						DHr(hr)
+					end
+
+					if group.uniqueID != 1 then
+						local locked = {}
+						locked.parent = ea.restriction:GetContent()
+						locked.uniqueID = group.uniqueID
+						locked.header = "LID_locked"
+						locked.netstr = "update_group_bool_locked"
+						locked.value = group.bool_locked
+						locked.uniqueID = group.uniqueID
+						locked.lforce = false
+						ea[group.uniqueID].locked = YRPDCheckBox(locked)
+
+						DHr(hr)
+					end
 					
-					local ahe = createD( "YLabel", abg, YRP.ctr(400), YRP.ctr(50), 0, 0)
-					ahe:SetText( v)
-					function ahe:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color( 100, 100, 255) )
-						draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color( 0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					local visible = {}
+					visible.parent = ea.restriction:GetContent()
+					visible.uniqueID = group.uniqueID
+					visible.header = YRP.lang_string( "LID_visible" ) .. " ( " .. YRP.lang_string( "LID_charactercreation" ) .. " )"
+					visible.netstr = "update_group_bool_visible_cc"
+					visible.value = group.bool_visible_cc
+					visible.uniqueID = group.uniqueID
+					visible.lforce = false
+					ea[group.uniqueID].visible = YRPDCheckBox( visible)
+
+					DHr(hr)
+
+					local visible2 = {}
+					visible2.parent = ea.restriction:GetContent()
+					visible2.uniqueID = group.uniqueID
+					visible2.header = YRP.lang_string( "LID_visible" ) .. " ( " .. YRP.lang_string( "LID_rolemenu" ) .. " )"
+					visible2.netstr = "update_group_bool_visible_rm"
+					visible2.value = group.bool_visible_rm
+					visible2.uniqueID = group.uniqueID
+					visible2.lforce = false
+					ea[group.uniqueID].visible2 = YRPDCheckBox( visible2)
+
+
+
+					local col2 = createD( "DPanelList", ea.background, YRP.ctr(800+24), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
+					col2:EnableVerticalScrollbar(true)
+					col2:SetSpacing(YRP.ctr(20) )
+					local sbar = col2.VBar
+					function sbar:Paint(w, h)
+						draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
+					end
+					function sbar.btnUp:Paint(w, h)
+						draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+					end
+					function sbar.btnDown:Paint(w, h)
+						draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+					end
+					function sbar.btnGrip:Paint(w, h)
+						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
 					end
 
-					local ava = createD( "DNumberWang", abg, YRP.ctr(400), YRP.ctr(50), YRP.ctr(400), 0)
-					ava:SetDecimals(0)
-					ava:SetMin(0)
-					ava:SetMax(999)
-					ava:SetValue( ammos[v] or 0)
-					function ava:OnValueChanged( val)
-						ammos[v] = math.Clamp( val, self:GetMin(), self:GetMax() )
-						YRPUpdateAmmoAmountGroup()
+					local equipment = createD( "YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1250), 0, 0)
+					equipment:SetText( "LID_equipment" )
+					function equipment:Paint(pw, ph)
+						hook.Run( "YGroupBoxPaint", self, pw, ph)
+					end
+					col2:AddItem(equipment)
+					ea.background:AddPanel( col2)
+
+					ea[group.uniqueID].equipment = equipment
+					ea.equipment = ea[group.uniqueID].equipment
+
+
+
+					-- SWEPS
+					local sweps = {}
+					sweps.parent = ea.equipment:GetContent()
+					sweps.uniqueID = group.uniqueID
+					sweps.header = "LID_sweps"
+					sweps.netstr = "update_group_string_sweps"
+					sweps.value = group.string_sweps
+					sweps.uniqueID = group.uniqueID
+					sweps.w = ea.equipment:GetContent():GetWide()
+					sweps.h = YRP.ctr(325)
+					sweps.doclick = function()
+						local winswep = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
+						winswep:SetTitle( "" )
+						winswep:Center()
+						winswep:MakePopup()
+						function winswep:Paint(pw, ph)
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255) )
+							draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+						end
+
+						local allsweps = GetSWEPsList()
+						local cl_sweps = {}
+						local count = 0
+						for k, v in pairs( allsweps) do
+							count = count + 1
+							cl_sweps[count] = {}
+							cl_sweps[count].WorldModel = v.WorldModel or ""
+							cl_sweps[count].ClassName = v.ClassName or "NO CLASSNAME"
+							cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
+						end
+
+						winswep.dpl = createD( "DPanelList", winswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100) )
+						winswep.dpl:EnableVerticalScrollbar(true)
+						local height = ScrH() - YRP.ctr(100)
+						function winswep:Search(strsearch)
+							strsearch = string.lower(strsearch)
+
+							strsearch = string.Replace(strsearch, "[", "" )
+							strsearch = string.Replace(strsearch, "]", "" )
+							strsearch = string.Replace(strsearch, "%", "" )
+
+							self.dpl:Clear()
+							for i, v in pairs( cl_sweps) do
+								if string.find(string.lower( v.PrintName), strsearch) or string.find(string.lower( v.ClassName), strsearch) or string.find(string.lower( v.WorldModel), strsearch) then
+									local d_swep = createD( "YButton", nil, winswep.dpl:GetWide(), height / 4, 0, 0)
+									d_swep:SetText( v.PrintName)
+									function d_swep:DoClick()
+										net.Start( "add_group_swep" )
+											net.WriteInt(group.uniqueID, 32)
+											net.WriteString( v.ClassName)
+										net.SendToServer()
+										winswep:Close()
+									end
+
+									if v.WorldModel != "" then
+										d_swep.model = createD( "DModelPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
+										d_swep.model:SetModel( v.WorldModel)
+									else
+										d_swep.model = createD( "DPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
+										function d_swep.model:Paint(pw, ph)
+											draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
+											draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										end
+									end
+
+									winswep.dpl:AddItem( d_swep)
+								end
+							end
+						end
+						winswep:Search( "" )
+
+						winswep.search = createD( "DTextEntry", winswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50) )
+						function winswep.search:OnChange()
+							winswep:Search(self:GetText() )
+						end
+					end
+					ea[group.uniqueID].sweps = DStringListBox(sweps)
+					net.Receive( "get_group_sweps", function()
+						local tab_pm = net.ReadTable()
+						local cl_sweps = {}
+						for i, v in pairs(tab_pm) do
+							local swep = {}
+							swep.uniqueID = i
+							swep.string_models = GetSwepWorldModel( v)
+							swep.string_classname = v
+							swep.string_name = v
+							swep.doclick = function()
+								net.Start( "rem_group_swep" )
+									net.WriteInt(group.uniqueID, 32)
+									net.WriteString(swep.string_classname)
+								net.SendToServer()
+							end
+							swep.h = YRP.ctr(120)
+							table.insert( cl_sweps, swep)
+						end
+						if ea[group.uniqueID].sweps.dpl.AddLines != nil then
+							ea[group.uniqueID].sweps.dpl:AddLines( cl_sweps)
+						end
+					end)
+					net.Start( "get_group_sweps" )
+						net.WriteInt(group.uniqueID, 32)
+					net.SendToServer()
+
+					hr.parent = ea.equipment:GetContent()
+					DHr(hr)
+
+
+
+					-- Ammunation
+					local ammobg = createD( "YPanel", col2, YRP.ctr(800), YRP.ctr(850), 0, 0)
+					local ammoheader = createD( "YLabel", ammobg, YRP.ctr(800), YRP.ctr(50), 0, 0)
+					ammoheader:SetText( "LID_ammo" )
+					function ammoheader:Paint(pw, ph)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
+						draw.SimpleText(YRP.lang_string(self:GetText() ), "Y_18_700", pw / 2, ph / 2, Color( 0, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 
-					ammolist:AddItem( abg)
+					ammolist = createD( "DPanelList", ammobg, YRP.ctr(800-23-20), YRP.ctr(800), 0, YRP.ctr(50) )
+					ammolist:SetSpacing(2)
+					ammolist:EnableVerticalScrollbar(true)
+					local sbar = ammolist.VBar
+					function sbar:Paint(w, h)
+						draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
+					end
+					function sbar.btnUp:Paint(w, h)
+						draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+					end
+					function sbar.btnDown:Paint(w, h)
+						draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+					end
+					function sbar.btnGrip:Paint(w, h)
+						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
+					end
+
+					local tammos = group.string_ammos or ""
+					tammos = string.Explode( ";", tammos)
+					local ammos = {}
+					for i, v in pairs(tammos) do
+						local t = string.Split( v, ":" )
+						ammos[t[1]] = t[2]
+					end
+
+					function YRPUpdateAmmoAmountGroup()
+						local tab = {}
+						for i, v in pairs( ammos) do
+							if tonumber( v) > 0 then
+								table.insert(tab, i .. ":" .. v)
+							end
+						end
+						local result = table.concat(tab, ";" )
+						net.Start( "update_group_string_ammos" )
+							net.WriteString(group.uniqueID)
+							net.WriteString(result)
+						net.SendToServer()
+					end
+
+					for i, v in pairs(game.GetAmmoTypes() ) do
+						local abg = createD( "YPanel", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
+						
+						local ahe = createD( "YLabel", abg, YRP.ctr(400), YRP.ctr(50), 0, 0)
+						ahe:SetText( v)
+						function ahe:Paint(pw, ph)
+							draw.RoundedBox(0, 0, 0, pw, ph, Color( 100, 100, 255) )
+							draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color( 0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						end
+
+						local ava = createD( "DNumberWang", abg, YRP.ctr(400), YRP.ctr(50), YRP.ctr(400), 0)
+						ava:SetDecimals(0)
+						ava:SetMin(0)
+						ava:SetMax(999)
+						ava:SetValue( ammos[v] or 0)
+						function ava:OnValueChanged( val)
+							ammos[v] = math.Clamp( val, self:GetMin(), self:GetMax() )
+							YRPUpdateAmmoAmountGroup()
+						end
+
+						ammolist:AddItem( abg)
+					end
+
+					ea.equipment:AddItem( ammobg)
+
+					ea.equipment:AutoSize(true)
+
 				end
-
-				ea.equipment:AddItem( ammobg)
-
-				ea.equipment:AutoSize(true)
-
 			end
 		end)
 
@@ -1811,7 +1813,9 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 
 				net.Receive( "get_all_playermodels", function(len)
-					YRP.msg( "note", "[get_all_playermodels] len: " .. len)
+					if len > 128000 then
+						YRP.msg( "note", "[get_all_playermodels] len: " .. len)
+					end
 					local tab = net.ReadTable()
 					table.insert( pms, tab )
 
@@ -1868,7 +1872,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			ea[role.uniqueID].equipment = equipment
 			ea.equipment = ea[role.uniqueID].equipment
 
-			if GetGlobalBool( "bool_weapon_system", true ) then
+			if GetGlobalYRPBool( "bool_weapon_system", true ) then
 				local info = createD( "DPanel", equipment, 100, 32, 0, 0 )
 				function info:Paint( pw, ph )
 					draw.SimpleText( "First Go to F8 -> " .. YRP.lang_string( "LID_administration" ) .. " -> " .. YRP.lang_string( "LID_weaponsystem" ), "Y_18_700", pw / 2, ph / 2, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
@@ -1879,7 +1883,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local sweps = {}
 			sweps.parent = ea.equipment:GetContent()
 			sweps.uniqueID = role.uniqueID
-			if GetGlobalBool( "bool_weapon_system", true) then
+			if GetGlobalYRPBool( "bool_weapon_system", true) then
 				sweps.header = YRP.lang_string( "LID_possiblesweps" ) .. ": Not Equipped => " .. YRP.lang_string( "LID_weaponchest" ) .. ""
 			else
 				sweps.header = YRP.lang_string( "LID_sweps" )
@@ -1965,7 +1969,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			hr.parent = ea.equipment:GetContent()
 			DHr(hr)
 
-			if GetGlobalBool( "bool_weapon_system", true) then
+			if GetGlobalYRPBool( "bool_weapon_system", true) then
 				local swepsonspawn = {}
 				swepsonspawn.parent = ea.equipment:GetContent()
 				swepsonspawn.uniqueID = role.uniqueID
@@ -2315,7 +2319,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 
 				DHr(hr)
 
-				if GetGlobalBool( "bool_building_system", false) then
+				if GetGlobalYRPBool( "bool_building_system", false) then
 					local securitylevel = {}
 					securitylevel.parent = ea.restriction:GetContent()
 					securitylevel.header = "LID_securitylevel"
@@ -2785,7 +2789,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
-			if GetGlobalBool( "bool_stamina", false) then
+			if GetGlobalYRPBool( "bool_stamina", false) then
 				local stamina = {}
 				stamina.parent = ea.attributes:GetContent()
 				stamina.uniqueID = role.uniqueID
@@ -2933,7 +2937,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 
 			DHr(hr)
 
-			if GetGlobalBool( "bool_hunger", false) then
+			if GetGlobalYRPBool( "bool_hunger", false) then
 				local bool_hunger = {}
 				bool_hunger.parent = ea.attributes:GetContent()
 				bool_hunger.uniqueID = role.uniqueID
@@ -2946,7 +2950,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			if GetGlobalBool( "bool_thirst", false) then
+			if GetGlobalYRPBool( "bool_thirst", false) then
 				local bool_thirst = {}
 				bool_thirst.parent = ea.attributes:GetContent()
 				bool_thirst.uniqueID = role.uniqueID
@@ -2959,7 +2963,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			if GetGlobalBool( "bool_stamina", false) then
+			if GetGlobalYRPBool( "bool_stamina", false) then
 				local bool_stamina = {}
 				bool_stamina.parent = ea.attributes:GetContent()
 				bool_stamina.uniqueID = role.uniqueID

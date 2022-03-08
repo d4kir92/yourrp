@@ -212,28 +212,28 @@ net.Receive( "yrp_open_weaponchest", function(len)
 			draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
 		end
 
-		for i = 1, GetGlobalInt( "yrp_max_slots_primary", 0) do
+		for i = 1, GetGlobalYRPInt( "yrp_max_slots_primary", 0) do
 			local slot = YRPCreateSlot(0, 0, "primary", i)
 
 			win.slots:AddItem(slot)
 			slots = slots + 1
 		end
 
-		for i = 1, GetGlobalInt( "yrp_max_slots_secondary", 0) do
+		for i = 1, GetGlobalYRPInt( "yrp_max_slots_secondary", 0) do
 			local slot = YRPCreateSlot(0, 0, "secondary", i)
 
 			win.slots:AddItem(slot)
 			slots = slots + 1
 		end
 		
-		for i = 1, GetGlobalInt( "yrp_max_slots_sidearm", 0) do
+		for i = 1, GetGlobalYRPInt( "yrp_max_slots_sidearm", 0) do
 			local slot = YRPCreateSlot(0, 0, "sidearm", i)
 
 			win.slots:AddItem(slot)
 			slots = slots + 1
 		end
 
-		for i = 1, GetGlobalInt( "yrp_max_slots_gadget", 0) do
+		for i = 1, GetGlobalYRPInt( "yrp_max_slots_gadget", 0) do
 			local slot = YRPCreateSlot(0, 0, "gadget", i)
 
 			win.slots:AddItem(slot)

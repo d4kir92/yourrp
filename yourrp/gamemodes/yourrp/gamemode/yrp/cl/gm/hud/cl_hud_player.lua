@@ -302,7 +302,7 @@ function client_toggled()
 end
 
 function server_toggled(ply)
-	return GetGlobalBool( "bool_yrp_hud", false)
+	return GetGlobalYRPBool( "bool_yrp_hud", false)
 end
 
 function YRPHudPlayer(ply)

@@ -43,7 +43,7 @@ function YRPChatChannel(edit, uid)
 	function win.name:OnChange()
 		name = win.name:GetText()
 	end
-	if edit then
+	if edit and GetGlobalYRPTable( "yrp_chat_channels" )[uid] then
 		name = GetGlobalYRPTable( "yrp_chat_channels" )[uid].string_name
 		win.name:SetText(name)
 	end
@@ -77,7 +77,7 @@ function YRPChatChannel(edit, uid)
 	}
 	for i, v in pairs(modes) do
 		local selected = false
-		if edit then
+		if edit and GetGlobalYRPTable( "yrp_chat_channels" )[uid] then
 			mode = tonumber(GetGlobalYRPTable( "yrp_chat_channels" )[uid].int_mode)
 			if isnumber(mode) and v[2] == mode then
 				selected = true
@@ -98,7 +98,7 @@ function YRPChatChannel(edit, uid)
 			win.previewrich:Think()
 		end
 	end
-	if edit then
+	if edit and GetGlobalYRPTable( "yrp_chat_channels" )[uid] then
 		structure = GetGlobalYRPTable( "yrp_chat_channels" )[uid].string_structure
 		if isstring(structure) then
 			win.structure:SetText(structure)
@@ -198,7 +198,7 @@ function YRPChatChannel(edit, uid)
 			win.previewrich:Think()
 		end
 	end
-	if edit then
+	if edit and GetGlobalYRPTable( "yrp_chat_channels" )[uid] then
 		structure2 = GetGlobalYRPTable( "yrp_chat_channels" )[uid].string_structure2
 		if isstring(structure2) then
 			win.structure2:SetText(structure2)
@@ -214,7 +214,7 @@ function YRPChatChannel(edit, uid)
 
 	-- enabled
 	win.enabled = createD( "DCheckBox", CON, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(600) )
-	if edit then
+	if edit and GetGlobalYRPTable( "yrp_chat_channels" )[uid] then
 		win.enabled:SetChecked(tobool(GetGlobalYRPTable( "yrp_chat_channels" )[uid].bool_enabled) )
 	else
 		win.enabled:SetChecked(true)
@@ -317,7 +317,7 @@ function YRPChatChannel(edit, uid)
 			end)
 		end
 
-		if GetGlobalYRPTable( "yrp_chat_channels" )[uid]["bool_removeable"] then
+		if GetGlobalYRPTable( "yrp_chat_channels" )[uid] and GetGlobalYRPTable( "yrp_chat_channels" )[uid]["bool_removeable"] then
 			win.rem = createD( "YButton", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(1170) )
 			win.rem:SetText( "LID_remove" )
 			function win.rem:Paint(pw, ph)
@@ -440,7 +440,7 @@ function OpenChatMenu()
 	end
 end
 
-function ToggleChatMenu()
+function YRPToggleChatMenu()
 	if pa( vm.win) then
 		CloseChatMenu()
 	elseif YRPIsNoMenuOpen() then

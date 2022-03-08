@@ -24,7 +24,7 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 
 	if wep:GetYRPBool( "yrpdropped", false) then
 		if wep:GetYRPBool( "canpickup", false) then
-			if GetGlobalBool( "bool_autopickup", true) then
+			if GetGlobalYRPBool( "bool_autopickup", true) then
 				return true
 			else
 				if ply:KeyPressed(IN_USE) then
@@ -92,7 +92,7 @@ function Player:DropSWEP( cname, force )
 						ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
 					end
 
-					local ttl = math.Clamp(GetGlobalInt( "int_ttlsweps", 60), 0, 3600)
+					local ttl = math.Clamp(GetGlobalYRPInt( "int_ttlsweps", 60), 0, 3600)
 					timer.Simple( ttl, function()
 						if ea( ent ) and !ent:GetOwner():IsValid() then
 							if ttl <= 1 then

@@ -4,7 +4,7 @@
 
 local _mm = {}
 
-function ToggleMacroMenu()
+function YRPToggleMacroMenu()
 	if YRPIsNoMenuOpen() then
 		OpenMacroMenu()
 	end

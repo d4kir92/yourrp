@@ -13,9 +13,13 @@ YRP_KEYBINDS["menu_options_door"] = KEY_O
 YRP_KEYBINDS["menu_appearance"] = KEY_P
 YRP_KEYBINDS["menu_emotes"] = KEY_MINUS
 YRP_KEYBINDS["menu_laws"] = KEY_L
-
 YRP_KEYBINDS["menu_char"] = KEY_Z
 YRP_KEYBINDS["menu_keybinds"] = KEY_J
+YRP_KEYBINDS["menu_interact"] = KEY_F6
+YRP_KEYBINDS["macro_menu"] = KEY_INSERT
+YRP_KEYBINDS["voice_menu"] = KEY_H
+YRP_KEYBINDS["chat_menu"] = KEY_PERIOD
+YRP_KEYBINDS["menu_group"] = KEY_N
 
 YRP_KEYBINDS["view_switch"] = KEY_T
 YRP_KEYBINDS["view_zoom_out"] = KEY_PAD_PLUS
@@ -31,19 +35,12 @@ YRP_KEYBINDS["toggle_mouse"] = KEY_F3
 YRP_KEYBINDS["toggle_map"] = KEY_M
 YRP_KEYBINDS["drop_item"] = KEY_G
 
-YRP_KEYBINDS["menu_interact"] = KEY_F6
-
 YRP_KEYBINDS["sp_open"] = KEY_UP
 YRP_KEYBINDS["sp_close"] = KEY_DOWN
 
 YRP_KEYBINDS["voice_mute"] = KEY_HOME
 YRP_KEYBINDS["voice_range_up"] = KEY_PAGEUP
 YRP_KEYBINDS["voice_range_dn"] = KEY_PAGEDOWN
-
-YRP_KEYBINDS["macro_menu"] = KEY_INSERT
-
-YRP_KEYBINDS["voice_menu"] = KEY_H
-YRP_KEYBINDS["chat_menu"] = KEY_PERIOD
 
 for i = 1, 49 do
 	YRP_KEYBINDS["m_" .. i] = 0
@@ -138,7 +135,7 @@ function YRPKeybindsLoad()
 	end
 
 	if type( yrp_keybinds ) != "table" then
-		YRP.msg( "error", "[KEYBINDS] [" .. LocalPlayer():YRPName() .. "|" .. LocalPlayer():SteamID64() .. "] KeybindsLoad FAILED, broken file?: " .. tostring( yrp_keybinds ) )
+		YRP.msg( "error", "[KEYBINDS] [" .. LocalPlayer():YRPName() .. "|" .. LocalPlayer():SteamID() .. "] KeybindsLoad FAILED, broken file?: " .. tostring( yrp_keybinds ) )
 	else
 		YRP_KeybindsLoaded = true
 	end

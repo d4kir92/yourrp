@@ -310,33 +310,36 @@ if ld then
 	YRP_SQL_UPDATE( DATABASE_NAME, {["text_loading_design"] = "Default"}, "text_loading_design = 'Bottom'" )
 end
 
-local _init_general = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-if wk(_init_general) then
-	yrp_general = _init_general[1]
+function YRPLoadGlobals()
+	local _init_general = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
+	if wk(_init_general) then
+		yrp_general = _init_general[1]
 
-	--RunConsoleCommand( "lua_log_sv", yrp_general.bool_server_debug)
-	--RunConsoleCommand( "lua_log_cl", yrp_general.bool_server_debug)
+		--RunConsoleCommand( "lua_log_sv", yrp_general.bool_server_debug)
+		--RunConsoleCommand( "lua_log_cl", yrp_general.bool_server_debug)
 
-	for name, value in pairs(yrp_general) do
-		if string.StartWith(name, "bool_" ) then
-			SetGlobalYRPBool(name, tobool( value) )
-		elseif name == "text_server_rules" then
-			SetGlobalYRPTable(name, string.Explode( "\n", tostring( value) ))
-		elseif string.StartWith(name, "int_" ) then
-			SetGlobalYRPInt(name, tonumber( value) )
-		elseif string.StartWith(name, "text_" ) then
-			SetGlobalYRPString(name, tostring( value) )
+		for name, value in pairs(yrp_general) do
+			if string.StartWith(name, "bool_" ) then
+				SetGlobalYRPBool(name, tobool( value ) )
+			elseif name == "text_server_rules" then
+				SetGlobalYRPTable(name, string.Explode( "\n", tostring( value) ))
+			elseif string.StartWith(name, "int_" ) then
+				SetGlobalYRPInt(name, tonumber( value) )
+			elseif string.StartWith(name, "text_" ) then
+				SetGlobalYRPString(name, tostring( value) )
+			end
 		end
-	end
 
-	SetGlobalYRPBool( "yrp_general_loaded", true)
+		SetGlobalYRPBool( "yrp_general_loaded", true)
+	end
 end
+timer.Simple( 0, YRPLoadGlobals )
 
 
 
 --[[ GETTER ]]--
 function YRPDebug()
-	return GetGlobalBool( "bool_server_debug", false)
+	return GetGlobalYRPBool( "bool_server_debug", false)
 end
 
 function YRPErrorMod()
@@ -344,7 +347,7 @@ function YRPErrorMod()
 end
 
 function YRPIsAutomaticServerReloadingEnabled()
-	return GetGlobalBool( "bool_server_reload", false)
+	return GetGlobalYRPBool( "bool_server_reload", false)
 end
 
 function YRPGetMoneyModel()
@@ -377,27 +380,27 @@ end
 
 
 function IsDropItemsOnDeathEnabled()
-	return GetGlobalBool( "bool_drop_items_on_death", false)
+	return GetGlobalYRPBool( "bool_drop_items_on_death", false)
 end
 
 function IsDealerImmortal()
-	return !GetGlobalBool( "bool_dealers_can_take_damage", false)
+	return !GetGlobalYRPBool( "bool_dealers_can_take_damage", false)
 end
 
 function IsRealisticEnabled()
-	return GetGlobalBool( "bool_realistic", false)
+	return GetGlobalYRPBool( "bool_realistic", false)
 end
 
 function PlayersCanDropWeapons()
-	return GetGlobalBool( "bool_players_can_drop_weapons", false)
+	return GetGlobalYRPBool( "bool_players_can_drop_weapons", false)
 end
 
 function IsSuicideDisabled()
-	return GetGlobalBool( "bool_suicide_disabled", false)
+	return GetGlobalYRPBool( "bool_suicide_disabled", false)
 end
 
 function IsDropMoneyOnDeathEnabled()
-	return GetGlobalBool( "bool_drop_money_on_death", false)
+	return GetGlobalYRPBool( "bool_drop_money_on_death", false)
 end
 
 util.AddNetworkString( "do_act" )
@@ -410,7 +413,7 @@ net.Receive( "do_act", function(len, ply)
 end)
 
 function IsVoiceEnabled()
-	return GetGlobalBool( "bool_voice", false)
+	return GetGlobalYRPBool( "bool_voice", false)
 end
 
 function GetMaxVoiceRange()
@@ -424,7 +427,7 @@ end
 
 
 function GetIDStructure()
-	return GetGlobalString( "text_idstructure", "!D!D!D!D-!D!D!D!D-!D!D!D!D" )
+	return GetGlobalYRPString( "text_idstructure", "!D!D!D!D-!D!D!D!D-!D!D!D!D" )
 end
 
 
@@ -1977,30 +1980,30 @@ net.Receive( "ply_ban", function(len, ply)
 	end
 end)
 
-function YRPGetPlayerBySteamID64(steamid64)
+function YRPGetPlayerBySteamID(steamid)
 	for i, ply in pairs(player.GetAll() ) do
-		if ply:SteamID64() == steamid64 then
+		if ply:SteamID() == steamid or ply:SteamID64() == steamid then
 			return ply
 		end
 	end
 	return nil
 end
 
-util.AddNetworkString( "tp_tpto_steamid64" )
-net.Receive( "tp_tpto_steamid64", function(len, ply)
+util.AddNetworkString( "tp_tpto_steamid" )
+net.Receive( "tp_tpto_steamid", function(len, ply)
 	if ply:HasAccess() then
-		local steamid64 = net.ReadString()
-		local _target = YRPGetPlayerBySteamID64(steamid64)
+		local steamid = net.ReadString()
+		local _target = YRPGetPlayerBySteamID(steamid)
 		if _target then
 			teleportToPoint(ply, _target:GetPos() )
 		end
 	end
 end)
-util.AddNetworkString( "tp_bring_steamid64" )
-net.Receive( "tp_bring_steamid64", function(len, ply)
+util.AddNetworkString( "tp_bring_steamid" )
+net.Receive( "tp_bring_steamid", function(len, ply)
 	if ply:HasAccess() then
-		local steamid64 = net.ReadString()
-		local _target = YRPGetPlayerBySteamID64(steamid64)
+		local steamid = net.ReadString()
+		local _target = YRPGetPlayerBySteamID(steamid)
 		if _target then
 			teleportToPoint(_target, ply:GetPos() )
 		end
@@ -2067,10 +2070,12 @@ function YRPDoRagdoll(ply)
 		tmp:SetPos(ply:GetPos() + Vector(0, 0, 0) )
 		tmp:Spawn()
 
-		ply:SetParent(tmp)
+		--ply:SetParent(tmp)
 		ply:SetYRPEntity( "ragdoll", tmp)
 
-		ply:Freeze( true )
+		ply:SetNoTarget( true )
+		ply:SetMoveType( MOVETYPE_NONE )
+		--ply:Freeze( true )
 
 		YRPRenderCloaked(ply)
 	end
@@ -2079,15 +2084,17 @@ end
 function YRPDoUnRagdoll(ply)
 	if IsValid(ply) and ply:IsPlayer() and YRPIsRagdoll(ply) then
 		ply:SetYRPBool( "ragdolled", false)
-		ply:SetParent(nil)
+		--ply:SetParent(nil)
 
 		local ragdoll = ply:GetYRPEntity( "ragdoll" )
 		if ea(ragdoll) then
-			ply:SetPos(ragdoll:GetPos() )
+			ply:SetPos( ragdoll:GetPos() )
 			ragdoll:Remove()
 		end
 
-		ply:Freeze( false )
+		ply:SetNoTarget( false )
+		ply:SetMoveType( MOVETYPE_WALK )
+		--ply:Freeze( false )
 
 		YRPRenderNormal(ply)
 	end
@@ -2100,6 +2107,7 @@ net.Receive( "ragdoll", function(len, ply)
 		YRPDoRagdoll(_target)
 	end
 end)
+
 util.AddNetworkString( "unragdoll" )
 net.Receive( "unragdoll", function(len, ply)
 	if ply:HasAccess() then

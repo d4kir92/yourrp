@@ -2,9 +2,9 @@
 
 -- #logs
 
-function GetPlayerBySteamID64(steamid64)
+function GetPlayerBySteamID(steamid)
 	for i, ply in pairs(player.GetAll() ) do
-		if ply:SteamID64() == steamid64 then
+		if ply:SteamID() == steamid or ply:SteamID64() == steamid then
 			return ply
 		end
 	end
@@ -24,8 +24,8 @@ function BuildLogs(parent, typ)
 			local tab = net.ReadTable()
 		
 			for i, v in pairs(tab) do
-				local source = GetPlayerBySteamID64( v.string_source_steamid)
-				local target = GetPlayerBySteamID64( v.string_target_steamid)
+				local source = GetPlayerBySteamID( v.string_source_steamid )
+				local target = GetPlayerBySteamID( v.string_target_steamid )
 				if wk(source) then
 					local line = createD( "YPanel", nil, parent:GetWide(), YRP.ctr(50) )
 

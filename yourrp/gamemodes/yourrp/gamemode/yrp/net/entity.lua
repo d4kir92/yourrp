@@ -11,7 +11,7 @@ function ENTITY:GetYRPAngle( key, value )
 	return self:GetNWAngle( key, value )
 end
 function ENTITY:SetYRPAngle( key, value )
-	if self:GetYRPAngle( key ) != value then
+	if self:GetYRPAngle( key ) != value or value == Angle( 0, 0, 0 ) then
 		self:SetNWAngle( key, value )
 	elseif YRPDEBUGENTITY then
 		c["angle"] = c["angle"] or 0
@@ -24,7 +24,7 @@ function ENTITY:GetYRPBool( key, value )
 	return tobool( self:GetNWBool( key, value ) )
 end
 function ENTITY:SetYRPBool( key, value )
-	if self:GetYRPBool( key ) != value then
+	if self:GetYRPBool( key ) != value or value == false then
 		self:SetNWBool( key, value )
 	elseif YRPDEBUGENTITY then
 		c["bool"] = c["bool"] or 0
@@ -37,7 +37,7 @@ function ENTITY:GetYRPEntity( key, value )
 	return self:GetNWEntity( key, value )
 end
 function ENTITY:SetYRPEntity( key, value )
-	if self:GetYRPEntity( key ) != value then
+	if self:GetYRPEntity( key ) != value or value == NULL then
 		self:SetNWEntity( key, value )
 	elseif YRPDEBUGENTITY then
 		c["entity"] = c["entity"] or 0
@@ -50,7 +50,7 @@ function ENTITY:GetYRPFloat( key, value )
 	return tonumber( self:GetNWFloat( key, value ) )
 end
 function ENTITY:SetYRPFloat( key, value )
-	if self:GetYRPFloat( key ) != value then
+	if math.abs( self:GetYRPFloat( key ) - value ) > 0.0001 or value == 0 then
 		self:SetNWFloat( key, tonumber( value ) )
 	elseif YRPDEBUGENTITY then
 		c["float"] = c["float"] or 0
@@ -63,7 +63,7 @@ function ENTITY:GetYRPInt( key, value )
 	return tonumber( self:GetNWInt( key, value ) )
 end
 function ENTITY:SetYRPInt( key, value )
-	if self:GetYRPInt( key ) != value then
+	if self:GetYRPInt( key ) != value or value == 0 then
 		self:SetNWInt( key, tonumber( value ) )
 	elseif YRPDEBUGENTITY then
 		c["int"] = c["int"] or 0
@@ -76,7 +76,7 @@ function ENTITY:GetYRPString( key, value )
 	return tostring( self:GetNWString( key, value ) )
 end
 function ENTITY:SetYRPString( key, value )
-	if self:GetYRPString( key ) != value then
+	if self:GetYRPString( key ) != value or value == "" then
 		self:SetNWString( key, tostring( value ) )
 	elseif YRPDEBUGENTITY then
 		c["string"] = c["string"] or 0
@@ -89,7 +89,7 @@ function ENTITY:GetYRPVector( key, value )
 	return self:GetNWVector( key, value )
 end
 function ENTITY:SetYRPVector( key, value )
-	if self:GetYRPVector( key ) != value then
+	if self:GetYRPVector( key ) != value or value == Vector( 0, 0, 0 ) then
 		self:SetNWVector( key, value )
 	elseif YRPDEBUGENTITY then
 		c["vector"] = c["vector"] or 0

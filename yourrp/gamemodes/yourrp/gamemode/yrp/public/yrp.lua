@@ -11,7 +11,7 @@ function GetTranslation(id)
 end
 
 function IsLevelSystemEnabled()
-	return GetGlobalBool( "bool_level_system", true)
+	return GetGlobalYRPBool( "bool_level_system", true)
 end
 
 if SERVER then

@@ -499,18 +499,6 @@ function DStringBox(tab, str, name, netstr)
 		text.br = 1
 		text.ax = 0
 		DrawText(text)
-
-		if dmg != nil and dstringline.dtextentry != nil then
-			local DMG = {}
-			DMG.text = dmg:GetValue() * dstringline.dtextentry:GetValue() .. " " .. YRP.lang_string( "LID_damage" )
-			DMG.x = pw - YRP.ctr(10)
-			DMG.y = ph / 2
-			DMG.font = "Y_22_500"
-			DMG.color = Color( 0, 0, 0, 255)
-			DMG.br = 1
-			DMG.ax = 2
-			DrawText(DMG)
-		end
 	end
 
 	dstringline.dtextentry = createD( "DTextEntry", dstringline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)

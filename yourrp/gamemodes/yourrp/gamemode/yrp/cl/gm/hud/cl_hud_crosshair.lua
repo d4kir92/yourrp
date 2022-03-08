@@ -36,7 +36,7 @@ local oldx = ScrW() / 2
 local oldy = ScrH() / 2
 function YRPHudCrosshair()
 	local lply = LocalPlayer()
-	if lply:Alive() and GetGlobalBool( "bool_yrp_crosshair", false) then
+	if lply:Alive() and GetGlobalYRPBool( "bool_yrp_crosshair", false) then
 		if true or !contextMenuOpen then
 			local weapon = lply:GetActiveWeapon()
 			if weapon != NULL then

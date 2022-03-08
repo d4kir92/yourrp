@@ -241,7 +241,7 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 													break
 												end
 											end
-											YRP.msg( "note", activator:RPName() .. " transfered " .. GetGlobalString( "text_money_pre", "" ) .. self.money .. GetGlobalString( "text_money_pos", "" ) .. " to " .. dbSelectTarget[1].rpname)
+											YRP.msg( "note", activator:RPName() .. " transfered " .. GetGlobalYRPString( "text_money_pre", "" ) .. self.money .. GetGlobalYRPString( "text_money_pos", "" ) .. " to " .. dbSelectTarget[1].rpname)
 										end
 									end
 								end

@@ -150,22 +150,22 @@ net.Receive( "update_interface_color", function(len, ply)
 end)
 
 function ResetDesign()
-	local tab = INTERFACES[GetGlobalString( "string_interface_design", "" )]
+	local tab = INTERFACES[GetGlobalYRPString( "string_interface_design", "" )]
 	if tab != nil then
 		for name, value in pairs(tab.floats) do
-			local _name = "float_IF_" .. GetGlobalString( "string_interface_design", "Material" ) .. "_" .. name
+			local _name = "float_IF_" .. GetGlobalYRPString( "string_interface_design", "Material" ) .. "_" .. name
 			YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'" )
 		end
 		for name, value in pairs(tab.bools) do
-			local _name = "bool_IF_" .. GetGlobalString( "string_interface_design", "Material" ) .. "_" .. name
+			local _name = "bool_IF_" .. GetGlobalYRPString( "string_interface_design", "Material" ) .. "_" .. name
 			YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'" )
 		end
 		for name, value in pairs(tab.colors) do
-			local _name = "color_IF_" .. GetGlobalString( "string_interface_design", "Material" ) .. "_" .. name
+			local _name = "color_IF_" .. GetGlobalYRPString( "string_interface_design", "Material" ) .. "_" .. name
 			YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'" )
 		end
 		for name, value in pairs(tab.ints) do
-			local _name = "int_IF_" .. GetGlobalString( "string_interface_design", "Material" ) .. "_" .. name
+			local _name = "int_IF_" .. GetGlobalYRPString( "string_interface_design", "Material" ) .. "_" .. name
 			YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = value}, "name = '" .. _name .. "'" )
 		end
 	end

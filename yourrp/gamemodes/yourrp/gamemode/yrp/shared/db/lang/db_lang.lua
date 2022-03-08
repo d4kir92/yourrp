@@ -118,14 +118,14 @@ hook.Add( "PostGamemodeLoaded", "Check_YourRP_Content", function()
 end )
 
 function HasYRPContent()
-	return GetGlobalBool( "yrp_hascontent", false) or hascontent
+	return GetGlobalYRPBool( "yrp_hascontent", false) or hascontent
 end
 function HasYRPFakeContent()
-	return GetGlobalBool( "hasfakecontent", false) or hasfakecontent
+	return GetGlobalYRPBool( "hasfakecontent", false) or hasfakecontent
 end
 
 function HasDarkrpmodification()
-	return GetGlobalBool( "hasdarkrpmodification", false)
+	return GetGlobalYRPBool( "hasdarkrpmodification", false)
 end
 
 function PrintLIDError( var)

@@ -98,26 +98,26 @@ function YRPUseFunction(str)
 			openSP()
 		elseif str == "closeSP" then
 			closeSP()
-		elseif str == "ToggleEmotesMenu" then
-			ToggleEmotesMenu()
-		elseif str == "ToggleLawsMenu" then
-			ToggleLawsMenu()
+		elseif str == "YRPToggleEmotesMenu" then
+			YRPToggleEmotesMenu()
+		elseif str == "YRPToggleLawsMenu" then
+			YRPToggleLawsMenu()
 		elseif str == "openCharacterMenu" then
 			done_tutorial( "tut_cs" )
 			toggleCharacterSelection()
 		elseif str == "openAppearance" then
-			toggleAppearanceMenu()
+			YRPToggleAppearanceMenu()
 		elseif str == "openInventory" then
 			done_tutorial( "tut_mi" )
 			YRPToggleInventory()
 		elseif str == "openSettings" then
 			done_tutorial( "tut_ms" )
-			ToggleSettings()
+			YRPToggleSettings()
 		elseif str == "openMap" then
 			done_tutorial( "tut_tma" )
-			toggleMap()
+			YRPToggleMap()
 		elseif str == "openInteractMenu" then
-			toggleInteractMenu()
+			YRPToggleInteractMenu()
 		elseif str == "voice_mute" then
 			net.Start( "yrp_mute_voice" )
 			net.SendToServer()
@@ -129,23 +129,25 @@ function YRPUseFunction(str)
 			net.SendToServer()
 		elseif str == "voice_menu" then
 			if input.IsShiftDown() then
-				ToggleVoiceMenu()
+				YRPToggleVoiceMenu()
 			elseif input.IsKeyDown( KEY_LALT ) then
 				NextVoiceChannel()
 			else
-				net.Start( "yrp_togglevoicemenu" )
+				net.Start( "yrp_YRPToggleVoiceMenu" )
 				net.SendToServer()
 			end
 		elseif str == "chat_menu" then
-			ToggleChatMenu()
+			YRPToggleChatMenu()
 		elseif str == "macro_menu" then
-			ToggleMacroMenu()
+			YRPToggleMacroMenu()
+		elseif str == "menu_group" then
+			YRPToggleGroupMenu()
 		elseif str == "openOptions" then
 			if eyeTrace.Entity != NULL then
 				if eyeTrace.Entity:GetClass() == "prop_door_rotating" or eyeTrace.Entity:GetClass() == "func_door" or eyeTrace.Entity:GetClass() == "func_door_rotating" then
-					toggleDoorOptions(eyeTrace.Entity)
+					YRPToggleDoorOptions(eyeTrace.Entity)
 				elseif eyeTrace.Entity:IsVehicle() then
-					toggleVehicleOptions(eyeTrace.Entity, eyeTrace.Entity:GetYRPInt( "item_uniqueID" ) )
+					YRPToggleVehicleOptions(eyeTrace.Entity, eyeTrace.Entity:GetYRPInt( "item_uniqueID" ) )
 				end
 			end
 
@@ -189,46 +191,46 @@ function YRPUseFunction(str)
 			str = string.Replace(str, "m_", "" )
 			local uid = tonumber(str)
 			UseMacro(uid)
-		elseif GetGlobalBool( "bool_yrp_combined_menu", false) then
+		elseif GetGlobalYRPBool( "bool_yrp_combined_menu", false) then
 			local id = 0
-			if str == "OpenHelpMenu" and GetGlobalBool( "bool_yrp_help_menu", false) then
+			if str == "OpenHelpMenu" and GetGlobalYRPBool( "bool_yrp_help_menu", false) then
 				done_tutorial( "tut_f1info", 10)
 				id = 1
-			elseif str == "OpenRoleMenu" and GetGlobalBool( "bool_yrp_role_menu", false) then
+			elseif str == "OpenRoleMenu" and GetGlobalYRPBool( "bool_yrp_role_menu", false) then
 				id = 2
-			elseif str == "OpenBuyMenu" and GetGlobalBool( "bool_yrp_buy_menu", false) then
+			elseif str == "OpenBuyMenu" and GetGlobalYRPBool( "bool_yrp_buy_menu", false) then
 				id = 3
-			elseif str == "openCharMenu" and GetGlobalBool( "bool_yrp_char_menu", false) then
+			elseif str == "openCharMenu" and GetGlobalYRPBool( "bool_yrp_char_menu", false) then
 				id = 4
-			elseif str == "openKeybindsMenu" and GetGlobalBool( "bool_yrp_keybinds_menu", false) then
+			elseif str == "openKeybindsMenu" and GetGlobalYRPBool( "bool_yrp_keybinds_menu", false) then
 				id = 5
-			elseif str == "openTicketMenu" and GetGlobalBool( "bool_yrp_tickets_menu", false) then
+			elseif str == "openTicketMenu" and GetGlobalYRPBool( "bool_yrp_tickets_menu", false) then
 				done_tutorial( "tut_feedback" )
 				id = 6
 			end
 			if id > 0 then
-				ToggleCombinedMenu(id)
+				YRPToggleCombinedMenu(id)
 			end
-		elseif !GetGlobalBool( "bool_yrp_combined_menu", false) then
-			if str == "OpenHelpMenu" and GetGlobalBool( "bool_yrp_help_menu", false) then
+		elseif !GetGlobalYRPBool( "bool_yrp_combined_menu", false) then
+			if str == "OpenHelpMenu" and GetGlobalYRPBool( "bool_yrp_help_menu", false) then
 				done_tutorial( "tut_welcome" )
 				done_tutorial( "tut_feedback" )
 				done_tutorial( "tut_f1info", 10)
-				ToggleHelpMenu()
-			elseif str == "OpenRoleMenu" and GetGlobalBool( "bool_yrp_role_menu", false) then
+				YRPToggleHelpMenu()
+			elseif str == "OpenRoleMenu" and GetGlobalYRPBool( "bool_yrp_role_menu", false) then
 				done_tutorial( "tut_mr" )
-				ToggleRoleMenu()
-			elseif str == "OpenBuyMenu" and GetGlobalBool( "bool_yrp_buy_menu", false) then
+				YRPToggleRoleMenu()
+			elseif str == "OpenBuyMenu" and GetGlobalYRPBool( "bool_yrp_buy_menu", false) then
 				done_tutorial( "tut_mb" )
 				YRPToggleBuyMenu()
-			elseif str == "openTicketMenu" and GetGlobalBool( "bool_yrp_tickets_menu", false) then
-				toggleTicketMenu()
-			elseif str == "openCharMenu" and GetGlobalBool( "bool_yrp_char_menu", false) then
-				toggleCharMenu()
-			elseif str == "openKeybindsMenu" and GetGlobalBool( "bool_yrp_keybinds_menu", false) then
-				toggleKeybindsMenu()
+			elseif str == "openTicketMenu" and GetGlobalYRPBool( "bool_yrp_tickets_menu", false) then
+				YRPToggleTicketMenu()
+			elseif str == "openCharMenu" and GetGlobalYRPBool( "bool_yrp_char_menu", false) then
+				YRPToggleCharMenu()
+			elseif str == "openKeybindsMenu" and GetGlobalYRPBool( "bool_yrp_keybinds_menu", false) then
+				YRPToggleKeybindsMenu()
 			end
-			if str == "OpenRoleMenu" and not GetGlobalBool( "bool_yrp_role_menu", false) then
+			if str == "OpenRoleMenu" and not GetGlobalYRPBool( "bool_yrp_role_menu", false) then
 				DarkRP.toggleF4Menu()
 			end
 		end
@@ -388,7 +390,7 @@ function YRPKeyPress()
 						if _old_view > 0 then
 							lply.yrp_view_range_view = _old_view
 						else
-							lply.yrp_view_range_view = tonumber(GetGlobalString( "text_view_distance", "200" ) )
+							lply.yrp_view_range_view = tonumber(GetGlobalYRPString( "text_view_distance", "200" ) )
 						end
 					end
 
@@ -405,8 +407,8 @@ function YRPKeyPress()
 
 						lply.yrp_view_range_view = lply.yrp_view_range_view + 1
 
-						if tonumber(lply.yrp_view_range_view) > tonumber(GetGlobalString( "text_view_distance", "200" ) ) then
-							lply.yrp_view_range_view = tonumber(GetGlobalString( "text_view_distance", "200" ) )
+						if tonumber(lply.yrp_view_range_view) > tonumber(GetGlobalYRPString( "text_view_distance", "200" ) ) then
+							lply.yrp_view_range_view = tonumber(GetGlobalYRPString( "text_view_distance", "200" ) )
 						end
 						lply.yrp_view_range_old = lply.yrp_view_range_view
 					elseif YRPGetKeybind( "view_zoom_in" ) and input.IsKeyDown(YRPGetKeybind( "view_zoom_in" ) ) then
@@ -482,9 +484,9 @@ function YRPKeyPress()
 	YRPKeyPressed(YRPGetKeybind( "menu_char" ), "openCharMenu" )
 	YRPKeyPressed(YRPGetKeybind( "menu_keybinds" ), "openKeybindsMenu" )
 
-	YRPKeyPressed(YRPGetKeybind( "menu_emotes" ), "ToggleEmotesMenu" )
+	YRPKeyPressed(YRPGetKeybind( "menu_emotes" ), "YRPToggleEmotesMenu" )
 
-	YRPKeyPressed(YRPGetKeybind( "menu_laws" ), "ToggleLawsMenu" )
+	YRPKeyPressed(YRPGetKeybind( "menu_laws" ), "YRPToggleLawsMenu" )
 
 	YRPKeyPressed(YRPGetKeybind( "menu_settings" ), "openSettings" )
 
@@ -495,10 +497,10 @@ function YRPKeyPress()
 	YRPKeyPressed(YRPGetKeybind( "menu_role" ), "OpenRoleMenu" )
 	YRPKeyPressed(YRPGetKeybind( "menu_buy" ), "OpenBuyMenu" )
 
-	YRPKeyPressed(YRPGetKeybind( "menu_interact" ), "openInteractMenu", GetGlobalInt( "int_door_distance", 200) )
+	YRPKeyPressed(YRPGetKeybind( "menu_interact" ), "openInteractMenu", GetGlobalYRPInt( "int_door_distance", 200) )
 
-	YRPKeyPressed(YRPGetKeybind( "menu_options_door" ), "openOptions", GetGlobalInt( "int_door_distance", 200) )
-	YRPKeyPressed(YRPGetKeybind( "menu_options_vehicle" ), "openOptions", GetGlobalInt( "int_door_distance", 200) )
+	YRPKeyPressed(YRPGetKeybind( "menu_options_door" ), "openOptions", GetGlobalYRPInt( "int_door_distance", 200) )
+	YRPKeyPressed(YRPGetKeybind( "menu_options_vehicle" ), "openOptions", GetGlobalYRPInt( "int_door_distance", 200) )
 
 	YRPKeyPressed(YRPGetKeybind( "toggle_map" ), "openMap" )
 
@@ -518,6 +520,8 @@ function YRPKeyPress()
 	YRPKeyPressed(YRPGetKeybind( "voice_menu" ), "voice_menu" )
 
 	YRPKeyPressed(YRPGetKeybind( "chat_menu" ), "chat_menu" )
+
+	YRPKeyPressed(YRPGetKeybind( "menu_group" ), "menu_group" )
 
 	YRPKeyPressed(YRPGetKeybind( "macro_menu" ), "macro_menu" )
 	for i = 1, 49 do
@@ -594,7 +598,7 @@ function YRP_CalcView(lply, pos, angles, fov)
 			end
 			local dist = _view_range * lply:GetModelScale()
 		
-			if lply:GetModel() != "models/player.mdl" and !lply:InVehicle() and !disablethirdperson and GetGlobalBool( "bool_thirdperson", false) then
+			if lply:GetModel() != "models/player.mdl" and !lply:InVehicle() and !disablethirdperson and GetGlobalYRPBool( "bool_thirdperson", false) then
 				if lply:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
 					pos2 = lply:GetBonePosition(lply:LookupBone( "ValveBiped.Bip01_Head1" ) ) + ( angles:Forward() * 12 * lply:GetModelScale() )
 				end
@@ -722,7 +726,7 @@ function YRP_CalcView(lply, pos, angles, fov)
 			if entindex then
 				local ent = Entity(entindex)
 				if IsValid(ent) then
-					pos = ent:GetPos() + Vector( 0, 0, 32 ) - angles:Forward() * 100
+					pos = ent:GetPos() + Vector( 0, 0, 64 ) - angles:Forward() * 100
 					if ent:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
 						--[[
 							pos, angles = ent:GetBonePosition(ent:LookupBone( "ValveBiped.Bip01_Head1" ) )

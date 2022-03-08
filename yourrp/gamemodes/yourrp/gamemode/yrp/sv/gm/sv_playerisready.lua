@@ -25,7 +25,7 @@ local function YRPPlayerLoadedGame( ply )
 	ply:UserGroupLoadout()
 
 	if IsValid(ply) and ply.OldKillSilent then
-		if GetGlobalBool( "bool_character_system", true) then
+		if GetGlobalYRPBool( "bool_character_system", true) then
 			ply:Spawn()
 			ply:OldKillSilent()
 		else
@@ -81,7 +81,7 @@ end
 hook.Add( "Think", "yrp_loaded_game", function()
 	for i, ply in pairs(player.GetAll() ) do
 		if IsValid( ply ) then
-			if ply:GetYRPBool( "finishedloadingcharacter", false) == true and ply:SteamID64() != nil and ply.yrploaded == nil then -- Only goes here, when a player fully loaded
+			if ply:GetYRPBool( "finishedloadingcharacter", false) == true and ply:SteamID() != nil and ply.yrploaded == nil then -- Only goes here, when a player fully loaded
 				ply.yrploaded = true
 
 				ply:SetYRPBool( "finishedloading", true)
@@ -102,7 +102,7 @@ hook.Add( "Think", "yrp_loaded_game", function()
 				ply:ChatPrint( "!help for help" )
 
 				if os.time() != nil and YRP_SQL_INSERT_INTO != nil then
-					YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "connected" .. "'" )
+					YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID() .. "', '" .. "connected" .. "'" )
 				end
 			end
 		end

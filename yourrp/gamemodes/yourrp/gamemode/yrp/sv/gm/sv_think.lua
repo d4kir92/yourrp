@@ -58,15 +58,15 @@ end
 
 
 function YRPConHG(ply, time)
-	if GetGlobalBool( "bool_onlywhencook", false) and !IsCookPlaying() then return false end
-	local newval = tonumber(ply:GetYRPFloat( "hunger", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_hunger", 1.0)
+	if GetGlobalYRPBool( "bool_onlywhencook", false) and !IsCookPlaying() then return false end
+	local newval = tonumber(ply:GetYRPFloat( "hunger", 0.0) ) - 0.01 * GetGlobalYRPFloat( "float_scale_hunger", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
-	ply:SetYRPFloat( "hunger", newval, 500)
+	ply:SetYRPFloat( "hunger", newval )
 
 	if tonumber(ply:GetYRPFloat( "hunger", 0.0) ) < 20.0 then
 		ply:TakeDamage( ply:GetMaxHealth() / 50, ply )
-	elseif GetGlobalBool( "bool_hunger_health_regeneration", false) then
-		local tickrate = tonumber(GetGlobalString( "text_hunger_health_regeneration_tickrate", 1) )
+	elseif GetGlobalYRPBool( "bool_hunger_health_regeneration", false) then
+		local tickrate = tonumber(GetGlobalYRPString( "text_hunger_health_regeneration_tickrate", 1) )
 		if tickrate >= 1 and time % tickrate == 0 then
 			ply:SetHealth( math.Clamp( ply:Health() + 1, 0, ply:GetMaxHealth() ) )
 		end
@@ -77,15 +77,15 @@ end
 
 function YRPConTH(ply)
 	if !IsValid(ply) then return end
-	local newval2 = tonumber(ply:GetYRPFloat( "permille", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_permille", 1.0)
+	local newval2 = tonumber(ply:GetYRPFloat( "permille", 0.0) ) - 0.01 * GetGlobalYRPFloat( "float_scale_permille", 1.0)
 	newval2 = math.Clamp( newval2, 0.0, ply:GetMaxPermille() )
 	
 	if ply:GetYRPFloat( "permille" ) != newval2 then
 		ply:SetYRPFloat( "permille", newval2 )
 	end
 
-	if GetGlobalBool( "bool_onlywhencook", false) and !IsCookPlaying() then return false end
-	local newval = tonumber(ply:GetYRPFloat( "thirst", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_thirst", 1.0)
+	if GetGlobalYRPBool( "bool_onlywhencook", false) and !IsCookPlaying() then return false end
+	local newval = tonumber(ply:GetYRPFloat( "thirst", 0.0) ) - 0.01 * GetGlobalYRPFloat( "float_scale_thirst", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
 	ply:SetYRPFloat( "thirst", newval)
 	if tonumber(ply:GetYRPFloat( "thirst", 0.0) ) < 20.0 then
@@ -97,9 +97,9 @@ end
 
 function YRPConRA(ply)
 	if IsInsideRadiation(ply) then
-		ply:SetYRPFloat( "GetCurRadiation", math.Clamp(tonumber(ply:GetYRPFloat( "GetCurRadiation", 0.0) ) + 0.01 * GetGlobalFloat( "float_scale_radiation_in", 50.0), 0, 100) )
+		ply:SetYRPFloat( "GetCurRadiation", math.Clamp(tonumber(ply:GetYRPFloat( "GetCurRadiation", 0.0) ) + 0.01 * GetGlobalYRPFloat( "float_scale_radiation_in", 50.0), 0, 100) )
 	else
-		ply:SetYRPFloat( "GetCurRadiation", math.Clamp(tonumber(ply:GetYRPFloat( "GetCurRadiation", 0.0) ) - 0.01 * GetGlobalFloat( "float_scale_radiation_out", 8.0), 0, 100) )
+		ply:SetYRPFloat( "GetCurRadiation", math.Clamp(tonumber(ply:GetYRPFloat( "GetCurRadiation", 0.0) ) - 0.01 * GetGlobalYRPFloat( "float_scale_radiation_out", 8.0), 0, 100) )
 	end
 	if tonumber(ply:GetYRPFloat( "GetCurRadiation", 0.0) ) > 80.0 then
 		ply:TakeDamage( ply:GetMaxHealth() / 50, ply )
@@ -109,7 +109,7 @@ end
 
 
 function YRPConST( ply, _time )
-	if GetGlobalBool( "bool_onlywhencook", false) and !IsCookPlaying() then
+	if GetGlobalYRPBool( "bool_onlywhencook", false) and !IsCookPlaying() then
 		if ply:GetYRPFloat( "GetCurStamina" ) != 100 then
 			ply:SetYRPFloat( "GetCurStamina", 100)
 		end
@@ -134,7 +134,7 @@ function YRPConST( ply, _time )
 		if !tr.Hit and !ply.jumping then
 			ply.jumping = true
 
-			local newval = ply:GetYRPFloat( "GetCurStamina", 0) - GetGlobalFloat( "float_scale_stamina_jump", 30)
+			local newval = ply:GetYRPFloat( "GetCurStamina", 0) - GetGlobalYRPFloat( "float_scale_stamina_jump", 30)
 			newval = math.Round(math.Clamp(newval, 0, ply:GetYRPFloat( "GetMaxStamina", 100) ), 1)
 			if ply:GetYRPFloat( "GetCurStamina" ) != newval then
 				ply:SetYRPFloat( "GetCurStamina", newval)
@@ -145,7 +145,7 @@ function YRPConST( ply, _time )
 	if _time % 1.0 == 0 then
 		if !ply:InVehicle() and ply:IsOnGround() then
 			if ply:GetMoveType() != MOVETYPE_NOCLIP and (ply:KeyDown(IN_SPEED) and (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT) )) then
-				local newval = ply:GetYRPFloat( "GetCurStamina", 0) - (ply:GetYRPFloat( "stamindown", 1) ) * GetGlobalFloat( "float_scale_stamina_down", 1.0)
+				local newval = ply:GetYRPFloat( "GetCurStamina", 0) - (ply:GetYRPFloat( "stamindown", 1) ) * GetGlobalYRPFloat( "float_scale_stamina_down", 1.0)
 				newval = math.Round(math.Clamp(newval, 0, ply:GetYRPFloat( "GetMaxStamina", 100) ), 1)
 				if ply:GetYRPFloat( "GetCurStamina" ) != newval then
 					ply:SetYRPFloat( "GetCurStamina", newval)
@@ -155,7 +155,7 @@ function YRPConST( ply, _time )
 				if ply:GetMoveType() == MOVETYPE_NOCLIP then
 					factor = 10
 				end
-				local newval = ply:GetYRPFloat( "GetCurStamina", 0) + ply:GetYRPFloat( "staminup", 1) * GetGlobalFloat( "float_scale_stamina_up", 1.0) * factor
+				local newval = ply:GetYRPFloat( "GetCurStamina", 0) + ply:GetYRPFloat( "staminup", 1) * GetGlobalYRPFloat( "float_scale_stamina_up", 1.0) * factor
 				newval = math.Round(math.Clamp(newval, 0, ply:GetYRPFloat( "GetMaxStamina", 100) ), 1)
 				if ply:GetYRPFloat( "GetCurStamina" ) != newval then
 					ply:SetYRPFloat( "GetCurStamina", newval)
@@ -271,7 +271,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 			ply:AddPlayTime()
 
 			if ply:AFK() and !ply:HasAccess() then
-				if CurTime() - tonumber(ply:GetYRPFloat( "afkts", 0) ) >= tonumber(GetGlobalInt( "int_afkkicktime", 0) ) then
+				if CurTime() - tonumber(ply:GetYRPFloat( "afkts", 0) ) >= tonumber(GetGlobalYRPInt( "int_afkkicktime", 0) ) then
 					ply:SetYRPBool( "isafk", false)
 					ply:Kick( "AFK" )
 				end
@@ -294,15 +294,15 @@ timer.Create( "ServerThink", TICK, 0, function()
 					ply:TakeDamage( 0.5, ply )
 				end
 
-				if GetGlobalBool( "bool_hunger", false) and ply:GetYRPBool( "bool_hunger", false) then
+				if GetGlobalYRPBool( "bool_hunger", false) and ply:GetYRPBool( "bool_hunger", false) then
 					YRPConHG(ply, _time)
 				end
 
-				if GetGlobalBool( "bool_thirst", false) and ply:GetYRPBool( "bool_thirst", false) then
+				if GetGlobalYRPBool( "bool_thirst", false) and ply:GetYRPBool( "bool_thirst", false) then
 					YRPConTH(ply)
 				end
 
-				if GetGlobalBool( "bool_radiation", false) then
+				if GetGlobalYRPBool( "bool_radiation", false) then
 					YRPConRA(ply)
 				end
 
@@ -311,7 +311,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 			end
 		end
 
-		if GetGlobalBool( "bool_radiation", false) then
+		if GetGlobalYRPBool( "bool_radiation", false) then
 			for k, ent in pairs(ents.GetAll() ) do
 				if ent:IsNPC() then
 					YRPConRA(ent)
@@ -325,7 +325,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 			-- Every 0.1
 			YRPRegAB(ply)
 
-			if GetGlobalBool( "bool_stamina", false) and ply:GetYRPBool( "bool_stamina", false) then
+			if GetGlobalYRPBool( "bool_stamina", false) and ply:GetYRPBool( "bool_stamina", false) then
 				YRPConST(ply, _time)
 			end
 		end
@@ -340,8 +340,8 @@ timer.Create( "ServerThink", TICK, 0, function()
 		end
 	end
 
-	if _time % 30.0 == 1 or GetGlobalBool( "yrp_update_teleporters", false) then
-		if GetGlobalBool( "yrp_update_teleporters", true) != false then
+	if _time % 30.0 == 1 or GetGlobalYRPBool( "yrp_update_teleporters", false) then
+		if GetGlobalYRPBool( "yrp_update_teleporters", true) != false then
 			SetGlobalYRPBool( "yrp_update_teleporters", false)
 		end
 
@@ -425,7 +425,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 	end
 
 	local _changelevel = 21600
-	if GetGlobalBool( "bool_server_reload", false) then
+	if GetGlobalYRPBool( "bool_server_reload", false) then
 		if _time >= _changelevel then
 			YRP.msg( "gm", "Auto Reload" )
 			timer.Simple(1, function()
@@ -433,7 +433,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 			end)
 		end
 	end
-	if GetGlobalBool( "bool_server_reload_notification", false) then
+	if GetGlobalYRPBool( "bool_server_reload_notification", false) then
 		if _time >= _changelevel - 30 then
 			local _str = "Auto Reload in " .. _changelevel - _time .. " sec"
 			YRP.msg( "gm", _str)
@@ -683,7 +683,7 @@ hook.Add( "KeyPress", "yrp_keypress_use_door", function( ply, key )
 	if ( key == IN_USE ) then
 		local tr = util.TraceLine( {
 			start = ply:EyePos(),
-			endpos = ply:EyePos() + ply:EyeAngles():Forward() * GetGlobalInt( "int_door_distance", 200),
+			endpos = ply:EyePos() + ply:EyeAngles():Forward() * GetGlobalYRPInt( "int_door_distance", 200),
 			filter = function( ent ) if ( ent:YRPIsDoor() ) then return true end end
 		} )
 

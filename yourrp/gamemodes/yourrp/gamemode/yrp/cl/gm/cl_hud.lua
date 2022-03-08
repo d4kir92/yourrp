@@ -29,7 +29,7 @@ function GM:DrawDeathNotice(x, y)
 end
 
 hook.Add( "HUDShouldDraw", "yrp_HUDShouldDraw_hidehud", function(name)
-	if GetGlobalBool( "bool_yrp_hud", false) then
+	if GetGlobalYRPBool( "bool_yrp_hud", false) then
 		local lply = LocalPlayer()
 		if lply:IsValid() then
 			local hide = {
@@ -37,7 +37,7 @@ hook.Add( "HUDShouldDraw", "yrp_HUDShouldDraw_hidehud", function(name)
 				CHudBattery = true,
 				CHudAmmo = true,
 				CHudSecondaryAmmo = true,
-				CHudCrosshair = GetGlobalBool( "bool_yrp_crosshair", false),
+				CHudCrosshair = GetGlobalYRPBool( "bool_yrp_crosshair", false),
 				CHudVoiceStatus = false,
 				CHudDamageIndicator = true,
 				CHudDeathNotice = true
@@ -48,7 +48,7 @@ hook.Add( "HUDShouldDraw", "yrp_HUDShouldDraw_hidehud", function(name)
 	end
 
 	if g_VoicePanelList != nil then
-		g_VoicePanelList:SetVisible(GetGlobalBool( "bool_gmod_voice_module", false), true)
+		g_VoicePanelList:SetVisible(GetGlobalYRPBool( "bool_gmod_voice_module", false), true)
 	end
 end)
 
@@ -131,7 +131,7 @@ hook.Add( "HUDPaint", "yrp_hud_zone", function()
 end)
 
 hook.Add( "HUDPaint", "yrp_hud_alert", function()
-	local text = GetGlobalString( "yrp_alert", "" )
+	local text = GetGlobalYRPString( "yrp_alert", "" )
 	local font = "Y_100_500"
 
 	surface.SetFont(font)
@@ -212,7 +212,7 @@ if pa(PAvatar) then
 end
 PAvatar = vgui.Create( "DPanel" )
 function PAvatar:Paint(pw, ph)
-	if GetGlobalBool( "bool_yrp_hud", false) and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
+	if GetGlobalYRPBool( "bool_yrp_hud", false) and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
 		render.ClearStencil()
 		render.SetStencilEnable(true)
 
@@ -256,9 +256,9 @@ timer.Simple(1, function()
 
 		local lply = LocalPlayer()
 		if lply != NULL then
-			if GetGlobalBool( "bool_yrp_hud", false) then
-				if GetGlobalInt( "YRPHUDVersion", -1 ) != ava.version then
-					ava.version = GetGlobalInt( "YRPHUDVersion", -1 )
+			if GetGlobalYRPBool( "bool_yrp_hud", false) then
+				if GetGlobalYRPInt( "YRPHUDVersion", -1 ) != ava.version then
+					ava.version = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 
 					HUD_AVATAR:Show()
 
@@ -279,8 +279,8 @@ timer.Simple(1, function()
 					HUD_AVATAR:SetSize(PAvatar:GetWide(), PAvatar:GetTall() )
 				end
 			else
-				if GetGlobalInt( "YRPHUDVersion", -1 ) != ava.version then
-					ava.version = GetGlobalInt( "YRPHUDVersion", -1 )
+				if GetGlobalYRPInt( "YRPHUDVersion", -1 ) != ava.version then
+					ava.version = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 
 					HUD_AVATAR:Hide()
 				end
@@ -308,12 +308,23 @@ YRP_PM.x = 0
 YRP_PM.y = 0
 YRP_PM.version = -1
 YRP_PM.model = ""
+local function YRPBodyGroupChanged()
+	if YRP_PM and YRP_PM.Entity then
+		for i, v in pairs( LocalPlayer():GetBodyGroups() ) do
+			if YRP_PM.Entity:GetBodygroup( v.id ) != LocalPlayer():GetBodygroup( v.id ) then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 function YRP_PMUpdate()
 	local lply = LocalPlayer()
 	if IsValid(lply) then
-		if GetGlobalBool( "bool_yrp_hud", false) then
-			if GetGlobalInt( "YRPHUDVersion", -1 ) != YRP_PM.version or YRP_PM.model != lply:GetPlayerModel() or YRP_PM.skin != lply:GetSkin() then
-				YRP_PM.version = GetGlobalInt( "YRPHUDVersion", -1 )
+		if GetGlobalYRPBool( "bool_yrp_hud", false) then
+			if GetGlobalYRPInt( "YRPHUDVersion", -1 ) != YRP_PM.version or YRP_PM.model != lply:GetPlayerModel() or YRP_PM.skin != lply:GetSkin() or YRPBodyGroupChanged() then
+				YRP_PM.version = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 
 				YRP_PM.model = lply:GetPlayerModel()
 				YRP_PM.skin = lply:GetSkin()
@@ -344,8 +355,8 @@ function YRP_PMUpdate()
 						YRP_PM:SetCamPos( Vector(50, 50, 50) )
 					end
 
-					for i, v in pairs( YRP_PM.Entity:GetBodyGroups() ) do
-						YRP_PM.Entity:SetBodygroup( v.id, LocalPlayer():GetYRPString( "bg" .. v.id, 0 ) )
+					for i, v in pairs( LocalPlayer():GetBodyGroups() ) do
+						YRP_PM.Entity:SetBodygroup( v.id, LocalPlayer():GetBodygroup( v.id ) )
 					end
 				end
 
@@ -354,10 +365,10 @@ function YRP_PMUpdate()
 				end
 			end
 
-			if IsValid(YRP_SL) and (GetGlobalInt( "YRPHUDVersion", -1 ) != YRP_SL.version or YRP_SL.url != GetGlobalString( "text_server_logo", "" ) ) then
-				YRP_SL.version = GetGlobalInt( "YRPHUDVersion", -1 )
+			if IsValid(YRP_SL) and (GetGlobalYRPInt( "YRPHUDVersion", -1 ) != YRP_SL.version or YRP_SL.url != GetGlobalYRPString( "text_server_logo", "" ) ) then
+				YRP_SL.version = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 				YRP_SL.visible = lply:HudValue( "SL", "VISI" )
-				YRP_SL.url = GetGlobalString( "text_server_logo", "" )
+				YRP_SL.url = GetGlobalYRPString( "text_server_logo", "" )
 
 				YRP_SL.w = lply:HudValue( "SL", "SIZE_W" )
 				YRP_SL.h = lply:HudValue( "SL", "SIZE_H" )
@@ -371,8 +382,8 @@ function YRP_PMUpdate()
 				YRP_SL:SetVisible(YRP_SL.visible)
 			end
 		else
-			if GetGlobalInt( "YRPHUDVersion", -1 ) != YRP_PM.version then
-				YRP_PM.version = GetGlobalInt( "YRPHUDVersion", -1 )
+			if GetGlobalYRPInt( "YRPHUDVersion", -1 ) != YRP_PM.version then
+				YRP_PM.version = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 
 				YRP_PM:SetModel( "" )
 			end
@@ -459,7 +470,7 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(10, 10, 10) )
 	end
 
-	if GetGlobalBool( "blinded", false) then
+	if GetGlobalYRPBool( "blinded", false) then
 		surfaceBox(0, 0, ScrW(), ScrH(), Color( 255, 255, 255, 255) )
 		surfaceText(YRP.lang_string( "LID_blinded" ), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(100), Color( 255, 255, 0, 255), 1, 1)
 	end
@@ -504,7 +515,7 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 		end
 	end
 
-	if GetGlobalBool( "bool_wanted_system", false) and false then
+	if GetGlobalYRPBool( "bool_wanted_system", false) and false then
 		local stars = {}
 		stars.size = YRP.ctr(80)
 		stars.cur = stars.size
@@ -547,7 +558,7 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 		draw.SimpleText( "[YourRP] " .. "DO NOT USE SINGLEPLAYER" .. "!", "Y_72_500", ScrW2(), ScrH2() - 100, Color( 255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	
-	if !HasYRPContent() and GetGlobalString( "YRP_VERSIONART", "X" ) == "workshop" then
+	if !HasYRPContent() and GetGlobalYRPString( "YRP_VERSIONART", "X" ) == "workshop" then
 		draw.SimpleTextOutlined( "\"YourRP Content\" IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2() - 250, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 		draw.SimpleTextOutlined( "Add \"YourRP Content\" to your Server Collection!", "Y_60_500", ScrW2(), ScrH2() - 200, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 	end
@@ -557,7 +568,7 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 		draw.SimpleTextOutlined( "Remove \"darkrpmodification\" to make YourRP work!", "Y_60_500", ScrW2(), ScrH2() - 400, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 	end
 
-	if GetGlobalBool( "bool_radiation", false) then
+	if GetGlobalYRPBool( "bool_radiation", false) then
 		LocalPlayer().radiation = LocalPlayer().radiation or CurTime()
 		if LocalPlayer().radiation < CurTime() then
 			LocalPlayer().radiation = CurTime() + math.Rand(0.1, 0.5)
@@ -580,7 +591,7 @@ end, hook.MONITOR_HIGH)
 
 hook.Add( "HUDPaint", "yrp_hud_charbackground", function()
 	local lply = LocalPlayer()
-	if lply:HasAccess() and YRPGetCharBGNotFound and strEmpty(GetGlobalString( "text_character_background" ) ) then
+	if lply:HasAccess() and YRPGetCharBGNotFound and strEmpty(GetGlobalYRPString( "text_character_background" ) ) then
 		local text = YRPGetCharBGNotFound()
 		draw.SimpleTextOutlined(text, "Y_40_500", ScrW() / 2, ScrH()  * 0.25, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 	end
@@ -618,7 +629,7 @@ function YRPInitEdgeHud()
 					return 100
 				end,
 				IsDisabled = function(  )
-					return !GetGlobalBool( "bool_hunger", false)
+					return !GetGlobalYRPBool( "bool_hunger", false)
 				end
 			})
 
@@ -632,7 +643,7 @@ function YRPInitEdgeHud()
 					return 100
 				end,
 				IsDisabled = function(  )
-					return !GetGlobalBool( "bool_thirst", false)
+					return !GetGlobalYRPBool( "bool_thirst", false)
 				end
 			})
 
@@ -749,7 +760,7 @@ local VO = {}
 hook.Add( "HUDPaint", "yrp_voice_module", function()
 	local lply = LocalPlayer()
 
-	if GetGlobalBool( "bool_voice", false) and lply:HudValue( "VO", "VISI" ) then
+	if GetGlobalYRPBool( "bool_voice", false) and lply:HudValue( "VO", "VISI" ) then
 		VO.font = "Y_18_700"
 		surface.SetFont( VO.font)
 
@@ -791,8 +802,8 @@ hook.Add( "HUDPaint", "yrp_voice_module", function()
 
 		VO.tw = surface.GetTextSize( VO.text)
 
-		if GetGlobalInt( "YRPHUDVersion", -1 ) != VO.version then
-			VO.version = GetGlobalInt( "YRPHUDVersion", -1 )
+		if GetGlobalYRPInt( "YRPHUDVersion", -1 ) != VO.version then
+			VO.version = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 
 			VO.x = lply:HudValue( "VO", "POSI_X" )
 			VO.y = lply:HudValue( "VO", "POSI_Y" )

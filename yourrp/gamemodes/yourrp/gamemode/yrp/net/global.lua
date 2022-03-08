@@ -62,7 +62,7 @@ function GetGlobalYRPAngle( index, value )
 end
 
 function SetGlobalYRPAngle( index, value )
-	if GetGlobalYRPAngle( index ) != value then
+	if GetGlobalYRPAngle( index ) != value or value == Angle( 0, 0, 0 ) then
 		return SetGlobalAngle( index, value )
 	elseif YRPDEBUGGLOBAL then
 		c["angle"] = c["angle"] or 0
@@ -73,11 +73,11 @@ end
 
 
 function GetGlobalYRPBool( index, value )
-	return GetGlobalBool( index, value )
+	return GetGlobalBool( index )
 end
 
 function SetGlobalYRPBool( index, value )
-	if GetGlobalYRPBool( index ) != value then
+	if GetGlobalYRPBool( index ) != value or value == false then
 		return SetGlobalBool( index, value )
 	elseif YRPDEBUGGLOBAL then
 		c["bool"] = c["bool"] or 0
@@ -92,7 +92,7 @@ function GetGlobalYRPEntity( index, value )
 end
 
 function SetGlobalYRPEntity( index, value )
-	if GetGlobalYRPEntity( index ) != value then
+	if GetGlobalYRPEntity( index ) != value or value == NULL then
 		return SetGlobalEntity( index, value )
 	elseif YRPDEBUGGLOBAL then
 		c["entity"] = c["entity"] or 0
@@ -107,7 +107,7 @@ function GetGlobalYRPFloat( index, value )
 end
 
 function SetGlobalYRPFloat( index, value )
-	if GetGlobalYRPFloat( index ) != value then
+	if math.abs( GetGlobalYRPFloat( index ) - value ) > 0.0001 or value == 0 then
 		return SetGlobalFloat( index, value )
 	elseif YRPDEBUGGLOBAL then
 		c["float"] = c["float"] or 0
@@ -122,7 +122,7 @@ function GetGlobalYRPInt( index, value )
 end
 
 function SetGlobalYRPInt( index, value )
-	if GetGlobalYRPInt( index ) != value then
+	if GetGlobalYRPInt( index ) != value or value == 0 then
 		return SetGlobalInt( index, value )
 	elseif YRPDEBUGGLOBAL then
 		c["int"] = c["int"] or 0
@@ -137,7 +137,7 @@ function GetGlobalYRPString( index, value )
 end
 
 function SetGlobalYRPString( index, value )
-	if GetGlobalYRPString( index ) != value then
+	if GetGlobalYRPString( index ) != value or value == "" then
 		return SetGlobalString( index, value )
 	elseif YRPDEBUGGLOBAL then
 		c["string"] = c["string"] or 0
@@ -152,7 +152,7 @@ function GetGlobalYRPVector( index, value )
 end
 
 function SetGlobalYRPVector( index, value )
-	if GetGlobalYRPVector( index ) != value then
+	if GetGlobalYRPVector( index ) != value or value == Vector( 0, 0, 0 ) then
 		return SetGlobalVector( index, value )
 	elseif YRPDEBUGGLOBAL then
 		c["vector"] = c["vector"] or 0

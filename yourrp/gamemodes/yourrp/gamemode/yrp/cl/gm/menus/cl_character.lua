@@ -64,7 +64,7 @@ end
 
 
 function openCharacterCreation(from)
-	if IsVoidCharEnabled() or !GetGlobalBool( "bool_character_system", true) then return end
+	if IsVoidCharEnabled() or !GetGlobalYRPBool( "bool_character_system", true) then return end
 
 	if CharacterMenu == nil then
 		openMenu()
@@ -86,9 +86,9 @@ function openCharacterCreation(from)
 		function win.blur:Paint(pw, ph)
 			-- Blur Background
 			Derma_DrawBackgroundBlur(self, 0)
-			if win.bg.url != GetGlobalString( "text_character_background", "" ) then
-				win.bg.url = GetGlobalString( "text_character_background", "" )
-				win.bg:SetHTML(GetHTMLImage(GetGlobalString( "text_character_background", "" ), win:GetWide(), win:GetTall() ))
+			if win.bg.url != GetGlobalYRPString( "text_character_background", "" ) then
+				win.bg.url = GetGlobalYRPString( "text_character_background", "" )
+				win.bg:SetHTML(GetHTMLImage(GetGlobalYRPString( "text_character_background", "" ), win:GetWide(), win:GetTall() ))
 			end
 		end
 		function win.blur:OnRemove()
@@ -133,7 +133,7 @@ local chars = {}
 local loading = false
 function LoadCharacters()
 	--YRP.msg( "gm", "received characterlist" )
-	if !IsVoidCharEnabled() and GetGlobalBool( "bool_character_system", true) then
+	if !IsVoidCharEnabled() and GetGlobalYRPBool( "bool_character_system", true) then
 		trashicon = YRP.GetDesignIcon( "64_trash" )
 
 		local cache = {}
@@ -180,7 +180,7 @@ function LoadCharacters()
 						chars[i].char.bool_archived = tobool( chars[i].char.bool_archived)
 						chars[i].char.bool_eventchar = tobool( chars[i].char.bool_eventchar)
 
-						if GetGlobalBool( "bool_characters_removeondeath", false) then
+						if GetGlobalYRPBool( "bool_characters_removeondeath", false) then
 							if chars[i].char.bool_archived then
 								continue
 							end
@@ -299,7 +299,9 @@ function LoadCharacters()
 								self.PressX, self.PressY = gui.MousePos()
 								self.Pressed = true
 							end
-							function tmpChar.charplayermodel:DragMouseRelease() self.Pressed = false end
+							function tmpChar.charplayermodel:DragMouseRelease()
+								self.Pressed = false
+							end
 
 							function tmpChar.charplayermodel:LayoutEntity(ent)
 								local _playermodel = tmpChar.playermodels[tmpChar.playermodelID] or nil
@@ -311,7 +313,9 @@ function LoadCharacters()
 									tmpChar.charplayermodel:SetModel(self.pm)
 								end
 
-								if (self.bAnimated) then self:RunAnimation() end
+								if (self.bAnimated) and self.RunAnimation then
+									self:RunAnimation()
+								end
 
 								if (self.Pressed) then
 									local mx, _ = gui.MousePos()
@@ -903,7 +907,7 @@ local logout = false
 local logoutts = 0
 local logoutpos
 hook.Add( "HUDPaint", "yrp_logout", function()
-	if GetGlobalBool( "bool_character_system" ) and !IsVoidCharEnabled() then
+	if GetGlobalYRPBool( "bool_character_system" ) and !IsVoidCharEnabled() then
 		if logoutts > CurTime() then
 			if !logoutpos:IsEqualTol( LocalPlayer():GetPos(), 50 ) or LocalPlayer():IsInCombat() then
 				logoutts = 0
@@ -919,7 +923,7 @@ hook.Add( "HUDPaint", "yrp_logout", function()
 end)
 
 function openCharacterSelection( force )
-	if IsVoidCharEnabled() or !GetGlobalBool( "bool_character_system", true) then return end
+	if IsVoidCharEnabled() or !GetGlobalYRPBool( "bool_character_system", true) then return end
 
 	if pa(CharMenu.characterList) then
 		CharMenu.characterList:Clear()
@@ -943,11 +947,11 @@ function openCharacterSelection( force )
 	openMenu()
 	
 	if !pa(CharMenu.frame) then
-		YRP_CharDesign = string.lower(GetGlobalString( "text_character_design" ) )
+		YRP_CharDesign = string.lower(GetGlobalYRPString( "text_character_design" ) )
 
 		function CharMenu.logic()
-			if YRP_CharDesign != string.lower(GetGlobalString( "text_character_design" ) ) then
-				YRP_CharDesign = string.lower(GetGlobalString( "text_character_design" ) )
+			if YRP_CharDesign != string.lower(GetGlobalYRPString( "text_character_design" ) ) then
+				YRP_CharDesign = string.lower(GetGlobalYRPString( "text_character_design" ) )
 
 				if CharMenu.frame and CharMenu.frame:IsVisible() then
 					closeMenu()
@@ -1001,7 +1005,7 @@ function openCharacterSelection( force )
 				-- Get Newest Background for the Menu
 				if pa(CharMenu) and pa(CharMenu.frame) then
 					local oldurl = CharMenu.frame.bg.url
-					local newurl = GetGlobalString( "text_character_background", "" )
+					local newurl = GetGlobalYRPString( "text_character_background", "" )
 					if oldurl != newurl then
 						CharMenu.frame.bg.url = newurl
 						CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH() )) -- url?
@@ -1256,7 +1260,7 @@ function openCharacterSelection( force )
 
 				-- Get Newest Background for the Menu
 				local oldurl = CharMenu.frame.bg.url
-				local newurl = GetGlobalString( "text_character_background", "" )
+				local newurl = GetGlobalYRPString( "text_character_background", "" )
 				if oldurl != newurl then
 					CharMenu.frame.bg.url = newurl
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH() )) -- url?
@@ -1478,7 +1482,7 @@ function openCharacterSelection( force )
 
 				-- Get Newest Background for the Menu
 				local oldurl = CharMenu.frame.bg.url
-				local newurl = GetGlobalString( "text_character_background", "" )
+				local newurl = GetGlobalYRPString( "text_character_background", "" )
 				if oldurl != newurl then
 					CharMenu.frame.bg.url = newurl
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH() )) -- url?
@@ -1521,11 +1525,11 @@ function openCharacterSelection( force )
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 255) )
 
 				if self.logo then
-					if self.logo.svlogo != GetGlobalString( "text_server_logo", "" ) then
-						self.logo.svlogo = GetGlobalString( "text_server_logo", "" )
+					if self.logo.svlogo != GetGlobalYRPString( "text_server_logo", "" ) then
+						self.logo.svlogo = GetGlobalYRPString( "text_server_logo", "" )
 						
-						if !strEmpty(GetGlobalString( "text_server_logo", "" ) ) then
-							self.logo:SetHTML(GetHTMLImage(GetGlobalString( "text_server_logo", "" ), iconsize, iconsize) )
+						if !strEmpty(GetGlobalYRPString( "text_server_logo", "" ) ) then
+							self.logo:SetHTML(GetHTMLImage(GetGlobalYRPString( "text_server_logo", "" ), iconsize, iconsize) )
 							self.logo:Show()
 						else
 							self.logo:Hide()
@@ -1644,7 +1648,7 @@ function openCharacterSelection( force )
 
 				-- Get Newest Background for the Menu
 				local oldurl = CharMenu.frame.bg.url
-				local newurl = GetGlobalString( "text_character_background", "" )
+				local newurl = GetGlobalYRPString( "text_character_background", "" )
 				if oldurl != newurl then
 					CharMenu.frame.bg.url = newurl
 					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH() )) -- url?
@@ -1838,7 +1842,7 @@ end
 function YRPOpenCharacterSelection( force )
 	if !force and LocalPlayer():Alive() then
 		logoutpos = LocalPlayer():GetPos()
-		logoutts = CurTime() + GetGlobalInt( "int_logouttime", 3 )
+		logoutts = CurTime() + GetGlobalYRPInt( "int_logouttime", 3 )
 		logout = true
 		YRP_LogOut = true
 	else
@@ -1848,7 +1852,7 @@ function YRPOpenCharacterSelection( force )
 end
 
 net.Receive( "YRP_LogOut", function( len )
-	if GetGlobalBool( "bool_character_system" ) and !IsVoidCharEnabled() then
+	if GetGlobalYRPBool( "bool_character_system" ) and !IsVoidCharEnabled() then
 		YRPOpenCharacterSelection()
 		timer.Simple( 0.3, function()
 			YRP_LogOut = false

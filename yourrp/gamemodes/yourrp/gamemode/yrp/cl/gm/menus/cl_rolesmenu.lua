@@ -6,7 +6,7 @@ ROLEMENU = ROLEMENU or {}
 ROLEMENU.open = false
 local _info = nil
 
-function ToggleRoleMenu()
+function YRPToggleRoleMenu()
 	if !ROLEMENU.open and YRPIsNoMenuOpen() then
 		OpenRoleMenu()
 	else
@@ -381,7 +381,7 @@ end
 
 function OpenRoleMenu()
 	openMenu()
-	if GetGlobalBool( "bool_players_can_switch_role", false) then
+	if GetGlobalYRPBool( "bool_players_can_switch_role", false) then
 		ROLEMENU.open = true
 		ROLEMENU.window = createD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
 		ROLEMENU.window:SetMinWidth(BFW() )

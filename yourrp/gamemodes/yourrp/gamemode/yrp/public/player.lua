@@ -335,7 +335,7 @@ end
 if CLIENT then
 	function MoneyFormat(money)
 		money = tonumber(money)
-		return GetGlobalString( "text_money_pre", "" ) .. string.point(money) .. GetGlobalString( "text_money_pos", "" )
+		return GetGlobalYRPString( "text_money_pre", "" ) .. string.point(money) .. GetGlobalYRPString( "text_money_pos", "" )
 	end
 
 	function MoneyFormatRounded(money, round)
@@ -346,20 +346,20 @@ if CLIENT then
 			round = 0
 		end
 		money = tonumber(money)
-		return GetGlobalString( "text_money_pre", "" ) .. roundMoney(money, round) .. GetGlobalString( "text_money_pos", "" )
+		return GetGlobalYRPString( "text_money_pre", "" ) .. roundMoney(money, round) .. GetGlobalYRPString( "text_money_pos", "" )
 	end
 end
 
 function Player:FormattedMoney()
-	return GetGlobalString( "text_money_pre", "" ) .. string.point(self:Money() ) .. GetGlobalString( "text_money_pos", "" )
+	return GetGlobalYRPString( "text_money_pre", "" ) .. string.point(self:Money() ) .. GetGlobalYRPString( "text_money_pos", "" )
 end
 
 function Player:FormattedMoneyBank()
-	return GetGlobalString( "text_money_pre", "" ) .. string.point(self:MoneyBank() ) .. GetGlobalString( "text_money_pos", "" )
+	return GetGlobalYRPString( "text_money_pre", "" ) .. string.point(self:MoneyBank() ) .. GetGlobalYRPString( "text_money_pos", "" )
 end
 
 function Player:FormattedSalary()
-	return GetGlobalString( "text_money_pre", "" ) .. string.point(self:Salary() ) .. GetGlobalString( "text_money_pos", "" )
+	return GetGlobalYRPString( "text_money_pre", "" ) .. string.point(self:Salary() ) .. GetGlobalYRPString( "text_money_pos", "" )
 end
 
 function Player:FormattedMoneyRounded(round)
@@ -369,7 +369,7 @@ function Player:FormattedMoneyRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return GetGlobalString( "text_money_pre", "" ) .. roundMoney(self:Money(), round) .. GetGlobalString( "text_money_pos", "" )
+	return GetGlobalYRPString( "text_money_pre", "" ) .. roundMoney(self:Money(), round) .. GetGlobalYRPString( "text_money_pos", "" )
 end
 
 function Player:FormattedMoneyBankRounded(round)
@@ -379,7 +379,7 @@ function Player:FormattedMoneyBankRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return GetGlobalString( "text_money_pre", "" ) .. roundMoney(self:MoneyBank(), round) .. GetGlobalString( "text_money_pos", "" )
+	return GetGlobalYRPString( "text_money_pre", "" ) .. roundMoney(self:MoneyBank(), round) .. GetGlobalYRPString( "text_money_pos", "" )
 end
 
 function Player:FormattedSalaryRounded(round)
@@ -389,7 +389,7 @@ function Player:FormattedSalaryRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-	return GetGlobalString( "text_money_pre", "" ) .. roundMoney(self:Salary(), round) .. GetGlobalString( "text_money_pos", "" )
+	return GetGlobalYRPString( "text_money_pre", "" ) .. roundMoney(self:Salary(), round) .. GetGlobalYRPString( "text_money_pos", "" )
 end
 
 function Player:AddMoney(money)
@@ -470,12 +470,28 @@ function Player:GetRoleName() -- Role Name / "Job" Name
 	return "BROKEN"
 end
 
-function Player:GetLicenseIDs()
-	return self:GetYRPString( "licenseIDs", "" )
+function YRPAddToTable( tTab, sTab )
+	for i, v in pairs( sTab ) do
+		if !strEmpty( v ) then
+			table.insert( tTab, v )
+		end
+	end
 end
 
-function Player:GetLicenseNames()
-	return self:GetYRPString( "licenseNames", "" )
+function Player:GetLicenseIDs()
+	local LIDs1 = self:GetYRPString( "licenseIDs1", "" )
+	local LIDs2 = self:GetYRPString( "licenseIDs2", "" )
+	local LIDs3 = self:GetYRPString( "licenseIDs3", "" )
+
+	if self.LIDs == nil or self.licenseIDsVersion != self:GetYRPInt( "licenseIDsVersion", 0 ) then
+		self.licenseIDsVersion = self:GetYRPInt( "licenseIDsVersion", 0 )
+		self.LIDs = {}
+		YRPAddToTable( self.LIDs, string.Explode( ",", LIDs1 ) )
+		YRPAddToTable( self.LIDs, string.Explode( ",", LIDs2 ) )
+		YRPAddToTable( self.LIDs, string.Explode( ",", LIDs3 ) )
+	end
+
+	return self.LIDs
 end
 
 function Player:GetRoleSweps()

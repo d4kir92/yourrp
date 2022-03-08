@@ -156,7 +156,7 @@ function PANEL:Init()
 
 		for i, r in pairs(rols) do
 			r.bool_eventrole = tobool(r.bool_eventrole)
-			if r.bool_eventrole == GetGlobalBool( "create_eventchar", false) then
+			if r.bool_eventrole == GetGlobalYRPBool( "create_eventchar", false) then
 				AddRole(rlist, r, w, h, list)
 			end
 		end
@@ -427,7 +427,7 @@ function PANEL:Init()
 							continue
 						end
 						
-						if rol.int_prerole == 0 and rol.bool_eventrole == GetGlobalBool( "create_eventchar", false) then
+						if rol.int_prerole == 0 and rol.bool_eventrole == GetGlobalYRPBool( "create_eventchar", false) then
 							w = rw
 							h = rh
 							local rlist = createD( "DHorizontalScroller", nil, 10, YRP.ctr(h), 0, 0)

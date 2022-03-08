@@ -101,46 +101,54 @@ function drop_weapon(sender)
 	return ""
 end
 
-function drop_money(sender, text)
-	local _table = string.Explode( " ", text)
-	local _money = tonumber(_table[2])
-	if isnumber(_money) then
-		local _moneyAmount = math.abs(_money)
-		if sender:canAfford(_moneyAmount) then
+function YRPDropMoney( ply, amount )
+	if ply and amount then
+		local _moneyAmount = math.abs( amount )
+		if ply:canAfford(_moneyAmount) then
 			local emoney = ents.Create( "yrp_money" )
-			sender:addMoney(-_moneyAmount)
+			ply:addMoney(-_moneyAmount)
 			local tr = util.TraceHull({
-				start = sender:GetPos() + sender:GetUp() * 74,
-				endpos = sender:GetPos() + sender:GetUp() * 74 + sender:GetForward() * 64,
-				filter = sender,
+				start = ply:GetPos() + ply:GetUp() * 74,
+				endpos = ply:GetPos() + ply:GetUp() * 74 + ply:GetForward() * 64,
+				filter = ply,
 				mins = Vector(-10, -10, -10),
 				maxs = Vector(10, 10, 10),
 				mask = MASK_SHOT_HULL
 			})
 			if tr.Hit then
 				local tr2 = util.TraceHull({
-					start = sender:GetPos() + sender:GetUp() * 74,
-					endpos = sender:GetPos() + sender:GetUp() * 74 - sender:GetForward() * 64,
-					filter = sender,
+					start = ply:GetPos() + ply:GetUp() * 74,
+					endpos = ply:GetPos() + ply:GetUp() * 74 - ply:GetForward() * 64,
+					filter = ply,
 					mins = Vector(-10, -10, -10),
 					maxs = Vector(10, 10, 10),
 					mask = MASK_SHOT_HULL
 				})
 				if tr2.Hit then
-					emoney:SetPos(sender:GetPos() + sender:GetUp() * 74)
+					emoney:SetPos(ply:GetPos() + ply:GetUp() * 74)
 				else
-					emoney:SetPos(sender:GetPos() + sender:GetUp() * 74 - sender:GetForward() * 64)
+					emoney:SetPos(ply:GetPos() + ply:GetUp() * 74 - ply:GetForward() * 64)
 				end
 			else
-				emoney:SetPos(sender:GetPos() + sender:GetUp() * 74 + sender:GetForward() * 64)
+				emoney:SetPos(ply:GetPos() + ply:GetUp() * 74 + ply:GetForward() * 64)
 			end
 			emoney:Spawn()
 			emoney:SetMoney(_moneyAmount)
-			YRP.msg( "note", sender:Nick() .. " dropped " .. _moneyAmount .. " money" )
+			YRP.msg( "note", ply:Nick() .. " dropped " .. _moneyAmount .. " money" )
 			return ""
 		else
-			YRP.msg( "note", sender:Nick() .. " can't afford to dropmoney ( " .. _moneyAmount .. " )" )
+			YRP.msg( "note", ply:Nick() .. " can't afford to dropmoney ( " .. _moneyAmount .. " )" )
 		end
+	else
+		YRP.msg( "note", "YRPDropMoney invalid input" )
+	end
+end
+
+function drop_money(sender, text)
+	local _table = string.Explode( " ", text)
+	local _money = tonumber(_table[2])
+	if isnumber(_money) then
+		YRPDropMoney( sender, _money )
 	else
 		YRP.msg( "note", "Failed dropmoney" )
 	end
@@ -499,7 +507,7 @@ function DoCommand(sender, command, text)
 	end
 
 	if command == "rpname" or command == "name" or command == "nick" then
-		if GetGlobalBool( "bool_characters_changeable_name", false) or sender:HasAccess() then
+		if GetGlobalYRPBool( "bool_characters_changeable_name", false) or sender:HasAccess() then
 			local name = text
 
 			name = string.Replace(name, "!rpname ", "" )
@@ -572,6 +580,9 @@ timer.Simple(4, function() -- must be last hook
 			end
 			channel = string.upper( channel)
 		end
+		if strEmpty(channel) then
+			channel = "SAY"
+		end
 
 		-- TARGET
 		local target = NULL
@@ -604,7 +615,7 @@ timer.Simple(4, function() -- must be last hook
 			local pk2 = YRPChatReplaceCMDS(structure2, sender, text)
 
 			if channel != "HELP" and !strEmpty(text) then
-				YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID64() .. "', " .. YRP_SQL_STR_IN(text) .. "" )
+				YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID() .. "', " .. YRP_SQL_STR_IN(text) .. "" )
 			end
 			
 			if !tobool(tab.bool_enabled) then
@@ -619,7 +630,7 @@ timer.Simple(4, function() -- must be last hook
 				return ""
 			elseif tab.int_mode == 1 then -- LOCAL
 				for i, p in pairs(player.GetAll() ) do
-					if tonumber(p:GetPos():Distance(sender:GetPos() )) < tonumber(GetGlobalInt( "int_yrp_chat_range_local", 400) ) then
+					if tonumber(p:GetPos():Distance(sender:GetPos() )) < tonumber(GetGlobalYRPInt( "int_yrp_chat_range_local", 400) ) then
 						net.Start( "yrp_player_say" )
 							net.WriteEntity(sender)
 							net.WriteTable(pk)

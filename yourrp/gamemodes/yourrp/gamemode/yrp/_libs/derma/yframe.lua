@@ -21,6 +21,8 @@ function PANEL:SetHeaderHeight(num)
 		YRP.msg( "note", "SetHeaderHeight | num is not a number: " .. tostring(num) .. "!" )
 	end
 
+	self:DockPadding( 5, num + 5, 5, 5 )
+
 	self:InternalUpdateSize()
 	self:UpdateSize()
 end
@@ -129,10 +131,14 @@ function PANEL:InternalUpdateSize()
 	local header = self:GetHeaderHeight()
 	local pw = self:GetWide()
 	local ph = self:GetTall()
-	self.con:SetSize(pw - 2 * br - 2, ph - header - 2 * br)
-	self.con:SetPos( br, header + br)
-	self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
-	self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
+	if self.con then
+		self.con:SetSize(pw - 2 * br - 2, ph - header - 2 * br)
+		self.con:SetPos( br, header + br)
+	end
+	if self.close then
+		self.close:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
+		self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
+	end
 	if self.langu then
 		self.langu:SetTall(self:GetHeaderHeight() * 0.6)
 		self.langu:SetPos(self:GetWide() - self.langu:GetWide() - self:GetHeaderHeight() * 1.0, self:GetHeaderHeight() * 0.2)
@@ -167,7 +173,7 @@ function PANEL:Init()
 		self._cb = true
 	end
 
-	self._headerheight = YRP.ctr(GetGlobalInt( "int_headerheight", 100) )
+	self:SetHeaderHeight( YRP.ctr(GetGlobalYRPInt( "int_headerheight", 100) ) )
 	self._border = 20
 
 	self:ShowCloseButton(false)
@@ -209,8 +215,8 @@ function PANEL:Init()
 end
 
 function PANEL:Think()
-	if self._headerheight != YRP.ctr(GetGlobalInt( "int_headerheight", 100) ) then
-		self._headerheight = YRP.ctr(GetGlobalInt( "int_headerheight", 100) )
+	if self._headerheight != YRP.ctr(GetGlobalYRPInt( "int_headerheight", 100) ) then
+		self._headerheight = YRP.ctr(GetGlobalYRPInt( "int_headerheight", 100) )
 
 		self:InternalUpdateSize()
 		self:UpdateSize()

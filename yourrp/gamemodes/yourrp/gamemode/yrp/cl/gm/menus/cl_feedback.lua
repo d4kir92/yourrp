@@ -5,7 +5,7 @@
 TICKET = TICKET or {}
 TICKET.open = false
 
-function toggleTicketMenu()
+function YRPToggleTicketMenu()
 	if !TICKET.open and YRPIsNoMenuOpen() then
 		openTicketMenu()
 	else

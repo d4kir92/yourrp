@@ -159,7 +159,7 @@ net.Receive( "setting_events", function(len)
 		EVENT.StartEvent = createD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20 + 300 + 20 + 300 + 20), YRP.ctr(20) )
 		EVENT.StartEvent:SetText( "Start Event" )
 		function EVENT.StartEvent:Paint(pw, ph)
-			if EVENT.EventList:GetSelectedLine() and !GetGlobalBool( "yrp_event_running", false) then
+			if EVENT.EventList:GetSelectedLine() and !GetGlobalYRPBool( "yrp_event_running", false) then
 				hook.Run( "YButtonAPaint", self, pw, ph)
 			end
 		end
@@ -178,7 +178,7 @@ net.Receive( "setting_events", function(len)
 		EVENT.EndEvent = createD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20 + 300 + 20 + 300 + 20 + 300 + 20), YRP.ctr(20) )
 		EVENT.EndEvent:SetText( "End Event" )
 		function EVENT.EndEvent:Paint(pw, ph)
-			if EVENT.EventList:GetSelectedLine() and GetGlobalBool( "yrp_event_running", false) then
+			if EVENT.EventList:GetSelectedLine() and GetGlobalYRPBool( "yrp_event_running", false) then
 				hook.Run( "YButtonRPaint", self, pw, ph)
 			end
 		end

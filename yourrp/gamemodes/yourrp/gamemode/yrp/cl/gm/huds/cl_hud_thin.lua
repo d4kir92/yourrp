@@ -113,8 +113,8 @@ function YRPDrawThin(tab)
 		HUD_THIN[name].oldcur = tab.max
 	end
 
-	if GetGlobalInt( "YRPHUDVersion", -1 ) != HUD_THIN[name]["hud_version"] then
-		HUD_THIN[name]["hud_version"] = GetGlobalInt( "YRPHUDVersion", -1 )
+	if GetGlobalYRPInt( "YRPHUDVersion", -1 ) != HUD_THIN[name]["hud_version"] then
+		HUD_THIN[name]["hud_version"] = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 
 		HUD_THIN[name].x = tab.x or lply:HudValue(name, "POSI_X" )
 		HUD_THIN[name].y = tab.y or lply:HudValue(name, "POSI_Y" )
@@ -237,7 +237,7 @@ local oy = 0
 function YRPHUDThin()
 	local lply = LocalPlayer()
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
-		if GetGlobalBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Thin" then
+		if GetGlobalYRPBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Thin" then
 			if lply:HudElementVisible( "COM" ) then
 				DrawThinCompass(lply:HudValue( "COM", "POSI_X" ), lply:HudValue( "COM", "POSI_Y" ), lply:HudValue( "COM", "SIZE_W" ), lply:HudValue( "COM", "SIZE_H" ) )
 			end

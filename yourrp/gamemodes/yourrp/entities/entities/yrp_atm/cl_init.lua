@@ -20,7 +20,7 @@ function ENT:Draw()
 		self.display.ent = self
 
 		function self.display:Paint(pw, ph)
-			local bankName = "YRP Bank [" .. GetGlobalString( "text_money_pre", "" ) .. lply:GetYRPString( "moneybank", "-1" ) .. GetGlobalString( "text_money_pos", "" ) .. "]"
+			local bankName = "YRP Bank [" .. GetGlobalYRPString( "text_money_pre", "" ) .. lply:GetYRPString( "moneybank", "-1" ) .. GetGlobalYRPString( "text_money_pos", "" ) .. "]"
 			if self.ent:GetYRPString( "status" ) == "startup" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0) )
 				draw.SimpleTextOutlined( "..." .. YRP.lang_string( "LID_loading" ) .. "...", "Y_80_500", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
@@ -50,22 +50,22 @@ function ENT:Draw()
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_withdraw" ), "Y_80_500", pw / 2, 150 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, 0, 300, 400, 100, Color( 255, 255, 255) )
-				draw.SimpleTextOutlined(GetGlobalString( "text_money_pre", "" ) .. "5" .. GetGlobalString( "text_money_pos", "" ), "Y_60_500", 200, 300 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(GetGlobalYRPString( "text_money_pre", "" ) .. "5" .. GetGlobalYRPString( "text_money_pos", "" ), "Y_60_500", 200, 300 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, 0, 450, 400, 100, Color( 255, 255, 255) )
-				draw.SimpleTextOutlined(GetGlobalString( "text_money_pre", "" ) .. "10" .. GetGlobalString( "text_money_pos", "" ), "Y_60_500", 200, 450 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(GetGlobalYRPString( "text_money_pre", "" ) .. "10" .. GetGlobalYRPString( "text_money_pos", "" ), "Y_60_500", 200, 450 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, 0, 600, 400, 100, Color( 255, 255, 255) )
-				draw.SimpleTextOutlined(GetGlobalString( "text_money_pre", "" ) .. "20" .. GetGlobalString( "text_money_pos", "" ), "Y_60_500", 200, 600 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(GetGlobalYRPString( "text_money_pre", "" ) .. "20" .. GetGlobalYRPString( "text_money_pos", "" ), "Y_60_500", 200, 600 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, 0, 850, 400, 100, Color( 255, 255, 255) )
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_back" ), "Y_60_500", 200, 850 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, pw-400, 300, 400, 100, Color( 255, 255, 255) )
-				draw.SimpleTextOutlined(GetGlobalString( "text_money_pre", "" ) .. "50" .. GetGlobalString( "text_money_pos", "" ), "Y_60_500", pw-200, 300 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(GetGlobalYRPString( "text_money_pre", "" ) .. "50" .. GetGlobalYRPString( "text_money_pos", "" ), "Y_60_500", pw-200, 300 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, pw-400, 450, 400, 100, Color( 255, 255, 255) )
-				draw.SimpleTextOutlined(GetGlobalString( "text_money_pre", "" ) .. "100" .. GetGlobalString( "text_money_pos", "" ), "Y_60_500", pw-200, 450 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(GetGlobalYRPString( "text_money_pre", "" ) .. "100" .. GetGlobalYRPString( "text_money_pos", "" ), "Y_60_500", pw-200, 450 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, pw-400, 600, 400, 100, Color( 255, 255, 255) )
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_other" ), "Y_60_500", pw-200, 600 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
@@ -77,22 +77,22 @@ function ENT:Draw()
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_deposit" ), "Y_80_500", pw / 2, 150 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, 0, 300, 400, 100, Color( 255, 255, 255) )
-				draw.SimpleTextOutlined(GetGlobalString( "text_money_pre", "" ) .. "5" .. GetGlobalString( "text_money_pos", "" ), "Y_60_500", 200, 300 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(GetGlobalYRPString( "text_money_pre", "" ) .. "5" .. GetGlobalYRPString( "text_money_pos", "" ), "Y_60_500", 200, 300 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, 0, 450, 400, 100, Color( 255, 255, 255) )
-				draw.SimpleTextOutlined(GetGlobalString( "text_money_pre", "" ) .. "10" .. GetGlobalString( "text_money_pos", "" ), "Y_60_500", 200, 450 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(GetGlobalYRPString( "text_money_pre", "" ) .. "10" .. GetGlobalYRPString( "text_money_pos", "" ), "Y_60_500", 200, 450 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, 0, 600, 400, 100, Color( 255, 255, 255) )
-				draw.SimpleTextOutlined(GetGlobalString( "text_money_pre", "" ) .. "20" .. GetGlobalString( "text_money_pos", "" ), "Y_60_500", 200, 600 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(GetGlobalYRPString( "text_money_pre", "" ) .. "20" .. GetGlobalYRPString( "text_money_pos", "" ), "Y_60_500", 200, 600 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, 0, 850, 400, 100, Color( 255, 255, 255) )
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_back" ), "Y_60_500", 200, 850 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, pw-400, 300, 400, 100, Color( 255, 255, 255) )
-				draw.SimpleTextOutlined(GetGlobalString( "text_money_pre", "" ) .. "50" .. GetGlobalString( "text_money_pos", "" ), "Y_60_500", pw-200, 300 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(GetGlobalYRPString( "text_money_pre", "" ) .. "50" .. GetGlobalYRPString( "text_money_pos", "" ), "Y_60_500", pw-200, 300 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, pw-400, 450, 400, 100, Color( 255, 255, 255) )
-				draw.SimpleTextOutlined(GetGlobalString( "text_money_pre", "" ) .. "100" .. GetGlobalString( "text_money_pos", "" ), "Y_60_500", pw-200, 450 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(GetGlobalYRPString( "text_money_pre", "" ) .. "100" .. GetGlobalYRPString( "text_money_pos", "" ), "Y_60_500", pw-200, 450 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, pw-400, 600, 400, 100, Color( 255, 255, 255) )
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_other" ), "Y_60_500", pw-200, 600 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
@@ -151,7 +151,7 @@ function ENT:Draw()
 				draw.SimpleTextOutlined(otherText .. " > " .. otherTextPos, "Y_80_500", pw / 2, 150 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, 300, 250, 400, 100, Color( 255, 255, 255) )
-				draw.SimpleTextOutlined(GetGlobalString( "text_money_pre", "" ) .. self.ent:GetYRPString( "othermoney", "..." ) .. GetGlobalString( "text_money_pos", "" ), "Y_60_500", 500, 250 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(GetGlobalYRPString( "text_money_pre", "" ) .. self.ent:GetYRPString( "othermoney", "..." ) .. GetGlobalYRPString( "text_money_pos", "" ), "Y_60_500", 500, 250 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 
 				draw.RoundedBox(0, 750, 250, 100, 100, Color( 255, 255, 255) )
 				draw.SimpleTextOutlined( "<", "Y_60_500", 800, 250 + 50, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )

@@ -10,5 +10,5 @@ if SERVER then
 end
 
 function IsInventorySystemEnabled()
-	return GetGlobalBool( "bool_inventory_system", false)
+	return GetGlobalYRPBool( "bool_inventory_system", false)
 end

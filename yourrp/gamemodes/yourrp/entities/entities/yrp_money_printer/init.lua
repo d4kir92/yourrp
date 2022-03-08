@@ -269,7 +269,7 @@ function ENT:Think()
 				self:SetYRPInt( "money", self:GetYRPInt( "moneyMax" ) )
 			end
 
-			if GetGlobalBool( "bool_money_printer_spawn_money", false) and self:GetYRPInt( "money", 0) > 0 then
+			if GetGlobalYRPBool( "bool_money_printer_spawn_money", false) and self:GetYRPInt( "money", 0) > 0 then
 				local m = self:GetYRPInt( "money", 0)
 				local ent_m = ents.Create( "yrp_money" )
 				ent_m:SetMoney(m)

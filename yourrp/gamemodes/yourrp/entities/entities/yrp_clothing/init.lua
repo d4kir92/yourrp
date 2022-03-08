@@ -21,8 +21,8 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-	if string.lower(GetGlobalString( "text_appearance_model", "models/props_wasteland/controlroom_storagecloset001a.mdl" ) ) != self:GetModel() then
-		self:SetModel(string.lower(GetGlobalString( "text_appearance_model", "models/props_wasteland/controlroom_storagecloset001a.mdl" ) ))
+	if string.lower(GetGlobalYRPString( "text_appearance_model", "models/props_wasteland/controlroom_storagecloset001a.mdl" ) ) != self:GetModel() then
+		self:SetModel(string.lower(GetGlobalYRPString( "text_appearance_model", "models/props_wasteland/controlroom_storagecloset001a.mdl" ) ))
 	end
 end
 

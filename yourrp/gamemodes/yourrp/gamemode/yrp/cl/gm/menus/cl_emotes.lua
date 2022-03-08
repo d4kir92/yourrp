@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _em = {}
 
-function ToggleEmotesMenu()
+function YRPToggleEmotesMenu()
 	if YRPIsNoMenuOpen() then
 		OpenEmotesMenu()
 	else

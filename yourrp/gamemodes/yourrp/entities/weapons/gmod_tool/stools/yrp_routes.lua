@@ -17,14 +17,13 @@ function TOOL:LeftClick( trace )
 			local wayp = YRPAddWaypoint( trace.HitPos, sel_wayp )
 			if IsValid( wayp ) then
 				self:GetOwner():SetYRPEntity( "yrp_waypoint_selected", wayp )
-				print( "yrp_waypoint_selected", wayp)
 			end
 		end
 	end
 end
  
 function TOOL:RightClick( trace )
-	print( "NOTHING HERE: WIP" )
+
 end
 
 function TOOL.BuildCPanel(panel)
@@ -43,12 +42,9 @@ function YRPAddWaypoint( vec, sel_wayp )
 		if IsValid( sel_wayp ) then
 			sel_wayp:SetYRPEntity( "yrp_waypoint_next", wayp )
 		end
-		print( "------------------------------" )
-		print( "Added Waypoint" )
 
 		return wayp
 	else
-		print( "FAIL" )
 		return NULL
 	end
 end

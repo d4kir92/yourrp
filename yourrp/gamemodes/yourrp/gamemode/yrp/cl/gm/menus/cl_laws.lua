@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _la = {}
 
-function ToggleLawsMenu()
+function YRPToggleLawsMenu()
 	if YRPIsNoMenuOpen() then
 		OpenLawsMenu()
 	end

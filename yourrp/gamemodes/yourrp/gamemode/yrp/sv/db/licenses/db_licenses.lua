@@ -115,15 +115,15 @@ net.Receive( "role_add_license", function(len, ply)
 	local _role = YRP_SQL_SELECT( "yrp_ply_roles", "licenseIDs", "uniqueID = " .. _role_uid)
 	if _role != nil then
 		_role = _role[1]
-		local _licenseIDs = {}
+		local LIDs = {}
 		if _role.licenseIDs != "" then
-			_licenseIDs = string.Explode( ",", _role.licenseIDs)
+			LIDs = string.Explode( ",", _role.licenseIDs)
 		end
-		if !table.HasValue(_licenseIDs, _license_uid) then
-			table.insert(_licenseIDs, _license_uid)
-			_licenseIDs = string.Implode( ",", _licenseIDs)
+		if !table.HasValue(LIDs, _license_uid) then
+			table.insert(LIDs, _license_uid)
+			LIDs = string.Implode( ",", LIDs)
 
-			YRP_SQL_UPDATE( "yrp_ply_roles", {["licenseIDs"] = _licenseIDs}, "uniqueID = " .. _role_uid)
+			YRP_SQL_UPDATE( "yrp_ply_roles", {["licenseIDs"] = LIDs}, "uniqueID = " .. _role_uid)
 		end
 	end
 end)
@@ -136,17 +136,17 @@ net.Receive( "role_rem_license", function(len, ply)
 	local _role = YRP_SQL_SELECT( "yrp_ply_roles", "licenseIDs", "uniqueID = " .. _role_uid)
 	if _role != nil then
 		_role = _role[1]
-		local _licenseIDs = {}
+		local LIDs = {}
 		if _role.licenseIDs != "" then
-			_licenseIDs = string.Explode( ",", _role.licenseIDs)
+			LIDs = string.Explode( ",", _role.licenseIDs)
 		end
 
-		if table.HasValue(_licenseIDs, _license_uid) then
-			table.RemoveByValue(_licenseIDs, _license_uid)
+		if table.HasValue(LIDs, _license_uid) then
+			table.RemoveByValue(LIDs, _license_uid)
 
-			_licenseIDs = string.Implode( ",", _licenseIDs)
+			LIDs = string.Implode( ",", LIDs)
 
-			YRP_SQL_UPDATE( "yrp_ply_roles", {["licenseIDs"] = _licenseIDs}, "uniqueID = " .. _role_uid)
+			YRP_SQL_UPDATE( "yrp_ply_roles", {["licenseIDs"] = LIDs}, "uniqueID = " .. _role_uid)
 		end
 	end
 end)
@@ -155,60 +155,99 @@ local Player = FindMetaTable( "Player" )
 function Player:AddLicense(license)
 	license = tostring(license)
 	if tonumber(license) != nil then
-		local _licenseIDs = self:GetYRPString( "licenseIDs", "" )
+		local LIDs1 = self:GetYRPString( "licenseIDs1", "" )
+		local LIDs2 = self:GetYRPString( "licenseIDs2", "" )
+		local LIDs3 = self:GetYRPString( "licenseIDs3", "" )
 
-		_licenseIDs = string.Explode( ",", _licenseIDs)
-		if !table.HasValue(_licenseIDs, license) then
-			table.insert(_licenseIDs, license)
+		local LIDs = {}
+		YRPAddToTable( LIDs, string.Explode( ",", LIDs1 ) )
+		YRPAddToTable( LIDs, string.Explode( ",", LIDs2 ) )
+		YRPAddToTable( LIDs, string.Explode( ",", LIDs3 ) )
+
+		if !table.HasValue(LIDs, license) then
+			table.insert(LIDs, license)
 		end
-		if table.HasValue(_licenseIDs, "" ) then
-			table.RemoveByValue(_licenseIDs, "" )
-		end
-		_licenseIDs = string.Implode( ",", _licenseIDs)
 
-		self:SetYRPString( "licenseIDs", tostring(_licenseIDs) )
-
-		local ids = string.Explode( ",", _licenseIDs)
-		local lnames = {}
-		for i, id in pairs(ids) do
-			local lic = YRP_SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'" )
-			if wk(lic) then
-				lic = lic[1]
-				table.insert(lnames, lic.name)
+		local SLIDs1 = ""
+		local SLIDs2 = ""
+		local SLIDs3 = ""
+		for i, LID in pairs( LIDs ) do
+			if string.len( SLIDs1 ) + 1 + string.len( LID ) <= 199 then -- 199 is maximum at string
+				if strEmpty( SLIDs1 ) then
+					SLIDs1 = SLIDs1 .. LID
+				else
+					SLIDs1 = SLIDs1 .. "," ..  LID
+				end
+			elseif string.len( SLIDs2 ) + 1 + string.len( LID ) <= 199 then
+				if strEmpty( SLIDs2 ) then
+					SLIDs2 = SLIDs2 .. LID
+				else
+					SLIDs2 = SLIDs2 .. "," ..  LID
+				end
+			elseif string.len( SLIDs3 ) + 1 + string.len( LID ) <= 199 then
+				if strEmpty( SLIDs3 ) then
+					SLIDs3 = SLIDs3 .. LID
+				else
+					SLIDs3 = SLIDs3 .. "," ..  LID
+				end
+			else
+				YRP.msg( "error", "#1 HIT MAXIMUM LICENSE-IDS: " .. LID )
 			end
 		end
-		lnames = table.concat(lnames, ", " )
-		self:SetYRPString( "licenseNames", lnames)
+
+		self:SetYRPString( "licenseIDs1", tostring(SLIDs1) )
+		self:SetYRPString( "licenseIDs2", tostring(SLIDs2) )
+		self:SetYRPString( "licenseIDs3", tostring(SLIDs3) )
 	end
 end
+
 
 function Player:RemoveLicense(license)
 	license = tostring(license)
 	if tonumber(license) != nil then
-		local _licenseIDs = self:GetYRPString( "licenseIDs", "" )
+		local LIDs1 = self:GetYRPString( "licenseIDs1", "" )
+		local LIDs2 = self:GetYRPString( "licenseIDs2", "" )
+		local LIDs3 = self:GetYRPString( "licenseIDs3", "" )
 
-		_licenseIDs = string.Explode( ",", _licenseIDs)
-		if table.HasValue(_licenseIDs, license) then
-			table.RemoveByValue(_licenseIDs, license)
-		end
-		if table.HasValue(_licenseIDs, "" ) then
-			table.RemoveByValue(_licenseIDs, "" )
-		end
-		_licenseIDs = string.Implode( ",", _licenseIDs)
-		
-		self:SetYRPString( "licenseIDs", tostring(_licenseIDs) )
+		local LIDs = {}
+		YRPAddToTable( LIDs, string.Explode( ",", LIDs1 ) )
+		YRPAddToTable( LIDs, string.Explode( ",", LIDs2 ) )
+		YRPAddToTable( LIDs, string.Explode( ",", LIDs3 ) )
 
-		local ids = string.Explode( ",", _licenseIDs)
-		local lnames = {}
-		for i, id in pairs(ids) do
-			local lic = YRP_SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'" )
-			if wk(lic) then
-				lic = lic[1]
-				table.insert(lnames, lic.name)
+		if !table.HasValue(LIDs, license) then
+			table.RemoveByValue(LIDs, license)
+		end
+
+		local SLIDs1 = ""
+		local SLIDs2 = ""
+		local SLIDs3 = ""
+		for i, LID in pairs( LIDs ) do
+			if string.len( SLIDs1 ) + 1 + string.len( LID ) <= 199 then -- 199 is maximum at string
+				if strEmpty( SLIDs1 ) then
+					SLIDs1 = SLIDs1 .. LID
+				else
+					SLIDs1 = SLIDs1 .. "," ..  LID
+				end
+			elseif string.len( SLIDs2 ) + 1 + string.len( LID ) <= 199 then
+				if strEmpty( SLIDs2 ) then
+					SLIDs2 = SLIDs2 .. LID
+				else
+					SLIDs2 = SLIDs2 .. "," ..  LID
+				end
+			elseif string.len( SLIDs3 ) + 1 + string.len( LID ) <= 199 then
+				if strEmpty( SLIDs3 ) then
+					SLIDs3 = SLIDs3 .. LID
+				else
+					SLIDs3 = SLIDs3 .. "," ..  LID
+				end
+			else
+				YRP.msg( "error", "#2 HIT MAXIMUM LICENSE-IDS: " .. LID )
 			end
 		end
-		lnames = table.concat(lnames, ", " )
-		self:SetYRPString( "licenseNames", lnames)
+
+		self:SetYRPString( "licenseIDs1", tostring(SLIDs1) )
+		self:SetYRPString( "licenseIDs2", tostring(SLIDs2) )
+		self:SetYRPString( "licenseIDs3", tostring(SLIDs3) )
 	end
 end
 
@@ -261,6 +300,8 @@ function GiveLicense(ply, lid)
 	YRP.msg( "gm", "Give " .. ply:RPName() .. " LicenseID " .. lid)
 
 	ply:AddLicense(lid)
+
+	ply:SetYRPInt( "licenseIDsVersion", ply:GetYRPInt( "licenseIDsVersion", 0 ) + 1 )
 end
 
 function RemoveLicense(ply, lid)
@@ -270,4 +311,5 @@ function RemoveLicense(ply, lid)
 	YRP.msg( "gm", "Removed from " .. ply:RPName() .. " LicenseID " .. lid)
 
 	ply:RemoveLicense(lid)
+	ply:SetYRPInt( "licenseIDsVersion", ply:GetYRPInt( "licenseIDsVersion", 0 ) + 1 )
 end

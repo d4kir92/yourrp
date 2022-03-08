@@ -540,21 +540,23 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 				cb:SetChecked(true)
 			end
 			function cb:OnChange( bVal)
-				if CURRENT_USERGROUP and UGS[CURRENT_USERGROUP] and type(UGS[CURRENT_USERGROUP].string_licenses) == "string" then
+				if CURRENT_USERGROUP and UGS[CURRENT_USERGROUP] and UGS[CURRENT_USERGROUP].string_licenses and type(UGS[CURRENT_USERGROUP].string_licenses) == "string" then
 					UGS[CURRENT_USERGROUP].string_licenses = string.Explode( ",", UGS[CURRENT_USERGROUP].string_licenses)
 				end
-				if bVal then
-					table.insert(UGS[CURRENT_USERGROUP].string_licenses, lic.uniqueID)
-				else
-					table.RemoveByValue(UGS[CURRENT_USERGROUP].string_licenses, lic.uniqueID)
+				if UGS[CURRENT_USERGROUP].string_licenses then
+					if bVal then
+						table.insert(UGS[CURRENT_USERGROUP].string_licenses, lic.uniqueID)
+					else
+						table.RemoveByValue(UGS[CURRENT_USERGROUP].string_licenses, lic.uniqueID)
+					end
+
+					local str = table.concat(UGS[CURRENT_USERGROUP].string_licenses, "," )
+
+					net.Start( "usergroup_update_string_licenses" )
+						net.WriteString(CURRENT_USERGROUP)
+						net.WriteString(str)
+					net.SendToServer()
 				end
-
-				local str = table.concat(UGS[CURRENT_USERGROUP].string_licenses, "," )
-
-				net.Start( "usergroup_update_string_licenses" )
-					net.WriteString(CURRENT_USERGROUP)
-					net.WriteString(str)
-				net.SendToServer()
 			end
 			
 			LICENSES.plus:AddItem(line)
@@ -634,18 +636,20 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 							cb:SetChecked(true)
 						end
 						function cb:OnChange( bVal)
-							if bVal then
-								table.insert(UGS[CURRENT_USERGROUP].string_tools, too.ItemName)
-							else
-								table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, too.ItemName)
+							if UGS[CURRENT_USERGROUP] and UGS[CURRENT_USERGROUP].string_tools then
+								if bVal then
+									table.insert(UGS[CURRENT_USERGROUP].string_tools, too.ItemName)
+								else
+									table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, too.ItemName)
+								end
+
+								local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, "," )
+
+								net.Start( "usergroup_update_string_tools" )
+									net.WriteString(CURRENT_USERGROUP)
+									net.WriteString(str)
+								net.SendToServer()
 							end
-
-							local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, "," )
-
-							net.Start( "usergroup_update_string_tools" )
-								net.WriteString(CURRENT_USERGROUP)
-								net.WriteString(str)
-							net.SendToServer()
 						end
 						
 						YTOOLS.plus:AddItem(line)

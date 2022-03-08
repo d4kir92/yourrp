@@ -417,7 +417,7 @@ function YRPUpdateVoiceList()
 
 	vm.win.list:Clear()
 
-	if lply:GetYRPBool( "yrp_togglevoicemenu", true ) then
+	if lply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) then
 		local h = YRP.ctr(66)
 		local pbr = YRP.ctr(10)
 		for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable( "yrp_voice_channels", {}), "int_position" ) do
@@ -490,7 +490,7 @@ function YRPUpdateVoiceList()
 						end
 					end
 					function mutemic:DoClick()
-						if !lply:GetYRPBool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, false) or (lply:GetYRPBool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, false) and lply:GetYRPInt( "yrp_voice_channel_active_mic", 0) < GetGlobalInt( "int_max_channels_active", 1 ) ) then
+						if !lply:GetYRPBool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, false) or (lply:GetYRPBool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, false) and lply:GetYRPInt( "yrp_voice_channel_active_mic", 0) < GetGlobalYRPInt( "int_max_channels_active", 1 ) ) then
 							net.Start( "mutemic_channel" )
 								net.WriteString( channel.uniqueID)
 							net.SendToServer()
@@ -518,7 +518,7 @@ function YRPUpdateVoiceList()
 						end
 					end
 					function mute:DoClick()
-						if !lply:GetYRPBool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) or (lply:GetYRPBool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) and lply:GetYRPInt( "yrp_voice_channel_passive_voice", 0) < GetGlobalInt( "int_max_channels_passive", 3 ) ) then
+						if !lply:GetYRPBool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) or (lply:GetYRPBool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) and lply:GetYRPInt( "yrp_voice_channel_passive_voice", 0) < GetGlobalYRPInt( "int_max_channels_passive", 3 ) ) then
 							net.Start( "mute_channel" )
 								net.WriteString( channel.uniqueID)
 							net.SendToServer()
@@ -585,8 +585,8 @@ function OpenVoiceMenu()
 	function vm.win:Paint(pw, ph)
 		DrawRectBlurHUD(5, 0, 0, pw, ph, 255)
 		
-		if self.toggle != lply:GetYRPBool( "yrp_togglevoicemenu", true ) then
-			self.toggle = lply:GetYRPBool( "yrp_togglevoicemenu", true )
+		if self.toggle != lply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) then
+			self.toggle = lply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true )
 			YRPUpdateVoiceList()
 		end
 
@@ -610,10 +610,10 @@ function OpenVoiceMenu()
 	-- HEADER
 	vm.win.listheader = createD( "DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(50 + 20), 0, 0)
 	function vm.win.listheader:Paint(pw, ph)
-		if lply:GetYRPBool( "yrp_togglevoicemenu", true ) then
+		if lply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) then
 			draw.SimpleText(YRP.lang_string( "LID_name" ), "Y_20_500", YRP.ctr(80), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_active_mic", 0) .. "/" .. GetGlobalInt( "int_max_channels_active", 1 ), "Y_20_500", YRP.ctr(990), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_passive_voice", 0) .. "/" .. GetGlobalInt( "int_max_channels_passive", 3 ), "Y_20_500", YRP.ctr(1100), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_active_mic", 0) .. "/" .. GetGlobalYRPInt( "int_max_channels_active", 1 ), "Y_20_500", YRP.ctr(990), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_passive_voice", 0) .. "/" .. GetGlobalYRPInt( "int_max_channels_passive", 3 ), "Y_20_500", YRP.ctr(1100), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end
 
@@ -692,7 +692,7 @@ function OpenVoiceMenu()
 		vm.win.maxactive:SetText( YRP.lang_string( "LID_maxactive" ) )
 		vm.win.maxactive:SetDecimals( 0 )
 		vm.win.maxactive:SetMinMax( 0, 10 )
-		vm.win.maxactive:SetValue( GetGlobalInt( "int_max_channels_active", 1 ) )
+		vm.win.maxactive:SetValue( GetGlobalYRPInt( "int_max_channels_active", 1 ) )
 		function vm.win.maxactive:OnValueChanged( value )
 			net.Start( "yrp_voice_set_max_active" )
 				net.WriteString( math.floor( value, self:GetDecimals() ) )
@@ -704,7 +704,7 @@ function OpenVoiceMenu()
 		vm.win.maxpassive:SetText( YRP.lang_string( "LID_maxpassive" ) )
 		vm.win.maxpassive:SetDecimals( 0 )
 		vm.win.maxpassive:SetMinMax( 0, 10 )
-		vm.win.maxpassive:SetValue( GetGlobalInt( "int_max_channels_passive", 3 ) )
+		vm.win.maxpassive:SetValue( GetGlobalYRPInt( "int_max_channels_passive", 3 ) )
 		function vm.win.maxpassive:OnValueChanged( value )
 			net.Start( "yrp_voice_set_max_passive" )
 				net.WriteString( math.floor( value, self:GetDecimals() ) )
@@ -752,8 +752,8 @@ net.Receive( "channel_up", function(len)
 	OpenVoiceMenu()
 end)
 
-function ToggleVoiceMenu()
-	if GetGlobalBool( "bool_voice", false) then
+function YRPToggleVoiceMenu()
+	if GetGlobalYRPBool( "bool_voice", false) then
 		if pa( vm.win) then
 			surface.PlaySound( "npc/metropolice/vo/off2.wav" )
 			CloseVoiceMenu()

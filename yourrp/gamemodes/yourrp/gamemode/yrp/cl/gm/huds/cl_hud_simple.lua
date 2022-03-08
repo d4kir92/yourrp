@@ -13,8 +13,8 @@ function HUDSimpleBG(tab)
 			Simple[tab.element] = Simple[tab.element] or {}
 			Simple[tab.element]["background"] = Simple[tab.element]["background"] or {}
 
-			if GetGlobalInt( "YRPHUDVersion", -1 ) != Simple[tab.element]["background"]["version"] then
-				Simple[tab.element]["background"]["version"] = GetGlobalInt( "YRPHUDVersion", -1 )
+			if GetGlobalYRPInt( "YRPHUDVersion", -1 ) != Simple[tab.element]["background"]["version"] then
+				Simple[tab.element]["background"]["version"] = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 
 				local w = lply:HudValue(tab.element, "SIZE_W" )
 				local h = lply:HudValue(tab.element, "SIZE_H" )
@@ -54,8 +54,8 @@ function HUDSimpleBAR(tab)
 		Simple[tab.element]["icon"] = Simple[tab.element]["icon"] or {}
 		Simple[tab.element]["text"] = Simple[tab.element]["text"] or {}
 
-		if GetGlobalInt( "YRPHUDVersion", -1 ) != Simple[tab.element]["bar"]["version"] then
-			Simple[tab.element]["bar"]["version"] = GetGlobalInt( "YRPHUDVersion", -1 )
+		if GetGlobalYRPInt( "YRPHUDVersion", -1 ) != Simple[tab.element]["bar"]["version"] then
+			Simple[tab.element]["bar"]["version"] = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 
 			local w = lply:HudValue(tab.element, "SIZE_W" )
 			local h = lply:HudValue(tab.element, "SIZE_H" )
@@ -177,8 +177,8 @@ function HUDSimpleBR(tab)
 				Simple[tab.element]["border"].y = HUDMOTIONY(Simple[tab.element]["border"].fy)
 			end
 
-			if GetGlobalInt( "YRPHUDVersion", -1 ) != Simple[tab.element]["border"]["version"] then
-				Simple[tab.element]["border"]["version"] = GetGlobalInt( "YRPHUDVersion", -1 )
+			if GetGlobalYRPInt( "YRPHUDVersion", -1 ) != Simple[tab.element]["border"]["version"] then
+				Simple[tab.element]["border"]["version"] = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 
 				local w = lply:HudValue(tab.element, "SIZE_W" )
 				local h = lply:HudValue(tab.element, "SIZE_H" )
@@ -256,8 +256,8 @@ function HUDSimpleCompass()
 		Simple["COM"]["east"] = Simple["COM"]["east"] or {}
 		Simple["COM"]["west"] = Simple["COM"]["west"] or {}
 
-		if GetGlobalInt( "YRPHUDVersion", -1 ) != Simple["COM"]["degree"]["version"] then
-			Simple["COM"]["degree"]["version"] = GetGlobalInt( "YRPHUDVersion", -1 )
+		if GetGlobalYRPInt( "YRPHUDVersion", -1 ) != Simple["COM"]["degree"]["version"] then
+			Simple["COM"]["degree"]["version"] = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 
 			local w = lply:HudValue( "COM", "SIZE_W" )
 			local h = lply:HudValue( "COM", "SIZE_H" )
@@ -519,7 +519,7 @@ icons["NA"] = "64_user"
 function HUDSimple()
 	local lply = LocalPlayer()
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and !YRPIsScoreboardVisible() then
-		if GetGlobalBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Simple" then
+		if GetGlobalYRPBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Simple" then
 			local batterypower = system.BatteryPower()
 
 			-- Background
@@ -562,12 +562,12 @@ function HUDSimple()
 			local RO = {}
 			RO.element = "RO"
 			HUDSimpleBG(RO)
-			if GetGlobalBool( "bool_stamina", false) then
+			if GetGlobalYRPBool( "bool_stamina", false) then
 				local ST = {}
 				ST.element = "ST"
 				HUDSimpleBG(ST)
 			end
-			if GetGlobalBool( "bool_radiation", false) then
+			if GetGlobalYRPBool( "bool_radiation", false) then
 				local RA = {}
 				RA.element = "RA"
 				HUDSimpleBG(RA)
@@ -577,12 +577,12 @@ function HUDSimple()
 				HU.element = "HU"
 				HUDSimpleBG(HU)
 			end
-			if GetGlobalBool( "bool_thirst", false) then
+			if GetGlobalYRPBool( "bool_thirst", false) then
 				local TH = {}
 				TH.element = "TH"
 				HUDSimpleBG(TH)
 			end
-			if GetGlobalBool( "bool_permille", false) then
+			if GetGlobalYRPBool( "bool_permille", false) then
 				local AL = {}
 				AL.element = "AL"
 				HUDSimpleBG(AL)
@@ -693,7 +693,7 @@ function HUDSimple()
 			SN.element = "SN"
 			SN.cur = 0
 			SN.max = 1
-			SN.text = GetGlobalString( "text_server_name", "SERVERNAME" )
+			SN.text = GetGlobalYRPString( "text_server_name", "SERVERNAME" )
 			HUDSimpleBAR(SN)
 			NA = {}
 			NA.element = "NA"
@@ -773,7 +773,7 @@ function HUDSimple()
 			RO.icon = icons["RO"]
 			--RO.tcolor = lply:GetRoleColor()
 			HUDSimpleBAR(RO)
-			if GetGlobalBool( "bool_stamina", false) then
+			if GetGlobalYRPBool( "bool_stamina", false) then
 				local ST = {}
 				ST.element = "ST"
 				ST.cur = lply:Stamina()
@@ -783,7 +783,7 @@ function HUDSimple()
 				ST.icon = icons["ST"]
 				HUDSimpleBAR(ST)
 			end
-			if GetGlobalBool( "bool_hunger", false) then
+			if GetGlobalYRPBool( "bool_hunger", false) then
 				local HU = {}
 				HU.element = "HU"
 				HU.cur = lply:Hunger()
@@ -793,7 +793,7 @@ function HUDSimple()
 				HU.icon = icons["HU"]
 				HUDSimpleBAR(HU)
 			end
-			if GetGlobalBool( "bool_thirst", false) then
+			if GetGlobalYRPBool( "bool_thirst", false) then
 				local TH = {}
 				TH.element = "TH"
 				TH.cur = lply:Thirst()
@@ -803,7 +803,7 @@ function HUDSimple()
 				TH.icon = icons["TH"]
 				HUDSimpleBAR(TH)
 			end
-			if GetGlobalBool( "bool_permille", false) then
+			if GetGlobalYRPBool( "bool_permille", false) then
 				local AL = {}
 				AL.element = "AL"
 				AL.cur = lply:Permille()
@@ -813,7 +813,7 @@ function HUDSimple()
 				AL.icon = icons["AL"]
 				HUDSimpleBAR(AL)
 			end
-			if GetGlobalBool( "bool_radiation", false) then
+			if GetGlobalYRPBool( "bool_radiation", false) then
 				local RA = {}
 				RA.element = "RA"
 				RA.cur = lply:Radiation()
@@ -994,27 +994,27 @@ function HUDSimple()
 			RO = {}
 			RO.element = "RO"
 			HUDSimpleBR(RO)
-			if GetGlobalBool( "bool_stamina", false) then
+			if GetGlobalYRPBool( "bool_stamina", false) then
 				local ST = {}
 				ST.element = "ST"
 				HUDSimpleBR(ST)
 			end
-			if GetGlobalBool( "bool_radiation", false) then
+			if GetGlobalYRPBool( "bool_radiation", false) then
 				local RA = {}
 				RA.element = "RA"
 				HUDSimpleBR(RA)
 			end
-			if GetGlobalBool( "bool_hunger", false) then
+			if GetGlobalYRPBool( "bool_hunger", false) then
 				local HU = {}
 				HU.element = "HU"
 				HUDSimpleBR(HU)
 			end
-			if GetGlobalBool( "bool_thirst", false) then
+			if GetGlobalYRPBool( "bool_thirst", false) then
 				local TH = {}
 				TH.element = "TH"
 				HUDSimpleBR(TH)
 			end
-			if GetGlobalBool( "bool_permille", false) then
+			if GetGlobalYRPBool( "bool_permille", false) then
 				local AL = {}
 				AL.element = "AL"
 				HUDSimpleBR(AL)

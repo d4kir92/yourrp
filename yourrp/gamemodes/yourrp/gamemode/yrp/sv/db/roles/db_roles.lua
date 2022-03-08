@@ -1731,21 +1731,17 @@ end)
 
 util.AddNetworkString( "openInteractMenu" )
 net.Receive( "openInteractMenu", function(len, ply)
-	local tmpTargetSteamID = net.ReadString()
+	local charid = net.ReadString()
+	charid = tonumber( charid )
+	local target = YRPGetPlayerByCharID( charid )
 
-	local tmpTarget = nil
-	for k, v in pairs(player.GetAll() ) do
-		if v:YRPSteamID() == tmpTargetSteamID then
-			tmpTarget = v
-		end
-	end
-	if ea(tmpTarget) and tmpTarget:IsPlayer() then
+	if ea(target) and target:IsPlayer() then
 		local idcard = YRP_SQL_SELECT( "yrp_general", "*", nil)
 		idcard = tobool(idcard[1].bool_identity_card)
 
-		local tmpTargetChaTab = tmpTarget:YRPGetCharacterTable()
-		if wk(tmpTargetChaTab) then
-			local tmpTargetRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID)
+		local chatab = target:YRPGetCharacterTable()
+		if wk(chatab) then
+			local targetRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. chatab.roleID)
 
 			local tmpT = ply:YRPGetCharacterTable()
 			local tmpTable = ply:YRPGetRoleTable()
@@ -1761,7 +1757,7 @@ net.Receive( "openInteractMenu", function(len, ply)
 				if tonumber(tmpTable.bool_instructor) == 1 then
 					isInstructor = true
 
-					local tmpSearch = true	--tmpTargetSteamID
+					local tmpSearch = true	--targetSteamID
 					local tmpTableSearch = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
 					if wk(tmpTableSearch) then
 						local tmpSearchUniqueID = tmpTableSearch[1].int_prerole
@@ -1771,31 +1767,17 @@ net.Receive( "openInteractMenu", function(len, ply)
 							if wk(tmpTableSearch) then
 								tmpSearchUniqueID = tonumber(tmpTableSearch[1].int_prerole)
 
-								if tonumber(tmpTargetRole[1].int_prerole) != 0 and tmpTableSearch[1].uniqueID == tmpTargetRole[1].uniqueID then
+								if tonumber(targetRole[1].int_prerole) != 0 and tmpTableSearch[1].uniqueID == targetRole[1].uniqueID then
 									tmpDemote = true
-									local tmp = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetRole[1].int_prerole)
+									local tmp = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. targetRole[1].int_prerole)
 									tmpDemoteName = tmp[1].string_name
 								end
 
-								if tonumber(tmpSearchUniqueID) == tonumber(tmpTargetRole[1].uniqueID) then
+								if tonumber(tmpSearchUniqueID) == tonumber(targetRole[1].uniqueID) then
 									tmpPromote = true
 									tmpPromoteName = tmpTableSearch[1].string_name
 								end
 
-								--[[if tmpSearchUniqueID == 0 or tmpPromote and tmpDemote then
-									if !tmpDemote and tonumber(tmpTargetRole[1].uniqueID) != 1 and tonumber(tmpTargetRole[1].int_groupID) == ply:GetGroupUID() then
-										-- von First Role to CIV
-										tmpDemote = true
-										local tmp = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '1'" )
-										tmpDemoteName = tmp[1].string_name
-									end
-									if !tmpPromote and tonumber(tmpTargetRole[1].uniqueID) == 1 then
-										-- von CIV to First Role
-										tmpPromote = true
-										tmpPromoteName = tmpTableSearch[1].string_name
-									end
-									tmpSearch = false
-								end]]
 								if tmpPromote and tmpDemote then
 									tmpSearch = false
 								end
@@ -1818,7 +1800,7 @@ net.Receive( "openInteractMenu", function(len, ply)
 				end
 
 				net.Start( "openInteractMenu" )
-					net.WriteEntity(tmpTarget)
+					net.WriteEntity(target)
 
 					net.WriteBool(idcard)
 
@@ -1854,21 +1836,20 @@ function removeFromWhitelist( SteamID, roleID )
 	end
 end
 
-function addToWhitelistByPly( SteamID, roleID, groupID, nick, ply, target )
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. target:SteamID64() .. "', '" .. roleID .. " " .. groupID .. "'" )
+function addToWhitelistByPly( SteamID, roleID, groupID, nick, ply, targetSteamID )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. targetSteamID .. "', '" .. roleID .. " " .. groupID .. "'" )
 
 	if YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID ) == nil then
 		local dat = util.DateStamp()
 		local status = "Promoted by " .. ply:SteamName()
-		local name = target:SteamName()
-		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', " .. YRP_SQL_STR_IN( nick ) .. ", " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
+		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', " .. YRP_SQL_STR_IN( nick ) .. ", " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. nick .. "'" )
 	else
 		YRP.msg( "note", "is already in whitelist" )
 	end
 end
 
 function addToWhitelist( roleID, ply )
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. roleID .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. ply:SteamID() .. "', '" .. roleID .. "'" )
 
 	if YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:YRPSteamID() .. "' AND roleID = " .. roleID ) == nil then
 		local dat = util.DateStamp()
@@ -1881,7 +1862,7 @@ function addToWhitelist( roleID, ply )
 end
 
 function addToWhitelistGroup( groupID, ply )
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. groupID .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. ply:SteamID() .. "', '" .. groupID .. "'" )
 
 	if YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. ply:YRPSteamID() .. "' AND groupID = " .. groupID ) == nil then
 		local dat = util.DateStamp()
@@ -1893,23 +1874,34 @@ function addToWhitelistGroup( groupID, ply )
 	end
 end
 
-util.AddNetworkString( "promotePlayer" )
-net.Receive( "promotePlayer", function(len, ply)
-	local tmpTargetSteamID = net.ReadString()
+function YRPGetCharTabByID( uid )
+	local char = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = '" .. uid .. "'" )
+	if char and char[1] then
+		return char[1]
+	end
+	return {}
+end
 
-	local tmpTarget = nil
-	for k, v in pairs( player.GetAll() ) do
-		if v:YRPSteamID() == tmpTargetSteamID then
-			tmpTarget = v
+function YRPGetPlayerByCharID( uid )
+	for i, v in pairs( player.GetAll() ) do
+		if v:CharID() == uid then
+			return v
 		end
 	end
+	return NULL
+end
 
-	local tmpTableInstructorRole = ply:YRPGetRoleTable() --YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTableInstructor.roleID )
+util.AddNetworkString( "promotePlayer" )
+net.Receive( "promotePlayer", function(len, ply)
+	local targetcharid = net.ReadString()
+	targetcharid = tonumber( targetcharid )
 
-	local tmpTargetChaTab = tmpTarget:YRPGetCharacterTable()
+	local target = YRPGetPlayerByCharID( targetcharid )
+	local chatab = YRPGetCharTabByID( targetcharid )
 
+	local tmpTableInstructorRole = ply:YRPGetRoleTable()
 	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
-		local tmpTableTargetRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
+		local tmpTableTargetRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. chatab.roleID )
 		local tmpTableTargetPromoteRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "int_prerole = '" .. tmpTableTargetRole[1].uniqueID .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'" )
 		local tmpTableTargetGroup = nil
 		if tmpTableTargetPromoteRole != nil then
@@ -1922,16 +1914,21 @@ net.Receive( "promotePlayer", function(len, ply)
 		tmpTableTargetPromoteRole = tmpTableTargetPromoteRole[1]
 		tmpTableTargetGroup = tmpTableTargetGroup[1]
 
-		for k, v in pairs(player.GetAll() ) do
-			if tostring( v:YRPSteamID() ) == tostring( tmpTargetSteamID ) then
-				addToWhitelistByPly( tmpTarget:YRPSteamID(), tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, v:Nick(), ply, v )
-				break
+		if tmpTableTargetPromoteRole.uniqueID != tmpTableInstructorRole.uniqueID then
+			addToWhitelistByPly( chatab.SteamID, tmpTableTargetPromoteRole.uniqueID, tmpTableTargetGroup.uniqueID, chatab.rpname, ply, chatab.SteamID )
+
+			YRP_SQL_UPDATE( "yrp_characters", {
+				["roleID"] = tmpTableTargetPromoteRole.uniqueID
+			}, "uniqueID = '" .. chatab.uniqueID .. "'" )
+
+			if IsValid( target ) then
+				SetRole( target, tmpTableTargetPromoteRole.uniqueID, true )
 			end
+			YRP.msg( "note", ply:Nick() .. " promoted " .. chatab.rpname .. " to " .. tmpTableTargetPromoteRole.string_name )
+			YRPSendGroupMember( ply, chatab.uniqueID )
+		else
+			YRP.msg( "note", ply:Nick() .. " tried to promote to same role" )
 		end
-
-		SetRole( tmpTarget, tmpTableTargetPromoteRole.uniqueID, true )
-
-		YRP.msg( "note", ply:Nick() .. " promoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetPromoteRole.uniqueID )
 	elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
 		YRP.msg( "error", "Player: " .. ply:Nick() .. " ( " .. ply:YRPSteamID() .. " ) tried to use promote function! He is not an instructor!" )
 	else
@@ -1941,21 +1938,16 @@ end)
 
 util.AddNetworkString( "demotePlayer" )
 net.Receive( "demotePlayer", function( len, ply )
-	local tmpTargetSteamID = net.ReadString()
+	local targetcharid = net.ReadString()
+	targetcharid = tonumber( targetcharid )
 
-	local tmpTarget = nil
-	for k, v in pairs( player.GetAll() ) do
-		if v:YRPSteamID() == tmpTargetSteamID then
-			tmpTarget = v
-		end
-	end
+	local target = YRPGetPlayerByCharID( targetcharid )
+	local chatab = YRPGetCharTabByID( targetcharid )
 
 	local tmpTableInstructorRole = ply:YRPGetRoleTable()
 
-	local tmpTargetChaTab = tmpTarget:YRPGetCharacterTable()
-
 	if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
-		local tmpTableTargetRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTargetChaTab.roleID )
+		local tmpTableTargetRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. chatab.roleID )
 		local tmpTableTargetDemoteRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTableTargetRole[1].int_prerole )
 		local tmpTableTargetGroup = nil
 		if tmpTableTargetDemoteRole != nil then
@@ -1967,10 +1959,17 @@ net.Receive( "demotePlayer", function( len, ply )
 		tmpTableTargetDemoteRole = tmpTableTargetDemoteRole[1]
 		tmpTableTargetGroup = tmpTableTargetGroup[1]
 
-		removeFromWhitelist( tmpTarget:YRPSteamID(), tmpTableTargetRole[1].uniqueID )
-		SetRole( tmpTarget, tmpTableTargetDemoteRole.uniqueID )
+		removeFromWhitelist( chatab.SteamID, tmpTableTargetRole[1].uniqueID )
 
-		YRP.msg( "note", ply:Nick() .. " demoted " .. tmpTarget:Nick() .. " to " .. tmpTableTargetDemoteRole.uniqueID )
+		YRP_SQL_UPDATE( "yrp_characters", {
+			["roleID"] = tmpTableTargetDemoteRole.uniqueID
+		}, "uniqueID = '" .. chatab.uniqueID .. "'" )
+
+		if IsValid( target ) then
+			SetRole( target, tmpTableTargetDemoteRole.uniqueID )
+		end
+		YRP.msg( "note", ply:Nick() .. " demoted " .. chatab.rpname .. " to " .. tmpTableTargetDemoteRole.string_name )
+		YRPSendGroupMember( ply, chatab.uniqueID )
 	elseif tonumber( tmpTableInstructorRole.bool_instructor ) == 0 then
 		YRP.msg( "note", "Player: " .. ply:Nick() .. " ( " .. ply:YRPSteamID() .. " ) tried to use demote function! He is not an instructor!" )
 	else
@@ -2010,18 +2009,14 @@ util.AddNetworkString( "invitetogroup" )
 util.AddNetworkString( "yrp_invite_ply" )
 util.AddNetworkString( "yrp_invite_accept" )
 net.Receive( "invitetogroup", function( len, ply )
-	local tmpTargetSteamID = net.ReadString()
+	local charid = net.ReadString()
+	charid = tonumber( charid )
 
-	local tmpTarget = nil
-	for k, v in pairs( player.GetAll() ) do
-		if v:YRPSteamID() == tmpTargetSteamID then
-			tmpTarget = v
-		end
-	end
+	local target = YRPGetPlayerByCharID( charid )
 
 	local tmpTableInstructorRole = ply:YRPGetRoleTable()
 
-	if tmpTarget != nil then
+	if IsValid( target ) then
 		if tonumber( tmpTableInstructorRole.bool_instructor ) == 1 then
 			local firstrankuid = YRPGetFirstRankUID(ply:GetRoleUID() )
 			
@@ -2038,9 +2033,9 @@ net.Receive( "invitetogroup", function( len, ply )
 					net.Start( "yrp_invite_ply" )
 						net.WriteTable(role)
 						net.WriteTable(group)
-					net.Send(tmpTarget)
+					net.Send(target)
 
-					YRP.msg( "note", "[InviteToGroup] " .. ply:Nick() .. " invited " .. tmpTarget:Nick() .. " to " .. ply:GetGroupName() )
+					YRP.msg( "note", "[InviteToGroup] " .. ply:Nick() .. " invited " .. target:Nick() .. " to " .. ply:GetGroupName() )
 				else
 					YRP.msg( "note", "[InviteToGroup] GROUP DOESN'T EXISTS ANYMORE" )
 				end
@@ -2067,6 +2062,7 @@ net.Receive( "yrp_invite_accept", function( len, ply )
 		addToWhitelistGroup( tonumber(role.int_groupID), ply )
 		SetRole( ply, tonumber(role.uniqueID) )
 		YRP.msg( "note", "[yrp_invite_accept] Added to whitelist and setrole for " .. ply:YRPName() )
+		YRPUpdateGroupMemberLists()
 	else
 		YRP.msg( "note", "[yrp_invite_accept] ROLE DOESN'T EXISTS ANYMORE" )
 	end

@@ -102,9 +102,15 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 		local player = GetPlayerByName(playername)
 
 		if ea(player) then
-			player:SetRPName(newrpname, "console forcerpname" )
+			player:SetRPName( newrpname, "darkrp forcerpname" )
 		else
 			YRP.msg( "note", "[forcerpname] Player not found" )
+		end
+	elseif args[1] and args[1] == "name" then
+		local newrpname = args[2]
+
+		if ea(ply) then
+			ply:SetRPName( newrpname, "darkrp name" )
 		end
 	elseif args[1] and args[1] == "wanted" then
 		YRP.msg( "error", "[darkrp] wanted: args[1]: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
@@ -116,6 +122,12 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 		YRP.msg( "error", "[darkrp] unwarrant: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
 	elseif args[1] and args[1] == "addjailpos" then
 		--
+	elseif args[1] and args[1] == "unownalldoors" then
+		--
+	elseif args[1] and args[1] == "cheque" then
+		--
+	elseif args[1] and args[1] == "dropmoney" then
+		YRPDropMoney(ply, args[2])
 	elseif args[1] and args[1] == "drop" then
 		local _weapon = ply:GetActiveWeapon()
 		if _weapon != nil and PlayersCanDropWeapons() then
@@ -128,11 +140,11 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 	elseif args[1] and jobByCmd[args[1]] then
 		local jobtab = RPExtraTeams[jobByCmd[args[1]]]
 		if jobtab then
-			if GetGlobalBool( "bool_players_die_on_role_switch", false) then
+			if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 				ply:OldKillSilent()
 			end
 			SetRole(ply, jobtab.uniqueID)
-			if GetGlobalBool( "bool_players_die_on_role_switch", false) then
+			if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 				ply:Spawn()
 			end
 		end
@@ -173,10 +185,10 @@ concommand.Add( "yrp_givelicense", function(ply, cmd, args)
 end)
 
 concommand.Add( "yrp_allowallcountries", function(ply, cmd, args)
-	SetGlobalYRPBool( "yrp_allowallcountries", !GetGlobalBool( "yrp_allowallcountries", false ) )
+	SetGlobalYRPBool( "yrp_allowallcountries", !GetGlobalYRPBool( "yrp_allowallcountries", false ) )
 
 	MsgC( Color( 255, 255, 0 ), "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" .. "\n" )
-	if GetGlobalBool( "yrp_allowallcountries", false ) then
+	if GetGlobalYRPBool( "yrp_allowallcountries", false ) then
 		MsgC( Color( 0, 255, 0 ), "[YourRP] Allow All Countries is Enabled." .. "\n" )
 	else
 		MsgC( Color( 255, 0, 0 ), "[YourRP] Allow All Countries is Disabled." .. "\n" )

@@ -5,7 +5,7 @@ function GM:PlayerDisconnected(ply)
 	YRP.msg( "gm", "[PlayerDisconnected] " .. ply:YRPName() )
 	save_clients( "PlayerDisconnected" )
 
-	YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID64() .. "', '" .. "disconnected" .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID() .. "', '" .. "disconnected" .. "'" )
 
 	local _rol_tab = ply:YRPGetRoleTable()
 	if wk(_rol_tab) then
@@ -97,7 +97,7 @@ function GM:PlayerInitialSpawn(ply)
 
 	timer.Simple( 1, function()
 		if IsValid(ply) and ply.KillSilent then
-			if GetGlobalBool( "bool_character_system", true) then
+			if GetGlobalYRPBool( "bool_character_system", true) then
 				ply:OldKillSilent()
 			else
 				ply:Spawn()
@@ -133,7 +133,7 @@ hook.Add( "Think", "yrp_banhackers", function()
 		hackertick = CurTime() + 1
 
 		for i, ply in pairs( player.GetAll() ) do
-			if hackers[ ply:SteamID64() ] or hackers[ ply:YRPSteamID() ] then
+			if hackers[ ply:SteamID() ] or hackers[ ply:YRPSteamID() ] then
 				ply:Ban( 0 )
 				ply:Kick( "HACKS DETECTED! VAC BAN INCOMING" )
 			end
@@ -165,7 +165,7 @@ hook.Add( "PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	
 	ply:SetYRPBool( "yrpspawnedwithcharacter", false)
 	
-	if hackers[ ply:SteamID64() ] or hackers[ ply:YRPSteamID() ] or hackers[ steamid ] then
+	if hackers[ ply:SteamID() ] or hackers[ ply:YRPSteamID() ] or hackers[ steamid ] then
 		ply:Ban( 0 )
 		ply:Kick( "HACKS DETECTED! VAC BAN INCOMING" )
 	end
@@ -181,7 +181,7 @@ hook.Add( "PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 
 	YRPSetAllCharsToDefaultRole(ply)
 
-	if IsVoidCharEnabled() or GetGlobalBool( "bool_character_system", true) == false then
+	if IsVoidCharEnabled() or GetGlobalYRPBool( "bool_character_system", true) == false then
 		local chars = YRP_SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. ply:YRPSteamID() .. "'" )
 		if !wk( chars) then
 			local tab = {}
@@ -234,13 +234,44 @@ function YRP:Loadout(ply)
 	end
 end
 
+function YRPSetBodyGroups( ply )
+	ply:YRPUpdateAppearance()
+	
+	local rolTab = ply:YRPGetRoleTable()
+	if wk(rolTab) and tonumber( rolTab.bool_savebodygroups ) == 1 then
+		local chaTab = ply:YRPGetCharacterTable()
+		if wk( chaTab ) then
+			ply:SetSkin( chaTab.skin)
+			ply:SetupHands()
+			
+			for i = 0, 19 do
+				ply:SetBodygroup(i, chaTab["bg" .. i])
+			end
+		end
+	end
+end
+
+function YRPResetBodyGroups( ply )
+	local tab = {}
+	tab.playermodelID = 1
+	tab.skin = 0
+	for i = 0, 19 do
+		tab["bg" .. i] = 0
+	end
+	YRP_SQL_UPDATE( "yrp_characters", tab, "uniqueID = '" .. ply:CharID() .. "'" )
+
+	YRPSetBodyGroups( ply )
+end
+
 function YRPPlayerLoadout( ply )
 	if ply:IsValid() then
 		YRP.msg( "note", "[PlayerLoadout] for " .. ply:YRPName() )
 
-		ply:SetYRPString( "licenseIDs", "" )
-		ply:SetYRPString( "licenseNames", "" )
-
+		ply:SetYRPString( "licenseIDs1", "" )
+		ply:SetYRPString( "licenseIDs2", "" )
+		ply:SetYRPString( "licenseIDs3", "" )
+		ply:SetYRPInt( "licenseIDsVersion", ply:GetYRPInt( "licenseIDsVersion", 0 ) + 1 )
+		
 		ply:StripWeapons()
 		--YRP.msg( "gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment." )
 		YRP:Loadout(ply)
@@ -275,7 +306,7 @@ function YRPPlayerLoadout( ply )
 				end
 
 				local chaTab = ply:YRPGetCharacterTable()
-				if wk( chaTab) then
+				if wk( chaTab ) then
 					if not IsVoidCharEnabled() then
 						ply:SetYRPString( "money", chaTab.money)
 						ply:SetYRPString( "moneybank", chaTab.moneybank)
@@ -288,7 +319,7 @@ function YRPPlayerLoadout( ply )
 							ply:SetYRPString( "rpdescription" .. i, v)
 						end
 
-						setbodygroups(ply)
+						YRPSetBodyGroups(ply)
 					end
 				else
 					YRP.msg( "note", "Give char failed -> KillSilent -> " .. ply:YRPName() .. " char: " .. tostring( chaTab) )
@@ -438,7 +469,7 @@ hook.Add( "PlayerDeath", "yrp_stars_playerdeath", function( victim, inflictor, a
 
 	YRPDoUnRagdoll(ply)
 
-	if GetGlobalBool( "bool_characters_removeondeath", false) then
+	if GetGlobalYRPBool( "bool_characters_removeondeath", false) then
 		local test = YRP_SQL_UPDATE( "yrp_characters", {["bool_archived"] = 1}, "uniqueID = '" .. victim:CharID() .. "'" )
 		victim:SetYRPBool( "yrp_chararchived", true)
 	end
@@ -474,7 +505,7 @@ function IsNoUserGroupWeapon(ply, cname)
 end
 
 function IsNoRoleSwep(ply, cname)
-	if GetGlobalBool( "bool_drop_items_role", false) then
+	if GetGlobalYRPBool( "bool_drop_items_role", false) then
 		local _rol_tab = ply:YRPGetRoleTable()
 		if wk(_rol_tab) then
 			local _sweps = string.Explode( ",", _rol_tab.string_sweps)
@@ -490,7 +521,7 @@ function IsNoRoleSwep(ply, cname)
 end
 
 function IsNoGroupSwep(ply, cname)
-	if GetGlobalBool( "bool_drop_items_role", false) then
+	if GetGlobalYRPBool( "bool_drop_items_role", false) then
 		local _gro_tab = ply:YRPGetGroupTable()
 		if wk(_gro_tab) then
 			local _sweps = string.Explode( ",", _gro_tab.string_sweps)
@@ -527,7 +558,7 @@ function PLAYER:CreateRagdoll()
 	local rd = ents.Create( "prop_ragdoll" )
 	if IsValid(rd) and ply:GetModel() != nil then
 		rd:SetModel( ply:GetModel() )
-		for id = 1, 19 do
+		for id = 0, 19 do
 			local val = ply:GetBodygroup( id )
 			if val then
 				rd:SetBodygroup( id, val )
@@ -545,7 +576,7 @@ function PLAYER:CreateRagdoll()
 		ply:SetYRPEntity( "yrp_ragdoll", rd )
 		ply:SetYRPInt( "ent_ragdollindex", rd:EntIndex() )
 
-		timer.Simple(GetGlobalInt( "int_deathtimestamp_max", 60), function()
+		timer.Simple(GetGlobalYRPInt( "int_deathtimestamp_max", 60), function()
 			if IsValid(ply) then
 				local ragdoll = ply:GetRagdollEntity()
 				if IsValid( ragdoll ) and ragdoll.index == ply:GetYRPInt( "ent_ragdollindex" ) then
@@ -555,9 +586,9 @@ function PLAYER:CreateRagdoll()
 		end)
 	else
 		if !IsValid(rd) then
-			YRP.msg( "error", "[DoPlayerDeath] Spawn Defi Ragdoll... FAILED: rd is not valid" )
+			YRP.msg( "note", "[DoPlayerDeath] Spawn Defi Ragdoll... FAILED: rd is not valid" )
 		elseif ply:GetModel() != nil then
-			YRP.msg( "error", "[DoPlayerDeath] GetModel... FAILED: nil" )	
+			YRP.msg( "note", "[DoPlayerDeath] GetModel... FAILED: nil" )	
 		end
 	end
 end
@@ -586,7 +617,7 @@ end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
-	--if GetGlobalBool( "bool_spawncorpseondeath_gmod", true ) then
+	--if GetGlobalYRPBool( "bool_spawncorpseondeath_gmod", true ) then
 		ply:CreateRagdoll()
 	--end
 
@@ -600,11 +631,11 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 		end
 	end
 
-	ply:SetYRPInt( "int_deathtimestamp_min", CurTime() + GetGlobalInt( "int_deathtimestamp_min", 20) )
-	ply:SetYRPInt( "int_deathtimestamp_max", CurTime() + GetGlobalInt( "int_deathtimestamp_max", 60) )
+	ply:SetYRPInt( "int_deathtimestamp_min", CurTime() + GetGlobalYRPInt( "int_deathtimestamp_min", 20) )
+	ply:SetYRPInt( "int_deathtimestamp_max", CurTime() + GetGlobalYRPInt( "int_deathtimestamp_max", 60) )
 
 	-- NEW RAGDOLL
-	--[[if GetGlobalBool( "bool_spawncorpseondeath", true) then
+	--[[if GetGlobalYRPBool( "bool_spawncorpseondeath", true) then
 	
 		ply.rd = ents.Create( "prop_ragdoll" )
 		if IsValid(ply.rd) and ply:GetModel() != nil then
@@ -617,7 +648,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 			ply.rd.index = ply.rd:EntIndex()
 			ply.rd.removeable = false
 
-			timer.Simple(GetGlobalInt( "int_deathtimestamp_max", 60), function()
+			timer.Simple(GetGlobalYRPInt( "int_deathtimestamp_max", 60), function()
 				if IsValid(ply) and IsValid(ply.rd) and ply.rd.index == ply:GetYRPInt( "ent_ragdollindex" ) then
 					ply.rd:Remove()
 				end
@@ -645,8 +676,8 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 end
 
 hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attacker, dmg)
-	if attacker.SteamID64 and ply.SteamID64 then
-		YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value",	"'" .. os.time() .. "' ,'LID_kills', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmg:GetDamage() .. "'" )
+	if attacker.SteamID and ply.SteamID then
+		YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value",	"'" .. os.time() .. "' ,'LID_kills', '" .. attacker:SteamID() .. "', '" .. ply:SteamID() .. "', '" .. dmg:GetDamage() .. "'" )
 	end
 
 	--YRP.msg( "gm", "[DoPlayerDeath] " .. tostring(ply:YRPName() ) .. " do death." )
@@ -786,7 +817,7 @@ hook.Add( "EntityTakeDamage", "YRP_EntityTakeDamage", function(ent, dmginfo)
 		local hitfactor = GetHitFactorVehicles() or 1
 		dmginfo:ScaleDamage(hitfactor)
 	elseif ent:IsPlayer() then
-		if GetGlobalBool( "bool_antipropkill", true) then
+		if GetGlobalYRPBool( "bool_antipropkill", true) then
 			if IsValid( dmginfo:GetAttacker() ) and dmginfo:GetAttacker():GetClass() == "prop_physics" then
 				dmginfo:ScaleDamage(0)
 			end
@@ -860,7 +891,7 @@ hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, 
 
 			SlowThink(ply)
 
-			if GetGlobalBool( "bool_antipropkill", true) then
+			if GetGlobalYRPBool( "bool_antipropkill", true) then
 				if IsValid( dmginfo:GetAttacker() ) and dmginfo:GetAttacker():GetClass() == "prop_physics" then
 					dmginfo:ScaleDamage(0)
 				end
@@ -925,9 +956,9 @@ hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, 
 			local damage = dmginfo:GetDamage()
 			damage = math.Round( damage, 2)
 			if IsValid( attacker) and attacker:IsPlayer() then
-				YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID64() .. "', '" .. ply:SteamID64() .. "', '" .. dmginfo:GetDamage() .. "'" )
+				YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID() .. "', '" .. ply:SteamID() .. "', '" .. dmginfo:GetDamage() .. "'" )
 			else
-				YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID64() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'" )	
+				YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'" )	
 			end
 		end
 	end
@@ -1465,9 +1496,9 @@ net.Receive( "yrp_next_voice_channel", function(len, ply)
 	YRPCountPassiveChannels(ply)
 end)
 
-util.AddNetworkString( "yrp_togglevoicemenu" )
-net.Receive( "yrp_togglevoicemenu", function(len, ply)
-	ply:SetYRPBool( "yrp_togglevoicemenu", !ply:GetYRPBool( "yrp_togglevoicemenu", true ) )
+util.AddNetworkString( "yrp_YRPToggleVoiceMenu" )
+net.Receive( "yrp_YRPToggleVoiceMenu", function(len, ply)
+	ply:SetYRPBool( "yrp_YRPToggleVoiceMenu", !ply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) )
 end)
 
 util.AddNetworkString( "yrp_voice_set_max_active" )
@@ -1485,7 +1516,7 @@ net.Receive( "yrp_voice_set_max_passive", function(len, ply)
 end)
 
 hook.Add( "PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, talker)
-	if GetGlobalBool( "bool_voice", false) then
+	if GetGlobalYRPBool( "bool_voice", false) then
 		if listener == talker then
 			return false
 		end
@@ -1509,7 +1540,7 @@ hook.Add( "PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, tal
 		end
 		
 		return false -- new
-	elseif GetGlobalBool( "bool_voice_3d", false) then
+	elseif GetGlobalYRPBool( "bool_voice_3d", false) then
 		if YRPIsInMaxVoiceRange(listener, talker) then
 			if YRPIsInSpeakRange(listener, talker) then
 				return true
@@ -1518,22 +1549,6 @@ hook.Add( "PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, tal
 		return false
 	end
 end)
-
-function setbodygroups( ply )
-	local rolTab = ply:YRPGetRoleTable()
-
-	if wk(roltab) and tonumber( roltab.bool_savebodygroups ) == 1 then
-		local chaTab = ply:YRPGetCharacterTable()
-		if wk( chaTab) then
-			ply:SetSkin( chaTab.skin)
-			ply:SetupHands()
-
-			for i = 0, 19 do
-				ply:SetBodygroup(i, chaTab["bg" .. i])
-			end
-		end
-	end
-end
 
 function setPlayerModel(ply)
 	local tmpRolePlayermodel = ply:GetPlayerModel()
@@ -1544,7 +1559,7 @@ function setPlayerModel(ply)
 		ply:SetModel( "models/player/skeleton.mdl" )
 		YRP.msg( "note", ply:YRPName() .. " HAS NO PLAYERMODEL" )
 	end
-	setbodygroups(ply)
+	YRPSetBodyGroups(ply)
 end
 
 function GM:PlayerSetModel(ply)
@@ -1552,7 +1567,7 @@ function GM:PlayerSetModel(ply)
 end
 
 function GM:PlayerSpray(ply)
-	if GetGlobalBool( "bool_graffiti_disabled", false) then
+	if GetGlobalYRPBool( "bool_graffiti_disabled", false) then
 		return true
 	else
 		return false

@@ -4,15 +4,14 @@
 
 local _avatars = {}
 function GetAvatarUrl(steamid)
-	local steamid64 = util.SteamIDTo64(steamid)
-	http.Fetch( "http://steamcommunity.com/profiles/" .. steamid64,
+	http.Fetch( "http://steamcommunity.com/profiles/" .. steamid,
 		function( body, len, headers, code)
 			_avatars[steamid] = "TEST"
 			local str_start = string.find( body, "<div class=\"playerAvatarAutoSizeInner\"><img src=" )
 			if str_start != nil then
 				local str_end = string.find( body, ".jpg\">", str_start)
 				body = string.sub( body, str_start + 49, str_end + 3)
-				_avatars[steamid64] = GetHTMLImage( body, YRP.ctr(200), YRP.ctr(200) )
+				_avatars[steamid] = GetHTMLImage( body, YRP.ctr(200), YRP.ctr(200) )
 			end
 		end,
 		function(error)
@@ -32,7 +31,7 @@ function BuildFeedbackLine(parent, tab)
 
 	-- LINE
 	local _fb = createD( "YPanel", parent, parent:GetWide(), YRP.ctr(90) + YRP.ctr(50) * tab.rows, 0, 0)
-	_fb.steamid64 = util.SteamIDTo64(tab.steamid)
+	_fb.steamid = tab.steamid
 	function _fb:Paint(pw, ph)
 		hook.Run( "YPanelPaint", self, pw, ph)
 	end
@@ -83,7 +82,7 @@ function BuildFeedbackLine(parent, tab)
 	_fb.profile = createD( "YButton", _fb, YRP.ctr(500), YRP.ctr(50), YRP.ctr(2080), YRP.ctr(20) )
 	_fb.profile:SetText( "LID_openprofile" )
 	function _fb.profile:DoClick()
-		gui.OpenURL( "http://steamcommunity.com/profiles/" .. _fb.steamid64)
+		gui.OpenURL( "http://steamcommunity.com/profiles/" .. _fb.steamid)
 	end
 
 	-- MOVETO
@@ -110,16 +109,16 @@ function BuildFeedbackLine(parent, tab)
 	_fb.statusbtn4 = createD( "YButton", _fb, YRP.ctr(500), YRP.ctr(50), YRP.ctr(2080), YRP.ctr(230) )
 	_fb.statusbtn4:SetText( "LID_tpto" )
 	function _fb.statusbtn4:DoClick()
-		net.Start( "tp_tpto_steamid64" )
-			net.WriteString(_fb.steamid64)
+		net.Start( "tp_tpto_steamid" )
+			net.WriteString(_fb.steamid)
 		net.SendToServer()
 	end
 
 	_fb.statusbtn5 = createD( "YButton", _fb, YRP.ctr(500), YRP.ctr(50), YRP.ctr(2080), YRP.ctr(300) )
 	_fb.statusbtn5:SetText( "LID_bring" )
 	function _fb.statusbtn5:DoClick()
-		net.Start( "tp_bring_steamid64" )
-			net.WriteString(_fb.steamid64)
+		net.Start( "tp_bring_steamid" )
+			net.WriteString(_fb.steamid)
 		net.SendToServer()
 	end
 

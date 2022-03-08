@@ -111,7 +111,7 @@ function teleportToJailpoint(ply, tim, police)
 					ply:SetYRPInt( "int_arrests", ply:GetYRPInt( "int_arrests", 0) + 1)
 					YRP_SQL_UPDATE( "yrp_characters", {["int_arrests"] = ply:GetYRPInt( "int_arrests", 0)}, "uniqueID = '" .. ply:CharID() .. "'" )
 					if police and police:IsPlayer() then
-						YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_source_steamid", "'" .. os.time() .. "', 'LID_arrests', '" .. ply:SteamID64() .. "', '" .. police:SteamID64() .. "'" )
+						YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_source_steamid", "'" .. os.time() .. "', 'LID_arrests', '" .. ply:SteamID() .. "', '" .. police:SteamID() .. "'" )
 					end
 
 					tp_to(ply, vec)

@@ -3,7 +3,7 @@
 local yrp_door = {}
 yrp_door.waitforanswer = false
 
-function toggleDoorOptions( door)
+function YRPToggleDoorOptions( door)
 	if YRPIsNoMenuOpen() then
 		openDoorOptions( door)
 	elseif !mouseVisible then
@@ -31,7 +31,7 @@ net.Receive( "getBuildingInfo", function(len)
 			local tabOwner = tab["O"]
 			local tabGroup = tab["G"]
 
-			if GetGlobalBool( "bool_building_system", false) then
+			if GetGlobalYRPBool( "bool_building_system", false) then
 				if ea( door) and !LocalPlayer():GetYRPBool( "bool_" .. "ishobo", false) then
 					if table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
 						optionWindow( door, tabBuilding, tabOwner, tabGroup)
@@ -99,8 +99,8 @@ function buyWindow( door, tabBuilding)
 	function yrp_door.window.con:Paint(pw, ph)
 		draw.SimpleTextOutlined(YRP.lang_string( "LID_name" ) .. ": " .. tabBuilding.name, "Y_24_500", br, br, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
 		draw.SimpleTextOutlined(YRP.lang_string( "LID_doors" ) .. ": " .. _doors, "Y_24_500", br, YRP.ctr(20 + 50), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
-		if GetGlobalBool( "bool_canbeowned", true ) and tabBuilding.bool_canbeowned then
-			draw.SimpleTextOutlined(YRP.lang_string( "LID_price" ) .. ": " .. GetGlobalString( "text_money_pre", "" ) .. tabBuilding.buildingprice .. GetGlobalString( "text_money_pos", "" ), "Y_24_500", br, YRP.ctr(20 + 100), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
+		if GetGlobalYRPBool( "bool_canbeowned", true ) and tabBuilding.bool_canbeowned then
+			draw.SimpleTextOutlined(YRP.lang_string( "LID_price" ) .. ": " .. GetGlobalYRPString( "text_money_pre", "" ) .. tabBuilding.buildingprice .. GetGlobalYRPString( "text_money_pos", "" ), "Y_24_500", br, YRP.ctr(20 + 100), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
 		end
 
 		if tostring( door:GetYRPString( "buildingID", "-1" ) ) == "-1" then
@@ -115,17 +115,17 @@ function buyWindow( door, tabBuilding)
 		draw.RoundedBox(0, 0, YRP.ctr(200), pw, ph - YRP.ctr(200), Color( 255, 255, 100, 200) )
 		draw.SimpleTextOutlined(YRP.lang_string( "LID_name" ) .. ":", "Y_18_500", br, YRP.ctr(250), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )
 		draw.SimpleTextOutlined(YRP.lang_string( "LID_building" ) .. ":", "Y_18_500", br, YRP.ctr(350), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )
-		if GetGlobalBool( "bool_canbeowned", true ) and tabBuilding.bool_canbeowned then
+		if GetGlobalYRPBool( "bool_canbeowned", true ) and tabBuilding.bool_canbeowned then
 			draw.SimpleTextOutlined(YRP.lang_string( "LID_group" ) .. ":", "Y_18_500", br, YRP.ctr(450), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )
 			draw.SimpleTextOutlined(YRP.lang_string( "LID_price" ) .. ":", "Y_18_500", br, YRP.ctr(550), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )
 		end
-		if GetGlobalBool( "bool_canbeowned", true ) then
+		if GetGlobalYRPBool( "bool_canbeowned", true ) then
 			draw.SimpleTextOutlined(YRP.lang_string( "LID_canbeowned" ), "Y_18_500", pw - YRP.ctr(450 - 10) - br, YRP.ctr(475), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
 		end
 		draw.SimpleTextOutlined(YRP.lang_string( "LID_securitylevel" ) .. ":", "Y_18_500", pw - YRP.ctr(500) - br, YRP.ctr(550), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )	
 	end
 
-	if GetGlobalBool( "bool_canbeowned", true ) then
+	if GetGlobalYRPBool( "bool_canbeowned", true ) then
 		local _buyButton = createD( "YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, br)
 		_buyButton:SetText( "LID_buy" )
 		function _buyButton:DoClick()
@@ -205,7 +205,7 @@ function buyWindow( door, tabBuilding)
 			end
 		end
 
-		if GetGlobalBool( "bool_canbeowned", true ) then
+		if GetGlobalYRPBool( "bool_canbeowned", true ) then
 			local _ComboBoxGroupName = createD( "DComboBox", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(450) )
 			net.Start( "getBuildingGroups" )
 			net.SendToServer()
@@ -368,7 +368,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 
 	--[[
 	local _ButtonUpgrade = createVGUI( "YButton", yrp_door.window, 400, 50, 10, 200)
-	_ButtonUpgrade:SetText(YRP.lang_string( "LID_upgradedoor" ) .. " (-" .. GetGlobalString( "text_money_pre", "" ) .. "100" .. GetGlobalString( "text_money_pos", "" ) .. " ) NOT AVAILABLE" )
+	_ButtonUpgrade:SetText(YRP.lang_string( "LID_upgradedoor" ) .. " (-" .. GetGlobalYRPString( "text_money_pre", "" ) .. "100" .. GetGlobalYRPString( "text_money_pos", "" ) .. " ) NOT AVAILABLE" )
 	function _ButtonUpgrade:DoClick()
 		net.Start( "wantHouse" )
 			net.WriteInt(tabBuilding.uniqueID, 16)
@@ -379,7 +379,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 
 	if OWNER then
 		local _ButtonSell = createD( "YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(150) )
-		_ButtonSell:SetText(YRP.lang_string( "LID_sell" ) .. " (+" .. GetGlobalString( "text_money_pre", "" ) .. tabBuilding.buildingprice / 2 .. GetGlobalString( "text_money_pos", "" ) .. " )" )
+		_ButtonSell:SetText(YRP.lang_string( "LID_sell" ) .. " (+" .. GetGlobalYRPString( "text_money_pre", "" ) .. tabBuilding.buildingprice / 2 .. GetGlobalYRPString( "text_money_pos", "" ) .. " )" )
 		function _ButtonSell:DoClick()
 			net.Start( "sellBuilding" )
 				net.WriteString(tabBuilding.uniqueID)
@@ -387,7 +387,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 			yrp_door.window:Remove()
 		end
 		--function _ButtonSell:Paint(pw, ph)
-			--surfaceButton(self, pw, ph, YRP.lang_string( "LID_sell" ) .. " (+" .. GetGlobalString( "text_money_pre", "" ) .. _price / 2 .. GetGlobalString( "text_money_pos", "" ) .. " )" )
+			--surfaceButton(self, pw, ph, YRP.lang_string( "LID_sell" ) .. " (+" .. GetGlobalYRPString( "text_money_pre", "" ) .. _price / 2 .. GetGlobalYRPString( "text_money_pos", "" ) .. " )" )
 		--end
 
 		local _header = createD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(50) )

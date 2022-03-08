@@ -156,7 +156,7 @@ function Player:getJobTable()
 	_job.salary = tonumber(self:GetYRPString( "salary", "INVALID" ) )
 	_job.admin = tonumber(self:GetYRPBool( "isadminonly" ) ) or 0
 	_job.vote = self:GetYRPBool( "isVoteable" ) or false
-	if self:GetYRPString( "licenseIDs", "" ) != "" then
+	if self:GetLicenseIDs() then
 		_job.hasLicense = true
 	else
 		_job.hasLicense = false

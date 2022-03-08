@@ -42,11 +42,11 @@ end
 function Player:changeTeam(team, force, suppressNotification)
 	--Description: Change the team of a player.
 	if canGetRole(self, team) then
-		if GetGlobalBool( "bool_players_die_on_role_switch", false) then
+		if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 			self:OldKillSilent()
 		end
 		SetRole(self, team, false, nil)
-		if GetGlobalBool( "bool_players_die_on_role_switch", false) then
+		if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 			self:Spawn()
 		end
 		return true
@@ -104,7 +104,7 @@ end
 
 function Player:keysUnOwnAll()
 	--Description: Unown every door and vehicle owned by this player.
-	YRPDarkrpNotFound( "keysUnOwnAll()" )
+	--YRPDarkrpNotFound( "keysUnOwnAll()" )
 end
 
 function Player:newHungerData()

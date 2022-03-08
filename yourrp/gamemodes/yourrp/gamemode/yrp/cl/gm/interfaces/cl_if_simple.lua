@@ -12,9 +12,13 @@ hook.Add( "YFramePaint", "YFrame_Material", function(self, pw, ph, tab)
 			hh = self:GetHeaderHeight()
 		end
 
-		draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, hh, YRPInterfaceValue( "YFrame", "HB" ), true, true)
+		local r = YRP.ctr(yrpr)
+		if self.rad then
+			r = self.rad
+		end
+		draw.RoundedBoxEx(r, 0, 0, pw, hh, YRPInterfaceValue( "YFrame", "HB" ), true, true)
 
-		draw.RoundedBoxEx(YRP.ctr(10), 0, hh, pw, ph - hh, YRPInterfaceValue( "YFrame", "BG" ), false, false, true, true) --YRPInterfaceValue( "YFrame", "BG" ) )
+		draw.RoundedBoxEx(r, 0, hh, pw, ph - hh, YRPInterfaceValue( "YFrame", "BG" ), false, false, true, true) --YRPInterfaceValue( "YFrame", "BG" ) )
 
 		if self.GetTitle != nil then
 			draw.SimpleText(YRP.lang_string(self:GetTitle() ), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue( "YFrame", "HT" ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -62,7 +66,11 @@ hook.Add( "YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor
-		draw.RoundedBox(YRP.ctr(yrpr), tab.x, tab.y, pw, ph, Color( color.r, color.g, color.b, color.a) )
+		local r = YRP.ctr(yrpr)
+		if self.rad then
+			r = self.rad
+		end
+		draw.RoundedBox(r, tab.x, tab.y, pw, ph, Color( color.r, color.g, color.b, color.a) )
 
 		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
@@ -103,7 +111,11 @@ hook.Add( "YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 		end
 		color = tab.color or color
 		tcolor = tab.tcolor or tcolor
-		draw.RoundedBox(YRP.ctr(yrpr), tab.x, tab.y, pw, ph, Color( color.r, color.g, color.b, color.a) )
+		local r = YRP.ctr(yrpr)
+		if self.rad then
+			r = self.rad
+		end
+		draw.RoundedBox(r, tab.x, tab.y, pw, ph, Color( color.r, color.g, color.b, color.a) )
 
 		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
@@ -140,7 +152,11 @@ hook.Add( "YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 		if tcolor == nil then
 			tcolor = TextColor( color) -- YRPInterfaceValue( "YButton", "NT" )
 		end
-		draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color( color.r, color.g, color.b, color.a) )
+		local r = YRP.ctr(yrpr)
+		if self.rad then
+			r = self.rad
+		end
+		draw.RoundedBox(r, 0, 0, pw, ph, Color( color.r, color.g, color.b, color.a) )
 
 		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, ph / 2, tcolor or Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
@@ -155,7 +171,11 @@ hook.Add( "YLabelPaint", "YLabel_Material", function(self, pw, ph, tab)
 		local color = YRPInterfaceValue( "YFrame", "HI" )
 		local tcolor = YRPInterfaceValue( "YFrame", "HT" )
 
-		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( color.r, color.g, color.b, 255) )
+		local r = YRP.ctr(yrpr)
+		if self.rad then
+			r = self.rad
+		end
+		draw.RoundedBox(r, 0, 0, pw, ph, Color( color.r, color.g, color.b, 255) )
 
 		local ax = tab.ax or TEXT_ALIGN_CENTER
 		local ay = tab.ay or TEXT_ALIGN_CENTER
@@ -208,7 +228,11 @@ hook.Add( "YPanelPaint", "YPanel_Material", function(self, pw, ph, tab)
 	if YRPGetInterfaceDesign() == "Material" then
 		local color = tab.color or YRPInterfaceValue( "YFrame", "HI" )
 
-		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( color.r, color.g, color.b, 255) )
+		local r = YRP.ctr(yrpr)
+		if self.rad then
+			r = self.rad
+		end
+		draw.RoundedBox(r, 0, 0, pw, ph, Color( color.r, color.g, color.b, 255) )
 		return true
 	end
 end)

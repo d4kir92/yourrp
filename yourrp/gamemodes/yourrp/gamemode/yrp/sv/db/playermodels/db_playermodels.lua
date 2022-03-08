@@ -64,5 +64,5 @@ net.Receive( "rem_playermodel", function(len, ply)
 
 	YRP.log( ply:RPName() .. " removed PUBLIC ENTRY (playermodels: " .. pms .. " )" )
 
-	--YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. muid .. "'" )
+	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. muid .. "'" )
 end)

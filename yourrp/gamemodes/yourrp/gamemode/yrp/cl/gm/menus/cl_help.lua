@@ -5,7 +5,7 @@
 HELPMENU = HELPMENU or {}
 HELPMENU.open = false
 
-function ToggleHelpMenu()
+function YRPToggleHelpMenu()
 	if !HELPMENU.open and YRPIsNoMenuOpen() then
 		OpenHelpMenu()
 	else
@@ -73,7 +73,7 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		local text = ""
 		local color = Color( 255, 255, 255, 255)
 
-		if disabled != nil and !GetGlobalBool( disabled) then
+		if disabled != nil and !GetGlobalYRPBool( disabled) then
 			text = "[" .. YRP.lang_string( "LID_disabled" ) .. "] "
 			color = Color( 255, 255, 100, 255)
 		end
@@ -137,15 +137,16 @@ net.Receive( "getsitehelp", function(len)
 		AddKeybind(keybinds, YRPGetKeybindName( "menu_settings" ), "LID_settings", "settings" )
 		AddKeybind(keybinds, YRPGetKeybindName( "toggle_map" ), "LID_map", "map", "bool_map_system" )
 		--AddKeybind(keybinds, YRPGetKeybindName( "menu_inventory" ), "LID_inventory", "work", "bool_inventory_system" )
-		if GetGlobalBool( "bool_appearance_system", false) then
+		if GetGlobalYRPBool( "bool_appearance_system", false) then
 			AddKeybind(keybinds, YRPGetKeybindName( "menu_appearance" ), "LID_appearance", "face", "bool_appearance_system" )
 		end
 		AddKeybind(keybinds, YRPGetKeybindName( "menu_emotes" ), "LID_emotes", "smile" )
-		if GetGlobalBool( "bool_laws_system", false) then
+		if GetGlobalYRPBool( "bool_laws_system", false) then
 			AddKeybind(keybinds, YRPGetKeybindName( "menu_laws" ), "LID_laws", "list" )
 		end
 		AddKeybindBr(keybinds)
 		AddKeybind(keybinds, YRPGetKeybindName( "menu_interact" ), "LID_interact", "role" )
+		AddKeybind(keybinds, YRPGetKeybindName( "menu_group" ), "LID_groupmenu", "group" )
 		AddKeybind(keybinds, YRPGetKeybindName( "drop_item" ), "LID_drop", "pin_drop", "bool_players_can_drop_weapons" )
 		AddKeybindBr(keybinds)
 		AddKeybind(keybinds, YRPGetKeybindName( "view_switch" ), "LID_switchview", "3d_rotation" )
@@ -183,7 +184,7 @@ net.Receive( "getsitehelp", function(len)
 		local version = createD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - YRP.ctr(50) )
 
 		function version:Paint(pw, ph)
-			draw.SimpleText( "( " .. string.upper(GAMEMODE.dedicated) .. " Server) ( " .. GetGlobalString( "YRP_VERSIONART", "X" ) .. " ) YourRP V.: " .. YRPGetVersionFull() .. " by D4KiR", "Y_22_500", pw, ph / 2, GetVersionColor(), 2, 1)
+			draw.SimpleText( "( " .. string.upper(GAMEMODE.dedicated) .. " Server) ( " .. GetGlobalYRPString( "YRP_VERSIONART", "X" ) .. " ) YourRP V.: " .. YRPGetVersionFull() .. " by D4KiR", "Y_22_500", pw, ph / 2, GetVersionColor(), 2, 1)
 		end
 		YRPCheckVersion( "help" )
 	end

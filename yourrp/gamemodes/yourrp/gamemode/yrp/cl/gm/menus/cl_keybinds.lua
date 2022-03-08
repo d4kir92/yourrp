@@ -18,7 +18,7 @@ function createDKeybinder(parent, w, h, x, y, keybind)
 	return _tmp
 end
 
-function toggleKeybindsMenu()
+function YRPToggleKeybindsMenu()
 	if !KEYBINDS.open and YRPIsNoMenuOpen() then
 		openKeybindsMenu()
 	end
@@ -76,6 +76,7 @@ function CreateKeybindsContent(parent)
 	table.insert(keybinds, {YRP.lang_string( "LID_holdtozoomoutview" ), "view_zoom_out"})
 	table.insert(keybinds, {YRP.lang_string( "LID_holdtozoominview" ), "view_zoom_in"})
 	table.insert(keybinds, {YRP.lang_string( "LID_interact" ), "menu_interact"})
+	table.insert(keybinds, {YRP.lang_string( "LID_groupmenu" ), "menu_group"})
 	table.insert(keybinds, {YRP.lang_string( "LID_drop" ), "drop_item"})
 	table.insert(keybinds, {YRP.lang_string( "LID_appearance" ), "menu_appearance"})
 	table.insert(keybinds, {YRP.lang_string( "LID_emotes" ), "menu_emotes"})

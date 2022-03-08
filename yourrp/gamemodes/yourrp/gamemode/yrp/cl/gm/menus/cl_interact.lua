@@ -1,14 +1,14 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-local tmpTargetSteamID = ""
-function toggleInteractMenu()
+local tmpTargetCharID = ""
+function YRPToggleInteractMenu()
 	local lply = LocalPlayer()
 	local eyeTrace = lply:GetEyeTrace()
 
-	--openInteractMenu(LocalPlayer():YRPSteamID() )
+	--openInteractMenu(LocalPlayer():CharID() )
 	if eyeTrace.Entity:IsPlayer() and YRPIsNoMenuOpen() then
 		if eyeTrace.Entity:GetColor().a > 0 then
-			openInteractMenu(eyeTrace.Entity:YRPSteamID() )
+			openInteractMenu(eyeTrace.Entity:CharID() )
 		end
 	else
 		closeInteractMenu()
@@ -23,12 +23,12 @@ function closeInteractMenu()
 	end
 end
 
-function openInteractMenu(SteamID)
-	if SteamID != nil then
+function openInteractMenu(CharID)
+	if CharID != nil then
 		openMenu()
-		tmpTargetSteamID = SteamID
+		tmpTargetCharID = CharID
 		net.Start( "openInteractMenu" )
-			net.WriteString(tmpTargetSteamID)
+			net.WriteString(tmpTargetCharID)
 		net.SendToServer()
 	end
 end
@@ -48,8 +48,6 @@ net.Receive( "openInteractMenu", function(len)
 
 	local hasspecs = net.ReadBool()
 
-	local licenses = ply:GetLicenseNames()
-
 	yrp_Interact = createD( "YFrame", nil, YRP.ctr(1090), YRP.ctr(1360), 0, 0)
 	yrp_Interact:SetHeaderHeight(YRP.ctr(100) )
 	function yrp_Interact:OnClose()
@@ -64,7 +62,7 @@ net.Receive( "openInteractMenu", function(len)
 	local tmpID = ""
 	local tmpCharID = 0
 	for k, v in pairs (player.GetAll() ) do
-		if tostring( v:YRPSteamID() ) == tostring(tmpTargetSteamID) then
+		if tostring( v:CharID() ) == tostring(tmpTargetCharID) then
 			tmpPly = v
 			tmpTargetName = v:Nick()
 			tmpRPName = v:RPName()
@@ -88,8 +86,8 @@ net.Receive( "openInteractMenu", function(len)
 
 	local content = yrp_Interact:GetContent()
 	function content:Paint(pw, ph)
-		local scaleW = pw / (GetGlobalInt( "int_" .. "background" .. "_w", 100) + 20)
-		local scaleH = YRP.ctr(470) / (GetGlobalInt( "int_" .. "background" .. "_h", 100) + 20)
+		local scaleW = pw / (GetGlobalYRPInt( "int_" .. "background" .. "_w", 100) + 20)
+		local scaleH = YRP.ctr(470) / (GetGlobalYRPInt( "int_" .. "background" .. "_h", 100) + 20)
 		local scale = scaleW
 		if scaleH < scaleW then
 			scale = scaleH
@@ -99,8 +97,6 @@ net.Receive( "openInteractMenu", function(len)
 		--[[ Licenses ]]--
 		if LocalPlayer():isCP() or LocalPlayer():GetYRPBool( "bool_canusewarnsystem", false) then
 			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color( 255, 255, 255, 255) )
-			draw.SimpleTextOutlined(YRP.lang_string( "LID_licenses" ) .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(470 + 5 + 25), Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0) )
-			draw.SimpleTextOutlined(licenses, "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(510 + 5 + 25), Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0) )
 		end
 	
 		--[[ Description ]]--
@@ -169,7 +165,7 @@ net.Receive( "openInteractMenu", function(len)
 			btnPromote:SetText(YRP.lang_string( "LID_promote" ) .. ": " .. promoteName)
 			function btnPromote:DoClick()
 				net.Start( "promotePlayer" )
-					net.WriteString(tmpTargetSteamID)
+					net.WriteString(tmpTargetCharID)
 				net.SendToServer()
 				if pa(yrp_Interact) then
 					yrp_Interact:Close()
@@ -185,7 +181,7 @@ net.Receive( "openInteractMenu", function(len)
 			btnDemote:SetText(YRP.lang_string( "LID_demote" ) .. ": " .. demoteName)
 			function btnDemote:DoClick()
 				net.Start( "demotePlayer" )
-					net.WriteString(tmpTargetSteamID)
+					net.WriteString(tmpTargetCharID)
 				net.SendToServer()
 				if pa(yrp_Interact) then
 					yrp_Interact:Close()
@@ -201,7 +197,7 @@ net.Receive( "openInteractMenu", function(len)
 			btnbtnInviteToGroup:SetText(YRP.lang_string( "LID_invitetogroup" ) )
 			function btnbtnInviteToGroup:DoClick()
 				net.Start( "invitetogroup" )
-					net.WriteString(tmpTargetSteamID)
+					net.WriteString(tmpTargetCharID)
 				net.SendToServer()
 				if pa(yrp_Interact) then
 					yrp_Interact:Close()
@@ -232,7 +228,7 @@ net.Receive( "openInteractMenu", function(len)
 	yrp_Interact:MakePopup()
 end)
 
-function YRPOpenGiveSpec( charid, ruid)
+function YRPOpenGiveSpec( charid, ruid )
 	charid = tonumber( charid)
 	ruid = tonumber(ruid)
 

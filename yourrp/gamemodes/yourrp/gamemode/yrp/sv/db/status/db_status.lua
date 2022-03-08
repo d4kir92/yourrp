@@ -39,19 +39,19 @@ net.Receive( "Connect_Settings_Status", function(len, ply)
 			_nw_yourrp["Collection ID"] = {}
 			_nw_yourrp["Collection ID"]["LID_thecollectionidismissing"] = Color( 255, 0, 0)
 		end
-		if strEmpty(GetGlobalString( "text_server_name" ) ) then
+		if strEmpty(GetGlobalYRPString( "text_server_name" ) ) then
 			_nw_yourrp["Hostname"] = {}
 			_nw_yourrp["Hostname"]["Hostname is missing/empty"] = Color( 255, 255, 0)
 		end
-		if strEmpty(GetGlobalString( "text_server_logo" ) ) then
+		if strEmpty(GetGlobalYRPString( "text_server_logo" ) ) then
 			_nw_yourrp["ServerLogo"] = {}
 			_nw_yourrp["ServerLogo"]["Server Logo is missing/empty"] = Color( 255, 255, 0)
 		end
-		if strEmpty(GetGlobalString( "text_loading_background" ) ) then
+		if strEmpty(GetGlobalYRPString( "text_loading_background" ) ) then
 			_nw_yourrp["backgroundloading"] = {}
 			_nw_yourrp["backgroundloading"]["Loadingscreen Background is missing"] = Color( 255, 255, 0)
 		end
-		if strEmpty(GetGlobalString( "text_character_background" ) ) then
+		if strEmpty(GetGlobalYRPString( "text_character_background" ) ) then
 			_nw_yourrp["backgroundcharacter"] = {}
 			_nw_yourrp["backgroundcharacter"]["Character Background is missing"] = Color( 255, 255, 0)
 		end

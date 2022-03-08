@@ -287,7 +287,7 @@ function CreateRolePreviewContent()
 			end
 		end
 
-		if GetGlobalBool( "bool_players_can_switch_role", false) or LocalPlayer().cc then
+		if GetGlobalYRPBool( "bool_players_can_switch_role", false) or LocalPlayer().cc then
 			local getrole = createD( "YButton", win, ew, YRP.ctr(hh), nw - ew - YRP.ctr(20), nh - 2 * YRP.ctr(hh + 20) )
 			getrole:SetText( "LID_getrole" )
 			function getrole:DoClick()
@@ -494,7 +494,7 @@ function CreateRoleSelectionContent(PARENT)
 						end
 					end
 
-					if !LocalPlayer().cc and GetGlobalBool( "bool_players_can_switch_faction", false) and factioncount > 1 then
+					if !LocalPlayer().cc and GetGlobalYRPBool( "bool_players_can_switch_faction", false) and factioncount > 1 then
 						local changefaction = createD( "YButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 20), YRP.ctr(20) )
 						changefaction:SetText( "LID_changefaction" )
 						function changefaction:Think()

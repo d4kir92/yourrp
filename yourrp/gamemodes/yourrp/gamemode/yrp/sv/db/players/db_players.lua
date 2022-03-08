@@ -100,7 +100,8 @@ defaultsweps["yrp_key"] = true
 defaultsweps["yrp_unarmed"] = true
 
 function SetRole(ply, rid, force, pmid)
-	if (IsVoidCharEnabled() or GetGlobalBool( "bool_character_system", true) == false) and !ply:Alive() then
+	rid = tonumber( rid )
+	if (IsVoidCharEnabled() or GetGlobalYRPBool( "bool_character_system", true) == false) and !ply:Alive() then
 		--ply:Spawn()
 	end
 
@@ -113,11 +114,17 @@ function SetRole(ply, rid, force, pmid)
 		YRPGiveSpecs(ply)
 	end
 
+	if rid != ply:GetRoleUID() then
+		YRPResetBodyGroups( ply )
+	end
+	
 	-- SWEPS
 	local ChaTab = ply:YRPGetCharacterTable()
 	local rolTab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'" )
-	if GetGlobalBool( "bool_weapon_system", true) and wk(ChaTab) and wk(rolTab) and tonumber(ChaTab.roleID) != tonumber(rid) then
+	if (GetGlobalYRPBool( "bool_weapon_system", true) and wk(ChaTab) and wk(rolTab)) and (ply:GetYRPBool( "yrp_reset_charloadout" ) or rid != ply:GetRoleUID()) then
 		rolTab = rolTab[1]
+
+		ply:SetYRPBool( "yrp_reset_charloadout", false )
 
 		local tmpSWEPTable = string.Explode( ",", rolTab.string_sweps_onspawn)
 
@@ -133,34 +140,32 @@ function SetRole(ply, rid, force, pmid)
 
 		for k, swep in pairs(tmpSWEPTable) do
 			if swep != nil and swep != NULL and swep != "" then
-				if ply:Alive() then
-					local slots = YRPGetSlotsOfSWEP(swep)
-					if slots.slot_primary and pr + 1 <= GetGlobalInt( "yrp_max_slots_primary", 0) then
-						pr = pr + 1
-						table.insert(pri, swep)
-					elseif slots.slot_secondary and se + 1 <= GetGlobalInt( "yrp_max_slots_secondary", 0) then
-						se = se + 1
-						table.insert(sec, swep)
-					elseif slots.slot_sidearm and si + 1 <= GetGlobalInt( "yrp_max_slots_sidearm", 0) then
-						si = si + 1
-						table.insert(sid, swep)
-					elseif slots.slot_gadget and ga + 1 <= GetGlobalInt( "yrp_max_slots_gadget", 0) then
-						ga = ga + 1
-						table.insert(gad, swep)
-					else
-						YRP.msg( "note", "SLOTS OF ROLE FULL! ( " .. tostring(rolTab.string_name) .. " )" )
-					end
+				local slots = YRPGetSlotsOfSWEP(swep)
+				if slots.slot_primary and pr + 1 <= GetGlobalYRPInt( "yrp_max_slots_primary", 0) then
+					pr = pr + 1
+					table.insert(pri, swep)
+				elseif slots.slot_secondary and se + 1 <= GetGlobalYRPInt( "yrp_max_slots_secondary", 0) then
+					se = se + 1
+					table.insert(sec, swep)
+				elseif slots.slot_sidearm and si + 1 <= GetGlobalYRPInt( "yrp_max_slots_sidearm", 0) then
+					si = si + 1
+					table.insert(sid, swep)
+				elseif slots.slot_gadget and ga + 1 <= GetGlobalYRPInt( "yrp_max_slots_gadget", 0) then
+					ga = ga + 1
+					table.insert(gad, swep)
+				else
+					YRP.msg( "note", "SLOTS OF ROLE FULL! ( " .. tostring(rolTab.string_name) .. " )" )
 				end
 			end
 		end
-
+		
 		YRPUpdateCharSlot(ply, "primary", 		pri)
 		YRPUpdateCharSlot(ply, "secondary", 	sec)
 		YRPUpdateCharSlot(ply, "sidearm", 		sid)
 		YRPUpdateCharSlot(ply, "gadget", 		gad)
 	end
 
-	if GetGlobalBool( "bool_weapon_system", true) then
+	if GetGlobalYRPBool( "bool_weapon_system", true) then
 		for i, slot in pairs(YRPGetCharSWEPS(ply) ) do
 			for x, wep in pairs(slot) do
 				if !strEmpty( wep ) then
@@ -371,6 +376,7 @@ function set_role_values(ply, pmid)
 						ply:AddLicense(_lic.ClassName)
 					end
 				end
+				ply:SetYRPInt( "licenseIDsVersion", ply:GetYRPInt( "licenseIDsVersion", 0 ) + 1 )
 			end
 			if ChaTab.playermodelID != nil then
 				pmid = tonumber(pmid) or tonumber( ChaTab.playermodelID )
@@ -482,6 +488,7 @@ function set_role_values(ply, pmid)
 					ply:AddLicense(lic)
 				end
 			end
+			ply:SetYRPInt( "licenseIDsVersion", ply:GetYRPInt( "licenseIDsVersion", 0 ) + 1 )
 
 			ply:SetYRPString( "maxamount", rolTab.int_maxamount)
 
@@ -535,7 +542,7 @@ function set_role_values(ply, pmid)
 			ply:SetYRPString( "groupColor", groTab.string_color)
 			ply:SetYRPString( "groupIcon", groTab.string_icon)
 
-			if GetGlobalBool( "bool_team_color", true) then
+			if GetGlobalYRPBool( "bool_team_color", true) then
 				timer.Simple(0.12, function()
 					if IsValid(ply) then
 						ply:SetPlayerColor( StringToPlayerVector( groTab.string_color) )
@@ -1016,14 +1023,14 @@ net.Receive( "wantRole", function(len, ply)
 		YRPRemRolVals(ply)
 		RemGroVals(ply)
 
-		if GetGlobalBool( "bool_players_die_on_role_switch", false) then
+		if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 			ply:OldKillSilent()
 		end
 
 		--New role
 		SetRole(ply, uniqueIDRole, false, pmid)
 
-		if GetGlobalBool( "bool_players_die_on_role_switch", false) then
+		if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 			ply:Spawn()
 			YRPTeleportToSpawnpoint(ply, "switchrole" )
 		end

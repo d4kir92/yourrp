@@ -62,8 +62,12 @@ local once = true
 
 local CHATMODE = "SAY"
 
-local BR = 10
-local H = 50
+local BR = 8
+local TOPBAR_H = 33
+local BOTBAR_H = 36
+local C_HE = Color( 40, 130, 180, 255 )
+local C_BG = Color( 46, 46, 46, 255 )
+local C_FG = Color( 32, 32, 32, 255 )
 
 function GetChatMode()
 	return CHATMODE
@@ -335,20 +339,21 @@ local function InitYRPChat()
 		if yrpChat.window == nil then
 			-- MAIN FRAME
 			yrpChat.window = createD( "DFrame", nil, 100, 100, 100, 100)
-			yrpChat.window:DockPadding( YRP.ctr( BR ), YRP.ctr( BR ), YRP.ctr( BR ), YRP.ctr( BR ) )
+			yrpChat.window:DockPadding( BR, BR, BR, BR )
 			yrpChat.window:SetTitle( "" )
 			yrpChat.window:ShowCloseButton(false)
 			yrpChat.window:SetDraggable(false)
 			function yrpChat.window:Paint(pw, ph)
 				if IsChatVisible() then
-					draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "Chat", "FG" ) )
+					draw.RoundedBoxEx( 5, 0, 0, pw, TOPBAR_H, C_HE, true, true, false, false )
+					draw.RoundedBoxEx( 5, 0, TOPBAR_H, pw, ph - TOPBAR_H, C_FG, false, false, true, true )
 
 					if self.logo then
-						if self.logo.svlogo != GetGlobalString( "text_server_logo", "" ) then
-							self.logo.svlogo = GetGlobalString( "text_server_logo", "" )
+						if self.logo.svlogo != GetGlobalYRPString( "text_server_logo", "" ) then
+							self.logo.svlogo = GetGlobalYRPString( "text_server_logo", "" )
 		
-							if !strEmpty(GetGlobalString( "text_server_logo", "" ) ) then
-								self.logo:SetHTML(GetHTMLImage(GetGlobalString( "text_server_logo", "" ), YRP.ctr(H), YRP.ctr(H) ))
+							if !strEmpty(GetGlobalYRPString( "text_server_logo", "" ) ) then
+								self.logo:SetHTML(GetHTMLImage(GetGlobalYRPString( "text_server_logo", "" ), TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR ))
 								self.logo:Show()
 							else
 								self.logo:Hide()
@@ -358,7 +363,7 @@ local function InitYRPChat()
 						if !self.logo:IsVisible() then
 							surface.SetMaterial(yrp_logo)
 							surface.SetDrawColor( 255, 255, 255, 255)
-							surface.DrawTexturedRect(YRP.ctr(BR), YRP.ctr(BR), YRP.ctr(H), YRP.ctr(H) )
+							surface.DrawTexturedRect(BR, BR, TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR )
 						end
 					end
 
@@ -389,38 +394,39 @@ local function InitYRPChat()
 			end
 
 			-- TOPBAR
-			yrpChat.TopBar = createD( "DPanel", yrpChat.window, YRP.ctr(H), YRP.ctr(H), 0, 0 )
-			yrpChat.TopBar:DockMargin( 0, 0, 0, YRP.ctr( BR ) )
+			yrpChat.TopBar = createD( "DPanel", yrpChat.window, TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR, 0, 0 )
+			yrpChat.TopBar:DockMargin( 0, 0, 0, BR )
 			yrpChat.TopBar:Dock( TOP )
 			function yrpChat.TopBar:Paint( pw, ph )
 				--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 100))
 				if IsChatVisible() then
-					local name = GetGlobalString( "text_server_name", "" )
+					local name = GetGlobalYRPString( "text_server_name", "" )
 					if strEmpty(name) then
 						name = YRPGetHostName()
 					end
-					draw.SimpleText(name, "Y_16_500", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(name, "Y_18_700", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-					draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers(), "Y_16_500", pw - YRP.ctr(BR), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_700", pw - BR, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 			end
 
 			-- BOTBAR
-			yrpChat.BotBar = createD( "DPanel", yrpChat.window, YRP.ctr(H), YRP.ctr(H), 0, 0 )
-			yrpChat.BotBar:DockMargin( 0, YRP.ctr( BR ), 0, 0 )
+			yrpChat.BotBar = createD( "DPanel", yrpChat.window, BOTBAR_H - 2 * BR, BOTBAR_H - 2 * BR, 0, 0 )
+			yrpChat.BotBar:DockMargin( 0, BR, 0, 0 )
 			yrpChat.BotBar:Dock( BOTTOM )
 			function yrpChat.BotBar:Paint( pw, ph )
 				--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 100))
 			end
 
 			-- FILL
-			yrpChat.content = createD( "DScrollPanel", yrpChat.window, YRP.ctr(H), YRP.ctr(H), 0, 0 )
+			yrpChat.content = createD( "DScrollPanel", yrpChat.window, 10, 10, 0, 0 )
 			yrpChat.content:Dock( FILL )
+			yrpChat.content:DockMargin( 0, BR, 0, 0 )
 			yrpChat.content.delay = 0
 			yrpChat.content.oldy = 0
 			function yrpChat.content:Paint(pw, ph)
 				if IsChatVisible() then
-					draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "Chat", "BG" ) )
+					draw.RoundedBox(0, 0, 0, pw, ph, C_BG )
 				end
 
 				if self.delay < CurTime() then
@@ -462,12 +468,12 @@ local function InitYRPChat()
 			end
 
 			-- TOPBAR CONTENT
-			yrpChat.window.logo = createD( "DHTML", yrpChat.TopBar, YRP.ctr(H), YRP.ctr(H), 0, 0)
+			yrpChat.window.logo = createD( "DHTML", yrpChat.TopBar, TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR, 0, 0)
 
 			-- BOTBAR CONTENT
-			yrpChat.comboBox = createD( "DComboBox", yrpChat.BotBar, YRP.ctr(140), YRP.ctr(H), 0, 0)
+			yrpChat.comboBox = createD( "DComboBox", yrpChat.BotBar, 70, BOTBAR_H - 2 * BR, 0, 0)
 			yrpChat.comboBox:Dock( LEFT )
-			yrpChat.comboBox:DockMargin( 0, 0, YRP.ctr( BR ), 0 )
+			yrpChat.comboBox:DockMargin( 0, 0, BR, 0 )
 			update_chat_choices()
 			function yrpChat.comboBox:Paint(pw, ph)
 				surface.SetDrawColor(Color( 0, 0, 0, 0) )
@@ -481,9 +487,9 @@ local function InitYRPChat()
 				net.SendToServer()
 			end
 
-			yrpChat.settings = createD( "YButton", yrpChat.BotBar, YRP.ctr(H), YRP.ctr(H), 0, 0)
+			yrpChat.settings = createD( "YButton", yrpChat.BotBar, BOTBAR_H - 2 * BR, BOTBAR_H - 2 * BR, 0, 0)
 			yrpChat.settings:Dock( RIGHT )
-			yrpChat.settings:DockMargin( YRP.ctr( BR ), 0, 0, 0 )
+			yrpChat.settings:DockMargin( BR, 0, 0, 0 )
 			yrpChat.settings:SetText( "" )
 			function yrpChat.settings:Paint(pw, ph)
 				local w = pw - pw % 4
@@ -496,22 +502,22 @@ local function InitYRPChat()
 				end
 			end
 			function yrpChat.settings:DoClick()
-				local win = createD( "YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+				local win = createD( "YFrame", nil, 800, 800, 0, 0)
 				win:MakePopup()
 				win:Center()
 				win:SetTitle( "LID_settings" )
 
-				local tila = createD( "YLabel", win:GetContent(), YRP.ctr(350), YRP.ctr(50), YRP.ctr(50), YRP.ctr(0) )
+				local tila = createD( "YLabel", win:GetContent(), 350, 50, 50, 0 )
 				tila:SetText( "Timestamp" )
-				local ticb = createD( "DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0) )
+				local ticb = createD( "DCheckBox", win:GetContent(), 50, 50, 0, 0 )
 				ticb:SetChecked(lply.yrp_timestamp)
 				function ticb:OnChange()
 					lply.yrp_timestamp = !lply.yrp_timestamp
 				end
 
-				local tspn = createD( "YLabel", win:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(0), YRP.ctr(100) )
+				local tspn = createD( "YLabel", win:GetContent(), 400, 50, 0, 100 )
 				tspn:SetText( "LID_textsize" )
-				local tsnw = createD( "DNumberWang", win:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(0), YRP.ctr(100 + 50) )
+				local tsnw = createD( "DNumberWang", win:GetContent(), 400, 50, 0, 100 + 50 )
 				tsnw:SetValue(LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" ) )
 				tsnw:SetMin(10)
 				tsnw:SetMax(64)
@@ -520,7 +526,7 @@ local function InitYRPChat()
 				end
 			end
 
-			yrpChat.writeField = createD( "DTextEntry", yrpChat.BotBar, 0, YRP.ctr(H), 0, 0)
+			yrpChat.writeField = createD( "DTextEntry", yrpChat.BotBar, 0, BOTBAR_H - 2 * BR, 0, 0)
 			yrpChat.writeField:Dock( BOTTOM )
 			yrpChat.writeField:SetHistoryEnabled(true)
 			function yrpChat.writeField:GetAutoComplete( text )
@@ -562,7 +568,7 @@ local function InitYRPChat()
 				self:SetBGColor(Color( 0, 0, 0, 0) )
 			end
 			function yrpChat.writeField:Paint(pw, ph)
-				surface.SetDrawColor(YRPInterfaceValue( "Chat", "BG" ) )
+				surface.SetDrawColor( C_BG )
 				surface.DrawRect(0, 0, yrpChat.writeField:GetWide(), yrpChat.writeField:GetTall() )
 				yrpChat.writeField:DrawTextEntryText(Color( 255, 255, 255), Color( 0, 0, 0, 0), Color( 255, 255, 255) )
 				if !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then

@@ -25,7 +25,7 @@ function YRPHUDSpace()
 		local RO = YRP.GetDesignIcon( "64_user-graduate" )
 		local NA = YRP.GetDesignIcon( "64_user" )
 
-		if GetGlobalBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Space" then
+		if GetGlobalYRPBool( "bool_yrp_hud", false) and lply:GetHudDesignName() == "Space" then
 			ELES["HP"] = {
 				lply:Health(),
 				lply:GetMaxHealth(),
@@ -177,7 +177,7 @@ function YRPHUDSpace()
 				0,
 				nil,
 				nil,
-				GetGlobalString( "text_server_name", "SERVERNAME" ),
+				GetGlobalYRPString( "text_server_name", "SERVERNAME" ),
 				2
 			}
 
@@ -234,9 +234,9 @@ function YRPHUDSpace()
 				}
 			end
 
-			if GetGlobalInt( "YRPHUDVersion", -1 ) != SPACE["version"] then
+			if GetGlobalYRPInt( "YRPHUDVersion", -1 ) != SPACE["version"] then
 				-- LOAD VARIABLES
-				SPACE["version"] = GetGlobalInt( "YRPHUDVersion", -1 )
+				SPACE["version"] = GetGlobalYRPInt( "YRPHUDVersion", -1 )
 				for ele, etab in pairs(ELES) do
 					local DB = lply:HudElement(ele)
 

@@ -7,7 +7,7 @@ if CLIENT then
 		if self:GetYRPString( "string_hud", "serverdefault" ) != "serverdefault" then
 			return self:GetYRPString( "string_hud", "serverdefault" )
 		else
-			return GetGlobalString( "string_hud_design", "notloaded" )
+			return GetGlobalYRPString( "string_hud_design", "notloaded" )
 		end
 	end
 	function Player:GetHudDesignMask()
@@ -102,15 +102,15 @@ if CLIENT then
 		elseif element == "LO" then
 			return self:Lockdown()
 		elseif element == "HU" then
-			return GetGlobalBool( "bool_hunger", false) and self:GetYRPBool( "bool_hunger", false)
+			return GetGlobalYRPBool( "bool_hunger", false) and self:GetYRPBool( "bool_hunger", false)
 		elseif element == "TH" then
-			return GetGlobalBool( "bool_thirst", false) and self:GetYRPBool( "bool_thirst", false)
+			return GetGlobalYRPBool( "bool_thirst", false) and self:GetYRPBool( "bool_thirst", false)
 		elseif element == "AL" then
-			return GetGlobalBool( "bool_permille", false)
+			return GetGlobalYRPBool( "bool_permille", false)
 		elseif element == "ST" then
-			return GetGlobalBool( "bool_stamina", false) and self:GetYRPBool( "bool_stamina", false)
+			return GetGlobalYRPBool( "bool_stamina", false) and self:GetYRPBool( "bool_stamina", false)
 		elseif element == "RA" then
-			return GetGlobalBool( "bool_radiation", false)
+			return GetGlobalYRPBool( "bool_radiation", false)
 		elseif element == "XP" then
 			return IsLevelSystemEnabled()
 		elseif element == "WP" then
