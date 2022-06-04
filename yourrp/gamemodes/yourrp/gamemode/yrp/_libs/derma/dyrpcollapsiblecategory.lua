@@ -5,8 +5,8 @@ function PANEL:Init()
 	self.header = createD( "DButton", self, 100, 50, 0, 0)
 	self.header:SetText( "" )
 	self.content = createD( "DPanelList", self, 100, 50, 0, 100)
-	self.color = Color( 255, 0, 0)
-	self.color2 = Color( 255, 0, 0)
+	self.color = YRPColGreen()
+	self.color2 = YRPColGreen()
 	self.header:SetTall(self:GetHeaderHeight() )
 	self:SetTall(self:GetHeaderHeight() )
 	self.open = false
@@ -25,7 +25,7 @@ function PANEL:Init()
 		end
 
 		draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl, self.color.a), true, true, not self:IsOpen(), not self:IsOpen() )
-		draw.SimpleText(self.headertext, "Y_24_500", ph / 2, ph / 2, Color( 255, 255, 255), 0, 1)
+		draw.SimpleText(self.headertext, "Y_24_500", ph / 2, ph / 2, Color( 255, 255, 255, 255 ), 0, 1)
 		
 		local icon = YRP.GetDesignIcon( "64_angle-down" )
 		if self:IsOpen() then
@@ -34,12 +34,12 @@ function PANEL:Init()
 
 		if wk(icon) then
 			surface.SetMaterial(icon)
-			surface.SetDrawColor( 255, 255, 255, 255)
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.DrawTexturedRect(pw - ph, br, ph - 2 * br, ph - 2 * br)
 		end
 		
 		if tobool(self.locked) then
-			YRP.DrawIcon(YRP.GetDesignIcon( "lock" ), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), Color( 255, 0, 0) )
+			YRP.DrawIcon(YRP.GetDesignIcon( "lock" ), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), YRPColGreen() )
 		end
 	end
 
@@ -166,7 +166,7 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox(0, 0, 0, w, h, Color( 255, 0, 0) )
+	--draw.RoundedBox(0, 0, 0, w, h, YRPColGreen() )
 end
 
 vgui.Register( "DYRPCollapsibleCategory", PANEL, "Panel" )

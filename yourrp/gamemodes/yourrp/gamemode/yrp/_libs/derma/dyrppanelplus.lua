@@ -9,11 +9,11 @@ function PANEL:Init()
 		self.header.text = text
 	end
 
-	self.header.color = Color( 255, 255, 255, 255)
+	self.header.color = Color( 255, 255, 255, 255 )
 
 	function self.header:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-		surfaceText(YRP.lang_string(self.text), "Y_18_700", pw / 2, ph / 2, Color( 0, 0, 0), 1, 1)
+		surfaceText(YRP.lang_string(self.text), "Y_18_700", pw / 2, ph / 2, Color( 0, 0, 0, 255 ), 1, 1)
 	end
 end
 

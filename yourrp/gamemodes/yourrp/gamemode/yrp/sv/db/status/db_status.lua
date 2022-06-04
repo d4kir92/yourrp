@@ -33,11 +33,11 @@ net.Receive( "Connect_Settings_Status", function(len, ply)
 		end
 		if !_yourrp_content_found then
 			_nw_yourrp["YourRP Content"] = {}
-			_nw_yourrp["YourRP Content"]["LID_missingx"] = Color( 255, 0, 0)
+			_nw_yourrp["YourRP Content"]["LID_missingx"] = YRPColGreen()
 		end
 		if YRPCollectionID() < 100000000 then
 			_nw_yourrp["Collection ID"] = {}
-			_nw_yourrp["Collection ID"]["LID_thecollectionidismissing"] = Color( 255, 0, 0)
+			_nw_yourrp["Collection ID"]["LID_thecollectionidismissing"] = YRPColGreen()
 		end
 		if strEmpty(GetGlobalYRPString( "text_server_name" ) ) then
 			_nw_yourrp["Hostname"] = {}

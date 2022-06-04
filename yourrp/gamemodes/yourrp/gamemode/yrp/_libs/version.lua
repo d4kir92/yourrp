@@ -116,7 +116,7 @@ function IsYRPOutdated()
 end
 
 function GetVersionColor()
-	return GAMEMODE.versioncolor or Color( 255, 255, 255)
+	return GAMEMODE.versioncolor or Color( 255, 255, 255, 255 )
 end
 
 local on = {}
@@ -151,17 +151,17 @@ if CLIENT then
 			function frame.con:Paint(pw, ph)
 				local tab = {}
 				tab["yrp"] = "YourRP"
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_newyourrpversionavailable", tab), "Y_24_500", pw / 2, YRP.ctr(50), Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_currentversion" ) .. ":", "Y_24_500", pw / 2, YRP.ctr(100), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_newyourrpversionavailable", tab), "Y_24_500", pw / 2, YRP.ctr(50), Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_currentversion" ) .. ":", "Y_24_500", pw / 2, YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_client" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(150), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
-				draw.SimpleTextOutlined(GAMEMODE.Version, "Y_24_500", pw / 2, YRP.ctr(150), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_client" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(150), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				draw.SimpleTextOutlined(GAMEMODE.Version, "Y_24_500", pw / 2, YRP.ctr(150), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
-				draw.SimpleTextOutlined( "( " .. string.upper(GAMEMODE.dedicated) .. " ) " .. YRP.lang_string( "LID_server" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(200), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
-				draw.SimpleTextOutlined(GAMEMODE.VersionServer, "Y_24_500", pw / 2, YRP.ctr(200), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined( "( " .. string.upper(GAMEMODE.dedicated) .. " ) " .. YRP.lang_string( "LID_server" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(200), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				draw.SimpleTextOutlined(GAMEMODE.VersionServer, "Y_24_500", pw / 2, YRP.ctr(200), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_workshopversion" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
-				draw.SimpleTextOutlined(on.stable .. "." .. on.beta .. "." .. on.canary .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " )", "Y_24_500", pw / 2, YRP.ctr(300), Color( 0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_workshopversion" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				draw.SimpleTextOutlined(on.stable .. "." .. on.beta .. "." .. on.canary .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " )", "Y_24_500", pw / 2, YRP.ctr(300), Color( 0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			end
 
 			local showChanges = createD( "YButton", frame.con, YRP.ctr(500), YRP.ctr(80), frame.con:GetWide() / 2 - YRP.ctr(250), YRP.ctr(350) )
@@ -191,7 +191,7 @@ function YRPCheckVersion(from)
 						local serverart = string.upper(GAMEMODE.VersionSort)
 
 						if serverart == "OUTDATED" then	
-							GAMEMODE.versioncolor = Color( 255, 0, 0)	
+							GAMEMODE.versioncolor = YRPColGreen()	
 							yrpoutdated = true	
 							serverart = "CANARY"	
 						else	
@@ -203,11 +203,11 @@ function YRPCheckVersion(from)
 						on.canary = YRPGetVersionValue( body, "V" .. serverart .. "CANARY" )
 
 						if on.stable == GAMEMODE.VersionStable and on.beta == GAMEMODE.VersionBeta and on.canary == GAMEMODE.VersionCanary then
-							GAMEMODE.versioncolor = Color( 255, 255, 255)
+							GAMEMODE.versioncolor = Color( 255, 255, 255, 255 )
 							yrpoutdated = false
 						else
 							yrpoutdated = true
-							GAMEMODE.versioncolor = Color( 255, 0, 0)
+							GAMEMODE.versioncolor = YRPColGreen()
 							if CLIENT then
 								VersionWindow()
 							end

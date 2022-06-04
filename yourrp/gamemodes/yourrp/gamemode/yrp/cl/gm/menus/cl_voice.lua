@@ -66,7 +66,7 @@ function YRPVoiceChannel(edit, uid)
 	-- Hear?
 	local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 	function line:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string( "LID_hearq" ), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_hearq" ), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -101,7 +101,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(taugs) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -143,7 +143,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(tagrps) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -185,7 +185,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(tarols) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -230,7 +230,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(tpugs) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -272,7 +272,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(tpgrps) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -314,7 +314,7 @@ function YRPVoiceChannel(edit, uid)
 		for i, ug in pairs(tprols) do
 			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
-				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -449,7 +449,7 @@ function YRPUpdateVoiceList()
 						local br = YRP.ctr(8)
 						if YRP.GetDesignIcon( "edit" ) then
 							surface.SetMaterial( YRP.GetDesignIcon( "edit" ) )
-							surface.SetDrawColor( 255, 255, 255, 255 )
+							surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 							surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 						end
 					end
@@ -460,7 +460,7 @@ function YRPUpdateVoiceList()
 
 				local name = createD( "DPanel", bg, YRP.ctr(800), h, h + pbr, 0)
 				function name:Paint(pw, ph)
-					draw.SimpleText( channel.string_name, "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText( channel.string_name, "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				
@@ -479,13 +479,13 @@ function YRPUpdateVoiceList()
 						local br = YRP.ctr(8)
 						if YRP.GetDesignIcon( "mic" ) then
 							surface.SetMaterial( YRP.GetDesignIcon( "mic" ) )
-							surface.SetDrawColor( 255, 255, 255, 255 )
+							surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 							surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 						end
-						draw.SimpleText( "+", "Y_24_700", pw / 2, ph / 2 - 1, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText( "+", "Y_24_700", pw / 2, ph / 2 - 1, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						if YRP.GetDesignIcon( "volume_up" ) then
 							surface.SetMaterial( YRP.GetDesignIcon( "volume_up" ) )
-							surface.SetDrawColor( 255, 255, 255, 255 )
+							surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 							surface.DrawTexturedRect( br + ph + br, br, ph - 2 * br, ph - 2 * br)
 						end
 					end
@@ -513,7 +513,7 @@ function YRPUpdateVoiceList()
 						local br = YRP.ctr(8)
 						if YRP.GetDesignIcon(icon) then
 							surface.SetMaterial(YRP.GetDesignIcon(icon) )
-							surface.SetDrawColor( 255, 255, 255, 255 )
+							surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 							surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 						end
 					end
@@ -537,7 +537,7 @@ function YRPUpdateVoiceList()
 							local br = YRP.ctr(8)
 							if YRP.GetDesignIcon( "64_angle-down" ) then
 								surface.SetMaterial(YRP.GetDesignIcon( "64_angle-down" ) )
-								surface.SetDrawColor( 255, 255, 255, 255 )
+								surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 								surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 							end
 						end
@@ -559,7 +559,7 @@ function YRPUpdateVoiceList()
 							local br = YRP.ctr(8)
 							if YRP.GetDesignIcon( "64_angle-up" ) then
 								surface.SetMaterial(YRP.GetDesignIcon( "64_angle-up" ) )
-								surface.SetDrawColor( 255, 255, 255, 255 )
+								surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 								surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 							end
 						end
@@ -611,9 +611,9 @@ function OpenVoiceMenu()
 	vm.win.listheader = createD( "DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(50 + 20), 0, 0)
 	function vm.win.listheader:Paint(pw, ph)
 		if lply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) then
-			draw.SimpleText(YRP.lang_string( "LID_name" ), "Y_20_500", YRP.ctr(80), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_active_mic", 0) .. "/" .. GetGlobalYRPInt( "int_max_channels_active", 1 ), "Y_20_500", YRP.ctr(990), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_passive_voice", 0) .. "/" .. GetGlobalYRPInt( "int_max_channels_passive", 3 ), "Y_20_500", YRP.ctr(1100), ph / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_name" ), "Y_20_500", YRP.ctr(80), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_active_mic", 0) .. "/" .. GetGlobalYRPInt( "int_max_channels_active", 1 ), "Y_20_500", YRP.ctr(990), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_passive_voice", 0) .. "/" .. GetGlobalYRPInt( "int_max_channels_passive", 3 ), "Y_20_500", YRP.ctr(1100), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end
 
@@ -626,10 +626,10 @@ function OpenVoiceMenu()
 		draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 	end
 	function sbar.btnUp:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+		draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 	end
 	function sbar.btnDown:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+		draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 	end
 	function sbar.btnGrip:Paint(w, h)
 		draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -682,7 +682,7 @@ function OpenVoiceMenu()
 		vm.win.showalllabel = createD( "DLabel", CONTENT, YRP.ctr(200), size, YRP.ctr(40 + 20), CONTENT:GetTall() - YRP.ctr(50) )
 		vm.win.showalllabel:SetText( "" )
 		function vm.win.showalllabel:Paint(pw, ph)
-			draw.SimpleText( YRP.lang_string( "LID_adminmode" ), "Y_16_700", 0, ph / 2, Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+			draw.SimpleText( YRP.lang_string( "LID_adminmode" ), "Y_16_700", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 		end
 
 
@@ -734,7 +734,7 @@ function OpenVoiceMenu()
 		local br = YRP.ctr(8)
 		if YRP.GetDesignIcon(icon) then
 			surface.SetMaterial(YRP.GetDesignIcon(icon) )
-			surface.SetDrawColor( 255, 255, 255, 255 )
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 		end
 	end

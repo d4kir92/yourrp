@@ -44,16 +44,16 @@ local yrp_chat_channels = {}
 
 -- CREATE DEFAULT CHANNELS
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "OOC" .. "'" ) == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'OOC', 'Color( 100, 255, 100)[OOC] %STEAMNAME%: Color( 255, 255, 255)%TEXT%', 0, 0" )
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'OOC', 'Color( 100, 255, 100)[OOC] %STEAMNAME%: Color( 255, 255, 255, 255 )%TEXT%', 0, 0" )
 end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "/" .. "'" ) == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'" .. "/" .. "', 'Color( 100, 255, 100)[OOC] %STEAMNAME%: Color( 255, 255, 255)%TEXT%', 0, 0" )
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'" .. "/" .. "', 'Color( 100, 255, 100)[OOC] %STEAMNAME%: Color( 255, 255, 255, 255 )%TEXT%', 0, 0" )
 end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "LOOC" .. "'" ) == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'LOOC', 'Color( 100, 255, 100)[LOOC] %STEAMNAME%: Color( 255, 255, 255)%TEXT%', 1, 0" )
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'LOOC', 'Color( 100, 255, 100)[LOOC] %STEAMNAME%: Color( 255, 255, 255, 255 )%TEXT%', 1, 0" )
 end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "SAY" .. "'" ) == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable, bool_canbedisabled", "'SAY', 'Color( 100, 255, 100)%RPNAME%: Color( 255, 255, 255)%TEXT%', 1, 0, 0" )
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable, bool_canbedisabled", "'SAY', 'Color( 100, 255, 100)%RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 1, 0, 0" )
 end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ADVERT" .. "'" ) == nil then
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ADVERT', 'Color( 255, 255, 0)[ADVERT] %RPNAME%: %TEXT%', 0, 0" )
@@ -65,22 +65,22 @@ if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "EVENT" .. "'" ) == n
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'EVENT', 'Color( 255, 255, 100)[EVENT] %RPNAME%: Color( 255, 255, 100)%TEXT%', 0, 0" )
 end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ROLE" .. "'" ) == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ROLE', 'Color( 0, 255, 0)[ROLE] %RPNAME%: Color( 255, 255, 255)%TEXT%', 4, 0" )
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ROLE', 'YRPColGreen()[ROLE] %RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 4, 0" )
 end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "GROUP" .. "'" ) == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'GROUP', 'Color( 160, 160, 255)[GROUP] %RPNAME%: Color( 255, 255, 255)%TEXT%', 3, 0" )
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'GROUP', 'Color( 160, 160, 255)[GROUP] %RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 3, 0" )
 end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "FACTION" .. "'" ) == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'FACTION', 'Color( 100, 100, 255)[FACTION] %RPNAME%: Color( 255, 255, 255)%TEXT%', 2, 0" )
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'FACTION', 'Color( 100, 100, 255)[FACTION] %RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 2, 0" )
 end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ME" .. "'" ) == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ME', 'Color( 0, 255, 0)%RPNAME% %TEXT%', 1, 0" )
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ME', 'YRPColGreen()%RPNAME% %TEXT%', 1, 0" )
 end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "IT" .. "'" ) == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'IT', 'Color( 255, 255, 255)*** %TEXT%', 1, 0" )
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'IT', 'Color( 255, 255, 255, 255 )*** %TEXT%', 1, 0" )
 end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ID" .. "'" ) == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ID', 'Color( 255, 0, 0)%RPNAME% Color( 255, 255, 255)shows his ID, it says: Color( 255, 0, 0)%IDCARDID%', 1, 0" )
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ID', 'YRPColGreen()%RPNAME% Color( 255, 255, 255, 255 )shows his ID, it says: YRPColGreen()%IDCARDID%', 1, 0" )
 end
 
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "W" .. "'" ) == nil then

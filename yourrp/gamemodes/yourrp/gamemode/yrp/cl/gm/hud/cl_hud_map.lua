@@ -66,7 +66,7 @@ function openMap()
 				win.y = (ScrH() / 2) - (win.h / 2)
 
 				draw.RoundedBox(0, win.x - YRP.ctr(2), win.y - YRP.ctr(2), win.w + YRP.ctr(4), win.h + YRP.ctr(4), Color( 255, 255, 0, 240) )
-				draw.RoundedBox(0, win.x, win.y, win.w, win.h, Color( 0, 0, 0, 255) )
+				draw.RoundedBox(0, win.x, win.y, win.w, win.h, Color( 0, 0, 0, 255 ) )
 
 				local _mapName = GetNiceMapName()
 
@@ -112,7 +112,7 @@ function openMap()
 					render.SetViewPort(0, 0, old_w, old_h)
 				render.SetRenderTarget(old_RT)
 
-				surface.SetDrawColor( 255, 255, 255, 255)
+				surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 				surface.SetMaterial(map_RT_mat)
 				surface.DrawTexturedRect(win.x, win.y, win.w, win.h)
 
@@ -171,7 +171,7 @@ function openMap()
 					draw.RoundedBox(0, win.x, y, win.w, YRP.ctr(2), color)
 				end
 				for y = nulPos.y - YRP.ctr(100), 0, -YRP.ctr(200) do
-					draw.SimpleText(math.abs( c - fixc) + 1, "Y_24_500", win.x + YRP.ctr(20), y, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(math.abs( c - fixc) + 1, "Y_24_500", win.x + YRP.ctr(20), y, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c = c + 1
 				end
 				for y = nulPos.y - YRP.ctr(100), win.h, YRP.ctr(200) do
@@ -208,7 +208,7 @@ function openMap()
 					c2 = c2 + 1
 				end
 
-				--draw.SimpleText(win.x .. " |  ||| " ..nulPos.x .. " | " .. win.w, "Y_14_500", ScrW2(), ScrH2(), Color( 255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+				--draw.SimpleText(win.x .. " |  ||| " ..nulPos.x .. " | " .. win.w, "Y_14_500", ScrW2(), ScrH2(), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 
 				--You
 				local x = plyPos.x
@@ -220,13 +220,13 @@ function openMap()
 				surface.SetDrawColor( 100, 100, 255, 255)
 				surface.SetMaterial(YRP.GetDesignIcon( "navigation" ) )
 				surface.DrawTexturedRectRotated(x, y, w, h, rot)
-				draw.SimpleText(YRP.lang_string( "LID_you" ), "Y_24_500", plyPos.x, plyPos.y-YRP.ctr(50), Color( 255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleText(YRP.lang_string( "LID_you" ), "Y_24_500", plyPos.x, plyPos.y-YRP.ctr(50), Color( 255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
 				--Coords
-				draw.SimpleText(math.Round(lply:GetPos().x, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
-				draw.SimpleText( ", " .. math.Round(lply:GetPos().y, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleText(math.Round(lply:GetPos().x, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				draw.SimpleText( ", " .. math.Round(lply:GetPos().y, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
-				draw.SimpleText( "[M] - " .. YRP.lang_string( "LID_map" ) .. ": " .. _mapName, "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0) )
+				draw.SimpleText( "[M] - " .. YRP.lang_string( "LID_map" ) .. ": " .. _mapName, "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 255 ) )
 
 				if lply:GetYRPBool( "bool_canseeteammatesonmap", false) or lply:GetYRPBool( "bool_canseeenemiesonmap", false) then
 					for k, pl in pairs(player.GetAll() ) do
@@ -263,7 +263,7 @@ function openMap()
 							surface.SetDrawColor(pl_col)
 							surface.SetMaterial(YRP.GetDesignIcon( "navigation" ) )
 							surface.DrawTexturedRectRotated(ppx, ppy, psw, psh, prot)
-							draw.SimpleText(pl:Nick(), "Y_24_500", tmp.x, tmp.y - YRP.ctr(50), Color( 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+							draw.SimpleText(pl:Nick(), "Y_24_500", tmp.x, tmp.y - YRP.ctr(50), YRPColBlue(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 						end
 					end
 				end

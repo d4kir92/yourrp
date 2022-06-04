@@ -54,7 +54,7 @@ function YRPCreateCharacterSettingsContent()
 
 	local header = createD( "DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200) )
 	function header:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string( "LID_charactercreation" ), "Y_36_500", pw / 2, ph / 2, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_charactercreation" ), "Y_36_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	local btn = {}
@@ -214,8 +214,8 @@ function YRPCreateCharacterSettingsContent()
 				end
 				self:SetFontInternal( "Y_18_500" )
 
-				self:SetFGColor(Color( 255, 255, 255) )
-				self:SetBGColor(Color( 0, 0, 0) )
+				self:SetFGColor(Color( 255, 255, 255, 255 ) )
+				self:SetBGColor(Color( 0, 0, 0, 255 ) )
 			end
 			function name:OnChange()
 				local nam = self:GetText()
@@ -236,8 +236,8 @@ function YRPCreateCharacterSettingsContent()
 				end
 				self:SetFontInternal( "Y_18_500" )
 
-				self:SetFGColor(Color( 255, 255, 255) )
-				self:SetBGColor(Color( 0, 0, 0) )
+				self:SetFGColor(Color( 255, 255, 255, 255 ) )
+				self:SetBGColor(Color( 0, 0, 0, 255 ) )
 			end
 			function surname:OnChange()
 				local nam = self:GetText()
@@ -264,10 +264,10 @@ function YRPCreateCharacterSettingsContent()
 				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 			end
 			function sbar.btnUp:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 			end
 			function sbar.btnDown:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 			end
 			function sbar.btnGrip:Paint(w, h)
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -280,7 +280,7 @@ function YRPCreateCharacterSettingsContent()
 					local pbg = createD( "DPanel", nil, ew, YRP.ctr( config.hh * 2), 0, 0)
 					function pbg:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "PC" ) )
-						draw.SimpleText(LocalPlayer()["charcreate_bg" .. bg.id] + 1 .. "/" .. table.Count( bg.submodels) .. " " .. bg["name"], "Y_18_500", YRP.ctr( config.hh + config.br), ph / 2, Color( 255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(LocalPlayer()["charcreate_bg" .. bg.id] + 1 .. "/" .. table.Count( bg.submodels) .. " " .. bg["name"], "Y_18_500", YRP.ctr( config.hh + config.br), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 
 					local skinup = createD( "YButton", pbg, YRP.ctr( config.hh * 0.8), YRP.ctr( config.hh * 0.8), YRP.ctr( config.hh * 0.1), YRP.ctr( config.hh * 0.1) )
@@ -289,7 +289,7 @@ function YRPCreateCharacterSettingsContent()
 						if LocalPlayer()["charcreate_bg" .. bg.id] + 1 < table.Count( bg.submodels) then
 							hook.Run( "YButtonPaint", self, pw, ph)
 
-							surface.SetDrawColor( 255, 255, 255, 255)
+							surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 							surface.SetMaterial(YRP.GetDesignIcon( "64_angle-up" ) )
 							surface.DrawTexturedRect(0, 0, pw, ph)
 						end
@@ -307,7 +307,7 @@ function YRPCreateCharacterSettingsContent()
 						if LocalPlayer()["charcreate_bg" .. bg.id] > 0 then
 							hook.Run( "YButtonPaint", self, pw, ph)
 
-							surface.SetDrawColor( 255, 255, 255, 255)
+							surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 							surface.SetMaterial(YRP.GetDesignIcon( "64_angle-down" ) )
 							surface.DrawTexturedRect(0, 0, pw, ph)
 						end
@@ -337,10 +337,10 @@ function YRPCreateCharacterSettingsContent()
 			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 		end
 		function sbar.btnUp:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+			draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 		end
 		function sbar.btnDown:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+			draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 		end
 		function sbar.btnGrip:Paint(w, h)
 			draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -364,8 +364,8 @@ function YRPCreateCharacterSettingsContent()
 				end
 				self:SetFontInternal( "Y_18_500" )
 
-				self:SetFGColor(Color( 255, 255, 255) )
-				self:SetBGColor(Color( 0, 0, 0) )
+				self:SetFGColor(Color( 255, 255, 255, 255 ) )
+				self:SetBGColor(Color( 0, 0, 0, 255 ) )
 			end
 			function birt:OnChange()
 				LocalPlayer().charcreate_birt = self:GetText()
@@ -420,8 +420,8 @@ function YRPCreateCharacterSettingsContent()
 			end
 			self:SetFontInternal( "Y_18_500" )
 
-			self:SetFGColor(Color( 255, 255, 255) )
-			self:SetBGColor(Color( 0, 0, 0) )
+			self:SetFGColor(Color( 255, 255, 255, 255 ) )
+			self:SetBGColor(Color( 0, 0, 0, 255 ) )
 		end
 		function desc:OnChange()
 			LocalPlayer().charcreate_desc = self:GetText()

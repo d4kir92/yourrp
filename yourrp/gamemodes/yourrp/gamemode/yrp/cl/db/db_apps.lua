@@ -9,8 +9,8 @@ end
 
 function APP:Paint(w, h)
 	draw.RoundedBox(0, 0, 0, w, h, Color( 255, 0, 0, 255) )
-	draw.SimpleTextOutlined( "NO", "HudHintTextSmall", w/2, h/3, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255) )
-	draw.SimpleTextOutlined( "ICON", "HudHintTextSmall", w/2, h*2/3, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255) )
+	draw.SimpleTextOutlined( "NO", "HudHintTextSmall", w/2, h/3, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255 ) )
+	draw.SimpleTextOutlined( "ICON", "HudHintTextSmall", w/2, h*2/3, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255 ) )
 end
 
 vgui.Register( "YRPAPP", APP, "DButton" )
@@ -84,7 +84,7 @@ local yrp_apps = {}
 local dbfile = "yrp_apps/yrp_apps.json"
 
 function YRPAppsMSG( msg )
-	MsgC( Color( 0, 255, 0 ), "[YourRP] [TUTORIALS] " .. msg .. "\n" )
+	MsgC( YRPColGreen(), "[YourRP] [TUTORIALS] " .. msg .. "\n" )
 end
 
 function YRPAppsCheckFile()

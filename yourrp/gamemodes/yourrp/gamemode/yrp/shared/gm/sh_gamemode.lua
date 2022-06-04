@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 206 -- do NOT change this!
+GM.VersionBuild = 214 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -96,11 +96,11 @@ if SERVER then
 		end
 
 		if YRPIsDoubleInstalled() and dir == 1 then
-			YRPHR( Color( 255, 0, 0 ) )
-			MsgC( Color( 255, 0, 0 ), "[YourRP] YourRP is DOUBLE installed!" .. "\n" )
-			MsgC( Color( 255, 0, 0 ), "[YourRP] Please REMOVE the folder: Server/garrysmod/gamemodes/" .. tostring( doubleinstalledpath ) .. " <-" .. "\n" )
-			MsgC( Color( 255, 0, 0 ), "[YourRP] You will not lose your Data (Data is saved in: Server/garrysmod/sv.db)" .. "\n" )
-			YRPHR( Color( 255, 0, 0 ) )
+			YRPHR( YRPColGreen() )
+			MsgC( YRPColGreen(), "[YourRP] YourRP is DOUBLE installed!" .. "\n" )
+			MsgC( YRPColGreen(), "[YourRP] Please REMOVE the folder: Server/garrysmod/gamemodes/" .. tostring( doubleinstalledpath ) .. " <-" .. "\n" )
+			MsgC( YRPColGreen(), "[YourRP] You will not lose your Data (Data is saved in: Server/garrysmod/sv.db)" .. "\n" )
+			YRPHR( YRPColGreen() )
 		end
 	end)
 end
@@ -206,9 +206,9 @@ end
 
 concommand.Add( "yrp_version", function(ply, cmd, args)
 	local _text = "Gamemode-Version: " .. YRPGetVersionFull() .. " ( " .. string.upper( GAMEMODE.VersionSort ) .. " ) [" .. GetGlobalYRPString( "YRP_VERSIONART", "X" ) .. "]"
-	local _color = Color( 0, 255, 0 )
+	local _color = YRPColGreen()
 	if string.upper( GAMEMODE.VersionSort ) == "OUTDATED" then
-		_color = Color( 255, 0, 0 )
+		_color = YRPColGreen()
 	end
 
 	YRPHR( _color )
@@ -373,7 +373,7 @@ if SERVER then
 				net.WriteString(GAMEMODE.BaseName)
 			net.Send(ply)
 		end
-	end)
+	end )
 end
 
 if CLIENT then
@@ -381,10 +381,10 @@ if CLIENT then
 		GAMEMODE.BaseName = net.ReadString()
 	end)
 
-	timer.Simple(1, function()
+	timer.Simple( 1, function()
 		net.Start( "YRPGetGamemodename" )
 		net.SendToServer()
-	end)
+	end )
 end
 
 -- Multicore (Shared) enable:
@@ -537,14 +537,14 @@ if system.IsLinux() then
 	_ErrorNoHalt                = _ErrorNoHalt  or ErrorNoHalt
 
 	local available_colors      = {
-	Color( 0, 0, 0),       Color(128, 0, 0),     Color( 0, 128, 0),
+	Color( 0, 0, 0, 255 ),       Color(128, 0, 0),     Color( 0, 128, 0),
 	Color(128, 128, 0),   Color( 0, 0, 128),     Color(128, 0, 128),
 	Color( 0, 128, 128),   Color(192, 192, 192), Color(128, 128, 128),
-	Color( 255, 0, 0),     Color( 0, 255, 0),     Color( 255, 255, 0),
-	Color( 0, 0, 255),     Color( 255, 0, 255),   Color( 0, 255, 255),
-	Color( 255, 255, 255), Color( 0, 0, 0),       Color( 0, 0, 95),
+	YRPColGreen(),     YRPColGreen(),     Color( 255, 255, 0),
+	YRPColBlue(),     Color( 255, 0, 255),   Color( 0, 255, 255),
+	Color( 255, 255, 255, 255 ), Color( 0, 0, 0, 255 ),       Color( 0, 0, 95),
 	Color( 0, 0, 135),     Color( 0, 0, 175),     Color( 0, 0, 215),
-	Color( 0, 0, 255),     Color( 0, 95, 0),      Color( 0, 95, 95),
+	YRPColBlue(),     Color( 0, 95, 0),      Color( 0, 95, 95),
 	Color( 0, 95, 135),    Color( 0, 95, 175),    Color( 0, 95, 215),
 	Color( 0, 95, 255),    Color( 0, 135, 0),     Color( 0, 135, 95),
 	Color( 0, 135, 135),   Color( 0, 135, 175),   Color( 0, 135, 215),
@@ -552,7 +552,7 @@ if system.IsLinux() then
 	Color( 0, 175, 135),   Color( 0, 175, 175),   Color( 0, 175, 215),
 	Color( 0, 175, 255),   Color( 0, 215, 0),     Color( 0, 215, 95),
 	Color( 0, 215, 135),   Color( 0, 215, 175),   Color( 0, 215, 215),
-	Color( 0, 215, 255),   Color( 0, 255, 0),     Color( 0, 255, 95),
+	Color( 0, 215, 255),   YRPColGreen(),     Color( 0, 255, 95),
 	Color( 0, 255, 135),   Color( 0, 255, 175),   Color( 0, 255, 215),
 	Color( 0, 255, 255),   Color(95, 0, 0),      Color(95, 0, 95),
 	Color(95, 0, 135),    Color(95, 0, 175),    Color(95, 0, 215),
@@ -602,7 +602,7 @@ if system.IsLinux() then
 	Color(215, 215, 135), Color(215, 215, 175), Color(215, 215, 215),
 	Color(215, 215, 255), Color(215, 255, 0),   Color(215, 255, 95),
 	Color(215, 255, 135), Color(215, 255, 175), Color(215, 255, 215),
-	Color(215, 255, 255), Color( 255, 0, 0),     Color( 255, 0, 95),
+	Color(215, 255, 255), YRPColGreen(),     Color( 255, 0, 95),
 	Color( 255, 0, 135),   Color( 255, 0, 175),   Color( 255, 0, 215),
 	Color( 255, 0, 255),   Color( 255, 95, 0),    Color( 255, 95, 95),
 	Color( 255, 95, 135),  Color( 255, 95, 175),  Color( 255, 95, 215),
@@ -614,7 +614,7 @@ if system.IsLinux() then
 	Color( 255, 215, 135), Color( 255, 215, 175), Color( 255, 215, 215),
 	Color( 255, 215, 255), Color( 255, 255, 0),   Color( 255, 255, 95),
 	Color( 255, 255, 135), Color( 255, 255, 175), Color( 255, 255, 215),
-	Color( 255, 255, 255), Color(8, 8, 8),       Color(18, 18, 18),
+	Color( 255, 255, 255, 255 ), Color(8, 8, 8),       Color(18, 18, 18),
 	Color(28, 28, 28),    Color(38, 38, 38),    Color(48, 48, 48),
 	Color(58, 58, 58),    Color(68, 68, 68),    Color(78, 78, 78),
 	Color(88, 88, 88),    Color(98, 98, 98),    Color(108, 108, 108),
@@ -774,7 +774,7 @@ function YRP_RN(text)
 			else
 				local s1 = ex[1]
 				local s2 = ex[2]
-				MsgC( Color( 255, 0, 0 ), "ROLL FAILED: " .. tostring( s1 ) .. " " .. tostring( s2 ) .. "\n" )
+				MsgC( YRPColGreen(), "ROLL FAILED: " .. tostring( s1 ) .. " " .. tostring( s2 ) .. "\n" )
 			end
 		end
 		return YRP_RN(text)
@@ -869,7 +869,7 @@ local url_sv = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSecLLX255Pvm-uMPtgG
 -- CONFIG
 
 local function YRPErrorMSG( msg, color )
-	color = color or Color( 255, 0, 0 )
+	color = color or YRPColGreen()
 	MsgC( color, "[COLLECT-ERRORS] " .. msg .. "\n" )
 end
 
@@ -882,16 +882,21 @@ local function YRPCheckErrorFile()
 		local tab = {}
 		file.Write( filename, util.TableToJSON( tab, true ) )
 	end
-	YRPErrors = util.JSONToTable( file.Read( filename, "DATA" ) )
+	local olderrors = util.JSONToTable( file.Read( filename, "DATA" ) )
+	if olderrors then
+		YRPErrors = olderrors
+	end
 end
 YRPCheckErrorFile()
 
 function YRPNewError(err)
 	YRPCheckErrorFile()
 
-	for i, v in pairs(YRPErrors) do
-		if v.err and v.err == err then
-			return false
+	if YRPErrors then
+		for i, v in pairs(YRPErrors) do
+			if v.err and v.err == err then
+				return false
+			end
 		end
 	end
 	return true
@@ -899,7 +904,7 @@ end
 
 local function YRPSaveErrors()
 	if YRPErrors != nil then
-		YRPErrorMSG( "Saved Errors", Color( 0, 255, 0 ) )
+		YRPErrorMSG( "Saved Errors", YRPColGreen() )
 		file.Write( filename, util.TableToJSON( YRPErrors, true ) )
 	else
 		YRPErrorMSG( "Failed to save Errors" )
@@ -913,7 +918,7 @@ local function YRPSendError(tab, from)
 	local posturl = ""
 
 	if tab.buildnummer != gmbn then
-		MsgC( Color( 255, 0, 0), ">>> [YRPSendError] FAIL, ERROR IS OUTDATED" .. "\n" )
+		MsgC( YRPColGreen(), ">>> [YRPSendError] FAIL, ERROR IS OUTDATED" .. "\n" )
 		YRPRemoveOutdatedErrors()
 		return
 	end
@@ -971,15 +976,15 @@ local function YRPSendError(tab, from)
 
 		posturl = url_cl
 	else
-		MsgC( Color( 255, 0, 0), ">>> [YRPSendError] FAIL! >> Realm: " .. tostring(tab.realm) .. "\n" )
+		MsgC( YRPColGreen(), ">>> [YRPSendError] FAIL! >> Realm: " .. tostring(tab.realm) .. "\n" )
 		return
 	end
 
 	if GAMEMODE and YRPIsVersionSet and YRPIsVersionSet() and IsYRPOutdated != nil then
 		if IsYRPOutdated() then
-			MsgC( Color( 255, 0, 0), "[YRPSendError] >> YourRP Is Outdated" .. "\n" )
+			MsgC( YRPColGreen(), "[YRPSendError] >> YourRP Is Outdated" .. "\n" )
 		elseif YRPIsServerDedicated() and !string.StartWith( GetGlobalYRPString( "serverip", "0.0.0.0:27015" ), "0.0.0.0:" ) then
-			--MsgC( Color( 255, 0, 0), "[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err) .. "\n" )
+			--MsgC( YRPColGreen(), "[YRPSendError] [" .. tostring(from) .. "] >> " .. tostring(tab.err) .. "\n" )
 			
 			http.Post(posturl, entry,
 			function( body, length, headers, code)
@@ -1023,11 +1028,13 @@ function YRPRemoveOutdatedErrors()
 			end
 		end
 		if changed then
-			YRPErrorMSG( "Found Outdated Errors", Color( 0, 255, 0 ) )
-			YRPErrors = TMPYRPErrors
+			YRPErrorMSG( "Found Outdated Errors", YRPColGreen() )
+			if TMPYRPErrors then
+				YRPErrors = TMPYRPErrors
+			end
 			YRPSaveErrors()
 		else
-			-- YRPErrorMSG( "No Outdated Errors found", Color( 0, 255, 0 ) )
+			-- YRPErrorMSG( "No Outdated Errors found", YRPColGreen() )
 		end
 	else
 		YRPErrorMSG( "Failed to remove outdated errors" )
@@ -1078,7 +1085,7 @@ function YRPAddLuaErrorHook()
 
 		--if err and trace and realm and ( string.find(err, "/yrp/" ) or string.find(trace, "/yrp/" ) ) and YRPNewError(err) then
 		if err and trace and realm and ( string.find( err, "/yrp/", 1, true ) or string.find( trace, "/yrp/", 1, true ) or string.find( trace, "[YourRP]", 1, true ) ) and YRPNewError(err) then
-			MsgC( Color( 255, 0, 0), "[YRPAddError] >> Found a new ERROR" .. "\n" )
+			MsgC( YRPColGreen(), "[YRPAddError] >> Found a new ERROR" .. "\n" )
 			YRPAddError(err, trace, realm)
 		end
 	end)
@@ -1114,11 +1121,11 @@ if CLIENT then
 		YRPHR( Color( 255, 255, 0 ) )
 
 		if GetGlobalYRPString( "serverversion", VERSION ) > VERSION then
-			MsgC( Color( 255, 0, 0 ), "YOUR GAME IS OUTDATED!" .. "\n" )
+			MsgC( YRPColGreen(), "YOUR GAME IS OUTDATED!" .. "\n" )
 		elseif GetGlobalYRPString( "serverversion", VERSION ) < VERSION and BRANCH == "unknown" then
-			MsgC( Color( 255, 0, 0 ), "SERVER IS OUTDATED!" .. "\n" )
+			MsgC( YRPColGreen(), "SERVER IS OUTDATED!" .. "\n" )
 		else
-			MsgC( Color( 0, 255, 0 ), "YOUR GAME IS UP-To-Date!" .. "\n" )
+			MsgC( YRPColGreen(), "YOUR GAME IS UP-To-Date!" .. "\n" )
 		end
 	end)
 end

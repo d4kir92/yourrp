@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 	
 function CreateCheckBoxLine( dpanellist, val, lstr, netstr, fixx, textcolor)
-	textcolor = textcolor or Color( 255, 255, 255)
+	textcolor = textcolor or Color( 255, 255, 255, 255 )
 	fixx = fixx or 0
 	local background = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(50), 0, 0)
 	background.text_posx = YRP.ctr(50 + 10)
@@ -281,7 +281,7 @@ function CreateHRLine( dpanellist)
 	local hr = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(20), 0, 0)
 	function hr:Paint(pw, ph)
 		surfacePanel(self, pw, ph, "" )
-		surfaceBox(YRP.ctr(10), hr:GetTall() / 4, hr:GetWide() - YRP.ctr(2 * 10), hr:GetTall() / 2, Color( 0, 0, 0, 255) )
+		surfaceBox(YRP.ctr(10), hr:GetTall() / 4, hr:GetWide() - YRP.ctr(2 * 10), hr:GetTall() / 2, Color( 0, 0, 0, 255 ) )
 	end
 	dpanellist:AddItem(hr)
 	return hr
@@ -429,9 +429,11 @@ net.Receive( "Connect_Settings_General", function(len)
 		local wc_mdl = CreateButtonLine(GAMEMODE_SYSTEMS:GetContent(), YRP.lang_string( "LID_weaponchest" ) .. " ( " .. YRP.lang_string( "LID_model" ) .. " )", "update_text_weaponchest_model", "LID_change" )
 		function YRPWeaponchestUpdateModel()
 			local mdl = LocalPlayer().yrpseltab[1]
-			net.Start( "update_text_weapon_system_model" )
-				net.WriteString(mdl)
-			net.SendToServer()
+			if mdl then
+				net.Start( "update_text_weapon_system_model" )
+					net.WriteString(mdl)
+				net.SendToServer()
+			end
 		end
 		function wc_mdl.button:DoClick()
 			local noneplayermodels = {}
@@ -542,12 +544,12 @@ net.Receive( "Connect_Settings_General", function(len)
 			idbg:SetTitle( "" )
 			idbg:SetDraggable(false)
 			function idbg:Paint(pw, ph)
-				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255) )
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
 				for y = 0, ScrH(), gs do
-					draw.RoundedBox(0, 0, y, pw, 1, Color( 255, 255, 255, 255) )
+					draw.RoundedBox(0, 0, y, pw, 1, Color( 255, 255, 255, 255 ) )
 				end
 				for x = 0, ScrW(), gs do
-					draw.RoundedBox(0, x, 0, 1, ph, Color( 255, 255, 255, 255) )
+					draw.RoundedBox(0, x, 0, 1, ph, Color( 255, 255, 255, 255 ) )
 				end
 				drawIDCard(LocalPlayer(), 1)
 			end
@@ -853,9 +855,9 @@ net.Receive( "Connect_Settings_General", function(len)
 					end
 					local content = win:GetContent()
 					function content:Paint(pw, ph)
-						draw.SimpleText( "TEXT ALIGN", "DermaDefault", YRP.ctr(10), YRP.ctr(560), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-						draw.SimpleText( "TEXT HEIGHT", "DermaDefault", YRP.ctr(10), YRP.ctr(680), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-						draw.SimpleText(YRP.lang_string( "LID_title" ), "DermaDefault", YRP.ctr(60), YRP.ctr(800), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText( "TEXT ALIGN", "DermaDefault", YRP.ctr(10), YRP.ctr(560), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText( "TEXT HEIGHT", "DermaDefault", YRP.ctr(10), YRP.ctr(680), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText(YRP.lang_string( "LID_title" ), "DermaDefault", YRP.ctr(60), YRP.ctr(800), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 					win.ele = ele
 
@@ -1042,7 +1044,7 @@ net.Receive( "Connect_Settings_General", function(len)
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_changeable_name, "LID_namechangeable", "update_bool_characters_changeable_name" )
 		
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent() )
-		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_removeondeath, YRP.lang_string( "LID_removeondeath" ) .. " (REMOVES CHAR ON DEATH)", "update_bool_characters_removeondeath", nil, Color( 255, 0, 0 ) )
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_removeondeath, YRP.lang_string( "LID_removeondeath" ) .. " (REMOVES CHAR ON DEATH)", "update_bool_characters_removeondeath", nil, YRPColGreen() )
 
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent() )	
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_birthday, "LID_birthday", "update_bool_characters_birthday" )
@@ -1055,8 +1057,6 @@ net.Receive( "Connect_Settings_General", function(len)
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent() )
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_min, YRP.lang_string( "LID_respawntime" ) .. " [" .. YRP.lang_string( "LID_min" ) .. "]", "update_int_deathtimestamp_min" )
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_max, YRP.lang_string( "LID_respawntime" ) .. " [" .. YRP.lang_string( "LID_max" ) .. "]", "update_int_deathtimestamp_max" )
-		--CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_spawncorpseondeath, "LID_spawncorpseondeath", "update_bool_spawncorpseondeath" )
-		--CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_spawncorpseondeath_gmod, YRP.lang_string( "LID_spawncorpseondeath" ) .. "GMOD", "update_bool_spawncorpseondeath_gmod" )
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_deathscreen, "LID_deathscreen", "update_bool_deathscreen" )
 
 

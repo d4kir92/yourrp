@@ -43,7 +43,7 @@ function BuildLogs(parent, typ)
 								self:SetUnderlineFont( "Y_18_500" )
 							end
 							self:SetFontInternal( "Y_18_500" )
-							self:SetBGColor(Color( 0, 0, 0) )
+							self:SetBGColor(Color( 0, 0, 0, 255 ) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
@@ -79,7 +79,7 @@ function BuildLogs(parent, typ)
 								self:SetUnderlineFont( "Y_18_500" )
 							end
 							self:SetFontInternal( "Y_18_500" )
-							self:SetBGColor(Color( 0, 0, 0) )
+							self:SetBGColor(Color( 0, 0, 0, 255 ) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
@@ -115,7 +115,7 @@ function BuildLogs(parent, typ)
 								self:SetUnderlineFont( "Y_18_500" )
 							end
 							self:SetFontInternal( "Y_18_500" )
-							self:SetBGColor(Color( 0, 0, 0) )
+							self:SetBGColor(Color( 0, 0, 0, 255 ) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
@@ -162,7 +162,7 @@ function BuildLogs(parent, typ)
 								self:SetUnderlineFont( "Y_18_500" )
 							end
 							self:SetFontInternal( "Y_18_500" )
-							self:SetBGColor(Color( 0, 0, 0) )
+							self:SetBGColor(Color( 0, 0, 0, 255 ) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) and IsValid( target ) then
@@ -209,7 +209,7 @@ function BuildLogs(parent, typ)
 								self:SetUnderlineFont( "Y_18_500" )
 							end
 							self:SetFontInternal( "Y_18_500" )
-							self:SetBGColor(Color( 0, 0, 0) )
+							self:SetBGColor(Color( 0, 0, 0, 255 ) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
@@ -250,7 +250,7 @@ function BuildLogs(parent, typ)
 								self:SetUnderlineFont( "Y_18_500" )
 							end
 							self:SetFontInternal( "Y_18_500" )
-							self:SetBGColor(Color( 0, 0, 0) )
+							self:SetBGColor(Color( 0, 0, 0, 255 ) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then
@@ -312,7 +312,7 @@ function BuildLogs(parent, typ)
 								self:SetUnderlineFont( "Y_18_500" )
 							end
 							self:SetFontInternal( "Y_18_500" )
-							self:SetBGColor(Color( 0, 0, 0) )
+							self:SetBGColor(Color( 0, 0, 0, 255 ) )
 						end
 						function rt:ActionSignal(signalName, signalValue)
 							if ( signalName == "TextClicked" ) then

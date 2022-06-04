@@ -1,5 +1,26 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
+-- Colors --
+local col_green = Color( 0, 255, 0, 255 )
+function YRPColGreen()
+	return col_green
+end
+local col_red = Color( 255, 0, 0, 255 )
+function YRPColRed()
+	return col_red
+end
+local col_blue = Color( 0, 0, 255, 255 )
+function YRPColBlue()
+	return col_blue
+end
+local col_yellow = Color( 255, 255, 0, 255 )
+function YRPColYellow()
+	return col_yellow
+end
+
+color_dark1 = Color( 60, 60, 60 )
+-- Colors --
+
 add_luas( "collect.lua" )
 add_luas( "output.lua" )
 add_luas( "version.lua" )

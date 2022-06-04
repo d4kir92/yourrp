@@ -411,15 +411,17 @@ yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_R_Hand"].ang = Angle(-25, 4
 18      RightKneeRoll
 ]]
 
+local nang = Angle(0, 0, 0)
+local nvec = Vector(0, 0, 0)
 function YRPResetPoses(ply)
 	for i = 0, 100 do
-		ply["posesang"][i] = ply["posesang"][i] or Angle(0, 0, 0)
-		ply["posesang"][i] = LerpAngle(12 * FrameTime(), ply["posesang"][i], Angle(0, 0, 0) )
+		ply["posesang"][i] = ply["posesang"][i] or nang
+		ply["posesang"][i] = LerpAngle(12 * FrameTime(), ply["posesang"][i], nang )
 		
 		ply:ManipulateBoneAngles( i, ply["posesang"][i] )
 
-		ply["posespos"][i] = ply["posespos"][i] or Vector(0, 0, 0)
-		ply["posespos"][i] = LerpVector(12 * FrameTime(), ply["posespos"][i], Vector(0, 0, 0) )
+		ply["posespos"][i] = ply["posespos"][i] or nvec
+		ply["posespos"][i] = LerpVector(12 * FrameTime(), ply["posespos"][i], nvec )
 		
 		ply:ManipulateBonePosition( i, ply["posespos"][i] )
 	end
@@ -448,7 +450,7 @@ function YRPDoPoses()
 						ply.yrpposestatus = "reset"
 					end
 				elseif !strEmpty(ply.yrppose) then
-					MsgC( Color( 255, 0, 0), "missing pose: " .. tostring(ply.yrppose) .. "\n" )
+					MsgC( YRPColGreen(), "missing pose: " .. tostring(ply.yrppose) .. "\n" )
 					ply.yrpposestatus = "reset"
 				else
 					ply.yrpposestatus = "reset"

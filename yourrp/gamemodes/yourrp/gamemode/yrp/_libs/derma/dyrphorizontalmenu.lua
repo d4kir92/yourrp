@@ -4,7 +4,7 @@ function DrawSelector( btn, w, h, text, selected, hassubtabs)
 	if hassubtabs then
 		spacer = YRP.ctr(100)
 	end
-	draw.SimpleText(text, "Y_22_500", w / 2 - spacer / 2, h / 2, Color( 255, 255, 255, 255), 1, 1)
+	draw.SimpleText(text, "Y_22_500", w / 2 - spacer / 2, h / 2, Color( 255, 255, 255, 255 ), 1, 1)
 
 	if btn.ani_h == nil then
 		btn.ani_h = 0
@@ -32,13 +32,13 @@ function DrawSelector( btn, w, h, text, selected, hassubtabs)
 end
 
 local PANEL = {}
-
+local color_red = Color( 255, 0, 0, 100 )
 function PANEL:Init()
 	self.tabs = {}
 	self.hscroller = createD( "DHorizontalScroller", self, self:GetWide(), YRP.ctr(100), 0, 0)
 
 	function self.hscroller:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 
 	self.w = 0
@@ -46,7 +46,7 @@ function PANEL:Init()
 	self.site = createD( "DPanel", self, 0, 0, 0, 0)
 
 	function self.site:Paint(pw, ph)
-		surfaceBox(0, 0, pw, ph, Color( 255, 0, 0, 100) )
+		surfaceBox(0, 0, pw, ph, color_red )
 	end
 end
 
@@ -324,9 +324,6 @@ function PANEL:GetHeaderHeight()
 end
 
 function PANEL:Paint(w, h)
-	--surfaceBox(0, 0, w, YRP.ctr(100), Color( 255, 255, 255, 10) )
-	--surfaceBox(0, 0, w, h, Color( 255, 255, 0, 100) )
-	--hook.Run( "YFramePaint", self, w, h)
 	local lply = LocalPlayer()
 	draw.RoundedBox(0, 0, 0, w, self:GetHeaderHeight(), YRPInterfaceValue( "YFrame", "HI" ) )
 end

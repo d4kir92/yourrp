@@ -39,15 +39,15 @@ function PANEL:Init()
 	self.PlayerName:SetFont( "Y_24_500" )
 	self.PlayerName:SetSize(sw - br - sh - br - br, sh / 2 - 2 * br)
 	self.PlayerName:SetPos(sh + br, br)
-	self.PlayerName:SetTextColor( color_white )
+	self.PlayerName:SetTextColor( Color( 255, 255, 255, 255 ) )
 
 	self.Channels = vgui.Create( "DLabel", self )
 	self.Channels:SetFont( "Y_20_500" )
 	self.Channels:SetSize(sw - br - sh - br - br, sh / 2 - 2 * br)
 	self.Channels:SetPos(sh + br, sh / 2 + br)
-	self.Channels:SetTextColor( color_white )
+	self.Channels:SetTextColor( Color( 255, 255, 255, 255 ) )
 
-	self.Color = color_transparent
+	self.Color = Color( 255, 255, 255, 0)
 
 	self:SetSize( sw, sh )
 	self:DockPadding( 4, 4, 4, 4 )

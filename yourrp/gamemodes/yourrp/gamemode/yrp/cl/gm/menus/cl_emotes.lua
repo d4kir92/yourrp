@@ -157,9 +157,9 @@ function OpenEmotesMenu()
 			end
 		end
 
-		--surfaceText( "WINKEL: " .. tostring(math.Round(_ang, 0) ) .. " SELECT: " .. _em.emotes.select, "Y_24_500", _mx+self:GetWide()/2, _my+self:GetTall()/2, Color( 0, 0, 255), 1, 1)
+		--surfaceText( "WINKEL: " .. tostring(math.Round(_ang, 0) ) .. " SELECT: " .. _em.emotes.select, "Y_24_500", _mx+self:GetWide()/2, _my+self:GetTall()/2, YRPColBlue(), 1, 1)
 		for e = 1, _seg do
-			surfaceText(YRP.lang_string(GetEmotes()[e].name), "Y_22_500", _vec_emo[e].x, _vec_emo[e].y, Color( 255, 255, 255), 1, 1)
+			surfaceText(YRP.lang_string(GetEmotes()[e].name), "Y_22_500", _vec_emo[e].x, _vec_emo[e].y, Color( 255, 255, 255, 255 ), 1, 1)
 		end
 	end
 

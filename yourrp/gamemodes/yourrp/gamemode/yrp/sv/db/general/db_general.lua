@@ -231,8 +231,6 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_logouttime", "INT DEFAULT 5" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_min", "INT DEFAULT 6" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_deathtimestamp_max", "INT DEFAULT 30" )
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_spawncorpseondeath", "INT DEFAULT 1" )
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_spawncorpseondeath_gmod", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_deathscreen", "INT DEFAULT 1" )
 
 --[[ Social Settings ]]--
@@ -1560,16 +1558,7 @@ net.Receive( "update_int_deathtimestamp_max", function(len, ply)
 		GeneralUpdateInt(ply, "update_int_deathtimestamp_max", "int_deathtimestamp_max", int)
 	end
 end)
-util.AddNetworkString( "update_bool_spawncorpseondeath" )
-net.Receive( "update_bool_spawncorpseondeath", function(len, ply)
-	local b = btn(net.ReadBool() )
-	GeneralUpdateBool(ply, "update_bool_spawncorpseondeath", "bool_spawncorpseondeath", b)
-end)
-util.AddNetworkString( "update_bool_spawncorpseondeath_gmod" )
-net.Receive( "update_bool_spawncorpseondeath_gmod", function(len, ply)
-	local b = btn(net.ReadBool() )
-	GeneralUpdateBool(ply, "update_bool_spawncorpseondeath_gmod", "bool_spawncorpseondeath_gmod", b)
-end)
+
 util.AddNetworkString( "update_bool_deathscreen" )
 net.Receive( "update_bool_deathscreen", function(len, ply)
 	local b = btn(net.ReadBool() )
@@ -1964,14 +1953,16 @@ util.AddNetworkString( "ply_kick" )
 net.Receive( "ply_kick", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:Kick( "You get kicked by " .. ply:YRPName() )
+		if ea( _target ) then
+			_target:Kick( "You get kicked by " .. ply:YRPName() )
+		end
 	end
 end)
 util.AddNetworkString( "ply_ban" )
 net.Receive( "ply_ban", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if ea( _target ) then
 			_target:Ban(24 * 60, false)
 			_target:Kick( "You get banned for 24 hours by " .. ply:YRPName() )
 		else
@@ -2104,7 +2095,9 @@ util.AddNetworkString( "ragdoll" )
 net.Receive( "ragdoll", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		YRPDoRagdoll(_target)
+		if ea(_target) then
+			YRPDoRagdoll(_target)
+		end
 	end
 end)
 
@@ -2112,99 +2105,125 @@ util.AddNetworkString( "unragdoll" )
 net.Receive( "unragdoll", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		YRPDoUnRagdoll(_target)
+		if ea(_target) then
+			YRPDoUnRagdoll(_target)
+		end
 	end
 end)
 util.AddNetworkString( "freeze" )
 net.Receive( "freeze", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:Freeze(true)
-		YRPRenderFrozen(_target)
+		if ea(_target) and _target.Freeze then
+			_target:Freeze(true)
+			YRPRenderFrozen(_target)
+		end
 	end
 end)
 util.AddNetworkString( "unfreeze" )
 net.Receive( "unfreeze", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:Freeze(false)
-		YRPRenderNormal(_target)
+		if ea(_target) then
+			_target:Freeze(false)
+			YRPRenderNormal(_target)
+		end
 	end
 end)
 util.AddNetworkString( "god" )
 net.Receive( "god", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:GodEnable()
-		_target:AddFlags(FL_GODMODE)
-		_target:SetYRPBool( "godmode", true)
+		if ea(_target) then
+			_target:GodEnable()
+			_target:AddFlags(FL_GODMODE)
+			_target:SetYRPBool( "godmode", true)
+		end
 	end
 end)
 util.AddNetworkString( "ungod" )
 net.Receive( "ungod", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:GodDisable()
-		_target:RemoveFlags(FL_GODMODE)
-		_target:SetYRPBool( "godmode", false)
+		if ea(_target) then
+			_target:GodDisable()
+			_target:RemoveFlags(FL_GODMODE)
+			_target:SetYRPBool( "godmode", false)
+		end
 	end
 end)
 util.AddNetworkString( "cloak" )
 net.Receive( "cloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetYRPBool( "cloaked", true)
-		YRPRenderCloaked(_target)
+		if ea(_target) then
+			_target:SetYRPBool( "cloaked", true)
+			YRPRenderCloaked(_target)
+		end
 	end
 end)
 util.AddNetworkString( "uncloak" )
 net.Receive( "uncloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetYRPBool( "cloaked", false)
-		YRPRenderNormal(_target)
+		if ea(_target) then
+			_target:SetYRPBool( "cloaked", false)
+			YRPRenderNormal(_target)
+		end
 	end
 end)
 util.AddNetworkString( "blind" )
 net.Receive( "blind", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetYRPBool( "blinded", true)
+		if ea(_target) then
+			_target:SetYRPBool( "blinded", true)
+		end
 	end
 end)
 util.AddNetworkString( "unblind" )
 net.Receive( "unblind", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetYRPBool( "blinded", false)
+		if ea(_target) then
+			_target:SetYRPBool( "blinded", false)
+		end
 	end
 end)
 util.AddNetworkString( "ignite" )
 net.Receive( "ignite", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:Ignite(10, 10)
+		if ea(_target) then
+			_target:Ignite(10, 10)
+		end
 	end
 end)
 util.AddNetworkString( "extinguish" )
 net.Receive( "extinguish", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:Extinguish()
+		if ea(_target) then
+			_target:Extinguish()
+		end
 	end
 end)
 util.AddNetworkString( "slay" )
 net.Receive( "slay", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:Kill()
+		if ea(_target) then
+			_target:Kill()
+		end
 	end
 end)
 util.AddNetworkString( "slap" )
 net.Receive( "slap", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		_target:SetVelocity( Vector(0, 0, 600) )
+		if ea(_target) then
+			_target:SetVelocity( Vector(0, 0, 600) )
+		end
 	end
 end)
 
@@ -2232,15 +2251,19 @@ function YRPRepairSQLDB(force) -- Remove %01 - %XX
 		if ( version <= 1 or force) and fixonce then
 			fixonce = false
 			local alltables = YRP_SQL_QUERY( "SELECT * FROM sqlite_master WHERE type='table';" )
-			MsgC(Color( 0, 255, 0), ">>> REPAIR YourRP DB, START <<<" .. "\n" )
-			for i, v in pairs( alltables) do
-				if string.StartWith( v.name, "yrp_" ) then
-					MsgC(Color( 0, 255, 0), "> FIX DB: " .. v.name .. "\n" )
-					local tab = YRP_SQL_SELECT( v.name, "*", nil)
-					YRPFixDatabase(tab, v.name)
+			MsgC(YRPColGreen(), ">>> REPAIR YourRP DB, START <<<" .. "\n" )
+			if alltables then
+				for i, v in pairs( alltables ) do
+					if string.StartWith( v.name, "yrp_" ) then
+						MsgC(YRPColGreen(), "> FIX DB: " .. v.name .. "\n" )
+						local tab = YRP_SQL_SELECT( v.name, "*", nil)
+						YRPFixDatabase(tab, v.name)
+					end
 				end
+			else
+				MsgC(YRPColRed(), ">>> FAILED, NO TABLES <<<" .. "\n" )
 			end
-			MsgC(Color( 0, 255, 0), ">>> REPAIR YourRP DB, DONE <<<" .. "\n" )
+			MsgC(YRPColGreen(), ">>> REPAIR YourRP DB, DONE <<<" .. "\n" )
 
 			YRP_SQL_UPDATE(DATABASE_NAME, {["int_version"] = 2}, "uniqueID = '1'" )
 		end

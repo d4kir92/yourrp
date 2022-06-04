@@ -74,8 +74,8 @@ local function YRPCreateSlot(x, y, art, id)
 			slot.mdl:SetCamPos( Vector(0, 0, 0) - Vector(-40, 0, -20) )
 		end
 
-		draw.SimpleText(YRP.lang_string( "LID_" .. art), "Y_20_500", 10, 16, Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string(name), "Y_20_500", pw - 10, 16, Color( 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_" .. art), "Y_20_500", 10, 16, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(name), "Y_20_500", pw - 10, 16, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
 		if cname and !strEmpty( cname) and cname != "LID_empty" and self:IsHovered() then
 			local text = YRP.lang_string( "LID_tostore" )
@@ -142,8 +142,8 @@ local function YRPCreateSWEP(x, y, art, cname)
 			slot.mdl:SetCamPos( Vector(0, 0, 0) - Vector(-40, 0, -20) )
 		end
 
-		draw.SimpleText(YRP.lang_string( "LID_" .. art), "Y_20_500", 10, 16, Color( 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string(name), "Y_20_500", pw - 10, 16, Color( 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_" .. art), "Y_20_500", 10, 16, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(name), "Y_20_500", pw - 10, 16, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
 		if self:IsHovered() then
 			local text = YRP.lang_string( "LID_equip" )
@@ -203,10 +203,10 @@ net.Receive( "yrp_open_weaponchest", function(len)
 			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 		end
 		function sbar.btnUp:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+			draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 		end
 		function sbar.btnDown:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+			draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 		end
 		function sbar.btnGrip:Paint(w, h)
 			draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )

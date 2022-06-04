@@ -409,7 +409,7 @@ function OpenChatMenu()
 					local br = YRP.ctr(8)
 					if YRP.GetDesignIcon( "edit" ) then
 						surface.SetMaterial( YRP.GetDesignIcon( "edit" ) )
-						surface.SetDrawColor( 255, 255, 255, 255 )
+						surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 						surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 					end
 				end
@@ -420,7 +420,7 @@ function OpenChatMenu()
 
 			local name = createD( "DPanel", bg, YRP.ctr(800), h, h + pbr, 0)
 			function name:Paint(pw, ph)
-				draw.SimpleText( channel.string_name, "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText( channel.string_name, "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			vm.win.list:AddItem(line)

@@ -13,6 +13,10 @@ function enough_space(ply, pos)
 		return false
 	end
 
+	if pos == nil then
+		return false
+	end
+
 	local tr = {
 		start = pos,
 		endpos = pos,

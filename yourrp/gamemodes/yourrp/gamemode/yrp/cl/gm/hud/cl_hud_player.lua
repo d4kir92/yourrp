@@ -39,7 +39,7 @@ function roundMoney(_money, round)
 end
 
 function showIcon(str, material)
-	surface.SetDrawColor( 255, 255, 255, 255)
+	surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 	surface.SetMaterial(material)
 	surface.DrawTexturedRect( anchorW(HudV(str .. "aw" ) ) + YRP.ctr(HudV(str .. "px" ) ) + YRP.ctr(30) - YRP.ctr(16), anchorH(HudV(str .. "ah" ) ) + YRP.ctr(HudV(str .. "py" ) ) + YRP.ctr(HudV(str .. "sh" )/2) - YRP.ctr(16), YRP.ctr(32), YRP.ctr(32) )
 end
@@ -155,7 +155,7 @@ function sText(text, font, x, y, color, ax, ay)
 		_ay = h / 2
 	end
 
-	surface.SetTextColor( color or Color( 255, 255, 255, 255) )
+	surface.SetTextColor( color or Color( 255, 255, 255, 255 ) )
 	surface.SetTextPos(x - _ax, y - _ay)
 	surface.DrawText(text)
 end
@@ -251,7 +251,7 @@ function drawHUDElement( dbV, cur, max, text, icon, color)
 				end
 				_st.x = anchorW(HudV( dbV .. "aw" ) ) + YRP.ctr(HudV( dbV .. "px" ) ) + _pw
 				_st.y = anchorH(HudV( dbV .. "ah" ) ) + YRP.ctr(HudV( dbV .. "py" ) ) + _ph
-				draw.SimpleText(text, dbV .. "sf", _st.x, _st.y, Color( 255, 255, 255, 255), HudV( dbV .. "tx" ), HudV( dbV .. "ty" ), 1, Color( 0, 0, 0) )
+				draw.SimpleText(text, dbV .. "sf", _st.x, _st.y, Color( 255, 255, 255, 255 ), HudV( dbV .. "tx" ), HudV( dbV .. "ty" ), 1, Color( 0, 0, 0, 255 ) )
 			end
 
 			if icon != nil and HudV( dbV .. "it" ) == 1	then
@@ -284,16 +284,16 @@ function YRPHudThirdperson(ply, color)
 		elseif ply.yrp_view_range > 0 then
 			_3PText = YRP.lang_string( "LID_tpp" )
 		end
-		draw.SimpleText(_3PText .. " ( " .. math.Round(ply.yrp_view_range, -1) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 550), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.SimpleText(_3PText .. " ( " .. math.Round(ply.yrp_view_range, -1) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 550), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 	if YRPGetKeybind( "view_up" ) and YRPGetKeybind( "view_down" ) and ( input.IsKeyDown(YRPGetKeybind( "view_up" ) ) or input.IsKeyDown(YRPGetKeybind( "view_down" ) ) ) then
-		draw.SimpleText(YRP.lang_string( "LID_viewingheight" ) .. " ( " .. math.Round(ply.yrp_view_z, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 600), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.SimpleText(YRP.lang_string( "LID_viewingheight" ) .. " ( " .. math.Round(ply.yrp_view_z, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 600), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 	if YRPGetKeybind( "view_right" ) and YRPGetKeybind( "view_left" ) and ( input.IsKeyDown(YRPGetKeybind( "view_right" ) ) or input.IsKeyDown(YRPGetKeybind( "view_left" ) ) ) then
-		draw.SimpleText(YRP.lang_string( "LID_viewingposition" ) .. " ( " .. math.Round(ply.yrp_view_x, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 650), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.SimpleText(YRP.lang_string( "LID_viewingposition" ) .. " ( " .. math.Round(ply.yrp_view_x, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 650), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 	if YRPGetKeybind( "view_spin_right" ) and YRPGetKeybind( "view_spin_left" ) and ( input.IsKeyDown(YRPGetKeybind( "view_spin_right" ) ) or input.IsKeyDown(YRPGetKeybind( "view_spin_left" ) ) ) then
-		draw.SimpleText(YRP.lang_string( "LID_viewingangle" ) .. " ( " .. math.Round(ply.yrp_view_s, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 700), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.SimpleText(YRP.lang_string( "LID_viewingangle" ) .. " ( " .. math.Round(ply.yrp_view_s, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 700), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 end
 
@@ -316,6 +316,6 @@ function YRPHudPlayer(ply)
 		end
 	else
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 100) )
-		draw.SimpleText(YRP.lang_string( "LID_loading" ) .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255) )
+		draw.SimpleText(YRP.lang_string( "LID_loading" ) .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 	end
 end

@@ -154,6 +154,7 @@ hook.Add( "HUDPaint", "yrp_hud_alert", function()
 	draw.SimpleText(text, font, ScrW() / 2, YRP.ctr(500), Color( 255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end)
 
+local color1 = Color( 0, 0, 0, 120 )
 local oldlevel = oldlevel or nil--ply:Level()
 hook.Add( "HUDPaint", "yrp_hud_levelup", function()
 	local lply = LocalPlayer()
@@ -175,8 +176,8 @@ hook.Add( "HUDPaint", "yrp_hud_levelup", function()
 			tab["LEVEL"] = lply:Level()
 			levelup.LID_levelx = YRP.lang_string( "LID_levelx", tab)
 			levelup.lucolor = Color( 255, 255, 100, 255)
-			levelup.lxcolor = Color( 255, 255, 255, 255)
-			levelup.brcolor = Color( 0, 0, 0, 255)
+			levelup.lxcolor = Color( 255, 255, 255, 255 )
+			levelup.brcolor = Color( 0, 0, 0, 255 )
 			levelup.level = oldlevel
 			function levelup:Paint(pw, ph)
 				surface.SetFont( "Y_36_500" )
@@ -184,7 +185,7 @@ hook.Add( "HUDPaint", "yrp_hud_levelup", function()
 				tw = tw + 2 * YRP.ctr(20)
 				self.aw = self.aw or 0
 
-				draw.RoundedBox(YRP.ctr(10), pw / 2 - self.aw / 2, 0, self.aw, ph, Color( 0, 0, 0, 120) )
+				draw.RoundedBox(YRP.ctr(10), pw / 2 - self.aw / 2, 0, self.aw, ph, color1 )
 
 				if self.aw < tw then
 					self.aw = math.Clamp(self.aw + 5, 0, tw)
@@ -227,7 +228,7 @@ function PAvatar:Paint(pw, ph)
 
 			render.SetStencilReferenceValue(1)
 
-			drawRoundedBox(ph / 2, 0, 0, pw, ph, Color( 255, 255, 255, 255) )
+			drawRoundedBox(ph / 2, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 
 			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
@@ -448,10 +449,10 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 	local lply = LocalPlayer()
 
 	if lply:GetYRPBool( "yrp_spawning", false ) then
-		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 255) ) -- Black Background - Respawning
+		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color( 0, 0, 0, 255 ) ) -- Black Background - Respawning
 
-		draw.SimpleText(YRP.lang_string( "LID_pleasewait" ), "Y_18_500", ScrW() / 2, ScrH() / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string( "LID_respawning" ), "Y_40_500", ScrW() / 2, ScrH() / 2 + YRP.ctr(100), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_pleasewait" ), "Y_18_500", ScrW() / 2, ScrH() / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_respawning" ), "Y_40_500", ScrW() / 2, ScrH() / 2 + YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	if lply:GetYRPBool( "yrp_speaking", false ) then
@@ -463,15 +464,15 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 			text = text .. " ( " .. YRP.lang_string( "LID_range" ) .. " " .. YRPGetVoiceRangeText(lply) .. " [" .. YRPGetVoiceRange(lply) .. "])"
 		end
 
-		draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	if pa(yrp_loading_screen) then
+	if yrp_loading_screen and pa(yrp_loading_screen) then
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(10, 10, 10) )
 	end
 
 	if GetGlobalYRPBool( "blinded", false) then
-		surfaceBox(0, 0, ScrW(), ScrH(), Color( 255, 255, 255, 255) )
+		surfaceBox(0, 0, ScrW(), ScrH(), Color( 255, 255, 255, 255 ) )
 		surfaceText(YRP.lang_string( "LID_blinded" ), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(100), Color( 255, 255, 0, 255), 1, 1)
 	end
 	if lply:IsFlagSet(FL_FROZEN) then
@@ -509,7 +510,7 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 				draw.RoundedBox( ctrb(_r), _sp.x - _br.x, _sp.y - _br.y, _sp.w + 2 * _br.x, _sp.h + 2 * _br.y, YRPGetSpCaseColor() )
 			end
 
-			surface.SetDrawColor( 255, 255, 255, 255)
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(_yrp_icon	)
 			surface.DrawTexturedRect(_sp.x + _sp.w / 2 - ctrb(246) / 2, _sp.y - ctrb(80 + 10), ctrb(246), ctrb(80) )
 		end
@@ -523,7 +524,7 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 		stars.y = YRP.ctr(32)
 
 		-- Slot
-		surface.SetDrawColor( 0, 0, 0, 255)
+		surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
 		surface.SetMaterial(star)
 		for x = 1, 5 do
 			surface.DrawTexturedRect(stars.x + x * stars.size, stars.y, stars.cur, stars.cur)
@@ -537,7 +538,7 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 		end
 
 		-- Current Stars
-		surface.SetDrawColor( 255, 255, 255, 255)
+		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 		for x = 1, 5 do
 			if lply:GetYRPInt( "yrp_stars", 0) >= x then
 				surface.DrawTexturedRect(stars.x + x * stars.size + stars.br, stars.y + stars.br, stars.cur, stars.cur)
@@ -559,13 +560,13 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 	end
 	
 	if !HasYRPContent() and GetGlobalYRPString( "YRP_VERSIONART", "X" ) == "workshop" then
-		draw.SimpleTextOutlined( "\"YourRP Content\" IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2() - 250, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
-		draw.SimpleTextOutlined( "Add \"YourRP Content\" to your Server Collection!", "Y_60_500", ScrW2(), ScrH2() - 200, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.SimpleTextOutlined( "\"YourRP Content\" IS MISSING! (FROM SERVER COLLECTION)", "Y_60_500", ScrW2(), ScrH2() - 250, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( "Add \"YourRP Content\" to your Server Collection!", "Y_60_500", ScrW2(), ScrH2() - 200, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 
 	if HasDarkrpmodification() then
-		draw.SimpleTextOutlined( "You have \"darkrpmodification\" (locally) on your Server", "Y_60_500", ScrW2(), ScrH2() - 450, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
-		draw.SimpleTextOutlined( "Remove \"darkrpmodification\" to make YourRP work!", "Y_60_500", ScrW2(), ScrH2() - 400, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.SimpleTextOutlined( "You have \"darkrpmodification\" (locally) on your Server", "Y_60_500", ScrW2(), ScrH2() - 450, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( "Remove \"darkrpmodification\" to make YourRP work!", "Y_60_500", ScrW2(), ScrH2() - 400, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 
 	if GetGlobalYRPBool( "bool_radiation", false) then
@@ -585,7 +586,7 @@ hook.Add( "HUDPaint", "yrp_hud_collectionid", function()
 	local lply = LocalPlayer()
 	if lply:HasAccess() and YRPCollectionID() < 100000000 then
 		local text = "[STEAM] " .. YRP.lang_string( "LID_thecollectionidismissing" ) .. " ( " .. YRPGetKeybindName( "menu_settings" ) .. " >> " .. YRP.lang_string( "LID_server" ) .. " >> " .. YRP.lang_string( "LID_general" ) .. " >> " .. YRP.lang_string( "LID_collectionid" ) .. " )"
-		draw.SimpleTextOutlined(text, "Y_50_500", ScrW() / 2, ScrH()  * 0.2, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.SimpleTextOutlined(text, "Y_50_500", ScrW() / 2, ScrH()  * 0.2, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 end, hook.MONITOR_HIGH)
 
@@ -593,7 +594,7 @@ hook.Add( "HUDPaint", "yrp_hud_charbackground", function()
 	local lply = LocalPlayer()
 	if lply:HasAccess() and YRPGetCharBGNotFound and strEmpty(GetGlobalYRPString( "text_character_background" ) ) then
 		local text = YRPGetCharBGNotFound()
-		draw.SimpleTextOutlined(text, "Y_40_500", ScrW() / 2, ScrH()  * 0.25, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.SimpleTextOutlined(text, "Y_40_500", ScrW() / 2, ScrH()  * 0.25, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 end, hook.MONITOR_HIGH)
 
@@ -601,7 +602,7 @@ local yrpeh = nil
 function YRPInitEdgeHud()
 	if EdgeHUD and EdgeHUD.Configuration and yrpeh == nil then
 		YRP.msg( "note", "EDGEHUD installed, add hunger and thirst." )
-		if EdgeHUD.Configuration.GetConfigValue( "LowerLeft" ) then
+		if EdgeHUD.Configuration.GetConfigValue( "LowerLeft" ) and EdgeHUD.Colors and EdgeHUD.Vars then
 
 			--Create a variable for the local player.
 			local ply = LocalPlayer()
@@ -661,8 +662,10 @@ function YRPInitEdgeHud()
 				--Create a widgetbox.
 				local statusWidget = vgui.Create( "EdgeHUD:WidgetBox" )
 				statusWidget:SetWidth( VARS.statusWidgetWidth)
-				statusWidget:SetPos(x + EdgeHUD.LeftOffset,y - EdgeHUD.BottomOffset - ( VARS.WidgetHeight + VARS.ElementsMargin) )
-				
+				if EdgeHUD.LeftOffset and EdgeHUD.BottomOffset then
+					statusWidget:SetPos(x + EdgeHUD.LeftOffset,y - EdgeHUD.BottomOffset - ( VARS.WidgetHeight + VARS.ElementsMargin) )
+				end
+
 				yrpeh = statusWidget
 
 				--Register the derma element.
@@ -817,7 +820,7 @@ hook.Add( "HUDPaint", "yrp_voice_module", function()
 		VO.tw = VO.tw + VO.h / 2
 
 		DrawRectBlurHUD(15, VO.tx - VO.tw / 2, VO.y, VO.tw, VO.h, 200)
-		draw.SimpleText( VO.text, VO.font, VO.tx, VO.ty, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText( VO.text, VO.font, VO.tx, VO.ty, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 end)
 
@@ -901,7 +904,7 @@ function YRPHUDDrawTexture(name, anchor, posx, posy, sizew, sizeh, material)
 		YRPHUDMats[material] = Material(material)
 	end
 
-	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 	surface.SetMaterial( YRPHUDMats[material] ) 
 	surface.DrawTexturedRect( YRPTEMPDATA[name].x, YRPTEMPDATA[name].y, YRPTEMPDATA[name].w, YRPTEMPDATA[name].h )
 end
@@ -909,7 +912,7 @@ end
 function YRPHUDDrawText(name, anchor, posx, posy, text, font, textcolor, tax, tay)
 	YRPHUDValues(name, anchor, posx, posy, 10, 10)
 
-	draw.SimpleText( text, font, YRPTEMPDATA[name].x, YRPTEMPDATA[name].y, textcolor or Color( 255, 255, 255), tax, tay )
+	draw.SimpleText( text, font, YRPTEMPDATA[name].x, YRPTEMPDATA[name].y, textcolor or Color( 255, 255, 255, 255 ), tax, tay )
 end
 
 function YRPHUDGetFont(ts, thick)
@@ -946,7 +949,7 @@ hook.Add( "HUDPaint", "yrp_hud_api", function()
 		YRPHUDDrawTexture( "le_icon", "LEFT", 		10, 		-200 / 2, 	200, 	200, 	"yrp/yrp_icon" )
 		YRPHUDDrawTexture( "ri_icon", "RIGHT", 		-210, 		-200 / 2, 	200, 	200, 	"yrp/yrp_icon" )
 
-		YRPHUDDrawText( "ce_text", "CENTER", 0, 0, "TESTTEXT", YRPHUDGetFont(40, false), Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		YRPHUDDrawText( "ce_text", "CENTER", 0, 0, "TESTTEXT", YRPHUDGetFont(40, false), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 end)
 

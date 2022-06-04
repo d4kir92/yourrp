@@ -86,7 +86,7 @@ function CreateRolePreviewContent()
 			self:SetFontInternal( "Y_18_500" )
 
 			self:SetBGColor(Color(50, 50, 50) )
-			self:SetFGColor(Color( 255, 255, 255) )
+			self:SetFGColor(Color( 255, 255, 255, 255 ) )
 		end
 		desc:SetText(tostring(rol.string_description) )
 
@@ -157,10 +157,10 @@ function CreateRolePreviewContent()
 		nextpm:SetText( "" )
 		function nextpm:Paint(pw, ph)
 			if pms.id + 1 <= table.Count(pms.models) then
-				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
+				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
 				
 				if YRP.GetDesignIcon( "64_angle-right" ) then
-					surface.SetDrawColor( 255, 255, 255, 255)
+					surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-right" ) )
 					surface.DrawTexturedRect(0, 0, pw, ph)
 				end
@@ -178,10 +178,10 @@ function CreateRolePreviewContent()
 		prevpm:SetText( "" )
 		function prevpm:Paint(pw, ph)
 			if pms.id - 1 > 0 then
-				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
+				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
 				
 				if YRP.GetDesignIcon( "64_angle-left" ) then
-					surface.SetDrawColor( 255, 255, 255, 255)
+					surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-left" ) )
 					surface.DrawTexturedRect(0, 0, pw, ph)
 				end
@@ -205,7 +205,7 @@ function CreateRolePreviewContent()
 		function swepsbg:Paint(pw, ph)
 			hook.Run( "YTextFieldPaint", self, pw, ph)
 
-			draw.SimpleText(GetSWEPPrintName(LocalPlayer().preview_swep or "NO SWEPS" ), "Y_18_500", pw / 2, YRP.ctr(50), Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(GetSWEPPrintName(LocalPlayer().preview_swep or "NO SWEPS" ), "Y_18_500", pw / 2, YRP.ctr(50), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local sweps = createD( "DModelPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20 + hh + 20 + 20 + hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh) )
@@ -249,10 +249,10 @@ function CreateRolePreviewContent()
 		nextpm:SetText( "" )
 		function nextpm:Paint(pw, ph)
 			if sweps.id + 1 <= table.Count(sweps.models) then
-				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
+				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
 				
 				if YRP.GetDesignIcon( "64_angle-right" ) then
-					surface.SetDrawColor( 255, 255, 255, 255)
+					surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-right" ) )
 					surface.DrawTexturedRect(0, 0, pw, ph)
 				end
@@ -270,10 +270,10 @@ function CreateRolePreviewContent()
 		prevpm:SetText( "" )
 		function prevpm:Paint(pw, ph)
 			if sweps.id - 1 > 0 then
-				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
+				--draw.SimpleText(self:GetText(), "Y_30_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)--hook.Run( "YButtonPaint", self, pw, ph)
 				
 				if YRP.GetDesignIcon( "64_angle-left" ) then
-					surface.SetDrawColor( 255, 255, 255, 255)
+					surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-left" ) )
 					surface.DrawTexturedRect(0, 0, pw, ph)
 				end
@@ -399,7 +399,7 @@ function CreateRoleSelectionContent(PARENT)
 	list:EnableVerticalScrollbar()
 	list:SetSpacing(YRP.ctr( config.br) )
 	function list:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
 		if list:GetWide() != win:GetWide() - YRP.ctr(2 * config.br) then
 			list:SetWide(win:GetWide() - YRP.ctr(2 * config.br) )
 		end
@@ -411,10 +411,10 @@ function CreateRoleSelectionContent(PARENT)
 		end
 	end
 	function sbar.btnUp:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+		draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 	end
 	function sbar.btnDown:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+		draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 	end
 	function sbar.btnGrip:Paint(w, h)
 		if LocalPlayer().InterfaceValue and YRPInterfaceValue( "YFrame", "HI" ) then
@@ -427,7 +427,7 @@ function CreateRoleSelectionContent(PARENT)
 	if LocalPlayer().cc then -- for Character Creation
 		local header = createD( "DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200) )
 		function header:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string( "LID_chooseyourrole" ), "Y_36_500", pw / 2, ph / 2, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_chooseyourrole" ), "Y_36_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local btn = {}

@@ -75,7 +75,7 @@ function createRoleBox(rol, parent, mainparent)
 		_rol.rn.rolename = _rol.rn:GetParent().tbl.string_name
 		_rol.rn.rolecolor = StringToColor(_rol.rn:GetParent().tbl.string_color)
 		function _rol.rn:Paint(pw, ph)
-			draw.SimpleText(self.rolename, "Y_24_500", ph + YRP.ctr(10), ph / 3, Color( 255, 255, 255), 0, 1)
+			draw.SimpleText(self.rolename, "Y_24_500", ph + YRP.ctr(10), ph / 3, Color( 255, 255, 255, 255 ), 0, 1)
 		end
 
 		-- Role Salary --
@@ -83,7 +83,7 @@ function createRoleBox(rol, parent, mainparent)
 		_rol.rs.rolesalary = _rol.rs:GetParent().tbl.int_salary
 		_rol.rs.rolecolor = StringToColor(_rol.rn:GetParent().tbl.string_color)
 		function _rol.rs:Paint(pw, ph)
-			draw.SimpleText(MoneyFormatRounded(self.rolesalary, 0), "Y_20_500", ph + YRP.ctr(10), ph / 3 * 2, Color( 255, 255, 255, 255), 0, 1)
+			draw.SimpleText(MoneyFormatRounded(self.rolesalary, 0), "Y_20_500", ph + YRP.ctr(10), ph / 3 * 2, Color( 255, 255, 255, 255 ), 0, 1)
 		end
 
 		-- Role MaxAmount --
@@ -102,14 +102,14 @@ function createRoleBox(rol, parent, mainparent)
 
 				--Maxamount
 				--draw.RoundedBox(0, YRP.ctr(_br), 0, (rol.int_uses / rol.int_maxamount) * pw, ph, Color( 255, 0, 0, 255) )
-				local color = Color( 255, 255, 255)
+				local color = Color( 255, 255, 255, 255 )
 				if tonumber(rol.int_uses) == tonumber(rol.int_maxamount) then
-					color = Color( 255, 0, 0)
+					color = YRPColGreen()
 				end
 				draw.SimpleText(self:GetParent().tbl.int_uses .. "/" .. self:GetParent().tbl.int_maxamount, "Y_20_500", pw - YRP.ctr(w / 2 + br), ph - YRP.ctr(h / 2 + br) * 1.1, color, 1, 1)
 
 				--BR
-				--drawRBBR(0, YRP.ctr(_br), 0, pw, ph, Color( 0, 0, 0, 255), YRP.ctr(4) )
+				--drawRBBR(0, YRP.ctr(_br), 0, pw, ph, Color( 0, 0, 0, 255 ), YRP.ctr(4) )
 			end
 		end
 
@@ -200,7 +200,7 @@ function createBouncer(parent, mainparent)
 		parent:SetWide(mainparent:GetWide() - YRP.ctr(140) )
 		local _bou = createD( "DPanel", parent, YRP.ctr(50), YRP.ctr(200), 0, 0)
 		function _bou:Paint(pw, ph)
-			surfaceText( "➔", "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255), 1, 1)
+			surfaceText( "➔", "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
 		end
 		if parent.AddPanel != nil then
 			parent:AddPanel(_bou)
@@ -242,7 +242,7 @@ function addRoleRow(rol, parent)
 		local _rr = createD( "DHorizontalScroller", parent.content, RRW, RRH, 0, 0) --parent:GetWide() - 2*YRP.ctr(parent:GetSpacing() ), YRP.ctr(400), 0, 0)
 		_rr:SetOverlap(YRP.ctr(-30) )
 		function _rr:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 0) )
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 0) )
 		end
 
 		addRole(rol, _rr, parent)
@@ -297,7 +297,7 @@ function addGroup(grp, parent)
 			if tonumber(self.tbl.int_parentgroup) == 0 then
 				name = YRP.lang_string( "LID_faction" ) .. ": " .. name
 			end
-			draw.SimpleText(name, "Y_24_500", _x, ph / 2, Color( 255, 255, 255), 0, 1)
+			draw.SimpleText(name, "Y_24_500", _x, ph / 2, Color( 255, 255, 255, 255 ), 0, 1)
 
 			local _box = YRP.ctr(50)
 			local _dif = 50
@@ -307,7 +307,7 @@ function addGroup(grp, parent)
 				_tog = "▲"
 			end
 			draw.RoundedBox(0, pw - _box - _br, _br, _box, _box, Color(self.color.r - _dif, self.color.g - _dif, self.color.b - _dif, headeralpha) )
-			draw.SimpleText(_tog, "Y_24_500", pw - _box / 2 - _br, _br + _box / 2, Color( 255, 255, 255), 1, 1)
+			draw.SimpleText(_tog, "Y_24_500", pw - _box / 2 - _br, _br + _box / 2, Color( 255, 255, 255, 255 ), 1, 1)
 			if tobool(grp.bool_locked) then
 				YRP.DrawIcon(YRP.GetDesignIcon( "lock" ), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), Color( 255, 0, 0, 200) )
 			end

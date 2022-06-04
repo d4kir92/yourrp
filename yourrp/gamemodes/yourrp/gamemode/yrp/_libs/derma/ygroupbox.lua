@@ -79,7 +79,7 @@ function PANEL:Init()
 	self.con:EnableVerticalScrollbar()
 	self.con:SetText( "CONTENT" )
 	function self.con:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 end
 

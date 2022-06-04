@@ -3,7 +3,7 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self.color_sel = Color( 0, 0, 255)
+	self.color_sel = YRPColBlue()
 	self.color_uns = Color( 255, 255, 0)
 
 	function self:SetSelectedColor( col)
@@ -25,7 +25,7 @@ function PANEL:Init()
 	end
 
 	function self.slider:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0) )
+		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
 	end
 
 	function self:AddTab(str, tbl)
@@ -52,7 +52,7 @@ function PANEL:Init()
 
 			draw.RoundedBoxEx(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HB" ), true, true)
 
-			local _color = Color( 255, 255, 255)
+			local _color = Color( 255, 255, 255, 255 )
 			local font = "Y_24_500"
 			if self.selected then
 				font = "Y_24_500"
@@ -84,7 +84,7 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox(0, 0, 0, w, h, Color( 255, 0, 0) )
+	--draw.RoundedBox(0, 0, 0, w, h, YRPColGreen() )
 end
 
 vgui.Register( "DYRPTabs", PANEL, "Panel" )

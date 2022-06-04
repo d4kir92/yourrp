@@ -101,7 +101,7 @@ net.Receive( "yrp_get_macros", function(len)
 						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HI" ) )
 					end
 
-					draw.SimpleText(self.name, "Y_12_500", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(self.name, "Y_12_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 				function m:DoClick()
 					_mm.tf:SetText(self.value)

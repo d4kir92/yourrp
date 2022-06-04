@@ -25,7 +25,7 @@ function SetGlobalYRPTable( key, value )
 			net.Broadcast()
 		end
 	else
-		Msg(Color( 255, 0, 0), ">>> SetGlobalYRPTable FAILED", key, value)
+		Msg(YRPColGreen(), ">>> SetGlobalYRPTable FAILED", key, value)
 	end
 end
 
@@ -168,7 +168,7 @@ if YRPDEBUGGLOBAL then
 
 	local function ShowStatsLoop()
 		if pTab then
-			MsgC( Color( 0, 255, 0 ), "YRP - GLOBAL:\n")
+			MsgC( YRPColGreen(), "YRP - GLOBAL:\n")
 			pTab(c)
 		end
 		if YRPDEBUGGLOBAL and v == YRPDEBUGGLOBAL_V then

@@ -1052,7 +1052,7 @@ function HudLoadoutAll()
 				YRPHUDVersion = YRPHUDVersion + 1
 				SetGlobalYRPInt( "YRPHUDVersion", YRPHUDVersion )
 			else
-				MsgC( Color( 255, 0, 0 ), "Failed To HUD", v.name, v.value, "\n" )
+				MsgC( YRPColGreen(), "Failed To HUD", v.name, v.value, "\n" )
 			end
 		end
 	end

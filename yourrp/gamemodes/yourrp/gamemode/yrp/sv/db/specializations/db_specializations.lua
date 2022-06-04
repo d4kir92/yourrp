@@ -133,20 +133,22 @@ net.Receive( "spec_add_swep", function(len, ply)
 		else
 			tab = {}
 		end
-		local newtab = {}
-		for i, v in pairs(string.Explode( ",", tab.sweps) ) do
-			if !table.HasValue( newtab, v ) and !strEmpty( v) then
-				table.insert( newtab, v )
+		if tab.sweps then
+			local newtab = {}
+			for i, v in pairs(string.Explode( ",", tab.sweps) ) do
+				if !table.HasValue( newtab, v ) and !strEmpty( v) then
+					table.insert( newtab, v )
+				end
 			end
-		end
-		if !table.HasValue( newtab, swep ) then
-			table.insert( newtab, swep )
-		end
+			if !table.HasValue( newtab, swep ) then
+				table.insert( newtab, swep )
+			end
 
-		local newsweps = table.concat( newtab, "," )
+			local newsweps = table.concat( newtab, "," )
 
-		YRP_SQL_UPDATE(DATABASE_NAME, {["sweps"] = newsweps}, "uniqueID = '" .. uid .. "'" )
-		YRPSendSpecSWEPS(uid, ply)
+			YRP_SQL_UPDATE(DATABASE_NAME, {["sweps"] = newsweps}, "uniqueID = '" .. uid .. "'" )
+			YRPSendSpecSWEPS(uid, ply)
+		end
 	end
 end)
 

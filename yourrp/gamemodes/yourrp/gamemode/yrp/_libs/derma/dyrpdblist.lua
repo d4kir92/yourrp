@@ -9,7 +9,7 @@ function paintDBButton(self, pw, ph, color, text)
 	end
 
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
-	surfaceText(text, "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255), 1, 1)
+	surfaceText(text, "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
 end
 
 function PANEL:Init()
@@ -27,7 +27,7 @@ function PANEL:Init()
 	self.header.add:SetText( "" )
 
 	function self.header.add:Paint(pw, ph)
-		paintDBButton(self, pw, ph, Color( 0, 255, 0), "+" )
+		paintDBButton(self, pw, ph, YRPColGreen(), "+" )
 	end
 
 	function self.header.add:DoClick()
@@ -39,7 +39,7 @@ function PANEL:Init()
 
 	function self.header.rem:Paint(pw, ph)
 		if _pnl.uid ~= nil then
-			paintDBButton(self, pw, ph, Color( 255, 0, 0), "-" )
+			paintDBButton(self, pw, ph, YRPColGreen(), "-" )
 		end
 	end
 
@@ -83,8 +83,8 @@ function PANEL:Init()
 	self.listheader.textpos = ""
 
 	function self.listheader:Paint(pw, ph)
-		local color = Color( 0, 255, 0)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0) )
+		local color = YRPColGreen()
+		draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
 		surfaceText(self.textpre .. " " .. YRP.lang_string(self.text) .. " " .. self.textpos, "Y_24_500", pw / 2, ph / 2, TextColor( color ), 1, 1)
 	end
 
@@ -139,7 +139,7 @@ function PANEL:Init()
 		_new.tbl = tbl
 
 		function _new:Paint(pw, ph)
-			local _color = Color( 255, 255, 255)
+			local _color = Color( 255, 255, 255, 255 )
 
 			if self:IsHovered() or _pnl.uid == self.tbl.uniqueID then
 				_color = Color( 255, 255, 0)
@@ -206,7 +206,7 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox(0, 0, 0, w, h, Color( 255, 0, 0) )
+	--draw.RoundedBox(0, 0, 0, w, h, YRPColGreen() )
 end
 
 vgui.Register( "DYRPDBList", PANEL, "Panel" )

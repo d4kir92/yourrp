@@ -59,7 +59,7 @@ hook.Add( "YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 			tcolor.g = 255
 			tcolor.b = 255
 			if tab.force then
-				color = Color( 0, 0, 0, 0)
+				color = Color( 255, 255, 255, 0)
 			end
 			self.hovering = false
 			self.clicked = false
@@ -70,13 +70,15 @@ hook.Add( "YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 		if self.rad then
 			r = self.rad
 		end
-		draw.RoundedBox(r, tab.x, tab.y, pw, ph, Color( color.r, color.g, color.b, color.a) )
+		draw.RoundedBox(r, tab.x, tab.y, pw, ph, Color( color.r, color.g, color.b, color.a ) )
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, TextColor( color ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)
 
+local col1 = Color( 197, 52, 52 )
+local col2 = Color( 206, 111, 111 )
 hook.Add( "YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
@@ -92,19 +94,19 @@ hook.Add( "YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 				self.clicked = true
 				surface.PlaySound( "garrysmod/ui_click.wav" )
 			end
-			color = Color(197, 52, 52)
+			color = col1
 		elseif self:IsHovered() then
 			if not self.hovering then
 				self.hovering = true
 				surface.PlaySound( "garrysmod/ui_hover.wav" )
 			end
-			color = Color(206, 111, 111)
+			color = col2
 		else
 			tcolor.r = 255
 			tcolor.g = 255
 			tcolor.b = 255
 			if tab.force then
-				color = Color( 0, 0, 0, 0)
+				color = Color( 255, 255, 255, 0)
 			end
 			self.hovering = false
 			self.clicked = false
@@ -115,35 +117,38 @@ hook.Add( "YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 		if self.rad then
 			r = self.rad
 		end
-		draw.RoundedBox(r, tab.x, tab.y, pw, ph, Color( color.r, color.g, color.b, color.a) )
+		draw.RoundedBox(r, tab.x, tab.y, pw, ph, Color( color.r, color.g, color.b, color.a ) )
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, TextColor( color ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)
 
+local col3 = Color( 126, 126, 126 )
+local col4 = Color( 38, 222, 129 )
+local col5 = Color( 111, 206, 111 )
 hook.Add( "YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
 	if YRPGetInterfaceDesign() == "Material" then
-		local color = Color(126, 126, 126)
+		local color = col3
 		local tcolor = tab.tcolor
 		if self:IsDown() or self:IsPressed() then
 			if not self.clicked then
 				self.clicked = true
 				surface.PlaySound( "garrysmod/ui_click.wav" )
 			end
-			color = Color(38, 222, 129)
+			color = col4
 		elseif self:IsHovered() then
 			if not self.hovering then
 				self.hovering = true
 				surface.PlaySound( "garrysmod/ui_hover.wav" )
 			end
-			color = Color(111, 206, 111)
+			color = col5
 		else
 			if tab.force then
-				color = Color( 0, 0, 0, 0)
+				color = Color( 255, 255, 255, 0)
 			end
 			self.hovering = false
 			self.clicked = false
@@ -158,7 +163,7 @@ hook.Add( "YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 		end
 		draw.RoundedBox(r, 0, 0, pw, ph, Color( color.r, color.g, color.b, color.a) )
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, ph / 2, tcolor or Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, ph / 2, tcolor or Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)
@@ -194,12 +199,13 @@ hook.Add( "YLabelPaint", "YLabel_Material", function(self, pw, ph, tab)
 	end
 end)
 
+local col6 = Color(50, 50, 50)
 hook.Add( "YTextFieldPaint", "YTextFieldPaint_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	local lply = LocalPlayer()
 	if YRPGetInterfaceDesign() == "Material" then
-		local color = Color(50, 50, 50)
+		local color = col6
 		local tcolor = YRPInterfaceValue( "YFrame", "HT" )
 
 		draw.RoundedBox(0, 0, 0, pw, ph, Color( color.r, color.g, color.b, 255) )
@@ -241,7 +247,7 @@ hook.Add( "YAddPaint", "YAdd_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	if YRPGetInterfaceDesign() == "Material" then
-		local color = Color( 100, 205, 100)
+		local color = Color( 100, 205, 100 )
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
 			color.g = color.g - 50
@@ -260,7 +266,7 @@ hook.Add( "YAddPaint", "YAdd_Material", function(self, pw, ph, tab)
 
 		local br = ph * 0.1
 		if YRP.GetDesignIcon( "add" ) ~= nil then
-			surface.SetDrawColor( 255, 255, 255, 255)
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(YRP.GetDesignIcon( "add" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		end
@@ -287,7 +293,7 @@ hook.Add( "YRemovePaint", "YRemove_Material", function(self, pw, ph, tab)
 
 		local br = ph * 0.1
 		if YRP.GetDesignIcon( "remove" ) ~= nil then
-			surface.SetDrawColor( 255, 255, 255, 255)
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(YRP.GetDesignIcon( "remove" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		end
@@ -299,28 +305,28 @@ hook.Add( "YClosePaint", "YClose_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	if YRPGetInterfaceDesign() == "Material" then
-		local color = Color(205, 100, 100)
+		self.color = Color(205, 100, 100)
 		if self:IsDown() or self:IsPressed() then
-			color.r = color.r - 50
-			color.g = color.g - 50
-			color.b = color.b - 50
+			self.color.r = self.color.r - 50
+			self.color.g = self.color.g - 50
+			self.color.b = self.color.b - 50
 		elseif self:IsHovered() then
-			color.r = color.r + 50
-			color.g = color.g + 50
-			color.b = color.b + 50
+			self.color.r = self.color.r + 50
+			self.color.g = self.color.g + 50
+			self.color.b = self.color.b + 50
 		else
-			color = Color( 0, 0, 0, 0)
+			self.color = Color( 255, 255, 255, 0)
 		end
 
 		if YRP.GetDesignIcon( "circle" ) ~= nil then
-			surface.SetDrawColor( color)
+			surface.SetDrawColor( self.color )
 			surface.SetMaterial(YRP.GetDesignIcon( "circle" ) )
 			surface.DrawTexturedRect(0, 0, pw, ph)
 		end
 
 		local br = ph * 0.1
 		if YRP.GetDesignIcon( "clear" ) ~= nil then
-			surface.SetDrawColor( 255, 255, 255, 255)
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(YRP.GetDesignIcon( "clear" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		end
@@ -342,7 +348,7 @@ hook.Add( "YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 			color.g = color.g + 50
 			color.b = color.b + 50
 		else
-			color = Color( 0, 0, 0, 0)
+			color = Color( 255, 255, 255, 0)
 		end
 
 		if YRP.GetDesignIcon( "circle" ) ~= nil then
@@ -353,7 +359,7 @@ hook.Add( "YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 
 		local br = ph * 0.1
 		if YRP.GetDesignIcon( "mat_square" ) ~= nil then
-			surface.SetDrawColor( 255, 255, 255, 255)
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(YRP.GetDesignIcon( "mat_square" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		end
@@ -361,18 +367,21 @@ hook.Add( "YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 	end
 end)
 
+local color1 = Color( 40, 40, 40, 255 )
+local color2 = Color( 60, 60, 60, 255 )
+local color3 = Color( 20, 20, 20, 255 )
 hook.Add( "YGroupBoxPaint", "YGroupBox_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	if YRPGetInterfaceDesign() == "Material" then
-		draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255) )
+		draw.RoundedBox(0, 0, 0, pw, ph, color1 )
 
-		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 60, 60, 255) )
+		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), color2 )
 
 		local x, y = self.con:GetPos()
-		draw.RoundedBox(0, x, y, self.con:GetWide(), self.con:GetTall(), Color(20, 20, 20, 255) )
+		draw.RoundedBox(0, x, y, self.con:GetWide(), self.con:GetTall(), color3 )
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)

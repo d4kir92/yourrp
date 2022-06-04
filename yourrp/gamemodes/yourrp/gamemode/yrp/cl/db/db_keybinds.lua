@@ -52,7 +52,7 @@ yrp_keybinds.version = 4
 local dbfile = "yrp_keybinds/yrp_keybinds.json"
 
 function YRPKeybindsMSG( msg )
-	MsgC( Color( 0, 255, 0 ), "[YourRP] [KEYBINDS] " .. msg .. "\n" )
+	MsgC( YRPColGreen(), "[YourRP] [KEYBINDS] " .. msg .. "\n" )
 end
 
 function YRPKeybindsCheckFile()

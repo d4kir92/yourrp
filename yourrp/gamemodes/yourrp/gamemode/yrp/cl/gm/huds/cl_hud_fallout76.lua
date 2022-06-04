@@ -42,7 +42,7 @@ function FO76BG(tab)
 		FO76["BR"][tab.element].h = h
 		FO76["BR"][tab.element].x = x
 		FO76["BR"][tab.element].y = y
-		FO76["BR"][tab.element].color = Color( 0, 0, 0, 255)
+		FO76["BR"][tab.element].color = Color( 0, 0, 0, 255 )
 	elseif lply:HudElementVisible(tab.element) then
 		HudBox(FO76["BG"][tab.element])
 		HudBoxBr(FO76["BR"][tab.element])
@@ -128,7 +128,7 @@ function FO76Element(tab)
 		FO76["CENTERTEXT"][tab.element].ax = 1
 		FO76["CENTERTEXT"][tab.element].ay = 1
 		FO76["CENTERTEXT"][tab.element].font = "Y_18_500"
-		FO76["CENTERTEXT"][tab.element].color = Color( 0, 0, 0)
+		FO76["CENTERTEXT"][tab.element].color = Color( 0, 0, 0, 255 )
 
 		FO76["BR"][tab.element].r = 0
 		if lply:HudValue(tab.element, "TEXT" ) then
@@ -143,7 +143,7 @@ function FO76Element(tab)
 			FO76["BR"][tab.element].x = x
 		end
 		FO76["BR"][tab.element].y = y + (h - tab.thickness) / 2
-		FO76["BR"][tab.element].color = Color( 0, 0, 0, 255)
+		FO76["BR"][tab.element].color = Color( 0, 0, 0, 255 )
 	elseif lply:HudElementVisible(tab.element) then
 		HudBox(FO76["BG"][tab.element])
 		HudBox(FO76["BGBar"][tab.element])
@@ -310,7 +310,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["degree"].ay = 1
 			FO76[tab.element]["degree"].font = "Y_14_500"
 			FO76[tab.element]["degree"].color = FOColor()
-			FO76[tab.element]["degree"].brcolor = Color( 0, 0, 0)
+			FO76[tab.element]["degree"].brcolor = Color( 0, 0, 0, 255 )
 
 			FO76[tab.element]["north"].w = h / 8
 			FO76[tab.element]["north"].h = h
@@ -320,7 +320,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["north"].ay = 1
 			FO76[tab.element]["north"].font = "Y_14_500"
 			FO76[tab.element]["north"].color = FOColor()
-			FO76[tab.element]["north"].brcolor = Color( 0, 0, 0)
+			FO76[tab.element]["north"].brcolor = Color( 0, 0, 0, 255 )
 			FO76[tab.element]["north"].text = YRP.lang_string( "LID_north_short" )
 
 			FO76[tab.element]["south"].w = h / 8
@@ -331,7 +331,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["south"].ay = 1
 			FO76[tab.element]["south"].font = "Y_14_500"
 			FO76[tab.element]["south"].color = FOColor()
-			FO76[tab.element]["south"].brcolor = Color( 0, 0, 0)
+			FO76[tab.element]["south"].brcolor = Color( 0, 0, 0, 255 )
 			FO76[tab.element]["south"].text = YRP.lang_string( "LID_south_short" )
 
 			FO76[tab.element]["east"].w = h / 8
@@ -342,7 +342,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["east"].ay = 1
 			FO76[tab.element]["east"].font = "Y_14_500"
 			FO76[tab.element]["east"].color = FOColor()
-			FO76[tab.element]["east"].brcolor = Color( 0, 0, 0)
+			FO76[tab.element]["east"].brcolor = Color( 0, 0, 0, 255 )
 			FO76[tab.element]["east"].text = YRP.lang_string( "LID_east_short" )
 
 			FO76[tab.element]["west"].w = h / 8
@@ -353,7 +353,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["west"].ay = 1
 			FO76[tab.element]["west"].font = "Y_14_500"
 			FO76[tab.element]["west"].color = FOColor()
-			FO76[tab.element]["west"].brcolor = Color( 0, 0, 0)
+			FO76[tab.element]["west"].brcolor = Color( 0, 0, 0, 255 )
 			FO76[tab.element]["west"].text = YRP.lang_string( "LID_west_short" )
 		else
 			HudBox(FO76[tab.element]["BG"])
@@ -418,7 +418,7 @@ local fpsavg = fps
 local fpstavg = 0
 local fpscou = 0
 local fps_delay = 0
-local fpscolor = Color( 0, 0, 0)
+local fpscolor = Color( 0, 0, 0, 255 )
 
 local ping = 5
 local pingmin = 9999
@@ -427,7 +427,7 @@ local pingavg = ping
 local pingtavg = 0
 local pingcou = 0
 local ping_delay = 0
-local pingcolor = Color( 0, 0, 0)
+local pingcolor = Color( 0, 0, 0, 255 )
 
 function HUD_FO76()
 	local lply = LocalPlayer()
@@ -546,11 +546,11 @@ function HUD_FO76()
 				end
 
 				if ping > 100 then
-					pingcolor = Color( 255, 0, 0)
+					pingcolor = YRPColGreen()
 				elseif ping > 50 then
 					pingcolor = Color( 255, 255, 0)
 				else
-					pingcolor = Color( 0, 255, 0)
+					pingcolor = YRPColGreen()
 				end
 			end
 			local NE = {}
@@ -579,11 +579,11 @@ function HUD_FO76()
 				end
 
 				if fps < 30 then
-					fpscolor = Color( 255, 0, 0)
+					fpscolor = YRPColGreen()
 				elseif fps < 60 then
 					fpscolor = Color( 255, 255, 0)
 				else
-					fpscolor = Color( 0, 255, 0)
+					fpscolor = YRPColGreen()
 				end
 			end
 			PE.text = YRP.lang_string( "LID_fps" ) .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. " )"
@@ -631,7 +631,7 @@ function HUD_FO76()
 				local LO = {}
 				LO.element = "LO"
 				LO.text = "[" .. GTS( "lockdown" ) .. "] " .. lply:LockdownText()
-				LO.tcolor = Color( 255, 0, 0)
+				LO.tcolor = YRPColGreen()
 				FO76Name(LO)
 			end
 

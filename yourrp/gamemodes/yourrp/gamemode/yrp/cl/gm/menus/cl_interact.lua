@@ -96,12 +96,12 @@ net.Receive( "openInteractMenu", function(len)
 		
 		--[[ Licenses ]]--
 		if LocalPlayer():isCP() or LocalPlayer():GetYRPBool( "bool_canusewarnsystem", false) then
-			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color( 255, 255, 255, 255) )
+			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color( 255, 255, 255, 255 ) )
 		end
 	
 		--[[ Description ]]--
-		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(590), content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), Color( 255, 255, 255, 255) )
-		draw.SimpleTextOutlined(YRP.lang_string( "LID_description" ) .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(610), Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 0) )
+		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(590), content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), Color( 255, 255, 255, 255 ) )
+		draw.SimpleTextOutlined(YRP.lang_string( "LID_description" ) .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(610), Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 255, 255, 255, 0) )
 	end
 
 	if idcard then
@@ -349,9 +349,9 @@ net.Receive( "yrp_invite_ply", function(len)
 
 	function content:Paint(pw, ph)
 		local text = YRP.lang_string( "LID_youwereinvited" )
-		draw.SimpleText(text .. ":", "Y_16_500", pw / 2, YRP.ctr(20), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(group.string_name, "Y_16_500", pw / 2, YRP.ctr(60), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(role.string_name, "Y_16_500", pw / 2, YRP.ctr(100), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(text .. ":", "Y_16_500", pw / 2, YRP.ctr(20), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(group.string_name, "Y_16_500", pw / 2, YRP.ctr(60), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(role.string_name, "Y_16_500", pw / 2, YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	win.accept = createD( "YButton", content, YRP.ctr(200), YRP.ctr(50), content:GetWide() / 2 - YRP.ctr(200 + 5), content:GetTall() - YRP.ctr(50 + 10) )

@@ -186,7 +186,7 @@ function YRPMakeJobTable( id )
 	job.category = ""
 	job.command = ""
 	
-	job.color = Color( 0, 0, 0, 255)
+	job.color = Color( 0, 0, 0, 255 )
 	job.uniqueID = id
 	job.int_groupID = 1
 
@@ -304,6 +304,24 @@ Player.DarkRPVars.job = ""
 --
 local function RetrievePlayerVar(userID, var, value)
 	--RetrievePlayerVar
+end
+
+local DarkRPVarById = {}
+local UNKNOWN_DARKRPVAR = 255
+
+function DarkRP.readNetDarkRPVar()
+    local DarkRPVarId = net.ReadUInt(DARKRP_ID_BITS)
+    local DarkRPVar = DarkRPVarById[DarkRPVarId]
+
+    if DarkRPVarId == UNKNOWN_DARKRPVAR then
+        local name, value = readUnknown()
+
+        return name, value
+    end
+
+    local val = DarkRPVar.readFn(value)
+
+    return DarkRPVar.name, val
 end
 
 local function doRetrieve()

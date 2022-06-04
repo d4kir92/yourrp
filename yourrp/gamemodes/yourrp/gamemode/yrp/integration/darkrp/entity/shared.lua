@@ -80,6 +80,11 @@ function Entity:IsDoor()
 	self:YRPIsDoor()
 end
 
+function Entity:isDoor()
+	--Description: Whether this entity is considered a door in DarkRP.
+	self:IsDoor()
+end
+
 function Entity:isKeysAllowedToOwn(ply)
 	--Description: Whether this player is allowed to co-own a door, as decided by the master door owner.
 	YRPDarkrpNotFound( "isKeysAllowedToOwn(ply)" )

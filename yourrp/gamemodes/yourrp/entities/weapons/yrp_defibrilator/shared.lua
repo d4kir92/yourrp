@@ -42,7 +42,7 @@ end
 
 function SWEP:PrimaryAttack()
 	self.delay = self.delay or 0
-	if CLIENT and !GetGlobalYRPBool( "bool_spawncorpseondeath", true ) then
+	if CLIENT then
 		if self.delay < CurTime() then
 			self.delay = CurTime() + 1
 			notification.AddLegacy( "[Spawn Corpse On Death] is disabled, which is needed for the defi", NOTIFY_HINT, 3)

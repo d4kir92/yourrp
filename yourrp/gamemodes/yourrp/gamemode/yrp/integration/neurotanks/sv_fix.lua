@@ -34,7 +34,7 @@ function Meta:TankExitVehicle()
 	-- self.Pilot:ConCommand( "jet_cockpitview 0" )
 	-- self.Pilot.ClientVector = nil
 
-	-- self.Pilot:SetColor(Color( 255,255,255,255) )
+	-- self.Pilot:SetColor(Color( 255, 255, 255, 255 ) )
 	self:SetNetworkedEntity( "Pilot", NULL)
 
 	if(self.TowerSound) then

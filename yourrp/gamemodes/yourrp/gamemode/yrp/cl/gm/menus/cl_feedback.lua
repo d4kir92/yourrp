@@ -67,20 +67,20 @@ function CreateTicketContent(parent)
 
 	TICKET.titleP = createD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(170) )
 	function TICKET.titleP:Paint(pw, ph)
-		surfaceText(YRP.lang_string( "LID_title" ), "Y_25_500", YRP.ctr(0), ph / 2, Color( 255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string( "LID_title" ), "Y_25_500", YRP.ctr(0), ph / 2, Color( 255, 255, 255, 255 ), 0, 1)
 	end
 	TICKET.titleT = createD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(220) )
 
 	TICKET.ticketP = createD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(300) )
 	function TICKET.ticketP:Paint(pw, ph)
-		surfaceText(YRP.lang_string( "LID_ticket" ) .. " ( " .. YRP.lang_string( "LID_problems" ) .. ", " .. YRP.lang_string( "LID_suggestions" ) .. ", ...)", "Y_25_500", YRP.ctr(0), ph/2, Color( 255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string( "LID_ticket" ) .. " ( " .. YRP.lang_string( "LID_problems" ) .. ", " .. YRP.lang_string( "LID_suggestions" ) .. ", ...)", "Y_25_500", YRP.ctr(0), ph/2, Color( 255, 255, 255, 255 ), 0, 1)
 	end
 	TICKET.ticketT = createD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(500), YRP.ctr(20), YRP.ctr(350) )
 	TICKET.ticketT:SetMultiline(true)
 
 	TICKET.contactP = createD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(900) )
 	function TICKET.contactP:Paint(pw, ph)
-		surfaceText(YRP.lang_string( "LID_contact" ) .. " ( " .. YRP.lang_string( "LID_notrequired" ) .. " )", "Y_25_500", YRP.ctr(0), ph/2, Color( 255, 255, 255), 0, 1)
+		surfaceText(YRP.lang_string( "LID_contact" ) .. " ( " .. YRP.lang_string( "LID_notrequired" ) .. " )", "Y_25_500", YRP.ctr(0), ph/2, Color( 255, 255, 255, 255 ), 0, 1)
 	end
 	TICKET.contactT = createD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(950) )
 

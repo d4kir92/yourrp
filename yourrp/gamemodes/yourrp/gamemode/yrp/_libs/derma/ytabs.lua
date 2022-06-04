@@ -67,11 +67,9 @@ function PANEL:AddOption(name, func, height)
 		end
 		self.h = math.Clamp(self.h, 0, 10)
 	
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 100) )
-
 		draw.RoundedBox(0, YRP.ctr(20), ph - YRP.ctr(self.h), pw - YRP.ctr(40), YRP.ctr(self.h), self.color)
 
-		draw.SimpleText(YRP.lang_string(name), "Y_26_500", pw / 2, ph / 2, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(name), "Y_26_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	self.tabs[name] = func

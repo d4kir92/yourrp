@@ -58,10 +58,10 @@ function YRPToggleGroupMenu()
 					draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 				end
 				function sbar.btnUp:Paint(w, h)
-					draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+					draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 				end
 				function sbar.btnDown:Paint(w, h)
-					draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+					draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 				end
 				function sbar.btnGrip:Paint(w, h)
 					draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -102,10 +102,10 @@ function YRPToggleGroupMenu()
 			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 		end
 		function sbar.btnUp:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+			draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 		end
 		function sbar.btnDown:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+			draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 		end
 		function sbar.btnGrip:Paint(w, h)
 			draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )

@@ -33,7 +33,7 @@ local function YRPGetClientInfo()
 end
 
 net.Receive( "receivedstartdata", function( len )
-	MsgC( Color( 0, 255, 0 ), "[LOADING] SERVER -> CLIENT: Server Received Start Data", "\n" )
+	MsgC( YRPColGreen(), "[LOADING] SERVER -> CLIENT: Server Received Start Data", "\n" )
 	yrpreceivedstartdata = true
 end)
 
@@ -47,7 +47,7 @@ local function YRPSendAskData( from )
 		net.WriteString( info.beta )
 	net.SendToServer()
 
-	MsgC( Color( 255, 255, 255 ), "[LOADING] Sended StartData", "\n" )
+	MsgC( Color( 255, 255, 255, 255 ), "[LOADING] Sended StartData", "\n" )
 
 	timer.Simple( 8, function()
 		if !yrpreceivedstartdata then

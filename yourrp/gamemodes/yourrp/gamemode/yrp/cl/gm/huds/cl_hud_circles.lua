@@ -60,7 +60,7 @@ function HUDCirclesDrawIcon(ele, icon, perc, text)
 			render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
 			render.SetStencilReferenceValue(1)
 
-			drawC(midx, midy, barsize / 2, 32, Color( 0, 0, 0, 255) )
+			drawC(midx, midy, barsize / 2, 32, Color( 0, 0, 0, 255 ) )
 
 			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
@@ -83,12 +83,12 @@ function HUDCirclesDrawIcon(ele, icon, perc, text)
 
 			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
 
-			drawC(midx, midy, h / 2, 32, Color( 0, 0, 0, 255) )
+			drawC(midx, midy, h / 2, 32, Color( 0, 0, 0, 255 ) )
 
 		render.SetStencilEnable(false)
 
 		if icon then
-			surface.SetDrawColor( 255, 255, 255, 255)
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(icon)
 			surface.DrawTexturedRect(x + h / 2 - 32, y + h / 2 - 32, 64, 64)
 		end
@@ -99,7 +99,7 @@ function HUDCirclesDrawIcon(ele, icon, perc, text)
 		end
 		local font = "Y_" .. fontsize .. "_500"
 
-		draw.SimpleText(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color( 0, 0, 0) )
+		draw.SimpleText(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color( 0, 0, 0, 255 ) )
 	end
 end
 
@@ -121,7 +121,7 @@ function HUDCirclesDrawText(ele, text)
 		local ay = lply:HudValue(ele, "AY" )
 		local midx = x + ( ax * w) / 2
 		local midy = y + ( ay * h) / 2
-		draw.SimpleText(text, font, midx, midy, Color( 255, 255, 255, 255 ), ax, ay, 2, Color( 0, 0, 0) )
+		draw.SimpleText(text, font, midx, midy, Color( 255, 255, 255, 255 ), ax, ay, 2, Color( 0, 0, 0, 255 ) )
 	end
 end
 

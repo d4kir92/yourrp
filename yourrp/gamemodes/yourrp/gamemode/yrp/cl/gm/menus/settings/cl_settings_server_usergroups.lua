@@ -24,6 +24,13 @@ _icon.br = YRP.ctr(8)
 
 net.Receive( "Connect_Settings_UserGroup", function(len)
 	local ug = net.ReadTable()
+	if ug == nil then
+		return 
+	end
+	if ug.uniqueID == nil then
+		return
+	end
+
 	CURRENT_USERGROUP = tonumber(ug.uniqueID)
 	UGS[CURRENT_USERGROUP] = ug
 
@@ -219,11 +226,13 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		if wk(UGS[CURRENT_USERGROUP]) then
 			if self.oldcur != self.cur then
 				self.oldcur = self.cur
-				self:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_sweps[self.cur]) )
+				if UGS[CURRENT_USERGROUP].string_sweps then
+					self:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_sweps[self.cur]) )
+				end
 			end
-			surfaceText(self.cur .. "/" .. self.max, "Y_18_500", pw / 2, ph - YRP.ctr(30), Color( 255, 255, 255), 1, 1)
+			surfaceText(self.cur .. "/" .. self.max, "Y_18_500", pw / 2, ph - YRP.ctr(30), Color( 255, 255, 255, 255 ), 1, 1)
 			if UGS[CURRENT_USERGROUP].string_sweps then
-				surfaceText(UGS[CURRENT_USERGROUP].string_sweps[self.cur] or "NOMODEL", "Y_18_500", pw / 2, ph - YRP.ctr(70), Color( 255, 255, 255), 1, 1)
+				surfaceText(UGS[CURRENT_USERGROUP].string_sweps[self.cur] or "NOMODEL", "Y_18_500", pw / 2, ph - YRP.ctr(70), Color( 255, 255, 255, 255 ), 1, 1)
 			end
 		end
 	end
@@ -298,9 +307,9 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 				net.SendToServer()
 				UGS[CURRENT_USERGROUP].string_sweps = lply.yrpseltab
 			elseif lply.yrpseltab and lply.yrpseltab[1] then
-				MsgC( Color( 255, 0, 0), "[YRPAddSwepToUG] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+				MsgC( YRPColGreen(), "[YRPAddSwepToUG] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 			else
-				MsgC( Color( 255, 0, 0), "[YRPAddSwepToUG] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+				MsgC( YRPColGreen(), "[YRPAddSwepToUG] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 			end
 		end
 
@@ -325,7 +334,9 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 			if UGS[CURRENT_USERGROUP].string_sweps[1] != "" then
 				SWEPS.preview.cur = 1
 				SWEPS.preview.max = #UGS[CURRENT_USERGROUP].string_sweps
-				SWEPS.preview:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_sweps[1] or "" ) )
+				if UGS[CURRENT_USERGROUP].string_sweps then
+					SWEPS.preview:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_sweps[1] or "" ) )
+				end
 			else
 				SWEPS.preview.cur = 0
 				SWEPS.preview.max = 0
@@ -391,11 +402,13 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		if wk(UGS[CURRENT_USERGROUP]) then
 			if self.oldcur != self.cur then
 				self.oldcur = self.cur
-				self:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_nonesweps[self.cur]) )
+				if UGS[CURRENT_USERGROUP].string_nonesweps then
+					self:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_nonesweps[self.cur]) )
+				end
 			end
-			surfaceText(self.cur .. "/" .. self.max, "Y_18_500", pw / 2, ph - YRP.ctr(30), Color( 255, 255, 255), 1, 1)
+			surfaceText(self.cur .. "/" .. self.max, "Y_18_500", pw / 2, ph - YRP.ctr(30), Color( 255, 255, 255, 255 ), 1, 1)
 			if UGS[CURRENT_USERGROUP].string_nonesweps then
-				surfaceText(UGS[CURRENT_USERGROUP].string_nonesweps[self.cur] or "NOMODEL", "Y_18_500", pw / 2, ph - YRP.ctr(70), Color( 255, 255, 255), 1, 1)
+				surfaceText(UGS[CURRENT_USERGROUP].string_nonesweps[self.cur] or "NOMODEL", "Y_18_500", pw / 2, ph - YRP.ctr(70), Color( 255, 255, 255, 255 ), 1, 1)
 			end
 		end
 	end
@@ -465,9 +478,9 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 				net.SendToServer()
 				UGS[CURRENT_USERGROUP].string_nonesweps = lply.yrpseltab
 			elseif lply.yrpseltab and lply.yrpseltab[1] then
-				MsgC( Color( 255, 0, 0), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+				MsgC( YRPColGreen(), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 			else
-				MsgC( Color( 255, 0, 0), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+				MsgC( YRPColGreen(), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 			end
 		end
 
@@ -492,7 +505,9 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 			if UGS[CURRENT_USERGROUP].string_nonesweps[1] != "" then
 				NONESWEPS.preview.cur = 1
 				NONESWEPS.preview.max = #UGS[CURRENT_USERGROUP].string_nonesweps
-				NONESWEPS.preview:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_nonesweps[1] or "" ) )
+				if UGS[CURRENT_USERGROUP].string_nonesweps then
+					NONESWEPS.preview:SetModel(GetSWEPWorldModel(UGS[CURRENT_USERGROUP].string_nonesweps[1] or "" ) )
+				end
 			else
 				NONESWEPS.preview.cur = 0
 				NONESWEPS.preview.max = 0
@@ -705,8 +720,8 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	local ammoheader = createD( "YLabel", ammobg, YRP.ctr(w), YRP.ctr(50), 0, 0)
 	ammoheader:SetText( "LID_ammo" )
 	function ammoheader:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
-		draw.SimpleText(YRP.lang_string(self:GetText() ), "Y_18_700", pw / 2, ph / 2, Color( 0, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		draw.SimpleText(YRP.lang_string(self:GetText() ), "Y_18_700", pw / 2, ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	ammolist = createD( "DPanelList", ammobg, YRP.ctr(w), YRP.ctr(500), 0, YRP.ctr(50) )
@@ -717,10 +732,10 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 	end
 	function sbar.btnUp:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+		draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 	end
 	function sbar.btnDown:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+		draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 	end
 	function sbar.btnGrip:Paint(w, h)
 		draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -756,7 +771,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		ahe:SetText( v)
 		function ahe:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color( 100, 100, 255) )
-			draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color( 0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		local ava = createD( "DNumberWang", abg, YRP.ctr(w / 2), YRP.ctr(50), YRP.ctr(w / 2), 0)
@@ -817,7 +832,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		local tmp = createD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
 		function tmp:Paint(pw, ph)
 			surfacePanel(self, pw, ph, "" )
-			surfaceBox(0, YRP.ctr(4), pw, YRP.ctr(4), Color( 0, 0, 0, 255) )
+			surfaceBox(0, YRP.ctr(4), pw, YRP.ctr(4), Color( 0, 0, 0, 255 ) )
 		end
 		ACCESS:AddItem(tmp)
 	end
@@ -931,7 +946,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		local tmp = createD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
 		function tmp:Paint(pw, ph)
 			surfacePanel(self, pw, ph, "" )
-			surfaceBox(0, YRP.ctr(4), pw, YRP.ctr(4), Color( 0, 0, 0, 255) )
+			surfaceBox(0, YRP.ctr(4), pw, YRP.ctr(4), Color( 0, 0, 0, 255 ) )
 		end
 		GAMEPLAY:AddItem(tmp)
 	end
@@ -992,7 +1007,7 @@ function YRPAddUG(tbl)
 		draw.SimpleText(text, "Y_16_700", ph + YRP.ctr(40 + 20), ph / 2, TextColor(self.string_color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 		if UGS[tonumber(tbl.uniqueID)].string_icon and strEmpty(UGS[tonumber(tbl.uniqueID)].string_icon) then
-			surfaceBox(YRP.ctr(8) + YRP.ctr(40) + YRP.ctr(8), YRP.ctr(4), ph - YRP.ctr(8), ph - YRP.ctr(8), Color( 255, 255, 255, 255) )
+			surfaceBox(YRP.ctr(8) + YRP.ctr(40) + YRP.ctr(8), YRP.ctr(4), ph - YRP.ctr(8), ph - YRP.ctr(8), Color( 255, 255, 255, 255 ) )
 		end
 		if self.uid == tonumber(CURRENT_USERGROUP) then
 			surfaceSelected(self, pw - YRP.ctr(40 + 8), ph, YRP.ctr(40 + 8) )
@@ -1022,7 +1037,7 @@ function YRPAddUG(tbl)
 			hook.Run( "YButtonPaint", self, pw, ph )
 
 			if YRP.GetDesignIcon( "64_angle-up" ) then
-				surface.SetDrawColor( 255, 255, 255, 255 )
+				surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 				surface.SetMaterial(YRP.GetDesignIcon( "64_angle-up" ) )
 				surface.DrawTexturedRect(0, 0, pw, ph)
 			end
@@ -1044,7 +1059,7 @@ function YRPAddUG(tbl)
 			hook.Run( "YButtonPaint", self, pw, ph)
 
 			if YRP.GetDesignIcon( "64_angle-down" ) then
-				surface.SetDrawColor( 255, 255, 255, 255)
+				surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 				surface.SetMaterial(YRP.GetDesignIcon( "64_angle-down" ) )
 				surface.DrawTexturedRect(0, 0, pw, ph)
 			end
@@ -1073,7 +1088,7 @@ function YRPAddUG(tbl)
 		UGS[tonumber( tbl.uniqueID )].iconprot = createD( "DPanel", _ug, protsize, protsize, 2, _ug:GetTall() / 2 - protsize / 2 )
 		UGS[tonumber( tbl.uniqueID )].iconprot.Paint = function( self, pw, ph )
 			if YRP.GetDesignIcon( "security" ) then
-				surface.SetDrawColor( 0, 0, 0, 255)
+				surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
 				surface.SetMaterial(YRP.GetDesignIcon( "security" ) )
 				surface.DrawTexturedRect(0, 0, pw, ph)
 
@@ -1224,7 +1239,7 @@ function YRPOpenSettingsUsergroups()
 					hook.Run( "YButtonRPaint", self, pw, ph)
 				else
 					draw.RoundedBox( 13, 0, 0, pw, ph, Color( 100, 100, 100, 255 ) )
-					draw.SimpleText( "X", "Y_14_700", pw / 2, ph / 2, Color( 255, 0, 0 ), 1, 1 )
+					draw.SimpleText( "X", "Y_14_700", pw / 2, ph / 2, YRPColGreen(), 1, 1 )
 				end
 			end
 		end
@@ -1250,14 +1265,14 @@ function YRPOpenSettingsUsergroups()
 
 		local _ugs_title = createD( "DPanel", PARENT, YRP.ctr(SW), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20 + 50 + 20) )
 		function _ugs_title:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255) )
-			surfaceText(YRP.lang_string( "LID_usergroups" ), "Y_26_500", pw / 2, ph / 2, Color( 0, 0, 0), 1, 1)
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+			surfaceText(YRP.lang_string( "LID_usergroups" ), "Y_26_500", pw / 2, ph / 2, Color( 0, 0, 0, 255 ), 1, 1)
 		end
 
 		--[[ UserGroupsList ]]--
 		PARENT.uglist = createD( "DPanelList", PARENT, YRP.ctr(SW), PARENT:GetTall() - YRP.ctr(2 * 20 + 120), YRP.ctr(20), YRP.ctr(20 + 50 + 20 + 50) )
 		function PARENT.uglist:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
+			surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 		end
 		PARENT.uglist:EnableVerticalScrollbar(true)
 	end

@@ -29,7 +29,7 @@ net.Receive( "get_design_settings", function(len)
 		end
 		local hud_design_header = createD( "DPanel", hud_design_bg, hud_design_bg:GetWide(), YRP.ctr(50), 0, 0)
 		function hud_design_header:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string( "LID_design" ), "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_design" ), "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		local hud_design_choice = createD( "DComboBox", hud_design_bg, hud_design_bg:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) )
 		for i, design in pairs(HUDS) do
@@ -63,7 +63,7 @@ net.Receive( "get_design_settings", function(len)
 			hudcustom:SetTitle( "" )
 			--hudcustom:MakePopup()
 			function hudcustom:Paint(pw, ph)
-				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0) )
+				--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
 			end
 
 			local editarea = createD( "DButton", hudcustom, ScW(), ScH(), 0, 0)
@@ -76,7 +76,7 @@ net.Receive( "get_design_settings", function(len)
 			editarea["windows"] = {}
 			editarea["settingswindows"] = {}
 			function editarea:Paint(pw, ph)
-				-- draw.SimpleText(table.Count(editarea["settingswindows"]), "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				-- draw.SimpleText(table.Count(editarea["settingswindows"]), "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				if table.Count(editarea["settingswindows"]) == 0 then
 					local cx, cy = input.GetCursorPos()
 					if cur_delay < CurTime() then
@@ -319,23 +319,25 @@ net.Receive( "get_design_settings", function(len)
 						table.insert(editarea["settingswindows"], win.winset)
 						function win.winset:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 200) )
-							draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", YRP.ctr(50), YRP.ctr(25), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", YRP.ctr(50), YRP.ctr(25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 							local x, y = self:GetPos()
 							local mx, my = gui.MousePos()
 							if input.IsMouseDown(MOUSE_FIRST) then
 								if mx < x or mx > x + pw or my < y or my > y + ph then
-									local childrens = win.winset.dpl:GetItems()
-									local open = false
-									for i, item in pairs( childrens) do
-										if item.cb != nil then
-											if item.cb:IsMenuOpen() then
-												open = true
+									if pa( win.winset.dpl ) then
+										local childrens = win.winset.dpl:GetItems()
+										local open = false
+										for i, item in pairs( childrens) do
+											if item.cb != nil then
+												if item.cb:IsMenuOpen() then
+													open = true
+												end
 											end
 										end
-									end
-									if !open then
-										win.winset:Close()
+										if !open then
+											win.winset:Close()
+										end
 									end
 								end
 							end
@@ -363,7 +365,7 @@ net.Receive( "get_design_settings", function(len)
 						function win.winset:AddCheckBox(t)
 							local line = createD( "DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							local cb = createD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -381,7 +383,7 @@ net.Receive( "get_design_settings", function(len)
 						function win.winset:AddTextPosition(t)
 							local line = createD( "DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							local btn = createD( "DButton", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -427,8 +429,8 @@ net.Receive( "get_design_settings", function(len)
 											local _x = bx + YRP.ctr(8) / 2
 											local _y = by + YRP.ctr(8) / 2
 											local _size = YRP.ctr(20)
-											draw.RoundedBox(0, bx, by, bw, bh, Color( 255, 255, 255) )
-											draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * x, _y + (_h - _size) / 2 * y, _size, _size, Color( 0, 0, 0) )
+											draw.RoundedBox(0, bx, by, bw, bh, Color( 255, 255, 255, 255 ) )
+											draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * x, _y + (_h - _size) / 2 * y, _size, _size, Color( 0, 0, 0, 255 ) )
 										end
 										function tp_btn:DoClick()
 											net.Start( "update_hud_text_position" )
@@ -442,7 +444,7 @@ net.Receive( "get_design_settings", function(len)
 								end
 							end
 							function btn:Paint(pw, ph)
-								local color = Color( 255, 255, 255)
+								local color = Color( 255, 255, 255, 255 )
 								if self:IsHovered() then
 									color = Color( 255, 255, 0, 255)
 								end
@@ -460,7 +462,7 @@ net.Receive( "get_design_settings", function(len)
 								local _x = YRP.ctr(8) / 2
 								local _y = YRP.ctr(8) / 2
 								local _size = YRP.ctr(20)
-								draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * ax, _y + (_h - _size) / 2 * ay, _size, _size, Color( 0, 0, 0) )
+								draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * ax, _y + (_h - _size) / 2 * ay, _size, _size, Color( 0, 0, 0, 255 ) )
 							end
 
 							win.winset.dpl:AddItem(line)
@@ -468,7 +470,7 @@ net.Receive( "get_design_settings", function(len)
 						function win.winset:AddComboBox(t)
 							local line = createD( "DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", YRP.ctr(200 + 20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", YRP.ctr(200 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							line.cb = createD( "DComboBox", line, YRP.ctr(200), YRP.ctr(50), 0, 0)
@@ -492,7 +494,7 @@ net.Receive( "get_design_settings", function(len)
 						function win.winset:AddColorMixer(t)
 							local line = createD( "DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							t.color = lply:HudValue(t.element, t.art)
@@ -535,7 +537,7 @@ net.Receive( "get_design_settings", function(len)
 						function win.winset:AddTextBox(t)
 							local line = createD( "DPanel", nil, YRP.ctr(500), YRP.ctr(50), 0, 0)
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", YRP.ctr(420), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", YRP.ctr(420), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							local cb = createD( "DTextEntry", line, YRP.ctr(400), YRP.ctr(50), 0, 0)
@@ -865,12 +867,12 @@ net.Receive( "get_design_settings", function(len)
 			local hud_x = createD( "DButton", nil, GRP_HUD:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) )
 			hud_x:SetText( "" )
 			function hud_x:Paint(pw, ph)
-				local color = Color( 255, 255, 255)
+				local color = Color( 255, 255, 255, 255 )
 				if self:IsHovered() then
 					color = Color( 255, 255, 100)
 				end
 				draw.RoundedBox(0, 0, 0, pw, ph, color)
-				draw.SimpleText(YRP.lang_string( "LID_customize" ) .. " ( " .. YRP.lang_string( "LID_gridsize" ) .. " " .. size .. " )", "DermaDefault", pw / 2, ph / 2, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.lang_string( "LID_customize" ) .. " ( " .. YRP.lang_string( "LID_gridsize" ) .. " " .. size .. " )", "DermaDefault", pw / 2, ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			function hud_x:DoClick()
 				boxspace = YRP.ctr(size)
@@ -907,12 +909,12 @@ net.Receive( "get_design_settings", function(len)
 		local hud_reset_settings = createD( "DButton", nil, GRP_HUD:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) )
 		hud_reset_settings:SetText( "" )
 		function hud_reset_settings:Paint(pw, ph)
-			local color = Color( 255, 255, 255)
+			local color = Color( 255, 255, 255, 255 )
 			if self:IsHovered() then
 				color = Color( 255, 255, 100)
 			end
 			draw.RoundedBox(0, 0, 0, pw, ph, color)
-			draw.SimpleText(YRP.lang_string( "LID_settodefault" ), "DermaDefault", pw / 2, ph / 2, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_settodefault" ), "DermaDefault", pw / 2, ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		function hud_reset_settings:DoClick()
 			F8CloseSettings()
@@ -941,7 +943,7 @@ net.Receive( "get_design_settings", function(len)
 		end
 		local if_font_header = createD( "DPanel", if_font_bg, if_font_bg:GetWide(), YRP.ctr(50), 0, 0)
 		function if_font_header:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string( "LID_font" ), "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_font" ), "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		local if_font_choice = createD( "DComboBox", if_font_bg, if_font_bg:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) )
 		for i, fo in pairs(YRP.GetFonts() ) do
@@ -965,7 +967,7 @@ net.Receive( "get_design_settings", function(len)
 		end
 		local if_design_header = createD( "DPanel", if_design_bg, if_design_bg:GetWide(), YRP.ctr(50), 0, 0)
 		function if_design_header:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string( "LID_design" ), "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_design" ), "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		local if_design_choice = createD( "DComboBox", if_design_bg, if_design_bg:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) )
 		for i, design in pairs(INTERFACES) do
@@ -1030,7 +1032,7 @@ net.Receive( "get_design_settings", function(len)
 				end
 				function reset_interface:Paint(pw, ph)
 					local tab = {}
-					tab.color = Color( 255, 0, 0)
+					tab.color = YRPColGreen()
 					hook.Run( "YButtonPaint", self, pw, ph, tab)
 				end
 				table.insert(GRP_IF.cif, reset_interface)
@@ -1047,8 +1049,8 @@ net.Receive( "get_design_settings", function(len)
 
 							local ycol = createD( "DPanel", nil, YRP.ctr(200), YRP.ctr(50), 0, 0)
 							function ycol:Paint(pw, ph)
-								draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255) )
-								draw.SimpleText(YRP.lang_string(name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+								draw.SimpleText(YRP.lang_string(name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							ycol.cm = createD( "YColorMenuButton", ycol, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -1070,8 +1072,8 @@ net.Receive( "get_design_settings", function(len)
 
 							local ycol = createD( "DPanel", nil, YRP.ctr(200), YRP.ctr(50), 0, 0)
 							function ycol:Paint(pw, ph)
-								draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255) )
-								draw.SimpleText(YRP.lang_string(name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+								draw.SimpleText(YRP.lang_string(name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							ycol.cm = createD( "YColorMenuButton", ycol, YRP.ctr(50), YRP.ctr(50), 0, 0)

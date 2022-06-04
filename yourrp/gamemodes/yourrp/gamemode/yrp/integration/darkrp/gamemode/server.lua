@@ -294,7 +294,7 @@ end
 
 function DarkRP.talkToRange(ply, playerName, message, size)
 	--Description: Send a chat message to people close to a player.
-	YRPDarkrpNotFound( "talkToRange(ply, playerName, message, size)" )
+	--YRPDarkrpNotFound( "talkToRange(ply, playerName, message, size)" )
 end
 
 function DarkRP.toggleSleep(ply, command)

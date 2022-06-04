@@ -290,12 +290,12 @@ net.Receive( "get_levelsystem_settings", function(len)
 		local diagramm = createD( "YLabel", PARENT, YRP.ctr(1600), YRP.ctr(800), YRP.ctr(2060), YRP.ctr(20) )
 		diagramm:SetText( "" )
 		function diagramm:Paint(pw, ph)
-			draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 
 			local br = YRP.ctr(100)
 			local x = br
 			local y = ph - br
-			surface.SetDrawColor( 0, 0, 0, 255)
+			surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
 			surface.DrawLine(x, y, pw - x, y)
 			surface.DrawLine(x, y, x, ph - y)
 
@@ -327,7 +327,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 					p1 = br + p1
 					p2 = br + p2
 					if i == min then
-						draw.SimpleTextOutlined( coords[i], "DermaDefault", br - YRP.ctr(10), p1, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255) )
+						draw.SimpleTextOutlined( coords[i], "DermaDefault", br - YRP.ctr(10), p1, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 					end
 
 					surface.DrawLine(x + xaxispart * i, p1, x + xaxispart * (i + 1), p2)
@@ -336,13 +336,13 @@ net.Receive( "get_levelsystem_settings", function(len)
 
 			local ymin = 0
 			ymax = math.Round(ymax, 0)
-			draw.SimpleTextOutlined(ymin, "DermaDefault", YRP.ctr(10), br + yaxis, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255) )
-			draw.SimpleTextOutlined(ymax, "DermaDefault", YRP.ctr(10), br, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255) )
-			draw.SimpleTextOutlined(YRP.lang_string( "LID_xp" ), "DermaDefault", YRP.ctr(10), br + yaxis / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255) )
+			draw.SimpleTextOutlined(ymin, "DermaDefault", YRP.ctr(10), br + yaxis, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+			draw.SimpleTextOutlined(ymax, "DermaDefault", YRP.ctr(10), br, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+			draw.SimpleTextOutlined(YRP.lang_string( "LID_xp" ), "DermaDefault", YRP.ctr(10), br + yaxis / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
-			draw.SimpleTextOutlined(min, "DermaDefault", br, br + yaxis + br / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255) )
-			draw.SimpleTextOutlined(max, "DermaDefault", br + xaxis, br + yaxis + br / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255) )
-			draw.SimpleTextOutlined(YRP.lang_string( "LID_level" ), "DermaDefault", br + xaxis / 2, br + yaxis + br / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255) )
+			draw.SimpleTextOutlined(min, "DermaDefault", br, br + yaxis + br / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+			draw.SimpleTextOutlined(max, "DermaDefault", br + xaxis, br + yaxis + br / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+			draw.SimpleTextOutlined(YRP.lang_string( "LID_level" ), "DermaDefault", br + xaxis / 2, br + yaxis + br / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 		end
 	end
 end)

@@ -208,7 +208,7 @@ hook.Add( "YAddPaint", "YAdd_Blur", function(self, pw, ph, tab)
 		surface.DrawTexturedRect(0, 0, pw, ph)
 
 		local br = ph * 0.1
-		surface.SetDrawColor( 255, 255, 255, 255)
+		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 		surface.SetMaterial(YRP.GetDesignIcon( "add" ) )
 		surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		return true
@@ -234,18 +234,19 @@ hook.Add( "YRemovePaint", "YRemove_Blur", function(self, pw, ph, tab)
 		surface.DrawTexturedRect(0, 0, pw, ph)
 
 		local br = ph * 0.1
-		surface.SetDrawColor( 255, 255, 255, 255)
+		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 		surface.SetMaterial(YRP.GetDesignIcon( "remove" ) )
 		surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		return true
 	end
 end)
 
+local color3 = Color(205, 100, 100)
 hook.Add( "YClosePaint", "YClose_Blur", function(self, pw, ph, tab)
 	tab = tab or {}
 
 	if YRPGetInterfaceDesign() == "Blur" then
-		local color = Color(205, 100, 100)
+		local color = color3
 		if self:IsDown() or self:IsPressed() then
 			color.r = color.r - 50
 			color.g = color.g - 50
@@ -260,7 +261,7 @@ hook.Add( "YClosePaint", "YClose_Blur", function(self, pw, ph, tab)
 		surface.DrawTexturedRect(0, 0, pw, ph)
 
 		local br = ph * 0.1
-		surface.SetDrawColor( 255, 255, 255, 255)
+		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 		surface.SetMaterial(YRP.GetDesignIcon( "clear" ) )
 		surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		return true
@@ -286,7 +287,7 @@ hook.Add( "YMaxPaint", "YMax_Blur", function(self, pw, ph, tab)
 		surface.DrawTexturedRect(0, 0, pw, ph)
 
 		local br = ph * 0.1
-		surface.SetDrawColor( 255, 255, 255, 255)
+		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 		surface.SetMaterial(YRP.GetDesignIcon( "mat_square" ) )
 		surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
 		return true
@@ -304,7 +305,7 @@ hook.Add( "YGroupBoxPaint", "YGroupBox_Blur", function(self, pw, ph, tab)
 		local x, y = self.con:GetPos()
 		draw.RoundedBox(0, x, y, self.con:GetWide(), self.con:GetTall(), Color(20, 20, 20, 60) )
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		return true
 	end
 end)

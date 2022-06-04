@@ -50,7 +50,7 @@ end
 function PANEL:Init()
 	self.header = createD( "DPanel", self, 10, 10, 0, 0)
 	function self.header:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string(self.name) or "UNNAMED", "Y_" .. math.Round(ph / 3 * 2) .. "_500", pw / 2, ph / 2, Color( 255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(self.name) or "UNNAMED", "Y_" .. math.Round(ph / 3 * 2) .. "_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	self.numberwang = createD( "DNumberWang", self, 10, 10, 0, 10)

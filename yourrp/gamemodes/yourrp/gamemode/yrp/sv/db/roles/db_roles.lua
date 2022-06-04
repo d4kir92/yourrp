@@ -245,7 +245,7 @@ function YRPConvertToDarkRPJob(tab)
 			YRPRepairSQLDB(true)
 		end
 	else
-		_job.color = Color( 0, 0, 0, 255)
+		_job.color = Color( 0, 0, 0, 255 )
 	end
 	_job.uniqueID = tonumber(tab.uniqueID)
 	_job.int_groupID = tab.int_groupID

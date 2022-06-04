@@ -10,8 +10,8 @@ function PANEL:Init()
 	end
 
 	function self.header:Paint(pw, ph)
-		local color = Color( 255, 255, 255)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
+		local color = Color( 255, 255, 255, 255 )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 		surfaceText(self.text, "Y_24_700", pw / 2, ph / 2, TextColor( color), 1, 1)
 	end
 
@@ -41,7 +41,7 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(w, h)
-	draw.RoundedBox(0, 0, 0, w, h, Color( 255, 0, 0) )
+	draw.RoundedBox(0, 0, 0, w, h, YRPColGreen() )
 end
 
 vgui.Register( "DYRPTextEntry", PANEL, "Panel" )

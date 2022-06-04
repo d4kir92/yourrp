@@ -1305,12 +1305,12 @@ function YRPRenderFrozen(ply)
 			YRPRenderCloaked(ply)
 		else
 			ply:SetRenderMode(RENDERMODE_NORMAL)
-			ply:SetColor( Color( 0, 0, 255) )
+			ply:SetColor( YRPColBlue() )
 			for i, wp in pairs(ply:GetWeapons() ) do
 				wp:SetRenderMode(RENDERMODE_TRANSCOLOR)
-				wp:SetColor( Color( 0, 0, 255) )
+				wp:SetColor( YRPColBlue() )
 			end
-			--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, Color( 0, 0, 255) )
+			--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, YRPColBlue() )
 		end
 	end
 end
@@ -1324,12 +1324,12 @@ function YRPRenderNormal(ply)
 		else
 			setPlayerModel(ply)
 			ply:SetRenderMode(RENDERMODE_NORMAL)
-			ply:SetColor(Color( 255, 255, 255, 255) )
+			ply:SetColor(Color( 255, 255, 255, 255 ) )
 			for i, wp in pairs(ply:GetWeapons() ) do
 				wp:SetRenderMode(RENDERMODE_NORMAL)
-				wp:SetColor(Color( 255, 255, 255, 255) )
+				wp:SetColor(Color( 255, 255, 255, 255 ) )
 			end
-			--YRPRenderEquipments(ply, RENDERMODE_NORMAL, Color( 255, 255, 255, 255) )
+			--YRPRenderEquipments(ply, RENDERMODE_NORMAL, Color( 255, 255, 255, 255 ) )
 		end
 	end
 end
@@ -1862,7 +1862,7 @@ net.Receive( "usergroup_update_string_ammos", function(len, ply)
 	YRP.msg( "db", ply:YRPName() .. " updated ammos of usergroup ( " .. uid .. " ) to [" .. string_ammos .. "]" )
 end)
 
-hook.Add( "Think", "yrp_usergroup_haschanged", function()
+local function YRPCheckUGChanged()
 	for i, ply in pairs( player.GetAll() ) do
 		ply.yrp_ug = ply.yrp_ug or ply:GetUserGroup()
 		if ply.yrpauthed then
@@ -1880,4 +1880,14 @@ hook.Add( "Think", "yrp_usergroup_haschanged", function()
 			ply.yrp_ug = ply:GetUserGroup()
 		end
 	end
-end)
+end
+
+local function YRPCheckUGChangedLoop()
+	local succ, err = pcall(YRPCheckUGChanged)
+	if err then
+		YRPMsg(err)
+	end
+
+	timer.Simple( 0.1, YRPCheckUGChangedLoop )
+end
+YRPCheckUGChangedLoop()

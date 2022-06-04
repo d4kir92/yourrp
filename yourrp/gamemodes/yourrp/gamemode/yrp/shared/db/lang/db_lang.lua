@@ -206,7 +206,7 @@ function YRP.send_lang(short)
 		YRP.msg( "lang", "Send Language to Server: [" .. tostring(short) .. "]" )
 
 		net.Start( "client_lang" )
-		net.WriteString(tostring(short) )
+			net.WriteString(tostring(short) )
 		net.SendToServer()
 	end
 end

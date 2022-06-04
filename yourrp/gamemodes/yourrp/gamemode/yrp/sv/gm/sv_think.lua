@@ -57,8 +57,13 @@ end
 
 
 
-function YRPConHG(ply, time)
+function YRPConHG( ply, time )
+	if !IsValid( ply ) then
+		return false
+	end
+
 	if GetGlobalYRPBool( "bool_onlywhencook", false) and !IsCookPlaying() then return false end
+
 	local newval = tonumber(ply:GetYRPFloat( "hunger", 0.0) ) - 0.01 * GetGlobalYRPFloat( "float_scale_hunger", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
 	ply:SetYRPFloat( "hunger", newval )
@@ -75,8 +80,11 @@ end
 
 
 
-function YRPConTH(ply)
-	if !IsValid(ply) then return end
+function YRPConTH( ply )
+	if !IsValid(ply) then
+		return
+	end
+
 	local newval2 = tonumber(ply:GetYRPFloat( "permille", 0.0) ) - 0.01 * GetGlobalYRPFloat( "float_scale_permille", 1.0)
 	newval2 = math.Clamp( newval2, 0.0, ply:GetMaxPermille() )
 	
@@ -95,7 +103,11 @@ end
 
 
 
-function YRPConRA(ply)
+function YRPConRA( ply )
+	if !IsValid(ply) then
+		return
+	end
+
 	if IsInsideRadiation(ply) then
 		ply:SetYRPFloat( "GetCurRadiation", math.Clamp(tonumber(ply:GetYRPFloat( "GetCurRadiation", 0.0) ) + 0.01 * GetGlobalYRPFloat( "float_scale_radiation_in", 50.0), 0, 100) )
 	else
@@ -294,15 +306,15 @@ timer.Create( "ServerThink", TICK, 0, function()
 					ply:TakeDamage( 0.5, ply )
 				end
 
-				if GetGlobalYRPBool( "bool_hunger", false) and ply:GetYRPBool( "bool_hunger", false) then
+				if GetGlobalYRPBool( "bool_hunger", false) and ply:GetYRPBool( "bool_hunger", false) and YRPConHG then
 					YRPConHG(ply, _time)
 				end
 
-				if GetGlobalYRPBool( "bool_thirst", false) and ply:GetYRPBool( "bool_thirst", false) then
+				if GetGlobalYRPBool( "bool_thirst", false) and ply:GetYRPBool( "bool_thirst", false) and YRPConTH then
 					YRPConTH(ply)
 				end
 
-				if GetGlobalYRPBool( "bool_radiation", false) then
+				if GetGlobalYRPBool( "bool_radiation", false) and YRPConRA then
 					YRPConRA(ply)
 				end
 
@@ -445,21 +457,21 @@ timer.Create( "ServerThink", TICK, 0, function()
 	end
 
 	if _time % 1 == 0 and HasDarkrpmodification() then
-		YRPHR( Color( 255, 0, 0) )
-		MsgC( Color( 255, 0, 0), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color( 255, 255, 255), "\n" )
-		YRPHR( Color( 255, 0, 0) )
+		YRPHR( YRPColGreen() )
+		MsgC( YRPColGreen(), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color( 255, 255, 255, 255 ), "\n" )
+		YRPHR( YRPColGreen() )
 		YRPTestDarkrpmodification()
 	end
 
 	if _time % 1 == 0 and !HasYRPContent() then
 		YRPHR( Color( 255, 255, 0) )
-		MsgC( Color( 255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color( 255, 255, 255), "\n" )
-		MsgC( Color( 255, 255, 0), "Or is STEAM down?", Color( 255, 255, 255), "\n" )
+		MsgC( Color( 255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color( 255, 255, 255, 255 ), "\n" )
+		MsgC( Color( 255, 255, 0), "Or is STEAM down?", Color( 255, 255, 255, 255 ), "\n" )
 		YRPHR( Color( 255, 255, 0) )
 		YRPTestContentAddons()
 	end
 
-	if _time % 60 == 0 then
+	if _time % 60 == 0 and YRPCheckAddons then
 		YRPCheckAddons()
 	end
 

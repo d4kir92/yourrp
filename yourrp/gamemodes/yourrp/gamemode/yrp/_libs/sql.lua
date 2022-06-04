@@ -20,7 +20,7 @@ function YRP_SQL_Show_Last_Error()
 	--YRP.msg( "db", "YRP_SQL_Show_Last_Error()" )
 	local _last_error = tostring( sql.LastError() ) or ""
 
-	MsgC( Color( 255, 0, 0 ), "DATABASE HAS ERROR: " .. _last_error )
+	MsgC( YRPColGreen(), "DATABASE HAS ERROR: " .. _last_error )
 	
 	if SERVER then
 		PrintMessage( HUD_PRINTCENTER, "[YourRP|DATABASE] SERVER-DATABASE:" )
@@ -43,7 +43,7 @@ end
 
 function YRP_SQL_STR_IN(str, f)
 	if str == nil and f then
-		MsgC(Color( 255, 0, 0), f)
+		MsgC(YRPColGreen(), f)
 		return str
 	else
 		str = string.Replace( str, "'", "§01§" )
@@ -232,13 +232,16 @@ function YRP_SQL_CREATE_TABLE( db_table)
 
 		return _result
 	elseif GetSQLMode() == 1 then
-		local _q = "CREATE TABLE "
-		_q = _q .. YRPSQL.schema .. "." .. db_table .. " ( "
-		_q = _q .. "uniqueID		INTEGER				 PRIMARY KEY AUTO_INCREMENT"
-		_q = _q .. " )"
-		_q = _q .. ";"
-		local _result = YRP_SQL_QUERY(_q)
-
+		if YRPSQL.schema then
+			local _q = "CREATE TABLE "
+			_q = _q .. YRPSQL.schema .. "." .. db_table .. " ( "
+			_q = _q .. "uniqueID		INTEGER				 PRIMARY KEY AUTO_INCREMENT"
+			_q = _q .. " )"
+			_q = _q .. ";"
+			local _result = YRP_SQL_QUERY(_q)
+		else
+			YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
+		end
 		return _result
 	end
 end
@@ -263,22 +266,27 @@ function YRP_SQL_SELECT( db_table, db_columns, db_where, db_extra)
 
 		return YRP_SQL_QUERY(_q)
 	elseif GetSQLMode() == 1 then
-		local _q = "SELECT "
-		_q = _q .. db_columns
-		_q = _q .. " FROM " .. YRPSQL.schema .. "." .. tostring( db_table)
+		if YRPSQL.schema then
+			local _q = "SELECT "
+			_q = _q .. db_columns
+			_q = _q .. " FROM " .. YRPSQL.schema .. "." .. tostring( db_table)
 
-		if db_where != nil then
-			_q = _q .. " WHERE "
-			_q = _q .. db_where
+			if db_where != nil then
+				_q = _q .. " WHERE "
+				_q = _q .. db_where
+			end
+
+			if db_extra then
+				_q = _q .. " " .. db_extra
+			end
+
+			_q = _q .. ";"
+
+			return YRP_SQL_QUERY(_q)
+		else
+			YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
+			return false
 		end
-
-		if db_extra then
-			_q = _q .. " " .. db_extra
-		end
-
-		_q = _q .. ";"
-
-		return YRP_SQL_QUERY(_q)
 	end
 end
 
@@ -316,18 +324,22 @@ function YRP_SQL_UPDATE( db_table, db_sets, db_where)
 
 		return ret
 	elseif GetSQLMode() == 1 then
-		local _q = "UPDATE "
-		_q = _q .. YRPSQL.schema .. "." .. db_table
-		_q = _q .. " SET " .. sets
+		if YRPSQL.schema then
+			local _q = "UPDATE "
+			_q = _q .. YRPSQL.schema .. "." .. db_table
+			_q = _q .. " SET " .. sets
 
-		if db_where != nil then
-			_q = _q .. " WHERE "
-			_q = _q .. db_where
+			if db_where != nil then
+				_q = _q .. " WHERE "
+				_q = _q .. db_where
+			end
+
+			_q = _q .. ";"
+
+			return YRP_SQL_QUERY(_q)
+		else
+			YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
 		end
-
-		_q = _q .. ";"
-
-		return YRP_SQL_QUERY(_q)
 	end
 end
 
@@ -458,8 +470,13 @@ function YRP_SQL_CHECK_IF_COLUMN_EXISTS( db_table, column_name)
 end
 
 function YRP_SQL_HAS_COLUMN( db_table, column_name)
-	local _r = YRP_SQL_QUERY( "SHOW COLUMNS FROM " .. YRPSQL.schema .. "." .. tostring( db_table) .. " LIKE '" .. column_name .. "';" )
-	return _r
+	if YRPSQL.schema then
+		local _r = YRP_SQL_QUERY( "SHOW COLUMNS FROM " .. YRPSQL.schema .. "." .. tostring( db_table) .. " LIKE '" .. column_name .. "';" )
+		return _r
+	else
+		YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
+		return false
+	end
 end
 
 function YRP_SQL_ADD_COLUMN( db_table, column_name, datatype)
@@ -474,11 +491,21 @@ function YRP_SQL_ADD_COLUMN( db_table, column_name, datatype)
 		end
 		local _r = nil
 		if !YRP_SQL_HAS_COLUMN( db_table, column_name) then
-			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring( db_table) .. " ADD " .. column_name .. " " .. datatype .. ";" -- FAST
-			_r = YRP_SQL_QUERY(_q)
+			if YRPSQL.schema then
+				local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring( db_table) .. " ADD " .. column_name .. " " .. datatype .. ";" -- FAST
+				_r = YRP_SQL_QUERY(_q)
+			else
+				YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
+				return false
+			end
 		else
-			local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring( db_table) .. " CHANGE " .. column_name .. " " .. column_name .. " " .. datatype .. ";" -- SLOW
-			_r = YRP_SQL_QUERY(_q)
+			if YRPSQL.schema then
+				local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring( db_table) .. " CHANGE " .. column_name .. " " .. column_name .. " " .. datatype .. ";" -- SLOW
+				_r = YRP_SQL_QUERY(_q)
+			else
+				YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
+				return false
+			end
 		end
 
 		return _r
@@ -498,12 +525,12 @@ if SERVER then
 		YRP.msg( "db", "Connect to MYSQL Database" )
 
 		-- MYSQL
-		MsgC( Color( 255, 0, 0), "If Module not found, download it via yourrp discord!\n" )
+		MsgC( YRPColGreen(), "If Module not found, download it via yourrp discord!\n" )
 		require( "mysqloo" )
 
 		if (mysqloo.VERSION != "9" or !mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
-			MsgC( Color( 255, 0, 0), "You are using an outdated mysqloo version\n" )
-			MsgC( Color( 255, 0, 0), "Download the latest mysqloo9 from here\n" )
+			MsgC( YRPColGreen(), "You are using an outdated mysqloo version\n" )
+			MsgC( YRPColGreen(), "Download the latest mysqloo9 from here\n" )
 			MsgC( Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases\n" )
 			YRPSQL.outdated = true
 		end

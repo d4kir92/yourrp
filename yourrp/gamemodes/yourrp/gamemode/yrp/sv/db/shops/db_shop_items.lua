@@ -512,7 +512,9 @@ net.Receive( "item_buy", function(len, ply)
 				if _spawned then
 					if ea(ent) then
 						ent:SetYRPInt( "item_uniqueID", _item.uniqueID)
-						ent:SetColor(StringToColor(_tab.color) )
+						if _tab.color then
+							ent:SetColor( StringToColor(_tab.color) )
+						end
 						if ent:IsVehicle() then
 							AddVehicle(ent, ply, _item)
 						end

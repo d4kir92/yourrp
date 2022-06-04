@@ -196,7 +196,7 @@ function YRPDrawThin(tab)
 		if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
 			local iconmat = YRP.GetDesignIcon(HUD_THIN[name].iconmat)
 			if iconmat then
-				surface.SetDrawColor( 255, 255, 255, 255)
+				surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 				surface.SetMaterial(iconmat)
 				surface.DrawTexturedRect(HUDMOTIONX(HUD_THIN[name].ix), HUDMOTIONY(HUD_THIN[name].iy), HUD_THIN[name].ih, HUD_THIN[name].ih)
 			end

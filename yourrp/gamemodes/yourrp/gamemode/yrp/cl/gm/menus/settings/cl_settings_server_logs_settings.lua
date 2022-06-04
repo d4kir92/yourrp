@@ -27,7 +27,7 @@ function BuildLogsSettings(parent, typ)
 							self:SetUnderlineFont( "Y_18_500" )
 						end
 						self:SetFontInternal( "Y_18_500" )
-						self:SetBGColor(Color( 0, 0, 0) )
+						self:SetBGColor(Color( 0, 0, 0, 255 ) )
 					end
 					rt:AppendText( v.string_text)
 				end

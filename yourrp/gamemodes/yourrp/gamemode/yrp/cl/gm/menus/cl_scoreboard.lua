@@ -2,6 +2,16 @@
 
 -- #scoreboard #Scoreboard #SCOREBOARD
 
+local sb_bg = Color( 0, 0, 0, 100 )
+local color_dark = color_dark1
+local color_lightblue = Color( 100, 100, 255 )
+local color_lightyellow = Color( 255, 255, 100 )
+local color_lightred = Color( 255, 100, 100, 255 )
+local color_lightgreen = Color( 100, 255, 100, 255 )
+
+local color1 = Color( 0, 0, 0, 255 )
+local color2 = Color( 255, 255, 255, 255 )
+
 surface.CreateFont( "Open Sans_72", {
 	font = "Open Sans",
 	extended = true,
@@ -240,7 +250,7 @@ function YRPSortScoreboard()
 	local c = 0
 	for i, entry in SortedPairsByMemberValue(plys, lply.yrp_sb_sortby, lply.yrp_sb_reverse) do
 		c = c + 1
-		timer.Simple( c * 0.02, function()
+		timer.Simple( c * 0.01, function()
 			if YRPScoreboard and YRPScoreboard.id == id and entry and entry.ply then
 				YRPScoreboardAddPlayer( entry.ply )
 			end
@@ -267,7 +277,7 @@ function YRPScoreboardAddPlayer(ply)
 			self:SetTall(self.lerph)
 
 			if self.open then
-				draw.RoundedBox(0, 1, 1, pw - 2, ph - 2, Color( 0, 0, 0, 100) )
+				draw.RoundedBox(0, 1, 1, pw - 2, ph - 2, sb_bg )
 			end
 		end
 
@@ -277,7 +287,6 @@ function YRPScoreboardAddPlayer(ply)
 		local plypnl = createD( "DPanel", plyframe, size, size, 0, 0 )
 		plypnl:Dock( TOP )
 		function plypnl:Paint(pw, ph)
-			--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 255, 200 ) )
 			if IsValid( ply ) then
 				if self.Mute then
 					if ply:IsBot() then
@@ -341,7 +350,7 @@ function YRPScoreboardAddPlayer(ply)
 								local size = math.ceil( h * 0.75 )
 								local br = (h - size) / 2
 								surface.SetMaterial( img )
-								surface.SetDrawColor( 255, 255, 255, 255)
+								surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 								surface.DrawTexturedRect( br, br, size, size)
 							end
 
@@ -350,8 +359,10 @@ function YRPScoreboardAddPlayer(ply)
 							end
 							local a = 255 - math.Clamp( CurTime() - ( s.LastTick or 0 ), 0, 3 ) * 255
 							if a > 0 then
-								draw.RoundedBox( 4, 0, 0, w, h, Color( 0, 0, 0, a * 0.75 ) )
-								draw.SimpleText( math.ceil( ply:GetVoiceVolumeScale() * 100 ) .. "%", "DermaDefaultBold", w / 2, h / 2, Color( 255, 255, 255, a ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+								color1.a = a * 0.75
+								color2.a = a
+								draw.RoundedBox( 4, 0, 0, w, h, color1 )
+								draw.SimpleText( math.ceil( ply:GetVoiceVolumeScale() * 100 ) .. "%", "DermaDefaultBold", w / 2, h / 2, color2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 							end
 						end
 					end
@@ -391,7 +402,7 @@ function YRPScoreboardAddPlayer(ply)
 										self.lang = YRP.GetDesignIcon( "lang_" .. ply:GetLanguageShort() )
 										local sh = math.ceil( size * 0.6 )
 										local sw = sh * 1.49
-										YRP.DrawIcon( self.lang, sw, sh, pw / 2 - sw / 2, ph / 2 - sh / 2, Color( 255, 255, 255, 255) )
+										YRP.DrawIcon( self.lang, sw, sh, pw / 2 - sw / 2, ph / 2 - sh / 2, Color( 255, 255, 255, 255 ) )
 									end
 								else
 									local px = pw / 2
@@ -402,16 +413,16 @@ function YRPScoreboardAddPlayer(ply)
 										local br = 4
 										local mat = YRP.GetDesignIcon( "signal3" )
 										if text >= 300 then
-											col = Color( 255, 0, 0, 255 )
+											col = YRPColRed()
 											mat = YRP.GetDesignIcon( "signal1" )
 										elseif text >= 150 then
-											col = Color( 255, 100, 100, 255 )
+											col = color_lightred
 											mat = YRP.GetDesignIcon( "signal1" )
 										elseif text >= 75 then
-											col = Color( 255, 255, 100, 255 )
+											col = color_lightyellow
 											mat = YRP.GetDesignIcon( "signal2" )
 										else
-											col = Color( 100, 255, 100, 255 )
+											col = color_lightgreen
 											mat = YRP.GetDesignIcon( "signal3" )
 										end
 										if mat then
@@ -449,7 +460,7 @@ function YRPScoreboardAddPlayer(ply)
 											self.lang = YRP.GetDesignIcon( "os_" .. ply:OS() )
 											local sh = math.ceil( size * 0.6 )
 											local sw = sh
-											YRP.DrawIcon( self.lang, sw, sh, pw / 2 - sw / 2, ph / 2 - sh / 2, Color( 255, 255, 255, 255) )
+											YRP.DrawIcon( self.lang, sw, sh, pw / 2 - sw / 2, ph / 2 - sh / 2, Color( 255, 255, 255, 255 ) )
 										end
 										if ply:GetYRPString( "gmod_branch", "unknown" ) != "64Bit" and !ply:IsBot() then
 											text = ply:GetYRPString( "gmod_branch", "unknown" )
@@ -481,17 +492,17 @@ function YRPScoreboardAddPlayer(ply)
 			local iconsize = math.ceil( ph * 0.666 )
 			local br = (ph - iconsize) / 2
 			local ts = math.Round(math.Clamp(ph * 0.5, 6, 100), 0)
-			--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 0, 200 ) )
+
 			if IsValid( ply ) and LocalPlayer():HasAccess() then
 				-- Money
 				if YRP.GetDesignIcon( "64_money-bill" ) then
 					surface.SetMaterial(YRP.GetDesignIcon( "64_money-bill" ) )
-					surface.SetDrawColor( 255, 255, 255, 255)
+					surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 					surface.DrawTexturedRect( br, br, iconsize, iconsize)
 				end
 
-				draw.SimpleText( ply:FormattedMoney(), "Open Sans_24", ph + br, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-				draw.SimpleText( ply:SteamName(), "Open Sans_24", xn, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				draw.SimpleText( ply:FormattedMoney(), "Open Sans_24", ph + br, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+				draw.SimpleText( ply:SteamName(), "Open Sans_24", xn, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 			end
 
 			local text = "GMOD: "
@@ -500,14 +511,14 @@ function YRPScoreboardAddPlayer(ply)
 			else
 				text = text .. "NO BETA"
 			end
-			draw.SimpleText( text, "Open Sans_24", pw - br, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+			draw.SimpleText( text, "Open Sans_24", pw - br, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
 		end
 
 		local adminbtns = createD( "DHorizontalScroller", plyopt2, size, size, 0, 0)
 		--adminbtns:Dock( RIGHT )
 		adminbtns:SetOverlap(-10)
 		function adminbtns:Paint(pw, ph)
-			--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 200 ) )
+			--
 		end
 
 		local btns = {}
@@ -547,9 +558,9 @@ function YRPScoreboardAddPlayer(ply)
 		end, function( btn)
 			if IsValid( ply ) then
 				if ply:GetYRPVector( "yrpoldpos" ) != Vector(0, 0, 0) then
-					btn.iconcolor = Color( 255, 255, 255)
+					btn.iconcolor = Color( 255, 255, 255, 255 )
 				else
-					btn.iconcolor = Color( 255, 0, 0)
+					btn.iconcolor = YRPColRed()
 				end
 			end
 		end}
@@ -568,9 +579,9 @@ function YRPScoreboardAddPlayer(ply)
 		end, function( btn)
 			if IsValid(ply) then
 				if ply:IsFlagSet(FL_FROZEN) then
-					btn.iconcolor = Color( 100, 100, 255)
+					btn.iconcolor = color_lightblue
 				else
-					btn.iconcolor = Color( 255, 255, 255)
+					btn.iconcolor = Color( 255, 255, 255, 255 )
 				end
 			end
 		end}
@@ -626,9 +637,9 @@ function YRPScoreboardAddPlayer(ply)
 		end, function( btn)
 			if IsValid(ply) then
 				if ply:GetYRPBool( "cloaked", false) then
-					btn.iconcolor = Color( 0, 255, 0)
+					btn.iconcolor = YRPColYellow()
 				else
-					btn.iconcolor = Color( 255, 255, 255)
+					btn.iconcolor = Color( 255, 255, 255, 255 )
 				end
 			end
 		end}
@@ -655,9 +666,8 @@ function YRPScoreboardAddPlayer(ply)
 					b:Dock( LEFT )
 					b:SetText( "" )
 					b.icon = btn[2]
-					b.iconcolor = Color( 255, 255, 255)
+					b.iconcolor = Color( 255, 255, 255, 255 )
 					function b:Paint(pw, ph)
-						--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 200 ) )
 						local iconsize = math.ceil( ph * 0.666 )
 						local br = (ph - iconsize) / 2
 
@@ -678,7 +688,7 @@ function YRPScoreboardAddPlayer(ply)
 								self.tt:ShowCloseButton(false)
 								self.tt:SetDraggable(false)
 								function self.tt:Paint(pw, ph)
-									draw.SimpleText(YRP.lang_string( btn[1]), "Y_16_500", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+									draw.SimpleText(YRP.lang_string( btn[1]), "Y_16_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 									if !YRPIsScoreboardVisible() then
 										self:Remove()
@@ -707,7 +717,7 @@ function YRPScoreboardAddPlayer(ply)
 						
 						if YRP.GetDesignIcon( btn[2]) then
 							surface.SetMaterial(YRP.GetDesignIcon( btn[2]) )
-							surface.SetDrawColor( color)
+							surface.SetDrawColor( color )
 							surface.DrawTexturedRect( br, br, iconsize, iconsize)
 						end
 
@@ -745,7 +755,7 @@ function YRPOpenSBS()
 			function sortbtn:Paint( pw, ph )
 				local size = 16 + 4
 				local x = pw / 2 
-				--draw.RoundedBox( 10, 0, 0, pw, ph, Color( 0, 0, 255, 255 ))
+
 				local text = YRP.lang_string( v.tran )
 				if v.name == "level" and string.len( text ) > 3 then
 					text = string.sub( text, 1, 3 )
@@ -763,7 +773,7 @@ function YRPOpenSBS()
 					x = pw / 2 - size / 2
 					YRPDrawOrder(self, x, ph / 2, text, "Open Sans_28", v.name )
 				end
-				draw.SimpleText(text, "Open Sans_28", x, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(text, "Open Sans_28", x, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			function sortbtn:DoClick()
 				if v.tran != "" then
@@ -778,7 +788,7 @@ function YRPOpenSBS()
 		end
 	end
 
-	timer.Simple( 0.1, function()
+	timer.Simple( 0.05, function()
 		if pa( YRPScoreboard ) then
 			local sw = 0
 			for i, v in pairs( YRPScoreboard.Header:GetChildren() ) do
@@ -822,7 +832,7 @@ function YRPDrawOrder(self, x, y, text, font, art)
 			}
 		end
 
-		surface.SetDrawColor( 255, 255, 255, 255 )
+		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 		draw.NoTexture()
 		surface.DrawPoly( triangle )
 	end
@@ -862,7 +872,7 @@ function YRPInitScoreboard()
 			end
 			if !self.logo:IsVisible() then
 				surface.SetMaterial(yrp_logo)
-				surface.SetDrawColor( 255, 255, 255, 255 )
+				surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 				surface.DrawTexturedRect( 0, 0, 128, 128 )
 			end
 		end
@@ -874,7 +884,7 @@ function YRPInitScoreboard()
 
 		-- MOUSE HELP
 		if !vgui.CursorVisible() then
-			draw.SimpleText(YRP.lang_string( "LID_rightclicktoshowmouse" ), "Open Sans_24", pw / 2, 34, Color( 255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_rightclicktoshowmouse" ), "Open Sans_24", pw / 2, 34, color_lightyellow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		-- BOTTOM LEFT
@@ -883,37 +893,33 @@ function YRPInitScoreboard()
 		if GAMEMODE.dedicated then
 			server = " [Dedicated]"
 		end
-		draw.SimpleText( "v" .. YRPVersion() .. " ( " .. GetGlobalYRPString( "YRP_VERSIONART", "X" ) .. " )" .. string.upper(server), "Open Sans_16", pw - br, br, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+		draw.SimpleText( "v" .. YRPVersion() .. " ( " .. GetGlobalYRPString( "YRP_VERSIONART", "X" ) .. " )" .. string.upper(server), "Open Sans_16", pw - br, br, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 	end
 
 	YRPScoreboard.BotBar = createD( "DPanel", YRPScoreboard, 128, 32, 0, 0 )
 	YRPScoreboard.BotBar:Dock( BOTTOM )
 	function YRPScoreboard.BotBar:Paint( pw, ph )
-		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 100, 100, 255 ) )
 		-- Table Footer
-		draw.RoundedBox( 5, 0, 0, YRPScoreboard.w, hr, Color( 255, 255, 255, 255) )
+		draw.RoundedBox( 5, 0, 0, YRPScoreboard.w, hr, Color( 255, 255, 255, 255 ) )
 
-		draw.SimpleText(string.upper(YRP.lang_string( "LID_map" ) ) .. ": " .. GetNiceMapName(), "Open Sans_28", 0, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers() .. " (" .. string.upper(YRP.lang_string( "LID_players" ) ) .. ")", "Open Sans_28", pw, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(string.upper(YRP.lang_string( "LID_map" ) ) .. ": " .. GetNiceMapName(), "Open Sans_28", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers() .. " (" .. string.upper(YRP.lang_string( "LID_players" ) ) .. ")", "Open Sans_28", pw, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
 	YRPScoreboard.TopBar = createD( "DPanel", YRPScoreboard, 128, 128, 0, 0 )
 	YRPScoreboard.TopBar:Dock( TOP )
 	function YRPScoreboard.TopBar:Paint( pw, ph )
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
-
 		-- NAME
 		local name = GetGlobalYRPString( "text_server_name", "" )
 		if strEmpty(name) then
 			name = YRPGetHostName()
 		end
-		draw.SimpleText(name, "Open Sans_72", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(name, "Open Sans_72", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	YRPScoreboard.Header = createD( "DPanel", YRPScoreboard, 32, 32, 0, 0 )
 	YRPScoreboard.Header:Dock( TOP )
 	function YRPScoreboard.Header:Paint( pw, ph )
-		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 100, 255 ) )
 		draw.RoundedBox( 5, 0, 32 - hr, pw, hr, Color( 255, 255, 255, 255 ) )
 	end
 
@@ -921,7 +927,7 @@ function YRPInitScoreboard()
 	YRPScoreboard.list:Dock(FILL)
 	YRPScoreboard.list:SetPadding(0)
 	function YRPScoreboard.list:Paint(pw, ph)
-		--draw.RoundedBox(5, 0, 0, pw, ph, Color( 255, 100, 100, 255) )
+		--
 	end
 	local sbar = YRPScoreboard.list.VBar
 	if IsValid( sbar ) then
@@ -930,10 +936,10 @@ function YRPInitScoreboard()
 			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 		end
 		function sbar.btnUp:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+			draw.RoundedBox(0, 0, 0, w, h, color_dark )
 		end
 		function sbar.btnDown:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+			draw.RoundedBox(0, 0, 0, w, h, color_dark )
 		end
 		function sbar.btnGrip:Paint(w, h)
 			local lply = LocalPlayer()

@@ -10,7 +10,7 @@ function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full
 
 		draw.RoundedBox(0, 0, 0, (mp:GetYRPInt(item, -1) / mp:GetYRPInt(item .. "Max", -1) ) * YRP.ctr(540) , ph, Color( 0, 0, 255, 200) )
 
-		draw.SimpleTextOutlined(mp:GetYRPInt(item, -1) .. "/" .. mp:GetYRPInt(item .. "Max", -1) .. " " .. name, "Y_24_500", YRP.ctr(10), ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.SimpleTextOutlined(mp:GetYRPInt(item, -1) .. "/" .. mp:GetYRPInt(item .. "Max", -1) .. " " .. name, "Y_24_500", YRP.ctr(10), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 	local tmpBut = createD( "DButton", tmp, YRP.ctr(220), h, w - YRP.ctr(220), 0)
 	tmpBut:SetText( "" )
@@ -19,14 +19,14 @@ function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full
 		if mp:GetYRPInt(item, 0) < mp:GetYRPInt(item .. "Max", 0) then
 			if self:IsHovered() then
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 255, 255, 0, 200) )
-				draw.SimpleTextOutlined(formatMoney( cost, ply), "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(formatMoney( cost, ply), "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			else
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 255, 255, 255, 200) )
-				draw.SimpleTextOutlined(_up, "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(_up, "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			end
 		else
 			draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 0, 255, 0, 200) )
-			draw.SimpleTextOutlined(_full, "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+			draw.SimpleTextOutlined(_full, "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 		end
 	end
 	function tmpBut:DoClick()
@@ -43,7 +43,7 @@ function tempInfo(mp, parent, w, h, x, y)
 
 		draw.RoundedBox(0, 0, 0, (mp:GetYRPFloat( "temp", 0.0) / mp:GetYRPFloat( "tempMax", 0.0) ) * YRP.ctr(540) , ph, Color( 0, 0, 255, 200) )
 
-		draw.SimpleTextOutlined(math.Round(tonumber(mp:GetYRPFloat( "temp", 0.0) ),2) .. " °C", "Y_24_500", YRP.ctr(10), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.SimpleTextOutlined(math.Round(tonumber(mp:GetYRPFloat( "temp", 0.0) ),2) .. " °C", "Y_24_500", YRP.ctr(10), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 end
 
@@ -62,7 +62,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 		end
 		function upgradeframe:Paint(pw, ph)
 			draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(40, 40, 40, 200) )
-			draw.SimpleTextOutlined(YRP.lang_string( "LID_money_printer" ) .. "[" .. mp:EntIndex() .. "]", "Y_24_500", pw/2, YRP.ctr(30), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+			draw.SimpleTextOutlined(YRP.lang_string( "LID_money_printer" ) .. "[" .. mp:EntIndex() .. "]", "Y_24_500", pw/2, YRP.ctr(30), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 		end
 
 		--CPU
@@ -96,7 +96,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 
 				draw.RoundedBox(0, 0, 0, (mp:GetYRPInt( "money", -1) / mp:GetYRPInt( "moneyMax", -1) ) * YRP.ctr(360) , ph, Color( 0, 0, 255, 200) )
 
-				draw.SimpleTextOutlined(formatMoney(mp:GetYRPInt( "money", -1), ply) .. "/" .. formatMoney(mp:GetYRPInt( "moneyMax" , -1), ply), "Y_24_500", YRP.ctr(10), ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(formatMoney(mp:GetYRPInt( "money", -1), ply) .. "/" .. formatMoney(mp:GetYRPInt( "moneyMax" , -1), ply), "Y_24_500", YRP.ctr(10), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			end
 		end
 
@@ -106,10 +106,10 @@ net.Receive( "getMoneyPrintMenu", function(len)
 			if !GetGlobalYRPBool( "bool_money_printer_spawn_money", false) then
 				if self:IsHovered() then
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 255, 255, 0, 200) )
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_gather" ), "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_gather" ), "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 				else
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 255, 255, 255, 200) )
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_gather" ), "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_gather" ), "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 				end
 			end
 		end
@@ -131,14 +131,14 @@ net.Receive( "getMoneyPrintMenu", function(len)
 			end
 			if self:IsHovered() then
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 255, 255, 0, 200) )
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_toggle" ), "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(YRP.lang_string( "LID_toggle" ), "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			else
 				if mp:GetYRPBool( "working" ) then
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 0, 255, 0, 200) )
 				else
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 255, 0, 0, 200) )
 				end
-				draw.SimpleTextOutlined(working, "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+				draw.SimpleTextOutlined(working, "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			end
 		end
 		function workingB:DoClick()
@@ -157,7 +157,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 255, 255, 255, 200) )
 			end
 
-			draw.SimpleTextOutlined( "X", "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+			draw.SimpleTextOutlined( "X", "Y_24_500", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 		end
 		function closeMenu:DoClick()
 			upgradeframe:Close()

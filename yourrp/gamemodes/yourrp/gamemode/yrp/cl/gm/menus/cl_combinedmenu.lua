@@ -37,7 +37,7 @@ function CreateRulesContent(PARENT)
 
 	local page = createD( "DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20) )
 	function page:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string( "LID_rules" ), "Y_22_500", 0, YRP.ctr(50), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.SimpleText(YRP.lang_string( "LID_rules" ), "Y_22_500", 0, YRP.ctr(50), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 	end
 
 	page.serverrules = createD( "RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(70), 0, YRP.ctr(70) )
@@ -58,7 +58,7 @@ function CreateDiscordContent(PARENT)
 
 	local page = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function page:Paint(pw, ph)
-		--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255) )
+		--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255 ) )
 	end
 
 	local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. PARENT:GetWide() - YRP.ctr(2 * 20) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
@@ -71,7 +71,7 @@ function CreateDiscordContent(PARENT)
 		if YRP.GetDesignIcon( "launch" ) ~= nil then
 			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
-		draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), 1, 1)
+		draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
 	end
 
 	function openLink:DoClick()
@@ -113,7 +113,7 @@ function CreateCollectionContent(PARENT)
 		local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
 		function WorkshopPage:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
+			surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 		end
 
 		WorkshopPage:OpenURL(link)
@@ -137,7 +137,7 @@ function CreateTwitchContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_twitch", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -158,7 +158,7 @@ function CreateYoutubeContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_youtube", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -177,7 +177,7 @@ function CreateTwitterContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_twitter", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -198,7 +198,7 @@ function CreateSteamGroupContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_steamgroup", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -219,7 +219,7 @@ function CreateFacebookContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_facebook", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -240,7 +240,7 @@ function CreateInstagramContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_instagram", "" )
 	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255) )
+		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -473,10 +473,10 @@ function OpenCombinedMenu()
 			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ), 0)
 		end
 		function sbar.btnUp:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+			draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 		end
 		function sbar.btnDown:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+			draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 		end
 		function sbar.btnGrip:Paint(w, h)
 			local lply = LocalPlayer()
@@ -523,7 +523,7 @@ function OpenCombinedMenu()
 					surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
 				end
 			end
-			surface.SetDrawColor( 255, 255, 255, 255)
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 		end
 		
@@ -595,7 +595,7 @@ function OpenCombinedMenu()
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
 
 					if YRP.GetDesignIcon( v.icon) ~= nil then
-						surface.SetDrawColor( 255, 255, 255, 255)
+						surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 						surface.SetMaterial(YRP.GetDesignIcon( v.icon) )
 						surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 					end
@@ -627,7 +627,7 @@ function OpenCombinedMenu()
 				local site = cm.sites[v.name]
 				function site:Paint(pw, ph)
 					local hr = YRP.ctr(2)
-					draw.RoundedBox(0, br, ph / 2 - hr / 2, pw - br * 2, hr, Color( 255, 255, 255, 255) )
+					draw.RoundedBox(0, br, ph / 2 - hr / 2, pw - br * 2, hr, Color( 255, 255, 255, 255 ) )
 				end
 
 				cm.menu:AddItem(site)

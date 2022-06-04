@@ -40,14 +40,14 @@ if CLIENT then
 			elseif table.HasValue(hcolors, art) then
 				if element == "AB" then
 					local abcolors = {}
-					abcolors["none"] = Color( 0, 0, 0, 0)
+					abcolors["none"] = Color( 255, 255, 255, 0)
 					abcolors["mana"] = Color( 100, 100, 255, 255)
 					abcolors["rage"] = Color( 255, 0, 0, 255)
 					abcolors["energy"] = Color( 255, 255, 0, 255)
 					abcolors["force"] = Color( 100, 100, 255, 255)
 					return abcolors[self:GetYRPString( "GetAbilityType", "none" )]
 				else
-					local hcolor = YRPHUD( "color_HUD_" .. element .. "_" .. art, Color( 255, 0, 0 ) ) -- self:GetYRPString( "color_HUD_" .. element .. "_" .. art, "255, 0, 0" )
+					local hcolor = YRPHUD( "color_HUD_" .. element .. "_" .. art, YRPColGreen() ) -- self:GetYRPString( "color_HUD_" .. element .. "_" .. art, "255, 0, 0" )
 					return hcolor
 				end
 			elseif table.HasValue(hints, art) then

@@ -15,7 +15,11 @@ function CloseLawsMenu()
 	end
 end
 
-function CreateLawsContent(PARENT)
+function CreateLawsContent( PARENT )
+	if !pa(PARENT) then
+		return
+	end
+
 	local lply = LocalPlayer()
 	net.Receive( "yrp_get_laws", function(len)
 		local lawtab = net.ReadTable()
@@ -23,6 +27,10 @@ function CreateLawsContent(PARENT)
 		local laws = lawtab.string_laws
 		local lockdowntext = lawtab.string_lockdowntext
 		local lockdown = tobool(lawtab.bool_lockdown)
+
+		if !pa(PARENT) then
+			return
+		end
 
 		if !lply:GetYRPBool( "bool_" .. "ismayor", false) then
 			if PARENT:IsValid() then
@@ -96,12 +104,12 @@ function CreateLawsContent(PARENT)
 			l_alarms:EnableVerticalScrollbar()
 			l_alarms:SetSpacing(4)
 			function l_alarms:Paint(pw, ph)
-				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0) )
+				--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
 			end
 			for i, e in pairs( alarms) do
 				local line = createD( "DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 				function line:Paint(pw, ph)
-					--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0) )
+					--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
 				end
 
 				local a = createD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -126,13 +134,13 @@ function CreateLawsContent(PARENT)
 				l_buildings:EnableVerticalScrollbar()
 				l_buildings:SetSpacing(4)
 				function l_buildings:Paint(pw, ph)
-					--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0) )
+					--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
 				end
 
 				for i, e in pairs( buildings) do
 					local line = createD( "DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 					function line:Paint(pw, ph)
-						--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0) )
+						--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
 					end
 
 					local a = createD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -171,5 +179,5 @@ function OpenLawsMenu()
 
 	local content = _la.window:GetContent()
 
-	CreateLawsContent( content)
+	CreateLawsContent( content )
 end

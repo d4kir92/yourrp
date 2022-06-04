@@ -48,8 +48,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 				_cbg[20] = _tbl.bg19 or 0
 
 				function _yrp_appearance.left:Paint(pw, ph)
-					--surfacePanel(self, pw, ph)
-					--draw.SimpleTextOutlined(YRP.lang_string( "LID_appearance" ), "Y_24_500", pw/2, YRP.ctr(50), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255) )
+					--
 				end
 
 				_appe.r.play = createD( "DButton", _yrp_appearance.left, YRP.ctr(100), YRP.ctr(100), ScW() / 4, ScrH() - YRP.ctr(200) )
@@ -62,13 +61,13 @@ net.Receive( "get_menu_bodygroups", function(len)
 					tab.text.text = ""
 					DrawButton(self, tab)
 					local symbol = "pause"
-					local color = Color( 255, 0, 0)
+					local color = YRPColGreen()
 					if !self:IsHovered() and play then
 						symbol = "play"
-						color = Color( 0, 255, 0)
+						color = YRPColGreen()
 					elseif self:IsHovered() and !play then
 						symbol = "play"
-						color = Color( 0, 255, 0)
+						color = YRPColGreen()
 					end
 					YRP.DrawIcon(YRP.GetDesignIcon(symbol), pw, ph, 0, 0, color)
 				end
@@ -108,8 +107,8 @@ net.Receive( "get_menu_bodygroups", function(len)
 				_tmpPM.max = #_pms
 				_tmpPM.name = YRP.lang_string( "LID_appearance" )
 				function _tmpPM:Paint(pw, ph)
-					surfacePanel(self, pw, ph)
-					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpPM.cur .. "/" .. _tmpPM.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255) )
+					hook.Run( "YPanelPaint", self, pw, ph )
+					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpPM.cur .. "/" .. _tmpPM.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 				end
 
 				local _tmpPMUp = createD( "DButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
@@ -150,7 +149,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					end
 				end
 
-				--[[ Skin changing ]]--
+				-- Skin changing
 				if _appe.r.pm.Entity then
 					_tbl.bgs = _appe.r.pm.Entity:GetBodyGroups()
 				end
@@ -163,8 +162,8 @@ net.Receive( "get_menu_bodygroups", function(len)
 				end
 				_tmpSkin.name = YRP.lang_string( "LID_skin" )
 				function _tmpSkin:Paint(pw, ph)
-					surfacePanel(self, pw, ph)
-					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpSkin.cur + 1 .. "/" .. _tmpSkin.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255) )
+					hook.Run( "YPanelPaint", self, pw, ph )
+					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpSkin.cur + 1 .. "/" .. _tmpSkin.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 				end
 
 				local _tmpSkinUp = createD( "DButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
@@ -220,8 +219,8 @@ net.Receive( "get_menu_bodygroups", function(len)
 							_tmpBg.cur = _cbg[k]
 							_tmpBg.id = v.id
 							function _tmpBg:Paint(pw, ph)
-								surfacePanel(self, pw, ph)
-								draw.SimpleTextOutlined(self.name .. " ( " .. _tmpBg.cur + 1 .. "/" .. _tmpBg.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255) )
+								hook.Run( "YPanelPaint", self, pw, ph )
+								draw.SimpleTextOutlined(self.name .. " ( " .. _tmpBg.cur + 1 .. "/" .. _tmpBg.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 							end
 							_tmpBgUp = createD( "DButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
 							_tmpBgUp:SetText( "" )
@@ -325,8 +324,7 @@ function open_appearance()
 
 	_yrp_appearance.left = createD( "DPanel", _yrp_appearance.window, ScW(), ScrH() - _yrp_appearance.window:GetHeaderHeight(), 0, _yrp_appearance.window:GetHeaderHeight() )
 	function _yrp_appearance.left:Paint(pw, ph)
-		--surfacePanel(self, pw, ph)
-		--paintBr(pw, ph, Color( 255, 0, 0, 255) )
+		--
 	end
 
 	net.Start( "get_menu_bodygroups" )

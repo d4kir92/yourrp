@@ -143,7 +143,7 @@ function HUDSimpleBAR(tab)
 
 			if lply:HudValue(tab.element, "ICON" ) and tab.icon and YRP.GetDesignIcon(tab.icon) then
 				local ico = tab.icon
-				YRP.DrawIcon(YRP.GetDesignIcon(ico), Simple[tab.element]["icon"].w, Simple[tab.element]["icon"].h, Simple[tab.element]["icon"].x, Simple[tab.element]["icon"].y, Color( 255, 255, 255) )
+				YRP.DrawIcon(YRP.GetDesignIcon(ico), Simple[tab.element]["icon"].w, Simple[tab.element]["icon"].h, Simple[tab.element]["icon"].x, Simple[tab.element]["icon"].y, Color( 255, 255, 255, 255 ) )
 			end
 
 			Simple[tab.element]["text"].text = ""
@@ -269,7 +269,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["needle"].h = h / 4
 			Simple["COM"]["needle"].fx = x + w / 2
 			Simple["COM"]["needle"].fy = y
-			Simple["COM"]["needle"].color = Color( 255, 255, 255)
+			Simple["COM"]["needle"].color = Color( 255, 255, 255, 255 )
 
 			local fontsize = lply:HudValue( "COM", "TS" )
 			if fontsize <= 0 then
@@ -486,7 +486,7 @@ local fpsavg = fps
 local fpstavg = 0
 local fpscou = 0
 local fps_delay = 0
-local fpscolor = Color( 0, 0, 0)
+local fpscolor = Color( 0, 0, 0, 255 )
 
 local ping = 0
 local pingmin = 9999
@@ -495,7 +495,7 @@ local pingavg = ping
 local pingtavg = 0
 local pingcou = 0
 local ping_delay = 0
-local pingcolor = Color( 0, 0, 0)
+local pingcolor = Color( 0, 0, 0, 255 )
 
 local icons = {}
 icons["RA"] = "64_radiation"
@@ -896,11 +896,11 @@ function HUDSimple()
 				end
 
 				if fps < 30 then
-					fpscolor = Color( 255, 0, 0)
+					fpscolor = YRPColGreen()
 				elseif fps < 60 then
 					fpscolor = Color( 255, 255, 0)
 				else
-					fpscolor = Color( 0, 255, 0)
+					fpscolor = YRPColGreen()
 				end
 			end
 			PE.text = YRP.lang_string( "LID_fps" ) .. ": " .. fps
@@ -930,11 +930,11 @@ function HUDSimple()
 				end
 
 				if ping > 100 then
-					pingcolor = Color( 255, 0, 0)
+					pingcolor = YRPColGreen()
 				elseif ping > 50 then
 					pingcolor = Color( 255, 255, 0)
 				else
-					pingcolor = Color( 0, 255, 0)
+					pingcolor = YRPColGreen()
 				end
 			end
 			NE = {}

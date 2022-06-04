@@ -187,7 +187,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					hook.Run( "YButtonPaint", self, pw, ph)
 
 					if YRP.GetDesignIcon( "64_angle-up" ) then
-						surface.SetDrawColor( 255, 255, 255, 255)
+						surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 						surface.SetMaterial(YRP.GetDesignIcon( "64_angle-up" ) )
 						surface.DrawTexturedRect(0, 0, pw, ph)
 					end
@@ -207,7 +207,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					hook.Run( "YButtonPaint", self, pw, ph)
 
 					if YRP.GetDesignIcon( "64_angle-down" ) then
-						surface.SetDrawColor( 255, 255, 255, 255)
+						surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 						surface.SetMaterial(YRP.GetDesignIcon( "64_angle-down" ) )
 						surface.DrawTexturedRect(0, 0, pw, ph)
 					end
@@ -383,7 +383,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		function rs.rlist:Paint(pw, ph)
 			if rs.top.headername != nil then
 				local tab = {}
-				tab.color = Color( 255, 255, 255)
+				tab.color = Color( 255, 255, 255, 255 )
 				DrawPanel(self, tab)
 			end
 		end
@@ -465,7 +465,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 				local content = win:GetContent()
 				function content:Paint(pw, ph)
-					draw.SimpleText( "Recursive" .. " - " .. "If checked, removes everything behind!", "DermaDefault",  YRP.ctr(60), YRP.ctr(50 + 20 + 25), Color( 255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText( "Recursive" .. " - " .. "If checked, removes everything behind!", "DermaDefault",  YRP.ctr(60), YRP.ctr(50 + 20 + 25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				local recursive = createD( "DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), 0, YRP.ctr(50 + 20) )
@@ -836,10 +836,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 					end
 					function sbar.btnUp:Paint(w, h)
-						draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+						draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 					end
 					function sbar.btnDown:Paint(w, h)
-						draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+						draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 					end
 					function sbar.btnGrip:Paint(w, h)
 						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -875,7 +875,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						winswep:MakePopup()
 						function winswep:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255) )
-							draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 						end
 
 						local allsweps = GetSWEPsList()
@@ -919,7 +919,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 										d_swep.model = createD( "DPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
 										function d_swep.model:Paint(pw, ph)
 											draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
-											draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+											draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 										end
 									end
 
@@ -971,8 +971,8 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					local ammoheader = createD( "YLabel", ammobg, YRP.ctr(800), YRP.ctr(50), 0, 0)
 					ammoheader:SetText( "LID_ammo" )
 					function ammoheader:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
-						draw.SimpleText(YRP.lang_string(self:GetText() ), "Y_18_700", pw / 2, ph / 2, Color( 0, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+						draw.SimpleText(YRP.lang_string(self:GetText() ), "Y_18_700", pw / 2, ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 
 					ammolist = createD( "DPanelList", ammobg, YRP.ctr(800-23-20), YRP.ctr(800), 0, YRP.ctr(50) )
@@ -983,10 +983,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 					end
 					function sbar.btnUp:Paint(w, h)
-						draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+						draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 					end
 					function sbar.btnDown:Paint(w, h)
-						draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+						draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 					end
 					function sbar.btnGrip:Paint(w, h)
 						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -1021,7 +1021,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						ahe:SetText( v)
 						function ahe:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color( 100, 100, 255) )
-							draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color( 0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 						end
 
 						local ava = createD( "DNumberWang", abg, YRP.ctr(400), YRP.ctr(50), YRP.ctr(400), 0)
@@ -1098,7 +1098,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					hook.Run( "YButtonPaint", self, pw, ph)
 
 					if YRP.GetDesignIcon( "64_angle-up" ) then
-						surface.SetDrawColor( 255, 255, 255, 255)
+						surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 						surface.SetMaterial(YRP.GetDesignIcon( "64_angle-up" ) )
 						surface.DrawTexturedRect(0, 0, pw, ph)
 					end
@@ -1118,7 +1118,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					hook.Run( "YButtonPaint", self, pw, ph)
 
 					if YRP.GetDesignIcon( "64_angle-down" ) then
-						surface.SetDrawColor( 255, 255, 255, 255)
+						surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 						surface.SetMaterial(YRP.GetDesignIcon( "64_angle-down" ) )
 						surface.DrawTexturedRect(0, 0, pw, ph)
 					end
@@ -1212,10 +1212,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 			end
 			function sbar.btnUp:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 			end
 			function sbar.btnDown:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 			end
 			function sbar.btnGrip:Paint(w, h)
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -1532,10 +1532,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 			end
 			function sbar.btnUp:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 			end
 			function sbar.btnDown:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 			end
 			function sbar.btnGrip:Paint(w, h)
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -1626,8 +1626,8 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 										local line = createD( "DPanel", pmwin.list, YRP.ctr(200), YRP.ctr(64), 0, 0)
 										line.pm = pm
 										function line:Paint(pw, ph)
-											draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color( 255, 255, 255) )
-											draw.SimpleText(self.pm, "DermaDefault", ph + YRP.ctr(10), ph / 2, Color( 0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+											draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+											draw.SimpleText(self.pm, "DermaDefault", ph + YRP.ctr(10), ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 										end
 
 										line.dmp = createD( "DModelPanel", line, YRP.ctr(64), YRP.ctr(64), 0, 0)
@@ -1643,12 +1643,12 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					function pmwin:Paint(pw, ph)
 						hook.Run( "YFramePaint", self, pw, ph)
 
-						draw.SimpleText(YRP.lang_string( "LID_name" ) .. ": ", "DermaDefault", YRP.ctr(20 + 300 + 20 + 300 + 20 + 120), YRP.ctr(150), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRP.lang_string( "LID_name" ) .. ": ", "DermaDefault", YRP.ctr(20 + 300 + 20 + 300 + 20 + 120), YRP.ctr(150), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-						draw.SimpleText(YRP.lang_string( "LID_minimumsize" ) .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(300), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-						draw.SimpleText(YRP.lang_string( "LID_maximumsize" ) .. ":", "DermaDefault", YRP.ctr(40 + 200 + 20), YRP.ctr(300), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText(YRP.lang_string( "LID_minimumsize" ) .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText(YRP.lang_string( "LID_maximumsize" ) .. ":", "DermaDefault", YRP.ctr(40 + 200 + 20), YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
-						draw.SimpleText(YRP.lang_string( "LID_models" ) .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(410), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText(YRP.lang_string( "LID_models" ) .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(410), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 					end
 
 					pmwin.selpm = createD( "YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20) )
@@ -1713,7 +1713,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				win.dpl = createD( "DPanelList", content, content:GetWide() - YRP.ctr(20 * 2), content:GetTall() - YRP.ctr(20 + 50 + 20 + 20), YRP.ctr(20), YRP.ctr(20 + 50 + 20) )
 				win.dpl:EnableVerticalScrollbar(true)
 				function win.dpl:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
+					draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 				end
 
 				win.delay = 0.02
@@ -1745,8 +1745,8 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 									end
 									function line:Paint(pw, ph)
 										draw.RoundedBox(0, 0, 0, pw, ph, Color(140, 140, 140) )
-										draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-										draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3 * 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3 * 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									end
 
 
@@ -1767,7 +1767,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 									end
 									function line.remove:Paint(pw, ph)
 										draw.RoundedBox(16, 0, 0, pw, ph, Color( 255, 140, 140) )
-										draw.SimpleText(YRP.lang_string( "LID_remove" ) .. " ( " .. pm.uses .. " " .. "uses" .. " )", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										draw.SimpleText(YRP.lang_string( "LID_remove" ) .. " ( " .. pm.uses .. " " .. "uses" .. " )", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 									end
 
 
@@ -1779,7 +1779,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 										line.model = createD( "DPanel", line, line:GetTall(), line:GetTall(), 0, 0)
 										function line.model:Paint(pw, ph)
 											draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
-											draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+											draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 										end
 									end
 
@@ -1875,7 +1875,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			if GetGlobalYRPBool( "bool_weapon_system", true ) then
 				local info = createD( "DPanel", equipment, 100, 32, 0, 0 )
 				function info:Paint( pw, ph )
-					draw.SimpleText( "First Go to F8 -> " .. YRP.lang_string( "LID_administration" ) .. " -> " .. YRP.lang_string( "LID_weaponsystem" ), "Y_18_700", pw / 2, ph / 2, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					draw.SimpleText( "First Go to F8 -> " .. YRP.lang_string( "LID_administration" ) .. " -> " .. YRP.lang_string( "LID_weaponsystem" ), "Y_18_700", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 				end
 				equipment:AddItem(info)
 			end
@@ -1923,9 +1923,9 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						net.SendToServer()
 						role.string_sweps = table.concat( lply.yrpseltab, "," )
 					elseif lply.yrpseltab and lply.yrpseltab[1] then
-						MsgC( Color( 255, 0, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+						MsgC( YRPColGreen(), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 					else
-						MsgC( Color( 255, 0, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+						MsgC( YRPColGreen(), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 					end
 				end
 
@@ -2008,9 +2008,9 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 							net.SendToServer()
 							role.string_sweps_onspawn = table.concat( lply.yrpseltab, "," )
 						elseif lply.yrpseltab and lply.yrpseltab[1] then
-							MsgC( Color( 255, 0, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+							MsgC( YRPColGreen(), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 						else
-							MsgC( Color( 255, 0, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+							MsgC( YRPColGreen(), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 						end
 					end
 
@@ -2061,8 +2061,8 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local ammoheader = createD( "YLabel", ammobg, YRP.ctr(800), YRP.ctr(50), 0, 0)
 			ammoheader:SetText( "LID_ammo" )
 			function ammoheader:Paint(pw, ph)
-				draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
-				draw.SimpleText(YRP.lang_string(self:GetText() ), "Y_18_700", pw / 2, ph / 2, Color( 0, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+				draw.SimpleText(YRP.lang_string(self:GetText() ), "Y_18_700", pw / 2, ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
 			ammolist = createD( "DPanelList", ammobg, YRP.ctr(800-23-20), YRP.ctr(300), 0, YRP.ctr(50) )
@@ -2073,10 +2073,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 			end
 			function sbar.btnUp:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 			end
 			function sbar.btnDown:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 			end
 			function sbar.btnGrip:Paint(w, h)
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -2111,7 +2111,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				ahe:SetText( v)
 				function ahe:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color( 100, 100, 255) )
-					draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color( 0, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				local ava = createD( "DNumberWang", abg, YRP.ctr(400), YRP.ctr(50), YRP.ctr(400), 0)
@@ -2148,7 +2148,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				winlicenses:MakePopup()
 				function winlicenses:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255) )
-					draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
 				net.Receive( "get_all_licenses", function(l)
@@ -2198,7 +2198,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 										d_licenses.model = createD( "DPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
 										function d_licenses.model:Paint(pw, ph)
 											draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
-											draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+											draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 										end
 									end
 
@@ -2499,7 +2499,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				winndswep:MakePopup()
 				function winndswep:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255) )
-					draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
 				local allndsweps = GetSWEPsList()
@@ -2543,7 +2543,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 								d_ndswep.model = createD( "DPanel", d_ndswep, d_ndswep:GetTall(), d_ndswep:GetTall(), 0, 0)
 								function d_ndswep.model:Paint(pw, ph)
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
-									draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+									draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								end
 							end
 
@@ -2603,7 +2603,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				winspecializations:MakePopup()
 				function winspecializations:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255) )
-					draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
 				net.Receive( "get_all_specializations", function(l)
@@ -2653,7 +2653,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 										d_specializations.model = createD( "DPanel", d_specializations, d_specializations:GetTall(), d_specializations:GetTall(), 0, 0)
 										function d_specializations.model:Paint(pw, ph)
 											draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
-											draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+											draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 										end
 									end
 
@@ -2748,7 +2748,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			health.dnw[3].max = GetMaxInt()
 			health.dnw[3].netstr = "update_role_" .. "int_" .. "hpup"
 
-			health.color = Color( 0, 255, 0)
+			health.color = YRPColGreen()
 			health.color2 = Color( 100, 255, 100)
 			ea[role.uniqueID].health = DAttributeBar(health)
 
@@ -2783,7 +2783,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			armor.dnw[3].max = GetMaxInt()
 			armor.dnw[3].netstr = "update_role_" .. "int_" .. "arup"
 
-			armor.color = Color( 0, 0, 255)
+			armor.color = YRPColBlue()
 			armor.color2 = Color( 100, 100, 255)
 			ea[role.uniqueID].armor = DAttributeBar( armor)
 

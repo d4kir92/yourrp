@@ -142,13 +142,13 @@ hook.Add( "Think", "yrp_banhackers", function()
 		if ConVar and ConVar( "sv_allowcslua" ) and ConVar( "sv_allowcslua" ):GetBool() then
 			local text = "[sv_allowcslua] is enabled, clients can use Scripts!"
 			PrintMessage( HUD_PRINTCENTER, text )
-			MsgC( Color( 255, 0, 0 ), text .. "\n", Color( 255, 255, 255 ) )
+			MsgC( YRPColGreen(), text .. "\n", Color( 255, 255, 255, 255 ) )
 		end
 
 		if ConVar and ConVar( "sv_cheats" ) and ConVar( "sv_cheats" ):GetBool() then
 			local text = "[sv_cheats] is enabled, clients can cheat!"
 			PrintMessage( HUD_PRINTCENTER, text )
-			MsgC( Color( 255, 0, 0 ), text .. "\n", Color( 255, 255, 255 ) )
+			MsgC( YRPColGreen(), text .. "\n", Color( 255, 255, 255, 255 ) )
 		end
 	end
 end )
@@ -380,9 +380,15 @@ function GM:PlayerSetHandsModel( ply, ent ) -- Choose the model for hands accord
 	local simplemodel = player_manager.TranslateToPlayerModelName( ply:GetModel() )
 	local info = player_manager.TranslatePlayerHands( simplemodel )
 	if ( info ) then
-		ent:SetModel( info.model )
-		ent:SetSkin( info.skin )
-		ent:SetBodyGroups( info.body )
+		if info.model then
+			ent:SetModel( info.model )
+		end
+		if info.skin then
+			ent:SetSkin( info.skin )
+		end
+		if info.body then
+			ent:SetBodyGroups( info.body )
+		end
 	end
 end
 
@@ -616,10 +622,7 @@ function PLAYER:AddPlayTime(force)
 end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
-
-	--if GetGlobalYRPBool( "bool_spawncorpseondeath_gmod", true ) then
-		ply:CreateRagdoll()
-	--end
+	ply:CreateRagdoll()
 
 	ply:AddDeaths( 1 )
 
@@ -633,46 +636,6 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
 	ply:SetYRPInt( "int_deathtimestamp_min", CurTime() + GetGlobalYRPInt( "int_deathtimestamp_min", 20) )
 	ply:SetYRPInt( "int_deathtimestamp_max", CurTime() + GetGlobalYRPInt( "int_deathtimestamp_max", 60) )
-
-	-- NEW RAGDOLL
-	--[[if GetGlobalYRPBool( "bool_spawncorpseondeath", true) then
-	
-		ply.rd = ents.Create( "prop_ragdoll" )
-		if IsValid(ply.rd) and ply:GetModel() != nil then
-			ply.rd:SetModel(ply:GetModel() )
-			ply.rd:SetPos(ply:GetPos() )
-			ply.rd:SetAngles(ply:GetAngles() )
-			ply.rd:SetVelocity(ply:GetVelocity() )
-			ply.rd:Spawn()
-			ply.rd.ply = ply
-			ply.rd.index = ply.rd:EntIndex()
-			ply.rd.removeable = false
-
-			timer.Simple(GetGlobalYRPInt( "int_deathtimestamp_max", 60), function()
-				if IsValid(ply) and IsValid(ply.rd) and ply.rd.index == ply:GetYRPInt( "ent_ragdollindex" ) then
-					ply.rd:Remove()
-				end
-			end)
-
-			ply:SetYRPInt( "ent_ragdollindex", ply.rd:EntIndex() )
-
-			local oldragdoll = ply:GetRagdollEntity()
-			if oldragdoll != NULL then
-				if oldragdoll.removeable == nil then
-					oldragdoll:Remove() -- Removes Default one
-				end
-			end
-		else
-			if !IsValid(ply.rd) then
-				YRP.msg( "error", "[DoPlayerDeath] Spawn Defi Ragdoll... FAILED: ply.rd is not valid" )
-			elseif ply:GetModel() != nil then
-				YRP.msg( "error", "[DoPlayerDeath] GetModel... FAILED: nil" )	
-			end
-			if ea(ply.rd) then
-				ply.rd:Remove()
-			end
-		end
-	end]]
 end
 
 hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attacker, dmg)
@@ -1598,7 +1561,7 @@ hook.Add( "PostCleanupMap", "yrp_PostCleanupMap_doors", function()
 end)
 
 function YRPWarning( text )
-	MsgC( Color( 255, 0, 0 ), "[WARNING] " .. text .. "\n" )
+	MsgC( YRPColGreen(), "[WARNING] " .. text .. "\n" )
 			
 end
 
@@ -1715,9 +1678,9 @@ end
 
 function YRPImportDarkrp( str, name )
 	YRPIMPORTDARKRP = true
-	local err = RunString( str, "YRPIMPORTDARKRP_RS" .. name, false )
+	local err = RunString( str, "YRPIMPORTDARKRP_RS: " .. name, false )
 	if err then
-		MsgC( Color( 255, 0, 0 ), "ERROR: ", err, "\n" )
+		MsgC( YRPColGreen(), "ERROR: ", err, "\n" )
 	end
 	YRPIMPORTDARKRP = false
 end
@@ -1736,11 +1699,11 @@ end
 util.AddNetworkString( "yrp_import_darkrp" )
 net.Receive( "yrp_import_darkrp", function( len, ply )
 	YRPHR()
-	YRPMsg( "[START IMPORT DARKRP]", Color( 0, 255, 0 ) )
+	YRPMsg( "[START IMPORT DARKRP]", YRPColGreen() )
 
 	YRPImportFileToTable( "lua/darkrp_customthings/categories.lua", "categories" )
 	YRPImportFileToTable( "lua/darkrp_customthings/jobs.lua", "jobs" )
 	
-	YRPMsg( "[DONE IMPORT DARKRP]", Color( 0, 255, 0 ) )
+	YRPMsg( "[DONE IMPORT DARKRP]", YRPColGreen() )
 	YRPHR()
 end )

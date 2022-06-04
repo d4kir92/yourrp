@@ -2,7 +2,7 @@
 include( "shared.lua" )
 
 function YDrawIDCards()
-	for _, ply in pairs(player.GetAll() ) do
+	for _, ply in pairs(player.GetAll() ) do -- Drawing all IDCards
 		if ply:GetPos():Distance(LocalPlayer():GetPos() ) < 400 and ply:GetActiveWeapon().ClassName == "yrp_idcard" then
 			local ang = Angle(0, ply:EyeAngles().y - 270, ply:EyeAngles().p + 90)
 			local sca = 0.016

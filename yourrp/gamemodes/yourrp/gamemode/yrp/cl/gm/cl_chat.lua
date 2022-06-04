@@ -292,8 +292,8 @@ local function YRPCreateText()
 			self:SetFontInternal( font )
 		end
 
-		self:SetFGColor(Color( 255, 255, 255) )
-		self:SetBGColor(Color( 0, 0, 0, 0) )
+		self:SetFGColor(Color( 255, 255, 255, 255 ) )
+		self:SetBGColor(Color( 255, 255, 255, 0) )
 	end
 	newtext:DockMargin( 0, 0, 0, 4 )
 
@@ -362,7 +362,7 @@ local function InitYRPChat()
 			
 						if !self.logo:IsVisible() then
 							surface.SetMaterial(yrp_logo)
-							surface.SetDrawColor( 255, 255, 255, 255)
+							surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 							surface.DrawTexturedRect(BR, BR, TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR )
 						end
 					end
@@ -398,15 +398,14 @@ local function InitYRPChat()
 			yrpChat.TopBar:DockMargin( 0, 0, 0, BR )
 			yrpChat.TopBar:Dock( TOP )
 			function yrpChat.TopBar:Paint( pw, ph )
-				--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 100))
 				if IsChatVisible() then
 					local name = GetGlobalYRPString( "text_server_name", "" )
 					if strEmpty(name) then
 						name = YRPGetHostName()
 					end
-					draw.SimpleText(name, "Y_18_700", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(name, "Y_18_700", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-					draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_700", pw - BR, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_700", pw - BR, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 			end
 
@@ -445,17 +444,17 @@ local function InitYRPChat()
 				end
 			end
 			function sbar.btnUp:Paint(w, h)
-				--draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+				--draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 				if YRP.GetDesignIcon( "64_angle-up" ) then
-					surface.SetDrawColor( 255, 255, 255, 255)
+					surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-up" ) )
 					surface.DrawTexturedRect(0, 0, w, h)
 				end
 			end
 			function sbar.btnDown:Paint(w, h)
-				--draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60) )
+				--draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
 				if YRP.GetDesignIcon( "64_angle-down" ) then
-					surface.SetDrawColor( 255, 255, 255, 255)
+					surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-down" ) )
 					surface.DrawTexturedRect(0, 0, w, h)
 				end
@@ -476,9 +475,9 @@ local function InitYRPChat()
 			yrpChat.comboBox:DockMargin( 0, 0, BR, 0 )
 			update_chat_choices()
 			function yrpChat.comboBox:Paint(pw, ph)
-				surface.SetDrawColor(Color( 0, 0, 0, 0) )
+				surface.SetDrawColor(Color( 255, 255, 255, 0) )
 				surface.DrawRect(0, 0, pw, ph)
-				self:SetTextColor(Color( 255, 255, 255) )
+				self:SetTextColor(Color( 255, 255, 255, 255 ) )
 			end
 			function yrpChat.comboBox:OnSelect(index, value, data)
 				SetChatMode( value)
@@ -496,7 +495,7 @@ local function InitYRPChat()
 				local h = ph - ph % 4
 
 				if YRP.GetDesignIcon( "64_cog" ) ~= nil then
-					surface.SetDrawColor( 255, 255, 255, 255)
+					surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 					surface.SetMaterial(YRP.GetDesignIcon( "64_cog" ) )
 					surface.DrawTexturedRect( (pw - w) / 2, (ph - h) / 2, w, h)
 				end
@@ -564,13 +563,13 @@ local function InitYRPChat()
 				end
 
 				self:SetTextColor(Color(40, 40, 40) )
-				self:SetFGColor(Color( 0, 0, 0, 0) )
-				self:SetBGColor(Color( 0, 0, 0, 0) )
+				self:SetFGColor(Color( 255, 255, 255, 0) )
+				self:SetBGColor(Color( 255, 255, 255, 0) )
 			end
 			function yrpChat.writeField:Paint(pw, ph)
 				surface.SetDrawColor( C_BG )
 				surface.DrawRect(0, 0, yrpChat.writeField:GetWide(), yrpChat.writeField:GetTall() )
-				yrpChat.writeField:DrawTextEntryText(Color( 255, 255, 255), Color( 0, 0, 0, 0), Color( 255, 255, 255) )
+				yrpChat.writeField:DrawTextEntryText(Color( 255, 255, 255, 255 ), Color( 255, 255, 255, 0), Color( 255, 255, 255, 255 ) )
 				if !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
 					timer.Simple(0.1, function()
 						if pa(yrpChat.window) and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
@@ -775,15 +774,15 @@ local function InitYRPChat()
 											YRPChatChangeTextColor( newtext, v, "green", 		Color( 0, 255, 0, 255) )
 											YRPChatChangeTextColor( newtext, v, "blue", 		Color( 0, 0, 255, 255) )
 											YRPChatChangeTextColor( newtext, v, "yellow", 	Color( 255, 255, 0, 255) )
-											YRPChatChangeTextColor( newtext, v, "black", 		Color( 0, 0, 0, 255) )
-											YRPChatChangeTextColor( newtext, v, "white", 		Color( 255, 255, 255, 255) )
+											YRPChatChangeTextColor( newtext, v, "black", 		Color( 0, 0, 0, 255 ) )
+											YRPChatChangeTextColor( newtext, v, "white", 		Color( 255, 255, 255, 255 ) )
 
-											YRPChatChangeTextColor( newtext, v, "/red", 		Color( 255, 255, 255, 255) )
-											YRPChatChangeTextColor( newtext, v, "/green", 	Color( 255, 255, 255, 255) )
-											YRPChatChangeTextColor( newtext, v, "/blue", 		Color( 255, 255, 255, 255) )
-											YRPChatChangeTextColor( newtext, v, "/yellow", 	Color( 255, 255, 255, 255) )
-											YRPChatChangeTextColor( newtext, v, "/black", 	Color( 255, 255, 255, 255) )
-											YRPChatChangeTextColor( newtext, v, "/white", 	Color( 255, 255, 255, 255) )
+											YRPChatChangeTextColor( newtext, v, "/red", 		Color( 255, 255, 255, 255 ) )
+											YRPChatChangeTextColor( newtext, v, "/green", 	Color( 255, 255, 255, 255 ) )
+											YRPChatChangeTextColor( newtext, v, "/blue", 		Color( 255, 255, 255, 255 ) )
+											YRPChatChangeTextColor( newtext, v, "/yellow", 	Color( 255, 255, 255, 255 ) )
+											YRPChatChangeTextColor( newtext, v, "/black", 	Color( 255, 255, 255, 255 ) )
+											YRPChatChangeTextColor( newtext, v, "/white", 	Color( 255, 255, 255, 255 ) )
 										end
 									else
 										newtext:AppendText(str)

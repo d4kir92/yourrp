@@ -43,10 +43,10 @@ SWEP.ShowViewModel = true
 SWEP.ShowWorldModel = true
 SWEP.ViewModelBoneMods = {}
 SWEP.VElements = {
-	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "static_prop", rel = "", pos = Vector(8.831, 3.635, -2.597), angle = Angle(-90, -70, 0), size = Vector(0.5, 0.5, 0.5), color = Color( 255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "static_prop", rel = "", pos = Vector(8.831, 3.635, -2.597), angle = Angle(-90, -70, 0), size = Vector(0.5, 0.5, 0.5), color = Color( 255, 255, 255, 255 ), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }
 SWEP.WElements = {
-	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.635, 1.557, -2), angle = Angle(90, -110, 0), size = Vector(1.21, 1.21, 1.21), color = Color( 255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.635, 1.557, -2), angle = Angle(90, -110, 0), size = Vector(1.21, 1.21, 1.21), color = Color( 255, 255, 255, 255 ), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }
 
 function SWEP:Reload()
@@ -107,7 +107,7 @@ end
 local wave = Material( "vgui/entities/yrp_key.png", "noclamp smooth" )
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
 	surface.SetMaterial( wave )
-	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 	surface.DrawTexturedRect( x + (wide - tall) / 2, y, tall, tall )
 end
 
@@ -134,7 +134,7 @@ function SWEP:Initialize()
 				
 				-- Init viewmodel visibility
 				if (self.ShowViewModel == nil or self.ShowViewModel) then
-					vm:SetColor(Color( 255,255,255,255) )
+					vm:SetColor(Color( 255, 255, 255, 255 ) )
 				else
 					-- we set the alpha to 1 instead of 0 because else ViewModelDrawn stops being called
 					vm:SetColor(Color( 255,255,255,1) )
@@ -430,7 +430,7 @@ if CLIENT then
 
 			if (!bone) then return end
 			
-			pos, ang = Vector(0,0,0), Angle(0,0,0)
+			pos, ang = Vector( 0,0,0 ), Angle( 0,0,0 )
 			local m = ent:GetBoneMatrix( bone)
 			if (m) then
 				pos, ang = m:GetTranslation(), m:GetAngles()
@@ -510,9 +510,9 @@ if CLIENT then
 						allbones[bonename] = self.ViewModelBoneMods[bonename]
 					else
 						allbones[bonename] = { 
-							scale = Vector(1,1,1),
-							pos = Vector(0,0,0),
-							angle = Angle(0,0,0)
+							scale = Vector( 1,1,1 ),
+							pos = Vector( 0,0,0 ),
+							angle = Angle( 0,0,0 )
 						}
 					end
 				end

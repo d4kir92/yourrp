@@ -98,8 +98,8 @@ function F8RequireUG(site, usergroups)
 	allugs["USERGROUPS"] = usergroups
 	local notallowed = createD( "DPanel", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function notallowed:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color( 0, 0, 0, 255) )
-		surfaceText(YRP.lang_string( "LID_settings_yourusergrouphasnopermission" ) .. " [ " .. site .. " ]", "Y_24_500", w / 2, h / 2, Color( 255, 0, 0), 1, 1)
+		draw.RoundedBox(0, 0, 0, w, h, Color( 0, 0, 0, 255 ) )
+		surfaceText(YRP.lang_string( "LID_settings_yourusergrouphasnopermission" ) .. " [ " .. site .. " ]", "Y_24_500", w / 2, h / 2, YRPColGreen(), 1, 1)
 
 		if site != "usergroups" then
 			surfaceText(YRP.lang_string( "LID_settings_gotof8usergroups" ), "Y_24_500", w / 2, h / 2 + YRP.ctr(100), Color( 255, 255, 0), 1, 1)
@@ -406,8 +406,8 @@ function F8OpenSettings()
 		local rlsize = sm.win:GetHeaderHeight() - YRP.ctr(20)
 		function sm.win:Paint(pw, ph)
 			hook.Run( "YFramePaint", self, pw, ph)
-			draw.SimpleText(self:GetTitle(), "Y_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.lang_string( "LID_players" ) .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw / 2 - YRP.ctr(300), self:GetHeaderHeight() / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(self:GetTitle(), "Y_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_players" ) .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw / 2 - YRP.ctr(300), self:GetHeaderHeight() / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 			draw.SimpleText( "YourRP Version.: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2 + YRP.ctr(120), self:GetHeaderHeight() / 2, GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			
 			if sm.win.reload and (sm.win.reload.sw != sm.win:GetWide() or sm.win.reload.sh != sm.win:GetTall() ) then
@@ -426,7 +426,7 @@ function F8OpenSettings()
 			local br = YRP.ctr(10)
 			if YRP.GetDesignIcon( "64_angle-right" ) ~= nil then
 				surface.SetMaterial(YRP.GetDesignIcon( "64_sync" ) )
-				surface.SetDrawColor( 255, 255, 255, 255)
+				surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 				surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 			end
 		end
@@ -443,8 +443,8 @@ function F8OpenSettings()
 		sm.win.logo = createD( "YPanel", sm.win, YRP.ctr(200), logoS, sm.win:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10) )
 		sm.win.logo.yrp = Material( "vgui/yrp/logo100_beta.png" )
 		function sm.win.logo:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0) )
-			surface.SetDrawColor( 255, 255, 255, 255)
+			--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(self.yrp)
 			surface.DrawTexturedRect(0, 0, 400 * logoS / 130, 130 * logoS / 130)
 
@@ -471,7 +471,7 @@ function F8OpenSettings()
 
 		function sm.win.discord.logo:Paint( pw, ph )
 			if YRP.GetDesignIcon( "discord" ) then
-				surface.SetDrawColor( 255, 255, 255, 255 )
+				surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 				surface.SetMaterial( YRP.GetDesignIcon( "discord" ) )
 				surface.DrawTexturedRect( 0, 0, ph, ph )
 			end
@@ -505,9 +505,9 @@ function F8OpenSettings()
 			self:SetPos(0, sm.win:GetTall() - YRP.ctr(50) )
 			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ) )
 
-			draw.SimpleText(GetGlobalYRPString( "text_server_name", "-" ), "Y_18_500", ph / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(GetGlobalYRPString( "text_server_name", "-" ), "Y_18_500", ph / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			draw.SimpleText( "YourRP Version.: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, GetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.lang_string( "LID_map" ) .. ": " .. game.GetMap() .. "        " .. YRP.lang_string( "LID_players" ) .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_map" ) .. ": " .. game.GetMap() .. "        " .. YRP.lang_string( "LID_players" ) .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end]]
 
 		local content = sm.win:GetContent()
@@ -549,7 +549,7 @@ function F8OpenSettings()
 					surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
 				end
 			end
-			surface.SetDrawColor( 255, 255, 255, 255)
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 		end
 		
@@ -620,7 +620,7 @@ function F8OpenSettings()
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
 					
 					if YRP.GetDesignIcon( v.icon) ~= nil then
-						surface.SetDrawColor( 255, 255, 255, 255)
+						surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 						surface.SetMaterial(YRP.GetDesignIcon( v.icon) )
 						surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
 					end
@@ -651,7 +651,7 @@ function F8OpenSettings()
 				local site = sm.sites[v.name]
 				function site:Paint(pw, ph)
 					local hr = YRP.ctr(2)
-					draw.RoundedBox(0, br, ph / 2 - hr / 2, pw - br * 2, hr, Color( 255, 255, 255, 255) )
+					draw.RoundedBox(0, br, ph / 2 - hr / 2, pw - br * 2, hr, Color( 255, 255, 255, 255 ) )
 				end
 
 				sm.menu:AddItem(site)

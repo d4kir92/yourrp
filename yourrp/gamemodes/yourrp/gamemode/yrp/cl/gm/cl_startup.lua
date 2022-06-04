@@ -10,10 +10,10 @@ function OpenHelpTranslatingWindow()
 
 	function window:Paint(pw, ph)
 		surfaceWindow(self, pw, ph, "Help translating" )
-		draw.SimpleTextOutlined( "If you want to add a new language or help translating an existing language,", "Y_18_500", YRP.ctr(10), YRP.ctr(100), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255) )
-		draw.SimpleTextOutlined( "please do this:", "Y_18_500", YRP.ctr(10), YRP.ctr(150), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255) )
-		draw.SimpleTextOutlined( "First go to the translation-website and register there:", "Y_18_500", YRP.ctr(10), YRP.ctr(200), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255) )
-		draw.SimpleTextOutlined( "Then write D4KiR on the discord server to get rights for translating:", "Y_18_500", YRP.ctr(10), YRP.ctr(300), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255) )
+		draw.SimpleTextOutlined( "If you want to add a new language or help translating an existing language,", "Y_18_500", YRP.ctr(10), YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( "please do this:", "Y_18_500", YRP.ctr(10), YRP.ctr(150), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( "First go to the translation-website and register there:", "Y_18_500", YRP.ctr(10), YRP.ctr(200), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( "Then write D4KiR on the discord server to get rights for translating:", "Y_18_500", YRP.ctr(10), YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
 	end
 
 	window.translationsite = createD( "DButton", window, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(200) )
@@ -52,19 +52,19 @@ function YRP.AddLanguageChangerLine(parent, tab, mainparent)
 		end
 
 		surfaceBox(0, 0, pw, ph, color)
-		YRP.DrawIcon(YRP.GetDesignIcon( "lang_" .. tostring(self.lang.short) ), YRP.ctr(46), YRP.ctr(31), YRP.ctr(4), YRP.ctr( (40 - 31) / 2), Color( 255, 255, 255, 255) )
-		self.textcol = Color( 255, 255, 255)
+		YRP.DrawIcon(YRP.GetDesignIcon( "lang_" .. tostring(self.lang.short) ), YRP.ctr(46), YRP.ctr(31), YRP.ctr(4), YRP.ctr( (40 - 31) / 2), Color( 255, 255, 255, 255 ) )
+		self.textcol = Color( 255, 255, 255, 255 )
 
 		if self.lang.percentage != nil then
 			if self.lang.percentage == 100 then
-				self.textcol = Color( 0, 255, 0)
+				self.textcol = YRPColGreen()
 			elseif self.lang.percentage < 100 then
 				local perc = 255 - 255 * self.lang.percentage / 100
 				self.textcol = Color(perc, 255, perc)
 			end
 		end
 
-		draw.SimpleTextOutlined( constructLanguageText(self.lang.language, self.lang.inenglish, self.lang.percentage), GetFont(), YRP.ctr(4 + 46 + 8), ph / 2, self.textcol, 0, 1, 1, Color( 0, 0, 0, 255) )
+		draw.SimpleTextOutlined( constructLanguageText(self.lang.language, self.lang.inenglish, self.lang.percentage), GetFont(), YRP.ctr(4 + 46 + 8), ph / 2, self.textcol, 0, 1, 1, Color( 0, 0, 0, 255 ) )
 	end
 
 	function lang:DoClick()
@@ -96,7 +96,7 @@ function YRP.AddLanguageAddLine(parent, mainparent)
 
 		surfaceBox(0, 0, pw, ph, color)
 		local text = "Help translating"
-		draw.SimpleTextOutlined(text, "DermaDefault", YRP.ctr(4 + 46 + 8), ph / 2, Color( 255, 255, 0, 255), 0, 1, YRP.ctr(1), Color( 0, 0, 0, 255) )
+		draw.SimpleTextOutlined(text, "DermaDefault", YRP.ctr(4 + 46 + 8), ph / 2, Color( 255, 255, 0, 255), 0, 1, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 	end
 
 	function lang:DoClick()
@@ -117,7 +117,7 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 
 	local LanguageChanger = createD( "DPanel", parent, sw, sh, x, y)
 	function LanguageChanger:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 100) )
+		--
 	end
 	LanguageChanger.selecting = false
 
@@ -125,7 +125,7 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 	LanguageChanger.btn:SetText( "" )
 	local br = YRP.ctr(10)
 	function LanguageChanger.btn:Paint(pw, ph)
-		local color = Color( 0, 0, 0, 0) --YRPGetColor( "2" )
+		local color = Color( 255, 255, 255, 0) --YRPGetColor( "2" )
 		local text = YRP.GetCurrentLanguageInEnglish()
 
 		if self:IsHovered() then
@@ -146,8 +146,8 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 			self:SetPos( LanguageChanger:GetWide() - self:GetWide(), 0 )
 		end
 
-		YRP.DrawIcon(YRP.GetDesignIcon( "lang_" .. YRP.GetCurrentLanguage() ), ph, ph * 0.671, br, (ph - ph * 0.671) / 2, Color( 255, 255, 255, 255) )
-		draw.SimpleText(text, font, br + size + br, ph / 2 * 0.85, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		YRP.DrawIcon(YRP.GetDesignIcon( "lang_" .. YRP.GetCurrentLanguage() ), ph, ph * 0.671, br, (ph - ph * 0.671) / 2, Color( 255, 255, 255, 255 ) )
+		draw.SimpleText(text, font, br + size + br, ph / 2 * 0.85, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	function LanguageChanger.btn:DoClick()
@@ -320,6 +320,7 @@ function GetSENTsList()
 	return list_entities
 end
 
+local color1 = Color( 0, 0, 0, 120 )
 function YRPOpenSelector(tab, multiple, ret, fu)
 	local lply = LocalPlayer()
 	if multiple then
@@ -339,7 +340,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		hook.Run( "YFramePaint", self, pw, ph)
 
 		if self.nr and self.perpage and pmsel.maxpage then
-			draw.SimpleText(YRP.lang_string( "LID_page" ) .. ": " .. ( (pmsel.nr / self.perpage) + 1) .. "/" .. pmsel.maxpage, "DermaDefault", ScrW() / 2, ph - YRP.ctr(50 + 10), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_page" ) .. ": " .. ( (pmsel.nr / self.perpage) + 1) .. "/" .. pmsel.maxpage, "DermaDefault", ScrW() / 2, ph - YRP.ctr(50 + 10), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end
 
@@ -355,12 +356,12 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 	
 
 	function parent:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr( br + 100), YRP.ctr( br + 25), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr( br + 100), YRP.ctr( br + 25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
 	pmsel.dpl = createD( "DPanel", parent, parent:GetWide() - YRP.ctr( br + br), parent:GetTall() - YRP.ctr( br + 50 + br + br + 50 + br), YRP.ctr( br), YRP.ctr( br + 50 + br) )
 	function pmsel.dpl:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 120) )
+		draw.RoundedBox(0, 0, 0, pw, ph, color1 )
 	end
 	--pmsel.dpl:EnableVerticalScrollbar(true)
 	--pmsel.dpl:SetSpacing(10)
@@ -392,26 +393,26 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 						d_pm.PrintName = v.PrintName
 						function d_pm:Paint(pw, ph)
 							local text = YRP.lang_string( "LID_notadded" )
-							local col = Color( 255, 255, 255)
+							local col = Color( 255, 255, 255, 255 )
 							if ret == "worldmodel" then
 								if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.WorldModel) then
-									col = Color( 0, 255, 0)
+									col = YRPColGreen()
 									text = YRP.lang_string( "LID_added" )
 								end
 							elseif ret == "classname" then
 								if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.ClassName) then
-									col = Color( 0, 255, 0)
+									col = YRPColGreen()
 									text = YRP.lang_string( "LID_added" )
 								end
 							end
 							draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
 
 							if multiple then
-								draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 							end
 
-							draw.SimpleText(self.PrintName, "DermaDefault", pw / 2, ph * 0.90, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-							draw.SimpleText(self.WorldModel, "DermaDefault", pw / 2, ph * 0.95, Color( 0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							draw.SimpleText(self.PrintName, "DermaDefault", pw / 2, ph * 0.90, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							draw.SimpleText(self.WorldModel, "DermaDefault", pw / 2, ph * 0.95, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						end
 
 						local msize = d_pm:GetTall() * 0.75
@@ -428,7 +429,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 							d_pm.model = createD( "DPanel", d_pm, msize, msize, mbr, my)
 							function d_pm.model:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
-								draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 							end
 						end
 						d_pm.btn = createD( "YButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
@@ -559,7 +560,7 @@ function openSingleSelector(tab, closeF, web)
 
 	function frame:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col() )
-		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "Y_24_500", pw / 2, ph - YRP.ctr(10), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )
+		draw.SimpleTextOutlined(site.cur .. "/" .. site.max, "Y_24_500", pw / 2, ph - YRP.ctr(10), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
 	end
 
 	function frame:OnClose()
@@ -579,7 +580,7 @@ function openSingleSelector(tab, closeF, web)
 	function searchButton:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
 		local _br = 4
-		surface.SetDrawColor( 255, 255, 255, 255)
+		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 		surface.SetMaterial(searchIcon)
 		surface.DrawTexturedRect(YRP.ctr(5), YRP.ctr(5), YRP.ctr(40), YRP.ctr(40) )
 	end
@@ -587,14 +588,14 @@ function openSingleSelector(tab, closeF, web)
 	local search = createD( "DTextEntry", frame, _w - YRP.ctr(50 + 10), YRP.ctr(50), YRP.ctr(10 + 50 + 10), YRP.ctr(50 + 10) )
 
 	function search:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 		local _string = search:GetText()
 
 		if _string == "" then
 			_string = YRP.lang_string( "LID_search" )
 		end
 
-		draw.SimpleTextOutlined(_string, "DermaDefault", YRP.ctr(10), ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255) )
+		draw.SimpleTextOutlined(_string, "DermaDefault", YRP.ctr(10), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 	end
 
 	function showList()
@@ -645,9 +646,9 @@ function openSingleSelector(tab, closeF, web)
 					function icon:Paint(pw, ph)
 						if item.ishidden then
 							draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 100, 100) )
-							draw.SimpleText( "HIDDEN ENTITY!", "Y_30_500", pw / 2, YRP.ctr(30), Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							draw.SimpleText( "HIDDEN ENTITY!", "Y_30_500", pw / 2, YRP.ctr(30), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						else
-							draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255) )
+							draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 						end
 					end
 
@@ -661,8 +662,8 @@ function openSingleSelector(tab, closeF, web)
 					_tmpName:SetText( "" )
 
 					function _tmpName:Paint(pw, ph)
-						draw.SimpleTextOutlined(item.PrintName, "Y_20_500", pw - YRP.ctr(10), ph - YRP.ctr(10), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )
-						draw.SimpleTextOutlined(item.ClassName, "Y_20_500", pw - YRP.ctr(10), ph - YRP.ctr(60), Color( 255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )
+						draw.SimpleTextOutlined(item.PrintName, "Y_20_500", pw - YRP.ctr(10), ph - YRP.ctr(10), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+						draw.SimpleTextOutlined(item.ClassName, "Y_20_500", pw - YRP.ctr(10), ph - YRP.ctr(60), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
 					end
 
 					function _tmpName:DoClick()
@@ -688,8 +689,8 @@ function openSingleSelector(tab, closeF, web)
 	nextB:SetText( "" )
 
 	function nextB:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255) )
-		draw.SimpleTextOutlined(YRP.lang_string( "LID_next" ), "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		draw.SimpleTextOutlined(YRP.lang_string( "LID_next" ), "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 
 	function nextB:DoClick()
@@ -703,8 +704,8 @@ function openSingleSelector(tab, closeF, web)
 	prevB:SetText( "" )
 
 	function prevB:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255) )
-		draw.SimpleTextOutlined(YRP.lang_string( "LID_prev" ), "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		draw.SimpleTextOutlined(YRP.lang_string( "LID_prev" ), "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 
 	function prevB:DoClick()
@@ -734,7 +735,7 @@ net.Receive( "yrpInfoBox", function(len)
 
 	function _tmp:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 80) )
-		draw.SimpleTextOutlined(_text, "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+		draw.SimpleTextOutlined(_text, "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 
 	local closeButton = createVGUI( "DButton", _tmp, 200, 50, 400 - 100, 400 - 50)
@@ -773,7 +774,7 @@ function YRPHUD( name, failed )
 	elseif v.name == "Version" then
 		return GetGlobalYRPInt( "Version", -1 )
 	else
-		MsgC( Color( 255, 0, 0 ), "Failed To HUD", v.name, v.value, "\n" )
+		MsgC( YRPColGreen(), "Failed To HUD", v.name, v.value, "\n" )
 	end
 	return failed
 end
@@ -843,12 +844,12 @@ function YRPDrawNamePlateStringBox(ent, instr, z, color)
 			ico.w = th * 0.8
 			ico.h = ico.w
 			ico.br = (th - ico.h) / 2
-			surface.SetDrawColor( 255, 255, 255, 255)
+			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(YRP.GetDesignIcon( "shopping_cart" ) )
 			surface.DrawTexturedRect(-box.w / 2 + br + ico.br, br + ico.br, ico.w, ico.h)
 		end
 
-		draw.SimpleText(instr, "Y_18_500", -box.w / 2 + th + 2 * br, box.h / 2, Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) --, 1, Color( 0, 0, 0) )
+		draw.SimpleText(instr, "Y_18_500", -box.w / 2 + th + 2 * br, box.h / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) --, 1, Color( 0, 0, 0, 255 ) )
 	cam.End3D2D()
 end
 
@@ -1016,7 +1017,7 @@ function YRPDrawNamePlates()
 	local _distance = 200
 
 	if IsValid( LocalPlayer() ) and player.GetAll() then
-		for i, ply in pairs( player.GetAll() ) do
+		for i, ply in pairs( player.GetAll() ) do -- NAMEPLATES
 			ply.ply_distance = LocalPlayer():GetPos():Distance(ply:GetPos() )
 		end
 
@@ -1188,7 +1189,7 @@ function YRPDrawNamePlates()
 
 					if ply:AFK() or ply:DND() then
 						local onlinestatus = ""
-						local onlinecolor = Color( 255, 255, 255, 255)
+						local onlinecolor = Color( 255, 255, 255, 255 )
 						if ply:DND() then
 							onlinestatus = YRP.lang_string( "LID_dnd" )
 							onlinecolor = Color( 255, 0, 0, 255)
@@ -1352,7 +1353,7 @@ end
 hook.Add( "PostDrawTranslucentRenderables", "yrp_draw_plates", YRPDrawNamePlates)
 
 function draw3DText(text, x, y, color)
-	color = color or Color( 255, 255, 255, 255)
+	color = color or Color( 255, 255, 255, 255 )
 	surface.SetTextColor( color)
 	surface.SetFont( "Y_" .. 24 .. "_500" )
 	local tw, _ = surface.GetTextSize(text)
@@ -1365,7 +1366,7 @@ hook.Add( "PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 		if ent:IsNPC() and !ent:IsPlayer() and ent:IsDealer() then
 			local dist = LocalPlayer():GetPos():Distance(ent:GetPos() )
 			if dist < 300 then
-				YRPDrawNamePlateStringBox(ent, ent:GetYRPString( "name", "Unnamed" ), 20, Color( 255, 255, 255) )
+				YRPDrawNamePlateStringBox(ent, ent:GetYRPString( "name", "Unnamed" ), 20, Color( 255, 255, 255, 255 ) )
 			end
 		end
 	end
@@ -1499,15 +1500,15 @@ end)
 function DrawDoorText( door)
 	local header = door:GetYRPString( "text_header", "" )
 	surface.SetFont( "Y_24_500" )
-	local head_size = surface.GetTextSize(header)
-	surface.SetTextColor( 255, 255, 255)
+	local head_size = surface.GetTextSize( header )
+	surface.SetTextColor( Color( 255, 255, 255, 255 ) )
 	surface.SetTextPos(- head_size / 2, -80)
 	surface.DrawText(header)
 
 	local description = door:GetYRPString( "text_description", "" )
 	surface.SetFont( "Y_14_500" )
 	local desc_size = surface.GetTextSize( description)
-	surface.SetTextColor( 255, 255, 255)
+	surface.SetTextColor( Color( 255, 255, 255, 255 ) )
 	surface.SetTextPos(- desc_size / 2, -50)
 	surface.DrawText( description)
 
@@ -1516,7 +1517,7 @@ function DrawDoorText( door)
 		local int_securitylevel = YRP.lang_string( "LID_securitylevel" ) .. ": " .. sl
 		surface.SetFont( "Y_24_500" )
 		local secu_size = surface.GetTextSize(int_securitylevel)
-		surface.SetTextColor( 255, 255, 255)
+		surface.SetTextColor( Color( 255, 255, 255, 255 ) )
 		surface.SetTextPos(- secu_size / 2, -20)
 		surface.DrawText(int_securitylevel)
 	end
@@ -1546,7 +1547,7 @@ function loadDoorTexts()
 						pos = pos + door:GetForward() * x * 0.7
 					end
 
-					--render.DrawSphere(pos, 10, 8, 8, Color( 0, 255, 0) )
+					--render.DrawSphere(pos, 10, 8, 8, YRPColGreen() )
 
 					if GetGlobalYRPBool( "bool_building_system", false) then
 						cam.Start3D2D(pos, ang, 0.2)
@@ -1865,7 +1866,7 @@ hook.Add( "Think", "openDeathScreen", function(len)
 			if !LocalPlayer():GetYRPBool( "yrp_chararchived", false) then
 				local tab = {}
 				tab.color = Color(56, 118, 29, 255)
-				tab.tcolor = Color( 255, 255, 255, 255)
+				tab.tcolor = Color( 255, 255, 255, 255 )
 				if LocalPlayer():GetYRPInt( "int_deathtimestamp_min", 0) <= CurTime() then
 					hook.Run( "YButtonPaint", self, pw, ph, tab)
 				else
@@ -1909,6 +1910,7 @@ end
 -- #LOADING
 local yrp_icon = Material( "yrp/yrp_icon" )
 
+--[[ -- HIDE Loading Temp.
 if pa(yrp_loading_screen) then
 	yrp_loading_screen:Remove()
 end
@@ -2056,7 +2058,7 @@ if pa(yrp_loading_screen) then
 			if yrp_loading_screen.bg.url != GetGlobalYRPString( "text_loading_background" ) then
 				yrp_loading_screen.bg.url = GetGlobalYRPString( "text_loading_background" )
 				if yrp_loading_screen.bg.url == nil then
-					--draw.SimpleText( "LOADING", "Y_26_500", pw / 2, ph / 3, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					--draw.SimpleText( "LOADING", "Y_26_500", pw / 2, ph / 3, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				else
 					if strEmpty(yrp_loading_screen.bg.url) then
 						yrp_loading_screen.bg:Hide()
@@ -2071,14 +2073,14 @@ if pa(yrp_loading_screen) then
 		end
 
 		if yrp_loading_screen.bg and yrp_loading_screen.bg.url and strEmpty(yrp_loading_screen.bg.url) then
-			draw.SimpleText( "NO LOADINGSCREEN FOUND - F8 General -> Loadingscreen Background", "Y_26_500", pw / 2, ph / 3, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)		
+			draw.SimpleText( "NO LOADINGSCREEN FOUND - F8 General -> Loadingscreen Background", "Y_26_500", pw / 2, ph / 3, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)		
 		end
 
 
 
 		-- LOGO
 		local logosize = YRP.ctr(128)
-		surface.SetDrawColor( 255, 255, 255, 255)
+		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 		surface.SetMaterial(yrp_icon)
 		surface.DrawTexturedRectRotated(YRP.ctr(logosize) * 0.8, YRP.ctr(logosize) * 0.8, YRP.ctr(logosize), YRP.ctr(logosize), self.r)
 		if self.rdir > 0 then
@@ -2169,11 +2171,11 @@ if pa(yrp_loading_screen) then
 
 		-- HOSTNAME --
 		if GetGlobalYRPString( "text_loading_design" ) == "Center" then
-			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, SCREEN_CENTER_Y - PANEL_H / 2 - HOSTNAME_SPACE, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, SCREEN_CENTER_Y - PANEL_H / 2 - HOSTNAME_SPACE, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		elseif GetGlobalYRPString( "text_loading_design" ) == "BottomRight" then
-			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, HOSTNAME_SPACE, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, HOSTNAME_SPACE, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		else
-			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, HOSTNAME_SPACE, Color( 255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRPGetHostName(), "Y_" .. HOSTNAME_FONT_SIZE .. "_700", SCREEN_CENTER_X, HOSTNAME_SPACE, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		
 		-- TIME
@@ -2188,7 +2190,7 @@ if pa(yrp_loading_screen) then
 		end
 		text = text .. "    BytesLeft: " .. bl1
 		text = text .. "    BytesWritten: " .. bw1
-		draw.SimpleText( text, "Y_18_700", YRP.ctr(10), ph - YRP.ctr(2), Color( 255,255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.SimpleText( text, "Y_18_700", YRP.ctr(10), ph - YRP.ctr(2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 		if self.t >= self.tmax and self.t <= self.tmaxmax and loading_cur < 100 then
 			if self.discord == nil then
 				self.discord = createD( "DButton", self, 300, 60, ScrW() / 2 - 300 / 2, ScrH() * 0.8 )
@@ -2217,6 +2219,9 @@ if pa(yrp_loading_screen) then
 		BSHADOWS.EndShadow(PANEL_SHADOW_intensity, PANEL_SHADOW_Spread, PANEL_SHADOW_Blur, PANEL_SHADOW_Opacity, PANEL_SHADOW_Direction, PANEL_SHADOW_Distance)
 	end
 end
+]]
+
+
 
 local windowOpen = false
 net.Receive( "openLawBoard", function(len)
@@ -2270,10 +2275,10 @@ net.Receive( "openLawBoard", function(len)
 				end
 				local content = addWindow:GetContent()
 				function content:Paint(pw, ph)
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_player" ), "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_cell" ), "Y_24_500", YRP.ctr(10), YRP.ctr(150), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_note" ), "Y_24_500", YRP.ctr(10), YRP.ctr(250), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_timeinsec" ), "Y_24_500", YRP.ctr(10), YRP.ctr(350), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0) )
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_player" ), "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_cell" ), "Y_24_500", YRP.ctr(10), YRP.ctr(150), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_note" ), "Y_24_500", YRP.ctr(10), YRP.ctr(250), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_timeinsec" ), "Y_24_500", YRP.ctr(10), YRP.ctr(350), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
 				end
 
 				local _player = createVGUI( "DComboBox", addWindow:GetContent(), 380, 50, 10, 50)
@@ -2433,10 +2438,10 @@ net.Receive( "openLawBoard", function(len)
 						color = Color( 255, 255, 100, 100)
 					end
 					draw.RoundedBox(0, 0, 0, pw, ph, color)
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_name" ) .. ": " .. v.nick, "Y_26_500", YRP.ctr(20), YRP.ctr(45), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_cell" ) .. ": " .. v.cellname, "Y_24_500", YRP.ctr(20), YRP.ctr(95), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )	
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_note" ) .. ": " .. v.reason, "Y_24_500", YRP.ctr(20), YRP.ctr(145), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )	
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_time" ) .. ": " .. v.time, "Y_24_500", YRP.ctr(20), ph - YRP.ctr(45), Color( 255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0) )
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_name" ) .. ": " .. v.nick, "Y_26_500", YRP.ctr(20), YRP.ctr(45), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_cell" ) .. ": " .. v.cellname, "Y_24_500", YRP.ctr(20), YRP.ctr(95), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )	
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_note" ) .. ": " .. v.reason, "Y_24_500", YRP.ctr(20), YRP.ctr(145), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )	
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_time" ) .. ": " .. v.time, "Y_24_500", YRP.ctr(20), ph - YRP.ctr(45), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 				end
 
 				local model = ""
@@ -2572,10 +2577,10 @@ net.Receive( "openLawBoard", function(len)
 					if plist.btn == self then
 						color = Color( 255, 255, 100, 255)
 					elseif self:IsHovered() then
-						color = Color( 255, 255, 255, 255)
+						color = Color( 255, 255, 255, 255 )
 					end
 					draw.RoundedBox(0, 0, 0, pw, ph, color)
-					draw.SimpleText(self:GetText(), "Y_18_500", YRP.ctr(20), ph / 2, Color( 0, 0, 0, 255), 0, 1)
+					draw.SimpleText(self:GetText(), "Y_18_500", YRP.ctr(20), ph / 2, Color( 0, 0, 0, 255 ), 0, 1)
 				end
 				function pline:DoClick()
 					plist.btn = self
