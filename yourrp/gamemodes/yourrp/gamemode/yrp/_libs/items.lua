@@ -320,7 +320,7 @@ if CLIENT then
 					item_handler[tonumber(uid)][y] = {}
 					for x = 1, w do
 						item_handler[tonumber(uid)][y][x] = {}
-						item_handler[tonumber(uid)][y][x].slot = createD( "DPanel", item_handler[tonumber(uid)].pnl, YRP.ctr(ICON_SIZE), YRP.ctr(ICON_SIZE), YRP.ctr( (x-1)*ICON_SIZE), YRP.ctr( (y-1)*ICON_SIZE) )
+						item_handler[tonumber(uid)][y][x].slot = YRPCreateD( "DPanel", item_handler[tonumber(uid)].pnl, YRP.ctr(ICON_SIZE), YRP.ctr(ICON_SIZE), YRP.ctr( (x-1)*ICON_SIZE), YRP.ctr( (y-1)*ICON_SIZE) )
 						local _edit_slot = item_handler[tonumber(uid)][y][x].slot
 						item_handler[tonumber(uid)][y][x].value = ""
 						_edit_slot.storageID = uid
@@ -402,7 +402,7 @@ if CLIENT then
 			local _parent = item_handler[tonumber(tab.storageID)].pnl:GetParent()
 			local _x, _y = item_handler[tonumber(tab.storageID)].pnl:GetPos()
 
-			local _bg = createD( "DPanel", _parent, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), _x + YRP.ctr( (tab.posx-1)*ICON_SIZE), _y + YRP.ctr( (tab.posy-1)*ICON_SIZE) )
+			local _bg = YRPCreateD( "DPanel", _parent, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), _x + YRP.ctr( (tab.posx-1)*ICON_SIZE), _y + YRP.ctr( (tab.posy-1)*ICON_SIZE) )
 			function _bg:Paint(pw, ph)
 				surfaceBox(0, 0, pw, ph, Color( 0, 0, 0, 200) )
 			end
@@ -417,13 +417,13 @@ if CLIENT then
 				surfaceText(tab.PrintName, "Y_18_500", YRP.ctr(20), YRP.ctr(10), Color( 255, 255, 255, 255 ), 0, 0)
 			end
 
-			local _item = createD( "DModelPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
+			local _item = YRPCreateD( "DModelPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
 			_item:InvalidateLayout(true)
 			_item:SetModel(tab.WorldModel)
 			SetCamPosition(_item, tab)
 			function _item:LayoutEntity(Entity) return end
 
-			local _item2 = createD( "DPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
+			local _item2 = YRPCreateD( "DPanel", _bg, YRP.ctr(ICON_SIZE*tab.sizew), YRP.ctr(ICON_SIZE*tab.sizeh), 0, 0)
 			if item_handler[tonumber(tab.storageID)][tonumber(tab.posy)] != nil then
 				if item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)] != nil then
 					item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item = _item2

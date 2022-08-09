@@ -75,7 +75,7 @@ function PANEL:Init()
 	self._text = "GroupBox"
 	self._autosize = false
 
-	self.con = createD( "DPanelList", self, 10, 10, 0, 0)
+	self.con = YRPCreateD( "DPanelList", self, 10, 10, 0, 0)
 	self.con:EnableVerticalScrollbar()
 	self.con:SetText( "CONTENT" )
 	function self.con:Paint(pw, ph)

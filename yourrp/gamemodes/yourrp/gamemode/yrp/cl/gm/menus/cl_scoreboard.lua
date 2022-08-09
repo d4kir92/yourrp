@@ -262,7 +262,7 @@ function YRPScoreboardAddPlayer(ply)
 	if pa(YRPScoreboard) and IsValid( ply ) and !table.HasValue(YRPScoreboard.plys, ply) then
 		table.insert(YRPScoreboard.plys, ply)
 
-		local plyframe = createD( "DPanel", YRPScoreboard.list, size, size, 0, 0)
+		local plyframe = YRPCreateD( "DPanel", YRPScoreboard.list, size, size, 0, 0)
 		plyframe:Dock( TOP )
 		plyframe.open = false
 		plyframe.targh = size
@@ -284,7 +284,7 @@ function YRPScoreboardAddPlayer(ply)
 
 
 		-- First Line
-		local plypnl = createD( "DPanel", plyframe, size, size, 0, 0 )
+		local plypnl = YRPCreateD( "DPanel", plyframe, size, size, 0, 0 )
 		plypnl:Dock( TOP )
 		function plypnl:Paint(pw, ph)
 			if IsValid( ply ) then
@@ -306,19 +306,19 @@ function YRPScoreboardAddPlayer(ply)
 		for i, v in ipairs( eles ) do
 			if YRPIsElementEnabled( v.name ) then
 				if v.name == "avatar" then
-					local avatarp = createD( "DPanel", plypnl, v.size, size, 0, 0 )
+					local avatarp = YRPCreateD( "DPanel", plypnl, v.size, size, 0, 0 )
 					avatarp:Dock( LEFT )
 					function avatarp:Paint( pw, ph )
 						local br = 3
 						draw.RoundedBox( 0, br, br, pw - 2 * br, ph - 2 * br, Color( 255, 255, 255, 255 ) )
 					end
 
-					local avatar = createD( "AvatarImage", avatarp, v.size - 8, 40 - 8, 0, 0 )
+					local avatar = YRPCreateD( "AvatarImage", avatarp, v.size - 8, 40 - 8, 0, 0 )
 					avatar:DockMargin( 4, 4, 4, 4 )
 					avatar:Dock( LEFT )
 					avatar:SetPlayer( ply )
 				elseif v.name == "mute" then
-					plypnl.Mute = createD( "DButton", plypnl, v.size, size, 0, 0)
+					plypnl.Mute = YRPCreateD( "DButton", plypnl, v.size, size, 0, 0)
 					plypnl.Mute:SetText( "" )
 					plypnl.Mute:Dock( LEFT )
 					plypnl.Muted = ply:IsMuted()
@@ -367,7 +367,7 @@ function YRPScoreboardAddPlayer(ply)
 						end
 					end
 				else
-					local plyinf = createD( "DButton", plypnl, v.size, 32, 0, 0 )
+					local plyinf = YRPCreateD( "DButton", plypnl, v.size, 32, 0, 0 )
 					plyinf:SetText( "" )
 					plyinf:Dock( LEFT )
 					function plyinf:Paint( pw, ph )
@@ -486,7 +486,7 @@ function YRPScoreboardAddPlayer(ply)
 		end
 	
 		-- Second Line
-		local plyopt2 = createD( "DPanel", plyframe, size, size, 0, 0 )
+		local plyopt2 = YRPCreateD( "DPanel", plyframe, size, size, 0, 0 )
 		plyopt2:Dock( FILL )
 		function plyopt2:Paint( pw, ph )
 			local iconsize = math.ceil( ph * 0.666 )
@@ -514,7 +514,7 @@ function YRPScoreboardAddPlayer(ply)
 			draw.SimpleText( text, "Open Sans_24", pw - br, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
 		end
 
-		local adminbtns = createD( "DHorizontalScroller", plyopt2, size, size, 0, 0)
+		local adminbtns = YRPCreateD( "DHorizontalScroller", plyopt2, size, size, 0, 0)
 		--adminbtns:Dock( RIGHT )
 		adminbtns:SetOverlap(-10)
 		function adminbtns:Paint(pw, ph)
@@ -662,7 +662,7 @@ function YRPScoreboardAddPlayer(ply)
 			if !btn[3] or ( btn[3] and LocalPlayer():HasAccess() ) then
 				if !btn[4] or ( btn[4] and YRPNotSelf(ply) ) then
 					c = c + 1
-					local b = createD( "YButton", adminbtns, size, size, 0, 0)
+					local b = YRPCreateD( "YButton", adminbtns, size, size, 0, 0)
 					b:Dock( LEFT )
 					b:SetText( "" )
 					b.icon = btn[2]
@@ -683,7 +683,7 @@ function YRPScoreboardAddPlayer(ply)
 							end
 
 							if !pa(self.tt) then
-								self.tt = createD( "DFrame", nil, 100, 20, 0, 0)
+								self.tt = YRPCreateD( "DFrame", nil, 100, 20, 0, 0)
 								self.tt:SetTitle( "" )
 								self.tt:ShowCloseButton(false)
 								self.tt:SetDraggable(false)
@@ -749,7 +749,7 @@ function YRPOpenSBS()
 	local x = 0
 	for i, v in ipairs( eles ) do
 		if YRPIsElementEnabled( v.name ) then
-			local sortbtn = createD( "DButton", YRPScoreboard.Header, v.size, 40, x, 0 )
+			local sortbtn = YRPCreateD( "DButton", YRPScoreboard.Header, v.size, 40, x, 0 )
 			sortbtn:SetText( "" )
 			sortbtn:Dock( LEFT )
 			function sortbtn:Paint( pw, ph )
@@ -842,7 +842,7 @@ function YRPInitScoreboard()
 	if pa(YRPScoreboard) then
 		YRPScoreboard:Remove()
 	end
-	YRPScoreboard = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
+	YRPScoreboard = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
 	YRPScoreboard:DockPadding( 4, 4, 4, 4 )
 	YRPScoreboard.plys = {}
 	YRPScoreboard:Hide()
@@ -896,7 +896,7 @@ function YRPInitScoreboard()
 		draw.SimpleText( "v" .. YRPVersion() .. " ( " .. GetGlobalYRPString( "YRP_VERSIONART", "X" ) .. " )" .. string.upper(server), "Open Sans_16", pw - br, br, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 	end
 
-	YRPScoreboard.BotBar = createD( "DPanel", YRPScoreboard, 128, 32, 0, 0 )
+	YRPScoreboard.BotBar = YRPCreateD( "DPanel", YRPScoreboard, 128, 32, 0, 0 )
 	YRPScoreboard.BotBar:Dock( BOTTOM )
 	function YRPScoreboard.BotBar:Paint( pw, ph )
 		-- Table Footer
@@ -906,7 +906,7 @@ function YRPInitScoreboard()
 		draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers() .. " (" .. string.upper(YRP.lang_string( "LID_players" ) ) .. ")", "Open Sans_28", pw, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
-	YRPScoreboard.TopBar = createD( "DPanel", YRPScoreboard, 128, 128, 0, 0 )
+	YRPScoreboard.TopBar = YRPCreateD( "DPanel", YRPScoreboard, 128, 128, 0, 0 )
 	YRPScoreboard.TopBar:Dock( TOP )
 	function YRPScoreboard.TopBar:Paint( pw, ph )
 		-- NAME
@@ -917,13 +917,13 @@ function YRPInitScoreboard()
 		draw.SimpleText(name, "Open Sans_72", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	YRPScoreboard.Header = createD( "DPanel", YRPScoreboard, 32, 32, 0, 0 )
+	YRPScoreboard.Header = YRPCreateD( "DPanel", YRPScoreboard, 32, 32, 0, 0 )
 	YRPScoreboard.Header:Dock( TOP )
 	function YRPScoreboard.Header:Paint( pw, ph )
 		draw.RoundedBox( 5, 0, 32 - hr, pw, hr, Color( 255, 255, 255, 255 ) )
 	end
 
-	YRPScoreboard.list = createD( "DScrollPanel", YRPScoreboard, 100, 100, 0, 0)
+	YRPScoreboard.list = YRPCreateD( "DScrollPanel", YRPScoreboard, 100, 100, 0, 0)
 	YRPScoreboard.list:Dock(FILL)
 	YRPScoreboard.list:SetPadding(0)
 	function YRPScoreboard.list:Paint(pw, ph)
@@ -947,7 +947,7 @@ function YRPInitScoreboard()
 		end
 	end
 
-	YRPScoreboard.logo = createD( "DHTML", YRPScoreboard.TopBar, 128, 128, 0, 0 )
+	YRPScoreboard.logo = YRPCreateD( "DHTML", YRPScoreboard.TopBar, 128, 128, 0, 0 )
 	YRPScoreboard.logo:Dock( LEFT )
 	
 	YRPScoreboard:Hide()

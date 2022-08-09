@@ -700,7 +700,7 @@ net.Receive( "get_grp_roles", function(len, ply)
 	local _roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. _uid .. "'" )
 	if wk(_roles) then
 		for i, ro in pairs(_roles) do
-			updateRoleUses(ro.uniqueID)
+			YRPUpdateRoleUses(ro.uniqueID)
 			ro.pms = GetPMTableOfRole(ro.uniqueID)
 		end
 		net.Start( "get_grp_roles" )
@@ -1922,7 +1922,7 @@ net.Receive( "promotePlayer", function(len, ply)
 			}, "uniqueID = '" .. chatab.uniqueID .. "'" )
 
 			if IsValid( target ) then
-				SetRole( target, tmpTableTargetPromoteRole.uniqueID, true )
+				YRPSetRole( target, tmpTableTargetPromoteRole.uniqueID, true )
 			end
 			YRP.msg( "note", ply:Nick() .. " promoted " .. chatab.rpname .. " to " .. tmpTableTargetPromoteRole.string_name )
 			YRPSendGroupMember( ply, chatab.uniqueID )
@@ -1966,7 +1966,7 @@ net.Receive( "demotePlayer", function( len, ply )
 		}, "uniqueID = '" .. chatab.uniqueID .. "'" )
 
 		if IsValid( target ) then
-			SetRole( target, tmpTableTargetDemoteRole.uniqueID )
+			YRPSetRole( target, tmpTableTargetDemoteRole.uniqueID )
 		end
 		YRP.msg( "note", ply:Nick() .. " demoted " .. chatab.rpname .. " to " .. tmpTableTargetDemoteRole.string_name )
 		YRPSendGroupMember( ply, chatab.uniqueID )
@@ -2060,7 +2060,7 @@ net.Receive( "yrp_invite_accept", function( len, ply )
 	
 		addToWhitelist( tonumber(role.uniqueID), ply )
 		addToWhitelistGroup( tonumber(role.int_groupID), ply )
-		SetRole( ply, tonumber(role.uniqueID) )
+		YRPSetRole( ply, tonumber(role.uniqueID) )
 		YRP.msg( "note", "[yrp_invite_accept] Added to whitelist and setrole for " .. ply:YRPName() )
 		YRPUpdateGroupMemberLists()
 	else

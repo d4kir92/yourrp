@@ -35,7 +35,7 @@ local PANEL = {}
 local color_red = Color( 255, 0, 0, 100 )
 function PANEL:Init()
 	self.tabs = {}
-	self.hscroller = createD( "DHorizontalScroller", self, self:GetWide(), YRP.ctr(100), 0, 0)
+	self.hscroller = YRPCreateD( "DHorizontalScroller", self, self:GetWide(), YRP.ctr(100), 0, 0)
 
 	function self.hscroller:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
@@ -43,7 +43,7 @@ function PANEL:Init()
 
 	self.w = 0
 	self.h = 0
-	self.site = createD( "DPanel", self, 0, 0, 0, 0)
+	self.site = YRPCreateD( "DPanel", self, 0, 0, 0, 0)
 
 	function self.site:Paint(pw, ph)
 		surfaceBox(0, 0, pw, ph, color_red )
@@ -65,7 +65,7 @@ function PANEL:AddPanel(pnl)
 end
 
 function PANEL:MakeSpacer()
-	local spacer = createD( "DButton", self, YRP.ctr(30), YRP.ctr(100), 0, 0)
+	local spacer = YRPCreateD( "DButton", self, YRP.ctr(30), YRP.ctr(100), 0, 0)
 	spacer:SetText( "" )
 
 	function spacer:Paint(pw, ph)
@@ -102,7 +102,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 	if hassubtabs then
 		spacer = YRP.ctr(100)
 	end
-	local TAB = createD( "DButton", self, GetTextLength(YRP.lang_string(name), "Y_22_500" ) + YRP.ctr(30 * 2) + spacer, YRP.ctr(100), YRP.ctr(400), 0)
+	local TAB = YRPCreateD( "DButton", self, GetTextLength(YRP.lang_string(name), "Y_22_500" ) + YRP.ctr(30 * 2) + spacer, YRP.ctr(100), YRP.ctr(400), 0)
 	TAB.menu = self
 	TAB.name = name
 	TAB.netstr = netstr
@@ -119,7 +119,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 	function TAB:ShowSubTabs()
 		if self.stabs == nil then
 			local posx, posy = self:LocalToScreen(0, 0)
-			self.stabs = createD( "DFrame", self, YRP.ctr(400), self:GetTall() * table.Count(self.subtabs), posx, posy + self:GetTall() )
+			self.stabs = YRPCreateD( "DFrame", self, YRP.ctr(400), self:GetTall() * table.Count(self.subtabs), posx, posy + self:GetTall() )
 			self.stabs:SetTitle( "" )
 			self.stabs:ShowCloseButton(false)
 			self.stabs:SetDraggable(false)
@@ -144,10 +144,10 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 				--surfaceBox(0, YRP.ctr(4), pw, ph - YRP.ctr(8), Color( 0, 0, 255, 255) )
 			end
 
-			self.stabs.pl = createD( "DPanelList", self.stabs, self.stabs:GetWide(), self.stabs:GetTall(), 0, 0)
+			self.stabs.pl = YRPCreateD( "DPanelList", self.stabs, self.stabs:GetWide(), self.stabs:GetTall(), 0, 0)
 
 			for i, subtab in pairs(self.subtabs) do
-				local st = createD( "DButton", self.stabs.pl, self.stabs:GetWide(), self:GetTall(), 0, 0)
+				local st = YRPCreateD( "DButton", self.stabs.pl, self.stabs:GetWide(), self:GetTall(), 0, 0)
 				st:SetText( "" )
 				st.menu = TAB
 				st.name = subtab.name

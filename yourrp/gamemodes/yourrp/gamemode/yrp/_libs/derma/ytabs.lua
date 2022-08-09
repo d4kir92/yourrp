@@ -9,9 +9,9 @@ function PANEL:UPDATESIZE()
 end
 
 function PANEL:Init()
-	self.hs = createD( "DHorizontalScroller", self, 0, 0, 0, 0)
+	self.hs = YRPCreateD( "DHorizontalScroller", self, 0, 0, 0, 0)
 	self.hs:SetOverlap(-YRP.ctr(20) )
-	self.site = createD( "DPanel", self, 0, 0, 0, 0)
+	self.site = YRPCreateD( "DPanel", self, 0, 0, 0, 0)
 	function self.site:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 100, 100, 200) )
 	end
@@ -37,7 +37,7 @@ function PANEL:AddOption(name, func, height)
 	self.height = height
 	self:UPDATESIZE()
 
-	local tab = createD( "DButton", nil, YRP.ctr(400), YRP.ctr(height), 0, 0)
+	local tab = YRPCreateD( "DButton", nil, YRP.ctr(400), YRP.ctr(height), 0, 0)
 	tab:SetText( "" )
 	tab.tabs = self
 	function tab:DoClick()

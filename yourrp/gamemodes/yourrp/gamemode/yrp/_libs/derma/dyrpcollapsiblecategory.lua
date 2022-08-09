@@ -2,9 +2,9 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self.header = createD( "DButton", self, 100, 50, 0, 0)
+	self.header = YRPCreateD( "DButton", self, 100, 50, 0, 0)
 	self.header:SetText( "" )
-	self.content = createD( "DPanelList", self, 100, 50, 0, 100)
+	self.content = YRPCreateD( "DPanelList", self, 100, 50, 0, 100)
 	self.color = YRPColGreen()
 	self.color2 = YRPColGreen()
 	self.header:SetTall(self:GetHeaderHeight() )

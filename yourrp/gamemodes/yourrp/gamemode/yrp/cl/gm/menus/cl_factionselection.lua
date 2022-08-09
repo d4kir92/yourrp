@@ -31,12 +31,12 @@ function CreateFactionSelectionContent()
 		nh = parent:GetTall()
 	end
 
-	local site = createD( "DPanel", parent, parent:GetWide(), parent:GetTall(), 0, 0)
+	local site = YRPCreateD( "DPanel", parent, parent:GetWide(), parent:GetTall(), 0, 0)
 	function site:Paint(pw, ph)
 	end
 
 	-- List of Factions
-	local list = createD( "DScrollPanel", site, nw, nh, 0, 0)
+	local list = YRPCreateD( "DScrollPanel", site, nw, nh, 0, 0)
 	list:Center()
 	function list:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ) )
@@ -58,7 +58,7 @@ function CreateFactionSelectionContent()
 
 
 	if LocalPlayer().cc then -- for Character Creation
-		local header = createD( "DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200) )
+		local header = YRPCreateD( "DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200) )
 		function header:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string( "LID_chooseyourfaction" ), "Y_36_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
@@ -67,7 +67,7 @@ function CreateFactionSelectionContent()
 		btn.w = 500
 		btn.h = 75
 
-		local back = createD( "YButton", site, YRP.ctr( btn.w), YRP.ctr( btn.h), site:GetWide() / 2 - YRP.ctr( btn.w) / 2, ScH() - YRP.ctr(200) )
+		local back = YRPCreateD( "YButton", site, YRP.ctr( btn.w), YRP.ctr( btn.h), site:GetWide() / 2 - YRP.ctr( btn.w) / 2, ScH() - YRP.ctr(200) )
 		back:SetText( "LID_back" )
 		function back:Paint(pw, ph)
 			if LocalPlayer():GetYRPInt( "char_count", 0) > 0 then
@@ -118,7 +118,7 @@ function CreateFactionSelectionContent()
 					end
 		
 					if fac.uniqueID != -1 then
-						local faction = createD( "YPanel", nil, w, h, YRP.ctr( config.br) + x * (w + YRP.ctr( config.br) ), YRP.ctr( config.br) + y * (h + YRP.ctr( config.br) ))
+						local faction = YRPCreateD( "YPanel", nil, w, h, YRP.ctr( config.br) + x * (w + YRP.ctr( config.br) ), YRP.ctr( config.br) + y * (h + YRP.ctr( config.br) ))
 						function faction:Paint(pw, ph)
 							if LocalPlayer().cc then
 								draw.RoundedBox(YRP.ctr(10), 0, 0, w, h, YRPInterfaceValue( "YFrame", "BG" ) )
@@ -133,16 +133,16 @@ function CreateFactionSelectionContent()
 						if !strEmpty(url) then
 							px = h + YRP.ctr(20)
 							sw = w - h - 2 * YRP.ctr(20)
-							local logo = createD( "DHTML", faction, h - 2 * YRP.ctr( config.br), h - 2 * YRP.ctr( config.br), YRP.ctr( config.br), YRP.ctr( config.br) )
+							local logo = YRPCreateD( "DHTML", faction, h - 2 * YRP.ctr( config.br), h - 2 * YRP.ctr( config.br), YRP.ctr( config.br), YRP.ctr( config.br) )
 							logo:SetHTML(GetHTMLImage(url, logo:GetWide(), logo:GetTall() ))
 						end
 
-						local name = createD( "DPanel", faction, sw, YRP.ctr(100), px, 0)
+						local name = YRPCreateD( "DPanel", faction, sw, YRP.ctr(100), px, 0)
 						function name:Paint(pw, ph)
 							draw.SimpleText(fac.string_name, "Y_26_500", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 						end
 
-						local description = createD( "RichText", faction, sw, h - YRP.ctr(100), px, YRP.ctr(100) )
+						local description = YRPCreateD( "RichText", faction, sw, h - YRP.ctr(100), px, YRP.ctr(100) )
 						description:SetText(fac.string_description)
 						function description:PerformLayout()
 							if self.SetUnderlineFont != nil then
@@ -153,7 +153,7 @@ function CreateFactionSelectionContent()
 							self:SetFGColor(Color( 255, 255, 255, 255 ) )
 						end
 
-						local join = createD( "DButton", faction, faction:GetWide() - YRP.ctr(60), faction:GetTall(), 0, 0)
+						local join = YRPCreateD( "DButton", faction, faction:GetWide() - YRP.ctr(60), faction:GetTall(), 0, 0)
 						join:SetText( "" )
 						function join:Paint(pw, ph)
 							if self:IsHovered() then

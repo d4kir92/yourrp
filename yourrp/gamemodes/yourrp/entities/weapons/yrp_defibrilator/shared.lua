@@ -41,13 +41,6 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
-	self.delay = self.delay or 0
-	if CLIENT then
-		if self.delay < CurTime() then
-			self.delay = CurTime() + 1
-			notification.AddLegacy( "[Spawn Corpse On Death] is disabled, which is needed for the defi", NOTIFY_HINT, 3)
-		end
-	end
 	if SERVER then
 		local ply = self:GetOwner()
 		local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)

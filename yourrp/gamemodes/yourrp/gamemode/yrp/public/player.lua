@@ -400,6 +400,15 @@ function Player:AddMoneyBank(money)
 	self:addMoneyBank(money)
 end
 
+
+
+--[[ Shop ]]--
+function Player:HasStorageItem( uid )
+	return self:YRPHasStorageItem( uid )
+end
+
+
+
 --[[ Character ]]--
 function Player:Level()
 	return tonumber(self:GetYRPString( "int_level", "1" ) )

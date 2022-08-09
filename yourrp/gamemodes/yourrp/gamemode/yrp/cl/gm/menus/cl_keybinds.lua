@@ -3,8 +3,8 @@
 KEYBINDS = KEYBINDS or {}
 KEYBINDS.open = false
 
-function createDKeybinder(parent, w, h, x, y, keybind)
-	local _tmp = createD( "DBinder", parent, w, h, x, y)
+function YRPCreateDKeybinder(parent, w, h, x, y, keybind)
+	local _tmp = YRPCreateD( "DBinder", parent, w, h, x, y)
 	_tmp:SetValue(YRPGetKeybind(keybind) )
 	function _tmp:OnChange(num)
 		if !YRPSetKeybind(keybind, num) and num != 0 then
@@ -37,7 +37,7 @@ function openKeybindsMenu()
 	openMenu()
 
 	KEYBINDS.open = true
-	KEYBINDS.window = createD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
+	KEYBINDS.window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
 	KEYBINDS.window:Center()
 	KEYBINDS.window:SetTitle( "LID_keybinds" )
 	KEYBINDS.window:SetHeaderHeight(YRP.ctr(100) )
@@ -62,7 +62,7 @@ function CreateKeybindsContent(parent)
 
 	local _wide = 780
 
-	background = createD( "DPanel", parent, YRP.ctr(1200), parent:GetTall(), 0, 0)
+	background = YRPCreateD( "DPanel", parent, YRP.ctr(1200), parent:GetTall(), 0, 0)
 	local keybinds = {}
 	table.insert(keybinds, {YRP.lang_string( "LID_characterselection" ), "menu_character_selection"})
 	table.insert(keybinds, {YRP.lang_string( "LID_rolemenu" ), "menu_role"})
@@ -106,12 +106,12 @@ function CreateKeybindsContent(parent)
 
 	local kbw = YRP.ctr(200)
 	for i, v in pairs(keybinds) do
-		createDKeybinder(parent, kbw, YRP.ctr(50), YRP.ctr(_wide + 10), YRP.ctr(20) + (i - 1) * YRP.ctr(50 + 4), v[2])
+		YRPCreateDKeybinder(parent, kbw, YRP.ctr(50), YRP.ctr(_wide + 10), YRP.ctr(20) + (i - 1) * YRP.ctr(50 + 4), v[2])
 	end
 
 
 
-	local reset = createD( "DButton", parent, YRP.ctr(500), YRP.ctr(50), YRP.ctr(_wide + 400), YRP.ctr(20) )
+	local reset = YRPCreateD( "DButton", parent, YRP.ctr(500), YRP.ctr(50), YRP.ctr(_wide + 400), YRP.ctr(20) )
 	reset:SetText( "" )
 	function reset:Paint(pw, ph)
 		local tab = {}
@@ -145,7 +145,7 @@ function CreateKeybindsContent(parent)
 	end
 
 	if LocalPlayer():HasAccess() then
-		local setsvkeybind = createD( "DButton", parent, YRP.ctr(500), YRP.ctr(50), YRP.ctr(_wide + 400), YRP.ctr(90) )
+		local setsvkeybind = YRPCreateD( "DButton", parent, YRP.ctr(500), YRP.ctr(50), YRP.ctr(_wide + 400), YRP.ctr(90) )
 		setsvkeybind:SetText( "" )
 		function setsvkeybind:Paint(pw, ph)
 			local tab = {}
@@ -178,7 +178,7 @@ function CreateKeybindsContent(parent)
 			_window:MakePopup()
 		end
 
-		local forcesetkeybinds = createD( "DButton", parent, YRP.ctr(500), YRP.ctr(50), YRP.ctr(_wide + 400), YRP.ctr(160) )
+		local forcesetkeybinds = YRPCreateD( "DButton", parent, YRP.ctr(500), YRP.ctr(50), YRP.ctr(_wide + 400), YRP.ctr(160) )
 		forcesetkeybinds:SetText( "" )
 		function forcesetkeybinds:Paint(pw, ph)
 			local tab = {}

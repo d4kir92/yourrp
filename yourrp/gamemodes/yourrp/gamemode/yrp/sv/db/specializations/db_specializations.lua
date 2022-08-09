@@ -180,11 +180,7 @@ net.Receive( "spec_rem_swep", function(len, ply)
 end)
 
 function send_specializations(ply)
-	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-	local _nm = _all
-	if _nm == nil or _nm == false then
-		_nm = {}
-	end
+	local _nm = GetAllSpecializations()
 	net.Start( "get_specializations" )
 		net.WriteTable(_nm)
 	net.Send(ply)
@@ -349,6 +345,8 @@ function Player:AddSpecialization(specialization)
 		end
 		lnames = table.concat(lnames, ", " )
 		self:SetYRPString( "specializationNames", lnames)
+	else
+		YRP.msg( "note", "[AddSpecialization] id is nil" )
 	end
 end
 
@@ -397,7 +395,7 @@ end)
 
 function GetSpecializationIDByName(lname)
 	if lname == nil then
-		YRP.msg( "note", "GetSpecializationIDByName: " .. "NAME == " .. tostring(lname) )
+		YRP.msg( "note", "GetSpecializationIDByName: " .. "name == " .. tostring(lname) )
 		return nil
 	end
 
@@ -421,16 +419,24 @@ function GetSpecializationIDByName(lname)
 	if lid == nil then
 		return "FAIL!"
 	end
-	return tonumber(lid)
+	return tonumber( lid )
 end
 
-function GiveSpecialization(ply, lid)
-	if !IsValid(ply) then return end
-	if !wk(lid) then return end
+function GiveSpecialization( ply, lid )
+	if !IsValid(ply) then
+		YRP.msg( "note", "[GiveSpecialization] ply is invalid" )
+		return
+	end
+	if lid == nil then
+		YRP.msg( "note", "[GiveSpecialization] lid is nil" )
+		return
+	end
 
 	YRP.msg( "gm", "Give " .. ply:RPName() .. " SpecializationID " .. lid)
 
-	ply:AddSpecialization(lid)
+	ply:AddSpecialization( lid )
+
+	YRPGiveSpecs( ply )
 end
 
 function RemoveSpecialization(ply, lid)
@@ -440,4 +446,13 @@ function RemoveSpecialization(ply, lid)
 	YRP.msg( "gm", "Removed from " .. ply:RPName() .. " SpecializationID " .. lid)
 
 	ply:RemoveSpecialization(lid)
+end
+
+function GetAllSpecializations()
+	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+	local _nm = _all
+	if _nm == nil or _nm == false then
+		_nm = {}
+	end
+	return _nm
 end

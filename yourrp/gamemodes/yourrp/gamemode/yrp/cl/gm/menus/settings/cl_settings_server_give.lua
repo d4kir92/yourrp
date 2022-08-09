@@ -5,7 +5,7 @@ net.Receive( "setting_players", function(len)
 
 	if pa(PARENT) then
 
-		local _giveListView = createD( "DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+		local _giveListView = YRPCreateD( "DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 		_giveListView:AddColumn( "SteamID" )
 		_giveListView:AddColumn(YRP.lang_string( "LID_nick" ) )
 		_giveListView:AddColumn(YRP.lang_string( "LID_name" ) )

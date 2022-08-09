@@ -102,7 +102,7 @@ if CLIENT then
 	local textColor = Color( 255, 255, 255, 255 )
 
 	function SWEP:DrawHUD()
-		if IsValid( self.Owner:GetVehicle() ) then return end
+		if IsValid( self.Owner ) and self.Owner.GetVehicle and IsValid( self.Owner:GetVehicle() ) then return end
 		local Pos = self.Owner:GetShootPos()
 		local Aim = self.Owner:GetAimVector()
 

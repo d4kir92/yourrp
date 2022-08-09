@@ -16,14 +16,14 @@ function PANEL:Init()
 	local _pnl = self
 	--[[ Header ]]
 	--
-	self.header = createD( "DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
+	self.header = YRPCreateD( "DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 
 	function self.header:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 0) )
 	end
 
 	self.panels = {}
-	self.header.add = createD( "DButton", self.header, self:GetWide() / 5, self:GetTall(), 0, 0)
+	self.header.add = YRPCreateD( "DButton", self.header, self:GetWide() / 5, self:GetTall(), 0, 0)
 	self.header.add:SetText( "" )
 
 	function self.header.add:Paint(pw, ph)
@@ -34,7 +34,7 @@ function PANEL:Init()
 		_pnl:AddFunction()
 	end
 
-	self.header.rem = createD( "DButton", self.header, self:GetWide() / 5, self:GetTall(), 4 * (self:GetWide() / 5), 0)
+	self.header.rem = YRPCreateD( "DButton", self.header, self:GetWide() / 5, self:GetTall(), 4 * (self:GetWide() / 5), 0)
 	self.header.rem:SetText( "" )
 
 	function self.header.rem:Paint(pw, ph)
@@ -77,7 +77,7 @@ function PANEL:Init()
 
 	--[[ List Header ]]
 	--
-	self.listheader = createD( "DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
+	self.listheader = YRPCreateD( "DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 	self.listheader.textpre = ""
 	self.listheader.text = "UNNAMED"
 	self.listheader.textpos = ""
@@ -90,7 +90,7 @@ function PANEL:Init()
 
 	--[[ List ]]
 	--
-	self.list = createD( "DPanelList", self, self:GetWide(), self:GetTall() - YRP.ctr(110), 0, 0)
+	self.list = YRPCreateD( "DPanelList", self, self:GetWide(), self:GetTall() - YRP.ctr(110), 0, 0)
 	self.list:EnableVerticalScrollbar(true)
 	self.list:SetSpacing(2)
 
@@ -134,7 +134,7 @@ function PANEL:Init()
 	end
 
 	function self:AddEntry(tbl)
-		local _new = createD( "DButton", nil, self:GetWide(), YRP.ctr(50), 0, 0)
+		local _new = YRPCreateD( "DButton", nil, self:GetWide(), YRP.ctr(50), 0, 0)
 		_new:SetText( "" )
 		_new.tbl = tbl
 

@@ -69,7 +69,7 @@ function openCharacterCreation(from)
 	if CharacterMenu == nil then
 		openMenu()
 		
-		local win = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
+		local win = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
 		win:MakePopup()
 		win:Center()
 		win:SetTitle( "" )
@@ -79,10 +79,10 @@ function openCharacterCreation(from)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40) ) -- Dark Background - Character Creation
 		end
 		
-		win.bg = createD( "DHTML", win, win:GetWide(), win:GetTall(), 0, 0)
+		win.bg = YRPCreateD( "DHTML", win, win:GetWide(), win:GetTall(), 0, 0)
 		win.bg.url = ""
 
-		win.blur = createD( "DPanel", win, win:GetWide(), win:GetTall(), 0, 0)
+		win.blur = YRPCreateD( "DPanel", win, win:GetWide(), win:GetTall(), 0, 0)
 		function win.blur:Paint(pw, ph)
 			-- Blur Background
 			Derma_DrawBackgroundBlur(self, 0)
@@ -211,7 +211,7 @@ function LoadCharacters()
 							px = 0
 							py = 0
 						end
-						cache[i].tmpChar = createD( "YButton", nil, sw, sh, px, py)
+						cache[i].tmpChar = YRPCreateD( "YButton", nil, sw, sh, px, py)
 						local tmpChar = cache[i].tmpChar
 						tmpChar:SetText( "" )
 
@@ -290,7 +290,7 @@ function LoadCharacters()
 								end			
 							end
 							local mdlsize = tmpChar:GetTall() - YRP.ctr(100)
-							tmpChar.charplayermodel = createD( "DModelPanel", tmpChar, mdlsize, mdlsize, tmpChar:GetWide() / 2 - mdlsize / 2, YRP.ctr(100) )
+							tmpChar.charplayermodel = YRPCreateD( "DModelPanel", tmpChar, mdlsize, mdlsize, tmpChar:GetWide() / 2 - mdlsize / 2, YRP.ctr(100) )
 							tmpChar.charplayermodel:SetModel( "models/player/skeleton.mdl" )
 							tmpChar.charplayermodel:SetAnimated(true)
 							tmpChar.charplayermodel.Angles = Angle(0, 0, 0)
@@ -341,7 +341,7 @@ function LoadCharacters()
 							button.h = YRP.ctr(36*2)
 							button.x = tmpChar:GetWide() / 2 - button.w / 2
 							button.y = tmpChar:GetTall() / 2 - button.h / 2
-							local charactersEnter = createD( "YButton", tmpChar, button.w, button.h, button.x, button.y)
+							local charactersEnter = YRPCreateD( "YButton", tmpChar, button.w, button.h, button.x, button.y)
 							function charactersEnter:Paint(pw, ph)
 								if self:IsHovered() then
 									tmpChar.btnishovered = true
@@ -397,7 +397,7 @@ function LoadCharacters()
 							
 							local deletesize = YRP.ctr(40)
 							local deletebr = YRP.ctr(20)
-							local deleteChar = createD( "YButton", tmpChar, deletesize, deletesize, tmpChar:GetWide() - deletesize - deletebr, deletebr)
+							local deleteChar = YRPCreateD( "YButton", tmpChar, deletesize, deletesize, tmpChar:GetWide() - deletesize - deletebr, deletebr)
 							deleteChar:SetText( "" )
 							function deleteChar:Paint(pw, ph)
 								--hook.Run( "YRemovePaint", self, pw, ph)
@@ -508,7 +508,7 @@ function LoadCharacters()
 								curChar = tonumber(self.charid)
 							end
 							local mdlsize = CHARACTERW
-							tmpChar.charplayermodel = createD( "DModelPanel", tmpChar, DefaultCharH, DefaultCharH, DefaultCharW - (DefaultCharW / 2 - DefaultCharBR / 2) / 2 - DefaultCharH / 2, 0)
+							tmpChar.charplayermodel = YRPCreateD( "DModelPanel", tmpChar, DefaultCharH, DefaultCharH, DefaultCharW - (DefaultCharW / 2 - DefaultCharBR / 2) / 2 - DefaultCharH / 2, 0)
 							tmpChar.charplayermodel:SetModel( "models/player/skeleton.mdl" )
 							tmpChar.charplayermodel:SetAnimated(true)
 							tmpChar.charplayermodel.Angles = Angle(0, 0, 0)
@@ -552,7 +552,7 @@ function LoadCharacters()
 							
 							local deletesize = YRP.ctr(40)
 							local deletebr = YRP.ctr(40)
-							local deleteChar = createD( "YButton", tmpChar, deletesize, deletesize, tmpChar:GetWide() - deletesize - deletebr, deletebr)
+							local deleteChar = YRPCreateD( "YButton", tmpChar, deletesize, deletesize, tmpChar:GetWide() - deletesize - deletebr, deletebr)
 							deleteChar:SetText( "" )
 							function deleteChar:Paint(pw, ph)
 								--hook.Run( "YRemovePaint", self, pw, ph)
@@ -596,7 +596,7 @@ function LoadCharacters()
 							end
 						else
 							if YRP_CharDesign != "horizontalnew" then
-								tmpChar.mdl = createD( "DModelPanel", tmpChar, tmpChar:GetTall(), tmpChar:GetTall(), 0, 0)
+								tmpChar.mdl = YRPCreateD( "DModelPanel", tmpChar, tmpChar:GetTall(), tmpChar:GetTall(), 0, 0)
 								local pm = tmpChar.playermodels[tmpChar.playermodelID]
 								if strEmpty(pm) then
 									pm = "models/player/skeleton.mdl"
@@ -691,7 +691,7 @@ function LoadCharacters()
 								end
 	
 								if !strEmpty(tmpChar.factionIcon) and tmpChar.factionIcon != "http://www.famfamfam.com/lab/icons/silk/icons/group.png" and tmpChar.icon == nil then
-									tmpChar.icon = createD( "DHTML", tmpChar, tmpChar:GetTall() * 0.8, tmpChar:GetTall() * 0.8, tmpChar:GetWide() - tmpChar:GetTall() * 0.9, tmpChar:GetTall() * 0.1)
+									tmpChar.icon = YRPCreateD( "DHTML", tmpChar, tmpChar:GetTall() * 0.8, tmpChar:GetTall() * 0.8, tmpChar:GetWide() - tmpChar:GetTall() * 0.9, tmpChar:GetTall() * 0.1)
 									tmpChar.icon:SetHTML(GetHTMLImage(tmpChar.factionIcon, tmpChar.icon:GetWide(), tmpChar.icon:GetTall() ))
 								end
 							end
@@ -721,7 +721,7 @@ function LoadCharacters()
 					local py = 0
 
 					if CharMenu.character.amount < LocalPlayer():GetYRPInt( "int_characters_max", 1) then
-						local addChar = createD( "YButton", nil, sw, sh, px, py)
+						local addChar = YRPCreateD( "YButton", nil, sw, sh, px, py)
 						addChar:SetText( "" )
 						function addChar:Paint(pw, ph)
 							if CharMenu.character.amount < LocalPlayer():GetYRPInt( "int_characters_max", 1) then
@@ -754,7 +754,7 @@ function LoadCharacters()
 					end
 
 					if CharMenu.character.amountevent < LocalPlayer():GetYRPInt( "int_charactersevent_max", 1) then
-						local addCharEvent = createD( "YButton", nil, sw, sh, px, py)
+						local addCharEvent = YRPCreateD( "YButton", nil, sw, sh, px, py)
 						addCharEvent:SetText( "" )
 						function addCharEvent:Paint(pw, ph)
 							if CharMenu.character.amountevent and CharMenu.character.amountevent < LocalPlayer():GetYRPInt( "int_charactersevent_max", 1) then
@@ -794,7 +794,7 @@ function LoadCharacters()
 					local py = 0
 
 					if CharMenu.character.amount < LocalPlayer():GetYRPInt( "int_characters_max", 1 ) then
-						local addChar = createD( "YButton", nil, sw, sh, px, py)
+						local addChar = YRPCreateD( "YButton", nil, sw, sh, px, py)
 						addChar:SetText( "" )
 						function addChar:Paint(pw, ph)
 							if CharMenu.character.amount < LocalPlayer():GetYRPInt( "int_characters_max", 1) then
@@ -828,7 +828,7 @@ function LoadCharacters()
 					end
 
 					if CharMenu.character.amountevent < LocalPlayer():GetYRPInt( "int_charactersevent_max", 1) then
-						local addCharEvent = createD( "YButton", nil, sw, sh, px, py)
+						local addCharEvent = YRPCreateD( "YButton", nil, sw, sh, px, py)
 						addCharEvent:SetText( "" )
 						function addCharEvent:Paint(pw, ph)
 							if CharMenu.character.amountevent and CharMenu.character.amountevent < LocalPlayer():GetYRPInt( "int_charactersevent_max", 1) then
@@ -964,7 +964,7 @@ function openCharacterSelection( force )
 		end
 		CharMenu.logic()
 
-		CharMenu.frame = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
+		CharMenu.frame = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
 
 		if YRP_CharDesign == "vertical" then
 			CharMenu.frame:Hide()
@@ -982,10 +982,10 @@ function openCharacterSelection( force )
 				closeMenu()
 			end
 
-			CharMenu.frame.bg = createD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
+			CharMenu.frame.bg = YRPCreateD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
 			CharMenu.frame.bg.url = ""
 
-			CharMenu.frame.bgcf = createD( "DPanel", CharMenu.frame.bg, CharMenu.frame.bg:GetWide(), CharMenu.frame.bg:GetTall(), 0, 0)
+			CharMenu.frame.bgcf = YRPCreateD( "DPanel", CharMenu.frame.bg, CharMenu.frame.bg:GetWide(), CharMenu.frame.bg:GetTall(), 0, 0)
 			function CharMenu.frame.bgcf:Paint(pw, ph)
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
@@ -1020,7 +1020,7 @@ function openCharacterSelection( force )
 			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32*5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
 
 			local border = YRP.ctr(50)
-			CharMenu.charactersBackground = createD( "DPanel", CharMenu.frame, YRP.ctr(fw), ScrH() - (2 * border), (ScrW() - ScW() ) / 2 + border, border)
+			CharMenu.charactersBackground = YRPCreateD( "DPanel", CharMenu.frame, YRP.ctr(fw), ScrH() - (2 * border), (ScrW() - ScW() ) / 2 + border, border)
 			CharMenu.charactersBackground.text = YRP.lang_string( "LID_siteisloading" )
 			function CharMenu.charactersBackground:Paint(pw, ph)
 				local color = YRPInterfaceValue( "YFrame", "NC" )
@@ -1057,7 +1057,7 @@ function openCharacterSelection( force )
 
 			local cmdlbr = 60
 			local size = ScrH() - 2 * YRP.ctr( cmdlbr)
-			CharMenu.charplayermodel = createD( "DModelPanel", CharMenu.frame, size, size, ScrW2() - size * 0.48, YRP.ctr( cmdlbr) )
+			CharMenu.charplayermodel = YRPCreateD( "DModelPanel", CharMenu.frame, size, size, ScrW2() - size * 0.48, YRP.ctr( cmdlbr) )
 			CharMenu.charplayermodel:SetModel( "models/player/skeleton.mdl" )
 			CharMenu.charplayermodel:SetAnimated(true)
 			CharMenu.charplayermodel.Angles = Angle(0, 0, 0)
@@ -1093,7 +1093,7 @@ function openCharacterSelection( force )
 			CharMenu.charplayermodel:SetCamPos( Vector( size, size, size ) )
 			CharMenu.charplayermodel:SetLookAt( (mn + mx) * 0.5 )
 
-			CharMenu.characterList = createD( "DPanelList", CharMenu.charactersBackground, YRP.ctr(fw) - 2 * br, ScrH() - (2 * border) - br - YRP.ctr(120), br, br)
+			CharMenu.characterList = YRPCreateD( "DPanelList", CharMenu.charactersBackground, YRP.ctr(fw) - 2 * br, ScrH() - (2 * border) - br - YRP.ctr(120), br, br)
 			CharMenu.characterList:EnableVerticalScrollbar()
 			CharMenu.characterList:SetSpacing(YRP.ctr(20) )
 			function CharMenu.characterList:Paint(pw, ph)
@@ -1120,7 +1120,7 @@ function openCharacterSelection( force )
 			button.h = YRP.ctr(100)
 			button.x = ScrW2() - button.w / 2
 			button.y = ScrH() - button.h - border
-			local charactersEnter = createD( "YButton", CharMenu.frame, button.w, button.h, button.x, button.y)
+			local charactersEnter = YRPCreateD( "YButton", CharMenu.frame, button.w, button.h, button.x, button.y)
 			function charactersEnter:Paint(pw, ph)
 				if isEventChar then
 					draw.SimpleText( "EVENT CHARACTER", "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -1165,7 +1165,7 @@ function openCharacterSelection( force )
 
 			local px, py = charactersEnter:GetPos()
 
-			local deleteChar = createD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px + br + button.w, py)
+			local deleteChar = YRPCreateD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px + br + button.w, py)
 			deleteChar:SetText( "" )
 			function deleteChar:Paint(pw, ph)
 				hook.Run( "YRemovePaint", self, pw, ph)
@@ -1195,7 +1195,7 @@ function openCharacterSelection( force )
 				_window:MakePopup()
 			end
 
-			local charactersCreate = createD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(100), py)
+			local charactersCreate = YRPCreateD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(100), py)
 			charactersCreate:SetText( "" )
 			function charactersCreate:Paint(pw, ph)
 				if CharMenu.character.amount < LocalPlayer():GetYRPInt( "int_characters_max", 1) then
@@ -1212,7 +1212,7 @@ function openCharacterSelection( force )
 				end
 			end
 
-			local charactersCreateEvent = createD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(210), py)
+			local charactersCreateEvent = YRPCreateD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(210), py)
 			charactersCreateEvent:SetText( "" )
 			function charactersCreateEvent:Paint(pw, ph)
 				if CharMenu.character.amountevent < LocalPlayer():GetYRPInt( "int_charactersevent_max", 1) then
@@ -1244,10 +1244,10 @@ function openCharacterSelection( force )
 				closeMenu()
 			end
 
-			CharMenu.frame.bg = createD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
+			CharMenu.frame.bg = YRPCreateD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
 			CharMenu.frame.bg.url = ""
 
-			CharMenu.frame.bgcf = createD( "DPanel", CharMenu.frame.bg, CharMenu.frame.bg:GetWide(), CharMenu.frame.bg:GetTall(), 0, 0)
+			CharMenu.frame.bgcf = YRPCreateD( "DPanel", CharMenu.frame.bg, CharMenu.frame.bg:GetWide(), CharMenu.frame.bg:GetTall(), 0, 0)
 			function CharMenu.frame.bgcf:Paint(pw, ph)
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
@@ -1296,7 +1296,7 @@ function openCharacterSelection( force )
 			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32*5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
 
 			local border = YRP.ctr(50)
-			CharMenu.charactersBackground = createD( "DPanel", CharMenu.frame, ScrW() - (2 * br), YRP.ctr(200) + (2 * br), br, ScrH() - YRP.ctr(200) - 2 * br - br)
+			CharMenu.charactersBackground = YRPCreateD( "DPanel", CharMenu.frame, ScrW() - (2 * br), YRP.ctr(200) + (2 * br), br, ScrH() - YRP.ctr(200) - 2 * br - br)
 			CharMenu.charactersBackground.text = YRP.lang_string( "LID_siteisloading" )
 			function CharMenu.charactersBackground:Paint(pw, ph)
 				local color = YRPInterfaceValue( "YFrame", "NC" )
@@ -1306,7 +1306,7 @@ function openCharacterSelection( force )
 			end
 
 			local size = ScrH() - br - br - YRP.ctr(200) - br - br - br - YRP.ctr(100) - br - br
-			CharMenu.charplayermodel = createD( "DModelPanel", CharMenu.frame, size, size, ScrW2() - size / 2, br)
+			CharMenu.charplayermodel = YRPCreateD( "DModelPanel", CharMenu.frame, size, size, ScrW2() - size / 2, br)
 			CharMenu.charplayermodel:SetModel( "models/player/skeleton.mdl" )
 			CharMenu.charplayermodel:SetAnimated(true)
 			CharMenu.charplayermodel.Angles = Angle(0, 0, 0)
@@ -1332,7 +1332,7 @@ function openCharacterSelection( force )
 				end
 			end
 
-			CharMenu.characterList = createD( "DHorizontalScroller", CharMenu.charactersBackground, CharMenu.charactersBackground:GetWide() - 2 * br, CharMenu.charactersBackground:GetTall() - 2 * br, br, br)
+			CharMenu.characterList = YRPCreateD( "DHorizontalScroller", CharMenu.charactersBackground, CharMenu.charactersBackground:GetWide() - 2 * br, CharMenu.charactersBackground:GetTall() - 2 * br, br, br)
 			--CharMenu.characterList:EnableVerticalScrollbar()
 			CharMenu.characterList:SetOverlap(-YRP.ctr(20) )
 			function CharMenu.characterList:Paint(pw, ph)
@@ -1344,7 +1344,7 @@ function openCharacterSelection( force )
 			button.h = YRP.ctr(100)
 			button.x = ScrW2() - button.w / 2
 			button.y = ScrH() - br - YRP.ctr(200) - br - br - br - button.h
-			local charactersEnter = createD( "YButton", CharMenu.frame, button.w, button.h, button.x, button.y)
+			local charactersEnter = YRPCreateD( "YButton", CharMenu.frame, button.w, button.h, button.x, button.y)
 			function charactersEnter:Paint(pw, ph)
 				if isEventChar then
 					draw.SimpleText( "EVENT CHARACTER", "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
@@ -1390,7 +1390,7 @@ function openCharacterSelection( force )
 
 			local px, py = charactersEnter:GetPos()
 
-			local deleteChar = createD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px + br + button.w, py)
+			local deleteChar = YRPCreateD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px + br + button.w, py)
 			deleteChar:SetText( "" )
 			function deleteChar:Paint(pw, ph)
 				hook.Run( "YRemovePaint", self, pw, ph)
@@ -1423,7 +1423,7 @@ function openCharacterSelection( force )
 				_window:MakePopup()
 			end
 
-			local charactersCreate = createD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(100), py)
+			local charactersCreate = YRPCreateD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(100), py)
 			charactersCreate:SetText( "" )
 			function charactersCreate:Paint(pw, ph)
 				if CharMenu.character.amount < LocalPlayer():GetYRPInt( "int_characters_max", 1) then
@@ -1440,7 +1440,7 @@ function openCharacterSelection( force )
 				end
 			end
 			
-			local charactersCreateEvent = createD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(210), py)
+			local charactersCreateEvent = YRPCreateD( "YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(210), py)
 			charactersCreateEvent:SetText( "" )
 			function charactersCreateEvent:Paint(pw, ph)
 				if CharMenu.character.amountevent < LocalPlayer():GetYRPInt( "int_charactersevent_max", 1) then
@@ -1472,10 +1472,10 @@ function openCharacterSelection( force )
 				closeMenu()
 			end
 
-			CharMenu.frame.bg = createD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
+			CharMenu.frame.bg = YRPCreateD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
 			CharMenu.frame.bg.url = ""
 
-			CharMenu.frame.bgcf = createD( "DPanel", CharMenu.frame.bg, CharMenu.frame.bg:GetWide(), CharMenu.frame.bg:GetTall(), 0, 0)
+			CharMenu.frame.bgcf = YRPCreateD( "DPanel", CharMenu.frame.bg, CharMenu.frame.bg:GetWide(), CharMenu.frame.bg:GetTall(), 0, 0)
 			function CharMenu.frame.bgcf:Paint(pw, ph)
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
@@ -1517,8 +1517,8 @@ function openCharacterSelection( force )
 
 			local iconsize = YRP.ctr(120*2)
 			local iconbr = YRP.ctr(30)
-			CharMenu.charactersHeader = createD( "YPanel", CharMenu.frame, ScrW(), iconsize + iconbr, 0, 0)
-			CharMenu.charactersHeader.logo = createD( "DHTML", CharMenu.frame, iconsize, iconsize + iconbr, 0, 0)
+			CharMenu.charactersHeader = YRPCreateD( "YPanel", CharMenu.frame, ScrW(), iconsize + iconbr, 0, 0)
+			CharMenu.charactersHeader.logo = YRPCreateD( "DHTML", CharMenu.frame, iconsize, iconsize + iconbr, 0, 0)
 			CharMenu.charactersHeader.matlogo = Material( "yrp/yrpicon.png" )
 			CharMenu.charactersHeader.br = iconbr
 			function CharMenu.charactersHeader:Paint(pw, ph)
@@ -1551,7 +1551,7 @@ function openCharacterSelection( force )
 			end
 
 			local charw = YRP.ctr(3 * 350*2 + 2 * 200)
-			CharMenu.charactersBackground = createD( "DPanel", CharMenu.frame, charw, ScrH() - YRP.ctr(600 + 360), ScrW() / 2 - charw / 2, YRP.ctr(600) )
+			CharMenu.charactersBackground = YRPCreateD( "DPanel", CharMenu.frame, charw, ScrH() - YRP.ctr(600 + 360), ScrW() / 2 - charw / 2, YRP.ctr(600) )
 			CharMenu.charactersBackground.text = YRP.lang_string( "LID_siteisloading" )
 			function CharMenu.charactersBackground:Paint(pw, ph)
 				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -1559,7 +1559,7 @@ function openCharacterSelection( force )
 
 
 
-			CharMenu.characterList = createD( "DHorizontalScroller", CharMenu.charactersBackground, CharMenu.charactersBackground:GetWide(), CharMenu.charactersBackground:GetTall(), 0, 0)
+			CharMenu.characterList = YRPCreateD( "DHorizontalScroller", CharMenu.charactersBackground, CharMenu.charactersBackground:GetWide(), CharMenu.charactersBackground:GetTall(), 0, 0)
 			--CharMenu.characterList:EnableVerticalScrollbar()
 			CharMenu.characterList:SetOverlap(-YRP.ctr(200) )
 			function CharMenu.characterList:Paint(pw, ph)
@@ -1572,7 +1572,7 @@ function openCharacterSelection( force )
 
 			local arrowbtnsize = YRP.ctr(128)
 
-			CharMenu.prevChar = createD( "YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 - charw / 2 - YRP.ctr(100 + 100), YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2) )
+			CharMenu.prevChar = YRPCreateD( "YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 - charw / 2 - YRP.ctr(100 + 100), YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2) )
 			CharMenu.prevChar:SetText( "" )
 			function CharMenu.prevChar:Paint(pw, ph)
 				if CharMenu.characterList.OffsetX > 0 then
@@ -1597,7 +1597,7 @@ function openCharacterSelection( force )
 				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
 			end
 
-			CharMenu.nextChar = createD( "YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 + charw / 2 + arrowbtnsize, YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2) )
+			CharMenu.nextChar = YRPCreateD( "YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 + charw / 2 + arrowbtnsize, YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100/2) )
 			CharMenu.nextChar:SetText( "" )
 			function CharMenu.nextChar:Paint(pw, ph)
 				if CharMenu.characterList.OffsetX < CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide() then
@@ -1637,10 +1637,10 @@ function openCharacterSelection( force )
 				closeMenu()
 			end
 
-			CharMenu.frame.bg = createD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
+			CharMenu.frame.bg = YRPCreateD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
 			CharMenu.frame.bg.url = ""
 
-			CharMenu.frame.bgcf = createD( "DPanel", CharMenu.frame.bg, CharMenu.frame.bg:GetWide(), CharMenu.frame.bg:GetTall(), 0, 0)
+			CharMenu.frame.bgcf = YRPCreateD( "DPanel", CharMenu.frame.bg, CharMenu.frame.bg:GetWide(), CharMenu.frame.bg:GetTall(), 0, 0)
 			function CharMenu.frame.bgcf:Paint(pw, ph)
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
@@ -1683,7 +1683,7 @@ function openCharacterSelection( force )
 			YRPUpdateCharValues()
 			local charw = DefaultCharW
 			local charh = DefaultCharH
-			CharMenu.charactersBackground = createD( "DPanel", CharMenu.frame, charw, charh, ScrW() / 2 - charw / 2, ScrH() / 2 - charh / 2)
+			CharMenu.charactersBackground = YRPCreateD( "DPanel", CharMenu.frame, charw, charh, ScrW() / 2 - charw / 2, ScrH() / 2 - charh / 2)
 			CharMenu.charactersBackground.text = YRP.lang_string( "LID_siteisloading" )
 			function CharMenu.charactersBackground:Paint(pw, ph)
 				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -1691,7 +1691,7 @@ function openCharacterSelection( force )
 
 
 
-			CharMenu.characterList = createD( "DHorizontalScroller", CharMenu.charactersBackground, charw, charh, 0, 0)
+			CharMenu.characterList = YRPCreateD( "DHorizontalScroller", CharMenu.charactersBackground, charw, charh, 0, 0)
 			CharMenu.characterList.OffsetX = 0
 			--CharMenu.characterList:EnableVerticalScrollbar()
 			CharMenu.characterList:SetOverlap(-YRP.ctr(200) )
@@ -1744,7 +1744,7 @@ function openCharacterSelection( force )
 
 			local arrowbtnsize = YRP.ctr(128)
 
-			CharMenu.prevChar = createD( "YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 - DefaultCharW / 2, ScrH() - arrowbtnsize)
+			CharMenu.prevChar = YRPCreateD( "YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 - DefaultCharW / 2, ScrH() - arrowbtnsize)
 			CharMenu.prevChar:SetText( "" )
 			function CharMenu.prevChar:Paint(pw, ph)
 				if CharMenu.characterList.OffsetX > 0 then
@@ -1769,7 +1769,7 @@ function openCharacterSelection( force )
 				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
 			end
 
-			CharMenu.nextChar = createD( "YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 + DefaultCharW / 2 - arrowbtnsize, ScrH() - arrowbtnsize)
+			CharMenu.nextChar = YRPCreateD( "YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 + DefaultCharW / 2 - arrowbtnsize, ScrH() - arrowbtnsize)
 			CharMenu.nextChar:SetText( "" )
 			function CharMenu.nextChar:Paint(pw, ph)
 				if CharMenu.characterList.OffsetX < CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide() then
@@ -1796,7 +1796,7 @@ function openCharacterSelection( force )
 
 			local bw = ScrW() * 0.14
 			local bh = ScrH() * 0.05
-			local charactersEnter = createD( "YButton", CharMenu.frame, bw, bh, ScrW() / 2 - bw / 2, ScrH() - bh - ScrH() * 0.01)
+			local charactersEnter = YRPCreateD( "YButton", CharMenu.frame, bw, bh, ScrW() / 2 - bw / 2, ScrH() - bh - ScrH() * 0.01)
 			function charactersEnter:Paint(pw, ph)
 				local tab = {}
 				local text = math.Round(LocalPlayer():GetYRPInt( "int_deathtimestamp_min", 0) - CurTime(), 0)

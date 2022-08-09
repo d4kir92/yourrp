@@ -19,7 +19,7 @@ net.Receive( "Connect_Settings_Realistic", function(len)
 		scroller.h = PARENT:GetTall() - 2 * br
 		local Scroller = DHorizontalScroller(scroller)
 
-		local General = createD( "YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+		local General = YRPCreateD( "YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
 		General:SetText( "LID_generalsettings" )
 		function General:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -62,7 +62,7 @@ net.Receive( "Connect_Settings_Realistic", function(len)
 
 
 
-		local Damage = createD( "YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
+		local Damage = YRPCreateD( "YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
 		Damage:SetText( "LID_damagesettings" )
 		function Damage:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)

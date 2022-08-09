@@ -9,7 +9,7 @@ end
 function PANEL:Init()
 	self:SetTitle( "LID_color" )
 
-	local ctrl = createD( "DColorMixer", self, self:GetWide() - YRP.ctr(40), self:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
+	local ctrl = YRPCreateD( "DColorMixer", self, self:GetWide() - YRP.ctr(40), self:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
 
 	ctrl.ValueChanged = function( ctrl, color)
 		self:ValueChanged( color)

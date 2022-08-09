@@ -215,8 +215,8 @@ function YRP.msg( chan, str_msg, tochat, force )
 						YRPAddError(str, str, REALM)
 					end
 
-					if CLIENT and cn == "ERROR" and createD != nil then
-						local err = createD( "DFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400) )
+					if CLIENT and cn == "ERROR" and YRPCreateD != nil then
+						local err = YRPCreateD( "DFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400) )
 						err:ShowCloseButton(false)
 						err:SetDraggable(false)
 						err:SetTitle( "" )

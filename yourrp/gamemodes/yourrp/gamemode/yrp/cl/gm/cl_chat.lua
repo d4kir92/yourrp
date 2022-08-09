@@ -258,7 +258,7 @@ end
 local function YRPCreateText()
 	local lply = LocalPlayer()
 
-	local newtext = createD( "RichText", yrpChat.content:GetCanvas(), lply:HudValue( "CH", "SIZE_W" ), 50, 0, 0 )
+	local newtext = YRPCreateD( "RichText", yrpChat.content:GetCanvas(), lply:HudValue( "CH", "SIZE_W" ), 50, 0, 0 )
 	newtext:SetMouseInputEnabled( false )
 	newtext:Dock( TOP )
 	newtext:SetVerticalScrollbarEnabled( false )
@@ -338,7 +338,7 @@ local function InitYRPChat()
 		lply.yrp_timestamp = lply.yrp_timestamp or false
 		if yrpChat.window == nil then
 			-- MAIN FRAME
-			yrpChat.window = createD( "DFrame", nil, 100, 100, 100, 100)
+			yrpChat.window = YRPCreateD( "DFrame", nil, 100, 100, 100, 100)
 			yrpChat.window:DockPadding( BR, BR, BR, BR )
 			yrpChat.window:SetTitle( "" )
 			yrpChat.window:ShowCloseButton(false)
@@ -394,7 +394,7 @@ local function InitYRPChat()
 			end
 
 			-- TOPBAR
-			yrpChat.TopBar = createD( "DPanel", yrpChat.window, TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR, 0, 0 )
+			yrpChat.TopBar = YRPCreateD( "DPanel", yrpChat.window, TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR, 0, 0 )
 			yrpChat.TopBar:DockMargin( 0, 0, 0, BR )
 			yrpChat.TopBar:Dock( TOP )
 			function yrpChat.TopBar:Paint( pw, ph )
@@ -410,7 +410,7 @@ local function InitYRPChat()
 			end
 
 			-- BOTBAR
-			yrpChat.BotBar = createD( "DPanel", yrpChat.window, BOTBAR_H - 2 * BR, BOTBAR_H - 2 * BR, 0, 0 )
+			yrpChat.BotBar = YRPCreateD( "DPanel", yrpChat.window, BOTBAR_H - 2 * BR, BOTBAR_H - 2 * BR, 0, 0 )
 			yrpChat.BotBar:DockMargin( 0, BR, 0, 0 )
 			yrpChat.BotBar:Dock( BOTTOM )
 			function yrpChat.BotBar:Paint( pw, ph )
@@ -418,7 +418,7 @@ local function InitYRPChat()
 			end
 
 			-- FILL
-			yrpChat.content = createD( "DScrollPanel", yrpChat.window, 10, 10, 0, 0 )
+			yrpChat.content = YRPCreateD( "DScrollPanel", yrpChat.window, 10, 10, 0, 0 )
 			yrpChat.content:Dock( FILL )
 			yrpChat.content:DockMargin( 0, BR, 0, 0 )
 			yrpChat.content.delay = 0
@@ -467,10 +467,10 @@ local function InitYRPChat()
 			end
 
 			-- TOPBAR CONTENT
-			yrpChat.window.logo = createD( "DHTML", yrpChat.TopBar, TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR, 0, 0)
+			yrpChat.window.logo = YRPCreateD( "DHTML", yrpChat.TopBar, TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR, 0, 0)
 
 			-- BOTBAR CONTENT
-			yrpChat.comboBox = createD( "DComboBox", yrpChat.BotBar, 70, BOTBAR_H - 2 * BR, 0, 0)
+			yrpChat.comboBox = YRPCreateD( "DComboBox", yrpChat.BotBar, 70, BOTBAR_H - 2 * BR, 0, 0)
 			yrpChat.comboBox:Dock( LEFT )
 			yrpChat.comboBox:DockMargin( 0, 0, BR, 0 )
 			update_chat_choices()
@@ -486,7 +486,7 @@ local function InitYRPChat()
 				net.SendToServer()
 			end
 
-			yrpChat.settings = createD( "YButton", yrpChat.BotBar, BOTBAR_H - 2 * BR, BOTBAR_H - 2 * BR, 0, 0)
+			yrpChat.settings = YRPCreateD( "YButton", yrpChat.BotBar, BOTBAR_H - 2 * BR, BOTBAR_H - 2 * BR, 0, 0)
 			yrpChat.settings:Dock( RIGHT )
 			yrpChat.settings:DockMargin( BR, 0, 0, 0 )
 			yrpChat.settings:SetText( "" )
@@ -501,22 +501,22 @@ local function InitYRPChat()
 				end
 			end
 			function yrpChat.settings:DoClick()
-				local win = createD( "YFrame", nil, 800, 800, 0, 0)
+				local win = YRPCreateD( "YFrame", nil, 800, 800, 0, 0)
 				win:MakePopup()
 				win:Center()
 				win:SetTitle( "LID_settings" )
 
-				local tila = createD( "YLabel", win:GetContent(), 350, 50, 50, 0 )
+				local tila = YRPCreateD( "YLabel", win:GetContent(), 350, 50, 50, 0 )
 				tila:SetText( "Timestamp" )
-				local ticb = createD( "DCheckBox", win:GetContent(), 50, 50, 0, 0 )
+				local ticb = YRPCreateD( "DCheckBox", win:GetContent(), 50, 50, 0, 0 )
 				ticb:SetChecked(lply.yrp_timestamp)
 				function ticb:OnChange()
 					lply.yrp_timestamp = !lply.yrp_timestamp
 				end
 
-				local tspn = createD( "YLabel", win:GetContent(), 400, 50, 0, 100 )
+				local tspn = YRPCreateD( "YLabel", win:GetContent(), 400, 50, 0, 100 )
 				tspn:SetText( "LID_textsize" )
-				local tsnw = createD( "DNumberWang", win:GetContent(), 400, 50, 0, 100 + 50 )
+				local tsnw = YRPCreateD( "DNumberWang", win:GetContent(), 400, 50, 0, 100 + 50 )
 				tsnw:SetValue(LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" ) )
 				tsnw:SetMin(10)
 				tsnw:SetMax(64)
@@ -525,7 +525,7 @@ local function InitYRPChat()
 				end
 			end
 
-			yrpChat.writeField = createD( "DTextEntry", yrpChat.BotBar, 0, BOTBAR_H - 2 * BR, 0, 0)
+			yrpChat.writeField = YRPCreateD( "DTextEntry", yrpChat.BotBar, 0, BOTBAR_H - 2 * BR, 0, 0)
 			yrpChat.writeField:Dock( BOTTOM )
 			yrpChat.writeField:SetHistoryEnabled(true)
 			function yrpChat.writeField:GetAutoComplete( text )
@@ -859,7 +859,7 @@ local function InitYRPChat()
 					local rows = math.Clamp( math.ceil( tx / lply:HudValue( "CH", "SIZE_W" ) ), 1, 5 )
 					newtext:SetTall( rows * ts )
 									
-					local img = createD( "HTML", yrpChat.content:GetCanvas(), w - 32, 250, 0, 0 )
+					local img = YRPCreateD( "HTML", yrpChat.content:GetCanvas(), w - 32, 250, 0, 0 )
 					img:SetParent( yrpChat.content )
 					img:SetMouseInputEnabled( false )
 					img:Dock( TOP )

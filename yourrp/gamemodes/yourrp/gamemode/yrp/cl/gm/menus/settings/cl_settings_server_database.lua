@@ -24,7 +24,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 
 
 
-		local yourrpdatabase = createD( "YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
+		local yourrpdatabase = YRPCreateD( "YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
 		yourrpdatabase:SetText( "LID_yourrpdatabase" )
 		function yourrpdatabase:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -63,7 +63,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 		yrp_db.data = DStringBox( bl, YRP_SQL.string_database, "LID_database", "update_string_database" )
 		yrp_db.user = DStringBox( bl, YRP_SQL.string_username, "LID_username", "update_string_username" )
 		yrp_db.pass = DStringBox( bl, YRP_SQL.string_password, "LID_password", "update_string_password" )
-		yrp_db.change_to_sqlmode = createD( "DButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
+		yrp_db.change_to_sqlmode = YRPCreateD( "DButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
 
 		yrp_db:AddItem(yrp_db.change_to_sqlmode)
 
@@ -96,7 +96,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 			end
 		end
 		yrp_db.dele = DIntComboBoxBox( bl, delete, "LID_removebackupolderthen", "update_int_backup_delete", tonumber(YRP_SQL.int_backup_delete) )
-		yrp_db.createbackupnow = createD( "DButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
+		yrp_db.createbackupnow = YRPCreateD( "DButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
 		yrp_db.createbackupnow:SetText( "" )
 		function yrp_db.createbackupnow:Paint(pw, ph)
 			surfaceButton(self, pw, ph, YRP.lang_string( "LID_createbackupnow" ) .. " ( data/yrp_backups/)" )
@@ -149,7 +149,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 
 		DHR( dhr)
 
-		local restartServer = createD( "DButton", yourrpdatabase.parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3000), YRP.ctr(900) )
+		local restartServer = YRPCreateD( "DButton", yourrpdatabase.parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3000), YRP.ctr(900) )
 		restartServer:SetText( "RESTART SERVER" )
 		function restartServer:DoClick()
 			net.Start( "yrp_restartserver" )
@@ -159,7 +159,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 
 
 
-		local yourrptables = createD( "YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall() - YRP.ctr(60), 0, 0)
+		local yourrptables = YRPCreateD( "YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall() - YRP.ctr(60), 0, 0)
 		yourrptables:SetText( "LID_yourrptables" )
 		function yourrptables:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -177,7 +177,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 		end
 		local _x, _y = Scroller.YourRPTables:GetPos()
 		local _w, _h = Scroller.YourRPTables:GetSize()
-		local _rem_and_change = createD( "DButton", Scroller.YourRPTables:GetParent(), Scroller.YourRPTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
+		local _rem_and_change = YRPCreateD( "DButton", Scroller.YourRPTables:GetParent(), Scroller.YourRPTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
 		_rem_and_change:SetText( "" )
 		yourrptables:AddItem(_rem_and_change)
 		function _rem_and_change:Paint(pw, ph)
@@ -217,7 +217,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 
 
 
-		local yourrprelatedtables = createD( "YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
+		local yourrprelatedtables = YRPCreateD( "YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
 		yourrprelatedtables:SetText( "LID_yourrprelatedtables" )
 		function yourrprelatedtables:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -232,7 +232,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 		for i, tab in pairs(TAB_YRP_RELATED) do
 			yrp_r_tabs[tab.name] = DBoolLine( dbtab, 0, tab.name, nil)
 		end
-		local _rem_and_change2 = createD( "DButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
+		local _rem_and_change2 = YRPCreateD( "DButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
 		_rem_and_change2:SetText( "" )
 		yourrprelatedtables:AddItem(_rem_and_change2)
 		function _rem_and_change2:Paint(pw, ph)
@@ -272,7 +272,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 
 
 
-		local othertables = createD( "YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
+		local othertables = YRPCreateD( "YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
 		othertables:SetText( "LID_othertables" )
 		function othertables:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -287,7 +287,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 		for i, tab in pairs(TAB_YRP_OTHER) do
 			other_tabs[tab.name] = DBoolLine( dbtab, 0, tab.name, nil)
 		end
-		local _rem_and_change3 = createD( "DButton", OtherTables:GetParent(), OtherTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
+		local _rem_and_change3 = YRPCreateD( "DButton", OtherTables:GetParent(), OtherTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
 		_rem_and_change3:SetText( "" )
 		othertables:AddItem(_rem_and_change3)
 		function _rem_and_change3:Paint(pw, ph)

@@ -96,7 +96,7 @@ function F8RequireUG(site, usergroups)
 
 	local allugs = {}
 	allugs["USERGROUPS"] = usergroups
-	local notallowed = createD( "DPanel", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local notallowed = YRPCreateD( "DPanel", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function notallowed:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color( 0, 0, 0, 255 ) )
 		surfaceText(YRP.lang_string( "LID_settings_yourusergrouphasnopermission" ) .. " [ " .. site .. " ]", "Y_24_500", w / 2, h / 2, YRPColGreen(), 1, 1)
@@ -111,7 +111,7 @@ function F8RequireUG(site, usergroups)
 
 	if site == "usergroups" then
 		for i, v in pairs(ugs) do
-			local example = createD( "DTextEntry", PARENT, YRP.ctr(1400), YRP.ctr(50), PARENT:GetWide() / 2 - YRP.ctr(1400 / 2), PARENT:GetTall() / 2 + YRP.ctr(300) + (i - 1) * YRP.ctr(60) )
+			local example = YRPCreateD( "DTextEntry", PARENT, YRP.ctr(1400), YRP.ctr(50), PARENT:GetWide() / 2 - YRP.ctr(1400 / 2), PARENT:GetTall() / 2 + YRP.ctr(300) + (i - 1) * YRP.ctr(60) )
 			if DAMVERSION then
 				example:SetText( "dam addply \"" .. lply:RPName() .. "\" " .. v)
 			elseif SAM_LOADED then
@@ -133,7 +133,7 @@ function SettingsTabsContent()
 	local PARENT = sm.site
 
 	-- TABS
-	local tabs = createD( "YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local tabs = YRPCreateD( "YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function tabs:Think()
 		self:SetSize(PARENT:GetWide(), PARENT:GetTall() )
 	end
@@ -393,7 +393,7 @@ function F8OpenSettings()
 			YRPOpenSettingsUsergroups()
 		end
 
-		sm.win = createD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
+		sm.win = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
 		sm.win:SetTitle( "" )
 		sm.win:MakePopup()
 		--sm.win:SetHeaderHeight(YRP.ctr(100) )
@@ -418,7 +418,7 @@ function F8OpenSettings()
 			F8CloseSettings(self)
 		end
 
-		sm.win.reload = createD( "YButton", sm.win, rlsize, rlsize, 0, 0)
+		sm.win.reload = YRPCreateD( "YButton", sm.win, rlsize, rlsize, 0, 0)
 		sm.win.reload:SetText( "" )
 		function sm.win.reload:Paint(pw, ph)
 			hook.Run( "YButtonPaint", self, pw, ph)
@@ -440,7 +440,7 @@ function F8OpenSettings()
 
 		-- LOGO
 		local logoS = sm.win:GetHeaderHeight() - YRP.ctr(20)
-		sm.win.logo = createD( "YPanel", sm.win, YRP.ctr(200), logoS, sm.win:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10) )
+		sm.win.logo = YRPCreateD( "YPanel", sm.win, YRP.ctr(200), logoS, sm.win:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10) )
 		sm.win.logo.yrp = Material( "vgui/yrp/logo100_beta.png" )
 		function sm.win.logo:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
@@ -464,9 +464,9 @@ function F8OpenSettings()
 		local icon_size = sm.win:GetHeaderHeight() - YRP.ctr(20)
 		local icon_x, icon_y = sm.win.logo:GetPos()
 		icon_x = icon_x + sm.win.logo:GetWide() + YRP.ctr(20)
-		sm.win.discord = createD( "YPanel", sm.win, icon_size, icon_size, icon_x, icon_y)
-		sm.win.discord.logo = createD( "DPanel", sm.win.discord, icon_size, icon_size, 0, 0)
-		sm.win.discord.btn = createD( "DButton", sm.win.discord, icon_size, icon_size, 0, 0)
+		sm.win.discord = YRPCreateD( "YPanel", sm.win, icon_size, icon_size, icon_x, icon_y)
+		sm.win.discord.logo = YRPCreateD( "DPanel", sm.win.discord, icon_size, icon_size, 0, 0)
+		sm.win.discord.btn = YRPCreateD( "DButton", sm.win.discord, icon_size, icon_size, 0, 0)
 		sm.win.discord.btn:SetText( "" )
 
 		function sm.win.discord.logo:Paint( pw, ph )
@@ -499,7 +499,7 @@ function F8OpenSettings()
 			gui.OpenURL( "https://discord.gg/CXXDCMJ" )
 		end
 
-		--[[sm.win.botbar = createD( "DPanel", sm.win, sm.win:GetWide(), YRP.ctr(50), 0, 0)
+		--[[sm.win.botbar = YRPCreateD( "DPanel", sm.win, sm.win:GetWide(), YRP.ctr(50), 0, 0)
 		function sm.win.botbar:Paint(pw, ph)
 			self:SetWide(sm.win:GetWide() )
 			self:SetPos(0, sm.win:GetTall() - YRP.ctr(50) )
@@ -512,7 +512,7 @@ function F8OpenSettings()
 
 		local content = sm.win:GetContent()
 		-- MENU
-		sm.menu = createD( "DPanelList", content, 10, BFH() - sm.win:GetHeaderHeight(), 0, 0)
+		sm.menu = YRPCreateD( "DPanelList", content, 10, BFH() - sm.win:GetHeaderHeight(), 0, 0)
 		sm.menu:SetText( "" )
 		sm.menu.pw = YRP.ctr(64) + 2 * br
 		sm.menu.ph = YRP.ctr(64) + 2 * br
@@ -524,7 +524,7 @@ function F8OpenSettings()
 		end
 		sm.menu:SetSpacing(YRP.ctr(20) )
 		
-		sm.menu.expander = createD( "DButton", sm.win, sm.menu.ph, sm.menu.ph, 0, sm.win:GetTall() - sm.menu.ph)
+		sm.menu.expander = YRPCreateD( "DButton", sm.win, sm.menu.ph, sm.menu.ph, 0, sm.win:GetTall() - sm.menu.ph)
 		sm.menu.expander:SetText( "" )
 		function sm.menu.expander:DoClick()
 			if lply.settings_expanded then
@@ -554,7 +554,7 @@ function F8OpenSettings()
 		end
 		
 		-- SITE
-		sm.site = createD( "YPanel", content, BFW() - 10, BFH() - sm.win:GetHeaderHeight(), 10, 0)
+		sm.site = YRPCreateD( "YPanel", content, BFW() - 10, BFH() - sm.win:GetHeaderHeight(), 10, 0)
 		sm.site:SetText( "" )
 		sm.site:SetHeaderHeight(sm.win:GetHeaderHeight() )
 		function sm.site:Paint(pw, ph)
@@ -597,7 +597,7 @@ function F8OpenSettings()
 					sm.menu.pw = tw
 				end
 
-				sm.sites[v.name] = createD( "YButton", sm.menu, sm.menu.pw, sm.menu.ph, 0, 0)
+				sm.sites[v.name] = YRPCreateD( "YButton", sm.menu, sm.menu.pw, sm.menu.ph, 0, 0)
 				local site = sm.sites[v.name]
 				site:SetText( "" )
 				site.id = tonumber(i)
@@ -647,7 +647,7 @@ function F8OpenSettings()
 
 				sm.menu:AddItem(site)
 			else
-				sm.sites[v.name] = createD( "DPanel", sm.menu, sm.menu.pw, YRP.ctr(20), 0, 0)
+				sm.sites[v.name] = YRPCreateD( "DPanel", sm.menu, sm.menu.pw, YRP.ctr(20), 0, 0)
 				local site = sm.sites[v.name]
 				function site:Paint(pw, ph)
 					local hr = YRP.ctr(2)

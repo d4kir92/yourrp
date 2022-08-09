@@ -10,12 +10,12 @@ net.Receive( "get_licenses", function()
 		local spw = PARENT:GetWide()
 		local sph = PARENT:GetTall()
 
-		_li.ea = createD( "DPanel", PARENT, ScW() - YRP.ctr(40 + 480 + 40 + 40), sph - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
+		_li.ea = YRPCreateD( "DPanel", PARENT, ScW() - YRP.ctr(40 + 480 + 40 + 40), sph - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
 		function _li.ea:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 200) )
 		end
 
-		_li._lic = createD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40) )
+		_li._lic = YRPCreateD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40) )
 		_li._lic:SetListHeader(YRP.lang_string( "LID_licenses" ) )
 		--_li._lic:SetDStrForAdd( "license_add" )
 		_li._lic:SetEditArea(_li.ea)
@@ -25,7 +25,7 @@ net.Receive( "get_licenses", function()
 			end
 
 			--[[ NAME ]]--
-			_li.name = createD( "DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
+			_li.name = YRPCreateD( "DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 			_li.name.textentry.tbl = tbl
 			_li.name:SetHeader(YRP.lang_string( "LID_name" ) )
 			_li.name:SetText(tbl.name)
@@ -38,7 +38,7 @@ net.Receive( "get_licenses", function()
 			end
 
 			--[[ Description ]]--
-			_li.desc = createD( "DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(400), 0, YRP.ctr(150) )
+			_li.desc = YRPCreateD( "DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(400), 0, YRP.ctr(150) )
 			_li.desc.textentry.tbl = tbl
 			_li.desc:SetHeader(YRP.lang_string( "LID_description" ) )
 			_li.desc:SetText(tbl.description)
@@ -51,7 +51,7 @@ net.Receive( "get_licenses", function()
 			end
 
 			--[[ Price ]]--
-			_li.price = createD( "DYRPNumberWang", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(600) )
+			_li.price = YRPCreateD( "DYRPNumberWang", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(600) )
 			_li.price.numberwang.tbl = tbl
 			_li.price:SetHeader(YRP.lang_string( "LID_price" ) )
 			_li.price:SetValue(tbl.price)

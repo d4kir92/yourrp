@@ -9,7 +9,7 @@ end
 function PANEL:DoClick()
 	local mx, my = gui.MousePos()
 
-	local ctrl = createD( "YColorMenu", nil, YRP.ctr(600), YRP.ctr(600), mx - YRP.ctr(20), my - YRP.ctr(20) )
+	local ctrl = YRPCreateD( "YColorMenu", nil, YRP.ctr(600), YRP.ctr(600), mx - YRP.ctr(20), my - YRP.ctr(20) )
 	ctrl:MakePopup()
 	ctrl:SetColor(self._col)
 

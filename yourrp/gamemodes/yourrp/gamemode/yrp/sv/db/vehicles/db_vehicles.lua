@@ -70,9 +70,9 @@ net.Receive( "getVehicleInfo", function(len, ply)
 	end
 end)
 
-function unlockVehicle(ply, ent, nr)
+function YRPUnlockVehicle( ply, ent, nr )
 	if ply == ent:GetOwner() or ply == ent:GetRPOwner() then
-		ent:Fire( "Unlock" )
+		YRPFireUnlock( ent, ply )
 		if ent.UnLock != nil then
 			ent:UnLock()
 		end
@@ -82,7 +82,7 @@ function unlockVehicle(ply, ent, nr)
 	if _tmpVehicleTable != nil then
 		_tmpVehicleTable = _tmpVehicleTable[1]
 		if canVehicleLock(ply, ent) then
-			ent:Fire( "Unlock" )
+			YRPFireUnlock( ent, ply )
 			if ent.UnLock != nil then
 				ent:UnLock()
 			end
@@ -93,9 +93,9 @@ function unlockVehicle(ply, ent, nr)
 	end
 end
 
-function lockVehicle(ply, ent, nr)
+function YRPLockVehicle(ply, ent, nr)
 	if ply == ent:GetOwner() or ply == ent:GetRPOwner() then
-		ent:Fire( "Lock" )
+		YRPFireLock( ent, ply )
 		if ent.Lock != nil then
 			ent:Lock()
 		end
@@ -105,7 +105,7 @@ function lockVehicle(ply, ent, nr)
 	if _tmpVehicleTable != nil then
 		_tmpVehicleTable = _tmpVehicleTable[1]
 		if canVehicleLock(ply, ent) then
-			ent:Fire( "Lock" )
+			YRPFireLock( ent, ply )
 			if ent.Lock != nil then
 				ent:Lock()
 			end

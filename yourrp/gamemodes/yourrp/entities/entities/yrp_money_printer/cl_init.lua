@@ -4,7 +4,7 @@ include( "shared.lua" )
 
 function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full)
 	local lply = LocalPlayer()
-	local tmp = createD( "DPanel", parent, w, h, x, y)
+	local tmp = YRPCreateD( "DPanel", parent, w, h, x, y)
 	function tmp:Paint(pw, ph)
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 0, 0, 0, 200) )
 
@@ -12,7 +12,7 @@ function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full
 
 		draw.SimpleTextOutlined(mp:GetYRPInt(item, -1) .. "/" .. mp:GetYRPInt(item .. "Max", -1) .. " " .. name, "Y_24_500", YRP.ctr(10), ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
-	local tmpBut = createD( "DButton", tmp, YRP.ctr(220), h, w - YRP.ctr(220), 0)
+	local tmpBut = YRPCreateD( "DButton", tmp, YRP.ctr(220), h, w - YRP.ctr(220), 0)
 	tmpBut:SetText( "" )
 	function tmpBut:Paint(pw, ph)
 		local cost = mp:GetYRPInt(item .. "Cost" )
@@ -37,7 +37,7 @@ function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full
 end
 
 function tempInfo(mp, parent, w, h, x, y)
-	local tmp = createD( "DPanel", parent, w, h, x, y)
+	local tmp = YRPCreateD( "DPanel", parent, w, h, x, y)
 	function tmp:Paint(pw, ph)
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 0, 0, 0, 200) )
 
@@ -54,7 +54,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 	local mp = net.ReadEntity()
 
 	if upgradeframe == nil then
-		upgradeframe = createD( "DFrame", nil, YRP.ctr(800), YRP.ctr(900), 0, 0)
+		upgradeframe = YRPCreateD( "DFrame", nil, YRP.ctr(800), YRP.ctr(900), 0, 0)
 		upgradeframe:SetTitle( "" )
 		upgradeframe:ShowCloseButton(false)
 		function upgradeframe:Remove()
@@ -89,7 +89,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 		tempInfo(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 520) )
 
 		--gather
-		local moneyInfo = createD( "DPanel", upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 690) )
+		local moneyInfo = YRPCreateD( "DPanel", upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 690) )
 		function moneyInfo:Paint(pw, ph)
 			if !GetGlobalYRPBool( "bool_money_printer_spawn_money", false) then
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 0, 0, 0, 200) )
@@ -100,7 +100,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 			end
 		end
 
-		local gatherMoney = createD( "DButton", moneyInfo, YRP.ctr(220), YRP.ctr(60), YRP.ctr(540), YRP.ctr(0) )
+		local gatherMoney = YRPCreateD( "DButton", moneyInfo, YRP.ctr(220), YRP.ctr(60), YRP.ctr(540), YRP.ctr(0) )
 		gatherMoney:SetText( "" )
 		function gatherMoney:Paint(pw, ph)
 			if !GetGlobalYRPBool( "bool_money_printer_spawn_money", false) then
@@ -122,7 +122,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 		end
 
 		--Working
-		local workingB = createD( "DButton", upgradeframe, YRP.ctr(360), YRP.ctr(60), YRP.ctr(20), YRP.ctr(820) )
+		local workingB = YRPCreateD( "DButton", upgradeframe, YRP.ctr(360), YRP.ctr(60), YRP.ctr(20), YRP.ctr(820) )
 		workingB:SetText( "" )
 		function workingB:Paint(pw, ph)
 			local working =YRP.lang_string( "LID_off" )
@@ -148,7 +148,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 		end
 
 		--CLOSE
-		local closeMenu = createD( "DButton", upgradeframe, YRP.ctr(200), YRP.ctr(60), YRP.ctr(800-200-20), YRP.ctr(900-60-20) )
+		local closeMenu = YRPCreateD( "DButton", upgradeframe, YRP.ctr(200), YRP.ctr(60), YRP.ctr(800-200-20), YRP.ctr(900-60-20) )
 		closeMenu:SetText( "" )
 		function closeMenu:Paint(pw, ph)
 			if self:IsHovered() then

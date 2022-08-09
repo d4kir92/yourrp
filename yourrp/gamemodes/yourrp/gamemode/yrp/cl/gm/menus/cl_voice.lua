@@ -25,7 +25,7 @@ function YRPVoiceChannel(edit, uid)
 	local pgrps = {}
 	local prols = {}
 
-	local win = createD( "YFrame", nil, YRP.ctr(1600), YRP.ctr(1210), 0, 0)
+	local win = YRPCreateD( "YFrame", nil, YRP.ctr(1600), YRP.ctr(1210), 0, 0)
 	function win:Paint(pw, ph)
 		DrawRectBlurHUD(5, 0, 0, pw, ph, 255)
 	end
@@ -40,10 +40,10 @@ function YRPVoiceChannel(edit, uid)
 	local CON = win:GetContent()
 
 	-- NAME
-	win.nameheader = createD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0) )
+	win.nameheader = YRPCreateD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0) )
 	win.nameheader:SetText( "LID_name" )
 
-	win.name = createD( "DTextEntry", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50) )
+	win.name = YRPCreateD( "DTextEntry", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50) )
 	function win.name:OnChange()
 		name = win.name:GetText()
 	end
@@ -53,23 +53,23 @@ function YRPVoiceChannel(edit, uid)
 	end
 	
 	-- Defaults
-	win.defaultsheader = createD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(0) )
+	win.defaultsheader = YRPCreateD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(0) )
 	win.defaultsheader:SetText(YRP.lang_string( "LID_defaults" ) )
 
-	win.defaultsbg = createD( "DPanel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50) )
+	win.defaultsbg = YRPCreateD( "DPanel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50) )
 	function win.defaultsbg:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20) )
 	end
-	win.defaults = createD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50) )
+	win.defaults = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50) )
 	win.defaults:EnableVerticalScrollbar()
 
 	-- Hear?
-	local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
+	local line = YRPCreateD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 	function line:Paint(pw, ph)
 		draw.SimpleText(YRP.lang_string( "LID_hearq" ), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
-	line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
+	line.cb = YRPCreateD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
 	function line.cb:OnChange( bVal)
 		hear = bVal
 	end
@@ -86,25 +86,25 @@ function YRPVoiceChannel(edit, uid)
 
 	-- ACTIVE --
 	-- USERGROUPS
-	win.augsheader = createD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(150) )
+	win.augsheader = YRPCreateD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(150) )
 	win.augsheader:SetText( "[" .. YRP.lang_string( "LID_active" ) .. "] " .. YRP.lang_string( "LID_usergroups" ) )
 
-	win.augsbg = createD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(200) )
+	win.augsbg = YRPCreateD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(200) )
 	function win.augsbg:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20) )
 	end
-	win.augs = createD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(200) )
+	win.augs = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(200) )
 	win.augs:EnableVerticalScrollbar()
 	net.Receive( "yrp_vm_get_active_usergroups", function(len)
 		local taugs = net.ReadTable()
 
 		for i, ug in pairs(taugs) do
-			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			local line = YRPCreateD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
 				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			line.cb = YRPCreateD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line.cb:OnChange( bVal)
 				if bVal then
 					table.insert( augs, ug.string_name)
@@ -128,25 +128,25 @@ function YRPVoiceChannel(edit, uid)
 	net.SendToServer()
 
 	-- GROUPS
-	win.agrpsheader = createD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(450) )
+	win.agrpsheader = YRPCreateD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(450) )
 	win.agrpsheader:SetText( "[" .. YRP.lang_string( "LID_active" ) .. "] " .. YRP.lang_string( "LID_groups" ) )
 
-	win.agrpsbg = createD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(500) )
+	win.agrpsbg = YRPCreateD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(500) )
 	function win.agrpsbg:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20) )
 	end
-	win.agrps = createD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(500) )
+	win.agrps = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(500) )
 	win.agrps:EnableVerticalScrollbar()
 	net.Receive( "yrp_vm_get_active_groups", function(len)
 		local tagrps = net.ReadTable()
 
 		for i, ug in pairs(tagrps) do
-			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			local line = YRPCreateD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
 				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			line.cb = YRPCreateD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line.cb:OnChange( bVal)
 				if bVal then
 					table.insert( agrps, ug.uniqueID)
@@ -170,25 +170,25 @@ function YRPVoiceChannel(edit, uid)
 	net.SendToServer()
 
 	-- ROLES
-	win.arolsheader = createD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(750) )
+	win.arolsheader = YRPCreateD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(750) )
 	win.arolsheader:SetText( "[" .. YRP.lang_string( "LID_active" ) .. "] " .. YRP.lang_string( "LID_roles" ) )
 
-	win.arolsbg = createD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(800) )
+	win.arolsbg = YRPCreateD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(800) )
 	function win.arolsbg:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20) )
 	end
-	win.arols = createD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(800) )
+	win.arols = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(800) )
 	win.arols:EnableVerticalScrollbar()
 	net.Receive( "yrp_vm_get_active_roles", function(len)
 		local tarols = net.ReadTable()
 
 		for i, ug in pairs(tarols) do
-			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			local line = YRPCreateD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
 				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			line.cb = YRPCreateD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line.cb:OnChange( bVal)
 				if bVal then
 					table.insert( arols, ug.uniqueID)
@@ -215,25 +215,25 @@ function YRPVoiceChannel(edit, uid)
 
 	-- PASSIVE --
 	-- USERGROUPS
-	win.pugsheader = createD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(150) )
+	win.pugsheader = YRPCreateD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(150) )
 	win.pugsheader:SetText( "[" .. YRP.lang_string( "LID_passive" ) .. "] " .. YRP.lang_string( "LID_usergroups" ) )
 
-	win.pugsbg = createD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(200) )
+	win.pugsbg = YRPCreateD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(200) )
 	function win.pugsbg:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20) )
 	end
-	win.pugs = createD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(200) )
+	win.pugs = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(200) )
 	win.pugs:EnableVerticalScrollbar()
 	net.Receive( "yrp_vm_get_passive_usergroups", function(len)
 		local tpugs = net.ReadTable()
 
 		for i, ug in pairs(tpugs) do
-			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			local line = YRPCreateD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
 				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			line.cb = YRPCreateD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line.cb:OnChange( bVal)
 				if bVal then
 					table.insert(pugs, ug.string_name)
@@ -257,25 +257,25 @@ function YRPVoiceChannel(edit, uid)
 	net.SendToServer()
 
 	-- GROUPS
-	win.pgrpsheader = createD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(450) )
+	win.pgrpsheader = YRPCreateD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(450) )
 	win.pgrpsheader:SetText( "[" .. YRP.lang_string( "LID_passive" ) .. "] " .. YRP.lang_string( "LID_groups" ) )
 
-	win.pgrpsbg = createD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(500) )
+	win.pgrpsbg = YRPCreateD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(500) )
 	function win.pgrpsbg:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20) )
 	end
-	win.pgrps = createD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(500) )
+	win.pgrps = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(500) )
 	win.pgrps:EnableVerticalScrollbar()
 	net.Receive( "yrp_vm_get_passive_groups", function(len)
 		local tpgrps = net.ReadTable()
 
 		for i, ug in pairs(tpgrps) do
-			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			local line = YRPCreateD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
 				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			line.cb = YRPCreateD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line.cb:OnChange( bVal)
 				if bVal then
 					table.insert(pgrps, ug.uniqueID)
@@ -299,25 +299,25 @@ function YRPVoiceChannel(edit, uid)
 	net.SendToServer()
 
 	-- ROLES
-	win.prolsheader = createD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(750) )
+	win.prolsheader = YRPCreateD( "YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(750) )
 	win.prolsheader:SetText( "[" .. YRP.lang_string( "LID_passive" ) .. "] " .. YRP.lang_string( "LID_roles" ) )
 
-	win.prolsbg = createD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(800) )
+	win.prolsbg = YRPCreateD( "DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(800) )
 	function win.prolsbg:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20) )
 	end
-	win.prols = createD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(800) )
+	win.prols = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(800) )
 	win.prols:EnableVerticalScrollbar()
 	net.Receive( "yrp_vm_get_passive_roles", function(len)
 		local tprols = net.ReadTable()
 
 		for i, ug in pairs(tprols) do
-			local line = createD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			local line = YRPCreateD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line:Paint(pw, ph)
 				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			line.cb = createD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
+			line.cb = YRPCreateD( "DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
 			function line.cb:OnChange( bVal)
 				if bVal then
 					table.insert(prols, ug.uniqueID)
@@ -341,7 +341,7 @@ function YRPVoiceChannel(edit, uid)
 	net.SendToServer()
 
 	if edit then
-		win.save = createD( "YButton", CON, YRP.ctr(760), YRP.ctr(50), 0, YRP.ctr(1020) )
+		win.save = YRPCreateD( "YButton", CON, YRP.ctr(760), YRP.ctr(50), 0, YRP.ctr(1020) )
 		win.save:SetText( "LID_save" )
 		function win.save:Paint(pw, ph)
 			hook.Run( "YButtonAPaint", self, pw, ph)
@@ -368,7 +368,7 @@ function YRPVoiceChannel(edit, uid)
 			end)
 		end
 
-		win.rem = createD( "YButton", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(1020) )
+		win.rem = YRPCreateD( "YButton", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(1020) )
 		win.rem:SetText( "LID_remove" )
 		function win.rem:Paint(pw, ph)
 			hook.Run( "YButtonRPaint", self, pw, ph)
@@ -384,7 +384,7 @@ function YRPVoiceChannel(edit, uid)
 			end)
 		end
 	else
-		win.add = createD( "YButton", CON, YRP.ctr(760), YRP.ctr(50), 0, YRP.ctr(1020) )
+		win.add = YRPCreateD( "YButton", CON, YRP.ctr(760), YRP.ctr(50), 0, YRP.ctr(1020) )
 		win.add:SetText( "LID_add" )
 		function win.add:Paint(pw, ph)
 			hook.Run( "YButtonAPaint", self, pw, ph)
@@ -422,16 +422,16 @@ function YRPUpdateVoiceList()
 		local pbr = YRP.ctr(10)
 		for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable( "yrp_voice_channels", {}), "int_position" ) do
 			if IsInChannel(lply, channel.uniqueID, true) or ( vm.adminmode and lply:HasAccess() ) then
-				local line = createD( "DPanel", nil, CONTENT:GetWide(), h, 0, 0)
+				local line = YRPCreateD( "DPanel", nil, CONTENT:GetWide(), h, 0, 0)
 				function line:Paint(pw, ph)
 				end
 
-				local bg = createD( "DPanel", line, CONTENT:GetWide() - YRP.ctr(26), h, 0, 0)
+				local bg = YRPCreateD( "DPanel", line, CONTENT:GetWide() - YRP.ctr(26), h, 0, 0)
 				function bg:Paint(pw, ph)
 					DrawRectBlurHUD(YRP.ctr(10), 0, 0, pw, ph, 255) --draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "PC" ) )
 				end
 
-				local status = createD( "DPanel", bg, h, h, 0, 0)
+				local status = YRPCreateD( "DPanel", bg, h, h, 0, 0)
 				function status:Paint(pw, ph)
 					local color = colr
 					if IsActiveInChannel(lply, channel.uniqueID, true) then
@@ -443,7 +443,7 @@ function YRPUpdateVoiceList()
 				end
 
 				if ( vm.adminmode and lply:HasAccess() ) then
-					local edit = createD( "DButton", bg, h , h, 0, 0)
+					local edit = YRPCreateD( "DButton", bg, h , h, 0, 0)
 					edit:SetText( "" )
 					function edit:Paint(pw, ph)
 						local br = YRP.ctr(8)
@@ -458,7 +458,7 @@ function YRPUpdateVoiceList()
 					end
 				end
 
-				local name = createD( "DPanel", bg, YRP.ctr(800), h, h + pbr, 0)
+				local name = YRPCreateD( "DPanel", bg, YRP.ctr(800), h, h + pbr, 0)
 				function name:Paint(pw, ph)
 					draw.SimpleText( channel.string_name, "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
@@ -467,7 +467,7 @@ function YRPUpdateVoiceList()
 
 				if IsActiveInChannel(lply, channel.uniqueID, true) then
 					local br = YRP.ctr(8)
-					local mutemic = createD( "YButton", bg, h * 2 + br, h, bg:GetWide() - h * 3 - YRP.ctr(20), 0)
+					local mutemic = YRPCreateD( "YButton", bg, h * 2 + br, h, bg:GetWide() - h * 3 - YRP.ctr(20), 0)
 					mutemic:SetText( "" )
 					function mutemic:Paint(pw, ph)
 						local color = colg
@@ -499,7 +499,7 @@ function YRPUpdateVoiceList()
 				end
 
 				if IsInChannel(lply, channel.uniqueID, true) then
-					local mute = createD( "YButton", bg, h, h, bg:GetWide() - h, 0)
+					local mute = YRPCreateD( "YButton", bg, h, h, bg:GetWide() - h, 0)
 					mute:SetText( "" )
 					function mute:Paint(pw, ph)
 						local icon = "64_volume-up"
@@ -527,7 +527,7 @@ function YRPUpdateVoiceList()
 				end
 
 				if ( vm.adminmode and lply:HasAccess() ) then
-					local dn = createD( "YButton", bg, h, h, bg:GetWide() - 4 * h - 2 * YRP.ctr(20), 0)
+					local dn = YRPCreateD( "YButton", bg, h, h, bg:GetWide() - 4 * h - 2 * YRP.ctr(20), 0)
 					dn:SetText( "" )
 					function dn:Paint(pw, ph)
 						if channel.int_position < table.Count(GetGlobalYRPTable( "yrp_voice_channels", {}) ) - 1 then
@@ -549,7 +549,7 @@ function YRPUpdateVoiceList()
 						net.SendToServer()
 					end
 
-					local up = createD( "YButton", bg, h, h, bg:GetWide() - 5 * h - 3 * YRP.ctr(20), 0)
+					local up = YRPCreateD( "YButton", bg, h, h, bg:GetWide() - 5 * h - 3 * YRP.ctr(20), 0)
 					up:SetText( "" )
 					function up:Paint(pw, ph)
 						if channel.int_position > 0 then
@@ -581,7 +581,7 @@ end
 function OpenVoiceMenu()
 	local lply = LocalPlayer()
 
-	vm.win = createD( "YFrame", nil, YRP.ctr(1200), YRP.ctr(1400), 0, 0)
+	vm.win = YRPCreateD( "YFrame", nil, YRP.ctr(1200), YRP.ctr(1400), 0, 0)
 	function vm.win:Paint(pw, ph)
 		DrawRectBlurHUD(5, 0, 0, pw, ph, 255)
 		
@@ -608,7 +608,7 @@ function OpenVoiceMenu()
 	local CONTENT = vm.win:GetContent()
 
 	-- HEADER
-	vm.win.listheader = createD( "DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(50 + 20), 0, 0)
+	vm.win.listheader = YRPCreateD( "DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(50 + 20), 0, 0)
 	function vm.win.listheader:Paint(pw, ph)
 		if lply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) then
 			draw.SimpleText(YRP.lang_string( "LID_name" ), "Y_20_500", YRP.ctr(80), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -618,7 +618,7 @@ function OpenVoiceMenu()
 	end
 
 	-- LIST
-	vm.win.list = createD( "DPanelList", CONTENT, CONTENT:GetWide(), CONTENT:GetTall() - YRP.ctr(40 + 20 + 50 + 20), 0, YRP.ctr(50 + 20) )
+	vm.win.list = YRPCreateD( "DPanelList", CONTENT, CONTENT:GetWide(), CONTENT:GetTall() - YRP.ctr(40 + 20 + 50 + 20), 0, YRP.ctr(50 + 20) )
 	vm.win.list:EnableVerticalScrollbar()
 	vm.win.list:SetSpacing(YRP.ctr(10) )
 	local sbar = vm.win.list.VBar
@@ -641,7 +641,7 @@ function OpenVoiceMenu()
 		local size = YRP.ctr(50)
 
 		-- ADMIN MODE
-		vm.win.showall = createD( "DCheckBox", CONTENT, size, size, YRP.ctr(0), CONTENT:GetTall() - YRP.ctr(50) )
+		vm.win.showall = YRPCreateD( "DCheckBox", CONTENT, size, size, YRP.ctr(0), CONTENT:GetTall() - YRP.ctr(50) )
 		vm.win.showall:SetChecked( vm.adminmode )
 		function vm.win.showall:OnChange()
 			vm.adminmode = !vm.adminmode
@@ -663,7 +663,7 @@ function OpenVoiceMenu()
 
 
 
-		vm.win.add = createD( "YButton", CONTENT, size, size, YRP.ctr(260), CONTENT:GetTall() - YRP.ctr(50) )
+		vm.win.add = YRPCreateD( "YButton", CONTENT, size, size, YRP.ctr(260), CONTENT:GetTall() - YRP.ctr(50) )
 		vm.win.add:SetText( "+" )
 		function vm.win.add:Paint(pw, ph)
 			hook.Run( "YButtonAPaint", self, pw, ph)
@@ -679,7 +679,7 @@ function OpenVoiceMenu()
 
 
 
-		vm.win.showalllabel = createD( "DLabel", CONTENT, YRP.ctr(200), size, YRP.ctr(40 + 20), CONTENT:GetTall() - YRP.ctr(50) )
+		vm.win.showalllabel = YRPCreateD( "DLabel", CONTENT, YRP.ctr(200), size, YRP.ctr(40 + 20), CONTENT:GetTall() - YRP.ctr(50) )
 		vm.win.showalllabel:SetText( "" )
 		function vm.win.showalllabel:Paint(pw, ph)
 			draw.SimpleText( YRP.lang_string( "LID_adminmode" ), "Y_16_700", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
@@ -688,7 +688,7 @@ function OpenVoiceMenu()
 
 
 		-- MAX ACTIVE
-		vm.win.maxactive = createD( "DNumSlider", CONTENT, YRP.ctr(380), size, YRP.ctr(40 + 20 + 40 + 20 + 200 + 20), CONTENT:GetTall() - YRP.ctr(50) )
+		vm.win.maxactive = YRPCreateD( "DNumSlider", CONTENT, YRP.ctr(380), size, YRP.ctr(40 + 20 + 40 + 20 + 200 + 20), CONTENT:GetTall() - YRP.ctr(50) )
 		vm.win.maxactive:SetText( YRP.lang_string( "LID_maxactive" ) )
 		vm.win.maxactive:SetDecimals( 0 )
 		vm.win.maxactive:SetMinMax( 0, 10 )
@@ -700,7 +700,7 @@ function OpenVoiceMenu()
 		end
 
 		-- MAX Passive
-		vm.win.maxpassive = createD( "DNumSlider", CONTENT, YRP.ctr(380), size, YRP.ctr(40 + 20 + 40 + 20 + 200 + 20 + 350 + 20), CONTENT:GetTall() - YRP.ctr(50) )
+		vm.win.maxpassive = YRPCreateD( "DNumSlider", CONTENT, YRP.ctr(380), size, YRP.ctr(40 + 20 + 40 + 20 + 200 + 20 + 350 + 20), CONTENT:GetTall() - YRP.ctr(50) )
 		vm.win.maxpassive:SetText( YRP.lang_string( "LID_maxpassive" ) )
 		vm.win.maxpassive:SetDecimals( 0 )
 		vm.win.maxpassive:SetMinMax( 0, 10 )
@@ -720,7 +720,7 @@ function OpenVoiceMenu()
 	end
 
 	local size = YRP.ctr(50)
-	vm.win.muteall = createD( "YButton", CONTENT, size, size, CONTENT:GetWide() - size, CONTENT:GetTall() - YRP.ctr(50) )
+	vm.win.muteall = YRPCreateD( "YButton", CONTENT, size, size, CONTENT:GetWide() - size, CONTENT:GetTall() - YRP.ctr(50) )
 	vm.win.muteall:SetText( "+" )
 	function vm.win.muteall:Paint(pw, ph)
 		local icon = "64_volume-up"

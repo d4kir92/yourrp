@@ -8,7 +8,10 @@ local c = {}
 
 -- ANGLE
 function ENTITY:GetYRPAngle( key, value )
-	return self:GetNW2Angle( key, value )
+	if IsValid( self ) then
+		return self:GetNW2Angle( key, value )
+	end
+	return Angle( 0, 0, 0 )
 end
 function ENTITY:SetYRPAngle( key, value )
 	if self:GetYRPAngle( key ) != value or value == Angle( 0, 0, 0 ) then
@@ -21,7 +24,10 @@ end
 
 -- BOOL
 function ENTITY:GetYRPBool( key, value )
-	return tobool( self:GetNW2Bool( key, value ) )
+	if IsValid( self ) then
+		return tobool( self:GetNW2Bool( key, value ) )
+	end
+	return false
 end
 function ENTITY:SetYRPBool( key, value )
 	if self:GetYRPBool( key ) != value or value == false then
@@ -34,7 +40,10 @@ end
 
 -- ENTITY
 function ENTITY:GetYRPEntity( key, value )
-	return self:GetNW2Entity( key, value )
+	if IsValid( self ) then
+		return self:GetNW2Entity( key, value )
+	end
+	return NULL
 end
 function ENTITY:SetYRPEntity( key, value )
 	if self:GetYRPEntity( key ) != value or value == NULL then
@@ -47,7 +56,10 @@ end
 
 -- FLOAT
 function ENTITY:GetYRPFloat( key, value )
-	return tonumber( self:GetNW2Float( key, value ) )
+	if IsValid( self ) then
+		return tonumber( self:GetNW2Float( key, value ) )
+	end
+	return -1.0
 end
 function ENTITY:SetYRPFloat( key, value )
 	if math.abs( self:GetYRPFloat( key ) - value ) > 0.0001 or value == 0 then
@@ -60,7 +72,10 @@ end
 
 -- INT
 function ENTITY:GetYRPInt( key, value )
-	return tonumber( self:GetNW2Int( key, value ) )
+	if IsValid( self ) then
+		return tonumber( self:GetNW2Int( key, value ) )
+	end
+	return -1
 end
 function ENTITY:SetYRPInt( key, value )
 	if self:GetYRPInt( key ) != value or value == 0 then
@@ -73,7 +88,10 @@ end
 
 -- STRING
 function ENTITY:GetYRPString( key, value )
-	return tostring( self:GetNW2String( key, value ) )
+	if IsValid( self ) then
+		return tostring( self:GetNW2String( key, value ) )
+	end
+	return ""
 end
 function ENTITY:SetYRPString( key, value )
 	if self:GetYRPString( key ) != value or value == "" then
@@ -86,7 +104,10 @@ end
 
 -- Vector
 function ENTITY:GetYRPVector( key, value )
-	return self:GetNW2Vector( key, value )
+	if IsValid( self ) then
+		return self:GetNW2Vector( key, value )
+	end
+	return Vector( 0, 0, 0 )
 end
 function ENTITY:SetYRPVector( key, value )
 	if self:GetYRPVector( key ) != value or value == Vector( 0, 0, 0 ) then

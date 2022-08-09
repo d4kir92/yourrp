@@ -2,7 +2,7 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self.header = createD( "DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
+	self.header = YRPCreateD( "DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 	self.header.text = "UNNAMED"
 
 	function self:SetHeader(text)
@@ -15,7 +15,7 @@ function PANEL:Init()
 		surfaceText(self.text, "Y_24_700", pw / 2, ph / 2, TextColor( color), 1, 1)
 	end
 
-	self.textentry = createD( "DTextEntry", self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, YRP.ctr(50) )
+	self.textentry = YRPCreateD( "DTextEntry", self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, YRP.ctr(50) )
 
 	function self:SetText(text)
 		self.textentry:SetText(text)

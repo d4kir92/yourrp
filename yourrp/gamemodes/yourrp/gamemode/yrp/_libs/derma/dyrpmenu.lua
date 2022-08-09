@@ -44,7 +44,7 @@ end
 function PANEL:AddSpacer()
 	local Entry = {}
 	Entry.size = 10
-	Entry.spacer = createD( "DPanel", self, self:GetWide(), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight) )
+	Entry.spacer = YRPCreateD( "DPanel", self, self:GetWide(), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight) )
 
 	function Entry.spacer:Paint(pw, ph)
 		surfaceBox(0, ph / 4, pw, ph / 2, Color( 0, 0, 0, 255 ) )
@@ -65,7 +65,7 @@ function PANEL:AddOption(name, icon)
 	end
 
 	Entry.size = 50
-	Entry.icon = createD( "YPanel", self, YRP.ctr(Entry.size), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight) )
+	Entry.icon = YRPCreateD( "YPanel", self, YRP.ctr(Entry.size), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight) )
 
 	function Entry.icon:Paint(pw, ph)
 		if Entry.iconpng ~= "" then
@@ -75,7 +75,7 @@ function PANEL:AddOption(name, icon)
 		end
 	end
 
-	Entry.button = createD( "YButton", self, self:GetWide() - YRP.ctr(Entry.size), YRP.ctr(Entry.size), YRP.ctr(Entry.size), YRP.ctr(self.lastheight) )
+	Entry.button = YRPCreateD( "YButton", self, self:GetWide() - YRP.ctr(Entry.size), YRP.ctr(Entry.size), YRP.ctr(Entry.size), YRP.ctr(self.lastheight) )
 	Entry.button:SetText(Entry.name)
 
 	function Entry.button:Paint(pw, ph)

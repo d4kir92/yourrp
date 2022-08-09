@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function AddStatusLine(parent, cat, entry, str_id, color)
-	local sl = createD( "DPanel", parent, parent:GetWide(), YRP.ctr(50), 0, 0)
+	local sl = YRPCreateD( "DPanel", parent, parent:GetWide(), YRP.ctr(50), 0, 0)
 	local _t = {}
 	_t[cat] = entry
 	sl.text = YRP.lang_string(str_id, _t)
@@ -47,7 +47,7 @@ net.Receive( "Connect_Settings_Status", function(len)
 
 
 
-		local Group_YourRP = createD( "YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+		local Group_YourRP = YRPCreateD( "YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
 		Group_YourRP:SetText( "YourRP" )
 		function Group_YourRP:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -61,7 +61,7 @@ net.Receive( "Connect_Settings_Status", function(len)
 
 
 
-		local Group_Roles = createD( "YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+		local Group_Roles = YRPCreateD( "YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
 		Group_Roles:SetText( "LID_roles" )
 		function Group_Roles:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -75,7 +75,7 @@ net.Receive( "Connect_Settings_Status", function(len)
 
 
 
-		local Group_Groups = createD( "YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+		local Group_Groups = YRPCreateD( "YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
 		Group_Groups:SetText( "LID_groups" )
 		function Group_Groups:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -89,7 +89,7 @@ net.Receive( "Connect_Settings_Status", function(len)
 
 
 
-		local Group_Map = createD( "YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+		local Group_Map = YRPCreateD( "YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
 		Group_Map:SetText( "LID_map" )
 		function Group_Map:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)

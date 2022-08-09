@@ -74,7 +74,7 @@ function buyWindow( door, tabBuilding)
 	end
 
 	local br = YRP.ctr(20)
-	yrp_door.window = createD( "YFrame", nil, YRP.ctr(1100), YRP.ctr(760), 0, 0)
+	yrp_door.window = YRPCreateD( "YFrame", nil, YRP.ctr(1100), YRP.ctr(760), 0, 0)
 	if !lply:HasAccess() then
 		yrp_door.window:SetTall(YRP.ctr(300) )
 	end
@@ -126,7 +126,7 @@ function buyWindow( door, tabBuilding)
 	end
 
 	if GetGlobalYRPBool( "bool_canbeowned", true ) then
-		local _buyButton = createD( "YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, br)
+		local _buyButton = YRPCreateD( "YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, br)
 		_buyButton:SetText( "LID_buy" )
 		function _buyButton:DoClick()
 			if tabBuilding.bool_canbeowned then
@@ -146,7 +146,7 @@ function buyWindow( door, tabBuilding)
 	end
 
 	if lply:HasAccess() then
-		local _TextEntryName = createD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(250) )
+		local _TextEntryName = YRPCreateD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(250) )
 		_TextEntryName:SetText(tabBuilding.name)
 		function _TextEntryName:OnChange()
 			tabBuilding.name = _TextEntryName:GetText()
@@ -156,7 +156,7 @@ function buyWindow( door, tabBuilding)
 			net.SendToServer()
 		end
 
-		local _ComboBoxHouseName = createD( "DComboBox", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(350) )
+		local _ComboBoxHouseName = YRPCreateD( "DComboBox", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(350) )
 		net.Start( "getBuildings" )
 		net.SendToServer()
 
@@ -195,7 +195,7 @@ function buyWindow( door, tabBuilding)
 			end
 		end
 
-		local _ButtonAddNew = createD( "YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, YRP.ctr(350) )
+		local _ButtonAddNew = YRPCreateD( "YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, YRP.ctr(350) )
 		_ButtonAddNew:SetText( "LID_addanewbuilding" )
 		function _ButtonAddNew:DoClick()
 			net.Start( "addnewbuilding" )
@@ -206,7 +206,7 @@ function buyWindow( door, tabBuilding)
 		end
 
 		if GetGlobalYRPBool( "bool_canbeowned", true ) then
-			local _ComboBoxGroupName = createD( "DComboBox", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(450) )
+			local _ComboBoxGroupName = YRPCreateD( "DComboBox", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(450) )
 			net.Start( "getBuildingGroups" )
 			net.SendToServer()
 
@@ -241,7 +241,7 @@ function buyWindow( door, tabBuilding)
 
 
 
-			local _TextEntryPrice = createD( "DNumberWang", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(550) )
+			local _TextEntryPrice = YRPCreateD( "DNumberWang", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(550) )
 			_TextEntryPrice:SetText(tabBuilding.buildingprice)
 			function _TextEntryPrice:OnChange()
 				tabBuilding.buildingprice = _TextEntryPrice:GetValue()
@@ -264,7 +264,7 @@ function buyWindow( door, tabBuilding)
 			end
 			YRPUpdateDoorVisi()
 
-			local cb_canbeowned = createD( "DCheckBox", yrp_door.window.con, YRP.ctr(50), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, YRP.ctr(450) )
+			local cb_canbeowned = YRPCreateD( "DCheckBox", yrp_door.window.con, YRP.ctr(50), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, YRP.ctr(450) )
 			cb_canbeowned:SetValue(tabBuilding.bool_canbeowned)
 			function cb_canbeowned:OnChange( bVal)
 				tabBuilding.bool_canbeowned = bVal
@@ -277,7 +277,7 @@ function buyWindow( door, tabBuilding)
 			end
 		end
 
-		local _TextEntrySL = createD( "DNumberWang", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, YRP.ctr(550) )
+		local _TextEntrySL = YRPCreateD( "DNumberWang", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500) - br, YRP.ctr(550) )
 		_TextEntrySL:SetText(tabBuilding.int_securitylevel)
 		function _TextEntrySL:OnChange()
 			tabBuilding.int_securitylevel = _TextEntrySL:GetValue()
@@ -322,7 +322,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 		end
 	end
 
-	yrp_door.window = createD( "YFrame", nil, YRP.ctr(1100), YRP.ctr(580), 0, 0)
+	yrp_door.window = YRPCreateD( "YFrame", nil, YRP.ctr(1100), YRP.ctr(580), 0, 0)
 	if !lply:HasAccess() then
 		yrp_door.window:SetTall(YRP.ctr(340) )
 	end
@@ -378,7 +378,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 	]]--
 
 	if OWNER then
-		local _ButtonSell = createD( "YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(150) )
+		local _ButtonSell = YRPCreateD( "YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(150) )
 		_ButtonSell:SetText(YRP.lang_string( "LID_sell" ) .. " (+" .. GetGlobalYRPString( "text_money_pre", "" ) .. tabBuilding.buildingprice / 2 .. GetGlobalYRPString( "text_money_pos", "" ) .. " )" )
 		function _ButtonSell:DoClick()
 			net.Start( "sellBuilding" )
@@ -390,7 +390,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 			--surfaceButton(self, pw, ph, YRP.lang_string( "LID_sell" ) .. " (+" .. GetGlobalYRPString( "text_money_pre", "" ) .. _price / 2 .. GetGlobalYRPString( "text_money_pos", "" ) .. " )" )
 		--end
 
-		local _header = createD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(50) )
+		local _header = YRPCreateD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(50) )
 		_header:SetText(tabBuilding.text_header)
 		function _header:OnChange()
 			tabBuilding.text_header = _header:GetText()
@@ -400,7 +400,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 			net.SendToServer()
 		end
 
-		local _description = createD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(150) )
+		local _description = YRPCreateD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(150) )
 		_description:SetText(tabBuilding.text_description)
 		function _description:OnChange()
 			tabBuilding.text_description = _description:GetText()
@@ -412,7 +412,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 	end
 
 	if lply:HasAccess() then
-		local _TextEntryName = createD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(270) )
+		local _TextEntryName = YRPCreateD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(270) )
 		_TextEntryName:SetText(tabBuilding.name)
 		function _TextEntryName:OnChange()
 			tabBuilding.name = _TextEntryName:GetText()
@@ -422,7 +422,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 			net.SendToServer()
 		end
 
-		local _TextEntrySL = createD( "DNumberWang", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(540), YRP.ctr(370) )
+		local _TextEntrySL = YRPCreateD( "DNumberWang", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(540), YRP.ctr(370) )
 		_TextEntrySL:SetText(tabBuilding.int_securitylevel)
 		function _TextEntrySL:OnChange()
 			tabBuilding.int_securitylevel = _TextEntrySL:GetValue()
@@ -434,7 +434,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 			end
 		end
 
-		local _buttonRemoveOwner = createD( "YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(370) )
+		local _buttonRemoveOwner = YRPCreateD( "YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(370) )
 		_buttonRemoveOwner:SetText( "LID_removeowner" )
 		function _buttonRemoveOwner:DoClick()
 			net.Start( "removeOwner" )

@@ -6,7 +6,7 @@ SWEP.Instructions = ""
 
 SWEP.Category = "[YourRP] Weapon"
 
-SWEP.PrintName = "Lockpick (Normal)"
+SWEP.PrintName = "Lockpick (Good)"
 SWEP.Language = "en"
 SWEP.LanguageString = "LID_lockpick"
 
@@ -58,7 +58,7 @@ function SWEP:PrimaryAttack()
 			local ent = tr.Entity
 			local class = tr.Entity:GetClass()
 			if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos() ) < GetGlobalYRPInt( "int_door_distance", 200) and ( class ==  "func_door_rotating" or class ==  "func_door" or class == "prop_door_rotating" ) then
-				ply:StartCasting( "lockpick", "LID_lockpicking", 0, self.target, 3, 50, 1, false)
+				ply:StartCasting( "lockpick", "LID_lockpicking", 0, self.target, 1.5, 50, 1, false)
 				local filename = "doors/door_locked2.wav"
 				util.PrecacheSound(filename)
 				ply:EmitSound(filename, 75, 100, 1, CHAN_AUTO)

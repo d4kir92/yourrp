@@ -41,7 +41,7 @@ function PANEL:Init()
 
 	self._world = false
 
-	self.mdl = createD( "SpawnIcon", self, self:GetWide(), self:GetTall(), 0, 0)
+	self.mdl = YRPCreateD( "SpawnIcon", self, self:GetWide(), self:GetTall(), 0, 0)
 	self.mdl.main = self
 	function self:DoClick()
 		if self:GetItemID() != nil then
@@ -88,7 +88,7 @@ net.Receive( "yrp_storage_open", function(len)
 		local ww = YRPItemSize() * cols + br * 2 + sp * ( cols - 1)
 		local wh = YRPItemSize() * sh + br * 2 + sp * (sh - 1) + YRP.ctr(50)
 
-		local bag = createD( "DFrame", nil, ww, wh, 0, 0)
+		local bag = YRPCreateD( "DFrame", nil, ww, wh, 0, 0)
 		if isinv then
 			bag:SetPos(lply.invx - ww, lply.invy - wh)
 
@@ -119,7 +119,7 @@ net.Receive( "yrp_storage_open", function(len)
 		local sw = YRPItemSize() * cols + sp * ( cols - 1)
 		local sh = YRPItemSize() * cols + sp * ( cols - 1)
 
-		bag.storage = createD( "YStorage", bag, sw, sh, br, br + YRP.ctr(50) )
+		bag.storage = YRPCreateD( "YStorage", bag, sw, sh, br, br + YRP.ctr(50) )
 		bag.storage:SetStorageID(storage.uniqueID)
 	end
 end)

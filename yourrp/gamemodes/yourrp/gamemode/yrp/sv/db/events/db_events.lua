@@ -155,14 +155,14 @@ end)
 function YRPSpawnAsCharacter(ply, cuid, force)
 	local roltab = ply:YRPGetRoleTable()
 	if wk(roltab) then
-		updateRoleUses(roltab.uniqueID)
+		YRPUpdateRoleUses(roltab.uniqueID)
 	end
 
 	ply:SetYRPBool( "yrp_chararchived", false )
 
 	if cuid != ply:CharID() then
 		if GetGlobalYRPBool( "bool_removebuildingownercharswitch", false) then
-			BuildingRemoveOwner(ply:YRPSteamID() )
+			BuildingRemoveOwner( ply:YRPSteamID() )
 		end
 		hook.Run( "yrp_switched_character", ply, ply:CharID(), cuid)
 	end

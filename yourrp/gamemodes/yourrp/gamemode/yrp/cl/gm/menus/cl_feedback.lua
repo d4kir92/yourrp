@@ -33,7 +33,7 @@ function openTicketMenu()
 	openMenu()
 
 	TICKET.open = true
-	TICKET.window = createD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
+	TICKET.window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
 	TICKET.window:Center()
 	TICKET.window:SetTitle( "LID_sendticket" )
 	TICKET.window:SetHeaderHeight(YRP.ctr(100) )
@@ -56,7 +56,7 @@ end
 function CreateTicketContent(parent)
 	TICKET.content = parent
 
-	TICKET.discord = createD( "YButton", TICKET.content, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20) )
+	TICKET.discord = YRPCreateD( "YButton", TICKET.content, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20) )
 	TICKET.discord:SetText( "LID_getlivesupport" )
 	function TICKET.discord:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string( "LID_getlivesupport" ) )
@@ -65,26 +65,26 @@ function CreateTicketContent(parent)
 		gui.OpenURL( "https://discord.gg/sEgNZxg" )
 	end
 
-	TICKET.titleP = createD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(170) )
+	TICKET.titleP = YRPCreateD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(170) )
 	function TICKET.titleP:Paint(pw, ph)
 		surfaceText(YRP.lang_string( "LID_title" ), "Y_25_500", YRP.ctr(0), ph / 2, Color( 255, 255, 255, 255 ), 0, 1)
 	end
-	TICKET.titleT = createD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(220) )
+	TICKET.titleT = YRPCreateD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(220) )
 
-	TICKET.ticketP = createD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(300) )
+	TICKET.ticketP = YRPCreateD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(300) )
 	function TICKET.ticketP:Paint(pw, ph)
 		surfaceText(YRP.lang_string( "LID_ticket" ) .. " ( " .. YRP.lang_string( "LID_problems" ) .. ", " .. YRP.lang_string( "LID_suggestions" ) .. ", ...)", "Y_25_500", YRP.ctr(0), ph/2, Color( 255, 255, 255, 255 ), 0, 1)
 	end
-	TICKET.ticketT = createD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(500), YRP.ctr(20), YRP.ctr(350) )
+	TICKET.ticketT = YRPCreateD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(500), YRP.ctr(20), YRP.ctr(350) )
 	TICKET.ticketT:SetMultiline(true)
 
-	TICKET.contactP = createD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(900) )
+	TICKET.contactP = YRPCreateD( "DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(900) )
 	function TICKET.contactP:Paint(pw, ph)
 		surfaceText(YRP.lang_string( "LID_contact" ) .. " ( " .. YRP.lang_string( "LID_notrequired" ) .. " )", "Y_25_500", YRP.ctr(0), ph/2, Color( 255, 255, 255, 255 ), 0, 1)
 	end
-	TICKET.contactT = createD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(950) )
+	TICKET.contactT = YRPCreateD( "DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(950) )
 
-	TICKET.send = createD( "YButton", TICKET.content, YRP.ctr(600), YRP.ctr(50), YRP.ctr(20), YRP.ctr(1050) )
+	TICKET.send = YRPCreateD( "YButton", TICKET.content, YRP.ctr(600), YRP.ctr(50), YRP.ctr(20), YRP.ctr(1050) )
 	TICKET.send:SetText( "LID_sendticket" )
 	function TICKET.send:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, string.upper(YRP.lang_string( "LID_sendticket" ) ))

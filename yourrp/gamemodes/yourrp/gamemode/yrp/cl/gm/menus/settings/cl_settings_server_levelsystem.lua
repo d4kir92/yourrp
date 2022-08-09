@@ -6,7 +6,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 
 	local PARENT = GetSettingsSite()
 	if pa(PARENT) then
-		local GRP_LS = createD( "YGroupBox", PARENT, YRP.ctr(1000), YRP.ctr(530), YRP.ctr(20), YRP.ctr(20) )
+		local GRP_LS = YRPCreateD( "YGroupBox", PARENT, YRP.ctr(1000), YRP.ctr(530), YRP.ctr(20), YRP.ctr(20) )
 		GRP_LS:SetText( "LID_levelsystem" )
 		function GRP_LS:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -14,14 +14,14 @@ net.Receive( "get_levelsystem_settings", function(len)
 		GRP_LS:AutoSize(true)
 
 		-- MIN
-		local ls_level_min_header = createD( "YLabel", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_level_min_header = YRPCreateD( "YLabel", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
 		ls_level_min_header:SetText( "LID_minimumlevel" )
 		function ls_level_min_header:Paint(pw, ph)
 			hook.Run( "YLabelPaint", self, pw, ph)
 		end
 		GRP_LS:AddItem(ls_level_min_header)
 
-		local ls_level_min = createD( "DNumberWang", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_level_min = YRPCreateD( "DNumberWang", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
 		ls_level_min:SetMin(1)
 		ls_level_min:SetMax(9999999)
 		ls_level_min:SetValue(setting.int_level_min)
@@ -50,14 +50,14 @@ net.Receive( "get_levelsystem_settings", function(len)
 		DHr(hr)
 
 		-- MAX
-		local ls_level_max_header = createD( "YLabel", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_level_max_header = YRPCreateD( "YLabel", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
 		ls_level_max_header:SetText( "LID_maximumlevel" )
 		function ls_level_max_header:Paint(pw, ph)
 			hook.Run( "YLabelPaint", self, pw, ph)
 		end
 		GRP_LS:AddItem(ls_level_max_header)
 
-		local ls_level_max = createD( "DNumberWang", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_level_max = YRPCreateD( "DNumberWang", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
 		ls_level_max:SetMin(1)
 		ls_level_max:SetMax(10000000)
 		ls_level_max:SetValue(setting.int_level_max)
@@ -83,14 +83,14 @@ net.Receive( "get_levelsystem_settings", function(len)
 		DHr(hr)
 
 		-- START
-		local ls_level_start_header = createD( "YLabel", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_level_start_header = YRPCreateD( "YLabel", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
 		ls_level_start_header:SetText( "LID_startlevel" )
 		function ls_level_start_header:Paint(pw, ph)
 			hook.Run( "YLabelPaint", self, pw, ph)
 		end
 		GRP_LS:AddItem(ls_level_start_header)
 
-		local ls_level_start = createD( "DNumberWang", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_level_start = YRPCreateD( "DNumberWang", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
 		ls_level_start:SetMin(0)
 		ls_level_start:SetMax(9999999)
 		ls_level_start:SetValue(setting.int_level_start)
@@ -116,14 +116,14 @@ net.Receive( "get_levelsystem_settings", function(len)
 		DHr(hr)
 
 		-- Multiplier
-		local ls_level_multiplier_header = createD( "YLabel", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_level_multiplier_header = YRPCreateD( "YLabel", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
 		ls_level_multiplier_header:SetText( "LID_multiplier" )
 		function ls_level_multiplier_header:Paint(pw, ph)
 			hook.Run( "YLabelPaint", self, pw, ph)
 		end
 		GRP_LS:AddItem(ls_level_multiplier_header)
 
-		local ls_level_multiplier = createD( "DNumberWang", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_level_multiplier = YRPCreateD( "DNumberWang", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
 		ls_level_multiplier:SetNumeric(true)
 		ls_level_multiplier:SetDecimals(3)
 		ls_level_multiplier:SetMin(1.0)
@@ -151,14 +151,14 @@ net.Receive( "get_levelsystem_settings", function(len)
 		DHr(hr)
 
 		-- Levelup
-		local xp_for_levelup_header = createD( "YLabel", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
+		local xp_for_levelup_header = YRPCreateD( "YLabel", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
 		xp_for_levelup_header:SetText( "LID_xpforlevelup" )
 		function xp_for_levelup_header:Paint(pw, ph)
 			hook.Run( "YLabelPaint", self, pw, ph)
 		end
 		GRP_LS:AddItem(xp_for_levelup_header)
 
-		local ls_xp_for_levelup = createD( "DNumberWang", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_xp_for_levelup = YRPCreateD( "DNumberWang", nil, GRP_LS:GetWide(), YRP.ctr(50), 0, 0)
 		ls_xp_for_levelup:SetMin(1)
 		ls_xp_for_levelup:SetMax(999999)
 		ls_xp_for_levelup:SetValue(setting.int_xp_for_levelup)
@@ -183,7 +183,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 
 
 
-		local GRP_XP = createD( "YGroupBox", PARENT, YRP.ctr(1000), YRP.ctr(530), YRP.ctr(1040), YRP.ctr(20) )
+		local GRP_XP = YRPCreateD( "YGroupBox", PARENT, YRP.ctr(1000), YRP.ctr(530), YRP.ctr(1040), YRP.ctr(20) )
 		GRP_XP:SetText( "LID_levelsystem" )
 		function GRP_XP:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -191,14 +191,14 @@ net.Receive( "get_levelsystem_settings", function(len)
 		GRP_XP:AutoSize(true)
 
 		-- XP Per Kill
-		local xp_per_kill_header = createD( "YLabel", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
+		local xp_per_kill_header = YRPCreateD( "YLabel", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
 		xp_per_kill_header:SetText( "LID_xpperkill" )
 		function xp_per_kill_header:Paint(pw, ph)
 			hook.Run( "YLabelPaint", self, pw, ph)
 		end
 		GRP_XP:AddItem(xp_per_kill_header)
 
-		local ls_xp_per_kill = createD( "DNumberWang", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_xp_per_kill = YRPCreateD( "DNumberWang", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
 		ls_xp_per_kill:SetMin(1)
 		ls_xp_per_kill:SetMax(999999)
 		ls_xp_per_kill:SetValue(setting.int_xp_per_kill)
@@ -222,14 +222,14 @@ net.Receive( "get_levelsystem_settings", function(len)
 		GRP_XP:AddItem(ls_xp_per_kill)
 
 		-- XP Per Minute
-		local ls_xp_per_minute_header = createD( "YLabel", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_xp_per_minute_header = YRPCreateD( "YLabel", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
 		ls_xp_per_minute_header:SetText( "LID_xpperminute" )
 		function ls_xp_per_minute_header:Paint(pw, ph)
 			hook.Run( "YLabelPaint", self, pw, ph)
 		end
 		GRP_XP:AddItem(ls_xp_per_minute_header)
 
-		local ls_xp_per_minute = createD( "DNumberWang", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_xp_per_minute = YRPCreateD( "DNumberWang", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
 		ls_xp_per_minute:SetMin(1)
 		ls_xp_per_minute:SetMax(999999)
 		ls_xp_per_minute:SetValue(setting.int_xp_per_minute)
@@ -253,14 +253,14 @@ net.Receive( "get_levelsystem_settings", function(len)
 		GRP_XP:AddItem(ls_xp_per_minute)
 
 		-- XP Per Revive
-		local ls_xp_per_revive_header = createD( "YLabel", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_xp_per_revive_header = YRPCreateD( "YLabel", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
 		ls_xp_per_revive_header:SetText( "LID_xpperrevive" )
 		function ls_xp_per_revive_header:Paint(pw, ph)
 			hook.Run( "YLabelPaint", self, pw, ph)
 		end
 		GRP_XP:AddItem(ls_xp_per_revive_header)
 
-		local ls_xp_per_revive = createD( "DNumberWang", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
+		local ls_xp_per_revive = YRPCreateD( "DNumberWang", nil, GRP_XP:GetWide(), YRP.ctr(50), 0, 0)
 		ls_xp_per_revive:SetMin(1)
 		ls_xp_per_revive:SetMax(999999)
 		ls_xp_per_revive:SetValue(setting.int_xp_per_revive)
@@ -287,7 +287,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 
 
 		-- Diagramm
-		local diagramm = createD( "YLabel", PARENT, YRP.ctr(1600), YRP.ctr(800), YRP.ctr(2060), YRP.ctr(20) )
+		local diagramm = YRPCreateD( "YLabel", PARENT, YRP.ctr(1600), YRP.ctr(800), YRP.ctr(2060), YRP.ctr(20) )
 		diagramm:SetText( "" )
 		function diagramm:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )

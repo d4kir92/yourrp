@@ -3,14 +3,14 @@
 function CreateCheckBoxLine( dpanellist, val, lstr, netstr, fixx, textcolor)
 	textcolor = textcolor or Color( 255, 255, 255, 255 )
 	fixx = fixx or 0
-	local background = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(50), 0, 0)
+	local background = YRPCreateD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(50), 0, 0)
 	background.text_posx = YRP.ctr(50 + 10)
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, "", nil, self.text_posx + YRP.ctr(fixx), nil, 0, 1)
 		draw.SimpleText(YRP.lang_string(lstr), "Y_16_500", self.text_posx + YRP.ctr(fixx), ph / 2, textcolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
-	background.checkbox = createD( "DCheckBox", background, YRP.ctr(50), YRP.ctr(50), 0 + YRP.ctr(fixx), 0)
+	background.checkbox = YRPCreateD( "DCheckBox", background, YRP.ctr(50), YRP.ctr(50), 0 + YRP.ctr(fixx), 0)
 	background.checkbox:SetValue( val)
 	function background.checkbox:Paint(pw, ph)
 		surfaceCheckBox(self, pw, ph, "done" )
@@ -46,12 +46,12 @@ function CreateCheckBoxLineTab( dpanellist, val, lstr, netstr, x)
 end
 
 function CreateButtonLine( dpanellist, lstr, netstr, lstr2)
-	local background = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
+	local background = YRPCreateD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
-	background.button = createD( "DButton", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
+	background.button = YRPCreateD( "DButton", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
 	background.button:SetText( "" )
 	background.button.text = lstr2 or lstr
 	function background.button:Paint(pw, ph)
@@ -69,12 +69,12 @@ function CreateButtonLine( dpanellist, lstr, netstr, lstr2)
 end
 
 function CreateTextBoxLine( dpanellist, text, lstr, netstr)
-	local background = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
+	local background = YRPCreateD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
-	local textbox = createD( "DTextEntry", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
+	local textbox = YRPCreateD( "DTextEntry", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
 	textbox:SetText(text)
 	textbox.serverside = false
 
@@ -101,12 +101,12 @@ function CreateTextBoxLine( dpanellist, text, lstr, netstr)
 end
 
 function CreateComboBoxLine( dpanellist, text, lstr, netstr, default, choices)
-	local background = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
+	local background = YRPCreateD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
-	local combobox = createD( "DComboBox", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
+	local combobox = YRPCreateD( "DComboBox", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
 	combobox.serverside = false
 	for id, v in pairs( choices) do
 		local selected = false
@@ -141,12 +141,12 @@ end
 function CreateTextBoxBox( dpanellist, text, lstr, netstr)
 	text = YRP_SQL_STR_OUT( text )
 
-	local background = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(50 + 400 + 10), 0, 0)
+	local background = YRPCreateD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(50 + 400 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), YRP.ctr(25), 0, 1)
 	end
 
-	local textbox = createD( "DTextEntry", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(400), YRP.ctr(10), YRP.ctr(50) )
+	local textbox = YRPCreateD( "DTextEntry", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(400), YRP.ctr(10), YRP.ctr(50) )
 	textbox:SetText(text)
 	textbox:SetMultiline(true)
 	textbox.serverside = false
@@ -174,12 +174,12 @@ function CreateTextBoxBox( dpanellist, text, lstr, netstr)
 end
 
 function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr2)
-	local background = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
+	local background = YRPCreateD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ": ( " .. GetGlobalYRPString( "text_money_pre", "" ) .. "100" .. GetGlobalYRPString( "text_money_pos", "" ) .. " )", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
-	background.textbox = createD( "DTextEntry", background, YRP.ctr(400) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
+	background.textbox = YRPCreateD( "DTextEntry", background, YRP.ctr(400) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
 	background.textbox:SetText(text)
 	background.textbox.serverside = false
 
@@ -200,7 +200,7 @@ function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr
 		end
 	end)
 
-	background.textbox2 = createD( "DTextEntry", background, YRP.ctr(400) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10 + 400), YRP.ctr(50) )
+	background.textbox2 = YRPCreateD( "DTextEntry", background, YRP.ctr(400) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10 + 400), YRP.ctr(50) )
 	background.textbox2:SetText(text2)
 	background.textbox2.serverside = false
 
@@ -227,12 +227,12 @@ function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr
 end
 
 function CreateNumberWangLine( dpanellist, value, lstr, netstr, fixx, max, min)
-	local background = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
+	local background = YRPCreateD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10) + YRP.ctr(fixx), ph * 1 / 4, 0, 1)
 	end
 
-	background.numberwang = createD( "DNumberWang", background, dpanellist:GetWide() - YRP.ctr(20 * 2) - YRP.ctr(fixx), YRP.ctr(50), YRP.ctr(10) + YRP.ctr(fixx), YRP.ctr(50) )
+	background.numberwang = YRPCreateD( "DNumberWang", background, dpanellist:GetWide() - YRP.ctr(20 * 2) - YRP.ctr(fixx), YRP.ctr(50), YRP.ctr(10) + YRP.ctr(fixx), YRP.ctr(50) )
 	background.numberwang:SetMax(max or 999999999999)
 	background.numberwang:SetMin(min or -999999999999)
 	background.numberwang:SetValue( value)
@@ -278,7 +278,7 @@ function CreateNumberWangLine( dpanellist, value, lstr, netstr, fixx, max, min)
 end
 
 function CreateHRLine( dpanellist)
-	local hr = createD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(20), 0, 0)
+	local hr = YRPCreateD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(20), 0, 0)
 	function hr:Paint(pw, ph)
 		surfacePanel(self, pw, ph, "" )
 		surfaceBox(YRP.ctr(10), hr:GetTall() / 4, hr:GetWide() - YRP.ctr(2 * 10), hr:GetTall() / 2, Color( 0, 0, 0, 255 ) )
@@ -317,7 +317,7 @@ net.Receive( "Connect_Settings_General", function(len)
 
 
 
-		local General_Slider = createD( "DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(2 * 20), PARENT:GetTall() - YRP.ctr(2 * 20), YRP.ctr(20), YRP.ctr(20) )
+		local General_Slider = YRPCreateD( "DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(2 * 20), PARENT:GetTall() - YRP.ctr(2 * 20), YRP.ctr(20), YRP.ctr(20) )
 		General_Slider:SetOverlap(- YRP.ctr(20) )
 		function General_Slider:Paint(pw, ph)
 			if self.w != PARENT:GetWide() or self.h != PARENT:GetTall() then
@@ -331,7 +331,7 @@ net.Receive( "Connect_Settings_General", function(len)
 
 
 		--[[ SERVER SETTINGS ]]--
-		local SERVER_SETTINGS = createD( "YGroupBox", Server_Settings, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
+		local SERVER_SETTINGS = YRPCreateD( "YGroupBox", Server_Settings, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		SERVER_SETTINGS:SetText( "LID_serversettings" )
 		function SERVER_SETTINGS:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -366,7 +366,7 @@ net.Receive( "Connect_Settings_General", function(len)
 
 
 		--[[ GAMEMODE SETTINGS ]]--
-		local GAMEMODE_SETTINGS = createD( "YGroupBox", Gamemode_Settings, YRP.ctr(1000), General_Slider:GetTall(), 0, 0)
+		local GAMEMODE_SETTINGS = YRPCreateD( "YGroupBox", Gamemode_Settings, YRP.ctr(1000), General_Slider:GetTall(), 0, 0)
 		GAMEMODE_SETTINGS:SetText( "LID_gamemodesettings" )
 		function GAMEMODE_SETTINGS:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -406,7 +406,7 @@ net.Receive( "Connect_Settings_General", function(len)
 
 
 		--[[ GAMEMODE SYSTEMS ]]--
-		local GAMEMODE_SYSTEMS = createD( "YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
+		local GAMEMODE_SYSTEMS = YRPCreateD( "YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		GAMEMODE_SYSTEMS:SetText( "LID_gamemodesystems" )
 		function GAMEMODE_SYSTEMS:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -505,7 +505,7 @@ net.Receive( "Connect_Settings_General", function(len)
 
 
 		--[[ GAMEMODE VISUALS ]]--
-		local GAMEMODE_VISUALS = createD( "YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
+		local GAMEMODE_VISUALS = YRPCreateD( "YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		GAMEMODE_VISUALS:SetText( "LID_gamemodevisuals" )
 		function GAMEMODE_VISUALS:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -535,11 +535,11 @@ net.Receive( "Connect_Settings_General", function(len)
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idstructure, YRP.lang_string( "LID_idstructure" ) .. " (!D 1Dig., !L 1Let., !N 1Num.)", "update_text_idstructure" )
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idcard_background, YRP.lang_string( "LID_background" ) .. " ( " .. YRP.lang_string( "LID_idcard" ) .. " )", "update_text_idcard_background" )
 		local gs = 8
-		local idcard_change = createD( "YButton", GAMEMODE_VISUALS:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, 0)
+		local idcard_change = YRPCreateD( "YButton", GAMEMODE_VISUALS:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, 0)
 		idcard_change:SetText( "LID_change" )
 		function idcard_change:DoClick()
 			F8CloseSettings()
-			local idbg = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
+			local idbg = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
 			idbg:MakePopup()
 			idbg:SetTitle( "" )
 			idbg:SetDraggable(false)
@@ -583,7 +583,7 @@ net.Receive( "Connect_Settings_General", function(len)
 				if !string.find(ele, "box" ) then
 					name = YRP.lang_string( "LID_" .. ele)
 				end
-				local e = createD( "YFrame", idbg, GetGlobalYRPInt( "int_" .. ele .. "_w", 10), GetGlobalYRPInt( "int_" .. ele .. "_h", 10), GetGlobalYRPInt( "int_" .. ele .. "_x", 10), GetGlobalYRPInt( "int_" .. ele .. "_y", 10) )
+				local e = YRPCreateD( "YFrame", idbg, GetGlobalYRPInt( "int_" .. ele .. "_w", 10), GetGlobalYRPInt( "int_" .. ele .. "_h", 10), GetGlobalYRPInt( "int_" .. ele .. "_x", 10), GetGlobalYRPInt( "int_" .. ele .. "_y", 10) )
 				if string.find(ele, "background" ) then
 					e:SetDraggable(false)
 					e.draggable = false
@@ -831,7 +831,7 @@ net.Receive( "Connect_Settings_General", function(len)
 
 				local X = 0
 				if ele != "background" then
-					e.toggle = createD( "DCheckBox", e, YRP.ctr(50), YRP.ctr(50), 0, 0)
+					e.toggle = YRPCreateD( "DCheckBox", e, YRP.ctr(50), YRP.ctr(50), 0, 0)
 					e.toggle:SetChecked(GetGlobalYRPBool( "bool_" .. ele .. "_visible", false) )
 					function e.toggle:OnChange( bVal)
 						net.Start( "update_idcard_" .. "bool_" .. ele .. "_visible" )
@@ -842,10 +842,10 @@ net.Receive( "Connect_Settings_General", function(len)
 					X = X + YRP.ctr(50 + 2)
 				end
 
-				e.setting = createD( "YButton", e, YRP.ctr(70), YRP.ctr(50), X, 0)
+				e.setting = YRPCreateD( "YButton", e, YRP.ctr(70), YRP.ctr(50), X, 0)
 				e.setting:SetText(string.sub(YRP.lang_string( "LID_settings" ), 1, 3) .. "." )
 				function e.setting:DoClick()
-					local win = createD( "YFrame", nil, YRP.ctr(800), YRP.ctr(1000), 0, 0)
+					local win = YRPCreateD( "YFrame", nil, YRP.ctr(800), YRP.ctr(1000), 0, 0)
 					win:SetTitle(name)
 					win:SetHeaderHeight(YRP.ctr(100) )
 					win:MakePopup()
@@ -861,7 +861,7 @@ net.Receive( "Connect_Settings_General", function(len)
 					end
 					win.ele = ele
 
-					win.colortype = createD( "DComboBox", win:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, YRP.ctr(0) )
+					win.colortype = YRPCreateD( "DComboBox", win:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, YRP.ctr(0) )
 					local cho = {}
 					cho[1] = YRP.lang_string( "LID_custom" ) .. "-" .. YRP.lang_string( "LID_color" )
 					cho[2] = YRP.lang_string( "LID_faction" ) .. "-" .. YRP.lang_string( "LID_color" )
@@ -882,7 +882,7 @@ net.Receive( "Connect_Settings_General", function(len)
 						net.SendToServer()
 					end
 
-					win.color = createD( "DColorMixer", win:GetContent(), YRP.ctr(400), YRP.ctr(400), 0, YRP.ctr(50) )
+					win.color = YRPCreateD( "DColorMixer", win:GetContent(), YRP.ctr(400), YRP.ctr(400), 0, YRP.ctr(50) )
 					win.color:SetColor(Color(GetGlobalYRPInt( "int_" .. ele .. "_r", 0), GetGlobalYRPInt( "int_" .. ele .. "_g", 0), GetGlobalYRPInt( "int_" .. ele .. "_b", 0), GetGlobalYRPInt( "int_" .. ele .. "_a", 0) ))
 					function win.color:ValueChanged( colo)
 						e.col = colo
@@ -893,7 +893,7 @@ net.Receive( "Connect_Settings_General", function(len)
 					halign[1] = "C"
 					halign[2] = "R"
 					for x = 0, 2 do
-						local ax = createD( "YButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(570) )
+						local ax = YRPCreateD( "YButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(570) )
 						ax:SetText(halign[x])
 						function ax:DoClick()
 							net.Start( "update_idcard_" .. "int_" .. ele .. "_ax" )
@@ -907,7 +907,7 @@ net.Receive( "Connect_Settings_General", function(len)
 					valign[1] = "C"
 					valign[2] = "B"
 					for x = 0, 2 do
-						local ay = createD( "YButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(690) )
+						local ay = YRPCreateD( "YButton", win:GetContent(), YRP.ctr(50), YRP.ctr(50), x * YRP.ctr(50 + 2), YRP.ctr(690) )
 						ay:SetText( valign[x])
 						function ay:DoClick()
 							net.Start( "update_idcard_" .. "int_" .. ele .. "_ay" )
@@ -918,7 +918,7 @@ net.Receive( "Connect_Settings_General", function(len)
 					end
 					X = X + YRP.ctr(50 + 2)
 
-					e.title = createD( "DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), 0, YRP.ctr(780) )
+					e.title = YRPCreateD( "DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), 0, YRP.ctr(780) )
 					e.title:SetChecked(GetGlobalYRPBool( "bool_" .. ele .. "_title", false) )
 					function e.title:OnChange( bVal)
 						net.Start( "update_idcard_" .. "bool_" .. ele .. "_title" )
@@ -990,7 +990,7 @@ net.Receive( "Connect_Settings_General", function(len)
 
 
 		--[[ MONEY SETTINGS ]]--
-		local MONEY_SETTINGS = createD( "YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
+		local MONEY_SETTINGS = YRPCreateD( "YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		MONEY_SETTINGS:SetText( "LID_moneysettings" )
 		function MONEY_SETTINGS:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -1031,7 +1031,7 @@ net.Receive( "Connect_Settings_General", function(len)
 
 
 		--[[ CHARACTERS SETTINGS ]]--
-		local CHARACTERS_SETTINGS = createD( "YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
+		local CHARACTERS_SETTINGS = YRPCreateD( "YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		CHARACTERS_SETTINGS:SetText( "LID_characterssettings" )
 		function CHARACTERS_SETTINGS:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -1062,7 +1062,7 @@ net.Receive( "Connect_Settings_General", function(len)
 
 
 		--[[ SOCIAL SETTINGS ]]--
-		local SOCIAL_SETTINGS = createD( "YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
+		local SOCIAL_SETTINGS = YRPCreateD( "YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
 		SOCIAL_SETTINGS:SetText( "LID_socialsettings" )
 		function SOCIAL_SETTINGS:Paint(pw, ph)
 			hook.Run( "YGroupBoxPaint", self, pw, ph)

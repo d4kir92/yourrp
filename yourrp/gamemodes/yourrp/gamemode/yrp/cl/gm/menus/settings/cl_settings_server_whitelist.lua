@@ -16,7 +16,7 @@ function BuildWhitelist(parent, tab)
 	end
 
 	if loadedR and loadedG and loadedW and pa(parent) then
-		local list = createD( "DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20) )
+		local list = YRPCreateD( "DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20) )
 		list:AddColumn( "uniqueID" ):SetFixedWidth(60)
 		list:AddColumn( "SteamID" ):SetFixedWidth(130)
 		list:AddColumn(YRP.lang_string( "LID_nick" ) )
@@ -113,7 +113,7 @@ function BuildWhitelist(parent, tab)
 			end
 		end
 
-		local btnAdd = createD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(20) )
+		local btnAdd = YRPCreateD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(20) )
 		btnAdd:SetText(YRP.lang_string( "LID_addentry" ) .. " ( " .. YRP.lang_string( "LID_role" ) .. " )" )
 		function btnAdd:DoClick()
 			local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0)
@@ -186,7 +186,7 @@ function BuildWhitelist(parent, tab)
 			end
 		end
 
-		local btnGroup = createD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(90) )
+		local btnGroup = YRPCreateD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(90) )
 		btnGroup:SetText(YRP.lang_string( "LID_addentry" ) .. " ( " .. YRP.lang_string( "LID_group" ) .. " )" )
 		function btnGroup:DoClick()
 			local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0)
@@ -239,7 +239,7 @@ function BuildWhitelist(parent, tab)
 			end
 		end
 
-		local btnAll = createD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(160) )
+		local btnAll = YRPCreateD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(160) )
 		btnAll:SetText(YRP.lang_string( "LID_addentry" ) .. " ( " .. YRP.lang_string( "LID_all" ) .. " )" )
 		function btnAll:DoClick()
 			local _whitelistFrame = createVGUI( "DFrame", nil, 400, 500, 0, 0)
@@ -285,7 +285,7 @@ function BuildWhitelist(parent, tab)
 			end
 		end
 
-		local btnRem = createD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(230) )
+		local btnRem = YRPCreateD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(230) )
 		btnRem:SetText(YRP.lang_string( "LID_removeentry" ) )
 		function btnRem:DoClick()
 			if list:GetSelectedLine() != nil then
@@ -357,7 +357,7 @@ net.Receive( "getRoleWhitelist_line", function(len)
 			loadedW = true
 
 			-- TABS
-			local tabs = createD( "YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
+			local tabs = YRPCreateD( "YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
 			function tabs:Think()
 				self:SetSize(site:GetWide(), site:GetTall() )
 			end

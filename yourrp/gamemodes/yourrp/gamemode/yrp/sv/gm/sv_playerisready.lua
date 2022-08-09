@@ -40,8 +40,8 @@ local function YRPPlayerLoadedGame( ply )
 		UpdateDarkRPTable(ply)
 
 		if ply.DRPSendTeamsToPlayer and ply.DRPSendCategoriesToPlayer then
-			--ply:DRPSendTeamsToPlayer()
-			--ply:DRPSendCategoriesToPlayer()
+			ply:DRPSendTeamsToPlayer()
+			ply:DRPSendCategoriesToPlayer()
 		else
 			if ply.DRPSendTeamsToPlayer == nil then
 				YRP.msg( "error", "Function not found! DRPSendTeamsToPlayer" )

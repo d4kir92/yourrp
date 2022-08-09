@@ -178,7 +178,7 @@ function PANEL:Init()
 
 	self:ShowCloseButton(false)
 
-	self.close = createD( "YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
+	self.close = YRPCreateD( "YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
 	self.close:SetText( "X" )
 	self.close.main = self
 	function self.close:Paint(pw, ph)
@@ -188,7 +188,7 @@ function PANEL:Init()
 		self.main:Close()
 	end
 
-	self.btnmax = createD( "YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
+	self.btnmax = YRPCreateD( "YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
 	self.btnmax:SetText( "[ ]" )
 	self.btnmax.main = self
 	self.btnmax:SetVisible(self.maximised)
@@ -201,7 +201,7 @@ function PANEL:Init()
 
 	self.langu = YRP.DChangeLanguage(self, self:GetWide() - self:GetHeaderHeight() * 0.3 * 5.6, self:GetHeaderHeight() * 0.7 / 2, self:GetHeaderHeight() * 0.3, true)
 
-	self.con = createD( "YPanel", self, 1000, 1000, 0, 0)
+	self.con = YRPCreateD( "YPanel", self, 1000, 1000, 0, 0)
 	function self.con:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
 	end

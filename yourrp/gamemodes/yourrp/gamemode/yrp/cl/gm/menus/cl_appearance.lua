@@ -51,7 +51,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					--
 				end
 
-				_appe.r.play = createD( "DButton", _yrp_appearance.left, YRP.ctr(100), YRP.ctr(100), ScW() / 4, ScrH() - YRP.ctr(200) )
+				_appe.r.play = YRPCreateD( "DButton", _yrp_appearance.left, YRP.ctr(100), YRP.ctr(100), ScW() / 4, ScrH() - YRP.ctr(200) )
 				_appe.r.play:SetText( "" )
 				function _appe.r.play:Paint(pw, ph)
 					local tab = {}
@@ -75,7 +75,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					play = !play
 				end
 
-				_appe.r.pm = createD( "DModelPanel", _yrp_appearance.left, ScrH() - _yrp_appearance.window:GetHeaderHeight() - YRP.ctr(100), ScW() / 2, 0, 0 )
+				_appe.r.pm = YRPCreateD( "DModelPanel", _yrp_appearance.left, ScrH() - _yrp_appearance.window:GetHeaderHeight() - YRP.ctr(100), ScW() / 2, 0, 0 )
 				_appe.r.pm:SetModel(_pm)
 				_appe.r.pm:SetAnimated(true)
 				_appe.r.pm.Angles = Angle(0, 0, 0)
@@ -102,7 +102,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 				end
 
 				-- Playermodel changing
-				local _tmpPM = createD( "DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(80), ScW() / 2, _yrp_appearance.window:GetHeaderHeight() )
+				local _tmpPM = YRPCreateD( "DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(80), ScW() / 2, _yrp_appearance.window:GetHeaderHeight() )
 				_tmpPM.cur = _pmid
 				_tmpPM.max = #_pms
 				_tmpPM.name = YRP.lang_string( "LID_appearance" )
@@ -111,7 +111,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpPM.cur .. "/" .. _tmpPM.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 				end
 
-				local _tmpPMUp = createD( "DButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
+				local _tmpPMUp = YRPCreateD( "DButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
 				_tmpPMUp:SetText( "" )
 				function _tmpPMUp:Paint(pw, ph)
 					if _tmpPM.cur < _tmpPM.max then
@@ -130,7 +130,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					end
 				end
 
-				local _tmpPMDo = createD( "DButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40) )
+				local _tmpPMDo = YRPCreateD( "DButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40) )
 				_tmpPMDo:SetText( "" )
 				function _tmpPMDo:Paint(pw, ph)
 					if _tmpPM.cur > 1 then
@@ -154,7 +154,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					_tbl.bgs = _appe.r.pm.Entity:GetBodyGroups()
 				end
 
-				local _tmpSkin = createD( "DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(80), ScW() / 2, YRP.ctr(200) )
+				local _tmpSkin = YRPCreateD( "DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(80), ScW() / 2, YRP.ctr(200) )
 				_tmpSkin.cur = _skin--_appe.r.pm.Entity:GetSkin()
 				if _appe.r.pm.Entity then
 					_appe.r.pm.Entity:SetSkin(_tmpSkin.cur)
@@ -166,7 +166,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpSkin.cur + 1 .. "/" .. _tmpSkin.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 				end
 
-				local _tmpSkinUp = createD( "DButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
+				local _tmpSkinUp = YRPCreateD( "DButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
 				_tmpSkinUp:SetText( "" )
 				function _tmpSkinUp:Paint(pw, ph)
 					if _tmpSkin.cur < _tmpSkin.max - 1 then
@@ -185,7 +185,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					end
 				end
 
-				local _tmpSkinDo = createD( "DButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40) )
+				local _tmpSkinDo = YRPCreateD( "DButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40) )
 				_tmpSkinDo:SetText( "" )
 				function _tmpSkinDo:Paint(pw, ph)
 					if _tmpSkin.cur > 0 then
@@ -213,7 +213,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 								_appe.r.pm.Entity:SetBodygroup(k-1, tonumber(_cbg[k]) )
 							end
 							local _height = 80
-							local _tmpBg = createD( "DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(_height), ScW() / 2, YRP.ctr(300) + k * YRP.ctr(_height + 2) )
+							local _tmpBg = YRPCreateD( "DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(_height), ScW() / 2, YRP.ctr(300) + k * YRP.ctr(_height + 2) )
 							_tmpBg.name = v.name
 							_tmpBg.max = v.num
 							_tmpBg.cur = _cbg[k]
@@ -222,7 +222,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 								hook.Run( "YPanelPaint", self, pw, ph )
 								draw.SimpleTextOutlined(self.name .. " ( " .. _tmpBg.cur + 1 .. "/" .. _tmpBg.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 							end
-							_tmpBgUp = createD( "DButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
+							_tmpBgUp = YRPCreateD( "DButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
 							_tmpBgUp:SetText( "" )
 							function _tmpBgUp:Paint(pw, ph)
 								if _tmpBg.cur < _tmpBg.max - 1 then
@@ -242,7 +242,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 								end
 							end
 
-							_tmpBgDo = createD( "DButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(_height / 2 - 2) )
+							_tmpBgDo = YRPCreateD( "DButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(_height / 2 - 2) )
 							_tmpBgDo:SetText( "" )
 							function _tmpBgDo:Paint(pw, ph)
 								if _tmpBg.cur > 0 then
@@ -307,7 +307,7 @@ end)
 function open_appearance()
 	openMenu()
 
-	_yrp_appearance.window = createD( "YFrame", nil, ScW(), ScrH(), 0, 0)
+	_yrp_appearance.window = YRPCreateD( "YFrame", nil, ScW(), ScrH(), 0, 0)
 	_yrp_appearance.window:SetTitle( "LID_appearance" )
 	_yrp_appearance.window:Center()
 	_yrp_appearance.window:SetDraggable(false)
@@ -322,7 +322,7 @@ function open_appearance()
 		hook.Run( "YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string( "LID_appearance" ) .. " - " .. YRP.lang_string( "LID_menu" ) .. " [PROTOTYPE]" )
 	end
 
-	_yrp_appearance.left = createD( "DPanel", _yrp_appearance.window, ScW(), ScrH() - _yrp_appearance.window:GetHeaderHeight(), 0, _yrp_appearance.window:GetHeaderHeight() )
+	_yrp_appearance.left = YRPCreateD( "DPanel", _yrp_appearance.window, ScW(), ScrH() - _yrp_appearance.window:GetHeaderHeight(), 0, _yrp_appearance.window:GetHeaderHeight() )
 	function _yrp_appearance.left:Paint(pw, ph)
 		--
 	end

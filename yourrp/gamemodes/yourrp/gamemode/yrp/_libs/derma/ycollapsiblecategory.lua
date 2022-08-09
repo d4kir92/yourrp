@@ -11,15 +11,15 @@ net.Receive( "yrp_want_role", function(len, ply)
 	if result == "worked" then
 		CreateRolePreviewContent()
 	else
-		local popup = createD( "YFrame", nil, YRP.ctr(800), YRP.ctr(120 + 20 + 60 + 20 + 20 + 100), 0, 0)
+		local popup = YRPCreateD( "YFrame", nil, YRP.ctr(800), YRP.ctr(120 + 20 + 60 + 20 + 20 + 100), 0, 0)
 		popup:Center()
 		popup:MakePopup()
 		popup:SetTitle(YRP.lang_string(result) )
 
-		local ok = createD( "YLabel", popup:GetContent(), YRP.ctr(760), YRP.ctr(120), popup:GetContent():GetWide() / 2 - YRP.ctr(760 / 2), popup:GetContent():GetTall() - YRP.ctr(60 + 20 + 120) )
+		local ok = YRPCreateD( "YLabel", popup:GetContent(), YRP.ctr(760), YRP.ctr(120), popup:GetContent():GetWide() / 2 - YRP.ctr(760 / 2), popup:GetContent():GetTall() - YRP.ctr(60 + 20 + 120) )
 		ok:SetText(YRP.lang_string(result) )
 
-		local ok = createD( "YButton", popup:GetContent(), YRP.ctr(400), YRP.ctr(60), popup:GetContent():GetWide() / 2 - YRP.ctr(400 / 2), popup:GetContent():GetTall() - YRP.ctr(60) )
+		local ok = YRPCreateD( "YButton", popup:GetContent(), YRP.ctr(400), YRP.ctr(60), popup:GetContent():GetWide() / 2 - YRP.ctr(400 / 2), popup:GetContent():GetTall() - YRP.ctr(60) )
 		ok:SetText(YRP.lang_string( "LID_ok" ) )
 		function ok:DoClick()
 			popup:Close()
@@ -84,7 +84,7 @@ function PANEL:Init()
 	self._htext = ""
 
 	-- CON
-	self.con = createD( "DPanelList", self, 10, 10, 0, 10)
+	self.con = YRPCreateD( "DPanelList", self, 10, 10, 0, 10)
 	self.con:EnableVerticalScrollbar()
 	self.con:SetSpacing(YRP.ctr(20) )
 	function self.con:Paint(pw, ph)
@@ -105,7 +105,7 @@ function PANEL:Init()
 	end
 
 	-- BTN
-	self.btn = createD( "DButton", self, 10, 10, 0, 0)
+	self.btn = YRPCreateD( "DButton", self, 10, 10, 0, 0)
 	self.btn:SetText( "" )
 	function self.btn:Paint(pw, ph)
 		draw.RoundedBoxEx(YRP.ctr(10), 0, 0, YRP.ctr(20), ph, base._hcol, true, false, false, false)
@@ -136,7 +136,7 @@ function PANEL:Init()
 			return
 		end
 
-		local list = createD( "DPanelList", nil, YRP.ctr(w + 80 + 30), YRP.ctr(h), 0, 0)
+		local list = YRPCreateD( "DPanelList", nil, YRP.ctr(w + 80 + 30), YRP.ctr(h), 0, 0)
 		list:EnableVerticalScrollbar()
 		rlist:AddPanel(list)
 
@@ -175,12 +175,12 @@ function PANEL:Init()
 		rol.int_maxamount = tonumber(rol.int_maxamount)
 		rol.int_prerole = tonumber(rol.int_prerole)
 
-		local r = createD( "DPanel", nil, YRP.ctr(w) + YRP.ctr(80), YRP.ctr(h), 0, 0)
+		local r = YRPCreateD( "DPanel", nil, YRP.ctr(w) + YRP.ctr(80), YRP.ctr(h), 0, 0)
 		function r:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
 		end
 	
-		local bg = createD( "DPanel", r, YRP.ctr(w), YRP.ctr(h), 0, 0)
+		local bg = YRPCreateD( "DPanel", r, YRP.ctr(w), YRP.ctr(h), 0, 0)
 		function bg:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, YRP.ctr(20), ph, StringToColor(rol.string_color), true, false, true, false)
 			draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, YRPInterfaceValue( "YFrame", "PC" ), false, true, false, true)
@@ -266,7 +266,7 @@ function PANEL:Init()
 		end
 		if type(rol.pms) == "table" then
 			if !strEmpty(rol.pms[1]) then
-				local pm = createD( "YModelPanel", bg, diameter, diameter, YRP.ctr(20), YRP.ctr(10) )
+				local pm = YRPCreateD( "YModelPanel", bg, diameter, diameter, YRP.ctr(20), YRP.ctr(10) )
 				pm:SetModel( rol.pms[1] )
 				if pm.panel and pm.panel.Entity and pm.panel.Entity:IsValid() then
 					function pm.panel:LayoutEntity( ent )
@@ -288,7 +288,7 @@ function PANEL:Init()
 			end
 		end
 
-		local btn = createD( "DButton", bg, bg:GetWide(), bg:GetTall(), 0, 0)
+		local btn = YRPCreateD( "DButton", bg, bg:GetWide(), bg:GetTall(), 0, 0)
 		btn:SetText( "" )
 		function btn:Paint(pw, ph)
 			if rol.int_prerole == 0 and (!rol.bool_locked or LocalPlayer():HasAccess() ) and rol.int_requireslevel <= LocalPlayer():Level() then
@@ -297,9 +297,9 @@ function PANEL:Init()
 				end
 			end
 			if rol.bool_locked or rol.int_requireslevel > LocalPlayer():Level() then
-				YRP.DrawIcon(YRP.GetDesignIcon( "lock" ), ph - 2 * YRP.ctr(40), ph - 2 * YRP.ctr(40), YRP.ctr(50), YRP.ctr(40), TextColor(StringToColor(rol.string_color) ))
+				YRP.DrawIcon(YRP.GetDesignIcon( "lock" ), ph - 2 * YRP.ctr(40), ph - 2 * YRP.ctr(40), YRP.ctr(50), YRP.ctr(40), Color( 255, 100, 100 ) )
 				if rol.int_requireslevel > LocalPlayer():Level() then
-					draw.SimpleText(rol.int_requireslevel, "Y_40_500", ph / 2 + YRP.ctr(10), ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText( string.sub( YRP.lang_string( "LID_level" ), 1, 3 ) .. ". " .. rol.int_requireslevel, "Y_24_500", ph / 2 + YRP.ctr(10), ph / 2, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 		end
@@ -315,7 +315,7 @@ function PANEL:Init()
 			end
 		end
 
-		local nex = createD( "DButton", r, YRP.ctr(80), YRP.ctr(h), r:GetWide() - YRP.ctr(80), 0)
+		local nex = YRPCreateD( "DButton", r, YRP.ctr(80), YRP.ctr(h), r:GetWide() - YRP.ctr(80), 0)
 		nex:SetText( "" )
 		function nex:Paint(pw, ph)
 			if self:IsHovered() then
@@ -430,7 +430,7 @@ function PANEL:Init()
 						if rol.int_prerole == 0 and rol.bool_eventrole == GetGlobalYRPBool( "create_eventchar", false) then
 							w = rw
 							h = rh
-							local rlist = createD( "DHorizontalScroller", nil, 10, YRP.ctr(h), 0, 0)
+							local rlist = YRPCreateD( "DHorizontalScroller", nil, 10, YRP.ctr(h), 0, 0)
 							function rlist:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, color1 )
 							end
@@ -456,7 +456,7 @@ function PANEL:Init()
 							continue
 						end
 
-						local group = createD( "YCollapsibleCategory", base.con, w, h, 0, 0)
+						local group = YRPCreateD( "YCollapsibleCategory", base.con, w, h, 0, 0)
 						group:SetS(w, h)
 						group:SetHeader(grp.string_name)
 						group:SetIcon(grp.string_icon)
@@ -530,7 +530,7 @@ function PANEL:Init()
 	end
 
 	-- ICON
-	self.icon = createD( "DHTML", self.btn, YRP.ctr(100) - 2 * YRP.ctr(20), YRP.ctr(100) - 2 * YRP.ctr(20), YRP.ctr(30), YRP.ctr(20) )
+	self.icon = YRPCreateD( "DHTML", self.btn, YRP.ctr(100) - 2 * YRP.ctr(20), YRP.ctr(100) - 2 * YRP.ctr(20), YRP.ctr(30), YRP.ctr(20) )
 end
 
 vgui.Register( "YCollapsibleCategory", PANEL, "DPanel" )

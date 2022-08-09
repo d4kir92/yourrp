@@ -13,6 +13,23 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "NormalCharacter", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "Timestamp", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_total", "INT DEFAULT 0" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_current", "INT DEFAULT 0" )
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "TS_LastOnline", "INT DEFAULT 1" )
+
+function YRPGetTSLastOnline( steamId )
+	local tab = YRP_SQL_SELECT( "yrp_players", "*", "SteamID = '" .. steamId .. "'" )
+	if tab and tab[1] then
+		tab = tab[1]
+		
+		return tab.TS_LastOnline
+	end
+	return 1
+end
+
+function YRPSetTSLastOnline( steamId )
+	if steamId then
+		YRP_SQL_UPDATE( "yrp_players", {["TS_LastOnline"] = os.time()}, "SteamID = '" .. steamId .. "'" )
+	end
+end
 
 util.AddNetworkString( "setting_players" )
 util.AddNetworkString( "YRPOpenCharacterMenu" )
@@ -30,7 +47,7 @@ net.Receive( "setting_players", function(len, ply)
 end)
 
 g_db_reseted = false
-function save_clients(str)
+function YRPSaveClients(str)
 	--YRP.msg( "db", string.upper( "[Saving all clients] [" .. str .. "]" ) )
 	if YRP_SQL_TABLE_EXISTS(DATABASE_NAME) then
 		if !g_db_reseted then
@@ -43,16 +60,16 @@ function save_clients(str)
 				
 				if ply:Alive() and YRP_SQL_TABLE_EXISTS( "yrp_characters" ) then
 					local _char_id = ply:CharID()
-					if worked(_char_id, "CharID failed @save_clients" ) then
+					if worked(_char_id, "CharID failed @YRPSaveClients" ) then
 						YRP_SQL_UPDATE( "yrp_characters", {["position"] = tostring(ply:GetPos() )}, "uniqueID = " .. _char_id)
 						YRP_SQL_UPDATE( "yrp_characters", {["angle"] = tostring(ply:EyeAngles() )}, "uniqueID = " .. _char_id)
-						if worked(ply:GetYRPString( "money", "0" ), "money failed @save_clients" ) and isnumber(tonumber(ply:GetYRPString( "money" ) )) then
+						if worked(ply:GetYRPString( "money", "0" ), "money failed @YRPSaveClients" ) and isnumber(tonumber(ply:GetYRPString( "money" ) )) then
 							local _mo_result = YRP_SQL_UPDATE( "yrp_characters", {["money"] = ply:GetYRPString( "money", "0" )}, "uniqueID = " .. _char_id)
 						end
-						if worked(ply:GetYRPString( "moneybank", "0" ), "moneybank failed @save_clients" ) and isnumber(tonumber(ply:GetYRPString( "moneybank" ) )) then
+						if worked(ply:GetYRPString( "moneybank", "0" ), "moneybank failed @YRPSaveClients" ) and isnumber(tonumber(ply:GetYRPString( "moneybank" ) )) then
 							local _mb_result = YRP_SQL_UPDATE( "yrp_characters", {["moneybank"] = ply:GetYRPString( "moneybank", "0" )}, "uniqueID = " .. _char_id)
 						end
-						if worked(GetMapNameDB(), "getmap failed @save_clients" ) then
+						if worked(GetMapNameDB(), "getmap failed @YRPSaveClients" ) then
 							YRP_SQL_UPDATE( "yrp_characters", {["map"] = GetMapNameDB()}, "uniqueID = " .. _char_id)
 						end
 					end
@@ -84,7 +101,7 @@ function save_clients(str)
 	end
 end
 
-function updateRoleUses(rid)
+function YRPUpdateRoleUses(rid)
 	rid = tonumber(rid)
 	local _count = 0
 	for k, p in pairs(player.GetAll() ) do
@@ -99,7 +116,12 @@ local defaultsweps = {}
 defaultsweps["yrp_key"] = true
 defaultsweps["yrp_unarmed"] = true
 
-function SetRole(ply, rid, force, pmid)
+function YRPSetRole( ply, rid, force, pmid )
+	if rid == nil then
+		YRP.msg( "note", "[YRPSetRole] No roleid" )
+		return false
+	end
+
 	rid = tonumber( rid )
 	if (IsVoidCharEnabled() or GetGlobalYRPBool( "bool_character_system", true) == false) and !ply:Alive() then
 		--ply:Spawn()
@@ -197,18 +219,18 @@ function SetRole(ply, rid, force, pmid)
 	end
 
 	if canGetRole(ply, rid, false) or force then
-		set_role(ply, rid)
-		set_role_values(ply, pmid)
+		YRPSetRoleData(ply, rid)
+		YRPSetRoleValues(ply, pmid)
 	else
-		set_role(ply, 1)
-		set_role_values(ply)
+		YRPSetRoleData(ply, 1)
+		YRPSetRoleValues(ply)
 	end
 
 	ply:SetYRPBool( "yrpspawnedwithcharacter", true)
 end
 
-function GiveRole(ply, rid, force)
-	SetRole(ply, rid, force, nil)
+function YRPGiveRole(ply, rid, force)
+	YRPSetRole(ply, rid, force, nil)
 end
 
 function YFAR(str, f, r)
@@ -296,7 +318,7 @@ function SetIDCardID(ply)
 	ply:SetYRPString( "idcardid", char.text_idcardid)
 end
 
-function set_role(ply, rid)
+function YRPSetRoleData(ply, rid)
 	hook.Run( "yrp_get_role_pre", ply, rid)
 
 	local _char_id = ply:CharID()
@@ -322,8 +344,8 @@ function set_role(ply, rid)
 			else
 				YRP.msg( "note", "_role failed" )
 			end
-			updateRoleUses(_old_uid)
-			updateRoleUses(rid)
+			YRPUpdateRoleUses(_old_uid)
+			YRPUpdateRoleUses(rid)
 			hook.Run( "yrp_get_role_post", ply, rid)
 		end
 	end
@@ -358,17 +380,17 @@ function GetFactionTable(uid)
 	return {}
 end
 
-function set_role_values(ply, pmid)
+function YRPSetRoleValues(ply, pmid)
 	hitquit(ply)
 	if yrp_db_loaded() then
 		local rolTab = ply:YRPGetRoleTable()
 		local groTab = ply:YRPGetGroupTable()
 		local ChaTab = ply:YRPGetCharacterTable()
 
-		if worked(rolTab, "set_role_values rolTab" ) and worked(ChaTab, "set_role_values ChaTab" ) then
+		if worked(rolTab, "YRPSetRoleValues rolTab" ) and worked(ChaTab, "YRPSetRoleValues ChaTab" ) then
 			if ChaTab.storage != nil then
 				local _storage = string.Explode( ",", ChaTab.storage)
-				YRP.msg( "debug", "[set_role_values] " .. ply:YRPName() .. " give permanent Licenses" )
+				YRP.msg( "gm", "[YRPSetRoleValues] " .. ply:YRPName() .. " give permanent Licenses" )
 				for i, lic in pairs(_storage) do
 					local _lic = YRP_SQL_SELECT( "yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'" )
 					if _lic != nil and _lic != false then
@@ -400,7 +422,7 @@ function set_role_values(ply, pmid)
 
 		--[RE]--check_inv(ply, ply:CharID() )
 
-		if worked(rolTab, "set_role_values rolTab" ) then
+		if worked(rolTab, "YRPSetRoleValues rolTab" ) then
 			ply:SetYRPString( "roleIcon", rolTab.string_icon)
 			ply:SetYRPString( "roleColor", rolTab.string_color)
 			ply:SetYRPInt( "speedwalk", tonumber( rolTab.int_speedwalk ) )
@@ -618,7 +640,7 @@ function YRPCLIENTOpenCharacterSelection(ply)
 	end
 end
 
-function add_yrp_player(ply, steamid)
+function YRPAddPlayer(ply, steamid)
 	YRP.msg( "db", "[" .. ply:SteamName() .. "] -> Add player to database." )
 
 	steamid = steamid or ply:YRPSteamID()
@@ -643,12 +665,12 @@ function add_yrp_player(ply, steamid)
 
 			ply:SetServerKeybinds()
 		else
-			YRP.msg( "error", "add_yrp_player failed! _insert: " .. tostring(_insert) )
+			YRP.msg( "error", "YRPAddPlayer failed! _insert: " .. tostring(_insert) )
 		end
 	end
 end
 
-function check_yrp_player(ply, steamid)
+function YRPCheckPlayer(ply, steamid)
 	--YRP.msg( "db", "[" .. ply:SteamName() .. "] -> Checking if player is in database." )
 
 	steamid = steamid or ply:YRPSteamID()
@@ -657,7 +679,7 @@ function check_yrp_player(ply, steamid)
 		local _result = YRP_SQL_SELECT( "yrp_players", "*", "SteamID = '" .. steamid .. "'" )
 
 		if _result == nil then
-			add_yrp_player(ply, steamid)
+			YRPAddPlayer(ply, steamid)
 		elseif wk(_result) then
 			--YRP.msg( "db", "[" .. ply:SteamName() .. "] is in database." )
 			if #_result > 1 then
@@ -670,23 +692,23 @@ function check_yrp_player(ply, steamid)
 				end
 			end
 		else
-			YRP.msg( "note", "[check_yrp_player] FAILED ( " .. tostring(_result) .. " )" )
+			YRP.msg( "note", "[YRPCheckPlayer] FAILED ( " .. tostring(_result) .. " )" )
 		end
 	else
 		YRP.msg( "error", "SteamID FAILED [" .. tostring(steamid) .. "]" )
 		timer.Simple(1, function()
 			YRP.msg( "db", "[" .. ply:SteamName() .. "] -> Retry check." )
-			check_yrp_player(ply, steamid)
+			YRPCheckPlayer(ply, steamid)
 		end)
 	end
 end
 
-function check_yrp_client(ply, steamid)
+function YRPCheckClient(ply, steamid)
 	--YRP.msg( "db", "[" .. ply:SteamName() .. "] -> Check client ( " .. ply:YRPSteamID() .. " )" )
 
-	check_yrp_player(ply, steamid)
+	YRPCheckPlayer(ply, steamid)
 
-	save_clients( "check_yrp_client" )
+	YRPSaveClients( "YRPCheckClient" )
 end
 
 net.Receive( "getCharakterList", function(len, ply)
@@ -753,9 +775,9 @@ net.Receive( "giveRole", function(len, ply)
 	for k, _ply in pairs(player.GetAll() ) do
 		if IsValid(_ply) and tostring(_ply:YRPSteamID() ) == tostring(_tmpSteamID) then
 			YRPRemRolVals(_ply)
-			RemGroVals(_ply)
-			set_role(_ply, uniqueIDRole)
-			set_role_values(_ply)
+			YRPRemGroVals(_ply)
+			YRPSetRoleData(_ply, uniqueIDRole)
+			YRPSetRoleValues(_ply)
 			YRP.msg( "note", tostring(_ply:Nick() ) .. " is now the role: " .. tostring(uniqueIDRole) )
 			return true
 		end
@@ -865,7 +887,7 @@ function startVote(ply, table)
 					end
 				end
 				if _yes > _no and (_yes + _no) > 1 then
-					SetRole( votePly, table[1].uniqueID)
+					YRPSetRole( votePly, table[1].uniqueID)
 				else
 					YRP.msg( "gm", "VOTE: not enough yes" )
 				end
@@ -977,14 +999,14 @@ function YRPRemRolVals(ply)
 	if wk(rolTab) then
 		local _sweps = string.Explode( ",", rolTab.string_sweps)
 		for k, v in pairs(_sweps) do
-			if ply:HasWeapon( v ) then
+			if v and ply:HasWeapon( v ) then
 				ply:StripWeapon( v )
 			end
 		end
 	end
 end
 
-function RemGroVals(ply)
+function YRPRemGroVals(ply)
 	local groTab = ply:YRPGetGroupTable()
 	if wk(groTab) then
 		local _sweps = string.Explode( ",", groTab.string_sweps)
@@ -1021,14 +1043,14 @@ net.Receive( "wantRole", function(len, ply)
 		ply:SetYRPBool( "switchrole", true)
 		--Remove Sweps from old role
 		YRPRemRolVals(ply)
-		RemGroVals(ply)
+		YRPRemGroVals(ply)
 
 		if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 			ply:OldKillSilent()
 		end
 
 		--New role
-		SetRole(ply, uniqueIDRole, false, pmid)
+		YRPSetRole(ply, uniqueIDRole, false, pmid)
 
 		if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 			ply:Spawn()

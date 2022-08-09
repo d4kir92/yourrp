@@ -167,7 +167,7 @@ hook.Add( "HUDPaint", "yrp_hud_levelup", function()
 
 			surface.PlaySound( "garrysmod/content_downloaded.wav" )
 
-			local levelup = createD( "DFrame", nil, YRP.ctr(600), YRP.ctr(160), 0, 0)
+			local levelup = YRPCreateD( "DFrame", nil, YRP.ctr(600), YRP.ctr(160), 0, 0)
 			levelup:SetPos(ScrW() / 2 - levelup:GetWide() / 2, ScrH() / 2 - levelup:GetTall() / 2 - YRP.ctr(400) )
 			levelup:ShowCloseButton(false)
 			levelup:SetTitle( "" )

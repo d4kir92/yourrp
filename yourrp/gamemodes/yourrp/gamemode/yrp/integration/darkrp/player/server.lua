@@ -45,7 +45,7 @@ function Player:changeTeam(team, force, suppressNotification)
 		if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 			self:OldKillSilent()
 		end
-		SetRole(self, team, false, nil)
+		YRPSetRole(self, team, false, nil)
 		if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 			self:Spawn()
 		end
@@ -258,17 +258,17 @@ end
 
 function Player:updateJob(job)
 	--Description: Set the job name of a player ( doesn't change the actual team).
-	YRPDarkrpNotFound( "updateJob(job)" )
+	--YRPDarkrpNotFound( "updateJob(job)" )
 end
 
 function Player:wanted( actor, reason, time)
 	--Description: Make this person wanted by the police.
-	YRPDarkrpNotFound( "wanted( actor, reason, time)" )
+	--YRPDarkrpNotFound( "wanted( actor, reason, time)" )
 end
 
 function Player:warrant(warranter, reason)
 	--Description: Get a search warrant for this person.
-	YRPDarkrpNotFound( "warrant(warranter, reason)" )
+	--YRPDarkrpNotFound( "warrant(warranter, reason)" )
 end
 
 DarkRP.hooks.playerArrested = Player.arrest

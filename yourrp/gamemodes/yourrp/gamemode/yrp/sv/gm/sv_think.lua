@@ -127,7 +127,6 @@ function YRPConST( ply, _time )
 		end
 		return false
 	end
-	ply.jumping = ply.jumping or fals
 
 	if ply:GetMoveType() == MOVETYPE_NOCLIP then
 		local newval = ply:GetYRPFloat( "GetCurStamina", 0) + 20
@@ -138,14 +137,21 @@ function YRPConST( ply, _time )
 	end
 
 	if ply:GetMoveType() != MOVETYPE_NOCLIP and !ply:InVehicle() then
-		local tr = util.QuickTrace( ply:GetPos(), -ply:GetUp() * 8, nil )
-		if tr.Hit and ply.jumping then
-			ply.jumping = false
-		end
+		ply.yrpjumping = ply.yrpjumping or 1
+		ply.yrpjumpposz = ply.yrpjumpposz or ply:GetPos().z
 
-		if !tr.Hit and !ply.jumping then
-			ply.jumping = true
-
+		if ply.yrpjumping == 1 and !ply:IsOnGround() then -- LEAVE GROUND
+			ply.yrpjumpposz = ply:GetPos().z
+			ply.yrpjumping = 2
+		elseif ply.yrpjumping == 2 then -- AFTER LEAVE GROUND
+			if ply.yrpjumpposz < ply:GetPos().z then -- UP, CONTINUE
+				ply.yrpjumping = 3
+			else -- DOWN, RESET
+				ply.yrpjumping = 1
+				ply.yrpjumpposz = ply:GetPos().z
+			end
+		elseif ply.yrpjumping == 3 then -- FULL JUMP, remove stamina
+			ply.yrpjumping = 1
 			local newval = ply:GetYRPFloat( "GetCurStamina", 0) - GetGlobalYRPFloat( "float_scale_stamina_jump", 30)
 			newval = math.Round(math.Clamp(newval, 0, ply:GetYRPFloat( "GetMaxStamina", 100) ), 1)
 			if ply:GetYRPFloat( "GetCurStamina" ) != newval then
@@ -432,7 +438,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 		local _mod = _time % 60
 		local _left = _time / 60 - _mod
 		local _str = "Auto-Save (Uptime: " .. _left .. " " .. "minutes" .. " )"
-		save_clients(_str)
+		YRPSaveClients(_str)
 		--SaveStorages(_str)
 	end
 
@@ -471,10 +477,28 @@ timer.Create( "ServerThink", TICK, 0, function()
 		YRPTestContentAddons()
 	end
 
+
+
 	if _time % 60 == 0 and YRPCheckAddons then
 		YRPCheckAddons()
 	end
 
+	if _time % 1 == 0 and YRPRemoveBuildingOwner and YRPRemoveBuildingOwner() and GetAllDoors then
+		for i, door in pairs( GetAllDoors() ) do
+			local charId = door:GetYRPInt( "ownerCharID" )
+			if charId != 0 then
+				local steamId = YRPGetSteamIdByCharId( charId )
+				local ply = YRPGetPlayerBySteamID( steamId )
+				if ply == nil and steamId then
+					local ts = YRPGetTSLastOnline( steamId )
+					if os.time() - ts >= YRPRemoveBuildingOwnerTime() then
+						BuildingRemoveOwner( steamId )
+					end
+				end
+			end
+		end
+	end
+	
 	if _time == 10 then
 		YRPCheckVersion( "think" )
 	elseif _time == 30 then

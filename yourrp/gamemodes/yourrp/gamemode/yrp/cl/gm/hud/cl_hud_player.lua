@@ -293,7 +293,7 @@ function YRPHudThirdperson(ply, color)
 		draw.SimpleText(YRP.lang_string( "LID_viewingposition" ) .. " ( " .. math.Round(ply.yrp_view_x, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 650), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 	if YRPGetKeybind( "view_spin_right" ) and YRPGetKeybind( "view_spin_left" ) and ( input.IsKeyDown(YRPGetKeybind( "view_spin_right" ) ) or input.IsKeyDown(YRPGetKeybind( "view_spin_left" ) ) ) then
-		draw.SimpleText(YRP.lang_string( "LID_viewingangle" ) .. " ( " .. math.Round(ply.yrp_view_s, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 700), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+		draw.SimpleText(YRP.lang_string( "LID_viewingangle" ) .. " ( " .. math.Round(ply.yrp_view_s, 0) .. "° )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 700), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 end
 

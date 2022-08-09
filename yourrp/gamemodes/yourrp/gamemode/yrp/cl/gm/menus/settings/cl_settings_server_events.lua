@@ -12,7 +12,7 @@ net.Receive( "setting_events", function(len)
 
 
 		-- Event Chars
-		EVENT.EventChars = createD( "DListView", PARENT, sw, sh * 2 - YRP.ctr(100), 0, YRP.ctr(100) + sh)
+		EVENT.EventChars = YRPCreateD( "DListView", PARENT, sw, sh * 2 - YRP.ctr(100), 0, YRP.ctr(100) + sh)
 		EVENT.EventChars:AddColumn(YRP.lang_string( "LID_name" ) )
 		EVENT.EventChars:AddColumn( "Event Character ID" ):SetFixedWidth(120)
 		EVENT.EventChars:AddColumn( "Event Character NAME" )
@@ -36,7 +36,7 @@ net.Receive( "setting_events", function(len)
 			end
 		end)
 
-		EVENT.AddChar = createD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20), sh + YRP.ctr(20) )
+		EVENT.AddChar = YRPCreateD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20), sh + YRP.ctr(20) )
 		EVENT.AddChar:SetText( "Add Char" )
 		function EVENT.AddChar:Paint(pw, ph)
 			if EVENT.EventList and EVENT.EventList:GetSelectedLine() then
@@ -45,12 +45,12 @@ net.Receive( "setting_events", function(len)
 		end
 		function EVENT.AddChar:DoClick()
 			if EVENT.EventList and EVENT.EventList:GetSelectedLine() then
-				local Frame = createD( "YFrame", nil, YRP.ctr(500), YRP.ctr(500), 0, 0)
+				local Frame = YRPCreateD( "YFrame", nil, YRP.ctr(500), YRP.ctr(500), 0, 0)
 				Frame:SetTitle( "Add Char" )
 				Frame:Center()
 				Frame:MakePopup()
 
-				Frame.Char = createD( "DComboBox", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20 + 60 + 20) )
+				Frame.Char = YRPCreateD( "DComboBox", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20 + 60 + 20) )
 				net.Receive( "yrp_event_get_chars", function()
 					local tab = net.ReadTable()
 					if pa( Frame ) and pa( Frame.Char ) then
@@ -61,7 +61,7 @@ net.Receive( "setting_events", function(len)
 					end
 				end)
 
-				Frame.Player = createD( "DComboBox", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20 + 60 + 20 + 60 + 20 + 60 + 20) )
+				Frame.Player = YRPCreateD( "DComboBox", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20 + 60 + 20 + 60 + 20 + 60 + 20) )
 				for i, v in pairs(player.GetAll() ) do
 					Frame.Player:AddChoice( v:RPName(), v:YRPSteamID() )
 				end
@@ -71,7 +71,7 @@ net.Receive( "setting_events", function(len)
 					net.SendToServer()
 				end
 
-				Frame.Add = createD( "YButton", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20) )
+				Frame.Add = YRPCreateD( "YButton", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20) )
 				Frame.Add:SetText( "LID_add" )
 				function Frame.Add:DoClick()
 					if EVENT.EventList:GetSelectedLine() then
@@ -93,7 +93,7 @@ net.Receive( "setting_events", function(len)
 			end
 		end
 
-		EVENT.RemoveChar = createD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20 + 300 + 20), sh + YRP.ctr(20) )
+		EVENT.RemoveChar = YRPCreateD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20 + 300 + 20), sh + YRP.ctr(20) )
 		EVENT.RemoveChar:SetText( "Remove Char" )
 		function EVENT.RemoveChar:Paint(pw, ph)
 			if EVENT.EventChars:GetSelectedLine() then
@@ -115,20 +115,20 @@ net.Receive( "setting_events", function(len)
 		
 
 		-- Events
-		EVENT.AddEvent = createD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20), YRP.ctr(20) )
+		EVENT.AddEvent = YRPCreateD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20), YRP.ctr(20) )
 		EVENT.AddEvent:SetText( "Add Event" )
 		function EVENT.AddEvent:Paint(pw, ph)
 			hook.Run( "YButtonAPaint", self, pw, ph)
 		end
 		function EVENT.AddEvent:DoClick()
-			local Frame = createD( "YFrame", nil, YRP.ctr(500), YRP.ctr(300), 0, 0)
+			local Frame = YRPCreateD( "YFrame", nil, YRP.ctr(500), YRP.ctr(300), 0, 0)
 			Frame:SetTitle( "Add Event" )
 			Frame:Center()
 			Frame:MakePopup()
 
-			Frame.Name = createD( "DTextEntry", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20 + 60 + 20) )
+			Frame.Name = YRPCreateD( "DTextEntry", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20 + 60 + 20) )
 
-			Frame.Add = createD( "YButton", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20) )
+			Frame.Add = YRPCreateD( "YButton", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20) )
 			Frame.Add:SetText( "LID_add" )
 			function Frame.Add:DoClick()
 				net.Start( "yrp_event_add" )
@@ -139,7 +139,7 @@ net.Receive( "setting_events", function(len)
 			end
 		end
 
-		EVENT.RemoveEvent = createD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20 + 300 + 20), YRP.ctr(20) )
+		EVENT.RemoveEvent = YRPCreateD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20 + 300 + 20), YRP.ctr(20) )
 		EVENT.RemoveEvent:SetText( "Remove Event" )
 		function EVENT.RemoveEvent:Paint(pw, ph)
 			if EVENT.EventList:GetSelectedLine() then
@@ -156,7 +156,7 @@ net.Receive( "setting_events", function(len)
 			end
 		end
 
-		EVENT.StartEvent = createD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20 + 300 + 20 + 300 + 20), YRP.ctr(20) )
+		EVENT.StartEvent = YRPCreateD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20 + 300 + 20 + 300 + 20), YRP.ctr(20) )
 		EVENT.StartEvent:SetText( "Start Event" )
 		function EVENT.StartEvent:Paint(pw, ph)
 			if EVENT.EventList:GetSelectedLine() and !GetGlobalYRPBool( "yrp_event_running", false) then
@@ -175,7 +175,7 @@ net.Receive( "setting_events", function(len)
 			end
 		end
 
-		EVENT.EndEvent = createD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20 + 300 + 20 + 300 + 20 + 300 + 20), YRP.ctr(20) )
+		EVENT.EndEvent = YRPCreateD( "YButton", PARENT, YRP.ctr(300), YRP.ctr(60), YRP.ctr(20 + 300 + 20 + 300 + 20 + 300 + 20), YRP.ctr(20) )
 		EVENT.EndEvent:SetText( "End Event" )
 		function EVENT.EndEvent:Paint(pw, ph)
 			if EVENT.EventList:GetSelectedLine() and GetGlobalYRPBool( "yrp_event_running", false) then
@@ -194,7 +194,7 @@ net.Receive( "setting_events", function(len)
 			end
 		end
 
-		EVENT.EventList = createD( "DListView", PARENT, sw, sh - YRP.ctr(100), 0, YRP.ctr(100) )
+		EVENT.EventList = YRPCreateD( "DListView", PARENT, sw, sh - YRP.ctr(100), 0, YRP.ctr(100) )
 		EVENT.EventList:AddColumn(YRP.lang_string( "LID_id" ) ):SetFixedWidth(80)
 		EVENT.EventList:AddColumn(YRP.lang_string( "LID_name" ) )
 		function EVENT.EventList:OnRowSelected(rowIndex, row)

@@ -16,7 +16,7 @@ function PANEL:Init()
 
 	self.tabs = {}
 
-	self.slider = createD( "DHorizontalScroller", self, self:GetWide(), self:GetTall(), 0, 0)
+	self.slider = YRPCreateD( "DHorizontalScroller", self, self:GetWide(), self:GetTall(), 0, 0)
 
 	self.OldSetSize = self.OldSetSize or self.SetSize
 	function self:SetSize(w, h)
@@ -39,7 +39,7 @@ function PANEL:Init()
 		end
 
 		_w = _w * 1.4
-		local _tmp = createD( "DButton", self, _w, self:GetTall(), _x, ctrb(0) )
+		local _tmp = YRPCreateD( "DButton", self, _w, self:GetTall(), _x, ctrb(0) )
 		_tmp.tbl = tbl
 		_tmp:SetText( "" )
 		_tmp.name = str

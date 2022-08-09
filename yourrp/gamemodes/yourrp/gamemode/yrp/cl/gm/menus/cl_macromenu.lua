@@ -55,9 +55,9 @@ net.Receive( "yrp_get_macros", function(len)
 
 		_mm.uid = 1
 
-		_mm.list = createD( "DScrollPanel", content, YRP.ctr(80 * 7 + 20 * 6 + 36), YRP.ctr(80 * 3 + 20 * 2), 0, 0)
+		_mm.list = YRPCreateD( "DScrollPanel", content, YRP.ctr(80 * 7 + 20 * 6 + 36), YRP.ctr(80 * 3 + 20 * 2), 0, 0)
 
-		_mm.tf = createD( "DTextEntry", content, YRP.ctr(80 * 7 + 20 * 6 + 36), YRP.ctr(80 * 3 + 20 * 2), 0, YRP.ctr(80 * 3 + 20 * 3) )
+		_mm.tf = YRPCreateD( "DTextEntry", content, YRP.ctr(80 * 7 + 20 * 6 + 36), YRP.ctr(80 * 3 + 20 * 2), 0, YRP.ctr(80 * 3 + 20 * 3) )
 		_mm.tf:SetMultiline(true)
 		function _mm.tf:OnTextChanged()
 			if _mm.uid then
@@ -69,13 +69,13 @@ net.Receive( "yrp_get_macros", function(len)
 			end
 		end
 
-		_mm.use = createD( "YButton", content, YRP.ctr(300), YRP.ctr(60), YRP.ctr(0), YRP.ctr(600) )
+		_mm.use = YRPCreateD( "YButton", content, YRP.ctr(300), YRP.ctr(60), YRP.ctr(0), YRP.ctr(600) )
 		_mm.use:SetText( "LID_use" )
 		function _mm.use:DoClick()
 			UseMacro(_mm.uid)
 		end
 
-		_mm.bind = createD( "DBinder", content, YRP.ctr(300), YRP.ctr(60), YRP.ctr(320), YRP.ctr(600) )
+		_mm.bind = YRPCreateD( "DBinder", content, YRP.ctr(300), YRP.ctr(60), YRP.ctr(320), YRP.ctr(600) )
 		_mm.bind.keybind = nil
 		function _mm.bind:OnChange(num)
 			if num != -1 and YRPGetKeybind(self.keybind) != nil then
@@ -89,7 +89,7 @@ net.Receive( "yrp_get_macros", function(len)
 		local c = 1
 		for y = 0, 6 do
 			for x = 0, 6 do
-				local m = createD( "DButton", nil, YRP.ctr(80), YRP.ctr(80), x * YRP.ctr(80 + 20), y * YRP.ctr(80 + 20) )
+				local m = YRPCreateD( "DButton", nil, YRP.ctr(80), YRP.ctr(80), x * YRP.ctr(80 + 20), y * YRP.ctr(80 + 20) )
 				m:SetText( "" )
 				m.name = _mm.tab[c].name
 				m.value = _mm.tab[c].value
@@ -131,7 +131,7 @@ end )
 function OpenMacroMenu()
 	openMenu()
 
-	_mm.window = createD( "YFrame", nil, YRP.ctr(720 + 36), YRP.ctr(820), 0, 0)
+	_mm.window = YRPCreateD( "YFrame", nil, YRP.ctr(720 + 36), YRP.ctr(820), 0, 0)
 	_mm.window:Center()
 	_mm.window:MakePopup()
 	_mm.window:SetTitle(YRP.lang_string( "LID_macromenu" ) )

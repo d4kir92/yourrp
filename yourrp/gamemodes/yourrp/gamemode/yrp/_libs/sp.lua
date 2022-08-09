@@ -52,7 +52,7 @@ function drawBattery(x)
 end
 
 function appPosition(parent, x, y, nr)
-	local _tmp = createD( "DPanel", parent, ctrb(64), ctrb(64), x, y)
+	local _tmp = YRPCreateD( "DPanel", parent, ctrb(64), ctrb(64), x, y)
 	_tmp.nr = nr
 	function _tmp:Paint(pw, ph)
 		if self:IsHovered() then
@@ -73,7 +73,7 @@ function appPosition(parent, x, y, nr)
 end
 
 function createSmartphone(parent, w, h, x, y)
-	local _tmp = createD( "DFrame", parent, w, h, x, y)
+	local _tmp = YRPCreateD( "DFrame", parent, w, h, x, y)
 	_tmp.tbl = {}
 	_tmp.tbl.w = w
 	_tmp.tbl.h = h
@@ -81,7 +81,7 @@ function createSmartphone(parent, w, h, x, y)
 	_tmp.tbl.y = y
 
 	--[[ Elements ]]--
-	_tmp.display = createD( "DPanel", _tmp, w, h, 0, 0)
+	_tmp.display = YRPCreateD( "DPanel", _tmp, w, h, 0, 0)
 	function _tmp.display:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, YRPGetSpBackColor() )
 
@@ -106,7 +106,7 @@ function createSmartphone(parent, w, h, x, y)
 	end
 
 	--[[ TOP BAR ]]--
-	_tmp.topbar = createD( "DPanel", _tmp, w, ctrb(40), 0, 0)
+	_tmp.topbar = YRPCreateD( "DPanel", _tmp, w, ctrb(40), 0, 0)
 	function _tmp.topbar:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
 
@@ -124,12 +124,12 @@ function createSmartphone(parent, w, h, x, y)
 	end
 
 	--[[ BOT BAR ]]--
-	_tmp.botbar = createD( "DPanel", _tmp, w, ctrb(40), 0, h - ctrb(40) )
+	_tmp.botbar = YRPCreateD( "DPanel", _tmp, w, ctrb(40), 0, h - ctrb(40) )
 	function _tmp.botbar:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color( 100, 100, 100, 255) )
 	end
 
-	_tmp.botbar.buttonhome = createD( "DButton", _tmp.botbar, w/3, ctrb(40), w/3, 0)
+	_tmp.botbar.buttonhome = YRPCreateD( "DButton", _tmp.botbar, w/3, ctrb(40), w/3, 0)
 	_tmp.botbar.buttonhome:SetText( "" )
 	function _tmp.botbar.buttonhome:Paint(pw, ph)
 		if self:IsHovered() then
@@ -143,7 +143,7 @@ function createSmartphone(parent, w, h, x, y)
 		_tmp.display:HomeScreen()
 	end
 
-	_tmp.botbar.buttonback = createD( "DButton", _tmp.botbar, w/3, ctrb(40), (w/3)*2, 0)
+	_tmp.botbar.buttonback = YRPCreateD( "DButton", _tmp.botbar, w/3, ctrb(40), (w/3)*2, 0)
 	_tmp.botbar.buttonback:SetText( "" )
 	function _tmp.botbar.buttonback:Paint(pw, ph)
 		if self:IsHovered() then
@@ -154,7 +154,7 @@ function createSmartphone(parent, w, h, x, y)
 		--draw.SimpleTextOutlined(YRP.lang_string( "LID_wip" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255 ) )
 	end
 
-	_tmp.botbar.buttonapps = createD( "DButton", _tmp.botbar, w/3, ctrb(40), 0, 0)
+	_tmp.botbar.buttonapps = YRPCreateD( "DButton", _tmp.botbar, w/3, ctrb(40), 0, 0)
 	_tmp.botbar.buttonapps:SetText( "" )
 	function _tmp.botbar.buttonapps:Paint(pw, ph)
 		if self:IsHovered() then

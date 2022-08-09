@@ -48,7 +48,7 @@ net.Receive( "openInteractMenu", function(len)
 
 	local hasspecs = net.ReadBool()
 
-	yrp_Interact = createD( "YFrame", nil, YRP.ctr(1090), YRP.ctr(1360), 0, 0)
+	yrp_Interact = YRPCreateD( "YFrame", nil, YRP.ctr(1090), YRP.ctr(1360), 0, 0)
 	yrp_Interact:SetHeaderHeight(YRP.ctr(100) )
 	function yrp_Interact:OnClose()
 		closeMenu()
@@ -105,7 +105,7 @@ net.Receive( "openInteractMenu", function(len)
 	end
 
 	if idcard then
-		local _tmpDescription = createD( "DTextEntry", content, content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), YRP.ctr(10), YRP.ctr(640) )
+		local _tmpDescription = YRPCreateD( "DTextEntry", content, content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), YRP.ctr(10), YRP.ctr(640) )
 		_tmpDescription:SetMultiline(true)
 		_tmpDescription:SetEditable(false)
 		_tmpDescription:SetText(tmpRPDescription or "" )
@@ -232,27 +232,27 @@ function YRPOpenGiveSpec( charid, ruid )
 	charid = tonumber( charid)
 	ruid = tonumber(ruid)
 
-	local win = createD( "YFrame", nil, 600, 600, 0, 0)
+	local win = YRPCreateD( "YFrame", nil, 600, 600, 0, 0)
 	win:SetTitle( "LID_specializations" )
 	win:Center()
 	win:MakePopup()
 
 	local content = win:GetContent()
 
-	win.header = createD( "YLabel", content, 280, 50, 0, 0)
+	win.header = YRPCreateD( "YLabel", content, 280, 50, 0, 0)
 	win.header:SetText( "LID_add" )
 
-	win.headerrem = createD( "YLabel", content, 280, 50, 300, 0)
+	win.headerrem = YRPCreateD( "YLabel", content, 280, 50, 300, 0)
 	win.headerrem:SetText( "LID_remove" )
 
-	win.dpl = createD( "DPanelList", content, 280, content:GetTall() - 50, 0, 50)
+	win.dpl = YRPCreateD( "DPanelList", content, 280, content:GetTall() - 50, 0, 50)
 	win.dpl:EnableVerticalScrollbar()
 	win.dpl:SetSpacing(2)
 	function win.dpl:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 80) )
 	end
 	
-	win.dplrem = createD( "DPanelList", content, 280, content:GetTall() - 50, 300, 50)
+	win.dplrem = YRPCreateD( "DPanelList", content, 280, content:GetTall() - 50, 300, 50)
 	win.dplrem:EnableVerticalScrollbar()
 	win.dplrem:SetSpacing(2)
 	function win.dplrem:Paint(pw, ph)
@@ -281,7 +281,7 @@ function YRPOpenGiveSpec( charid, ruid )
 			for i, v in pairs(nettab) do
 				v.uid = tonumber( v.uid )
 				if !table.HasValue( specids, v.uid ) then
-					local btn = createD( "YButton", nil, 250, 50, 0, 0)
+					local btn = YRPCreateD( "YButton", nil, 250, 50, 0, 0)
 					btn:SetText( v.name)
 
 					function btn:Paint(pw, ph)
@@ -300,7 +300,7 @@ function YRPOpenGiveSpec( charid, ruid )
 
 					win.dpl:AddItem( btn)
 				else
-					local btn = createD( "YButton", nil, 250, 50, 0, 0)
+					local btn = YRPCreateD( "YButton", nil, 250, 50, 0, 0)
 					btn:SetText( v.name)
 
 					function btn:Paint(pw, ph)
@@ -340,7 +340,7 @@ net.Receive( "yrp_invite_ply", function(len)
 	local role = net.ReadTable()
 	local group = net.ReadTable()
 	
-	local win = createD( "YFrame", nil, YRP.ctr(600), YRP.ctr(400), 0, 0)
+	local win = YRPCreateD( "YFrame", nil, YRP.ctr(600), YRP.ctr(400), 0, 0)
 	win:SetTitle( "LID_invitation" )
 	win:Center()
 	win:MakePopup()
@@ -354,7 +354,7 @@ net.Receive( "yrp_invite_ply", function(len)
 		draw.SimpleText(role.string_name, "Y_16_500", pw / 2, YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	win.accept = createD( "YButton", content, YRP.ctr(200), YRP.ctr(50), content:GetWide() / 2 - YRP.ctr(200 + 5), content:GetTall() - YRP.ctr(50 + 10) )
+	win.accept = YRPCreateD( "YButton", content, YRP.ctr(200), YRP.ctr(50), content:GetWide() / 2 - YRP.ctr(200 + 5), content:GetTall() - YRP.ctr(50 + 10) )
 	win.accept:SetText( "LID_accept" )
 	function win.accept:DoClick()
 		net.Start( "yrp_invite_accept" )
@@ -363,7 +363,7 @@ net.Receive( "yrp_invite_ply", function(len)
 		win:Close()
 	end
 
-	win.decline = createD( "YButton", content, YRP.ctr(200), YRP.ctr(50), content:GetWide() / 2 + YRP.ctr(5), content:GetTall() - YRP.ctr(50 + 10) )
+	win.decline = YRPCreateD( "YButton", content, YRP.ctr(200), YRP.ctr(50), content:GetWide() / 2 + YRP.ctr(5), content:GetTall() - YRP.ctr(50 + 10) )
 	win.decline:SetText( "LID_decline" )
 	function win.decline:DoClick()
 		win:Close()

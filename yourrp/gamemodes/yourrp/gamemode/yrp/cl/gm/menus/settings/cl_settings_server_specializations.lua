@@ -10,12 +10,12 @@ net.Receive( "get_specializations", function()
 		local spw = PARENT:GetWide()
 		local sph = PARENT:GetTall()
 
-		_li.ea = createD( "DPanel", PARENT, ScW() - YRP.ctr(40 + 480 + 40 + 40), sph - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
+		_li.ea = YRPCreateD( "DPanel", PARENT, ScW() - YRP.ctr(40 + 480 + 40 + 40), sph - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
 		function _li.ea:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 200) )
 		end
 
-		_li._spe = createD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40) )
+		_li._spe = YRPCreateD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40) )
 		_li._spe:SetListHeader(YRP.lang_string( "LID_specializations" ) )
 		--_li._spe:SetDStrForAdd( "specialization_add" )
 		_li._spe:SetEditArea(_li.ea)
@@ -25,7 +25,7 @@ net.Receive( "get_specializations", function()
 			end
 
 			--[[ NAME ]]--
-			_li.name = createD( "DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
+			_li.name = YRPCreateD( "DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 			_li.name.textentry.tbl = tbl
 			_li.name:SetHeader(YRP.lang_string( "LID_name" ) )
 			_li.name:SetText(tbl.name)
@@ -38,7 +38,7 @@ net.Receive( "get_specializations", function()
 			end
 
 			--[[ Prefix ]]--
-			_li.prefix = createD( "DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(110) )
+			_li.prefix = YRPCreateD( "DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(110) )
 			_li.prefix.textentry.tbl = tbl
 			_li.prefix:SetHeader(YRP.lang_string( "LID_prefix" ) )
 			_li.prefix:SetText(tbl.prefix)
@@ -51,7 +51,7 @@ net.Receive( "get_specializations", function()
 			end
 
 			--[[ Suffix ]]--
-			_li.suffix = createD( "DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(220) )
+			_li.suffix = YRPCreateD( "DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(220) )
 			_li.suffix.textentry.tbl = tbl
 			_li.suffix:SetHeader(YRP.lang_string( "LID_suffix" ) )
 			_li.suffix:SetText(tbl.suffix)

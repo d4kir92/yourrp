@@ -128,6 +128,8 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 		--
 	elseif args[1] and args[1] == "dropmoney" then
 		YRPDropMoney(ply, args[2])
+	elseif args[1] and args[1] == "teamban" then
+		--
 	elseif args[1] and args[1] == "drop" then
 		local _weapon = ply:GetActiveWeapon()
 		if _weapon != nil and PlayersCanDropWeapons() then
@@ -143,7 +145,7 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 			if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 				ply:OldKillSilent()
 			end
-			SetRole(ply, jobtab.uniqueID)
+			YRPSetRole(ply, jobtab.uniqueID)
 			if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 				ply:Spawn()
 			end

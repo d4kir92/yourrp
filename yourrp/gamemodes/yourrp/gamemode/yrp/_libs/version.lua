@@ -135,7 +135,7 @@ if CLIENT then
 		once = true
 		if check_window < CurTime() and LocalPlayer():HasAccess() then
 			check_window = CurTime() + 5
-			local frame = createD( "YFrame", nil, YRP.ctr(1100), YRP.ctr(590), 0, 0)
+			local frame = YRPCreateD( "YFrame", nil, YRP.ctr(1100), YRP.ctr(590), 0, 0)
 			frame:Center()
 			frame:SetHeaderHeight(YRP.ctr(100) )
 			frame:SetTitle(YRP.lang_string( "LID_about" ) .. " ( " .. YRP.lang_string( "LID_visible" ) .. ": " .. YRP.lang_string( "LID_adminonly" ) .. " )" )
@@ -164,7 +164,7 @@ if CLIENT then
 				draw.SimpleTextOutlined(on.stable .. "." .. on.beta .. "." .. on.canary .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " )", "Y_24_500", pw / 2, YRP.ctr(300), Color( 0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			end
 
-			local showChanges = createD( "YButton", frame.con, YRP.ctr(500), YRP.ctr(80), frame.con:GetWide() / 2 - YRP.ctr(250), YRP.ctr(350) )
+			local showChanges = YRPCreateD( "YButton", frame.con, YRP.ctr(500), YRP.ctr(80), frame.con:GetWide() / 2 - YRP.ctr(250), YRP.ctr(350) )
 			showChanges:SetText( "LID_showchanges" )
 			function showChanges:DoClick()
 				gui.OpenURL( "http://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152" )

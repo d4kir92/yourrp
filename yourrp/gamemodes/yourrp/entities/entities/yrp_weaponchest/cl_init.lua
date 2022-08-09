@@ -52,15 +52,15 @@ local w = 300
 local h = 200
 
 local function YRPCreateSlot(x, y, art, id)
-	local slot = createD( "DPanel", nil, w + 50, h, x, y)
+	local slot = YRPCreateD( "DPanel", nil, w + 50, h, x, y)
 	function slot:Paint(pw, ph)
 		draw.RoundedBox(3, 0, 0, pw, ph, Color(40, 40, 40) )
 	end
 
-	slot.mdl = createD( "DModelPanel", slot, w, h, 0, 0)
+	slot.mdl = YRPCreateD( "DModelPanel", slot, w, h, 0, 0)
 	slot.mdl:SetModel( "" )
 
-	slot.btn = createD( "DButton", slot.mdl, w, h, 0, 0)
+	slot.btn = YRPCreateD( "DButton", slot.mdl, w, h, 0, 0)
 	slot.btn:SetText( "" )
 	function slot.btn:Paint(pw, ph)
 		local cname = YRPGetSlotSWEP( "slot_" .. art, id)
@@ -102,7 +102,7 @@ local function YRPCreateSlot(x, y, art, id)
 		end
 	end
 
-	slot.btnlist = createD( "YButton", slot, 50, h, w, 0)
+	slot.btnlist = YRPCreateD( "YButton", slot, 50, h, w, 0)
 	slot.btnlist:SetText( ">" )
 	function slot.btnlist:Paint(pw, ph)
 		local cname = YRPGetSlotSWEP( "slot_" .. art, id)
@@ -121,15 +121,15 @@ local function YRPCreateSlot(x, y, art, id)
 end
 
 local function YRPCreateSWEP(x, y, art, cname)
-	local slot = createD( "DPanel", nil, w, h, x, y)
+	local slot = YRPCreateD( "DPanel", nil, w, h, x, y)
 	function slot:Paint(pw, ph)
 		draw.RoundedBox(3, 0, 0, pw, ph, Color(40, 40, 40) )
 	end
 
-	slot.mdl = createD( "DModelPanel", slot, w, h, 0, 0)
+	slot.mdl = YRPCreateD( "DModelPanel", slot, w, h, 0, 0)
 	slot.mdl:SetModel( "" )
 
-	slot.btn = createD( "DButton", slot.mdl, w, h, 0, 0)
+	slot.btn = YRPCreateD( "DButton", slot.mdl, w, h, 0, 0)
 	slot.btn:SetText( "" )
 	function slot.btn:Paint(pw, ph)
 		local model = YRPGetModelOfSWEP( cname)
@@ -174,7 +174,7 @@ end
 
 net.Receive( "yrp_open_weaponchest", function(len)
 	if win == nil then
-		win = createD( "YFrame", nil, 30 + 300 + 50 + 12 + 300 + 12 + 30, ScrH(), 0, 0)
+		win = YRPCreateD( "YFrame", nil, 30 + 300 + 50 + 12 + 300 + 12 + 30, ScrH(), 0, 0)
 		win:SetTitle( "LID_weaponchest" )
 		win:Center()
 		win:MakePopup()
@@ -192,7 +192,7 @@ net.Receive( "yrp_open_weaponchest", function(len)
 		local slots = 0
 
 		-- SLOTS
-		win.slots = createD( "DPanelList", content, 300 + 50 + 12, content:GetTall(), 0, 0)
+		win.slots = YRPCreateD( "DPanelList", content, 300 + 50 + 12, content:GetTall(), 0, 0)
 		win.slots:EnableVerticalScrollbar()
 		win.slots:SetSpacing(10)
 		function win.slots:Paint(pw, ph)
@@ -249,7 +249,7 @@ net.Receive( "yrp_open_weaponchest", function(len)
 
 
 		-- List
-		win.selectionlist = createD( "DPanelList", content, 300 + 12, sh, 400, 0)
+		win.selectionlist = YRPCreateD( "DPanelList", content, 300 + 12, sh, 400, 0)
 		win.selectionlist:EnableVerticalScrollbar()
 		win.selectionlist:SetSpacing(10)
 		function win.selectionlist:Paint(pw, ph)
@@ -280,7 +280,7 @@ net.Receive( "yrp_open_weaponchest", function(len)
 				end
 
 				if none then
-					local info = createD( "YLabel", nil, 300, h, 0, 0)
+					local info = YRPCreateD( "YLabel", nil, 300, h, 0, 0)
 					info:SetText( "LID_empty" )
 
 					win.selectionlist:AddItem(info)

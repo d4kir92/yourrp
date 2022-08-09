@@ -77,9 +77,9 @@ function DarkRP.createCategory( tbl )
 	end
 end
 
-function DarkRP.createDemoteGroup(name, tbl)
+function DarkRP.YRPCreateDemoteGroup(name, tbl)
 	--Description: Create a demote group. When you get banned ( demoted) from one of the jobs in this group, you will be banned from every job in this group.
-	YRPDarkrpNotFound( "createDemoteGroup( " .. name .. ", tbl)" )
+	YRPDarkrpNotFound( "YRPCreateDemoteGroup( " .. name .. ", tbl)" )
 end
 
 function DarkRP.createEntity(name, tbl)

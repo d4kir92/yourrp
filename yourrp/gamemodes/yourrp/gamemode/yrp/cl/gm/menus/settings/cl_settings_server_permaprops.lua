@@ -15,7 +15,7 @@ net.Receive( "get_perma_props", function(len, ply)
 	if pa(pp.list) then
 		local h = YRP.ctr(240)
 		
-		local line = createD( "DPanel", nil, pp.list:GetWide(), h, 0, 0)
+		local line = YRPCreateD( "DPanel", nil, pp.list:GetWide(), h, 0, 0)
 		line.c = pp.c
 		line.id = pp.tab[i].id
 		line.max = pp.tab[i].max
@@ -29,9 +29,9 @@ net.Receive( "get_perma_props", function(len, ply)
 			draw.SimpleText( "WorldModel: " .. self.model, "Y_30_500", ph + YRP.ctr(20), ph / 4 * 3, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 	
-		local mdl = createD( "DModelPanel", line, h, h, 0, 0)
+		local mdl = YRPCreateD( "DModelPanel", line, h, h, 0, 0)
 
-		local sho = createD( "YButton", line, h, h, 0, 0)
+		local sho = YRPCreateD( "YButton", line, h, h, 0, 0)
 		sho:SetText( "LID_show" )
 		sho.model = pp.tab[i].model
 		sho.mdl = mdl
@@ -46,7 +46,7 @@ net.Receive( "get_perma_props", function(len, ply)
 			--mdl:SetModel(self.model)
 		end
 
-		local tel = createD( "YButton", line, YRP.ctr(480), h, line:GetWide() - YRP.ctr(480 + 20 + 240 + 36), 0)
+		local tel = YRPCreateD( "YButton", line, YRP.ctr(480), h, line:GetWide() - YRP.ctr(480 + 20 + 240 + 36), 0)
 		tel:SetText( "LID_tpto" )
 		tel.line = line
 		tel.id = pp.tab[i].id
@@ -59,7 +59,7 @@ net.Receive( "get_perma_props", function(len, ply)
 			net.SendToServer()
 		end
 
-		local rem = createD( "YButton", line, YRP.ctr(240), h, line:GetWide() - YRP.ctr(240 + 36), 0)
+		local rem = YRPCreateD( "YButton", line, YRP.ctr(240), h, line:GetWide() - YRP.ctr(240 + 36), 0)
 		rem:SetText( "LID_remove" )
 		rem.line = line
 		rem.id = pp.tab[i].id
@@ -81,7 +81,7 @@ end)
 function CreatePermaPropsSetting()
 	local PARENT = GetSettingsSite()
 	if pa(PARENT) then
-		pp.list = createD( "DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
+		pp.list = YRPCreateD( "DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
 		pp.list:EnableVerticalScrollbar()
 		pp.list:SetSpacing(YRP.ctr(20) )
 		function pp.list:Paint(pw, ph)
@@ -122,7 +122,7 @@ net.Receive( "get_perma_props2", function(len, ply)
 	if pa(pp2.list) then
 		local h = YRP.ctr(240)
 
-		local line = createD( "DPanel", nil, pp2.list:GetWide(), h, 0, 0)
+		local line = YRPCreateD( "DPanel", nil, pp2.list:GetWide(), h, 0, 0)
 		line.c = pp2.c
 		line.id = pp2.tab[i].id
 		line.max = pp2.tab[i].max
@@ -136,9 +136,9 @@ net.Receive( "get_perma_props2", function(len, ply)
 			draw.SimpleText( "WorldModel: " .. self.model, "Y_30_500", ph + YRP.ctr(20), ph / 4 * 3, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 	
-		local mdl = createD( "DModelPanel", line, h, h, 0, 0)
+		local mdl = YRPCreateD( "DModelPanel", line, h, h, 0, 0)
 
-		local sho = createD( "YButton", line, h, h, 0, 0)
+		local sho = YRPCreateD( "YButton", line, h, h, 0, 0)
 		sho:SetText( "LID_show" )
 		sho.model = pp2.tab[i].model
 		sho.mdl = mdl
@@ -153,7 +153,7 @@ net.Receive( "get_perma_props2", function(len, ply)
 			--mdl:SetModel(self.model)
 		end
 
-		local tel = createD( "YButton", line, YRP.ctr(480), h, line:GetWide() - YRP.ctr(480 + 20 + 240 + 36), 0)
+		local tel = YRPCreateD( "YButton", line, YRP.ctr(480), h, line:GetWide() - YRP.ctr(480 + 20 + 240 + 36), 0)
 		tel:SetText( "LID_tpto" )
 		tel.line = line
 		tel.id = pp2.tab[i].id
@@ -166,7 +166,7 @@ net.Receive( "get_perma_props2", function(len, ply)
 			net.SendToServer()
 		end
 
-		local rem = createD( "YButton", line, YRP.ctr(240), h, line:GetWide() - YRP.ctr(240 + 36), 0)
+		local rem = YRPCreateD( "YButton", line, YRP.ctr(240), h, line:GetWide() - YRP.ctr(240 + 36), 0)
 		rem:SetText( "LID_remove" )
 		rem.line = line
 		rem.id = pp2.tab[i].id
@@ -188,7 +188,7 @@ end)
 function CreatePermaPropsSetting2()
 	local PARENT = GetSettingsSite()
 	if pa(PARENT) then
-		pp2.list = createD( "DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
+		pp2.list = YRPCreateD( "DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
 		pp2.list:EnableVerticalScrollbar()
 		pp2.list:SetSpacing(YRP.ctr(20) )
 		function pp2.list:Paint(pw, ph)

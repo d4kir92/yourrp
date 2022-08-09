@@ -2,7 +2,7 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self.header = createD( "DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
+	self.header = YRPCreateD( "DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 	self.header.text = "UNNAMED"
 
 	function self:SetHeader(text)
@@ -18,7 +18,7 @@ function PANEL:Init()
 end
 
 function PANEL:INITPanel( derma)
-	self.plus = createD( derma, self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, self.header:GetTall() )
+	self.plus = YRPCreateD( derma, self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, self.header:GetTall() )
 	self.plus.getclass = derma
 	
 	function self:SetText(text)

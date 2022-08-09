@@ -39,6 +39,7 @@ if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1" ) == nil then
 	YRP.msg( "note", DATABASE_NAME .. " has not the default group" )
 	local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "'1', 'Civilians', '0,0,255', '0', '0'" )
 end
+YRP_SQL_UPDATE(DATABASE_NAME, {["bool_visible_cc"] = 1}, "uniqueID = '1'" )
 
 local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 if dbtab then
@@ -579,7 +580,7 @@ net.Receive( "yrp_roleselection_getcontent", function(len, ply)
 	if wk(roltab) then
 		for i, v in pairs(roltab) do
 			v.pms = GetPlayermodelsOfRole( v.uniqueID)
-			updateRoleUses( v.uniqueID)
+			YRPUpdateRoleUses( v.uniqueID)
 		end
 	end
 
@@ -864,7 +865,7 @@ net.Receive( "yrp_group_delmember", function( len, ply )
 	}, "uniqueID = '" .. uid .. "'" )
 	local target = YRPGetPlayerByCharID( uid )
 	if IsValid( target ) then
-		SetRole( target, 1, force )
+		YRPSetRole( target, 1, force )
 	end
 	YRPSendGroupMember( ply, uid )
 	YRPSendGroupMembers( ply )

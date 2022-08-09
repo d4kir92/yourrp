@@ -21,12 +21,12 @@ function CloseCombinedMenu()
 end
 
 function CreateWebsiteContent(PARENT)
-	local site = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local site = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	site:OpenURL(GetGlobalYRPString( "text_social_website", "" ) )
 end
 
 function CreateForumContent(PARENT)
-	local site = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local site = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	
 	site:OpenURL(GetGlobalYRPString( "text_social_forum", "" ) )
 end
@@ -35,12 +35,12 @@ function CreateRulesContent(PARENT)
 	local serverrules = table.concat(GetGlobalYRPTable( "text_server_rules", "" ), "\n" )
 	serverrules = YRP_SQL_STR_OUT( serverrules )
 
-	local page = createD( "DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20) )
+	local page = YRPCreateD( "DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20) )
 	function page:Paint(pw, ph)
 		draw.SimpleText(YRP.lang_string( "LID_rules" ), "Y_22_500", 0, YRP.ctr(50), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 	end
 
-	page.serverrules = createD( "RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(70), 0, YRP.ctr(70) )
+	page.serverrules = YRPCreateD( "RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(70), 0, YRP.ctr(70) )
 	function page.serverrules:PerformLayout()
 		if self.SetUnderlineFont != nil then
 			self:SetUnderlineFont( "Y_18_500" )
@@ -56,7 +56,7 @@ function CreateDiscordContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_discord", "" )
 	local widgetid = GetGlobalYRPString( "text_social_discord_widgetid", "" )
 
-	local page = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local page = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function page:Paint(pw, ph)
 		--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255 ) )
 	end
@@ -64,7 +64,7 @@ function CreateDiscordContent(PARENT)
 	local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. PARENT:GetWide() - YRP.ctr(2 * 20) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
 	page:SetHTML(widgetlink)
 
-	local openLink = createD( "YButton", page, YRP.ctr(240), YRP.ctr(54), PARENT:GetWide() - YRP.ctr(280), page:GetTall() - YRP.ctr(92) )
+	local openLink = YRPCreateD( "YButton", page, YRP.ctr(240), YRP.ctr(54), PARENT:GetWide() - YRP.ctr(280), page:GetTall() - YRP.ctr(92) )
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
@@ -87,7 +87,7 @@ function CreateTeamspeakContent(PARENT)
 
 	if !strEmpty(ip) then
 		if !strEmpty(port) and !strEmpty(query_port) then
-			local page = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+			local page = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
 			function page:Paint(pw, ph)
 				--surfaceBox(0, 0, pw, ph, Color(40, 40, 40, 255) )
@@ -96,7 +96,7 @@ function CreateTeamspeakContent(PARENT)
 			local widgetlink = "<span id=\"its402545\"><a href=\"https://www.teamspeak3.com/\">teamspeak</a> Hosting by TeamSpeak3.com</span><script type=\"text/javascript\" src=\"https://view.light-speed.com/teamspeak3.php?IP=" .. ip .. "&PORT=" .. port .. "&QUERY= " .. query_port .. "&UID=402545&display=block&font=11px&background=transparent&server_info_background=transparent&server_info_text=%23ffffff&server_name_background=transparent&server_name_text=%23ffffff&info_background=transparent&channel_background=transparent&channel_text=%23ffffff&username_background=transparent&username_text=%23ffffff\"></script>"
 			page:SetHTML(widgetlink)
 
-			local ipport = createD( "DTextEntry", PARENT, YRP.ctr(400), YRP.ctr(50), PARENT:GetWide() - YRP.ctr(420), YRP.ctr(20) )
+			local ipport = YRPCreateD( "DTextEntry", PARENT, YRP.ctr(400), YRP.ctr(50), PARENT:GetWide() - YRP.ctr(420), YRP.ctr(20) )
 			ipport:SetText(ip .. ":" .. port)
 			ipport:SetEditable(true)
 		else
@@ -110,14 +110,14 @@ function CreateCollectionContent(PARENT)
 
 	if collectionid > 100000000 then
 		local link = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. collectionid
-		local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+		local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
 		function WorkshopPage:Paint(pw, ph)
 			surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 		end
 
 		WorkshopPage:OpenURL(link)
-		local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+		local openLink = YRPCreateD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 		openLink:SetText( "" )
 
 		function openLink:Paint(pw, ph)
@@ -135,13 +135,13 @@ end
 
 function CreateTwitchContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_twitch", "" )
-	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	local openLink = YRPCreateD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
@@ -156,13 +156,13 @@ end
 
 function CreateYoutubeContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_youtube", "" )
-	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	local openLink = YRPCreateD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
@@ -175,13 +175,13 @@ end
 
 function CreateTwitterContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_twitter", "" )
-	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	local openLink = YRPCreateD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
@@ -196,13 +196,13 @@ end
 
 function CreateSteamGroupContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_steamgroup", "" )
-	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	local openLink = YRPCreateD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
@@ -217,13 +217,13 @@ end
 
 function CreateFacebookContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_facebook", "" )
-	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	local openLink = YRPCreateD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
@@ -238,13 +238,13 @@ end
 
 function CreateInstagramContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_instagram", "" )
-	local WorkshopPage = createD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
-	local openLink = createD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
+	local openLink = YRPCreateD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20) )
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
@@ -443,7 +443,7 @@ function OpenCombinedMenu()
 			c = c + 1
 		end
 					
-		cm.win = createD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
+		cm.win = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
 		cm.win:SetTitle(GetGlobalYRPString( "text_server_name", "" ) )
 		cm.win:MakePopup()
 		--cm.win:SetHeaderHeight(YRP.ctr(100) )
@@ -465,7 +465,7 @@ function OpenCombinedMenu()
 
 		local content = cm.win:GetContent()
 		-- MENU
-		cm.menu = createD( "DPanelList", content, 10, BFH() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br, 0, 0)
+		cm.menu = YRPCreateD( "DPanelList", content, 10, BFH() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br, 0, 0)
 		cm.menu:EnableVerticalScrollbar()
 		local sbar = cm.menu.VBar
 		function sbar:Paint(w, h)
@@ -497,7 +497,7 @@ function OpenCombinedMenu()
 			cm.win:UpdateSize()
 		end
 
-		cm.menu.expander = createD( "DButton", cm.win, cm.menu.ph, cm.menu.ph, 0, cm.win:GetHeaderHeight() + cm.menu:GetTall() )
+		cm.menu.expander = YRPCreateD( "DButton", cm.win, cm.menu.ph, cm.menu.ph, 0, cm.win:GetHeaderHeight() + cm.menu:GetTall() )
 		cm.menu.expander:SetText( "" )
 		function cm.menu.expander:DoClick()
 			if cm.menu.expanded then
@@ -528,7 +528,7 @@ function OpenCombinedMenu()
 		end
 		
 		-- SITE
-		cm.site = createD( "YPanel", content, BFW() - 10, BFH() - cm.win:GetHeaderHeight(), 10, 0)
+		cm.site = YRPCreateD( "YPanel", content, BFW() - 10, BFH() - cm.win:GetHeaderHeight(), 10, 0)
 		cm.site:SetText( "" )
 		cm.site:SetHeaderHeight( cm.win:GetHeaderHeight() )
 		function cm.site:Paint(pw, ph)
@@ -572,7 +572,7 @@ function OpenCombinedMenu()
 					cm.menu.pw = tw
 				end
 
-				cm.sites[v.name] = createD( "YButton", cm.menu, cm.menu.pw, cm.menu.ph, 0, 0)
+				cm.sites[v.name] = YRPCreateD( "YButton", cm.menu, cm.menu.pw, cm.menu.ph, 0, 0)
 				local site = cm.sites[v.name]
 				site:SetText( "" )
 				site.id = tonumber(i)
@@ -623,7 +623,7 @@ function OpenCombinedMenu()
 
 				cm.menu:AddItem(site)
 			else
-				cm.sites[v.name] = createD( "DPanel", cm.menu, cm.menu.pw, YRP.ctr(20), 0, 0)
+				cm.sites[v.name] = YRPCreateD( "DPanel", cm.menu, cm.menu.pw, YRP.ctr(20), 0, 0)
 				local site = cm.sites[v.name]
 				function site:Paint(pw, ph)
 					local hr = YRP.ctr(2)

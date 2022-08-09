@@ -69,7 +69,7 @@ function allowedToUseDoor(id, ply, door)
 					door:SetYRPString( "ownerGroup", "" )
 					door:SetYRPInt( "ownerCharID", 0)
 					door:SetYRPBool( "bool_hasowner", false)
-					door:Fire( "Unlock" )
+					YRPFireUnlock( door )
 				else
 					local grp_id = ply:GetGroupUID()
 
@@ -167,9 +167,9 @@ function loadDoors()
 						end
 
 						if v:SecurityLevel() > 0 then
-							v:Fire( "Lock" )
+							YRPFireLock( v )
 						else
-							v:Fire( "Unlock" )
+							YRPFireUnlock( v )
 						end
 
 						if !strEmpty(w.text_header) then
@@ -233,17 +233,43 @@ net.Receive( "addnewbuilding", function()
 	YRP_SQL_INSERT_INTO_DEFAULTVALUES( "yrp_" .. GetMapNameDB() .. "_buildings" )
 end)
 
-function YRPUnYRPLockDoor(ply, ent, nr)
-	if YRPCanLock(ply, ent) then
-		ent:Fire( "Unlock" )
+util.AddNetworkString( "yrp_door_anim" )
+
+function YRPFireUnlock( ent, owner )
+	ent:Fire( "Unlock" )
+	if ea( owner ) then
+		owner:EmitSound("npc/metropolice/gear" .. math.random( 1, 7 ) .. ".wav")
+		
+		net.Start( "yrp_door_anim" )
+			net.WriteEntity( owner )
+			net.WriteString( "unlock" )
+		net.Broadcast()
+	end
+end
+
+function YRPFireLock( ent, owner )
+	ent:Fire( "Lock" )
+	if ea( owner ) then
+		owner:EmitSound("npc/metropolice/gear" ..  math.random( 1, 7 ) .. ".wav")
+
+		net.Start( "yrp_door_anim" )
+			net.WriteEntity( owner )
+			net.WriteString( "lock" )
+		net.Broadcast()
+	end
+end
+
+function YRPUnlockDoor( ply, ent, nr )
+	if YRPCanLock( ply, ent ) then
+		YRPFireUnlock( ent, ply )
 		return true
 	end
 	return false
 end
 
-function YRPLockDoor(ply, ent, nr)
-	if YRPCanLock(ply, ent) then
-		ent:Fire( "Lock" )
+function YRPLockDoor( ply, ent, nr )
+	if YRPCanLock( ply, ent ) then
+		YRPFireLock( ent, ply )
 		return true
 	end
 	return false
@@ -254,7 +280,7 @@ function YRPOpenDoor(ply, ent, nr)
 		if ent:SecurityLevel() > 0 and ply:SecurityLevel() >= ent:SecurityLevel() then
 			local locked = ent:GetSaveTable().m_bLocked
 			if locked then
-				ent:Fire( "Unlock" )
+				YRPFireUnlock( ent )
 			end
 
 			local currentstate = ent:GetSaveTable().m_toggle_state
@@ -267,45 +293,31 @@ function YRPOpenDoor(ply, ent, nr)
 			end
 
 			if locked then
-				ent:Fire( "Lock" )
+				YRPFireLock( ent )
 			end
-		else
-			--[[
-			local tab = ent:GetSaveTable()
-			if true or tab.spawnflags == 256 then
-				local currentstate = ent:GetSaveTable().m_toggle_state
-				if currentstate == 0 then
-					ent:Fire( "close" )
-				elseif currentstate == 1 then
-					ent:Fire( "open" )
-				else -- NO TOGGLE DOOR
-					ent:Fire( "open" )
-				end
-			end]]
 		end
 	else
-		--YRP.msg( "note", "Building: NOT ALLOWED TO OPEN" )
 		local filename = "doors/default_locked.wav"
 		util.PrecacheSound(filename)
 		ent:EmitSound(filename, 75, 100, 1, CHAN_AUTO )
 	end
 end
 
-function BuildingRemoveOwner(SteamID)
+function BuildingRemoveOwner( SteamID )
 	YRP.msg( "db", "BuildingRemoveOwner( " .. tostring(SteamID) .. " )" )
 	local chars = YRP_SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. SteamID .. "'" )
 
-	if wk( chars) then
-		for i, c in pairs( chars) do
+	if wk( chars ) then
+		for i, c in pairs( chars ) do
 			local charid = c.uniqueID
-			for k, v in pairs(GetAllDoors() ) do
+			for k, v in pairs( GetAllDoors() ) do
 				if v:GetYRPInt( "ownerCharID" ) == tonumber( charid) then
 					v:SetYRPString( "ownerRPName", "" )
 					v:SetYRPInt( "ownerGroupUID", -99)
 					v:SetYRPString( "ownerGroup", "" )
 					v:SetYRPInt( "ownerCharID", 0)
 					v:SetYRPBool( "bool_hasowner", false)
-					v:Fire( "Unlock" )
+					YRPFireUnlock( v )
 					YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", {["ownerCharID"] = ""}, "uniqueID = '" .. v:GetYRPString( "uniqueID" ) .. "'" )
 				end
 			end
@@ -329,7 +341,7 @@ net.Receive( "removeOwner", function(len, ply)
 			v:SetYRPString( "ownerGroup", "" )
 			v:SetYRPInt( "ownerCharID", 0)
 			v:SetYRPBool( "bool_hasowner", false)
-			v:Fire( "Unlock" )
+			YRPFireUnlock( v )
 		end
 	end
 end)
@@ -350,7 +362,7 @@ net.Receive( "sellBuilding", function(len, ply)
 			v:SetYRPString( "ownerGroup", "" )
 			v:SetYRPInt( "ownerCharID", 0)
 			v:SetYRPBool( "bool_hasowner", false)
-			v:Fire( "Unlock" )
+			YRPFireUnlock( v )
 			YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_doors", {["keynr"] = -1}, "buildingID = " .. tonumber( v:GetYRPString( "buildingID" ) ))
 		end
 	end
@@ -432,9 +444,9 @@ function SetSecurityLevel(id, sl)
 			if door:GetYRPString( "buildingID", -1) == id then
 				door:SetYRPInt( "int_securitylevel", sl)
 				if door:SecurityLevel() > 0 then
-					door:Fire( "Lock" )
+					YRPFireLock( door )
 				else
-					door:Fire( "Unlock" )
+					YRPFireUnlock( door )
 				end
 			end
 		end

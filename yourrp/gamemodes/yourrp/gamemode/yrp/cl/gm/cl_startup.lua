@@ -3,7 +3,7 @@
 local searchIcon = Material( "icon16/magnifier.png" )
 
 function OpenHelpTranslatingWindow()
-	local window = createD( "DFrame", nil, YRP.ctr(1200), YRP.ctr(500), 0, 0)
+	local window = YRPCreateD( "DFrame", nil, YRP.ctr(1200), YRP.ctr(500), 0, 0)
 	window:SetTitle( "" )
 	window:Center()
 	window:MakePopup()
@@ -16,7 +16,7 @@ function OpenHelpTranslatingWindow()
 		draw.SimpleTextOutlined( "Then write D4KiR on the discord server to get rights for translating:", "Y_18_500", YRP.ctr(10), YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
 	end
 
-	window.translationsite = createD( "DButton", window, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(200) )
+	window.translationsite = YRPCreateD( "DButton", window, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(200) )
 	window.translationsite:SetText( "" )
 
 	function window.translationsite:Paint(pw, ph)
@@ -27,7 +27,7 @@ function OpenHelpTranslatingWindow()
 		gui.OpenURL( "https://yourrp.noserver4u.de/engage/yourrp/" )
 	end
 
-	window.discordserver = createD( "DButton", window, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(300) )
+	window.discordserver = YRPCreateD( "DButton", window, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(300) )
 	window.discordserver:SetText( "" )
 
 	function window.discordserver:Paint(pw, ph)
@@ -40,7 +40,7 @@ function OpenHelpTranslatingWindow()
 end
 
 function YRP.AddLanguageChangerLine(parent, tab, mainparent)
-	local lang = createD( "DButton", parent, parent:GetWide(), YRP.ctr(40), 0, 0)
+	local lang = YRPCreateD( "DButton", parent, parent:GetWide(), YRP.ctr(40), 0, 0)
 	lang:SetText( "" )
 	lang.lang = tab
 
@@ -84,7 +84,7 @@ function constructLanguageText(lang, inenglish, percentage)
 end
 
 function YRP.AddLanguageAddLine(parent, mainparent)
-	local lang = createD( "DButton", parent, parent:GetWide(), YRP.ctr(40), 0, 0)
+	local lang = YRPCreateD( "DButton", parent, parent:GetWide(), YRP.ctr(40), 0, 0)
 	lang:SetText( "" )
 
 	function lang:Paint(pw, ph)
@@ -115,13 +115,13 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 		sh = size
 	end
 
-	local LanguageChanger = createD( "DPanel", parent, sw, sh, x, y)
+	local LanguageChanger = YRPCreateD( "DPanel", parent, sw, sh, x, y)
 	function LanguageChanger:Paint(pw, ph)
 		--
 	end
 	LanguageChanger.selecting = false
 
-	LanguageChanger.btn = createD( "DButton", LanguageChanger, sw, sh, 0, 0)
+	LanguageChanger.btn = YRPCreateD( "DButton", LanguageChanger, sw, sh, 0, 0)
 	LanguageChanger.btn:SetText( "" )
 	local br = YRP.ctr(10)
 	function LanguageChanger.btn:Paint(pw, ph)
@@ -164,7 +164,7 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 			end
 		end
 
-		local window = createD( "DFrame", nil, _longestLanguageString + YRP.ctr(78), YRP.ctr(400), 0, 0)
+		local window = YRPCreateD( "DFrame", nil, _longestLanguageString + YRP.ctr(78), YRP.ctr(400), 0, 0)
 		window:SetTitle( "" )
 		window:ShowCloseButton(false)
 		window:SetDraggable(false)
@@ -208,7 +208,7 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 		mx = mx - window:GetWide() / 2
 		my = my - YRP.ctr(25)
 		window:SetPos(mx, my)
-		window.dpanellist = createD( "DPanelList", window, window:GetWide(), YRP.ctr(400), 0, 0)
+		window.dpanellist = YRPCreateD( "DPanelList", window, window:GetWide(), YRP.ctr(400), 0, 0)
 		YRP.AddLanguageChangerLine(window.dpanellist, YRP.GetLanguageAutoInfo(), window)
 
 		for k, lang in SortedPairs(languages) do
@@ -331,7 +331,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 
 	local br = 10
 
-	local pmsel = createD( "YFrame", nil, ScrW(), ScrH(), 0, 0)
+	local pmsel = YRPCreateD( "YFrame", nil, ScrW(), ScrH(), 0, 0)
 	pmsel:SetTitle(YRP.lang_string( "LID_add" ) .. ": " .. tostring(ret) )
 	pmsel:Center()
 	pmsel:MakePopup()
@@ -359,7 +359,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr( br + 100), YRP.ctr( br + 25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
-	pmsel.dpl = createD( "DPanel", parent, parent:GetWide() - YRP.ctr( br + br), parent:GetTall() - YRP.ctr( br + 50 + br + br + 50 + br), YRP.ctr( br), YRP.ctr( br + 50 + br) )
+	pmsel.dpl = YRPCreateD( "DPanel", parent, parent:GetWide() - YRP.ctr( br + br), parent:GetTall() - YRP.ctr( br + 50 + br + br + 50 + br), YRP.ctr( br), YRP.ctr( br + 50 + br) )
 	function pmsel.dpl:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, color1 )
 	end
@@ -386,7 +386,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 					self.count = self.count + 1
 					if self.count > pmsel.nr and self.count <= pmsel.nr + pmsel.perpage then
 						self.fcount = self.fcount + 1
-						local d_pm = createD( "DPanel", pmsel.dpl, pmsel.size, pmsel.size, self.px * pmsel.space, self.py * pmsel.space)
+						local d_pm = YRPCreateD( "DPanel", pmsel.dpl, pmsel.size, pmsel.size, self.px * pmsel.space, self.py * pmsel.space)
 						d_pm:SetText( "" )
 						d_pm.WorldModel = v.WorldModel
 						d_pm.ClassName = v.ClassName
@@ -419,20 +419,20 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 						local mbr = ( d_pm:GetTall() - msize) / 2
 						local my = d_pm:GetTall() * 0.10
 						if v.WorldModel != "" then
-							d_pm.model = createD( "DModelPanel", d_pm, msize, msize, mbr, my)
+							d_pm.model = YRPCreateD( "DModelPanel", d_pm, msize, msize, mbr, my)
 							timer.Simple(0.1 * self.fcount, function()
 								if pa( d_pm) then
 									d_pm.model:SetModel( v.WorldModel)
 								end
 							end)
 						else
-							d_pm.model = createD( "DPanel", d_pm, msize, msize, mbr, my)
+							d_pm.model = YRPCreateD( "DPanel", d_pm, msize, msize, mbr, my)
 							function d_pm.model:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
 								draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 							end
 						end
-						d_pm.btn = createD( "YButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
+						d_pm.btn = YRPCreateD( "YButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
 						d_pm.btn:SetText( "" )
 						function d_pm.btn:DoClick()
 							if ret == "worldmodel" then
@@ -484,7 +484,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		pmsel:RefreshPage()
 	end
 
-	pmsel.prev = createD( "YButton", parent, YRP.ctr(100), YRP.ctr(50), parent:GetWide() / 2 - YRP.ctr(100 + br) - YRP.ctr(100), parent:GetTall() - YRP.ctr(50 + br) )
+	pmsel.prev = YRPCreateD( "YButton", parent, YRP.ctr(100), YRP.ctr(50), parent:GetWide() / 2 - YRP.ctr(100 + br) - YRP.ctr(100), parent:GetTall() - YRP.ctr(50 + br) )
 	pmsel.prev:SetText( "<" )
 	function pmsel.prev:DoClick()
 		if pmsel.nr >= pmsel.perpage then
@@ -493,7 +493,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		end
 	end
 
-	pmsel.next = createD( "YButton", parent, YRP.ctr(100), YRP.ctr(50), parent:GetWide() / 2 + YRP.ctr(100 + br), parent:GetTall() - YRP.ctr(50 + br) )
+	pmsel.next = YRPCreateD( "YButton", parent, YRP.ctr(100), YRP.ctr(50), parent:GetWide() / 2 + YRP.ctr(100 + br), parent:GetTall() - YRP.ctr(50 + br) )
 	pmsel.next:SetText( ">" )
 	function pmsel.next:DoClick()
 		pmsel.nr = pmsel.nr + pmsel.perpage
@@ -501,7 +501,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 	end
 
 	if multiple then
-		pmsel.done = createD( "YButton", parent, YRP.ctr(200), YRP.ctr(50), parent:GetWide() - YRP.ctr(200 + br), parent:GetTall() - YRP.ctr(50 + br) )
+		pmsel.done = YRPCreateD( "YButton", parent, YRP.ctr(200), YRP.ctr(50), parent:GetWide() - YRP.ctr(200 + br), parent:GetTall() - YRP.ctr(50 + br) )
 		pmsel.done:SetText( "LID_done" )
 		function pmsel.done:DoClick()
 			if fu then
@@ -513,7 +513,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		end
 	end
 
-	pmsel.search = createD( "DTextEntry", parent, parent:GetWide() - YRP.ctr(10 + 100 + 10), YRP.ctr(50), YRP.ctr(10 + 100), YRP.ctr(10) )
+	pmsel.search = YRPCreateD( "DTextEntry", parent, parent:GetWide() - YRP.ctr(10 + 100 + 10), YRP.ctr(50), YRP.ctr(10 + 100), YRP.ctr(10) )
 	function pmsel.search:OnChange()
 		pmsel:Search(self:GetText() )
 	end
@@ -554,7 +554,7 @@ function openSingleSelector(tab, closeF, web)
 	end
 
 	getMaxSite()
-	local frame = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
+	local frame = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
 	frame:SetDraggable(false)
 	frame:SetTitle(YRP.lang_string( "Item Menu" ) )
 
@@ -567,14 +567,14 @@ function openSingleSelector(tab, closeF, web)
 		hook.Call( closeF)
 	end
 
-	local PanelSelect = createD( "DPanel", frame, _w, _h, _x, _y)
+	local PanelSelect = YRPCreateD( "DPanel", frame, _w, _h, _x, _y)
 	PanelSelect:SetText( "" )
 
 	function PanelSelect:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
 	end
 
-	local searchButton = createD( "DButton", frame, YRP.ctr(50), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50 + 10) )
+	local searchButton = YRPCreateD( "DButton", frame, YRP.ctr(50), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50 + 10) )
 	searchButton:SetText( "" )
 
 	function searchButton:Paint(pw, ph)
@@ -585,7 +585,7 @@ function openSingleSelector(tab, closeF, web)
 		surface.DrawTexturedRect(YRP.ctr(5), YRP.ctr(5), YRP.ctr(40), YRP.ctr(40) )
 	end
 
-	local search = createD( "DTextEntry", frame, _w - YRP.ctr(50 + 10), YRP.ctr(50), YRP.ctr(10 + 50 + 10), YRP.ctr(50 + 10) )
+	local search = YRPCreateD( "DTextEntry", frame, _w - YRP.ctr(50 + 10), YRP.ctr(50), YRP.ctr(10 + 50 + 10), YRP.ctr(50 + 10) )
 
 	function search:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
@@ -641,7 +641,7 @@ function openSingleSelector(tab, closeF, web)
 						item.PrintName = item.Name or ""
 					end
 
-					local icon = createD( "DPanel", PanelSelect, YRP.ctr(_item.w), YRP.ctr(_item.h), tmpX, tmpY)
+					local icon = YRPCreateD( "DPanel", PanelSelect, YRP.ctr(_item.w), YRP.ctr(_item.h), tmpX, tmpY)
 
 					function icon:Paint(pw, ph)
 						if item.ishidden then
@@ -652,13 +652,13 @@ function openSingleSelector(tab, closeF, web)
 						end
 					end
 
-					local spawnicon = createD( "SpawnIcon", icon, YRP.ctr(_item.h), YRP.ctr(_item.h), 0, 0)
+					local spawnicon = YRPCreateD( "SpawnIcon", icon, YRP.ctr(_item.h), YRP.ctr(_item.h), 0, 0)
 					spawnicon.item = item
 					spawnicon:SetText( "" )
 					spawnicon:SetModel(item.WorldModel)
 
 					spawnicon:SetTooltip(item.PrintName)
-					local _tmpName = createD( "DButton", icon, YRP.ctr(_item.w), YRP.ctr(_item.h), 0, 0)
+					local _tmpName = YRPCreateD( "DButton", icon, YRP.ctr(_item.w), YRP.ctr(_item.h), 0, 0)
 					_tmpName:SetText( "" )
 
 					function _tmpName:Paint(pw, ph)
@@ -685,7 +685,7 @@ function openSingleSelector(tab, closeF, web)
 		end
 	end
 
-	local nextB = createD( "DButton", frame, YRP.ctr(200), YRP.ctr(50), ScrW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10) )
+	local nextB = YRPCreateD( "DButton", frame, YRP.ctr(200), YRP.ctr(50), ScrW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10) )
 	nextB:SetText( "" )
 
 	function nextB:Paint(pw, ph)
@@ -700,7 +700,7 @@ function openSingleSelector(tab, closeF, web)
 		end
 	end
 
-	local prevB = createD( "DButton", frame, YRP.ctr(200), YRP.ctr(50), YRP.ctr(10), ScrH() - YRP.ctr(50 + 10) )
+	local prevB = YRPCreateD( "DButton", frame, YRP.ctr(200), YRP.ctr(50), YRP.ctr(10), ScrH() - YRP.ctr(50 + 10) )
 	prevB:SetText( "" )
 
 	function prevB:Paint(pw, ph)
@@ -1749,7 +1749,7 @@ function drawIDCard(ply, scale, px, py)
 				if logos[ele] == nil then
 					logos[ele] = true
 
-					local test = createD( "DHTML", nil, w, h, 0, 0)
+					local test = YRPCreateD( "DHTML", nil, w, h, 0, 0)
 					if string.find(ele, "logo", 1, true) then
 						test:SetHTML(GetHTMLImage(GetGlobalYRPString( "text_server_logo", "" ), w, h) )
 					else
@@ -1809,7 +1809,7 @@ hook.Add( "Think", "openDeathScreen", function(len)
 
 	if !YRP_LogOut and LocalPlayer():LoadedGamemode() and !LocalPlayer():Alive() and !vgui.CursorVisible() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds and GetGlobalYRPBool( "bool_deathscreen", false) and !customdeathscreen then
 		ds = true
-		local win = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
+		local win = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
 		win:SetTitle( "" )
 		--win:MakePopup() -- chat not work in deathscreen if popup
 		--gui.EnableScreenClicker(true)
@@ -1847,7 +1847,7 @@ hook.Add( "Think", "openDeathScreen", function(len)
 			end
 		end
 
-		win.respawn = createD( "YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScrH() - YRP.ctr(400) )
+		win.respawn = YRPCreateD( "YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScrH() - YRP.ctr(400) )
 		win.respawn:SetText( "LID_respawnnow" )
 		function win.respawn:DoClick()
 			if LocalPlayer():GetYRPInt( "int_deathtimestamp_min", 0) <= CurTime() and !LocalPlayer():GetYRPBool( "yrp_chararchived", false) then
@@ -1876,7 +1876,7 @@ hook.Add( "Think", "openDeathScreen", function(len)
 			end
 		end
 
-		win.changecharacter = createD( "YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScrH() - YRP.ctr(250) )
+		win.changecharacter = YRPCreateD( "YButton", win, YRP.ctr(600), YRP.ctr(100), ScrW2() - YRP.ctr(600 / 2), ScrH() - YRP.ctr(250) )
 		win.changecharacter:SetText( "LID_changecharacter" )
 		function win.changecharacter:DoClick()
 			ds = false
@@ -1916,7 +1916,7 @@ if pa(yrp_loading_screen) then
 end
 
 if tostring(yrp_loading_screen) != "[NULL Panel]" then
-	yrp_loading_screen = createD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
+	yrp_loading_screen = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
 end
 if pa(yrp_loading_screen) then
 	yrp_loading_screen:SetTitle( "" )
@@ -1937,10 +1937,10 @@ if pa(yrp_loading_screen) then
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(20, 20, 20, alpha) )
 	end
 
-	yrp_loading_screen.bg = createD( "DHTML", yrp_loading_screen, yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall(), 0, 0)
+	yrp_loading_screen.bg = YRPCreateD( "DHTML", yrp_loading_screen, yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall(), 0, 0)
 	yrp_loading_screen.bg.url = ""
 
-	yrp_loading_screen.blur = createD( "DPanel", yrp_loading_screen, yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall(), 0, 0)
+	yrp_loading_screen.blur = YRPCreateD( "DPanel", yrp_loading_screen, yrp_loading_screen:GetWide(), yrp_loading_screen:GetTall(), 0, 0)
 	yrp_loading_screen.blur.d = CurTime() + 1
 	yrp_loading_screen.blur.t = 0
 	yrp_loading_screen.blur.tmax = 60
@@ -2099,11 +2099,11 @@ if pa(yrp_loading_screen) then
 			if GetGlobalYRPBool( "bool_yrp_play_button" ) then
 				if self.joinbutton == nil then
 					if GetGlobalYRPString( "text_loading_design" ) == "Center" then
-						self.joinbutton = createD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ph / 2 + PANEL_H / 2 - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
+						self.joinbutton = YRPCreateD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ph / 2 + PANEL_H / 2 - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
 					elseif GetGlobalYRPString( "text_loading_design" ) == "BottomRight" then
-						self.joinbutton = createD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ScrH() - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
+						self.joinbutton = YRPCreateD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ScrH() - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
 					else
-						self.joinbutton = createD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ScrH() - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
+						self.joinbutton = YRPCreateD( "YButton", self, PLAY_BUTTON_W, PLAY_BUTTON_H, pw / 2 - PLAY_BUTTON_W / 2, ScrH() - PLAY_BUTTON_H - PLAY_BUTTON_SPACE )
 					end
 					self.joinbutton:SetText( "" )
 					self.joinbutton.master = yrp_loading_screen
@@ -2193,7 +2193,7 @@ if pa(yrp_loading_screen) then
 		draw.SimpleText( text, "Y_18_700", YRP.ctr(10), ph - YRP.ctr(2), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 		if self.t >= self.tmax and self.t <= self.tmaxmax and loading_cur < 100 then
 			if self.discord == nil then
-				self.discord = createD( "DButton", self, 300, 60, ScrW() / 2 - 300 / 2, ScrH() * 0.8 )
+				self.discord = YRPCreateD( "DButton", self, 300, 60, ScrW() / 2 - 300 / 2, ScrH() * 0.8 )
 				self.discord:SetText( "If you are stuck here, please click me" )
 				function self.discord:DoClick()
 					gui.OpenURL( "https://discord.gg/mxDMPMXGy8" )
@@ -2203,7 +2203,7 @@ if pa(yrp_loading_screen) then
 
 		if self.t >= 40 and self.disconnect == nil and loading_cur < 100 then
 			local br = ScrH() * 0.010
-			self.disconnect = createD( "DButton", self, 300, 60, ScrW() - br - 300, br )
+			self.disconnect = YRPCreateD( "DButton", self, 300, 60, ScrW() - br - 300, br )
 			self.disconnect:SetText( YRP.lang_string( "LID_disconnect" ) )
 			function self.disconnect:DoClick()
 				RunConsoleCommand( "disconnect" )
@@ -2228,7 +2228,7 @@ net.Receive( "openLawBoard", function(len)
 	if not windowOpen and (LocalPlayer():isCP() or LocalPlayer():GetYRPBool( "bool_canusewarnsystem", false) ) then
 		local tmpJailList = net.ReadTable()
 		windowOpen = true
-		local window = createD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
+		local window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
 		window:SetHeaderHeight(YRP.ctr(100) )
 		window:SetTitle( "LID_jail" )
 		window:Center()
@@ -2247,10 +2247,10 @@ net.Receive( "openLawBoard", function(len)
 			hook.Run( "YFramePaint", self, pw, ph)
 		end
 
-		window.tabs = createD( "YTabs", window:GetContent(), window:GetContent():GetWide(), window:GetContent():GetTall(), 0, 0)
+		window.tabs = YRPCreateD( "YTabs", window:GetContent(), window:GetContent():GetWide(), window:GetContent():GetTall(), 0, 0)
 
 		window.tabs:AddOption( "LID_prisoners", function(parent)
-			local scrollpanel = createD( "DScrollPanel", parent, parent:GetWide() - YRP.ctr(40), parent:GetTall() - YRP.ctr(90), YRP.ctr(20), YRP.ctr(90) )
+			local scrollpanel = YRPCreateD( "DScrollPanel", parent, parent:GetWide() - YRP.ctr(40), parent:GetTall() - YRP.ctr(90), YRP.ctr(20), YRP.ctr(90) )
 			function scrollpanel:Paint(pw, ph)
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 100) )
 			end
@@ -2259,7 +2259,7 @@ net.Receive( "openLawBoard", function(len)
 
 
 			-- ADD
-			local addButton = createD( "YButton", parent, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20) )
+			local addButton = YRPCreateD( "YButton", parent, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20) )
 			addButton:SetText( "+" )
 			function addButton:DoClick()
 				local _SteamID = nil
@@ -2332,7 +2332,7 @@ net.Receive( "openLawBoard", function(len)
 
 
 			-- REMOVE
-			local remBtn = createD( "YButton", parent, YRP.ctr(50), YRP.ctr(50), YRP.ctr(90), YRP.ctr(20) )
+			local remBtn = YRPCreateD( "YButton", parent, YRP.ctr(50), YRP.ctr(50), YRP.ctr(90), YRP.ctr(20) )
 			remBtn:SetText( "-" )
 			function remBtn:DoClick()
 				if scrollpanel.selected > 0 then
@@ -2354,7 +2354,7 @@ net.Receive( "openLawBoard", function(len)
 
 
 			-- JAIL
-			local jailBtn = createD( "YButton", parent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(160), YRP.ctr(20) )
+			local jailBtn = YRPCreateD( "YButton", parent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(160), YRP.ctr(20) )
 			jailBtn:SetText( "LID_jail" )
 			function jailBtn:DoClick()
 				if scrollpanel.selected > 0 then
@@ -2384,7 +2384,7 @@ net.Receive( "openLawBoard", function(len)
 
 
 			-- UNJAIL
-			local unjailBtn = createD( "YButton", parent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(380), YRP.ctr(20) )
+			local unjailBtn = YRPCreateD( "YButton", parent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(380), YRP.ctr(20) )
 			unjailBtn:SetText( "LID_unjail" )
 			function unjailBtn:DoClick()
 				if scrollpanel.selected > 0 then
@@ -2451,7 +2451,7 @@ net.Receive( "openLawBoard", function(len)
 					end
 				end
 				if !strEmpty(model) then
-					local dmodelpanel = createD( "DModelPanel", dpanel, dpanel:GetTall() - YRP.ctr(20), dpanel:GetTall() - YRP.ctr(20), dpanel:GetWide() - ( dpanel:GetTall() - YRP.ctr(20) ), YRP.ctr(10) )
+					local dmodelpanel = YRPCreateD( "DModelPanel", dpanel, dpanel:GetTall() - YRP.ctr(20), dpanel:GetTall() - YRP.ctr(20), dpanel:GetWide() - ( dpanel:GetTall() - YRP.ctr(20) ), YRP.ctr(10) )
 					dmodelpanel:SetModel(model)
 				end
 
@@ -2470,24 +2470,24 @@ net.Receive( "openLawBoard", function(len)
 
 		window.tabs:AddOption( "LID_records", function(parent)
 			-- PlayerListHeader
-			local p = createD( "YLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20) )
+			local p = YRPCreateD( "YLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20) )
 			p:SetText(YRP.lang_string( "LID_players" ) )
 			-- PlayerList
-			local plist = createD( "DScrollPanel", parent, p:GetWide(), YRP.ctr(800), YRP.ctr(20), YRP.ctr(20 + 50) )
+			local plist = YRPCreateD( "DScrollPanel", parent, p:GetWide(), YRP.ctr(800), YRP.ctr(20), YRP.ctr(20 + 50) )
 			function plist:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255) )
 			end
 			plist.btn = 0
 			plist.ply = NULL
 			-- RIGHT
-			plist.notes = createD( "YPanel", parent, YRP.ctr(1000), YRP.ctr(1000), YRP.ctr(20 + 800 + 20), YRP.ctr(20) )
+			plist.notes = YRPCreateD( "YPanel", parent, YRP.ctr(1000), YRP.ctr(1000), YRP.ctr(20 + 800 + 20), YRP.ctr(20) )
 			plist.notes.curnote = 0
 			function plist.notes:Paint(pw, ph)
 
 			end
 			function plist.notes:UpdatePlayerNotes()
 				self:Clear()
-				self.addNote = createD( "YButton", self, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0) )
+				self.addNote = YRPCreateD( "YButton", self, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0) )
 				self.addNote:SetText( "+" )
 				function self.addNote:Paint(pw, ph)
 					local tab = {}
@@ -2495,7 +2495,7 @@ net.Receive( "openLawBoard", function(len)
 					hook.Run( "YButtonPaint", self, pw, ph, tab)
 				end
 				function self.addNote:DoClick()
-					local win = createD( "YFrame", nil, YRP.ctr(400), YRP.ctr(400), 0, 0)
+					local win = YRPCreateD( "YFrame", nil, YRP.ctr(400), YRP.ctr(400), 0, 0)
 					win:SetTitle( "" )
 					win:SetHeaderHeight(YRP.ctr(100) )
 					win:Center()
@@ -2503,9 +2503,9 @@ net.Receive( "openLawBoard", function(len)
 
 					local content = win:GetContent()
 
-					win.text = createD( "DTextEntry", content, content:GetWide(), YRP.ctr(50), 0, 0)
+					win.text = YRPCreateD( "DTextEntry", content, content:GetWide(), YRP.ctr(50), 0, 0)
 
-					win.send = createD( "YButton", content, content:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) )
+					win.send = YRPCreateD( "YButton", content, content:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) )
 					win.send:SetText( "LID_send" )
 					function win.send:DoClick()
 						net.Start( "AddJailNote" )
@@ -2518,7 +2518,7 @@ net.Receive( "openLawBoard", function(len)
 					end
 				end
 
-				self.remNote = createD( "YButton", self, YRP.ctr(50), YRP.ctr(50), self:GetWide() - YRP.ctr(50), YRP.ctr(0) )
+				self.remNote = YRPCreateD( "YButton", self, YRP.ctr(50), YRP.ctr(50), self:GetWide() - YRP.ctr(50), YRP.ctr(0) )
 				self.remNote:SetText( "-" )
 				function self.remNote:Paint(pw, ph)
 					if plist.notes.curnote > 0 then
@@ -2537,7 +2537,7 @@ net.Receive( "openLawBoard", function(len)
 					end
 				end
 
-				self.nlist = createD( "DScrollPanel", self, self:GetWide(), self:GetTall() - YRP.ctr(50), 0, YRP.ctr(50) )
+				self.nlist = YRPCreateD( "DScrollPanel", self, self:GetWide(), self:GetTall() - YRP.ctr(50), 0, YRP.ctr(50) )
 				function self.nlist:Paint(pw, ph)
 					--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 40, 40, 255) )
 				end
@@ -2552,7 +2552,7 @@ net.Receive( "openLawBoard", function(len)
 				if par then
 					for i, note in pairs(notes) do
 						note.uniqueID = tonumber(note.uniqueID)
-						local n = createD( "YButton", par.nlist, par:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) * (i - 1) )
+						local n = YRPCreateD( "YButton", par.nlist, par:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) * (i - 1) )
 						n:SetText(note.note)
 						function n:Paint(pw, ph)
 							local tab = {}
@@ -2570,7 +2570,7 @@ net.Receive( "openLawBoard", function(len)
 			end)
 			-- PlayerLines
 			for i, v in pairs(player.GetAll() ) do
-				local pline = createD( "YButton", plist, p:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) * (i - 1) )
+				local pline = YRPCreateD( "YButton", plist, p:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) * (i - 1) )
 				pline:SetText( v:RPName() )
 				function pline:Paint(pw, ph)
 					local color = Color(120, 120, 120, 255)
@@ -2592,7 +2592,7 @@ net.Receive( "openLawBoard", function(len)
 			end
 
 			-- Playerinfo
-			local pinfo = createD( "YPanel", parent, YRP.ctr(800), YRP.ctr(800), YRP.ctr(20), YRP.ctr(890) )
+			local pinfo = YRPCreateD( "YPanel", parent, YRP.ctr(800), YRP.ctr(800), YRP.ctr(20), YRP.ctr(890) )
 			function pinfo:Paint(pw, ph)
 				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
 					local scale = self:GetWide() / GetGlobalYRPInt( "int_" .. "background" .. "_w", 100)

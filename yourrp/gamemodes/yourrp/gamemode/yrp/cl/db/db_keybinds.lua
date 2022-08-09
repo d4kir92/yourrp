@@ -60,10 +60,10 @@ function YRPKeybindsCheckFile()
 		YRPKeybindsMSG( "Created Keybind Folder" )
 		file.CreateDir( "yrp_keybinds" )
 	end
-	if !file.Exists( dbfile, "DATA" ) then
+	if dbfile and !file.Exists( dbfile, "DATA" ) then
 		YRPKeybindsMSG( "Created New Keybind File" )
 		file.Write( dbfile, util.TableToJSON( YRP_KEYBINDS, true ) )
-	else
+	elseif dbfile then
 		local data = file.Read( dbfile, "DATA" )
 		if data then
 			local testfile = util.JSONToTable( data )
@@ -99,7 +99,9 @@ function YRPKeybindsSave()
 	YRPKeybindsCheckFile()
 	YRPKeybindsMSG( "Save Keybinds" )
 	
-	file.Write( dbfile, util.TableToJSON( yrp_keybinds, true ) )
+	if dbfile then
+		file.Write( dbfile, util.TableToJSON( yrp_keybinds, true ) )
+	end
 end
 
 function YRPKeybindsLoad()
@@ -110,7 +112,7 @@ function YRPKeybindsLoad()
 	YRPKeybindsCheckFile()
 	YRPKeybindsMSG( "Load Keybinds" )
 
-	if file.Exists( dbfile, "DATA" ) then
+	if dbfile and file.Exists( dbfile, "DATA" ) then
 		yrp_keybinds = util.JSONToTable( file.Read( dbfile, "DATA" ) )
 		if yrp_keybinds then
 			for name, key in pairs( yrp_keybinds ) do
@@ -169,15 +171,32 @@ function YRPGetKeybind(name)
 		name = tostring(name)
 		if YRP_KeybindsLoaded and yrp_keybinds and name and yrp_keybinds[name] != nil then
 			return tonumber(yrp_keybinds[name])
-		elseif YRP_KeybindsLoaded and yrp_keybinds then
-			local dbf = util.JSONToTable( file.Read( dbfile, "DATA" ) )
-			YRP.msg( "error", "[KEYBINDS] Failed to get Keybind: " .. tostring( name ) .. " result: " .. tostring( yrp_keybinds[name] ) )
-			YRP.msg( "error", "[KEYBINDS] Content: " .. tostring( table.ToString( dbf, "File" ) ) )
+		elseif YRP_KeybindsLoaded and yrp_keybinds and dbfile then
+			local data = file.Read( dbfile, "DATA" )
+			if data then
+				local dbf = util.JSONToTable( data )
+				if dbf then
+					YRP.msg( "error", "[KEYBINDS] Failed to get Keybind: " .. tostring( name ) .. " result: " .. tostring( yrp_keybinds[name] ) )
+					YRP.msg( "error", "[KEYBINDS] Content: " .. tostring( table.ToString( dbf, "File" ) ) )
+					return -1
+				else
+					YRP.msg( "error", "[KEYBINDS] Failed to Parse to Table" )
+					return -1
+				end
+			else
+				YRP.msg( "error", "[KEYBINDS] Failed to get Data" )
+				return -1
+			end
+		else
+			YRP.msg( "error", "[KEYBINDS] Failed to Parse to Table" )
 			return -1
 		end
 	else
+		YRP.msg( "error", "[KEYBINDS] Unknown error #2" )
 		return -1
 	end
+	YRP.msg( "error", "[KEYBINDS] Unknown error #1" )
+	return -1
 end
 
 function YRPSetKeybind(name, value, force)

@@ -67,7 +67,7 @@ function PANEL:SetStorageID(storageID, slots)
 				if slots[c] == nil then
 					break
 				end
-				local line = createD( "DHorizontalScroller", nil, YRPItemSize(), YRPItemSize(), 0, 0)
+				local line = YRPCreateD( "DHorizontalScroller", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 				line:SetOverlap(-sp)
 	
 				self:AddItem(line)
@@ -79,13 +79,13 @@ function PANEL:SetStorageID(storageID, slots)
 					local s = slots[c]
 					
 					--if s.uniqueID then
-						local slot = createD( "YSlot", nil, YRPItemSize(), YRPItemSize(), 0, 0)
+						local slot = YRPCreateD( "YSlot", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 						--slot:SetSlotID()
 						
 						line:AddPanel(slot)
 						c = c + 1
 						if ea(s) then
-							local i = createD( "YItem", nil, YRPItemSize(), YRPItemSize(), 0, 0)
+							local i = YRPCreateD( "YItem", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 							i:SetModel(s:GetModel() )
 							i:SetE(s)
 							slot:AddItem(i)
@@ -141,7 +141,7 @@ function BuildStorage(storage, slots)
 			if slots[c] == nil then
 				break
 			end
-			local line = createD( "DHorizontalScroller", nil, YRPItemSize(), YRPItemSize(), 0, 0)
+			local line = YRPCreateD( "DHorizontalScroller", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 			line:SetOverlap(-sp)
 
 			storage:AddItem(line)
@@ -152,7 +152,7 @@ function BuildStorage(storage, slots)
 
 				local s = slots[c]
 
-				local slot = createD( "YSlot", nil, YRPItemSize(), YRPItemSize(), 0, 0)
+				local slot = YRPCreateD( "YSlot", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 				slot:SetSlotID(s.uniqueID)
 	
 				line:AddPanel(slot)

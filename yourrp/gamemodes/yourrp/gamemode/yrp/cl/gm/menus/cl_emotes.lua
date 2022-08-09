@@ -92,13 +92,13 @@ end
 
 function OpenEmotesMenu()
 	openMenu()
-	_em.window = createD( "DFrame", nil, YRP.ctr(1900), YRP.ctr(1900), 0, 0)
+	_em.window = YRPCreateD( "DFrame", nil, YRP.ctr(1900), YRP.ctr(1900), 0, 0)
 	_em.window:Center()
 	_em.window:ShowCloseButton(false)
 	_em.window:SetDraggable(false)
 	_em.window:MakePopup()
 	_em.window:SetTitle( "" )
-	_em.emotes = createD( "DButton", _em.window, YRP.ctr(1900), YRP.ctr(1900), 0, 0)
+	_em.emotes = YRPCreateD( "DButton", _em.window, YRP.ctr(1900), YRP.ctr(1900), 0, 0)
 	_em.emotes:SetText( "" )
 
 	function _em.emotes:Paint(pw, ph)

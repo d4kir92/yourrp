@@ -137,6 +137,22 @@ function Player:HasAccess()
 	return self:GetYRPBool( "bool_adminaccess", false) or self:IsSuperAdmin()
 end
 
+function Player:YRPHasStorageItem( uid )
+	if !wk( uid ) then
+		return false
+	end
+
+	if self.yrpstorage == nil or self:GetYRPString( "storage", "" ) != self.yrpstoragestr then
+		self.yrpstoragestr = self:GetYRPString( "storage", "" )
+		self.yrpstorage = string.Explode( ",", self.yrpstoragestr )
+	end
+	
+	if self.yrpstorage then
+		return table.HasValue( self.yrpstorage, string.format( "%d", uid ) )
+	end
+	return false
+end
+
 function Player:LoadedGamemode()
 	if self:IsBot() then
 		return true
@@ -709,7 +725,7 @@ function YRPCanLock(ply, door, open)
 		if ply:GetSecurityLevel() >= door:SecurityLevel() then
 			if door:GetYRPInt( "ownerCharID", 0) > 0 then
 				if ply:CharID() == door:GetYRPInt( "ownerCharID", 0) then
-					YRP.msg( "note", "[canLock] " .. "IsOwner" )
+					--YRP.msg( "note", "[canLock] " .. "IsOwner" )
 					return true
 				end
 				YRP.msg( "note", "[canLock] " .. "Building has owner, but not this one! (from Player: " .. ply:RPName() .. " )" )

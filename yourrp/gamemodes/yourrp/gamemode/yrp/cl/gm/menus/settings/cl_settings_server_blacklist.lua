@@ -4,7 +4,7 @@
 
 function BuildBlacklist(parent, tabBL, tab)
 	parent:Clear()
-	local list = createD( "DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20) )
+	local list = YRPCreateD( "DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20) )
 	list:AddColumn( "uniqueID" ):SetFixedWidth(80)
 	list:AddColumn(YRP.lang_string( "LID_name" ) )
 	list:AddColumn(YRP.lang_string( "LID_value" ) )
@@ -27,10 +27,10 @@ function BuildBlacklist(parent, tabBL, tab)
 		end
 	end
 
-	local btnAdd = createD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(20) )
+	local btnAdd = YRPCreateD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(20) )
 	btnAdd:SetText(YRP.lang_string( "LID_addentry" ) )
 	function btnAdd:DoClick()
-		local AddFrame = createD( "YFrame", nil, YRP.ctr(500), YRP.ctr(500), 0, 0)
+		local AddFrame = YRPCreateD( "YFrame", nil, YRP.ctr(500), YRP.ctr(500), 0, 0)
 		AddFrame:Center()
 		AddFrame:SetDraggable(true)
 		AddFrame:SetTitle( "LID_add" )
@@ -38,15 +38,15 @@ function BuildBlacklist(parent, tabBL, tab)
 
 		local CONTENT = AddFrame:GetContent()
 
-		local addlist = createD( "DPanelList", CONTENT, CONTENT:GetWide(), CONTENT:GetTall(), 0, 0) 
+		local addlist = YRPCreateD( "DPanelList", CONTENT, CONTENT:GetWide(), CONTENT:GetTall(), 0, 0) 
 
 
 
-		local BLNameHeader = createD( "YLabel", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
+		local BLNameHeader = YRPCreateD( "YLabel", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
 		BLNameHeader:SetText( "LID_name" )
 		addlist:AddItem(BLNameHeader)
 
-		local BLName = createD( "DComboBox", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
+		local BLName = YRPCreateD( "DComboBox", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
 		for k, v in pairs({"chat", "inventory", "entities"}) do
 			BLName:AddChoice( v, v)
 		end
@@ -54,7 +54,7 @@ function BuildBlacklist(parent, tabBL, tab)
 
 
 
-		local HR = createD( "DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(20), 0, 0)
+		local HR = YRPCreateD( "DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(20), 0, 0)
 		function HR:Paint(pw, ph)
 			--
 		end
@@ -62,11 +62,11 @@ function BuildBlacklist(parent, tabBL, tab)
 
 
 
-		local BLValueHeader = createD( "YLabel", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
+		local BLValueHeader = YRPCreateD( "YLabel", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
 		BLValueHeader:SetText( "LID_value" )
 		addlist:AddItem(BLValueHeader)
 
-		local BLValue = createD( "DTextEntry", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
+		local BLValue = YRPCreateD( "DTextEntry", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
 		addlist:AddItem(BLValue)
 
 
@@ -75,7 +75,7 @@ function BuildBlacklist(parent, tabBL, tab)
 
 
 
-		local BLAdd = createD( "DButton", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
+		local BLAdd = YRPCreateD( "DButton", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
 		BLAdd:SetText(YRP.lang_string( "LID_add" ) )
 		function BLAdd:DoClick()
 			if BLName:GetOptionData(BLName:GetSelectedID() ) != nil then
@@ -104,7 +104,7 @@ function BuildBlacklist(parent, tabBL, tab)
 		end
 	end
 
-	local btnRem = createD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(70) )
+	local btnRem = YRPCreateD( "YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(70) )
 	btnRem:SetText(YRP.lang_string( "LID_removeentry" ) )
 	function btnRem:DoClick()
 		if list:GetSelectedLine() != nil then
@@ -163,7 +163,7 @@ net.Receive( "yrp_blacklist_get", function(len)
 		local tab = net.ReadString()
 	
 		-- TABS
-		local tabs = createD( "YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
+		local tabs = YRPCreateD( "YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
 		function tabs:Think()
 			self:SetSize(site:GetWide(), site:GetTall() )
 		end

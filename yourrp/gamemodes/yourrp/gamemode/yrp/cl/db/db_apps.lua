@@ -47,7 +47,7 @@ function getAllApps()
 end
 
 function createApp( app, parent, x, y)
-	local _tmp = createD( "YRPAPP", parent, ctrb(64), ctrb(64), x, y)
+	local _tmp = YRPCreateD( "YRPAPP", parent, ctrb(64), ctrb(64), x, y)
 	_tmp.tbl = app
 	_tmp.oldpaint = _tmp.Paint
 	function _tmp:Paint(pw, ph)

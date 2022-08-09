@@ -81,8 +81,6 @@ if SERVER then
 				timer.Simple(1, SendServerInfo)
 			end
 		end
-			
-		RunConsoleCommand( "sv_hibernate_think", 0)
 	end
 
 	hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded", function()

@@ -22,7 +22,7 @@ function openCharMenu()
 	openMenu()
 
 	CHAR.open = true
-	CHAR.window = createD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
+	CHAR.window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
 	CHAR.window:Center()
 	CHAR.window:SetTitle( "LID_character" )
 	CHAR.window:SetHeaderHeight(YRP.ctr(100) )
@@ -51,13 +51,13 @@ function CreateCharContent(parent)
 	local Y = 20
 	local cl_rpName = nil
 	if GetGlobalYRPBool( "bool_characters_changeable_name", false) then
-		local cl_rpNamelabel = createD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
+		local cl_rpNamelabel = YRPCreateD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 		cl_rpNamelabel:SetText( "" )
 		function cl_rpNamelabel:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string( "LID_name" ), "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 		Y = Y + 50
-		cl_rpName = createD( "DTextEntry", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(70) )
+		cl_rpName = YRPCreateD( "DTextEntry", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(70) )
 		cl_rpName:SetText(LocalPlayer():RPName() )
 		function cl_rpName:OnChange()
 			if #self:GetText() > 32 then
@@ -69,13 +69,13 @@ function CreateCharContent(parent)
 
 
 
-	local cl_rpDescriptionlabel = createD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
+	local cl_rpDescriptionlabel = YRPCreateD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 	cl_rpDescriptionlabel:SetText( "" )
 	function cl_rpDescriptionlabel:Paint(pw, ph)
 		draw.SimpleText(YRP.lang_string( "LID_description" ), "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 	Y = Y + 50
-	local cl_rpDescription = createD( "DTextEntry", parent, YRP.ctr(800), YRP.ctr(200), YRP.ctr(20), YRP.ctr(Y) )
+	local cl_rpDescription = YRPCreateD( "DTextEntry", parent, YRP.ctr(800), YRP.ctr(200), YRP.ctr(20), YRP.ctr(Y) )
 	cl_rpDescription:SetMultiline(true)
 	cl_rpDescription:SetText(LocalPlayer():GetYRPString( "rpdescription", "FAIL" ) )
 	function cl_rpDescription:OnChange()
@@ -87,13 +87,13 @@ function CreateCharContent(parent)
 
 	local cl_birthday = nil
 	if GetGlobalYRPBool( "bool_characters_birthday", false) then
-		local cl_birthdayheader = createD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
+		local cl_birthdayheader = YRPCreateD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 		cl_birthdayheader:SetText( "" )
 		function cl_birthdayheader:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string( "LID_birthday" ), "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 		Y = Y + 50
-		cl_birthday = createD( "DTextEntry", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
+		cl_birthday = YRPCreateD( "DTextEntry", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 		cl_birthday:SetText(LocalPlayer():GetYRPString( "string_birthday", "" ) )
 		function cl_birthday:OnChange()
 
@@ -105,13 +105,13 @@ function CreateCharContent(parent)
 
 	local cl_bodyheight = nil
 	if GetGlobalYRPBool( "bool_characters_bodyheight", false) then
-		local cl_bodyheightheader = createD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
+		local cl_bodyheightheader = YRPCreateD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 		cl_bodyheightheader:SetText( "" )
 		function cl_bodyheightheader:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string( "LID_bodyheight" ), "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 		Y = Y + 50
-		cl_bodyheight = createD( "DNumberWang", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
+		cl_bodyheight = YRPCreateD( "DNumberWang", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 		cl_bodyheight:SetValue(tostring(LocalPlayer():GetYRPInt( "int_bodyheight", 0) ))
 		function cl_bodyheight:OnChange()
 
@@ -123,13 +123,13 @@ function CreateCharContent(parent)
 
 	local cl_weight = nil
 	if GetGlobalYRPBool( "bool_characters_weight", false) then
-		local cl_weightheader = createD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
+		local cl_weightheader = YRPCreateD( "DLabel", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 		cl_weightheader:SetText( "" )
 		function cl_weightheader:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string( "LID_weight" ), "Y_24_500", 0, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 		Y = Y + 50
-		cl_weight = createD( "DNumberWang", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
+		cl_weight = YRPCreateD( "DNumberWang", parent, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 		cl_weight:SetText(LocalPlayer():GetYRPInt( "int_weight", 0) )
 		function cl_weight:OnChange()
 
@@ -139,7 +139,7 @@ function CreateCharContent(parent)
 
 
 
-	--[[local attr = createD( "YPanel", parent, YRP.ctr(300), YRP.ctr(260), YRP.ctr(20), YRP.ctr(Y) )
+	--[[local attr = YRPCreateD( "YPanel", parent, YRP.ctr(300), YRP.ctr(260), YRP.ctr(20), YRP.ctr(Y) )
 	function attr:Paint(pw, ph)
 		hook.Run( "YPanelPaint", self, pw, ph)
 
@@ -162,7 +162,7 @@ function CreateCharContent(parent)
 
 
 
-	local cl_save = createD( "YButton", parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
+	local cl_save = YRPCreateD( "YButton", parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(20), YRP.ctr(Y) )
 	cl_save:SetText( "LID_change" )
 	function cl_save:Paint(pw, ph)
 		if CurTime() > save_delay then

@@ -6,7 +6,7 @@ local DBTab2 = {}
 local cbs = {}
 
 local function YRPWeaponSlotNum(parent, x, y, lid, smin, smax, sart, sval)
-	local slider = createD( "DNumSlider", parent, 400, 50, x, y)
+	local slider = YRPCreateD( "DNumSlider", parent, 400, 50, x, y)
 	slider:SetText(YRP.lang_string(lid) )
 	slider:SetDecimals(0)
 	slider:SetMinMax( smin, smax )
@@ -22,7 +22,7 @@ local function YRPWeaponSlotNum(parent, x, y, lid, smin, smax, sart, sval)
 end
 
 local function YRPWeaponSlotCB(parent, x, y, cname, art, sval)
-	local cb = createD( "DCheckBox", parent, 30, 30, x + 5, y + 5)
+	local cb = YRPCreateD( "DCheckBox", parent, 30, 30, x + 5, y + 5)
 	cb:SetChecked(sval)
 	function cb:OnChange( bVal )
 		if art == "slot_no" and bVal then
@@ -102,13 +102,13 @@ net.Receive( "yrp_weapon_menu", function(len)
 
 	local sw = 640
 
-	local search = createD( "DTextEntry", PARENT, sw, 30, 400 + 10, 10)
+	local search = YRPCreateD( "DTextEntry", PARENT, sw, 30, 400 + 10, 10)
 	search:SetPlaceholderText( "Enter Weapon Name (Example: food, drink, physgun, ...)" )
 	function search:OnTextChanged()
 		YRPWeaponUpdateList()
 	end
 
-	local header = createD( "DPanel", PARENT, sw, 30, 400 + 10, 10 + 30)
+	local header = YRPCreateD( "DPanel", PARENT, sw, 30, 400 + 10, 10 + 30)
 	function header:Paint(pw, ph)
 		local color = Color(80, 80, 80)
 		draw.RoundedBox(3, 0, 0, pw, ph, color)
@@ -121,7 +121,7 @@ net.Receive( "yrp_weapon_menu", function(len)
 		draw.SimpleText(YRP.lang_string( "LID_noslot" ), 		"Y_16_700", pw - 60 - spacer * 0 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	local list = createD( "DPanelList", PARENT, sw, PARENT:GetTall() - 10 - 30 - 30 - 10, 400 + 10, 10 + 30 + 30)
+	local list = YRPCreateD( "DPanelList", PARENT, sw, PARENT:GetTall() - 10 - 30 - 30 - 10, 400 + 10, 10 + 30 + 30)
 	list:EnableVerticalScrollbar()
 	list:SetSpacing(2)
 	function list:Paint(pw, ph)
@@ -137,7 +137,7 @@ net.Receive( "yrp_weapon_menu", function(len)
 			searchstr = string.Replace(searchstr, "]", "" )
 			searchstr = string.Replace(searchstr, "%", "" )
 			if string.find(string.lower(swep.PrintName), searchstr) or string.find(string.lower(swep.ClassName), searchstr) then
-				local weapon = createD( "DLabel", nil, list:GetWide(), 40, 0, 0)
+				local weapon = YRPCreateD( "DLabel", nil, list:GetWide(), 40, 0, 0)
 				weapon:SetText( "" )
 				function weapon:Paint(pw, ph)
 					local color = Color(40, 160, 40)

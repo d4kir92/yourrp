@@ -373,20 +373,24 @@ function YRPSpawnItem(ply, item, duid)
 			if ENT.t != nil and ENT.t.SpawnFunction != nil then
 				ent = ENT.t:SpawnFunction(ply, tr, item.ClassName)
 
-				--ent:SetOwner(ply)
-				ent:SetYRPEntity( "yrp_owner", ply)
-				ent:Activate()
+				if ent then
+					--ent:SetOwner(ply)
+					ent:SetYRPEntity( "yrp_owner", ply)
+					ent:Activate()
 
-				ent:SetAngles(TARGETANG)
-				if !hasstorage then
-					ent:SetPos(ply:GetPos() + ply:GetForward() * 64 + ply:GetUp() * 64)
+					ent:SetAngles(TARGETANG)
+					if !hasstorage then
+						ent:SetPos(ply:GetPos() + ply:GetForward() * 64 + ply:GetUp() * 64)
+					end
+
+					ent:SetYRPInt( "item_uniqueID", item.uniqueID )
+
+					--YRP.msg( "gm", "[Spawn Item] WORKED #1" )
+
+					return true, ent
+				else
+					return false, NULL
 				end
-
-				ent:SetYRPInt( "item_uniqueID", item.uniqueID )
-
-				--YRP.msg( "gm", "[Spawn Item] WORKED #1" )
-
-				return true, ent
 			else
 				ent = ents.Create(item.ClassName)
 				if IsValid(ent) then
@@ -498,14 +502,18 @@ net.Receive( "item_buy", function(len, ply)
 		if ply:canAfford(tonumber(_item.price) ) then
 			YRP.msg( "gm", ply:YRPName() .. " buyed " .. _item.name)
 
+			timer.Simple( 0.3, function()
+				YRPPlyUpdateStorage( ply )
+			end )
+
 			if _item.type == "licenses" then
 				ply:AddLicense(_item.ClassName)
 				ply:SetYRPInt( "licenseIDsVersion", ply:GetYRPInt( "licenseIDsVersion", 0 ) + 1 )
 			elseif _item.type == "roles" then
 				local rid = _item.ClassName
 				YRPRemRolVals(ply)
-				RemGroVals(ply)
-				SetRole(ply, rid, true)
+				YRPRemGroVals(ply)
+				YRPSetRole(ply, rid, true)
 			else
 				local _spawned, ent = YRPSpawnItem(ply, _item, _dealer_uid)
 

@@ -117,7 +117,7 @@ function DHorizontalScroller(tab)
 	tab.h = tab.h or 100
 	tab.br = tab.br or 10
 	tab.color = tab.color or Color( 255, 0, 0, 0)
-	local dhorizontalscroller = createD( "DHorizontalScroller", tab.parent, tab.w, tab.h, tab.x, tab.y)
+	local dhorizontalscroller = YRPCreateD( "DHorizontalScroller", tab.parent, tab.w, tab.h, tab.x, tab.y)
 	function dhorizontalscroller:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 	end
@@ -138,7 +138,7 @@ function DGroup(tab)
 	tab.bgcolor = tab.bgcolor or Color(80, 80, 80)
 	tab.name = tab.name or "Unnamed Header"
 	local dgroup = {}
-	dgroup.header = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
+	dgroup.header = YRPCreateD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
 	function dgroup.header:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		ph = YRP.ctr(50)
@@ -154,7 +154,7 @@ function DGroup(tab)
 		DrawText(text)
 	end
 
-	dgroup.content = createD( "DPanelList", dgroup.header, tab.w - 2 * tab.br, tab.h - 1 * tab.br - YRP.ctr(50), tab.br, YRP.ctr(50) )
+	dgroup.content = YRPCreateD( "DPanelList", dgroup.header, tab.w - 2 * tab.br, tab.h - 1 * tab.br - YRP.ctr(50), tab.br, YRP.ctr(50) )
 	dgroup.content:EnableVerticalScrollbar(true)
 	function dgroup.content:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.bgcolor)
@@ -190,7 +190,7 @@ function DName(tab)
 	tab.color = tab.color or Color( 255, 255, 255, 255 )
 	tab.bgcolor = tab.bgcolor or Color(80, 80, 80)
 	tab.name = tab.name or "Unnamed"
-	local dname = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
+	local dname = YRPCreateD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
 	function dname:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -225,7 +225,7 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 
 	local dintcomboboxbox = {}
 
-	dintcomboboxbox.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	dintcomboboxbox.line = YRPCreateD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function dintcomboboxbox.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -239,7 +239,7 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 		DrawText(text)
 	end
 
-	dintcomboboxbox.dcombobox = createD( "DComboBox", dintcomboboxbox.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	dintcomboboxbox.dcombobox = YRPCreateD( "DComboBox", dintcomboboxbox.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	dintcomboboxbox.dcombobox:SetSortItems(false)
 	dintcomboboxbox.dcombobox.serverside = false
 	if choices != nil then
@@ -281,7 +281,7 @@ function DBoolLine(tab, value, str, netstr)
 
 	local dboolline = {}
 
-	dboolline.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	dboolline.line = YRPCreateD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function dboolline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -295,7 +295,7 @@ function DBoolLine(tab, value, str, netstr)
 		DrawText(text)
 	end
 
-	dboolline.dcheckbox = createD( "DCheckBox", dboolline.line, tab.h, tab.h, tab.brx, 0)
+	dboolline.dcheckbox = YRPCreateD( "DCheckBox", dboolline.line, tab.h, tab.h, tab.brx, 0)
 	dboolline.dcheckbox:SetValue( value)
 	function dboolline.dcheckbox:Paint(pw, ph)
 		surfaceCheckBox(self, ph, ph, "done" )
@@ -341,7 +341,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 
 	local dfloatline = {}
 
-	dfloatline.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	dfloatline.line = YRPCreateD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function dfloatline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -367,7 +367,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 		end
 	end
 
-	dfloatline.dnumberwang = createD( "DNumberWang", dfloatline.line, YRP.ctr(200), tab.h, tab.brx, 0)
+	dfloatline.dnumberwang = YRPCreateD( "DNumberWang", dfloatline.line, YRP.ctr(200), tab.h, tab.brx, 0)
 	dfloatline.dnumberwang:SetMax(max or 100)
 	dfloatline.dnumberwang:SetMin(min or 0)
 	dfloatline.dnumberwang:SetDecimals(6)
@@ -419,7 +419,7 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 
 	local dintline = {}
 
-	dintline.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	dintline.line = YRPCreateD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function dintline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -433,7 +433,7 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 		DrawText(text)
 	end
 
-	dintline.dnumberwang = createD( "DNumberWang", dintline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	dintline.dnumberwang = YRPCreateD( "DNumberWang", dintline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	dintline.dnumberwang:SetMax(max or 100)
 	dintline.dnumberwang:SetMin(min or 0)
 	dintline.dnumberwang:SetDecimals(0)
@@ -487,7 +487,7 @@ function DStringBox(tab, str, name, netstr)
 
 	local dstringline = {}
 
-	dstringline.line = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	dstringline.line = YRPCreateD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function dstringline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
@@ -501,7 +501,7 @@ function DStringBox(tab, str, name, netstr)
 		DrawText(text)
 	end
 
-	dstringline.dtextentry = createD( "DTextEntry", dstringline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
+	dstringline.dtextentry = YRPCreateD( "DTextEntry", dstringline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
 	dstringline.dtextentry:SetText(str)
 	dstringline.dtextentry.serverside = false
 	function dstringline.dtextentry:OnChange()
@@ -537,7 +537,7 @@ function DHR(tab)
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color( 255, 255, 255, 255 )
 
-	local hr = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	local hr = YRPCreateD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function hr:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		draw.RoundedBox(0, 0, ph / 3, pw, ph / 3, Color( 0, 0, 0, 255 ) )
@@ -562,7 +562,7 @@ function DHeader(tab, header)
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color( 255, 255, 255, 255 )
 
-	local hea = createD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
+	local hea = YRPCreateD( "DPanel", tab.parent, tab.w, tab.h, tab.x, tab.x)
 	function hea:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local head = {}

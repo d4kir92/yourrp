@@ -101,16 +101,16 @@ if CLIENT then
 	net.Receive( "yrp_spawner_npc_options", function()
 		local stab = net.ReadTable()
 
-		local w = createD( "YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+		local w = YRPCreateD( "YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
 		w:Center()
 		w:MakePopup()
 		w:SetHeaderHeight(YRP.ctr(100) )
 		w:SetTitle( "LID_npcspawner" )
 
 		-- Respawn time
-		w.respawntext = createD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0) )
+		w.respawntext = YRPCreateD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0) )
 		w.respawntext:SetText( YRP.lang_string( "LID_respawntime" ) .. " ( " .. YRP.lang_string( "LID_seconds" ) .. " )" )
-		w.respawn = createD( "DNumberWang", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
+		w.respawn = YRPCreateD( "DNumberWang", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
 		w.respawn:SetMin(1)
 		w.respawn:SetMax(60 * 60 * 6)
 		w.respawn:SetValue(stab.int_respawntime)
@@ -122,9 +122,9 @@ if CLIENT then
 		end
 
 		-- Amount
-		w.amounttext = createD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(150) )
+		w.amounttext = YRPCreateD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(150) )
 		w.amounttext:SetText( "LID_quantity" )
-		w.amount = createD( "DNumberWang", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(200) )
+		w.amount = YRPCreateD( "DNumberWang", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(200) )
 		w.amount:SetMin(1)
 		w.amount:SetMax(10)
 		w.amount:SetValue(stab.int_amount)
@@ -136,9 +136,9 @@ if CLIENT then
 		end
 
 		-- ClassName
-		w.classnametext = createD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(300) )
+		w.classnametext = YRPCreateD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(300) )
 		w.classnametext:SetText( "LID_npc" )
-		w.classname = createD( "DComboBox", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(350) )
+		w.classname = YRPCreateD( "DComboBox", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(350) )
 		w.classname:SetText(stab.string_classname)
 		for i, v in pairs(list.Get( "NPC" ) ) do
 			w.classname:AddChoice(i, i)

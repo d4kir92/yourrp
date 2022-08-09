@@ -499,8 +499,8 @@ function YRP.GetDesignIcon(name)
 	return _icons["clear"]
 end
 
-function YRP.DrawIcon(material, w, h, x, y, color)
-	local col = color or YRPGetColor( "6" )
+function YRP.DrawIcon(material, w, h, x, y, colo)
+	local col = colo or YRPGetColor( "6" )
 	if wk(material) then
 		surface.SetDrawColor( col)
 		surface.SetMaterial(material)
@@ -693,7 +693,7 @@ function paintInv( derma, pw, ph, text1, text2)
 	end
 end
 
-function createD( cla, parent, w, h, x, y )
+function YRPCreateD( cla, parent, w, h, x, y )
 	local _parent = parent or nil
 	local _w = w or 100
 	local _h = h or 100
@@ -941,7 +941,7 @@ function paintMDBackground( derma, pw, ph)
 end
 
 function createMDMenu(parent, w, h, x, y)
-	local tmp = createD( "YFrame", parent, w, h, x, y)
+	local tmp = YRPCreateD( "YFrame", parent, w, h, x, y)
 	tmp:SetBorder(0)
 	tmp:SetDraggable(true)
 	tmp:SetMinWidth(100)
@@ -958,7 +958,7 @@ function createMDMenu(parent, w, h, x, y)
 
 	-- LOGO
 	local logoS = tmp:GetHeaderHeight() - YRP.ctr(20)
-	tmp.logo = createD( "YPanel", tmp, YRP.ctr(200), logoS, tmp:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10) )
+	tmp.logo = YRPCreateD( "YPanel", tmp, YRP.ctr(200), logoS, tmp:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10) )
 	tmp.logo.yrp = Material( "vgui/yrp/logo100_beta.png" )
 	function tmp.logo:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
@@ -982,9 +982,9 @@ function createMDMenu(parent, w, h, x, y)
 	local icon_size = tmp:GetHeaderHeight() - YRP.ctr(20)
 	local icon_x, icon_y = tmp.logo:GetPos()
 	icon_x = icon_x + tmp.logo:GetWide() + YRP.ctr(20)
-	tmp.discord = createD( "YPanel", tmp, icon_size, icon_size, icon_x, icon_y)
-	tmp.discord.logo = createD( "DHTML", tmp.discord, icon_size, icon_size, 0, 0)
-	tmp.discord.btn = createD( "DButton", tmp.discord, icon_size, icon_size, 0, 0)
+	tmp.discord = YRPCreateD( "YPanel", tmp, icon_size, icon_size, icon_x, icon_y)
+	tmp.discord.logo = YRPCreateD( "DHTML", tmp.discord, icon_size, icon_size, 0, 0)
+	tmp.discord.btn = YRPCreateD( "DButton", tmp.discord, icon_size, icon_size, 0, 0)
 	tmp.discord.btn:SetText( "" )
 	local img = GetHTMLImage( "https://discordapp.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg", icon_size, icon_size)
 	tmp.discord.logo:SetHTML(img)
@@ -1026,7 +1026,7 @@ function createMDMenu(parent, w, h, x, y)
 		self.cats[cat][tmpNr].material = material
 	end
 
-	tmp.sitepanel = createD( "DPanel", tmp, w, h - YRP.ctr(100), 0, YRP.ctr(100) )
+	tmp.sitepanel = YRPCreateD( "DPanel", tmp, w, h - YRP.ctr(100), 0, YRP.ctr(100) )
 
 	function tmp.sitepanel:Paint(pw, ph)
 		--
@@ -1042,8 +1042,8 @@ function createMDMenu(parent, w, h, x, y)
 		hook.Call(_hook)
 	end
 
-	tmp.menu = createD( "DPanel", tmp, BarW, tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50), 0, tmp:GetHeaderHeight() )
-	tmp.menulist = createD( "DPanelList", tmp.menu, IconSize, tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50) - 2 * BR, BR, BR)
+	tmp.menu = YRPCreateD( "DPanel", tmp, BarW, tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50), 0, tmp:GetHeaderHeight() )
+	tmp.menulist = YRPCreateD( "DPanelList", tmp.menu, IconSize, tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50) - 2 * BR, BR, BR)
 	tmp.menulist:EnableVerticalScrollbar(true)
 
 	function tmp.menu:Paint(pw, ph)
@@ -1066,7 +1066,7 @@ function createMDMenu(parent, w, h, x, y)
 
 	function tmp:CreateMenu()
 		for k, v in pairs(tmp.cat) do
-			local tmpCat = createD( "DPanel", tmp.menulist, IconSize, YRP.ctr(0), BR, YRP.ctr(posY) )
+			local tmpCat = YRPCreateD( "DPanel", tmp.menulist, IconSize, YRP.ctr(0), BR, YRP.ctr(posY) )
 			function tmpCat:Paint(pw, ph)
 				draw.SimpleTextOutlined(string.upper(YRP.lang_string( v) ), "Y_18_500", YRP.ctr(10), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			end
@@ -1075,7 +1075,7 @@ function createMDMenu(parent, w, h, x, y)
 			--posY = posY + 50 + 10
 			if tmp.cats[v] ~= nil then
 				for _l, _w in pairs(tmp.cats[v]) do
-					tmp.sites[_w.hook] = createD( "DButton", nil, IconSize, IconSize, BR, YRP.ctr(posY) )
+					tmp.sites[_w.hook] = YRPCreateD( "DButton", nil, IconSize, IconSize, BR, YRP.ctr(posY) )
 					local tmp2 = tmp.sites[_w.hook]
 					tmp2:SetText( "" )
 					tmp2.hook = string.lower(_w.hook)
@@ -1106,7 +1106,7 @@ function createMDMenu(parent, w, h, x, y)
 					end
 
 					tmp.menulist:AddItem(tmp2)
-					local tmpHr2 = createD( "DPanel", nil, IconSize, YRP.ctr(20), 0, YRP.ctr(posY) )
+					local tmpHr2 = YRPCreateD( "DPanel", nil, IconSize, YRP.ctr(20), 0, YRP.ctr(posY) )
 
 					function tmpHr2:Paint(pw, ph)
 					end
@@ -1115,7 +1115,7 @@ function createMDMenu(parent, w, h, x, y)
 					--posY = posY + 80 + 10
 				end
 
-				local tmpHr = createD( "DPanel", nil, IconSize, YRP.ctr(0), 0, YRP.ctr(posY) )
+				local tmpHr = YRPCreateD( "DPanel", nil, IconSize, YRP.ctr(0), 0, YRP.ctr(posY) )
 				function tmpHr:Paint(pw, ph)
 					--
 				end
@@ -1126,7 +1126,7 @@ function createMDMenu(parent, w, h, x, y)
 	end
 
 	local CONTENT = tmp:GetContent()
-	tmp.site = createD( "YPanel", tmp, CONTENT:GetWide() - BarW, CONTENT:GetTall() - YRP.ctr(50), BarW, tmp:GetHeaderHeight() )
+	tmp.site = YRPCreateD( "YPanel", tmp, CONTENT:GetWide() - BarW, CONTENT:GetTall() - YRP.ctr(50), BarW, tmp:GetHeaderHeight() )
 	function tmp.site:Paint(pw, ph)
 		local color = YRPInterfaceValue( "YFrame", "HB" )
 
@@ -1144,7 +1144,7 @@ function createMDMenu(parent, w, h, x, y)
 	end
 
 	-- BOTTOMBAR
-	tmp.bot = createD( "YPanel", tmp, 10, 10, 0, 0)
+	tmp.bot = YRPCreateD( "YPanel", tmp, 10, 10, 0, 0)
 	local color_bot1 = Color( 0, 0, 0, 20 )
 	function tmp.bot:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, color_bot1 )
@@ -1168,7 +1168,7 @@ function createMDMenu(parent, w, h, x, y)
 end
 
 function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
-	local tmp = createD( "DButton", parent, w, h, x, y)
+	local tmp = YRPCreateD( "DButton", parent, w, h, x, y)
 	tmp.opt1 = opt1
 	tmp.opt2 = opt2
 
@@ -1206,7 +1206,7 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 end
 
 function addPColorField(parent, col, x, y)
-	local tmp = createD( "DButton", parent, YRP.ctr(50), YRP.ctr(50), x, y)
+	local tmp = YRPCreateD( "DButton", parent, YRP.ctr(50), YRP.ctr(50), x, y)
 	tmp.color = col
 	tmp:SetText( "" )
 
@@ -1227,7 +1227,7 @@ function addPColorField(parent, col, x, y)
 end
 
 function addSColorField(parent, col, x, y)
-	local tmp = createD( "DButton", parent, YRP.ctr(50), YRP.ctr(50), x, y)
+	local tmp = YRPCreateD( "DButton", parent, YRP.ctr(50), YRP.ctr(50), x, y)
 	tmp.color = col
 	tmp:SetText( "" )
 

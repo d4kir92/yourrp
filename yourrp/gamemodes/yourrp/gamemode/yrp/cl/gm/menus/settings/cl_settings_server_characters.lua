@@ -24,7 +24,7 @@ end)
 function OpenSettingsCharacters()
 	local PARENT = GetSettingsSite()
 	if pa(PARENT) then
-		YRPCharList = createD( "DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+		YRPCharList = YRPCreateD( "DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 		YRPCharList:AddColumn( "SteamID" )
 		YRPCharList:AddColumn(YRP.lang_string( "LID_name" ) )
 		YRPCharList:AddColumn(YRP.lang_string( "LID_idcardid" ) )

@@ -45,7 +45,7 @@ function CreateRolePreviewContent()
 
 
 	-- Fake POPUP
-	local win = createD( "DPanel", parent, nw, nh, 0, 0)
+	local win = YRPCreateD( "DPanel", parent, nw, nh, 0, 0)
 	function win:Paint(pw, ph)
 		local color = YRPInterfaceValue( "YFrame", "NC" )
 		if color then
@@ -64,21 +64,21 @@ function CreateRolePreviewContent()
 
 
 		-- TOP
-		local descheader = createD( "YLabel", win, nw - YRP.ctr(2 * 20), YRP.ctr(hh), YRP.ctr(20), YRP.ctr(20) )
+		local descheader = YRPCreateD( "YLabel", win, nw - YRP.ctr(2 * 20), YRP.ctr(hh), YRP.ctr(20), YRP.ctr(20) )
 		descheader:SetText(rol.string_name)
 
 
 
 		-- LEFT
-		local descheader = createD( "YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), YRP.ctr(20 + hh + 20) )
+		local descheader = YRPCreateD( "YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), YRP.ctr(20 + hh + 20) )
 		descheader:SetText( "LID_description" )
 		
-		local descbg = createD( "DPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20 + hh + 20 + hh), YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh) )
+		local descbg = YRPCreateD( "DPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20 + hh + 20 + hh), YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh) )
 		function descbg:Paint(pw, ph)
 			hook.Run( "YTextFieldPaint", self, pw, ph)
 		end
 
-		local desc = createD( "RichText", win, ew - YRP.ctr(20 + 20), nh - YRP.ctr(20 + hh + 20 + hh + 20 + hh + 20 + hh + 20 + 20), YRP.ctr(40), YRP.ctr(20 + hh + 20 + hh + 20) )
+		local desc = YRPCreateD( "RichText", win, ew - YRP.ctr(20 + 20), nh - YRP.ctr(20 + hh + 20 + hh + 20 + hh + 20 + hh + 20 + 20), YRP.ctr(40), YRP.ctr(20 + hh + 20 + hh + 20) )
 		function desc:PerformLayout()
 			if self.SetUnderlineFont != nil then
 				self:SetUnderlineFont( "Y_18_500" )
@@ -91,10 +91,10 @@ function CreateRolePreviewContent()
 		desc:SetText(tostring(rol.string_description) )
 
 		if tonumber(rol.int_salary) > 0 then
-			local salaryheader = createD( "YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), nh - YRP.ctr(hh + 20 + hh) )
+			local salaryheader = YRPCreateD( "YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), nh - YRP.ctr(hh + 20 + hh) )
 			salaryheader:SetText( "LID_salary" )
 
-			local salary = createD( "YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), nh - YRP.ctr(20 + hh) )
+			local salary = YRPCreateD( "YLabel", win, ew, YRP.ctr(hh), YRP.ctr(20), nh - YRP.ctr(20 + hh) )
 			salary:SetText( MoneyFormat(rol.int_salary) )
 			function salary:Paint(pw, ph)
 				hook.Run( "YTextFieldPaint", self, pw, ph)
@@ -107,15 +107,15 @@ function CreateRolePreviewContent()
 
 
 		-- MID
-		local pmsheader = createD( "YLabel", win, ew, YRP.ctr(hh), ew + 2 * YRP.ctr(20), YRP.ctr(20 + hh + 20) )
+		local pmsheader = YRPCreateD( "YLabel", win, ew, YRP.ctr(hh), ew + 2 * YRP.ctr(20), YRP.ctr(20 + hh + 20) )
 		pmsheader:SetText( "LID_chooseyourplayermodel" )
 
-		local pmsbg = createD( "YPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20), ew + 2 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh) )
+		local pmsbg = YRPCreateD( "YPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20), ew + 2 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh) )
 		function pmsbg:Paint(pw, ph)
 			hook.Run( "YTextFieldPaint", self, pw, ph)
 		end
 
-		local pms = createD( "DModelPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20), ew + 2 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh) )
+		local pms = YRPCreateD( "DModelPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20), ew + 2 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh) )
 		pms.models = string.Explode( ",", rol.pms)
 		LocalPlayer().charcreate_rpmid = 1
 		pms.id = LocalPlayer().charcreate_rpmid
@@ -153,7 +153,7 @@ function CreateRolePreviewContent()
 			pms:SetModel(pms.models[1])
 		end
 
-		local nextpm = createD( "YButton", pms, YRP.ctr(64), YRP.ctr(64), pms:GetWide() - YRP.ctr(64 + 20), YRP.ctr(450) )
+		local nextpm = YRPCreateD( "YButton", pms, YRP.ctr(64), YRP.ctr(64), pms:GetWide() - YRP.ctr(64 + 20), YRP.ctr(450) )
 		nextpm:SetText( "" )
 		function nextpm:Paint(pw, ph)
 			if pms.id + 1 <= table.Count(pms.models) then
@@ -174,7 +174,7 @@ function CreateRolePreviewContent()
 			end
 		end
 
-		local prevpm = createD( "YButton", pms, YRP.ctr(64), YRP.ctr(64), YRP.ctr(20), YRP.ctr(450) )
+		local prevpm = YRPCreateD( "YButton", pms, YRP.ctr(64), YRP.ctr(64), YRP.ctr(20), YRP.ctr(450) )
 		prevpm:SetText( "" )
 		function prevpm:Paint(pw, ph)
 			if pms.id - 1 > 0 then
@@ -198,17 +198,17 @@ function CreateRolePreviewContent()
 
 
 		-- RIGHT
-		local swepsheader = createD( "YLabel", win, ew, YRP.ctr(hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(20 + hh + 20) )
+		local swepsheader = YRPCreateD( "YLabel", win, ew, YRP.ctr(hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(20 + hh + 20) )
 		swepsheader:SetText( "LID_equipment" )
 
-		local swepsbg = createD( "YPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20 + hh + 20 + 20 + hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh) )
+		local swepsbg = YRPCreateD( "YPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20 + hh + 20 + 20 + hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh) )
 		function swepsbg:Paint(pw, ph)
 			hook.Run( "YTextFieldPaint", self, pw, ph)
 
 			draw.SimpleText(GetSWEPPrintName(LocalPlayer().preview_swep or "NO SWEPS" ), "Y_18_500", pw / 2, YRP.ctr(50), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
-		local sweps = createD( "DModelPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20 + hh + 20 + 20 + hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh) )
+		local sweps = YRPCreateD( "DModelPanel", win, ew, nh - YRP.ctr(20 + hh + 20 + hh + 20 + hh + 20 + 20 + hh), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(20 + hh + 20 + hh) )
 		sweps.models = string.Explode( ",", rol.string_sweps)
 		sweps.id = 1
 		sweps:SetCamPos( Vector( 50, 0, 0 ) )
@@ -245,7 +245,7 @@ function CreateRolePreviewContent()
 			LocalPlayer().preview_swep = sweps.models[1]
 		end
 
-		local nextpm = createD( "YButton", sweps, YRP.ctr(64), YRP.ctr(64), sweps:GetWide() - YRP.ctr(64 + 20), YRP.ctr(450) )
+		local nextpm = YRPCreateD( "YButton", sweps, YRP.ctr(64), YRP.ctr(64), sweps:GetWide() - YRP.ctr(64 + 20), YRP.ctr(450) )
 		nextpm:SetText( "" )
 		function nextpm:Paint(pw, ph)
 			if sweps.id + 1 <= table.Count(sweps.models) then
@@ -266,7 +266,7 @@ function CreateRolePreviewContent()
 			end
 		end
 
-		local prevpm = createD( "YButton", sweps, YRP.ctr(64), YRP.ctr(64), YRP.ctr(20), YRP.ctr(450) )
+		local prevpm = YRPCreateD( "YButton", sweps, YRP.ctr(64), YRP.ctr(64), YRP.ctr(20), YRP.ctr(450) )
 		prevpm:SetText( "" )
 		function prevpm:Paint(pw, ph)
 			if sweps.id - 1 > 0 then
@@ -288,7 +288,7 @@ function CreateRolePreviewContent()
 		end
 
 		if GetGlobalYRPBool( "bool_players_can_switch_role", false) or LocalPlayer().cc then
-			local getrole = createD( "YButton", win, ew, YRP.ctr(hh), nw - ew - YRP.ctr(20), nh - 2 * YRP.ctr(hh + 20) )
+			local getrole = YRPCreateD( "YButton", win, ew, YRP.ctr(hh), nw - ew - YRP.ctr(20), nh - 2 * YRP.ctr(hh + 20) )
 			getrole:SetText( "LID_getrole" )
 			function getrole:DoClick()
 				if LocalPlayer().cc then
@@ -308,7 +308,7 @@ function CreateRolePreviewContent()
 			end
 		end
 
-		local back = createD( "YButton", win, ew, YRP.ctr(hh), nw - ew - YRP.ctr(20), nh - YRP.ctr(hh + 20) )
+		local back = YRPCreateD( "YButton", win, ew, YRP.ctr(hh), nw - ew - YRP.ctr(20), nh - YRP.ctr(hh + 20) )
 		back:SetText( "LID_back" )
 		function back:Paint(pw, ph)
 			if LocalPlayer().rolepreview then
@@ -370,7 +370,7 @@ function CreateRoleSelectionContent(PARENT)
 	end
 
 	
-	local site = createD( "DPanel", parent, ScrW(), ScrH(), 0, 0)
+	local site = YRPCreateD( "DPanel", parent, ScrW(), ScrH(), 0, 0)
 	function site:Paint(pw, ph)
 		if !LocalPlayer().cc then
 			if self:GetWide() != parent:GetWide() then
@@ -381,7 +381,7 @@ function CreateRoleSelectionContent(PARENT)
 		end
 	end
 
-	local win = createD( "DPanel", site, SW, SH, 0, 0)
+	local win = YRPCreateD( "DPanel", site, SW, SH, 0, 0)
 	function win:Paint(pw, ph)
 		draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "BG" ) )
 
@@ -395,7 +395,7 @@ function CreateRoleSelectionContent(PARENT)
 	menu = win
 
 	-- List of Groups
-	local list = createD( "DPanelList", win, win:GetWide() - YRP.ctr(2 * config.br), win:GetTall() - YRP.ctr(2 * config.br), YRP.ctr( config.br), YRP.ctr( config.br) )
+	local list = YRPCreateD( "DPanelList", win, win:GetWide() - YRP.ctr(2 * config.br), win:GetTall() - YRP.ctr(2 * config.br), YRP.ctr( config.br), YRP.ctr( config.br) )
 	list:EnableVerticalScrollbar()
 	list:SetSpacing(YRP.ctr( config.br) )
 	function list:Paint(pw, ph)
@@ -425,7 +425,7 @@ function CreateRoleSelectionContent(PARENT)
 
 
 	if LocalPlayer().cc then -- for Character Creation
-		local header = createD( "DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200) )
+		local header = YRPCreateD( "DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200) )
 		function header:Paint(pw, ph)
 			draw.SimpleText(YRP.lang_string( "LID_chooseyourrole" ), "Y_36_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
@@ -434,7 +434,7 @@ function CreateRoleSelectionContent(PARENT)
 		btn.w = 500
 		btn.h = 75
 
-		local back = createD( "YButton", site, YRP.ctr( btn.w), YRP.ctr( btn.h), site:GetWide() / 2 - YRP.ctr( btn.w) / 2, ScH() - YRP.ctr(200) )
+		local back = YRPCreateD( "YButton", site, YRP.ctr( btn.w), YRP.ctr( btn.h), site:GetWide() / 2 - YRP.ctr( btn.w) / 2, ScH() - YRP.ctr(200) )
 		back:SetText( "LID_back" )
 		function back:Paint(pw, ph)
 			hook.Run( "YButtonRPaint", self, pw, ph)
@@ -478,7 +478,7 @@ function CreateRoleSelectionContent(PARENT)
 				
 				if pa(list) then
 					-- Category Group
-					local group = createD( "YCollapsibleCategory", list, w, h, 0, 0)
+					local group = YRPCreateD( "YCollapsibleCategory", list, w, h, 0, 0)
 					group:SetS(w, h)
 					group:SetHeader(grp.string_name)
 					group:SetIcon(grp.string_icon)
@@ -495,7 +495,7 @@ function CreateRoleSelectionContent(PARENT)
 					end
 
 					if !LocalPlayer().cc and GetGlobalYRPBool( "bool_players_can_switch_faction", false) and factioncount > 1 then
-						local changefaction = createD( "YButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 20), YRP.ctr(20) )
+						local changefaction = YRPCreateD( "YButton", group, YRP.ctr(500), group:GetTall() - 2 * YRP.ctr(20), group:GetWide() - YRP.ctr(500 + 20), YRP.ctr(20) )
 						changefaction:SetText( "LID_changefaction" )
 						function changefaction:Think()
 							local px, py = self:GetPos()

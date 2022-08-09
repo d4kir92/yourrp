@@ -3,7 +3,7 @@
 local leftedPlys = {}
 function GM:PlayerDisconnected(ply)
 	YRP.msg( "gm", "[PlayerDisconnected] " .. ply:YRPName() )
-	save_clients( "PlayerDisconnected" )
+	YRPSaveClients( "PlayerDisconnected" )
 
 	YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID() .. "', '" .. "disconnected" .. "'" )
 
@@ -11,38 +11,18 @@ function GM:PlayerDisconnected(ply)
 	if wk(_rol_tab) then
 		if tonumber(_rol_tab.int_maxamount) > 0 then
 			ply:SetYRPString( "roleUniqueID", "1" )
-			updateRoleUses(_rol_tab.uniqueID)
+			YRPUpdateRoleUses(_rol_tab.uniqueID)
 		end
 	end
 
-	if YRPRemoveBuildingOwner() then
-		local entry = {}
-		entry.SteamID = ply:YRPSteamID()
-		entry.timestamp = CurTime()
-		table.insert(leftedPlys, entry)
-		timer.Simple(YRPRemoveBuildingOwnerTime(), function()
-			local found = false
-			for i, e in pairs(leftedPlys) do
-				for j, p in pairs(player.GetAll() ) do
-					if p:YRPSteamID() == e.SteamID then
-						found = true
-					end
-				end
-				if !found then
-					BuildingRemoveOwner(e.SteamID)
-				end
-				table.RemoveByValue(leftedPlys, e)
-			end
-		end)
-	end
+	YRPSetTSLastOnline( ply:YRPSteamID() )
 
 	-- Remove all items belong to the player
-	for i, ent in pairs(ents.GetAll() ) do
-		if ent.PermaProps or ent.PermaPropID then -- if perma propped => ignore
+	for i, ent in pairs( ents.GetAll() ) do
+		if ent and ( ent.PermaProps or ent.PermaPropID ) then -- if perma propped => ignore
 			continue
 		end
-
-		if ent:GetOwner() == ply or ent:GetRPOwner() == ply then
+		if ent and ( ent:GetOwner() == ply or ent:GetRPOwner() == ply ) then
 			ent:Remove()
 		end
 	end
@@ -58,7 +38,7 @@ function GM:PlayerInitialSpawn(ply)
 
 	if ply:IsBot() then
 		local steamid = ply:YRPSteamID()
-		check_yrp_client( ply, steamid )
+		YRPCheckClient( ply, steamid )
 
 		ply:SetYRPBool( "finishedloadingcharacter", true )
 
@@ -173,7 +153,7 @@ hook.Add( "PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 	ply:SetYRPBool( "yrp_characterselection", true )
 
 	ply:resetUptimeCurrent()
-	check_yrp_client(ply, steamid or uniqueID)
+	YRPCheckClient(ply, steamid or uniqueID)
 
 	if IsValid(ply) and ply.KillSilent then
 		ply:OldKillSilent()
@@ -263,8 +243,19 @@ function YRPResetBodyGroups( ply )
 	YRPSetBodyGroups( ply )
 end
 
+function YRPPlyUpdateStorage( ply )
+	if IsValid( ply ) then
+		local chaTab = ply:YRPGetCharacterTable()
+		if wk( chaTab ) then
+			if not IsVoidCharEnabled() then
+				ply:SetYRPString( "storage", chaTab.storage )
+			end
+		end
+	end
+end
+
 function YRPPlayerLoadout( ply )
-	if ply:IsValid() then
+	if IsValid( ply ) then
 		YRP.msg( "note", "[PlayerLoadout] for " .. ply:YRPName() )
 
 		ply:SetYRPString( "licenseIDs1", "" )
@@ -292,7 +283,7 @@ function YRPPlayerLoadout( ply )
 				
 				local _rol_tab = ply:YRPGetRoleTable()
 				if wk(_rol_tab) then
-					SetRole(ply, _rol_tab.uniqueID)
+					YRPSetRole(ply, _rol_tab.uniqueID)
 					setPlayerModel( ply )
 				else
 					YRP.msg( "note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab) )
@@ -318,6 +309,8 @@ function YRPPlayerLoadout( ply )
 						for i, v in pairs(string.Explode( "\n", chaTab.rpdescription) ) do
 							ply:SetYRPString( "rpdescription" .. i, v)
 						end
+
+						YRPPlyUpdateStorage( ply )
 
 						YRPSetBodyGroups(ply)
 					end
@@ -655,7 +648,7 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attac
 
 	local roleondeathuid = ply:GetRoleOnDeathRoleUID()
 	if roleondeathuid > 0 then
-		SetRole(ply, roleondeathuid, false)
+		YRPSetRole(ply, roleondeathuid, false)
 	end
 
 	if IsDropItemsOnDeathEnabled() then
@@ -694,15 +687,30 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attac
 	end
 end)
 
+local function YRPDeathKeys( pl )
+	return ( pl:KeyPressed( IN_ATTACK ) || pl:KeyPressed( IN_ATTACK2 ) || pl:KeyPressed( IN_JUMP ) )
+end
+
 function GM:PlayerDeathThink( pl )
+	pl.deadts = pl.deadts or 0
 
 	if ( pl:GetYRPInt( "int_deathtimestamp_max", 0) > CurTime() ) then
+		if GetGlobalYRPBool( "bool_deathscreen", false ) == false and YRPDeathKeys( pl ) then
+			if pl.deadts < CurTime() then
+				pl.deadts = CurTime() + 0.3
+				pl:PrintMessage( HUD_PRINTCENTER, string.format( YRP.lang_string( "LID_youreunconsious" ) ..". (%0.1f".. "s)", pl:GetYRPInt( "int_deathtimestamp_max", 0) - CurTime() ) )
+			end
+		end
 		return false
 	end
-
-	if ( pl:KeyPressed( IN_ATTACK ) || pl:KeyPressed( IN_ATTACK2 ) || pl:KeyPressed( IN_JUMP ) ) then
+	
+	if YRPDeathKeys( pl ) then
 
 		if pl:IsBot() then
+			pl:Spawn()
+		end
+
+		if GetGlobalYRPBool( "bool_deathscreen", false ) == false then
 			pl:Spawn()
 		end
 
@@ -711,7 +719,7 @@ function GM:PlayerDeathThink( pl )
 end
 
 function GM:ShutDown()
-	save_clients( "Shutdown/Changelevel" )
+	YRPSaveClients( "Shutdown/Changelevel" )
 	--SaveStorages( "Shutdown/Changelevel" )
 end
 
@@ -1248,23 +1256,25 @@ net.Receive( "channel_up", function(len, ply)
 	local uid = net.ReadString()
 	uid = tonumber(uid)
 
-	local int_position = GetGlobalYRPTable( "yrp_voice_channels", {})[uid].int_position
+	if GetGlobalYRPTable( "yrp_voice_channels", {}) then
+		local int_position = GetGlobalYRPTable( "yrp_voice_channels", {})[uid].int_position
 
-	local c = 0
-	for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable( "yrp_voice_channels", {}), "int_position" ) do
-		channel.int_position = tonumber( channel.int_position)
-		if c == int_position then
-			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c - 1}, "uniqueID = '" .. channel.uniqueID .. "'" )
-		elseif c == int_position - 1 then
-			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c + 1}, "uniqueID = '" .. channel.uniqueID .. "'" )
-		elseif channel.int_position != c then
-			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'" )
+		local c = 0
+		for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable( "yrp_voice_channels", {}), "int_position" ) do
+			channel.int_position = tonumber( channel.int_position)
+			if c == int_position then
+				YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c - 1}, "uniqueID = '" .. channel.uniqueID .. "'" )
+			elseif c == int_position - 1 then
+				YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c + 1}, "uniqueID = '" .. channel.uniqueID .. "'" )
+			elseif channel.int_position != c then
+				YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'" )
+			end
+
+			c = c + 1
 		end
 
-		c = c + 1
+		GenerateVoiceTable()
 	end
-
-	GenerateVoiceTable()
 
 	timer.Simple(0.1, function()
 		net.Start( "channel_up" )
@@ -1277,23 +1287,25 @@ net.Receive( "channel_dn", function(len, ply)
 	local uid = net.ReadString()
 	uid = tonumber(uid)
 
-	local int_position = GetGlobalYRPTable( "yrp_voice_channels", {})[uid].int_position
+	if (GetGlobalYRPTable( "yrp_voice_channels", {})) then
+		local int_position = GetGlobalYRPTable( "yrp_voice_channels", {})[uid].int_position
 
-	local c = 0
-	for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable( "yrp_voice_channels", {}), "int_position" ) do
-		channel.int_position = tonumber( channel.int_position)
-		if c == int_position then
-			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c + 1}, "uniqueID = '" .. channel.uniqueID .. "'" )
-		elseif c == int_position + 1 then
-			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c - 1}, "uniqueID = '" .. channel.uniqueID .. "'" )
-		elseif channel.int_position != c then
-			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'" )
+		local c = 0
+		for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable( "yrp_voice_channels", {}), "int_position" ) do
+			channel.int_position = tonumber( channel.int_position)
+			if c == int_position then
+				YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c + 1}, "uniqueID = '" .. channel.uniqueID .. "'" )
+			elseif c == int_position + 1 then
+				YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c - 1}, "uniqueID = '" .. channel.uniqueID .. "'" )
+			elseif channel.int_position != c then
+				YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = c}, "uniqueID = '" .. channel.uniqueID .. "'" )
+			end
+
+			c = c + 1
 		end
 
-		c = c + 1
+		GenerateVoiceTable()
 	end
-
-	GenerateVoiceTable()
 
 	timer.Simple(0.1, function()
 		net.Start( "channel_dn" )

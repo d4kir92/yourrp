@@ -1103,6 +1103,7 @@ end)
 local Entity = FindMetaTable( "Entity" )
 function Entity:YRPSetOwner(ply)
 	self:SetYRPEntity( "yrp_owner", ply)
+	--self:SetOwner(ply) -- Breaks Collision somehow
 end
 
 function Entity:YRPRemoveOwner()

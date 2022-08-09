@@ -37,20 +37,47 @@ SWEP.HoldType = "pistol"
 SWEP.ViewModelFOV = 90
 SWEP.ViewModelFlip = false
 SWEP.UseHands = true
-SWEP.ViewModel = "models/props/yrp_key.mdl"
-SWEP.WorldModel = "models/props/yrp_key.mdl"
+SWEP.ViewModel = ""--"models/props/yrp_key.mdl"
+SWEP.WorldModel = ""--"models/props/yrp_key.mdl"
 SWEP.ShowViewModel = true
 SWEP.ShowWorldModel = true
 SWEP.ViewModelBoneMods = {}
 SWEP.VElements = {
-	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "static_prop", rel = "", pos = Vector(8.831, 3.635, -2.597), angle = Angle(-90, -70, 0), size = Vector(0.5, 0.5, 0.5), color = Color( 255, 255, 255, 255 ), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	--["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "static_prop", rel = "", pos = Vector(8.831, 3.635, -2.597), angle = Angle(-90, -70, 0), size = Vector(0.5, 0.5, 0.5), color = Color( 255, 255, 255, 255 ), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }
 SWEP.WElements = {
-	["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.635, 1.557, -2), angle = Angle(90, -110, 0), size = Vector(1.21, 1.21, 1.21), color = Color( 255, 255, 255, 255 ), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	--["key"] = { type = "Model", model = "models/props/yrp_key.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.635, 1.557, -2), angle = Angle(90, -110, 0), size = Vector(1.21, 1.21, 1.21), color = Color( 255, 255, 255, 255 ), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }
 
-function SWEP:Reload()
+if CLIENT then
+	net.Receive( "yrp_door_anim", function( self, len )
+		local ply = net.ReadEntity()
+		local msg = net.ReadString()
 
+		if msg == "lock" then
+			ply:AnimRestartGesture( GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE, true )
+		elseif msg == "unlock" then
+			ply:AnimRestartGesture( GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE, true )
+		elseif msg == "knock" then
+			ply:AnimRestartGesture( GESTURE_SLOT_CUSTOM, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true )
+        end
+	end )
+end
+
+function SWEP:Reload()
+	if SERVER then
+		local owner = self:GetOwner()
+		owner.ts = owner.ts or CurTime()
+		if ea( owner ) and owner.ts + 0.5 < CurTime() then
+			owner.ts = CurTime()
+			owner:EmitSound( "physics/wood/wood_crate_impact_hard" .. math.random(1, 5) ..".wav", 100, math.random( 90, 110 ) )
+
+			net.Start( "yrp_door_anim" )
+				net.WriteEntity( owner )
+				net.WriteString( "knock" )
+			net.Broadcast()
+		end
+	end
 end
 
 function SWEP:Think()
@@ -67,14 +94,20 @@ function SWEP:PrimaryAttack()
 		local ent = self:GetOwner():GetEyeTrace().Entity
 		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos() ) < GetGlobalYRPInt( "int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
-				if YRPUnYRPLockDoor(self:GetOwner(), ent, ent:GetYRPString( "buildingID", "Failed" ) ) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_unlockeddoor" ) )
+				if YRPLockDoor(self:GetOwner(), ent, ent:GetYRPString( "buildingID", "Failed" ) ) then
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_lockeddoor" ) )
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_youdonthaveakey" ) )
 				end
-			elseif ent:GetYRPInt( "item_uniqueID", 0) != 0 then
-				if unlockVehicle(self:GetOwner(), ent, ent:GetYRPInt( "item_uniqueID", 0) ) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_unlockedvehicle" ) )
+			elseif ent:IsVehicle() and ent:GetYRPInt( "item_uniqueID", 0) != 0 then
+				if YRPLockVehicle(self:GetOwner(), ent, ent:GetYRPInt( "item_uniqueID", 0) ) then
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_lockedvehicle" ) )
+				else
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_youdonthaveakey" ) )
+				end
+			else
+				if YRPLockVehicle(self:GetOwner(), ent, ent:GetYRPInt( "item_uniqueID", 0) ) then
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_lockedvehicle" ) )
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_youdonthaveakey" ) )
 				end
@@ -86,16 +119,22 @@ end
 function SWEP:SecondaryAttack()
 	if SERVER and self:GetOwner() and self:GetOwner():IsValid() then
 		local ent = self:GetOwner():GetEyeTrace().Entity
-		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos() ) < GetGlobalYRPInt( "int_door_distance", 200) then
+		if ea( ent ) and ent:GetPos():Distance( self:GetOwner():GetPos() ) < GetGlobalYRPInt( "int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
-				if YRPLockDoor(self:GetOwner(), ent, ent:GetYRPString( "buildingID", "Failed" ) ) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_lockeddoor" ) )
+				if YRPUnlockDoor(self:GetOwner(), ent, ent:GetYRPString( "buildingID", "Failed" ) ) then
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_unlockeddoor" ) )
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_youdonthaveakey" ) )
 				end
-			elseif ent:IsVehicle() and ent:GetYRPInt( "item_uniqueID", 0) != 0 then
-				if lockVehicle(self:GetOwner(), ent, ent:GetYRPInt( "item_uniqueID", 0) ) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_lockedvehicle" ) )
+			elseif ent:GetYRPInt( "item_uniqueID", 0) != 0 then
+				if YRPUnlockVehicle(self:GetOwner(), ent, ent:GetYRPInt( "item_uniqueID", 0) ) then
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_unlockedvehicle" ) )
+				else
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_youdonthaveakey" ) )
+				end
+			else
+				if YRPUnlockVehicle(self:GetOwner(), ent, ent:GetYRPInt( "item_uniqueID", 0) ) then
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_unlockedvehicle" ) )
 				else
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_youdonthaveakey" ) )
 				end

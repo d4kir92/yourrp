@@ -47,9 +47,9 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		PARENT.ug:Remove()
 	end
 
-	PARENT.ug = createD( "DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(20 + SW + 20), PARENT:GetTall(), YRP.ctr(20 + SW), YRP.ctr(0) )
+	PARENT.ug = YRPCreateD( "DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(20 + SW + 20), PARENT:GetTall(), YRP.ctr(20 + SW), YRP.ctr(0) )
 
-	PARENT.ugp = createD( "DPanel", PARENT, YRP.ctr( (w + 10) * 4), PARENT:GetTall(), 0, 0)
+	PARENT.ugp = YRPCreateD( "DPanel", PARENT, YRP.ctr( (w + 10) * 4), PARENT:GetTall(), 0, 0)
 	function PARENT.ugp:Paint(pw, ph)
 		--surfaceBox(0, 0, pw, ph, Color( 255, 100, 100, 100) )
 	end
@@ -58,7 +58,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	PARENT = PARENT.ugp
 	
 	-- NAME
-	local NAME = createD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20) )
+	local NAME = YRPCreateD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20) )
 	NAME.strname = true
 	NAME:INITPanel( "DTextEntry" )
 	NAME:SetHeader(YRP.lang_string( "LID_name" ) )
@@ -84,7 +84,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	end
 
 	-- DISPLAYNAME
-	local DISPLAYNAME = createD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20) )
+	local DISPLAYNAME = YRPCreateD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20) )
 	DISPLAYNAME.displayname = true
 	DISPLAYNAME:INITPanel( "DTextEntry" )
 	DISPLAYNAME:SetHeader(YRP.lang_string( "LID_displayname" ) )
@@ -105,7 +105,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	end)
 
 	-- COLOR
-	local COLOR = createD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20) )
+	local COLOR = YRPCreateD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20) )
 	COLOR:INITPanel( "YButton" )
 	COLOR:SetHeader(YRP.lang_string( "LID_color" ) )
 	COLOR.plus:SetText( "LID_change" )
@@ -115,7 +115,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		end
 	end
 	function COLOR.plus:DoClick()
-		local window = createD( "DFrame", nil, YRP.ctr(20 + 500 + 20), YRP.ctr(50 + 20 + 500 + 20), 0, 0)
+		local window = YRPCreateD( "DFrame", nil, YRP.ctr(20 + 500 + 20), YRP.ctr(50 + 20 + 500 + 20), 0, 0)
 		window:Center()
 		window:MakePopup()
 		window:SetTitle( "" )
@@ -125,7 +125,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 				self:Remove()
 			end
 		end
-		window.cm = createD( "DColorMixer", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20) )
+		window.cm = YRPCreateD( "DColorMixer", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20) )
 		function window.cm:ValueChanged( col)
 			UGS[CURRENT_USERGROUP].string_color = YRPTableToColorStr( col)
 			net.Start( "usergroup_update_string_color" )
@@ -142,7 +142,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	end)
 
 	-- ICON
-	UGS[CURRENT_USERGROUP].ICON = createD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20) )
+	UGS[CURRENT_USERGROUP].ICON = YRPCreateD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20) )
 	local ICON = UGS[CURRENT_USERGROUP].ICON
 	ICON:INITPanel( "DTextEntry" )
 	ICON:SetHeader(YRP.lang_string( "LID_icon" ) )
@@ -183,7 +183,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	end
 	ug.string_sweps = tmp
 
-	local SWEPS = createD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 100 + 20) )
+	local SWEPS = YRPCreateD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 100 + 20) )
 	SWEPS:INITPanel( "DPanel" )
 	SWEPS:SetHeader(YRP.lang_string( "LID_weapons" ) )
 	SWEPS:SetText(ug.string_icon)
@@ -191,7 +191,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255) )
 	end
 
-	SWEPS.preview = createD( "DModelPanel", SWEPS, YRP.ctr(w), YRP.ctr(500), YRP.ctr(0), YRP.ctr(50) )
+	SWEPS.preview = YRPCreateD( "DModelPanel", SWEPS, YRP.ctr(w), YRP.ctr(500), YRP.ctr(0), YRP.ctr(50) )
 	if ug.string_sweps[1] != nil then
 		SWEPS.preview:SetModel(GetSWEPWorldModel(ug.string_sweps[1]) )
 		SWEPS.preview.cur = 1
@@ -237,7 +237,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		end
 	end
 
-	SWEPS.preview.prev = createD( "YButton", SWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(500 - 50) / 2)
+	SWEPS.preview.prev = YRPCreateD( "YButton", SWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(500 - 50) / 2)
 	SWEPS.preview.prev:SetText( "" )
 	function SWEPS.preview.prev:Paint(pw, ph)
 		if SWEPS.preview.cur > 1 then
@@ -250,7 +250,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		end
 	end
 
-	SWEPS.preview.next = createD( "YButton", SWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(w - 50), YRP.ctr(500 - 50) / 2)
+	SWEPS.preview.next = YRPCreateD( "YButton", SWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(w - 50), YRP.ctr(500 - 50) / 2)
 	SWEPS.preview.next:SetText( "" )
 	function SWEPS.preview.next:Paint(pw, ph)
 		if SWEPS.preview.cur < SWEPS.preview.max then
@@ -267,7 +267,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		UGS[CURRENT_USERGROUP].string_sweps = string.Explode( ",", UGS[CURRENT_USERGROUP].string_sweps)
 	end
 
-	SWEPS.button = createD( "YButton", SWEPS, YRP.ctr(w), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50 + 500) )
+	SWEPS.button = YRPCreateD( "YButton", SWEPS, YRP.ctr(w), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50 + 500) )
 	SWEPS.button:SetText( "LID_change" )
 	function SWEPS.button:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)--surfaceButton(self, pw, ph, YRP.lang_string( "LID_change" ) )
@@ -359,7 +359,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	end
 	ug.string_nonesweps = tmp
 
-	local NONESWEPS = createD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 500 + 50 + 50 + 20 + 100 + 20) )
+	local NONESWEPS = YRPCreateD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 500 + 50 + 50 + 20 + 100 + 20) )
 	NONESWEPS:INITPanel( "DPanel" )
 	NONESWEPS:SetHeader(YRP.lang_string( "LID_ndsweps" ) )
 	NONESWEPS:SetText(ug.string_icon)
@@ -367,7 +367,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		surfaceBox(0, 0, pw, ph, Color(80, 80, 80, 255) )
 	end
 
-	NONESWEPS.preview = createD( "DModelPanel", NONESWEPS, YRP.ctr(w), YRP.ctr(500), YRP.ctr(0), YRP.ctr(50) )
+	NONESWEPS.preview = YRPCreateD( "DModelPanel", NONESWEPS, YRP.ctr(w), YRP.ctr(500), YRP.ctr(0), YRP.ctr(50) )
 	if ug.string_nonesweps[1] != nil then
 		NONESWEPS.preview:SetModel(GetSWEPWorldModel(ug.string_nonesweps[1]) )
 		NONESWEPS.preview.cur = 1
@@ -413,7 +413,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		end
 	end
 
-	NONESWEPS.preview.prev = createD( "YButton", NONESWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(500 - 50) / 2)
+	NONESWEPS.preview.prev = YRPCreateD( "YButton", NONESWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(500 - 50) / 2)
 	NONESWEPS.preview.prev:SetText( "" )
 	function NONESWEPS.preview.prev:Paint(pw, ph)
 		if NONESWEPS.preview.cur > 1 then
@@ -426,7 +426,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		end
 	end
 
-	NONESWEPS.preview.next = createD( "YButton", NONESWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(w - 50), YRP.ctr(500 - 50) / 2)
+	NONESWEPS.preview.next = YRPCreateD( "YButton", NONESWEPS.preview, YRP.ctr(50), YRP.ctr(50), YRP.ctr(w - 50), YRP.ctr(500 - 50) / 2)
 	NONESWEPS.preview.next:SetText( "" )
 	function NONESWEPS.preview.next:Paint(pw, ph)
 		if NONESWEPS.preview.cur < NONESWEPS.preview.max then
@@ -439,7 +439,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		end
 	end
 
-	NONESWEPS.button = createD( "YButton", NONESWEPS, YRP.ctr(w), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50 + 500) )
+	NONESWEPS.button = YRPCreateD( "YButton", NONESWEPS, YRP.ctr(w), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50 + 500) )
 	NONESWEPS.button:SetText( "LID_change" )
 	function NONESWEPS.button:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)--surfaceButton(self, pw, ph, YRP.lang_string( "LID_change" ) )
@@ -522,7 +522,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 
 	-- Licenses
 	y = 20
-	local LICENSES = createD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(y) )
+	local LICENSES = YRPCreateD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(y) )
 	LICENSES:INITPanel( "DPanelList" )
 	LICENSES:SetHeader(YRP.lang_string( "LID_licenses" ) )
 	LICENSES:SetText(ug.string_icon)
@@ -542,12 +542,12 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		local licenses = net.ReadTable()
 
 		for i, lic in pairs(licenses) do
-			local line = createD( "DPanel", nil, 10, YRP.ctr(50), 0, 0)
+			local line = YRPCreateD( "DPanel", nil, 10, YRP.ctr(50), 0, 0)
 			function line:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55) )
 				draw.SimpleText(lic.name, "Y_14_500", ph + YRP.ctr(10), ph / 2, Color( 255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
-			local cb = createD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+			local cb = YRPCreateD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
 			if type(UGS[CURRENT_USERGROUP].string_licenses) == "string" then
 				UGS[CURRENT_USERGROUP].string_licenses = string.Explode( ",", UGS[CURRENT_USERGROUP].string_licenses)
 			end
@@ -586,7 +586,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	-- YTools
 	if tonumber( ug.bool_removeable ) == 1 then
 		y = y + 550 + 20
-		local YTOOLS = createD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(y) )
+		local YTOOLS = YRPCreateD( "DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(y) )
 		YTOOLS:INITPanel( "DPanelList" )
 		YTOOLS:SetHeader(YRP.lang_string( "LID_tools" ) )
 		YTOOLS:SetText(ug.string_icon)
@@ -602,12 +602,12 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 			table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, "" )
 		end
 
-		local line = createD( "DPanel", nil, 10, YRP.ctr(50), 0, 0)
+		local line = YRPCreateD( "DPanel", nil, 10, YRP.ctr(50), 0, 0)
 		function line:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55) )
 			draw.SimpleText( "all", "Y_14_500", ph + YRP.ctr(10), ph / 2, Color( 255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
-		local cb = createD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+		local cb = YRPCreateD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
 		if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, "all" ) then
 			cb:SetChecked(true)
 		end
@@ -638,12 +638,12 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 				for k, too in pairs( cat2) do
 					if type(too) == "table" then
 						too.ItemName = string.lower(too.ItemName)
-						local line = createD( "DPanel", nil, 10, YRP.ctr(50), 0, 0)
+						local line = YRPCreateD( "DPanel", nil, 10, YRP.ctr(50), 0, 0)
 						function line:Paint(pw, ph)
 							draw.RoundedBox( 0, 0, 0, pw, ph, Color(55, 55, 55) )
 							draw.SimpleText( language.GetPhrase( too.Text ), "Y_14_500", ph + YRP.ctr(10), ph / 2, Color( 255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 						end
-						local cb = createD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+						local cb = YRPCreateD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
 						if type(UGS[CURRENT_USERGROUP].string_tools) == "string" then
 							UGS[CURRENT_USERGROUP].string_tools = string.Explode( ",", UGS[CURRENT_USERGROUP].string_tools)
 						end
@@ -684,12 +684,12 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 			"persist"
 		}
 		for i, v in pairs(properties) do
-			local line = createD( "DPanel", nil, 10, YRP.ctr(50), 0, 0)
+			local line = YRPCreateD( "DPanel", nil, 10, YRP.ctr(50), 0, 0)
 			function line:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55) )
 				draw.SimpleText( v, "Y_14_500", ph + YRP.ctr(10), ph / 2, Color( 255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
-			local cb = createD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+			local cb = YRPCreateD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
 			if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, v) then
 				cb:SetChecked(true)
 			end
@@ -716,15 +716,15 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 
 	-- Ammunation
 	y = y + 550 + 20
-	local ammobg = createD( "YPanel", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(y) )
-	local ammoheader = createD( "YLabel", ammobg, YRP.ctr(w), YRP.ctr(50), 0, 0)
+	local ammobg = YRPCreateD( "YPanel", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(y) )
+	local ammoheader = YRPCreateD( "YLabel", ammobg, YRP.ctr(w), YRP.ctr(50), 0, 0)
 	ammoheader:SetText( "LID_ammo" )
 	function ammoheader:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 		draw.SimpleText(YRP.lang_string(self:GetText() ), "Y_18_700", pw / 2, ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	ammolist = createD( "DPanelList", ammobg, YRP.ctr(w), YRP.ctr(500), 0, YRP.ctr(50) )
+	ammolist = YRPCreateD( "DPanelList", ammobg, YRP.ctr(w), YRP.ctr(500), 0, YRP.ctr(50) )
 	ammolist:SetSpacing(2)
 	ammolist:EnableVerticalScrollbar(true)
 	local sbar = ammolist.VBar
@@ -765,16 +765,16 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	end
 
 	for i, v in pairs(game.GetAmmoTypes() ) do
-		local abg = createD( "YPanel", nil, YRP.ctr(w), YRP.ctr(50), 0, 0)
+		local abg = YRPCreateD( "YPanel", nil, YRP.ctr(w), YRP.ctr(50), 0, 0)
 		
-		local ahe = createD( "YLabel", abg, YRP.ctr(w / 2), YRP.ctr(50), 0, 0)
+		local ahe = YRPCreateD( "YLabel", abg, YRP.ctr(w / 2), YRP.ctr(50), 0, 0)
 		ahe:SetText( v)
 		function ahe:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color( 100, 100, 255) )
 			draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
-		local ava = createD( "DNumberWang", abg, YRP.ctr(w / 2), YRP.ctr(50), YRP.ctr(w / 2), 0)
+		local ava = YRPCreateD( "DNumberWang", abg, YRP.ctr(w / 2), YRP.ctr(50), YRP.ctr(w / 2), 0)
 		ava:SetDecimals(0)
 		ava:SetMin(0)
 		ava:SetMax(999)
@@ -792,7 +792,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	x = x + w + 10
 
 	
-	local ACCESS = createD( "YGroupBox", PARENT, YRP.ctr(w), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(x), YRP.ctr(20) )
+	local ACCESS = YRPCreateD( "YGroupBox", PARENT, YRP.ctr(w), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(x), YRP.ctr(20) )
 	ACCESS:SetText( "LID_accesssettings" )
 	function ACCESS:Paint(pw, ph)
 		hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -800,11 +800,11 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	ACCESS:AutoSize(true)
 
 	function ACCESSAddCheckBox(name, lstr, color)
-		local tmp = createD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
+		local tmp = YRPCreateD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
 		function tmp:Paint(pw, ph)
 			surfacePanel(self, pw, ph, YRP.lang_string(lstr), color, YRP.ctr(50 + 10), nil, 0, 1)
 		end
-		tmp.cb = createD( "DCheckBox", tmp, YRP.ctr(50), YRP.ctr(50), 0, 0)
+		tmp.cb = YRPCreateD( "DCheckBox", tmp, YRP.ctr(50), YRP.ctr(50), 0, 0)
 		tmp.cb:SetValue(ug[name])
 		function tmp.cb:Paint(pw, ph)
 			surfaceCheckBox(self, pw, ph, "done" )
@@ -829,7 +829,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		ACCESS:AddItem(tmp)
 	end
 	function ACCESSAddHr()
-		local tmp = createD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
+		local tmp = YRPCreateD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
 		function tmp:Paint(pw, ph)
 			surfacePanel(self, pw, ph, "" )
 			surfaceBox(0, YRP.ctr(4), pw, YRP.ctr(4), Color( 0, 0, 0, 255 ) )
@@ -893,7 +893,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	x = x + w + 10
 
 
-	local GAMEPLAY = createD( "YGroupBox", PARENT, YRP.ctr(w), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(x), YRP.ctr(20) )
+	local GAMEPLAY = YRPCreateD( "YGroupBox", PARENT, YRP.ctr(w), ScrH() - YRP.ctr(100 + 10 + 10), YRP.ctr(x), YRP.ctr(20) )
 	GAMEPLAY:SetText( "LID_gameplayrestrictions" )
 	function GAMEPLAY:Paint(pw, ph)
 		hook.Run( "YGroupBoxPaint", self, pw, ph)
@@ -901,15 +901,15 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	GAMEPLAY:AutoSize(true)
 
 	function GAMEPLAYAddIntBox(name, lstr)
-		local tmp = createD( "DPanel", PARENT, GAMEPLAY:GetWide() - YRP.ctr(40), YRP.ctr(100), 0, 0)
+		local tmp = YRPCreateD( "DPanel", PARENT, GAMEPLAY:GetWide() - YRP.ctr(40), YRP.ctr(100), 0, 0)
 		function tmp:Paint(pw, ph)
 			--
 		end
 
-		tmp.lbl = createD( "YLabel", tmp, tmp:GetWide(), YRP.ctr(50), 0, 0)
+		tmp.lbl = YRPCreateD( "YLabel", tmp, tmp:GetWide(), YRP.ctr(50), 0, 0)
 		tmp.lbl:SetText(lstr)
 
-		tmp.cb = createD( "DNumberWang", tmp, tmp:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) )
+		tmp.cb = YRPCreateD( "DNumberWang", tmp, tmp:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) )
 		tmp.cb:SetValue(ug[name])
 		tmp.cb:SetMax(100)
 		tmp.cb:SetMin(1)
@@ -924,11 +924,11 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	end
 
 	function GAMEPLAYAddCheckBox(name, lstr)
-		local tmp = createD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
+		local tmp = YRPCreateD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
 		function tmp:Paint(pw, ph)
 			surfacePanel(self, pw, ph, YRP.lang_string(lstr), nil, YRP.ctr(50 + 10), nil, 0, 1)
 		end
-		tmp.cb = createD( "DCheckBox", tmp, YRP.ctr(50), YRP.ctr(50), 0, 0)
+		tmp.cb = YRPCreateD( "DCheckBox", tmp, YRP.ctr(50), YRP.ctr(50), 0, 0)
 		tmp.cb:SetValue(ug[name])
 		function tmp.cb:Paint(pw, ph)
 			surfaceCheckBox(self, pw, ph, "done" )
@@ -943,7 +943,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		GAMEPLAY:AddItem(tmp)
 	end
 	function GAMEPLAYAddHr()
-		local tmp = createD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
+		local tmp = YRPCreateD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
 		function tmp:Paint(pw, ph)
 			surfacePanel(self, pw, ph, "" )
 			surfaceBox(0, YRP.ctr(4), pw, YRP.ctr(4), Color( 0, 0, 0, 255 ) )
@@ -992,7 +992,7 @@ function YRPAddUG(tbl)
 
 	UGS[tonumber(tbl.uniqueID)] = tbl
 
-	DUGS[tonumber(tbl.uniqueID)] = createD( "YButton", PARENT.uglist, PARENT.uglist:GetWide(), YRP.ctr(100), 0, 0)
+	DUGS[tonumber(tbl.uniqueID)] = YRPCreateD( "YButton", PARENT.uglist, PARENT.uglist:GetWide(), YRP.ctr(100), 0, 0)
 	local _ug = DUGS[tonumber(tbl.uniqueID)]
 	_ug.uid = tonumber(tbl.uniqueID)
 	_ug:SetText( "" )
@@ -1029,7 +1029,7 @@ function YRPAddUG(tbl)
 	P.int_position = tonumber(tbl.int_position)
 	P.uniqueID = tonumber(tbl.uniqueID)
 
-	local UP = createD( "YButton", P, YRP.ctr(40), YRP.ctr(40), YRP.ctr(8), YRP.ctr(8) )
+	local UP = YRPCreateD( "YButton", P, YRP.ctr(40), YRP.ctr(40), YRP.ctr(8), YRP.ctr(8) )
 	UP:SetText( "" )
 	local up = UP
 	function up:Paint(pw, ph)
@@ -1051,7 +1051,7 @@ function YRPAddUG(tbl)
 		end
 	end
 
-	local DO = createD( "YButton", P, YRP.ctr(40), YRP.ctr(40), YRP.ctr(8), P:GetTall() - YRP.ctr(40 + 8) )
+	local DO = YRPCreateD( "YButton", P, YRP.ctr(40), YRP.ctr(40), YRP.ctr(8), P:GetTall() - YRP.ctr(40 + 8) )
 	DO:SetText( "" )
 	local dn = DO
 	function dn:Paint(pw, ph)
@@ -1074,7 +1074,7 @@ function YRPAddUG(tbl)
 	end
 
 	local HTMLCODE = GetHTMLImage(tbl.string_icon, _icon.size, _icon.size)
-	UGS[tonumber(tbl.uniqueID)].icon = createD( "DHTML", _ug, _icon.size, _icon.size, _icon.br + UP:GetWide() + _icon.br, _icon.br)
+	UGS[tonumber(tbl.uniqueID)].icon = YRPCreateD( "DHTML", _ug, _icon.size, _icon.size, _icon.br + UP:GetWide() + _icon.br, _icon.br)
 	local icon = UGS[tonumber(tbl.uniqueID)].icon
 	if strEmpty(HTMLCODE) then
 		icon:SetHTML( "" )
@@ -1085,7 +1085,7 @@ function YRPAddUG(tbl)
 
 	if !tobool(UGS[tonumber( tbl.uniqueID )].bool_removeable) then
 		local protsize = 24
-		UGS[tonumber( tbl.uniqueID )].iconprot = createD( "DPanel", _ug, protsize, protsize, 2, _ug:GetTall() / 2 - protsize / 2 )
+		UGS[tonumber( tbl.uniqueID )].iconprot = YRPCreateD( "DPanel", _ug, protsize, protsize, 2, _ug:GetTall() / 2 - protsize / 2 )
 		UGS[tonumber( tbl.uniqueID )].iconprot.Paint = function( self, pw, ph )
 			if YRP.GetDesignIcon( "security" ) then
 				surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
@@ -1221,7 +1221,7 @@ function YRPOpenSettingsUsergroups()
 		end
 
 		--[[ UserGroups Action Buttons ]]--
-		local _ug_add = createD( "YButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20) )
+		local _ug_add = YRPCreateD( "YButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20) )
 		_ug_add:SetText( "+" )
 		function _ug_add:Paint(pw, ph)
 			hook.Run( "YButtonAPaint", self, pw, ph) --surfaceButton(self, pw, ph, "+", Color( 0, 255, 0, 255) )
@@ -1231,7 +1231,7 @@ function YRPOpenSettingsUsergroups()
 			net.SendToServer()
 		end
 		
-		local _ug_rem = createD( "YButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20 + SW - 50), YRP.ctr(20) )
+		local _ug_rem = YRPCreateD( "YButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20 + SW - 50), YRP.ctr(20) )
 		_ug_rem:SetText( "-" )
 		function _ug_rem:Paint(pw, ph)
 			if wk(UGS[CURRENT_USERGROUP]) then
@@ -1250,7 +1250,7 @@ function YRPOpenSettingsUsergroups()
 						net.WriteString(CURRENT_USERGROUP)
 					net.SendToServer()
 				else
-					local win = createD( "YFrame", nil, 400, 120, 0, 0 )
+					local win = YRPCreateD( "YFrame", nil, 400, 120, 0, 0 )
 
 					if UGS[CURRENT_USERGROUP].string_name == "yrp_usergroups" then
 						win:SetTitle( "Backup Usergroup!" )
@@ -1263,14 +1263,14 @@ function YRPOpenSettingsUsergroups()
 			end
 		end
 
-		local _ugs_title = createD( "DPanel", PARENT, YRP.ctr(SW), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20 + 50 + 20) )
+		local _ugs_title = YRPCreateD( "DPanel", PARENT, YRP.ctr(SW), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20 + 50 + 20) )
 		function _ugs_title:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 			surfaceText(YRP.lang_string( "LID_usergroups" ), "Y_26_500", pw / 2, ph / 2, Color( 0, 0, 0, 255 ), 1, 1)
 		end
 
 		--[[ UserGroupsList ]]--
-		PARENT.uglist = createD( "DPanelList", PARENT, YRP.ctr(SW), PARENT:GetTall() - YRP.ctr(2 * 20 + 120), YRP.ctr(20), YRP.ctr(20 + 50 + 20 + 50) )
+		PARENT.uglist = YRPCreateD( "DPanelList", PARENT, YRP.ctr(SW), PARENT:GetTall() - YRP.ctr(2 * 20 + 120), YRP.ctr(20), YRP.ctr(20 + 50 + 20 + 50) )
 		function PARENT.uglist:Paint(pw, ph)
 			surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 		end

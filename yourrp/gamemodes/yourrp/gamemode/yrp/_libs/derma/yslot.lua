@@ -113,7 +113,7 @@ net.Receive( "yrp_item_store", function(len)
 
 	local slot = GetSlotPanel(slotID)
 	if pa(slot) then
-		local i = createD( "YItem", nil, YRPItemSize(), YRPItemSize(), 0, 0)
+		local i = YRPCreateD( "YItem", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 		i:SetItemID(item.uniqueID)
 		i:SetModel(item.text_worldmodel)
 		if item.isinv then

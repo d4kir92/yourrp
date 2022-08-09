@@ -60,6 +60,8 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "TEXT DEFAULT '0'" )
 
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_archived", "TEXT DEFAULT '0'" )
 
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "lids", "TEXT DEFAULT ''" )
+
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1" ) == nil then
 	local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "1" )
 end
@@ -72,6 +74,18 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slot_gadget", "TEXT DEFAULT ''" )
 
 -- Specs
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_specializations", "TEXT DEFAULT ''" )
+
+function YRPGetSteamIdByCharId( charId )
+	if charId then
+		local tab = YRP_SQL_SELECT( "yrp_characters", "uniqueID, SteamID", "uniqueID = '" .. charId .. "'" )
+		if tab and tab[1] then
+			tab = tab[1]
+
+			return tab.SteamID
+		end
+	end
+	return nil
+end
 
 function YRPUpdateCharSlot(ply, art, pri)
 	local tab = {}
@@ -1052,8 +1066,8 @@ net.Receive( "givelicense", function(len, ply)
 	if ply:HasAccess() then
 		local target = net.ReadEntity()
 		local uid = tonumber(net.ReadString() )
-		if uid and uid > 0 then
-			GiveLicense(target, uid)
+		if target and uid and uid > 0 then
+			GiveLicense( target, uid )
 		end
 	end
 end)
@@ -1140,8 +1154,8 @@ function YRPGetSpecData(ply)
 	return tab
 end
 
-function YRPGiveSpecs(ply)
-	local tab = YRPGetSpecData(ply)
+function YRPGiveSpecs( ply )
+	local tab = YRPGetSpecData( ply )
 
 	ply:SetYRPString( "spec_prefix", tab.prefix )
 	ply:SetYRPString( "spec_suffix", tab.suffix )

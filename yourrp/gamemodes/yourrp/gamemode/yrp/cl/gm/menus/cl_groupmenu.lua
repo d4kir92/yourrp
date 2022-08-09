@@ -16,7 +16,7 @@ function YRPToggleGroupMenu()
 		GMENU:Remove()
 	elseif YRPIsNoMenuOpen() then
 		openMenu()
-		GMENU = createD( "YFrame", nil, 600, 600, 0, 0 )
+		GMENU = YRPCreateD( "YFrame", nil, 600, 600, 0, 0 )
 		GMENU:SetTitle( string.format( "%s: %s", YRP.lang_string( "LID_group" ), LocalPlayer():GetGroupName() ) )
 		GMENU:Center()
 		GMENU:MakePopup()
@@ -25,30 +25,30 @@ function YRPToggleGroupMenu()
 
 
 		-- LEFT
-		GMENU.left = createD( "DPanel", GMENU, 200, 300, 0, 0 )
+		GMENU.left = YRPCreateD( "DPanel", GMENU, 200, 300, 0, 0 )
 		GMENU.left:Dock( FILL )
 		function GMENU.left:Paint( pw, ph )
 			--
 		end
 
 		if LocalPlayer():GetYRPBool( "isInstructor" ) then
-			GMENU.invite = createD( "YButton", GMENU.left, 36, 30, 0, 0 )
+			GMENU.invite = YRPCreateD( "YButton", GMENU.left, 36, 30, 0, 0 )
 			GMENU.invite:Dock( TOP )
 			GMENU.invite:SetText( "LID_invitetogroup" )
 			function GMENU.invite:DoClick()
-				local win = createD( "YFrame", nil, 400, 500, 0, 0 )
+				local win = YRPCreateD( "YFrame", nil, 400, 500, 0, 0 )
 				win:SetTitle( "LID_invitetogroup" )
 				win:Center()
 				win:MakePopup()
 				win:SetSizable( true )
 
-				win.listheader = createD( "YLabel", win, 36, 30, 0, 0 )
+				win.listheader = YRPCreateD( "YLabel", win, 36, 30, 0, 0 )
 				win.listheader:Dock( TOP )
 				win.listheader:DockMargin( 0, 5, 0, 0 )
 				win.listheader:SetText( "LID_players" )
 				win.listheader.rad = 0
 
-				win.list = createD( "DScrollPanel", win, 36, 30, 0, 0 )
+				win.list = YRPCreateD( "DScrollPanel", win, 36, 30, 0, 0 )
 				win.list:Dock( FILL )
 				function win.list:Paint( pw, ph )
 					draw.RoundedBox( 0, 0, 0, pw, ph, Color( 20, 20, 20 ) )
@@ -69,7 +69,7 @@ function YRPToggleGroupMenu()
 
 				for i, v in pairs( player.GetAll() ) do
 					if LocalPlayer():GetGroupUID() != v:GetGroupUID() then
-						local inv = createD( "YButton", win.list, 30, 30, 0, 0 )
+						local inv = YRPCreateD( "YButton", win.list, 30, 30, 0, 0 )
 						inv:Dock( TOP )
 						inv:SetText( v:RPName() )
 						function inv:DoClick()
@@ -84,7 +84,7 @@ function YRPToggleGroupMenu()
 			end
 		end
 
-		GMENU.listheader = createD( "YLabel", GMENU.left, 36, 30, 0, 0 )
+		GMENU.listheader = YRPCreateD( "YLabel", GMENU.left, 36, 30, 0, 0 )
 		GMENU.listheader:Dock( TOP )
 		if LocalPlayer():GetYRPBool( "isInstructor" ) then
 			GMENU.listheader:DockMargin( 0, 5, 0, 0 )
@@ -92,7 +92,7 @@ function YRPToggleGroupMenu()
 		GMENU.listheader:SetText( "LID_members" )
 		GMENU.listheader.rad = 0
 
-		GMENU.list = createD( "DScrollPanel", GMENU.left, 36, 30, 0, 0 )
+		GMENU.list = YRPCreateD( "DScrollPanel", GMENU.left, 36, 30, 0, 0 )
 		GMENU.list:Dock( FILL )
 		function GMENU.list:Paint( pw, ph )
 			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 20, 20, 20 ) )
@@ -114,31 +114,31 @@ function YRPToggleGroupMenu()
 
 
 		-- RIGHT
-		GMENU.right = createD( "DPanel", GMENU, 300, 300, 0, 0 )
+		GMENU.right = YRPCreateD( "DPanel", GMENU, 300, 300, 0, 0 )
 		GMENU.right:Dock( RIGHT )
 		GMENU.right:DockMargin( 5, 0, 0, 0 )
 		function GMENU.right:Paint( pw, ph )
 			--
 		end
 
-		GMENU.membername = createD( "YLabel", GMENU.right, 36, 30, 0, 0 )
+		GMENU.membername = YRPCreateD( "YLabel", GMENU.right, 36, 30, 0, 0 )
 		GMENU.membername:Dock( TOP )
 		GMENU.membername:SetText( "LID_member" )
 		GMENU.membername:Hide()
 
-		GMENU.memberstatus = createD( "YLabel", GMENU.right, 36, 30, 0, 0 )
+		GMENU.memberstatus = YRPCreateD( "YLabel", GMENU.right, 36, 30, 0, 0 )
 		GMENU.memberstatus:Dock( TOP )
 		GMENU.memberstatus:DockMargin( 0, 5, 0, 0 )
 		GMENU.memberstatus:SetText( "LID_status" )
 		GMENU.memberstatus:Hide()
 
-		GMENU.memberrole = createD( "YLabel", GMENU.right, 36, 30, 0, 0 )
+		GMENU.memberrole = YRPCreateD( "YLabel", GMENU.right, 36, 30, 0, 0 )
 		GMENU.memberrole:Dock( TOP )
 		GMENU.memberrole:DockMargin( 0, 5, 0, 0 )
 		GMENU.memberrole:SetText( "LID_role" )
 		GMENU.memberrole:Hide()
 
-		GMENU.specs = createD( "YButton", GMENU.right, 36, 30, 0, 0 )
+		GMENU.specs = YRPCreateD( "YButton", GMENU.right, 36, 30, 0, 0 )
 		GMENU.specs:Dock( BOTTOM )
 		GMENU.specs:DockMargin( 0, 5, 0, 0 )
 		GMENU.specs:SetText( "LID_specializations" )
@@ -149,7 +149,7 @@ function YRPToggleGroupMenu()
 			end
 		end
 
-		GMENU.demote = createD( "YButton", GMENU.right, 36, 30, 0, 0 )
+		GMENU.demote = YRPCreateD( "YButton", GMENU.right, 36, 30, 0, 0 )
 		GMENU.demote:Dock( BOTTOM )
 		GMENU.demote:DockMargin( 0, 5, 0, 0 )
 		GMENU.demote:SetText( "LID_demote" )
@@ -162,7 +162,7 @@ function YRPToggleGroupMenu()
 			end
 		end
 
-		GMENU.promote = createD( "YButton", GMENU.right, 36, 30, 0, 0 )
+		GMENU.promote = YRPCreateD( "YButton", GMENU.right, 36, 30, 0, 0 )
 		GMENU.promote:Dock( BOTTOM )
 		GMENU.promote:DockMargin( 0, 5, 0, 0 )
 		GMENU.promote:SetText( "LID_promote" )
@@ -224,11 +224,11 @@ function YRPToggleGroupMenu()
 			for i, v in pairs( members ) do
 				if IsValid( GMENU ) then
 					if v.rpname != "ID_RPNAME" and v.rpname != "BOTNAME" then
-						local plline = createD( "YPanel", GMENU.list, 30, 30, 0, 0 )
+						local plline = YRPCreateD( "YPanel", GMENU.list, 30, 30, 0, 0 )
 						plline:Dock( TOP )
 						plline:DockMargin( 0, 0, 0, 2 )
 
-						plline.pl = createD( "YButton", plline, 30, 30, 0, 0 )
+						plline.pl = YRPCreateD( "YButton", plline, 30, 30, 0, 0 )
 						plline.pl:Dock( FILL )
 						plline.pl:SetText( v.rpname )
 						plline.pl.rad = 0
@@ -239,7 +239,7 @@ function YRPToggleGroupMenu()
 						end
 
 						if LocalPlayer():GetYRPBool( "isInstructor" ) then
-							plline.del = createD( "YButton", plline, 30, 30, 0, 0 )
+							plline.del = YRPCreateD( "YButton", plline, 30, 30, 0, 0 )
 							plline.del:Dock( RIGHT )
 							plline.del:SetText( "X" )
 							function plline.del:Paint( pw, ph )

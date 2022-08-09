@@ -102,16 +102,16 @@ if CLIENT then
 		if YRPIsNoMenuOpen() then
 			local stab = net.ReadTable()
 
-			local w = createD( "YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+			local w = YRPCreateD( "YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
 			w:Center()
 			w:MakePopup()
 			w:SetHeaderHeight(YRP.ctr(100) )
 			w:SetTitle( "LID_radiation" )
 
 			-- name time
-			w.nametext = createD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0) )
+			w.nametext = YRPCreateD( "YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0) )
 			w.nametext:SetText( "LID_name" )
-			w.name = createD( "DTextEntry", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
+			w.name = YRPCreateD( "DTextEntry", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
 			w.name:SetText(stab.name)
 			function w.name:OnChange()
 				local name = self:GetText()
