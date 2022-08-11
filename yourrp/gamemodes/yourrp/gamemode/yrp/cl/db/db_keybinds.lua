@@ -192,10 +192,9 @@ function YRPGetKeybind(name)
 			return -1
 		end
 	else
-		YRP.msg( "error", "[KEYBINDS] Unknown error #2" )
 		return -1
 	end
-	YRP.msg( "error", "[KEYBINDS] Unknown error #1" )
+	YRP.msg( "error", "[KEYBINDS] Unknown error" )
 	return -1
 end
 
