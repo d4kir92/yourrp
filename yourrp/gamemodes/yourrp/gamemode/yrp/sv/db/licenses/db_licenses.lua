@@ -9,15 +9,16 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT '-'" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT '100'" )
 
-function send_licenses(ply)
-	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+function send_licenses( ply )
+	local _all = YRP_SQL_SELECT( DATABASE_NAME, "*", nil )
 	local _nm = _all
 	if _nm == nil or _nm == false then
 		_nm = {}
 	end
+
 	net.Start( "get_licenses" )
-		net.WriteTable(_nm)
-	net.Send(ply)
+		net.WriteTable( _nm )
+	net.Send( ply )
 end
 
 util.AddNetworkString( "get_all_licenses" )

@@ -1,8 +1,32 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local _li = {}
+
+local _licenses = nil
+
+local function GetResult()
+	net.Start( "get_licenses" )
+	net.SendToServer()	
+end
+
+local function UpdateList( value )
+	local dbList = _li._lic
+	if pa( dbList ) then
+		dbList.list:Clear()
+
+		local li = dbList:GetList()
+		if li then
+			for i, license in SortedPairsByMemberValue( _licenses, "name" ) do
+				if strEmpty( value ) or string.find( string.lower( license.name ), string.lower( value ), 1, true ) then
+					dbList:AddEntry( license )
+				end
+			end
+		end
+	end
+end
+
 net.Receive( "get_licenses", function()
-	local _licenses = net.ReadTable()
+	_licenses = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
 	if pa(PARENT) then
@@ -15,7 +39,7 @@ net.Receive( "get_licenses", function()
 			draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 200) )
 		end
 
-		_li._lic = YRPCreateD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40) )
+		_li._lic = YRPCreateD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(1600), YRP.ctr(40), YRP.ctr(40 + 50 + 10) )
 		_li._lic:SetListHeader(YRP.lang_string( "LID_licenses" ) )
 		--_li._lic:SetDStrForAdd( "license_add" )
 		_li._lic:SetEditArea(_li.ea)
@@ -72,8 +96,9 @@ net.Receive( "get_licenses", function()
 			net.Start( "license_rem" )
 				net.WriteString(self.uid)
 			net.SendToServer()
-		end
-		for i, license in pairs(_licenses) do
+		end 
+
+		for i, license in SortedPairsByMemberValue(_licenses, "name") do
 			_li._lic:AddEntry(license)
 		end
 	end
@@ -82,6 +107,15 @@ end)
 function OpenSettingsLicenses()
 	local lply = LocalPlayer()
 
-	net.Start( "get_licenses" )
-	net.SendToServer()
+	local PARENT = GetSettingsSite()
+	if pa(PARENT) then
+		_li._search = YRPCreateD( "DTextEntry", PARENT, YRP.ctr(480), YRP.ctr(50), YRP.ctr(40), YRP.ctr(40) )
+		_li._search:SetPlaceholderText( "SEARCH" )
+		function _li._search:OnTextChanged()
+			local value = string.lower( self:GetText() )
+			UpdateList( value )
+		end
+
+		GetResult()
+	end
 end

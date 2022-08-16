@@ -90,9 +90,8 @@ function PANEL:Init()
 
 	--[[ List ]]
 	--
-	self.list = YRPCreateD( "DPanelList", self, self:GetWide(), self:GetTall() - YRP.ctr(110), 0, 0)
-	self.list:EnableVerticalScrollbar(true)
-	self.list:SetSpacing(2)
+	self.list = YRPCreateD( "DScrollPanel", self, self:GetWide(), self:GetTall() - YRP.ctr(110), 0, 0)
+	self.list:SetPadding(2)
 
 	--self.list:SetNoSizing(true)
 	function self.list:Paint(pw, ph)
@@ -113,23 +112,13 @@ function PANEL:Init()
 		end
 	end
 
-	function self:ReSize()
-		local _tab = self.panels
-		self.height = 0
-
-		for i, panel in pairs(_tab) do
-			if i > 1 then
-				self.height = self.height + panel:GetTall()
-			else
-				self.height = self.height + panel:GetTall()
-			end
-
-			panel:SetPos(0, self.height - panel:GetTall() )
-		end
+	function self:GetList()
+		return self.list:GetCanvas():GetChildren()
 	end
 
 	function self:Add(panel)
 		panel:SetParent(self.list)
+		panel:Dock(TOP)
 		self.list:AddItem(panel)
 	end
 

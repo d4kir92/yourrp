@@ -2,7 +2,7 @@
 
 local leftedPlys = {}
 function GM:PlayerDisconnected(ply)
-	YRP.msg( "gm", "[PlayerDisconnected] " .. ply:YRPName() )
+	YRP.msg( "debug", "[PlayerDisconnected] " .. ply:YRPName() )
 	YRPSaveClients( "PlayerDisconnected" )
 
 	YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID() .. "', '" .. "disconnected" .. "'" )

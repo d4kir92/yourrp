@@ -449,14 +449,17 @@ net.Receive( "get_shop_items", function()
 end)
 
 function OpenSettingsShops()
-	local w = GetSettingsSite():GetWide()
-	local h = GetSettingsSite():GetTall()
+	local setSite = GetSettingsSite()
+	if setSite then
+		local w = setSite:GetWide()
+		local h = setSite:GetTall()
 
-	_sh.ea = YRPCreateD( "DPanel", GetSettingsSite(), ScW() - YRP.ctr(40 + 480 + 40 + 40), h - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
-	function _sh.ea:Paint(pw, ph)
-		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 200) )
+		_sh.ea = YRPCreateD( "DPanel", setSite, ScW() - YRP.ctr(40 + 480 + 40 + 40), h - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40)	)
+		function _sh.ea:Paint(pw, ph)
+			draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 200) )
+		end
+
+		net.Start( "get_shops" )
+		net.SendToServer()
 	end
-
-	net.Start( "get_shops" )
-	net.SendToServer()
 end

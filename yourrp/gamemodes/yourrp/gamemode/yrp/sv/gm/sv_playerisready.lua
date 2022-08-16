@@ -55,7 +55,7 @@ local function YRPPlayerLoadedGame( ply )
 	timer.Simple( 12, function()
 		if !IsValid(ply) then return end
 
-		MsgC( Color( 255, 255, 255, 255 ), "[LOADING] SEND SERVER DATA", "\n" )
+		--MsgC( Color( 255, 255, 255, 255 ), "[LOADING] SEND SERVER DATA", "\n" )
 
 		net.Start( "sendserverdata" )
 		net.Send( ply )
@@ -177,7 +177,7 @@ net.Receive( "sendstartdata", function( len, ply )
 	net.Start( "receivedstartdata" )
 	net.Send( ply )
 
-	MsgC( Color( 255, 255, 255, 255 ), "[LOADING] CLIENT -> SERVER: Start Data", "\n" )
+	--MsgC( Color( 255, 255, 255, 255 ), "[LOADING] CLIENT -> SERVER: Start Data", "\n" )
 
 	local tab = {}
 	tab["os"] = osid
