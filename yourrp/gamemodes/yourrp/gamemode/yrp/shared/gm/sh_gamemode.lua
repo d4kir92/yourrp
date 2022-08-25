@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 224 -- do NOT change this!
+GM.VersionBuild = 225 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -1150,3 +1150,33 @@ end
 timer.Simple(0, function()
 	GAMEMODE:DarkRPFinishedLoading()
 end)
+
+function YRPCheckDarkRP()
+	if gmod and gmod.GetGamemode() then
+		if gmod.GetGamemode().Name != "DarkRP" then
+			YRP.msg( "note", "Modified Files Detected, DarkRP addons will not work with that." )
+		end
+	end
+
+	timer.Simple( 1, YRPCheckDarkRP )
+end
+YRPCheckDarkRP()
+
+--[[
+local function Test()
+	print("----")
+
+	local c = 0
+	for i, v in pairs( ents.GetAll() ) do
+		if string.find( string.lower( v:GetClass() ), "c_baseflex", 1, true ) then
+			c = c + 1
+			print(c, v)
+		end
+	end
+	print("total: " .. c)
+
+	timer.Simple(2, Test)
+end
+Test()
+]]
+

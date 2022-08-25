@@ -27,12 +27,12 @@ function ENT:Getamount()
 	return self:GetYRPString( "money" )
 end
 
-function ENT:Setamount(money)
-	self:SetYRPString( "money", money)
+function ENT:Setamount( money )
+	self:SetYRPString( "money", money )
 end
 
 function ENT:Use( activator, caller)
-	caller:addMoney(self:Getamount() )
+	caller:addMoney( self:Getamount() )
 	self:Remove()
 end
 

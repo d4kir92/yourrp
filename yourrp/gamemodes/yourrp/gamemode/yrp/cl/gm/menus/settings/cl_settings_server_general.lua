@@ -519,6 +519,7 @@ net.Receive( "Connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_char_menu, "LID_charactermenu", "update_bool_yrp_char_menu" )
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_keybinds_menu, "LID_keybindsmenu", "update_bool_yrp_keybinds_menu" )
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_tickets_menu, "LID_ticketsmenu", "update_bool_yrp_tickets_menu" )
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_appearance_system, "LID_macromenu", "update_bool_yrp_macro_menu" )
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent() )
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_background, "LID_loadingbackground", "update_text_loading_background" )

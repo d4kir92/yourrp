@@ -124,8 +124,8 @@ function Entity:Getowning_ent()
 end
 
 if SERVER then
-	function Entity:CPPISetOwner(ent)
-		self:SetYRPEntity( "cppiowner", ent)
+	function Entity:CPPISetOwner( ent )
+		self:SetYRPEntity( "cppiowner", ent )
 	end
 end
 

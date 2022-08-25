@@ -523,7 +523,9 @@ function YRPKeyPress()
 
 	YRPKeyPressed(YRPGetKeybind( "menu_group" ), "menu_group" )
 
-	YRPKeyPressed(YRPGetKeybind( "macro_menu" ), "macro_menu" )
+	if GetGlobalYRPBool( "bool_yrp_macro_menu", false) then
+		YRPKeyPressed(YRPGetKeybind( "macro_menu" ), "macro_menu" )
+	end
 	for i = 1, 49 do
 		if YRPGetKeybind( "m_" .. i) != 0 then
 			YRPKeyPressed(YRPGetKeybind( "m_" .. i), "m_" .. i)

@@ -1174,6 +1174,28 @@ function YRPSendNotification(ply, msg)
 	net.Send(ply)
 end
 
+hook.Add( "PlayerSpawnSWEP", "yrp_weapons_restriction", function(pl)
+	if ea(pl) then
+		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_weapons", "string_name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
+
+		if wk(_tmp) then
+			_tmp = _tmp[1]
+			if tobool(_tmp.bool_weapons) then
+				return true
+			else
+				YRP.msg( "note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup() ) .. "] tried to spawn an weapon." )
+
+				YRPNotiToPlyDisallowed(pl, "weapons" )
+
+				return false
+			end
+		else
+			YRP.msg( "note", "[PlayerSpawnSWEP] Usergroup not Found" )
+			YRPSendNotification(pl, "[PlayerSpawnSWEP] Usergroup not found" )
+		end
+	end
+end)
+
 hook.Add( "PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
 	if ea(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_entities", "string_name = '" .. string.lower(pl:GetUserGroup() ) .. "'" )

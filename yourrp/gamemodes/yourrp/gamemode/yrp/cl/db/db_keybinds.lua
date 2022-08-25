@@ -78,11 +78,11 @@ function YRPKeybindsCheckFile()
 						YRP.msg( "error", "[KEYBINDS] File is still empty." )
 					end
 				else
-					YRP.msg( "note", "[KEYBINDS] FAILED TO READ KEYBINDS FILE #2" )
+					YRP.msg( "error", "[KEYBINDS] FAILED TO READ KEYBINDS FILE #2 fi: " .. tostring( data ) )
 				end
 			end
 		else
-			YRP.msg( "note", "[KEYBINDS] FAILED TO READ KEYBINDS FILE #1" )
+			YRP.msg( "error", "[KEYBINDS] FAILED TO READ KEYBINDS FILE #1 fi: " .. tostring( data ) )
 		end
 	end
 
@@ -130,14 +130,16 @@ function YRPKeybindsLoad()
 				YRPKeybindsSave()
 			end
 		else
-			YRP.msg( "note", "FAILED TO LOAD KEYBINDS!!!" )
+			local fi = file.Read( dbfile, "DATA" )
+			YRP.msg( "error", "FAILED TO LOAD KEYBINDS! fi: " .. tostring( fi ) )
 		end
 	else
 		YRP.msg( "error", "[KEYBINDS] FILE DOESN'T EXISTS" )
 	end
 
 	if type( yrp_keybinds ) != "table" then
-		YRP.msg( "error", "[KEYBINDS] [" .. LocalPlayer():YRPName() .. "|" .. LocalPlayer():SteamID() .. "] KeybindsLoad FAILED, broken file?: " .. tostring( yrp_keybinds ) )
+		local fi = file.Read( dbfile, "DATA" )
+		YRP.msg( "error", "[KEYBINDS] [" .. LocalPlayer():YRPName() .. "|" .. LocalPlayer():SteamID() .. "] KeybindsLoad FAILED, broken file?: " .. tostring( fi ) )
 	else
 		YRP_KeybindsLoaded = true
 	end

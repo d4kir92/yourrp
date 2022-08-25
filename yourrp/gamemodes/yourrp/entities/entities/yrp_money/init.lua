@@ -24,9 +24,11 @@ function ENT:Initialize()
 	self.ismoney = true
 end
 
-function ENT:SetMoney(money)
+function ENT:SetMoney( money )
 	self.money = tonumber(money)
-	self:SetYRPString( "money", self.money)
+	if self.money then
+		self:SetYRPString( "money", self.money )
+	end
 end
 
 function ENT:Use( activator, caller)

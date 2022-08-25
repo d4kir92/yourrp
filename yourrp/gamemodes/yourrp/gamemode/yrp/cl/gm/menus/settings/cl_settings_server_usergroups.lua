@@ -100,7 +100,9 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		local string_displayname = net.ReadString()
 		if UGS and UGS[CURRENT_USERGROUP] then
 			UGS[CURRENT_USERGROUP].string_displayname = string_displayname
-			DISPLAYNAME:SetText(UGS[CURRENT_USERGROUP].string_displayname)
+			if DISPLAYNAME then
+				DISPLAYNAME:SetText(UGS[CURRENT_USERGROUP].string_displayname)
+			end
 		end
 	end)
 
@@ -1146,7 +1148,7 @@ function UpdateUsergroupsList()
 			if ug then
 				ug.int_position = tonumber( ug.int_position )
 				YRPAddUG( ug )
-			else
+			elseif i != 1 then -- 1 == "yrp_usergroup"
 				local text = "[UGList][i: " .. tostring( i ) .. "][#N_UGS: " .. tostring( #N_UGS ) .. "] "
 				for x, v in pairs( N_UGS ) do
 					text = text .. " [x: " .. x .. " pos: " .. v.int_position .. "]"

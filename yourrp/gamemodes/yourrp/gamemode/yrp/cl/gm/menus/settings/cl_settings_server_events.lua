@@ -101,7 +101,7 @@ net.Receive( "setting_events", function(len)
 			end
 		end
 		function EVENT.RemoveChar:DoClick()
-			if EVENT.EventChars:GetSelectedLine() and EVENT.EventChars:GetSelectedLine() then
+			if EVENT.EventChars:GetSelectedLine() and EVENT.EventList:GetSelectedLine() then
 				local euid = EVENT.EventList:GetLine( EVENT.EventList:GetSelectedLine() ):GetValue(1)
 				local cuid = EVENT.EventChars:GetLine( EVENT.EventChars:GetSelectedLine() ):GetValue(2)
 

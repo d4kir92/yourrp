@@ -727,7 +727,7 @@ end)
 util.AddNetworkString( "give_getGroTab" )
 
 net.Receive( "give_getGroTab", function(len, ply)
-	local _tmpGroupList = YRP_SQL_SELECT( "yrp_ply_groups", "*", nil)
+	local _tmpGroupList = YRP_SQL_SELECT( "yrp_ply_groups", "string_name, uniqueID", nil)
 	if _tmpGroupList != nil then
 		net.Start( "give_getGroTab" )
 			net.WriteTable(_tmpGroupList)
@@ -741,7 +741,7 @@ util.AddNetworkString( "give_getRolTab" )
 
 net.Receive( "give_getRolTab", function(len, ply)
 	local _groupID = net.ReadString()
-	local _tmpRolTab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "int_groupID = " .. tonumber(_groupID) )
+	local _tmpRolTab = YRP_SQL_SELECT( "yrp_ply_roles", "string_name, uniqueID", "int_groupID = " .. tonumber(_groupID) )
 	if _tmpRolTab != nil then
 		net.Start( "give_getRolTab" )
 			net.WriteTable(_tmpRolTab)

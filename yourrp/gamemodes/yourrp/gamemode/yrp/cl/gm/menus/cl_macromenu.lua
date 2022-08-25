@@ -129,16 +129,18 @@ timer.Simple( 10, function()
 end )
 
 function OpenMacroMenu()
-	openMenu()
+	if GetGlobalYRPBool( "bool_yrp_macro_menu", false) then
+		openMenu()
 
-	_mm.window = YRPCreateD( "YFrame", nil, YRP.ctr(720 + 36), YRP.ctr(820), 0, 0)
-	_mm.window:Center()
-	_mm.window:MakePopup()
-	_mm.window:SetTitle(YRP.lang_string( "LID_macromenu" ) )
-	_mm.window:SetHeaderHeight(YRP.ctr(100) )
+		_mm.window = YRPCreateD( "YFrame", nil, YRP.ctr(720 + 36), YRP.ctr(820), 0, 0)
+		_mm.window:Center()
+		_mm.window:MakePopup()
+		_mm.window:SetTitle(YRP.lang_string( "LID_macromenu" ) )
+		_mm.window:SetHeaderHeight(YRP.ctr(100) )
 
-	_mm.content = _mm.window:GetContent()
-
-	net.Start( "yrp_get_macros" )
-	net.SendToServer()
+		_mm.content = _mm.window:GetContent()
+		
+		net.Start( "yrp_get_macros" )
+		net.SendToServer()
+	end
 end

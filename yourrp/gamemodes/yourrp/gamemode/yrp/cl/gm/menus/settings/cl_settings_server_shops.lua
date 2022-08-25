@@ -29,6 +29,8 @@ net.Receive( "get_shops", function()
 		end
 
 		function _sh.eaf(tbl)
+			if !IsValid( _sh.ea ) then return end
+
 			for i, child in pairs(_sh.ea:GetChildren() ) do
 				child:Remove()
 			end
@@ -85,6 +87,8 @@ net.Receive( "get_shop_categories", function()
 			end
 		end
 		function _sh.eaf2(tbl)
+			if !IsValid( _sh.ea ) then return end
+			
 			for i, child in pairs(_sh.ea:GetChildren() ) do
 				child:Remove()
 			end
@@ -143,6 +147,8 @@ net.Receive( "get_shop_items", function()
 			end
 		end
 		function _sh.eaf3(tbl)
+			if !IsValid( _sh.ea ) then return end
+			
 			for i, child in pairs(_sh.ea:GetChildren() ) do
 				child:Remove()
 			end

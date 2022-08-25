@@ -104,7 +104,7 @@ net.Receive( "setting_players", function(len)
 						net.Receive( "give_getRolTab", function(le)
 							local _tmpRolTab = net.ReadTable()
 							for k, v in pairs(_tmpRolTab) do
-								_giveComboBox2:AddChoice( v.string_name, v.uniqueID)
+								_giveComboBox2:AddChoice( v.string_name, v.uniqueID )
 							end
 						end)
 					end

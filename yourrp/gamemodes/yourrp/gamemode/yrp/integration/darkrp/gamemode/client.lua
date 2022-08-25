@@ -54,7 +54,7 @@ end
 
 function DarkRP.openKeysMenu()
 	--Description: Open the keys/F2 menu.
-	YRPDarkrpNotFound( "openKeysMenu()" )
+	--YRPDarkrpNotFound( "openKeysMenu()" )
 end
 
 function DarkRP.openPocketMenu()

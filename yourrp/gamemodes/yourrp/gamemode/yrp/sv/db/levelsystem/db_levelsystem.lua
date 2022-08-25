@@ -249,15 +249,19 @@ end
 hook.Add( "PlayerDeath", "yrp_xp_playerdeath", function( victim, inflictor, attacker)
 	if attacker:IsPlayer() then
 		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-		setting = setting[1]
-		attacker:AddXP(setting.int_xp_per_kill)
+		if wk(setting) then
+			setting = setting[1]
+			attacker:AddXP(setting.int_xp_per_kill)
+		end
 	end
 end)
 
 hook.Add( "OnNPCKilled", "yrp_xp_onnpckilled", function(npc, attacker, inflictor)
 	if attacker:IsPlayer() then
 		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-		setting = setting[1]
-		attacker:AddXP(setting.int_xp_per_kill)
+		if wk(setting) then
+			setting = setting[1]
+			attacker:AddXP(setting.int_xp_per_kill)
+		end
 	end
 end)

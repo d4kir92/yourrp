@@ -12,12 +12,12 @@ end
 
 function DarkRP.createMoneyBag(pos, amount)
 	--Description: Create a money bag.
-	--YRPDarkrpNotFound( "createMoneyBag( " .. tostring(pos) .. ", ".. tostring( amount) .. " )" )
 
 	local _moneyEnt = ents.Create( "yrp_money" )
-	_moneyEnt:SetPos(pos)
+	_moneyEnt:SetPos( pos )
 	_moneyEnt:Spawn()
-	_moneyEnt:SetMoney( amount)
+	_moneyEnt:SetMoney( amount )
+
 	return _moneyEnt
 end
 
@@ -137,11 +137,11 @@ function DarkRP.log(message, colour, noFileSave)
 end
 
 util.AddNetworkString( "sendNotify" )
-function DarkRP.notify(ply, msgType, time, message)
+function DarkRP.notify( ply, msgType, time, message )
 	--Description: Log a message in DarkRP
 	if ply:IsPlayer() and wk(message) then
 		net.Start( "sendNotify" )
-			net.WriteString(message)
+			net.WriteString( message )
 		net.Send(ply)
 	else
 		YRP.msg( "gm", "[DarkRP.notify] message is NIL" )
