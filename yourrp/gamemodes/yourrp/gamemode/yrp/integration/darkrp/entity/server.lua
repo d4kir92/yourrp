@@ -30,8 +30,9 @@ function Entity:isLocked()
 end
 
 function Entity:keysLock()
-	--Description: Lock this door or vehicle.
-	self:Fire( "Lock" )
+	if ea( self ) then
+		self:Fire( "Lock" )
+	end
 end
 
 function Entity:keysOwn(ply)
@@ -40,8 +41,9 @@ function Entity:keysOwn(ply)
 end
 
 function Entity:keysUnLock()
-	--Description: Unlock this door or vehicle.
-	self:Fire( "Unlock" )
+	if ea( self ) then
+		self:Fire( "Unlock" )
+	end
 end
 
 function Entity:keysUnOwn(ply)

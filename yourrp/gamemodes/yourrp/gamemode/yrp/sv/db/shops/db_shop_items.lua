@@ -163,6 +163,23 @@ net.Receive( "yrp_shop_get_items", function(len, ply)
 		_nw = _items
 	end
 
+	for i, v in pairs( _nw ) do
+		if strEmpty( v.WorldModel ) then
+			local ent = ents.Create( v.ClassName )
+			if ea( ent ) then
+				ent:Spawn()
+
+				v.WorldModel = ent:GetModel()
+
+				YRP_SQL_UPDATE( DATABASE_NAME, {
+					["WorldModel"] = v.WorldModel
+				}, "uniqueID = '" .. v.uniqueID .. "'" )
+
+				ent:Remove()
+			end
+		end
+	end
+
 	net.Start( "yrp_shop_get_items" )
 		net.WriteString(_uid)
 		net.WriteTable(_nw)

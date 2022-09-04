@@ -72,6 +72,8 @@ end
 local NEXTS = {}
 local color1 = Color( 0, 0, 0, 10 )
 function PANEL:Init()
+	local this = self
+
 	self:SetText( "" )
 
 	self._open = false
@@ -390,128 +392,153 @@ function PANEL:Init()
 		end
 	end
 
-	function self.btn:DoClick()
-		base._open = !base._open
-		if base._open then
-			net.Receive( "yrp_roleselection_getcontent", function(len)
-				local roltab = net.ReadTable()
-				local grptab = net.ReadTable()
+	function self.RebuildContent()
+		local roltab = this.roltab or {}
+		local grptab = this.grptab or {}
+
+		if pa( base ) then
+			local rw = 800
+			local rh = 160
+			for i, rol in pairs( roltab ) do
+				if type( rol.string_usergroups ) != "table" then
+					rol.string_usergroups = string.Explode( ",", rol.string_usergroups )
+				else
+					rol.string_usergroups = {}
+				end
+				rol.bool_visible_cc = tobool(rol.bool_visible_cc)
+				rol.bool_visible_rm = tobool(rol.bool_visible_rm)
+				rol.bool_locked = tobool(rol.bool_locked)
+				rol.int_uses = tonumber(rol.int_uses)
+				rol.int_maxamount = tonumber(rol.int_maxamount)
+				rol.int_prerole = tonumber(rol.int_prerole)
+				rol.bool_eventrole = tobool(rol.bool_eventrole)
 				
-				if pa( base) then
-					local rw = 800
-					local rh = 160
-					for i, rol in pairs(roltab) do
-						if rol.string_usergroups then
-							rol.string_usergroups = string.Explode( ",", rol.string_usergroups)
-						else
-							rol.string_usergroups = {}
-						end
-						rol.bool_visible_cc = tobool(rol.bool_visible_cc)
-						rol.bool_visible_rm = tobool(rol.bool_visible_rm)
-						rol.bool_locked = tobool(rol.bool_locked)
-						rol.int_uses = tonumber(rol.int_uses)
-						rol.int_maxamount = tonumber(rol.int_maxamount)
-						rol.int_prerole = tonumber(rol.int_prerole)
-						rol.bool_eventrole = tobool(rol.bool_eventrole)
-						
-						-- Restrictions
-						if !table.HasValue(rol.string_usergroups, "ALL" ) then
-							if !table.HasValue(rol.string_usergroups, string.upper(LocalPlayer():GetUserGroup() )) then
-								continue
-							end
-						end
-
-						if LocalPlayer().cc == true and !rol.bool_visible_cc then
-							continue
-						elseif LocalPlayer().cc == false and !rol.bool_visible_rm then
-							continue
-						end
-						
-						if rol.int_prerole == 0 and rol.bool_eventrole == GetGlobalYRPBool( "create_eventchar", false) then
-							w = rw
-							h = rh
-							local rlist = YRPCreateD( "DHorizontalScroller", nil, 10, YRP.ctr(h), 0, 0)
-							function rlist:Paint(pw, ph)
-								draw.RoundedBox(0, 0, 0, pw, ph, color1 )
-							end
-
-							base.con:AddItem(rlist)
-
-							AddRole(rlist, rol, w, h)
-						end
-					end
-					
-					local gw = base._w - 2 * YRP.ctr(20) - base.con.VBar:GetWide()
-					local gh = base._h
-					for i, grp in pairs(grptab) do
-						local w = gw
-						local h = gh
-
-						grp.bool_visible_cc = tobool(grp.bool_visible_cc)
-						grp.bool_visible_rm = tobool(grp.bool_visible_rm)
-
-						if LocalPlayer().cc == true and !grp.bool_visible_cc then
-							continue
-						elseif LocalPlayer().cc == false and !grp.bool_visible_rm then
-							continue
-						end
-
-						local group = YRPCreateD( "YCollapsibleCategory", base.con, w, h, 0, 0)
-						group:SetS(w, h)
-						group:SetHeader(grp.string_name)
-						group:SetIcon(grp.string_icon)
-						group:SetList( base.con)
-						group:SetHeaderColor(StringToColor(grp.string_color) )
-						group:SetContentColor(StringToColor(grp.string_color) )
-						group:SetGroupUID(grp.uniqueID)
-
-						if pa( base.con) then
-							base.con:AddItem(group)
-						else
-							group:Remove()
-							break
-						end
-					end
-
-					base.con:Rebuild()
-					base._list:Rebuild()
-
-					local h = rh * 3.5
-					if base.con:GetCanvas():GetTall() < h then
-						h = base.con:GetCanvas():GetTall()
-						h = math.Clamp(h, YRP.ctr(999), YRP.ctr(1999) )
-						if base._fh then
-							h = base._fh
-						end
-						h = YRP.ctr(h)
-
-						base:SetTall(h + YRP.ctr(100 + 2 * 20) )
-						base.btn:SetTall(YRP.ctr(100) )
-						base.con:SetTall(h)
-						base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20) )
-					
-						base.con:Rebuild()
-						base._list:Rebuild()
-					else
-						h = rh * 3.5
-						if base._fh then
-							h = base._fh
-						end
-						h = YRP.ctr(h)
-
-						base:SetTall(h)
-						base.btn:SetTall(YRP.ctr(100) )
-						base.con:SetTall(h - YRP.ctr(100) - 2 * YRP.ctr(20) )
-						base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20) )
-						
-						base.con:Rebuild()
-						base._list:Rebuild()
+				-- Restrictions
+				if !table.HasValue(rol.string_usergroups, "ALL" ) then
+					if !table.HasValue(rol.string_usergroups, string.upper(LocalPlayer():GetUserGroup() )) then
+						continue
 					end
 				end
+
+				if LocalPlayer().cc == true and !rol.bool_visible_cc then
+					continue
+				elseif LocalPlayer().cc == false and !rol.bool_visible_rm then
+					continue
+				end
+
+				if GetGlobalYRPBool( "create_eventchar", false) then
+					if !tobool( rol.bool_eventrole ) then
+						continue 
+					end
+				end
+
+				if tonumber( rol.int_prerole ) == 0 then
+					w = rw
+					h = rh
+					local rlist = YRPCreateD( "DHorizontalScroller", nil, 10, YRP.ctr(h), 0, 0)
+					function rlist:Paint(pw, ph)
+						draw.RoundedBox(0, 0, 0, pw, ph, color1 )
+					end
+
+					base.con:AddItem(rlist)
+
+					AddRole(rlist, rol, w, h)
+				end
+			end
+			
+			local gw = base._w - 2 * YRP.ctr(20) - base.con.VBar:GetWide()
+			local gh = base._h
+			for i, grp in pairs(grptab) do
+				local w = gw
+				local h = gh
+
+				grp.bool_visible_cc = tobool(grp.bool_visible_cc)
+				grp.bool_visible_rm = tobool(grp.bool_visible_rm)
+
+				if LocalPlayer().cc == true and !grp.bool_visible_cc then
+					continue
+				elseif LocalPlayer().cc == false and !grp.bool_visible_rm then
+					continue
+				end
+
+				local group = YRPCreateD( "YCollapsibleCategory", base.con, w, h, 0, 0)
+				group:SetS(w, h)
+				group:SetHeader(grp.string_name)
+				group:SetIcon(grp.string_icon)
+				group:SetList( base.con)
+				group:SetHeaderColor(StringToColor(grp.string_color) )
+				group:SetContentColor(StringToColor(grp.string_color) )
+				group:SetGroupUID(grp.uniqueID)
+
+				if pa( base.con) then
+					base.con:AddItem(group)
+				else
+					group:Remove()
+					break
+				end
+			end
+
+			base.con:Rebuild()
+			base._list:Rebuild()
+
+			local h = rh * 3.5
+			if base.con:GetCanvas():GetTall() < h then
+				h = base.con:GetCanvas():GetTall()
+				h = math.Clamp(h, YRP.ctr(999), YRP.ctr(1999) )
+				if base._fh then
+					h = base._fh
+				end
+				h = YRP.ctr(h)
+
+				base:SetTall(h + YRP.ctr(100 + 2 * 20) )
+				base.btn:SetTall(YRP.ctr(100) )
+				base.con:SetTall(h)
+				base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20) )
+			
+				base.con:Rebuild()
+				base._list:Rebuild()
+			else
+				h = rh * 3.5
+				if base._fh then
+					h = base._fh
+				end
+				h = YRP.ctr(h)
+
+				base:SetTall(h)
+				base.btn:SetTall(YRP.ctr(100) )
+				base.con:SetTall(h - YRP.ctr(100) - 2 * YRP.ctr(20) )
+				base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20) )
+				
+				base.con:Rebuild()
+				base._list:Rebuild()
+			end
+		end
+	end
+
+	function self.btn:DoClick()
+		base._open = !base._open
+
+		this.roltab = {}
+		this.grptab = {}
+
+		if base._open then
+			net.Receive( "yrp_roleselection_getcontent_role", function( len )
+				local rol = net.ReadTable()
+				table.insert( this.roltab, rol )
+
+				this:RebuildContent()
 			end)
+			
+			net.Receive( "yrp_roleselection_getcontent_group", function( len )
+				local grp = net.ReadTable()
+				table.insert( this.grptab, grp )
+
+				this.RebuildContent()
+			end)
+
 			if base._guid then
 				net.Start( "yrp_roleselection_getcontent" )
-					net.WriteString( base._guid)
+					net.WriteString( base._guid )
 				net.SendToServer()
 			else
 				YRP.msg( "note", "ycollapsiblecategory error, base._guid" )

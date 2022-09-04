@@ -95,6 +95,14 @@ function YRPChangeUserGroup(ply, cmd, args)
 end
 
 concommand.Add( "darkrp", function(ply, cmd, args)
+	if args[1] and strEmpty( args[1] ) then
+		return 
+	end
+
+	if args[1] then
+		args[1] = string.lower( args[1] )
+	end
+
 	if args[1] and args[1] == "forcerpname" then
 		local playername = args[2]
 		local newrpname = args[3]

@@ -408,6 +408,8 @@ function CreateRoleMenuContent(parent)
 	LocalPlayer().cc = false
 	LocalPlayer().charcreate_fuid = LocalPlayer():GetFactionUniqueID()
 
+	SetGlobalYRPBool( "create_eventchar", false )
+
 	RoleMenu = parent
 
 	CreateRoleSelectionContent(parent)

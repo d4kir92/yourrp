@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 225 -- do NOT change this!
+GM.VersionBuild = 227 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -1161,6 +1161,10 @@ function YRPCheckDarkRP()
 	timer.Simple( 1, YRPCheckDarkRP )
 end
 YRPCheckDarkRP()
+
+function GetSENTsList()
+	return list.Get( "SpawnableEntities" )
+end
 
 --[[
 local function Test()

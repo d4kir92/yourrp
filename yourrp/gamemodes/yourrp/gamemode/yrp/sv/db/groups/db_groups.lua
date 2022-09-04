@@ -572,41 +572,42 @@ net.Receive( "yrp_roleselection_getgroups", function(len, ply)
 end)
 
 util.AddNetworkString( "yrp_roleselection_getcontent" )
+util.AddNetworkString( "yrp_roleselection_getcontent_role" )
+util.AddNetworkString( "yrp_roleselection_getcontent_group" )
 net.Receive( "yrp_roleselection_getcontent", function(len, ply)
 	local guid = net.ReadString()
+
 	local roltab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'" )
 	local grptab = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. guid .. "'" )
 	
-	if wk(roltab) then
+	if wk( roltab ) then
 		for i, v in pairs(roltab) do
 			v.pms = GetPlayermodelsOfRole( v.uniqueID)
 			YRPUpdateRoleUses( v.uniqueID)
 		end
 	end
+	
+	if wk( roltab ) then
+		for i, rol in pairs( roltab ) do
+			net.Start( "yrp_roleselection_getcontent_role" )
+				net.WriteTable( rol )
+			net.Send( ply )
+		end
+	end
 
-	if wk(roltab) and wk(grptab) then
-		net.Start( "yrp_roleselection_getcontent" )
-			net.WriteTable(roltab)
-			net.WriteTable(grptab)
-		net.Send(ply)
-	elseif !wk(roltab) and wk(grptab) then
-		net.Start( "yrp_roleselection_getcontent" )
-			net.WriteTable({})
-			net.WriteTable(grptab)
-		net.Send(ply)
-	elseif !wk(grptab) and wk(roltab) then
-		net.Start( "yrp_roleselection_getcontent" )
-			net.WriteTable(roltab)
-			net.WriteTable({})
-		net.Send(ply)
-	else
-		YRP.msg( "note", "[yrp_roleselection_getcontent] Roles and Groups not exists anymore" )
+	if wk( grptab ) then
+		for i, grp in pairs( grptab ) do
+			net.Start( "yrp_roleselection_getcontent_group" )
+				net.WriteTable( grp )
+			net.Send( ply )
+		end
 	end
 end)
 
 util.AddNetworkString( "yrp_roleselection_getrole" )
 net.Receive( "yrp_roleselection_getrole", function(len, ply)
 	local ruid = net.ReadString()
+
 	local roltab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'" )
 	if wk(roltab) then
 		for i, v in pairs(roltab) do

@@ -442,10 +442,10 @@ timer.Create( "ServerThink", TICK, 0, function()
 		--SaveStorages(_str)
 	end
 
-	local _changelevel = 21600
+	local _changelevel = 43200 -- 43200 = 60 * 60 * 12 (12 Hours)
 	if GetGlobalYRPBool( "bool_server_reload", false) then
 		if _time >= _changelevel then
-			YRP.msg( "gm", "Auto Reload" )
+			YRP.msg( "gm", "Auto Reload Map to prevent Lags/Stutter." )
 			timer.Simple(1, function()
 				game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
 			end)
@@ -457,7 +457,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 			YRP.msg( "gm", _str)
 
 			net.Start( "yrp_autoreload" )
-				net.WriteString(_changelevel - _time)
+				net.WriteString( string.format( "%0.1f", _changelevel - _time ) )
 			net.Broadcast()
 		end
 	end

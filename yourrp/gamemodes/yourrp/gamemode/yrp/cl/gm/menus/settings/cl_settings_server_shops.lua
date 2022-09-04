@@ -363,7 +363,7 @@ net.Receive( "get_shop_items", function()
 						_itemlist = swepsL
 						openSingleSelector(_itemlist, "selected_shop_item" )
 					elseif value == "entities" then
-						local _sentlist = list.Get( "SpawnableEntities" )
+						local _sentlist = GetSENTsList()
 
 						local tmpTable = {}
 						local count = 0

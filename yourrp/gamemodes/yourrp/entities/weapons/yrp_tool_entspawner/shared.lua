@@ -139,7 +139,7 @@ if CLIENT then
 		w.classnametext:SetText( "LID_entity" )
 		w.classname = YRPCreateD( "DComboBox", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(350) )
 		w.classname:SetText(stab.string_classname)
-		for i, v in pairs(list.Get( "SpawnableEntities" ) ) do
+		for i, v in pairs( GetSENTsList() ) do
 			w.classname:AddChoice(i, i)
 		end
 		function w.classname:OnSelect()

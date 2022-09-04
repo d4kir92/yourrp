@@ -314,12 +314,6 @@ function GetSWEPPrintName(ClassName)
 	return ""
 end
 
-function GetSENTsList()
-	local list_entities = list.Get( "SpawnableEntities" )
-
-	return list_entities
-end
-
 local color1 = Color( 0, 0, 0, 120 )
 function YRPOpenSelector(tab, multiple, ret, fu)
 	local lply = LocalPlayer()
@@ -1363,8 +1357,8 @@ end
 
 hook.Add( "PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	for i, ent in pairs(ents.GetAll() ) do
-		if ent:IsNPC() and !ent:IsPlayer() and ent:IsDealer() then
-			local dist = LocalPlayer():GetPos():Distance(ent:GetPos() )
+		if LocalPlayer() and ent and ent:IsNPC() and !ent:IsPlayer() and ent:IsDealer() then
+			local dist = LocalPlayer():GetPos():Distance( ent:GetPos() )
 			if dist < 300 then
 				YRPDrawNamePlateStringBox(ent, ent:GetYRPString( "name", "Unnamed" ), 20, Color( 255, 255, 255, 255 ) )
 			end
@@ -1492,9 +1486,9 @@ end)
 
 net.Receive( "yrp_autoreload", function(len, ply)
 	local t = net.ReadString()
-	local str = YRP.lang_string( "LID_automaticmapchangeinx" )
-	str = string.Replace(str, "X", t)
-	notification.AddLegacy(str, NOTIFY_GENERIC, 5)
+	local str = YRP.lang_string( "LID_automaticmapchangeinx" ) .. " (to prevent Lags/Stutter after 6/12 Hours)."
+	str = string.Replace( str, "X", t )
+	notification.AddLegacy( str, NOTIFY_GENERIC, 1 )
 end)
 
 function DrawDoorText( door)
