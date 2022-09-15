@@ -334,8 +334,6 @@ function YRPPlayerLoadout( ply )
 		end
 
 		ply:UpdateBackpack()
-
-		YRPRenderNormal(ply)
 	else
 		YRP.msg( "note", "[PlayerLoadout] is invalid or bot." )
 	end

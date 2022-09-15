@@ -2075,7 +2075,7 @@ function YRPDoRagdoll(ply)
 		ply:SetMoveType( MOVETYPE_NONE )
 		--ply:Freeze( true )
 
-		YRPRenderCloaked(ply)
+		ply:SetYRPBool( "cloaked", true )
 	end
 end
 
@@ -2094,7 +2094,7 @@ function YRPDoUnRagdoll(ply)
 		ply:SetMoveType( MOVETYPE_WALK )
 		--ply:Freeze( false )
 
-		YRPRenderNormal(ply)
+		ply:SetYRPBool( "cloaked", false )
 	end
 end
 
@@ -2123,7 +2123,6 @@ net.Receive( "freeze", function(len, ply)
 		local _target = net.ReadEntity()
 		if ea(_target) and _target.Freeze then
 			_target:Freeze(true)
-			YRPRenderFrozen(_target)
 		end
 	end
 end)
@@ -2133,7 +2132,6 @@ net.Receive( "unfreeze", function(len, ply)
 		local _target = net.ReadEntity()
 		if ea(_target) then
 			_target:Freeze(false)
-			YRPRenderNormal(_target)
 		end
 	end
 end)
@@ -2165,7 +2163,6 @@ net.Receive( "cloak", function(len, ply)
 		local _target = net.ReadEntity()
 		if ea(_target) then
 			_target:SetYRPBool( "cloaked", true)
-			YRPRenderCloaked(_target)
 		end
 	end
 end)
@@ -2175,7 +2172,6 @@ net.Receive( "uncloak", function(len, ply)
 		local _target = net.ReadEntity()
 		if ea(_target) then
 			_target:SetYRPBool( "cloaked", false)
-			YRPRenderNormal(_target)
 		end
 	end
 end)

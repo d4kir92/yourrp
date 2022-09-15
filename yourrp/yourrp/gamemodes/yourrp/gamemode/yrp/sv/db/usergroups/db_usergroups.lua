@@ -1309,53 +1309,56 @@ function YRPRenderEquipments(ply, mode, color)
 	YRPRenderEquipment(ply, "backpack", mode, color)
 end
 
-function YRPRenderCloaked(ply)
-	if IsValid(ply) and ply:IsPlayer() and ply:Alive() and ply:GetWeapons() then
-		local _alpha = 0
-		ply:SetRenderMode(RENDERMODE_TRANSCOLOR)
-		ply:SetColor(Color( 255, 255, 255, _alpha) )
-		for i, wp in pairs(ply:GetWeapons() ) do
-			wp:SetRenderMode(RENDERMODE_TRANSCOLOR)
-			wp:SetColor(Color( 255, 255, 255, _alpha) )
-		end
-		--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, Color( 255, 255, 255, _alpha) )
-	end
-end
+function YRPRenderColor( ply, mode, color )
+	if ea( ply ) and mode and color and ply:GetWeapons() then
+		ply:SetRenderMode( mode )
+		ply:SetColor( color )
 
-function YRPRenderFrozen(ply)
-	if ea(ply) then
-		if ply:GetYRPBool( "cloaked", false) then
-			YRPRenderCloaked(ply)
-		else
-			ply:SetRenderMode(RENDERMODE_NORMAL)
-			ply:SetColor( YRPColBlue() )
-			for i, wp in pairs(ply:GetWeapons() ) do
-				wp:SetRenderMode(RENDERMODE_TRANSCOLOR)
-				wp:SetColor( YRPColBlue() )
-			end
-			--YRPRenderEquipments(ply, RENDERMODE_TRANSCOLOR, YRPColBlue() )
+		for i, wp in pairs( ply:GetWeapons() ) do
+			wp:SetRenderMode( mode )
+			wp:SetColor( color )
 		end
 	end
 end
 
-function YRPRenderNormal(ply)
-	if ea(ply) then
-		if ply:GetYRPBool( "cloaked", false) then
-			YRPRenderCloaked(ply)
-		elseif ply:IsFlagSet(FL_FROZEN) then
-			YRPRenderFrozen(ply)
+local cloakColor = Color( 255, 255, 255, 0 )
+local frozenColor = Color( 0, 0, 255, 255 )
+local normalColor = Color( 255, 255, 255, 255 )
+function YRPRender( ply )
+	if ea( ply ) then
+		ply.oldrenderstatus = ply.oldrenderstatus or ""
+
+		if ply:GetYRPBool( "cloaked", false ) then
+			ply.renderstatus = "cloaked"
+		elseif ply:IsFlagSet( FL_FROZEN ) then
+			ply.renderstatus = "frozen"
 		else
-			setPlayerModel(ply)
-			ply:SetRenderMode(RENDERMODE_NORMAL)
-			ply:SetColor(Color( 255, 255, 255, 255 ) )
-			for i, wp in pairs(ply:GetWeapons() ) do
-				wp:SetRenderMode(RENDERMODE_NORMAL)
-				wp:SetColor(Color( 255, 255, 255, 255 ) )
+			ply.renderstatus = "normal"
+		end
+
+		if ply.oldrenderstatus != ply.renderstatus then
+			ply.oldrenderstatus = ply.renderstatus
+			
+			if ply.renderstatus == "cloaked" then
+				YRPRenderColor( ply, RENDERMODE_TRANSCOLOR, cloakColor )
+			elseif ply.renderstatus == "frozen" then
+				YRPRenderColor( ply, RENDERMODE_NORMAL, frozenColor )
+			else
+				setPlayerModel( ply )
+				YRPRenderColor( ply, RENDERMODE_NORMAL, normalColor )
 			end
-			--YRPRenderEquipments(ply, RENDERMODE_NORMAL, Color( 255, 255, 255, 255 ) )
 		end
 	end
 end
+
+function YRPUpdateRender()
+	for i, pl in pairs( player.GetAll() ) do
+		YRPRender( pl )
+	end
+
+	timer.Simple( 0.2, YRPUpdateRender )
+end
+YRPUpdateRender()
 
 function EntBlacklisted(ent)
 	local blacklist = GetGlobalYRPTable( "yrp_blacklist_entities", {})
