@@ -15,7 +15,7 @@ config.br = 20
 
 
 
-local menu = nil
+local menue = nil
 
 
 
@@ -38,8 +38,8 @@ function CreateRolePreviewContent()
 
 
 
-	if pa(menu) then
-		menu:Hide()
+	if pa(menue) then
+		menue:Hide()
 	end
 
 
@@ -298,9 +298,14 @@ function CreateRolePreviewContent()
 
 					YRPCreateCharacterSettingsContent()
 				else
+					local bgs = {}
+					for i = 0, 19 do
+						bgs[i] = LocalPlayer()["charcreate_bg" .. i]
+					end
 					net.Start( "wantRole" )
 						net.WriteInt(LocalPlayer().charcreate_ruid, 16)
 						net.WriteInt(LocalPlayer().charcreate_rpmid, 16)
+						net.WriteTable( bgs )
 					net.SendToServer()
 					CloseCombinedMenu()
 					CloseRoleMenu()
@@ -317,8 +322,8 @@ function CreateRolePreviewContent()
 		end
 		function back:DoClick()
 			if LocalPlayer().rolepreview then
-				if pa(menu) then
-					menu:Show()
+				if pa(menue) then
+					menue:Show()
 				end
 				win:Remove()
 				LocalPlayer().rolepreview = false
@@ -392,7 +397,7 @@ function CreateRoleSelectionContent(PARENT)
 	end
 	win:Center()
 
-	menu = win
+	menue = win
 
 	-- List of Groups
 	local list = YRPCreateD( "DPanelList", win, win:GetWide() - YRP.ctr(2 * config.br), win:GetTall() - YRP.ctr(2 * config.br), YRP.ctr( config.br), YRP.ctr( config.br) )
@@ -505,7 +510,7 @@ function CreateRoleSelectionContent(PARENT)
 						end
 						function changefaction:DoClick()
 							LocalPlayer().cc = false
-							menu:Hide()
+							menue:Hide()
 							CreateFactionSelectionContent()
 						end
 					end

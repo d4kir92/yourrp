@@ -231,12 +231,13 @@ function YRPSetBodyGroups( ply )
 	end
 end
 
-function YRPResetBodyGroups( ply )
+function YRPUpdateBodyGroups( ply, pmid, bgs )
 	local tab = {}
-	tab.playermodelID = 1
-	tab.skin = 0
+	bgs = bgs or {}
+	tab.playermodelID = pmid or ply:YRPGetCharacterTable().playermodelID or 1
+	tab.skin = ply:YRPGetCharacterTable().skin or 0
 	for i = 0, 19 do
-		tab["bg" .. i] = 0
+		tab["bg" .. i] = bgs[i] or ply:YRPGetCharacterTable()["bg" .. i]
 	end
 	YRP_SQL_UPDATE( "yrp_characters", tab, "uniqueID = '" .. ply:CharID() .. "'" )
 

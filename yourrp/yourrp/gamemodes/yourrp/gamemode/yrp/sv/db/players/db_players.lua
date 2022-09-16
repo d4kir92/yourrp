@@ -116,7 +116,7 @@ local defaultsweps = {}
 defaultsweps["yrp_key"] = true
 defaultsweps["yrp_unarmed"] = true
 
-function YRPSetRole( ply, rid, force, pmid )
+function YRPSetRole( ply, rid, force, pmid, bgs )
 	if rid == nil then
 		YRP.msg( "note", "[YRPSetRole] No roleid" )
 		return false
@@ -137,7 +137,7 @@ function YRPSetRole( ply, rid, force, pmid )
 	end
 
 	if rid != ply:GetRoleUID() then
-		YRPResetBodyGroups( ply )
+		YRPUpdateBodyGroups( ply, pmid, bgs )
 	end
 	
 	-- SWEPS
@@ -1036,6 +1036,7 @@ util.AddNetworkString( "wantRole" )
 net.Receive( "wantRole", function(len, ply)
 	local uniqueIDRole = net.ReadInt(16)
 	local pmid = net.ReadInt(16)
+	local bgs = net.ReadTable()
 
 	YRP.msg( "note", ply:YRPName() .. " wants the role " .. uniqueIDRole)
 
@@ -1050,7 +1051,7 @@ net.Receive( "wantRole", function(len, ply)
 		end
 
 		--New role
-		YRPSetRole(ply, uniqueIDRole, false, pmid)
+		YRPSetRole(ply, uniqueIDRole, false, pmid, bgs)
 
 		if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 			ply:Spawn()
