@@ -32,7 +32,10 @@ end)
 function createShopItem(item, duid, id)
 	local lply = LocalPlayer()
 
+	item.permanent = tobool( item.permanent )
 	item.int_level = tonumber(item.int_level)
+	item.count = 1
+
 	local W = 1800
 	local H = 500 + 2 * 20
 	local BR = 20
@@ -126,10 +129,14 @@ function createShopItem(item, duid, id)
 		_i.price = YRPCreateD( "DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE - 20 - HE) )
 		function _i.price:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 0) )
-			draw.SimpleText(formatMoney(item.price, LocalPlayer() ), "Y_36_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
+			local c = ""
+			if item.count > 1 then
+				c = item.count .. "x "
+			end
+			draw.SimpleText(c .. formatMoney(item.price, LocalPlayer() ), "Y_36_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
 		end
 	end
-	if tonumber(item.permanent) == 1 then
+	if item.permanent then
 		_i.permanent = YRPCreateD( "DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE - 20 - HE - 20 - HE) )
 		function _i.permanent:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 0) )
@@ -172,7 +179,11 @@ function createShopItem(item, duid, id)
 					_color = YRPColGreen()
 					_text = YRP.lang_string( "LID_oncooldown" )
 				end
-				self:SetText(_text)
+				local c = ""
+				if item.count > 1 then
+					c = " (" .. formatMoney( (item.price * item.count) ) .. ")"
+				end
+				self:SetText(_text .. c)
 
 				hook.Run( "YButtonAPaint", self, pw, ph)
 			end
@@ -180,11 +191,40 @@ function createShopItem(item, duid, id)
 				if LocalPlayer():GetYRPFloat( "buy_ts", 0.0) < CurTime() then
 					net.Start( "item_buy" )
 						self.item.color = lply.item_color or "255, 255, 255"
-						net.WriteTable(self.item)
-						net.WriteString( duid)
+						net.WriteString( duid )
+						net.WriteString( self.item.uniqueID )
+						net.WriteString( self.item.count )
+						net.WriteString( self.item.color )
 					net.SendToServer()
 					YRPCloseBuyMenu()
 				end
+			end
+
+			if !item.permanent and item.type == "weapons" then
+				_i.count = YRPCreateD( "DNumberWang", _i, YRP.ctr(HE * 2), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE) )
+				_i.count:SetValue( 1 )
+				_i.count:SetMin( 1 )
+				_i.count:SetMax( 10 )
+				function _i.count:OnValueChanged()
+					local val = self:GetValue()
+					if self.setval then return end
+					self.setval = true
+					if val > self:GetMax() then
+						val = self:GetMax()
+						self:SetValue( val )
+						self:SetText( val )
+					elseif val < self:GetMin() then
+						val = self:GetMin()
+						self:SetValue( val )
+						self:SetText( val )
+					end
+
+					item.count = self:GetValue()
+					self.setval = false
+				end
+
+				_i.buy:SetPos( YRP.ctr(H + 2 * HE + 20), YRP.ctr(H - 20 - HE) )
+				_i.buy:SetWide( YRP.ctr(W - H - 20 - 2 * HE - 20) )
 			end
 		end
 	else

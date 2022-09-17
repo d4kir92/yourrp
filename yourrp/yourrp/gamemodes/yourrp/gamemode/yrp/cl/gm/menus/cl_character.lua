@@ -760,7 +760,7 @@ function LoadCharacters()
 							if CharMenu.character.amountevent and CharMenu.character.amountevent < LocalPlayer():GetYRPInt( "int_charactersevent_max", 1) then
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200) )
 								
-								draw.SimpleText(YRP.lang_string( "LID_event" ), "Y_18_500", pw / 2, YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string( "LID_event" ), "Y_30_700", pw / 2, YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 								local sw = pw - 2 * YRP.ctr(180)
 								local breite = YRP.ctr(50)
@@ -834,7 +834,7 @@ function LoadCharacters()
 							if CharMenu.character.amountevent and CharMenu.character.amountevent < LocalPlayer():GetYRPInt( "int_charactersevent_max", 1) then
 								draw.RoundedBox(50, 0, 0, pw, ph, Color(51, 51, 51, 200) )
 								
-								draw.SimpleText(YRP.lang_string( "LID_event" ), "Y_18_500", pw / 2, YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.lang_string( "LID_event" ), "Y_30_700", pw / 2, YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 								local sw = pw - 2 * YRP.ctr(180)
 								local sh = ph - 2 * YRP.ctr(180)
@@ -999,7 +999,7 @@ function openCharacterSelection( force )
 				local aecur = CharMenu.character.amountevent or -1
 				local aemax = LocalPlayer():GetYRPInt( "int_charactersevent_max", 1)
 				if aecur < aemax then
-					draw.SimpleText(YRP.lang_string( "LID_event" ), "Y_24_500", pw / 2 - YRP.ctr(480), ph - YRP.ctr(180), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.lang_string( "LID_event" ), "Y_30_700", pw / 2 - YRP.ctr(480), ph - YRP.ctr(180), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				-- Get Newest Background for the Menu

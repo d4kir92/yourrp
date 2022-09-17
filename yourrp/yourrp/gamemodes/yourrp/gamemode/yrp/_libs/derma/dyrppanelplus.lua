@@ -34,7 +34,7 @@ function PANEL:Think()
 	if self.plus.getclass != "DCheckBox" then
 		self.plus:SetWide(self:GetWide() )
 	else
-		self.plus:SetWide(self:GetTall() )
+		self.plus:SetWide(self:GetTall() / 2 )
 	end
 
 	if self.plus:GetTall() ~= self:GetTall() - self.header:GetTall() then

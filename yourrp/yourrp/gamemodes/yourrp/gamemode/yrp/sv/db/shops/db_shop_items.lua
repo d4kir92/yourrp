@@ -266,25 +266,51 @@ function SpawnVehicle(item, pos, ang)
 	end
 end
 
-function YRPSpawnItem(ply, item, duid)
+function YRPSpawnItem( ply, item, duid, count, itemColor )
 	ClassName = item.ClassName -- fix for WAC addons, dumb!
 
 	if item.type == "weapons" then
-		local wep = ply:Give(item.ClassName)
-		if wk(wep) and wep != NULL then
-			wep:SetYRPInt( "item_uniqueID", item.uniqueID)
-			wep:SetYRPEntity( "yrp_owner", ply)
-			return true
-		else
-			for i, ws in pairs( engine.GetAddons() ) do
-				if ws.wsid == "167545348" then
-					YRP.msg( "note", "[Spawn Item] [IMPORTANT] Addon: " .. ws.title .. " is installed, which is overriding the GIVE function" )
-					return false
+		if count == 1 then
+			local wep = ply:Give(item.ClassName)
+			if wk(wep) and wep != NULL then
+				wep:SetYRPInt( "item_uniqueID", item.uniqueID)
+				wep:SetYRPEntity( "yrp_owner", ply)
+				return true
+			else
+				for i, ws in pairs( engine.GetAddons() ) do
+					if ws.wsid == "167545348" then
+						YRP.msg( "note", "[Spawn Item] [IMPORTANT] Addon: " .. ws.title .. " is installed, which is overriding the GIVE function" )
+						return false
+					end
 				end
 			end
-			YRP.msg( "note", "[Spawn Item] Class " .. item.ClassName .. " Give() FAILED ( already have it?)" )
-			return false
 		end
+
+		local shipment = ents.Create( "yrp_shipment" )
+		if shipment then
+			shipment:Spawn()
+			tp_to( shipment, ply:GetPos() )
+
+			shipment:SetClassName( item.ClassName )
+			shipment:SetDisplayName( item.name )
+			shipment:SetItemType( item.type )
+			shipment:SetAmount( count )
+
+			return true
+		end
+		--[[for i = 1, count do
+			local wmw = ents.Create( item.ClassName )
+			if wmw then
+				wmw:SetPos( ply:GetPos() + Vector( 0, 0, 42 ) + ply:GetForward() * 100 )
+				wmw:Spawn()
+				if itemColor then
+					wmw:SetColor( StringToColor(itemColor) )
+				end
+			else
+				return false
+			end
+		end]]
+		return false
 	end
 	
 	local hasstorage = false
@@ -503,21 +529,30 @@ end
 
 util.AddNetworkString( "item_buy" )
 net.Receive( "item_buy", function(len, ply)
-	local _tab = net.ReadTable()
-	local _dealer_uid = net.ReadString()
-	local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
+	local duid = net.ReadString()
+	local itemId = net.ReadString()
+	local count = tonumber( net.ReadString() )
+	local itemColor = net.ReadString()
 
+	local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. itemId)
+	
 	if wk(_item) then
 		_item = _item[1]
 		_item.name = tostring(_item.name)
+		_item.price = tonumber( _item.price )
+		
+		local totalPrice = _item.price
+		if count > 1 and _item.type == "weapons" then
+			totalPrice = _item.price * count
+		end
 
 		if ply:GetYRPFloat( "buy_ts", 0.0) > CurTime() then
 			YRP.msg( "note", "[item_buy] On Cooldown" )
 			return
 		end
 
-		if ply:canAfford(tonumber(_item.price) ) then
-			YRP.msg( "gm", ply:YRPName() .. " buyed " .. _item.name)
+		if ply:canAfford( totalPrice ) then
+			YRP.msg( "gm", ply:YRPName() .. " buyed " .. _item.name .. " for " .. totalPrice )
 
 			timer.Simple( 0.3, function()
 				YRPPlyUpdateStorage( ply )
@@ -532,13 +567,13 @@ net.Receive( "item_buy", function(len, ply)
 				YRPRemGroVals(ply)
 				YRPSetRole(ply, rid, true)
 			else
-				local _spawned, ent = YRPSpawnItem(ply, _item, _dealer_uid)
+				local _spawned, ent = YRPSpawnItem( ply, _item, duid, count, itemColor )
 
 				if _spawned then
 					if ea(ent) then
 						ent:SetYRPInt( "item_uniqueID", _item.uniqueID)
-						if _tab.color then
-							ent:SetColor( StringToColor(_tab.color) )
+						if itemColor then
+							ent:SetColor( StringToColor(itemColor) )
 						end
 						if ent:IsVehicle() then
 							AddVehicle(ent, ply, _item)
@@ -571,7 +606,7 @@ net.Receive( "item_buy", function(len, ply)
 			end
 
 			-- Remove money if everything works
-			ply:addMoney(-tonumber(_item.price) )
+			ply:addMoney( - totalPrice )
 		end
 	end
 end)
@@ -579,16 +614,16 @@ end)
 util.AddNetworkString( "item_spawn" )
 net.Receive( "item_spawn", function(len, ply)
 	local _tab = net.ReadTable()
-	local _dealer_uid = net.ReadString()
+	local duid = net.ReadString()
 
-	if wk(_tab) and wk(_dealer_uid) then
+	if wk(_tab) and wk(duid) then
 		local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
 
 		if wk(_item) then
 			_item = _item[1]
 
 			if not IsEntityAlive(ply, _item.uniqueID) then
-				local _spawned, ent = YRPSpawnItem(ply, _item, _dealer_uid)
+				local _spawned, ent = YRPSpawnItem(ply, _item, duid, 1)
 
 				if _spawned then
 					if ea(ent) then
