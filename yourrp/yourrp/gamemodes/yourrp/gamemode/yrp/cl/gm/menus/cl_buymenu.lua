@@ -175,20 +175,22 @@ function createShopItem(item, duid, id)
 				if self:IsHovered() then
 					_color = Color( 255, 255, 100)
 				end
-				if LocalPlayer():GetYRPFloat( "buy_ts", 0.0) > CurTime() then
-					_color = YRPColGreen()
-					_text = YRP.lang_string( "LID_oncooldown" )
-				end
 				local c = ""
 				if item.count > 1 then
 					c = " (" .. formatMoney( (item.price * item.count) ) .. ")"
+					_text = _text .. c
 				end
-				self:SetText(_text .. c)
+
+				if LocalPlayer():GetYRPFloat( "buy_ts" .. item.uniqueID, 0.0) > CurTime() then
+					_color = YRPColGreen()
+					_text = YRP.lang_string( "LID_oncooldown" )
+				end
+				self:SetText(_text)
 
 				hook.Run( "YButtonAPaint", self, pw, ph)
 			end
 			function _i.buy:DoClick()
-				if LocalPlayer():GetYRPFloat( "buy_ts", 0.0) < CurTime() then
+				if LocalPlayer():GetYRPFloat( "buy_ts" .. item.uniqueID, 0.0) <= CurTime() then
 					net.Start( "item_buy" )
 						self.item.color = lply.item_color or "255, 255, 255"
 						net.WriteString( duid )

@@ -267,9 +267,8 @@ net.Receive( "get_shop_items", function()
 				]]--
 
 				--[[ Cooldown ]]--
-				--[[
 				_sh._sit.itemcool = YRPCreateD( "DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1200) )
-				_sh._sit.itemcool:SetHeader(YRP.lang_string( "LID_cooldown" ) .. " ( " .. YRP.lang_string( "LID_wip" ) .. " )" )
+				_sh._sit.itemcool:SetHeader(YRP.lang_string( "LID_cooldown" ) )
 				_sh._sit.itemcool:INITPanel( "DNumberWang" )
 				_sh._sit.itemcool.plus.tbl = tbl
 				_sh._sit.itemcool.plus:SetMin(0)
@@ -285,7 +284,6 @@ net.Receive( "get_shop_items", function()
 						net.SendToServer()
 					end
 				end
-				]]--
 
 				--[[ License ]]--
 				_sh._sit.itemlice = YRPCreateD( "DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1350) )

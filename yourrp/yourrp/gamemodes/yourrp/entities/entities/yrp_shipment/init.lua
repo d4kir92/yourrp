@@ -18,44 +18,49 @@ function ENT:Initialize()
 	self.delay = 0
 end
 
-function ENT:Think()
-	if ea( self.viewmodel ) then
-		local ang = self:GetAngles()
-		ang.p = 0
-		ang.r = 0
-		self.viewmodel:SetPos( self:GetPos() + Vector( 0, 0, 40 ) )
-		self.viewmodel:SetAngles( ang )
-	end
-end
-
 function ENT:SetClassName( classname )
 	self:SetYRPString( "classname", classname )
 
 	if !ea( self.viewmodel ) then
 		self.viewmodel = ents.Create( "prop_dynamic" )
+		self.viewmodel:SetPos( self:GetPos() )
 		self.viewmodel:SetModel( "models/items/item_item_crate.mdl" )
 		self.viewmodel:Spawn()
-		--self.viewmodel:SetPos( self:GetPos() + Vector( 0, 0, 40 ) )
-		--self.viewmodel:SetParent( self )
+
+		self:SetYRPEntity( "viewmodel", self.viewmodel )
 	end
 
 	local mdl = ents.Create( classname )
 	if ea( mdl ) then
 		self.viewmodel:SetModel( mdl:GetModel() )
 		mdl:Remove()
+		self:SetYRPEntity( "viewmodel", self.viewmodel )
 	end
 end
 
-function ENT:SetDisplayName( name )
-	self:SetYRPString( "name", name )
+function ENT:SetDisplayName( itemname )
+	self:SetYRPString( "itemname", itemname )
 end
 
 function ENT:SetItemType( typ )
-	self:SetYRPString( "type", typ )
+	self:SetYRPString( "itemtype", typ )
 end
 
 function ENT:SetAmount( amount )
 	self:SetYRPInt( "amount", amount )
+end
+
+function ENT:OnRemove()
+	if ea( self.viewmodel ) then
+		self.viewmodel:Remove()
+	end
+end
+
+function ENT:AddOne( ent )
+	self:SetYRPInt( "amount", self:GetYRPInt( "amount", 1 ) + 1 )
+	if ea( ent ) then
+		ent:Remove()
+	end
 end
 
 function ENT:RemoveOne()
@@ -70,7 +75,7 @@ function ENT:Use( activator, caller )
 		self.delay = self.delay or 0
 		if self.delay < CurTime() then
 			self.delay = CurTime() + 0.5
-			if self:GetYRPString( "type" ) == "weapons" then
+			if self:GetYRPString( "itemtype" ) == "weapons" then
 				local wep = activator:Give( self:GetYRPString( "classname", "" ) )
 				if ea( wep ) then
 					self:RemoveOne()
@@ -87,3 +92,20 @@ function ENT:Use( activator, caller )
 	end
 end
 
+function ENT:StartTouch( ent )
+	if ent:GetClass() == "yrp_shipment" then
+		if ent:GetYRPString( "classname" ) == self:GetYRPString( "classname" ) and 
+			ent:GetYRPString( "itemtype" ) == self:GetYRPString( "itemtype" ) then
+			local amount = ent:GetYRPInt( "amount" ) + self:GetYRPInt( "amount" )
+			if self:GetPos().z > ent:GetPos().z then
+				ent:Remove()
+				self:SetAmount( amount )
+			end
+		end
+	end
+end
+function ENT:Touch( ent )
+	if ent:GetClass() == self:GetYRPString( "classname" ) then
+		self:AddOne( ent )
+	end
+end

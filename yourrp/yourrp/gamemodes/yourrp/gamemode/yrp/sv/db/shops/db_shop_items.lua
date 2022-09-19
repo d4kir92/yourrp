@@ -291,11 +291,11 @@ function YRPSpawnItem( ply, item, duid, count, itemColor )
 			shipment:Spawn()
 			tp_to( shipment, ply:GetPos() )
 
-			shipment:SetClassName( item.ClassName )
 			shipment:SetDisplayName( item.name )
 			shipment:SetItemType( item.type )
 			shipment:SetAmount( count )
-
+			shipment:SetClassName( item.ClassName )
+			
 			return true
 		end
 		--[[for i = 1, count do
@@ -533,20 +533,21 @@ net.Receive( "item_buy", function(len, ply)
 	local itemId = net.ReadString()
 	local count = tonumber( net.ReadString() )
 	local itemColor = net.ReadString()
-
+	
 	local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. itemId)
 	
 	if wk(_item) then
 		_item = _item[1]
 		_item.name = tostring(_item.name)
 		_item.price = tonumber( _item.price )
-		
+		_item.cooldown = tonumber( _item.cooldown )
+
 		local totalPrice = _item.price
 		if count > 1 and _item.type == "weapons" then
 			totalPrice = _item.price * count
 		end
 
-		if ply:GetYRPFloat( "buy_ts", 0.0) > CurTime() then
+		if ply:GetYRPFloat( "buy_ts" .. _item.uniqueID, 0.0) > CurTime() then
 			YRP.msg( "note", "[item_buy] On Cooldown" )
 			return
 		end
@@ -580,7 +581,9 @@ net.Receive( "item_buy", function(len, ply)
 						end
 					end
 
-					ply:SetYRPFloat( "buy_ts", CurTime() + 2)
+					if _item.cooldown > 0 then
+						ply:SetYRPFloat( "buy_ts" .. _item.uniqueID, CurTime() + _item.cooldown )
+					end
 				else
 					YRP.msg( "note", "Failed to spawn item from shop, spawned: " .. tostring(_spawned) )
 					return false
