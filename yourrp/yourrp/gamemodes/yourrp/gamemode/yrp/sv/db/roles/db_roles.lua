@@ -271,7 +271,7 @@ function YRPBuildDarkrpTeams()
 			RPExtraTeams[darkrpjobuid] = darkrpjob
 			jobByCmd[darkrpjob.command] = darkrpjobuid
 
-			team.SetUp(role.uniqueID, role.string_name, darkrpjob.color)
+			team.SetUp(tonumber(role.uniqueID), role.string_name, darkrpjob.color)
 		end
 	end
 

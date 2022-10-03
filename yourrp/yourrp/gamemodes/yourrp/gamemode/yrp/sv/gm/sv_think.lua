@@ -281,6 +281,7 @@ util.AddNetworkString( "yrp_autoreload" )
 local _time = 0
 local TICK = 0.1
 local DEC = 1
+local isTPsInstalled = true
 timer.Remove( "ServerThink" )
 timer.Create( "ServerThink", TICK, 0, function()
 	if _time % 1.0 == 0 then	-- Every second
@@ -394,35 +395,36 @@ timer.Create( "ServerThink", TICK, 0, function()
 			end
 		end
 
-		if YRP_SQL_TABLE_EXISTS( "yrp_teleporters" ) then
+		if YRP_SQL_TABLE_EXISTS( "yrp_teleporters" ) and isTPsInstalled then
 			local teleporters = YRP_SQL_SELECT( "yrp_teleporters", "*", "string_map = '" .. game.GetMap() .. "'" )
 			if wk(teleporters) then
-				if table.Count(teleporters) < 100 then
-					for i, teleporter in pairs( teleporters ) do
-						if !YRPIsTeleporterAlive(teleporter.uniqueID) then
-							local tp = ents.Create( "yrp_teleporter" )
-							if IsValid( tp ) then
-								local pos = string.Explode( ",", teleporter.string_position)
-								pos = Vector(pos[1], pos[2], pos[3])
-								tp:SetPos(pos - tp:GetUp() * 5)
-								local ang = string.Explode( ",", teleporter.string_angle)
-								ang = Angle( ang[1], ang[2], ang[3])
-								tp:SetAngles( ang)
-								tp:SetYRPInt( "yrp_teleporter_uid", tonumber(teleporter.uniqueID) )
-								tp:SetYRPString( "string_name", teleporter.string_name)
-								tp:SetYRPString( "string_target", teleporter.string_target)
-								tp:Spawn()
-								tp.PermaProps = true
-								tp.PermaPropID = 0
+				if table.Count(teleporters) >= 100 then
+					YRP.msg( "note", "There are to many Teleporters created!" )
+				end
+				for i, teleporter in pairs( teleporters ) do
+					if !YRPIsTeleporterAlive(teleporter.uniqueID) then
+						local tp = ents.Create( "yrp_teleporter" )
+						if IsValid( tp ) then
+							local pos = string.Explode( ",", teleporter.string_position)
+							pos = Vector(pos[1], pos[2], pos[3])
+							tp:SetPos(pos - tp:GetUp() * 5)
+							local ang = string.Explode( ",", teleporter.string_angle)
+							ang = Angle( ang[1], ang[2], ang[3])
+							tp:SetAngles( ang)
+							tp:SetYRPInt( "yrp_teleporter_uid", tonumber(teleporter.uniqueID) )
+							tp:SetYRPString( "string_name", teleporter.string_name)
+							tp:SetYRPString( "string_target", teleporter.string_target)
+							tp:Spawn()
+							tp.PermaProps = true
+							tp.PermaPropID = 0
 
-								YRP.msg( "note", "[YourRP Teleporters] " .. "Was dead, respawned" )
-							else
-								YRP.msg( "note", "FAILED TO CREATE TELEPORTER, is [YourRP Teleporters] missing?" )
-							end
+							YRP.msg( "note", "[YourRP Teleporters] " .. "Was dead, respawned" )
+						else
+							YRP.msg( "note", "FAILED TO CREATE TELEPORTER, is [YourRP Teleporters] missing?" )
+							isTPsInstalled = false
+							break
 						end
 					end
-				else
-					YRP.msg( "note", "There are a lot of Teleporters!" )
 				end
 			end
 		end

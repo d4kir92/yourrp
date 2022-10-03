@@ -83,11 +83,11 @@ function ENT:Use( activator, caller )
 					local weap = ents.Create( self:GetYRPString( "classname", "" ) )
 					if ea( weap ) then
 						weap:Spawn()
-						tp_to( weap, activator:GetPos() + Vector( 0, 0, 42 ) )
+						tp_to( weap, activator:GetPos() + Vector( 0, 0, 70 ) )
 						self:RemoveOne()
 					end
 				end
-			end			
+			end
 		end
 	end
 end
@@ -105,7 +105,8 @@ function ENT:StartTouch( ent )
 	end
 end
 function ENT:Touch( ent )
-	if ent:GetClass() == self:GetYRPString( "classname" ) then
+	if ent:GetClass() == self:GetYRPString( "classname" ) and ent.checkadd == nil then
+		ent.checkadd = true
 		self:AddOne( ent )
 	end
 end

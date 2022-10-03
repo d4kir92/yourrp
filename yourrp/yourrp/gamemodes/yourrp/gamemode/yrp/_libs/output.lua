@@ -298,6 +298,7 @@ countries["FI"] = "Finland"
 countries["FR"] = "France"
 
 countries["GB"] = "Great Britain"
+countries["GE"] = "Georgia"
 countries["GG"] = "Guernsey"
 countries["GI"] = "Gibraltar"
 countries["GR"] = "Greece"
