@@ -84,7 +84,6 @@ function print_help(sender)
 		sender:ChatPrint( "revive NAME" )
 	end
 	sender:ChatPrint( "--- --- ---" )
-	return ""
 end
 
 function drop_weapon(sender)
@@ -98,7 +97,6 @@ function drop_weapon(sender)
 			YRP.msg( "note", sender:YRPName() .. " drop weapon is disabled!" )
 		end
 	end
-	return ""
 end
 
 function YRPDropMoney( ply, amount )
@@ -159,7 +157,6 @@ function do_suicide(sender)
 	if IsAllowedToSuicide(sender) then
 		sender:Kill()
 	end
-	return ""
 end
 
 function show_tag_dev(sender)
@@ -173,7 +170,6 @@ function show_tag_dev(sender)
 	else
 		sender:ChatPrint( "[tag_dev] disabled" )
 	end
-	return ""
 end
 
 function show_tag_tra(sender)
@@ -187,7 +183,6 @@ function show_tag_tra(sender)
 	else
 		sender:ChatPrint( "[tag_tra] disabled" )
 	end
-	return ""
 end
 
 function show_tag_ug(sender)
@@ -201,7 +196,6 @@ function show_tag_ug(sender)
 	else
 		sender:ChatPrint( "[tag_ug] disabled" )
 	end
-	return ""
 end
 
 util.AddNetworkString( "set_chat_mode" )
@@ -248,24 +242,6 @@ util.AddNetworkString( "setafk" )
 net.Receive( "setafk", function(len, ply)
 	ply:SetAFK(true)
 end)
-
-function strTrimLeft(str, cha)
-	local s, e = string.find(str, cha)
-	if s then
-		return string.sub(str, 1, s - 1)
-	else
-		return ""
-	end
-end
-
-function strTrimRight(str, cha)
-	local s, e = string.find(str, cha)
-	if s then
-		return string.sub(str, s + 1)
-	else
-		return ""
-	end
-end
 
 function YRPChatAfk( sender )
 	sender:SetAFK(!sender:AFK() )
@@ -483,7 +459,7 @@ cmdsS["afk"] = YRPChatAfk
 cmdsS["dnd"] = YRPChatDnd
 
 local cmdsM = {}
-cmdsM["dropmoney"] = dropmoney
+cmdsM["dropmoney"] = drop_money
 cmdsM["setmoney"] = set_money
 cmdsM["addmoney"] = add_money
 cmdsM["addxp"] = add_xp
@@ -515,10 +491,11 @@ local eGroup = 3
 local eRole = 4
 local eUsergroup = 5
 local eWhisper = 6
+local eCustom = 10
 
 local oldDistLocal = 0
 local distLocal = 0
-timer.Simple(4, function() -- must be last hook
+timer.Simple( 4, function() -- must be last hook
 	hook.Add( "PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
 		local oldtext = text
 		local channel = ""
@@ -667,7 +644,7 @@ timer.Simple(4, function() -- must be last hook
 						net.WriteTable(pk2)
 					net.Send(sender)
 				end
-			elseif tab.int_mode == 9 then -- Custom
+			elseif tab.int_mode == eCustom then -- Custom
 				-- May in the future
 				return ""
 			else
@@ -679,5 +656,5 @@ timer.Simple(4, function() -- must be last hook
 
 		-- RETURN NOTHING SO OTHER ADDONS CAN USE THIS ONE
 		-- return oldtext --""
-	end)
-end)
+	end )
+end )

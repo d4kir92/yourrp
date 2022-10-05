@@ -1237,12 +1237,12 @@ function YRPDrawNamePlates()
 					_height = _height + 7
 				end
 
-				if ply:GetYRPBool( "tag_tra", false) and translatorsteamids[tostring(ply:SteamID() )] then -- Translators of YourRP
+				if ply:GetYRPBool( "tag_tra", false) and translatorsteamids[tostring(ply:SteamID64() )] then -- Translators of YourRP
 					YRPDrawNamePlate( ply, YRP.lang_string( "LID_gamemodetranslator" ), _height, Color( 100, 100, 255, color.a) )
 					_height = _height + 7
 				end
 
-				if ply:GetYRPBool( "tag_dev", false) and tostring(ply:SteamID() ) == "76561198002066427" then -- D4KIR, Developer of YourRP
+				if ply:GetYRPBool( "tag_dev", false) and tostring( ply:SteamID64() ) == "76561198002066427" then -- D4KIR, Developer of YourRP
 					YRPDrawNamePlate( ply, YRP.lang_string( "LID_gamemodedeveloper" ), _height, Color( 255, 165, 0, color.a) )
 					_height = _height + 7
 				end
