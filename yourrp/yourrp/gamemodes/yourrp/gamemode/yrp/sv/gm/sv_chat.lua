@@ -146,7 +146,7 @@ end
 
 function drop_money(sender, text)
 	local _table = string.Explode( " ", text)
-	local _money = tonumber(_table[2])
+	local _money = tonumber(_table[1])
 	if isnumber(_money) then
 		YRPDropMoney( sender, _money )
 	else
@@ -202,138 +202,6 @@ function show_tag_ug(sender)
 		sender:ChatPrint( "[tag_ug] disabled" )
 	end
 	return ""
-end
-
-function set_money(sender, text)
-	if sender:HasAccess() then
-		local _table = string.Explode( " ", text, false)
-		local _name = _table[2]
-		local _money = tonumber(_table[3])
-		if isnumber(_money) then
-			local ply = GetPlayerByName(_name)
-			if ply != NULL then
-				if ply.addMoney == nil then
-					sender:ChatPrint( "\nCommand-FAILED: Is not a Player" )
-					return ""
-				end
-				ply:SetMoney(_money)
-				YRP.msg( "note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money)
-				return ""
-			else
-				YRP.msg( "note", "[set_money] Name: " .. tostring(_name) .. " not found!" )
-				return ""
-			end
-		end
-		sender:ChatPrint( "\nCommand-FAILED" )
-	else
-		YRP.msg( "note", sender:YRPName() .. " tried to use setmoney!" )
-	end
-end
-
-function revive(sender, text)
-	if sender:HasAccess() then
-		local _table = string.Explode( " ", text, false)
-		local _name = _table[2]
-		local ply = GetPlayerByName(_name)
-		if IsValid(ply) and ply:IsPlayer() then
-			if ply:Alive() then
-				sender:ChatPrint( "\nCommand-FAILED: Player alive" )
-				return ""
-			end
-			local rd = ply:GetRagdollEntity()
-			if IsValid( rd ) then
-				ply:Revive(rd:GetPos() )
-			else
-				ply:Revive(ply:GetPos() )
-			end
-			return ""
-		else
-			sender:ChatPrint( "\nCommand-FAILED" )
-		end
-	else
-		YRP.msg( "note", sender:YRPName() .. " tried to use setmoney!" )
-	end
-end
-
-function add_money(sender, text)
-	if sender:HasAccess() then
-		local _table = string.Explode( " ", text, false)
-		local _name = _table[2]
-		local _money = tonumber(_table[3])
-		if isnumber(_money) then
-			local ply = GetPlayerByName(_name)
-			if ply != NULL then
-				if ply.addMoney == nil then
-					sender:ChatPrint( "\nCommand-FAILED: Is not a Player" )
-					return ""
-				end
-				ply:addMoney(_money)
-				YRP.msg( "note", sender:Nick() .. " adds " .. _money .. " to " .. ply:Nick() )
-				return ""
-			else
-				sender:ChatPrint( "\nCommand-FAILED: Player not found" )
-			end
-		end
-	else
-		YRP.msg( "note", sender:Nick() .. " tried to use addmoney!" )
-	end
-end
-
-function add_xp(sender, text)
-	if sender:HasAccess() then
-		local _table = string.Explode( " ", text, false)
-		local _name = _table[2]
-		local _xp = tonumber(_table[3])
-		if isnumber(_xp) then
-			local _receiver = GetPlayerByName(_name)
-			if EntityAlive(_receiver) then
-				_receiver:AddXP(_xp)
-				return ""
-			else
-				sender:ChatPrint( "\nCommand-FAILED NAME not found" )
-			end
-		end
-	else
-		YRP.msg( "note", sender:Nick() .. " tried to use addxp!" )
-	end
-end
-
-function add_level(sender, text)
-	if sender:HasAccess() then
-		local _table = string.Explode( " ", text, false)
-		local _name = _table[2]
-		local _lvl = tonumber(_table[3])
-		if isnumber(_lvl) then
-			local _receiver = GetPlayerByName(_name)
-			if NotNilAndNotFalse(_receiver) and _receiver.AddLevel != nil then
-				_receiver:AddLevel(_lvl)
-				return ""
-			else
-				sender:ChatPrint( "\nCommand-FAILED NAME not found" )
-			end
-		end
-	else
-		YRP.msg( "note", sender:Nick() .. " tried to use addlevel!" )
-	end
-end
-
-function set_level(sender, text)
-	if sender:HasAccess() then
-		local _table = string.Explode( " ", text, false)
-		local _name = _table[2]
-		local _lvl = tonumber(_table[3])
-		if isnumber(_lvl) then
-			local _receiver = GetPlayerByName(_name)
-			if EntityAlive(_receiver) then
-				_receiver:SetLevel(_lvl)
-				return ""
-			else
-				sender:ChatPrint( "\nCommand-FAILED NAME not found" )
-			end
-		end
-	else
-		YRP.msg( "note", sender:Nick() .. " tried to use setlevel!" )
-	end
 end
 
 util.AddNetworkString( "set_chat_mode" )
@@ -399,16 +267,17 @@ function strTrimRight(str, cha)
 	end
 end
 
+function YRPChatAfk( sender )
+	sender:SetAFK(!sender:AFK() )
+end
+
+function YRPChatDnd( sender )
+	sender:SetYRPBool( "isdnd", !sender:GetYRPBool( "isdnd", false) )
+end
+
 function YRPChatRenamePlayer( sender, text )
 	if GetGlobalYRPBool( "bool_characters_changeable_name", false) or sender:HasAccess() then
 		local name = text
-
-		name = string.Replace(name, "!", "" )
-		name = string.Replace(name, "/", "" )
-
-		name = string.Replace(name, "rpname ", "" )
-		name = string.Replace(name, "name ", "" )
-		name = string.Replace(name, "nick ", "" )
 
 		local tab = {}
 		if string.find(name, "\"" ) then
@@ -447,23 +316,15 @@ function YRPChatRenamePlayer( sender, text )
 	end
 end
 
-function YRPChatAfk( sender )
-	sender:SetAFK(!sender:AFK() )
-end
-
-function YRPChatDnd( sender )
-	sender:SetYRPBool( "isdnd", !sender:GetYRPBool( "isdnd", false) )
-end
-
 function YRPChatAlert( sender, text )
 	if sender:HasAccess() then
-		AddAlert(string.sub(text, 7) )
+		AddAlert( text )
 		return ""
 	end
 end
 
 function YRPChatGiveLicense( sender, text )
-	text = string.sub(text, 14)
+
 	local args = string.Explode( " ", text)
 	local name = args[1]
 	local lname = args[2]
@@ -479,6 +340,138 @@ function YRPChatGiveLicense( sender, text )
 	end
 end
 
+function set_money(sender, text)
+	if sender:HasAccess() then
+		local _table = string.Explode( " ", text, false)
+		local _name = _table[1]
+		local _money = tonumber(_table[2])
+		if isnumber(_money) then
+			local ply = GetPlayerByName(_name)
+			if ply != NULL then
+				if ply.addMoney == nil then
+					sender:ChatPrint( "\nCommand-FAILED: Is not a Player" )
+					return ""
+				end
+				ply:SetMoney(_money)
+				YRP.msg( "note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money)
+				return ""
+			else
+				YRP.msg( "note", "[set_money] Name: " .. tostring(_name) .. " not found!" )
+				return ""
+			end
+		end
+		sender:ChatPrint( "\nCommand-FAILED" )
+	else
+		YRP.msg( "note", sender:YRPName() .. " tried to use setmoney!" )
+	end
+end
+
+function revive(sender, text)
+	if sender:HasAccess() then
+		local _table = string.Explode( " ", text, false)
+		local _name = _table[1]
+		local ply = GetPlayerByName(_name)
+		if IsValid(ply) and ply:IsPlayer() then
+			if ply:Alive() then
+				sender:ChatPrint( "\nCommand-FAILED: Player alive" )
+				return ""
+			end
+			local rd = ply:GetRagdollEntity()
+			if IsValid( rd ) then
+				ply:Revive(rd:GetPos() )
+			else
+				ply:Revive(ply:GetPos() )
+			end
+			return ""
+		else
+			sender:ChatPrint( "\nCommand-FAILED" )
+		end
+	else
+		YRP.msg( "note", sender:YRPName() .. " tried to use setmoney!" )
+	end
+end
+
+function add_money(sender, text)
+	if sender:HasAccess() then
+		local _table = string.Explode( " ", text, false)
+		local _name = _table[1]
+		local _money = tonumber(_table[2])
+		if isnumber(_money) then
+			local ply = GetPlayerByName(_name)
+			if ply != NULL then
+				if ply.addMoney == nil then
+					sender:ChatPrint( "\nCommand-FAILED: Is not a Player" )
+					return ""
+				end
+				ply:addMoney(_money)
+				YRP.msg( "note", sender:Nick() .. " adds " .. _money .. " to " .. ply:Nick() )
+				return ""
+			else
+				sender:ChatPrint( "\nCommand-FAILED: Player not found" )
+			end
+		end
+	else
+		YRP.msg( "note", sender:Nick() .. " tried to use addmoney!" )
+	end
+end
+
+function add_xp(sender, text)
+	if sender:HasAccess() then
+		local _table = string.Explode( " ", text, false)
+		local _name = _table[1]
+		local _xp = tonumber(_table[2])
+		if isnumber(_xp) then
+			local _receiver = GetPlayerByName(_name)
+			if EntityAlive(_receiver) then
+				_receiver:AddXP(_xp)
+				return ""
+			else
+				sender:ChatPrint( "\nCommand-FAILED NAME not found" )
+			end
+		end
+	else
+		YRP.msg( "note", sender:Nick() .. " tried to use addxp!" )
+	end
+end
+
+function add_level(sender, text)
+	if sender:HasAccess() then
+		local _table = string.Explode( " ", text, false)
+		local _name = _table[1]
+		local _lvl = tonumber(_table[2])
+		if isnumber(_lvl) then
+			local _receiver = GetPlayerByName(_name)
+			if NotNilAndNotFalse(_receiver) and _receiver.AddLevel != nil then
+				_receiver:AddLevel(_lvl)
+				return ""
+			else
+				sender:ChatPrint( "\nCommand-FAILED NAME not found" )
+			end
+		end
+	else
+		YRP.msg( "note", sender:Nick() .. " tried to use addlevel!" )
+	end
+end
+
+function set_level(sender, text)
+	if sender:HasAccess() then
+		local _table = string.Explode( " ", text, false)
+		local _name = _table[1]
+		local _lvl = tonumber(_table[2])
+		if isnumber(_lvl) then
+			local _receiver = GetPlayerByName(_name)
+			if EntityAlive(_receiver) then
+				_receiver:SetLevel(_lvl)
+				return ""
+			else
+				sender:ChatPrint( "\nCommand-FAILED NAME not found" )
+			end
+		end
+	else
+		YRP.msg( "note", sender:Nick() .. " tried to use setlevel!" )
+	end
+end
+
 local cmdsS = {}
 cmdsS["help"] = print_help
 cmdsS["dropweapon"] = drop_weapon
@@ -486,7 +479,6 @@ cmdsS["kill"] = do_suicide
 cmdsS["tag_dev"] = show_tag_dev
 cmdsS["tag_tra"] = show_tag_tra
 cmdsS["tag_ug"] = show_tag_ug
-cmdsS["tag_dev"] = set_money
 cmdsS["afk"] = YRPChatAfk
 cmdsS["dnd"] = YRPChatDnd
 
@@ -508,8 +500,6 @@ cmdsM["nick"] = YRPChatRenamePlayer
 function YRPRunCommand(sender, command, text)
 	command = string.lower( command)
 	text = text or ""
-
-	text = command .. " " .. text
 
 	if cmdsS[command] then
 		cmdsS[command]( sender )
