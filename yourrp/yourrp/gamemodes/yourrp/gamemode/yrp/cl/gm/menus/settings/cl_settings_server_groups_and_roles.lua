@@ -4,7 +4,7 @@
 
 net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		local cur_group = {}
 		cur_group.cur = 0
 		cur_group.par = 0
@@ -109,7 +109,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		net.Receive( "settings_group_update_name", function(le)
 			local _uid = tonumber(net.ReadString() )
 			local name = net.ReadString()
-			if pa(gs.gplist) and gs.gplist[_uid] and gs.gplist[_uid].text then
+			if PanelAlive(gs.gplist) and gs.gplist[_uid] and gs.gplist[_uid].text then
 				gs.gplist[_uid].text = name
 			end
 		end)
@@ -117,7 +117,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		net.Receive( "settings_group_update_color", function(le)
 			local _uid = tonumber(net.ReadString() )
 			local color = net.ReadString()
-			if pa(gs) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_color then
+			if PanelAlive(gs) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_color then
 				if isnumber(_uid) and gs.gplist[_uid] != nil then
 					gs.gplist[_uid].string_color = stc( color)
 				end
@@ -127,7 +127,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		net.Receive( "settings_group_update_icon", function(le)
 			local _uid = tonumber(net.ReadString() )
 			local icon = net.ReadString()
-			if pa(gs.gplist) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_icon then
+			if PanelAlive(gs.gplist) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_icon then
 				gs.gplist[_uid].string_icon = icon
 				gs.gplist[_uid].ico:SetHTML(GetHTMLImage(gs.gplist[_uid].string_icon, gs.gplist[_uid].ico:GetWide(), gs.gplist[_uid].ico:GetTall() ))
 				TestHTML(gs.gplist[_uid].ico, gs.gplist[_uid].string_icon, false)
@@ -248,7 +248,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					net.WriteString( cur_group.cur)
 				net.SendToServer()
 				timer.Simple(0.01, function()
-					if wk(gs.gplist[group.uniqueID]) and wk(gs.gplist[group.uniqueID].uniqueID) then
+					if NotNilAndNotFalse(gs.gplist[group.uniqueID]) and NotNilAndNotFalse(gs.gplist[group.uniqueID].uniqueID) then
 						net.Start( "settings_subscribe_grouplist" )
 							net.WriteString(gs.gplist[group.uniqueID].uniqueID)
 						net.SendToServer()
@@ -259,7 +259,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			parent:AddItem(gs.gplist[group.uniqueID])
 		end
 		net.Receive( "settings_subscribe_grouplist", function(le)
-			if pa(gs.gplist) then
+			if PanelAlive(gs.gplist) then
 				gs.gplist:ClearList()
 
 				local parentgroup = net.ReadTable()
@@ -319,7 +319,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		rs.bac = YRPCreateD( "YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(940) )
 		rs.bac:SetText( "" )
 		function rs.bac:Paint(pw, ph)
-			if wk( cur_role.pre) then
+			if NotNilAndNotFalse( cur_role.pre) then
 				if cur_role.pre > 0 then
 				--[[if rs.rplist.tab != nil then
 					if rs.rplist.tab[1] != nil then
@@ -348,7 +348,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 		function rs.bac:DoClick()
-			if wk( cur_role.pre) and wk( cur_role.gro) then
+			if NotNilAndNotFalse( cur_role.pre) and NotNilAndNotFalse( cur_role.gro) then
 				if cur_role.pre > 0 then
 					rs.rplist:ClearList()
 					net.Start( "settings_unsubscribe_rolelist" )
@@ -396,10 +396,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		end
 
 		net.Receive( "settings_role_update_name", function(le)
-			if pa(rs.rplist) then
+			if PanelAlive(rs.rplist) then
 				local _uid = tonumber(net.ReadString() )
 				local name = net.ReadString()
-				if wk(rs.rplist[_uid]) then
+				if NotNilAndNotFalse(rs.rplist[_uid]) then
 					rs.rplist[_uid].text = name
 				else
 					YRP.msg( "note", "[settings_role_update_name] index is invalid" )
@@ -408,7 +408,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		end)
 
 		net.Receive( "settings_role_update_color", function(le)
-			if pa(rs) then
+			if PanelAlive(rs) then
 				local _uid = tonumber(net.ReadString() )
 				local color = net.ReadString()
 				if isnumber(_uid) and rs.rplist[_uid] != nil then
@@ -418,10 +418,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		end)
 
 		net.Receive( "settings_role_update_icon", function(le)
-			if pa(rs.rplist) then
+			if PanelAlive(rs.rplist) then
 				local _uid = tonumber(net.ReadString() )
 				local icon = net.ReadString()
-				if pa(rs.rplist[_uid]) then
+				if PanelAlive(rs.rplist[_uid]) then
 					rs.rplist[_uid].string_icon = icon
 					rs.rplist[_uid].ico:SetHTML(GetHTMLImage(rs.rplist[_uid].string_icon, rs.rplist[_uid].ico:GetWide(), rs.rplist[_uid].ico:GetTall() ))
 					TestHTML(rs.rplist[_uid].ico, rs.rplist[_uid].string_icon, false)
@@ -490,7 +490,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				function _no:DoClick()
 					win:Close()
 				end
-			elseif ea.typ == "role" and wk(ea.tab.uniqueID) and tonumber(ea.tab.uniqueID) != 1 then
+			elseif ea.typ == "role" and NotNilAndNotFalse(ea.tab.uniqueID) and tonumber(ea.tab.uniqueID) != 1 then
 				net.Start( "settings_delete_role" )
 					net.WriteString(ea.tab.uniqueID)
 				net.SendToServer()
@@ -583,7 +583,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local groups = net.ReadTable()
 			local db_ugs = net.ReadTable()
 
-			if pa( ea.background ) then
+			if PanelAlive( ea.background ) then
 				if group.uniqueID != nil then
 					net.Start( "settings_subscribe_rolelist" )
 						net.WriteString(group.uniqueID)
@@ -1164,7 +1164,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					net.SendToServer()
 				end
 				timer.Simple(0.01, function()
-					if cur_role.gro and rs and pa(rs.rplist) and rs.rplist[role.uniqueID] and rs.rplist[role.uniqueID].uniqueID then
+					if cur_role.gro and rs and PanelAlive(rs.rplist) and rs.rplist[role.uniqueID] and rs.rplist[role.uniqueID].uniqueID then
 						net.Start( "settings_subscribe_rolelist" )
 							net.WriteString( cur_role.gro)
 							net.WriteString(rs.rplist[role.uniqueID].uniqueID)
@@ -1184,7 +1184,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local db_huds = net.ReadTable()
 			local db_hudmasks = net.ReadTable()
 
-			if !wk( db_groups) or !wk( db_ugs) or !wk(roles) or !wk(role) then
+			if !NotNilAndNotFalse( db_groups) or !NotNilAndNotFalse( db_ugs) or !NotNilAndNotFalse(roles) or !NotNilAndNotFalse(role) then
 				return
 			end
 
@@ -1192,7 +1192,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			cur_role.gro = role.int_groupID
 			cur_role.edi = role.uniqueID
 
-			if !pa(ea) then
+			if !PanelAlive(ea) then
 				YRP.msg( "note", "Closed F8/Switched f8 site?" )
 				return
 			end
@@ -1337,7 +1337,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				local grps = {}
 				for i, tab in pairs( db_groups) do
 					tab.uniqueID = tonumber(tab.uniqueID)
-					if wk(tab.string_name) and wk(tab.uniqueID) and tab.uniqueID != -1 then
+					if NotNilAndNotFalse(tab.string_name) and NotNilAndNotFalse(tab.uniqueID) and tab.uniqueID != -1 then
 						grps[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
 					end
 				end
@@ -1620,11 +1620,11 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					pmwin.list:SetSpacing(10)
 					function pmwin.list:RefreshList()
 						local lply = LocalPlayer()
-						if wk(lply.yrpseltab) and pmwin.list != nil and pa(pmwin.list) then
+						if NotNilAndNotFalse(lply.yrpseltab) and pmwin.list != nil and PanelAlive(pmwin.list) then
 							pmwin.list:Clear()
 							for i, pm in pairs( lply.yrpseltab ) do
 								timer.Simple( i * 0.001, function()
-									if pa(pmwin) and pa(pmwin.list) then
+									if PanelAlive(pmwin) and PanelAlive(pmwin.list) then
 										local line = YRPCreateD( "DPanel", pmwin.list, YRP.ctr(200), YRP.ctr(64), 0, 0)
 										line.pm = pm
 										function line:Paint(pw, ph)
@@ -1733,7 +1733,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 								self.searchstr = string.Replace(self.searchstr, "]", "" )
 								self.searchstr = string.Replace(self.searchstr, "%", "" )
 
-								if pa(win.dpl) and string.find(string.lower(pm.string_name), self.searchstr) or string.find(string.lower(pm.string_models), self.searchstr) then
+								if PanelAlive(win.dpl) and string.find(string.lower(pm.string_name), self.searchstr) or string.find(string.lower(pm.string_models), self.searchstr) then
 									local line = YRPCreateD( "YButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
 									line.string_name = pm.string_name
 									line.models = string.Explode( ",", pm.string_models)
@@ -1821,7 +1821,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					local tab = net.ReadTable()
 					table.insert( pms, tab )
 
-					if pa( win ) then
+					if PanelAlive( win ) then
 						win:Search( win:GetText() )
 					end
 				end)
@@ -2982,7 +2982,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		end)
 
 		net.Receive( "settings_subscribe_rolelist", function(le)
-			if pa(rs.rplist) then
+			if PanelAlive(rs.rplist) then
 				rs.rplist:ClearList()
 
 				local roles = net.ReadTable()
@@ -2992,7 +2992,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				local gro = net.ReadString()
 				local pre = net.ReadString()
 
-				if wk(gro) and wk(pre) then
+				if NotNilAndNotFalse(gro) and NotNilAndNotFalse(pre) then
 					cur_role.gro = tonumber(gro)
 					cur_role.pre = tonumber(pre)
 

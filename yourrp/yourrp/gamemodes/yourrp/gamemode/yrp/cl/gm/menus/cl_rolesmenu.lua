@@ -139,7 +139,7 @@ function createRoleBox(rol, parent, mainparent)
 					if IsValid( dmp) then
 						dmp:SetModel(pmtab.string_model)
 						local randsize = math.Rand(pmtab.float_size_min, pmtab.float_size_max)
-						if wk( dmp.Entity) then
+						if NotNilAndNotFalse( dmp.Entity) then
 							dmp.Entity:SetModelScale(randsize + 1, 0)
 							dmp.Entity:SetPos( Vector(0, 0, - 40) )
 						end
@@ -236,7 +236,7 @@ function addRole(rol, parent, mainparent)
 end
 
 function addRoleRow(rol, parent)
-	if pa(parent) then
+	if PanelAlive(parent) then
 		local RRW = YRP.ctr(600)
 		local RRH = YRP.ctr(150)
 		local _rr = YRPCreateD( "DHorizontalScroller", parent.content, RRW, RRH, 0, 0) --parent:GetWide() - 2*YRP.ctr(parent:GetSpacing() ), YRP.ctr(400), 0, 0)
@@ -271,7 +271,7 @@ function getRoles(uid, parent)
 end
 
 function addGroup(grp, parent)
-	if parent != NULL and pa(parent) then
+	if parent != NULL and PanelAlive(parent) then
 		local _grp = YRPCreateD( "DYRPCollapsibleCategory", parent, parent:GetWide() - YRP.ctr(80), YRP.ctr(200), YRP.ctr(0), YRP.ctr(0) )
 		_grp:SetHeader(grp.string_name)
 		_grp:SetSpacing(30)
@@ -332,7 +332,7 @@ function addGroup(grp, parent)
 			_grp.icon:SetHTML(GetHTMLImage(grp.string_icon, _grp.icon:GetWide(), _grp.icon:GetTall() ))
 		end
 
-		if pa(parent) then
+		if PanelAlive(parent) then
 			--if tostring(grp.int_parentgroup) != "0" then -- removed to make it work for under one by one
 				if parent.AddItem then -- first additem!
 					parent:AddItem(_grp)
@@ -368,7 +368,7 @@ function getGroups(uid, parent)
 			end
 		end
 		timer.Simple(0.2, function()
-			if wk( dg) and wk( dg.header) then
+			if NotNilAndNotFalse( dg) and NotNilAndNotFalse( dg.header) then
 				dg.header:DoClick()
 			end
 		end)

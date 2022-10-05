@@ -316,7 +316,7 @@ end
 local yrp_colors = {}
 
 function YRPGetColor(nr)
-	if wk(yrp_colors[interfaceDesign()]) and wk(yrp_colors[interfaceDesign()][InterfaceColor()]) and wk(yrp_colors[interfaceDesign()][InterfaceColor()][nr]) then
+	if NotNilAndNotFalse(yrp_colors[interfaceDesign()]) and NotNilAndNotFalse(yrp_colors[interfaceDesign()][InterfaceColor()]) and NotNilAndNotFalse(yrp_colors[interfaceDesign()][InterfaceColor()][nr]) then
 		 local color = yrp_colors[interfaceDesign()][InterfaceColor()][nr]
 		 if InterfaceTransparent() then
 			 color.a = 200
@@ -501,7 +501,7 @@ end
 
 function YRP.DrawIcon(material, w, h, x, y, colo)
 	local col = colo or YRPGetColor( "6" )
-	if wk(material) then
+	if NotNilAndNotFalse(material) then
 		surface.SetDrawColor( col)
 		surface.SetMaterial(material)
 		surface.DrawTexturedRect(x or 0, y or 0, w or 64, h or 64)
@@ -1497,7 +1497,7 @@ function TestHTML(pnl, url, rem)
 	else
 		http.Fetch(url,
 			function( body, len, headers, code )
-				if pa(pnl) then
+				if PanelAlive(pnl) then
 					if code != 200 then
 						if rem then
 							pnl:Remove()
@@ -1510,7 +1510,7 @@ function TestHTML(pnl, url, rem)
 				end
 			end,
 			function( error )
-				if pa(pnl) then
+				if PanelAlive(pnl) then
 					if rem then
 						pnl:Remove()
 					else

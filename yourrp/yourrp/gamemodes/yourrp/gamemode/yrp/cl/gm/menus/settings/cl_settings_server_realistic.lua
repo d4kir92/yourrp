@@ -2,7 +2,7 @@
 
 net.Receive( "Connect_Settings_Realistic", function(len)
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 
 		function PARENT:OnRemove()
 			net.Start( "Disconnect_Settings_Realistic" )

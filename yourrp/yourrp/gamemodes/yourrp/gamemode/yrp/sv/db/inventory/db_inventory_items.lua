@@ -68,7 +68,7 @@ function CreateItem(slotID, tab)
 	end
 
 	local last = YRP_SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1" )
-	if wk(last) then
+	if NotNilAndNotFalse(last) then
 		last = last[1]
 		StoreItem(slotID, last)
 	else
@@ -94,7 +94,7 @@ function CreateItemByEntity(slotID, entity)
 		tab.int_storageID = entity._suid
 		if tab.int_storageID == nil then
 			local storage = CreateStorage(entity.bag_size)
-			if wk(storage) then
+			if NotNilAndNotFalse(storage) then
 				tab.int_storageID = storage.uniqueID
 				return CreateItem(slotID, tab)
 			else
@@ -111,11 +111,11 @@ end
 
 function GetItem(slotID)
 	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_slotID = '" .. slotID .. "'" )
-	if wk(item) then
+	if NotNilAndNotFalse(item) then
 		item = item[1]
 		if item.text_type == "bag" then
 			local storage = YRP_SQL_SELECT( "yrp_inventory_storages", "*", "uniqueID = '" .. item.int_storageID .. "'" )
-			if !wk(storage) then
+			if !NotNilAndNotFalse(storage) then
 				YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. item.uniqueID .. "'" )
 				return false
 			end
@@ -230,7 +230,7 @@ function MoveItem(itemID, slotID)
 
 	local slot = YRP_SQL_SELECT( "yrp_inventory_slots", "*", "uniqueID = '" .. slotID .. "'" )
 
-	if wk(item) and wk(slot) then -- if both exists
+	if NotNilAndNotFalse(item) and NotNilAndNotFalse(slot) then -- if both exists
 		item = item[1]
 		slot = slot[1]
 
@@ -256,7 +256,7 @@ function MoveItem(itemID, slotID)
 		if item.text_type == "bag" then
 			for i, slot in pairs(GetStorageSlots(item.int_storageID) ) do
 				local ite = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_slotID = '" .. slot.uniqueID .. "'" )
-				if wk(ite) then
+				if NotNilAndNotFalse(ite) then
 					YRP.msg( "db", "Bag is not empty" )
 					return
 				end
@@ -284,7 +284,7 @@ function MoveItem(itemID, slotID)
 
 		local added = CreateItemByEntity(slotID, e)
 
-		if wk(e) and added then
+		if NotNilAndNotFalse(e) and added then
 			e:Remove()
 		else
 			YRP.msg( "db", "Item or Slot not exists" )
@@ -303,7 +303,7 @@ net.Receive( "yrp_item_clicked", function(len, ply)
 
 	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'" )
 
-	if wk(item) then
+	if NotNilAndNotFalse(item) then
 		item = item[1]
 
 		item.int_storageID = tonumber(item.int_storageID)
@@ -336,7 +336,7 @@ net.Receive( "yrp_item_drop", function(len, ply)
 	itemID = tonumber(itemID)
 
 	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'" )
-	if wk(item) then
+	if NotNilAndNotFalse(item) then
 		item = item[1]
 		DropItem(ply, item.int_slotID)
 	end

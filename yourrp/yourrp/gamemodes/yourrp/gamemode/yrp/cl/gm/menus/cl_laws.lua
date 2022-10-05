@@ -16,7 +16,7 @@ function CloseLawsMenu()
 end
 
 function CreateLawsContent( PARENT )
-	if !pa(PARENT) then
+	if !PanelAlive(PARENT) then
 		return
 	end
 
@@ -28,7 +28,7 @@ function CreateLawsContent( PARENT )
 		local lockdowntext = lawtab.string_lockdowntext
 		local lockdown = tobool(lawtab.bool_lockdown)
 
-		if !pa(PARENT) then
+		if !PanelAlive(PARENT) then
 			return
 		end
 

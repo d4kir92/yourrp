@@ -8,7 +8,7 @@ function GM:PlayerDisconnected(ply)
 	YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID() .. "', '" .. "disconnected" .. "'" )
 
 	local _rol_tab = ply:YRPGetRoleTable()
-	if wk(_rol_tab) then
+	if NotNilAndNotFalse(_rol_tab) then
 		if tonumber(_rol_tab.int_maxamount) > 0 then
 			ply:SetYRPString( "roleUniqueID", "1" )
 			YRPUpdateRoleUses(_rol_tab.uniqueID)
@@ -163,7 +163,7 @@ hook.Add( "PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 
 	if IsVoidCharEnabled() or GetGlobalYRPBool( "bool_character_system", true) == false then
 		local chars = YRP_SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. ply:YRPSteamID() .. "'" )
-		if !wk( chars) then
+		if !NotNilAndNotFalse( chars) then
 			local tab = {}
 			tab.roleID = 1
 			tab.rpname = ply:Nick()		
@@ -218,9 +218,9 @@ function YRPSetBodyGroups( ply )
 	ply:YRPUpdateAppearance()
 	
 	local rolTab = ply:YRPGetRoleTable()
-	if wk(rolTab) and tonumber( rolTab.bool_savebodygroups ) == 1 then
+	if NotNilAndNotFalse(rolTab) and tonumber( rolTab.bool_savebodygroups ) == 1 then
 		local chaTab = ply:YRPGetCharacterTable()
-		if wk( chaTab ) then
+		if NotNilAndNotFalse( chaTab ) then
 			ply:SetSkin( chaTab.skin)
 			ply:SetupHands()
 			
@@ -247,7 +247,7 @@ end
 function YRPPlyUpdateStorage( ply )
 	if IsValid( ply ) then
 		local chaTab = ply:YRPGetCharacterTable()
-		if wk( chaTab ) then
+		if NotNilAndNotFalse( chaTab ) then
 			if not IsVoidCharEnabled() then
 				ply:SetYRPString( "storage", chaTab.storage )
 			end
@@ -279,18 +279,18 @@ function YRPPlayerLoadout( ply )
 			--ply:Give( "yrp_unarmed" )
 
 			local plyT = ply:GetPlyTab()
-			if wk(plyT) then
+			if NotNilAndNotFalse(plyT) then
 				ply:SetupCharID()
 				
 				local _rol_tab = ply:YRPGetRoleTable()
-				if wk(_rol_tab) then
+				if NotNilAndNotFalse(_rol_tab) then
 					YRPSetRole(ply, _rol_tab.uniqueID)
 					setPlayerModel( ply )
 				else
 					YRP.msg( "note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab) )
 
 					local chatab = ply:YRPGetCharacterTable()
-					if wk( chatab) then
+					if NotNilAndNotFalse( chatab) then
 						CheckIfRoleExists(ply, chatab.roleID)
 					end
 
@@ -298,7 +298,7 @@ function YRPPlayerLoadout( ply )
 				end
 
 				local chaTab = ply:YRPGetCharacterTable()
-				if wk( chaTab ) then
+				if NotNilAndNotFalse( chaTab ) then
 					if not IsVoidCharEnabled() then
 						ply:SetYRPString( "money", chaTab.money)
 						ply:SetYRPString( "moneybank", chaTab.moneybank)
@@ -505,7 +505,7 @@ end
 function IsNoRoleSwep(ply, cname)
 	if GetGlobalYRPBool( "bool_drop_items_role", false) then
 		local _rol_tab = ply:YRPGetRoleTable()
-		if wk(_rol_tab) then
+		if NotNilAndNotFalse(_rol_tab) then
 			local _sweps = string.Explode( ",", _rol_tab.string_sweps)
 			if !table.HasValue(_sweps, cname) then
 				return true
@@ -521,7 +521,7 @@ end
 function IsNoGroupSwep(ply, cname)
 	if GetGlobalYRPBool( "bool_drop_items_role", false) then
 		local _gro_tab = ply:YRPGetGroupTable()
-		if wk(_gro_tab) then
+		if NotNilAndNotFalse(_gro_tab) then
 			local _sweps = string.Explode( ",", _gro_tab.string_sweps)
 			if !table.HasValue(_sweps, cname) then
 				return true
@@ -536,7 +536,7 @@ end
 
 function IsNoNotDroppableRoleSwep(ply, cname)
 	local _rol_tab = ply:YRPGetRoleTable()
-	if wk(_rol_tab) then
+	if NotNilAndNotFalse(_rol_tab) then
 		local _sweps = string.Explode( ",", _rol_tab.string_ndsweps)
 		if !table.HasValue(_sweps, cname) then
 			return true
@@ -598,7 +598,7 @@ function PLAYER:AddPlayTime(force)
 			local playtime = os.time() - self:GetYRPInt( "ts_spawned", os.time() )
 			
 			local tab = YRP_SQL_SELECT( "yrp_characters", "uniqueID, text_playtime", "uniqueID = '" .. self.yrp_ts_oldchar .. "'" )
-			if wk(tab) then
+			if NotNilAndNotFalse(tab) then
 				local oldplaytime = tab[1].text_playtime
 				
 				YRP_SQL_UPDATE( "yrp_characters", {["text_playtime"] = oldplaytime + playtime}, "uniqueID = '" .. self.yrp_ts_oldchar .. "'" )
@@ -676,7 +676,7 @@ hook.Add( "DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attac
 		end
 		if _money > 0 then
 			local money = ents.Create( "yrp_money" )
-			if wk(money) then
+			if NotNilAndNotFalse(money) then
 				money:SetPos(ply:GetPos() )
 				money:Spawn()
 				money:SetMoney(_money)
@@ -834,7 +834,7 @@ function StartCombat(ply)
 				timer.Remove(steamid .. " outOfCombat" )
 			end
 			timer.Create(steamid .. " outOfCombat", 5, 1, function()
-				if ea(ply) then
+				if EntityAlive(ply) then
 					ply:SetYRPBool( "inCombat", false)
 					if timer.Exists(steamid .. " outOfCombat" ) then
 						timer.Remove(steamid .. " outOfCombat" )
@@ -1013,7 +1013,7 @@ end
 function GenerateVoiceTable()
 	yrp_voice_channels = {}
 	local channels = YRP_SQL_SELECT(DATABASE_NAME, "*" )
-	if wk( channels) then
+	if NotNilAndNotFalse( channels) then
 		for i, channel in pairs( channels) do
 			yrp_voice_channels[tonumber( channel.uniqueID)] = {}
 			yrp_voice_channels[tonumber( channel.uniqueID)].uniqueID = tonumber( channel.uniqueID)
@@ -1109,7 +1109,7 @@ GenerateVoiceTable()
 util.AddNetworkString( "yrp_vm_get_active_usergroups" )
 net.Receive( "yrp_vm_get_active_usergroups", function(len, ply)
 	local ugs = YRP_SQL_SELECT( "yrp_usergroups", "uniqueID, string_name", nil)
-	if wk(ugs) then
+	if NotNilAndNotFalse(ugs) then
 		net.Start( "yrp_vm_get_active_usergroups" )
 			net.WriteTable(ugs)
 		net.Send(ply)
@@ -1119,7 +1119,7 @@ end)
 util.AddNetworkString( "yrp_vm_get_active_groups" )
 net.Receive( "yrp_vm_get_active_groups", function(len, ply)
 	local grps = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", nil)
-	if wk(grps) then
+	if NotNilAndNotFalse(grps) then
 		net.Start( "yrp_vm_get_active_groups" )
 			net.WriteTable(grps)
 		net.Send(ply)
@@ -1129,7 +1129,7 @@ end)
 util.AddNetworkString( "yrp_vm_get_active_roles" )
 net.Receive( "yrp_vm_get_active_roles", function(len, ply)
 	local rols = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name", nil)
-	if wk(rols) then
+	if NotNilAndNotFalse(rols) then
 		net.Start( "yrp_vm_get_active_roles" )
 			net.WriteTable(rols)
 		net.Send(ply)
@@ -1139,7 +1139,7 @@ end)
 util.AddNetworkString( "yrp_vm_get_passive_usergroups" )
 net.Receive( "yrp_vm_get_passive_usergroups", function(len, ply)
 	local ugs = YRP_SQL_SELECT( "yrp_usergroups", "uniqueID, string_name", nil)
-	if wk(ugs) then
+	if NotNilAndNotFalse(ugs) then
 		net.Start( "yrp_vm_get_passive_usergroups" )
 			net.WriteTable(ugs)
 		net.Send(ply)
@@ -1149,7 +1149,7 @@ end)
 util.AddNetworkString( "yrp_vm_get_passive_groups" )
 net.Receive( "yrp_vm_get_passive_groups", function(len, ply)
 	local grps = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", nil)
-	if wk(grps) then
+	if NotNilAndNotFalse(grps) then
 		net.Start( "yrp_vm_get_passive_groups" )
 			net.WriteTable(grps)
 		net.Send(ply)
@@ -1159,7 +1159,7 @@ end)
 util.AddNetworkString( "yrp_vm_get_passive_roles" )
 net.Receive( "yrp_vm_get_passive_roles", function(len, ply)
 	local rols = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name", nil)
-	if wk(rols) then
+	if NotNilAndNotFalse(rols) then
 		net.Start( "yrp_vm_get_passive_roles" )
 			net.WriteTable(rols)
 		net.Send(ply)
@@ -1527,7 +1527,7 @@ end)
 function setPlayerModel(ply)
 	local tmpRolePlayermodel = ply:GetPlayerModel()
 
-	if wk(tmpRolePlayermodel) and !strEmpty(tmpRolePlayermodel) then
+	if NotNilAndNotFalse(tmpRolePlayermodel) and !strEmpty(tmpRolePlayermodel) then
 		ply:SetModel(tmpRolePlayermodel)
 	else
 		ply:SetModel( "models/player/skeleton.mdl" )
@@ -1550,7 +1550,7 @@ end
 
 function GM:PlayerSwitchFlashlight(pl, enabled)
 	local _tmp = YRP_SQL_SELECT( "yrp_usergroups", "*", "string_name = '" .. string.lower(pl:GetUserGroup() ) .. "'" )
-	if wk(_tmp) then
+	if NotNilAndNotFalse(_tmp) then
 		_tmp = _tmp[1]
 		if tobool(_tmp.bool_flashlight) then
 			return true

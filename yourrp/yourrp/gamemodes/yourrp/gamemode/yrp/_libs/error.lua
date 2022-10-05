@@ -2,7 +2,7 @@
 
 -- #ERROR #BUGS
 
-function wk(obj)
+function NotNilAndNotFalse( obj )
 	if obj != nil and obj != false then
 		return true
 	else
@@ -10,7 +10,7 @@ function wk(obj)
 	end
 end
 
-function worked(obj, name, _silence)
+function WORKED(obj, name, _silence)
 	if obj != nil and obj != false then
 		return true
 	else
@@ -21,7 +21,7 @@ function worked(obj, name, _silence)
 	end
 end
 
-function ea(ent)
+function EntityAlive(ent)
 	if ent != nil and ent != NULL and tostring(ent) != "[NULL Entity]" then
 		if ent:IsValid() then
 			return true
@@ -30,13 +30,9 @@ function ea(ent)
 	return false
 end
 
-function pa(panel)
+function PanelAlive(panel)
 	if tostring(panel) != "[NULL Panel]" and panel != nil then
 		return true
 	end
 	return false
-end
-
-function yts(str , str2)
-	return string.find(string.lower(str), string.lower(str2) )
 end

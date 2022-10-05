@@ -138,7 +138,7 @@ function Player:HasAccess()
 end
 
 function Player:YRPHasStorageItem( uid )
-	if !wk( uid ) then
+	if !NotNilAndNotFalse( uid ) then
 		return false
 	end
 
@@ -178,7 +178,7 @@ function Player:GetPlyTab()
 				local steamid = self:YRPSteamID()
 				if steamid != nil and steamid != false and steamid != "" then
 					local yrp_players = YRP_SQL_SELECT( "yrp_players", "*", "SteamID = '" .. steamid .. "'" )
-					if wk(yrp_players) then
+					if NotNilAndNotFalse(yrp_players) then
 						self.plytab = yrp_players[1]
 						return self.plytab
 					else
@@ -224,9 +224,9 @@ function Player:HasCharacterSelected()
 			else
 				if self:GetYRPBool( "finishedloadingcharacter", false) then
 					local _ply_tab = self:GetPlyTab()
-					if wk(_ply_tab) and tostring(_ply_tab.CurrentCharacter) != "NULL" and _ply_tab.CurrentCharacter != NULL then
+					if NotNilAndNotFalse(_ply_tab) and tostring(_ply_tab.CurrentCharacter) != "NULL" and _ply_tab.CurrentCharacter != NULL then
 						local chatab = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = '" .. _ply_tab.CurrentCharacter .. "'" )
-						if wk( chatab) then
+						if NotNilAndNotFalse( chatab) then
 							return true
 						end
 					end
@@ -244,9 +244,9 @@ function Player:YRPGetCharacterTable()
 		if self:IsValid() then
 			if self:GetYRPBool( "finishedloadingcharacter", false) then
 				local _tmp = self:GetPlyTab()
-				if wk(_tmp) then
+				if NotNilAndNotFalse(_tmp) then
 					local yrp_characters = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = '" .. _tmp.CurrentCharacter .. "'" )
-					if wk(yrp_characters) then
+					if NotNilAndNotFalse(yrp_characters) then
 						self.chatab = yrp_characters[1]
 						return self.chatab
 					elseif yrp_characters == nil then
@@ -270,9 +270,9 @@ function Player:YRPGetRoleTable()
 		if self:IsValid() then
 			if self:GetYRPBool( "finishedloadingcharacter", false) then
 				local yrp_characters = self:YRPGetCharacterTable()
-				if wk(yrp_characters) and wk(yrp_characters.roleID) then
+				if NotNilAndNotFalse(yrp_characters) and NotNilAndNotFalse(yrp_characters.roleID) then
 					local yrp_roles = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. yrp_characters.roleID)
-					if wk(yrp_roles) then
+					if NotNilAndNotFalse(yrp_roles) then
 						self.roltab = yrp_roles[1]
 
 						return self.roltab
@@ -295,9 +295,9 @@ function Player:YRPGetGroupTable()
 		if self:IsValid() then
 			if self:GetYRPBool( "finishedloadingcharacter", false) then
 				local yrp_characters = self:YRPGetCharacterTable()
-				if wk(yrp_characters) and wk(yrp_characters.groupID) then
+				if NotNilAndNotFalse(yrp_characters) and NotNilAndNotFalse(yrp_characters.groupID) then
 					local yrp_groups = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. yrp_characters.groupID)
-					if wk(yrp_groups) then
+					if NotNilAndNotFalse(yrp_groups) then
 						self.grotab = yrp_groups[1]
 						return self.grotab
 					end
@@ -323,14 +323,14 @@ function Player:UpdateMoney()
 				if money == "FAILED" then
 					return false
 				end
-				if worked(money, "ply:money UpdateMoney", true) then
+				if WORKED(money, "ply:money UpdateMoney", true) then
 					YRP_SQL_UPDATE( "yrp_characters", {["money"] = money}, "uniqueID = " .. _char_id)
 				end
 				local moneybank = tonumber(self:GetYRPString( "moneybank", "FAILED" ) )
 				if moneybank == "FAILED" then
 					return false
 				end
-				if worked(moneybank, "ply:moneybank UpdateMoney", true) then
+				if WORKED(moneybank, "ply:moneybank UpdateMoney", true) then
 					YRP_SQL_UPDATE( "yrp_characters", {["moneybank"] = moneybank}, "uniqueID = " .. _char_id)
 				end
 			end
@@ -480,7 +480,7 @@ if SERVER then
 	end
 
 	function Player:addMoney(money)
-		if wk(money) and isnumber(money) and isnumber( tonumber( self:GetYRPString( "money" ) )) then
+		if NotNilAndNotFalse(money) and isnumber(money) and isnumber( tonumber( self:GetYRPString( "money" ) )) then
 			local newmoney = math.Round(tonumber(self:GetYRPString( "money" ) ), 2) + math.Round(money, 2)
 			if self:GetYRPBool( "moneyready", false ) then
 				self:SetYRPString( "money", math.Round(newmoney, 2) )

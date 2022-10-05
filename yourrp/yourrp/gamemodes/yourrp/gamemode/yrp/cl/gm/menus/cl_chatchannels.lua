@@ -55,7 +55,7 @@ function YRPChatChannel(edit, uid)
 	win.mode = YRPCreateD( "DComboBox", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50) )
 	function win.mode:OnSelect(index, value, data)		
 		mode = data
-		if pa( win.structure2 ) then
+		if PanelAlive( win.structure2 ) then
 			if mode == 6 then
 				win.structure2header:Show()
 				win.structure2:Show()
@@ -94,7 +94,7 @@ function YRPChatChannel(edit, uid)
 	win.structure = YRPCreateD( "DTextEntry", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(200) )
 	function win.structure:OnChange()
 		structure = win.structure:GetText()
-		if pa(win.previewrich) then
+		if PanelAlive(win.previewrich) then
 			win.previewrich:Think()
 		end
 	end
@@ -194,7 +194,7 @@ function YRPChatChannel(edit, uid)
 	win.structure2 = YRPCreateD( "DTextEntry", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(500) )
 	function win.structure2:OnChange()
 		structure2 = win.structure2:GetText()
-		if pa(win.previewrich) then
+		if PanelAlive(win.previewrich) then
 			win.previewrich:Think()
 		end
 	end
@@ -238,7 +238,7 @@ function YRPChatChannel(edit, uid)
 	win.previewtext:SetText( "" )
 	win.previewtext:SetPlaceholderText( "Example Text" )
 	function win.previewtext:OnChange()
-		if pa(win.previewrich) then
+		if PanelAlive(win.previewrich) then
 			win.previewrich:Think()
 		end
 	end
@@ -247,7 +247,7 @@ function YRPChatChannel(edit, uid)
 	win.previewrich:SetText(win.structure:GetText() )
 
 	function win.previewrich:Think()
-		if pa(win.previewrich) and pa(win.previewtext) then
+		if PanelAlive(win.previewrich) and PanelAlive(win.previewtext) then
 			win.previewrich:SetText( "" )
 			local pk = YRPChatReplaceCMDS(win.structure:GetText(), LocalPlayer(), YRPReplaceWithPlayerNames(win.previewtext:GetText() ))
 			if mode == 6 then
@@ -441,7 +441,7 @@ function OpenChatMenu()
 end
 
 function YRPToggleChatMenu()
-	if pa( vm.win) then
+	if PanelAlive( vm.win) then
 		CloseChatMenu()
 	elseif YRPIsNoMenuOpen() then
 		OpenChatMenu()

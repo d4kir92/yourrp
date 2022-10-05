@@ -179,7 +179,7 @@ net.Receive( "get_ticket", function()
 	local _fbt = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 
 		local site = PARENT
 

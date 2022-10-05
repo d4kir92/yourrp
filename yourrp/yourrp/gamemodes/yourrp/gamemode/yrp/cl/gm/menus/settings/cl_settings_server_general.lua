@@ -27,7 +27,7 @@ function CreateCheckBoxLine( dpanellist, val, lstr, netstr, fixx, textcolor)
 
 	net.Receive(netstr, function(len)
 		local b = net.ReadString()
-		if pa( background.checkbox) then
+		if PanelAlive( background.checkbox) then
 			background.checkbox.serverside = true
 			background.checkbox:SetValue( b)
 			background.checkbox.serverside = false
@@ -88,7 +88,7 @@ function CreateTextBoxLine( dpanellist, text, lstr, netstr)
 
 	net.Receive(netstr, function(len)
 		local tex = net.ReadString()
-		if pa(textbox) then
+		if PanelAlive(textbox) then
 			textbox.serverside = true
 			textbox:SetText(tex)
 			textbox.serverside = false
@@ -126,7 +126,7 @@ function CreateComboBoxLine( dpanellist, text, lstr, netstr, default, choices)
 
 	net.Receive(netstr, function(len)
 		local tex = net.ReadString()
-		if pa( combobox) then
+		if PanelAlive( combobox) then
 			combobox.serverside = true
 			combobox:SetText(tex)
 			combobox.serverside = false
@@ -161,7 +161,7 @@ function CreateTextBoxBox( dpanellist, text, lstr, netstr)
 
 	net.Receive(netstr, function(len)
 		local tex = net.ReadString()
-		if pa(textbox) then
+		if PanelAlive(textbox) then
 			textbox.serverside = true
 			textbox:SetText(tex)
 			textbox.serverside = false
@@ -193,7 +193,7 @@ function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr
 
 	net.Receive(netstr, function(len)
 		local tex = net.ReadString()
-		if pa( background.textbox) then
+		if PanelAlive( background.textbox) then
 			background.textbox.serverside = true
 			background.textbox:SetText(tex)
 			background.textbox.serverside = false
@@ -214,7 +214,7 @@ function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr
 
 	net.Receive(netstr2, function(len)
 		local tex = net.ReadString()
-		if pa( background.textbox2) then
+		if PanelAlive( background.textbox2) then
 			background.textbox2.serverside = true
 			background.textbox2:SetText(tex)
 			background.textbox2.serverside = false
@@ -265,7 +265,7 @@ function CreateNumberWangLine( dpanellist, value, lstr, netstr, fixx, max, min)
 
 	net.Receive(netstr, function(len)
 		local val = net.ReadString()
-		if pa( background.numberwang) then
+		if PanelAlive( background.numberwang) then
 			background.numberwang.serverside = true
 			background.numberwang:SetValue( val)
 			background.numberwang.serverside = false
@@ -307,7 +307,7 @@ end
 
 net.Receive( "Connect_Settings_General", function(len)
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		function PARENT:OnRemove()
 			net.Start( "Disconnect_Settings_General" )
 			net.SendToServer()

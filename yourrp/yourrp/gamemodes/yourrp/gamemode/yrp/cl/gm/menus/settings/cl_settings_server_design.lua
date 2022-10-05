@@ -14,7 +14,7 @@ net.Receive( "get_design_settings", function(len)
 	local hud_profiles = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		local GRP_HUD = YRPCreateD( "YGroupBox", PARENT, YRP.ctr(1000), YRP.ctr(1600), YRP.ctr(20), YRP.ctr(20) )
 		GRP_HUD:SetText( "LID_hud" )
 		function GRP_HUD:Paint(pw, ph)
@@ -325,7 +325,7 @@ net.Receive( "get_design_settings", function(len)
 							local mx, my = gui.MousePos()
 							if input.IsMouseDown(MOUSE_FIRST) then
 								if mx < x or mx > x + pw or my < y or my > y + ph then
-									if pa( win.winset.dpl ) then
+									if PanelAlive( win.winset.dpl ) then
 										local childrens = win.winset.dpl:GetItems()
 										local open = false
 										for i, item in pairs( childrens) do
@@ -1001,7 +1001,7 @@ net.Receive( "get_design_settings", function(len)
 		GRP_IF:AddItem(spacer)
 
 		net.Receive( "get_interface_settings", function(le)
-			if pa(GRP_IF) then
+			if PanelAlive(GRP_IF) then
 				for i, ele in pairs(GRP_IF.cif) do
 					ele:Remove()
 				end

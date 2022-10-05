@@ -193,21 +193,21 @@ function YRPNotSelf(ply)
 end
 
 function YRPIsScoreboardVisible()
-	if pa(YRPScoreboard) and YRPScoreboard:IsVisible() then
+	if PanelAlive(YRPScoreboard) and YRPScoreboard:IsVisible() then
 		return true
 	end
 	return false
 end
 
 function YRPCloseSBS()
-	if !pa(YRPScoreboard) then return end
+	if !PanelAlive(YRPScoreboard) then return end
 
 	YRPScoreboard:Hide()
 	gui.EnableScreenClicker(false)
 end
 
 function YRPSortScoreboard()
-	if !pa(YRPScoreboard) then return end
+	if !PanelAlive(YRPScoreboard) then return end
 	local lply = LocalPlayer()
 	if lply.yrp_sb_reverse == nil then
 		lply.yrp_sb_reverse = false
@@ -259,7 +259,7 @@ function YRPSortScoreboard()
 end
 
 function YRPScoreboardAddPlayer(ply)
-	if pa(YRPScoreboard) and IsValid( ply ) and !table.HasValue(YRPScoreboard.plys, ply) then
+	if PanelAlive(YRPScoreboard) and IsValid( ply ) and !table.HasValue(YRPScoreboard.plys, ply) then
 		table.insert(YRPScoreboard.plys, ply)
 
 		local plyframe = YRPCreateD( "DPanel", YRPScoreboard.list, size, size, 0, 0)
@@ -682,7 +682,7 @@ function YRPScoreboardAddPlayer(ply)
 								surface.PlaySound( "garrysmod/ui_hover.wav" )
 							end
 
-							if !pa(self.tt) then
+							if !PanelAlive(self.tt) then
 								self.tt = YRPCreateD( "DFrame", nil, 100, 20, 0, 0)
 								self.tt:SetTitle( "" )
 								self.tt:ShowCloseButton(false)
@@ -703,7 +703,7 @@ function YRPScoreboardAddPlayer(ply)
 							self.hovering = false
 							self.clicked = false
 
-							if pa(self.tt) then
+							if PanelAlive(self.tt) then
 								self.tt:Remove()
 							end
 						end
@@ -740,7 +740,7 @@ function YRPScoreboardAddPlayer(ply)
 end
 
 function YRPOpenSBS()
-	if !pa(YRPScoreboard) then return end
+	if !PanelAlive(YRPScoreboard) then return end
 
 	local lply = LocalPlayer()
 
@@ -789,7 +789,7 @@ function YRPOpenSBS()
 	end
 
 	timer.Simple( 0.05, function()
-		if pa( YRPScoreboard ) then
+		if PanelAlive( YRPScoreboard ) then
 			local sw = 0
 			for i, v in pairs( YRPScoreboard.Header:GetChildren() ) do
 				sw = sw + v:GetWide()
@@ -839,7 +839,7 @@ function YRPDrawOrder(self, x, y, text, font, art)
 end
 
 function YRPInitScoreboard()
-	if pa(YRPScoreboard) then
+	if PanelAlive(YRPScoreboard) then
 		YRPScoreboard:Remove()
 	end
 	YRPScoreboard = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)

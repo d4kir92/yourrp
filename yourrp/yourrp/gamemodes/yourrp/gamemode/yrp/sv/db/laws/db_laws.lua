@@ -15,7 +15,7 @@ if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" ) == nil then
 end
 
 local laws = YRP_SQL_SELECT(DATABASE_NAME, "*" )
-if wk(laws) then
+if NotNilAndNotFalse(laws) then
 	laws = laws[1]
 	SetGlobalYRPString( "sting_laws", laws.string_laws)
 end
@@ -23,19 +23,19 @@ end
 util.AddNetworkString( "yrp_get_laws" )
 net.Receive( "yrp_get_laws", function(len, ply)
 	local laws = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-	if wk(laws) then
+	if NotNilAndNotFalse(laws) then
 		laws = laws[1]
 		laws.string_lawsymbol = laws.string_lawsymbol
 		laws.string_laws = laws.string_laws
 		local lockdown = YRP_SQL_SELECT( "yrp_lockdown", "*", "uniqueID = '1'" )
-		if wk(lockdown) then
+		if NotNilAndNotFalse(lockdown) then
 			lockdown = lockdown[1]
 			laws.bool_lockdown = lockdown.bool_lockdown
 			laws.string_lockdowntext = lockdown.string_lockdowntext
 		end
 
 		local buildings = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "name, bool_lockdown, uniqueID", "name != 'Building'" )
-		if !wk( buildings) then
+		if !NotNilAndNotFalse( buildings) then
 			buildings = {}
 		end
 

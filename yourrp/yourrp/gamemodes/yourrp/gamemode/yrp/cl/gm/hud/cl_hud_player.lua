@@ -73,10 +73,10 @@ hook.Add( "SpawnMenuOpen", "yrp_spawn_menu_open", function()
 	if once then -- Fix tabsorting
 		once = false
 		timer.Simple(0.2, function()
-			if pa(g_SpawnMenu) then
+			if PanelAlive(g_SpawnMenu) then
 				g_SpawnMenu:Close(true) -- close it after short time
 				timer.Simple(0.1, function()
-					if pa(g_SpawnMenu) and g_SpawnMenu.Open then
+					if PanelAlive(g_SpawnMenu) and g_SpawnMenu.Open then
 						g_SpawnMenu:Open() -- reopen with handling the tabs
 						hook.Run( "SpawnMenuOpen" ) -- reload the hook
 					end
@@ -170,7 +170,7 @@ function drawMenuInfo()
 		local y = ibr
 
 		--[[ F1 ]]--
-		if wk(YRP.GetDesignIcon( "help" ) ) then
+		if NotNilAndNotFalse(YRP.GetDesignIcon( "help" ) ) then
 			surface.SetDrawColor( color)
 			surface.SetMaterial(YRP.GetDesignIcon( "help" ) )
 			surface.DrawTexturedRect(x, y, isize, isize)

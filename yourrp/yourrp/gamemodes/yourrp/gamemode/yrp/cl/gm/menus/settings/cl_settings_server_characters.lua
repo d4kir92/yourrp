@@ -2,7 +2,7 @@
 
 net.Receive( "setting_characters", function(len)
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) and pa(YRPCharList) then
+	if PanelAlive(PARENT) and PanelAlive(YRPCharList) then
 		local tab = net.ReadTable()
 
 		--for n, y in pairs(tab) do
@@ -23,7 +23,7 @@ end)
 
 function OpenSettingsCharacters()
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		YRPCharList = YRPCreateD( "DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 		YRPCharList:AddColumn( "SteamID" )
 		YRPCharList:AddColumn(YRP.lang_string( "LID_name" ) )

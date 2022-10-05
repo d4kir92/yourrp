@@ -173,7 +173,7 @@ function YRPCreateCharacterSettingsContent()
 				net.Receive( "YRPCreateCharacter", function(len)
 					local success = net.ReadBool()
 					if success then
-						if pa(CharacterMenu) then
+						if PanelAlive(CharacterMenu) then
 							CharacterMenu:Remove()
 						end
 						YRPOpenCharacterSelection()

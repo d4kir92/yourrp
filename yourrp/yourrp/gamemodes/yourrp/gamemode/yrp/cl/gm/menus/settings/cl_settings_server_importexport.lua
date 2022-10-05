@@ -1,7 +1,7 @@
 
 function OpenSettingsImportDarkRP()
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		local btn = YRPCreateD( "YButton", PARENT, YRP.ctr( 300 ), YRP.ctr( 60 ), 20, 20 )
 		btn:SetText( "Import DarkRP" )
 		function btn:DoClick()

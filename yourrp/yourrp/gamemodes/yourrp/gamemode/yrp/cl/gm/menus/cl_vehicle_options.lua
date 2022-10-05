@@ -5,7 +5,7 @@
 local yrp_vehicle = {}
 
 function YRPToggleVehicleOptions( vehicle, vehicleID)
-	if YRPIsNoMenuOpen() and !pa(yrp_vehicle.window) then
+	if YRPIsNoMenuOpen() and !PanelAlive(yrp_vehicle.window) then
 		openVehicleOptions( vehicle, vehicleID)
 	else
 		closeVehicleOptions()
@@ -14,7 +14,7 @@ end
 
 function closeVehicleOptions()
 	closeMenu()
-	if pa(yrp_vehicle.window) then
+	if PanelAlive(yrp_vehicle.window) then
 		yrp_vehicle.window:Close()
 		yrp_vehicle.window = nil
 	end
@@ -68,7 +68,7 @@ function optionVehicleWindow( vehicle, vehicleTab)
 			net.Start( "removeVehicleOwner" )
 				net.WriteString( vehicleTab[1].uniqueID)
 			net.SendToServer()
-			if pa(yrp_vehicle.window) then
+			if PanelAlive(yrp_vehicle.window) then
 				yrp_vehicle.window:Close()
 			end
 		end
@@ -85,7 +85,7 @@ function optionVehicleWindow( vehicle, vehicleTab)
 end
 
 function openVehicleOptions( vehicle, vehicleID)
-	if wk( vehicle) and wk( vehicleID) then
+	if NotNilAndNotFalse( vehicle) and NotNilAndNotFalse( vehicleID) then
 		net.Start( "getVehicleInfo" )
 			net.WriteEntity( vehicle)
 			net.WriteString( vehicleID)

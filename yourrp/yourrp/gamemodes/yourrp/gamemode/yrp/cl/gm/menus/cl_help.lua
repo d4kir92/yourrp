@@ -99,7 +99,7 @@ function AddKeybindBr(plist)
 end
 
 net.Receive( "getsitehelp", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local welcome_message = net.ReadString()
 		local motd = net.ReadString()
 		local posy = 0
@@ -191,7 +191,7 @@ net.Receive( "getsitehelp", function(len)
 end)
 
 net.Receive( "getsitestaff", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local staff = net.ReadTable()
 		local stafflist = YRPCreateD( "DPanelList", HELPMENU.mainmenu.site, YRP.ctr(800), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 		stafflist:SetSpacing(YRP.ctr(10) )
@@ -202,7 +202,7 @@ net.Receive( "getsitestaff", function(len)
 
 			function tmp:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 255, 200) )
-				if ea(pl) then
+				if EntityAlive(pl) then
 					draw.SimpleText(YRP.lang_string( "LID_name" ) .. ": " .. pl:RPName(), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(25), Color( 255, 255, 255, 255 ), 0, 1)
 					draw.SimpleText(YRP.lang_string( "LID_usergroup" ) .. ": " .. string.upper(pl:GetUserGroup() ), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(50 + 25), Color( 255, 255, 255, 255 ), 0, 1)
 				end
@@ -229,7 +229,7 @@ net.Receive( "getsitestaff", function(len)
 end)
 
 net.Receive( "getsiteserverrules", function(len)
-	if pa(HELPMENU) then
+	if PanelAlive(HELPMENU) then
 		local serverrules = net.ReadString()
 		local page = YRPCreateD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
@@ -252,7 +252,7 @@ net.Receive( "getsiteserverrules", function(len)
 end)
 
 net.Receive( "getsitecollection", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local collectionid = tonumber(net.ReadString() )
 
 		if collectionid > 100000000 then
@@ -280,7 +280,7 @@ net.Receive( "getsitecollection", function(len)
 end)
 
 net.Receive( "getsitecommunitywebsite", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 		if !strEmpty(link) then
 			local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
@@ -306,7 +306,7 @@ net.Receive( "getsitecommunitywebsite", function(len)
 end)
 
 net.Receive( "getsitecommunityforum", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
 		if !strEmpty(link) then
@@ -333,7 +333,7 @@ net.Receive( "getsitecommunityforum", function(len)
 end)
 
 net.Receive( "getsitecommunitydiscord", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 		local widgetid = net.ReadString()
 
@@ -363,7 +363,7 @@ net.Receive( "getsitecommunitydiscord", function(len)
 end)
 
 net.Receive( "getsitecommunityteamspeak", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local ip = net.ReadString()
 		local port = net.ReadString()
 		local query_port = net.ReadString()
@@ -391,7 +391,7 @@ net.Receive( "getsitecommunityteamspeak", function(len)
 end)
 
 net.Receive( "getsitecommunitytwitter", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
 		if !strEmpty(link) then
@@ -418,7 +418,7 @@ net.Receive( "getsitecommunitytwitter", function(len)
 end)
 
 net.Receive( "getsitecommunityyoutube", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
 		if !strEmpty(link) then
@@ -445,7 +445,7 @@ net.Receive( "getsitecommunityyoutube", function(len)
 end)
 
 net.Receive( "getsitecommunityfacebook", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
 		if !strEmpty(link) then
@@ -472,7 +472,7 @@ net.Receive( "getsitecommunityfacebook", function(len)
 end)
 
 net.Receive( "getsitecommunitysteamgroup", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
 		if !strEmpty(link) then
@@ -499,7 +499,7 @@ net.Receive( "getsitecommunitysteamgroup", function(len)
 end)
 
 net.Receive( "getsiteyourrpwhatsnew", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = "https://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152"
 
 		if !strEmpty(link) then
@@ -523,7 +523,7 @@ net.Receive( "getsiteyourrpwhatsnew", function(len)
 end)
 
 net.Receive( "getsiteyourrpdiscord", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = "https://discord.gg/sEgNZxg"
 
 		if !strEmpty(link) then
@@ -556,7 +556,7 @@ net.Receive( "getsiteyourrpdiscord", function(len)
 end)
 
 net.Receive( "getsiteyourrpserverlist", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = "https://sites.google.com/view/yourrp-gmod/serverlist"
 
 		local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
@@ -577,7 +577,7 @@ net.Receive( "getsiteyourrpserverlist", function(len)
 end)
 
 net.Receive( "getsiteyourrptranslations", function(len)
-	if pa(HELPMENU.mainmenu.site) then
+	if PanelAlive(HELPMENU.mainmenu.site) then
 		local Parent = HELPMENU.mainmenu.site
 		--local page = YRPCreateD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
@@ -724,7 +724,7 @@ function CreateHelpMenuContent(parent)
 	HELPMENU.content = parent
 	HELPMENU.standalone = standalone or false
 	HELPMENU.mainmenu = YRPCreateD( "DYRPHorizontalMenu", HELPMENU.content, HELPMENU.content:GetWide(), HELPMENU.content:GetTall(), 0, 0)
-	if pa(HELPMENU.mainmenu) then
+	if PanelAlive(HELPMENU.mainmenu) then
 		HELPMENU.mainmenu:GetMenuInfo( "gethelpmenu" )
 		HELPMENU.mainmenu:SetStartTab( "LID_help" )
 		HELPMENU.mainmenu:SetHeaderHeight(YRP.ctr(100) )

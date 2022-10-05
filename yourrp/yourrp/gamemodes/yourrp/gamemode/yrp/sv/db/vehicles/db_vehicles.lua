@@ -45,7 +45,7 @@ net.Receive( "getVehicleInfo", function(len, ply)
 
 	local _vehicleTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "ownerCharID = '" .. _vehicle:GetYRPInt( "ownerCharID", 0) .. "' AND item_id = " .. _vehicleID)
 
-	if worked(_vehicleTab, "getVehicleInfo | No buyed vehicle! Dont work on spawnmenu vehicle" ) then
+	if WORKED(_vehicleTab, "getVehicleInfo | No buyed vehicle! Dont work on spawnmenu vehicle" ) then
 		local owner = ""
 		for k, v in pairs(player.GetAll() ) do
 			if tostring( v:CharID() ) == tostring(_vehicleTab[1].ownerCharID) then
@@ -119,7 +119,7 @@ end
 net.Receive( "removeVehicleOwner", function(len, ply)
 	local _tmpVehicleID = tonumber( net.ReadString() )
 	local _tmpTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _tmpVehicleID .. "'" )
-	if wk(_tmpTable) then
+	if NotNilAndNotFalse(_tmpTable) then
 		_tmpTable = _tmpTable[1]
 		
 		local item_uniqueID = tonumber( _tmpTable.item_id )

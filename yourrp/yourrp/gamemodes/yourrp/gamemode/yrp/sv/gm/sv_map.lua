@@ -143,7 +143,7 @@ function get_coords()
 
 	local _hasNoSpawnpoints = true
 	for k, v in pairs(ents.GetAll() ) do
-		if ea( v) and ( v:GetClass() == "info_player_teamspawn"
+		if EntityAlive( v) and ( v:GetClass() == "info_player_teamspawn"
 			or v:GetClass() == "info_player_terrorist"
 			or v:GetClass() == "info_player_counterterrorist" )
 			then

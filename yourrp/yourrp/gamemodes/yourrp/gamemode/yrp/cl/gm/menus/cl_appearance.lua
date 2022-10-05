@@ -6,10 +6,10 @@ local _yrp_appearance = {}
 local play = true
 net.Receive( "get_menu_bodygroups", function(len)
 	local _tbl = net.ReadTable()
-	if _tbl.string_playermodels != nil and pa(_yrp_appearance.window) then
+	if _tbl.string_playermodels != nil and PanelAlive(_yrp_appearance.window) then
 		local _skin = tonumber(_tbl.skin)
 		local _pms = string.Explode( ",", _tbl.string_playermodels)
-		if pa(_yrp_appearance.left) then
+		if PanelAlive(_yrp_appearance.left) then
 			if _yrp_appearance.left.GetChildren != nil then
 				for i, child in pairs(_yrp_appearance.left:GetChildren() ) do
 					child:Remove()
@@ -199,7 +199,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					net.Start( "inv_skin_do" )
 						net.WriteInt(_tmpSkin.cur, 16)
 					net.SendToServer()
-					if ea(_appe.r.pm.Entity) then
+					if EntityAlive(_appe.r.pm.Entity) then
 						_appe.r.pm.Entity:SetSkin(_tmpSkin.cur)
 					end
 				end
@@ -266,7 +266,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 				end
 			end
 		end
-	elseif pa(_yrp_appearance.window) then
+	elseif PanelAlive(_yrp_appearance.window) then
 		function _yrp_appearance.window:Paint(pw, ph)
 			hook.Run( "YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string( "LID_appearance" ) .. " - " .. YRP.lang_string( "LID_menu" ) .. " [PROTOTYPE]" )
 			local tab = {}
@@ -314,7 +314,7 @@ function open_appearance()
 	_yrp_appearance.window:SetSizable(true)
 	_yrp_appearance.window:SetHeaderHeight(YRP.ctr(100) )
 	function _yrp_appearance.window:OnClose()
-		if pa( _yrp_appearance.window ) then
+		if PanelAlive( _yrp_appearance.window ) then
 			_yrp_appearance.window:Remove()
 		end
 	end

@@ -11,11 +11,11 @@ local loadedG = false
 local loadedW = false
 
 function BuildWhitelist(parent, tab)
-	if !pa( parent ) then
+	if !PanelAlive( parent ) then
 		YRP.msg( "note", "[BuildWhitelist] failed! parent: " .. tostring(parent) )
 	end
 
-	if loadedR and loadedG and loadedW and pa(parent) then
+	if loadedR and loadedG and loadedW and PanelAlive(parent) then
 		local list = YRPCreateD( "DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20) )
 		list:AddColumn( "uniqueID" ):SetFixedWidth(60)
 		list:AddColumn( "SteamID" ):SetFixedWidth(130)
@@ -345,7 +345,7 @@ end)
 
 net.Receive( "getRoleWhitelist_line", function(len)
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 
 		local site = PARENT
 

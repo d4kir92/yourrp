@@ -164,7 +164,7 @@ function YRPDCheckBoxes(tab)
 		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString() )
 			local _str = net.ReadString()
-			if pa(pnl.DButton) then
+			if PanelAlive(pnl.DButton) then
 				pnl.DButton.serverside = true
 				tab.value = _str
 				pnl.DButton.serverside = false
@@ -235,7 +235,7 @@ function YRPDCheckBox(tab)
 		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString() )
 			local _int = tonumber(net.ReadString() )
-			if pa(pnl.DButton) then
+			if PanelAlive(pnl.DButton) then
 				pnl.DButton.serverside = true
 				tab.value = _int
 				pnl.DButton.serverside = false
@@ -306,7 +306,7 @@ function YRPDComboBox(tab)
 		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString() )
 			local _str = net.ReadString()
-			if pa(pnl.DComboBox) then
+			if PanelAlive(pnl.DComboBox) then
 				pnl.DComboBox.serverside = true
 				pnl.DComboBox:SetText(_str)
 				pnl.DComboBox.serverside = false
@@ -377,7 +377,7 @@ function YRPDComboBoxHUD(tab)
 		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString() )
 			local _str = net.ReadString()
-			if pa(pnl.DComboBox) then
+			if PanelAlive(pnl.DComboBox) then
 				pnl.DComboBox.serverside = true
 				pnl.DComboBox:SetText(_str)
 				pnl.DComboBox.serverside = false
@@ -467,7 +467,7 @@ function DColor(tab)
 		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString() )
 			local _str = net.ReadString()
-			if pa(pnl.DButton) then
+			if PanelAlive(pnl.DButton) then
 				pnl.DButton.serverside = true
 				pnl.DButton.color = stc(_str)
 				pnl.DButton.serverside = false
@@ -545,7 +545,7 @@ function DIntBox(tab)
 		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString() )
 			local _val = tonumber(net.ReadString() )
-			if pa(pnl.DNumberWang) then
+			if PanelAlive(pnl.DNumberWang) then
 				pnl.DNumberWang.serverside = true
 				pnl.DNumberWang:SetValue(_val)
 				pnl.DNumberWang.serverside = false
@@ -637,7 +637,7 @@ function DTextBox(tab)
 		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString() )
 			local _str = net.ReadString()
-			if pa(pnl.DTextEntry) then
+			if PanelAlive(pnl.DTextEntry) then
 				pnl.DTextEntry.serverside = true
 				pnl.DTextEntry:SetText(_str)
 				pnl.DTextEntry.serverside = false
@@ -682,7 +682,7 @@ function YRPDNumberWang(tab)
 		net.Receive(tab.netstr, function(len)
 			local _uid = tonumber(net.ReadString() )
 			local _val = tonumber(net.ReadString() )
-			if pa( dnw) then
+			if PanelAlive( dnw) then
 				dnw.serverside = true
 				dnw:SetValue(_val)
 				dnw.serverside = false

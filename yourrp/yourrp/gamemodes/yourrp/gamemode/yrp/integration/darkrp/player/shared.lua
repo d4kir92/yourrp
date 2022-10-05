@@ -112,7 +112,7 @@ function Player:getHitTarget()
 end
 
 function YRPConvertToDarkRPJobName(name)
-	if wk(name) then
+	if NotNilAndNotFalse(name) then
 		name = string.Replace(name, " ", "_" )
 		local jobname = "TEAM_" .. name
 		return string.upper(jobname)

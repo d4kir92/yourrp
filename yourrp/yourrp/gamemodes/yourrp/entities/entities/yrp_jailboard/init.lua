@@ -22,13 +22,13 @@ end
 function ENT:Use( activator, caller)
 	local tmpTable = YRP_SQL_SELECT( "yrp_jail", "*", nil)
 
-	if !wk(tmpTable) then
+	if !NotNilAndNotFalse(tmpTable) then
 		tmpTable = {}
 	end
 
 	for i, v in pairs(tmpTable) do
 		local cells = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' and uniqueID = '" .. v.cell .. "'" )
-		if wk( cells) then
+		if NotNilAndNotFalse( cells) then
 			cells = cells[1]
 			v.cellname = cells.name
 		else
@@ -50,7 +50,7 @@ net.Receive( "jail", function(len, ply)
 	local target = net.ReadEntity()
 
 	local jail = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. target:YRPSteamID() .. "'" )
-	if wk(jail) then
+	if NotNilAndNotFalse(jail) then
 		jail = jail[1]
 		local tim = jail.time or 2*60
 		teleportToJailpoint(target, tim, ply)

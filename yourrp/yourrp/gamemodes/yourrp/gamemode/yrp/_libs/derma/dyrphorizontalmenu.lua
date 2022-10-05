@@ -125,7 +125,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 			self.stabs:SetDraggable(false)
 
 			function self.stabs:Paint(pw, ph)
-				if !pa(self:GetParent() ) then
+				if !PanelAlive(self:GetParent() ) then
 					self:HideSubTabs()
 				end
 
@@ -274,7 +274,7 @@ function PANEL:GetMenuInfo(netstr)
 	net.SendToServer()
 
 	net.Receive(netstr, function(len)
-		if pa(self) then
+		if PanelAlive(self) then
 			local tabs = net.ReadTable()
 			local subtabs = net.ReadTable()
 

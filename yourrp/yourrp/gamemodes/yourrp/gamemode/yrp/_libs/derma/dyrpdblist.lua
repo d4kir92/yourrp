@@ -155,11 +155,11 @@ function PANEL:Init()
 		self.edf = func
 	end
 
-	function self:GetEditArea()
+	function self:GetEditArEntityAlive()
 		return self.editarea
 	end
 
-	function self:SetEditArea(panel)
+	function self:SetEditArEntityAlive(panel)
 		self.editarea = panel
 	end
 end

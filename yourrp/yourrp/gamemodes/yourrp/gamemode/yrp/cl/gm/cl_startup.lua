@@ -198,7 +198,7 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 		end
 
 		function window:OnRemove()
-			if pa(LanguageChanger) then
+			if PanelAlive(LanguageChanger) then
 				LanguageChanger.selecting = false
 			end
 		end
@@ -374,7 +374,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		end
 	
 		for i, v in pairs(tab) do
-			if pa(pmsel) then
+			if PanelAlive(pmsel) then
 				if pmsel.strsearch != nil and v.PrintName and string.find(string.lower( v.PrintName), pmsel.strsearch or "", 1, true) or string.find(string.lower( v.ClassName), pmsel.strsearch or "", 1, true) or string.find(string.lower( v.WorldModel), pmsel.strsearch or "", 1, true) then
 					self.nothingfound = false
 					self.count = self.count + 1
@@ -415,7 +415,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 						if v.WorldModel != "" then
 							d_pm.model = YRPCreateD( "DModelPanel", d_pm, msize, msize, mbr, my)
 							timer.Simple(0.1 * self.fcount, function()
-								if pa( d_pm) then
+								if PanelAlive( d_pm) then
 									d_pm.model:SetModel( v.WorldModel)
 								end
 							end)
@@ -442,7 +442,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 									table.RemoveByValue(lply.yrpseltab, v.ClassName)
 								end
 							end
-							if !multiple and pa(pmsel) then
+							if !multiple and PanelAlive(pmsel) then
 								if fu then
 									fu()
 								end
@@ -501,7 +501,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 			if fu then
 				fu()
 			end
-			if pa(pmsel) then
+			if PanelAlive(pmsel) then
 				pmsel:Close()
 			end
 		end
@@ -513,7 +513,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 	end
 
 	timer.Simple(1, function()
-		if pa(pmsel) then
+		if PanelAlive(pmsel) then
 			pmsel:Search( "" )
 		end
 	end)
@@ -1750,7 +1750,7 @@ function drawIDCard(ply, scale, px, py)
 						test:SetHTML(GetHTMLImage(GetGlobalYRPString( "text_idcard_background", "" ), w, h) )
 					end
 					function test:Paint(pw, ph)
-						if pa(test) then
+						if PanelAlive(test) then
 							test.mat = test:GetHTMLMaterial()
 
 							if test.mat != nil and !test.found then
@@ -1905,14 +1905,14 @@ end
 local yrp_icon = Material( "yrp/yrp_icon" )
 
 --[[ -- HIDE Loading Temp.
-if pa(yrp_loading_screen) then
+if PanelAlive(yrp_loading_screen) then
 	yrp_loading_screen:Remove()
 end
 
 if tostring(yrp_loading_screen) != "[NULL Panel]" then
 	yrp_loading_screen = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
 end
-if pa(yrp_loading_screen) then
+if PanelAlive(yrp_loading_screen) then
 	yrp_loading_screen:SetTitle( "" )
 	yrp_loading_screen:Center()
 	yrp_loading_screen:ShowCloseButton(false)
@@ -2039,7 +2039,7 @@ if pa(yrp_loading_screen) then
 		loading_cur_old = Lerp(2 * FrameTime(), loading_cur_old, loading_cur)
 
 
-		if pa(yrp_loading_screen) then
+		if PanelAlive(yrp_loading_screen) then
 			yrp_loading_screen:MoveToFront()
 		end
 
@@ -2061,7 +2061,7 @@ if pa(yrp_loading_screen) then
 						yrp_loading_screen.bg:Show()
 					end
 				end
-			elseif pa( yrp_loading_screen.bg ) and loading_cur != 100 and self.t >= 60 then
+			elseif PanelAlive( yrp_loading_screen.bg ) and loading_cur != 100 and self.t >= 60 then
 				yrp_loading_screen.bg:Hide()
 			end
 		end
@@ -2108,7 +2108,7 @@ if pa(yrp_loading_screen) then
 					function self.joinbutton:DoClick()
 						--self.master:Remove()
 						
-						if pa(self:GetParent() ) and pa(self:GetParent():GetParent() ) then
+						if PanelAlive(self:GetParent() ) and PanelAlive(self:GetParent():GetParent() ) then
 							self:GetParent():GetParent():Remove()
 						end
 					end
@@ -2203,7 +2203,7 @@ if pa(yrp_loading_screen) then
 				RunConsoleCommand( "disconnect" )
 			end
 		elseif loading_cur >= 100 then
-			if pa( self.disconnect ) then
+			if PanelAlive( self.disconnect ) then
 				self.disconnect:Remove()
 				self.disconnect = nil
 			end

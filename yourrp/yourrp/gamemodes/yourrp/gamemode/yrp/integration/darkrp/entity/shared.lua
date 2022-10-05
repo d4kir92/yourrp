@@ -21,7 +21,7 @@ function Entity:getDoorData()
 	self.DoorData.owner = nil
 
 	local charid = self:GetYRPInt( "ownerCharID", 0)
-	if ea(self:GetRPOwner() ) then
+	if EntityAlive(self:GetRPOwner() ) then
 		self.DoorData.owner = self:GetRPOwner():UserID()
 	elseif charid and charid > 0 then
 		for i, v in pairs(player.GetAll() ) do

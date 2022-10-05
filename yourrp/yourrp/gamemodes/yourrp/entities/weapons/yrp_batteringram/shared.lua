@@ -57,7 +57,7 @@ function SWEP:PrimaryAttack()
 			self.target = tr.Entity
 			local ent = tr.Entity
 			local class = tr.Entity:GetClass()
-			if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos() ) < GetGlobalYRPInt( "int_door_distance", 200) then
+			if EntityAlive(ent) and ent:GetPos():Distance(self:GetOwner():GetPos() ) < GetGlobalYRPInt( "int_door_distance", 200) then
 				if ent.isFadingDoor and ent.fadeActivate then
 					ent:fadeActivate()
 				else

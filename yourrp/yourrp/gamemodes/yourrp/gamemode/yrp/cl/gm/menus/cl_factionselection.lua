@@ -88,7 +88,7 @@ function CreateFactionSelectionContent()
 	net.Receive( "yrp_factionselection_getfactions", function(len)
 		local ftab = net.ReadTable()
 
-		if pa(list) then
+		if PanelAlive(list) then
 			local x = 0
 			local y = 0
 

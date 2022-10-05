@@ -94,7 +94,7 @@ function Player:DropSWEP( cname, force )
 
 					local ttl = math.Clamp(GetGlobalYRPInt( "int_ttlsweps", 60), 0, 3600)
 					timer.Simple( ttl, function()
-						if ea( ent ) and !ent:GetOwner():IsValid() then
+						if EntityAlive( ent ) and !ent:GetOwner():IsValid() then
 							if ttl <= 1 then
 								YRP.msg( "note", "SWEP was removed TTL: " .. ttl)
 							end
@@ -119,7 +119,7 @@ end
 
 function Player:IsAllowedToDropSWEPRole( cname)
 	local ndsweps = YRP_SQL_SELECT( "yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetYRPString( "roleUniqueID", "0" ) .. "'" )
-	if wk(ndsweps) then
+	if NotNilAndNotFalse(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode( ",", ndsweps.string_ndsweps)
 		if table.HasValue(ndsweps, cname) then
@@ -133,7 +133,7 @@ end
 
 function Player:IsAllowedToDropSWEPUG( cname)
 	local ndsweps = YRP_SQL_SELECT( "yrp_usergroups", "string_nonesweps", "string_name = '" .. string.lower(self:GetUserGroup() ) .. "'" )
-	if wk(ndsweps) then
+	if NotNilAndNotFalse(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode( ",", ndsweps.string_nonesweps)
 		if table.HasValue(ndsweps, cname) then

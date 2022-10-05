@@ -54,7 +54,7 @@ net.Receive( "category_edit_name", function(len, ply)
 	local _new_name = net.ReadString()
 	local _shopid = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
-	YRP.msg( "db", "category_edit_name: " .. db_worked(_new) )
+	YRP.msg( "db", "category_edit_name: " .. db_WORKED(_new) )
 end)
 
 util.AddNetworkString( "yrp_shop_get_categories" )

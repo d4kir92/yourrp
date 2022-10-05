@@ -11,7 +11,7 @@ end
 
 local function UpdateList( value )
 	local dbList = _li._lic
-	if pa( dbList ) then
+	if PanelAlive( dbList ) then
 		dbList.list:Clear()
 
 		local li = dbList:GetList()
@@ -29,7 +29,7 @@ net.Receive( "get_licenses", function()
 	_licenses = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 
 		local spw = PARENT:GetWide()
 		local sph = PARENT:GetTall()
@@ -42,7 +42,7 @@ net.Receive( "get_licenses", function()
 		_li._lic = YRPCreateD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(1600), YRP.ctr(40), YRP.ctr(40 + 50 + 10) )
 		_li._lic:SetListHeader(YRP.lang_string( "LID_licenses" ) )
 		--_li._lic:SetDStrForAdd( "license_add" )
-		_li._lic:SetEditArea(_li.ea)
+		_li._lic:SetEditArEntityAlive(_li.ea)
 		function _li.eaf(tbl)
 			for i, child in pairs(_li.ea:GetChildren() ) do
 				child:Remove()
@@ -108,7 +108,7 @@ function OpenSettingsLicenses()
 	local lply = LocalPlayer()
 
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		_li._search = YRPCreateD( "DTextEntry", PARENT, YRP.ctr(480), YRP.ctr(50), YRP.ctr(40), YRP.ctr(40) )
 		_li._search:SetPlaceholderText( "SEARCH" )
 		function _li._search:OnTextChanged()

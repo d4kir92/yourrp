@@ -280,7 +280,7 @@ net.Receive( "Connect_Settings_General", function(len, ply)
 		AddToHandler_General(ply)
 
 		local _yrp_general = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		if wk(_yrp_general) then
+		if NotNilAndNotFalse(_yrp_general) then
 			_yrp_general = _yrp_general[1]
 		else
 			_yrp_general = {}
@@ -311,7 +311,7 @@ end
 
 function YRPLoadGlobals()
 	local _init_general = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-	if wk(_init_general) then
+	if NotNilAndNotFalse(_init_general) then
 		yrp_general = _init_general[1]
 
 		--RunConsoleCommand( "lua_log_sv", yrp_general.bool_server_debug)
@@ -1732,7 +1732,7 @@ end
 util.AddNetworkString( "gethelpmenu" )
 net.Receive( "gethelpmenu", function(len, ply)
 	local info = YRP_SQL_SELECT( "yrp_general", "*", "uniqueID = '1'" )
-	if wk(info) then
+	if NotNilAndNotFalse(info) then
 		info = info[1]
 
 		local tabs = {}
@@ -1780,7 +1780,7 @@ end)
 util.AddNetworkString( "getsiteserverrules" )
 net.Receive( "getsiteserverrules", function(len, ply)
 	local server_rules = YRP_SQL_SELECT( "yrp_general", "text_server_rules", "uniqueID = '1'" )
-	if wk(server_rules) then
+	if NotNilAndNotFalse(server_rules) then
 		server_rules = server_rules[1].text_server_rules
 	else
 		server_rules = ""
@@ -1793,7 +1793,7 @@ end)
 util.AddNetworkString( "getsitecollection" )
 net.Receive( "getsitecollection", function(len, ply)
 	local collectionid = YRP_SQL_SELECT( "yrp_general", "text_server_collectionid", "uniqueID = '1'" )
-	if wk( collectionid) then
+	if NotNilAndNotFalse( collectionid) then
 		collectionid = collectionid[1].text_server_collectionid
 	else
 		collectionid = ""
@@ -1806,7 +1806,7 @@ end)
 util.AddNetworkString( "getsitecommunitywebsite" )
 net.Receive( "getsitecommunitywebsite", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_website", "uniqueID = '1'" )
-	if wk(link) then
+	if NotNilAndNotFalse(link) then
 		link = link[1].text_social_website
 	else
 		link = ""
@@ -1819,7 +1819,7 @@ end)
 util.AddNetworkString( "getsitecommunityforum" )
 net.Receive( "getsitecommunityforum", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_forum", "uniqueID = '1'" )
-	if wk(link) then
+	if NotNilAndNotFalse(link) then
 		link = link[1].text_social_forum
 	else
 		link = ""
@@ -1834,7 +1834,7 @@ net.Receive( "getsitecommunitydiscord", function(len, ply)
 	local sql_select = YRP_SQL_SELECT( "yrp_general", "text_social_discord, text_social_discord_widgetid", "uniqueID = '1'" )
 	local link = ""
 	local widgetid = ""
-	if wk(link) then
+	if NotNilAndNotFalse(link) then
 		link = sql_select[1].text_social_discord
 		widgetid = sql_select[1].text_social_discord_widgetid
 	end
@@ -1850,7 +1850,7 @@ net.Receive( "getsitecommunityteamspeak", function(len, ply)
 	local ip = ""
 	local port = ""
 	local query_port = ""
-	if wk(sql_select) then
+	if NotNilAndNotFalse(sql_select) then
 		ip = sql_select[1].text_social_teamspeak_ip
 		port = sql_select[1].text_social_teamspeak_port
 		query_port = sql_select[1].text_social_teamspeak_query_port
@@ -1865,7 +1865,7 @@ end)
 util.AddNetworkString( "getsitecommunitytwitter" )
 net.Receive( "getsitecommunitytwitter", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_twitter", "uniqueID = '1'" )
-	if wk(link) then
+	if NotNilAndNotFalse(link) then
 		link = link[1].text_social_twitter
 	else
 		link = ""
@@ -1878,7 +1878,7 @@ end)
 util.AddNetworkString( "getsitecommunityyoutube" )
 net.Receive( "getsitecommunityyoutube", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_youtube", "uniqueID = '1'" )
-	if wk(link) then
+	if NotNilAndNotFalse(link) then
 		link = link[1].text_social_youtube
 	else
 		link = ""
@@ -1891,7 +1891,7 @@ end)
 util.AddNetworkString( "getsitecommunityfacebook" )
 net.Receive( "getsitecommunityfacebook", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_facebook", "uniqueID = '1'" )
-	if wk(link) then
+	if NotNilAndNotFalse(link) then
 		link = link[1].text_social_facebook
 	else
 		link = ""
@@ -1904,7 +1904,7 @@ end)
 util.AddNetworkString( "getsitecommunitysteamgroup" )
 net.Receive( "getsitecommunitysteamgroup", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_steamgroup", "uniqueID = '1'" )
-	if wk(link) then
+	if NotNilAndNotFalse(link) then
 		link = link[1].text_social_steamgroup
 	else
 		link = ""
@@ -1960,7 +1960,7 @@ util.AddNetworkString( "ply_kick" )
 net.Receive( "ply_kick", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea( _target ) then
+		if EntityAlive( _target ) then
 			_target:Kick( "You get kicked by " .. ply:YRPName() )
 		end
 	end
@@ -1969,7 +1969,7 @@ util.AddNetworkString( "ply_ban" )
 net.Receive( "ply_ban", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea( _target ) then
+		if EntityAlive( _target ) then
 			_target:Ban(24 * 60, false)
 			_target:Kick( "You get banned for 24 hours by " .. ply:YRPName() )
 		else
@@ -2085,7 +2085,7 @@ function YRPDoUnRagdoll(ply)
 		--ply:SetParent(nil)
 
 		local ragdoll = ply:GetYRPEntity( "ragdoll" )
-		if ea(ragdoll) then
+		if EntityAlive(ragdoll) then
 			ply:SetPos( ragdoll:GetPos() )
 			ragdoll:Remove()
 		end
@@ -2102,7 +2102,7 @@ util.AddNetworkString( "ragdoll" )
 net.Receive( "ragdoll", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			YRPDoRagdoll(_target)
 		end
 	end
@@ -2112,7 +2112,7 @@ util.AddNetworkString( "unragdoll" )
 net.Receive( "unragdoll", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			YRPDoUnRagdoll(_target)
 		end
 	end
@@ -2121,7 +2121,7 @@ util.AddNetworkString( "freeze" )
 net.Receive( "freeze", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) and _target.Freeze then
+		if EntityAlive(_target) and _target.Freeze then
 			_target:Freeze(true)
 		end
 	end
@@ -2130,7 +2130,7 @@ util.AddNetworkString( "unfreeze" )
 net.Receive( "unfreeze", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			_target:Freeze(false)
 		end
 	end
@@ -2139,7 +2139,7 @@ util.AddNetworkString( "god" )
 net.Receive( "god", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			_target:GodEnable()
 			_target:AddFlags(FL_GODMODE)
 			_target:SetYRPBool( "godmode", true)
@@ -2150,7 +2150,7 @@ util.AddNetworkString( "ungod" )
 net.Receive( "ungod", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			_target:GodDisable()
 			_target:RemoveFlags(FL_GODMODE)
 			_target:SetYRPBool( "godmode", false)
@@ -2161,7 +2161,7 @@ util.AddNetworkString( "cloak" )
 net.Receive( "cloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			_target:SetYRPBool( "cloaked", true)
 		end
 	end
@@ -2170,7 +2170,7 @@ util.AddNetworkString( "uncloak" )
 net.Receive( "uncloak", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			_target:SetYRPBool( "cloaked", false)
 		end
 	end
@@ -2179,7 +2179,7 @@ util.AddNetworkString( "blind" )
 net.Receive( "blind", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			_target:SetYRPBool( "blinded", true)
 		end
 	end
@@ -2188,7 +2188,7 @@ util.AddNetworkString( "unblind" )
 net.Receive( "unblind", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			_target:SetYRPBool( "blinded", false)
 		end
 	end
@@ -2197,7 +2197,7 @@ util.AddNetworkString( "ignite" )
 net.Receive( "ignite", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			_target:Ignite(10, 10)
 		end
 	end
@@ -2206,7 +2206,7 @@ util.AddNetworkString( "extinguish" )
 net.Receive( "extinguish", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			_target:Extinguish()
 		end
 	end
@@ -2215,7 +2215,7 @@ util.AddNetworkString( "slay" )
 net.Receive( "slay", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			_target:Kill()
 		end
 	end
@@ -2224,7 +2224,7 @@ util.AddNetworkString( "slap" )
 net.Receive( "slap", function(len, ply)
 	if ply:HasAccess() then
 		local _target = net.ReadEntity()
-		if ea(_target) then
+		if EntityAlive(_target) then
 			_target:SetVelocity( Vector(0, 0, 600) )
 		end
 	end
@@ -2235,7 +2235,7 @@ end)
 -- YRPRepairSQLDB
 function YRPFixDatabase(tab, name, c)
 	c = c or 0
-	if wk(tab) then
+	if NotNilAndNotFalse(tab) then
 		for id, value in pairs(tab) do
 			if type( value) == "string" then
 				YRP_SQL_UPDATE(name, {[id] = YRP_SQL_STR_OUT( value )}, "" .. id .. " = '" .. value .. "'" )
@@ -2249,7 +2249,7 @@ end
 local fixonce = true
 function YRPRepairSQLDB(force) -- Remove %01 - %XX
 	local version = YRP_SQL_SELECT(DATABASE_NAME, "int_version", "uniqueID = '1'" )
-	if wk( version) then
+	if NotNilAndNotFalse( version) then
 		version = tonumber( version[1].int_version)
 		if ( version <= 1 or force) and fixonce then
 			fixonce = false

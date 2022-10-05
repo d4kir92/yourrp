@@ -29,9 +29,9 @@ end
 function YRPHudView()
 	local lply = LocalPlayer()
 	local _eyeTrace = lply:GetEyeTrace()
-	if _eyeTrace.Entity and ea(_eyeTrace.Entity) then
+	if _eyeTrace.Entity and EntityAlive(_eyeTrace.Entity) then
 		local ent = _eyeTrace.Entity
-		if ea(ent) then
+		if EntityAlive(ent) then
 			local plypos = lply:GetPos()
 			local entpos = ent:WorldSpaceCenter()
 			if entpos == Vector(0, 0, 0) then

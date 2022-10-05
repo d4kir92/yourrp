@@ -61,7 +61,7 @@ function SWEP:Reload()
 	if SERVER then
 		local owner = self:GetOwner()
 		owner.ts = owner.ts or CurTime()
-		if ea( owner ) and owner.ts + 0.5 < CurTime() then
+		if EntityAlive( owner ) and owner.ts + 0.5 < CurTime() then
 			owner.ts = CurTime()
 			owner:EmitSound( "physics/wood/wood_crate_impact_hard" .. math.random(1, 5) ..".wav", 100, math.random( 90, 110 ) )
 
@@ -85,7 +85,7 @@ end
 function SWEP:PrimaryAttack()
 	if SERVER and self:GetOwner() and self:GetOwner():IsValid() then
 		local ent = self:GetOwner():GetEyeTrace().Entity
-		if ea(ent) and ent:GetPos():Distance(self:GetOwner():GetPos() ) < GetGlobalYRPInt( "int_door_distance", 200) then
+		if EntityAlive(ent) and ent:GetPos():Distance(self:GetOwner():GetPos() ) < GetGlobalYRPInt( "int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
 				if YRPLockDoor(self:GetOwner(), ent, ent:GetYRPString( "buildingID", "Failed" ) ) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_lockeddoor" ) )
@@ -112,7 +112,7 @@ end
 function SWEP:SecondaryAttack()
 	if SERVER and self:GetOwner() and self:GetOwner():IsValid() then
 		local ent = self:GetOwner():GetEyeTrace().Entity
-		if ea( ent ) and ent:GetPos():Distance( self:GetOwner():GetPos() ) < GetGlobalYRPInt( "int_door_distance", 200) then
+		if EntityAlive( ent ) and ent:GetPos():Distance( self:GetOwner():GetPos() ) < GetGlobalYRPInt( "int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
 				if YRPUnlockDoor(self:GetOwner(), ent, ent:GetYRPString( "buildingID", "Failed" ) ) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER,YRP.lang_string( "LID_unlockeddoor" ) )

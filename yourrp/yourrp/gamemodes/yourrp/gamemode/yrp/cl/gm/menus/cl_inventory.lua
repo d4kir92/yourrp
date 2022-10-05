@@ -63,7 +63,7 @@ function YRPOpenInventory(target)
 
 		net.Receive( "get_inventory", function(len)
 			local storageID = net.ReadString()
-			if pa(YRPInventory() ) then
+			if PanelAlive(YRPInventory() ) then
 				inv.storage = YRPCreateD( "YStorage", inv.win, YRPItemSize() * 5 + YRP.ctr(inv.br) * 4, YRPItemSize(), YRP.ctr(inv.sp), YRP.ctr(inv.sp) )
 				inv.storage:SetCols(5)
 				inv.storage:SetStorageID(storageID)
@@ -97,7 +97,7 @@ net.Receive( "yrp_open_storage", function(len)
 	local lply = LocalPlayer()
 	YRPOpenInventory(true)
 
-	if pa(YRPInventory() ) then
+	if PanelAlive(YRPInventory() ) then
 		local wsuid = net.ReadString()
 		local name = net.ReadString()
 		

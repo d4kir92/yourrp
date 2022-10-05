@@ -143,10 +143,10 @@ function BuildBlacklist(parent, tabBL, tab)
 	end
 
 	function list:OnRemove()
-		if pa( btnAdd) then
+		if PanelAlive( btnAdd) then
 			btnAdd:Remove()
 		end
-		if pa( btnRem) then
+		if PanelAlive( btnRem) then
 			btnRem:Remove()
 		end
 	end
@@ -155,7 +155,7 @@ end
 net.Receive( "yrp_blacklist_get", function(len)
 	local site = GetSettingsSite()
 
-	if pa(site) then
+	if PanelAlive(site) then
 
 		site:Clear()
 

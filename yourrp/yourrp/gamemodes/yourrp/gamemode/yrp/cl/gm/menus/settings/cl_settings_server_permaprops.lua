@@ -12,7 +12,7 @@ net.Receive( "get_perma_props", function(len, ply)
 	i = tonumber(i)
 	pp.tab[i] = net.ReadTable()
 
-	if pa(pp.list) then
+	if PanelAlive(pp.list) then
 		local h = YRP.ctr(240)
 		
 		local line = YRPCreateD( "DPanel", nil, pp.list:GetWide(), h, 0, 0)
@@ -80,7 +80,7 @@ end)
 
 function CreatePermaPropsSetting()
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		pp.list = YRPCreateD( "DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
 		pp.list:EnableVerticalScrollbar()
 		pp.list:SetSpacing(YRP.ctr(20) )
@@ -119,7 +119,7 @@ net.Receive( "get_perma_props2", function(len, ply)
 	i = tonumber(i)
 	pp2.tab[i] = net.ReadTable()
 
-	if pa(pp2.list) then
+	if PanelAlive(pp2.list) then
 		local h = YRP.ctr(240)
 
 		local line = YRPCreateD( "DPanel", nil, pp2.list:GetWide(), h, 0, 0)
@@ -187,7 +187,7 @@ end)
 
 function CreatePermaPropsSetting2()
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		pp2.list = YRPCreateD( "DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
 		pp2.list:EnableVerticalScrollbar()
 		pp2.list:SetSpacing(YRP.ctr(20) )

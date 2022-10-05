@@ -19,7 +19,7 @@ function CloseMacroMenu()
 end
 
 function UseMacro(uid)
-	if wk(uid) and wk(_mm.tab) and wk(_mm.tab[uid]) and wk(_mm.tab[uid].value) then
+	if NotNilAndNotFalse(uid) and NotNilAndNotFalse(_mm.tab) and NotNilAndNotFalse(_mm.tab[uid]) and NotNilAndNotFalse(_mm.tab[uid].value) then
 		local mtext = _mm.tab[uid].value
 		local tim = 0
 
@@ -50,7 +50,7 @@ net.Receive( "yrp_get_macros", function(len)
 	local lply = LocalPlayer()
 	_mm.tab = net.ReadTable()
 
-	if pa(_mm.content) then
+	if PanelAlive(_mm.content) then
 		local content = _mm.content
 
 		_mm.uid = 1

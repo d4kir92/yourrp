@@ -95,7 +95,7 @@ local star = Material( "vgui/material/icon_star.png" )
 
 function DrawEquipment(ply, name)
 	local _tmp = ply:GetYRPEntity(name, NULL)
-	if ea(_tmp) then
+	if EntityAlive(_tmp) then
 		ply.yrp_view_range = ply.yrp_view_range or 0
 		if ply.yrp_view_range <= 0 then
 			_tmp:SetNoDraw(true)
@@ -208,7 +208,7 @@ end)
 
 HUD_AVATAR = HUD_AVATAR or nil
 PAvatar = PAvatar or nil
-if pa(PAvatar) then
+if PanelAlive(PAvatar) then
 	PAvatar:Remove()
 end
 PAvatar = vgui.Create( "DPanel" )
@@ -232,7 +232,7 @@ function PAvatar:Paint(pw, ph)
 
 			render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
-			if pa(HUD_AVATAR) then
+			if PanelAlive(HUD_AVATAR) then
 				HUD_AVATAR:SetPaintedManually(false)
 				HUD_AVATAR:PaintManual()
 				HUD_AVATAR:SetPaintedManually(true)
@@ -251,7 +251,7 @@ timer.Simple(1, function()
 	ava.y = 0
 	ava.version = -1
 	function HUD_AVATARUpdate()
-		if !pa(HUD_AVATAR) then return end
+		if !PanelAlive(HUD_AVATAR) then return end
 
 		HUD_AVATAR:MoveToBack()
 
@@ -342,7 +342,7 @@ function YRP_PMUpdate()
 				
 				
 
-				if ea(YRP_PM.Entity) then
+				if EntityAlive(YRP_PM.Entity) then
 					YRP_PM.Entity:SetSkin(lply:GetSkin() )
 					local lb = YRP_PM.Entity:LookupBone( "ValveBiped.Bip01_Head1" )
 					if lb != nil then
@@ -467,7 +467,7 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 		draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	if yrp_loading_screen and pa(yrp_loading_screen) then
+	if yrp_loading_screen and PanelAlive(yrp_loading_screen) then
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(10, 10, 10) )
 	end
 

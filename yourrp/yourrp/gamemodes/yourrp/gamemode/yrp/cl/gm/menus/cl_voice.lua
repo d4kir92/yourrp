@@ -119,7 +119,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 
-			if pa(win) and pa(win.augs) then
+			if PanelAlive(win) and PanelAlive(win.augs) then
 				win.augs:AddItem(line)
 			end
 		end
@@ -161,7 +161,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 
-			if pa(win) and pa(win.agrps) then
+			if PanelAlive(win) and PanelAlive(win.agrps) then
 				win.agrps:AddItem(line)
 			end
 		end
@@ -203,7 +203,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 			
-			if pa(win) and pa(win.arols) then
+			if PanelAlive(win) and PanelAlive(win.arols) then
 				win.arols:AddItem(line)
 			end
 		end
@@ -248,7 +248,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 
-			if pa(win) and pa(win.pugs) then
+			if PanelAlive(win) and PanelAlive(win.pugs) then
 				win.pugs:AddItem(line)	
 			end
 		end
@@ -290,7 +290,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 
-			if pa(win) and pa(win.pgrps) then
+			if PanelAlive(win) and PanelAlive(win.pgrps) then
 				win.pgrps:AddItem(line)
 			end
 		end
@@ -332,7 +332,7 @@ function YRPVoiceChannel(edit, uid)
 				end
 			end
 
-			if pa(win) and pa(win.prols) then
+			if PanelAlive(win) and PanelAlive(win.prols) then
 				win.prols:AddItem(line)
 			end
 		end
@@ -754,7 +754,7 @@ end)
 
 function YRPToggleVoiceMenu()
 	if GetGlobalYRPBool( "bool_voice", false) then
-		if pa( vm.win) then
+		if PanelAlive( vm.win) then
 			surface.PlaySound( "npc/metropolice/vo/off2.wav" )
 			CloseVoiceMenu()
 		elseif YRPIsNoMenuOpen() then

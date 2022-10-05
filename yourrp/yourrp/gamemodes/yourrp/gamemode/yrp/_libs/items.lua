@@ -54,7 +54,7 @@ function AddTableAxis(tab, axis, value)
 end
 
 function GetEntityItemSize(ent)
-	if ea(ent) then
+	if EntityAlive(ent) then
 		if ent:ItemSizeW() == nil and ent:ItemSizeH() == nil then
 			local _maxs = ent:OBBMaxs()
 			local _mins = ent:OBBMins()
@@ -296,10 +296,10 @@ if CLIENT then
 					for x = 1, #item_handler[tonumber(uid)][y] do
 						item_handler[tonumber(uid)][y][x].slot:Remove()
 						local _item = item_handler[tonumber(uid)][y][x].item
-						if pa(_item) then
+						if PanelAlive(_item) then
 							_item:Remove()
 							local _parent = _item:GetParent()
-							if pa(_parent) then
+							if PanelAlive(_parent) then
 								_parent:Remove()
 							end
 						end
@@ -310,11 +310,11 @@ if CLIENT then
 	end
 
 	function AddStorage(pnl, uid, w, h, typ)
-		if pa(pnl) then
+		if PanelAlive(pnl) then
 			item_handler[tonumber(uid)] = {}
 			item_handler[tonumber(uid)].pnl = pnl
 			pnl.uid = uid
-			if pa(item_handler[tonumber(uid)].pnl) then
+			if PanelAlive(item_handler[tonumber(uid)].pnl) then
 				item_handler[tonumber(uid)].pnl:SetSize(YRP.ctr(ICON_SIZE*w), YRP.ctr(ICON_SIZE*h) )
 				for y = 1, h do
 					item_handler[tonumber(uid)][y] = {}
@@ -380,7 +380,7 @@ if CLIENT then
 	end
 
 	function SetCamPosition(pnl, item)
-		if pa(pnl) then
+		if PanelAlive(pnl) then
 			if pnl.Entity != nil then
 				if pnl.Entity:IsValid() then
 					local _mins, _maxs = pnl.Entity:GetRenderBounds()
@@ -398,7 +398,7 @@ if CLIENT then
 			tab.intern_storageID = tab.entity:GetYRPString( "storage_uid", "" )
 		end
 		local _storage = item_handler[tonumber(tab.storageID)].pnl
-		if pa(_storage) then
+		if PanelAlive(_storage) then
 			local _parent = item_handler[tonumber(tab.storageID)].pnl:GetParent()
 			local _x, _y = item_handler[tonumber(tab.storageID)].pnl:GetPos()
 

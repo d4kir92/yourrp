@@ -59,7 +59,7 @@ net.Receive( "Connect_Settings_Status", function(len, ply)
 		local _roles = YRP_SQL_SELECT( "yrp_ply_roles", "*", nil)
 		local _groups = YRP_SQL_SELECT( "yrp_ply_groups", "*", nil)
 		local _map = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", nil)
-		if wk(_roles) then
+		if NotNilAndNotFalse(_roles) then
 			for i, role in pairs(_roles) do
 				if role.string_playermodels == "" or role.string_playermodels == " " then
 					_nw_roles[role.string_name] = _nw_roles[role.string_name] or {}
@@ -75,7 +75,7 @@ net.Receive( "Connect_Settings_Status", function(len, ply)
 		if _map == nil then
 			_map = {}
 		end
-		if wk(_map) and wk(_groups) then
+		if NotNilAndNotFalse(_map) and NotNilAndNotFalse(_groups) then
 			for i, group in pairs(_groups) do
 				local _has_no_spawnpoint = true
 				for j, entry in pairs(_map) do

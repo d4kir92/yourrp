@@ -9,9 +9,9 @@ end
 local YRP_STORAGES = YRP_STORAGES or {}
 
 function GetStoragePanel(storageID)
-	if wk(storageID) then
+	if NotNilAndNotFalse(storageID) then
 		storageID = tonumber(storageID)
-		if wk(YRP_STORAGES[storageID]) then
+		if NotNilAndNotFalse(YRP_STORAGES[storageID]) then
 			return YRP_STORAGES[storageID]
 		else
 			YRP.msg( "note", "[GetStoragePanel] no panel with: " .. tostring(storageID) )
@@ -23,9 +23,9 @@ end
 
 function SetStoragePanel(storageID, pnl)
 	
-	if wk(storageID) then
+	if NotNilAndNotFalse(storageID) then
 		storageID = tonumber(storageID)
-		if !wk(YRP_STORAGES[storageID]) then
+		if !NotNilAndNotFalse(YRP_STORAGES[storageID]) then
 			YRP_STORAGES[storageID] = pnl
 		else
 			YRP.msg( "note", "[SetStoragePanel] there is already a storage with storageID: " .. tostring(storageID) )
@@ -36,7 +36,7 @@ function SetStoragePanel(storageID, pnl)
 end
 
 function RemoveStoragePanel(storageID, pnl)
-	if wk(YRP_STORAGES[storageID]) then
+	if NotNilAndNotFalse(YRP_STORAGES[storageID]) then
 		YRP_STORAGES[storageID] = nil
 	end
 end
@@ -46,7 +46,7 @@ function PANEL:GetStorageID()
 end
 
 function PANEL:SetStorageID(storageID, slots)
-	if wk(storageID) then
+	if NotNilAndNotFalse(storageID) then
 		storageID = tonumber(storageID)
 
 		if storageID != 0 then
@@ -84,7 +84,7 @@ function PANEL:SetStorageID(storageID, slots)
 						
 						line:AddPanel(slot)
 						c = c + 1
-						if ea(s) then
+						if EntityAlive(s) then
 							local i = YRPCreateD( "YItem", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 							i:SetModel(s:GetModel() )
 							i:SetE(s)
@@ -132,7 +132,7 @@ net.Receive( "yrp_storage_get_slots", function(len)
 end)
 
 function BuildStorage(storage, slots)
-	if pa(storage) then
+	if PanelAlive(storage) then
 		local c = 1
 		local sp = (storage:GetWide() - storage:GetCols() * YRPItemSize() ) / (storage:GetCols() - 1)
 
@@ -173,7 +173,7 @@ net.Receive( "yrpclosebag", function(len)
 	local storID = net.ReadString()
 
 	local storage = GetStoragePanel(storID)
-	if wk(storage) then
+	if NotNilAndNotFalse(storage) then
 		storage:GetParent():Remove()
 	end
 end)

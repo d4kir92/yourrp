@@ -6,11 +6,11 @@ net.Receive( "get_shops", function()
 	local _shops = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		_sh._sho = YRPCreateD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40) )
 		_sh._sho.tbl = _shops
 		_sh._sho:SetListHeader(YRP.lang_string( "LID_settings_shops" ) )
-		_sh._sho:SetEditArea(_sh.ea)
+		_sh._sho:SetEditArEntityAlive(_sh.ea)
 		function _sh._sho:AddFunction()
 			net.Start( "shop_add" )
 			net.SendToServer()
@@ -63,11 +63,11 @@ net.Receive( "get_shop_categories", function()
 	local _scats = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		_sh._cat = YRPCreateD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40+500+40) )
 		_sh._cat.tbl = _scats
 		_sh._cat:SetListHeader(YRP.lang_string( "LID_categories" ) )
-		_sh._cat:SetEditArea(_sh.ea)
+		_sh._cat:SetEditArEntityAlive(_sh.ea)
 		function _sh._cat:AddFunction()
 			if _sh._sho.uid != nil then
 				net.Start( "category_add" )
@@ -94,8 +94,8 @@ net.Receive( "get_shop_categories", function()
 			end
 
 			--[[ NAME ]]--
-			if pa(_sh.ea) then
-				if pa(_sh._cat) then
+			if PanelAlive(_sh.ea) then
+				if PanelAlive(_sh._cat) then
 					_sh._cat._name = YRPCreateD( "DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 					_sh._cat._name.textentry.tbl = tbl
 					_sh._cat._name:SetHeader(YRP.lang_string( "LID_name" ) )
@@ -126,11 +126,11 @@ net.Receive( "get_shop_items", function()
 	local _sitems = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		_sh._sit = YRPCreateD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40+500+40+500+40) )
 		_sh._sit.tbl = _sitems
 		_sh._sit:SetListHeader(YRP.lang_string( "LID_items" ) )
-		_sh._sit:SetEditArea(_sh.ea)
+		_sh._sit:SetEditArEntityAlive(_sh.ea)
 		function _sh._sit:AddFunction()
 			if _sh._cat.uid != nil then
 				net.Start( "shop_item_add" )
@@ -154,7 +154,7 @@ net.Receive( "get_shop_items", function()
 			end
 
 			--[[ NAME ]]--
-			if pa(_sh.ea) and pa(_sh._sit) then
+			if PanelAlive(_sh.ea) and PanelAlive(_sh._sit) then
 				_sh._sit.itemname = YRPCreateD( "DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(150) )
 				_sh._sit.itemname.textentry.tbl = tbl
 				_sh._sit.itemname:SetHeader(YRP.lang_string( "LID_name" ) )
@@ -294,7 +294,7 @@ net.Receive( "get_shop_items", function()
 				net.SendToServer()
 				net.Receive( "get_all_licenses_simple", function(len)
 					local _licenses = net.ReadTable()
-					if pa(_sh._sit) and pa(_sh._sit.itemlice) and pa(_sh._sit.itemlice.plus) then
+					if PanelAlive(_sh._sit) and PanelAlive(_sh._sit.itemlice) and PanelAlive(_sh._sit.itemlice.plus) then
 						_sh._sit.itemlice.plus:AddChoice(YRP.lang_string( "LID_none" ), -1)
 						for i, lic in pairs(_licenses) do
 							local _b = false
@@ -428,7 +428,7 @@ net.Receive( "get_shop_items", function()
 					end
 				end
 				hook.Add( "selected_shop_item", "yrp_selected_shop_item", function()
-					if pa(_sh._sit) and pa(_sh._sit.type) then
+					if PanelAlive(_sh._sit) and PanelAlive(_sh._sit.type) then
 						local _wm = LocalPlayer().WorldModel or ""
 						local _cn = LocalPlayer().ClassName or ""
 						local _pn = LocalPlayer().PrintName or ""

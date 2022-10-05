@@ -18,7 +18,7 @@ local Player = FindMetaTable( "Player" )
 function Player:LockdownLoadout()
 	--YRP.msg( "gm", self:SteamName() .. " LockdownLoadout" )
 	local lockdown = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-	if wk(lockdown) then
+	if NotNilAndNotFalse(lockdown) then
 		lockdown = lockdown[1]
 		lockdown.bool_lockdown = tobool(lockdown.bool_lockdown)
 		for i, pl in pairs(player.GetAll() ) do
@@ -134,7 +134,7 @@ net.Receive( "set_lockdown", function(len, ply)
 
 		local buildings = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'" )
 		local lockdoors = {}
-		if pa( buildings) then
+		if PanelAlive( buildings) then
 			for i, v in pairs( buildings) do
 				if tobool( v.bool_lockdown) then
 					table.insert(lockdoors, tonumber( v.uniqueID) )
@@ -161,7 +161,7 @@ net.Receive( "set_lockdown", function(len, ply)
 
 		local buildings = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'" )
 		local lockdoors = {}
-		if pa( buildings) then
+		if PanelAlive( buildings) then
 			for i, v in pairs( buildings) do
 				if tobool( v.bool_lockdown) then
 					table.insert(lockdoors, tonumber( v.uniqueID) )

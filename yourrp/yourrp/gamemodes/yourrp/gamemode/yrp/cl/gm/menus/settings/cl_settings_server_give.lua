@@ -3,7 +3,7 @@
 net.Receive( "setting_players", function(len)
 	local PARENT = GetSettingsSite()
 
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 
 		local _giveListView = YRPCreateD( "DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 		_giveListView:AddColumn( "SteamID" )
@@ -84,7 +84,7 @@ net.Receive( "setting_players", function(len)
 				local _giveComboBox = createVGUI( "DComboBox", _giveFrame, 380, 50, 10, 85)
 
 				net.Receive( "give_getGroTab", function(le)
-					if pa(_giveComboBox) then
+					if PanelAlive(_giveComboBox) then
 						local _tmpGroupList = net.ReadTable()
 						for k, v in pairs(_tmpGroupList) do
 							_giveComboBox:AddChoice( v.string_name, v.uniqueID)
@@ -96,7 +96,7 @@ net.Receive( "setting_players", function(len)
 
 				local _giveComboBox2 = createVGUI( "DComboBox", _giveFrame, 380, 50, 10, 185)
 				function _giveComboBox:OnSelect(panel, index, value)
-					if pa(_giveComboBox2) then
+					if PanelAlive(_giveComboBox2) then
 						_giveComboBox2:Clear()
 						net.Start( "give_getRolTab" )
 							net.WriteString(tostring( value) )

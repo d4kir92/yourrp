@@ -68,16 +68,16 @@ end
 
 function F8CloseSettings(pnl)
 	sm.open = false
-	if pa(sm.win) then
+	if PanelAlive(sm.win) then
 		sm.win:Hide()
-	elseif wk(pnl) and pnl.Remove != nil then
+	elseif NotNilAndNotFalse(pnl) and pnl.Remove != nil then
 		pnl:Remove()
 	end
 end
 
 function F8HardCloseSettings()
 	sm.open = false
-	if pa(sm.win) then
+	if PanelAlive(sm.win) then
 		sm.win:Remove()
 		sm.win = nil
 	end
@@ -92,7 +92,7 @@ function F8RequireUG(site, usergroups)
 	local ugs = string.Explode( ", ", usergroups)
 
 	local PARENT = GetSettingsSite()
-	if !pa(PARENT) then return end
+	if !PanelAlive(PARENT) then return end
 
 	local allugs = {}
 	allugs["USERGROUPS"] = usergroups
@@ -337,7 +337,7 @@ function F8OpenSettings()
 	sm.open = true
 	local br = YRP.ctr(20)
 
-	if pa(sm.win) == false then
+	if PanelAlive(sm.win) == false then
 		local sites = {}
 		
 		local c = 1
@@ -663,7 +663,7 @@ function F8OpenSettings()
 		else
 			sm.win:UpdateCustomeSize(sm.menu.ph)
 		end
-	elseif pa(sm.win) then
+	elseif PanelAlive(sm.win) then
 		sm.win:Show()
 	end
 end

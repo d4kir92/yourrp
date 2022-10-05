@@ -5,7 +5,7 @@ local EVENT = {}
 net.Receive( "setting_events", function(len)
 	local PARENT = GetSettingsSite()
 
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		local sw = PARENT:GetWide() / 3
 		local sh = PARENT:GetTall() / 3
 
@@ -53,7 +53,7 @@ net.Receive( "setting_events", function(len)
 				Frame.Char = YRPCreateD( "DComboBox", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20 + 60 + 20) )
 				net.Receive( "yrp_event_get_chars", function()
 					local tab = net.ReadTable()
-					if pa( Frame ) and pa( Frame.Char ) then
+					if PanelAlive( Frame ) and PanelAlive( Frame.Char ) then
 						Frame.Char:Clear()
 						for i, v in pairs(tab) do
 							Frame.Char:AddChoice( v.rpname, v.uniqueID)
@@ -208,7 +208,7 @@ net.Receive( "setting_events", function(len)
 		net.Receive( "yrp_get_events", function(len)
 			local tab = net.ReadTable()
 
-			if wk(tab) and pa(EVENT) and pa(EVENT.EventList) then
+			if NotNilAndNotFalse(tab) and PanelAlive(EVENT) and PanelAlive(EVENT.EventList) then
 				EVENT.EventList:Clear()
 
 				for n, event in pairs(tab) do

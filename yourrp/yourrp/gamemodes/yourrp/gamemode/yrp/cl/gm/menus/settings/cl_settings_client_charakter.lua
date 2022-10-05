@@ -5,7 +5,7 @@ net.Receive( "getCharakterList", function()
 	local _charTab = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		local cl_rpName = createVGUI( "DTextEntry", PARENT, 800, 50, 10, 50)
 		if _charTab.rpname != nil then
 			cl_rpName:SetText(_charTab.rpname)
@@ -51,7 +51,7 @@ net.Receive( "getCharakterList", function()
 end)
 
 hook.Add( "open_client_character", "open_client_character", function()
-	if pa(settingsWindow) then
+	if PanelAlive(settingsWindow) then
 		SaveLastSite()
 	end
 end)

@@ -5,7 +5,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 	local setting = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		local GRP_LS = YRPCreateD( "YGroupBox", PARENT, YRP.ctr(1000), YRP.ctr(530), YRP.ctr(20), YRP.ctr(20) )
 		GRP_LS:SetText( "LID_levelsystem" )
 		function GRP_LS:Paint(pw, ph)

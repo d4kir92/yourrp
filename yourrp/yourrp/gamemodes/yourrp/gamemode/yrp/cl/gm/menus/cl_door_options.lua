@@ -14,7 +14,7 @@ end
 function closeDoorOptions()
 	closeMenu()
 
-	if yrp_door and pa(yrp_door.window) then
+	if yrp_door and PanelAlive(yrp_door.window) then
 		yrp_door.window:Close()
 		yrp_door.window = nil
 	end
@@ -26,13 +26,13 @@ net.Receive( "getBuildingInfo", function(len)
 
 		local door = net.ReadEntity()
 		local tab = net.ReadTable()
-		if wk(tab) then
+		if NotNilAndNotFalse(tab) then
 			local tabBuilding = tab["B"]
 			local tabOwner = tab["O"]
 			local tabGroup = tab["G"]
 
 			if GetGlobalYRPBool( "bool_building_system", false) then
-				if ea( door) and !LocalPlayer():GetYRPBool( "bool_" .. "ishobo", false) then
+				if EntityAlive( door) and !LocalPlayer():GetYRPBool( "bool_" .. "ishobo", false) then
 					if table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
 						optionWindow( door, tabBuilding, tabOwner, tabGroup)
 					else
@@ -164,12 +164,12 @@ function buyWindow( door, tabBuilding)
 			local _tmpBuildings = net.ReadTable()
 			tabBuilding.uniqueID = tonumber(tabBuilding.uniqueID)
 
-			if pa(_ComboBoxHouseName) then
+			if PanelAlive(_ComboBoxHouseName) then
 				_ComboBoxHouseName.setup = true
 				if _ComboBoxHouseName != NULL then
 					for k, v in pairs(_tmpBuildings) do
 						v.uniqueID = tonumber( v.uniqueID)
-						if pa(_ComboBoxHouseName) then
+						if PanelAlive(_ComboBoxHouseName) then
 							local isbuilding = false
 							if v.uniqueID == tabBuilding.uniqueID then
 								isbuilding = true
@@ -200,7 +200,7 @@ function buyWindow( door, tabBuilding)
 		function _ButtonAddNew:DoClick()
 			net.Start( "addnewbuilding" )
 			net.SendToServer()
-			if pa(yrp_door.window) then
+			if PanelAlive(yrp_door.window) then
 				yrp_door.window:Close()
 			end
 		end
@@ -213,9 +213,9 @@ function buyWindow( door, tabBuilding)
 			net.Receive( "getBuildingGroups", function()
 				local _tmpGroups = net.ReadTable()
 
-				if pa(_ComboBoxGroupName) then
+				if PanelAlive(_ComboBoxGroupName) then
 					for k, v in pairs(_tmpGroups) do
-						if pa(_ComboBoxGroupName) then
+						if PanelAlive(_ComboBoxGroupName) then
 							v.uniqueID = tonumber( v.uniqueID)
 							if v.uniqueID == 0 then
 								_ComboBoxGroupName:AddChoice(YRP.lang_string( "LID_public" ), v.uniqueID, false)
@@ -354,7 +354,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 		draw.SimpleTextOutlined(YRP.lang_string( "LID_name" ) .. ":", "Y_18_500", YRP.ctr(20), YRP.ctr(270), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
 		draw.SimpleTextOutlined(YRP.lang_string( "LID_securitylevel" ) .. ":", "Y_18_500", YRP.ctr(540), YRP.ctr(370), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
 
-		if ea( door) then
+		if EntityAlive( door) then
 			draw.SimpleTextOutlined( "Building-ID: " .. door:GetYRPString( "buildingID", "FAILED" ), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
 			draw.SimpleTextOutlined( "Door-ID: " .. door:GetYRPString( "uniqueID", -1), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270 + 40), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
 		end

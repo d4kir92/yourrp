@@ -35,7 +35,7 @@ function YRPTeleportToSpawnpoint(ply, from)
 		local groTab = ply:YRPGetGroupTable()
 		local chaTab = ply:YRPGetCharacterTable()
 
-		if wk( chaTab) and wk(groTab) and wk(rolTab) then
+		if NotNilAndNotFalse( chaTab) and NotNilAndNotFalse(groTab) and NotNilAndNotFalse(rolTab) then
 			local _roleSpawnpoints = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = 'RoleSpawnpoint' AND linkID = '" .. rolTab.uniqueID .. "'" )
 			local _groupSpawnpoints = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = 'GroupSpawnpoint' AND linkID = '" .. groTab.uniqueID .. "'" )
 			if _roleSpawnpoints != nil then
@@ -137,12 +137,12 @@ end)
 net.Receive( "getMapList", function(len, ply)
 	if ply:CanAccess( "bool_map" ) then
 		local _tmpMapTable = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		if !wk(_tmpMapTable) then
+		if !NotNilAndNotFalse(_tmpMapTable) then
 			_tmpMapTable = {}
 		end
 
 		local _tmpDealerTable = YRP_SQL_SELECT( "yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'" )
-		if !wk(_tmpDealerTable) then
+		if !NotNilAndNotFalse(_tmpDealerTable) then
 			_tmpDealerTable = {}
 		end
 
@@ -168,7 +168,7 @@ end)
 util.AddNetworkString( "getMapListRoles" )
 net.Receive( "getMapListRoles", function(len, ply)
 	local _tmpRolesTable = YRP_SQL_SELECT( "yrp_ply_roles", "*", nil)
-	if wk(_tmpRolesTable) then
+	if NotNilAndNotFalse(_tmpRolesTable) then
 		for i, v in pairs(_tmpRolesTable) do
 			net.Start( "getMapListRoles" )
 				net.WriteString(table.Count(_tmpRolesTable) )
@@ -304,10 +304,10 @@ net.Receive( "getMapTab", function(len, ply)
 		elseif tab == "groupspawnpoints" then
 			dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "GroupSpawnpoint" .. "'" )
 			grp = true
-			if wk( dbTab) then
+			if NotNilAndNotFalse( dbTab) then
 				for i, v in pairs( dbTab) do
 					local g = YRP_SQL_SELECT( "yrp_ply_groups", "string_name", "uniqueID = '" .. v.linkID .. "'" )
-					if wk(g) then
+					if NotNilAndNotFalse(g) then
 						g = g[1]
 						v.name = g.string_name
 					end
@@ -317,10 +317,10 @@ net.Receive( "getMapTab", function(len, ply)
 			dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "RoleSpawnpoint" .. "'" )
 			grp = true
 			rol = true
-			if wk( dbTab) then
+			if NotNilAndNotFalse( dbTab) then
 				for i, v in pairs( dbTab) do
 					local r = YRP_SQL_SELECT( "yrp_ply_roles", "string_name", "uniqueID = '" .. v.linkID .. "'" )
-					if wk(r) then
+					if NotNilAndNotFalse(r) then
 						r = r[1]
 						v.name = r.string_name
 					end
@@ -343,7 +343,7 @@ net.Receive( "getMapTab", function(len, ply)
 			dbRol = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, int_groupID, string_name", nil)
 		end
 
-		if !wk( dbTab) then
+		if !NotNilAndNotFalse( dbTab) then
 			dbTab = {}
 		end
 
@@ -368,7 +368,7 @@ function YRPRegisterObject(obj)
 
 	if obj._suid == nil then
 		local storage = CreateStorage(obj.bag_size)
-		if wk(storage) then
+		if NotNilAndNotFalse(storage) then
 			obj._suid = tonumber(storage.uniqueID)
 		end
 
@@ -390,7 +390,7 @@ function YRPRegisterObject(obj)
 		YRP_SQL_INSERT_INTO(DATABASE_NAME, cols, vals)
 
 		local last = YRP_SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1" )
-		if wk(last) then
+		if NotNilAndNotFalse(last) then
 			last = last[1]
 		end
 	end
@@ -399,7 +399,7 @@ end
 function LoadWorldStorages()
 	local storages = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "storage" .. "'" )
 
-	if wk(storages) then
+	if NotNilAndNotFalse(storages) then
 		for i, v in pairs(storages) do
 			v.linkID = v.linkID or 0
 			v.linkID = tonumber( v.linkID)

@@ -19,7 +19,7 @@ function closeTicketMenu()
 		closeMenu()
 		TICKET.window:Remove()
 		TICKET.window = nil
-	elseif pa(TICKET.content) and pa(TICKET.content:GetParent() ) then
+	elseif PanelAlive(TICKET.content) and PanelAlive(TICKET.content:GetParent() ) then
 		if TICKET.content:GetParent().Close != nil then
 			TICKET.content:GetParent():Close()
 		end

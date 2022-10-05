@@ -167,7 +167,7 @@ net.Receive( "openInteractMenu", function(len)
 				net.Start( "promotePlayer" )
 					net.WriteString(tmpTargetCharID)
 				net.SendToServer()
-				if pa(yrp_Interact) then
+				if PanelAlive(yrp_Interact) then
 					yrp_Interact:Close()
 				end
 			end
@@ -183,7 +183,7 @@ net.Receive( "openInteractMenu", function(len)
 				net.Start( "demotePlayer" )
 					net.WriteString(tmpTargetCharID)
 				net.SendToServer()
-				if pa(yrp_Interact) then
+				if PanelAlive(yrp_Interact) then
 					yrp_Interact:Close()
 				end
 			end
@@ -199,7 +199,7 @@ net.Receive( "openInteractMenu", function(len)
 				net.Start( "invitetogroup" )
 					net.WriteString(tmpTargetCharID)
 				net.SendToServer()
-				if pa(yrp_Interact) then
+				if PanelAlive(yrp_Interact) then
 					yrp_Interact:Close()
 				end
 			end
@@ -213,7 +213,7 @@ net.Receive( "openInteractMenu", function(len)
 		local btnbtnSpecialization = createVGUI( "YButton", content, 500, 50, 520, 1120)
 		btnbtnSpecialization:SetText(YRP.lang_string( "LID_specializations" ) )
 		function btnbtnSpecialization:DoClick()
-			if pa(yrp_Interact) then
+			if PanelAlive(yrp_Interact) then
 				yrp_Interact:Close()
 			end
 
@@ -261,7 +261,7 @@ function YRPOpenGiveSpec( charid, ruid )
 
 	net.Receive( "get_role_specs", function(len)
 		local nettab = net.ReadTable()
-		if pa( win ) and pa( win.dpl ) then
+		if PanelAlive( win ) and PanelAlive( win.dpl ) then
 			local ply = NULL
 			for i, v in pairs(player.GetAll() ) do
 				if v:CharID() == charid then

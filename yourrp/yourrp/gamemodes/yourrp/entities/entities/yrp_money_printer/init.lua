@@ -179,7 +179,7 @@ end
 
 function ENT:Destroy()
 	local explosion = ents.Create( "env_explosion" )
-	if wk(explosion) then
+	if NotNilAndNotFalse(explosion) then
 		explosion:SetKeyValue( "spawnflags", 144)
 		explosion:SetKeyValue( "iMagnitude", 15)  -- Damage
 		explosion:SetKeyValue( "iRadiusOverride", 200) -- Radius

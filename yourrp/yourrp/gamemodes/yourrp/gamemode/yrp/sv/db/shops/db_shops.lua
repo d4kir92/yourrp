@@ -30,7 +30,7 @@ util.AddNetworkString( "shop_add" )
 
 net.Receive( "shop_add", function(len, ply)
 	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new shop'" )
-	YRP.msg( "db", "shop_add: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_add: " .. db_WORKED(_new) )
 
 	send_shops(ply)
 end)
@@ -63,7 +63,7 @@ function HasShopPermanent(tab)
 
 	for i, cat in pairs(_nw) do
 		local _s_items = YRP_SQL_SELECT( "yrp_shop_items", "*", "categoryID = " .. cat.uniqueID)
-		if wk(_s_items) then
+		if NotNilAndNotFalse(_s_items) then
 			for j, item in pairs(_s_items) do
 				if tonumber(item.permanent) == 1 then --or item.permanent == "1" then
 					return true

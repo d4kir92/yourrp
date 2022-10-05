@@ -18,7 +18,7 @@ local showafter =	60*60*2
 local deleteafter =	60*60*12
 
 local logTab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-if wk(logTab) then
+if NotNilAndNotFalse(logTab) then
 	for i, t in pairs(logTab) do
 		if os.time() - deleteafter > tonumber(t.string_timestamp) then
 			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. t.uniqueID .. "'" )
@@ -34,7 +34,7 @@ net.Receive( "yrp_get_logs", function(len, ply)
 		local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_typ = '" .. tab .. "'" )
 		local nettab = {}
 		local count = 0
-		if wk( dbtab) then
+		if NotNilAndNotFalse( dbtab) then
 			for i, t in SortedPairsByMemberValue( dbtab, "string_timestamp", true ) do
 				if os.time() - showafter < tonumber(t.string_timestamp) then
 					if count < 60 then

@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 232 -- do NOT change this!
+GM.VersionBuild = 233 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -361,7 +361,7 @@ if SERVER then
 	end)
 
 	local tmp = YRP_SQL_SELECT( "yrp_general", "text_gamemode_name", nil)
-	if wk(tmp) then
+	if NotNilAndNotFalse(tmp) then
 		tmp = tmp[1]
 		GM.BaseName = tmp.text_gamemode_name
 	end
@@ -514,7 +514,7 @@ end
 function YRPIsInMaxVoiceRange(listener, talker)
 	if IsValid(listener) and IsValid(talker) then
 		local dist = listener:GetPos():Distance(talker:GetPos() )
-		if wk( dist) and GetGlobalYRPInt( "int_voice_max_range", 1) then
+		if NotNilAndNotFalse( dist) and GetGlobalYRPInt( "int_voice_max_range", 1) then
 			return dist <= tonumber(GetGlobalYRPInt( "int_voice_max_range", 1) )
 		end
 	end
@@ -524,7 +524,7 @@ end
 function YRPIsInSpeakRange(listener, talker)
 	if IsValid(listener) and IsValid(talker) then
 		local dist = listener:GetPos():Distance(talker:GetPos() )
-		if wk( dist) and YRPGetVoiceRange(talker) then
+		if NotNilAndNotFalse( dist) and YRPGetVoiceRange(talker) then
 			return dist <= YRPGetVoiceRange(talker)
 		end
 	end
@@ -811,7 +811,7 @@ function YRPChatReplaceCMDS(structure, ply, text)
 	local newtext = string.Explode( " ", text, false )
 	if newtext[1] and #newtext[1] >= 4 then
 		local target = GetPlayerByRPName( newtext[1] )
-		if ea( target ) then
+		if EntityAlive( target ) then
 			result = string.Replace(result, "%TARGET%", target:RPName() )
 			table.remove( newtext, 1 )
 			if table.Count( newtext ) > 0 then
@@ -1096,7 +1096,7 @@ timer.Simple( 10, YRPAddLuaErrorHook )
 
 
 function YRPCheckReadyTable( tab )
-	if !wk( tab ) then
+	if !NotNilAndNotFalse( tab ) then
 		YRP.msg( "error", "[CheckReadyTable] Table INVALID: " .. tostring( tab ) )
 		return false
 	end

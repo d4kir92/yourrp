@@ -16,7 +16,7 @@ net.Receive( "updateServer", function(len, ply)
 	if ply:HasAccess() then
 		local _tmpString = net.ReadString()
 		local _result = YRP_SQL_UPDATE( "yrp_general", {["text_gamemode_name"] = _tmpString})
-		if worked(_result, "text_gamemode_name failed" ) then
+		if WORKED(_result, "text_gamemode_name failed" ) then
 		end
 		local countdown = net.ReadInt(16)
 		timer.Create( "timerRestartServer", 1, 0, function()
@@ -109,7 +109,7 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 
 		local player = GetPlayerByName(playername)
 
-		if ea(player) then
+		if EntityAlive(player) then
 			player:SetRPName( newrpname, "darkrp forcerpname" )
 		else
 			YRP.msg( "note", "[forcerpname] Player not found" )
@@ -117,7 +117,7 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 	elseif args[1] and args[1] == "name" then
 		local newrpname = args[2]
 
-		if ea(ply) then
+		if EntityAlive(ply) then
 			ply:SetRPName( newrpname, "darkrp name" )
 		end
 	elseif args[1] and args[1] == "wanted" then
@@ -141,7 +141,7 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 	elseif args[1] and args[1] == "drop" then
 		local _weapon = ply:GetActiveWeapon()
 		if _weapon != nil and PlayersCanDropWeapons() then
-			if ea(_weapon) then
+			if EntityAlive(_weapon) then
 				ply:DropSWEP( _weapon:GetClass() )
 			end
 		else
@@ -187,7 +187,7 @@ concommand.Add( "yrp_givelicense", function(ply, cmd, args)
 
 	local lid = GetLicenseIDByName(lname)
 
-	if IsValid(ply) and wk(lid) then
+	if IsValid(ply) and NotNilAndNotFalse(lid) then
 		GiveLicense(ply, lid)
 	else
 		YRP.msg( "note", "[yrp_givelicense] Not found" )

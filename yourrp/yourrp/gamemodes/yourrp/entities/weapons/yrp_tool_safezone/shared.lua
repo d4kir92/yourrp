@@ -83,7 +83,7 @@ function SWEP:Think()
 					YRP.msg( "db", "Option Safezone" )
 
 					local stab = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'" )
-					if wk(stab) then
+					if NotNilAndNotFalse(stab) then
 						stab = stab[1]
 						net.Start( "yrp_safezone_options" )
 							net.WriteTable(stab)

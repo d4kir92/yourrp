@@ -88,7 +88,7 @@ function PANEL:Setup( ply )
 		--self.Avatar:SetPlayer( ply )
 	
 		self.mdl:SetModel( ply:GetModel() )
-		if self.mdl.Entity and ea(self.mdl.Entity) then
+		if self.mdl.Entity and EntityAlive(self.mdl.Entity) then
 			local head = self.mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" )
 			if head then
 				local eyepos = self.mdl.Entity:GetBonePosition(head) + Vector(0, 0, 3)
@@ -220,7 +220,7 @@ hook.Add( "PlayerEndVoice", "YRP_VOICE_MODULE_PlayerEndVoice", function(ply)
 end)
 
 local function YRPCreateVoiceVGUI()
-	if pa(yrp_VoicePanelList) then
+	if PanelAlive(yrp_VoicePanelList) then
 		yrp_VoicePanelList:Remove()
 	end
 

@@ -35,7 +35,7 @@ end
 
 function CreateDarkRPSetting()
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		local list = YRPCreateD( "DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
 		list:EnableVerticalScrollbar()
 		function list:Paint(pw, ph)

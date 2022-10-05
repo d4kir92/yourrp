@@ -20,13 +20,13 @@ function BuildLogs(parent, typ)
 	net.SendToServer()
 
 	net.Receive( "yrp_get_logs", function(len)
-		if pa(parent) then
+		if PanelAlive(parent) then
 			local tab = net.ReadTable()
 		
 			for i, v in pairs(tab) do
 				local source = GetPlayerBySteamID( v.string_source_steamid )
 				local target = GetPlayerBySteamID( v.string_target_steamid )
-				if wk(source) then
+				if NotNilAndNotFalse(source) then
 					local line = YRPCreateD( "YPanel", nil, parent:GetWide(), YRP.ctr(50) )
 
 
@@ -55,7 +55,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk( v.string_source_steamid) then
+						if NotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
@@ -91,7 +91,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk( v.string_source_steamid) then
+						if NotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
@@ -129,7 +129,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk( v.string_source_steamid) then
+						if NotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
@@ -174,7 +174,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk( v.string_source_steamid) then
+						if NotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
@@ -191,7 +191,7 @@ function BuildLogs(parent, typ)
 						rt:InsertColorChange(255, 255, 255, 255)
 						rt:AppendText( " " .. "whitelisted" .. " " )
 
-						if wk( v.string_source_steamid) then
+						if NotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_target_steamid) )
 							rt:InsertClickableTextEnd()
@@ -221,7 +221,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk( v.string_source_steamid) then
+						if NotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
@@ -235,7 +235,7 @@ function BuildLogs(parent, typ)
 						end
 						rt:InsertClickableTextEnd()
 
-						if wk( v.string_value) then
+						if NotNilAndNotFalse( v.string_value) then
 							rt:InsertColorChange(255, 255, 255, 255)
 							rt:AppendText( " " .. v.string_value)
 						else
@@ -263,7 +263,7 @@ function BuildLogs(parent, typ)
 						end
 
 						if source.RPName then
-							if wk( v.string_source_steamid) then
+							if NotNilAndNotFalse( v.string_source_steamid) then
 								rt:InsertColorChange(100, 100, 255, 255)
 								rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 							else
@@ -324,7 +324,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if wk( v.string_source_steamid) then
+						if NotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
@@ -360,7 +360,7 @@ end
 
 function BuildLogsSite()
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 
 		-- TABS
 		local tabs = YRPCreateD( "YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)

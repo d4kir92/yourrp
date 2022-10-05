@@ -143,7 +143,7 @@ function YRP.lang_string( var, vals)
 			local translation = yrp_current_lang[string.lower( var)]
 
 			-- IF NOT FOUND
-			if !wk(translation) then
+			if !NotNilAndNotFalse(translation) then
 				if CLIENT then
 					LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
 					if nf[var] == nil and LocalPlayer().LoadedGamemode and LocalPlayer():LoadedGamemode() and LocalPlayer().badyourrpcontent != "" then
@@ -155,7 +155,7 @@ function YRP.lang_string( var, vals)
 			end
 
 			-- IF HAVE VALS
-			if wk( vals) then
+			if NotNilAndNotFalse( vals) then
 				if type( vals) == "string" then
 					return YRP.lang_string( var)
 				else

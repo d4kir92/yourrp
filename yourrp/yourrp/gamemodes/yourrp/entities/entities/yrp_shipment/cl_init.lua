@@ -26,7 +26,7 @@ function ENT:Draw()
 	end
 
 	local viewmodel = self:GetYRPEntity( "viewmodel" )
-	if ea( viewmodel ) then
+	if EntityAlive( viewmodel ) then
 		self.ang = self.ang or 0
 		local pos = opos + Vector( 0, 0, 30 )
 		viewmodel:SetPos( pos )

@@ -23,7 +23,7 @@ end
 local Player = FindMetaTable( "Player" )
 function Player:LevelSystemLoadout()
 	local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-	if wk(setting) then
+	if NotNilAndNotFalse(setting) then
 		setting = setting[1]
 		self:SetYRPString( "int_level_min", setting.int_level_min)
 		self:SetYRPString( "int_level_max", setting.int_level_max)
@@ -35,7 +35,7 @@ net.Receive( "get_levelsystem_settings", function(len, ply)
 	if ply:CanAccess( "bool_levelsystem" ) then
 
 		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-		if wk(setting) then
+		if NotNilAndNotFalse(setting) then
 			setting = setting[1]
 			net.Start( "get_levelsystem_settings" )
 				net.WriteTable(setting)
@@ -45,7 +45,7 @@ net.Receive( "get_levelsystem_settings", function(len, ply)
 end)
 
 local yrp_levelsystem = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-if wk(yrp_levelsystem) then
+if NotNilAndNotFalse(yrp_levelsystem) then
 	yrp_levelsystem = yrp_levelsystem[1]
 
 	function YRP.XPPerMinute()
@@ -176,7 +176,7 @@ function Player:AddXP(xp)
 		local chatab = self:YRPGetCharacterTable()
 		local charid = self:CharID()
 
-		if wk( chatab) then
+		if NotNilAndNotFalse( chatab) then
 			local curxp = tonumber( chatab.int_xp)
 			local lvl = tonumber( chatab.int_level)
 			local lvlmulti = tonumber(lvltab.float_multiplier)
@@ -249,7 +249,7 @@ end
 hook.Add( "PlayerDeath", "yrp_xp_playerdeath", function( victim, inflictor, attacker)
 	if attacker:IsPlayer() then
 		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-		if wk(setting) then
+		if NotNilAndNotFalse(setting) then
 			setting = setting[1]
 			attacker:AddXP(setting.int_xp_per_kill)
 		end
@@ -259,7 +259,7 @@ end)
 hook.Add( "OnNPCKilled", "yrp_xp_onnpckilled", function(npc, attacker, inflictor)
 	if attacker:IsPlayer() then
 		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-		if wk(setting) then
+		if NotNilAndNotFalse(setting) then
 			setting = setting[1]
 			attacker:AddXP(setting.int_xp_per_kill)
 		end

@@ -203,7 +203,7 @@ net.Receive( "yrp_darkrp_bool", function(len, ply)
 	local name = net.ReadString()
 	local b = net.ReadBool()
 	
-	if !wk(YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "bool_" .. name .. "'" ) ) then
+	if !NotNilAndNotFalse(YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "bool_" .. name .. "'" ) ) then
 		YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "" .. YRP_SQL_STR_IN( "bool_" .. name ) .. ", '" .. tonum( b ) .. "'" )
 	else
 		YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = tonum( b)}, "name = '" .. "bool_" .. name .. "'" )
@@ -215,7 +215,7 @@ util.AddNetworkString( "update_yrp_darkrp" )
 function UpdateDarkRPTable(ply)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
-	if wk(tab) then
+	if NotNilAndNotFalse(tab) then
 		local yrp_darkrp = {}
 		for i, v in pairs(tab) do
 			local name = v.name

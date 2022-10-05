@@ -1036,7 +1036,7 @@ DefaultHUDSettings()
 YRPHUDVersion = YRPHUDVersion or -1
 function HudLoadoutAll()
 	local hudeles = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-	if wk(hudeles) then
+	if NotNilAndNotFalse(hudeles) then
 		for i, v in pairs( hudeles ) do
 			if string.StartWith( v.name, "float_HUD_" ) then
 				SetGlobalYRPFloat( v.name, tonumber( v.value ) )

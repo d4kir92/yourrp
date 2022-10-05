@@ -4,7 +4,7 @@
 
 function BuildScaleSite()
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 		
 		local SW = 500
 

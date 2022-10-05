@@ -21,7 +21,7 @@ end
 function ENT:SetClassName( classname )
 	self:SetYRPString( "classname", classname )
 
-	if !ea( self.viewmodel ) then
+	if !EntityAlive( self.viewmodel ) then
 		self.viewmodel = ents.Create( "prop_dynamic" )
 		self.viewmodel:SetPos( self:GetPos() )
 		self.viewmodel:SetModel( "models/items/item_item_crate.mdl" )
@@ -31,7 +31,7 @@ function ENT:SetClassName( classname )
 	end
 
 	local mdl = ents.Create( classname )
-	if ea( mdl ) then
+	if EntityAlive( mdl ) then
 		self.viewmodel:SetModel( mdl:GetModel() )
 		mdl:Remove()
 		self:SetYRPEntity( "viewmodel", self.viewmodel )
@@ -51,14 +51,14 @@ function ENT:SetAmount( amount )
 end
 
 function ENT:OnRemove()
-	if ea( self.viewmodel ) then
+	if EntityAlive( self.viewmodel ) then
 		self.viewmodel:Remove()
 	end
 end
 
 function ENT:AddOne( ent )
 	self:SetYRPInt( "amount", self:GetYRPInt( "amount", 1 ) + 1 )
-	if ea( ent ) then
+	if EntityAlive( ent ) then
 		ent:Remove()
 	end
 end
@@ -77,11 +77,11 @@ function ENT:Use( activator, caller )
 			self.delay = CurTime() + 0.5
 			if self:GetYRPString( "itemtype" ) == "weapons" then
 				local wep = activator:Give( self:GetYRPString( "classname", "" ) )
-				if ea( wep ) then
+				if EntityAlive( wep ) then
 					self:RemoveOne()
 				else
 					local weap = ents.Create( self:GetYRPString( "classname", "" ) )
-					if ea( weap ) then
+					if EntityAlive( weap ) then
 						weap:Spawn()
 						tp_to( weap, activator:GetPos() + Vector( 0, 0, 70 ) )
 						self:RemoveOne()

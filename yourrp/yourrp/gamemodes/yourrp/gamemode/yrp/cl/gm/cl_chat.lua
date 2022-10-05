@@ -76,7 +76,7 @@ end
 function SetChatMode(mode)
 	if type(mode) == "string" then
 		CHATMODE = string.upper(mode)
-		if pa(yrpChat) and pa(yrpChat.comboBox) then
+		if PanelAlive(yrpChat) and PanelAlive(yrpChat.comboBox) then
 			yrpChat.comboBox:SetText(CHATMODE)
 		end
 	end
@@ -138,7 +138,7 @@ local function ChatBlacklisted(...)
 end
 
 local function update_chat_choices()
-	if pa(yrpChat.window) and yrpChat.comboBox != nil then
+	if PanelAlive(yrpChat.window) and yrpChat.comboBox != nil then
 		yrpChat.comboBox:Clear()
 		chatids = {}
 		
@@ -572,7 +572,7 @@ local function InitYRPChat()
 				yrpChat.writeField:DrawTextEntryText(Color( 255, 255, 255, 255 ), Color( 255, 255, 255, 0), Color( 255, 255, 255, 255 ) )
 				if !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
 					timer.Simple(0.1, function()
-						if pa(yrpChat.window) and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
+						if PanelAlive(yrpChat.window) and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
 							--yrpChat.closeChatbox( "NOT FOCUS ANYMORE" )
 						end
 					end)
@@ -609,7 +609,7 @@ local function InitYRPChat()
 			end
 			
 			function yrpChat:openChatbox( bteam)
-				if !pa(yrpChat.window) then
+				if !PanelAlive(yrpChat.window) then
 					notification.AddLegacy( "[YourRP] [openChatbox] ChatBox Window broken", NOTIFY_ERROR, 10)
 					yrp_chat_show = false
 					return
@@ -630,7 +630,7 @@ local function InitYRPChat()
 			end
 
 			function yrpChat.closeChatbox(reason)
-				if !pa(yrpChat.window) then
+				if !PanelAlive(yrpChat.window) then
 					notification.AddLegacy( "[YourRP] [closeChatbox] ChatBox Window broken", NOTIFY_ERROR, 10)
 					yrp_chat_show = false
 					return
@@ -873,7 +873,7 @@ local function InitYRPChat()
 			yrpChat.content:GoToEnd()
 
 			function YRPChatThink()
-				if pa( yrpChat.window ) then
+				if PanelAlive( yrpChat.window ) then
 					YRPCheckChatVisible()
 					timer.Simple(0.01, YRPChatThink)
 				end
@@ -885,14 +885,14 @@ end
 
 local function CheckIfRemoved()
 	local wasremoved = false
-	if pa(yrpChat.window) then
+	if PanelAlive(yrpChat.window) then
 		yrpChat.window:Remove()
 		yrpChat.window = nil
 		wasremoved = true
 		-- Already chat created
 	end
 
-	if !pa(yrpChat.window) then
+	if !PanelAlive(yrpChat.window) then
 		yrpChat = {}
 	end
 	if wasremoved then
@@ -914,14 +914,14 @@ hook.Add( "PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed
 			return
 		end
 
-		if pa(yrpChat.window) then
+		if PanelAlive(yrpChat.window) then
 			yrpChat:openChatbox( bTeam)
 		else
-			if !pa(yrpChat.window) and YRPIsChatEnabled( "PlayerBindPress2" ) then
+			if !PanelAlive(yrpChat.window) and YRPIsChatEnabled( "PlayerBindPress2" ) then
 				InitYRPChat()
 			end
 
-			if !pa(yrpChat.window) and YRPIsChatEnabled( "PlayerBindPress3" ) then
+			if !PanelAlive(yrpChat.window) and YRPIsChatEnabled( "PlayerBindPress3" ) then
 				notification.AddLegacy( "[YourRP] [yrp_overrideChatbind] ChatBox Window broken", NOTIFY_ERROR, 10)
 			end
 		end
@@ -933,7 +933,7 @@ hook.Add( "ChatText", "yrp_serverNotifications", function(index, name, text, typ
 	local lply = LocalPlayer()
 	if lply:IsValid() and YRPIsChatEnabled( "ChatText" ) then
 		if type == "none" then
-			if pa(yrpChat.content) and lply:HasAccess() then
+			if PanelAlive(yrpChat.content) and lply:HasAccess() then
 				notification.AddLegacy(text, NOTIFY_GENERIC, 6)
 			end
 		end
@@ -962,7 +962,7 @@ net.Receive( "yrpsendanim", function()
 	local activity = net.ReadInt(32)
 	local loop = net.ReadBool()
 
-	if ply:IsValid() and wk(slot) and wk( activity) and wk(loop) then
+	if ply:IsValid() and NotNilAndNotFalse(slot) and NotNilAndNotFalse( activity) and NotNilAndNotFalse(loop) then
 		ply:AnimRestartGesture(slot, activity, loop)
 	end
 end)
@@ -971,13 +971,12 @@ net.Receive( "yrpstopanim", function()
 	local ply = net.ReadEntity()
 	local slot = net.ReadInt(32)
 
-	if ply:IsValid() and wk(slot) then
+	if ply:IsValid() and NotNilAndNotFalse(slot) then
 		ply:AnimResetGestureSlot(slot)
 	end
 end)
 
 net.Receive( "yrp_player_say", function(len)
-	local sender = net.ReadEntity()
 	local pk = net.ReadTable()
 	for i, v in pairs( pk ) do
 		if isstring( v ) then
@@ -995,11 +994,8 @@ net.Receive( "yrp_player_say", function(len)
 			end
 		end
 	end
-	if YRPIsChatEnabled( "yrp_player_say" ) then
-		chat.AddText( unpack( pk ) )
-	else
-		chat.AddText( unpack( pk ) )
-	end
+	
+	chat.AddText( unpack( pk ) )
 	chat.PlaySound()
 end)
 

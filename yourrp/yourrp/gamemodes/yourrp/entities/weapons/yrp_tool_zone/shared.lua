@@ -75,7 +75,7 @@ function SWEP:Think()
 			if inzone then
 				YRP.msg( "db", "Option Zone" )
 				local stab = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. zoneuid .. "'" )
-				if wk(stab) then
+				if NotNilAndNotFalse(stab) then
 					stab = stab[1]
 					net.Start( "yrp_zone_options" )
 						net.WriteTable(stab)

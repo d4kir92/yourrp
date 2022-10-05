@@ -5,7 +5,7 @@ net.Receive( "get_specializations", function()
 	local _specializations = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
-	if pa(PARENT) then
+	if PanelAlive(PARENT) then
 
 		local spw = PARENT:GetWide()
 		local sph = PARENT:GetTall()
@@ -18,7 +18,7 @@ net.Receive( "get_specializations", function()
 		_li._spe = YRPCreateD( "DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40) )
 		_li._spe:SetListHeader(YRP.lang_string( "LID_specializations" ) )
 		--_li._spe:SetDStrForAdd( "specialization_add" )
-		_li._spe:SetEditArea(_li.ea)
+		_li._spe:SetEditArEntityAlive(_li.ea)
 		function _li.eaf(tbl)
 			for i, child in pairs(_li.ea:GetChildren() ) do
 				child:Remove()

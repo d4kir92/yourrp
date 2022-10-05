@@ -13,7 +13,7 @@ net.Receive( "getPlayerNotes", function(len, ply)
 
 	local notes = YRP_SQL_SELECT(DBNotes, "*", "SteamID = '" .. p:YRPSteamID() .. "'" )
 
-	if !wk(notes) then
+	if !NotNilAndNotFalse(notes) then
 		notes = {}
 	end
 	net.Start( "getPlayerNotes" )
@@ -51,7 +51,7 @@ function teleportToReleasepoint(ply)
 
 	local _tmpTele = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "releasepoint" .. "'" )
 
-	if wk(_tmpTele) then
+	if NotNilAndNotFalse(_tmpTele) then
 		ply:Spawn()
 		local _tmp = string.Explode( ",", _tmpTele[1].position)
 		tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]) )
@@ -78,7 +78,7 @@ function teleportToJailpoint(ply, tim, police)
 		-- CELL
 		local _tmpTable = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. ply:YRPSteamID() .. "'" )
 		local uid = 0
-		if wk(_tmpTable) then
+		if NotNilAndNotFalse(_tmpTable) then
 			uid = _tmpTable[1].cell
 		end
 		local _tmpCell = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. uid .. "'" )
@@ -86,7 +86,7 @@ function teleportToJailpoint(ply, tim, police)
 		-- "CELL DELETED"
 		local _tmpTele = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "jailpoint" .. "'" )
 
-		if wk(_tmpCell) then -- CELL
+		if NotNilAndNotFalse(_tmpCell) then -- CELL
 			_tmpCell = _tmpCell[1]
 
 			local _tmp = string.Explode( ",", _tmpCell.position)
@@ -95,7 +95,7 @@ function teleportToJailpoint(ply, tim, police)
 
 			_tmp = string.Explode( ",", _tmpCell.angle)
 			ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]) )
-		elseif wk(_tmpTele) then -- CELL DELETED
+		elseif NotNilAndNotFalse(_tmpTele) then -- CELL DELETED
 			for i, v in pairs(_tmpTele) do
 				local _tmp = string.Explode( ",", v.position)
 				local vec = Vector(_tmp[1], _tmp[2], _tmp[3])
@@ -139,7 +139,7 @@ end
 
 function clean_up_jail(ply)
 	local _tmpTable = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. ply:YRPSteamID() .. "'" )
-	if wk(_tmpTable) then
+	if NotNilAndNotFalse(_tmpTable) then
 		YRP_SQL_DELETE_FROM( "yrp_jail", "SteamID = '" .. ply:YRPSteamID() .. "'" )
 	end
 
@@ -184,7 +184,7 @@ net.Receive( "dbRemJail", function(len, ply)
 
 	local _res = YRP_SQL_DELETE_FROM( "yrp_jail", "uniqueID = " .. _uid)
 
-	if wk(_SteamID) then
+	if NotNilAndNotFalse(_SteamID) then
 		_SteamID = _SteamID[1].SteamID
 		local _tmpTable = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. _SteamID .. "'" )
 

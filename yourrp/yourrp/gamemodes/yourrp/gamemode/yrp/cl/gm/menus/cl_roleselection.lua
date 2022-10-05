@@ -22,7 +22,7 @@ local menue = nil
 function CreateRolePreviewContent()
 	local parent = CharacterMenu or RoleMenu
 
-	if !pa(parent) then
+	if !PanelAlive(parent) then
 		YRP.msg( "note", "[CreateRolePreviewContent] failed to get Parent" )
 		return
 	end
@@ -38,7 +38,7 @@ function CreateRolePreviewContent()
 
 
 
-	if pa(menue) then
+	if PanelAlive(menue) then
 		menue:Hide()
 	end
 
@@ -292,7 +292,7 @@ function CreateRolePreviewContent()
 			getrole:SetText( "LID_getrole" )
 			function getrole:DoClick()
 				if LocalPlayer().cc then
-					if pa(parent) then
+					if PanelAlive(parent) then
 						parent:Clear()
 					end
 
@@ -322,7 +322,7 @@ function CreateRolePreviewContent()
 		end
 		function back:DoClick()
 			if LocalPlayer().rolepreview then
-				if pa(menue) then
+				if PanelAlive(menue) then
 					menue:Show()
 				end
 				win:Remove()
@@ -446,18 +446,18 @@ function CreateRoleSelectionContent(PARENT)
 		end
 		function back:DoClick()
 			if !LocalPlayer().onefaction and (!LocalPlayer().rolepreview and LocalPlayer():GetYRPInt( "char_count", 0) > 0) then
-				if pa(parent) then
+				if PanelAlive(parent) then
 					parent:Clear()
 				end
 
 				CreateFactionSelectionContent()
 			elseif LocalPlayer().onefaction then
-				if pa(parent) then
+				if PanelAlive(parent) then
 					parent:Remove()
 				end
 				YRPOpenCharacterSelection()
 			else
-				if pa(parent) then
+				if PanelAlive(parent) then
 					parent:Clear()
 				end
 
@@ -470,7 +470,7 @@ function CreateRoleSelectionContent(PARENT)
 
 	-- Groups
 	net.Receive( "yrp_roleselection_getgroups", function(len)
-		if pa(list) then
+		if PanelAlive(list) then
 			local gtab = net.ReadTable()
 
 			local factioncount = tonumber(net.ReadString() )
@@ -481,7 +481,7 @@ function CreateRoleSelectionContent(PARENT)
 			for i, grp in pairs(gtab) do
 				grp.uniqueID = tonumber(grp.uniqueID)
 				
-				if pa(list) then
+				if PanelAlive(list) then
 					-- Category Group
 					local group = YRPCreateD( "YCollapsibleCategory", list, w, h, 0, 0)
 					group:SetS(w, h)

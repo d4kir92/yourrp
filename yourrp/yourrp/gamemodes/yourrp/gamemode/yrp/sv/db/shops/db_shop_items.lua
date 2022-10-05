@@ -43,7 +43,7 @@ util.AddNetworkString( "shop_item_add" )
 net.Receive( "shop_item_add", function(len, ply)
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "categoryID", _catID)
-	YRP.msg( "db", "shop_item_add: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_item_add: " .. db_WORKED(_new) )
 	send_shop_items(ply, _catID)
 end)
 
@@ -52,7 +52,7 @@ net.Receive( "shop_item_rem", function(len, ply)
 	local _uid = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
-	YRP.msg( "db", "shop_item_rem: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_item_rem: " .. db_WORKED(_new) )
 	send_shop_items(ply, _catID)
 end)
 
@@ -62,7 +62,7 @@ net.Receive( "shop_item_edit_name", function(len, ply)
 	local _new_name = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
-	YRP.msg( "db", "shop_item_edit_name: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_item_edit_name: " .. db_WORKED(_new) )
 end)
 
 util.AddNetworkString( "shop_item_edit_desc" )
@@ -71,7 +71,7 @@ net.Receive( "shop_item_edit_desc", function(len, ply)
 	local _new_desc = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["description"] = _new_desc}, "uniqueID = " .. _uid)
-	YRP.msg( "db", "shop_item_edit_desc: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_item_edit_desc: " .. db_WORKED(_new) )
 end)
 
 util.AddNetworkString( "shop_item_edit_price" )
@@ -80,7 +80,7 @@ net.Receive( "shop_item_edit_price", function(len, ply)
 	local _new_price = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["price"] = _new_price}, "uniqueID = " .. _uid)
-	YRP.msg( "db", "shop_item_edit_price: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_item_edit_price: " .. db_WORKED(_new) )
 end)
 
 util.AddNetworkString( "shop_item_edit_level" )
@@ -89,7 +89,7 @@ net.Receive( "shop_item_edit_level", function(len, ply)
 	local _new_level = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["int_level"] = _new_level}, "uniqueID = " .. _uid)
-	YRP.msg( "db", "shop_item_edit_level: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_item_edit_level: " .. db_WORKED(_new) )
 end)
 
 util.AddNetworkString( "shop_item_edit_quan" )
@@ -98,7 +98,7 @@ net.Receive( "shop_item_edit_quan", function(len, ply)
 	local _new_quan = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["quantity"] = _new_quan}, "uniqueID = " .. _uid)
-	YRP.msg( "db", "shop_item_edit_quan: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_item_edit_quan: " .. db_WORKED(_new) )
 end)
 
 util.AddNetworkString( "shop_item_edit_cool" )
@@ -107,7 +107,7 @@ net.Receive( "shop_item_edit_cool", function(len, ply)
 	local _new_cool = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["cooldown"] = _new_cool}, "uniqueID = " .. _uid)
-	YRP.msg( "db", "shop_item_edit_cool: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_item_edit_cool: " .. db_WORKED(_new) )
 end)
 
 util.AddNetworkString( "shop_item_edit_lice" )
@@ -116,7 +116,7 @@ net.Receive( "shop_item_edit_lice", function(len, ply)
 	local _new_lice = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["licenseID"] = _new_lice}, "uniqueID = " .. _uid)
-	YRP.msg( "db", "shop_item_edit_lice: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_item_edit_lice: " .. db_WORKED(_new) )
 	local _test = YRP_SQL_SELECT(DATABASE_NAME, "licenseID", "uniqueID = " .. _uid)
 end)
 
@@ -126,7 +126,7 @@ net.Receive( "shop_item_edit_perm", function(len, ply)
 	local _new_perm = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["permanent"] = _new_perm}, "uniqueID = " .. _uid)
-	YRP.msg( "db", "shop_item_edit_perm: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_item_edit_perm: " .. db_WORKED(_new) )
 end)
 
 util.AddNetworkString( "shop_get_items_storage" )
@@ -166,7 +166,7 @@ net.Receive( "yrp_shop_get_items", function(len, ply)
 	for i, v in pairs( _nw ) do
 		if strEmpty( v.WorldModel ) then
 			local ent = ents.Create( v.ClassName )
-			if ea( ent ) then
+			if EntityAlive( ent ) then
 				ent:Spawn()
 
 				v.WorldModel = ent:GetModel()
@@ -201,7 +201,7 @@ net.Receive( "shop_item_edit_base", function(len, ply)
 		["type"] = _type
 	}, "uniqueID = " .. _uid)
 
-	YRP.msg( "db", "shop_item_edit_base: " .. db_worked(_new) )
+	YRP.msg( "db", "shop_item_edit_base: " .. db_WORKED(_new) )
 end)
 
 function SpawnVehicle(item, pos, ang)
@@ -272,7 +272,7 @@ function YRPSpawnItem( ply, item, duid, count, itemColor )
 	if item.type == "weapons" then
 		if count == 1 then
 			local wep = ply:Give(item.ClassName)
-			if wk(wep) and wep != NULL then
+			if NotNilAndNotFalse(wep) and wep != NULL then
 				wep:SetYRPInt( "item_uniqueID", item.uniqueID)
 				wep:SetYRPEntity( "yrp_owner", ply)
 				return true
@@ -338,11 +338,11 @@ function YRPSpawnItem( ply, item, duid, count, itemColor )
 	end
 
 	local DEALER = YRP_SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
-    if wk(DEALER) then
+    if NotNilAndNotFalse(DEALER) then
 		DEALER = DEALER[1]
 		local SPUID = DEALER.storagepoints
 		local SP = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. SPUID .. "'" )
-		if wk(SP) then
+		if NotNilAndNotFalse(SP) then
 			SP = SP[1]
 			YRP.msg( "gm", "[Spawn Item] Item To Storagepoint" )
 
@@ -517,7 +517,7 @@ function YRPSpawnItem( ply, item, duid, count, itemColor )
 			end
 		end
 
-		if ea(ent) and TARGETANG then
+		if EntityAlive(ent) and TARGETANG then
 			ent:SetAngles(TARGETANG)
 		end
 	else
@@ -536,7 +536,7 @@ net.Receive( "item_buy", function(len, ply)
 	
 	local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. itemId)
 	
-	if wk(_item) then
+	if NotNilAndNotFalse(_item) then
 		_item = _item[1]
 		_item.name = tostring(_item.name)
 		_item.price = tonumber( _item.price )
@@ -571,7 +571,7 @@ net.Receive( "item_buy", function(len, ply)
 				local _spawned, ent = YRPSpawnItem( ply, _item, duid, count, itemColor )
 
 				if _spawned then
-					if ea(ent) then
+					if EntityAlive(ent) then
 						ent:SetYRPInt( "item_uniqueID", _item.uniqueID)
 						if itemColor then
 							ent:SetColor( StringToColor(itemColor) )
@@ -619,17 +619,17 @@ net.Receive( "item_spawn", function(len, ply)
 	local _tab = net.ReadTable()
 	local duid = net.ReadString()
 
-	if wk(_tab) and wk(duid) then
+	if NotNilAndNotFalse(_tab) and NotNilAndNotFalse(duid) then
 		local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
 
-		if wk(_item) then
+		if NotNilAndNotFalse(_item) then
 			_item = _item[1]
 
 			if not IsEntityAlive(ply, _item.uniqueID) then
 				local _spawned, ent = YRPSpawnItem(ply, _item, duid, 1)
 
 				if _spawned then
-					if ea(ent) then
+					if EntityAlive(ent) then
 						ent:SetYRPInt( "item_uniqueID", _item.uniqueID)
 						if ent:IsVehicle() then
 							AddVehicle(ent, ply, _item)
@@ -651,7 +651,7 @@ net.Receive( "item_despawn", function(len, ply)
 	if _item ~= nil then
 		_item = _item[1]
 		local _alive, ent = IsEntityAlive(ply, _item.uniqueID)
-		if _alive and ea(ent) then
+		if _alive and EntityAlive(ent) then
 			ent:Remove()
 		end
 	end

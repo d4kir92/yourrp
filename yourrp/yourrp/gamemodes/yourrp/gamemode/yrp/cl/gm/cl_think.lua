@@ -269,10 +269,10 @@ function YRPKeyPressed(key, str, distance)
 
 	if ChatIsClosedForChat and ChatIsClosedForChat() then
 		local lply = LocalPlayer()
-		if IsValid(lply) and wk(lply.GetEyeTrace) then
+		if IsValid(lply) and NotNilAndNotFalse(lply.GetEyeTrace) then
 			local plyTrace = lply:GetEyeTrace()
 			local _return = false
-			if plyTrace and distance and ea(plyTrace.Entity) then
+			if plyTrace and distance and EntityAlive(plyTrace.Entity) then
 				if plyTrace.Entity:GetPos():Distance(lply:GetPos() ) > distance then
 					_return = true
 				end
@@ -686,7 +686,7 @@ function YRP_CalcView(lply, pos, angles, fov)
 						local _tmpThick = 16
 						local _head = lply:LookupBone( "ValveBiped.Bip01_Head1" )
 
-						if worked(_head, "_head failed @cl_think.lua" ) then
+						if WORKED(_head, "_head failed @cl_think.lua" ) then
 							local tr = util.TraceHull({
 								start = lply:GetBonePosition(_head) + angles:Forward() * 4,
 								endpos = lply:GetBonePosition(_head) - angles:Forward() * 4,

@@ -15,7 +15,7 @@ end
 
 function CloseCombinedMenu()
 	cm.open = false
-	if pa( cm.win) then
+	if PanelAlive( cm.win) then
 		cm.win:Hide()
 	end
 end
@@ -261,7 +261,7 @@ function OpenCombinedMenu()
 	local lply = LocalPlayer()
 	cm.open = true
 	local br = YRP.ctr(20)
-	if pa( cm.win) == false then
+	if PanelAlive( cm.win) == false then
 
 		local sites = {}
 		
@@ -638,7 +638,7 @@ function OpenCombinedMenu()
 		else
 			cm.win:UpdateSize( cm.menu.ph)
 		end
-	elseif pa( cm.win) then
+	elseif PanelAlive( cm.win) then
 		cm.win:Show()
 		for i, site in pairs( cm.sites) do
 			if cm.currentsite == site.id then

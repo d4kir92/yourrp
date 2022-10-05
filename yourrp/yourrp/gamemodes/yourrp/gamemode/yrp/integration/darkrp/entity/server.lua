@@ -30,7 +30,7 @@ function Entity:isLocked()
 end
 
 function Entity:keysLock()
-	if ea( self ) then
+	if EntityAlive( self ) then
 		self:Fire( "Lock" )
 	end
 end
@@ -41,7 +41,7 @@ function Entity:keysOwn(ply)
 end
 
 function Entity:keysUnLock()
-	if ea( self ) then
+	if EntityAlive( self ) then
 		self:Fire( "Unlock" )
 	end
 end

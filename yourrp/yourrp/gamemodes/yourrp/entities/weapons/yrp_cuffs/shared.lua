@@ -105,7 +105,7 @@ if SERVER then
 		if args.target:GetYRPBool( "cuffed", false) then
 			args.target:SetYRPBool( "cuffed", false)
 			local _weapon = args.target:GetActiveWeapon()
-			if ea(_weapon) then
+			if EntityAlive(_weapon) then
 				_weapon:Remove()
 			end
 			if !args.target:HasWeapon( "yrp_unarmed" ) then

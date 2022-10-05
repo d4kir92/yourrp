@@ -18,13 +18,13 @@ function LoadBlacklist()
 	local tabChat = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "chat" .. "'" )
 	local tabInventory = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "inventory" .. "'" )
 	local tabEntities = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "entities" .. "'" )
-	if wk(tabChat) then
+	if NotNilAndNotFalse(tabChat) then
 		SetGlobalYRPTable( "yrp_blacklist_chat", tabChat)
 	end
-	if wk(tabInventory) then
+	if NotNilAndNotFalse(tabInventory) then
 		SetGlobalYRPTable( "yrp_blacklist_inventory", tabInventory)
 	end
-	if wk(tabEntities) then
+	if NotNilAndNotFalse(tabEntities) then
 		SetGlobalYRPTable( "yrp_blacklist_entities", tabEntities)
 	end
 end
@@ -36,7 +36,7 @@ net.Receive( "yrp_blacklist_get", function(len, ply)
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
-	if !wk(tab) then
+	if !NotNilAndNotFalse(tab) then
 		tab = {}
 	end
 	
@@ -55,7 +55,7 @@ net.Receive( "yrp_blacklist_add", function(len, ply)
 	local name = net.ReadString()
 	local value = net.ReadString()
 
-	if wk(name) and wk( value) then
+	if NotNilAndNotFalse(name) and NotNilAndNotFalse( value) then
 		YRP.msg( "db", "Added blacklist entry: " .. value)
 		YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. value .. "'" )
 	end
@@ -67,7 +67,7 @@ util.AddNetworkString( "yrp_blacklist_remove" )
 net.Receive( "yrp_blacklist_remove", function(len, ply)
 	local uid = net.ReadString()
 	
-	if wk(uid) then
+	if NotNilAndNotFalse(uid) then
 		YRP.msg( "db", "Removed blacklist entry" )
 		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'" )
 	end
