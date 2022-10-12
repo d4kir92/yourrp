@@ -80,8 +80,8 @@ function PANEL:Init()
 
 	local base = self
 
-	self._hcol = YRPColGreen()
-	self._ccol = YRPColGreen()
+	self._hcol = YRPColGreen
+	self._ccol = YRPColGreen
 
 	self._htext = ""
 
@@ -90,7 +90,7 @@ function PANEL:Init()
 	self.con:EnableVerticalScrollbar()
 	self.con:SetSpacing(YRP.ctr(20) )
 	function self.con:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue() )
+		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue )
 	end
 	local sbar = self.con.VBar
 	function sbar:Paint(w, h)
@@ -179,7 +179,7 @@ function PANEL:Init()
 
 		local r = YRPCreateD( "DPanel", nil, YRP.ctr(w) + YRP.ctr(80), YRP.ctr(h), 0, 0)
 		function r:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
+			--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
 		end
 	
 		local bg = YRPCreateD( "DPanel", r, YRP.ctr(w), YRP.ctr(h), 0, 0)

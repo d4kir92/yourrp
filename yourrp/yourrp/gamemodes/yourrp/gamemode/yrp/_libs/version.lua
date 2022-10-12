@@ -191,7 +191,7 @@ function YRPCheckVersion(from)
 						local serverart = string.upper(GAMEMODE.VersionSort)
 
 						if serverart == "OUTDATED" then	
-							GAMEMODE.versioncolor = YRPColGreen()	
+							GAMEMODE.versioncolor = YRPColGreen	
 							yrpoutdated = true	
 							serverart = "CANARY"	
 						else	
@@ -207,7 +207,7 @@ function YRPCheckVersion(from)
 							yrpoutdated = false
 						else
 							yrpoutdated = true
-							GAMEMODE.versioncolor = YRPColGreen()
+							GAMEMODE.versioncolor = YRPColGreen
 							if CLIENT then
 								VersionWindow()
 							end

@@ -896,11 +896,11 @@ function HUDSimple()
 				end
 
 				if fps < 30 then
-					fpscolor = YRPColGreen()
+					fpscolor = YRPColGreen
 				elseif fps < 60 then
 					fpscolor = Color( 255, 255, 0)
 				else
-					fpscolor = YRPColGreen()
+					fpscolor = YRPColGreen
 				end
 			end
 			PE.text = YRP.lang_string( "LID_fps" ) .. ": " .. fps
@@ -930,11 +930,11 @@ function HUDSimple()
 				end
 
 				if ping > 100 then
-					pingcolor = YRPColGreen()
+					pingcolor = YRPColGreen
 				elseif ping > 50 then
 					pingcolor = Color( 255, 255, 0)
 				else
-					pingcolor = YRPColGreen()
+					pingcolor = YRPColGreen
 				end
 			end
 			NE = {}

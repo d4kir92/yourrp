@@ -12,7 +12,7 @@ function APP:AppIcon(pw, ph)
 	surface.SetMaterial(self.Icon	)
 	surface.DrawTexturedRect(0, 0, pw, ph)
 
-	--draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue() )
+	--draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue )
 end
 
 APP.Fullscreen = true

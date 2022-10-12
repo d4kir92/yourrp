@@ -948,7 +948,7 @@ function DStringListBox(tab)
 				line.rem = YRPCreateD( "DButton", line, v.h - 2 * v.br, v.h - 2 * v.br, line:GetWide() - v.h - v.br, v.br)
 				line.rem:SetText( "" )
 				function line.rem:Paint(pw, ph)
-					draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
+					draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
 					draw.SimpleText( "-", "DermaDefault", pw / 2, ph / 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 				function line.rem:DoClick()

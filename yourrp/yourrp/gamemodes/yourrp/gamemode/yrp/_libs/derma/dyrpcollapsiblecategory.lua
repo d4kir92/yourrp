@@ -5,8 +5,8 @@ function PANEL:Init()
 	self.header = YRPCreateD( "DButton", self, 100, 50, 0, 0)
 	self.header:SetText( "" )
 	self.content = YRPCreateD( "DPanelList", self, 100, 50, 0, 100)
-	self.color = YRPColGreen()
-	self.color2 = YRPColGreen()
+	self.color = YRPColGreen
+	self.color2 = YRPColGreen
 	self.header:SetTall(self:GetHeaderHeight() )
 	self:SetTall(self:GetHeaderHeight() )
 	self.open = false
@@ -39,7 +39,7 @@ function PANEL:Init()
 		end
 		
 		if tobool(self.locked) then
-			YRP.DrawIcon(YRP.GetDesignIcon( "lock" ), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), YRPColGreen() )
+			YRP.DrawIcon(YRP.GetDesignIcon( "lock" ), ph - YRP.ctr(8), ph - YRP.ctr(8), pw - 2 * ph, YRP.ctr(4), YRPColGreen )
 		end
 	end
 
@@ -166,7 +166,7 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox(0, 0, 0, w, h, YRPColGreen() )
+	--draw.RoundedBox(0, 0, 0, w, h, YRPColGreen )
 end
 
 vgui.Register( "DYRPCollapsibleCategory", PANEL, "Panel" )

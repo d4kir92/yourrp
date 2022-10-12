@@ -47,7 +47,7 @@ if CLIENT then
 					abcolors["force"] = Color( 100, 100, 255, 255)
 					return abcolors[self:GetYRPString( "GetAbilityType", "none" )]
 				else
-					local hcolor = YRPHUD( "color_HUD_" .. element .. "_" .. art, YRPColGreen() ) -- self:GetYRPString( "color_HUD_" .. element .. "_" .. art, "255, 0, 0" )
+					local hcolor = YRPHUD( "color_HUD_" .. element .. "_" .. art, YRPColGreen ) -- self:GetYRPString( "color_HUD_" .. element .. "_" .. art, "255, 0, 0" )
 					return hcolor
 				end
 			elseif table.HasValue(hints, art) then

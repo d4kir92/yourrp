@@ -69,40 +69,41 @@ function Player:DropSWEP( cname, force )
 			if ent.WorldModel == "" then
 				ent.WorldModel = "models/props_junk/garbage_takeoutcarton001a.mdl"
 			end
-
-			ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
-			ent:SetAngles(self:GetAngles() )
-			ent:SetYRPBool( "yrpdropped", true)
-			ent:SetYRPBool( "canpickup", false)
-			timer.Simple(0.8, function()
-				if IsValid(ent) then
-					ent:SetYRPBool( "canpickup", true)
-				end
-			end)
-
-			timer.Simple( 0.0, function()
-				if IsValid( ent ) then
-					ent:Spawn()
-
-					if IsValid(wep) and wep.GetClip1 then
-						ent:SetYRPInt( "clip1", wep:GetClip1() )
+			if IsValid( ent ) then
+				ent:SetPos(self:GetPos() + Vector(0, 0, 56) + self:EyeAngles():Forward() * 16)
+				ent:SetAngles(self:GetAngles() )
+				ent:SetYRPBool( "yrpdropped", true)
+				ent:SetYRPBool( "canpickup", false)
+				timer.Simple(0.8, function()
+					if IsValid(ent) then
+						ent:SetYRPBool( "canpickup", true)
 					end
+				end)
 
-					if ent:GetPhysicsObject():IsValid() and IsValid(self) then
-						ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
-					end
+				timer.Simple( 0.0, function()
+					if IsValid( ent ) then
+						ent:Spawn()
 
-					local ttl = math.Clamp(GetGlobalYRPInt( "int_ttlsweps", 60), 0, 3600)
-					timer.Simple( ttl, function()
-						if EntityAlive( ent ) and !ent:GetOwner():IsValid() then
-							if ttl <= 1 then
-								YRP.msg( "note", "SWEP was removed TTL: " .. ttl)
-							end
-							ent:Remove()
+						if IsValid(wep) and wep.GetClip1 then
+							ent:SetYRPInt( "clip1", wep:GetClip1() )
 						end
-					end )
-				end
-			end )
+
+						if ent:GetPhysicsObject():IsValid() and IsValid(self) then
+							ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
+						end
+
+						local ttl = math.Clamp(GetGlobalYRPInt( "int_ttlsweps", 60), 0, 3600)
+						timer.Simple( ttl, function()
+							if EntityAlive( ent ) and !ent:GetOwner():IsValid() then
+								if ttl <= 1 then
+									YRP.msg( "note", "SWEP was removed TTL: " .. ttl)
+								end
+								ent:Remove()
+							end
+						end )
+					end
+				end )
+			end
 		else
 			-- on cooldown
 		end

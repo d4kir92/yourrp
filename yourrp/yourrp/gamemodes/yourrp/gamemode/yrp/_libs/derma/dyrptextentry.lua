@@ -41,7 +41,7 @@ function PANEL:Think()
 end
 
 function PANEL:Paint(w, h)
-	draw.RoundedBox(0, 0, 0, w, h, YRPColGreen() )
+	draw.RoundedBox(0, 0, 0, w, h, YRPColGreen )
 end
 
 vgui.Register( "DYRPTextEntry", PANEL, "Panel" )

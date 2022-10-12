@@ -122,13 +122,13 @@ hook.Add( "Think", "yrp_banhackers", function()
 		if ConVar and ConVar( "sv_allowcslua" ) and ConVar( "sv_allowcslua" ):GetBool() then
 			local text = "[sv_allowcslua] is enabled, clients can use Scripts!"
 			PrintMessage( HUD_PRINTCENTER, text )
-			MsgC( YRPColGreen(), text .. "\n", Color( 255, 255, 255, 255 ) )
+			MsgC( YRPColGreen, text .. "\n", Color( 255, 255, 255, 255 ) )
 		end
 
 		if ConVar and ConVar( "sv_cheats" ) and ConVar( "sv_cheats" ):GetBool() then
 			local text = "[sv_cheats] is enabled, clients can cheat!"
 			PrintMessage( HUD_PRINTCENTER, text )
-			MsgC( YRPColGreen(), text .. "\n", Color( 255, 255, 255, 255 ) )
+			MsgC( YRPColGreen, text .. "\n", Color( 255, 255, 255, 255 ) )
 		end
 	end
 end )
@@ -925,10 +925,10 @@ hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, 
 			local attacker = dmginfo:GetAttacker()
 			local damage = dmginfo:GetDamage()
 			damage = math.Round( damage, 2)
-			if IsValid( attacker) and attacker:IsPlayer() then
-				YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID() .. "', '" .. ply:SteamID() .. "', '" .. dmginfo:GetDamage() .. "'" )
-			else
-				YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'" )	
+			if IsValid( attacker ) and attacker:IsPlayer() then
+				YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID() .. "', '" .. ply:SteamID() .. "', '" .. dmginfo:GetDamage() .. "'" )
+			elseif IsValid( attacker ) then
+				YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'" )	
 			end
 		end
 	end
@@ -1572,7 +1572,7 @@ hook.Add( "PostCleanupMap", "yrp_PostCleanupMap_doors", function()
 end)
 
 function YRPWarning( text )
-	MsgC( YRPColGreen(), "[WARNING] " .. text .. "\n" )
+	MsgC( YRPColGreen, "[WARNING] " .. text .. "\n" )
 			
 end
 
@@ -1692,10 +1692,10 @@ function YRPImportDarkrp( str, name )
 	if str and name then
 		local err = RunString( str, "YRPIMPORTDARKRP_RS: " .. name, false )
 		if err then
-			MsgC( YRPColGreen(), "ERROR: ", err, "\n" )
+			MsgC( YRPColGreen, "ERROR: ", err, "\n" )
 		end
 	else
-		MsgC( YRPColRed(), "ERROR: ", "str or name is nil", str, name, "\n" )
+		MsgC( YRPColRed, "ERROR: ", "str or name is nil", str, name, "\n" )
 	end
 	YRPIMPORTDARKRP = false
 end
@@ -1714,11 +1714,11 @@ end
 util.AddNetworkString( "yrp_import_darkrp" )
 net.Receive( "yrp_import_darkrp", function( len, ply )
 	YRPHR()
-	YRPMsg( "[START IMPORT DARKRP]", YRPColGreen() )
+	YRPMsg( "[START IMPORT DARKRP]", YRPColGreen )
 
 	YRPImportFileToTable( "lua/darkrp_customthings/categories.lua", "categories" )
 	YRPImportFileToTable( "lua/darkrp_customthings/jobs.lua", "jobs" )
 	
-	YRPMsg( "[DONE IMPORT DARKRP]", YRPColGreen() )
+	YRPMsg( "[DONE IMPORT DARKRP]", YRPColGreen )
 	YRPHR()
 end )

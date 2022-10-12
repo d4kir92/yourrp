@@ -33,7 +33,7 @@ local function YRPGetClientInfo()
 end
 
 net.Receive( "receivedstartdata", function( len )
-	MsgC( YRPColGreen(), "[LOADING] SERVER -> CLIENT: Server Received Start Data", "\n" )
+	MsgC( YRPColGreen, "[LOADING] SERVER -> CLIENT: Server Received Start Data", "\n" )
 	yrpreceivedstartdata = true
 end)
 

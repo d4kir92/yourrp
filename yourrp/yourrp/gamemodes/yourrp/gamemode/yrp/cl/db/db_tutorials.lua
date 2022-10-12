@@ -23,7 +23,7 @@ local yrp_tutorials = {}
 local dbfile = "yrp_tutorials/yrp_tutorials.json"
 
 function YRPTutorialsMSG( msg )
-	MsgC( YRPColGreen(), "[YourRP] [TUTORIALS] " .. msg .. "\n" )
+	MsgC( YRPColGreen, "[YourRP] [TUTORIALS] " .. msg .. "\n" )
 end
 
 function YRPTutorialsCheckFile()

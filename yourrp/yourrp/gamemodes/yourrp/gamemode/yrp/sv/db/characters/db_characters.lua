@@ -545,7 +545,7 @@ end
 
 util.AddNetworkString( "yrp_received_chars" )
 net.Receive( "yrp_received_chars", function( len , ply )
-	MsgC( YRPColGreen(), "Player Received Charlist", "\n")
+	MsgC( YRPColGreen, "Player Received Charlist", "\n")
 	ply.receivedchars = true
 end )
 

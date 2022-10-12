@@ -203,7 +203,7 @@ function PANEL:Init()
 
 	self.con = YRPCreateD( "YPanel", self, 1000, 1000, 0, 0)
 	function self.con:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
+		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
 	end
 
 	self.sw = self:GetWide()

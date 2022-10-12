@@ -25,10 +25,10 @@ function ENT:Draw()
 				draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
 				draw.SimpleTextOutlined( "..." .. YRP.lang_string( "LID_loading" ) .. "...", "Y_80_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			elseif self.ent:GetYRPString( "status" ) == "logo" then
-				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue() )
+				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue )
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_welcome" ) .. "!", "Y_80_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			elseif self.ent:GetYRPString( "status" ) == "home" then
-				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue() )
+				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue )
 				draw.SimpleTextOutlined( bankName, "Y_80_500", 15, 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 255 ) )
 
 				draw.RoundedBox(0, 0, 150, pw, 100, Color( 255, 255, 255, 255 ) )
@@ -43,7 +43,7 @@ function ENT:Draw()
 				draw.RoundedBox(0, 0, 600, 400, 100, Color( 255, 255, 255, 255 ) )
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_transfer" ), "Y_60_500", 200, 600 + 50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			elseif self.ent:GetYRPString( "status" ) == "withdraw" then
-				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue() )
+				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue )
 				draw.SimpleTextOutlined( bankName, "Y_80_500", 15, 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 255 ) )
 
 				draw.RoundedBox(0, 0, 150, pw, 100, Color( 255, 255, 255, 255 ) )
@@ -70,7 +70,7 @@ function ENT:Draw()
 				draw.RoundedBox(0, pw-400, 600, 400, 100, Color( 255, 255, 255, 255 ) )
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_other" ), "Y_60_500", pw-200, 600 + 50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			elseif self.ent:GetYRPString( "status" ) == "deposit" then
-				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue() )
+				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue )
 				draw.SimpleTextOutlined( bankName, "Y_80_500", 15, 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 255 ) )
 
 				draw.RoundedBox(0, 0, 150, pw, 100, Color( 255, 255, 255, 255 ) )
@@ -97,7 +97,7 @@ function ENT:Draw()
 				draw.RoundedBox(0, pw-400, 600, 400, 100, Color( 255, 255, 255, 255 ) )
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_other" ), "Y_60_500", pw-200, 600 + 50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			elseif self.ent:GetYRPString( "status" ) == "transfer" then
-				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue() )
+				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue )
 				draw.SimpleTextOutlined( bankName, "Y_80_500", 15, 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 255 ) )
 
 				draw.RoundedBox(0, 0, 150, pw, 100, Color( 255, 255, 255, 255 ) )
@@ -134,7 +134,7 @@ function ENT:Draw()
 				draw.RoundedBox(0, pw-400, 600, 400, 100, Color( 255, 255, 255, 255 ) )
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_next" ), "Y_60_500", pw-200, 600 + 50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			elseif self.ent:GetYRPString( "status" ) == "other" then
-				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue() )
+				draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue )
 				draw.SimpleTextOutlined( bankName, "Y_80_500", 15, 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 255 ) )
 
 				draw.RoundedBox(0, 0, 150, pw, 100, Color( 255, 255, 255, 255 ) )
@@ -200,7 +200,7 @@ function ENT:Draw()
 				draw.RoundedBox(0, 0, 850, 400, 100, Color( 255, 255, 255, 255 ) )
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_back" ), "Y_60_500", 200, 850 + 50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			else
-				draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
+				draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
 				draw.SimpleTextOutlined( bankName, "Y_80_500", 15, 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 255 ) )
 
 				draw.RoundedBox(0, 0, 150, pw, 100, Color( 255, 255, 255, 255 ) )

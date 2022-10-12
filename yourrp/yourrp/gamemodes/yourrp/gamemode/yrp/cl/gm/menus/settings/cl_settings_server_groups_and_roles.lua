@@ -1925,9 +1925,9 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						net.SendToServer()
 						role.string_sweps = table.concat( lply.yrpseltab, "," )
 					elseif lply.yrpseltab and lply.yrpseltab[1] then
-						MsgC( YRPColGreen(), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+						MsgC( YRPColGreen, "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 					else
-						MsgC( YRPColGreen(), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+						MsgC( YRPColGreen, "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 					end
 				end
 
@@ -2010,9 +2010,9 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 							net.SendToServer()
 							role.string_sweps_onspawn = table.concat( lply.yrpseltab, "," )
 						elseif lply.yrpseltab and lply.yrpseltab[1] then
-							MsgC( YRPColGreen(), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+							MsgC( YRPColGreen, "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 						else
-							MsgC( YRPColGreen(), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+							MsgC( YRPColGreen, "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 						end
 					end
 
@@ -2750,7 +2750,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			health.dnw[3].max = GetMaxInt()
 			health.dnw[3].netstr = "update_role_" .. "int_" .. "hpup"
 
-			health.color = YRPColGreen()
+			health.color = YRPColGreen
 			health.color2 = Color( 100, 255, 100)
 			ea[role.uniqueID].health = DAttributeBar(health)
 
@@ -2785,7 +2785,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			armor.dnw[3].max = GetMaxInt()
 			armor.dnw[3].netstr = "update_role_" .. "int_" .. "arup"
 
-			armor.color = YRPColBlue()
+			armor.color = YRPColBlue
 			armor.color2 = Color( 100, 100, 255)
 			ea[role.uniqueID].armor = DAttributeBar( armor)
 

@@ -61,13 +61,13 @@ net.Receive( "get_menu_bodygroups", function(len)
 					tab.text.text = ""
 					DrawButton(self, tab)
 					local symbol = "pause"
-					local color = YRPColGreen()
+					local color = YRPColGreen
 					if !self:IsHovered() and play then
 						symbol = "play"
-						color = YRPColGreen()
+						color = YRPColGreen
 					elseif self:IsHovered() and !play then
 						symbol = "play"
-						color = YRPColGreen()
+						color = YRPColGreen
 					end
 					YRP.DrawIcon(YRP.GetDesignIcon(symbol), pw, ph, 0, 0, color)
 				end

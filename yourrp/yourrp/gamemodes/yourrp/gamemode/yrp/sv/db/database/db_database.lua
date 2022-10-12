@@ -128,7 +128,7 @@ function RemoveOldBackups()
 				end
 			end
 		else
-			MsgC( YRPColGreen(), "RemoveOldBackups IS BROKEN (Corrupted sv.db file? Modified Gamemode?)\n" )
+			MsgC( YRPColGreen, "RemoveOldBackups IS BROKEN (Corrupted sv.db file? Modified Gamemode?)\n" )
 		end
 	end
 end

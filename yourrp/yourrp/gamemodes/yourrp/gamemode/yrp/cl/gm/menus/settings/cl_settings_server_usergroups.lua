@@ -309,9 +309,9 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 				net.SendToServer()
 				UGS[CURRENT_USERGROUP].string_sweps = lply.yrpseltab
 			elseif lply.yrpseltab and lply.yrpseltab[1] then
-				MsgC( YRPColGreen(), "[YRPAddSwepToUG] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+				MsgC( YRPColGreen, "[YRPAddSwepToUG] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 			else
-				MsgC( YRPColGreen(), "[YRPAddSwepToUG] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+				MsgC( YRPColGreen, "[YRPAddSwepToUG] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 			end
 		end
 
@@ -480,9 +480,9 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 				net.SendToServer()
 				UGS[CURRENT_USERGROUP].string_nonesweps = lply.yrpseltab
 			elseif lply.yrpseltab and lply.yrpseltab[1] then
-				MsgC( YRPColGreen(), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+				MsgC( YRPColGreen, "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 			else
-				MsgC( YRPColGreen(), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+				MsgC( YRPColGreen, "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 			end
 		end
 
@@ -1241,7 +1241,7 @@ function YRPOpenSettingsUsergroups()
 					hook.Run( "YButtonRPaint", self, pw, ph)
 				else
 					draw.RoundedBox( 13, 0, 0, pw, ph, Color( 100, 100, 100, 255 ) )
-					draw.SimpleText( "X", "Y_14_700", pw / 2, ph / 2, YRPColGreen(), 1, 1 )
+					draw.SimpleText( "X", "Y_14_700", pw / 2, ph / 2, YRPColGreen, 1, 1 )
 				end
 			end
 		end

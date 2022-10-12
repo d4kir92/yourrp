@@ -404,7 +404,7 @@ function CreateRoleSelectionContent(PARENT)
 	list:EnableVerticalScrollbar()
 	list:SetSpacing(YRP.ctr( config.br) )
 	function list:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen() )
+		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
 		if list:GetWide() != win:GetWide() - YRP.ctr(2 * config.br) then
 			list:SetWide(win:GetWide() - YRP.ctr(2 * config.br) )
 		end

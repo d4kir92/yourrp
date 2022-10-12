@@ -12,7 +12,7 @@ util.AddNetworkString( "receivedserverdata" )
 
 net.Receive( "receivedserverdata", function( len, ply )
 	ply.receivedserverdata = true
-	MsgC( YRPColGreen(), "[LOADING] SENDED SERVER DATA", "\n" )
+	MsgC( YRPColGreen, "[LOADING] SENDED SERVER DATA", "\n" )
 end )
 
 local function YRPPlayerLoadedGame( ply )
@@ -155,15 +155,15 @@ local function YRPReceivedReadyMessage( len, ply, tab )
 	ply:SetYRPString( "yrp_country", Country or "unknown" )
 	ply:SetYRPFloat( "uptime_current", os.clock() )
 
-	MsgC( YRPColBlue(), "###############################################################################" .. "\n" )--##########
+	MsgC( YRPColBlue, "###############################################################################" .. "\n" )--##########
 
-	MsgC( YRPColBlue(), ply:SteamName() .. " is using OS: " .. ply:GetYRPString( "yrp_os", "-" ) .. " ( " .. tostring( Branch ) .. " )" .. "\n" )
-	MsgC( YRPColBlue(), ply:SteamName() .. " is from Country: " .. YRPGetCountryName( Country, "IS READY" ) .. "\n" )
+	MsgC( YRPColBlue, ply:SteamName() .. " is using OS: " .. ply:GetYRPString( "yrp_os", "-" ) .. " ( " .. tostring( Branch ) .. " )" .. "\n" )
+	MsgC( YRPColBlue, ply:SteamName() .. " is from Country: " .. YRPGetCountryName( Country, "IS READY" ) .. "\n" )
 	if ply:GetYRPString( "gmod_beta", "unknown" ) != "unknown" then
-		MsgC( YRPColBlue(), ply:SteamName() .. " is using GMod BETA: " .. ply:GetYRPString( "gmod_beta", "unknown" ) .. "\n" )
+		MsgC( YRPColBlue, ply:SteamName() .. " is using GMod BETA: " .. ply:GetYRPString( "gmod_beta", "unknown" ) .. "\n" )
 	end
 
-	MsgC( YRPColBlue(), "###############################################################################" .. "\n" )--##########
+	MsgC( YRPColBlue, "###############################################################################" .. "\n" )--##########
 
 	YRPStartSendingData( ply )
 end
@@ -192,7 +192,7 @@ net.Receive( "sendstartdata", function( len, ply )
 
 	if not ply.receivedstartdata then
 		ply.receivedstartdata = true
-		MsgC( YRPColGreen(), "[LOADING] CLIENT -> SERVER: Start Data [ACCEPTED]", "\n" )
+		MsgC( YRPColGreen, "[LOADING] CLIENT -> SERVER: Start Data [ACCEPTED]", "\n" )
 
 		YRPReceivedReadyMessage( len, ply, tab )
 	end

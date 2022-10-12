@@ -1121,50 +1121,56 @@ end
 hook.Add( "PlayerSpawnedVehicle", "yrp_vehicles_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
-
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Vehicle: " .. ent:GetClass() .. "'" )
+	local class = YRP_SQL_STR_IN( ent:GetClass(), nil, true )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Vehicle: " .. class .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedSWEP", "yrp_entities_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Weapon: " .. ent:GetClass() .. "'" )
+	local class = YRP_SQL_STR_IN( ent:GetClass(), nil, true )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Weapon: " .. class .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedSENT", "yrp_entities_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Entity: " .. ent:GetClass() .. "'" )
+	local class = YRP_SQL_STR_IN( ent:GetClass(), nil, true )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Entity: " .. class .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedEffect", "yrp_effects_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Effect: " .. ent:GetClass() .. "'" )
+	local class = YRP_SQL_STR_IN( ent:GetClass(), nil, true )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Effect: " .. class .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedNPC", "yrp_npcs_spawned", function(pl, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'NPC: " .. ent:GetClass() .. "'" )
+	local class = YRP_SQL_STR_IN( ent:GetClass(), nil, true )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'NPC: " .. class .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedProp", "yrp_props_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'PROP: " .. ent:GetClass() .. "'" )
+	local class = YRP_SQL_STR_IN( ent:GetClass(), nil, true )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'PROP: " .. class .. "'" )
 end)
 
 hook.Add( "PlayerSpawnedRagdoll", "yrp_ragdolls_spawned", function(pl, model, ent)
 	ent:YRPSetOwner(pl)
 	HasUseFunction(ent)
 
-	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Ragdoll: " .. ent:GetClass() .. "'" )
+	local class = YRP_SQL_STR_IN( ent:GetClass(), nil, true )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_spawns', '" .. pl:SteamID() .. "', 'Ragdoll: " .. class .. "'" )
 end)
 
 util.AddNetworkString( "yrp_notification" )

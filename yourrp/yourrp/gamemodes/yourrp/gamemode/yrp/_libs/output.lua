@@ -85,20 +85,20 @@ end
 
 local channelcolors = {}
 channelcolors["noti"] = Color( 255, 255, 0)
-channelcolors["db"] = YRPColGreen()
+channelcolors["db"] = YRPColGreen
 channelcolors["gm"] = Color( 0, 100, 225)
 channelcolors["lang"] = Color( 100, 255, 100)
-channelcolors["chat"] = YRPColBlue()
+channelcolors["chat"] = YRPColBlue
 channelcolors["debug"] = Color( 255, 255, 255, 255 )
 channelcolors["printtable"] = Color( 255, 255, 255, 255 )
 channelcolors["missing"] = Color( 255, 100, 100)
-channelcolors["error"] = YRPColGreen()
+channelcolors["error"] = YRPColGreen
 function GetChannelColor( chan)
 	chan = string.lower( chan)
 	if channelcolors[chan] != nil then
 		return channelcolors[chan]
 	else
-		return YRPColGreen()
+		return YRPColGreen
 	end
 end
 
@@ -188,7 +188,7 @@ function YRP.msg( chan, str_msg, tochat, force )
 			
 				if force then
 					MsgC( rc, " " )
-					MsgC( YRPColGreen(), "[FORCED]" )
+					MsgC( YRPColGreen, "[FORCED]" )
 				end
 
 				MsgC( "\n" )
@@ -221,7 +221,7 @@ function YRP.msg( chan, str_msg, tochat, force )
 						err:SetDraggable(false)
 						err:SetTitle( "" )
 						function err:Paint(pw, ph)
-							draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string( "LID_error" ) .. "] " .. "Look into the console!", "Y_14_500", YRPColGreen(), Color( 0, 0, 0, 255 ) )
+							draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string( "LID_error" ) .. "] " .. "Look into the console!", "Y_14_500", YRPColGreen, Color( 0, 0, 0, 255 ) )
 						end
 						timer.Simple(8, function()
 							err:Remove()

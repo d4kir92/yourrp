@@ -40,7 +40,7 @@ end
 
 function PANEL:Init()
 	self:SetText( "" )
-	self._col = YRPColGreen()
+	self._col = YRPColGreen
 end
 
 vgui.Register( "YColorMenuButton", PANEL, "DButton" )

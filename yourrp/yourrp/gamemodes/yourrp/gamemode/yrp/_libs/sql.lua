@@ -20,7 +20,7 @@ function YRP_SQL_Show_Last_Error()
 	--YRP.msg( "db", "YRP_SQL_Show_Last_Error()" )
 	local _last_error = tostring( sql.LastError() ) or ""
 
-	MsgC( YRPColGreen(), "DATABASE HAS ERROR: " .. _last_error )
+	MsgC( YRPColGreen, "DATABASE HAS ERROR: " .. _last_error )
 	
 	if SERVER then
 		PrintMessage( HUD_PRINTCENTER, "[YourRP|DATABASE] SERVER-DATABASE:" )
@@ -41,13 +41,13 @@ function YRP_SQL_Show_Last_Error()
 	return _last_error
 end
 
-function YRP_SQL_STR_IN(str, f)
+function YRP_SQL_STR_IN( str, f, bNoQuotes )
 	if str == nil and f then
-		MsgC(YRPColGreen(), f)
+		MsgC( YRPColGreen, f )
 		return str
 	else
 		str = string.Replace( str, "'", "§01§" )
-		return sql.SQLStr( tostring(str) )
+		return sql.SQLStr( tostring(str), bNoQuotes )
 	end
 end
 
@@ -525,12 +525,12 @@ if SERVER then
 		YRP.msg( "db", "Connect to MYSQL Database" )
 
 		-- MYSQL
-		MsgC( YRPColGreen(), "If Module not found, download it via yourrp discord!\n" )
+		MsgC( YRPColGreen, "If Module not found, download it via yourrp discord!\n" )
 		require( "mysqloo" )
 
 		if (mysqloo.VERSION != "9" or !mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
-			MsgC( YRPColGreen(), "You are using an outdated mysqloo version\n" )
-			MsgC( YRPColGreen(), "Download the latest mysqloo9 from here\n" )
+			MsgC( YRPColGreen, "You are using an outdated mysqloo version\n" )
+			MsgC( YRPColGreen, "Download the latest mysqloo9 from here\n" )
 			MsgC( Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases\n" )
 			YRPSQL.outdated = true
 		end
