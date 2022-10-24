@@ -292,10 +292,6 @@ end
 function GetSWEPPrintName(ClassName)
 	local sweps = GetSWEPsList()
 
-	for k, v in pairs(_weaplist) do
-		table.insert(sweps, v)
-	end
-
 	for k, v in pairs(sweps) do
 		if v.WorldModel == nil then
 			v.WorldModel = v.Model or ""
