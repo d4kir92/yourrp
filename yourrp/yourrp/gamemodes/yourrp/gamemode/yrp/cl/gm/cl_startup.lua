@@ -232,12 +232,21 @@ function isInTable(mytable, item)
 end
 
 function GetSWEPsList()
-	local SWEPS = weapons.GetList()
-	local list_weapon = list.Get( "Weapon" )
-
-	for k, v in pairs(list_weapon) do
+	local cnames = {}
+	local sweps = {}
+	for k, v in pairs( weapons.GetList() ) do
+		if !table.HasValue( cnames, v.ClassName ) and !string.StartWith( string.lower( v.ClassName ), "npc_" ) then
+			table.insert( cnames, v.ClassName )
+			table.insert( sweps, v )
+		end
+	end
+	for k, v in pairs( list.Get( "Weapon" ) ) do
 		if v.Category == "Half-Life 2" or string.find( v.ClassName, "weapon_physgun", 1, true) then
-			table.insert(SWEPS, v)
+			if !table.HasValue( cnames, v.ClassName ) and !string.StartWith( string.lower( v.ClassName ), "npc_" ) then
+				print(v.ClassName)
+				table.insert( cnames, v.ClassName )
+				table.insert( sweps, v )
+			end
 		end
 	end
 
@@ -257,12 +266,7 @@ function GetSwepWorldModel(swepcn)
 end
 
 function GetSWEPWorldModel(ClassName)
-	local sweps = weapons.GetList()
-	local _weaplist = list.Get( "Weapon" )
-
-	for k, v in pairs(_weaplist) do
-		table.insert(sweps, v)
-	end
+	local sweps = GetSWEPsList()
 
 	for k, v in pairs(sweps) do
 		if v.WorldModel == nil then
@@ -286,8 +290,7 @@ function GetSWEPWorldModel(ClassName)
 end
 
 function GetSWEPPrintName(ClassName)
-	local sweps = weapons.GetList()
-	local _weaplist = list.Get( "Weapon" )
+	local sweps = GetSWEPsList()
 
 	for k, v in pairs(_weaplist) do
 		table.insert(sweps, v)
@@ -2502,11 +2505,12 @@ net.Receive( "openLawBoard", function(len)
 					win.send = YRPCreateD( "YButton", content, content:GetWide(), YRP.ctr(50), 0, YRP.ctr(50) )
 					win.send:SetText( "LID_send" )
 					function win.send:DoClick()
-						net.Start( "AddJailNote" )
-							net.WriteString(plist.ply:YRPSteamID() )
-							net.WriteString(win.text:GetText() )
-						net.SendToServer()
-
+						if IsValid( plist.ply ) and win.text then
+							net.Start( "AddJailNote" )
+								net.WriteString(plist.ply:YRPSteamID() )
+								net.WriteString(win.text:GetText() )
+							net.SendToServer()
+						end
 						plist.notes:UpdatePlayerNotes()
 						win:Close()
 					end

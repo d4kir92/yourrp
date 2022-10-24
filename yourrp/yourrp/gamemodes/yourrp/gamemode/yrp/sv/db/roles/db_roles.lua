@@ -623,21 +623,25 @@ function SendRoleList(ply, gro, pre)
 
 		if NotNilAndNotFalse(headername) then
 			if ply != nil then
-				net.Start( "settings_subscribe_rolelist" )
-					net.WriteTable(tbl_roles)
-					net.WriteString(headername)
-					net.WriteString(gro)
-					net.WriteString(pre)
-				net.Send(ply)
-			elseif HANDLER_GROUPSANDROLES["roleslist"] and HANDLER_GROUPSANDROLES["roleslist"][gro] and HANDLER_GROUPSANDROLES["roleslist"][gro][pre] then
-				local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
-				for i, pl in pairs(tbl_bc) do
+				if tbl_roles then
 					net.Start( "settings_subscribe_rolelist" )
 						net.WriteTable(tbl_roles)
 						net.WriteString(headername)
 						net.WriteString(gro)
 						net.WriteString(pre)
-					net.Send(pl)
+					net.Send(ply)
+				end
+			elseif HANDLER_GROUPSANDROLES["roleslist"] and HANDLER_GROUPSANDROLES["roleslist"][gro] and HANDLER_GROUPSANDROLES["roleslist"][gro][pre] then
+				local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
+				if tbl_bc then
+					for i, pl in pairs(tbl_bc) do
+						net.Start( "settings_subscribe_rolelist" )
+							net.WriteTable(tbl_roles)
+							net.WriteString(headername)
+							net.WriteString(gro)
+							net.WriteString(pre)
+						net.Send(pl)
+					end
 				end
 			end
 		else

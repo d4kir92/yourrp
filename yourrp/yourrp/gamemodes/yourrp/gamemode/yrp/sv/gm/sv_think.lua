@@ -310,7 +310,9 @@ timer.Create( "ServerThink", TICK, 0, function()
 					effect:SetOrigin(ply:GetPos() - ply:GetBleedingPosition() )
 					effect:SetScale(1)
 					util.Effect( "bloodimpact", effect)
-					ply:TakeDamage( 0.5, ply )
+					if ply:Alive() then
+						ply:TakeDamage( 0.5, ply, ply )
+					end
 				end
 
 				if GetGlobalYRPBool( "bool_hunger", false) and ply:GetYRPBool( "bool_hunger", false) and YRPConHG then

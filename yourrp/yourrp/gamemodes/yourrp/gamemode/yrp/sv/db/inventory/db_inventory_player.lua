@@ -81,7 +81,7 @@ function Player:DropSWEP( cname, force )
 				end)
 
 				timer.Simple( 0.0, function()
-					if IsValid( ent ) then
+					if IsValid( ent ) and ent.Spawn then
 						ent:Spawn()
 
 						if IsValid(wep) and wep.GetClip1 then

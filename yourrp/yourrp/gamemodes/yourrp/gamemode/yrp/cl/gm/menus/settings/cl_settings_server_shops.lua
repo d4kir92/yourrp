@@ -350,14 +350,7 @@ net.Receive( "get_shop_items", function()
 				function _sh._sit.type.plus:OnSelect(panel, index, value)
 					local _itemlist = {}
 					if value == "weapons" then
-						local swepsL = weapons.GetList()
-						local _weaplist = list.Get( "Weapon" )
-
-						for k, v in pairs(_weaplist) do
-							if v.Category == "Half-Life 2" or string.find( v.ClassName, "weapon_physgun" ) then
-								table.insert(swepsL, v)
-							end
-						end
+						local swepsL = GetSWEPsList()
 						_itemlist = swepsL
 						openSingleSelector(_itemlist, "selected_shop_item" )
 					elseif value == "entities" then

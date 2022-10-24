@@ -38,7 +38,7 @@ function YRPTeleportToSpawnpoint(ply, from)
 		if NotNilAndNotFalse( chaTab) and NotNilAndNotFalse(groTab) and NotNilAndNotFalse(rolTab) then
 			local _roleSpawnpoints = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = 'RoleSpawnpoint' AND linkID = '" .. rolTab.uniqueID .. "'" )
 			local _groupSpawnpoints = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = 'GroupSpawnpoint' AND linkID = '" .. groTab.uniqueID .. "'" )
-			if _roleSpawnpoints != nil then
+			if NotNilAndNotFalse( _roleSpawnpoints ) then
 				local _randomSpawnPoint = table.Random(_roleSpawnpoints)
 
 				local _tmp = string.Explode( ",", _randomSpawnPoint.position)
