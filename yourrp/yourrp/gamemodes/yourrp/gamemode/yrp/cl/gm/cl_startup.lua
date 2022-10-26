@@ -232,8 +232,9 @@ function isInTable(mytable, item)
 end
 
 function GetSWEPsList()
-	local cnames = {}
 	local sweps = {}
+	
+	local cnames = {}
 	for k, v in pairs( weapons.GetList() ) do
 		if !table.HasValue( cnames, v.ClassName ) and !string.StartWith( string.lower( v.ClassName ), "npc_" ) then
 			table.insert( cnames, v.ClassName )
@@ -243,14 +244,13 @@ function GetSWEPsList()
 	for k, v in pairs( list.Get( "Weapon" ) ) do
 		if v.Category == "Half-Life 2" or string.find( v.ClassName, "weapon_physgun", 1, true) then
 			if !table.HasValue( cnames, v.ClassName ) and !string.StartWith( string.lower( v.ClassName ), "npc_" ) then
-				print(v.ClassName)
 				table.insert( cnames, v.ClassName )
 				table.insert( sweps, v )
 			end
 		end
 	end
 
-	return SWEPS
+	return sweps
 end
 
 function GetSwepWorldModel(swepcn)
