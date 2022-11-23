@@ -37,9 +37,13 @@ function createShopItem(item, duid, id)
 	item.count = 1
 
 	local W = 1800
-	local H = 500 + 2 * 20
+	local H = 300 + 2 * 20
 	local BR = 20
-	local HE = 60
+	local HE = 50
+	if item.type == "vehicle" then
+		H = 500 + 2 * 20
+	end
+
 	local _i = YRPCreateD( "DPanel", nil, YRP.ctr(W), YRP.ctr(H), YRP.ctr(BR), 0)
 	function _i:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -108,7 +112,7 @@ function createShopItem(item, duid, id)
 		end
 		function _i.name:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 0) )
-			draw.SimpleText(self.name, "Y_36_500", 0, ph / 2, Color( 255, 255, 255, 255 ), 0, 1)
+			draw.SimpleText(self.name, "Y_30_500", 0, ph / 2, Color( 255, 255, 255, 255 ), 0, 1)
 		end
 	end
 	if item.description != nil then
@@ -133,14 +137,14 @@ function createShopItem(item, duid, id)
 			if item.count > 1 then
 				c = item.count .. "x "
 			end
-			draw.SimpleText(c .. formatMoney(item.price, LocalPlayer() ), "Y_36_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
+			draw.SimpleText(c .. formatMoney(item.price, LocalPlayer() ), "Y_30_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
 		end
 	end
 	if item.permanent then
 		_i.permanent = YRPCreateD( "DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE - 20 - HE - 20 - HE) )
 		function _i.permanent:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 0) )
-			draw.SimpleText( "[" .. YRP.lang_string( "LID_permanent" ) .. "]", "Y_36_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
+			draw.SimpleText( "[" .. YRP.lang_string( "LID_permanent" ) .. "]", "Y_30_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
 		end
 	end
 
@@ -248,6 +252,7 @@ function createStorageItem(item, duid)
 	local lply = LocalPlayer()
 	local W = 800
 	local H = 400
+
 	local _i = YRPCreateD( "DPanel", nil, YRP.ctr(W), YRP.ctr(H), 0, 0)
 	function _i:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HB" ) )
@@ -683,7 +688,7 @@ function CreateBuyMenuContent(parent, uid)
 		BUYMENU.tabs = YRPCreateD( "DYRPTabs", BUYMENU.content, BUYMENU.content:GetWide(), YRP.ctr(100), 0, 0)
 		BUYMENU.tabs:SetSelectedColor(YRPInterfaceValue( "YButton", "SC" ) )
 		BUYMENU.tabs:SetUnselectedColor(YRPInterfaceValue( "YButton", "NC" ) )
-		BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide(), YRP.ctr(100) )
+		BUYMENU.tabs:SetSize( BUYMENU.shop:GetWide(), YRP.ctr(100) )
 		if LocalPlayer():HasAccess() then
 			BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide() - YRP.ctr(220), YRP.ctr(100) )
 		end

@@ -229,7 +229,9 @@ local function YRPCreateVoiceVGUI()
 	yrp_VoicePanelList:ParentToHUD()
 	yrp_VoicePanelList:SetPos( px, py )
 	yrp_VoicePanelList:SetSize( sw, ScrH() - 5 * sh )
-	yrp_VoicePanelList:SetPaintBackground( false )
+	if yrp_VoicePanelList.SetPaintBackground then
+		yrp_VoicePanelList:SetPaintBackground( false )
+	end
 
 end
 hook.Add( "InitPostEntity", "YRPCreateVoiceVGUI", YRPCreateVoiceVGUI )

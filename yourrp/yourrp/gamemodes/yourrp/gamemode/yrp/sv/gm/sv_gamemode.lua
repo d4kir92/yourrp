@@ -789,7 +789,7 @@ hook.Add( "EntityTakeDamage", "YRP_EntityTakeDamage", function(ent, dmginfo)
 	elseif ent:IsPlayer() then
 		if GetGlobalYRPBool( "bool_antipropkill", true) then
 			if IsValid( dmginfo:GetAttacker() ) and dmginfo:GetAttacker():GetClass() == "prop_physics" then
-				dmginfo:ScaleDamage(0)
+				dmginfo:ScaleDamage( 0 )
 			end
 		end
 		if dmginfo:GetDamageType() == DMG_BURN then
@@ -853,7 +853,7 @@ hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, 
 	if ply:IsFullyAuthenticated() then
 
 		if IsInsideSafezone(ply) or ply:HasGodMode() or ply:GetYRPBool( "godmode", false) then
-			dmginfo:ScaleDamage(0)
+			dmginfo:ScaleDamage( 0 )
 		else
 			if IsValid( dmginfo:GetAttacker() ) and dmginfo:GetAttacker() != ply then
 				StartCombat(ply)
@@ -863,7 +863,7 @@ hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, 
 
 			if GetGlobalYRPBool( "bool_antipropkill", true) then
 				if IsValid( dmginfo:GetAttacker() ) and dmginfo:GetAttacker():GetClass() == "prop_physics" then
-					dmginfo:ScaleDamage(0)
+					dmginfo:ScaleDamage( 0 )
 				end
 			end
 
@@ -931,12 +931,19 @@ hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, 
 				YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'" )	
 			end
 		end
+
+		local attacker = dmginfo:GetAttacker()
+		if IsValid( attacker ) and IsInsideSafezone( attacker ) then
+			dmginfo:ScaleDamage( 0 )
+		end
 	end
 end)
 
 hook.Add( "ScaleNPCDamage", "YRP_ScaleNPCDamage", function(npc, hitgroup, dmginfo)
 	if true then
-		if hitgroup == HITGROUP_HEAD then
+		if IsInsideSafezone( npc ) then
+			dmginfo:ScaleDamage( 0 )
+		elseif hitgroup == HITGROUP_HEAD then
 			if IsHeadshotDeadlyNpc() then
 				dmginfo:ScaleDamage(npc:Health() )
 			else
@@ -955,6 +962,11 @@ hook.Add( "ScaleNPCDamage", "YRP_ScaleNPCDamage", function(npc, hitgroup, dmginf
 		end
 	else
 		dmginfo:ScaleDamage(1)
+	end
+
+	local attacker = dmginfo:GetAttacker()
+	if IsValid( attacker ) and IsInsideSafezone( attacker ) then
+		dmginfo:ScaleDamage( 0 )
 	end
 end)
 

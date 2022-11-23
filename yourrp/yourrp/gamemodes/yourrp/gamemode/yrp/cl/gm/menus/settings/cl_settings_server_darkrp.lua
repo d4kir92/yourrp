@@ -4,31 +4,41 @@ function BuildTable(tab, parent, name, tabx)
 	local header = YRPCreateD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 	function header:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0,0,255,100) )
-		draw.SimpleText(name .. ":", "Y_14_500", tabx + YRP.ctr(10), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		if name then
+			draw.SimpleText(name .. ":", "Y_14_500", tabx + YRP.ctr(10), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
 	end
-	parent:AddItem(header)
+	if parent then
+		parent:AddItem(header)
+	end
 
-	for i, v in pairs(tab) do
-		if type( v) == "function" then 
-			continue
-		elseif type( v) == "table" then
-			BuildTable( v, parent, i, tabx + YRP.ctr(40) )
-		elseif type( v) == "boolean" then
-			local pnl = YRPCreateD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
-			function pnl:Paint(pw, ph)
-				draw.SimpleText(i, "Y_18_500", tabx + YRP.ctr(40) + YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
+	if tab then
+		for i, v in pairs( tab ) do
+			timer.Simple( i * 0.01, function()
+				if type( v) == "function" then 
+					continue
+				elseif type( v) == "table" then
+					BuildTable( v, parent, i, tabx + YRP.ctr(40) )
+				elseif type( v) == "boolean" then
+					local pnl = YRPCreateD( "DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
+					function pnl:Paint(pw, ph)
+						draw.SimpleText(i, "Y_18_500", tabx + YRP.ctr(40) + YRP.ctr(40 + 20), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					end
 
-			local check = YRPCreateD( "DCheckBox", pnl, YRP.ctr(40), YRP.ctr(40), tabx + YRP.ctr(40), 0)
-			check:SetChecked( v)
-			function check:OnChange()
-				net.Start( "yrp_darkrp_bool" )
-					net.WriteString(i)
-					net.WriteBool( check:GetChecked() )
-				net.SendToServer()
-			end
+					local check = YRPCreateD( "DCheckBox", pnl, YRP.ctr(40), YRP.ctr(40), tabx + YRP.ctr(40), 0)
+					check:SetChecked( v)
+					function check:OnChange()
+						net.Start( "yrp_darkrp_bool" )
+							net.WriteString(i)
+							net.WriteBool( check:GetChecked() )
+						net.SendToServer()
+					end
 
-			parent:AddItem(pnl)
+					if parent then
+						parent:AddItem(pnl)
+					end
+				end
+			end )
 		end
 	end
 end

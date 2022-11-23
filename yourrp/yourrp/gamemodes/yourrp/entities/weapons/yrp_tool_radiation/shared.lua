@@ -157,7 +157,11 @@ function SWEP:PrimaryAttack()
 	end
 end
 
-function IsInsideRadiation(ply)
+function IsInsideRadiation( ply )
+	if !IsValid( ply ) then
+		return false
+	end
+
 	for i, v in pairs(GetGlobalYRPTable( "yrp_radiation" ) ) do
 		local pos = string.Explode( ",", v.pos)
 		local spos = Vector(pos[1], pos[2], pos[3])

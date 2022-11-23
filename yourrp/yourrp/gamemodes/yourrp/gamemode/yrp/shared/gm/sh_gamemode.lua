@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 238 -- do NOT change this!
+GM.VersionBuild = 240 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -106,7 +106,7 @@ if SERVER then
 end
 
 function GM:Initialize()
-	self.BaseClass.Initialize(self)
+	self.BaseClass.Initialize( self )
 end
 
 function GM:GetGameDescription()
@@ -1150,9 +1150,10 @@ function GM:DarkRPFinishedLoading()
     hook.Call( "loadCustomDarkRPItems", self )
     hook.Call( "postLoadCustomDarkRPItems", self )
 end
-timer.Simple(0, function()
+
+timer.Simple( 0, function()
 	GAMEMODE:DarkRPFinishedLoading()
-end)
+end )
 
 function YRPCheckDarkRP()
 	if gmod and gmod.GetGamemode() then

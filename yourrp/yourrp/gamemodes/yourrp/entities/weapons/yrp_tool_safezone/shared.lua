@@ -157,7 +157,11 @@ function SWEP:PrimaryAttack()
 	end
 end
 
-function IsInsideSafezone(ply)
+function IsInsideSafezone( ply )
+	if !IsValid( ply ) then
+		return false
+	end
+
 	for i, v in pairs(GetGlobalYRPTable( "yrp_safezone" ) ) do
 		local pos = string.Explode( ",", v.pos)
 		local spos = Vector(pos[1], pos[2], pos[3])
