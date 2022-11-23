@@ -157,8 +157,8 @@ function SWEP:PrimaryAttack()
 	end
 end
 
-function IsInsideSafezone( ply )
-	if !IsValid( ply ) then
+function IsInsideSafezone( ent )
+	if !IsValid( ent ) then
 		return false
 	end
 
@@ -167,7 +167,7 @@ function IsInsideSafezone( ply )
 		local spos = Vector(pos[1], pos[2], pos[3])
 		local epos = Vector(pos[4], pos[5], pos[6])
 		
-		local pos = ply:GetPos()
+		local pos = ent:GetPos()
 
 		local sx = math.min(spos.x, epos.x)
 		local mx = math.max(spos.x, epos.x)
@@ -180,10 +180,10 @@ function IsInsideSafezone( ply )
 			return true
 		end
 
-		if ply:Crouching() then
-			pos = ply:GetPos() + Vector(0, 0, 36)
+		if ent:IsPlayer() and ent:Crouching() then
+			pos = ent:GetPos() + Vector(0, 0, 36)
 		else
-			pos = ply:GetPos() + Vector(0, 0, 72)
+			pos = ent:GetPos() + Vector(0, 0, 72)
 		end
 
 		if (pos.x >= sx and pos.x <= mx) and (pos.y >= sy and pos.y <= my) and (pos.z >= sz and pos.z <= mz) then

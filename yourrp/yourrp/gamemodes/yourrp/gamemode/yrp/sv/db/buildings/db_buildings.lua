@@ -457,7 +457,9 @@ net.Receive( "changeBuildingSL", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewSL = net.ReadString()
 	_tmpNewSL = tonumber(_tmpNewSL) or 0
-
+	if _tmpNewSL > 1000 then
+		_tmpNewSL = 1000
+	end
 	local _result = YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", {["int_securitylevel"] = _tmpNewSL}, "uniqueID = " .. _tmpBuildingID)
 	SetSecurityLevel(_tmpBuildingID, _tmpNewSL)
 end)

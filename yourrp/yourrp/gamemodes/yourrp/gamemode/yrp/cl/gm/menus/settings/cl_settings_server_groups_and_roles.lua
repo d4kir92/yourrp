@@ -770,7 +770,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						requireslevel.uniqueID = group.uniqueID
 						requireslevel.lforce = false
 						requireslevel.min = 1
-						requireslevel.max = 100
+						requireslevel.max = 10000000
 						ea[group.uniqueID].requireslevel = DIntBox(requireslevel)
 
 						DHr(hr)
@@ -2316,7 +2316,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				requireslevel.uniqueID = role.uniqueID
 				requireslevel.lforce = false
 				requireslevel.min = 1
-				requireslevel.max = 100
+				requireslevel.max = 10000000
 				ea[role.uniqueID].requireslevel = DIntBox(requireslevel)
 
 				DHr(hr)
@@ -2330,7 +2330,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					securitylevel.uniqueID = role.uniqueID
 					securitylevel.lforce = false
 					securitylevel.min = 0
-					securitylevel.max = 10
+					securitylevel.max = 1000
 					ea[role.uniqueID].securitylevel = DIntBox(securitylevel)
 
 					DHr(hr)
