@@ -97,7 +97,7 @@ end
 local dbChannels = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_structure", nil )
 if dbChannels then
 	for i, v in pairs( dbChannels ) do
-		local string_structure = string.Replace( v.string_structure, "YRPColGreen", "Color( 0, 255, 0 )" )
+		local string_structure = string.Replace( v.string_structure, "Color( 0, 255, 0 )", "Color( 0, 255, 0 )" )
 		YRP_SQL_UPDATE( DATABASE_NAME, {["string_structure"] = string_structure}, "uniqueID = '" .. v.uniqueID .. "'" )
 	end
 end

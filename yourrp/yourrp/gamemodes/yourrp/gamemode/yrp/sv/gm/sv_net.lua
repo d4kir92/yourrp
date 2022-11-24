@@ -199,9 +199,9 @@ concommand.Add( "yrp_allowallcountries", function(ply, cmd, args)
 
 	MsgC( Color( 255, 255, 0 ), "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" .. "\n" )
 	if GetGlobalYRPBool( "yrp_allowallcountries", false ) then
-		MsgC( YRPColGreen, "[YourRP] Allow All Countries is Enabled." .. "\n" )
+		MsgC( Color( 0, 255, 0 ), "[YourRP] Allow All Countries is Enabled." .. "\n" )
 	else
-		MsgC( YRPColGreen, "[YourRP] Allow All Countries is Disabled." .. "\n" )
+		MsgC( Color( 0, 255, 0 ), "[YourRP] Allow All Countries is Disabled." .. "\n" )
 	end
 	MsgC( Color( 255, 255, 0 ), "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" .. "\n" )
 end)

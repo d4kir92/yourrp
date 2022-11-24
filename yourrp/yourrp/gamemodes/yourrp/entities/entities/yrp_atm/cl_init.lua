@@ -200,7 +200,7 @@ function ENT:Draw()
 				draw.RoundedBox(0, 0, 850, 400, 100, Color( 255, 255, 255, 255 ) )
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_back" ), "Y_60_500", 200, 850 + 50, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			else
-				draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
+				draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
 				draw.SimpleTextOutlined( bankName, "Y_80_500", 15, 10, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 255 ) )
 
 				draw.RoundedBox(0, 0, 150, pw, 100, Color( 255, 255, 255, 255 ) )

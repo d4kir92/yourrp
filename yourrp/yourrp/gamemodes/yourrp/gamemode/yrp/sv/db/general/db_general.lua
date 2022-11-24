@@ -2254,11 +2254,11 @@ function YRPRepairSQLDB(force) -- Remove %01 - %XX
 		if ( version <= 1 or force) and fixonce then
 			fixonce = false
 			local alltables = YRP_SQL_QUERY( "SELECT * FROM sqlite_master WHERE type='table';" )
-			MsgC(YRPColGreen, ">>> REPAIR YourRP DB, START <<<" .. "\n" )
+			MsgC(Color( 0, 255, 0 ), ">>> REPAIR YourRP DB, START <<<" .. "\n" )
 			if alltables then
 				for i, v in pairs( alltables ) do
 					if string.StartWith( v.name, "yrp_" ) then
-						MsgC(YRPColGreen, "> FIX DB: " .. v.name .. "\n" )
+						MsgC(Color( 0, 255, 0 ), "> FIX DB: " .. v.name .. "\n" )
 						local tab = YRP_SQL_SELECT( v.name, "*", nil)
 						YRPFixDatabase(tab, v.name)
 					end
@@ -2266,7 +2266,7 @@ function YRPRepairSQLDB(force) -- Remove %01 - %XX
 			else
 				MsgC(YRPColRed, ">>> FAILED, NO TABLES <<<" .. "\n" )
 			end
-			MsgC(YRPColGreen, ">>> REPAIR YourRP DB, DONE <<<" .. "\n" )
+			MsgC(Color( 0, 255, 0 ), ">>> REPAIR YourRP DB, DONE <<<" .. "\n" )
 
 			YRP_SQL_UPDATE(DATABASE_NAME, {["int_version"] = 2}, "uniqueID = '1'" )
 		end

@@ -80,8 +80,8 @@ function PANEL:Init()
 
 	local base = self
 
-	self._hcol = YRPColGreen
-	self._ccol = YRPColGreen
+	self._hcol = Color( 0, 255, 0 )
+	self._ccol = Color( 0, 255, 0 )
 
 	self._htext = ""
 
@@ -179,7 +179,7 @@ function PANEL:Init()
 
 		local r = YRPCreateD( "DPanel", nil, YRP.ctr(w) + YRP.ctr(80), YRP.ctr(h), 0, 0)
 		function r:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
 		end
 	
 		local bg = YRPCreateD( "DPanel", r, YRP.ctr(w), YRP.ctr(h), 0, 0)
@@ -396,10 +396,12 @@ function PANEL:Init()
 		local roltab = this.roltab or {}
 		local grptab = this.grptab or {}
 
+		base.con:Clear()
+
 		if PanelAlive( base ) then
 			local rw = 800
 			local rh = 160
-			for i, rol in pairs( roltab ) do
+			for i, rol in SortedPairsByMemberValue(roltab, "int_position" ) do
 				if type( rol.string_usergroups ) != "table" then
 					rol.string_usergroups = string.Explode( ",", rol.string_usergroups )
 				else
@@ -414,7 +416,7 @@ function PANEL:Init()
 				rol.bool_eventrole = tobool(rol.bool_eventrole)
 				
 				-- Restrictions
-				if !table.HasValue(rol.string_usergroups, "ALL" ) then
+				if table.Count( rol.string_usergroups ) > 0 and !table.HasValue(rol.string_usergroups, "ALL" ) then
 					if !table.HasValue(rol.string_usergroups, string.upper(LocalPlayer():GetUserGroup() )) then
 						continue
 					end
@@ -439,7 +441,6 @@ function PANEL:Init()
 					function rlis:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, color1 )
 					end
-
 					base.con:AddItem(rlis)
 
 					AddRole(rlis, rol, w, h)
@@ -448,7 +449,8 @@ function PANEL:Init()
 			
 			local gw = base._w - 2 * YRP.ctr(20) - base.con.VBar:GetWide()
 			local gh = base._h
-			for i, grp in pairs(grptab) do
+
+			for i, grp in SortedPairsByMemberValue(grptab, "int_position" ) do
 				local w = gw
 				local h = gh
 

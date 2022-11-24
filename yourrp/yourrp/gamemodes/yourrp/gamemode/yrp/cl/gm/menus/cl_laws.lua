@@ -104,7 +104,7 @@ function CreateLawsContent( PARENT )
 			l_alarms:EnableVerticalScrollbar()
 			l_alarms:SetSpacing(4)
 			function l_alarms:Paint(pw, ph)
-				--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
 			end
 			for i, e in pairs( alarms) do
 				local line = YRPCreateD( "DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
@@ -134,7 +134,7 @@ function CreateLawsContent( PARENT )
 				l_buildings:EnableVerticalScrollbar()
 				l_buildings:SetSpacing(4)
 				function l_buildings:Paint(pw, ph)
-					--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
+					--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
 				end
 
 				for i, e in pairs( buildings) do

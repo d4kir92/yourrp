@@ -126,7 +126,7 @@ if YRPDEBUGENTITY then
 
 	local function ShowStatsLoop()
 		if pTab then
-			MsgC( YRPColGreen, "YRP - ENTITY:\n")
+			MsgC( Color( 0, 255, 0 ), "YRP - ENTITY:\n")
 			pTab(c)
 		end
 		if YRPDEBUGENTITY and v == YRPDEBUGENTITY_V then

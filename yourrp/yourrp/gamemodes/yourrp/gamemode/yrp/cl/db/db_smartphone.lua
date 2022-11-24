@@ -9,7 +9,7 @@ local yrp_smartphone = {}
 local dbfile = "yrp_smartphone/yrp_smartphone.json"
 
 function YRPSmartphoneMSG( msg, col )
-	local color = col or YRPColGreen
+	local color = col or Color( 0, 255, 0 )
 	MsgC( color, "[YourRP] [SMARTPHONE] " .. msg .. "\n" )
 end
 
@@ -34,7 +34,7 @@ function YRPSmartphoneLoad()
 			yrp_smartphone[i] = YRPTableToColor( v )
 		end
 	else
-		YRPSmartphoneMSG( "FAILED TO LOAD SMARTPHONE COLORS", YRPColGreen )
+		YRPSmartphoneMSG( "FAILED TO LOAD SMARTPHONE COLORS", Color( 0, 255, 0 ) )
 	end
 end
 

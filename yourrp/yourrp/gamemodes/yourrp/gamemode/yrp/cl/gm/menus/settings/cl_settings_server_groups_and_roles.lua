@@ -1919,9 +1919,9 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						net.SendToServer()
 						role.string_sweps = table.concat( lply.yrpseltab, "," )
 					elseif lply.yrpseltab and lply.yrpseltab[1] then
-						MsgC( YRPColGreen, "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+						MsgC( Color( 0, 255, 0 ), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 					else
-						MsgC( YRPColGreen, "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+						MsgC( Color( 0, 255, 0 ), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 					end
 				end
 
@@ -2004,9 +2004,9 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 							net.SendToServer()
 							role.string_sweps_onspawn = table.concat( lply.yrpseltab, "," )
 						elseif lply.yrpseltab and lply.yrpseltab[1] then
-							MsgC( YRPColGreen, "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
+							MsgC( Color( 0, 255, 0 ), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n" )
 						else
-							MsgC( YRPColGreen, "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
+							MsgC( Color( 0, 255, 0 ), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n" )
 						end
 					end
 
@@ -2744,8 +2744,8 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			health.dnw[3].max = GetMaxInt()
 			health.dnw[3].netstr = "update_role_" .. "int_" .. "hpup"
 
-			health.color = YRPColGreen
-			health.color2 = Color( 100, 255, 100)
+			health.color = Color( 0, 255, 0 )
+			health.color2 = Color( 0, 200, 0)
 			ea[role.uniqueID].health = DAttributeBar(health)
 
 			hr.parent = ea.attributes:GetContent()

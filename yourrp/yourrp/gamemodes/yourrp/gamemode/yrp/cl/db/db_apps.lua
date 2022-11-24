@@ -84,7 +84,7 @@ local yrp_apps = {}
 local dbfile = "yrp_apps/yrp_apps.json"
 
 function YRPAppsMSG( msg )
-	MsgC( YRPColGreen, "[YourRP] [TUTORIALS] " .. msg .. "\n" )
+	MsgC( Color( 0, 255, 0 ), "[YourRP] [TUTORIALS] " .. msg .. "\n" )
 end
 
 function YRPAppsCheckFile()

@@ -1045,7 +1045,7 @@ net.Receive( "Connect_Settings_General", function(len)
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_changeable_name, "LID_namechangeable", "update_bool_characters_changeable_name" )
 		
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent() )
-		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_removeondeath, YRP.lang_string( "LID_removeondeath" ) .. " (REMOVES CHAR ON DEATH)", "update_bool_characters_removeondeath", nil, YRPColGreen )
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_removeondeath, YRP.lang_string( "LID_removeondeath" ) .. " (REMOVES CHAR ON DEATH)", "update_bool_characters_removeondeath", nil, Color( 0, 255, 0 ) )
 
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent() )	
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_birthday, "LID_birthday", "update_bool_characters_birthday" )

@@ -63,7 +63,7 @@ net.Receive( "get_design_settings", function(len)
 			hudcustom:SetTitle( "" )
 			--hudcustom:MakePopup()
 			function hudcustom:Paint(pw, ph)
-				--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
+				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
 			end
 
 			local editarea = YRPCreateD( "DButton", hudcustom, ScW(), ScH(), 0, 0)
@@ -1032,7 +1032,7 @@ net.Receive( "get_design_settings", function(len)
 				end
 				function reset_interface:Paint(pw, ph)
 					local tab = {}
-					tab.color = YRPColGreen
+					tab.color = Color( 0, 255, 0 )
 					hook.Run( "YButtonPaint", self, pw, ph, tab)
 				end
 				table.insert(GRP_IF.cif, reset_interface)

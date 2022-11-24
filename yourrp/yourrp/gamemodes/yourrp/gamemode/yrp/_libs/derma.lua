@@ -60,7 +60,7 @@ function HudBox(tab)
 	tab.y = tab.y or 0
 	tab.w = tab.w or 100
 	tab.h = tab.h or 100
-	tab.color = tab.color or YRPColGreen
+	tab.color = tab.color or Color( 0, 255, 0 )
 	draw.RoundedBox(tab.r, tab.x, tab.y, tab.w, tab.h, tab.color)
 end
 
@@ -564,7 +564,7 @@ function surfaceCheckBox( derma, pw, ph, icon)
 			if derma:GetChecked() then
 				br = 4
 				if YRP.GetDesignIcon(icon) ~= nil then
-					surface.SetDrawColor( YRPColGreen )
+					surface.SetDrawColor( Color( 0, 255, 0 ) )
 					surface.SetMaterial(YRP.GetDesignIcon(icon) )
 					surface.DrawTexturedRect(YRP.ctr( br), YRP.ctr( br), pw - YRP.ctr( br * 2), ph - YRP.ctr(8) )
 				end
@@ -961,7 +961,7 @@ function createMDMenu(parent, w, h, x, y)
 	tmp.logo = YRPCreateD( "YPanel", tmp, YRP.ctr(200), logoS, tmp:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10) )
 	tmp.logo.yrp = Material( "vgui/yrp/logo100_beta.png" )
 	function tmp.logo:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
 		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 		surface.SetMaterial(self.yrp)
 		surface.DrawTexturedRect(0, 0, 400 * logoS / 130, 130 * logoS / 130)

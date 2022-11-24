@@ -104,7 +104,7 @@ function createRoleBox(rol, parent, mainparent)
 				--draw.RoundedBox(0, YRP.ctr(_br), 0, (rol.int_uses / rol.int_maxamount) * pw, ph, Color( 255, 0, 0, 255) )
 				local color = Color( 255, 255, 255, 255 )
 				if tonumber(rol.int_uses) == tonumber(rol.int_maxamount) then
-					color = YRPColGreen
+					color = Color( 0, 255, 0 )
 				end
 				draw.SimpleText(self:GetParent().tbl.int_uses .. "/" .. self:GetParent().tbl.int_maxamount, "Y_20_500", pw - YRP.ctr(w / 2 + br), ph - YRP.ctr(h / 2 + br) * 1.1, color, 1, 1)
 
@@ -254,8 +254,7 @@ end
 function getRoles(uid, parent)
 	net.Receive( "get_grp_roles", function(len)
 		local _roles = net.ReadTable()
-
-		for i, rol in pairs(_roles) do
+		for i, rol in SortedPairsByMemberValue(_roles, "int_position" ) do
 			if rol != nil and tonumber(rol.int_prerole) <= 0 then
 				addRoleRow(rol, parent)
 			end
@@ -411,6 +410,5 @@ function CreateRoleMenuContent(parent)
 	SetGlobalYRPBool( "create_eventchar", false )
 
 	RoleMenu = parent
-
 	CreateRoleSelectionContent(parent)
 end

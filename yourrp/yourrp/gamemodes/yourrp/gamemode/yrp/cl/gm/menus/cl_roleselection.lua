@@ -404,7 +404,7 @@ function CreateRoleSelectionContent(PARENT)
 	lis:EnableVerticalScrollbar()
 	lis:SetSpacing(YRP.ctr( config.br) )
 	function lis:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
+		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
 		if lis:GetWide() != win:GetWide() - YRP.ctr(2 * config.br) then
 			lis:SetWide(win:GetWide() - YRP.ctr(2 * config.br) )
 		end
@@ -478,7 +478,7 @@ function CreateRoleSelectionContent(PARENT)
 			local w = lis:GetWide() -- YRP.ctr(2 * config.br)
 			local h = YRP.ctr(100)
 
-			for i, grp in pairs(gtab) do
+			for i, grp in SortedPairsByMemberValue(gtab, "int_position" ) do
 				grp.uniqueID = tonumber(grp.uniqueID)
 				
 				if PanelAlive(lis) then

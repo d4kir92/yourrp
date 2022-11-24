@@ -57,7 +57,7 @@ function YRP.AddLanguageChangerLine(parent, tab, mainparent)
 
 		if self.lang.percentage != nil then
 			if self.lang.percentage == 100 then
-				self.textcol = YRPColGreen
+				self.textcol = Color( 0, 255, 0 )
 			elseif self.lang.percentage < 100 then
 				local perc = 255 - 255 * self.lang.percentage / 100
 				self.textcol = Color(perc, 255, perc)
@@ -389,12 +389,12 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 							local col = Color( 255, 255, 255, 255 )
 							if ret == "worldmodel" then
 								if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.WorldModel) then
-									col = YRPColGreen
+									col = Color( 0, 255, 0 )
 									text = YRP.lang_string( "LID_added" )
 								end
 							elseif ret == "classname" then
 								if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.ClassName) then
-									col = YRPColGreen
+									col = Color( 0, 255, 0 )
 									text = YRP.lang_string( "LID_added" )
 								end
 							end
@@ -767,7 +767,7 @@ function YRPHUD( name, failed )
 	elseif v.name == "Version" then
 		return GetGlobalYRPInt( "Version", -1 )
 	else
-		MsgC( YRPColGreen, "Failed To HUD", v.name, v.value, "\n" )
+		MsgC( Color( 0, 255, 0 ), "Failed To HUD", v.name, v.value, "\n" )
 	end
 	return failed
 end
@@ -1540,7 +1540,7 @@ function loadDoorTexts()
 						pos = pos + door:GetForward() * x * 0.7
 					end
 
-					--render.DrawSphere(pos, 10, 8, 8, YRPColGreen )
+					--render.DrawSphere(pos, 10, 8, 8, Color( 0, 255, 0 ) )
 
 					if GetGlobalYRPBool( "bool_building_system", false) then
 						cam.Start3D2D(pos, ang, 0.2)

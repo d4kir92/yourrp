@@ -186,7 +186,7 @@ function createShopItem(item, duid, id)
 				end
 
 				if LocalPlayer():GetYRPFloat( "buy_ts" .. item.uniqueID, 0.0) > CurTime() then
-					_color = YRPColGreen
+					_color = Color( 0, 255, 0 )
 					_text = YRP.lang_string( "LID_oncooldown" )
 				end
 				self:SetText(_text)

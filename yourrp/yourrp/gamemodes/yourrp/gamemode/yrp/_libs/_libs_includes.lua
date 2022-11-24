@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 -- Colors --
-YRPColGreen = Color( 0, 255, 0, 255 )
+Color( 0, 255, 0 ) = Color( 0, 255, 0, 255 )
 YRPColRed = Color( 255, 0, 0, 255 )
 YRPColBlue = Color( 0, 0, 255, 255 )
 YRPColYellow = Color( 255, 255, 0, 255 )

@@ -115,7 +115,7 @@ function CreateKeybindsContent(parent)
 	reset:SetText( "" )
 	function reset:Paint(pw, ph)
 		local tab = {}
-		tab.color = YRPColGreen
+		tab.color = Color( 0, 255, 0 )
 		tab.hovercolor = Color( 255, 100, 100)
 		tab.text = {}
 		tab.text.text = YRP.lang_string( "LID_settodefault" )
@@ -149,7 +149,7 @@ function CreateKeybindsContent(parent)
 		setsvkeybind:SetText( "" )
 		function setsvkeybind:Paint(pw, ph)
 			local tab = {}
-			tab.color = YRPColGreen
+			tab.color = Color( 0, 255, 0 )
 			tab.hovercolor = Color( 255, 100, 100)
 			tab.text = {}
 			tab.text.text = YRP.lang_string( "LID_setasserverdefault" )
@@ -182,7 +182,7 @@ function CreateKeybindsContent(parent)
 		forcesetkeybinds:SetText( "" )
 		function forcesetkeybinds:Paint(pw, ph)
 			local tab = {}
-			tab.color = YRPColGreen
+			tab.color = Color( 0, 255, 0 )
 			tab.hovercolor = Color( 255, 100, 100)
 			tab.text = {}
 			tab.text.text = YRP.lang_string( "LID_forcesetkeybinds" )

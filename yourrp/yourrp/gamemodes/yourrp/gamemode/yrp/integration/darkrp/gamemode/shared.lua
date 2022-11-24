@@ -64,13 +64,13 @@ function DarkRP.createCategory( tbl )
 			if tbl.categorises == "jobs" then
 				local group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "string_name = '" .. tbl.name .. "'" )
 				if group == nil then
-					MsgC( YRPColGreen, "[YRPImportCategory]", " Add Group ( ", tbl.name, " )", "\n" )
+					MsgC( Color( 0, 255, 0 ), "[YRPImportCategory]", " Add Group ( ", tbl.name, " )", "\n" )
 					local res = YRP_SQL_INSERT_INTO( "yrp_ply_groups", "string_name, string_color", YRP_SQL_STR_IN( tbl.name ) .. ", " .. YRP_SQL_STR_IN( YRPColorToString( tbl.color ) ) )
 					if res != nil then
-						MsgC( YRPColGreen, "[YRPImportCategory]", " FAILED? ( ", res, " )", "\n" )
+						MsgC( Color( 0, 255, 0 ), "[YRPImportCategory]", " FAILED? ( ", res, " )", "\n" )
 					end
 				else
-					MsgC( YRPColGreen, "[YRPImportCategory]", " Already Added? ( ", tbl.name, " )", "\n" )
+					MsgC( Color( 0, 255, 0 ), "[YRPImportCategory]", " Already Added? ( ", tbl.name, " )", "\n" )
 				end
 			end
 		end
@@ -111,7 +111,7 @@ function DarkRP.createJob(name, tbl)
 			local groupid = 1
 			local group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "string_name = '" .. tbl.category .. "'" )
 			if group == nil then
-				MsgC( YRPColGreen, "[YRPImportJob]", " Group not found ( ", tbl.category, " )", "\n" )
+				MsgC( Color( 0, 255, 0 ), "[YRPImportJob]", " Group not found ( ", tbl.category, " )", "\n" )
 			elseif group and group[1] then
 				group = group[1]
 				groupid = tonumber( group.uniqueID )
@@ -492,8 +492,8 @@ local function loadMySQLModule()
     if MySQLite_config.Preferred_module == "tmysql4" then
 
         if not tmysql.Version or tmysql.Version < 4.1 then
-            MsgC(YRPColGreen, "Using older tmysql version, please consider updating!\n")
-            MsgC(YRPColGreen, "Newer Version: https://github.com/SuperiorServers/gm_tmysql4\n")
+            MsgC(Color( 0, 255, 0 ), "Using older tmysql version, please consider updating!\n")
+            MsgC(Color( 0, 255, 0 ), "Newer Version: https://github.com/SuperiorServers/gm_tmysql4\n")
         end
 
         -- Turns tmysql.Connect into tmysql.Initialize if they're using an older version.

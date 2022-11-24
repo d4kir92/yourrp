@@ -122,13 +122,13 @@ hook.Add( "Think", "yrp_banhackers", function()
 		if ConVar and ConVar( "sv_allowcslua" ) and ConVar( "sv_allowcslua" ):GetBool() then
 			local text = "[sv_allowcslua] is enabled, clients can use Scripts!"
 			PrintMessage( HUD_PRINTCENTER, text )
-			MsgC( YRPColGreen, text .. "\n", Color( 255, 255, 255, 255 ) )
+			MsgC( Color( 0, 255, 0 ), text .. "\n", Color( 255, 255, 255, 255 ) )
 		end
 
 		if ConVar and ConVar( "sv_cheats" ) and ConVar( "sv_cheats" ):GetBool() then
 			local text = "[sv_cheats] is enabled, clients can cheat!"
 			PrintMessage( HUD_PRINTCENTER, text )
-			MsgC( YRPColGreen, text .. "\n", Color( 255, 255, 255, 255 ) )
+			MsgC( Color( 0, 255, 0 ), text .. "\n", Color( 255, 255, 255, 255 ) )
 		end
 	end
 end )
@@ -855,118 +855,112 @@ hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, 
 		if IsInsideSafezone(ply) or ply:HasGodMode() or ply:GetYRPBool( "godmode", false) then
 			dmginfo:ScaleDamage( 0 )
 		else
-			if IsValid( dmginfo:GetAttacker() ) and dmginfo:GetAttacker() != ply then
-				StartCombat(ply)
-			end
-
-			SlowThink(ply)
-
-			if GetGlobalYRPBool( "bool_antipropkill", true) then
-				if IsValid( dmginfo:GetAttacker() ) and dmginfo:GetAttacker():GetClass() == "prop_physics" then
-					dmginfo:ScaleDamage( 0 )
-				end
-			end
-
-			if IsBleedingEnabled() then
-				local _rand = math.Rand(0, 100)
-				if _rand < GetBleedingChance() then
-					ply:StartBleeding()
-					ply:SetBleedingPosition(ply:GetPos() - dmginfo:GetDamagePosition() )
-				end
-			end
-			if hitgroup == HITGROUP_HEAD then
-				if IsHeadshotDeadlyPlayer() then
-					dmginfo:ScaleDamage(ply:GetMaxHealth() )
-				else
-					dmginfo:ScaleDamage(GetHitFactorPlayerHead() )
-				end
-			elseif hitgroup == HITGROUP_CHEST then
-				dmginfo:ScaleDamage(GetHitFactorPlayerChes() )
-			elseif hitgroup == HITGROUP_STOMACH then
-				dmginfo:ScaleDamage(GetHitFactorPlayerStom() )
-			elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-				dmginfo:ScaleDamage(GetHitFactorPlayerArms() )
-				if IsBonefracturingEnabled() then
-					local _break = math.Round(math.Rand(0, 100), 0)
-					if _break <= GetBrokeChanceArms() then
-						if hitgroup == HITGROUP_LEFTARM then
-							ply:SetYRPBool( "broken_arm_left", true)
-
-							if !ply:HasWeapon( "yrp_unarmed" ) then
-								ply:Give( "yrp_unarmed" )
-							end
-							ply:SelectWeapon( "yrp_unarmed" )
-						elseif hitgroup == HITGROUP_RIGHTARM then
-							ply:SetYRPBool( "broken_arm_right", true)
-
-							if !ply:HasWeapon( "yrp_unarmed" ) then
-								ply:Give( "yrp_unarmed", true)
-							end
-							ply:SelectWeapon( "yrp_unarmed" )
-						end
-					end
-				end
-			elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-				dmginfo:ScaleDamage(GetHitFactorPlayerLegs() )
-				if IsBonefracturingEnabled() then
-					local _break = math.Round(math.Rand(0, 100), 0)
-					if _break <= GetBrokeChanceLegs() then
-						if hitgroup == HITGROUP_LEFTLEG then
-							ply:SetYRPBool( "broken_leg_left", true)
-						elseif hitgroup == HITGROUP_RIGHTLEG then
-							ply:SetYRPBool( "broken_leg_right", true)
-						end
-					end
-				end
-			else
-				dmginfo:ScaleDamage(1)
-			end
-
 			local attacker = dmginfo:GetAttacker()
-			local damage = dmginfo:GetDamage()
-			damage = math.Round( damage, 2)
-			if IsValid( attacker ) and attacker:IsPlayer() then
-				YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID() .. "', '" .. ply:SteamID() .. "', '" .. dmginfo:GetDamage() .. "'" )
-			elseif IsValid( attacker ) then
-				YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'" )	
-			end
-		end
+			if IsValid( attacker ) and IsInsideSafezone( attacker ) then
+				dmginfo:ScaleDamage( 0 )
+			else
+				if IsValid( dmginfo:GetAttacker() ) and dmginfo:GetAttacker() != ply then
+					StartCombat(ply)
+				end
 
-		local attacker = dmginfo:GetAttacker()
-		if IsValid( attacker ) and IsInsideSafezone( attacker ) then
-			dmginfo:ScaleDamage( 0 )
+				SlowThink(ply)
+
+				if GetGlobalYRPBool( "bool_antipropkill", true) then
+					if IsValid( dmginfo:GetAttacker() ) and dmginfo:GetAttacker():GetClass() == "prop_physics" then
+						dmginfo:ScaleDamage( 0 )
+					end
+				end
+
+				if IsBleedingEnabled() then
+					local _rand = math.Rand(0, 100)
+					if _rand < GetBleedingChance() then
+						ply:StartBleeding()
+						ply:SetBleedingPosition(ply:GetPos() - dmginfo:GetDamagePosition() )
+					end
+				end
+				if hitgroup == HITGROUP_HEAD then
+					if IsHeadshotDeadlyPlayer() then
+						dmginfo:ScaleDamage(ply:GetMaxHealth() )
+					else
+						dmginfo:ScaleDamage(GetHitFactorPlayerHead() )
+					end
+				elseif hitgroup == HITGROUP_CHEST then
+					dmginfo:ScaleDamage(GetHitFactorPlayerChes() )
+				elseif hitgroup == HITGROUP_STOMACH then
+					dmginfo:ScaleDamage(GetHitFactorPlayerStom() )
+				elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+					dmginfo:ScaleDamage(GetHitFactorPlayerArms() )
+					if IsBonefracturingEnabled() then
+						local _break = math.Round(math.Rand(0, 100), 0)
+						if _break <= GetBrokeChanceArms() then
+							if hitgroup == HITGROUP_LEFTARM then
+								ply:SetYRPBool( "broken_arm_left", true)
+
+								if !ply:HasWeapon( "yrp_unarmed" ) then
+									ply:Give( "yrp_unarmed" )
+								end
+								ply:SelectWeapon( "yrp_unarmed" )
+							elseif hitgroup == HITGROUP_RIGHTARM then
+								ply:SetYRPBool( "broken_arm_right", true)
+
+								if !ply:HasWeapon( "yrp_unarmed" ) then
+									ply:Give( "yrp_unarmed", true)
+								end
+								ply:SelectWeapon( "yrp_unarmed" )
+							end
+						end
+					end
+				elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+					dmginfo:ScaleDamage(GetHitFactorPlayerLegs() )
+					if IsBonefracturingEnabled() then
+						local _break = math.Round(math.Rand(0, 100), 0)
+						if _break <= GetBrokeChanceLegs() then
+							if hitgroup == HITGROUP_LEFTLEG then
+								ply:SetYRPBool( "broken_leg_left", true)
+							elseif hitgroup == HITGROUP_RIGHTLEG then
+								ply:SetYRPBool( "broken_leg_right", true)
+							end
+						end
+					end
+				else
+					dmginfo:ScaleDamage(1)
+				end
+
+				local attacker = dmginfo:GetAttacker()
+				local damage = dmginfo:GetDamage()
+				damage = math.Round( damage, 2)
+				if IsValid( attacker ) and attacker:IsPlayer() then
+					YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID() .. "', '" .. ply:SteamID() .. "', '" .. dmginfo:GetDamage() .. "'" )
+				elseif IsValid( attacker ) then
+					YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID() .. "', '" .. damage .. "', '" .. attacker:GetName() .. attacker:GetClass() .. "'" )	
+				end
+			end
 		end
 	end
 end)
 
 hook.Add( "ScaleNPCDamage", "YRP_ScaleNPCDamage", function(npc, hitgroup, dmginfo)
-	if true then
-		if IsInsideSafezone( npc ) then
-			dmginfo:ScaleDamage( 0 )
-		elseif hitgroup == HITGROUP_HEAD then
-			if IsHeadshotDeadlyNpc() then
-				dmginfo:ScaleDamage(npc:Health() )
-			else
-				dmginfo:ScaleDamage(GetHitFactorNpcHead() )
-			end
-	 	elseif hitgroup == HITGROUP_CHEST then
-			dmginfo:ScaleDamage(GetHitFactorNpcChes() )
-		elseif hitgroup == HITGROUP_STOMACH then
-			dmginfo:ScaleDamage(GetHitFactorNpcStom() )
-		elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-			dmginfo:ScaleDamage(GetHitFactorNpcArms() )
-		elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-			dmginfo:ScaleDamage(GetHitFactorNpcLegs() )
-		else
-			dmginfo:ScaleDamage(1)
-		end
-	else
-		dmginfo:ScaleDamage(1)
-	end
-
 	local attacker = dmginfo:GetAttacker()
 	if IsValid( attacker ) and IsInsideSafezone( attacker ) then
 		dmginfo:ScaleDamage( 0 )
+	elseif IsInsideSafezone( npc ) then
+		dmginfo:ScaleDamage( 0 )
+	elseif hitgroup == HITGROUP_HEAD then
+		if IsHeadshotDeadlyNpc() then
+			dmginfo:ScaleDamage(npc:Health() )
+		else
+			dmginfo:ScaleDamage(GetHitFactorNpcHead() )
+		end
+	elseif hitgroup == HITGROUP_CHEST then
+		dmginfo:ScaleDamage(GetHitFactorNpcChes() )
+	elseif hitgroup == HITGROUP_STOMACH then
+		dmginfo:ScaleDamage(GetHitFactorNpcStom() )
+	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+		dmginfo:ScaleDamage(GetHitFactorNpcArms() )
+	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+		dmginfo:ScaleDamage(GetHitFactorNpcLegs() )
+	else
+		dmginfo:ScaleDamage(1)
 	end
 end)
 
@@ -1584,7 +1578,7 @@ hook.Add( "PostCleanupMap", "yrp_PostCleanupMap_doors", function()
 end)
 
 function YRPWarning( text )
-	MsgC( YRPColGreen, "[WARNING] " .. text .. "\n" )
+	MsgC( Color( 0, 255, 0 ), "[WARNING] " .. text .. "\n" )
 			
 end
 
@@ -1704,7 +1698,7 @@ function YRPImportDarkrp( str, name )
 	if str and name then
 		local err = RunString( str, "YRPIMPORTDARKRP_RS: " .. name, false )
 		if err then
-			MsgC( YRPColGreen, "ERROR: ", err, "\n" )
+			MsgC( Color( 0, 255, 0 ), "ERROR: ", err, "\n" )
 		end
 	else
 		MsgC( YRPColRed, "ERROR: ", "str or name is nil", str, name, "\n" )
@@ -1726,11 +1720,11 @@ end
 util.AddNetworkString( "yrp_import_darkrp" )
 net.Receive( "yrp_import_darkrp", function( len, ply )
 	YRPHR()
-	YRPMsg( "[START IMPORT DARKRP]", YRPColGreen )
+	YRPMsg( "[START IMPORT DARKRP]", Color( 0, 255, 0 ) )
 
 	YRPImportFileToTable( "lua/darkrp_customthings/categories.lua", "categories" )
 	YRPImportFileToTable( "lua/darkrp_customthings/jobs.lua", "jobs" )
 	
-	YRPMsg( "[DONE IMPORT DARKRP]", YRPColGreen )
+	YRPMsg( "[DONE IMPORT DARKRP]", Color( 0, 255, 0 ) )
 	YRPHR()
 end )

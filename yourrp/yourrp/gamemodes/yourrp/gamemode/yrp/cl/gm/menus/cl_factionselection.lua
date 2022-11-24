@@ -105,7 +105,7 @@ function CreateFactionSelectionContent()
 				lis:SetTall(sh)
 				lis:Center()
 
-				for i, fac in pairs(ftab) do
+				for i, fac in SortedPairsByMemberValue(ftab, "int_position" ) do
 					fac.uniqueID = tonumber(fac.uniqueID)
 
 					fac.bool_visible_cc = tobool(fac.bool_visible_cc)

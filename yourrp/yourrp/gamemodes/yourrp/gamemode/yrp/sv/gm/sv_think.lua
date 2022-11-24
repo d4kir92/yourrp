@@ -467,9 +467,9 @@ timer.Create( "ServerThink", TICK, 0, function()
 	end
 
 	if _time % 1 == 0 and HasDarkrpmodification() then
-		YRPHR( YRPColGreen )
-		MsgC( YRPColGreen, "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color( 255, 255, 255, 255 ), "\n" )
-		YRPHR( YRPColGreen )
+		YRPHR( Color( 0, 255, 0 ) )
+		MsgC( Color( 0, 255, 0 ), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color( 255, 255, 255, 255 ), "\n" )
+		YRPHR( Color( 0, 255, 0 ) )
 		YRPTestDarkrpmodification()
 	end
 

@@ -450,7 +450,7 @@ function YRPDoPoses()
 						ply.yrpposestatus = "reset"
 					end
 				elseif !strEmpty(ply.yrppose) then
-					MsgC( YRPColGreen, "missing pose: " .. tostring(ply.yrppose) .. "\n" )
+					MsgC( Color( 0, 255, 0 ), "missing pose: " .. tostring(ply.yrppose) .. "\n" )
 					ply.yrpposestatus = "reset"
 				else
 					ply.yrpposestatus = "reset"

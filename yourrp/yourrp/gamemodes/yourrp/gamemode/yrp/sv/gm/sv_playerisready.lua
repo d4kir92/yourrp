@@ -12,7 +12,7 @@ util.AddNetworkString( "receivedserverdata" )
 
 net.Receive( "receivedserverdata", function( len, ply )
 	ply.receivedserverdata = true
-	MsgC( YRPColGreen, "[LOADING] SENDED SERVER DATA", "\n" )
+	MsgC( Color( 0, 255, 0 ), "[LOADING] SENDED SERVER DATA", "\n" )
 end )
 
 local function YRPPlayerLoadedGame( ply )
@@ -192,7 +192,7 @@ net.Receive( "sendstartdata", function( len, ply )
 
 	if not ply.receivedstartdata then
 		ply.receivedstartdata = true
-		MsgC( YRPColGreen, "[LOADING] CLIENT -> SERVER: Start Data [ACCEPTED]", "\n" )
+		MsgC( Color( 0, 255, 0 ), "[LOADING] CLIENT -> SERVER: Start Data [ACCEPTED]", "\n" )
 
 		YRPReceivedReadyMessage( len, ply, tab )
 	end
