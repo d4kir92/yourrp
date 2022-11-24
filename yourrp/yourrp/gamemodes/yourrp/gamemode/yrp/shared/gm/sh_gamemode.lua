@@ -1152,7 +1152,9 @@ function GM:DarkRPFinishedLoading()
 end
 
 timer.Simple( 0, function()
-	GAMEMODE:DarkRPFinishedLoading()
+	if GAMEMODE.DarkRPFinishedLoading then
+		GAMEMODE:DarkRPFinishedLoading()
+	end
 end )
 
 function YRPCheckDarkRP()

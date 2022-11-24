@@ -188,7 +188,7 @@ function YRPCheckVersion(from)
 			function( body, len, headers, code)
 				if body != nil then
 					if code == 200 then
-						local serverart = string.upper(GAMEMODE.VersionSort)
+						local serverart = string.upper(GAMEMODE.VersionSort or "outdated")
 
 						if serverart == "OUTDATED" then	
 							GAMEMODE.versioncolor = Color( 0, 255, 0 )	

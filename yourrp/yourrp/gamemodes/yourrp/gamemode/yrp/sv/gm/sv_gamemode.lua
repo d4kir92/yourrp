@@ -780,29 +780,38 @@ function GM:CanPlayerSuicide(ply)
 end
 
 hook.Add( "EntityTakeDamage", "YRP_EntityTakeDamage", function(ent, dmginfo)
-	if IsEntity(ent) and !ent:IsPlayer() and !ent:IsNPC() then
-		local hitfactor = GetHitFactorEntities() or 1
-		dmginfo:ScaleDamage(hitfactor)
-	elseif ent:IsVehicle() then
-		local hitfactor = GetHitFactorVehicles() or 1
-		dmginfo:ScaleDamage(hitfactor)
-	elseif ent:IsPlayer() then
-		if GetGlobalYRPBool( "bool_antipropkill", true) then
-			if IsValid( dmginfo:GetAttacker() ) and dmginfo:GetAttacker():GetClass() == "prop_physics" then
-				dmginfo:ScaleDamage( 0 )
+	if IsInsideSafezone( ent ) or ( ent:IsPlayer() and ( ent:HasGodMode() or ent:GetYRPBool( "godmode", false) ) ) then
+		dmginfo:ScaleDamage( 0 )
+	else
+		local attacker = dmginfo:GetAttacker()
+		if IsValid( attacker ) and IsInsideSafezone( attacker ) then
+			dmginfo:ScaleDamage( 0 )
+		else
+			if IsEntity(ent) and !ent:IsPlayer() and !ent:IsNPC() then
+				local hitfactor = GetHitFactorEntities() or 1
+				dmginfo:ScaleDamage(hitfactor)
+			elseif ent:IsVehicle() then
+				local hitfactor = GetHitFactorVehicles() or 1
+				dmginfo:ScaleDamage(hitfactor)
+			elseif ent:IsPlayer() then
+				if GetGlobalYRPBool( "bool_antipropkill", true) then
+					if IsValid( dmginfo:GetAttacker() ) and dmginfo:GetAttacker():GetClass() == "prop_physics" then
+						dmginfo:ScaleDamage( 0 )
+					end
+				end
+				if dmginfo:GetDamageType() == DMG_BURN then
+					dmginfo:ScaleDamage(ent:GetYRPFloat( "float_dmgtype_burn", 1.0) )
+				elseif dmginfo:GetDamageType() == DMG_BULLET then
+					dmginfo:ScaleDamage(ent:GetYRPFloat( "float_dmgtype_bullet", 1.0) )
+				elseif dmginfo:GetDamageType() == DMG_ENERGYBEAM then
+					dmginfo:ScaleDamage(ent:GetYRPFloat( "float_dmgtype_energybeam", 1.0) )
+				else
+					dmginfo:ScaleDamage(1)
+				end
+			else
+				dmginfo:ScaleDamage(1)
 			end
 		end
-		if dmginfo:GetDamageType() == DMG_BURN then
-			dmginfo:ScaleDamage(ent:GetYRPFloat( "float_dmgtype_burn", 1.0) )
-		elseif dmginfo:GetDamageType() == DMG_BULLET then
-			dmginfo:ScaleDamage(ent:GetYRPFloat( "float_dmgtype_bullet", 1.0) )
-		elseif dmginfo:GetDamageType() == DMG_ENERGYBEAM then
-			dmginfo:ScaleDamage(ent:GetYRPFloat( "float_dmgtype_energybeam", 1.0) )
-		else
-			dmginfo:ScaleDamage(1)
-		end
-	else
-		dmginfo:ScaleDamage(1)
 	end
 end)
 
@@ -852,7 +861,7 @@ end
 hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, dmginfo)
 	if ply:IsFullyAuthenticated() then
 
-		if IsInsideSafezone(ply) or ply:HasGodMode() or ply:GetYRPBool( "godmode", false) then
+		if IsInsideSafezone( ply ) or ply:HasGodMode() or ply:GetYRPBool( "godmode", false) then
 			dmginfo:ScaleDamage( 0 )
 		else
 			local attacker = dmginfo:GetAttacker()
