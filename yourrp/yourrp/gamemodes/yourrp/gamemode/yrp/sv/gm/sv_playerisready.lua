@@ -155,15 +155,15 @@ local function YRPReceivedReadyMessage( len, ply, tab )
 	ply:SetYRPString( "yrp_country", Country or "unknown" )
 	ply:SetYRPFloat( "uptime_current", os.clock() )
 
-	MsgC( YRPColBlue, "###############################################################################" .. "\n" )--##########
+	MsgC( Color( 0, 0, 255, 255 ), "###############################################################################" .. "\n" )--##########
 
-	MsgC( YRPColBlue, ply:SteamName() .. " is using OS: " .. ply:GetYRPString( "yrp_os", "-" ) .. " ( " .. tostring( Branch ) .. " )" .. "\n" )
-	MsgC( YRPColBlue, ply:SteamName() .. " is from Country: " .. YRPGetCountryName( Country, "IS READY" ) .. "\n" )
+	MsgC( Color( 0, 0, 255, 255 ), ply:SteamName() .. " is using OS: " .. ply:GetYRPString( "yrp_os", "-" ) .. " ( " .. tostring( Branch ) .. " )" .. "\n" )
+	MsgC( Color( 0, 0, 255, 255 ), ply:SteamName() .. " is from Country: " .. YRPGetCountryName( Country, "IS READY" ) .. "\n" )
 	if ply:GetYRPString( "gmod_beta", "unknown" ) != "unknown" then
-		MsgC( YRPColBlue, ply:SteamName() .. " is using GMod BETA: " .. ply:GetYRPString( "gmod_beta", "unknown" ) .. "\n" )
+		MsgC( Color( 0, 0, 255, 255 ), ply:SteamName() .. " is using GMod BETA: " .. ply:GetYRPString( "gmod_beta", "unknown" ) .. "\n" )
 	end
 
-	MsgC( YRPColBlue, "###############################################################################" .. "\n" )--##########
+	MsgC( Color( 0, 0, 255, 255 ), "###############################################################################" .. "\n" )--##########
 
 	YRPStartSendingData( ply )
 end

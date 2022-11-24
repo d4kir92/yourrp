@@ -444,7 +444,7 @@ local function InitYRPChat()
 				end
 			end
 			function sbar.btnUp:Paint(w, h)
-				--draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+				--draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 				if YRP.GetDesignIcon( "64_angle-up" ) then
 					surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-up" ) )
@@ -452,7 +452,7 @@ local function InitYRPChat()
 				end
 			end
 			function sbar.btnDown:Paint(w, h)
-				--draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+				--draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 				if YRP.GetDesignIcon( "64_angle-down" ) then
 					surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 					surface.SetMaterial( YRP.GetDesignIcon( "64_angle-down" ) )

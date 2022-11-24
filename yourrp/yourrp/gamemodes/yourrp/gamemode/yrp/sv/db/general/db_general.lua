@@ -2264,7 +2264,7 @@ function YRPRepairSQLDB(force) -- Remove %01 - %XX
 					end
 				end
 			else
-				MsgC(YRPColRed, ">>> FAILED, NO TABLES <<<" .. "\n" )
+				MsgC(Color( 255, 0, 0, 255 ), ">>> FAILED, NO TABLES <<<" .. "\n" )
 			end
 			MsgC(Color( 0, 255, 0 ), ">>> REPAIR YourRP DB, DONE <<<" .. "\n" )
 

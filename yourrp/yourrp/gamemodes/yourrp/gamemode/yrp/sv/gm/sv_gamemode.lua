@@ -1701,7 +1701,7 @@ function YRPImportDarkrp( str, name )
 			MsgC( Color( 0, 255, 0 ), "ERROR: ", err, "\n" )
 		end
 	else
-		MsgC( YRPColRed, "ERROR: ", "str or name is nil", str, name, "\n" )
+		MsgC( Color( 255, 0, 0, 255 ), "ERROR: ", "str or name is nil", str, name, "\n" )
 	end
 	YRPIMPORTDARKRP = false
 end

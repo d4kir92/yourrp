@@ -3,7 +3,7 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self.color_sel = YRPColBlue
+	self.color_sel = Color( 0, 0, 255, 255 )
 	self.color_uns = Color( 255, 255, 0)
 
 	function self:SetSelectedColor( col)

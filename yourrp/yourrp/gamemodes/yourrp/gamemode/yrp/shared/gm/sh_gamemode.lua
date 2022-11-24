@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 242 -- do NOT change this!
+GM.VersionBuild = 243 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -544,10 +544,10 @@ if system.IsLinux() then
 	Color(128, 128, 0),   Color( 0, 0, 128),     Color(128, 0, 128),
 	Color( 0, 128, 128),   Color(192, 192, 192), Color(128, 128, 128),
 	Color( 0, 255, 0 ),     Color( 0, 255, 0 ),     Color( 255, 255, 0),
-	YRPColBlue,     Color( 255, 0, 255),   Color( 0, 255, 255),
+	Color( 0, 0, 255, 255 ),     Color( 255, 0, 255),   Color( 0, 255, 255),
 	Color( 255, 255, 255, 255 ), Color( 0, 0, 0, 255 ),       Color( 0, 0, 95),
 	Color( 0, 0, 135),     Color( 0, 0, 175),     Color( 0, 0, 215),
-	YRPColBlue,     Color( 0, 95, 0),      Color( 0, 95, 95),
+	Color( 0, 0, 255, 255 ),     Color( 0, 95, 0),      Color( 0, 95, 95),
 	Color( 0, 95, 135),    Color( 0, 95, 175),    Color( 0, 95, 215),
 	Color( 0, 95, 255),    Color( 0, 135, 0),     Color( 0, 135, 95),
 	Color( 0, 135, 135),   Color( 0, 135, 175),   Color( 0, 135, 215),

@@ -12,7 +12,7 @@ function APP:AppIcon(pw, ph)
 	surface.SetMaterial(self.Icon	)
 	surface.DrawTexturedRect(0, 0, pw, ph)
 
-	--draw.RoundedBox(0, 0, 0, pw, ph, YRPColBlue )
+	--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 255, 255 ) )
 end
 
 function APP:OpenApp( display, x, y, w, h)

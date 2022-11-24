@@ -1,14 +1,5 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
--- Colors --
-Color( 0, 255, 0 ) = Color( 0, 255, 0, 255 )
-YRPColRed = Color( 255, 0, 0, 255 )
-YRPColBlue = Color( 0, 0, 255, 255 )
-YRPColYellow = Color( 255, 255, 0, 255 )
-
-color_dark1 = Color( 60, 60, 60 )
--- Colors --
-
 add_luas( "collect.lua" )
 add_luas( "output.lua" )
 add_luas( "version.lua" )

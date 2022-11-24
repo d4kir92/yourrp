@@ -832,10 +832,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 					end
 					function sbar.btnUp:Paint(w, h)
-						draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+						draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 					end
 					function sbar.btnDown:Paint(w, h)
-						draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+						draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 					end
 					function sbar.btnGrip:Paint(w, h)
 						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -979,10 +979,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 					end
 					function sbar.btnUp:Paint(w, h)
-						draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+						draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 					end
 					function sbar.btnDown:Paint(w, h)
-						draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+						draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 					end
 					function sbar.btnGrip:Paint(w, h)
 						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -1208,10 +1208,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 			end
 			function sbar.btnUp:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+				draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 			end
 			function sbar.btnDown:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+				draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 			end
 			function sbar.btnGrip:Paint(w, h)
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -1528,10 +1528,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 			end
 			function sbar.btnUp:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+				draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 			end
 			function sbar.btnDown:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+				draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 			end
 			function sbar.btnGrip:Paint(w, h)
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -2069,10 +2069,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 			end
 			function sbar.btnUp:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+				draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 			end
 			function sbar.btnDown:Paint(w, h)
-				draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+				draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 			end
 			function sbar.btnGrip:Paint(w, h)
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
@@ -2779,7 +2779,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			armor.dnw[3].max = GetMaxInt()
 			armor.dnw[3].netstr = "update_role_" .. "int_" .. "arup"
 
-			armor.color = YRPColBlue
+			armor.color = Color( 0, 0, 255, 255 )
 			armor.color2 = Color( 100, 100, 255)
 			ea[role.uniqueID].armor = DAttributeBar( armor)
 

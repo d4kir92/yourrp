@@ -3,7 +3,7 @@
 -- #scoreboard #Scoreboard #SCOREBOARD
 
 local sb_bg = Color( 0, 0, 0, 100 )
-local color_dark = color_dark1
+local color_dark = Color( 60, 60, 60 )
 local color_lightblue = Color( 100, 100, 255 )
 local color_lightyellow = Color( 255, 255, 100 )
 local color_lightred = Color( 255, 100, 100, 255 )
@@ -413,7 +413,7 @@ function YRPScoreboardAddPlayer(ply)
 										local br = 4
 										local mat = YRP.GetDesignIcon( "signal3" )
 										if text >= 300 then
-											col = YRPColRed
+											col = Color( 255, 0, 0, 255 )
 											mat = YRP.GetDesignIcon( "signal1" )
 										elseif text >= 150 then
 											col = color_lightred
@@ -560,7 +560,7 @@ function YRPScoreboardAddPlayer(ply)
 				if ply:GetYRPVector( "yrpoldpos" ) != Vector(0, 0, 0) then
 					btn.iconcolor = Color( 255, 255, 255, 255 )
 				else
-					btn.iconcolor = YRPColRed
+					btn.iconcolor = Color( 255, 0, 0, 255 )
 				end
 			end
 		end}
@@ -637,7 +637,7 @@ function YRPScoreboardAddPlayer(ply)
 		end, function( btn)
 			if IsValid(ply) then
 				if ply:GetYRPBool( "cloaked", false) then
-					btn.iconcolor = YRPColYellow
+					btn.iconcolor = Color( 255, 255, 0, 255 )
 				else
 					btn.iconcolor = Color( 255, 255, 255, 255 )
 				end

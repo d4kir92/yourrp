@@ -324,7 +324,7 @@ function YRPGetColor(nr)
 		 return color
 	end
 
-	return YRPColRed
+	return Color( 255, 0, 0, 255 )
 end
 
 function YRPAddColor( design, color, nr, col)
@@ -1447,7 +1447,7 @@ function drawRoundedBoxStencil(r, x, y, w, h, color, max)
 	render.SetStencilFailOperation(STENCILOPERATION_INCR)
 	render.SetStencilPassOperation(STENCILOPERATION_KEEP)
 	render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
-	drawRoundedBox(0, x, y, max, h, YRPColRed )
+	drawRoundedBox(0, x, y, max, h, Color( 255, 0, 0, 255 ) )
 	render.SetStencilReferenceValue(1)
 	render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 	draw.RoundedBox(0, x, y, w, h, color)

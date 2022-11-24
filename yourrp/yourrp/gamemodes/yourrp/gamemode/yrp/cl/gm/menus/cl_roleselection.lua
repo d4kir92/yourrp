@@ -416,10 +416,10 @@ function CreateRoleSelectionContent(PARENT)
 		end
 	end
 	function sbar.btnUp:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+		draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 	end
 	function sbar.btnDown:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, color_dark1 )
+		draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 	end
 	function sbar.btnGrip:Paint(w, h)
 		if LocalPlayer().InterfaceValue and YRPInterfaceValue( "YFrame", "HI" ) then
