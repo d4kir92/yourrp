@@ -97,7 +97,8 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			net.SendToServer()
 		end
 
-		gs.glist = YRPCreateD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(840), YRP.ctr(20), YRP.ctr(80) )
+		local listH = PARENT:GetTall() / 2 - 2 * YRP.ctr(30) - 3 * YRP.ctr(10)
+		gs.glist = YRPCreateD( "DPanel", PARENT, YRP.ctr(800), listH, YRP.ctr(20), YRP.ctr(20 + 60) )
 		gs.gplist = YRPCreateD( "DPanelList", gs.glist, gs.glist:GetWide(), gs.glist:GetTall(), 0, 0)
 		gs.gplist:EnableVerticalScrollbar(true)
 		gs.gplist:SetSpacing(YRP.ctr(10) )
@@ -292,7 +293,8 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			net.WriteString( cur_group.par)
 		net.SendToServer()
 
-		rs.top = YRPCreateD( "DPanel", PARENT, YRP.ctr(800-120), YRP.ctr(60), YRP.ctr(80), YRP.ctr(940) )
+		local listH = PARENT:GetTall() / 2 - 2 * YRP.ctr(30) - 3 * YRP.ctr(10)
+		rs.top = YRPCreateD( "DPanel", PARENT, YRP.ctr(800-120), YRP.ctr(60), YRP.ctr(80), listH + YRP.ctr(20 + 60 + 20) )
 		function rs.top:Paint(pw, ph)
 			if rs.top.headername != nil then
 				local tab = {}
@@ -316,30 +318,22 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.bac = YRPCreateD( "YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(940) )
+		rs.bac = YRPCreateD( "YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), listH + YRP.ctr(20 + 60 + 20) )
 		rs.bac:SetText( "" )
 		function rs.bac:Paint(pw, ph)
-			if NotNilAndNotFalse( cur_role.pre) then
+			if rs.top.headername != nil and NotNilAndNotFalse( cur_role.pre) then
 				if cur_role.pre > 0 then
-				--[[if rs.rplist.tab != nil then
-					if rs.rplist.tab[1] != nil then
-						if tonumber(rs.rplist.tab[1].int_prerole) > 0 then
-						]]--
-							local tab = {}
-							tab.color = Color( 255, 255, 0)
-							DrawPanel(self, tab)
-							local tab2 = {}
-							tab2.x = pw / 2
-							tab2.y = ph / 2
-							tab2.ax = 1
-							tab2.ay = 1
-							tab2.text = "◀"
-							tab2.font = "Y_18_700"
-							DrawText(tab2)
-							--[[
-						end
-					end
-					]]--
+					local tab = {}
+					tab.color = Color( 255, 255, 0)
+					DrawPanel(self, tab)
+					local tab2 = {}
+					tab2.x = pw / 2
+					tab2.y = ph / 2
+					tab2.ax = 1
+					tab2.ay = 1
+					tab2.text = "◀"
+					tab2.font = "Y_18_700"
+					DrawText(tab2)
 				else
 					local tab = {}
 					tab.color = YRPGetColor( "3" )
@@ -363,7 +357,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.add = YRPCreateD( "YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), YRP.ctr(940) )
+		rs.add = YRPCreateD( "YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), listH + YRP.ctr(20 + 60 + 20) )
 		rs.add:SetText( "+" )
 		function rs.add:Paint(pw, ph)
 			if rs.top.headername != nil then
@@ -378,8 +372,8 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				net.SendToServer()
 			end
 		end
-
-		rs.rlist = YRPCreateD( "DPanel", PARENT, YRP.ctr(800), YRP.ctr(840), YRP.ctr(20), YRP.ctr(1000) )
+		
+		rs.rlist = YRPCreateD( "DPanel", PARENT, YRP.ctr(800), listH, YRP.ctr(20), listH + 2 * YRP.ctr(20) + 2 * YRP.ctr(60) )
 		function rs.rlist:Paint(pw, ph)
 			if rs.top.headername != nil then
 				local tab = {}

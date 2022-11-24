@@ -532,10 +532,10 @@ function OpenCombinedMenu()
 		cm.site:SetText( "" )
 		cm.site:SetHeaderHeight( cm.win:GetHeaderHeight() )
 		function cm.site:Paint(pw, ph)
-			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
 			local tab = {}
 			tab.color = YRPInterfaceValue( "YFrame", "BG" )
 			hook.Run( "YPanelPaint", self, pw, ph, tab) --draw.RoundedBox(0, 0, 0, pw, ph, Color(60, 60, 60, 255) )
+			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
 		end
 
 		-- SITES

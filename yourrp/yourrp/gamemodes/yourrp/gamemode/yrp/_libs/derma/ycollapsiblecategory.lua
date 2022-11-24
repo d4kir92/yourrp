@@ -40,8 +40,8 @@ function PANEL:Paint(pw, ph)
 	draw.RoundedBoxEx(YRP.ctr(14), YRP.ctr(10), YRP.ctr(10), pw - 1 * YRP.ctr(10), ph - 1 * YRP.ctr(10), YRPInterfaceValue( "YFrame", "NC" ), false, false, false, true)--self._ccol)
 end
 
-function PANEL:SetList(list)
-	self._list = list
+function PANEL:SetList(lis)
+	self._lis = lis
 end
 
 function PANEL:SetS(w, h)
@@ -131,18 +131,18 @@ function PANEL:Init()
 		local rols = net.ReadTable()
 
 		local nex = NEXTS[tonumber(rols[1].int_prerole)]
-		local rlist = nex.rlist
+		local rlis = nex.rlis
 
-		if !PanelAlive(rlist) then
-			YRP.msg( "note", "rlist invalid" )
+		if !PanelAlive(rlis) then
+			YRP.msg( "note", "rlis invalid" )
 			return
 		end
 
-		local list = YRPCreateD( "DPanelList", nil, YRP.ctr(w + 80 + 30), YRP.ctr(h), 0, 0)
-		list:EnableVerticalScrollbar()
-		rlist:AddPanel(list)
+		local lis = YRPCreateD( "DPanelList", nil, YRP.ctr(w + 80 + 30), YRP.ctr(h), 0, 0)
+		lis:EnableVerticalScrollbar()
+		rlis:AddPanel(lis)
 
-		local sbar = list.VBar
+		local sbar = lis.VBar
 		function sbar:Paint(w, h)
 			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 		end
@@ -159,12 +159,12 @@ function PANEL:Init()
 		for i, r in pairs(rols) do
 			r.bool_eventrole = tobool(r.bool_eventrole)
 			if r.bool_eventrole == GetGlobalYRPBool( "create_eventchar", false) then
-				AddRole(rlist, r, w, h, list)
+				AddRole(rlis, r, w, h, lis)
 			end
 		end
 	end)
 
-	function AddRole(rlist, rol, w, h, list)
+	function AddRole(rlis, rol, w, h, lis)
 		rol.uniqueID = tonumber(rol.uniqueID)
 		if type(rol.string_usergroups) != "table" then
 			rol.string_usergroups = string.Explode( ",", rol.string_usergroups)
@@ -330,8 +330,8 @@ function PANEL:Init()
 				surface.DrawTexturedRect( br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
 			end
 		end
-		nex.list = list
-		nex.rlist = rlist
+		nex.lis= lis
+		nex.rlis = rlis
 		nex.base = r
 		NEXTS[rol.uniqueID] = nex
 		function nex:DoClick()
@@ -340,9 +340,9 @@ function PANEL:Init()
 				net.WriteString(rol.uniqueID)
 			net.SendToServer()
 			
-			if PanelAlive(self.rlist) then
+			if PanelAlive(self.rlis) then
 				local remove = false
-				for i, v in pairs(self.rlist.Panels) do	
+				for i, v in pairs(self.rlis.Panels) do	
 					if PanelAlive( v) then
 						if v.GetName and v:GetName() == "DPanelList" then
 							if remove then
@@ -385,10 +385,10 @@ function PANEL:Init()
 			net.WriteString(rol.uniqueID)
 		net.SendToServer()
 			
-		if PanelAlive(list) then
-			list:AddItem(r)
-		elseif PanelAlive(rlist) then
-			rlist:AddPanel(r)
+		if PanelAlive(lis) then
+			lis:AddItem(r)
+		elseif PanelAlive(rlis) then
+			rlis:AddPanel(r)
 		end
 	end
 
@@ -435,14 +435,14 @@ function PANEL:Init()
 				if tonumber( rol.int_prerole ) == 0 then
 					w = rw
 					h = rh
-					local rlist = YRPCreateD( "DHorizontalScroller", nil, 10, YRP.ctr(h), 0, 0)
-					function rlist:Paint(pw, ph)
+					local rlis = YRPCreateD( "DHorizontalScroller", nil, 10, YRP.ctr(h), 0, 0)
+					function rlis:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, color1 )
 					end
 
-					base.con:AddItem(rlist)
+					base.con:AddItem(rlis)
 
-					AddRole(rlist, rol, w, h)
+					AddRole(rlis, rol, w, h)
 				end
 			end
 			
@@ -479,7 +479,7 @@ function PANEL:Init()
 			end
 
 			base.con:Rebuild()
-			base._list:Rebuild()
+			base._lis:Rebuild()
 
 			local h = rh * 3.5
 			if base.con:GetCanvas():GetTall() < h then
@@ -496,7 +496,7 @@ function PANEL:Init()
 				base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20) )
 			
 				base.con:Rebuild()
-				base._list:Rebuild()
+				base._lis:Rebuild()
 			else
 				h = rh * 3.5
 				if base._fh then
@@ -510,7 +510,7 @@ function PANEL:Init()
 				base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20) )
 				
 				base.con:Rebuild()
-				base._list:Rebuild()
+				base._lis:Rebuild()
 			end
 		end
 	end
@@ -554,7 +554,7 @@ function PANEL:Init()
 			base.con:Clear()
 
 			base.con:Rebuild()
-			base._list:Rebuild()
+			base._lis:Rebuild()
 		end
 	end
 

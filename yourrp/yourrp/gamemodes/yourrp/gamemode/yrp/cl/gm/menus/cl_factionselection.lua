@@ -36,12 +36,12 @@ function CreateFactionSelectionContent()
 	end
 
 	-- List of Factions
-	local list = YRPCreateD( "DScrollPanel", site, nw, nh, 0, 0)
-	list:Center()
-	function list:Paint(pw, ph)
+	local lis = YRPCreateD( "DScrollPanel", site, nw, nh, 0, 0)
+	lis:Center()
+	function lis:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ) )
 	end
-	local sbar = list:GetVBar()
+	local sbar = lis:GetVBar()
 	function sbar:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 	end
@@ -88,7 +88,7 @@ function CreateFactionSelectionContent()
 	net.Receive( "yrp_factionselection_getfactions", function(len)
 		local ftab = net.ReadTable()
 
-		if PanelAlive(list) then
+		if PanelAlive(lis) then
 			local x = 0
 			local y = 0
 
@@ -97,13 +97,13 @@ function CreateFactionSelectionContent()
 				local w = (nw - YRP.ctr(3 * config.br) ) / 2
 				local h = YRP.ctr(500)
 				if table.Count(ftab) > 4 then
-					list:SetWide(nw + sbar:GetWide() )
+					lis:SetWide(nw + sbar:GetWide() )
 				end
 
 				-- Recalculate Height
 				local sh = math.Clamp(YRP.ctr( config.br) + table.Count(ftab) / 2 * (h + YRP.ctr( config.br) ), 100, nh)
-				list:SetTall(sh)
-				list:Center()
+				lis:SetTall(sh)
+				lis:Center()
 
 				for i, fac in pairs(ftab) do
 					fac.uniqueID = tonumber(fac.uniqueID)
@@ -167,7 +167,7 @@ function CreateFactionSelectionContent()
 							CreateRoleSelectionContent()
 						end
 
-						list:AddItem(faction)
+						lis:AddItem(faction)
 
 
 

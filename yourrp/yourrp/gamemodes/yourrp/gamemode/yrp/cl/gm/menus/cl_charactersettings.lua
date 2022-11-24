@@ -327,12 +327,12 @@ function YRPCreateCharacterSettingsContent()
 
 
 		-- RIGHT
-		local list = YRPCreateD( "DPanelList", win, ew, YRP.ctr( config.h - config.br * 2 - config.hh - config.br), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120) )
-		list:EnableVerticalScrollbar()
-		function list:Paint(pw, ph)
+		local lis = YRPCreateD( "DPanelList", win, ew, YRP.ctr( config.h - config.br * 2 - config.hh - config.br), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120) )
+		lis:EnableVerticalScrollbar()
+		function lis:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "BG" ) )
 		end
-		local sbar = list.VBar
+		local sbar = lis.VBar
 		function sbar:Paint(w, h)
 			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 		end
@@ -354,7 +354,7 @@ function YRPCreateCharacterSettingsContent()
 		if GetGlobalYRPBool( "bool_characters_birthday", false) then
 			local birtheader = YRPCreateD( "YLabel", nil, ew, YRP.ctr( config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			birtheader:SetText( "LID_birthday" )
-			list:AddItem( birtheader)
+			lis:AddItem( birtheader)
 
 			local birt = YRPCreateD( "DTextEntry", nil, ew, YRP.ctr( config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			birt:SetText( "" )
@@ -370,15 +370,15 @@ function YRPCreateCharacterSettingsContent()
 			function birt:OnChange()
 				LocalPlayer().charcreate_birt = self:GetText()
 			end
-			list:AddItem( birt)
-			list:AddItem(hr)
+			lis:AddItem( birt)
+			lis:AddItem(hr)
 		end
 		
 		-- Bodyheight
 		if GetGlobalYRPBool( "bool_characters_bodyheight", false) then
 			local boheheader = YRPCreateD( "YLabel", nil, ew, YRP.ctr( config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			boheheader:SetText( "LID_bodyheight" )
-			list:AddItem( boheheader)
+			lis:AddItem( boheheader)
 
 			local bohe = YRPCreateD( "DNumberWang", nil, ew, YRP.ctr( config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			bohe:SetText( "" )
@@ -386,15 +386,15 @@ function YRPCreateCharacterSettingsContent()
 			function bohe:OnChange()
 				LocalPlayer().charcreate_bohe = self:GetText()
 			end
-			list:AddItem( bohe)
-			list:AddItem(hr)
+			lis:AddItem( bohe)
+			lis:AddItem(hr)
 		end
 
 		-- Weight
 		if GetGlobalYRPBool( "bool_characters_weight", false) then
 			local weigheader = YRPCreateD( "YLabel", nil, ew, YRP.ctr( config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			weigheader:SetText( "LID_weight" )
-			list:AddItem(weigheader)
+			lis:AddItem(weigheader)
 
 			local weig = YRPCreateD( "DNumberWang", nil, ew, YRP.ctr( config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 			weig:SetText( "" )
@@ -402,14 +402,14 @@ function YRPCreateCharacterSettingsContent()
 			function weig:OnChange()
 				LocalPlayer().charcreate_weig = self:GetText()
 			end
-			list:AddItem(weig)
-			list:AddItem(hr)
+			lis:AddItem(weig)
+			lis:AddItem(hr)
 		end
 
 		-- Description
 		local descheader = YRPCreateD( "YLabel", nil, ew, YRP.ctr( config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
 		descheader:SetText( "LID_description" )
-		list:AddItem( descheader)
+		lis:AddItem( descheader)
 
 		local desc = YRPCreateD( "DTextEntry", nil, ew, YRP.ctr(400), ew * 2 + 3 * YRP.ctr(20), 0)
 		desc:SetMultiline(true)
@@ -426,7 +426,7 @@ function YRPCreateCharacterSettingsContent()
 		function desc:OnChange()
 			LocalPlayer().charcreate_desc = self:GetText()
 		end
-		list:AddItem( desc)
+		lis:AddItem( desc)
 	end)
 
 	timer.Simple(0.2, function()

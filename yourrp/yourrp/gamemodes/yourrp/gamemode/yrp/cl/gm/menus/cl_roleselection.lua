@@ -400,16 +400,16 @@ function CreateRoleSelectionContent(PARENT)
 	menue = win
 
 	-- List of Groups
-	local list = YRPCreateD( "DPanelList", win, win:GetWide() - YRP.ctr(2 * config.br), win:GetTall() - YRP.ctr(2 * config.br), YRP.ctr( config.br), YRP.ctr( config.br) )
-	list:EnableVerticalScrollbar()
-	list:SetSpacing(YRP.ctr( config.br) )
-	function list:Paint(pw, ph)
+	local lis = YRPCreateD( "DPanelList", win, win:GetWide() - YRP.ctr(2 * config.br), win:GetTall() - YRP.ctr(2 * config.br), YRP.ctr( config.br), YRP.ctr( config.br) )
+	lis:EnableVerticalScrollbar()
+	lis:SetSpacing(YRP.ctr( config.br) )
+	function lis:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, YRPColGreen )
-		if list:GetWide() != win:GetWide() - YRP.ctr(2 * config.br) then
-			list:SetWide(win:GetWide() - YRP.ctr(2 * config.br) )
+		if lis:GetWide() != win:GetWide() - YRP.ctr(2 * config.br) then
+			lis:SetWide(win:GetWide() - YRP.ctr(2 * config.br) )
 		end
 	end
-	local sbar = list.VBar
+	local sbar = lis.VBar
 	function sbar:Paint(w, h)
 		if LocalPlayer().InterfaceValue and YRPInterfaceValue( "YFrame", "NC" ) then
 			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
@@ -470,30 +470,30 @@ function CreateRoleSelectionContent(PARENT)
 
 	-- Groups
 	net.Receive( "yrp_roleselection_getgroups", function(len)
-		if PanelAlive(list) then
+		if PanelAlive(lis) then
 			local gtab = net.ReadTable()
 
 			local factioncount = tonumber(net.ReadString() )
 
-			local w = list:GetWide() -- YRP.ctr(2 * config.br)
+			local w = lis:GetWide() -- YRP.ctr(2 * config.br)
 			local h = YRP.ctr(100)
 
 			for i, grp in pairs(gtab) do
 				grp.uniqueID = tonumber(grp.uniqueID)
 				
-				if PanelAlive(list) then
+				if PanelAlive(lis) then
 					-- Category Group
-					local group = YRPCreateD( "YCollapsibleCategory", list, w, h, 0, 0)
+					local group = YRPCreateD( "YCollapsibleCategory", lis, w, h, 0, 0)
 					group:SetS(w, h)
 					group:SetHeader(grp.string_name)
 					group:SetIcon(grp.string_icon)
-					group:SetList(list)
+					group:SetList(lis)
 					group:SetHeaderColor(StringToColor(grp.string_color) )
 					group:SetContentColor(StringToColor(grp.string_color) )
 					group:SetGroupUID(grp.uniqueID)
-					group:SetFixedHeight(list:GetTall() * 2)
+					group:SetFixedHeight(lis:GetTall() * 2)
 					function group:Think()
-						w = list:GetWide()
+						w = lis:GetWide()
 						if w != self:GetWide() then
 							self:SetWide(w)
 						end
@@ -515,7 +515,7 @@ function CreateRoleSelectionContent(PARENT)
 						end
 					end
 
-					list:AddItem(group)
+					lis:AddItem(group)
 
 					group.btn:DoClick()
 				else

@@ -929,19 +929,19 @@ hook.Add( "PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed
 	end
 end)
 
-hook.Add( "ChatText", "yrp_serverNotifications", function(index, name, text, type)
+hook.Add( "ChatText", "yrp_serverNotifications", function(index, name, text, typ)
 	local lply = LocalPlayer()
 	if lply:IsValid() and YRPIsChatEnabled( "ChatText" ) then
-		if type == "none" then
+		if typ == "none" then
 			if PanelAlive(yrpChat.content) and lply:HasAccess() then
 				notification.AddLegacy(text, NOTIFY_GENERIC, 6)
 			end
 		end
 	else
-		if type == "none" then
+		if typ == "none" then
 			return true
 		end
-		if type == "joinleave" then
+		if typ == "joinleave" then
 			return true
 		end
 	end

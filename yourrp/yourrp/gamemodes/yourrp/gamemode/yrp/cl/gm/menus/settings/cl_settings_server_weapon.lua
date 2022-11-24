@@ -121,23 +121,23 @@ net.Receive( "yrp_weapon_menu", function(len)
 		draw.SimpleText(YRP.lang_string( "LID_noslot" ), 		"Y_16_700", pw - 60 - spacer * 0 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	local list = YRPCreateD( "DPanelList", PARENT, sw, PARENT:GetTall() - 10 - 30 - 30 - 10, 400 + 10, 10 + 30 + 30)
-	list:EnableVerticalScrollbar()
-	list:SetSpacing(2)
-	function list:Paint(pw, ph)
+	local lis = YRPCreateD( "DPanelList", PARENT, sw, PARENT:GetTall() - 10 - 30 - 30 - 10, 400 + 10, 10 + 30 + 30)
+	lis:EnableVerticalScrollbar()
+	lis:SetSpacing(2)
+	function lis:Paint(pw, ph)
 		local color = Color(120, 120, 120)
 		draw.RoundedBox(0, 0, 0, pw, ph, color)
 	end
 
 	function YRPWeaponUpdateList()
-		list:Clear()
+		lis:Clear()
 		for i, swep in SortedPairsByMemberValue( cl_sweps, "PrintName" ) do
 			local searchstr = string.lower(search:GetText() )
 			searchstr = string.Replace(searchstr, "[", "" )
 			searchstr = string.Replace(searchstr, "]", "" )
 			searchstr = string.Replace(searchstr, "%", "" )
 			if string.find(string.lower(swep.PrintName), searchstr) or string.find(string.lower(swep.ClassName), searchstr) then
-				local weapon = YRPCreateD( "DLabel", nil, list:GetWide(), 40, 0, 0)
+				local weapon = YRPCreateD( "DLabel", nil, lis:GetWide(), 40, 0, 0)
 				weapon:SetText( "" )
 				function weapon:Paint(pw, ph)
 					local color = Color(40, 160, 40)
@@ -181,7 +181,7 @@ net.Receive( "yrp_weapon_menu", function(len)
 				cbs[swep.ClassName].ga = YRPWeaponSlotCB(weapon, weapon:GetWide() - 60 - spacer * 1 - 12, 0, swep.ClassName, "slot_gadget", 	DBTab2[swep.ClassName].slot_gadget)
 				cbs[swep.ClassName].no = YRPWeaponSlotCB(weapon, weapon:GetWide() - 60 - spacer * 0 - 12, 0, swep.ClassName, "slot_no", 		DBTab2[swep.ClassName].slot_no)
 
-				list:AddItem(weapon)
+				lis:AddItem(weapon)
 			end
 		end
 	end

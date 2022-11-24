@@ -162,14 +162,14 @@ function BuildFeedbackLine(parent, tab)
 end
 
 function BuildFeedback(parent, tab, status)
-	local list = YRPCreateD( "DScrollPanel", parent, parent:GetWide(), parent:GetTall(), 0, 0)
+	local lis = YRPCreateD( "DScrollPanel", parent, parent:GetWide(), parent:GetTall(), 0, 0)
 
 	for i, v in pairs(tab) do
 		if v.status == status then
-			local line = BuildFeedbackLine(list, v)
+			local line = BuildFeedbackLine(lis, v)
 			line:Dock( TOP )
 			line:DockMargin( 0, 0, 0, YRP.ctr(20) )
-			list:AddItem(line)
+			lis:AddItem(line)
 		end
 	end
 end
