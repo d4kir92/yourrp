@@ -6,9 +6,7 @@ SWEP.Instructions = ""
 
 SWEP.Category = "[YourRP] Medical"
 
-SWEP.PrintName = "Bandage"
-SWEP.Language = "en"
-SWEP.LanguageString = "LID_bandages"
+SWEP.PrintName = "Health Pack"
 
 SWEP.Slot = 5
 SWEP.SlotPos = 1
@@ -27,8 +25,8 @@ SWEP.WorldModel = "models/weapons/w_medkit.mdl"
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.DefaultClip = 1
 SWEP.Primary.Automatic = false
-SWEP.Primary.Ammo = "bandage"
-SWEP.Secondary.Ammo = "bandagesecondary"
+SWEP.Primary.Ammo = "healthpack"
+SWEP.Secondary.Ammo = "healthpacksecondary"
 
 SWEP.HoldType = "fist"
 function SWEP:Initialize()
@@ -53,7 +51,7 @@ function SWEP:PrimaryAttack()
 				self.target = tr.Entity
 				if tr.Entity:IsPlayer() then
 					--StartCasting(net_str, lang_str, mode, target, duration, range, cost, canmove)
-					ply:StartCasting( "bandage", "LID_bandaging", 0, self.target, 3, 100, 1, false)
+					ply:StartCasting( "healthpack", "LID_healing", 0, self.target, 3, 100, 1, false)
 				end
 			end
 		end
@@ -61,8 +59,8 @@ function SWEP:PrimaryAttack()
 end
 
 if SERVER then
-	hook.Add( "yrp_castdone_bandage", "bandage", function( args)
-		args.target:Heal( 25 )
+	hook.Add( "yrp_castdone_healthpack", "healthpack", function( args)
+		args.target:Heal( 100 )
 		args.target:StopBleeding()
 		args.attacker:GetActiveWeapon():TakePrimaryAmmo(1)
 	end)
@@ -74,12 +72,12 @@ function SWEP:SecondaryAttack()
 		if self:Clip1() > 0 then
 			local ply = self:GetOwner()
 			_target = ply
-			ply:StartCasting( "bandage", "LID_bandaging", 0, _target, 3, 100, 1, false)
+			ply:StartCasting( "healthpack", "LID_bandaging", 0, _target, 3, 100, 1, false)
 		end
 	end
 end
 
-local wave = Material( "vgui/entities/yrp_bandage.png", "noclamp smooth" )
+local wave = Material( "vgui/entities/yrp_healthpack.png", "noclamp smooth" )
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
 	surface.SetMaterial( wave )
 	surface.SetDrawColor( Color( 255, 255, 255, 255 ) )

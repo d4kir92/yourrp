@@ -185,7 +185,7 @@ net.Receive( "yrp_blacklis_get", function(len)
 	end
 end)
 
-function OpenSettingsBlacklis()
+function OpenSettingsBlacklist()
 	local lply = LocalPlayer()
 
 	net.Start( "yrp_blacklis_get" )

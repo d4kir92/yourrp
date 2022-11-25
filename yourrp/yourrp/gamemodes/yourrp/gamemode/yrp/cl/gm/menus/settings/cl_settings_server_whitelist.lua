@@ -383,7 +383,7 @@ net.Receive( "getRoleWhitelis_line", function(len)
 	end
 end)
 
-function OpenSettingsWhitelis()
+function OpenSettingsWhitelist()
 	local lply = LocalPlayer()
 
 	loadedR = false
