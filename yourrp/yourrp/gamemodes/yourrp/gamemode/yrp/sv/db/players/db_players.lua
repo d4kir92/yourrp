@@ -994,7 +994,11 @@ function canGetRole(ply, roleID, want)
 	return false
 end
 
-function YRPRemRolVals(ply)
+function YRPRemRolVals( ply )
+	if not IsValid( ply ) then
+		return
+	end
+
 	local rolTab = ply:YRPGetRoleTable()
 	if NotNilAndNotFalse(rolTab) then
 		local _sweps = string.Explode( ",", rolTab.string_sweps)
@@ -1007,6 +1011,10 @@ function YRPRemRolVals(ply)
 end
 
 function YRPRemGroVals(ply)
+	if not IsValid( ply ) then
+		return
+	end
+	
 	local groTab = ply:YRPGetGroupTable()
 	if NotNilAndNotFalse(groTab) then
 		local _sweps = string.Explode( ",", groTab.string_sweps)

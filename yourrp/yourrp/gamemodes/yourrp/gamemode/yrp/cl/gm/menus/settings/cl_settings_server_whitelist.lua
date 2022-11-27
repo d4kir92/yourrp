@@ -149,7 +149,7 @@ function BuildWhitelis(parent, tab)
 			_whitelisButton:SetText(YRP.lang_string( "LID_whitelisplayer" ) )
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID() ) != nil then
-					net.Start( "whitelisPlayer" )
+					net.Start( "whitelistPlayer" )
 						local _cb1_id = _whitelisComboBoxPlys:GetSelectedID()
 						local _cb2_id = _whitelisComboBox2:GetSelectedID()
 						local _cb1_data = _whitelisComboBoxPlys:GetOptionData(_cb1_id)
@@ -209,7 +209,7 @@ function BuildWhitelis(parent, tab)
 			_whitelisButton:SetText(YRP.lang_string( "LID_whitelisplayer" ) )
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID() ) != nil and _whitelisComboBox:GetOptionData(_whitelisComboBox:GetSelectedID() ) != nil then
-					net.Start( "whitelisPlayerGroup" )
+					net.Start( "whitelistPlayerGroup" )
 						net.WriteString(_whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID() ))
 						net.WriteInt(_whitelisComboBox:GetOptionData(_whitelisComboBox:GetSelectedID() ), 16)
 					net.SendToServer()
@@ -257,7 +257,7 @@ function BuildWhitelis(parent, tab)
 			_whitelisButton:SetText(YRP.lang_string( "LID_whitelisplayer" ) )
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID() ) != nil then
-					net.Start( "whitelisPlayerAll" )
+					net.Start( "whitelistPlayerAll" )
 						net.WriteString(_whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID() ))
 					net.SendToServer()
 				end
@@ -291,7 +291,7 @@ function BuildWhitelis(parent, tab)
 			if lis:GetSelectedLine() != nil then
 				local uid = lis:GetLine(lis:GetSelectedLine() ):GetValue(1)
 				if uid != nil then
-					net.Start( "whitelisPlayerRemove" )
+					net.Start( "whitelistPlayerRemove" )
 						net.WriteInt(uid, 16)
 					net.SendToServer()
 
@@ -343,7 +343,7 @@ net.Receive( "getRolesWhitelist", function(len)
 	loadedR = true
 end)
 
-net.Receive( "getRoleWhitelis_line", function(len)
+net.Receive( "getRoleWhitelist_line", function(len)
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) then
 

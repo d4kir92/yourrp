@@ -83,13 +83,13 @@ end)
 
 function GetBackupCreateTime()
 	local _create = sql.Query( "SELECT int_backup_create FROM yrp_sql WHERE uniqueID = 1;" )
-	if NotNilAndNotFalse(_create) then
-		_create = tonumber(_create[1].int_backup_create)
-		if isnumber(_create) then
-			_create = _create * 60 * 60
-			return _create
+	if NotNilAndNotFalse( _create ) then
+		local num = tonumber( _create[1].int_backup_create )
+		if isnumber( num ) then
+			num = num * 60 * 60
+			return num
 		else
-			YRP.msg( "error", "[GetBackupCreateTime] is not a number: " .. tostring(_create) )
+			YRP.msg( "error", "[GetBackupCreateTime] is not a number: " .. tostring( num ) )
 			return 60
 		end
 	else
