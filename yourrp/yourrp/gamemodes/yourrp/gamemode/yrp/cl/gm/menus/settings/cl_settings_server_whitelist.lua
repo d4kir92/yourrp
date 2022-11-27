@@ -120,7 +120,7 @@ function BuildWhitelis(parent, tab)
 			_whitelisFrame:Center()
 			_whitelisFrame:ShowCloseButton(true)
 			_whitelisFrame:SetDraggable(true)
-			_whitelisFrame:SetTitle( "Whitelis" )
+			_whitelisFrame:SetTitle( "Whitelist" )
 
 			local _whitelisComboBoxPlys = createVGUI( "DComboBox", _whitelisFrame, 380, 50, 10, 100)
 			for k, v in pairs(player.GetAll() ) do
@@ -193,7 +193,7 @@ function BuildWhitelis(parent, tab)
 			_whitelisFrame:Center()
 			_whitelisFrame:ShowCloseButton(true)
 			_whitelisFrame:SetDraggable(true)
-			_whitelisFrame:SetTitle( "Whitelis" )
+			_whitelisFrame:SetTitle( "Whitelist" )
 
 			local _whitelisComboBoxPlys = createVGUI( "DComboBox", _whitelisFrame, 380, 50, 10, 100)
 			for k, v in pairs(player.GetAll() ) do
@@ -246,7 +246,7 @@ function BuildWhitelis(parent, tab)
 			_whitelisFrame:Center()
 			_whitelisFrame:ShowCloseButton(true)
 			_whitelisFrame:SetDraggable(true)
-			_whitelisFrame:SetTitle( "Whitelis" )
+			_whitelisFrame:SetTitle( "Whitelist" )
 
 			local _whitelisComboBoxPlys = createVGUI( "DComboBox", _whitelisFrame, 380, 50, 10, 100)
 			for k, v in pairs(player.GetAll() ) do
@@ -333,12 +333,12 @@ function BuildWhitelis(parent, tab)
 	end
 end
 
-net.Receive( "getGroupsWhitelis", function(len)
+net.Receive( "getGroupsWhitelist", function(len)
 	tabG = net.ReadTable()
 	loadedG = true
 end)
 
-net.Receive( "getRolesWhitelis", function(len)
+net.Receive( "getRolesWhitelist", function(len)
 	tabR = net.ReadTable()
 	loadedR = true
 end)
@@ -390,15 +390,15 @@ function OpenSettingsWhitelist()
 	loadedG = false
 
 	timer.Simple(0.1, function()
-		net.Start( "getGroupsWhitelis" )
+		net.Start( "getGroupsWhitelist" )
 		net.SendToServer()
 	end)
 	timer.Simple(0.2, function()
-		net.Start( "getRolesWhitelis" )
+		net.Start( "getRolesWhitelist" )
 		net.SendToServer()
 	end)
 	timer.Simple(0.3, function()
-		net.Start( "getRoleWhitelis" )
+		net.Start( "getRoleWhitelist" )
 		net.SendToServer()
 	end)
 end
