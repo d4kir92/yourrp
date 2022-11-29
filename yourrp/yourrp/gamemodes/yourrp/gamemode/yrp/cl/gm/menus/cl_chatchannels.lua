@@ -95,7 +95,7 @@ function YRPChatChannel(edit, uid)
 	function win.structure:OnChange()
 		structure = win.structure:GetText()
 		if PanelAlive(win.previewrich) then
-			win.previewrich:Think()
+			win.previewrich:UpdatePreview( "structure" )
 		end
 	end
 	if edit and GetGlobalYRPTable( "yrp_chat_channels" )[uid] then
@@ -195,7 +195,7 @@ function YRPChatChannel(edit, uid)
 	function win.structure2:OnChange()
 		structure2 = win.structure2:GetText()
 		if PanelAlive(win.previewrich) then
-			win.previewrich:Think()
+			win.previewrich:UpdatePreview( "structure2" )
 		end
 	end
 	if edit and GetGlobalYRPTable( "yrp_chat_channels" )[uid] then
@@ -239,14 +239,14 @@ function YRPChatChannel(edit, uid)
 	win.previewtext:SetPlaceholderText( "Example Text" )
 	function win.previewtext:OnChange()
 		if PanelAlive(win.previewrich) then
-			win.previewrich:Think()
+			win.previewrich:UpdatePreview( "previewtext" )
 		end
 	end
 
 	win.previewrich = YRPCreateD( "RichText", CON, YRP.ctr(1600), YRP.ctr(200), YRP.ctr(0), YRP.ctr(800) )
 	win.previewrich:SetText(win.structure:GetText() )
 
-	function win.previewrich:Think()
+	function win.previewrich:UpdatePreview( from )
 		if PanelAlive(win.previewrich) and PanelAlive(win.previewtext) then
 			win.previewrich:SetText( "" )
 			local pk = YRPChatReplaceCMDS(win.structure:GetText(), LocalPlayer(), YRPReplaceWithPlayerNames(win.previewtext:GetText() ))
@@ -282,8 +282,16 @@ function YRPChatChannel(edit, uid)
 				end
 			end
 		end
+
+		if from == "INIT" then
+			timer.Simple( 0.5, function()
+				if win and win.previewrich then
+					win.previewrich:UpdatePreview( from )
+				end
+			end )
+		end
 	end
-	win.previewrich:Think()
+	win.previewrich:UpdatePreview( "INIT" )
 
 	if edit then
 		win.save = YRPCreateD( "YButton", CON, YRP.ctr(760), YRP.ctr(50), 0, YRP.ctr(1170) )

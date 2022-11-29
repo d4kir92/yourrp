@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 245 -- do NOT change this!
+GM.VersionBuild = 246 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -762,25 +762,63 @@ end
 
 function YRP_RN(text)
 	local cs, ce = string.find(text, "RN(", 1, true)
-	if cs then
-		local s, e = string.find(text, ")", cs, true)
-		if e then
-			local pre = string.sub(text, 1, cs - 1)
-			local suf = string.sub(text, e + 1)
-			local ex = string.sub(text, cs + 3, e - 1)
+	if cs == nil then
+		return text
+	end
+	local s, e = string.find(text, ")", cs, true)
+	if e == nil then
+		return text
+	end
 
-			ex = string.Explode( ",", ex)
-			if ex[1] and ex[2] then
-				local rn = math.random( tonumber( ex[1] ), tonumber( ex[2] ) )
+	local pre = string.sub(text, 1, cs - 1)
+	local suf = string.sub(text, e + 1)
+	local ex = string.sub(text, cs + 3, e - 1)
 
-				text = pre .. rn .. suf
-			else
-				local s1 = ex[1]
-				local s2 = ex[2]
-				MsgC( Color( 0, 255, 0 ), "ROLL FAILED: " .. tostring( s1 ) .. " " .. tostring( s2 ) .. "\n" )
-			end
-		end
+	ex = string.Explode( ",", ex)
+	local rn = nil
+	if ex[1] and ex[2] and isnumber( tonumber( ex[1] ) ) and isnumber( tonumber( ex[2] ) )then
+		rn = math.random( tonumber( ex[1] ), tonumber( ex[2] ) )
+	elseif isnumber( tonumber( ex[1] ) ) then
+		rn = math.random( 0, tonumber( ex[1] ) )
+	end
+	if rn then
+		text = pre .. rn .. suf
 		return YRP_RN(text)
+	end
+	return text
+end
+
+function YRP_RT( text )
+	local cs, ce = string.find(text, "RT(", 1, true)
+	if cs == nil then
+		return text
+	end
+	local s, e = string.find(text, ")", cs, true)
+	if e == nil then
+		return text
+	end
+
+	local pre = string.sub(text, 1, cs - 1)
+	local suf = string.sub(text, e + 1)
+
+	local ex = string.sub(text, cs + 3, e - 1)
+	ex = string.Explode( ",", ex )
+
+	local words = {}
+	for i, v in pairs( ex ) do
+		local word = string.gsub( v, "%s+", "" )
+		if !strEmpty( word ) then
+			table.insert( words, word )
+		end
+	end
+
+	if table.Count( words ) > 1 then
+		local rn = table.Random( words )
+		
+		if rn then
+			text = pre .. rn .. suf
+			return YRP_RT(text)
+		end
 	end
 	return text
 end
@@ -825,7 +863,9 @@ function YRPChatReplaceCMDS(structure, ply, text)
 
 	result = string.Replace(result, "%TEXT%", text)
 	
-	result = YRP_RN(result)
+	result = YRP_RN( result )
+
+	result = YRP_RT( result )
 
 	local pk = {}
 	while(!strEmpty(result) ) do
