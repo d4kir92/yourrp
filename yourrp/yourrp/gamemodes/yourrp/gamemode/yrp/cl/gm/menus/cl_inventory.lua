@@ -21,7 +21,23 @@ function YRPCloseInventory()
 
 	if inv.win != nil then
 		surface.PlaySound( "ambient/materials/wood_creak4.wav" )
+
+		if inv.env then
+			inv.env:Remove()
+		end
+		if inv.envstor then
+			inv.envstor:Remove()
+		end
+
+		if inv.env2 then
+			inv.env2:Remove()
+		end
+		if inv.envstor2 then
+			inv.envstor2:Remove()
+		end
+
 		inv.win:Remove()
+
 		inv.win = nil
 	end
 end
@@ -33,6 +49,12 @@ end
 function YRPInventory()
 	return inv.win
 end
+
+YRPDropItem = YRPDropItem or YRPCreateD( "DPanelList", nil, ScrW(), ScrH(), 0, 0)
+function YRPDropItem:Paint(pw, ph)
+	--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 0) )
+end
+YRPDropItem:Hide()
 
 function YRPOpenInventory(target)
 	if IsInventorySystemEnabled() and YRPIsNoMenuOpen() then
@@ -70,19 +92,19 @@ function YRPOpenInventory(target)
 
 				local nettab = net.ReadTable()
 				if table.Count(nettab) > 0 and !target then
-					local env = YRPCreateD( "DFrame", nil, 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp), 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp) + YRP.ctr(50), 0, 0)
-					env:MakePopup()
-					env:Center()
-					env:SetTitle( "" )
-					function env:Paint(pw, ph)
+					inv.env = YRPCreateD( "DFrame", nil, 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp), 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp) + YRP.ctr(50), 0, 0)
+					inv.env:MakePopup()
+					inv.env:Center()
+					inv.env:SetTitle( "" )
+					function inv.env:Paint(pw, ph)
 						if !YRPInventory() then
 							--self:Remove()
 						end
 						draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ) )
 						draw.SimpleText(YRP.lang_string( "LID_environment" ), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
-					local envsto = YRPCreateD( "YStorage", env, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRP.ctr(inv.sp), YRP.ctr(50) + YRP.ctr(inv.sp) )
-					envsto:SetStorageID(0, nettab)
+					inv.envstor = YRPCreateD( "YStorage", inv.env, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRP.ctr(inv.sp), YRP.ctr(50) + YRP.ctr(inv.sp) )
+					inv.envstor:SetStorageID(0, nettab)
 				end
 			end
 		end)
@@ -101,27 +123,26 @@ net.Receive( "yrp_open_storage", function(len)
 		local wsuid = net.ReadString()
 		local name = net.ReadString()
 		
-		local env = YRPCreateD( "DFrame", nil, 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp), 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp) + YRP.ctr(50), 0, 0)
-		env:MakePopup()
-		env:Center()
-		env:SetTitle( "" )
-		function env:Paint(pw, ph)
+		if inv and inv.env2 then
+			inv.env2:Remove()
+		end
+
+		inv.env2 = YRPCreateD( "DFrame", nil, 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp), 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp) + YRP.ctr(50), 0, 0)
+		inv.env2:MakePopup()
+		inv.env2:Center()
+		inv.env2:SetTitle( "" )
+		function inv.env2:Paint(pw, ph)
 			if !YRPInventory() then
 				self:Remove()
 			end
 			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ) )
 			draw.SimpleText(name, "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
-		local storage = YRPCreateD( "YStorage", env, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRP.ctr(inv.sp), YRP.ctr(50) + YRP.ctr(inv.sp) )
-		storage:SetStorageID(wsuid)
+		inv.envstor2 = YRPCreateD( "YStorage", inv.env2, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRP.ctr(inv.sp), YRP.ctr(50) + YRP.ctr(inv.sp) )
+		inv.envstor2:SetStorageID(wsuid)
 	end
 end)
 
-YRPDropItem = YRPDropItem or YRPCreateD( "DPanelList", nil, ScrW(), ScrH(), 0, 0)
-function YRPDropItem:Paint(pw, ph)
-	draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 255, 4) )
-end
-YRPDropItem:Hide()
 YRPDropItem:Receiver( "yrp_slot", function( receiver, panels, bDoDrop, Command, x, y )
 	if bDoDrop then
 		local item = panels[1]
