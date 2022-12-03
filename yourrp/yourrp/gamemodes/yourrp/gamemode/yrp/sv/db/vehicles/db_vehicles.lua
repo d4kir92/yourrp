@@ -119,7 +119,7 @@ end
 net.Receive( "removeVehicleOwner", function(len, ply)
 	local _tmpVehicleID = tonumber( net.ReadString() )
 	local _tmpTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _tmpVehicleID .. "'" )
-	if NotNilAndNotFalse(_tmpTable) then
+	if IsNotNilAndNotFalse(_tmpTable) then
 		_tmpTable = _tmpTable[1]
 		
 		local item_uniqueID = tonumber( _tmpTable.item_id )

@@ -57,7 +57,7 @@ net.Receive( "Connect_Settings_Realistic", function(len, ply)
 		AddToHandler_Realistic(ply)
 
 		local _yrp_realistic = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		if NotNilAndNotFalse(_yrp_realistic) then
+		if IsNotNilAndNotFalse(_yrp_realistic) then
 			_yrp_realistic = _yrp_realistic[1]
 		else
 			_yrp_realistic = {}

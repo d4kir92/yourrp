@@ -249,7 +249,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					net.WriteString( cur_group.cur)
 				net.SendToServer()
 				timer.Simple(0.01, function()
-					if NotNilAndNotFalse(gs.gplist[group.uniqueID]) and NotNilAndNotFalse(gs.gplist[group.uniqueID].uniqueID) then
+					if IsNotNilAndNotFalse(gs.gplist[group.uniqueID]) and IsNotNilAndNotFalse(gs.gplist[group.uniqueID].uniqueID) then
 						net.Start( "settings_subscribe_grouplist" )
 							net.WriteString(gs.gplist[group.uniqueID].uniqueID)
 						net.SendToServer()
@@ -321,7 +321,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		rs.bac = YRPCreateD( "YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), listH + YRP.ctr(20 + 60 + 20) )
 		rs.bac:SetText( "" )
 		function rs.bac:Paint(pw, ph)
-			if rs.top.headername != nil and NotNilAndNotFalse( cur_role.pre) then
+			if rs.top.headername != nil and IsNotNilAndNotFalse( cur_role.pre) then
 				if cur_role.pre > 0 then
 					local tab = {}
 					tab.color = Color( 255, 255, 0)
@@ -342,7 +342,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 		function rs.bac:DoClick()
-			if NotNilAndNotFalse( cur_role.pre) and NotNilAndNotFalse( cur_role.gro) then
+			if IsNotNilAndNotFalse( cur_role.pre) and IsNotNilAndNotFalse( cur_role.gro) then
 				if cur_role.pre > 0 then
 					rs.rplist:ClearList()
 					net.Start( "settings_unsubscribe_rolelist" )
@@ -393,7 +393,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			if PanelAlive(rs.rplist) then
 				local _uid = tonumber(net.ReadString() )
 				local name = net.ReadString()
-				if NotNilAndNotFalse(rs.rplist[_uid]) then
+				if IsNotNilAndNotFalse(rs.rplist[_uid]) then
 					rs.rplist[_uid].text = name
 				else
 					YRP.msg( "note", "[settings_role_update_name] index is invalid" )
@@ -484,7 +484,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				function _no:DoClick()
 					win:Close()
 				end
-			elseif ea.typ == "role" and NotNilAndNotFalse(ea.tab.uniqueID) and tonumber(ea.tab.uniqueID) != 1 then
+			elseif ea.typ == "role" and IsNotNilAndNotFalse(ea.tab.uniqueID) and tonumber(ea.tab.uniqueID) != 1 then
 				net.Start( "settings_delete_role" )
 					net.WriteString(ea.tab.uniqueID)
 				net.SendToServer()
@@ -1178,7 +1178,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local db_huds = net.ReadTable()
 			local db_hudmasks = net.ReadTable()
 
-			if !NotNilAndNotFalse( db_groups) or !NotNilAndNotFalse( db_ugs) or !NotNilAndNotFalse(roles) or !NotNilAndNotFalse(role) then
+			if !IsNotNilAndNotFalse( db_groups) or !IsNotNilAndNotFalse( db_ugs) or !IsNotNilAndNotFalse(roles) or !IsNotNilAndNotFalse(role) then
 				return
 			end
 
@@ -1331,7 +1331,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				local grps = {}
 				for i, tab in pairs( db_groups) do
 					tab.uniqueID = tonumber(tab.uniqueID)
-					if NotNilAndNotFalse(tab.string_name) and NotNilAndNotFalse(tab.uniqueID) and tab.uniqueID != -1 then
+					if IsNotNilAndNotFalse(tab.string_name) and IsNotNilAndNotFalse(tab.uniqueID) and tab.uniqueID != -1 then
 						grps[tab.uniqueID] = tab.string_name .. " [UID: " .. tab.uniqueID .. "]"
 					end
 				end
@@ -1614,7 +1614,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					pmwin.list:SetSpacing(10)
 					function pmwin.list:RefreshList()
 						local lply = LocalPlayer()
-						if NotNilAndNotFalse(lply.yrpseltab) and pmwin.list != nil and PanelAlive(pmwin.list) then
+						if IsNotNilAndNotFalse(lply.yrpseltab) and pmwin.list != nil and PanelAlive(pmwin.list) then
 							pmwin.list:Clear()
 							for i, pm in pairs( lply.yrpseltab ) do
 								timer.Simple( i * 0.001, function()
@@ -2986,7 +2986,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				local gro = net.ReadString()
 				local pre = net.ReadString()
 
-				if NotNilAndNotFalse(gro) and NotNilAndNotFalse(pre) then
+				if IsNotNilAndNotFalse(gro) and IsNotNilAndNotFalse(pre) then
 					cur_role.gro = tonumber(gro)
 					cur_role.pre = tonumber(pre)
 

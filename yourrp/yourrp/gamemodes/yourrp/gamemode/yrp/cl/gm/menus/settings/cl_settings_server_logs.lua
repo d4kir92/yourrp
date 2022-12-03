@@ -26,7 +26,7 @@ function BuildLogs(parent, typ)
 			for i, v in pairs(tab) do
 				local source = GetPlayerBySteamID( v.string_source_steamid )
 				local target = GetPlayerBySteamID( v.string_target_steamid )
-				if NotNilAndNotFalse(source) then
+				if IsNotNilAndNotFalse(source) then
 					local line = YRPCreateD( "YPanel", nil, parent:GetWide(), YRP.ctr(50) )
 
 
@@ -55,7 +55,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if NotNilAndNotFalse( v.string_source_steamid) then
+						if IsNotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
@@ -91,7 +91,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if NotNilAndNotFalse( v.string_source_steamid) then
+						if IsNotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
@@ -129,7 +129,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if NotNilAndNotFalse( v.string_source_steamid) then
+						if IsNotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
@@ -174,7 +174,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if NotNilAndNotFalse( v.string_source_steamid) then
+						if IsNotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
@@ -191,7 +191,7 @@ function BuildLogs(parent, typ)
 						rt:InsertColorChange(255, 255, 255, 255)
 						rt:AppendText( " " .. "whitelisted" .. " " )
 
-						if NotNilAndNotFalse( v.string_source_steamid) then
+						if IsNotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_target_steamid) )
 							rt:InsertClickableTextEnd()
@@ -221,7 +221,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if NotNilAndNotFalse( v.string_source_steamid) then
+						if IsNotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else
@@ -235,7 +235,7 @@ function BuildLogs(parent, typ)
 						end
 						rt:InsertClickableTextEnd()
 
-						if NotNilAndNotFalse( v.string_value) then
+						if IsNotNilAndNotFalse( v.string_value) then
 							rt:InsertColorChange(255, 255, 255, 255)
 							rt:AppendText( " " .. v.string_value)
 						else
@@ -263,7 +263,7 @@ function BuildLogs(parent, typ)
 						end
 
 						if source.RPName then
-							if NotNilAndNotFalse( v.string_source_steamid) then
+							if IsNotNilAndNotFalse( v.string_source_steamid) then
 								rt:InsertColorChange(100, 100, 255, 255)
 								rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 							else
@@ -324,7 +324,7 @@ function BuildLogs(parent, typ)
 							end
 						end
 
-						if NotNilAndNotFalse( v.string_source_steamid) then
+						if IsNotNilAndNotFalse( v.string_source_steamid) then
 							rt:InsertColorChange(100, 100, 255, 255)
 							rt:InsertClickableTextStart(tostring( v.string_source_steamid) )
 						else

@@ -280,7 +280,7 @@ net.Receive( "Connect_Settings_General", function(len, ply)
 		AddToHandler_General(ply)
 
 		local _yrp_general = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		if NotNilAndNotFalse(_yrp_general) then
+		if IsNotNilAndNotFalse(_yrp_general) then
 			_yrp_general = _yrp_general[1]
 		else
 			_yrp_general = {}
@@ -311,7 +311,7 @@ end
 
 function YRPLoadGlobals()
 	local _init_general = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-	if NotNilAndNotFalse(_init_general) then
+	if IsNotNilAndNotFalse(_init_general) then
 		yrp_general = _init_general[1]
 
 		--RunConsoleCommand( "lua_log_sv", yrp_general.bool_server_debug)
@@ -1732,7 +1732,7 @@ end
 util.AddNetworkString( "gethelpmenu" )
 net.Receive( "gethelpmenu", function(len, ply)
 	local info = YRP_SQL_SELECT( "yrp_general", "*", "uniqueID = '1'" )
-	if NotNilAndNotFalse(info) then
+	if IsNotNilAndNotFalse(info) then
 		info = info[1]
 
 		local tabs = {}
@@ -1780,7 +1780,7 @@ end)
 util.AddNetworkString( "getsiteserverrules" )
 net.Receive( "getsiteserverrules", function(len, ply)
 	local server_rules = YRP_SQL_SELECT( "yrp_general", "text_server_rules", "uniqueID = '1'" )
-	if NotNilAndNotFalse(server_rules) then
+	if IsNotNilAndNotFalse(server_rules) then
 		server_rules = server_rules[1].text_server_rules
 	else
 		server_rules = ""
@@ -1793,7 +1793,7 @@ end)
 util.AddNetworkString( "getsitecollection" )
 net.Receive( "getsitecollection", function(len, ply)
 	local collectionid = YRP_SQL_SELECT( "yrp_general", "text_server_collectionid", "uniqueID = '1'" )
-	if NotNilAndNotFalse( collectionid) then
+	if IsNotNilAndNotFalse( collectionid) then
 		collectionid = collectionid[1].text_server_collectionid
 	else
 		collectionid = ""
@@ -1806,7 +1806,7 @@ end)
 util.AddNetworkString( "getsitecommunitywebsite" )
 net.Receive( "getsitecommunitywebsite", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_website", "uniqueID = '1'" )
-	if NotNilAndNotFalse(link) then
+	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_website
 	else
 		link = ""
@@ -1819,7 +1819,7 @@ end)
 util.AddNetworkString( "getsitecommunityforum" )
 net.Receive( "getsitecommunityforum", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_forum", "uniqueID = '1'" )
-	if NotNilAndNotFalse(link) then
+	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_forum
 	else
 		link = ""
@@ -1834,7 +1834,7 @@ net.Receive( "getsitecommunitydiscord", function(len, ply)
 	local sql_select = YRP_SQL_SELECT( "yrp_general", "text_social_discord, text_social_discord_widgetid", "uniqueID = '1'" )
 	local link = ""
 	local widgetid = ""
-	if NotNilAndNotFalse(link) then
+	if IsNotNilAndNotFalse(link) then
 		link = sql_select[1].text_social_discord
 		widgetid = sql_select[1].text_social_discord_widgetid
 	end
@@ -1850,7 +1850,7 @@ net.Receive( "getsitecommunityteamspeak", function(len, ply)
 	local ip = ""
 	local port = ""
 	local query_port = ""
-	if NotNilAndNotFalse(sql_select) then
+	if IsNotNilAndNotFalse(sql_select) then
 		ip = sql_select[1].text_social_teamspeak_ip
 		port = sql_select[1].text_social_teamspeak_port
 		query_port = sql_select[1].text_social_teamspeak_query_port
@@ -1865,7 +1865,7 @@ end)
 util.AddNetworkString( "getsitecommunitytwitter" )
 net.Receive( "getsitecommunitytwitter", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_twitter", "uniqueID = '1'" )
-	if NotNilAndNotFalse(link) then
+	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_twitter
 	else
 		link = ""
@@ -1878,7 +1878,7 @@ end)
 util.AddNetworkString( "getsitecommunityyoutube" )
 net.Receive( "getsitecommunityyoutube", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_youtube", "uniqueID = '1'" )
-	if NotNilAndNotFalse(link) then
+	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_youtube
 	else
 		link = ""
@@ -1891,7 +1891,7 @@ end)
 util.AddNetworkString( "getsitecommunityfacebook" )
 net.Receive( "getsitecommunityfacebook", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_facebook", "uniqueID = '1'" )
-	if NotNilAndNotFalse(link) then
+	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_facebook
 	else
 		link = ""
@@ -1904,7 +1904,7 @@ end)
 util.AddNetworkString( "getsitecommunitysteamgroup" )
 net.Receive( "getsitecommunitysteamgroup", function(len, ply)
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_steamgroup", "uniqueID = '1'" )
-	if NotNilAndNotFalse(link) then
+	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_steamgroup
 	else
 		link = ""
@@ -2235,7 +2235,7 @@ end)
 -- YRPRepairSQLDB
 function YRPFixDatabase(tab, name, c)
 	c = c or 0
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		for id, value in pairs(tab) do
 			if type( value) == "string" then
 				YRP_SQL_UPDATE(name, {[id] = YRP_SQL_STR_OUT( value )}, "" .. id .. " = '" .. value .. "'" )
@@ -2249,7 +2249,7 @@ end
 local fixonce = true
 function YRPRepairSQLDB(force) -- Remove %01 - %XX
 	local version = YRP_SQL_SELECT(DATABASE_NAME, "int_version", "uniqueID = '1'" )
-	if NotNilAndNotFalse( version) then
+	if IsNotNilAndNotFalse( version) then
 		version = tonumber( version[1].int_version)
 		if ( version <= 1 or force) and fixonce then
 			fixonce = false

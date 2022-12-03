@@ -29,7 +29,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbedisabled", "TEXT DEFAULT '1'" )
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
 local all = YRP_SQL_SELECT( DATABASE_NAME, "*", nil )
-if NotNilAndNotFalse( all ) then
+if IsNotNilAndNotFalse( all ) then
 	local tab = {}
 	for i, v in pairs( all ) do
 		if !table.HasValue( tab, v.string_name ) then
@@ -105,7 +105,7 @@ end
 function GenerateChatTable()
 	yrp_chat_channels = {}
 	local channels = YRP_SQL_SELECT(DATABASE_NAME, "*" )
-	if NotNilAndNotFalse( channels) then
+	if IsNotNilAndNotFalse( channels) then
 		for i, channel in pairs( channels) do
 			yrp_chat_channels[tonumber( channel.uniqueID)] = {}
 			yrp_chat_channels[tonumber( channel.uniqueID)].uniqueID = tonumber( channel.uniqueID)
@@ -208,7 +208,7 @@ GenerateChatTable()
 util.AddNetworkString( "yrp_cm_get_active_usergroups" )
 net.Receive( "yrp_cm_get_active_usergroups", function(len, ply)
 	local ugs = YRP_SQL_SELECT( "yrp_usergroups", "uniqueID, string_name", nil)
-	if NotNilAndNotFalse(ugs) then
+	if IsNotNilAndNotFalse(ugs) then
 		net.Start( "yrp_cm_get_active_usergroups" )
 			net.WriteTable(ugs)
 		net.Send(ply)
@@ -218,7 +218,7 @@ end)
 util.AddNetworkString( "yrp_cm_get_active_groups" )
 net.Receive( "yrp_cm_get_active_groups", function(len, ply)
 	local grps = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", nil)
-	if NotNilAndNotFalse(grps) then
+	if IsNotNilAndNotFalse(grps) then
 		net.Start( "yrp_cm_get_active_groups" )
 			net.WriteTable(grps)
 		net.Send(ply)
@@ -228,7 +228,7 @@ end)
 util.AddNetworkString( "yrp_cm_get_active_roles" )
 net.Receive( "yrp_cm_get_active_roles", function(len, ply)
 	local rols = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name", nil)
-	if NotNilAndNotFalse(rols) then
+	if IsNotNilAndNotFalse(rols) then
 		net.Start( "yrp_cm_get_active_roles" )
 			net.WriteTable(rols)
 		net.Send(ply)
@@ -238,7 +238,7 @@ end)
 util.AddNetworkString( "yrp_cm_get_passive_usergroups" )
 net.Receive( "yrp_cm_get_passive_usergroups", function(len, ply)
 	local ugs = YRP_SQL_SELECT( "yrp_usergroups", "uniqueID, string_name", nil)
-	if NotNilAndNotFalse(ugs) then
+	if IsNotNilAndNotFalse(ugs) then
 		net.Start( "yrp_cm_get_passive_usergroups" )
 			net.WriteTable(ugs)
 		net.Send(ply)
@@ -248,7 +248,7 @@ end)
 util.AddNetworkString( "yrp_cm_get_passive_groups" )
 net.Receive( "yrp_cm_get_passive_groups", function(len, ply)
 	local grps = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", nil)
-	if NotNilAndNotFalse(grps) then
+	if IsNotNilAndNotFalse(grps) then
 		net.Start( "yrp_cm_get_passive_groups" )
 			net.WriteTable(grps)
 		net.Send(ply)
@@ -258,7 +258,7 @@ end)
 util.AddNetworkString( "yrp_cm_get_passive_roles" )
 net.Receive( "yrp_cm_get_passive_roles", function(len, ply)
 	local rols = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name", nil)
-	if NotNilAndNotFalse(rols) then
+	if IsNotNilAndNotFalse(rols) then
 		net.Start( "yrp_cm_get_passive_roles" )
 			net.WriteTable(rols)
 		net.Send(ply)

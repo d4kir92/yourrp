@@ -9,9 +9,9 @@ end
 local YRP_STORAGES = YRP_STORAGES or {}
 
 function GetStoragePanel(storageID)
-	if NotNilAndNotFalse(storageID) then
+	if IsNotNilAndNotFalse(storageID) then
 		storageID = tonumber(storageID)
-		if NotNilAndNotFalse(YRP_STORAGES[storageID]) then
+		if IsNotNilAndNotFalse(YRP_STORAGES[storageID]) then
 			return YRP_STORAGES[storageID]
 		else
 			YRP.msg( "note", "[GetStoragePanel] no panel with: " .. tostring(storageID) )
@@ -23,9 +23,9 @@ end
 
 function SetStoragePanel(storageID, pnl)
 	
-	if NotNilAndNotFalse(storageID) then
+	if IsNotNilAndNotFalse(storageID) then
 		storageID = tonumber(storageID)
-		if !NotNilAndNotFalse(YRP_STORAGES[storageID]) then
+		if !IsNotNilAndNotFalse(YRP_STORAGES[storageID]) then
 			YRP_STORAGES[storageID] = pnl
 		else
 			YRP.msg( "note", "[SetStoragePanel] there is already a storage with storageID: " .. tostring(storageID) )
@@ -36,7 +36,7 @@ function SetStoragePanel(storageID, pnl)
 end
 
 function RemoveStoragePanel(storageID, pnl)
-	if NotNilAndNotFalse(YRP_STORAGES[storageID]) then
+	if IsNotNilAndNotFalse(YRP_STORAGES[storageID]) then
 		YRP_STORAGES[storageID] = nil
 	end
 end
@@ -46,7 +46,7 @@ function PANEL:GetStorageID()
 end
 
 function PANEL:SetStorageID(storageID, slots)
-	if NotNilAndNotFalse(storageID) then
+	if IsNotNilAndNotFalse(storageID) then
 		storageID = tonumber(storageID)
 
 		if storageID != 0 then
@@ -173,7 +173,7 @@ net.Receive( "yrpclosebag", function(len)
 	local storID = net.ReadString()
 
 	local storage = GetStoragePanel(storID)
-	if NotNilAndNotFalse(storage) then
+	if IsNotNilAndNotFalse(storage) then
 		storage:GetParent():Remove()
 	end
 end)

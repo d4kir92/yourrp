@@ -147,7 +147,7 @@ function LoadCharacters()
 		if PanelAlive(CharMenu.charactersBackground) then
 			local i = 1
 			CharMenu.charactersBackground.text = ""
-			if NotNilAndNotFalse( chars) then
+			if IsNotNilAndNotFalse( chars) then
 				CharMenu.character.amount = 0
 				CharMenu.character.amountevent = 0
 
@@ -161,7 +161,7 @@ function LoadCharacters()
 				end
 				local y = 0
 				for k, v in pairs( cache) do
-					if NotNilAndNotFalse( v.tmpChar.shadow) then
+					if IsNotNilAndNotFalse( v.tmpChar.shadow) then
 						v.tmpChar.shadow:Remove()
 					end
 					v.tmpChar:Remove()
@@ -420,7 +420,7 @@ function LoadCharacters()
 								_yesButton:SetText(YRP.lang_string( "LID_yes" ) )
 								function _yesButton:DoClick()
 									
-									if NotNilAndNotFalse(tmpChar.charid) then
+									if IsNotNilAndNotFalse(tmpChar.charid) then
 										net.Start( "YRPDeleteCharacter" )
 											net.WriteString(tmpChar.charid)
 										net.SendToServer()
@@ -469,7 +469,7 @@ function LoadCharacters()
 									local barr = barh / 2
 									local barx = posx + tabw + barbr
 									local bary = py - barr
-									if NotNilAndNotFalse( chars[self.id]) then
+									if IsNotNilAndNotFalse( chars[self.id]) then
 										local cur = tonumber( chars[self.id].char.int_xp )
 										local max = LocalPlayer():CalculateMaxXP( tonumber( chars[self.id].char.int_level ) )
 										if cur > max then
@@ -575,7 +575,7 @@ function LoadCharacters()
 								_yesButton:SetText(YRP.lang_string( "LID_yes" ) )
 								function _yesButton:DoClick()
 									
-									if NotNilAndNotFalse(tmpChar.charid) then
+									if IsNotNilAndNotFalse(tmpChar.charid) then
 										net.Start( "YRPDeleteCharacter" )
 											net.WriteString(tmpChar.charid)
 										net.SendToServer()

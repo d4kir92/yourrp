@@ -24,7 +24,7 @@ net.Receive( "get_ticket", function(len, ply)
 	if ply:CanAccess( "bool_feedback" ) then
 		local _result = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
-		if NotNilAndNotFalse(_result) then
+		if IsNotNilAndNotFalse(_result) then
 			for i, t in pairs(_result) do
 				t.string_timestamp = t.string_timestamp or "0"
 				t.string_timestamp = tonumber(t.string_timestamp)

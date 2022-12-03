@@ -140,7 +140,7 @@ net.Receive( "getMapTab", function(len)
 	
 	local parent = PARENT.maptabs.site
 
-	if !NotNilAndNotFalse(parent) or !PanelAlive(parent) then return end
+	if !IsNotNilAndNotFalse(parent) or !PanelAlive(parent) then return end
 	parent:Clear()
 
 	local mapList = YRPCreateD( "DListView", parent, parent:GetWide() - YRP.ctr(660), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20) )

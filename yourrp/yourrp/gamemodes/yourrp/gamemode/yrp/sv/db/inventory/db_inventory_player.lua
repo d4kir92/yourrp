@@ -120,7 +120,7 @@ end
 
 function Player:IsAllowedToDropSWEPRole( cname)
 	local ndsweps = YRP_SQL_SELECT( "yrp_ply_roles", "string_ndsweps", "uniqueID = '" .. self:GetYRPString( "roleUniqueID", "0" ) .. "'" )
-	if NotNilAndNotFalse(ndsweps) then
+	if IsNotNilAndNotFalse(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode( ",", ndsweps.string_ndsweps)
 		if table.HasValue(ndsweps, cname) then
@@ -134,7 +134,7 @@ end
 
 function Player:IsAllowedToDropSWEPUG( cname)
 	local ndsweps = YRP_SQL_SELECT( "yrp_usergroups", "string_nonesweps", "string_name = '" .. string.lower(self:GetUserGroup() ) .. "'" )
-	if NotNilAndNotFalse(ndsweps) then
+	if IsNotNilAndNotFalse(ndsweps) then
 		ndsweps = ndsweps[1]
 		ndsweps = string.Explode( ",", ndsweps.string_nonesweps)
 		if table.HasValue(ndsweps, cname) then

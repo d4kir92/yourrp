@@ -8,7 +8,7 @@ include( "shared.lua" )
 function ENT:SetStorage(id)
 	if id == nil then
 		local storage = CreateStorage(self.bag_size)
-		if NotNilAndNotFalse(storage) then
+		if IsNotNilAndNotFalse(storage) then
 			self._suid = tonumber(storage.uniqueID)
 		end
 	else

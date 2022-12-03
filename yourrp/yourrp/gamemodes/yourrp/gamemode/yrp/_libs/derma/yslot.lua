@@ -12,9 +12,9 @@ end
 local YRP_SLOTS = YRP_SLOTS or {}
 
 function GetSlotPanel(slotID)
-	if NotNilAndNotFalse(slotID) then
+	if IsNotNilAndNotFalse(slotID) then
 		slotID = tonumber(slotID)
-		if NotNilAndNotFalse(YRP_SLOTS[slotID]) then
+		if IsNotNilAndNotFalse(YRP_SLOTS[slotID]) then
 			return YRP_SLOTS[slotID]
 		else
 			return nil
@@ -26,9 +26,9 @@ function GetSlotPanel(slotID)
 end
 
 function SetSlotPanel(slotID, pnl)
-	if NotNilAndNotFalse(slotID) then
+	if IsNotNilAndNotFalse(slotID) then
 		slotID = tonumber(slotID)
-		if !NotNilAndNotFalse(YRP_SLOTS[slotID]) then
+		if !IsNotNilAndNotFalse(YRP_SLOTS[slotID]) then
 			YRP_SLOTS[slotID] = pnl
 		else
 			YRP.msg( "note", "[SetSlotPanel] there is already a Slot with slotID: " .. tostring(slotID) )
@@ -39,7 +39,7 @@ function SetSlotPanel(slotID, pnl)
 end
 
 function RemoveSlotPanel(slotID, pnl)
-	if NotNilAndNotFalse(YRP_SLOTS[slotID]) then
+	if IsNotNilAndNotFalse(YRP_SLOTS[slotID]) then
 		YRP_SLOTS[slotID] = nil
 	end
 end
@@ -49,7 +49,7 @@ function PANEL:GetSlotID()
 end
 
 function PANEL:SetSlotID(slotID)
-	if NotNilAndNotFalse(slotID) then
+	if IsNotNilAndNotFalse(slotID) then
 		slotID = tonumber(slotID)
 
 		self._slotID = slotID
@@ -65,7 +65,7 @@ function PANEL:SetSlotID(slotID)
 end
 
 function PANEL:OnRemove()
-	if NotNilAndNotFalse(self._slotID) then
+	if IsNotNilAndNotFalse(self._slotID) then
 		net.Start( "yrp_slot_disconnect" )
 			net.WriteString(self._slotID)
 		net.SendToServer()

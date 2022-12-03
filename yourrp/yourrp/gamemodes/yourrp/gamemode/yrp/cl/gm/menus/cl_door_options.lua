@@ -26,7 +26,7 @@ net.Receive( "getBuildingInfo", function(len)
 
 		local door = net.ReadEntity()
 		local tab = net.ReadTable()
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			local tabBuilding = tab["B"]
 			local tabOwner = tab["O"]
 			local tabGroup = tab["G"]

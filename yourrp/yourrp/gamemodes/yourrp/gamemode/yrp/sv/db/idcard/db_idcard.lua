@@ -79,7 +79,7 @@ function LoadIDCardSetting(force, from)
 		for j, name in pairs(names) do
 			name = string.Replace(name, "ELEMENT", ele)
 			local value = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'" )
-			if NotNilAndNotFalse( value) then
+			if IsNotNilAndNotFalse( value) then
 				-- FOUND DATABASE VALUE
 				value = value[1]
 				if string.StartWith(name, "bool_" ) then
@@ -163,7 +163,7 @@ function LoadIDCardSetting(force, from)
 	end
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ax'" )
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		for i, v in pairs(tab) do
 			v.value = tonumber( v.value)
 			if v.value > 2 then
@@ -172,7 +172,7 @@ function LoadIDCardSetting(force, from)
 		end
 	end
 	local tab2 = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_ay'" )
-	if NotNilAndNotFalse(tab2) then
+	if IsNotNilAndNotFalse(tab2) then
 		for i, v in pairs(tab2) do
 			v.value = tonumber( v.value)
 			if v.value > 2 then
@@ -181,7 +181,7 @@ function LoadIDCardSetting(force, from)
 		end
 	end
 	local tab3 = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '%_colortype'" )
-	if NotNilAndNotFalse(tab3) then
+	if IsNotNilAndNotFalse(tab3) then
 		for i, v in pairs(tab3) do
 			v.value = tonumber( v.value)
 			if v.value > 5 then -- 1 CustomColor, 2 FactionColor, 3 GroupColor, 4 RoleColor, 5 UserGroupColor

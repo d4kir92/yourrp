@@ -18,7 +18,7 @@ local Player = FindMetaTable( "Player" )
 function Player:LockdownLoadout()
 	--YRP.msg( "gm", self:SteamName() .. " LockdownLoadout" )
 	local lockdown = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-	if NotNilAndNotFalse(lockdown) then
+	if IsNotNilAndNotFalse(lockdown) then
 		lockdown = lockdown[1]
 		lockdown.bool_lockdown = tobool(lockdown.bool_lockdown)
 		for i, pl in pairs(player.GetAll() ) do

@@ -30,7 +30,7 @@ end
 function CleanUpDealers()
 	local _dealers = YRP_SQL_SELECT( "yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'" )
 	local _map_dealers = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = 'dealer'" )
-	if NotNilAndNotFalse(_map_dealers) and NotNilAndNotFalse(_dealers) then
+	if IsNotNilAndNotFalse(_map_dealers) and IsNotNilAndNotFalse(_dealers) then
 		for i, dealer in pairs(_dealers) do
 			local found = false
 			for j, map_dealer in pairs(_map_dealers) do

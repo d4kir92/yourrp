@@ -44,7 +44,7 @@ net.Receive( "Connect_Settings_Database", function(len, ply)
 		end
 
 		local nw_sql = sql.Query( "SELECT * FROM yrp_sql WHERE uniqueID = 1;" )
-		if NotNilAndNotFalse(nw_sql) then
+		if IsNotNilAndNotFalse(nw_sql) then
 			nw_sql = nw_sql[1]
 		end
 
@@ -69,7 +69,7 @@ net.Receive( "yrp_drop_tables", function(len, ply)
 	local _drop_tables = net.ReadTable()
 	local _ug = string.lower(ply:GetUserGroup() )
 	local _can = YRP_SQL_SELECT( "yrp_usergroups", "bool_ac_database", "string_name = '" .. _ug .. "'" )
-	if NotNilAndNotFalse(_can) then
+	if IsNotNilAndNotFalse(_can) then
 		_can = _can[1]
 		CreateBackup()
 		if tobool(_can.bool_ac_database) then
@@ -83,7 +83,7 @@ end)
 
 function GetBackupCreateTime()
 	local _create = sql.Query( "SELECT int_backup_create FROM yrp_sql WHERE uniqueID = 1;" )
-	if NotNilAndNotFalse( _create ) then
+	if IsNotNilAndNotFalse( _create ) then
 		local num = tonumber( _create[1].int_backup_create )
 		if isnumber( num ) then
 			num = num * 60 * 60
@@ -118,7 +118,7 @@ function RemoveOldBackups()
 		local backups = file.Find( "yrp_backups/sv_backup_*.txt", "DATA" )
 		local _remove_after = sql.Query( "SELECT int_backup_delete FROM yrp_sql WHERE uniqueID = 1;" )
 
-		if NotNilAndNotFalse(_remove_after) then
+		if IsNotNilAndNotFalse(_remove_after) then
 			_remove_after = tonumber(_remove_after[1].int_backup_delete)
 
 			for i, fi in pairs( backups) do

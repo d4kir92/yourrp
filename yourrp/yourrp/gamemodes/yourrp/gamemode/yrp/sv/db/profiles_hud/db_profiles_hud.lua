@@ -23,7 +23,7 @@ net.Receive( "change_to_hud_profile", function()
 	SetGlobalYRPString( "string_hud_profile", profile_name)
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. profile_name .. "'" )
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		for i, v in pairs(tab) do
 			local name = v.name
 			local value = v.value

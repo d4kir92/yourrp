@@ -309,7 +309,7 @@ function YRPChatGiveLicense( sender, text )
 
 	local lid = GetLicenseIDByName(lname)
 
-	if IsValid(ply) and NotNilAndNotFalse(lid) then
+	if IsValid(ply) and IsNotNilAndNotFalse(lid) then
 		GiveLicense(ply, lid)
 	else
 		YRP.msg( "note", "[yrp_givelicense] Not found" )
@@ -417,7 +417,7 @@ function add_level(sender, text)
 		local _lvl = tonumber(_table[2])
 		if isnumber(_lvl) then
 			local _receiver = GetPlayerByName(_name)
-			if NotNilAndNotFalse(_receiver) and _receiver.AddLevel != nil then
+			if IsNotNilAndNotFalse(_receiver) and _receiver.AddLevel != nil then
 				_receiver:AddLevel(_lvl)
 				return ""
 			else
@@ -540,7 +540,7 @@ timer.Simple( 4, function() -- must be last hook
 
 		-- Channels
 		local tab = YRP_SQL_SELECT( "yrp_chat_channels", "*", "string_name = '" .. channel .. "'" )
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			tab = tab[1]
 
 			tab.int_mode = tonumber(tab.int_mode)

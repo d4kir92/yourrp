@@ -70,7 +70,7 @@ function F8CloseSettings(pnl)
 	sm.open = false
 	if PanelAlive(sm.win) then
 		sm.win:Hide()
-	elseif NotNilAndNotFalse(pnl) and pnl.Remove != nil then
+	elseif IsNotNilAndNotFalse(pnl) and pnl.Remove != nil then
 		pnl:Remove()
 	end
 end

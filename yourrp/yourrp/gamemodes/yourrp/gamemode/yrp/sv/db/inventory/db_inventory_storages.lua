@@ -9,7 +9,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1" )
 
 
 function CreateStorage(size, inv)
-	if !NotNilAndNotFalse(size) then return end
+	if !IsNotNilAndNotFalse(size) then return end
 	
 	local result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_storage_size", "'" .. size .. "'" )
 
@@ -17,7 +17,7 @@ function CreateStorage(size, inv)
 		YRP.msg( "db", "Created Storage" )
 
 		local last = YRP_SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1" )
-		if NotNilAndNotFalse(last) then
+		if IsNotNilAndNotFalse(last) then
 			last = last[1]
 
 			for i = 1, size do
@@ -35,9 +35,9 @@ end
 
 function GetCharacterStorage(ply)
 	local chaTab = ply:YRPGetCharacterTable()
-	if NotNilAndNotFalse( chaTab) then
+	if IsNotNilAndNotFalse( chaTab) then
 		local storage = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. chaTab.int_storageID .. "'" )
-		if NotNilAndNotFalse(storage) then
+		if IsNotNilAndNotFalse(storage) then
 			storage = storage[1]
 			return storage
 		else
@@ -50,16 +50,16 @@ end
 
 function YRPCreateCharacterStorages()
 	local chars = YRP_SQL_SELECT( "yrp_characters", "*", nil)
-	if NotNilAndNotFalse( chars) then
+	if IsNotNilAndNotFalse( chars) then
 		for _, char in pairs( chars) do
 			-- Remove wrong ones
 			if isnumber(tonumber( char.int_storageID) ) then
 				local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'" )
-				if NotNilAndNotFalse(tab) then
+				if IsNotNilAndNotFalse(tab) then
 					tab = tab[1]
 
 					local slots = YRP_SQL_SELECT( "yrp_inventory_slots", "*", "int_storageID = '" .. tab.uniqueID .. "'" )
-					if NotNilAndNotFalse(slots) and (#slots < 5 or #slots > 5) then
+					if IsNotNilAndNotFalse(slots) and (#slots < 5 or #slots > 5) then
 						YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. char.int_storageID .. "'" )
 						YRP_SQL_DELETE_FROM( "yrp_inventory_slots", "int_storageID = '" .. tab.uniqueID .. "'" )
 						YRP_SQL_UPDATE( "yrp_characters", {["int_storageID"] = 0}, "uniqueID = '" .. char.uniqueID .. "'" )
@@ -71,13 +71,13 @@ function YRPCreateCharacterStorages()
 			if strEmpty( char.int_storageID) or tonumber( char.int_storageID) == 0 then
 				YRP.msg( "db", "YRPCreateCharacterStorages empty or 0" )
 				local bagsStorage = CreateStorage(5, true)
-				if NotNilAndNotFalse( bagsStorage) then
+				if IsNotNilAndNotFalse( bagsStorage) then
 					YRP_SQL_UPDATE( "yrp_characters", {["int_storageID"] = bagsStorage.uniqueID}, "uniqueID = '" .. char.uniqueID .. "'" )
 				end
-			elseif !NotNilAndNotFalse(YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'" ) ) then
+			elseif !IsNotNilAndNotFalse(YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'" ) ) then
 				YRP.msg( "db", "YRPCreateCharacterStorages WRONG" )
 				local bagsStorage = CreateStorage(5, true)
-				if NotNilAndNotFalse( bagsStorage) then
+				if IsNotNilAndNotFalse( bagsStorage) then
 					YRP_SQL_UPDATE( "yrp_characters", {["int_storageID"] = bagsStorage.uniqueID}, "uniqueID = '" .. char.uniqueID .. "'" )
 				end
 			end
@@ -95,7 +95,7 @@ util.AddNetworkString( "get_inventory" )
 net.Receive( "get_inventory", function(len, ply)
 	local storage = GetCharacterStorage(ply)
 
-	if NotNilAndNotFalse(storage) and storage.uniqueID != nil then
+	if IsNotNilAndNotFalse(storage) and storage.uniqueID != nil then
 		local nettab = {}
 		local es = ents.FindInSphere(ply:GetPos(), 100)
 		for i, ent in pairs(es) do
@@ -122,12 +122,12 @@ function OpenStorage(ply, storageID)
 
 	local storage = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. storageID .. "'" )
 
-	if NotNilAndNotFalse(storage) then
+	if IsNotNilAndNotFalse(storage) then
 		storage = storage[1]
 
 		local isinv = false
 		local item = YRP_SQL_SELECT( "yrp_inventory_items", "*", "int_storageID = '" .. storage.uniqueID .. "'" )
-		if NotNilAndNotFalse(item) then
+		if IsNotNilAndNotFalse(item) then
 			item = item[1]
 
 			item.int_slotID = tonumber(item.int_slotID)

@@ -112,7 +112,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	COLOR:SetHeader(YRP.lang_string( "LID_color" ) )
 	COLOR.plus:SetText( "LID_change" )
 	function COLOR.plus:Paint(pw, ph)
-		if NotNilAndNotFalse(UGS[CURRENT_USERGROUP]) then
+		if IsNotNilAndNotFalse(UGS[CURRENT_USERGROUP]) then
 			hook.Run( "YButtonPaint", self, pw, ph)--surfaceButton(self, pw, ph, YRP.lang_string( "LID_change" ), StringToColor(UGS[CURRENT_USERGROUP].string_color) )
 		end
 	end
@@ -225,7 +225,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		end
 	end
 	function SWEPS.preview:PaintOver(pw, ph)
-		if NotNilAndNotFalse(UGS[CURRENT_USERGROUP]) then
+		if IsNotNilAndNotFalse(UGS[CURRENT_USERGROUP]) then
 			if self.oldcur != self.cur then
 				self.oldcur = self.cur
 				if UGS[CURRENT_USERGROUP].string_sweps then
@@ -401,7 +401,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		end
 	end
 	function NONESWEPS.preview:PaintOver(pw, ph)
-		if NotNilAndNotFalse(UGS[CURRENT_USERGROUP]) then
+		if IsNotNilAndNotFalse(UGS[CURRENT_USERGROUP]) then
 			if self.oldcur != self.cur then
 				self.oldcur = self.cur
 				if UGS[CURRENT_USERGROUP].string_nonesweps then
@@ -614,7 +614,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 			cb:SetChecked(true)
 		end
 		function cb:OnChange( bVal)
-			if NotNilAndNotFalse(UGS[CURRENT_USERGROUP]) and UGS[CURRENT_USERGROUP].string_tools then
+			if IsNotNilAndNotFalse(UGS[CURRENT_USERGROUP]) and UGS[CURRENT_USERGROUP].string_tools then
 				if type(UGS[CURRENT_USERGROUP].string_tools) == "string" then
 					UGS[CURRENT_USERGROUP].string_tools = string.Explode( ",", UGS[CURRENT_USERGROUP].string_tools)
 				end
@@ -1236,7 +1236,7 @@ function YRPOpenSettingsUsergroups()
 		local _ug_rem = YRPCreateD( "YButton", PARENT, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20 + SW - 50), YRP.ctr(20) )
 		_ug_rem:SetText( "-" )
 		function _ug_rem:Paint(pw, ph)
-			if NotNilAndNotFalse(UGS[CURRENT_USERGROUP]) then
+			if IsNotNilAndNotFalse(UGS[CURRENT_USERGROUP]) then
 				if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
 					hook.Run( "YButtonRPaint", self, pw, ph)
 				else
@@ -1246,7 +1246,7 @@ function YRPOpenSettingsUsergroups()
 			end
 		end
 		function _ug_rem:DoClick()
-			if NotNilAndNotFalse(UGS[CURRENT_USERGROUP]) then
+			if IsNotNilAndNotFalse(UGS[CURRENT_USERGROUP]) then
 				if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
 					net.Start( "usergroup_rem" )
 						net.WriteString(CURRENT_USERGROUP)

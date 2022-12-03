@@ -269,7 +269,7 @@ function YRPKeyPressed(key, str, distance)
 
 	if ChatIsClosedForChat and ChatIsClosedForChat() then
 		local lply = LocalPlayer()
-		if IsValid(lply) and NotNilAndNotFalse(lply.GetEyeTrace) then
+		if IsValid(lply) and IsNotNilAndNotFalse(lply.GetEyeTrace) then
 			local plyTrace = lply:GetEyeTrace()
 			local _return = false
 			if plyTrace and distance and EntityAlive(plyTrace.Entity) then

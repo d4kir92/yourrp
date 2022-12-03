@@ -364,7 +364,7 @@ if SERVER then
 	end)
 
 	local tmp = YRP_SQL_SELECT( "yrp_general", "text_gamemode_name", nil)
-	if NotNilAndNotFalse(tmp) then
+	if IsNotNilAndNotFalse(tmp) then
 		tmp = tmp[1]
 		GM.BaseName = tmp.text_gamemode_name
 	end
@@ -517,7 +517,7 @@ end
 function YRPIsInMaxVoiceRange(listener, talker)
 	if IsValid(listener) and IsValid(talker) then
 		local dist = listener:GetPos():Distance(talker:GetPos() )
-		if NotNilAndNotFalse( dist) and GetGlobalYRPInt( "int_voice_max_range", 1) then
+		if IsNotNilAndNotFalse( dist) and GetGlobalYRPInt( "int_voice_max_range", 1) then
 			return dist <= tonumber(GetGlobalYRPInt( "int_voice_max_range", 1) )
 		end
 	end
@@ -527,7 +527,7 @@ end
 function YRPIsInSpeakRange(listener, talker)
 	if IsValid(listener) and IsValid(talker) then
 		local dist = listener:GetPos():Distance(talker:GetPos() )
-		if NotNilAndNotFalse( dist) and YRPGetVoiceRange(talker) then
+		if IsNotNilAndNotFalse( dist) and YRPGetVoiceRange(talker) then
 			return dist <= YRPGetVoiceRange(talker)
 		end
 	end
@@ -1139,7 +1139,7 @@ timer.Simple( 10, YRPAddLuaErrorHook )
 
 
 function YRPCheckReadyTable( tab )
-	if !NotNilAndNotFalse( tab ) then
+	if !IsNotNilAndNotFalse( tab ) then
 		YRP.msg( "error", "[CheckReadyTable] Table INVALID: " .. tostring( tab ) )
 		return false
 	end

@@ -100,7 +100,7 @@ end
 
 timer.Simple( 1, function()
 	local yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-	if NotNilAndNotFalse(yrp_usergroups) then
+	if IsNotNilAndNotFalse(yrp_usergroups) then
 		for _i, _ug in pairs(yrp_usergroups) do
 			_ug.string_name = _ug.string_name or "failed"
 			_ug.string_name = string.lower(_ug.string_name)
@@ -108,10 +108,10 @@ timer.Simple( 1, function()
 		end
 	end
 	yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-	if NotNilAndNotFalse(yrp_usergroups) then
+	if IsNotNilAndNotFalse(yrp_usergroups) then
 		for _i, _ug in pairs(yrp_usergroups) do
 			local tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug.string_name .. "'" )
-			if NotNilAndNotFalse(tmp) and #tmp > 1 then
+			if IsNotNilAndNotFalse(tmp) and #tmp > 1 then
 				for i, ug in pairs(tmp) do
 					if i > 1 then
 						YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. ug.uniqueID .. "'" )
@@ -191,7 +191,7 @@ end )
 
 function SortUserGroups()
 	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-	if NotNilAndNotFalse(siblings) then
+	if IsNotNilAndNotFalse(siblings) then
 		for i, sibling in pairs(siblings) do
 			if sibling.string_name == "yrp_usergroups" then
 				table.remove( siblings, i )
@@ -299,7 +299,7 @@ function GetULXUserGroups()
 	-- ULX
 	local f = file.Read( "ulib/groups.txt", "DATA" )
 
-	if !NotNilAndNotFalse(f) then return end
+	if !IsNotNilAndNotFalse(f) then return end
 
 	f = string.Explode( "\n", f)
 	f = ConvertToMains(f)
@@ -380,7 +380,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len, ply)
 	AddToHandler_UserGroup(ply, uid)
 
 	local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. uid)
-	if NotNilAndNotFalse(_tmp) then
+	if IsNotNilAndNotFalse(_tmp) then
 		_tmp = _tmp[1]
 	end
 
@@ -430,11 +430,11 @@ function Player:CanAccess(site)
 	local _ug = self:GetUserGroup() or "failed"
 	_ug = string.lower(_ug)
 	local _b = YRP_SQL_SELECT(DATABASE_NAME, site, "string_name = '" .. _ug .. "'" )
-	if NotNilAndNotFalse(_b) then
+	if IsNotNilAndNotFalse(_b) then
 		_b = tobool(_b[1][site])
 		if !_b then
 			local _ugs = YRP_SQL_SELECT(DATABASE_NAME, "string_name", "bool_usergroups = '1'" )
-			if NotNilAndNotFalse(_ugs) then
+			if IsNotNilAndNotFalse(_ugs) then
 				for i, ug in pairs(_ugs) do
 					if usergroups == "" then
 						usergroups = usergroups .. string.lower(ug.string_name)
@@ -586,7 +586,7 @@ function UGUpdateInt(ply, uid, name, value)
 	end
 
 	local ug = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(ug) then
+	if IsNotNilAndNotFalse(ug) then
 		ug = ug[1]
 		ug.string_name = string.lower(ug.string_name)
 		for i, pl in pairs(player.GetAll() ) do
@@ -604,7 +604,7 @@ function UGCheckBox(ply, uid, name, value)
 
 	YRP.msg( "db", ply:YRPName() .. " updated " .. name .. " of usergroup ( " .. uid .. " ) to [" .. value .. "]" )
 
-	if NotNilAndNotFalse(HANDLER_USERGROUP[uid]) then
+	if IsNotNilAndNotFalse(HANDLER_USERGROUP[uid]) then
 		for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 			net.Start( "usergroup_update_" .. name)
 				net.WriteString( value)
@@ -613,7 +613,7 @@ function UGCheckBox(ply, uid, name, value)
 	end
 
 	local ug = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(ug) then
+	if IsNotNilAndNotFalse(ug) then
 		ug = ug[1]
 		ug.string_name = string.lower(ug.string_name)
 		for i, pl in pairs(player.GetAll() ) do
@@ -1184,7 +1184,7 @@ hook.Add( "PlayerSpawnSWEP", "yrp_weapons_restriction", function(pl)
 	if EntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_weapons", "string_name = '" .. string.lower( pl:GetUserGroup() ) .. "'" )
 
-		if NotNilAndNotFalse(_tmp) then
+		if IsNotNilAndNotFalse(_tmp) then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_weapons) then
 				return true
@@ -1206,7 +1206,7 @@ hook.Add( "PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
 	if EntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_entities", "string_name = '" .. string.lower(pl:GetUserGroup() ) .. "'" )
 
-		if NotNilAndNotFalse(_tmp) then
+		if IsNotNilAndNotFalse(_tmp) then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_entities) then
 				return true
@@ -1263,7 +1263,7 @@ end)
 hook.Add( "PlayerSpawnProp", "yrp_props_restriction", function(pl)
 	if EntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_props", "string_name = '" .. string.lower(pl:GetUserGroup() ) .. "'" )
-		if NotNilAndNotFalse(_tmp, "PlayerSpawnProp failed" ) then
+		if IsNotNilAndNotFalse(_tmp, "PlayerSpawnProp failed" ) then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_props) then
 				return true
@@ -1284,7 +1284,7 @@ end)
 hook.Add( "PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function(pl, model)
 	if EntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_ragdolls", "string_name = '" .. tostring(string.lower(pl:GetUserGroup() )) .. "'" )
-		if NotNilAndNotFalse(_tmp) then
+		if IsNotNilAndNotFalse(_tmp) then
 			_tmp = _tmp[1]
 			if tobool(_tmp.bool_ragdolls) then
 				return true
@@ -1383,7 +1383,7 @@ function GM:PhysgunPickup(pl, ent)
 		return false
 	end
 	local tabUsergroup = YRP_SQL_SELECT(DATABASE_NAME, "bool_physgunpickup, bool_physgunpickupworld, bool_physgunpickupplayer, bool_physgunpickupignoreblacklist", "string_name = '" .. string.lower(pl:GetUserGroup() ) .. "'" )
-	if NotNilAndNotFalse(tabUsergroup) then
+	if IsNotNilAndNotFalse(tabUsergroup) then
 		tabUsergroup = tabUsergroup[1]
 		if tobool(tabUsergroup.bool_physgunpickup) then
 			if EntBlacklisted(ent) and !tobool(tabUsergroup.bool_physgunpickupignoreblacklist) then
@@ -1427,7 +1427,7 @@ end
 
 function GM:GravGunPunt(pl, ent)
 	local tabUsergroup = YRP_SQL_SELECT(DATABASE_NAME, "bool_gravgunpunt", "string_name = '" .. string.lower(pl:GetUserGroup() ) .. "'" )
-	if NotNilAndNotFalse(tabUsergroup) then
+	if IsNotNilAndNotFalse(tabUsergroup) then
 		tabUsergroup = tabUsergroup[1]
 		if tobool(tabUsergroup.bool_gravgunpunt) then
 			return true
@@ -1445,11 +1445,11 @@ end
 
 local toolantispam = {}
 hook.Add( "CanTool", "yrp_can_tool", function(pl, tr, tool)
-	if EntityAlive(pl) and NotNilAndNotFalse(tool) then
+	if EntityAlive(pl) and IsNotNilAndNotFalse(tool) then
 		--YRP.msg( "gm", "CanTool: " .. tool)
 		local tools = {}
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup() ) .. "'" )
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			tab = tab[1]
 			tools = string.Explode( ",", tab.string_tools)
 		end
@@ -1509,11 +1509,11 @@ hook.Add( "CanTool", "yrp_can_tool", function(pl, tr, tool)
 end)
 
 hook.Add( "CanProperty", "yrp_canproperty", function(pl, property, ent)
-	if EntityAlive(pl) and NotNilAndNotFalse(property) and pl.GetUserGroup != nil then
+	if EntityAlive(pl) and IsNotNilAndNotFalse(property) and pl.GetUserGroup != nil then
 		--YRP.msg( "gm", "CanProperty: " .. property)
 		local tools = {}
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup() ) .. "'" )
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			tab = tab[1]
 			tools = string.Explode( ",", tab.string_tools)
 		end
@@ -1535,7 +1535,7 @@ end)
 function Player:UserGroupLoadout()
 	--YRP.msg( "gm", self:SteamName() .. " UserGroupLoadout" )
 	local UG = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. string.lower( self:GetUserGroup() ) .. "'" )
-	if NotNilAndNotFalse(UG) then
+	if IsNotNilAndNotFalse(UG) then
 		UG = UG[1]
 
 		self:SetYRPString( "usergroupDisplayname", UG.string_displayname)
@@ -1694,7 +1694,7 @@ net.Receive( "get_perma_props", function(len, ply)
 
 	ply.ppid = ply.ppid or 0
 
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		ply.ppid = ply.ppid + 1
 		local ppid = ply.ppid
 		local sortedtab = {}
@@ -1760,7 +1760,7 @@ net.Receive( "yrp_pp_teleport", function(len, ply)
 
 	if YRP_SQL_TABLE_EXISTS( "permaprops" ) then
 		local tab = YRP_SQL_SELECT( "permaprops", "*", "id = '" .. ppid .. "'" )
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			tab = tab[1]
 
 			tab.content = util.JSONToTable(tab.content)
@@ -1779,7 +1779,7 @@ net.Receive( "get_perma_props2", function(len, ply)
 
 	ply.ppid = ply.ppid or 0
 
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		ply.ppid = ply.ppid + 1
 		local ppid = ply.ppid
 		local sortedtab = {}
@@ -1846,7 +1846,7 @@ net.Receive( "yrp_pp_teleport2", function(len, ply)
 
 	if YRP_SQL_TABLE_EXISTS( "permaprops_system" ) then
 		local tab = YRP_SQL_SELECT( "permaprops_system", "*", "id = '" .. ppid .. "'" )
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			tab = tab[1]
 
 			tab.data = util.JSONToTable(tab.data)
@@ -1860,7 +1860,7 @@ util.AddNetworkString( "get_usergroup_licenses" )
 net.Receive( "get_usergroup_licenses", function(len, ply)
 	local licenses = YRP_SQL_SELECT( "yrp_licenses", "*", nil)
 
-	if NotNilAndNotFalse(licenses) then
+	if IsNotNilAndNotFalse(licenses) then
 		net.Start( "get_usergroup_licenses" )
 			net.WriteTable(licenses)
 		net.Send(ply)

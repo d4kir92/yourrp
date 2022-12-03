@@ -49,7 +49,7 @@ end
 local yrp_sql = {}
 
 local _init_yrp_sql = sql.Query( "SELECT * FROM " .. DATABASE_NAME)
-if NotNilAndNotFalse(_init_yrp_sql) then
+if IsNotNilAndNotFalse(_init_yrp_sql) then
 	yrp_sql = _init_yrp_sql[1]
 end
 

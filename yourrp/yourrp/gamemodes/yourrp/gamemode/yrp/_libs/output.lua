@@ -377,7 +377,7 @@ function YRPGetCountryName( id, from )
 	end
 	id = string.upper( id )
 	local countryname = countries[id]
-	if NotNilAndNotFalse( countryname ) then
+	if IsNotNilAndNotFalse( countryname ) then
 		return countryname
 	elseif string.len( id ) == 2 then
 		YRP.msg( "error", "[YRPGetCountryName] Missing Country: " .. tostring( id ) )

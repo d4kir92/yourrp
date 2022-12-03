@@ -962,7 +962,7 @@ net.Receive( "yrpsendanim", function()
 	local activity = net.ReadInt(32)
 	local loop = net.ReadBool()
 
-	if ply:IsValid() and NotNilAndNotFalse(slot) and NotNilAndNotFalse( activity) and NotNilAndNotFalse(loop) then
+	if ply:IsValid() and IsNotNilAndNotFalse(slot) and IsNotNilAndNotFalse( activity) and IsNotNilAndNotFalse(loop) then
 		ply:AnimRestartGesture(slot, activity, loop)
 	end
 end)
@@ -971,7 +971,7 @@ net.Receive( "yrpstopanim", function()
 	local ply = net.ReadEntity()
 	local slot = net.ReadInt(32)
 
-	if ply:IsValid() and NotNilAndNotFalse(slot) then
+	if ply:IsValid() and IsNotNilAndNotFalse(slot) then
 		ply:AnimResetGestureSlot(slot)
 	end
 end)

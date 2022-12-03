@@ -13,7 +13,7 @@ net.Receive( "yrp_get_macros", function(len, ply)
 	if ply:HasAccess() then
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*" )
 
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			net.Start( "yrp_get_macros" )
 				net.WriteTable(tab)
 			net.Send(ply)

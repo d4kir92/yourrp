@@ -55,7 +55,7 @@ end
 -- Local Table
 local yrp_ply_groups = {}
 local _init_ply_groups = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-if NotNilAndNotFalse(_init_ply_groups) then
+if IsNotNilAndNotFalse(_init_ply_groups) then
 	yrp_ply_groups = _init_ply_groups[1]
 end
 
@@ -84,7 +84,7 @@ for str, val in pairs(yrp_ply_groups) do
 			if tab.netstr == "update_group_string_name" then
 				util.AddNetworkString( "settings_group_update_name" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-				if NotNilAndNotFalse(puid) then
+				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
 					tab.netstr = "settings_group_update_name"
@@ -95,7 +95,7 @@ for str, val in pairs(yrp_ply_groups) do
 			elseif tab.netstr == "update_group_string_color" then
 				util.AddNetworkString( "settings_group_update_color" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-				if NotNilAndNotFalse(puid) then
+				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
 					tab.netstr = "settings_group_update_color"
@@ -106,7 +106,7 @@ for str, val in pairs(yrp_ply_groups) do
 			elseif tab.netstr == "update_group_string_icon" then
 				util.AddNetworkString( "settings_group_update_icon" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-				if NotNilAndNotFalse(puid) then
+				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
 					tab.netstr = "settings_group_update_icon"
@@ -133,7 +133,7 @@ for str, val in pairs(yrp_ply_groups) do
 			tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
 			BroadcastInt(tab)
 			if tab.netstr == "update_group_int_parentgroup" then
-				if NotNilAndNotFalse( cur) then
+				if IsNotNilAndNotFalse( cur) then
 					cur = cur[1]
 					SendGroupList(tonumber( cur.int_parentgroup) )
 				end
@@ -225,7 +225,7 @@ end)
 function SortGroups(uid)
 	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. uid .. "'" )
 
-	if NotNilAndNotFalse(siblings) then
+	if IsNotNilAndNotFalse(siblings) then
 		for i, sibling in pairs(siblings) do
 			sibling.int_position = tonumber(sibling.int_position)
 		end
@@ -243,19 +243,19 @@ function SendGroupList(uid)
 	SortGroups(uid)
 
 	local tbl_parentgroup = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	if !NotNilAndNotFalse(tbl_parentgroup) or uid < 1 then
+	if !IsNotNilAndNotFalse(tbl_parentgroup) or uid < 1 then
 		tbl_parentgroup = {}
 	else
 		tbl_parentgroup = tbl_parentgroup[1]
 	end
 
 	local tbl_groups = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. uid .. "'" )
-	if !NotNilAndNotFalse(tbl_groups) then
+	if !IsNotNilAndNotFalse(tbl_groups) then
 		tbl_groups = {}
 	end
 	local currentuid = uid
 	local parentuid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(parentuid) then
+	if IsNotNilAndNotFalse(parentuid) then
 		parentuid = parentuid[1].int_parentgroup
 	else
 		parentuid = 0
@@ -276,7 +276,7 @@ end
 function DuplicateGroup(guid)
 	guid = tonumber(guid)
 	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. guid .. "'" )
-	if NotNilAndNotFalse(group) then
+	if IsNotNilAndNotFalse(group) then
 		group = group[1]
 
 		local cols = {}
@@ -296,7 +296,7 @@ function DuplicateGroup(guid)
 		last = last[table.Count(last)]
 
 		local roles = YRP_SQL_SELECT( "yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'" )
-		if NotNilAndNotFalse(roles) then
+		if IsNotNilAndNotFalse(roles) then
 			for i, role in pairs(roles) do
 				DuplicateRole(role.uniqueID, last.uniqueID)
 			end
@@ -404,7 +404,7 @@ net.Receive( "settings_subscribe_group", function(len, ply)
 	SubscribeGroup(ply, uid)
 
 	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	if !NotNilAndNotFalse(group) then
+	if !IsNotNilAndNotFalse(group) then
 		group = {}
 	else
 		group = group[1]
@@ -471,7 +471,7 @@ end
 
 function DeleteGroup(guid, recursive)
 	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. guid .. "'" )
-	if NotNilAndNotFalse(group) then
+	if IsNotNilAndNotFalse(group) then
 		group = group[1]
 		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. guid .. "'" )
 
@@ -484,7 +484,7 @@ function DeleteGroup(guid, recursive)
 		else
 			-- Position richtig anordnen
 			local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. group.int_parentgroup .. "'" )
-			if NotNilAndNotFalse(siblings) then
+			if IsNotNilAndNotFalse(siblings) then
 				for i, sibling in pairs(siblings) do
 					sibling.int_position = tonumber(sibling.int_position)
 				end
@@ -516,7 +516,7 @@ net.Receive( "get_grps", function(len, ply)
 	local _uid = tonumber(net.ReadString() )
 
 	local _get_grps = YRP_SQL_SELECT( "yrp_ply_groups", "*", "int_parentgroup = " .. _uid)
-	if NotNilAndNotFalse(_get_grps) then
+	if IsNotNilAndNotFalse(_get_grps) then
 		net.Start( "get_grps" )
 			net.WriteTable(_get_grps)
 		net.Send(ply)
@@ -525,7 +525,7 @@ end)
 
 function GetGroupTable(gid)
 	local result = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. gid .. "'" )
-	if NotNilAndNotFalse(result) then
+	if IsNotNilAndNotFalse(result) then
 		result = result[1]
 	end
 	return result
@@ -537,7 +537,7 @@ net.Receive( "yrp_factionselection_getfactions", function(len, ply)
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_icon, string_name, string_description, bool_visible_cc, bool_visible_rm", "int_parentgroup = '0'" )
 
 	local nettab = {}
-	if NotNilAndNotFalse( dbtab) then
+	if IsNotNilAndNotFalse( dbtab) then
 		nettab = dbtab
 	end
 
@@ -552,14 +552,14 @@ net.Receive( "yrp_roleselection_getgroups", function(len, ply)
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. fuid .. "'" )
 
 	local nettab = {}
-	if NotNilAndNotFalse( dbtab) then
+	if IsNotNilAndNotFalse( dbtab) then
 		nettab = dbtab
 	end
 
 	local factioncount = 0
 	local fatab = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. 0 .. "'" )
 
-	if NotNilAndNotFalse(fatab) then
+	if IsNotNilAndNotFalse(fatab) then
 		for i, v in pairs(fatab) do
 			factioncount = factioncount + 1
 		end
@@ -580,14 +580,14 @@ net.Receive( "yrp_roleselection_getcontent", function(len, ply)
 	local roltab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'" )
 	local grptab = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. guid .. "'" )
 	
-	if NotNilAndNotFalse( roltab ) then
+	if IsNotNilAndNotFalse( roltab ) then
 		for i, v in pairs(roltab) do
 			v.pms = GetPlayermodelsOfRole( v.uniqueID)
 			YRPUpdateRoleUses( v.uniqueID)
 		end
 	end
 	
-	if NotNilAndNotFalse( roltab ) then
+	if IsNotNilAndNotFalse( roltab ) then
 		for i, rol in pairs( roltab ) do
 			if rol then
 				net.Start( "yrp_roleselection_getcontent_role" )
@@ -597,7 +597,7 @@ net.Receive( "yrp_roleselection_getcontent", function(len, ply)
 		end
 	end
 
-	if NotNilAndNotFalse( grptab ) then
+	if IsNotNilAndNotFalse( grptab ) then
 		for i, grp in pairs( grptab ) do
 			if grp then
 				net.Start( "yrp_roleselection_getcontent_group" )
@@ -613,7 +613,7 @@ net.Receive( "yrp_roleselection_getrole", function(len, ply)
 	local ruid = net.ReadString()
 
 	local roltab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'" )
-	if NotNilAndNotFalse(roltab) then
+	if IsNotNilAndNotFalse(roltab) then
 		for i, v in pairs(roltab) do
 			v.pms = GetPlayermodelsOfRole( v.uniqueID)
 		end
@@ -632,7 +632,7 @@ net.Receive( "yrp_char_getrole", function(len, ply)
 	local ruid = net.ReadString()
 	local roltab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'" )
 	
-	if NotNilAndNotFalse(roltab) then
+	if IsNotNilAndNotFalse(roltab) then
 		for i, v in pairs(roltab) do
 			v.pms = GetPlayermodelsOfRole( v.uniqueID)
 		end
@@ -651,7 +651,7 @@ end)
 -- SWEPS
 function GetGroup(uid)
 	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(group) then
+	if IsNotNilAndNotFalse(group) then
 		return group[1]
 	end
 	return nil
@@ -659,7 +659,7 @@ end
 
 function SendSwepsGroup(uid)
 	local group = GetGroup(uid)
-	if NotNilAndNotFalse(group) then
+	if IsNotNilAndNotFalse(group) then
 		local nettab = {}
 		local sweps = string.Explode( ",", group.string_sweps)
 		for i, swep in pairs(sweps) do
@@ -688,7 +688,7 @@ end)
 
 function AddSwepToGroup(guid, swepcn)
 	local group = GetGroup(guid)
-	if NotNilAndNotFalse(group) then
+	if IsNotNilAndNotFalse(group) then
 		local sweps = string.Explode( ",", group.string_sweps)
 		if !table.HasValue(sweps, tostring(swepcn) ) then
 			local oldsweps = {}
@@ -718,7 +718,7 @@ end)
 
 function RemSwepFromGroup(guid, swepcn)
 	local group = GetGroup(guid)
-	if NotNilAndNotFalse(group) then
+	if IsNotNilAndNotFalse(group) then
 		local sweps = string.Explode( ",", group.string_sweps)
 		local oldsweps = {}
 		for i, v in pairs(sweps) do

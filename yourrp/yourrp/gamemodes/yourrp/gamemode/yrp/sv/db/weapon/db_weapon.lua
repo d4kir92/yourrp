@@ -16,7 +16,7 @@ end
 
 function YRPSetWeaponSettings()
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		tab = tab[1]
 		
 		SetGlobalYRPInt( "yrp_max_slots_primary", 		tonumber(tab.slots_primary) )
@@ -51,7 +51,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_no", "INT DEFAULT 0" )
 
 function YRPGetSlotsOfSWEP( cn)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'" )
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		tab = tab[1]
 		tab.slot_primary = tobool(tab.slot_primary)
 		tab.slot_secondary = tobool(tab.slot_secondary)
@@ -70,7 +70,7 @@ util.AddNetworkString( "yrp_weapon_menu" )
 net.Receive( "yrp_weapon_menu", function(len, ply)
 	if ply:CanAccess( "bool_weapons" ) then
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			tab = tab[1]
 		else
 			tab = {}
@@ -78,7 +78,7 @@ net.Receive( "yrp_weapon_menu", function(len, ply)
 
 		local tab2 = YRP_SQL_SELECT(DATABASE_NAME2, "*", nil)
 		local tab2s = {}
-		if NotNilAndNotFalse(tab2) then
+		if IsNotNilAndNotFalse(tab2) then
 			for i, v in pairs(tab2) do
 				tab2s[v.classname] = v
 			end
@@ -99,7 +99,7 @@ net.Receive( "yrp_set_slot_weapon", function(len, ply)
 		local bo = net.ReadBool()
 		
 		local tab = YRP_SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'" )
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			YRP_SQL_UPDATE(DATABASE_NAME2, {[ar] = tonum( bo)}, "classname = '" .. cn .. "'" )
 		else
 			YRP_SQL_INSERT_INTO(DATABASE_NAME2, "'" .. "classname" .. "', " .. YRP_SQL_STR_IN( ar ) .. "", "" .. YRP_SQL_STR_IN( cn ) .. ", '" .. tonum( bo) .. "'" )

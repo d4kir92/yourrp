@@ -187,7 +187,7 @@ concommand.Add( "yrp_givelicense", function(ply, cmd, args)
 
 	local lid = GetLicenseIDByName(lname)
 
-	if IsValid(ply) and NotNilAndNotFalse(lid) then
+	if IsValid(ply) and IsNotNilAndNotFalse(lid) then
 		GiveLicense(ply, lid)
 	else
 		YRP.msg( "note", "[yrp_givelicense] Not found" )

@@ -81,7 +81,7 @@ function SWEP:Think()
 					YRP.msg( "db", "Option Jailpoint" )
 
 					local stab = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' AND uniqueID = '" .. v.uniqueID .. "'" )
-					if NotNilAndNotFalse(stab) then
+					if IsNotNilAndNotFalse(stab) then
 						stab = stab[1]
 						net.Start( "yrp_jailpoints_options" )
 							net.WriteTable(stab)

@@ -15,7 +15,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_size_min", "TEXT DEFAULT '1'" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_size_max", "TEXT DEFAULT '1'" )
 
 local oldpms = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-if NotNilAndNotFalse(oldpms) then
+if IsNotNilAndNotFalse(oldpms) then
 	for i, pm in pairs(oldpms) do
 		if pm.string_model != nil and pm.string_model != "" and pm.string_models == "" then
 			YRP_SQL_UPDATE(DATABASE_NAME, {["string_models"] = pm.string_model}, "uniqueID = '" .. pm.uniqueID .. "'" )
@@ -25,7 +25,7 @@ end
 
 local usedpms = {}
 local roles = YRP_SQL_SELECT( "yrp_ply_roles", "string_playermodels, uniqueID", nil)
-if NotNilAndNotFalse(roles) then
+if IsNotNilAndNotFalse(roles) then
 	for i, role in pairs(roles) do
 		if role.string_playermodels then
 			local pms = string.Explode( ",", role.string_playermodels)
@@ -39,7 +39,7 @@ if NotNilAndNotFalse(roles) then
 end
 
 local pms = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-if NotNilAndNotFalse(pms) then
+if IsNotNilAndNotFalse(pms) then
 	for i, pm in pairs(oldpms) do
 		if !table.HasValue(usedpms, pm.uniqueID) then
 			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. pm.uniqueID .. "'" )
@@ -58,7 +58,7 @@ net.Receive( "rem_playermodel", function(len, ply)
 
 	local test = YRP_SQL_SELECT( DATABASE_NAME, "*", "uniqueID = '" .. muid .. "'" )
 
-	if NotNilAndNotFalse(test) then
+	if IsNotNilAndNotFalse(test) then
 		pms = test[1].string_models
 	end
 

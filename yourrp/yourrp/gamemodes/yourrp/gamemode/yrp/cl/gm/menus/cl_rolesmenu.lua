@@ -139,7 +139,7 @@ function createRoleBox(rol, parent, mainparent)
 					if IsValid( dmp) then
 						dmp:SetModel(pmtab.string_model)
 						local randsize = math.Rand(pmtab.float_size_min, pmtab.float_size_max)
-						if NotNilAndNotFalse( dmp.Entity) then
+						if IsNotNilAndNotFalse( dmp.Entity) then
 							dmp.Entity:SetModelScale(randsize + 1, 0)
 							dmp.Entity:SetPos( Vector(0, 0, - 40) )
 						end
@@ -367,7 +367,7 @@ function getGroups(uid, parent)
 			end
 		end
 		timer.Simple(0.2, function()
-			if NotNilAndNotFalse( dg) and NotNilAndNotFalse( dg.header) then
+			if IsNotNilAndNotFalse( dg) and IsNotNilAndNotFalse( dg.header) then
 				dg.header:DoClick()
 			end
 		end)

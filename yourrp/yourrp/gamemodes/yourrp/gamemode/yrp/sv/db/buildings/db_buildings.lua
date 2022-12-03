@@ -24,7 +24,7 @@ function IsUnderGroup(uid, tuid)
 	local group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'" )
 	group = group[1]
 	local undergroup = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'" )
-	if NotNilAndNotFalse(undergroup) then
+	if IsNotNilAndNotFalse(undergroup) then
 		undergroup = undergroup[1]
 		if tonumber(undergroup.uniqueID) == tonumber(tuid) then
 			return true
@@ -37,7 +37,7 @@ end
 
 function IsUnderGroupOf(ply, uid)
 	local ply_group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. ply:GetGroupUID() .. "'" )
-	if NotNilAndNotFalse(ply_group) then
+	if IsNotNilAndNotFalse(ply_group) then
 		ply_group = ply_group[1]
 		local group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. ply_group.uniqueID .. "'" )
 		group = group[1]
@@ -52,7 +52,7 @@ function allowedToUseDoor(id, ply, door)
 		return true
 	else
 		local _tmpBuildingTable = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. id .. "'" )
-		if NotNilAndNotFalse(_tmpBuildingTable) then
+		if IsNotNilAndNotFalse(_tmpBuildingTable) then
 			local bui_cuid = _tmpBuildingTable[1].ownerCharID
 			local bui_guid = _tmpBuildingTable[1].groupID
 			if (tostring( bui_cuid) == "" or tostring( bui_cuid) == " " ) and tonumber(_tmpBuildingTable[1].groupID) == -1 then
@@ -61,7 +61,7 @@ function allowedToUseDoor(id, ply, door)
 				local _tmpChaTab = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. bui_cuid)
 
 				local removeowner = false
-				if !NotNilAndNotFalse(_tmpChaTab) then -- If char not available anymore => remove ownership
+				if !IsNotNilAndNotFalse(_tmpChaTab) then -- If char not available anymore => remove ownership
 					YRP_SQL_UPDATE(DATABASE_NAME_BUILDINGS, {["ownerCharID"] = ""}, "uniqueID = '" .. id .. "'" )
 					
 					door:SetYRPString( "ownerRPName", "" )
@@ -100,7 +100,7 @@ function searchForDoors()
 		YRP_SQL_INSERT_INTO_DEFAULTVALUES( "yrp_" .. GetMapNameDB() .. "_buildings" )
 
 		local _tmpBuildingTable = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
-		if NotNilAndNotFalse(_tmpBuildingTable) then
+		if IsNotNilAndNotFalse(_tmpBuildingTable) then
 			YRP_SQL_INSERT_INTO( "yrp_" .. GetMapNameDB() .. "_doors", "buildingID", "'" .. _tmpBuildingTable[table.Count(_tmpBuildingTable)].uniqueID .. "'" )
 
 			local _tmpDoorsTable = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
@@ -118,7 +118,7 @@ function loadDoors()
 		YRP.msg( "db", "[Buildings] Setting up Doors!" )
 		local _tmpDoors = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 
-		if NotNilAndNotFalse(_tmpDoors) then
+		if IsNotNilAndNotFalse(_tmpDoors) then
 			for i, door in pairs(GetAllDoors() ) do
 				if WORKED(_tmpDoors[i], "loadDoors 2" ) then
 					door:SetYRPString( "buildingID", _tmpDoors[i].buildingID)
@@ -131,7 +131,7 @@ function loadDoors()
 		end
 
 		local _tmpBuildings = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
-		if NotNilAndNotFalse(_tmpBuildings) then
+		if IsNotNilAndNotFalse(_tmpBuildings) then
 			for k, v in pairs(GetAllDoors() ) do
 				for l, w in pairs(_tmpBuildings) do
 					if tonumber(w.uniqueID) == tonumber( v:GetYRPString( "buildingID" ) ) then
@@ -139,9 +139,9 @@ function loadDoors()
 						v:SetYRPBool( "bool_hasowner", false)
 						if !strEmpty(w.ownerCharID) then
 							local tabChar = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. w.ownerCharID)
-							if NotNilAndNotFalse(tabChar) then
+							if IsNotNilAndNotFalse(tabChar) then
 								tabChar = tabChar[1]
-								if NotNilAndNotFalse(tabChar.rpname) then
+								if IsNotNilAndNotFalse(tabChar.rpname) then
 									v:SetYRPString( "ownerRPName", tabChar.rpname)
 									v:SetYRPInt( "ownerCharID", tonumber(w.ownerCharID) )
 									v:SetYRPBool( "bool_hasowner", true)
@@ -150,9 +150,9 @@ function loadDoors()
 						else
 							if tonumber(w.groupID) != 0 then
 								local _tmpGroupName = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", "uniqueID = " .. w.groupID)
-								if NotNilAndNotFalse(_tmpGroupName) then
+								if IsNotNilAndNotFalse(_tmpGroupName) then
 									_tmpGroupName = _tmpGroupName[1]
-									if NotNilAndNotFalse(_tmpGroupName) then
+									if IsNotNilAndNotFalse(_tmpGroupName) then
 										v:SetYRPInt( "ownerGroupUID", _tmpGroupName.uniqueID)
 										v:SetYRPString( "ownerGroup", tostring(_tmpGroupName.string_name) )
 										v:SetYRPBool( "bool_hasowner", true)
@@ -196,7 +196,7 @@ function YRPCheckMapDoors()
 	--YRP.msg( "db", "[Buildings] Get Database Doors and Buildings" )
 	local _tmpTable = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 	local _tmpTable2 = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
-	if NotNilAndNotFalse(_tmpTable) and NotNilAndNotFalse(_tmpTable2) then
+	if IsNotNilAndNotFalse(_tmpTable) and IsNotNilAndNotFalse(_tmpTable2) then
 		--YRP.msg( "db", "[Buildings] Found! ( " .. tostring(table.Count(_tmpTable) ) .. " Doors | " .. tostring(table.Count(_tmpTable) ) .. " Buildings)" )
 		local doors = GetAllDoors()
 		if (table.Count(_tmpTable) ) < (table.Count( doors) ) then
@@ -307,7 +307,7 @@ function BuildingRemoveOwner( SteamID )
 	YRP.msg( "db", "BuildingRemoveOwner( " .. tostring(SteamID) .. " )" )
 	local chars = YRP_SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. SteamID .. "'" )
 
-	if NotNilAndNotFalse( chars ) then
+	if IsNotNilAndNotFalse( chars ) then
 		for i, c in pairs( chars ) do
 			local charid = c.uniqueID
 			for k, v in pairs( GetAllDoors() ) do
@@ -382,7 +382,7 @@ net.Receive( "buyBuilding", function(len, ply)
 				ply:addMoney(- _tmpTable[1].buildingprice)
 				YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", {["ownerCharID"] = ply:CharID()}, "uniqueID = '" .. _tmpBuildingID .. "'" )
 				local tabChar = YRP_SQL_SELECT( "yrp_characters", "rpname", "uniqueID = " .. ply:CharID() )
-				if NotNilAndNotFalse(tabChar) then
+				if IsNotNilAndNotFalse(tabChar) then
 					tabChar = tabChar[1]
 				end
 				for k, v in pairs(GetAllDoors() ) do
@@ -411,7 +411,7 @@ net.Receive( "setBuildingOwnerGroup", function(len, ply)
 	YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", {["groupID"] = _tmpGroupID}, "uniqueID = " .. _tmpBuildingID)
 
 	local _tmpGroupName = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", "uniqueID = " .. _tmpGroupID)
-	if NotNilAndNotFalse(_tmpGroupName) then
+	if IsNotNilAndNotFalse(_tmpGroupName) then
 		for k, v in pairs(GetAllDoors() ) do
 			if tonumber( v:GetYRPString( "buildingID" ) ) == tonumber(_tmpBuildingID) then
 				v:SetYRPInt( "ownerGroupUID", _tmpGroupName[1].uniqueID)
@@ -487,7 +487,7 @@ end
 
 function lookForEmptyBuildings()
 	local _allBuildings = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
-	if NotNilAndNotFalse(_allBuildings) then
+	if IsNotNilAndNotFalse(_allBuildings) then
 		for k, v in pairs(_allBuildings) do
 			if !hasDoors( v.uniqueID) then
 				YRP_SQL_DELETE_FROM( "yrp_" .. GetMapNameDB() .. "_buildings", "uniqueID = " .. tonumber( v.uniqueID) )
@@ -510,7 +510,7 @@ end)
 net.Receive( "changeBuildingName", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewName = net.ReadString()
-	if NotNilAndNotFalse(_tmpBuildingID) then
+	if IsNotNilAndNotFalse(_tmpBuildingID) then
 		YRP.msg( "note", "renamed Building: " .. _tmpNewName)
 		YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", {["name"] = _tmpNewName}, "uniqueID = " .. _tmpBuildingID)
 	else
@@ -528,7 +528,7 @@ end
 
 function ChangeBuildingBool(uid, net_str, new_boo)
 	local tabBuilding = YRP_SQL_SELECT(DATABASE_NAME_BUILDINGS, "*", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(tabBuilding) then
+	if IsNotNilAndNotFalse(tabBuilding) then
 		tabBuilding = tabBuilding[1]
 	else
 		tabBuilding = {}
@@ -543,7 +543,7 @@ end
 net.Receive( "changeBuildingHeader", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewName = net.ReadString()
-	if NotNilAndNotFalse(_tmpBuildingID) then
+	if IsNotNilAndNotFalse(_tmpBuildingID) then
 		YRP.msg( "note", "header Building: " .. _tmpNewName)
 		YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", {["text_header"] = _tmpNewName}, "uniqueID = " .. _tmpBuildingID)
 		ChangeBuildingString(tonumber(_tmpBuildingID), "text_header", _tmpNewName)
@@ -555,7 +555,7 @@ end)
 net.Receive( "changeBuildingDescription", function(len, ply)
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewName = net.ReadString()
-	if NotNilAndNotFalse(_tmpBuildingID) then
+	if IsNotNilAndNotFalse(_tmpBuildingID) then
 		YRP.msg( "note", "description Building: " .. _tmpNewName)
 		YRP_SQL_UPDATE( "yrp_" .. GetMapNameDB() .. "_buildings", {["text_description"] = _tmpNewName}, "uniqueID = " .. _tmpBuildingID)
 		ChangeBuildingString(tonumber(_tmpBuildingID), "text_description", _tmpNewName)
@@ -567,7 +567,7 @@ end)
 function GetDoors()
 	local _tmpTable = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "name, uniqueID", "name != 'Building'" )
 
-	if NotNilAndNotFalse(_tmpTable) then
+	if IsNotNilAndNotFalse(_tmpTable) then
 		for k, building in pairs(_tmpTable) do
 			local _doors = 0
 			_tmpDoors = ents.FindByClass( "prop_door_rotating" )
@@ -593,7 +593,7 @@ function GetDoors()
 			building.doors = _doors
 		end
 	end
-	if !NotNilAndNotFalse(_tmpTable) then
+	if !IsNotNilAndNotFalse(_tmpTable) then
 		_tmpTable = {}
 	end
 
@@ -634,16 +634,16 @@ net.Receive( "getBuildingInfo", function(len, ply)
 	local tabBuilding = {}
 	local tabOwner = {}
 	local tabGroup = {}
-	if NotNilAndNotFalse( buid) and buid != "nil" then
+	if IsNotNilAndNotFalse( buid) and buid != "nil" then
 		tabBuilding = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. buid .. "'" )
 		--local owner = ""
-		if NotNilAndNotFalse(tabBuilding) then
+		if IsNotNilAndNotFalse(tabBuilding) then
 			tabBuilding = tabBuilding[1]
 			tabBuilding.name = tabBuilding.name
 			tabBuilding.groupID = tonumber(tabBuilding.groupID)
 			if !strEmpty(tabBuilding.ownerCharID) then
 				tabOwner = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = '" .. tabBuilding.ownerCharID .. "'" )
-				if NotNilAndNotFalse(tabOwner) then
+				if IsNotNilAndNotFalse(tabOwner) then
 					tabOwner = tabOwner[1]
 					--owner = tabOwner.rpname
 				else
@@ -652,7 +652,7 @@ net.Receive( "getBuildingInfo", function(len, ply)
 				end
 			elseif tabBuilding.groupID != 0 then
 				tabGroup = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. tabBuilding.groupID .. "'" )
-				if NotNilAndNotFalse(tabGroup) then
+				if IsNotNilAndNotFalse(tabGroup) then
 					tabGroup = tabGroup[1]
 					--owner = _tmpGroTab.string_name
 				else

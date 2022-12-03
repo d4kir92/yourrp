@@ -256,7 +256,7 @@ util.AddNetworkString( "GetLicenseName" )
 net.Receive( "GetLicenseName", function(len, ply)
 	local id = net.ReadInt(32)
 	local lic = YRP_SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'" )
-	if NotNilAndNotFalse(lic) then
+	if IsNotNilAndNotFalse(lic) then
 		lic = lic[1]
 		net.Start( "GetLicenseName" )
 			net.WriteString(id)
@@ -277,7 +277,7 @@ function GetLicenseIDByName(lname)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*" )
 	local lid = nil
 
-	if !NotNilAndNotFalse(tab) then return nil end
+	if !IsNotNilAndNotFalse(tab) then return nil end
 
 	for i, lic in pairs(tab) do
 		lic.name = lic.name
@@ -296,7 +296,7 @@ end
 
 function GiveLicense(ply, lid)
 	if !IsValid(ply) then return end
-	if !NotNilAndNotFalse(lid) then return end
+	if !IsNotNilAndNotFalse(lid) then return end
 
 	YRP.msg( "gm", "Give " .. ply:RPName() .. " LicenseID " .. lid)
 
@@ -307,7 +307,7 @@ end
 
 function RemoveLicense(ply, lid)
 	if !IsValid(ply) then return end
-	if !NotNilAndNotFalse(lid) then return end
+	if !IsNotNilAndNotFalse(lid) then return end
 
 	YRP.msg( "gm", "Removed from " .. ply:RPName() .. " LicenseID " .. lid)
 

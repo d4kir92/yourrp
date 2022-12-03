@@ -26,7 +26,7 @@ util.AddNetworkString( "yrpInfoBox" )
 util.AddNetworkString( "getGroupsWhitelist" )
 net.Receive( "getGroupsWhitelist", function(len, ply)
 	local _tmpGroupList = YRP_SQL_SELECT( "yrp_ply_groups", "string_name, uniqueID", nil)
-	if NotNilAndNotFalse(_tmpGroupList) then
+	if IsNotNilAndNotFalse(_tmpGroupList) then
 		net.Start( "getGroupsWhitelist" )
 			net.WriteTable(_tmpGroupList)
 		net.Send(ply)
@@ -36,7 +36,7 @@ end)
 util.AddNetworkString( "getRolesWhitelist" )
 net.Receive( "getRolesWhitelist", function(len, ply)
 	local _tmpRoleList = YRP_SQL_SELECT( "yrp_ply_roles", "int_groupID, string_name, uniqueID", nil)
-	if NotNilAndNotFalse(_tmpRoleList) then
+	if IsNotNilAndNotFalse(_tmpRoleList) then
 		net.Start( "getRolesWhitelist" )
 			net.WriteTable(_tmpRoleList)
 		net.Send(ply)
@@ -46,7 +46,7 @@ end)
 function sendRoleWhitelist(ply)
 	local tabW = YRP_SQL_SELECT( "yrp_role_whitelist", "*", nil)
 
-	if !NotNilAndNotFalse(tabW) then
+	if !IsNotNilAndNotFalse(tabW) then
 		tabW = {}
 	end
 
@@ -56,13 +56,13 @@ function sendRoleWhitelist(ply)
 
 		if v.groupID > 0 then
 			local tabG = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. v.groupID .. "'" )
-			if !NotNilAndNotFalse(tabG) then
+			if !IsNotNilAndNotFalse(tabG) then
 				YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. v.uniqueID .. "'" )
 			end
 		end
 		if v.roleID > 0 then
 			local tabR = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. v.roleID .. "'" )
-			if !NotNilAndNotFalse(tabR) then
+			if !IsNotNilAndNotFalse(tabR) then
 				YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. v.uniqueID .. "'" )
 			end
 		end
@@ -71,7 +71,7 @@ function sendRoleWhitelist(ply)
 	if ply:CanAccess( "bool_whitelist" ) then
 		local _tmpWhiteList = YRP_SQL_SELECT( "yrp_role_whitelist", "*", nil)
 
-		if !NotNilAndNotFalse(_tmpWhiteList) then
+		if !IsNotNilAndNotFalse(_tmpWhiteList) then
 			_tmpWhiteList = {}
 		end
 
@@ -113,7 +113,7 @@ net.Receive( "whitelistPlayer", function(len, ply)
 		end
 		local roleID = net.ReadInt(16)
 		local DBRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. roleID)
-		if NotNilAndNotFalse(DBRole) then
+		if IsNotNilAndNotFalse(DBRole) then
 			DBRole = DBRole[1]
 			local _groupID = DBRole.int_groupID
 
@@ -143,7 +143,7 @@ net.Receive( "whitelistPlayerGroup", function(len, ply)
 		end
 		local groupID = net.ReadInt(16)
 		local DBGroup = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. groupID)
-		if NotNilAndNotFalse(DBGroup) then
+		if IsNotNilAndNotFalse(DBGroup) then
 			DBGroup = DBGroup[1]
 		end
 		local dat = util.DateStamp()
@@ -190,7 +190,7 @@ function WhitelistToRole(ply, rid)
 	local roleID = rid
 
 	local DBRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. roleID)
-	if NotNilAndNotFalse(DBRole) then
+	if IsNotNilAndNotFalse(DBRole) then
 		DBRole = DBRole[1]
 		local _groupID = DBRole.int_groupID
 

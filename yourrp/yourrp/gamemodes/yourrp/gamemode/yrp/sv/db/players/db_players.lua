@@ -143,7 +143,7 @@ function YRPSetRole( ply, rid, force, pmid, bgs )
 	-- SWEPS
 	local ChaTab = ply:YRPGetCharacterTable()
 	local rolTab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'" )
-	if (GetGlobalYRPBool( "bool_weapon_system", true) and NotNilAndNotFalse(ChaTab) and NotNilAndNotFalse(rolTab)) and (ply:GetYRPBool( "yrp_reset_charloadout" ) or rid != ply:GetRoleUID()) then
+	if (GetGlobalYRPBool( "bool_weapon_system", true) and IsNotNilAndNotFalse(ChaTab) and IsNotNilAndNotFalse(rolTab)) and (ply:GetYRPBool( "yrp_reset_charloadout" ) or rid != ply:GetRoleUID()) then
 		rolTab = rolTab[1]
 
 		ply:SetYRPBool( "yrp_reset_charloadout", false )
@@ -197,7 +197,7 @@ function YRPSetRole( ply, rid, force, pmid, bgs )
 		end
 		
 		local rolTab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'" )
-		if NotNilAndNotFalse(rolTab) then
+		if IsNotNilAndNotFalse(rolTab) then
 			rolTab = rolTab[1]
 			local tmpSWEPTable = string.Explode( ",", rolTab.string_sweps_onspawn)
 			for k, swep in pairs(tmpSWEPTable) do
@@ -211,7 +211,7 @@ function YRPSetRole( ply, rid, force, pmid, bgs )
 				end
 			end
 		end
-	elseif NotNilAndNotFalse(rolTab) then
+	elseif IsNotNilAndNotFalse(rolTab) then
 		rolTab = rolTab[1]
 		for i, swep in pairs(string.Explode( ",", rolTab.string_sweps) ) do
 			ply:Give(swep)
@@ -246,7 +246,7 @@ end
 
 function IsCardIDUnique(id)
 	local charTab = YRP_SQL_SELECT( "yrp_characters", "*", "text_idcardid = '" .. id .. "'" )
-	if NotNilAndNotFalse( charTab) then
+	if IsNotNilAndNotFalse( charTab) then
 		return false
 	end
 	return true
@@ -300,7 +300,7 @@ function RecreateNewIDCardID()
 
 	for i, ply in pairs(player.GetAll() ) do
 		local char = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = '" .. ply:CharID() .. "'" )
-		if NotNilAndNotFalse( char) then
+		if IsNotNilAndNotFalse( char) then
 			char = char[1]
 			ply:SetYRPString( "idcardid", char.text_idcardid)
 		end
@@ -324,7 +324,7 @@ function YRPSetRoleData(ply, rid)
 	local _char_id = ply:CharID()
 	if _char_id != nil then
 		local old_rid = ply:YRPGetCharacterTable()
-		if NotNilAndNotFalse(old_rid) then
+		if IsNotNilAndNotFalse(old_rid) then
 			old_rid = old_rid.roleID
 			local _result = YRP_SQL_UPDATE( "yrp_characters", {["roleID"] = rid}, "uniqueID = " .. ply:CharID() )
 			local gid = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. rid)
@@ -353,19 +353,19 @@ end
 
 function GetFactionTable(uid)
 	local group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(group) then
+	if IsNotNilAndNotFalse(group) then
 		group = group[1]
 		group.int_parentgroup = tonumber(group.int_parentgroup)
 		group.uniqueID = tonumber(group.uniqueID)
 		if group.int_parentgroup == group.uniqueID then
 			local undergroup = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. "0" .. "'" )
-			if NotNilAndNotFalse(undergroup) then
+			if IsNotNilAndNotFalse(undergroup) then
 				undergroup = undergroup[1]
 				return undergroup
 			end
 		elseif group.int_parentgroup != 0 then
 			local undergroup = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'" )
-			if NotNilAndNotFalse(undergroup) then
+			if IsNotNilAndNotFalse(undergroup) then
 				undergroup = undergroup[1]
 				return GetFactionTable(undergroup.uniqueID)
 			end
@@ -373,7 +373,7 @@ function GetFactionTable(uid)
 		return group
 	end
 	local undergroup = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. "0" .. "'" )
-	if NotNilAndNotFalse(undergroup) then
+	if IsNotNilAndNotFalse(undergroup) then
 		undergroup = undergroup[1]
 		return undergroup
 	end
@@ -407,7 +407,7 @@ function YRPSetRoleValues(ply, pmid)
 					pmid = 1
 				end
 				local pm = pms[pmid]
-				if NotNilAndNotFalse(pm) and pm.string_model then
+				if IsNotNilAndNotFalse(pm) and pm.string_model then
 					ply:SetYRPString( "string_playermodel", pm.string_model)
 					ply:SetModel(pm.string_model)
 
@@ -538,9 +538,9 @@ function YRPSetRoleValues(ply, pmid)
 
 			local customflags = string.Explode( ",", rolTab.string_customflags)
 			for i, flag in pairs( customflags) do
-				if NotNilAndNotFalse(flag) then
+				if IsNotNilAndNotFalse(flag) then
 					local fl = YRP_SQL_SELECT( "yrp_flags", "*", "uniqueID = '" .. flag .. "'" )
-					if NotNilAndNotFalse(fl) then
+					if IsNotNilAndNotFalse(fl) then
 						fl = fl[1]
 						ply:SetYRPBool( "bool_" .. fl.string_name, true)
 					end
@@ -558,7 +558,7 @@ function YRPSetRoleValues(ply, pmid)
 			ply:KillSilent()
 		end
 
-		if NotNilAndNotFalse(groTab) then
+		if IsNotNilAndNotFalse(groTab) then
 			ply:SetYRPString( "groupName", groTab.string_name)
 			ply:SetYRPString( "groupUniqueID", groTab.uniqueID)
 			ply:SetYRPString( "groupColor", groTab.string_color)
@@ -680,7 +680,7 @@ function YRPCheckPlayer(ply, steamid)
 
 		if _result == nil then
 			YRPAddPlayer(ply, steamid)
-		elseif NotNilAndNotFalse(_result) then
+		elseif IsNotNilAndNotFalse(_result) then
 			--YRP.msg( "db", "[" .. ply:SteamName() .. "] is in database." )
 			if #_result > 1 then
 				YRP.msg( "db", "[" .. ply:SteamName() .. "] is more then 1 time in database ( " .. #_result .. " )" )
@@ -713,7 +713,7 @@ end
 
 net.Receive( "getCharakterList", function(len, ply)
 	local _character_table = ply:YRPGetCharacterTable()
-	if NotNilAndNotFalse(_character_table) then
+	if IsNotNilAndNotFalse(_character_table) then
 		_character_table.rpname = _character_table.rpname
 		_character_table.rpdescription = _character_table.rpdescription
 		net.Start( "getCharakterList" )
@@ -793,7 +793,7 @@ end
 
 function YRPIsWhitelisted( ply, id )
 	local _role = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. id)
-	if NotNilAndNotFalse(_role) then
+	if IsNotNilAndNotFalse(_role) then
 		_role = _role[1]
 		
 		local steamid = ply:YRPSteamID()
@@ -807,12 +807,12 @@ function YRPIsWhitelisted( ply, id )
 		end
 		
 		local _group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. _role.int_groupID )
-		if NotNilAndNotFalse(_group) then
+		if IsNotNilAndNotFalse(_group) then
 			_group = _group[1]
 
 			local _plyAllowedGroup = YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND groupID = " .. _group.uniqueID)
 			if tonumber(_group.bool_whitelist) == 1 then
-				if NotNilAndNotFalse( _plyAllowedGroup ) then
+				if IsNotNilAndNotFalse( _plyAllowedGroup ) then
 					YRP.msg( "gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is group whitelisted." )
 					return true
 				else
@@ -828,7 +828,7 @@ function YRPIsWhitelisted( ply, id )
 				YRP.msg( "gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " has access." )
 				return true
 			else
-				if NotNilAndNotFalse(_plyAllowedRole) then
+				if IsNotNilAndNotFalse(_plyAllowedRole) then
 					YRP.msg( "gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is role whitelisted." )
 					return true
 				else
@@ -909,7 +909,7 @@ function canGetRole(ply, roleID, want)
 	local tmpTableRole = YRP_SQL_SELECT( "yrp_ply_roles" , "*", "uniqueID = '" .. roleID .. "'" )
 	local chatab = ply:YRPGetCharacterTable()
 
-	if NotNilAndNotFalse(tmpTableRole) then
+	if IsNotNilAndNotFalse(tmpTableRole) then
 		tmpTableRole = tmpTableRole[1]
 		if tonumber(tmpTableRole.int_uses) < tonumber(tmpTableRole.int_maxamount) or tonumber(tmpTableRole.int_maxamount) == 0 or tonumber(tmpTableRole.uniqueID) == ply:GetRoleUID() then
 			-- Admin only
@@ -932,7 +932,7 @@ function canGetRole(ply, roleID, want)
 			end
 
 			-- level check
-			if NotNilAndNotFalse( chatab) then
+			if IsNotNilAndNotFalse( chatab) then
 				if tonumber( chatab.int_level) < tonumber(tmpTableRole.int_requireslevel) then
 					local text = ply:YRPName() .. " is not high enough (is: " .. tonumber( chatab.int_level) .. " need: " .. tonumber(tmpTableRole.int_requireslevel) .. " )!"
 					YRP.msg( "gm", "[canGetRole] " .. text)
@@ -1000,7 +1000,7 @@ function YRPRemRolVals( ply )
 	end
 
 	local rolTab = ply:YRPGetRoleTable()
-	if NotNilAndNotFalse(rolTab) then
+	if IsNotNilAndNotFalse(rolTab) then
 		local _sweps = string.Explode( ",", rolTab.string_sweps)
 		for k, v in pairs(_sweps) do
 			if v and ply:HasWeapon( v ) then
@@ -1016,7 +1016,7 @@ function YRPRemGroVals(ply)
 	end
 	
 	local groTab = ply:YRPGetGroupTable()
-	if NotNilAndNotFalse(groTab) then
+	if IsNotNilAndNotFalse(groTab) then
 		local _sweps = string.Explode( ",", groTab.string_sweps)
 		for k, v in pairs(_sweps) do
 			ply:StripWeapon( v)

@@ -85,7 +85,7 @@ function optionVehicleWindow( vehicle, vehicleTab)
 end
 
 function openVehicleOptions( vehicle, vehicleID)
-	if NotNilAndNotFalse( vehicle) and NotNilAndNotFalse( vehicleID) then
+	if IsNotNilAndNotFalse( vehicle) and IsNotNilAndNotFalse( vehicleID) then
 		net.Start( "getVehicleInfo" )
 			net.WriteEntity( vehicle)
 			net.WriteString( vehicleID)

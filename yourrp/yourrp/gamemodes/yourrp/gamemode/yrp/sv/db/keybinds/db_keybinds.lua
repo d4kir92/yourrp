@@ -18,7 +18,7 @@ util.AddNetworkString( "SetServerKeybinds" )
 local PLAYER = FindMetaTable( "Player" )
 function PLAYER:SetServerKeybinds()
 	local selresult = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-	if NotNilAndNotFalse( selresult ) then
+	if IsNotNilAndNotFalse( selresult ) then
 		net.Start( "SetServerKeybinds" )
 			net.WriteTable( selresult )
 		net.Send( self )

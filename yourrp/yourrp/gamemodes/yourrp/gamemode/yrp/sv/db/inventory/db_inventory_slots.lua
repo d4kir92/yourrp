@@ -10,7 +10,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'" )
 
 function CreateSlot(storageID, inv)
 	storageID = tonumber(storageID)
-	if NotNilAndNotFalse(storageID) then
+	if IsNotNilAndNotFalse(storageID) then
 		if inv then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_storageID, text_type", "'" .. storageID .. "', '" .. "bag" .. "'" )
 		else
@@ -23,11 +23,11 @@ end
 
 function GetStorageSlots(storageID)
 	storageID = tonumber(storageID)
-	if NotNilAndNotFalse(storageID) then
+	if IsNotNilAndNotFalse(storageID) then
 		local slots = {}
 
 		local yrp_slots = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_storageID = '" .. storageID .. "'" )
-		if NotNilAndNotFalse(yrp_slots) then
+		if IsNotNilAndNotFalse(yrp_slots) then
 			slots = yrp_slots
 		else
 			YRP.msg( "db", "[GetStorageSlots] there are no slots" )
@@ -63,7 +63,7 @@ function ConnectToSlot(ply, slotID)
 		table.insert(YRP_SLOTS_PLYS[slotID], ply)
 
 		local item = GetItem(slotID)
-		if NotNilAndNotFalse(item) then
+		if IsNotNilAndNotFalse(item) then
 			StoreItem(slotID, GetItem(slotID), ply)
 		end
 	end
@@ -87,11 +87,11 @@ net.Receive( "yrp_storage_get_slots", function(len, ply)
 	storageID = tonumber(storageID)
 
 	local slots = GetStorageSlots(storageID)
-	if NotNilAndNotFalse(slots) then
+	if IsNotNilAndNotFalse(slots) then
 		if slots[5] then
 			local bp = slots[5]
 		
-			if NotNilAndNotFalse( bp) and bp.uniqueID and !NotNilAndNotFalse(GetItem( bp.uniqueID) ) and table.Count(slots) == 5 then
+			if IsNotNilAndNotFalse( bp) and bp.uniqueID and !IsNotNilAndNotFalse(GetItem( bp.uniqueID) ) and table.Count(slots) == 5 then
 				local tab = {}
 				tab.text_classname = "bag"
 				tab.text_printname = "bag"
@@ -100,7 +100,7 @@ net.Receive( "yrp_storage_get_slots", function(len, ply)
 				tab.int_fixed = "1"
 
 				local storage = CreateStorage(16)
-				if NotNilAndNotFalse(storage) then
+				if IsNotNilAndNotFalse(storage) then
 					tab.int_storageID = storage.uniqueID
 					CreateItem( bp.uniqueID, tab)
 				else

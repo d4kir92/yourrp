@@ -170,7 +170,7 @@ function drawMenuInfo()
 		local y = ibr
 
 		--[[ F1 ]]--
-		if NotNilAndNotFalse(YRP.GetDesignIcon( "help" ) ) then
+		if IsNotNilAndNotFalse(YRP.GetDesignIcon( "help" ) ) then
 			surface.SetDrawColor( color)
 			surface.SetMaterial(YRP.GetDesignIcon( "help" ) )
 			surface.DrawTexturedRect(x, y, isize, isize)

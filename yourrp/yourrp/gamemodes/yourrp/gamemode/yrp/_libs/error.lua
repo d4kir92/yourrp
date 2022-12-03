@@ -2,12 +2,18 @@
 
 -- #ERROR #BUGS
 
-function NotNilAndNotFalse( obj )
+function IsNilOrFalse( obj )
+	if obj == nil or obj == false then
+		return true
+	end
+	return false
+end
+
+function IsNotNilAndNotFalse( obj )
 	if obj != nil and obj != false then
 		return true
-	else
-		return false
 	end
+	return false
 end
 
 function WORKED(obj, name, _silence)

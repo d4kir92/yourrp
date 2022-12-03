@@ -19,7 +19,7 @@ end)
 function YRPSendEvents(ply)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
-	if !NotNilAndNotFalse(tab) then -- when empty, send empty
+	if !IsNotNilAndNotFalse(tab) then -- when empty, send empty
 		tab = {}
 	end
 
@@ -62,7 +62,7 @@ end)
 function YRPSendEventChars(ply, uid)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		tab = tab[1]
 	else
 		tab = {}
@@ -84,7 +84,7 @@ net.Receive( "yrp_event_get_chars", function(len, ply)
 	local steamid = net.ReadString()
 	local tab = YRP_SQL_SELECT( "yrp_characters", "*", "SteamID = '" .. steamid .. "' AND bool_eventchar = '1'" )
 
-	if !NotNilAndNotFalse(tab) then
+	if !IsNotNilAndNotFalse(tab) then
 		tab = {}
 	end
 
@@ -103,7 +103,7 @@ net.Receive( "yrp_event_char_add", function(len, ply)
 
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			tab = tab[1]
 			
 			local str = tab.string_chars
@@ -128,7 +128,7 @@ net.Receive( "yrp_event_char_remove", function(len, ply)
 		if euid and euid != "" then
 			local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'" )
 
-			if NotNilAndNotFalse(tab) then
+			if IsNotNilAndNotFalse(tab) then
 				tab = tab[1]
 				local newchars = ""
 				tab = string.Split(tab.string_chars, ";" )
@@ -154,7 +154,7 @@ end)
 
 function YRPSpawnAsCharacter(ply, cuid, force)
 	local roltab = ply:YRPGetRoleTable()
-	if NotNilAndNotFalse(roltab) then
+	if IsNotNilAndNotFalse(roltab) then
 		YRPUpdateRoleUses(roltab.uniqueID)
 	end
 
@@ -166,7 +166,7 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 		end
 		hook.Run( "yrp_switched_character", ply, ply:CharID(), cuid)
 	end
-	if NotNilAndNotFalse( cuid ) then
+	if IsNotNilAndNotFalse( cuid ) then
 		YRP_SQL_UPDATE( "yrp_players", {["CurrentCharacter"] = cuid}, "SteamID = '" .. ply:YRPSteamID() .. "'" )
 		if !force then
 			YRP_SQL_UPDATE( "yrp_players", {["NormalCharacter"] = cuid}, "SteamID = '" .. ply:YRPSteamID() .. "'" )
@@ -211,7 +211,7 @@ net.Receive( "yrp_event_start", function(len, ply)
 	local euid = net.ReadString()
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'" )
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		tab = tab[1]
 
 		SetGlobalYRPBool( "yrp_event_running", true)
@@ -236,7 +236,7 @@ net.Receive( "yrp_event_end", function(len, ply)
 	local euid = net.ReadString()
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'" )
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		tab = tab[1]
 
 		SetGlobalYRPBool( "yrp_event_running", false)

@@ -118,12 +118,12 @@ end
 function MoveUnusedRolesToDefault()
 	local changed = false
 	local allroles = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name, int_prerole, int_groupID", nil)
-	if NotNilAndNotFalse( allroles) then
+	if IsNotNilAndNotFalse( allroles) then
 		for i, role in pairs( allroles) do
 			-- If prerole not exists remove the prerole
 			if tonumber(role.int_prerole) != 0 then
 				local prerole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. role.int_prerole .. "'" )
-				if !NotNilAndNotFalse(prerole) then
+				if !IsNotNilAndNotFalse(prerole) then
 					changed = true
 					YRP_SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '" .. role.uniqueID .. "'" )
 				elseif role.uniqueID == prerole[1].int_prerole then
@@ -135,7 +135,7 @@ function MoveUnusedRolesToDefault()
 			MoveUnusedGroups()
 			-- if group not exists move it to default group
 			local group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'" )
-			if !NotNilAndNotFalse(group) then
+			if !IsNotNilAndNotFalse(group) then
 				changed = true
 				YRP_SQL_UPDATE(DATABASE_NAME, {
 					["int_groupID"] = 1,
@@ -154,28 +154,28 @@ MoveUnusedRolesToDefault()
 
 -- CONVERTING
 local wrongprerole = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'" )
-if NotNilAndNotFalse(wrongprerole) then
+if IsNotNilAndNotFalse(wrongprerole) then
 	for i, role in pairs(wrongprerole) do
 		YRP_SQL_UPDATE(DATABASE_NAME, {["int_prerole"] = 0}, "uniqueID = '" .. role.uniqueID .. "'" )
 	end
 end
 
 local wrongmaxamount = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_maxamount = -1" )
-if NotNilAndNotFalse(wrongmaxamount) then
+if IsNotNilAndNotFalse(wrongmaxamount) then
 	for i, role in pairs(wrongmaxamount) do
 		YRP_SQL_UPDATE(DATABASE_NAME, {["int_maxamount"] = 0}, "uniqueID = '" .. role.uniqueID .. "'" )
 	end
 end
 
 local wrongpercentage = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_amountpercentage > 100" )
-if NotNilAndNotFalse(wrongpercentage) then
+if IsNotNilAndNotFalse(wrongpercentage) then
 	for i, role in pairs(wrongpercentage) do
 		YRP_SQL_UPDATE(DATABASE_NAME, {["int_amountpercentage"] = 100}, "uniqueID = '" .. role.uniqueID .. "'" )
 	end
 end
 
 local wrongmainrole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-if NotNilAndNotFalse(wrongmainrole) then
+if IsNotNilAndNotFalse(wrongmainrole) then
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_usergroups"] = "ALL"}, "uniqueID = '1'" )
 	YRP_SQL_UPDATE(DATABASE_NAME, {["int_maxamount"] = 0}, "uniqueID = '1'" )
 	YRP_SQL_UPDATE(DATABASE_NAME, {["int_amountpercentage"] = 100}, "uniqueID = '1'" )
@@ -225,7 +225,7 @@ function YRPConvertToDarkRPJob(tab)
 	end
 	_job.candemote = tobool(tab.bool_instructor) or false
 	local gname = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. tab.int_groupID .. "'" )
-	if NotNilAndNotFalse(gname) then
+	if IsNotNilAndNotFalse(gname) then
 		gname = gname[1].string_name
 	end
 	_job.category = gname or "invalid group"
@@ -258,7 +258,7 @@ end
 local TEAMS = {}
 function YRPBuildDarkrpTeams()
 	local drp_allroles = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-	if NotNilAndNotFalse( drp_allroles) then
+	if IsNotNilAndNotFalse( drp_allroles) then
 		for i, role in pairs( drp_allroles) do
 			local teamname = YRPConvertToDarkRPJobName(role.string_name)
 			if !strEmpty( role.string_identifier ) then
@@ -329,7 +329,7 @@ CATEGORIES.shipments = {}
 CATEGORIES.weapons = {}
 CATEGORIES.ammo = {}
 CATEGORIES.vehicles = {}
-if NotNilAndNotFalse( drp_allgroups ) then
+if IsNotNilAndNotFalse( drp_allgroups ) then
 	for i, group in pairs( drp_allgroups) do
 		local catname = group.string_name
 		local tab = YRPConvertToDarkRPCategory( group, "jobs" )
@@ -370,7 +370,7 @@ function Player:DRPSendCategoriesToPlayer()
 	net.Start( "YRP_Combine_DarkRPTables" )
 	net.Send(self)
 
-	if NotNilAndNotFalse(TEAMS) then
+	if IsNotNilAndNotFalse(TEAMS) then
 		for i, cat in pairs(CATEGORIES.jobs) do
 			cat.members = {}
 			for i, role in pairs(TEAMS) do
@@ -387,7 +387,7 @@ end
 
 function UpdatePrerolesGroupIDs(uid, gid)
 	local preroles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. uid .. "'" )
-	if NotNilAndNotFalse(preroles) then
+	if IsNotNilAndNotFalse(preroles) then
 		for i, prerole in pairs(preroles) do
 			YRP_SQL_UPDATE(DATABASE_NAME, {["int_groupID"] = gid}, "uniqueID = '" .. prerole.uniqueID .. "'" )
 			UpdatePrerolesGroupIDs(prerole.uniqueID, gid)
@@ -397,7 +397,7 @@ end
 
 local yrp_ply_roles = {}
 local _init_ply_roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-if NotNilAndNotFalse(_init_ply_roles) then
+if IsNotNilAndNotFalse(_init_ply_roles) then
 	yrp_ply_roles = _init_ply_roles[1]
 end
 
@@ -424,7 +424,7 @@ for str, val in pairs(yrp_ply_roles) do
 			if tab.netstr == "update_role_string_name" then
 				util.AddNetworkString( "settings_role_update_name" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-				if NotNilAndNotFalse(puid) then
+				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
 					tab.netstr = "settings_role_update_name"
@@ -435,7 +435,7 @@ for str, val in pairs(yrp_ply_roles) do
 			elseif tab.netstr == "update_role_string_color" then
 				util.AddNetworkString( "settings_role_update_color" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-				if NotNilAndNotFalse(puid) then
+				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
 					tab.netstr = "settings_role_update_color"
@@ -446,7 +446,7 @@ for str, val in pairs(yrp_ply_roles) do
 			elseif tab.netstr == "update_role_string_icon" then
 				util.AddNetworkString( "settings_role_update_icon" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-				if NotNilAndNotFalse(puid) then
+				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
 					tab.netstr = "settings_role_update_icon"
@@ -473,7 +473,7 @@ for str, val in pairs(yrp_ply_roles) do
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastInt(tab)
 			if tab.netstr == "update_role_int_prerole" then
-				if NotNilAndNotFalse( cur) then
+				if IsNotNilAndNotFalse( cur) then
 					cur = cur[1]
 					SendRoleList(nil, tonumber( cur.int_groupID), tonumber( cur.int_prerole) )
 				end
@@ -499,7 +499,7 @@ for str, val in pairs(yrp_ply_roles) do
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastFloat(tab)
 			if tab.netstr == "update_role_int_prerole" then
-				if NotNilAndNotFalse( cur) then
+				if IsNotNilAndNotFalse( cur) then
 					cur = cur[1]
 					SendGroupList(tonumber( cur.float_parentrole) )
 				end
@@ -523,7 +523,7 @@ for str, val in pairs(yrp_ply_roles) do
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastInt(tab)
 			if tab.netstr == "update_role_int_prerole" then
-				if NotNilAndNotFalse( cur) then
+				if IsNotNilAndNotFalse( cur) then
 					cur = cur[1]
 					SendGroupList(tonumber( cur.int_parentrole) )
 				end
@@ -578,7 +578,7 @@ end
 function SortRoles(gro, pre)
 	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'" )
 
-	if NotNilAndNotFalse(siblings) then
+	if IsNotNilAndNotFalse(siblings) then
 		for i, sibling in pairs(siblings) do
 			sibling.int_position = tonumber(sibling.int_position)
 		end
@@ -604,7 +604,7 @@ function SendRoleList(ply, gro, pre)
 			tbl_roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. gro .. "' AND int_prerole = '" .. pre .. "'" )
 		end
 
-		if !NotNilAndNotFalse(tbl_roles) then
+		if !IsNotNilAndNotFalse(tbl_roles) then
 			tbl_roles = {}
 		end
 
@@ -621,7 +621,7 @@ function SendRoleList(ply, gro, pre)
 			end
 		end
 
-		if NotNilAndNotFalse(headername) then
+		if IsNotNilAndNotFalse(headername) then
 			if ply != nil then
 				if tbl_roles then
 					net.Start( "settings_subscribe_rolelist" )
@@ -659,7 +659,7 @@ function DuplicateRole(ruid, guid)
 
 	if ruid > -1 then
 		local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'" )
-		if NotNilAndNotFalse(role) then
+		if IsNotNilAndNotFalse(role) then
 			role = role[1]
 
 			guid = guid or role.int_groupID
@@ -702,7 +702,7 @@ util.AddNetworkString( "get_grp_roles" )
 net.Receive( "get_grp_roles", function(len, ply)
 	local _uid = net.ReadString()
 	local _roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. _uid .. "'" )
-	if NotNilAndNotFalse(_roles) then
+	if IsNotNilAndNotFalse(_roles) then
 		for i, ro in pairs(_roles) do
 			YRPUpdateRoleUses(ro.uniqueID)
 			ro.pms = GetPMTableOfRole(ro.uniqueID)
@@ -720,7 +720,7 @@ net.Receive( "get_rol_prerole", function(len, ply)
 	local _uid = net.ReadString()
 	local _roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. _uid .. "'" )
 
-	if NotNilAndNotFalse(_roles) then
+	if IsNotNilAndNotFalse(_roles) then
 		for i, ro in pairs(_roles) do
 			ro.pms = GetPMTableOfRole(ro.uniqueID)
 		end
@@ -748,7 +748,7 @@ net.Receive( "settings_subscribe_prerolelist", function(len, ply)
 	local pre = tonumber(net.ReadString() )
 
 	pre = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'" )
-	if NotNilAndNotFalse(pre) then
+	if IsNotNilAndNotFalse(pre) then
 		pre = tonumber(pre[1].int_prerole)
 		SubscribeRoleList(ply, gro, pre)
 		SendRoleList(ply, gro, pre)
@@ -766,7 +766,7 @@ net.Receive( "settings_add_role", function(len, ply)
 	if pre > 0 then
 		-- Has Prerole
 		has_prerole = true
-		if !NotNilAndNotFalse(prerole) then
+		if !IsNotNilAndNotFalse(prerole) then
 			YRP.msg( "note", "[settings_add_role] Prerole dont Exists anymore" )
 			SendRoleList(nil, gro, pre)
 			return
@@ -864,14 +864,14 @@ net.Receive( "settings_subscribe_role", function(len, ply)
 	SubscribeRole(ply, uid)
 
 	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	if !NotNilAndNotFalse(role) then
+	if !IsNotNilAndNotFalse(role) then
 		role = {}
 	else
 		role = role[1]
 	end
 
 	local roles = YRP_SQL_SELECT(DATABASE_NAME, "string_name, uniqueID, int_groupID", nil)
-	if !NotNilAndNotFalse(roles) then
+	if !IsNotNilAndNotFalse(roles) then
 		roles = {}
 	end
 
@@ -883,7 +883,7 @@ net.Receive( "settings_subscribe_role", function(len, ply)
 
 	local hudmasks = YRPGetHUDMasks()
 
-	if NotNilAndNotFalse(role) and NotNilAndNotFalse(roles) and NotNilAndNotFalse(usergroups) and NotNilAndNotFalse(groups) and NotNilAndNotFalse(huds) and NotNilAndNotFalse(hudmasks) then
+	if IsNotNilAndNotFalse(role) and IsNotNilAndNotFalse(roles) and IsNotNilAndNotFalse(usergroups) and IsNotNilAndNotFalse(groups) and IsNotNilAndNotFalse(huds) and IsNotNilAndNotFalse(hudmasks) then
 		net.Start( "settings_subscribe_role" )
 			net.WriteTable(role)
 			net.WriteTable(roles)
@@ -914,17 +914,17 @@ util.AddNetworkString( "settings_delete_role" )
 net.Receive( "settings_delete_role", function(len, ply)
 	local uid = tonumber(net.ReadString() )
 	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		role = role[1]
 		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'" )
 
 		local roledeleted = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-		if !NotNilAndNotFalse(roledeleted) then
+		if !IsNotNilAndNotFalse(roledeleted) then
 			YRP.msg( "note", "Role deleted (uid: " .. tostring( uid ) .. " )" )
 		end
 
 		local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'" )
-		if NotNilAndNotFalse(siblings) then
+		if IsNotNilAndNotFalse(siblings) then
 			for i, sibling in pairs(siblings) do
 				sibling.int_position = tonumber(sibling.int_position)
 			end
@@ -946,7 +946,7 @@ end)
 util.AddNetworkString( "getScoreboardGroups" )
 net.Receive( "getScoreboardGroups", function(len, ply)
 	local _tmpGroups = YRP_SQL_SELECT( "yrp_ply_groups", "*", nil)
-	if NotNilAndNotFalse(_tmpGroups) then
+	if IsNotNilAndNotFalse(_tmpGroups) then
 		net.Start( "getScoreboardGroups" )
 			net.WriteTable(_tmpGroups)
 		net.Broadcast()
@@ -958,7 +958,7 @@ end)
 
 function GetRole(uid)
 	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		return role[1]
 	end
 	return nil
@@ -966,12 +966,12 @@ end
 
 function SendCustomFlags(uid)
 	local role = GetRole(uid)
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		local nettab = {}
 		local flags = string.Explode( ",", role.string_customflags)
 		for i, val in pairs(flags) do
 			local flag = YRP_SQL_SELECT( "yrp_flags", "*", "uniqueID = '" .. val .. "'" )
-			if NotNilAndNotFalse(flag) then
+			if IsNotNilAndNotFalse(flag) then
 				flag = flag[1]
 				local entry = {}
 				entry.uniqueID = flag.uniqueID
@@ -997,7 +997,7 @@ end)
 util.AddNetworkString( "get_all_role_customflags" )
 net.Receive( "get_all_role_customflags", function(len, ply)
 	local allflags = YRP_SQL_SELECT( "yrp_flags", "*", "string_type = 'role'" )
-	if !NotNilAndNotFalse( allflags) then
+	if !IsNotNilAndNotFalse( allflags) then
 		allflags = {}
 	end
 
@@ -1054,13 +1054,13 @@ end)
 
 function SendPlayermodels(uid)
 	local role = GetRole(uid)
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		local nettab = {}
 		local flags = string.Explode( ",", role.string_playermodels)
 		for i, val in pairs(flags) do
 			local pms = YRP_SQL_SELECT( "yrp_playermodels", "*", "uniqueID = '" .. val .. "'" )
 
-			if NotNilAndNotFalse(pms) then
+			if IsNotNilAndNotFalse(pms) then
 				pms = pms[1]
 				local entry = {}
 				entry.uniqueID = pms.uniqueID
@@ -1093,7 +1093,7 @@ end)
 util.AddNetworkString( "get_all_playermodels" )
 net.Receive( "get_all_playermodels", function(len, ply)
 	local allpms = YRP_SQL_SELECT( "yrp_playermodels", "*", nil)
-	if !NotNilAndNotFalse( allpms) then
+	if !IsNotNilAndNotFalse( allpms) then
 		allpms = {}
 	end
 	for x, pm in pairs( allpms) do
@@ -1117,7 +1117,7 @@ net.Receive( "get_all_playermodels", function(len, ply)
 		end
 	end
 
-	if NotNilAndNotFalse( allpms ) then
+	if IsNotNilAndNotFalse( allpms ) then
 		for i, v in pairs( allpms ) do
 			net.Start( "get_all_playermodels" )
 				net.WriteTable( v )
@@ -1210,7 +1210,7 @@ net.Receive( "rem_role_playermodel", function(len, ply)
 
 	local test = YRP_SQL_SELECT( "yrp_playermodels", "*", "uniqueID = '" .. muid .. "'" )
 
-	if NotNilAndNotFalse(test) then
+	if IsNotNilAndNotFalse(test) then
 		pms = test[1].string_models
 	end
 
@@ -1221,7 +1221,7 @@ end)
 
 function SendSweps(uid)
 	local role = GetRole(uid)
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		local nettab = {}
 		local sweps = string.Explode( ",", role.string_sweps)
 		for i, swep in pairs(sweps) do
@@ -1250,7 +1250,7 @@ end)
 
 function AddSwepToRole(ruid, swepcn)
 	local role = GetRole(ruid)
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		local sweps = string.Explode( ",", role.string_sweps)
 		if !table.HasValue(sweps, tostring(swepcn) ) then
 			local oldsweps = {}
@@ -1313,7 +1313,7 @@ end)
 -- sweps on spawn
 function SendSwepsOnSpawn(uid)
 	local role = GetRole(uid)
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		local nettab = {}
 		local sweps = string.Explode( ",", role.string_sweps_onspawn)
 		for i, swep in pairs(sweps) do
@@ -1339,7 +1339,7 @@ end)
 
 function AddSwepToRoleOnSpawn(ruid, swepcn)
 	local role = GetRole(ruid)
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		local sweps = string.Explode( ",", role.string_sweps_onspawn)
 		if !table.HasValue(sweps, tostring(swepcn) ) then
 			local oldsweps = {}
@@ -1400,7 +1400,7 @@ end)
 --not droppable sweps
 function SendNDSweps(uid)
 	local role = GetRole(uid)
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		local nettab = {}
 		local ndsweps = string.Explode( ",", role.string_ndsweps)
 		for i, ndswep in pairs(ndsweps) do
@@ -1480,12 +1480,12 @@ end)
 --licenses
 function SendLicenses(ruid)
 	local role = GetRole(ruid)
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		local nettab = {}
 		local licenses = string.Explode( ",", role.string_licenses)
 		for i, val in pairs(licenses) do
 			local li = YRP_SQL_SELECT( "yrp_licenses", "*", "uniqueID = '" .. val .. "'" )
-			if NotNilAndNotFalse(li) then
+			if IsNotNilAndNotFalse(li) then
 				li = li[1]
 				local entry = {}
 				entry.uniqueID = li.uniqueID
@@ -1523,13 +1523,13 @@ end
 
 function CleanUpLicenses(ruid)
 	local role = GetRole(ruid)
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		local lis = string.Explode( ",", role.string_licenses)
 
 		for i, li in pairs(lis) do
 			if li != "" then
 				local found = YRP_SQL_SELECT( "yrp_licenses", "*", "uniqueID = '" .. li .. "'" )
-				if !NotNilAndNotFalse(found) then
+				if !IsNotNilAndNotFalse(found) then
 					RemLicenseFromRole(ruid, li)
 				end
 			end
@@ -1547,7 +1547,7 @@ end)
 util.AddNetworkString( "get_all_licenses" )
 net.Receive( "get_all_licenses", function(len, ply)
 	local alllis = YRP_SQL_SELECT( "yrp_licenses", "*", nil)
-	if !NotNilAndNotFalse( alllis) then
+	if !IsNotNilAndNotFalse( alllis) then
 		alllis = {}
 	end
 	net.Start( "get_all_licenses" )
@@ -1608,12 +1608,12 @@ end)
 --specializations
 function SendSpecializations(ruid)
 	local role = GetRole(ruid)
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		local nettab = {}
 		local specializations = string.Explode( ",", role.string_specializations)
 		for i, val in pairs(specializations) do
 			local li = YRP_SQL_SELECT( "yrp_specializations", "*", "uniqueID = '" .. val .. "'" )
-			if NotNilAndNotFalse(li) then
+			if IsNotNilAndNotFalse(li) then
 				li = li[1]
 				local entry = {}
 				entry.uniqueID = li.uniqueID
@@ -1651,13 +1651,13 @@ end
 
 function CleanUpSpecializations(ruid)
 	local role = GetRole(ruid)
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		local lis = string.Explode( ",", role.string_specializations)
 
 		for i, li in pairs(lis) do
 			if li != "" then
 				local found = YRP_SQL_SELECT( "yrp_specializations", "*", "uniqueID = '" .. li .. "'" )
-				if !NotNilAndNotFalse(found) then
+				if !IsNotNilAndNotFalse(found) then
 					RemSpecializationFromRole(ruid, li)
 				end
 			end
@@ -1675,7 +1675,7 @@ end)
 util.AddNetworkString( "get_all_specializations" )
 net.Receive( "get_all_specializations", function(len, ply)
 	local alllis = YRP_SQL_SELECT( "yrp_specializations", "*", nil)
-	if !NotNilAndNotFalse( alllis) then
+	if !IsNotNilAndNotFalse( alllis) then
 		alllis = {}
 	end
 	net.Start( "get_all_specializations" )
@@ -1744,12 +1744,12 @@ net.Receive( "openInteractMenu", function(len, ply)
 		idcard = tobool(idcard[1].bool_identity_card)
 
 		local chatab = target:YRPGetCharacterTable()
-		if NotNilAndNotFalse(chatab) then
+		if IsNotNilAndNotFalse(chatab) then
 			local targetRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. chatab.roleID)
 
 			local tmpT = ply:YRPGetCharacterTable()
 			local tmpTable = ply:YRPGetRoleTable()
-			if NotNilAndNotFalse(tmpT) and NotNilAndNotFalse(tmpTable) then
+			if IsNotNilAndNotFalse(tmpT) and IsNotNilAndNotFalse(tmpTable) then
 				local isInstructor = false
 
 				local tmpPromote = false
@@ -1763,12 +1763,12 @@ net.Receive( "openInteractMenu", function(len, ply)
 
 					local tmpSearch = true	--targetSteamID
 					local tmpTableSearch = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
-					if NotNilAndNotFalse(tmpTableSearch) then
+					if IsNotNilAndNotFalse(tmpTableSearch) then
 						local tmpSearchUniqueID = tmpTableSearch[1].int_prerole
 
 						local tmpCounter = 0
 						while (tmpSearch) do
-							if NotNilAndNotFalse(tmpTableSearch) then
+							if IsNotNilAndNotFalse(tmpTableSearch) then
 								tmpSearchUniqueID = tonumber(tmpTableSearch[1].int_prerole)
 
 								if tonumber(targetRole[1].int_prerole) != 0 and tmpTableSearch[1].uniqueID == targetRole[1].uniqueID then
@@ -1990,11 +1990,11 @@ function YRPGetFirstRankUID(ruid)
 	local Search = true
 	while (Search) do
 		local int_prerole = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, int_prerole", "uniqueID = '" .. lastuid .. "'" )
-		if NotNilAndNotFalse(int_prerole) then
+		if IsNotNilAndNotFalse(int_prerole) then
 			int_prerole = int_prerole[1].int_prerole
 
 			local prerole = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, int_prerole", "uniqueID = '" .. int_prerole .. "'" )
-			if NotNilAndNotFalse(prerole) then
+			if IsNotNilAndNotFalse(prerole) then
 				lastuid = prerole[1].uniqueID
 
 				resultuid = lastuid
@@ -2026,12 +2026,12 @@ net.Receive( "invitetogroup", function( len, ply )
 			
 			local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. firstrankuid .. "'" )
 			local group = YRP_SQL_SELECT(DATABASE_NAME, "*", role.groupID)
-			if NotNilAndNotFalse(role) then
+			if IsNotNilAndNotFalse(role) then
 				role = role[1]
 
 				local group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'" )
 
-				if NotNilAndNotFalse(group) then
+				if IsNotNilAndNotFalse(group) then
 					group = group[1]
 
 					net.Start( "yrp_invite_ply" )
@@ -2059,7 +2059,7 @@ net.Receive( "yrp_invite_accept", function( len, ply )
 	local r = net.ReadTable()
 
 	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. r.uniqueID .. "'" )
-	if NotNilAndNotFalse(role) then
+	if IsNotNilAndNotFalse(role) then
 		role = role[1]
 	
 		addToWhitelist( tonumber(role.uniqueID), ply )
@@ -2092,7 +2092,7 @@ end
 
 function GetRoleTable(rid)
 	local result = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. rid .. "'" )
-	if NotNilAndNotFalse(result) then
+	if IsNotNilAndNotFalse(result) then
 		result = result[1]
 	end
 	return result
@@ -2101,7 +2101,7 @@ end
 util.AddNetworkString( "getallroles" )
 net.Receive( "getallroles", function(len, ply)
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_name", nil)
-	if NotNilAndNotFalse( dbtab) then
+	if IsNotNilAndNotFalse( dbtab) then
 		for i, v in pairs( dbtab) do
 			local pms = string.Explode( ",", GetPlayermodelsOfRole( v.uniqueID) )
 			if pms[1] != nil then
@@ -2122,7 +2122,7 @@ net.Receive( "get_next_ranks", function(len, ply)
 	local ruid = net.ReadString()
 	local rols = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'" )
 
-	if NotNilAndNotFalse(rols) then
+	if IsNotNilAndNotFalse(rols) then
 		for i, rol in pairs(rols) do
 			rols[i].pms = string.Explode( ",", GetPlayermodelsOfRole(rol.uniqueID) )
 		end
@@ -2139,7 +2139,7 @@ net.Receive( "yrp_hasnext_ranks", function(len, ply)
 	local rols = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'" )
 
 	local has = false
-	if NotNilAndNotFalse(rols) then
+	if IsNotNilAndNotFalse(rols) then
 		has = true
 	end
 
@@ -2155,7 +2155,7 @@ net.Receive( "yrp_want_role", function(len, ply)
 	ruid = tonumber(ruid)
 	local rol = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'" )
 	local result = "Role dont exists anymore"
-	if NotNilAndNotFalse(rol) then
+	if IsNotNilAndNotFalse(rol) then
 		if canGetRole(ply, ruid, true) then
 			result = "worked"
 		else
@@ -2170,14 +2170,14 @@ end)
 
 function YRPSendRoleSpecs(ply, ruid)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. ruid .. "'" )
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		tab = tab[1]
 
 		local nettab = {}
 
 		for i, v in pairs( string.Explode( ",", tab.string_specializations ) ) do
 			local dbtab = YRP_SQL_SELECT( "yrp_specializations", "*", "uniqueID = '" .. v .. "'" )
-			if NotNilAndNotFalse( dbtab) then
+			if IsNotNilAndNotFalse( dbtab) then
 				local entry = {}
 				entry.uid = v
 				entry.name = dbtab[1].name
@@ -2205,7 +2205,7 @@ util.AddNetworkString( "yrp_getallroles" )
 net.Receive( "yrp_getallroles", function( len, ply )
 	local roles = YRP_SQL_SELECT( DATABASE_NAME, "*", nil )
 
-	if NotNilAndNotFalse( roles ) then
+	if IsNotNilAndNotFalse( roles ) then
 		for i, role in pairs( roles ) do
 			role.pms = GetPlayermodelsOfRole( role.uniqueID )
 			net.Start( "yrp_getallroles" )
@@ -2219,7 +2219,7 @@ util.AddNetworkString( "yrp_getallroles_whitelisted" )
 net.Receive( "yrp_getallroles_whitelisted", function( len, ply )
 	local roles = YRP_SQL_SELECT( DATABASE_NAME, "*", nil )
 
-	if NotNilAndNotFalse( roles ) then
+	if IsNotNilAndNotFalse( roles ) then
 		for i, role in pairs( roles ) do
 			role.pms = GetPlayermodelsOfRole( role.uniqueID )
 			if YRPIsWhitelisted( ply, role.uniqueID ) then
@@ -2235,7 +2235,7 @@ util.AddNetworkString( "yrp_getcharacters" )
 net.Receive( "yrp_getcharacters", function( len, ply )
 	local chars = YRP_SQL_SELECT( "yrp_characters", "*", "steamid = '" .. ply:YRPSteamID() .. "'" )
 
-	if NotNilAndNotFalse( chars ) then
+	if IsNotNilAndNotFalse( chars ) then
 		for i, char in pairs( chars ) do
 			local role = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name, string_color", "uniqueID = '" .. char.roleID .. "'" )
 			if role and role[1] then

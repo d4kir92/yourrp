@@ -63,7 +63,7 @@ function HasShopPermanent(tab)
 
 	for i, cat in pairs(_nw) do
 		local _s_items = YRP_SQL_SELECT( "yrp_shop_items", "*", "categoryID = " .. cat.uniqueID)
-		if NotNilAndNotFalse(_s_items) then
+		if IsNotNilAndNotFalse(_s_items) then
 			for j, item in pairs(_s_items) do
 				if tonumber(item.permanent) == 1 then --or item.permanent == "1" then
 					return true

@@ -82,7 +82,7 @@ function SWEP:Think()
 					YRP.msg( "db", "Option ENTSpawner" )
 
 					local stab = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'" )
-					if NotNilAndNotFalse(stab) then
+					if IsNotNilAndNotFalse(stab) then
 						stab = stab[1]
 						net.Start( "yrp_spawner_ent_options" )
 							net.WriteTable(stab)

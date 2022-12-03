@@ -71,10 +71,10 @@ end
 local savedfonts = {}
 
 function YRP.SetFont(fontname)
-	if NotNilAndNotFalse(fontname) then
+	if IsNotNilAndNotFalse(fontname) then
 		local fontID = string.lower(fontname)
 		local fontTab = fonts[fontID]
-		if NotNilAndNotFalse(fontTab) then
+		if IsNotNilAndNotFalse(fontTab) then
 			font = fontTab.name or ""
 			fontscale = fontTab.scale or ""
 			table.Empty(savedfonts)
@@ -115,7 +115,7 @@ function GetFontSizeTable()
 end
 
 function yrp_create_font(_name, _font, _size, _weight, _outline, _shadow)
-	if NotNilAndNotFalse(_name) and NotNilAndNotFalse(_font) and NotNilAndNotFalse(_size) then
+	if IsNotNilAndNotFalse(_name) and IsNotNilAndNotFalse(_font) and IsNotNilAndNotFalse(_size) then
 		if table.HasValue(savedfonts, _name) then
 			--
 		else

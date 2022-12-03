@@ -272,7 +272,7 @@ function YRPSpawnItem( ply, item, duid, count, itemColor )
 	if item.type == "weapons" then
 		if count == 1 then
 			local wep = ply:Give(item.ClassName)
-			if NotNilAndNotFalse(wep) and wep != NULL then
+			if IsNotNilAndNotFalse(wep) and wep != NULL then
 				wep:SetYRPInt( "item_uniqueID", item.uniqueID)
 				wep:SetYRPEntity( "yrp_owner", ply)
 				return true
@@ -338,11 +338,11 @@ function YRPSpawnItem( ply, item, duid, count, itemColor )
 	end
 
 	local DEALER = YRP_SQL_SELECT( "yrp_dealers", "storagepoints", "uniqueID = '" .. duid .. "'" )
-    if NotNilAndNotFalse(DEALER) then
+    if IsNotNilAndNotFalse(DEALER) then
 		DEALER = DEALER[1]
 		local SPUID = DEALER.storagepoints
 		local SP = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. SPUID .. "'" )
-		if NotNilAndNotFalse(SP) then
+		if IsNotNilAndNotFalse(SP) then
 			SP = SP[1]
 			YRP.msg( "gm", "[Spawn Item] Item To Storagepoint" )
 
@@ -536,7 +536,7 @@ net.Receive( "item_buy", function(len, ply)
 	
 	local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. itemId)
 	
-	if NotNilAndNotFalse(_item) then
+	if IsNotNilAndNotFalse(_item) then
 		_item = _item[1]
 		_item.name = tostring(_item.name)
 		_item.price = tonumber( _item.price )
@@ -619,10 +619,10 @@ net.Receive( "item_spawn", function(len, ply)
 	local _tab = net.ReadTable()
 	local duid = net.ReadString()
 
-	if NotNilAndNotFalse(_tab) and NotNilAndNotFalse(duid) then
+	if IsNotNilAndNotFalse(_tab) and IsNotNilAndNotFalse(duid) then
 		local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
 
-		if NotNilAndNotFalse(_item) then
+		if IsNotNilAndNotFalse(_item) then
 			_item = _item[1]
 
 			if not IsEntityAlive(ply, _item.uniqueID) then

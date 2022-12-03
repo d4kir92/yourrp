@@ -316,7 +316,7 @@ end
 local yrp_colors = {}
 
 function YRPGetColor(nr)
-	if NotNilAndNotFalse(yrp_colors[interfaceDesign()]) and NotNilAndNotFalse(yrp_colors[interfaceDesign()][InterfaceColor()]) and NotNilAndNotFalse(yrp_colors[interfaceDesign()][InterfaceColor()][nr]) then
+	if IsNotNilAndNotFalse(yrp_colors[interfaceDesign()]) and IsNotNilAndNotFalse(yrp_colors[interfaceDesign()][InterfaceColor()]) and IsNotNilAndNotFalse(yrp_colors[interfaceDesign()][InterfaceColor()][nr]) then
 		 local color = yrp_colors[interfaceDesign()][InterfaceColor()][nr]
 		 if InterfaceTransparent() then
 			 color.a = 200
@@ -501,7 +501,7 @@ end
 
 function YRP.DrawIcon(material, w, h, x, y, colo)
 	local col = colo or YRPGetColor( "6" )
-	if NotNilAndNotFalse(material) then
+	if IsNotNilAndNotFalse(material) then
 		surface.SetDrawColor( col)
 		surface.SetMaterial(material)
 		surface.DrawTexturedRect(x or 0, y or 0, w or 64, h or 64)

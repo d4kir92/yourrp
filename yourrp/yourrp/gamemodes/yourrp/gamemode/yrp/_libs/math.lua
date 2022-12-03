@@ -190,7 +190,7 @@ function ScrH2()
 end
 
 function formatMoney(money)
-	if NotNilAndNotFalse(money) then
+	if IsNotNilAndNotFalse(money) then
 		return GetGlobalYRPString( "text_money_pre", "" ) .. money .. GetGlobalYRPString( "text_money_pos", "" )
 	else
 		return "[FAILED: formatMoney]"

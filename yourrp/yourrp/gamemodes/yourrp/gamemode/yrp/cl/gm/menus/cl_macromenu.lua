@@ -19,7 +19,7 @@ function CloseMacroMenu()
 end
 
 function UseMacro(uid)
-	if NotNilAndNotFalse(uid) and NotNilAndNotFalse(_mm.tab) and NotNilAndNotFalse(_mm.tab[uid]) and NotNilAndNotFalse(_mm.tab[uid].value) then
+	if IsNotNilAndNotFalse(uid) and IsNotNilAndNotFalse(_mm.tab) and IsNotNilAndNotFalse(_mm.tab[uid]) and IsNotNilAndNotFalse(_mm.tab[uid].value) then
 		local mtext = _mm.tab[uid].value
 		local tim = 0
 

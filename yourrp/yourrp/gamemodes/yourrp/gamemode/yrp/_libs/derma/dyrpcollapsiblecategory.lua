@@ -32,7 +32,7 @@ function PANEL:Init()
 			icon = YRP.GetDesignIcon( "64_angle-up" )
 		end
 
-		if NotNilAndNotFalse(icon) then
+		if IsNotNilAndNotFalse(icon) then
 			surface.SetMaterial(icon)
 			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.DrawTexturedRect(pw - ph, br, ph - 2 * br, ph - 2 * br)

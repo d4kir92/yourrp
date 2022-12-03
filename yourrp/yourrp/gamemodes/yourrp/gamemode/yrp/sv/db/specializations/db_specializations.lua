@@ -14,7 +14,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "suffix", "TEXT DEFAULT ''" )
 -- PMs
 function YRPSendSpecPMs(uid, ply)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "pms", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		tab = string.Explode( ",", tab[1].pms )
 	else
 		tab = {}
@@ -44,7 +44,7 @@ net.Receive( "spec_add_pm", function(len, ply)
 
 	for i, pm in pairs( pms ) do
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, pms", "uniqueID = '" .. uid .. "'" )
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			tab = tab[1]
 		else
 			tab = {}
@@ -72,7 +72,7 @@ net.Receive( "spec_rem_pm", function(len, ply)
 	local pm = net.ReadString()
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, pms", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		tab = tab[1]
 	else
 		tab = {}
@@ -98,7 +98,7 @@ end)
 -- SWEPS
 function YRPSendSpecSWEPS(uid, ply)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "sweps", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		tab = string.Explode( ",", tab[1].sweps )
 	else
 		tab = {}
@@ -128,7 +128,7 @@ net.Receive( "spec_add_swep", function(len, ply)
 
 	for i, swep in pairs( sweps ) do
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, sweps", "uniqueID = '" .. uid .. "'" )
-		if NotNilAndNotFalse(tab) then
+		if IsNotNilAndNotFalse(tab) then
 			tab = tab[1]
 		else
 			tab = {}
@@ -158,7 +158,7 @@ net.Receive( "spec_rem_swep", function(len, ply)
 	local swep = net.ReadString()
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, sweps", "uniqueID = '" .. uid .. "'" )
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		tab = tab[1]
 	else
 		tab = {}
@@ -338,7 +338,7 @@ function Player:AddSpecialization(specialization)
 		local lnames = {}
 		for i, id in pairs(ids) do
 			local spe = YRP_SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'" )
-			if NotNilAndNotFalse(spe) then
+			if IsNotNilAndNotFalse(spe) then
 				spe = spe[1]
 				table.insert(lnames, spe.name)
 			end
@@ -370,7 +370,7 @@ function Player:RemoveSpecialization(specialization)
 		local lnames = {}
 		for i, id in pairs(ids) do
 			local spe = YRP_SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'" )
-			if NotNilAndNotFalse(spe) then
+			if IsNotNilAndNotFalse(spe) then
 				spe = spe[1]
 				table.insert(lnames, spe.name)
 			end
@@ -384,7 +384,7 @@ util.AddNetworkString( "GetSpecializationName" )
 net.Receive( "GetSpecializationName", function(len, ply)
 	local id = net.ReadInt(32)
 	local spe = YRP_SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'" )
-	if NotNilAndNotFalse(spe) then
+	if IsNotNilAndNotFalse(spe) then
 		spe = spe[1]
 		net.Start( "GetSpecializationName" )
 			net.WriteString(id)
@@ -405,7 +405,7 @@ function GetSpecializationIDByName(lname)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*" )
 	local lid = nil
 
-	if !NotNilAndNotFalse(tab) then return nil end
+	if !IsNotNilAndNotFalse(tab) then return nil end
 
 	for i, spe in pairs(tab) do
 		spe.name = spe.name
@@ -441,7 +441,7 @@ end
 
 function RemoveSpecialization(ply, lid)
 	if !IsValid(ply) then return end
-	if !NotNilAndNotFalse(lid) then return end
+	if !IsNotNilAndNotFalse(lid) then return end
 
 	YRP.msg( "gm", "Removed from " .. ply:RPName() .. " SpecializationID " .. lid)
 

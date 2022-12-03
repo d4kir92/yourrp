@@ -106,7 +106,7 @@ AddIFElement(Blur)
 YRPIFVersion = YRPIFVersion or -1
 function IFLoadoutAll()
 	local ifeles = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-	if NotNilAndNotFalse(ifeles) then
+	if IsNotNilAndNotFalse(ifeles) then
 		for i, ele in pairs(ifeles) do
 			if ele.name != nil then
 				if string.StartWith( ele.name, "float_" ) then
@@ -132,7 +132,7 @@ net.Receive( "get_interface_settings", function(len, ply)
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '" .. "%_IF_" .. element .. "_%'" )
 
-	if NotNilAndNotFalse(tab) then
+	if IsNotNilAndNotFalse(tab) then
 		table.SortByMember(tab, "name", true)
 		net.Start( "get_interface_settings" )
 			net.WriteTable(tab)

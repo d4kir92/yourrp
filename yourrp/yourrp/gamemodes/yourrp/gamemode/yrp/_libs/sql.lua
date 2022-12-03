@@ -515,7 +515,7 @@ end
 if SERVER then
 	local _sql_settings = sql.Query( "SELECT * FROM yrp_sql" )
 
-	if NotNilAndNotFalse(_sql_settings) then
+	if IsNotNilAndNotFalse(_sql_settings) then
 		_sql_settings = _sql_settings[1]
 		YRPSQL.schema = _sql_settings.string_database
 		SetSQLMode(_sql_settings.int_mode)

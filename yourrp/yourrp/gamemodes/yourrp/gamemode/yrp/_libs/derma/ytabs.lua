@@ -41,7 +41,7 @@ function PANEL:AddOption(name, func, height)
 	tab:SetText( "" )
 	tab.tabs = self
 	function tab:DoClick()
-		if NotNilAndNotFalse(name) then
+		if IsNotNilAndNotFalse(name) then
 			self.tabs:GoToSite(name)
 		end
 	end

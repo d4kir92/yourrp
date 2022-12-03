@@ -53,13 +53,13 @@ function SWEP:PrimaryAttack()
 
 		local tmpTable = YRP_SQL_SELECT( "yrp_jail", "*", nil)
 
-		if !NotNilAndNotFalse(tmpTable) then
+		if !IsNotNilAndNotFalse(tmpTable) then
 			tmpTable = {}
 		end
 
 		for i, v in pairs(tmpTable) do
 			local cells = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' and uniqueID = '" .. v.cell .. "'" )
-			if NotNilAndNotFalse( cells) then
+			if IsNotNilAndNotFalse( cells) then
 				cells = cells[1]
 				v.cellname = cells.name
 			else

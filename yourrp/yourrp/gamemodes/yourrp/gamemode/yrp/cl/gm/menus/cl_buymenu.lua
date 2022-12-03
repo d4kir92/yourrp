@@ -461,7 +461,7 @@ net.Receive( "shop_get_tabs", function(len)
 					local _uid = net.ReadString()
 					local _cats = net.ReadTable()
 
-					if NotNilAndNotFalse(BUYMENU.content) then
+					if IsNotNilAndNotFalse(BUYMENU.content) then
 						BUYMENU.shop:Clear()
 
 						for j, cat in pairs(_cats) do
@@ -630,7 +630,7 @@ net.Receive( "shop_get_tabs", function(len)
 					hook.Add( "close_dealerWorldmodel", "close_dealerWorldmodelHook", function()
 						_dealer.WorldModel = LocalPlayer().WorldModel
 
-						if NotNilAndNotFalse(_dealer.WorldModel) then
+						if IsNotNilAndNotFalse(_dealer.WorldModel) then
 							net.Start( "dealer_edit_worldmodel" )
 								net.WriteString(_dealer.uniqueID)
 								net.WriteString(_dealer.WorldModel)

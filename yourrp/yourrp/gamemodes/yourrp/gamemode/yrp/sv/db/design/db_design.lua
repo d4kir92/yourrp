@@ -14,7 +14,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'" )
 local fir = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1" )
 if fir == nil then
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Material', 'Roboto'" )
-elseif NotNilAndNotFalse(fir) then
+elseif IsNotNilAndNotFalse(fir) then
 	fir = fir[1]
 	if fir.string_interface_design == "Simple" or fir.string_hud_design == "Material" then
 		YRP_SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = "Simple"}, "uniqueID = '" .. "1" .. "'" )
@@ -127,7 +127,7 @@ function YRPDesignLoadout(from)
 	--self:HudLoadout()
 	--self:InterfaceLoadout()
 	local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
-	if NotNilAndNotFalse(setting) then
+	if IsNotNilAndNotFalse(setting) then
 		setting = setting[1]
 	
 		SetGlobalYRPString( "string_hud_design", setting.string_hud_design)
@@ -213,7 +213,7 @@ net.Receive( "get_design_settings", function(len, ply)
 		hook.Call( "RegisterHUDDesign" )
 		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
 		local hud_profiles = GetHudProfiles()
-		if NotNilAndNotFalse(setting) then
+		if IsNotNilAndNotFalse(setting) then
 			setting = setting[1]
 			net.Start( "get_design_settings" )
 				net.WriteTable(setting)
@@ -228,7 +228,7 @@ end)
 util.AddNetworkString( "yrp_set_font" )
 function YRPSendFontName(ply)
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "string_fontname", "uniqueID = '1'" )
-	if NotNilAndNotFalse( dbtab) then
+	if IsNotNilAndNotFalse( dbtab) then
 		dbtab = dbtab[1]
 
 		net.Start( "yrp_set_font" )
