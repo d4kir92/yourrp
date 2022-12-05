@@ -27,17 +27,17 @@ function WORKED(obj, name, _silence)
 	end
 end
 
-function EntityAlive(ent)
-	if ent != nil and ent != NULL and tostring(ent) != "[NULL Entity]" then
-		if ent:IsValid() then
+function EntityAlive(obj)
+	if obj != nil and obj != NULL and tostring(obj) != "[NULL Entity]" then
+		if obj:IsValid() then
 			return true
 		end
 	end
 	return false
 end
 
-function PanelAlive(panel)
-	if tostring(panel) != "[NULL Panel]" and panel != nil then
+function PanelAlive(obj)
+	if obj != nil and tostring(obj) != "[NULL Panel]" then
 		return true
 	end
 	return false
