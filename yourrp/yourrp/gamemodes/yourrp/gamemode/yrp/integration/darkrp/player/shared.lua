@@ -147,8 +147,19 @@ function Player:getJobTable()
 	_job.team = self:GetRoleUID()
 
 	_job.name = self:GetYRPString( "roleName", "INVALID" )
+
 	local _pms = string.Explode( ",", self:GetYRPString( "playermodels", "INVALID" ) )
-	_job.model = _pms
+	local pms = {}
+	for i, v in pairs( _pms ) do
+		if !strEmpty( v ) then
+			table.insert( pms, v )
+		end
+	end
+	if table.Count( pms ) <= 0 then
+		pms = "models/player/skeleton.mdl"
+	end
+	_job.model = pms
+
 	_job.description = self:GetYRPString( "roleDescription", "INVALID" )
 	local _weapons = string.Explode( ",", self:GetYRPString( "sweps", "INVALID" ) )
 	_job.weapons = _weapons
@@ -174,7 +185,7 @@ function YRPMakeJobTable( id )
 
 	job.team = id
 	job.name = "LOADING"
-	job.model = ""
+	job.model = "models/player/skeleton.mdl"
 	job.description = ""
 	job.weapons = ""
 	job.max = 1
@@ -201,6 +212,7 @@ if RPExtraTeams == nil then
 		RPExtraTeams[i] = YRPMakeJobTable( i )
 		if i == 0 then
 			RPExtraTeams[i].name = "LOADING"
+			RPExtraTeams[i].model = "models/player/skeleton.mdl"
 			RPExtraTeams[i].fake = false
 		end
 	end

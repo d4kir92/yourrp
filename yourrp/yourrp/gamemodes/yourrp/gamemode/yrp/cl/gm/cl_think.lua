@@ -284,12 +284,13 @@ function YRPKeyPressed(key, str, distance)
 				key = tonumber(key)
 				if key and input.IsKeyDown(key) and !keys[tostring(key)] then
 					keys[tostring(key)] = true
-					timer.Simple(0.14, function()
+					
+					timer.Simple( 0.14, function()
 						if str != nil then
 							YRPUseFunction(str)
 						end
 						keys[tostring(key)] = false
-					end)
+					end )
 				end
 			end
 		end

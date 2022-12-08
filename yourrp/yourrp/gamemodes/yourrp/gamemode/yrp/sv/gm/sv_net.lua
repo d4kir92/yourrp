@@ -121,13 +121,13 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 			ply:SetRPName( newrpname, "darkrp name" )
 		end
 	elseif args[1] and args[1] == "wanted" then
-		YRP.msg( "error", "[darkrp] wanted: args[1]: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
+		YRP.msg( "note", "[darkrp] wanted: args[1]: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
 	elseif args[1] and args[1] == "unwanted" then
-		YRP.msg( "error", "[darkrp] unwanted: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
+		YRP.msg( "note", "[darkrp] unwanted: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
 	elseif args[1] and args[1] == "warrant" then
-		YRP.msg( "error", "[darkrp] warrant: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
+		YRP.msg( "note", "[darkrp] warrant: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
 	elseif args[1] and args[1] == "unwarrant" then
-		YRP.msg( "error", "[darkrp] unwarrant: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
+		YRP.msg( "note", "[darkrp] unwarrant: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
 	elseif args[1] and args[1] == "addjailpos" then
 		--
 	elseif args[1] and args[1] == "unownalldoors" then

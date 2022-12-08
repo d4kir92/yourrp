@@ -208,6 +208,7 @@ function YRPConvertToDarkRPJob(tab)
 		pms = { pms }
 	end
 	_job.model = pms
+
 	_job.description = tab.string_description or ""
 	local _weapons = {}
 	if tab.string_sweps then

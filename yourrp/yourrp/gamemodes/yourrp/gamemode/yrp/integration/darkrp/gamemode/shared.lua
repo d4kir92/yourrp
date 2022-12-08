@@ -157,7 +157,11 @@ function DarkRP.createJob(name, tbl)
 
 					-- Playermodels
 					if type( tbl.model ) == "string" then
-						tbl.model = { tbl.model }
+						if strEmpty( tbl.model ) then
+							tbl.model = "models/player/skeleton.mdl"
+						else
+							tbl.model = { tbl.model }
+						end
 					end
 					YRPAddPlayermodelsToRole( tbl.model, "pms for " .. name, 1, 1, ruid )
 				end
