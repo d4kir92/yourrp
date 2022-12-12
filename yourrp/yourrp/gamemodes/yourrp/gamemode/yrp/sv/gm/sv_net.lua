@@ -147,8 +147,8 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 		else
 			YRP.msg( "note", ply:YRPName() .. " drop weapon is disabled!" )
 		end
-	elseif args[1] and jobByCmd[args[1]] then
-		local jobtab = RPExtraTeams[jobByCmd[args[1]]]
+	elseif args[1] and jobByCmd[string.upper(args[1])] then
+		local jobtab = RPExtraTeams[jobByCmd[string.upper(args[1])]]
 		if jobtab then
 			if GetGlobalYRPBool( "bool_players_die_on_role_switch", false) then
 				ply:KillSilent()
