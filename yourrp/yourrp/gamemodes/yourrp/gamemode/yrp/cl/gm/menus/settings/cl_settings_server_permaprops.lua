@@ -20,26 +20,28 @@ net.Receive( "get_perma_props", function(len, ply)
 		line.id = pp.tab[i].id
 		line.max = pp.tab[i].max
 		line.class = pp.tab[i].class
-		line.model = pp.tab[i].model
+		line.model = pp.tab[i].model or ""
 		function line:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(45, 45, 45, 100) )
 
-			draw.SimpleText( "ID: " .. self.id .. "    " .. self.c .. "/" .. self.max, "Y_30_500", ph + YRP.ctr(20), ph / 4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText( "ClassName: " .. self.class, "Y_30_500", ph + YRP.ctr(20), ph / 4 * 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText( "WorldModel: " .. self.model, "Y_30_500", ph + YRP.ctr(20), ph / 4 * 3, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText( "ID: " .. tostring( self.id ) .. "    " .. tostring( self.c ) .. "/" .. tostring( self.max ), "Y_30_500", ph + YRP.ctr(20), ph / 4, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText( "ClassName: " .. tostring( self.class ), "Y_30_500", ph + YRP.ctr(20), ph / 4 * 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText( "WorldModel: " .. tostring( self.model ), "Y_30_500", ph + YRP.ctr(20), ph / 4 * 3, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 	
 		local mdl = YRPCreateD( "DModelPanel", line, h, h, 0, 0)
 
 		local sho = YRPCreateD( "YButton", line, h, h, 0, 0)
 		sho:SetText( "LID_show" )
-		sho.model = pp.tab[i].model
+		sho.model = pp.tab[i].model or ""
 		sho.mdl = mdl
 		function sho:Paint(pw, ph)
 			self.o = self.o or false
 			if self:IsVisible() and self.mdl:GetModel() == nil and !self.o then
 				self.o = true
-				self.mdl:SetModel(self.model)
+				if !strEmpty( self.model ) then
+					self.mdl:SetModel( self.model )
+				end
 			end
 		end
 		function sho:DoClick()
