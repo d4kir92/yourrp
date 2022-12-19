@@ -1,5 +1,7 @@
 -- Networking
 
+local NWSystem = 2
+
 YRP_Global_Tables = YRP_Global_Tables or {}
 
 YRPDEBUGGLOBAL = false
@@ -58,12 +60,20 @@ end
 
 -- OTHER (REDUCE SET NETWORKING)
 function GetGlobalYRPAngle( index, value )
-	return GetGlobalAngle( index, value )
+	if NWSystem == 1 then
+		return GetGlobalAngle( index, value )
+	else
+		return GetGlobal2Angle( index, value )
+	end
 end
 
 function SetGlobalYRPAngle( index, value )
 	if GetGlobalYRPAngle( index ) != value or value == Angle( 0, 0, 0 ) then
-		return SetGlobalAngle( index, value )
+		if NWSystem == 1 then
+			SetGlobalAngle( index, value )
+		else
+			SetGlobal2Angle( index, value )
+		end
 	elseif YRPDEBUGGLOBAL then
 		c["angle"] = c["angle"] or 0
 		c["angle"] = c["angle"] + 1
@@ -73,12 +83,20 @@ end
 
 
 function GetGlobalYRPBool( index, value )
-	return GetGlobalBool( index )
+	if NWSystem == 1 then
+		return GetGlobalBool( index )
+	else
+		return GetGlobal2Bool( index )
+	end
 end
 
 function SetGlobalYRPBool( index, value )
 	if GetGlobalYRPBool( index ) != value or value == false then
-		return SetGlobalBool( index, value )
+		if NWSystem == 1 then
+			SetGlobalBool( index, value )
+		else
+			SetGlobal2Bool( index, value )
+		end
 	elseif YRPDEBUGGLOBAL then
 		c["bool"] = c["bool"] or 0
 		c["bool"] = c["bool"] + 1
@@ -88,12 +106,20 @@ end
 
 
 function GetGlobalYRPEntity( index, value )
-	return GetGlobalEntity( index, value )
+	if NWSystem == 1 then
+		return GetGlobalEntity( index, value )
+	else
+		return GetGlobal2Entity( index, value )
+	end
 end
 
 function SetGlobalYRPEntity( index, value )
 	if GetGlobalYRPEntity( index ) != value or value == NULL then
-		return SetGlobalEntity( index, value )
+		if NWSystem == 1 then
+			SetGlobalEntity( index, value )
+		else
+			SetGlobal2Entity( index, value )
+		end
 	elseif YRPDEBUGGLOBAL then
 		c["entity"] = c["entity"] or 0
 		c["entity"] = c["entity"] + 1
@@ -103,13 +129,21 @@ end
 
 
 function GetGlobalYRPFloat( index, value )
-	return tonumber( GetGlobalFloat( index, value ) )
+	if NWSystem == 1 then
+		return tonumber( GetGlobalFloat( index, value ) )
+	else
+		return tonumber( GetGlobal2Float( index, value ) )
+	end
 end
 
 function SetGlobalYRPFloat( index, value )
 	value = tonumber( value )
 	if math.abs( GetGlobalYRPFloat( index ) - value ) > 0.0001 or value == 0 then
-		return SetGlobalFloat( index, value )
+		if NWSystem == 1 then
+			SetGlobalFloat( index, value )
+		else
+			SetGlobal2Float( index, value )
+		end
 	elseif YRPDEBUGGLOBAL then
 		c["float"] = c["float"] or 0
 		c["float"] = c["float"] + 1
@@ -119,13 +153,21 @@ end
 
 
 function GetGlobalYRPInt( index, value )
-	return tonumber( GetGlobalInt( index, value ) )
+	if NWSystem == 1 then
+		return tonumber( GetGlobalInt( index, value ) )
+	else
+		return tonumber( GetGlobal2Int( index, value ) )
+	end
 end
 
 function SetGlobalYRPInt( index, value )
 	value = tonumber( value )
 	if GetGlobalYRPInt( index ) != value or value == 0 then
-		return SetGlobalInt( index, value )
+		if NWSystem == 1 then
+			SetGlobalInt( index, value )
+		else
+			SetGlobal2Int( index, value )
+		end
 	elseif YRPDEBUGGLOBAL then
 		c["int"] = c["int"] or 0
 		c["int"] = c["int"] + 1
@@ -135,12 +177,20 @@ end
 
 
 function GetGlobalYRPString( index, value )
-	return GetGlobalString( index, value )
+	if NWSystem == 1 then
+		return tostring( GetGlobalString( index, value ) )
+	else
+		return tostring( GetGlobal2String( index, value ) )
+	end
 end
 
 function SetGlobalYRPString( index, value )
 	if GetGlobalYRPString( index ) != value or value == "" then
-		return SetGlobalString( index, value )
+		if NWSystem == 1 then
+			SetGlobalString( index, value )
+		else
+			SetGlobal2String( index, value )
+		end
 	elseif YRPDEBUGGLOBAL then
 		c["string"] = c["string"] or 0
 		c["string"] = c["string"] + 1
@@ -150,12 +200,20 @@ end
 
 
 function GetGlobalYRPVector( index, value )
-	return GetGlobalVector( index, value )
+	if NWSystem == 1 then
+		return GetGlobalVector( index, value )
+	else
+		return GetGlobal2Vector( index, value )
+	end
 end
 
 function SetGlobalYRPVector( index, value )
 	if GetGlobalYRPVector( index ) != value or value == Vector( 0, 0, 0 ) then
-		return SetGlobalVector( index, value )
+		if NWSystem == 1 then
+			SetGlobalVector( index, value )
+		else
+			SetGlobal2Vector( index, value )
+		end
 	elseif YRPDEBUGGLOBAL then
 		c["vector"] = c["vector"] or 0
 		c["vector"] = c["vector"] + 1

@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 251 -- do NOT change this!
+GM.VersionBuild = 252 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -1159,13 +1159,13 @@ end
 if CLIENT then
 	timer.Simple(1, function()
 		YRPHR( Color( 255, 255, 0 ) )
-		MsgC( Color( 255, 255, 0 ), "[GAME VERSION] Server: " .. GetGlobalYRPString( "serverversion", VERSION ) .. "\n" )
+		MsgC( Color( 255, 255, 0 ), "[GAME VERSION] Server: " .. GetGlobalYRPInt( "serverversion", VERSION ) .. "\n" )
 		MsgC( Color( 255, 255, 0 ), "[GAME VERSION] Client: " .. VERSION .. "\n" )
 		YRPHR( Color( 255, 255, 0 ) )
 
-		if GetGlobalYRPString( "serverversion", VERSION ) > VERSION then
+		if tonumber( GetGlobalYRPInt( "serverversion", VERSION ) ) > VERSION then
 			MsgC( Color( 0, 255, 0 ), "YOUR GAME IS OUTDATED!" .. "\n" )
-		elseif GetGlobalYRPString( "serverversion", VERSION ) < VERSION and BRANCH == "unknown" then
+		elseif tonumber( GetGlobalYRPInt( "serverversion", VERSION ) ) < VERSION and BRANCH == "unknown" then
 			MsgC( Color( 0, 255, 0 ), "SERVER IS OUTDATED!" .. "\n" )
 		else
 			MsgC( Color( 0, 255, 0 ), "YOUR GAME IS UP-To-Date!" .. "\n" )
