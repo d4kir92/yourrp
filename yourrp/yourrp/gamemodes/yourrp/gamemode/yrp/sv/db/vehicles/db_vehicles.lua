@@ -117,6 +117,10 @@ function YRPLockVehicle(ply, ent, nr)
 end
 
 net.Receive( "removeVehicleOwner", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local _tmpVehicleID = tonumber( net.ReadString() )
 	local _tmpTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _tmpVehicleID .. "'" )
 	if IsNotNilAndNotFalse(_tmpTable) then

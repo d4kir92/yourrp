@@ -772,7 +772,12 @@ util.AddNetworkString( "giveRole" )
 net.Receive( "giveRole", function(len, ply)
 	local _tmpSteamID = net.ReadString()
 	local uniqueIDRole = net.ReadInt(16)
-	for k, _ply in pairs(player.GetAll() ) do
+
+	if !ply:HasAccess() then
+		return 
+	end
+	
+	for k, _ply in pairs( player.GetAll() ) do
 		if IsValid(_ply) and tostring(_ply:YRPSteamID() ) == tostring(_tmpSteamID) then
 			YRPRemRolVals(_ply)
 			YRPRemGroVals(_ply)

@@ -230,6 +230,10 @@ util.AddNetworkString( "sellBuilding" )
 
 util.AddNetworkString( "addnewbuilding" )
 net.Receive( "addnewbuilding", function()
+	if !ply:HasAccess() then
+		return 
+	end
+
 	YRP_SQL_INSERT_INTO_DEFAULTVALUES( "yrp_" .. GetMapNameDB() .. "_buildings" )
 end)
 
@@ -326,6 +330,10 @@ function BuildingRemoveOwner( SteamID )
 end
 
 net.Receive( "removeOwner", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local _tmpBuildingID = net.ReadString()
 	local _tmpTable = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
@@ -521,7 +529,7 @@ end)
 function ChangeBuildingString(uid, net_str, new_str)
 	for i, v in pairs(GetAllDoors() ) do
 		if uid == tonumber( v:GetYRPString( "buildingID" ) ) then
-			v:SetYRPString(net_str, new_str)
+			v:SetYRPString( net_str, new_str ) -- only building stuff
 		end
 	end
 end
@@ -541,6 +549,10 @@ function ChangeBuildingBool(uid, net_str, new_boo)
 end
 
 net.Receive( "changeBuildingHeader", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewName = net.ReadString()
 	if IsNotNilAndNotFalse(_tmpBuildingID) then
@@ -553,6 +565,10 @@ net.Receive( "changeBuildingHeader", function(len, ply)
 end)
 
 net.Receive( "changeBuildingDescription", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewName = net.ReadString()
 	if IsNotNilAndNotFalse(_tmpBuildingID) then

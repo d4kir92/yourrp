@@ -43,12 +43,14 @@ net.Receive( "updateServer", function(len, ply)
 end)
 
 net.Receive( "cancelRestartServer", function(len, ply)
-	if ply:HasAccess() then
-		timer.Remove( "timerRestartServer" )
-		local message = "Restart Server CANCELED!"
-		PrintMessage(HUD_PRINTCENTER, message)
-		YRP.msg( "server", message)
+	if !ply:HasAccess() then
+		return
 	end
+	
+	timer.Remove( "timerRestartServer" )
+	local message = "Restart Server CANCELED!"
+	PrintMessage(HUD_PRINTCENTER, message)
+	YRP.msg( "server", message)
 end)
 
 function YRPChangeUserGroup(ply, cmd, args)

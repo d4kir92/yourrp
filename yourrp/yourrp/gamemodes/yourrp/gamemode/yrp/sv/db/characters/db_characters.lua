@@ -406,10 +406,14 @@ end)
 
 util.AddNetworkString( "moneyreset" )
 net.Receive( "moneyreset", function(len, ply)
-	YRP.msg( "db", "<[MONEY RESET]>" )
+	if !ply:HasAccess() then
+		return 
+	end
+
 	YRP_SQL_UPDATE( "yrp_characters", {["money"] = 0}, nil)
 	YRP_SQL_UPDATE( "yrp_characters", {["moneybank"] = 0}, nil)
-	for i, pl in pairs(player.GetAll() ) do
+	
+	for i, pl in pairs( player.GetAll() ) do
 		pl:SetMoney(0)
 		pl:SetMoneyBank(0)
 	end
@@ -1018,6 +1022,11 @@ end)
 util.AddNetworkString( "set_rpname" )
 net.Receive( "set_rpname", function(len, ply)
 	local p = net.ReadEntity()
+
+	if !ply:HasAccess() then
+		return 
+	end
+
 	if IsValid( p ) then
 		local rpname = net.ReadString()
 
@@ -1044,6 +1053,10 @@ end)
 
 util.AddNetworkString( "removearrests" )
 net.Receive( "removearrests", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local p = net.ReadEntity()
 	if IsValid(p) and p:IsPlayer() and p.CharID and IsNotNilAndNotFalse(p:CharID() ) then
 		YRP_SQL_UPDATE(DATABASE_NAME, {["int_arrests"] = 0}, "uniqueID = '" .. p:CharID() .. "'" )
@@ -1063,23 +1076,27 @@ end)
 
 util.AddNetworkString( "givelicense" )
 net.Receive( "givelicense", function(len, ply)
-	if ply:HasAccess() then
-		local target = net.ReadEntity()
-		local uid = tonumber(net.ReadString() )
-		if target and uid and uid > 0 then
-			GiveLicense( target, uid )
-		end
+	if !ply:HasAccess() then
+		return 
+	end
+
+	local target = net.ReadEntity()
+	local uid = tonumber(net.ReadString() )
+	if target and uid and uid > 0 then
+		GiveLicense( target, uid )
 	end
 end)
 
 util.AddNetworkString( "removelicense" )
 net.Receive( "removelicense", function(len, ply)
-	if ply:HasAccess() then
-		local target = net.ReadEntity()
-		local uid = tonumber(net.ReadString() )
-		if uid and uid > 0 then
-			RemoveLicense(target, uid)
-		end
+	if !ply:HasAccess() then
+		return 
+	end
+
+	local target = net.ReadEntity()
+	local uid = tonumber(net.ReadString() )
+	if uid and uid > 0 then
+		RemoveLicense(target, uid)
 	end
 end)
 

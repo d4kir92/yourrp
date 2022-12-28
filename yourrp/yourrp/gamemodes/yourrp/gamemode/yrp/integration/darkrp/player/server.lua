@@ -159,39 +159,41 @@ function Player:setDarkRPVar( variable, value, target )
 
 	target = target or self
 
-	if variable == "Thirst" then
-		target:Drink( value - target:GetYRPFloat( "thirst", 0.0) )
-	elseif variable == "Energy" then
-		target:Eat( value - target:GetYRPFloat( "hunger", 0.0) )
-	elseif variable == "rpname" then
-		target:SetRPName( value, "setDarkRPVar" )
-	elseif variable == "money" then
-		target:SetMoney( value)
-	elseif variable == "wanted" then
-		target:SetYRPBool( "iswanted", value)
-	elseif variable == "agenda" then
-		--
-	elseif variable == "salary" then
-		--
-	elseif variable == "job" then
-		--
-	elseif variable == "wantedReason" then
-		--
-	elseif variable == "HasGunlicense" then
-		--
-	else
-		--YRPDarkrpNotFound( "setDarkRPVar( " .. tostring( variable) .. ", " .. tostring( value) .. ", " .. tostring(target) .. " )" )
-		if target == self then
-			self[ variable ] = value
+	if variable then
+		if variable == "Thirst" then
+			target:Drink( value - target:GetYRPFloat( "thirst", 0.0) )
+		elseif variable == "Energy" then
+			target:Eat( value - target:GetYRPFloat( "hunger", 0.0) )
+		elseif variable == "rpname" then
+			target:SetRPName( value, "setDarkRPVar" )
+		elseif variable == "money" then
+			target:SetMoney( value)
+		elseif variable == "wanted" then
+			target:SetYRPBool( "iswanted", value)
+		elseif variable == "agenda" then
+			--
+		elseif variable == "salary" then
+			--
+		elseif variable == "job" then
+			--
+		elseif variable == "wantedReason" then
+			--
+		elseif variable == "HasGunlicense" then
+			--
 		else
-			target[ variable ] = value
+			--YRPDarkrpNotFound( "setDarkRPVar( " .. tostring( variable) .. ", " .. tostring( value) .. ", " .. tostring(target) .. " )" )
+			if target == self then
+				self[ variable ] = value
+			else
+				target[ variable ] = value
+			end
 		end
-	end
 
-	if isnumber( value) then
-		target:SetYRPInt( variable, value)
-	else
-		target:SetYRPString( variable, value)
+		if isnumber( value ) then
+			target:SetYRPInt( variable, value)
+		elseif string.lower( variable ) != "usergroup" then
+			target:SetYRPString( variable, value)
+		end
 	end
 end
 

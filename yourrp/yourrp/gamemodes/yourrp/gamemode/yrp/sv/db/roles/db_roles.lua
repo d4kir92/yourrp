@@ -1586,6 +1586,10 @@ end)
 
 util.AddNetworkString( "add_license" )
 net.Receive( "add_license", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local ruid = net.ReadInt(32)
 	local WorldModel = net.ReadString()
 	local name = net.ReadString()
@@ -1706,6 +1710,10 @@ end
 
 util.AddNetworkString( "add_role_specialization" )
 net.Receive( "add_role_specialization", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local ruid = net.ReadInt(32)
 	local muid = tonumber(net.ReadString() )
 
@@ -1714,6 +1722,10 @@ end)
 
 util.AddNetworkString( "add_specialization" )
 net.Receive( "add_specialization", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local ruid = net.ReadInt(32)
 	local WorldModel = net.ReadString()
 	local name = net.ReadString()

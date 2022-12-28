@@ -395,6 +395,10 @@ end)
 
 util.AddNetworkString( "usergroup_add" )
 net.Receive( "usergroup_add", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 	YRP.msg( "gm", ply:YRPName() .. " added a new UserGroup" )
 
@@ -403,6 +407,10 @@ end)
 
 util.AddNetworkString( "usergroup_rem" )
 net.Receive( "usergroup_rem", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'" )
 	YRP.msg( "gm", ply:YRPName() .. " removed UserGroup ( " .. uid .. " )" )
@@ -458,6 +466,10 @@ end
 --[[ Usergroup Edit ]]--
 util.AddNetworkString( "usergroup_update_string_name" )
 net.Receive( "usergroup_update_string_name", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local string_name = string.lower(net.ReadString() )
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_name"] = string_name}, "uniqueID = '" .. uid .. "'" )
@@ -492,6 +504,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_string_color" )
 net.Receive( "usergroup_update_string_color", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local string_color = net.ReadString()
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_color"] = string_color}, "uniqueID = '" .. uid .. "'" )
@@ -526,6 +542,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_string_sweps" )
 net.Receive( "usergroup_update_string_sweps", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local sweps = net.ReadTable()
 	local string_sweps = table.concat( sweps, "," )
@@ -542,6 +562,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_string_nonesweps" )
 net.Receive( "usergroup_update_string_nonesweps", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local sweps = net.ReadTable()
 
@@ -559,6 +583,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_string_ammos" )
 net.Receive( "usergroup_update_string_ammos", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local string_ammos = net.ReadString()
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_ammos"] = string_ammos}, "uniqueID = '" .. uid .. "'" )
@@ -626,6 +654,10 @@ end
 
 util.AddNetworkString( "usergroup_update_bool_ac_database" )
 net.Receive( "usergroup_update_bool_ac_database", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_ac_database = net.ReadString()
 	UGCheckBox(ply, uid, "bool_ac_database", bool_ac_database)
@@ -633,6 +665,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_chat" )
 net.Receive( "usergroup_update_bool_chat", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_chat = net.ReadString()
 	UGCheckBox(ply, uid, "bool_chat", bool_chat)
@@ -640,6 +676,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_darkrp" )
 net.Receive( "usergroup_update_bool_darkrp", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_darkrp = net.ReadString()
 	UGCheckBox(ply, uid, "bool_darkrp", bool_darkrp)
@@ -647,6 +687,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_permaprops" )
 net.Receive( "usergroup_update_bool_permaprops", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_permaprops = net.ReadString()
 	UGCheckBox(ply, uid, "bool_permaprops", bool_permaprops)
@@ -654,6 +698,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_status" )
 net.Receive( "usergroup_update_bool_status", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_status = net.ReadString()
 	UGCheckBox(ply, uid, "bool_status", bool_status)
@@ -668,6 +716,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_yourrp_addons" )
 net.Receive( "usergroup_update_bool_yourrp_addons", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_yourrp_addons = net.ReadString()
 	UGCheckBox(ply, uid, "bool_yourrp_addons", bool_yourrp_addons)
@@ -675,6 +727,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_adminaccess" )
 net.Receive( "usergroup_update_bool_adminaccess", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_adminaccess = net.ReadString()
 	UGCheckBox(ply, uid, "bool_adminaccess", bool_adminaccess)
@@ -682,6 +738,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_general" )
 net.Receive( "usergroup_update_bool_general", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_general = net.ReadString()
 	UGCheckBox(ply, uid, "bool_general", bool_general)
@@ -689,6 +749,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_levelsystem" )
 net.Receive( "usergroup_update_bool_levelsystem", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_levelsystem = net.ReadString()
 	UGCheckBox(ply, uid, "bool_levelsystem", bool_levelsystem)
@@ -696,6 +760,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_design" )
 net.Receive( "usergroup_update_bool_design", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_design = net.ReadString()
 	UGCheckBox(ply, uid, "bool_design", bool_design)
@@ -703,6 +771,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_realistic" )
 net.Receive( "usergroup_update_bool_realistic", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_realistic = net.ReadString()
 	UGCheckBox(ply, uid, "bool_realistic", bool_realistic)
@@ -710,6 +782,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_money" )
 net.Receive( "usergroup_update_bool_money", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_money = net.ReadString()
 	UGCheckBox(ply, uid, "bool_money", bool_money)
@@ -717,6 +793,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_licenses" )
 net.Receive( "usergroup_update_bool_licenses", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_licenses = net.ReadString()
 	UGCheckBox(ply, uid, "bool_licenses", bool_licenses)
@@ -724,6 +804,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_specializations" )
 net.Receive( "usergroup_update_bool_specializations", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_specializations = net.ReadString()
 	UGCheckBox(ply, uid, "bool_specializations", bool_specializations)
@@ -731,6 +815,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_weaponsystem" )
 net.Receive( "usergroup_update_bool_weaponsystem", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_weaponsystem = net.ReadString()
 	UGCheckBox(ply, uid, "bool_weaponsystem", bool_weaponsystem)
@@ -738,6 +826,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_shops" )
 net.Receive( "usergroup_update_bool_shops", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_shops = net.ReadString()
 	UGCheckBox(ply, uid, "bool_shops", bool_shops)
@@ -745,6 +837,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_map" )
 net.Receive( "usergroup_update_bool_map", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_map = net.ReadString()
 	UGCheckBox(ply, uid, "bool_map", bool_map)
@@ -752,6 +848,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_feedback" )
 net.Receive( "usergroup_update_bool_feedback", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_feedback = net.ReadString()
 	UGCheckBox(ply, uid, "bool_feedback", bool_feedback)
@@ -759,6 +859,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_usergroups" )
 net.Receive( "usergroup_update_bool_usergroups", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_usergroups = net.ReadString()
 	UGCheckBox(ply, uid, "bool_usergroups", bool_usergroups)
@@ -766,6 +870,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_logs" )
 net.Receive( "usergroup_update_bool_logs", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_logs = net.ReadString()
 	UGCheckBox(ply, uid, "bool_logs", bool_logs)
@@ -773,6 +881,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_blacklist" )
 net.Receive( "usergroup_update_bool_blacklist", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_blacklist = net.ReadString()
 	UGCheckBox(ply, uid, "bool_blacklist", bool_blacklist)
@@ -780,6 +892,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_scale" )
 net.Receive( "usergroup_update_bool_scale", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_scale = net.ReadString()
 	UGCheckBox(ply, uid, "bool_scale", bool_scale)
@@ -787,6 +903,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_groupsandroles" )
 net.Receive( "usergroup_update_bool_groupsandroles", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_groupsandroles = net.ReadString()
 	UGCheckBox(ply, uid, "bool_groupsandroles", bool_groupsandroles)
@@ -794,6 +914,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_players" )
 net.Receive( "usergroup_update_bool_players", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_players = net.ReadString()
 	UGCheckBox(ply, uid, "bool_players", bool_players)
@@ -801,6 +925,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_events" )
 net.Receive( "usergroup_update_bool_events", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_events = net.ReadString()
 	UGCheckBox(ply, uid, "bool_events", bool_events)
@@ -808,6 +936,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_whitelist" )
 net.Receive( "usergroup_update_bool_whitelist", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_whitelist = net.ReadString()
 	UGCheckBox(ply, uid, "bool_whitelist", bool_whitelist)
@@ -815,6 +947,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_vehicles" )
 net.Receive( "usergroup_update_bool_vehicles", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_vehicles = net.ReadString()
 	UGCheckBox(ply, uid, "bool_vehicles", bool_vehicles)
@@ -822,6 +958,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_weapons" )
 net.Receive( "usergroup_update_bool_weapons", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_weapons = net.ReadString()
 	UGCheckBox(ply, uid, "bool_weapons", bool_weapons)
@@ -829,6 +969,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_entities" )
 net.Receive( "usergroup_update_bool_entities", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_entities = net.ReadString()
 	UGCheckBox(ply, uid, "bool_entities", bool_entities)
@@ -836,6 +980,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_effects" )
 net.Receive( "usergroup_update_bool_effects", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_effects = net.ReadString()
 	UGCheckBox(ply, uid, "bool_effects", bool_effects)
@@ -843,6 +991,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_npcs" )
 net.Receive( "usergroup_update_bool_npcs", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_npcs = net.ReadString()
 	UGCheckBox(ply, uid, "bool_npcs", bool_npcs)
@@ -850,6 +1002,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_props" )
 net.Receive( "usergroup_update_bool_props", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_props = net.ReadString()
 	UGCheckBox(ply, uid, "bool_props", bool_props)
@@ -857,6 +1013,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_ragdolls" )
 net.Receive( "usergroup_update_bool_ragdolls", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_ragdolls = net.ReadString()
 	UGCheckBox(ply, uid, "bool_ragdolls", bool_ragdolls)
@@ -864,6 +1024,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_postprocess" )
 net.Receive( "usergroup_update_bool_postprocess", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_postprocess = net.ReadString()
 	UGCheckBox(ply, uid, "bool_postprocess", bool_postprocess)
@@ -871,6 +1035,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_dupes" )
 net.Receive( "usergroup_update_bool_dupes", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_dupes = net.ReadString()
 	UGCheckBox(ply, uid, "bool_dupes", bool_dupes)
@@ -878,6 +1046,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_saves" )
 net.Receive( "usergroup_update_bool_saves", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_saves = net.ReadString()
 	UGCheckBox(ply, uid, "bool_saves", bool_saves)
@@ -885,6 +1057,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_ignite" )
 net.Receive( "usergroup_update_bool_ignite", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_ignite = net.ReadString()
 	UGCheckBox(ply, uid, "bool_ignite", bool_ignite)
@@ -892,6 +1068,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_drive" )
 net.Receive( "usergroup_update_bool_drive", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_drive = net.ReadString()
 	UGCheckBox(ply, uid, "bool_drive", bool_drive)
@@ -899,6 +1079,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_flashlight" )
 net.Receive( "usergroup_update_bool_flashlight", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_flashlight = net.ReadString()
 	UGCheckBox(ply, uid, "bool_flashlight", bool_flashlight)
@@ -906,6 +1090,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_collision" )
 net.Receive( "usergroup_update_bool_collision", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_collision = net.ReadString()
 	UGCheckBox(ply, uid, "bool_collision", bool_collision)
@@ -913,6 +1101,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_gravity" )
 net.Receive( "usergroup_update_bool_gravity", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_gravity = net.ReadString()
 	UGCheckBox(ply, uid, "bool_gravity", bool_gravity)
@@ -920,6 +1112,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_keepupright" )
 net.Receive( "usergroup_update_bool_keepupright", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_keepupright = net.ReadString()
 	UGCheckBox(ply, uid, "bool_keepupright", bool_keepupright)
@@ -927,6 +1123,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_bodygroups" )
 net.Receive( "usergroup_update_bool_bodygroups", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_bodygroups = net.ReadString()
 	UGCheckBox(ply, uid, "bool_bodygroups", bool_bodygroups)
@@ -934,6 +1134,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_physgunpickup" )
 net.Receive( "usergroup_update_bool_physgunpickup", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_physgunpickup = net.ReadString()
 	UGCheckBox(ply, uid, "bool_physgunpickup", bool_physgunpickup)
@@ -941,6 +1145,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_physgunpickupplayer" )
 net.Receive( "usergroup_update_bool_physgunpickupplayer", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_physgunpickupplayer = net.ReadString()
 	UGCheckBox(ply, uid, "bool_physgunpickupplayer", bool_physgunpickupplayer)
@@ -948,6 +1156,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_physgunpickupworld" )
 net.Receive( "usergroup_update_bool_physgunpickupworld", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_physgunpickupworld = net.ReadString()
 	UGCheckBox(ply, uid, "bool_physgunpickupworld", bool_physgunpickupworld)
@@ -955,6 +1167,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_physgunpickupotherowner" )
 net.Receive( "usergroup_update_bool_physgunpickupotherowner", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_physgunpickupotherowner = net.ReadString()
 	UGCheckBox(ply, uid, "bool_physgunpickupotherowner", bool_physgunpickupotherowner)
@@ -962,6 +1178,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_physgunpickupignoreblacklist" )
 net.Receive( "usergroup_update_bool_physgunpickupignoreblacklist", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_physgunpickupignoreblacklist = net.ReadString()
 	UGCheckBox(ply, uid, "bool_physgunpickupignoreblacklist", bool_physgunpickupignoreblacklist)
@@ -969,6 +1189,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_gravgunpunt" )
 net.Receive( "usergroup_update_bool_gravgunpunt", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_gravgunpunt = net.ReadString()
 	UGCheckBox(ply, uid, "bool_gravgunpunt", bool_gravgunpunt)
@@ -978,6 +1202,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_canseeteammatesonmap" )
 net.Receive( "usergroup_update_bool_canseeteammatesonmap", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_canseeteammatesonmap = net.ReadString()
 	UGCheckBox(ply, uid, "bool_canseeteammatesonmap", bool_canseeteammatesonmap)
@@ -985,6 +1213,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_canseeenemiesonmap" )
 net.Receive( "usergroup_update_bool_canseeenemiesonmap", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_canseeenemiesonmap = net.ReadString()
 	UGCheckBox(ply, uid, "bool_canseeenemiesonmap", bool_canseeenemiesonmap)
@@ -992,6 +1224,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_canusewarnsystem" )
 net.Receive( "usergroup_update_bool_canusewarnsystem", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_canusewarnsystem = net.ReadString()
 	UGCheckBox(ply, uid, "bool_canusewarnsystem", bool_canusewarnsystem)
@@ -999,6 +1235,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_canusecontextmenu" )
 net.Receive( "usergroup_update_bool_canusecontextmenu", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_canusecontextmenu = net.ReadString()
 	UGCheckBox(ply, uid, "bool_canusecontextmenu", bool_canusecontextmenu)
@@ -1006,6 +1246,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_bool_canusespawnmenu" )
 net.Receive( "usergroup_update_bool_canusespawnmenu", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local bool_canusespawnmenu = net.ReadString()
 	UGCheckBox(ply, uid, "bool_canusespawnmenu", bool_canusespawnmenu)
@@ -1015,6 +1259,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_int_characters_max" )
 net.Receive( "usergroup_update_int_characters_max", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local int_characters_max = net.ReadString()
 	UGUpdateInt(ply, uid, "int_characters_max", int_characters_max)
@@ -1022,6 +1270,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_int_charactersevent_max" )
 net.Receive( "usergroup_update_int_charactersevent_max", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local int_charactersevent_max = net.ReadString()
 	UGUpdateInt(ply, uid, "int_charactersevent_max", int_charactersevent_max)
@@ -1603,9 +1855,11 @@ end
 
 util.AddNetworkString( "yrp_restartserver" )
 net.Receive( "yrp_restartserver", function(len, ply)
-	if ply:HasAccess() then
-		YRPRestartServer()
+	if !ply:HasAccess() then
+		return 
 	end
+	
+	YRPRestartServer()
 end)
 
 util.AddNetworkString( "UpdateUsergroupsList" )
@@ -1637,6 +1891,10 @@ end
 
 util.AddNetworkString( "settings_usergroup_position_up" )
 net.Receive( "settings_usergroup_position_up", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local usergroup = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 	usergroup = usergroup[1]
@@ -1662,6 +1920,10 @@ end)
 
 util.AddNetworkString( "settings_usergroup_position_dn" )
 net.Receive( "settings_usergroup_position_dn", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 	group = group[1]
@@ -1687,6 +1949,10 @@ end)
 
 util.AddNetworkString( "get_perma_props" )
 net.Receive( "get_perma_props", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local tab = {}
 	if YRP_SQL_TABLE_EXISTS( "permaprops" ) then
 		tab = YRP_SQL_SELECT( "permaprops", "*", nil)
@@ -1741,6 +2007,10 @@ end)
 
 util.AddNetworkString( "yrp_pp_remove" )
 net.Receive( "yrp_pp_remove", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local ppid = net.ReadString()
 
 	if YRP_SQL_TABLE_EXISTS( "permaprops" ) then
@@ -1756,6 +2026,10 @@ end)
 
 util.AddNetworkString( "yrp_pp_teleport" )
 net.Receive( "yrp_pp_teleport", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local ppid = net.ReadString()
 
 	if YRP_SQL_TABLE_EXISTS( "permaprops" ) then
@@ -1772,6 +2046,10 @@ end)
 
 util.AddNetworkString( "get_perma_props2" )
 net.Receive( "get_perma_props2", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local tab = {}
 	if YRP_SQL_TABLE_EXISTS( "permaprops_system" ) then
 		tab = YRP_SQL_SELECT( "permaprops_system", "*", nil)
@@ -1827,6 +2105,10 @@ end)
 
 util.AddNetworkString( "yrp_pp_remove2" )
 net.Receive( "yrp_pp_remove2", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local ppid = net.ReadString()
 
 	if YRP_SQL_TABLE_EXISTS( "permaprops_system" ) then
@@ -1842,6 +2124,10 @@ end)
 
 util.AddNetworkString( "yrp_pp_teleport2" )
 net.Receive( "yrp_pp_teleport2", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local ppid = net.ReadString()
 
 	if YRP_SQL_TABLE_EXISTS( "permaprops_system" ) then
@@ -1858,6 +2144,10 @@ end)
 
 util.AddNetworkString( "get_usergroup_licenses" )
 net.Receive( "get_usergroup_licenses", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local licenses = YRP_SQL_SELECT( "yrp_licenses", "*", nil)
 
 	if IsNotNilAndNotFalse(licenses) then
@@ -1869,6 +2159,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_string_licenses" )
 net.Receive( "usergroup_update_string_licenses", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local string_licenses = string.lower(net.ReadString() )
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_licenses"] = string_licenses}, "uniqueID = '" .. uid .. "'" )
@@ -1878,6 +2172,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_string_tools" )
 net.Receive( "usergroup_update_string_tools", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local string_tools = net.ReadString()
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_tools"] = string_tools}, "uniqueID = '" .. uid .. "'" )
@@ -1887,6 +2185,10 @@ end)
 
 util.AddNetworkString( "usergroup_update_string_ammos" )
 net.Receive( "usergroup_update_string_ammos", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local uid = tonumber(net.ReadString() )
 	local string_ammos = net.ReadString()
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_ammos"] = string_ammos}, "uniqueID = '" .. uid .. "'" )

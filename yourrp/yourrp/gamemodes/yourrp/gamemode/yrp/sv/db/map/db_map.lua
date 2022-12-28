@@ -122,6 +122,10 @@ util.AddNetworkString( "dbInsertIntoMap" )
 util.AddNetworkString( "removeMapEntry" )
 
 net.Receive( "removeMapEntry", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+	
 	local _tmpUniqueID = net.ReadString()
 
 	local _tmpMapTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _tmpUniqueID .. "'" )

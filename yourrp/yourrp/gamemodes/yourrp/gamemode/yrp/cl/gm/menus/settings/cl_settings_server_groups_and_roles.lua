@@ -467,11 +467,13 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				local _yes = YRPCreateD( "YButton", win:GetContent(), YRP.ctr(300), YRP.ctr(50), 0, 0)
 				_yes:SetText(YRP.lang_string( "LID_yes" ) )
 				function _yes:DoClick()
-					net.Start( "settings_delete_group" )
-						net.WriteString(ea.tab.uniqueID)
-						net.WriteBool(recursive:GetValue() )
-					net.SendToServer()
-
+					if ea.tab.uniqueID then
+						net.Start( "settings_delete_group" )
+							net.WriteString(ea.tab.uniqueID)
+							net.WriteBool(recursive:GetValue() )
+						net.SendToServer()
+					end
+					
 					ea.background:Clear()
 
 					ea.typ = nil

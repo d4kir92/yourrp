@@ -470,6 +470,9 @@ function RemoveUnusedRoles()
 end
 
 function DeleteGroup(guid, recursive)
+	if guid == nil then
+		return false
+	end
 	local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. guid .. "'" )
 	if IsNotNilAndNotFalse(group) then
 		group = group[1]
@@ -508,7 +511,9 @@ util.AddNetworkString( "settings_delete_group" )
 net.Receive( "settings_delete_group", function(len, ply)
 	local guid = tonumber(net.ReadString() )
 	local recursive = net.ReadBool()
-	DeleteGroup(guid, recursive)
+	if guid then
+		DeleteGroup(guid, recursive)
+	end
 end)
 
 util.AddNetworkString( "get_grps" )
