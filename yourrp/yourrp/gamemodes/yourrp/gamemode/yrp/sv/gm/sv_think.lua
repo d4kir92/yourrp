@@ -121,6 +121,10 @@ end
 
 
 function YRPConST( ply, _time )
+	if !IsValid( ply ) then
+		return false
+	end
+
 	if GetGlobalYRPBool( "bool_onlywhencook", false) and !IsCookPlaying() then
 		if ply:GetYRPFloat( "GetCurStamina" ) != 100 then
 			ply:SetYRPFloat( "GetCurStamina", 100)
