@@ -140,46 +140,6 @@ function YRPConvertToDarkRPCategory( tab, cat )
 	return t
 end
 
-function Player:getJobTable()
-	--Description: Get the job table of a player.
-	local _job = {}
-
-	_job.team = self:GetRoleUID()
-
-	_job.name = self:GetYRPString( "roleName", "INVALID" )
-
-	local _pms = string.Explode( ",", self:GetYRPString( "playermodels", "INVALID" ) )
-	local pms = {}
-	for i, v in pairs( _pms ) do
-		if !strEmpty( v ) then
-			table.insert( pms, v )
-		end
-	end
-	if table.Count( pms ) <= 0 then
-		pms = "models/player/skeleton.mdl"
-	end
-	_job.model = pms
-
-	_job.description = self:GetYRPString( "roleDescription", "INVALID" )
-	local _weapons = string.Explode( ",", self:GetYRPString( "sweps", "INVALID" ) )
-	_job.weapons = _weapons
-	_job.max = tonumber(self:GetYRPString( "maxamount", -1) )
-	_job.salary = tonumber(self:GetYRPString( "salary", "INVALID" ) )
-	_job.admin = tonumber(self:GetYRPBool( "isadminonly" ) ) or 0
-	_job.vote = self:GetYRPBool( "isVoteable" ) or false
-	if self:GetLicenseIDs() then
-		_job.hasLicense = true
-	else
-		_job.hasLicense = false
-	end
-	_job.candemote = self:GetYRPBool( "isInstructor" ) or false
-	_job.category = self:GetYRPString( "groupName", "INVALID" )
-	_job.command = YRPConvertToDarkRPJobName(_job.name)
-	_job.color = self:GetRoleColor()
-
-	return _job
-end
-
 function YRPMakeJobTable( id )
 	local job = {}
 
@@ -228,6 +188,52 @@ end
 GetRPExtraTeams()
 
 RPExtraTeamDoors = RPExtraTeamDoors or {}
+
+function Player:getJobTable()
+	--Description: Get the job table of a player.
+	local darkrpJobTab = RPExtraTeams[self:Team()]
+	
+	local _job = {}
+
+	_job.team = self:GetRoleUID()
+
+	_job.name = self:GetYRPString( "roleName", "INVALID" )
+
+	local _pms = {}
+	if darkrpJobTab then
+		_pms = darkrpJobTab.model
+	end
+
+	local pms = {}
+	for i, v in pairs( _pms ) do
+		if !strEmpty( v ) then
+			table.insert( pms, v )
+		end
+	end
+	if table.Count( pms ) <= 0 then
+		pms = "models/player/skeleton.mdl"
+	end
+	_job.model = pms
+
+	_job.description = self:GetYRPString( "roleDescription", "INVALID" )
+	local _weapons = string.Explode( ",", self:GetYRPString( "sweps", "INVALID" ) )
+	_job.weapons = _weapons
+	_job.max = tonumber(self:GetYRPString( "maxamount", -1) )
+	_job.salary = tonumber(self:GetYRPString( "salary", "INVALID" ) )
+	_job.admin = tonumber(self:GetYRPBool( "isadminonly" ) ) or 0
+	_job.vote = self:GetYRPBool( "isVoteable" ) or false
+	if self:GetLicenseIDs() then
+		_job.hasLicense = true
+	else
+		_job.hasLicense = false
+	end
+	_job.candemote = self:GetYRPBool( "isInstructor" ) or false
+	_job.category = self:GetYRPString( "groupName", "INVALID" )
+	_job.command = YRPConvertToDarkRPJobName(_job.name)
+	_job.color = self:GetRoleColor()
+
+	return _job
+end
 
 function Player:getPocketItems()
 	--Description: Get a player's pocket items.
