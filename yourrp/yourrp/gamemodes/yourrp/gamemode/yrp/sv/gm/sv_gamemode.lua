@@ -110,7 +110,7 @@ local hackertick = 0
 
 hook.Add( "Think", "yrp_banhackers", function()
 	if hackertick < CurTime() then
-		hackertick = CurTime() + 1
+		hackertick = CurTime() + 4
 
 		for i, ply in pairs( player.GetAll() ) do
 			if hackers[ ply:SteamID() ] or hackers[ ply:YRPSteamID() ] then
@@ -120,9 +120,9 @@ hook.Add( "Think", "yrp_banhackers", function()
 		end
 		
 		if ConVar and ConVar( "sv_allowcslua" ) and ConVar( "sv_allowcslua" ):GetBool() then
-			local text = "[sv_allowcslua] is enabled, clients can use Scripts!"
+			local text = "[sv_allowcslua] enabled, clients can use Scripts! To Disable: \"sv_allowcslua 0\""
 			PrintMessage( HUD_PRINTCENTER, text )
-			MsgC( Color( 0, 255, 0 ), text .. "\n", Color( 255, 255, 255, 255 ) )
+			MsgC( Color( 255, 0, 0 ), text .. "\n", Color( 255, 255, 255, 255 ) )
 		end
 
 		if ConVar and ConVar( "sv_cheats" ) and ConVar( "sv_cheats" ):GetBool() then

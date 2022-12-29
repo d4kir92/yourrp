@@ -140,7 +140,7 @@ function ENTITY:GetYRPString( key, value )
 	return ""
 end
 function ENTITY:SetYRPString( key, value )
-	if self:GetYRPString( key ) != value or value == "" then
+	if self:GetYRPString( key ) != value or value == "" and string.lower( key ) != "usergroup" then
 		if NWSystem == 1 then
 			self:SetNWString( key, tostring( value ) )
 		else
