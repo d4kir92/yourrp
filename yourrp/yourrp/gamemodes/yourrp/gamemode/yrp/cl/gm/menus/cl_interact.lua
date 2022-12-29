@@ -27,13 +27,13 @@ function openInteractMenu(CharID)
 	if CharID != nil then
 		openMenu()
 		tmpTargetCharID = CharID
-		net.Start( "openInteractMenu" )
+		net.Start( "nws_yrp_openInteractMenu" )
 			net.WriteString(tmpTargetCharID)
 		net.SendToServer()
 	end
 end
 
-net.Receive( "openInteractMenu", function(len)
+net.Receive( "nws_yrp_openInteractMenu", function(len)
 	local ply = net.ReadEntity()
 
 	local idcard = net.ReadBool()
@@ -121,14 +121,14 @@ net.Receive( "openInteractMenu", function(len)
 		local btnVerwarnungUp = createVGUI( "YButton", content, 50, 50, 10, 1000)
 		btnVerwarnungUp:SetText( "⮝" )
 		function btnVerwarnungUp:DoClick()
-			net.Start( "warning_up" )
+			net.Start( "nws_yrp_warning_up" )
 				net.WriteEntity(ply)
 			net.SendToServer()
 		end
 		local btnVerwarnungDn = createVGUI( "YButton", content, 50, 50, 10, 1050)
 		btnVerwarnungDn:SetText( "⮟" )
 		function btnVerwarnungDn:DoClick()
-			net.Start( "warning_dn" )
+			net.Start( "nws_yrp_warning_dn" )
 				net.WriteEntity(ply)
 			net.SendToServer()
 		end
@@ -141,14 +141,14 @@ net.Receive( "openInteractMenu", function(len)
 		local btnVerstoesseUp = createVGUI( "YButton", content, 50, 50, 10, 1110)
 		btnVerstoesseUp:SetText( "⮝" )
 		function btnVerstoesseUp:DoClick()
-			net.Start( "violation_up" )
+			net.Start( "nws_yrp_violation_up" )
 				net.WriteEntity(ply)
 			net.SendToServer()
 		end
 		local btnVerstoesseDn = createVGUI( "YButton", content, 50, 50, 10, 1160)
 		btnVerstoesseDn:SetText( "⮟" )
 		function btnVerstoesseDn:DoClick()
-			net.Start( "violation_dn" )
+			net.Start( "nws_yrp_violation_dn" )
 				net.WriteEntity(ply)
 			net.SendToServer()
 		end
@@ -164,7 +164,7 @@ net.Receive( "openInteractMenu", function(len)
 			local btnPromote = createVGUI( "YButton", content, 500, 50, 520, 1000)
 			btnPromote:SetText(YRP.lang_string( "LID_promote" ) .. ": " .. promoteName)
 			function btnPromote:DoClick()
-				net.Start( "promotePlayer" )
+				net.Start( "nws_yrp_promotePlayer" )
 					net.WriteString(tmpTargetCharID)
 				net.SendToServer()
 				if PanelAlive(yrp_Interact) then
@@ -180,7 +180,7 @@ net.Receive( "openInteractMenu", function(len)
 			local btnDemote = createVGUI( "YButton", content, 500, 50, 520, 1000 + 10 + 50)
 			btnDemote:SetText(YRP.lang_string( "LID_demote" ) .. ": " .. demoteName)
 			function btnDemote:DoClick()
-				net.Start( "demotePlayer" )
+				net.Start( "nws_yrp_demotePlayer" )
 					net.WriteString(tmpTargetCharID)
 				net.SendToServer()
 				if PanelAlive(yrp_Interact) then
@@ -196,7 +196,7 @@ net.Receive( "openInteractMenu", function(len)
 			local btnbtnInviteToGroup = createVGUI( "YButton", content, 500, 50, 520, 1000)
 			btnbtnInviteToGroup:SetText(YRP.lang_string( "LID_invitetogroup" ) )
 			function btnbtnInviteToGroup:DoClick()
-				net.Start( "invitetogroup" )
+				net.Start( "nws_yrp_invitetogroup" )
 					net.WriteString(tmpTargetCharID)
 				net.SendToServer()
 				if PanelAlive(yrp_Interact) then
@@ -259,7 +259,7 @@ function YRPOpenGiveSpec( charid, ruid )
 		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 80) )
 	end
 
-	net.Receive( "get_role_specs", function(len)
+	net.Receive( "nws_yrp_get_role_specs", function(len)
 		local nettab = net.ReadTable()
 		if PanelAlive( win ) and PanelAlive( win.dpl ) then
 			local ply = NULL
@@ -289,7 +289,7 @@ function YRPOpenGiveSpec( charid, ruid )
 					end
 
 					function btn:DoClick()
-						net.Start( "char_add_spec" )
+						net.Start( "nws_yrp_char_add_spec" )
 							net.WriteString( charid)
 							net.WriteString( v.uid)
 							net.WriteString(ruid)
@@ -308,7 +308,7 @@ function YRPOpenGiveSpec( charid, ruid )
 					end
 
 					function btn:DoClick()
-						net.Start( "char_rem_spec" )
+						net.Start( "nws_yrp_char_rem_spec" )
 							net.WriteString( charid)
 							net.WriteString( v.uid)
 							net.WriteString(ruid)
@@ -323,20 +323,20 @@ function YRPOpenGiveSpec( charid, ruid )
 		end
 	end)
 	if ruid then
-		net.Start( "get_role_specs" )
+		net.Start( "nws_yrp_get_role_specs" )
 			net.WriteString(ruid)
 		net.SendToServer()
 	end
 end
 
-net.Receive( "yrp_reopen_givespec", function()
+net.Receive( "nws_yrp_reopen_givespec", function()
 	local charid = net.ReadString()
 	local ruid = net.ReadString()
 
 	YRPOpenGiveSpec( charid, ruid)
 end)
 
-net.Receive( "yrp_invite_ply", function(len)
+net.Receive( "nws_yrp_invite_ply", function(len)
 	local role = net.ReadTable()
 	local group = net.ReadTable()
 	
@@ -357,7 +357,7 @@ net.Receive( "yrp_invite_ply", function(len)
 	win.accept = YRPCreateD( "YButton", content, YRP.ctr(200), YRP.ctr(50), content:GetWide() / 2 - YRP.ctr(200 + 5), content:GetTall() - YRP.ctr(50 + 10) )
 	win.accept:SetText( "LID_accept" )
 	function win.accept:DoClick()
-		net.Start( "yrp_invite_accept" )
+		net.Start( "nws_yrp_invite_accept" )
 			net.WriteTable(role)
 		net.SendToServer()
 		win:Close()

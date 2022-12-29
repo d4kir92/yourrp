@@ -109,7 +109,7 @@ function BuildFeedbackLine(parent, tab)
 	_fb.statusbtn4 = YRPCreateD( "YButton", _fb, YRP.ctr(500), YRP.ctr(50), YRP.ctr(2080), YRP.ctr(230) )
 	_fb.statusbtn4:SetText( "LID_tpto" )
 	function _fb.statusbtn4:DoClick()
-		net.Start( "tp_tpto_steamid" )
+		net.Start( "nws_yrp_tp_tpto_steamid" )
 			net.WriteString(_fb.steamid)
 		net.SendToServer()
 	end
@@ -117,14 +117,14 @@ function BuildFeedbackLine(parent, tab)
 	_fb.statusbtn5 = YRPCreateD( "YButton", _fb, YRP.ctr(500), YRP.ctr(50), YRP.ctr(2080), YRP.ctr(300) )
 	_fb.statusbtn5:SetText( "LID_bring" )
 	function _fb.statusbtn5:DoClick()
-		net.Start( "tp_bring_steamid" )
+		net.Start( "nws_yrp_tp_bring_steamid" )
 			net.WriteString(_fb.steamid)
 		net.SendToServer()
 	end
 
 	if _fb.statusbtn1 then
 		function _fb.statusbtn1:DoClick()
-			net.Start( "fb_movetoopen" )
+			net.Start( "nws_yrp_fb_movetoopen" )
 				net.WriteString(tab.uniqueID)
 			net.SendToServer()
 
@@ -136,7 +136,7 @@ function BuildFeedbackLine(parent, tab)
 
 	if _fb.statusbtn2 then
 		function _fb.statusbtn2:DoClick()
-			net.Start( "fb_movetowip" )
+			net.Start( "nws_yrp_fb_movetowip" )
 				net.WriteString(tab.uniqueID)
 			net.SendToServer()
 
@@ -148,7 +148,7 @@ function BuildFeedbackLine(parent, tab)
 
 	if _fb.statusbtn3 then
 		function _fb.statusbtn3:DoClick()
-			net.Start( "fb_movetoclosed" )
+			net.Start( "nws_yrp_fb_movetoclosed" )
 				net.WriteString(tab.uniqueID)
 			net.SendToServer()
 
@@ -174,7 +174,7 @@ function BuildFeedback(parent, tab, status)
 	end
 end
 
-net.Receive( "get_ticket", function()
+net.Receive( "nws_yrp_get_ticket", function()
 	local lply = LocalPlayer()
 	local _fbt = net.ReadTable()
 
@@ -202,6 +202,6 @@ net.Receive( "get_ticket", function()
 end)
 
 function OpenSettingsFeedback()
-	net.Start( "get_ticket" )
+	net.Start( "nws_yrp_get_ticket" )
 	net.SendToServer()
 end

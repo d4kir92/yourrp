@@ -83,7 +83,7 @@ function YRPOpenInventory(target)
 			draw.RoundedBoxEx(12, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ), true, true, false, false)
 		end
 
-		net.Receive( "get_inventory", function(len)
+		net.Receive( "nws_yrp_get_inventory", function(len)
 			local storageID = net.ReadString()
 			if PanelAlive(YRPInventory() ) then
 				inv.storage = YRPCreateD( "YStorage", inv.win, YRPItemSize() * 5 + YRP.ctr(inv.br) * 4, YRPItemSize(), YRP.ctr(inv.sp), YRP.ctr(inv.sp) )
@@ -109,13 +109,13 @@ function YRPOpenInventory(target)
 			end
 		end)
 
-		net.Start( "get_inventory" )
+		net.Start( "nws_yrp_get_inventory" )
 		net.SendToServer()
 	end
 end
 YRPCloseInventory()
 
-net.Receive( "yrp_open_storage", function(len)
+net.Receive( "nws_yrp_open_storage", function(len)
 	local lply = LocalPlayer()
 	YRPOpenInventory(true)
 
@@ -150,7 +150,7 @@ YRPDropItem:Receiver( "yrp_slot", function( receiver, panels, bDoDrop, Command, 
 		local itemID = item.main:GetItemID()
 
 		if itemID != nil then
-			net.Start( "yrp_item_drop" )
+			net.Start( "nws_yrp_item_drop" )
 				net.WriteString(itemID)
 			net.SendToServer()
 		end

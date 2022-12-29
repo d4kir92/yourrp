@@ -108,7 +108,7 @@ function Player:DropSWEP( cname, force )
 			-- on cooldown
 		end
 	else
-		net.Start( "dropswep" )
+		net.Start( "nws_yrp_dropswep" )
 			net.WriteBool(false)
 		net.Send(self)
 	end
@@ -146,8 +146,8 @@ function Player:IsAllowedToDropSWEPUG( cname)
 	return true
 end
 
-util.AddNetworkString( "dropswep" )
-net.Receive( "dropswep", function(len, ply)
+util.AddNetworkString( "nws_yrp_dropswep" )
+net.Receive( "nws_yrp_dropswep", function(len, ply)
 	local _enabled = PlayersCanDropWeapons()
 
 	if _enabled then

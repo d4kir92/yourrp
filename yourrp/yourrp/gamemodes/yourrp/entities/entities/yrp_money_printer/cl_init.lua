@@ -30,7 +30,7 @@ function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full
 		end
 	end
 	function tmpBut:DoClick()
-		net.Start(_net)
+		net.Start( _net )
 			net.WriteEntity(mp)
 		net.SendToServer()
 	end
@@ -48,7 +48,7 @@ function tempInfo(mp, parent, w, h, x, y)
 end
 
 local upgradeframe = nil
-net.Receive( "getMoneyPrintMenu", function(len)
+net.Receive( "nws_yrp_getMoneyPrintMenu", function(len)
 	local lply = LocalPlayer()
 
 	local mp = net.ReadEntity()
@@ -66,24 +66,24 @@ net.Receive( "getMoneyPrintMenu", function(len)
 		end
 
 		--CPU
-		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60), "cpu", "upgradeCPU",YRP.lang_string( "LID_cpu" ),YRP.lang_string( "LID_upgrade" ),YRP.lang_string( "LID_max" ) )
+		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60), "cpu", "nws_yrp_upgradeCPU",YRP.lang_string( "LID_cpu" ),YRP.lang_string( "LID_upgrade" ),YRP.lang_string( "LID_max" ) )
 
 		--Cooler
-		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 70), "cooler", "upgradeCooler",YRP.lang_string( "LID_cooler" ),YRP.lang_string( "LID_upgrade" ),YRP.lang_string( "LID_max" ) )
+		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 70), "cooler", "nws_yrp_upgradeCooler",YRP.lang_string( "LID_cooler" ),YRP.lang_string( "LID_upgrade" ),YRP.lang_string( "LID_max" ) )
 
 		--Printer
-		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 140), "printer", "upgradePrinter",YRP.lang_string( "LID_printer" ),YRP.lang_string( "LID_upgrade" ),YRP.lang_string( "LID_max" ) )
+		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 140), "printer", "nws_yrp_upgradePrinter",YRP.lang_string( "LID_printer" ),YRP.lang_string( "LID_upgrade" ),YRP.lang_string( "LID_max" ) )
 
 		--Printer
 		if !GetGlobalYRPBool( "bool_money_printer_spawn_money", false) then
-			moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 220), "storage", "upgradeStorage",YRP.lang_string( "LID_storage" ),YRP.lang_string( "LID_upgrade" ),YRP.lang_string( "LID_max" ) )
+			moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 220), "storage", "nws_yrp_upgradeStorage",YRP.lang_string( "LID_storage" ),YRP.lang_string( "LID_upgrade" ),YRP.lang_string( "LID_max" ) )
 		end
 
 		--Fuel
-		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 380), "fuel", "fuelUP",YRP.lang_string( "LID_fuel" ),YRP.lang_string( "LID_fuelup" ),YRP.lang_string( "LID_full" ) )
+		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 380), "fuel", "yrp_fuelUP",YRP.lang_string( "LID_fuel" ),YRP.lang_string( "LID_fuelup" ),YRP.lang_string( "LID_full" ) )
 
 		--HP
-		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 450), "hp", "repairMP", YRP.lang_string( "LID_health" ), YRP.lang_string( "LID_repair" ), "" )
+		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 450), "hp", "yrp_repairMP", YRP.lang_string( "LID_health" ), YRP.lang_string( "LID_repair" ), "" )
 
 		--Temperatur
 		tempInfo(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 520) )
@@ -115,7 +115,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 		end
 		function gatherMoney:DoClick()
 			if !GetGlobalYRPBool( "bool_money_printer_spawn_money", false) then
-				net.Start( "withdrawMoney" )
+				net.Start( "nws_yrp_withdrawMoney" )
 					net.WriteEntity(mp)
 				net.SendToServer()
 			end
@@ -142,7 +142,7 @@ net.Receive( "getMoneyPrintMenu", function(len)
 			end
 		end
 		function workingB:DoClick()
-			net.Start( "startMoneyPrinter" )
+			net.Start( "nws_yrp_startMoneyPrinter" )
 				net.WriteEntity(mp)
 			net.SendToServer()
 		end

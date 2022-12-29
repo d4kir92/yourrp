@@ -2,7 +2,7 @@
 
 -- #CHAT
 
-util.AddNetworkString( "ShowAlert" )
+util.AddNetworkString( "nws_yrp_showAlert" )
 local alerts = {}
 
 function AddAlert(str)
@@ -37,15 +37,15 @@ if !YRPAlertsHOOKED then
 	YRPSetAlerts()
 end
 
-util.AddNetworkString( "yrp_player_say" )
+util.AddNetworkString( "nws_yrp_player_say" )
 
-util.AddNetworkString( "startchat" )
-net.Receive( "startchat", function(len, ply)
+util.AddNetworkString( "nws_yrp_startchat" )
+net.Receive( "nws_yrp_startchat", function(len, ply)
 	ply:SetYRPBool( "istyping", true)
 end)
 
-util.AddNetworkString( "finishchat" )
-net.Receive( "finishchat", function(len, ply)
+util.AddNetworkString( "nws_yrp_finishchat" )
+net.Receive( "nws_yrp_finishchat", function(len, ply)
 	ply:SetYRPBool( "istyping", false)
 end)
 
@@ -198,8 +198,8 @@ function show_tag_ug(sender)
 	end
 end
 
-util.AddNetworkString( "set_chat_mode" )
-net.Receive( "set_chat_mode", function(len, ply)
+util.AddNetworkString( "nws_yrp_set_chat_mode" )
+net.Receive( "nws_yrp_set_chat_mode", function(len, ply)
 	local _str = net.ReadString() or "say"
 	ply:SetYRPString( "chat_mode", string.upper(_str) )
 end)
@@ -230,16 +230,16 @@ function Player:SetAFK( bo)
 	YRPSendAnim(self, GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_SIT, false)
 end
 
-util.AddNetworkString( "notafk" )
-net.Receive( "notafk", function(len, ply)
+util.AddNetworkString( "nws_yrp_notafk" )
+net.Receive( "nws_yrp_notafk", function(len, ply)
 	if ply:AFK() then
 		ply:SetAFK(false)
 		YRPStopAnim(ply, GESTURE_SLOT_ATTACK_AND_RELOAD)
 	end
 end)
 
-util.AddNetworkString( "setafk" )
-net.Receive( "setafk", function(len, ply)
+util.AddNetworkString( "nws_yrp_setafk" )
+net.Receive( "nws_yrp_setafk", function(len, ply)
 	ply:SetAFK(true)
 end)
 
@@ -560,7 +560,7 @@ timer.Simple( 4, function() -- must be last hook
 			end
 
 			if tab.int_mode == eGlobal then
-				net.Start( "yrp_player_say" )
+				net.Start( "nws_yrp_player_say" )
 					net.WriteTable(pk)
 				net.Broadcast()
 				return ""
@@ -572,7 +572,7 @@ timer.Simple( 4, function() -- must be last hook
 					end
 				end
 				if #plys > 0 then
-					net.Start( "yrp_player_say" )
+					net.Start( "nws_yrp_player_say" )
 						net.WriteTable(pk)
 					net.Send( plys )
 				end
@@ -585,7 +585,7 @@ timer.Simple( 4, function() -- must be last hook
 					end
 				end
 				if #plys > 0 then
-					net.Start( "yrp_player_say" )
+					net.Start( "nws_yrp_player_say" )
 						net.WriteTable(pk)
 					net.Send( plys )
 				end
@@ -598,7 +598,7 @@ timer.Simple( 4, function() -- must be last hook
 					end
 				end
 				if #plys > 0 then
-					net.Start( "yrp_player_say" )
+					net.Start( "nws_yrp_player_say" )
 						net.WriteTable(pk)
 					net.Send( plys )
 				end
@@ -611,7 +611,7 @@ timer.Simple( 4, function() -- must be last hook
 					end
 				end
 				if #plys > 0 then
-					net.Start( "yrp_player_say" )
+					net.Start( "nws_yrp_player_say" )
 						net.WriteTable(pk)
 					net.Send( plys )
 				end
@@ -624,23 +624,23 @@ timer.Simple( 4, function() -- must be last hook
 					end
 				end
 				if #plys > 0 then
-					net.Start( "yrp_player_say" )
+					net.Start( "nws_yrp_player_say" )
 						net.WriteTable(pk)
 					net.Send( plys )
 				end
 				return ""
 			elseif tab.int_mode == eWhisper then -- Whisper
 				if EntityAlive(target) then
-					net.Start( "yrp_player_say" )
+					net.Start( "nws_yrp_player_say" )
 						net.WriteTable(pk2)
 					net.Send(sender)
 
-					net.Start( "yrp_player_say" )
+					net.Start( "nws_yrp_player_say" )
 						net.WriteTable(pk)
 					net.Send(target)
 				elseif texttab[1] then
 					pk2[2] = "\"" .. texttab[1] .. "\" is not on this server."
-					net.Start( "yrp_player_say" )
+					net.Start( "nws_yrp_player_say" )
 						net.WriteTable(pk2)
 					net.Send(sender)
 				end

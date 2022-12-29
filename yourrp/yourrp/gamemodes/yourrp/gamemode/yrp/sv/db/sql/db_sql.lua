@@ -3,7 +3,7 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-util.AddNetworkString( "get_sql_info" )
+util.AddNetworkString( "nws_yrp_get_sql_info" )
 
 local DATABASE_NAME = "yrp_sql"
 
@@ -151,46 +151,46 @@ end
 
 for str, val in pairs(yrp_sql) do
 	if string.find(str, "int_" ) then
-		util.AddNetworkString( "update_" .. str)
-		net.Receive( "update_" .. str, function(len, ply)
+		util.AddNetworkString( "nws_yrp_update_" .. str)
+		net.Receive( "nws_yrp_update_" .. str, function(len, ply)
 			local i = net.ReadInt(32)
-			DBUpdateInt(DATABASE_NAME, ply, "update_" .. str, str, yrp_sql, i)
+			DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, i)
 		end)
 	elseif string.find(str, "float_" ) then
-		util.AddNetworkString( "update_" .. str)
-		net.Receive( "update_" .. str, function(len, ply)
+		util.AddNetworkString( "nws_yrp_update_" .. str)
+		net.Receive( "nws_yrp_update_" .. str, function(len, ply)
 			local f = net.ReadFloat()
-			DBUpdateFloat(DATABASE_NAME, ply, "update_" .. str, str, yrp_sql, f)
+			DBUpdateFloat(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, f)
 		end)
 	elseif string.find(str, "string_" ) then
-		util.AddNetworkString( "update_" .. str)
-		net.Receive( "update_" .. str, function(len, ply)
+		util.AddNetworkString( "nws_yrp_update_" .. str)
+		net.Receive( "nws_yrp_update_" .. str, function(len, ply)
 			local s = net.ReadString()
-			DBUpdateString(DATABASE_NAME, ply, "update_" .. str, str, yrp_sql, s)
+			DBUpdateString(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, s)
 		end)
 	end
 end
 
-net.Receive( "get_sql_info", function(len, ply)
+net.Receive( "nws_yrp_get_sql_info", function(len, ply)
 	local _sql_info = sql.Query( "SELECT * FROM " .. DATABASE_NAME)
 
 	if _sql_info != nil and _sql_info != false then
 		_sql_info = _sql_info[1]
-		net.Start( "get_sql_info" )
+		net.Start( "nws_yrp_get_sql_info" )
 			net.WriteTable(_sql_info)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "change_to_sql_mode" )
-net.Receive( "change_to_sql_mode", function(len, ply)
+util.AddNetworkString( "nws_yrp_change_to_sql_mode" )
+net.Receive( "nws_yrp_change_to_sql_mode", function(len, ply)
 	local _mode = net.ReadInt(32)
 	if !ply:HasAccess( "change_to_sql_mode" ) then
 		YRP.msg( "note", ply:YRPName() .. " tried to use change_to_sql_mode" )
 		return
 	end
 	
-	DBUpdateInt(DATABASE_NAME, ply, "update_" .. "int_mode", "int_mode", yrp_sql, _mode)
+	DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. "int_mode", "int_mode", yrp_sql, _mode)
 	SetSQLMode(_mode)
 	YRP.msg( "note", ply:YRPName() .. " changed sqlmode to " .. GetSQLModeName() )
 	timer.Simple(1, function()

@@ -1,8 +1,8 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-util.AddNetworkString( "dbGetGeneral" )
-util.AddNetworkString( "dbGetQuestions" )
-util.AddNetworkString( "hardresetdatabase" )
+util.AddNetworkString( "nws_yrp_dbGetGeneral" )
+util.AddNetworkString( "nws_yrp_dbGetQuestions" )
+util.AddNetworkString( "nws_yrp_hardresetdatabase" )
 
 local yrp_db = {}
 yrp_db.version = 1
@@ -80,7 +80,7 @@ function reset_database()
 end
 --reset_database()
 
-net.Receive( "hardresetdatabase", function(len, ply)
+net.Receive( "nws_yrp_hardresetdatabase", function(len, ply)
 	if string.lower(ply:GetUserGroup() ) == "superadmin" then
 		YRP.msg( "note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!" )
 		YRP.msg( "note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!" )
@@ -198,8 +198,8 @@ local DATABASE_NAME = "yrp_darkrp"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''" )
 
-util.AddNetworkString( "yrp_darkrp_bool" )
-net.Receive( "yrp_darkrp_bool", function(len, ply)
+util.AddNetworkString( "nws_yrp_darkrp_bool" )
+net.Receive( "nws_yrp_darkrp_bool", function(len, ply)
 	local name = net.ReadString()
 	local b = net.ReadBool()
 	
@@ -211,7 +211,7 @@ net.Receive( "yrp_darkrp_bool", function(len, ply)
 	UpdateDarkRPTable()
 end)
 
-util.AddNetworkString( "update_yrp_darkrp" )
+util.AddNetworkString( "nws_yrp_update_yrp_darkrp" )
 function UpdateDarkRPTable(ply)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
@@ -231,11 +231,11 @@ function UpdateDarkRPTable(ply)
 		UpdateDarkRP(DarkRP)
 
 		if ply == nil then
-			net.Start( "update_yrp_darkrp" )
+			net.Start( "nws_yrp_update_yrp_darkrp" )
 				net.WriteTable(yrp_darkrp)
 			net.Broadcast()
 		else
-			net.Start( "update_yrp_darkrp" )
+			net.Start( "nws_yrp_update_yrp_darkrp" )
 				net.WriteTable(yrp_darkrp)
 			net.Send(ply)
 		end

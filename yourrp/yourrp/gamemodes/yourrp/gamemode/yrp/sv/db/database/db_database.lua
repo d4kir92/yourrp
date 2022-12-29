@@ -3,8 +3,8 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-util.AddNetworkString( "yrp_drop_table" )
-net.Receive( "yrp_drop_table", function(len, ply)
+util.AddNetworkString( "nws_yrp_drop_table" )
+net.Receive( "nws_yrp_drop_table", function(len, ply)
 	local tab = net.ReadString()
 	YRP_SQL_DROP_TABLE(tab)
 end)
@@ -21,8 +21,8 @@ function AddToHandler_Database(ply)
 	end
 end
 
-util.AddNetworkString( "Connect_Settings_Database" )
-net.Receive( "Connect_Settings_Database", function(len, ply)
+util.AddNetworkString( "nws_yrp_connect_Settings_Database" )
+net.Receive( "nws_yrp_connect_Settings_Database", function(len, ply)
 	if ply:CanAccess( "bool_ac_database" ) then
 		AddToHandler_Database(ply)
 
@@ -48,7 +48,7 @@ net.Receive( "Connect_Settings_Database", function(len, ply)
 			nw_sql = nw_sql[1]
 		end
 
-		net.Start( "Connect_Settings_Database" )
+		net.Start( "nws_yrp_connect_Settings_Database" )
 			net.WriteTable(nw_yrp)
 			net.WriteTable(nw_yrp_related)
 			net.WriteTable(nw_other)
@@ -57,15 +57,15 @@ net.Receive( "Connect_Settings_Database", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "Disconnect_Settings_Database" )
-net.Receive( "Disconnect_Settings_Database", function(len, ply)
+util.AddNetworkString( "nws_yrp_disconnect_Settings_Database" )
+net.Receive( "nws_yrp_disconnect_Settings_Database", function(len, ply)
 	RemFromHandler_Database(ply)
 end)
 
-util.AddNetworkString( "get_sql_info" )
+util.AddNetworkString( "nws_yrp_get_sql_info" )
 
-util.AddNetworkString( "yrp_drop_tables" )
-net.Receive( "yrp_drop_tables", function(len, ply)
+util.AddNetworkString( "nws_yrp_drop_tables" )
+net.Receive( "nws_yrp_drop_tables", function(len, ply)
 	local _drop_tables = net.ReadTable()
 	local _ug = string.lower(ply:GetUserGroup() )
 	local _can = YRP_SQL_SELECT( "yrp_usergroups", "bool_ac_database", "string_name = '" .. _ug .. "'" )
@@ -144,7 +144,7 @@ function CreateBackup()
 	end
 end
 
-util.AddNetworkString( "makebackup" )
-net.Receive( "makebackup", function(len, ply)
+util.AddNetworkString( "nws_yrp_makebackup" )
+net.Receive( "nws_yrp_makebackup", function(len, ply)
 	CreateBackup()
 end)

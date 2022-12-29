@@ -514,7 +514,7 @@ local _get_design = true
 function GetDesign()
 	if _get_design then
 		_get_design = not _get_design
-		net.Start( "get_design" )
+		net.Start( "nws_yrp_get_design" )
 		net.SendToServer()
 	end
 end

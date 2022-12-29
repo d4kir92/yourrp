@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 254 -- do NOT change this!
+GM.VersionBuild = 256 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -307,7 +307,7 @@ function PrintHelp()
 	YRP.msg( "note", "Client Commands:" )
 	YRP.msg( "note", "yrp_cl_hud X" )
 	YRP.msg( "note", "	1: Shows hud, 0: Hide hud" )
-	YRP.msg( "note", "yrp_YRPToggleSettings" )
+	YRP.msg( "note", "yrp_open_settings" )
 	YRP.msg( "note", "	Toggle settings menu" )
 
 	YRP.msg( "note", "Server Commands:" )
@@ -443,7 +443,7 @@ end
 function IsInChannel(ply, cuid, skip)
 	skip = skip or false
 
-	if ply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) == false then
+	if ply:GetYRPBool( "yrp_ToggleVoiceMenu", true ) == false then
 		return false
 	end
 
@@ -466,7 +466,7 @@ end
 function IsActiveInChannel(ply, cuid, skip)
 	skip = skip or false
 
-	if ply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) == false then
+	if ply:GetYRPBool( "yrp_ToggleVoiceMenu", true ) == false then
 		return false
 	end
 

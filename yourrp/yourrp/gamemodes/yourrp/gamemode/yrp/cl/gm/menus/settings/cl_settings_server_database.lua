@@ -1,10 +1,10 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-net.Receive( "Connect_Settings_Database", function(len)
+net.Receive( "nws_yrp_connect_Settings_Database", function(len)
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) then
 		function PARENT:OnRemove()
-			net.Start( "Disconnect_Settings_Database" )
+			net.Start( "nws_yrp_disconnect_Settings_Database" )
 			net.SendToServer()
 		end
 
@@ -58,11 +58,11 @@ net.Receive( "Connect_Settings_Database", function(len)
 
 		DHR( dhr)
 
-		yrp_db.host = DStringBox( bl, YRP_SQL.string_host, "LID_hostname", "update_string_host" )
-		yrp_db.port = OLDDIntBox( bl, YRP_SQL.int_port, "LID_port", "update_int_port", 99999)
-		yrp_db.data = DStringBox( bl, YRP_SQL.string_database, "LID_database", "update_string_database" )
-		yrp_db.user = DStringBox( bl, YRP_SQL.string_username, "LID_username", "update_string_username" )
-		yrp_db.pass = DStringBox( bl, YRP_SQL.string_password, "LID_password", "update_string_password" )
+		yrp_db.host = DStringBox( bl, YRP_SQL.string_host, "LID_hostname", "nws_yrp_update_string_host" )
+		yrp_db.port = OLDDIntBox( bl, YRP_SQL.int_port, "LID_port", "nws_yrp_update_int_port", 99999)
+		yrp_db.data = DStringBox( bl, YRP_SQL.string_database, "LID_database", "nws_yrp_update_string_database" )
+		yrp_db.user = DStringBox( bl, YRP_SQL.string_username, "LID_username", "nws_yrp_update_string_username" )
+		yrp_db.pass = DStringBox( bl, YRP_SQL.string_password, "LID_password", "nws_yrp_update_string_password" )
 		yrp_db.change_to_sqlmode = YRPCreateD( "DButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
 
 		yrp_db:AddItem(yrp_db.change_to_sqlmode)
@@ -80,7 +80,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 				create[i].data = i
 			end
 		end
-		yrp_db.crea = DIntComboBoxBox( bl, create, "LID_createbackupevery", "update_int_backup_create", tonumber(YRP_SQL.int_backup_create) )
+		yrp_db.crea = DIntComboBoxBox( bl, create, "LID_createbackupevery", "nws_yrp_update_int_backup_create", tonumber(YRP_SQL.int_backup_create) )
 
 		local delete = {}
 		for i = 1, 180 do
@@ -95,14 +95,14 @@ net.Receive( "Connect_Settings_Database", function(len)
 				delete[i].data = i
 			end
 		end
-		yrp_db.dele = DIntComboBoxBox( bl, delete, "LID_removebackupolderthen", "update_int_backup_delete", tonumber(YRP_SQL.int_backup_delete) )
+		yrp_db.dele = DIntComboBoxBox( bl, delete, "LID_removebackupolderthen", "nws_yrp_update_int_backup_delete", tonumber(YRP_SQL.int_backup_delete) )
 		yrp_db.createbackupnow = YRPCreateD( "DButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
 		yrp_db.createbackupnow:SetText( "" )
 		function yrp_db.createbackupnow:Paint(pw, ph)
 			surfaceButton(self, pw, ph, YRP.lang_string( "LID_createbackupnow" ) .. " ( data/yrp_backups/)" )
 		end
 		function yrp_db.createbackupnow:DoClick()
-			net.Start( "makebackup" )
+			net.Start( "nws_yrp_makebackup" )
 			net.SendToServer()
 		end
 		yrp_db:AddItem(yrp_db.createbackupnow)
@@ -142,7 +142,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 		end
 		function yrp_db.change_to_sqlmode:DoClick()
 			local _, dat = sqlmode:GetSelected()
-			net.Start( "change_to_sql_mode" )
+			net.Start( "nws_yrp_change_to_sql_mode" )
 				net.WriteInt( dat, 32)
 			net.SendToServer()
 		end
@@ -152,7 +152,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 		local restartServer = YRPCreateD( "DButton", yourrpdatabase.parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3000), YRP.ctr(900) )
 		restartServer:SetText( "RESTART SERVER" )
 		function restartServer:DoClick()
-			net.Start( "yrp_restartserver" )
+			net.Start( "nws_yrp_restartserver" )
 			net.SendToServer()
 		end
 		Scroller.YourRPDatabase:AddItem(restartServer)
@@ -200,7 +200,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 			local _yesButton = createVGUI( "DButton", _window, 200, 50, 10, 60)
 			_yesButton:SetText(YRP.lang_string( "LID_yes" ) )
 			function _yesButton:DoClick()
-				net.Start( "yrp_drop_tables" )
+				net.Start( "nws_yrp_drop_tables" )
 					net.WriteTable(_nw_tab)
 				net.SendToServer()
 				_window:Close()
@@ -255,7 +255,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 			local _yesButton = createVGUI( "DButton", _window, 200, 50, 10, 60)
 			_yesButton:SetText(YRP.lang_string( "LID_yes" ) )
 			function _yesButton:DoClick()
-				net.Start( "yrp_drop_tables" )
+				net.Start( "nws_yrp_drop_tables" )
 					net.WriteTable(_nw_tab)
 				net.SendToServer()
 				_window:Close()
@@ -310,7 +310,7 @@ net.Receive( "Connect_Settings_Database", function(len)
 			local _yesButton = createVGUI( "DButton", _window, 200, 50, 10, 60)
 			_yesButton:SetText(YRP.lang_string( "LID_yes" ) )
 			function _yesButton:DoClick()
-				net.Start( "yrp_drop_tables" )
+				net.Start( "nws_yrp_drop_tables" )
 					net.WriteTable(_nw_tab)
 				net.SendToServer()
 				_window:Close()
@@ -328,6 +328,6 @@ net.Receive( "Connect_Settings_Database", function(len)
 end)
 
 function OpenSettingsDatabase()
-	net.Start( "Connect_Settings_Database" )
+	net.Start( "nws_yrp_connect_Settings_Database" )
 	net.SendToServer()
 end

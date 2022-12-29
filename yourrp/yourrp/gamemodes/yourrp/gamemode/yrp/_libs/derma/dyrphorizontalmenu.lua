@@ -325,7 +325,9 @@ end
 
 function PANEL:Paint(w, h)
 	local lply = LocalPlayer()
-	draw.RoundedBox(0, 0, 0, w, self:GetHeaderHeight(), YRPInterfaceValue( "YFrame", "HI" ) )
+	local col = YRPInterfaceValue( "YFrame", "HI" )
+
+	draw.RoundedBox(0, 0, 0, w, self:GetHeaderHeight() or h, col or Color( 255, 0, 0 ) )
 end
 
 vgui.Register( "DYRPHorizontalMenu", PANEL, "Panel" )

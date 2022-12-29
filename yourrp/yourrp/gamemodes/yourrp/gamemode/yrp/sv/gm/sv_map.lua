@@ -27,37 +27,37 @@ _map_size.error = 0
 
 local skyCamera = nil
 
-util.AddNetworkString( "askCoords" )
-util.AddNetworkString( "sendCoords" )
-util.AddNetworkString( "askCoordsMM" )
-util.AddNetworkString( "sendCoordsMM" )
+util.AddNetworkString( "nws_yrp_askCoords" )
+util.AddNetworkString( "nws_yrp_sendCoords" )
+util.AddNetworkString( "nws_yrp_askCoordsMM" )
+util.AddNetworkString( "nws_yrp_sendCoordsMM" )
 
-net.Receive( "askCoords", function(len, ply)
+net.Receive( "nws_yrp_askCoords", function(len, ply)
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
-		net.Start( "sendCoords" )
+		net.Start( "nws_yrp_sendCoords" )
 			net.WriteBool(false)
 			net.WriteTable(_map_size)
 		net.Send(ply)
 
 		YRPGetMapDoors()
 	else
-		net.Start( "sendCoords" )
+		net.Start( "nws_yrp_sendCoords" )
 			net.WriteBool(true)
 			net.WriteTable(_map_size)
 		net.Send(ply)
 	end
 end)
 
-net.Receive( "askCoordsMM", function(len, ply)
+net.Receive( "nws_yrp_askCoordsMM", function(len, ply)
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
-		net.Start( "sendCoordsMM" )
+		net.Start( "nws_yrp_sendCoordsMM" )
 			net.WriteBool(false)
 			net.WriteTable(_map_size)
 		net.Send(ply)
 
 		YRPGetMapDoors()
 	else
-		net.Start( "sendCoordsMM" )
+		net.Start( "nws_yrp_sendCoordsMM" )
 			net.WriteBool(true)
 			net.WriteTable(_map_size)
 		net.Send(ply)

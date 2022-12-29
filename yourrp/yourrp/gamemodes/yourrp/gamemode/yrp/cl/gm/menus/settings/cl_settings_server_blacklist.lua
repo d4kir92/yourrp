@@ -79,12 +79,12 @@ function BuildBlacklis(parent, tabBL, tab)
 		BLAdd:SetText(YRP.lang_string( "LID_add" ) )
 		function BLAdd:DoClick()
 			if BLName:GetOptionData(BLName:GetSelectedID() ) != nil then
-				net.Start( "yrp_blacklist_add" )
+				net.Start( "nws_yrp_blacklist_add" )
 					net.WriteString(BLName:GetOptionData(BLName:GetSelectedID() ))
 					net.WriteString(BLValue:GetText() )
 				net.SendToServer()
 
-				net.Start( "yrp_blacklist_get" )
+				net.Start( "nws_yrp_blacklist_get" )
 					net.WriteString(tab)
 				net.SendToServer()
 			end
@@ -109,7 +109,7 @@ function BuildBlacklis(parent, tabBL, tab)
 	function btnRem:DoClick()
 		if lis:GetSelectedLine() != nil then
 			if lis:GetLine(lis:GetSelectedLine() ):GetValue(1) != nil then
-				net.Start( "yrp_blacklist_remove" )
+				net.Start( "nws_yrp_blacklist_remove" )
 					net.WriteString(lis:GetLine(lis:GetSelectedLine() ):GetValue(1) )
 				net.SendToServer()
 
@@ -152,7 +152,7 @@ function BuildBlacklis(parent, tabBL, tab)
 	end
 end
 
-net.Receive( "yrp_blacklist_get", function(len)
+net.Receive( "nws_yrp_blacklist_get", function(len)
 	local site = GetSettingsSite()
 
 	if PanelAlive(site) then
@@ -188,6 +188,6 @@ end)
 function OpenSettingsBlacklist()
 	local lply = LocalPlayer()
 
-	net.Start( "yrp_blacklist_get" )
+	net.Start( "nws_yrp_blacklist_get" )
 	net.SendToServer()
 end

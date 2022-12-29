@@ -3,9 +3,9 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-util.AddNetworkString( "removeVehicleOwner" )
+util.AddNetworkString( "nws_yrp_removeVehicleOwner" )
 
-util.AddNetworkString( "getVehicleInfo" )
+util.AddNetworkString( "nws_yrp_getVehicleInfo" )
 
 local DATABASE_NAME = "yrp_vehicles"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "keynr", "TEXT DEFAULT '-1'" )
@@ -38,7 +38,7 @@ function allowedToUseVehicle(id, ply)
 	return false
 end
 
-net.Receive( "getVehicleInfo", function(len, ply)
+net.Receive( "nws_yrp_getVehicleInfo", function(len, ply)
 	local _vehicle = net.ReadEntity()
 
 	local _vehicleID = net.ReadString()
@@ -55,14 +55,14 @@ net.Receive( "getVehicleInfo", function(len, ply)
 
 		if _vehicleTab != nil then
 			if allowedToUseVehicle(_vehicleID, ply) then
-				net.Start( "getVehicleInfo" )
+				net.Start( "nws_yrp_getVehicleInfo" )
 					net.WriteBool(true)
 					net.WriteEntity(_vehicle)
 					net.WriteTable(_vehicleTab)
 					net.WriteString(owner)
 				net.Send(ply)
 			else
-				net.Start( "getVehicleInfo" )
+				net.Start( "nws_yrp_getVehicleInfo" )
 					net.WriteBool(false)
 				net.Send(ply)
 			end
@@ -116,7 +116,7 @@ function YRPLockVehicle(ply, ent, nr)
 	end
 end
 
-net.Receive( "removeVehicleOwner", function(len, ply)
+net.Receive( "nws_yrp_removeVehicleOwner", function(len, ply)
 	if !ply:HasAccess( "removeVehicleOwner" ) then
 		return 
 	end

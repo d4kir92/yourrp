@@ -5,9 +5,6 @@ AddCSLuaFile( "shared.lua" )
 
 include( "shared.lua" )
 
-util.AddNetworkString( "ATMPressPrev" )
-util.AddNetworkString( "ATMPressNext" )
-
 function ENT:Initialize()
 	self:SetModel( "models/yrp/yrp_atm.mdl" )
 	self:PhysicsInit(SOLID_VPHYSICS)

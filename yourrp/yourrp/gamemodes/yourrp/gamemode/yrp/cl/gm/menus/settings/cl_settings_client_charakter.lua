@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 local save_delay = 0
-net.Receive( "getCharakterList", function()
+net.Receive( "nws_yrp_getCharakterList", function()
 	local _charTab = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
@@ -39,11 +39,11 @@ net.Receive( "getCharakterList", function()
 			if CurTime() > save_delay then
 				save_delay = CurTime() + 4
 				
-				net.Start( "change_rpname" )
+				net.Start( "nws_yrp_change_rpname" )
 					net.WriteString( cl_rpName:GetText() )
 				net.SendToServer()
 
-				net.Start( "change_rpdescription" )
+				net.Start( "nws_yrp_change_rpdescription" )
 					net.WriteString( cl_rpDescription:GetText() )
 				net.SendToServer()
 			end

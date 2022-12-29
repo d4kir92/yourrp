@@ -26,9 +26,9 @@ function ENT:Use( activator, caller, useType, value)
 	end
 end
 
-util.AddNetworkString( "yrp_open_storage" )
+util.AddNetworkString( "nws_yrp_open_storage" )
 function OpenWorldStorage(ply, suid, name)
-	net.Start( "yrp_open_storage" )
+	net.Start( "nws_yrp_open_storage" )
 		net.WriteString(suid)
 		net.WriteString(name)
 	net.Send(ply)

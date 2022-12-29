@@ -5,7 +5,7 @@ AddCSLuaFile( "shared.lua" )
 
 include( "shared.lua" )
 
-util.AddNetworkString( "openLawBoard" )
+util.AddNetworkString( "nws_yrp_openLawBoard" )
 
 function ENT:Initialize()
 	self:SetModel( "models/props_combine/combine_intmonitor001.mdl" )
@@ -36,7 +36,7 @@ function ENT:Use( activator, caller)
 		end
 	end
 
-	net.Start( "openLawBoard" )
+	net.Start( "nws_yrp_openLawBoard" )
 		net.WriteTable(tmpTable)
 	net.Send( caller)
 end
@@ -45,8 +45,8 @@ function ENT:Think()
 
 end
 
-util.AddNetworkString( "jail" )
-net.Receive( "jail", function(len, ply)
+util.AddNetworkString( "nws_yrp_jail" )
+net.Receive( "nws_yrp_jail", function(len, ply)
 	local target = net.ReadEntity()
 
 	local jail = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. target:YRPSteamID() .. "'" )
@@ -57,8 +57,8 @@ net.Receive( "jail", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "unjail" )
-net.Receive( "unjail", function(len, ply)
+util.AddNetworkString( "nws_yrp_unjail" )
+net.Receive( "nws_yrp_unjail", function(len, ply)
 	local target = net.ReadEntity()
 
 	YRP_SQL_DELETE_FROM( "yrp_jail", "SteamID = '" .. target:YRPSteamID() .. "'" )

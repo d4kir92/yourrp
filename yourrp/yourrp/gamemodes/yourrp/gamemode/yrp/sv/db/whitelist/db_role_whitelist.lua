@@ -15,29 +15,29 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "roleID", "INTEGER DEFAULT -1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "status", "TEXT DEFAULT ''" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "date", "TEXT DEFAULT '0000-00-00 00-00-00'" )
 
-util.AddNetworkString( "getRoleWhitelist" )
-util.AddNetworkString( "getRoleWhitelist_line" )
-util.AddNetworkString( "whitelistPlayer" )
-util.AddNetworkString( "whitelistPlayerGroup" )
-util.AddNetworkString( "whitelistPlayerAll" )
-util.AddNetworkString( "whitelistPlayerRemove" )
-util.AddNetworkString( "yrpInfoBox" )
+util.AddNetworkString( "nws_yrp_getRoleWhitelist" )
+util.AddNetworkString( "nws_yrp_getRoleWhitelist_line" )
+util.AddNetworkString( "nws_yrp_whitelistPlayer" )
+util.AddNetworkString( "nws_yrp_whitelistPlayerGroup" )
+util.AddNetworkString( "nws_yrp_whitelistPlayerAll" )
+util.AddNetworkString( "nws_yrp_whitelistPlayerRemove" )
+util.AddNetworkString( "nws_yrp_InfoBox" )
 
-util.AddNetworkString( "getGroupsWhitelist" )
-net.Receive( "getGroupsWhitelist", function(len, ply)
+util.AddNetworkString( "nws_yrp_getGroupsWhitelist" )
+net.Receive( "nws_yrp_getGroupsWhitelist", function(len, ply)
 	local _tmpGroupList = YRP_SQL_SELECT( "yrp_ply_groups", "string_name, uniqueID", nil)
 	if IsNotNilAndNotFalse(_tmpGroupList) then
-		net.Start( "getGroupsWhitelist" )
+		net.Start( "nws_yrp_getGroupsWhitelist" )
 			net.WriteTable(_tmpGroupList)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "getRolesWhitelist" )
-net.Receive( "getRolesWhitelist", function(len, ply)
+util.AddNetworkString( "nws_yrp_getRolesWhitelist" )
+net.Receive( "nws_yrp_getRolesWhitelist", function(len, ply)
 	local _tmpRoleList = YRP_SQL_SELECT( "yrp_ply_roles", "int_groupID, string_name, uniqueID", nil)
 	if IsNotNilAndNotFalse(_tmpRoleList) then
-		net.Start( "getRolesWhitelist" )
+		net.Start( "nws_yrp_getRolesWhitelist" )
 			net.WriteTable(_tmpRoleList)
 		net.Send(ply)
 	end
@@ -76,14 +76,14 @@ function sendRoleWhitelist(ply)
 		end
 
 		if table.Count(_tmpWhiteList) < 1 then
-			net.Start( "getRoleWhitelist_line" )
+			net.Start( "nws_yrp_getRoleWhitelist_line" )
 				net.WriteString(1)
 				net.WriteTable({})
 				net.WriteBool(true)
 			net.Send(ply)
 		else
 			for i, line in pairs(_tmpWhiteList) do
-				net.Start( "getRoleWhitelist_line" )
+				net.Start( "nws_yrp_getRoleWhitelist_line" )
 					net.WriteString(i)
 					net.WriteTable(line)
 					net.WriteBool(i == #_tmpWhiteList)
@@ -93,12 +93,12 @@ function sendRoleWhitelist(ply)
 	end
 end
 
-net.Receive( "whitelistPlayerRemove", function(len, ply)
+net.Receive( "nws_yrp_whitelistPlayerRemove", function(len, ply)
 	local _tmpUniqueID = net.ReadInt(16)
 	YRP_SQL_DELETE_FROM( "yrp_role_whitelist", "uniqueID = " .. _tmpUniqueID)
 end)
 
-net.Receive( "whitelistPlayer", function(len, ply)
+net.Receive( "nws_yrp_whitelistPlayer", function(len, ply)
 	if !IsValid(ply) then return end
 
 	if ply:GetYRPBool( "bool_whitelist" ) then
@@ -131,7 +131,7 @@ net.Receive( "whitelistPlayer", function(len, ply)
 	sendRoleWhitelist(ply)
 end)
 
-net.Receive( "whitelistPlayerGroup", function(len, ply)
+net.Receive( "nws_yrp_whitelistPlayerGroup", function(len, ply)
 	if !ply:HasAccess( "whitelistPlayerGroup" ) then
 		return
 	end
@@ -158,7 +158,7 @@ net.Receive( "whitelistPlayerGroup", function(len, ply)
 	sendRoleWhitelist(ply)
 end)
 
-net.Receive( "whitelistPlayerAll", function(len, ply)
+net.Receive( "nws_yrp_whitelistPlayerAll", function(len, ply)
 	if !ply:HasAccess( "whitelistPlayerAll" ) then
 		return
 	end
@@ -181,7 +181,7 @@ net.Receive( "whitelistPlayerAll", function(len, ply)
 	sendRoleWhitelist(ply)
 end)
 
-net.Receive( "getRoleWhitelist", function(len, ply)
+net.Receive( "nws_yrp_getRoleWhitelist", function(len, ply)
 	sendRoleWhitelist(ply)
 end)
 

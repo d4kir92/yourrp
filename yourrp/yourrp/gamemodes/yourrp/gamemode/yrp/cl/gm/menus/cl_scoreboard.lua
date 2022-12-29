@@ -537,21 +537,21 @@ function YRPScoreboardAddPlayer(ply)
 		end}
 		btns[3] = {"LID_tpto", "128_arrow-circle-up", true, true, function()
 			if IsValid( ply ) and YRPNotSelf(ply) then
-				net.Start( "tp_tpto" )
+				net.Start( "nws_yrp_tp_tpto" )
 					net.WriteEntity(ply)
 				net.SendToServer()
 			end
 		end}
 		btns[4] = {"LID_bring", "128_arrow-circle-down", true, true, function()
 			if IsValid(ply) and YRPNotSelf(ply) then
-				net.Start( "tp_bring" )
+				net.Start( "nws_yrp_tp_bring" )
 					net.WriteEntity(ply)
 				net.SendToServer()
 			end
 		end}
 		btns[5] = {"LID_return", "return", true, false, function()
 			if IsValid(ply) then
-				net.Start( "tp_return" )
+				net.Start( "nws_yrp_tp_return" )
 					net.WriteEntity(ply)
 				net.SendToServer()
 			end
@@ -567,11 +567,11 @@ function YRPScoreboardAddPlayer(ply)
 		btns[6] = {"LID_freeze", "128_snowflake", true, false, function()
 			if IsValid(ply) then
 				if !ply:IsFlagSet(FL_FROZEN) then
-					net.Start( "freeze" )
+					net.Start( "nws_yrp_freeze" )
 						net.WriteEntity(ply)
 					net.SendToServer()
 				else
-					net.Start( "unfreeze" )
+					net.Start( "nws_yrp_unfreeze" )
 						net.WriteEntity(ply)
 					net.SendToServer()
 				end
@@ -625,11 +625,11 @@ function YRPScoreboardAddPlayer(ply)
 		btns[8] = {"LID_cloak", "incognito", true, false, function()
 			if IsValid(ply) then
 				if !ply:GetYRPBool( "cloaked", false) then
-					net.Start( "cloak" )
+					net.Start( "nws_yrp_cloak" )
 						net.WriteEntity(ply)
 					net.SendToServer()
 				else
-					net.Start( "uncloak" )
+					net.Start( "nws_yrp_uncloak" )
 						net.WriteEntity(ply)
 					net.SendToServer()
 				end
@@ -645,14 +645,14 @@ function YRPScoreboardAddPlayer(ply)
 		end}
 		btns[9] = {"LID_kick", "128_fist-raised", true, true, function()
 			if IsValid(ply) then
-				net.Start( "ply_kick" )
+				net.Start( "nws_yrp_ply_kick" )
 					net.WriteEntity(ply)
 				net.SendToServer()
 			end
 		end}
 		btns[10] = {"LID_ban", "128_gavel", true, true, function()
 			if IsValid(ply) then
-				net.Start( "ply_ban" )
+				net.Start( "nws_yrp_ply_ban" )
 					net.WriteEntity(ply)
 				net.SendToServer()
 			end

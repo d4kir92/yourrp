@@ -4,7 +4,7 @@ function disk_full(error)
 	if string.find(error, "database or disk is full" ) then
 		if SERVER then
 			PrintMessage(HUD_PRINTCENTER, "database or disk is full, please make more space!" )
-			net.Start( "yrp_noti" )
+			net.Start( "nws_yrp_noti" )
 			net.WriteString( "database_full_server" )
 			net.WriteString( "" )
 			net.Broadcast()

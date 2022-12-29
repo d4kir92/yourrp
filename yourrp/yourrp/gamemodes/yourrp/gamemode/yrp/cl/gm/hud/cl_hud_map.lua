@@ -8,7 +8,7 @@ local _map = _map or {}
 _map.open = false
 
 function getCoords()
-	net.Start( "askCoords" )
+	net.Start( "nws_yrp_askCoords" )
 	net.SendToServer()
 end
 
@@ -16,7 +16,7 @@ function YRPToggleMap()
 	if YRPIsNoMenuOpen() and !_map.open then
 		_map.open = true
 		openMenu()
-		net.Start( "askCoords" )
+		net.Start( "nws_yrp_askCoords" )
 		net.SendToServer()
 	else
 		_map.open = false
@@ -282,7 +282,7 @@ function openMap()
 	end
 end
 
-net.Receive( "sendCoords", function()
+net.Receive( "nws_yrp_sendCoords", function()
 	if net.ReadBool() then
 		map = net.ReadTable()
 		openMap()

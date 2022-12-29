@@ -7,8 +7,8 @@ local DBNotes = "yrp_jail_notes"
 YRP_SQL_ADD_COLUMN(DBNotes, "SteamID", "TEXT DEFAULT ''" )
 YRP_SQL_ADD_COLUMN(DBNotes, "note", "TEXT DEFAULT ''" )
 
-util.AddNetworkString( "getPlayerNotes" )
-net.Receive( "getPlayerNotes", function(len, ply)
+util.AddNetworkString( "nws_yrp_getPlayerNotes" )
+net.Receive( "nws_yrp_getPlayerNotes", function(len, ply)
 	local p = net.ReadEntity()
 
 	local notes = YRP_SQL_SELECT(DBNotes, "*", "SteamID = '" .. p:YRPSteamID() .. "'" )
@@ -16,21 +16,21 @@ net.Receive( "getPlayerNotes", function(len, ply)
 	if !IsNotNilAndNotFalse(notes) then
 		notes = {}
 	end
-	net.Start( "getPlayerNotes" )
+	net.Start( "nws_yrp_getPlayerNotes" )
 		net.WriteTable(notes)
 	net.Send(ply)
 end)
 
-util.AddNetworkString( "AddJailNote" )
-net.Receive( "AddJailNote", function(len, ply)
+util.AddNetworkString( "nws_yrp_addJailNote" )
+net.Receive( "nws_yrp_addJailNote", function(len, ply)
 	local steamid = net.ReadString()
 	local note = net.ReadString()
 
 	YRP_SQL_INSERT_INTO(DBNotes, "note, SteamID", "'" .. note .. "', '" .. steamid .. "'" )
 end)
 
-util.AddNetworkString( "RemoveJailNote" )
-net.Receive( "RemoveJailNote", function(len, ply)
+util.AddNetworkString( "nws_yrp_removeJailNote" )
+net.Receive( "nws_yrp_removeJailNote", function(len, ply)
 	local uid = net.ReadString()
 
 	YRP_SQL_DELETE_FROM(DBNotes, "uniqueID = '" .. uid .. "'" )
@@ -61,7 +61,7 @@ function teleportToReleasepoint(ply)
 		local _str = YRP.lang_string( "LID_noreleasepoint" )
 		YRP.msg( "note", "[teleportToReleasepoint] " .. _str)
 
-		net.Start( "yrp_noti" )
+		net.Start( "nws_yrp_noti" )
 			net.WriteString( "noreleasepoint" )
 			net.WriteString( "" )
 		net.Broadcast()
@@ -126,7 +126,7 @@ function teleportToJailpoint(ply, tim, police)
 			local _str = YRP.lang_string( "LID_nojailpoint" )
 			YRP.msg( "note", "[teleportToJailpoint] " .. _str)
 
-			net.Start( "yrp_noti" )
+			net.Start( "nws_yrp_noti" )
 				net.WriteString( "nojailpoint" )
 				net.WriteString( "" )
 			net.Broadcast()
@@ -146,9 +146,9 @@ function clean_up_jail(ply)
 	teleportToReleasepoint(ply)
 end
 
-util.AddNetworkString( "dbAddJail" )
+util.AddNetworkString( "nws_yrp_dbAddJail" )
 
-net.Receive( "dbAddJail", function(len, ply)
+net.Receive( "nws_yrp_dbAddJail", function(len, ply)
 	local _tmpDBTable = net.ReadString()
 	local _tmpDBCol = net.ReadString()
 	local _tmpDBVal = net.ReadString()
@@ -175,9 +175,9 @@ net.Receive( "dbAddJail", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "dbRemJail" )
+util.AddNetworkString( "nws_yrp_dbRemJail" )
 
-net.Receive( "dbRemJail", function(len, ply)
+net.Receive( "nws_yrp_dbRemJail", function(len, ply)
 	local _uid = net.ReadString()
 
 	local _SteamID = YRP_SQL_SELECT( "yrp_jail", "*", "uniqueID = '" .. _uid .. "'" )

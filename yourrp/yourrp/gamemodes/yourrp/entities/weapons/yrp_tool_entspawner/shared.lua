@@ -54,7 +54,7 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	util.AddNetworkString( "yrp_spawner_ent_options" )
+	util.AddNetworkString( "nws_yrp_spawner_ent_options" )
 end
 
 local size = 8
@@ -84,7 +84,7 @@ function SWEP:Think()
 					local stab = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'" )
 					if IsNotNilAndNotFalse(stab) then
 						stab = stab[1]
-						net.Start( "yrp_spawner_ent_options" )
+						net.Start( "nws_yrp_spawner_ent_options" )
 							net.WriteTable(stab)
 						net.Send(ply)
 					end
@@ -97,7 +97,7 @@ function SWEP:Think()
 end
 
 if CLIENT then
-	net.Receive( "yrp_spawner_ent_options", function()
+	net.Receive( "nws_yrp_spawner_ent_options", function()
 		local stab = net.ReadTable()
 
 		local w = YRPCreateD( "YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
@@ -114,7 +114,7 @@ if CLIENT then
 		w.respawn:SetMax(60 * 60 * 6)
 		w.respawn:SetValue(stab.int_respawntime)
 		function w.respawn:OnValueChanged()
-			net.Start( "update_map_int_respawntime" )
+			net.Start( "nws_yrp_update_map_int_respawntime" )
 				net.WriteString(stab.uniqueID)
 				net.WriteString(self:GetValue() )
 			net.SendToServer()
@@ -128,7 +128,7 @@ if CLIENT then
 		w.amount:SetMax(10)
 		w.amount:SetValue(stab.int_amount)
 		function w.amount:OnValueChanged()
-			net.Start( "update_map_int_amount" )
+			net.Start( "nws_yrp_update_map_int_amount" )
 				net.WriteString(stab.uniqueID)
 				net.WriteString(self:GetValue() )
 			net.SendToServer()
@@ -143,7 +143,7 @@ if CLIENT then
 			w.classname:AddChoice(i, i)
 		end
 		function w.classname:OnSelect()
-			net.Start( "update_map_string_classname" )
+			net.Start( "nws_yrp_update_map_string_classname" )
 				net.WriteString(stab.uniqueID)
 				net.WriteString(self:GetText() )
 			net.SendToServer()

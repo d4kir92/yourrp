@@ -25,12 +25,12 @@ function ENT:Think()
 	end
 end
 
-util.AddNetworkString( "yrp_open_weaponchest" )
+util.AddNetworkString( "nws_yrp_open_weaponchest" )
 function ENT:Use( activator, caller, useType, value )
 	if !activator:GetYRPBool( "wc_clicked", false) then
 		activator:SetYRPBool( "wc_clicked", true)
 		
-		net.Start( "yrp_open_weaponchest" )
+		net.Start( "nws_yrp_open_weaponchest" )
 		net.Send( activator)
 
 		timer.Simple(0.4, function()

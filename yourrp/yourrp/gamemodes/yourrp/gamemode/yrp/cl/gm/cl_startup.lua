@@ -1365,12 +1365,12 @@ hook.Add( "PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	end
 end)
 
-net.Receive( "yrp_whitelist_infoplayer", function(len)
+net.Receive( "nws_yrp_whitelist_infoplayer", function(len)
 	local msg = net.ReadString()
 	notification.AddLegacy(YRP.lang_string(msg), NOTIFY_GENERIC, 6)
 end)
 
-net.Receive( "yrp_noti", function(len)
+net.Receive( "nws_yrp_noti", function(len)
 	local lply = LocalPlayer()
 	if lply:IsValid() and lply:HasAccess() then
 		local _str_lang = net.ReadString()
@@ -1424,7 +1424,7 @@ function YRPReplaceKEYs(str)
 end
 
 local delay = 0
-net.Receive( "yrp_info", function(len)
+net.Receive( "nws_yrp_info", function(len)
 	local lply = LocalPlayer()
 	if lply:IsValid() and delay < CurTime() then
 		delay = CurTime() + 1
@@ -1437,7 +1437,7 @@ net.Receive( "yrp_info", function(len)
 end)
 
 local delay2 = 0
-net.Receive( "yrp_info2", function(len)
+net.Receive( "nws_yrp_info2", function(len)
 	local lply = LocalPlayer()
 	if lply:IsValid() and delay2 < CurTime() then
 		delay2 = CurTime() + 1
@@ -1456,7 +1456,7 @@ net.Receive( "yrp_info2", function(len)
 end)
 
 local delay3 = 0
-net.Receive( "yrp_info3", function(len)
+net.Receive( "nws_yrp_info3", function(len)
 	local lply = LocalPlayer()
 	if lply:IsValid() and delay3 < CurTime() then
 		delay3 = CurTime() + 1
@@ -1467,7 +1467,7 @@ net.Receive( "yrp_info3", function(len)
 	end
 end)
 
-net.Receive( "yrp_message", function(len)
+net.Receive( "nws_yrp_message", function(len)
 	local lply = LocalPlayer()
 	if lply:IsValid() then
 		local _str = YRP.lang_string(net.ReadString() )
@@ -1475,7 +1475,7 @@ net.Receive( "yrp_message", function(len)
 	end
 end)
 
-net.Receive( "yrp_notification", function(len)
+net.Receive( "nws_yrp_notification", function(len)
 	local lply = LocalPlayer()
 	if IsValid(lply) then
 		local msg = net.ReadString()
@@ -1483,7 +1483,7 @@ net.Receive( "yrp_notification", function(len)
 	end
 end)
 
-net.Receive( "yrp_autoreload", function(len, ply)
+net.Receive( "nws_yrp_autoreload", function(len, ply)
 	local t = net.ReadString()
 	local str = YRP.lang_string( "LID_automaticmapchangeinx" ) .. " (to prevent Lags/Stutter after 6/12 Hours)."
 	str = string.Replace( str, "X", t )
@@ -1585,7 +1585,7 @@ end
 timer.Simple(5, function()
 	loadDoorTexts()
 end)
-net.Receive( "loaded_doors", function()
+net.Receive( "nws_yrp_loaded_doors", function()
 	timer.Simple(5, function()
 		loadDoorTexts()
 	end)
@@ -1846,7 +1846,7 @@ hook.Add( "Think", "openDeathScreen", function(len)
 			if LocalPlayer():GetYRPInt( "int_deathtimestamp_min", 0) <= CurTime() and !LocalPlayer():GetYRPBool( "yrp_chararchived", false) then
 				net.Start( "YRPResetCharLoadout" )
 				net.SendToServer()
-				net.Start( "YRP_EnterWorld" )
+				net.Start( "nws_yrp_EnterWorld" )
 					net.WriteString(LocalPlayer():CharID() )
 				net.SendToServer()
 				ds = false
@@ -2217,7 +2217,7 @@ end
 
 
 local windowOpen = false
-net.Receive( "openLawBoard", function(len)
+net.Receive( "nws_yrp_openLawBoard", function(len)
 	if not windowOpen and (LocalPlayer():isCP() or LocalPlayer():GetYRPBool( "bool_canusewarnsystem", false) ) then
 		local tmpJailList = net.ReadTable()
 		windowOpen = true
@@ -2299,14 +2299,14 @@ net.Receive( "openLawBoard", function(len)
 				function _add:DoClick()
 					if _SteamID != nil and _Cell != nil then
 						local _insert = "'" .. _SteamID .. "', '" .. _reason:GetText() .. "', " .. db_int(_time:GetValue() ) .. ", '" .. _nick .. "', '" .. _Cell .. "'"
-						net.Start( "dbAddJail" )
+						net.Start( "nws_yrp_dbAddJail" )
 							net.WriteString( "yrp_jail" )
 							net.WriteString( "SteamID, reason, time, nick, cell" )
 							net.WriteString(_insert)
 							net.WriteString(_SteamID)
 						net.SendToServer()
 
-						net.Start( "AddJailNote" )
+						net.Start( "nws_yrp_addJailNote" )
 							net.WriteString(_SteamID)
 							net.WriteString(_reason:GetText() )
 						net.SendToServer()
@@ -2329,7 +2329,7 @@ net.Receive( "openLawBoard", function(len)
 			remBtn:SetText( "-" )
 			function remBtn:DoClick()
 				if scrollpanel.selected > 0 then
-					net.Start( "dbRemJail" )
+					net.Start( "nws_yrp_dbRemJail" )
 					net.WriteString(scrollpanel.selected)
 					net.SendToServer()
 					scrollpanel.items[scrollpanel.selected]:Remove()
@@ -2360,7 +2360,7 @@ net.Receive( "openLawBoard", function(len)
 					end
 
 					if target != nil then
-						net.Start( "jail" )
+						net.Start( "nws_yrp_jail" )
 							net.WriteEntity(target)
 						net.SendToServer()
 					end
@@ -2390,7 +2390,7 @@ net.Receive( "openLawBoard", function(len)
 					end
 
 					if target != nil then
-						net.Start( "unjail" )
+						net.Start( "nws_yrp_unjail" )
 							net.WriteEntity(target)
 						net.SendToServer()
 						window:Close()
@@ -2502,7 +2502,7 @@ net.Receive( "openLawBoard", function(len)
 					win.send:SetText( "LID_send" )
 					function win.send:DoClick()
 						if IsValid( plist.ply ) and win.text then
-							net.Start( "AddJailNote" )
+							net.Start( "nws_yrp_addJailNote" )
 								net.WriteString(plist.ply:YRPSteamID() )
 								net.WriteString(win.text:GetText() )
 							net.SendToServer()
@@ -2523,7 +2523,7 @@ net.Receive( "openLawBoard", function(len)
 				end
 				function self.remNote:DoClick()
 					if plist.notes.curnote > 0 then
-						net.Start( "RemoveJailNote" )
+						net.Start( "nws_yrp_removeJailNote" )
 							net.WriteString(plist.notes.curnote)
 						net.SendToServer()
 
@@ -2536,11 +2536,11 @@ net.Receive( "openLawBoard", function(len)
 					--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 40, 40, 255) )
 				end
 
-				net.Start( "getPlayerNotes" )
+				net.Start( "nws_yrp_getPlayerNotes" )
 					net.WriteEntity(plist.ply)
 				net.SendToServer()
 			end
-			net.Receive( "getPlayerNotes", function()
+			net.Receive( "nws_yrp_getPlayerNotes", function()
 				local par = plist.notes
 				local notes = net.ReadTable()
 				if par then
@@ -2598,7 +2598,7 @@ net.Receive( "openLawBoard", function(len)
 			btnVerwarnungUp:SetText( "⮝" )
 			function btnVerwarnungUp:DoClick()
 				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
-					net.Start( "warning_up" )
+					net.Start( "nws_yrp_warning_up" )
 						net.WriteEntity(plist.ply)
 					net.SendToServer()
 				end
@@ -2607,7 +2607,7 @@ net.Receive( "openLawBoard", function(len)
 			btnVerwarnungDn:SetText( "⮟" )
 			function btnVerwarnungDn:DoClick()
 				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
-					net.Start( "warning_dn" )
+					net.Start( "nws_yrp_warning_dn" )
 						net.WriteEntity(plist.ply)
 					net.SendToServer()
 				end
@@ -2625,7 +2625,7 @@ net.Receive( "openLawBoard", function(len)
 			btnVerstoesseUp:SetText( "⮝" )
 			function btnVerstoesseUp:DoClick()
 				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
-					net.Start( "violation_up" )
+					net.Start( "nws_yrp_violation_up" )
 						net.WriteEntity(plist.ply)
 					net.SendToServer()
 				end
@@ -2634,7 +2634,7 @@ net.Receive( "openLawBoard", function(len)
 			btnVerstoesseDn:SetText( "⮟" )
 			function btnVerstoesseDn:DoClick()
 				if IsValid(plist) and plist.ply and IsValid( plist.ply ) and plist.ply:IsPlayer() then
-					net.Start( "violation_dn" )
+					net.Start( "nws_yrp_violation_dn" )
 						net.WriteEntity(plist.ply)
 					net.SendToServer()
 				end

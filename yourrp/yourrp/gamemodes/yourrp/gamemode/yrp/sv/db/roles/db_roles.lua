@@ -286,7 +286,7 @@ function YRPBuildDarkrpTeams()
 end
 YRPBuildDarkrpTeams()
 
-util.AddNetworkString( "YRP_Send_DarkRP_Jobs" )
+util.AddNetworkString( "nws_yrp_Send_DarkRP_Jobs" )
 local Player = FindMetaTable( "Player" )
 local timerdelay = 0.26
 function Player:DRPSendTeamsToPlayer()
@@ -299,7 +299,7 @@ function Player:DRPSendTeamsToPlayer()
 			if type( role.weapons ) == "string" then
 				role.weapons = string.Explode( ",", role.weapons )
 			end
-			net.Start( "YRP_Send_DarkRP_Jobs" )
+			net.Start( "nws_yrp_Send_DarkRP_Jobs" )
 				net.WriteUInt( role.admin, 2 )
 				net.WriteBool( role.candemote )
 				net.WriteString( role.category )
@@ -349,15 +349,15 @@ if IsNotNilAndNotFalse( drp_allgroups ) then
 	end
 end
 
-util.AddNetworkString( "YRP_Send_DarkRP_Categories" )
-util.AddNetworkString( "YRP_Combine_DarkRPTables" )
+util.AddNetworkString( "nws_yrp_Send_DarkRP_Categories" )
+util.AddNetworkString( "nws_yrp_Combine_DarkRPTables" )
 function Player:DRPSendCategoriesToPlayer()
 	local count = 0
 	for i, group in pairs(CATEGORIES.jobs) do
 		if IsValid( self ) and i and group then
 			local gro = YRPConvertToDarkRPCategory( group, "jobs" )
 			count = count + 1
-			net.Start( "YRP_Send_DarkRP_Categories" )
+			net.Start( "nws_yrp_Send_DarkRP_Categories" )
 				net.WriteUInt( gro.uniqueID, 16 )
 				net.WriteString( gro.name )
 				net.WriteString( gro.categorises )
@@ -368,7 +368,7 @@ function Player:DRPSendCategoriesToPlayer()
 		end
 	end
 
-	net.Start( "YRP_Combine_DarkRPTables" )
+	net.Start( "nws_yrp_Combine_DarkRPTables" )
 	net.Send(self)
 
 	if IsNotNilAndNotFalse(TEAMS) then
@@ -409,7 +409,7 @@ HANDLER_GROUPSANDROLES["roles"] = {}
 for str, val in pairs(yrp_ply_roles) do
 	if string.find(str, "string_" ) then
 		local tab = {}
-		tab.netstr = "update_role_" .. str
+		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
 		net.Receive(tab.netstr, function(len, ply)
 			local uid = tonumber(net.ReadString() )
@@ -422,35 +422,35 @@ for str, val in pairs(yrp_ply_roles) do
 			UpdateString(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastString(tab)
-			if tab.netstr == "update_role_string_name" then
-				util.AddNetworkString( "settings_role_update_name" )
+			if tab.netstr == "nws_yrp_update_role_string_name" then
+				util.AddNetworkString( "nws_yrp_settings_role_update_name" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-					tab.netstr = "settings_role_update_name"
+					tab.netstr = "yrp_settings_role_update_name"
 					tab.uniqueID = tonumber(puid.uniqueID)
 					tab.force = true
 					BroadcastString(tab)
 				end
-			elseif tab.netstr == "update_role_string_color" then
-				util.AddNetworkString( "settings_role_update_color" )
+			elseif tab.netstr == "nws_yrp_update_role_string_color" then
+				util.AddNetworkString( "nws_yrp_settings_role_update_color" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-					tab.netstr = "settings_role_update_color"
+					tab.netstr = "yrp_settings_role_update_color"
 					tab.uniqueID = tonumber(puid.uniqueID)
 					tab.force = true
 					BroadcastString(tab)
 				end
-			elseif tab.netstr == "update_role_string_icon" then
-				util.AddNetworkString( "settings_role_update_icon" )
+			elseif tab.netstr == "nws_yrp_update_role_string_icon" then
+				util.AddNetworkString( "nws_yrp_settings_role_update_icon" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-					tab.netstr = "settings_role_update_icon"
+					tab.netstr = "yrp_settings_role_update_icon"
 					tab.uniqueID = tonumber(puid.uniqueID)
 					tab.force = true
 					BroadcastString(tab)
@@ -459,7 +459,7 @@ for str, val in pairs(yrp_ply_roles) do
 		end)
 	elseif string.find(str, "int_" ) then
 		local tab = {}
-		tab.netstr = "update_role_" .. str
+		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
 		net.Receive(tab.netstr, function(len, ply)
 			local uid = tonumber(net.ReadString() )
@@ -473,19 +473,19 @@ for str, val in pairs(yrp_ply_roles) do
 			UpdateInt(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastInt(tab)
-			if tab.netstr == "update_role_int_prerole" then
+			if tab.netstr == "nws_yrp_update_role_int_prerole" then
 				if IsNotNilAndNotFalse( cur) then
 					cur = cur[1]
 					SendRoleList(nil, tonumber( cur.int_groupID), tonumber( cur.int_prerole) )
 				end
 				SendRoleList(nil, tonumber( cur.int_groupID), 0)
-			elseif tab.netstr == "update_role_int_groupID" then
+			elseif tab.netstr == "nws_yrp_update_role_int_groupID" then
 				UpdatePrerolesGroupIDs(tab.uniqueID, tab.value)
 			end
 		end)
 	elseif string.find(str, "float_" ) then
 		local tab = {}
-		tab.netstr = "update_role_" .. str
+		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
 		net.Receive(tab.netstr, function(len, ply)
 			local uid = tonumber(net.ReadString() )
@@ -499,7 +499,7 @@ for str, val in pairs(yrp_ply_roles) do
 			UpdateFloat(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastFloat(tab)
-			if tab.netstr == "update_role_int_prerole" then
+			if tab.netstr == "nws_yrp_update_role_int_prerole" then
 				if IsNotNilAndNotFalse( cur) then
 					cur = cur[1]
 					SendGroupList(tonumber( cur.float_parentrole) )
@@ -509,7 +509,7 @@ for str, val in pairs(yrp_ply_roles) do
 		end)
 	elseif string.find(str, "bool_" ) then
 		local tab = {}
-		tab.netstr = "update_role_" .. str
+		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
 		net.Receive(tab.netstr, function(len, ply)
 			local uid = tonumber(net.ReadString() )
@@ -523,7 +523,7 @@ for str, val in pairs(yrp_ply_roles) do
 			UpdateInt(tab)
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastInt(tab)
-			if tab.netstr == "update_role_int_prerole" then
+			if tab.netstr == "nws_yrp_update_role_int_prerole" then
 				if IsNotNilAndNotFalse( cur) then
 					cur = cur[1]
 					SendGroupList(tonumber( cur.int_parentrole) )
@@ -625,7 +625,7 @@ function SendRoleList(ply, gro, pre)
 		if IsNotNilAndNotFalse(headername) then
 			if ply != nil then
 				if tbl_roles then
-					net.Start( "settings_subscribe_rolelist" )
+					net.Start( "nws_yrp_settings_subscribe_rolelist" )
 						net.WriteTable(tbl_roles)
 						net.WriteString(headername)
 						net.WriteString(gro)
@@ -636,7 +636,7 @@ function SendRoleList(ply, gro, pre)
 				local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
 				if tbl_bc then
 					for i, pl in pairs(tbl_bc) do
-						net.Start( "settings_subscribe_rolelist" )
+						net.Start( "nws_yrp_settings_subscribe_rolelist" )
 							net.WriteTable(tbl_roles)
 							net.WriteString(headername)
 							net.WriteString(gro)
@@ -692,15 +692,23 @@ function DuplicateRole(ruid, guid)
 	end
 end
 
-util.AddNetworkString( "duplicated_role" )
-net.Receive( "duplicated_role", function(len, ply)
+util.AddNetworkString( "nws_yrp_duplicated_role" )
+net.Receive( "nws_yrp_duplicated_role", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = tonumber(net.ReadString() )
 	DuplicateRole(ruid)
 end)
 
 -- Role menu
-util.AddNetworkString( "get_grp_roles" )
-net.Receive( "get_grp_roles", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_grp_roles" )
+net.Receive( "nws_yrp_get_grp_roles", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local _uid = net.ReadString()
 	local _roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. _uid .. "'" )
 	if IsNotNilAndNotFalse(_roles) then
@@ -708,7 +716,7 @@ net.Receive( "get_grp_roles", function(len, ply)
 			YRPUpdateRoleUses(ro.uniqueID)
 			ro.pms = GetPMTableOfRole(ro.uniqueID)
 		end
-		net.Start( "get_grp_roles" )
+		net.Start( "nws_yrp_get_grp_roles" )
 			net.WriteTable(_roles)
 		net.Send(ply)
 	else
@@ -716,8 +724,12 @@ net.Receive( "get_grp_roles", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "get_rol_prerole" )
-net.Receive( "get_rol_prerole", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_rol_prerole" )
+net.Receive( "nws_yrp_get_rol_prerole", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local _uid = net.ReadString()
 	local _roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. _uid .. "'" )
 
@@ -727,15 +739,19 @@ net.Receive( "get_rol_prerole", function(len, ply)
 		end
 		_roles = _roles[1]
 
-		net.Start( "get_rol_prerole" )
+		net.Start( "nws_yrp_get_rol_prerole" )
 			net.WriteTable(_roles)
 		net.Send(ply)
 	end
 end)
 
 -- Role Settings
-util.AddNetworkString( "settings_subscribe_rolelist" )
-net.Receive( "settings_subscribe_rolelist", function(len, ply)
+util.AddNetworkString( "nws_yrp_settings_subscribe_rolelist" )
+net.Receive( "nws_yrp_settings_subscribe_rolelist", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local gro = tonumber(net.ReadString() )
 	local pre = tonumber(net.ReadString() )
 
@@ -743,8 +759,12 @@ net.Receive( "settings_subscribe_rolelist", function(len, ply)
 	SendRoleList(ply, gro, pre)
 end)
 
-util.AddNetworkString( "settings_subscribe_prerolelist" )
-net.Receive( "settings_subscribe_prerolelist", function(len, ply)
+util.AddNetworkString( "nws_yrp_settings_subscribe_prerolelist" )
+net.Receive( "nws_yrp_settings_subscribe_prerolelist", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local gro = tonumber(net.ReadString() )
 	local pre = tonumber(net.ReadString() )
 
@@ -756,8 +776,12 @@ net.Receive( "settings_subscribe_prerolelist", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "settings_add_role" )
-net.Receive( "settings_add_role", function(len, ply)
+util.AddNetworkString( "nws_yrp_settings_add_role" )
+net.Receive( "nws_yrp_settings_add_role", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local gro = tonumber(net.ReadString() )
 	local pre = tonumber(net.ReadString() )
 
@@ -803,8 +827,12 @@ net.Receive( "settings_add_role", function(len, ply)
 	SendRoleList(nil, gro, pre)
 end)
 
-util.AddNetworkString( "settings_role_position_up" )
-net.Receive( "settings_role_position_up", function(len, ply)
+util.AddNetworkString( "nws_yrp_settings_role_position_up" )
+net.Receive( "nws_yrp_settings_role_position_up", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = tonumber(net.ReadString() )
 	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 	role = role[1]
@@ -831,8 +859,12 @@ net.Receive( "settings_role_position_up", function(len, ply)
 	SendRoleList(nil, role.int_groupID, role.int_prerole)
 end)
 
-util.AddNetworkString( "settings_role_position_dn" )
-net.Receive( "settings_role_position_dn", function(len, ply)
+util.AddNetworkString( "nws_yrp_settings_role_position_dn" )
+net.Receive( "nws_yrp_settings_role_position_dn", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = tonumber(net.ReadString() )
 	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 	role = role[1]
@@ -859,8 +891,12 @@ net.Receive( "settings_role_position_dn", function(len, ply)
 	SendRoleList(nil, role.int_groupID, role.int_prerole)
 end)
 
-util.AddNetworkString( "settings_subscribe_role" )
-net.Receive( "settings_subscribe_role", function(len, ply)
+util.AddNetworkString( "nws_yrp_settings_subscribe_role" )
+net.Receive( "nws_yrp_settings_subscribe_role", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = tonumber(net.ReadString() )
 	SubscribeRole(ply, uid)
 
@@ -885,7 +921,7 @@ net.Receive( "settings_subscribe_role", function(len, ply)
 	local hudmasks = YRPGetHUDMasks()
 
 	if IsNotNilAndNotFalse(role) and IsNotNilAndNotFalse(roles) and IsNotNilAndNotFalse(usergroups) and IsNotNilAndNotFalse(groups) and IsNotNilAndNotFalse(huds) and IsNotNilAndNotFalse(hudmasks) then
-		net.Start( "settings_subscribe_role" )
+		net.Start( "nws_yrp_settings_subscribe_role" )
 			net.WriteTable(role)
 			net.WriteTable(roles)
 			net.WriteTable(usergroups)
@@ -898,21 +934,33 @@ net.Receive( "settings_subscribe_role", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "settings_unsubscribe_role" )
-net.Receive( "settings_unsubscribe_role", function(len, ply)
+util.AddNetworkString( "nws_yrp_settings_unsubscribe_role" )
+net.Receive( "nws_yrp_settings_unsubscribe_role", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = tonumber(net.ReadString() )
 	UnsubscribeRole(ply, uid)
 end)
 
-util.AddNetworkString( "settings_unsubscribe_rolelist" )
-net.Receive( "settings_unsubscribe_rolelist", function(len, ply)
+util.AddNetworkString( "nws_yrp_settings_unsubscribe_rolelist" )
+net.Receive( "nws_yrp_settings_unsubscribe_rolelist", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local gro = tonumber(net.ReadString() )
 	local pre = tonumber(net.ReadString() )
 	UnsubscribeRoleList(ply, gro, pre)
 end)
 
-util.AddNetworkString( "settings_delete_role" )
-net.Receive( "settings_delete_role", function(len, ply)
+util.AddNetworkString( "nws_yrp_settings_delete_role" )
+net.Receive( "nws_yrp_settings_delete_role", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = tonumber(net.ReadString() )
 	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 	if IsNotNilAndNotFalse(role) then
@@ -944,11 +992,15 @@ net.Receive( "settings_delete_role", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "getScoreboardGroups" )
-net.Receive( "getScoreboardGroups", function(len, ply)
+util.AddNetworkString( "nws_yrp_getScoreboardGroups" )
+net.Receive( "nws_yrp_getScoreboardGroups", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local _tmpGroups = YRP_SQL_SELECT( "yrp_ply_groups", "*", nil)
 	if IsNotNilAndNotFalse(_tmpGroups) then
-		net.Start( "getScoreboardGroups" )
+		net.Start( "nws_yrp_getScoreboardGroups" )
 			net.WriteTable(_tmpGroups)
 		net.Broadcast()
 	else
@@ -982,33 +1034,45 @@ function SendCustomFlags(uid)
 		end
 
 		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
-			net.Start( "get_role_customflags" )
+			net.Start( "nws_yrp_get_role_customflags" )
 				net.WriteTable(nettab)
 			net.Send(pl)
 		end
 	end
 end
 
-util.AddNetworkString( "get_role_customflags" )
-net.Receive( "get_role_customflags", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_role_customflags" )
+net.Receive( "nws_yrp_get_role_customflags", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = net.ReadInt(32)
 	SendCustomFlags(uid)
 end)
 
-util.AddNetworkString( "get_all_role_customflags" )
-net.Receive( "get_all_role_customflags", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_all_role_customflags" )
+net.Receive( "nws_yrp_get_all_role_customflags", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local allflags = YRP_SQL_SELECT( "yrp_flags", "*", "string_type = 'role'" )
 	if !IsNotNilAndNotFalse( allflags) then
 		allflags = {}
 	end
 
-	net.Start( "get_all_role_customflags" )
+	net.Start( "nws_yrp_get_all_role_customflags" )
 		net.WriteTable( allflags)
 	net.Send(ply)
 end)
 
-util.AddNetworkString( "add_role_flag" )
-net.Receive( "add_role_flag", function(len, ply)
+util.AddNetworkString( "nws_yrp_add_role_flag" )
+net.Receive( "nws_yrp_add_role_flag", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local fuid = net.ReadInt(32)
 	local role = GetRole(ruid)
@@ -1031,8 +1095,12 @@ net.Receive( "add_role_flag", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "rem_role_flag" )
-net.Receive( "rem_role_flag", function(len, ply)
+util.AddNetworkString( "nws_yrp_rem_role_flag" )
+net.Receive( "nws_yrp_rem_role_flag", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local fuid = net.ReadInt(32)
 	local role = GetRole(ruid)
@@ -1077,7 +1145,7 @@ function SendPlayermodels(uid)
 
 		if HANDLER_GROUPSANDROLES and HANDLER_GROUPSANDROLES["roles"] and HANDLER_GROUPSANDROLES["roles"][uid] then
 			for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
-				net.Start( "get_role_playermodels" )
+				net.Start( "nws_yrp_get_role_playermodels" )
 					net.WriteTable(nettab)
 				net.Send(pl)
 			end
@@ -1085,14 +1153,22 @@ function SendPlayermodels(uid)
 	end
 end
 
-util.AddNetworkString( "get_role_playermodels" )
-net.Receive( "get_role_playermodels", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_role_playermodels" )
+net.Receive( "nws_yrp_get_role_playermodels", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = net.ReadInt(32)
 	SendPlayermodels(uid)
 end)
 
-util.AddNetworkString( "get_all_playermodels" )
-net.Receive( "get_all_playermodels", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_all_playermodels" )
+net.Receive( "nws_yrp_get_all_playermodels", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local allpms = YRP_SQL_SELECT( "yrp_playermodels", "*", nil)
 	if !IsNotNilAndNotFalse( allpms) then
 		allpms = {}
@@ -1120,7 +1196,7 @@ net.Receive( "get_all_playermodels", function(len, ply)
 
 	if IsNotNilAndNotFalse( allpms ) then
 		for i, v in pairs( allpms ) do
-			net.Start( "get_all_playermodels" )
+			net.Start( "nws_yrp_get_all_playermodels" )
 				net.WriteTable( v )
 			net.Send( ply )
 		end
@@ -1147,8 +1223,12 @@ function AddPlayermodelToRole(ruid, muid)
 	end
 end
 
-util.AddNetworkString( "add_role_playermodel" )
-net.Receive( "add_role_playermodel", function(len, ply)
+util.AddNetworkString( "nws_yrp_add_role_playermodel" )
+net.Receive( "nws_yrp_add_role_playermodel", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local muid = net.ReadInt(32)
 
@@ -1173,8 +1253,12 @@ function YRPAddPlayermodelsToRole( pms, name, min, max, ruid )
 	AddPlayermodelToRole(ruid, lastentry.uniqueID)
 end
 
-util.AddNetworkString( "add_playermodels" )
-net.Receive( "add_playermodels", function(len, ply)
+util.AddNetworkString( "nws_yrp_add_playermodels" )
+net.Receive( "nws_yrp_add_playermodels", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local pms = net.ReadTable()
 	local name = net.ReadString()
@@ -1202,8 +1286,12 @@ function RemPlayermodelFromRole(ruid, muid)
 	SendPlayermodels(ruid)
 end
 
-util.AddNetworkString( "rem_role_playermodel" )
-net.Receive( "rem_role_playermodel", function(len, ply)
+util.AddNetworkString( "nws_yrp_rem_role_playermodel" )
+net.Receive( "nws_yrp_rem_role_playermodel", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local muid = net.ReadInt(32)
 
@@ -1233,7 +1321,7 @@ function SendSweps(uid)
 		
 		if HANDLER_GROUPSANDROLES and HANDLER_GROUPSANDROLES["roles"] and HANDLER_GROUPSANDROLES["roles"][uid] then
 			for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
-				net.Start( "get_role_sweps" )
+				net.Start( "nws_yrp_get_role_sweps" )
 					net.WriteTable(nettab)
 				net.Send(pl)
 			end
@@ -1243,8 +1331,12 @@ function SendSweps(uid)
 	end
 end
 
-util.AddNetworkString( "get_role_sweps" )
-net.Receive( "get_role_sweps", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_role_sweps" )
+net.Receive( "nws_yrp_get_role_sweps", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = net.ReadInt(32)
 	SendSweps(uid)
 end)
@@ -1273,8 +1365,12 @@ function AddSwepToRole(ruid, swepcn)
 	end
 end
 
-util.AddNetworkString( "add_role_swep" )
-net.Receive( "add_role_swep", function(len, ply)
+util.AddNetworkString( "nws_yrp_add_role_swep" )
+net.Receive( "nws_yrp_add_role_swep", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local swepcn = net.ReadTable()
 
@@ -1301,8 +1397,12 @@ function RemSwepFromRole(ruid, swepcn)
 	SendSweps(ruid)
 end
 
-util.AddNetworkString( "rem_role_swep" )
-net.Receive( "rem_role_swep", function(len, ply)
+util.AddNetworkString( "nws_yrp_rem_role_swep" )
+net.Receive( "nws_yrp_rem_role_swep", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local swepcn = net.ReadString()
 
@@ -1325,15 +1425,19 @@ function SendSwepsOnSpawn(uid)
 		end
 
 		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
-			net.Start( "get_role_sweps_onspawn" )
+			net.Start( "nws_yrp_get_role_sweps_onspawn" )
 				net.WriteTable(nettab)
 			net.Send(pl)
 		end
 	end
 end
 
-util.AddNetworkString( "get_role_sweps_onspawn" )
-net.Receive( "get_role_sweps_onspawn", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_role_sweps_onspawn" )
+net.Receive( "nws_yrp_get_role_sweps_onspawn", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = net.ReadInt(32)
 	SendSwepsOnSpawn(uid)
 end)
@@ -1360,8 +1464,12 @@ function AddSwepToRoleOnSpawn(ruid, swepcn)
 	end
 end
 
-util.AddNetworkString( "add_role_swep_onspawn" )
-net.Receive( "add_role_swep_onspawn", function(len, ply)
+util.AddNetworkString( "nws_yrp_add_role_swep_onspawn" )
+net.Receive( "nws_yrp_add_role_swep_onspawn", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local swepcn = net.ReadTable()
 
@@ -1388,8 +1496,12 @@ function RemSwepFromRoleOnSpawn(ruid, swepcn)
 	SendSwepsOnSpawn(ruid)
 end
 
-util.AddNetworkString( "rem_role_swep_onspawn" )
-net.Receive( "rem_role_swep_onspawn", function(len, ply)
+util.AddNetworkString( "nws_yrp_rem_role_swep_onspawn" )
+net.Receive( "nws_yrp_rem_role_swep_onspawn", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local swepcn = net.ReadString()
 
@@ -1411,15 +1523,19 @@ function SendNDSweps(uid)
 		end
 
 		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][uid]) do
-			net.Start( "get_role_ndsweps" )
+			net.Start( "nws_yrp_get_role_ndsweps" )
 				net.WriteTable(nettab)
 			net.Send(pl)
 		end
 	end
 end
 
-util.AddNetworkString( "get_role_ndsweps" )
-net.Receive( "get_role_ndsweps", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_role_ndsweps" )
+net.Receive( "nws_yrp_get_role_ndsweps", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = net.ReadInt(32)
 	SendNDSweps(uid)
 end)
@@ -1444,8 +1560,12 @@ function AddNDSwepToRole(ruid, ndswepcn)
 	end
 end
 
-util.AddNetworkString( "add_role_ndswep" )
-net.Receive( "add_role_ndswep", function(len, ply)
+util.AddNetworkString( "nws_yrp_add_role_ndswep" )
+net.Receive( "nws_yrp_add_role_ndswep", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local ndswepcn = net.ReadString()
 
@@ -1470,8 +1590,12 @@ function RemNDSwepFromRole(ruid, ndswepcn)
 	SendNDSweps(ruid)
 end
 
-util.AddNetworkString( "rem_role_ndswep" )
-net.Receive( "rem_role_ndswep", function(len, ply)
+util.AddNetworkString( "nws_yrp_rem_role_ndswep" )
+net.Receive( "nws_yrp_rem_role_ndswep", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local ndswepcn = net.ReadString()
 
@@ -1497,7 +1621,7 @@ function SendLicenses(ruid)
 		end
 
 		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][ruid]) do
-			net.Start( "get_role_licenses" )
+			net.Start( "nws_yrp_get_role_licenses" )
 				net.WriteTable(nettab)
 			net.Send(pl)
 		end
@@ -1538,20 +1662,28 @@ function CleanUpLicenses(ruid)
 	end
 end
 
-util.AddNetworkString( "get_role_licenses" )
-net.Receive( "get_role_licenses", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_role_licenses" )
+net.Receive( "nws_yrp_get_role_licenses", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = net.ReadInt(32)
 	CleanUpLicenses(uid)
 	SendLicenses(uid)
 end)
 
-util.AddNetworkString( "get_all_licenses" )
-net.Receive( "get_all_licenses", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_all_licenses" )
+net.Receive( "nws_yrp_get_all_licenses", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local alllis = YRP_SQL_SELECT( "yrp_licenses", "*", nil)
 	if !IsNotNilAndNotFalse( alllis) then
 		alllis = {}
 	end
-	net.Start( "get_all_licenses" )
+	net.Start( "nws_yrp_get_all_licenses" )
 		net.WriteTable( alllis)
 	net.Send(ply)
 end)
@@ -1576,18 +1708,22 @@ function AddLicenseToRole(ruid, muid)
 	end
 end
 
-util.AddNetworkString( "add_role_license" )
-net.Receive( "add_role_license", function(len, ply)
+util.AddNetworkString( "nws_yrp_add_role_license" )
+net.Receive( "nws_yrp_add_role_license", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local muid = tonumber(net.ReadString() )
 
 	AddLicenseToRole(ruid, muid)
 end)
 
-util.AddNetworkString( "add_license" )
-net.Receive( "add_license", function(len, ply)
-	if !ply:HasAccess() then
-		return 
+util.AddNetworkString( "nws_yrp_add_license" )
+net.Receive( "nws_yrp_add_license", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
 	end
 
 	local ruid = net.ReadInt(32)
@@ -1600,8 +1736,12 @@ net.Receive( "add_license", function(len, ply)
 	AddLicenseToRole(ruid, lastentry.uniqueID)
 end)
 
-util.AddNetworkString( "rem_role_license" )
-net.Receive( "rem_role_license", function(len, ply)
+util.AddNetworkString( "nws_yrp_rem_role_license" )
+net.Receive( "nws_yrp_rem_role_license", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local ruid = net.ReadInt(32)
 	local muid = tonumber(net.ReadString() )
 
@@ -1629,7 +1769,7 @@ function SendSpecializations(ruid)
 		end
 
 		for i, pl in pairs(HANDLER_GROUPSANDROLES["roles"][ruid]) do
-			net.Start( "get_role_specializations" )
+			net.Start( "nws_yrp_get_role_specializations" )
 				net.WriteTable(nettab)
 			net.Send(pl)
 		end
@@ -1670,20 +1810,28 @@ function CleanUpSpecializations(ruid)
 	end
 end
 
-util.AddNetworkString( "get_role_specializations" )
-net.Receive( "get_role_specializations", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_role_specializations" )
+net.Receive( "nws_yrp_get_role_specializations", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local uid = net.ReadInt(32)
 	CleanUpSpecializations(uid)
 	SendSpecializations(uid)
 end)
 
-util.AddNetworkString( "get_all_specializations" )
-net.Receive( "get_all_specializations", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_all_specializations" )
+net.Receive( "nws_yrp_get_all_specializations", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
+	end
+
 	local alllis = YRP_SQL_SELECT( "yrp_specializations", "*", nil)
 	if !IsNotNilAndNotFalse( alllis) then
 		alllis = {}
 	end
-	net.Start( "get_all_specializations" )
+	net.Start( "nws_yrp_get_all_specializations" )
 		net.WriteTable( alllis)
 	net.Send(ply)
 end)
@@ -1708,10 +1856,10 @@ function AddSpecializationToRole(ruid, muid)
 	end
 end
 
-util.AddNetworkString( "add_role_specialization" )
-net.Receive( "add_role_specialization", function(len, ply)
-	if !ply:HasAccess() then
-		return 
+util.AddNetworkString( "nws_yrp_add_role_specialization" )
+net.Receive( "nws_yrp_add_role_specialization", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
 	end
 
 	local ruid = net.ReadInt(32)
@@ -1720,24 +1868,12 @@ net.Receive( "add_role_specialization", function(len, ply)
 	AddSpecializationToRole(ruid, muid)
 end)
 
-util.AddNetworkString( "add_specialization" )
-net.Receive( "add_specialization", function(len, ply)
-	if !ply:HasAccess() then
-		return 
+util.AddNetworkString( "nws_yrp_rem_role_specialization" )
+net.Receive( "nws_yrp_rem_role_specialization", function(len, ply)
+	if !ply:CanAccess( "bool_groupsandroles" ) then
+		return
 	end
-	
-	local ruid = net.ReadInt(32)
-	local WorldModel = net.ReadString()
-	local name = net.ReadString()
-	YRP_SQL_INSERT_INTO( "yrp_specializations", "string_model, string_name", "'" .. WorldModel .. "', '" .. name .. "'" )
 
-	local lastentry = YRP_SQL_SELECT( "yrp_specializations", "*", nil)
-	lastentry = lastentry[table.Count(lastentry)]
-	AddSpecializationToRole(ruid, lastentry.uniqueID)
-end)
-
-util.AddNetworkString( "rem_role_specialization" )
-net.Receive( "rem_role_specialization", function(len, ply)
 	local ruid = net.ReadInt(32)
 	local muid = tonumber(net.ReadString() )
 
@@ -1746,8 +1882,8 @@ end)
 
 
 
-util.AddNetworkString( "openInteractMenu" )
-net.Receive( "openInteractMenu", function(len, ply)
+util.AddNetworkString( "nws_yrp_openInteractMenu" )
+net.Receive( "nws_yrp_openInteractMenu", function(len, ply)
 	local charid = net.ReadString()
 	charid = tonumber( charid )
 	local target = YRPGetPlayerByCharID( charid )
@@ -1816,7 +1952,7 @@ net.Receive( "openInteractMenu", function(len, ply)
 					tmpHasSpecs = true
 				end
 
-				net.Start( "openInteractMenu" )
+				net.Start( "nws_yrp_openInteractMenu" )
 					net.WriteEntity(target)
 
 					net.WriteBool(idcard)
@@ -1836,12 +1972,12 @@ net.Receive( "openInteractMenu", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "isidcardenabled" )
-net.Receive( "isidcardenabled", function(len, ply)
+util.AddNetworkString( "nws_yrp_isidcardenabled" )
+net.Receive( "nws_yrp_isidcardenabled", function(len, ply)
 	local idcard = YRP_SQL_SELECT( "yrp_general", "*", nil)
 	idcard = tobool(idcard[1].bool_identity_card)
 
-	net.Start( "isidcardenabled" )
+	net.Start( "nws_yrp_isidcardenabled" )
 		net.WriteBool(idcard)
 	net.Send(ply)
 end)
@@ -1908,8 +2044,8 @@ function YRPGetPlayerByCharID( uid )
 	return NULL
 end
 
-util.AddNetworkString( "promotePlayer" )
-net.Receive( "promotePlayer", function(len, ply)
+util.AddNetworkString( "nws_yrp_promotePlayer" )
+net.Receive( "nws_yrp_promotePlayer", function(len, ply)
 	local targetcharid = net.ReadString()
 	targetcharid = tonumber( targetcharid )
 
@@ -1953,8 +2089,8 @@ net.Receive( "promotePlayer", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "demotePlayer" )
-net.Receive( "demotePlayer", function( len, ply )
+util.AddNetworkString( "nws_yrp_demotePlayer" )
+net.Receive( "nws_yrp_demotePlayer", function( len, ply )
 	local targetcharid = net.ReadString()
 	targetcharid = tonumber( targetcharid )
 
@@ -2022,10 +2158,10 @@ function YRPGetFirstRankUID(ruid)
 	return resultuid
 end
 
-util.AddNetworkString( "invitetogroup" )
-util.AddNetworkString( "yrp_invite_ply" )
-util.AddNetworkString( "yrp_invite_accept" )
-net.Receive( "invitetogroup", function( len, ply )
+util.AddNetworkString( "nws_yrp_invitetogroup" )
+util.AddNetworkString( "nws_yrp_invite_ply" )
+util.AddNetworkString( "nws_yrp_invite_accept" )
+net.Receive( "nws_yrp_invitetogroup", function( len, ply )
 	local charid = net.ReadString()
 	charid = tonumber( charid )
 
@@ -2047,7 +2183,7 @@ net.Receive( "invitetogroup", function( len, ply )
 				if IsNotNilAndNotFalse(group) then
 					group = group[1]
 
-					net.Start( "yrp_invite_ply" )
+					net.Start( "nws_yrp_invite_ply" )
 						net.WriteTable(role)
 						net.WriteTable(group)
 					net.Send(target)
@@ -2068,7 +2204,7 @@ net.Receive( "invitetogroup", function( len, ply )
 		YRP.msg( "note", "[InviteToGroup] TARGET NOT FOUND" )
 	end
 end)
-net.Receive( "yrp_invite_accept", function( len, ply )
+net.Receive( "nws_yrp_invite_accept", function( len, ply )
 	local r = net.ReadTable()
 
 	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. r.uniqueID .. "'" )
@@ -2111,8 +2247,8 @@ function GetRoleTable(rid)
 	return result
 end
 
-util.AddNetworkString( "getallroles" )
-net.Receive( "getallroles", function(len, ply)
+util.AddNetworkString( "nws_yrp_getallroles" )
+net.Receive( "nws_yrp_getallroles", function(len, ply)
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse( dbtab) then
 		for i, v in pairs( dbtab) do
@@ -2124,14 +2260,14 @@ net.Receive( "getallroles", function(len, ply)
 			end
 		end
 
-		net.Start( "getallroles" )
+		net.Start( "nws_yrp_getallroles" )
 			net.WriteTable( dbtab)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "get_next_ranks" )
-net.Receive( "get_next_ranks", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_next_ranks" )
+net.Receive( "nws_yrp_get_next_ranks", function(len, ply)
 	local ruid = net.ReadString()
 	local rols = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'" )
 
@@ -2140,14 +2276,14 @@ net.Receive( "get_next_ranks", function(len, ply)
 			rols[i].pms = string.Explode( ",", GetPlayermodelsOfRole(rol.uniqueID) )
 		end
 
-		net.Start( "get_next_ranks" )
+		net.Start( "nws_yrp_get_next_ranks" )
 			net.WriteTable(rols)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_hasnext_ranks" )
-net.Receive( "yrp_hasnext_ranks", function(len, ply)
+util.AddNetworkString( "nws_yrp_hasnext_ranks" )
+net.Receive( "nws_yrp_hasnext_ranks", function(len, ply)
 	local ruid = net.ReadString()
 	local rols = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'" )
 
@@ -2156,14 +2292,14 @@ net.Receive( "yrp_hasnext_ranks", function(len, ply)
 		has = true
 	end
 
-	net.Start( "yrp_hasnext_ranks" )
+	net.Start( "nws_yrp_hasnext_ranks" )
 		net.WriteString(ruid)
 		net.WriteBool(has)
 	net.Send(ply)
 end)
 
-util.AddNetworkString( "yrp_want_role" )
-net.Receive( "yrp_want_role", function(len, ply)
+util.AddNetworkString( "nws_yrp_want_role" )
+net.Receive( "nws_yrp_want_role", function(len, ply)
 	local ruid = net.ReadString()
 	ruid = tonumber(ruid)
 	local rol = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'" )
@@ -2176,7 +2312,7 @@ net.Receive( "yrp_want_role", function(len, ply)
 		end
 	end
 
-	net.Start( "yrp_want_role" )
+	net.Start( "nws_yrp_want_role" )
 		net.WriteString(result)
 	net.Send(ply)
 end)
@@ -2199,14 +2335,14 @@ function YRPSendRoleSpecs(ply, ruid)
 			end
 		end
 
-		net.Start( "get_role_specs" )
+		net.Start( "nws_yrp_get_role_specs" )
 			net.WriteTable(nettab)
 		net.Send(ply)
 	end
 end
 
-util.AddNetworkString( "get_role_specs" )
-net.Receive( "get_role_specs", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_role_specs" )
+net.Receive( "nws_yrp_get_role_specs", function(len, ply)
 	local ruid = net.ReadString()
 	YRPSendRoleSpecs(ply, ruid)
 end)
@@ -2214,29 +2350,29 @@ end)
 
 
 -- For Custom Charsystems
-util.AddNetworkString( "yrp_getallroles" )
-net.Receive( "yrp_getallroles", function( len, ply )
+util.AddNetworkString( "nws_yrp_getallroles" )
+net.Receive( "nws_yrp_getallroles", function( len, ply )
 	local roles = YRP_SQL_SELECT( DATABASE_NAME, "*", nil )
 
 	if IsNotNilAndNotFalse( roles ) then
 		for i, role in pairs( roles ) do
 			role.pms = GetPlayermodelsOfRole( role.uniqueID )
-			net.Start( "yrp_getallroles" )
+			net.Start( "nws_yrp_getallroles" )
 				net.WriteTable( role )
 			net.Send( ply )
 		end
 	end
 end )
 
-util.AddNetworkString( "yrp_getallroles_whitelisted" )
-net.Receive( "yrp_getallroles_whitelisted", function( len, ply )
+util.AddNetworkString( "nws_yrp_getallroles_whitelisted" )
+net.Receive( "nws_yrp_getallroles_whitelisted", function( len, ply )
 	local roles = YRP_SQL_SELECT( DATABASE_NAME, "*", nil )
 
 	if IsNotNilAndNotFalse( roles ) then
 		for i, role in pairs( roles ) do
 			role.pms = GetPlayermodelsOfRole( role.uniqueID )
 			if YRPIsWhitelisted( ply, role.uniqueID ) then
-				net.Start( "yrp_getallroles_whitelisted" )
+				net.Start( "nws_yrp_getallroles_whitelisted" )
 					net.WriteTable( role )
 				net.Send( ply )
 			end
@@ -2244,8 +2380,8 @@ net.Receive( "yrp_getallroles_whitelisted", function( len, ply )
 	end
 end )
 
-util.AddNetworkString( "yrp_getcharacters" )
-net.Receive( "yrp_getcharacters", function( len, ply )
+util.AddNetworkString( "nws_yrp_getcharacters" )
+net.Receive( "nws_yrp_getcharacters", function( len, ply )
 	local chars = YRP_SQL_SELECT( "yrp_characters", "*", "steamid = '" .. ply:YRPSteamID() .. "'" )
 
 	if IsNotNilAndNotFalse( chars ) then
@@ -2262,7 +2398,7 @@ net.Receive( "yrp_getcharacters", function( len, ply )
 			end
 			char.playermodels = GetPlayermodelsOfRole( char.roleID )
 
-			net.Start( "yrp_getcharacters" )
+			net.Start( "nws_yrp_getcharacters" )
 				net.WriteTable( char )
 			net.Send( ply )
 		end

@@ -95,7 +95,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.augs = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(200) )
 	win.augs:EnableVerticalScrollbar()
-	net.Receive( "yrp_vm_get_active_usergroups", function(len)
+	net.Receive( "nws_yrp_vm_get_active_usergroups", function(len)
 		local taugs = net.ReadTable()
 
 		for i, ug in pairs(taugs) do
@@ -124,7 +124,7 @@ function YRPVoiceChannel(edit, uid)
 			end
 		end
 	end)
-	net.Start( "yrp_vm_get_active_usergroups" )
+	net.Start( "nws_yrp_vm_get_active_usergroups" )
 	net.SendToServer()
 
 	-- GROUPS
@@ -137,7 +137,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.agrps = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(500) )
 	win.agrps:EnableVerticalScrollbar()
-	net.Receive( "yrp_vm_get_active_groups", function(len)
+	net.Receive( "nws_yrp_vm_get_active_groups", function(len)
 		local tagrps = net.ReadTable()
 
 		for i, ug in pairs(tagrps) do
@@ -166,7 +166,7 @@ function YRPVoiceChannel(edit, uid)
 			end
 		end
 	end)
-	net.Start( "yrp_vm_get_active_groups" )
+	net.Start( "nws_yrp_vm_get_active_groups" )
 	net.SendToServer()
 
 	-- ROLES
@@ -179,7 +179,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.arols = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(800) )
 	win.arols:EnableVerticalScrollbar()
-	net.Receive( "yrp_vm_get_active_roles", function(len)
+	net.Receive( "nws_yrp_vm_get_active_roles", function(len)
 		local tarols = net.ReadTable()
 
 		for i, ug in pairs(tarols) do
@@ -208,7 +208,7 @@ function YRPVoiceChannel(edit, uid)
 			end
 		end
 	end)
-	net.Start( "yrp_vm_get_active_roles" )
+	net.Start( "nws_yrp_vm_get_active_roles" )
 	net.SendToServer()
 
 
@@ -224,7 +224,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.pugs = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(200) )
 	win.pugs:EnableVerticalScrollbar()
-	net.Receive( "yrp_vm_get_passive_usergroups", function(len)
+	net.Receive( "nws_yrp_vm_get_passive_usergroups", function(len)
 		local tpugs = net.ReadTable()
 
 		for i, ug in pairs(tpugs) do
@@ -253,7 +253,7 @@ function YRPVoiceChannel(edit, uid)
 			end
 		end
 	end)
-	net.Start( "yrp_vm_get_passive_usergroups" )
+	net.Start( "nws_yrp_vm_get_passive_usergroups" )
 	net.SendToServer()
 
 	-- GROUPS
@@ -266,7 +266,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.pgrps = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(500) )
 	win.pgrps:EnableVerticalScrollbar()
-	net.Receive( "yrp_vm_get_passive_groups", function(len)
+	net.Receive( "nws_yrp_vm_get_passive_groups", function(len)
 		local tpgrps = net.ReadTable()
 
 		for i, ug in pairs(tpgrps) do
@@ -295,7 +295,7 @@ function YRPVoiceChannel(edit, uid)
 			end
 		end
 	end)
-	net.Start( "yrp_vm_get_passive_groups" )
+	net.Start( "nws_yrp_vm_get_passive_groups" )
 	net.SendToServer()
 
 	-- ROLES
@@ -308,7 +308,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.prols = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(800) )
 	win.prols:EnableVerticalScrollbar()
-	net.Receive( "yrp_vm_get_passive_roles", function(len)
+	net.Receive( "nws_yrp_vm_get_passive_roles", function(len)
 		local tprols = net.ReadTable()
 
 		for i, ug in pairs(tprols) do
@@ -337,7 +337,7 @@ function YRPVoiceChannel(edit, uid)
 			end
 		end
 	end)
-	net.Start( "yrp_vm_get_passive_roles" )
+	net.Start( "nws_yrp_vm_get_passive_roles" )
 	net.SendToServer()
 
 	if edit then
@@ -347,7 +347,7 @@ function YRPVoiceChannel(edit, uid)
 			hook.Run( "YButtonAPaint", self, pw, ph)
 		end
 		function win.save:DoClick()
-			net.Start( "yrp_voice_channel_save" )
+			net.Start( "nws_yrp_voice_channel_save" )
 				net.WriteString(name)
 				net.WriteBool(hear)
 
@@ -374,7 +374,7 @@ function YRPVoiceChannel(edit, uid)
 			hook.Run( "YButtonRPaint", self, pw, ph)
 		end
 		function win.rem:DoClick()
-			net.Start( "yrp_voice_channel_rem" )
+			net.Start( "nws_yrp_voice_channel_rem" )
 				net.WriteString(uid)
 			net.SendToServer()
 
@@ -390,7 +390,7 @@ function YRPVoiceChannel(edit, uid)
 			hook.Run( "YButtonAPaint", self, pw, ph)
 		end
 		function win.add:DoClick()
-			net.Start( "yrp_voice_channel_add" )
+			net.Start( "nws_yrp_voice_channel_add" )
 				net.WriteString(name)
 				net.WriteBool(hear)
 
@@ -417,7 +417,7 @@ function YRPUpdateVoiceList()
 
 	vm.win.list:Clear()
 
-	if lply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) then
+	if lply:GetYRPBool( "yrp_ToggleVoiceMenu", true ) then
 		local h = YRP.ctr(66)
 		local pbr = YRP.ctr(10)
 		for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable( "yrp_voice_channels", {}), "int_position" ) do
@@ -491,7 +491,7 @@ function YRPUpdateVoiceList()
 					end
 					function mutemic:DoClick()
 						if !lply:GetYRPBool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, false) or (lply:GetYRPBool( "yrp_voice_channel_mutemic_" .. channel.uniqueID, false) and lply:GetYRPInt( "yrp_voice_channel_active_mic", 0) < GetGlobalYRPInt( "int_max_channels_active", 1 ) ) then
-							net.Start( "mutemic_channel" )
+							net.Start( "nws_yrp_mutemic_channel" )
 								net.WriteString( channel.uniqueID)
 							net.SendToServer()
 						end
@@ -519,7 +519,7 @@ function YRPUpdateVoiceList()
 					end
 					function mute:DoClick()
 						if !lply:GetYRPBool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) or (lply:GetYRPBool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) and lply:GetYRPInt( "yrp_voice_channel_passive_voice", 0) < GetGlobalYRPInt( "int_max_channels_passive", 3 ) ) then
-							net.Start( "mute_channel" )
+							net.Start( "nws_yrp_mute_channel" )
 								net.WriteString( channel.uniqueID)
 							net.SendToServer()
 						end
@@ -544,7 +544,7 @@ function YRPUpdateVoiceList()
 					end
 					function dn:DoClick()
 						CloseVoiceMenu()
-						net.Start( "channel_dn" )
+						net.Start( "nws_yrp_channel_dn" )
 							net.WriteString( channel.uniqueID)
 						net.SendToServer()
 					end
@@ -566,7 +566,7 @@ function YRPUpdateVoiceList()
 					end
 					function up:DoClick()
 						CloseVoiceMenu()
-						net.Start( "channel_up" )
+						net.Start( "nws_yrp_channel_up" )
 							net.WriteString( channel.uniqueID)
 						net.SendToServer()
 					end
@@ -585,8 +585,8 @@ function OpenVoiceMenu()
 	function vm.win:Paint(pw, ph)
 		DrawRectBlurHUD(5, 0, 0, pw, ph, 255)
 		
-		if self.toggle != lply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) then
-			self.toggle = lply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true )
+		if self.toggle != lply:GetYRPBool( "yrp_ToggleVoiceMenu", true ) then
+			self.toggle = lply:GetYRPBool( "yrp_ToggleVoiceMenu", true )
 			YRPUpdateVoiceList()
 		end
 
@@ -610,7 +610,7 @@ function OpenVoiceMenu()
 	-- HEADER
 	vm.win.listheader = YRPCreateD( "DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(50 + 20), 0, 0)
 	function vm.win.listheader:Paint(pw, ph)
-		if lply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) then
+		if lply:GetYRPBool( "yrp_ToggleVoiceMenu", true ) then
 			draw.SimpleText(YRP.lang_string( "LID_name" ), "Y_20_500", YRP.ctr(80), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_active_mic", 0) .. "/" .. GetGlobalYRPInt( "int_max_channels_active", 1 ), "Y_20_500", YRP.ctr(990), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			draw.SimpleText(lply:GetYRPInt( "yrp_voice_channel_passive_voice", 0) .. "/" .. GetGlobalYRPInt( "int_max_channels_passive", 3 ), "Y_20_500", YRP.ctr(1100), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -694,7 +694,7 @@ function OpenVoiceMenu()
 		vm.win.maxactive:SetMinMax( 0, 10 )
 		vm.win.maxactive:SetValue( GetGlobalYRPInt( "int_max_channels_active", 1 ) )
 		function vm.win.maxactive:OnValueChanged( value )
-			net.Start( "yrp_voice_set_max_active" )
+			net.Start( "nws_yrp_voice_set_max_active" )
 				net.WriteString( math.floor( value, self:GetDecimals() ) )
 			net.SendToServer()
 		end
@@ -706,7 +706,7 @@ function OpenVoiceMenu()
 		vm.win.maxpassive:SetMinMax( 0, 10 )
 		vm.win.maxpassive:SetValue( GetGlobalYRPInt( "int_max_channels_passive", 3 ) )
 		function vm.win.maxpassive:OnValueChanged( value )
-			net.Start( "yrp_voice_set_max_passive" )
+			net.Start( "nws_yrp_voice_set_max_passive" )
 				net.WriteString( math.floor( value, self:GetDecimals() ) )
 			net.SendToServer()
 		end
@@ -739,16 +739,16 @@ function OpenVoiceMenu()
 		end
 	end
 	function vm.win.muteall:DoClick()
-		net.Start( "mute_channel_all" )
+		net.Start( "nws_yrp_mute_channel_all" )
 		net.SendToServer()
 	end
 end
 
-net.Receive( "channel_dn", function(len)
+net.Receive( "nws_yrp_channel_dn", function(len)
 	OpenVoiceMenu()
 end)
 
-net.Receive( "channel_up", function(len)
+net.Receive( "nws_yrp_channel_up", function(len)
 	OpenVoiceMenu()
 end)
 
@@ -765,7 +765,7 @@ function YRPToggleVoiceMenu()
 end
 
 function NextVoiceChannel()
-	net.Start( "yrp_next_voice_channel" )
+	net.Start( "nws_yrp_next_voice_channel" )
 	net.SendToServer()
 end
 

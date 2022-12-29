@@ -61,7 +61,7 @@ function getCopyMapPNG()
 	return _mapPNG
 end
 
-net.Receive( "getMapSite", function(len)
+net.Receive( "nws_yrp_getMapSite", function(len)
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) then
 		if len > 512000 then
@@ -80,43 +80,43 @@ net.Receive( "getMapSite", function(len)
 
 		-- GROUPS AND ROLES
 		tabs:AddOption( "LID_groupspawnpoints", function(parent)
-			net.Start( "getMapTab" )
+			net.Start( "nws_yrp_getMapTab" )
 				net.WriteString( "groupspawnpoints" )
 			net.SendToServer()
 		end)
 		tabs:AddOption( "LID_rolespawnpoints", function(parent)
-			net.Start( "getMapTab" )
+			net.Start( "nws_yrp_getMapTab" )
 				net.WriteString( "rolespawnpoints" )
 			net.SendToServer()
 		end)
 
 		-- SHOPS
 		tabs:AddOption( "LID_dealers", function(parent)
-			net.Start( "getMapTab" )
+			net.Start( "nws_yrp_getMapTab" )
 				net.WriteString( "dealers" )
 			net.SendToServer()
 		end)
 		tabs:AddOption( "LID_storagepoints", function(parent)
-			net.Start( "getMapTab" )
+			net.Start( "nws_yrp_getMapTab" )
 				net.WriteString( "storagepoints" )
 			net.SendToServer()
 		end)
 
 		-- JAIL
 		tabs:AddOption( "LID_jailpoint", function(parent)
-			net.Start( "getMapTab" )
+			net.Start( "nws_yrp_getMapTab" )
 				net.WriteString( "jailpoints" )
 			net.SendToServer()
 		end)
 		tabs:AddOption( "LID_releasepoint", function(parent)
-			net.Start( "getMapTab" )
+			net.Start( "nws_yrp_getMapTab" )
 				net.WriteString( "releasepoints" )
 			net.SendToServer()
 		end)
 
 		-- OTHER THINGS
 		tabs:AddOption( "LID_other", function(parent)
-			net.Start( "getMapTab" )
+			net.Start( "nws_yrp_getMapTab" )
 				net.WriteString( "other" )
 			net.SendToServer()
 		end)
@@ -126,7 +126,7 @@ net.Receive( "getMapSite", function(len)
 end)
 
 -- #F8Map
-net.Receive( "getMapTab", function(len)
+net.Receive( "nws_yrp_getMapTab", function(len)
 	local lply = LocalPlayer()
 
 	local tab = net.ReadString()
@@ -256,7 +256,7 @@ net.Receive( "getMapTab", function(len)
 					local addAng = string.Explode( " ", tostring(lply:GetAngles() ))
 					if addWin.linkID != nil then
 						if tab == "groupspawnpoints" or tab == "rolespawnpoints" then
-							net.Start( "dbInsertIntoMap" )
+							net.Start( "nws_yrp_dbInsertIntoMap" )
 								net.WriteString( "yrp_" .. GetMapNameDB() )
 								net.WriteString( "position, angle, linkID, type" )
 								local addStr = "'" .. tonumber( addPos[1]) .. "," .. tonumber( addPos[2]) .. "," .. tonumber( addPos[3] + 4) .. "', '" .. tonumber( addAng[1]) .. "," .. tonumber( addAng[2]) .. "," .. tonumber( addAng[3]) .. "', " .. tostring( addWin.linkID) .. ", '" .. addWin.type .. "'"
@@ -264,10 +264,10 @@ net.Receive( "getMapTab", function(len)
 							net.SendToServer()
 						end
 					elseif tab == "dealers" then
-						net.Start( "dealer_add" )
+						net.Start( "nws_yrp_dealer_add" )
 						net.SendToServer()
 					elseif tab == "storagepoints" then
-						net.Start( "dbInsertIntoMap" )
+						net.Start( "nws_yrp_dbInsertIntoMap" )
 							net.WriteString( "yrp_" .. GetMapNameDB() )
 							net.WriteString( "position, angle, name, type" )
 							local addStr = "'" .. tonumber( addPos[1]) .. "," .. tonumber( addPos[2]) .. "," .. tonumber( addPos[3] + 4) .. "', '" .. tonumber( addAng[1]) .. "," .. tonumber( addAng[2]) .. "," .. tonumber( addAng[3]) .. "', " .. YRP_SQL_STR_IN( tostring( addWin.name ) ) .. ", '" .. addWin.type .. "'"
@@ -275,7 +275,7 @@ net.Receive( "getMapTab", function(len)
 						net.SendToServer()
 					end
 
-					net.Start( "getMapTab" )
+					net.Start( "nws_yrp_getMapTab" )
 						net.WriteString(tab)
 					net.SendToServer()
 
@@ -312,7 +312,7 @@ net.Receive( "getMapTab", function(len)
 	btnDelete.py = YRP.ctr(PY)
 	function btnDelete:DoClick()
 		if mapList:GetSelectedLine() != nil then
-			net.Start( "removeMapEntry" )
+			net.Start( "nws_yrp_removeMapEntry" )
 				net.WriteString(mapList:GetLine(mapList:GetSelectedLine() ):GetValue(1) )
 			net.SendToServer()
 			mapList:RemoveLine(mapList:GetSelectedLine() )
@@ -344,7 +344,7 @@ net.Receive( "getMapTab", function(len)
 	btnTeleport.py = YRP.ctr(PY)
 	function btnTeleport:DoClick()
 		if mapList:GetSelectedLine() != nil then
-			net.Start( "teleportto" )
+			net.Start( "nws_yrp_teleportto" )
 				net.WriteString(mapList:GetLine(mapList:GetSelectedLine() ):GetValue(1) )
 			net.SendToServer()
 		end
@@ -370,6 +370,6 @@ net.Receive( "getMapTab", function(len)
 end)
 
 function OpenSettingsMap()
-	net.Start( "getMapSite" )
+	net.Start( "nws_yrp_getMapSite" )
 	net.SendToServer()
 end

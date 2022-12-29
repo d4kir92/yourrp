@@ -89,7 +89,7 @@ function LoadIDCardSetting(force, from)
 				end
 				register[name] = register[name] or nil
 				if register[name] == nil then
-					local netstr = "update_idcard_" .. name
+					local netstr = "nws_yrp_update_idcard_" .. name
 					util.AddNetworkString(netstr)
 					net.Receive(netstr, function()
 						local n = net.ReadString()

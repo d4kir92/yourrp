@@ -73,7 +73,7 @@ function YRPCreateCharacterSettingsContent()
 	
 
 
-	net.Receive( "yrp_char_getrole", function(len)
+	net.Receive( "nws_yrp_char_getrole", function(len)
 		local rol = net.ReadTable()
 
 		rol.int_namelength = tonumber(rol.int_namelength)
@@ -430,7 +430,7 @@ function YRPCreateCharacterSettingsContent()
 	end)
 
 	timer.Simple(0.2, function()
-		net.Start( "yrp_char_getrole" )
+		net.Start( "nws_yrp_char_getrole" )
 			net.WriteString(LocalPlayer().charcreate_ruid)
 		net.SendToServer()
 	end)

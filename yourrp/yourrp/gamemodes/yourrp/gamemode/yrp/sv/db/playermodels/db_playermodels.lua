@@ -48,8 +48,8 @@ if IsNotNilAndNotFalse(pms) then
 end
 
 
-util.AddNetworkString( "rem_playermodel" )
-net.Receive( "rem_playermodel", function(len, ply)
+util.AddNetworkString( "nws_yrp_rem_playermodel" )
+net.Receive( "nws_yrp_rem_playermodel", function(len, ply)
 	local muid = net.ReadInt(32)
 
 	if muid == nil then return end

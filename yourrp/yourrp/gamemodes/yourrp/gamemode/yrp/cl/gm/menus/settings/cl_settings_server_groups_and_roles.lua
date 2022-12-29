@@ -2,7 +2,7 @@
 
 --#roles #groups #settings
 
-net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
+net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) then
 		local cur_group = {}
@@ -16,7 +16,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		cur_role.edi = 0
 
 		function PARENT:OnRemove()
-			net.Start( "Unsubscribe_Settings_GroupsAndRoles" )
+			net.Start( "nws_yrp_unsubscribe_Settings_GroupsAndRoles" )
 				net.WriteString( cur_group.cur)
 			net.SendToServer()
 		end
@@ -51,10 +51,10 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		function gs.bac:DoClick()
 			if cur_group.cur > 0 then
 				gs.gplist:ClearList()
-				net.Start( "settings_unsubscribe_grouplist" )
+				net.Start( "nws_yrp_settings_unsubscribe_grouplist" )
 					net.WriteString( cur_group.cur)
 				net.SendToServer()
-				net.Start( "settings_subscribe_grouplist" )
+				net.Start( "nws_yrp_settings_subscribe_grouplist" )
 					net.WriteString( cur_group.par)
 				net.SendToServer()
 			end
@@ -92,7 +92,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			hook.Run( "YButtonAPaint", self, pw, ph)
 		end
 		function gs.add:DoClick()
-			net.Start( "settings_add_group" )
+			net.Start( "nws_yrp_settings_add_group" )
 				net.WriteString( cur_group.cur)
 			net.SendToServer()
 		end
@@ -107,7 +107,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			gs.gplist:Clear()
 		end
 
-		net.Receive( "settings_group_update_name", function(le)
+		net.Receive( "nws_yrp_settings_group_update_name", function(le)
 			local _uid = tonumber(net.ReadString() )
 			local name = net.ReadString()
 			if PanelAlive(gs.gplist) and gs.gplist[_uid] and gs.gplist[_uid].text then
@@ -115,7 +115,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end)
 
-		net.Receive( "settings_group_update_color", function(le)
+		net.Receive( "nws_yrp_settings_group_update_color", function(le)
 			local _uid = tonumber(net.ReadString() )
 			local color = net.ReadString()
 			if PanelAlive(gs) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_color then
@@ -125,7 +125,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end)
 
-		net.Receive( "settings_group_update_icon", function(le)
+		net.Receive( "nws_yrp_settings_group_update_icon", function(le)
 			local _uid = tonumber(net.ReadString() )
 			local icon = net.ReadString()
 			if PanelAlive(gs.gplist) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_icon then
@@ -168,7 +168,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				DrawText(tab2)
 			end
 			function pnl:DoClick()
-				net.Start( "settings_subscribe_group" )
+				net.Start( "nws_yrp_settings_subscribe_group" )
 					net.WriteString(group.uniqueID)
 				net.SendToServer()
 			end
@@ -195,7 +195,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 			end
 			function up:DoClick()
-				net.Start( "settings_group_position_up" )
+				net.Start( "nws_yrp_settings_group_position_up" )
 					net.WriteString(gs.gplist[group.uniqueID].uniqueID)
 				net.SendToServer()
 			end
@@ -215,7 +215,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 			end
 			function dn:DoClick()
-				net.Start( "settings_group_position_dn" )
+				net.Start( "nws_yrp_settings_group_position_dn" )
 					net.WriteString(gs.gplist[group.uniqueID].uniqueID)
 				net.SendToServer()
 			end
@@ -245,12 +245,12 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 			function ch:DoClick()
 				gs.gplist:ClearList()
-				net.Start( "settings_unsubscribe_grouplist" )
+				net.Start( "nws_yrp_settings_unsubscribe_grouplist" )
 					net.WriteString( cur_group.cur)
 				net.SendToServer()
 				timer.Simple(0.01, function()
 					if IsNotNilAndNotFalse(gs.gplist[group.uniqueID]) and IsNotNilAndNotFalse(gs.gplist[group.uniqueID].uniqueID) then
-						net.Start( "settings_subscribe_grouplist" )
+						net.Start( "nws_yrp_settings_subscribe_grouplist" )
 							net.WriteString(gs.gplist[group.uniqueID].uniqueID)
 						net.SendToServer()
 					end
@@ -259,7 +259,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 
 			parent:AddItem(gs.gplist[group.uniqueID])
 		end
-		net.Receive( "settings_subscribe_grouplist", function(le)
+		net.Receive( "nws_yrp_settings_subscribe_grouplist", function(le)
 			if PanelAlive(gs.gplist) then
 				gs.gplist:ClearList()
 
@@ -289,7 +289,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end)
 
-		net.Start( "settings_subscribe_grouplist" )
+		net.Start( "nws_yrp_settings_subscribe_grouplist" )
 			net.WriteString( cur_group.par)
 		net.SendToServer()
 
@@ -345,11 +345,11 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			if IsNotNilAndNotFalse( cur_role.pre) and IsNotNilAndNotFalse( cur_role.gro) then
 				if cur_role.pre > 0 then
 					rs.rplist:ClearList()
-					net.Start( "settings_unsubscribe_rolelist" )
+					net.Start( "nws_yrp_settings_unsubscribe_rolelist" )
 						net.WriteString( cur_role.gro)
 						net.WriteString( cur_role.pre)
 					net.SendToServer()
-					net.Start( "settings_subscribe_prerolelist" )
+					net.Start( "nws_yrp_settings_subscribe_prerolelist" )
 						net.WriteString( cur_role.gro)
 						net.WriteString( cur_role.pre)
 					net.SendToServer()
@@ -366,7 +366,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		end
 		function rs.add:DoClick()
 			if rs.top.headername != nil and cur_role.gro != nil and cur_role.pre != nil then
-				net.Start( "settings_add_role" )
+				net.Start( "nws_yrp_settings_add_role" )
 					net.WriteString( cur_role.gro)
 					net.WriteString( cur_role.pre)
 				net.SendToServer()
@@ -389,7 +389,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			rs.rplist:Clear()
 		end
 
-		net.Receive( "settings_role_update_name", function(le)
+		net.Receive( "nws_yrp_settings_role_update_name", function(le)
 			if PanelAlive(rs.rplist) then
 				local _uid = tonumber(net.ReadString() )
 				local name = net.ReadString()
@@ -401,7 +401,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end)
 
-		net.Receive( "settings_role_update_color", function(le)
+		net.Receive( "nws_yrp_settings_role_update_color", function(le)
 			if PanelAlive(rs) then
 				local _uid = tonumber(net.ReadString() )
 				local color = net.ReadString()
@@ -411,7 +411,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end)
 
-		net.Receive( "settings_role_update_icon", function(le)
+		net.Receive( "nws_yrp_settings_role_update_icon", function(le)
 			if PanelAlive(rs.rplist) then
 				local _uid = tonumber(net.ReadString() )
 				local icon = net.ReadString()
@@ -468,7 +468,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				_yes:SetText(YRP.lang_string( "LID_yes" ) )
 				function _yes:DoClick()
 					if ea.tab.uniqueID then
-						net.Start( "settings_delete_group" )
+						net.Start( "nws_yrp_settings_delete_group" )
 							net.WriteString(ea.tab.uniqueID)
 							net.WriteBool(recursive:GetValue() )
 						net.SendToServer()
@@ -487,7 +487,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					win:Close()
 				end
 			elseif ea.typ == "role" and IsNotNilAndNotFalse(ea.tab.uniqueID) and tonumber(ea.tab.uniqueID) != 1 then
-				net.Start( "settings_delete_role" )
+				net.Start( "nws_yrp_settings_delete_role" )
 					net.WriteString(ea.tab.uniqueID)
 				net.SendToServer()
 
@@ -526,11 +526,11 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 		function ea.dup:DoClick()
 			if ea.tab and ea.tab.uniqueID != nil and ea.tab.uniqueID != 1 then
 				if ea.typ == "group" then
-					net.Start( "duplicated_group" )
+					net.Start( "nws_yrp_settings_duplicate_group" )
 						net.WriteString(ea.tab.uniqueID)
 					net.SendToServer()
 				elseif ea.typ == "role" then
-					net.Start( "duplicated_role" )
+					net.Start( "nws_yrp_duplicated_role" )
 						net.WriteString(ea.tab.uniqueID)
 					net.SendToServer()
 				end
@@ -574,14 +574,14 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		net.Receive( "settings_subscribe_group", function(le)
+		net.Receive( "nws_yrp_settings_subscribe_group", function(le)
 			local group = net.ReadTable()
 			local groups = net.ReadTable()
 			local db_ugs = net.ReadTable()
 
 			if PanelAlive( ea.background ) then
 				if group.uniqueID != nil then
-					net.Start( "settings_subscribe_rolelist" )
+					net.Start( "nws_yrp_settings_subscribe_rolelist" )
 						net.WriteString(group.uniqueID)
 						net.WriteString( "0" )
 					net.SendToServer()
@@ -612,7 +612,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					ea.info = ea[group.uniqueID].info
 					function ea.info:OnRemove()
 						if cur_group.edi != group.uniqueID then
-							net.Start( "settings_unsubscribe_group" )
+							net.Start( "nws_yrp_settings_unsubscribe_group" )
 								net.WriteString(group.uniqueID)
 							net.SendToServer()
 						end
@@ -622,7 +622,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					name.parent = ea.info:GetContent()
 					name.uniqueID = group.uniqueID
 					name.header = "LID_name"
-					name.netstr = "update_group_string_name"
+					name.netstr = "nws_yrp_update_group_string_name"
 					name.value = group.string_name
 					name.uniqueID = group.uniqueID
 					name.lforce = false
@@ -637,7 +637,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					color.parent = ea.info:GetContent()
 					color.uniqueID = group.uniqueID
 					color.header = "LID_color"
-					color.netstr = "update_group_string_color"
+					color.netstr = "nws_yrp_update_group_string_color"
 					color.value = group.string_color
 					color.uniqueID = group.uniqueID
 					color.lforce = false
@@ -649,7 +649,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					icon.parent = ea.info:GetContent()
 					icon.uniqueID = group.uniqueID
 					icon.header = "LID_icon"
-					icon.netstr = "update_group_string_icon"
+					icon.netstr = "nws_yrp_update_group_string_icon"
 					icon.value = group.string_icon
 					icon.uniqueID = group.uniqueID
 					icon.lforce = false
@@ -661,7 +661,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					desc.parent = ea.info:GetContent()
 					desc.uniqueID = group.uniqueID
 					desc.header = "LID_description"
-					desc.netstr = "update_group_string_description"
+					desc.netstr = "nws_yrp_update_group_string_description"
 					desc.value = group.string_description
 					desc.uniqueID = group.uniqueID
 					desc.lforce = false
@@ -686,7 +686,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						parentgroup.parent = ea.info:GetContent()
 						parentgroup.uniqueID = group.uniqueID
 						parentgroup.header = "LID_parentgroup"
-						parentgroup.netstr = "update_group_int_parentgroup"
+						parentgroup.netstr = "nws_yrp_update_group_int_parentgroup"
 						parentgroup.value = tonumber(group.int_parentgroup)
 						parentgroup.uniqueID = group.uniqueID
 						parentgroup.lforce = false
@@ -700,7 +700,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					iscp.parent = ea.info:GetContent()
 					iscp.uniqueID = group.uniqueID
 					iscp.header = "LID_iscp"
-					iscp.netstr = "update_group_bool_iscp"
+					iscp.netstr = "nws_yrp_update_group_bool_iscp"
 					iscp.value = group.bool_iscp
 					iscp.uniqueID = group.uniqueID
 					ea[group.uniqueID].iscp = YRPDCheckBox(iscp)
@@ -747,7 +747,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						usergroups.parent = ea.restriction:GetContent()
 						usergroups.uniqueID = group.uniqueID
 						usergroups.header = "LID_usergroups"
-						usergroups.netstr = "update_group_string_usergroups"
+						usergroups.netstr = "nws_yrp_update_group_string_usergroups"
 						usergroups.value = group.string_usergroups
 						usergroups.uniqueID = group.uniqueID
 						usergroups.lforce = false
@@ -761,7 +761,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						local requireslevel = {}
 						requireslevel.parent = ea.restriction:GetContent()
 						requireslevel.header = "LID_requireslevel"
-						requireslevel.netstr = "update_group_int_requireslevel"
+						requireslevel.netstr = "nws_yrp_update_group_int_requireslevel"
 						requireslevel.value = group.int_requireslevel
 						requireslevel.uniqueID = group.uniqueID
 						requireslevel.lforce = false
@@ -777,7 +777,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						whitelist.parent = ea.restriction:GetContent()
 						whitelist.uniqueID = group.uniqueID
 						whitelist.header = "LID_useswhitelist"
-						whitelist.netstr = "update_group_bool_whitelist"
+						whitelist.netstr = "nws_yrp_update_group_bool_whitelist"
 						whitelist.value = group.bool_whitelist
 						whitelist.uniqueID = group.uniqueID
 						whitelist.lforce = false
@@ -791,7 +791,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						locked.parent = ea.restriction:GetContent()
 						locked.uniqueID = group.uniqueID
 						locked.header = "LID_locked"
-						locked.netstr = "update_group_bool_locked"
+						locked.netstr = "nws_yrp_update_group_bool_locked"
 						locked.value = group.bool_locked
 						locked.uniqueID = group.uniqueID
 						locked.lforce = false
@@ -805,7 +805,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						visible.parent = ea.restriction:GetContent()
 						visible.uniqueID = group.uniqueID
 						visible.header = YRP.lang_string( "LID_visible" ) .. " ( " .. YRP.lang_string( "LID_charactercreation" ) .. " )"
-						visible.netstr = "update_group_bool_visible_cc"
+						visible.netstr = "nws_yrp_update_group_bool_visible_cc"
 						visible.value = group.bool_visible_cc
 						visible.uniqueID = group.uniqueID
 						visible.lforce = false
@@ -818,7 +818,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					visible2.parent = ea.restriction:GetContent()
 					visible2.uniqueID = group.uniqueID
 					visible2.header = YRP.lang_string( "LID_visible" ) .. " ( " .. YRP.lang_string( "LID_rolemenu" ) .. " )"
-					visible2.netstr = "update_group_bool_visible_rm"
+					visible2.netstr = "nws_yrp_update_group_bool_visible_rm"
 					visible2.value = group.bool_visible_rm
 					visible2.uniqueID = group.uniqueID
 					visible2.lforce = false
@@ -861,7 +861,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					sweps.parent = ea.equipment:GetContent()
 					sweps.uniqueID = group.uniqueID
 					sweps.header = "LID_sweps"
-					sweps.netstr = "update_group_string_sweps"
+					sweps.netstr = "nws_yrp_update_group_string_sweps"
 					sweps.value = group.string_sweps
 					sweps.uniqueID = group.uniqueID
 					sweps.w = ea.equipment:GetContent():GetWide()
@@ -903,7 +903,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 									local d_swep = YRPCreateD( "YButton", nil, winswep.dpl:GetWide(), height / 4, 0, 0)
 									d_swep:SetText( v.PrintName)
 									function d_swep:DoClick()
-										net.Start( "add_group_swep" )
+										net.Start( "nws_yrp_settings_add_sweps" )
 											net.WriteInt(group.uniqueID, 32)
 											net.WriteString( v.ClassName)
 										net.SendToServer()
@@ -933,7 +933,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						end
 					end
 					ea[group.uniqueID].sweps = DStringListBox(sweps)
-					net.Receive( "get_group_sweps", function()
+					net.Receive( "nws_yrp_settings_get_sweps", function()
 						local tab_pm = net.ReadTable()
 						local cl_sweps = {}
 						for i, v in pairs(tab_pm) do
@@ -943,7 +943,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 							swep.string_classname = v
 							swep.string_name = v
 							swep.doclick = function()
-								net.Start( "rem_group_swep" )
+								net.Start( "nws_yrp_settings_rem_sweps" )
 									net.WriteInt(group.uniqueID, 32)
 									net.WriteString(swep.string_classname)
 								net.SendToServer()
@@ -955,7 +955,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 							ea[group.uniqueID].sweps.dpl:AddLines( cl_sweps)
 						end
 					end)
-					net.Start( "get_group_sweps" )
+					net.Start( "nws_yrp_settings_get_sweps" )
 						net.WriteInt(group.uniqueID, 32)
 					net.SendToServer()
 
@@ -1006,7 +1006,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 							end
 						end
 						local result = table.concat(tab, ";" )
-						net.Start( "update_group_string_ammos" )
+						net.Start( "nws_yrp_update_group_string_ammos" )
 							net.WriteString(group.uniqueID)
 							net.WriteString(result)
 						net.SendToServer()
@@ -1076,7 +1076,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				DrawText(tab2)
 			end
 			function pnl:DoClick()
-				net.Start( "settings_subscribe_role" )
+				net.Start( "nws_yrp_settings_subscribe_role" )
 					net.WriteString(role.uniqueID .. "" )
 				net.SendToServer()
 			end
@@ -1103,7 +1103,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 			end
 			function up:DoClick()
-				net.Start( "settings_role_position_up" )
+				net.Start( "nws_yrp_settings_role_position_up" )
 					net.WriteString(rs.rplist[role.uniqueID].uniqueID)
 				net.SendToServer()
 			end
@@ -1123,7 +1123,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 			end
 			function dn:DoClick()
-				net.Start( "settings_role_position_dn" )
+				net.Start( "nws_yrp_settings_role_position_dn" )
 					net.WriteString(rs.rplist[role.uniqueID].uniqueID)
 				net.SendToServer()
 			end
@@ -1154,14 +1154,14 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			function ch:DoClick()
 				rs.rplist:ClearList()
 				if cur_role.gro and cur_role.pre then
-					net.Start( "settings_unsubscribe_rolelist" )
+					net.Start( "nws_yrp_settings_unsubscribe_rolelist" )
 						net.WriteString( cur_role.gro)
 						net.WriteString( cur_role.pre)
 					net.SendToServer()
 				end
 				timer.Simple(0.01, function()
 					if cur_role.gro and rs and PanelAlive(rs.rplist) and rs.rplist[role.uniqueID] and rs.rplist[role.uniqueID].uniqueID then
-						net.Start( "settings_subscribe_rolelist" )
+						net.Start( "nws_yrp_settings_subscribe_rolelist" )
 							net.WriteString( cur_role.gro)
 							net.WriteString(rs.rplist[role.uniqueID].uniqueID)
 						net.SendToServer()
@@ -1172,7 +1172,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			parent:AddItem(rs.rplist[role.uniqueID])
 		end
 
-		net.Receive( "settings_subscribe_role", function(le)
+		net.Receive( "nws_yrp_settings_subscribe_role", function(le)
 			local role = net.ReadTable()
 			local roles = net.ReadTable()
 			local db_ugs = net.ReadTable()
@@ -1230,7 +1230,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			ea.info = ea[role.uniqueID].info
 			function ea.info:OnRemove()
 				if cur_role.edi != role.uniqueID then
-					net.Start( "settings_unsubscribe_role" )
+					net.Start( "nws_yrp_settings_unsubscribe_role" )
 						net.WriteString(role.uniqueID)
 					net.SendToServer()
 				end
@@ -1240,7 +1240,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			name.parent = ea.info:GetContent()
 			name.uniqueID = role.uniqueID
 			name.header = "LID_name"
-			name.netstr = "update_role_string_name"
+			name.netstr = "nws_yrp_update_role_string_name"
 			name.value = role.string_name
 			name.uniqueID = role.uniqueID
 			name.lforce = false
@@ -1255,7 +1255,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			identifier.parent = ea.info:GetContent()
 			identifier.uniqueID = role.uniqueID
 			identifier.header = "LID_identifier"
-			identifier.netstr = "update_role_string_identifier"
+			identifier.netstr = "nws_yrp_update_role_string_identifier"
 			identifier.value = role.string_identifier
 			identifier.uniqueID = role.uniqueID
 			identifier.lforce = false
@@ -1273,7 +1273,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			color.parent = ea.info:GetContent()
 			color.uniqueID = role.uniqueID
 			color.header = "LID_color"
-			color.netstr = "update_role_string_color"
+			color.netstr = "nws_yrp_update_role_string_color"
 			color.value = role.string_color
 			color.uniqueID = role.uniqueID
 			color.lforce = false
@@ -1285,7 +1285,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			icon.parent = ea.info:GetContent()
 			icon.uniqueID = role.uniqueID
 			icon.header = "LID_icon"
-			icon.netstr = "update_role_string_icon"
+			icon.netstr = "nws_yrp_update_role_string_icon"
 			icon.value = role.string_icon
 			icon.uniqueID = role.uniqueID
 			icon.lforce = false
@@ -1304,7 +1304,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				maxamount.parent = ea.info:GetContent()
 				maxamount.uniqueID = role.uniqueID
 				maxamount.header = "LID_maxamount"
-				maxamount.netstr = "update_role_int_maxamount"
+				maxamount.netstr = "nws_yrp_update_role_int_maxamount"
 				maxamount.value = tonumber(role.int_maxamount)
 				maxamount.uniqueID = role.uniqueID
 				maxamount.lforce = false
@@ -1318,7 +1318,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				local amountpercentage = {}
 				amountpercentage.parent = ea.info:GetContent()
 				amountpercentage.header = "LID_amountpercentage"
-				amountpercentage.netstr = "update_role_int_amountpercentage"
+				amountpercentage.netstr = "nws_yrp_update_role_int_amountpercentage"
 				amountpercentage.value = role.int_amountpercentage
 				amountpercentage.uniqueID = role.uniqueID
 				amountpercentage.lforce = false
@@ -1342,7 +1342,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				int_groupID.parent = ea.info:GetContent()
 				int_groupID.uniqueID = role.uniqueID
 				int_groupID.header = "LID_group"
-				int_groupID.netstr = "update_role_int_groupID"
+				int_groupID.netstr = "nws_yrp_update_role_int_groupID"
 				int_groupID.value = tonumber(role.int_groupID)
 				int_groupID.uniqueID = role.uniqueID
 				int_groupID.lforce = false
@@ -1356,7 +1356,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			string_description.parent = ea.info:GetContent()
 			string_description.uniqueID = role.uniqueID
 			string_description.header = "LID_description"
-			string_description.netstr = "update_role_string_description"
+			string_description.netstr = "nws_yrp_update_role_string_description"
 			string_description.value = role.string_description
 			string_description.uniqueID = role.uniqueID
 			string_description.lforce = false
@@ -1369,7 +1369,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local salary = {}
 			salary.parent = ea.info:GetContent()
 			salary.header = "LID_salary"
-			salary.netstr = "update_role_int_salary"
+			salary.netstr = "nws_yrp_update_role_int_salary"
 			salary.value = role.int_salary
 			salary.uniqueID = role.uniqueID
 			salary.lforce = false
@@ -1382,7 +1382,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local salarytime = {}
 			salarytime.parent = ea.info:GetContent()
 			salarytime.header = "LID_timesalary"
-			salarytime.netstr = "update_role_int_salarytime"
+			salarytime.netstr = "nws_yrp_update_role_int_salarytime"
 			salarytime.value = role.int_salarytime
 			salarytime.uniqueID = role.uniqueID
 			salarytime.lforce = false
@@ -1406,7 +1406,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				prerole.parent = ea.info:GetContent()
 				prerole.uniqueID = role.uniqueID
 				prerole.header = YRP.lang_string( "LID_prerole" ) .. " | " .. YRP.lang_string( "LID_prerank" )
-				prerole.netstr = "update_role_int_prerole"
+				prerole.netstr = "nws_yrp_update_role_int_prerole"
 				prerole.value = tonumber(role.int_prerole)
 				prerole.uniqueID = role.uniqueID
 				prerole.lforce = false
@@ -1428,7 +1428,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			roleondeath.parent = ea.info:GetContent()
 			roleondeath.uniqueID = role.uniqueID
 			roleondeath.header = YRP.lang_string( "LID_roleafterdeath" )
-			roleondeath.netstr = "update_role_int_roleondeath"
+			roleondeath.netstr = "nws_yrp_update_role_int_roleondeath"
 			roleondeath.value = tonumber(role.int_roleondeath)
 			roleondeath.uniqueID = role.uniqueID
 			roleondeath.lforce = false
@@ -1456,7 +1456,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			bool_instructor.parent = ea.flags:GetContent()
 			bool_instructor.uniqueID = role.uniqueID
 			bool_instructor.header = "LID_isinstructor"
-			bool_instructor.netstr = "update_role_bool_instructor"
+			bool_instructor.netstr = "nws_yrp_update_role_bool_instructor"
 			bool_instructor.value = role.bool_instructor
 			bool_instructor.uniqueID = role.uniqueID
 			bool_instructor.lforce = false
@@ -1469,13 +1469,13 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			custom_flags.parent = ea.flags:GetContent()
 			custom_flags.uniqueID = role.uniqueID
 			custom_flags.header = "LID_customflags"
-			custom_flags.netstr = "update_role_string_customflags"
+			custom_flags.netstr = "nws_yrp_update_role_string_customflags"
 			custom_flags.value = role.string_customflags
 			custom_flags.uniqueID = role.uniqueID
 			custom_flags.w = ea.flags:GetContent():GetWide()
 			custom_flags.h = YRP.ctr(225)
 			custom_flags.doclick = function()
-				net.Receive( "get_all_role_customflags", function()
+				net.Receive( "nws_yrp_get_all_role_customflags", function()
 					local cf = net.ReadTable()
 
 					local win = YRPCreateD( "DFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
@@ -1488,7 +1488,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						local line = YRPCreateD( "YButton", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
 						line:SetText(flag.string_name)
 						function line:DoClick()
-							net.Start( "add_role_flag" )
+							net.Start( "nws_yrp_add_role_flag" )
 								net.WriteInt(role.uniqueID, 32)
 								net.WriteInt(flag.uniqueID, 32)
 							net.SendToServer()
@@ -1498,15 +1498,15 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						win.dpl:AddItem(line)
 					end
 				end)
-				net.Start( "get_all_role_customflags" )
+				net.Start( "nws_yrp_get_all_role_customflags" )
 				net.SendToServer()
 			end
 			ea[role.uniqueID].custom_flags = DStringListBox( custom_flags)
-			net.Receive( "get_role_customflags", function()
+			net.Receive( "nws_yrp_get_role_customflags", function()
 				local tab_cf = net.ReadTable()
 				for i, v in pairs(tab_cf) do
 					v.doclick = function()
-						net.Start( "rem_role_flag" )
+						net.Start( "nws_yrp_rem_role_flag" )
 							net.WriteInt(role.uniqueID, 32)
 							net.WriteInt( v.uniqueID, 32)
 						net.SendToServer()
@@ -1516,7 +1516,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					ea[role.uniqueID].custom_flags.dpl:AddLines(tab_cf)
 				end
 			end)
-			net.Start( "get_role_customflags" )
+			net.Start( "nws_yrp_get_role_customflags" )
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
@@ -1553,7 +1553,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			playermodels.parent = ea.appearance:GetContent()
 			playermodels.uniqueID = role.uniqueID
 			playermodels.header = "LID_playermodels"
-			playermodels.netstr = "update_role_string_playermodels"
+			playermodels.netstr = "nws_yrp_update_role_string_playermodels"
 			playermodels.value = role.string_playermodels
 			playermodels.uniqueID = role.uniqueID
 			playermodels.w = ea.appearance:GetContent():GetWide()
@@ -1693,7 +1693,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 							lply.yrpseltab = lply.yrpseltab or {}
 							local min = tonumber(pmwin.float_min:GetValue() )
 							local max = tonumber(pmwin.float_max:GetValue() )
-							net.Start( "add_playermodels" )
+							net.Start( "nws_yrp_add_playermodels" )
 								net.WriteInt(role.uniqueID, 32)
 								net.WriteTable(lply.yrpseltab)
 								net.WriteString(pmwin.name:GetText() )
@@ -1735,7 +1735,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 									line.models = string.Explode( ",", pm.string_models)
 									line:SetText( "" )
 									function line:DoClick()
-										net.Start( "add_role_playermodel" )
+										net.Start( "nws_yrp_add_role_playermodel" )
 											net.WriteInt(role.uniqueID, 32)
 											net.WriteInt(pm.uniqueID, 32)
 										net.SendToServer()
@@ -1756,7 +1756,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 											--
 										end
 										function YRPYesDeletePMS()
-											net.Start( "rem_playermodel" )
+											net.Start( "nws_yrp_rem_playermodel" )
 												net.WriteInt(pm.uniqueID, 32)
 											net.SendToServer()
 											line:Remove()
@@ -1810,7 +1810,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					win:Search(self:GetText() )
 				end
 
-				net.Receive( "get_all_playermodels", function(len)
+				net.Receive( "nws_yrp_get_all_playermodels", function(len)
 					if len > 128000 then
 						YRP.msg( "note", "[get_all_playermodels] len: " .. len)
 					end
@@ -1822,15 +1822,15 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					end
 				end)
 
-				net.Start( "get_all_playermodels" )
+				net.Start( "nws_yrp_get_all_playermodels" )
 				net.SendToServer()
 			end
 			ea[role.uniqueID].playermodels = DStringListBox(playermodels)
-			net.Receive( "get_role_playermodels", function()
+			net.Receive( "nws_yrp_get_role_playermodels", function()
 				local tab_pm = net.ReadTable()
 				for i, v in pairs(tab_pm) do
 					v.doclick = function()
-						net.Start( "rem_role_playermodel" )
+						net.Start( "nws_yrp_rem_role_playermodel" )
 							net.WriteInt(role.uniqueID, 32)
 							net.WriteInt( v.uniqueID, 32)
 						net.SendToServer()
@@ -1841,7 +1841,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					ea[role.uniqueID].playermodels.dpl:AddLines(tab_pm)
 				end
 			end)
-			net.Start( "get_role_playermodels" )
+			net.Start( "nws_yrp_get_role_playermodels" )
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
@@ -1849,7 +1849,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			bool_savebodygroups.parent = ea.appearance:GetContent()
 			bool_savebodygroups.uniqueID = role.uniqueID
 			bool_savebodygroups.header = "LID_savebodygroups"
-			bool_savebodygroups.netstr = "update_role_bool_savebodygroups"
+			bool_savebodygroups.netstr = "nws_yrp_update_role_bool_savebodygroups"
 			bool_savebodygroups.value = role.bool_savebodygroups
 			bool_savebodygroups.uniqueID = role.uniqueID
 			bool_savebodygroups.lforce = false
@@ -1886,7 +1886,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			else
 				sweps.header = YRP.lang_string( "LID_sweps" )
 			end
-			sweps.netstr = "update_role_string_sweps"
+			sweps.netstr = "nws_yrp_update_role_string_sweps"
 			sweps.value = role.string_sweps
 			sweps.uniqueID = role.uniqueID
 			sweps.w = ea.equipment:GetContent():GetWide()
@@ -1915,7 +1915,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				function YRPAddSwepToRole()
 					local lply = LocalPlayer()
 					if role.uniqueID and lply.yrpseltab then
-						net.Start( "add_role_swep" )
+						net.Start( "nws_yrp_add_role_swep" )
 							net.WriteInt(role.uniqueID, 32)
 							net.WriteTable(lply.yrpseltab)
 						net.SendToServer()
@@ -1930,7 +1930,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				YRPOpenSelector( cl_sweps, true, "classname", YRPAddSwepToRole)
 			end
 			ea[role.uniqueID].sweps = DStringListBox(sweps)
-			net.Receive( "get_role_sweps", function()
+			net.Receive( "nws_yrp_get_role_sweps", function()
 				local tab_pm = net.ReadTable()
 				local cl_sweps = {}
 				for i, v in pairs(tab_pm) do
@@ -1940,7 +1940,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					swep.string_classname = v
 					swep.string_name = v
 					swep.doclick = function()
-						net.Start( "rem_role_swep" )
+						net.Start( "nws_yrp_rem_role_swep" )
 							net.WriteInt(role.uniqueID, 32)
 							net.WriteString(swep.string_classname)
 						net.SendToServer()
@@ -1960,7 +1960,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					ea[role.uniqueID].sweps.dpl:AddLines( cl_sweps)
 				end
 			end)
-			net.Start( "get_role_sweps" )
+			net.Start( "nws_yrp_get_role_sweps" )
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
@@ -1972,7 +1972,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				swepsonspawn.parent = ea.equipment:GetContent()
 				swepsonspawn.uniqueID = role.uniqueID
 				swepsonspawn.header = YRP.lang_string( "LID_swepsatspawn" ) .. " (Equipped if slot is not full!)"
-				swepsonspawn.netstr = "update_role_string_sweps_onspawn"
+				swepsonspawn.netstr = "nws_yrp_update_role_string_sweps_onspawn"
 				swepsonspawn.value = role.string_sweps_onspawn
 				swepsonspawn.uniqueID = role.uniqueID
 				swepsonspawn.w = ea.equipment:GetContent():GetWide()
@@ -2000,7 +2000,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					function YRPAddSwepToRoleOnSpawn()
 						local lply = LocalPlayer()
 						if role.uniqueID and lply.yrpseltab then
-							net.Start( "add_role_swep_onspawn" )
+							net.Start( "nws_yrp_add_role_swep_onspawn" )
 								net.WriteInt(role.uniqueID, 32)
 								net.WriteTable(lply.yrpseltab)
 							net.SendToServer()
@@ -2015,7 +2015,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					YRPOpenSelector( cl_sweps, true, "classname", YRPAddSwepToRoleOnSpawn)
 				end
 				ea[role.uniqueID].swepsonspawn = DStringListBox(swepsonspawn)
-				net.Receive( "get_role_sweps_onspawn", function()
+				net.Receive( "nws_yrp_get_role_sweps_onspawn", function()
 					local tab_pm = net.ReadTable()
 					local cl_sweps = {}
 					for i, v in pairs( tab_pm ) do
@@ -2026,7 +2026,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						swep.string_name = v.classname
 						swep.slots = v
 						swep.doclick = function()
-							net.Start( "rem_role_swep_onspawn" )
+							net.Start( "nws_yrp_rem_role_swep_onspawn" )
 								net.WriteInt(role.uniqueID, 32)
 								net.WriteString(swep.string_classname)
 							net.SendToServer()
@@ -2046,7 +2046,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						ea[role.uniqueID].swepsonspawn.dpl:AddLines( cl_sweps)
 					end
 				end)
-				net.Start( "get_role_sweps_onspawn" )
+				net.Start( "nws_yrp_get_role_sweps_onspawn" )
 					net.WriteInt(role.uniqueID, 32)
 				net.SendToServer()
 
@@ -2096,7 +2096,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					end
 				end
 				local result = table.concat(tab, ";" )
-				net.Start( "update_role_string_ammos" )
+				net.Start( "nws_yrp_update_role_string_ammos" )
 					net.WriteString(role.uniqueID)
 					net.WriteString(result)
 				net.SendToServer()
@@ -2134,7 +2134,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			licenses.parent = ea.equipment:GetContent()
 			licenses.uniqueID = role.uniqueID
 			licenses.header = "LID_licenses"
-			licenses.netstr = "update_role_string_licenses"
+			licenses.netstr = "nws_yrp_update_role_string_licenses"
 			licenses.value = role.string_licenses
 			licenses.uniqueID = role.uniqueID
 			licenses.w = ea.equipment:GetContent():GetWide()
@@ -2149,7 +2149,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
-				net.Receive( "get_all_licenses", function(l)
+				net.Receive( "nws_yrp_get_all_licenses", function(l)
 					local alllicenses = net.ReadTable()
 					local cl_licenses = {}
 					local count = 0
@@ -2182,7 +2182,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 									local d_licenses = YRPCreateD( "YButton", nil, winlicenses.dpl:GetWide(), height / 4, 0, 0)
 									d_licenses:SetText( v.PrintName)
 									function d_licenses:DoClick()
-										net.Start( "add_role_license" )
+										net.Start( "nws_yrp_add_role_license" )
 											net.WriteInt(role.uniqueID, 32)
 											net.WriteString( v.ClassName)
 										net.SendToServer()
@@ -2215,11 +2215,11 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						end
 					end
 				end)
-				net.Start( "get_all_licenses" )
+				net.Start( "nws_yrp_get_all_licenses" )
 				net.SendToServer()
 			end
 			ea[role.uniqueID].licenses = DStringListBox(licenses)
-			net.Receive( "get_role_licenses", function()
+			net.Receive( "nws_yrp_get_role_licenses", function()
 				local tab_li = net.ReadTable()
 				local cl_licenses = {}
 				for i, v in pairs(tab_li) do
@@ -2230,7 +2230,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						license.string_classname = v.uniqueID
 						license.string_name = v.string_name
 						license.doclick = function()
-							net.Start( "rem_role_license" )
+							net.Start( "nws_yrp_rem_role_license" )
 								net.WriteInt(role.uniqueID, 32)
 								net.WriteString(license.string_classname)
 							net.SendToServer()
@@ -2243,7 +2243,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					ea[role.uniqueID].licenses.dpl:AddLines( cl_licenses)
 				end
 			end)
-			net.Start( "get_role_licenses" )
+			net.Start( "nws_yrp_get_role_licenses" )
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
@@ -2293,7 +2293,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				usergroups.parent = ea.restriction:GetContent()
 				usergroups.uniqueID = role.uniqueID
 				usergroups.header = "LID_usergroups"
-				usergroups.netstr = "update_role_string_usergroups"
+				usergroups.netstr = "nws_yrp_update_role_string_usergroups"
 				usergroups.value = role.string_usergroups
 				usergroups.uniqueID = role.uniqueID
 				usergroups.lforce = false
@@ -2307,7 +2307,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				local requireslevel = {}
 				requireslevel.parent = ea.restriction:GetContent()
 				requireslevel.header = "LID_requireslevel"
-				requireslevel.netstr = "update_role_int_requireslevel"
+				requireslevel.netstr = "nws_yrp_update_role_int_requireslevel"
 				requireslevel.value = role.int_requireslevel
 				requireslevel.uniqueID = role.uniqueID
 				requireslevel.lforce = false
@@ -2321,7 +2321,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					local securitylevel = {}
 					securitylevel.parent = ea.restriction:GetContent()
 					securitylevel.header = "LID_securitylevel"
-					securitylevel.netstr = "update_role_int_securitylevel"
+					securitylevel.netstr = "nws_yrp_update_role_int_securitylevel"
 					securitylevel.value = role.int_securitylevel
 					securitylevel.uniqueID = role.uniqueID
 					securitylevel.lforce = false
@@ -2338,7 +2338,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				whitelist.parent = ea.restriction:GetContent()
 				whitelist.uniqueID = role.uniqueID
 				whitelist.header = "LID_useswhitelist"
-				whitelist.netstr = "update_role_bool_whitelist"
+				whitelist.netstr = "nws_yrp_update_role_bool_whitelist"
 				whitelist.value = role.bool_whitelist
 				whitelist.uniqueID = role.uniqueID
 				whitelist.lforce = false
@@ -2352,7 +2352,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				locked.parent = ea.restriction:GetContent()
 				locked.uniqueID = role.uniqueID
 				locked.header = "LID_locked"
-				locked.netstr = "update_role_bool_locked"
+				locked.netstr = "nws_yrp_update_role_bool_locked"
 				locked.value = role.bool_locked
 				locked.uniqueID = role.uniqueID
 				locked.lforce = false
@@ -2366,7 +2366,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				bool_canbeagent.parent = ea.restriction:GetContent()
 				bool_canbeagent.uniqueID = role.uniqueID
 				bool_canbeagent.header = YRP.lang_string( "LID_isagent" )
-				bool_canbeagent.netstr = "update_role_bool_canbeagent"
+				bool_canbeagent.netstr = "nws_yrp_update_role_bool_canbeagent"
 				bool_canbeagent.value = role.bool_canbeagent
 				bool_canbeagent.uniqueID = role.uniqueID
 				bool_canbeagent.lforce = false
@@ -2379,7 +2379,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			visible.parent = ea.restriction:GetContent()
 			visible.uniqueID = role.uniqueID
 			visible.header = YRP.lang_string( "LID_visible" ) .. " ( " .. YRP.lang_string( "LID_charactercreation" ) .. " )"
-			visible.netstr = "update_role_bool_visible_cc"
+			visible.netstr = "nws_yrp_update_role_bool_visible_cc"
 			visible.value = role.bool_visible_cc
 			visible.uniqueID = role.uniqueID
 			visible.lforce = false
@@ -2391,7 +2391,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			visible2.parent = ea.restriction:GetContent()
 			visible2.uniqueID = role.uniqueID
 			visible2.header = YRP.lang_string( "LID_visible" ) .. " ( " .. YRP.lang_string( "LID_rolemenu" ) .. " )"
-			visible2.netstr = "update_role_bool_visible_rm"
+			visible2.netstr = "nws_yrp_update_role_bool_visible_rm"
 			visible2.value = role.bool_visible_rm
 			visible2.uniqueID = role.uniqueID
 			visible2.lforce = false
@@ -2404,7 +2404,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				bool_voteable.parent = ea.restriction:GetContent()
 				bool_voteable.uniqueID = role.uniqueID
 				bool_voteable.header = "LID_voteable"
-				bool_voteable.netstr = "update_role_bool_voteable"
+				bool_voteable.netstr = "nws_yrp_update_role_bool_voteable"
 				bool_voteable.value = role.bool_voteable
 				bool_voteable.uniqueID = role.uniqueID
 				bool_voteable.lforce = false
@@ -2417,7 +2417,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			bool_eventrole.parent = ea.restriction:GetContent()
 			bool_eventrole.uniqueID = role.uniqueID
 			bool_eventrole.header = "EVENT ROLE?"
-			bool_eventrole.netstr = "update_role_bool_eventrole"
+			bool_eventrole.netstr = "nws_yrp_update_role_bool_eventrole"
 			bool_eventrole.value = role.bool_eventrole
 			bool_eventrole.uniqueID = role.uniqueID
 			bool_eventrole.lforce = false
@@ -2428,7 +2428,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local int_namelength = {}
 			int_namelength.parent = ea.restriction:GetContent()
 			int_namelength.header = "LID_namelength"
-			int_namelength.netstr = "update_role_int_namelength"
+			int_namelength.netstr = "nws_yrp_update_role_int_namelength"
 			int_namelength.value = role.int_namelength
 			int_namelength.uniqueID = role.uniqueID
 			int_namelength.lforce = false
@@ -2453,7 +2453,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			string_hud.parent = ea.restriction:GetContent()
 			string_hud.uniqueID = role.uniqueID
 			string_hud.header = YRP.lang_string( "LID_hud" )
-			string_hud.netstr = "update_role_string_hud"
+			string_hud.netstr = "nws_yrp_update_role_string_hud"
 			string_hud.value = role.string_hud
 			string_hud.uniqueID = role.uniqueID
 			string_hud.lforce = false
@@ -2471,7 +2471,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			string_hud_mask.parent = ea.restriction:GetContent()
 			string_hud_mask.uniqueID = role.uniqueID
 			string_hud_mask.header = "HUD Mask"
-			string_hud_mask.netstr = "update_role_string_hud_mask"
+			string_hud_mask.netstr = "nws_yrp_update_role_string_hud_mask"
 			string_hud_mask.value = role.string_hud_mask
 			string_hud_mask.uniqueID = role.uniqueID
 			string_hud_mask.lforce = false
@@ -2485,7 +2485,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			ndsweps.parent = ea.restriction:GetContent()
 			ndsweps.uniqueID = role.uniqueID
 			ndsweps.header = "LID_ndsweps"
-			ndsweps.netstr = "update_role_string_ndsweps"
+			ndsweps.netstr = "nws_yrp_update_role_string_ndsweps"
 			ndsweps.value = role.string_ndsweps
 			ndsweps.uniqueID = role.uniqueID
 			ndsweps.w = ea.restriction:GetContent():GetWide()
@@ -2527,7 +2527,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 							local d_ndswep = YRPCreateD( "YButton", nil, winndswep.dpl:GetWide(), height / 4, 0, 0)
 							d_ndswep:SetText( v.PrintName)
 							function d_ndswep:DoClick()
-								net.Start( "add_role_ndswep" )
+								net.Start( "nws_yrp_add_role_ndswep" )
 									net.WriteInt(role.uniqueID, 32)
 									net.WriteString( v.ClassName)
 								net.SendToServer()
@@ -2557,7 +2557,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				end
 			end
 			ea[role.uniqueID].ndsweps = DStringListBox(ndsweps)
-			net.Receive( "get_role_ndsweps", function()
+			net.Receive( "nws_yrp_get_role_ndsweps", function()
 				local tab_pm = net.ReadTable()
 				local cl_ndsweps = {}
 				for i, v in pairs(tab_pm) do
@@ -2566,7 +2566,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					ndswep.string_classname = v
 					ndswep.string_name = v
 					ndswep.doclick = function()
-						net.Start( "rem_role_ndswep" )
+						net.Start( "nws_yrp_rem_role_ndswep" )
 							net.WriteInt(role.uniqueID, 32)
 							net.WriteString(ndswep.string_classname)
 						net.SendToServer()
@@ -2578,7 +2578,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					ea[role.uniqueID].ndsweps.dpl:AddLines( cl_ndsweps)
 				end
 			end)
-			net.Start( "get_role_ndsweps" )
+			net.Start( "nws_yrp_get_role_ndsweps" )
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
@@ -2589,7 +2589,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			specializations.parent = ea.restriction:GetContent()
 			specializations.uniqueID = role.uniqueID
 			specializations.header = YRP.lang_string( "LID_specializations" ) .. " Permission to give it"
-			specializations.netstr = "update_role_string_specializations"
+			specializations.netstr = "nws_yrp_update_role_string_specializations"
 			specializations.value = role.string_specializations
 			specializations.uniqueID = role.uniqueID
 			specializations.w = ea.restriction:GetContent():GetWide()
@@ -2604,7 +2604,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
-				net.Receive( "get_all_specializations", function(l)
+				net.Receive( "nws_yrp_get_all_specializations", function(l)
 					local allspecializations = net.ReadTable()
 					local cl_specializations = {}
 					local count = 0
@@ -2637,7 +2637,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 									local d_specializations = YRPCreateD( "YButton", nil, winspecializations.dpl:GetWide(), height / 4, 0, 0)
 									d_specializations:SetText( v.PrintName)
 									function d_specializations:DoClick()
-										net.Start( "add_role_specialization" )
+										net.Start( "nws_yrp_add_role_specialization" )
 											net.WriteInt(role.uniqueID, 32)
 											net.WriteString( v.ClassName)
 										net.SendToServer()
@@ -2670,11 +2670,11 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						end
 					end
 				end)
-				net.Start( "get_all_specializations" )
+				net.Start( "nws_yrp_get_all_specializations" )
 				net.SendToServer()
 			end
 			ea[role.uniqueID].specializations = DStringListBox(specializations)
-			net.Receive( "get_role_specializations", function()
+			net.Receive( "nws_yrp_get_role_specializations", function()
 				local tab_li = net.ReadTable()
 				local cl_specializations = {}
 				for i, v in pairs(tab_li) do
@@ -2685,7 +2685,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 						specialization.string_classname = v.uniqueID
 						specialization.string_name = v.string_name
 						specialization.doclick = function()
-							net.Start( "rem_role_specialization" )
+							net.Start( "nws_yrp_rem_role_specialization" )
 								net.WriteInt(role.uniqueID, 32)
 								net.WriteString(specialization.string_classname)
 							net.SendToServer()
@@ -2698,7 +2698,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 					ea[role.uniqueID].specializations.dpl:AddLines( cl_specializations)
 				end
 			end)
-			net.Start( "get_role_specializations" )
+			net.Start( "nws_yrp_get_role_specializations" )
 				net.WriteInt(role.uniqueID, 32)
 			net.SendToServer()
 
@@ -2722,7 +2722,6 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			health.parent = ea.attributes:GetContent()
 			health.uniqueID = role.uniqueID
 			health.header = "LID_health"
-			health.netstr = "hp"
 			health.uniqueID = role.uniqueID
 			health.lforce = false
 
@@ -2732,19 +2731,19 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			health.dnw[1].value = role.int_hp
 			health.dnw[1].min = 1
 			health.dnw[1].max = GetMaxInt()
-			health.dnw[1].netstr = "update_role_" .. "int_" .. "hp"
+			health.dnw[1].netstr = "nws_yrp_update_role_" .. "int_" .. "hp"
 
 			health.dnw[2] = {}
 			health.dnw[2].value = role.int_hpmax
 			health.dnw[2].min = 1
 			health.dnw[2].max = GetMaxInt()
-			health.dnw[2].netstr = "update_role_" .. "int_" .. "hpmax"
+			health.dnw[2].netstr = "nws_yrp_update_role_" .. "int_" .. "hpmax"
 
 			health.dnw[3] = {}
 			health.dnw[3].value = role.int_hpup
 			health.dnw[3].min = -GetMaxInt()
 			health.dnw[3].max = GetMaxInt()
-			health.dnw[3].netstr = "update_role_" .. "int_" .. "hpup"
+			health.dnw[3].netstr = "nws_yrp_update_role_" .. "int_" .. "hpup"
 
 			health.color = Color( 0, 255, 0 )
 			health.color2 = Color( 0, 200, 0)
@@ -2757,7 +2756,6 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			armor.parent = ea.attributes:GetContent()
 			armor.uniqueID = role.uniqueID
 			armor.header = "LID_armor"
-			armor.netstr = "ar"
 			armor.uniqueID = role.uniqueID
 			armor.lforce = false
 
@@ -2767,19 +2765,19 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			armor.dnw[1].value = role.int_ar
 			armor.dnw[1].min = 0
 			armor.dnw[1].max = GetMaxInt()
-			armor.dnw[1].netstr = "update_role_" .. "int_" .. "ar"
+			armor.dnw[1].netstr = "nws_yrp_update_role_" .. "int_" .. "ar"
 
 			armor.dnw[2] = {}
 			armor.dnw[2].value = role.int_armax
 			armor.dnw[2].min = 1
 			armor.dnw[2].max = GetMaxInt()
-			armor.dnw[2].netstr = "update_role_" .. "int_" .. "armax"
+			armor.dnw[2].netstr = "nws_yrp_update_role_" .. "int_" .. "armax"
 
 			armor.dnw[3] = {}
 			armor.dnw[3].value = role.int_arup
 			armor.dnw[3].min = -GetMaxInt()
 			armor.dnw[3].max = GetMaxInt()
-			armor.dnw[3].netstr = "update_role_" .. "int_" .. "arup"
+			armor.dnw[3].netstr = "nws_yrp_update_role_" .. "int_" .. "arup"
 
 			armor.color = Color( 0, 0, 255, 255 )
 			armor.color2 = Color( 100, 100, 255)
@@ -2792,7 +2790,6 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				stamina.parent = ea.attributes:GetContent()
 				stamina.uniqueID = role.uniqueID
 				stamina.header = "LID_stamina"
-				stamina.netstr = "st"
 				stamina.uniqueID = role.uniqueID
 				stamina.lforce = false
 
@@ -2802,25 +2799,25 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				stamina.dnw[1].value = role.int_st
 				stamina.dnw[1].min = 1
 				stamina.dnw[1].max = GetMaxInt()
-				stamina.dnw[1].netstr = "update_role_" .. "int_" .. "st"
+				stamina.dnw[1].netstr = "nws_yrp_update_role_" .. "int_" .. "st"
 
 				stamina.dnw[2] = {}
 				stamina.dnw[2].value = role.int_stmax
 				stamina.dnw[2].min = 1
 				stamina.dnw[2].max = GetMaxInt()
-				stamina.dnw[2].netstr = "update_role_" .. "int_" .. "stmax"
+				stamina.dnw[2].netstr = "nws_yrp_update_role_" .. "int_" .. "stmax"
 
 				stamina.dnw[3] = {}
 				stamina.dnw[3].value = role.float_stup
 				stamina.dnw[3].min = -GetMaxFloat()
 				stamina.dnw[3].max = GetMaxFloat()
-				stamina.dnw[3].netstr = "update_role_" .. "float_" .. "stup"
+				stamina.dnw[3].netstr = "nws_yrp_update_role_" .. "float_" .. "stup"
 
 				stamina.dnw[4] = {}
 				stamina.dnw[4].value = role.float_stdn
 				stamina.dnw[4].min = -GetMaxFloat()
 				stamina.dnw[4].max = GetMaxFloat()
-				stamina.dnw[4].netstr = "update_role_" .. "float_" .. "stdn"
+				stamina.dnw[4].netstr = "nws_yrp_update_role_" .. "float_" .. "stdn"
 
 				stamina.color = Color( 255, 255, 0)
 				stamina.color2 = Color( 200, 200, 0)
@@ -2840,7 +2837,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			string_ability.parent = ea.attributes:GetContent()
 			string_ability.uniqueID = role.uniqueID
 			string_ability.header = YRP.lang_string( "LID_ability" ) .. " (for addons)"
-			string_ability.netstr = "update_role_string_ability"
+			string_ability.netstr = "nws_yrp_update_role_string_ability"
 			string_ability.value = role.string_ability
 			string_ability.uniqueID = role.uniqueID
 			string_ability.lforce = false
@@ -2851,7 +2848,6 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			ability.parent = ea.attributes:GetContent()
 			ability.uniqueID = role.uniqueID
 			ability.header = YRP.lang_string( "LID_ability" )
-			ability.netstr = "ab"
 			ability.uniqueID = role.uniqueID
 			ability.lforce = false
 
@@ -2861,13 +2857,13 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			ability.dnw[1].value = role.int_ab
 			ability.dnw[1].min = 1
 			ability.dnw[1].max = GetMaxInt()
-			ability.dnw[1].netstr = "update_role_" .. "int_" .. "ab"
+			ability.dnw[1].netstr = "nws_yrp_update_role_" .. "int_" .. "ab"
 
 			ability.dnw[2] = {}
 			ability.dnw[2].value = role.int_abmax
 			ability.dnw[2].min = 1
 			ability.dnw[2].max = GetMaxInt()
-			ability.dnw[2].netstr = "update_role_" .. "int_" .. "abmax"
+			ability.dnw[2].netstr = "nws_yrp_update_role_" .. "int_" .. "abmax"
 
 			ability.color = Color( 255, 255, 0)
 			ability.color2 = Color( 200, 200, 0)
@@ -2879,7 +2875,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local speedwalk = {}
 			speedwalk.parent = ea.attributes:GetContent()
 			speedwalk.header = "LID_walkspeed"
-			speedwalk.netstr = "update_role_int_speedwalk"
+			speedwalk.netstr = "nws_yrp_update_role_int_speedwalk"
 			speedwalk.value = role.int_speedwalk or -1
 			speedwalk.uniqueID = role.uniqueID
 			speedwalk.lforce = false
@@ -2892,7 +2888,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local speedrun = {}
 			speedrun.parent = ea.attributes:GetContent()
 			speedrun.header = "LID_runspeed"
-			speedrun.netstr = "update_role_int_speedrun"
+			speedrun.netstr = "nws_yrp_update_role_int_speedrun"
 			speedrun.value = role.int_speedrun or -1
 			speedrun.uniqueID = role.uniqueID
 			speedrun.lforce = false
@@ -2905,7 +2901,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			local powerjump = {}
 			powerjump.parent = ea.attributes:GetContent()
 			powerjump.header = "LID_jumppower"
-			powerjump.netstr = "update_role_int_powerjump"
+			powerjump.netstr = "nws_yrp_update_role_int_powerjump"
 			powerjump.value = role.int_powerjump or -1
 			powerjump.uniqueID = role.uniqueID
 			powerjump.lforce = false
@@ -2924,7 +2920,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				local d = {}
 				d.parent = ea.attributes:GetContent()
 				d.header = "LID_" .. "dmgtype_" .. dmgtype
-				d.netstr = "update_role_float_" .. "dmgtype_" .. dmgtype
+				d.netstr = "nws_yrp_update_role_float_" .. "dmgtype_" .. dmgtype
 				d.value = role["float_" .. "dmgtype_" .. dmgtype] or 1.0
 				d.uniqueID = role.uniqueID
 				d.lforce = false
@@ -2940,7 +2936,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				bool_hunger.parent = ea.attributes:GetContent()
 				bool_hunger.uniqueID = role.uniqueID
 				bool_hunger.header = "LID_hunger"
-				bool_hunger.netstr = "update_role_bool_hunger"
+				bool_hunger.netstr = "nws_yrp_update_role_bool_hunger"
 				bool_hunger.value = role.bool_hunger
 				bool_hunger.uniqueID = role.uniqueID
 				ea[role.uniqueID].bool_hunger = YRPDCheckBox( bool_hunger)
@@ -2953,7 +2949,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				bool_thirst.parent = ea.attributes:GetContent()
 				bool_thirst.uniqueID = role.uniqueID
 				bool_thirst.header = "LID_thirst"
-				bool_thirst.netstr = "update_role_bool_thirst"
+				bool_thirst.netstr = "nws_yrp_update_role_bool_thirst"
 				bool_thirst.value = role.bool_thirst
 				bool_thirst.uniqueID = role.uniqueID
 				ea[role.uniqueID].bool_thirst = YRPDCheckBox( bool_thirst)
@@ -2966,7 +2962,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 				bool_stamina.parent = ea.attributes:GetContent()
 				bool_stamina.uniqueID = role.uniqueID
 				bool_stamina.header = "LID_stamina"
-				bool_stamina.netstr = "update_role_bool_stamina"
+				bool_stamina.netstr = "nws_yrp_update_role_bool_stamina"
 				bool_stamina.value = role.bool_stamina
 				bool_stamina.uniqueID = role.uniqueID
 				ea[role.uniqueID].bool_stamina = YRPDCheckBox( bool_stamina)
@@ -2977,7 +2973,7 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 			ea.attributes:AutoSize(true)
 		end)
 
-		net.Receive( "settings_subscribe_rolelist", function(le)
+		net.Receive( "nws_yrp_settings_subscribe_rolelist", function(le)
 			if PanelAlive(rs.rplist) then
 				rs.rplist:ClearList()
 
@@ -3007,6 +3003,6 @@ net.Receive( "Subscribe_Settings_GroupsAndRoles", function(len)
 end)
 
 function OpenSettingsGroupsAndRoles()
-	net.Start( "Subscribe_Settings_GroupsAndRoles" )
+	net.Start( "nws_yrp_subscribe_Settings_GroupsAndRoles" )
 	net.SendToServer()
 end

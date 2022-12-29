@@ -67,9 +67,9 @@ function ENT:Open( activator, caller)
 	end
 end
 
-util.AddNetworkString( "open_buy_menu" )
+util.AddNetworkString( "nws_yrp_open_buy_menu" )
 function ENT:OpenBuyMenu(pl)
-	net.Start( "open_buy_menu" )
+	net.Start( "nws_yrp_open_buy_menu" )
 		net.WriteString(self:GetYRPString( "dealerID", "-1" ) )
 	net.Send(pl)
 end

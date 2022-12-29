@@ -10,6 +10,7 @@ function YRPInterfaceValue( element, art )
 	local ibools = {}
 	local icolors = {"BG", "HT", "HI", "HB", "NC", "HC", "PC", "SC", "NT", "HT", "ST", "FG"}
 	local iints = {}
+
 	if table.HasValue(ifloats, art) then
 		return 0.0
 	elseif table.HasValue(ibools, art) then

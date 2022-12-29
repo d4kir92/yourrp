@@ -20,8 +20,8 @@ if IsNotNilAndNotFalse(laws) then
 	SetGlobalYRPString( "sting_laws", laws.string_laws)
 end
 
-util.AddNetworkString( "yrp_get_laws" )
-net.Receive( "yrp_get_laws", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_laws" )
+net.Receive( "nws_yrp_get_laws", function(len, ply)
 	local laws = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
 	if IsNotNilAndNotFalse(laws) then
 		laws = laws[1]
@@ -39,23 +39,23 @@ net.Receive( "yrp_get_laws", function(len, ply)
 			buildings = {}
 		end
 
-		net.Start( "yrp_get_laws" )
+		net.Start( "nws_yrp_get_laws" )
 			net.WriteTable(laws)
 			net.WriteTable( buildings)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "set_lawsymbol" )
-net.Receive( "set_lawsymbol", function(len, ply)
+util.AddNetworkString( "nws_yrp_set_lawsymbol" )
+net.Receive( "nws_yrp_set_lawsymbol", function(len, ply)
 	local lawsymbol = net.ReadString()
 	lawsymbol = lawsymbol
 	YRP.msg( "db", "Changed lawsymbol to: " .. lawsymbol)
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_lawsymbol"] = lawsymbol}, "uniqueID = '1'" )
 end)
 
-util.AddNetworkString( "set_laws" )
-net.Receive( "set_laws", function(len, ply)
+util.AddNetworkString( "nws_yrp_set_laws" )
+net.Receive( "nws_yrp_set_laws", function(len, ply)
 	local laws = net.ReadString()
 	laws = laws
 	YRP.msg( "db", "Changed lawsymbol to: " .. laws)

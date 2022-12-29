@@ -43,7 +43,7 @@ SWEP.ShowViewModel = true
 SWEP.ShowWorldModel = true
 
 if CLIENT then
-	net.Receive( "yrp_door_anim", function( self, len )
+	net.Receive( "nws_yrp_door_anim", function( self, len )
 		local ply = net.ReadEntity()
 		local msg = net.ReadString()
 
@@ -65,7 +65,7 @@ function SWEP:Reload()
 			owner.ts = CurTime()
 			owner:EmitSound( "physics/wood/wood_crate_impact_hard" .. math.random(1, 5) ..".wav", 100, math.random( 90, 110 ) )
 
-			net.Start( "yrp_door_anim" )
+			net.Start( "nws_yrp_door_anim" )
 				net.WriteEntity( owner )
 				net.WriteString( "knock" )
 			net.Broadcast()

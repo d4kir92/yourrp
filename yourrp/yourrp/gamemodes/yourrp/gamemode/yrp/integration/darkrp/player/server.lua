@@ -261,7 +261,7 @@ end
 
 function Player:updateJob(job)
 	--Description: Set the job name of a player ( doesn't change the actual team).
-	--YRPDarkrpNotFound( "updateJob(job)" )
+	--YRPDarkrpNotFound( "nws_yrp_updateJob(job)" )
 end
 
 function Player:wanted( actor, reason, time)

@@ -22,7 +22,7 @@ local _icon = {}
 _icon.size = YRP.ctr(100 - 16)
 _icon.br = YRP.ctr(8)
 
-net.Receive( "Connect_Settings_UserGroup", function(len)
+net.Receive( "nws_yrp_connect_Settings_UserGroup", function(len)
 	local ug = net.ReadTable()
 	if ug == nil then
 		return 
@@ -65,12 +65,12 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	NAME:SetText(string.upper(ug.string_name) )
 	function NAME.plus:OnChange()
 		UGS[CURRENT_USERGROUP].string_name = string.upper(self:GetText() )
-		net.Start( "usergroup_update_string_name" )
+		net.Start( "nws_yrp_usergroup_update_string_name" )
 			net.WriteString(CURRENT_USERGROUP)
 			net.WriteString(string.upper(self:GetText() ))
 		net.SendToServer()
 	end
-	net.Receive( "usergroup_update_string_name", function(len2)
+	net.Receive( "nws_yrp_usergroup_update_string_name", function(len2)
 		local string_name = net.ReadString()
 		if UGS and UGS[CURRENT_USERGROUP] then
 			UGS[CURRENT_USERGROUP].string_name = string.upper(string_name)
@@ -91,12 +91,12 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	DISPLAYNAME:SetText(ug.string_displayname)
 	function DISPLAYNAME.plus:OnChange()
 		UGS[CURRENT_USERGROUP].string_displayname = self:GetText()
-		net.Start( "usergroup_update_string_displayname" )
+		net.Start( "nws_yrp_usergroup_update_string_displayname" )
 			net.WriteString(CURRENT_USERGROUP)
 			net.WriteString(self:GetText() )
 		net.SendToServer()
 	end
-	net.Receive( "usergroup_update_string_displayname", function(len2)
+	net.Receive( "nws_yrp_usergroup_update_string_displayname", function(len2)
 		local string_displayname = net.ReadString()
 		if UGS and UGS[CURRENT_USERGROUP] then
 			UGS[CURRENT_USERGROUP].string_displayname = string_displayname
@@ -130,13 +130,13 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		window.cm = YRPCreateD( "DColorMixer", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20) )
 		function window.cm:ValueChanged( col)
 			UGS[CURRENT_USERGROUP].string_color = YRPTableToColorStr( col)
-			net.Start( "usergroup_update_string_color" )
+			net.Start( "nws_yrp_usergroup_update_string_color" )
 				net.WriteString(CURRENT_USERGROUP)
 				net.WriteString(UGS[CURRENT_USERGROUP].string_color)
 			net.SendToServer()
 		end
 	end
-	net.Receive( "usergroup_update_string_color", function(len2)
+	net.Receive( "nws_yrp_usergroup_update_string_color", function(len2)
 		local color = net.ReadString()
 		if UGS and UGS[CURRENT_USERGROUP] then
 			UGS[CURRENT_USERGROUP].string_color = color
@@ -151,12 +151,12 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 	ICON:SetText(ug.string_icon)
 	function ICON.plus:OnChange()
 		UGS[CURRENT_USERGROUP].string_icon = self:GetText()
-		net.Start( "usergroup_update_icon" )
+		net.Start( "nws_yrp_usergroup_update_icon" )
 			net.WriteString(CURRENT_USERGROUP)
 			net.WriteString(self:GetText() )
 		net.SendToServer()
 	end
-	net.Receive( "usergroup_update_icon", function(len2)
+	net.Receive( "nws_yrp_usergroup_update_icon", function(len2)
 		local string_icon = net.ReadString()
 		if UGS and UGS[CURRENT_USERGROUP] then
 			UGS[CURRENT_USERGROUP].string_icon = string_icon
@@ -303,7 +303,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		function YRPAddSwepToUG()
 			local lply = LocalPlayer()
 			if UGS[CURRENT_USERGROUP] and lply.yrpseltab then
-				net.Start( "usergroup_update_string_sweps" )
+				net.Start( "nws_yrp_usergroup_update_string_sweps" )
 					net.WriteString(UGS[CURRENT_USERGROUP].uniqueID)
 					net.WriteTable(lply.yrpseltab)
 				net.SendToServer()
@@ -318,7 +318,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		YRPOpenSelector( cl_sweps, true, "classname", YRPAddSwepToUG)
 	end
 
-	net.Receive( "usergroup_update_string_sweps", function(len2)
+	net.Receive( "nws_yrp_usergroup_update_string_sweps", function(len2)
 		if PanelAlive(SWEPS) then
 			local string_sweps = net.ReadString()
 
@@ -474,7 +474,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		function YRPAddSwepToUGNone()
 			local lply = LocalPlayer()
 			if UGS[CURRENT_USERGROUP] and lply.yrpseltab then
-				net.Start( "usergroup_update_string_nonesweps" )
+				net.Start( "nws_yrp_usergroup_update_string_nonesweps" )
 					net.WriteString(UGS[CURRENT_USERGROUP].uniqueID)
 					net.WriteTable(lply.yrpseltab)
 				net.SendToServer()
@@ -489,7 +489,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		YRPOpenSelector( cl_sweps, true, "classname", YRPAddSwepToUGNone)
 	end
 
-	net.Receive( "usergroup_update_string_nonesweps", function(len2)
+	net.Receive( "nws_yrp_usergroup_update_string_nonesweps", function(len2)
 		if PanelAlive(NONESWEPS) then
 			local string_nonesweps = net.ReadString()
 
@@ -540,7 +540,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		table.RemoveByValue(UGS[CURRENT_USERGROUP].string_licenses, "" )
 	end
 
-	net.Receive( "get_usergroup_licenses", function()
+	net.Receive( "nws_yrp_get_usergroup_licenses", function()
 		local licenses = net.ReadTable()
 
 		for i, lic in pairs(licenses) do
@@ -569,7 +569,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 
 					local str = table.concat(UGS[CURRENT_USERGROUP].string_licenses, "," )
 
-					net.Start( "usergroup_update_string_licenses" )
+					net.Start( "nws_yrp_usergroup_update_string_licenses" )
 						net.WriteString(CURRENT_USERGROUP)
 						net.WriteString(str)
 					net.SendToServer()
@@ -580,7 +580,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		end
 	end)
 
-	net.Start( "get_usergroup_licenses" )
+	net.Start( "nws_yrp_get_usergroup_licenses" )
 	net.SendToServer()
 
 
@@ -626,7 +626,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 
 				local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, "," )
 
-				net.Start( "usergroup_update_string_tools" )
+				net.Start( "nws_yrp_usergroup_update_string_tools" )
 					net.WriteString(CURRENT_USERGROUP)
 					net.WriteString(str)
 				net.SendToServer()
@@ -662,7 +662,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 
 								local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, "," )
 
-								net.Start( "usergroup_update_string_tools" )
+								net.Start( "nws_yrp_usergroup_update_string_tools" )
 									net.WriteString(CURRENT_USERGROUP)
 									net.WriteString(str)
 								net.SendToServer()
@@ -704,7 +704,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 
 				local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, "," )
 
-				net.Start( "usergroup_update_string_tools" )
+				net.Start( "nws_yrp_usergroup_update_string_tools" )
 					net.WriteString(CURRENT_USERGROUP)
 					net.WriteString(str)
 				net.SendToServer()
@@ -759,7 +759,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		end
 		local result = table.concat(tab, ";" )
 		if CURRENT_USERGROUP then
-			net.Start( "usergroup_update_string_ammos" )
+			net.Start( "nws_yrp_usergroup_update_string_ammos" )
 				net.WriteString(CURRENT_USERGROUP)
 				net.WriteString(result)
 			net.SendToServer()
@@ -813,13 +813,13 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		end
 		function tmp.cb:OnChange( bVal)
 			if !self.serverside then
-				net.Start( "usergroup_update_" .. name)
+				net.Start( "nws_yrp_usergroup_update_" .. name)
 					net.WriteString(CURRENT_USERGROUP)
 					net.WriteString( btn( bVal) )
 				net.SendToServer()
 			end
 		end
-		net.Receive( "usergroup_update_" .. name, function(len2)
+		net.Receive( "nws_yrp_usergroup_update_" .. name, function(len2)
 			local b = net.ReadString()
 			if PanelAlive(tmp.cb) then
 				tmp.cb.serverside = true
@@ -916,7 +916,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 		tmp.cb:SetMax(100)
 		tmp.cb:SetMin(1)
 		function tmp.cb:OnValueChanged( val)
-			net.Start( "usergroup_update_" .. name)
+			net.Start( "nws_yrp_usergroup_update_" .. name)
 				net.WriteString(CURRENT_USERGROUP)
 				net.WriteString( val)
 			net.SendToServer()
@@ -936,7 +936,7 @@ net.Receive( "Connect_Settings_UserGroup", function(len)
 			surfaceCheckBox(self, pw, ph, "done" )
 		end
 		function tmp.cb:OnChange( bVal)
-			net.Start( "usergroup_update_" .. name)
+			net.Start( "nws_yrp_usergroup_update_" .. name)
 				net.WriteString(CURRENT_USERGROUP)
 				net.WriteString( btn( bVal) )
 			net.SendToServer()
@@ -1018,11 +1018,11 @@ function YRPAddUG(tbl)
 
 	function _ug:DoClick()
 		if CURRENT_USERGROUP != nil then
-			net.Start( "Disconnect_Settings_UserGroup" )
+			net.Start( "nws_yrp_disconnect_Settings_UserGroup" )
 				net.WriteString(CURRENT_USERGROUP)
 			net.SendToServer()
 		end
-		net.Start( "Connect_Settings_UserGroup" )
+		net.Start( "nws_yrp_connect_Settings_UserGroup" )
 			net.WriteString(self.uid)
 		net.SendToServer()
 	end
@@ -1047,7 +1047,7 @@ function YRPAddUG(tbl)
 	end
 	function up:DoClick()
 		if P.int_position > 1 then
-			net.Start( "settings_usergroup_position_up" )
+			net.Start( "nws_yrp_settings_usergroup_position_up" )
 				net.WriteString(P.uniqueID)
 			net.SendToServer()
 		end
@@ -1069,7 +1069,7 @@ function YRPAddUG(tbl)
 	end
 	function dn:DoClick()
 		if P.int_position > 2 and P.int_position < table.Count(UGS) then
-			net.Start( "settings_usergroup_position_dn" )
+			net.Start( "nws_yrp_settings_usergroup_position_dn" )
 				net.WriteString(P.uniqueID)
 			net.SendToServer()
 		end
@@ -1110,7 +1110,7 @@ end
 
 function RemUG(uid)
 	if CURRENT_USERGROUP != nil then
-		net.Start( "Disconnect_Settings_UserGroup" )
+		net.Start( "nws_yrp_disconnect_Settings_UserGroup" )
 			net.WriteString(CURRENT_USERGROUP)
 		net.SendToServer()
 	end
@@ -1118,14 +1118,14 @@ function RemUG(uid)
 	DUGS[tonumber(uid)]:Remove()
 end
 
-net.Receive( "usergroup_rem", function(len)
+net.Receive( "nws_yrp_usergroup_rem", function(len)
 	local uid = tonumber(net.ReadString() )
 	if DUGS[uid] != nil then
 		RemUG(uid)
 	end
 end)
 
-net.Receive( "usergroup_add", function(len)
+net.Receive( "nws_yrp_usergroup_add", function(len)
 	local ugtab = net.ReadTable()
 
 	for i, ug in pairs( ugtab ) do
@@ -1167,7 +1167,7 @@ function YRPAddToUGList( ug )
 	table.insert( N_UGS, ug )
 end
 
-net.Receive( "UpdateUsergroupsList", function()
+net.Receive( "nws_yrp_updateUsergroupsList", function()
 	_icon.size = YRP.ctr(100 - 16)
 	_icon.br = YRP.ctr(8)
 
@@ -1191,7 +1191,7 @@ net.Receive( "UpdateUsergroupsList", function()
 	end
 end)
 
-net.Receive( "Connect_Settings_UserGroups", function(len)
+net.Receive( "nws_yrp_connect_Settings_UserGroups", function(len)
 	local ug = {}
 
 	if net.ReadBool() then
@@ -1218,7 +1218,7 @@ function YRPOpenSettingsUsergroups()
 		CURRENT_USERGROUP = nil
 
 		function PARENT:OnRemove()
-			net.Start( "Disconnect_Settings_UserGroups" )
+			net.Start( "nws_yrp_disconnect_Settings_UserGroups" )
 			net.SendToServer()
 		end
 
@@ -1229,7 +1229,7 @@ function YRPOpenSettingsUsergroups()
 			hook.Run( "YButtonAPaint", self, pw, ph) --surfaceButton(self, pw, ph, "+", Color( 0, 255, 0, 255) )
 		end
 		function _ug_add:DoClick()
-			net.Start( "usergroup_add" )
+			net.Start( "nws_yrp_usergroup_add" )
 			net.SendToServer()
 		end
 		
@@ -1248,7 +1248,7 @@ function YRPOpenSettingsUsergroups()
 		function _ug_rem:DoClick()
 			if IsNotNilAndNotFalse(UGS[CURRENT_USERGROUP]) then
 				if tobool(UGS[CURRENT_USERGROUP].bool_removeable) then
-					net.Start( "usergroup_rem" )
+					net.Start( "nws_yrp_usergroup_rem" )
 						net.WriteString(CURRENT_USERGROUP)
 					net.SendToServer()
 				else
@@ -1279,6 +1279,6 @@ function YRPOpenSettingsUsergroups()
 		PARENT.uglist:EnableVerticalScrollbar(true)
 	end
 
-	net.Start( "Connect_Settings_UserGroups" )
+	net.Start( "nws_yrp_connect_Settings_UserGroups" )
 	net.SendToServer()
 end

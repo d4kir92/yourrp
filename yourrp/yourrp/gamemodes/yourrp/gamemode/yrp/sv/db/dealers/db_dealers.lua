@@ -20,7 +20,7 @@ if _minus != nil then
 	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '-1'" )
 end
 
-util.AddNetworkString( "dealer_add" )
+util.AddNetworkString( "nws_yrp_dealer_add" )
 
 function dealer_rem(uid)
 	uid = tonumber(uid)
@@ -63,13 +63,13 @@ function dealer_add(ply)
 	end
 end
 
-net.Receive( "dealer_add", function(len, ply)
+net.Receive( "nws_yrp_dealer_add", function(len, ply)
 	dealer_add(ply)
 end)
 
-util.AddNetworkString( "dealer_add_tab" )
+util.AddNetworkString( "nws_yrp_dealer_add_tab" )
 
-net.Receive( "dealer_add_tab", function(len, ply)
+net.Receive( "nws_yrp_dealer_add_tab", function(len, ply)
 	local _dealer_uid = net.ReadString()
 	local _tab_uid = net.ReadString()
 
@@ -90,9 +90,9 @@ net.Receive( "dealer_add_tab", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "dealer_rem_tab" )
+util.AddNetworkString( "nws_yrp_dealer_rem_tab" )
 
-net.Receive( "dealer_rem_tab", function(len, ply)
+net.Receive( "nws_yrp_dealer_rem_tab", function(len, ply)
 	local _dealer_uid = net.ReadString()
 	local _tab_uid = net.ReadString()
 
@@ -106,8 +106,8 @@ net.Receive( "dealer_rem_tab", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "dealer_edit_name" )
-net.Receive( "dealer_edit_name", function(len, ply)
+util.AddNetworkString( "nws_yrp_dealer_edit_name" )
+net.Receive( "nws_yrp_dealer_edit_name", function(len, ply)
 	local _dealer_uid = net.ReadString()
 	local _dealer_new_name = net.ReadString()
 
@@ -119,8 +119,8 @@ net.Receive( "dealer_edit_name", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "dealer_edit_worldmodel" )
-net.Receive( "dealer_edit_worldmodel", function(len, ply)
+util.AddNetworkString( "nws_yrp_dealer_edit_worldmodel" )
+net.Receive( "nws_yrp_dealer_edit_worldmodel", function(len, ply)
 	local _dealer_uid = net.ReadString()
 	local _dealer_new_wm = net.ReadString()
 
@@ -135,8 +135,8 @@ net.Receive( "dealer_edit_worldmodel", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "dealer_edit_storagepoints" )
-net.Receive( "dealer_edit_storagepoints", function(len, ply)
+util.AddNetworkString( "nws_yrp_dealer_edit_storagepoints" )
+net.Receive( "nws_yrp_dealer_edit_storagepoints", function(len, ply)
 	local _dealer_uid = net.ReadString()
 	local _dealer_storagepoints = net.ReadString()
 

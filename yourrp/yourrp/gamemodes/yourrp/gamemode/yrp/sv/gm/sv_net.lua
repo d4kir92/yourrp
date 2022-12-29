@@ -1,11 +1,11 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-util.AddNetworkString( "restartServer" )
-util.AddNetworkString( "updateServer" )
-util.AddNetworkString( "cancelRestartServer" )
+util.AddNetworkString( "nws_yrp_restartServer" )
+util.AddNetworkString( "nws_yrp_updateServer" )
+util.AddNetworkString( "nws_yrp_cancelRestartServer" )
 
 --Restart Server
-net.Receive( "restartServer", function(len, ply)
+net.Receive( "nws_yrp_restartServer", function(len, ply)
 	if !ply:HasAccess( "restartServer" ) then
 		return
 	end
@@ -14,8 +14,8 @@ net.Receive( "restartServer", function(len, ply)
 	RunConsoleCommand( "map", game.GetMap() )
 end)
 
-net.Receive( "updateServer", function(len, ply)
-	if !ply:HasAccess( "updateServer" ) then
+net.Receive( "nws_yrp_updateServer", function(len, ply)
+	if !ply:HasAccess( "nws_yrp_updateServer" ) then
 		return
 	end
 	
@@ -46,7 +46,7 @@ net.Receive( "updateServer", function(len, ply)
 	end)
 end)
 
-net.Receive( "cancelRestartServer", function(len, ply)
+net.Receive( "nws_yrp_cancelRestartServer", function(len, ply)
 	if !ply:HasAccess( "cancelRestartServer" ) then
 		return
 	end

@@ -15,8 +15,8 @@ function AddToHandler_Status(ply)
 	end
 end
 
-util.AddNetworkString( "Connect_Settings_Status" )
-net.Receive( "Connect_Settings_Status", function(len, ply)
+util.AddNetworkString( "nws_yrp_connect_Settings_Status" )
+net.Receive( "nws_yrp_connect_Settings_Status", function(len, ply)
 	if ply:CanAccess( "bool_status" ) then
 		AddToHandler_Status(ply)
 		local _nw_yourrp = {}
@@ -105,7 +105,7 @@ net.Receive( "Connect_Settings_Status", function(len, ply)
 			end
 		end
 
-		net.Start( "Connect_Settings_Status" )
+		net.Start( "nws_yrp_connect_Settings_Status" )
 			net.WriteTable(_nw_yourrp)
 			net.WriteTable(_nw_roles)
 			net.WriteTable(_nw_groups)
@@ -114,7 +114,7 @@ net.Receive( "Connect_Settings_Status", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "Disconnect_Settings_Status" )
-net.Receive( "Disconnect_Settings_Status", function(len, ply)
+util.AddNetworkString( "nws_yrp_disconnect_Settings_Status" )
+net.Receive( "nws_yrp_disconnect_Settings_Status", function(len, ply)
 	RemFromHandler_Status(ply)
 end)

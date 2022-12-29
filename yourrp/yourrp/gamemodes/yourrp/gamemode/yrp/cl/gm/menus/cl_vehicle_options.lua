@@ -20,7 +20,7 @@ function closeVehicleOptions()
 	end
 end
 
-net.Receive( "getVehicleInfo", function(len)
+net.Receive( "nws_yrp_getVehicleInfo", function(len)
 	if net.ReadBool() then
 		local vehicle = net.ReadEntity()
 		local _tmpVehicle = net.ReadTable()
@@ -65,7 +65,7 @@ function optionVehicleWindow( vehicle, vehicleTab)
 		local _buttonRemoveOwner = createVGUI( "DButton", yrp_vehicle.window, 530, 50, 545, 170)
 		_buttonRemoveOwner:SetText( "" )
 		function _buttonRemoveOwner:DoClick()
-			net.Start( "removeVehicleOwner" )
+			net.Start( "nws_yrp_removeVehicleOwner" )
 				net.WriteString( vehicleTab[1].uniqueID)
 			net.SendToServer()
 			if PanelAlive(yrp_vehicle.window) then
@@ -86,7 +86,7 @@ end
 
 function openVehicleOptions( vehicle, vehicleID)
 	if IsNotNilAndNotFalse( vehicle) and IsNotNilAndNotFalse( vehicleID) then
-		net.Start( "getVehicleInfo" )
+		net.Start( "nws_yrp_getVehicleInfo" )
 			net.WriteEntity( vehicle)
 			net.WriteString( vehicleID)
 		net.SendToServer()

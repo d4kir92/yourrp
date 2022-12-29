@@ -249,7 +249,7 @@ function YRPResetKeybinds()
 	end
 end
 
-net.Receive( "SetServerKeybinds", function(len)
+net.Receive( "nws_yrp_setServerKeybinds", function(len)
 	local keytab = net.ReadTable()
 	for i, ktab in pairs( keytab ) do
 		YRPSetKeybind( ktab.name, ktab.value )

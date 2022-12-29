@@ -23,7 +23,7 @@ function YRPCloseBuyMenu()
 end
 
 local lnames = {}
-net.Receive( "GetLicenseName", function(len)
+net.Receive( "nws_yrp_getLicenseName", function(len)
 	local id = net.ReadString()
 	local tmp = net.ReadString()
 	lnames[id] = tmp
@@ -195,7 +195,7 @@ function createShopItem(item, duid, id)
 			end
 			function _i.buy:DoClick()
 				if LocalPlayer():GetYRPFloat( "buy_ts" .. item.uniqueID, 0.0) <= CurTime() then
-					net.Start( "item_buy" )
+					net.Start( "nws_yrp_item_buy" )
 						self.item.color = lply.item_color or "255, 255, 255"
 						net.WriteString( duid )
 						net.WriteString( self.item.uniqueID )
@@ -236,7 +236,7 @@ function createShopItem(item, duid, id)
 	else
 		_i.require = YRPCreateD( "DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE) )
 		lnames[item.licenseID] = lnames[item.licenseID] or item.licenseID
-		net.Start( "GetLicenseName" )
+		net.Start( "nws_yrp_getLicenseName" )
 			net.WriteInt(item.licenseID, 32)
 		net.SendToServer()
 		function _i.require:Paint(pw, ph)
@@ -307,12 +307,12 @@ function createStorageItem(item, duid)
 		end
 		function _i.spawn:DoClick()
 			if self.action == 0 then
-				net.Start( "item_spawn" )
+				net.Start( "nws_yrp_item_spawn" )
 					net.WriteTable(self.item)
 					net.WriteString( duid)
 				net.SendToServer()
 			elseif self.action == 1 then
-				net.Start( "item_despawn" )
+				net.Start( "nws_yrp_item_despawn" )
 					net.WriteTable(self.item)
 				net.SendToServer()
 			end
@@ -336,7 +336,7 @@ end
 
 local _mat_set = Material( "vgui/yrp/light_settings.png" )
 
-net.Receive( "shop_get_tabs", function(len)
+net.Receive( "nws_yrp_shop_get_tabs", function(len)
 	local _dealer = net.ReadTable()
 	local _dealer_uid = _dealer.uniqueID
 	local _tabs = net.ReadTable()
@@ -356,7 +356,7 @@ net.Receive( "shop_get_tabs", function(len)
 		local _tab = BUYMENU.tabs:AddTab(tab.name, tab.uniqueID)
 
 		function _tab:GetCategories()
-			net.Receive( "yrp_shop_get_categories", function(le)
+			net.Receive( "nws_yrp_shop_get_categories", function(le)
 				local lply = LocalPlayer()
 				if BUYMENU.shop:IsValid() then
 					local _uid = net.ReadString()
@@ -375,7 +375,7 @@ net.Receive( "shop_get_tabs", function(len)
 						_cat.color2 = YRPInterfaceValue( "YFrame", "HB" )
 						function _cat:DoClick()
 							if self:IsOpen() then
-								net.Receive( "yrp_shop_get_items", function(l)
+								net.Receive( "nws_yrp_shop_get_items", function(l)
 									local uid = net.ReadString()
 									local _items = net.ReadTable()
 
@@ -409,7 +409,7 @@ net.Receive( "shop_get_tabs", function(len)
 										end
 									end
 								end)
-								net.Start( "yrp_shop_get_items" )
+								net.Start( "nws_yrp_shop_get_items" )
 									net.WriteString(self.uid)
 								net.SendToServer()
 							else
@@ -434,7 +434,7 @@ net.Receive( "shop_get_tabs", function(len)
 							draw.SimpleText(YRP.lang_string( "LID_remove" ) .. " [" .. YRP.lang_string( "LID_tab" ) .. "] => " .. tab.name, "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
 						end
 						function _remove:DoClick()
-							net.Start( "dealer_rem_tab" )
+							net.Start( "nws_yrp_dealer_rem_tab" )
 								net.WriteString(_dealer_uid)
 								net.WriteString(self.uid)
 							net.SendToServer()
@@ -445,7 +445,7 @@ net.Receive( "shop_get_tabs", function(len)
 					end
 				end
 			end)
-			net.Start( "yrp_shop_get_categories" )
+			net.Start( "nws_yrp_shop_get_categories" )
 				net.WriteString(_tab.tbl)
 			net.SendToServer()
 		end
@@ -457,7 +457,7 @@ net.Receive( "shop_get_tabs", function(len)
 			local _tab2 = BUYMENU.tabs:AddTab(YRP.lang_string( "LID_mystorage" ) .. ": " .. tab.name, tab.uniqueID)
 			function _tab2:GetCategories()
 				local lply = LocalPlayer()
-				net.Receive( "yrp_shop_get_categories", function(le)
+				net.Receive( "nws_yrp_shop_get_categories", function(le)
 					local _uid = net.ReadString()
 					local _cats = net.ReadTable()
 
@@ -474,14 +474,14 @@ net.Receive( "shop_get_tabs", function(len)
 							_c.color2 = YRPInterfaceValue( "YFrame", "HB" )
 							function _c:DoClick()
 								if self:IsOpen() then
-									net.Receive( "shop_get_items_storage", function(l)
+									net.Receive( "nws_yrp_shop_get_items_storage", function(l)
 										local _items = net.ReadTable()
 										for k, item in pairs(_items) do
 											local _item = createStorageItem(item, _dealer_uid)
 											self:Add(_item)
 										end
 									end)
-									net.Start( "shop_get_items_storage" )
+									net.Start( "nws_yrp_shop_get_items_storage" )
 										net.WriteString(self.uid)
 									net.SendToServer()
 								else
@@ -494,7 +494,7 @@ net.Receive( "shop_get_tabs", function(len)
 						end
 					end
 				end)
-				net.Start( "yrp_shop_get_categories" )
+				net.Start( "nws_yrp_shop_get_categories" )
 					net.WriteString(_tab.tbl)
 				net.SendToServer()
 			end
@@ -538,7 +538,7 @@ net.Receive( "shop_get_tabs", function(len)
 			_tmp.tabs:INITPanel( "DComboBox" )
 			_tmp.tabs:SetHeader(YRP.lang_string( "LID_tabs" ) )
 
-			net.Receive( "shop_get_all_tabs", function(l)
+			net.Receive( "nws_yrp_shop_get_all_tabs", function(l)
 				local _ts = net.ReadTable()
 				if PanelAlive( _tmp.tabs ) then
 					for i, tab in pairs(_ts) do
@@ -547,7 +547,7 @@ net.Receive( "shop_get_tabs", function(len)
 				end
 			end)
 
-			net.Start( "shop_get_all_tabs" )
+			net.Start( "nws_yrp_shop_get_all_tabs" )
 			net.SendToServer()
 
 			_tmp.addtab = YRPCreateD( "YButton", _tmp, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50 + 10 + 100 + 10) )
@@ -558,7 +558,7 @@ net.Receive( "shop_get_tabs", function(len)
 			function _tmp.addtab:DoClick()
 				local _name, _uid = _tmp.tabs.plus:GetSelected()
 				if _uid != nil then
-					net.Start( "dealer_add_tab" )
+					net.Start( "nws_yrp_dealer_add_tab" )
 						net.WriteString(BUYMENU.dUID)
 						net.WriteString(_uid)
 					net.SendToServer()
@@ -586,7 +586,7 @@ net.Receive( "shop_get_tabs", function(len)
 			surface.DrawTexturedRect(YRP.ctr(_br), YRP.ctr(_br), pw-YRP.ctr(2 * _br), ph-YRP.ctr(2 * _br) )
 		end
 		function BUYMENU.settings:DoClick()
-			net.Receive( "dealer_settings", function(le)
+			net.Receive( "nws_yrp_dealer_settings", function(le)
 				local _set = YRPCreateD( "DFrame", nil, YRP.ctr(700), YRP.ctr(60 + 110 + 110 + 110), 0, 0)
 				_set:SetTitle( "" )
 				_set:Center()
@@ -602,7 +602,7 @@ net.Receive( "shop_get_tabs", function(len)
 				_set.name:SetText(_dealer.name)
 				function _set.name.plus:OnChange()
 					_dealer.name = self:GetText()
-					net.Start( "dealer_edit_name" )
+					net.Start( "nws_yrp_dealer_edit_name" )
 						net.WriteString(_dealer.uniqueID)
 						net.WriteString(_dealer.name)
 					net.SendToServer()
@@ -631,7 +631,7 @@ net.Receive( "shop_get_tabs", function(len)
 						_dealer.WorldModel = LocalPlayer().WorldModel
 
 						if IsNotNilAndNotFalse(_dealer.WorldModel) then
-							net.Start( "dealer_edit_worldmodel" )
+							net.Start( "nws_yrp_dealer_edit_worldmodel" )
 								net.WriteString(_dealer.uniqueID)
 								net.WriteString(_dealer.WorldModel)
 							net.SendToServer()
@@ -652,14 +652,14 @@ net.Receive( "shop_get_tabs", function(len)
 					_set.storagepoint.plus:AddChoice(storage.name, storage.uniqueID, _sp)
 				end
 				function _set.storagepoint.plus:OnSelect(index, value, data)
-					net.Start( "dealer_edit_storagepoints" )
+					net.Start( "nws_yrp_dealer_edit_storagepoints" )
 						net.WriteString(_dealer.uniqueID)
 						net.WriteString( data)
 					net.SendToServer()
 				end
 			end)
 
-			net.Start( "dealer_settings" )
+			net.Start( "nws_yrp_dealer_settings" )
 			net.SendToServer()
 		end
 	end
@@ -693,7 +693,7 @@ function CreateBuyMenuContent(parent, uid)
 			BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide() - YRP.ctr(220), YRP.ctr(100) )
 		end
 
-		net.Start( "shop_get_tabs" )
+		net.Start( "nws_yrp_shop_get_tabs" )
 			net.WriteString(uid)
 		net.SendToServer()
 	end

@@ -95,7 +95,7 @@ local function YRPCreateSlot(x, y, art, id)
 	function slot.btn:DoClick()
 		local cname = YRPGetSlotSWEP( "slot_" .. art, id)
 		if cname and cname != "LID_empty" then
-			net.Start( "yrp_slot_swep_rem" )
+			net.Start( "nws_yrp_slot_swep_rem" )
 				net.WriteString( art)
 				net.WriteString( cname)
 			net.SendToServer()
@@ -161,7 +161,7 @@ local function YRPCreateSWEP(x, y, art, cname)
 	end
 
 	function slot.btn:DoClick()
-		net.Start( "yrp_slot_swep_add" )
+		net.Start( "nws_yrp_slot_swep_add" )
 			net.WriteString( art)
 			net.WriteString( cname)
 		net.SendToServer()
@@ -172,7 +172,7 @@ local function YRPCreateSWEP(x, y, art, cname)
 	return slot
 end
 
-net.Receive( "yrp_open_weaponchest", function(len)
+net.Receive( "nws_yrp_open_weaponchest", function(len)
 	if win == nil then
 		win = YRPCreateD( "YFrame", nil, 30 + 300 + 50 + 12 + 300 + 12 + 30, ScrH(), 0, 0)
 		win:SetTitle( "LID_weaponchest" )
@@ -256,7 +256,7 @@ net.Receive( "yrp_open_weaponchest", function(len)
 			draw.RoundedBox(3, 0, 0, pw, ph, Color( 0, 0, 0, 20) )
 		end
 
-		net.Receive( "yrp_get_sweps_role_art", function(len)
+		net.Receive( "nws_yrp_get_sweps_role_art", function(len)
 			local tab = net.ReadTable()
 			
 			if PanelAlive( win ) then
@@ -295,7 +295,7 @@ net.Receive( "yrp_open_weaponchest", function(len)
 		function win:UpdateArtList( art)
 			win.art = art
 			win:ClearList()
-			net.Start( "yrp_get_sweps_role_art" )
+			net.Start( "nws_yrp_get_sweps_role_art" )
 				net.WriteString(win.art)
 			net.SendToServer()
 		end

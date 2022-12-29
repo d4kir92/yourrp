@@ -32,7 +32,7 @@ local function YRPGetClientInfo()
 	return info
 end
 
-net.Receive( "receivedstartdata", function( len )
+net.Receive( "nws_yrp_receivedstartdata", function( len )
 	MsgC( Color( 0, 255, 0 ), "[LOADING] SERVER -> CLIENT: Server Received Start Data", "\n" )
 	yrpreceivedstartdata = true
 end)
@@ -40,7 +40,7 @@ end)
 local function YRPSendAskData( from )
 	local info = YRPGetClientInfo()
 
-	net.Start( "sendstartdata" )
+	net.Start( "nws_yrp_sendstartdata" )
 		net.WriteUInt( info.os, 2 )
 		net.WriteString( info.branch )
 		net.WriteString( info.country )
@@ -74,11 +74,11 @@ function GM:InitPostEntity()
 	YRPStartSendingStartData( "GM InitPostEntity" )
 end
 
-net.Receive( "sendserverdata", function( len )
+net.Receive( "nws_yrp_sendserverdata", function( len )
 	if !yrpreceivedserverdata then
 		yrpreceivedserverdata = true
 
-		net.Start( "receivedserverdata" )
+		net.Start( "nws_yrp_receivedserverdata" )
 		net.SendToServer()
 	end
 end )

@@ -102,11 +102,11 @@ function AddYRPAddon(parent, tab)
 	return _add_on
 end
 
-net.Receive( "Connect_Settings_YourRP_Addons", function(len)
+net.Receive( "nws_yrp_connect_Settings_YourRP_Addons", function(len)
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) then
 		function PARENT:OnRemove()
-			net.Start( "Disconnect_Settings_YourRP_Addons" )
+			net.Start( "nws_yrp_disconnect_Settings_YourRP_Addons" )
 			net.SendToServer()
 		end
 
@@ -146,6 +146,6 @@ net.Receive( "Connect_Settings_YourRP_Addons", function(len)
 end)
 
 function OpenSettingsYourRPAddons()
-	net.Start( "Connect_Settings_YourRP_Addons" )
+	net.Start( "nws_yrp_connect_Settings_YourRP_Addons" )
 	net.SendToServer()
 end

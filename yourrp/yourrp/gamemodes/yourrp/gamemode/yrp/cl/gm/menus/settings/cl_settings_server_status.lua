@@ -23,11 +23,11 @@ function AddStatusLine(parent, cat, entry, str_id, color)
 	return sl
 end
 
-net.Receive( "Connect_Settings_Status", function(len)
+net.Receive( "nws_yrp_connect_Settings_Status", function(len)
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) then
 		function PARENT:OnRemove()
-			net.Start( "Disconnect_Settings_Status" )
+			net.Start( "nws_yrp_disconnect_Settings_Status" )
 			net.SendToServer()
 		end
 
@@ -104,6 +104,6 @@ net.Receive( "Connect_Settings_Status", function(len)
 end)
 
 function OpenSettingsStatus()
-	net.Start( "Connect_Settings_Status" )
+	net.Start( "nws_yrp_connect_Settings_Status" )
 	net.SendToServer()
 end

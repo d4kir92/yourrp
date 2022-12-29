@@ -31,17 +31,17 @@ function YRPSetTSLastOnline( steamId )
 	end
 end
 
-util.AddNetworkString( "setting_players" )
+util.AddNetworkString( "nws_yrp_setting_players" )
 util.AddNetworkString( "YRPOpenCharacterMenu" )
-util.AddNetworkString( "setPlayerValues" )
-util.AddNetworkString( "setRoleValues" )
-util.AddNetworkString( "getPlyList" )
-util.AddNetworkString( "getCharakterList" )
-util.AddNetworkString( "getrpdescription" )
+util.AddNetworkString( "nws_yrp_setPlayerValues" )
+util.AddNetworkString( "nws_yrp_setRoleValues" )
+util.AddNetworkString( "nws_yrp_getPlyList" )
+util.AddNetworkString( "nws_yrp_getCharakterList" )
+util.AddNetworkString( "nws_yrp_getrpdescription" )
 
-net.Receive( "setting_players", function(len, ply)
+net.Receive( "nws_yrp_setting_players", function(len, ply)
 	if ply:CanAccess( "bool_players" ) then
-		net.Start( "setting_players" )
+		net.Start( "nws_yrp_setting_players" )
 		net.Send(ply)
 	end
 end)
@@ -711,12 +711,12 @@ function YRPCheckClient(ply, steamid)
 	YRPSaveClients( "YRPCheckClient" )
 end
 
-net.Receive( "getCharakterList", function(len, ply)
+net.Receive( "nws_yrp_getCharakterList", function(len, ply)
 	local _character_table = ply:YRPGetCharacterTable()
 	if IsNotNilAndNotFalse(_character_table) then
 		_character_table.rpname = _character_table.rpname
 		_character_table.rpdescription = _character_table.rpdescription
-		net.Start( "getCharakterList" )
+		net.Start( "nws_yrp_getCharakterList" )
 			net.WriteTable(_character_table)
 		net.Send(ply)
 	else
@@ -724,12 +724,12 @@ net.Receive( "getCharakterList", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "give_getGroTab" )
+util.AddNetworkString( "nws_yrp_give_getGroTab" )
 
-net.Receive( "give_getGroTab", function(len, ply)
+net.Receive( "nws_yrp_give_getGroTab", function(len, ply)
 	local _tmpGroupList = YRP_SQL_SELECT( "yrp_ply_groups", "string_name, uniqueID", nil)
 	if _tmpGroupList != nil then
-		net.Start( "give_getGroTab" )
+		net.Start( "nws_yrp_give_getGroTab" )
 			net.WriteTable(_tmpGroupList)
 		net.Send(ply)
 	else
@@ -737,13 +737,13 @@ net.Receive( "give_getGroTab", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "give_getRolTab" )
+util.AddNetworkString( "nws_yrp_give_getRolTab" )
 
-net.Receive( "give_getRolTab", function(len, ply)
+net.Receive( "nws_yrp_give_getRolTab", function(len, ply)
 	local _groupID = net.ReadString()
 	local _tmpRolTab = YRP_SQL_SELECT( "yrp_ply_roles", "string_name, uniqueID", "int_groupID = " .. tonumber(_groupID) )
 	if _tmpRolTab != nil then
-		net.Start( "give_getRolTab" )
+		net.Start( "nws_yrp_give_getRolTab" )
 			net.WriteTable(_tmpRolTab)
 		net.Send(ply)
 	else
@@ -751,13 +751,13 @@ net.Receive( "give_getRolTab", function(len, ply)
 	end
 end)
 
-net.Receive( "getPlyList", function(len, ply)
+net.Receive( "nws_yrp_getPlyList", function(len, ply)
 	local _tmpChaList = YRP_SQL_SELECT( "yrp_characters", "*", nil)
 	local _tmpRoleList = YRP_SQL_SELECT( "yrp_ply_roles", "*", nil)
 	local _tmpGroupList = YRP_SQL_SELECT( "yrp_ply_groups", "*", nil)
 	if _tmpChaList != nil and _tmpRoleList != nil and _tmpGroupList != nil then
 
-		net.Start( "getPlyList" )
+		net.Start( "nws_yrp_getPlyList" )
 			net.WriteTable(_tmpChaList)
 			net.WriteTable(_tmpGroupList)
 			net.WriteTable(_tmpRoleList)
@@ -767,9 +767,9 @@ net.Receive( "getPlyList", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "giveRole" )
+util.AddNetworkString( "nws_yrp_giveRole" )
 
-net.Receive( "giveRole", function(len, ply)
+net.Receive( "nws_yrp_giveRole", function(len, ply)
 	local _tmpSteamID = net.ReadString()
 	local uniqueIDRole = net.ReadInt(16)
 
@@ -789,9 +789,9 @@ net.Receive( "giveRole", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_whitelist_infoplayer" )
+util.AddNetworkString( "nws_yrp_whitelist_infoplayer" )
 function YRPWhitelistInfoPlayer(ply, msg)
-	net.Start( "yrp_whitelist_infoplayer" )
+	net.Start( "nws_yrp_whitelist_infoplayer" )
 		net.WriteString(msg)
 	net.Send(ply)
 end
@@ -851,13 +851,13 @@ function YRPIsWhitelisted( ply, id )
 	return false
 end
 
-util.AddNetworkString( "voteNo" )
-net.Receive( "voteNo", function(len, ply)
+util.AddNetworkString( "nws_yrp_voteNo" )
+net.Receive( "nws_yrp_voteNo", function(len, ply)
 	ply:SetYRPString( "voteStatus", "no" )
 end)
 
-util.AddNetworkString( "voteYes" )
-net.Receive( "voteYes", function(len, ply)
+util.AddNetworkString( "nws_yrp_voteYes" )
+net.Receive( "nws_yrp_voteYes", function(len, ply)
 	ply:SetYRPString( "voteStatus", "yes" )
 end)
 
@@ -1045,8 +1045,8 @@ function canVoteRole(ply, roleID)
 	return false
 end
 
-util.AddNetworkString( "wantRole" )
-net.Receive( "wantRole", function(len, ply)
+util.AddNetworkString( "nws_yrp_wantRole" )
+net.Receive( "nws_yrp_wantRole", function(len, ply)
 	local uniqueIDRole = net.ReadInt(16)
 	local pmid = net.ReadInt(16)
 	local bgs = net.ReadTable()

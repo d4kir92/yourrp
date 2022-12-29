@@ -53,7 +53,7 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	util.AddNetworkString( "yrp_jailpoints_options" )
+	util.AddNetworkString( "nws_yrp_jailpoints_options" )
 end
 
 local size = 8
@@ -83,7 +83,7 @@ function SWEP:Think()
 					local stab = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' AND uniqueID = '" .. v.uniqueID .. "'" )
 					if IsNotNilAndNotFalse(stab) then
 						stab = stab[1]
-						net.Start( "yrp_jailpoints_options" )
+						net.Start( "nws_yrp_jailpoints_options" )
 							net.WriteTable(stab)
 						net.Send(ply)
 					end
@@ -96,7 +96,7 @@ function SWEP:Think()
 end
 
 if CLIENT then
-	net.Receive( "yrp_jailpoints_options", function()
+	net.Receive( "nws_yrp_jailpoints_options", function()
 		if YRPIsNoMenuOpen() then
 			local stab = net.ReadTable()
 
@@ -113,7 +113,7 @@ if CLIENT then
 			w.name:SetText(stab.name)
 			function w.name:OnChange()
 				local name = self:GetText()
-				net.Start( "update_map_name" )
+				net.Start( "nws_yrp_update_map_name" )
 					net.WriteString(stab.uniqueID)
 					net.WriteString(name)
 				net.SendToServer()
@@ -128,7 +128,7 @@ function SWEP:PrimaryAttack()
 		self.pdelay = CurTime() + 0.4
 		if CLIENT then
 			local lply = LocalPlayer()
-			net.Start( "dbInsertIntoMap" )
+			net.Start( "nws_yrp_dbInsertIntoMap" )
 				net.WriteString( "yrp_" .. GetMapNameDB() )
 				net.WriteString( "position, angle, type" )
 				local tmpPos = string.Explode( " ", tostring(lply:GetPos() ))

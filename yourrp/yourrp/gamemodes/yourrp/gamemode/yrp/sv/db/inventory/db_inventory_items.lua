@@ -126,24 +126,24 @@ function GetItem(slotID)
 	return false
 end
 
-util.AddNetworkString( "yrp_item_unstore" )
+util.AddNetworkString( "nws_yrp_item_unstore" )
 function UnstoreItem(slotID, ply)
 	slotID = tonumber(slotID)
 
 	if ply != nil then
-		net.Start( "yrp_item_unstore" )
+		net.Start( "nws_yrp_item_unstore" )
 			net.WriteString(slotID)
 		net.Send(ply)
 	else
 		for i, p in pairs(GetPlayersFromSlot(slotID) ) do
-			net.Start( "yrp_item_unstore" )
+			net.Start( "nws_yrp_item_unstore" )
 				net.WriteString(slotID)
 			net.Send(p)
 		end
 	end
 end	
 
-util.AddNetworkString( "yrp_item_store" )
+util.AddNetworkString( "nws_yrp_item_store" )
 function StoreItem(slotID, itemTable, ply)
 	slotID = tonumber(slotID)
 
@@ -162,13 +162,13 @@ function StoreItem(slotID, itemTable, ply)
 
 	if istable(itemTable) then
 		if ply != nil then
-			net.Start( "yrp_item_store" )
+			net.Start( "nws_yrp_item_store" )
 				net.WriteString(slotID)
 				net.WriteTable(itemTable)
 			net.Send(ply)
 		else
 			for i, p in pairs(GetPlayersFromSlot(slotID) ) do
-				net.Start( "yrp_item_store" )
+				net.Start( "nws_yrp_item_store" )
 					net.WriteString(slotID)
 					net.WriteTable(itemTable)
 				net.Send(p)
@@ -295,8 +295,8 @@ end
 
 
 -- Networking
-util.AddNetworkString( "yrp_item_clicked" )
-net.Receive( "yrp_item_clicked", function(len, ply)
+util.AddNetworkString( "nws_yrp_item_clicked" )
+net.Receive( "nws_yrp_item_clicked", function(len, ply)
 	local itemID = net.ReadString()
 
 	itemID = tonumber(itemID)
@@ -318,8 +318,8 @@ net.Receive( "yrp_item_clicked", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_item_move" )
-net.Receive( "yrp_item_move", function(len, ply)
+util.AddNetworkString( "nws_yrp_item_move" )
+net.Receive( "nws_yrp_item_move", function(len, ply)
 	local itemID = net.ReadString()
 	local slotID = net.ReadString()
 
@@ -329,8 +329,8 @@ net.Receive( "yrp_item_move", function(len, ply)
 	MoveItem(itemID, slotID)
 end)
 
-util.AddNetworkString( "yrp_item_drop" )
-net.Receive( "yrp_item_drop", function(len, ply)
+util.AddNetworkString( "nws_yrp_item_drop" )
+net.Receive( "nws_yrp_item_drop", function(len, ply)
 	local itemID = net.ReadString()
 
 	itemID = tonumber(itemID)

@@ -19,8 +19,8 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "timestamp", "TEXT DEFAULT ''" )
 local showafter =	60*60*12
 local deleteafter =	60*60*24
 
-util.AddNetworkString( "get_ticket" )
-net.Receive( "get_ticket", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_ticket" )
+net.Receive( "nws_yrp_get_ticket", function(len, ply)
 	if ply:CanAccess( "bool_feedback" ) then
 		local _result = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
@@ -41,42 +41,42 @@ net.Receive( "get_ticket", function(len, ply)
 			_result = {}
 		end
 
-		net.Start( "get_ticket" )
+		net.Start( "nws_yrp_get_ticket" )
 			net.WriteTable(_result)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "add_ticket" )
-net.Receive( "add_ticket", function(len, ply)
+util.AddNetworkString( "nws_yrp_add_ticket" )
+net.Receive( "nws_yrp_add_ticket", function(len, ply)
 	local _fb = net.ReadTable()
 	local _insert = YRP_SQL_INSERT_INTO(
 		DATABASE_NAME,
 		"title, feedback, contact, steamid, steamname, rpname, timestamp",
 		"" .. YRP_SQL_STR_IN( _fb.title ) .. ", " .. YRP_SQL_STR_IN( _fb.feedback ) .. ", " .. YRP_SQL_STR_IN( _fb.contact ) .. ", '" .. _fb.steamid .. "', " .. YRP_SQL_STR_IN( _fb.steamname ) .. ", " .. YRP_SQL_STR_IN( _fb.rpname ) .. ", '" .. os.time() .. "'"
 	)
-	net.Start( "yrp_noti" )
+	net.Start( "nws_yrp_noti" )
 		net.WriteString( "newfeedback" )
 		net.WriteString( "" )
 	net.Broadcast()
 end)
 
-util.AddNetworkString( "fb_movetoopen" )
-net.Receive( "fb_movetowip", function(len, ply)
+util.AddNetworkString( "nws_yrp_fb_movetoopen" )
+net.Receive( "nws_yrp_fb_movetowip", function(len, ply)
 	local uid = net.ReadString()
 
 	YRP_SQL_UPDATE(DATABASE_NAME, {["status"] = "open"}, "uniqueID = '" .. uid .. "'" )
 end)
 
-util.AddNetworkString( "fb_movetowip" )
-net.Receive( "fb_movetowip", function(len, ply)
+util.AddNetworkString( "nws_yrp_fb_movetowip" )
+net.Receive( "nws_yrp_fb_movetowip", function(len, ply)
 	local uid = net.ReadString()
 
 	YRP_SQL_UPDATE(DATABASE_NAME, {["status"] = "wip"}, "uniqueID = '" .. uid .. "'" )
 end)
 
-util.AddNetworkString( "fb_movetoclosed" )
-net.Receive( "fb_movetoclosed", function(len, ply)
+util.AddNetworkString( "nws_yrp_fb_movetoclosed" )
+net.Receive( "nws_yrp_fb_movetoclosed", function(len, ply)
 	local uid = net.ReadString()
 
 	YRP_SQL_UPDATE(DATABASE_NAME, {["status"] = "closed"}, "uniqueID = '" .. uid .. "'" )

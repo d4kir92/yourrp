@@ -15,8 +15,8 @@ function GetHudProfiles()
 	return YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'name'" )
 end
 
-util.AddNetworkString( "change_to_hud_profile" )
-net.Receive( "change_to_hud_profile", function()
+util.AddNetworkString( "nws_yrp_change_to_hud_profile" )
+net.Receive( "nws_yrp_change_to_hud_profile", function()
 	local profile_name = net.ReadString()
 
 	YRP_SQL_UPDATE( "yrp_design", {["string_hud_profile"] = profile_name}, "uniqueID = 1" )

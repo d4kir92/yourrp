@@ -51,8 +51,8 @@ function AddToHandler_Realistic(ply)
 	end
 end
 
-util.AddNetworkString( "Connect_Settings_Realistic" )
-net.Receive( "Connect_Settings_Realistic", function(len, ply)
+util.AddNetworkString( "nws_yrp_connect_Settings_Realistic" )
+net.Receive( "nws_yrp_connect_Settings_Realistic", function(len, ply)
 	if ply:CanAccess( "bool_realistic" ) then
 		AddToHandler_Realistic(ply)
 
@@ -62,14 +62,14 @@ net.Receive( "Connect_Settings_Realistic", function(len, ply)
 		else
 			_yrp_realistic = {}
 		end
-		net.Start( "Connect_Settings_Realistic" )
+		net.Start( "nws_yrp_connect_Settings_Realistic" )
 			net.WriteTable(_yrp_realistic)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "Disconnect_Settings_Realistic" )
-net.Receive( "Disconnect_Settings_Realistic", function(len, ply)
+util.AddNetworkString( "nws_yrp_disconnect_Settings_Realistic" )
+net.Receive( "nws_yrp_disconnect_Settings_Realistic", function(len, ply)
 	RemFromHandler_Realistic(ply)
 end)
 
@@ -120,16 +120,16 @@ end
 
 for str, val in pairs(yrp_realistic) do
 	if string.find(str, "bool_" ) then
-		util.AddNetworkString( "update_" .. str)
-		net.Receive( "update_" .. str, function(len, ply)
+		util.AddNetworkString( "nws_yrp_update_" .. str)
+		net.Receive( "nws_yrp_update_" .. str, function(len, ply)
 			local b = btn(net.ReadBool() )
-			YRPUpdateBool(HANDLER_REALISTIC, DATABASE_NAME, ply, "update_" .. str, str, yrp_realistic, b)
+			YRPUpdateBool(HANDLER_REALISTIC, DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_realistic, b)
 		end)
 	elseif string.find(str, "float_" ) then
-		util.AddNetworkString( "update_" .. str)
-		net.Receive( "update_" .. str, function(len, ply)
+		util.AddNetworkString( "nws_yrp_update_" .. str)
+		net.Receive( "nws_yrp_update_" .. str, function(len, ply)
 			local f = net.ReadFloat()
-			YRPUpdateFloat(HANDLER_REALISTIC, DATABASE_NAME, ply, "update_" .. str, str, yrp_realistic, f)
+			YRPUpdateFloat(HANDLER_REALISTIC, DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_realistic, f)
 		end)
 	end
 end

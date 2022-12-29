@@ -56,7 +56,7 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	util.AddNetworkString( "yrp_zone_options" )
+	util.AddNetworkString( "nws_yrp_zone_options" )
 end
 
 local size = 8
@@ -77,7 +77,7 @@ function SWEP:Think()
 				local stab = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. zoneuid .. "'" )
 				if IsNotNilAndNotFalse(stab) then
 					stab = stab[1]
-					net.Start( "yrp_zone_options" )
+					net.Start( "nws_yrp_zone_options" )
 						net.WriteTable(stab)
 					net.Send(ply)
 				end
@@ -89,7 +89,7 @@ function SWEP:Think()
 end
 
 if CLIENT then
-	net.Receive( "yrp_zone_options", function()
+	net.Receive( "nws_yrp_zone_options", function()
 		if YRPIsNoMenuOpen() then
 			local stab = net.ReadTable()
 
@@ -106,7 +106,7 @@ if CLIENT then
 			w.name:SetText(stab.name)
 			function w.name:OnChange()
 				local name = self:GetText()
-				net.Start( "update_map_name" )
+				net.Start( "nws_yrp_update_map_name" )
 					net.WriteString(stab.uniqueID)
 					net.WriteString(name)
 				net.SendToServer()
@@ -122,7 +122,7 @@ if CLIENT then
 			w.name:SetColor( StringToColor( stab.color ) )
 			function w.name:ValueChanged( col)
 				local color = YRPColorToString( col)
-				net.Start( "update_map_color" )
+				net.Start( "nws_yrp_update_map_color" )
 					net.WriteString(stab.uniqueID)
 					net.WriteString( color)
 				net.SendToServer()
@@ -144,7 +144,7 @@ function SWEP:PrimaryAttack()
 				self.endpos = string.Explode( " ", tostring(lply:GetPos() ))
 				self.endang = string.Explode( " ", tostring(lply:GetAngles() ))
 
-				net.Start( "dbInsertIntoMap" )
+				net.Start( "nws_yrp_dbInsertIntoMap" )
 					net.WriteString( "yrp_" .. GetMapNameDB() )
 					net.WriteString( "position, angle, type" )
 					

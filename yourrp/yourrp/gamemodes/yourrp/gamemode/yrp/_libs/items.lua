@@ -340,14 +340,14 @@ if CLIENT then
 								_slot2.posx = receiver.posx
 								_slot2.type = receiver.type or "world"
 
-								net.Start( "moveitem" )
+								net.Start( "nws_yrp_moveitem" )
 									net.WriteTable(_slot1)
 									net.WriteTable(_slot2)
 									net.WriteTable(_item)
 								net.SendToServer()
 
 								if tostring(_item.intern_storageID) != "" then
-									net.Start( "update_backpack" )
+									net.Start( "nws_yrp_update_backpack" )
 									net.SendToServer()
 								end
 							end
@@ -450,12 +450,12 @@ if CLIENT then
 		end
 	end
 
-	net.Receive( "additemtostorage", function(len)
+	net.Receive( "nws_yrp_additemtostorage", function(len)
 		local _item = net.ReadTable()
 		AddItemToStorage(_item)
 	end)
 
-	net.Receive( "moveitem_slot1", function(len)
+	net.Receive( "nws_yrp_moveitem_slot1", function(len)
 		if IsInventoryOpen() then
 			local _s1 = net.ReadTable()
 
@@ -470,7 +470,7 @@ if CLIENT then
 		end
 	end)
 
-	net.Receive( "moveitem_slot2", function(len)
+	net.Receive( "nws_yrp_moveitem_slot2", function(len)
 		if IsInventoryOpen() then
 			local _s2 = net.ReadTable()
 			local _i = net.ReadTable()

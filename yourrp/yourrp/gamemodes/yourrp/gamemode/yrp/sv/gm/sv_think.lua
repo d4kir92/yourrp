@@ -9,8 +9,8 @@ hook.Add( "PlayerStartTaunt", "yrp_taunt_start", function(ply, act, length)
 	end)
 end)
 
-util.AddNetworkString( "client_lang" )
-net.Receive( "client_lang", function(len, ply)
+util.AddNetworkString( "nws_yrp_client_lang" )
+net.Receive( "nws_yrp_client_lang", function(len, ply)
 	local _lang = net.ReadString()
 	--YRP.msg( "db", ply:YRPName() .. " using language: " .. string.upper(_lang) )
 
@@ -276,7 +276,7 @@ function YRPIsTeleporterAlive(uid)
 	return false
 end
 
-util.AddNetworkString( "yrp_autoreload" )
+util.AddNetworkString( "nws_yrp_autoreload" )
 
 local _time = 0
 local TICK = 0.1
@@ -289,8 +289,8 @@ timer.Create( "ServerThink", TICK, 0, function()
 
 			ply:AddPlayTime()
 
-			if ply:AFK() and !ply:HasAccess( "ServerThink1" ) then
-				if CurTime() - tonumber(ply:GetYRPFloat( "afkts", 0) ) >= tonumber(GetGlobalYRPInt( "int_afkkicktime", 0) ) then
+			if ply:AFK() and !ply:HasAccess() then -- when not admin, kick
+				if CurTime() - tonumber( ply:GetYRPFloat( "afkts", 0) ) >= tonumber( GetGlobalYRPInt( "int_afkkicktime", 0) ) then
 					ply:SetYRPBool( "isafk", false)
 					ply:Kick( "AFK" )
 				end
@@ -361,9 +361,9 @@ timer.Create( "ServerThink", TICK, 0, function()
 		end
 	end
 
-	if _time % 30.0 == 1 or GetGlobalYRPBool( "yrp_update_teleporters", false) then
-		if GetGlobalYRPBool( "yrp_update_teleporters", true) != false then
-			SetGlobalYRPBool( "yrp_update_teleporters", false)
+	if _time % 30.0 == 1 or GetGlobalYRPBool( "nws_yrp_update_teleporters", false) then
+		if GetGlobalYRPBool( "nws_yrp_update_teleporters", true) != false then
+			SetGlobalYRPBool( "nws_yrp_update_teleporters", false)
 		end
 
 		local _dealers = YRP_SQL_SELECT( "yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'" )
@@ -460,7 +460,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 			local _str = "Auto Reload in " .. _changelevel - _time .. " sec"
 			YRP.msg( "gm", _str)
 
-			net.Start( "yrp_autoreload" )
+			net.Start( "nws_yrp_autoreload" )
 				net.WriteString( string.format( "%0.1f", _changelevel - _time ) )
 			net.Broadcast()
 		end

@@ -126,22 +126,22 @@ function IFLoadoutAll()
 end
 IFLoadoutAll()
 
-util.AddNetworkString( "get_interface_settings" )
-net.Receive( "get_interface_settings", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_interface_settings" )
+net.Receive( "nws_yrp_get_interface_settings", function(len, ply)
 	local element = net.ReadString()
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '" .. "%_IF_" .. element .. "_%'" )
 
 	if IsNotNilAndNotFalse(tab) then
 		table.SortByMember(tab, "name", true)
-		net.Start( "get_interface_settings" )
+		net.Start( "nws_yrp_get_interface_settings" )
 			net.WriteTable(tab)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "update_interface_color" )
-net.Receive( "update_interface_color", function(len, ply)
+util.AddNetworkString( "nws_yrp_update_interface_color" )
+net.Receive( "nws_yrp_update_interface_color", function(len, ply)
 	local name = net.ReadString()
 	local color = net.ReadString()
 	YRP.msg( "db", "value = '" .. color .. "'" .. "name = '" .. name .. "'" )
@@ -173,8 +173,8 @@ function ResetDesign()
 	IFLoadoutAll()
 end
 
-util.AddNetworkString( "reset_interface_design" )
-net.Receive( "reset_interface_design", function(len, ply)
+util.AddNetworkString( "nws_yrp_reset_interface_design" )
+net.Receive( "nws_yrp_reset_interface_design", function(len, ply)
 	ResetDesign()
 end)
 

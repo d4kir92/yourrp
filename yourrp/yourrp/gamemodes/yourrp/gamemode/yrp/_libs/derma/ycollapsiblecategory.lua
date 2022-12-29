@@ -5,7 +5,7 @@ local PANEL = {}
 local w = 10
 local h = 10
 
-net.Receive( "yrp_want_role", function(len, ply)
+net.Receive( "nws_yrp_want_role", function(len, ply)
 	local result = net.ReadString()
 
 	if result == "worked" then
@@ -127,7 +127,7 @@ function PANEL:Init()
 		draw.SimpleText( base._htext, "Y_" .. math.Clamp(math.Round(ph - 2 * YRP.ctr(20), 0), 4, 100) .. "_500", x, ph / 2, TextColor(YRPInterfaceValue( "YFrame", "PC" ) ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
-	net.Receive( "get_next_ranks", function(len)
+	net.Receive( "nws_yrp_get_next_ranks", function(len)
 		local rols = net.ReadTable()
 
 		local nex = NEXTS[tonumber(rols[1].int_prerole)]
@@ -310,7 +310,7 @@ function PANEL:Init()
 			if (!rol.bool_locked or LocalPlayer():HasAccess( "CollapseCategory2" ) ) and rol.int_requireslevel <= LocalPlayer():Level() then
 				LocalPlayer().charcreate_ruid = rol.uniqueID
 				timer.Simple(0.2, function()
-					net.Start( "yrp_want_role" )
+					net.Start( "nws_yrp_want_role" )
 						net.WriteString(rol.uniqueID)
 					net.SendToServer()
 				end)
@@ -336,7 +336,7 @@ function PANEL:Init()
 		NEXTS[rol.uniqueID] = nex
 		function nex:DoClick()
 			
-			net.Start( "get_next_ranks" )
+			net.Start( "nws_yrp_get_next_ranks" )
 				net.WriteString(rol.uniqueID)
 			net.SendToServer()
 			
@@ -367,7 +367,7 @@ function PANEL:Init()
 			end
 		end
 
-		net.Receive( "yrp_hasnext_ranks", function(len)
+		net.Receive( "nws_yrp_hasnext_ranks", function(len)
 			local ruid = net.ReadString()
 			ruid = tonumber(ruid)
 
@@ -381,7 +381,7 @@ function PANEL:Init()
 				end
 			end
 		end)
-		net.Start( "yrp_hasnext_ranks" )
+		net.Start( "nws_yrp_hasnext_ranks" )
 			net.WriteString(rol.uniqueID)
 		net.SendToServer()
 			
@@ -524,7 +524,7 @@ function PANEL:Init()
 		this.grptab = {}
 
 		if base._open then
-			net.Receive( "yrp_roleselection_getcontent_role", function( len )
+			net.Receive( "nws_yrp_roleselection_getcontent_role", function( len )
 				local rol = net.ReadTable()
 				if rol and this.roltab then
 					table.insert( this.roltab, rol )
@@ -532,7 +532,7 @@ function PANEL:Init()
 				end
 			end)
 			
-			net.Receive( "yrp_roleselection_getcontent_group", function( len )
+			net.Receive( "nws_yrp_roleselection_getcontent_group", function( len )
 				local grp = net.ReadTable()
 				if grp and this.grptab then
 					table.insert( this.grptab, grp )
@@ -541,7 +541,7 @@ function PANEL:Init()
 			end)
 
 			if base._guid then
-				net.Start( "yrp_roleselection_getcontent" )
+				net.Start( "nws_yrp_roleselection_getcontent" )
 					net.WriteString( base._guid )
 				net.SendToServer()
 			else

@@ -5,7 +5,7 @@ local _li = {}
 local _licenses = nil
 
 local function GetResult()
-	net.Start( "get_licenses" )
+	net.Start( "nws_yrp_get_licenses" )
 	net.SendToServer()	
 end
 
@@ -25,7 +25,7 @@ local function UpdateList( value )
 	end
 end
 
-net.Receive( "get_licenses", function()
+net.Receive( "nws_yrp_get_licenses", function()
 	_licenses = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
@@ -55,7 +55,7 @@ net.Receive( "get_licenses", function()
 			_li.name:SetText(tbl.name)
 			function _li.name.textentry:OnChange()
 				self.tbl.name = self:GetValue()
-				net.Start( "edit_license_name" )
+				net.Start( "nws_yrp_edit_license_name" )
 					net.WriteString(self.tbl.uniqueID)
 					net.WriteString(self.tbl.name)
 				net.SendToServer()
@@ -68,7 +68,7 @@ net.Receive( "get_licenses", function()
 			_li.desc:SetText(tbl.description)
 			function _li.desc.textentry:OnChange()
 				self.tbl.description = self:GetValue()
-				net.Start( "edit_license_description" )
+				net.Start( "nws_yrp_edit_license_description" )
 					net.WriteString(self.tbl.uniqueID)
 					net.WriteString(self.tbl.description)
 				net.SendToServer()
@@ -81,7 +81,7 @@ net.Receive( "get_licenses", function()
 			_li.price:SetValue(tbl.price)
 			function _li.price.numberwang:OnChange()
 				self.tbl.price = self:GetValue()
-				net.Start( "edit_license_price" )
+				net.Start( "nws_yrp_edit_license_price" )
 					net.WriteString(self.tbl.uniqueID)
 					net.WriteString(self.tbl.price)
 				net.SendToServer()
@@ -89,11 +89,11 @@ net.Receive( "get_licenses", function()
 		end
 		_li._lic:SetEditFunc(_li.eaf)
 		function _li._lic:AddFunction()
-			net.Start( "license_add" )
+			net.Start( "nws_yrp_license_add" )
 			net.SendToServer()
 		end
 		function _li._lic:RemoveFunction()
-			net.Start( "license_rem" )
+			net.Start( "nws_yrp_license_rem" )
 				net.WriteString(self.uid)
 			net.SendToServer()
 		end 

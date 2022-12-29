@@ -67,7 +67,7 @@ function SWEP:PrimaryAttack()
 			end
 		end
 
-		net.Start( "openLawBoard" )
+		net.Start( "nws_yrp_openLawBoard" )
 			net.WriteTable(tmpTable)
 		net.Send(ply)
 	end

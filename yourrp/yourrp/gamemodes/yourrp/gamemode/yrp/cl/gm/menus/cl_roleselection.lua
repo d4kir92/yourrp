@@ -56,7 +56,7 @@ function CreateRolePreviewContent()
 
 
 
-	net.Receive( "yrp_roleselection_getrole", function(len)
+	net.Receive( "nws_yrp_roleselection_getrole", function(len)
 		local rol = net.ReadTable()
 	
 		LocalPlayer().rolepreview = true
@@ -302,7 +302,7 @@ function CreateRolePreviewContent()
 					for i = 0, 19 do
 						bgs[i] = LocalPlayer()["charcreate_bg" .. i]
 					end
-					net.Start( "wantRole" )
+					net.Start( "nws_yrp_wantRole" )
 						net.WriteInt(LocalPlayer().charcreate_ruid, 16)
 						net.WriteInt(LocalPlayer().charcreate_rpmid, 16)
 						net.WriteTable( bgs )
@@ -334,7 +334,7 @@ function CreateRolePreviewContent()
 	timer.Simple(0.2, function()
 
 		if LocalPlayer().charcreate_ruid != nil then
-			net.Start( "yrp_roleselection_getrole" )
+			net.Start( "nws_yrp_roleselection_getrole" )
 				net.WriteString(LocalPlayer().charcreate_ruid)
 			net.SendToServer()
 		else
@@ -469,7 +469,7 @@ function CreateRoleSelectionContent(PARENT)
 
 
 	-- Groups
-	net.Receive( "yrp_roleselection_getgroups", function(len)
+	net.Receive( "nws_yrp_roleselection_getgroups", function(len)
 		if PanelAlive(lis) then
 			local gtab = net.ReadTable()
 
@@ -524,7 +524,7 @@ function CreateRoleSelectionContent(PARENT)
 			end
 		end
 	end)
-	net.Start( "yrp_roleselection_getgroups" )
+	net.Start( "nws_yrp_roleselection_getgroups" )
 		net.WriteString(LocalPlayer().charcreate_fuid)
 	net.SendToServer()
 end

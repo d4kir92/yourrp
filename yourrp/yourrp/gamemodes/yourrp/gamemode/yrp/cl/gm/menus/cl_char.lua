@@ -176,27 +176,27 @@ function CreateCharContent(parent)
 		if CurTime() > save_delay then
 			save_delay = CurTime() + 4
 			if GetGlobalYRPBool( "bool_characters_changeable_name", false) then
-				net.Start( "change_rpname" )
+				net.Start( "nws_yrp_change_rpname" )
 					net.WriteString( cl_rpName:GetText() )
 				net.SendToServer()
 			end
 
-			net.Start( "change_rpdescription" )
+			net.Start( "nws_yrp_change_rpdescription" )
 				net.WriteString( cl_rpDescription:GetText() )
 			net.SendToServer()
 
 			if GetGlobalYRPBool( "bool_characters_birthday", false) then
-				net.Start( "change_birthday" )
+				net.Start( "nws_yrp_change_birthday" )
 					net.WriteString( cl_birthday:GetText() )
 				net.SendToServer()
 			end
 			if GetGlobalYRPBool( "bool_characters_bodyheight", false) then
-				net.Start( "change_bodyheight" )
+				net.Start( "nws_yrp_change_bodyheight" )
 					net.WriteString( cl_bodyheight:GetText() )
 				net.SendToServer()
 			end
 			if GetGlobalYRPBool( "bool_characters_weight", false) then
-				net.Start( "change_weight" )
+				net.Start( "nws_yrp_change_weight" )
 					net.WriteString( cl_weight:GetText() )
 				net.SendToServer()
 			end

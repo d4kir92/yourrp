@@ -7,7 +7,7 @@ local DATABASE_NAME = "yrp_shops"
 
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'" )
 
-util.AddNetworkString( "get_shops" )
+util.AddNetworkString( "nws_yrp_get_shops" )
 
 function send_shops(ply)
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
@@ -15,29 +15,29 @@ function send_shops(ply)
 	if _nm == nil or _nm == false then
 		_nm = {}
 	end
-	net.Start( "get_shops" )
+	net.Start( "nws_yrp_get_shops" )
 		net.WriteTable(_nm)
 	net.Send(ply)
 end
 
-net.Receive( "get_shops", function(len, ply)
+net.Receive( "nws_yrp_get_shops", function(len, ply)
 	if ply:CanAccess( "bool_shops" ) then
 		send_shops(ply)
 	end
 end)
 
-util.AddNetworkString( "shop_add" )
+util.AddNetworkString( "nws_yrp_shop_add" )
 
-net.Receive( "shop_add", function(len, ply)
+net.Receive( "nws_yrp_shop_add", function(len, ply)
 	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new shop'" )
 	YRP.msg( "db", "shop_add: " .. db_WORKED(_new) )
 
 	send_shops(ply)
 end)
 
-util.AddNetworkString( "shop_rem" )
+util.AddNetworkString( "nws_yrp_shop_rem" )
 
-net.Receive( "shop_rem", function(len, ply)
+net.Receive( "nws_yrp_shop_rem", function(len, ply)
 	local _uid = net.ReadString()
 	local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 	YRP.msg( "db", "shop_rem: " .. tostring(_uid) )
@@ -45,9 +45,9 @@ net.Receive( "shop_rem", function(len, ply)
 	send_shops(ply)
 end)
 
-util.AddNetworkString( "shop_edit_name" )
+util.AddNetworkString( "nws_yrp_shop_edit_name" )
 
-net.Receive( "shop_edit_name", function(len, ply)
+net.Receive( "nws_yrp_shop_edit_name", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_name = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
@@ -74,7 +74,7 @@ function HasShopPermanent(tab)
 	return false
 end
 
-util.AddNetworkString( "shop_get_tabs" )
+util.AddNetworkString( "nws_yrp_shop_get_tabs" )
 function YRPOpenBuyMenu(ply, uid)
 	--YRP.msg( "note", "OpenBuyMenu | ply: " .. tostring(ply:RPName() ) .. " | uid: " .. tostring(uid) )
 	local _dealer = YRP_SQL_SELECT( "yrp_dealers", "*", "uniqueID = '" .. uid .. "'" )
@@ -93,7 +93,7 @@ function YRPOpenBuyMenu(ply, uid)
 			end
 		end
 
-		net.Start( "shop_get_tabs" )
+		net.Start( "nws_yrp_shop_get_tabs" )
 			net.WriteTable(_dealer)
 			net.WriteTable(_nw_tabs)
 		net.Send(ply)
@@ -102,20 +102,20 @@ function YRPOpenBuyMenu(ply, uid)
 	end
 end
 
-net.Receive( "shop_get_tabs", function(len, ply)
+net.Receive( "nws_yrp_shop_get_tabs", function(len, ply)
 	local _uid = net.ReadString()
 	YRPOpenBuyMenu(ply, _uid)
 end)
 
-util.AddNetworkString( "shop_get_all_tabs" )
+util.AddNetworkString( "nws_yrp_shop_get_all_tabs" )
 
-net.Receive( "shop_get_all_tabs", function(len, ply)
+net.Receive( "nws_yrp_shop_get_all_tabs", function(len, ply)
 	local _tabs = YRP_SQL_SELECT(DATABASE_NAME, "name, uniqueID", nil)
 	local _nw = {}
 	if _tabs != nil then
 		_nw = _tabs
 	end
-	net.Start( "shop_get_all_tabs" )
+	net.Start( "nws_yrp_shop_get_all_tabs" )
 		net.WriteTable(_nw)
 	net.Send(ply)
 end)

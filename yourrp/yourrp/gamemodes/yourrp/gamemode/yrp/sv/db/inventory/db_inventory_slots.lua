@@ -81,8 +81,8 @@ end
 
 
 -- Networking
-util.AddNetworkString( "yrp_storage_get_slots" )
-net.Receive( "yrp_storage_get_slots", function(len, ply)
+util.AddNetworkString( "nws_yrp_storage_get_slots" )
+net.Receive( "nws_yrp_storage_get_slots", function(len, ply)
 	local storageID = net.ReadString()
 	storageID = tonumber(storageID)
 
@@ -109,7 +109,7 @@ net.Receive( "yrp_storage_get_slots", function(len, ply)
 			end
 		end
 	
-		net.Start( "yrp_storage_get_slots" )
+		net.Start( "nws_yrp_storage_get_slots" )
 			net.WriteString(storageID)
 			net.WriteTable(slots)
 		net.Send(ply)
@@ -118,15 +118,15 @@ net.Receive( "yrp_storage_get_slots", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_slot_connect" )
-net.Receive( "yrp_slot_connect", function(len, ply)
+util.AddNetworkString( "nws_yrp_slot_connect" )
+net.Receive( "nws_yrp_slot_connect", function(len, ply)
 	local slotID = net.ReadString()
 
 	ConnectToSlot(ply, slotID)
 end)
 
-util.AddNetworkString( "yrp_slot_disconnect" )
-net.Receive( "yrp_slot_disconnect", function(len, ply)
+util.AddNetworkString( "nws_yrp_slot_disconnect" )
+net.Receive( "nws_yrp_slot_disconnect", function(len, ply)
 	local slotID = net.ReadString()
 
 	DisconnectFromSlot(ply, slotID)

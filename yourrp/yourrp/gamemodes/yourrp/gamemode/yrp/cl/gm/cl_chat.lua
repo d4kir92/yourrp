@@ -481,7 +481,7 @@ local function InitYRPChat()
 			end
 			function yrpChat.comboBox:OnSelect(index, value, data)
 				SetChatMode( value)
-				net.Start( "set_chat_mode" )
+				net.Start( "nws_yrp_set_chat_mode" )
 					net.WriteString(string.upper( value) )
 				net.SendToServer()
 			end
@@ -976,7 +976,7 @@ net.Receive( "yrpstopanim", function()
 	end
 end)
 
-net.Receive( "yrp_player_say", function(len)
+net.Receive( "nws_yrp_player_say", function(len)
 	local pk = net.ReadTable()
 	for i, v in pairs( pk ) do
 		if isstring( v ) then
@@ -998,18 +998,6 @@ net.Receive( "yrp_player_say", function(len)
 	chat.AddText( unpack( pk ) )
 	chat.PlaySound()
 end)
-
-
-
-net.Receive( "yrp_chat_ready", function(len)
-	if YRPIsChatEnabled( "yrp_chat_ready" ) then
-		InitYRPChat()
-	end
-	timer.Simple(2, function()
-		_fadeout = CurTime() + 0.1
-	end)
-end)
-
 
 hook.Add( "OnPlayerChat", "YRPHideCommands", function( ply, strText, bTeam, bDead )
 	if string.StartWith(strText, "!" ) or string.StartWith(strText, "/" ) or string.StartWith(strText, "@" ) then

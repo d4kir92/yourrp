@@ -12,7 +12,7 @@ local function YRPWeaponSlotNum(parent, x, y, lid, smin, smax, sart, sval)
 	slider:SetMinMax( smin, smax )
 	slider:SetValue( sval )
 	function slider:OnValueChanged( value )
-		net.Start( "yrp_set_slot_amount" )
+		net.Start( "nws_yrp_set_slot_amount" )
 			net.WriteString(sart)
 			net.WriteString(math.floor( value, self:GetDecimals() ))
 		net.SendToServer()
@@ -51,7 +51,7 @@ local function YRPWeaponSlotCB(parent, x, y, cname, art, sval)
 
 		DBTab2[cname][art] = tonum( bVal)
 
- 		net.Start( "yrp_set_slot_weapon" )
+ 		net.Start( "nws_yrp_set_slot_weapon" )
 			net.WriteString( cname)
 			net.WriteString( art)
 			net.WriteBool( bVal)
@@ -68,7 +68,7 @@ local function YRPWeaponNoEntry( cname)
 	return false
 end
 
-net.Receive( "yrp_weapon_menu", function(len)
+net.Receive( "nws_yrp_weapon_menu", function(len)
 	local lply = LocalPlayer()
 
 	local spacer = 80
@@ -189,6 +189,6 @@ net.Receive( "yrp_weapon_menu", function(len)
 end)
 
 function OpenSettingsWeaponSystem()
-	net.Start( "yrp_weapon_menu" )
+	net.Start( "nws_yrp_weapon_menu" )
 	net.SendToServer()
 end

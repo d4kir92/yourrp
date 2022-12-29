@@ -149,7 +149,7 @@ function BuildWhitelis(parent, tab)
 			_whitelisButton:SetText(YRP.lang_string( "LID_whitelisplayer" ) )
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID() ) != nil then
-					net.Start( "whitelistPlayer" )
+					net.Start( "nws_yrp_whitelistPlayer" )
 						local _cb1_id = _whitelisComboBoxPlys:GetSelectedID()
 						local _cb2_id = _whitelisComboBox2:GetSelectedID()
 						local _cb1_data = _whitelisComboBoxPlys:GetOptionData(_cb1_id)
@@ -209,7 +209,7 @@ function BuildWhitelis(parent, tab)
 			_whitelisButton:SetText(YRP.lang_string( "LID_whitelisplayer" ) )
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID() ) != nil and _whitelisComboBox:GetOptionData(_whitelisComboBox:GetSelectedID() ) != nil then
-					net.Start( "whitelistPlayerGroup" )
+					net.Start( "nws_yrp_whitelistPlayerGroup" )
 						net.WriteString(_whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID() ))
 						net.WriteInt(_whitelisComboBox:GetOptionData(_whitelisComboBox:GetSelectedID() ), 16)
 					net.SendToServer()
@@ -257,7 +257,7 @@ function BuildWhitelis(parent, tab)
 			_whitelisButton:SetText(YRP.lang_string( "LID_whitelisplayer" ) )
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID() ) != nil then
-					net.Start( "whitelistPlayerAll" )
+					net.Start( "nws_yrp_whitelistPlayerAll" )
 						net.WriteString(_whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID() ))
 					net.SendToServer()
 				end
@@ -291,7 +291,7 @@ function BuildWhitelis(parent, tab)
 			if lis:GetSelectedLine() != nil then
 				local uid = lis:GetLine(lis:GetSelectedLine() ):GetValue(1)
 				if uid != nil then
-					net.Start( "whitelistPlayerRemove" )
+					net.Start( "nws_yrp_whitelistPlayerRemove" )
 						net.WriteInt(uid, 16)
 					net.SendToServer()
 
@@ -333,17 +333,17 @@ function BuildWhitelis(parent, tab)
 	end
 end
 
-net.Receive( "getGroupsWhitelist", function(len)
+net.Receive( "nws_yrp_getGroupsWhitelist", function(len)
 	tabG = net.ReadTable()
 	loadedG = true
 end)
 
-net.Receive( "getRolesWhitelist", function(len)
+net.Receive( "nws_yrp_getRolesWhitelist", function(len)
 	tabR = net.ReadTable()
 	loadedR = true
 end)
 
-net.Receive( "getRoleWhitelist_line", function(len)
+net.Receive( "nws_yrp_getRoleWhitelist_line", function(len)
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) then
 
@@ -390,15 +390,15 @@ function OpenSettingsWhitelist()
 	loadedG = false
 
 	timer.Simple(0.1, function()
-		net.Start( "getGroupsWhitelist" )
+		net.Start( "nws_yrp_getGroupsWhitelist" )
 		net.SendToServer()
 	end)
 	timer.Simple(0.2, function()
-		net.Start( "getRolesWhitelist" )
+		net.Start( "nws_yrp_getRolesWhitelist" )
 		net.SendToServer()
 	end)
 	timer.Simple(0.3, function()
-		net.Start( "getRoleWhitelist" )
+		net.Start( "nws_yrp_getRoleWhitelist" )
 		net.SendToServer()
 	end)
 end

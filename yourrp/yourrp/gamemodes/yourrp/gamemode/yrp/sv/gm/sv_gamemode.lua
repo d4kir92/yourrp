@@ -448,14 +448,14 @@ function GM:PlayerDeath(ply, inflictor, attacker)
 	end
 
 	if IsValid( attacker ) and attacker == ply then
-		net.Start( "PlayerKilledSelf" )
+		net.Start( "nws_yrp_playerKilledSelf" )
 			net.WriteEntity(ply)
 		net.Broadcast()
 		return
 	end
 
 	if IsValid( attacker ) and attacker:IsPlayer() then
-		net.Start( "PlayerKilledByPlayer" )
+		net.Start( "nws_yrp_playerKilledByPlayer" )
 			net.WriteEntity(ply)
 			net.WriteString(inflictor:GetClass() )
 			net.WriteEntity( attacker)
@@ -464,7 +464,7 @@ function GM:PlayerDeath(ply, inflictor, attacker)
 	end
 
 	if ply and IsValid( inflictor ) and IsValid( attacker ) then
-		net.Start( "PlayerKilled" )
+		net.Start( "nws_yrp_playerKilled" )
 			net.WriteEntity(ply)
 			net.WriteString(inflictor:GetClass() )
 			net.WriteString( attacker:GetClass() )
@@ -985,28 +985,28 @@ hook.Add( "ScaleNPCDamage", "YRP_ScaleNPCDamage", function(npc, hitgroup, dmginf
 	end
 end)
 
-util.AddNetworkString( "yrp_voice_start" )
-net.Receive( "yrp_voice_start", function(len, ply)
+util.AddNetworkString( "nws_yrp_voice_start" )
+net.Receive( "nws_yrp_voice_start", function(len, ply)
 	ply:SetYRPBool( "yrp_speaking", true)
 end)
 
-util.AddNetworkString( "yrp_voice_end" )
-net.Receive( "yrp_voice_end", function(len, ply)
+util.AddNetworkString( "nws_yrp_voice_end" )
+net.Receive( "nws_yrp_voice_end", function(len, ply)
 	ply:SetYRPBool( "yrp_speaking", false)
 end)
 
-util.AddNetworkString( "yrp_mute_voice" )
-net.Receive( "yrp_mute_voice", function(len, ply)
+util.AddNetworkString( "nws_yrp_mute_voice" )
+net.Receive( "nws_yrp_mute_voice", function(len, ply)
 	ply:SetYRPBool( "mute_voice", !ply:GetYRPBool( "mute_voice", false) )
 end)
 
-util.AddNetworkString( "yrp_voice_range_up" )
-net.Receive( "yrp_voice_range_up", function(len, ply)
+util.AddNetworkString( "nws_yrp_voice_range_up" )
+net.Receive( "nws_yrp_voice_range_up", function(len, ply)
 	ply:SetYRPInt( "voice_range", math.Clamp(ply:GetYRPInt( "voice_range", 2) + 1, 0, 4) )
 end)
 
-util.AddNetworkString( "yrp_voice_range_dn" )
-net.Receive( "yrp_voice_range_dn", function(len, ply)
+util.AddNetworkString( "nws_yrp_voice_range_dn" )
+net.Receive( "nws_yrp_voice_range_dn", function(len, ply)
 	ply:SetYRPInt( "voice_range", math.Clamp(ply:GetYRPInt( "voice_range", 2) - 1, 0, 4) )
 end)
 
@@ -1133,68 +1133,68 @@ function GenerateVoiceTable()
 end
 GenerateVoiceTable()
 
-util.AddNetworkString( "yrp_vm_get_active_usergroups" )
-net.Receive( "yrp_vm_get_active_usergroups", function(len, ply)
+util.AddNetworkString( "nws_yrp_vm_get_active_usergroups" )
+net.Receive( "nws_yrp_vm_get_active_usergroups", function(len, ply)
 	local ugs = YRP_SQL_SELECT( "yrp_usergroups", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(ugs) then
-		net.Start( "yrp_vm_get_active_usergroups" )
+		net.Start( "nws_yrp_vm_get_active_usergroups" )
 			net.WriteTable(ugs)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_vm_get_active_groups" )
-net.Receive( "yrp_vm_get_active_groups", function(len, ply)
+util.AddNetworkString( "nws_yrp_vm_get_active_groups" )
+net.Receive( "nws_yrp_vm_get_active_groups", function(len, ply)
 	local grps = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(grps) then
-		net.Start( "yrp_vm_get_active_groups" )
+		net.Start( "nws_yrp_vm_get_active_groups" )
 			net.WriteTable(grps)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_vm_get_active_roles" )
-net.Receive( "yrp_vm_get_active_roles", function(len, ply)
+util.AddNetworkString( "nws_yrp_vm_get_active_roles" )
+net.Receive( "nws_yrp_vm_get_active_roles", function(len, ply)
 	local rols = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(rols) then
-		net.Start( "yrp_vm_get_active_roles" )
+		net.Start( "nws_yrp_vm_get_active_roles" )
 			net.WriteTable(rols)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_vm_get_passive_usergroups" )
-net.Receive( "yrp_vm_get_passive_usergroups", function(len, ply)
+util.AddNetworkString( "nws_yrp_vm_get_passive_usergroups" )
+net.Receive( "nws_yrp_vm_get_passive_usergroups", function(len, ply)
 	local ugs = YRP_SQL_SELECT( "yrp_usergroups", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(ugs) then
-		net.Start( "yrp_vm_get_passive_usergroups" )
+		net.Start( "nws_yrp_vm_get_passive_usergroups" )
 			net.WriteTable(ugs)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_vm_get_passive_groups" )
-net.Receive( "yrp_vm_get_passive_groups", function(len, ply)
+util.AddNetworkString( "nws_yrp_vm_get_passive_groups" )
+net.Receive( "nws_yrp_vm_get_passive_groups", function(len, ply)
 	local grps = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(grps) then
-		net.Start( "yrp_vm_get_passive_groups" )
+		net.Start( "nws_yrp_vm_get_passive_groups" )
 			net.WriteTable(grps)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_vm_get_passive_roles" )
-net.Receive( "yrp_vm_get_passive_roles", function(len, ply)
+util.AddNetworkString( "nws_yrp_vm_get_passive_roles" )
+net.Receive( "nws_yrp_vm_get_passive_roles", function(len, ply)
 	local rols = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(rols) then
-		net.Start( "yrp_vm_get_passive_roles" )
+		net.Start( "nws_yrp_vm_get_passive_roles" )
 			net.WriteTable(rols)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_voice_channel_add" )
-net.Receive( "yrp_voice_channel_add", function(len, ply)
+util.AddNetworkString( "nws_yrp_voice_channel_add" )
+net.Receive( "nws_yrp_voice_channel_add", function(len, ply)
 	local name = net.ReadString()
 	local hear = tonum(net.ReadBool() )
 
@@ -1227,8 +1227,8 @@ net.Receive( "yrp_voice_channel_add", function(len, ply)
 	GenerateVoiceTable()
 end)
 
-util.AddNetworkString( "yrp_voice_channel_save" )
-net.Receive( "yrp_voice_channel_save", function(len, ply)
+util.AddNetworkString( "nws_yrp_voice_channel_save" )
+net.Receive( "nws_yrp_voice_channel_save", function(len, ply)
 	local name = net.ReadString()
 	local hear = tonum(net.ReadBool() )
 
@@ -1256,8 +1256,8 @@ net.Receive( "yrp_voice_channel_save", function(len, ply)
 	GenerateVoiceTable()
 end)
 
-util.AddNetworkString( "yrp_voice_channel_rem" )
-net.Receive( "yrp_voice_channel_rem", function(len, ply)
+util.AddNetworkString( "nws_yrp_voice_channel_rem" )
+net.Receive( "nws_yrp_voice_channel_rem", function(len, ply)
 	local uid = net.ReadString()
 
 	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'" )
@@ -1277,8 +1277,8 @@ net.Receive( "yrp_voice_channel_rem", function(len, ply)
 	GenerateVoiceTable()
 end)
 
-util.AddNetworkString( "channel_up" )
-net.Receive( "channel_up", function(len, ply)
+util.AddNetworkString( "nws_yrp_channel_up" )
+net.Receive( "nws_yrp_channel_up", function(len, ply)
 	local uid = net.ReadString()
 	uid = tonumber(uid)
 
@@ -1303,13 +1303,13 @@ net.Receive( "channel_up", function(len, ply)
 	end
 
 	timer.Simple(0.1, function()
-		net.Start( "channel_up" )
+		net.Start( "nws_yrp_channel_up" )
 		net.Send(ply)
 	end)
 end)
 
-util.AddNetworkString( "channel_dn" )
-net.Receive( "channel_dn", function(len, ply)
+util.AddNetworkString( "nws_yrp_channel_dn" )
+net.Receive( "nws_yrp_channel_dn", function(len, ply)
 	local uid = net.ReadString()
 	uid = tonumber(uid)
 
@@ -1334,7 +1334,7 @@ net.Receive( "channel_dn", function(len, ply)
 	end
 
 	timer.Simple(0.1, function()
-		net.Start( "channel_dn" )
+		net.Start( "nws_yrp_channel_dn" )
 		net.Send(ply)
 	end)
 end)
@@ -1393,8 +1393,8 @@ function YRPSwitchToVoiceChannel(ply, uid)
 	YRPCountPassiveChannels(ply)
 end
 
-util.AddNetworkString( "mutemic_channel" )
-net.Receive( "mutemic_channel", function(len, ply)
+util.AddNetworkString( "nws_yrp_mutemic_channel" )
+net.Receive( "nws_yrp_mutemic_channel", function(len, ply)
 	local uid = net.ReadString()
 	uid = uid or "0"
 	uid = tonumber(uid)
@@ -1409,8 +1409,8 @@ net.Receive( "mutemic_channel", function(len, ply)
 	YRPCountPassiveChannels(ply)
 end)
 
-util.AddNetworkString( "mute_channel" )
-net.Receive( "mute_channel", function(len, ply)
+util.AddNetworkString( "nws_yrp_mute_channel" )
+net.Receive( "nws_yrp_mute_channel", function(len, ply)
 	local uid = net.ReadString()
 	
 	if !ply:GetYRPBool( "yrp_voice_channel_mutemic_" .. uid, false) then
@@ -1423,8 +1423,8 @@ net.Receive( "mute_channel", function(len, ply)
 	YRPCountPassiveChannels(ply)
 end)
 
-util.AddNetworkString( "mutemic_channel_all" )
-net.Receive( "mutemic_channel_all", function(len, ply)
+util.AddNetworkString( "nws_yrp_mutemic_channel_all" )
+net.Receive( "nws_yrp_mutemic_channel_all", function(len, ply)
 	ply:SetYRPBool( "mutemic_channel_all", !ply:GetYRPBool( "mutemic_channel_all", false) )
 
 	for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable( "yrp_voice_channels", {}), "int_position", false) do
@@ -1434,8 +1434,8 @@ net.Receive( "mutemic_channel_all", function(len, ply)
 	YRPCountPassiveChannels(ply)
 end)
 
-util.AddNetworkString( "mute_channel_all" )
-net.Receive( "mute_channel_all", function(len, ply)
+util.AddNetworkString( "nws_yrp_mute_channel_all" )
+net.Receive( "nws_yrp_mute_channel_all", function(len, ply)
 	ply:SetYRPBool( "mute_channel_all", !ply:GetYRPBool( "mute_channel_all", false) )
 
 	for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable( "yrp_voice_channels", {}), "int_position", false) do
@@ -1489,28 +1489,28 @@ function YRPMoveAllToNext( ply )
 	end
 end
 
-util.AddNetworkString( "yrp_next_voice_channel" )
-net.Receive( "yrp_next_voice_channel", function(len, ply)
+util.AddNetworkString( "nws_yrp_next_voice_channel" )
+net.Receive( "nws_yrp_next_voice_channel", function(len, ply)
 	YRPMoveAllToNext( ply )
 
 	YRPCountActiveChannels(ply)
 	YRPCountPassiveChannels(ply)
 end)
 
-util.AddNetworkString( "yrp_YRPToggleVoiceMenu" )
-net.Receive( "yrp_YRPToggleVoiceMenu", function(len, ply)
-	ply:SetYRPBool( "yrp_YRPToggleVoiceMenu", !ply:GetYRPBool( "yrp_YRPToggleVoiceMenu", true ) )
+util.AddNetworkString( "nws_yrp_ToggleVoiceMenu" )
+net.Receive( "nws_yrp_ToggleVoiceMenu", function(len, ply)
+	ply:SetYRPBool( "yrp_ToggleVoiceMenu", !ply:GetYRPBool( "yrp_ToggleVoiceMenu", true ) )
 end)
 
-util.AddNetworkString( "yrp_voice_set_max_active" )
-net.Receive( "yrp_voice_set_max_active", function(len, ply)
+util.AddNetworkString( "nws_yrp_voice_set_max_active" )
+net.Receive( "nws_yrp_voice_set_max_active", function(len, ply)
 	local maxi = tonumber( net.ReadString() )
 	YRP_SQL_UPDATE( "yrp_general", {["int_max_channels_active"] = maxi}, "uniqueID = '1'" )
 	SetGlobalYRPInt( "int_max_channels_active", maxi)
 end)
 
-util.AddNetworkString( "yrp_voice_set_max_passive" )
-net.Receive( "yrp_voice_set_max_passive", function(len, ply)
+util.AddNetworkString( "nws_yrp_voice_set_max_passive" )
+net.Receive( "nws_yrp_voice_set_max_passive", function(len, ply)
 	local maxi = tonumber( net.ReadString() )
 	YRP_SQL_UPDATE( "yrp_general", {["int_max_channels_passive"] = maxi}, "uniqueID = '1'" )
 	SetGlobalYRPInt( "int_max_channels_passive", maxi)
@@ -1738,8 +1738,8 @@ function YRPImportFileToTable( filename, name )
 	end
 end
 
-util.AddNetworkString( "yrp_import_darkrp" )
-net.Receive( "yrp_import_darkrp", function( len, ply )
+util.AddNetworkString( "nws_yrp_import_darkrp" )
+net.Receive( "nws_yrp_import_darkrp", function( len, ply )
 	if !ply:HasAccess( "yrp_import_darkrp" ) then
 		return
 	end

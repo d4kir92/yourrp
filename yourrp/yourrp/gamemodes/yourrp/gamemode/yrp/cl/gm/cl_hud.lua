@@ -17,7 +17,7 @@ hook.Add( "ResolutionChanged", "Resolution Change", function(w, h)
 	--YRP.msg( "gm", "Changed Resolution to " .. w .. "x" .. h .. " ( " .. rw .. ":" .. rh .. " )" )
 	changeFontSize()
 
-	net.Start( "ply_changed_resolution" )
+	net.Start( "nws_yrp_ply_changed_resolution" )
 	net.SendToServer()
 end)
 --##############################################################################
@@ -76,7 +76,7 @@ hook.Add( "PlayerStartVoice", "yrp_playerstartvoice", function(pl)
 	if pl != nil then
 		if pl == LocalPlayer() then
 			_showVoice = true
-			net.Start( "yrp_voice_start" )
+			net.Start( "nws_yrp_voice_start" )
 			net.SendToServer()
 		end
 	end
@@ -85,7 +85,7 @@ end)
 hook.Add( "PlayerEndVoice", "yrp_playerendvoice", function(pl)
 	if pl == LocalPlayer() then
 		_showVoice = false
-		net.Start( "yrp_voice_end" )
+		net.Start( "nws_yrp_voice_end" )
 		net.SendToServer()
 	end
 end)

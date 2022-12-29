@@ -58,7 +58,7 @@ function PANEL:SetSlotID(slotID)
 
 		self.name = "ID: " .. slotID -- REMOVEME
 
-		net.Start( "yrp_slot_connect" )
+		net.Start( "nws_yrp_slot_connect" )
 			net.WriteString(self._slotID)
 		net.SendToServer()
 	end
@@ -66,7 +66,7 @@ end
 
 function PANEL:OnRemove()
 	if IsNotNilAndNotFalse(self._slotID) then
-		net.Start( "yrp_slot_disconnect" )
+		net.Start( "nws_yrp_slot_disconnect" )
 			net.WriteString(self._slotID)
 		net.SendToServer()
 		RemoveSlotPanel(self:GetSlotID(), self)
@@ -89,13 +89,13 @@ function PANEL:Init()
 			local e = item.main:GetE()
 
 			if slotID != nil then
-				net.Start( "yrp_item_move" )
+				net.Start( "nws_yrp_item_move" )
 					net.WriteString(itemID or "0" )
 					net.WriteString(slotID)
 					net.WriteEntity(e)
 				net.SendToServer()
 			elseif itemID != nil then
-				net.Start( "yrp_item_drop" )
+				net.Start( "nws_yrp_item_drop" )
 					net.WriteString(itemID)
 				net.SendToServer()
 
@@ -105,7 +105,7 @@ function PANEL:Init()
 	end, {})
 end
 
-net.Receive( "yrp_item_store", function(len)
+net.Receive( "nws_yrp_item_store", function(len)
 	local slotID = net.ReadString()
 	local item = net.ReadTable()
 
@@ -124,7 +124,7 @@ net.Receive( "yrp_item_store", function(len)
 	end
 end)
 
-net.Receive( "yrp_item_unstore", function(len)
+net.Receive( "nws_yrp_item_unstore", function(len)
 	local slotID = net.ReadString()
 
 	slotID = tonumber(slotID)

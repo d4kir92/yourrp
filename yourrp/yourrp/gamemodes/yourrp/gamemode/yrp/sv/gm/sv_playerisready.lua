@@ -2,15 +2,13 @@
 
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 
-util.AddNetworkString( "yrp_chat_ready" )
+util.AddNetworkString( "nws_yrp_sendstartdata" )
+util.AddNetworkString( "nws_yrp_receivedstartdata" )
 
-util.AddNetworkString( "sendstartdata" )
-util.AddNetworkString( "receivedstartdata" )
+util.AddNetworkString( "nws_yrp_sendserverdata" )
+util.AddNetworkString( "nws_yrp_receivedserverdata" )
 
-util.AddNetworkString( "sendserverdata" )
-util.AddNetworkString( "receivedserverdata" )
-
-net.Receive( "receivedserverdata", function( len, ply )
+net.Receive( "nws_yrp_receivedserverdata", function( len, ply )
 	ply.receivedserverdata = true
 	MsgC( Color( 0, 255, 0 ), "[LOADING] SENDED SERVER DATA", "\n" )
 end )
@@ -57,7 +55,7 @@ local function YRPPlayerLoadedGame( ply )
 
 		--MsgC( Color( 255, 255, 255, 255 ), "[LOADING] SEND SERVER DATA", "\n" )
 
-		net.Start( "sendserverdata" )
+		net.Start( "nws_yrp_sendserverdata" )
 		net.Send( ply )
 
 		timer.Simple( 12, function()
@@ -94,7 +92,7 @@ local function YRPCheckFinishLoading()
 					YRP.msg( "error", "YRPCLIENTOpenCharacterSelection is NIL" )
 				end
 
-				net.Start( "yrp_noti" )
+				net.Start( "nws_yrp_noti" )
 					net.WriteString( "playerisready" )
 					net.WriteString( ply:Nick() )
 				net.Broadcast()
@@ -168,13 +166,13 @@ local function YRPReceivedReadyMessage( len, ply, tab )
 	YRPStartSendingData( ply )
 end
 
-net.Receive( "sendstartdata", function( len, ply )
+net.Receive( "nws_yrp_sendstartdata", function( len, ply )
 	local osid = net.ReadUInt( 2 )
 	local branch = net.ReadString()
 	local country = net.ReadString()
 	local beta = net.ReadString()
 
-	net.Start( "receivedstartdata" )
+	net.Start( "nws_yrp_receivedstartdata" )
 	net.Send( ply )
 
 	--MsgC( Color( 255, 255, 255, 255 ), "[LOADING] CLIENT -> SERVER: Start Data", "\n" )

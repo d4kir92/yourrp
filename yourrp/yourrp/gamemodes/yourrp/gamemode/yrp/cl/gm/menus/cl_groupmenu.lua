@@ -73,7 +73,7 @@ function YRPToggleGroupMenu()
 						inv:Dock( TOP )
 						inv:SetText( v:RPName() )
 						function inv:DoClick()
-							net.Start( "invitetogroup" )
+							net.Start( "nws_yrp_invitetogroup" )
 								net.WriteString( v:CharID() )
 							net.SendToServer()
 							
@@ -156,7 +156,7 @@ function YRPToggleGroupMenu()
 		GMENU.demote:Hide()
 		function GMENU.demote:DoClick()
 			if GMENU.charid then
-				net.Start( "demotePlayer" )
+				net.Start( "nws_yrp_demotePlayer" )
 					net.WriteString( GMENU.charid )
 				net.SendToServer()
 			end
@@ -169,13 +169,13 @@ function YRPToggleGroupMenu()
 		GMENU.promote:Hide()
 		function GMENU.promote:DoClick()
 			if GMENU.charid then
-				net.Start( "promotePlayer" )
+				net.Start( "nws_yrp_promotePlayer" )
 					net.WriteString( GMENU.charid )
 				net.SendToServer()
 			end
 		end
 
-		net.Receive( "yrp_group_getmember", function( len )
+		net.Receive( "nws_yrp_group_getmember", function( len )
 			local char = net.ReadTable()
 			char.uniqueID = tonumber( char.uniqueID )
 			if IsValid( GMENU ) then
@@ -216,7 +216,7 @@ function YRPToggleGroupMenu()
 			end
 		end )
 
-		net.Receive( "yrp_group_getmembers", function( len )
+		net.Receive( "nws_yrp_group_getmembers", function( len )
 			local members = net.ReadTable()
 			if IsValid( GMENU ) then
 				GMENU.list:Clear()
@@ -233,7 +233,7 @@ function YRPToggleGroupMenu()
 						plline.pl:SetText( v.rpname )
 						plline.pl.rad = 0
 						function plline.pl:DoClick()
-							net.Start( "yrp_group_getmember" )
+							net.Start( "nws_yrp_group_getmember" )
 								net.WriteUInt( v.uniqueID, 24 )
 							net.SendToServer()
 						end
@@ -255,7 +255,7 @@ function YRPToggleGroupMenu()
 								end
 							end
 							function plline.del:DoClick()
-								net.Start( "yrp_group_delmember" )
+								net.Start( "nws_yrp_group_delmember" )
 									net.WriteUInt( v.uniqueID, 24 )
 								net.SendToServer()
 							end
@@ -265,7 +265,7 @@ function YRPToggleGroupMenu()
 			end
 		end)
 
-		net.Start( "yrp_group_getmembers" )
+		net.Start( "nws_yrp_group_getmembers" )
 		net.SendToServer()
 	end
 end

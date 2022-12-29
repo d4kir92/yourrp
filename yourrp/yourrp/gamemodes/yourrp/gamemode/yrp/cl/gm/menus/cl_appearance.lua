@@ -4,7 +4,7 @@ local _appe = {}
 _appe.r = {}
 local _yrp_appearance = {}
 local play = true
-net.Receive( "get_menu_bodygroups", function(len)
+net.Receive( "nws_yrp_get_menu_bodygroups", function(len)
 	local _tbl = net.ReadTable()
 	if _tbl.string_playermodels != nil and PanelAlive(_yrp_appearance.window) then
 		local _skin = tonumber(_tbl.skin)
@@ -122,7 +122,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					if _tmpPM.cur < _tmpPM.max then
 						_tmpPM.cur = _tmpPM.cur + 1
 					end
-					net.Start( "inv_pm_up" )
+					net.Start( "nws_yrp_inv_pm_up" )
 						net.WriteInt(_tmpPM.cur, 16)
 					net.SendToServer()
 					if _appe.r.pm.Entity then
@@ -141,7 +141,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					if _tmpPM.cur > 1 then
 						_tmpPM.cur = _tmpPM.cur - 1
 					end
-					net.Start( "inv_pm_do" )
+					net.Start( "nws_yrp_inv_pm_do" )
 						net.WriteInt(_tmpPM.cur, 16)
 					net.SendToServer()
 					if _appe.r.pm.Entity then
@@ -177,7 +177,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					if _tmpSkin.cur < _tmpSkin.max-1 then
 						_tmpSkin.cur = _tmpSkin.cur + 1
 					end
-					net.Start( "inv_skin_up" )
+					net.Start( "nws_yrp_inv_skin_up" )
 						net.WriteInt(_tmpSkin.cur, 16)
 					net.SendToServer()
 					if _appe.r.pm.Entity then
@@ -196,7 +196,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 					if _tmpSkin.cur > 0 then
 						_tmpSkin.cur = _tmpSkin.cur - 1
 					end
-					net.Start( "inv_skin_do" )
+					net.Start( "nws_yrp_inv_skin_do" )
 						net.WriteInt(_tmpSkin.cur, 16)
 					net.SendToServer()
 					if EntityAlive(_appe.r.pm.Entity) then
@@ -233,7 +233,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 								if _tmpBg.cur < _tmpBg.max-1 then
 									_tmpBg.cur = _tmpBg.cur + 1
 								end
-								net.Start( "inv_bg_up" )
+								net.Start( "nws_yrp_inv_bg_up" )
 									net.WriteInt(_tmpBg.cur, 16)
 									net.WriteInt(_tmpBg.id, 16)
 								net.SendToServer()
@@ -253,7 +253,7 @@ net.Receive( "get_menu_bodygroups", function(len)
 								if _tmpBg.cur > 0 then
 									_tmpBg.cur = _tmpBg.cur - 1
 								end
-								net.Start( "inv_bg_do" )
+								net.Start( "nws_yrp_inv_bg_do" )
 									net.WriteInt(_tmpBg.cur, 16)
 									net.WriteInt(_tmpBg.id, 16)
 								net.SendToServer()
@@ -300,7 +300,7 @@ function close_appearance()
 	end
 end
 
-net.Receive( "openAM", function(len)
+net.Receive( "nws_yrp_openAM", function(len)
 	open_appearance()
 end)
 
@@ -327,7 +327,7 @@ function open_appearance()
 		--
 	end
 
-	net.Start( "get_menu_bodygroups" )
+	net.Start( "nws_yrp_get_menu_bodygroups" )
 	net.SendToServer()
 
 	_yrp_appearance.window:MakePopup()

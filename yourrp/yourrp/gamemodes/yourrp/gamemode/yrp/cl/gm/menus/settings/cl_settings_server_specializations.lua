@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/specializations/gpl.txt)
 
 local _li = {}
-net.Receive( "get_specializations", function()
+net.Receive( "nws_yrp_get_specializations", function()
 	local _specializations = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
@@ -31,7 +31,7 @@ net.Receive( "get_specializations", function()
 			_li.name:SetText(tbl.name)
 			function _li.name.textentry:OnChange()
 				self.tbl.name = self:GetValue()
-				net.Start( "edit_specialization_name" )
+				net.Start( "nws_yrp_edit_specialization_name" )
 					net.WriteString(self.tbl.uniqueID)
 					net.WriteString(self.tbl.name)
 				net.SendToServer()
@@ -44,7 +44,7 @@ net.Receive( "get_specializations", function()
 			_li.prefix:SetText(tbl.prefix)
 			function _li.prefix.textentry:OnChange()
 				self.tbl.prefix = self:GetValue()
-				net.Start( "edit_specialization_prefix" )
+				net.Start( "nws_yrp_edit_specialization_prefix" )
 					net.WriteString(self.tbl.uniqueID)
 					net.WriteString(self.tbl.prefix)
 				net.SendToServer()
@@ -57,7 +57,7 @@ net.Receive( "get_specializations", function()
 			_li.suffix:SetText(tbl.suffix)
 			function _li.suffix.textentry:OnChange()
 				self.tbl.suffix = self:GetValue()
-				net.Start( "edit_specialization_suffix" )
+				net.Start( "nws_yrp_edit_specialization_suffix" )
 					net.WriteString(self.tbl.uniqueID)
 					net.WriteString(self.tbl.suffix)
 				net.SendToServer()
@@ -70,7 +70,6 @@ net.Receive( "get_specializations", function()
 			sweps.parent = _li.ea
 			sweps.uniqueID = tbl.uniqueID
 			sweps.header = "LID_sweps"
-			sweps.netstr = "edit_specialization_sweps"
 			sweps.value = tbl.sweps or ""
 			sweps.uniqueID = tbl.uniqueID
 			sweps.w = YRP.ctr(800)
@@ -98,7 +97,7 @@ net.Receive( "get_specializations", function()
 				end
 				function YRPUpdateSpecSweps()
 					local lply = LocalPlayer()
-					net.Start( "spec_add_swep" )
+					net.Start( "nws_yrp_spec_add_swep" )
 						net.WriteInt(tbl.uniqueID, 32)
 						net.WriteTable(lply.yrpseltab)
 					net.SendToServer()
@@ -108,7 +107,7 @@ net.Receive( "get_specializations", function()
 				YRPOpenSelector( cl_sweps, true, "classname", YRPUpdateSpecSweps)
 			end
 			_li.sweps = DStringListBox(sweps)
-			net.Receive( "get_specialization_sweps", function()
+			net.Receive( "nws_yrp_get_specialization_sweps", function()
 				local tab_pm = net.ReadTable()
 				local cl_sweps = {}
 				for i, v in pairs(tab_pm) do
@@ -118,7 +117,7 @@ net.Receive( "get_specializations", function()
 					swep.string_classname = v
 					swep.string_name = v
 					swep.doclick = function()
-						net.Start( "spec_rem_swep" )
+						net.Start( "nws_yrp_spec_rem_swep" )
 							net.WriteInt(tbl.uniqueID, 32)
 							net.WriteString(swep.string_classname)
 						net.SendToServer()
@@ -138,7 +137,7 @@ net.Receive( "get_specializations", function()
 					_li.sweps.dpl:AddLines( cl_sweps)
 				end
 			end)
-			net.Start( "get_specialization_sweps" )
+			net.Start( "nws_yrp_get_specialization_sweps" )
 				net.WriteInt(tbl.uniqueID, 32)
 			net.SendToServer()
 
@@ -149,7 +148,6 @@ net.Receive( "get_specializations", function()
 			pms.parent = _li.ea
 			pms.uniqueID = tbl.uniqueID
 			pms.header = "LID_playermodels"
-			pms.netstr = "edit_specialization_pms"
 			pms.value = tbl.pms or ""
 			pms.uniqueID = tbl.uniqueID
 			pms.w = YRP.ctr(800)
@@ -189,7 +187,7 @@ net.Receive( "get_specializations", function()
 				
 				function YRPUpdateSpecPMs()
 					local lply = LocalPlayer()
-					net.Start( "spec_add_pm" )
+					net.Start( "nws_yrp_spec_add_pm" )
 						net.WriteInt(tbl.uniqueID, 32)
 						net.WriteTable(lply.yrpseltab)
 					net.SendToServer()
@@ -199,7 +197,7 @@ net.Receive( "get_specializations", function()
 				YRPOpenSelector( cl_pms, true, "classname", YRPUpdateSpecPMs)
 			end
 			_li.pms = DStringListBox(pms)
-			net.Receive( "get_specialization_pms", function()
+			net.Receive( "nws_yrp_get_specialization_pms", function()
 				local tab_pm = net.ReadTable()
 				local cl_pms = {}
 				for i, v in pairs(tab_pm) do
@@ -209,7 +207,7 @@ net.Receive( "get_specializations", function()
 					pms.string_classname = v
 					pms.string_name = v
 					pms.doclick = function()
-						net.Start( "spec_rem_pm" )
+						net.Start( "nws_yrp_spec_rem_pm" )
 							net.WriteInt(tbl.uniqueID, 32)
 							net.WriteString(pms.string_classname)
 						net.SendToServer()
@@ -229,18 +227,18 @@ net.Receive( "get_specializations", function()
 					_li.pms.dpl:AddLines( cl_pms)
 				end
 			end)
-			net.Start( "get_specialization_pms" )
+			net.Start( "nws_yrp_get_specialization_pms" )
 				net.WriteInt(tbl.uniqueID, 32)
 			net.SendToServer()
 		end
 
 		_li._spe:SetEditFunc(_li.eaf)
 		function _li._spe:AddFunction()
-			net.Start( "specialization_add" )
+			net.Start( "nws_yrp_specialization_add" )
 			net.SendToServer()
 		end
 		function _li._spe:RemoveFunction()
-			net.Start( "specialization_rem" )
+			net.Start( "nws_yrp_specialization_rem" )
 				net.WriteString(self.uid)
 			net.SendToServer()
 		end
@@ -253,6 +251,6 @@ end)
 function OpenSettingsSpecializations()
 	local lply = LocalPlayer()
 
-	net.Start( "get_specializations" )
+	net.Start( "nws_yrp_get_specializations" )
 	net.SendToServer()
 end

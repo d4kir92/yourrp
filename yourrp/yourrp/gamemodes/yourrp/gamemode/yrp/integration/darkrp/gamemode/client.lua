@@ -155,7 +155,7 @@ function DarkRP.toggleF4Menu()
 	--YRPDarkrpNotFound( "toggleF4Menu()" )
 end
 
-net.Receive( "sendNotify", function()
+net.Receive( "nws_yrp_sendNotify", function()
 	local message = net.ReadString()
 	notification.AddLegacy(message, NOTIFY_GENERIC, 3)
 end)

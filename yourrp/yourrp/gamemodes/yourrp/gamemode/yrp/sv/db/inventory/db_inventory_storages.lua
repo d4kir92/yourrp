@@ -91,8 +91,8 @@ end)
 
 
 -- Networking
-util.AddNetworkString( "get_inventory" )
-net.Receive( "get_inventory", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_inventory" )
+net.Receive( "nws_yrp_get_inventory", function(len, ply)
 	local storage = GetCharacterStorage(ply)
 
 	if IsNotNilAndNotFalse(storage) and storage.uniqueID != nil then
@@ -107,7 +107,7 @@ net.Receive( "get_inventory", function(len, ply)
 			end
 		end
 
-		net.Start( "get_inventory" )
+		net.Start( "nws_yrp_get_inventory" )
 			net.WriteString(storage.uniqueID)
 			net.WriteTable(nettab)
 		net.Send(ply)
@@ -116,7 +116,7 @@ net.Receive( "get_inventory", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_storage_open" )
+util.AddNetworkString( "nws_yrp_storage_open" )
 function OpenStorage(ply, storageID)
 	storageID = tonumber(storageID)
 
@@ -141,7 +141,7 @@ function OpenStorage(ply, storageID)
 			end
 		end
 
-		net.Start( "yrp_storage_open" )
+		net.Start( "nws_yrp_storage_open" )
 			net.WriteTable(storage)
 			net.WriteBool(isinv)
 		net.Send(ply)

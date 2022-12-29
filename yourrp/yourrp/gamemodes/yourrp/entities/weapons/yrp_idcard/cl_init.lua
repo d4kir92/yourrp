@@ -22,7 +22,7 @@ function YDrawIDCards()
 end
 hook.Add( "PostDrawTranslucentRenderables", "yrp_draw_idcards", YDrawIDCards)
 
-hook.Add( "HUDPaint", "yrp_yrp_idcard", function()
+hook.Add( "HUDPaint", "yrp_idcard", function()
 	local lply = LocalPlayer()
 	local weapon = lply:GetActiveWeapon()
 	if weapon:IsValid() and weapon:GetClass() == "yrp_idcard" then

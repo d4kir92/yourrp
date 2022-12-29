@@ -26,8 +26,8 @@ if IsNotNilAndNotFalse(logTab) then
 	end
 end
 
-util.AddNetworkString( "yrp_get_logs" )
-net.Receive( "yrp_get_logs", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_logs" )
+net.Receive( "nws_yrp_get_logs", function(len, ply)
 	local tab = net.ReadString()
 
 	if ply:CanAccess( "bool_logs" ) then
@@ -50,7 +50,7 @@ net.Receive( "yrp_get_logs", function(len, ply)
 
 		table.SortByMember(nettab, "string_timestamp" )
 
-		net.Start( "yrp_get_logs" )
+		net.Start( "nws_yrp_get_logs" )
 			net.WriteTable(nettab)
 		net.Send(ply)
 	end

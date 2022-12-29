@@ -46,7 +46,7 @@ function UseMacro(uid)
 	end
 end
 
-net.Receive( "yrp_get_macros", function(len)
+net.Receive( "nws_yrp_get_macros", function(len)
 	local lply = LocalPlayer()
 	_mm.tab = net.ReadTable()
 
@@ -61,7 +61,7 @@ net.Receive( "yrp_get_macros", function(len)
 		_mm.tf:SetMultiline(true)
 		function _mm.tf:OnTextChanged()
 			if _mm.uid then
-				net.Start( "yrp_update_macro" )
+				net.Start( "nws_yrp_update_macro" )
 					net.WriteString(_mm.uid)
 					net.WriteString(self:GetText() )
 				net.SendToServer()
@@ -124,7 +124,7 @@ net.Receive( "yrp_get_macros", function(len)
 end)
 
 timer.Simple( 10, function()
-	net.Start( "yrp_get_macros" )
+	net.Start( "nws_yrp_get_macros" )
 	net.SendToServer()
 end )
 
@@ -140,7 +140,7 @@ function OpenMacroMenu()
 
 		_mm.content = _mm.window:GetContent()
 		
-		net.Start( "yrp_get_macros" )
+		net.Start( "nws_yrp_get_macros" )
 		net.SendToServer()
 	end
 end

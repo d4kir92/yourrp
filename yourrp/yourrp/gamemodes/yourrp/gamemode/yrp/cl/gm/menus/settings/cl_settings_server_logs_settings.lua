@@ -6,11 +6,11 @@ function BuildLogsSettings(parent, typ)
 	parent.list = YRPCreateD( "DPanelList", parent, parent:GetWide(), parent:GetTall(), 0, 0)
 	parent.list:EnableVerticalScrollbar()
 
-	net.Start( "yrp_get_logs_settings" )
+	net.Start( "nws_yrp_get_logs_settings" )
 		net.WriteString(typ)
 	net.SendToServer()
 
-	net.Receive( "yrp_get_logs_settings", function(len)
+	net.Receive( "nws_yrp_get_logs_settings", function(len)
 		local tab = net.ReadTable()
 
 		if PanelAlive(parent) then

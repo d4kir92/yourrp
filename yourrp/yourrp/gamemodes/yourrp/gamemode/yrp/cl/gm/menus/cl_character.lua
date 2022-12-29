@@ -382,7 +382,7 @@ function LoadCharacters()
 										if LocalPlayer():Alive() then
 											closeCharacterSelection()
 										elseif tonumber(tmpChar.charid) != nil then
-											net.Start( "YRP_EnterWorld" )
+											net.Start( "nws_yrp_EnterWorld" )
 												net.WriteString(tmpChar.charid)
 											net.SendToServer()
 											if PanelAlive(CharMenu.frame) then
@@ -878,12 +878,12 @@ function LoadCharacters()
 	end
 end
 
-net.Receive( "yrp_received_chars", function( len )
-	net.Start( "yrp_received_chars" )
+net.Receive( "nws_yrp_received_chars", function( len )
+	net.Start( "nws_yrp_received_chars" )
 	net.SendToServer()
 end )
 
-net.Receive( "yrp_get_characters", function( len )
+net.Receive( "nws_yrp_get_characters", function( len )
 	local first = net.ReadBool()
 	if first and PanelAlive(CharMenu.characterList) then
 		chars = {}
@@ -898,7 +898,7 @@ net.Receive( "yrp_get_characters", function( len )
 end )
 
 function YRPGetCharacters()
-	net.Start( "yrp_get_characters" )
+	net.Start( "nws_yrp_get_characters" )
 	net.SendToServer()
 end
 
@@ -916,7 +916,7 @@ hook.Add( "HUDPaint", "yrp_logout", function()
 			draw.SimpleText( string.format( "%s (%0.1f%s)", YRP.lang_string( "LID_logout" ), logoutts - CurTime(), string.lower( string.sub( YRP.lang_string( "LID_seconds" ), 1, 1 ) ) ), "Y_30_700", ScrW() / 2, ScrH() * 0.25, Color( 255, 255, 255, 255 ), 1, 1 )
 		elseif logout then
 			logout = false
-			net.Start( "YRP_LogOut" )
+			net.Start( "nws_yrp_LogOut" )
 			net.SendToServer()
 		end
 	end
@@ -1152,7 +1152,7 @@ function openCharacterSelection( force )
 						if LocalPlayer():Alive() then
 							closeCharacterSelection()
 						elseif curChar != nil then
-							net.Start( "YRP_EnterWorld" )
+							net.Start( "nws_yrp_EnterWorld" )
 								net.WriteString( curChar)
 							net.SendToServer()
 							if PanelAlive(CharMenu.frame) then
@@ -1377,7 +1377,7 @@ function openCharacterSelection( force )
 							closeCharacterSelection()
 							closeCharacterSelection()
 						elseif curChar != nil then
-							net.Start( "YRP_EnterWorld" )
+							net.Start( "nws_yrp_EnterWorld" )
 								net.WriteString( curChar)
 							net.SendToServer()
 							if PanelAlive(CharMenu.frame) then
@@ -1824,7 +1824,7 @@ function openCharacterSelection( force )
 					if LocalPlayer():Alive() then
 						closeCharacterSelection()
 					elseif curChar != nil then
-						net.Start( "YRP_EnterWorld" )
+						net.Start( "nws_yrp_EnterWorld" )
 							net.WriteString( curChar)
 						net.SendToServer()
 						if PanelAlive(CharMenu.frame) then
@@ -1849,7 +1849,7 @@ function YRPOpenCharacterSelection( force )
 	end
 end
 
-net.Receive( "YRP_LogOut", function( len )
+net.Receive( "nws_yrp_LogOut", function( len )
 	if GetGlobalYRPBool( "bool_character_system" ) and !IsVoidCharEnabled() then
 		YRPOpenCharacterSelection()
 		timer.Simple( 0.3, function()
@@ -1864,7 +1864,7 @@ net.Receive( "YRPOpenCharacterMenu", function( len, ply )
 	end )
 end)
 
-net.Receive( "OpenCharacterCreation", function(len, ply)
+net.Receive( "nws_yrp_openCharacterCreation", function(len, ply)
 	timer.Simple(1, function()
 		SetGlobalYRPBool( "create_eventchar", false)
 		openCharacterCreation( "server force openCharacterCreation" )

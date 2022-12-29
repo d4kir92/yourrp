@@ -163,7 +163,7 @@ function OpenEmotesMenu()
 		end
 	end
 
-	net.Receive( "do_act", function(len)
+	net.Receive( "nws_yrp_do_act", function(len)
 		local pl = net.ReadEntity()
 		local act = net.ReadString()
 		if IsValid(pl) then
@@ -179,7 +179,7 @@ function OpenEmotesMenu()
 			if _sel ~= nil and GetEmotes()[_sel] ~= nil then
 				--RunConsoleCommand( "act", GetEmotes()[_sel].cmd)
 				--LocalPlayer():AnimRestartGesture( GESTURE_SLOT_CUSTOM, GetEmotes()[_sel].cmd, true )
-				net.Start( "do_act" )
+				net.Start( "nws_yrp_do_act" )
 					net.WriteString(GetEmotes()[_sel].cmd)
 				net.SendToServer()
 			end

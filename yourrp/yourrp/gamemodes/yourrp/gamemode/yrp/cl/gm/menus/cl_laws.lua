@@ -21,7 +21,7 @@ function CreateLawsContent( PARENT )
 	end
 
 	local lply = LocalPlayer()
-	net.Receive( "yrp_get_laws", function(len)
+	net.Receive( "nws_yrp_get_laws", function(len)
 		local lawtab = net.ReadTable()
 		local lawsymbol = tostring(lawtab.string_lawsymbol)
 		local laws = lawtab.string_laws
@@ -51,7 +51,7 @@ function CreateLawsContent( PARENT )
 			_la.laws:SetMultiline(true)
 			_la.laws:SetText( "#" .. laws)
 			function _la.laws:OnChange()
-				net.Start( "set_laws" )
+				net.Start( "nws_yrp_set_laws" )
 					net.WriteString(self:GetText() )
 				net.SendToServer()
 			end
@@ -68,7 +68,7 @@ function CreateLawsContent( PARENT )
 			_la.lockdowntext = YRPCreateD( "DTextEntry", PARENT, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50) )
 			_la.lockdowntext:SetText( "#" .. lockdowntext)
 			function _la.lockdowntext:OnChange()
-				net.Start( "set_lockdowntext" )
+				net.Start( "nws_yrp_set_lockdowntext" )
 					net.WriteString(self:GetText() )
 				net.SendToServer()
 			end
@@ -93,7 +93,7 @@ function CreateLawsContent( PARENT )
 				else
 					_la.lockdowntoggle:SetText(ld_disabled)
 				end
-				net.Start( "set_lockdown" )
+				net.Start( "nws_yrp_set_lockdown" )
 					net.WriteBool(lockdown)
 				net.SendToServer()
 			end
@@ -115,7 +115,7 @@ function CreateLawsContent( PARENT )
 				local a = YRPCreateD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
 				a:SetChecked(e.enabled)
 				function a:OnChange( bVal )
-					net.Start( "update_lockdown_alarms" )
+					net.Start( "nws_yrp_update_lockdown_alarms" )
 						net.WriteString(e.name)
 						net.WriteBool( bVal)
 					net.SendToServer()
@@ -146,7 +146,7 @@ function CreateLawsContent( PARENT )
 					local a = YRPCreateD( "DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
 					a:SetChecked(tobool(e.bool_lockdown) )
 					function a:OnChange( bVal )
-						net.Start( "update_lockdown_buildings" )
+						net.Start( "nws_yrp_update_lockdown_buildings" )
 							net.WriteString(e.uniqueID)
 							net.WriteBool( bVal)
 						net.SendToServer()
@@ -161,7 +161,7 @@ function CreateLawsContent( PARENT )
 		end
 	end)
 
-	net.Start( "yrp_get_laws" )
+	net.Start( "nws_yrp_get_laws" )
 	net.SendToServer()
 end
 

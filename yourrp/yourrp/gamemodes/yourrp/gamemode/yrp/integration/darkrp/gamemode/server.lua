@@ -136,11 +136,11 @@ function DarkRP.log(message, colour, noFileSave)
 	YRPDarkrpNotFound( "log( " .. message .. ", " .. tostring( colour) .. ", " .. tostring(noFileSave) .. " )" )
 end
 
-util.AddNetworkString( "sendNotify" )
+util.AddNetworkString( "nws_yrp_sendNotify" )
 function DarkRP.notify( ply, msgType, time, message )
 	--Description: Log a message in DarkRP
 	if ply:IsPlayer() and IsNotNilAndNotFalse(message) then
-		net.Start( "sendNotify" )
+		net.Start( "nws_yrp_sendNotify" )
 			net.WriteString( message )
 		net.Send(ply)
 	else
@@ -151,7 +151,7 @@ end
 function DarkRP.notifyAll(msgType, time, message)
 	--Description: Make a notification pop up on the everyone's screen.
 	--YRPDarkrpNotFound( "notifyAll(msgType, time, " .. message .. " )" )
-	net.Start( "sendNotify" )
+	net.Start( "nws_yrp_sendNotify" )
 		net.WriteString(message)
 	net.Broadcast()
 end

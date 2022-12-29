@@ -54,7 +54,7 @@ function PANEL:SetStorageID(storageID, slots)
 
 			SetStoragePanel(storageID, self)
 
-			net.Start( "yrp_storage_get_slots" )
+			net.Start( "nws_yrp_storage_get_slots" )
 				net.WriteString(self._storageID)
 			net.SendToServer()
 		else
@@ -120,7 +120,7 @@ vgui.Register( "YStorage", PANEL, "DPanelList" )
 
 
 -- Networking
-net.Receive( "yrp_storage_get_slots", function(len)
+net.Receive( "nws_yrp_storage_get_slots", function(len)
 	local storageID = net.ReadString()
 	local slots = net.ReadTable()
 

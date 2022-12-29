@@ -86,12 +86,12 @@ function YRP.SetFont(fontname)
 	end
 end
 
-net.Receive( "yrp_set_font", function(len)
+net.Receive( "nws_yrp_set_font", function(len)
 	local fname = net.ReadString()
 	YRP.SetFont(fname)
 end)
 timer.Simple( 10, function()
-	net.Start( "yrp_set_font" )
+	net.Start( "nws_yrp_set_font" )
 	net.SendToServer()
 end )
 

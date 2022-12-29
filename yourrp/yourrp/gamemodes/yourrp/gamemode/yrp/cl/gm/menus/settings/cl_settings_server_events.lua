@@ -2,7 +2,7 @@
 
 local EVENT = {}
 
-net.Receive( "setting_events", function(len)
+net.Receive( "nws_yrp_setting_events", function(len)
 	local PARENT = GetSettingsSite()
 
 	if PanelAlive(PARENT) then
@@ -16,7 +16,7 @@ net.Receive( "setting_events", function(len)
 		EVENT.EventChars:AddColumn(YRP.lang_string( "LID_name" ) )
 		EVENT.EventChars:AddColumn( "Event Character ID" ):SetFixedWidth(120)
 		EVENT.EventChars:AddColumn( "Event Character NAME" )
-		net.Receive( "yrp_get_event_chars", function(len)
+		net.Receive( "nws_yrp_get_event_chars", function(len)
 			local tab = net.ReadTable()
 
 			EVENT.EventChars:Clear()
@@ -51,7 +51,7 @@ net.Receive( "setting_events", function(len)
 				Frame:MakePopup()
 
 				Frame.Char = YRPCreateD( "DComboBox", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20 + 60 + 20) )
-				net.Receive( "yrp_event_get_chars", function()
+				net.Receive( "nws_yrp_event_get_chars", function()
 					local tab = net.ReadTable()
 					if PanelAlive( Frame ) and PanelAlive( Frame.Char ) then
 						Frame.Char:Clear()
@@ -66,7 +66,7 @@ net.Receive( "setting_events", function(len)
 					Frame.Player:AddChoice( v:RPName(), v:YRPSteamID() )
 				end
 				function Frame.Player:OnSelect(index, rpname, steamid)
-					net.Start( "yrp_event_get_chars" )
+					net.Start( "nws_yrp_event_get_chars" )
 						net.WriteString(steamid)
 					net.SendToServer()
 				end
@@ -79,7 +79,7 @@ net.Receive( "setting_events", function(len)
 						local _, steamid = Frame.Player:GetSelected()
 						local charname, charuid = Frame.Char:GetSelected()
 						if Frame.Char:GetSelected() then
-							net.Start( "yrp_event_char_add" )
+							net.Start( "nws_yrp_event_char_add" )
 								net.WriteString(uid)
 								net.WriteString(steamid)
 								net.WriteString( charuid)
@@ -105,7 +105,7 @@ net.Receive( "setting_events", function(len)
 				local euid = EVENT.EventList:GetLine( EVENT.EventList:GetSelectedLine() ):GetValue(1)
 				local cuid = EVENT.EventChars:GetLine( EVENT.EventChars:GetSelectedLine() ):GetValue(2)
 
-				net.Start( "yrp_event_char_remove" )
+				net.Start( "nws_yrp_event_char_remove" )
 					net.WriteString(euid)
 					net.WriteString( cuid)
 				net.SendToServer()
@@ -131,7 +131,7 @@ net.Receive( "setting_events", function(len)
 			Frame.Add = YRPCreateD( "YButton", Frame, YRP.ctr(300), YRP.ctr(60), Frame:GetWide() / 2 - YRP.ctr(300 / 2), Frame:GetTall() - YRP.ctr(60 + 20) )
 			Frame.Add:SetText( "LID_add" )
 			function Frame.Add:DoClick()
-				net.Start( "yrp_event_add" )
+				net.Start( "nws_yrp_event_add" )
 					net.WriteString(Frame.Name:GetText() )
 				net.SendToServer()
 
@@ -150,7 +150,7 @@ net.Receive( "setting_events", function(len)
 			if EVENT.EventList:GetSelectedLine() then
 				local uid = EVENT.EventList:GetLine(EVENT.EventList:GetSelectedLine() ):GetValue(1)
 
-				net.Start( "yrp_event_remove" )
+				net.Start( "nws_yrp_event_remove" )
 					net.WriteString(uid)
 				net.SendToServer()
 			end
@@ -169,7 +169,7 @@ net.Receive( "setting_events", function(len)
 
 				local uid = EVENT.EventList:GetLine( EVENT.EventList:GetSelectedLine() ):GetValue(1)
 
-				net.Start( "yrp_event_start" )
+				net.Start( "nws_yrp_event_start" )
 					net.WriteString(uid)
 				net.SendToServer()
 			end
@@ -188,7 +188,7 @@ net.Receive( "setting_events", function(len)
 
 				local uid = EVENT.EventList:GetLine( EVENT.EventList:GetSelectedLine() ):GetValue(1)
 
-				net.Start( "yrp_event_end" )
+				net.Start( "nws_yrp_event_end" )
 					net.WriteString(uid)
 				net.SendToServer()
 			end
@@ -200,12 +200,12 @@ net.Receive( "setting_events", function(len)
 		function EVENT.EventList:OnRowSelected(rowIndex, row)
 			local uid = EVENT.EventList:GetLine( EVENT.EventList:GetSelectedLine() ):GetValue(1)
 
-			net.Start( "yrp_get_event_chars" )
+			net.Start( "nws_yrp_get_event_chars" )
 				net.WriteString(uid)
 			net.SendToServer()
 		end
 
-		net.Receive( "yrp_get_events", function(len)
+		net.Receive( "nws_yrp_get_events", function(len)
 			local tab = net.ReadTable()
 
 			if IsNotNilAndNotFalse(tab) and PanelAlive(EVENT) and PanelAlive(EVENT.EventList) then
@@ -216,12 +216,12 @@ net.Receive( "setting_events", function(len)
 				end
 			end
 		end)
-		net.Start( "yrp_get_events" )
+		net.Start( "nws_yrp_get_events" )
 		net.SendToServer()
 	end
 end)
 
 function OpenSettingsEvents()
-	net.Start( "setting_events" )
+	net.Start( "nws_yrp_setting_events" )
 	net.SendToServer()
 end

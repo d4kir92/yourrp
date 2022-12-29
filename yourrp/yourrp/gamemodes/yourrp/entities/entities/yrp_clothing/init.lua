@@ -26,11 +26,11 @@ function ENT:Think()
 	end
 end
 
-util.AddNetworkString( "openAM" )
+util.AddNetworkString( "nws_yrp_openAM" )
 function ENT:Use( activator, caller)
 	if !activator:GetYRPBool( "clicked", false) then
 		activator:SetYRPBool( "clicked", true)
-		net.Start( "openAM" )
+		net.Start( "nws_yrp_openAM" )
 		net.Send( activator)
 		timer.Simple(0.4, function()
 			activator:SetYRPBool( "clicked", false)

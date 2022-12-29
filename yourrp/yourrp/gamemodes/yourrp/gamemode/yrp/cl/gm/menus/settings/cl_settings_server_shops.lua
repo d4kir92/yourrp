@@ -2,7 +2,7 @@
 
 local _sh = {}
 
-net.Receive( "get_shops", function()
+net.Receive( "nws_yrp_get_shops", function()
 	local _shops = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
@@ -12,11 +12,11 @@ net.Receive( "get_shops", function()
 		_sh._sho:SetListHeader(YRP.lang_string( "LID_settings_shops" ) )
 		_sh._sho:SetEditArEntityAlive(_sh.ea)
 		function _sh._sho:AddFunction()
-			net.Start( "shop_add" )
+			net.Start( "nws_yrp_shop_add" )
 			net.SendToServer()
 		end
 		function _sh._sho:RemoveFunction()
-			net.Start( "shop_rem" )
+			net.Start( "nws_yrp_shop_rem" )
 				net.WriteString(self.uid)
 			net.SendToServer()
 
@@ -42,13 +42,13 @@ net.Receive( "get_shops", function()
 			_sh._sho._name:SetText(tbl.name)
 			function _sh._sho._name.textentry:OnChange()
 				self.tbl.name = self:GetValue()
-				net.Start( "shop_edit_name" )
+				net.Start( "nws_yrp_shop_edit_name" )
 					net.WriteString(self.tbl.uniqueID)
 					net.WriteString(self.tbl.name)
 				net.SendToServer()
 			end
 
-			net.Start( "get_shop_categories" )
+			net.Start( "nws_yrp_get_shop_categories" )
 				net.WriteString(tbl.uniqueID)
 			net.SendToServer()
 		end
@@ -59,7 +59,7 @@ net.Receive( "get_shops", function()
 	end
 end)
 
-net.Receive( "get_shop_categories", function()
+net.Receive( "nws_yrp_get_shop_categories", function()
 	local _scats = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
@@ -70,14 +70,14 @@ net.Receive( "get_shop_categories", function()
 		_sh._cat:SetEditArEntityAlive(_sh.ea)
 		function _sh._cat:AddFunction()
 			if _sh._sho.uid != nil then
-				net.Start( "category_add" )
+				net.Start( "nws_yrp_category_add" )
 					net.WriteString(_sh._sho.uid)
 				net.SendToServer()
 			end
 		end
 		function _sh._cat:RemoveFunction()
 			if _sh._sho.uid != nil then
-				net.Start( "category_rem" )
+				net.Start( "nws_yrp_category_rem" )
 					net.WriteString(self.uid)
 					net.WriteString(_sh._sho.uid)
 				net.SendToServer()
@@ -102,14 +102,14 @@ net.Receive( "get_shop_categories", function()
 					_sh._cat._name:SetText(tbl.name)
 					function _sh._cat._name.textentry:OnChange()
 						self.tbl.name = self:GetValue()
-						net.Start( "category_edit_name" )
+						net.Start( "nws_yrp_category_edit_name" )
 							net.WriteString(self.tbl.uniqueID)
 							net.WriteString(self.tbl.name)
 							net.WriteString(_sh._sho.uid)
 						net.SendToServer()
 					end
 
-					net.Start( "get_shop_items" )
+					net.Start( "nws_yrp_get_shop_items" )
 						net.WriteString(tbl.uniqueID)
 					net.SendToServer()
 				end
@@ -122,7 +122,7 @@ net.Receive( "get_shop_categories", function()
 	end
 end)
 
-net.Receive( "get_shop_items", function()
+net.Receive( "nws_yrp_get_shop_items", function()
 	local _sitems = net.ReadTable()
 
 	local PARENT = GetSettingsSite()
@@ -133,14 +133,14 @@ net.Receive( "get_shop_items", function()
 		_sh._sit:SetEditArEntityAlive(_sh.ea)
 		function _sh._sit:AddFunction()
 			if _sh._cat.uid != nil then
-				net.Start( "shop_item_add" )
+				net.Start( "nws_yrp_shop_item_add" )
 					net.WriteString(_sh._cat.uid)
 				net.SendToServer()
 			end
 		end
 		function _sh._sit:RemoveFunction()
 			if _sh._cat.uid != nil then
-				net.Start( "shop_item_rem" )
+				net.Start( "nws_yrp_shop_item_rem" )
 					net.WriteString(self.uid)
 					net.WriteString(_sh._cat.uid)
 				net.SendToServer()
@@ -161,7 +161,7 @@ net.Receive( "get_shop_items", function()
 				_sh._sit.itemname:SetText(tbl.name)
 				function _sh._sit.itemname.textentry:SendNewName()
 					if _sh._cat.uid != nil then
-						net.Start( "shop_item_edit_name" )
+						net.Start( "nws_yrp_shop_item_edit_name" )
 							net.WriteString(self.tbl.uniqueID)
 							net.WriteString(self.tbl.name)
 							net.WriteString(_sh._cat.uid)
@@ -185,7 +185,7 @@ net.Receive( "get_shop_items", function()
 				_sh._sit.itemdesc.textentry:SetMultiline(true)
 				function _sh._sit.itemdesc.textentry:SendNewDesc()
 					if _sh._cat.uid != nil then
-						net.Start( "shop_item_edit_desc" )
+						net.Start( "nws_yrp_shop_item_edit_desc" )
 							net.WriteString(self.tbl.uniqueID)
 							net.WriteString(self.tbl.description)
 							net.WriteString(_sh._cat.uid)
@@ -212,7 +212,7 @@ net.Receive( "get_shop_items", function()
 				function _sh._sit.itemprice.plus:OnValueChanged( value)
 					self.tbl.price = value
 					if _sh._cat.uid != nil then
-						net.Start( "shop_item_edit_price" )
+						net.Start( "nws_yrp_shop_item_edit_price" )
 							net.WriteString(self.tbl.uniqueID)
 							net.WriteString(self.tbl.price)
 							net.WriteString(_sh._cat.uid)
@@ -231,7 +231,7 @@ net.Receive( "get_shop_items", function()
 				function _sh._sit.itemlevel.plus:OnValueChanged( value)
 					self.tbl.int_level = value
 					if _sh._cat.uid != nil then
-						net.Start( "shop_item_edit_level" )
+						net.Start( "nws_yrp_shop_item_edit_level" )
 							net.WriteString(self.tbl.uniqueID)
 							net.WriteString(self.tbl.int_level)
 							net.WriteString(_sh._cat.uid)
@@ -257,7 +257,7 @@ net.Receive( "get_shop_items", function()
 				function _sh._sit.itemquan.plus:OnSelect(index, value, data)
 					self.tbl.quantity = data
 					if _sh._cat.uid != nil then
-						net.Start( "shop_item_edit_quan" )
+						net.Start( "nws_yrp_shop_item_edit_quan" )
 							net.WriteString(self.tbl.uniqueID)
 							net.WriteString(self.tbl.quantity)
 							net.WriteString(_sh._cat.uid)
@@ -277,7 +277,7 @@ net.Receive( "get_shop_items", function()
 				function _sh._sit.itemcool.plus:OnValueChanged( value)
 					self.tbl.cooldown = value
 					if _sh._cat.uid != nil then
-						net.Start( "shop_item_edit_cool" )
+						net.Start( "nws_yrp_shop_item_edit_cool" )
 							net.WriteString(self.tbl.uniqueID)
 							net.WriteString(self.tbl.cooldown)
 							net.WriteString(_sh._cat.uid)
@@ -290,9 +290,9 @@ net.Receive( "get_shop_items", function()
 				_sh._sit.itemlice:SetHeader(YRP.lang_string( "LID_licenses" ) )
 				_sh._sit.itemlice:INITPanel( "DComboBox" )
 				_sh._sit.itemlice.plus.tbl = tbl
-				net.Start( "get_all_licenses_simple" )
+				net.Start( "nws_yrp_get_all_licenses_simple" )
 				net.SendToServer()
-				net.Receive( "get_all_licenses_simple", function(len)
+				net.Receive( "nws_yrp_get_all_licenses_simple", function(len)
 					local _licenses = net.ReadTable()
 					if PanelAlive(_sh._sit) and PanelAlive(_sh._sit.itemlice) and PanelAlive(_sh._sit.itemlice.plus) then
 						_sh._sit.itemlice.plus:AddChoice(YRP.lang_string( "LID_none" ), -1)
@@ -308,7 +308,7 @@ net.Receive( "get_shop_items", function()
 				function _sh._sit.itemlice.plus:OnSelect(index, value, data)
 					self.tbl.licenseID = data
 					if _sh._cat.uid != nil then
-						net.Start( "shop_item_edit_lice" )
+						net.Start( "nws_yrp_shop_item_edit_lice" )
 							net.WriteString(self.tbl.uniqueID)
 							net.WriteString(self.tbl.licenseID)
 							net.WriteString(_sh._cat.uid)
@@ -329,7 +329,7 @@ net.Receive( "get_shop_items", function()
 					end
 					self.tbl.permanent = _checked
 					if _sh._cat.uid != nil then
-						net.Start( "shop_item_edit_perm" )
+						net.Start( "nws_yrp_shop_item_edit_perm" )
 							net.WriteString(self.tbl.uniqueID)
 							net.WriteString(self.tbl.permanent)
 							net.WriteString(_sh._cat.uid)
@@ -391,9 +391,9 @@ net.Receive( "get_shop_items", function()
 						_itemlist = tmpTable
 						openSingleSelector(_itemlist, "selected_shop_item" )
 					elseif value == "licenses" then
-						net.Start( "getlicenses" )
+						net.Start( "nws_yrp_getlicenses" )
 						net.SendToServer()
-						net.Receive( "getlicenses", function()
+						net.Receive( "nws_yrp_getlicenses", function()
 							local _net_tab = net.ReadTable()
 							_itemlist = _net_tab
 							for i, lic in pairs(_itemlist) do
@@ -404,7 +404,7 @@ net.Receive( "get_shop_items", function()
 							openSingleSelector(_itemlist, "selected_shop_item" )
 						end)
 					elseif value == "roles" then
-						net.Receive( "getallroles", function()
+						net.Receive( "nws_yrp_getallroles", function()
 							local _net_tab = net.ReadTable()
 							_itemlist = _net_tab
 							for i, rol in pairs(_itemlist) do
@@ -416,7 +416,7 @@ net.Receive( "get_shop_items", function()
 							openSingleSelector(_itemlist, "selected_shop_item" )
 						end)
 
-						net.Start( "getallroles" )
+						net.Start( "nws_yrp_getallroles" )
 						net.SendToServer()
 					end
 				end
@@ -426,7 +426,7 @@ net.Receive( "get_shop_items", function()
 						local _cn = LocalPlayer().ClassName or ""
 						local _pn = LocalPlayer().PrintName or ""
 						local _type = _sh._sit.type.plus:GetOptionData(_sh._sit.type.plus:GetSelectedID() )
-						net.Start( "shop_item_edit_base" )
+						net.Start( "nws_yrp_shop_item_edit_base" )
 							net.WriteString(_sh._sit.type.plus.tbl.uniqueID)
 							net.WriteString(_wm)
 							net.WriteString(_cn)
@@ -456,7 +456,7 @@ function OpenSettingsShops()
 			draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 200) )
 		end
 
-		net.Start( "get_shops" )
+		net.Start( "nws_yrp_get_shops" )
 		net.SendToServer()
 	end
 end

@@ -106,7 +106,7 @@ function CreateTicketContent(parent)
 			_net_table.steamid = LocalPlayer():YRPSteamID() or "FAILED"
 			_net_table.steamname = LocalPlayer():SteamName() or "FAILED"
 			_net_table.rpname = LocalPlayer():RPName() or "FAILED"
-			net.Start( "add_ticket" )
+			net.Start( "nws_yrp_add_ticket" )
 				net.WriteTable(_net_table)
 			net.SendToServer()
 

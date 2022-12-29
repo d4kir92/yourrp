@@ -45,7 +45,7 @@ function PANEL:Init()
 	self.mdl.main = self
 	function self:DoClick()
 		if self:GetItemID() != nil then
-			net.Start( "yrp_item_clicked" )
+			net.Start( "nws_yrp_item_clicked" )
 				net.WriteString(self:GetItemID() )
 			net.SendToServer()
 		else
@@ -66,7 +66,7 @@ function PANEL:Init()
 	self.mdl:Droppable( "yrp_slot" )
 end
 
-net.Receive( "yrp_storage_open", function(len)
+net.Receive( "nws_yrp_storage_open", function(len)
 	local lply = LocalPlayer()
 
 	local storage = net.ReadTable()

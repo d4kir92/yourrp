@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-net.Receive( "setting_players", function(len)
+net.Receive( "nws_yrp_setting_players", function(len)
 	local PARENT = GetSettingsSite()
 
 	if PanelAlive(PARENT) then
@@ -58,7 +58,7 @@ net.Receive( "setting_players", function(len)
 				local _rpnameButton = createVGUI( "DButton", _rpnameFrame, 380, 50, 10, 60 + 10 + 50)
 				_rpnameButton:SetText(YRP.lang_string( "LID_rpname" ) )
 				function _rpnameButton:DoClick()
-					net.Start( "set_rpname" )
+					net.Start( "nws_yrp_set_rpname" )
 						net.WriteEntity(ply)
 						net.WriteString(_newrpname:GetText() )
 					net.SendToServer()
@@ -83,7 +83,7 @@ net.Receive( "setting_players", function(len)
 
 				local _giveComboBox = createVGUI( "DComboBox", _giveFrame, 380, 50, 10, 85)
 
-				net.Receive( "give_getGroTab", function(le)
+				net.Receive( "nws_yrp_give_getGroTab", function(le)
 					if PanelAlive(_giveComboBox) then
 						local _tmpGroupList = net.ReadTable()
 						for k, v in pairs(_tmpGroupList) do
@@ -91,17 +91,17 @@ net.Receive( "setting_players", function(len)
 						end
 					end
 				end)
-				net.Start( "give_getGroTab" )
+				net.Start( "nws_yrp_give_getGroTab" )
 				net.SendToServer()
 
 				local _giveComboBox2 = createVGUI( "DComboBox", _giveFrame, 380, 50, 10, 185)
 				function _giveComboBox:OnSelect(panel, index, value)
 					if PanelAlive(_giveComboBox2) then
 						_giveComboBox2:Clear()
-						net.Start( "give_getRolTab" )
+						net.Start( "nws_yrp_give_getRolTab" )
 							net.WriteString(tostring( value) )
 						net.SendToServer()
-						net.Receive( "give_getRolTab", function(le)
+						net.Receive( "nws_yrp_give_getRolTab", function(le)
 							local _tmpRolTab = net.ReadTable()
 							for k, v in pairs(_tmpRolTab) do
 								_giveComboBox2:AddChoice( v.string_name, v.uniqueID )
@@ -114,7 +114,7 @@ net.Receive( "setting_players", function(len)
 				_giveButton:SetText(YRP.lang_string( "LID_give" ) )
 				function _giveButton:DoClick()
 					if isnumber(tonumber(_giveComboBox2:GetOptionData(_giveComboBox2:GetSelectedID() )) ) then
-						net.Start( "giveRole" )
+						net.Start( "nws_yrp_giveRole" )
 							net.WriteString(_tmpSteamID)
 							net.WriteInt(_giveComboBox2:GetOptionData(_giveComboBox2:GetSelectedID() ), 16)
 						net.SendToServer()
@@ -147,7 +147,7 @@ net.Receive( "setting_players", function(len)
 				local _idcardidButton = createVGUI( "DButton", _idcardidFrame, 380, 50, 10, 60 + 10 + 50)
 				_idcardidButton:SetText(YRP.lang_string( "LID_setidcardid" ) )
 				function _idcardidButton:DoClick()
-					net.Start( "set_idcardid" )
+					net.Start( "nws_yrp_set_idcardid" )
 						net.WriteEntity(ply)
 						net.WriteString(_newidcardid:GetText() )
 					net.SendToServer()
@@ -164,7 +164,7 @@ net.Receive( "setting_players", function(len)
 			local _buttonRemoveArrests = createVGUI( "DButton", _tmpPanel, 400, 50, 10, 190)
 			_buttonRemoveArrests:SetText(YRP.lang_string( "LID_removearrests" ) )
 			function _buttonRemoveArrests:DoClick()
-				net.Start( "removearrests" )
+				net.Start( "nws_yrp_removearrests" )
 					net.WriteEntity(ply)
 				net.SendToServer()
 			end
@@ -181,7 +181,7 @@ net.Receive( "setting_players", function(len)
 				local license = 0
 				local _newlicense = createVGUI( "DComboBox", _licenseFrame, 380, 50, 10, 60)
 
-				net.Receive( "get_licenses_player", function(len)
+				net.Receive( "nws_yrp_get_licenses_player", function(len)
 					local tab = net.ReadTable()
 					for k, v in pairs(tab) do
 						_newlicense:AddChoice( v.name, v.uniqueID)
@@ -190,13 +190,13 @@ net.Receive( "setting_players", function(len)
 						license = data
 					end
 				end)
-				net.Start( "get_licenses_player" )
+				net.Start( "nws_yrp_get_licenses_player" )
 				net.SendToServer()
 
 				local _licenseButton = createVGUI( "DButton", _licenseFrame, 380, 50, 10, 60 + 10 + 50)
 				_licenseButton:SetText(YRP.lang_string( "LID_givelicense" ) )
 				function _licenseButton:DoClick()
-					net.Start( "givelicense" )
+					net.Start( "nws_yrp_givelicense" )
 						net.WriteEntity(ply)
 						net.WriteString(license)
 					net.SendToServer()
@@ -222,7 +222,7 @@ net.Receive( "setting_players", function(len)
 				local license = 0
 				local _newlicense = createVGUI( "DComboBox", _licenseFrame, 380, 50, 10, 60)
 
-				net.Receive( "get_licenses_player", function(len)
+				net.Receive( "nws_yrp_get_licenses_player", function(len)
 					local tab = net.ReadTable()
 					for k, v in pairs(tab) do
 						_newlicense:AddChoice( v.name, v.uniqueID)
@@ -231,13 +231,13 @@ net.Receive( "setting_players", function(len)
 						license = data
 					end
 				end)
-				net.Start( "get_licenses_player" )
+				net.Start( "nws_yrp_get_licenses_player" )
 				net.SendToServer()
 
 				local _licenseButton = createVGUI( "DButton", _licenseFrame, 380, 50, 10, 60 + 10 + 50)
 				_licenseButton:SetText(YRP.lang_string( "LID_removelicense" ) )
 				function _licenseButton:DoClick()
-					net.Start( "removelicense" )
+					net.Start( "nws_yrp_removelicense" )
 						net.WriteEntity(ply)
 						net.WriteString(license)
 					net.SendToServer()
@@ -263,6 +263,6 @@ net.Receive( "setting_players", function(len)
 end)
 
 function OpenSettingsPlayers()
-	net.Start( "setting_players" )
+	net.Start( "nws_yrp_setting_players" )
 	net.SendToServer()
 end

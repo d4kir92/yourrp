@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-net.Receive( "get_levelsystem_settings", function(len)
+net.Receive( "nws_yrp_get_levelsystem_settings", function(len)
 	local lply = LocalPlayer()
 	local setting = net.ReadTable()
 
@@ -31,7 +31,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 			local max = tonumber(self:GetMax() )
 			if val >= min and val <= max then
 				setting.int_level_min = val
-				net.Start( "update_ls_int_level_min" )
+				net.Start( "nws_yrp_update_ls_int_level_min" )
 					net.WriteString( val)
 				net.SendToServer()
 			elseif val < min then
@@ -67,7 +67,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 			local max = tonumber(self:GetMax() )
 			if val >= min and val <= max then
 				setting.int_level_max = val
-				net.Start( "update_ls_int_level_max" )
+				net.Start( "nws_yrp_update_ls_int_level_max" )
 					net.WriteString( val)
 				net.SendToServer()
 			elseif val < min then
@@ -100,7 +100,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 			local max = tonumber(self:GetMax() )
 			if val >= min and val <= max then
 				setting.int_level_start = val
-				net.Start( "update_ls_int_level_start" )
+				net.Start( "nws_yrp_update_ls_int_level_start" )
 					net.WriteString( val)
 				net.SendToServer()
 			elseif val < min then
@@ -135,7 +135,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 			local max = tonumber(self:GetMax() )
 			if val >= min and val <= max then
 				setting.float_multiplier = val
-				net.Start( "update_ls_float_multiplier" )
+				net.Start( "nws_yrp_update_ls_float_multiplier" )
 					net.WriteString( val)
 				net.SendToServer()
 			elseif val < min then
@@ -168,7 +168,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 			local max = tonumber(self:GetMax() )
 			if val >= min and val <= max then
 				setting.int_xp_for_levelup = val
-				net.Start( "update_ls_int_xp_for_levelup" )
+				net.Start( "nws_yrp_update_ls_int_xp_for_levelup" )
 					net.WriteString( val)
 				net.SendToServer()
 			elseif val < min then
@@ -208,7 +208,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 			local max = tonumber(self:GetMax() )
 			if val >= min and val <= max then
 				setting.int_xp_per_kill = val
-				net.Start( "update_ls_int_xp_per_kill" )
+				net.Start( "nws_yrp_update_ls_int_xp_per_kill" )
 					net.WriteString( val)
 				net.SendToServer()
 			elseif val < min then
@@ -239,7 +239,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 			local max = tonumber(self:GetMax() )
 			if val >= min and val <= max then
 				setting.int_xp_per_minute = val
-				net.Start( "update_ls_int_xp_per_minute" )
+				net.Start( "nws_yrp_update_ls_int_xp_per_minute" )
 					net.WriteString( val)
 				net.SendToServer()
 			elseif val < min then
@@ -270,7 +270,7 @@ net.Receive( "get_levelsystem_settings", function(len)
 			local max = tonumber(self:GetMax() )
 			if val >= min and val <= max then
 				setting.int_xp_per_revive = val
-				net.Start( "update_ls_int_xp_per_revive" )
+				net.Start( "nws_yrp_update_ls_int_xp_per_revive" )
 					net.WriteString( val)
 				net.SendToServer()
 			elseif val < min then
@@ -348,6 +348,6 @@ net.Receive( "get_levelsystem_settings", function(len)
 end)
 
 function OpenSettingsLevelsystem()
-	net.Start( "get_levelsystem_settings" )
+	net.Start( "nws_yrp_get_levelsystem_settings" )
 	net.SendToServer()
 end

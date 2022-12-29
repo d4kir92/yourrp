@@ -9,11 +9,11 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "reward", "INTEGER DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT 'NO DESCRIPTION'" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "contract_SteamID", "TEXT DEFAULT ''" )
 
-util.AddNetworkString( "yrp_placehit" )
-util.AddNetworkString( "yrp_gethits" )
-util.AddNetworkString( "yrp_accepthit" )
+util.AddNetworkString( "nws_yrp_placehit" )
+util.AddNetworkString( "nws_yrp_gethits" )
+util.AddNetworkString( "nws_yrp_accepthit" )
 
-net.Receive( "yrp_placehit", function(len, ply)
+net.Receive( "nws_yrp_placehit", function(len, ply)
 	local _steamid = net.ReadString()
 	local _reward = net.ReadString()
 	local _desc = net.ReadString()
@@ -30,20 +30,20 @@ net.Receive( "yrp_placehit", function(len, ply)
 	end
 end)
 
-net.Receive( "yrp_gethits", function(len, ply)
+net.Receive( "nws_yrp_gethits", function(len, ply)
 	local _hits = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if _hits != nil then
-		net.Start( "yrp_gethits" )
+		net.Start( "nws_yrp_gethits" )
 			net.WriteTable(_hits)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_get_contracts" )
-net.Receive( "yrp_get_contracts", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_contracts" )
+net.Receive( "nws_yrp_get_contracts", function(len, ply)
 	local _hits = YRP_SQL_SELECT(DATABASE_NAME, "*", "contract_SteamID = '" .. ply:YRPSteamID() .. "'" )
 	if _hits != nil then
-		net.Start( "yrp_get_contracts" )
+		net.Start( "nws_yrp_get_contracts" )
 			net.WriteTable(_hits)
 		net.Send(ply)
 	end
@@ -64,7 +64,7 @@ function hitquit( agent )
 	agent:SetYRPEntity( "hittarget", NULL)
 end
 
-net.Receive( "yrp_accepthit", function(len, ply)
+net.Receive( "nws_yrp_accepthit", function(len, ply)
 	local _uid = net.ReadString()
 	local _hit = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _uid)
 

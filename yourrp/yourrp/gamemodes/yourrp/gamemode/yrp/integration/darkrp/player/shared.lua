@@ -342,12 +342,12 @@ local function doRetrieve()
 
 	RetrievePlayerVar(userID, var, value)
 end
-net.Receive( "DarkRP_PlayerVar", doRetrieve)
+net.Receive( "nws_yrp_darkRP_PlayerVar", doRetrieve)
 
 local function doRetrieveRemoval()
 	--doRetrieveRemoval
 end
-net.Receive( "DarkRP_PlayerVarRemoval", doRetrieveRemoval)
+net.Receive( "nws_yrp_darkRP_PlayerVarRemoval", doRetrieveRemoval)
 
 local function InitializeDarkRPVars(len)
 	local plyCount = net.ReadUInt(8)
@@ -362,10 +362,10 @@ local function InitializeDarkRPVars(len)
 		end
 	end
 end
-net.Receive( "DarkRP_InitializeVars", InitializeDarkRPVars)
+net.Receive( "nws_yrp_darkRP_InitializeVars", InitializeDarkRPVars)
 --timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
 
-net.Receive( "DarkRP_DarkRPVarDisconnect", function(len)
+net.Receive( "nws_yrp_darkRP_DarkRPVarDisconnect", function(len)
 	local userID = net.ReadUInt(16)
 	DarkRPVars[userID] = nil
 end)

@@ -19,8 +19,8 @@ function AddToHandler_YourRP_Addons(ply)
 	end
 end
 
-util.AddNetworkString( "Connect_Settings_YourRP_Addons" )
-net.Receive( "Connect_Settings_YourRP_Addons", function(len, ply)
+util.AddNetworkString( "nws_yrp_connect_Settings_YourRP_Addons" )
+net.Receive( "nws_yrp_connect_Settings_YourRP_Addons", function(len, ply)
 	if ply:CanAccess( "bool_yourrp_addons" ) then
 		AddToHandler_YourRP_Addons(ply)
 
@@ -28,14 +28,14 @@ net.Receive( "Connect_Settings_YourRP_Addons", function(len, ply)
 			hook.Run( "get_yourrp_addons" )
 		end
 
-		net.Start( "Connect_Settings_YourRP_Addons" )
+		net.Start( "nws_yrp_connect_Settings_YourRP_Addons" )
 			net.WriteTable(yrp_addons)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "Disconnect_Settings_YourRP_Addons" )
-net.Receive( "Disconnect_Settings_YourRP_Addons", function(len, ply)
+util.AddNetworkString( "nws_yrp_disconnect_Settings_YourRP_Addons" )
+net.Receive( "nws_yrp_disconnect_Settings_YourRP_Addons", function(len, ply)
 	RemFromHandler_YourRP_Addons(ply)
 end)
 

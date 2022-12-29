@@ -29,7 +29,7 @@ end
 local wasgroup = false
 hook.Add( "StartChat", "yrp_startchat", function(isTeamChat)
 	chatisopen = true
-	net.Start( "startchat" )
+	net.Start( "nws_yrp_startchat" )
 	net.SendToServer()
 	if isTeamChat then
 		wasgroup = true
@@ -43,7 +43,7 @@ end)
 
 hook.Add( "FinishChat", "yrp_finishchat", function()
 	chatisopen = false
-	net.Start( "finishchat" )
+	net.Start( "nws_yrp_finishchat" )
 	net.SendToServer()
 end)
 
@@ -119,13 +119,13 @@ function YRPUseFunction(str)
 		elseif str == "openInteractMenu" then
 			YRPToggleInteractMenu()
 		elseif str == "voice_mute" then
-			net.Start( "yrp_mute_voice" )
+			net.Start( "nws_yrp_mute_voice" )
 			net.SendToServer()
 		elseif str == "voice_range_up" then
-			net.Start( "yrp_voice_range_up" )
+			net.Start( "nws_yrp_voice_range_up" )
 			net.SendToServer()
 		elseif str == "voice_range_dn" then
-			net.Start( "yrp_voice_range_dn" )
+			net.Start( "nws_yrp_voice_range_dn" )
 			net.SendToServer()
 		elseif str == "voice_menu" then
 			if input.IsShiftDown() then
@@ -133,7 +133,7 @@ function YRPUseFunction(str)
 			elseif input.IsKeyDown( KEY_LALT ) then
 				NextVoiceChannel()
 			else
-				net.Start( "yrp_YRPToggleVoiceMenu" )
+				net.Start( "nws_yrp_ToggleVoiceMenu" )
 				net.SendToServer()
 			end
 		elseif str == "chat_menu" then
@@ -161,7 +161,7 @@ function YRPUseFunction(str)
 				local cannotbedropped = YRP.lang_string( "LID_cannotbedropped", tab)
 				local hasbeendropped = YRP.lang_string( "LID_hasbeendropped", tab)
 				if _weapon.notdropable == nil then
-					net.Receive( "dropswep", function(len)
+					net.Receive( "nws_yrp_dropswep", function(len)
 						local _b = net.ReadBool()
 						if _b then
 							notification.AddLegacy(hasbeendropped, 0, 3)
@@ -169,7 +169,7 @@ function YRPUseFunction(str)
 							notification.AddLegacy( cannotbedropped, 0, 3)
 						end
 					end)
-					net.Start( "dropswep" )
+					net.Start( "nws_yrp_dropswep" )
 					net.SendToServer()
 				else
 					notification.AddLegacy( cannotbedropped, 0, 3)
@@ -182,10 +182,10 @@ function YRPUseFunction(str)
 			gui.EnableScreenClicker(!vgui.CursorVisible() )
 
 		elseif str == "vyes" and !mouseVisible() then
-			net.Start( "voteYes" )
+			net.Start( "nws_yrp_voteYes" )
 			net.SendToServer()
 		elseif str == "vno" and !mouseVisible() then
-			net.Start( "voteNo" )
+			net.Start( "nws_yrp_voteNo" )
 			net.SendToServer()
 		elseif string.StartWith(str, "m_" ) then
 			str = string.Replace(str, "m_", "" )
@@ -354,7 +354,7 @@ function YRPKeyPress()
 				end
 			end
 			if !afk then
-				net.Start( "notafk" )
+				net.Start( "nws_yrp_notafk" )
 				net.SendToServer()
 			end
 		else
@@ -369,7 +369,7 @@ function YRPKeyPress()
 				end
 			end
 			if afktime + 300 < CurTime() then -- AFKTIME
-				net.Start( "setafk" )
+				net.Start( "nws_yrp_setafk" )
 				net.SendToServer()
 			end
 		end
@@ -574,7 +574,7 @@ function YRP_CalcView(lply, pos, angles, fov)
 
 			if lply:AFK() then
 				if (oldang.p + 1 < angles.p and oldang.p - 1 < angles.p) or (oldang.y + 1 < angles.y and oldang.y - 1 < angles.y) or (oldang.r + 1 < angles.r and oldang.r - 1 < angles.r) then
-					net.Start( "notafk" )
+					net.Start( "nws_yrp_notafk" )
 					net.SendToServer()
 				end
 			end
@@ -768,14 +768,14 @@ end
 jobByCmd = jobByCmd or {}
 
 -- FOR CLIENTS
-net.Receive( "yrp_send_jobs", function(len, ply)
+net.Receive( "nws_yrp_send_jobs", function(len, ply)
 	local tab = net.ReadTable()
 	for id, name in pairs( tab ) do
 		_G[string.upper(name)] = tonumber( id )
 	end
 end)
 -- FOR CLIENTS
-net.Receive( "YRP_Send_DarkRP_Jobs", function(len) -- full jobs data
+net.Receive( "nws_yrp_Send_DarkRP_Jobs", function(len) -- full jobs data
 	local teamTab = {}
 	teamTab.admin = net.ReadUInt( 2 )
 	teamTab.candemote = net.ReadBool()
@@ -819,7 +819,7 @@ CATEGORIES.shipments = CATEGORIES.shipments or {}
 CATEGORIES.weapons = CATEGORIES.weapons or {}
 CATEGORIES.ammo = CATEGORIES.ammo or {}
 CATEGORIES.vehicles = CATEGORIES.vehicles or {}
-net.Receive( "YRP_Send_DarkRP_Categories", function(len)
+net.Receive( "nws_yrp_Send_DarkRP_Categories", function(len)
 	local catTab = {}
 	catTab.uniqueID = net.ReadUInt( 16 )
 	catTab.name = net.ReadString()
@@ -834,7 +834,7 @@ net.Receive( "YRP_Send_DarkRP_Categories", function(len)
 	table.insert( CATEGORIES.jobs, catTab )
 end)
 
-net.Receive( "YRP_Combine_DarkRPTables", function(len)
+net.Receive( "nws_yrp_Combine_DarkRPTables", function(len)
 	local TEMPRPExtraTeams = {}
 	for i, v in pairs(RPExtraTeams) do
 		if v.fake == false then

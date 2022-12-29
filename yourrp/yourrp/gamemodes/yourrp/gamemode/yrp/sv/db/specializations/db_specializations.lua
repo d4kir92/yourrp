@@ -26,19 +26,19 @@ function YRPSendSpecPMs(uid, ply)
 		end
 	end
 
-	net.Start( "get_specialization_pms" )
+	net.Start( "nws_yrp_get_specialization_pms" )
 		net.WriteTable(newtab)
 	net.Send(ply)
 end
 
-util.AddNetworkString( "get_specialization_pms" )
-net.Receive( "get_specialization_pms", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_specialization_pms" )
+net.Receive( "nws_yrp_get_specialization_pms", function(len, ply)
 	local uid = net.ReadInt(32)
 	YRPSendSpecPMs(uid, ply)
 end)
 
-util.AddNetworkString( "spec_add_pm" )
-net.Receive( "spec_add_pm", function(len, ply)
+util.AddNetworkString( "nws_yrp_spec_add_pm" )
+net.Receive( "nws_yrp_spec_add_pm", function(len, ply)
 	local uid = net.ReadInt(32)
 	local pms = net.ReadTable()
 
@@ -66,8 +66,8 @@ net.Receive( "spec_add_pm", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "spec_rem_pm" )
-net.Receive( "spec_rem_pm", function(len, ply)
+util.AddNetworkString( "nws_yrp_spec_rem_pm" )
+net.Receive( "nws_yrp_spec_rem_pm", function(len, ply)
 	local uid = net.ReadInt(32)
 	local pm = net.ReadString()
 
@@ -110,19 +110,19 @@ function YRPSendSpecSWEPS(uid, ply)
 		end
 	end
 
-	net.Start( "get_specialization_sweps" )
+	net.Start( "nws_yrp_get_specialization_sweps" )
 		net.WriteTable(newtab)
 	net.Send(ply)
 end
 
-util.AddNetworkString( "get_specialization_sweps" )
-net.Receive( "get_specialization_sweps", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_specialization_sweps" )
+net.Receive( "nws_yrp_get_specialization_sweps", function(len, ply)
 	local uid = net.ReadInt(32)
 	YRPSendSpecSWEPS(uid, ply)
 end)
 
-util.AddNetworkString( "spec_add_swep" )
-net.Receive( "spec_add_swep", function(len, ply)
+util.AddNetworkString( "nws_yrp_spec_add_swep" )
+net.Receive( "nws_yrp_spec_add_swep", function(len, ply)
 	local uid = net.ReadInt(32)
 	local sweps = net.ReadTable()
 
@@ -152,8 +152,8 @@ net.Receive( "spec_add_swep", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "spec_rem_swep" )
-net.Receive( "spec_rem_swep", function(len, ply)
+util.AddNetworkString( "nws_yrp_spec_rem_swep" )
+net.Receive( "nws_yrp_spec_rem_swep", function(len, ply)
 	local uid = net.ReadInt(32)
 	local swep = net.ReadString()
 
@@ -181,25 +181,25 @@ end)
 
 function send_specializations(ply)
 	local _nm = GetAllSpecializations()
-	net.Start( "get_specializations" )
+	net.Start( "nws_yrp_get_specializations" )
 		net.WriteTable(_nm)
 	net.Send(ply)
 end
 
-util.AddNetworkString( "get_all_specializations" )
-net.Receive( "get_all_specializations", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_all_specializations" )
+net.Receive( "nws_yrp_get_all_specializations", function(len, ply)
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
 	if _nm == nil or _nm == false then
 		_nm = {}
 	end
-	net.Start( "get_all_specializations" )
+	net.Start( "nws_yrp_get_all_specializations" )
 		net.WriteTable(_nm)
 	net.Send(ply)
 end)
 
-util.AddNetworkString( "get_specializations" )
-net.Receive( "get_specializations", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_specializations" )
+net.Receive( "nws_yrp_get_specializations", function(len, ply)
 	if ply:CanAccess( "bool_specializations" ) then
 		send_specializations(ply)
 	end
@@ -211,26 +211,26 @@ function sendspecializations(ply)
 	if _nm == nil or _nm == false then
 		_nm = {}
 	end
-	net.Start( "getspecializations" )
+	net.Start( "nws_yrp_getspecializations" )
 		net.WriteTable(_nm)
 	net.Send(ply)
 end
 
-util.AddNetworkString( "getspecializations" )
-net.Receive( "getspecializations", function(len, ply)
+util.AddNetworkString( "nws_yrp_getspecializations" )
+net.Receive( "nws_yrp_getspecializations", function(len, ply)
 	sendspecializations(ply)
 end)
 
-util.AddNetworkString( "specialization_add" )
-net.Receive( "specialization_add", function(len, ply)
+util.AddNetworkString( "nws_yrp_specialization_add" )
+net.Receive( "nws_yrp_specialization_add", function(len, ply)
 	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new specialization'" )
 	YRP.msg( "db", "Add new specialization: " .. tostring(_new) )
 
 	send_specializations(ply)
 end)
 
-util.AddNetworkString( "specialization_rem" )
-net.Receive( "specialization_rem", function(len, ply)
+util.AddNetworkString( "nws_yrp_specialization_rem" )
+net.Receive( "nws_yrp_specialization_rem", function(len, ply)
 	local _uid = net.ReadString()
 	local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 	YRP.msg( "db", "Removed specialization: " .. tostring(_uid) )
@@ -238,43 +238,43 @@ net.Receive( "specialization_rem", function(len, ply)
 	send_specializations(ply)
 end)
 
-util.AddNetworkString( "edit_specialization_name" )
-net.Receive( "edit_specialization_name", function(len, ply)
+util.AddNetworkString( "nws_yrp_edit_specialization_name" )
+net.Receive( "nws_yrp_edit_specialization_name", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_name = net.ReadString()
 	local _edit = YRP_SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
 	YRP.msg( "db", "edit_specialization_name: " .. tostring(_new_name) )
 end)
 
-util.AddNetworkString( "edit_specialization_prefix" )
-net.Receive( "edit_specialization_prefix", function(len, ply)
+util.AddNetworkString( "nws_yrp_edit_specialization_prefix" )
+net.Receive( "nws_yrp_edit_specialization_prefix", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_prefix = net.ReadString()
 	local _edit = YRP_SQL_UPDATE(DATABASE_NAME, {["prefix"] = _new_prefix}, "uniqueID = " .. _uid)
 	YRP.msg( "db", "edit_specialization_prefix: " .. tostring(_new_prefix) )
 end)
 
-util.AddNetworkString( "edit_specialization_suffix" )
-net.Receive( "edit_specialization_suffix", function(len, ply)
+util.AddNetworkString( "nws_yrp_edit_specialization_suffix" )
+net.Receive( "nws_yrp_edit_specialization_suffix", function(len, ply)
 	local _uid = net.ReadString()
 	local _new_suffix = net.ReadString()
 	local _edit = YRP_SQL_UPDATE(DATABASE_NAME, {["suffix"] = _new_suffix}, "uniqueID = " .. _uid)
 	YRP.msg( "db", "edit_specialization_suffix: " .. tostring(_new_suffix) )
 end)
 
-util.AddNetworkString( "get_all_specializations_simple" )
-net.Receive( "get_all_specializations_simple", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_all_specializations_simple" )
+net.Receive( "nws_yrp_get_all_specializations_simple", function(len, ply)
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "name, uniqueID", nil)
 	if _all == false or _all == nil then
 		_all = {}
 	end
-	net.Start( "get_all_specializations_simple" )
+	net.Start( "nws_yrp_get_all_specializations_simple" )
 		net.WriteTable(_all)
 	net.Send(ply)
 end)
 
-util.AddNetworkString( "role_add_specialization" )
-net.Receive( "role_add_specialization", function(len, ply)
+util.AddNetworkString( "nws_yrp_role_add_specialization" )
+net.Receive( "nws_yrp_role_add_specialization", function(len, ply)
 	local _role_uid = net.ReadString()
 	local _specialization_uid = net.ReadString()
 
@@ -294,8 +294,8 @@ net.Receive( "role_add_specialization", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "role_rem_specialization" )
-net.Receive( "role_rem_specialization", function(len, ply)
+util.AddNetworkString( "nws_yrp_role_rem_specialization" )
+net.Receive( "nws_yrp_role_rem_specialization", function(len, ply)
 	local _role_uid = net.ReadString()
 	local _specialization_uid = net.ReadString()
 
@@ -380,13 +380,13 @@ function Player:RemoveSpecialization(specialization)
 	end
 end
 
-util.AddNetworkString( "GetSpecializationName" )
-net.Receive( "GetSpecializationName", function(len, ply)
+util.AddNetworkString( "nws_yrp_getSpecializationName" )
+net.Receive( "nws_yrp_getSpecializationName", function(len, ply)
 	local id = net.ReadInt(32)
 	local spe = YRP_SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'" )
 	if IsNotNilAndNotFalse(spe) then
 		spe = spe[1]
-		net.Start( "GetSpecializationName" )
+		net.Start( "nws_yrp_getSpecializationName" )
 			net.WriteString(id)
 			net.WriteString(spe.name)
 		net.Send(ply)

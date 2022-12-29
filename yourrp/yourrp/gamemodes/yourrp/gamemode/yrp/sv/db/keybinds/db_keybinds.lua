@@ -14,12 +14,12 @@ end
 
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 
-util.AddNetworkString( "SetServerKeybinds" )
+util.AddNetworkString( "nws_yrp_setServerKeybinds" )
 local PLAYER = FindMetaTable( "Player" )
 function PLAYER:SetServerKeybinds()
 	local selresult = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if IsNotNilAndNotFalse( selresult ) then
-		net.Start( "SetServerKeybinds" )
+		net.Start( "nws_yrp_setServerKeybinds" )
 			net.WriteTable( selresult )
 		net.Send( self )
 	else
@@ -27,8 +27,8 @@ function PLAYER:SetServerKeybinds()
 	end
 end
 
-util.AddNetworkString( "setserverdefaultkeybind" )
-net.Receive( "setserverdefaultkeybind", function(len, ply)
+util.AddNetworkString( "nws_yrp_setserverdefaultkeybind" )
+net.Receive( "nws_yrp_setserverdefaultkeybind", function(len, ply)
 	local keybinds = net.ReadTable()
 	for name, value in pairs(keybinds) do
 		local selresult = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'" )
@@ -40,8 +40,8 @@ net.Receive( "setserverdefaultkeybind", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "forcesetkeybinds" )
-net.Receive( "forcesetkeybinds", function(len, ply)
+util.AddNetworkString( "nws_yrp_forcesetkeybinds" )
+net.Receive( "nws_yrp_forcesetkeybinds", function(len, ply)
 	for i, p in pairs(player.GetAll() ) do
 		p:SetServerKeybinds()
 	end

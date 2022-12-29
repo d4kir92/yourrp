@@ -511,8 +511,8 @@ hook.Add( "Think", "yrp_pose_think", function()
 end)
 
 if SERVER then
-	util.AddNetworkString( "yrp_change_pose" )
-	net.Receive( "yrp_change_pose", function(len, ply)
+	util.AddNetworkString( "nws_yrp_change_pose" )
+	net.Receive( "nws_yrp_change_pose", function(len, ply)
 		local pose_art = net.ReadString()
 		local pose = net.ReadString()
 		if pose then
@@ -647,7 +647,7 @@ function SWEP:Reload()
 						btn:SetText( "LID_" .. name)
 						btn.win = self.yrpposes
 						function btn:DoClick()
-							net.Start( "yrp_change_pose" )
+							net.Start( "nws_yrp_change_pose" )
 								net.WriteString(namecategory)
 								net.WriteString(name)
 							net.SendToServer()

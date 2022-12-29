@@ -63,7 +63,7 @@ function testApp( display, x, y, w, h)
 			end
 		end
 		function _target_accept:DoClick()
-			net.Start( "yrp_accepthit" )
+			net.Start( "nws_yrp_accepthit" )
 				net.WriteString(self.hit.uniqueID)
 			net.SendToServer()
 			closeSP()
@@ -74,7 +74,7 @@ function testApp( display, x, y, w, h)
 		_target_list:AddColumn(YRP.lang_string( "LID_target" ) )
 		_target_list:AddColumn(YRP.lang_string( "LID_reward" ) )
 		_target_list:AddColumn(YRP.lang_string( "LID_description" ) )
-		net.Receive( "yrp_gethits", function(len)
+		net.Receive( "nws_yrp_gethits", function(len)
 			local _hits = net.ReadTable()
 			for i, hit in pairs(_hits) do
 				for j, ply in pairs(player.GetAll() ) do
@@ -85,7 +85,7 @@ function testApp( display, x, y, w, h)
 				end
 			end
 		end)
-		net.Start( "yrp_gethits" )
+		net.Start( "nws_yrp_gethits" )
 		net.SendToServer()
 		function _target_list.OnRowSelected(lst, index, pnl)
 			local hit = {}
@@ -151,7 +151,7 @@ function testApp( display, x, y, w, h)
 					local _steamid = data
 					local _reward = _hr:GetValue()
 					local _desc = _hd:GetText()
-					net.Start( "yrp_placehit" )
+					net.Start( "nws_yrp_placehit" )
 						net.WriteString(_steamid)
 						net.WriteString(_reward)
 						net.WriteString(_desc)
@@ -167,7 +167,7 @@ function testApp( display, x, y, w, h)
 		_target_list:AddColumn(YRP.lang_string( "LID_target" ) )
 		_target_list:AddColumn(YRP.lang_string( "LID_reward" ) )
 		_target_list:AddColumn(YRP.lang_string( "LID_description" ) )
-		net.Receive( "yrp_get_contracts", function(len)
+		net.Receive( "nws_yrp_get_contracts", function(len)
 			local _hits = net.ReadTable()
 			for i, hit in pairs(_hits) do
 				for j, ply in pairs(player.GetAll() ) do
@@ -178,7 +178,7 @@ function testApp( display, x, y, w, h)
 				end
 			end
 		end)
-		net.Start( "yrp_get_contracts" )
+		net.Start( "nws_yrp_get_contracts" )
 		net.SendToServer()
 	end
 end

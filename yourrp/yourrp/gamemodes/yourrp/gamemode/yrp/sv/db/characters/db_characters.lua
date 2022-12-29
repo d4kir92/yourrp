@@ -122,8 +122,8 @@ function YRPGetCharSWEPS(ply)
 	return tab
 end
 
-util.AddNetworkString( "yrp_get_sweps_role_art" )
-net.Receive( "yrp_get_sweps_role_art", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_sweps_role_art" )
+net.Receive( "nws_yrp_get_sweps_role_art", function(len, ply)
 	local art = net.ReadString()
 
 	local sweps = {}
@@ -164,7 +164,7 @@ net.Receive( "yrp_get_sweps_role_art", function(len, ply)
 		end
 	end
 
-	net.Start( "yrp_get_sweps_role_art" )
+	net.Start( "nws_yrp_get_sweps_role_art" )
 		net.WriteTable(sweps)
 	net.Send(ply)
 end)
@@ -178,8 +178,8 @@ function YRPHasWeapon(ply, cname)
 	return false
 end
 
-util.AddNetworkString( "yrp_slot_swep_add" )
-net.Receive( "yrp_slot_swep_add", function(len, ply)
+util.AddNetworkString( "nws_yrp_slot_swep_add" )
+net.Receive( "nws_yrp_slot_swep_add", function(len, ply)
 	local art = net.ReadString()
 	local cname = net.ReadString()
 
@@ -194,8 +194,8 @@ net.Receive( "yrp_slot_swep_add", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "yrp_slot_swep_rem" )
-net.Receive( "yrp_slot_swep_rem", function(len, ply)
+util.AddNetworkString( "nws_yrp_slot_swep_rem" )
+net.Receive( "nws_yrp_slot_swep_rem", function(len, ply)
 	local art = net.ReadString()
 	local cname = net.ReadString()
 
@@ -360,8 +360,8 @@ function Player:SetRPName(str, from)
 	end
 end
 
-util.AddNetworkString( "update_backpack" )
-net.Receive( "update_backpack", function(len, ply)
+util.AddNetworkString( "nws_yrp_update_backpack" )
+net.Receive( "nws_yrp_update_backpack", function(len, ply)
 	if EntityAlive(ply) then
 		local _bp = ply:UpdateBackpack()
 
@@ -371,7 +371,7 @@ net.Receive( "update_backpack", function(len, ply)
 			local _stor = YRP_SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _uid .. "'" )
 			if _stor != nil then
 				_stor = _stor[1]
-				net.Start( "update_backpack" )
+				net.Start( "nws_yrp_update_backpack" )
 					net.WriteBool(true)
 					net.WriteTable(_stor)
 				net.Send(ply)
@@ -379,15 +379,15 @@ net.Receive( "update_backpack", function(len, ply)
 			end
 		end
 
-		net.Start( "update_backpack" )
+		net.Start( "nws_yrp_update_backpack" )
 			net.WriteBool(false)
 		net.Send(ply)
 		return false
 	end
 end)
 
-util.AddNetworkString( "update_slot_backpack" )
-net.Receive( "update_slot_backpack", function(len, ply)
+util.AddNetworkString( "nws_yrp_update_slot_backpack" )
+net.Receive( "nws_yrp_update_slot_backpack", function(len, ply)
 	if EntityAlive(ply) then
 		local _charid = ply:CharID()
 		local _uid = YRP_SQL_SELECT(DATABASE_NAME, "eqbp", "uniqueID = '" .. _charid .. "'" )
@@ -399,15 +399,15 @@ net.Receive( "update_slot_backpack", function(len, ply)
 				_backpack_storage = YRP_SQL_SELECT( "yrp_storages", "*", "uniqueID = '" .. _backpack_storage .. "'" )
 			end
 			_backpack_storage = _backpack_storage[1]
-			net.Start( "update_slot_backpack" )
+			net.Start( "nws_yrp_update_slot_backpack" )
 				net.WriteTable(_backpack_storage)
 			net.Send(ply)
 		end
 	end
 end)
 
-util.AddNetworkString( "moneyreset" )
-net.Receive( "moneyreset", function(len, ply)
+util.AddNetworkString( "nws_yrp_moneyreset" )
+net.Receive( "nws_yrp_moneyreset", function(len, ply)
 	if !ply:HasAccess() then
 		return 
 	end
@@ -421,8 +421,8 @@ net.Receive( "moneyreset", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "change_rpdescription" )
-net.Receive( "change_rpdescription", function(len, ply)
+util.AddNetworkString( "nws_yrp_change_rpdescription" )
+net.Receive( "nws_yrp_change_rpdescription", function(len, ply)
 	local _new_rp_description = net.ReadString()
 	YRP_SQL_UPDATE( "yrp_characters", {["rpdescription"] = _new_rp_description}, "uniqueID = " .. ply:CharID() )
 	ply:SetYRPString( "rpdescription", _new_rp_description)
@@ -431,26 +431,26 @@ net.Receive( "change_rpdescription", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "change_birthday" )
-net.Receive( "change_birthday", function(len, ply)
+util.AddNetworkString( "nws_yrp_change_birthday" )
+net.Receive( "nws_yrp_change_birthday", function(len, ply)
 	local _new_birthday = net.ReadString()
 	YRP_SQL_UPDATE( "yrp_characters", {["string_birthday"] = _new_birthday}, "uniqueID = " .. ply:CharID() )
 	ply:SetYRPString( "string_birthday", _new_birthday)
 end)
-util.AddNetworkString( "change_bodyheight" )
-net.Receive( "change_bodyheight", function(len, ply)
+util.AddNetworkString( "nws_yrp_change_bodyheight" )
+net.Receive( "nws_yrp_change_bodyheight", function(len, ply)
 	local _new_bodyheight = net.ReadString()
 	YRP_SQL_UPDATE( "yrp_characters", {["int_bodyheight"] = _new_bodyheight}, "uniqueID = " .. ply:CharID() )
 	ply:SetYRPInt( "int_bodyheight", _new_bodyheight)
 end)
-util.AddNetworkString( "change_weight" )
-net.Receive( "change_weight", function(len, ply)
+util.AddNetworkString( "nws_yrp_change_weight" )
+net.Receive( "nws_yrp_change_weight", function(len, ply)
 	local _new_weight = net.ReadString()
 	YRP_SQL_UPDATE( "yrp_characters", {["int_weight"] = _new_weight}, "uniqueID = " .. ply:CharID() )
 	ply:SetYRPInt( "int_weight", _new_weight)
 end)
 
-util.AddNetworkString( "yrp_get_characters" )
+util.AddNetworkString( "nws_yrp_get_characters" )
 
 util.AddNetworkString( "YRPDeleteCharacter" )
 util.AddNetworkString( "YRPCreateCharacter" )
@@ -543,8 +543,8 @@ function GetPMsOfCharacter(ply, ruid)
 	return rpms
 end
 
-util.AddNetworkString( "yrp_received_chars" )
-net.Receive( "yrp_received_chars", function( len , ply )
+util.AddNetworkString( "nws_yrp_received_chars" )
+net.Receive( "nws_yrp_received_chars", function( len , ply )
 	MsgC( Color( 0, 255, 0 ), "Player Received Charlist", "\n")
 	ply.receivedchars = true
 end )
@@ -570,13 +570,13 @@ function SendLoopCharacterList(ply, tab)
 					last = true
 				end
 
-				net.Start( "yrp_get_characters" )
+				net.Start( "nws_yrp_get_characters" )
 					net.WriteBool( first )
 					net.WriteTable( char ) // TODO WriteTable get rid off
 					net.WriteBool( last )
 				net.Send( ply )
 				if last then
-					net.Start( "yrp_received_chars" )
+					net.Start( "nws_yrp_received_chars" )
 					net.Send( ply )
 					--YRP.msg( "note", "Player Send Charlist: " .. tostring( char.c ) .. "/" .. tostring( #tab ) )
 							
@@ -600,7 +600,7 @@ function SendLoopCharacterList(ply, tab)
 	end
 end
 
-util.AddNetworkString( "OpenCharacterCreation" )
+util.AddNetworkString( "nws_yrp_openCharacterCreation" )
 function YRPSendCharacters(ply, from)
 	if ply:IsBot() then
 		return
@@ -664,19 +664,19 @@ function YRPSendCharacters(ply, from)
 		end
 		SendLoopCharacterList( ply, netTable )
 	else
-		net.Start( "OpenCharacterCreation" )
+		net.Start( "nws_yrp_openCharacterCreation" )
 		net.Send(ply)
 	end
 end
 
 --[[ Client ask for Characters ]]--
-net.Receive( "yrp_get_characters", function(len, ply)
+net.Receive( "nws_yrp_get_characters", function(len, ply)
 	--YRP.msg( "db", ply:YRPName() .. " ask for characters" )
 	if ply:IsBot() then
 		return
 	end
 
-	YRPSendCharacters( ply, "yrp_get_characters" )
+	YRPSendCharacters( ply, "nws_yrp_get_characters" )
 
 	if !ply:Alive() then
 		ply:SetYRPBool( "yrp_characterselection", true )
@@ -805,8 +805,8 @@ net.Receive( "YRPCreateCharacter", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "YRP_LogOut" )
-net.Receive( "YRP_LogOut", function(len, ply)
+util.AddNetworkString( "nws_yrp_LogOut" )
+net.Receive( "nws_yrp_LogOut", function(len, ply)
 	ply:SetYRPBool( "yrp_reset_charloadout", true )
 
 	ply:KillSilent()
@@ -816,7 +816,7 @@ net.Receive( "YRP_LogOut", function(len, ply)
 
 	timer.Simple(0.1, function()
 		if IsValid( ply ) then
-			net.Start( "YRP_LogOut" )
+			net.Start( "nws_yrp_LogOut" )
 			net.Send( ply )
 		end
 	end )
@@ -827,8 +827,8 @@ net.Receive( "YRPResetCharLoadout", function(len, ply)
 	ply:SetYRPBool( "yrp_reset_charloadout", true )
 end )
 
-util.AddNetworkString( "YRP_EnterWorld" )
-net.Receive( "YRP_EnterWorld", function(len, ply)
+util.AddNetworkString( "nws_yrp_EnterWorld" )
+net.Receive( "nws_yrp_EnterWorld", function(len, ply)
 	local cuid = net.ReadString()
 
 	if ply:Alive() then
@@ -851,11 +851,11 @@ function SendBodyGroups(ply)
 				_result.string_playermodels = GetPlayermodelsOfCharacter(ply, ruid)
 
 				if _result.string_playermodels != "" then
-					net.Start( "get_menu_bodygroups" )
+					net.Start( "nws_yrp_get_menu_bodygroups" )
 						net.WriteTable(_result)
 					net.Send(ply)
 				else
-					net.Start( "get_menu_bodygroups" )
+					net.Start( "nws_yrp_get_menu_bodygroups" )
 						net.WriteTable({})
 					net.Send(ply)
 				end
@@ -866,14 +866,14 @@ function SendBodyGroups(ply)
 	end
 end
 
-util.AddNetworkString( "get_menu_bodygroups" )
-net.Receive( "get_menu_bodygroups", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_menu_bodygroups" )
+net.Receive( "nws_yrp_get_menu_bodygroups", function(len, ply)
 	SendBodyGroups(ply)
 end)
 
-util.AddNetworkString( "inv_bg_up" )
+util.AddNetworkString( "nws_yrp_inv_bg_up" )
 
-net.Receive( "inv_bg_up", function(len, ply)
+net.Receive( "nws_yrp_inv_bg_up", function(len, ply)
 	local _cur = net.ReadInt(16)
 	local _id = net.ReadInt(16)
 
@@ -882,9 +882,9 @@ net.Receive( "inv_bg_up", function(len, ply)
 	YRP_SQL_UPDATE( "yrp_characters", {["bg" .. tonumber(_id)] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
 end)
 
-util.AddNetworkString( "inv_bg_do" )
+util.AddNetworkString( "nws_yrp_inv_bg_do" )
 
-net.Receive( "inv_bg_do", function(len, ply)
+net.Receive( "nws_yrp_inv_bg_do", function(len, ply)
 	local _cur = net.ReadInt(16)
 	local _id = net.ReadInt(16)
 
@@ -893,9 +893,9 @@ net.Receive( "inv_bg_do", function(len, ply)
 	YRP_SQL_UPDATE( "yrp_characters", {["bg" .. tonumber(_id)] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
 end)
 
-util.AddNetworkString( "inv_skin_up" )
+util.AddNetworkString( "nws_yrp_inv_skin_up" )
 
-net.Receive( "inv_skin_up", function(len, ply)
+net.Receive( "nws_yrp_inv_skin_up", function(len, ply)
 	local _cur = net.ReadInt(16)
 	ply:SetSkin(_cur)
 	ply:SetupHands()
@@ -903,9 +903,9 @@ net.Receive( "inv_skin_up", function(len, ply)
 	YRP_SQL_UPDATE( "yrp_characters", {["skin"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
 end)
 
-util.AddNetworkString( "inv_skin_do" )
+util.AddNetworkString( "nws_yrp_inv_skin_do" )
 
-net.Receive( "inv_skin_do", function(len, ply)
+net.Receive( "nws_yrp_inv_skin_do", function(len, ply)
 	local _cur = net.ReadInt(16)
 	ply:SetSkin(_cur)
 	ply:SetupHands()
@@ -913,8 +913,8 @@ net.Receive( "inv_skin_do", function(len, ply)
 	YRP_SQL_UPDATE( "yrp_characters", {["skin"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
 end)
 
-util.AddNetworkString( "inv_pm_up" )
-net.Receive( "inv_pm_up", function(len, ply)
+util.AddNetworkString( "nws_yrp_inv_pm_up" )
+net.Receive( "nws_yrp_inv_pm_up", function(len, ply)
 	local _cur = net.ReadInt(16)
 	local _pms = string.Explode( ",", GetPlayermodelsOfCharacter( ply, ply:YRPGetRoleTable().uniqueID ) )
 	if IsNotNilAndNotFalse(_pms) then
@@ -930,8 +930,8 @@ net.Receive( "inv_pm_up", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "inv_pm_do" )
-net.Receive( "inv_pm_do", function(len, ply)
+util.AddNetworkString( "nws_yrp_inv_pm_do" )
+net.Receive( "nws_yrp_inv_pm_do", function(len, ply)
 	local _cur = net.ReadInt(16)
 	local _pms = string.Explode( ",", GetPlayermodelsOfCharacter( ply, ply:YRPGetRoleTable().uniqueID ) )
 	if IsNotNilAndNotFalse(_pms) then
@@ -947,8 +947,8 @@ net.Receive( "inv_pm_do", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "warning_up" )
-net.Receive( "warning_up", function(len, ply)
+util.AddNetworkString( "nws_yrp_warning_up" )
+net.Receive( "nws_yrp_warning_up", function(len, ply)
 	local p = net.ReadEntity()
 	if IsValid( p ) then
 		local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'" )
@@ -964,8 +964,8 @@ net.Receive( "warning_up", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "warning_dn" )
-net.Receive( "warning_dn", function(len, ply)
+util.AddNetworkString( "nws_yrp_warning_dn" )
+net.Receive( "nws_yrp_warning_dn", function(len, ply)
 	local p = net.ReadEntity()
 	if IsValid( p ) then
 		local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'" )
@@ -981,8 +981,8 @@ net.Receive( "warning_dn", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "violation_up" )
-net.Receive( "violation_up", function(len, ply)
+util.AddNetworkString( "nws_yrp_violation_up" )
+net.Receive( "nws_yrp_violation_up", function(len, ply)
 	local p = net.ReadEntity()
 	if IsValid( p ) then
 		local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'" )
@@ -998,8 +998,8 @@ net.Receive( "violation_up", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "violation_dn" )
-net.Receive( "violation_dn", function(len, ply)
+util.AddNetworkString( "nws_yrp_violation_dn" )
+net.Receive( "nws_yrp_violation_dn", function(len, ply)
 	local p = net.ReadEntity()
 	if IsValid( p ) then
 		local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'" )
@@ -1015,16 +1015,16 @@ net.Receive( "violation_dn", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "change_rpname" )
-net.Receive( "change_rpname", function(len, ply)
+util.AddNetworkString( "nws_yrp_change_rpname" )
+net.Receive( "nws_yrp_change_rpname", function(len, ply)
 	local _new_rp_name = net.ReadString()
 	if GetGlobalYRPBool( "bool_characters_changeable_name", false) then
 		ply:SetRPName(_new_rp_name)
 	end
 end)
 
-util.AddNetworkString( "set_rpname" )
-net.Receive( "set_rpname", function(len, ply)
+util.AddNetworkString( "nws_yrp_set_rpname" )
+net.Receive( "nws_yrp_set_rpname", function(len, ply)
 	local p = net.ReadEntity()
 
 	if !ply:HasAccess() then
@@ -1040,8 +1040,8 @@ net.Receive( "set_rpname", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "set_idcardid" )
-net.Receive( "set_idcardid", function(len, ply)
+util.AddNetworkString( "nws_yrp_set_idcardid" )
+net.Receive( "nws_yrp_set_idcardid", function(len, ply)
 	local p = net.ReadEntity()
 	if IsValid( p ) then
 		local text_idcardid = net.ReadString()
@@ -1055,8 +1055,8 @@ net.Receive( "set_idcardid", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "removearrests" )
-net.Receive( "removearrests", function(len, ply)
+util.AddNetworkString( "nws_yrp_removearrests" )
+net.Receive( "nws_yrp_removearrests", function(len, ply)
 	if !ply:HasAccess() then
 		return 
 	end
@@ -1068,18 +1068,18 @@ net.Receive( "removearrests", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "get_licenses_player" )
-net.Receive( "get_licenses_player", function(len, ply)
+util.AddNetworkString( "nws_yrp_get_licenses_player" )
+net.Receive( "nws_yrp_get_licenses_player", function(len, ply)
 	local tab = YRP_SQL_SELECT( "yrp_licenses", "*", nil)
 	if IsNotNilAndNotFalse(tab) then
-		net.Start( "get_licenses_player" )
+		net.Start( "nws_yrp_get_licenses_player" )
 			net.WriteTable(tab)
 		net.Send(ply)
 	end
 end)
 
-util.AddNetworkString( "givelicense" )
-net.Receive( "givelicense", function(len, ply)
+util.AddNetworkString( "nws_yrp_givelicense" )
+net.Receive( "nws_yrp_givelicense", function(len, ply)
 	if !ply:HasAccess( "givelicense" ) then
 		return 
 	end
@@ -1091,8 +1091,8 @@ net.Receive( "givelicense", function(len, ply)
 	end
 end)
 
-util.AddNetworkString( "removelicense" )
-net.Receive( "removelicense", function(len, ply)
+util.AddNetworkString( "nws_yrp_removelicense" )
+net.Receive( "nws_yrp_removelicense", function(len, ply)
 	if !ply:HasAccess() then
 		return 
 	end
@@ -1112,14 +1112,14 @@ function YRPSetAllCharsToDefaultRole(ply)
 	end
 end
 
-util.AddNetworkString( "setting_characters" )
-net.Receive( "setting_characters", function(len, ply)
+util.AddNetworkString( "nws_yrp_setting_characters" )
+net.Receive( "nws_yrp_setting_characters", function(len, ply)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "SteamID, rpname, text_idcardid, rpdescription, groupID, roleID, money, moneybank, int_level, bool_eventchar, bool_archived", nil)
 	if !IsNotNilAndNotFalse(tab) then
 		tab = {}
 	end
 	for i, chartab in pairs( tab ) do
-		net.Start( "setting_characters" )
+		net.Start( "nws_yrp_setting_characters" )
 			net.WriteTable( chartab )
 		net.Send(ply)
 	end
@@ -1184,10 +1184,10 @@ function YRPGiveSpecs( ply )
 	ply:SetYRPString( "spec_pms", tab.pms )
 end
 
-util.AddNetworkString( "yrp_reopen_givespec" )
+util.AddNetworkString( "nws_yrp_reopen_givespec" )
 
-util.AddNetworkString( "char_add_spec" )
-net.Receive( "char_add_spec", function(len, ply)
+util.AddNetworkString( "nws_yrp_char_add_spec" )
+net.Receive( "nws_yrp_char_add_spec", function(len, ply)
 	local charid = net.ReadString()
 	local specid = net.ReadString()
 	local ruid = net.ReadString()
@@ -1220,7 +1220,7 @@ net.Receive( "char_add_spec", function(len, ply)
 
 	timer.Simple( 0.1, function()
 		if ply and charid then
-			net.Start( "yrp_reopen_givespec" )
+			net.Start( "nws_yrp_reopen_givespec" )
 				net.WriteString( charid)
 				net.WriteString(ruid)
 			net.Send(ply)
@@ -1228,8 +1228,8 @@ net.Receive( "char_add_spec", function(len, ply)
 	end )
 end)
 
-util.AddNetworkString( "char_rem_spec" )
-net.Receive( "char_rem_spec", function(len, ply)
+util.AddNetworkString( "nws_yrp_char_rem_spec" )
+net.Receive( "nws_yrp_char_rem_spec", function(len, ply)
 	local charid = net.ReadString()
 	local specid = net.ReadString()
 	local ruid = net.ReadString()
@@ -1262,7 +1262,7 @@ net.Receive( "char_rem_spec", function(len, ply)
 
 	timer.Simple( 0.1, function()
 		if ply and charid then
-			net.Start( "yrp_reopen_givespec" )
+			net.Start( "nws_yrp_reopen_givespec" )
 				net.WriteString( charid)
 				net.WriteString(ruid)
 			net.Send(ply)
