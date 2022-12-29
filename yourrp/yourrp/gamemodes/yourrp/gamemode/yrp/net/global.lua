@@ -185,6 +185,10 @@ function GetGlobalYRPString( index, value )
 end
 
 function SetGlobalYRPString( index, value )
+	if index and index == "ServerName" then
+		YRP.msg( "error", "Someone tried to set ServerName" )
+	end
+
 	if GetGlobalYRPString( index ) != value or value == "" then
 		if NWSystem == 1 then
 			SetGlobalString( index, value )

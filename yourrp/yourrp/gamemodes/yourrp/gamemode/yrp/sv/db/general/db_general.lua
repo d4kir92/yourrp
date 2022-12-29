@@ -317,15 +317,15 @@ function YRPLoadGlobals()
 		--RunConsoleCommand( "lua_log_sv", yrp_general.bool_server_debug)
 		--RunConsoleCommand( "lua_log_cl", yrp_general.bool_server_debug)
 
-		for name, value in pairs(yrp_general) do
-			if string.StartWith(name, "bool_" ) then
-				SetGlobalYRPBool(name, tobool( value ) )
+		for name, value in pairs( yrp_general ) do
+			if string.StartWith( name, "bool_" ) then
+				SetGlobalYRPBool( name, tobool( value ) )
 			elseif name == "text_server_rules" then
-				SetGlobalYRPTable(name, string.Explode( "\n", tostring( value) ))
-			elseif string.StartWith(name, "int_" ) then
-				SetGlobalYRPInt(name, tonumber( value) )
-			elseif string.StartWith(name, "text_" ) then
-				SetGlobalYRPString(name, tostring( value) )
+				SetGlobalYRPTable( name, string.Explode( "\n", tostring( value) ) )
+			elseif string.StartWith( name, "int_" ) then
+				SetGlobalYRPInt( name, tonumber( value) )
+			elseif string.StartWith( name, "text_" ) then
+				SetGlobalYRPString( name, tostring( value) )
 			end
 		end
 
@@ -445,15 +445,15 @@ function SetYRPCollectionID( cid)
 end
 
 function GeneralDB()
-	for i, set in pairs(yrp_general) do
-		if string.StartWith(i, "text_" ) then
-			SetGlobalYRPString(i, set)
-		elseif string.StartWith(i, "bool_" ) then
-			SetGlobalYRPBool(i, tobool(set) )
-		elseif string.StartWith(i, "int_" ) then
-			SetGlobalYRPInt(i, tonumber(set) )
-		elseif string.StartWith(i, "float_" ) then
-			SetGlobalYRPFloat(i, tonumber(set) )
+	for i, set in pairs( yrp_general ) do
+		if string.StartWith( i, "text_" ) then
+			SetGlobalYRPString( i, set )
+		elseif string.StartWith( i, "bool_" ) then
+			SetGlobalYRPBool( i, tobool(set) )
+		elseif string.StartWith( i, "int_" ) then
+			SetGlobalYRPInt( i, tonumber(set) )
+		elseif string.StartWith( i, "float_" ) then
+			SetGlobalYRPFloat( i, tonumber(set) )
 		end
 	end
 end
@@ -485,7 +485,7 @@ end
 function GeneralUpdateString(ply, netstr, str, value)
 	YRP.msg( "db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring( value) )
 	GeneralUpdateValue(ply, netstr, str, value)
-	SetGlobalYRPString(str, value)
+	SetGlobalYRPString( str, value )
 end
 
 function GeneralUpdateTable(ply, netstr, str, value)
@@ -523,18 +523,30 @@ end
 --[[ SERVER SETTINGS ]]--
 util.AddNetworkString( "update_bool_server_reload_notification" )
 net.Receive( "update_bool_server_reload_notification", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "update_bool_server_reload_notification", "bool_server_reload_notification", b)
 end)
 
 util.AddNetworkString( "update_bool_server_reload" )
 net.Receive( "update_bool_server_reload", function(len, ply)
+	if !ply:HasAccess( "update_bool_server_reload" ) then
+		return 
+	end
+
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "update_bool_server_reload", "bool_server_reload", b)
 end)
 
 util.AddNetworkString( "update_text_server_collectionid" )
 net.Receive( "update_text_server_collectionid", function(len, ply)
+	if !ply:HasAccess( "update_text_server_collectionid" ) then
+		return 
+	end
+
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_server_collectionid", "text_server_collectionid", str)
 end)
@@ -542,12 +554,20 @@ end)
 
 util.AddNetworkString( "update_text_server_logo" )
 net.Receive( "update_text_server_logo", function(len, ply)
+	if !ply:HasAccess( "update_text_server_logo" ) then
+		return 
+	end
+
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_server_logo", "text_server_logo", str)
 end)
 
 util.AddNetworkString( "update_text_server_name" )
 net.Receive( "update_text_server_name", function(len, ply)
+	if !ply:HasAccess( "update_text_server_name" ) then
+		return 
+	end
+
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_server_name", "text_server_name", str)
 end)
@@ -556,12 +576,20 @@ end)
 
 util.AddNetworkString( "update_text_server_rules" )
 net.Receive( "update_text_server_rules", function(len, ply)
+	if !ply:HasAccess( "update_text_server_rules" ) then
+		return 
+	end
+
 	local str = net.ReadString()
 	GeneralUpdateTable(ply, "update_text_server_rules", "text_server_rules", str)
 end)
 
 util.AddNetworkString( "update_text_server_welcome_message" )
 net.Receive( "update_text_server_welcome_message", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_server_welcome_message", "text_server_welcome_message", str)
 end)
@@ -569,12 +597,20 @@ end)
 
 util.AddNetworkString( "update_text_server_message_of_the_day" )
 net.Receive( "update_text_server_message_of_the_day", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_server_message_of_the_day", "text_server_message_of_the_day", str)
 end)
 
 util.AddNetworkString( "update_bool_server_debug" )
 net.Receive( "update_bool_server_debug", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "update_bool_server_debug", "bool_server_debug", b)
 	RunConsoleCommand( "lua_log_sv", b)
@@ -583,12 +619,20 @@ end)
 
 util.AddNetworkString( "update_bool_server_debug_voice" )
 net.Receive( "update_bool_server_debug_voice", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "update_bool_server_debug_voice", "bool_server_debug_voice", b)
 end)
 
 util.AddNetworkString( "update_int_server_debug_tick" )
 net.Receive( "update_int_server_debug_tick", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local int = net.ReadString()
 	if isnumber(tonumber(int) ) then
 		GeneralUpdateInt(ply, "update_int_server_debug_tick", "int_server_debug_tick", int)
@@ -597,42 +641,70 @@ end)
 
 util.AddNetworkString( "update_bool_msg_channel_gm" )
 net.Receive( "update_bool_msg_channel_gm", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local b = btn(net.ReadBool() )
 	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_gm", "bool_msg_channel_gm", b)
 end)
 
 util.AddNetworkString( "update_bool_msg_channel_db" )
 net.Receive( "update_bool_msg_channel_db", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local b = btn(net.ReadBool() )
 	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_db", "bool_msg_channel_db", b)
 end)
 
 util.AddNetworkString( "update_bool_msg_channel_lang" )
 net.Receive( "update_bool_msg_channel_lang", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local b = btn(net.ReadBool() )
 	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_lang", "bool_msg_channel_lang", b)
 end)
 
 util.AddNetworkString( "update_bool_msg_channel_noti" )
 net.Receive( "update_bool_msg_channel_noti", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local b = btn(net.ReadBool() )
 	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_noti", "bool_msg_channel_noti", b)
 end)
 
 util.AddNetworkString( "update_bool_msg_channel_darkrp" )
 net.Receive( "update_bool_msg_channel_darkrp", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local b = btn(net.ReadBool() )
 	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_darkrp", "bool_msg_channel_darkrp", b)
 end)
 
 util.AddNetworkString( "update_bool_msg_channel_chat" )
 net.Receive( "update_bool_msg_channel_chat", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local b = btn(net.ReadBool() )
 	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_chat", "bool_msg_channel_chat", b)
 end)
 
 util.AddNetworkString( "update_bool_msg_channel_debug" )
 net.Receive( "update_bool_msg_channel_debug", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local b = btn(net.ReadBool() )
 	GeneralUpdateGlobalBool(ply, "update_bool_msg_channel_debug", "bool_msg_channel_debug", b)
 end)
@@ -642,6 +714,10 @@ end)
 --[[ GAMEMODE SETTINGS ]]--
 util.AddNetworkString( "update_text_gamemode_name" )
 net.Receive( "update_text_gamemode_name", function(len, ply)
+	if !ply:HasAccess() then
+		return 
+	end
+
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "update_text_gamemode_name", "text_gamemode_name", str)
 	GAMEMODE.BaseName = str
@@ -1958,23 +2034,28 @@ end)
 -- Scoreboard Commands
 util.AddNetworkString( "ply_kick" )
 net.Receive( "ply_kick", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive( _target ) then
-			_target:Kick( "You get kicked by " .. ply:YRPName() )
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive( _target ) then
+		_target:Kick( "You get kicked by " .. ply:YRPName() )
 	end
 end)
+
 util.AddNetworkString( "ply_ban" )
 net.Receive( "ply_ban", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive( _target ) then
-			_target:Ban(24 * 60, false)
-			_target:Kick( "You get banned for 24 hours by " .. ply:YRPName() )
-		else
-			YRP.msg( "note", "ply_ban " .. tostring(_target) .. " IS NIL => NOT AVAILABLE" )
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive( _target ) then
+		_target:Ban(24 * 60, false)
+		_target:Kick( "You get banned for 24 hours by " .. ply:YRPName() )
+	else
+		YRP.msg( "note", "ply_ban " .. tostring(_target) .. " IS NIL => NOT AVAILABLE" )
 	end
 end)
 
@@ -1989,22 +2070,26 @@ end
 
 util.AddNetworkString( "tp_tpto_steamid" )
 net.Receive( "tp_tpto_steamid", function(len, ply)
-	if ply:HasAccess() then
-		local steamid = net.ReadString()
-		local _target = YRPGetPlayerBySteamID(steamid)
-		if _target then
-			teleportToPoint(ply, _target:GetPos() )
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local steamid = net.ReadString()
+	local _target = YRPGetPlayerBySteamID(steamid)
+	if _target then
+		teleportToPoint(ply, _target:GetPos() )
 	end
 end)
 util.AddNetworkString( "tp_bring_steamid" )
 net.Receive( "tp_bring_steamid", function(len, ply)
-	if ply:HasAccess() then
-		local steamid = net.ReadString()
-		local _target = YRPGetPlayerBySteamID(steamid)
-		if _target then
-			teleportToPoint(_target, ply:GetPos() )
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local steamid = net.ReadString()
+	local _target = YRPGetPlayerBySteamID(steamid)
+	if _target then
+		teleportToPoint(_target, ply:GetPos() )
 	end
 end)
 
@@ -2020,36 +2105,44 @@ net.Receive( "tp_tpto", function(len, ply)
 end)
 util.AddNetworkString( "tp_bring" )
 net.Receive( "tp_bring", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		_target:SetYRPVector( "yrpoldpos", _target:GetPos() )
-		teleportToPoint(_target, ply:GetPos() )
+	if !ply:HasAccess() then
+		return
 	end
+
+	local _target = net.ReadEntity()
+	_target:SetYRPVector( "yrpoldpos", _target:GetPos() )
+	teleportToPoint(_target, ply:GetPos() )
 end)
 util.AddNetworkString( "tp_return" )
 net.Receive( "tp_return", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if _target:GetYRPVector( "yrpoldpos" ) != Vector(0, 0, 0) then
-			teleportToPoint(_target, _target:GetYRPVector( "yrpoldpos" ) )
+	if !ply:HasAccess() then
+		return
+	end
 
-			_target:SetYRPVector( "yrpoldpos", Vector(0, 0, 0) ) -- RESET
-		end
+	local _target = net.ReadEntity()
+	if _target:GetYRPVector( "yrpoldpos" ) != Vector(0, 0, 0) then
+		teleportToPoint(_target, _target:GetYRPVector( "yrpoldpos" ) )
+
+		_target:SetYRPVector( "yrpoldpos", Vector(0, 0, 0) ) -- RESET
 	end
 end)
 util.AddNetworkString( "tp_jail" )
 net.Receive( "tp_jail", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		teleportToJailpoint(_target, 5 * 60 )
+	if !ply:HasAccess() then
+		return
 	end
+
+	local _target = net.ReadEntity()
+	teleportToJailpoint(_target, 5 * 60 )
 end)
 util.AddNetworkString( "tp_unjail" )
 net.Receive( "tp_unjail", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		teleportToReleasepoint(_target)
+	if !ply:HasAccess() then
+		return
 	end
+
+	local _target = net.ReadEntity()
+	teleportToReleasepoint(_target)
 end)
 
 function YRPIsRagdoll(ply)
@@ -2100,133 +2193,161 @@ end
 
 util.AddNetworkString( "ragdoll" )
 net.Receive( "ragdoll", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			YRPDoRagdoll(_target)
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		YRPDoRagdoll(_target)
 	end
 end)
 
 util.AddNetworkString( "unragdoll" )
 net.Receive( "unragdoll", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			YRPDoUnRagdoll(_target)
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		YRPDoUnRagdoll(_target)
 	end
 end)
 util.AddNetworkString( "freeze" )
 net.Receive( "freeze", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) and _target.Freeze then
-			_target:Freeze(true)
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) and _target.Freeze then
+		_target:Freeze(true)
 	end
 end)
 util.AddNetworkString( "unfreeze" )
 net.Receive( "unfreeze", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			_target:Freeze(false)
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		_target:Freeze(false)
 	end
 end)
 util.AddNetworkString( "god" )
 net.Receive( "god", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			_target:GodEnable()
-			_target:AddFlags(FL_GODMODE)
-			_target:SetYRPBool( "godmode", true)
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		_target:GodEnable()
+		_target:AddFlags(FL_GODMODE)
+		_target:SetYRPBool( "godmode", true)
 	end
 end)
 util.AddNetworkString( "ungod" )
 net.Receive( "ungod", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			_target:GodDisable()
-			_target:RemoveFlags(FL_GODMODE)
-			_target:SetYRPBool( "godmode", false)
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		_target:GodDisable()
+		_target:RemoveFlags(FL_GODMODE)
+		_target:SetYRPBool( "godmode", false)
 	end
 end)
 util.AddNetworkString( "cloak" )
 net.Receive( "cloak", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			_target:SetYRPBool( "cloaked", true)
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		_target:SetYRPBool( "cloaked", true)
 	end
 end)
 util.AddNetworkString( "uncloak" )
 net.Receive( "uncloak", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			_target:SetYRPBool( "cloaked", false)
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		_target:SetYRPBool( "cloaked", false)
 	end
 end)
 util.AddNetworkString( "blind" )
 net.Receive( "blind", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			_target:SetYRPBool( "blinded", true)
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		_target:SetYRPBool( "blinded", true)
 	end
 end)
 util.AddNetworkString( "unblind" )
 net.Receive( "unblind", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			_target:SetYRPBool( "blinded", false)
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		_target:SetYRPBool( "blinded", false)
 	end
 end)
 util.AddNetworkString( "ignite" )
 net.Receive( "ignite", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			_target:Ignite(10, 10)
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		_target:Ignite(10, 10)
 	end
 end)
 util.AddNetworkString( "extinguish" )
 net.Receive( "extinguish", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			_target:Extinguish()
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		_target:Extinguish()
 	end
 end)
 util.AddNetworkString( "slay" )
 net.Receive( "slay", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			_target:Kill()
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		_target:Kill()
 	end
 end)
 util.AddNetworkString( "slap" )
 net.Receive( "slap", function(len, ply)
-	if ply:HasAccess() then
-		local _target = net.ReadEntity()
-		if EntityAlive(_target) then
-			_target:SetVelocity( Vector(0, 0, 600) )
-		end
+	if !ply:HasAccess() then
+		return
+	end
+
+	local _target = net.ReadEntity()
+	if EntityAlive(_target) then
+		_target:SetVelocity( Vector(0, 0, 600) )
 	end
 end)
 

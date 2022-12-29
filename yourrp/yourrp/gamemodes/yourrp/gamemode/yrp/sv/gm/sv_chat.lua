@@ -68,7 +68,7 @@ function print_help(sender)
 	--sender:ChatPrint( "sleep - sleep or wake up" )
 	sender:ChatPrint( "tag_ug - show usergroup tag" )
 	sender:ChatPrint( "tag_immortal - shows immortal tag" )
-	if sender:HasAccess() then
+	if sender:HasAccess( "print_help" ) then
 		sender:ChatPrint( "ADMIN ONLY:" )
 
 		sender:ChatPrint( "addmoney NAME AMOUNT - adds money to NAME" )
@@ -252,7 +252,7 @@ function YRPChatDnd( sender )
 end
 
 function YRPChatRenamePlayer( sender, text )
-	if GetGlobalYRPBool( "bool_characters_changeable_name", false) or sender:HasAccess() then
+	if GetGlobalYRPBool( "bool_characters_changeable_name", false) or sender:HasAccess( "YRPChatRenamePlayer" ) then
 		local name = text
 
 		local tab = {}
@@ -293,7 +293,7 @@ function YRPChatRenamePlayer( sender, text )
 end
 
 function YRPChatAlert( sender, text )
-	if sender:HasAccess() then
+	if sender:HasAccess( "YRPChatAlert" ) then
 		AddAlert( text )
 		return ""
 	end
@@ -317,7 +317,7 @@ function YRPChatGiveLicense( sender, text )
 end
 
 function set_money(sender, text)
-	if sender:HasAccess() then
+	if sender:HasAccess( "set_money" ) then
 		local _table = string.Explode( " ", text, false)
 		local _name = _table[1]
 		local _money = tonumber(_table[2])
@@ -343,7 +343,7 @@ function set_money(sender, text)
 end
 
 function revive(sender, text)
-	if sender:HasAccess() then
+	if sender:HasAccess( "revive" ) then
 		local _table = string.Explode( " ", text, false)
 		local _name = _table[1]
 		local ply = GetPlayerByName(_name)
@@ -368,7 +368,7 @@ function revive(sender, text)
 end
 
 function add_money(sender, text)
-	if sender:HasAccess() then
+	if sender:HasAccess( "add_money" ) then
 		local _table = string.Explode( " ", text, false)
 		local _name = _table[1]
 		local _money = tonumber(_table[2])
@@ -392,7 +392,7 @@ function add_money(sender, text)
 end
 
 function add_xp(sender, text)
-	if sender:HasAccess() then
+	if sender:HasAccess( "add_xp" ) then
 		local _table = string.Explode( " ", text, false)
 		local _name = _table[1]
 		local _xp = tonumber(_table[2])
@@ -411,7 +411,7 @@ function add_xp(sender, text)
 end
 
 function add_level(sender, text)
-	if sender:HasAccess() then
+	if sender:HasAccess( "add_level" ) then
 		local _table = string.Explode( " ", text, false)
 		local _name = _table[1]
 		local _lvl = tonumber(_table[2])
@@ -430,7 +430,7 @@ function add_level(sender, text)
 end
 
 function set_level(sender, text)
-	if sender:HasAccess() then
+	if sender:HasAccess( "set_level" ) then
 		local _table = string.Explode( " ", text, false)
 		local _name = _table[1]
 		local _lvl = tonumber(_table[2])

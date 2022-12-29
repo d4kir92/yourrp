@@ -425,7 +425,7 @@ net.Receive( "shop_get_tabs", function(len)
 
 						_cat.header:DoClick() -- opens the items
 					end
-					if LocalPlayer():HasAccess() then
+					if LocalPlayer():HasAccess( "show_get_tabs1" ) then
 						local _remove = YRPCreateD( "DButton", _cat, YRP.ctr(400), YRP.ctr(100), 0, 0)
 						_remove:SetText( "" )
 						_remove.uid = _uid
@@ -508,7 +508,7 @@ net.Receive( "shop_get_tabs", function(len)
 		end
 	end
 
-	if LocalPlayer():HasAccess() then
+	if LocalPlayer():HasAccess( "show_get_tabs2" ) then
 		if !PanelAlive(BUYMENU) then return end
 		if !PanelAlive(BUYMENU.tabs) then return end
 
@@ -572,7 +572,7 @@ net.Receive( "shop_get_tabs", function(len)
 	end
 
 	--[[ Settings ]]--
-	if LocalPlayer():HasAccess() then
+	if LocalPlayer():HasAccess( "show_get_tabs3" ) then
 		if !PanelAlive(BUYMENU) then return end
 		if !PanelAlive(BUYMENU.tabs) then return end
 
@@ -689,7 +689,7 @@ function CreateBuyMenuContent(parent, uid)
 		BUYMENU.tabs:SetSelectedColor(YRPInterfaceValue( "YButton", "SC" ) )
 		BUYMENU.tabs:SetUnselectedColor(YRPInterfaceValue( "YButton", "NC" ) )
 		BUYMENU.tabs:SetSize( BUYMENU.shop:GetWide(), YRP.ctr(100) )
-		if LocalPlayer():HasAccess() then
+		if LocalPlayer():HasAccess( "show_get_tabs4" ) then
 			BUYMENU.tabs:SetSize(BUYMENU.shop:GetWide() - YRP.ctr(220), YRP.ctr(100) )
 		end
 

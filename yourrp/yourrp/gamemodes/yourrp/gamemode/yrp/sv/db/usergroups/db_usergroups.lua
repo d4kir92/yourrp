@@ -395,7 +395,7 @@ end)
 
 util.AddNetworkString( "usergroup_add" )
 net.Receive( "usergroup_add", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "usergroup_add" ) then
 		return 
 	end
 	
@@ -407,7 +407,7 @@ end)
 
 util.AddNetworkString( "usergroup_rem" )
 net.Receive( "usergroup_rem", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "usergroup_rem" ) then
 		return 
 	end
 	
@@ -466,7 +466,7 @@ end
 --[[ Usergroup Edit ]]--
 util.AddNetworkString( "usergroup_update_string_name" )
 net.Receive( "usergroup_update_string_name", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "usergroup_update_string_name" ) then
 		return 
 	end
 	
@@ -1717,7 +1717,7 @@ hook.Add( "CanTool", "yrp_can_tool", function(pl, tr, tool)
 			if tr then
 				if tr.Entity and IsValid(tr.Entity) and tr.Entity:GetRPOwner() then
 					local Owner = tr.Entity:GetRPOwner()
-					if Owner == pl or pl:HasAccess() or !EntityAlive(Owner) then
+					if Owner == pl or pl:HasAccess( "yrp_can_tool" ) or !EntityAlive(Owner) then
 						return true
 					else
 						if !table.HasValue(toolantispam, pl) then
@@ -1855,7 +1855,7 @@ end
 
 util.AddNetworkString( "yrp_restartserver" )
 net.Receive( "yrp_restartserver", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "yrp_restartserver" ) then
 		return 
 	end
 	
@@ -2007,7 +2007,7 @@ end)
 
 util.AddNetworkString( "yrp_pp_remove" )
 net.Receive( "yrp_pp_remove", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "yrp_pp_remove" ) then
 		return 
 	end
 	
@@ -2026,7 +2026,7 @@ end)
 
 util.AddNetworkString( "yrp_pp_teleport" )
 net.Receive( "yrp_pp_teleport", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "yrp_pp_teleport" ) then
 		return 
 	end
 	
@@ -2105,7 +2105,7 @@ end)
 
 util.AddNetworkString( "yrp_pp_remove2" )
 net.Receive( "yrp_pp_remove2", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "yrp_pp_remove2" ) then
 		return 
 	end
 	
@@ -2124,7 +2124,7 @@ end)
 
 util.AddNetworkString( "yrp_pp_teleport2" )
 net.Receive( "yrp_pp_teleport2", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "yrp_pp_teleport2" ) then
 		return 
 	end
 	
@@ -2144,7 +2144,7 @@ end)
 
 util.AddNetworkString( "get_usergroup_licenses" )
 net.Receive( "get_usergroup_licenses", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "get_usergroup_licenses" ) then
 		return 
 	end
 	
@@ -2159,7 +2159,7 @@ end)
 
 util.AddNetworkString( "usergroup_update_string_licenses" )
 net.Receive( "usergroup_update_string_licenses", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "usergroup_update_string_licenses" ) then
 		return 
 	end
 	
@@ -2172,7 +2172,7 @@ end)
 
 util.AddNetworkString( "usergroup_update_string_tools" )
 net.Receive( "usergroup_update_string_tools", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "usergroup_update_string_tools" ) then
 		return 
 	end
 	
@@ -2185,7 +2185,7 @@ end)
 
 util.AddNetworkString( "usergroup_update_string_ammos" )
 net.Receive( "usergroup_update_string_ammos", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "usergroup_update_string_ammos" ) then
 		return 
 	end
 	

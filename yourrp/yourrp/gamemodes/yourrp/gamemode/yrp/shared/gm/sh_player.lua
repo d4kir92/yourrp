@@ -133,8 +133,17 @@ function Player:YRPGetLanguageShort()
 	return self:GetYRPString( "client_lang", YRP.lang_string( "LID_none" ) )
 end
 
-function Player:HasAccess()
-	return self:GetYRPBool( "bool_adminaccess", false ) or self:IsSuperAdmin()
+local accessTab = {}
+function Player:HasAccess( from )
+	local hasAccess = self:GetYRPBool( "bool_adminaccess", false ) or self:IsSuperAdmin()
+	if !hasAccess and SERVER then
+		if !table.HasValue( accessTab, from ) then
+			table.insert( accessTab, from )
+			--MsgC( Color(255, 0, 0 ), "HAS NO ACCESS: ", from, "\n" )
+			YRP.msg( "access", "Tried to Access: " .. tostring( from ) )
+		end
+	end
+	return hasAccess
 end
 
 function Player:YRPHasStorageItem( uid )

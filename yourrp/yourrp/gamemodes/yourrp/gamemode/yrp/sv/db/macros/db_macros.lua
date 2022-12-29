@@ -10,14 +10,12 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''" )
 
 util.AddNetworkString( "yrp_get_macros" )
 net.Receive( "yrp_get_macros", function(len, ply)
-	if ply:HasAccess() then
-		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*" )
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*" )
 
-		if IsNotNilAndNotFalse(tab) then
-			net.Start( "yrp_get_macros" )
-				net.WriteTable(tab)
-			net.Send(ply)
-		end
+	if IsNotNilAndNotFalse(tab) then
+		net.Start( "yrp_get_macros" )
+			net.WriteTable(tab)
+		net.Send(ply)
 	end
 end)
 

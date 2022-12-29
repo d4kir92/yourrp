@@ -289,7 +289,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 
 			ply:AddPlayTime()
 
-			if ply:AFK() and !ply:HasAccess() then
+			if ply:AFK() and !ply:HasAccess( "ServerThink1" ) then
 				if CurTime() - tonumber(ply:GetYRPFloat( "afkts", 0) ) >= tonumber(GetGlobalYRPInt( "int_afkkicktime", 0) ) then
 					ply:SetYRPBool( "isafk", false)
 					ply:Kick( "AFK" )

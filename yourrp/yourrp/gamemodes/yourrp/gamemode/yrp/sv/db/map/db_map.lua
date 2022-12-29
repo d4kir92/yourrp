@@ -122,7 +122,7 @@ util.AddNetworkString( "dbInsertIntoMap" )
 util.AddNetworkString( "removeMapEntry" )
 
 net.Receive( "removeMapEntry", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "removeMapEntry" ) then
 		return 
 	end
 	
@@ -220,16 +220,18 @@ end)
 
 util.AddNetworkString( "teleportto" )
 net.Receive( "teleportto", function(len, ply)
-	if ply:HasAccess() then
-		local _uid = net.ReadString()
-		local _entry = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _uid .. "'" )
-		if _entry != nil then
-			_entry = _entry[1]
-			local pos = string.Explode( ",", _entry.position)
-			local ang = string.Explode( ",", _entry.angle)
-			ply:SetPos( Vector(pos[1], pos[2], pos[3]) )
-			ply:SetEyeAngles(Angle( ang[1], ang[2], ang[3]) )
-		end
+	if !ply:HasAccess( "teleportto" ) then
+		return
+	end
+
+	local _uid = net.ReadString()
+	local _entry = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _uid .. "'" )
+	if _entry != nil then
+		_entry = _entry[1]
+		local pos = string.Explode( ",", _entry.position)
+		local ang = string.Explode( ",", _entry.angle)
+		ply:SetPos( Vector(pos[1], pos[2], pos[3]) )
+		ply:SetEyeAngles(Angle( ang[1], ang[2], ang[3]) )
 	end
 end)
 

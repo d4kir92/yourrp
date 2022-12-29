@@ -543,7 +543,7 @@ local function InitYRPChat()
 					end
 				end
 
-				if LocalPlayer():HasAccess() then
+				if LocalPlayer():HasAccess( "chat1" ) then
 					for _, cmd in pairs( admincommands) do
 						if string.StartWith( cmd, text) then
 							table.insert(suggestions, cmd)
@@ -933,7 +933,7 @@ hook.Add( "ChatText", "yrp_serverNotifications", function(index, name, text, typ
 	local lply = LocalPlayer()
 	if lply:IsValid() and YRPIsChatEnabled( "ChatText" ) then
 		if typ == "none" then
-			if PanelAlive(yrpChat.content) and lply:HasAccess() then
+			if PanelAlive(yrpChat.content) and lply:HasAccess( "chat2" ) then
 				notification.AddLegacy(text, NOTIFY_GENERIC, 6)
 			end
 		end

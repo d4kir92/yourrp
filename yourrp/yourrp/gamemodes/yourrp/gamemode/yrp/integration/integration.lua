@@ -125,8 +125,8 @@ DarkRP.disabledDefaults["workarounds"] = {
     ["disable CAC"]                                  = false,
 }
 
-function YRPDarkrpNotFound(name)
-    YRP.msg( "darkrp", "[COLLECT] " .. name)
+function YRPDarkrpNotFound( name )
+    YRP.msg( "darkrp", "[MISSING] " .. name)
 end
 
 AddCSLuaFile( "darkrp/fn.lua" )

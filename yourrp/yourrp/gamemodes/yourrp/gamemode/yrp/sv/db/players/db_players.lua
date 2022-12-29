@@ -773,7 +773,7 @@ net.Receive( "giveRole", function(len, ply)
 	local _tmpSteamID = net.ReadString()
 	local uniqueIDRole = net.ReadInt(16)
 
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "giveRole" ) then
 		return 
 	end
 	
@@ -829,7 +829,7 @@ function YRPIsWhitelisted( ply, id )
 
 		if tonumber(_role.bool_whitelist) == 1 or tonumber(_role.int_prerole) > 0 then
 			local _plyAllowedRole = YRP_SQL_SELECT( "yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND roleID = " .. id)
-			if ply:HasAccess() then
+			if ply:HasAccess( "YRPIsWhitelisted" ) then
 				YRP.msg( "gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " has access." )
 				return true
 			else
@@ -919,7 +919,7 @@ function canGetRole(ply, roleID, want)
 		if tonumber(tmpTableRole.int_uses) < tonumber(tmpTableRole.int_maxamount) or tonumber(tmpTableRole.int_maxamount) == 0 or tonumber(tmpTableRole.uniqueID) == ply:GetRoleUID() then
 			-- Admin only
 			if tonumber(tmpTableRole.bool_adminonly) == 1 then
-				if !ply:HasAccess() then
+				if !ply:HasAccess( "canGetRole" ) then
 					local text = "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin."
 					YRP.msg( "gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin." )
 

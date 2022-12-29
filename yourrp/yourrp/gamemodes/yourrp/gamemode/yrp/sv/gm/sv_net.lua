@@ -6,44 +6,48 @@ util.AddNetworkString( "cancelRestartServer" )
 
 --Restart Server
 net.Receive( "restartServer", function(len, ply)
-	if ply:HasAccess() then
-		YRP.msg( "gm", "RunConsoleCommand(map)" )
-		RunConsoleCommand( "map", game.GetMap() )
+	if !ply:HasAccess( "restartServer" ) then
+		return
 	end
+
+	YRP.msg( "gm", "RunConsoleCommand(map)" )
+	RunConsoleCommand( "map", game.GetMap() )
 end)
 
 net.Receive( "updateServer", function(len, ply)
-	if ply:HasAccess() then
-		local _tmpString = net.ReadString()
-		local _result = YRP_SQL_UPDATE( "yrp_general", {["text_gamemode_name"] = _tmpString})
-		if WORKED(_result, "text_gamemode_name failed" ) then
+	if !ply:HasAccess( "updateServer" ) then
+		return
+	end
+	
+	local _tmpString = net.ReadString()
+	local _result = YRP_SQL_UPDATE( "yrp_general", {["text_gamemode_name"] = _tmpString})
+	if WORKED(_result, "text_gamemode_name failed" ) then
+	end
+	local countdown = net.ReadInt(16)
+	timer.Create( "timerRestartServer", 1, 0, function()
+		local message = "Updating Server in " .. countdown .. " seconds"
+		if countdown == 0 then
+			message = "Server is updating."
 		end
-		local countdown = net.ReadInt(16)
-		timer.Create( "timerRestartServer", 1, 0, function()
-			local message = "Updating Server in " .. countdown .. " seconds"
-			if countdown == 0 then
-				message = "Server is updating."
-			end
-			if countdown > 10 then
-				if ( countdown%10) == 0 then
-					PrintMessage(HUD_PRINTCENTER, message)
-					YRP.msg( "server", message)
-				end
-			elseif countdown <= 10 then
+		if countdown > 10 then
+			if ( countdown%10) == 0 then
 				PrintMessage(HUD_PRINTCENTER, message)
 				YRP.msg( "server", message)
 			end
-			countdown = countdown - 1
-			if countdown == -1 then
-				timer.Remove( "timerRestartServer" )
-				game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
-			end
-		end)
-	end
+		elseif countdown <= 10 then
+			PrintMessage(HUD_PRINTCENTER, message)
+			YRP.msg( "server", message)
+		end
+		countdown = countdown - 1
+		if countdown == -1 then
+			timer.Remove( "timerRestartServer" )
+			game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
+		end
+	end)
 end)
 
 net.Receive( "cancelRestartServer", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "cancelRestartServer" ) then
 		return
 	end
 	
@@ -69,7 +73,7 @@ function YRPChangeUserGroup(ply, cmd, args)
 				end
 			end
 			YRP.msg( "note", _cmdpre .. "Player [" .. args[1] .. "] not found." )
-		elseif ply:HasAccess() or ply:IPAddress() == "loopback" then
+		elseif ply:HasAccess( "YRPChangeUserGroup" ) or ply:IPAddress() == "loopback" then
 			--[[ if admin/superadmin/owner tries ]]--
 			for k, v in pairs(player.GetAll() ) do
 				if string.find(string.lower( v:Nick() ), string.lower( args[1]) ) or string.find(string.lower( v:SteamName() ), string.lower( args[1]) ) then
@@ -96,7 +100,7 @@ function YRPChangeUserGroup(ply, cmd, args)
 	end
 end
 
-concommand.Add( "darkrp", function(ply, cmd, args)
+concommand.Add( "darkrp", function( ply, cmd, args )
 	if args[1] and strEmpty( args[1] ) then
 		return 
 	end
@@ -109,10 +113,10 @@ concommand.Add( "darkrp", function(ply, cmd, args)
 		local playername = args[2]
 		local newrpname = args[3]
 
-		local player = GetPlayerByName(playername)
+		local pl = GetPlayerByName(playername)
 
-		if EntityAlive(player) then
-			player:SetRPName( newrpname, "darkrp forcerpname" )
+		if EntityAlive(pl) then
+			pl:SetRPName( newrpname, "darkrp forcerpname" )
 		else
 			YRP.msg( "note", "[forcerpname] Player not found" )
 		end

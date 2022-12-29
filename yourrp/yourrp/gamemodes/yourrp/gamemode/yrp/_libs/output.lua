@@ -74,8 +74,10 @@ function GetChannelName( chan)
 		return "DEBUG"
 	elseif chan == "ptab" then
 		return "PRINTTABLE"
-	elseif chan == "mis" or chan == "miss" then
+	elseif chan == "mis" or chan == "miss" or chan == "missing" then
 		return "MISSING"
+	elseif chan == "acc" or chan == "acce" or chan == "access" then
+		return "ACCESS"
 	elseif chan == "err" or chan == "error" then
 		return "ERROR"
 	else
@@ -92,6 +94,7 @@ channelcolors["chat"] = Color( 0, 0, 255, 255 )
 channelcolors["debug"] = Color( 255, 255, 255, 255 )
 channelcolors["printtable"] = Color( 255, 255, 255, 255 )
 channelcolors["missing"] = Color( 255, 100, 100)
+channelcolors["access"] = Color( 255, 50, 50)
 channelcolors["error"] = Color( 0, 255, 0 )
 function GetChannelColor( chan)
 	chan = string.lower( chan)
@@ -111,6 +114,7 @@ msgchannels["chat"] = true
 msgchannels["debug"] = true
 msgchannels["printtable"] = true
 msgchannels["missing"] = true
+msgchannels["access"] = true
 msgchannels["error"] = true
 msgchannels["darkrp"] = true
 function IsChannelRegistered( chan)
@@ -126,7 +130,7 @@ function MSGChannelEnabled( chan)
 	if !isstring( chan) then return false end
 
 	chan = string.lower( chan)
-	if chan == "printtable" or chan == "missing" or chan == "error" then
+	if chan == "printtable" or chan == "missing" or chan == "error" or chan == "access" then
 		return true
 	elseif GetGlobalYRPBool( "yrp_general_loaded" ) then
 		if !IsChannelRegistered( chan) then
@@ -210,7 +214,7 @@ function YRP.msg( chan, str_msg, tochat, force )
 					REALM = "SERVER"
 				end
 
-				if cn == "ERROR" or cn == "MISSING" then			
+				if cn == "ERROR" or cn == "MISSING" or cn == "ACCESS" then			
 					if YRPNewError(str) then
 						YRPAddError(str, str, REALM)
 					end

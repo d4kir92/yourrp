@@ -133,7 +133,7 @@ if CLIENT then
 	function VersionWindow()
 		if once then return end
 		once = true
-		if check_window < CurTime() and LocalPlayer():HasAccess() then
+		if check_window < CurTime() and LocalPlayer():HasAccess( "version" ) then
 			check_window = CurTime() + 5
 			local frame = YRPCreateD( "YFrame", nil, YRP.ctr(1100), YRP.ctr(590), 0, 0)
 			frame:Center()

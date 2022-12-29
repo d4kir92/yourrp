@@ -273,7 +273,7 @@ function PANEL:GetMenuInfo(netstr)
 	net.Start(netstr)
 	net.SendToServer()
 
-	net.Receive(netstr, function(len)
+	net.Receive( netstr, function(len)
 		if PanelAlive(self) then
 			local tabs = net.ReadTable()
 			local subtabs = net.ReadTable()
@@ -301,7 +301,7 @@ function PANEL:GetMenuInfo(netstr)
 				end
 			end
 		end
-	end)
+	end )
 end
 
 function PANEL:Think()

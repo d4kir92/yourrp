@@ -181,18 +181,19 @@ function Player:setDarkRPVar( variable, value, target )
 		elseif variable == "HasGunlicense" then
 			--
 		else
-			--YRPDarkrpNotFound( "setDarkRPVar( " .. tostring( variable) .. ", " .. tostring( value) .. ", " .. tostring(target) .. " )" )
+			YRPDarkrpNotFound( "setDarkRPVar( " .. tostring( variable ) .. ", " .. tostring( value ) .. ", " .. tostring( target ) .. " )" )
+			
 			if target == self then
 				self[ variable ] = value
 			else
 				target[ variable ] = value
 			end
-		end
 
-		if isnumber( value ) then
-			target:SetYRPInt( variable, value)
-		elseif string.lower( variable ) != "usergroup" then
-			target:SetYRPString( variable, value)
+			if isnumber( value ) then
+				target:SetYRPInt( variable, value)
+			elseif string.lower( variable ) != "usergroup" then
+				target:SetYRPString( variable, value)
+			end
 		end
 	end
 end

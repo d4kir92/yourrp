@@ -38,6 +38,7 @@ net.Receive( "getCharakterList", function()
 		function cl_save:DoClick()
 			if CurTime() > save_delay then
 				save_delay = CurTime() + 4
+				
 				net.Start( "change_rpname" )
 					net.WriteString( cl_rpName:GetText() )
 				net.SendToServer()

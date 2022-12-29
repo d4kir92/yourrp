@@ -584,7 +584,7 @@ end, hook.MONITOR_HIGH)
 
 hook.Add( "HUDPaint", "yrp_hud_collectionid", function()
 	local lply = LocalPlayer()
-	if lply:HasAccess() and YRPCollectionID() < 100000000 then
+	if YRPCollectionID() < 100000000 and lply:HasAccess( "hud1" ) then
 		local text = "[STEAM] " .. YRP.lang_string( "LID_thecollectionidismissing" ) .. " ( " .. YRPGetKeybindName( "menu_settings" ) .. " >> " .. YRP.lang_string( "LID_server" ) .. " >> " .. YRP.lang_string( "LID_general" ) .. " >> " .. YRP.lang_string( "LID_collectionid" ) .. " )"
 		draw.SimpleTextOutlined(text, "Y_50_500", ScrW() / 2, ScrH()  * 0.2, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
@@ -592,7 +592,7 @@ end, hook.MONITOR_HIGH)
 
 hook.Add( "HUDPaint", "yrp_hud_charbackground", function()
 	local lply = LocalPlayer()
-	if lply:HasAccess() and YRPGetCharBGNotFound and strEmpty(GetGlobalYRPString( "text_character_background" ) ) then
+	if YRPGetCharBGNotFound and strEmpty(GetGlobalYRPString( "text_character_background" ) ) and lply:HasAccess( "hud2" ) then
 		local text = YRPGetCharBGNotFound()
 		draw.SimpleTextOutlined(text, "Y_40_500", ScrW() / 2, ScrH()  * 0.25, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end

@@ -25,7 +25,7 @@ function AddVehicle( veh, ply, item)
 end
 
 function allowedToUseVehicle(id, ply)
-	if ply:HasAccess() then
+	if ply:HasAccess( "allowedToUseVehicle" ) then
 		return true
 	else
 		local _tmpVehicleTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. id .. "'" )
@@ -117,7 +117,7 @@ function YRPLockVehicle(ply, ent, nr)
 end
 
 net.Receive( "removeVehicleOwner", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "removeVehicleOwner" ) then
 		return 
 	end
 	

@@ -293,7 +293,7 @@ function PANEL:Init()
 		local btn = YRPCreateD( "DButton", bg, bg:GetWide(), bg:GetTall(), 0, 0)
 		btn:SetText( "" )
 		function btn:Paint(pw, ph)
-			if rol.int_prerole == 0 and (!rol.bool_locked or LocalPlayer():HasAccess() ) and rol.int_requireslevel <= LocalPlayer():Level() then
+			if rol.int_prerole == 0 and (!rol.bool_locked or LocalPlayer():HasAccess( "CollapseCategory1" ) ) and rol.int_requireslevel <= LocalPlayer():Level() then
 				if self:IsHovered() then
 					draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color( 255, 255, 255, 10) )
 				end
@@ -307,7 +307,7 @@ function PANEL:Init()
 		end
 		function btn:DoClick()
 			rol.int_prerole = tonumber(rol.int_prerole)
-			if (!rol.bool_locked or LocalPlayer():HasAccess() ) and rol.int_requireslevel <= LocalPlayer():Level() then
+			if (!rol.bool_locked or LocalPlayer():HasAccess( "CollapseCategory2" ) ) and rol.int_requireslevel <= LocalPlayer():Level() then
 				LocalPlayer().charcreate_ruid = rol.uniqueID
 				timer.Simple(0.2, function()
 					net.Start( "yrp_want_role" )

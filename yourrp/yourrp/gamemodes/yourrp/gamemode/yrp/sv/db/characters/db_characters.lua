@@ -344,17 +344,19 @@ function Player:UpdateBackpack()
 end
 
 function Player:SetRPName(str, from)
-	if isstring(str) then
-		str = YRPCleanUpName( str )
+	if GetGlobalYRPBool( "bool_characters_changeable_name", false ) or self:HasAccess() then
+		if isstring(str) then
+			str = YRPCleanUpName( str )
 
-		local oldname = self:Nick()
-		local newname = str
-		YRP_SQL_UPDATE( "yrp_characters", {["rpname"] = newname}, "uniqueID = " .. self:CharID() )
+			local oldname = self:Nick()
+			local newname = str
+			YRP_SQL_UPDATE( "yrp_characters", {["rpname"] = newname}, "uniqueID = " .. self:CharID() )
 
-		newname = newname
-		self:SetYRPString( "rpname", newname)
+			newname = newname
+			self:SetYRPString( "rpname", newname)
 
-		YRP.msg( "note", oldname .. " changed name to " .. newname, true)
+			YRP.msg( "note", oldname .. " changed name to " .. newname, true)
+		end
 	end
 end
 
@@ -417,12 +419,6 @@ net.Receive( "moneyreset", function(len, ply)
 		pl:SetMoney(0)
 		pl:SetMoneyBank(0)
 	end
-end)
-
-util.AddNetworkString( "change_rpname" )
-net.Receive( "change_rpname", function(len, ply)
-	local _new_rp_name = net.ReadString()
-	ply:SetRPName(_new_rp_name)
 end)
 
 util.AddNetworkString( "change_rpdescription" )
@@ -1019,6 +1015,14 @@ net.Receive( "violation_dn", function(len, ply)
 	end
 end)
 
+util.AddNetworkString( "change_rpname" )
+net.Receive( "change_rpname", function(len, ply)
+	local _new_rp_name = net.ReadString()
+	if GetGlobalYRPBool( "bool_characters_changeable_name", false) then
+		ply:SetRPName(_new_rp_name)
+	end
+end)
+
 util.AddNetworkString( "set_rpname" )
 net.Receive( "set_rpname", function(len, ply)
 	local p = net.ReadEntity()
@@ -1076,7 +1080,7 @@ end)
 
 util.AddNetworkString( "givelicense" )
 net.Receive( "givelicense", function(len, ply)
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "givelicense" ) then
 		return 
 	end
 

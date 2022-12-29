@@ -185,14 +185,15 @@ end)
 util.AddNetworkString( "change_to_sql_mode" )
 net.Receive( "change_to_sql_mode", function(len, ply)
 	local _mode = net.ReadInt(32)
-	if ply:HasAccess() then
-		DBUpdateInt(DATABASE_NAME, ply, "update_" .. "int_mode", "int_mode", yrp_sql, _mode)
-		SetSQLMode(_mode)
-		YRP.msg( "note", ply:YRPName() .. " changed sqlmode to " .. GetSQLModeName() )
-		timer.Simple(1, function()
-			game.ConsoleCommand( "changelevel " .. GetMapName() .. "\n" )
-		end)
-	else
+	if !ply:HasAccess( "change_to_sql_mode" ) then
 		YRP.msg( "note", ply:YRPName() .. " tried to use change_to_sql_mode" )
+		return
 	end
+	
+	DBUpdateInt(DATABASE_NAME, ply, "update_" .. "int_mode", "int_mode", yrp_sql, _mode)
+	SetSQLMode(_mode)
+	YRP.msg( "note", ply:YRPName() .. " changed sqlmode to " .. GetSQLModeName() )
+	timer.Simple(1, function()
+		game.ConsoleCommand( "changelevel " .. GetMapName() .. "\n" )
+	end)
 end)

@@ -132,46 +132,52 @@ net.Receive( "whitelistPlayer", function(len, ply)
 end)
 
 net.Receive( "whitelistPlayerGroup", function(len, ply)
-	if ply:HasAccess() then
-		local _SteamID = net.ReadString()
-		local _nick = ""
-		for k, v in pairs(player.GetAll() ) do
-			if v:YRPSteamID() == _SteamID then
-				_nick = v:Nick()
-				target = v
-			end
-		end
-		local groupID = net.ReadInt(16)
-		local DBGroup = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. groupID)
-		if IsNotNilAndNotFalse(DBGroup) then
-			DBGroup = DBGroup[1]
-		end
-		local dat = util.DateStamp()
-		local status = "Manually by " .. ply:SteamName()
-		local name = target:SteamName()
-		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. _SteamID .. "', " .. YRP_SQL_STR_IN( _nick ) .. ", " .. groupID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
-		YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. target:SteamID() .. "', 'Group: " .. DBGroup.string_name .. "'" )
+	if !ply:HasAccess( "whitelistPlayerGroup" ) then
+		return
 	end
+
+	local _SteamID = net.ReadString()
+	local _nick = ""
+	for k, v in pairs(player.GetAll() ) do
+		if v:YRPSteamID() == _SteamID then
+			_nick = v:Nick()
+			target = v
+		end
+	end
+	local groupID = net.ReadInt(16)
+	local DBGroup = YRP_SQL_SELECT( "yrp_ply_groups", "*", "uniqueID = " .. groupID)
+	if IsNotNilAndNotFalse(DBGroup) then
+		DBGroup = DBGroup[1]
+	end
+	local dat = util.DateStamp()
+	local status = "Manually by " .. ply:SteamName()
+	local name = target:SteamName()
+	YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. _SteamID .. "', " .. YRP_SQL_STR_IN( _nick ) .. ", " .. groupID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. target:SteamID() .. "', 'Group: " .. DBGroup.string_name .. "'" )
+	
 	sendRoleWhitelist(ply)
 end)
 
 net.Receive( "whitelistPlayerAll", function(len, ply)
-	if ply:HasAccess() then
-		local _SteamID = net.ReadString()
-		local _nick = ""
-		for k, v in pairs(player.GetAll() ) do
-			if v:YRPSteamID() == _SteamID then
-				_nick = v:Nick()
-				target = v
-			end
-		end
-
-		local dat = util.DateStamp()
-		local status = "Manually by " .. ply:SteamName()
-		local name = target:SteamName()
-		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, roleID, groupID, date, status, name", "'" .. _SteamID .. "', " .. YRP_SQL_STR_IN( _nick ) .. ", " .. "-1" .. ", " .. "-1" .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
-		YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. target:SteamID() .. "', '" .. "ALL" .. "'" )
+	if !ply:HasAccess( "whitelistPlayerAll" ) then
+		return
 	end
+
+	local _SteamID = net.ReadString()
+	local _nick = ""
+	for k, v in pairs(player.GetAll() ) do
+		if v:YRPSteamID() == _SteamID then
+			_nick = v:Nick()
+			target = v
+		end
+	end
+
+	local dat = util.DateStamp()
+	local status = "Manually by " .. ply:SteamName()
+	local name = target:SteamName()
+	YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, roleID, groupID, date, status, name", "'" .. _SteamID .. "', " .. YRP_SQL_STR_IN( _nick ) .. ", " .. "-1" .. ", " .. "-1" .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
+	YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. target:SteamID() .. "', '" .. "ALL" .. "'" )
+
 	sendRoleWhitelist(ply)
 end)
 

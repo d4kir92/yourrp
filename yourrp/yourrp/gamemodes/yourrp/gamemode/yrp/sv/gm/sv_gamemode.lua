@@ -778,7 +778,7 @@ function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 end
 
 function IsAllowedToSuicide(ply)
-	if ply:HasAccess() then
+	if ply:HasAccess( "IsAllowedToSuicide" ) then
 		return true
 	elseif IsSuicideDisabled() or ply:IsFlagSet(FL_FROZEN) or ply:GetYRPBool( "ragdolled", false) or ply:GetYRPBool( "injail", false) then
 		return false
@@ -1740,6 +1740,10 @@ end
 
 util.AddNetworkString( "yrp_import_darkrp" )
 net.Receive( "yrp_import_darkrp", function( len, ply )
+	if !ply:HasAccess( "yrp_import_darkrp" ) then
+		return
+	end
+	
 	YRPHR()
 	YRPMsg( "[START IMPORT DARKRP]", Color( 0, 255, 0 ) )
 
