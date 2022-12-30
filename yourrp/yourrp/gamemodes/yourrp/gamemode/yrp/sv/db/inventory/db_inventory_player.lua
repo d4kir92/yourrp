@@ -147,7 +147,7 @@ function Player:IsAllowedToDropSWEPUG( cname)
 end
 
 util.AddNetworkString( "nws_yrp_dropswep" )
-net.Receive( "nws_yrp_dropswep", function(len, ply)
+net.Receive( "nws_yrp_dropswep", function( len, ply )
 	local _enabled = PlayersCanDropWeapons()
 
 	if _enabled then

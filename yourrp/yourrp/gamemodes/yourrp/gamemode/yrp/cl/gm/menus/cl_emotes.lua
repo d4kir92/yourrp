@@ -163,7 +163,7 @@ function OpenEmotesMenu()
 		end
 	end
 
-	net.Receive( "nws_yrp_do_act", function(len)
+	net.Receive( "nws_yrp_do_act", function( len )
 		local pl = net.ReadEntity()
 		local act = net.ReadString()
 		if IsValid(pl) then

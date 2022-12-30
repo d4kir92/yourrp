@@ -28,7 +28,7 @@ function PLAYER:SetServerKeybinds()
 end
 
 util.AddNetworkString( "nws_yrp_setserverdefaultkeybind" )
-net.Receive( "nws_yrp_setserverdefaultkeybind", function(len, ply)
+net.Receive( "nws_yrp_setserverdefaultkeybind", function( len, ply )
 	local keybinds = net.ReadTable()
 	for name, value in pairs(keybinds) do
 		local selresult = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'" )
@@ -41,7 +41,7 @@ net.Receive( "nws_yrp_setserverdefaultkeybind", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_forcesetkeybinds" )
-net.Receive( "nws_yrp_forcesetkeybinds", function(len, ply)
+net.Receive( "nws_yrp_forcesetkeybinds", function( len, ply )
 	for i, p in pairs(player.GetAll() ) do
 		p:SetServerKeybinds()
 	end

@@ -92,7 +92,7 @@ end)
 
 -- Networking
 util.AddNetworkString( "nws_yrp_get_inventory" )
-net.Receive( "nws_yrp_get_inventory", function(len, ply)
+net.Receive( "nws_yrp_get_inventory", function( len, ply )
 	local storage = GetCharacterStorage(ply)
 
 	if IsNotNilAndNotFalse(storage) and storage.uniqueID != nil then

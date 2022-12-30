@@ -493,7 +493,7 @@ function YRPScoreboardAddPlayer(ply)
 			local br = (ph - iconsize) / 2
 			local ts = math.Round(math.Clamp(ph * 0.5, 6, 100), 0)
 
-			if IsValid( ply ) and LocalPlayer():HasAccess() then
+			if IsValid( ply ) and LocalPlayer():HasAccess( "YRPScoreboardAddPlayer1" ) then
 				-- Money
 				if YRP.GetDesignIcon( "64_money-bill" ) then
 					surface.SetMaterial(YRP.GetDesignIcon( "64_money-bill" ) )
@@ -659,7 +659,7 @@ function YRPScoreboardAddPlayer(ply)
 		end}
 		local c = 0
 		for i, btn in pairs( btns ) do
-			if !btn[3] or ( btn[3] and LocalPlayer():HasAccess() ) then
+			if !btn[3] or ( btn[3] and LocalPlayer():HasAccess( "YRPScoreboardAddPlayer2") ) then
 				if !btn[4] or ( btn[4] and YRPNotSelf(ply) ) then
 					c = c + 1
 					local b = YRPCreateD( "YButton", adminbtns, size, size, 0, 0)

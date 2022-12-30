@@ -45,7 +45,7 @@ function YRPHudView()
 				tab["KEY"] = "[" .. string.upper(YRPGetKeybindName( "in_use" ) ) .. "]"
 				draw.SimpleText(YRP.lang_string( "LID_presstoopen", tab), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 				local canbeowned = ent:GetYRPBool( "bool_canbeowned", false)
-				if canbeowned or lply:HasAccess() then
+				if canbeowned or lply:HasAccess( "YRPHudView" ) then
 					local tab2 = {}
 					tab2["KEY"] = "[" .. string.upper(YRPGetKeybindName( "menu_options_door" ) ) .. "]"
 					draw.SimpleText(YRP.lang_string( "LID_presstoopensettings", tab2), "Y_24_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )

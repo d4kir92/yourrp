@@ -134,9 +134,9 @@ function Player:YRPGetLanguageShort()
 end
 
 local accessTab = {}
-function Player:HasAccess( from )
+function Player:HasAccess( from, skip )
 	local hasAccess = self:GetYRPBool( "bool_adminaccess", false ) or self:IsSuperAdmin()
-	if !hasAccess and SERVER then
+	if !hasAccess and SERVER and skip == nil then
 		if !table.HasValue( accessTab, from ) then
 			table.insert( accessTab, from )
 			--MsgC( Color(255, 0, 0 ), "HAS NO ACCESS: ", from, "\n" )

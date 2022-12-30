@@ -333,17 +333,17 @@ function BuildWhitelis(parent, tab)
 	end
 end
 
-net.Receive( "nws_yrp_getGroupsWhitelist", function(len)
+net.Receive( "nws_yrp_getGroupsWhitelist", function( len )
 	tabG = net.ReadTable()
 	loadedG = true
 end)
 
-net.Receive( "nws_yrp_getRolesWhitelist", function(len)
+net.Receive( "nws_yrp_getRolesWhitelist", function( len )
 	tabR = net.ReadTable()
 	loadedR = true
 end)
 
-net.Receive( "nws_yrp_getRoleWhitelist_line", function(len)
+net.Receive( "nws_yrp_getRoleWhitelist_line", function( len )
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) then
 

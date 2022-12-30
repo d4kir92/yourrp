@@ -976,7 +976,7 @@ net.Receive( "yrpstopanim", function()
 	end
 end)
 
-net.Receive( "nws_yrp_player_say", function(len)
+net.Receive( "nws_yrp_player_say", function( len )
 	local pk = net.ReadTable()
 	for i, v in pairs( pk ) do
 		if isstring( v ) then

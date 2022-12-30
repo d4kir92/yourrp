@@ -48,7 +48,7 @@ function tempInfo(mp, parent, w, h, x, y)
 end
 
 local upgradeframe = nil
-net.Receive( "nws_yrp_getMoneyPrintMenu", function(len)
+net.Receive( "nws_yrp_getMoneyPrintMenu", function( len )
 	local lply = LocalPlayer()
 
 	local mp = net.ReadEntity()

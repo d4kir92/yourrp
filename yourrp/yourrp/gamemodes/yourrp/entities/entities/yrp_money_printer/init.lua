@@ -8,7 +8,7 @@ include( "shared.lua" )
 util.AddNetworkString( "nws_yrp_getMoneyPrintMenu" )
 
 util.AddNetworkString( "nws_yrp_upgradeCPU" )
-net.Receive( "nws_yrp_upgradeCPU", function(len, ply)
+net.Receive( "nws_yrp_upgradeCPU", function( len, ply )
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "cpuCost" )
@@ -22,7 +22,7 @@ net.Receive( "nws_yrp_upgradeCPU", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_upgradeCooler" )
-net.Receive( "nws_yrp_upgradeCooler", function(len, ply)
+net.Receive( "nws_yrp_upgradeCooler", function( len, ply )
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "coolerCost" )
@@ -36,7 +36,7 @@ net.Receive( "nws_yrp_upgradeCooler", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_upgradePrinter" )
-net.Receive( "nws_yrp_upgradePrinter", function(len, ply)
+net.Receive( "nws_yrp_upgradePrinter", function( len, ply )
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "printerCost" )
@@ -48,7 +48,7 @@ net.Receive( "nws_yrp_upgradePrinter", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_upgradeStorage" )
-net.Receive( "nws_yrp_upgradeStorage", function(len, ply)
+net.Receive( "nws_yrp_upgradeStorage", function( len, ply )
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "storageCost" )
@@ -62,7 +62,7 @@ net.Receive( "nws_yrp_upgradeStorage", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_fuelUp" )
-net.Receive( "nws_yrp_fuelUp", function(len, ply)
+net.Receive( "nws_yrp_fuelUp", function( len, ply )
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "fuelCost" )
@@ -77,7 +77,7 @@ net.Receive( "nws_yrp_fuelUp", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_repairMP" )
-net.Receive( "nws_yrp_repairMP", function(len, ply)
+net.Receive( "nws_yrp_repairMP", function( len, ply )
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "hpCost" )
@@ -92,7 +92,7 @@ net.Receive( "nws_yrp_repairMP", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_withdrawMoney" )
-net.Receive( "nws_yrp_withdrawMoney", function(len, ply)
+net.Receive( "nws_yrp_withdrawMoney", function( len, ply )
 	local mp = net.ReadEntity()
 	if mp:GetClass() == "yrp_money_printer" then
 		local withdraw = mp:GetYRPInt( "money", 0)
@@ -104,7 +104,7 @@ net.Receive( "nws_yrp_withdrawMoney", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_startMoneyPrinter" )
-net.Receive( "nws_yrp_startMoneyPrinter", function(len, ply)
+net.Receive( "nws_yrp_startMoneyPrinter", function( len, ply )
 	local mp = net.ReadEntity()
 	if mp:GetYRPBool( "working", false) then
 		mp:SetYRPBool( "working", false)

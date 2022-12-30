@@ -275,7 +275,7 @@ function AddToHandler_General(ply)
 end
 
 util.AddNetworkString( "nws_yrp_connect_Settings_General" )
-net.Receive( "nws_yrp_connect_Settings_General", function(len, ply)
+net.Receive( "nws_yrp_connect_Settings_General", function( len, ply )
 	if ply:CanAccess( "bool_general" ) then
 		AddToHandler_General(ply)
 
@@ -292,7 +292,7 @@ net.Receive( "nws_yrp_connect_Settings_General", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_disconnect_Settings_General" )
-net.Receive( "nws_yrp_disconnect_Settings_General", function(len, ply)
+net.Receive( "nws_yrp_disconnect_Settings_General", function( len, ply )
 	RemFromHandler_General(ply)
 end)
 
@@ -403,7 +403,7 @@ function IsDropMoneyOnDeathEnabled()
 end
 
 util.AddNetworkString( "nws_yrp_do_act" )
-net.Receive( "nws_yrp_do_act", function(len, ply)
+net.Receive( "nws_yrp_do_act", function( len, ply )
 	local act = net.ReadString()
 	net.Start( "nws_yrp_do_act" )
 		net.WriteEntity(ply)
@@ -522,8 +522,8 @@ end
 
 --[[ SERVER SETTINGS ]]--
 util.AddNetworkString( "nws_yrp_update_bool_server_reload_notification" )
-net.Receive( "nws_yrp_update_bool_server_reload_notification", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_bool_server_reload_notification", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_bool_server_reload_notification" ) then
 		return 
 	end
 
@@ -532,7 +532,7 @@ net.Receive( "nws_yrp_update_bool_server_reload_notification", function(len, ply
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_server_reload" )
-net.Receive( "nws_yrp_update_bool_server_reload", function(len, ply)
+net.Receive( "nws_yrp_update_bool_server_reload", function( len, ply )
 	if !ply:HasAccess( "nws_yrp_update_bool_server_reload" ) then
 		return 
 	end
@@ -542,7 +542,7 @@ net.Receive( "nws_yrp_update_bool_server_reload", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_server_collectionid" )
-net.Receive( "nws_yrp_update_text_server_collectionid", function(len, ply)
+net.Receive( "nws_yrp_update_text_server_collectionid", function( len, ply )
 	if !ply:HasAccess( "nws_yrp_update_text_server_collectionid" ) then
 		return 
 	end
@@ -553,7 +553,7 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_text_server_logo" )
-net.Receive( "nws_yrp_update_text_server_logo", function(len, ply)
+net.Receive( "nws_yrp_update_text_server_logo", function( len, ply )
 	if !ply:HasAccess( "nws_yrp_update_text_server_logo" ) then
 		return 
 	end
@@ -563,7 +563,7 @@ net.Receive( "nws_yrp_update_text_server_logo", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_server_name" )
-net.Receive( "nws_yrp_update_text_server_name", function(len, ply)
+net.Receive( "nws_yrp_update_text_server_name", function( len, ply )
 	if !ply:HasAccess( "nws_yrp_update_text_server_name" ) then
 		return 
 	end
@@ -575,7 +575,7 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_text_server_rules" )
-net.Receive( "nws_yrp_update_text_server_rules", function(len, ply)
+net.Receive( "nws_yrp_update_text_server_rules", function( len, ply )
 	if !ply:HasAccess( "nws_yrp_update_text_server_rules" ) then
 		return 
 	end
@@ -585,8 +585,8 @@ net.Receive( "nws_yrp_update_text_server_rules", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_server_welcome_message" )
-net.Receive( "nws_yrp_update_text_server_welcome_message", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_text_server_welcome_message", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_text_server_welcome_message" ) then
 		return 
 	end
 
@@ -596,8 +596,8 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_text_server_message_of_the_day" )
-net.Receive( "nws_yrp_update_text_server_message_of_the_day", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_text_server_message_of_the_day", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_text_server_message_of_the_day" ) then
 		return 
 	end
 
@@ -606,8 +606,8 @@ net.Receive( "nws_yrp_update_text_server_message_of_the_day", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_server_debug" )
-net.Receive( "nws_yrp_update_bool_server_debug", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_bool_server_debug", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_bool_server_debug" ) then
 		return 
 	end
 
@@ -618,8 +618,8 @@ net.Receive( "nws_yrp_update_bool_server_debug", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_server_debug_voice" )
-net.Receive( "nws_yrp_update_bool_server_debug_voice", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_bool_server_debug_voice", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_bool_server_debug_voice" ) then
 		return 
 	end
 
@@ -628,8 +628,8 @@ net.Receive( "nws_yrp_update_bool_server_debug_voice", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_int_server_debug_tick" )
-net.Receive( "nws_yrp_update_int_server_debug_tick", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_int_server_debug_tick", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_int_server_debug_tick" ) then
 		return 
 	end
 
@@ -640,8 +640,8 @@ net.Receive( "nws_yrp_update_int_server_debug_tick", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_gm" )
-net.Receive( "nws_yrp_update_bool_msg_channel_gm", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_bool_msg_channel_gm", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_gm" ) then
 		return 
 	end
 
@@ -650,8 +650,8 @@ net.Receive( "nws_yrp_update_bool_msg_channel_gm", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_db" )
-net.Receive( "nws_yrp_update_bool_msg_channel_db", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_bool_msg_channel_db", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_db" ) then
 		return 
 	end
 
@@ -660,8 +660,8 @@ net.Receive( "nws_yrp_update_bool_msg_channel_db", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_lang" )
-net.Receive( "nws_yrp_update_bool_msg_channel_lang", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_bool_msg_channel_lang", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_lang" ) then
 		return 
 	end
 
@@ -670,8 +670,8 @@ net.Receive( "nws_yrp_update_bool_msg_channel_lang", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_noti" )
-net.Receive( "nws_yrp_update_bool_msg_channel_noti", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_bool_msg_channel_noti", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_noti" ) then
 		return 
 	end
 
@@ -680,8 +680,8 @@ net.Receive( "nws_yrp_update_bool_msg_channel_noti", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_darkrp" )
-net.Receive( "nws_yrp_update_bool_msg_channel_darkrp", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_bool_msg_channel_darkrp", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_darkrp" ) then
 		return 
 	end
 
@@ -690,8 +690,8 @@ net.Receive( "nws_yrp_update_bool_msg_channel_darkrp", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_chat" )
-net.Receive( "nws_yrp_update_bool_msg_channel_chat", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_bool_msg_channel_chat", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_chat" ) then
 		return 
 	end
 
@@ -700,8 +700,8 @@ net.Receive( "nws_yrp_update_bool_msg_channel_chat", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_debug" )
-net.Receive( "nws_yrp_update_bool_msg_channel_debug", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_bool_msg_channel_debug", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_debug" ) then
 		return 
 	end
 
@@ -713,8 +713,8 @@ end)
 
 --[[ GAMEMODE SETTINGS ]]--
 util.AddNetworkString( "nws_yrp_update_text_gamemode_name" )
-net.Receive( "nws_yrp_update_text_gamemode_name", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_update_text_gamemode_name", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_update_text_gamemode_name" ) then
 		return 
 	end
 
@@ -724,19 +724,19 @@ net.Receive( "nws_yrp_update_text_gamemode_name", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_graffiti_disabled" )
-net.Receive( "nws_yrp_update_bool_graffiti_disabled", function(len, ply)
+net.Receive( "nws_yrp_update_bool_graffiti_disabled", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_graffiti_disabled", "bool_graffiti_disabled", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_suicide_disabled" )
-net.Receive( "nws_yrp_update_bool_suicide_disabled", function(len, ply)
+net.Receive( "nws_yrp_update_bool_suicide_disabled", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_suicide_disabled", "bool_suicide_disabled", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_team_color" )
-net.Receive( "nws_yrp_update_bool_team_color", function(len, ply)
+net.Receive( "nws_yrp_update_bool_team_color", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_team_color", "bool_team_color", b)
 end)
@@ -744,42 +744,42 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_antipropkill" )
-net.Receive( "nws_yrp_update_bool_antipropkill", function(len, ply)
+net.Receive( "nws_yrp_update_bool_antipropkill", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_antipropkill", "bool_antipropkill", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_drop_items_on_death" )
-net.Receive( "nws_yrp_update_bool_drop_items_on_death", function(len, ply)
+net.Receive( "nws_yrp_update_bool_drop_items_on_death", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_drop_items_on_death", "bool_drop_items_on_death", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_drop_items_role" )
-net.Receive( "nws_yrp_update_bool_drop_items_role", function(len, ply)
+net.Receive( "nws_yrp_update_bool_drop_items_role", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_drop_items_role", "bool_drop_items_role", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_players_need_to_introduce" )
-net.Receive( "nws_yrp_update_bool_players_need_to_introduce", function(len, ply)
+net.Receive( "nws_yrp_update_bool_players_need_to_introduce", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_players_need_to_introduce", "bool_players_need_to_introduce", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_players_can_drop_weapons" )
-net.Receive( "nws_yrp_update_bool_players_can_drop_weapons", function(len, ply)
+net.Receive( "nws_yrp_update_bool_players_can_drop_weapons", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_players_can_drop_weapons", "bool_players_can_drop_weapons", b)
 end)
 util.AddNetworkString( "nws_yrp_update_bool_players_start_with_default_role" )
-net.Receive( "nws_yrp_update_bool_players_start_with_default_role", function(len, ply)
+net.Receive( "nws_yrp_update_bool_players_start_with_default_role", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_players_start_with_default_role", "bool_players_start_with_default_role", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_dealers_can_take_damage" )
-net.Receive( "nws_yrp_update_bool_dealers_can_take_damage", function(len, ply)
+net.Receive( "nws_yrp_update_bool_dealers_can_take_damage", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_dealers_can_take_damage", "bool_dealers_can_take_damage", b)
 end)
@@ -787,86 +787,86 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_thirdperson" )
-net.Receive( "nws_yrp_update_bool_thirdperson", function(len, ply)
+net.Receive( "nws_yrp_update_bool_thirdperson", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_thirdperson", "bool_thirdperson", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_view_distance" )
-net.Receive( "nws_yrp_update_text_view_distance", function(len, ply)
+net.Receive( "nws_yrp_update_text_view_distance", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_view_distance", "text_view_distance", str)
 end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_chat_ooc" )
-net.Receive( "nws_yrp_update_bool_chat_ooc", function(len, ply)
+net.Receive( "nws_yrp_update_bool_chat_ooc", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_chat_ooc", "bool_chat_ooc", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_chat_looc" )
-net.Receive( "nws_yrp_update_bool_chat_looc", function(len, ply)
+net.Receive( "nws_yrp_update_bool_chat_looc", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_chat_looc", "bool_chat_looc", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_chat_role" )
-net.Receive( "nws_yrp_update_bool_chat_role", function(len, ply)
+net.Receive( "nws_yrp_update_bool_chat_role", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_chat_role", "bool_chat_role", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_chat_group" )
-net.Receive( "nws_yrp_update_bool_chat_group", function(len, ply)
+net.Receive( "nws_yrp_update_bool_chat_group", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_chat_group", "bool_chat_group", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_chat_yell" )
-net.Receive( "nws_yrp_update_bool_chat_yell", function(len, ply)
+net.Receive( "nws_yrp_update_bool_chat_yell", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_chat_yell", "bool_chat_yell", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_chat_service" )
-net.Receive( "nws_yrp_update_bool_chat_service", function(len, ply)
+net.Receive( "nws_yrp_update_bool_chat_service", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_chat_service", "bool_chat_service", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_canbeowned" )
-net.Receive( "nws_yrp_update_bool_canbeowned", function(len, ply)
+net.Receive( "nws_yrp_update_bool_canbeowned", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_canbeowned", "bool_canbeowned", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_removebuildingowner" )
-net.Receive( "nws_yrp_update_bool_removebuildingowner", function(len, ply)
+net.Receive( "nws_yrp_update_bool_removebuildingowner", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_removebuildingowner", "bool_removebuildingowner", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_removebuildingownercharswitch" )
-net.Receive( "nws_yrp_update_bool_removebuildingownercharswitch", function(len, ply)
+net.Receive( "nws_yrp_update_bool_removebuildingownercharswitch", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_removebuildingownercharswitch", "bool_removebuildingownercharswitch", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_removebuildingownertime" )
-net.Receive( "nws_yrp_update_text_removebuildingownertime", function(len, ply)
+net.Receive( "nws_yrp_update_text_removebuildingownertime", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_removebuildingownertime", "text_removebuildingownertime", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_autopickup" )
-net.Receive( "nws_yrp_update_bool_autopickup", function(len, ply)
+net.Receive( "nws_yrp_update_bool_autopickup", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_autopickup", "bool_autopickup", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_int_ttlsweps" )
-net.Receive( "nws_yrp_update_int_ttlsweps", function(len, ply)
+net.Receive( "nws_yrp_update_int_ttlsweps", function( len, ply )
 	local int = net.ReadString()
 	if isnumber(tonumber(int) ) then
 		GeneralUpdateInt(ply, "nws_yrp_update_int_ttlsweps", "int_ttlsweps", int)
@@ -874,7 +874,7 @@ net.Receive( "nws_yrp_update_int_ttlsweps", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_int_afkkicktime" )
-net.Receive( "nws_yrp_update_int_afkkicktime", function(len, ply)
+net.Receive( "nws_yrp_update_int_afkkicktime", function( len, ply )
 	local int = net.ReadString()
 	if isnumber(tonumber(int) ) then
 		GeneralUpdateInt(ply, "nws_yrp_update_int_afkkicktime", "int_afkkicktime", int)
@@ -885,97 +885,97 @@ end)
 
 --[[ GAMEMODE SYSTEMS ]]--
 util.AddNetworkString( "nws_yrp_update_bool_onlywhencook" )
-net.Receive( "nws_yrp_update_bool_onlywhencook", function(len, ply)
+net.Receive( "nws_yrp_update_bool_onlywhencook", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_onlywhencook", "bool_onlywhencook", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_hunger" )
-net.Receive( "nws_yrp_update_bool_hunger", function(len, ply)
+net.Receive( "nws_yrp_update_bool_hunger", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_hunger", "bool_hunger", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_hunger_health_regeneration" )
-net.Receive( "nws_yrp_update_bool_hunger_health_regeneration", function(len, ply)
+net.Receive( "nws_yrp_update_bool_hunger_health_regeneration", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_hunger_health_regeneration", "bool_hunger_health_regeneration", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_hunger_health_regeneration_tickrate" )
-net.Receive( "nws_yrp_update_text_hunger_health_regeneration_tickrate", function(len, ply)
+net.Receive( "nws_yrp_update_text_hunger_health_regeneration_tickrate", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_hunger_health_regeneration_tickrate", "text_hunger_health_regeneration_tickrate", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_thirst" )
-net.Receive( "nws_yrp_update_bool_thirst", function(len, ply)
+net.Receive( "nws_yrp_update_bool_thirst", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_thirst", "bool_thirst", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_permille" )
-net.Receive( "nws_yrp_update_bool_permille", function(len, ply)
+net.Receive( "nws_yrp_update_bool_permille", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_permille", "bool_permille", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_stamina" )
-net.Receive( "nws_yrp_update_bool_stamina", function(len, ply)
+net.Receive( "nws_yrp_update_bool_stamina", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_stamina", "bool_stamina", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_radiation" )
-net.Receive( "nws_yrp_update_bool_radiation", function(len, ply)
+net.Receive( "nws_yrp_update_bool_radiation", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_radiation", "bool_radiation", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_map_system" )
-net.Receive( "nws_yrp_update_bool_map_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_map_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_map_system", "bool_map_system", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_character_system" )
-net.Receive( "nws_yrp_update_bool_character_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_character_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_character_system", "bool_character_system", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_building_system" )
-net.Receive( "nws_yrp_update_bool_building_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_building_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_building_system", "bool_building_system", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_inventory_system" )
-net.Receive( "nws_yrp_update_bool_inventory_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_inventory_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_inventory_system", "bool_inventory_system", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_realistic_system" )
-net.Receive( "nws_yrp_update_bool_realistic_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_realistic_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_realistic_system", "bool_realistic_system", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_level_system" )
-net.Receive( "nws_yrp_update_bool_level_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_level_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_level_system", "bool_level_system", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_weapon_system" )
-net.Receive( "nws_yrp_update_bool_weapon_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_weapon_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_weapon_system", "bool_weapon_system", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_weapon_system_model" )
-net.Receive( "nws_yrp_update_text_weapon_system_model", function(len, ply)
+net.Receive( "nws_yrp_update_text_weapon_system_model", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_weapon_system_model", "text_weapon_system_model", str)
 end)
@@ -983,31 +983,31 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_identity_card" )
-net.Receive( "nws_yrp_update_bool_identity_card", function(len, ply)
+net.Receive( "nws_yrp_update_bool_identity_card", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_identity_card", "bool_identity_card", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_laws_system" )
-net.Receive( "nws_yrp_update_bool_laws_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_laws_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_laws_system", "bool_laws_system", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_appearance_system" )
-net.Receive( "nws_yrp_update_bool_appearance_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_appearance_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_appearance_system", "bool_appearance_system", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_appearance_model" )
-net.Receive( "nws_yrp_update_text_appearance_model", function(len, ply)
+net.Receive( "nws_yrp_update_text_appearance_model", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_appearance_model", "text_appearance_model", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_smartphone_system" )
-net.Receive( "nws_yrp_update_bool_smartphone_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_smartphone_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_smartphone_system", "bool_smartphone_system", b)
 end)
@@ -1015,19 +1015,19 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_players_can_switch_faction" )
-net.Receive( "nws_yrp_update_bool_players_can_switch_faction", function(len, ply)
+net.Receive( "nws_yrp_update_bool_players_can_switch_faction", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_players_can_switch_faction", "bool_players_can_switch_faction", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_players_can_switch_role" )
-net.Receive( "nws_yrp_update_bool_players_can_switch_role", function(len, ply)
+net.Receive( "nws_yrp_update_bool_players_can_switch_role", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_players_can_switch_role", "bool_players_can_switch_role", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_players_die_on_role_switch" )
-net.Receive( "nws_yrp_update_bool_players_die_on_role_switch", function(len, ply)
+net.Receive( "nws_yrp_update_bool_players_die_on_role_switch", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_players_die_on_role_switch", "bool_players_die_on_role_switch", b)
 end)
@@ -1035,7 +1035,7 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_wanted_system" )
-net.Receive( "nws_yrp_update_bool_wanted_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_wanted_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_wanted_system", "bool_wanted_system", b)
 end)
@@ -1043,31 +1043,31 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_voice" )
-net.Receive( "nws_yrp_update_bool_voice", function(len, ply)
+net.Receive( "nws_yrp_update_bool_voice", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_voice", "bool_voice", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_voice_module" )
-net.Receive( "nws_yrp_update_bool_voice_module", function(len, ply)
+net.Receive( "nws_yrp_update_bool_voice_module", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_voice_module", "bool_voice_module", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_voice_module_locally" )
-net.Receive( "nws_yrp_update_bool_voice_module_locally", function(len, ply)
+net.Receive( "nws_yrp_update_bool_voice_module_locally", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_voice_module_locally", "bool_voice_module_locally", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_voice_3d" )
-net.Receive( "nws_yrp_update_bool_voice_3d", function(len, ply)
+net.Receive( "nws_yrp_update_bool_voice_3d", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_voice_3d", "bool_voice_3d", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_int_voice_max_range" )
-net.Receive( "nws_yrp_update_int_voice_max_range", function(len, ply)
+net.Receive( "nws_yrp_update_int_voice_max_range", function( len, ply )
 	local int = net.ReadString()
 	if isnumber(tonumber(int) ) then
 		GeneralUpdateInt(ply, "nws_yrp_update_int_voice_max_range", "int_voice_max_range", int)
@@ -1076,7 +1076,7 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_gmod_voice_module" )
-net.Receive( "nws_yrp_update_bool_gmod_voice_module", function(len, ply)
+net.Receive( "nws_yrp_update_bool_gmod_voice_module", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_gmod_voice_module", "bool_gmod_voice_module", b)
 end)
@@ -1085,144 +1085,144 @@ end)
 
 --[[ GAMEMODE VISUALS ]]--
 util.AddNetworkString( "nws_yrp_update_bool_yrp_combined_menu" )
-net.Receive( "nws_yrp_update_bool_yrp_combined_menu", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_combined_menu", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_combined_menu", "bool_yrp_combined_menu", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_role_menu" )
-net.Receive( "nws_yrp_update_bool_yrp_role_menu", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_role_menu", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_role_menu", "bool_yrp_role_menu", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_help_menu" )
-net.Receive( "nws_yrp_update_bool_yrp_help_menu", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_help_menu", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_help_menu", "bool_yrp_help_menu", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_buy_menu" )
-net.Receive( "nws_yrp_update_bool_yrp_buy_menu", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_buy_menu", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_buy_menu", "bool_yrp_buy_menu", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_char_menu" )
-net.Receive( "nws_yrp_update_bool_yrp_char_menu", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_char_menu", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_char_menu", "bool_yrp_char_menu", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_keybinds_menu" )
-net.Receive( "nws_yrp_update_bool_yrp_keybinds_menu", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_keybinds_menu", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_keybinds_menu", "bool_yrp_keybinds_menu", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_tickets_menu" )
-net.Receive( "nws_yrp_update_bool_yrp_tickets_menu", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_tickets_menu", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_tickets_menu", "bool_yrp_tickets_menu", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_macro_menu" )
-net.Receive( "nws_yrp_update_bool_yrp_macro_menu", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_macro_menu", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_macro_menu", "bool_yrp_macro_menu", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_character_background" )
-net.Receive( "nws_yrp_update_text_character_background", function(len, ply)
+net.Receive( "nws_yrp_update_text_character_background", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_character_background", "text_character_background", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_loading_design" )
-net.Receive( "nws_yrp_update_text_loading_design", function(len, ply)
+net.Receive( "nws_yrp_update_text_loading_design", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_loading_design", "text_loading_design", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_loading_background" )
-net.Receive( "nws_yrp_update_text_loading_background", function(len, ply)
+net.Receive( "nws_yrp_update_text_loading_background", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_loading_background", "text_loading_background", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_character_design" )
-net.Receive( "nws_yrp_update_text_character_design", function(len, ply)
+net.Receive( "nws_yrp_update_text_character_design", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_character_design", "text_character_design", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_chat" )
-net.Receive( "nws_yrp_update_bool_yrp_chat", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_chat", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_chat", "bool_yrp_chat", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_chat_show_name" )
-net.Receive( "nws_yrp_update_bool_yrp_chat_show_name", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_chat_show_name", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_chat_show_name", "bool_yrp_chat_show_name", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_chat_show_rolename" )
-net.Receive( "nws_yrp_update_bool_yrp_chat_show_rolename", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_chat_show_rolename", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_chat_show_rolename", "bool_yrp_chat_show_rolename", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_chat_show_factionname" )
-net.Receive( "nws_yrp_update_bool_yrp_chat_show_factionname", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_chat_show_factionname", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_chat_show_factionname", "bool_yrp_chat_show_factionname", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_chat_show_groupname" )
-net.Receive( "nws_yrp_update_bool_yrp_chat_show_groupname", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_chat_show_groupname", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_chat_show_groupname", "bool_yrp_chat_show_groupname", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_chat_show_usergroup" )
-net.Receive( "nws_yrp_update_bool_yrp_chat_show_usergroup", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_chat_show_usergroup", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_chat_show_usergroup", "bool_yrp_chat_show_usergroup", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_idcard_background" )
-net.Receive( "nws_yrp_update_text_idcard_background", function(len, ply)
+net.Receive( "nws_yrp_update_text_idcard_background", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_idcard_background", "text_idcard_background", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_idstructure" )
-net.Receive( "nws_yrp_update_text_idstructure", function(len, ply)
+net.Receive( "nws_yrp_update_text_idstructure", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_idstructure", "text_idstructure", str)
 	RecreateNewIDCardID()
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_chat_show_idcardid" )
-net.Receive( "nws_yrp_update_bool_yrp_chat_show_idcardid", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_chat_show_idcardid", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_chat_show_idcardid", "bool_yrp_chat_show_idcardid", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_show_securitylevel" )
-net.Receive( "nws_yrp_update_bool_show_securitylevel", function(len, ply)
+net.Receive( "nws_yrp_update_bool_show_securitylevel", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_show_securitylevel", "bool_show_securitylevel", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_int_yrp_chat_range_local" )
-net.Receive( "nws_yrp_update_int_yrp_chat_range_local", function(len, ply)
+net.Receive( "nws_yrp_update_int_yrp_chat_range_local", function( len, ply )
 	local int = net.ReadString()
 	if isnumber(tonumber(int) ) then
 		GeneralUpdateInt(ply, "nws_yrp_update_int_yrp_chat_range_local", "int_yrp_chat_range_local", int)
@@ -1232,7 +1232,7 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_showowner" )
-net.Receive( "nws_yrp_update_bool_yrp_showowner", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_showowner", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_showowner", "bool_yrp_showowner", b)
 end)
@@ -1240,7 +1240,7 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_crosshair" )
-net.Receive( "nws_yrp_update_bool_yrp_crosshair", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_crosshair", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_crosshair", "bool_yrp_crosshair", b)
 end)
@@ -1248,7 +1248,7 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_play_button" )
-net.Receive( "nws_yrp_update_bool_yrp_play_button", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_play_button", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_play_button", "bool_yrp_play_button", b)
 end)
@@ -1256,13 +1256,13 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_hud" )
-net.Receive( "nws_yrp_update_bool_yrp_hud", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_hud", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_hud", "bool_yrp_hud", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_hud_swaying" )
-net.Receive( "nws_yrp_update_bool_yrp_hud_swaying", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_hud_swaying", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_hud_swaying", "bool_yrp_hud_swaying", b)
 end)
@@ -1270,91 +1270,91 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard", "bool_yrp_scoreboard", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_yrp_scoreboard_style" )
-net.Receive( "nws_yrp_update_text_yrp_scoreboard_style", function(len, ply)
+net.Receive( "nws_yrp_update_text_yrp_scoreboard_style", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_yrp_scoreboard_style", "text_yrp_scoreboard_style", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_level" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_level", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_level", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_level", "bool_yrp_scoreboard_show_level", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_name" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_name", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_name", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_name", "bool_yrp_scoreboard_show_name", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_usergroup" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_usergroup", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_usergroup", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_usergroup", "bool_yrp_scoreboard_show_usergroup", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_rolename" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_rolename", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_rolename", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_rolename", "bool_yrp_scoreboard_show_rolename", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_factionname" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_factionname", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_factionname", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_factionname", "bool_yrp_scoreboard_show_factionname", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_groupname" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_groupname", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_groupname", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_groupname", "bool_yrp_scoreboard_show_groupname", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_language" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_language", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_language", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_language", "bool_yrp_scoreboard_show_language", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_country" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_country", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_country", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_country", "bool_yrp_scoreboard_show_country", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_playtime" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_playtime", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_playtime", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_playtime", "bool_yrp_scoreboard_show_playtime", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_frags" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_frags", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_frags", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_frags", "bool_yrp_scoreboard_show_frags", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_deaths" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_deaths", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_deaths", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_deaths", "bool_yrp_scoreboard_show_deaths", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_operating_system" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_operating_system", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_operating_system", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_operating_system", "bool_yrp_scoreboard_show_operating_system", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_idcardid" )
-net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_idcardid", function(len, ply)
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_idcardid", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_idcardid", "bool_yrp_scoreboard_show_idcardid", b)
 end)
@@ -1362,182 +1362,182 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head" )
-net.Receive( "nws_yrp_update_bool_tag_on_head", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head", "bool_tag_on_head", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_target" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_target", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_target", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_target", "bool_tag_on_head_target", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_idcardid" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_idcardid", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_idcardid", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_idcardid", "bool_tag_on_head_idcardid", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_name" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_name", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_name", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_name", "bool_tag_on_head_name", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_name_onlyfaction" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_name_onlyfaction", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_name_onlyfaction", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_name_onlyfaction", "bool_tag_on_head_name_onlyfaction", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_name_onlygroup" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_name_onlygroup", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_name_onlygroup", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_name_onlygroup", "bool_tag_on_head_name_onlygroup", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_name_onlyrole" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_name_onlyrole", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_name_onlyrole", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_name_onlyrole", "bool_tag_on_head_name_onlyrole", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_clan" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_clan", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_clan", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_clan", "bool_tag_on_head_clan", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_level" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_level", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_level", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_level", "bool_tag_on_head_level", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_rolename" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_rolename", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_rolename", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_rolename", "bool_tag_on_head_rolename", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_factionname" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_factionname", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_factionname", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_factionname", "bool_tag_on_head_factionname", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_groupname" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_groupname", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_groupname", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_groupname", "bool_tag_on_head_groupname", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_health" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_health", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_health", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_health", "bool_tag_on_head_health", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_armor" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_armor", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_armor", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_armor", "bool_tag_on_head_armor", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_usergroup" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_usergroup", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_usergroup", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_usergroup", "bool_tag_on_head_usergroup", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_target_forced" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_target_forced", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_target_forced", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_target_forced", "bool_tag_on_head_target_forced", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_voice" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_voice", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_voice", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_voice", "bool_tag_on_head_voice", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_head_chat" )
-net.Receive( "nws_yrp_update_bool_tag_on_head_chat", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_head_chat", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_head_chat", "bool_tag_on_head_chat", b)
 end)
 
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side" )
-net.Receive( "nws_yrp_update_bool_tag_on_side", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side", "bool_tag_on_side", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side_target" )
-net.Receive( "nws_yrp_update_bool_tag_on_side_target", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side_target", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side_target", "bool_tag_on_side_target", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side_name" )
-net.Receive( "nws_yrp_update_bool_tag_on_side_name", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side_name", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side_name", "bool_tag_on_side_name", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side_idcardid" )
-net.Receive( "nws_yrp_update_bool_tag_on_side_idcardid", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side_idcardid", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side_idcardid", "bool_tag_on_side_idcardid", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side_clan" )
-net.Receive( "nws_yrp_update_bool_tag_on_side_clan", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side_clan", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side_clan", "bool_tag_on_side_clan", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side_level" )
-net.Receive( "nws_yrp_update_bool_tag_on_side_level", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side_level", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side_level", "bool_tag_on_side_level", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side_rolename" )
-net.Receive( "nws_yrp_update_bool_tag_on_side_rolename", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side_rolename", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side_rolename", "bool_tag_on_side_rolename", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side_factionname" )
-net.Receive( "nws_yrp_update_bool_tag_on_side_factionname", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side_factionname", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side_factionname", "bool_tag_on_side_factionname", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side_groupname" )
-net.Receive( "nws_yrp_update_bool_tag_on_side_groupname", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side_groupname", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side_groupname", "bool_tag_on_side_groupname", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side_health" )
-net.Receive( "nws_yrp_update_bool_tag_on_side_health", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side_health", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side_health", "bool_tag_on_side_health", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side_armor" )
-net.Receive( "nws_yrp_update_bool_tag_on_side_armor", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side_armor", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side_armor", "bool_tag_on_side_armor", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_tag_on_side_usergroup" )
-net.Receive( "nws_yrp_update_bool_tag_on_side_usergroup", function(len, ply)
+net.Receive( "nws_yrp_update_bool_tag_on_side_usergroup", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_tag_on_side_usergroup", "bool_tag_on_side_usergroup", b)
 end)
@@ -1546,38 +1546,38 @@ end)
 
 --[[ MONEY SETTINGS ]]--
 util.AddNetworkString( "nws_yrp_update_bool_drop_money_on_death" )
-net.Receive( "nws_yrp_update_bool_drop_money_on_death", function(len, ply)
+net.Receive( "nws_yrp_update_bool_drop_money_on_death", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_drop_money_on_death", "bool_drop_money_on_death", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_money_max_amount_of_dropped_money" )
-net.Receive( "nws_yrp_update_text_money_max_amount_of_dropped_money", function(len, ply)
+net.Receive( "nws_yrp_update_text_money_max_amount_of_dropped_money", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_money_max_amount_of_dropped_money", "text_money_max_amount_of_dropped_money", str)
 end)
 
 
 util.AddNetworkString( "nws_yrp_update_text_money_pre" )
-net.Receive( "nws_yrp_update_text_money_pre", function(len, ply)
+net.Receive( "nws_yrp_update_text_money_pre", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_money_pre", "text_money_pre", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_money_pos" )
-net.Receive( "nws_yrp_update_text_money_pos", function(len, ply)
+net.Receive( "nws_yrp_update_text_money_pos", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_money_pos", "text_money_pos", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_money_model" )
-net.Receive( "nws_yrp_update_text_money_model", function(len, ply)
+net.Receive( "nws_yrp_update_text_money_model", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_money_model", "text_money_model", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_money_printer_spawn_money" )
-net.Receive( "nws_yrp_update_bool_money_printer_spawn_money", function(len, ply)
+net.Receive( "nws_yrp_update_bool_money_printer_spawn_money", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_money_printer_spawn_money", "bool_money_printer_spawn_money", b)
 end)
@@ -1586,41 +1586,41 @@ end)
 
 --[[ CHARACTERS SETTINGS ]]--
 util.AddNetworkString( "nws_yrp_update_text_characters_money_start" )
-net.Receive( "nws_yrp_update_text_characters_money_start", function(len, ply)
+net.Receive( "nws_yrp_update_text_characters_money_start", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_characters_money_start", "text_characters_money_start", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_characters_changeable_name" )
-net.Receive( "nws_yrp_update_bool_characters_changeable_name", function(len, ply)
+net.Receive( "nws_yrp_update_bool_characters_changeable_name", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_characters_changeable_name", "bool_characters_changeable_name", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_characters_removeondeath" )
-net.Receive( "nws_yrp_update_bool_characters_removeondeath", function(len, ply)
+net.Receive( "nws_yrp_update_bool_characters_removeondeath", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_characters_removeondeath", "bool_characters_removeondeath", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_characters_birthday" )
-net.Receive( "nws_yrp_update_bool_characters_birthday", function(len, ply)
+net.Receive( "nws_yrp_update_bool_characters_birthday", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_characters_birthday", "bool_characters_birthday", b)
 end)
 util.AddNetworkString( "nws_yrp_update_bool_characters_bodyheight" )
-net.Receive( "nws_yrp_update_bool_characters_bodyheight", function(len, ply)
+net.Receive( "nws_yrp_update_bool_characters_bodyheight", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_characters_bodyheight", "bool_characters_bodyheight", b)
 end)
 util.AddNetworkString( "nws_yrp_update_bool_characters_weight" )
-net.Receive( "nws_yrp_update_bool_characters_weight", function(len, ply)
+net.Receive( "nws_yrp_update_bool_characters_weight", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_characters_weight", "bool_characters_weight", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_int_logouttime" )
-net.Receive( "nws_yrp_update_int_logouttime", function(len, ply)
+net.Receive( "nws_yrp_update_int_logouttime", function( len, ply )
 	local int = net.ReadString()
 	if isnumber(tonumber(int) ) then
 		GeneralUpdateInt(ply, "nws_yrp_update_int_logouttime", "int_logouttime", int)
@@ -1628,14 +1628,14 @@ net.Receive( "nws_yrp_update_int_logouttime", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_int_deathtimestamp_min" )
-net.Receive( "nws_yrp_update_int_deathtimestamp_min", function(len, ply)
+net.Receive( "nws_yrp_update_int_deathtimestamp_min", function( len, ply )
 	local int = net.ReadString()
 	if isnumber(tonumber(int) ) then
 		GeneralUpdateInt(ply, "nws_yrp_update_int_deathtimestamp_min", "int_deathtimestamp_min", int)
 	end
 end)
 util.AddNetworkString( "nws_yrp_update_int_deathtimestamp_max" )
-net.Receive( "nws_yrp_update_int_deathtimestamp_max", function(len, ply)
+net.Receive( "nws_yrp_update_int_deathtimestamp_max", function( len, ply )
 	local int = net.ReadString()
 	if isnumber(tonumber(int) ) then
 		GeneralUpdateInt(ply, "nws_yrp_update_int_deathtimestamp_max", "int_deathtimestamp_max", int)
@@ -1643,7 +1643,7 @@ net.Receive( "nws_yrp_update_int_deathtimestamp_max", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_deathscreen" )
-net.Receive( "nws_yrp_update_bool_deathscreen", function(len, ply)
+net.Receive( "nws_yrp_update_bool_deathscreen", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_deathscreen", "bool_deathscreen", b)
 end)
@@ -1652,90 +1652,90 @@ end)
 
 --[[ SOCIAL SETTINGS ]]--
 util.AddNetworkString( "nws_yrp_update_text_social_website" )
-net.Receive( "nws_yrp_update_text_social_website", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_website", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_website", "text_social_website", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_forum" )
-net.Receive( "nws_yrp_update_text_social_forum", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_forum", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_forum", "text_social_forum", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_discord" )
-net.Receive( "nws_yrp_update_text_social_discord", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_discord", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_discord", "text_social_discord", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_discord_widgetid" )
-net.Receive( "nws_yrp_update_text_social_discord_widgetid", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_discord_widgetid", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_discord_widgetid", "text_social_discord_widgetid", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_teamspeak_ip" )
-net.Receive( "nws_yrp_update_text_social_teamspeak_ip", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_teamspeak_ip", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_teamspeak_ip", "text_social_teamspeak_ip", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_teamspeak_port" )
-net.Receive( "nws_yrp_update_text_social_teamspeak_port", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_teamspeak_port", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_teamspeak_port", "text_social_teamspeak_port", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_teamspeak_query_port" )
-net.Receive( "nws_yrp_update_text_social_teamspeak_query_port", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_teamspeak_query_port", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_teamspeak_query_port", "text_social_teamspeak_query_port", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_youtube" )
-net.Receive( "nws_yrp_update_text_social_youtube", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_youtube", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_youtube", "text_social_youtube", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_twitch" )
-net.Receive( "nws_yrp_update_text_social_twitch", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_twitch", function( len, ply )
 	local str = net.ReadString()
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_twitch", "text_social_twitch", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_twitter" )
-net.Receive( "nws_yrp_update_text_social_twitter", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_twitter", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_twitter", "text_social_twitter", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_facebook" )
-net.Receive( "nws_yrp_update_text_social_facebook", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_facebook", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_facebook", "text_social_facebook", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_instagram" )
-net.Receive( "nws_yrp_update_text_social_instagram", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_instagram", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_instagram", "text_social_instagram", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_social_steamgroup" )
-net.Receive( "nws_yrp_update_text_social_steamgroup", function(len, ply)
+net.Receive( "nws_yrp_update_text_social_steamgroup", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_social_steamgroup", "text_social_steamgroup", str)
@@ -1744,45 +1744,45 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_float_scale_hunger" )
-net.Receive( "nws_yrp_update_float_scale_hunger", function(len, ply)
+net.Receive( "nws_yrp_update_float_scale_hunger", function( len, ply )
 	local flo = net.ReadFloat()
 	GeneralUpdateFloat(ply, "nws_yrp_update_float_scale_hunger", "float_scale_hunger", flo)
 end)
 
 util.AddNetworkString( "nws_yrp_update_float_scale_thirst" )
-net.Receive( "nws_yrp_update_float_scale_thirst", function(len, ply)
+net.Receive( "nws_yrp_update_float_scale_thirst", function( len, ply )
 	local flo = net.ReadFloat()
 	GeneralUpdateFloat(ply, "nws_yrp_update_float_scale_thirst", "float_scale_thirst", flo)
 end)
 
 
 util.AddNetworkString( "nws_yrp_update_float_scale_stamina_up" )
-net.Receive( "nws_yrp_update_float_scale_stamina_up", function(len, ply)
+net.Receive( "nws_yrp_update_float_scale_stamina_up", function( len, ply )
 	local flo = net.ReadFloat()
 	GeneralUpdateFloat(ply, "nws_yrp_update_float_scale_stamina_up", "float_scale_stamina_up", flo)
 end)
 
 util.AddNetworkString( "nws_yrp_update_float_scale_stamina_down" )
-net.Receive( "nws_yrp_update_float_scale_stamina_down", function(len, ply)
+net.Receive( "nws_yrp_update_float_scale_stamina_down", function( len, ply )
 	local flo = net.ReadFloat()
 	GeneralUpdateFloat(ply, "nws_yrp_update_float_scale_stamina_down", "float_scale_stamina_down", flo)
 end)
 
 
 util.AddNetworkString( "nws_yrp_update_float_scale_radiation_in" )
-net.Receive( "nws_yrp_update_float_scale_radiation_in", function(len, ply)
+net.Receive( "nws_yrp_update_float_scale_radiation_in", function( len, ply )
 	local flo = net.ReadFloat()
 	GeneralUpdateFloat(ply, "nws_yrp_update_float_scale_radiation_in", "float_scale_radiation_in", flo)
 end)
 
 util.AddNetworkString( "nws_yrp_update_float_scale_radiation_out" )
-net.Receive( "nws_yrp_update_float_scale_radiation_out", function(len, ply)
+net.Receive( "nws_yrp_update_float_scale_radiation_out", function( len, ply )
 	local flo = net.ReadFloat()
 	GeneralUpdateFloat(ply, "nws_yrp_update_float_scale_radiation_out", "float_scale_radiation_out", flo)
 end)
 
 util.AddNetworkString( "nws_yrp_update_float_scale_stamina_jump" )
-net.Receive( "nws_yrp_update_float_scale_stamina_jump", function(len, ply)
+net.Receive( "nws_yrp_update_float_scale_stamina_jump", function( len, ply )
 	local flo = net.ReadFloat()
 	GeneralUpdateFloat(ply, "nws_yrp_update_float_scale_stamina_jump", "float_scale_stamina_jump", flo)
 end)
@@ -1806,7 +1806,7 @@ function AddSubTab(tab, parent, name, netstr, url, func)
 end
 
 util.AddNetworkString( "nws_yrp_gethelpmenu" )
-net.Receive( "nws_yrp_gethelpmenu", function(len, ply)
+net.Receive( "nws_yrp_gethelpmenu", function( len, ply )
 	local info = YRP_SQL_SELECT( "yrp_general", "*", "uniqueID = '1'" )
 	if IsNotNilAndNotFalse(info) then
 		info = info[1]
@@ -1833,7 +1833,7 @@ net.Receive( "nws_yrp_gethelpmenu", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsitehelp" )
-net.Receive( "nws_yrp_getsitehelp", function(len, ply)
+net.Receive( "nws_yrp_getsitehelp", function( len, ply )
 	net.Start( "nws_yrp_getsitehelp" )
 		net.WriteString(yrp_general.text_server_welcome_message)
 		net.WriteString(yrp_general.text_server_message_of_the_day)
@@ -1841,10 +1841,10 @@ net.Receive( "nws_yrp_getsitehelp", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsitestaff" )
-net.Receive( "nws_yrp_getsitestaff", function(len, ply)
+net.Receive( "nws_yrp_getsitestaff", function( len, ply )
 	local staff = {}
 	for i, pl in pairs(player.GetAll() ) do
-		if pl:HasAccess() then
+		if pl:HasAccess( "nws_yrp_getsitestaff" ) then
 			table.insert(staff, pl)
 		end
 	end
@@ -1854,7 +1854,7 @@ net.Receive( "nws_yrp_getsitestaff", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsiteserverrules" )
-net.Receive( "nws_yrp_getsiteserverrules", function(len, ply)
+net.Receive( "nws_yrp_getsiteserverrules", function( len, ply )
 	local server_rules = YRP_SQL_SELECT( "yrp_general", "text_server_rules", "uniqueID = '1'" )
 	if IsNotNilAndNotFalse(server_rules) then
 		server_rules = server_rules[1].text_server_rules
@@ -1867,7 +1867,7 @@ net.Receive( "nws_yrp_getsiteserverrules", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsitecollection" )
-net.Receive( "nws_yrp_getsitecollection", function(len, ply)
+net.Receive( "nws_yrp_getsitecollection", function( len, ply )
 	local collectionid = YRP_SQL_SELECT( "yrp_general", "text_server_collectionid", "uniqueID = '1'" )
 	if IsNotNilAndNotFalse( collectionid) then
 		collectionid = collectionid[1].text_server_collectionid
@@ -1880,7 +1880,7 @@ net.Receive( "nws_yrp_getsitecollection", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsitecommunitywebsite" )
-net.Receive( "nws_yrp_getsitecommunitywebsite", function(len, ply)
+net.Receive( "nws_yrp_getsitecommunitywebsite", function( len, ply )
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_website", "uniqueID = '1'" )
 	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_website
@@ -1893,7 +1893,7 @@ net.Receive( "nws_yrp_getsitecommunitywebsite", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsitecommunityforum" )
-net.Receive( "nws_yrp_getsitecommunityforum", function(len, ply)
+net.Receive( "nws_yrp_getsitecommunityforum", function( len, ply )
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_forum", "uniqueID = '1'" )
 	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_forum
@@ -1906,7 +1906,7 @@ net.Receive( "nws_yrp_getsitecommunityforum", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsitecommunitydiscord" )
-net.Receive( "nws_yrp_getsitecommunitydiscord", function(len, ply)
+net.Receive( "nws_yrp_getsitecommunitydiscord", function( len, ply )
 	local sql_select = YRP_SQL_SELECT( "yrp_general", "text_social_discord, text_social_discord_widgetid", "uniqueID = '1'" )
 	local link = ""
 	local widgetid = ""
@@ -1921,7 +1921,7 @@ net.Receive( "nws_yrp_getsitecommunitydiscord", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsitecommunityteamspeak" )
-net.Receive( "nws_yrp_getsitecommunityteamspeak", function(len, ply)
+net.Receive( "nws_yrp_getsitecommunityteamspeak", function( len, ply )
 	local sql_select = YRP_SQL_SELECT( "yrp_general", "text_social_teamspeak_ip, text_social_teamspeak_port, text_social_teamspeak_query_port", "uniqueID = '1'" )
 	local ip = ""
 	local port = ""
@@ -1939,7 +1939,7 @@ net.Receive( "nws_yrp_getsitecommunityteamspeak", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsitecommunitytwitter" )
-net.Receive( "nws_yrp_getsitecommunitytwitter", function(len, ply)
+net.Receive( "nws_yrp_getsitecommunitytwitter", function( len, ply )
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_twitter", "uniqueID = '1'" )
 	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_twitter
@@ -1952,7 +1952,7 @@ net.Receive( "nws_yrp_getsitecommunitytwitter", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsitecommunityyoutube" )
-net.Receive( "nws_yrp_getsitecommunityyoutube", function(len, ply)
+net.Receive( "nws_yrp_getsitecommunityyoutube", function( len, ply )
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_youtube", "uniqueID = '1'" )
 	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_youtube
@@ -1965,7 +1965,7 @@ net.Receive( "nws_yrp_getsitecommunityyoutube", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsitecommunityfacebook" )
-net.Receive( "nws_yrp_getsitecommunityfacebook", function(len, ply)
+net.Receive( "nws_yrp_getsitecommunityfacebook", function( len, ply )
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_facebook", "uniqueID = '1'" )
 	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_facebook
@@ -1978,7 +1978,7 @@ net.Receive( "nws_yrp_getsitecommunityfacebook", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsitecommunitysteamgroup" )
-net.Receive( "nws_yrp_getsitecommunitysteamgroup", function(len, ply)
+net.Receive( "nws_yrp_getsitecommunitysteamgroup", function( len, ply )
 	local link = YRP_SQL_SELECT( "yrp_general", "text_social_steamgroup", "uniqueID = '1'" )
 	if IsNotNilAndNotFalse(link) then
 		link = link[1].text_social_steamgroup
@@ -1993,25 +1993,25 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_getsiteyourrpwhatsnew" )
-net.Receive( "nws_yrp_getsiteyourrpwhatsnew", function(len, ply)
+net.Receive( "nws_yrp_getsiteyourrpwhatsnew", function( len, ply )
 	net.Start( "nws_yrp_getsiteyourrpwhatsnew" )
 	net.Send(ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsiteyourrpdiscord" )
-net.Receive( "nws_yrp_getsiteyourrpdiscord", function(len, ply)
+net.Receive( "nws_yrp_getsiteyourrpdiscord", function( len, ply )
 	net.Start( "nws_yrp_getsiteyourrpdiscord" )
 	net.Send(ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsiteyourrpserverlist" )
-net.Receive( "nws_yrp_getsiteyourrpserverlist", function(len, ply)
+net.Receive( "nws_yrp_getsiteyourrpserverlist", function( len, ply )
 	net.Start( "nws_yrp_getsiteyourrpserverlist" )
 	net.Send(ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getsiteyourrptranslations" )
-net.Receive( "nws_yrp_getsiteyourrptranslations", function(len, ply)
+net.Receive( "nws_yrp_getsiteyourrptranslations", function( len, ply )
 	net.Start( "nws_yrp_getsiteyourrptranslations" )
 	net.Send(ply)
 end)
@@ -2019,7 +2019,7 @@ end)
 --[[ OLD GETTER BELOW ]]--
 
 util.AddNetworkString( "nws_yrp_dbUpdate" )
-net.Receive( "nws_yrp_dbUpdate", function(len, ply)
+net.Receive( "nws_yrp_dbUpdate", function( len, ply )
 	local _dbTable = net.ReadString()
 	local _dbSets = net.ReadString()
 	local _dbWhile = net.ReadString()
@@ -2033,8 +2033,8 @@ end)
 
 -- Scoreboard Commands
 util.AddNetworkString( "nws_yrp_ply_kick" )
-net.Receive( "nws_yrp_ply_kick", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_ply_kick", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_ply_kick" ) then
 		return
 	end
 
@@ -2045,8 +2045,8 @@ net.Receive( "nws_yrp_ply_kick", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_ply_ban" )
-net.Receive( "nws_yrp_ply_ban", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_ply_ban", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_ply_ban" ) then
 		return
 	end
 
@@ -2069,8 +2069,8 @@ function YRPGetPlayerBySteamID(steamid)
 end
 
 util.AddNetworkString( "nws_yrp_tp_tpto_steamid" )
-net.Receive( "nws_yrp_tp_tpto_steamid", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_tp_tpto_steamid", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_tp_tpto_steamid" ) then
 		return
 	end
 
@@ -2081,8 +2081,8 @@ net.Receive( "nws_yrp_tp_tpto_steamid", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_tp_bring_steamid" )
-net.Receive( "nws_yrp_tp_bring_steamid", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_tp_bring_steamid", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_tp_bring_steamid" ) then
 		return
 	end
 
@@ -2094,8 +2094,8 @@ net.Receive( "nws_yrp_tp_bring_steamid", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_tp_tpto" )
-net.Receive( "nws_yrp_tp_tpto", function(len, ply)
-	if IsValid( ply ) and ply:HasAccess() then
+net.Receive( "nws_yrp_tp_tpto", function( len, ply )
+	if IsValid( ply ) and ply:HasAccess( "nws_yrp_tp_tpto" ) then
 		local _target = net.ReadEntity()
 		if IsValid( _target ) then
 			ply:SetYRPVector( "yrpoldpos", ply:GetPos() )
@@ -2104,8 +2104,8 @@ net.Receive( "nws_yrp_tp_tpto", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_tp_bring" )
-net.Receive( "nws_yrp_tp_bring", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_tp_bring", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_tp_bring" ) then
 		return
 	end
 
@@ -2114,8 +2114,8 @@ net.Receive( "nws_yrp_tp_bring", function(len, ply)
 	teleportToPoint(_target, ply:GetPos() )
 end)
 util.AddNetworkString( "nws_yrp_tp_return" )
-net.Receive( "nws_yrp_tp_return", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_tp_return", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_tp_return" ) then
 		return
 	end
 
@@ -2127,8 +2127,8 @@ net.Receive( "nws_yrp_tp_return", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_tp_jail" )
-net.Receive( "nws_yrp_tp_jail", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_tp_jail", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_tp_jail" ) then
 		return
 	end
 
@@ -2136,8 +2136,8 @@ net.Receive( "nws_yrp_tp_jail", function(len, ply)
 	teleportToJailpoint(_target, 5 * 60 )
 end)
 util.AddNetworkString( "nws_yrp_tp_unjail" )
-net.Receive( "nws_yrp_tp_unjail", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_tp_unjail", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_tp_unjail" ) then
 		return
 	end
 
@@ -2192,8 +2192,8 @@ function YRPDoUnRagdoll(ply)
 end
 
 util.AddNetworkString( "nws_yrp_ragdoll" )
-net.Receive( "nws_yrp_ragdoll", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_ragdoll", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_ragdoll" ) then
 		return
 	end
 
@@ -2204,8 +2204,8 @@ net.Receive( "nws_yrp_ragdoll", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_unragdoll" )
-net.Receive( "nws_yrp_unragdoll", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_unragdoll", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_unragdoll" ) then
 		return
 	end
 
@@ -2215,8 +2215,8 @@ net.Receive( "nws_yrp_unragdoll", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_freeze" )
-net.Receive( "nws_yrp_freeze", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_freeze", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_freeze" ) then
 		return
 	end
 
@@ -2226,8 +2226,8 @@ net.Receive( "nws_yrp_freeze", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_unfreeze" )
-net.Receive( "nws_yrp_unfreeze", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_unfreeze", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_unfreeze" ) then
 		return
 	end
 
@@ -2237,8 +2237,8 @@ net.Receive( "nws_yrp_unfreeze", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_god" )
-net.Receive( "nws_yrp_god", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_god", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_god" ) then
 		return
 	end
 
@@ -2250,8 +2250,8 @@ net.Receive( "nws_yrp_god", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_ungod" )
-net.Receive( "nws_yrp_ungod", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_ungod", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_ungod" ) then
 		return
 	end
 
@@ -2263,8 +2263,8 @@ net.Receive( "nws_yrp_ungod", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_cloak" )
-net.Receive( "nws_yrp_cloak", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_cloak", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_cloak" ) then
 		return
 	end
 
@@ -2274,8 +2274,8 @@ net.Receive( "nws_yrp_cloak", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_uncloak" )
-net.Receive( "nws_yrp_uncloak", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_uncloak", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_uncloak" ) then
 		return
 	end
 
@@ -2285,8 +2285,8 @@ net.Receive( "nws_yrp_uncloak", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_blind" )
-net.Receive( "nws_yrp_blind", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_blind", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_blind" ) then
 		return
 	end
 
@@ -2296,8 +2296,8 @@ net.Receive( "nws_yrp_blind", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_unblind" )
-net.Receive( "nws_yrp_unblind", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_unblind", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_unblind" ) then
 		return
 	end
 
@@ -2307,8 +2307,8 @@ net.Receive( "nws_yrp_unblind", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_ignite" )
-net.Receive( "nws_yrp_ignite", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_ignite", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_ignite" ) then
 		return
 	end
 
@@ -2318,8 +2318,8 @@ net.Receive( "nws_yrp_ignite", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_extinguish" )
-net.Receive( "nws_yrp_extinguish", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_extinguish", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_extinguish" ) then
 		return
 	end
 
@@ -2329,8 +2329,8 @@ net.Receive( "nws_yrp_extinguish", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_slay" )
-net.Receive( "nws_yrp_slay", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_slay", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_slay" ) then
 		return
 	end
 
@@ -2340,8 +2340,8 @@ net.Receive( "nws_yrp_slay", function(len, ply)
 	end
 end)
 util.AddNetworkString( "nws_yrp_slap" )
-net.Receive( "nws_yrp_slap", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_slap", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_slap" ) then
 		return
 	end
 

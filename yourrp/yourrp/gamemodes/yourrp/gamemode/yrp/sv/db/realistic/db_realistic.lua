@@ -52,7 +52,7 @@ function AddToHandler_Realistic(ply)
 end
 
 util.AddNetworkString( "nws_yrp_connect_Settings_Realistic" )
-net.Receive( "nws_yrp_connect_Settings_Realistic", function(len, ply)
+net.Receive( "nws_yrp_connect_Settings_Realistic", function( len, ply )
 	if ply:CanAccess( "bool_realistic" ) then
 		AddToHandler_Realistic(ply)
 
@@ -69,7 +69,7 @@ net.Receive( "nws_yrp_connect_Settings_Realistic", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_disconnect_Settings_Realistic" )
-net.Receive( "nws_yrp_disconnect_Settings_Realistic", function(len, ply)
+net.Receive( "nws_yrp_disconnect_Settings_Realistic", function( len, ply )
 	RemFromHandler_Realistic(ply)
 end)
 
@@ -121,13 +121,13 @@ end
 for str, val in pairs(yrp_realistic) do
 	if string.find(str, "bool_" ) then
 		util.AddNetworkString( "nws_yrp_update_" .. str)
-		net.Receive( "nws_yrp_update_" .. str, function(len, ply)
+		net.Receive( "nws_yrp_update_" .. str, function( len, ply )
 			local b = btn(net.ReadBool() )
 			YRPUpdateBool(HANDLER_REALISTIC, DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_realistic, b)
 		end)
 	elseif string.find(str, "float_" ) then
 		util.AddNetworkString( "nws_yrp_update_" .. str)
-		net.Receive( "nws_yrp_update_" .. str, function(len, ply)
+		net.Receive( "nws_yrp_update_" .. str, function( len, ply )
 			local f = net.ReadFloat()
 			YRPUpdateFloat(HANDLER_REALISTIC, DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_realistic, f)
 		end)

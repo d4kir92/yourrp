@@ -68,7 +68,7 @@ local function YRPWeaponNoEntry( cname)
 	return false
 end
 
-net.Receive( "nws_yrp_weapon_menu", function(len)
+net.Receive( "nws_yrp_weapon_menu", function( len )
 	local lply = LocalPlayer()
 
 	local spacer = 80

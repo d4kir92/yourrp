@@ -32,7 +32,7 @@ function SetGlobalYRPTable( key, value )
 end
 
 if SERVER then
-	net.Receive( "YRPGetGlobalYRPTables", function(len, ply)
+	net.Receive( "YRPGetGlobalYRPTables", function( len, ply )
 		for key, value in pairs(YRP_Global_Tables) do
 			net.Start( "YRPSetGlobalYRPTable" )
 				net.WriteString(key)
@@ -43,7 +43,7 @@ if SERVER then
 end
 
 if CLIENT then
-	net.Receive( "YRPSetGlobalYRPTable", function(len)
+	net.Receive( "YRPSetGlobalYRPTable", function( len )
 		local key = net.ReadString()
 		local tab = net.ReadTable()
 

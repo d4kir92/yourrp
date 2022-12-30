@@ -19,7 +19,7 @@ function BuildLogs(parent, typ)
 		net.WriteString(typ)
 	net.SendToServer()
 
-	net.Receive( "nws_yrp_get_logs", function(len)
+	net.Receive( "nws_yrp_get_logs", function( len )
 		if PanelAlive(parent) then
 			local tab = net.ReadTable()
 		

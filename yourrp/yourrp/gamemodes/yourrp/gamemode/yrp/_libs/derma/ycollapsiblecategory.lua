@@ -5,7 +5,7 @@ local PANEL = {}
 local w = 10
 local h = 10
 
-net.Receive( "nws_yrp_want_role", function(len, ply)
+net.Receive( "nws_yrp_want_role", function( len, ply )
 	local result = net.ReadString()
 
 	if result == "worked" then
@@ -127,7 +127,7 @@ function PANEL:Init()
 		draw.SimpleText( base._htext, "Y_" .. math.Clamp(math.Round(ph - 2 * YRP.ctr(20), 0), 4, 100) .. "_500", x, ph / 2, TextColor(YRPInterfaceValue( "YFrame", "PC" ) ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
-	net.Receive( "nws_yrp_get_next_ranks", function(len)
+	net.Receive( "nws_yrp_get_next_ranks", function( len )
 		local rols = net.ReadTable()
 
 		local nex = NEXTS[tonumber(rols[1].int_prerole)]
@@ -367,7 +367,7 @@ function PANEL:Init()
 			end
 		end
 
-		net.Receive( "nws_yrp_hasnext_ranks", function(len)
+		net.Receive( "nws_yrp_hasnext_ranks", function( len )
 			local ruid = net.ReadString()
 			ruid = tonumber(ruid)
 

@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 256 -- do NOT change this!
+GM.VersionBuild = 258 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -351,7 +351,7 @@ end
 
 if SERVER then
 	util.AddNetworkString( "YRPGetServerInfo" )
-	net.Receive( "YRPGetServerInfo", function(len, ply)
+	net.Receive( "YRPGetServerInfo", function( len, ply )
 		local tab = {}
 		tab.Version = GAMEMODE.Version
 		tab.VersionStable = GAMEMODE.VersionStable
@@ -370,7 +370,7 @@ if SERVER then
 	end
 
 	util.AddNetworkString( "YRPGetGamemodename" )
-	net.Receive( "YRPGetGamemodename", function(len, ply)
+	net.Receive( "YRPGetGamemodename", function( len, ply )
 		if GAMEMODE and GAMEMODE.BaseName then
 			net.Start( "YRPGetGamemodename" )
 				net.WriteString(GAMEMODE.BaseName)
@@ -380,7 +380,7 @@ if SERVER then
 end
 
 if CLIENT then
-	net.Receive( "YRPGetGamemodename", function(len)
+	net.Receive( "YRPGetGamemodename", function( len )
 		GAMEMODE.BaseName = net.ReadString()
 	end)
 

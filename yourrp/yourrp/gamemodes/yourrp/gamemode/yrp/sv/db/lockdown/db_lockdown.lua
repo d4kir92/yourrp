@@ -31,7 +31,7 @@ function Player:LockdownLoadout()
 end
 
 util.AddNetworkString( "nws_yrp_set_lockdowntext" )
-net.Receive( "nws_yrp_set_lockdowntext", function(len, ply)
+net.Receive( "nws_yrp_set_lockdowntext", function( len, ply )
 	local string_lockdowntext = net.ReadString()
 	string_lockdowntext = string_lockdowntext
 	YRP.msg( "db", "Changed lockdowntext to: " .. string_lockdowntext)
@@ -82,7 +82,7 @@ function GetRandomAlarm()
 end
 
 util.AddNetworkString( "nws_yrp_update_lockdown_alarms" )
-net.Receive( "nws_yrp_update_lockdown_alarms", function(len, ply)
+net.Receive( "nws_yrp_update_lockdown_alarms", function( len, ply )
 	local name = net.ReadString()
 	local checked = net.ReadBool()
 
@@ -105,7 +105,7 @@ function RemoveFromLockdownSpeakers(ent)
 end
 
 util.AddNetworkString( "nws_yrp_set_lockdown" )
-net.Receive( "nws_yrp_set_lockdown", function(len, ply)
+net.Receive( "nws_yrp_set_lockdown", function( len, ply )
 	local bool_lockdown = net.ReadBool()
 	int_lockdown = tonum( bool_lockdown)
 	YRP.msg( "db", "Changed bool_lockdown to: " .. tostring(int_lockdown) )

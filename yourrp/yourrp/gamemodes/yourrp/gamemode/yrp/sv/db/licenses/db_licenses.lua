@@ -22,7 +22,7 @@ function send_licenses( ply )
 end
 
 util.AddNetworkString( "nws_yrp_get_all_licenses" )
-net.Receive( "nws_yrp_get_all_licenses", function(len, ply)
+net.Receive( "nws_yrp_get_all_licenses", function( len, ply )
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
 	if _nm == nil or _nm == false then
@@ -34,7 +34,7 @@ net.Receive( "nws_yrp_get_all_licenses", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_get_licenses" )
-net.Receive( "nws_yrp_get_licenses", function(len, ply)
+net.Receive( "nws_yrp_get_licenses", function( len, ply )
 	if ply:CanAccess( "bool_licenses" ) then
 		send_licenses(ply)
 	end
@@ -52,12 +52,12 @@ function sendlicenses(ply)
 end
 
 util.AddNetworkString( "nws_yrp_getlicenses" )
-net.Receive( "nws_yrp_getlicenses", function(len, ply)
+net.Receive( "nws_yrp_getlicenses", function( len, ply )
 	sendlicenses(ply)
 end)
 
 util.AddNetworkString( "nws_yrp_license_add" )
-net.Receive( "nws_yrp_license_add", function(len, ply)
+net.Receive( "nws_yrp_license_add", function( len, ply )
 	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new license'" )
 	YRP.msg( "db", "Add new license: " .. tostring(_new) )
 
@@ -65,7 +65,7 @@ net.Receive( "nws_yrp_license_add", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_license_rem" )
-net.Receive( "nws_yrp_license_rem", function(len, ply)
+net.Receive( "nws_yrp_license_rem", function( len, ply )
 	local _uid = net.ReadString()
 	local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 	YRP.msg( "db", "Removed license: " .. tostring(_uid) )
@@ -74,7 +74,7 @@ net.Receive( "nws_yrp_license_rem", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_edit_license_name" )
-net.Receive( "nws_yrp_edit_license_name", function(len, ply)
+net.Receive( "nws_yrp_edit_license_name", function( len, ply )
 	local _uid = net.ReadString()
 	local _new_name = net.ReadString()
 	local _edit = YRP_SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
@@ -82,7 +82,7 @@ net.Receive( "nws_yrp_edit_license_name", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_edit_license_description" )
-net.Receive( "nws_yrp_edit_license_description", function(len, ply)
+net.Receive( "nws_yrp_edit_license_description", function( len, ply )
 	local _uid = net.ReadString()
 	local _new_description = net.ReadString()
 	local _edit = YRP_SQL_UPDATE(DATABASE_NAME, {["description"] = _new_description}, "uniqueID = " .. _uid)
@@ -90,7 +90,7 @@ net.Receive( "nws_yrp_edit_license_description", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_edit_license_price" )
-net.Receive( "nws_yrp_edit_license_price", function(len, ply)
+net.Receive( "nws_yrp_edit_license_price", function( len, ply )
 	local _uid = net.ReadString()
 	local _new_price = net.ReadString()
 	local _edit = YRP_SQL_UPDATE(DATABASE_NAME, {["price"] = _new_price}, "uniqueID = " .. _uid)
@@ -98,7 +98,7 @@ net.Receive( "nws_yrp_edit_license_price", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_get_all_licenses_simple" )
-net.Receive( "nws_yrp_get_all_licenses_simple", function(len, ply)
+net.Receive( "nws_yrp_get_all_licenses_simple", function( len, ply )
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "name, uniqueID", nil)
 	if _all == false or _all == nil then
 		_all = {}
@@ -109,7 +109,7 @@ net.Receive( "nws_yrp_get_all_licenses_simple", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_role_add_license" )
-net.Receive( "nws_yrp_role_add_license", function(len, ply)
+net.Receive( "nws_yrp_role_add_license", function( len, ply )
 	local _role_uid = net.ReadString()
 	local _license_uid = net.ReadString()
 
@@ -130,7 +130,7 @@ net.Receive( "nws_yrp_role_add_license", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_role_rem_license" )
-net.Receive( "nws_yrp_role_rem_license", function(len, ply)
+net.Receive( "nws_yrp_role_rem_license", function( len, ply )
 	local _role_uid = net.ReadString()
 	local _license_uid = net.ReadString()
 
@@ -253,7 +253,7 @@ function Player:RemoveLicense(license)
 end
 
 util.AddNetworkString( "nws_yrp_getLicenseName" )
-net.Receive( "nws_yrp_getLicenseName", function(len, ply)
+net.Receive( "nws_yrp_getLicenseName", function( len, ply )
 	local id = net.ReadInt(32)
 	local lic = YRP_SQL_SELECT(DATABASE_NAME, "name", "uniqueID = '" .. id .. "'" )
 	if IsNotNilAndNotFalse(lic) then

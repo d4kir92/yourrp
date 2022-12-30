@@ -70,7 +70,7 @@ for str, val in pairs(yrp_ply_groups) do
 		local tab = {}
 		tab.netstr = "nws_yrp_update_group_" .. str
 		util.AddNetworkString(tab.netstr)
-		net.Receive(tab.netstr, function(len, ply)
+		net.Receive(tab.netstr, function( len, ply )
 			local uid = tonumber(net.ReadString() )
 			local s = net.ReadString()
 			tab.ply = ply
@@ -120,7 +120,7 @@ for str, val in pairs(yrp_ply_groups) do
 		local tab = {}
 		tab.netstr = "nws_yrp_update_group_" .. str
 		util.AddNetworkString(tab.netstr)
-		net.Receive(tab.netstr, function(len, ply)
+		net.Receive(tab.netstr, function( len, ply )
 			local uid = tonumber(net.ReadString() )
 			local int = tonumber(net.ReadString() )
 			local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
@@ -144,7 +144,7 @@ for str, val in pairs(yrp_ply_groups) do
 		local tab = {}
 		tab.netstr = "nws_yrp_update_group_" .. str
 		util.AddNetworkString(tab.netstr)
-		net.Receive(tab.netstr, function(len, ply)
+		net.Receive(tab.netstr, function( len, ply )
 			local uid = tonumber(net.ReadString() )
 			local bool = tonumber(net.ReadString() )
 			tab.ply = ply
@@ -206,7 +206,7 @@ function UnsubscribeGroup(ply, uid)
 end
 
 util.AddNetworkString( "nws_yrp_subscribe_Settings_GroupsAndRoles" )
-net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function(len, ply)
+net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -218,7 +218,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_unsubscribe_Settings_GroupsAndRoles" )
-net.Receive( "nws_yrp_unsubscribe_Settings_GroupsAndRoles", function(len, ply)
+net.Receive( "nws_yrp_unsubscribe_Settings_GroupsAndRoles", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -315,7 +315,7 @@ function DuplicateGroup(guid)
 end
 
 util.AddNetworkString( "nws_yrp_settings_duplicate_group" )
-net.Receive( "nws_yrp_settings_duplicate_group", function(len, ply)
+net.Receive( "nws_yrp_settings_duplicate_group", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -326,7 +326,7 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_settings_subscribe_grouplist" )
-net.Receive( "nws_yrp_settings_subscribe_grouplist", function(len, ply)
+net.Receive( "nws_yrp_settings_subscribe_grouplist", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -337,7 +337,7 @@ net.Receive( "nws_yrp_settings_subscribe_grouplist", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_add_group" )
-net.Receive( "nws_yrp_settings_add_group", function(len, ply)
+net.Receive( "nws_yrp_settings_add_group", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -363,7 +363,7 @@ net.Receive( "nws_yrp_settings_add_group", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_group_position_up" )
-net.Receive( "nws_yrp_settings_group_position_up", function(len, ply)
+net.Receive( "nws_yrp_settings_group_position_up", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -394,7 +394,7 @@ net.Receive( "nws_yrp_settings_group_position_up", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_group_position_dn" )
-net.Receive( "nws_yrp_settings_group_position_dn", function(len, ply)
+net.Receive( "nws_yrp_settings_group_position_dn", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -425,7 +425,7 @@ net.Receive( "nws_yrp_settings_group_position_dn", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_subscribe_group" )
-net.Receive( "nws_yrp_settings_subscribe_group", function(len, ply)
+net.Receive( "nws_yrp_settings_subscribe_group", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -452,7 +452,7 @@ net.Receive( "nws_yrp_settings_subscribe_group", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_unsubscribe_group" )
-net.Receive( "nws_yrp_settings_unsubscribe_group", function(len, ply)
+net.Receive( "nws_yrp_settings_unsubscribe_group", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -462,7 +462,7 @@ net.Receive( "nws_yrp_settings_unsubscribe_group", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_unsubscribe_grouplist" )
-net.Receive( "nws_yrp_settings_unsubscribe_grouplist", function(len, ply)
+net.Receive( "nws_yrp_settings_unsubscribe_grouplist", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -548,7 +548,7 @@ function DeleteGroup(guid, recursive)
 end
 
 util.AddNetworkString( "nws_yrp_settings_delete_group" )
-net.Receive( "nws_yrp_settings_delete_group", function(len, ply)
+net.Receive( "nws_yrp_settings_delete_group", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -561,7 +561,7 @@ net.Receive( "nws_yrp_settings_delete_group", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_rolesmenu_get_groups" )
-net.Receive( "nws_yrp_rolesmenu_get_groups", function(len, ply)
+net.Receive( "nws_yrp_rolesmenu_get_groups", function( len, ply )
 	local _uid = tonumber(net.ReadString() )
 
 	local _get_grps = YRP_SQL_SELECT( "yrp_ply_groups", "*", "int_parentgroup = " .. _uid)
@@ -582,7 +582,7 @@ end
 
 -- Faction Selection
 util.AddNetworkString( "nws_yrp_factionselection_getfactions" )
-net.Receive( "nws_yrp_factionselection_getfactions", function(len, ply)
+net.Receive( "nws_yrp_factionselection_getfactions", function( len, ply )
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_icon, string_name, string_description, bool_visible_cc, bool_visible_rm", "int_parentgroup = '0'" )
 
 	local nettab = {}
@@ -596,7 +596,7 @@ net.Receive( "nws_yrp_factionselection_getfactions", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_roleselection_getgroups" )
-net.Receive( "nws_yrp_roleselection_getgroups", function(len, ply)
+net.Receive( "nws_yrp_roleselection_getgroups", function( len, ply )
 	local fuid = net.ReadString()
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. fuid .. "'" )
 
@@ -623,7 +623,7 @@ end)
 util.AddNetworkString( "nws_yrp_roleselection_getcontent" )
 util.AddNetworkString( "nws_yrp_roleselection_getcontent_role" )
 util.AddNetworkString( "nws_yrp_roleselection_getcontent_group" )
-net.Receive( "nws_yrp_roleselection_getcontent", function(len, ply)
+net.Receive( "nws_yrp_roleselection_getcontent", function( len, ply )
 	local guid = net.ReadString()
 
 	local roltab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'" )
@@ -658,7 +658,7 @@ net.Receive( "nws_yrp_roleselection_getcontent", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_roleselection_getrole" )
-net.Receive( "nws_yrp_roleselection_getrole", function(len, ply)
+net.Receive( "nws_yrp_roleselection_getrole", function( len, ply )
 	local ruid = net.ReadString()
 
 	local roltab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'" )
@@ -677,7 +677,7 @@ net.Receive( "nws_yrp_roleselection_getrole", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_char_getrole" )
-net.Receive( "nws_yrp_char_getrole", function(len, ply)
+net.Receive( "nws_yrp_char_getrole", function( len, ply )
 	local ruid = net.ReadString()
 	local roltab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'" )
 	
@@ -730,7 +730,7 @@ function SendSwepsGroup(uid)
 end
 
 util.AddNetworkString( "nws_yrp_settings_get_sweps" )
-net.Receive( "nws_yrp_settings_get_sweps", function(len, ply)
+net.Receive( "nws_yrp_settings_get_sweps", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -762,7 +762,7 @@ function AddSwepToGroup(guid, swepcn)
 end
 
 util.AddNetworkString( "nws_yrp_settings_add_sweps" )
-net.Receive( "nws_yrp_settings_add_sweps", function(len, ply)
+net.Receive( "nws_yrp_settings_add_sweps", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -796,7 +796,7 @@ function RemSwepFromGroup(guid, swepcn)
 end
 
 util.AddNetworkString( "nws_yrp_settings_rem_sweps" )
-net.Receive( "nws_yrp_settings_rem_sweps", function(len, ply)
+net.Receive( "nws_yrp_settings_rem_sweps", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end

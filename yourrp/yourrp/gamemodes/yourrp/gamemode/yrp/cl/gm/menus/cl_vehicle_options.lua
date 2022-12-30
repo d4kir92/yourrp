@@ -20,7 +20,7 @@ function closeVehicleOptions()
 	end
 end
 
-net.Receive( "nws_yrp_getVehicleInfo", function(len)
+net.Receive( "nws_yrp_getVehicleInfo", function( len )
 	if net.ReadBool() then
 		local vehicle = net.ReadEntity()
 		local _tmpVehicle = net.ReadTable()
@@ -61,7 +61,7 @@ function optionVehicleWindow( vehicle, vehicleTab)
 		draw.RoundedBox(0, YRP.ctr(4), YRP.ctr(160), pw - YRP.ctr(8), YRP.ctr(70-4), Color( 255, 255, 0, 200) )
 	end
 
-	if lply:HasAccess() then
+	if lply:HasAccess( "optionVehicleWindow" ) then
 		local _buttonRemoveOwner = createVGUI( "DButton", yrp_vehicle.window, 530, 50, 545, 170)
 		_buttonRemoveOwner:SetText( "" )
 		function _buttonRemoveOwner:DoClick()

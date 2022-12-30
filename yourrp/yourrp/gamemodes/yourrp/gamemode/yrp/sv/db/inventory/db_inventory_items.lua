@@ -296,7 +296,7 @@ end
 
 -- Networking
 util.AddNetworkString( "nws_yrp_item_clicked" )
-net.Receive( "nws_yrp_item_clicked", function(len, ply)
+net.Receive( "nws_yrp_item_clicked", function( len, ply )
 	local itemID = net.ReadString()
 
 	itemID = tonumber(itemID)
@@ -319,7 +319,7 @@ net.Receive( "nws_yrp_item_clicked", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_item_move" )
-net.Receive( "nws_yrp_item_move", function(len, ply)
+net.Receive( "nws_yrp_item_move", function( len, ply )
 	local itemID = net.ReadString()
 	local slotID = net.ReadString()
 
@@ -330,7 +330,7 @@ net.Receive( "nws_yrp_item_move", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_item_drop" )
-net.Receive( "nws_yrp_item_drop", function(len, ply)
+net.Receive( "nws_yrp_item_drop", function( len, ply )
 	local itemID = net.ReadString()
 
 	itemID = tonumber(itemID)

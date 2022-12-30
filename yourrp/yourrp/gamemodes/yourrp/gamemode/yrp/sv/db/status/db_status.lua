@@ -16,7 +16,7 @@ function AddToHandler_Status(ply)
 end
 
 util.AddNetworkString( "nws_yrp_connect_Settings_Status" )
-net.Receive( "nws_yrp_connect_Settings_Status", function(len, ply)
+net.Receive( "nws_yrp_connect_Settings_Status", function( len, ply )
 	if ply:CanAccess( "bool_status" ) then
 		AddToHandler_Status(ply)
 		local _nw_yourrp = {}
@@ -115,6 +115,6 @@ net.Receive( "nws_yrp_connect_Settings_Status", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_disconnect_Settings_Status" )
-net.Receive( "nws_yrp_disconnect_Settings_Status", function(len, ply)
+net.Receive( "nws_yrp_disconnect_Settings_Status", function( len, ply )
 	RemFromHandler_Status(ply)
 end)

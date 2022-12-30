@@ -46,7 +46,7 @@ function UseMacro(uid)
 	end
 end
 
-net.Receive( "nws_yrp_get_macros", function(len)
+net.Receive( "nws_yrp_get_macros", function( len )
 	local lply = LocalPlayer()
 	_mm.tab = net.ReadTable()
 

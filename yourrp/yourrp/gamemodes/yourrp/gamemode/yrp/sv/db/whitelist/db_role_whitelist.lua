@@ -24,7 +24,11 @@ util.AddNetworkString( "nws_yrp_whitelistPlayerRemove" )
 util.AddNetworkString( "nws_yrp_InfoBox" )
 
 util.AddNetworkString( "nws_yrp_getGroupsWhitelist" )
-net.Receive( "nws_yrp_getGroupsWhitelist", function(len, ply)
+net.Receive( "nws_yrp_getGroupsWhitelist", function( len, ply )
+	if !ply:GetYRPBool( "bool_whitelist", false) then
+		return
+	end
+	
 	local _tmpGroupList = YRP_SQL_SELECT( "yrp_ply_groups", "string_name, uniqueID", nil)
 	if IsNotNilAndNotFalse(_tmpGroupList) then
 		net.Start( "nws_yrp_getGroupsWhitelist" )
@@ -34,7 +38,11 @@ net.Receive( "nws_yrp_getGroupsWhitelist", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getRolesWhitelist" )
-net.Receive( "nws_yrp_getRolesWhitelist", function(len, ply)
+net.Receive( "nws_yrp_getRolesWhitelist", function( len, ply )
+	if !ply:GetYRPBool( "bool_whitelist", false) then
+		return
+	end
+
 	local _tmpRoleList = YRP_SQL_SELECT( "yrp_ply_roles", "int_groupID, string_name, uniqueID", nil)
 	if IsNotNilAndNotFalse(_tmpRoleList) then
 		net.Start( "nws_yrp_getRolesWhitelist" )
@@ -93,46 +101,50 @@ function sendRoleWhitelist(ply)
 	end
 end
 
-net.Receive( "nws_yrp_whitelistPlayerRemove", function(len, ply)
+net.Receive( "nws_yrp_whitelistPlayerRemove", function( len, ply )
+	if !ply:GetYRPBool( "bool_whitelist", false) then
+		return
+	end
+
 	local _tmpUniqueID = net.ReadInt(16)
 	YRP_SQL_DELETE_FROM( "yrp_role_whitelist", "uniqueID = " .. _tmpUniqueID)
 end)
 
-net.Receive( "nws_yrp_whitelistPlayer", function(len, ply)
+net.Receive( "nws_yrp_whitelistPlayer", function( len, ply )
+	if !ply:GetYRPBool( "bool_whitelist", false) then
+		return
+	end
+
 	if !IsValid(ply) then return end
 
-	if ply:GetYRPBool( "bool_whitelist" ) then
-		local _SteamID = net.ReadString()
-		local _nick = ""
-		local target = ply
-		for k, v in pairs(player.GetAll() ) do
-			if v:YRPSteamID() == _SteamID then
-				_nick = v:Nick()
-				target = v
-			end
+	local _SteamID = net.ReadString()
+	local _nick = ""
+	local target = ply
+	for k, v in pairs(player.GetAll() ) do
+		if v:YRPSteamID() == _SteamID then
+			_nick = v:Nick()
+			target = v
 		end
-		local roleID = net.ReadInt(16)
-		local DBRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. roleID)
-		if IsNotNilAndNotFalse(DBRole) then
-			DBRole = DBRole[1]
-			local _groupID = DBRole.int_groupID
+	end
+	local roleID = net.ReadInt(16)
+	local DBRole = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = " .. roleID)
+	if IsNotNilAndNotFalse(DBRole) then
+		DBRole = DBRole[1]
+		local _groupID = DBRole.int_groupID
 
-			local dat = util.DateStamp()
-			local status = "Manually by " .. ply:SteamName()
-			local name = target:SteamName()
-			YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', " .. YRP_SQL_STR_IN( _nick ) .. ", " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
-			YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. target:SteamID() .. "', 'Role: " .. DBRole.string_name .. "'" )
-		else
-			YRP.msg( "note", "whitelistPlayer FAILED! CALL DEVS" )
-		end
+		local dat = util.DateStamp()
+		local status = "Manually by " .. ply:SteamName()
+		local name = target:SteamName()
+		YRP_SQL_INSERT_INTO( "yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', " .. YRP_SQL_STR_IN( _nick ) .. ", " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', '" .. name .. "'" )
+		YRP_SQL_INSERT_INTO( "yrp_logs",	"string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. target:SteamID() .. "', 'Role: " .. DBRole.string_name .. "'" )
 	else
-		YRP.msg( "note", ply:RPName() .. " has no right for whitelist!" )
+		YRP.msg( "note", "whitelistPlayer FAILED! CALL DEVS" )
 	end
 	sendRoleWhitelist(ply)
 end)
 
-net.Receive( "nws_yrp_whitelistPlayerGroup", function(len, ply)
-	if !ply:HasAccess( "whitelistPlayerGroup" ) then
+net.Receive( "nws_yrp_whitelistPlayerGroup", function( len, ply )
+	if !ply:GetYRPBool( "bool_whitelist", false) then
 		return
 	end
 
@@ -158,8 +170,8 @@ net.Receive( "nws_yrp_whitelistPlayerGroup", function(len, ply)
 	sendRoleWhitelist(ply)
 end)
 
-net.Receive( "nws_yrp_whitelistPlayerAll", function(len, ply)
-	if !ply:HasAccess( "whitelistPlayerAll" ) then
+net.Receive( "nws_yrp_whitelistPlayerAll", function( len, ply )
+	if !ply:GetYRPBool( "bool_whitelist", false) then
 		return
 	end
 
@@ -181,7 +193,11 @@ net.Receive( "nws_yrp_whitelistPlayerAll", function(len, ply)
 	sendRoleWhitelist(ply)
 end)
 
-net.Receive( "nws_yrp_getRoleWhitelist", function(len, ply)
+net.Receive( "nws_yrp_getRoleWhitelist", function( len, ply )
+	if !ply:GetYRPBool( "bool_whitelist", false) then
+		return
+	end
+
 	sendRoleWhitelist(ply)
 end)
 

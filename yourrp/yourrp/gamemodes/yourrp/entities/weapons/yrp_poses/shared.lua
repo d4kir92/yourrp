@@ -512,7 +512,7 @@ end)
 
 if SERVER then
 	util.AddNetworkString( "nws_yrp_change_pose" )
-	net.Receive( "nws_yrp_change_pose", function(len, ply)
+	net.Receive( "nws_yrp_change_pose", function( len, ply )
 		local pose_art = net.ReadString()
 		local pose = net.ReadString()
 		if pose then

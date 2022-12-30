@@ -6,7 +6,7 @@ local visible = true
 local cur_delay = CurTime()
 local cur_alpha = 255
 
-net.Receive( "nws_yrp_get_design_settings", function(len)
+net.Receive( "nws_yrp_get_design_settings", function( len )
 	local lply = LocalPlayer()
 	local setting = net.ReadTable()
 	local HUDS = net.ReadTable()

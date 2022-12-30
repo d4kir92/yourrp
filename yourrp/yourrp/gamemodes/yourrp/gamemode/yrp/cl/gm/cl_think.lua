@@ -161,7 +161,7 @@ function YRPUseFunction(str)
 				local cannotbedropped = YRP.lang_string( "LID_cannotbedropped", tab)
 				local hasbeendropped = YRP.lang_string( "LID_hasbeendropped", tab)
 				if _weapon.notdropable == nil then
-					net.Receive( "nws_yrp_dropswep", function(len)
+					net.Receive( "nws_yrp_dropswep", function( len )
 						local _b = net.ReadBool()
 						if _b then
 							notification.AddLegacy(hasbeendropped, 0, 3)
@@ -768,14 +768,14 @@ end
 jobByCmd = jobByCmd or {}
 
 -- FOR CLIENTS
-net.Receive( "nws_yrp_send_jobs", function(len, ply)
+net.Receive( "nws_yrp_send_jobs", function( len, ply )
 	local tab = net.ReadTable()
 	for id, name in pairs( tab ) do
 		_G[string.upper(name)] = tonumber( id )
 	end
 end)
 -- FOR CLIENTS
-net.Receive( "nws_yrp_Send_DarkRP_Jobs", function(len) -- full jobs data
+net.Receive( "nws_yrp_Send_DarkRP_Jobs", function( len ) -- full jobs data
 	local teamTab = {}
 	teamTab.admin = net.ReadUInt( 2 )
 	teamTab.candemote = net.ReadBool()
@@ -819,7 +819,7 @@ CATEGORIES.shipments = CATEGORIES.shipments or {}
 CATEGORIES.weapons = CATEGORIES.weapons or {}
 CATEGORIES.ammo = CATEGORIES.ammo or {}
 CATEGORIES.vehicles = CATEGORIES.vehicles or {}
-net.Receive( "nws_yrp_Send_DarkRP_Categories", function(len)
+net.Receive( "nws_yrp_Send_DarkRP_Categories", function( len )
 	local catTab = {}
 	catTab.uniqueID = net.ReadUInt( 16 )
 	catTab.name = net.ReadString()
@@ -834,7 +834,7 @@ net.Receive( "nws_yrp_Send_DarkRP_Categories", function(len)
 	table.insert( CATEGORIES.jobs, catTab )
 end)
 
-net.Receive( "nws_yrp_Combine_DarkRPTables", function(len)
+net.Receive( "nws_yrp_Combine_DarkRPTables", function( len )
 	local TEMPRPExtraTeams = {}
 	for i, v in pairs(RPExtraTeams) do
 		if v.fake == false then

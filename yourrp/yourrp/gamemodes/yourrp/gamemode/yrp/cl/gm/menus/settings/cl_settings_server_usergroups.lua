@@ -22,7 +22,7 @@ local _icon = {}
 _icon.size = YRP.ctr(100 - 16)
 _icon.br = YRP.ctr(8)
 
-net.Receive( "nws_yrp_connect_Settings_UserGroup", function(len)
+net.Receive( "nws_yrp_connect_Settings_UserGroup", function( len )
 	local ug = net.ReadTable()
 	if ug == nil then
 		return 
@@ -1118,14 +1118,14 @@ function RemUG(uid)
 	DUGS[tonumber(uid)]:Remove()
 end
 
-net.Receive( "nws_yrp_usergroup_rem", function(len)
+net.Receive( "nws_yrp_usergroup_rem", function( len )
 	local uid = tonumber(net.ReadString() )
 	if DUGS[uid] != nil then
 		RemUG(uid)
 	end
 end)
 
-net.Receive( "nws_yrp_usergroup_add", function(len)
+net.Receive( "nws_yrp_usergroup_add", function( len )
 	local ugtab = net.ReadTable()
 
 	for i, ug in pairs( ugtab ) do
@@ -1191,7 +1191,7 @@ net.Receive( "nws_yrp_updateUsergroupsList", function()
 	end
 end)
 
-net.Receive( "nws_yrp_connect_Settings_UserGroups", function(len)
+net.Receive( "nws_yrp_connect_Settings_UserGroups", function( len )
 	local ug = {}
 
 	if net.ReadBool() then

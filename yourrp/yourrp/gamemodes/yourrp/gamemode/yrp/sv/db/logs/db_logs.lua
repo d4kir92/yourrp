@@ -27,7 +27,7 @@ if IsNotNilAndNotFalse(logTab) then
 end
 
 util.AddNetworkString( "nws_yrp_get_logs" )
-net.Receive( "nws_yrp_get_logs", function(len, ply)
+net.Receive( "nws_yrp_get_logs", function( len, ply )
 	local tab = net.ReadString()
 
 	if ply:CanAccess( "bool_logs" ) then

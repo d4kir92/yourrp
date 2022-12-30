@@ -66,7 +66,7 @@ function PANEL:Init()
 	self.mdl:Droppable( "yrp_slot" )
 end
 
-net.Receive( "nws_yrp_storage_open", function(len)
+net.Receive( "nws_yrp_storage_open", function( len )
 	local lply = LocalPlayer()
 
 	local storage = net.ReadTable()

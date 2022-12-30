@@ -210,7 +210,7 @@ function UpdateDarkRP(tab)
 	end
 end
 
-net.Receive( "nws_yrp_update_yrp_darkrp", function(len)
+net.Receive( "nws_yrp_update_yrp_darkrp", function( len )
 	local tab = net.ReadTable()
 
 	SetDarkRPTab(tab)

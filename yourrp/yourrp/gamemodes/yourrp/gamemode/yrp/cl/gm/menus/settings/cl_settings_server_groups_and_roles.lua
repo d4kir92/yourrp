@@ -2,7 +2,7 @@
 
 --#roles #groups #settings
 
-net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
+net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) then
 		local cur_group = {}
@@ -1810,7 +1810,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					win:Search(self:GetText() )
 				end
 
-				net.Receive( "nws_yrp_get_all_playermodels", function(len)
+				net.Receive( "nws_yrp_get_all_playermodels", function( len )
 					if len > 128000 then
 						YRP.msg( "note", "[get_all_playermodels] len: " .. len)
 					end

@@ -2,7 +2,7 @@
 
 include('shared.lua')
 
-net.Receive( "nws_yrp_open_buy_menu", function(len)
+net.Receive( "nws_yrp_open_buy_menu", function( len )
 	local id = net.ReadString()
 	YRPOpenBuyMenu(id)
 end)

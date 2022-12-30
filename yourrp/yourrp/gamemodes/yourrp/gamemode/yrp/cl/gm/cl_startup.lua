@@ -721,7 +721,7 @@ function openSingleSelector(tab, closeF, web)
 	frame:MakePopup()
 end
 
-net.Receive( "yrpInfoBox", function(len)
+net.Receive( "yrpInfoBox", function( len )
 	local _tmp = createVGUI( "DFrame", nil, 800, 400, 0, 0)
 	_tmp:SetTitle( "Notification" )
 	local _text = net.ReadString()
@@ -1310,7 +1310,7 @@ function YRPDrawNamePlates()
 						_z = _z + _d
 					end
 
-					if LocalPlayer():HasAccess() then
+					if LocalPlayer():HasAccess( "YRPDrawNamePlates" ) then
 						local col = ply:HudValue( "ST", "BA" )
 						YRPDrawNamePlayerInfo(ply, ply:GetYRPFloat( "GetCurStamina", 0.0) .. "/" .. ply:GetYRPFloat( "GetMaxStamina", 1.0), _x, _y, _z, _w, _h, Color( 0, 0, 0, _alpha), _alpha, _icons["ms"], ply:GetYRPFloat( "GetCurStamina", 0.0), ply:GetYRPFloat( "GetMaxStamina", "" ), Color( col.r, col.g, col.b, _alpha) )
 						_z = _z + _d
@@ -1365,14 +1365,14 @@ hook.Add( "PostDrawOpaqueRenderables", "yrp_npc_tags", function()
 	end
 end)
 
-net.Receive( "nws_yrp_whitelist_infoplayer", function(len)
+net.Receive( "nws_yrp_whitelist_infoplayer", function( len )
 	local msg = net.ReadString()
 	notification.AddLegacy(YRP.lang_string(msg), NOTIFY_GENERIC, 6)
 end)
 
-net.Receive( "nws_yrp_noti", function(len)
+net.Receive( "nws_yrp_noti", function( len )
 	local lply = LocalPlayer()
-	if lply:IsValid() and lply:HasAccess() then
+	if lply:IsValid() and lply:HasAccess( "nws_yrp_noti" ) then
 		local _str_lang = net.ReadString()
 		local _time = 4
 		local _channel = NOTIFY_GENERIC
@@ -1424,7 +1424,7 @@ function YRPReplaceKEYs(str)
 end
 
 local delay = 0
-net.Receive( "nws_yrp_info", function(len)
+net.Receive( "nws_yrp_info", function( len )
 	local lply = LocalPlayer()
 	if lply:IsValid() and delay < CurTime() then
 		delay = CurTime() + 1
@@ -1437,7 +1437,7 @@ net.Receive( "nws_yrp_info", function(len)
 end)
 
 local delay2 = 0
-net.Receive( "nws_yrp_info2", function(len)
+net.Receive( "nws_yrp_info2", function( len )
 	local lply = LocalPlayer()
 	if lply:IsValid() and delay2 < CurTime() then
 		delay2 = CurTime() + 1
@@ -1456,7 +1456,7 @@ net.Receive( "nws_yrp_info2", function(len)
 end)
 
 local delay3 = 0
-net.Receive( "nws_yrp_info3", function(len)
+net.Receive( "nws_yrp_info3", function( len )
 	local lply = LocalPlayer()
 	if lply:IsValid() and delay3 < CurTime() then
 		delay3 = CurTime() + 1
@@ -1467,7 +1467,7 @@ net.Receive( "nws_yrp_info3", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_message", function(len)
+net.Receive( "nws_yrp_message", function( len )
 	local lply = LocalPlayer()
 	if lply:IsValid() then
 		local _str = YRP.lang_string(net.ReadString() )
@@ -1475,7 +1475,7 @@ net.Receive( "nws_yrp_message", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_notification", function(len)
+net.Receive( "nws_yrp_notification", function( len )
 	local lply = LocalPlayer()
 	if IsValid(lply) then
 		local msg = net.ReadString()
@@ -1483,7 +1483,7 @@ net.Receive( "nws_yrp_notification", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_autoreload", function(len, ply)
+net.Receive( "nws_yrp_autoreload", function( len, ply )
 	local t = net.ReadString()
 	local str = YRP.lang_string( "LID_automaticmapchangeinx" ) .. " (to prevent Lags/Stutter after 6/12 Hours)."
 	str = string.Replace( str, "X", t )
@@ -1797,7 +1797,7 @@ end
 -- #DEATHSCREEN, #RESPAWNING, #CHANGECHARACTER
 local dsd = CurTime() + 2
 local ds = ds or false
-hook.Add( "Think", "openDeathScreen", function(len)
+hook.Add( "Think", "openDeathScreen", function( len )
 	if LocalPlayer() == NULL then return end
 
 	if !YRP_LogOut and LocalPlayer():LoadedGamemode() and !LocalPlayer():Alive() and !vgui.CursorVisible() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds and GetGlobalYRPBool( "bool_deathscreen", false) and !customdeathscreen then
@@ -2217,7 +2217,7 @@ end
 
 
 local windowOpen = false
-net.Receive( "nws_yrp_openLawBoard", function(len)
+net.Receive( "nws_yrp_openLawBoard", function( len )
 	if not windowOpen and (LocalPlayer():isCP() or LocalPlayer():GetYRPBool( "bool_canusewarnsystem", false) ) then
 		local tmpJailList = net.ReadTable()
 		windowOpen = true

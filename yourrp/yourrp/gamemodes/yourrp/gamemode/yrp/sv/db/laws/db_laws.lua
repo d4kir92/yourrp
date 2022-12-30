@@ -21,7 +21,7 @@ if IsNotNilAndNotFalse(laws) then
 end
 
 util.AddNetworkString( "nws_yrp_get_laws" )
-net.Receive( "nws_yrp_get_laws", function(len, ply)
+net.Receive( "nws_yrp_get_laws", function( len, ply )
 	local laws = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
 	if IsNotNilAndNotFalse(laws) then
 		laws = laws[1]
@@ -47,7 +47,7 @@ net.Receive( "nws_yrp_get_laws", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_set_lawsymbol" )
-net.Receive( "nws_yrp_set_lawsymbol", function(len, ply)
+net.Receive( "nws_yrp_set_lawsymbol", function( len, ply )
 	local lawsymbol = net.ReadString()
 	lawsymbol = lawsymbol
 	YRP.msg( "db", "Changed lawsymbol to: " .. lawsymbol)
@@ -55,7 +55,7 @@ net.Receive( "nws_yrp_set_lawsymbol", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_set_laws" )
-net.Receive( "nws_yrp_set_laws", function(len, ply)
+net.Receive( "nws_yrp_set_laws", function( len, ply )
 	local laws = net.ReadString()
 	laws = laws
 	YRP.msg( "db", "Changed lawsymbol to: " .. laws)

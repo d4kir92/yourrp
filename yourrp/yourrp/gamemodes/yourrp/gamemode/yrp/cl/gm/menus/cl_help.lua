@@ -65,7 +65,7 @@ end
 
 function AddKeybind(plist, keybind, lstr, icon, disabled)
 	local lply = LocalPlayer()
-	if disabled and !lply:HasAccess() then return end
+	if disabled and !lply:HasAccess( "AddKeybind" ) then return end
 	local kb = YRPCreateD( "DPanel", nil, YRP.ctr(100), YRP.ctr(48), 0, 0)
 	kb.key = keybind
 
@@ -98,7 +98,7 @@ function AddKeybindBr(plist)
 	plist:AddItem(kb)
 end
 
-net.Receive( "nws_yrp_getsitehelp", function(len)
+net.Receive( "nws_yrp_getsitehelp", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local welcome_message = net.ReadString()
 		local motd = net.ReadString()
@@ -190,7 +190,7 @@ net.Receive( "nws_yrp_getsitehelp", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsitestaff", function(len)
+net.Receive( "nws_yrp_getsitestaff", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local staff = net.ReadTable()
 		local stafflist = YRPCreateD( "DPanelList", HELPMENU.mainmenu.site, YRP.ctr(800), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
@@ -228,7 +228,7 @@ net.Receive( "nws_yrp_getsitestaff", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsiteserverrules", function(len)
+net.Receive( "nws_yrp_getsiteserverrules", function( len )
 	if PanelAlive(HELPMENU) then
 		local serverrules = net.ReadString()
 		local page = YRPCreateD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
@@ -251,7 +251,7 @@ net.Receive( "nws_yrp_getsiteserverrules", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsitecollection", function(len)
+net.Receive( "nws_yrp_getsitecollection", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local collectionid = tonumber(net.ReadString() )
 
@@ -279,7 +279,7 @@ net.Receive( "nws_yrp_getsitecollection", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsitecommunitywebsite", function(len)
+net.Receive( "nws_yrp_getsitecommunitywebsite", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 		if !strEmpty(link) then
@@ -305,7 +305,7 @@ net.Receive( "nws_yrp_getsitecommunitywebsite", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsitecommunityforum", function(len)
+net.Receive( "nws_yrp_getsitecommunityforum", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
@@ -332,7 +332,7 @@ net.Receive( "nws_yrp_getsitecommunityforum", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsitecommunitydiscord", function(len)
+net.Receive( "nws_yrp_getsitecommunitydiscord", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 		local widgetid = net.ReadString()
@@ -362,7 +362,7 @@ net.Receive( "nws_yrp_getsitecommunitydiscord", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsitecommunityteamspeak", function(len)
+net.Receive( "nws_yrp_getsitecommunityteamspeak", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local ip = net.ReadString()
 		local port = net.ReadString()
@@ -390,7 +390,7 @@ net.Receive( "nws_yrp_getsitecommunityteamspeak", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsitecommunitytwitter", function(len)
+net.Receive( "nws_yrp_getsitecommunitytwitter", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
@@ -417,7 +417,7 @@ net.Receive( "nws_yrp_getsitecommunitytwitter", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsitecommunityyoutube", function(len)
+net.Receive( "nws_yrp_getsitecommunityyoutube", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
@@ -444,7 +444,7 @@ net.Receive( "nws_yrp_getsitecommunityyoutube", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsitecommunityfacebook", function(len)
+net.Receive( "nws_yrp_getsitecommunityfacebook", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
@@ -471,7 +471,7 @@ net.Receive( "nws_yrp_getsitecommunityfacebook", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsitecommunitysteamgroup", function(len)
+net.Receive( "nws_yrp_getsitecommunitysteamgroup", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
@@ -498,7 +498,7 @@ net.Receive( "nws_yrp_getsitecommunitysteamgroup", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsiteyourrpwhatsnew", function(len)
+net.Receive( "nws_yrp_getsiteyourrpwhatsnew", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = "https://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152"
 
@@ -522,7 +522,7 @@ net.Receive( "nws_yrp_getsiteyourrpwhatsnew", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsiteyourrpdiscord", function(len)
+net.Receive( "nws_yrp_getsiteyourrpdiscord", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = "https://discord.gg/sEgNZxg"
 
@@ -555,7 +555,7 @@ net.Receive( "nws_yrp_getsiteyourrpdiscord", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsiteyourrpserverlist", function(len)
+net.Receive( "nws_yrp_getsiteyourrpserverlist", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = "https://sites.google.com/view/yourrp-gmod/serverlist"
 
@@ -576,7 +576,7 @@ net.Receive( "nws_yrp_getsiteyourrpserverlist", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_getsiteyourrptranslations", function(len)
+net.Receive( "nws_yrp_getsiteyourrptranslations", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local Parent = HELPMENU.mainmenu.site
 		--local page = YRPCreateD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)

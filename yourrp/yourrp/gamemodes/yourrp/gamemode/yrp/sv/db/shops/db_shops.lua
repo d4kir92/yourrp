@@ -20,7 +20,7 @@ function send_shops(ply)
 	net.Send(ply)
 end
 
-net.Receive( "nws_yrp_get_shops", function(len, ply)
+net.Receive( "nws_yrp_get_shops", function( len, ply )
 	if ply:CanAccess( "bool_shops" ) then
 		send_shops(ply)
 	end
@@ -28,7 +28,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_shop_add" )
 
-net.Receive( "nws_yrp_shop_add", function(len, ply)
+net.Receive( "nws_yrp_shop_add", function( len, ply )
 	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new shop'" )
 	YRP.msg( "db", "shop_add: " .. db_WORKED(_new) )
 
@@ -37,7 +37,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_shop_rem" )
 
-net.Receive( "nws_yrp_shop_rem", function(len, ply)
+net.Receive( "nws_yrp_shop_rem", function( len, ply )
 	local _uid = net.ReadString()
 	local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 	YRP.msg( "db", "shop_rem: " .. tostring(_uid) )
@@ -47,7 +47,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_shop_edit_name" )
 
-net.Receive( "nws_yrp_shop_edit_name", function(len, ply)
+net.Receive( "nws_yrp_shop_edit_name", function( len, ply )
 	local _uid = net.ReadString()
 	local _new_name = net.ReadString()
 	local _new = YRP_SQL_UPDATE(DATABASE_NAME, {["name"] = _new_name}, "uniqueID = " .. _uid)
@@ -102,14 +102,14 @@ function YRPOpenBuyMenu(ply, uid)
 	end
 end
 
-net.Receive( "nws_yrp_shop_get_tabs", function(len, ply)
+net.Receive( "nws_yrp_shop_get_tabs", function( len, ply )
 	local _uid = net.ReadString()
 	YRPOpenBuyMenu(ply, _uid)
 end)
 
 util.AddNetworkString( "nws_yrp_shop_get_all_tabs" )
 
-net.Receive( "nws_yrp_shop_get_all_tabs", function(len, ply)
+net.Receive( "nws_yrp_shop_get_all_tabs", function( len, ply )
 	local _tabs = YRP_SQL_SELECT(DATABASE_NAME, "name, uniqueID", nil)
 	local _nw = {}
 	if _tabs != nil then

@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-net.Receive( "nws_yrp_get_levelsystem_settings", function(len)
+net.Receive( "nws_yrp_get_levelsystem_settings", function( len )
 	local lply = LocalPlayer()
 	local setting = net.ReadTable()
 

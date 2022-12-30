@@ -4,7 +4,7 @@
 -- https://discord.gg/sEgNZxg
 
 util.AddNetworkString( "nws_yrp_drop_table" )
-net.Receive( "nws_yrp_drop_table", function(len, ply)
+net.Receive( "nws_yrp_drop_table", function( len, ply )
 	local tab = net.ReadString()
 	YRP_SQL_DROP_TABLE(tab)
 end)
@@ -22,7 +22,7 @@ function AddToHandler_Database(ply)
 end
 
 util.AddNetworkString( "nws_yrp_connect_Settings_Database" )
-net.Receive( "nws_yrp_connect_Settings_Database", function(len, ply)
+net.Receive( "nws_yrp_connect_Settings_Database", function( len, ply )
 	if ply:CanAccess( "bool_ac_database" ) then
 		AddToHandler_Database(ply)
 
@@ -58,14 +58,14 @@ net.Receive( "nws_yrp_connect_Settings_Database", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_disconnect_Settings_Database" )
-net.Receive( "nws_yrp_disconnect_Settings_Database", function(len, ply)
+net.Receive( "nws_yrp_disconnect_Settings_Database", function( len, ply )
 	RemFromHandler_Database(ply)
 end)
 
 util.AddNetworkString( "nws_yrp_get_sql_info" )
 
 util.AddNetworkString( "nws_yrp_drop_tables" )
-net.Receive( "nws_yrp_drop_tables", function(len, ply)
+net.Receive( "nws_yrp_drop_tables", function( len, ply )
 	local _drop_tables = net.ReadTable()
 	local _ug = string.lower(ply:GetUserGroup() )
 	local _can = YRP_SQL_SELECT( "yrp_usergroups", "bool_ac_database", "string_name = '" .. _ug .. "'" )
@@ -145,6 +145,6 @@ function CreateBackup()
 end
 
 util.AddNetworkString( "nws_yrp_makebackup" )
-net.Receive( "nws_yrp_makebackup", function(len, ply)
+net.Receive( "nws_yrp_makebackup", function( len, ply )
 	CreateBackup()
 end)

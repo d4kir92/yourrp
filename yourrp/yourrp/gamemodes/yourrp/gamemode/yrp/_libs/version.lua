@@ -32,7 +32,7 @@ end
 
 local test = {}
 if CLIENT then
-	net.Receive( "YRPGetServerInfo", function(len)
+	net.Receive( "YRPGetServerInfo", function( len )
 		local tab = net.ReadTable()
 
 		GAMEMODE.VersionServer = tostring(tab.Version)

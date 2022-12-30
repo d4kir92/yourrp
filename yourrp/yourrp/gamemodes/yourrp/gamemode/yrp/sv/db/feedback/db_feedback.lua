@@ -20,7 +20,7 @@ local showafter =	60*60*12
 local deleteafter =	60*60*24
 
 util.AddNetworkString( "nws_yrp_get_ticket" )
-net.Receive( "nws_yrp_get_ticket", function(len, ply)
+net.Receive( "nws_yrp_get_ticket", function( len, ply )
 	if ply:CanAccess( "bool_feedback" ) then
 		local _result = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
@@ -48,7 +48,7 @@ net.Receive( "nws_yrp_get_ticket", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_add_ticket" )
-net.Receive( "nws_yrp_add_ticket", function(len, ply)
+net.Receive( "nws_yrp_add_ticket", function( len, ply )
 	local _fb = net.ReadTable()
 	local _insert = YRP_SQL_INSERT_INTO(
 		DATABASE_NAME,
@@ -62,21 +62,21 @@ net.Receive( "nws_yrp_add_ticket", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_fb_movetoopen" )
-net.Receive( "nws_yrp_fb_movetowip", function(len, ply)
+net.Receive( "nws_yrp_fb_movetowip", function( len, ply )
 	local uid = net.ReadString()
 
 	YRP_SQL_UPDATE(DATABASE_NAME, {["status"] = "open"}, "uniqueID = '" .. uid .. "'" )
 end)
 
 util.AddNetworkString( "nws_yrp_fb_movetowip" )
-net.Receive( "nws_yrp_fb_movetowip", function(len, ply)
+net.Receive( "nws_yrp_fb_movetowip", function( len, ply )
 	local uid = net.ReadString()
 
 	YRP_SQL_UPDATE(DATABASE_NAME, {["status"] = "wip"}, "uniqueID = '" .. uid .. "'" )
 end)
 
 util.AddNetworkString( "nws_yrp_fb_movetoclosed" )
-net.Receive( "nws_yrp_fb_movetoclosed", function(len, ply)
+net.Receive( "nws_yrp_fb_movetoclosed", function( len, ply )
 	local uid = net.ReadString()
 
 	YRP_SQL_UPDATE(DATABASE_NAME, {["status"] = "closed"}, "uniqueID = '" .. uid .. "'" )

@@ -38,7 +38,7 @@ function allowedToUseVehicle(id, ply)
 	return false
 end
 
-net.Receive( "nws_yrp_getVehicleInfo", function(len, ply)
+net.Receive( "nws_yrp_getVehicleInfo", function( len, ply )
 	local _vehicle = net.ReadEntity()
 
 	local _vehicleID = net.ReadString()
@@ -116,7 +116,7 @@ function YRPLockVehicle(ply, ent, nr)
 	end
 end
 
-net.Receive( "nws_yrp_removeVehicleOwner", function(len, ply)
+net.Receive( "nws_yrp_removeVehicleOwner", function( len, ply )
 	if !ply:HasAccess( "removeVehicleOwner" ) then
 		return 
 	end

@@ -391,7 +391,7 @@ function OpenChatMenu()
 	local h = YRP.ctr(80)
 	local pbr = YRP.ctr(20)
 	for i, channel in pairs(GetGlobalYRPTable( "yrp_chat_channels", {}) ) do
-		if lply:HasAccess() then
+		if lply:HasAccess( "OpenChatMenu1" ) then
 			local line = YRPCreateD( "DPanel", nil, CONTENT:GetWide(), h, 0, 0)
 			function line:Paint(pw, ph)
 			end
@@ -410,7 +410,7 @@ function OpenChatMenu()
 				draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 			end
 
-			if lply:HasAccess() then
+			if lply:HasAccess( "OpenChatMenu2" ) then
 				local edit = YRPCreateD( "DButton", bg, h , h, 0, 0)
 				edit:SetText( "" )
 				function edit:Paint(pw, ph)
@@ -435,7 +435,7 @@ function OpenChatMenu()
 		end
 	end
 
-	if lply:HasAccess() then
+	if lply:HasAccess( "OpenChatMenu3" ) then
 		local size = YRP.ctr(50)
 		vm.win.add = YRPCreateD( "YButton", CONTENT, size, size, YRP.ctr(0), CONTENT:GetTall() - YRP.ctr(50) )
 		vm.win.add:SetText( "+" )

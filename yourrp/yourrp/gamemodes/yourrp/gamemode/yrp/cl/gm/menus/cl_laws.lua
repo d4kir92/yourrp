@@ -21,7 +21,7 @@ function CreateLawsContent( PARENT )
 	end
 
 	local lply = LocalPlayer()
-	net.Receive( "nws_yrp_get_laws", function(len)
+	net.Receive( "nws_yrp_get_laws", function( len )
 		local lawtab = net.ReadTable()
 		local lawsymbol = tostring(lawtab.string_lawsymbol)
 		local laws = lawtab.string_laws

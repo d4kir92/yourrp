@@ -80,7 +80,7 @@ function reset_database()
 end
 --reset_database()
 
-net.Receive( "nws_yrp_hardresetdatabase", function(len, ply)
+net.Receive( "nws_yrp_hardresetdatabase", function( len, ply )
 	if string.lower(ply:GetUserGroup() ) == "superadmin" then
 		YRP.msg( "note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!" )
 		YRP.msg( "note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!" )
@@ -199,7 +199,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''" )
 
 util.AddNetworkString( "nws_yrp_darkrp_bool" )
-net.Receive( "nws_yrp_darkrp_bool", function(len, ply)
+net.Receive( "nws_yrp_darkrp_bool", function( len, ply )
 	local name = net.ReadString()
 	local b = net.ReadBool()
 	

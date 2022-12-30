@@ -82,7 +82,7 @@ end
 
 -- Networking
 util.AddNetworkString( "nws_yrp_storage_get_slots" )
-net.Receive( "nws_yrp_storage_get_slots", function(len, ply)
+net.Receive( "nws_yrp_storage_get_slots", function( len, ply )
 	local storageID = net.ReadString()
 	storageID = tonumber(storageID)
 
@@ -119,14 +119,14 @@ net.Receive( "nws_yrp_storage_get_slots", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_slot_connect" )
-net.Receive( "nws_yrp_slot_connect", function(len, ply)
+net.Receive( "nws_yrp_slot_connect", function( len, ply )
 	local slotID = net.ReadString()
 
 	ConnectToSlot(ply, slotID)
 end)
 
 util.AddNetworkString( "nws_yrp_slot_disconnect" )
-net.Receive( "nws_yrp_slot_disconnect", function(len, ply)
+net.Receive( "nws_yrp_slot_disconnect", function( len, ply )
 	local slotID = net.ReadString()
 
 	DisconnectFromSlot(ply, slotID)

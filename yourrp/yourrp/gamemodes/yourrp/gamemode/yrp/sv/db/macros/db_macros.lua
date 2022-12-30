@@ -9,7 +9,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''" )
 
 util.AddNetworkString( "nws_yrp_get_macros" )
-net.Receive( "nws_yrp_get_macros", function(len, ply)
+net.Receive( "nws_yrp_get_macros", function( len, ply )
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*" )
 
 	if IsNotNilAndNotFalse and IsNotNilAndNotFalse( tab ) then
@@ -30,7 +30,7 @@ if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'm_1'" ) == nil then
 end
 
 util.AddNetworkString( "nws_yrp_update_macro" )
-net.Receive( "nws_yrp_update_macro", function(len, ply)
+net.Receive( "nws_yrp_update_macro", function( len, ply )
 	local muid = net.ReadString()
 	local value = net.ReadString()
 

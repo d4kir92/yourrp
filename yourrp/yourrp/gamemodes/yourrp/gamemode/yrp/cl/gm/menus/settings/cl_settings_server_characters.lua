@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-net.Receive( "nws_yrp_setting_characters", function(len)
+net.Receive( "nws_yrp_setting_characters", function( len )
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) and PanelAlive(YRPCharList) then
 		local tab = net.ReadTable()

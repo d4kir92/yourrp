@@ -172,7 +172,7 @@ local function YRPCreateSWEP(x, y, art, cname)
 	return slot
 end
 
-net.Receive( "nws_yrp_open_weaponchest", function(len)
+net.Receive( "nws_yrp_open_weaponchest", function( len )
 	if win == nil then
 		win = YRPCreateD( "YFrame", nil, 30 + 300 + 50 + 12 + 300 + 12 + 30, ScrH(), 0, 0)
 		win:SetTitle( "LID_weaponchest" )
@@ -256,7 +256,7 @@ net.Receive( "nws_yrp_open_weaponchest", function(len)
 			draw.RoundedBox(3, 0, 0, pw, ph, Color( 0, 0, 0, 20) )
 		end
 
-		net.Receive( "nws_yrp_get_sweps_role_art", function(len)
+		net.Receive( "nws_yrp_get_sweps_role_art", function( len )
 			local tab = net.ReadTable()
 			
 			if PanelAlive( win ) then

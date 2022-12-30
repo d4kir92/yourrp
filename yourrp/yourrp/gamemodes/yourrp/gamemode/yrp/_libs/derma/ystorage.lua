@@ -120,7 +120,7 @@ vgui.Register( "YStorage", PANEL, "DPanelList" )
 
 
 -- Networking
-net.Receive( "nws_yrp_storage_get_slots", function(len)
+net.Receive( "nws_yrp_storage_get_slots", function( len )
 	local storageID = net.ReadString()
 	local slots = net.ReadTable()
 
@@ -169,7 +169,7 @@ function BuildStorage(storage, slots)
 	end
 end
 
-net.Receive( "yrpclosebag", function(len)
+net.Receive( "yrpclosebag", function( len )
 	local storID = net.ReadString()
 
 	local storage = GetStoragePanel(storID)

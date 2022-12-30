@@ -48,7 +48,7 @@ function IsUnderGroupOf(ply, uid)
 end
 
 function allowedToUseDoor(id, ply, door)
-	if ply:HasAccess() then
+	if ply:HasAccess( "allowedToUseDoor" ) then
 		return true
 	else
 		local _tmpBuildingTable = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. id .. "'" )
@@ -230,7 +230,7 @@ util.AddNetworkString( "nws_yrp_sellBuilding" )
 
 util.AddNetworkString( "nws_yrp_addnewbuilding" )
 net.Receive( "nws_yrp_addnewbuilding", function()
-	if !ply:HasAccess() then
+	if !ply:HasAccess( "nws_yrp_addnewbuilding" ) then
 		return 
 	end
 
@@ -329,8 +329,8 @@ function BuildingRemoveOwner( SteamID )
 	end
 end
 
-net.Receive( "nws_yrp_removeOwner", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_removeOwner", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_removeOwner" ) then
 		return 
 	end
 
@@ -354,7 +354,7 @@ net.Receive( "nws_yrp_removeOwner", function(len, ply)
 	end
 end)
 
-net.Receive( "nws_yrp_sellBuilding", function(len, ply)
+net.Receive( "nws_yrp_sellBuilding", function( len, ply )
 	local _tmpBuildingID = net.ReadString()
 	local _tmpTable = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
 
@@ -380,7 +380,7 @@ net.Receive( "nws_yrp_sellBuilding", function(len, ply)
 	end
 end)
 
-net.Receive( "nws_yrp_buyBuilding", function(len, ply)
+net.Receive( "nws_yrp_buyBuilding", function( len, ply )
 	if GetGlobalYRPBool( "bool_building_system", false) then
 		local _tmpBuildingID = net.ReadString()
 		local _tmpTable = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'" )
@@ -412,7 +412,7 @@ net.Receive( "nws_yrp_buyBuilding", function(len, ply)
 	end
 end)
 
-net.Receive( "nws_yrp_setBuildingOwnerGroup", function(len, ply)
+net.Receive( "nws_yrp_setBuildingOwnerGroup", function( len, ply )
 	local _tmpBuildingID = net.ReadString()
 	local _tmpGroupID = net.ReadInt(32)
 
@@ -430,7 +430,7 @@ net.Receive( "nws_yrp_setBuildingOwnerGroup", function(len, ply)
 	end
 end)
 
-net.Receive( "nws_yrp_getBuildingGroups", function(len, ply)
+net.Receive( "nws_yrp_getBuildingGroups", function( len, ply )
 	local _tmpTable = YRP_SQL_SELECT( "yrp_ply_groups", "*", nil)
 
 	net.Start( "nws_yrp_getBuildingGroups" )
@@ -438,7 +438,7 @@ net.Receive( "nws_yrp_getBuildingGroups", function(len, ply)
 	net.Send(ply)
 end)
 
-net.Receive( "nws_yrp_changeBuildingPrice", function(len, ply)
+net.Receive( "nws_yrp_changeBuildingPrice", function( len, ply )
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewPrice = net.ReadString()
 	_tmpNewPrice = tonumber(_tmpNewPrice) or 99
@@ -461,7 +461,7 @@ function SetSecurityLevel(id, sl)
 	end
 end
 
-net.Receive( "nws_yrp_changeBuildingSL", function(len, ply)
+net.Receive( "nws_yrp_changeBuildingSL", function( len, ply )
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewSL = net.ReadString()
 	_tmpNewSL = tonumber(_tmpNewSL) or 0
@@ -473,7 +473,7 @@ net.Receive( "nws_yrp_changeBuildingSL", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_canBuildingBeOwned" )
-net.Receive( "nws_yrp_canBuildingBeOwned", function(len, ply)
+net.Receive( "nws_yrp_canBuildingBeOwned", function( len, ply )
 	local _tmpBuildingID = net.ReadString()
 	local _canbeowned = tonum(net.ReadBool() )
 
@@ -505,7 +505,7 @@ function lookForEmptyBuildings()
 end
 lookForEmptyBuildings()
 
-net.Receive( "nws_yrp_changeBuildingID", function(len, ply)
+net.Receive( "nws_yrp_changeBuildingID", function( len, ply )
 	local _tmpDoor = net.ReadEntity()
 	local _tmpBuildingID = net.ReadString()
 
@@ -515,7 +515,7 @@ net.Receive( "nws_yrp_changeBuildingID", function(len, ply)
 	lookForEmptyBuildings()
 end)
 
-net.Receive( "nws_yrp_changeBuildingName", function(len, ply)
+net.Receive( "nws_yrp_changeBuildingName", function( len, ply )
 	local _tmpBuildingID = net.ReadString()
 	local _tmpNewName = net.ReadString()
 	if IsNotNilAndNotFalse(_tmpBuildingID) then
@@ -548,8 +548,8 @@ function ChangeBuildingBool(uid, net_str, new_boo)
 	end
 end
 
-net.Receive( "nws_yrp_changeBuildingHeader", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_changeBuildingHeader", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_changeBuildingHeader" ) then
 		return 
 	end
 
@@ -564,8 +564,8 @@ net.Receive( "nws_yrp_changeBuildingHeader", function(len, ply)
 	end
 end)
 
-net.Receive( "nws_yrp_changeBuildingDescription", function(len, ply)
-	if !ply:HasAccess() then
+net.Receive( "nws_yrp_changeBuildingDescription", function( len, ply )
+	if !ply:HasAccess( "nws_yrp_changeBuildingDescription" ) then
 		return 
 	end
 
@@ -616,7 +616,7 @@ function GetDoors()
 	return _tmpTable
 end
 
-net.Receive( "nws_yrp_getBuildings", function(len, ply)
+net.Receive( "nws_yrp_getBuildings", function( len, ply )
 	local doors = GetDoors()
 
 	net.Start( "nws_yrp_getBuildings" )
@@ -638,7 +638,7 @@ function SendBuildingInfo(ply, ent, tab)
 	end
 end
 
-net.Receive( "nws_yrp_getBuildingInfo", function(len, ply)
+net.Receive( "nws_yrp_getBuildingInfo", function( len, ply )
 	local door = net.ReadEntity()
 	local buid = door:GetYRPString( "buildingID" )
 
@@ -694,7 +694,7 @@ net.Receive( "nws_yrp_getBuildingInfo", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_lockdown_buildings" )
-net.Receive( "nws_yrp_update_lockdown_buildings", function(len, ply)
+net.Receive( "nws_yrp_update_lockdown_buildings", function( len, ply )
 	local buid = net.ReadString()
 	local checked = net.ReadBool()
 

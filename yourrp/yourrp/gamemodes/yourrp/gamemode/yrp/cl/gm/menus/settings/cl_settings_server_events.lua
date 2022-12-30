@@ -2,7 +2,7 @@
 
 local EVENT = {}
 
-net.Receive( "nws_yrp_setting_events", function(len)
+net.Receive( "nws_yrp_setting_events", function( len )
 	local PARENT = GetSettingsSite()
 
 	if PanelAlive(PARENT) then
@@ -16,7 +16,7 @@ net.Receive( "nws_yrp_setting_events", function(len)
 		EVENT.EventChars:AddColumn(YRP.lang_string( "LID_name" ) )
 		EVENT.EventChars:AddColumn( "Event Character ID" ):SetFixedWidth(120)
 		EVENT.EventChars:AddColumn( "Event Character NAME" )
-		net.Receive( "nws_yrp_get_event_chars", function(len)
+		net.Receive( "nws_yrp_get_event_chars", function( len )
 			local tab = net.ReadTable()
 
 			EVENT.EventChars:Clear()
@@ -205,7 +205,7 @@ net.Receive( "nws_yrp_setting_events", function(len)
 			net.SendToServer()
 		end
 
-		net.Receive( "nws_yrp_get_events", function(len)
+		net.Receive( "nws_yrp_get_events", function( len )
 			local tab = net.ReadTable()
 
 			if IsNotNilAndNotFalse(tab) and PanelAlive(EVENT) and PanelAlive(EVENT.EventList) then

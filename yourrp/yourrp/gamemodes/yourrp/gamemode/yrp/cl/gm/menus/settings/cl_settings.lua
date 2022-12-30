@@ -668,7 +668,7 @@ function F8OpenSettings()
 	end
 end
 
-net.Receive( "nws_yrp_setting_hasnoaccess", function(len)
+net.Receive( "nws_yrp_setting_hasnoaccess", function( len )
 	local site = net.ReadString()
 	local usergroups = net.ReadString()
 	F8RequireUG(YRP.lang_string(site), usergroups)

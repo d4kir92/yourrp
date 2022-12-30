@@ -3,7 +3,7 @@
 local pp = {}
 pp.c = 0
 
-net.Receive( "nws_yrp_get_perma_props", function(len, ply)
+net.Receive( "nws_yrp_get_perma_props", function( len, ply )
 	pp.tab = pp.tab or {}
 
 	pp.c = pp.c + 1
@@ -56,7 +56,7 @@ net.Receive( "nws_yrp_get_perma_props", function(len, ply)
 			hook.Run( "YButtonPaint", self, pw, ph)
 		end
 		function tel:DoClick()
-			net.Start( "nws_yrp_pp_teleport" )
+			net.Start( "nws_yrp_permaprops_teleport" )
 				net.WriteString(self.id)
 			net.SendToServer()
 		end
@@ -69,7 +69,7 @@ net.Receive( "nws_yrp_get_perma_props", function(len, ply)
 			hook.Run( "YButtonRPaint", self, pw, ph)
 		end
 		function rem:DoClick()
-			net.Start( "nws_yrp_pp_remove" )
+			net.Start( "nws_yrp_permaprops_remove" )
 				net.WriteString(self.id)
 			net.SendToServer()
 			self.line:Remove()
@@ -90,7 +90,7 @@ function CreatePermaPropsSetting()
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 100, 100, 100) )
 		end
 		function pp.list:OnRemove()
-			net.Start( "nws_yrp_pp_close" )
+			net.Start( "nws_yrp_permaprops_close" )
 			net.SendToServer()
 		end
 
@@ -112,7 +112,7 @@ end
 local pp2 = {}
 pp2.c = 0
 
-net.Receive( "nws_yrp_get_perma_props2", function(len, ply)
+net.Receive( "nws_yrp_get_perma_props2", function( len, ply )
 	pp2.tab = pp2.tab or {}
 
 	pp2.c = pp2.c + 1
@@ -163,7 +163,7 @@ net.Receive( "nws_yrp_get_perma_props2", function(len, ply)
 			hook.Run( "YButtonPaint", self, pw, ph)
 		end
 		function tel:DoClick()
-			net.Start( "nws_yrp_pp_teleport2" )
+			net.Start( "nws_yrp_permaprops_teleport2" )
 				net.WriteString(self.id)
 			net.SendToServer()
 		end
@@ -176,7 +176,7 @@ net.Receive( "nws_yrp_get_perma_props2", function(len, ply)
 			hook.Run( "YButtonRPaint", self, pw, ph)
 		end
 		function rem:DoClick()
-			net.Start( "nws_yrp_pp_remove2" )
+			net.Start( "nws_yrp_permaprops_remove2" )
 				net.WriteString(self.id)
 			net.SendToServer()
 			self.line:Remove()
@@ -197,7 +197,7 @@ function CreatePermaPropsSetting2()
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 100, 100, 100) )
 		end
 		function pp2.list:OnRemove()
-			net.Start( "nws_yrp_pp_close2" )
+			net.Start( "nws_yrp_permaprops_close2" )
 			net.SendToServer()
 		end
 

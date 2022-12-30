@@ -85,7 +85,7 @@ function CreateFactionSelectionContent()
 
 
 	-- Factions
-	net.Receive( "nws_yrp_factionselection_getfactions", function(len)
+	net.Receive( "nws_yrp_factionselection_getfactions", function( len )
 		local ftab = net.ReadTable()
 
 		if PanelAlive(lis) then

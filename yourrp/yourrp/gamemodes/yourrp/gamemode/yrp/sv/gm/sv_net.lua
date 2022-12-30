@@ -5,7 +5,7 @@ util.AddNetworkString( "nws_yrp_updateServer" )
 util.AddNetworkString( "nws_yrp_cancelRestartServer" )
 
 --Restart Server
-net.Receive( "nws_yrp_restartServer", function(len, ply)
+net.Receive( "nws_yrp_restartServer", function( len, ply )
 	if !ply:HasAccess( "restartServer" ) then
 		return
 	end
@@ -14,7 +14,7 @@ net.Receive( "nws_yrp_restartServer", function(len, ply)
 	RunConsoleCommand( "map", game.GetMap() )
 end)
 
-net.Receive( "nws_yrp_updateServer", function(len, ply)
+net.Receive( "nws_yrp_updateServer", function( len, ply )
 	if !ply:HasAccess( "nws_yrp_updateServer" ) then
 		return
 	end
@@ -46,7 +46,7 @@ net.Receive( "nws_yrp_updateServer", function(len, ply)
 	end)
 end)
 
-net.Receive( "nws_yrp_cancelRestartServer", function(len, ply)
+net.Receive( "nws_yrp_cancelRestartServer", function( len, ply )
 	if !ply:HasAccess( "cancelRestartServer" ) then
 		return
 	end

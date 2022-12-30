@@ -152,7 +152,7 @@ function BuildBlacklis(parent, tabBL, tab)
 	end
 end
 
-net.Receive( "nws_yrp_blacklist_get", function(len)
+net.Receive( "nws_yrp_blacklist_get", function( len )
 	local site = GetSettingsSite()
 
 	if PanelAlive(site) then

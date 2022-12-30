@@ -142,7 +142,7 @@ YRPDesignLoadout("Init")
 
 local once = false
 util.AddNetworkString( "nws_yrp_ply_changed_resolution" )
-net.Receive( "nws_yrp_ply_changed_resolution", function(len, ply)
+net.Receive( "nws_yrp_ply_changed_resolution", function( len, ply )
 	--YRP.msg( "note", ply:YRPName() .. " changed the Resolution." )
 	if !once then
 		once = true
@@ -161,7 +161,7 @@ net.Receive( "nws_yrp_ply_changed_resolution", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_change_hud_design" )
-net.Receive( "nws_yrp_change_hud_design", function(len, ply)
+net.Receive( "nws_yrp_change_hud_design", function( len, ply )
 	local string_hud_design = net.ReadString()
 	YRP.msg( "db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_hud_design"] = string_hud_design}, "uniqueID = '1'" )
@@ -197,7 +197,7 @@ IF_Blur.progress = 50
 RegisterInterfaceDesign(IF_Blur)
 
 util.AddNetworkString( "nws_yrp_change_interface_design" )
-net.Receive( "nws_yrp_change_interface_design", function(len, ply)
+net.Receive( "nws_yrp_change_interface_design", function( len, ply )
 	local string_interface_design = net.ReadString()
 	YRP.msg( "db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_interface_design"] = string_interface_design}, "uniqueID = '1'" )
@@ -208,7 +208,7 @@ end)
 
 -- F8 Design Page
 util.AddNetworkString( "nws_yrp_get_design_settings" )
-net.Receive( "nws_yrp_get_design_settings", function(len, ply)
+net.Receive( "nws_yrp_get_design_settings", function( len, ply )
 	if ply:CanAccess( "bool_design" ) then
 		hook.Call( "RegisterHUDDesign" )
 		local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" )
@@ -237,12 +237,12 @@ function YRPSendFontName(ply)
 	end
 end
 
-net.Receive( "nws_yrp_set_font", function(len, ply)
+net.Receive( "nws_yrp_set_font", function( len, ply )
 	YRPSendFontName(ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_font" )
-net.Receive( "nws_yrp_update_font", function(len, ply)
+net.Receive( "nws_yrp_update_font", function( len, ply )
 	local string_fontname = net.ReadString()
 	YRP.msg( "db", "[DESIGN] string_fontname changed to " .. string_fontname)
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_fontname"] = string_fontname}, "uniqueID = '1'" )
@@ -253,7 +253,7 @@ net.Receive( "nws_yrp_update_font", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_change_headerheight" )
-net.Receive( "nws_yrp_change_headerheight", function(len, ply)
+net.Receive( "nws_yrp_change_headerheight", function( len, ply )
 	local newheaderheight = net.ReadString()
 	newheaderheight = tonumber(newheaderheight)
 

@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-net.Receive( "nws_yrp_setting_players", function(len)
+net.Receive( "nws_yrp_setting_players", function( len )
 	local PARENT = GetSettingsSite()
 
 	if PanelAlive(PARENT) then
@@ -181,7 +181,7 @@ net.Receive( "nws_yrp_setting_players", function(len)
 				local license = 0
 				local _newlicense = createVGUI( "DComboBox", _licenseFrame, 380, 50, 10, 60)
 
-				net.Receive( "nws_yrp_get_licenses_player", function(len)
+				net.Receive( "nws_yrp_get_licenses_player", function( len )
 					local tab = net.ReadTable()
 					for k, v in pairs(tab) do
 						_newlicense:AddChoice( v.name, v.uniqueID)
@@ -222,7 +222,7 @@ net.Receive( "nws_yrp_setting_players", function(len)
 				local license = 0
 				local _newlicense = createVGUI( "DComboBox", _licenseFrame, 380, 50, 10, 60)
 
-				net.Receive( "nws_yrp_get_licenses_player", function(len)
+				net.Receive( "nws_yrp_get_licenses_player", function( len )
 					local tab = net.ReadTable()
 					for k, v in pairs(tab) do
 						_newlicense:AddChoice( v.name, v.uniqueID)

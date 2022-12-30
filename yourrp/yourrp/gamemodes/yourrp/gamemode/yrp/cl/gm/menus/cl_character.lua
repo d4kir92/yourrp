@@ -421,7 +421,7 @@ function LoadCharacters()
 								function _yesButton:DoClick()
 									
 									if IsNotNilAndNotFalse(tmpChar.charid) then
-										net.Start( "YRPDeleteCharacter" )
+										net.Start( "nws_yrp_delete_own_character" )
 											net.WriteString(tmpChar.charid)
 										net.SendToServer()
 									else
@@ -576,7 +576,7 @@ function LoadCharacters()
 								function _yesButton:DoClick()
 									
 									if IsNotNilAndNotFalse(tmpChar.charid) then
-										net.Start( "YRPDeleteCharacter" )
+										net.Start( "nws_yrp_delete_own_character" )
 											net.WriteString(tmpChar.charid)
 										net.SendToServer()
 									else
@@ -1179,7 +1179,7 @@ function openCharacterSelection( force )
 				_yesButton:SetText(YRP.lang_string( "LID_yes" ) )
 				function _yesButton:DoClick()
 
-					net.Start( "YRPDeleteCharacter" )
+					net.Start( "nws_yrp_delete_own_character" )
 						net.WriteString( curChar)
 					net.SendToServer()
 
@@ -1404,7 +1404,7 @@ function openCharacterSelection( force )
 				_yesButton:SetText(YRP.lang_string( "LID_yes" ) )
 				function _yesButton:DoClick()
 
-					net.Start( "YRPDeleteCharacter" )
+					net.Start( "nws_yrp_delete_own_character" )
 						net.WriteString( curChar)
 					net.SendToServer()
 
@@ -1864,7 +1864,7 @@ net.Receive( "YRPOpenCharacterMenu", function( len, ply )
 	end )
 end)
 
-net.Receive( "nws_yrp_openCharacterCreation", function(len, ply)
+net.Receive( "nws_yrp_openCharacterCreation", function( len, ply )
 	timer.Simple(1, function()
 		SetGlobalYRPBool( "create_eventchar", false)
 		openCharacterCreation( "server force openCharacterCreation" )

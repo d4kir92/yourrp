@@ -121,7 +121,7 @@ util.AddNetworkString( "nws_yrp_getMapList" )
 util.AddNetworkString( "nws_yrp_dbInsertIntoMap" )
 util.AddNetworkString( "nws_yrp_removeMapEntry" )
 
-net.Receive( "nws_yrp_removeMapEntry", function(len, ply)
+net.Receive( "nws_yrp_removeMapEntry", function( len, ply )
 	if !ply:HasAccess( "removeMapEntry" ) then
 		return 
 	end
@@ -138,7 +138,7 @@ net.Receive( "nws_yrp_removeMapEntry", function(len, ply)
 	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _tmpUniqueID)
 end)
 
-net.Receive( "nws_yrp_getMapList", function(len, ply)
+net.Receive( "nws_yrp_getMapList", function( len, ply )
 	if ply:CanAccess( "bool_map" ) then
 		local _tmpMapTable = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 		if !IsNotNilAndNotFalse(_tmpMapTable) then
@@ -158,7 +158,7 @@ net.Receive( "nws_yrp_getMapList", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getMapListGroups" )
-net.Receive( "nws_yrp_getMapListGroups", function(len, ply)
+net.Receive( "nws_yrp_getMapListGroups", function( len, ply )
 	local _tmpGroupTable = YRP_SQL_SELECT( "yrp_ply_groups", "*", nil)
 	for i, v in pairs(_tmpGroupTable) do
 		net.Start( "nws_yrp_getMapListGroups" )
@@ -170,7 +170,7 @@ net.Receive( "nws_yrp_getMapListGroups", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getMapListRoles" )
-net.Receive( "nws_yrp_getMapListRoles", function(len, ply)
+net.Receive( "nws_yrp_getMapListRoles", function( len, ply )
 	local _tmpRolesTable = YRP_SQL_SELECT( "yrp_ply_roles", "*", nil)
 	if IsNotNilAndNotFalse(_tmpRolesTable) then
 		for i, v in pairs(_tmpRolesTable) do
@@ -193,7 +193,7 @@ function YRPUpdateAllDBTables()
 	UpdateZoneTable()
 end
 
-net.Receive( "nws_yrp_dbInsertIntoMap", function(len, ply)
+net.Receive( "nws_yrp_dbInsertIntoMap", function( len, ply )
 	local _tmpDBTable = net.ReadString()
 	local _tmpDBCol = net.ReadString()
 	local _tmpDBVal = net.ReadString()
@@ -208,7 +208,7 @@ net.Receive( "nws_yrp_dbInsertIntoMap", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_dealer_settings" )
-net.Receive( "nws_yrp_dealer_settings", function(len, ply)
+net.Receive( "nws_yrp_dealer_settings", function( len, ply )
 	local _storages = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = 'Storagepoint'" )
 	if _storages == nil or _storages == false then
 		_storages = {}
@@ -219,7 +219,7 @@ net.Receive( "nws_yrp_dealer_settings", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_teleportto" )
-net.Receive( "nws_yrp_teleportto", function(len, ply)
+net.Receive( "nws_yrp_teleportto", function( len, ply )
 	if !ply:HasAccess( "teleportto" ) then
 		return
 	end
@@ -238,7 +238,7 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_update_map_name" )
-net.Receive( "nws_yrp_update_map_name", function(len, ply)
+net.Receive( "nws_yrp_update_map_name", function( len, ply )
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
@@ -247,7 +247,7 @@ net.Receive( "nws_yrp_update_map_name", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_map_color" )
-net.Receive( "nws_yrp_update_map_color", function(len, ply)
+net.Receive( "nws_yrp_update_map_color", function( len, ply )
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
@@ -256,7 +256,7 @@ net.Receive( "nws_yrp_update_map_color", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_map_int_respawntime" )
-net.Receive( "nws_yrp_update_map_int_respawntime", function(len, ply)
+net.Receive( "nws_yrp_update_map_int_respawntime", function( len, ply )
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
@@ -266,7 +266,7 @@ net.Receive( "nws_yrp_update_map_int_respawntime", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_map_int_amount" )
-net.Receive( "nws_yrp_update_map_int_amount", function(len, ply)
+net.Receive( "nws_yrp_update_map_int_amount", function( len, ply )
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
@@ -276,7 +276,7 @@ net.Receive( "nws_yrp_update_map_int_amount", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_update_map_string_classname" )
-net.Receive( "nws_yrp_update_map_string_classname", function(len, ply)
+net.Receive( "nws_yrp_update_map_string_classname", function( len, ply )
 	local uid = net.ReadString()
 	local s = net.ReadString()
 
@@ -287,7 +287,7 @@ end)
 
 -- NEW MAP PAGE
 util.AddNetworkString( "nws_yrp_getMapSite" )
-net.Receive( "nws_yrp_getMapSite", function(len, ply)
+net.Receive( "nws_yrp_getMapSite", function( len, ply )
 	if ply:CanAccess( "bool_map" ) then
 		net.Start( "nws_yrp_getMapSite" )
 		net.Send(ply)
@@ -295,7 +295,7 @@ net.Receive( "nws_yrp_getMapSite", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getMapTab" )
-net.Receive( "nws_yrp_getMapTab", function(len, ply)
+net.Receive( "nws_yrp_getMapTab", function( len, ply )
 	if ply:CanAccess( "bool_map" ) then
 		local tab = net.ReadString()
 

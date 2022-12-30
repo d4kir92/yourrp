@@ -144,7 +144,7 @@ function CreateKeybindsContent(parent)
 		_window:MakePopup()
 	end
 
-	if LocalPlayer():HasAccess() then
+	if LocalPlayer():HasAccess( "CreateKeybindsContent" ) then
 		local setsvkeybind = YRPCreateD( "DButton", parent, YRP.ctr(500), YRP.ctr(50), YRP.ctr(_wide + 400), YRP.ctr(90) )
 		setsvkeybind:SetText( "" )
 		function setsvkeybind:Paint(pw, ph)

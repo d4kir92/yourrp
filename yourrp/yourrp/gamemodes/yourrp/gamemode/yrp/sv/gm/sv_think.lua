@@ -10,7 +10,7 @@ hook.Add( "PlayerStartTaunt", "yrp_taunt_start", function(ply, act, length)
 end)
 
 util.AddNetworkString( "nws_yrp_client_lang" )
-net.Receive( "nws_yrp_client_lang", function(len, ply)
+net.Receive( "nws_yrp_client_lang", function( len, ply )
 	local _lang = net.ReadString()
 	--YRP.msg( "db", ply:YRPName() .. " using language: " .. string.upper(_lang) )
 
@@ -293,7 +293,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 
 			ply:AddPlayTime()
 
-			if ply:AFK() and !ply:HasAccess() then -- when not admin, kick
+			if ply:AFK() and !ply:HasAccess( "afk", true ) then -- when not admin, kick
 				if CurTime() - tonumber( ply:GetYRPFloat( "afkts", 0) ) >= tonumber( GetGlobalYRPInt( "int_afkkicktime", 0) ) then
 					ply:SetYRPBool( "isafk", false)
 					ply:Kick( "AFK" )

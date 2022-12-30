@@ -292,7 +292,7 @@ net.Receive( "nws_yrp_get_shop_items", function()
 				_sh._sit.itemlice.plus.tbl = tbl
 				net.Start( "nws_yrp_get_all_licenses_simple" )
 				net.SendToServer()
-				net.Receive( "nws_yrp_get_all_licenses_simple", function(len)
+				net.Receive( "nws_yrp_get_all_licenses_simple", function( len )
 					local _licenses = net.ReadTable()
 					if PanelAlive(_sh._sit) and PanelAlive(_sh._sit.itemlice) and PanelAlive(_sh._sit.itemlice.plus) then
 						_sh._sit.itemlice.plus:AddChoice(YRP.lang_string( "LID_none" ), -1)

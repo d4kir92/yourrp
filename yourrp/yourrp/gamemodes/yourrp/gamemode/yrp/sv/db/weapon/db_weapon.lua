@@ -28,7 +28,7 @@ end
 YRPSetWeaponSettings()
 
 util.AddNetworkString( "nws_yrp_set_slot_amount" )
-net.Receive( "nws_yrp_set_slot_amount", function(len, ply)
+net.Receive( "nws_yrp_set_slot_amount", function( len, ply )
 	if ply:CanAccess( "bool_weapons" ) then
 		local ar = net.ReadString()
 		local va = net.ReadString()
@@ -67,7 +67,7 @@ function YRPGetSlotsOfSWEP( cn)
 end
 
 util.AddNetworkString( "nws_yrp_weapon_menu" )
-net.Receive( "nws_yrp_weapon_menu", function(len, ply)
+net.Receive( "nws_yrp_weapon_menu", function( len, ply )
 	if ply:CanAccess( "bool_weapons" ) then
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 		if IsNotNilAndNotFalse(tab) then
@@ -92,7 +92,7 @@ net.Receive( "nws_yrp_weapon_menu", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_set_slot_weapon" )
-net.Receive( "nws_yrp_set_slot_weapon", function(len, ply)
+net.Receive( "nws_yrp_set_slot_weapon", function( len, ply )
 	if ply:CanAccess( "bool_weapons" ) then
 		local cn = net.ReadString()
 		local ar = net.ReadString()

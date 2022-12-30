@@ -40,12 +40,12 @@ end
 util.AddNetworkString( "nws_yrp_player_say" )
 
 util.AddNetworkString( "nws_yrp_startchat" )
-net.Receive( "nws_yrp_startchat", function(len, ply)
+net.Receive( "nws_yrp_startchat", function( len, ply )
 	ply:SetYRPBool( "istyping", true)
 end)
 
 util.AddNetworkString( "nws_yrp_finishchat" )
-net.Receive( "nws_yrp_finishchat", function(len, ply)
+net.Receive( "nws_yrp_finishchat", function( len, ply )
 	ply:SetYRPBool( "istyping", false)
 end)
 
@@ -199,7 +199,7 @@ function show_tag_ug(sender)
 end
 
 util.AddNetworkString( "nws_yrp_set_chat_mode" )
-net.Receive( "nws_yrp_set_chat_mode", function(len, ply)
+net.Receive( "nws_yrp_set_chat_mode", function( len, ply )
 	local _str = net.ReadString() or "say"
 	ply:SetYRPString( "chat_mode", string.upper(_str) )
 end)
@@ -231,7 +231,7 @@ function Player:SetAFK( bo)
 end
 
 util.AddNetworkString( "nws_yrp_notafk" )
-net.Receive( "nws_yrp_notafk", function(len, ply)
+net.Receive( "nws_yrp_notafk", function( len, ply )
 	if ply:AFK() then
 		ply:SetAFK(false)
 		YRPStopAnim(ply, GESTURE_SLOT_ATTACK_AND_RELOAD)
@@ -239,7 +239,7 @@ net.Receive( "nws_yrp_notafk", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_setafk" )
-net.Receive( "nws_yrp_setafk", function(len, ply)
+net.Receive( "nws_yrp_setafk", function( len, ply )
 	ply:SetAFK(true)
 end)
 

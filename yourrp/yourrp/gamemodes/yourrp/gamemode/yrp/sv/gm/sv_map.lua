@@ -32,7 +32,7 @@ util.AddNetworkString( "nws_yrp_sendCoords" )
 util.AddNetworkString( "nws_yrp_askCoordsMM" )
 util.AddNetworkString( "nws_yrp_sendCoordsMM" )
 
-net.Receive( "nws_yrp_askCoords", function(len, ply)
+net.Receive( "nws_yrp_askCoords", function( len, ply )
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
 		net.Start( "nws_yrp_sendCoords" )
 			net.WriteBool(false)
@@ -48,7 +48,7 @@ net.Receive( "nws_yrp_askCoords", function(len, ply)
 	end
 end)
 
-net.Receive( "nws_yrp_askCoordsMM", function(len, ply)
+net.Receive( "nws_yrp_askCoordsMM", function( len, ply )
 	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
 		net.Start( "nws_yrp_sendCoordsMM" )
 			net.WriteBool(false)

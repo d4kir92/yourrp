@@ -31,7 +31,7 @@ end
 LoadBlacklist()
 
 util.AddNetworkString( "nws_yrp_blacklist_get" )
-net.Receive( "nws_yrp_blacklist_get", function(len, ply)
+net.Receive( "nws_yrp_blacklist_get", function( len, ply )
 	local site = net.ReadString()
 
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
@@ -51,7 +51,7 @@ net.Receive( "nws_yrp_blacklist_get", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_blacklist_add" )
-net.Receive( "nws_yrp_blacklist_add", function(len, ply)
+net.Receive( "nws_yrp_blacklist_add", function( len, ply )
 	local name = net.ReadString()
 	local value = net.ReadString()
 
@@ -64,7 +64,7 @@ net.Receive( "nws_yrp_blacklist_add", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_blacklist_remove" )
-net.Receive( "nws_yrp_blacklist_remove", function(len, ply)
+net.Receive( "nws_yrp_blacklist_remove", function( len, ply )
 	local uid = net.ReadString()
 	
 	if IsNotNilAndNotFalse(uid) then

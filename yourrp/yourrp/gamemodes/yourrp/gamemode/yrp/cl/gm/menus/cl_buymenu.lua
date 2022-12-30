@@ -23,7 +23,7 @@ function YRPCloseBuyMenu()
 end
 
 local lnames = {}
-net.Receive( "nws_yrp_getLicenseName", function(len)
+net.Receive( "nws_yrp_getLicenseName", function( len )
 	local id = net.ReadString()
 	local tmp = net.ReadString()
 	lnames[id] = tmp
@@ -336,7 +336,7 @@ end
 
 local _mat_set = Material( "vgui/yrp/light_settings.png" )
 
-net.Receive( "nws_yrp_shop_get_tabs", function(len)
+net.Receive( "nws_yrp_shop_get_tabs", function( len )
 	local _dealer = net.ReadTable()
 	local _dealer_uid = _dealer.uniqueID
 	local _tabs = net.ReadTable()

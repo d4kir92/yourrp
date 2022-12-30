@@ -8,7 +8,7 @@ YRP_SQL_ADD_COLUMN(DBNotes, "SteamID", "TEXT DEFAULT ''" )
 YRP_SQL_ADD_COLUMN(DBNotes, "note", "TEXT DEFAULT ''" )
 
 util.AddNetworkString( "nws_yrp_getPlayerNotes" )
-net.Receive( "nws_yrp_getPlayerNotes", function(len, ply)
+net.Receive( "nws_yrp_getPlayerNotes", function( len, ply )
 	local p = net.ReadEntity()
 
 	local notes = YRP_SQL_SELECT(DBNotes, "*", "SteamID = '" .. p:YRPSteamID() .. "'" )
@@ -22,7 +22,7 @@ net.Receive( "nws_yrp_getPlayerNotes", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_addJailNote" )
-net.Receive( "nws_yrp_addJailNote", function(len, ply)
+net.Receive( "nws_yrp_addJailNote", function( len, ply )
 	local steamid = net.ReadString()
 	local note = net.ReadString()
 
@@ -30,7 +30,7 @@ net.Receive( "nws_yrp_addJailNote", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_removeJailNote" )
-net.Receive( "nws_yrp_removeJailNote", function(len, ply)
+net.Receive( "nws_yrp_removeJailNote", function( len, ply )
 	local uid = net.ReadString()
 
 	YRP_SQL_DELETE_FROM(DBNotes, "uniqueID = '" .. uid .. "'" )
@@ -148,7 +148,7 @@ end
 
 util.AddNetworkString( "nws_yrp_dbAddJail" )
 
-net.Receive( "nws_yrp_dbAddJail", function(len, ply)
+net.Receive( "nws_yrp_dbAddJail", function( len, ply )
 	local _tmpDBTable = net.ReadString()
 	local _tmpDBCol = net.ReadString()
 	local _tmpDBVal = net.ReadString()
@@ -177,7 +177,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_dbRemJail" )
 
-net.Receive( "nws_yrp_dbRemJail", function(len, ply)
+net.Receive( "nws_yrp_dbRemJail", function( len, ply )
 	local _uid = net.ReadString()
 
 	local _SteamID = YRP_SQL_SELECT( "yrp_jail", "*", "uniqueID = '" .. _uid .. "'" )

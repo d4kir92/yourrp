@@ -13,7 +13,7 @@ util.AddNetworkString( "nws_yrp_placehit" )
 util.AddNetworkString( "nws_yrp_gethits" )
 util.AddNetworkString( "nws_yrp_accepthit" )
 
-net.Receive( "nws_yrp_placehit", function(len, ply)
+net.Receive( "nws_yrp_placehit", function( len, ply )
 	local _steamid = net.ReadString()
 	local _reward = net.ReadString()
 	local _desc = net.ReadString()
@@ -30,7 +30,7 @@ net.Receive( "nws_yrp_placehit", function(len, ply)
 	end
 end)
 
-net.Receive( "nws_yrp_gethits", function(len, ply)
+net.Receive( "nws_yrp_gethits", function( len, ply )
 	local _hits = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if _hits != nil then
 		net.Start( "nws_yrp_gethits" )
@@ -40,7 +40,7 @@ net.Receive( "nws_yrp_gethits", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_get_contracts" )
-net.Receive( "nws_yrp_get_contracts", function(len, ply)
+net.Receive( "nws_yrp_get_contracts", function( len, ply )
 	local _hits = YRP_SQL_SELECT(DATABASE_NAME, "*", "contract_SteamID = '" .. ply:YRPSteamID() .. "'" )
 	if _hits != nil then
 		net.Start( "nws_yrp_get_contracts" )
@@ -64,7 +64,7 @@ function hitquit( agent )
 	agent:SetYRPEntity( "hittarget", NULL)
 end
 
-net.Receive( "nws_yrp_accepthit", function(len, ply)
+net.Receive( "nws_yrp_accepthit", function( len, ply )
 	local _uid = net.ReadString()
 	local _hit = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _uid)
 

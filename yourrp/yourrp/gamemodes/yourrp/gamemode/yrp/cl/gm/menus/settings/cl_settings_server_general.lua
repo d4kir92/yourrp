@@ -25,7 +25,7 @@ function CreateCheckBoxLine( dpanellist, val, lstr, netstr, fixx, textcolor)
 		end
 	end
 
-	net.Receive(netstr, function(len)
+	net.Receive(netstr, function( len )
 		local b = net.ReadString()
 		if PanelAlive( background.checkbox) then
 			background.checkbox.serverside = true
@@ -86,7 +86,7 @@ function CreateTextBoxLine( dpanellist, text, lstr, netstr)
 		end
 	end
 
-	net.Receive(netstr, function(len)
+	net.Receive(netstr, function( len )
 		local tex = net.ReadString()
 		if PanelAlive(textbox) then
 			textbox.serverside = true
@@ -124,7 +124,7 @@ function CreateComboBoxLine( dpanellist, text, lstr, netstr, default, choices)
 		end
 	end
 
-	net.Receive(netstr, function(len)
+	net.Receive(netstr, function( len )
 		local tex = net.ReadString()
 		if PanelAlive( combobox) then
 			combobox.serverside = true
@@ -159,7 +159,7 @@ function CreateTextBoxBox( dpanellist, text, lstr, netstr)
 		end
 	end
 
-	net.Receive(netstr, function(len)
+	net.Receive(netstr, function( len )
 		local tex = net.ReadString()
 		if PanelAlive(textbox) then
 			textbox.serverside = true
@@ -191,7 +191,7 @@ function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr
 		end
 	end
 
-	net.Receive(netstr, function(len)
+	net.Receive(netstr, function( len )
 		local tex = net.ReadString()
 		if PanelAlive( background.textbox) then
 			background.textbox.serverside = true
@@ -212,7 +212,7 @@ function CreateTextBoxLineSpecial( dpanellist, text, text2, lstr, netstr, netstr
 		end
 	end
 
-	net.Receive(netstr2, function(len)
+	net.Receive(netstr2, function( len )
 		local tex = net.ReadString()
 		if PanelAlive( background.textbox2) then
 			background.textbox2.serverside = true
@@ -263,7 +263,7 @@ function CreateNumberWangLine( dpanellist, value, lstr, netstr, fixx, max, min)
 		end
 	end
 
-	net.Receive(netstr, function(len)
+	net.Receive(netstr, function( len )
 		local val = net.ReadString()
 		if PanelAlive( background.numberwang) then
 			background.numberwang.serverside = true
@@ -305,7 +305,7 @@ function AddToTabRecursive(tab, folder, path, wildcard)
 	end
 end
 
-net.Receive( "nws_yrp_connect_Settings_General", function(len)
+net.Receive( "nws_yrp_connect_Settings_General", function( len )
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) then
 		function PARENT:OnRemove()

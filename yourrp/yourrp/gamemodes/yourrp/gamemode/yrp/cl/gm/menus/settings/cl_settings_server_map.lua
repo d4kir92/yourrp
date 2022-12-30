@@ -61,7 +61,7 @@ function getCopyMapPNG()
 	return _mapPNG
 end
 
-net.Receive( "nws_yrp_getMapSite", function(len)
+net.Receive( "nws_yrp_getMapSite", function( len )
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) then
 		if len > 512000 then
@@ -126,7 +126,7 @@ net.Receive( "nws_yrp_getMapSite", function(len)
 end)
 
 -- #F8Map
-net.Receive( "nws_yrp_getMapTab", function(len)
+net.Receive( "nws_yrp_getMapTab", function( len )
 	local lply = LocalPlayer()
 
 	local tab = net.ReadString()

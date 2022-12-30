@@ -309,7 +309,7 @@ function DBoolLine(tab, value, str, netstr)
 				net.SendToServer()
 			end
 		end
-		net.Receive(netstr, function(len)
+		net.Receive(netstr, function( len )
 			local b = btn(net.ReadString() )
 			if PanelAlive( dboolline.dcheckbox) then
 				dboolline.dcheckbox.serverside = true
@@ -389,7 +389,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 			dfloatline.dnumberwang:SetText(self:GetMin() )
 		end
 	end
-	net.Receive(netstr, function(len)
+	net.Receive(netstr, function( len )
 		local f = net.ReadFloat()
 		if PanelAlive( dfloatline.dnumberwang) then
 			dfloatline.dnumberwang.serverside = true
@@ -455,7 +455,7 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 			dintline.dnumberwang:SetText(self:GetMin() )
 		end
 	end
-	net.Receive(netstr, function(len)
+	net.Receive(netstr, function( len )
 		local f = net.ReadInt(32)
 		if PanelAlive( dintline.dnumberwang) then
 			dintline.dnumberwang.serverside = true
@@ -509,7 +509,7 @@ function DStringBox(tab, str, name, netstr)
 			net.WriteString(self:GetText() )
 		net.SendToServer()
 	end
-	net.Receive(netstr, function(len)
+	net.Receive(netstr, function( len )
 		local t = net.ReadString()
 		if PanelAlive( dstringline.dtextentry) then
 			dstringline.dtextentry.serverside = true

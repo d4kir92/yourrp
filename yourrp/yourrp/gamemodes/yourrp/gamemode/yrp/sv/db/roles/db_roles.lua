@@ -411,7 +411,7 @@ for str, val in pairs(yrp_ply_roles) do
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
-		net.Receive(tab.netstr, function(len, ply)
+		net.Receive(tab.netstr, function( len, ply )
 			local uid = tonumber(net.ReadString() )
 			local s = net.ReadString()
 			tab.ply = ply
@@ -461,7 +461,7 @@ for str, val in pairs(yrp_ply_roles) do
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
-		net.Receive(tab.netstr, function(len, ply)
+		net.Receive(tab.netstr, function( len, ply )
 			local uid = tonumber(net.ReadString() )
 			local int = tonumber(net.ReadString() )
 			local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
@@ -487,7 +487,7 @@ for str, val in pairs(yrp_ply_roles) do
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
-		net.Receive(tab.netstr, function(len, ply)
+		net.Receive(tab.netstr, function( len, ply )
 			local uid = tonumber(net.ReadString() )
 			local float = tonumber(net.ReadString() )
 			local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
@@ -511,7 +511,7 @@ for str, val in pairs(yrp_ply_roles) do
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
-		net.Receive(tab.netstr, function(len, ply)
+		net.Receive(tab.netstr, function( len, ply )
 			local uid = tonumber(net.ReadString() )
 			local int = tonumber(net.ReadString() )
 			local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
@@ -693,7 +693,7 @@ function DuplicateRole(ruid, guid)
 end
 
 util.AddNetworkString( "nws_yrp_duplicated_role" )
-net.Receive( "nws_yrp_duplicated_role", function(len, ply)
+net.Receive( "nws_yrp_duplicated_role", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -704,7 +704,7 @@ end)
 
 -- Role menu
 util.AddNetworkString( "nws_yrp_get_grp_roles" )
-net.Receive( "nws_yrp_get_grp_roles", function(len, ply)
+net.Receive( "nws_yrp_get_grp_roles", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -725,7 +725,7 @@ net.Receive( "nws_yrp_get_grp_roles", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_get_rol_prerole" )
-net.Receive( "nws_yrp_get_rol_prerole", function(len, ply)
+net.Receive( "nws_yrp_get_rol_prerole", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -747,7 +747,7 @@ end)
 
 -- Role Settings
 util.AddNetworkString( "nws_yrp_settings_subscribe_rolelist" )
-net.Receive( "nws_yrp_settings_subscribe_rolelist", function(len, ply)
+net.Receive( "nws_yrp_settings_subscribe_rolelist", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -760,7 +760,7 @@ net.Receive( "nws_yrp_settings_subscribe_rolelist", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_subscribe_prerolelist" )
-net.Receive( "nws_yrp_settings_subscribe_prerolelist", function(len, ply)
+net.Receive( "nws_yrp_settings_subscribe_prerolelist", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -777,7 +777,7 @@ net.Receive( "nws_yrp_settings_subscribe_prerolelist", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_add_role" )
-net.Receive( "nws_yrp_settings_add_role", function(len, ply)
+net.Receive( "nws_yrp_settings_add_role", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -828,7 +828,7 @@ net.Receive( "nws_yrp_settings_add_role", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_role_position_up" )
-net.Receive( "nws_yrp_settings_role_position_up", function(len, ply)
+net.Receive( "nws_yrp_settings_role_position_up", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -860,7 +860,7 @@ net.Receive( "nws_yrp_settings_role_position_up", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_role_position_dn" )
-net.Receive( "nws_yrp_settings_role_position_dn", function(len, ply)
+net.Receive( "nws_yrp_settings_role_position_dn", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -892,7 +892,7 @@ net.Receive( "nws_yrp_settings_role_position_dn", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_subscribe_role" )
-net.Receive( "nws_yrp_settings_subscribe_role", function(len, ply)
+net.Receive( "nws_yrp_settings_subscribe_role", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -935,7 +935,7 @@ net.Receive( "nws_yrp_settings_subscribe_role", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_unsubscribe_role" )
-net.Receive( "nws_yrp_settings_unsubscribe_role", function(len, ply)
+net.Receive( "nws_yrp_settings_unsubscribe_role", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -945,7 +945,7 @@ net.Receive( "nws_yrp_settings_unsubscribe_role", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_unsubscribe_rolelist" )
-net.Receive( "nws_yrp_settings_unsubscribe_rolelist", function(len, ply)
+net.Receive( "nws_yrp_settings_unsubscribe_rolelist", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -956,7 +956,7 @@ net.Receive( "nws_yrp_settings_unsubscribe_rolelist", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_settings_delete_role" )
-net.Receive( "nws_yrp_settings_delete_role", function(len, ply)
+net.Receive( "nws_yrp_settings_delete_role", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -993,7 +993,7 @@ net.Receive( "nws_yrp_settings_delete_role", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getScoreboardGroups" )
-net.Receive( "nws_yrp_getScoreboardGroups", function(len, ply)
+net.Receive( "nws_yrp_getScoreboardGroups", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1042,7 +1042,7 @@ function SendCustomFlags(uid)
 end
 
 util.AddNetworkString( "nws_yrp_get_role_customflags" )
-net.Receive( "nws_yrp_get_role_customflags", function(len, ply)
+net.Receive( "nws_yrp_get_role_customflags", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1052,7 +1052,7 @@ net.Receive( "nws_yrp_get_role_customflags", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_get_all_role_customflags" )
-net.Receive( "nws_yrp_get_all_role_customflags", function(len, ply)
+net.Receive( "nws_yrp_get_all_role_customflags", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1068,7 +1068,7 @@ net.Receive( "nws_yrp_get_all_role_customflags", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_add_role_flag" )
-net.Receive( "nws_yrp_add_role_flag", function(len, ply)
+net.Receive( "nws_yrp_add_role_flag", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1096,7 +1096,7 @@ net.Receive( "nws_yrp_add_role_flag", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_rem_role_flag" )
-net.Receive( "nws_yrp_rem_role_flag", function(len, ply)
+net.Receive( "nws_yrp_rem_role_flag", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1154,7 +1154,7 @@ function SendPlayermodels(uid)
 end
 
 util.AddNetworkString( "nws_yrp_get_role_playermodels" )
-net.Receive( "nws_yrp_get_role_playermodels", function(len, ply)
+net.Receive( "nws_yrp_get_role_playermodels", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1164,7 +1164,7 @@ net.Receive( "nws_yrp_get_role_playermodels", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_get_all_playermodels" )
-net.Receive( "nws_yrp_get_all_playermodels", function(len, ply)
+net.Receive( "nws_yrp_get_all_playermodels", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1224,7 +1224,7 @@ function AddPlayermodelToRole(ruid, muid)
 end
 
 util.AddNetworkString( "nws_yrp_add_role_playermodel" )
-net.Receive( "nws_yrp_add_role_playermodel", function(len, ply)
+net.Receive( "nws_yrp_add_role_playermodel", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1254,7 +1254,7 @@ function YRPAddPlayermodelsToRole( pms, name, min, max, ruid )
 end
 
 util.AddNetworkString( "nws_yrp_add_playermodels" )
-net.Receive( "nws_yrp_add_playermodels", function(len, ply)
+net.Receive( "nws_yrp_add_playermodels", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1287,7 +1287,7 @@ function RemPlayermodelFromRole(ruid, muid)
 end
 
 util.AddNetworkString( "nws_yrp_rem_role_playermodel" )
-net.Receive( "nws_yrp_rem_role_playermodel", function(len, ply)
+net.Receive( "nws_yrp_rem_role_playermodel", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1332,7 +1332,7 @@ function SendSweps(uid)
 end
 
 util.AddNetworkString( "nws_yrp_get_role_sweps" )
-net.Receive( "nws_yrp_get_role_sweps", function(len, ply)
+net.Receive( "nws_yrp_get_role_sweps", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1366,7 +1366,7 @@ function AddSwepToRole(ruid, swepcn)
 end
 
 util.AddNetworkString( "nws_yrp_add_role_swep" )
-net.Receive( "nws_yrp_add_role_swep", function(len, ply)
+net.Receive( "nws_yrp_add_role_swep", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1398,7 +1398,7 @@ function RemSwepFromRole(ruid, swepcn)
 end
 
 util.AddNetworkString( "nws_yrp_rem_role_swep" )
-net.Receive( "nws_yrp_rem_role_swep", function(len, ply)
+net.Receive( "nws_yrp_rem_role_swep", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1433,7 +1433,7 @@ function SendSwepsOnSpawn(uid)
 end
 
 util.AddNetworkString( "nws_yrp_get_role_sweps_onspawn" )
-net.Receive( "nws_yrp_get_role_sweps_onspawn", function(len, ply)
+net.Receive( "nws_yrp_get_role_sweps_onspawn", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1465,7 +1465,7 @@ function AddSwepToRoleOnSpawn(ruid, swepcn)
 end
 
 util.AddNetworkString( "nws_yrp_add_role_swep_onspawn" )
-net.Receive( "nws_yrp_add_role_swep_onspawn", function(len, ply)
+net.Receive( "nws_yrp_add_role_swep_onspawn", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1497,7 +1497,7 @@ function RemSwepFromRoleOnSpawn(ruid, swepcn)
 end
 
 util.AddNetworkString( "nws_yrp_rem_role_swep_onspawn" )
-net.Receive( "nws_yrp_rem_role_swep_onspawn", function(len, ply)
+net.Receive( "nws_yrp_rem_role_swep_onspawn", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1531,7 +1531,7 @@ function SendNDSweps(uid)
 end
 
 util.AddNetworkString( "nws_yrp_get_role_ndsweps" )
-net.Receive( "nws_yrp_get_role_ndsweps", function(len, ply)
+net.Receive( "nws_yrp_get_role_ndsweps", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1561,7 +1561,7 @@ function AddNDSwepToRole(ruid, ndswepcn)
 end
 
 util.AddNetworkString( "nws_yrp_add_role_ndswep" )
-net.Receive( "nws_yrp_add_role_ndswep", function(len, ply)
+net.Receive( "nws_yrp_add_role_ndswep", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1591,7 +1591,7 @@ function RemNDSwepFromRole(ruid, ndswepcn)
 end
 
 util.AddNetworkString( "nws_yrp_rem_role_ndswep" )
-net.Receive( "nws_yrp_rem_role_ndswep", function(len, ply)
+net.Receive( "nws_yrp_rem_role_ndswep", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1663,7 +1663,7 @@ function CleanUpLicenses(ruid)
 end
 
 util.AddNetworkString( "nws_yrp_get_role_licenses" )
-net.Receive( "nws_yrp_get_role_licenses", function(len, ply)
+net.Receive( "nws_yrp_get_role_licenses", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1674,7 +1674,7 @@ net.Receive( "nws_yrp_get_role_licenses", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_get_all_licenses" )
-net.Receive( "nws_yrp_get_all_licenses", function(len, ply)
+net.Receive( "nws_yrp_get_all_licenses", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1709,7 +1709,7 @@ function AddLicenseToRole(ruid, muid)
 end
 
 util.AddNetworkString( "nws_yrp_add_role_license" )
-net.Receive( "nws_yrp_add_role_license", function(len, ply)
+net.Receive( "nws_yrp_add_role_license", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1721,7 +1721,7 @@ net.Receive( "nws_yrp_add_role_license", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_add_license" )
-net.Receive( "nws_yrp_add_license", function(len, ply)
+net.Receive( "nws_yrp_add_license", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1737,7 +1737,7 @@ net.Receive( "nws_yrp_add_license", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_rem_role_license" )
-net.Receive( "nws_yrp_rem_role_license", function(len, ply)
+net.Receive( "nws_yrp_rem_role_license", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1811,7 +1811,7 @@ function CleanUpSpecializations(ruid)
 end
 
 util.AddNetworkString( "nws_yrp_get_role_specializations" )
-net.Receive( "nws_yrp_get_role_specializations", function(len, ply)
+net.Receive( "nws_yrp_get_role_specializations", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1822,7 +1822,7 @@ net.Receive( "nws_yrp_get_role_specializations", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_get_all_specializations" )
-net.Receive( "nws_yrp_get_all_specializations", function(len, ply)
+net.Receive( "nws_yrp_get_all_specializations", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1857,7 +1857,7 @@ function AddSpecializationToRole(ruid, muid)
 end
 
 util.AddNetworkString( "nws_yrp_add_role_specialization" )
-net.Receive( "nws_yrp_add_role_specialization", function(len, ply)
+net.Receive( "nws_yrp_add_role_specialization", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1869,7 +1869,7 @@ net.Receive( "nws_yrp_add_role_specialization", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_rem_role_specialization" )
-net.Receive( "nws_yrp_rem_role_specialization", function(len, ply)
+net.Receive( "nws_yrp_rem_role_specialization", function( len, ply )
 	if !ply:CanAccess( "bool_groupsandroles" ) then
 		return
 	end
@@ -1883,7 +1883,7 @@ end)
 
 
 util.AddNetworkString( "nws_yrp_openInteractMenu" )
-net.Receive( "nws_yrp_openInteractMenu", function(len, ply)
+net.Receive( "nws_yrp_openInteractMenu", function( len, ply )
 	local charid = net.ReadString()
 	charid = tonumber( charid )
 	local target = YRPGetPlayerByCharID( charid )
@@ -1973,7 +1973,7 @@ net.Receive( "nws_yrp_openInteractMenu", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_isidcardenabled" )
-net.Receive( "nws_yrp_isidcardenabled", function(len, ply)
+net.Receive( "nws_yrp_isidcardenabled", function( len, ply )
 	local idcard = YRP_SQL_SELECT( "yrp_general", "*", nil)
 	idcard = tobool(idcard[1].bool_identity_card)
 
@@ -2045,7 +2045,7 @@ function YRPGetPlayerByCharID( uid )
 end
 
 util.AddNetworkString( "nws_yrp_promotePlayer" )
-net.Receive( "nws_yrp_promotePlayer", function(len, ply)
+net.Receive( "nws_yrp_promotePlayer", function( len, ply )
 	local targetcharid = net.ReadString()
 	targetcharid = tonumber( targetcharid )
 
@@ -2248,7 +2248,7 @@ function GetRoleTable(rid)
 end
 
 util.AddNetworkString( "nws_yrp_getallroles" )
-net.Receive( "nws_yrp_getallroles", function(len, ply)
+net.Receive( "nws_yrp_getallroles", function( len, ply )
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse( dbtab) then
 		for i, v in pairs( dbtab) do
@@ -2267,7 +2267,7 @@ net.Receive( "nws_yrp_getallroles", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_get_next_ranks" )
-net.Receive( "nws_yrp_get_next_ranks", function(len, ply)
+net.Receive( "nws_yrp_get_next_ranks", function( len, ply )
 	local ruid = net.ReadString()
 	local rols = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'" )
 
@@ -2283,7 +2283,7 @@ net.Receive( "nws_yrp_get_next_ranks", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_hasnext_ranks" )
-net.Receive( "nws_yrp_hasnext_ranks", function(len, ply)
+net.Receive( "nws_yrp_hasnext_ranks", function( len, ply )
 	local ruid = net.ReadString()
 	local rols = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'" )
 
@@ -2299,7 +2299,7 @@ net.Receive( "nws_yrp_hasnext_ranks", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_want_role" )
-net.Receive( "nws_yrp_want_role", function(len, ply)
+net.Receive( "nws_yrp_want_role", function( len, ply )
 	local ruid = net.ReadString()
 	ruid = tonumber(ruid)
 	local rol = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'" )
@@ -2342,7 +2342,7 @@ function YRPSendRoleSpecs(ply, ruid)
 end
 
 util.AddNetworkString( "nws_yrp_get_role_specs" )
-net.Receive( "nws_yrp_get_role_specs", function(len, ply)
+net.Receive( "nws_yrp_get_role_specs", function( len, ply )
 	local ruid = net.ReadString()
 	YRPSendRoleSpecs(ply, ruid)
 end)

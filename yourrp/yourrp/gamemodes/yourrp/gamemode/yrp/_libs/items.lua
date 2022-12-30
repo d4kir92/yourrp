@@ -450,12 +450,12 @@ if CLIENT then
 		end
 	end
 
-	net.Receive( "nws_yrp_additemtostorage", function(len)
+	net.Receive( "nws_yrp_additemtostorage", function( len )
 		local _item = net.ReadTable()
 		AddItemToStorage(_item)
 	end)
 
-	net.Receive( "nws_yrp_moveitem_slot1", function(len)
+	net.Receive( "nws_yrp_moveitem_slot1", function( len )
 		if IsInventoryOpen() then
 			local _s1 = net.ReadTable()
 
@@ -470,7 +470,7 @@ if CLIENT then
 		end
 	end)
 
-	net.Receive( "nws_yrp_moveitem_slot2", function(len)
+	net.Receive( "nws_yrp_moveitem_slot2", function( len )
 		if IsInventoryOpen() then
 			local _s2 = net.ReadTable()
 			local _i = net.ReadTable()

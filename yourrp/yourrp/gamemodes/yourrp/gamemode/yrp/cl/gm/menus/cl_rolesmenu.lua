@@ -217,7 +217,7 @@ function addPreRole(rol, parent, mainparent)
 end
 
 function getPreRole(uid, parent, mainparent)
-	net.Receive( "nws_yrp_get_rol_prerole", function(len)
+	net.Receive( "nws_yrp_get_rol_prerole", function( len )
 		local _prerole = net.ReadTable()
 		if _prerole.int_prerole != nil then
 			addPreRole(_prerole, _pr[_prerole.int_prerole], mainparent)
@@ -252,7 +252,7 @@ function addRoleRow(rol, parent)
 end
 
 function getRoles(uid, parent)
-	net.Receive( "nws_yrp_get_grp_roles", function(len)
+	net.Receive( "nws_yrp_get_grp_roles", function( len )
 		local _roles = net.ReadTable()
 		for i, rol in SortedPairsByMemberValue(_roles, "int_position" ) do
 			if rol != nil and tonumber(rol.int_prerole) <= 0 then
@@ -356,7 +356,7 @@ function addGroup(grp, parent)
 end
 
 function getGroups(uid, parent)
-	net.Receive( "nws_yrp_rolesmenu_get_groups", function(len)
+	net.Receive( "nws_yrp_rolesmenu_get_groups", function( len )
 		local _groups = net.ReadTable()
 		local dg = nil -- Default Group
 		for i, grp in SortedPairsByMemberValue(_groups, "int_position" ) do

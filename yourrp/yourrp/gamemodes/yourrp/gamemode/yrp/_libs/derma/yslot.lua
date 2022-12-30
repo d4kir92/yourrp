@@ -105,7 +105,7 @@ function PANEL:Init()
 	end, {})
 end
 
-net.Receive( "nws_yrp_item_store", function(len)
+net.Receive( "nws_yrp_item_store", function( len )
 	local slotID = net.ReadString()
 	local item = net.ReadTable()
 
@@ -124,7 +124,7 @@ net.Receive( "nws_yrp_item_store", function(len)
 	end
 end)
 
-net.Receive( "nws_yrp_item_unstore", function(len)
+net.Receive( "nws_yrp_item_unstore", function( len )
 	local slotID = net.ReadString()
 
 	slotID = tonumber(slotID)

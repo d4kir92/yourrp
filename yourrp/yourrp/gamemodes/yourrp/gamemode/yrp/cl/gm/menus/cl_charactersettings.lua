@@ -73,7 +73,7 @@ function YRPCreateCharacterSettingsContent()
 	
 
 
-	net.Receive( "nws_yrp_char_getrole", function(len)
+	net.Receive( "nws_yrp_char_getrole", function( len )
 		local rol = net.ReadTable()
 
 		rol.int_namelength = tonumber(rol.int_namelength)
@@ -170,7 +170,7 @@ function YRPCreateCharacterSettingsContent()
 				character.nati = LocalPlayer().charcreate_nati
 				character.create_eventchar = GetGlobalYRPBool( "create_eventchar", false)
 
-				net.Receive( "YRPCreateCharacter", function(len)
+				net.Receive( "nws_yrp_create_own_character", function( len )
 					local success = net.ReadBool()
 					if success then
 						if PanelAlive(CharacterMenu) then
@@ -194,7 +194,7 @@ function YRPCreateCharacterSettingsContent()
 					end
 				end)
 
-				net.Start( "YRPCreateCharacter" )
+				net.Start( "nws_yrp_create_own_character" )
 					net.WriteTable( character )
 				net.SendToServer()
 			end

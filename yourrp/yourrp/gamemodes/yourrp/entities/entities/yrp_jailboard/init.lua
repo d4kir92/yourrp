@@ -46,7 +46,7 @@ function ENT:Think()
 end
 
 util.AddNetworkString( "nws_yrp_jail" )
-net.Receive( "nws_yrp_jail", function(len, ply)
+net.Receive( "nws_yrp_jail", function( len, ply )
 	local target = net.ReadEntity()
 
 	local jail = YRP_SQL_SELECT( "yrp_jail", "*", "SteamID = '" .. target:YRPSteamID() .. "'" )
@@ -58,7 +58,7 @@ net.Receive( "nws_yrp_jail", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_unjail" )
-net.Receive( "nws_yrp_unjail", function(len, ply)
+net.Receive( "nws_yrp_unjail", function( len, ply )
 	local target = net.ReadEntity()
 
 	YRP_SQL_DELETE_FROM( "yrp_jail", "SteamID = '" .. target:YRPSteamID() .. "'" )

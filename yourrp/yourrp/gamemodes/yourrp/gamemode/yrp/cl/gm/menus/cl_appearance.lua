@@ -4,7 +4,7 @@ local _appe = {}
 _appe.r = {}
 local _yrp_appearance = {}
 local play = true
-net.Receive( "nws_yrp_get_menu_bodygroups", function(len)
+net.Receive( "nws_yrp_get_menu_bodygroups", function( len )
 	local _tbl = net.ReadTable()
 	if _tbl.string_playermodels != nil and PanelAlive(_yrp_appearance.window) then
 		local _skin = tonumber(_tbl.skin)
@@ -300,7 +300,7 @@ function close_appearance()
 	end
 end
 
-net.Receive( "nws_yrp_openAM", function(len)
+net.Receive( "nws_yrp_openAM", function( len )
 	open_appearance()
 end)
 

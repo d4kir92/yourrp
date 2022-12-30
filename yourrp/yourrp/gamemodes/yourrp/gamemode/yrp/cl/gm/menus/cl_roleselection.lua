@@ -56,7 +56,7 @@ function CreateRolePreviewContent()
 
 
 
-	net.Receive( "nws_yrp_roleselection_getrole", function(len)
+	net.Receive( "nws_yrp_roleselection_getrole", function( len )
 		local rol = net.ReadTable()
 	
 		LocalPlayer().rolepreview = true
@@ -469,7 +469,7 @@ function CreateRoleSelectionContent(PARENT)
 
 
 	-- Groups
-	net.Receive( "nws_yrp_roleselection_getgroups", function(len)
+	net.Receive( "nws_yrp_roleselection_getgroups", function( len )
 		if PanelAlive(lis) then
 			local gtab = net.ReadTable()
 

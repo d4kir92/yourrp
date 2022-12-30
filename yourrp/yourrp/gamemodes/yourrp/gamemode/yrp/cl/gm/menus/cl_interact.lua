@@ -33,7 +33,7 @@ function openInteractMenu(CharID)
 	end
 end
 
-net.Receive( "nws_yrp_openInteractMenu", function(len)
+net.Receive( "nws_yrp_openInteractMenu", function( len )
 	local ply = net.ReadEntity()
 
 	local idcard = net.ReadBool()
@@ -259,7 +259,7 @@ function YRPOpenGiveSpec( charid, ruid )
 		draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 80) )
 	end
 
-	net.Receive( "nws_yrp_get_role_specs", function(len)
+	net.Receive( "nws_yrp_get_role_specs", function( len )
 		local nettab = net.ReadTable()
 		if PanelAlive( win ) and PanelAlive( win.dpl ) then
 			local ply = NULL
@@ -336,7 +336,7 @@ net.Receive( "nws_yrp_reopen_givespec", function()
 	YRPOpenGiveSpec( charid, ruid)
 end)
 
-net.Receive( "nws_yrp_invite_ply", function(len)
+net.Receive( "nws_yrp_invite_ply", function( len )
 	local role = net.ReadTable()
 	local group = net.ReadTable()
 	

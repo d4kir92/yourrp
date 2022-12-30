@@ -74,7 +74,7 @@ function testApp( display, x, y, w, h)
 		_target_list:AddColumn(YRP.lang_string( "LID_target" ) )
 		_target_list:AddColumn(YRP.lang_string( "LID_reward" ) )
 		_target_list:AddColumn(YRP.lang_string( "LID_description" ) )
-		net.Receive( "nws_yrp_gethits", function(len)
+		net.Receive( "nws_yrp_gethits", function( len )
 			local _hits = net.ReadTable()
 			for i, hit in pairs(_hits) do
 				for j, ply in pairs(player.GetAll() ) do
@@ -167,7 +167,7 @@ function testApp( display, x, y, w, h)
 		_target_list:AddColumn(YRP.lang_string( "LID_target" ) )
 		_target_list:AddColumn(YRP.lang_string( "LID_reward" ) )
 		_target_list:AddColumn(YRP.lang_string( "LID_description" ) )
-		net.Receive( "nws_yrp_get_contracts", function(len)
+		net.Receive( "nws_yrp_get_contracts", function( len )
 			local _hits = net.ReadTable()
 			for i, hit in pairs(_hits) do
 				for j, ply in pairs(player.GetAll() ) do

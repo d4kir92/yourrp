@@ -95,7 +95,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.augs = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(200) )
 	win.augs:EnableVerticalScrollbar()
-	net.Receive( "nws_yrp_vm_get_active_usergroups", function(len)
+	net.Receive( "nws_yrp_vm_get_active_usergroups", function( len )
 		local taugs = net.ReadTable()
 
 		for i, ug in pairs(taugs) do
@@ -137,7 +137,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.agrps = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(500) )
 	win.agrps:EnableVerticalScrollbar()
-	net.Receive( "nws_yrp_vm_get_active_groups", function(len)
+	net.Receive( "nws_yrp_vm_get_active_groups", function( len )
 		local tagrps = net.ReadTable()
 
 		for i, ug in pairs(tagrps) do
@@ -179,7 +179,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.arols = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(800) )
 	win.arols:EnableVerticalScrollbar()
-	net.Receive( "nws_yrp_vm_get_active_roles", function(len)
+	net.Receive( "nws_yrp_vm_get_active_roles", function( len )
 		local tarols = net.ReadTable()
 
 		for i, ug in pairs(tarols) do
@@ -224,7 +224,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.pugs = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(200) )
 	win.pugs:EnableVerticalScrollbar()
-	net.Receive( "nws_yrp_vm_get_passive_usergroups", function(len)
+	net.Receive( "nws_yrp_vm_get_passive_usergroups", function( len )
 		local tpugs = net.ReadTable()
 
 		for i, ug in pairs(tpugs) do
@@ -266,7 +266,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.pgrps = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(500) )
 	win.pgrps:EnableVerticalScrollbar()
-	net.Receive( "nws_yrp_vm_get_passive_groups", function(len)
+	net.Receive( "nws_yrp_vm_get_passive_groups", function( len )
 		local tpgrps = net.ReadTable()
 
 		for i, ug in pairs(tpgrps) do
@@ -308,7 +308,7 @@ function YRPVoiceChannel(edit, uid)
 	end
 	win.prols = YRPCreateD( "DPanelList", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(800) )
 	win.prols:EnableVerticalScrollbar()
-	net.Receive( "nws_yrp_vm_get_passive_roles", function(len)
+	net.Receive( "nws_yrp_vm_get_passive_roles", function( len )
 		local tprols = net.ReadTable()
 
 		for i, ug in pairs(tprols) do
@@ -421,7 +421,7 @@ function YRPUpdateVoiceList()
 		local h = YRP.ctr(66)
 		local pbr = YRP.ctr(10)
 		for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable( "yrp_voice_channels", {}), "int_position" ) do
-			if IsInChannel(lply, channel.uniqueID, true) or ( vm.adminmode and lply:HasAccess() ) then
+			if IsInChannel(lply, channel.uniqueID, true) or ( vm.adminmode and lply:HasAccess( "YRPUpdateVoiceList1") ) then
 				local line = YRPCreateD( "DPanel", nil, CONTENT:GetWide(), h, 0, 0)
 				function line:Paint(pw, ph)
 				end
@@ -442,7 +442,7 @@ function YRPUpdateVoiceList()
 					draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 				end
 
-				if ( vm.adminmode and lply:HasAccess() ) then
+				if ( vm.adminmode and lply:HasAccess( "YRPUpdateVoiceList2") ) then
 					local edit = YRPCreateD( "DButton", bg, h , h, 0, 0)
 					edit:SetText( "" )
 					function edit:Paint(pw, ph)
@@ -526,7 +526,7 @@ function YRPUpdateVoiceList()
 					end
 				end
 
-				if ( vm.adminmode and lply:HasAccess() ) then
+				if ( vm.adminmode and lply:HasAccess( "YRPUpdateVoiceList3") ) then
 					local dn = YRPCreateD( "YButton", bg, h, h, bg:GetWide() - 4 * h - 2 * YRP.ctr(20), 0)
 					dn:SetText( "" )
 					function dn:Paint(pw, ph)
@@ -637,7 +637,7 @@ function OpenVoiceMenu()
 
 	YRPUpdateVoiceList()
 
-	if lply:HasAccess() then
+	if lply:HasAccess( "OpenVoiceMenu1" ) then
 		local size = YRP.ctr(50)
 
 		-- ADMIN MODE
@@ -671,7 +671,7 @@ function OpenVoiceMenu()
 		function vm.win.add:DoClick()
 			YRPVoiceChannel(false)
 		end
-		if vm.adminmode and lply:HasAccess() then
+		if vm.adminmode and lply:HasAccess( "OpenVoiceMenu2" ) then
 			--
 		else
 			vm.win.add:Hide()
@@ -711,7 +711,7 @@ function OpenVoiceMenu()
 			net.SendToServer()
 		end
 
-		if vm.adminmode and lply:HasAccess() then
+		if vm.adminmode and lply:HasAccess( "OpenVoiceMenu3" ) then
 			--
 		else
 			vm.win.maxactive:Hide()
@@ -744,11 +744,11 @@ function OpenVoiceMenu()
 	end
 end
 
-net.Receive( "nws_yrp_channel_dn", function(len)
+net.Receive( "nws_yrp_channel_dn", function( len )
 	OpenVoiceMenu()
 end)
 
-net.Receive( "nws_yrp_channel_up", function(len)
+net.Receive( "nws_yrp_channel_up", function( len )
 	OpenVoiceMenu()
 end)
 

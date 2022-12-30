@@ -20,7 +20,7 @@ function closeDoorOptions()
 	end
 end
 
-net.Receive( "nws_yrp_getBuildingInfo", function(len)
+net.Receive( "nws_yrp_getBuildingInfo", function( len )
 	if yrp_door.waitforanswer then
 		yrp_door.waitforanswer = false
 
@@ -75,7 +75,7 @@ function buyWindow( door, tabBuilding)
 
 	local br = YRP.ctr(20)
 	yrp_door.window = YRPCreateD( "YFrame", nil, YRP.ctr(1100), YRP.ctr(760), 0, 0)
-	if !lply:HasAccess() then
+	if !lply:HasAccess( "buyWindow1" ) then
 		yrp_door.window:SetTall(YRP.ctr(300) )
 	end
 	yrp_door.window:SetHeaderHeight(YRP.ctr(100) )
@@ -145,7 +145,7 @@ function buyWindow( door, tabBuilding)
 		end
 	end
 
-	if lply:HasAccess() then
+	if lply:HasAccess( "buyWindow2" ) then
 		local _TextEntryName = YRPCreateD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), br, YRP.ctr(250) )
 		_TextEntryName:SetText(tabBuilding.name)
 		function _TextEntryName:OnChange()
@@ -323,7 +323,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 	end
 
 	yrp_door.window = YRPCreateD( "YFrame", nil, YRP.ctr(1100), YRP.ctr(580), 0, 0)
-	if !lply:HasAccess() then
+	if !lply:HasAccess( "optionWindow1" ) then
 		yrp_door.window:SetTall(YRP.ctr(340) )
 	end
 	yrp_door.window:SetHeaderHeight(YRP.ctr(100) )
@@ -411,7 +411,7 @@ function optionWindow( door, tabBuilding, tabOwner, tabGroup)
 		end
 	end
 
-	if lply:HasAccess() then
+	if lply:HasAccess( "optionWindow2" ) then
 		local _TextEntryName = YRPCreateD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(270) )
 		_TextEntryName:SetText(tabBuilding.name)
 		function _TextEntryName:OnChange()

@@ -206,7 +206,7 @@ end
 GenerateChatTable()
 
 util.AddNetworkString( "nws_yrp_cm_get_active_usergroups" )
-net.Receive( "nws_yrp_cm_get_active_usergroups", function(len, ply)
+net.Receive( "nws_yrp_cm_get_active_usergroups", function( len, ply )
 	local ugs = YRP_SQL_SELECT( "yrp_usergroups", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(ugs) then
 		net.Start( "nws_yrp_cm_get_active_usergroups" )
@@ -216,7 +216,7 @@ net.Receive( "nws_yrp_cm_get_active_usergroups", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_cm_get_active_groups" )
-net.Receive( "nws_yrp_cm_get_active_groups", function(len, ply)
+net.Receive( "nws_yrp_cm_get_active_groups", function( len, ply )
 	local grps = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(grps) then
 		net.Start( "nws_yrp_cm_get_active_groups" )
@@ -226,7 +226,7 @@ net.Receive( "nws_yrp_cm_get_active_groups", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_cm_get_active_roles" )
-net.Receive( "nws_yrp_cm_get_active_roles", function(len, ply)
+net.Receive( "nws_yrp_cm_get_active_roles", function( len, ply )
 	local rols = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(rols) then
 		net.Start( "nws_yrp_cm_get_active_roles" )
@@ -236,7 +236,7 @@ net.Receive( "nws_yrp_cm_get_active_roles", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_cm_get_passive_usergroups" )
-net.Receive( "nws_yrp_cm_get_passive_usergroups", function(len, ply)
+net.Receive( "nws_yrp_cm_get_passive_usergroups", function( len, ply )
 	local ugs = YRP_SQL_SELECT( "yrp_usergroups", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(ugs) then
 		net.Start( "nws_yrp_cm_get_passive_usergroups" )
@@ -246,7 +246,7 @@ net.Receive( "nws_yrp_cm_get_passive_usergroups", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_cm_get_passive_groups" )
-net.Receive( "nws_yrp_cm_get_passive_groups", function(len, ply)
+net.Receive( "nws_yrp_cm_get_passive_groups", function( len, ply )
 	local grps = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(grps) then
 		net.Start( "nws_yrp_cm_get_passive_groups" )
@@ -256,7 +256,7 @@ net.Receive( "nws_yrp_cm_get_passive_groups", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_cm_get_passive_roles" )
-net.Receive( "nws_yrp_cm_get_passive_roles", function(len, ply)
+net.Receive( "nws_yrp_cm_get_passive_roles", function( len, ply )
 	local rols = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, string_name", nil)
 	if IsNotNilAndNotFalse(rols) then
 		net.Start( "nws_yrp_cm_get_passive_roles" )
@@ -266,7 +266,7 @@ net.Receive( "nws_yrp_cm_get_passive_roles", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_chat_channel_add" )
-net.Receive( "nws_yrp_chat_channel_add", function(len, ply)
+net.Receive( "nws_yrp_chat_channel_add", function( len, ply )
 	local name = string.upper(net.ReadString() )
 	local mode = net.ReadString()
 	local structure = net.ReadString()
@@ -292,7 +292,7 @@ net.Receive( "nws_yrp_chat_channel_add", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_chat_channel_save" )
-net.Receive( "nws_yrp_chat_channel_save", function(len, ply)
+net.Receive( "nws_yrp_chat_channel_save", function( len, ply )
 	local name = string.upper(net.ReadString() )
 	local mode = net.ReadString()
 	local structure = net.ReadString()
@@ -328,7 +328,7 @@ net.Receive( "nws_yrp_chat_channel_save", function(len, ply)
 end)
 
 util.AddNetworkString( "nws_yrp_chat_channel_rem" )
-net.Receive( "nws_yrp_chat_channel_rem", function(len, ply)
+net.Receive( "nws_yrp_chat_channel_rem", function( len, ply )
 	local uid = net.ReadString()
 
 	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'" )
