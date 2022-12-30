@@ -6,7 +6,7 @@ util.AddNetworkString( "nws_yrp_cancelRestartServer" )
 
 --Restart Server
 net.Receive( "nws_yrp_restartServer", function( len, ply )
-	if !ply:HasAccess( "restartServer" ) then
+	if !ply:HasAccess( "nws_yrp_restartServer" ) then
 		return
 	end
 
@@ -47,7 +47,7 @@ net.Receive( "nws_yrp_updateServer", function( len, ply )
 end)
 
 net.Receive( "nws_yrp_cancelRestartServer", function( len, ply )
-	if !ply:HasAccess( "cancelRestartServer" ) then
+	if !ply:HasAccess( "nws_yrp_cancelRestartServer" ) then
 		return
 	end
 	

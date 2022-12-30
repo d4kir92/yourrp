@@ -1740,7 +1740,7 @@ end
 
 util.AddNetworkString( "nws_yrp_import_darkrp" )
 net.Receive( "nws_yrp_import_darkrp", function( len, ply )
-	if !ply:HasAccess( "yrp_import_darkrp" ) then
+	if !ply:HasAccess( "nws_yrp_import_darkrp" ) then
 		return
 	end
 	

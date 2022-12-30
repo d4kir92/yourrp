@@ -423,34 +423,34 @@ for str, val in pairs(yrp_ply_roles) do
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastString(tab)
 			if tab.netstr == "nws_yrp_update_role_string_name" then
-				util.AddNetworkString( "nws_yrp_settings_role_update_name" )
+				util.AddNetworkString( "nws_nws_yrp_settings_role_update_name" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-					tab.netstr = "yrp_settings_role_update_name"
+					tab.netstr = "nws_yrp_settings_role_update_name"
 					tab.uniqueID = tonumber(puid.uniqueID)
 					tab.force = true
 					BroadcastString(tab)
 				end
 			elseif tab.netstr == "nws_yrp_update_role_string_color" then
-				util.AddNetworkString( "nws_yrp_settings_role_update_color" )
+				util.AddNetworkString( "nws_nws_yrp_settings_role_update_color" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-					tab.netstr = "yrp_settings_role_update_color"
+					tab.netstr = "nws_yrp_settings_role_update_color"
 					tab.uniqueID = tonumber(puid.uniqueID)
 					tab.force = true
 					BroadcastString(tab)
 				end
 			elseif tab.netstr == "nws_yrp_update_role_string_icon" then
-				util.AddNetworkString( "nws_yrp_settings_role_update_icon" )
+				util.AddNetworkString( "nws_nws_yrp_settings_role_update_icon" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
 					tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-					tab.netstr = "yrp_settings_role_update_icon"
+					tab.netstr = "nws_yrp_settings_role_update_icon"
 					tab.uniqueID = tonumber(puid.uniqueID)
 					tab.force = true
 					BroadcastString(tab)
