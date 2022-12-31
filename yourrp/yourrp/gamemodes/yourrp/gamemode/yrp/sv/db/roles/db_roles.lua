@@ -423,7 +423,7 @@ for str, val in pairs(yrp_ply_roles) do
 			tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 			BroadcastString(tab)
 			if tab.netstr == "nws_yrp_update_role_string_name" then
-				util.AddNetworkString( "nws_nws_yrp_settings_role_update_name" )
+				util.AddNetworkString( "nws_yrp_settings_role_update_name" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
@@ -434,7 +434,7 @@ for str, val in pairs(yrp_ply_roles) do
 					BroadcastString(tab)
 				end
 			elseif tab.netstr == "nws_yrp_update_role_string_color" then
-				util.AddNetworkString( "nws_nws_yrp_settings_role_update_color" )
+				util.AddNetworkString( "nws_yrp_settings_role_update_color" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
@@ -445,7 +445,7 @@ for str, val in pairs(yrp_ply_roles) do
 					BroadcastString(tab)
 				end
 			elseif tab.netstr == "nws_yrp_update_role_string_icon" then
-				util.AddNetworkString( "nws_nws_yrp_settings_role_update_icon" )
+				util.AddNetworkString( "nws_yrp_settings_role_update_icon" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
@@ -2350,29 +2350,29 @@ end)
 
 
 -- For Custom Charsystems
-util.AddNetworkString( "nws_yrp_getallroles" )
-net.Receive( "nws_yrp_getallroles", function( len, ply )
+util.AddNetworkString( "getallroles" )
+net.Receive( "getallroles", function( len, ply )
 	local roles = YRP_SQL_SELECT( DATABASE_NAME, "*", nil )
 
 	if IsNotNilAndNotFalse( roles ) then
 		for i, role in pairs( roles ) do
 			role.pms = GetPlayermodelsOfRole( role.uniqueID )
-			net.Start( "nws_yrp_getallroles" )
+			net.Start( "getallroles" )
 				net.WriteTable( role )
 			net.Send( ply )
 		end
 	end
 end )
 
-util.AddNetworkString( "nws_yrp_getallroles_whitelisted" )
-net.Receive( "nws_yrp_getallroles_whitelisted", function( len, ply )
+util.AddNetworkString( "getallroles_whitelisted" )
+net.Receive( "getallroles_whitelisted", function( len, ply )
 	local roles = YRP_SQL_SELECT( DATABASE_NAME, "*", nil )
 
 	if IsNotNilAndNotFalse( roles ) then
 		for i, role in pairs( roles ) do
 			role.pms = GetPlayermodelsOfRole( role.uniqueID )
 			if YRPIsWhitelisted( ply, role.uniqueID ) then
-				net.Start( "nws_yrp_getallroles_whitelisted" )
+				net.Start( "getallroles_whitelisted" )
 					net.WriteTable( role )
 				net.Send( ply )
 			end
@@ -2380,8 +2380,8 @@ net.Receive( "nws_yrp_getallroles_whitelisted", function( len, ply )
 	end
 end )
 
-util.AddNetworkString( "nws_yrp_getcharacters" )
-net.Receive( "nws_yrp_getcharacters", function( len, ply )
+util.AddNetworkString( "getcharacters" )
+net.Receive( "getcharacters", function( len, ply )
 	local chars = YRP_SQL_SELECT( "yrp_characters", "*", "steamid = '" .. ply:YRPSteamID() .. "'" )
 
 	if IsNotNilAndNotFalse( chars ) then
@@ -2404,3 +2404,4 @@ net.Receive( "nws_yrp_getcharacters", function( len, ply )
 		end
 	end
 end )
+-- For Custom Charsystems

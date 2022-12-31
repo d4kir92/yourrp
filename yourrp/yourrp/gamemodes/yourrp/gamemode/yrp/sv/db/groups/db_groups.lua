@@ -82,7 +82,7 @@ for str, val in pairs(yrp_ply_groups) do
 			tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
 			BroadcastString(tab)
 			if tab.netstr == "nws_yrp_update_group_string_name" then
-				util.AddNetworkString( "nws_nws_yrp_settings_group_update_name" )
+				util.AddNetworkString( "nws_yrp_settings_group_update_name" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
@@ -93,7 +93,7 @@ for str, val in pairs(yrp_ply_groups) do
 					BroadcastString(tab)
 				end
 			elseif tab.netstr == "nws_yrp_update_group_string_color" then
-				util.AddNetworkString( "nws_nws_yrp_settings_group_update_color" )
+				util.AddNetworkString( "nws_yrp_settings_group_update_color" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]
@@ -104,7 +104,7 @@ for str, val in pairs(yrp_ply_groups) do
 					BroadcastString(tab)
 				end
 			elseif tab.netstr == "nws_yrp_update_group_string_icon" then
-				util.AddNetworkString( "nws_nws_yrp_settings_group_update_icon" )
+				util.AddNetworkString( "nws_yrp_settings_group_update_icon" )
 				local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
 				if IsNotNilAndNotFalse(puid) then
 					puid = puid[1]

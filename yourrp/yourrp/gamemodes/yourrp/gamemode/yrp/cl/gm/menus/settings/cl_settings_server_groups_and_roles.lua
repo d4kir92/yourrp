@@ -107,7 +107,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 			gs.gplist:Clear()
 		end
 
-		net.Receive( "nws_nws_yrp_settings_group_update_name", function(le)
+		net.Receive( "nws_yrp_settings_group_update_name", function(le)
 			local _uid = tonumber(net.ReadString() )
 			local name = net.ReadString()
 			if PanelAlive(gs.gplist) and gs.gplist[_uid] and gs.gplist[_uid].text then
@@ -115,7 +115,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 			end
 		end)
 
-		net.Receive( "nws_nws_yrp_settings_group_update_color", function(le)
+		net.Receive( "nws_yrp_settings_group_update_color", function(le)
 			local _uid = tonumber(net.ReadString() )
 			local color = net.ReadString()
 			if PanelAlive(gs) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_color then
@@ -125,7 +125,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 			end
 		end)
 
-		net.Receive( "nws_nws_yrp_settings_group_update_icon", function(le)
+		net.Receive( "nws_yrp_settings_group_update_icon", function(le)
 			local _uid = tonumber(net.ReadString() )
 			local icon = net.ReadString()
 			if PanelAlive(gs.gplist) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_icon then
@@ -389,7 +389,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 			rs.rplist:Clear()
 		end
 
-		net.Receive( "nws_nws_yrp_settings_role_update_name", function(le)
+		net.Receive( "nws_yrp_settings_role_update_name", function(le)
 			if PanelAlive(rs.rplist) then
 				local _uid = tonumber(net.ReadString() )
 				local name = net.ReadString()
@@ -401,7 +401,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 			end
 		end)
 
-		net.Receive( "nws_nws_yrp_settings_role_update_color", function(le)
+		net.Receive( "nws_yrp_settings_role_update_color", function(le)
 			if PanelAlive(rs) then
 				local _uid = tonumber(net.ReadString() )
 				local color = net.ReadString()
@@ -411,7 +411,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 			end
 		end)
 
-		net.Receive( "nws_nws_yrp_settings_role_update_icon", function(le)
+		net.Receive( "nws_yrp_settings_role_update_icon", function(le)
 			if PanelAlive(rs.rplist) then
 				local _uid = tonumber(net.ReadString() )
 				local icon = net.ReadString()
