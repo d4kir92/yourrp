@@ -1843,11 +1843,12 @@ end)
 util.AddNetworkString( "nws_yrp_getsitestaff" )
 net.Receive( "nws_yrp_getsitestaff", function( len, ply )
 	local staff = {}
-	for i, pl in pairs(player.GetAll() ) do
-		if pl:HasAccess( "nws_yrp_getsitestaff" ) then
-			table.insert(staff, pl)
+	for i, pl in pairs( player.GetAll() ) do
+		if pl:HasAccess( "nws_yrp_getsitestaff", true ) then
+			table.insert( staff, pl )
 		end
 	end
+
 	net.Start( "nws_yrp_getsitestaff" )
 		net.WriteTable(staff)
 	net.Send(ply)

@@ -1745,7 +1745,7 @@ hook.Add( "CanTool", "yrp_can_tool", function(pl, tr, tool)
 			if tr then
 				if tr.Entity and IsValid(tr.Entity) and tr.Entity:GetRPOwner() then
 					local Owner = tr.Entity:GetRPOwner()
-					if Owner == pl or pl:HasAccess( "yrp_can_tool" ) or !EntityAlive(Owner) then
+					if Owner == pl or !EntityAlive(Owner) or pl:HasAccess( "yrp_can_tool", true ) then
 						return true
 					else
 						if !table.HasValue(toolantispam, pl) then

@@ -344,7 +344,7 @@ function Player:UpdateBackpack()
 end
 
 function Player:SetRPName(str, from)
-	if GetGlobalYRPBool( "bool_characters_changeable_name", false ) or self:HasAccess( "SetRPName" ) then
+	if GetGlobalYRPBool( "bool_characters_changeable_name", false ) or self:GetYRPBool( "bool_players", false ) then
 		if isstring(str) then
 			str = YRPCleanUpName( str )
 
@@ -408,7 +408,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_moneyreset" )
 net.Receive( "nws_yrp_moneyreset", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_moneyreset" ) then
+	if !ply:HasAccess( "nws_yrp_moneyreset", true ) then
 		return 
 	end
 
@@ -1029,7 +1029,7 @@ util.AddNetworkString( "nws_yrp_set_rpname" )
 net.Receive( "nws_yrp_set_rpname", function( len, ply )
 	local p = net.ReadEntity()
 
-	if !ply:HasAccess( "nws_yrp_set_rpname" ) then
+	if !ply:GetYRPBool( "bool_players", false ) then
 		return 
 	end
 
@@ -1059,7 +1059,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_removearrests" )
 net.Receive( "nws_yrp_removearrests", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_removearrests" ) then
+	if !ply:GetYRPBool( "bool_players", false ) then
 		return 
 	end
 	
@@ -1082,7 +1082,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_givelicense" )
 net.Receive( "nws_yrp_givelicense", function( len, ply )
-	if !ply:HasAccess( "givelicense" ) then
+	if !ply:GetYRPBool( "bool_players", false ) then
 		return 
 	end
 
@@ -1095,7 +1095,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_removelicense" )
 net.Receive( "nws_yrp_removelicense", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_removelicense" ) then
+	if !ply:GetYRPBool( "bool_players", false ) then
 		return 
 	end
 

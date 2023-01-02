@@ -68,7 +68,7 @@ function print_help(sender)
 	--sender:ChatPrint( "sleep - sleep or wake up" )
 	sender:ChatPrint( "tag_ug - show usergroup tag" )
 	sender:ChatPrint( "tag_immortal - shows immortal tag" )
-	if sender:HasAccess( "print_help" ) then
+	if sender:HasAccess( "print_help", true ) then
 		sender:ChatPrint( "ADMIN ONLY:" )
 
 		sender:ChatPrint( "addmoney NAME AMOUNT - adds money to NAME" )
@@ -343,7 +343,7 @@ function set_money(sender, text)
 end
 
 function revive(sender, text)
-	if sender:HasAccess( "revive" ) then
+	if sender:HasAccess( "revive", true ) then
 		local _table = string.Explode( " ", text, false)
 		local _name = _table[1]
 		local ply = GetPlayerByName(_name)
