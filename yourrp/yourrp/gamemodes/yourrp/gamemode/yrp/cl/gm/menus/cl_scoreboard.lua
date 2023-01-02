@@ -2,13 +2,6 @@
 
 -- #scoreboard #Scoreboard #SCOREBOARD
 
-local sb_bg = Color( 0, 0, 0, 100 )
-local color_dark = Color( 60, 60, 60 )
-local color_lightblue = Color( 100, 100, 255 )
-local color_lightyellow = Color( 255, 255, 100 )
-local color_lightred = Color( 255, 100, 100, 255 )
-local color_lightgreen = Color( 100, 255, 100, 255 )
-
 local color1 = Color( 0, 0, 0, 255 )
 local color2 = Color( 255, 255, 255, 255 )
 
@@ -277,7 +270,7 @@ function YRPScoreboardAddPlayer(ply)
 			self:SetTall(self.lerph)
 
 			if self.open then
-				draw.RoundedBox(0, 1, 1, pw - 2, ph - 2, sb_bg )
+				draw.RoundedBox(0, 1, 1, pw - 2, ph - 2, Color( 0, 0, 0, 100 ) )
 			end
 		end
 
@@ -416,13 +409,13 @@ function YRPScoreboardAddPlayer(ply)
 											col = Color( 255, 0, 0, 255 )
 											mat = YRP.GetDesignIcon( "signal1" )
 										elseif text >= 150 then
-											col = color_lightred
+											col = Color( 255, 100, 100, 255 )
 											mat = YRP.GetDesignIcon( "signal1" )
-										elseif text >= 75 then
-											col = color_lightyellow
+										elseif text >= 100 then
+											col = Color( 255, 255, 100 )
 											mat = YRP.GetDesignIcon( "signal2" )
 										else
-											col = color_lightgreen
+											col = Color( 100, 255, 100, 255 )
 											mat = YRP.GetDesignIcon( "signal3" )
 										end
 										if mat then
@@ -579,7 +572,7 @@ function YRPScoreboardAddPlayer(ply)
 		end, function( btn)
 			if IsValid(ply) then
 				if ply:IsFlagSet(FL_FROZEN) then
-					btn.iconcolor = color_lightblue
+					btn.iconcolor = Color( 100, 100, 255 )
 				else
 					btn.iconcolor = Color( 255, 255, 255, 255 )
 				end
@@ -884,7 +877,7 @@ function YRPInitScoreboard()
 
 		-- MOUSE HELP
 		if !vgui.CursorVisible() then
-			draw.SimpleText(YRP.lang_string( "LID_rightclicktoshowmouse" ), "Open Sans_24", pw / 2, 34, color_lightyellow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.lang_string( "LID_rightclicktoshowmouse" ), "Open Sans_24", pw / 2, 34, Color( 255, 255, 100 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		-- BOTTOM LEFT
@@ -936,10 +929,10 @@ function YRPInitScoreboard()
 			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
 		end
 		function sbar.btnUp:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, color_dark )
+			draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 		end
 		function sbar.btnDown:Paint(w, h)
-			draw.RoundedBox(0, 0, 0, w, h, color_dark )
+			draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
 		end
 		function sbar.btnGrip:Paint(w, h)
 			local lply = LocalPlayer()

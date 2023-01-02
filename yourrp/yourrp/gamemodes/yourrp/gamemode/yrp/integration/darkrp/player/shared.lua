@@ -205,13 +205,17 @@ function Player:getJobTable()
 	end
 
 	local pms = {}
-	for i, v in pairs( _pms ) do
-		if !strEmpty( v ) then
-			table.insert( pms, v )
+	if type( _pms ) == "table" then
+		for i, v in pairs( _pms ) do
+			if !strEmpty( v ) then
+				table.insert( pms, v )
+			end
 		end
-	end
-	if table.Count( pms ) <= 0 then
-		pms = "models/player/skeleton.mdl"
+		if table.Count( pms ) <= 0 then
+			pms = "models/player/skeleton.mdl"
+		end
+	else
+		pms = _pms
 	end
 	_job.model = pms
 

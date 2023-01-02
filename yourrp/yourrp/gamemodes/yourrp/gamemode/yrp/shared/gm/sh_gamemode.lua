@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 0 -- do NOT change this!
 GM.VersionBeta = 352 -- do NOT change this!
 GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 260 -- do NOT change this!
+GM.VersionBuild = 261 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -242,7 +242,6 @@ end)
 
 concommand.Add( "yrp_map", function(ply, cmd, args)
 	YRPHR()
-	YRPMsg( "[Changelevel]" )
 	local allmaps = file.Find( "maps/*.bsp", "GAME", "nameasc" )
 	for i, map in pairs( allmaps) do
 		local mapname = string.Replace(map, ".bsp", "" )
@@ -252,13 +251,13 @@ concommand.Add( "yrp_map", function(ply, cmd, args)
 	local map = allmaps[id]
 	if map != nil then
 		if SERVER then
-			YRPMsg( "Changelevel to " .. map)
+			YRPMsg( "[yrp_map] Changelevel to " .. map)
 			RunConsoleCommand( "changelevel", map)
 		else
-			YRPMsg( "ONLY AVAILABLE ON SERVER" )
+			YRPMsg( "[yrp_map] ONLY AVAILABLE ON SERVER!" )
 		end
 	else
-		YRPMsg( "ID OUT OF RANGE" )
+		YRPMsg( "[yrp_map] ID OUT OF RANGE" )
 	end
 	YRPHR()
 end)

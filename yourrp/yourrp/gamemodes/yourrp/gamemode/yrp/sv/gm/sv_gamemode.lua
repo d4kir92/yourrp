@@ -778,7 +778,7 @@ function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 end
 
 function IsAllowedToSuicide(ply)
-	if ply:HasAccess( "IsAllowedToSuicide" ) then
+	if ply:HasAccess( "IsAllowedToSuicide", true ) then
 		return true
 	elseif IsSuicideDisabled() or ply:IsFlagSet(FL_FROZEN) or ply:GetYRPBool( "ragdolled", false) or ply:GetYRPBool( "injail", false) then
 		return false
