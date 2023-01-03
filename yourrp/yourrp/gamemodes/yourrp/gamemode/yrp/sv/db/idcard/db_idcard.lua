@@ -75,8 +75,8 @@ function LoadIDCardSetting(force, from)
 
 	local cx = 0
 	local cy = 0
-	for i, ele in pairs(elements) do
-		for j, name in pairs(names) do
+	for i, ele in pairs( elements ) do
+		for j, name in pairs( names ) do
 			name = string.Replace(name, "ELEMENT", ele)
 			local value = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'" )
 			if IsNotNilAndNotFalse( value) then
@@ -90,8 +90,8 @@ function LoadIDCardSetting(force, from)
 				register[name] = register[name] or nil
 				if register[name] == nil then
 					local netstr = "nws_yrp_update_idcard_" .. name
-					util.AddNetworkString(netstr)
-					net.Receive(netstr, function()
+					util.AddNetworkString( netstr )
+					net.Receive( netstr, function()
 						local n = net.ReadString()
 						local v = net.ReadString()
 						if v == "true" then
@@ -100,13 +100,13 @@ function LoadIDCardSetting(force, from)
 							v = 0
 						end
 						if string.StartWith(n, "bool_" ) and GetGlobalYRPBool(n, tobool( v) ) ~= tobool( v) then
-							SetGlobalYRPBool(n, tobool( v) )
+							SetGlobalYRPBool( n, tobool( v ) )
 						elseif string.StartWith(n, "int_" ) and GetGlobalYRPInt(n, v) ~= v then
-							SetGlobalYRPInt(n, v)
+							SetGlobalYRPInt( n, v )
 						end
 						YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = v}, "name = '" .. n .. "'" )
 						LoadIDCardSetting(true, "UPDATED VARIABLE" )
-					end)
+					end )
 				end
 			else
 				-- Missed DB Value, add them

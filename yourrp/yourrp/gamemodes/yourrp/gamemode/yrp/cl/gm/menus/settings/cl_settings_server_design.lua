@@ -69,8 +69,8 @@ net.Receive( "nws_yrp_get_design_settings", function( len )
 			local editarea = YRPCreateD( "DButton", hudcustom, ScW(), ScH(), 0, 0)
 			editarea:SetText( "" )
 			if BiggerThen16_9() then
-				editarea:SetPos(PosX(), 0)
-				editarea:SetWide(ScW() )
+				editarea:SetPos( PosX(), 0 )
+				editarea:SetWide( ScW() )
 			end
 			editarea.hl = 5
 			editarea["windows"] = {}

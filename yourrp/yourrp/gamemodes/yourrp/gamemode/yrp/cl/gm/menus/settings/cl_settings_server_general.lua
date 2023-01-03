@@ -540,11 +540,12 @@ net.Receive( "nws_yrp_connect_Settings_General", function( len )
 		idcard_change:SetText( "LID_change" )
 		function idcard_change:DoClick()
 			F8CloseSettings()
-			local idbg = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
+			local idbg = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0 )
+			idbg:Center()
 			idbg:MakePopup()
 			idbg:SetTitle( "" )
-			idbg:SetDraggable(false)
-			function idbg:Paint(pw, ph)
+			idbg:SetDraggable( false )
+			function idbg:Paint( pw, ph )
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 255 ) )
 				for y = 0, ScrH(), gs do
 					draw.RoundedBox(0, 0, y, pw, 1, Color( 255, 255, 255, 255 ) )
@@ -584,7 +585,35 @@ net.Receive( "nws_yrp_connect_Settings_General", function( len )
 				if !string.find(ele, "box" ) then
 					name = YRP.lang_string( "LID_" .. ele)
 				end
-				local e = YRPCreateD( "YFrame", idbg, GetGlobalYRPInt( "int_" .. ele .. "_w", 10), GetGlobalYRPInt( "int_" .. ele .. "_h", 10), GetGlobalYRPInt( "int_" .. ele .. "_x", 10), GetGlobalYRPInt( "int_" .. ele .. "_y", 10) )
+				
+				local sw = GetGlobalYRPInt( "int_" .. ele .. "_w", 10)
+				local sh = GetGlobalYRPInt( "int_" .. ele .. "_h", 10)
+				local posx = GetGlobalYRPInt( "int_" .. ele .. "_x", 10)
+				local posy = GetGlobalYRPInt( "int_" .. ele .. "_y", 10)
+				if posx > ScrW() - sw then
+					SetGlobalYRPInt( "int_" .. ele .. "_x", ScrW() - sw )
+					posx = ScrW() - sw
+
+					net.Start( "nws_yrp_update_idcard_" .. "int_" .. ele .. "_x" )
+						net.WriteString( "int_" .. ele .. "_x" )
+						net.WriteString( posx )
+					net.SendToServer()
+				end
+				if posy > ScrH() - sh then
+					SetGlobalYRPInt( "int_" .. ele .. "_y", ScrH() - sh )
+					posy = ScrH() - sh
+
+					net.Start( "nws_yrp_update_idcard_" .. "int_" .. ele .. "_y" )
+						net.WriteString( "int_" .. ele .. "_y" )
+						net.WriteString( posy )
+					net.SendToServer()
+				end
+				local e = YRPCreateD( "YFrame", idbg,
+					sw,
+					sh,
+					posx,
+					posy
+				)
 				if string.find(ele, "background" ) then
 					e:SetDraggable(false)
 					e.draggable = false
@@ -603,7 +632,7 @@ net.Receive( "nws_yrp_connect_Settings_General", function( len )
 				e.ts = CurTime() + 1
 				e.ts2 = CurTime() + 1
 				e.ts3 = CurTime() + 1
-				function e:Paint(pw, ph)
+				function e:Paint( pw, ph )
 					--[[if ele == "background" or string.find(ele,  "box" ) then
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(GetGlobalYRPInt( "int_" .. ele .. "_r", 0), GetGlobalYRPInt( "int_" .. ele .. "_g", 0), GetGlobalYRPInt( "int_" .. ele .. "_b", 0), GetGlobalYRPInt( "int_" .. ele .. "_a", 0) ))
 					end]]
@@ -614,7 +643,7 @@ net.Receive( "nws_yrp_connect_Settings_General", function( len )
 					if GetGlobalYRPInt( "int_" .. ele .. "_x", 0) < GetGlobalYRPInt( "int_" .. "background" .. "_w", 0) and GetGlobalYRPInt( "int_" .. ele .. "_y", 0) < GetGlobalYRPInt( "int_" .. "background" .. "_h", 0) then
 						self.inbg = true
 					end
-					if self:IsHovered() then
+					if self:IsHovered() or self.setting:IsHovered() then
 						visible = true
 					elseif mx > px and mx < px + pw and my > py and my < py + ph then
 						visible = true
