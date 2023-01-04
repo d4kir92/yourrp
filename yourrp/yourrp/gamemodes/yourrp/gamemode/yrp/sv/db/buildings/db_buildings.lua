@@ -229,7 +229,7 @@ util.AddNetworkString( "nws_yrp_removeOwner" )
 util.AddNetworkString( "nws_yrp_sellBuilding" )
 
 util.AddNetworkString( "nws_yrp_addnewbuilding" )
-net.Receive( "nws_yrp_addnewbuilding", function()
+net.Receive( "nws_yrp_addnewbuilding", function( len, ply )
 	if !ply:HasAccess( "nws_yrp_addnewbuilding" ) then
 		return 
 	end
