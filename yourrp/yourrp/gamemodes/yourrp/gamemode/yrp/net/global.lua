@@ -22,7 +22,7 @@ function SetGlobalYRPTable( key, value )
 		YRP_Global_Tables[key] = value
 		if SERVER then
 			net.Start( "YRPSetGlobalYRPTable" )
-				net.WriteString(key)
+				net.WriteString( key )
 				net.WriteTable( value )
 			net.Broadcast()
 		end

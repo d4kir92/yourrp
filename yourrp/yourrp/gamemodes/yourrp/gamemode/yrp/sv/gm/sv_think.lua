@@ -665,6 +665,7 @@ hook.Add( "Think", "yrp_spawner_think", function()
 				npc_spawner = npc_spawner[1]
 				npc_spawner.int_amount = tonumber(npc_spawner.int_amount)
 				npc_spawner.int_respawntime = tonumber(npc_spawner.int_respawntime)
+
 				for _, npc in pairs(YNPCs[v.uniqueID].npcs) do
 					if !npc:IsValid() then
 						YRP.msg( "gm", "A NPC Died, start respawning..." )
@@ -678,6 +679,12 @@ hook.Add( "Think", "yrp_spawner_think", function()
 					local npc = ents.Create(npc_spawner.string_classname)
 					if npc:IsValid() then
 						npc:Spawn()
+
+						if !strEmpty( npc_spawner.string_swep ) then
+							print("AAHA")
+							npc:Give( npc_spawner.string_swep )
+						end
+
 						teleportToPoint(npc, pos)
 
 						table.insert(YNPCs[v.uniqueID].npcs, npc)

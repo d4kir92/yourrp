@@ -59,9 +59,9 @@ function Player:doPropertyTax()
 	YRPDarkrpNotFound( "doPropertyTax()" )
 end
 
-function Player:dropDRPWeapon(weapon)
+function Player:dropDRPWeapon( weapon )
 	--Description: Drop the weapon with animations.
-	YRPDarkrpNotFound( "dropDRPWeapon(weapon)" )
+	--YRPDarkrpNotFound( "dropDRPWeapon(weapon)" )
 end
 
 function Player:dropPocketItem(ent)

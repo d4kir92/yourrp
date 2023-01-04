@@ -12,6 +12,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "linkID", "TEXT DEFAULT ''" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "color", "TEXT DEFAULT '255,255,255'" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_respawntime", "TEXT DEFAULT '1'" )
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_swep", "TEXT DEFAULT ''" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_amount", "TEXT DEFAULT '1'" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_classname", "TEXT DEFAULT 'npc_zombie'" )
 
@@ -263,6 +264,15 @@ net.Receive( "nws_yrp_update_map_int_respawntime", function( len, ply )
 	YRP_SQL_UPDATE(DATABASE_NAME, {["int_respawntime"] = i}, "uniqueID = '" .. uid .. "'" )
 	UpdateSpawnerNPCTable()
 	UpdateSpawnerENTTable()
+end)
+
+util.AddNetworkString( "nws_yrp_update_map_string_swep" )
+net.Receive( "nws_yrp_update_map_string_swep", function( len, ply )
+	local uid = net.ReadString()
+	local i = net.ReadString()
+
+	YRP_SQL_UPDATE(DATABASE_NAME, {["string_swep"] = i}, "uniqueID = '" .. uid .. "'" )
+	UpdateSpawnerNPCTable()
 end)
 
 util.AddNetworkString( "nws_yrp_update_map_int_amount" )

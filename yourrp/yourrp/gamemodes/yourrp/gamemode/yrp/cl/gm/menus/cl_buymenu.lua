@@ -587,7 +587,7 @@ net.Receive( "nws_yrp_shop_get_tabs", function( len )
 		end
 		function BUYMENU.settings:DoClick()
 			net.Receive( "nws_yrp_dealer_settings", function(le)
-				local _set = YRPCreateD( "DFrame", nil, YRP.ctr(700), YRP.ctr(60 + 110 + 110 + 110), 0, 0)
+				local _set = YRPCreateD( "DFrame", nil, YRP.ctr(700), YRP.ctr(60 + 110 + 110 + 110 + 10), 0, 0)
 				_set:SetTitle( "" )
 				_set:Center()
 				_set:MakePopup()
@@ -608,24 +608,40 @@ net.Receive( "nws_yrp_shop_get_tabs", function( len )
 					net.SendToServer()
 				end
 
-				_set.name = YRPCreateD( "DYRPPanelPlus", _set, YRP.ctr(660), YRP.ctr(100), YRP.ctr(20), YRP.ctr(170) )
-				_set.name:INITPanel( "YButton" )
-				_set.name:SetHeader(YRP.lang_string( "LID_appearance" ) )
-				_set.name.plus:SetText( "LID_change" )
-				function _set.name.plus:Paint(pw, ph)
+				_set.pmodel = YRPCreateD( "DYRPPanelPlus", _set, YRP.ctr(660), YRP.ctr(100), YRP.ctr(20), YRP.ctr(170) )
+				_set.pmodel:INITPanel( "YButton" )
+				_set.pmodel:SetHeader(YRP.lang_string( "LID_appearance" ) )
+				_set.pmodel.plus:SetText( "LID_change" )
+				function _set.pmodel.plus:Paint(pw, ph)
 					hook.Run( "YButtonPaint", self, pw, ph)
 				end
-				function _set.name.plus:DoClick()
+				function _set.pmodel.plus:DoClick()
 					local playermodels = player_manager.AllValidModels()
+
+					local noneplayermodels = {}
+					AddToTabRecursive(noneplayermodels, "models/", "GAME", "*.mdl" )
+					for _, addon in SortedPairsByMemberValue(engine.GetAddons(), "title" ) do
+						if (!addon.downloaded or !addon.mounted) then continue end
+						AddToTabRecursive(noneplayermodels, "models/", addon.title, "*.mdl" )
+					end
+
 					local tmpTable = {}
 					local count = 0
-					for k, v in pairs(playermodels) do
+					for k, v in pairs( playermodels ) do
 						count = count + 1
 						tmpTable[count] = {}
 						tmpTable[count].WorldModel = v
 						tmpTable[count].ClassName = v
 						tmpTable[count].PrintName = player_manager.TranslateToPlayerModelName( v)
 					end
+					for k, v in pairs( noneplayermodels ) do
+						count = count + 1
+						tmpTable[count] = {}
+						tmpTable[count].WorldModel = v
+						tmpTable[count].ClassName = v
+						tmpTable[count].PrintName = player_manager.TranslateToPlayerModelName( v)
+					end
+
 					_globalWorking = _dealer.WorldModel
 					hook.Add( "close_dealerWorldmodel", "close_dealerWorldmodelHook", function()
 						_dealer.WorldModel = LocalPlayer().WorldModel
