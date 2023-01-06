@@ -523,7 +523,7 @@ end
 --[[ SERVER SETTINGS ]]--
 util.AddNetworkString( "nws_yrp_update_bool_server_reload_notification" )
 net.Receive( "nws_yrp_update_bool_server_reload_notification", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_bool_server_reload_notification" ) then
+	if !ply:HasAccess( "nws_yrp_update_bool_server_reload_notification", true ) then
 		return 
 	end
 
@@ -533,7 +533,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_bool_server_reload" )
 net.Receive( "nws_yrp_update_bool_server_reload", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_bool_server_reload" ) then
+	if !ply:HasAccess( "nws_yrp_update_bool_server_reload", true ) then
 		return 
 	end
 
@@ -543,7 +543,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_text_server_collectionid" )
 net.Receive( "nws_yrp_update_text_server_collectionid", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_text_server_collectionid" ) then
+	if !ply:HasAccess( "nws_yrp_update_text_server_collectionid", true ) then
 		return 
 	end
 
@@ -554,7 +554,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_text_server_logo" )
 net.Receive( "nws_yrp_update_text_server_logo", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_text_server_logo" ) then
+	if !ply:HasAccess( "nws_yrp_update_text_server_logo", true ) then
 		return 
 	end
 
@@ -564,7 +564,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_text_server_name" )
 net.Receive( "nws_yrp_update_text_server_name", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_text_server_name" ) then
+	if !ply:HasAccess( "nws_yrp_update_text_server_name", true ) then
 		return 
 	end
 
@@ -576,7 +576,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_text_server_rules" )
 net.Receive( "nws_yrp_update_text_server_rules", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_text_server_rules" ) then
+	if !ply:HasAccess( "nws_yrp_update_text_server_rules", true ) then
 		return 
 	end
 
@@ -586,7 +586,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_text_server_welcome_message" )
 net.Receive( "nws_yrp_update_text_server_welcome_message", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_text_server_welcome_message" ) then
+	if !ply:HasAccess( "nws_yrp_update_text_server_welcome_message", true ) then
 		return 
 	end
 
@@ -597,7 +597,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_text_server_message_of_the_day" )
 net.Receive( "nws_yrp_update_text_server_message_of_the_day", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_text_server_message_of_the_day" ) then
+	if !ply:HasAccess( "nws_yrp_update_text_server_message_of_the_day", true ) then
 		return 
 	end
 
@@ -607,7 +607,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_bool_server_debug" )
 net.Receive( "nws_yrp_update_bool_server_debug", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_bool_server_debug" ) then
+	if !ply:HasAccess( "nws_yrp_update_bool_server_debug", true ) then
 		return 
 	end
 
@@ -619,7 +619,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_bool_server_debug_voice" )
 net.Receive( "nws_yrp_update_bool_server_debug_voice", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_bool_server_debug_voice" ) then
+	if !ply:HasAccess( "nws_yrp_update_bool_server_debug_voice", true ) then
 		return 
 	end
 
@@ -629,7 +629,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_int_server_debug_tick" )
 net.Receive( "nws_yrp_update_int_server_debug_tick", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_int_server_debug_tick" ) then
+	if !ply:HasAccess( "nws_yrp_update_int_server_debug_tick", true ) then
 		return 
 	end
 
@@ -641,7 +641,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_gm" )
 net.Receive( "nws_yrp_update_bool_msg_channel_gm", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_gm" ) then
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_gm", true ) then
 		return 
 	end
 
@@ -651,7 +651,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_db" )
 net.Receive( "nws_yrp_update_bool_msg_channel_db", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_db" ) then
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_db", true ) then
 		return 
 	end
 
@@ -661,7 +661,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_lang" )
 net.Receive( "nws_yrp_update_bool_msg_channel_lang", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_lang" ) then
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_lang", true ) then
 		return 
 	end
 
@@ -671,7 +671,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_noti" )
 net.Receive( "nws_yrp_update_bool_msg_channel_noti", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_noti" ) then
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_noti", true ) then
 		return 
 	end
 
@@ -681,7 +681,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_darkrp" )
 net.Receive( "nws_yrp_update_bool_msg_channel_darkrp", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_darkrp" ) then
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_darkrp", true ) then
 		return 
 	end
 
@@ -691,7 +691,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_chat" )
 net.Receive( "nws_yrp_update_bool_msg_channel_chat", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_chat" ) then
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_chat", true ) then
 		return 
 	end
 
@@ -701,7 +701,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_bool_msg_channel_debug" )
 net.Receive( "nws_yrp_update_bool_msg_channel_debug", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_debug" ) then
+	if !ply:HasAccess( "nws_yrp_update_bool_msg_channel_debug", true ) then
 		return 
 	end
 
@@ -714,7 +714,7 @@ end)
 --[[ GAMEMODE SETTINGS ]]--
 util.AddNetworkString( "nws_yrp_update_text_gamemode_name" )
 net.Receive( "nws_yrp_update_text_gamemode_name", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_text_gamemode_name" ) then
+	if !ply:HasAccess( "nws_yrp_update_text_gamemode_name", true ) then
 		return 
 	end
 
@@ -2035,7 +2035,7 @@ end)
 -- Scoreboard Commands
 util.AddNetworkString( "nws_yrp_ply_kick" )
 net.Receive( "nws_yrp_ply_kick", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_ply_kick" ) then
+	if !ply:HasAccess( "nws_yrp_ply_kick", true ) then
 		return
 	end
 
@@ -2047,7 +2047,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_ply_ban" )
 net.Receive( "nws_yrp_ply_ban", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_ply_ban" ) then
+	if !ply:HasAccess( "nws_yrp_ply_ban", true ) then
 		return
 	end
 
@@ -2071,65 +2071,65 @@ end
 
 util.AddNetworkString( "nws_yrp_tp_tpto_steamid" )
 net.Receive( "nws_yrp_tp_tpto_steamid", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_tp_tpto_steamid" ) then
+	if !ply:HasAccess( "nws_yrp_tp_tpto_steamid", true ) then
 		return
 	end
 
 	local steamid = net.ReadString()
 	local _target = YRPGetPlayerBySteamID(steamid)
 	if _target then
-		teleportToPoint(ply, _target:GetPos() )
+		YRPTeleportToPoint(ply, _target:GetPos() )
 	end
 end)
 util.AddNetworkString( "nws_yrp_tp_bring_steamid" )
 net.Receive( "nws_yrp_tp_bring_steamid", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_tp_bring_steamid" ) then
+	if !ply:HasAccess( "nws_yrp_tp_bring_steamid", true ) then
 		return
 	end
 
 	local steamid = net.ReadString()
 	local _target = YRPGetPlayerBySteamID(steamid)
 	if _target then
-		teleportToPoint(_target, ply:GetPos() )
+		YRPTeleportToPoint(_target, ply:GetPos() )
 	end
 end)
 
 util.AddNetworkString( "nws_yrp_tp_tpto" )
 net.Receive( "nws_yrp_tp_tpto", function( len, ply )
-	if IsValid( ply ) and ply:HasAccess( "nws_yrp_tp_tpto" ) then
+	if IsValid( ply ) and ply:HasAccess( "nws_yrp_tp_tpto", true ) then
 		local _target = net.ReadEntity()
 		if IsValid( _target ) then
 			ply:SetYRPVector( "yrpoldpos", ply:GetPos() )
-			teleportToPoint(ply, _target:GetPos() )
+			YRPTeleportToPoint(ply, _target:GetPos() )
 		end
 	end
 end)
 util.AddNetworkString( "nws_yrp_tp_bring" )
 net.Receive( "nws_yrp_tp_bring", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_tp_bring" ) then
+	if !ply:HasAccess( "nws_yrp_tp_bring", true ) then
 		return
 	end
 
 	local _target = net.ReadEntity()
 	_target:SetYRPVector( "yrpoldpos", _target:GetPos() )
-	teleportToPoint(_target, ply:GetPos() )
+	YRPTeleportToPoint(_target, ply:GetPos() )
 end)
 util.AddNetworkString( "nws_yrp_tp_return" )
 net.Receive( "nws_yrp_tp_return", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_tp_return" ) then
+	if !ply:HasAccess( "nws_yrp_tp_return", true ) then
 		return
 	end
 
 	local _target = net.ReadEntity()
 	if _target:GetYRPVector( "yrpoldpos" ) != Vector(0, 0, 0) then
-		teleportToPoint(_target, _target:GetYRPVector( "yrpoldpos" ) )
+		YRPTeleportToPoint(_target, _target:GetYRPVector( "yrpoldpos" ) )
 
 		_target:SetYRPVector( "yrpoldpos", Vector(0, 0, 0) ) -- RESET
 	end
 end)
 util.AddNetworkString( "nws_yrp_tp_jail" )
 net.Receive( "nws_yrp_tp_jail", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_tp_jail" ) then
+	if !ply:HasAccess( "nws_yrp_tp_jail", true ) then
 		return
 	end
 
@@ -2138,7 +2138,7 @@ net.Receive( "nws_yrp_tp_jail", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_tp_unjail" )
 net.Receive( "nws_yrp_tp_unjail", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_tp_unjail" ) then
+	if !ply:HasAccess( "nws_yrp_tp_unjail", true ) then
 		return
 	end
 
@@ -2194,7 +2194,7 @@ end
 
 util.AddNetworkString( "nws_yrp_ragdoll" )
 net.Receive( "nws_yrp_ragdoll", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_ragdoll" ) then
+	if !ply:HasAccess( "nws_yrp_ragdoll", true ) then
 		return
 	end
 
@@ -2206,7 +2206,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_unragdoll" )
 net.Receive( "nws_yrp_unragdoll", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_unragdoll" ) then
+	if !ply:HasAccess( "nws_yrp_unragdoll", true ) then
 		return
 	end
 
@@ -2217,7 +2217,7 @@ net.Receive( "nws_yrp_unragdoll", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_freeze" )
 net.Receive( "nws_yrp_freeze", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_freeze" ) then
+	if !ply:HasAccess( "nws_yrp_freeze", true ) then
 		return
 	end
 
@@ -2228,7 +2228,7 @@ net.Receive( "nws_yrp_freeze", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_unfreeze" )
 net.Receive( "nws_yrp_unfreeze", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_unfreeze" ) then
+	if !ply:HasAccess( "nws_yrp_unfreeze", true ) then
 		return
 	end
 
@@ -2239,7 +2239,7 @@ net.Receive( "nws_yrp_unfreeze", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_god" )
 net.Receive( "nws_yrp_god", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_god" ) then
+	if !ply:HasAccess( "nws_yrp_god", true ) then
 		return
 	end
 
@@ -2252,7 +2252,7 @@ net.Receive( "nws_yrp_god", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_ungod" )
 net.Receive( "nws_yrp_ungod", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_ungod" ) then
+	if !ply:HasAccess( "nws_yrp_ungod", true ) then
 		return
 	end
 
@@ -2265,7 +2265,7 @@ net.Receive( "nws_yrp_ungod", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_cloak" )
 net.Receive( "nws_yrp_cloak", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_cloak" ) then
+	if !ply:HasAccess( "nws_yrp_cloak", true ) then
 		return
 	end
 
@@ -2276,7 +2276,7 @@ net.Receive( "nws_yrp_cloak", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_uncloak" )
 net.Receive( "nws_yrp_uncloak", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_uncloak" ) then
+	if !ply:HasAccess( "nws_yrp_uncloak", true ) then
 		return
 	end
 
@@ -2287,7 +2287,7 @@ net.Receive( "nws_yrp_uncloak", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_blind" )
 net.Receive( "nws_yrp_blind", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_blind" ) then
+	if !ply:HasAccess( "nws_yrp_blind", true ) then
 		return
 	end
 
@@ -2298,7 +2298,7 @@ net.Receive( "nws_yrp_blind", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_unblind" )
 net.Receive( "nws_yrp_unblind", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_unblind" ) then
+	if !ply:HasAccess( "nws_yrp_unblind", true ) then
 		return
 	end
 
@@ -2309,7 +2309,7 @@ net.Receive( "nws_yrp_unblind", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_ignite" )
 net.Receive( "nws_yrp_ignite", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_ignite" ) then
+	if !ply:HasAccess( "nws_yrp_ignite", true ) then
 		return
 	end
 
@@ -2320,7 +2320,7 @@ net.Receive( "nws_yrp_ignite", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_extinguish" )
 net.Receive( "nws_yrp_extinguish", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_extinguish" ) then
+	if !ply:HasAccess( "nws_yrp_extinguish", true ) then
 		return
 	end
 
@@ -2331,7 +2331,7 @@ net.Receive( "nws_yrp_extinguish", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_slay" )
 net.Receive( "nws_yrp_slay", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_slay" ) then
+	if !ply:HasAccess( "nws_yrp_slay", true ) then
 		return
 	end
 
@@ -2342,7 +2342,7 @@ net.Receive( "nws_yrp_slay", function( len, ply )
 end)
 util.AddNetworkString( "nws_yrp_slap" )
 net.Receive( "nws_yrp_slap", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_slap" ) then
+	if !ply:HasAccess( "nws_yrp_slap", true ) then
 		return
 	end
 

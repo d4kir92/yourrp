@@ -1086,7 +1086,7 @@ function YRPRemoveOutdatedErrors()
 end
 timer.Simple(0.1, YRPRemoveOutdatedErrors)
 
-function YRPAddError(err, trace, realm)
+function YRPAddError( err, trace, realm )
 	local newerr = {}
 	newerr.err = err
 	newerr.trace = trace
@@ -1108,6 +1108,12 @@ end
 function YRPAddLuaErrorHook()
 	hook.Remove( "OnLuaError", "yrp_OnLuaError" )
 
+	local blocklist = {
+		"attempt to write a readonly database", 
+		"database is locked",
+		"database disk image is malformed",
+	}
+
 	hook.Add( "OnLuaError", "yrp_OnLuaError", function(...)
 		local tab = ...
 		local err = tab.path
@@ -1125,6 +1131,12 @@ function YRPAddLuaErrorHook()
 		end
 		trace = table.concat( newtrace, "\n" )
 		trace = string.Replace( trace, "\t", "" )
+
+		for i, blockSentence in pairs( blocklist ) do
+			if string.find( err, blockSentence ) then
+				return
+			end
+		end
 
 		--if err and trace and realm and ( string.find(err, "/yrp/" ) or string.find(trace, "/yrp/" ) ) and YRPNewError(err) then
 		if err and trace and realm and ( string.find( err, "/yrp/", 1, true ) or string.find( trace, "/yrp/", 1, true ) or string.find( trace, "[YourRP]", 1, true ) ) and YRPNewError(err) then

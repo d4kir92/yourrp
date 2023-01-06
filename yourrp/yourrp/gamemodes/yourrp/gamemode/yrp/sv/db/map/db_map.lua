@@ -16,8 +16,8 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_swep", "TEXT DEFAULT ''" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_amount", "TEXT DEFAULT '1'" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_classname", "TEXT DEFAULT 'npc_zombie'" )
 
-function teleportToPoint(ply, pos)
-	--YRP.msg( "note", "teleportToPoint " .. tostring(pos) )
+function YRPTeleportToPoint(ply, pos)
+	--YRP.msg( "note", "YRPTeleportToPoint " .. tostring(pos) )
 	tp_to(ply, Vector(pos[1], pos[2], pos[3]) )
 end
 

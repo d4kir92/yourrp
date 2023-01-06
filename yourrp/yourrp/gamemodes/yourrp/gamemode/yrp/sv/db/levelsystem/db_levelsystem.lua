@@ -193,7 +193,7 @@ function Player:AddXP(xp)
 						newxp = newxp - maxxp
 						local result = YRP_SQL_UPDATE( "yrp_characters", {["int_xp"] = 0}, "uniqueID = '" .. charid .. "'" )
 						if result != nil then
-							YRP.msg( "error", "AddXP FAILED #1: " .. tostring(result) )
+							YRP.msg( "note", "AddXP FAILED #1: " .. tostring(result) )
 						else
 							self:AddLevel(1)
 							self:AddXP(newxp)
@@ -201,7 +201,7 @@ function Player:AddXP(xp)
 					else
 						local result = YRP_SQL_UPDATE( "yrp_characters", {["int_xp"] = newxp}, "uniqueID = '" .. charid .. "'" )
 						if result != nil then
-							YRP.msg( "error", "AddXP FAILED #2: " .. tostring(result) )
+							YRP.msg( "note", "AddXP FAILED #2: " .. tostring(result) )
 						else
 							self:SetYRPInt( "int_xp", newxp)
 						end
@@ -211,7 +211,7 @@ function Player:AddXP(xp)
 				elseif newxp > maxxp then
 					local result = YRP_SQL_UPDATE( "yrp_characters", {["int_xp"] = maxxp}, "uniqueID = '" .. charid .. "'" )
 					if result != nil then
-						YRP.msg( "error", "AddXP FAILED #5: " .. tostring(result) )
+						YRP.msg( "note", "AddXP FAILED #5: " .. tostring(result) )
 					else
 						self:SetYRPInt( "int_xp", maxxp)
 					end
@@ -227,7 +227,7 @@ function Player:AddXP(xp)
 
 						local result = YRP_SQL_UPDATE( "yrp_characters", {["int_xp"] = 0}, "uniqueID = '" .. charid .. "'" )
 						if result != nil then
-							YRP.msg( "error", "AddXP FAILED #3: " .. tostring(result) )
+							YRP.msg( "note", "AddXP FAILED #3: " .. tostring(result) )
 						else
 							self:AddLevel(-1)
 							self:AddXP(newxp)
@@ -235,7 +235,7 @@ function Player:AddXP(xp)
 					else
 						local result = YRP_SQL_UPDATE( "yrp_characters", {["int_xp"] = newxp}, "uniqueID = '" .. charid .. "'" )
 						if result != nil then
-							YRP.msg( "error", "AddXP FAILED #4: " .. tostring(result) )
+							YRP.msg( "note", "AddXP FAILED #4: " .. tostring(result) )
 						else
 							self:SetYRPInt( "int_xp", newxp)
 						end

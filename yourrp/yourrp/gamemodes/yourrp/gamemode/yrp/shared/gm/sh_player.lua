@@ -139,7 +139,6 @@ function Player:HasAccess( from, skip )
 	if !hasAccess and SERVER and skip == nil then
 		if !table.HasValue( accessTab, from ) then
 			table.insert( accessTab, from )
-			--MsgC( Color(255, 0, 0 ), "HAS NO ACCESS: ", from, "\n" )
 			YRP.msg( "access", "Tried to Access: " .. tostring( from ) )
 		end
 	end

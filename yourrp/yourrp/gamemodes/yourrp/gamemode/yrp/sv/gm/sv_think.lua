@@ -681,11 +681,10 @@ hook.Add( "Think", "yrp_spawner_think", function()
 						npc:Spawn()
 
 						if !strEmpty( npc_spawner.string_swep ) then
-							print("AAHA")
 							npc:Give( npc_spawner.string_swep )
 						end
 
-						teleportToPoint(npc, pos)
+						YRPTeleportToPoint(npc, pos)
 
 						table.insert(YNPCs[v.uniqueID].npcs, npc)
 					end
@@ -720,7 +719,7 @@ hook.Add( "Think", "yrp_spawner_think", function()
 					local ent = ents.Create(ent_spawner.string_classname)
 					if ent:IsValid() then
 						ent:Spawn()
-						teleportToPoint(ent, pos)
+						YRPTeleportToPoint(ent, pos)
 
 						table.insert(YENTs[v.uniqueID].ents, ent)
 					end

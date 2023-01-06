@@ -4,12 +4,12 @@ local Entity = FindMetaTable( "Entity" )
 
 function Entity:addKeysAllowedToOwn(ply)
 	--Description: Make this player allowed to co-own the door or vehicle.
-	YRPDarkrpNotFound( "addKeysAllowedToOwn(ply)" )
+	--YRPDarkrpNotFound( "addKeysAllowedToOwn(ply)" )
 end
 
 function Entity:addKeysDoorOwner(ply)
 	--Description: Make this player a co-owner of the door.
-	YRPDarkrpNotFound( "addKeysDoorOwner(ply)" )
+	--YRPDarkrpNotFound( "addKeysDoorOwner(ply)" )
 end
 
 function Entity:addKeysDoorTeam(team)
@@ -48,37 +48,37 @@ end
 
 function Entity:keysUnOwn(ply)
 	--Description: Make this player unown the door/vehicle.
-	YRPDarkrpNotFound( "keysUnOwn(ply)" )
+	--YRPDarkrpNotFound( "keysUnOwn(ply)" )
 end
 
 function Entity:removeAllKeysAllowedToOwn()
 	--Description: Disallow all people from owning the door.
-	YRPDarkrpNotFound( "removeAllKeysAllowedToOwn()" )
+	--YRPDarkrpNotFound( "removeAllKeysAllowedToOwn()" )
 end
 
 function Entity:removeAllKeysDoorTeams()
 	--Description: Disallow all teams from locking/unlocking a door.
-	YRPDarkrpNotFound( "removeAllKeysDoorTeams()" )
+	--YRPDarkrpNotFound( "removeAllKeysDoorTeams()" )
 end
 
 function Entity:removeAllKeysExtraOwners()
 	--Description: Remove all co-owners from a door.
-	YRPDarkrpNotFound( "removeAllKeysExtraOwners()" )
+	--YRPDarkrpNotFound( "removeAllKeysExtraOwners()" )
 end
 
 function Entity:removeKeysAllowedToOwn(ply)
 	--Description: Remove a player from being allowed to co-own a door.
-	YRPDarkrpNotFound( "removeKeysAllowedToOwn(ply)" )
+	--YRPDarkrpNotFound( "removeKeysAllowedToOwn(ply)" )
 end
 
 function Entity:removeKeysDoorOwner(ply)
 	--Description: Remove this player as co-owner
-	YRPDarkrpNotFound( "removeKeysDoorOwner(ply)" )
+	--YRPDarkrpNotFound( "removeKeysDoorOwner(ply)" )
 end
 
 function Entity:removeKeysDoorTeam(team)
 	--Description: Disallow a team from locking/unlocking a door.
-	YRPDarkrpNotFound( "removeKeysDoorTeam( " .. tostring(team) .. " )" )
+	--YRPDarkrpNotFound( "removeKeysDoorTeam( " .. tostring(team) .. " )" )
 end
 
 function Entity:setDoorGroup(group)

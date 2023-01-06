@@ -338,7 +338,7 @@ net.Receive( "nws_yrp_getMapTab", function( len )
 	end
 	PY = PY + 50 + 20
 
-	-- TeleportToPoint
+	-- YRPTeleportToPoint
 	local btnTeleport = YRPCreateD( "YButton", parent, YRP.ctr(600), YRP.ctr(50), parent:GetWide() - YRP.ctr(620), YRP.ctr(PY) )
 	btnTeleport:SetText(YRP.lang_string( "LID_tpto" ) )
 	btnTeleport.py = YRP.ctr(PY)
