@@ -293,10 +293,13 @@ timer.Create( "ServerThink", TICK, 0, function()
 
 			ply:AddPlayTime()
 
-			if ply:AFK() and !ply:HasAccess( "afk", true ) then -- when not admin, kick
-				if CurTime() - tonumber( ply:GetYRPFloat( "afkts", 0) ) >= tonumber( GetGlobalYRPInt( "int_afkkicktime", 0) ) then
-					ply:SetYRPBool( "isafk", false)
-					ply:Kick( "AFK" )
+			local afkticktime = tonumber( GetGlobalYRPInt( "int_afkkicktime", 0 ) )
+			if afkticktime > 0 then
+				if ply:AFK() and !ply:HasAccess( "afk", true ) then -- when not admin, kick
+					if CurTime() - tonumber( ply:GetYRPFloat( "afkts", 0 ) ) >= afkticktime then
+						ply:SetYRPBool( "isafk", false )
+						ply:Kick( "AFK" )
+					end
 				end
 			end
 
@@ -500,7 +503,7 @@ timer.Create( "ServerThink", TICK, 0, function()
 				if ply == nil and steamId then
 					local ts = YRPGetTSLastOnline( steamId )
 					if os.time() - ts >= YRPRemoveBuildingOwnerTime() then
-						BuildingRemoveOwner( steamId )
+						YRPBuildingRemoveOwner( steamId )
 					end
 				end
 			end

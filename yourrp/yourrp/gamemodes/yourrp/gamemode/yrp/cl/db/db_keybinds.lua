@@ -131,7 +131,7 @@ function YRPKeybindsLoad()
 			end
 		else
 			local fi = file.Read( dbfile, "DATA" )
-			YRP.msg( "error", "FAILED TO LOAD KEYBINDS! fi: " .. tostring( fi ) )
+			YRP.msg( "error", "FAILED TO LOAD KEYBINDS! fi: [" .. tostring( fi ) .. "]" )
 		end
 	else
 		YRP.msg( "error", "[KEYBINDS] FILE DOESN'T EXISTS" )
@@ -139,7 +139,7 @@ function YRPKeybindsLoad()
 
 	if type( yrp_keybinds ) != "table" then
 		local fi = file.Read( dbfile, "DATA" )
-		YRP.msg( "error", "[KEYBINDS] [" .. LocalPlayer():YRPName() .. "|" .. LocalPlayer():SteamID() .. "] KeybindsLoad FAILED, broken file?: " .. tostring( fi ) )
+		YRP.msg( "error", "[KEYBINDS] [" .. LocalPlayer():YRPName() .. "|" .. LocalPlayer():SteamID() .. "] KeybindsLoad FAILED, broken file? [" .. tostring( fi ) .. "]" )
 	else
 		YRP_KeybindsLoaded = true
 	end

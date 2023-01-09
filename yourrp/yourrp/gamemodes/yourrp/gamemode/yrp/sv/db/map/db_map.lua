@@ -123,7 +123,7 @@ util.AddNetworkString( "nws_yrp_dbInsertIntoMap" )
 util.AddNetworkString( "nws_yrp_removeMapEntry" )
 
 net.Receive( "nws_yrp_removeMapEntry", function( len, ply )
-	if !ply:HasAccess( "removeMapEntry" ) then
+	if !ply:GetYRPBool( "bool_map", false ) then
 		return 
 	end
 	
@@ -140,26 +140,32 @@ net.Receive( "nws_yrp_removeMapEntry", function( len, ply )
 end)
 
 net.Receive( "nws_yrp_getMapList", function( len, ply )
-	if ply:CanAccess( "bool_map" ) then
-		local _tmpMapTable = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		if !IsNotNilAndNotFalse(_tmpMapTable) then
-			_tmpMapTable = {}
-		end
-
-		local _tmpDealerTable = YRP_SQL_SELECT( "yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'" )
-		if !IsNotNilAndNotFalse(_tmpDealerTable) then
-			_tmpDealerTable = {}
-		end
-
-		net.Start( "nws_yrp_getMapList" )
-			net.WriteTable(_tmpMapTable)
-			net.WriteTable(_tmpDealerTable)
-		net.Send(ply)
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
 	end
+
+	local _tmpMapTable = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+	if !IsNotNilAndNotFalse(_tmpMapTable) then
+		_tmpMapTable = {}
+	end
+
+	local _tmpDealerTable = YRP_SQL_SELECT( "yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'" )
+	if !IsNotNilAndNotFalse(_tmpDealerTable) then
+		_tmpDealerTable = {}
+	end
+
+	net.Start( "nws_yrp_getMapList" )
+		net.WriteTable(_tmpMapTable)
+		net.WriteTable(_tmpDealerTable)
+	net.Send(ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getMapListGroups" )
 net.Receive( "nws_yrp_getMapListGroups", function( len, ply )
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
+	end
+
 	local _tmpGroupTable = YRP_SQL_SELECT( "yrp_ply_groups", "*", nil)
 	for i, v in pairs(_tmpGroupTable) do
 		net.Start( "nws_yrp_getMapListGroups" )
@@ -172,6 +178,10 @@ end)
 
 util.AddNetworkString( "nws_yrp_getMapListRoles" )
 net.Receive( "nws_yrp_getMapListRoles", function( len, ply )
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
+	end
+
 	local _tmpRolesTable = YRP_SQL_SELECT( "yrp_ply_roles", "*", nil)
 	if IsNotNilAndNotFalse(_tmpRolesTable) then
 		for i, v in pairs(_tmpRolesTable) do
@@ -195,6 +205,10 @@ function YRPUpdateAllDBTables()
 end
 
 net.Receive( "nws_yrp_dbInsertIntoMap", function( len, ply )
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
+	end
+
 	local _tmpDBTable = net.ReadString()
 	local _tmpDBCol = net.ReadString()
 	local _tmpDBVal = net.ReadString()
@@ -210,6 +224,10 @@ end)
 
 util.AddNetworkString( "nws_yrp_dealer_settings" )
 net.Receive( "nws_yrp_dealer_settings", function( len, ply )
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
+	end
+
 	local _storages = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = 'Storagepoint'" )
 	if _storages == nil or _storages == false then
 		_storages = {}
@@ -221,8 +239,8 @@ end)
 
 util.AddNetworkString( "nws_yrp_teleportto" )
 net.Receive( "nws_yrp_teleportto", function( len, ply )
-	if !ply:HasAccess( "teleportto" ) then
-		return
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
 	end
 
 	local _uid = net.ReadString()
@@ -240,6 +258,10 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_map_name" )
 net.Receive( "nws_yrp_update_map_name", function( len, ply )
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
+	end
+
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
@@ -249,6 +271,10 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_map_color" )
 net.Receive( "nws_yrp_update_map_color", function( len, ply )
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
+	end
+	
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
@@ -258,6 +284,10 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_map_int_respawntime" )
 net.Receive( "nws_yrp_update_map_int_respawntime", function( len, ply )
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
+	end
+	
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
@@ -268,6 +298,10 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_map_string_swep" )
 net.Receive( "nws_yrp_update_map_string_swep", function( len, ply )
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
+	end
+	
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
@@ -277,6 +311,10 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_map_int_amount" )
 net.Receive( "nws_yrp_update_map_int_amount", function( len, ply )
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
+	end
+	
 	local uid = net.ReadString()
 	local i = net.ReadString()
 
@@ -287,6 +325,10 @@ end)
 
 util.AddNetworkString( "nws_yrp_update_map_string_classname" )
 net.Receive( "nws_yrp_update_map_string_classname", function( len, ply )
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
+	end
+	
 	local uid = net.ReadString()
 	local s = net.ReadString()
 
@@ -298,78 +340,82 @@ end)
 -- NEW MAP PAGE
 util.AddNetworkString( "nws_yrp_getMapSite" )
 net.Receive( "nws_yrp_getMapSite", function( len, ply )
-	if ply:CanAccess( "bool_map" ) then
-		net.Start( "nws_yrp_getMapSite" )
-		net.Send(ply)
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
 	end
+
+	net.Start( "nws_yrp_getMapSite" )
+	net.Send(ply)
 end)
 
 util.AddNetworkString( "nws_yrp_getMapTab" )
 net.Receive( "nws_yrp_getMapTab", function( len, ply )
-	if ply:CanAccess( "bool_map" ) then
-		local tab = net.ReadString()
-
-		local grp = false
-		local rol = false
-
-		local dbTab = {}
-		if tab == "jailpoints" then
-			dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "jailpoint" .. "'" )
-		elseif tab == "releasepoints" then
-			dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "releasepoint" .. "'" )
-		elseif tab == "groupspawnpoints" then
-			dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "GroupSpawnpoint" .. "'" )
-			grp = true
-			if IsNotNilAndNotFalse( dbTab) then
-				for i, v in pairs( dbTab) do
-					local g = YRP_SQL_SELECT( "yrp_ply_groups", "string_name", "uniqueID = '" .. v.linkID .. "'" )
-					if IsNotNilAndNotFalse(g) then
-						g = g[1]
-						v.name = g.string_name
-					end
-				end
-			end
-		elseif tab == "rolespawnpoints" then
-			dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "RoleSpawnpoint" .. "'" )
-			grp = true
-			rol = true
-			if IsNotNilAndNotFalse( dbTab) then
-				for i, v in pairs( dbTab) do
-					local r = YRP_SQL_SELECT( "yrp_ply_roles", "string_name", "uniqueID = '" .. v.linkID .. "'" )
-					if IsNotNilAndNotFalse(r) then
-						r = r[1]
-						v.name = r.string_name
-					end
-				end
-			end
-		elseif tab == "dealers" then
-			dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "dealer" .. "'" )
-		elseif tab == "storagepoints" then
-			dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "Storagepoint" .. "'" )
-		elseif tab == "other" then
-			dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "NOT type = 'dealer' AND NOT type = 'Storagepoint' AND NOT type = 'RoleSpawnpoint' AND NOT type = 'GroupSpawnpoint' AND NOT type = 'jailpoint' AND NOT type = 'releasepoint'" )
-		end
-
-		local dbGrp = {}
-		local dbRol = {}
-		if grp then
-			dbGrp = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", nil)
-		end
-		if rol then
-			dbRol = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, int_groupID, string_name", nil)
-		end
-
-		if !IsNotNilAndNotFalse( dbTab) then
-			dbTab = {}
-		end
-
-		net.Start( "nws_yrp_getMapTab" )
-			net.WriteString(tab)
-			net.WriteTable( dbTab)
-			net.WriteTable( dbGrp)
-			net.WriteTable( dbRol)
-		net.Send(ply)
+	if !ply:GetYRPBool( "bool_map", false ) then
+		return 
 	end
+
+	local tab = net.ReadString()
+
+	local grp = false
+	local rol = false
+
+	local dbTab = {}
+	if tab == "jailpoints" then
+		dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "jailpoint" .. "'" )
+	elseif tab == "releasepoints" then
+		dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "releasepoint" .. "'" )
+	elseif tab == "groupspawnpoints" then
+		dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "GroupSpawnpoint" .. "'" )
+		grp = true
+		if IsNotNilAndNotFalse( dbTab) then
+			for i, v in pairs( dbTab) do
+				local g = YRP_SQL_SELECT( "yrp_ply_groups", "string_name", "uniqueID = '" .. v.linkID .. "'" )
+				if IsNotNilAndNotFalse(g) then
+					g = g[1]
+					v.name = g.string_name
+				end
+			end
+		end
+	elseif tab == "rolespawnpoints" then
+		dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "RoleSpawnpoint" .. "'" )
+		grp = true
+		rol = true
+		if IsNotNilAndNotFalse( dbTab) then
+			for i, v in pairs( dbTab) do
+				local r = YRP_SQL_SELECT( "yrp_ply_roles", "string_name", "uniqueID = '" .. v.linkID .. "'" )
+				if IsNotNilAndNotFalse(r) then
+					r = r[1]
+					v.name = r.string_name
+				end
+			end
+		end
+	elseif tab == "dealers" then
+		dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "dealer" .. "'" )
+	elseif tab == "storagepoints" then
+		dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "Storagepoint" .. "'" )
+	elseif tab == "other" then
+		dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "NOT type = 'dealer' AND NOT type = 'Storagepoint' AND NOT type = 'RoleSpawnpoint' AND NOT type = 'GroupSpawnpoint' AND NOT type = 'jailpoint' AND NOT type = 'releasepoint'" )
+	end
+
+	local dbGrp = {}
+	local dbRol = {}
+	if grp then
+		dbGrp = YRP_SQL_SELECT( "yrp_ply_groups", "uniqueID, string_name", nil)
+	end
+	if rol then
+		dbRol = YRP_SQL_SELECT( "yrp_ply_roles", "uniqueID, int_groupID, string_name", nil)
+	end
+
+	if !IsNotNilAndNotFalse( dbTab) then
+		dbTab = {}
+	end
+
+	net.Start( "nws_yrp_getMapTab" )
+		net.WriteString(tab)
+		net.WriteTable( dbTab)
+		net.WriteTable( dbGrp)
+		net.WriteTable( dbRol)
+	net.Send(ply)
 end)
 
 local mapobjects = {}

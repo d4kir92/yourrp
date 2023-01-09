@@ -162,7 +162,7 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 
 	if cuid != ply:CharID() then
 		if GetGlobalYRPBool( "bool_removebuildingownercharswitch", false) then
-			BuildingRemoveOwner( ply:YRPSteamID() )
+			YRPBuildingRemoveOwner( ply:YRPSteamID() )
 		end
 		hook.Run( "yrp_switched_character", ply, ply:CharID(), cuid)
 	end

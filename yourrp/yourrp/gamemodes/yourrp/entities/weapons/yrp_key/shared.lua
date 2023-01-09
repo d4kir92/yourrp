@@ -45,15 +45,17 @@ SWEP.ShowWorldModel = true
 if CLIENT then
 	net.Receive( "nws_yrp_door_anim", function( self, len )
 		local ply = net.ReadEntity()
-		local msg = net.ReadString()
+		if EntityAlive( ply ) then
+			local msg = net.ReadString()
 
-		if msg == "lock" then
-			ply:AnimRestartGesture( GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE, true )
-		elseif msg == "unlock" then
-			ply:AnimRestartGesture( GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE, true )
-		elseif msg == "knock" then
-			ply:AnimRestartGesture( GESTURE_SLOT_CUSTOM, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true )
-        end
+			if msg == "lock" then
+				ply:AnimRestartGesture( GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE, true )
+			elseif msg == "unlock" then
+				ply:AnimRestartGesture( GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE, true )
+			elseif msg == "knock" then
+				ply:AnimRestartGesture( GESTURE_SLOT_CUSTOM, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true )
+			end
+		end
 	end )
 end
 

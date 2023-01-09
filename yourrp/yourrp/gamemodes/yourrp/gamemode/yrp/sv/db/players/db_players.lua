@@ -1005,8 +1005,8 @@ function YRPRemRolVals( ply )
 
 	local rolTab = ply:YRPGetRoleTable()
 	if IsNotNilAndNotFalse(rolTab) then
-		local _sweps = string.Explode( ",", rolTab.string_sweps)
-		for k, v in pairs(_sweps) do
+		local _sweps = string.Explode( ",", rolTab.string_sweps )
+		for k, v in pairs( _sweps ) do
 			if v and ply:HasWeapon( v ) then
 				ply:StripWeapon( v )
 			end

@@ -1594,7 +1594,7 @@ hook.Add( "PostCleanupMap", "yrp_PostCleanupMap_doors", function()
 	-- Rebuild Doors
 	YRP.msg( "note", "RELOAD DOORS" )
 
-	loadDoors()
+	YRPLoadDoors()
 	LoadWorldStorages()
 end)
 
@@ -1728,8 +1728,12 @@ function YRPImportDarkrp( str, name )
 end
 
 function YRPImportFileToTable( filename, name )
+	if filename == nil then
+		return
+	end
+
 	local str = file.Read( filename, "GAME" )
-	if str then
+	if str and name then
 		str = YRPRemoveCommentsLong( str, 0 )
 		str = YRPRemoveCommentsShort( str )
 		str = YRPRemoveEmptyLines( str )

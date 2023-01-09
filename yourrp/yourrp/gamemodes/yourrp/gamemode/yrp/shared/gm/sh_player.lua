@@ -741,7 +741,7 @@ function YRPCanLock(ply, door, open)
 			elseif door:GetYRPString( "ownerGroup", "" ) != "" then
 				if tonumber(ply:GetYRPString( "groupUniqueID", "-98" ) ) == tonumber( door:GetYRPInt( "ownerGroupUID", -99) ) then
 					return true
-				elseif IsUnderGroupOf(ply, tonumber( door:GetYRPInt( "ownerGroupUID", -99) )) then
+				elseif YRPIsUnderGroupOf(ply, tonumber( door:GetYRPInt( "ownerGroupUID", -99) )) then
 					return true
 				elseif open and door:GetYRPString( "ownerGroup", "" ) == "PUBLIC" then
 					return true
