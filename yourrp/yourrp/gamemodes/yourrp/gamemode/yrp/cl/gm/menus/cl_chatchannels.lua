@@ -390,7 +390,7 @@ function OpenChatMenu()
 
 	local h = YRP.ctr(80)
 	local pbr = YRP.ctr(20)
-	pTab(GetGlobalYRPTable( "yrp_chat_channels", {}))
+
 	for i, channel in pairs(GetGlobalYRPTable( "yrp_chat_channels", {}) ) do
 		if lply:HasAccess( "OpenChatMenu1" ) or lply:GetYRPBool( "bool_chat" ) then
 			local line = YRPCreateD( "DPanel", nil, CONTENT:GetWide(), h, 0, 0)

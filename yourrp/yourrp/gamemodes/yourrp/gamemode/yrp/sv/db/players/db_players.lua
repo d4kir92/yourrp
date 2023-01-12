@@ -531,9 +531,9 @@ function YRPSetRoleValues(ply, pmid)
 			end
 
 			--custom flags
-			local allflags = YRP_SQL_SELECT( "yrp_flags", "*", nil)
+			local allflags = YRP_SQL_SELECT( "yrp_flags", "*", nil) -- hobo, police
 			for i, flag in pairs( allflags) do
-				ply:SetYRPBool( "bool_" .. flag.string_name, false)
+				ply:SetYRPBool( "bool_" .. flag.string_name, false )
 			end
 
 			local customflags = string.Explode( ",", rolTab.string_customflags)
@@ -542,7 +542,7 @@ function YRPSetRoleValues(ply, pmid)
 					local fl = YRP_SQL_SELECT( "yrp_flags", "*", "uniqueID = '" .. flag .. "'" )
 					if IsNotNilAndNotFalse(fl) then
 						fl = fl[1]
-						ply:SetYRPBool( "bool_" .. fl.string_name, true)
+						ply:SetYRPBool( "bool_" .. fl.string_name, true )
 					end
 				end
 			end

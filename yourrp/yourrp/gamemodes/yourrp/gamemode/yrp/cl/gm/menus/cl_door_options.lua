@@ -32,18 +32,26 @@ net.Receive( "nws_yrp_sendBuildingInfo", function( len )
 			local tabGroup = tab["G"]
 
 			if GetGlobalYRPBool( "bool_building_system", false) then
-				if EntityAlive( door) and !LocalPlayer():GetYRPBool( "bool_" .. "ishobo", false) then
-					if table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
+				if EntityAlive( door) then
+					if LocalPlayer():GetYRPBool( "bool_" .. "ishobo", false) then
+						YRP.msg( "note", "[Building] You are a HOBO" )
+						LocalPlayer():PrintMessage( HUD_PRINTCENTER, "[Building] You are a HOBO" )
+					elseif table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
 						YRPDoorOptionWindow( door, tabBuilding, tabOwner, tabGroup)
 					else
 						YRPDoorBuyWindow( door, tabBuilding)
 					end
+				else
+					YRP.msg( "note", "[Building] Building not alive" )
+					LocalPlayer():PrintMessage( HUD_PRINTCENTER, "[Building] Building not alive" )
 				end
 			else
-				YRP.msg( "note", "getBuildingInfo Building System Disabled" )
+				YRP.msg( "note", "[Building] Building System Disabled" )
+				LocalPlayer():PrintMessage( HUD_PRINTCENTER, "[Building] Building System Disabled" )
 			end
 		else
 			YRP.msg( "note", "getBuildingInfo net Table broken" )
+			LocalPlayer():PrintMessage( HUD_PRINTCENTER, "[Building] net Table broken" )
 		end
 	end
 end)
@@ -456,5 +464,9 @@ function YRPOpenDoorOptions( door )
 		net.Start( "nws_yrp_getBuildingInfo" )
 			net.WriteEntity( door )
 		net.SendToServer()
+
+		timer.Simple( 1, function()
+			yrp_door.waitforanswer = false
+		end )
 	end
 end

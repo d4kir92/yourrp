@@ -35,7 +35,7 @@ if CLIENT then
 	net.Receive( "YRPGetServerInfo", function( len )
 		local tab = net.ReadTable()
 
-		GAMEMODE.VersionServer = tostring(tab.Version)
+		GAMEMODE.VersionServer = tostring( tab.Version ) .. ":" .. tostring( tab.VersionBuild )
 		GAMEMODE.ServerIsDedicated = tab.isdedicated
 		if GAMEMODE.ServerIsDedicated then
 			GAMEMODE.dedicated = "dedicated"
@@ -68,19 +68,22 @@ function SetYRPChannel( from )
 					test["stable"].stable = YRPGetVersionValue( body, "V" .. "STABLE" .. "STABLE" )
 					test["stable"].beta = YRPGetVersionValue( body, "V" .. "STABLE" .. "BETA" )
 					test["stable"].canary = YRPGetVersionValue( body, "V" .. "STABLE" .. "CANARY" )
+					test["stable"].build = YRPGetVersionValue( body, "V" .. "STABLE" .. "BUILD" )
 
 					test["beta"] = {}
 					test["beta"].stable = YRPGetVersionValue( body, "V" .. "BETA" .. "STABLE" )
 					test["beta"].beta = YRPGetVersionValue( body, "V" .. "BETA" .. "BETA" )
 					test["beta"].canary = YRPGetVersionValue( body, "V" .. "BETA" .. "CANARY" )
+					test["beta"].build = YRPGetVersionValue( body, "V" .. "BETA" .. "BUILD" )
 
 					test["canary"] = {}
 					test["canary"].stable = YRPGetVersionValue( body, "V" .. "CANARY" .. "STABLE" )
 					test["canary"].beta = YRPGetVersionValue( body, "V" .. "CANARY" .. "BETA" )
 					test["canary"].canary = YRPGetVersionValue( body, "V" .. "CANARY" .. "CANARY" )
+					test["canary"].build = YRPGetVersionValue( body, "V" .. "CANARY" .. "BUILD" )
 
 					for art, tab in pairs(test) do
-						if tab.stable == GAMEMODE.VersionStable and tab.beta == GAMEMODE.VersionBeta and tab.canary == GAMEMODE.VersionCanary then
+						if tab.stable == GAMEMODE.VersionStable and tab.beta == GAMEMODE.VersionBeta and tab.canary == GAMEMODE.VersionCanary and tab.build == GAMEMODE.VersionBuild then
 							YRP.msg( "gm", "Gamemode channel: " .. string.upper( art) )
 							GAMEMODE.VersionSort = art
 							break
@@ -155,13 +158,17 @@ if CLIENT then
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_currentversion" ) .. ":", "Y_24_500", pw / 2, YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_client" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(150), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
-				draw.SimpleTextOutlined(GAMEMODE.Version, "Y_24_500", pw / 2, YRP.ctr(150), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				draw.SimpleTextOutlined(GAMEMODE.Version .. ":" .. GAMEMODE.VersionBuild, "Y_24_500", pw / 2, YRP.ctr(150), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
 				draw.SimpleTextOutlined( "( " .. string.upper(GAMEMODE.dedicated) .. " ) " .. YRP.lang_string( "LID_server" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(200), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 				draw.SimpleTextOutlined(GAMEMODE.VersionServer, "Y_24_500", pw / 2, YRP.ctr(200), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
-				draw.SimpleTextOutlined(YRP.lang_string( "LID_workshopversion" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
-				draw.SimpleTextOutlined(on.stable .. "." .. on.beta .. "." .. on.canary .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " )", "Y_24_500", pw / 2, YRP.ctr(300), Color( 0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				if GetGlobalYRPString( "YRP_VERSIONART", "X" ) == "workshop" then
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_workshopversion" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				else
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_githubversion" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				end
+				draw.SimpleTextOutlined(on.stable .. "." .. on.beta .. "." .. on.canary .. ":" .. on.build .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " )", "Y_24_500", pw / 2, YRP.ctr(300), Color( 0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 			end
 
 			local showChanges = YRPCreateD( "YButton", frame.con, YRP.ctr(500), YRP.ctr(80), frame.con:GetWide() / 2 - YRP.ctr(250), YRP.ctr(350) )
@@ -178,61 +185,76 @@ if CLIENT then
 	end
 end
 
-local check = 0
-function YRPCheckVersion(from)
-	if GAMEMODE != nil then
-		if YRPIsVersionSet() then
-			if CurTime() < check then return end
-			check = CurTime() + 1
-			http.Fetch( "https://docs.google.com/spreadsheets/d/e/2PACX-1vR3aN8b4y0qZbZBBQLkqBy4dKFzKCnPt4cOMp7ghUaq5Bzxf-BtlEc0fruUI18IK-csODjrK6wcpFCX/pubhtml?gid=0&single=true",
-			function( body, len, headers, code)
-				if body != nil then
-					if code == 200 then
-						local serverart = string.upper(GAMEMODE.VersionSort or "outdated")
+local check = check or 0
+function YRPCheckVersion( from )
+	if not YRPIsVersionSet() then
+		timer.Simple( 1, function()
+			YRPCheckVersion( "retry Version not set" )
+		end )
+		return
+	end
 
-						if serverart == "OUTDATED" then	
-							GAMEMODE.versioncolor = Color( 0, 255, 0 )	
-							yrpoutdated = true	
-							serverart = "CANARY"	
-						else	
-							yrpoutdated = false	
-						end
-						
-						on.stable = YRPGetVersionValue( body, "V" .. serverart .. "STABLE" )
-						on.beta = YRPGetVersionValue( body, "V" .. serverart .. "BETA" )
-						on.canary = YRPGetVersionValue( body, "V" .. serverart .. "CANARY" )
+	if GAMEMODE == nil then
+		timer.Simple( 0.1, function()
+			YRPCheckVersion( "retry GAMEMODE" )
+		end )
+		return
+	end
 
-						if on.stable == GAMEMODE.VersionStable and on.beta == GAMEMODE.VersionBeta and on.canary == GAMEMODE.VersionCanary then
-							GAMEMODE.versioncolor = Color( 255, 255, 255, 255 )
-							yrpoutdated = false
-						else
-							yrpoutdated = true
-							GAMEMODE.versioncolor = Color( 0, 255, 0 )
-							if CLIENT then
-								VersionWindow()
-							end
-						end
+	if CurTime() < check then
+		return
+	end
+	
+	check = CurTime() + 60
+	http.Fetch( "https://docs.google.com/spreadsheets/d/e/2PACX-1vR3aN8b4y0qZbZBBQLkqBy4dKFzKCnPt4cOMp7ghUaq5Bzxf-BtlEc0fruUI18IK-csODjrK6wcpFCX/pubhtml?gid=0&single=true",
+	function( body, len, headers, code)
+		if body != nil then
+			if code == 200 then
+				local serverart = string.upper(GAMEMODE.VersionSort or "outdated")
+
+				if serverart == "OUTDATED" then	
+					GAMEMODE.versioncolor = Color( 0, 255, 0 )	
+					yrpoutdated = true	
+					serverart = "CANARY"	
+				else	
+					yrpoutdated = false	
+				end
+				
+				on.stable = YRPGetVersionValue( body, "V" .. serverart .. "STABLE" )
+				on.beta = YRPGetVersionValue( body, "V" .. serverart .. "BETA" )
+				on.canary = YRPGetVersionValue( body, "V" .. serverart .. "CANARY" )
+				on.build = YRPGetVersionValue( body, "V" .. serverart .. "BUILD" )
+
+				if on.stable == GAMEMODE.VersionStable and on.beta == GAMEMODE.VersionBeta and on.canary == GAMEMODE.VersionCanary and on.build == GAMEMODE.VersionBuild then
+					GAMEMODE.versioncolor = Color( 255, 255, 255, 255 )
+					yrpoutdated = false
+				else
+					yrpoutdated = true
+					GAMEMODE.versioncolor = Color( 0, 255, 0 )
+					if CLIENT then
+						VersionWindow()
 					else
-						YRP.msg( "note", "[CheckVersion] CODE: " .. code)
+						if GetGlobalYRPString( "YRP_VERSIONART", "X" ) == "workshop" then
+							MsgC( Color( 255, 255, 0 ), "[CheckVersion] YOURRP IS OUTDATED, PLEASE RESTART SERVER", "\n" )
+						else
+							MsgC( Color( 255, 255, 0 ), "[CheckVersion] YOURRP IS OUTDATED, PLEASE DOWNLOAD LATEST AND RESTART SERVER", "\n" )
+						end
+						MsgC( Color( 255, 0, 	0 ), string.format( "[CheckVersion] NEW VERSION: %s.%s.%s:%s", on.stable, on.beta, on.canary, on.build ), "\n" )
 					end
 				end
-			end,
-				function(error)
-					YRP.msg( "note", "[CheckVersion] ERROR: " .. error)
-				end
-			)
+			else
+				YRP.msg( "note", "[CheckVersion] CODE: " .. code)
+			end
 		else
-			timer.Simple(4, function()
-				SetYRPChannel( "CheckVersion" )
-			end)
+			YRP.msg( "note", "[CheckVersion] BODY not found" )
 		end
-	else
-		timer.Simple(0.1, function()
-			YRPCheckVersion( "retry GAMEMODE" )
-		end)
-	end
+	end,
+		function(error)
+			YRP.msg( "note", "[CheckVersion] ERROR: " .. error)
+		end
+	)
 end
 
-timer.Simple(1, function()
+timer.Simple( 1, function()
 	YRPCheckVersion( "init" )
-end)
+end )

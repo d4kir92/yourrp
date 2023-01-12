@@ -16,10 +16,10 @@ GM.Youtube = "youtube.com/c/D4KiR" -- do NOT change this!
 GM.Twitter = "twitter.com/D4KIR" -- do NOT change this!
 GM.Help = "Create your rp you want to make!" -- do NOT change this!
 GM.dedicated = "-" -- do NOT change this!
-GM.VersionStable = 0 -- do NOT change this!
-GM.VersionBeta = 352 -- do NOT change this!
-GM.VersionCanary = 707 -- do NOT change this!
-GM.VersionBuild = 268 -- do NOT change this!
+GM.VersionStable = 1 -- do NOT change this!
+GM.VersionBeta = 353 -- do NOT change this!
+GM.VersionCanary = 709 -- do NOT change this!
+GM.VersionBuild = 269 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -357,6 +357,7 @@ if SERVER then
 		tab.VersionStable = GAMEMODE.VersionStable
 		tab.VersionBeta = GAMEMODE.VersionBeta
 		tab.VersionCanary = GAMEMODE.VersionCanary
+		tab.VersionBuild = GAMEMODE.VersionBuild
 		tab.isdedicated = game.IsDedicated()
 		net.Start( "YRPGetServerInfo" )
 			net.WriteTable(tab)

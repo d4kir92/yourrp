@@ -40,11 +40,9 @@ end
 
 util.AddNetworkString( "nws_yrp_openAM" )
 function ENT:Use( activator, caller )
-	print("USE")
 	if !activator:GetYRPBool( "clicked", false) then
 		activator:SetYRPBool( "clicked", true)
 
-		print("TEST")
 		net.Start( "nws_yrp_openAM" )
 		net.Send( activator)
 

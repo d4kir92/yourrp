@@ -648,7 +648,7 @@ net.Receive( "nws_yrp_getBuildingInfo", function( len, ply )
 	local buid = door:GetYRPString( "buildingID", "" )
 
 	if IsNilOrFalse( buid ) and buid == "" then
-		YRP.msg( "note", "getBuildingInfo -> BuildingID (" .. tostring( buid ) .. ") is not valid [Map: " .. GetMapNameDB() .. "]" )
+		YRP.msg( "note", "[getBuildingInfo] -> BuildingID (" .. tostring( buid ) .. ") is not valid [Map: " .. GetMapNameDB() .. "]" )
 		return
 	end
 
