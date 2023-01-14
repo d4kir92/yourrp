@@ -17,7 +17,7 @@ if SERVER then
 	YRP_INFO_WAS_SENDED = YRP_INFO_WAS_SENDED or false
 
 	local posturl = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScCz8AxHm8xMqiPUKWyhHf9qsAWxMcNX1Hy9PvQI5MIcFsh0A/formResponse"
-	function SendServerInfo()
+	function YRPSendServerInfo()
 		if game.IsDedicated() then
 			if GAMEMODE then
 				YRP.msg( "note", "> Send Server Info <" )
@@ -78,16 +78,16 @@ if SERVER then
 					YRP.msg( "note", "[Send Server] Already Send" )
 				end
 			else
-				timer.Simple(1, SendServerInfo)
+				timer.Simple(1, YRPSendServerInfo)
 			end
 		end
 	end
 
 	hook.Add( "PostGamemodeLoaded", "yrp_PostGamemodeLoaded", function()
 		RunConsoleCommand( "sv_hibernate_think", 1)
-		timer.Simple(2, function()
+		timer.Simple( 2, function()
 			MsgC( Color( 255, 255, 0), ">>> Server is online <<<" .. "\t\t\tYourRP Version: " .. YRPGetVersionFull() .. "\n" )
-		end)
-		timer.Simple(10, SendServerInfo)
+		end )
+		timer.Simple( 10, YRPSendServerInfo )
 	end)
 end
