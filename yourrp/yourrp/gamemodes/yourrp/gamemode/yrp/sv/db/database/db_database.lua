@@ -55,7 +55,7 @@ end)
 
 util.AddNetworkString( "nws_yrp_disconnect_Settings_Database" )
 net.Receive( "nws_yrp_disconnect_Settings_Database", function( len, ply )
-	if !ply:CanAccess( "bool_ac_database" ) then
+	if !ply:GetYRPBool( "bool_ac_database", false ) then
 		return
 	end
 	RemFromHandler_Database(ply)
@@ -65,23 +65,17 @@ util.AddNetworkString( "nws_yrp_get_sql_info" )
 
 util.AddNetworkString( "nws_yrp_drop_tables" )
 net.Receive( "nws_yrp_drop_tables", function( len, ply )
-	if !ply:CanAccess( "bool_ac_database" ) then
+	if !ply:GetYRPBool( "bool_ac_database", false ) then
 		return
 	end
 
 	local _drop_tables = net.ReadTable()
-	local _ug = string.lower(ply:GetUserGroup() )
-	local _can = YRP_SQL_SELECT( "yrp_usergroups", "bool_ac_database", "string_name = '" .. _ug .. "'" )
-	if IsNotNilAndNotFalse(_can) then
-		_can = _can[1]
-		CreateBackup()
-		if tobool(_can.bool_ac_database) then
-			for i, tab in pairs(_drop_tables) do
-				YRP_SQL_DROP_TABLE(tab)
-			end
-			game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
-		end
+	
+	CreateBackup()
+	for i, tab in pairs(_drop_tables) do
+		YRP_SQL_DROP_TABLE(tab)
 	end
+	game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
 end)
 
 function GetBackupCreateTime()
