@@ -4,17 +4,35 @@
 -- https://discord.gg/sEgNZxg
 
 util.AddNetworkString( "nws_yrp_drop_table" )
+
+
+local function IsValidTableName(name)
+
+	if table.HasValue(GetDBNames(), name) then
+		if name != "yrp_sql" then
+			return true
+		end
+	elseif string.StartWith(name, "yrp_" ) then
+		return true
+	elseif name != "sqlite_sequence" then
+		// not sure on this one?
+		return false
+	end
+
+	return false
+end
+
+
 net.Receive( "nws_yrp_drop_table", function( len, ply )
 	local tab = net.ReadString()
-	if string.find(tab, ";" ) then return end // Bad fix for SQL Injection, should be fixed in actual sql handler
-	local _ug = string.lower(ply:GetUserGroup() )
-	local _can = YRP_SQL_SELECT( "yrp_usergroups", "bool_ac_database", "string_name = '" .. _ug .. "'" )
-	if IsNotNilAndNotFalse(_can) then
-		_can = _can[1]
-		if tobool(_can.bool_ac_database) then
-			YRP_SQL_DROP_TABLE(tab)
-		end
+	
+	if not ply:CanAccess( "bool_ac_database" ) then
+		return
 	end
+
+	if not IsValidTableName(tab) then return end
+	
+	YRP_SQL_DROP_TABLE(tab)
 end)
 
 local HANDLER_DATABASE = {}
@@ -75,18 +93,26 @@ util.AddNetworkString( "nws_yrp_get_sql_info" )
 util.AddNetworkString( "nws_yrp_drop_tables" )
 net.Receive( "nws_yrp_drop_tables", function( len, ply )
 	local _drop_tables = net.ReadTable()
-	local _ug = string.lower(ply:GetUserGroup() )
-	local _can = YRP_SQL_SELECT( "yrp_usergroups", "bool_ac_database", "string_name = '" .. _ug .. "'" )
-	if IsNotNilAndNotFalse(_can) then
-		_can = _can[1]
-		CreateBackup()
-		if tobool(_can.bool_ac_database) then
-			for i, tab in pairs(_drop_tables) do
-				YRP_SQL_DROP_TABLE(tab)
-			end
-			game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
-		end
+
+	if (ply.ymakebackup or 0) < CurTime() then
+		ply.ymakebackup = CurTime() + 10
+	else
+		YRP.msg( "note", "DropTables blocked" )
+		return
 	end
+	
+	if not ply:CanAccess( "bool_ac_database" ) then
+		return
+	end
+	
+	CreateBackup()
+
+	for _, tab in pairs(_drop_tables) do
+		if type(tab) != "string" then continue end
+		if not IsValidTableName(tab) then continue end
+		YRP_SQL_DROP_TABLE(tab)
+	end
+	game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
 end)
 
 function GetBackupCreateTime()
@@ -154,5 +180,15 @@ end
 
 util.AddNetworkString( "nws_yrp_makebackup" )
 net.Receive( "nws_yrp_makebackup", function( len, ply )
-	CreateBackup()
+	
+	if (ply.ymakebackup or 0) < CurTime() then
+		ply.ymakebackup = CurTime() + 10
+	else
+		YRP.msg( "note", "Backup blocked" )
+		return
+	end
+	
+	if ply:CanAccess( "bool_ac_database" ) then
+		CreateBackup()
+	end
 end)
