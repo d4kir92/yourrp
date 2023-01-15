@@ -6,7 +6,15 @@
 util.AddNetworkString( "nws_yrp_drop_table" )
 net.Receive( "nws_yrp_drop_table", function( len, ply )
 	local tab = net.ReadString()
-	YRP_SQL_DROP_TABLE(tab)
+	if string.find(tab, ";" ) then return end // Bad fix for SQL Injection, should be fixed in actual sql handler
+	local _ug = string.lower(ply:GetUserGroup() )
+	local _can = YRP_SQL_SELECT( "yrp_usergroups", "bool_ac_database", "string_name = '" .. _ug .. "'" )
+	if IsNotNilAndNotFalse(_can) then
+		_can = _can[1]
+		if tobool(_can.bool_ac_database) then
+			YRP_SQL_DROP_TABLE(tab)
+		end
+	end
 end)
 
 local HANDLER_DATABASE = {}
