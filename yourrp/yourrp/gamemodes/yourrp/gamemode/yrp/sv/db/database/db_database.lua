@@ -25,13 +25,13 @@ end
 
 net.Receive( "nws_yrp_drop_table", function( len, ply )
 	local tab = net.ReadString()
-	
+
 	if not ply:CanAccess( "bool_ac_database" ) then
 		return
 	end
 
 	if not IsValidTableName(tab) then return end
-	
+
 	YRP_SQL_DROP_TABLE(tab)
 end)
 
@@ -100,11 +100,11 @@ net.Receive( "nws_yrp_drop_tables", function( len, ply )
 		YRP.msg( "note", "DropTables blocked" )
 		return
 	end
-	
+
 	if not ply:CanAccess( "bool_ac_database" ) then
 		return
 	end
-	
+
 	CreateBackup()
 
 	for _, tab in pairs(_drop_tables) do
@@ -180,14 +180,14 @@ end
 
 util.AddNetworkString( "nws_yrp_makebackup" )
 net.Receive( "nws_yrp_makebackup", function( len, ply )
-	
+
 	if (ply.ymakebackup or 0) < CurTime() then
 		ply.ymakebackup = CurTime() + 10
 	else
 		YRP.msg( "note", "Backup blocked" )
 		return
 	end
-	
+
 	if ply:CanAccess( "bool_ac_database" ) then
 		CreateBackup()
 	end
