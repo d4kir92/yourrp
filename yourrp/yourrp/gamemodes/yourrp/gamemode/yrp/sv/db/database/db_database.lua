@@ -3,12 +3,6 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 
-util.AddNetworkString( "nws_yrp_drop_table" )
-net.Receive( "nws_yrp_drop_table", function( len, ply )
-	local tab = net.ReadString()
-	YRP_SQL_DROP_TABLE(tab)
-end)
-
 local HANDLER_DATABASE = {}
 
 function RemFromHandler_Database(ply)
@@ -23,42 +17,47 @@ end
 
 util.AddNetworkString( "nws_yrp_connect_Settings_Database" )
 net.Receive( "nws_yrp_connect_Settings_Database", function( len, ply )
-	if ply:CanAccess( "bool_ac_database" ) then
-		AddToHandler_Database(ply)
-
-		local tables = sql.Query( "SELECT name FROM sqlite_master WHERE type='table';" )
-
-		local nw_yrp = {}
-		local nw_yrp_related = {}
-		local nw_other = {}
-		for i, tab in pairs(tables) do
-			if table.HasValue(GetDBNames(), tab.name) then
-				if tab.name != "yrp_sql" then
-					table.insert(nw_yrp, tab)
-				end
-			elseif string.StartWith(tab.name, "yrp_" ) then
-				table.insert(nw_yrp_related, tab)
-			elseif tab.name != "sqlite_sequence" then
-				table.insert(nw_other, tab)
-			end
-		end
-
-		local nw_sql = sql.Query( "SELECT * FROM yrp_sql WHERE uniqueID = 1;" )
-		if IsNotNilAndNotFalse(nw_sql) then
-			nw_sql = nw_sql[1]
-		end
-
-		net.Start( "nws_yrp_connect_Settings_Database" )
-			net.WriteTable(nw_yrp)
-			net.WriteTable(nw_yrp_related)
-			net.WriteTable(nw_other)
-			net.WriteTable(nw_sql)
-		net.Send(ply)
+	if !ply:CanAccess( "bool_ac_database" ) then
+		return
 	end
+
+	AddToHandler_Database(ply)
+
+	local tables = sql.Query( "SELECT name FROM sqlite_master WHERE type='table';" )
+
+	local nw_yrp = {}
+	local nw_yrp_related = {}
+	local nw_other = {}
+	for i, tab in pairs(tables) do
+		if table.HasValue(GetDBNames(), tab.name) then
+			if tab.name != "yrp_sql" then
+				table.insert(nw_yrp, tab)
+			end
+		elseif string.StartWith(tab.name, "yrp_" ) then
+			table.insert(nw_yrp_related, tab)
+		elseif tab.name != "sqlite_sequence" then
+			table.insert(nw_other, tab)
+		end
+	end
+
+	local nw_sql = sql.Query( "SELECT * FROM yrp_sql WHERE uniqueID = 1;" )
+	if IsNotNilAndNotFalse(nw_sql) then
+		nw_sql = nw_sql[1]
+	end
+
+	net.Start( "nws_yrp_connect_Settings_Database" )
+		net.WriteTable(nw_yrp)
+		net.WriteTable(nw_yrp_related)
+		net.WriteTable(nw_other)
+		net.WriteTable(nw_sql)
+	net.Send(ply)
 end)
 
 util.AddNetworkString( "nws_yrp_disconnect_Settings_Database" )
 net.Receive( "nws_yrp_disconnect_Settings_Database", function( len, ply )
+	if !ply:CanAccess( "bool_ac_database" ) then
+		return
+	end
 	RemFromHandler_Database(ply)
 end)
 
@@ -66,6 +65,10 @@ util.AddNetworkString( "nws_yrp_get_sql_info" )
 
 util.AddNetworkString( "nws_yrp_drop_tables" )
 net.Receive( "nws_yrp_drop_tables", function( len, ply )
+	if !ply:CanAccess( "bool_ac_database" ) then
+		return
+	end
+
 	local _drop_tables = net.ReadTable()
 	local _ug = string.lower(ply:GetUserGroup() )
 	local _can = YRP_SQL_SELECT( "yrp_usergroups", "bool_ac_database", "string_name = '" .. _ug .. "'" )
@@ -146,5 +149,9 @@ end
 
 util.AddNetworkString( "nws_yrp_makebackup" )
 net.Receive( "nws_yrp_makebackup", function( len, ply )
+	if !ply:CanAccess( "bool_ac_database" ) then
+		return
+	end
+
 	CreateBackup()
 end)
