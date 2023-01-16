@@ -585,7 +585,7 @@ end, hook.MONITOR_HIGH)
 hook.Add( "HUDPaint", "yrp_hud_collectionid", function()
 	local lply = LocalPlayer()
 	if YRPCollectionID() < 100000000 and lply:HasAccess( "hud1" ) then
-		local text = "[STEAM] " .. YRP.lang_string( "LID_thecollectionidismissing" ) .. " ( " .. YRPGetKeybindName( "menu_settings" ) .. " >> " .. YRP.lang_string( "LID_server" ) .. " >> " .. YRP.lang_string( "LID_general" ) .. " >> " .. YRP.lang_string( "LID_collectionid" ) .. " )"
+		local text = "[STEAM] " .. YRP.lang_string( "LID_thecollectionidismissing" ) .. " ( " .. "to start config: " .. "+host_workshop_collection WORKSHOPID" .. " )"
 		draw.SimpleTextOutlined(text, "Y_50_500", ScrW() / 2, ScrH()  * 0.2, Color( 255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 end, hook.MONITOR_HIGH)

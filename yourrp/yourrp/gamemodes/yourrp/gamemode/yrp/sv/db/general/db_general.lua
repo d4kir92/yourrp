@@ -11,8 +11,6 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_version", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_reload_notification", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_reload", "INT DEFAULT 1" )
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_server_collectionid", "INT DEFAULT 0" )
-
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_community_servers", "TEXT DEFAULT ''" )
 
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_server_name", "TEXT DEFAULT ''" )
@@ -432,18 +430,6 @@ end
 
 
 --[[ Setter ]]--
-function SetYRPCollectionID( cid)
-	cid = cid or 0
-	cid = tonumber( cid)
-	if cid > 0 then
-		YRP.msg( "db", "SetYRPCollectionID( " .. cid .. " )" )
-		yrp_general.text_server_collectionid = cid
-		YRP_SQL_UPDATE(DATABASE_NAME, {["text_server_collectionid"] = cid}, "uniqueID = '1'" )
-
-		--IsServerInfoOutdated()
-	end
-end
-
 function GeneralDB()
 	for i, set in pairs( yrp_general ) do
 		if string.StartWith( i, "text_" ) then
@@ -541,15 +527,6 @@ net.Receive( "nws_yrp_update_bool_server_reload", function( len, ply )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_server_reload", "bool_server_reload", b)
 end)
 
-util.AddNetworkString( "nws_yrp_update_text_server_collectionid" )
-net.Receive( "nws_yrp_update_text_server_collectionid", function( len, ply )
-	if !ply:HasAccess( "nws_yrp_update_text_server_collectionid", true ) then
-		return 
-	end
-
-	local str = net.ReadString()
-	GeneralUpdateString(ply, "nws_yrp_update_text_server_collectionid", "text_server_collectionid", str)
-end)
 
 
 util.AddNetworkString( "nws_yrp_update_text_server_logo" )
@@ -1869,14 +1846,8 @@ end)
 
 util.AddNetworkString( "nws_yrp_getsitecollection" )
 net.Receive( "nws_yrp_getsitecollection", function( len, ply )
-	local collectionid = YRP_SQL_SELECT( "yrp_general", "text_server_collectionid", "uniqueID = '1'" )
-	if IsNotNilAndNotFalse( collectionid) then
-		collectionid = collectionid[1].text_server_collectionid
-	else
-		collectionid = ""
-	end
 	net.Start( "nws_yrp_getsitecollection" )
-		net.WriteString( collectionid)
+		net.WriteString( YRPCollectionID() )
 	net.Send(ply)
 end)
 

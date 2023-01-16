@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 353 -- do NOT change this!
 GM.VersionCanary = 709 -- do NOT change this!
-GM.VersionBuild = 272 -- do NOT change this!
+GM.VersionBuild = 273 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -322,8 +322,15 @@ concommand.Add( "yrp__help", function(ply, cmd, args)
 	PrintHelp()
 end)
 
+if SERVER then
+	local num = GetConVar( "host_workshop_collection" ):GetString()
+	if num then
+		num = tonumber( num )
+	end
+	SetGlobalYRPInt( "YRPCollectionID", num or 0 )
+end
 function YRPCollectionID()
-	local collectionid = tonumber(GetGlobalYRPString( "text_server_collectionid", "0" ) )
+	local collectionid = GetGlobalYRPInt( "YRPCollectionID", 0 )
 	if collectionid and collectionid > 100000000 then
 		return collectionid
 	end
