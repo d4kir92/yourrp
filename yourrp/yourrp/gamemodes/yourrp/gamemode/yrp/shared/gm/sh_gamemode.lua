@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 353 -- do NOT change this!
 GM.VersionCanary = 709 -- do NOT change this!
-GM.VersionBuild = 273 -- do NOT change this!
+GM.VersionBuild = 274 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -323,14 +323,25 @@ concommand.Add( "yrp__help", function(ply, cmd, args)
 end)
 
 if SERVER then
-	local num = GetConVar( "host_workshop_collection" ):GetString()
-	if num then
-		num = tonumber( num )
+	local function CollectCollectionID()
+		local cvar = GetConVar( "host_workshop_collection" )
+		if cvar then
+			local num = cvar:GetString()
+			if num then
+				num = tonumber( num )
+			end
+			if num <= 0 then
+				timer.Simple( 1, function()
+					CollectCollectionID()
+				end )
+			end
+			SetGlobalYRPFloat( "YRPCollectionID", num or -1 )
+		end
 	end
-	SetGlobalYRPInt( "YRPCollectionID", num or 0 )
+	CollectCollectionID()
 end
 function YRPCollectionID()
-	local collectionid = GetGlobalYRPInt( "YRPCollectionID", 0 )
+	local collectionid = GetGlobalYRPFloat( "YRPCollectionID", -2 )
 	if collectionid and collectionid > 100000000 then
 		return collectionid
 	end
