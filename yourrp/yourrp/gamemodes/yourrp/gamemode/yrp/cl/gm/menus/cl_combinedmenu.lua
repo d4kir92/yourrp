@@ -108,7 +108,7 @@ end
 function CreateCollectionContent(PARENT)
 	local collectionid = YRPCollectionID()
 
-	if collectionid > 100000000 then
+	if collectionid != "0" then
 		local link = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. collectionid
 		local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
@@ -354,7 +354,7 @@ function OpenCombinedMenu()
 			community = true
 		end
 
-		if YRPCollectionID() > 100000000 then
+		if YRPCollectionID() != "0" then
 			sites[c] = {}
 			sites[c].name = "LID_collection"
 			sites[c].icon = "web"

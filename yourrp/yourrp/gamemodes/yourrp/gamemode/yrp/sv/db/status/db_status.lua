@@ -35,7 +35,7 @@ net.Receive( "nws_yrp_connect_Settings_Status", function( len, ply )
 			_nw_yourrp["YourRP Content"] = {}
 			_nw_yourrp["YourRP Content"]["LID_missingx"] = Color( 0, 255, 0 )
 		end
-		if YRPCollectionID() < 100000000 then
+		if YRPCollectionID() == "0" then
 			_nw_yourrp["Collection ID"] = {}
 			_nw_yourrp["Collection ID"]["LID_thecollectionidismissing"] = Color( 0, 255, 0 )
 		end

@@ -327,25 +327,18 @@ if SERVER then
 		local cvar = GetConVar( "host_workshop_collection" )
 		if cvar then
 			local num = cvar:GetString()
-			if num then
-				num = tonumber( num )
-			end
-			if num <= 0 then
+			if num == "0" then
 				timer.Simple( 1, function()
 					CollectCollectionID()
 				end )
 			end
-			SetGlobalYRPFloat( "YRPCollectionID", num or -1 )
+			SetGlobalYRPString( "YRPCollectionID", num or "0" )
 		end
 	end
 	CollectCollectionID()
 end
 function YRPCollectionID()
-	local collectionid = GetGlobalYRPFloat( "YRPCollectionID", -2 )
-	if collectionid and collectionid > 100000000 then
-		return collectionid
-	end
-	return 0
+	return GetGlobalYRPString( "YRPCollectionID", "0" )
 end
 
 function PrintCollectionID()
