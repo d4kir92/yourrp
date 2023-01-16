@@ -86,9 +86,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_savebodygroups", "INTEGER DEFAULT 1" )
 
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1" ) == nil then
 	YRP.msg( "note", DATABASE_NAME .. " has not the default role" )
-	local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "'1', 'Civilian', '0,0,255', '1', '0'" )
-else
-	YRP_SQL_UPDATE(DATABASE_NAME, {["string_color"] = "0,0,0"}, "uniqueID = '1'" )
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "'1', 'Civilian', '0,0,255', '1', '0'" )
 end
 
 YRP_SQL_UPDATE(DATABASE_NAME, {["int_uses"] = 0}, nil)
