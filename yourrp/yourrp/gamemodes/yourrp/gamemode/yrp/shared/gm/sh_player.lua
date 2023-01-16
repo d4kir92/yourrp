@@ -138,7 +138,10 @@ function Player:HasAccess( from, skip )
 	local hasAccess = self:GetYRPBool( "bool_adminaccess", false ) or self:IsSuperAdmin()
 	if !hasAccess and SERVER and skip == nil then
 		if from == nil then
-			YRP.msg( "access", "[HasAccess] Missing \"from\": " .. tostring( debug.traceback() )  )
+			local trace = tostring( debug.traceback() )
+			trace = string.Replace( trace, "\t", "" )
+			trace = string.Replace( trace, "\n", "-> " )
+			YRP.msg( "access", "[HasAccess] Missing \"from\": " .. trace  )
 		elseif !table.HasValue( accessTab, from ) then
 			table.insert( accessTab, from )
 			YRP.msg( "access", "[HasAccess] Tried to Access: " .. tostring( from ) )
