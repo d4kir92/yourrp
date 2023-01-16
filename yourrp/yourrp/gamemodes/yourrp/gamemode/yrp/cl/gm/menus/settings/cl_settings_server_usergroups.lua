@@ -1148,12 +1148,6 @@ function UpdateUsergroupsList()
 			if ug then
 				ug.int_position = tonumber( ug.int_position )
 				YRPAddUG( ug )
-			elseif i != 1 then -- 1 == "yrp_usergroup"
-				local text = "[UGList][i: " .. tostring( i ) .. "][#N_UGS: " .. tostring( #N_UGS ) .. "] "
-				for x, v in pairs( N_UGS ) do
-					text = text .. " [x: " .. x .. " pos: " .. v.int_position .. "]"
-				end
-				YRP.msg( "error", text .. " ug: " .. tostring( ug ) )
 			end
 		end
 	end

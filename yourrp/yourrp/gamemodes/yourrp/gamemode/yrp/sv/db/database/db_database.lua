@@ -17,7 +17,7 @@ end
 
 util.AddNetworkString( "nws_yrp_connect_Settings_Database" )
 net.Receive( "nws_yrp_connect_Settings_Database", function( len, ply )
-	if !ply:CanAccess( "bool_ac_database" ) then
+	if !ply:GetYRPBool( "bool_ac_database", false ) then
 		return
 	end
 
@@ -72,8 +72,10 @@ net.Receive( "nws_yrp_drop_tables", function( len, ply )
 	local _drop_tables = net.ReadTable()
 	
 	CreateBackup()
-	for i, tab in pairs(_drop_tables) do
-		YRP_SQL_DROP_TABLE(tab)
+	for i, tab in pairs( _drop_tables ) do
+		if tab.name != "yrp_sql" and tab.name != "sqlite_sequence" then
+			YRP_SQL_DROP_TABLE(tab)
+		end
 	end
 	game.ConsoleCommand( "changelevel " .. GetMapNameDB() .. "\n" )
 end)
@@ -141,11 +143,16 @@ function CreateBackup()
 	end
 end
 
+local bu_ts = 0
 util.AddNetworkString( "nws_yrp_makebackup" )
 net.Receive( "nws_yrp_makebackup", function( len, ply )
-	if !ply:CanAccess( "bool_ac_database" ) then
+	if !ply:GetYRPBool( "bool_ac_database", false ) then
+		return
+	end
+	if bu_ts > CurTime() then
 		return
 	end
 
+	bu_ts = CurTime() + 20
 	CreateBackup()
 end)
