@@ -762,8 +762,7 @@ function GM:GetFallDamage(ply, speed)
 	end
 end
 
-function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
-
+hook.Add( "PlayerSwitchWeapon", "yrp_playerswitchweapon", function( ply, oldWeapon, newWeapon )
 	if newWeapon:IsScripted() then
 		-- Set default HoldType of currentweapon
 		if newWeapon:GetYRPString( "swep_holdtype", "" ) == "" then
@@ -775,7 +774,7 @@ function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 	if ply:GetYRPBool( "cuffed" ) or ply.leiche != nil then
 		return true
 	end
-end
+end )
 
 function IsAllowedToSuicide(ply)
 	if ply:HasAccess( "IsAllowedToSuicide", true ) then
