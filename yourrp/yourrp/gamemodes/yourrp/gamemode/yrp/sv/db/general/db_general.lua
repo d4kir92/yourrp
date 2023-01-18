@@ -40,6 +40,8 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_gamemode_name", "TEXT DEFAULT 'YourRP'" 
 
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_graffiti_disabled", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_suicide_disabled", "INT DEFAULT 1" )
+
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_team_set", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_team_color", "INT DEFAULT 1" )
 
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_antipropkill", "INT DEFAULT 1" )
@@ -710,6 +712,12 @@ util.AddNetworkString( "nws_yrp_update_bool_suicide_disabled" )
 net.Receive( "nws_yrp_update_bool_suicide_disabled", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_suicide_disabled", "bool_suicide_disabled", b)
+end)
+
+util.AddNetworkString( "nws_yrp_update_bool_team_set" )
+net.Receive( "nws_yrp_update_bool_team_set", function( len, ply )
+	local b = btn(net.ReadBool() )
+	GeneralUpdateBool(ply, "nws_yrp_update_bool_team_set", "bool_team_set", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_team_color" )

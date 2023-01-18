@@ -552,7 +552,9 @@ function YRPSetRoleValues(ply, pmid)
 			ply:SetYRPFloat( "float_dmgtype_energybeam", tonumber(rolTab.float_dmgtype_energybeam) )
 
 			-- Darkrp Team
-			ply:SetTeam(rolTab.uniqueID) -- disables damage against npcs
+			if GetGlobalYRPBool( "bool_team_set", true ) then
+				ply:SetTeam(rolTab.uniqueID) -- disables damage against npcs
+			end
 		else
 			YRP.msg( "note", "[SET ROLE VALUES] No role selected -> Suicide" )
 			ply:KillSilent()
