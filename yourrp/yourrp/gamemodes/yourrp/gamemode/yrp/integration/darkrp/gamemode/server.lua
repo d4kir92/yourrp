@@ -213,9 +213,19 @@ function DarkRP.retrievePlayerData(ply, callback, failure)
 	YRPDarkrpNotFound( "retrievePlayerData(ply, callback, failure)" )
 end
 
-function DarkRP.retrieveRPNames(name, callback)
+function DarkRP.retrieveRPNames( name, callback )
 	--Description: Whether a given RP name is taken by someone else.
-	YRPDarkrpNotFound( "retrieveRPNames(name, callback)" )
+	local inuse = false
+	for i, v in pairs( player.GetAll() ) do
+		if v:YRPRPName() == name then
+			inuse = true
+			break
+		end
+	end
+	if callback then
+		callback( inuse )
+	end
+	return inuse
 end
 
 function DarkRP.retrieveSalary(ply, callback)

@@ -80,10 +80,10 @@ net.Receive( "nws_yrp_getMoneyPrintMenu", function( len )
 		end
 
 		--Fuel
-		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 380), "fuel", "yrp_fuelUP",YRP.lang_string( "LID_fuel" ),YRP.lang_string( "LID_fuelup" ),YRP.lang_string( "LID_full" ) )
+		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 380), "fuel", "nws_yrp_fuelUp",YRP.lang_string( "LID_fuel" ),YRP.lang_string( "LID_fuelup" ),YRP.lang_string( "LID_full" ) )
 
 		--HP
-		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 450), "hp", "yrp_repairMP", YRP.lang_string( "LID_health" ), YRP.lang_string( "LID_repair" ), "" )
+		moneyPrinterButton(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 450), "hp", "nws_yrp_repairMP", YRP.lang_string( "LID_health" ), YRP.lang_string( "LID_repair" ), "" )
 
 		--Temperatur
 		tempInfo(mp, upgradeframe, YRP.ctr(800 - 2 * 20), YRP.ctr(60), YRP.ctr(20), YRP.ctr(60 + 520) )
