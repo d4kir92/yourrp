@@ -853,4 +853,8 @@ net.Receive( "nws_yrp_Combine_DarkRPTables", function( len )
 	end
 
 	hook.Run( "bKeypads.ConfigUpdated" )
+
+	if GAMEMODE.DarkRPFinishedLoading then
+		GAMEMODE:DarkRPFinishedLoading()
+	end
 end)

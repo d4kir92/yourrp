@@ -119,7 +119,7 @@ function YRPLoadDoors()
 		local _tmpDoors = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 
 		if IsNotNilAndNotFalse(_tmpDoors) then
-			for i, door in pairs(GetAllDoors() ) do
+			for i, door in pairs( GetAllDoors() ) do
 				if WORKED(_tmpDoors[i], "YRPLoadDoors 2" ) then
 					door:SetYRPString( "buildingID", _tmpDoors[i].buildingID)
 					door:SetYRPString( "uniqueID", i)
@@ -132,7 +132,7 @@ function YRPLoadDoors()
 
 		local _tmpBuildings = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
 		if IsNotNilAndNotFalse(_tmpBuildings) then
-			for k, v in pairs(GetAllDoors() ) do
+			for k, v in pairs( GetAllDoors() ) do
 				for l, w in pairs(_tmpBuildings) do
 					if tonumber(w.uniqueID) == tonumber( v:GetYRPString( "buildingID" ) ) then
 						v:SetYRPBool( "bool_canbeowned", w.bool_canbeowned)
@@ -166,10 +166,14 @@ function YRPLoadDoors()
 							v:SetYRPInt( "int_securitylevel", w.int_securitylevel)
 						end
 
-						if v:SecurityLevel() > 0 then
-							YRPFireLock( v )
+						if GetGlobalYRPBool( "bool_securitylevel_system", false ) then
+							if v:SecurityLevel() > 0 then
+								YRPFireLock( v )
+							else
+								YRPFireUnlock( v )
+							end
 						else
-							YRPFireUnlock( v )
+							YRPFireLock( v )
 						end
 
 						if !strEmpty(w.text_header) then

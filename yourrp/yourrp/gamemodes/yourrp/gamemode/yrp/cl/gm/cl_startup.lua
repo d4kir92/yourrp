@@ -1506,7 +1506,7 @@ function DrawDoorText( door)
 	surface.DrawText( description)
 
 	local sl = door:SecurityLevel()
-	if sl > 0 and GetGlobalYRPBool( "bool_show_securitylevel", true) then
+	if sl > 0 and GetGlobalYRPBool( "bool_securitylevel_system", false ) and GetGlobalYRPBool( "bool_show_securitylevel", true) then
 		local int_securitylevel = YRP.lang_string( "LID_securitylevel" ) .. ": " .. sl
 		surface.SetFont( "Y_24_500" )
 		local secu_size = surface.GetTextSize(int_securitylevel)

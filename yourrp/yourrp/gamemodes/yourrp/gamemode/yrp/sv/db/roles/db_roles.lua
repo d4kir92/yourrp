@@ -384,6 +384,12 @@ function Player:DRPSendCategoriesToPlayer()
 end
 -- darkrp
 
+timer.Simple( 1, function()
+	if GAMEMODE.DarkRPFinishedLoading then
+		GAMEMODE:DarkRPFinishedLoading()
+	end
+end )
+
 function UpdatePrerolesGroupIDs(uid, gid)
 	local preroles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. uid .. "'" )
 	if IsNotNilAndNotFalse(preroles) then
