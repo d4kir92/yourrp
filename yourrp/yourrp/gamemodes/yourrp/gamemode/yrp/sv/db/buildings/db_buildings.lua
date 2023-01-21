@@ -172,6 +172,8 @@ function YRPLoadDoors()
 							else
 								YRPFireUnlock( v )
 							end
+						elseif GetGlobalYRPBool( "bool_allbuildingsunlocked", false ) then
+							YRPFireUnlock( v )
 						else
 							YRPFireLock( v )
 						end
