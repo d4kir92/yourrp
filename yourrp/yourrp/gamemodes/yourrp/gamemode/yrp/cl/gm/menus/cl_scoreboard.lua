@@ -5,10 +5,10 @@
 local color1 = Color( 0, 0, 0, 255 )
 local color2 = Color( 255, 255, 255, 255 )
 
-surface.CreateFont( "Open Sans_72", {
+surface.CreateFont( "Open Sans_60", {
 	font = "Open Sans",
 	extended = true,
-	size = 72,
+	size = 60,
 	weight = 700,
 	blursize = 0,
 	scanlines = 0,
@@ -907,7 +907,7 @@ function YRPInitScoreboard()
 		if strEmpty(name) then
 			name = YRPGetHostName()
 		end
-		draw.SimpleText(name, "Open Sans_72", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(name, "Open Sans_60", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	YRPScoreboard.Header = YRPCreateD( "DPanel", YRPScoreboard, 32, 32, 0, 0 )
