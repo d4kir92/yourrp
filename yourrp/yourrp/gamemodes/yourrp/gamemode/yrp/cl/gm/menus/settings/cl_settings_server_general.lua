@@ -523,10 +523,6 @@ net.Receive( "nws_yrp_connect_Settings_General", function( len )
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_appearance_system, "LID_macromenu", "nws_yrp_update_bool_yrp_macro_menu" )
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent() )
-		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_background, "LID_loadingbackground", "nws_yrp_update_text_loading_background" )
-		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_loading_design, "LID_loadingdesign", "nws_yrp_update_text_loading_design", GetGlobalYRPString( "text_loading_design", "Default" ), {"Default", "Center", "BottomRight"})
-
-		CreateHRLine(GAMEMODE_VISUALS:GetContent() )
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_background, "LID_character_background", "nws_yrp_update_text_character_background" )
 		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "LID_characterdesign", "nws_yrp_update_text_character_design", GetGlobalYRPString( "text_character_design", "Default" ), {"Default", "HorizontalNEW", "Horizontal", "Vertical"})
 

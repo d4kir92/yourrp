@@ -47,10 +47,6 @@ net.Receive( "nws_yrp_connect_Settings_Status", function( len, ply )
 			_nw_yourrp["ServerLogo"] = {}
 			_nw_yourrp["ServerLogo"]["Server Logo is missing/empty"] = Color( 255, 255, 0)
 		end
-		if strEmpty(GetGlobalYRPString( "text_loading_background" ) ) then
-			_nw_yourrp["backgroundloading"] = {}
-			_nw_yourrp["backgroundloading"]["Loadingscreen Background is missing"] = Color( 255, 255, 0)
-		end
 		if strEmpty(GetGlobalYRPString( "text_character_background" ) ) then
 			_nw_yourrp["backgroundcharacter"] = {}
 			_nw_yourrp["backgroundcharacter"]["Character Background is missing"] = Color( 255, 255, 0)

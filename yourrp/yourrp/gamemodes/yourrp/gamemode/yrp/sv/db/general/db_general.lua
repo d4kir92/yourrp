@@ -130,8 +130,6 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_keybinds_menu", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_tickets_menu", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_macro_menu", "INT DEFAULT 1" )
 
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_loading_background", "TEXT DEFAULT ''" )
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_loading_design", "TEXT DEFAULT 'Default'" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_character_background", "TEXT DEFAULT ''" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_character_design", "TEXT DEFAULT 'Default'" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_chat", "INT DEFAULT 1" )
@@ -304,11 +302,6 @@ local yrp_general = {}
 
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'" ) == nil then
 	YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
-end
-
-local ld = YRP_SQL_SELECT( DATABASE_NAME, "*", "text_loading_design = 'Bottom'" )
-if ld then
-	YRP_SQL_UPDATE( DATABASE_NAME, {["text_loading_design"] = "Default"}, "text_loading_design = 'Bottom'" )
 end
 
 function YRPLoadGlobals()
@@ -1136,20 +1129,6 @@ net.Receive( "nws_yrp_update_text_character_background", function( len, ply )
 	local str = net.ReadString()
 	str = string.Replace(str, " ", "" )
 	GeneralUpdateString(ply, "nws_yrp_update_text_character_background", "text_character_background", str)
-end)
-
-util.AddNetworkString( "nws_yrp_update_text_loading_design" )
-net.Receive( "nws_yrp_update_text_loading_design", function( len, ply )
-	local str = net.ReadString()
-	str = string.Replace(str, " ", "" )
-	GeneralUpdateString(ply, "nws_yrp_update_text_loading_design", "text_loading_design", str)
-end)
-
-util.AddNetworkString( "nws_yrp_update_text_loading_background" )
-net.Receive( "nws_yrp_update_text_loading_background", function( len, ply )
-	local str = net.ReadString()
-	str = string.Replace(str, " ", "" )
-	GeneralUpdateString(ply, "nws_yrp_update_text_loading_background", "text_loading_background", str)
 end)
 
 util.AddNetworkString( "nws_yrp_update_text_character_design" )

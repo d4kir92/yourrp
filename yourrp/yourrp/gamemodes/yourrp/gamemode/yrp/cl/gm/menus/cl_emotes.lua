@@ -163,14 +163,6 @@ function OpenEmotesMenu()
 		end
 	end
 
-	net.Receive( "nws_yrp_do_act", function( len )
-		local pl = net.ReadEntity()
-		local act = net.ReadString()
-		if IsValid(pl) then
-			pl:AnimRestartGesture( GESTURE_SLOT_CUSTOM, act, true )
-		end
-	end)
-
 	function _em.emotes:DoClick()
 		if self.select ~= nil then
 			local _sel = self.select
@@ -186,3 +178,11 @@ function OpenEmotesMenu()
 		end
 	end
 end
+
+net.Receive( "nws_yrp_do_act", function( len )
+	local pl = net.ReadEntity()
+	local act = net.ReadString()
+	if IsValid(pl) then
+		pl:AnimRestartGesture( GESTURE_SLOT_CUSTOM, act, true )
+	end
+end)

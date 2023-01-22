@@ -49,7 +49,9 @@ function ENT:Initialize()
 	self.bag_size = 32
 	
 	timer.Simple(0.1, function()
-		self:SetStorage(self._suid)
-		YRPRegisterObject(self)
+		if EntityAlive( self ) then
+			self:SetStorage(self._suid)
+			YRPRegisterObject(self)
+		end
 	end)
 end
