@@ -188,21 +188,12 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 	end
 end
 
-
-
-local antinoti3spam = {}
 util.AddNetworkString( "nws_yrp_info3" )
-function YRPNotiToPly(msg)
-	if not table.HasValue( antinoti3spam, ply) then
-		table.insert( antinoti3spam, ply)
-
+function YRPNotiBro( msg )
+	if msg then
 		net.Start( "nws_yrp_info3" )
-			net.WriteString(msg)
+			net.WriteString( msg )
 		net.Broadcast()
-
-		timer.Simple(5, function()
-			table.RemoveByValue( antinoti3spam, ply)
-		end)
 	end
 end
 
@@ -227,7 +218,9 @@ net.Receive( "nws_yrp_event_start", function( len, ply )
 			end
 		end
 
-		YRPNotiToPly( "Event started! ( " .. tab.string_eventname .. " )" )
+		tab.string_eventname = tab.string_eventname or "NO EVENT NAME"
+
+		YRPNotiBro( "Event started! ( " .. tostring( tab.string_eventname ) .. " )" )
 	end
 end)
 
@@ -255,6 +248,8 @@ net.Receive( "nws_yrp_event_end", function( len, ply )
 			end
 		end
 
-		YRPNotiToPly( "Event ended! ( " .. tab.string_eventname .. " )" )
+		tab.string_eventname = tab.string_eventname or "NO EVENT NAME"
+
+		YRPNotiBro( "Event ended! ( " .. tab.string_eventname .. " )" )
 	end
 end)

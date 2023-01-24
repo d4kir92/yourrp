@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 353 -- do NOT change this!
 GM.VersionCanary = 709 -- do NOT change this!
-GM.VersionBuild = 277 -- do NOT change this!
+GM.VersionBuild = 278 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -106,7 +106,9 @@ if SERVER then
 end
 
 function GM:Initialize()
-	self.BaseClass.Initialize( self )
+	if self.BaseClass and self.BaseClass.Initialize then
+		self.BaseClass.Initialize( self )
+	end
 end
 
 function GM:GetGameDescription()
