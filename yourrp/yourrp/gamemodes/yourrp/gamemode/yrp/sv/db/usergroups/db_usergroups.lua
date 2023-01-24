@@ -1325,8 +1325,8 @@ end
 
 local antinoti2spam = {}
 util.AddNetworkString( "nws_yrp_info2" )
-function YRPNotiToPly(msg, ply)
-	if not table.HasValue( antinoti2spam, ply) then
+function YRPNotiToPly( msg, ply )
+	if msg and not table.HasValue( antinoti2spam, ply) then
 		table.insert( antinoti2spam, ply)
 
 		net.Start( "nws_yrp_info2" )

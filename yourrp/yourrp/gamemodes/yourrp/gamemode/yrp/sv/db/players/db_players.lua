@@ -1080,7 +1080,7 @@ net.Receive( "nws_yrp_wantRole", function( len, ply )
 		local _role = YRP_SQL_SELECT( "yrp_ply_roles" , "*", "uniqueID = " .. uniqueIDRole)
 		startVote(ply, _role)
 	else
-		YRPNotiToPly(text, "not allowed to get this role" )
+		YRPNotiToPly( "Not allowed to get this role", ply )
 	end
 end)
 
