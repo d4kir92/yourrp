@@ -140,84 +140,6 @@ function YRPSetRole( ply, rid, force, pmid, bgs )
 		YRPUpdateBodyGroups( ply, pmid, bgs )
 	end
 	
-	-- SWEPS
-	local ChaTab = ply:YRPGetCharacterTable()
-	local rolTab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'" )
-	if (GetGlobalYRPBool( "bool_weapon_system", true) and IsNotNilAndNotFalse(ChaTab) and IsNotNilAndNotFalse(rolTab)) and (ply:GetYRPBool( "yrp_reset_charloadout" ) or rid != ply:GetRoleUID()) then
-		rolTab = rolTab[1]
-
-		ply:SetYRPBool( "yrp_reset_charloadout", false )
-
-		local tmpSWEPTable = string.Explode( ",", rolTab.string_sweps_onspawn)
-
-		local pr = 0
-		local se = 0
-		local si = 0
-		local ga = 0
-		
-		local pri = {}
-		local sec = {}
-		local sid = {}
-		local gad = {}
-
-		for k, swep in pairs(tmpSWEPTable) do
-			if swep != nil and swep != NULL and swep != "" then
-				local slots = YRPGetSlotsOfSWEP(swep)
-				if slots.slot_primary and pr + 1 <= GetGlobalYRPInt( "yrp_max_slots_primary", 0) then
-					pr = pr + 1
-					table.insert(pri, swep)
-				elseif slots.slot_secondary and se + 1 <= GetGlobalYRPInt( "yrp_max_slots_secondary", 0) then
-					se = se + 1
-					table.insert(sec, swep)
-				elseif slots.slot_sidearm and si + 1 <= GetGlobalYRPInt( "yrp_max_slots_sidearm", 0) then
-					si = si + 1
-					table.insert(sid, swep)
-				elseif slots.slot_gadget and ga + 1 <= GetGlobalYRPInt( "yrp_max_slots_gadget", 0) then
-					ga = ga + 1
-					table.insert(gad, swep)
-				else
-					YRP.msg( "note", "SLOTS OF ROLE FULL! ( " .. tostring(rolTab.string_name) .. " )" )
-				end
-			end
-		end
-		
-		YRPUpdateCharSlot(ply, "primary", 		pri)
-		YRPUpdateCharSlot(ply, "secondary", 	sec)
-		YRPUpdateCharSlot(ply, "sidearm", 		sid)
-		YRPUpdateCharSlot(ply, "gadget", 		gad)
-	end
-
-	if GetGlobalYRPBool( "bool_weapon_system", true) then
-		for i, slot in pairs(YRPGetCharSWEPS(ply) ) do
-			for x, wep in pairs(slot) do
-				if !strEmpty( wep ) then
-					ply:Give(wep)
-				end
-			end
-		end
-		
-		local rolTab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'" )
-		if IsNotNilAndNotFalse(rolTab) then
-			rolTab = rolTab[1]
-			local tmpSWEPTable = string.Explode( ",", rolTab.string_sweps_onspawn)
-			for k, swep in pairs(tmpSWEPTable) do
-				if swep != nil and swep != NULL and swep != "" then
-					if ply:Alive() then
-						local slots = YRPGetSlotsOfSWEP(swep)
-						if slots.slot_no then
-							ply:Give(swep)
-						end
-					end
-				end
-			end
-		end
-	elseif IsNotNilAndNotFalse(rolTab) then
-		rolTab = rolTab[1]
-		for i, swep in pairs(string.Explode( ",", rolTab.string_sweps) ) do
-			ply:Give(swep)
-		end
-	end
-
 	if canGetRole(ply, rid, false) or force then
 		YRPSetRoleData(ply, rid)
 		YRPSetRoleValues(ply, pmid)
@@ -320,6 +242,84 @@ end
 
 function YRPSetRoleData(ply, rid)
 	hook.Run( "yrp_get_role_pre", ply, rid)
+
+	-- SWEPS
+	local ChaTab = ply:YRPGetCharacterTable()
+	local rolTab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'" )
+	if (GetGlobalYRPBool( "bool_weapon_system", true) and IsNotNilAndNotFalse(ChaTab) and IsNotNilAndNotFalse(rolTab)) and (ply:GetYRPBool( "yrp_reset_charloadout" ) or rid != ply:GetRoleUID()) then
+		rolTab = rolTab[1]
+
+		ply:SetYRPBool( "yrp_reset_charloadout", false )
+
+		local tmpSWEPTable = string.Explode( ",", rolTab.string_sweps_onspawn)
+
+		local pr = 0
+		local se = 0
+		local si = 0
+		local ga = 0
+		
+		local pri = {}
+		local sec = {}
+		local sid = {}
+		local gad = {}
+
+		for k, swep in pairs(tmpSWEPTable) do
+			if swep != nil and swep != NULL and swep != "" then
+				local slots = YRPGetSlotsOfSWEP(swep)
+				if slots.slot_primary and pr + 1 <= GetGlobalYRPInt( "yrp_max_slots_primary", 0) then
+					pr = pr + 1
+					table.insert(pri, swep)
+				elseif slots.slot_secondary and se + 1 <= GetGlobalYRPInt( "yrp_max_slots_secondary", 0) then
+					se = se + 1
+					table.insert(sec, swep)
+				elseif slots.slot_sidearm and si + 1 <= GetGlobalYRPInt( "yrp_max_slots_sidearm", 0) then
+					si = si + 1
+					table.insert(sid, swep)
+				elseif slots.slot_gadget and ga + 1 <= GetGlobalYRPInt( "yrp_max_slots_gadget", 0) then
+					ga = ga + 1
+					table.insert(gad, swep)
+				else
+					YRP.msg( "note", "SLOTS OF ROLE FULL! ( " .. tostring(rolTab.string_name) .. " )" )
+				end
+			end
+		end
+		
+		YRPUpdateCharSlot(ply, "primary", 		pri)
+		YRPUpdateCharSlot(ply, "secondary", 	sec)
+		YRPUpdateCharSlot(ply, "sidearm", 		sid)
+		YRPUpdateCharSlot(ply, "gadget", 		gad)
+	end
+
+	if GetGlobalYRPBool( "bool_weapon_system", true) then
+		for i, slot in pairs(YRPGetCharSWEPS(ply) ) do
+			for x, wep in pairs(slot) do
+				if !strEmpty( wep ) then
+					ply:Give(wep)
+				end
+			end
+		end
+		
+		local rolTab = YRP_SQL_SELECT( "yrp_ply_roles", "*", "uniqueID = '" .. rid .. "'" )
+		if IsNotNilAndNotFalse(rolTab) then
+			rolTab = rolTab[1]
+			local tmpSWEPTable = string.Explode( ",", rolTab.string_sweps_onspawn)
+			for k, swep in pairs(tmpSWEPTable) do
+				if swep != nil and swep != NULL and swep != "" then
+					if ply:Alive() then
+						local slots = YRPGetSlotsOfSWEP(swep)
+						if slots.slot_no then
+							ply:Give(swep)
+						end
+					end
+				end
+			end
+		end
+	elseif IsNotNilAndNotFalse(rolTab) then
+		rolTab = rolTab[1]
+		for i, swep in pairs(string.Explode( ",", rolTab.string_sweps) ) do
+			ply:Give(swep)
+		end
+	end
 
 	local _char_id = ply:CharID()
 	if _char_id != nil then
@@ -782,8 +782,7 @@ net.Receive( "nws_yrp_giveRole", function( len, ply )
 		if IsValid(_ply) and tostring(_ply:YRPSteamID() ) == tostring(_tmpSteamID) then
 			YRPRemRolVals(_ply)
 			YRPRemGroVals(_ply)
-			YRPSetRoleData(_ply, uniqueIDRole)
-			YRPSetRoleValues(_ply)
+			YRPSetRole( _ply, uniqueIDRole, true )
 			YRP.msg( "note", tostring(_ply:Nick() ) .. " is now the role: " .. tostring(uniqueIDRole) )
 			return true
 		end
