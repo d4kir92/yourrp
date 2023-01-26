@@ -981,7 +981,7 @@ end
 YRPCheckDarkRP()
 
 function GetSENTsList()
-	return list.Get( "SpawnableEntities" )
+	return scripted_ents.GetList()
 end
 
 --[[
