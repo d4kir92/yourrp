@@ -1,15 +1,15 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function YRPSetupDoors()
-	timer.Simple(1.5, function()
+	timer.Simple( 2.5, function()
 		YRPCheckMapDoors()
-	end)
+	end )
 end
 
 function YRPSetupCoords()
-	timer.Simple(4, function()
+	timer.Simple( 4, function()
 		YRPGetMapDoors()
-	end)
+	end )
 end
 
 hook.Add( "InitPostEntity", "yrp_InitPostEntity_doors_and_coords", function()
@@ -17,4 +17,4 @@ hook.Add( "InitPostEntity", "yrp_InitPostEntity_doors_and_coords", function()
 
 	YRPSetupDoors()
 	YRPSetupCoords()
-end)
+end )

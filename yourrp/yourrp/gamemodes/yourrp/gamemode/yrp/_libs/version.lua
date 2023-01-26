@@ -61,7 +61,7 @@ function SetYRPChannel( from )
 				if code == 200 then
 					local cs, ce = string.find( body, "VSTABLE" )
 					if ce then
-						body = string.sub( body, ce )
+						body = string.sub( body, cs - 1 )
 					end
 
 					test["stable"] = {}

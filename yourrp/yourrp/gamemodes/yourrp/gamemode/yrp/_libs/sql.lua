@@ -525,7 +525,13 @@ if SERVER then
 		YRP.msg( "db", "Connect to MYSQL Database" )
 
 		-- MYSQL
-		MsgC( Color( 0, 255, 0 ), "If Module not found, download it via yourrp discord!\n" )
+		if file.Find( "bin/gmsv_mysqloo_linux.dll", "LUA" ) == nil and file.Find( "bin/gmsv_mysqloo_win32.dll", "LUA" ) == nil then
+			MsgC( Color( 0, 255, 0 ), "Module not found, download it via yourrp discord!\n" )
+			YRPSQL.mysql_worked = false
+			SetSQLMode(0, true)
+			return
+		end
+		MsgC( Color( 0, 255, 0 ), "LOAD MODULE MYSQLOO!\n" )
 		require( "mysqloo" )
 
 		if (mysqloo.VERSION != "9" or !mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
