@@ -918,16 +918,19 @@ end)
 util.AddNetworkString( "nws_yrp_inv_pm_up" )
 net.Receive( "nws_yrp_inv_pm_up", function( len, ply )
 	local _cur = net.ReadInt(16)
-	local _pms = string.Explode( ",", GetPlayermodelsOfCharacter( ply, ply:YRPGetRoleTable().uniqueID ) )
-	if IsNotNilAndNotFalse(_pms) then
-		if IsNotNilAndNotFalse(_pms[_cur]) then
-			ply:SetYRPString( "string_playermodel", _pms[_cur])
-			ply:SetYRPInt( "pmid", _cur)
-			ply:SetModel(_pms[_cur])
-			local _charid = ply:CharID()
-			YRP_SQL_UPDATE( "yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
-			ply:UpdateBackpack()
-			SendBodyGroups(ply)
+	local pms = GetPlayermodelsOfCharacter( ply, ply:YRPGetRoleTable().uniqueID )
+	if pms then
+		local _pms = string.Explode( ",", pms )
+		if IsNotNilAndNotFalse(_pms) then
+			if IsNotNilAndNotFalse(_pms[_cur]) then
+				ply:SetYRPString( "string_playermodel", _pms[_cur])
+				ply:SetYRPInt( "pmid", _cur)
+				ply:SetModel(_pms[_cur])
+				local _charid = ply:CharID()
+				YRP_SQL_UPDATE( "yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
+				ply:UpdateBackpack()
+				SendBodyGroups(ply)
+			end
 		end
 	end
 end)
@@ -935,16 +938,19 @@ end)
 util.AddNetworkString( "nws_yrp_inv_pm_do" )
 net.Receive( "nws_yrp_inv_pm_do", function( len, ply )
 	local _cur = net.ReadInt(16)
-	local _pms = string.Explode( ",", GetPlayermodelsOfCharacter( ply, ply:YRPGetRoleTable().uniqueID ) )
-	if IsNotNilAndNotFalse(_pms) then
-		if IsNotNilAndNotFalse(_pms[_cur]) then
-			ply:SetYRPString( "string_playermodel", _pms[_cur])
-			ply:SetYRPInt( "pmid", _cur)
-			ply:SetModel(_pms[_cur])
-			local _charid = ply:CharID()
-			YRP_SQL_UPDATE( "yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
-			ply:UpdateBackpack()
-			SendBodyGroups(ply)
+	local pms = GetPlayermodelsOfCharacter( ply, ply:YRPGetRoleTable().uniqueID )
+	if pms then
+		local _pms = string.Explode( ",", pms )
+		if IsNotNilAndNotFalse(_pms) then
+			if IsNotNilAndNotFalse(_pms[_cur]) then
+				ply:SetYRPString( "string_playermodel", _pms[_cur])
+				ply:SetYRPInt( "pmid", _cur)
+				ply:SetModel(_pms[_cur])
+				local _charid = ply:CharID()
+				YRP_SQL_UPDATE( "yrp_characters", {["playermodelID"] = tonumber(_cur)}, "uniqueID = " .. tonumber(_charid) )
+				ply:UpdateBackpack()
+				SendBodyGroups(ply)
+			end
 		end
 	end
 end)
