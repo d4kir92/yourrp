@@ -259,8 +259,8 @@ function YRPCheckSalary(ply)
 end
 
 function YRPIsDealerAlive(uid)
-	for j, npc in pairs(ents.GetAll() ) do
-		if npc:IsNPC() and tonumber(npc:GetYRPString( "dealerID", "0" ) ) == tonumber(uid) then
+	for j, npc in pairs( ents.GetAll() ) do
+		if npc and npc:IsNPC() and tonumber(npc:GetYRPString( "dealerID", "0" ) ) == tonumber(uid) then
 			return true
 		end
 	end
@@ -268,8 +268,8 @@ function YRPIsDealerAlive(uid)
 end
 
 function YRPIsTeleporterAlive(uid)
-	for j, tel in pairs(ents.GetAll() ) do
-		if tel:GetClass() == "yrp_teleporter" then
+	for j, tel in pairs( ents.GetAll() ) do
+		if tel and tel:GetClass() == "yrp_teleporter" then
 			if tonumber(tel:GetYRPInt( "yrp_teleporter_uid", -1) ) != -1 and tonumber(tel:GetYRPInt( "yrp_teleporter_uid", -1) ) == tonumber(uid) then
 				return true
 			end
@@ -340,8 +340,8 @@ timer.Create( "ServerThink", TICK, 0, function()
 		end
 
 		if GetGlobalYRPBool( "bool_radiation", false) then
-			for k, ent in pairs(ents.GetAll() ) do
-				if ent:IsNPC() then
+			for k, ent in pairs( ents.GetAll() ) do
+				if ent and ent:IsNPC() then
 					YRPConRA(ent)
 				end
 			end
