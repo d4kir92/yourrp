@@ -672,7 +672,7 @@ net.Receive( "nws_yrp_roleselection_getrole", function( len, ply )
 			net.WriteTable(roltab)
 		net.Send(ply)
 	else
-		YRP.msg( "error", "[yrp_roleselection_getrole] ruid not valid: " .. tostring(ruid) )
+		YRP.msg( "note", "[nws_yrp_roleselection_getrole] Role-UID is no valid one: " .. tostring(ruid) )
 	end
 end)
 

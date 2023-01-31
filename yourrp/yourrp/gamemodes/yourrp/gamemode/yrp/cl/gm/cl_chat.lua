@@ -426,6 +426,9 @@ local function InitYRPChat()
 			function yrpChat.content:Paint(pw, ph)
 				if IsChatVisible() then
 					draw.RoundedBox(0, 0, 0, pw, ph, C_BG )
+					self:SetAlpha( 255 )
+				else
+					self:SetAlpha( 0 )
 				end
 
 				if self.delay < CurTime() then
@@ -554,7 +557,7 @@ local function InitYRPChat()
 				return suggestions
 			end
 			function yrpChat.writeField:PerformLayout()
-				local ts = LocalPlayer():HudValue( "CH", "TS" )
+				local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" )
 				if ts > 6 then
 					if self.SetUnderlineFont != nil then
 						self:SetUnderlineFont( "Y_" .. ts .. "_500" )
@@ -830,7 +833,7 @@ local function InitYRPChat()
 
 
 
-					local ts = LocalPlayer():HudValue( "CH", "TS" ) 
+					local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" ) 
 					surface.SetFont("Y_" .. ts .. "_500")
 					
 					local tx, ty = surface.GetTextSize( newtext.text )
@@ -852,7 +855,7 @@ local function InitYRPChat()
 						newtext:AppendText( args[2] )
 					end
 
-					local ts = LocalPlayer():HudValue( "CH", "TS" ) 
+					local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" ) 
 					surface.SetFont("Y_" .. ts .. "_500")
 					
 					local tx, ty = surface.GetTextSize( newtext.text )

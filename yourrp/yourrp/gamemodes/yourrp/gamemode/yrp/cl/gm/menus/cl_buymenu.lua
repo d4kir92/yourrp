@@ -423,7 +423,7 @@ net.Receive( "nws_yrp_shop_get_tabs", function( len )
 						BUYMENU.shop:AddItem(_cat)
 						BUYMENU.shop:Rebuild()
 
-						_cat.header:DoClick() -- opens the items
+						--_cat.header:DoClick() -- opens the items
 					end
 					if LocalPlayer():HasAccess( "show_get_tabs1" ) then
 						local _remove = YRPCreateD( "DButton", _cat, YRP.ctr(400), YRP.ctr(100), 0, 0)

@@ -513,72 +513,75 @@ function YRP_SQL_ADD_COLUMN( db_table, column_name, datatype)
 end
 
 if SERVER then
-	local _sql_settings = sql.Query( "SELECT * FROM yrp_sql" )
+	function YRPCheckSQL()
+		local _sql_settings = sql.Query( "SELECT * FROM yrp_sql" )
 
-	if IsNotNilAndNotFalse(_sql_settings) then
-		_sql_settings = _sql_settings[1]
-		YRPSQL.schema = _sql_settings.string_database
-		SetSQLMode(_sql_settings.int_mode)
-	end
-
-	if GetSQLMode() == 1 then
-		YRP.msg( "db", "Connect to MYSQL Database" )
-
-		-- MYSQL
-		if file.Find( "bin/gmsv_mysqloo_linux.dll", "LUA" ) == nil and file.Find( "bin/gmsv_mysqloo_win32.dll", "LUA" ) == nil then
-			MsgC( Color( 0, 255, 0 ), "Module not found, download it via yourrp discord!\n" )
-			YRPSQL.mysql_worked = false
-			SetSQLMode(0, true)
-			return
-		end
-		MsgC( Color( 0, 255, 0 ), "LOAD MODULE MYSQLOO!\n" )
-		require( "mysqloo" )
-
-		if (mysqloo.VERSION != "9" or !mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
-			MsgC( Color( 0, 255, 0 ), "You are using an outdated mysqloo version\n" )
-			MsgC( Color( 0, 255, 0 ), "Download the latest mysqloo9 from here\n" )
-			MsgC( Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases\n" )
-			YRPSQL.outdated = true
+		if IsNotNilAndNotFalse(_sql_settings) then
+			_sql_settings = _sql_settings[1]
+			YRPSQL.schema = _sql_settings.string_database
+			SetSQLMode(_sql_settings.int_mode)
 		end
 
-		if !YRPSQL.outdated then
-			YRPSQL.mysql_worked = false
+		if GetSQLMode() == 1 then
+			YRP.msg( "db", "Connect to MYSQL Database" )
 
-			timer.Simple(10, function()
-				if !YRPSQL.mysql_worked then
-					YRP.msg( "note", "Took to long to connect to mysql server, switch back to sqlite" )
+			-- MYSQL
+			if file.Find( "bin/gmsv_mysqloo_linux.dll", "LUA" ) == nil and file.Find( "bin/gmsv_mysqloo_win32.dll", "LUA" ) == nil then
+				MsgC( Color( 0, 255, 0 ), "Module not found, download it via yourrp discord!\n" )
+				YRPSQL.mysql_worked = false
+				SetSQLMode(0, true)
+				return
+			end
+			MsgC( Color( 0, 255, 0 ), "LOAD MODULE MYSQLOO!\n" )
+			require( "mysqloo" )
+
+			if (mysqloo.VERSION != "9" or !mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
+				MsgC( Color( 0, 255, 0 ), "You are using an outdated mysqloo version\n" )
+				MsgC( Color( 0, 255, 0 ), "Download the latest mysqloo9 from here\n" )
+				MsgC( Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases\n" )
+				YRPSQL.outdated = true
+			end
+
+			if !YRPSQL.outdated then
+				YRPSQL.mysql_worked = false
+
+				timer.Simple(10, function()
+					if !YRPSQL.mysql_worked then
+						YRP.msg( "note", "Took to long to connect to mysql server, switch back to sqlite" )
+						SetSQLMode(0, true)
+					end
+				end)
+
+				YRP.msg( "db", "Connection info:" )
+				YRP.msg( "db", "Hostname: " .. _sql_settings.string_host)
+				YRP.msg( "db", "Username: " .. _sql_settings.string_username)
+				YRP.msg( "note", "Password: " .. _sql_settings.string_password .. " (DON'T SHOW THIS TO OTHERS)" )
+				YRP.msg( "db", "Database/Schema: " .. _sql_settings.string_database)
+				YRP.msg( "db", "Port: " .. _sql_settings.int_port)
+
+				YRP.msg( "db", "Setup MYSQL Connection-Table" )
+				YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port) )
+
+				YRPSQL.db.onConnected = function()
+					YRP.msg( "note", ">>> CONNECTED! <<<" )
+					YRPSQL.mysql_worked = true
+					SetSQLMode(1)
+				end
+
+				--YRP_SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
+				YRPSQL.db.onConnectionFailed = function( db, serr)
+					YRP.msg( "note", ">>> CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!" )
+					YRP.msg( "error", "[MYSQL onConnectionFailed] " .. tostring(serr) )
 					SetSQLMode(0, true)
 				end
-			end)
 
-			YRP.msg( "db", "Connection info:" )
-			YRP.msg( "db", "Hostname: " .. _sql_settings.string_host)
-			YRP.msg( "db", "Username: " .. _sql_settings.string_username)
-			YRP.msg( "note", "Password: " .. _sql_settings.string_password .. " (DON'T SHOW THIS TO OTHERS)" )
-			YRP.msg( "db", "Database/Schema: " .. _sql_settings.string_database)
-			YRP.msg( "db", "Port: " .. _sql_settings.int_port)
-
-			YRP.msg( "db", "Setup MYSQL Connection-Table" )
-			YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port) )
-
-			YRPSQL.db.onConnected = function()
-				YRP.msg( "note", ">>> CONNECTED! <<<" )
-				YRPSQL.mysql_worked = true
-				SetSQLMode(1)
+				YRP.msg( "db", ">>> Connect to MYSQL Server, if stuck => connection info is wrong or server offline! ( default mysql port: 3306)" )
+				YRPSQL.db:connect()
+				YRPSQL.db:wait()
 			end
-
-			--YRP_SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
-			YRPSQL.db.onConnectionFailed = function( db, serr)
-				YRP.msg( "note", ">>> CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!" )
-				YRP.msg( "error", "[MYSQL onConnectionFailed] " .. tostring(serr) )
-				SetSQLMode(0, true)
-			end
-
-			YRP.msg( "db", ">>> Connect to MYSQL Server, if stuck => connection info is wrong or server offline! ( default mysql port: 3306)" )
-			YRPSQL.db:connect()
-			YRPSQL.db:wait()
 		end
 	end
+	YRPCheckSQL()
 end
 YRP.msg( "db", "Current SQL Mode: " .. GetSQLModeName() )
 
