@@ -480,7 +480,7 @@ local function InitYRPChat()
 			function yrpChat.comboBox:Paint(pw, ph)
 				surface.SetDrawColor(Color( 255, 255, 255, 0) )
 				surface.DrawRect(0, 0, pw, ph)
-				self:SetYRPTextColor(Color( 255, 255, 255, 255 ) )
+				self:SetTextColor(Color( 255, 255, 255, 255 ) )
 			end
 			function yrpChat.comboBox:OnSelect(index, value, data)
 				SetChatMode( value)
@@ -568,7 +568,7 @@ local function InitYRPChat()
 					self:SetFontInternal( "Y_" .. ts .. "_500" )
 				end
 
-				self:SetYRPTextColor(Color(40, 40, 40) )
+				self:SetTextColor(Color(40, 40, 40) )
 				self:SetFGColor(Color( 255, 255, 255, 0) )
 				self:SetBGColor(Color( 255, 255, 255, 0) )
 			end

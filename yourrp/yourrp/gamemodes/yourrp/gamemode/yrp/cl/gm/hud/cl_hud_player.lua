@@ -155,7 +155,7 @@ function sText(text, font, x, y, color, ax, ay)
 		_ay = h / 2
 	end
 
-	surface.SetYRPTextColor( color or Color( 255, 255, 255, 255 ) )
+	surface.SetTextColor( color or Color( 255, 255, 255, 255 ) )
 	surface.SetTextPos(x - _ax, y - _ay)
 	surface.DrawText(text)
 end

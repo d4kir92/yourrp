@@ -39,13 +39,13 @@ function PANEL:Init()
 	self.PlayerName:SetFont( "Y_24_500" )
 	self.PlayerName:SetSize(sw - br - sh - br - br, sh / 2 - 2 * br)
 	self.PlayerName:SetPos(sh + br, br)
-	self.PlayerName:SetYRPTextColor( Color( 255, 255, 255, 255 ) )
+	self.PlayerName:SetTextColor( Color( 255, 255, 255, 255 ) )
 
 	self.Channels = vgui.Create( "DLabel", self )
 	self.Channels:SetFont( "Y_20_500" )
 	self.Channels:SetSize(sw - br - sh - br - br, sh / 2 - 2 * br)
 	self.Channels:SetPos(sh + br, sh / 2 + br)
-	self.Channels:SetYRPTextColor( Color( 255, 255, 255, 255 ) )
+	self.Channels:SetTextColor( Color( 255, 255, 255, 255 ) )
 
 	self.Color = Color( 255, 255, 255, 0)
 

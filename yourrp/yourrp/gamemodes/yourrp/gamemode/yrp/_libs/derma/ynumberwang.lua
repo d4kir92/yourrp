@@ -65,7 +65,7 @@ function PANEL:Init()
 		local color = YRPInterfaceValue( "YFrame", "HI" )
 		local tcolor = YRPTextColor( color)
 
-		self:SetYRPTextColor(tcolor)
+		self:SetTextColor(tcolor)
 		self:SetFGColor(tcolor)
 		self:SetBGColor( color)
 
