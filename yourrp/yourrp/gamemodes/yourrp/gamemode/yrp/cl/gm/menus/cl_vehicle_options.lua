@@ -13,7 +13,7 @@ function YRPToggleVehicleOptions( vehicle, vehicleID)
 end
 
 function closeVehicleOptions()
-	closeMenu()
+	YRPCloseMenu()
 	if PanelAlive(yrp_vehicle.window) then
 		yrp_vehicle.window:Close()
 		yrp_vehicle.window = nil
@@ -29,7 +29,7 @@ net.Receive( "nws_yrp_getVehicleInfo", function( len )
 end)
 
 function optionVehicleWindow( vehicle, vehicleTab)
-	openMenu()
+	YRPOpenMenu()
 	local lply = LocalPlayer()
 
 	yrp_vehicle.window = createVGUI( "YFrame", nil, 1090, 160, 0, 0)
@@ -39,10 +39,10 @@ function optionVehicleWindow( vehicle, vehicleTab)
 		yrp_vehicle.window:Remove()
 	end
 	function yrp_vehicle.window:OnClose()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	function yrp_vehicle.window:OnRemove()
-		closeMenu()
+		YRPCloseMenu()
 	end
 
 	local ownercharid = vehicleTab[1].ownerCharID
@@ -61,7 +61,7 @@ function optionVehicleWindow( vehicle, vehicleTab)
 		draw.RoundedBox(0, YRP.ctr(4), YRP.ctr(160), pw - YRP.ctr(8), YRP.ctr(70-4), Color( 255, 255, 0, 200) )
 	end
 
-	if lply:HasAccess( "optionVehicleWindow" ) then
+	if lply:HasAccess( "optionVehicleWindow" ) or (vehicle:GetRPOwner() and LocalPlayer() == vehicle:GetRPOwner()) then
 		local _buttonRemoveOwner = createVGUI( "DButton", yrp_vehicle.window, 530, 50, 545, 170)
 		_buttonRemoveOwner:SetText( "" )
 		function _buttonRemoveOwner:DoClick()

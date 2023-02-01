@@ -12,7 +12,7 @@ function YRPToggleDoorOptions( door)
 end
 
 function YRPCloseDoorOptions()
-	closeMenu()
+	YRPCloseMenu()
 
 	if yrp_door and PanelAlive(yrp_door.window) then
 		yrp_door.window:Close()
@@ -58,7 +58,7 @@ end)
 
 function YRPDoorBuyWindow( door, tabBuilding)
 	tabBuilding.bool_canbeowned = tobool(tabBuilding.bool_canbeowned)
-	openMenu()
+	YRPOpenMenu()
 	local lply = LocalPlayer()
 
 	local _doors = 0
@@ -99,10 +99,10 @@ function YRPDoorBuyWindow( door, tabBuilding)
 		hook.Run( "YFramePaint", self, pw, ph)
 	end
 	function yrp_door.window:OnClose()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	function yrp_door.window:OnRemove()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	function yrp_door.window.con:Paint(pw, ph)
 		draw.SimpleTextOutlined(YRP.lang_string( "LID_name" ) .. ": " .. tabBuilding.name, "Y_24_500", br, br, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 255 ) )
@@ -302,7 +302,7 @@ function YRPDoorBuyWindow( door, tabBuilding)
 end
 
 function YRPDoorOptionWindow( door, tabBuilding, tabOwner, tabGroup)
-	openMenu()
+	YRPOpenMenu()
 	local lply = LocalPlayer()
 
 	local OWNER = false
@@ -368,10 +368,10 @@ function YRPDoorOptionWindow( door, tabBuilding, tabOwner, tabGroup)
 		end
 	end
 	function yrp_door.window:OnClose()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	function yrp_door.window:OnRemove()
-		closeMenu()
+		YRPCloseMenu()
 	end
 
 	--[[

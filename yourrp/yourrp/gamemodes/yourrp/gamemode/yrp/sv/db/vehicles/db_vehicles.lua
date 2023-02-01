@@ -117,26 +117,25 @@ function YRPLockVehicle(ply, ent, nr)
 end
 
 net.Receive( "nws_yrp_removeVehicleOwner", function( len, ply )
-	if !ply:HasAccess( "removeVehicleOwner" ) then
-		return 
-	end
-	
 	local _tmpVehicleID = tonumber( net.ReadString() )
 	local _tmpTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _tmpVehicleID .. "'" )
 	if IsNotNilAndNotFalse(_tmpTable) then
 		_tmpTable = _tmpTable[1]
 		
 		local item_uniqueID = tonumber( _tmpTable.item_id )
-		local result = YRP_SQL_UPDATE(DATABASE_NAME, {["ownerCharID"] = ""}, "uniqueID = '" .. _tmpVehicleID .. "'" )
 
 		for k, v in pairs(ents.GetAll() ) do
 			if v:GetYRPInt( "item_uniqueID", 0) != 0 and item_uniqueID and v:GetYRPInt( "item_uniqueID", 0) == item_uniqueID then
-				v:SetYRPInt( "item_uniqueID", 0)
-				v:SetYRPString( "ownerRPName", "" )
-				v:SetYRPEntity( "yrp_owner", NULL)
-				v:SetOwner(NULL)
+				if ply:HasAccess( "removeVehicleOwner" ) or ply == v:GetRPOwner() then
+					YRP_SQL_UPDATE(DATABASE_NAME, {["ownerCharID"] = ""}, "uniqueID = '" .. _tmpVehicleID .. "'" )
 
-				v:Fire( "Unlock" )
+					v:SetYRPInt( "item_uniqueID", 0)
+					v:SetYRPString( "ownerRPName", "" )
+					v:SetYRPEntity( "yrp_owner", NULL)
+					v:SetOwner(NULL)
+
+					v:Fire( "Unlock" )
+				end
 			end
 		end
 	end

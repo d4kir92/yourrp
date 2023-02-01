@@ -16,7 +16,7 @@ function AddStatusLine(parent, cat, entry, str_id, color)
 		tab.text.x = pw / 2
 		tab.text.y = ph / 2
 		tab.text.font = "Y_18_500"
-		DrawButton(self, tab)
+		YRPDrawButton(self, tab)
 	end
 
 	parent:AddItem(sl)

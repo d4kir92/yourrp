@@ -169,7 +169,7 @@ net.Receive( "nws_yrp_connect_Settings_UserGroup", function( len )
 			else
 				icon:SetHTML(HTMLCODE)
 			end
-			TestHTML(icon, UGS[CURRENT_USERGROUP].string_icon, false)
+			YRPTestHTML(icon, UGS[CURRENT_USERGROUP].string_icon, false)
 		end
 	end)
 
@@ -1006,7 +1006,7 @@ function YRPAddUG(tbl)
 		end
 		surfaceButton(self, pw, ph, "", self.string_color, ph + YRP.ctr(40 + 20), ph / 2, 0, 1, false)
 
-		draw.SimpleText(text, "Y_16_700", ph + YRP.ctr(40 + 20), ph / 2, TextColor(self.string_color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(text, "Y_16_700", ph + YRP.ctr(40 + 20), ph / 2, YRPTextColor(self.string_color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 		if UGS[tonumber(tbl.uniqueID)].string_icon and strEmpty(UGS[tonumber(tbl.uniqueID)].string_icon) then
 			surfaceBox(YRP.ctr(8) + YRP.ctr(40) + YRP.ctr(8), YRP.ctr(4), ph - YRP.ctr(8), ph - YRP.ctr(8), Color( 255, 255, 255, 255 ) )
@@ -1083,7 +1083,7 @@ function YRPAddUG(tbl)
 	else
 		icon:SetHTML(HTMLCODE)
 	end
-	TestHTML(icon, tbl.string_icon, false)
+	YRPTestHTML(icon, tbl.string_icon, false)
 
 	if !tobool(UGS[tonumber( tbl.uniqueID )].bool_removeable) then
 		local protsize = 24

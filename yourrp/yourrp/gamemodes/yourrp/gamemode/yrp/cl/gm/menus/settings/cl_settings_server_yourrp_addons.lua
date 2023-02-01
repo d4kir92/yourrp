@@ -120,7 +120,7 @@ net.Receive( "nws_yrp_connect_Settings_YourRP_Addons", function( len )
 			box.w = pw
 			box.h = ph
 			box.color = Color(80, 80, 80)
-			DrawBox( box)
+			YRPDrawBox( box)
 		end
 
 		if table.Count(YRPA) > 0 then

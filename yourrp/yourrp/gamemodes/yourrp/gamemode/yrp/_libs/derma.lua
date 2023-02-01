@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-function TextColor( bgcol)
+function YRPTextColor( bgcol)
 	if bgcol.r and bgcol.g and bgcol.b then
 		local sum = bgcol.r + bgcol.g + bgcol.b
 		if sum > 255 then
@@ -196,7 +196,7 @@ function stc(str)
 end
 
 local color_db = Color( 200, 200, 200 )
-function DrawBox(tab)
+function YRPDrawBox(tab)
 	tab.r = tab.r or 0
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
@@ -206,7 +206,7 @@ function DrawBox(tab)
 	draw.RoundedBox(tab.r, tab.x, tab.y, tab.w, tab.h, tab.color)
 end
 
-function DrawButton( button, tab)
+function YRPDrawButton( button, tab)
 	tab.r = tab.r or 0
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
@@ -221,7 +221,7 @@ function DrawButton( button, tab)
 	if button:IsHovered() then
 		tab.color = tab.hovercolor or Color( 255, 255, 255, 255 )
 	end
-	DrawBox(tab)
+	YRPDrawBox(tab)
 	tab.text = tab.text or {}
 	tab.text.text = tab.text.text or "NOTEXT"
 	tab.text.x = tab.text.x or tab.w / 2
@@ -230,7 +230,7 @@ function DrawButton( button, tab)
 	DrawText(tab.text)
 end
 
-function GetTextLength(text, font)
+function YRPGetTextLength(text, font)
 	surface.SetFont(font)
 	local l = select(1, surface.GetTextSize(text) )
 
@@ -243,7 +243,7 @@ function GetHTMLImage(url, w, h)
 	return "<style type=\"text/css\"> body { padding: 0; margin: 0; border:0; } img { padding: 0; margin: 0; border:0; } </style> <body> <img src=\"" .. url .. "\" width=\"" .. w .. "\" height=\"" .. h .. "\"/> </body>"
 end
 
-function RegisterDesign(tab)
+function YRPRegisterDesign(tab)
 	if tab.name ~= nil then
 		yrp_if[tab.name] = {}
 		yrp_if[tab.name].author = tab.author or "NO AUTHOR"
@@ -264,11 +264,11 @@ function RegisterWindowFunction(name, func)
 	yrp_if[name]["DFrame"] = func
 end
 
-function GetDesigns()
+function YRPGetDesigns()
 	return yrp_if
 end
 
-function GetFont()
+function YRPGetFont()
 	return yrp_if[interfaceDesign()].textFont
 end
 
@@ -511,7 +511,7 @@ end
 local _delay = 1
 local _get_design = true
 
-function GetDesign()
+function YRPGetDesign()
 	if _get_design then
 		_get_design = not _get_design
 		net.Start( "nws_yrp_get_design" )
@@ -525,7 +525,7 @@ function surfaceWindow( derma, pw, ph, title)
 	if yrp_if[interfaceDesign()] ~= nil then
 		yrp_if[interfaceDesign()]["DFrame"]( derma, pw, ph, _title)
 	else
-		GetDesign()
+		YRPGetDesign()
 	end
 end
 
@@ -535,7 +535,7 @@ function surfaceButton( derma, pw, ph, text, color, px, py, ax, ay, forcelang)
 	if yrp_if[interfaceDesign()] ~= nil then
 		yrp_if[interfaceDesign()]["DButton"]( derma, pw, ph, text, color, px, py, ax, ay, forcelang)
 	else
-		GetDesign()
+		YRPGetDesign()
 	end
 end
 
@@ -544,7 +544,7 @@ function surfacePanel( derm, pw, ph, text, color, px, py, ax, ay)
 	if yrp_if and yrp_if[interfaceDesign()] ~= nil then
 		yrp_if[interfaceDesign()]["DPanel"]( derm, pw, ph, _text, color, px, py, ax, ay)
 	else
-		GetDesign()
+		YRPGetDesign()
 	end
 end
 
@@ -571,7 +571,7 @@ function surfaceCheckBox( derma, pw, ph, icon)
 			end
 		end
 	else
-		GetDesign()
+		YRPGetDesign()
 	end
 end
 
@@ -610,11 +610,11 @@ function surfaceSelected( derma, pw, ph, px, py)
 			surfaceBox(px + pw - YRP.ctr(_h) - YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color( 255, 255, 255, 255 ) )
 		end
 	else
-		GetDesign()
+		YRPGetDesign()
 	end
 end
 
-function mouseVisible()
+function YRPMouseVisible()
 	return vgui.CursorVisible()
 end
 
@@ -629,12 +629,12 @@ function YRPIsNoMenuOpen()
 	end
 end
 
-function closeMenu()
+function YRPCloseMenu()
 	_menuOpen = false
 	gui.EnableScreenClicker(false)
 end
 
-function openMenu()
+function YRPOpenMenu()
 	_menuOpen = true
 end
 
@@ -1267,67 +1267,7 @@ function anchorH(num)
 	end
 end
 
-function createCircle(x, y, radius, seg)
-	local cir = {}
-
-	table.insert( cir, {
-		x = x,
-		y = y,
-		u = 0.5,
-		v = 0.5
-	})
-
-	for i = 0, seg do
-		local a = math.rad( (i / seg) * -360)
-
-		table.insert( cir, {
-			x = x + math.sin( a) * radius,
-			y = y + math.cos( a) * radius,
-			u = math.sin( a) / 2 + 0.5,
-			v = math.cos( a) / 2 + 0.5
-		})
-	end
-
-	local a = math.rad(0) -- This is needed for non absolute segment counts
-
-	table.insert( cir, {
-		x = x + math.sin( a) * radius,
-		y = y + math.cos( a) * radius,
-		u = math.sin( a) / 2 + 0.5,
-		v = math.cos( a) / 2 + 0.5
-	})
-
-	return cir
-end
-
-local sin,cos,rad = math.sin,math.cos,math.rad;
-function surface.CreatePoly(x, y, radius, quality, ang)
-	ang = ang or 360
-	local circle = {};
-    for i = 1, quality do
-        circle[i] = {};
-        circle[i].x = x + cos(rad(i*ang)/quality)*radius;
-        circle[i].y = y + sin(rad(i*ang)/quality)*radius;
-	end
-	return circle;
-end
-
-function draw.Circle( x, y, radius, seg )
-	local cir = {}
-
-	table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
-	for i = 0, seg do
-		local a = math.rad( ( i / seg ) * -360 )
-		table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
-	end
-
-	local a = math.rad( 0 ) -- This is needed for non absolute segment counts
-	table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
-
-	surface.DrawPoly( cir )
-end
-
-function drawCircle(x, y, radius, seg)
+function YRPDrawCircle(x, y, radius, seg)
 	local cir = {}
 
 	table.insert( cir, {
@@ -1360,7 +1300,7 @@ function drawCircle(x, y, radius, seg)
 	surface.DrawPoly( cir)
 end
 
-function drawCircleL(x, y, radius, seg)
+function YRPDrawCircleL(x, y, radius, seg)
 	local cir = {}
 
 	table.insert( cir, {
@@ -1393,7 +1333,7 @@ function drawCircleL(x, y, radius, seg)
 	surface.DrawPoly( cir)
 end
 
-function drawCircleR(x, y, radius, seg)
+function YRPDrawCircleR(x, y, radius, seg)
 	local cir = {}
 
 	table.insert( cir, {
@@ -1430,10 +1370,10 @@ function drawRoundedBox(r, x, y, w, h, color)
 	draw.RoundedBox(0, x + h / 2, y, w - h, h, color)
 	surface.SetDrawColor( color)
 	draw.NoTexture()
-	drawCircleL(x + h / 2, y + h / 2, h / 2, 64)
+	YRPDrawCircleL(x + h / 2, y + h / 2, h / 2, 64)
 
 	if w >= h then
-		drawCircleR(x + w - h / 2, y + h / 2, h / 2, 64)
+		YRPDrawCircleR(x + w - h / 2, y + h / 2, h / 2, 64)
 	end
 end
 
@@ -1481,7 +1421,7 @@ function drawRoundedBoxBR(r, x, y, w, h, color, br)
 	render.SetStencilEnable(false)
 end
 
-function TestHTML(pnl, url, rem)
+function YRPTestHTML(pnl, url, rem)
 	if SERVER then return end
 
 	if rem == nil then

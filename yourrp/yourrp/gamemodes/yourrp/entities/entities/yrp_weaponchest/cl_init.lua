@@ -88,7 +88,7 @@ local function YRPCreateSlot(x, y, art, id)
 			sh = sh + 10
 
 			draw.RoundedBox(3, pw / 2 - sw / 2, ph / 2 - sh / 2, sw, sh, color)
-			draw.SimpleText(text, font, pw / 2, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)	
+			draw.SimpleText(text, font, pw / 2, ph / 2, YRPTextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)	
 		end
 	end
 
@@ -156,7 +156,7 @@ local function YRPCreateSWEP(x, y, art, cname)
 			sh = sh + 10
 
 			draw.RoundedBox(3, pw / 2 - sw / 2, ph / 2 - sh / 2, sw, sh, color)
-			draw.SimpleText(text, font, pw / 2, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)	
+			draw.SimpleText(text, font, pw / 2, ph / 2, YRPTextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)	
 		end
 	end
 

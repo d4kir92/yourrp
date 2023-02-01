@@ -11,7 +11,7 @@ end
 
 function CloseEmotesMenu()
 	if _em.window ~= nil then
-		closeMenu()
+		YRPCloseMenu()
 		_em.window:Remove()
 		_em.window = nil
 	end
@@ -91,7 +91,7 @@ for i = 1, _seg do
 end
 
 function OpenEmotesMenu()
-	openMenu()
+	YRPOpenMenu()
 	_em.window = YRPCreateD( "DFrame", nil, YRP.ctr(1900), YRP.ctr(1900), 0, 0)
 	_em.window:Center()
 	_em.window:ShowCloseButton(false)

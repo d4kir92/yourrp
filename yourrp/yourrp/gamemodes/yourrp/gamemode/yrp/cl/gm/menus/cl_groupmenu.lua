@@ -12,10 +12,10 @@ end
 local GMENU = nil
 function YRPToggleGroupMenu()
 	if IsValid( GMENU ) then
-		closeMenu()
+		YRPCloseMenu()
 		GMENU:Remove()
 	elseif YRPIsNoMenuOpen() then
-		openMenu()
+		YRPOpenMenu()
 		GMENU = YRPCreateD( "YFrame", nil, 600, 600, 0, 0 )
 		GMENU:SetTitle( string.format( "%s: %s", YRP.lang_string( "LID_group" ), LocalPlayer():GetGroupName() ) )
 		GMENU:Center()

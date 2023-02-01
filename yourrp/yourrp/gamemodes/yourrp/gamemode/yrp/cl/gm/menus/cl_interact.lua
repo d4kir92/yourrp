@@ -17,7 +17,7 @@ end
 
 function closeInteractMenu()
 	if yrp_Interact != nil then
-		closeMenu()
+		YRPCloseMenu()
 		yrp_Interact:Remove()
 		yrp_Interact = nil
 	end
@@ -25,7 +25,7 @@ end
 
 function openInteractMenu(CharID)
 	if CharID != nil then
-		openMenu()
+		YRPOpenMenu()
 		tmpTargetCharID = CharID
 		net.Start( "nws_yrp_openInteractMenu" )
 			net.WriteString(tmpTargetCharID)
@@ -51,10 +51,10 @@ net.Receive( "nws_yrp_openInteractMenu", function( len )
 	yrp_Interact = YRPCreateD( "YFrame", nil, YRP.ctr(1090), YRP.ctr(1360), 0, 0)
 	yrp_Interact:SetHeaderHeight(YRP.ctr(100) )
 	function yrp_Interact:OnClose()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	function yrp_Interact:OnRemove()
-		closeMenu()
+		YRPCloseMenu()
 	end
 
 	local tmpRPName = ""

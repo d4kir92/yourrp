@@ -27,14 +27,14 @@ end
 function closeKeybindsMenu()
 	KEYBINDS.open = false
 	if KEYBINDS.window != nil then
-		closeMenu()
+		YRPCloseMenu()
 		KEYBINDS.window:Remove()
 		KEYBINDS.window = nil
 	end
 end
 
 function openKeybindsMenu()
-	openMenu()
+	YRPOpenMenu()
 
 	KEYBINDS.open = true
 	KEYBINDS.window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
@@ -42,10 +42,10 @@ function openKeybindsMenu()
 	KEYBINDS.window:SetTitle( "LID_keybinds" )
 	KEYBINDS.window:SetHeaderHeight(YRP.ctr(100) )
 	function KEYBINDS.window:OnClose()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	function KEYBINDS.window:OnRemove()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	KEYBINDS.window.systime = SysTime()
 	function KEYBINDS.window:Paint(pw, ph)
@@ -119,7 +119,7 @@ function CreateKeybindsContent(parent)
 		tab.hovercolor = Color( 255, 100, 100)
 		tab.text = {}
 		tab.text.text = YRP.lang_string( "LID_settodefault" )
-		DrawButton(self, tab)
+		YRPDrawButton(self, tab)
 	end
 	function reset:DoClick()
 		local _window = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
@@ -153,7 +153,7 @@ function CreateKeybindsContent(parent)
 			tab.hovercolor = Color( 255, 100, 100)
 			tab.text = {}
 			tab.text.text = YRP.lang_string( "LID_setasserverdefault" )
-			DrawButton(self, tab)
+			YRPDrawButton(self, tab)
 		end
 		function setsvkeybind:DoClick()
 			local _window = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
@@ -186,7 +186,7 @@ function CreateKeybindsContent(parent)
 			tab.hovercolor = Color( 255, 100, 100)
 			tab.text = {}
 			tab.text.text = YRP.lang_string( "LID_forcesetkeybinds" )
-			DrawButton(self, tab)
+			YRPDrawButton(self, tab)
 		end
 		function forcesetkeybinds:DoClick()
 			local _window = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)

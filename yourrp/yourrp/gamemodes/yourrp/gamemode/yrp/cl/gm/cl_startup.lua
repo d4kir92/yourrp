@@ -64,7 +64,7 @@ function YRP.AddLanguageChangerLine(parent, tab, mainparent)
 			end
 		end
 
-		draw.SimpleTextOutlined( constructLanguageText(self.lang.language, self.lang.inenglish, self.lang.percentage), GetFont(), YRP.ctr(4 + 46 + 8), ph / 2, self.textcol, 0, 1, 1, Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( constructLanguageText(self.lang.language, self.lang.inenglish, self.lang.percentage), YRPGetFont(), YRP.ctr(4 + 46 + 8), ph / 2, self.textcol, 0, 1, 1, Color( 0, 0, 0, 255 ) )
 	end
 
 	function lang:DoClick()
@@ -153,7 +153,7 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 	function LanguageChanger.btn:DoClick()
 		LanguageChanger.selecting = true
 		local languages = YRP.GetAllLanguages()
-		surface.SetFont(GetFont() )
+		surface.SetFont(YRPGetFont() )
 		local _longestLanguageString = 0
 
 		for k, lang in SortedPairs(languages) do
@@ -896,7 +896,7 @@ end
 function YRPDrawNamePlate( ply, stri, z, color )
 	local br = 2
 	local font = "Y_100_700"
-	local textcolor = TextColor( color )
+	local textcolor = YRPTextColor( color )
 	local pos = ply:GetPos() + Vector(0, 0, ply:OBBMaxs().z)
 
 	if ply:LookupBone( "ValveBiped.Bip01_Head1" ) then
@@ -1347,7 +1347,7 @@ hook.Add( "PostDrawTranslucentRenderables", "yrp_draw_plates", YRPDrawNamePlates
 
 function draw3DText(text, x, y, color)
 	color = color or Color( 255, 255, 255, 255 )
-	surface.SetTextColor( color)
+	surface.SetYRPTextColor( color)
 	surface.SetFont( "Y_" .. 24 .. "_500" )
 	local tw, _ = surface.GetTextSize(text)
 	surface.SetTextPos(x - tw / 2, y)
@@ -1494,14 +1494,14 @@ function DrawDoorText( door)
 	local header = door:GetYRPString( "text_header", "" )
 	surface.SetFont( "Y_24_500" )
 	local head_size = surface.GetTextSize( header )
-	surface.SetTextColor( Color( 255, 255, 255, 255 ) )
+	surface.SetYRPTextColor( Color( 255, 255, 255, 255 ) )
 	surface.SetTextPos(- head_size / 2, -80)
 	surface.DrawText(header)
 
 	local description = door:GetYRPString( "text_description", "" )
 	surface.SetFont( "Y_14_500" )
 	local desc_size = surface.GetTextSize( description)
-	surface.SetTextColor( Color( 255, 255, 255, 255 ) )
+	surface.SetYRPTextColor( Color( 255, 255, 255, 255 ) )
 	surface.SetTextPos(- desc_size / 2, -50)
 	surface.DrawText( description)
 
@@ -1510,7 +1510,7 @@ function DrawDoorText( door)
 		local int_securitylevel = YRP.lang_string( "LID_securitylevel" ) .. ": " .. sl
 		surface.SetFont( "Y_24_500" )
 		local secu_size = surface.GetTextSize(int_securitylevel)
-		surface.SetTextColor( Color( 255, 255, 255, 255 ) )
+		surface.SetYRPTextColor( Color( 255, 255, 255, 255 ) )
 		surface.SetTextPos(- secu_size / 2, -20)
 		surface.DrawText(int_securitylevel)
 	end
@@ -1912,12 +1912,12 @@ net.Receive( "nws_yrp_openLawBoard", function( len )
 
 		function window:OnClose()
 			window:Remove()
-			closeMenu()
+			YRPCloseMenu()
 		end
 
 		function window:OnRemove()
 			windowOpen = false
-			closeMenu()
+			YRPCloseMenu()
 		end
 
 		function window:Paint(pw, ph)

@@ -67,7 +67,7 @@ function openCharacterCreation(from)
 	if IsVoidCharEnabled() or !GetGlobalYRPBool( "bool_character_system", true) then return end
 
 	if CharacterMenu == nil then
-		openMenu()
+		YRPOpenMenu()
 		
 		local win = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
 		win:MakePopup()
@@ -119,7 +119,7 @@ end
 
 function closeCharacterSelection()
 	if CharMenu.frame != nil and LocalPlayer():Alive() then
-		closeMenu()
+		YRPCloseMenu()
 		CharMenu.frame:Remove()
 		CharMenu.frame = nil
 	end
@@ -944,7 +944,7 @@ function openCharacterSelection( force )
 	CharMenu.character.amount = 0
 	CharMenu.character.amountevent = 0
 
-	openMenu()
+	YRPOpenMenu()
 	
 	if !PanelAlive(CharMenu.frame) then
 		YRP_CharDesign = string.lower(GetGlobalYRPString( "text_character_design" ) )
@@ -954,7 +954,7 @@ function openCharacterSelection( force )
 				YRP_CharDesign = string.lower(GetGlobalYRPString( "text_character_design" ) )
 
 				if CharMenu.frame and CharMenu.frame:IsVisible() then
-					closeMenu()
+					YRPCloseMenu()
 					CharMenu.frame:Remove()
 					CharMenu.frame = nil
 					openCharacterSelection()
@@ -976,10 +976,10 @@ function openCharacterSelection( force )
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255) ) -- Dark Background - Character Selection [vertical]
 			end
 			function CharMenu.frame:OnClose()
-				closeMenu()
+				YRPCloseMenu()
 			end
 			function CharMenu.frame:OnRemove()
-				closeMenu()
+				YRPCloseMenu()
 			end
 
 			CharMenu.frame.bg = YRPCreateD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
@@ -1238,10 +1238,10 @@ function openCharacterSelection( force )
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255) ) -- Dark Background - Character Selection [horizontal]
 			end
 			function CharMenu.frame:OnClose()
-				closeMenu()
+				YRPCloseMenu()
 			end
 			function CharMenu.frame:OnRemove()
-				closeMenu()
+				YRPCloseMenu()
 			end
 
 			CharMenu.frame.bg = YRPCreateD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
@@ -1466,10 +1466,10 @@ function openCharacterSelection( force )
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255) ) -- Dark Background - Character Selection [horizontalnew]
 			end
 			function CharMenu.frame:OnClose()
-				closeMenu()
+				YRPCloseMenu()
 			end
 			function CharMenu.frame:OnRemove()
-				closeMenu()
+				YRPCloseMenu()
 			end
 
 			CharMenu.frame.bg = YRPCreateD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
@@ -1631,10 +1631,10 @@ function openCharacterSelection( force )
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 255) ) -- Dark Background - Character Selection [horizontalnew]
 			end
 			function CharMenu.frame:OnClose()
-				closeMenu()
+				YRPCloseMenu()
 			end
 			function CharMenu.frame:OnRemove()
-				closeMenu()
+				YRPCloseMenu()
 			end
 
 			CharMenu.frame.bg = YRPCreateD( "DHTML", CharMenu.frame, ScrW(), ScrH(), 0, 0)
@@ -1814,7 +1814,7 @@ function openCharacterSelection( force )
 
 				if !strEmpty(text) then
 					local hasdesign = hook.Run( "YButtonAPaint", self, pw, ph, tab)
-					draw.SimpleText(text, "Y_26_700", pw / 2, ph / 2, TextColor(tab.color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(text, "Y_26_700", pw / 2, ph / 2, YRPTextColor(tab.color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 

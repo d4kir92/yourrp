@@ -12,14 +12,14 @@ end
 function closeCharMenu()
 	CHAR.open = false
 	if CHAR.window != nil then
-		closeMenu()
+		YRPCloseMenu()
 		CHAR.window:Remove()
 		CHAR.window = nil
 	end
 end
 
 function openCharMenu()
-	openMenu()
+	YRPOpenMenu()
 
 	CHAR.open = true
 	CHAR.window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
@@ -27,10 +27,10 @@ function openCharMenu()
 	CHAR.window:SetTitle( "LID_character" )
 	CHAR.window:SetHeaderHeight(YRP.ctr(100) )
 	function CHAR.window:OnClose()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	function CHAR.window:OnRemove()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	CHAR.window.systime = SysTime()
 	function CHAR.window:Paint(pw, ph)

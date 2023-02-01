@@ -480,7 +480,7 @@ local function InitYRPChat()
 			function yrpChat.comboBox:Paint(pw, ph)
 				surface.SetDrawColor(Color( 255, 255, 255, 0) )
 				surface.DrawRect(0, 0, pw, ph)
-				self:SetTextColor(Color( 255, 255, 255, 255 ) )
+				self:SetYRPTextColor(Color( 255, 255, 255, 255 ) )
 			end
 			function yrpChat.comboBox:OnSelect(index, value, data)
 				SetChatMode( value)
@@ -568,7 +568,7 @@ local function InitYRPChat()
 					self:SetFontInternal( "Y_" .. ts .. "_500" )
 				end
 
-				self:SetTextColor(Color(40, 40, 40) )
+				self:SetYRPTextColor(Color(40, 40, 40) )
 				self:SetFGColor(Color( 255, 255, 255, 0) )
 				self:SetBGColor(Color( 255, 255, 255, 0) )
 			end
@@ -661,7 +661,7 @@ local function InitYRPChat()
 				end
 			end
 
-			function YRPChatChangeTextColor( newtext, str, cstr, color )
+			function YRPChatChangeYRPTextColor( newtext, str, cstr, color )
 				if string.StartWith(str, cstr .. ">" ) then
 					str = string.Replace(str, cstr .. ">", "" )
 					newtext:InsertColorChange( color.r, color.g, color.b, color.a)
@@ -776,19 +776,19 @@ local function InitYRPChat()
 									if string.find(str, "<" ) then
 										local nstr = string.Explode( "<", str)
 										for i, v in pairs(nstr) do
-											YRPChatChangeTextColor( newtext, v, "red", 		Color( 255, 0, 0, 255) )
-											YRPChatChangeTextColor( newtext, v, "green", 		Color( 0, 255, 0, 255) )
-											YRPChatChangeTextColor( newtext, v, "blue", 		Color( 0, 0, 255, 255) )
-											YRPChatChangeTextColor( newtext, v, "yellow", 	Color( 255, 255, 0, 255) )
-											YRPChatChangeTextColor( newtext, v, "black", 		Color( 0, 0, 0, 255 ) )
-											YRPChatChangeTextColor( newtext, v, "white", 		Color( 255, 255, 255, 255 ) )
+											YRPChatChangeYRPTextColor( newtext, v, "red", 		Color( 255, 0, 0, 255) )
+											YRPChatChangeYRPTextColor( newtext, v, "green", 		Color( 0, 255, 0, 255) )
+											YRPChatChangeYRPTextColor( newtext, v, "blue", 		Color( 0, 0, 255, 255) )
+											YRPChatChangeYRPTextColor( newtext, v, "yellow", 	Color( 255, 255, 0, 255) )
+											YRPChatChangeYRPTextColor( newtext, v, "black", 		Color( 0, 0, 0, 255 ) )
+											YRPChatChangeYRPTextColor( newtext, v, "white", 		Color( 255, 255, 255, 255 ) )
 
-											YRPChatChangeTextColor( newtext, v, "/red", 		Color( 255, 255, 255, 255 ) )
-											YRPChatChangeTextColor( newtext, v, "/green", 	Color( 255, 255, 255, 255 ) )
-											YRPChatChangeTextColor( newtext, v, "/blue", 		Color( 255, 255, 255, 255 ) )
-											YRPChatChangeTextColor( newtext, v, "/yellow", 	Color( 255, 255, 255, 255 ) )
-											YRPChatChangeTextColor( newtext, v, "/black", 	Color( 255, 255, 255, 255 ) )
-											YRPChatChangeTextColor( newtext, v, "/white", 	Color( 255, 255, 255, 255 ) )
+											YRPChatChangeYRPTextColor( newtext, v, "/red", 		Color( 255, 255, 255, 255 ) )
+											YRPChatChangeYRPTextColor( newtext, v, "/green", 	Color( 255, 255, 255, 255 ) )
+											YRPChatChangeYRPTextColor( newtext, v, "/blue", 		Color( 255, 255, 255, 255 ) )
+											YRPChatChangeYRPTextColor( newtext, v, "/yellow", 	Color( 255, 255, 255, 255 ) )
+											YRPChatChangeYRPTextColor( newtext, v, "/black", 	Color( 255, 255, 255, 255 ) )
+											YRPChatChangeYRPTextColor( newtext, v, "/white", 	Color( 255, 255, 255, 255 ) )
 										end
 									else
 										newtext:AppendText(str)

@@ -152,7 +152,7 @@ function YRPUseFunction(str)
 			end
 
 		--Inventory
-		elseif str == "dropitem" and !mouseVisible() then
+		elseif str == "dropitem" and !YRPMouseVisible() then
 			local _weapon = LocalPlayer():GetActiveWeapon()
 			if _weapon != NULL then
 				local _pname = _weapon:GetPrintName() or _weapon.PrintName or YRP.lang_string( "LID_weapon" )
@@ -181,10 +181,10 @@ function YRPUseFunction(str)
 			done_tutorial( "tut_tmo" )
 			gui.EnableScreenClicker(!vgui.CursorVisible() )
 
-		elseif str == "vyes" and !mouseVisible() then
+		elseif str == "vyes" and !YRPMouseVisible() then
 			net.Start( "nws_yrp_voteYes" )
 			net.SendToServer()
-		elseif str == "vno" and !mouseVisible() then
+		elseif str == "vno" and !YRPMouseVisible() then
 			net.Start( "nws_yrp_voteNo" )
 			net.SendToServer()
 		elseif string.StartWith(str, "m_" ) then

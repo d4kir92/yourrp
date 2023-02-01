@@ -16,7 +16,7 @@ end
 function closeTicketMenu()
 	TICKET.open = false
 	if TICKET.window != nil then
-		closeMenu()
+		YRPCloseMenu()
 		TICKET.window:Remove()
 		TICKET.window = nil
 	elseif PanelAlive(TICKET.content) and PanelAlive(TICKET.content:GetParent() ) then
@@ -30,7 +30,7 @@ end
 local _url = "https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/formResponse"
 
 function openTicketMenu()
-	openMenu()
+	YRPOpenMenu()
 
 	TICKET.open = true
 	TICKET.window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
@@ -38,10 +38,10 @@ function openTicketMenu()
 	TICKET.window:SetTitle( "LID_sendticket" )
 	TICKET.window:SetHeaderHeight(YRP.ctr(100) )
 	function TICKET.window:OnClose()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	function TICKET.window:OnRemove()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	TICKET.window.systime = SysTime()
 	function TICKET.window:Paint(pw, ph)

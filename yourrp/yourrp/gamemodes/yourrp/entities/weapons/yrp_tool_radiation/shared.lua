@@ -225,7 +225,7 @@ if CLIENT then
 
 				if LocalPlayer():GetPos():Distance(spos) < 6000 then
 					render.SetColorMaterial()
-					render.DrawBox(spos, Angle(0, 0, 0), Vector(0, 0, 0), epos-spos, Color(40, 223, 40, 100) )
+					render.YRPDrawBox(spos, Angle(0, 0, 0), Vector(0, 0, 0), epos-spos, Color(40, 223, 40, 100) )
 					--render.DrawSphere(spos, size, 16, 16, Color(r, g, b, 200) )
 				end
 			end

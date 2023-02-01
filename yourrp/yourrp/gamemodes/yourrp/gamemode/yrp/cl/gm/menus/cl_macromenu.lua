@@ -12,7 +12,7 @@ end
 
 function CloseMacroMenu()
 	if _mm.window != nil then
-		closeMenu()
+		YRPCloseMenu()
 		_mm.window:Remove()
 		_mm.window = nil
 	end
@@ -130,7 +130,7 @@ end )
 
 function OpenMacroMenu()
 	if GetGlobalYRPBool( "bool_yrp_macro_menu", false) then
-		openMenu()
+		YRPOpenMenu()
 
 		_mm.window = YRPCreateD( "YFrame", nil, YRP.ctr(720 + 36), YRP.ctr(820), 0, 0)
 		_mm.window:Center()

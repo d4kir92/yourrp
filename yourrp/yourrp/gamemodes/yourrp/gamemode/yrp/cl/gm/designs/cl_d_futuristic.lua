@@ -4,7 +4,7 @@ local _fut = {}
 _fut.author = "D4KiR"
 _fut.name = "Futuristic"
 _fut.textFont = "Y_18_500"
-RegisterDesign(_fut)
+YRPRegisterDesign(_fut)
 
 function _fut.GetAlpha()
 	if InterfaceTransparent() then
@@ -164,7 +164,7 @@ end
 
 RegisterWindowFunction(_fut.name, _fut.DrawWindow)
 
-function _fut.DrawButton( btn, pw, ph, text, color)
+function _fut.YRPDrawButton( btn, pw, ph, text, color)
 	--[[ Vars ]]--
 	local _text = text or ""
 

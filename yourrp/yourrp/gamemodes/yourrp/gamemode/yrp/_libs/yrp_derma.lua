@@ -94,7 +94,7 @@ function DrawText(tab)
 		tab.text = YRP.lang_string(tab.text)
 	end
 	tab.font = tab.font or "Y_14_700"
-	draw.SimpleText(tab.text, tab.font, tab.x, tab.y, TextColor(tab.color), tab.ax, tab.ay)
+	draw.SimpleText(tab.text, tab.font, tab.x, tab.y, YRPTextColor(tab.color), tab.ax, tab.ay)
 end
 
 function DrawPanel(panel, tab)

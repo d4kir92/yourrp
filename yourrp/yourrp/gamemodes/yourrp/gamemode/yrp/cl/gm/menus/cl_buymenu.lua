@@ -16,7 +16,7 @@ end
 function YRPCloseBuyMenu()
 	BUYMENU.open = false
 	if BUYMENU.window != nil then
-		closeMenu()
+		YRPCloseMenu()
 		BUYMENU.window:Remove()
 		BUYMENU.window = nil
 	end
@@ -717,7 +717,7 @@ end
 
 function YRPOpenBuyMenu(uid)
 	uid = uid or 1
-	openMenu()
+	YRPOpenMenu()
 
 	BUYMENU.open = true
 	BUYMENU.window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
@@ -728,10 +728,10 @@ function YRPOpenBuyMenu(uid)
 	--BUYMENU.window:SetSizable(true)
 	BUYMENU.window:SetHeaderHeight(YRP.ctr(100) )
 	function BUYMENU.window:OnClose()
-		closeMenu()
+		YRPCloseMenu()
 	end
 	function BUYMENU.window:OnRemove()
-		closeMenu()
+		YRPCloseMenu()
 	end
 
 	BUYMENU.window.systime = SysTime()

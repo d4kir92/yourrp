@@ -102,7 +102,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 	if hassubtabs then
 		spacer = YRP.ctr(100)
 	end
-	local TAB = YRPCreateD( "DButton", self, GetTextLength(YRP.lang_string(name), "Y_22_500" ) + YRP.ctr(30 * 2) + spacer, YRP.ctr(100), YRP.ctr(400), 0)
+	local TAB = YRPCreateD( "DButton", self, YRPGetTextLength(YRP.lang_string(name), "Y_22_500" ) + YRP.ctr(30 * 2) + spacer, YRP.ctr(100), YRP.ctr(400), 0)
 	TAB.menu = self
 	TAB.name = name
 	TAB.netstr = netstr

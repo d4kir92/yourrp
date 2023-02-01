@@ -70,7 +70,7 @@ function PANEL:Paint( w, h )
 	draw.NoTexture()
 	surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
 	local diameter = h / 2
-	drawCircle( diameter, diameter, diameter, math.max(w, h) )
+	YRPDrawCircle( diameter, diameter, diameter, math.max(w, h) )
 
 	render.SetStencilCompareFunction( STENCIL_EQUAL )
 	render.SetStencilFailOperation( STENCIL_KEEP )

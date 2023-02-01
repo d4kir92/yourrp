@@ -16,7 +16,7 @@ end
 function CloseHelpMenu()
 	HELPMENU.open = false
 	if HELPMENU.window != nil then
-		closeMenu()
+		YRPCloseMenu()
 		HELPMENU.window:Remove()
 		HELPMENU.window = nil
 	end
@@ -593,7 +593,7 @@ net.Receive( "nws_yrp_getsiteyourrptranslations", function( len )
 			end
 
 			_allProgressTexts[sho] = text
-			surface.SetFont(GetFont() )
+			surface.SetFont(YRPGetFont() )
 			local width = surface.GetTextSize(text)
 
 			if (width > _longestProgressText) then
@@ -698,7 +698,7 @@ net.Receive( "nws_yrp_getsiteyourrptranslations", function( len )
 end)
 
 function OpenHelpMenu()
-	openMenu()
+	YRPOpenMenu()
 
 	HELPMENU.open = true
 	HELPMENU.window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() ) --ScW(), ScrH(), 0, 0)

@@ -59,7 +59,7 @@ net.Receive( "nws_yrp_get_menu_bodygroups", function( len )
 					tab.h = ph
 					tab.text = {}
 					tab.text.text = ""
-					DrawButton(self, tab)
+					YRPDrawButton(self, tab)
 					local symbol = "pause"
 					local color = Color( 0, 255, 0 )
 					if !self:IsHovered() and play then
@@ -291,7 +291,7 @@ end
 
 function close_appearance()
 	if _yrp_appearance.window != nil then
-		closeMenu()
+		YRPCloseMenu()
 		_yrp_appearance.window:Remove()
 		if _yrp_appearance.drop_panel != nil then
 			_yrp_appearance.drop_panel:Remove()
@@ -305,7 +305,7 @@ net.Receive( "nws_yrp_openAM", function( len )
 end)
 
 function open_appearance()
-	openMenu()
+	YRPOpenMenu()
 
 	_yrp_appearance.window = YRPCreateD( "YFrame", nil, ScW(), ScrH(), 0, 0)
 	_yrp_appearance.window:SetTitle( "LID_appearance" )

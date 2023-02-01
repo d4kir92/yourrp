@@ -63,9 +63,9 @@ function PANEL:Init()
 		self:SetPaintBackgroundEnabled(true)
 
 		local color = YRPInterfaceValue( "YFrame", "HI" )
-		local tcolor = TextColor( color)
+		local tcolor = YRPTextColor( color)
 
-		self:SetTextColor(tcolor)
+		self:SetYRPTextColor(tcolor)
 		self:SetFGColor(tcolor)
 		self:SetBGColor( color)
 

@@ -4,7 +4,7 @@ local _mat1 = {}
 _mat1.author = "D4KiR"
 _mat1.name = "Material Design 1"
 _mat1.textFont = "Y_18_500"
-RegisterDesign(_mat1)
+YRPRegisterDesign(_mat1)
 
 function _mat1.GetAlpha()
 	if InterfaceTransparent() then
@@ -111,7 +111,7 @@ end
 
 RegisterWindowFunction(_mat1.name, _mat1.DrawWindow)
 
-function _mat1.DrawButton( btn, pw, ph, text, color, px, py, ax, ah, forcelang)
+function _mat1.YRPDrawButton( btn, pw, ph, text, color, px, py, ax, ah, forcelang)
 	--[[ Vars ]]--
 	local _text = text or ""
 

@@ -9,7 +9,7 @@ end
 
 function CloseLawsMenu()
 	if _la.window != nil then
-		closeMenu()
+		YRPCloseMenu()
 		_la.window:Remove()
 		_la.window = nil
 	end
@@ -166,7 +166,7 @@ function CreateLawsContent( PARENT )
 end
 
 function OpenLawsMenu()
-	openMenu()
+	YRPOpenMenu()
 	_la.window = YRPCreateD( "YFrame", nil, YRP.ctr(1600), YRP.ctr(1200), 0, 0)
 	_la.window:Center()
 	_la.window:MakePopup()

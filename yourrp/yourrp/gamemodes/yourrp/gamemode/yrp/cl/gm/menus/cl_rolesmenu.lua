@@ -17,11 +17,11 @@ end
 function CloseRoleMenu()
 	ROLEMENU.open = false
 	if ROLEMENU.window != nil then
-		closeMenu()
+		YRPCloseMenu()
 		ROLEMENU.window:Remove()
 		ROLEMENU.window = nil
 	elseif _info != nil then
-		closeMenu()
+		YRPCloseMenu()
 		_info:Remove()
 		_info = nil
 	end
@@ -379,7 +379,7 @@ function getGroups(uid, parent)
 end
 
 function OpenRoleMenu()
-	openMenu()
+	YRPOpenMenu()
 	if GetGlobalYRPBool( "bool_players_can_switch_role", false) then
 		ROLEMENU.open = true
 		ROLEMENU.window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )

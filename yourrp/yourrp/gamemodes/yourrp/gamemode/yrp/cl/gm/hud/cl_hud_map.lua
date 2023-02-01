@@ -15,7 +15,7 @@ end
 function YRPToggleMap()
 	if YRPIsNoMenuOpen() and !_map.open then
 		_map.open = true
-		openMenu()
+		YRPOpenMenu()
 		net.Start( "nws_yrp_askCoords" )
 		net.SendToServer()
 	else
@@ -27,7 +27,7 @@ end
 function closeMap()
 	if _map.window != nil and _map.window != NULL then
 		gui.EnableScreenClicker(false)
-		closeMenu()
+		YRPCloseMenu()
 		_map.window:Remove()
 		_map.window = nil
 	end
@@ -271,11 +271,11 @@ function openMap()
 		end
 		function _map.window:OnClose()
 			map.open = false
-			closeMenu()
+			YRPCloseMenu()
 		end
 		function _map.window:OnRemove()
 			map.open = false
-			closeMenu()
+			YRPCloseMenu()
 		end
 	else
 		

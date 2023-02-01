@@ -112,13 +112,13 @@ net.Receive( "nws_yrp_weapon_menu", function( len )
 	function header:Paint(pw, ph)
 		local color = Color(80, 80, 80)
 		draw.RoundedBox(3, 0, 0, pw, ph, color)
-		draw.SimpleText(YRP.lang_string( "LID_name" ), "Y_16_700", ph / 2, ph / 2, TextColor( color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_name" ), "Y_16_700", ph / 2, ph / 2, YRPTextColor( color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		
-		draw.SimpleText(YRP.lang_string( "LID_primary" ), 	"Y_16_700", pw - 60 - spacer * 4 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string( "LID_secondary" ), 	"Y_16_700", pw - 60 - spacer * 3 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string( "LID_sidearm" ), 	"Y_16_700", pw - 60 - spacer * 2 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string( "LID_gadget" ), 		"Y_16_700", pw - 60 - spacer * 1 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string( "LID_noslot" ), 		"Y_16_700", pw - 60 - spacer * 0 + 8, ph / 2, TextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_primary" ), 	"Y_16_700", pw - 60 - spacer * 4 + 8, ph / 2, YRPTextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_secondary" ), 	"Y_16_700", pw - 60 - spacer * 3 + 8, ph / 2, YRPTextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_sidearm" ), 	"Y_16_700", pw - 60 - spacer * 2 + 8, ph / 2, YRPTextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_gadget" ), 		"Y_16_700", pw - 60 - spacer * 1 + 8, ph / 2, YRPTextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string( "LID_noslot" ), 		"Y_16_700", pw - 60 - spacer * 0 + 8, ph / 2, YRPTextColor( color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	local lis = YRPCreateD( "DPanelList", PARENT, sw, PARENT:GetTall() - 10 - 30 - 30 - 10, 400 + 10, 10 + 30 + 30)
@@ -155,7 +155,7 @@ net.Receive( "nws_yrp_weapon_menu", function( len )
 					if string.find(string.lower(swep.ClassName), "base" ) or string.find(string.lower(swep.PrintName), "base" ) then
 						text = text .. " [MAYBE A BASE]"
 					end
-					draw.SimpleText(text, "Y_16_700", ph / 2, ph / 2, TextColor( color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(text, "Y_16_700", ph / 2, ph / 2, YRPTextColor( color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				if DBTab2[swep.ClassName] == nil then

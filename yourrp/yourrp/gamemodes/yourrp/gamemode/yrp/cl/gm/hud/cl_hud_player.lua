@@ -62,7 +62,7 @@ local tabs = {
 	["spawnmenu.category.saves"] = "bool_saves"
 }
 hook.Add( "SpawnMenuOpen", "yrp_spawn_menu_open", function()
-	openMenu()
+	YRPOpenMenu()
 
 	local lply = LocalPlayer()
 
@@ -130,7 +130,7 @@ hook.Add( "SpawnMenuOpen", "yrp_spawn_menu_open", function()
 end, hook.MONITOR_HIGH)
 
 hook.Add( "SpawnMenuClose", "yrp_spawn_menu_close", function()
-	closeMenu()
+	YRPCloseMenu()
 end, hook.MONITOR_HIGH)
 
 local contextMenuOpen = false
@@ -155,7 +155,7 @@ function sText(text, font, x, y, color, ax, ay)
 		_ay = h / 2
 	end
 
-	surface.SetTextColor( color or Color( 255, 255, 255, 255 ) )
+	surface.SetYRPTextColor( color or Color( 255, 255, 255, 255 ) )
 	surface.SetTextPos(x - _ax, y - _ay)
 	surface.DrawText(text)
 end

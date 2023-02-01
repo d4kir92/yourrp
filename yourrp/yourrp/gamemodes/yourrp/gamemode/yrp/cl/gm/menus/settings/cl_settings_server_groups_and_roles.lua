@@ -131,7 +131,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 			if PanelAlive(gs.gplist) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_icon then
 				gs.gplist[_uid].string_icon = icon
 				gs.gplist[_uid].ico:SetHTML(GetHTMLImage(gs.gplist[_uid].string_icon, gs.gplist[_uid].ico:GetWide(), gs.gplist[_uid].ico:GetTall() ))
-				TestHTML(gs.gplist[_uid].ico, gs.gplist[_uid].string_icon, false)
+				YRPTestHTML(gs.gplist[_uid].ico, gs.gplist[_uid].string_icon, false)
 			end
 		end)
 
@@ -178,7 +178,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 			function ico:Paint(pw, ph)
 			end
 			ico:SetHTML(GetHTMLImage(group.string_icon, ico:GetWide(), ico:GetTall() ))
-			TestHTML(ico, group.string_icon, false)
+			YRPTestHTML(ico, group.string_icon, false)
 
 			gs.gplist[group.uniqueID].up = YRPCreateD( "YButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), YRP.ctr(10) )
 			gs.gplist[group.uniqueID].up:SetText( "" )
@@ -418,7 +418,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 				if PanelAlive(rs.rplist[_uid]) then
 					rs.rplist[_uid].string_icon = icon
 					rs.rplist[_uid].ico:SetHTML(GetHTMLImage(rs.rplist[_uid].string_icon, rs.rplist[_uid].ico:GetWide(), rs.rplist[_uid].ico:GetTall() ))
-					TestHTML(rs.rplist[_uid].ico, rs.rplist[_uid].string_icon, false)
+					YRPTestHTML(rs.rplist[_uid].ico, rs.rplist[_uid].string_icon, false)
 				end
 			end
 		end)
@@ -1086,7 +1086,7 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 			function ico:Paint(pw, ph)
 			end
 			ico:SetHTML(GetHTMLImage(role.string_icon, ico:GetWide(), ico:GetTall() ))
-			TestHTML(ico, role.string_icon, false)
+			YRPTestHTML(ico, role.string_icon, false)
 
 			rs.rplist[role.uniqueID].up = YRPCreateD( "YButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), YRP.ctr(10) )
 			rs.rplist[role.uniqueID].up:SetText( "" )
