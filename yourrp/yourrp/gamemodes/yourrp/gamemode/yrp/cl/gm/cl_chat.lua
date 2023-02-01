@@ -523,8 +523,11 @@ local function InitYRPChat()
 				tsnw:SetValue(LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" ) )
 				tsnw:SetMin(10)
 				tsnw:SetMax(64)
-				function tsnw:OnValueChanged( val)
-					LocalPlayer().CH_TS = tsnw:GetValue()
+				function tsnw:OnValueChanged( val )
+					local v = tsnw:GetValue()
+					if v >= 10 and v <= 64 then
+						LocalPlayer().CH_TS = tsnw:GetValue()
+					end
 				end
 			end
 
@@ -833,9 +836,11 @@ local function InitYRPChat()
 
 
 
-					local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" ) 
-					surface.SetFont("Y_" .. ts .. "_500")
-					
+					local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" )
+					if ts > 0 then 
+						surface.SetFont("Y_" .. ts .. "_500")
+					end
+
 					local tx, ty = surface.GetTextSize( newtext.text )
 					local rows = math.Clamp( math.ceil( tx / lply:HudValue( "CH", "SIZE_W" ) ), 1, 5 )
 					newtext:SetTall( rows * ts )
@@ -856,8 +861,10 @@ local function InitYRPChat()
 					end
 
 					local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" ) 
-					surface.SetFont("Y_" .. ts .. "_500")
-					
+					if ts > 0 then
+						surface.SetFont("Y_" .. ts .. "_500")
+					end
+
 					local tx, ty = surface.GetTextSize( newtext.text )
 					local rows = math.Clamp( math.ceil( tx / lply:HudValue( "CH", "SIZE_W" ) ), 1, 5 )
 					newtext:SetTall( rows * ts )

@@ -73,7 +73,7 @@ function SWEP:PrimaryAttack()
 					local wn = w:GetPrintName() or w.PrintName
 					local pa = tr.Entity:GetAmmoCount(w:GetPrimaryAmmoType() )
 					local sa = tr.Entity:GetAmmoCount(w:GetSecondaryAmmoType() )
-					chat.AddText(wn, " | PA: ", pa, " | SA: ", sa)
+					chat.AddText( tostring( wn ), " | PA: ", tostring( pa ), " | SA: ", tostring( sa ) )
 				end
 			end
 			if CLIENT then
