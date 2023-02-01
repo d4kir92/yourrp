@@ -1267,7 +1267,24 @@ function anchorH(num)
 	end
 end
 
-function YRPDrawCircle(x, y, radius, seg)
+function YRPDrawCircle( x, y, radius, seg )
+	if x == nil then
+		YRP.msg( "error", "x: " .. tostring( x ) )
+		return
+	end
+	if y == nil then
+		YRP.msg( "error", "y: " .. tostring( y ) )
+		return
+	end
+	if radius == nil then
+		YRP.msg( "error", "Radius: " .. tostring( radius ) )
+		return
+	end
+	if seg == nil then
+		YRP.msg( "error", "Seg: " .. tostring( seg ) )
+		return
+	end
+
 	local cir = {}
 
 	table.insert( cir, {
