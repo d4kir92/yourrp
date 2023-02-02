@@ -126,6 +126,7 @@ local on = {}
 on.stable = -1
 on.beta = -1
 on.canary = -1
+on.build = -1
 
 if CLIENT then
 	-- CONFIG
@@ -147,9 +148,6 @@ if CLIENT then
 					self:Remove()
 				end
 				hook.Run( "YFramePaint", self, pw, ph)
-				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 0, 0, 200) )
-
-				--surfaceWindow(self, pw, ph, YRP.lang_string( "LID_about" ) )
 			end
 			function frame.con:Paint(pw, ph)
 				local tab = {}
@@ -168,7 +166,9 @@ if CLIENT then
 				else
 					draw.SimpleTextOutlined(YRP.lang_string( "LID_githubversion" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 				end
-				draw.SimpleTextOutlined(on.stable .. "." .. on.beta .. "." .. on.canary .. ":" .. on.build .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " )", "Y_24_500", pw / 2, YRP.ctr(300), Color( 0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				if on then
+					draw.SimpleTextOutlined(on.stable .. "." .. on.beta .. "." .. on.canary .. ":" .. on.build .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " )", "Y_24_500", pw / 2, YRP.ctr(300), Color( 0, 255, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				end
 			end
 
 			local showChanges = YRPCreateD( "YButton", frame.con, YRP.ctr(500), YRP.ctr(80), frame.con:GetWide() / 2 - YRP.ctr(250), YRP.ctr(350) )

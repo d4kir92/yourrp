@@ -72,7 +72,7 @@ hook.Add( "YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 		end
 		draw.RoundedBox(r, tab.x, tab.y, pw, ph, Color( color.r, color.g, color.b, color.a ) )
 
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, YRPTextColor( color ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.lang_string(tab.text or self:GetText() ), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, YRPTextColor( color ), tab.ax or TEXT_ALIGN_CENTER, tab.ay or TEXT_ALIGN_CENTER)
 		return true
 	end
 end)

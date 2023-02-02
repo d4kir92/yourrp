@@ -62,7 +62,7 @@ function optionVehicleWindow( vehicle, vehicleTab)
 	end
 
 	if lply:HasAccess( "optionVehicleWindow" ) or (vehicle:GetRPOwner() and LocalPlayer() == vehicle:GetRPOwner()) then
-		local _buttonRemoveOwner = createVGUI( "DButton", yrp_vehicle.window, 530, 50, 545, 170)
+		local _buttonRemoveOwner = createVGUI( "YButton", yrp_vehicle.window, 530, 50, 545, 170)
 		_buttonRemoveOwner:SetText( "" )
 		function _buttonRemoveOwner:DoClick()
 			net.Start( "nws_yrp_removeVehicleOwner" )
@@ -72,10 +72,10 @@ function optionVehicleWindow( vehicle, vehicleTab)
 				yrp_vehicle.window:Close()
 			end
 		end
+		_buttonRemoveOwner.tab = { ["text"] = YRP.lang_string( "LID_removeowner" ) }
 		function _buttonRemoveOwner:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string( "LID_removeowner" ) )
+			hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 		end
-
 
 		yrp_vehicle.window:SetSize(YRP.ctr(1090), YRP.ctr(230) )
 		yrp_vehicle.window:Center()

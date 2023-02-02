@@ -528,8 +528,9 @@ net.Receive( "nws_yrp_usergroup_update_string_color", function( len, ply )
 		return
 	end
 	
-	local uid = tonumber(net.ReadString() )
+	local uid = tonumber( net.ReadString() )
 	local string_color = net.ReadString()
+
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_color"] = string_color}, "uniqueID = '" .. uid .. "'" )
 
 	YRP.msg( "db", ply:YRPName() .. " updated color of usergroup ( " .. uid .. " ) to [" .. string_color .. "]" )
@@ -551,6 +552,7 @@ net.Receive( "nws_yrp_usergroup_update_icon", function( len, ply )
 	
 	local uid = tonumber(net.ReadString() )
 	local string_icon = net.ReadString()
+
 	YRP_SQL_UPDATE(DATABASE_NAME, {["string_icon"] = string_icon}, "uniqueID = '" .. uid .. "'" )
 
 	YRP.msg( "db", ply:YRPName() .. " updated string_icon of usergroup ( " .. uid .. " ) to [" .. string_icon .. "]" )
@@ -558,6 +560,7 @@ net.Receive( "nws_yrp_usergroup_update_icon", function( len, ply )
 	for i, pl in pairs(HANDLER_USERGROUP[uid]) do
 		if pl != ply then
 			net.Start( "nws_yrp_usergroup_update_icon" )
+				net.WriteString(uid)
 				net.WriteString(string_icon)
 			net.Send(pl)
 		end

@@ -116,7 +116,6 @@ function createRoleBox(rol, parent, mainparent)
 		-- Role Button --
 		_rol.gr = YRPCreateD( "YButton", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0)
 		function _rol.gr:Paint(pw, ph)
-			--hook.Run( "YButtonPaint", self, pw, ph) -- surfaceButton(self, pw, ph, YRP.lang_string( "LID_moreinformation" ) )
 			if self:IsHovered() then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 60) )
 			end
@@ -394,7 +393,7 @@ function OpenRoleMenu()
 
 		function ROLEMENU.window:Paint(pw, ph)
 			Derma_DrawBackgroundBlur(self, self.systime)
-			hook.Run( "YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string( "LID_ROLEMENU.window" ) .. " [PROTOTYPE]" )
+			hook.Run( "YFramePaint", self, pw, ph)
 		end
 
 		ROLEMENU.window:MakePopup()

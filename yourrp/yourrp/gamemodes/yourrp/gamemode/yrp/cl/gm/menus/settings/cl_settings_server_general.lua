@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 	
 function CreateCheckBoxLine( dpanellist, val, lstr, netstr, fixx, textcolor)
 	textcolor = textcolor or Color( 255, 255, 255, 255 )
@@ -51,11 +51,12 @@ function CreateButtonLine( dpanellist, lstr, netstr, lstr2)
 		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
-	background.button = YRPCreateD( "DButton", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
+	background.button = YRPCreateD( "YButton", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50) )
 	background.button:SetText( "" )
 	background.button.text = lstr2 or lstr
+	background.button.tab = { ["text"] = "" }
 	function background.button:Paint(pw, ph)
-		surfaceButton(self, pw, ph, YRP.lang_string(self.text), Color( 200, 200, 200, 255) )
+		hook.Run( "YButtonPaint", self, pw, ph, { ["text"] = YRP.lang_string(self.text), ["color"] = Color( 200, 200, 200, 255) } )
 	end
 
 	function background.button:DoClick()
@@ -1036,7 +1037,7 @@ net.Receive( "nws_yrp_connect_Settings_General", function( len )
 			local win = createVGUI( "DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			win:Center()
 			win:SetTitle(YRP.lang_string( "LID_areyousure" ) )
-			local _yesButton = createVGUI( "DButton", win, 200, 50, 10, 60)
+			local _yesButton = createVGUI( "YButton", win, 200, 50, 10, 60)
 			_yesButton:SetText(YRP.lang_string( "LID_yes" ) )
 			function _yesButton:DoClick()
 
@@ -1045,7 +1046,7 @@ net.Receive( "nws_yrp_connect_Settings_General", function( len )
 
 				win:Close()
 			end
-			local _noButton = createVGUI( "DButton", win, 200, 50, 10 + 200 + 10, 60)
+			local _noButton = createVGUI( "YButton", win, 200, 50, 10 + 200 + 10, 60)
 			_noButton:SetText(YRP.lang_string( "LID_no" ) )
 			function _noButton:DoClick()
 				win:Close()

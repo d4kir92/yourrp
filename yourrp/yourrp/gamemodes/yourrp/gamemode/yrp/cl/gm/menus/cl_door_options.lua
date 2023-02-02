@@ -394,9 +394,6 @@ function YRPDoorOptionWindow( door, tabBuilding, tabOwner, tabGroup)
 			net.SendToServer()
 			yrp_door.window:Remove()
 		end
-		--function _ButtonSell:Paint(pw, ph)
-			--surfaceButton(self, pw, ph, YRP.lang_string( "LID_sell" ) .. " (+" .. GetGlobalYRPString( "text_money_pre", "" ) .. _price / 2 .. GetGlobalYRPString( "text_money_pos", "" ) .. " )" )
-		--end
 
 		local _header = YRPCreateD( "DTextEntry", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), yrp_door.window.con:GetWide() - YRP.ctr(500 + 20), YRP.ctr(50) )
 		_header:SetText(tabBuilding.text_header)

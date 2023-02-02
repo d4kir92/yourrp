@@ -472,7 +472,7 @@ hook.Add( "HUDPaint", "yrp_hud", function()
 	end
 
 	if GetGlobalYRPBool( "blinded", false) then
-		surfaceBox(0, 0, ScrW(), ScrH(), Color( 255, 255, 255, 255 ) )
+		draw.RoundedBox( 0, 0, 0, ScrW(), ScrH(), Color( 255, 255, 255, 255 ) )
 		surfaceText(YRP.lang_string( "LID_blinded" ), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(100), Color( 255, 255, 0, 255), 1, 1)
 	end
 	if lply:IsFlagSet(FL_FROZEN) then

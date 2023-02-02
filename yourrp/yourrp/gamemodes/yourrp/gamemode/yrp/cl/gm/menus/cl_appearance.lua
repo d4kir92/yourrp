@@ -51,7 +51,7 @@ net.Receive( "nws_yrp_get_menu_bodygroups", function( len )
 					--
 				end
 
-				_appe.r.play = YRPCreateD( "DButton", _yrp_appearance.left, YRP.ctr(100), YRP.ctr(100), ScW() / 4, ScrH() - YRP.ctr(200) )
+				_appe.r.play = YRPCreateD( "YButton", _yrp_appearance.left, YRP.ctr(100), YRP.ctr(100), ScW() / 4, ScrH() - YRP.ctr(200) )
 				_appe.r.play:SetText( "" )
 				function _appe.r.play:Paint(pw, ph)
 					local tab = {}
@@ -111,11 +111,12 @@ net.Receive( "nws_yrp_get_menu_bodygroups", function( len )
 					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpPM.cur .. "/" .. _tmpPM.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 				end
 
-				local _tmpPMUp = YRPCreateD( "DButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
+				local _tmpPMUp = YRPCreateD( "YButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
 				_tmpPMUp:SetText( "" )
+				_tmpPMUp.tab = { ["text"] = "↑" }
 				function _tmpPMUp:Paint(pw, ph)
 					if _tmpPM.cur < _tmpPM.max then
-						surfaceButton(self, pw, ph, "↑" )
+						hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 					end
 				end
 				function _tmpPMUp:DoClick()
@@ -130,11 +131,12 @@ net.Receive( "nws_yrp_get_menu_bodygroups", function( len )
 					end
 				end
 
-				local _tmpPMDo = YRPCreateD( "DButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40) )
+				local _tmpPMDo = YRPCreateD( "YButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40) )
 				_tmpPMDo:SetText( "" )
+				_tmpPMDo.tab = { ["text"] = "↓" }
 				function _tmpPMDo:Paint(pw, ph)
 					if _tmpPM.cur > 1 then
-						surfaceButton(self, pw, ph, "↓" )
+						hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 					end
 				end
 				function _tmpPMDo:DoClick()
@@ -166,11 +168,12 @@ net.Receive( "nws_yrp_get_menu_bodygroups", function( len )
 					draw.SimpleTextOutlined(self.name .. " ( " .. _tmpSkin.cur + 1 .. "/" .. _tmpSkin.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 				end
 
-				local _tmpSkinUp = YRPCreateD( "DButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
+				local _tmpSkinUp = YRPCreateD( "YButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
 				_tmpSkinUp:SetText( "" )
+				_tmpSkinUp.tab = { ["text"] = "↑" }
 				function _tmpSkinUp:Paint(pw, ph)
 					if _tmpSkin.cur < _tmpSkin.max - 1 then
-						surfaceButton(self, pw, ph, "↑" )
+						hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 					end
 				end
 				function _tmpSkinUp:DoClick()
@@ -185,11 +188,12 @@ net.Receive( "nws_yrp_get_menu_bodygroups", function( len )
 					end
 				end
 
-				local _tmpSkinDo = YRPCreateD( "DButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40) )
+				local _tmpSkinDo = YRPCreateD( "YButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40) )
 				_tmpSkinDo:SetText( "" )
+				_tmpSkinDo.tab = { ["text"] = "↓" }
 				function _tmpSkinDo:Paint(pw, ph)
 					if _tmpSkin.cur > 0 then
-						surfaceButton(self, pw, ph, "↓" )
+						hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 					end
 				end
 				function _tmpSkinDo:DoClick()
@@ -222,11 +226,12 @@ net.Receive( "nws_yrp_get_menu_bodygroups", function( len )
 								hook.Run( "YPanelPaint", self, pw, ph )
 								draw.SimpleTextOutlined(self.name .. " ( " .. _tmpBg.cur + 1 .. "/" .. _tmpBg.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 							end
-							_tmpBgUp = YRPCreateD( "DButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
+							_tmpBgUp = YRPCreateD( "YButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(2) )
 							_tmpBgUp:SetText( "" )
+							_tmpBgUp.tab = { ["text"] = "↑" }
 							function _tmpBgUp:Paint(pw, ph)
 								if _tmpBg.cur < _tmpBg.max - 1 then
-									surfaceButton(self, pw, ph, "↑" )
+									hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 								end
 							end
 							function _tmpBgUp:DoClick()
@@ -242,11 +247,12 @@ net.Receive( "nws_yrp_get_menu_bodygroups", function( len )
 								end
 							end
 
-							_tmpBgDo = YRPCreateD( "DButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(_height / 2 - 2) )
+							_tmpBgDo = YRPCreateD( "YButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(_height / 2 - 2) )
 							_tmpBgDo:SetText( "" )
+							_tmpBgDo.tab = { ["text"] = "↓" }
 							function _tmpBgDo:Paint(pw, ph)
 								if _tmpBg.cur > 0 then
-									surfaceButton(self, pw, ph, "↓" )
+									hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 								end
 							end
 							function _tmpBgDo:DoClick()
@@ -268,7 +274,7 @@ net.Receive( "nws_yrp_get_menu_bodygroups", function( len )
 		end
 	elseif PanelAlive(_yrp_appearance.window) then
 		function _yrp_appearance.window:Paint(pw, ph)
-			hook.Run( "YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string( "LID_appearance" ) .. " - " .. YRP.lang_string( "LID_menu" ) .. " [PROTOTYPE]" )
+			hook.Run( "YFramePaint", self, pw, ph)
 			local tab = {}
 			tab.x = pw / 2
 			tab.y = ph / 2
@@ -319,7 +325,7 @@ function open_appearance()
 		end
 	end
 	function _yrp_appearance.window:Paint(pw, ph)
-		hook.Run( "YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string( "LID_appearance" ) .. " - " .. YRP.lang_string( "LID_menu" ) .. " [PROTOTYPE]" )
+		hook.Run( "YFramePaint", self, pw, ph)
 	end
 
 	_yrp_appearance.left = YRPCreateD( "DPanel", _yrp_appearance.window, ScW(), ScrH() - _yrp_appearance.window:GetHeaderHeight(), 0, _yrp_appearance.window:GetHeaderHeight() )

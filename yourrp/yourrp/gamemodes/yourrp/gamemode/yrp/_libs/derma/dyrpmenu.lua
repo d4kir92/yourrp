@@ -47,7 +47,7 @@ function PANEL:AddSpacer()
 	Entry.spacer = YRPCreateD( "DPanel", self, self:GetWide(), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight) )
 
 	function Entry.spacer:Paint(pw, ph)
-		surfaceBox(0, ph / 4, pw, ph / 2, Color( 0, 0, 0, 255 ) )
+		draw.RoundedBox( 0, 0, ph / 4, pw, ph / 2, Color( 0, 0, 0, 255 ) )
 	end
 
 	self.lastheight = self.lastheight + Entry.size
@@ -79,7 +79,7 @@ function PANEL:AddOption(name, icon)
 	Entry.button:SetText(Entry.name)
 
 	function Entry.button:Paint(pw, ph)
-		hook.Run( "YButtonPaint", self, pw, ph) --surfaceButton(self, pw, ph, Entry.name)
+		hook.Run( "YButtonPaint", self, pw, ph)
 	end
 
 	self.lastheight = self.lastheight + Entry.size

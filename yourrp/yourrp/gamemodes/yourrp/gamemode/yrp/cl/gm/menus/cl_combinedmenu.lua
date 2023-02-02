@@ -58,7 +58,7 @@ function CreateDiscordContent(PARENT)
 
 	local page = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function page:Paint(pw, ph)
-		--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255 ) )
+		--draw.RoundedBox( 0, 0, 0, YRP.ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255 ) )
 	end
 
 	local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. PARENT:GetWide() - YRP.ctr(2 * 20) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
@@ -90,7 +90,7 @@ function CreateTeamspeakContent(PARENT)
 			local page = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
 			function page:Paint(pw, ph)
-				--surfaceBox(0, 0, pw, ph, Color(40, 40, 40, 255) )
+				--draw.RoundedBox( 0, 0, 0, pw, ph, Color(40, 40, 40, 255) )
 			end
 
 			local widgetlink = "<span id=\"its402545\"><a href=\"https://www.teamspeak3.com/\">teamspeak</a> Hosting by TeamSpeak3.com</span><script type=\"text/javascript\" src=\"https://view.light-speed.com/teamspeak3.php?IP=" .. ip .. "&PORT=" .. port .. "&QUERY= " .. query_port .. "&UID=402545&display=block&font=11px&background=transparent&server_info_background=transparent&server_info_text=%23ffffff&server_name_background=transparent&server_name_text=%23ffffff&info_background=transparent&channel_background=transparent&channel_text=%23ffffff&username_background=transparent&username_text=%23ffffff\"></script>"
@@ -113,7 +113,7 @@ function CreateCollectionContent(PARENT)
 		local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
 		function WorkshopPage:Paint(pw, ph)
-			surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+			draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 		end
 
 		WorkshopPage:OpenURL(link)
@@ -137,7 +137,7 @@ function CreateTwitchContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_twitch", "" )
 	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -158,7 +158,7 @@ function CreateYoutubeContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_youtube", "" )
 	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -177,7 +177,7 @@ function CreateTwitterContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_twitter", "" )
 	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -198,7 +198,7 @@ function CreateSteamGroupContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_steamgroup", "" )
 	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -219,7 +219,7 @@ function CreateFacebookContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_facebook", "" )
 	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 
@@ -240,7 +240,7 @@ function CreateInstagramContent(PARENT)
 	local link = GetGlobalYRPString( "text_social_instagram", "" )
 	local WorkshopPage = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function WorkshopPage:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 	WorkshopPage:OpenURL(link)
 

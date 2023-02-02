@@ -249,7 +249,7 @@ function YRPRegisterDesign(tab)
 		yrp_if[tab.name].author = tab.author or "NO AUTHOR"
 		yrp_if[tab.name].name = tab.name or "NO Name"
 		yrp_if[tab.name].textFont = tab.textFont or "Y_18_500"
-	end
+	end	
 end
 
 function RegisterPanelFunction(name, func)
@@ -511,19 +511,11 @@ end
 local _delay = 1
 local _get_design = true
 
-function surfaceWindow( derma, pw, ph, title)
+function surfaceWindow( self, pw, ph, title)
 	local _title = title or ""
 
 	if yrp_if[interfaceDesign()] ~= nil and yrp_if[interfaceDesign()]["DFrame"] then
-		yrp_if[interfaceDesign()]["DFrame"]( derma, pw, ph, _title)
-	end
-end
-
-function surfaceButton( derma, pw, ph, text, color, px, py, ax, ay, forcelang)
-	local _text = text or ""
-
-	if yrp_if[interfaceDesign()] ~= nil and yrp_if[interfaceDesign()]["DButton"] then
-		yrp_if[interfaceDesign()]["DButton"]( derma, pw, ph, text, color, px, py, ax, ay, forcelang)
+		yrp_if[interfaceDesign()]["DFrame"]( self, pw, ph, _title)
 	end
 end
 
@@ -534,20 +526,20 @@ function surfacePanel( derm, pw, ph, text, color, px, py, ax, ay)
 	end
 end
 
-function surfaceCheckBox( derma, pw, ph, icon)
+function surfaceCheckBox( self, pw, ph, icon)
 	if yrp_if[interfaceDesign()] ~= nil then
 		if yrp_if[interfaceDesign()]["DCheckBox"] ~= nil then
-			yrp_if[interfaceDesign()]["DCheckBox"]( derma, pw, ph, icon)
+			yrp_if[interfaceDesign()]["DCheckBox"]( self, pw, ph, icon)
 		else
 			local th = 4
 			local br = 4
 			local color = Color( 0, 0, 0, 255 )
-			surfaceBox(YRP.ctr( br), YRP.ctr( br), pw - YRP.ctr( br * 2), YRP.ctr(th), color)
-			surfaceBox(YRP.ctr( br), YRP.ctr( br), YRP.ctr(th), ph - YRP.ctr( br * 2), color)
-			surfaceBox(YRP.ctr( br), ph - YRP.ctr( br + th), pw - YRP.ctr( br * 2), YRP.ctr(th), color)
-			surfaceBox(pw - YRP.ctr( br + th), YRP.ctr( br), YRP.ctr(th), ph - YRP.ctr( br * 2), color)
+			draw.RoundedBox( 0, YRP.ctr( br), YRP.ctr( br), pw - YRP.ctr( br * 2), YRP.ctr(th), color)
+			draw.RoundedBox( 0, YRP.ctr( br), YRP.ctr( br), YRP.ctr(th), ph - YRP.ctr( br * 2), color)
+			draw.RoundedBox( 0, YRP.ctr( br), ph - YRP.ctr( br + th), pw - YRP.ctr( br * 2), YRP.ctr(th), color)
+			draw.RoundedBox( 0, pw - YRP.ctr( br + th), YRP.ctr( br), YRP.ctr(th), ph - YRP.ctr( br * 2), color)
 
-			if derma:GetChecked() then
+			if self:GetChecked() then
 				br = 4
 				if YRP.GetDesignIcon(icon) ~= nil then
 					surface.SetDrawColor( Color( 0, 255, 0 ) )
@@ -555,43 +547,6 @@ function surfaceCheckBox( derma, pw, ph, icon)
 					surface.DrawTexturedRect(YRP.ctr( br), YRP.ctr( br), pw - YRP.ctr( br * 2), ph - YRP.ctr(8) )
 				end
 			end
-		end
-	end
-end
-
-function surfaceSelected( derma, pw, ph, px, py)
-	px = px or 0
-	py = py or 0
-	local _text = text or ""
-
-	if yrp_if[interfaceDesign()] ~= nil then
-		if yrp_if[interfaceDesign()]["Selected"] ~= nil then
-			yrp_if[interfaceDesign()]["Selected"]( derma, pw, ph, px, py)
-		else
-			local _br = 4
-			local _w = 32
-			local _h = 12
-			--Outter
-			surfaceBox(px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color( 0, 0, 0, 255 ) )
-			surfaceBox(px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color( 0, 0, 0, 255 ) )
-			surfaceBox(px + YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color( 0, 0, 0, 255 ) )
-			surfaceBox(px + YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color( 0, 0, 0, 255 ) )
-			surfaceBox(px + pw - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color( 0, 0, 0, 255 ) )
-			surfaceBox(px + pw - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color( 0, 0, 0, 255 ) )
-			surfaceBox(px + pw - YRP.ctr(_w) - YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color( 0, 0, 0, 255 ) )
-			surfaceBox(px + pw - YRP.ctr(_h) - YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color( 0, 0, 0, 255 ) )
-			_br = 8
-			_w = 32 - 2 * 4
-			_h = 12 - 2 * 4
-			--Inner
-			surfaceBox(px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color( 255, 255, 255, 255 ) )
-			surfaceBox(px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color( 255, 255, 255, 255 ) )
-			surfaceBox(px + YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color( 255, 255, 255, 255 ) )
-			surfaceBox(px + YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color( 255, 255, 255, 255 ) )
-			surfaceBox(px + pw - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color( 255, 255, 255, 255 ) )
-			surfaceBox(px + pw - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color( 255, 255, 255, 255 ) )
-			surfaceBox(px + pw - YRP.ctr(_w) - YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color( 255, 255, 255, 255 ) )
-			surfaceBox(px + pw - YRP.ctr(_h) - YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color( 255, 255, 255, 255 ) )
 		end
 	end
 end
@@ -632,16 +587,16 @@ function paintBr(pw, ph, color)
 	draw.RoundedBox(0, _br, ph - 2 * _br, pw - 2 * _br, _br, color)
 end
 
-function paintWindow( derma, pw, ph, title)
-	yrp_if["Material Design 1"]["DFrame"]( derma, pw, ph, title)
+function paintWindow( self, pw, ph, title)
+	yrp_if["Material Design 1"]["DFrame"]( self, pw, ph, title)
 end
 
 local color_pb1 = Color( 255, 255, 255, 150 )
 local color_pb2 = Color( 255, 255, 100, 150)
-function paintButton( derma, pw, ph, mytext)
+function paintButton( self, pw, ph, mytext)
 	local _color = color_pb1
 
-	if derma:IsHovered() then
+	if self:IsHovered() then
 		_color = color_pb2
 	end
 
@@ -651,7 +606,7 @@ function paintButton( derma, pw, ph, mytext)
 	draw.SimpleTextOutlined(YRP.lang_string(mytext), "Y_18_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 end
 
-function paintPanel( derma, pw, ph, color)
+function paintPanel( self, pw, ph, color)
 	local _c = color
 
 	if _c == nil then
@@ -664,7 +619,7 @@ function paintPanel( derma, pw, ph, color)
 end
 
 local color_pi = Color( 0, 0, 0, 190 )
-function paintInv( derma, pw, ph, text1, text2)
+function paintInv( self, pw, ph, text1, text2)
 	draw.RoundedBox(0, 0, 0, pw, ph, color_pi )
 	local _brC = Color( 255, 255, 255, 255 )
 	paintBr(pw, ph, _brC)
@@ -914,8 +869,8 @@ function createVGUI( art, parent, w, h, x, y)
 	return tmp
 end
 
-function paintMDBackground( derma, pw, ph)
-	if derma:IsHovered() then
+function paintMDBackground( self, pw, ph)
+	if self:IsHovered() then
 		draw.RoundedBox(0, 0, 0, pw, ph, get_dsbg_col() )
 	else
 		draw.RoundedBox(0, 0, 0, pw, ph, get_ds_col() )

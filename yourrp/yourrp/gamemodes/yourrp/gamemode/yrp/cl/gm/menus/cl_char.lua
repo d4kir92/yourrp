@@ -35,7 +35,7 @@ function openCharMenu()
 	CHAR.window.systime = SysTime()
 	function CHAR.window:Paint(pw, ph)
 		Derma_DrawBackgroundBlur(self, self.systime)
-		hook.Run( "YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string( "LID_givechar" ) .. " [PROTOTYPE]" )
+		hook.Run( "YFramePaint", self, pw, ph)
 	end
 	CHAR.window:MakePopup()
 

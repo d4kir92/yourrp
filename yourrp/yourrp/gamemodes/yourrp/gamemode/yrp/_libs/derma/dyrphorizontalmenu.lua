@@ -28,7 +28,7 @@ function DrawSelector( btn, w, h, text, selected, hassubtabs)
 		color = YRPGetColor( "3" )
 	end
 
-	surfaceBox(0, h - YRP.ctr( btn.ani_h), w, YRP.ctr( btn.ani_h), color)
+	draw.RoundedBox( 0, 0, h - YRP.ctr( btn.ani_h), w, YRP.ctr( btn.ani_h), color)
 end
 
 local PANEL = {}
@@ -38,7 +38,7 @@ function PANEL:Init()
 	self.hscroller = YRPCreateD( "DHorizontalScroller", self, self:GetWide(), YRP.ctr(100), 0, 0)
 
 	function self.hscroller:Paint(pw, ph)
-		--surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+		--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
 
 	self.w = 0
@@ -46,7 +46,7 @@ function PANEL:Init()
 	self.site = YRPCreateD( "DPanel", self, 0, 0, 0, 0)
 
 	function self.site:Paint(pw, ph)
-		surfaceBox(0, 0, pw, ph, color_red )
+		draw.RoundedBox( 0, 0, 0, pw, ph, color_red )
 	end
 end
 
@@ -65,7 +65,7 @@ function PANEL:AddPanel(pnl)
 end
 
 function PANEL:MakeSpacer()
-	local spacer = YRPCreateD( "DButton", self, YRP.ctr(30), YRP.ctr(100), 0, 0)
+	local spacer = YRPCreateD( "YButton", self, YRP.ctr(30), YRP.ctr(100), 0, 0)
 	spacer:SetText( "" )
 
 	function spacer:Paint(pw, ph)
@@ -102,7 +102,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 	if hassubtabs then
 		spacer = YRP.ctr(100)
 	end
-	local TAB = YRPCreateD( "DButton", self, YRPGetTextLength(YRP.lang_string(name), "Y_22_500" ) + YRP.ctr(30 * 2) + spacer, YRP.ctr(100), YRP.ctr(400), 0)
+	local TAB = YRPCreateD( "YButton", self, YRPGetTextLength(YRP.lang_string(name), "Y_22_500" ) + YRP.ctr(30 * 2) + spacer, YRP.ctr(100), YRP.ctr(400), 0)
 	TAB.menu = self
 	TAB.name = name
 	TAB.netstr = netstr
@@ -141,22 +141,22 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 				elseif my < py and mx > px + self:GetParent():GetWide() then
 					self:GetParent():HideSubTabs()
 				end
-				--surfaceBox(0, YRP.ctr(4), pw, ph - YRP.ctr(8), Color( 0, 0, 255, 255) )
+				--draw.RoundedBox( 0, 0, YRP.ctr(4), pw, ph - YRP.ctr(8), Color( 0, 0, 255, 255) )
 			end
 
 			self.stabs.pl = YRPCreateD( "DPanelList", self.stabs, self.stabs:GetWide(), self.stabs:GetTall(), 0, 0)
 
 			for i, subtab in pairs(self.subtabs) do
-				local st = YRPCreateD( "DButton", self.stabs.pl, self.stabs:GetWide(), self:GetTall(), 0, 0)
+				local st = YRPCreateD( "YButton", self.stabs.pl, self.stabs:GetWide(), self:GetTall(), 0, 0)
 				st:SetText( "" )
 				st.menu = TAB
 				st.name = subtab.name
 				st.netstr = subtab.netstr or ""
 				st.url = subtab.url or ""
 				st.func = subtab.func or nil
-
+				st.tab = { ["text"] = self.name }
 				function st:Paint(pw, ph)
-					surfaceButton(self, pw, ph, self.name)
+					hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 
 					if self.url ~= "" or self.func ~= nil then
 						local br = YRP.ctr(10)

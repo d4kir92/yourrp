@@ -197,7 +197,7 @@ net.Receive( "nws_yrp_getsitestaff", function( len )
 		stafflist:SetSpacing(YRP.ctr(10) )
 
 		for i, pl in pairs(staff) do
-			local tmp = YRPCreateD( "DButton", stafflist, YRP.ctr(800), YRP.ctr(200), 0, 0)
+			local tmp = YRPCreateD( "YButton", stafflist, YRP.ctr(800), YRP.ctr(200), 0, 0)
 			tmp:SetText( "" )
 
 			function tmp:Paint(pw, ph)
@@ -211,11 +211,11 @@ net.Receive( "nws_yrp_getsitestaff", function( len )
 			tmp.avatar = YRPCreateD( "AvatarImage", tmp, YRP.ctr(200 - 8), YRP.ctr(200 - 8), YRP.ctr(4), YRP.ctr(4) )
 			tmp.avatar:SetPlayer(pl, YRP.ctr(200) )
 			local steamsize = 50
-			tmp.steam = YRPCreateD( "DButton", tmp, YRP.ctr(steamsize), YRP.ctr(steamsize), YRP.ctr(200 + 10), YRP.ctr(200 - steamsize - 10) )
+			tmp.steam = YRPCreateD( "YButton", tmp, YRP.ctr(steamsize), YRP.ctr(steamsize), YRP.ctr(200 + 10), YRP.ctr(200 - steamsize - 10) )
 			tmp.steam:SetText( "" )
 
 			function tmp.steam:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "" )
+				hook.Run( "YButtonPaint", self, pw, ph )
 				YRP.DrawIcon(YRP.GetDesignIcon( "steam" ), pw - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), YRPGetColor( "6" ) )
 			end
 
@@ -260,15 +260,15 @@ net.Receive( "nws_yrp_getsitecollection", function( len )
 			local WorkshopPage = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function WorkshopPage:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 			end
 
 			WorkshopPage:OpenURL(link)
-			local openLink = YRPCreateD( "DButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = YRPCreateD( "YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText( "" )
 
 			function openLink:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "" )
+				hook.Run( "YButtonPaint", self, pw, ph )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 			end
 
@@ -286,15 +286,15 @@ net.Receive( "nws_yrp_getsitecommunitywebsite", function( len )
 			local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 			end
 
 			page:OpenURL(link)
-			local openLink = YRPCreateD( "DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = YRPCreateD( "YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText( "" )
 
 			function openLink:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "" )
+				hook.Run( "YButtonPaint", self, pw, ph )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 			end
 
@@ -313,15 +313,15 @@ net.Receive( "nws_yrp_getsitecommunityforum", function( len )
 			local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 			end
 
 			page:OpenURL(link)
-			local openLink = YRPCreateD( "DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = YRPCreateD( "YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText( "" )
 
 			function openLink:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "" )
+				hook.Run( "YButtonPaint", self, pw, ph )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 			end
 
@@ -341,16 +341,16 @@ net.Receive( "nws_yrp_getsitecommunitydiscord", function( len )
 			local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				--surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255 ) )
+				--draw.RoundedBox( 0, 0, 0, YRP.ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255 ) )
 			end
 
 			local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. YRP.ctr(1000) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
 			page:SetHTML(widgetlink)
 
-			local openLink = YRPCreateD( "DButton", page, YRP.ctr(240), YRP.ctr(54), YRP.ctr(760), page:GetTall() - YRP.ctr(92) )
+			local openLink = YRPCreateD( "YButton", page, YRP.ctr(240), YRP.ctr(54), YRP.ctr(760), page:GetTall() - YRP.ctr(92) )
 			openLink:SetText( "" )
 			function openLink:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "" )
+				hook.Run( "YButtonPaint", self, pw, ph )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 				draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
 			end
@@ -374,7 +374,7 @@ net.Receive( "nws_yrp_getsitecommunityteamspeak", function( len )
 				local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, YRP.ctr(1000), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 				function page:Paint(pw, ph)
-					surfaceBox(0, 0, YRP.ctr(1000 + 2 * 20), ph, Color(40, 40, 40, 255) )
+					draw.RoundedBox( 0, 0, 0, YRP.ctr(1000 + 2 * 20), ph, Color(40, 40, 40, 255) )
 				end
 
 				local widgetlink = "<span id=\"its402545\"><a href=\"https://www.teamspeak3.com/\">teamspeak</a> Hosting by TeamSpeak3.com</span><script type=\"text/javascript\" src=\"https://view.light-speed.com/teamspeak3.php?IP=" .. ip .. "&PORT=" .. port .. "&QUERY= " .. query_port .. "&UID=402545&display=block&font=11px&background=transparent&server_info_background=transparent&server_info_text=%23ffffff&server_name_background=transparent&server_name_text=%23ffffff&info_background=transparent&channel_background=transparent&channel_text=%23ffffff&username_background=transparent&username_text=%23ffffff\"></script>"
@@ -398,15 +398,15 @@ net.Receive( "nws_yrp_getsitecommunitytwitter", function( len )
 			local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 			end
 
 			page:OpenURL(link)
-			local openLink = YRPCreateD( "DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = YRPCreateD( "YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText( "" )
 
 			function openLink:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "" )
+				hook.Run( "YButtonPaint", self, pw, ph )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 			end
 
@@ -425,15 +425,15 @@ net.Receive( "nws_yrp_getsitecommunityyoutube", function( len )
 			local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 			end
 
 			page:OpenURL(link)
-			local openLink = YRPCreateD( "DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = YRPCreateD( "YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText( "" )
 
 			function openLink:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "" )
+				hook.Run( "YButtonPaint", self, pw, ph )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 			end
 
@@ -452,15 +452,15 @@ net.Receive( "nws_yrp_getsitecommunityfacebook", function( len )
 			local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 			end
 
 			page:OpenURL(link)
-			local openLink = YRPCreateD( "DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = YRPCreateD( "YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText( "" )
 
 			function openLink:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "" )
+				hook.Run( "YButtonPaint", self, pw, ph )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 			end
 
@@ -479,15 +479,15 @@ net.Receive( "nws_yrp_getsitecommunitysteamgroup", function( len )
 			local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				surfaceBox(0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
+				draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 			end
 
 			page:OpenURL(link)
-			local openLink = YRPCreateD( "DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = YRPCreateD( "YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText( "" )
 
 			function openLink:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "" )
+				hook.Run( "YButtonPaint", self, pw, ph )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 			end
 
@@ -507,11 +507,11 @@ net.Receive( "nws_yrp_getsiteyourrpwhatsnew", function( len )
 			local page = YRPCreateD( "HTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20) + posy, 0, -posy)
 			page:OpenURL(link)
 
-			local openLink = YRPCreateD( "DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = YRPCreateD( "YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 			openLink:SetText( "" )
 
 			function openLink:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "" )
+				hook.Run( "YButtonPaint", self, pw, ph )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 			end
 
@@ -530,16 +530,16 @@ net.Receive( "nws_yrp_getsiteyourrpdiscord", function( len )
 			local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, YRP.ctr(1040), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 			function page:Paint(pw, ph)
-				--surfaceBox(0, 0, pw, ph, Color( 255, 0, 0, 255) )
+				--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
 			end
 
 			local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=322771229213851648&theme=dark\" width=\"" .. YRP.ctr(1000) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
 			page:SetHTML(widgetlink)
 
-			local openLink = YRPCreateD( "DButton", page, YRP.ctr(240), YRP.ctr(54), YRP.ctr(760), page:GetTall() - YRP.ctr(92) )
+			local openLink = YRPCreateD( "YButton", page, YRP.ctr(240), YRP.ctr(54), YRP.ctr(760), page:GetTall() - YRP.ctr(92) )
 			openLink:SetText( "" )
 			function openLink:Paint(pw, ph)
-				surfaceButton(self, pw, ph, "" )
+				hook.Run( "YButtonPaint", self, pw, ph )
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 				draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
 			end
@@ -562,11 +562,11 @@ net.Receive( "nws_yrp_getsiteyourrpserverlist", function( len )
 		local page = YRPCreateD( "DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
 		page:OpenURL(link)
 
-		local openLink = YRPCreateD( "DButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+		local openLink = YRPCreateD( "YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
 		openLink:SetText( "" )
 
 		function openLink:Paint(pw, ph)
-			surfaceButton(self, pw, ph, "" )
+			hook.Run( "YButtonPaint", self, pw, ph )
 			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 
@@ -637,7 +637,7 @@ net.Receive( "nws_yrp_getsiteyourrptranslations", function( len )
 				end
 
 				hook.Run( "YButtonPaint", self, pw, ph)
-				--surfaceButton(self, pw, ph, "" )
+
 				draw.SimpleText(_allProgressTexts[sho], "Y_18_500", YRP.ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
 				YRP.DrawIcon(YRP.GetDesignIcon( "lang_" .. tostring(self.language.short) ), YRP.ctr(_icon_w), YRP.ctr(_icon_h), YRP.ctr(_br), YRP.ctr( (_h - _icon_h) / 2), Color( 255, 255, 255, 255 ) )
 			end
@@ -713,7 +713,7 @@ function OpenHelpMenu()
 
 	function HELPMENU.window:Paint(pw, ph)
 		Derma_DrawBackgroundBlur(self, self.systime)
-		--surfaceBox(0, 0, pw, ph, Color(90, 90, 90, 200) )
+		--draw.RoundedBox( 0, 0, 0, pw, ph, Color(90, 90, 90, 200) )
 		hook.Run( "YFramePaint", self, pw, ph)
 	end
 

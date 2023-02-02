@@ -50,7 +50,7 @@ function openKeybindsMenu()
 	KEYBINDS.window.systime = SysTime()
 	function KEYBINDS.window:Paint(pw, ph)
 		Derma_DrawBackgroundBlur(self, self.systime)
-		hook.Run( "YFramePaint", self, pw, ph) --surfaceWindow(self, pw, ph, YRP.lang_string( "LID_givekeybinds" ) .. " [PROTOTYPE]" )
+		hook.Run( "YFramePaint", self, pw, ph)
 	end
 	KEYBINDS.window:MakePopup()
 

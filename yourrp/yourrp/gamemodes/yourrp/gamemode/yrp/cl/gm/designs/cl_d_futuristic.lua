@@ -152,8 +152,8 @@ function _fut.DrawWindow(window, pw, ph, title)
 		_color_bar.a = 255
 		_color_bg.a = 255
 	end
-	surfaceBox(0, 0, pw, YRP.ctr(50), _color_bar)
-	surfaceBox(0, YRP.ctr(50), pw, ph - YRP.ctr(50), _color_bg)
+	draw.RoundedBox( 0, 0, 0, pw, YRP.ctr(50), _color_bar)
+	draw.RoundedBox( 0, 0, YRP.ctr(50), pw, ph - YRP.ctr(50), _color_bg)
 	if InterfaceBorder() then
 		LaserBorder(pw, ph)
 	end
@@ -180,7 +180,7 @@ function _fut.YRPDrawButton( btn, pw, ph, text, color)
 		_hovered = 60
 	end
 	local _color = color or _color_bar
-	surfaceBox(0, 0, pw, ph, Color(_color.r + _hovered, _color.g + _hovered, _color.b + _hovered, _color.a	) )
+	draw.RoundedBox( 0, 0, 0, pw, ph, Color(_color.r + _hovered, _color.g + _hovered, _color.b + _hovered, _color.a	) )
 	if InterfaceBorder() then
 		LaserBorder(pw, ph)
 	end
@@ -201,7 +201,7 @@ function _fut.DrawPanel(pnl, pw, ph, text, color, px, py, ax, ah)
 	else
 		_color_bar.a = 255
 	end
-	surfaceBox(0, 0, pw, ph, _color_bar)
+	draw.RoundedBox( 0, 0, 0, pw, ph, _color_bar)
 	if InterfaceBorder() then
 		LaserBorder(pw, ph)
 	end

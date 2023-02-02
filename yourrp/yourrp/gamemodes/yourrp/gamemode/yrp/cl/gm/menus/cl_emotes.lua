@@ -106,7 +106,6 @@ function OpenEmotesMenu()
 	end
 
 	function _em.window:Paint(pw, ph)
-		--surfaceWindow(self, pw, ph, "" )
 		local _mx, _my = gui.MousePos()
 		local _px, _py = _em.window:GetPos()
 		_mx = _mx - self:GetWide() / 2 - _px

@@ -16,22 +16,24 @@ function OpenHelpTranslatingWindow()
 		draw.SimpleTextOutlined( "Then write D4KiR on the discord server to get rights for translating:", "Y_18_500", YRP.ctr(10), YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color( 0, 0, 0, 255 ) )
 	end
 
-	window.translationsite = YRPCreateD( "DButton", window, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(200) )
+	window.translationsite = YRPCreateD( "YButton", window, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(200) )
 	window.translationsite:SetText( "" )
 
+	window.translationsite.tab = { ["text"] = "Translation website" }
 	function window.translationsite:Paint(pw, ph)
-		surfaceButton(self, pw, ph, "Translation website" )
+		hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 	end
 
 	function window.translationsite:DoClick()
 		gui.OpenURL( "https://yourrp.noserver4u.de/engage/yourrp/" )
 	end
 
-	window.discordserver = YRPCreateD( "DButton", window, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(300) )
+	window.discordserver = YRPCreateD( "YButton", window, YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(300) )
 	window.discordserver:SetText( "" )
 
+	window.discordserver.tab = { ["text"] = "YourRP Discord server" }
 	function window.discordserver:Paint(pw, ph)
-		surfaceButton(self, pw, ph, "YourRP Discord server" )
+		hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 	end
 
 	function window.discordserver:DoClick()
@@ -40,7 +42,7 @@ function OpenHelpTranslatingWindow()
 end
 
 function YRP.AddLanguageChangerLine(parent, tab, mainparent)
-	local lang = YRPCreateD( "DButton", parent, parent:GetWide(), YRP.ctr(40), 0, 0)
+	local lang = YRPCreateD( "YButton", parent, parent:GetWide(), YRP.ctr(40), 0, 0)
 	lang:SetText( "" )
 	lang.lang = tab
 
@@ -51,7 +53,7 @@ function YRP.AddLanguageChangerLine(parent, tab, mainparent)
 			color = YRPGetColor( "1" )
 		end
 
-		surfaceBox(0, 0, pw, ph, color)
+		draw.RoundedBox( 0, 0, 0, pw, ph, color)
 		YRP.DrawIcon(YRP.GetDesignIcon( "lang_" .. tostring(self.lang.short) ), YRP.ctr(46), YRP.ctr(31), YRP.ctr(4), YRP.ctr( (40 - 31) / 2), Color( 255, 255, 255, 255 ) )
 		self.textcol = Color( 255, 255, 255, 255 )
 
@@ -84,7 +86,7 @@ function constructLanguageText(lang, inenglish, percentage)
 end
 
 function YRP.AddLanguageAddLine(parent, mainparent)
-	local lang = YRPCreateD( "DButton", parent, parent:GetWide(), YRP.ctr(40), 0, 0)
+	local lang = YRPCreateD( "YButton", parent, parent:GetWide(), YRP.ctr(40), 0, 0)
 	lang:SetText( "" )
 
 	function lang:Paint(pw, ph)
@@ -94,7 +96,7 @@ function YRP.AddLanguageAddLine(parent, mainparent)
 			color = YRPGetColor( "1" )
 		end
 
-		surfaceBox(0, 0, pw, ph, color)
+		draw.RoundedBox( 0, 0, 0, pw, ph, color)
 		local text = "Help translating"
 		draw.SimpleTextOutlined(text, "DermaDefault", YRP.ctr(4 + 46 + 8), ph / 2, Color( 255, 255, 0, 255), 0, 1, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 	end
@@ -121,7 +123,7 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 	end
 	LanguageChanger.selecting = false
 
-	LanguageChanger.btn = YRPCreateD( "DButton", LanguageChanger, sw, sh, 0, 0)
+	LanguageChanger.btn = YRPCreateD( "YButton", LanguageChanger, sw, sh, 0, 0)
 	LanguageChanger.btn:SetText( "" )
 	local br = YRP.ctr(10)
 	function LanguageChanger.btn:Paint(pw, ph)
@@ -567,7 +569,7 @@ function openSingleSelector(tab, closeF, web)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
 	end
 
-	local searchButton = YRPCreateD( "DButton", frame, YRP.ctr(50), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50 + 10) )
+	local searchButton = YRPCreateD( "YButton", frame, YRP.ctr(50), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50 + 10) )
 	searchButton:SetText( "" )
 
 	function searchButton:Paint(pw, ph)
@@ -651,7 +653,7 @@ function openSingleSelector(tab, closeF, web)
 					spawnicon:SetModel(item.WorldModel)
 
 					spawnicon:SetTooltip(item.PrintName)
-					local _tmpName = YRPCreateD( "DButton", icon, YRP.ctr(_item.w), YRP.ctr(_item.h), 0, 0)
+					local _tmpName = YRPCreateD( "YButton", icon, YRP.ctr(_item.w), YRP.ctr(_item.h), 0, 0)
 					_tmpName:SetText( "" )
 
 					function _tmpName:Paint(pw, ph)
@@ -678,7 +680,7 @@ function openSingleSelector(tab, closeF, web)
 		end
 	end
 
-	local nextB = YRPCreateD( "DButton", frame, YRP.ctr(200), YRP.ctr(50), ScrW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10) )
+	local nextB = YRPCreateD( "YButton", frame, YRP.ctr(200), YRP.ctr(50), ScrW() - YRP.ctr(200 + 10), ScrH() - YRP.ctr(50 + 10) )
 	nextB:SetText( "" )
 
 	function nextB:Paint(pw, ph)
@@ -693,7 +695,7 @@ function openSingleSelector(tab, closeF, web)
 		end
 	end
 
-	local prevB = YRPCreateD( "DButton", frame, YRP.ctr(200), YRP.ctr(50), YRP.ctr(10), ScrH() - YRP.ctr(50 + 10) )
+	local prevB = YRPCreateD( "YButton", frame, YRP.ctr(200), YRP.ctr(50), YRP.ctr(10), ScrH() - YRP.ctr(50 + 10) )
 	prevB:SetText( "" )
 
 	function prevB:Paint(pw, ph)
@@ -731,7 +733,7 @@ net.Receive( "yrpInfoBox", function( len )
 		draw.SimpleTextOutlined(_text, "Y_24_500", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 	end
 
-	local closeButton = createVGUI( "DButton", _tmp, 200, 50, 400 - 100, 400 - 50)
+	local closeButton = createVGUI( "YButton", _tmp, 200, 50, 400 - 100, 400 - 50)
 	closeButton:SetText( "Close" )
 
 	function closeButton:DoClick()
@@ -785,11 +787,6 @@ hook.Add( "OnEntityCreated", "RemoveDeadRag", RemoveDeadRag)
 
 function GM:HUDDrawTargetID()
 	return false
-end
-
-function surfaceBox(x, y, w, h, color)
-	surface.SetDrawColor( color)
-	surface.DrawRect(x, y, w, h)
 end
 
 function YRP.DrawSymbol(ply, str, z, color, x)
@@ -941,7 +938,7 @@ function YRPDrawNamePlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, ico
 	_tw = _tw + 8
 	_th = _th
 	color.a = math.Round( color.a * 0.5, 0)
-	surfaceBox(0, 0, w, h, color)
+	draw.RoundedBox( 0, 0, 0, w, h, color)
 
 	if _cur != nil and _max != nil then
 		color2.a = alpha
@@ -949,7 +946,7 @@ function YRPDrawNamePlayerInfo(ply, _str, _x, _y, _z, _w, _h, color, _alpha, ico
 		local max = tonumber(_max)
 
 		if cur != nil and max != nil and max > 0 then
-			surfaceBox(0, 0, cur / max * w, h, color2)
+			draw.RoundedBox( 0, 0, 0, cur / max * w, h, color2)
 		end
 	end
 
@@ -1936,9 +1933,9 @@ net.Receive( "nws_yrp_openLawBoard", function( len )
 
 
 			-- ADD
-			local addButton = YRPCreateD( "YButton", parent, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20) )
-			addButton:SetText( "+" )
-			function addButton:DoClick()
+			local adYButton = YRPCreateD( "YButton", parent, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20) )
+			adYButton:SetText( "+" )
+			function adYButton:DoClick()
 				local _SteamID = nil
 				local _nick = ""
 				local _Cell = nil
@@ -2000,7 +1997,7 @@ net.Receive( "nws_yrp_openLawBoard", function( len )
 				window:Close()
 				addWindow:MakePopup()
 			end
-			function addButton:Paint(pw, ph)
+			function adYButton:Paint(pw, ph)
 				local tab = {}
 				tab.color = Color( 100, 255, 100)
 				hook.Run( "YButtonPaint", self, pw, ph, tab)
@@ -2099,7 +2096,7 @@ net.Receive( "nws_yrp_openLawBoard", function( len )
 
 			for k, v in pairs(tmpJailList) do
 				v.uniqueID = tonumber( v.uniqueID)
-				local dpanel = createVGUI( "DButton", scrollpanel, s.w, s.h, 0, 0)
+				local dpanel = createVGUI( "YButton", scrollpanel, s.w, s.h, 0, 0)
 				dpanel.uniqueID = v.uniqueID
 				dpanel:SetText( "" )
 				dpanel.sp = scrollpanel

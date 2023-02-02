@@ -63,7 +63,7 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 		yrp_db.data = DStringBox( bl, YRP_SQL.string_database, "LID_database", "nws_yrp_update_string_database" )
 		yrp_db.user = DStringBox( bl, YRP_SQL.string_username, "LID_username", "nws_yrp_update_string_username" )
 		yrp_db.pass = DStringBox( bl, YRP_SQL.string_password, "LID_password", "nws_yrp_update_string_password" )
-		yrp_db.change_to_sqlmode = YRPCreateD( "DButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
+		yrp_db.change_to_sqlmode = YRPCreateD( "YButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
 
 		yrp_db:AddItem(yrp_db.change_to_sqlmode)
 
@@ -96,10 +96,12 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 			end
 		end
 		yrp_db.dele = DIntComboBoxBox( bl, delete, "LID_removebackupolderthen", "nws_yrp_update_int_backup_delete", tonumber(YRP_SQL.int_backup_delete) )
-		yrp_db.createbackupnow = YRPCreateD( "DButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
+		yrp_db.createbackupnow = YRPCreateD( "YButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
 		yrp_db.createbackupnow:SetText( "" )
+
+		yrp_db.createbackupnow.tab = { ["text"] = YRP.lang_string( "LID_createbackupnow" ) .. " ( data/yrp_backups/)" }
 		function yrp_db.createbackupnow:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string( "LID_createbackupnow" ) .. " ( data/yrp_backups/)" )
+			hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 		end
 		function yrp_db.createbackupnow:DoClick()
 			net.Start( "nws_yrp_makebackup" )
@@ -108,9 +110,11 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 		yrp_db:AddItem(yrp_db.createbackupnow)
 
 		yrp_db.change_to_sqlmode:SetText( "" )
+		yrp_db.change_to_sqlmode.tab = { ["text"] = "" }
 		function yrp_db.change_to_sqlmode:Paint(pw, ph)
 			local tex, dat = sqlmode:GetSelected()
-			surfaceButton(self, pw, ph, YRP.lang_string( "LID_changetosqlmode" ) .. ": " .. tex)
+			self.tab.text = YRP.lang_string( "LID_changetosqlmode" ) .. ": " .. tex
+			hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 			dat = tonumber( dat)
 			if dat == 0 then
 				yrp_db.host:GetParent():SetSize(0, 0)
@@ -149,7 +153,7 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 
 		DHR( dhr)
 
-		local restartServer = YRPCreateD( "DButton", yourrpdatabase.parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3000), YRP.ctr(900) )
+		local restartServer = YRPCreateD( "YButton", yourrpdatabase.parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3000), YRP.ctr(900) )
 		restartServer:SetText( "RESTART SERVER" )
 		function restartServer:DoClick()
 			net.Start( "nws_yrp_restartserver" )
@@ -177,11 +181,12 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 		end
 		local _x, _y = Scroller.YourRPTables:GetPos()
 		local _w, _h = Scroller.YourRPTables:GetSize()
-		local _rem_and_change = YRPCreateD( "DButton", Scroller.YourRPTables:GetParent(), Scroller.YourRPTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
+		local _rem_and_change = YRPCreateD( "YButton", Scroller.YourRPTables:GetParent(), Scroller.YourRPTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
 		_rem_and_change:SetText( "" )
 		yourrptables:AddItem(_rem_and_change)
+		_rem_and_change.tab = { ["text"] = YRP.lang_string( "LID_droptablesandchangelevel" ) }
 		function _rem_and_change:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string( "LID_droptablesandchangelevel" ) )
+			hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 		end
 		function _rem_and_change:DoClick()
 			local _nw_tab = {}
@@ -197,7 +202,7 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 			_window:Center()
 			_window:SetTitle(YRP.lang_string( "LID_areyousure" ) )
 
-			local _yesButton = createVGUI( "DButton", _window, 200, 50, 10, 60)
+			local _yesButton = createVGUI( "YButton", _window, 200, 50, 10, 60)
 			_yesButton:SetText(YRP.lang_string( "LID_yes" ) )
 			function _yesButton:DoClick()
 				net.Start( "nws_yrp_drop_tables" )
@@ -206,7 +211,7 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 				_window:Close()
 			end
 
-			local _noButton = createVGUI( "DButton", _window, 200, 50, 10 + 200 + 10, 60)
+			local _noButton = createVGUI( "YButton", _window, 200, 50, 10 + 200 + 10, 60)
 			_noButton:SetText(YRP.lang_string( "LID_no" ) )
 			function _noButton:DoClick()
 				_window:Close()
@@ -232,11 +237,12 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 		for i, tab in pairs(TAB_YRP_RELATED) do
 			yrp_r_tabs[tab.name] = DBoolLine( dbtab, 0, tab.name, nil)
 		end
-		local _rem_and_change2 = YRPCreateD( "DButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
+		local _rem_and_change2 = YRPCreateD( "YButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
 		_rem_and_change2:SetText( "" )
 		yourrprelatedtables:AddItem(_rem_and_change2)
+		_rem_and_change2.tab = { ["text"] = YRP.lang_string( "LID_droptablesandchangelevel" ) }
 		function _rem_and_change2:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string( "LID_droptablesandchangelevel" ) )
+			hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 		end
 		function _rem_and_change2:DoClick()
 			local _nw_tab = {}
@@ -252,7 +258,7 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 			_window:Center()
 			_window:SetTitle(YRP.lang_string( "LID_areyousure" ) )
 
-			local _yesButton = createVGUI( "DButton", _window, 200, 50, 10, 60)
+			local _yesButton = createVGUI( "YButton", _window, 200, 50, 10, 60)
 			_yesButton:SetText(YRP.lang_string( "LID_yes" ) )
 			function _yesButton:DoClick()
 				net.Start( "nws_yrp_drop_tables" )
@@ -261,7 +267,7 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 				_window:Close()
 			end
 
-			local _noButton = createVGUI( "DButton", _window, 200, 50, 10 + 200 + 10, 60)
+			local _noButton = createVGUI( "YButton", _window, 200, 50, 10 + 200 + 10, 60)
 			_noButton:SetText(YRP.lang_string( "LID_no" ) )
 			function _noButton:DoClick()
 				_window:Close()
@@ -287,11 +293,12 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 		for i, tab in pairs(TAB_YRP_OTHER) do
 			other_tabs[tab.name] = DBoolLine( dbtab, 0, tab.name, nil)
 		end
-		local _rem_and_change3 = YRPCreateD( "DButton", OtherTables:GetParent(), OtherTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
+		local _rem_and_change3 = YRPCreateD( "YButton", OtherTables:GetParent(), OtherTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10) )
 		_rem_and_change3:SetText( "" )
 		othertables:AddItem(_rem_and_change3)
+		_rem_and_change3.tab = { ["text"] = YRP.lang_string( "LID_droptablesandchangelevel" ) }
 		function _rem_and_change3:Paint(pw, ph)
-			surfaceButton(self, pw, ph, YRP.lang_string( "LID_droptablesandchangelevel" ) )
+			hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 		end
 		function _rem_and_change3:DoClick()
 			local _nw_tab = {}
@@ -307,7 +314,7 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 			_window:Center()
 			_window:SetTitle(YRP.lang_string( "LID_areyousure" ) )
 
-			local _yesButton = createVGUI( "DButton", _window, 200, 50, 10, 60)
+			local _yesButton = createVGUI( "YButton", _window, 200, 50, 10, 60)
 			_yesButton:SetText(YRP.lang_string( "LID_yes" ) )
 			function _yesButton:DoClick()
 				net.Start( "nws_yrp_drop_tables" )
@@ -316,7 +323,7 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len )
 				_window:Close()
 			end
 
-			local _noButton = createVGUI( "DButton", _window, 200, 50, 10 + 200 + 10, 60)
+			local _noButton = createVGUI( "YButton", _window, 200, 50, 10 + 200 + 10, 60)
 			_noButton:SetText(YRP.lang_string( "LID_no" ) )
 			function _noButton:DoClick()
 				_window:Close()
