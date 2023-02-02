@@ -1,4 +1,4 @@
---Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function YRPTextColor( bgcol)
 	if bgcol.r and bgcol.g and bgcol.b then
@@ -511,46 +511,32 @@ end
 local _delay = 1
 local _get_design = true
 
-function YRPGetDesign()
-	if _get_design then
-		_get_design = not _get_design
-		net.Start( "nws_yrp_get_design" )
-		net.SendToServer()
-	end
-end
-
 function surfaceWindow( derma, pw, ph, title)
 	local _title = title or ""
 
-	if yrp_if[interfaceDesign()] ~= nil then
+	if yrp_if[interfaceDesign()] ~= nil and yrp_if[interfaceDesign()]["DFrame"] then
 		yrp_if[interfaceDesign()]["DFrame"]( derma, pw, ph, _title)
-	else
-		YRPGetDesign()
 	end
 end
 
 function surfaceButton( derma, pw, ph, text, color, px, py, ax, ay, forcelang)
 	local _text = text or ""
 
-	if yrp_if[interfaceDesign()] ~= nil then
+	if yrp_if[interfaceDesign()] ~= nil and yrp_if[interfaceDesign()]["DButton"] then
 		yrp_if[interfaceDesign()]["DButton"]( derma, pw, ph, text, color, px, py, ax, ay, forcelang)
-	else
-		YRPGetDesign()
 	end
 end
 
 function surfacePanel( derm, pw, ph, text, color, px, py, ax, ay)
 	local _text = text or ""
-	if yrp_if and yrp_if[interfaceDesign()] ~= nil then
+	if yrp_if and yrp_if[interfaceDesign()] ~= nil and yrp_if[interfaceDesign()] and yrp_if[interfaceDesign()]["DPanel"] then
 		yrp_if[interfaceDesign()]["DPanel"]( derm, pw, ph, _text, color, px, py, ax, ay)
-	else
-		YRPGetDesign()
 	end
 end
 
 function surfaceCheckBox( derma, pw, ph, icon)
 	if yrp_if[interfaceDesign()] ~= nil then
-		if yrp_if[interfaceDesign()]["Selected"] ~= nil then
+		if yrp_if[interfaceDesign()]["DCheckBox"] ~= nil then
 			yrp_if[interfaceDesign()]["DCheckBox"]( derma, pw, ph, icon)
 		else
 			local th = 4
@@ -570,8 +556,6 @@ function surfaceCheckBox( derma, pw, ph, icon)
 				end
 			end
 		end
-	else
-		YRPGetDesign()
 	end
 end
 
@@ -609,8 +593,6 @@ function surfaceSelected( derma, pw, ph, px, py)
 			surfaceBox(px + pw - YRP.ctr(_w) - YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color( 255, 255, 255, 255 ) )
 			surfaceBox(px + pw - YRP.ctr(_h) - YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color( 255, 255, 255, 255 ) )
 		end
-	else
-		YRPGetDesign()
 	end
 end
 

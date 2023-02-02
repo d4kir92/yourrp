@@ -1,4 +1,4 @@
---Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 --here you can change this, but it's dumb, because you can change it ingame
 GM.Name = "DarkRP" -- Is for other addons detecting that the gamemode is "DarkRP" compatible
@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 284 -- do NOT change this!
+GM.VersionBuild = 285 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser

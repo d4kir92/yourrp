@@ -1,4 +1,4 @@
---Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
 function DarkRP.addJailPos(pos)
 	--Description: Add a jail position to the map. This jail position will be saved in the database.

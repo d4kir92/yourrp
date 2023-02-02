@@ -1,1 +1,1 @@
---Copyright (C) 2017-2022 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
