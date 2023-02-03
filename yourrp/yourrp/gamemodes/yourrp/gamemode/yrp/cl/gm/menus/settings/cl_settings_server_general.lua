@@ -282,7 +282,7 @@ function CreateHRLine( dpanellist)
 	local hr = YRPCreateD( "DPanel", nil, dpanellist:GetWide(), YRP.ctr(20), 0, 0)
 	function hr:Paint(pw, ph)
 		surfacePanel(self, pw, ph, "" )
-		surfaceBox(YRP.ctr(10), hr:GetTall() / 4, hr:GetWide() - YRP.ctr(2 * 10), hr:GetTall() / 2, Color( 0, 0, 0, 255 ) )
+		draw.RoundedBox(0, YRP.ctr(10), hr:GetTall() / 4, hr:GetWide() - YRP.ctr(2 * 10), hr:GetTall() / 2, Color( 0, 0, 0, 255 ) )
 	end
 	dpanellist:AddItem(hr)
 	return hr

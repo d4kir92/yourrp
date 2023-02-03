@@ -346,10 +346,10 @@ end
 
 function YRPGetMoneyModel()
 	local model = yrp_general.text_money_model
-	if model == "" then
+	if model and strEmpty( model ) then
 		model = "models/props/cs_assault/money.mdl"
 	end
-	return model
+	return model or "models/props/cs_assault/money.mdl"
 end
 
 function YRPServerLogo()

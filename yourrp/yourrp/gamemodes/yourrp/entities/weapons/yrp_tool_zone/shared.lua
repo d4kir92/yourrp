@@ -238,7 +238,7 @@ if CLIENT then
 					render.SetColorMaterial()
 					local color = StringToColor( v.color )
 					color.a = 100
-					render.YRPDrawBox( spos, Angle(0, 0, 0), Vector(0, 0, 0), epos-spos, color )
+					render.DrawBox( spos, Angle(0, 0, 0), Vector(0, 0, 0), epos-spos, color )
 					--render.DrawSphere(spos, size, 16, 16, Color(r, g, b, 200) )
 				end
 			end

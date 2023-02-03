@@ -49,12 +49,11 @@ local yrp_logo = Material( "yrp/yrp_icon" )
 
 local words = 0
 local _delay = 4
-local _delayText = 1
+local _delayText = 0.75
 local _fadeout = CurTime() + _delay
 local _fadeoutText = CurTime() + _delayText
 local chatclosedforkeybinds = true
 local _showChat = false
-local _showChatText = true
 local chatids = {}
 local oldchoices = {}
 local chatAlpha = 255
@@ -187,20 +186,15 @@ local function YRPCheckChatVisible()
 		if YRPIsChatOpen() then
 			_fadeout = CurTime() + _delay
 		end
-		if _fadeoutText < _fadeout then
-			_fadeoutText = _fadeout
+		if _fadeout < _fadeoutText then
+			_fadeout = _fadeoutText
 		end
 		if CurTime() > _fadeout and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.settings:HasFocus() then
 			_showChat = false
 		else
 			_showChat = true
 		end
-		if CurTime() > _fadeoutText and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.settings:HasFocus() then
-			_showChatText = false
-			words = 0
-		else
-			_showChatText = true
-		end
+
 		if YRPIsChatEnabled( "YRPCheckChatVisible" ) == false then
 			_showChat = false
 		end
@@ -211,9 +205,9 @@ local function YRPCheckChatVisible()
 		end
 		if YRPScoreboard:IsVisible() or YRPScoreboard:IsVisible() then
 			chatAlpha = 0
-			yrpChat.window:SetVisible(false)
+			yrpChat.window:SetVisible( false )
 		else
-			yrpChat.window:SetVisible(true)
+			yrpChat.window:SetVisible( true )
 			
 			chatAlpha = math.Clamp( chatAlpha, 0, 255)
 			
@@ -832,10 +826,8 @@ local function InitYRPChat()
 					_delay = _delay / 10
 					_delay = math.Clamp(_delay, 2, 30)
 
-					_fadeoutText = CurTime() + math.Clamp(words * _delayText, 4, 60)
-
-
-
+					_fadeoutText = CurTime() + math.Clamp(words * _delayText, 2, 60)
+					
 					local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" )
 					if ts > 0 then 
 						surface.SetFont("Y_" .. ts .. "_500")

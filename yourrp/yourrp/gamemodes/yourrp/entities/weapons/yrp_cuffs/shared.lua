@@ -71,7 +71,7 @@ if CLIENT then
 
 			local t1 = ply:GetYRPEntity( "cuff_target" )
 			local t2 = t1:GetYRPEntity( "cuff_target" )
-			if t1:LookupBone( "ValveBiped.Bip01_R_Hand" ) and t2:LookupBone( "ValveBiped.Bip01_R_Hand" ) then
+			if t1 and t2 and t1:LookupBone( "ValveBiped.Bip01_R_Hand" ) and t2:LookupBone( "ValveBiped.Bip01_R_Hand" ) then
 				t1 = t1:GetBonePosition(t1:LookupBone( "ValveBiped.Bip01_R_Hand" ) )
 				t2 = t2:GetBonePosition(t2:LookupBone( "ValveBiped.Bip01_R_Hand" ) )
 				render.DrawBeam(t1, t2, 1, 0, 0, Color( 100, 100, 100 ) )
