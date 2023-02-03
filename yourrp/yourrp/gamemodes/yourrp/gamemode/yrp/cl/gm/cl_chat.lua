@@ -818,6 +818,8 @@ local function InitYRPChat()
 							end
 						elseif t == "panel" then
 							--
+						elseif t == "function" then
+							--
 						else
 							YRP.msg( "error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj) )
 						end
