@@ -494,9 +494,11 @@ end)
 
 function YRPHasDoors(id)
 	local _allDoors = YRP_SQL_SELECT( "yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
-	for k, v in pairs(_allDoors) do
-		if tonumber( v.buildingID) == tonumber(id) then
-			return true
+	if _allDoors then
+		for k, v in pairs( _allDoors ) do
+			if tonumber( v.buildingID) == tonumber(id) then
+				return true
+			end
 		end
 	end
 	return false
