@@ -71,7 +71,7 @@ if CLIENT then
 
 			local t1 = ply:GetYRPEntity( "cuff_target" )
 			local t2 = t1:GetYRPEntity( "cuff_target" )
-			if t1 and t2 and t1:LookupBone( "ValveBiped.Bip01_R_Hand" ) and t2:LookupBone( "ValveBiped.Bip01_R_Hand" ) then
+			if IsValid( t1 ) and IsValid( t2 ) and t1:LookupBone( "ValveBiped.Bip01_R_Hand" ) and t2:LookupBone( "ValveBiped.Bip01_R_Hand" ) then
 				t1 = t1:GetBonePosition(t1:LookupBone( "ValveBiped.Bip01_R_Hand" ) )
 				t2 = t2:GetBonePosition(t2:LookupBone( "ValveBiped.Bip01_R_Hand" ) )
 				render.DrawBeam(t1, t2, 1, 0, 0, Color( 100, 100, 100 ) )
@@ -141,7 +141,7 @@ hook.Add( "SetupMove", "YRP_SetupMove_Cuffs", function(ply, mv, cmd)
 
 	local target = ply:GetYRPEntity( "cuff_target" )
 
-	if target then
+	if IsValid( target ) and target.IsPlayer and target:IsPlayer() then
 		local TargetPoint = (target:IsPlayer() and target:GetShootPos() ) or target:GetPos()
 		local MoveDir = (TargetPoint - ply:GetPos() ):GetNormal()
 		local ShootPos = ply:GetShootPos() + ( Vector(0,0, (ply:Crouching() and 0) ))
