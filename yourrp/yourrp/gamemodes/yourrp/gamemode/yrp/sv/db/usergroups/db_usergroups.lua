@@ -168,7 +168,7 @@ timer.Simple( 1, function()
 
 			YRP_SQL_UPDATE( DATABASE_NAME, vals, "uniqueID = '" .. tab.uniqueID .. "'" )
 		else
-			YRP.msg( "error", "superadmin is missing" )
+			YRP.msg( "note", "superadmin is missing" )
 		end
 	end
 

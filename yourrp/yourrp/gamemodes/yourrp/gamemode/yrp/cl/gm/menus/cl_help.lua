@@ -184,7 +184,7 @@ net.Receive( "nws_yrp_getsitehelp", function( len )
 		local version = YRPCreateD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - YRP.ctr(50) )
 
 		function version:Paint(pw, ph)
-			draw.SimpleText( "( " .. string.upper(GAMEMODE.dedicated) .. " Server) ( " .. GetGlobalYRPString( "YRP_VERSIONART", "X" ) .. " ) YourRP V.: " .. YRPGetVersionFull() .. " by D4KiR", "Y_22_500", pw, ph / 2, GetVersionColor(), 2, 1)
+			draw.SimpleText( "( " .. string.upper(GAMEMODE.dedicated) .. " Server) ( " .. GetGlobalYRPString( "YRP_VERSIONART", "X" ) .. " ) YourRP V.: " .. YRPGetVersionFull() .. " by D4KiR", "Y_22_500", pw, ph / 2, YRPGetVersionColor(), 2, 1)
 		end
 		YRPCheckVersion( "help" )
 	end

@@ -118,7 +118,7 @@ function IsYRPOutdated()
 	return yrpoutdated
 end
 
-function GetVersionColor()
+function YRPGetVersionColor()
 	return GAMEMODE.versioncolor or Color( 255, 255, 255, 255 )
 end
 
@@ -156,10 +156,10 @@ if CLIENT then
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_currentversion" ) .. ":", "Y_24_500", pw / 2, YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
 				draw.SimpleTextOutlined(YRP.lang_string( "LID_client" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(150), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
-				draw.SimpleTextOutlined(GAMEMODE.Version .. ":" .. GAMEMODE.VersionBuild, "Y_24_500", pw / 2, YRP.ctr(150), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				draw.SimpleTextOutlined(GAMEMODE.Version .. ":" .. GAMEMODE.VersionBuild, "Y_24_500", pw / 2, YRP.ctr(150), YRPGetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
 				draw.SimpleTextOutlined( "( " .. string.upper(GAMEMODE.dedicated) .. " ) " .. YRP.lang_string( "LID_server" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(200), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
-				draw.SimpleTextOutlined(GAMEMODE.VersionServer, "Y_24_500", pw / 2, YRP.ctr(200), GetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+				draw.SimpleTextOutlined(GAMEMODE.VersionServer, "Y_24_500", pw / 2, YRP.ctr(200), YRPGetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 
 				if GetGlobalYRPString( "YRP_VERSIONART", "X" ) == "workshop" then
 					draw.SimpleTextOutlined(YRP.lang_string( "LID_workshopversion" ) .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
@@ -185,7 +185,7 @@ if CLIENT then
 	end
 end
 
-local check = check or 0
+local yrp_check = yrp_check or 0
 function YRPCheckVersion( from )
 	if not YRPIsVersionSet() then
 		timer.Simple( 1, function()
@@ -201,11 +201,11 @@ function YRPCheckVersion( from )
 		return
 	end
 
-	if CurTime() < check then
+	if CurTime() < yrp_check then
 		return
 	end
 	
-	check = CurTime() + 60
+	yrp_check = CurTime() + 60
 	http.Fetch( "https://docs.google.com/spreadsheets/d/e/2PACX-1vR3aN8b4y0qZbZBBQLkqBy4dKFzKCnPt4cOMp7ghUaq5Bzxf-BtlEc0fruUI18IK-csODjrK6wcpFCX/pubhtml?gid=0&single=true",
 	function( body, len, headers, code)
 		if body != nil then

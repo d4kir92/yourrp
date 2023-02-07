@@ -116,11 +116,11 @@ end
 
 function yrp_create_font(_name, _font, _size, _weight, _outline, _shadow)
 	if IsNotNilAndNotFalse(_name) and IsNotNilAndNotFalse(_font) and IsNotNilAndNotFalse(_size) then
-		if table.HasValue(savedfonts, _name) then
+		if table.HasValue( savedfonts, _name ) then
 			--
 		else
-			table.insert(savedfonts, _name)
-			surface.CreateFont(_name, {
+			table.insert( savedfonts, _name )
+			surface.CreateFont( _name, {
 				font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 				extended = true,
 				size = YRP.ctr(_size * fontscale * 2),
@@ -136,7 +136,7 @@ function yrp_create_font(_name, _font, _size, _weight, _outline, _shadow)
 				shadow = _shadow or false,
 				additive = false,
 				outline = _outline or false
-			})
+			} )
 		end
 	end
 end
