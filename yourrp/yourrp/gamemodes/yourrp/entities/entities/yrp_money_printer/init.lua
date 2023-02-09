@@ -10,7 +10,7 @@ util.AddNetworkString( "nws_yrp_getMoneyPrintMenu" )
 util.AddNetworkString( "nws_yrp_upgradeCPU" )
 net.Receive( "nws_yrp_upgradeCPU", function( len, ply )
 	local mp = net.ReadEntity()
-	if mp and mp:GetClass() == "yrp_money_printer" then
+	if IsValid( mp ) and mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "cpuCost" )
 		if ply:canAfford( cost) and mp:GetYRPInt( "cpu" ) < mp:GetYRPInt( "cpuMax" ) then
 			ply:addMoney(-cost)
@@ -24,7 +24,7 @@ end)
 util.AddNetworkString( "nws_yrp_upgradeCooler" )
 net.Receive( "nws_yrp_upgradeCooler", function( len, ply )
 	local mp = net.ReadEntity()
-	if mp and mp:GetClass() == "yrp_money_printer" then
+	if IsValid( mp ) and mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "coolerCost" )
 		if ply:canAfford( cost) and mp:GetYRPInt( "cooler" ) < mp:GetYRPInt( "coolerMax" ) then
 			ply:addMoney(-cost)
@@ -38,7 +38,7 @@ end)
 util.AddNetworkString( "nws_yrp_upgradePrinter" )
 net.Receive( "nws_yrp_upgradePrinter", function( len, ply )
 	local mp = net.ReadEntity()
-	if mp and mp:GetClass() == "yrp_money_printer" then
+	if IsValid( mp ) and mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "printerCost" )
 		if ply:canAfford( cost) and mp:GetYRPInt( "printer" ) < mp:GetYRPInt( "printerMax" ) then
 			ply:addMoney(-cost)
@@ -50,7 +50,7 @@ end)
 util.AddNetworkString( "nws_yrp_upgradeStorage" )
 net.Receive( "nws_yrp_upgradeStorage", function( len, ply )
 	local mp = net.ReadEntity()
-	if mp and mp:GetClass() == "yrp_money_printer" then
+	if IsValid( mp ) and mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "storageCost" )
 		if ply:canAfford( cost) and mp:GetYRPInt( "storage" ) < mp:GetYRPInt( "storageMax" ) then
 			ply:addMoney(-cost)
@@ -64,7 +64,7 @@ end)
 util.AddNetworkString( "nws_yrp_fuelUp" )
 net.Receive( "nws_yrp_fuelUp", function( len, ply )
 	local mp = net.ReadEntity()
-	if mp and mp:GetClass() == "yrp_money_printer" then
+	if IsValid( mp ) and mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "fuelCost" )
 		if ply:canAfford( cost) and mp:GetYRPInt( "fuel", 0) < mp:GetYRPInt( "fuelMax", 0) then
 			ply:addMoney(-cost)
@@ -79,7 +79,7 @@ end)
 util.AddNetworkString( "nws_yrp_repairMP" )
 net.Receive( "nws_yrp_repairMP", function( len, ply )
 	local mp = net.ReadEntity()
-	if mp and mp:GetClass() == "yrp_money_printer" then
+	if IsValid( mp ) and mp:GetClass() == "yrp_money_printer" then
 		local cost = mp:GetYRPInt( "hpCost" )
 		if ply:canAfford( cost) and mp:GetYRPInt( "hp" ) < mp:GetYRPInt( "hpMax" ) then
 			ply:addMoney(-cost)
@@ -94,7 +94,7 @@ end)
 util.AddNetworkString( "nws_yrp_withdrawMoney" )
 net.Receive( "nws_yrp_withdrawMoney", function( len, ply )
 	local mp = net.ReadEntity()
-	if mp and mp:GetClass() == "yrp_money_printer" then
+	if IsValid( mp ) and mp:GetClass() == "yrp_money_printer" then
 		local withdraw = mp:GetYRPInt( "money", 0)
 
 		ply:addMoney(withdraw)
@@ -106,7 +106,7 @@ end)
 util.AddNetworkString( "nws_yrp_startMoneyPrinter" )
 net.Receive( "nws_yrp_startMoneyPrinter", function( len, ply )
 	local mp = net.ReadEntity()
-	if mp then
+	if IsValid( mp ) then
 		if mp:GetYRPBool( "working", false) then
 			mp:SetYRPBool( "working", false)
 		elseif !mp:GetYRPBool( "working" ) then
@@ -180,14 +180,14 @@ function ENT:OnTakeDamage( dmginfo )
 end
 
 function ENT:Destroy()
-	local explosion = ents.Create( "env_explosion" )
-	if IsNotNilAndNotFalse(explosion) then
-		explosion:SetKeyValue( "spawnflags", 144)
-		explosion:SetKeyValue( "iMagnitude", 15)  -- Damage
-		explosion:SetKeyValue( "iRadiusOverride", 200) -- Radius
-		explosion:SetPos(self:GetPos() ) -- inside money printer
-		explosion:Spawn()
-		explosion:Fire( "explode", "", 0)
+	local exp = ents.Create( "env_explosion" )
+	if IsValid(exp) then
+		exp:SetKeyValue( "spawnflags", 144)
+		exp:SetKeyValue( "iMagnitude", 15)  -- Damage
+		exp:SetKeyValue( "iRadiusOverride", 200) -- Radius
+		exp:SetPos(self:GetPos() ) -- inside money printer
+		exp:Spawn()
+		exp:Fire( "explode", "", 0 )
 	end
 
 	self:Remove()

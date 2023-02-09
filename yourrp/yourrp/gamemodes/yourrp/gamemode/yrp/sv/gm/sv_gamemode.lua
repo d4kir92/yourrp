@@ -750,8 +750,8 @@ function GM:ShutDown()
 	--SaveStorages( "Shutdown/Changelevel" )
 end
 
-function GM:GetFallDamage(ply, speed)
-	local _damage = speed * CustomFalldamageMultiplier()
+function GM:GetFallDamage( ply, speed )
+	local _damage = speed * YRPCustomFalldamageMultiplier()
 	if ply:GetYRPString( "GetAbilityType", "none" ) == "force" then
 		return 0
 	end

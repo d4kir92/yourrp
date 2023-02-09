@@ -142,8 +142,8 @@ function IsCustomFalldamagePercentageEnabled()
 	return tobool(yrp_realistic.bool_custom_falldamage_percentage)
 end
 
-function CustomFalldamageMultiplier()
-	return yrp_realistic.float_custom_falldamage_muliplier
+function YRPCustomFalldamageMultiplier()
+	return yrp_realistic.float_custom_falldamage_muliplier or 0.125
 end
 
 function IsSlowingEnabled()
