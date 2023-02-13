@@ -323,6 +323,13 @@ function YRPHUDThin()
 			CA.valuetext = math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 1) .. "%"
 			YRPDrawThin(CA)
 
+			local RA = {}
+			RA.name = "RA"
+			RA.text = "LID_radiation"
+			RA.cur = lply:Radiation()
+			RA.max = lply:GetMaxRadiation()
+			YRPDrawThin(RA)
+
 			local weapon = lply:GetActiveWeapon()
 			if IsValid(weapon) then
 				local clip1 = weapon:Clip1()

@@ -839,28 +839,30 @@ net.Receive( "nws_yrp_settings_role_position_up", function( len, ply )
 
 	local uid = tonumber(net.ReadString() )
 	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	role = role[1]
+	if role and role[1] then
+		role = role[1]
 
-	role.int_position = tonumber(role.int_position)
+		role.int_position = tonumber(role.int_position)
 
-	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'" )
+		local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'" )
 
-	for i, sibling in pairs(siblings) do
-		sibling.int_position = tonumber(sibling.int_position)
-	end
-
-	local count = 0
-	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
-		count = count + 1
-		if tonumber(sibling.int_position) == role.int_position - 1 then
-			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = role.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'" )
-			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'" )
+		for i, sibling in pairs(siblings) do
+			sibling.int_position = tonumber(sibling.int_position)
 		end
-	end
 
-	role.int_groupID = tonumber(role.int_groupID)
-	role.int_prerole = tonumber(role.int_prerole)
-	SendRoleList(nil, role.int_groupID, role.int_prerole)
+		local count = 0
+		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+			count = count + 1
+			if tonumber(sibling.int_position) == role.int_position - 1 then
+				YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = role.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'" )
+				YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'" )
+			end
+		end
+
+		role.int_groupID = tonumber(role.int_groupID)
+		role.int_prerole = tonumber(role.int_prerole)
+		SendRoleList(nil, role.int_groupID, role.int_prerole)
+	end
 end)
 
 util.AddNetworkString( "nws_yrp_settings_role_position_dn" )
@@ -871,28 +873,30 @@ net.Receive( "nws_yrp_settings_role_position_dn", function( len, ply )
 
 	local uid = tonumber(net.ReadString() )
 	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'" )
-	role = role[1]
+	if role and role[1] then
+		role = role[1]
 
-	role.int_position = tonumber(role.int_position)
+		role.int_position = tonumber(role.int_position)
 
-	local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'" )
+		local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'" )
 
-	for i, sibling in pairs(siblings) do
-		sibling.int_position = tonumber(sibling.int_position)
-	end
-
-	local count = 0
-	for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
-		count = count + 1
-		if tonumber(sibling.int_position) == role.int_position + 1 then
-			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = role.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'" )
-			YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'" )
+		for i, sibling in pairs(siblings) do
+			sibling.int_position = tonumber(sibling.int_position)
 		end
-	end
 
-	role.int_groupID = tonumber(role.int_groupID)
-	role.int_prerole = tonumber(role.int_prerole)
-	SendRoleList(nil, role.int_groupID, role.int_prerole)
+		local count = 0
+		for i, sibling in SortedPairsByMemberValue(siblings, "int_position", false) do
+			count = count + 1
+			if tonumber(sibling.int_position) == role.int_position + 1 then
+				YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = role.int_position}, "uniqueID = '" .. sibling.uniqueID .. "'" )
+				YRP_SQL_UPDATE(DATABASE_NAME, {["int_position"] = sibling.int_position}, "uniqueID = '" .. uid .. "'" )
+			end
+		end
+
+		role.int_groupID = tonumber(role.int_groupID)
+		role.int_prerole = tonumber(role.int_prerole)
+		SendRoleList(nil, role.int_groupID, role.int_prerole)
+	end
 end)
 
 util.AddNetworkString( "nws_yrp_settings_subscribe_role" )

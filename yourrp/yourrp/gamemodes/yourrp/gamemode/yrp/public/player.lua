@@ -14,7 +14,11 @@ function Player:GetRagdollEntity()
 	return self:GetYRPEntity( "yrp_ragdoll", NULL )
 end
 
-function Player:Revive(pos)
+function Player:Revive( pos )
+	if !IsValid( self ) then
+		return
+	end
+
 	self.ignorespawnpoint = true
 	self:Spawn()
 	if pos then

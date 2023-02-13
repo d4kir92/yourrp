@@ -290,8 +290,12 @@ function YRP_SQL_SELECT( db_table, db_columns, db_where, db_extra)
 	end
 end
 
-function YRP_SQL_UPDATE( db_table, db_sets, db_where)
-	--YRP.msg( "db", "YRP_SQL_UPDATE( " .. tostring( db_table) .. ", " .. tostring( db_sets) .. ", " .. tostring( db_where) .. " )" )
+function YRP_SQL_UPDATE( db_table, db_sets, db_where )
+	if db_sets == nil then
+		YRP.msg( "error", "YRP_SQL_UPDATE-ERROR db_sets == nil: " .. tostring( db_table ) )
+		return false
+	end
+	
 	local c = 0
 	if type( db_sets) == "string" then
 		YRP.msg( "error", "[YRP_SQL_UPDATE] FAIL: db_table " .. db_table .. " db_sets " .. db_sets .. " db_where " .. db_where )
@@ -303,6 +307,11 @@ function YRP_SQL_UPDATE( db_table, db_sets, db_where)
 		tmp[c] = i .. " = " .. YRP_SQL_STR_IN( v )
 	end
 	local sets = table.concat( tmp, ", " )
+
+	if strEmpty( sets ) and db_sets then
+		YRP.msg( "error", "YRP_SQL_UPDATE-ERROR: " .. table.ToString( db_sets, "db_sets", false ) )
+		return false
+	end
 
 	if GetSQLMode() == 0 then
 		local _q = "UPDATE "

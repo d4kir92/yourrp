@@ -369,6 +369,7 @@ countries["TW"] = "Taiwan"
 
 countries["UA"] = "Ukraine"
 countries["US"] = "USA"
+countries["UY"] = "UNKNOWN??"
 
 countries["VE"] = "Venezuela"
 countries["VN"] = "Vietnam"
