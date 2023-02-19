@@ -25,7 +25,7 @@ function AddVehicle( veh, ply, item)
 end
 
 function allowedToUseVehicle(id, ply)
-	if ply:HasAccess( "allowedToUseVehicle" ) then
+	if ply:HasAccess( "allowedToUseVehicle", true ) then
 		return true
 	else
 		local _tmpVehicleTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. id .. "'" )
