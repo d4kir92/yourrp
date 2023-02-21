@@ -60,7 +60,7 @@ if SERVER then
 			local ply = args.target.ply
 			local pos = ragdoll:GetPos()
 			if pos != nil then
-				ply:Revive(pos)
+				ply:YRPRevive( pos )
 			else
 				YRP.msg( "note", "[REVIVE] Ragdoll is not valid" )
 			end

@@ -310,7 +310,7 @@ function YRPPlayerLoadout( ply )
 				local _rol_tab = ply:YRPGetRoleTable()
 				if IsNotNilAndNotFalse(_rol_tab) then
 					YRPSetRole(ply, _rol_tab.uniqueID)
-					setPlayerModel( ply )
+					YRPSetPlayerModel( ply )
 				else
 					YRP.msg( "note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab) )
 
@@ -1587,7 +1587,7 @@ hook.Add( "PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, tal
 	end
 end)
 
-function setPlayerModel( ply )
+function YRPSetPlayerModel( ply )
 	local tmpRolePlayermodel = ply:GetPlayerModel()
 
 	if IsNotNilAndNotFalse(tmpRolePlayermodel) and !strEmpty(tmpRolePlayermodel) then
@@ -1600,7 +1600,7 @@ function setPlayerModel( ply )
 end
 
 function GM:PlayerSetModel( ply )
-	setPlayerModel( ply )
+	YRPSetPlayerModel( ply )
 end
 
 function GM:PlayerSpray( ply )

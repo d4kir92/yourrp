@@ -316,8 +316,8 @@ function YRPChatGiveLicense( sender, text )
 	end
 end
 
-function set_money(sender, text)
-	if sender:HasAccess( "set_money" ) then
+function YRPSetMoney(sender, text)
+	if sender:HasAccess( "YRPSetMoney", true ) then
 		local _table = string.Explode( " ", text, false)
 		local _name = _table[1]
 		local _money = tonumber(_table[2])
@@ -332,7 +332,7 @@ function set_money(sender, text)
 				YRP.msg( "note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money)
 				return ""
 			else
-				YRP.msg( "note", "[set_money] Name: " .. tostring(_name) .. " not found!" )
+				YRP.msg( "note", "[YRPSetMoney] Name: " .. tostring(_name) .. " not found!" )
 				return ""
 			end
 		end
@@ -342,8 +342,8 @@ function set_money(sender, text)
 	end
 end
 
-function revive(sender, text)
-	if sender:HasAccess( "revive", true ) then
+function YRPRevive( sender, text )
+	if sender:HasAccess( "YRPRevive", true ) then
 		local _table = string.Explode( " ", text, false)
 		local _name = _table[1]
 		local ply = GetPlayerByName(_name)
@@ -354,9 +354,9 @@ function revive(sender, text)
 			end
 			local rd = ply:GetRagdollEntity()
 			if IsValid( rd ) then
-				ply:Revive(rd:GetPos() )
+				ply:YRPRevive(rd:GetPos() )
 			else
-				ply:Revive(ply:GetPos() )
+				ply:YRPRevive(ply:GetPos() )
 			end
 			return ""
 		else
@@ -458,14 +458,15 @@ cmdsS["tag_ug"] = show_tag_ug
 cmdsS["afk"] = YRPChatAfk
 cmdsS["dnd"] = YRPChatDnd
 
+
 local cmdsM = {}
 cmdsM["dropmoney"] = drop_money
-cmdsM["setmoney"] = set_money
+cmdsM["setmoney"] = YRPSetMoney
 cmdsM["addmoney"] = add_money
 cmdsM["addxp"] = add_xp
 cmdsM["addlevel"] = add_level
 cmdsM["setlevel"] = set_level
-cmdsM["revive"] = revive
+cmdsM["revive"] = YRPRevive
 cmdsM["alert"] = YRPChatAlert
 cmdsM["givelicense"] = YRPChatGiveLicense
 

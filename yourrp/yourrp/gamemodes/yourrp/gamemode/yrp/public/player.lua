@@ -14,15 +14,15 @@ function Player:GetRagdollEntity()
 	return self:GetYRPEntity( "yrp_ragdoll", NULL )
 end
 
-function Player:Revive( pos )
+function Player:YRPRevive( pos )
 	if !IsValid( self ) then
 		return
 	end
 
 	self.ignorespawnpoint = true
 	self:Spawn()
-	if pos then
-		self:SetPos(pos)
+	if pos and isvector( pos ) then
+		self:SetPos( pos )
 	end
 end
 

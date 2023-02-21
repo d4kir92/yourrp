@@ -1633,7 +1633,7 @@ function YRPRender( ply )
 			elseif ply.renderstatus == "frozen" then
 				YRPRenderColor( ply, RENDERMODE_NORMAL, frozenColor )
 			else
-				setPlayerModel( ply )
+				YRPSetPlayerModel( ply )
 				YRPRenderColor( ply, RENDERMODE_NORMAL, normalColor )
 			end
 		end
