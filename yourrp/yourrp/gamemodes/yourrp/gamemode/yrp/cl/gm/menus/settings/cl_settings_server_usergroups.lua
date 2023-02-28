@@ -100,7 +100,7 @@ net.Receive( "nws_yrp_connect_Settings_UserGroup", function( len )
 		local string_displayname = net.ReadString()
 		if UGS and UGS[CURRENT_USERGROUP] then
 			UGS[CURRENT_USERGROUP].string_displayname = string_displayname
-			if DISPLAYNAME then
+			if IsValid( DISPLAYNAME ) then
 				DISPLAYNAME:SetText(UGS[CURRENT_USERGROUP].string_displayname)
 			end
 		end

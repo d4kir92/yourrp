@@ -198,7 +198,7 @@ function Player:GetPlyTab()
 						YRP.msg( "note", "[GetPlyTab] table: " .. tostring(yrp_players) .. " SteamID [" .. tostring(steamid) .. "]" )
 					end
 				else
-					YRP.msg( "error", "[GetPlyTab] SteamID failed [" .. tostring(steamid) .. "]" )
+					YRP.msg( "note", "[GetPlyTab] SteamID failed [" .. tostring(steamid) .. "]" )
 				end
 			end
 		else
@@ -631,7 +631,11 @@ end
 
 Player.SteamName = Player.SteamName or Player.Name
 function Player:Name()
-	return self:YRPRPName()
+	if self.YRPRPName then
+		return self:YRPRPName()
+	else
+		return self:Nick()
+	end
 end
 Player.GetName = Player.Name
 Player.Nick = Player.Name
