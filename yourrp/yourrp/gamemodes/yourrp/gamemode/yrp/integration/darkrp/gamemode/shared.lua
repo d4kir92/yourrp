@@ -107,7 +107,7 @@ function DarkRP.createJob(name, tbl)
 	--Description: Create a job for DarkRP.
 	--YRPDarkrpNotFound( "createJob( " .. name .. ", tbl)" )
 	if SERVER then
-		if YRPIMPORTDARKRP and tbl then
+		if YRPIMPORTDARKRP and tbl and tbl.category then
 			local groupid = 1
 			local group = YRP_SQL_SELECT( "yrp_ply_groups", "*", "string_name = '" .. tbl.category .. "'" )
 			if group == nil then

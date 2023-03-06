@@ -1065,7 +1065,7 @@ function YRPDrawNamePlates()
 
 				if GetGlobalYRPBool( "bool_tag_on_side_target", false) then
 					local pt = LocalPlayer():GetEyeTrace()
-					if ply == pt.Entity then
+					if pt and pt.Entity and ply == pt.Entity then
 						ply.sidealpha = ply.sidealpha + 5
 					else
 						ply.sidealpha = ply.sidealpha - 5

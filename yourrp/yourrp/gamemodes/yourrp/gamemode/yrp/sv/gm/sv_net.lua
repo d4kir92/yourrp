@@ -176,7 +176,7 @@ concommand.Add( "darkrp", function( ply, cmd, args )
 				ply:Spawn()
 			end
 		end
-	else
+	elseif args[1] and !string.StartsWith( string.lower( args[1] ), "team_" ) then
 		YRP.msg( "error", "[darkrp] console command: args[1]: " .. tostring( args[1] ) .. " args[2]: " .. tostring( args[2] ) .. " args[3]: " .. tostring( args[3] ) )
 	end
 end)

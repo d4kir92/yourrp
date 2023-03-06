@@ -634,7 +634,7 @@ function Player:Name()
 	if self.YRPRPName then
 		return self:YRPRPName()
 	else
-		return self:Nick()
+		return self:SteamName()
 	end
 end
 Player.GetName = Player.Name

@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 293 -- do NOT change this!
+GM.VersionBuild = 294 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -362,6 +362,26 @@ function IsEntityAlive(ply, uid)
 	return false
 end
 
+-- Multicore (Shared) enable:
+RunConsoleCommand( "gmod_mcore_test", "1" )
+RunConsoleCommand( "mat_queue_mode", "-1" )
+RunConsoleCommand( "studio_queue_mode", "1" )
+RunConsoleCommand( "r_hunkalloclightmaps", "0" )
+
+if CLIENT then
+	-- Multicore (Client) enable:
+	RunConsoleCommand( "cl_threaded_bone_setup", "1" )
+	RunConsoleCommand( "cl_threaded_client_leaf_system", "1" )
+	RunConsoleCommand( "r_threaded_particles", "1" )
+	RunConsoleCommand( "r_threaded_renderables", "1" )
+	RunConsoleCommand( "r_threaded_client_shadow_manager", "1" )
+	RunConsoleCommand( "r_queued_ropes", "1" )
+	RunConsoleCommand( "M9KGasEffect", "0" )
+elseif SERVER then
+	-- "removes" voice icons
+	RunConsoleCommand( "mp_show_voice_icons", "0" )
+end
+
 if SERVER then
 	util.AddNetworkString( "YRPGetServerInfo" )
 	net.Receive( "YRPGetServerInfo", function( len, ply )
@@ -402,26 +422,6 @@ if CLIENT then
 		net.Start( "YRPGetGamemodename" )
 		net.SendToServer()
 	end )
-end
-
--- Multicore (Shared) enable:
-RunConsoleCommand( "gmod_mcore_test", "1" )
-RunConsoleCommand( "mat_queue_mode", "-1" )
-RunConsoleCommand( "studio_queue_mode", "1" )
-RunConsoleCommand( "r_hunkalloclightmaps", "0" )
-
-if CLIENT then
-	-- Multicore (Client) enable:
-	RunConsoleCommand( "cl_threaded_bone_setup", "1" )
-	RunConsoleCommand( "cl_threaded_client_leaf_system", "1" )
-	RunConsoleCommand( "r_threaded_particles", "1" )
-	RunConsoleCommand( "r_threaded_renderables", "1" )
-	RunConsoleCommand( "r_threaded_client_shadow_manager", "1" )
-	RunConsoleCommand( "r_queued_ropes", "1" )
-	RunConsoleCommand( "M9KGasEffect", "0" )
-elseif SERVER then
-	-- "removes" voice icons
-	RunConsoleCommand( "mp_show_voice_icons", "0" )
 end
 
 function GetAllDoors()
@@ -747,7 +747,11 @@ function IsVoidCharEnabled()
 	return false
 end
 
-function YRPReplaceWithPlayerNames(text)
+function YRPReplaceWithPlayerNames( text )
+	if text == nil then
+		return ""
+	end
+
 	local found = false
 	for _, p in pairs(player.GetAll() ) do
 		local s, e = string.find(string.lower(text), string.lower(p:RPName() ))

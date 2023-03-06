@@ -252,7 +252,7 @@ function YRPChatDnd( sender )
 end
 
 function YRPChatRenamePlayer( sender, text )
-	if GetGlobalYRPBool( "bool_characters_changeable_name", false) or sender:HasAccess( "YRPChatRenamePlayer" ) then
+	if GetGlobalYRPBool( "bool_characters_changeable_name", false) or sender:HasAccess( "YRPChatRenamePlayer", true ) then
 		local name = text
 
 		local tab = {}
