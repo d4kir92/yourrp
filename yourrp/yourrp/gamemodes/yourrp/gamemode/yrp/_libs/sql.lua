@@ -240,7 +240,7 @@ function YRP_SQL_CREATE_TABLE( db_table)
 			_q = _q .. ";"
 			local _result = YRP_SQL_QUERY(_q)
 		else
-			YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
+			YRP.msg( "note", "[YRP_SQL_CREATE_TABLE] " .. GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
 		end
 		return _result
 	end
@@ -284,7 +284,7 @@ function YRP_SQL_SELECT( db_table, db_columns, db_where, db_extra)
 
 			return YRP_SQL_QUERY(_q)
 		else
-			YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
+			YRP.msg( "note", "[YRP_SQL_SELECT] " .. GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
 			return false
 		end
 	end
@@ -347,7 +347,7 @@ function YRP_SQL_UPDATE( db_table, db_sets, db_where )
 
 			return YRP_SQL_QUERY(_q)
 		else
-			YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
+			YRP.msg( "note", "[YRP_SQL_UPDATE] " .. GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
 		end
 	end
 end
@@ -483,7 +483,7 @@ function YRP_SQL_HAS_COLUMN( db_table, column_name)
 		local _r = YRP_SQL_QUERY( "SHOW COLUMNS FROM " .. YRPSQL.schema .. "." .. tostring( db_table) .. " LIKE '" .. column_name .. "';" )
 		return _r
 	else
-		YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
+		YRP.msg( "note", "[YRP_SQL_HAS_COLUMN] " .. GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
 		return false
 	end
 end
@@ -504,7 +504,7 @@ function YRP_SQL_ADD_COLUMN( db_table, column_name, datatype)
 				local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring( db_table) .. " ADD " .. column_name .. " " .. datatype .. ";" -- FAST
 				_r = YRP_SQL_QUERY(_q)
 			else
-				YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
+				YRP.msg( "note", "[YRP_SQL_ADD_COLUMN] #1 " .. GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
 				return false
 			end
 		else
@@ -512,7 +512,7 @@ function YRP_SQL_ADD_COLUMN( db_table, column_name, datatype)
 				local _q = "ALTER TABLE " .. YRPSQL.schema .. "." .. tostring( db_table) .. " CHANGE " .. column_name .. " " .. column_name .. " " .. datatype .. ";" -- SLOW
 				_r = YRP_SQL_QUERY(_q)
 			else
-				YRP.msg( "error", GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
+				YRP.msg( "note", "[YRP_SQL_ADD_COLUMN] #2 " .. GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
 				return false
 			end
 		end
@@ -541,25 +541,44 @@ if SERVER then
 				SetSQLMode(0, true)
 				return
 			end
-			MsgC( Color( 0, 255, 0 ), "LOAD MODULE MYSQLOO!\n" )
-			require( "mysqloo" )
 
-			if (mysqloo.VERSION != "9" or !mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
-				MsgC( Color( 0, 255, 0 ), "You are using an outdated mysqloo version\n" )
-				MsgC( Color( 0, 255, 0 ), "Download the latest mysqloo9 from here\n" )
-				MsgC( Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases\n" )
+			if system.IsLinux() and (!file.Exists( "bin/gmsv_mysqloo_linux.dll", "LUA" ) or !file.Exists( "bin/gmsv_mysqloo_linux64.dll", "LUA" )) then
+				if !file.Exists( "bin/gmsv_mysqloo_linux.dll", "LUA" ) then
+					MsgC( Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_linux.dll", "\n")
+				end
+				if !file.Exists( "bin/gmsv_mysqloo_linux64.dll", "LUA" ) then
+					MsgC( Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_linux64.dll", "\n")
+				end
 				YRPSQL.outdated = true
+			elseif system.IsWindows() and (!file.Exists( "bin/gmsv_mysqloo_win32.dll", "LUA" ) or !file.Exists( "bin/gmsv_mysqloo_win64.dll", "LUA" )) then
+				if !file.Exists( "bin/gmsv_mysqloo_win32.dll", "LUA" ) then
+					MsgC( Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_win32.dll", "\n")
+				end
+				if !file.Exists( "bin/gmsv_mysqloo_win64.dll", "LUA" ) then
+					MsgC( Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_win64.dll", "\n")
+				end
+				YRPSQL.outdated = true
+			else
+				MsgC( Color( 0, 255, 0 ), "LOAD MODULE MYSQLOO!\n" )
+				require( "mysqloo" )
+
+				if (mysqloo.VERSION != "9" or !mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
+					MsgC( Color( 0, 255, 0 ), "You are using an outdated mysqloo version\n" )
+					MsgC( Color( 0, 255, 0 ), "Download the latest mysqloo9 from here\n" )
+					MsgC( Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases\n" )
+					YRPSQL.outdated = true
+				end
 			end
 
 			if !YRPSQL.outdated then
 				YRPSQL.mysql_worked = false
 
-				timer.Simple(10, function()
+				timer.Simple( 20, function()
 					if !YRPSQL.mysql_worked then
 						YRP.msg( "note", "Took to long to connect to mysql server, switch back to sqlite" )
-						SetSQLMode(0, true)
+						SetSQLMode( 0, true )
 					end
-				end)
+				end )
 
 				YRP.msg( "db", "Connection info:" )
 				YRP.msg( "db", "Hostname: " .. _sql_settings.string_host)
@@ -574,14 +593,14 @@ if SERVER then
 				YRPSQL.db.onConnected = function()
 					YRP.msg( "note", ">>> CONNECTED! <<<" )
 					YRPSQL.mysql_worked = true
-					SetSQLMode(1)
+					SetSQLMode( 1 )
 				end
 
 				--YRP_SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
 				YRPSQL.db.onConnectionFailed = function( db, serr)
 					YRP.msg( "note", ">>> CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!" )
 					YRP.msg( "error", "[MYSQL onConnectionFailed] " .. tostring(serr) )
-					SetSQLMode(0, true)
+					SetSQLMode( 0, true )
 				end
 
 				YRP.msg( "db", ">>> Connect to MYSQL Server, if stuck => connection info is wrong or server offline! ( default mysql port: 3306)" )

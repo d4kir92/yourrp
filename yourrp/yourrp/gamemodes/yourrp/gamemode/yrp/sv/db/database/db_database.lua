@@ -92,7 +92,7 @@ function GetBackupCreateTime()
 			return 60
 		end
 	else
-		YRP.msg( "note", "GetBackupCreateTime FAILED" )
+		YRP.msg( "note", "Database for BACKUP is broken, is it removed from database?" )
 		return 60
 	end
 end

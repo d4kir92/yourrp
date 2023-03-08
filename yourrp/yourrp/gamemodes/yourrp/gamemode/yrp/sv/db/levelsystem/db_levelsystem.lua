@@ -162,7 +162,7 @@ function Player:SetLevel(level)
 	self:AddLevel(level - curlvl)
 end
 
-function Player:AddXP(xp)
+function Player:AddXP( xp )
 	if xp == nil then
 		return
 	end
@@ -242,6 +242,22 @@ function Player:AddXP(xp)
 					end
 				end
 			end
+		end
+	end
+end
+
+function Player:SetXP( xp )
+	if xp == nil then
+		return
+	end
+	if !self:Alive() then
+		return
+	end
+	xp = tonumber(xp)
+	if xp <= self:GetMaxXP() then
+		self:SetYRPInt( "int_xp", xp )
+		if self:CharID() then
+			YRP_SQL_UPDATE( "yrp_characters", {["int_xp"] = xp}, "uniqueID = '" .. self:CharID() .. "'" )
 		end
 	end
 end

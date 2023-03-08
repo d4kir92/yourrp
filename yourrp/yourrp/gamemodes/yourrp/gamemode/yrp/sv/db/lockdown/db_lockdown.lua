@@ -26,7 +26,7 @@ function Player:LockdownLoadout()
 			pl:SetYRPString( "string_lockdowntext", lockdown.string_lockdowntext)
 		end
 	else
-		YRP.msg( "note", "LockdownLoadout FAILED" )
+		YRP.msg( "note", "Database for Lockdown is broken, is it removed from database?" )
 	end
 end
 

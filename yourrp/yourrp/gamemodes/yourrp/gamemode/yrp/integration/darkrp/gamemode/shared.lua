@@ -33,7 +33,7 @@ end
 
 function DarkRP.addPlayerGesture( anim, text)
 	--Description: Add a player gesture to the DarkRP animations menu (the one that opens with the keys weapon.). Note: This function must be called BOTH serverside AND clientside!
-	YRPDarkrpNotFound( "addPlayerGesture( " .. anim .. ", " .. text .. " )" )
+	--YRPDarkrpNotFound( "addPlayerGesture( " .. anim .. ", " .. text .. " )" )
 end
 
 function DarkRP.addToCategory(item, kind, cat)

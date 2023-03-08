@@ -180,6 +180,10 @@ function Player:setDarkRPVar( variable, value, target )
 			--
 		elseif variable == "HasGunlicense" then
 			--
+		elseif variable == "level" then
+			self:SetLevel( value )
+		elseif variable == "xp" then
+			self:SetXP( value )
 		else
 			YRPDarkrpNotFound( "setDarkRPVar( " .. tostring( variable ) .. ", " .. tostring( value ) .. ", " .. tostring( target ) .. " )" )
 			

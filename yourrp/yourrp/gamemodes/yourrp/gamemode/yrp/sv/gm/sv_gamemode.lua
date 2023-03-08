@@ -353,7 +353,7 @@ function YRPPlayerLoadout( ply )
 				ply:SetYRPFloat( "thirst", 100)
 				ply:SetYRPFloat( "GetCurRadiation", 0)
 			else
-				YRP.msg( "note", "[PlayerLoadout] failed at plytab." )
+				YRP.msg( "note", "[PlayerLoadout] can't get player-database." )
 			end
 		else
 			--YRP.msg( "note", "[PlayerLoadout] " .. ply:YRPName() .. " has no character selected." )
