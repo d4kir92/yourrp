@@ -140,6 +140,8 @@ concommand.Add( "darkrp", function( ply, cmd, args )
 		--
 	elseif args[1] and args[1] == "cheque" then
 		--
+	elseif args[1] and args[1] == "energy" then
+		-- there is drink and food
 	elseif args[1] and args[1] == "dropmoney" then
 		YRPDropMoney(ply, args[2])
 	elseif args[1] and args[1] == "teamban" then

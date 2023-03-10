@@ -5,19 +5,17 @@ net.Receive( "nws_yrp_setting_characters", function( len )
 	if PanelAlive(PARENT) and PanelAlive(YRPCharList) then
 		local tab = net.ReadTable()
 
-		--for n, y in pairs(tab) do
-			if tab.SteamID != "BOT" then
-				local event = tobool(tab.bool_eventchar)
-				local archi = tobool(tab.bool_archived)
-				local descr = ""
-				if tab.rpdescription and tab.rpdescription != "nil" then
-					descr = tostring(tab.rpdescription)
-				end
-				descr = descr
-
-				YRPCharList:AddLine(tab.SteamID, tab.rpname, tab.text_idcardid, descr, tab.groupID, tab.roleID, tab.money, tab.moneybank, tab.int_level, event, archi)
+		if tab.SteamID != "BOT" then
+			local event = tobool(tab.bool_eventchar)
+			local archi = tobool(tab.bool_archived)
+			local descr = ""
+			if tab.rpdescription and tab.rpdescription != "nil" then
+				descr = tostring(tab.rpdescription)
 			end
-		--end
+			descr = descr
+
+			YRPCharList:AddLine(tab.SteamID, tab.rpname, tab.text_idcardid, descr, tab.groupID, tab.roleID, tab.money, tab.moneybank, tab.int_level, event, archi)
+		end
 	end
 end)
 

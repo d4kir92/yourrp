@@ -287,6 +287,7 @@ countries["CA"] = "Canada"
 countries["CH"] = "Switzerland"
 countries["CL"] = "Chile"
 countries["CN"] = "China"
+countries["CO"] = "Corsican"
 countries["CY"] = "Zypern"
 countries["CZ"] = "Czech Republic"
 

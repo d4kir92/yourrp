@@ -1123,13 +1123,14 @@ end
 util.AddNetworkString( "nws_yrp_setting_characters" )
 net.Receive( "nws_yrp_setting_characters", function( len, ply )
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "SteamID, rpname, text_idcardid, rpdescription, groupID, roleID, money, moneybank, int_level, bool_eventchar, bool_archived", nil)
-	if !IsNotNilAndNotFalse(tab) then
-		tab = {}
-	end
-	for i, chartab in pairs( tab ) do
-		net.Start( "nws_yrp_setting_characters" )
-			net.WriteTable( chartab )
-		net.Send(ply)
+	if IsNotNilAndNotFalse(tab) then
+		for i, chartab in pairs( tab ) do
+			if chartab then
+				net.Start( "nws_yrp_setting_characters" )
+					net.WriteTable( chartab )
+				net.Send(ply)
+			end
+		end
 	end
 end)
 
