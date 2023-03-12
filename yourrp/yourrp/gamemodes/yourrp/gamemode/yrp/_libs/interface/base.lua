@@ -633,6 +633,10 @@ function DTextBox(tab)
 			if pnl.OnChange then
 				pnl:OnChange()
 			end
+
+			if tab.testCode then
+				tab:testCode()
+			end
 		end
 		net.Receive(tab.netstr, function( len )
 			local _uid = tonumber(net.ReadString() )

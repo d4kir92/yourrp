@@ -2970,6 +2970,36 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 				DHr(hr)
 			end
 
+			local plySpawn = {}
+			plySpawn.parent = ea.attributes:GetContent()
+			plySpawn.uniqueID = role.uniqueID
+			plySpawn.header = "LID_playerspawn"
+			plySpawn.netstr = "nws_yrp_update_role_string_playerspawn"
+			plySpawn.value = role.string_playerspawn
+			plySpawn.uniqueID = role.uniqueID
+			plySpawn.lforce = false
+			plySpawn.multiline = true
+			plySpawn.h = 200
+			plySpawn.testCode = function()
+				if ea[role.uniqueID].plySpawn then
+					local code = ea[role.uniqueID].plySpawn.DTextEntry:GetText()
+
+					pcall(
+						function( ply, transition )
+							local error = RunString( code, "role:" .. role.uniqueID, false )
+							if type( error ) == "string" then
+								notification.AddLegacy( "ERROR in PlayerSpawn: " .. tostring( error ), NOTIFY_ERROR, 6 )
+							else
+								notification.AddLegacy( "WORKED for PlayerSpawn: " .. tostring( code ), NOTIFY_GENERIC, 6 )
+							end
+						end,
+						LocalPlayer(),
+						false
+					)
+				end
+			end
+			ea[role.uniqueID].plySpawn = DTextBox( plySpawn )
+
 			ea.attributes:AutoSize(true)
 		end)
 

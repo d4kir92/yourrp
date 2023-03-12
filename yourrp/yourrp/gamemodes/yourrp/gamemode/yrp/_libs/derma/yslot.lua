@@ -130,8 +130,9 @@ net.Receive( "nws_yrp_item_unstore", function( len )
 	slotID = tonumber(slotID)
 
 	local slot = GetSlotPanel(slotID)
-
-	slot:Clear()
+	if slot then
+		slot:Clear()
+	end
 end)
 
 vgui.Register( "YSlot", PANEL, "DScrollPanel" )

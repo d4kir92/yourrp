@@ -375,7 +375,27 @@ hook.Add( "PlayerLoadout", "yrp_PlayerLoadout", function( ply )
 	return true
 end)
 
-hook.Add( "PlayerSpawn", "____yrp_player_spawn_PlayerSpawn", function( ply )
+function YRPPlayerSpawn( ply, transition )
+	local rolTab = ply:YRPGetRoleTable()
+	if rolTab then
+		if !strEmpty( rolTab.string_playerspawn ) then
+			local code = rolTab.string_playerspawn
+
+			pcall(
+				function( ply, transition )
+					local error = RunString( code, "role:" .. rolTab.uniqueID, false )
+					if type( error ) == "string" then
+						YRP.msg( "note", "ERROR [PlayerSpawn]: " .. tostring( error ) )
+					end
+				end,
+				ply,
+				transition
+			)
+		end
+	end
+end
+
+hook.Add( "PlayerSpawn", "____yrp_player_spawn_PlayerSpawn", function( ply, transition )
 	if !IsValid( ply ) then
 		return
 	end
@@ -384,6 +404,8 @@ hook.Add( "PlayerSpawn", "____yrp_player_spawn_PlayerSpawn", function( ply )
 		ply:SetYRPBool( "can_respawn", false)
 
 		ply:SetupHands()
+
+		YRPPlayerSpawn( ply, transition )
 
 		if ply:GetYRPBool( "switchrole", false) == false then
 			timer.Simple(1.5, function()

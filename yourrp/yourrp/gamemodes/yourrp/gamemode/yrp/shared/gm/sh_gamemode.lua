@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 295 -- do NOT change this!
+GM.VersionBuild = 296 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -227,8 +227,10 @@ concommand.Add( "yrp_status", function(ply, cmd, args)
 	YRPMsg( string.format( "%14s %s", "Servername:", YRPGetHostName() ) )
 	YRPMsg( string.format( "%14s %s", "IP:", game.GetIPAddress() ) )
 	YRPMsg( string.format( "%14s %s", "Map:", GetMapNameDB() ) )
-	YRPMsg( string.format( "%14s %s", "Players:", tostring(player.GetCount() ) .. "/" .. tostring(game.MaxPlayers() ) ) )
-	YRPMsg( string.format( "%14s %0.2f", "Tickrate:", tostring( 1 / FrameTime() ) ) )
+	YRPMsg( string.format( "%14s %s", "Players:", tostring( player.GetCount() ) .. "/" .. tostring( game.MaxPlayers() ) ) )
+	if FrameTime then
+		YRPMsg( string.format( "%14s %0.2f", "Tickrate:", 1 / FrameTime() ) )
+	end
 	YRPHR()
 end)
 
