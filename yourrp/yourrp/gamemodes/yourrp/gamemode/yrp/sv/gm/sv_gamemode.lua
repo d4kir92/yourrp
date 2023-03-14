@@ -1776,7 +1776,7 @@ function YRPImportDarkrp( str, name )
 	YRPIMPORTDARKRP = true
 	if str and name then
 		local err = RunString( str, "YRPIMPORTDARKRP_RS: " .. name, false )
-		if err and string.find( str, "table index is nil", 1, true ) == nil then
+		if err and string.find( err, "table index is nil", 1, true ) == nil then
 			MsgC( Color( 0, 255, 0 ), "ERROR: ", err, "\n" )
 		end
 	else

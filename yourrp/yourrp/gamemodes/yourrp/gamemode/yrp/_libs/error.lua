@@ -27,7 +27,16 @@ function WORKED(obj, name, _silence)
 	end
 end
 
-function EntityAlive(obj)
+function EntityAlive( obj )
+	if obj == nil then
+		return false
+	end
+	if type( obj ) == "number" then
+		return false
+	end
+	if type( obj ) == "string" then
+		return false
+	end
 	if obj != nil and obj != NULL and tostring(obj) != "[NULL Entity]" then
 		if obj:IsValid() then
 			return true

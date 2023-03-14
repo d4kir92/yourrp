@@ -964,6 +964,14 @@ function YRPCleanUpName( name )
 	return name
 end
 
+function loadCustomDarkRPItems()
+	
+end
+
+function postLoadCustomDarkRPItems()
+
+end
+
 function GM:DarkRPFinishedLoading()
     -- GAMEMODE gets set after the last statement in the gamemode files is run. That is not the case in this hook
     GAMEMODE = GAMEMODE or GM

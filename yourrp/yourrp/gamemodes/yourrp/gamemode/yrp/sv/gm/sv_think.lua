@@ -341,8 +341,8 @@ timer.Create( "ServerThink", TICK, 0, function()
 
 		if GetGlobalYRPBool( "bool_radiation", false) then
 			for k, ent in pairs( ents.GetAll() ) do
-				if ent and ent:IsNPC() then
-					YRPConRA(ent)
+				if ent and EntityAlive( ent ) and ent:IsNPC() then
+					YRPConRA( ent )
 				end
 			end
 		end

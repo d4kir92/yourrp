@@ -127,7 +127,7 @@ end
 
 function DarkRP.lockdown(ply)
 	--Description: Start a lockdown.
-	YRPDarkrpNotFound( "lockdown(ply)" )
+	--YRPDarkrpNotFound( "lockdown(ply)" )
 	return "Old lockdown"
 end
 
