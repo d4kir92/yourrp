@@ -381,16 +381,24 @@ function YRPPlayerSpawn( ply, transition )
 		if !strEmpty( rolTab.string_playerspawn ) then
 			local code = rolTab.string_playerspawn
 
-			pcall(
-				function( ply, transition )
-					local error = RunString( code, "role:" .. rolTab.uniqueID, false )
-					if type( error ) == "string" then
-						YRP.msg( "note", "ERROR [PlayerSpawn]: " .. tostring( error ) )
-					end
-				end,
-				ply,
-				transition
-			)
+			timer.Simple( 0.2, function()
+				if IsValid( ply ) then
+					pcall(
+						function( ply )
+							RSPLY = ply
+
+							code = "local ply = RSPLY;" .. code
+							local err = RunString( code, "role:" .. rolTab.uniqueID, false )
+							if type( err ) == "string" then
+								YRP.msg( "note", "ERROR [PlayerSpawn]: " .. tostring( err ) )
+							end
+
+							RSPLY = nil
+						end,
+						ply
+					)
+				end
+			end )
 		end
 	end
 end
