@@ -1,5 +1,7 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
+
+
 net.Receive( "nws_yrp_setting_characters", function( len )
 	local PARENT = GetSettingsSite()
 	if PanelAlive(PARENT) and PanelAlive(YRPCharList) then
@@ -17,7 +19,9 @@ net.Receive( "nws_yrp_setting_characters", function( len )
 			YRPCharList:AddLine(tab.SteamID, tab.rpname, tab.text_idcardid, descr, tab.groupID, tab.roleID, tab.money, tab.moneybank, tab.int_level, event, archi)
 		end
 	end
-end)
+end )
+
+
 
 function OpenSettingsCharacters()
 	local PARENT = GetSettingsSite()

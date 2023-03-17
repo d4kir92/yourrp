@@ -1125,7 +1125,7 @@ net.Receive( "nws_yrp_setting_characters", function( len, ply )
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "SteamID, rpname, text_idcardid, rpdescription, groupID, roleID, money, moneybank, int_level, bool_eventchar, bool_archived", nil)
 	if IsNotNilAndNotFalse(tab) then
 		for i, chartab in pairs( tab ) do
-			if chartab then
+			if chartab and type( chartab ) == "table" then
 				net.Start( "nws_yrp_setting_characters" )
 					net.WriteTable( chartab )
 				net.Send(ply)
