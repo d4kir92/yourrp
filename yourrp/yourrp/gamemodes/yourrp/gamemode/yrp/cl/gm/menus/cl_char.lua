@@ -1,51 +1,51 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 
-CHAR = CHAR or {}
-CHAR.open = false
+local yrp_charframe = {}
+yrp_charframe.open = false
 
 function YRPToggleCharMenu()
-	if !CHAR.open and YRPIsNoMenuOpen() then
+	if !yrp_charframe.open and YRPIsNoMenuOpen() then
 		openCharMenu()
 	end
 end
 
 function closeCharMenu()
-	CHAR.open = false
-	if CHAR.window != nil then
+	yrp_charframe.open = false
+	if PanelAlive( yrp_charframe.window ) and yrp_charframe.window and yrp_charframe.window.Remove then
 		YRPCloseMenu()
-		CHAR.window:Remove()
-		CHAR.window = nil
+		yrp_charframe.window:Remove()
+		yrp_charframe.window = nil
 	end
 end
 
 function openCharMenu()
 	YRPOpenMenu()
 
-	CHAR.open = true
-	CHAR.window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
-	CHAR.window:Center()
-	CHAR.window:SetTitle( "LID_character" )
-	CHAR.window:SetHeaderHeight(YRP.ctr(100) )
-	function CHAR.window:OnClose()
+	yrp_charframe.open = true
+	yrp_charframe.window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
+	yrp_charframe.window:Center()
+	yrp_charframe.window:SetTitle( "LID_character" )
+	yrp_charframe.window:SetHeaderHeight(YRP.ctr(100) )
+	function yrp_charframe.window:OnClose()
 		YRPCloseMenu()
 	end
-	function CHAR.window:OnRemove()
+	function yrp_charframe.window:OnRemove()
 		YRPCloseMenu()
 	end
-	CHAR.window.systime = SysTime()
-	function CHAR.window:Paint(pw, ph)
+	yrp_charframe.window.systime = SysTime()
+	function yrp_charframe.window:Paint(pw, ph)
 		Derma_DrawBackgroundBlur(self, self.systime)
 		hook.Run( "YFramePaint", self, pw, ph)
 	end
-	CHAR.window:MakePopup()
+	yrp_charframe.window:MakePopup()
 
-	CreateCharContent(CHAR.window.con)
+	CreateCharContent(yrp_charframe.window.con)
 end
 
 local save_delay = 0
 function CreateCharContent(parent)
 	local lply = LocalPlayer()
-	CHAR.content = parent
+	yrp_charframe.content = parent
 
 
 	local Y = 20

@@ -466,8 +466,8 @@ function LoadWorldStorages()
 			v.linkID = v.linkID or 0
 			v.linkID = tonumber( v.linkID)
 			local found = false
-			for j, ent in pairs(ents.GetAll() ) do
-				if ent._suid == v.linkID then
+			for j, ent in pairs( ents.GetAll() ) do
+				if ent and ent._suid and ent._suid == v.linkID then
 					found = true
 				end
 			end
