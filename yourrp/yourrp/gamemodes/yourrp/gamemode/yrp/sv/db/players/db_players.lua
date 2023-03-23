@@ -116,6 +116,10 @@ local defaultsweps = {}
 defaultsweps["yrp_key"] = true
 defaultsweps["yrp_unarmed"] = true
 
+function YRPPlayerGive( ply, cname, bNoAmmo )
+	ply:Give( cname, bNoAmmo )
+end
+
 function YRPSetRole( ply, rid, force, pmid, bgs )
 	if rid == nil then
 		YRP.msg( "note", "[YRPSetRole] No roleid" )
@@ -191,7 +195,11 @@ function YRPSetRole( ply, rid, force, pmid, bgs )
 		for i, slot in pairs(YRPGetCharSWEPS(ply) ) do
 			for x, wep in pairs(slot) do
 				if !strEmpty( wep ) then
-					ply:Give(wep)
+					local succ, err = pcall( YRPPlayerGive, ply, wep )
+					if err then
+						YRPMsg( err )
+					end
+					--ply:Give(wep)
 				end
 			end
 		end
@@ -205,7 +213,11 @@ function YRPSetRole( ply, rid, force, pmid, bgs )
 					if ply:Alive() then
 						local slots = YRPGetSlotsOfSWEP(swep)
 						if slots.slot_no then
-							ply:Give(swep)
+							local succ, err = pcall( YRPPlayerGive, ply, swep )
+							if err then
+								YRPMsg( err )
+							end
+							--ply:Give(swep)
 						end
 					end
 				end
@@ -214,7 +226,11 @@ function YRPSetRole( ply, rid, force, pmid, bgs )
 	elseif IsNotNilAndNotFalse(rolTab) then
 		rolTab = rolTab[1]
 		for i, swep in pairs(string.Explode( ",", rolTab.string_sweps) ) do
-			ply:Give(swep)
+			local succ, err = pcall( YRPPlayerGive, ply, swep )
+			if err then
+				YRPMsg( err )
+			end
+			--ply:Give(swep)
 		end
 	end
 
@@ -588,7 +604,11 @@ function YRPSetRoleValues(ply, pmid)
 			for k, swep in pairs(tmpSWEPTable) do
 				if swep != nil and swep != NULL and swep != "" then
 					if ply:Alive() then
-						ply:Give(swep)
+						local succ, err = pcall( YRPPlayerGive, ply, swep )
+						if err then
+							YRPMsg( err )
+						end
+						--ply:Give(swep)
 					end
 				end
 			end

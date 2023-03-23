@@ -224,9 +224,9 @@ function Player:setRPName(name, firstrun)
 	self:SetRPName(name, "darkrp setRPName" )
 end
 
-function Player:setSelfDarkRPVar( variable, value)
+function Player:setDarkRPVar( variable, value)
 	--Description: Set a shared variable that is only seen by the player to whom this variable applies.
-	--YRPDarkrpNotFound( "setSelfDarkRPVar( variable, value)" )
+	--YRPDarkrpNotFound( "setDarkRPVar( variable, value)" )
 	self:setDarkRPVar( variable, value, self)
 end
 

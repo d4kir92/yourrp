@@ -281,9 +281,9 @@ function DarkRP.storeOfflineMoney(sid64, amount)
 	YRPDarkrpNotFound( "storeOfflineMoney(sid64, amount)" )
 end
 
-function DarkRP.storeRPName(ply, name)
+function DarkRP.storeRPName( ply, name )
 	--Description: Store an RP name in the database.
-	YRPDarkrpNotFound( "storeRPName(ply, name)" )
+	--YRPDarkrpNotFound( "storeRPName(ply, name)" )
 end
 
 function DarkRP.storeTeamDoorOwnability(ent)

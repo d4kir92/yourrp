@@ -922,7 +922,7 @@ function StartCombat( ply )
 end
 
 hook.Add( "ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, dmginfo)
-	if ply:IsFullyAuthenticated() then
+	if ply and ply.IsFullyAuthenticated and ply:IsFullyAuthenticated() then
 
 		if IsInsideSafezone( ply ) or ply:HasGodMode() or ply:GetYRPBool( "godmode", false) then
 			dmginfo:ScaleDamage( 0 )

@@ -1787,7 +1787,11 @@ hook.Add( "CanTool", "yrp_can_tool", function(pl, tr, tool)
 		YRP.msg( "note", "[CanTool] " .. "FAIL FOR TOOL: " .. tostring(tool) )
 		return false
 	else
-		YRP.msg( "error", "[CanTool] Player is not valid!" )
+		if not IsNotNilAndNotFalse(tool) then
+			YRP.msg( "note", "[CanTool] Tool is not valid!" )
+		else
+			YRP.msg( "error", "[CanTool] Player is not valid!" )
+		end
 	end
 end)
 
@@ -1836,7 +1840,11 @@ function Player:UserGroupLoadout()
 		if SWEPS then
 			SWEPS = string.Explode( ",", SWEPS)
 			for i, swep in pairs(SWEPS) do
-				self:Give(swep)
+				local succ, err = pcall( YRPPlayerGive, self, swep )
+				if err then
+					YRPMsg( err )
+				end
+				--self:Give(swep)
 			end
 		end
 
