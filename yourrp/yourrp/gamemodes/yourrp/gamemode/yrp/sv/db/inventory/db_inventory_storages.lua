@@ -33,7 +33,9 @@ function CreateStorage(size, inv)
 	end
 end
 
-function GetCharacterStorage(ply)
+function GetCharacterStorage( ply, retry )
+	retry = retry or false
+
 	local chaTab = ply:YRPGetCharacterTable()
 	if IsNotNilAndNotFalse( chaTab) then
 		local storage = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. chaTab.int_storageID .. "'" )
@@ -41,16 +43,26 @@ function GetCharacterStorage(ply)
 			storage = storage[1]
 			return storage
 		else
-			ply:PrintMessage( HUD_PRINTCENTER, "No Storage for this Character (Inventory)" )
-			YRP.msg( "note", "[GetCharacterStorage] no storage" )
+			if retry == false then
+				retry = true
+				YRPCreateCharacterStorages( true )
+				return GetCharacterStorage( ply, retry )
+			else
+				ply:PrintMessage( HUD_PRINTCENTER, "No Storage for this Character (Inventory)" )
+				YRP.msg( "note", "[GetCharacterStorage] (Inventory) no storage" )
+			end
 		end
 	end
 	ply:PrintMessage( HUD_PRINTCENTER, "Failed to Get Storage for this Character (Inventory)" )
-	YRP.msg( "note", "[GetCharacterStorage] FAILED" )
+	YRP.msg( "note", "[GetCharacterStorage] (Inventory) FAILED!" )
 	return {}
 end
 
-function YRPCreateCharacterStorages()
+function YRPCreateCharacterStorages( retry )
+	if retry then
+		YRP.msg( "note", "[CreateCharacterStorages] (Inventory) RETRY!" )
+	end
+
 	local chars = YRP_SQL_SELECT( "yrp_characters", "*", nil)
 	if IsNotNilAndNotFalse( chars) then
 		for _, char in pairs( chars) do
@@ -87,7 +99,7 @@ function YRPCreateCharacterStorages()
 	end
 end
 timer.Simple(3, function()
-	YRPCreateCharacterStorages()
+	YRPCreateCharacterStorages( false )
 end)
 
 
