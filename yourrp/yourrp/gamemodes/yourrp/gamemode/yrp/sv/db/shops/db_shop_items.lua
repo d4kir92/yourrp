@@ -167,7 +167,10 @@ net.Receive( "nws_yrp_shop_get_items", function( len, ply )
 		if strEmpty( v.WorldModel ) then
 			local ent = ents.Create( v.ClassName )
 			if EntityAlive( ent ) then
-				ent:Spawn()
+				local succ, err = pcall( YRPEntSpawn, ent )
+				if err then
+					YRPMsg( err )
+				end
 
 				v.WorldModel = ent:GetModel()
 
@@ -442,7 +445,10 @@ function YRPSpawnItem( ply, item, duid, count, itemColor )
 					--ent:SetOwner(ply)
 					ent:SetYRPEntity( "yrp_owner", ply)
 
-					ent:Spawn()
+					local succ, err = pcall( YRPEntSpawn, ent )
+					if err then
+						YRPMsg( err )
+					end
 					ent:Activate()
 
 					ent:SetAngles(TARGETANG)
@@ -500,7 +506,10 @@ function YRPSpawnItem( ply, item, duid, count, itemColor )
 					ent:SetModel(item.WorldModel)
 					ent:SetPos(tr.HitPos)
 					
-					ent:Spawn()
+					local succ, err = pcall( YRPEntSpawn, ent )
+					if err then
+						YRPMsg( err )
+					end
 					ent:Activate()
 
 					ent:SetAngles(TARGETANG)

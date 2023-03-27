@@ -125,8 +125,12 @@ function YRPSetRole( ply, rid, force, pmid, bgs )
 		YRP.msg( "note", "[YRPSetRole] No roleid" )
 		return false
 	end
-
 	rid = tonumber( rid )
+	if rid == nil then
+		YRP.msg( "note", "[YRPSetRole] rid == nil" )
+		return false
+	end
+	
 	if (IsVoidCharEnabled() or GetGlobalYRPBool( "bool_character_system", true) == false) and !ply:Alive() then
 		--ply:Spawn()
 	end

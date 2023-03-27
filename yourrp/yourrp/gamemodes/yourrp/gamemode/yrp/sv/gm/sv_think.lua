@@ -721,7 +721,10 @@ hook.Add( "Think", "yrp_spawner_think", function()
 					ent_spawner.delay = CurTime() + ent_spawner.int_respawntime
 					local ent = ents.Create(ent_spawner.string_classname)
 					if ent:IsValid() then
-						ent:Spawn()
+						local succ, err = pcall( YRPEntSpawn, ent )
+						if err then
+							YRPMsg( err )
+						end
 						YRPTeleportToPoint(ent, pos)
 
 						table.insert(YENTs[v.uniqueID].ents, ent)

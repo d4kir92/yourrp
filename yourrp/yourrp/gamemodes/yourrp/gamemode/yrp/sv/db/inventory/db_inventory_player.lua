@@ -53,6 +53,14 @@ function Player:RemoveWeapon( cname)
 	return false
 end
 
+function YRPEntSpawn( ent )
+	if ent and ent.Spawn then
+		ent:Spawn()
+		return true
+	end
+	return false
+end
+
 function Player:DropSWEP( cname, force )
 	if (self:IsAllowedToDropSWEPRole( cname) and self:IsAllowedToDropSWEPUG( cname) ) or force then
 		self.dropdelay = self.dropdelay or CurTime() - 1
@@ -82,7 +90,15 @@ function Player:DropSWEP( cname, force )
 
 				timer.Simple( 0.0, function()
 					if IsValid( ent ) and ent.Spawn then
-						ent:Spawn()
+						local succ, err = pcall( YRPEntSpawn, ent )
+						if err then
+							YRPMsg( err )
+						end
+
+						local succ, err = pcall( YRPEntSpawn, ent )
+						if err then
+							YRPMsg( err )
+						end
 
 						if IsValid(wep) and wep.GetClip1 then
 							ent:SetYRPInt( "clip1", wep:GetClip1() )

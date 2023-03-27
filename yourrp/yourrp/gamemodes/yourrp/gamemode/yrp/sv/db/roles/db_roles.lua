@@ -642,12 +642,14 @@ function SendRoleList(ply, gro, pre)
 				local tbl_bc = HANDLER_GROUPSANDROLES["roleslist"][gro][pre] or {}
 				if tbl_bc then
 					for i, pl in pairs(tbl_bc) do
-						net.Start( "nws_yrp_settings_subscribe_rolelist" )
-							net.WriteTable(tbl_roles)
-							net.WriteString(headername)
-							net.WriteString(gro)
-							net.WriteString(pre)
-						net.Send(pl)
+						if tbl_roles then
+							net.Start( "nws_yrp_settings_subscribe_rolelist" )
+								net.WriteTable(tbl_roles)
+								net.WriteString(headername)
+								net.WriteString(gro)
+								net.WriteString(pre)
+							net.Send(pl)
+						end
 					end
 				end
 			end

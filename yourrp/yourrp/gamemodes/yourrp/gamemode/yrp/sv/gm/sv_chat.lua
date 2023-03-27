@@ -293,7 +293,7 @@ function YRPChatRenamePlayer( sender, text )
 end
 
 function YRPChatAlert( sender, text )
-	if sender:HasAccess( "YRPChatAlert" ) then
+	if sender:HasAccess( "YRPChatAlert", true ) then
 		AddAlert( text )
 		return ""
 	end

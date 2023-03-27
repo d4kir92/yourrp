@@ -153,7 +153,7 @@ function Player:sendDoorData()
 	YRPDarkrpNotFound( "sendDoorData()" )
 end
 
-function Player:setDarkRPVar( variable, value, target )
+function Player:setSelfDarkRPVar( variable, value, target )
 	--Description: Set a shared variable. Make sure the variable is registered with DarkRP.registerDarkRPVar!
 	if value == nil then return false end
 
@@ -224,10 +224,10 @@ function Player:setRPName(name, firstrun)
 	self:SetRPName(name, "darkrp setRPName" )
 end
 
-function Player:setDarkRPVar( variable, value)
+function Player:setDarkRPVar( variable, value )
 	--Description: Set a shared variable that is only seen by the player to whom this variable applies.
 	--YRPDarkrpNotFound( "setDarkRPVar( variable, value)" )
-	self:setDarkRPVar( variable, value, self)
+	self:setSelfDarkRPVar( variable, value, self )
 end
 
 function Player:teamBan(team, time)

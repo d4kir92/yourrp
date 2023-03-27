@@ -2985,16 +2985,19 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 					local code = ea[role.uniqueID].plySpawn.DTextEntry:GetText()
 
 					pcall(
-						function( ply, transition )
-							local error = RunString( code, "role:" .. role.uniqueID, false )
+						function( ply )
+							RSPLY = ply
+
+							local error = RunString( code, "[RS] GroupsAndRoles: role:" .. role.uniqueID, false )
 							if type( error ) == "string" then
 								notification.AddLegacy( "ERROR in PlayerSpawn: " .. tostring( error ), NOTIFY_ERROR, 6 )
 							else
 								notification.AddLegacy( "WORKED for PlayerSpawn: " .. tostring( code ), NOTIFY_GENERIC, 6 )
 							end
+
+							RSPLY = nil
 						end,
-						LocalPlayer(),
-						false
+						LocalPlayer()
 					)
 				end
 			end
