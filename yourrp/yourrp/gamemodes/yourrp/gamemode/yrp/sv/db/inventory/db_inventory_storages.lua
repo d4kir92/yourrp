@@ -41,10 +41,12 @@ function GetCharacterStorage(ply)
 			storage = storage[1]
 			return storage
 		else
-			YRP.msg( "db", "[GetCharacterStorage] no storage" )
+			ply:PrintMessage( HUD_PRINTCENTER, "No Storage for this Character (Inventory)" )
+			YRP.msg( "note", "[GetCharacterStorage] no storage" )
 		end
 	end
-	YRP.msg( "db", "[GetCharacterStorage] FAILED" )
+	ply:PrintMessage( HUD_PRINTCENTER, "Failed to Get Storage for this Character (Inventory)" )
+	YRP.msg( "note", "[GetCharacterStorage] FAILED" )
 	return {}
 end
 
@@ -112,7 +114,8 @@ net.Receive( "nws_yrp_get_inventory", function( len, ply )
 			net.WriteTable(nettab)
 		net.Send(ply)
 	else
-		YRP.msg( "db", "[get_inventory] No GetCharacterStorage" )
+		ply:PrintMessage( HUD_PRINTCENTER, "Failed to Get Storage-Info for this Character (Inventory)" )
+		YRP.msg( "note", "[get_inventory] No GetCharacterStorage" )
 	end
 end)
 

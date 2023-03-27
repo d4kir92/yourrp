@@ -43,6 +43,8 @@ net.Receive( "nws_yrp_connect_Settings_Database", function( len, ply )
 	local nw_sql = sql.Query( "SELECT * FROM yrp_sql WHERE uniqueID = 1;" )
 	if IsNotNilAndNotFalse(nw_sql) then
 		nw_sql = nw_sql[1]
+	else
+		nw_sql = {}
 	end
 
 	net.Start( "nws_yrp_connect_Settings_Database" )
