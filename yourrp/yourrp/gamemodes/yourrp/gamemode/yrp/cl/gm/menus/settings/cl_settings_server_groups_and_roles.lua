@@ -2252,7 +2252,22 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 
 
 			local col3 = YRPCreateD( "DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
+			col3:EnableVerticalScrollbar(true)
 			col3:SetSpacing(YRP.ctr(20) )
+			local sbar = col3.VBar
+			function sbar:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
+			end
+			function sbar.btnUp:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
+			end
+			function sbar.btnDown:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
+			end
+			function sbar.btnGrip:Paint(w, h)
+				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
+			end
+
 
 			local restriction = YRPCreateD( "YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1650), YRP.ctr(1660), YRP.ctr(20) )
 			restriction:SetText( "LID_restriction" )
@@ -2705,7 +2720,21 @@ net.Receive( "nws_yrp_subscribe_Settings_GroupsAndRoles", function( len )
 			ea.restriction:AutoSize(true)
 
 			local col4 = YRPCreateD( "DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20) )
+			col4:EnableVerticalScrollbar(true)
 			col4:SetSpacing(YRP.ctr(20) )
+			local sbar = col4.VBar
+			function sbar:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue( "YFrame", "NC" ) )
+			end
+			function sbar.btnUp:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
+			end
+			function sbar.btnDown:Paint(w, h)
+				draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
+			end
+			function sbar.btnGrip:Paint(w, h)
+				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue( "YFrame", "HI" ) )
+			end
 
 			local attributes = YRPCreateD( "YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1400), ea.restriction.x + ea.restriction:GetWide() + YRP.ctr(20), YRP.ctr(20) )
 			attributes:SetText( "LID_attributes" )

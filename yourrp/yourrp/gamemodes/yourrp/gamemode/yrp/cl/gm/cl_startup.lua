@@ -1787,7 +1787,7 @@ function drawIDCard(ply, scale, px, py)
 end
 
 local customdeathscreen = false
-function CustomDeathscreen( b)
+function CustomDeathscreen( b )
 	customdeathscreen = b
 end
 

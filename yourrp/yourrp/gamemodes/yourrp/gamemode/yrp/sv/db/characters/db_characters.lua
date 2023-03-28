@@ -207,7 +207,10 @@ net.Receive( "nws_yrp_slot_swep_rem", function( len, ply )
 	local tab = string.Explode( ",", currentsweps)
 	table.RemoveByValue(tab, cname)
 
-	ply:StripWeapon( cname)
+	local succ, err = pcall( YRPStripWeapon, ply, cname )
+	if err then
+		YRPMsg( err )
+	end
 
 	YRPUpdateCharSlot(ply, art, tab)
 end)

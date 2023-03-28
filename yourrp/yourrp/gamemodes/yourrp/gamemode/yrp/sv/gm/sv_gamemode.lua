@@ -386,7 +386,7 @@ function YRPPlayerSpawn( ply, transition )
 					pcall(
 						function( ply )
 							RSPLY = ply
-
+							
 							code = "local ply = RSPLY;" .. code
 							local err = RunString( code, "role:" .. rolTab.uniqueID, false )
 							if type( err ) == "string" then

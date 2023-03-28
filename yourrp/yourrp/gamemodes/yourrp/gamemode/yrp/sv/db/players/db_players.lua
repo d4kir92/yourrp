@@ -1023,6 +1023,10 @@ function canGetRole(ply, roleID, want)
 	return false
 end
 
+function YRPStripWeapon( ply, v )
+	ply:StripWeapon( v )
+end
+
 function YRPRemRolVals( ply )
 	if not IsValid( ply ) then
 		return
@@ -1033,7 +1037,10 @@ function YRPRemRolVals( ply )
 		local _sweps = string.Explode( ",", rolTab.string_sweps )
 		for k, v in pairs( _sweps ) do
 			if v and ply:HasWeapon( v ) then
-				ply:StripWeapon( v )
+				local succ, err = pcall( YRPStripWeapon, ply, v )
+				if err then
+					YRPMsg( err )
+				end
 			end
 		end
 	end
@@ -1048,7 +1055,10 @@ function YRPRemGroVals(ply)
 	if IsNotNilAndNotFalse(groTab) then
 		local _sweps = string.Explode( ",", groTab.string_sweps)
 		for k, v in pairs(_sweps) do
-			ply:StripWeapon( v)
+			local succ, err = pcall( YRPStripWeapon, ply, v )
+			if err then
+				YRPMsg( err )
+			end
 		end
 	end
 end
