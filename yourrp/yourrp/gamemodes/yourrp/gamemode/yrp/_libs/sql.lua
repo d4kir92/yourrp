@@ -563,8 +563,8 @@ if SERVER then
 				require( "mysqloo" )
 
 				if (mysqloo.VERSION != "9" or !mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1) then
-					MsgC( Color( 0, 255, 0 ), "You are using an outdated mysqloo version\n" )
-					MsgC( Color( 0, 255, 0 ), "Download the latest mysqloo9 from here\n" )
+					MsgC( Color( 0, 255, 0 ), "You are using an outdated mysqloo version (9.7.6)\n" )
+					MsgC( Color( 0, 255, 0 ), "Download the latest MYSQLOO 9 from here\n" )
 					MsgC( Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases\n" )
 					YRPSQL.outdated = true
 				end
