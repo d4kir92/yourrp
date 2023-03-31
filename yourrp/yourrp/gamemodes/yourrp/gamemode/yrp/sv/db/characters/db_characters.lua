@@ -245,6 +245,10 @@ function Player:YRPCharacterLoadout()
 	local chatab = self:YRPGetCharacterTable()
 	local plytab = self:GetPlyTab()
 
+	if plytab then
+		self:SetYRPInt( "int_chatdelay", plytab.int_chatdelay )
+	end
+
 	self:YRPUpdateAppearance()
 
 	if IsNotNilAndNotFalse( chatab) then

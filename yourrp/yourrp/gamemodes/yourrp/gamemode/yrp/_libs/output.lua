@@ -362,6 +362,7 @@ countries["RU"] = "Russia"
 countries["SA"] = "Saudi Arabia"
 countries["SE"] = "Sweden"
 countries["SG"] = "Singapore"
+countries["SI"] = "Slovenija"
 countries["SK"] = "Slovakia"
 
 countries["TH"] = "Thailand"

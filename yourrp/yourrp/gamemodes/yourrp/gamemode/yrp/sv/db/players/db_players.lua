@@ -14,6 +14,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "Timestamp", "INT DEFAULT 1" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_total", "INT DEFAULT 0" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_current", "INT DEFAULT 0" )
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "TS_LastOnline", "INT DEFAULT 1" )
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_chatdelay", "INT DEFAULT 4" )
 
 function YRPGetTSLastOnline( steamId )
 	local tab = YRP_SQL_SELECT( "yrp_players", "*", "SteamID = '" .. steamId .. "'" )
@@ -30,6 +31,15 @@ function YRPSetTSLastOnline( steamId )
 		YRP_SQL_UPDATE( "yrp_players", {["TS_LastOnline"] = os.time()}, "SteamID = '" .. steamId .. "'" )
 	end
 end
+
+util.AddNetworkString( "nws_yrp_chatdelay" )
+net.Receive( "nws_yrp_chatdelay", function( len, ply )
+	local delay = net.ReadInt( 8 )
+	local steamId = ply:SteamID()
+
+	YRP_SQL_UPDATE( "yrp_players", {["int_chatdelay"] = delay}, "SteamID = '" .. steamId .. "'" )
+	ply:SetYRPInt( "int_chatdelay", delay )
+end )
 
 util.AddNetworkString( "nws_yrp_setting_players" )
 util.AddNetworkString( "YRPOpenCharacterMenu" )
@@ -1023,9 +1033,13 @@ function canGetRole(ply, roleID, want)
 	return false
 end
 
-function YRPStripWeapon( ply, v )
-	ply:StripWeapon( v )
+
+
+function YRPStripWeapon( ply, cname )
+	ply:StripWeapon( cname )
 end
+
+
 
 function YRPRemRolVals( ply )
 	if not IsValid( ply ) then

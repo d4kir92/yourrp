@@ -79,6 +79,10 @@ function YRPCloseAllMenues()
 	closeMap()
 	closeInteractMenu()
 	closeSP()
+
+	if yrpChat then
+		yrpChat.closeChatbox( "CLOSE ALL" )
+	end
 end
 
 function YRPUseFunction(str)

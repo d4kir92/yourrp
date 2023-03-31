@@ -49,9 +49,7 @@ local yrp_logo = Material( "yrp/yrp_icon" )
 
 local words = 0
 local _delay = 4
-local _delayText = 0.75
 local _fadeout = CurTime() + _delay
-local _fadeoutText = CurTime() + _delayText
 local chatclosedforkeybinds = true
 local _showChat = false
 local chatids = {}
@@ -67,6 +65,10 @@ local BOTBAR_H = 36
 local C_HE = Color( 40, 130, 180, 255 )
 local C_BG = Color( 46, 46, 46, 255 )
 local C_FG = Color( 32, 32, 32, 255 )
+
+local function IsChatVisible()
+	return _showChat
+end
 
 function GetChatMode()
 	return CHATMODE
@@ -183,13 +185,7 @@ counti = counti + 1
 
 local function YRPCheckChatVisible()
 	if yrpChat.window != nil then
-		if YRPIsChatOpen() then
-			_fadeout = CurTime() + _delay
-		end
-		if _fadeout < _fadeoutText then
-			_fadeout = _fadeoutText
-		end
-		if CurTime() > _fadeout and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.settings:HasFocus() then
+		if CurTime() > _fadeout and !yrpChat.window:HasFocus() and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.settings:HasFocus() then
 			_showChat = false
 		else
 			_showChat = true
@@ -198,7 +194,8 @@ local function YRPCheckChatVisible()
 		if YRPIsChatEnabled( "YRPCheckChatVisible" ) == false then
 			_showChat = false
 		end
-		if _showChat then
+		
+		if IsChatVisible() then
 			chatAlpha = chatAlpha + 10
 		else
 			chatAlpha = chatAlpha - 10
@@ -222,10 +219,6 @@ end
 
 function ChatAlpha()
 	return chatAlpha
-end
-
-local function IsChatVisible()
-	return _showChat
 end
 
 local function niceCommand( com)
@@ -498,22 +491,22 @@ local function InitYRPChat()
 				end
 			end
 			function yrpChat.settings:DoClick()
-				local win = YRPCreateD( "YFrame", nil, 800, 800, 0, 0)
+				local win = YRPCreateD( "YFrame", nil, 400, 400, 0, 0)
 				win:MakePopup()
 				win:Center()
 				win:SetTitle( "LID_settings" )
 
-				local tila = YRPCreateD( "YLabel", win:GetContent(), 350, 50, 50, 0 )
+				local tila = YRPCreateD( "YLabel", win:GetContent(), 350, 25, 25, 0 )
 				tila:SetText( "Timestamp" )
-				local ticb = YRPCreateD( "DCheckBox", win:GetContent(), 50, 50, 0, 0 )
+				local ticb = YRPCreateD( "DCheckBox", win:GetContent(), 25, 25, 0, 0 )
 				ticb:SetChecked(lply.yrp_timestamp)
 				function ticb:OnChange()
 					lply.yrp_timestamp = !lply.yrp_timestamp
 				end
 
-				local tspn = YRPCreateD( "YLabel", win:GetContent(), 400, 50, 0, 100 )
+				local tspn = YRPCreateD( "YLabel", win:GetContent(), 380, 25, 0, 50 )
 				tspn:SetText( "LID_textsize" )
-				local tsnw = YRPCreateD( "DNumberWang", win:GetContent(), 400, 50, 0, 100 + 50 )
+				local tsnw = YRPCreateD( "DNumberWang", win:GetContent(), 380, 25, 0, 50 + 25 )
 				tsnw:SetValue(LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" ) )
 				tsnw:SetMin(10)
 				tsnw:SetMax(64)
@@ -521,6 +514,21 @@ local function InitYRPChat()
 					local v = tsnw:GetValue()
 					if v >= 10 and v <= 64 then
 						LocalPlayer().CH_TS = tsnw:GetValue()
+					end
+				end
+
+				local dela = YRPCreateD( "YLabel", win:GetContent(), 380, 25, 0, 125 )
+				dela:SetText( "Chat Delay" )
+				local denw = YRPCreateD( "DNumberWang", win:GetContent(), 380, 25, 0, 125 + 25 )
+				denw:SetValue( LocalPlayer():GetYRPInt( "int_chatdelay", 4 ) )
+				denw:SetMin( 1 )
+				denw:SetMax( 50 )
+				function denw:OnValueChanged( val )
+					local v = denw:GetValue()
+					if v >= 1 and v <= 50 then
+						net.Start( "nws_yrp_chatdelay" )
+							net.WriteInt( v, 8 )
+						net.SendToServer()
 					end
 				end
 			end
@@ -633,11 +641,13 @@ local function InitYRPChat()
 				if !PanelAlive(yrpChat.window) then
 					notification.AddLegacy( "[YourRP] [closeChatbox] ChatBox Window broken", NOTIFY_ERROR, 10)
 					yrp_chat_show = false
+					_fadeout = CurTime()
 					return
 				end
 				if yrp_chat_show then
 					yrp_chat_show = false
-					
+					_fadeout = CurTime()
+
 					gui.EnableScreenClicker(false)
 					
 					yrpChat._chatIsOpen = false
@@ -825,10 +835,7 @@ local function InitYRPChat()
 						end
 					end
 
-					_delay = _delay / 10
-					_delay = math.Clamp(_delay, 2, 30)
-
-					_fadeoutText = CurTime() + math.Clamp(words * _delayText, 2, 60)
+					_fadeout = CurTime() + LocalPlayer():GetYRPInt( "int_chatdelay", 4 )
 					
 					local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue( "CH", "TS" )
 					if ts > 0 then 

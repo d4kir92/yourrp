@@ -222,8 +222,8 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 								if activator:canAffordBank(self.money) then
 									local dbSelectActivator = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. activator:CharID() )
 									local dbSelectTarget = YRP_SQL_SELECT( "yrp_characters", "*", "uniqueID = " .. tostring(self.parent:GetYRPString( "SteamID" ) ))
-									if dbSelectActivator != nil and dbSelectTarget != nil then
-										if dbSelectTarget[1].SteamID != activator:YRPSteamID() then
+									if dbSelectTarget != nil and dbSelectActivator != nil then
+										if dbSelectTarget[1] and dbSelectTarget[1].SteamID != activator:YRPSteamID() then
 											dbSelectActivator[1].moneybank = dbSelectActivator[1].moneybank-self.money
 	
 											YRP_SQL_UPDATE( "yrp_characters", {["moneybank"] = dbSelectActivator[1].moneybank}, "uniqueID = " .. activator:CharID() )
