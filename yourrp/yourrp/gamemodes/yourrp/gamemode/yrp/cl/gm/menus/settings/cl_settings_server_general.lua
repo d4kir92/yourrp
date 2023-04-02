@@ -502,9 +502,9 @@ net.Receive( "nws_yrp_connect_Settings_General", function( len )
 		CreateCheckBoxLineTab(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_module_locally, YRP.lang_string( "LID_voicemodule" ) .. " (YourRP) [" .. YRP.lang_string( "local" ) .. "]", "nws_yrp_update_bool_voice_module_locally" )
 		CreateNumberWangLine(GAMEMODE_SYSTEMS:GetContent(), GEN.int_voice_max_range, YRP.lang_string( "LID_maxvoicerange" ), "nws_yrp_update_int_voice_max_range", 50)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_3d, YRP.lang_string( "LID_voicechat" ) .. " (3D)", "nws_yrp_update_bool_voice_3d" )
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_idcardid, "IDCardID in Voicechat", "nws_yrp_update_bool_voice_idcardid" )
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent() )
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_gmod_voice_module, YRP.lang_string( "LID_voicemodule" ) .. " (GMOD)", "nws_yrp_update_bool_gmod_voice_module" )
-
 
 		--[[ GAMEMODE VISUALS ]]--
 		local GAMEMODE_VISUALS = YRPCreateD( "YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)

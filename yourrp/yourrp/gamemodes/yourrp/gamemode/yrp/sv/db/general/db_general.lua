@@ -117,7 +117,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_voice_max_range", "INT DEFAULT 900" )
 
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_gmod_voice_module", "INT DEFAULT 0" )
 
-
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_voice_idcardid", "INT DEFAULT 0" )
 
 
 --[[ Gamemode Visuals ]]--
@@ -1050,6 +1050,12 @@ util.AddNetworkString( "nws_yrp_update_bool_voice_module_locally" )
 net.Receive( "nws_yrp_update_bool_voice_module_locally", function( len, ply )
 	local b = btn(net.ReadBool() )
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_voice_module_locally", "bool_voice_module_locally", b)
+end)
+
+util.AddNetworkString( "nws_yrp_update_bool_voice_idcardid" )
+net.Receive( "nws_yrp_update_bool_voice_idcardid", function( len, ply )
+	local b = btn(net.ReadBool() )
+	GeneralUpdateBool(ply, "nws_yrp_update_bool_voice_idcardid", "bool_voice_idcardid", b)
 end)
 
 util.AddNetworkString( "nws_yrp_update_bool_voice_3d" )

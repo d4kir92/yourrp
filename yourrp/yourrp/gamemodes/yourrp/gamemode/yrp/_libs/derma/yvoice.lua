@@ -128,9 +128,13 @@ function PANEL:Paint( w, h )
 end
 
 function PANEL:Think()
-	
+
 	if ( IsValid( self.ply ) ) then
-		self.PlayerName:SetText( self.ply:IDCardID() .. " " .. self.ply:RPName() )
+		if GetGlobalYRPBool( "bool_voice_idcardid", false ) then
+			self.PlayerName:SetText( self.ply:IDCardID() .. " " .. self.ply:RPName() )
+		else
+			self.PlayerName:SetText( self.ply:RPName() )
+		end
 	end
 
 	if ( self.fadeAnim ) then
