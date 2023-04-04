@@ -637,7 +637,7 @@ local function InitYRPChat()
 				end
 			end
 
-			function yrpChat.closeChatbox(reason)
+			function yrpChat:closeChatbox(reason)
 				if !PanelAlive(yrpChat.window) then
 					notification.AddLegacy( "[YourRP] [closeChatbox] ChatBox Window broken", NOTIFY_ERROR, 10)
 					yrp_chat_show = false

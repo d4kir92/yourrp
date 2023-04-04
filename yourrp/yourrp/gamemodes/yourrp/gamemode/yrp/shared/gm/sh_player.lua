@@ -546,16 +546,9 @@ if SERVER then
 		local _res = YRP_SQL_UPDATE( "yrp_players", {["uptime_current"] = 0}, "SteamID = '" .. self:YRPSteamID() .. "'" )
 	end
 
-	function Player:getuptimetotal()
-		local _ret = YRP_SQL_SELECT( "yrp_players", "uptime_total", "SteamID = '" .. self:YRPSteamID() .. "'" )
-		if _ret != nil and _ret != false then
-			return _ret[1].uptime_total
-		end
-		return 0
-	end
-
-	function Player:getuptimecurrent()
-		return os.clock() - self:GetYRPFloat( "uptime_current", 0)
+	function Player:SaveUptimeTotal()
+		local uptime_total = self:UptimeTotal()
+		local _res = YRP_SQL_UPDATE( "yrp_players", {["uptime_total"] = uptime_total}, "SteamID = '" .. self:YRPSteamID() .. "'" )
 	end
 
 	function Player:Heal( amount)
@@ -574,6 +567,57 @@ if SERVER then
 	function Player:SetBleedingPosition(pos)
 		self:SetYRPVector( "bleedingpos", pos)
 	end
+end
+
+function Player:UptimeCurrent()
+	return os.time() - self:GetYRPFloat( "uptime_current", 0 )
+end
+
+function Player:UptimeTotal()
+	return self:UptimeCurrent() + self:GetYRPFloat( "uptime_total", 0 )
+end
+
+function Player:FormattedUptimeCurrent()
+	if self:UptimeCurrent() == os.time() then
+		return "BOT"
+	end
+	local hms = os.date( "!%H:%M" , self:UptimeCurrent() )
+	local days = math.floor( self:UptimeCurrent() / (24 * 3600) )
+	if days >= 365 then -- years + months + days
+		local years = math.floor( days / 365 )
+		local months = math.floor( days / 365 / 12 )
+		days = days % 30
+		return string.format( "%1d:%02d:%02d:%s", years, months, days, hms )
+	elseif days >= 30 then -- months + days + hours
+		local months = math.floor( days / 365 / 12 )
+		days = days % 30
+		return string.format( "%02d:%02d:%s", months, days, hms )
+	elseif days > 0 then -- hours + minutes
+		return string.format( "%02d:%s", days, hms )
+	end
+	return hms
+end
+
+function Player:FormattedUptimeTotal()
+	if self:UptimeTotal() == os.time() then
+		return "BOT"
+	end
+	local hms = os.date( "!%H:%M:%S" , self:UptimeTotal() )
+	local days = math.floor( self:UptimeTotal() / (24 * 3600) )
+
+	if days >= 365 then -- years + months + days
+		local years = math.floor( days / 365 )
+		local months = math.floor( days / 365 / 12 )
+		days = days % 30
+		return string.format( "%1d:%02d:%02d:%s", years, months, days, hms )
+	elseif days >= 30 then -- months + days + hours
+		local months = math.floor( days / 365 / 12 )
+		days = days % 30
+		return string.format( "%02d:%02d:%s", months, days, hms )
+	elseif days > 0 then -- hours + minutes
+		return string.format( "%02d:%s", days, hms )
+	end
+	return hms
 end
 
 function Player:GetBleedingPosition()

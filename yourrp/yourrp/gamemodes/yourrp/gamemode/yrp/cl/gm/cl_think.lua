@@ -80,7 +80,7 @@ function YRPCloseAllMenues()
 	closeInteractMenu()
 	closeSP()
 
-	if yrpChat then
+	if yrpChat and yrpChat.closeChatbox then
 		yrpChat.closeChatbox( "CLOSE ALL" )
 	end
 end

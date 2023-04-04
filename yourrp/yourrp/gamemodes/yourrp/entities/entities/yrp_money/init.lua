@@ -8,7 +8,7 @@ include( "shared.lua" )
 function ENT:Initialize()
 	local moneyModel = YRPGetMoneyModel()
 	if moneyModel then
-		self:SetModel(YRPGetMoneyModel() )
+		self:SetModel( YRPGetMoneyModel() )
 	end
 
 	self:PhysicsInit(SOLID_VPHYSICS)
@@ -19,7 +19,7 @@ function ENT:Initialize()
 		phys:Wake()
 	end
 
-	self:SetMoney(tonumber(self.money) )
+	self:SetMoney( tonumber(self.money) )
 
 	self.ismoney = true
 end

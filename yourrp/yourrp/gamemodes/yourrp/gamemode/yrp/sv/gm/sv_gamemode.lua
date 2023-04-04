@@ -2,8 +2,14 @@
 
 local leftedPlys = {}
 function GM:PlayerDisconnected( ply )
+	--
+end
+
+hook.Add( "PlayerDisconnected", "YRPPlayerDisconnected", function( ply )
 	YRP.msg( "debug", "[PlayerDisconnected] " .. ply:YRPName() )
 	YRPSaveClients( "PlayerDisconnected" )
+
+	ply:SaveUptimeTotal()
 
 	YRP_SQL_INSERT_INTO( "yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID() .. "', '" .. "disconnected" .. "'" )
 
@@ -26,7 +32,7 @@ function GM:PlayerDisconnected( ply )
 			ent:Remove()
 		end
 	end
-end
+end )
 
 function GM:PlayerConnect(name, ip)
 	YRP.msg( "gm", "[PlayerConnect] Name: " .. name .. " (IP: " .. ip .. " )" )

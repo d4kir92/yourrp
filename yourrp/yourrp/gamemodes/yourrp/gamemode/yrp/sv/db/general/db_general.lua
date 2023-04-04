@@ -1337,6 +1337,12 @@ net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_operating_system", functio
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_operating_system", "bool_yrp_scoreboard_show_operating_system", b)
 end)
 
+util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_playtime" )
+net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_playtime", function( len, ply )
+	local b = btn(net.ReadBool() )
+	GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_scoreboard_show_playtime", "bool_yrp_scoreboard_show_playtime", b)
+end)
+
 util.AddNetworkString( "nws_yrp_update_bool_yrp_scoreboard_show_idcardid" )
 net.Receive( "nws_yrp_update_bool_yrp_scoreboard_show_idcardid", function( len, ply )
 	local b = btn(net.ReadBool() )

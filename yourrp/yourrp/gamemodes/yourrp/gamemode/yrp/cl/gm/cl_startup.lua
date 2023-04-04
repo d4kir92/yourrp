@@ -1786,9 +1786,9 @@ function drawIDCard(ply, scale, px, py)
 	end
 end
 
-local customdeathscreen = false
-function CustomDeathscreen( b )
-	customdeathscreen = b
+local customDeathscreen = false
+function YRPCustomDeathscreen( b )
+	customDeathscreen = b
 end
 
 -- #DEATHSCREEN, #RESPAWNING, #CHANGECHARACTER
@@ -1797,7 +1797,7 @@ local ds = ds or false
 hook.Add( "Think", "openDeathScreen", function( len )
 	if LocalPlayer() == NULL then return end
 
-	if !YRP_LogOut and LocalPlayer():LoadedGamemode() and !LocalPlayer():Alive() and !vgui.CursorVisible() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds and GetGlobalYRPBool( "bool_deathscreen", false) and !customdeathscreen then
+	if !YRP_LogOut and LocalPlayer():LoadedGamemode() and !LocalPlayer():Alive() and !vgui.CursorVisible() and dsd < CurTime() and LocalPlayer():CharID() > 0 and !ds and GetGlobalYRPBool( "bool_deathscreen", false) and !customDeathscreen then
 		ds = true
 		local win = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
 		win:SetTitle( "" )

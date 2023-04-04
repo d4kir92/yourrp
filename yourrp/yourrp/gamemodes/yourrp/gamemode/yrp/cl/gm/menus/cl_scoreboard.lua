@@ -159,19 +159,26 @@ local eles = {
 		["sort"] = true,
 	},
 	[10] = {
+		["name"] = "playtime",
+		["size"] = 150,
+		["tran"] = "LID_playtime",
+		["func"] = "FormattedUptimeTotal",
+		["sort"] = true,
+	},
+	[11] = {
 		["name"] = "ping",
 		["size"] = 100,
 		["tran"] = "LID_ping",
 		["func"] = "Ping",
 		["sort"] = true,
 	},
-	[11] = {
+	[12] = {
 		["name"] = "mute",
 		["size"] = 40,
 		["tran"] = "",
 		["func"] = nil,
 	},
-	[12] = {
+	[13] = {
 		["name"] = "scroll",
 		["size"] = 24,
 		["tran"] = "",

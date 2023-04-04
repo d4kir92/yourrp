@@ -151,7 +151,14 @@ local function YRPReceivedReadyMessage( len, ply, tab )
 	ply:SetYRPString( "gmod_beta", Beta or "unknown" )
 	ply:SetYRPString( "gmod_branch", Branch or "unknown" )
 	ply:SetYRPString( "yrp_country", Country or "unknown" )
-	ply:SetYRPFloat( "uptime_current", os.clock() )
+	ply:SetYRPFloat( "uptime_current", os.time() )
+
+	local _ret = YRP_SQL_SELECT( "yrp_players", "uptime_total", "SteamID = '" .. ply:YRPSteamID() .. "'" )
+	if IsNotNilAndNotFalse( _ret ) then
+		ply:SetYRPFloat( "uptime_total", _ret[1].uptime_total )
+	else
+		ply:SetYRPFloat( "uptime_total", 0 )
+	end
 
 	MsgC( Color( 0, 0, 255, 255 ), "###############################################################################" .. "\n" )--##########
 
