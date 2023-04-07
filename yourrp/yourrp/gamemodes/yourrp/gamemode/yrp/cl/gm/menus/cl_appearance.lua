@@ -333,8 +333,15 @@ function open_appearance()
 		--
 	end
 
-	net.Start( "nws_yrp_get_menu_bodygroups" )
-	net.SendToServer()
+	LocalPlayer().yrp_delay_apperance = LocalPlayer().yrp_delay_apperance or 0
+	if LocalPlayer().yrp_delay_apperance < CurTime() then
+		LocalPlayer().yrp_delay_apperance = CurTime() + 5
+
+		net.Start( "nws_yrp_get_menu_bodygroups" )
+		net.SendToServer()
+	else
+		LocalPlayer():PrintMessage( HUD_PRINTCENTER, "On Cooldown!" )
+	end
 
 	_yrp_appearance.window:MakePopup()
 end

@@ -410,13 +410,13 @@ function YRPHUDThin()
 			local MO = {}
 			MO.name = "MO"
 			MO.text = "LID_money"
-			MO.valuetext = lply:FormattedMoneyRounded(1)
+			MO.valuetext = lply:FormattedMoney()
 			YRPDrawThin(MO)
 
 			local SA = {}
 			SA.name = "SA"
 			SA.text = "LID_salary"
-			SA.valuetext = "+" .. lply:FormattedSalaryRounded(1)
+			SA.valuetext = "+" .. lply:FormattedSalary(1)
 			YRPDrawThin(SA)
 
 			local CON = {}

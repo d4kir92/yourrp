@@ -881,7 +881,13 @@ end
 
 util.AddNetworkString( "nws_yrp_get_menu_bodygroups" )
 net.Receive( "nws_yrp_get_menu_bodygroups", function( len, ply )
-	SendBodyGroups(ply)
+	ply.yrp_delay_apperance = ply.yrp_delay_apperance or 0
+	if ply.yrp_delay_apperance < CurTime() then
+		ply.yrp_delay_apperance = CurTime() + 5
+		SendBodyGroups( ply )
+	else
+		ply:PrintMessage( HUD_PRINTCENTER, "On Cooldown!" )
+	end
 end)
 
 util.AddNetworkString( "nws_yrp_inv_bg_up" )

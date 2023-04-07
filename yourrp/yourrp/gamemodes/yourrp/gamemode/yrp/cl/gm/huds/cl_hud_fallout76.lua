@@ -592,7 +592,7 @@ function HUD_FO76()
 
 			local MO = {}
 			MO.element = "MO"
-			MO.text = lply:FormattedMoneyRounded(3) .. " (+" .. lply:FormattedSalaryRounded(3) .. " )"
+			MO.text = lply:FormattedMoney() .. " (+" .. lply:FormattedSalary() .. " )"
 			FO76Name(MO)
 
 			local CR = {}

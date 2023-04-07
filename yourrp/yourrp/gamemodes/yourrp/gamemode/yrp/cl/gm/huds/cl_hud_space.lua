@@ -104,13 +104,13 @@ function YRPHUDSpace()
 				lply:Money(),
 				nil,
 				MO,
-				lply:FormattedMoneyRounded()
+				lply:FormattedMoney()
 			}
 			ELES["SA"] = {
 				lply:Salary(),
 				nil,
 				SA,
-				lply:FormattedSalaryRounded()
+				lply:FormattedSalary()
 			}
 
 			ELES["CA"] = {

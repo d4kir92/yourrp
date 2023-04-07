@@ -755,14 +755,14 @@ function HUDSimple()
 			MO.element = "MO"
 			MO.cur = 1
 			MO.max = 1
-			MO.text = lply:FormattedMoneyRounded(1)
+			MO.text = lply:FormattedMoney()
 			MO.icon = icons["MO"]
 			HUDSimpleBAR(MO)
 			SA = {}
 			SA.element = "SA"
 			SA.cur = lply:CurrentSalaryTime()
 			SA.max = lply:SalaryTime()
-			SA.text = "+" .. lply:FormattedSalaryRounded(1)
+			SA.text = "+" .. lply:FormattedSalary()
 			SA.icon = icons["SA"]
 			HUDSimpleBAR(SA)
 			RO = {}

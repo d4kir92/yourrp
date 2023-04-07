@@ -115,8 +115,8 @@ function HUDIcons()
 				HUDIconsDrawIcon( "XP", XP, lply:XP() / lply:GetMaxXP(), YRP.lang_string( "LID_levelx", tab) .. " ( " .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%)" )
 			end
 
-			HUDIconsDrawIcon( "MO", MO, 1, lply:FormattedMoneyRounded(1) )
-			HUDIconsDrawIcon( "SA", SA, lply:CurrentSalaryTime() / lply:SalaryTime(), lply:FormattedSalaryRounded(1) )
+			HUDIconsDrawIcon( "MO", MO, 1, lply:FormattedMoney() )
+			HUDIconsDrawIcon( "SA", SA, lply:CurrentSalaryTime() / lply:SalaryTime(), lply:FormattedSalary() )
 
 			if lply:GetYRPBool( "iscasting", false) then
 				HUDIconsDrawIcon( "CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName() )
