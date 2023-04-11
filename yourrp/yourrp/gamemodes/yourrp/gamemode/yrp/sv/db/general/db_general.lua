@@ -1778,14 +1778,14 @@ net.Receive( "nws_yrp_update_float_scale_stamina_jump", function( len, ply )
 end)
 
 
-function AddTab(tab, name, netstr)
+local function YRPAddTab(tab, name, netstr)
 	local entry = {}
 	entry.name = name
 	entry.netstr = netstr
 	table.insert(tab, entry)
 end
 
-function AddSubTab(tab, parent, name, netstr, url, func)
+local function YRPAddSubTab(tab, parent, name, netstr, url, func)
 	local entry = {}
 	entry.name = name
 	entry.netstr = netstr or ""
@@ -1804,14 +1804,14 @@ net.Receive( "nws_yrp_gethelpmenu", function( len, ply )
 		local tabs = {}
 		local subtabs = {}
 
-		AddTab(tabs, "LID_help", "nws_yrp_getsitehelp" )
-		AddTab(tabs, "LID_staff", "nws_yrp_getsitestaff" )
-	
-		AddTab(tabs, "YourRP", "" )
-		AddSubTab(subtabs, "YourRP", "Whats New", "nws_yrp_getsiteyourrpwhatsnew" )
-		AddSubTab(subtabs, "YourRP", "Discord", "nws_yrp_getsiteyourrpdiscord" )
-		AddSubTab(subtabs, "YourRP", "Translations", "nws_yrp_getsiteyourrptranslations", "" )
-		AddSubTab(subtabs, "YourRP", "Servers", "nws_yrp_getsiteyourrpserverlist", "" )
+		YRPAddTab(tabs, "LID_help", "nws_yrp_getsitehelp" )
+		YRPAddTab(tabs, "LID_staff", "nws_yrp_getsitestaff" )
+
+		YRPAddTab(tabs, "YourRP", "" )
+		YRPAddSubTab(subtabs, "YourRP", "Whats New", "nws_yrp_getsiteyourrpnew" )
+		YRPAddSubTab(subtabs, "YourRP", "Discord", "nws_yrp_getsiteyourrpdiscord" )
+		YRPAddSubTab(subtabs, "YourRP", "Translations", "nws_yrp_getsiteyourrptranslations", "" )
+		YRPAddSubTab(subtabs, "YourRP", "Servers", "nws_yrp_getsiteyourrpservers", "" )
 
 		net.Start( "nws_yrp_gethelpmenu" )
 			net.WriteTable(tabs)
@@ -1977,9 +1977,9 @@ end)
 
 
 
-util.AddNetworkString( "nws_yrp_getsiteyourrpwhatsnew" )
-net.Receive( "nws_yrp_getsiteyourrpwhatsnew", function( len, ply )
-	net.Start( "nws_yrp_getsiteyourrpwhatsnew" )
+util.AddNetworkString( "nws_yrp_getsiteyourrpnew" )
+net.Receive( "nws_yrp_getsiteyourrpnew", function( len, ply )
+	net.Start( "nws_yrp_getsiteyourrpnew" )
 	net.Send(ply)
 end)
 
@@ -1989,9 +1989,9 @@ net.Receive( "nws_yrp_getsiteyourrpdiscord", function( len, ply )
 	net.Send(ply)
 end)
 
-util.AddNetworkString( "nws_yrp_getsiteyourrpserverlist" )
-net.Receive( "nws_yrp_getsiteyourrpserverlist", function( len, ply )
-	net.Start( "nws_yrp_getsiteyourrpserverlist" )
+util.AddNetworkString( "nws_yrp_getsiteyourrpservers" )
+net.Receive( "nws_yrp_getsiteyourrpservers", function( len, ply )
+	net.Start( "nws_yrp_getsiteyourrpservers" )
 	net.Send(ply)
 end)
 

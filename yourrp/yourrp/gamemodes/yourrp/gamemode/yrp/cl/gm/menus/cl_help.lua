@@ -498,7 +498,7 @@ net.Receive( "nws_yrp_getsitecommunitysteamgroup", function( len )
 	end
 end)
 
-net.Receive( "nws_yrp_getsiteyourrpwhatsnew", function( len )
+net.Receive( "nws_yrp_getsiteyourrpnew", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = "https://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152"
 
@@ -555,7 +555,7 @@ net.Receive( "nws_yrp_getsiteyourrpdiscord", function( len )
 	end
 end)
 
-net.Receive( "nws_yrp_getsiteyourrpserverlist", function( len )
+net.Receive( "nws_yrp_getsiteyourrpservers", function( len )
 	if PanelAlive(HELPMENU.mainmenu.site) then
 		local link = "https://sites.google.com/view/yourrp-gmod/serverlist"
 
