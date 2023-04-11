@@ -19,9 +19,9 @@ net.Receive( "nws_yrp_want_role", function( len, ply )
 		local ok = YRPCreateD( "YLabel", popup:GetContent(), YRP.ctr(760), YRP.ctr(120), popup:GetContent():GetWide() / 2 - YRP.ctr(760 / 2), popup:GetContent():GetTall() - YRP.ctr(60 + 20 + 120) )
 		ok:SetText(YRP.lang_string(result) )
 
-		local ok = YRPCreateD( "YButton", popup:GetContent(), YRP.ctr(400), YRP.ctr(60), popup:GetContent():GetWide() / 2 - YRP.ctr(400 / 2), popup:GetContent():GetTall() - YRP.ctr(60) )
-		ok:SetText(YRP.lang_string( "LID_ok" ) )
-		function ok:DoClick()
+		local ok2 = YRPCreateD( "YButton", popup:GetContent(), YRP.ctr(400), YRP.ctr(60), popup:GetContent():GetWide() / 2 - YRP.ctr(400 / 2), popup:GetContent():GetTall() - YRP.ctr(60) )
+		ok2:SetText(YRP.lang_string( "LID_ok" ) )
+		function ok2:DoClick()
 			popup:Close()
 		end
 	end
@@ -36,8 +36,8 @@ function PANEL:SetIcon(ico)
 end
 
 function PANEL:Paint(pw, ph)
-	draw.RoundedBoxEx(YRP.ctr(14), 0, YRP.ctr(10), YRP.ctr(20), ph - YRP.ctr(10), self._ccol, false, false, true, false)--self._ccol)
-	draw.RoundedBoxEx(YRP.ctr(14), YRP.ctr(10), YRP.ctr(10), pw - 1 * YRP.ctr(10), ph - 1 * YRP.ctr(10), YRPInterfaceValue( "YFrame", "NC" ), false, false, false, true)--self._ccol)
+	draw.RoundedBoxEx(YRP.ctr(14), 0, YRP.ctr(10), YRP.ctr(20), ph - YRP.ctr(10), self._ccol, false, false, true, false) --self._ccol)
+	draw.RoundedBoxEx(YRP.ctr(14), YRP.ctr(10), YRP.ctr(10), pw - 1 * YRP.ctr(10), ph - 1 * YRP.ctr(10), YRPInterfaceValue( "YFrame", "NC" ), false, false, false, true) --self._ccol)
 end
 
 function PANEL:SetList(lis)
@@ -324,7 +324,7 @@ function PANEL:Init()
 				draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 20) )
 			end
 			local br = YRP.ctr(10)
-			if YRP.GetDesignIcon( "64_angle-right" ) ~= nil then
+			if YRP.GetDesignIcon( "64_angle-right" ) != nil then
 				surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
 				surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 				surface.DrawTexturedRect( br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)

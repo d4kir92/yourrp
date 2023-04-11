@@ -664,7 +664,7 @@ local function SQLiteQuery(sqlText, callback, errorCallback, queryValue)
     local lastError = sql.LastError()
     local Result = queryValue and sql.QueryValue(sqlText) or sql.Query(sqlText)
 
-    if sql.LastError() and sql.LastError() ~= lastError then
+    if sql.LastError() and sql.LastError() != lastError then
         local err = sql.LastError()
         local supp = errorCallback and errorCallback(err, sqlText)
         if supp == false then error(err .. " (" .. sqlText .. ")", 2) end
@@ -759,6 +759,6 @@ function tableExists(tbl, callback, errorCallback)
     end
 
     queryValue(string.format("SHOW TABLES LIKE %s", SQLStr(tbl)), function(v)
-        callback(v ~= nil)
+        callback(v != nil)
     end, errorCallback)
 end

@@ -68,7 +68,7 @@ function openCharacterCreation(from)
 
 	if CharacterMenu == nil then
 		YRPOpenMenu()
-		
+
 		local win = YRPCreateD( "DFrame", nil, ScrW(), ScrH(), 0, 0)
 		win:MakePopup()
 		win:Center()
@@ -78,7 +78,7 @@ function openCharacterCreation(from)
 		function win:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40) ) -- Dark Background - Character Creation
 		end
-		
+
 		win.bg = YRPCreateD( "DHTML", win, win:GetWide(), win:GetTall(), 0, 0)
 		win.bg.url = ""
 
@@ -101,7 +101,7 @@ function openCharacterCreation(from)
 		CharacterMenu = win.blur
 
 
-		
+
 		LocalPlayer().cc = true
 		CreateFactionSelectionContent()
 	end
@@ -126,7 +126,6 @@ function closeCharacterSelection()
 end
 
 local curChar = -1
-local curCharName = ""
 local validchar = false
 local _cur = ""
 local chars = {}
@@ -145,7 +144,6 @@ function LoadCharacters()
 		end
 
 		if PanelAlive(CharMenu.charactersBackground) then
-			local i = 1
 			CharMenu.charactersBackground.text = ""
 			if IsNotNilAndNotFalse( chars) then
 				CharMenu.character.amount = 0
@@ -166,7 +164,7 @@ function LoadCharacters()
 					end
 					v.tmpChar:Remove()
 				end
-				
+
 				local cni = 0
 				local cei = 0
 				for i = 1, #chars do
@@ -185,7 +183,7 @@ function LoadCharacters()
 								continue
 							end
 						end
-						
+
 						if chars[i].char.bool_eventchar then
 							CharMenu.character.amountevent = CharMenu.character.amountevent + 1
 							cei = cei + 1
@@ -200,8 +198,8 @@ function LoadCharacters()
 						local px = 0
 						local py = 0
 						if YRP_CharDesign == "horizontalnew" then
-							sw = YRP.ctr(350*2)
-							sh = YRP.ctr(600*2)
+							sw = YRP.ctr(350 * 2)
+							sh = YRP.ctr(600 * 2)
 							px = 0
 							py = 0
 						elseif YRP_CharDesign == "default" then
@@ -234,7 +232,7 @@ function LoadCharacters()
 						if !strEmpty( chars[i].role.string_playermodels) then
 							tmpChar.playermodels = string.Explode( ",", chars[i].role.string_playermodels)
 						end
-		
+
 						tmpChar.playermodelsize = chars[i].role.playermodelsize
 						tmpChar.skin = chars[i].char.skin
 						tmpChar.bg0 = chars[i].char.bg0 or 0
@@ -279,7 +277,7 @@ function LoadCharacters()
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200) )
 
 								draw.SimpleText(self.rpname, "Saira_60", pw / 2, YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-								
+
 								if self.cni > LocalPlayer():GetYRPInt( "int_characters_max", 1) then
 									draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 100, 100, 10) )
 									draw.SimpleText( "X", "Y_72_500", pw / 2, ph / 2, Color( 255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -287,7 +285,7 @@ function LoadCharacters()
 
 								if tmpChar:YRPIsHovered() then
 									draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 10) )
-								end			
+								end
 							end
 							local mdlsize = tmpChar:GetTall() - YRP.ctr(100)
 							tmpChar.charplayermodel = YRPCreateD( "DModelPanel", tmpChar, mdlsize, mdlsize, tmpChar:GetWide() / 2 - mdlsize / 2, YRP.ctr(100) )
@@ -313,7 +311,7 @@ function LoadCharacters()
 									tmpChar.charplayermodel:SetModel(self.pm)
 								end
 
-								if (self.bAnimated) and self.RunAnimation then
+								if self.bAnimated and self.RunAnimation then
 									self:RunAnimation()
 								end
 
@@ -335,10 +333,10 @@ function LoadCharacters()
 									tmpChar.mdlishovered = false
 								end
 							end
-							
+
 							local button = {}
-							button.w = YRP.ctr(200*2)
-							button.h = YRP.ctr(36*2)
+							button.w = YRP.ctr(200 * 2)
+							button.h = YRP.ctr(36 * 2)
 							button.x = tmpChar:GetWide() / 2 - button.w / 2
 							button.y = tmpChar:GetTall() / 2 - button.h / 2
 							local charactersEnter = YRPCreateD( "YButton", tmpChar, button.w, button.h, button.x, button.y)
@@ -372,7 +370,7 @@ function LoadCharacters()
 									end
 								end
 							end
-				
+
 							charactersEnter:SetText( "" )
 							function charactersEnter:DoClick()
 								if tmpChar.bool_eventchar then
@@ -392,9 +390,7 @@ function LoadCharacters()
 									end
 								end
 							end
-				
-							local px, py = charactersEnter:GetPos()
-							
+
 							local deletesize = YRP.ctr(40)
 							local deletebr = YRP.ctr(20)
 							local deleteChar = YRPCreateD( "YButton", tmpChar, deletesize, deletesize, tmpChar:GetWide() - deletesize - deletebr, deletebr)
@@ -729,7 +725,7 @@ function LoadCharacters()
 								
 								local sw = pw - 2 * YRP.ctr(180)
 								local breite = YRP.ctr(50)
-								if YRP.GetDesignIcon( "add" ) ~= nil then
+								if YRP.GetDesignIcon( "add" ) != nil then
 									draw.RoundedBox( breite / 2, pw / 2 - breite / 2, ph / 2 - sw / 2, breite, sw, Color(102, 102, 102, 255) )
 									draw.RoundedBox( breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255) )
 								end
@@ -764,7 +760,7 @@ function LoadCharacters()
 
 								local sw = pw - 2 * YRP.ctr(180)
 								local breite = YRP.ctr(50)
-								if YRP.GetDesignIcon( "add" ) ~= nil then
+								if YRP.GetDesignIcon( "add" ) != nil then
 									draw.RoundedBox( breite / 2, pw / 2 - breite / 2, ph / 2 - sw / 2, breite, sw, Color(102, 102, 102, 255) )
 									draw.RoundedBox( breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255) )
 								end
@@ -803,7 +799,7 @@ function LoadCharacters()
 								local sw = pw - 2 * YRP.ctr(180)
 								local sh = ph - 2 * YRP.ctr(180)
 								local breite = YRP.ctr(50)
-								if YRP.GetDesignIcon( "add" ) ~= nil then
+								if YRP.GetDesignIcon( "add" ) != nil then
 									draw.RoundedBox( breite / 2, pw / 2 - breite / 2, ph / 2 - sh / 2, breite, sh, Color(102, 102, 102, 255) )
 									draw.RoundedBox( breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255) )
 								end
@@ -839,7 +835,7 @@ function LoadCharacters()
 								local sw = pw - 2 * YRP.ctr(180)
 								local sh = ph - 2 * YRP.ctr(180)
 								local breite = YRP.ctr(50)
-								if YRP.GetDesignIcon( "add" ) ~= nil then
+								if YRP.GetDesignIcon( "add" ) != nil then
 									draw.RoundedBox( breite / 2, pw / 2 - breite / 2, ph / 2 - sh / 2, breite, sh, Color(102, 102, 102, 255) )
 									draw.RoundedBox( breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255) )
 								end
@@ -1582,7 +1578,7 @@ function openCharacterSelection( force )
 					if self:IsHovered() then
 						color = YRPInterfaceValue( "YButton", "NC" )
 					end
-					if YRP.GetDesignIcon( "64_angle-right" ) ~= nil then
+					if YRP.GetDesignIcon( "64_angle-right" ) != nil then
 						surface.SetMaterial(YRP.GetDesignIcon( "64_angle-left" ) )
 						surface.SetDrawColor( color)
 						surface.DrawTexturedRect( br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
@@ -1607,7 +1603,7 @@ function openCharacterSelection( force )
 					if self:IsHovered() then
 						color = YRPInterfaceValue( "YButton", "NC" )
 					end
-					if YRP.GetDesignIcon( "64_angle-right" ) ~= nil then
+					if YRP.GetDesignIcon( "64_angle-right" ) != nil then
 						surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
 						surface.SetDrawColor( color)
 						surface.DrawTexturedRect( br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
@@ -1754,7 +1750,7 @@ function openCharacterSelection( force )
 					if self:IsHovered() then
 						color = YRPInterfaceValue( "YButton", "NC" )
 					end
-					if YRP.GetDesignIcon( "64_angle-right" ) ~= nil then
+					if YRP.GetDesignIcon( "64_angle-right" ) != nil then
 						surface.SetMaterial(YRP.GetDesignIcon( "64_angle-left" ) )
 						surface.SetDrawColor( color)
 						surface.DrawTexturedRect( br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
@@ -1779,7 +1775,7 @@ function openCharacterSelection( force )
 					if self:IsHovered() then
 						color = YRPInterfaceValue( "YButton", "NC" )
 					end
-					if YRP.GetDesignIcon( "64_angle-right" ) ~= nil then
+					if YRP.GetDesignIcon( "64_angle-right" ) != nil then
 						surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
 						surface.SetDrawColor( color)
 						surface.DrawTexturedRect( br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)

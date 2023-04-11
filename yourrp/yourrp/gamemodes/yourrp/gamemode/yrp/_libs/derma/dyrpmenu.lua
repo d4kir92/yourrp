@@ -60,7 +60,7 @@ function PANEL:AddOption(name, icon)
 	Entry.name = name
 	Entry.iconpng = icon or ""
 
-	if Entry.iconpng ~= "" then
+	if Entry.iconpng != "" then
 		Entry.iconmat = Material(Entry.iconpng)
 	end
 
@@ -68,7 +68,7 @@ function PANEL:AddOption(name, icon)
 	Entry.icon = YRPCreateD( "YPanel", self, YRP.ctr(Entry.size), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight) )
 
 	function Entry.icon:Paint(pw, ph)
-		if Entry.iconpng ~= "" then
+		if Entry.iconpng != "" then
 			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(Entry.iconmat)
 			surface.DrawTexturedRect(YRP.ctr(9), YRP.ctr(9), YRP.ctr(32), YRP.ctr(32) )

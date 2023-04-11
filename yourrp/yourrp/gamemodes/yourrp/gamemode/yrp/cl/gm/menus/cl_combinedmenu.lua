@@ -27,7 +27,7 @@ end
 
 function CreateForumContent(PARENT)
 	local site = YRPCreateD( "DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
-	
+
 	site:OpenURL(GetGlobalYRPString( "text_social_forum", "" ) )
 end
 
@@ -68,7 +68,7 @@ function CreateDiscordContent(PARENT)
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon( "launch" ) ~= nil then
+		if YRP.GetDesignIcon( "launch" ) != nil then
 			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 		draw.SimpleText( "Connect", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), 1, 1)
@@ -122,7 +122,7 @@ function CreateCollectionContent(PARENT)
 
 		function openLink:Paint(pw, ph)
 			hook.Run( "YButtonPaint", self, pw, ph)
-			if YRP.GetDesignIcon( "launch" ) ~= nil then
+			if YRP.GetDesignIcon( "launch" ) != nil then
 				YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 			end
 		end
@@ -145,7 +145,7 @@ function CreateTwitchContent(PARENT)
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon( "launch" ) ~= nil then
+		if YRP.GetDesignIcon( "launch" ) != nil then
 			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 	end
@@ -185,7 +185,7 @@ function CreateTwitterContent(PARENT)
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon( "launch" ) ~= nil then
+		if YRP.GetDesignIcon( "launch" ) != nil then
 			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 	end
@@ -206,7 +206,7 @@ function CreateSteamGroupContent(PARENT)
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon( "launch" ) ~= nil then
+		if YRP.GetDesignIcon( "launch" ) != nil then
 			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 	end
@@ -227,7 +227,7 @@ function CreateFacebookContent(PARENT)
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon( "launch" ) ~= nil then
+		if YRP.GetDesignIcon( "launch" ) != nil then
 			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 	end
@@ -248,7 +248,7 @@ function CreateInstagramContent(PARENT)
 	openLink:SetText( "" )
 	function openLink:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon( "launch" ) ~= nil then
+		if YRP.GetDesignIcon( "launch" ) != nil then
 			YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), ph, ph, 0, 0, YRPGetColor( "6" ) )
 		end
 	end
@@ -515,11 +515,11 @@ function OpenCombinedMenu()
 			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HB" ), false, false, true, false)
 
 			if cm.menu.expanded then
-				if YRP.GetDesignIcon( "64_angle-left" ) ~= nil then
+				if YRP.GetDesignIcon( "64_angle-left" ) != nil then
 					surface.SetMaterial(YRP.GetDesignIcon( "64_angle-left" ) )
 				end
 			else
-				if YRP.GetDesignIcon( "64_angle-right" ) ~= nil then
+				if YRP.GetDesignIcon( "64_angle-right" ) != nil then
 					surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
 				end
 			end
@@ -594,7 +594,7 @@ function OpenCombinedMenu()
 
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
 
-					if YRP.GetDesignIcon( v.icon) ~= nil then
+					if YRP.GetDesignIcon( v.icon) != nil then
 						surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 						surface.SetMaterial(YRP.GetDesignIcon( v.icon) )
 						surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)

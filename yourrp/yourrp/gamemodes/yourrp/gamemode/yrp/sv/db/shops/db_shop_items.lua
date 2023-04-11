@@ -134,7 +134,7 @@ net.Receive( "nws_yrp_shop_get_items_storage", function( len, ply )
 	local _uid = net.ReadString()
 	local _cha_perm = YRP_SQL_SELECT( "yrp_characters", "storage", "uniqueID = '" .. ply:CharID() .. "'" )
 
-	if _cha_perm ~= nil and _cha_perm ~= false then
+	if _cha_perm != nil and _cha_perm != false then
 		_cha_perm = _cha_perm[1].storage
 		_cha_perm = string.Explode( ",", _cha_perm)
 		local _nw = {}
@@ -142,7 +142,7 @@ net.Receive( "nws_yrp_shop_get_items_storage", function( len, ply )
 		for i, item in pairs(_cha_perm) do
 			local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "categoryID = '" .. _uid .. "' AND uniqueID = '" .. item .. "'" )
 
-			if _item ~= nil and _item ~= false then
+			if _item != nil and _item != false then
 				table.insert(_nw, _item[1])
 			end
 		end
@@ -159,7 +159,7 @@ net.Receive( "nws_yrp_shop_get_items", function( len, ply )
 	local _items = YRP_SQL_SELECT(DATABASE_NAME, "*", "categoryID = '" .. _uid .. "'" )
 	local _nw = {}
 
-	if _items ~= nil then
+	if _items != nil then
 		_nw = _items
 	end
 
@@ -226,7 +226,7 @@ function SpawnVehicle(item, pos, ang)
 				car.Offset = vehicle.Offset or 0
 
 				timer.Simple(0.2, function()
-					if simfphys ~= nil and simfphys.RegisterEquipment ~= nil then
+					if simfphys != nil and simfphys.RegisterEquipment != nil then
 						YRP.msg( "gm", "[SpawnVehicle] -> simfphys armored vehilce" )
 						simfphys.RegisterEquipment( car)
 					end
@@ -241,12 +241,12 @@ function SpawnVehicle(item, pos, ang)
 		end
 	end
 
-	if vehicle.ClassName ~= nil then
+	if vehicle.ClassName != nil then
 		local car = ents.Create( vehicle.ClassName)
 		if not car then return end
 		car:SetModel( vehicle.WorldModel)
 
-		if vehicle.Skin ~= "-1" then
+		if vehicle.Skin != "-1" then
 			car:SetSkin( vehicle.Skin)
 		end
 
@@ -660,7 +660,7 @@ net.Receive( "nws_yrp_item_despawn", function( len, ply )
 	local _tab = net.ReadTable()
 	local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
 
-	if _item ~= nil then
+	if _item != nil then
 		_item = _item[1]
 		local _alive, ent = IsEntityAlive(ply, _item.uniqueID)
 		if _alive and EntityAlive(ent) then

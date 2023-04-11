@@ -501,7 +501,7 @@ timer.Simple( 4, function() -- must be last hook
 		local oldtext = text
 		local channel = ""
 
-		if oldDistLocal ~= GetGlobalYRPInt( "int_yrp_chat_range_local", 400) then
+		if oldDistLocal != GetGlobalYRPInt( "int_yrp_chat_range_local", 400) then
 			oldDistLocal = GetGlobalYRPInt( "int_yrp_chat_range_local", 400)
 			distLocal = GetGlobalYRPInt( "int_yrp_chat_range_local", 400) ^ 2
 		end

@@ -21,7 +21,7 @@ function YRP_SQL_Show_Last_Error()
 	local _last_error = tostring( sql.LastError() ) or ""
 
 	MsgC( Color( 0, 255, 0 ), "DATABASE HAS ERROR: " .. _last_error )
-	
+
 	if SERVER then
 		PrintMessage( HUD_PRINTCENTER, "[YourRP|DATABASE] SERVER-DATABASE:" )
 		PrintMessage( HUD_PRINTCENTER, _last_error )
@@ -238,11 +238,11 @@ function YRP_SQL_CREATE_TABLE( db_table)
 			_q = _q .. "uniqueID		INTEGER				 PRIMARY KEY AUTO_INCREMENT"
 			_q = _q .. " )"
 			_q = _q .. ";"
-			local _result = YRP_SQL_QUERY(_q)
+			return YRP_SQL_QUERY(_q)
 		else
 			YRP.msg( "note", "[YRP_SQL_CREATE_TABLE] " .. GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN" )
 		end
-		return _result
+		return nil
 	end
 end
 
@@ -261,7 +261,7 @@ function YRP_SQL_SELECT( db_table, db_columns, db_where, db_extra)
 		if db_extra then
 			_q = _q .. " " .. db_extra
 		end
-		
+
 		_q = _q .. ";"
 
 		return YRP_SQL_QUERY(_q)
@@ -295,7 +295,7 @@ function YRP_SQL_UPDATE( db_table, db_sets, db_where )
 		YRP.msg( "error", "YRP_SQL_UPDATE-ERROR db_sets == nil: " .. tostring( db_table ) )
 		return false
 	end
-	
+
 	local c = 0
 	if type( db_sets) == "string" then
 		YRP.msg( "error", "[YRP_SQL_UPDATE] FAIL: db_table " .. db_table .. " db_sets " .. db_sets .. " db_where " .. db_where )

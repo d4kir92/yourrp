@@ -19,7 +19,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 308 -- do NOT change this!
+GM.VersionBuild = 309 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -469,7 +469,7 @@ function IsInChannel(ply, cuid, skip)
 		local ug = ply:GetUserGroup()
 		local grp = ply:GetGroupUID()
 		local rol = ply:GetRoleUID()
-		
+
 		if !skip and ply:GetYRPBool( "yrp_voice_channel_mute_" .. channel.uniqueID, false) then
 			return false
 		end
@@ -508,7 +508,7 @@ function YRPGetVoiceRangeText(ply)
 			[0] = YRP.lang_string( "LID_whisper" ),
 			[1] = YRP.lang_string( "LID_quiet" ),
 			[2] = "",
-			[3] = YRP.lang_string( "LID_noisy" ), 
+			[3] = YRP.lang_string( "LID_noisy" ),
 			[4] = YRP.lang_string( "LID_yell" )
 		}
 		return ranges[ply:GetYRPInt( "voice_range", 2)]
@@ -522,7 +522,7 @@ function YRPGetVoiceRange(ply)
 			[0] = 80,
 			[1] = 120,
 			[2] = 250,
-			[3] = 400, 
+			[3] = 400,
 			[4] = GetGlobalYRPInt( "int_voice_max_range", 1)
 		}
 		return math.Clamp(ranges[ply:GetYRPInt( "voice_range", 2)], 0, GetGlobalYRPInt( "int_voice_max_range", 1) )
@@ -553,42 +553,42 @@ end
 
 -- COLORFIX
 if system.IsLinux() then
-	_MsgC                       = _MsgC         or MsgC
-	_ErrorNoHalt                = _ErrorNoHalt  or ErrorNoHalt
+	_MsgC					   = _MsgC		 or MsgC
+	_ErrorNoHalt				= _ErrorNoHalt  or ErrorNoHalt
 
-	local available_colors      = {
-	Color( 0, 0, 0, 255 ),       Color(128, 0, 0),     Color( 0, 128, 0),
-	Color(128, 128, 0),   Color( 0, 0, 128),     Color(128, 0, 128),
+	local available_colors	  = {
+	Color( 0, 0, 0, 255 ),	   Color(128, 0, 0),	 Color( 0, 128, 0),
+	Color(128, 128, 0),   Color( 0, 0, 128),	 Color(128, 0, 128),
 	Color( 0, 128, 128),   Color(192, 192, 192), Color(128, 128, 128),
-	Color( 0, 255, 0 ),     Color( 0, 255, 0 ),     Color( 255, 255, 0),
-	Color( 0, 0, 255, 255 ),     Color( 255, 0, 255),   Color( 0, 255, 255),
-	Color( 255, 255, 255, 255 ), Color( 0, 0, 0, 255 ),       Color( 0, 0, 95),
-	Color( 0, 0, 135),     Color( 0, 0, 175),     Color( 0, 0, 215),
-	Color( 0, 0, 255, 255 ),     Color( 0, 95, 0),      Color( 0, 95, 95),
-	Color( 0, 95, 135),    Color( 0, 95, 175),    Color( 0, 95, 215),
-	Color( 0, 95, 255),    Color( 0, 135, 0),     Color( 0, 135, 95),
+	Color( 0, 255, 0 ),	 Color( 0, 255, 0 ),	 Color( 255, 255, 0),
+	Color( 0, 0, 255, 255 ),	 Color( 255, 0, 255),   Color( 0, 255, 255),
+	Color( 255, 255, 255, 255 ), Color( 0, 0, 0, 255 ),	   Color( 0, 0, 95),
+	Color( 0, 0, 135),	 Color( 0, 0, 175),	 Color( 0, 0, 215),
+	Color( 0, 0, 255, 255 ),	 Color( 0, 95, 0),	  Color( 0, 95, 95),
+	Color( 0, 95, 135),	Color( 0, 95, 175),	Color( 0, 95, 215),
+	Color( 0, 95, 255),	Color( 0, 135, 0),	 Color( 0, 135, 95),
 	Color( 0, 135, 135),   Color( 0, 135, 175),   Color( 0, 135, 215),
-	Color( 0, 135, 255),   Color( 0, 175, 0),     Color( 0, 175, 95),
+	Color( 0, 135, 255),   Color( 0, 175, 0),	 Color( 0, 175, 95),
 	Color( 0, 175, 135),   Color( 0, 175, 175),   Color( 0, 175, 215),
-	Color( 0, 175, 255),   Color( 0, 215, 0),     Color( 0, 215, 95),
+	Color( 0, 175, 255),   Color( 0, 215, 0),	 Color( 0, 215, 95),
 	Color( 0, 215, 135),   Color( 0, 215, 175),   Color( 0, 215, 215),
-	Color( 0, 215, 255),   Color( 0, 255, 0 ),     Color( 0, 255, 95),
+	Color( 0, 215, 255),   Color( 0, 255, 0 ),	 Color( 0, 255, 95),
 	Color( 0, 255, 135),   Color( 0, 255, 175),   Color( 0, 255, 215),
-	Color( 0, 255, 255),   Color(95, 0, 0),      Color(95, 0, 95),
-	Color(95, 0, 135),    Color(95, 0, 175),    Color(95, 0, 215),
-	Color(95, 0, 255),    Color(95, 95, 0),     Color(95, 95, 95),
+	Color( 0, 255, 255),   Color(95, 0, 0),	  Color(95, 0, 95),
+	Color(95, 0, 135),	Color(95, 0, 175),	Color(95, 0, 215),
+	Color(95, 0, 255),	Color(95, 95, 0),	 Color(95, 95, 95),
 	Color(95, 95, 135),   Color(95, 95, 175),   Color(95, 95, 215),
-	Color(95, 95, 255),   Color(95, 135, 0),    Color(95, 135, 95),
+	Color(95, 95, 255),   Color(95, 135, 0),	Color(95, 135, 95),
 	Color(95, 135, 135),  Color(95, 135, 175),  Color(95, 135, 215),
-	Color(95, 135, 255),  Color(95, 175, 0),    Color(95, 175, 95),
+	Color(95, 135, 255),  Color(95, 175, 0),	Color(95, 175, 95),
 	Color(95, 175, 135),  Color(95, 175, 175),  Color(95, 175, 215),
-	Color(95, 175, 255),  Color(95, 215, 0),    Color(95, 215, 95),
+	Color(95, 175, 255),  Color(95, 215, 0),	Color(95, 215, 95),
 	Color(95, 215, 135),  Color(95, 215, 175),  Color(95, 215, 215),
-	Color(95, 215, 255),  Color(95, 255, 0),    Color(95, 255, 95),
+	Color(95, 215, 255),  Color(95, 255, 0),	Color(95, 255, 95),
 	Color(95, 255, 135),  Color(95, 255, 175),  Color(95, 255, 215),
-	Color(95, 255, 255),  Color(135, 0, 0),     Color(135, 0, 95),
+	Color(95, 255, 255),  Color(135, 0, 0),	 Color(135, 0, 95),
 	Color(135, 0, 135),   Color(135, 0, 175),   Color(135, 0, 215),
-	Color(135, 0, 255),   Color(135, 95, 0),    Color(135, 95, 95),
+	Color(135, 0, 255),   Color(135, 95, 0),	Color(135, 95, 95),
 	Color(135, 95, 135),  Color(135, 95, 175),  Color(135, 95, 215),
 	Color(135, 95, 255),  Color(135, 135, 0),   Color(135, 135, 95),
 	Color(135, 135, 135), Color(135, 135, 175), Color(135, 135, 215),
@@ -598,9 +598,9 @@ if system.IsLinux() then
 	Color(135, 215, 135), Color(135, 215, 175), Color(135, 215, 215),
 	Color(135, 215, 255), Color(135, 255, 0),   Color(135, 255, 95),
 	Color(135, 255, 135), Color(135, 255, 175), Color(135, 255, 215),
-	Color(135, 255, 255), Color(175, 0, 0),     Color(175, 0, 95),
+	Color(135, 255, 255), Color(175, 0, 0),	 Color(175, 0, 95),
 	Color(175, 0, 135),   Color(175, 0, 175),   Color(175, 0, 215),
-	Color(175, 0, 255),   Color(175, 95, 0),    Color(175, 95, 95),
+	Color(175, 0, 255),   Color(175, 95, 0),	Color(175, 95, 95),
 	Color(175, 95, 135),  Color(175, 95, 175),  Color(175, 95, 215),
 	Color(175, 95, 255),  Color(175, 135, 0),   Color(175, 135, 95),
 	Color(175, 135, 135), Color(175, 135, 175), Color(175, 135, 215),
@@ -610,9 +610,9 @@ if system.IsLinux() then
 	Color(175, 215, 135), Color(175, 215, 175), Color(175, 215, 215),
 	Color(175, 215, 255), Color(175, 255, 0),   Color(175, 255, 95),
 	Color(175, 255, 135), Color(175, 255, 175), Color(175, 255, 215),
-	Color(175, 255, 255), Color(215, 0, 0),     Color(215, 0, 95),
+	Color(175, 255, 255), Color(215, 0, 0),	 Color(215, 0, 95),
 	Color(215, 0, 135),   Color(215, 0, 175),   Color(215, 0, 215),
-	Color(215, 0, 255),   Color(215, 95, 0),    Color(215, 95, 95),
+	Color(215, 0, 255),   Color(215, 95, 0),	Color(215, 95, 95),
 	Color(215, 95, 135),  Color(215, 95, 175),  Color(215, 95, 215),
 	Color(215, 95, 255),  Color(215, 135, 0),   Color(215, 135, 95),
 	Color(215, 135, 135), Color(215, 135, 175), Color(215, 135, 215),
@@ -622,9 +622,9 @@ if system.IsLinux() then
 	Color(215, 215, 135), Color(215, 215, 175), Color(215, 215, 215),
 	Color(215, 215, 255), Color(215, 255, 0),   Color(215, 255, 95),
 	Color(215, 255, 135), Color(215, 255, 175), Color(215, 255, 215),
-	Color(215, 255, 255), Color( 0, 255, 0 ),     Color( 255, 0, 95),
+	Color(215, 255, 255), Color( 0, 255, 0 ),	 Color( 255, 0, 95),
 	Color( 255, 0, 135),   Color( 255, 0, 175),   Color( 255, 0, 215),
-	Color( 255, 0, 255),   Color( 255, 95, 0),    Color( 255, 95, 95),
+	Color( 255, 0, 255),   Color( 255, 95, 0),	Color( 255, 95, 95),
 	Color( 255, 95, 135),  Color( 255, 95, 175),  Color( 255, 95, 215),
 	Color( 255, 95, 255),  Color( 255, 135, 0),   Color( 255, 135, 95),
 	Color( 255, 135, 135), Color( 255, 135, 175), Color( 255, 135, 215),
@@ -634,10 +634,10 @@ if system.IsLinux() then
 	Color( 255, 215, 135), Color( 255, 215, 175), Color( 255, 215, 215),
 	Color( 255, 215, 255), Color( 255, 255, 0),   Color( 255, 255, 95),
 	Color( 255, 255, 135), Color( 255, 255, 175), Color( 255, 255, 215),
-	Color( 255, 255, 255, 255 ), Color(8, 8, 8),       Color(18, 18, 18),
-	Color(28, 28, 28),    Color(38, 38, 38),    Color(48, 48, 48),
-	Color(58, 58, 58),    Color(68, 68, 68),    Color(78, 78, 78),
-	Color(88, 88, 88),    Color(98, 98, 98),    Color(108, 108, 108),
+	Color( 255, 255, 255, 255 ), Color(8, 8, 8),	   Color(18, 18, 18),
+	Color(28, 28, 28),	Color(38, 38, 38),	Color(48, 48, 48),
+	Color(58, 58, 58),	Color(68, 68, 68),	Color(78, 78, 78),
+	Color(88, 88, 88),	Color(98, 98, 98),	Color(108, 108, 108),
 	Color(118, 118, 118), Color(128, 128, 128), Color(138, 138, 138),
 	Color(148, 148, 148), Color(158, 158, 158), Color(168, 168, 168),
 	Color(178, 178, 178), Color(188, 188, 188), Color(198, 198, 198),
@@ -645,7 +645,7 @@ if system.IsLinux() then
 	Color(238, 238, 238)
 	}
 
-	local n_available_colors    = #available_colors
+	local n_available_colors	= #available_colors
 	local color_clear_sequence  = "\27[0m"
 	local color_start_sequence  = "\27[38;5;"
 	local background_sequence   = "\27[48;5;"
@@ -656,7 +656,7 @@ if system.IsLinux() then
 		for i = 1, n_available_colors do
 			local color = available_colors[i]
 
-			dist = ( col.r - color.r)^2 + ( col.g - color.g)^2 + ( col.b - color.b)^2
+			dist = ( col.r - color.r) ^ 2 + ( col.g - color.g ) ^ 2 + ( col.b - color.b) ^ 2
 
 			if i == 1 or dist < windist then
 			windist = dist
@@ -728,7 +728,7 @@ if system.IsLinux() then
 	end
 
 	function ErrorNoHalt(msg)
-		Msg('\27[41;15m\27[1m')
+		Msg("\27[41;15m\27[1m")
 		_ErrorNoHalt(msg)
 		Msg( color_clear_sequence)
 	end
@@ -782,11 +782,11 @@ function YRPReplaceWithPlayerNames( text )
 end
 
 function YRP_RN(text)
-	local cs, ce = string.find(text, "RN(", 1, true)
+	local cs = string.find(text, "RN(", 1, true)
 	if cs == nil then
 		return text
 	end
-	local s, e = string.find(text, ")", cs, true)
+	local _, e = string.find(text, ")", cs, true)
 	if e == nil then
 		return text
 	end
@@ -797,7 +797,7 @@ function YRP_RN(text)
 
 	ex = string.Explode( ",", ex)
 	local rn = nil
-	if ex[1] and ex[2] and isnumber( tonumber( ex[1] ) ) and isnumber( tonumber( ex[2] ) )then
+	if ex[1] and ex[2] and isnumber( tonumber( ex[1] ) ) and isnumber( tonumber( ex[2] ) ) then
 		rn = math.random( tonumber( ex[1] ), tonumber( ex[2] ) )
 	elseif isnumber( tonumber( ex[1] ) ) then
 		rn = math.random( 0, tonumber( ex[1] ) )
@@ -810,11 +810,11 @@ function YRP_RN(text)
 end
 
 function YRP_RT( text )
-	local cs, ce = string.find(text, "RT(", 1, true)
+	local cs = string.find(text, "RT(", 1, true)
 	if cs == nil then
 		return text
 	end
-	local s, e = string.find(text, ")", cs, true)
+	local _, e = string.find(text, ")", cs, true)
 	if e == nil then
 		return text
 	end
@@ -835,7 +835,7 @@ function YRP_RT( text )
 
 	if table.Count( words ) > 1 then
 		local rn = table.Random( words )
-		
+
 		if rn then
 			text = pre .. rn .. suf
 			return YRP_RT(text)
@@ -883,16 +883,16 @@ function YRPChatReplaceCMDS(structure, ply, text)
 	end
 
 	result = string.Replace(result, "%TEXT%", text)
-	
+
 	result = YRP_RN( result )
 
 	result = YRP_RT( result )
 
 	local pk = {}
-	while(!strEmpty(result) ) do
-		local cs, ce = string.find(result, "Color(", 1, true)
+	while ( !strEmpty(result) ) do
+		local cs = string.find(result, "Color(", 1, true)
 		if cs == 1 then
-			local s, e = string.find(result, ")", 1, true)
+			local _, e = string.find(result, ")", 1, true)
 			if e then
 				local color = string.sub(result, cs + 6, e - 1)
 				color = string.Explode( ",", color)
@@ -910,7 +910,7 @@ function YRPChatReplaceCMDS(structure, ply, text)
 			end
 		elseif cs then
 			local tex = string.sub(result, 1, cs - 1)
-			
+
 			table.insert(pk, tex)
 
 			result = string.sub(result, cs)
@@ -966,7 +966,7 @@ function YRPCleanUpName( name )
 end
 
 function loadCustomDarkRPItems()
-	
+
 end
 
 function postLoadCustomDarkRPItems()
@@ -974,21 +974,19 @@ function postLoadCustomDarkRPItems()
 end
 
 function GM:DarkRPFinishedLoading()
-    -- GAMEMODE gets set after the last statement in the gamemode files is run. That is not the case in this hook
-    GAMEMODE = GAMEMODE or GM
-	
-    --loadLanguages()
-    --loadModules()
-    --loadCustomDarkRPItems()
-    hook.Call( "loadCustomDarkRPItems", self )
-    hook.Call( "postLoadCustomDarkRPItems", self )
+	-- GAMEMODE gets set after the last statement in the gamemode files is run. That is not the case in this hook
+	GAMEMODE = GAMEMODE or GM
+
+	--loadLanguages()
+	--loadModules()
+	--loadCustomDarkRPItems()
+	hook.Call( "loadCustomDarkRPItems", self )
+	hook.Call( "postLoadCustomDarkRPItems", self )
 end
 
 function YRPCheckDarkRP()
-	if gmod and gmod.GetGamemode() then
-		if gmod.GetGamemode().Name != "DarkRP" then
-			YRP.msg( "note", "Modified Files Detected, DarkRP addons will not work with that." )
-		end
+	if gmod and gmod.GetGamemode() and gmod.GetGamemode().Name != "DarkRP" then
+		YRP.msg( "note", "Modified Files Detected, DarkRP addons will not work with that." )
 	end
 
 	timer.Simple( 1, YRPCheckDarkRP )

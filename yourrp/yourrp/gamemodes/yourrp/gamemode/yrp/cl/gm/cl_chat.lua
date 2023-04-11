@@ -24,7 +24,7 @@ local commands = {
 	"!dropmoney AMOUNT"
 }
 
-local admincommands= {
+local admincommands = {
 	"/tag_ug",
 	"!tag_ug",
 	"/tag_tra",
@@ -55,7 +55,6 @@ local _showChat = false
 local chatids = {}
 local oldchoices = {}
 local chatAlpha = 255
-local once = true
 
 local CHATMODE = "SAY"
 
@@ -142,7 +141,7 @@ local function update_chat_choices()
 	if PanelAlive(yrpChat.window) and yrpChat.comboBox != nil then
 		yrpChat.comboBox:Clear()
 		chatids = {}
-		
+
 		for i, v in pairs(GetGlobalYRPTable( "yrp_chat_channels" ) ) do
 			local enabled = tobool( v.bool_enabled)
 			if enabled then
@@ -194,7 +193,7 @@ local function YRPCheckChatVisible()
 		if YRPIsChatEnabled( "YRPCheckChatVisible" ) == false then
 			_showChat = false
 		end
-		
+
 		if IsChatVisible() then
 			chatAlpha = chatAlpha + 10
 		else
@@ -205,9 +204,9 @@ local function YRPCheckChatVisible()
 			yrpChat.window:SetVisible( false )
 		else
 			yrpChat.window:SetVisible( true )
-			
+
 			chatAlpha = math.Clamp( chatAlpha, 0, 255)
-			
+
 			--yrpChat.window:SetAlpha( chatAlpha)
 			yrpChat.window.logo:SetAlpha( chatAlpha)
 			yrpChat.writeField:SetAlpha( chatAlpha)
@@ -219,27 +218,6 @@ end
 
 function ChatAlpha()
 	return chatAlpha
-end
-
-local function niceCommand( com)
-	if com == "say" then
-		return YRP.lang_string( "LID_say" )
-	elseif com == "yell" then
-		return YRP.lang_string( "LID_yell" )
-	elseif com == "advert" then
-		return YRP.lang_string( "LID_advert" )
-	elseif com == "admin" then
-		return YRP.lang_string( "LID_admin" )
-	elseif com == "faction" then
-		return YRP.lang_string( "LID_faction" )
-	elseif com == "group" then
-		return YRP.lang_string( "LID_group" )
-	elseif com == "role" then
-		return YRP.lang_string( "LID_role" )
-	elseif com == "service" then
-		return YRP.lang_string( "LID_service" )
-	end
-	return com
 end
 
 local function YRPCreateText()
@@ -302,23 +280,6 @@ local function YRPCreateText()
 	return newtext
 end
 
-local emojis = {
-	[":)"] = "icon16/emoticon_smile.png",
-	[":D"] = "icon16/emoticon_happy.png",
-	[":("] = "icon16/emoticon_unhappy.png",
-}
---[[
-	emoticon evilgrin
-	emoticon grin
-	emoticon happy
-	emoticon smile
-	emoticon surprised
-	emoticon tongue
-	emoticon unhappy
-	emoticon waii
-	emoticon wink
-]]
-
 local function InitYRPChat()
 	if YRPIsChatEnabled( "InitYRPChat" ) then
 		local lply = LocalPlayer()
@@ -338,7 +299,7 @@ local function InitYRPChat()
 					if self.logo then
 						if self.logo.svlogo != GetGlobalYRPString( "text_server_logo", "" ) then
 							self.logo.svlogo = GetGlobalYRPString( "text_server_logo", "" )
-		
+
 							if !strEmpty(GetGlobalYRPString( "text_server_logo", "" ) ) then
 								self.logo:SetHTML(GetHTMLImage(GetGlobalYRPString( "text_server_logo", "" ), TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR ))
 								self.logo:Show()
@@ -346,7 +307,7 @@ local function InitYRPChat()
 								self.logo:Hide()
 							end
 						end
-			
+
 						if !self.logo:IsVisible() then
 							surface.SetMaterial(yrp_logo)
 							surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
@@ -422,7 +383,7 @@ local function InitYRPChat()
 					self.delay = CurTime() + 0.01
 					self.oldy = math.Clamp( Lerp(FrameTime() * 16, self.oldy, self:GetCanvas():GetTall()), 0, self:GetCanvas():GetTall() )
 				end
-				
+
 				if !vgui.CursorVisible() then
 					self.VBar:AnimateTo( self.oldy, 0.5, 0, 0.5 )
 				end
@@ -484,7 +445,7 @@ local function InitYRPChat()
 				local w = pw - pw % 4
 				local h = ph - ph % 4
 
-				if YRP.GetDesignIcon( "64_cog" ) ~= nil then
+				if YRP.GetDesignIcon( "64_cog" ) != nil then
 					surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 					surface.SetMaterial(YRP.GetDesignIcon( "64_cog" ) )
 					surface.DrawTexturedRect( (pw - w) / 2, (ph - h) / 2, w, h)
@@ -538,7 +499,7 @@ local function InitYRPChat()
 			yrpChat.writeField:SetHistoryEnabled(true)
 			function yrpChat.writeField:GetAutoComplete( text )
 				local suggestions = {}
-			
+
 				for _, ply in ipairs( player.GetAll() ) do
 					if string.StartWith(ply:RPName(), text) then
 						table.insert(suggestions, ply:Nick() )
@@ -578,13 +539,13 @@ local function InitYRPChat()
 				surface.SetDrawColor( C_BG )
 				surface.DrawRect(0, 0, yrpChat.writeField:GetWide(), yrpChat.writeField:GetTall() )
 				yrpChat.writeField:DrawTextEntryText(Color( 255, 255, 255, 255 ), Color( 255, 255, 255, 0), Color( 255, 255, 255, 255 ) )
-				if !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
-					timer.Simple(0.1, function()
-						if PanelAlive(yrpChat.window) and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
+				--if !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
+					--timer.Simple(0.1, function()
+						--if PanelAlive(yrpChat.window) and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
 							--yrpChat.closeChatbox( "NOT FOCUS ANYMORE" )
-						end
-					end)
-				end
+						--end
+					--end)
+				--end
 			end
 
 			yrpChat.writeField.OnKeyCode = function(self, code)
@@ -596,7 +557,7 @@ local function InitYRPChat()
 						local tex = self:GetText()
 						local text = ""
 						for i = 0, 10 do
-							timer.Simple(2 * i, function()
+							timer.Simple( 2 * i, function()
 								if !strEmpty(string.Trim(tex) ) then
 									text = string.sub(tex, 1, 120)
 									tex = string.sub(tex, 121)
@@ -609,13 +570,13 @@ local function InitYRPChat()
 										LocalPlayer():ConCommand( "say \"!" .. CHATMODE .. " " .. text .. "\"" )
 									end
 								end
-							end)
+							end )
 						end
 					end
 					yrpChat.closeChatbox( "PRESSED ENTER" )
 				end
 			end
-			
+
 			function yrpChat:openChatbox( bteam)
 				if !PanelAlive(yrpChat.window) then
 					notification.AddLegacy( "[YourRP] [openChatbox] ChatBox Window broken", NOTIFY_ERROR, 10)
@@ -649,7 +610,7 @@ local function InitYRPChat()
 					_fadeout = CurTime()
 
 					gui.EnableScreenClicker(false)
-					
+
 					yrpChat._chatIsOpen = false
 					gamemode.Call( "FinishChat" )
 
@@ -690,7 +651,7 @@ local function InitYRPChat()
 				end
 				if istext then
 					local newtext = YRPCreateText()
-						
+
 					_delay = 3
 					if lply.yrp_timestamp and YRPIsChatEnabled( "chataddtext" ) then
 						local clock = {}

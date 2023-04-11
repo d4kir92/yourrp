@@ -111,10 +111,10 @@ function PANEL:ReSize()
 
 	local _grandparent = self:GetParent():GetParent()
 
-	if _grandparent ~= nil then
-		if _grandparent.ReSize ~= nil then
+	if _grandparent != nil then
+		if _grandparent.ReSize != nil then
 			_grandparent:ReSize()
-		elseif _grandparent.Rebuild ~= nil then
+		elseif _grandparent.Rebuild != nil then
 			_grandparent:Rebuild()
 		end
 	end
@@ -148,19 +148,19 @@ function PANEL:Add(panel)
 end
 
 function PANEL:Think()
-	if self:GetWide() ~= self.content:GetWide() then
+	if self:GetWide() != self.content:GetWide() then
 		self.content:SetWide(self:GetWide() )
 	end
 
-	if self:GetWide() ~= self.header:GetWide() then
+	if self:GetWide() != self.header:GetWide() then
 		self.header:SetWide(self:GetWide() )
 	end
 
-	if self:GetTall() - self:GetHeaderHeight() ~= self.content:GetTall() or self.content:GetTall() < 0 then
+	if self:GetTall() - self:GetHeaderHeight() != self.content:GetTall() or self.content:GetTall() < 0 then
 		self.content:SetTall(self:GetTall() - self:GetHeaderHeight() )
 	end
 
-	if self:GetHeaderHeight() ~= self.header:GetTall() then
+	if self:GetHeaderHeight() != self.header:GetTall() then
 		self.header:SetTall(self:GetHeaderHeight() )
 	end
 end

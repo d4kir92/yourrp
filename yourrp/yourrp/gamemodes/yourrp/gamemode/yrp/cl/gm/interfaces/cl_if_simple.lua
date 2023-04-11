@@ -5,7 +5,6 @@ local yrpr = 16
 hook.Add( "YFramePaint", "YFrame_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	local lply = LocalPlayer()
 	if YRPGetInterfaceDesign() == "Material" then
 		local hh = 24
 		if self.GetHeaderHeight != nil then
@@ -34,7 +33,6 @@ hook.Add( "YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 
-	local lply = LocalPlayer()
 	if YRPGetInterfaceDesign() == "Material" then
 		local color = YRPInterfaceValue( "YButton", "NC" )
 		local tcolor = YRPInterfaceValue( "YButton", "NT" )
@@ -85,7 +83,6 @@ hook.Add( "YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 
-	local lply = LocalPlayer()
 	if YRPGetInterfaceDesign() == "Material" then
 		local color = Color(126, 126, 126)
 		local tcolor = YRPInterfaceValue( "YButton", "NT" )
@@ -130,7 +127,6 @@ local col5 = Color( 111, 206, 111 )
 hook.Add( "YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	local lply = LocalPlayer()
 	if YRPGetInterfaceDesign() == "Material" then
 		local color = col3
 		local tcolor = tab.tcolor
@@ -171,7 +167,6 @@ end)
 hook.Add( "YLabelPaint", "YLabel_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	local lply = LocalPlayer()
 	if YRPGetInterfaceDesign() == "Material" then
 		local color = YRPInterfaceValue( "YFrame", "HI" )
 		local tcolor = YRPInterfaceValue( "YFrame", "HT" )
@@ -203,7 +198,6 @@ local col6 = Color(50, 50, 50)
 hook.Add( "YTextFieldPaint", "YTextFieldPaint_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	local lply = LocalPlayer()
 	if YRPGetInterfaceDesign() == "Material" then
 		local color = col6
 		local tcolor = YRPInterfaceValue( "YFrame", "HT" )
@@ -230,7 +224,6 @@ end)
 hook.Add( "YPanelPaint", "YPanel_Material", function(self, pw, ph, tab)
 	tab = tab or {}
 
-	local lply = LocalPlayer()
 	if YRPGetInterfaceDesign() == "Material" then
 		local color = tab.color or YRPInterfaceValue( "YFrame", "HI" )
 
@@ -257,15 +250,15 @@ hook.Add( "YAddPaint", "YAdd_Material", function(self, pw, ph, tab)
 			color.g = color.g + 50
 			color.b = color.b + 50
 		end
-	
-		if YRP.GetDesignIcon( "circle" ) ~= nil then
+
+		if YRP.GetDesignIcon( "circle" ) != nil then
 			surface.SetDrawColor( color)
 			surface.SetMaterial(YRP.GetDesignIcon( "circle" ) )
 			surface.DrawTexturedRect(0, 0, pw, ph)
 		end
 
 		local br = ph * 0.1
-		if YRP.GetDesignIcon( "add" ) ~= nil then
+		if YRP.GetDesignIcon( "add" ) != nil then
 			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(YRP.GetDesignIcon( "add" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
@@ -285,14 +278,14 @@ hook.Add( "YRemovePaint", "YRemove_Material", function(self, pw, ph, tab)
 			color = Color(206, 111, 111)
 		end
 
-		if YRP.GetDesignIcon( "circle" ) ~= nil then
+		if YRP.GetDesignIcon( "circle" ) != nil then
 			surface.SetDrawColor( color)
 			surface.SetMaterial(YRP.GetDesignIcon( "circle" ) )
 			surface.DrawTexturedRect(0, 0, pw, ph)
 		end
 
 		local br = ph * 0.1
-		if YRP.GetDesignIcon( "remove" ) ~= nil then
+		if YRP.GetDesignIcon( "remove" ) != nil then
 			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(YRP.GetDesignIcon( "remove" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
@@ -318,14 +311,14 @@ hook.Add( "YClosePaint", "YClose_Material", function(self, pw, ph, tab)
 			self.color = Color( 255, 255, 255, 0)
 		end
 
-		if YRP.GetDesignIcon( "circle" ) ~= nil then
+		if YRP.GetDesignIcon( "circle" ) != nil then
 			surface.SetDrawColor( self.color )
 			surface.SetMaterial(YRP.GetDesignIcon( "circle" ) )
 			surface.DrawTexturedRect(0, 0, pw, ph)
 		end
 
 		local br = ph * 0.1
-		if YRP.GetDesignIcon( "clear" ) ~= nil then
+		if YRP.GetDesignIcon( "clear" ) != nil then
 			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(YRP.GetDesignIcon( "clear" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)
@@ -351,14 +344,14 @@ hook.Add( "YMaxPaint", "YMax_Material", function(self, pw, ph, tab)
 			color = Color( 255, 255, 255, 0)
 		end
 
-		if YRP.GetDesignIcon( "circle" ) ~= nil then
+		if YRP.GetDesignIcon( "circle" ) != nil then
 			surface.SetDrawColor( color)
 			surface.SetMaterial(YRP.GetDesignIcon( "circle" ) )
 			surface.DrawTexturedRect(0, 0, pw, ph)
 		end
 
 		local br = ph * 0.1
-		if YRP.GetDesignIcon( "mat_square" ) ~= nil then
+		if YRP.GetDesignIcon( "mat_square" ) != nil then
 			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 			surface.SetMaterial(YRP.GetDesignIcon( "mat_square" ) )
 			surface.DrawTexturedRect( br, br, pw - br * 2, ph - br * 2)

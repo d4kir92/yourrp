@@ -49,7 +49,7 @@ end
 -- allow setting arbitrary keyvalues, but this implementation does not.
 function ENT:AddOutputFromAcceptInput( name, value )
 
-	if ( name ~= "AddOutput" ) then
+	if ( name != "AddOutput" ) then
 
 		return false
 
@@ -93,11 +93,11 @@ local function FireSingleOutput( output, this, activator, data )
 		ent:Fire( output.input, data or output.param, output.delay, activator, this )
 	end
 
-	if ( output.times ~= -1 ) then
+	if ( output.times != -1 ) then
 		output.times = output.times - 1
 	end
 
-	return ( output.times > 0 ) || ( output.times == -1 )
+	return ( output.times > 0 ) or ( output.times == -1 )
 
 end
 

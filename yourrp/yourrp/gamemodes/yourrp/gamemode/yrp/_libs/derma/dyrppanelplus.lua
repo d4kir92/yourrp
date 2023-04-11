@@ -20,14 +20,14 @@ end
 function PANEL:INITPanel( derma)
 	self.plus = YRPCreateD( derma, self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, self.header:GetTall() )
 	self.plus.getclass = derma
-	
+
 	function self:SetText(text)
 		self.plus:SetText(text)
 	end
 end
 
 function PANEL:Think()
-	if self.header:GetWide() ~= self:GetWide() then
+	if self.header:GetWide() != self:GetWide() then
 		self.header:SetWide(self:GetWide() )
 	end
 
@@ -37,13 +37,13 @@ function PANEL:Think()
 		self.plus:SetWide(self:GetTall() / 2 )
 	end
 
-	if self.plus:GetTall() ~= self:GetTall() - self.header:GetTall() then
+	if self.plus:GetTall() != self:GetTall() - self.header:GetTall() then
 		self.plus:SetTall(self:GetTall() - self.header:GetTall() )
 	end
 
 	local _px, _py = self.plus:GetPos()
 
-	if _py ~= self.header:GetTall() then
+	if _py != self.header:GetTall() then
 		self.plus:SetPos(0, self.header:GetTall() )
 	end
 end

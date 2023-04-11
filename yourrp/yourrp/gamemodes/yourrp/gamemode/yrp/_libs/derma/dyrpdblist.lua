@@ -38,13 +38,13 @@ function PANEL:Init()
 	self.header.rem:SetText( "" )
 
 	function self.header.rem:Paint(pw, ph)
-		if _pnl.uid ~= nil then
+		if _pnl.uid != nil then
 			paintDBButton(self, pw, ph, Color( 0, 255, 0 ), "-" )
 		end
 	end
 
 	function self.header.rem:DoClick()
-		if _pnl.uid ~= nil then
+		if _pnl.uid != nil then
 			_pnl:RemoveFunction()
 			_pnl.uid = nil
 		end
@@ -54,23 +54,23 @@ function PANEL:Init()
 		local _w = self:GetWide()
 		local _x = self.rem:GetPos()
 
-		if _x ~= 3 * (_w / 5) then
+		if _x != 3 * (_w / 5) then
 			self.rem:SetPos(4 * (_w / 5), 0)
 		end
 
-		if self.add:GetWide() ~= _w / 5 then
+		if self.add:GetWide() != _w / 5 then
 			self.add:SetWide(_w / 5)
 		end
 
-		if self.rem:GetWide() ~= _w / 5 then
+		if self.rem:GetWide() != _w / 5 then
 			self.rem:SetWide(_w / 5)
 		end
 
-		if self.add:GetTall() ~= self:GetTall() then
+		if self.add:GetTall() != self:GetTall() then
 			self.add:SetTall(self:GetTall() )
 		end
 
-		if self.rem:GetTall() ~= self:GetTall() then
+		if self.rem:GetTall() != self:GetTall() then
 			self.rem:SetTall(self:GetTall() )
 		end
 	end
@@ -103,11 +103,11 @@ function PANEL:Init()
 	function self:SetListHeader(text, pre, pos)
 		self.listheader.text = text
 
-		if pre ~= nil then
+		if pre != nil then
 			self.listheader.textpre = pre
 		end
 
-		if pos ~= nil then
+		if pos != nil then
 			self.listheader.textpos = pos
 		end
 	end
@@ -167,29 +167,29 @@ end
 function PANEL:Think()
 	local _x = self.listheader:GetPos()
 
-	if YRP.ctr(60) ~= _x then
+	if YRP.ctr(60) != _x then
 		self.listheader:SetPos(0, YRP.ctr(60) )
 	end
 
 	_x = self.list:GetPos()
 
-	if YRP.ctr(110) ~= _x then
+	if YRP.ctr(110) != _x then
 		self.list:SetPos(0, YRP.ctr(110) )
 	end
 
-	if self:GetWide() ~= self.header:GetWide() then
+	if self:GetWide() != self.header:GetWide() then
 		self.header:SetWide(self:GetWide() )
 	end
 
-	if self:GetWide() ~= self.listheader:GetWide() then
+	if self:GetWide() != self.listheader:GetWide() then
 		self.listheader:SetWide(self:GetWide() )
 	end
 
-	if self:GetWide() ~= self.list:GetWide() then
+	if self:GetWide() != self.list:GetWide() then
 		self.list:SetWide(self:GetWide() )
 	end
 
-	if self.list:GetTall() ~= self:GetTall() - YRP.ctr(120) then
+	if self.list:GetTall() != self:GetTall() - YRP.ctr(120) then
 		self.list:SetTall(self:GetTall() - YRP.ctr(120) )
 	end
 end

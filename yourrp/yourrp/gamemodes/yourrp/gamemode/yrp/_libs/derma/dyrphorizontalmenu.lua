@@ -110,7 +110,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 	TAB.subtabs = {}
 
 	function TAB:HideSubTabs()
-		if self.stabs ~= nil then
+		if self.stabs != nil then
 			self.stabs:Remove()
 			self.stabs = nil
 		end
@@ -158,7 +158,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 				function st:Paint(pw, ph)
 					hook.Run( "YButtonPaint", self, pw, ph, self.tab )
 
-					if self.url ~= "" or self.func ~= nil then
+					if self.url != "" or self.func != nil then
 						local br = YRP.ctr(10)
 						local size = ph - 2 * YRP.ctr(20)
 						YRP.DrawIcon(YRP.GetDesignIcon( "launch" ), size, size, pw - size - br, ph / 2 - size / 2, YRPGetColor( "6" ) )
@@ -181,15 +181,15 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 				end
 
 				function st:DoClick()
-					if self.netstr ~= "" then
+					if self.netstr != "" then
 						TAB.menu.current_site = self.menu.name
 						TAB.menu:ClearSite()
 						st.menu:HideSubTabs()
 						net.Start(self.netstr)
 						net.SendToServer()
-					elseif self.url ~= "" then
+					elseif self.url != "" then
 						gui.OpenURL(self.url)
-					elseif self.func ~= nil then
+					elseif self.func != nil then
 						self.func()
 					end
 				end
@@ -218,7 +218,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 		if self:IsHovered() then
 			self:GetParent().hovered = TAB.name
 			self:ShowSubTabs()
-		--elseif self:GetParent().hovered ~= TAB.name then
+		--elseif self:GetParent().hovered != TAB.name then
 		end
 		-- self:HideSubTabs()
 	end
@@ -226,14 +226,14 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 	function TAB:DoClick()
 		self.menu.current_site = self.name
 
-		if self.netstr ~= "" then
+		if self.netstr != "" then
 			self.menu:ClearSite()
 			net.Start(self.netstr)
 			net.SendToServer()
 		else
 			self:HideSubTabs()
 
-			if self.subtabs[1].netstr ~= "" then
+			if self.subtabs[1].netstr != "" then
 				net.Start(self.subtabs[1].netstr)
 				net.SendToServer()
 			end
@@ -307,7 +307,7 @@ end
 function PANEL:Think()
 	local _mx, _my = gui.MousePos()
 
-	if self.w ~= self:GetWide() or self.h ~= self:GetTall() then
+	if self.w != self:GetWide() or self.h != self:GetTall() then
 		self.w = self:GetWide()
 		self.h = self:GetTall()
 		self.site:SetSize(self:GetWide() - YRP.ctr(2 * 20), self:GetTall() - YRP.ctr(100 + 20 + 20) )
@@ -324,7 +324,6 @@ function PANEL:GetHeaderHeight()
 end
 
 function PANEL:Paint(w, h)
-	local lply = LocalPlayer()
 	local col = YRPInterfaceValue( "YFrame", "HI" )
 
 	draw.RoundedBox(0, 0, 0, w, self:GetHeaderHeight() or h, col or Color( 255, 0, 0 ) )

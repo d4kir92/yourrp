@@ -143,7 +143,7 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 			self.oldtext = text
 
 			surface.SetFont(font)
-			local tsw, tsh = surface.GetTextSize(text)
+			local tsw, _ = surface.GetTextSize(text)
 			self:SetWide( br + size + br + tsw + br )
 			self:SetPos( LanguageChanger:GetWide() - self:GetWide(), 0 )
 		end
@@ -235,7 +235,7 @@ end
 
 function GetSWEPsList()
 	local sweps = {}
-	
+
 	local cnames = {}
 	for k, v in pairs( weapons.GetList() ) do
 		if !table.HasValue( cnames, v.ClassName ) and !string.StartWith( string.lower( v.ClassName ), "npc_" ) then
@@ -244,11 +244,9 @@ function GetSWEPsList()
 		end
 	end
 	for k, v in pairs( list.Get( "Weapon" ) ) do
-		if v.Category == "Half-Life 2" or string.find( v.ClassName, "weapon_physgun", 1, true) then
-			if !table.HasValue( cnames, v.ClassName ) and !string.StartWith( string.lower( v.ClassName ), "npc_" ) then
-				table.insert( cnames, v.ClassName )
-				table.insert( sweps, v )
-			end
+		if v.Category == "Half-Life 2" or string.find( v.ClassName, "weapon_physgun", 1, true) and !table.HasValue( cnames, v.ClassName ) and !string.StartWith( string.lower( v.ClassName ), "npc_" ) then
+			table.insert( cnames, v.ClassName )
+			table.insert( sweps, v )
 		end
 	end
 
@@ -348,7 +346,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 	pmsel.x_max = pmsel.fx / pmsel.space - pmsel.fx / pmsel.space % 1
 	pmsel.perpage = pmsel.x_max * 4
 	pmsel.maxpage = math.ceil(#tab / pmsel.perpage)
-	
+
 
 	function parent:Paint(pw, ph)
 		draw.SimpleText(YRP.lang_string( "LID_search" ) .. ": ", "DermaDefault", YRP.ctr( br + 100), YRP.ctr( br + 25), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
@@ -373,92 +371,90 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 			pmsel.strsearch = string.Replace(pmsel.strsearch or "", "]", "" )
 			pmsel.strsearch = string.Replace(pmsel.strsearch or "", "%", "" )
 		end
-	
+
 		for i, v in pairs(tab) do
-			if PanelAlive(pmsel) then
-				if pmsel.strsearch != nil and v.PrintName and string.find(string.lower( v.PrintName), pmsel.strsearch or "", 1, true) or string.find(string.lower( v.ClassName), pmsel.strsearch or "", 1, true) or string.find(string.lower( v.WorldModel), pmsel.strsearch or "", 1, true) then
-					self.nothingfound = false
-					self.count = self.count + 1
-					if self.count > pmsel.nr and self.count <= pmsel.nr + pmsel.perpage then
-						self.fcount = self.fcount + 1
-						local d_pm = YRPCreateD( "DPanel", pmsel.dpl, pmsel.size, pmsel.size, self.px * pmsel.space, self.py * pmsel.space)
-						d_pm:SetText( "" )
-						d_pm.WorldModel = v.WorldModel
-						d_pm.ClassName = v.ClassName
-						d_pm.PrintName = v.PrintName
-						function d_pm:Paint(pw, ph)
-							local text = YRP.lang_string( "LID_notadded" )
-							local col = Color( 255, 255, 255, 255 )
-							if ret == "worldmodel" then
-								if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.WorldModel) then
-									col = Color( 0, 255, 0 )
-									text = YRP.lang_string( "LID_added" )
-								end
-							elseif ret == "classname" then
-								if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.ClassName) then
-									col = Color( 0, 255, 0 )
-									text = YRP.lang_string( "LID_added" )
-								end
+			if PanelAlive(pmsel) and pmsel.strsearch != nil and v.PrintName and string.find(string.lower( v.PrintName), pmsel.strsearch or "", 1, true) or string.find(string.lower( v.ClassName), pmsel.strsearch or "", 1, true) or string.find(string.lower( v.WorldModel), pmsel.strsearch or "", 1, true) then
+				self.nothingfound = false
+				self.count = self.count + 1
+				if self.count > pmsel.nr and self.count <= pmsel.nr + pmsel.perpage then
+					self.fcount = self.fcount + 1
+					local d_pm = YRPCreateD( "DPanel", pmsel.dpl, pmsel.size, pmsel.size, self.px * pmsel.space, self.py * pmsel.space)
+					d_pm:SetText( "" )
+					d_pm.WorldModel = v.WorldModel
+					d_pm.ClassName = v.ClassName
+					d_pm.PrintName = v.PrintName
+					function d_pm:Paint(pw, ph)
+						local text = YRP.lang_string( "LID_notadded" )
+						local col = Color( 255, 255, 255, 255 )
+						if ret == "worldmodel" then
+							if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.WorldModel) then
+								col = Color( 0, 255, 0 )
+								text = YRP.lang_string( "LID_added" )
 							end
-							draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
-
-							if multiple then
-								draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-							end
-
-							draw.SimpleText(self.PrintName, "DermaDefault", pw / 2, ph * 0.90, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-							draw.SimpleText(self.WorldModel, "DermaDefault", pw / 2, ph * 0.95, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-						end
-
-						local msize = d_pm:GetTall() * 0.75
-						local mbr = ( d_pm:GetTall() - msize) / 2
-						local my = d_pm:GetTall() * 0.10
-						if v.WorldModel != "" then
-							d_pm.model = YRPCreateD( "DModelPanel", d_pm, msize, msize, mbr, my)
-							timer.Simple(0.1 * self.fcount, function()
-								if PanelAlive( d_pm) then
-									d_pm.model:SetModel( v.WorldModel)
-								end
-							end)
-						else
-							d_pm.model = YRPCreateD( "DPanel", d_pm, msize, msize, mbr, my)
-							function d_pm.model:Paint(pw, ph)
-								draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
-								draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						elseif ret == "classname" then
+							if lply.yrpseltab != nil and table.HasValue(lply.yrpseltab, self.ClassName) then
+								col = Color( 0, 255, 0 )
+								text = YRP.lang_string( "LID_added" )
 							end
 						end
-						d_pm.btn = YRPCreateD( "YButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
-						d_pm.btn:SetText( "" )
-						function d_pm.btn:DoClick()
-							if ret == "worldmodel" then
-								if !table.HasValue(lply.yrpseltab, v.WorldModel) then
-									table.insert(lply.yrpseltab, v.WorldModel)
-								elseif table.HasValue(lply.yrpseltab, v.WorldModel) then
-									table.RemoveByValue(lply.yrpseltab, v.WorldModel)
-								end
-							elseif ret == "classname" then
-								if !table.HasValue(lply.yrpseltab, v.ClassName) then
-									table.insert(lply.yrpseltab, v.ClassName)
-								elseif table.HasValue(lply.yrpseltab, v.ClassName) then
-									table.RemoveByValue(lply.yrpseltab, v.ClassName)
-								end
-							end
-							if !multiple and PanelAlive(pmsel) then
-								if fu then
-									fu()
-								end
-								pmsel:Close()
-							end
-						end
-						function d_pm.btn:Paint(pw, ph)
+						draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, col)
 
+						if multiple then
+							draw.SimpleText(text, "DermaDefault", pw / 2, ph * 0.05, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						end
 
-						self.px = self.px + 1
-						if self.px > pmsel.x_max - 1 then
-							self.px = 0
-							self.py = self.py + 1
+						draw.SimpleText(self.PrintName, "DermaDefault", pw / 2, ph * 0.90, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText(self.WorldModel, "DermaDefault", pw / 2, ph * 0.95, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					end
+
+					local msize = d_pm:GetTall() * 0.75
+					local mbr = ( d_pm:GetTall() - msize) / 2
+					local my = d_pm:GetTall() * 0.10
+					if v.WorldModel != "" then
+						d_pm.model = YRPCreateD( "DModelPanel", d_pm, msize, msize, mbr, my)
+						timer.Simple(0.1 * self.fcount, function()
+							if PanelAlive( d_pm) then
+								d_pm.model:SetModel( v.WorldModel)
+							end
+						end)
+					else
+						d_pm.model = YRPCreateD( "DPanel", d_pm, msize, msize, mbr, my)
+						function d_pm.model:Paint(pw, ph)
+							draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80) )
+							draw.SimpleText( "NO MODEL", "DermaDefault", pw / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						end
+					end
+					d_pm.btn = YRPCreateD( "YButton", d_pm, d_pm:GetWide(), d_pm:GetTall(), 0, 0)
+					d_pm.btn:SetText( "" )
+					function d_pm.btn:DoClick()
+						if ret == "worldmodel" then
+							if !table.HasValue(lply.yrpseltab, v.WorldModel) then
+								table.insert(lply.yrpseltab, v.WorldModel)
+							elseif table.HasValue(lply.yrpseltab, v.WorldModel) then
+								table.RemoveByValue(lply.yrpseltab, v.WorldModel)
+							end
+						elseif ret == "classname" then
+							if !table.HasValue(lply.yrpseltab, v.ClassName) then
+								table.insert(lply.yrpseltab, v.ClassName)
+							elseif table.HasValue(lply.yrpseltab, v.ClassName) then
+								table.RemoveByValue(lply.yrpseltab, v.ClassName)
+							end
+						end
+						if !multiple and PanelAlive(pmsel) then
+							if fu then
+								fu()
+							end
+							pmsel:Close()
+						end
+					end
+					function d_pm.btn:Paint(pw, ph)
+
+					end
+
+					self.px = self.px + 1
+					if self.px > pmsel.x_max - 1 then
+						self.px = 0
+						self.py = self.py + 1
 					end
 				end
 			end
@@ -520,7 +516,6 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 	end)
 end
 
-local mdllist = {}
 function openSingleSelector(tab, closeF, web)
 	local site = {}
 	site.cur = 1
@@ -617,7 +612,7 @@ function openSingleSelector(tab, closeF, web)
 			searchtext = string.Replace(searchtext or "", "[", "" )
 			searchtext = string.Replace(searchtext or "", "]", "" )
 			searchtext = string.Replace(searchtext or "", "%", "" )
-			
+
 			if string.find(string.lower(item.WorldModel or "" ), searchtext, 1, true) or string.find(string.lower(item.PrintName or "" ), searchtext, 1, true) or string.find(string.lower(item.ClassName or "" ), searchtext, 1, true) then
 				site.count = site.count + 1
 
@@ -748,7 +743,7 @@ function YRP.Color()
 	return Color(26, 113, 242)
 end
 
-local tab = {}
+local vTab = {}
 function YRPHUD( name, failed )
 	if string.StartWith( name, "float_HUD_" ) then
 		return GetGlobalYRPFloat( name, 0.0 )
@@ -761,15 +756,15 @@ function YRPHUD( name, failed )
 	elseif string.StartWith( name, "color_HUD_" ) then
 		local vecname = GetGlobalYRPString( name, "255,0,0,255" )
 		if type( vecname ) == "string" then
-			if tab[vecname] == nil then
-				tab[vecname] = StringToColor( vecname )
+			if vTab[vecname] == nil then
+				vTab[vecname] = StringToColor( vecname )
 			end
-			return tab[vecname]
+			return vTab[vecname]
 		end
-	elseif v.name == "Version" then
+	elseif name == "Version" then
 		return GetGlobalYRPInt( "Version", -1 )
 	else
-		MsgC( Color( 0, 255, 0 ), "Failed To HUD", v.name, v.value, "\n" )
+		MsgC( Color( 0, 255, 0 ), "Failed To HUD", name, "\n" )
 	end
 	return failed
 end
@@ -829,7 +824,7 @@ function YRPDrawNamePlateStringBox(ent, instr, z, color)
 		box.h = th + 2 * br
 		draw.RoundedBox(math.Round( box.h / 2 - ( box.h / 2) % 1, 0), - box.w / 2, 0, box.w, box.h, Color( 0, 0, 0, 160) )
 
-		if YRP.GetDesignIcon( "shopping_cart" ) ~= nil then
+		if YRP.GetDesignIcon( "shopping_cart" ) != nil then
 			local ico = {}
 			ico.w = th * 0.8
 			ico.h = ico.w
@@ -883,7 +878,7 @@ function YRPDrawNamePlateBar(ply, stri, z, color, cur, max, barcolor, name)
 
 		lerptab[name] = lerptab[name] or 0
 		lerptab[name] = Lerp( FrameTime() * 2, lerptab[name], cur )
-		
+
 		draw.RoundedBox(r, -w / 2 - br, 2 - br, w + br * 2, 100 + br * 2, Color( 0, 0, 0, barcolor.a) )
 		draw.RoundedBox(r / 2, -w / 2, 2, w * lerptab[name] / max, 100, barcolor)
 		surfaceText(str, "Y_100_500", 0, _th / 2 - 0.2, color, 1, 1)
@@ -1086,7 +1081,7 @@ function YRPDrawNamePlates()
 						else
 							plyvol = math.Clamp(plyvol, 0, ply:GetColor().a)
 						end
-						
+
 						-- flüstern
 						local sym = "volume_mute"
 						local x = 0
@@ -1420,10 +1415,10 @@ function YRPReplaceKEYs(str)
 	return table.concat( tmpstr, " " )
 end
 
-local delay = 0
+local dela = 0
 net.Receive( "nws_yrp_info", function( len )
 	local lply = LocalPlayer()
-	if lply:IsValid() and delay < CurTime() then
+	if lply:IsValid() and dela < CurTime() then
 		delay = CurTime() + 1
 		local _str = net.ReadString()
 		_str = YRPReplaceLIDs(_str)
@@ -1770,16 +1765,11 @@ function drawIDCard(ply, scale, px, py)
 						end
 					end
 				end
-				if ele == "serverlogo" and strEmpty(GetGlobalYRPString( "text_server_logo", "" ) ) then
-					--
-				elseif ele == "background" and strEmpty(GetGlobalYRPString( "text_idcard_background", "" ) ) then
-					--
-				else
-					if mats[ele] != nil then
-						surface.SetDrawColor( color)
-						surface.SetMaterial(mats[ele])
-						surface.DrawTexturedRect(x, y, w, h)
-					end
+
+				if ele != "serverlogo" and ele != "background" and mats[ele] != nil then
+					surface.SetDrawColor( color)
+					surface.SetMaterial(mats[ele])
+					surface.DrawTexturedRect(x, y, w, h)
 				end
 			end
 		end
@@ -1817,7 +1807,7 @@ hook.Add( "Think", "openDeathScreen", function( len )
 			end
 			Derma_DrawBackgroundBlur(self, self.systime)
 			draw.RoundedBox(0, 0, YRP.ctr(300), pw, YRP.ctr(500), Color( 0, 0, 0, 180 * self.a) )
-			
+
 			if !vgui.CursorVisible() then
 				draw.SimpleText(YRP.lang_string( "LID_rightclicktoshowmouse" ), "Y_40_500", pw - 100, ph - 100, Color( 255, 255, 100, 255 * self.a), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
 			end
@@ -1899,7 +1889,7 @@ end
 
 local windowOpen = false
 net.Receive( "nws_yrp_openLawBoard", function( len )
-	if not windowOpen and (LocalPlayer():isCP() or LocalPlayer():GetYRPBool( "bool_canusewarnsystem", false) ) then
+	if !windowOpen and (LocalPlayer():isCP() or LocalPlayer():GetYRPBool( "bool_canusewarnsystem", false) ) then
 		local tmpJailList = net.ReadTable()
 		windowOpen = true
 		local window = YRPCreateD( "YFrame", nil, BFW(), BFH(), BPX(), BPY() )
@@ -2113,8 +2103,8 @@ net.Receive( "nws_yrp_openLawBoard", function( len )
 					end
 					draw.RoundedBox(0, 0, 0, pw, ph, color)
 					draw.SimpleTextOutlined(YRP.lang_string( "LID_name" ) .. ": " .. v.nick, "Y_26_500", YRP.ctr(20), YRP.ctr(45), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_cell" ) .. ": " .. v.cellname, "Y_24_500", YRP.ctr(20), YRP.ctr(95), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )	
-					draw.SimpleTextOutlined(YRP.lang_string( "LID_note" ) .. ": " .. v.reason, "Y_24_500", YRP.ctr(20), YRP.ctr(145), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )	
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_cell" ) .. ": " .. v.cellname, "Y_24_500", YRP.ctr(20), YRP.ctr(95), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+					draw.SimpleTextOutlined(YRP.lang_string( "LID_note" ) .. ": " .. v.reason, "Y_24_500", YRP.ctr(20), YRP.ctr(145), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 					draw.SimpleTextOutlined(YRP.lang_string( "LID_time" ) .. ": " .. v.time, "Y_24_500", YRP.ctr(20), ph - YRP.ctr(45), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 				end
 

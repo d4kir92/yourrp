@@ -61,7 +61,7 @@ function SWEP:PrimaryAttack()
 	if self.Drag then
 		HitEnt = self.Drag.Entity
 	else
-		if not IsValid( HitEnt ) or HitEnt:GetMoveType() ~= MOVETYPE_VPHYSICS or
+		if not IsValid( HitEnt ) or HitEnt:GetMoveType() != MOVETYPE_VPHYSICS or
 			HitEnt:IsVehicle() or HitEnt:GetYRPBool( "NoDrag", false ) or
 			HitEnt.BlockDrag or
 			IsValid( HitEnt:GetParent() ) then

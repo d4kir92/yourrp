@@ -138,7 +138,7 @@ Mod = function( a, b) return a % b end
 Neg = function( a)		return -a		end
 
 Eq	= function( a, b) return a == b end
-Neq = function( a, b) return a ~= b end
+Neq = function( a, b) return a != b end
 Gt	= function( a, b) return a > b	end
 Lt	= function( a, b) return a < b	end
 Gte = function( a, b) return a >= b end
@@ -211,7 +211,7 @@ end
 ForEach = function(f, xs)
 	for k,v in pairs(xs) do
 		local val = f(k, v)
-		if val ~= nil then return val end
+		if val != nil then return val end
 	end
 end
 
@@ -281,7 +281,7 @@ end
 
 And = function(xs)
 	for k, v in pairs(xs) do
-		if v ~= true then return false end
+		if v != true then return false end
 	end
 	return true
 end
@@ -302,7 +302,7 @@ end
 
 All = function(func, xs)
 	for k, v in pairs(xs) do
-			if func( v) ~= true then return false end
+			if func( v) != true then return false end
 	end
 	return true
 end

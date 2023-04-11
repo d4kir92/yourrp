@@ -157,10 +157,10 @@ function YRP.msg( chan, str_msg, tochat, force )
 	if !isstring( chan ) then return false end
 	if !isstring( str_msg ) then return false end
 
-	if force or strEmpty(str_msg) or not table.HasValue(yrpmsgantispam, str_msg) then
-		if not table.HasValue(yrpmsgantispam, str_msg) then
+	if force or strEmpty(str_msg) or !table.HasValue(yrpmsgantispam, str_msg) then
+		if !table.HasValue(yrpmsgantispam, str_msg) then
 			table.insert(yrpmsgantispam, str_msg)
-			
+
 			timer.Simple(3, function()
 				table.RemoveByValue(yrpmsgantispam, str_msg)
 			end)
@@ -189,7 +189,7 @@ function YRP.msg( chan, str_msg, tochat, force )
 				MsgC( rc, "] " )
 
 				MsgC( rc, msg )
-			
+
 				if force then
 					MsgC( rc, " " )
 					MsgC( Color( 0, 255, 0 ), "[FORCED]" )
@@ -214,7 +214,7 @@ function YRP.msg( chan, str_msg, tochat, force )
 					REALM = "SERVER"
 				end
 
-				if cn == "ERROR" or cn == "MISSING" or cn == "ACCESS" then			
+				if cn == "ERROR" or cn == "MISSING" or cn == "ACCESS" then
 					if YRPNewError(str) then
 						YRPAddError(str, str, REALM)
 					end
@@ -254,19 +254,19 @@ function YRPColorToString( col)
 	return col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a
 end
 
-function printTab(table, name)
+function printTab(ta, name)
 	local _header = "PrintTable: "
 	name = name or ""
 	if !strEmpty(name) then
 		name = name .. " "
 	end
-	_header = _header .. name .. "( " .. tostring(table) .. " )"
+	_header = _header .. name .. "( " .. tostring(ta) .. " )"
 	YRP.msg( "note", _header)
 
 	if istable(table) then
-		PrintTable(table)
+		PrintTable(ta)
 	else
-		YRP.msg( "note", "printTab " .. tostring(table) .. " is not a table!" )
+		YRP.msg( "note", "printTab " .. tostring(ta) .. " is not a table!" )
 	end
 end
 

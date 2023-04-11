@@ -99,9 +99,9 @@ function LoadIDCardSetting(force, from)
 						elseif v == "false" then
 							v = 0
 						end
-						if string.StartWith(n, "bool_" ) and GetGlobalYRPBool(n, tobool( v) ) ~= tobool( v) then
+						if string.StartWith(n, "bool_" ) and GetGlobalYRPBool(n, tobool( v) ) != tobool( v) then
 							SetGlobalYRPBool( n, tobool( v ) )
-						elseif string.StartWith(n, "int_" ) and GetGlobalYRPInt(n, v) ~= v then
+						elseif string.StartWith(n, "int_" ) and GetGlobalYRPInt(n, v) != v then
 							SetGlobalYRPInt( n, v )
 						end
 						YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = v}, "name = '" .. n .. "'" )

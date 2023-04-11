@@ -10,7 +10,7 @@ function YRPToggleEmotesMenu()
 end
 
 function CloseEmotesMenu()
-	if _em.window ~= nil then
+	if _em.window != nil then
 		YRPCloseMenu()
 		_em.window:Remove()
 		_em.window = nil
@@ -163,11 +163,11 @@ function OpenEmotesMenu()
 	end
 
 	function _em.emotes:DoClick()
-		if self.select ~= nil then
+		if self.select != nil then
 			local _sel = self.select
 			CloseEmotesMenu()
 
-			if _sel ~= nil and GetEmotes()[_sel] ~= nil then
+			if _sel != nil and GetEmotes()[_sel] != nil then
 				--RunConsoleCommand( "act", GetEmotes()[_sel].cmd)
 				--LocalPlayer():AnimRestartGesture( GESTURE_SLOT_CUSTOM, GetEmotes()[_sel].cmd, true )
 				net.Start( "nws_yrp_do_act" )

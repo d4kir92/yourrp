@@ -84,7 +84,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 				SelectedPanel:Dock(LEFT)
 				local Value = v.func(FAdmin.ScoreBoard.Player.Player)
 				--if not Value or Value == "" then return --[[ Value = "N/A" ]] end
-				if Value and Value ~= "" then
+				if Value and Value != "" then
 
 						local Text = vgui.Create( "DLabel" )
 						Text:Dock(LEFT)

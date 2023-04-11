@@ -45,7 +45,7 @@ sm.category = "LID_usermanagement"
 sm.usergroup = nil
 
 function F8CheckUsergroup()
-	if LocalPlayer():GetUserGroup() ~= sm.usergroup then
+	if LocalPlayer():GetUserGroup() != sm.usergroup then
 		sm.usergroup = LocalPlayer():GetUserGroup()
 		sm.open = false
 		return true
@@ -424,7 +424,7 @@ function F8OpenSettings()
 			hook.Run( "YButtonPaint", self, pw, ph)
 
 			local br = YRP.ctr(10)
-			if YRP.GetDesignIcon( "64_angle-right" ) ~= nil then
+			if YRP.GetDesignIcon( "64_angle-right" ) != nil then
 				surface.SetMaterial(YRP.GetDesignIcon( "64_sync" ) )
 				surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 				surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)
@@ -541,11 +541,11 @@ function F8OpenSettings()
 		function sm.menu.expander:Paint(pw, ph)
 			self:SetPos(0, sm.win:GetTall() - sm.menu.ph)
 			if lply.settings_expanded then
-				if YRP.GetDesignIcon( "64_angle-left" ) ~= nil then
+				if YRP.GetDesignIcon( "64_angle-left" ) != nil then
 					surface.SetMaterial(YRP.GetDesignIcon( "64_angle-left" ) )
 				end
 			else
-				if YRP.GetDesignIcon( "64_angle-right" ) ~= nil then
+				if YRP.GetDesignIcon( "64_angle-right" ) != nil then
 					surface.SetMaterial(YRP.GetDesignIcon( "64_angle-right" ) )
 				end
 			end
@@ -619,7 +619,7 @@ function F8OpenSettings()
 
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
 					
-					if YRP.GetDesignIcon( v.icon) ~= nil then
+					if YRP.GetDesignIcon( v.icon) != nil then
 						surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 						surface.SetMaterial(YRP.GetDesignIcon( v.icon) )
 						surface.DrawTexturedRect( br, br, ph - 2 * br, ph - 2 * br)

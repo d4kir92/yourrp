@@ -22,19 +22,19 @@ function PANEL:Init()
 end
 
 function PANEL:Think()
-	if self.header:GetWide() ~= self:GetWide() then
+	if self.header:GetWide() != self:GetWide() then
 		self.header:SetWide(self:GetWide() )
 	end
 
-	if self.numberwang:GetWide() ~= self:GetWide() then
+	if self.numberwang:GetWide() != self:GetWide() then
 		self.numberwang:SetWide(self:GetWide() )
 	end
 
-	if self.numberwang:GetTall() ~= self:GetTall() - self.header:GetTall() then
+	if self.numberwang:GetTall() != self:GetTall() - self.header:GetTall() then
 		self.numberwang:SetTall(self:GetTall() - self.header:GetTall() )
 	end
 
-	if self.numberwang:GetPos() ~= self:GetPos() + YRP.ctr(50) then
+	if self.numberwang:GetPos() != self:GetPos() + YRP.ctr(50) then
 		self.numberwang:SetPos(0, self:GetPos() + YRP.ctr(50) )
 	end
 end

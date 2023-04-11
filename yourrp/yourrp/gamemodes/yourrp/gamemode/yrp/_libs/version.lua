@@ -187,7 +187,7 @@ end
 
 local yrp_check = yrp_check or 0
 function YRPCheckVersion( from )
-	if not YRPIsVersionSet() then
+	if !YRPIsVersionSet() then
 		timer.Simple( 1, function()
 			YRPCheckVersion( "retry Version not set" )
 		end )
@@ -204,7 +204,7 @@ function YRPCheckVersion( from )
 	if CurTime() < yrp_check then
 		return
 	end
-	
+
 	yrp_check = CurTime() + 60
 	http.Fetch( "https://docs.google.com/spreadsheets/d/e/2PACX-1vR3aN8b4y0qZbZBBQLkqBy4dKFzKCnPt4cOMp7ghUaq5Bzxf-BtlEc0fruUI18IK-csODjrK6wcpFCX/pubhtml?gid=0&single=true",
 	function( body, len, headers, code)
@@ -212,14 +212,14 @@ function YRPCheckVersion( from )
 			if code == 200 then
 				local serverart = string.upper(GAMEMODE.VersionSort or "outdated")
 
-				if serverart == "OUTDATED" then	
-					GAMEMODE.versioncolor = Color( 0, 255, 0 )	
-					yrpoutdated = true	
-					serverart = "CANARY"	
-				else	
-					yrpoutdated = false	
+				if serverart == "OUTDATED" then
+					GAMEMODE.versioncolor = Color( 0, 255, 0 )
+					yrpoutdated = true
+					serverart = "CANARY"
+				else
+					yrpoutdated = false
 				end
-				
+
 				on.stable = YRPGetVersionValue( body, "V" .. serverart .. "STABLE" )
 				on.beta = YRPGetVersionValue( body, "V" .. serverart .. "BETA" )
 				on.canary = YRPGetVersionValue( body, "V" .. serverart .. "CANARY" )

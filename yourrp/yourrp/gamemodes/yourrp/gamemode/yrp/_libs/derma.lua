@@ -54,14 +54,14 @@ function ScrV( dec)
 end
 
 function HudBox(tab)
-	tab = tab or {}
-	tab.r = tab.r or 0
-	tab.x = tab.x or 0
-	tab.y = tab.y or 0
-	tab.w = tab.w or 100
-	tab.h = tab.h or 100
-	tab.color = tab.color or Color( 0, 255, 0 )
-	draw.RoundedBox(tab.r, tab.x, tab.y, tab.w, tab.h, tab.color)
+	local vTab = tab or {}
+	vTab.r = vTab.r or 0
+	vTab.x = vTab.x or 0
+	vTab.y = vTab.y or 0
+	vTab.w = vTab.w or 100
+	vTab.h = vTab.h or 100
+	vTab.color = vTab.color or Color( 0, 255, 0 )
+	draw.RoundedBox(vTab.r, vTab.x, vTab.y, vTab.w, vTab.h, vTab.color)
 end
 
 function HudBoxBr(tab)
@@ -100,12 +100,12 @@ function HudBoxBrRounded(tab)
 	draw.RoundedBox(0, tab.x, tab.y + tab.r, tab.br, tab.h - 2 * tab.r, tab.color)
 
 	-- LD
-	local center = Vector(tab.x + tab.r, tab.y + tab.h - tab.r, 0)
-	local scale = Vector(tab.r, tab.r, 0)
-	local segmentdist = 360 / ( 2 * math.pi * math.max( scale.x, scale.y ) / 2 )
+	local center2 = Vector(tab.x + tab.r, tab.y + tab.h - tab.r, 0)
+	local scale2 = Vector(tab.r, tab.r, 0)
+	local segmentdist2 = 360 / ( 2 * math.pi * math.max( scale2.x, scale2.y ) / 2 )
 	surface.SetDrawColor(tab.color)
-	for a = 180, 180 + 90, segmentdist do
-		surface.DrawLine( center.x + math.cos( math.rad( a ) ) * scale.x, center.y - math.sin( math.rad( a ) ) * scale.y, center.x + math.cos( math.rad( a + segmentdist ) ) * scale.x, center.y - math.sin( math.rad( a + segmentdist ) ) * scale.y )
+	for a = 180, 180 + 90, segmentdist2 do
+		surface.DrawLine( center2.x + math.cos( math.rad( a ) ) * scale2.x, center2.y - math.sin( math.rad( a ) ) * scale2.y, center2.x + math.cos( math.rad( a + segmentdist2 ) ) * scale2.x, center2.y - math.sin( math.rad( a + segmentdist2 ) ) * scale2.y )
 	end
 
 	-- MID
@@ -244,12 +244,12 @@ function GetHTMLImage(url, w, h)
 end
 
 function YRPRegisterDesign(tab)
-	if tab.name ~= nil then
+	if tab.name != nil then
 		yrp_if[tab.name] = {}
 		yrp_if[tab.name].author = tab.author or "NO AUTHOR"
 		yrp_if[tab.name].name = tab.name or "NO Name"
 		yrp_if[tab.name].textFont = tab.textFont or "Y_18_500"
-	end	
+	end
 end
 
 function RegisterPanelFunction(name, func)
@@ -276,7 +276,7 @@ function interfaceDesign()
 	local lply = LocalPlayer()
 	local design = lply:GetYRPString( "interface_design", "Material Design 1" )
 
-	if yrp_if[design] ~= nil then
+	if yrp_if[design] != nil then
 		return design
 	else
 		return "Material Design 1"
@@ -435,14 +435,14 @@ YRP.AddDesignIcon( "signal1", "vgui/material/icon_signal01.png" )
 YRP.AddDesignIcon( "signal2", "vgui/material/icon_signal02.png" )
 YRP.AddDesignIcon( "signal3", "vgui/material/icon_signal03.png" )
 
-local files, folders = file.Find( "materials/icons/*", "GAME" )
+local _, folders = file.Find( "materials/icons/*", "GAME" )
 for _, folder in pairs(folders) do
 	local _, f_folders = file.Find( "materials/icons/" .. folder .. "/*", "GAME" )
 
 	for _, f_folder in pairs(f_folders) do
 
 		local f_files, _ = file.Find( "materials/icons/" .. folder .. "/" .. f_folder .. "/*.png", "GAME" )
-		
+
 		for i, f_file in pairs(f_files) do
 			local f = "materials/icons/" .. folder .. "/" .. f_folder .. "/" .. f_file
 			local name = string.Explode( "/", f_file)
@@ -462,23 +462,23 @@ for i, flag in pairs(flags) do
 end
 
 function YRP.LoadDesignIcon()
-	if !m_adding and _w_icons[m_counter + 1] ~= nil then
-		
+	if !m_adding and _w_icons[m_counter + 1] != nil then
+
 		m_adding = true
 		m_counter = m_counter + 1
 
 		local name = _w_icons[m_counter][1]
 		local path = _w_icons[m_counter][2]
 
-		local mat, ti = Material(path, "noclamp" )
+		local mat, _ = Material(path, "noclamp" )
 		_icons[name] = mat
 
 		m_adding = false
 
-		if _w_icons[m_counter + 1] ~= nil then
+		if _w_icons[m_counter + 1] != nil then
 			YRP.LoadDesignIcon()
 		end
-	elseif m_counter ~= m_w_counter then
+	elseif m_counter != m_w_counter then
 		timer.Simple(1, function()
 			YRP.LoadDesignIcon()
 		end)
@@ -491,10 +491,8 @@ end)
 YRP.AddDesignIcon( "clear", "vgui/material/icon_clear.png" )
 
 function YRP.GetDesignIcon(name)
-	if _icons[name] ~= nil then
-		if tostring(_icons[name]) != "Material [___error]" then
-			return _icons[name]
-		end
+	if _icons[name] != nil and tostring(_icons[name]) != "Material [___error]" then
+		return _icons[name]
 	end
 	return _icons["clear"]
 end
@@ -514,21 +512,21 @@ local _get_design = true
 function surfaceWindow( self, pw, ph, title)
 	local _title = title or ""
 
-	if yrp_if[interfaceDesign()] ~= nil and yrp_if[interfaceDesign()]["DFrame"] then
+	if yrp_if[interfaceDesign()] != nil and yrp_if[interfaceDesign()]["DFrame"] then
 		yrp_if[interfaceDesign()]["DFrame"]( self, pw, ph, _title)
 	end
 end
 
 function surfacePanel( derm, pw, ph, text, color, px, py, ax, ay)
 	local _text = text or ""
-	if yrp_if and yrp_if[interfaceDesign()] ~= nil and yrp_if[interfaceDesign()] and yrp_if[interfaceDesign()]["DPanel"] then
+	if yrp_if and yrp_if[interfaceDesign()] != nil and yrp_if[interfaceDesign()] and yrp_if[interfaceDesign()]["DPanel"] then
 		yrp_if[interfaceDesign()]["DPanel"]( derm, pw, ph, _text, color, px, py, ax, ay)
 	end
 end
 
 function surfaceCheckBox( self, pw, ph, icon)
-	if yrp_if[interfaceDesign()] ~= nil then
-		if yrp_if[interfaceDesign()]["DCheckBox"] ~= nil then
+	if yrp_if[interfaceDesign()] != nil then
+		if yrp_if[interfaceDesign()]["DCheckBox"] != nil then
 			yrp_if[interfaceDesign()]["DCheckBox"]( self, pw, ph, icon)
 		else
 			local th = 4
@@ -541,7 +539,7 @@ function surfaceCheckBox( self, pw, ph, icon)
 
 			if self:GetChecked() then
 				br = 4
-				if YRP.GetDesignIcon(icon) ~= nil then
+				if YRP.GetDesignIcon(icon) != nil then
 					surface.SetDrawColor( Color( 0, 255, 0 ) )
 					surface.SetMaterial(YRP.GetDesignIcon(icon) )
 					surface.DrawTexturedRect(YRP.ctr( br), YRP.ctr( br), pw - YRP.ctr( br * 2), ph - YRP.ctr(8) )
@@ -559,7 +557,7 @@ end
 --
 local _menuOpen = false
 function YRPIsNoMenuOpen()
-	if not vgui.CursorVisible() then
+	if !vgui.CursorVisible() then
 		return true
 	else
 		return false
@@ -625,7 +623,7 @@ function paintInv( self, pw, ph, text1, text2)
 	paintBr(pw, ph, _brC)
 	draw.SimpleTextOutlined(YRP.lang_string(text1), "DermaDefault", YRP.ctr(15), ph - YRP.ctr(10), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 
-	if text2 ~= nil then
+	if text2 != nil then
 		draw.SimpleTextOutlined(YRP.lang_string(text2), "DermaDefault", YRP.ctr(15), YRP.ctr(10), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, YRP.ctr(1), Color( 0, 0, 0, 255 ) )
 	end
 end
@@ -848,7 +846,7 @@ function surfaceText(mytext, font, x, y, color, ax, ay, br)
 		col_br = Color( 255, 255, 255, color.a )
 	end
 
-	if not br then
+	if !br then
 		draw.SimpleText(mytext, font, x, y, color, ax, ay, 0, Color( 255, 255, 255, 0) )
 	else
 		draw.SimpleText(mytext, font, x, y, color, ax, ay, 1, col_br)
@@ -858,11 +856,11 @@ end
 function createVGUI( art, parent, w, h, x, y)
 	local tmp = vgui.Create( art, parent, nil)
 
-	if w ~= nil and h ~= nil then
+	if w != nil and h != nil then
 		tmp:SetSize(YRP.ctr(w), YRP.ctr(h) )
 	end
 
-	if x ~= nil and y ~= nil then
+	if x != nil and y != nil then
 		tmp:SetPos(YRP.ctr(x), YRP.ctr(y) )
 	end
 
@@ -953,12 +951,12 @@ function createMDMenu(parent, w, h, x, y)
 		self.cats[cat] = {}
 	end
 
-	function tmp:AddSite(hook, site, cat, icon)
+	function tmp:AddSite(hoo, site, cat, icon)
 		local material = Material(icon)
 		local tmpNrMax = #tmp.cats[cat]
 		local tmpNr = tmpNrMax + 1
 		self.cats[cat][tmpNr] = {}
-		self.cats[cat][tmpNr].hook = hook
+		self.cats[cat][tmpNr].hook = hoo
 		self.cats[cat][tmpNr].site = site
 		self.cats[cat][tmpNr].material = material
 	end
@@ -971,7 +969,7 @@ function createMDMenu(parent, w, h, x, y)
 
 	function tmp:SwitchToSite(_hook)
 		self.site:Clear()
-		
+
 		self.lastsite = _hook
 		tmp.cursite = tmp.sites[_hook].site
 		tmp:SetTitle(string.upper(YRP.lang_string(tmp.sites[_hook].site) ))
@@ -1010,7 +1008,7 @@ function createMDMenu(parent, w, h, x, y)
 			tmp.menulist:AddItem(tmpCat)
 
 			--posY = posY + 50 + 10
-			if tmp.cats[v] ~= nil then
+			if tmp.cats[v] != nil then
 				for _l, _w in pairs(tmp.cats[v]) do
 					tmp.sites[_w.hook] = YRPCreateD( "DButton", nil, IconSize, IconSize, BR, YRP.ctr(posY) )
 					local tmp2 = tmp.sites[_w.hook]
@@ -1029,7 +1027,7 @@ function createMDMenu(parent, w, h, x, y)
 
 						draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 
-						if _w.material ~= nil then
+						if _w.material != nil then
 							surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 							surface.SetMaterial(_w.material)
 							surface.DrawTexturedRect(BR, BR, IconSize - 2 * BR, IconSize - 2 * BR)
@@ -1472,20 +1470,20 @@ PANEL_SHADOW_Distance = 0
 --Global table
 if BSHADOWS == nil then
 	BSHADOWS = {}
-	
+
 	--The original drawing layer
 	BSHADOWS.RenderTarget = GetRenderTarget( "bshadows_original", ScrW(), ScrH() )
-	
+
 	--The shadow layer
 	BSHADOWS.RenderTarget2 = GetRenderTarget( "bshadows_shadow",  ScrW(), ScrH() )
-	
+
 	--The matarial to draw the render targets on
 	BSHADOWS.ShadowMaterial = CreateMaterial( "bshadows","UnlitGeneric",{
 		["$translucent"] = 1,
 		["$vertexalpha"] = 1,
 		["alpha"] = 1
 	})
-	
+
 	--When we copy the rendertarget it retains color, using this allows up to force any drawing to be black
 	--Then we can blur it to create the shadow effect
 	BSHADOWS.ShadowMaterialGrayscale = CreateMaterial( "bshadows_grayscale","UnlitGeneric",{
@@ -1495,112 +1493,112 @@ if BSHADOWS == nil then
 		["$color"] = "0 0 0",
 		["$color2"] = "0 0 0"
 	})
-	
+
 	--Call this to begin drawing a shadow
 	BSHADOWS.BeginShadow = function()
-	
+
 		--Set the render target so all draw calls draw onto the render target instead of the screen
 		render.PushRenderTarget(BSHADOWS.RenderTarget)
-	
+
 		--Clear is so that theres no color or alpha
 		render.OverrideAlphaWriteEnable(true, true)
 		render.Clear(0,0,0,0)
 		render.OverrideAlphaWriteEnable(false, false)
-	
+
 		--Start Cam2D as where drawing on a flat surface 
 		cam.Start2D()
-	
+
 		--Now leave the rest to the user to draw onto the surface
 	end
-	
+
 	--This will draw the shadow, and mirror any other draw calls the happened during drawing the shadow
 	BSHADOWS.EndShadow = function(intensity, spread, blur, opacity, direction, distance, _shadowOnly)
-		
+
 		--Set default opcaity
 		opacity = opacity or 255
 		direction = direction or 0
 		distance = distance or 0
 		_shadowOnly = _shadowOnly or false
-	
+
 		--Copy this render target to the other
 		render.CopyRenderTargetToTexture(BSHADOWS.RenderTarget2)
-	
+
 		--Blur the second render target
 		if blur > 0 then
 			render.OverrideAlphaWriteEnable(true, true)
 			render.BlurRenderTarget(BSHADOWS.RenderTarget2, spread, spread, blur)
-			render.OverrideAlphaWriteEnable(false, false) 
+			render.OverrideAlphaWriteEnable(false, false)
 		end
-	
+
 		--First remove the render target that the user drew
 		render.PopRenderTarget()
-	
+
 		--Now update the material to what was drawn
-		BSHADOWS.ShadowMaterial:SetTexture('$basetexture', BSHADOWS.RenderTarget)
-	
+		BSHADOWS.ShadowMaterial:SetTexture("$basetexture", BSHADOWS.RenderTarget)
+
 		--Now update the material to the shadow render target
-		BSHADOWS.ShadowMaterialGrayscale:SetTexture('$basetexture', BSHADOWS.RenderTarget2)
-	
+		BSHADOWS.ShadowMaterialGrayscale:SetTexture("$basetexture", BSHADOWS.RenderTarget2)
+
 		--Work out shadow offsets
-		local xOffset = math.sin(math.rad( direction) ) * distance 
+		local xOffset = math.sin(math.rad( direction) ) * distance
 		local yOffset = math.cos(math.rad( direction) ) * distance
-	
+
 		--Now draw the shadow
-		BSHADOWS.ShadowMaterialGrayscale:SetFloat( "$alpha", opacity/255) --set the alpha of the shadow
+		BSHADOWS.ShadowMaterialGrayscale:SetFloat( "$alpha", opacity / 255) --set the alpha of the shadow
 		render.SetMaterial(BSHADOWS.ShadowMaterialGrayscale)
 		if intensity then
 			for i = 1 , math.ceil(intensity) do
 				render.DrawScreenQuadEx(xOffset, yOffset, ScrW(), ScrH() )
 			end
 		end
-	
-		if not _shadowOnly then
+
+		if !_shadowOnly then
 			--Now draw the original
-			BSHADOWS.ShadowMaterial:SetTexture('$basetexture', BSHADOWS.RenderTarget)
+			BSHADOWS.ShadowMaterial:SetTexture("$basetexture", BSHADOWS.RenderTarget)
 			render.SetMaterial(BSHADOWS.ShadowMaterial)
 			render.DrawScreenQuad()
 		end
-	
+
 		cam.End2D()
 	end
-	
+
 	--This will draw a shadow based on the texture you passed it.
 	BSHADOWS.DrawShadowTexture = function(texture, intensity, spread, blur, opacity, direction, distance, shadowOnly)
-	
+
 		--Set default opcaity
 		opacity = opacity or 255
 		direction = direction or 0
 		distance = distance or 0
 		shadowOnly = shadowOnly or false
-	
+
 		--Copy the texture we wish to create a shadow for to the shadow render target
 		render.CopyTexture(texture, BSHADOWS.RenderTarget2)
-	
+
 		--Blur the second render target
 		if blur > 0 then
 			render.PushRenderTarget(BSHADOWS.RenderTarget2)
 			render.OverrideAlphaWriteEnable(true, true)
 			render.BlurRenderTarget(BSHADOWS.RenderTarget2, spread, spread, blur)
-			render.OverrideAlphaWriteEnable(false, false) 
+			render.OverrideAlphaWriteEnable(false, false)
 			render.PopRenderTarget()
 		end
-	
+
 		--Now update the material to the shadow render target
-		BSHADOWS.ShadowMaterialGrayscale:SetTexture('$basetexture', BSHADOWS.RenderTarget2)
-	
+		BSHADOWS.ShadowMaterialGrayscale:SetTexture("$basetexture", BSHADOWS.RenderTarget2)
+
 		--Work out shadow offsets
-		local xOffset = math.sin(math.rad( direction) ) * distance 
+		local xOffset = math.sin(math.rad( direction) ) * distance
 		local yOffset = math.cos(math.rad( direction) ) * distance
-	
+
 		--Now draw the shadow 
-		BSHADOWS.ShadowMaterialGrayscale:SetFloat( "$alpha", opacity/255) --Set the alpha
+		BSHADOWS.ShadowMaterialGrayscale:SetFloat( "$alpha", opacity / 255) --Set the alpha
 		render.SetMaterial(BSHADOWS.ShadowMaterialGrayscale)
 		for i = 1 , math.ceil(intensity) do
 			render.DrawScreenQuadEx(xOffset, yOffset, ScrW(), ScrH() )
 		end
-		if not shadowOnly then
+		if !shadowOnly then
 			--Now draw the original
-			BSHADOWS.ShadowMaterial:SetTexture('$basetexture', texture)
+			BSHADOWS.ShadowMaterial:SetTexture("$basetexture", texture)
 			render.SetMaterial(BSHADOWS.ShadowMaterial)
 			render.DrawScreenQuad()
 		end
