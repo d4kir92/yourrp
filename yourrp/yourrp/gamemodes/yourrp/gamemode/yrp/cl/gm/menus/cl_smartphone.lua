@@ -1,5 +1,4 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
 local sp = sp or {}
 
 function IsSpVisible()
@@ -11,23 +10,21 @@ function GetSpTable()
 end
 
 function openSP()
-	if GetGlobalYRPBool( "bool_smartphone_system" ) then
-		if YRPIsNoMenuOpen() and (!sp.visible or sp.visible == nil) then
-			YRPOpenMenu()
-			local _w = ctrb(560)
-			local _h = ctrb(1000)
-			local _x = ScrW() - (_w + ctrb(25) )
-			local _y = ScrH() - (_h)
-			sp = createSmartphone(nil, _w, _h, _x, _y)
-			sp.visible = true
-		end
+	if GetGlobalYRPBool("bool_smartphone_system") and YRPIsNoMenuOpen() and (not sp.visible or sp.visible == nil) then
+		YRPOpenMenu()
+		local _w = ctrb(560)
+		local _h = ctrb(1000)
+		local _x = ScrW() - (_w + ctrb(25))
+		local _y = ScrH() - _h
+		sp = createSmartphone(nil, _w, _h, _x, _y)
+		sp.visible = true
 	end
 end
 
 function closeSP()
 	YRPCloseMenu()
 
-	if sp != nil and sp.visible then
+	if sp ~= nil and sp.visible then
 		sp.visible = false
 		sp:Close()
 	end

@@ -1,79 +1,76 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
 local YRP_SMARTPHONE = {}
-YRP_SMARTPHONE["color_back"] = Color( 0, 0, 0, 255 )
-YRP_SMARTPHONE["color_case"] = Color( 0, 0, 0, 255 )
-
+YRP_SMARTPHONE["color_back"] = Color(0, 0, 0, 255)
+YRP_SMARTPHONE["color_case"] = Color(0, 0, 0, 255)
 local yrp_smartphone = {}
-
 local dbfile = "yrp_smartphone/yrp_smartphone.json"
 
-function YRPSmartphoneMSG( msg, col )
-	local color = col or Color( 0, 255, 0 )
-	MsgC( color, "[YourRP] [SMARTPHONE] " .. msg .. "\n" )
+function YRPSmartphoneMSG(msg, col)
+	local color = col or Color(0, 255, 0)
+	MsgC(color, "[YourRP] [SMARTPHONE] " .. msg .. "\n")
 end
 
 function YRPSmartphoneCheckFile()
-	if !file.Exists( "yrp_smartphone", "DATA" ) then
-		YRPSmartphoneMSG( "Created Tutorial Folder" )
-		file.CreateDir( "yrp_smartphone" )
+	if not file.Exists("yrp_smartphone", "DATA") then
+		YRPSmartphoneMSG("Created Tutorial Folder")
+		file.CreateDir("yrp_smartphone")
 	end
-	if !file.Exists( dbfile, "DATA" ) then
-		YRPSmartphoneMSG( "Created New Tutorial File" )
-		file.Write( dbfile, util.TableToJSON( YRP_SMARTPHONE, true ) )
+
+	if not file.Exists(dbfile, "DATA") then
+		YRPSmartphoneMSG("Created New Tutorial File")
+		file.Write(dbfile, util.TableToJSON(YRP_SMARTPHONE, true))
 	end
 end
 
 function YRPSmartphoneLoad()
 	YRPSmartphoneCheckFile()
-	YRPSmartphoneMSG( "Load Smartphone" )
-	
-	if file.Exists( dbfile, "DATA" ) then
-		yrp_smartphone = util.JSONToTable( file.Read( dbfile, "DATA" ) )
-		for i, v in pairs( yrp_smartphone ) do
-			yrp_smartphone[i] = YRPTableToColor( v )
+	YRPSmartphoneMSG("Load Smartphone")
+
+	if file.Exists(dbfile, "DATA") then
+		yrp_smartphone = util.JSONToTable(file.Read(dbfile, "DATA"))
+
+		for i, v in pairs(yrp_smartphone) do
+			yrp_smartphone[i] = YRPTableToColor(v)
 		end
 	else
-		YRPSmartphoneMSG( "FAILED TO LOAD SMARTPHONE COLORS", Color( 0, 255, 0 ) )
+		YRPSmartphoneMSG("FAILED TO LOAD SMARTPHONE COLORS", Color(0, 255, 0))
 	end
 end
 
 function YRPSmartphoneSave()
 	YRPSmartphoneCheckFile()
-	YRPSmartphoneMSG( "Save Smartphone" )
-	
-	file.Write( dbfile, util.TableToJSON( yrp_smartphone, true ) )
+	YRPSmartphoneMSG("Save Smartphone")
+	file.Write(dbfile, util.TableToJSON(yrp_smartphone, true))
 end
 
-function setSpBackColor( color )
+function setSpBackColor(color)
 	yrp_smartphone["color_back"] = color
 	YRPSmartphoneSave()
 end
 
 function YRPGetSpBackColor()
-	if yrp_smartphone["color_back"] != nil and type( yrp_smartphone["color_back"] ) == "table" then
+	if yrp_smartphone["color_back"] ~= nil and type(yrp_smartphone["color_back"]) == "table" then
 		return yrp_smartphone["color_back"]
 	else
-		return Color( 255, 0, 0, 255 )
+		return Color(255, 0, 0, 255)
 	end
 end
 
-function setSpCaseColor( color )
+function setSpCaseColor(color)
 	yrp_smartphone["color_case"] = color
 	YRPSmartphoneSave()
 end
 
 function YRPGetSpCaseColor()
-	if yrp_smartphone["color_case"] != nil and type( yrp_smartphone["color_case"] ) == "table" then
+	if yrp_smartphone["color_case"] ~= nil and type(yrp_smartphone["color_case"]) == "table" then
 		return yrp_smartphone["color_case"]
 	else
-		return Color( 255, 0, 0, 255 )
+		return Color(255, 0, 0, 255)
 	end
 end
-
-
 
 function YRPCheckSmartphone()
 	YRPSmartphoneLoad()
 end
+
 YRPCheckSmartphone()

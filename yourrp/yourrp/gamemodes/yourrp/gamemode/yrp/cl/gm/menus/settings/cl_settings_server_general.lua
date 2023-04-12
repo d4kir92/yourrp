@@ -722,7 +722,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 						surface.DrawLine(0, 0, lon, lon)
 					end
 
-					--if ele != "background" and !string.find(ele,  "box" ) then
+					--if ele ~= "background" and !string.find(ele,  "box" ) then
 					if not string.find(ele, "logo") or GetGlobalYRPBool("bool_" .. ele .. "_visible", false) == false then
 						local bgcolor = Color(255, 0, 0, a1)
 

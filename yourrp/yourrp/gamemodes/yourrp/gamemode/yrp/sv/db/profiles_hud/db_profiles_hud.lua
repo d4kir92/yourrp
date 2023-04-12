@@ -1,84 +1,93 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
-
 local DATABASE_NAME = "yrp_profiles_hud"
-
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "profile_name", "TEXT DEFAULT ''" )
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''" )
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''" )
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "profile_name", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
 
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
-
 function GetHudProfiles()
-	return YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'name'" )
+	return YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'name'")
 end
 
-util.AddNetworkString( "nws_yrp_change_to_hud_profile" )
-net.Receive( "nws_yrp_change_to_hud_profile", function()
+util.AddNetworkString("nws_yrp_change_to_hud_profile")
+
+net.Receive("nws_yrp_change_to_hud_profile", function()
 	local profile_name = net.ReadString()
 
-	YRP_SQL_UPDATE( "yrp_design", {["string_hud_profile"] = profile_name}, "uniqueID = 1" )
-	SetGlobalYRPString( "string_hud_profile", profile_name)
+	YRP_SQL_UPDATE("yrp_design", {
+		["string_hud_profile"] = profile_name
+	}, "uniqueID = 1")
 
-	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. profile_name .. "'" )
+	SetGlobalYRPString("string_hud_profile", profile_name)
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. profile_name .. "'")
+
 	if IsNotNilAndNotFalse(tab) then
 		for i, v in pairs(tab) do
 			local name = v.name
 			local value = v.value
-			YRP_SQL_UPDATE( "yrp_hud", {["value"] = value}, "name = '" .. name .. "'" )
+
+			YRP_SQL_UPDATE("yrp_hud", {
+				["value"] = value
+			}, "name = '" .. name .. "'")
 		end
 
 		HudLoadoutAll()
 	else
-		YRP.msg( "note", "HUD Profile: " .. profile_name .. " (not found)" )
+		YRP.msg("note", "HUD Profile: " .. profile_name .. " (not found)")
 	end
 end)
 
 function HudToCode(name)
-	MsgC( Color( 255, 255, 255, 255 ), "local " .. string.Replace(name, " ", "_" ) .. " = {}" .. "\n" )
-	local tab = YRP_SQL_SELECT( "yrp_hud", "*", nil)
-	for i, v in SortedPairsByMemberValue(tab, "name" ) do
-		local prefix = string.Replace(name, " ", "_" ) .. "." .. ""
-		v.value = tonumber( v.value) or v.value
-		if isnumber( v.value) then
-			MsgC( Color( 255, 255, 255, 255 ), prefix .. v.name .. " = " .. v.value .. "\n" )
-		elseif isstring( v.value) then
-			MsgC( Color( 255, 255, 255, 255 ), prefix .. v.name .. " = '" .. v.value .. "'" .. "\n" )
+	MsgC(Color(255, 255, 255, 255), "local " .. string.Replace(name, " ", "_") .. " = {}" .. "\n")
+	local tab = YRP_SQL_SELECT("yrp_hud", "*", nil)
+
+	for i, v in SortedPairsByMemberValue(tab, "name") do
+		local prefix = string.Replace(name, " ", "_") .. "." .. ""
+		v.value = tonumber(v.value) or v.value
+
+		if isnumber(v.value) then
+			MsgC(Color(255, 255, 255, 255), prefix .. v.name .. " = " .. v.value .. "\n")
+		elseif isstring(v.value) then
+			MsgC(Color(255, 255, 255, 255), prefix .. v.name .. " = '" .. v.value .. "'" .. "\n")
 		end
 	end
 end
+
 --HudToCode( "Identifycard" )
-
 local HUDPROFILEVERSION = 1
-
 YRPHUDS = YRPHUDS or {}
 
 function HudProfileToDataBase(name, tab)
-	YRP.msg( "db", "Load Hud Profile: " .. name, nil)
-	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. name .. "'" )
+	YRP.msg("db", "Load Hud Profile: " .. name, nil)
+	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. name .. "'")
+
 	if dbtab == nil then
-		YRP.msg( "db", "Missing Hud Profile: " .. name, nil, true)
-		YRP_SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. "name" .. "', '" .. name .. "'" )
+		YRP.msg("db", "Missing Hud Profile: " .. name, nil, true)
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. "name" .. "', '" .. name .. "'")
+
 		for i, v in pairs(tab) do
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. i .. "', '" .. v .. "'" )
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. i .. "', '" .. v .. "'")
 		end
 	else
-		if tab.Version != HUDPROFILEVERSION then
-			YRP.msg( "db", "Updating Hud Profile: " .. name, nil, true)
+		if tab.Version ~= HUDPROFILEVERSION then
+			YRP.msg("db", "Updating Hud Profile: " .. name, nil, true)
+
 			for i, v in pairs(tab) do
-				YRP_SQL_UPDATE(DATABASE_NAME, {["value"] = v}, "name = '" .. i .. "' AND profile_name = '" .. name .. "'" )
+				YRP_SQL_UPDATE(DATABASE_NAME, {
+					["value"] = v
+				}, "name = '" .. i .. "' AND profile_name = '" .. name .. "'")
 			end
 		end
 	end
-	YRP.msg( "db", "Loaded Hud Profile: " .. name, nil)
+
+	YRP.msg("db", "Loaded Hud Profile: " .. name, nil)
 end
 
 function ProfilesYourRPDefault()
 	if YRPHUDS.YourRP_Default == nil then
 		YRPHUDS.YourRP_Default = true
-
 		local YourRP_Default = {}
 		YourRP_Default.bool_HUD_AB_BACK = 1
 		YourRP_Default.bool_HUD_AB_BORD = 0
@@ -841,16 +850,15 @@ function ProfilesYourRPDefault()
 		YourRP_Default.int_HUD_XP_AY = 1
 		YourRP_Default.int_HUD_XP_TS = 18
 		YourRP_Default.Version = 1
-
-		HudProfileToDataBase( "YourRP Default", YourRP_Default)
+		HudProfileToDataBase("YourRP Default", YourRP_Default)
 	end
 end
+
 ProfilesYourRPDefault()
 
 function ProfilesTopBar()
 	if YRPHUDS.TopBar == nil then
 		YRPHUDS.TopBar = true
-	
 		local TopBar = {}
 		TopBar.bool_HUD_AB_BACK = 1
 		TopBar.bool_HUD_AB_BORD = 0
@@ -1613,15 +1621,15 @@ function ProfilesTopBar()
 		TopBar.int_HUD_XP_AY = 1
 		TopBar.int_HUD_XP_TS = 18
 		TopBar.Version = 1
-		HudProfileToDataBase( "Top Bar", TopBar)
+		HudProfileToDataBase("Top Bar", TopBar)
 	end
 end
+
 ProfilesTopBar()
 
 function ProfilesIdentifycard()
 	if YRPHUDS.Identifycard == nil then
 		YRPHUDS.Identifycard = true
-
 		local Identifycard = {}
 		Identifycard.bool_HUD_AB_BACK = 1
 		Identifycard.bool_HUD_AB_BORD = 0
@@ -2444,8 +2452,8 @@ function ProfilesIdentifycard()
 		Identifycard.int_HUD_XP_AY = 1
 		Identifycard.int_HUD_XP_TS = 18
 		Identifycard.Version = 1
-
-		HudProfileToDataBase( "Identifycard", Identifycard)
+		HudProfileToDataBase("Identifycard", Identifycard)
 	end
 end
+
 ProfilesIdentifycard()
