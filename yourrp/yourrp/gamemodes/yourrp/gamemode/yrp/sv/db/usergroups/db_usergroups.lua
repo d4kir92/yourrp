@@ -1566,7 +1566,7 @@ function GM:PhysgunPickup(pl, ent)
 		if tobool(tabUsergroup.bool_physgunpickup) then
 			if EntBlacklisted(ent) and not tobool(tabUsergroup.bool_physgunpickupignoreblacklist) then
 				YRPNotiToPlyDisallowed(pl, "LID_physgunpickupblacklist")
-				YRP.msg("note", "[PhysgunPickup] [" .. ply:RPName() .. "] not allowed (blacklisted).")
+				YRP.msg("note", "[PhysgunPickup] [" .. pl:RPName() .. "] not allowed (blacklisted).")
 
 				return false
 			elseif ent:IsPlayer() then
@@ -1575,13 +1575,13 @@ function GM:PhysgunPickup(pl, ent)
 						return true
 					else
 						YRPNotiToPlyDisallowed(pl, "LID_physgunpickuprank")
-						YRP.msg("note", "[PhysgunPickup] [" .. ply:RPName() .. "] not allowed to pickup higher rank Player.")
+						YRP.msg("note", "[PhysgunPickup] [" .. pl:RPName() .. "] not allowed to pickup higher rank Player.")
 
 						return false
 					end
 				else
 					YRPNotiToPlyDisallowed(pl, "LID_physgunpickupplayer")
-					YRP.msg("note", "[PhysgunPickup] [" .. ply:RPName() .. "] not allowed to pickup Player.")
+					YRP.msg("note", "[PhysgunPickup] [" .. pl:RPName() .. "] not allowed to pickup Player.")
 
 					return false
 				end
@@ -1590,7 +1590,7 @@ function GM:PhysgunPickup(pl, ent)
 					return true
 				else
 					YRPNotiToPlyDisallowed(pl, "LID_physgunpickupworld")
-					YRP.msg("note", "[PhysgunPickup] [" .. ply:RPName() .. "] not allowed to pickup world objects.")
+					YRP.msg("note", "[PhysgunPickup] [" .. pl:RPName() .. "] not allowed to pickup world objects.")
 
 					return false
 				end
@@ -1600,7 +1600,7 @@ function GM:PhysgunPickup(pl, ent)
 				return true
 			else
 				YRPNotiToPlyDisallowed(pl, "PICKUP ELSE")
-				YRP.msg("note", "[PhysgunPickup] [" .. ply:RPName() .. "] ELSE." .. tostring(ent))
+				YRP.msg("note", "[PhysgunPickup] [" .. pl:RPName() .. "] ELSE." .. tostring(ent))
 
 				return false
 			end
@@ -1608,17 +1608,17 @@ function GM:PhysgunPickup(pl, ent)
 			return true
 		else
 			YRPNotiToPlyDisallowed(pl, "LID_physgunpickup")
-			YRP.msg("note", "[PhysgunPickup] [" .. ply:RPName() .. "] failed! UserGroup not found in database.")
+			YRP.msg("note", "[PhysgunPickup] [" .. pl:RPName() .. "] failed! UserGroup not found in database.")
 
 			return false
 		end
 	else
-		YRP.msg("db", "[PhysgunPickup] [" .. ply:RPName() .. "] failed! UserGroup not found in database.")
+		YRP.msg("db", "[PhysgunPickup] [" .. pl:RPName() .. "] failed! UserGroup not found in database.")
 
 		return false
 	end
 
-	YRP.msg("note", "[PhysgunPickup] [" .. ply:RPName() .. "] failed! ERROR.")
+	YRP.msg("note", "[PhysgunPickup] [" .. pl:RPName() .. "] failed! ERROR.")
 
 	return false
 end

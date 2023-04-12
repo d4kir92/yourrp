@@ -663,15 +663,14 @@ local function InitYRPChat()
 					end
 
 					-- REMOVE CHAT COMMANDS
-					for i, obj in pairs(args) do
+					--[[for i, obj in pairs(args) do
 						local t = string.lower(type(obj))
 
 						if t == "string" and string.StartWith(obj, ": !") or string.StartWith(obj, ": /") then
 							YRP.msg("note", "HIDE COMMANDS: " .. tostring(obj))
 							--return false
 						end
-					end
-
+					end]]
 					for i, obj in pairs(args) do
 						local t = string.lower(type(obj))
 
