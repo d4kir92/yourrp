@@ -1784,7 +1784,8 @@ function Player:UserGroupLoadout()
 
 		for i, v in pairs(UG) do
 			if string.StartWith(i, "bool_") then
-				self:SetYRPBool(i, tobool(v))
+				local b = tobool(v) or false
+				self:SetYRPBool(i, b)
 			end
 		end
 
