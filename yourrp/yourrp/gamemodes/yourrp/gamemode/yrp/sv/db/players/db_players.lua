@@ -1075,7 +1075,7 @@ function canGetRole(ply, roleID, want)
 			end
 
 			-- Whitelist + Prerole
-			if tonumber(tmpTableRole.bool_whitelist) == 1 or tonumber(tmpTableRole.int_prerole) > 0 and not YRPIsWhitelisted(ply, roleID) then
+			if (tonumber(tmpTableRole.bool_whitelist) == 1 or tonumber(tmpTableRole.int_prerole) > 0) and not YRPIsWhitelisted(ply, roleID) then
 				local text = ply:YRPName() .. " is not whitelisted."
 				YRP.msg("gm", "[canGetRole] " .. text)
 				--YRPNotiToPly(text, ply)

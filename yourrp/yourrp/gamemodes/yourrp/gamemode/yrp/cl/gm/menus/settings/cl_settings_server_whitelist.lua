@@ -157,7 +157,7 @@ function BuildWhitelis(parent, tab)
 			end
 
 			local _whitelisButton = createVGUI("DButton", _whitelisFrame, 380, 50, 10, 400)
-			_whitelisButton:SetText(YRP.lang_string("LID_whitelisplayer"))
+			_whitelisButton:SetText(YRP.lang_string("LID_whitelistplayer"))
 
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID()) ~= nil then
@@ -222,7 +222,7 @@ function BuildWhitelis(parent, tab)
 			end
 
 			local _whitelisButton = createVGUI("DButton", _whitelisFrame, 380, 50, 10, 400)
-			_whitelisButton:SetText(YRP.lang_string("LID_whitelisplayer"))
+			_whitelisButton:SetText(YRP.lang_string("LID_whitelistplayer"))
 
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID()) ~= nil and _whitelisComboBox:GetOptionData(_whitelisComboBox:GetSelectedID()) ~= nil then
@@ -272,7 +272,7 @@ function BuildWhitelis(parent, tab)
 			end
 
 			local _whitelisButton = createVGUI("DButton", _whitelisFrame, 380, 50, 10, 400)
-			_whitelisButton:SetText(YRP.lang_string("LID_whitelisplayer"))
+			_whitelisButton:SetText(YRP.lang_string("LID_whitelistplayer"))
 
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID()) ~= nil then
