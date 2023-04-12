@@ -1,7 +1,5 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
 YRP = YRP or {}
-
 local yrp_cur_lang = "auto"
 local yrp_current_lang = {}
 yrp_current_lang.get_language = "Unknown"
@@ -10,28 +8,28 @@ yrp_current_lang["language"] = "Unknown"
 local yrp_button_info = {}
 local yrp_shorts = {}
 local _translationProgress = {}
-table.insert(yrp_shorts, "en" )
-table.insert(yrp_shorts, "de" )
-table.insert(yrp_shorts, "bg" )
-table.insert(yrp_shorts, "ca" )
-table.insert(yrp_shorts, "cs" )
-table.insert(yrp_shorts, "es" )
-table.insert(yrp_shorts, "fr" )
-table.insert(yrp_shorts, "hu" )
-table.insert(yrp_shorts, "it" )
-table.insert(yrp_shorts, "ja" )
-table.insert(yrp_shorts, "ko" )
-table.insert(yrp_shorts, "lt" )
-table.insert(yrp_shorts, "pl" )
-table.insert(yrp_shorts, "pt-br" )
-table.insert(yrp_shorts, "ro" )
-table.insert(yrp_shorts, "ru" )
-table.insert(yrp_shorts, "sv" )
-table.insert(yrp_shorts, "th" )
-table.insert(yrp_shorts, "tr" )
-table.insert(yrp_shorts, "uk" )
-table.insert(yrp_shorts, "zh-cn" )
-table.insert(yrp_shorts, "zh-tw" )
+table.insert(yrp_shorts, "en")
+table.insert(yrp_shorts, "de")
+table.insert(yrp_shorts, "bg")
+table.insert(yrp_shorts, "ca")
+table.insert(yrp_shorts, "cs")
+table.insert(yrp_shorts, "es")
+table.insert(yrp_shorts, "fr")
+table.insert(yrp_shorts, "hu")
+table.insert(yrp_shorts, "it")
+table.insert(yrp_shorts, "ja")
+table.insert(yrp_shorts, "ko")
+table.insert(yrp_shorts, "lt")
+table.insert(yrp_shorts, "pl")
+table.insert(yrp_shorts, "pt-br")
+table.insert(yrp_shorts, "ro")
+table.insert(yrp_shorts, "ru")
+table.insert(yrp_shorts, "sv")
+table.insert(yrp_shorts, "th")
+table.insert(yrp_shorts, "tr")
+table.insert(yrp_shorts, "uk")
+table.insert(yrp_shorts, "zh-cn")
+table.insert(yrp_shorts, "zh-tw")
 
 function YRP.GetLanguageAutoInfo()
 	local auto = {}
@@ -43,13 +41,13 @@ function YRP.GetLanguageAutoInfo()
 	return auto
 end
 
-AddCSLuaFile( "read_lang.lua" )
-include( "read_lang.lua" )
+AddCSLuaFile("read_lang.lua")
+include("read_lang.lua")
 
-function YRP.set_lang_string( var, str)
-	var = tostring( var)
+function YRP.set_lang_string(var, str)
+	var = tostring(var)
 	str = tostring(str)
-	yrp_current_lang[string.lower( var)] = str
+	yrp_current_lang[string.lower(var)] = str
 end
 
 function YRP.get_language_name(ls)
@@ -61,7 +59,7 @@ function YRP.get_language_name(ls)
 end
 
 function YRP.search_language()
-	yrp_current_lang.get_language = string.lower( GetConVar( "gmod_language" ):GetString() )
+	yrp_current_lang.get_language = string.lower(GetConVar("gmod_language"):GetString())
 end
 
 function YRP.replace_string(in_str, tab)
@@ -75,104 +73,111 @@ end
 local hascontent = false
 local hasfakecontent = false
 local searchedforcontent = false
+
 function YRPTestContentAddons()
-	if engine.GetAddons() and table.Count( engine.GetAddons() ) <= 0 then
-		YRP.msg( "note", "CAN'T GET ADDON LIST" )
+	if engine.GetAddons() and table.Count(engine.GetAddons()) <= 0 then
+		YRP.msg("note", "CAN'T GET ADDON LIST")
 	end
 
-	if (!searchedforcontent or hascontent == false) and SERVER and engine.GetAddons() and table.Count( engine.GetAddons() ) > 0 then
+	if (not searchedforcontent or hascontent == false) and SERVER and engine.GetAddons() and table.Count(engine.GetAddons()) > 0 then
 		searchedforcontent = true
-		for i, addon in pairs( engine.GetAddons() ) do
+
+		for i, addon in pairs(engine.GetAddons()) do
 			if addon.wsid then
-				addon.wsid = tostring( addon.wsid)
+				addon.wsid = tostring(addon.wsid)
+
 				if addon.wsid == "1189643820" then
 					hascontent = true
-					SetGlobalYRPBool( "yrp_hascontent", true)
-					if addon.mounted and addon.downloaded then
-						--
-					else
-						YRP.msg( "note", "YOURRP CONTENT IS NOT MOUNTED/DOWNLOADED!" )
+					SetGlobalYRPBool("yrp_hascontent", true)
+
+					if not addon.mounted or not addon.downloaded then
+						YRP.msg("note", "YOURRP CONTENT IS NOT MOUNTED/DOWNLOADED!")
 					end
 				elseif addon.wsid == "1964961396" and addon.mounted and addon.downloaded then
 					hasfakecontent = true
-					SetGlobalYRPBool( "hasfakecontent", true)
+					SetGlobalYRPBool("hasfakecontent", true)
 				end
 			else
-				YRP.msg( "note", "Addon list is broken?" )
+				YRP.msg("note", "Addon list is broken?")
 			end
 		end
 	end
 end
 
 function YRPTestDarkrpmodification()
-	if file.Exists( "addons/darkrpmodification", "GAME" ) then
-		SetGlobalYRPBool( "hasdarkrpmodification", true)
+	if file.Exists("addons/darkrpmodification", "GAME") then
+		SetGlobalYRPBool("hasdarkrpmodification", true)
 	else
-		SetGlobalYRPBool( "hasdarkrpmodification", false)
+		SetGlobalYRPBool("hasdarkrpmodification", false)
 	end
 end
 
-hook.Add( "PostGamemodeLoaded", "Check_YourRP_Content", function()
+hook.Add("PostGamemodeLoaded", "Check_YourRP_Content", function()
 	YRPTestContentAddons()
 	YRPTestDarkrpmodification()
-end )
+end)
 
 function HasYRPContent()
-	return GetGlobalYRPBool( "yrp_hascontent", false) or hascontent
+	return GetGlobalYRPBool("yrp_hascontent", false) or hascontent
 end
+
 function HasYRPFakeContent()
-	return GetGlobalYRPBool( "hasfakecontent", false) or hasfakecontent
+	return GetGlobalYRPBool("hasfakecontent", false) or hasfakecontent
 end
 
 function HasDarkrpmodification()
-	return GetGlobalYRPBool( "hasdarkrpmodification", false)
+	return GetGlobalYRPBool("hasdarkrpmodification", false)
 end
 
-function PrintLIDError( var)
-	if !string.find( var, " " ) and !string.find( var, ":" ) and !string.find( var, "-" ) and HasYRPContent() and !HasYRPFakeContent() then
-		YRP.msg( "error", "Translation string [" .. tostring( var) .. "] not found, sent to Dev. Wait for next update!" )
+function PrintLIDError(var)
+	if not string.find(var, " ") and not string.find(var, ":") and not string.find(var, "-") and HasYRPContent() and not HasYRPFakeContent() then
+		YRP.msg("error", "Translation string [" .. tostring(var) .. "] not found, sent to Dev. Wait for next update!")
 	end
 end
 
 local nf = {}
-function YRP.lang_string( var, vals)
-	var = tostring( var)
-	if string.StartWith( var, "LID_" ) then
-		local va = "LID_" .. string.lower(string.sub( var, 5) )
-		if va == var then	-- if is not modified
-			local translation = yrp_current_lang[string.lower( var)]
+
+function YRP.lang_string(var, vals)
+	var = tostring(var)
+
+	if string.StartWith(var, "LID_") then
+		local va = "LID_" .. string.lower(string.sub(var, 5))
+
+		-- if is not modified
+		if va == var then
+			local translation = yrp_current_lang[string.lower(var)]
 
 			-- IF NOT FOUND
-			if !IsNotNilAndNotFalse(translation) then
+			if not IsNotNilAndNotFalse(translation) then
 				if CLIENT then
 					LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
-					if nf[var] == nil and LocalPlayer().LoadedGamemode and LocalPlayer():LoadedGamemode() and LocalPlayer().badyourrpcontent != "" then
+
+					if nf[var] == nil and LocalPlayer().LoadedGamemode and LocalPlayer():LoadedGamemode() and LocalPlayer().badyourrpcontent ~= "" then
 						nf[var] = var
-						PrintLIDError( var)
+						PrintLIDError(var)
 					end
 				end
+
 				return var
 			end
 
 			-- IF HAVE VALS
-			if IsNotNilAndNotFalse( vals) then
-				if type( vals) == "string" then
-					return YRP.lang_string( var)
+			if IsNotNilAndNotFalse(vals) then
+				if type(vals) == "string" then
+					return YRP.lang_string(var)
 				else
-					for id, val in pairs( vals) do
+					for id, val in pairs(vals) do
 						translation = string.Replace(translation, "%" .. id .. "%", val)
 					end
 				end
 			end
-
 			-- RETURN TRANSLATION
+
 			return translation
-		else
-			-- INVALID
 		end
 	end
-
 	-- RETURN VAR
+
 	return var
 end
 
@@ -203,10 +208,9 @@ end
 function YRP.send_lang(short)
 	-- send info to server, to let others know what language i chose
 	if CLIENT then
-		YRP.msg( "lang", "Send Language to Server: [" .. tostring(short) .. "]" )
-
-		net.Start( "nws_yrp_client_lang" )
-			net.WriteString(tostring(short) )
+		YRP.msg("lang", "Send Language to Server: [" .. tostring(short) .. "]")
+		net.Start("nws_yrp_client_lang")
+		net.WriteString(tostring(short))
 		net.SendToServer()
 	end
 end
@@ -219,37 +223,37 @@ function YRP.read_language(short, init)
 		default = true
 	end
 
-	if !init then
-		YRP.read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties" )
+	if not init then
+		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 
-		if !default then
-			YRP.msg( "lang", "Get Language-Pack [" .. YRP.lang_string( "LID_initshort" ) .. "] " .. YRP.lang_string( "LID_initlanguage" ) .. "/" .. YRP.lang_string( "LID_initinenglish" ) )
+		if not default then
+			YRP.msg("lang", "Get Language-Pack [" .. YRP.lang_string("LID_initshort") .. "] " .. YRP.lang_string("LID_initlanguage") .. "/" .. YRP.lang_string("LID_initinenglish"))
 		end
 
-		YRP.read_lang( "resource/localization/yrp/general/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/hud/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/menuappearance/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/menuatm/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/menubuilding/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/menubuy/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/menucharacter/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/menuinteract/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settings/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsdatabase/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsgroupsandroles/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsdesign/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsmap/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsplayers/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsrealistic/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsstatus/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsyourrpaddons/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsscale/lang_" .. short .. ".properties" )
-		YRP.read_lang( "resource/localization/yrp/settingsblacklist/lang_" .. short .. ".properties" )
+		YRP.read_lang("resource/localization/yrp/general/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/hud/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/menuappearance/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/menuatm/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/menubuilding/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/menubuy/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/menucharacter/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/menuinteract/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settings/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsdatabase/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsfeedback/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsgeneral/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsgroupsandroles/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsdesign/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsmap/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsplayers/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsrealistic/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsstatus/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsusergroups/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsyourrpaddons/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsscale/lang_" .. short .. ".properties")
+		YRP.read_lang("resource/localization/yrp/settingsblacklist/lang_" .. short .. ".properties")
 	else
-		YRP.read_lang( "resource/localization/yrp/init/lang_" .. short .. ".properties" )
+		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 	end
 
 	yrp_cur_lang = short
@@ -257,52 +261,54 @@ end
 
 function YRP.LoadLanguage(short, init)
 	if short == nil then
-		YRP.msg( "note", "LoadLanguage ERROR!" )
+		YRP.msg("note", "LoadLanguage ERROR!")
 
 		return false
 	end
 
 	short = tostring(short)
 
-	if (init) then
+	if init then
 		YRP.read_language(short, init)
 	else
 		if short == "auto" then
-			YRP.msg( "lang", "[AUTOMATIC DETECTION]" )
+			YRP.msg("lang", "[AUTOMATIC DETECTION]")
 			YRP.search_language()
 
-			if yrp_current_lang.get_language != "" then
+			if yrp_current_lang.get_language ~= "" then
 				short = string.lower(yrp_current_lang.get_language)
-				YRP.msg( "lang", "Found Language: " .. "[" .. short .. "]" )
+				YRP.msg("lang", "Found Language: " .. "[" .. short .. "]")
 
-				if !YRP.check_languagepack() then
+				if not YRP.check_languagepack() then
 					short = "en"
+
 					if CLIENT then
-						YRP.msg( "lang", "Can't find Language-Pack, using Default-Language-Pack." )
+						YRP.msg("lang", "Can't find Language-Pack, using Default-Language-Pack.")
 					end
 				end
 			else
 				short = "en"
+
 				if CLIENT then
-					YRP.msg( "lang", "Can't find Language from Game, using Default-Language-Pack." )
+					YRP.msg("lang", "Can't find Language from Game, using Default-Language-Pack.")
 				end
 			end
 		else
 			yrp_current_lang.get_language = short
-			YRP.msg( "lang", "Manually change to Language [" .. short .. "]" )
+			YRP.msg("lang", "Manually change to Language [" .. short .. "]")
 		end
 
 		--have to read en first, so incomplete translations have en as base
-		if (short == "en" ) then
+		if short == "en" then
 			YRP.read_language(short, init)
 		else
-			YRP.read_language( "en", init)
+			YRP.read_language("en", init)
 			YRP.read_language(short, init)
 		end
 
-		YRP.msg( "lang", "Language changed to [" .. YRP.lang_string( "LID_initshort" ) .. "] " .. YRP.lang_string( "LID_initlanguage" ) )
+		YRP.msg("lang", "Language changed to [" .. YRP.lang_string("LID_initshort") .. "] " .. YRP.lang_string("LID_initlanguage"))
 		YRP.send_lang(short) -- Send To Server
-		hook.Run( "yrp_current_language_changed" ) -- Update Chat
+		hook.Run("yrp_current_language_changed") -- Update Chat
 	end
 
 	return true
@@ -322,11 +328,11 @@ function YRP.add_language(short)
 		yrp_button_info[short]["author"] = "D4KiR"
 		yrp_button_info[short]["steamid64"] = ""
 	else
-		yrp_button_info[short]["inenglish"] = YRP.lang_string( "LID_initinenglish" )
-		yrp_button_info[short]["language"] = YRP.lang_string( "LID_initlanguage" )
-		yrp_button_info[short]["short"] = YRP.lang_string( "LID_initshort" )
-		yrp_button_info[short]["author"] = YRP.lang_string( "LID_initauthor" )
-		yrp_button_info[short]["steamid64"] = YRP.lang_string( "LID_steamid64" )
+		yrp_button_info[short]["inenglish"] = YRP.lang_string("LID_initinenglish")
+		yrp_button_info[short]["language"] = YRP.lang_string("LID_initlanguage")
+		yrp_button_info[short]["short"] = YRP.lang_string("LID_initshort")
+		yrp_button_info[short]["author"] = YRP.lang_string("LID_initauthor")
+		yrp_button_info[short]["steamid64"] = YRP.lang_string("LID_steamid64")
 	end
 end
 
@@ -339,14 +345,15 @@ if CLIENT then
 	--[[ FLAGS ]]
 	--
 	for i, short in pairs(yrp_shorts) do
-		if short != nil and YRP.AddDesignIcon then
-			YRP.AddDesignIcon( "lang_" .. short, "vgui/iso_639/" .. short .. ".png" )
+		if short ~= nil and YRP.AddDesignIcon then
+			YRP.AddDesignIcon("lang_" .. short, "vgui/iso_639/" .. short .. ".png")
 		end
 	end
 end
 
 function YRP.initLang()
 	--YRP.msg( "lang", "... SEARCHING FOR LANGUAGE ..." )
-	YRP.LoadLanguage( "auto", false)
+	YRP.LoadLanguage("auto", false)
 end
-timer.Simple(0.1, YRP.initLang )
+
+timer.Simple(0.1, YRP.initLang)
