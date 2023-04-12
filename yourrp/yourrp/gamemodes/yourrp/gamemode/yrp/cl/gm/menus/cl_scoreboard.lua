@@ -715,7 +715,7 @@ function YRPScoreboardAddPlayer(ply)
 		local c = 0
 
 		for i, btn in pairs(btns) do
-			if not btn[3] or (btn[3] and LocalPlayer():HasAccess("YRPScoreboardAddPlayer2")) and not btn[4] or (btn[4] and YRPNotSelf(ply)) then
+			if not btn[3] or (btn[3] and LocalPlayer():HasAccess("YRPScoreboardAddPlayer2")) and not btn[4] and (btn[4] and YRPNotSelf(ply)) then
 				c = c + 1
 				local b = YRPCreateD("YButton", adminbtns, size, size, 0, 0)
 				b:Dock(LEFT)
