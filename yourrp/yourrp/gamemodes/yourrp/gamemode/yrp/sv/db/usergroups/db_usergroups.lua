@@ -1649,7 +1649,7 @@ local toolantispam = {}
 
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 	if EntityAlive(pl) and IsNotNilAndNotFalse(tool) then
-		--YRP.msg( "gm", "CanTool: " .. tool)
+		--YRP.msg("gm", "CanTool: " .. tool)
 		local tools = {}
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 
@@ -1666,31 +1666,35 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 			hasright = true
 		end
 
-		if hasright and tr and tr.Entity and IsValid(tr.Entity) and tr.Entity:GetRPOwner() then
-			local Owner = tr.Entity:GetRPOwner()
+		if hasright then
+			if tr and tr.Entity and IsValid(tr.Entity) and tr.Entity:GetRPOwner() then
+				local Owner = tr.Entity:GetRPOwner()
 
-			if Owner == pl or not EntityAlive(Owner) or pl:HasAccess("yrp_can_tool", true) then
-				return true
-			else
-				if not table.HasValue(toolantispam, pl) then
-					table.insert(toolantispam, pl)
+				if Owner == pl or not EntityAlive(Owner) or pl:HasAccess("yrp_can_tool", true) then
+					return true
+				else
+					if not table.HasValue(toolantispam, pl) then
+						table.insert(toolantispam, pl)
 
-					if EntityAlive(Owner) then
-						YRP.msg("note", "[CanTool] " .. pl:RPName() .. " tried to modify entity from: " .. Owner:RPName())
-						YRPNotiToPlyDisallowed(pl, "You are not the owner!")
+						if EntityAlive(Owner) then
+							YRP.msg("note", "[CanTool] " .. pl:RPName() .. " tried to modify entity from: " .. Owner:RPName())
+							YRPNotiToPlyDisallowed(pl, "You are not the owner!")
+						end
+
+						timer.Simple(2, function()
+							if EntityAlive(pl) then
+								table.RemoveByValue(toolantispam, pl)
+							end
+						end)
 					end
 
-					timer.Simple(2, function()
-						if EntityAlive(pl) then
-							table.RemoveByValue(toolantispam, pl)
-						end
-					end)
+					return false
 				end
 
-				return false
+				return true
+			else
+				return true
 			end
-
-			return true
 		else
 			YRPNotiToPlyDisallowed(pl, "NO RIGHTS - Tool: " .. tostring(tool) .. " >>> " .. "menu_settings" .. " -> " .. "LID_management" .. " -> " .. "LID_usergroups" .. " -> " .. "LID_tools")
 			YRP.msg("note", "[CanTool] " .. "NO RIGHTS - Tool: " .. tostring(tool))

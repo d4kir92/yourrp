@@ -390,8 +390,8 @@ function YRPDoPoses()
 			ply["posespos"] = ply["posespos"] or {}
 
 			if ply.yrpposestatus == "do" then
-				for id, v in pairs(yrp_poses[ply.yrpposeart][ply.yrppose]) do
-					local boneID = ply:LookupBone(i)
+				for ii, v in pairs(yrp_poses[ply.yrpposeart][ply.yrppose]) do
+					local boneID = ply:LookupBone(ii)
 
 					if boneID and v.ang then
 						ply["posesang"][boneID] = ply["posesang"][boneID] or Angle(0, 0, 0)
@@ -412,8 +412,8 @@ function YRPDoPoses()
 			ply.yrp_pose_delay_nw = CurTime() + ply.yrp_pose_delay_update
 
 			if ply.yrpposestatus == "do" then
-				for id, v in pairs(yrp_poses[ply.yrpposeart][ply.yrppose]) do
-					local boneID = ply:LookupBone(i)
+				for ii, v in pairs(yrp_poses[ply.yrpposeart][ply.yrppose]) do
+					local boneID = ply:LookupBone(ii)
 
 					if boneID and v.ang then
 						ply:ManipulateBoneAngles(boneID, ply["posesang"][boneID])
