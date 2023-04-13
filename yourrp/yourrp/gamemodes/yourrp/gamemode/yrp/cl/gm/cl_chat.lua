@@ -644,7 +644,7 @@ local function InitYRPChat()
 				local last = args[#args]
 				local istext = true
 
-				if last and type(last) == "string" and string.EndsWith(last, ".jpeg") or string.EndsWith(last, ".jpg") or string.EndsWith(last, ".png") or string.EndsWith(last, ".gif") then
+				if last and type(last) == "string" and (string.EndsWith(last, ".jpeg") or string.EndsWith(last, ".jpg") or string.EndsWith(last, ".png") or string.EndsWith(last, ".gif")) then
 					istext = false
 				end
 

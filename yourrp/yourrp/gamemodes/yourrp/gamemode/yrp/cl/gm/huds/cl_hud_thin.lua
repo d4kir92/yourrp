@@ -281,7 +281,7 @@ function YRPHUDThin()
 		XP.text = "LID_xp"
 		XP.cur = lply:XP()
 		XP.max = lply:GetMaxXP()
-		XP.valuetext = lply:XP() .. "/" .. lply:MaxXP() .. " ( " .. math.Round(lply:XP() / lply:MaxXP() * 100, 1) .. "%)"
+		XP.valuetext = "(" .. lply:Level() .. ") " .. lply:XP() .. "/" .. lply:MaxXP() .. " ( " .. math.Round(lply:XP() / lply:MaxXP() * 100, 1) .. "%)"
 		YRPDrawThin(XP)
 		local BA = {}
 		BA.name = "BA"
