@@ -336,7 +336,6 @@ end
 YRPBuildDarkrpTeams()
 util.AddNetworkString("nws_yrp_Send_DarkRP_Jobs")
 local Player = FindMetaTable("Player")
-local timerdelay = 0.26
 
 function Player:DRPSendTeamsToPlayer()
 	self.yrp_darkrp_index = 1
@@ -385,7 +384,7 @@ CATEGORIES.vehicles = {}
 
 if IsNotNilAndNotFalse(drp_allgroups) then
 	for i, group in pairs(drp_allgroups) do
-		local catname = group.string_name
+		--local catname = group.string_name
 		local tab = YRPConvertToDarkRPCategory(group, "jobs")
 		--CATEGORIES.jobs[catname] = tab -- break ipairs
 		table.insert(CATEGORIES.jobs, tab)
@@ -394,7 +393,7 @@ if IsNotNilAndNotFalse(drp_allgroups) then
 	for i, cat in pairs(CATEGORIES.jobs) do
 		cat.members = {}
 
-		for i, role in pairs(RPExtraTeams) do
+		for id, role in pairs(RPExtraTeams) do
 			if role and cat and role.int_groupID == cat.uniqueID then
 				table.insert(cat.members, role)
 			end
@@ -430,7 +429,7 @@ function Player:DRPSendCategoriesToPlayer()
 		for i, cat in pairs(CATEGORIES.jobs) do
 			cat.members = {}
 
-			for i, role in pairs(TEAMS) do
+			for id, role in pairs(TEAMS) do
 				if role.int_groupID == cat.uniqueID then
 					table.insert(cat.members, role)
 				end
@@ -1310,6 +1309,7 @@ end)
 
 function AddPlayermodelToRole(ruid, muid)
 	local role = GetRole(ruid)
+	if role == nil then return false end
 	local pms = string.Explode(",", role.string_playermodels)
 
 	if not table.HasValue(pms, tostring(muid)) then
@@ -2287,7 +2287,6 @@ net.Receive("nws_yrp_invitetogroup", function(len, ply)
 		if tonumber(tmpTableInstructorRole.bool_instructor) == 1 then
 			local firstrankuid = YRPGetFirstRankUID(ply:GetRoleUID())
 			local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. firstrankuid .. "'")
-			local group = YRP_SQL_SELECT(DATABASE_NAME, "*", role.groupID)
 
 			if IsNotNilAndNotFalse(role) then
 				role = role[1]

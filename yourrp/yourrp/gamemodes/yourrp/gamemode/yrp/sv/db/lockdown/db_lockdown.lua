@@ -146,7 +146,7 @@ net.Receive("nws_yrp_set_lockdown", function(len, ply)
 		local buildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name ~= '" .. "Building" .. "'")
 		local lockdoors = {}
 
-		if PanelAlive(buildings) then
+		if IsNilOrFalse(buildings) then
 			for i, v in pairs(buildings) do
 				if tobool(v.bool_lockdown) then
 					table.insert(lockdoors, tonumber(v.uniqueID))
@@ -176,7 +176,7 @@ net.Receive("nws_yrp_set_lockdown", function(len, ply)
 		local buildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name ~= '" .. "Building" .. "'")
 		local lockdoors = {}
 
-		if PanelAlive(buildings) then
+		if IsNilOrFalse(buildings) then
 			for i, v in pairs(buildings) do
 				if tobool(v.bool_lockdown) then
 					table.insert(lockdoors, tonumber(v.uniqueID))
