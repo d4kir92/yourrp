@@ -132,10 +132,6 @@ hook.Add("yrp_language_changed", "chat_language_changed", function()
 	update_chat_choices()
 end)
 
-local function YRPIsChatOpen()
-	return yrpChat._chatIsOpen
-end
-
 function ChatIsClosedForChat()
 	if chatclosedforkeybinds and YRPIsChatEnabled("chatclosedforchat") then
 		return chatclosedforkeybinds

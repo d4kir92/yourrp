@@ -282,25 +282,25 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 								net.SendToServer()
 							end
 
-							local w = pw
-							local h = ph
+							local psw = pw
+							local psh = ph
 
 							if self.w ~= self:GetWide() or self.h ~= self:GetTall() then
-								w = w - w % boxspace
-								h = h - h % boxspace
+								psw = psw - psw % boxspace
+								psh = psh - psh % boxspace
 
-								if w >= win:GetMinWidth() then
-									win:SetWide(w)
-									local _w = w / ScW()
+								if psw >= win:GetMinWidth() then
+									win:SetWide(psw)
+									local _w = psw / ScW()
 									net.Start("nws_yrp_update_hud_w")
 									net.WriteString(tab.element)
 									net.WriteFloat(_w)
 									net.SendToServer()
 								end
 
-								if h >= win:GetMinHeight() then
-									win:SetTall(h)
-									local _h = h / ScH()
+								if psh >= win:GetMinHeight() then
+									win:SetTall(psh)
+									local _h = psh / ScH()
 									net.Start("nws_yrp_update_hud_h")
 									net.WriteString(tab.element)
 									net.WriteFloat(_h)
@@ -334,24 +334,18 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 							local x, y = self:GetPos()
 							local mx, my = gui.MousePos()
 
-							if input.IsMouseDown(MOUSE_FIRST) then
-								if mx < x or mx > x + pw or my < y or my > y + ph then
-									if PanelAlive(win.winset.dpl) then
-										local childrens = win.winset.dpl:GetItems()
-										local open = false
+							if input.IsMouseDown(MOUSE_FIRST) and (mx < x or mx > x + pw or my < y or my > y + ph) and PanelAlive(win.winset.dpl) then
+								local childrens = win.winset.dpl:GetItems()
+								local open = false
 
-										for i, item in pairs(childrens) do
-											if item.cb ~= nil then
-												if item.cb:IsMenuOpen() then
-													open = true
-												end
-											end
-										end
-
-										if not open then
-											win.winset:Close()
-										end
+								for i, item in pairs(childrens) do
+									if item.cb ~= nil and item.cb:IsMenuOpen() then
+										open = true
 									end
+								end
+
+								if not open then
+									win.winset:Close()
 								end
 							end
 
@@ -418,7 +412,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 								function tp:Paint(pw, ph)
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 									local x, y = self:GetPos()
-									local modx, mody = x % boxspace, y % boxspace
+									local modx2, mody2 = x % boxspace, y % boxspace
 
 									if not self:IsDragging() then
 										if x + self:GetWide() > ScW() + PosX() then
@@ -429,9 +423,9 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 											self:SetPos(x, ScH() - self:GetTall())
 										elseif y < 0 then
 											self:SetPos(x, 0)
-										elseif modx ~= 0 or mody ~= 0 then
-											x = x - modx
-											y = y - mody
+										elseif modx2 ~= 0 or mody2 ~= 0 then
+											x = x - modx2
+											y = y - mody2
 											self:SetPos(x, y)
 										end
 									end
@@ -439,7 +433,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 
 								for y = 0, 3 do
 									for x = 0, 3 do
-										local id = x .. "," .. y
+										--local id = x .. "," .. y
 										local tp_btn = YRPCreateD("DButton", tp, YRP.ctr(100), YRP.ctr(100), x * YRP.ctr(100), y * YRP.ctr(100) + YRP.ctr(50))
 										tp_btn:SetText("")
 
@@ -553,10 +547,8 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 									local x, y = self:GetPos()
 									local mx, my = gui.MousePos()
 
-									if input.IsMouseDown(MOUSE_FIRST) then
-										if mx < x or mx > x + pw or my < y or my > y + ph then
-											cmwin:Close()
-										end
+									if input.IsMouseDown(MOUSE_FIRST) and (mx < x or mx > x + pw or my < y or my > y + ph) then
+										cmwin:Close()
 									end
 								end
 
@@ -681,18 +673,18 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 						win.winset:AddColorMixer(colorborder)
 
 						if eletab["text_HUD_" .. tab.element .. "_CTEX"] then
-							local text = {}
-							text.name = "LID_text"
-							text.element = tab.element
-							text.art = "text"
-							text.value = eletab["text_HUD_" .. tab.element .. "_CTEX"]
-							win.winset:AddTextBox(text)
+							local text2 = {}
+							text2.name = "LID_text"
+							text2.element = tab.element
+							text2.art = "text"
+							text2.value = eletab["text_HUD_" .. tab.element .. "_CTEX"]
+							win.winset:AddTextBox(text2)
 						end
 					end)
 
 					if table.Count(editarea["settingswindows"]) == 0 then
 						net.Start("nws_yrp_get_hud_element_settings")
-						net.WriteString(tab.element)
+						--net.WriteString(tab.element)
 						net.SendToServer()
 					end
 				end
@@ -1103,8 +1095,8 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 							table.insert(GRP_IF.cif, ycol)
 							GRP_IF:AddItem(ycol)
 						else
-							local _start, _end = string.find(ift.name, "Chat")
-							local name = string.sub(ift.name, _start)
+							local _s, _e = string.find(ift.name, "Chat")
+							local name = string.sub(ift.name, _s)
 							local color = StringToColor(ift.value)
 							local ycol = YRPCreateD("DPanel", nil, YRP.ctr(200), YRP.ctr(50), 0, 0)
 
@@ -1131,7 +1123,6 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 			end
 		end)
 
-		local px, py = PARENT:GetPos()
 		local pv_win = YRPCreateD("YFrame", PARENT, YRP.ctr(1000), YRP.ctr(1000), ScrW() - YRP.ctr(1000 + 20), YRP.ctr(120))
 		pv_win:SetTitle("LID_window")
 

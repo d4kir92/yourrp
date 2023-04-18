@@ -758,7 +758,6 @@ net.Receive("nws_yrp_delete_own_character", function(len, ply)
 		if result == nil then
 			YRP.msg("db", "DeleteCharacter: success")
 			ply:KillSilent()
-			local steamid = ply:YRPSteamID()
 
 			if IsNotNilAndNotFalse(steamid) then
 				local _first_character = YRP_SQL_SELECT("yrp_characters", "*", "SteamID = '" .. steamid .. "'")
@@ -1035,20 +1034,18 @@ net.Receive("nws_yrp_inv_pm_up", function(len, ply)
 	if pms then
 		local _pms = string.Explode(",", pms)
 
-		if IsNotNilAndNotFalse(_pms) then
-			if IsNotNilAndNotFalse(_pms[_cur]) then
-				ply:SetYRPString("string_playermodel", _pms[_cur])
-				ply:SetYRPInt("pmid", _cur)
-				ply:SetModel(_pms[_cur])
-				local _charid = ply:CharID()
+		if IsNotNilAndNotFalse(_pms) and IsNotNilAndNotFalse(_pms[_cur]) then
+			ply:SetYRPString("string_playermodel", _pms[_cur])
+			ply:SetYRPInt("pmid", _cur)
+			ply:SetModel(_pms[_cur])
+			local _charid = ply:CharID()
 
-				YRP_SQL_UPDATE("yrp_characters", {
-					["playermodelID"] = tonumber(_cur)
-				}, "uniqueID = " .. tonumber(_charid))
+			YRP_SQL_UPDATE("yrp_characters", {
+				["playermodelID"] = tonumber(_cur)
+			}, "uniqueID = " .. tonumber(_charid))
 
-				ply:UpdateBackpack()
-				SendBodyGroups(ply)
-			end
+			ply:UpdateBackpack()
+			SendBodyGroups(ply)
 		end
 	end
 end)
@@ -1062,20 +1059,18 @@ net.Receive("nws_yrp_inv_pm_do", function(len, ply)
 	if pms then
 		local _pms = string.Explode(",", pms)
 
-		if IsNotNilAndNotFalse(_pms) then
-			if IsNotNilAndNotFalse(_pms[_cur]) then
-				ply:SetYRPString("string_playermodel", _pms[_cur])
-				ply:SetYRPInt("pmid", _cur)
-				ply:SetModel(_pms[_cur])
-				local _charid = ply:CharID()
+		if IsNotNilAndNotFalse(_pms) and IsNotNilAndNotFalse(_pms[_cur]) then
+			ply:SetYRPString("string_playermodel", _pms[_cur])
+			ply:SetYRPInt("pmid", _cur)
+			ply:SetModel(_pms[_cur])
+			local _charid = ply:CharID()
 
-				YRP_SQL_UPDATE("yrp_characters", {
-					["playermodelID"] = tonumber(_cur)
-				}, "uniqueID = " .. tonumber(_charid))
+			YRP_SQL_UPDATE("yrp_characters", {
+				["playermodelID"] = tonumber(_cur)
+			}, "uniqueID = " .. tonumber(_charid))
 
-				ply:UpdateBackpack()
-				SendBodyGroups(ply)
-			end
+			ply:UpdateBackpack()
+			SendBodyGroups(ply)
 		end
 	end
 end)
@@ -1307,8 +1302,8 @@ function YRPGetSpecData(ply)
 			if IsNotNilAndNotFalse(tabSpec) then
 				tabSpec = tabSpec[1]
 
-				for i, v in pairs(string.Explode(",", tabSpec.sweps)) do
-					local succ, err = pcall(YRPPlayerGive, ply, v)
+				for id, val in pairs(string.Explode(",", tabSpec.sweps)) do
+					local _, err = pcall(YRPPlayerGive, ply, val)
 
 					if err then
 						YRPMsg(err)
@@ -1334,12 +1329,12 @@ function YRPGetSpecData(ply)
 	pms = table.concat(pms, ",")
 	prefix = table.concat(prefix, " ")
 	suffix = table.concat(suffix, " ")
-	local tab = {}
-	tab.prefix = prefix
-	tab.suffix = suffix
-	tab.pms = pms
+	local rTab = {}
+	rTab.prefix = prefix
+	rTab.suffix = suffix
+	rTab.pms = pms
 
-	return tab
+	return rTab
 end
 
 function YRPGiveSpecs(ply)

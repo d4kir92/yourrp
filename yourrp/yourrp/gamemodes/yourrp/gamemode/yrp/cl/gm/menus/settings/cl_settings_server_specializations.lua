@@ -222,21 +222,21 @@ net.Receive("nws_yrp_get_specializations", function()
 				local cl_pms = {}
 
 				for i, v in pairs(tab_pm) do
-					local pms = {}
-					pms.uniqueID = i
-					pms.string_models = v
-					pms.string_classname = v
-					pms.string_name = v
+					local pms2 = {}
+					pms2.uniqueID = i
+					pms2.string_models = v
+					pms2.string_classname = v
+					pms2.string_name = v
 
-					pms.doclick = function()
+					pms2.doclick = function()
 						net.Start("nws_yrp_spec_rem_pm")
 						net.WriteInt(tbl.uniqueID, 32)
-						net.WriteString(pms.string_classname)
+						net.WriteString(pms2.string_classname)
 						net.SendToServer()
 						local tmp = {}
 
 						for id, w in pairs(string.Explode(",", tbl.pms or "")) do
-							if w ~= pms.string_classname then
+							if w ~= pms2.string_classname then
 								table.insert(tmp, w)
 							end
 						end
@@ -244,8 +244,8 @@ net.Receive("nws_yrp_get_specializations", function()
 						tbl.pms = table.concat(tmp, ",")
 					end
 
-					pms.h = YRP.ctr(120)
-					table.insert(cl_pms, pms)
+					pms2.h = YRP.ctr(120)
+					table.insert(cl_pms, pms2)
 				end
 
 				if _li.pms.dpl.AddLines ~= nil then

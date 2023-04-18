@@ -55,7 +55,7 @@ net.Receive("nws_yrp_spec_add_pm", function(len, ply)
 
 		local newtab = {}
 
-		for i, v in pairs(string.Explode(",", tab.pms)) do
+		for id, v in pairs(string.Explode(",", tab.pms)) do
 			if not table.HasValue(newtab, v) and not strEmpty(v) then
 				table.insert(newtab, v)
 			end
@@ -157,7 +157,7 @@ net.Receive("nws_yrp_spec_add_swep", function(len, ply)
 		if tab.sweps then
 			local newtab = {}
 
-			for i, v in pairs(string.Explode(",", tab.sweps)) do
+			for id, v in pairs(string.Explode(",", tab.sweps)) do
 				if not table.HasValue(newtab, v) and not strEmpty(v) then
 					table.insert(newtab, v)
 				end

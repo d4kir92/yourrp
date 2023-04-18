@@ -23,10 +23,7 @@ function allowedToUseVehicle(id, ply)
 		return true
 	else
 		local _tmpVehicleTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "item_id = '" .. id .. "'")
-
-		if _tmpVehicleTable[1] ~= nil then
-			if tostring(_tmpVehicleTable[1].ownerCharID) == ply:CharID() then return true end
-		end
+		if _tmpVehicleTable[1] ~= nil and tostring(_tmpVehicleTable[1].ownerCharID) == ply:CharID() then return true end
 	end
 
 	return false
@@ -132,18 +129,16 @@ net.Receive("nws_yrp_removeVehicleOwner", function(len, ply)
 		local item_uniqueID = tonumber(_tmpTable.item_id)
 
 		for k, v in pairs(ents.GetAll()) do
-			if v:GetYRPInt("item_uniqueID", 0) ~= 0 and item_uniqueID and v:GetYRPInt("item_uniqueID", 0) == item_uniqueID then
-				if ply:HasAccess("removeVehicleOwner") or ply == v:GetRPOwner() then
-					YRP_SQL_UPDATE(DATABASE_NAME, {
-						["ownerCharID"] = ""
-					}, "uniqueID = '" .. _tmpVehicleID .. "'")
+			if v:GetYRPInt("item_uniqueID", 0) ~= 0 and item_uniqueID and v:GetYRPInt("item_uniqueID", 0) == item_uniqueID and ply:HasAccess("removeVehicleOwner") or ply == v:GetRPOwner() then
+				YRP_SQL_UPDATE(DATABASE_NAME, {
+					["ownerCharID"] = ""
+				}, "uniqueID = '" .. _tmpVehicleID .. "'")
 
-					v:SetYRPInt("item_uniqueID", 0)
-					v:SetYRPString("ownerRPName", "")
-					v:SetYRPEntity("yrp_owner", NULL)
-					v:SetOwner(NULL)
-					v:Fire("Unlock")
-				end
+				v:SetYRPInt("item_uniqueID", 0)
+				v:SetYRPString("ownerRPName", "")
+				v:SetYRPEntity("yrp_owner", NULL)
+				v:SetOwner(NULL)
+				v:Fire("Unlock")
 			end
 		end
 	end

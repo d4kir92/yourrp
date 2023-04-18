@@ -244,15 +244,12 @@ function YRPCheckSalary(ply)
 			local _money = tonumber(_m)
 			local _salary = tonumber(_ms)
 
-			if _money ~= nil and _salary ~= nil then
-				if CurTime() >= ply:GetYRPInt("nextsalarytime", 0) and ply:HasCharacterSelected() and ply:Alive() then
-					ply:SetYRPInt("nextsalarytime", CurTime() + ply:GetYRPInt("salarytime"))
-					ply:SetYRPString("money", _money + _salary)
-					ply:UpdateMoney()
-				end
+			if _money ~= nil and _salary ~= nil and CurTime() >= ply:GetYRPInt("nextsalarytime", 0) and ply:HasCharacterSelected() and ply:Alive() then
+				ply:SetYRPInt("nextsalarytime", CurTime() + ply:GetYRPInt("salarytime"))
+				ply:SetYRPString("money", _money + _salary)
+				ply:UpdateMoney()
 			end
 		end
-	else
 	end
 	--YRP.msg( "note", "[CheckSalary] Player is not ready to get salary: " .. ply:YRPName() )
 end
@@ -291,14 +288,9 @@ timer.Create("ServerThink", TICK, 0, function()
 			ply:AddPlayTime()
 			local afkticktime = tonumber(GetGlobalYRPInt("int_afkkicktime", 0))
 
-			if afkticktime > 0 then
-				-- when not admin, kick
-				if ply:AFK() and not ply:HasAccess("afk", true) then
-					if CurTime() - tonumber(ply:GetYRPFloat("afkts", 0)) >= afkticktime then
-						ply:SetYRPBool("isafk", false)
-						ply:Kick("AFK")
-					end
-				end
+			if afkticktime > 0 and ply:AFK() and not ply:HasAccess("afk", true) and CurTime() - tonumber(ply:GetYRPFloat("afkts", 0)) >= afkticktime then
+				ply:SetYRPBool("isafk", false)
+				ply:Kick("AFK")
 			end
 
 			if ply:GetYRPBool("loaded", false) then
@@ -360,13 +352,11 @@ timer.Create("ServerThink", TICK, 0, function()
 		end
 	end
 
-	if _time % 60.0 == 1 then
-		if YRP.XPPerMinute ~= nil then
-			local xp_per_minute = YRP.XPPerMinute()
+	if _time % 60.0 == 1 and YRP.XPPerMinute ~= nil then
+		local xp_per_minute = YRP.XPPerMinute()
 
-			for i, p in pairs(player.GetAll()) do
-				p:AddXP(xp_per_minute)
-			end
+		for i, p in pairs(player.GetAll()) do
+			p:AddXP(xp_per_minute)
 		end
 	end
 
@@ -462,24 +452,20 @@ timer.Create("ServerThink", TICK, 0, function()
 
 	local _changelevel = 43200 -- 43200 = 60 * 60 * 12 (12 Hours)
 
-	if GetGlobalYRPBool("bool_server_reload", false) then
-		if _time >= _changelevel then
-			YRP.msg("gm", "Auto Reload Map to prevent Lags/Stutter.")
+	if GetGlobalYRPBool("bool_server_reload", false) and _time >= _changelevel then
+		YRP.msg("gm", "Auto Reload Map to prevent Lags/Stutter.")
 
-			timer.Simple(1, function()
-				game.ConsoleCommand("changelevel " .. GetMapNameDB() .. "\n")
-			end)
-		end
+		timer.Simple(1, function()
+			game.ConsoleCommand("changelevel " .. GetMapNameDB() .. "\n")
+		end)
 	end
 
-	if GetGlobalYRPBool("bool_server_reload_notification", false) then
-		if _time >= _changelevel - 30 then
-			local _str = "Auto Reload in " .. _changelevel - _time .. " sec"
-			YRP.msg("gm", _str)
-			net.Start("nws_yrp_autoreload")
-			net.WriteString(string.format("%0.1f", _changelevel - _time))
-			net.Broadcast()
-		end
+	if GetGlobalYRPBool("bool_server_reload_notification", false) and _time >= _changelevel - 30 then
+		local _str = "Auto Reload in " .. _changelevel - _time .. " sec"
+		YRP.msg("gm", _str)
+		net.Start("nws_yrp_autoreload")
+		net.WriteString(string.format("%0.1f", _changelevel - _time))
+		net.Broadcast()
 	end
 
 	if _time % 1 == 0 and HasDarkrpmodification() then
@@ -522,7 +508,6 @@ timer.Create("ServerThink", TICK, 0, function()
 
 	if _time == 10 or _time > 10 and _time % 3600 == 0 then
 		YRPCheckVersion("think")
-	elseif _time == 30 then
 	end
 
 	--IsServerInfoOutdated()
@@ -736,9 +721,9 @@ hook.Add("Think", "yrp_spawner_think", function()
 			end
 		end
 
-		local t = GetGlobalYRPTable("yrp_spawner_ent")
+		local tEnts = GetGlobalYRPTable("yrp_spawner_ent")
 
-		for _, v in pairs(t) do
+		for _, v in pairs(tEnts) do
 			local pos = StringToVector(v.pos)
 
 			if YENTs[v.uniqueID] == nil then
@@ -767,7 +752,7 @@ hook.Add("Think", "yrp_spawner_think", function()
 					local ent = ents.Create(ent_spawner.string_classname)
 
 					if ent:IsValid() then
-						local succ, err = pcall(YRPEntSpawn, ent)
+						local _, err = pcall(YRPEntSpawn, ent)
 
 						if err then
 							YRPMsg(err)
@@ -794,11 +779,9 @@ hook.Add("KeyPress", "yrp_keypress_use_door", function(ply, key)
 
 		local ent = tr.Entity
 
-		if IsValid(ent) then
-			if ent:YRPIsDoor() then
-				local door = ent
-				YRPOpenDoor(ply, door)
-			end
+		if IsValid(ent) and ent:YRPIsDoor() then
+			local door = ent
+			YRPOpenDoor(ply, door)
 		end
 	end
 end)

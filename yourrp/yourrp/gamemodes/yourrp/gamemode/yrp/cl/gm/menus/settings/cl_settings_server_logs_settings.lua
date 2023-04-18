@@ -4,7 +4,7 @@ function BuildLogsSettings(parent, typ)
 	parent.list = YRPCreateD("DPanelList", parent, parent:GetWide(), parent:GetTall(), 0, 0)
 	parent.list:EnableVerticalScrollbar()
 	net.Start("nws_yrp_get_logs_settings")
-	net.WriteString(typ)
+	--net.WriteString(typ)
 	net.SendToServer()
 
 	net.Receive("nws_yrp_get_logs_settings", function(len)

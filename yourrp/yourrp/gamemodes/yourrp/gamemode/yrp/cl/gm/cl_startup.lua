@@ -1010,14 +1010,13 @@ function YRPDebug3DText(ply, str, pos, color)
 end
 
 local translatorsteamids = {
-	-- DE
-	["76561198002066427"] = true, -- D4KiR
+	-- DE -- D4KiR
+	["76561198002066427"] = true,
 	-- RU
 	["76561198219530143"] = true, -- Aimatt
 	["76561198349004756"] = true, -- Uzlovskii
-	-- TR
-	["76561198064891084"] = true, -- KAEL
-	
+	-- TR -- KAEL
+	["76561198064891084"] = true,
 }
 
 local symc = 0

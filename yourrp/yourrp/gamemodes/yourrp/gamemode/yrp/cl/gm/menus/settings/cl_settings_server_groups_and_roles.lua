@@ -309,8 +309,8 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 		net.Start("nws_yrp_settings_subscribe_grouplist")
 		net.WriteString(cur_group.par)
 		net.SendToServer()
-		local listH = PARENT:GetTall() / 2 - 2 * YRP.ctr(30) - 3 * YRP.ctr(10)
-		rs.top = YRPCreateD("DPanel", PARENT, YRP.ctr(800 - 120), YRP.ctr(60), YRP.ctr(80), listH + YRP.ctr(20 + 60 + 20))
+		local listH2 = PARENT:GetTall() / 2 - 2 * YRP.ctr(30) - 3 * YRP.ctr(10)
+		rs.top = YRPCreateD("DPanel", PARENT, YRP.ctr(800 - 120), YRP.ctr(60), YRP.ctr(80), listH2 + YRP.ctr(20 + 60 + 20))
 
 		function rs.top:Paint(pw, ph)
 			if rs.top.headername ~= nil then
@@ -337,7 +337,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.bac = YRPCreateD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), listH + YRP.ctr(20 + 60 + 20))
+		rs.bac = YRPCreateD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), listH2 + YRP.ctr(20 + 60 + 20))
 		rs.bac:SetText("")
 
 		function rs.bac:Paint(pw, ph)
@@ -363,22 +363,20 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 		end
 
 		function rs.bac:DoClick()
-			if IsNotNilAndNotFalse(cur_role.pre) and IsNotNilAndNotFalse(cur_role.gro) then
-				if cur_role.pre > 0 then
-					rs.rplist:ClearList()
-					net.Start("nws_yrp_settings_unsubscribe_rolelist")
-					net.WriteString(cur_role.gro)
-					net.WriteString(cur_role.pre)
-					net.SendToServer()
-					net.Start("nws_yrp_settings_subscribe_prerolelist")
-					net.WriteString(cur_role.gro)
-					net.WriteString(cur_role.pre)
-					net.SendToServer()
-				end
+			if IsNotNilAndNotFalse(cur_role.pre) and IsNotNilAndNotFalse(cur_role.gro) and cur_role.pre > 0 then
+				rs.rplist:ClearList()
+				net.Start("nws_yrp_settings_unsubscribe_rolelist")
+				net.WriteString(cur_role.gro)
+				net.WriteString(cur_role.pre)
+				net.SendToServer()
+				net.Start("nws_yrp_settings_subscribe_prerolelist")
+				net.WriteString(cur_role.gro)
+				net.WriteString(cur_role.pre)
+				net.SendToServer()
 			end
 		end
 
-		rs.add = YRPCreateD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), listH + YRP.ctr(20 + 60 + 20))
+		rs.add = YRPCreateD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), listH2 + YRP.ctr(20 + 60 + 20))
 		rs.add:SetText("+")
 
 		function rs.add:Paint(pw, ph)
@@ -396,7 +394,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			end
 		end
 
-		rs.rlist = YRPCreateD("DPanel", PARENT, YRP.ctr(800), listH, YRP.ctr(20), listH + 2 * YRP.ctr(20) + 2 * YRP.ctr(60))
+		rs.rlist = YRPCreateD("DPanel", PARENT, YRP.ctr(800), listH2, YRP.ctr(20), listH2 + 2 * YRP.ctr(20) + 2 * YRP.ctr(60))
 
 		function rs.rlist:Paint(pw, ph)
 			if rs.top.headername ~= nil then
@@ -1000,21 +998,21 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					ammolist = YRPCreateD("DPanelList", ammobg, YRP.ctr(800 - 23 - 20), YRP.ctr(800), 0, YRP.ctr(50))
 					ammolist:SetSpacing(2)
 					ammolist:EnableVerticalScrollbar(true)
-					local sbar = ammolist.VBar
+					local sbar2 = ammolist.VBar
 
-					function sbar:Paint(w, h)
+					function sbar2:Paint(w, h)
 						draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
 					end
 
-					function sbar.btnUp:Paint(w, h)
+					function sbar2.btnUp:Paint(w, h)
 						draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 					end
 
-					function sbar.btnDown:Paint(w, h)
+					function sbar2.btnDown:Paint(w, h)
 						draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 					end
 
-					function sbar.btnGrip:Paint(w, h)
+					function sbar2.btnGrip:Paint(w, h)
 						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 					end
 
@@ -1240,21 +1238,21 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local col1 = YRPCreateD("DPanelList", ea.background, YRP.ctr(800 + 24), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 			col1:EnableVerticalScrollbar(true)
 			col1:SetSpacing(YRP.ctr(20))
-			local sbar = col1.VBar
+			local sbar3 = col1.VBar
 
-			function sbar:Paint(w, h)
+			function sbar3:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
 			end
 
-			function sbar.btnUp:Paint(w, h)
+			function sbar3.btnUp:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 			end
 
-			function sbar.btnDown:Paint(w, h)
+			function sbar3.btnDown:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 			end
 
-			function sbar.btnGrip:Paint(w, h)
+			function sbar3.btnGrip:Paint(w, h)
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 			end
 
@@ -1554,21 +1552,21 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local col2 = YRPCreateD("DPanelList", ea.background, YRP.ctr(800 + 24), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 			col2:EnableVerticalScrollbar(true)
 			col2:SetSpacing(YRP.ctr(20))
-			local sbar = col2.VBar
+			local sbar4 = col2.VBar
 
-			function sbar:Paint(w, h)
+			function sbar4:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
 			end
 
-			function sbar.btnUp:Paint(w, h)
+			function sbar4.btnUp:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 			end
 
-			function sbar.btnDown:Paint(w, h)
+			function sbar4.btnDown:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 			end
 
-			function sbar.btnGrip:Paint(w, h)
+			function sbar4.btnGrip:Paint(w, h)
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 			end
 
@@ -1645,12 +1643,12 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					pmwin.list:SetSpacing(10)
 
 					function pmwin.list:RefreshList()
-						local lply = LocalPlayer()
+						local lpl = LocalPlayer()
 
-						if IsNotNilAndNotFalse(lply.yrpseltab) and pmwin.list ~= nil and PanelAlive(pmwin.list) then
+						if IsNotNilAndNotFalse(lpl.yrpseltab) and pmwin.list ~= nil and PanelAlive(pmwin.list) then
 							pmwin.list:Clear()
 
-							for i, pm in pairs(lply.yrpseltab) do
+							for i, pm in pairs(lpl.yrpseltab) do
 								timer.Simple(i * 0.001, function()
 									if PanelAlive(pmwin) and PanelAlive(pmwin.list) then
 										local line = YRPCreateD("DPanel", pmwin.list, YRP.ctr(200), YRP.ctr(64), 0, 0)
@@ -1727,13 +1725,13 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 
 					function pmwin.add:DoClick()
 						if pmwin.WorldModel ~= "" then
-							local lply = LocalPlayer()
-							lply.yrpseltab = lply.yrpseltab or {}
+							local lpl = LocalPlayer()
+							lpl.yrpseltab = lpl.yrpseltab or {}
 							local min = tonumber(pmwin.float_min:GetValue())
 							local max = tonumber(pmwin.float_max:GetValue())
 							net.Start("nws_yrp_add_playermodels")
 							net.WriteInt(role.uniqueID, 32)
-							net.WriteTable(lply.yrpseltab)
+							net.WriteTable(lpl.yrpseltab)
 							net.WriteString(pmwin.name:GetText())
 							net.WriteString(min)
 							net.WriteString(max)
@@ -1784,10 +1782,10 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 										win:Close()
 									end
 
-									function line:Paint(pw, ph)
-										draw.RoundedBox(0, 0, 0, pw, ph, Color(140, 140, 140))
-										draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-										draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP.ctr(20), ph / 3 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									function line:Paint(spw, sph)
+										draw.RoundedBox(0, 0, 0, spw, sph, Color(140, 140, 140))
+										draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + YRP.ctr(20), sph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP.ctr(20), sph / 3 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									end
 
 									line.remove = YRPCreateD("YButton", line, YRP.ctr(300), YRP.ctr(100), win.dpl:GetWide() - YRP.ctr(350), YRP.ctr(50))
@@ -1808,9 +1806,9 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 										YRPAreYouSure(YRPYesDeletePMS, YRPNoDeletePMS)
 									end
 
-									function line.remove:Paint(pw, ph)
-										draw.RoundedBox(16, 0, 0, pw, ph, Color(255, 140, 140))
-										draw.SimpleText(YRP.lang_string("LID_remove") .. " ( " .. pm.uses .. " " .. "uses" .. " )", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+									function line.remove:Paint(spw, sph)
+										draw.RoundedBox(16, 0, 0, pw, sph, Color(255, 140, 140))
+										draw.SimpleText(YRP.lang_string("LID_remove") .. " ( " .. pm.uses .. " " .. "uses" .. " )", "DermaDefault", spw / 2, sph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 									end
 
 									if line.models[1] ~= nil then
@@ -1819,9 +1817,9 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 									else
 										line.model = YRPCreateD("DPanel", line, line:GetTall(), line:GetTall(), 0, 0)
 
-										function line.model:Paint(pw, ph)
-											draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
-											draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										function line.model:Paint(spw, sph)
+											draw.RoundedBox(0, 0, 0, spw, sph, Color(80, 80, 80))
+											draw.SimpleText("NO MODEL", "DermaDefault", spw / 2, sph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 										end
 									end
 
@@ -1854,9 +1852,9 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					win:Search(self:GetText())
 				end
 
-				net.Receive("nws_yrp_get_all_playermodels", function(len)
-					if len > 128000 then
-						YRP.msg("note", "[get_all_playermodels] len: " .. len)
+				net.Receive("nws_yrp_get_all_playermodels", function(l)
+					if l > 128000 then
+						YRP.msg("note", "[get_all_playermodels] len: " .. l)
 					end
 
 					local tab = net.ReadTable()
@@ -1918,13 +1916,13 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			ea.equipment = ea[role.uniqueID].equipment
 
 			if GetGlobalYRPBool("bool_weapon_system", true) then
-				local info = YRPCreateD("DPanel", equipment, 100, 32, 0, 0)
+				local info2 = YRPCreateD("DPanel", equipment, 100, 32, 0, 0)
 
-				function info:Paint(pw, ph)
+				function info2:Paint(pw, ph)
 					draw.SimpleText("First Go to F8 -> " .. YRP.lang_string("LID_administration") .. " -> " .. YRP.lang_string("LID_weaponsystem"), "Y_18_700", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
-				equipment:AddItem(info)
+				equipment:AddItem(info2)
 			end
 
 			local sweps = {}
@@ -1966,18 +1964,18 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				end
 
 				function YRPAddSwepToRole()
-					local lply = LocalPlayer()
+					local lplayer = LocalPlayer()
 
-					if role.uniqueID and lply.yrpseltab then
+					if role.uniqueID and lplayer.yrpseltab then
 						net.Start("nws_yrp_add_role_swep")
 						net.WriteInt(role.uniqueID, 32)
-						net.WriteTable(lply.yrpseltab)
+						net.WriteTable(lplayer.yrpseltab)
 						net.SendToServer()
-						role.string_sweps = table.concat(lply.yrpseltab, ",")
-					elseif lply.yrpseltab and lply.yrpseltab[1] then
-						MsgC(Color(0, 255, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n")
+						role.string_sweps = table.concat(lplayer.yrpseltab, ",")
+					elseif lplayer.yrpseltab and lplayer.yrpseltab[1] then
+						MsgC(Color(0, 255, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lplayer.yrpseltab[1]) .. "\n")
 					else
-						MsgC(Color(0, 255, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n")
+						MsgC(Color(0, 255, 0), "[YRPAddSwepToRole] " .. tostring(role.uniqueID) .. " " .. tostring(lplayer.yrpseltab) .. "\n")
 					end
 				end
 
@@ -2004,9 +2002,9 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 						net.SendToServer()
 						local tmp = {}
 
-						for i, v in pairs(string.Explode(",", role.string_sweps)) do
-							if v ~= swep.string_classname then
-								table.insert(tmp, v)
+						for id, va in pairs(string.Explode(",", role.string_sweps)) do
+							if va ~= swep.string_classname then
+								table.insert(tmp, va)
 							end
 						end
 
@@ -2062,18 +2060,18 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					end
 
 					function YRPAddSwepToRoleOnSpawn()
-						local lply = LocalPlayer()
+						local lplayer = LocalPlayer()
 
-						if role.uniqueID and lply.yrpseltab then
+						if role.uniqueID and lplayer.yrpseltab then
 							net.Start("nws_yrp_add_role_swep_onspawn")
 							net.WriteInt(role.uniqueID, 32)
-							net.WriteTable(lply.yrpseltab)
+							net.WriteTable(lplayer.yrpseltab)
 							net.SendToServer()
-							role.string_sweps_onspawn = table.concat(lply.yrpseltab, ",")
-						elseif lply.yrpseltab and lply.yrpseltab[1] then
-							MsgC(Color(0, 255, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab[1]) .. "\n")
+							role.string_sweps_onspawn = table.concat(lplayer.yrpseltab, ",")
+						elseif lplayer.yrpseltab and lplayer.yrpseltab[1] then
+							MsgC(Color(0, 255, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lplayer.yrpseltab[1]) .. "\n")
 						else
-							MsgC(Color(0, 255, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lply.yrpseltab) .. "\n")
+							MsgC(Color(0, 255, 0), "[YRPAddSwepToRoleOnSpawn] " .. tostring(role.uniqueID) .. " " .. tostring(lplayer.yrpseltab) .. "\n")
 						end
 					end
 
@@ -2101,9 +2099,9 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 							net.SendToServer()
 							local tmp = {}
 
-							for i, v in pairs(string.Explode(",", role.string_sweps_onspawn)) do
-								if v ~= swep.string_classname then
-									table.insert(tmp, v)
+							for id, va in pairs(string.Explode(",", role.string_sweps_onspawn)) do
+								if va ~= swep.string_classname then
+									table.insert(tmp, va)
 								end
 							end
 
@@ -2344,21 +2342,21 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local col3 = YRPCreateD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 			col3:EnableVerticalScrollbar(true)
 			col3:SetSpacing(YRP.ctr(20))
-			local sbar = col3.VBar
+			local sbar2 = col3.VBar
 
-			function sbar:Paint(w, h)
+			function sbar2:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
 			end
 
-			function sbar.btnUp:Paint(w, h)
+			function sbar2.btnUp:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 			end
 
-			function sbar.btnDown:Paint(w, h)
+			function sbar2.btnDown:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 			end
 
-			function sbar.btnGrip:Paint(w, h)
+			function sbar2.btnGrip:Paint(w, h)
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 			end
 
@@ -2828,21 +2826,21 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local col4 = YRPCreateD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
 			col4:EnableVerticalScrollbar(true)
 			col4:SetSpacing(YRP.ctr(20))
-			local sbar = col4.VBar
+			local sbar5 = col4.VBar
 
-			function sbar:Paint(w, h)
+			function sbar5:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
 			end
 
-			function sbar.btnUp:Paint(w, h)
+			function sbar5.btnUp:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 			end
 
-			function sbar.btnDown:Paint(w, h)
+			function sbar5.btnDown:Paint(w, h)
 				draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
 			end
 
-			function sbar.btnGrip:Paint(w, h)
+			function sbar5.btnGrip:Paint(w, h)
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 			end
 
@@ -2946,12 +2944,10 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				DHr(hr)
 			end
 
-			local abis = {"none", "mana", "force", "rage", "energy"}
-
-			local tab_a = {}
+			local tab_a2 = {}
 
 			for i, v in pairs(abis) do
-				tab_a[string.lower(v)] = YRP.lang_string("LID_" .. string.lower(v))
+				tab_a2[string.lower(v)] = YRP.lang_string("LID_" .. string.lower(v))
 			end
 
 			local string_ability = {}
@@ -2962,7 +2958,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			string_ability.value = role.string_ability
 			string_ability.uniqueID = role.uniqueID
 			string_ability.lforce = false
-			string_ability.choices = tab_a
+			string_ability.choices = tab_a2
 			ea[role.uniqueID].string_ability = YRPDComboBox(string_ability)
 			local ability = {}
 			ability.parent = ea.attributes:GetContent()

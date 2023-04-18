@@ -51,7 +51,7 @@ function BuildWhitelis(parent, tab)
 
 		for k, whi in pairs(tabW) do
 			if whi.roleID == nil then
-			else --
+			else
 				local found = false
 
 				-- ROLE

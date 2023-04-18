@@ -1,36 +1,33 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
 local PANEL = {}
 
 function PANEL:Init()
-	self.color_sel = Color( 0, 0, 255, 255 )
-	self.color_uns = Color( 255, 255, 0)
+	self.color_sel = Color(0, 0, 255, 255)
+	self.color_uns = Color(255, 255, 0)
 
-	function self:SetSelectedColor( col)
+	function self:SetSelectedColor(col)
 		self.color_sel = col
 	end
 
-	function self:SetUnselectedColor( col)
+	function self:SetUnselectedColor(col)
 		self.color_uns = col
 	end
 
 	self.tabs = {}
-
-	self.slider = YRPCreateD( "DHorizontalScroller", self, self:GetWide(), self:GetTall(), 0, 0)
-
+	self.slider = YRPCreateD("DHorizontalScroller", self, self:GetWide(), self:GetTall(), 0, 0)
 	self.OldSetSize = self.OldSetSize or self.SetSize
+
 	function self:SetSize(w, h)
 		self:OldSetSize(w, h)
 		self.slider:SetSize(w, h)
 	end
 
 	function self.slider:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
 	end
 
+	--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
 	function self:AddTab(str, tbl)
-		local lply = LocalPlayer()
-		surface.SetFont( "Y_24_500" )
+		surface.SetFont("Y_24_500")
 		local _tw, _th = surface.GetTextSize(str)
 		local _w = self:GetTall()
 
@@ -39,24 +36,25 @@ function PANEL:Init()
 		end
 
 		_w = _w * 1.4
-		local _tmp = YRPCreateD( "DButton", self, _w, self:GetTall(), _x, ctrb(0) )
+		local _tmp = YRPCreateD("DButton", self, _w, self:GetTall(), _x, ctrb(0))
 		_tmp.tbl = tbl
-		_tmp:SetText( "" )
+		_tmp:SetText("")
 		_tmp.name = str
 		_tmp.selected = false
 		_tmp.base = self
+
 		function _tmp:Paint(pw, ph)
 			if self:IsHovered() then
-				draw.RoundedBoxEx(0, 0, 0, pw, ph, Color( 255, 255, 255, 254), true, true)
+				draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(255, 255, 255, 254), true, true)
 			end
 
-			draw.RoundedBoxEx(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "HB" ), true, true)
-
-			local _color = Color( 255, 255, 255, 255 )
+			draw.RoundedBoxEx(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"), true, true)
+			local _color = Color(255, 255, 255, 255)
 			local font = "Y_24_500"
+
 			if self.selected then
 				font = "Y_24_500"
-				_color = YRPInterfaceValue( "YButton", "SC" )
+				_color = YRPInterfaceValue("YButton", "SC")
 				draw.RoundedBox(0, YRP.ctr(2), ph - YRP.ctr(4 + 2), pw - 2 * YRP.ctr(2), YRP.ctr(4), _color)
 			end
 
@@ -80,11 +78,10 @@ function PANEL:Init()
 end
 
 function PANEL:Think()
-
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox(0, 0, 0, w, h, Color( 0, 255, 0 ) )
 end
 
-vgui.Register( "DYRPTabs", PANEL, "Panel" )
+--draw.RoundedBox(0, 0, 0, w, h, Color( 0, 255, 0 ) )
+vgui.Register("DYRPTabs", PANEL, "Panel")

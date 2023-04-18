@@ -160,6 +160,13 @@ function Player:sendDoorData()
 	YRPDarkrpNotFound("sendDoorData()")
 end
 
+local unhandled = {}
+unhandled["agenda"] = true
+unhandled["salary"] = true
+unhandled["job"] = true
+unhandled["wantedReason"] = true
+unhandled["HasGunlicense"] = true
+
 function Player:setSelfDarkRPVar(variable, value, target)
 	--Description: Set a shared variable. Make sure the variable is registered with DarkRP.registerDarkRPVar!
 	if value == nil then return false end
@@ -176,16 +183,11 @@ function Player:setSelfDarkRPVar(variable, value, target)
 			target:SetMoney(value)
 		elseif variable == "wanted" then
 			target:SetYRPBool("iswanted", value)
-		elseif variable == "agenda" then
-		elseif variable == "salary" then
-		elseif variable == "job" then
-		elseif variable == "wantedReason" then
-		elseif variable == "HasGunlicense" then
 		elseif variable == "level" then
 			self:SetLevel(value)
 		elseif variable == "xp" then
 			self:SetXP(value)
-		else
+		elseif unhandled[variable] == nil then
 			YRPDarkrpNotFound("setDarkRPVar( " .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. " )")
 
 			if target == self then

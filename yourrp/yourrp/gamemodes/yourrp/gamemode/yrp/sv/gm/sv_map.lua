@@ -69,12 +69,6 @@ function try_new_pos(dir, size, space, tmpX, tmpY, tmpZ)
 		end
 	end
 
-	if skyCamera ~= nil then
-		if skyCamera:GetPos():Distance(Vector(tmpX, tmpY, _result)) < 500 then
-			if _result ~= nil then return _result end
-		end
-	end
-
 	return _result
 end
 
@@ -206,13 +200,11 @@ function get_coords()
 	--Ohne Problem durchcgelaufen
 	_map_size.error = 0
 
-	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
-		if tries < 5 then
-			timer.Simple(5, function()
-				YRP.msg("note", "YRPGetMapDoors() retry")
-				YRPGetMapDoors()
-			end)
-		end
+	if (_map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999) and tries < 5 then
+		timer.Simple(5, function()
+			YRP.msg("note", "YRPGetMapDoors() retry")
+			YRPGetMapDoors()
+		end)
 	end
 end
 

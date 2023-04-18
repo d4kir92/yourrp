@@ -532,7 +532,7 @@ local distLocal = 0
 -- must be last hook
 timer.Simple(4, function()
 	hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
-		local oldtext = text
+		--local oldtext = text
 		local channel = ""
 
 		if oldDistLocal ~= GetGlobalYRPInt("int_yrp_chat_range_local", 400) then

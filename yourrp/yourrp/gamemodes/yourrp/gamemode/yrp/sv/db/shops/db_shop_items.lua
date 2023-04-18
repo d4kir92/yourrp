@@ -209,7 +209,7 @@ net.Receive("nws_yrp_shop_get_items", function(len, ply)
 			local ent = ents.Create(v.ClassName)
 
 			if EntityAlive(ent) then
-				local succ, err = pcall(YRPEntSpawn, ent)
+				local _, err = pcall(YRPEntSpawn, ent)
 
 				if err then
 					YRPMsg(err)
@@ -446,7 +446,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 		return false
 	end
 
-	local tr = util.TraceHull({
+	local tr2 = util.TraceHull({
 		start = TARGETPOS + Vector(0, 0, 40),
 		endpos = TARGETPOS - Vector(0, 0, 400),
 		mins = mins,
@@ -454,13 +454,13 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 		mask = MASK_SHOT_HULL
 	})
 
-	if tr.Hit then
+	if tr2.Hit then
 		local ent = nil
 		local ENT = scripted_ents.GetStored(item.ClassName)
 
 		if ENT ~= nil then
 			if ENT.t ~= nil and ENT.t.SpawnFunction ~= nil then
-				ent = ENT.t:SpawnFunction(ply, tr, item.ClassName)
+				ent = ENT.t:SpawnFunction(ply, tr2, item.ClassName)
 
 				if ent then
 					--ent:SetOwner(ply)
@@ -483,10 +483,10 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 				ent = ents.Create(item.ClassName)
 
 				if IsValid(ent) then
-					ent:SetPos(tr.HitPos)
+					ent:SetPos(tr2.HitPos)
 					--ent:SetOwner(ply)
 					ent:SetYRPEntity("yrp_owner", ply)
-					local succ, err = pcall(YRPEntSpawn, ent)
+					local _, err = pcall(YRPEntSpawn, ent)
 
 					if err then
 						YRPMsg(err)
@@ -517,7 +517,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 			end
 
 			if vehicle and simfphys then
-				ent = simfphys.SpawnVehicle(nil, tr.HitPos + Vector(0, 0, 0), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
+				ent = simfphys.SpawnVehicle(nil, tr2.HitPos + Vector(0, 0, 0), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
 				ent:SetYRPInt("item_uniqueID", item.uniqueID)
 				--YRP.msg( "gm", "[Spawn Item] WORKED #3" )
 				--ent:SetOwner(ply)
@@ -538,17 +538,15 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 						end
 					end
 
-					if veh ~= nil then
-						if veh.KeyValues ~= nil then
-							for i, v in pairs(veh.KeyValues) do
-								ent:SetKeyValue(i, v)
-							end
+					if veh ~= nil and veh.KeyValues ~= nil then
+						for i, v in pairs(veh.KeyValues) do
+							ent:SetKeyValue(i, v)
 						end
 					end
 
 					ent:SetModel(item.WorldModel)
-					ent:SetPos(tr.HitPos)
-					local succ, err = pcall(YRPEntSpawn, ent)
+					ent:SetPos(tr2.HitPos)
+					local _, err = pcall(YRPEntSpawn, ent)
 
 					if err then
 						YRPMsg(err)

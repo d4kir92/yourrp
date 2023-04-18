@@ -1103,7 +1103,7 @@ end)
 util.AddNetworkString("nws_yrp_get_hud_element_settings")
 
 net.Receive("nws_yrp_get_hud_element_settings", function(len, ply)
-	local element = net.ReadString()
+	--local element = net.ReadString()
 	local ele = YRP_SQL_SELECT(DATABASE_NAME, "*", nil) --"name LIKE '" .. "bool_HUD_" .. element .. "_%'" )
 	local nettab = {}
 

@@ -88,10 +88,10 @@ net.Receive("nws_yrp_dealer_add_tab", function(len, ply)
 		end
 
 		table.insert(_tabs, _tab_uid)
-		local _tabs = string.Implode(",", _tabs)
+		local tabs = string.Implode(",", _tabs)
 
 		local _up = YRP_SQL_UPDATE(DATABASE_NAME, {
-			["tabs"] = _tabs
+			["tabs"] = tabs
 		}, "uniqueID = " .. _dealer_uid)
 	end
 end)

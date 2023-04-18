@@ -91,8 +91,7 @@ DarkRP.disabledDefaults["agendas"] = {
 DarkRP.disabledDefaults["groupchat"] = {
 	[1] = false, -- Police group chat (mayor, cp, chief and/or your custom CP teams)
 	[2] = false, -- Group chat between gangsters and the mobboss
-	[3] = false, -- Group chat between people of the same team
-	
+	[3] = false,
 }
 
 DarkRP.disabledDefaults["hitmen"] = {

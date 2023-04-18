@@ -18,7 +18,6 @@ net.Receive("nws_yrp_updateServer", function(len, ply)
 		["text_gamemode_name"] = _tmpString
 	})
 
-	if WORKED(_result, "text_gamemode_name failed") then end
 	local countdown = net.ReadInt(16)
 
 	timer.Create("timerRestartServer", 1, 0, function()
@@ -107,6 +106,14 @@ function YRPChangeUserGroup(ply, cmd, args)
 	end
 end
 
+local unhandled = {}
+unhandled["addjailpos"] = true
+unhandled["unownalldoors"] = true
+unhandled["cheque"] = true
+unhandled["admintellall"] = true
+unhandled["energy"] = true
+unhandled["teamban"] = true
+
 concommand.Add("darkrp", function(ply, cmd, args)
 	if args[1] and strEmpty(args[1]) then return end
 
@@ -138,19 +145,8 @@ concommand.Add("darkrp", function(ply, cmd, args)
 		YRP.msg("note", "[darkrp] warrant: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
 	elseif args[1] and args[1] == "unwarrant" then
 		YRP.msg("note", "[darkrp] unwarrant: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
-	elseif args[1] and args[1] == "addjailpos" then
-	elseif args[1] and args[1] == "unownalldoors" then
-	elseif args[1] and args[1] == "cheque" then
-	elseif args[1] and args[1] == "admintellall" then
-	elseif args[1] and args[1] == "energy" then
 	elseif args[1] and args[1] == "dropmoney" then
-		--
-		--
-		--
-		--
-		-- there is drink and food
 		YRPDropMoney(ply, args[2])
-	elseif args[1] and args[1] == "teamban" then
 	elseif args[1] and args[1] == "job" then
 		--
 		local playername = args[2]
@@ -190,8 +186,10 @@ concommand.Add("darkrp", function(ply, cmd, args)
 				ply:Spawn()
 			end
 		end
-	elseif args[1] and not string.StartsWith(string.lower(args[1]), "team_") then
-		YRP.msg("error", "[darkrp] console command: args[1]: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
+	elseif args[1] and unhandled[args[1]] == nil then
+		if args[1] and not string.StartsWith(string.lower(args[1]), "team_") then
+			YRP.msg("error", "[darkrp] console command: args[1]: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
+		end
 	end
 end)
 
@@ -214,11 +212,11 @@ concommand.Add("yrp_givelicense", function(ply, cmd, args)
 
 	local name = args[1]
 	local lname = args[2]
-	local ply = GetPlayerByName(name)
+	local pl = GetPlayerByName(name)
 	local lid = GetLicenseIDByName(lname)
 
-	if IsValid(ply) and IsNotNilAndNotFalse(lid) then
-		GiveLicense(ply, lid)
+	if IsValid(pl) and IsNotNilAndNotFalse(lid) then
+		GiveLicense(pl, lid)
 	else
 		YRP.msg("note", "[yrp_givelicense] Not found")
 	end

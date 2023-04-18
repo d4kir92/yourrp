@@ -75,11 +75,9 @@ net.Receive("nws_yrp_get_macros", function(len)
 		_mm.bind.keybind = nil
 
 		function _mm.bind:OnChange(num)
-			if num ~= -1 and YRPGetKeybind(self.keybind) ~= nil then
-				if self.keybind ~= nil and not YRPSetKeybind(self.keybind, num) and num ~= 0 then
-					_mm.bind:SetSelectedNumber(YRPGetKeybind(self.keybind))
-					Derma_Message(YRP.lang_string("LID_hotkeyinuse") .. "!", YRP.lang_string("LID_error"), YRP.lang_string("LID_ok"))
-				end
+			if num ~= -1 and YRPGetKeybind(self.keybind) ~= nil and self.keybind ~= nil and not YRPSetKeybind(self.keybind, num) and num ~= 0 then
+				_mm.bind:SetSelectedNumber(YRPGetKeybind(self.keybind))
+				Derma_Message(YRP.lang_string("LID_hotkeyinuse") .. "!", YRP.lang_string("LID_error"), YRP.lang_string("LID_ok"))
 			end
 		end
 

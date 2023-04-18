@@ -346,15 +346,15 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 				UGS[CURRENT_USERGROUP].string_sweps = string.Explode(",", string_sweps)
 			end
 
-			local tmp2 = {}
+			local tmp4 = {}
 
 			for i, v in pairs(ug.string_sweps) do
 				if v ~= nil and not strEmpty(v) then
-					table.insert(tmp2, v)
+					table.insert(tmp4, v)
 				end
 			end
 
-			UGS[CURRENT_USERGROUP].string_sweps = tmp2
+			UGS[CURRENT_USERGROUP].string_sweps = tmp4
 
 			if UGS[CURRENT_USERGROUP].string_sweps[1] ~= "" then
 				SWEPS.preview.cur = 1
@@ -376,15 +376,15 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		ug.string_nonesweps = string.Explode(",", ug.string_nonesweps)
 	end
 
-	local tmp = {}
+	local tmp2 = {}
 
 	for i, v in pairs(ug.string_nonesweps) do
 		if v ~= nil and not strEmpty(v) then
-			table.insert(tmp, v)
+			table.insert(tmp2, v)
 		end
 	end
 
-	ug.string_nonesweps = tmp
+	ug.string_nonesweps = tmp2
 	local NONESWEPS = YRPCreateD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 500 + 50 + 50 + 20 + 100 + 20))
 	NONESWEPS:INITPanel("DPanel")
 	NONESWEPS:SetHeader(YRP.lang_string("LID_ndsweps"))
@@ -524,18 +524,18 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		end
 
 		function YRPAddSwepToUGNone()
-			local lply = LocalPlayer()
+			local lplayer = LocalPlayer()
 
-			if UGS[CURRENT_USERGROUP] and lply.yrpseltab then
+			if UGS[CURRENT_USERGROUP] and lplayer.yrpseltab then
 				net.Start("nws_yrp_usergroup_update_string_nonesweps")
 				net.WriteString(UGS[CURRENT_USERGROUP].uniqueID)
-				net.WriteTable(lply.yrpseltab)
+				net.WriteTable(lplayer.yrpseltab)
 				net.SendToServer()
-				UGS[CURRENT_USERGROUP].string_nonesweps = lply.yrpseltab
-			elseif lply.yrpseltab and lply.yrpseltab[1] then
-				MsgC(Color(0, 255, 0), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab[1]) .. "\n")
+				UGS[CURRENT_USERGROUP].string_nonesweps = lplayer.yrpseltab
+			elseif lplayer.yrpseltab and lplayer.yrpseltab[1] then
+				MsgC(Color(0, 255, 0), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lplayer.yrpseltab[1]) .. "\n")
 			else
-				MsgC(Color(0, 255, 0), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lply.yrpseltab) .. "\n")
+				MsgC(Color(0, 255, 0), "[YRPAddSwepToUGNone] " .. tostring(UGS[CURRENT_USERGROUP]) .. " " .. tostring(lplayer.yrpseltab) .. "\n")
 			end
 		end
 
@@ -550,15 +550,15 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 				UGS[CURRENT_USERGROUP].string_nonesweps = string.Explode(",", string_nonesweps)
 			end
 
-			local tmp2 = {}
+			local tmp3 = {}
 
 			for i, v in pairs(ug.string_nonesweps) do
 				if v ~= nil and not strEmpty(v) then
-					table.insert(tmp2, v)
+					table.insert(tmp3, v)
 				end
 			end
 
-			UGS[CURRENT_USERGROUP].string_nonesweps = tmp2
+			UGS[CURRENT_USERGROUP].string_nonesweps = tmp3
 
 			if UGS[CURRENT_USERGROUP].string_nonesweps[1] ~= "" then
 				NONESWEPS.preview.cur = 1
@@ -601,14 +601,14 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		local licenses = net.ReadTable()
 
 		for i, lic in pairs(licenses) do
-			local line = YRPCreateD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
+			local line4 = YRPCreateD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
 
-			function line:Paint(pw, ph)
+			function line4:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
 				draw.SimpleText(lic.name, "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			local cb = YRPCreateD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+			local cb = YRPCreateD("DCheckBox", line4, YRP.ctr(50), YRP.ctr(50), 0, 0)
 
 			if type(UGS[CURRENT_USERGROUP].string_licenses) == "string" then
 				UGS[CURRENT_USERGROUP].string_licenses = string.Explode(",", UGS[CURRENT_USERGROUP].string_licenses)
@@ -638,7 +638,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 				end
 			end
 
-			LICENSES.plus:AddItem(line)
+			LICENSES.plus:AddItem(line4)
 		end
 	end)
 
@@ -708,24 +708,24 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 				for k, too in pairs(cat2) do
 					if type(too) == "table" then
 						too.ItemName = string.lower(too.ItemName)
-						local line = YRPCreateD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
+						local line2 = YRPCreateD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
 
-						function line:Paint(pw, ph)
+						function line2:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
 							draw.SimpleText(language.GetPhrase(too.Text), "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 						end
 
-						local cb = YRPCreateD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+						local cb2 = YRPCreateD("DCheckBox", line2, YRP.ctr(50), YRP.ctr(50), 0, 0)
 
 						if type(UGS[CURRENT_USERGROUP].string_tools) == "string" then
 							UGS[CURRENT_USERGROUP].string_tools = string.Explode(",", UGS[CURRENT_USERGROUP].string_tools)
 						end
 
 						if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, too.ItemName) then
-							cb:SetChecked(true)
+							cb2:SetChecked(true)
 						end
 
-						function cb:OnChange(bVal)
+						function cb2:OnChange(bVal)
 							if UGS[CURRENT_USERGROUP] and UGS[CURRENT_USERGROUP].string_tools then
 								if bVal then
 									table.insert(UGS[CURRENT_USERGROUP].string_tools, too.ItemName)
@@ -741,7 +741,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 							end
 						end
 
-						YTOOLS.plus:AddItem(line)
+						YTOOLS.plus:AddItem(line2)
 					end
 				end
 			end
@@ -750,20 +750,20 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		local properties = {"ignite", "extinguish", "remover", "drive", "collision", "keepupright", "bodygroups", "gravity", "persist"}
 
 		for i, v in pairs(properties) do
-			local line = YRPCreateD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
+			local line3 = YRPCreateD("DPanel", nil, 10, YRP.ctr(50), 0, 0)
 
-			function line:Paint(pw, ph)
+			function line3:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(55, 55, 55))
 				draw.SimpleText(v, "Y_14_500", ph + YRP.ctr(10), ph / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			local cb = YRPCreateD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+			local cb3 = YRPCreateD("DCheckBox", line3, YRP.ctr(50), YRP.ctr(50), 0, 0)
 
 			if table.HasValue(UGS[CURRENT_USERGROUP].string_tools, v) then
-				cb:SetChecked(true)
+				cb3:SetChecked(true)
 			end
 
-			function cb:OnChange(bVal)
+			function cb3:OnChange(bVal)
 				if bVal then
 					table.insert(UGS[CURRENT_USERGROUP].string_tools, v)
 				else
@@ -777,7 +777,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 				net.SendToServer()
 			end
 
-			YTOOLS.plus:AddItem(line)
+			YTOOLS.plus:AddItem(line3)
 		end
 	end
 
@@ -797,20 +797,20 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	ammolist:EnableVerticalScrollbar(true)
 	local sbar = ammolist.VBar
 
-	function sbar:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
+	function sbar:Paint(sw, sh)
+		draw.RoundedBox(0, 0, 0, sw, sh, YRPInterfaceValue("YFrame", "NC"))
 	end
 
-	function sbar.btnUp:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+	function sbar.btnUp:Paint(sw, sh)
+		draw.RoundedBox(0, 0, 0, sw, sh, Color(60, 60, 60))
 	end
 
-	function sbar.btnDown:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60))
+	function sbar.btnDown:Paint(sw, sh)
+		draw.RoundedBox(0, 0, 0, sw, sh, Color(60, 60, 60))
 	end
 
-	function sbar.btnGrip:Paint(w, h)
-		draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
+	function sbar.btnGrip:Paint(sw, sh)
+		draw.RoundedBox(sw / 2, 0, 0, sw, sh, YRPInterfaceValue("YFrame", "HI"))
 	end
 
 	local tammos = UGS[CURRENT_USERGROUP].string_ammos or ""
@@ -876,20 +876,20 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	ACCESS:AutoSize(true)
 
 	function ACCESSAddCheckBox(name, lstr, color)
-		local tmp = YRPCreateD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
+		local tmp4 = YRPCreateD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
 
-		function tmp:Paint(pw, ph)
+		function tmp4:Paint(pw, ph)
 			surfacePanel(self, pw, ph, YRP.lang_string(lstr), color, YRP.ctr(50 + 10), nil, 0, 1)
 		end
 
-		tmp.cb = YRPCreateD("DCheckBox", tmp, YRP.ctr(50), YRP.ctr(50), 0, 0)
-		tmp.cb:SetValue(ug[name])
+		tmp4.cb = YRPCreateD("DCheckBox", tmp4, YRP.ctr(50), YRP.ctr(50), 0, 0)
+		tmp4.cb:SetValue(ug[name])
 
-		function tmp.cb:Paint(pw, ph)
+		function tmp4.cb:Paint(pw, ph)
 			surfaceCheckBox(self, pw, ph, "done")
 		end
 
-		function tmp.cb:OnChange(bVal)
+		function tmp4.cb:OnChange(bVal)
 			if not self.serverside then
 				net.Start("nws_yrp_usergroup_update_" .. name)
 				net.WriteString(CURRENT_USERGROUP)
@@ -901,25 +901,25 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		net.Receive("nws_yrp_usergroup_update_" .. name, function(len2)
 			local b = net.ReadString()
 
-			if PanelAlive(tmp.cb) then
-				tmp.cb.serverside = true
-				tmp.cb:SetValue(b)
-				tmp.cb.serverside = false
+			if PanelAlive(tmp4.cb) then
+				tmp4.cb.serverside = true
+				tmp4.cb:SetValue(b)
+				tmp4.cb.serverside = false
 			end
 		end)
 
-		ACCESS:AddItem(tmp)
+		ACCESS:AddItem(tmp4)
 	end
 
 	function ACCESSAddHr()
-		local tmp = YRPCreateD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
+		local tmp5 = YRPCreateD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
 
-		function tmp:Paint(pw, ph)
+		function tmp5:Paint(pw, ph)
 			surfacePanel(self, pw, ph, "")
 			draw.RoundedBox(0, 0, YRP.ctr(4), pw, YRP.ctr(4), Color(0, 0, 0, 255))
 		end
 
-		ACCESS:AddItem(tmp)
+		ACCESS:AddItem(tmp5)
 	end
 
 	if tonumber(ug.bool_removeable) == 1 then
@@ -982,62 +982,62 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	GAMEPLAY:AutoSize(true)
 
 	function GAMEPLAYAddIntBox(name, lstr)
-		local tmp = YRPCreateD("DPanel", PARENT, GAMEPLAY:GetWide() - YRP.ctr(40), YRP.ctr(100), 0, 0)
+		local tmp6 = YRPCreateD("DPanel", PARENT, GAMEPLAY:GetWide() - YRP.ctr(40), YRP.ctr(100), 0, 0)
 
-		function tmp:Paint(pw, ph)
+		function tmp6:Paint(pw, ph)
 		end
 
 		--
-		tmp.lbl = YRPCreateD("YLabel", tmp, tmp:GetWide(), YRP.ctr(50), 0, 0)
-		tmp.lbl:SetText(lstr)
-		tmp.cb = YRPCreateD("DNumberWang", tmp, tmp:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
-		tmp.cb:SetValue(ug[name])
-		tmp.cb:SetMax(100)
-		tmp.cb:SetMin(1)
+		tmp6.lbl = YRPCreateD("YLabel", tmp6, tmp6:GetWide(), YRP.ctr(50), 0, 0)
+		tmp6.lbl:SetText(lstr)
+		tmp6.cb = YRPCreateD("DNumberWang", tmp6, tmp6:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
+		tmp6.cb:SetValue(ug[name])
+		tmp6.cb:SetMax(100)
+		tmp6.cb:SetMin(1)
 
-		function tmp.cb:OnValueChanged(val)
+		function tmp6.cb:OnValueChanged(val)
 			net.Start("nws_yrp_usergroup_update_" .. name)
 			net.WriteString(CURRENT_USERGROUP)
 			net.WriteString(val)
 			net.SendToServer()
 		end
 
-		GAMEPLAY:AddItem(tmp)
+		GAMEPLAY:AddItem(tmp6)
 	end
 
 	function GAMEPLAYAddCheckBox(name, lstr)
-		local tmp = YRPCreateD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
+		local tmp7 = YRPCreateD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
 
-		function tmp:Paint(pw, ph)
+		function tmp7:Paint(pw, ph)
 			surfacePanel(self, pw, ph, YRP.lang_string(lstr), nil, YRP.ctr(50 + 10), nil, 0, 1)
 		end
 
-		tmp.cb = YRPCreateD("DCheckBox", tmp, YRP.ctr(50), YRP.ctr(50), 0, 0)
-		tmp.cb:SetValue(ug[name])
+		tmp7.cb = YRPCreateD("DCheckBox", tmp7, YRP.ctr(50), YRP.ctr(50), 0, 0)
+		tmp7.cb:SetValue(ug[name])
 
-		function tmp.cb:Paint(pw, ph)
+		function tmp7.cb:Paint(pw, ph)
 			surfaceCheckBox(self, pw, ph, "done")
 		end
 
-		function tmp.cb:OnChange(bVal)
+		function tmp7.cb:OnChange(bVal)
 			net.Start("nws_yrp_usergroup_update_" .. name)
 			net.WriteString(CURRENT_USERGROUP)
 			net.WriteString(btn(bVal))
 			net.SendToServer()
 		end
 
-		GAMEPLAY:AddItem(tmp)
+		GAMEPLAY:AddItem(tmp7)
 	end
 
 	function GAMEPLAYAddHr()
-		local tmp = YRPCreateD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
+		local tmp8 = YRPCreateD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(4 + 4 + 4), 0, 0)
 
-		function tmp:Paint(pw, ph)
+		function tmp8:Paint(pw, ph)
 			surfacePanel(self, pw, ph, "")
 			draw.RoundedBox(0, 0, YRP.ctr(4), pw, YRP.ctr(4), Color(0, 0, 0, 255))
 		end
 
-		GAMEPLAY:AddItem(tmp)
+		GAMEPLAY:AddItem(tmp8)
 	end
 
 	if tonumber(ug.bool_removeable) == 1 then
@@ -1109,8 +1109,8 @@ function YRPAddUG(tbl)
 		end
 
 		if self.uid == tonumber(CURRENT_USERGROUP) then
-			local pw = pw - YRP.ctr(40 + 8)
-			local ph = ph
+			local spw = pw - YRP.ctr(40 + 8)
+			local sph = ph
 			local px = YRP.ctr(40 + 8)
 			local _br = 4
 			local _w = 32
@@ -1118,24 +1118,24 @@ function YRPAddUG(tbl)
 			--Outter
 			draw.RoundedBox(0, px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
 			draw.RoundedBox(0, px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
-			draw.RoundedBox(0, px + YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
-			draw.RoundedBox(0, px + YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
-			draw.RoundedBox(0, px + pw - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
-			draw.RoundedBox(0, px + pw - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
-			draw.RoundedBox(0, px + pw - YRP.ctr(_w) - YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
-			draw.RoundedBox(0, px + pw - YRP.ctr(_h) - YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
+			draw.RoundedBox(0, px + YRP.ctr(_br), sph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
+			draw.RoundedBox(0, px + YRP.ctr(_br), sph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
+			draw.RoundedBox(0, px + spw - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
+			draw.RoundedBox(0, px + spw - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
+			draw.RoundedBox(0, px + spw - YRP.ctr(_w) - YRP.ctr(_br), sph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(0, 0, 0, 255))
+			draw.RoundedBox(0, px + spw - YRP.ctr(_h) - YRP.ctr(_br), sph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(0, 0, 0, 255))
 			_br = 8
 			_w = 32 - 2 * 4
 			_h = 12 - 2 * 4
 			--Inner
 			draw.RoundedBox(0, px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(255, 255, 255, 255))
 			draw.RoundedBox(0, px + YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(255, 255, 255, 255))
-			draw.RoundedBox(0, px + YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(255, 255, 255, 255))
-			draw.RoundedBox(0, px + YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(255, 255, 255, 255))
-			draw.RoundedBox(0, px + pw - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(255, 255, 255, 255))
-			draw.RoundedBox(0, px + pw - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(255, 255, 255, 255))
-			draw.RoundedBox(0, px + pw - YRP.ctr(_w) - YRP.ctr(_br), ph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(255, 255, 255, 255))
-			draw.RoundedBox(0, px + pw - YRP.ctr(_h) - YRP.ctr(_br), ph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(255, 255, 255, 255))
+			draw.RoundedBox(0, px + YRP.ctr(_br), sph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(255, 255, 255, 255))
+			draw.RoundedBox(0, px + YRP.ctr(_br), sph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(255, 255, 255, 255))
+			draw.RoundedBox(0, px + spw - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(255, 255, 255, 255))
+			draw.RoundedBox(0, px + spw - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(255, 255, 255, 255))
+			draw.RoundedBox(0, px + spw - YRP.ctr(_w) - YRP.ctr(_br), sph - YRP.ctr(_h) - YRP.ctr(_br), YRP.ctr(_w), YRP.ctr(_h), Color(255, 255, 255, 255))
+			draw.RoundedBox(0, px + spw - YRP.ctr(_h) - YRP.ctr(_br), sph - YRP.ctr(_w) - YRP.ctr(_br), YRP.ctr(_h), YRP.ctr(_w), Color(255, 255, 255, 255))
 		end
 	end
 

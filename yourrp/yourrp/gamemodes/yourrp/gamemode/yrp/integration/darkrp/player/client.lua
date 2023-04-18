@@ -1,25 +1,24 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
-local Player = FindMetaTable( "Player" )
+local Player = FindMetaTable("Player")
 
 function Player:drawHitInfo()
-	--Description: Start drawing the hit information above a hitman.
-	--
 end
 
+--Description: Start drawing the hit information above a hitman.
+--
 function Player:drawPlayerInfo()
-	--Description: Draw player info above a player's head (name, health job). Override this function to disable or change drawing behaviour in DarkRP.
-	--
 end
 
+--Description: Draw player info above a player's head (name, health job). Override this function to disable or change drawing behaviour in DarkRP.
+--
 function Player:drawWantedInfo()
-	--Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
-	--
 end
 
+--Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
+--
 function Player:getPreferredJobModel(teamNr)
 	--Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
-	YRPDarkrpNotFound( "getPreferredJobModel( " .. tostring(teamNr) .. " )" )
+	YRPDarkrpNotFound("getPreferredJobModel( " .. tostring(teamNr) .. " )")
 
 	return ""
 end
@@ -35,18 +34,20 @@ function Player:isInRoom()
 end
 
 function Player:stopHitInfo()
-	--Description: Stop drawing the hit information above a hitman.
-	--
 end
 
+--Description: Stop drawing the hit information above a hitman.
+--
 local keyNames
-function input.KeyNameToNumber(str)
-    if not keyNames then
-        keyNames = {}
-        for i = 1, 107, 1 do
-            keyNames[input.GetKeyName(i)] = i
-        end
-    end
 
-    return keyNames[str]
+function input.KeyNameToNumber(str)
+	if not keyNames then
+		keyNames = {}
+
+		for i = 1, 107 do
+			keyNames[input.GetKeyName(i)] = i
+		end
+	end
+
+	return keyNames[str]
 end
