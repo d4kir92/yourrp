@@ -85,49 +85,51 @@ hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
 		local firsttab = nil
 
 		-- Loop through all tabs of spawnmenu
-		for i, v in pairs(g_SpawnMenu.CreateMenu.Items) do
-			local tab = v.Tab -- tab
-			local text = tab:GetText() -- tab name
+		if PanelAlive(g_SpawnMenu) then
+			for i, v in pairs(g_SpawnMenu.CreateMenu.Items) do
+				local tab = v.Tab -- tab
+				local text = tab:GetText() -- tab name
 
-			for lstr, bstr in pairs(tabs) do
-				-- if tabtext == tabletabtext
-				if text == language.GetPhrase(lstr) then
-					tab:SetVisible(LocalPlayer():GetYRPBool(bstr, false)) -- set visible if allowed to
+				for lstr, bstr in pairs(tabs) do
+					-- if tabtext == tabletabtext
+					if text == language.GetPhrase(lstr) then
+						tab:SetVisible(LocalPlayer():GetYRPBool(bstr, false)) -- set visible if allowed to
 
-					-- if allowed
-					if LocalPlayer():GetYRPBool(bstr) then
-						allhidden = false -- then disable hiding the whole element
+						-- if allowed
+						if LocalPlayer():GetYRPBool(bstr) then
+							allhidden = false -- then disable hiding the whole element
 
-						-- if not firsttab found
-						if firsttab == nil then
-							firsttab = lstr -- set it
+							-- if not firsttab found
+							if firsttab == nil then
+								firsttab = lstr -- set it
+							end
 						end
 					end
 				end
 			end
-		end
 
-		-- Switch to allowed tab if on an unallowed one
-		local text = g_SpawnMenu.CreateMenu:GetActiveTab():GetText() -- active tab of spawnmenu
-		local changefirstpage = false
+			-- Switch to allowed tab if on an unallowed one
+			local text = g_SpawnMenu.CreateMenu:GetActiveTab():GetText() -- active tab of spawnmenu
+			local changefirstpage = false
 
-		for lstr, bstr in pairs(tabs) do
-			-- if active tab text == table tab text
-			if language.GetPhrase(text) == language.GetPhrase(lstr) and not lply:GetYRPBool(bstr) then
-				changefirstpage = true -- then change tab
+			for lstr, bstr in pairs(tabs) do
+				-- if active tab text == table tab text
+				if language.GetPhrase(text) == language.GetPhrase(lstr) and not lply:GetYRPBool(bstr) then
+					changefirstpage = true -- then change tab
+				end
 			end
-		end
 
-		-- change first tab page, because currently on unallowed
-		if changefirstpage and firsttab then
-			g_SpawnMenu:OpenCreationMenuTab("#" .. firsttab) -- changes to new tab page
-		end
+			-- change first tab page, because currently on unallowed
+			if changefirstpage and firsttab then
+				g_SpawnMenu:OpenCreationMenuTab("#" .. firsttab) -- changes to new tab page
+			end
 
-		-- Hide the whole element when all disallowed
-		if allhidden then
-			g_SpawnMenu.CreateMenu:SetVisible(false)
-		else
-			g_SpawnMenu.CreateMenu:SetVisible(true)
+			-- Hide the whole element when all disallowed
+			if allhidden then
+				g_SpawnMenu.CreateMenu:SetVisible(false)
+			else
+				g_SpawnMenu.CreateMenu:SetVisible(true)
+			end
 		end
 	end
 
