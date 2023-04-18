@@ -184,25 +184,25 @@ function LoadCharacters()
 						end
 
 						cache[i] = {}
-						local sw = YRP.ctr(fw) - 2 * br
-						local sh = YRP.ctr(200)
+						local psw = YRP.ctr(fw) - 2 * br
+						local psh = YRP.ctr(200)
 						local px = 0
 						local py = 0
 
 						if YRP_CharDesign == "horizontalnew" then
-							sw = YRP.ctr(350 * 2)
-							sh = YRP.ctr(600 * 2)
+							psw = YRP.ctr(350 * 2)
+							psh = YRP.ctr(600 * 2)
 							px = 0
 							py = 0
 						elseif YRP_CharDesign == "default" then
 							YRPUpdateCharValues()
-							sw = DefaultCharW
-							sh = DefaultCharH
+							psw = DefaultCharW
+							psh = DefaultCharH
 							px = 0
 							py = 0
 						end
 
-						cache[i].tmpChar = YRPCreateD("YButton", nil, sw, sh, px, py)
+						cache[i].tmpChar = YRPCreateD("YButton", nil, psw, psh, px, py)
 						local tmpChar = cache[i].tmpChar
 						tmpChar:SetText("")
 						tmpChar.charid = chars[i].char.uniqueID or "UID INVALID"
@@ -374,19 +374,16 @@ function LoadCharacters()
 							charactersEnter:SetText("")
 
 							function charactersEnter:DoClick()
-								if tmpChar.bool_eventchar then
-								else -- nothing
-									if LocalPlayer() ~= nil and tonumber(tmpChar.charid) ~= "-1" and LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
-										if LocalPlayer():Alive() then
-											closeCharacterSelection()
-										elseif tonumber(tmpChar.charid) ~= nil then
-											net.Start("nws_yrp_EnterWorld")
-											net.WriteString(tmpChar.charid)
-											net.SendToServer()
+								if not tmpChar.bool_eventchar and LocalPlayer() ~= nil and tonumber(tmpChar.charid) ~= "-1" and LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
+									if LocalPlayer():Alive() then
+										closeCharacterSelection()
+									elseif tonumber(tmpChar.charid) ~= nil then
+										net.Start("nws_yrp_EnterWorld")
+										net.WriteString(tmpChar.charid)
+										net.SendToServer()
 
-											if PanelAlive(CharMenu.frame) then
-												CharMenu.frame:Close()
-											end
+										if PanelAlive(CharMenu.frame) then
+											CharMenu.frame:Close()
 										end
 									end
 								end
@@ -744,13 +741,13 @@ function LoadCharacters()
 				end
 
 				if YRP_CharDesign == "horizontalnew" then
-					local sw = YRP.ctr(350 * 2)
-					local sh = YRP.ctr(600 * 2)
+					psw = YRP.ctr(350 * 2)
+					psh = YRP.ctr(600 * 2)
 					local px = 0
 					local py = 0
 
 					if CharMenu.character.amount < LocalPlayer():GetYRPInt("int_characters_max", 1) then
-						local addChar = YRPCreateD("YButton", nil, sw, sh, px, py)
+						local addChar = YRPCreateD("YButton", nil, psw, psh, px, py)
 						addChar:SetText("")
 
 						function addChar:Paint(pw, ph)
@@ -787,7 +784,7 @@ function LoadCharacters()
 					end
 
 					if CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
-						local addCharEvent = YRPCreateD("YButton", nil, sw, sh, px, py)
+						local addCharEvent = YRPCreateD("YButton", nil, psw, psh, px, py)
 						addCharEvent:SetText("")
 
 						function addCharEvent:Paint(pw, ph)
@@ -823,13 +820,13 @@ function LoadCharacters()
 					end
 				elseif YRP_CharDesign == "default" then
 					YRPUpdateCharValues()
-					local sw = DefaultCharW
-					local sh = DefaultCharH
+					psw = DefaultCharW
+					psh = DefaultCharH
 					local px = 0
 					local py = 0
 
 					if CharMenu.character.amount < LocalPlayer():GetYRPInt("int_characters_max", 1) then
-						local addChar = YRPCreateD("YButton", nil, sw, sh, px, py)
+						local addChar = YRPCreateD("YButton", nil, psw, psh, px, py)
 						addChar:SetText("")
 
 						function addChar:Paint(pw, ph)
@@ -867,7 +864,7 @@ function LoadCharacters()
 					end
 
 					if CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
-						local addCharEvent = YRPCreateD("YButton", nil, sw, sh, px, py)
+						local addCharEvent = YRPCreateD("YButton", nil, psw, psh, px, py)
 						addCharEvent:SetText("")
 
 						function addCharEvent:Paint(pw, ph)
@@ -1138,12 +1135,12 @@ function openCharacterSelection(force)
 			end
 
 			local mn, mx = CharMenu.charplayermodel.Entity:GetRenderBounds()
-			local size = 0
-			size = math.max(size, math.abs(mn.x) + math.abs(mx.x))
-			size = math.max(size, math.abs(mn.y) + math.abs(mx.y))
-			size = math.max(size, math.abs(mn.z) + math.abs(mx.z))
+			local psize = 0
+			psize = math.max(psize, math.abs(mn.x) + math.abs(mx.x))
+			psize = math.max(psize, math.abs(mn.y) + math.abs(mx.y))
+			psize = math.max(psize, math.abs(mn.z) + math.abs(mx.z))
 			CharMenu.charplayermodel:SetFOV(45)
-			CharMenu.charplayermodel:SetCamPos(Vector(size, size, size))
+			CharMenu.charplayermodel:SetCamPos(Vector(psize, psize, psize))
 			CharMenu.charplayermodel:SetLookAt((mn + mx) * 0.5)
 			CharMenu.characterList = YRPCreateD("DPanelList", CharMenu.charactersBackground, YRP.ctr(fw) - 2 * br, ScrH() - (2 * border) - br - YRP.ctr(120), br, br)
 			CharMenu.characterList:EnableVerticalScrollbar()
@@ -1206,19 +1203,16 @@ function openCharacterSelection(force)
 			charactersEnter:SetText("")
 
 			function charactersEnter:DoClick()
-				if isEventChar then
-				else -- nothing
-					if LocalPlayer() ~= nil and curChar ~= "-1" and LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
-						if LocalPlayer():Alive() then
-							closeCharacterSelection()
-						elseif curChar ~= nil then
-							net.Start("nws_yrp_EnterWorld")
-							net.WriteString(curChar)
-							net.SendToServer()
+				if not isEventChar and LocalPlayer() ~= nil and curChar ~= "-1" and LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
+					if LocalPlayer():Alive() then
+						closeCharacterSelection()
+					elseif curChar ~= nil then
+						net.Start("nws_yrp_EnterWorld")
+						net.WriteString(curChar)
+						net.SendToServer()
 
-							if PanelAlive(CharMenu.frame) then
-								CharMenu.frame:Close()
-							end
+						if PanelAlive(CharMenu.frame) then
+							CharMenu.frame:Close()
 						end
 					end
 				end
@@ -1438,20 +1432,17 @@ function openCharacterSelection(force)
 			charactersEnter:SetText("")
 
 			function charactersEnter:DoClick()
-				if isEventChar then
-				else -- nothing
-					if LocalPlayer() ~= nil and curChar ~= "-1" and LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
-						if LocalPlayer():Alive() then
-							closeCharacterSelection()
-							closeCharacterSelection()
-						elseif curChar ~= nil then
-							net.Start("nws_yrp_EnterWorld")
-							net.WriteString(curChar)
-							net.SendToServer()
+				if not isEventChar and LocalPlayer() ~= nil and curChar ~= "-1" and LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
+					if LocalPlayer():Alive() then
+						closeCharacterSelection()
+						closeCharacterSelection()
+					elseif curChar ~= nil then
+						net.Start("nws_yrp_EnterWorld")
+						net.WriteString(curChar)
+						net.SendToServer()
 
-							if PanelAlive(CharMenu.frame) then
-								CharMenu.frame:Close()
-							end
+						if PanelAlive(CharMenu.frame) then
+							CharMenu.frame:Close()
 						end
 					end
 				end
@@ -1921,7 +1912,7 @@ function openCharacterSelection(force)
 				end
 
 				if not strEmpty(text) then
-					local hasdesign = hook.Run("YButtonAPaint", self, pw, ph, tab)
+					hook.Run("YButtonAPaint", self, pw, ph, tab)
 					draw.SimpleText(text, "Y_26_700", pw / 2, ph / 2, YRPTextColor(tab.color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end

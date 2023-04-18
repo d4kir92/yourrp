@@ -418,17 +418,6 @@ function YRPDoorOptionWindow(door, tabBuilding, tabOwner, tabGroup)
 		YRPCloseMenu()
 	end
 
-	--[[
-	local _ButtonUpgrade = createVGUI( "YButton", yrp_door.window, 400, 50, 10, 200)
-	_ButtonUpgrade:SetText(YRP.lang_string( "LID_upgradedoor" ) .. " (-" .. GetGlobalYRPString( "text_money_pre", "" ) .. "100" .. GetGlobalYRPString( "text_money_pos", "" ) .. " ) NOT AVAILABLE" )
-	function _ButtonUpgrade:DoClick()
-		net.Start( "nws_yrp_wantHouse" )
-			net.WriteInt(tabBuilding.uniqueID, 16)
-		net.SendToServer()
-		yrp_door.window:Close()
-	end
-	]]
-	--
 	if OWNER then
 		local _ButtonSell = YRPCreateD("YButton", yrp_door.window.con, YRP.ctr(500), YRP.ctr(50), YRP.ctr(20), YRP.ctr(150))
 		_ButtonSell:SetText(YRP.lang_string("LID_sell") .. " (+" .. GetGlobalYRPString("text_money_pre", "") .. tabBuilding.buildingprice / 2 .. GetGlobalYRPString("text_money_pos", "") .. " )")

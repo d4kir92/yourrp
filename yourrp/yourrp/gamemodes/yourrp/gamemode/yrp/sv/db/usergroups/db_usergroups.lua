@@ -1506,7 +1506,7 @@ function YRPRenderColor(ply, mode, color)
 end
 
 local cloakColor = Color(255, 255, 255, 0)
-local frozenColor = Color(0, 0, 255, 255)
+--local frozenColor = Color(100, 100, 255, 255)
 local normalColor = Color(255, 255, 255, 255)
 
 function YRPRender(ply)
@@ -1515,8 +1515,6 @@ function YRPRender(ply)
 
 		if ply:GetYRPBool("cloaked", false) then
 			ply.renderstatus = "cloaked"
-		elseif ply:IsFlagSet(FL_FROZEN) then
-			ply.renderstatus = "frozen"
 		else
 			ply.renderstatus = "normal"
 		end
@@ -1526,8 +1524,6 @@ function YRPRender(ply)
 
 			if ply.renderstatus == "cloaked" then
 				YRPRenderColor(ply, RENDERMODE_TRANSCOLOR, cloakColor)
-			elseif ply.renderstatus == "frozen" then
-				YRPRenderColor(ply, RENDERMODE_NORMAL, frozenColor)
 			else
 				YRPSetPlayerModel(ply)
 				YRPRenderColor(ply, RENDERMODE_NORMAL, normalColor)

@@ -605,7 +605,7 @@ end, hook.MONITOR_HIGH)
 hook.Add("HUDPaint", "yrp_hud_charbackground", function()
 	local lply = LocalPlayer()
 
-	if YRPGetCharBGNotFound and strEmpty(GetGlobalYRPString("text_character_background")) and lply:HasAccess("hud2") then
+	if GetGlobalYRPBool("bool_character_system", true) and YRPGetCharBGNotFound and strEmpty(GetGlobalYRPString("text_character_background")) and lply:HasAccess("hud2") then
 		local text = YRPGetCharBGNotFound()
 		draw.SimpleTextOutlined(text, "Y_40_500", ScrW() / 2, ScrH() * 0.25, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end

@@ -143,7 +143,7 @@ net.Receive("nws_yrp_set_lockdown", function(len, ply)
 			speaker:EmitSound("sound_lockdown")
 		end
 
-		local buildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name ~= '" .. "Building" .. "'")
+		local buildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'")
 		local lockdoors = {}
 
 		if IsNilOrFalse(buildings) then
@@ -173,7 +173,7 @@ net.Receive("nws_yrp_set_lockdown", function(len, ply)
 			speaker:StopSound("sound_lockdown")
 		end
 
-		local buildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name ~= '" .. "Building" .. "'")
+		local buildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "name != '" .. "Building" .. "'")
 		local lockdoors = {}
 
 		if IsNilOrFalse(buildings) then

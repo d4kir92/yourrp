@@ -34,7 +34,7 @@ net.Receive("nws_yrp_get_laws", function(len, ply)
 			laws.string_lockdowntext = lockdown.string_lockdowntext
 		end
 
-		local buildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "name, bool_lockdown, uniqueID", "name ~= 'Building'")
+		local buildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "name, bool_lockdown, uniqueID", "name != 'Building'")
 
 		if not IsNotNilAndNotFalse(buildings) then
 			buildings = {}

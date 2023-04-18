@@ -665,7 +665,7 @@ net.Receive("nws_yrp_changeBuildingDescription", function(len, ply)
 end)
 
 function YRPGetDoors()
-	local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "name, uniqueID", "name ~= 'Building'")
+	local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "name, uniqueID", "name != 'Building'")
 
 	if IsNotNilAndNotFalse(_tmpTable) then
 		for k, building in pairs(_tmpTable) do
