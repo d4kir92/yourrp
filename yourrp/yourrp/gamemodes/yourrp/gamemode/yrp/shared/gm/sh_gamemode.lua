@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 321 -- do NOT change this!
+GM.VersionBuild = 322 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -114,7 +114,7 @@ end
 
 function GetNiceMapName()
 	local map = game.GetMap()
-	local _first = string.find(map, "_", 1, false)
+	local _first = string.find(map, "_", 1, true)
 
 	if _first ~= nil then
 		map = string.sub(map, _first + 1)
@@ -688,7 +688,7 @@ function YRPReplaceWithPlayerNames(text)
 	local found = false
 
 	for _, p in pairs(player.GetAll()) do
-		local s, e = string.find(string.lower(text), string.lower(p:RPName()))
+		local s, e = string.find(string.lower(text), string.lower(p:RPName()), 1, true)
 
 		if s then
 			local pre = string.sub(text, 1, s - 1)

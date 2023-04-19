@@ -117,14 +117,14 @@ function YRPUpdateFloat(handler, db_name, ply, netstr, str, l_db, value)
 end
 
 for str, val in pairs(yrp_realistic) do
-	if string.find(str, "bool_") then
+	if string.find(str, "bool_", 1, true) then
 		util.AddNetworkString("nws_yrp_update_" .. str)
 
 		net.Receive("nws_yrp_update_" .. str, function(len, ply)
 			local b = btn(net.ReadBool())
 			YRPUpdateBool(HANDLER_REALISTIC, DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_realistic, b)
 		end)
-	elseif string.find(str, "float_") then
+	elseif string.find(str, "float_", 1, true) then
 		util.AddNetworkString("nws_yrp_update_" .. str)
 
 		net.Receive("nws_yrp_update_" .. str, function(len, ply)

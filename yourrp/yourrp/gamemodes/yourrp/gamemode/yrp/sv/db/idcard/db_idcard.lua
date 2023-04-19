@@ -120,7 +120,7 @@ function LoadIDCardSetting(force, from)
 							end
 						end
 					else
-						if string.find(name, "background") then
+						if string.find(name, "background", 1, true) then
 							if string.EndsWith(name, "_w") then
 								YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '600'")
 							elseif string.EndsWith(name, "_h") then

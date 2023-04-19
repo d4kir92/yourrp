@@ -130,7 +130,7 @@ function HasDarkrpmodification()
 end
 
 function PrintLIDError(var)
-	if not string.find(var, " ") and not string.find(var, ":") and not string.find(var, "-") and HasYRPContent() and not HasYRPFakeContent() then
+	if not string.find(var, " ", 1, true) and not string.find(var, ":", 1, true) and not string.find(var, "-", 1, true) and HasYRPContent() and not HasYRPFakeContent() then
 		YRP.msg("error", "Translation string [" .. tostring(var) .. "] not found, sent to Dev. Wait for next update!")
 	end
 end

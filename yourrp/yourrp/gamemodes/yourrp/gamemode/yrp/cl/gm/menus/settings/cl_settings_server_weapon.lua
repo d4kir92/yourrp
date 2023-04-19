@@ -132,7 +132,7 @@ net.Receive("nws_yrp_weapon_menu", function(len)
 			searchstr = string.Replace(searchstr, "]", "")
 			searchstr = string.Replace(searchstr, "%", "")
 
-			if string.find(string.lower(swep.PrintName), searchstr) or string.find(string.lower(swep.ClassName), searchstr) then
+			if string.find(string.lower(swep.PrintName), searchstr, 1, true) or string.find(string.lower(swep.ClassName), searchstr, 1, true) then
 				local weapon = YRPCreateD("DLabel", nil, lis:GetWide(), 40, 0, 0)
 				weapon:SetText("")
 
@@ -154,7 +154,7 @@ net.Receive("nws_yrp_weapon_menu", function(len)
 						text = "ClassName: " .. swep.ClassName
 					end
 
-					if string.find(string.lower(swep.ClassName), "base") or string.find(string.lower(swep.PrintName), "base") then
+					if string.find(string.lower(swep.ClassName), "base", 1, true) or string.find(string.lower(swep.PrintName), "base", 1, true) then
 						text = text .. " [MAYBE A BASE]"
 					end
 

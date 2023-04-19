@@ -296,7 +296,7 @@ end
 
 function YFAR(str, f, r)
 	-- Y Find And Replace
-	local s, e = string.find(str, f)
+	local s, e = string.find(str, f, 1, true)
 
 	if s then
 		local pre = string.sub(str, 0, s - 1)
@@ -325,15 +325,15 @@ function CreateNewIDCardID(charid, try)
 
 	local idstructure = GetIDStructure()
 
-	while string.find(idstructure, "!D") do
+	while string.find(idstructure, "!D", 1, true) do
 		idstructure = YFAR(idstructure, "!D", table.Random(digits))
 	end
 
-	while string.find(idstructure, "!L") do
+	while string.find(idstructure, "!L", 1, true) do
 		idstructure = YFAR(idstructure, "!L", table.Random(letters))
 	end
 
-	while string.find(idstructure, "!N") do
+	while string.find(idstructure, "!N", 1, true) do
 		idstructure = YFAR(idstructure, "!N", table.Random(numbers))
 	end
 

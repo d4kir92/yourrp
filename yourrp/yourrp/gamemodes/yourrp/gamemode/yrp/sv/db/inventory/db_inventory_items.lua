@@ -14,7 +14,7 @@ function InventoryBlacklisted(cname)
 	local blacklist = GetGlobalYRPTable("yrp_blacklist_inventory", {})
 
 	for i, black in pairs(blacklist) do
-		if string.find(cname, black.value) then
+		if string.find(cname, black.value, 1, true) then
 			YRP.msg("note", "Blacklisted for inventory: " .. cname)
 
 			return true

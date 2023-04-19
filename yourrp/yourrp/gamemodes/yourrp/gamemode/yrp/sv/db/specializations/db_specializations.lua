@@ -487,7 +487,7 @@ function GetSpecializationIDByName(lname)
 		spe.name = spe.name
 		spe.name = string.lower(spe.name)
 
-		if lname and spe.name and string.find(spe.name, lname) then
+		if lname and spe.name and string.find(spe.name, lname, 1, true) then
 			lid = spe.uniqueID
 		end
 	end

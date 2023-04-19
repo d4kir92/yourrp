@@ -267,7 +267,7 @@ local function ConvertToMains(tab)
 	local res = {}
 
 	for i, v in pairs(tab) do
-		if not strEmpty(v) and not string.StartWith(v, "\t") and not string.find(v, "{") and not string.find(v, "}") then
+		if not strEmpty(v) and not string.StartWith(v, "\t") and not string.find(v, "{", 1, true) and not string.find(v, "}", 1, true) then
 			local ug = string.Replace(v, "\"", "")
 			ug = string.Replace(ug, "\t", "")
 			table.insert(res, string.lower(ug))
@@ -1546,7 +1546,7 @@ function EntBlacklisted(ent)
 	local blacklist = GetGlobalYRPTable("yrp_blacklist_entities", {})
 
 	for i, black in pairs(blacklist) do
-		if string.find(ent:GetClass(), black.value) or string.find(ent:GetModel(), black.value) then return true end
+		if string.find(ent:GetClass(), black.value, 1, true) or string.find(ent:GetModel(), black.value, 1, true) then return true end
 	end
 
 	return false

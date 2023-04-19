@@ -243,20 +243,23 @@ function YRPSortScoreboard()
 			entry.language = ply:GetLanguage()
 			entry.ping = ply:Ping()
 			entry.operating_system = ply:OS()
+			entry.playtime = ply:FormattedUptimeTotal()
 			table.insert(plys, entry)
 		end
 	end
 
 	local c = 0
 
-	for i, entry in SortedPairsByMemberValue(plys, lply.yrp_sb_sortby, lply.yrp_sb_reverse) do
-		c = c + 1
+	if IsNotNilAndNotFalse(lply.yrp_sb_sortby) and lply.yrp_sb_reverse ~= nil then
+		for i, entry in SortedPairsByMemberValue(plys, lply.yrp_sb_sortby, lply.yrp_sb_reverse) do
+			c = c + 1
 
-		timer.Simple(c * 0.01, function()
-			if YRPScoreboard and YRPScoreboard.id == id and entry and entry.ply then
-				YRPScoreboardAddPlayer(entry.ply)
-			end
-		end)
+			timer.Simple(c * 0.01, function()
+				if YRPScoreboard and YRPScoreboard.id == id and entry and entry.ply then
+					YRPScoreboardAddPlayer(entry.ply)
+				end
+			end)
+		end
 	end
 end
 

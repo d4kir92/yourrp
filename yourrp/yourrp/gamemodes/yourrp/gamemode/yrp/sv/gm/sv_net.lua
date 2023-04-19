@@ -65,7 +65,7 @@ function YRPChangeUserGroup(ply, cmd, args)
 			--[[ if server tries ]]
 			--
 			for k, v in pairs(player.GetAll()) do
-				if string.find(string.lower(v:Nick()), string.lower(args[1])) or string.find(string.lower(v:SteamName()), string.lower(args[1])) then
+				if string.find(string.lower(v:Nick()), string.lower(args[1]), 1, true) or string.find(string.lower(v:SteamName()), string.lower(args[1]), 1, true) then
 					v:SetUserGroup(args[2])
 					YRP.msg("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
 
@@ -78,7 +78,7 @@ function YRPChangeUserGroup(ply, cmd, args)
 			--[[ if admin/superadmin/owner tries ]]
 			--
 			for k, v in pairs(player.GetAll()) do
-				if string.find(string.lower(v:Nick()), string.lower(args[1])) or string.find(string.lower(v:SteamName()), string.lower(args[1])) then
+				if string.find(string.lower(v:Nick()), string.lower(args[1]), 1, true) or string.find(string.lower(v:SteamName()), string.lower(args[1]), 1, true) then
 					v:SetUserGroup(args[2])
 					YRP.msg("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
 

@@ -47,12 +47,12 @@ function nicekey(key_str)
 	local _str = string.lower(tostring(key_str))
 
 	if _str ~= nil then
-		if string.find(_str, "kp_") then
+		if string.find(_str, "kp_", 1, true) then
 			local _end = string.sub(_str, 4)
 			_end = replaceKeyName(_end)
 
 			return YRP.lang_string("LID_keynumpad") .. " " .. _end
-		elseif string.find(_str, "pg") then
+		elseif string.find(_str, "pg", 1, true) then
 			return YRP.lang_string("LID_keypage") .. " " .. replaceKeyName(_str)
 		end
 

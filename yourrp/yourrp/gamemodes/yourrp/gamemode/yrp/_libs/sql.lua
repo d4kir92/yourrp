@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function disk_full(error)
-	if string.find(error, "database or disk is full") then
+	if string.find(error, "database or disk is full", 1, true) then
 		if SERVER then
 			PrintMessage(HUD_PRINTCENTER, "database or disk is full, please make more space!")
 			net.Start("nws_yrp_noti")
@@ -159,7 +159,7 @@ function YRP_SQL_QUERY(query)
 	query = tostring(query)
 
 	--YRP.msg( "db", "YRP_SQL_QUERY( " .. tostring(query) .. " )" )
-	if not string.find(query, ";") then
+	if not string.find(query, ";", 1, true) then
 		YRP.msg("error", GetSQLModeName() .. ": " .. "Query has no ; [" .. query .. "]")
 
 		return false
@@ -180,7 +180,7 @@ function YRP_SQL_QUERY(query)
 			local que = YRPSQL.db:query(query)
 
 			que.onError = function(q, e)
-				if string.find(e, "Unknown column") == nil and string.find(e, "doesn't exist") == nil then
+				if string.find(e, "Unknown column", 1, true) == nil and string.find(e, "doesn't exist", 1, true) == nil then
 					YRP.msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_QUERY - ERROR: " .. tostring(e) .. " lastError: " .. YRP_SQL_Show_Last_Error() .. " query: " .. tostring(query))
 					q:error()
 				end
@@ -506,7 +506,7 @@ function YRP_SQL_ADD_COLUMN(db_table, column_name, datatype)
 
 		return _r
 	elseif GetSQLMode() == 1 then
-		if string.find(datatype, "TEXT") then
+		if string.find(datatype, "TEXT", 1, true) then
 			datatype = string.Replace(datatype, "TEXT", "VARCHAR(255)")
 		end
 

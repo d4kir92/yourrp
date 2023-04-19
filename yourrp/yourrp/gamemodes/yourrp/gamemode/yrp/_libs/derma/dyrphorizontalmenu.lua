@@ -175,13 +175,13 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 
 					local icon = ""
 
-					if string.find(string.lower(subtab.name), "discord") then
+					if string.find(string.lower(subtab.name), "discord", 1, true) then
 						icon = "discord"
-					elseif string.find(string.lower(subtab.name), "teamspeak") then
+					elseif string.find(string.lower(subtab.name), "teamspeak", 1, true) then
 						icon = "ts"
-					elseif string.find(string.lower(subtab.name), "translations") then
+					elseif string.find(string.lower(subtab.name), "translations", 1, true) then
 						icon = "language"
-					elseif string.find(string.lower(subtab.name), "steam") then
+					elseif string.find(string.lower(subtab.name), "steam", 1, true) then
 						icon = "steam"
 					end
 

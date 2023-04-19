@@ -914,7 +914,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 							self.dpl:Clear()
 
 							for i, v in pairs(cl_sweps) do
-								if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
+								if string.find(string.lower(v.PrintName), strsearch, 1, true) or string.find(string.lower(v.ClassName), strsearch, 1, true) or string.find(string.lower(v.WorldModel), strsearch, 1, true) then
 									local d_swep = YRPCreateD("YButton", nil, winswep.dpl:GetWide(), height / 4, 0, 0)
 									d_swep:SetText(v.PrintName)
 
@@ -1768,7 +1768,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 								self.searchstr = string.Replace(self.searchstr, "]", "")
 								self.searchstr = string.Replace(self.searchstr, "%", "")
 
-								if PanelAlive(win.dpl) and string.find(string.lower(pm.string_name), self.searchstr) or string.find(string.lower(pm.string_models), self.searchstr) then
+								if PanelAlive(win.dpl) and string.find(string.lower(pm.string_name), self.searchstr, 1, true) or string.find(string.lower(pm.string_models), self.searchstr, 1, true) then
 									local line = YRPCreateD("YButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
 									line.string_name = pm.string_name
 									line.models = string.Explode(",", pm.string_models)
@@ -2258,7 +2258,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 								v.ClassName = v.ClassName or ""
 								v.WorldModel = v.WorldModel or ""
 
-								if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
+								if string.find(string.lower(v.PrintName), strsearch, 1, true) or string.find(string.lower(v.ClassName), strsearch, 1, true) or string.find(string.lower(v.WorldModel), strsearch, 1, true) then
 									local d_licenses = YRPCreateD("YButton", nil, winlicenses.dpl:GetWide(), height / 4, 0, 0)
 									d_licenses:SetText(v.PrintName)
 
@@ -2621,7 +2621,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					self.dpl:Clear()
 
 					for i, v in pairs(cl_ndsweps) do
-						if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
+						if string.find(string.lower(v.PrintName), strsearch, 1, true) or string.find(string.lower(v.ClassName), strsearch, 1, true) or string.find(string.lower(v.WorldModel), strsearch, 1, true) then
 							local d_ndswep = YRPCreateD("YButton", nil, winndswep.dpl:GetWide(), height / 4, 0, 0)
 							d_ndswep:SetText(v.PrintName)
 
@@ -2742,7 +2742,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 								v.ClassName = v.ClassName or ""
 								v.WorldModel = v.WorldModel or ""
 
-								if string.find(string.lower(v.PrintName), strsearch) or string.find(string.lower(v.ClassName), strsearch) or string.find(string.lower(v.WorldModel), strsearch) then
+								if string.find(string.lower(v.PrintName), strsearch, 1, true) or string.find(string.lower(v.ClassName), strsearch, 1, true) or string.find(string.lower(v.WorldModel), strsearch, 1, true) then
 									local d_specializations = YRPCreateD("YButton", nil, winspecializations.dpl:GetWide(), height / 4, 0, 0)
 									d_specializations:SetText(v.PrintName)
 

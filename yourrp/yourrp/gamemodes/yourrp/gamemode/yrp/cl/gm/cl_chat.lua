@@ -93,7 +93,7 @@ local function ChatBlacklisted(...)
 	end
 
 	for i, black in pairs(blacklist) do
-		if string.find(str, black.value) then return true end
+		if string.find(str, black.value, 1, true) then return true end
 	end
 
 	return false
@@ -690,19 +690,19 @@ local function InitYRPChat()
 								local _l = {}
 								_l.l_www = false
 								_l.l_secure = false
-								_l.l_start = string.find(str, "https://", 1)
+								_l.l_start = string.find(str, "https://", 1, true)
 
 								if _l.l_start ~= nil then
 									_l.l_secure = true
 								else
 									_l.l_secure = false
-									_l.l_start = string.find(str, "http://", 1)
+									_l.l_start = string.find(str, "http://", 1, true)
 
 									if _l.l_start == nil then
 										_l.l_www = true
-										_l.l_start = string.find(str, "www.", 1)
+										_l.l_start = string.find(str, "www.", 1, true)
 									else
-										_l.l_start = string.find(str, ".")
+										_l.l_start = string.find(str, ".", 1, true)
 
 										if _l.l_start ~= nil then
 											_l.l_point = true
@@ -737,7 +737,7 @@ local function InitYRPChat()
 										end
 									end
 								else
-									if string.find(str, "<") then
+									if string.find(str, "<", 1, true) then
 										local nstr = string.Explode("<", str)
 
 										for id, v in pairs(nstr) do
@@ -943,10 +943,10 @@ net.Receive("nws_yrp_player_say", function(len)
 
 	for i, v in pairs(pk) do
 		if isstring(v) then
-			local s, _ = string.find(v, "LID_")
+			local s, _ = string.find(v, "LID_", 1, true)
 
 			if s then
-				local s2, _ = string.find(v, ";")
+				local s2, _ = string.find(v, ";", 1, true)
 
 				if s2 then
 					local lid = string.sub(v, s, s2 - 1)

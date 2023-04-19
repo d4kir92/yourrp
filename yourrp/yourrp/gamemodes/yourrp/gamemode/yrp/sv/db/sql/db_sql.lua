@@ -156,21 +156,21 @@ function DBUpdateString(db_name, ply, netstr, str, l_db, value)
 end
 
 for str, val in pairs(yrp_sql) do
-	if string.find(str, "int_") then
+	if string.find(str, "int_", 1, true) then
 		util.AddNetworkString("nws_yrp_update_" .. str)
 
 		net.Receive("nws_yrp_update_" .. str, function(len, ply)
 			local i = net.ReadInt(32)
 			DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, i)
 		end)
-	elseif string.find(str, "float_") then
+	elseif string.find(str, "float_", 1, true) then
 		util.AddNetworkString("nws_yrp_update_" .. str)
 
 		net.Receive("nws_yrp_update_" .. str, function(len, ply)
 			local f = net.ReadFloat()
 			DBUpdateFloat(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, f)
 		end)
-	elseif string.find(str, "string_") then
+	elseif string.find(str, "string_", 1, true) then
 		util.AddNetworkString("nws_yrp_update_" .. str)
 
 		net.Receive("nws_yrp_update_" .. str, function(len, ply)

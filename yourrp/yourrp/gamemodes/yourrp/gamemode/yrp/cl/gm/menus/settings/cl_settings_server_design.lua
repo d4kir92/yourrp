@@ -1069,8 +1069,8 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 				local iftab = net.ReadTable()
 
 				for i, ift in pairs(iftab) do
-					if string.find(ift.name, "color") then
-						local _start, _end = string.find(ift.name, "_Y")
+					if string.find(ift.name, "color", 1, true) then
+						local _start, _end = string.find(ift.name, "_Y", 1, true)
 
 						if _start then
 							local name = "LID_" .. string.lower("color_" .. string.sub(ift.name, _start + 1))
@@ -1095,7 +1095,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 							table.insert(GRP_IF.cif, ycol)
 							GRP_IF:AddItem(ycol)
 						else
-							local _s, _e = string.find(ift.name, "Chat")
+							local _s, _e = string.find(ift.name, "Chat", 1, true)
 							local name = string.sub(ift.name, _s)
 							local color = StringToColor(ift.value)
 							local ycol = YRPCreateD("DPanel", nil, YRP.ctr(200), YRP.ctr(50), 0, 0)

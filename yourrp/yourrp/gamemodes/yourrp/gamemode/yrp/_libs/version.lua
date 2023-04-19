@@ -19,10 +19,10 @@ end
 function YRPGetVersionValue(body, name)
 	local keys = "*" .. name .. "*"
 	local keye = "*/" .. name .. "*"
-	local spos = string.find(body, keys, 1, false)
+	local spos = string.find(body, keys, 1, true)
 
 	if spos then
-		local epos = string.find(body, keye, 1, false)
+		local epos = string.find(body, keye, 1, true)
 		if epos then return tonumber(string.sub(body, spos + string.len(keys), epos - 1)) end
 	end
 
@@ -59,7 +59,7 @@ function SetYRPChannel(from)
 		http.Fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vR3aN8b4y0qZbZBBQLkqBy4dKFzKCnPt4cOMp7ghUaq5Bzxf-BtlEc0fruUI18IK-csODjrK6wcpFCX/pubhtml?gid=0&single=true", function(body, len, headers, code)
 			if body ~= nil then
 				if code == 200 then
-					local cs, ce = string.find(body, "VSTABLE")
+					local cs, ce = string.find(body, "VSTABLE", 1, true)
 
 					if ce then
 						body = string.sub(body, cs - 1)

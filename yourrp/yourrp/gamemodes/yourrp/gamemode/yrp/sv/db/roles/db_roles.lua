@@ -233,7 +233,7 @@ function YRPConvertToDarkRPJob(tab)
 	_job.identifier = tab.string_identifier
 	local pms = GetPlayermodelsOfRole(tab.uniqueID)
 
-	if string.find(pms, ",") then
+	if string.find(pms, ",", 1, true) then
 		pms = string.Explode(",", pms)
 	end
 
@@ -473,7 +473,7 @@ HANDLER_GROUPSANDROLES["roleslist"] = {}
 HANDLER_GROUPSANDROLES["roles"] = {}
 
 for str, val in pairs(yrp_ply_roles) do
-	if string.find(str, "string_") then
+	if string.find(str, "string_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
@@ -528,7 +528,7 @@ for str, val in pairs(yrp_ply_roles) do
 				end
 			end
 		end)
-	elseif string.find(str, "int_") then
+	elseif string.find(str, "int_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
@@ -557,7 +557,7 @@ for str, val in pairs(yrp_ply_roles) do
 				UpdatePrerolesGroupIDs(tab.uniqueID, tab.value)
 			end
 		end)
-	elseif string.find(str, "float_") then
+	elseif string.find(str, "float_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
@@ -584,7 +584,7 @@ for str, val in pairs(yrp_ply_roles) do
 				SendGroupList(float)
 			end
 		end)
-	elseif string.find(str, "bool_") then
+	elseif string.find(str, "bool_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
 		util.AddNetworkString(tab.netstr)
@@ -1344,7 +1344,7 @@ end)
 
 function YRPAddPlayermodelsToRole(pms, name, min, max, ruid)
 	for i, v in pairs(pms) do
-		if string.find(v, "'") then
+		if string.find(v, "'", 1, true) then
 			YRP.msg("note", "!!! MODEL HAS > ' < in its path/file -> " .. tostring(v))
 			YRP.msg("note", "!!! CONTACT THE DEVELOPER TO CHANGE THIS")
 

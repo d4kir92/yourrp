@@ -5,10 +5,10 @@ local _avatars = {}
 function GetAvatarUrl(steamid)
 	http.Fetch("http://steamcommunity.com/profiles/" .. steamid, function(body, len, headers, code)
 		_avatars[steamid] = "TEST"
-		local str_start = string.find(body, "<div class=\"playerAvatarAutoSizeInner\"><img src=")
+		local str_start = string.find(body, "<div class=\"playerAvatarAutoSizeInner\"><img src=", 1, true)
 
 		if str_start ~= nil then
-			local str_end = string.find(body, ".jpg\">", str_start)
+			local str_end = string.find(body, ".jpg\">", str_start, true)
 			body = string.sub(body, str_start + 49, str_end + 3)
 			_avatars[steamid] = GetHTMLImage(body, YRP.ctr(200), YRP.ctr(200))
 		end

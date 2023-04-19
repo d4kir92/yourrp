@@ -71,7 +71,7 @@ HANDLER_GROUPSANDROLES["roles"] = {}
 
 -- Network Things
 for str, val in pairs(yrp_ply_groups) do
-	if string.find(str, "string_") then
+	if string.find(str, "string_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_group_" .. str
 		util.AddNetworkString(tab.netstr)
@@ -126,7 +126,7 @@ for str, val in pairs(yrp_ply_groups) do
 				end
 			end
 		end)
-	elseif string.find(str, "int_") then
+	elseif string.find(str, "int_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_group_" .. str
 		util.AddNetworkString(tab.netstr)
@@ -153,7 +153,7 @@ for str, val in pairs(yrp_ply_groups) do
 				SendGroupList(int)
 			end
 		end)
-	elseif string.find(str, "bool_") then
+	elseif string.find(str, "bool_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_group_" .. str
 		util.AddNetworkString(tab.netstr)

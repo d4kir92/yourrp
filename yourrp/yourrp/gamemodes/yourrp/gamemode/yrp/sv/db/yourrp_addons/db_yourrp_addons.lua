@@ -72,7 +72,7 @@ function YRP:AddYRPAddon(tab)
 		return false
 	end
 
-	if not strEmpty(tab.discord) and not string.find(tab.discord, "discord.gg") then
+	if not strEmpty(tab.discord) and not string.find(tab.discord, "discord.gg", 1, true) then
 		YRP.msg("note", "[AddYRPAddon] [" .. tab.name .. "] Discord link is wrong!")
 
 		return false

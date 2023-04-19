@@ -105,7 +105,7 @@ function GetEntityItemSize(ent)
 end
 
 function IsViewModel(ent)
-	if string.find(ent:GetClass(), "viewmodel") or string.find(ent:GetModel(), "/c_") or ent:GetYRPBool("isviewmodel", false) or string.find(string.lower(ent:GetClass()), "c_baseflex") then return true end
+	if string.find(ent:GetClass(), "viewmodel", 1, true) or string.find(ent:GetModel(), "/c_", 1, true) or ent:GetYRPBool("isviewmodel", false) or string.find(string.lower(ent:GetClass()), "c_baseflex", 1, true) then return true end
 
 	return false
 end
@@ -115,7 +115,7 @@ function GetSurroundingEntities(ply)
 	local _tab = {}
 
 	for i, ent in pairs(_ents) do
-		if ent:GetModel() ~= nil and ent:GetModel() ~= "" and not ent:IsPlayer() and not ent:IsNPC() and not ent:IsRagdoll() and not ent:IsVehicle() and not ent:IsWorld() and not ent:GetPersistent() and ent:GetParent() ~= ply and not ent:GetParent():IsVehicle() and not string.find(ent:GetClass(), "wheel") and not ent:IsWorldStorage() and not IsViewModel(ent) then
+		if ent:GetModel() ~= nil and ent:GetModel() ~= "" and not ent:IsPlayer() and not ent:IsNPC() and not ent:IsRagdoll() and not ent:IsVehicle() and not ent:IsWorld() and not ent:GetPersistent() and ent:GetParent() ~= ply and not ent:GetParent():IsVehicle() and not string.find(ent:GetClass(), "wheel", 1, true) and not ent:IsWorldStorage() and not IsViewModel(ent) then
 			table.insert(_tab, ent)
 		end
 	end

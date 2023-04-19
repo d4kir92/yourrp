@@ -319,7 +319,7 @@ function GetLicenseIDByName(lname)
 		lic.name = lic.name
 		lic.name = string.lower(lic.name)
 
-		if lname and lic.name and string.find(lic.name, lname) then
+		if lname and lic.name and string.find(lic.name, lname, 1, true) then
 			lid = lic.uniqueID
 		end
 	end

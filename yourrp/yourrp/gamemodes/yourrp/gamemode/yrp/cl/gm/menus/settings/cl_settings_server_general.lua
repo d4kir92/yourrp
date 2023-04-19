@@ -608,7 +608,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 			for i, ele in pairs(elements) do
 				local name = string.upper(ele)
 
-				if not string.find(ele, "box") then
+				if not string.find(ele, "box", 1, true) then
 					name = YRP.lang_string("LID_" .. ele)
 				end
 
@@ -637,7 +637,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 
 				local e = YRPCreateD("YFrame", idbg, sw, sh, posx, posy)
 
-				if string.find(ele, "background") then
+				if string.find(ele, "background", 1, true) then
 					e:SetDraggable(false)
 					e.draggable = false
 				else
@@ -658,7 +658,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 				e.ts3 = CurTime() + 1
 
 				function e:Paint(pw, ph)
-					--[[if ele == "background" or string.find(ele,  "box" ) then
+					--[[if ele == "background" or string.find(ele,  "box", 1, true) then
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(GetGlobalYRPInt( "int_" .. ele .. "_r", 0), GetGlobalYRPInt( "int_" .. ele .. "_g", 0), GetGlobalYRPInt( "int_" .. ele .. "_b", 0), GetGlobalYRPInt( "int_" .. ele .. "_a", 0) ))
 					end]]
 					local visible = false
@@ -723,7 +723,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 					end
 
 					--if ele ~= "background" and !string.find(ele,  "box" ) then
-					if not string.find(ele, "logo") or GetGlobalYRPBool("bool_" .. ele .. "_visible", false) == false then
+					if not string.find(ele, "logo", 1, true) or GetGlobalYRPBool("bool_" .. ele .. "_visible", false) == false then
 						local bgcolor = Color(255, 0, 0, a1)
 
 						if GetGlobalYRPBool("bool_" .. ele .. "_visible", false) == true then

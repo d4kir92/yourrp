@@ -412,7 +412,7 @@ function TestYourRPContent()
 		local files, _ = file.Find("addons/*", "GAME")
 
 		for i, v in pairs(files) do
-			if string.find(v, "1189643820") then
+			if string.find(v, "1189643820", 1, true) then
 				local ts = file.Time("addons/" .. v, "GAME")
 
 				if ts < 1585861486 then

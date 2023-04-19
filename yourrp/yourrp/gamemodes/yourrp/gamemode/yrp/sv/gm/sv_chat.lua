@@ -264,11 +264,11 @@ end
 
 function YRPChatRenamePlayer(sender, text)
 	if GetGlobalYRPBool("bool_characters_changeable_name", false) or sender:HasAccess("YRPChatRenamePlayer", true) then
-		local name = text
-		local tab = {}
+		local name, newname = text, nil
 
-		if string.find(name, "\"") then
+		if string.find(name, "\"", 1, true) then
 			local newtab = string.Explode("\"", name)
+			local tab = {}
 
 			for i, v in pairs(newtab) do
 				if not strEmpty(v) then
@@ -276,28 +276,40 @@ function YRPChatRenamePlayer(sender, text)
 					table.insert(tab, v)
 				end
 			end
-		end
 
-		local ply = GetPlayerByName(tab[1])
+			local ply = GetPlayerByName(tab[1])
 
-		if tab[#tab] ~= nil then
-			name = tab[#tab]
-			name = YRPCleanUpName(name)
+			if tab[#tab] ~= nil then
+				name = tab[#tab]
+				name = YRPCleanUpName(name)
 
-			if ply ~= NULL then
-				name = string.Replace(name, tab[1] .. " ", "")
-				ply:SetRPName(name, "chat command 1")
-			else
-				if not strEmpty(name) then
-					sender:SetRPName(name, "chat command 2")
-
-					return ""
+				if ply ~= NULL then
+					name = string.Replace(name, tab[1] .. " ", "")
+					ply:SetRPName(name, "chat command 2.1")
 				else
-					sender:ChatPrint("\nSetRPName need more text.")
+					if not strEmpty(name) then
+						sender:SetRPName(name, "chat command 2.2")
+
+						return ""
+					else
+						sender:ChatPrint("\nSetRPName need more text.")
+					end
 				end
+			else
+				sender:ChatPrint("\ninvalid args.")
 			end
 		else
-			sender:ChatPrint("\ninvalid args.")
+			local tab = string.split(text, " ")
+			name, newname = tab[1], tab[2]
+
+			if name and newname then
+				local ply = GetPlayerByName(name)
+				ply:SetRPName(newname, "chat command 2.3")
+			elseif name then
+				sender:SetRPName(name, "chat command 2.4")
+			else
+				sender:ChatPrint("\nMissing Name.")
+			end
 		end
 	else
 		sender:ChatPrint("\nSetRPName is not enabled.")
@@ -542,7 +554,7 @@ timer.Simple(4, function()
 
 		-- Find Channel
 		if string.StartWith(text, "!") or string.StartWith(text, "/") or string.StartWith(text, "@") then
-			local s, _ = string.find(text, " ")
+			local s, _ = string.find(text, " ", 1, true)
 
 			if s then
 				channel = string.sub(text, 2, s - 1)
