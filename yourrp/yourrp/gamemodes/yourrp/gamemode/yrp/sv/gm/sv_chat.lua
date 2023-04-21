@@ -299,7 +299,7 @@ function YRPChatRenamePlayer(sender, text)
 				sender:ChatPrint("\ninvalid args.")
 			end
 		else
-			local tab = string.split(text, " ")
+			local tab = string.Split(text, " ")
 			name, newname = tab[1], tab[2]
 
 			if name and newname then
