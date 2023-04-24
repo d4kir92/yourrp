@@ -33,7 +33,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_antipropkill", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_items_on_death", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_items_role", "INT DEFAULT 0")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_need_to_introduce", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_drop_weapons", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_can_YRPDropWeapons", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_players_start_with_default_role", "INT DEFAULT 0")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_dealers_can_take_damage", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirdperson", "INT DEFAULT 1")
@@ -162,7 +162,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_armor", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_usergroup", "INT DEFAULT 1")
 --[[ Money Settings ]]
 --
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_drop_money_on_death", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_YRPDropMoneyChat_on_death", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_money_max_amount_of_dropped_money", "TEXT DEFAULT '1000'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pre", "TEXT DEFAULT '$'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pos", "TEXT DEFAULT ''")
@@ -333,7 +333,7 @@ function IsRealisticEnabled()
 end
 
 function PlayersCanDropWeapons()
-	return GetGlobalYRPBool("bool_players_can_drop_weapons", false)
+	return GetGlobalYRPBool("bool_players_can_YRPDropWeapons", false)
 end
 
 function IsSuicideDisabled()
@@ -341,7 +341,7 @@ function IsSuicideDisabled()
 end
 
 function IsDropMoneyOnDeathEnabled()
-	return GetGlobalYRPBool("bool_drop_money_on_death", false)
+	return GetGlobalYRPBool("bool_YRPDropMoneyChat_on_death", false)
 end
 
 util.AddNetworkString("nws_yrp_do_act")
@@ -667,11 +667,11 @@ net.Receive("nws_yrp_update_bool_players_need_to_introduce", function(len, ply)
 	GeneralUpdateBool(ply, "nws_yrp_update_bool_players_need_to_introduce", "bool_players_need_to_introduce", b)
 end)
 
-util.AddNetworkString("nws_yrp_update_bool_players_can_drop_weapons")
+util.AddNetworkString("nws_yrp_update_bool_players_can_YRPDropWeapons")
 
-net.Receive("nws_yrp_update_bool_players_can_drop_weapons", function(len, ply)
+net.Receive("nws_yrp_update_bool_players_can_YRPDropWeapons", function(len, ply)
 	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "nws_yrp_update_bool_players_can_drop_weapons", "bool_players_can_drop_weapons", b)
+	GeneralUpdateBool(ply, "nws_yrp_update_bool_players_can_YRPDropWeapons", "bool_players_can_YRPDropWeapons", b)
 end)
 
 util.AddNetworkString("nws_yrp_update_bool_players_start_with_default_role")
@@ -1556,11 +1556,11 @@ end)
 
 --[[ MONEY SETTINGS ]]
 --
-util.AddNetworkString("nws_yrp_update_bool_drop_money_on_death")
+util.AddNetworkString("nws_yrp_update_bool_YRPDropMoneyChat_on_death")
 
-net.Receive("nws_yrp_update_bool_drop_money_on_death", function(len, ply)
+net.Receive("nws_yrp_update_bool_YRPDropMoneyChat_on_death", function(len, ply)
 	local b = btn(net.ReadBool())
-	GeneralUpdateBool(ply, "nws_yrp_update_bool_drop_money_on_death", "bool_drop_money_on_death", b)
+	GeneralUpdateBool(ply, "nws_yrp_update_bool_YRPDropMoneyChat_on_death", "bool_YRPDropMoneyChat_on_death", b)
 end)
 
 util.AddNetworkString("nws_yrp_update_text_money_max_amount_of_dropped_money")

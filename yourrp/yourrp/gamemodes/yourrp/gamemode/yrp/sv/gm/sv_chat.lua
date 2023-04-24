@@ -46,7 +46,7 @@ net.Receive("nws_yrp_finishchat", function(len, ply)
 	ply:SetYRPBool("istyping", false)
 end)
 
-function print_help(sender)
+function YRPHelpPrint(sender)
 	sender:ChatPrint("--- --- ---")
 	sender:ChatPrint("[HELP] (/help or !help) Any command can start with / or !")
 	sender:ChatPrint("afk - Away from keyboard")
@@ -66,7 +66,7 @@ function print_help(sender)
 	sender:ChatPrint("tag_ug - show usergroup tag")
 	sender:ChatPrint("tag_immortal - shows immortal tag")
 
-	if sender:HasAccess("print_help", true) then
+	if sender:HasAccess("YRPHelpPrint", true) then
 		sender:ChatPrint("ADMIN ONLY:")
 		sender:ChatPrint("addmoney NAME AMOUNT - adds money to NAME")
 		sender:ChatPrint("setmoney NAME AMOUNT - sets money of NAME")
@@ -80,7 +80,7 @@ function print_help(sender)
 	sender:ChatPrint("--- --- ---")
 end
 
-function drop_weapon(sender)
+function YRPDropWeapon(sender)
 	if EntityAlive(sender) then
 		local _weapon = sender:GetActiveWeapon()
 
@@ -143,7 +143,7 @@ function YRPDropMoney(ply, amount)
 	end
 end
 
-function drop_money(sender, text)
+function YRPDropMoneyChat(sender, text)
 	local _table = string.Explode(" ", text)
 	local _money = tonumber(_table[1])
 
@@ -156,7 +156,7 @@ function drop_money(sender, text)
 	sender:ChatPrint("\nCommand-FAILED")
 end
 
-function do_suicide(sender)
+function YRPSuicide(sender)
 	if IsAllowedToSuicide(sender) then
 		sender:Kill()
 	end
@@ -263,6 +263,8 @@ function YRPChatDnd(sender)
 end
 
 function YRPChatRenamePlayer(sender, text)
+	if not EntityAlive(sender) then return false end
+
 	if GetGlobalYRPBool("bool_characters_changeable_name", false) or sender:HasAccess("YRPChatRenamePlayer", true) then
 		local name, newname = text, nil
 
@@ -401,8 +403,8 @@ function YRPRevive(sender, text)
 	end
 end
 
-function add_money(sender, text)
-	if sender:HasAccess("add_money") then
+function YRPAddMoneyChat(sender, text)
+	if sender:HasAccess("YRPAddMoneyChat") then
 		local _table = string.Explode(" ", text, false)
 		local _name = _table[1]
 		local _money = tonumber(_table[2])
@@ -430,8 +432,8 @@ function add_money(sender, text)
 	end
 end
 
-function add_xp(sender, text)
-	if sender:HasAccess("add_xp") then
+function YRPAddXPChat(sender, text)
+	if sender:HasAccess("YRPAddXPChat") then
 		local _table = string.Explode(" ", text, false)
 		local _name = _table[1]
 		local _xp = tonumber(_table[2])
@@ -452,8 +454,8 @@ function add_xp(sender, text)
 	end
 end
 
-function add_level(sender, text)
-	if sender:HasAccess("add_level") then
+function YRPAddLevelChat(sender, text)
+	if sender:HasAccess("YRPAddLevelChat") then
 		local _table = string.Explode(" ", text, false)
 		local _name = _table[1]
 		local _lvl = tonumber(_table[2])
@@ -474,8 +476,8 @@ function add_level(sender, text)
 	end
 end
 
-function set_level(sender, text)
-	if sender:HasAccess("set_level") then
+function YRPSetLevelChat(sender, text)
+	if sender:HasAccess("YRPSetLevelChat") then
 		local _table = string.Explode(" ", text, false)
 		local _name = _table[1]
 		local _lvl = tonumber(_table[2])
@@ -497,21 +499,21 @@ function set_level(sender, text)
 end
 
 local cmdsS = {}
-cmdsS["help"] = print_help
-cmdsS["dropweapon"] = drop_weapon
-cmdsS["kill"] = do_suicide
+cmdsS["help"] = YRPHelpPrint
+cmdsS["dropweapon"] = YRPDropWeapon
+cmdsS["kill"] = YRPSuicide
 cmdsS["tag_dev"] = show_tag_dev
 cmdsS["tag_tra"] = show_tag_tra
 cmdsS["tag_ug"] = show_tag_ug
 cmdsS["afk"] = YRPChatAfk
 cmdsS["dnd"] = YRPChatDnd
 local cmdsM = {}
-cmdsM["dropmoney"] = drop_money
+cmdsM["dropmoney"] = YRPDropMoneyChat
 cmdsM["setmoney"] = YRPSetMoney
-cmdsM["addmoney"] = add_money
-cmdsM["addxp"] = add_xp
-cmdsM["addlevel"] = add_level
-cmdsM["setlevel"] = set_level
+cmdsM["addmoney"] = YRPAddMoneyChat
+cmdsM["addxp"] = YRPAddXPChat
+cmdsM["addlevel"] = YRPAddLevelChat
+cmdsM["setlevel"] = YRPSetLevelChat
 cmdsM["revive"] = YRPRevive
 cmdsM["alert"] = YRPChatAlert
 cmdsM["givelicense"] = YRPChatGiveLicense
@@ -520,6 +522,8 @@ cmdsM["name"] = YRPChatRenamePlayer
 cmdsM["nick"] = YRPChatRenamePlayer
 
 function YRPRunCommand(sender, command, text)
+	if not EntityAlive(sender) then return false end
+	if command == nil then return false end
 	command = string.lower(command)
 	text = text or ""
 
@@ -705,10 +709,11 @@ timer.Simple(4, function()
 				end
 			elseif tab.int_mode == eCustom then
 				return ""
-			else -- Custom -- May in the future
+			elseif EntityAlive(sender) then
+				-- Custom -- May in the future
 				YRPRunCommand(sender, channel, text) -- no return, it breaks custom chat addons, like atlas
 			end
-		else
+		elseif EntityAlive(sender) then
 			YRPRunCommand(sender, channel, text) -- no return, it breaks custom chat addons, like atlas
 		end
 	end)

@@ -12,8 +12,8 @@ function PANEL:DoClick()
 	ctrl:SetColor(self._col)
 
 	ctrl.ValueChanged = function(sel, color)
-		sel:SetColor(color)
-		sel:ColorChanged(color)
+		self:SetColor(color)
+		self:ValueChanged(color)
 	end
 
 	self._cm = ctrl
