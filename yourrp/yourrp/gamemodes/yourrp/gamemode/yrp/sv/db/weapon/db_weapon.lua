@@ -68,6 +68,7 @@ function YRPGetSlotsOfSWEP(cn)
 end
 
 util.AddNetworkString("nws_yrp_weapon_menu")
+util.AddNetworkString("nws_yrp_weapon_menu_weapon")
 
 net.Receive("nws_yrp_weapon_menu", function(len, ply)
 	if ply:CanAccess("bool_weapons") then
@@ -90,8 +91,13 @@ net.Receive("nws_yrp_weapon_menu", function(len, ply)
 
 		net.Start("nws_yrp_weapon_menu")
 		net.WriteTable(tab)
-		net.WriteTable(tab2s)
 		net.Send(ply)
+
+		for i, v in pairs(tab2s) do
+			net.Start("nws_yrp_weapon_menu_weapon")
+			net.WriteTable(v)
+			net.Send(ply)
+		end
 	end
 end)
 

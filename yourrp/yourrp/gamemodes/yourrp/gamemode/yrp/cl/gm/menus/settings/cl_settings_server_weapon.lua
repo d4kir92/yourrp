@@ -69,6 +69,22 @@ local function YRPWeaponNoEntry(cname)
 	return false
 end
 
+local cou = 0
+
+net.Receive("nws_yrp_weapon_menu_weapon", function(len)
+	local weapon = net.ReadTable()
+	DBTab2[weapon.classname] = weapon
+	cou = cou + 1
+	local c = cou
+
+	timer.Simple(0.1, function()
+		if c == cou then
+			print("TEST", c, cou)
+			YRPWeaponUpdateList()
+		end
+	end)
+end)
+
 net.Receive("nws_yrp_weapon_menu", function(len)
 	local spacer = 80
 	local PARENT = GetSettingsSite()
@@ -79,8 +95,6 @@ net.Receive("nws_yrp_weapon_menu", function(len)
 	YRPWeaponSlotNum(PARENT, 10, 70, "LID_secondaryslots", 1, 5, "slots_secondary", DBTab.slots_secondary)
 	YRPWeaponSlotNum(PARENT, 10, 130, "LID_sidearmslots", 1, 5, "slots_sidearm", DBTab.slots_sidearm)
 	YRPWeaponSlotNum(PARENT, 10, 190, "LID_gadgetslots", 1, 5, "slots_gadget", DBTab.slots_gadget)
-	-- Weapon Settings
-	DBTab2 = net.ReadTable()
 	local allsweps = GetSWEPsList()
 	local cl_sweps = {}
 	local count = 0
@@ -94,10 +108,10 @@ net.Receive("nws_yrp_weapon_menu", function(len)
 	end
 
 	local sw = 640
-	local search = YRPCreateD("DTextEntry", PARENT, sw, 30, 400 + 10, 10)
-	search:SetPlaceholderText("Enter Weapon Name (Example: food, drink, physgun, ...)")
+	local searc = YRPCreateD("DTextEntry", PARENT, sw, 30, 400 + 10, 10)
+	searc:SetPlaceholderText("Enter Weapon Name (Example: food, drink, physgun, ...)")
 
-	function search:OnTextChanged()
+	function searc:OnTextChanged()
 		YRPWeaponUpdateList()
 	end
 
@@ -127,12 +141,12 @@ net.Receive("nws_yrp_weapon_menu", function(len)
 		lis:Clear()
 
 		for i, swep in SortedPairsByMemberValue(cl_sweps, "PrintName") do
-			local searchstr = string.lower(search:GetText())
-			searchstr = string.Replace(searchstr, "[", "")
-			searchstr = string.Replace(searchstr, "]", "")
-			searchstr = string.Replace(searchstr, "%", "")
+			local searcstr = string.lower(searc:GetText())
+			searcstr = string.Replace(searcstr, "[", "")
+			searcstr = string.Replace(searcstr, "]", "")
+			searcstr = string.Replace(searcstr, "%", "")
 
-			if string.find(string.lower(swep.PrintName), searchstr, 1, true) or string.find(string.lower(swep.ClassName), searchstr, 1, true) then
+			if string.find(string.lower(swep.PrintName), searcstr, 1, true) or string.find(string.lower(swep.ClassName), searcstr, 1, true) then
 				local weapon = YRPCreateD("DLabel", nil, lis:GetWide(), 40, 0, 0)
 				weapon:SetText("")
 
