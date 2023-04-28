@@ -79,7 +79,6 @@ net.Receive("nws_yrp_weapon_menu_weapon", function(len)
 
 	timer.Simple(0.1, function()
 		if c == cou then
-			print("TEST", c, cou)
 			YRPWeaponUpdateList()
 		end
 	end)

@@ -393,7 +393,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 			SP = SP[1]
 			YRP.msg("gm", "[Spawn Item] Item To Storagepoint")
 			local pos = string.Explode(",", SP.position)
-			TARGETPOS = Vector(pos[1], pos[2], pos[3])
+			TARGETPOS = Vector(pos[1], pos[2], pos[3]) + Vector(0, 0, 100)
 			local ang = string.Explode(",", SP.angle)
 			TARGETANG = Angle(ang[1], ang[2], ang[3])
 			hasstorage = true
@@ -405,7 +405,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 		--YRP.msg( "gm", "[Spawn Item] Item To Player" )
 	end
 
-	TARGETPOS = TARGETPOS + Vector(0, 0, 50)
+	TARGETPOS = TARGETPOS
 	local foundpos = false
 	local ang = Angle(0, 0, 0)
 
@@ -447,7 +447,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 	end
 
 	local tr2 = util.TraceHull({
-		start = TARGETPOS + Vector(0, 0, 40),
+		start = TARGETPOS + Vector(0, 0, 80),
 		endpos = TARGETPOS - Vector(0, 0, 400),
 		mins = mins,
 		maxs = maxs,
@@ -483,7 +483,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 				ent = ents.Create(item.ClassName)
 
 				if IsValid(ent) then
-					ent:SetPos(tr2.HitPos)
+					ent:SetPos(tr2.HitPos + Vector(0, 0, 25))
 					--ent:SetOwner(ply)
 					ent:SetYRPEntity("yrp_owner", ply)
 					local _, err = pcall(YRPEntSpawn, ent)
@@ -517,7 +517,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 			end
 
 			if vehicle and simfphys then
-				ent = simfphys.SpawnVehicle(nil, tr2.HitPos + Vector(0, 0, 0), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
+				ent = simfphys.SpawnVehicle(nil, tr2.HitPos + Vector(0, 0, 50), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
 				ent:SetYRPInt("item_uniqueID", item.uniqueID)
 				--YRP.msg( "gm", "[Spawn Item] WORKED #3" )
 				--ent:SetOwner(ply)
@@ -545,7 +545,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 					end
 
 					ent:SetModel(item.WorldModel)
-					ent:SetPos(tr2.HitPos)
+					ent:SetPos(tr2.HitPos + Vector(0, 0, 50))
 					local _, err = pcall(YRPEntSpawn, ent)
 
 					if err then
