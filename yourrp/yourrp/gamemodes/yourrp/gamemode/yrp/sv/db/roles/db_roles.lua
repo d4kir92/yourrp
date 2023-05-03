@@ -614,7 +614,7 @@ for str, val in pairs(yrp_ply_roles) do
 	end
 end
 
-function SubscribeRoleList(ply, gro, pre)
+function YRPSubscribeRoleList(ply, gro, pre)
 	if HANDLER_GROUPSANDROLES["roleslist"][gro] == nil then
 		HANDLER_GROUPSANDROLES["roleslist"][gro] = {}
 	end
@@ -628,7 +628,7 @@ function SubscribeRoleList(ply, gro, pre)
 	end
 end
 
-function UnsubscribeRoleList(ply, gro, pre)
+function YRPUnsubscribeRoleList(ply, gro, pre)
 	if HANDLER_GROUPSANDROLES["roleslist"][gro] == nil then
 		HANDLER_GROUPSANDROLES["roleslist"][gro] = {}
 	end
@@ -642,7 +642,7 @@ function UnsubscribeRoleList(ply, gro, pre)
 	end
 end
 
-function SubscribeRole(ply, uid)
+function YRPSubscribeRole(ply, uid)
 	if HANDLER_GROUPSANDROLES["roles"][uid] == nil then
 		HANDLER_GROUPSANDROLES["roles"][uid] = {}
 	end
@@ -652,7 +652,7 @@ function SubscribeRole(ply, uid)
 	end
 end
 
-function UnsubscribeRole(ply, uid)
+function YRPUnsubscribeRole(ply, uid)
 	if HANDLER_GROUPSANDROLES["roles"][uid] == nil then
 		HANDLER_GROUPSANDROLES["roles"][uid] = {}
 	end
@@ -845,7 +845,7 @@ net.Receive("nws_yrp_settings_subscribe_rolelist", function(len, ply)
 	if not ply:CanAccess("bool_groupsandroles") then return end
 	local gro = tonumber(net.ReadString())
 	local pre = tonumber(net.ReadString())
-	SubscribeRoleList(ply, gro, pre)
+	YRPSubscribeRoleList(ply, gro, pre)
 	SendRoleList(ply, gro, pre)
 end)
 
@@ -859,7 +859,7 @@ net.Receive("nws_yrp_settings_subscribe_prerolelist", function(len, ply)
 
 	if IsNotNilAndNotFalse(pre) then
 		pre = tonumber(pre[1].int_prerole)
-		SubscribeRoleList(ply, gro, pre)
+		YRPSubscribeRoleList(ply, gro, pre)
 		SendRoleList(ply, gro, pre)
 	end
 end)
@@ -1001,7 +1001,7 @@ util.AddNetworkString("nws_yrp_settings_subscribe_role")
 net.Receive("nws_yrp_settings_subscribe_role", function(len, ply)
 	if not ply:CanAccess("bool_groupsandroles") then return end
 	local uid = tonumber(net.ReadString())
-	SubscribeRole(ply, uid)
+	YRPSubscribeRole(ply, uid)
 	local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 
 	if not IsNotNilAndNotFalse(role) then
@@ -1040,7 +1040,7 @@ util.AddNetworkString("nws_yrp_settings_unsubscribe_role")
 net.Receive("nws_yrp_settings_unsubscribe_role", function(len, ply)
 	if not ply:CanAccess("bool_groupsandroles") then return end
 	local uid = tonumber(net.ReadString())
-	UnsubscribeRole(ply, uid)
+	YRPUnsubscribeRole(ply, uid)
 end)
 
 util.AddNetworkString("nws_yrp_settings_unsubscribe_rolelist")
@@ -1049,7 +1049,7 @@ net.Receive("nws_yrp_settings_unsubscribe_rolelist", function(len, ply)
 	if not ply:CanAccess("bool_groupsandroles") then return end
 	local gro = tonumber(net.ReadString())
 	local pre = tonumber(net.ReadString())
-	UnsubscribeRoleList(ply, gro, pre)
+	YRPUnsubscribeRoleList(ply, gro, pre)
 end)
 
 util.AddNetworkString("nws_yrp_settings_delete_role")

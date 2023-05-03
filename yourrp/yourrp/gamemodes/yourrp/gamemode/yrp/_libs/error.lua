@@ -34,7 +34,7 @@ function EntityAlive(obj)
 end
 
 function PanelAlive(obj)
-	if obj ~= nil and tostring(obj) ~= "[NULL Panel]" and IsValid(obj) then return true end
+	if obj ~= nil and tostring(obj) ~= "[NULL Panel]" then return true end
 
 	return false
 end
