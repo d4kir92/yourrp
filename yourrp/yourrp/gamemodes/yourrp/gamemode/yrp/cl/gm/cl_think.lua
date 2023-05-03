@@ -64,7 +64,7 @@ function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 end
 
 function YRPCloseAllMenues()
-	CloseCombinedMenu()
+	YRPCloseCombinedMenu()
 	CloseHelpMenu()
 	CloseEmotesMenu()
 	closeTicketMenu()

@@ -12,13 +12,13 @@ end
 function DarkRP.closeF1Menu()
 	--Description: Close the F1 help menu.
 	--YRPDarkrpNotFound( "closeF1Menu()" )
-	CloseCombinedMenu()
+	YRPCloseCombinedMenu()
 end
 
 function DarkRP.closeF4Menu()
 	--Description: Close the F4 menu if it's open.
 	--YRPDarkrpNotFound( "closeF4Menu()" )
-	CloseCombinedMenu()
+	YRPCloseCombinedMenu()
 end
 
 function DarkRP.deLocalise(text)

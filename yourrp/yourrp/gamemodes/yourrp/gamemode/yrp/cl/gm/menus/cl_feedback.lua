@@ -24,7 +24,7 @@ function closeTicketMenu()
 		end
 	end
 
-	CloseCombinedMenu()
+	YRPCloseCombinedMenu()
 end
 
 local _url = "https://docs.google.com/forms/d/e/1FAIpQLSd2uI9qa5CCk3s-l4TtOVMca-IXn6boKhzx-gUrPFks1YCKjA/formResponse"

@@ -298,7 +298,7 @@ function CreateRolePreviewContent()
 					net.WriteInt(LocalPlayer().charcreate_rpmid, 16)
 					net.WriteTable(bgs)
 					net.SendToServer()
-					CloseCombinedMenu()
+					YRPCloseCombinedMenu()
 					CloseRoleMenu()
 				end
 			end

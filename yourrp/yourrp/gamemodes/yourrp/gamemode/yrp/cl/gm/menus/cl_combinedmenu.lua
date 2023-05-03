@@ -8,13 +8,13 @@ function YRPToggleCombinedMenu(id)
 	cm.currentsite = id
 
 	if not cm.open and YRPIsNoMenuOpen() then
-		OpenCombinedMenu()
+		YRPOpenCombinedMenu()
 	elseif cm.open and cm.currentsite ~= 4 and cm.currentsite ~= 5 then
-		CloseCombinedMenu()
+		YRPCloseCombinedMenu()
 	end
 end
 
-function CloseCombinedMenu()
+function YRPCloseCombinedMenu()
 	cm.open = false
 
 	if PanelAlive(cm.win) then
@@ -22,17 +22,17 @@ function CloseCombinedMenu()
 	end
 end
 
-function CreateWebsiteContent(PARENT)
+function YRPCreateWebsiteContent(PARENT)
 	local site = YRPCreateD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	site:OpenURL(GetGlobalYRPString("text_social_website", ""))
 end
 
-function CreateForumContent(PARENT)
+function YRPCreateForumContent(PARENT)
 	local site = YRPCreateD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	site:OpenURL(GetGlobalYRPString("text_social_forum", ""))
 end
 
-function CreateRulesContent(PARENT)
+function YRPCreateRulesContent(PARENT)
 	local serverrules = table.concat(GetGlobalYRPTable("text_server_rules", ""), "\n")
 	serverrules = YRP_SQL_STR_OUT(serverrules)
 	local page = YRPCreateD("DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20))
@@ -55,7 +55,7 @@ function CreateRulesContent(PARENT)
 	page.serverrules:AppendText(serverrules)
 end
 
-function CreateDiscordContent(PARENT)
+function YRPCreateDiscordContent(PARENT)
 	local link = GetGlobalYRPString("text_social_discord", "")
 	local widgetid = GetGlobalYRPString("text_social_discord_widgetid", "")
 	local page = YRPCreateD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
@@ -84,7 +84,7 @@ function CreateDiscordContent(PARENT)
 	end
 end
 
-function CreateTeamspeakContent(PARENT)
+function YRPCreateTeamspeakContent(PARENT)
 	local ip = GetGlobalYRPString("text_social_teamspeak_ip", "")
 	local port = GetGlobalYRPString("text_social_teamspeak_port", "")
 	local query_port = GetGlobalYRPString("text_social_teamspeak_query_port", "")
@@ -109,7 +109,7 @@ function CreateTeamspeakContent(PARENT)
 	end
 end
 
-function CreateCollectionContent(PARENT)
+function YRPCreateCollectionContent(PARENT)
 	local collectionid = YRPCollectionID()
 
 	if collectionid ~= "0" then
@@ -138,7 +138,7 @@ function CreateCollectionContent(PARENT)
 	end
 end
 
-function CreateTwitchContent(PARENT)
+function YRPCreateTwitchContent(PARENT)
 	local link = GetGlobalYRPString("text_social_twitch", "")
 	local WorkshopPage = YRPCreateD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
@@ -163,7 +163,7 @@ function CreateTwitchContent(PARENT)
 	end
 end
 
-function CreateYoutubeContent(PARENT)
+function YRPCreateYoutubeContent(PARENT)
 	local link = GetGlobalYRPString("text_social_youtube", "")
 	local WorkshopPage = YRPCreateD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
@@ -185,7 +185,7 @@ function CreateYoutubeContent(PARENT)
 	end
 end
 
-function CreateTwitterContent(PARENT)
+function YRPCreateTwitterContent(PARENT)
 	local link = GetGlobalYRPString("text_social_twitter", "")
 	local WorkshopPage = YRPCreateD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
@@ -210,7 +210,7 @@ function CreateTwitterContent(PARENT)
 	end
 end
 
-function CreateSteamGroupContent(PARENT)
+function YRPCreateSteamGroupContent(PARENT)
 	local link = GetGlobalYRPString("text_social_steamgroup", "")
 	local WorkshopPage = YRPCreateD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
@@ -235,7 +235,7 @@ function CreateSteamGroupContent(PARENT)
 	end
 end
 
-function CreateFacebookContent(PARENT)
+function YRPCreateFacebookContent(PARENT)
 	local link = GetGlobalYRPString("text_social_facebook", "")
 	local WorkshopPage = YRPCreateD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
@@ -260,7 +260,7 @@ function CreateFacebookContent(PARENT)
 	end
 end
 
-function CreateInstagramContent(PARENT)
+function YRPCreateInstagramContent(PARENT)
 	local link = GetGlobalYRPString("text_social_instagram", "")
 	local WorkshopPage = YRPCreateD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
@@ -285,7 +285,7 @@ function CreateInstagramContent(PARENT)
 	end
 end
 
-function OpenCombinedMenu()
+function YRPOpenCombinedMenu()
 	local lply = LocalPlayer()
 	cm.open = true
 	local br = YRP.ctr(20)
@@ -340,7 +340,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "LID_website"
 			sites[c].icon = "web"
-			sites[c].content = CreateWebsiteContent
+			sites[c].content = YRPCreateWebsiteContent
 			c = c + 1
 			community = true
 		end
@@ -349,7 +349,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "LID_forum"
 			sites[c].icon = "forum"
-			sites[c].content = CreateForumContent
+			sites[c].content = YRPCreateForumContent
 			c = c + 1
 			community = true
 		end
@@ -358,7 +358,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "LID_rules"
 			sites[c].icon = "policy"
-			sites[c].content = CreateRulesContent
+			sites[c].content = YRPCreateRulesContent
 			c = c + 1
 			community = true
 		end
@@ -367,7 +367,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "LID_discord"
 			sites[c].icon = "discord_white"
-			sites[c].content = CreateDiscordContent
+			sites[c].content = YRPCreateDiscordContent
 			c = c + 1
 			community = true
 		end
@@ -376,7 +376,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "LID_teamspeak"
 			sites[c].icon = "ts_white"
-			sites[c].content = CreateTeamspeakContent
+			sites[c].content = YRPCreateTeamspeakContent
 			c = c + 1
 			community = true
 		end
@@ -385,7 +385,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "LID_collection"
 			sites[c].icon = "web"
-			sites[c].content = CreateCollectionContent
+			sites[c].content = YRPCreateCollectionContent
 			c = c + 1
 			community = true
 		end
@@ -394,7 +394,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "LID_youtube"
 			sites[c].icon = "64_youtube"
-			sites[c].content = CreateYoutubeContent
+			sites[c].content = YRPCreateYoutubeContent
 			c = c + 1
 			community = true
 		end
@@ -403,7 +403,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "LID_twitch"
 			sites[c].icon = "64_twitch"
-			sites[c].content = CreateTwitchContent
+			sites[c].content = YRPCreateTwitchContent
 			c = c + 1
 			community = true
 		end
@@ -412,7 +412,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "LID_twitter"
 			sites[c].icon = "64_twitter-square"
-			sites[c].content = CreateTwitterContent
+			sites[c].content = YRPCreateTwitterContent
 			c = c + 1
 			community = true
 		end
@@ -421,7 +421,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "LID_steamgroup"
 			sites[c].icon = "64_steam-square"
-			sites[c].content = CreateSteamGroupContent
+			sites[c].content = YRPCreateSteamGroupContent
 			c = c + 1
 			community = true
 		end
@@ -430,7 +430,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "LID_facebook"
 			sites[c].icon = "64_facebook-square"
-			sites[c].content = CreateFacebookContent
+			sites[c].content = YRPCreateFacebookContent
 			c = c + 1
 			community = true
 		end
@@ -439,7 +439,7 @@ function OpenCombinedMenu()
 			sites[c] = {}
 			sites[c].name = "Instagram"
 			sites[c].icon = "64_instagram"
-			sites[c].content = CreateInstagramContent
+			sites[c].content = YRPCreateInstagramContent
 			c = c + 1
 			community = true
 		end
