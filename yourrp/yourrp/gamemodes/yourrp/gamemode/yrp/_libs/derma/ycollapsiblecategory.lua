@@ -396,12 +396,11 @@ function PANEL:Init()
 
 		net.Receive("nws_yrp_hasnext_ranks", function(len)
 			local ruid = net.ReadString()
+			local b = net.ReadBool()
 			ruid = tonumber(ruid)
 			local nextP = NEXTS[ruid]
 
 			if PanelAlive(nextP) then
-				local b = net.ReadBool()
-
 				if not b then
 					nextP:Remove()
 				else

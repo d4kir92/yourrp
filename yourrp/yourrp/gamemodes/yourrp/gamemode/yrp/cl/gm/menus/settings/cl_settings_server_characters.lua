@@ -14,8 +14,11 @@ net.Receive("nws_yrp_setting_characters", function(len)
 				descr = tostring(tab.rpdescription)
 			end
 
-			descr = descr
-			YRPCharList:AddLine(tab.SteamID, tab.rpname, tab.text_idcardid, descr, tab.groupID, tab.roleID, tab.money, tab.moneybank, tab.int_level, event, archi)
+			descr = descr or ""
+
+			if PanelAlive(YRPCharList) then
+				YRPCharList:AddLine(tab.SteamID, tab.rpname, tab.text_idcardid, descr, tab.groupID, tab.roleID, tab.money, tab.moneybank, tab.int_level, event, archi)
+			end
 		end
 	end
 end)

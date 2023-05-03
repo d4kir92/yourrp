@@ -113,6 +113,7 @@ local zonedelay = 0
 
 hook.Add("HUDPaint", "yrp_hud_zone", function()
 	local lply = LocalPlayer()
+	if IsInsideZone == nil then return end
 	local inzone, zonename, zonecolor = IsInsideZone(lply)
 
 	if inzone and lastzone ~= zonename then

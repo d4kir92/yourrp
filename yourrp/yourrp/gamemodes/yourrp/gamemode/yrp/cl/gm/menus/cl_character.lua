@@ -968,7 +968,7 @@ end)
 function openCharacterSelection(force)
 	if IsVoidCharEnabled() or not GetGlobalYRPBool("bool_character_system", true) then return end
 
-	if PanelAlive(CharMenu.characterList) then
+	if CharMenu and PanelAlive(CharMenu.characterList) then
 		CharMenu.characterList:Clear()
 	end
 

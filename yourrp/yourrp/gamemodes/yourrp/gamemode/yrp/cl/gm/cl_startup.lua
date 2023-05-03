@@ -426,7 +426,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 						d_pm.model = YRPCreateD("DModelPanel", d_pm, msize, msize, mbr, my)
 
 						timer.Simple(0.1 * self.fcount, function()
-							if PanelAlive(d_pm) then
+							if PanelAlive(d_pm) and PanelAlive(d_pm.model) then
 								d_pm.model:SetModel(v.WorldModel)
 							end
 						end)
