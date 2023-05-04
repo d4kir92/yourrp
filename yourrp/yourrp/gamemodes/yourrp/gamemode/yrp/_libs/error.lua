@@ -34,7 +34,7 @@ function YRPEntityAlive(obj)
 end
 
 function YRPPanelAlive(obj)
-	if obj and obj ~= nil and obj ~= NULL and tostring(obj) ~= "[NULL Panel]" then return true end
+	if obj ~= nil and obj ~= NULL and tostring(obj) ~= "[NULL Panel]" then return true end
 
 	return false
 end

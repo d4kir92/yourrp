@@ -28,7 +28,7 @@ util.AddNetworkString("nws_yrp_shop_add")
 
 net.Receive("nws_yrp_shop_add", function(len, ply)
 	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new shop'")
-	YRP.msg("db", "shop_add: " .. db_YRPWORKED(_new))
+	YRP.msg("db", "shop_add: " .. db_WORKED(_new))
 	send_shops(ply)
 end)
 

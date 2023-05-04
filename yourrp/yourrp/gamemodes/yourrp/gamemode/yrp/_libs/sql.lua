@@ -92,7 +92,7 @@ function db_is_empty(db_name)
 	end
 end
 
-function db_YRPWORKED(query)
+function db_WORKED(query)
 	if query == nil then
 		return "worked"
 	else

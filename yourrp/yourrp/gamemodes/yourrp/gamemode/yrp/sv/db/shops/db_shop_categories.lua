@@ -54,7 +54,7 @@ net.Receive("nws_yrp_category_edit_name", function(len, ply)
 		["name"] = _new_name
 	}, "uniqueID = " .. _uid)
 
-	YRP.msg("db", "category_edit_name: " .. db_YRPWORKED(_new))
+	YRP.msg("db", "category_edit_name: " .. db_WORKED(_new))
 end)
 
 util.AddNetworkString("nws_yrp_shop_get_categories")

@@ -306,7 +306,10 @@ function YRPChatRenamePlayer(sender, text)
 
 			if name and newname then
 				local ply = GetPlayerByName(name)
-				ply:SetRPName(newname, "chat command 2.3")
+
+				if ply ~= NULL then
+					ply:SetRPName(newname, "chat command 2.3")
+				end
 			elseif name then
 				sender:SetRPName(name, "chat command 2.4")
 			else
