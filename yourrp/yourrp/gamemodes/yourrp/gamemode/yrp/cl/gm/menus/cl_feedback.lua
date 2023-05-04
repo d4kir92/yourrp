@@ -18,7 +18,7 @@ function closeTicketMenu()
 		YRPCloseMenu()
 		TICKET.window:Remove()
 		TICKET.window = nil
-	elseif PanelAlive(TICKET.content) and PanelAlive(TICKET.content:GetParent()) then
+	elseif YRPPanelAlive(TICKET.content) and YRPPanelAlive(TICKET.content:GetParent()) then
 		if TICKET.content:GetParent().Close ~= nil then
 			TICKET.content:GetParent():Close()
 		end

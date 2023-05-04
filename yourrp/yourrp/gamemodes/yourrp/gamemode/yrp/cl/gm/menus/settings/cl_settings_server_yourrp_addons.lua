@@ -121,7 +121,7 @@ end
 net.Receive("nws_yrp_connect_Settings_YourRP_Addons", function(len)
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		function PARENT:OnRemove()
 			net.Start("nws_yrp_disconnect_Settings_YourRP_Addons")
 			net.SendToServer()

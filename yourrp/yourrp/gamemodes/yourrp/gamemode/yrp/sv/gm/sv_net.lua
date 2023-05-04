@@ -126,7 +126,7 @@ concommand.Add("darkrp", function(ply, cmd, args)
 		local newrpname = args[3]
 		local pl = GetPlayerByName(playername)
 
-		if EntityAlive(pl) then
+		if YRPEntityAlive(pl) then
 			pl:SetRPName(newrpname, "darkrp forcerpname")
 		else
 			YRP.msg("note", "[forcerpname] Player not found")
@@ -134,7 +134,7 @@ concommand.Add("darkrp", function(ply, cmd, args)
 	elseif args[1] and args[1] == "name" then
 		local newrpname = args[2]
 
-		if EntityAlive(ply) then
+		if YRPEntityAlive(ply) then
 			ply:SetRPName(newrpname, "darkrp name")
 		end
 	elseif args[1] and args[1] == "wanted" then
@@ -166,7 +166,7 @@ concommand.Add("darkrp", function(ply, cmd, args)
 		local _weapon = ply:GetActiveWeapon()
 
 		if _weapon ~= nil and PlayersCanDropWeapons() then
-			if EntityAlive(_weapon) then
+			if YRPEntityAlive(_weapon) then
 				ply:DropSWEP(_weapon:GetClass())
 			end
 		else

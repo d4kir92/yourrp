@@ -5,7 +5,7 @@ net.Receive("nws_yrp_getCharakterList", function()
 	local _charTab = net.ReadTable()
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		local cl_rpName = createVGUI("DTextEntry", PARENT, 800, 50, 10, 50)
 
 		if _charTab.rpname ~= nil then
@@ -55,7 +55,7 @@ net.Receive("nws_yrp_getCharakterList", function()
 end)
 
 hook.Add("open_client_character", "open_client_character", function()
-	if PanelAlive(settingsWindow) then
+	if YRPPanelAlive(settingsWindow) then
 		SaveLastSite()
 	end
 end)

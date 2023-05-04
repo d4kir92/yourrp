@@ -885,7 +885,7 @@ function StartCombat(ply)
 		end
 
 		timer.Create(steamid .. " outOfCombat", 5, 1, function()
-			if EntityAlive(ply) then
+			if YRPEntityAlive(ply) then
 				ply:SetYRPBool("inCombat", false)
 
 				if timer.Exists(steamid .. " outOfCombat") then

@@ -169,7 +169,7 @@ function YRPCreateCharacterSettingsContent()
 					local success = net.ReadBool()
 
 					if success then
-						if PanelAlive(CharacterMenu) then
+						if YRPPanelAlive(CharacterMenu) then
 							CharacterMenu:Remove()
 						end
 

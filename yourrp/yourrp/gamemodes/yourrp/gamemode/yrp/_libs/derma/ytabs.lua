@@ -80,7 +80,7 @@ function PANEL:GoToSite(name)
 	if name == nil then return end
 	self.tabs = self.tabs or {}
 	if self.tabs[name] == nil then return end
-	if not PanelAlive(self.site) then return end
+	if not YRPPanelAlive(self.site) then return end
 	self.site:Clear()
 	self.current = name
 	self.tabs[name](self.site)

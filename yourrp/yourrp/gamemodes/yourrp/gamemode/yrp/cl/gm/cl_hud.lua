@@ -89,7 +89,7 @@ local star = Material("vgui/material/icon_star.png")
 function DrawEquipment(ply, name)
 	local _tmp = ply:GetYRPEntity(name, NULL)
 
-	if EntityAlive(_tmp) then
+	if YRPEntityAlive(_tmp) then
 		ply.yrp_view_range = ply.yrp_view_range or 0
 
 		if ply.yrp_view_range <= 0 then
@@ -211,7 +211,7 @@ end)
 HUD_AVATAR = HUD_AVATAR or nil
 PAvatar = PAvatar or nil
 
-if PanelAlive(PAvatar) then
+if YRPPanelAlive(PAvatar) then
 	PAvatar:Remove()
 end
 
@@ -231,7 +231,7 @@ function PAvatar:Paint(pw, ph)
 		drawRoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255, 255))
 		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
-		if PanelAlive(HUD_AVATAR) then
+		if YRPPanelAlive(HUD_AVATAR) then
 			HUD_AVATAR:SetPaintedManually(false)
 			HUD_AVATAR:PaintManual()
 			HUD_AVATAR:SetPaintedManually(true)
@@ -252,7 +252,7 @@ timer.Simple(1, function()
 	ava.version = -1
 
 	function HUD_AVATARUpdate()
-		if not PanelAlive(HUD_AVATAR) then return end
+		if not YRPPanelAlive(HUD_AVATAR) then return end
 		HUD_AVATAR:MoveToBack()
 		local lply = LocalPlayer()
 
@@ -335,7 +335,7 @@ function YRP_PMUpdate()
 				YRP_PM:SetSize(YRP_PM.h, YRP_PM.h)
 				YRP_PM:SetModel(YRP_PM.model)
 
-				if EntityAlive(YRP_PM.Entity) then
+				if YRPEntityAlive(YRP_PM.Entity) then
 					YRP_PM.Entity:SetSkin(lply:GetSkin())
 					local lb = YRP_PM.Entity:LookupBone("ValveBiped.Bip01_Head1")
 
@@ -471,7 +471,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	if yrp_loading_screen and PanelAlive(yrp_loading_screen) then
+	if yrp_loading_screen and YRPPanelAlive(yrp_loading_screen) then
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(10, 10, 10))
 	end
 

@@ -70,7 +70,7 @@ end
 net.Receive("nws_yrp_getMapSite", function(len)
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		if len > 512000 then
 			YRP.msg("note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)")
 		end
@@ -79,7 +79,7 @@ net.Receive("nws_yrp_getMapSite", function(len)
 		tabs:SetTabWide(540)
 
 		function tabs:Think()
-			if PanelAlive(PARENT) then
+			if YRPPanelAlive(PARENT) then
 				self:SetSize(PARENT:GetWide(), PARENT:GetTall())
 			end
 		end
@@ -144,10 +144,10 @@ net.Receive("nws_yrp_getMapTab", function(len)
 	local dbGrp = net.ReadTable()
 	local dbRol = net.ReadTable()
 	local PARENT = GetSettingsSite()
-	if not PanelAlive(PARENT) then return end
-	if not PanelAlive(PARENT.maptabs) then return end
+	if not YRPPanelAlive(PARENT) then return end
+	if not YRPPanelAlive(PARENT.maptabs) then return end
 	local parent = PARENT.maptabs.site
-	if not IsNotNilAndNotFalse(parent) or not PanelAlive(parent) then return end
+	if not IsNotNilAndNotFalse(parent) or not YRPPanelAlive(parent) then return end
 	parent:Clear()
 	local mapList = YRPCreateD("DListView", parent, parent:GetWide() - YRP.ctr(660), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
 	mapList:AddColumn("uniqueID"):SetFixedWidth(YRP.ctr(120))

@@ -164,7 +164,7 @@ net.Receive("nws_yrp_get_ticket", function()
 	local _fbt = net.ReadTable()
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		local site = PARENT
 		local tabs = YRPCreateD("YTabs", site, ScW(), ScH() - YRP.ctr(100), 0, 0)
 

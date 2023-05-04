@@ -12,7 +12,7 @@ function IsNotNilAndNotFalse(obj)
 	return false
 end
 
-function WORKED(obj, name, _silence)
+function YRPWORKED(obj, name, _silence)
 	if obj ~= nil and obj ~= false then
 		return true
 	else
@@ -24,7 +24,7 @@ function WORKED(obj, name, _silence)
 	end
 end
 
-function EntityAlive(obj)
+function YRPEntityAlive(obj)
 	if obj == nil then return false end
 	if type(obj) == "number" then return false end
 	if type(obj) == "string" then return false end
@@ -33,8 +33,8 @@ function EntityAlive(obj)
 	return false
 end
 
-function PanelAlive(obj)
-	if obj ~= nil and obj ~= NULL and tostring(obj) ~= "[NULL Panel]" then return true end
+function YRPPanelAlive(obj)
+	if obj and obj ~= nil and obj ~= NULL and tostring(obj) ~= "[NULL Panel]" then return true end
 
 	return false
 end

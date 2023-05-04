@@ -129,7 +129,7 @@ function YRPLoadDoors()
 
 		if IsNotNilAndNotFalse(_tmpDoors) then
 			for i, door in pairs(GetAllDoors()) do
-				if WORKED(_tmpDoors[i], "YRPLoadDoors 2") then
+				if YRPWORKED(_tmpDoors[i], "YRPLoadDoors 2") then
 					door:SetYRPString("buildingID", _tmpDoors[i].buildingID)
 					door:SetYRPString("uniqueID", i)
 					HasUseFunction(door)
@@ -266,7 +266,7 @@ util.AddNetworkString("nws_yrp_door_anim")
 function YRPFireUnlock(ent, owner)
 	ent:Fire("Unlock")
 
-	if EntityAlive(owner) then
+	if YRPEntityAlive(owner) then
 		owner:EmitSound("npc/metropolice/gear" .. math.random(1, 7) .. ".wav")
 		net.Start("nws_yrp_door_anim")
 		net.WriteEntity(owner)
@@ -278,7 +278,7 @@ end
 function YRPFireLock(ent, owner)
 	ent:Fire("Lock")
 
-	if EntityAlive(owner) then
+	if YRPEntityAlive(owner) then
 		owner:EmitSound("npc/metropolice/gear" .. math.random(1, 7) .. ".wav")
 		net.Start("nws_yrp_door_anim")
 		net.WriteEntity(owner)

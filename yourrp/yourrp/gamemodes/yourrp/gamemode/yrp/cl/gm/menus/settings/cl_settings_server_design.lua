@@ -13,7 +13,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 	local hud_profiles = net.ReadTable()
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		local GRP_HUD = YRPCreateD("YGroupBox", PARENT, YRP.ctr(1000), YRP.ctr(1600), YRP.ctr(20), YRP.ctr(20))
 		GRP_HUD:SetText("LID_hud")
 
@@ -334,7 +334,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 							local x, y = self:GetPos()
 							local mx, my = gui.MousePos()
 
-							if input.IsMouseDown(MOUSE_FIRST) and (mx < x or mx > x + pw or my < y or my > y + ph) and PanelAlive(win.winset.dpl) then
+							if input.IsMouseDown(MOUSE_FIRST) and (mx < x or mx > x + pw or my < y or my > y + ph) and YRPPanelAlive(win.winset.dpl) then
 								local childrens = win.winset.dpl:GetItems()
 								local open = false
 
@@ -1028,7 +1028,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 		GRP_IF:AddItem(spacer)
 
 		net.Receive("nws_yrp_get_interface_settings", function(le)
-			if PanelAlive(GRP_IF) then
+			if YRPPanelAlive(GRP_IF) then
 				for i, ele in pairs(GRP_IF.cif) do
 					ele:Remove()
 				end

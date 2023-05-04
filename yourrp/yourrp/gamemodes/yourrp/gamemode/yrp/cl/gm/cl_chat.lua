@@ -36,7 +36,7 @@ function SetChatMode(mode)
 	if type(mode) == "string" then
 		CHATMODE = string.upper(mode)
 
-		if PanelAlive(yrpChat) and PanelAlive(yrpChat.comboBox) then
+		if YRPPanelAlive(yrpChat) and YRPPanelAlive(yrpChat.comboBox) then
 			yrpChat.comboBox:SetText(CHATMODE)
 		end
 	end
@@ -100,7 +100,7 @@ local function ChatBlacklisted(...)
 end
 
 local function update_chat_choices()
-	if PanelAlive(yrpChat.window) and yrpChat.comboBox ~= nil then
+	if YRPPanelAlive(yrpChat.window) and yrpChat.comboBox ~= nil then
 		yrpChat.comboBox:Clear()
 		chatids = {}
 
@@ -537,7 +537,7 @@ local function InitYRPChat()
 				yrpChat.writeField:DrawTextEntryText(Color(255, 255, 255, 255), Color(255, 255, 255, 0), Color(255, 255, 255, 255))
 				--if !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
 				--timer.Simple(0.1, function()
-				--if PanelAlive(yrpChat.window) and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
+				--if YRPPanelAlive(yrpChat.window) and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
 				--yrpChat.closeChatbox( "NOT FOCUS ANYMORE" )
 				--end
 				--end)
@@ -575,7 +575,7 @@ local function InitYRPChat()
 			end
 
 			function yrpChat:openChatbox(bteam)
-				if not PanelAlive(yrpChat.window) then
+				if not YRPPanelAlive(yrpChat.window) then
 					notification.AddLegacy("[YourRP] [openChatbox] ChatBox Window broken", NOTIFY_ERROR, 10)
 					yrp_chat_show = false
 
@@ -595,7 +595,7 @@ local function InitYRPChat()
 			end
 
 			function yrpChat:closeChatbox(reason)
-				if not PanelAlive(yrpChat.window) then
+				if not YRPPanelAlive(yrpChat.window) then
 					notification.AddLegacy("[YourRP] [closeChatbox] ChatBox Window broken", NOTIFY_ERROR, 10)
 					yrp_chat_show = false
 					_fadeout = CurTime()
@@ -840,7 +840,7 @@ local function InitYRPChat()
 			yrpChat.content:GoToEnd()
 
 			function YRPChatThink()
-				if PanelAlive(yrpChat.window) then
+				if YRPPanelAlive(yrpChat.window) then
 					YRPCheckChatVisible()
 					timer.Simple(0.01, YRPChatThink)
 				end
@@ -854,14 +854,14 @@ end
 local function CheckIfRemoved()
 	local wasremoved = false
 
-	if PanelAlive(yrpChat.window) then
+	if YRPPanelAlive(yrpChat.window) then
 		yrpChat.window:Remove()
 		yrpChat.window = nil
 		wasremoved = true
 		-- Already chat created
 	end
 
-	if not PanelAlive(yrpChat.window) then
+	if not YRPPanelAlive(yrpChat.window) then
 		yrpChat = {}
 	end
 
@@ -884,14 +884,14 @@ hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
 			return
 		end
 
-		if PanelAlive(yrpChat.window) then
+		if YRPPanelAlive(yrpChat.window) then
 			yrpChat:openChatbox(bTeam)
 		else
-			if not PanelAlive(yrpChat.window) and YRPIsChatEnabled("PlayerBindPress2") then
+			if not YRPPanelAlive(yrpChat.window) and YRPIsChatEnabled("PlayerBindPress2") then
 				InitYRPChat()
 			end
 
-			if not PanelAlive(yrpChat.window) and YRPIsChatEnabled("PlayerBindPress3") then
+			if not YRPPanelAlive(yrpChat.window) and YRPIsChatEnabled("PlayerBindPress3") then
 				notification.AddLegacy("[YourRP] [yrp_overrideChatbind] ChatBox Window broken", NOTIFY_ERROR, 10)
 			end
 		end
@@ -904,7 +904,7 @@ hook.Add("ChatText", "yrp_serverNotifications", function(index, name, text, typ)
 	local lply = LocalPlayer()
 
 	if lply:IsValid() and YRPIsChatEnabled("ChatText") then
-		if typ == "none" and PanelAlive(yrpChat.content) and lply:HasAccess("chat2") then
+		if typ == "none" and YRPPanelAlive(yrpChat.content) and lply:HasAccess("chat2") then
 			notification.AddLegacy(text, NOTIFY_GENERIC, 6)
 		end
 	else

@@ -1391,7 +1391,7 @@ function YRPTestHTML(pnl, url, rem)
 		end
 	else
 		http.Fetch(url, function(body, len, headers, code)
-			if PanelAlive(pnl) then
+			if YRPPanelAlive(pnl) and pnl.SetVisible and pnl.Remove then
 				if code ~= 200 then
 					if rem then
 						pnl:Remove()
@@ -1403,7 +1403,7 @@ function YRPTestHTML(pnl, url, rem)
 				end
 			end
 		end, function(error)
-			if PanelAlive(pnl) then
+			if YRPPanelAlive(pnl) then
 				if rem then
 					pnl:Remove()
 				else

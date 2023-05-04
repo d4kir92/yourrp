@@ -13,7 +13,7 @@ end
 function YRPCloseDoorOptions()
 	YRPCloseMenu()
 
-	if yrp_door and PanelAlive(yrp_door.window) then
+	if yrp_door and YRPPanelAlive(yrp_door.window) then
 		yrp_door.window:Close()
 		yrp_door.window = nil
 	end
@@ -31,7 +31,7 @@ net.Receive("nws_yrp_sendBuildingInfo", function(len)
 			local tabGroup = tab["G"]
 
 			if GetGlobalYRPBool("bool_building_system", false) then
-				if EntityAlive(door) then
+				if YRPEntityAlive(door) then
 					if LocalPlayer():GetYRPBool("bool_" .. "ishobo", false) then
 						YRP.msg("note", "[Building] You are a HOBO")
 						LocalPlayer():PrintMessage(HUD_PRINTCENTER, "[Building] You are a HOBO")
@@ -189,14 +189,14 @@ function YRPDoorBuyWindow(door, tabBuilding)
 			local _tmpBuildings = net.ReadTable()
 			tabBuilding.uniqueID = tonumber(tabBuilding.uniqueID)
 
-			if PanelAlive(_ComboBoxHouseName) then
+			if YRPPanelAlive(_ComboBoxHouseName) then
 				_ComboBoxHouseName.setup = true
 
 				if _ComboBoxHouseName ~= NULL then
 					for k, v in pairs(_tmpBuildings) do
 						v.uniqueID = tonumber(v.uniqueID)
 
-						if PanelAlive(_ComboBoxHouseName) then
+						if YRPPanelAlive(_ComboBoxHouseName) then
 							local isbuilding = false
 
 							if v.uniqueID == tabBuilding.uniqueID then
@@ -234,7 +234,7 @@ function YRPDoorBuyWindow(door, tabBuilding)
 			net.Start("nws_yrp_addnewbuilding")
 			net.SendToServer()
 
-			if PanelAlive(yrp_door.window) then
+			if YRPPanelAlive(yrp_door.window) then
 				yrp_door.window:Close()
 			end
 		end
@@ -247,9 +247,9 @@ function YRPDoorBuyWindow(door, tabBuilding)
 			net.Receive("nws_yrp_getBuildingGroups", function()
 				local _tmpGroups = net.ReadTable()
 
-				if PanelAlive(_ComboBoxGroupName) then
+				if YRPPanelAlive(_ComboBoxGroupName) then
 					for k, v in pairs(_tmpGroups) do
-						if PanelAlive(_ComboBoxGroupName) then
+						if YRPPanelAlive(_ComboBoxGroupName) then
 							v.uniqueID = tonumber(v.uniqueID)
 
 							if v.uniqueID == 0 then
@@ -404,7 +404,7 @@ function YRPDoorOptionWindow(door, tabBuilding, tabOwner, tabGroup)
 		draw.SimpleTextOutlined(YRP.lang_string("LID_name") .. ":", "Y_18_500", YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
 		draw.SimpleTextOutlined(YRP.lang_string("LID_securitylevel") .. ":", "Y_18_500", YRP.ctr(540), YRP.ctr(370), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
 
-		if EntityAlive(door) then
+		if YRPEntityAlive(door) then
 			draw.SimpleTextOutlined("Building-ID: " .. door:GetYRPString("buildingID", "FAILED"), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
 			draw.SimpleTextOutlined("Door-ID: " .. door:GetYRPString("uniqueID", -1), "Y_18_500", pw - YRP.ctr(20), YRP.ctr(270 + 40), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
 		end

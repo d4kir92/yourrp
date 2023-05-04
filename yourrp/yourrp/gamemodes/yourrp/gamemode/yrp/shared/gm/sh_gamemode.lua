@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 328 -- do NOT change this!
+GM.VersionBuild = 329 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -381,7 +381,7 @@ concommand.Add("yrp_collection", function(ply, cmd, args)
 	PrintCollectionID()
 end)
 
-function IsEntityAlive(ply, uid)
+function IsYRPEntityAlive(ply, uid)
 	for i, ent in pairs(ents.GetAll()) do
 		if tostring(ent:GetYRPInt("item_uniqueID", "")) == tostring(uid) and ent:GetRPOwner() == ply then return true, ent end
 	end
@@ -800,7 +800,7 @@ function YRPChatReplaceCMDS(structure, ply, text)
 	if newtext[1] and #newtext[1] >= 4 then
 		local target = GetPlayerByRPName(newtext[1])
 
-		if EntityAlive(target) then
+		if YRPEntityAlive(target) then
 			result = string.Replace(result, "%TARGET%", target:RPName())
 			table.remove(newtext, 1)
 

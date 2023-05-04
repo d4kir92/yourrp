@@ -41,7 +41,7 @@ util.AddNetworkString("nws_yrp_shop_item_add")
 net.Receive("nws_yrp_shop_item_add", function(len, ply)
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "categoryID", _catID)
-	YRP.msg("db", "shop_item_add: " .. db_WORKED(_new))
+	YRP.msg("db", "shop_item_add: " .. db_YRPWORKED(_new))
 	send_shop_items(ply, _catID)
 end)
 
@@ -51,7 +51,7 @@ net.Receive("nws_yrp_shop_item_rem", function(len, ply)
 	local _uid = net.ReadString()
 	local _catID = net.ReadString()
 	local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
-	YRP.msg("db", "shop_item_rem: " .. db_WORKED(_new))
+	YRP.msg("db", "shop_item_rem: " .. db_YRPWORKED(_new))
 	send_shop_items(ply, _catID)
 end)
 
@@ -66,7 +66,7 @@ net.Receive("nws_yrp_shop_item_edit_name", function(len, ply)
 		["name"] = _new_name
 	}, "uniqueID = " .. _uid)
 
-	YRP.msg("db", "shop_item_edit_name: " .. db_WORKED(_new))
+	YRP.msg("db", "shop_item_edit_name: " .. db_YRPWORKED(_new))
 end)
 
 util.AddNetworkString("nws_yrp_shop_item_edit_desc")
@@ -80,7 +80,7 @@ net.Receive("nws_yrp_shop_item_edit_desc", function(len, ply)
 		["description"] = _new_desc
 	}, "uniqueID = " .. _uid)
 
-	YRP.msg("db", "shop_item_edit_desc: " .. db_WORKED(_new))
+	YRP.msg("db", "shop_item_edit_desc: " .. db_YRPWORKED(_new))
 end)
 
 util.AddNetworkString("nws_yrp_shop_item_edit_price")
@@ -94,7 +94,7 @@ net.Receive("nws_yrp_shop_item_edit_price", function(len, ply)
 		["price"] = _new_price
 	}, "uniqueID = " .. _uid)
 
-	YRP.msg("db", "shop_item_edit_price: " .. db_WORKED(_new))
+	YRP.msg("db", "shop_item_edit_price: " .. db_YRPWORKED(_new))
 end)
 
 util.AddNetworkString("nws_yrp_shop_item_edit_level")
@@ -108,7 +108,7 @@ net.Receive("nws_yrp_shop_item_edit_level", function(len, ply)
 		["int_level"] = _new_level
 	}, "uniqueID = " .. _uid)
 
-	YRP.msg("db", "shop_item_edit_level: " .. db_WORKED(_new))
+	YRP.msg("db", "shop_item_edit_level: " .. db_YRPWORKED(_new))
 end)
 
 util.AddNetworkString("nws_yrp_shop_item_edit_quan")
@@ -122,7 +122,7 @@ net.Receive("nws_yrp_shop_item_edit_quan", function(len, ply)
 		["quantity"] = _new_quan
 	}, "uniqueID = " .. _uid)
 
-	YRP.msg("db", "shop_item_edit_quan: " .. db_WORKED(_new))
+	YRP.msg("db", "shop_item_edit_quan: " .. db_YRPWORKED(_new))
 end)
 
 util.AddNetworkString("nws_yrp_shop_item_edit_cool")
@@ -136,7 +136,7 @@ net.Receive("nws_yrp_shop_item_edit_cool", function(len, ply)
 		["cooldown"] = _new_cool
 	}, "uniqueID = " .. _uid)
 
-	YRP.msg("db", "shop_item_edit_cool: " .. db_WORKED(_new))
+	YRP.msg("db", "shop_item_edit_cool: " .. db_YRPWORKED(_new))
 end)
 
 util.AddNetworkString("nws_yrp_shop_item_edit_lice")
@@ -150,7 +150,7 @@ net.Receive("nws_yrp_shop_item_edit_lice", function(len, ply)
 		["licenseID"] = _new_lice
 	}, "uniqueID = " .. _uid)
 
-	YRP.msg("db", "shop_item_edit_lice: " .. db_WORKED(_new))
+	YRP.msg("db", "shop_item_edit_lice: " .. db_YRPWORKED(_new))
 	local _test = YRP_SQL_SELECT(DATABASE_NAME, "licenseID", "uniqueID = " .. _uid)
 end)
 
@@ -165,7 +165,7 @@ net.Receive("nws_yrp_shop_item_edit_perm", function(len, ply)
 		["permanent"] = _new_perm
 	}, "uniqueID = " .. _uid)
 
-	YRP.msg("db", "shop_item_edit_perm: " .. db_WORKED(_new))
+	YRP.msg("db", "shop_item_edit_perm: " .. db_YRPWORKED(_new))
 end)
 
 util.AddNetworkString("nws_yrp_shop_get_items_storage")
@@ -208,7 +208,7 @@ net.Receive("nws_yrp_shop_get_items", function(len, ply)
 		if strEmpty(v.WorldModel) then
 			local ent = ents.Create(v.ClassName)
 
-			if EntityAlive(ent) then
+			if YRPEntityAlive(ent) then
 				local _, err = pcall(YRPEntSpawn, ent)
 
 				if err then
@@ -248,7 +248,7 @@ net.Receive("nws_yrp_shop_item_edit_base", function(len, ply)
 		["type"] = _type
 	}, "uniqueID = " .. _uid)
 
-	YRP.msg("db", "shop_item_edit_base: " .. db_WORKED(_new))
+	YRP.msg("db", "shop_item_edit_base: " .. db_YRPWORKED(_new))
 end)
 
 function SpawnVehicle(item, pos, ang)
@@ -568,7 +568,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 			end
 		end
 
-		if EntityAlive(ent) and TARGETANG then
+		if YRPEntityAlive(ent) and TARGETANG then
 			ent:SetAngles(TARGETANG)
 		end
 	else
@@ -625,7 +625,7 @@ net.Receive("nws_yrp_item_buy", function(len, ply)
 				local _spawned, ent = YRPSpawnItem(ply, _item, duid, count, itemColor)
 
 				if _spawned then
-					if EntityAlive(ent) then
+					if YRPEntityAlive(ent) then
 						ent:SetYRPInt("item_uniqueID", _item.uniqueID)
 
 						if itemColor then
@@ -686,11 +686,11 @@ net.Receive("nws_yrp_item_spawn", function(len, ply)
 		if IsNotNilAndNotFalse(_item) then
 			_item = _item[1]
 
-			if not IsEntityAlive(ply, _item.uniqueID) then
+			if not IsYRPEntityAlive(ply, _item.uniqueID) then
 				local _spawned, ent = YRPSpawnItem(ply, _item, duid, 1)
 
 				if _spawned then
-					if EntityAlive(ent) then
+					if YRPEntityAlive(ent) then
 						ent:SetYRPInt("item_uniqueID", _item.uniqueID)
 
 						if ent:IsVehicle() then
@@ -713,9 +713,9 @@ net.Receive("nws_yrp_item_despawn", function(len, ply)
 
 	if _item ~= nil then
 		_item = _item[1]
-		local _alive, ent = IsEntityAlive(ply, _item.uniqueID)
+		local _alive, ent = IsYRPEntityAlive(ply, _item.uniqueID)
 
-		if _alive and EntityAlive(ent) then
+		if _alive and YRPEntityAlive(ent) then
 			ent:Remove()
 		end
 	end

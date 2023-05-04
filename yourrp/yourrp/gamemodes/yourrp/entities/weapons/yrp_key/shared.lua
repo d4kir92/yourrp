@@ -34,7 +34,7 @@ if CLIENT then
 	net.Receive("nws_yrp_door_anim", function(self, len)
 		local ply = net.ReadEntity()
 
-		if EntityAlive(ply) then
+		if YRPEntityAlive(ply) then
 			local msg = net.ReadString()
 
 			if msg == "lock" then
@@ -53,7 +53,7 @@ function SWEP:Reload()
 		local owner = self:GetOwner()
 		owner.ts = owner.ts or CurTime()
 
-		if EntityAlive(owner) and owner.ts + 0.5 < CurTime() then
+		if YRPEntityAlive(owner) and owner.ts + 0.5 < CurTime() then
 			owner.ts = CurTime()
 			owner:EmitSound("physics/wood/wood_crate_impact_hard" .. math.random(1, 5) .. ".wav", 100, math.random(90, 110))
 			net.Start("nws_yrp_door_anim")
@@ -77,7 +77,7 @@ function SWEP:PrimaryAttack()
 	if SERVER and self:GetOwner() and self:GetOwner():IsValid() then
 		local ent = self:GetOwner():GetEyeTrace().Entity
 
-		if EntityAlive(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalYRPInt("int_door_distance", 200) then
+		if YRPEntityAlive(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalYRPInt("int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
 				if YRPLockDoor(self:GetOwner(), ent, ent:GetYRPString("buildingID", "Failed")) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_lockeddoor"))
@@ -105,7 +105,7 @@ function SWEP:SecondaryAttack()
 	if SERVER and self:GetOwner() and self:GetOwner():IsValid() then
 		local ent = self:GetOwner():GetEyeTrace().Entity
 
-		if EntityAlive(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalYRPInt("int_door_distance", 200) then
+		if YRPEntityAlive(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalYRPInt("int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
 				if YRPUnlockDoor(self:GetOwner(), ent, ent:GetYRPString("buildingID", "Failed")) then
 					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_unlockeddoor"))

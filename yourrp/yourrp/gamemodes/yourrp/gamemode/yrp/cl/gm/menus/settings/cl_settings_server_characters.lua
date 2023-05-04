@@ -2,7 +2,7 @@
 net.Receive("nws_yrp_setting_characters", function(len)
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) and PanelAlive(YRPCharList) then
+	if YRPPanelAlive(PARENT) and YRPPanelAlive(YRPCharList) then
 		local tab = net.ReadTable()
 
 		if tab.SteamID ~= "BOT" then
@@ -16,7 +16,7 @@ net.Receive("nws_yrp_setting_characters", function(len)
 
 			descr = descr or ""
 
-			if PanelAlive(YRPCharList) then
+			if YRPPanelAlive(YRPCharList) then
 				YRPCharList:AddLine(tab.SteamID, tab.rpname, tab.text_idcardid, descr, tab.groupID, tab.roleID, tab.money, tab.moneybank, tab.int_level, event, archi)
 			end
 		end
@@ -26,7 +26,7 @@ end)
 function OpenSettingsCharacters()
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		YRPCharList = YRPCreateD("DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 		YRPCharList:AddColumn("SteamID")
 		YRPCharList:AddColumn(YRP.lang_string("LID_name"))

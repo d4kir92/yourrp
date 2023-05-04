@@ -97,7 +97,7 @@ function AddKeybindBr(plist)
 end
 
 net.Receive("nws_yrp_getsitehelp", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local welcome_message = net.ReadString()
 		local motd = net.ReadString()
 		local posy = 0
@@ -191,7 +191,7 @@ net.Receive("nws_yrp_getsitehelp", function(len)
 end)
 
 net.Receive("nws_yrp_getsitestaff", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local staff = net.ReadTable()
 		local stafflist = YRPCreateD("DPanelList", HELPMENU.mainmenu.site, YRP.ctr(800), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 		stafflist:SetSpacing(YRP.ctr(10))
@@ -203,7 +203,7 @@ net.Receive("nws_yrp_getsitestaff", function(len)
 			function tmp:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 255, 200))
 
-				if EntityAlive(pl) then
+				if YRPEntityAlive(pl) then
 					draw.SimpleText(YRP.lang_string("LID_name") .. ": " .. pl:RPName(), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
 					draw.SimpleText(YRP.lang_string("LID_usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(50 + 25), Color(255, 255, 255, 255), 0, 1)
 				end
@@ -230,7 +230,7 @@ net.Receive("nws_yrp_getsitestaff", function(len)
 end)
 
 net.Receive("nws_yrp_getsiteserverrules", function(len)
-	if PanelAlive(HELPMENU) then
+	if YRPPanelAlive(HELPMENU) then
 		local serverrules = net.ReadString()
 		local page = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
@@ -254,7 +254,7 @@ net.Receive("nws_yrp_getsiteserverrules", function(len)
 end)
 
 net.Receive("nws_yrp_getsitecollection", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local collectionid = tonumber(net.ReadString())
 
 		if collectionid > 100000000 then
@@ -282,7 +282,7 @@ net.Receive("nws_yrp_getsitecollection", function(len)
 end)
 
 net.Receive("nws_yrp_getsitecommunitywebsite", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
 		if not strEmpty(link) then
@@ -309,7 +309,7 @@ net.Receive("nws_yrp_getsitecommunitywebsite", function(len)
 end)
 
 net.Receive("nws_yrp_getsitecommunityforum", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
 		if not strEmpty(link) then
@@ -336,7 +336,7 @@ net.Receive("nws_yrp_getsitecommunityforum", function(len)
 end)
 
 net.Receive("nws_yrp_getsitecommunitydiscord", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 		local widgetid = net.ReadString()
 
@@ -366,7 +366,7 @@ net.Receive("nws_yrp_getsitecommunitydiscord", function(len)
 end)
 
 net.Receive("nws_yrp_getsitecommunityteamspeak", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local ip = net.ReadString()
 		local port = net.ReadString()
 		local query_port = net.ReadString()
@@ -393,7 +393,7 @@ net.Receive("nws_yrp_getsitecommunityteamspeak", function(len)
 end)
 
 net.Receive("nws_yrp_getsitecommunitytwitter", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
 		if not strEmpty(link) then
@@ -420,7 +420,7 @@ net.Receive("nws_yrp_getsitecommunitytwitter", function(len)
 end)
 
 net.Receive("nws_yrp_getsitecommunityyoutube", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
 		if not strEmpty(link) then
@@ -447,7 +447,7 @@ net.Receive("nws_yrp_getsitecommunityyoutube", function(len)
 end)
 
 net.Receive("nws_yrp_getsitecommunityfacebook", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
 		if not strEmpty(link) then
@@ -474,7 +474,7 @@ net.Receive("nws_yrp_getsitecommunityfacebook", function(len)
 end)
 
 net.Receive("nws_yrp_getsitecommunitysteamgroup", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local link = net.ReadString()
 
 		if not strEmpty(link) then
@@ -501,7 +501,7 @@ net.Receive("nws_yrp_getsitecommunitysteamgroup", function(len)
 end)
 
 net.Receive("nws_yrp_getsiteyourrpnew", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local link = "https://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152"
 
 		if not strEmpty(link) then
@@ -524,7 +524,7 @@ net.Receive("nws_yrp_getsiteyourrpnew", function(len)
 end)
 
 net.Receive("nws_yrp_getsiteyourrpdiscord", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local link = "https://discord.gg/sEgNZxg"
 
 		if not strEmpty(link) then
@@ -556,7 +556,7 @@ net.Receive("nws_yrp_getsiteyourrpdiscord", function(len)
 end)
 
 net.Receive("nws_yrp_getsiteyourrpservers", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local link = "https://sites.google.com/view/yourrp-gmod/serverlist"
 		local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
 		page:OpenURL(link)
@@ -575,7 +575,7 @@ net.Receive("nws_yrp_getsiteyourrpservers", function(len)
 end)
 
 net.Receive("nws_yrp_getsiteyourrptranslations", function(len)
-	if PanelAlive(HELPMENU.mainmenu.site) then
+	if YRPPanelAlive(HELPMENU.mainmenu.site) then
 		local Parent = HELPMENU.mainmenu.site
 		--local page = YRPCreateD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 		local _longestProgressText = 0
@@ -728,7 +728,7 @@ function CreateHelpMenuContent(parent)
 	HELPMENU.standalone = standalone or false
 	HELPMENU.mainmenu = YRPCreateD("DYRPHorizontalMenu", HELPMENU.content, HELPMENU.content:GetWide(), HELPMENU.content:GetTall(), 0, 0)
 
-	if PanelAlive(HELPMENU.mainmenu) then
+	if YRPPanelAlive(HELPMENU.mainmenu) then
 		HELPMENU.mainmenu:GetMenuInfo("nws_yrp_gethelpmenu")
 		HELPMENU.mainmenu:SetStartTab("LID_help")
 		HELPMENU.mainmenu:SetHeaderHeight(YRP.ctr(100))

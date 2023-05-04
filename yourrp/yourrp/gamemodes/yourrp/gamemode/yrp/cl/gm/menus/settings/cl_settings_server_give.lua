@@ -2,7 +2,7 @@
 net.Receive("nws_yrp_setting_players", function(len)
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		local _giveListView = YRPCreateD("DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 		_giveListView:AddColumn("SteamID")
 		_giveListView:AddColumn(YRP.lang_string("LID_nick"))
@@ -80,7 +80,7 @@ net.Receive("nws_yrp_setting_players", function(len)
 				local _giveComboBox = createVGUI("DComboBox", _giveFrame, 380, 50, 10, 85)
 
 				net.Receive("nws_yrp_give_getGroTab", function(le)
-					if PanelAlive(_giveComboBox) then
+					if YRPPanelAlive(_giveComboBox) then
 						local _tmpGroupList = net.ReadTable()
 
 						for k, v in pairs(_tmpGroupList) do
@@ -94,7 +94,7 @@ net.Receive("nws_yrp_setting_players", function(len)
 				local _giveComboBox2 = createVGUI("DComboBox", _giveFrame, 380, 50, 10, 185)
 
 				function _giveComboBox:OnSelect(panel, index, value)
-					if PanelAlive(_giveComboBox2) then
+					if YRPPanelAlive(_giveComboBox2) then
 						_giveComboBox2:Clear()
 						net.Start("nws_yrp_give_getRolTab")
 						net.WriteString(tostring(value))

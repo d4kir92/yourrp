@@ -8,11 +8,11 @@ local loadedG = false
 local loadedW = false
 
 function BuildWhitelis(parent, tab)
-	if not PanelAlive(parent) then
+	if not YRPPanelAlive(parent) then
 		YRP.msg("note", "[BuildWhitelis] failed! parent: " .. tostring(parent))
 	end
 
-	if loadedR and loadedG and loadedW and PanelAlive(parent) then
+	if loadedR and loadedG and loadedW and YRPPanelAlive(parent) then
 		local lis = YRPCreateD("DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
 		lis:AddColumn("uniqueID"):SetFixedWidth(60)
 		lis:AddColumn("SteamID"):SetFixedWidth(130)
@@ -368,7 +368,7 @@ end)
 net.Receive("nws_yrp_getRoleWhitelist_line", function(len)
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		local site = PARENT
 		local id = net.ReadString() or "0"
 		id = tonumber(id)

@@ -206,7 +206,7 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 		end
 
 		function window:OnRemove()
-			if PanelAlive(LanguageChanger) then
+			if YRPPanelAlive(LanguageChanger) then
 				LanguageChanger.selecting = false
 			end
 		end
@@ -380,7 +380,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		end
 
 		for i, v in pairs(tab) do
-			if PanelAlive(pmsel) and pmsel.strsearch ~= nil and v.PrintName and string.find(string.lower(v.PrintName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.ClassName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.WorldModel), pmsel.strsearch or "", 1, true) then
+			if YRPPanelAlive(pmsel) and pmsel.strsearch ~= nil and v.PrintName and string.find(string.lower(v.PrintName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.ClassName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.WorldModel), pmsel.strsearch or "", 1, true) then
 				self.nothingfound = false
 				self.count = self.count + 1
 
@@ -426,7 +426,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 						d_pm.model = YRPCreateD("DModelPanel", d_pm, msize, msize, mbr, my)
 
 						timer.Simple(0.1 * self.fcount, function()
-							if PanelAlive(d_pm) and PanelAlive(d_pm.model) then
+							if YRPPanelAlive(d_pm) and YRPPanelAlive(d_pm.model) then
 								d_pm.model:SetModel(v.WorldModel)
 							end
 						end)
@@ -457,7 +457,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 							end
 						end
 
-						if not multiple and PanelAlive(pmsel) then
+						if not multiple and YRPPanelAlive(pmsel) then
 							if fu then
 								fu()
 							end
@@ -524,7 +524,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 				fu()
 			end
 
-			if PanelAlive(pmsel) then
+			if YRPPanelAlive(pmsel) then
 				pmsel:Close()
 			end
 		end
@@ -537,7 +537,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 	end
 
 	timer.Simple(1, function()
-		if PanelAlive(pmsel) then
+		if YRPPanelAlive(pmsel) then
 			pmsel:Search("")
 		end
 	end)
@@ -1793,7 +1793,7 @@ function drawIDCard(ply, scale, px, py)
 					end
 
 					function test:Paint(pw, ph)
-						if PanelAlive(test) then
+						if YRPPanelAlive(test) then
 							test.mat = test:GetHTMLMaterial()
 
 							if test.mat ~= nil and not test.found then

@@ -4,7 +4,7 @@ local EVENT = {}
 net.Receive("nws_yrp_setting_events", function(len)
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		local sw = PARENT:GetWide() / 3
 		local sh = PARENT:GetTall() / 3
 		-- Event Chars
@@ -55,7 +55,7 @@ net.Receive("nws_yrp_setting_events", function(len)
 				net.Receive("nws_yrp_event_get_chars", function()
 					local tab = net.ReadTable()
 
-					if PanelAlive(Frame) and PanelAlive(Frame.Char) then
+					if YRPPanelAlive(Frame) and YRPPanelAlive(Frame.Char) then
 						Frame.Char:Clear()
 
 						for i, v in pairs(tab) do
@@ -215,7 +215,7 @@ net.Receive("nws_yrp_setting_events", function(len)
 		net.Receive("nws_yrp_get_events", function(le)
 			local tab = net.ReadTable()
 
-			if IsNotNilAndNotFalse(tab) and PanelAlive(EVENT) and PanelAlive(EVENT.EventList) then
+			if IsNotNilAndNotFalse(tab) and YRPPanelAlive(EVENT) and YRPPanelAlive(EVENT.EventList) then
 				EVENT.EventList:Clear()
 
 				for n, event in pairs(tab) do

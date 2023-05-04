@@ -253,7 +253,7 @@ net.Receive("nws_yrp_open_weaponchest", function(len)
 		net.Receive("nws_yrp_get_sweps_role_art", function(ilen)
 			local tab = net.ReadTable()
 
-			if PanelAlive(win) then
+			if YRPPanelAlive(win) then
 				local none = true
 				local alreadyinuse = LocalPlayer():GetWeapons()
 				local disallowed = {}

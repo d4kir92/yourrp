@@ -51,7 +51,7 @@ function YRPChatChannel(edit, uid)
 	function win.mode:OnSelect(index, value, data)
 		mode = data
 
-		if PanelAlive(win.structure2) then
+		if YRPPanelAlive(win.structure2) then
 			if mode == 6 then
 				win.structure2header:Show()
 				win.structure2:Show()
@@ -95,7 +95,7 @@ function YRPChatChannel(edit, uid)
 	function win.structure:OnChange()
 		structure = win.structure:GetText()
 
-		if PanelAlive(win.previewrich) then
+		if YRPPanelAlive(win.previewrich) then
 			win.previewrich:UpdatePreview("structure")
 		end
 	end
@@ -215,7 +215,7 @@ function YRPChatChannel(edit, uid)
 	function win.structure2:OnChange()
 		structure2 = win.structure2:GetText()
 
-		if PanelAlive(win.previewrich) then
+		if YRPPanelAlive(win.previewrich) then
 			win.previewrich:UpdatePreview("structure2")
 		end
 	end
@@ -262,7 +262,7 @@ function YRPChatChannel(edit, uid)
 	win.previewtext:SetPlaceholderText("Example Text")
 
 	function win.previewtext:OnChange()
-		if PanelAlive(win.previewrich) then
+		if YRPPanelAlive(win.previewrich) then
 			win.previewrich:UpdatePreview("previewtext")
 		end
 	end
@@ -271,7 +271,7 @@ function YRPChatChannel(edit, uid)
 	win.previewrich:SetText(win.structure:GetText())
 
 	function win.previewrich:UpdatePreview(from)
-		if PanelAlive(win.previewrich) and PanelAlive(win.previewtext) then
+		if YRPPanelAlive(win.previewrich) and YRPPanelAlive(win.previewtext) then
 			win.previewrich:SetText("")
 			local pk = YRPChatReplaceCMDS(win.structure:GetText(), LocalPlayer(), YRPReplaceWithPlayerNames(win.previewtext:GetText()))
 
@@ -486,7 +486,7 @@ function OpenChatMenu()
 end
 
 function YRPToggleChatMenu()
-	if PanelAlive(vm.win) then
+	if YRPPanelAlive(vm.win) then
 		CloseChatMenu()
 	elseif YRPIsNoMenuOpen() then
 		OpenChatMenu()

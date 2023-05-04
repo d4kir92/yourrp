@@ -11,7 +11,7 @@ end
 function closeCharMenu()
 	yrp_charframe.open = false
 
-	if PanelAlive(yrp_charframe.window) and yrp_charframe.window and yrp_charframe.window.Remove then
+	if YRPPanelAlive(yrp_charframe.window) and yrp_charframe.window and yrp_charframe.window.Remove then
 		YRPCloseMenu()
 		yrp_charframe.window:Remove()
 		yrp_charframe.window = nil

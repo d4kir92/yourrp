@@ -47,7 +47,7 @@ end
 net.Receive("nws_yrp_get_macros", function(len)
 	_mm.tab = net.ReadTable()
 
-	if PanelAlive(_mm.content) then
+	if YRPPanelAlive(_mm.content) then
 		local content = _mm.content
 		_mm.uid = 1
 		_mm.list = YRPCreateD("DScrollPanel", content, YRP.ctr(80 * 7 + 20 * 6 + 36), YRP.ctr(80 * 3 + 20 * 2), 0, 0)

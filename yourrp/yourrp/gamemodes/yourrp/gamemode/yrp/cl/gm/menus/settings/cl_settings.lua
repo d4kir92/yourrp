@@ -64,7 +64,7 @@ end
 function F8CloseSettings(pnl)
 	sm.open = false
 
-	if PanelAlive(sm.win) then
+	if YRPPanelAlive(sm.win) then
 		sm.win:Hide()
 	elseif IsNotNilAndNotFalse(pnl) and pnl.Remove ~= nil then
 		pnl:Remove()
@@ -74,7 +74,7 @@ end
 function F8HardCloseSettings()
 	sm.open = false
 
-	if PanelAlive(sm.win) then
+	if YRPPanelAlive(sm.win) then
 		sm.win:Remove()
 		sm.win = nil
 	end
@@ -88,7 +88,7 @@ function F8RequireUG(site, usergroups)
 	local lply = LocalPlayer()
 	local ugs = string.Explode(", ", usergroups)
 	local PARENT = GetSettingsSite()
-	if not PanelAlive(PARENT) then return end
+	if not YRPPanelAlive(PARENT) then return end
 	local allugs = {}
 	allugs["USERGROUPS"] = usergroups
 	local notallowed = YRPCreateD("DPanel", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
@@ -361,7 +361,7 @@ function F8OpenSettings()
 	sm.open = true
 	local br = YRP.ctr(20)
 
-	if PanelAlive(sm.win) == false then
+	if YRPPanelAlive(sm.win) == false then
 		local sites = {}
 		local c = 1
 
@@ -702,7 +702,7 @@ function F8OpenSettings()
 		else
 			sm.win:UpdateCustomeSize(sm.menu.ph)
 		end
-	elseif PanelAlive(sm.win) then
+	elseif YRPPanelAlive(sm.win) then
 		sm.win:Show()
 	end
 end

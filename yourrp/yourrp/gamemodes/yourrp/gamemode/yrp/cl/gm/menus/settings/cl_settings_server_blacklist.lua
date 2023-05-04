@@ -130,11 +130,11 @@ function BuildBlacklis(parent, tabBL, tab)
 	end
 
 	function lis:OnRemove()
-		if PanelAlive(btnAdd) then
+		if YRPPanelAlive(btnAdd) then
 			btnAdd:Remove()
 		end
 
-		if PanelAlive(btnRem) then
+		if YRPPanelAlive(btnRem) then
 			btnRem:Remove()
 		end
 	end
@@ -143,7 +143,7 @@ end
 net.Receive("nws_yrp_blacklist_get", function(len)
 	local site = GetSettingsSite()
 
-	if PanelAlive(site) then
+	if YRPPanelAlive(site) then
 		site:Clear()
 		local tabBL = net.ReadTable()
 		local tab = net.ReadString()

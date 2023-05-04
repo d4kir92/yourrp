@@ -3,7 +3,7 @@
 function BuildScaleSite()
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		local SW = 500
 		local Y = 20
 		local scale_hunger = YRPCreateD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))

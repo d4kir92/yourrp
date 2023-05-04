@@ -78,7 +78,7 @@ function YRPSaveClients(str)
 				if ply:Alive() and YRP_SQL_TABLE_EXISTS("yrp_characters") then
 					local _char_id = ply:CharID()
 
-					if WORKED(_char_id, "CharID failed @YRPSaveClients") then
+					if YRPWORKED(_char_id, "CharID failed @YRPSaveClients") then
 						YRP_SQL_UPDATE("yrp_characters", {
 							["position"] = tostring(ply:GetPos())
 						}, "uniqueID = " .. _char_id)
@@ -87,19 +87,19 @@ function YRPSaveClients(str)
 							["angle"] = tostring(ply:EyeAngles())
 						}, "uniqueID = " .. _char_id)
 
-						if WORKED(ply:GetYRPString("money", "0"), "money failed @YRPSaveClients") and isnumber(tonumber(ply:GetYRPString("money"))) then
+						if YRPWORKED(ply:GetYRPString("money", "0"), "money failed @YRPSaveClients") and isnumber(tonumber(ply:GetYRPString("money"))) then
 							local _mo_result = YRP_SQL_UPDATE("yrp_characters", {
 								["money"] = ply:GetYRPString("money", "0")
 							}, "uniqueID = " .. _char_id)
 						end
 
-						if WORKED(ply:GetYRPString("moneybank", "0"), "moneybank failed @YRPSaveClients") and isnumber(tonumber(ply:GetYRPString("moneybank"))) then
+						if YRPWORKED(ply:GetYRPString("moneybank", "0"), "moneybank failed @YRPSaveClients") and isnumber(tonumber(ply:GetYRPString("moneybank"))) then
 							local _mb_result = YRP_SQL_UPDATE("yrp_characters", {
 								["moneybank"] = ply:GetYRPString("moneybank", "0")
 							}, "uniqueID = " .. _char_id)
 						end
 
-						if WORKED(GetMapNameDB(), "getmap failed @YRPSaveClients") then
+						if YRPWORKED(GetMapNameDB(), "getmap failed @YRPSaveClients") then
 							YRP_SQL_UPDATE("yrp_characters", {
 								["map"] = GetMapNameDB()
 							}, "uniqueID = " .. _char_id)
@@ -479,7 +479,7 @@ function YRPSetRoleValues(ply, pmid)
 		local groTab = ply:YRPGetGroupTable()
 		local ChaTab = ply:YRPGetCharacterTable()
 
-		if WORKED(rolTab, "YRPSetRoleValues rolTab") and WORKED(ChaTab, "YRPSetRoleValues ChaTab") then
+		if YRPWORKED(rolTab, "YRPSetRoleValues rolTab") and YRPWORKED(ChaTab, "YRPSetRoleValues ChaTab") then
 			if ChaTab.storage ~= nil then
 				local _storage = string.Explode(",", ChaTab.storage)
 				YRP.msg("gm", "[YRPSetRoleValues] " .. ply:YRPName() .. " give permanent Licenses")
@@ -519,7 +519,7 @@ function YRPSetRoleValues(ply, pmid)
 		end
 
 		--[RE]--check_inv(ply, ply:CharID() )
-		if WORKED(rolTab, "YRPSetRoleValues rolTab") then
+		if YRPWORKED(rolTab, "YRPSetRoleValues rolTab") then
 			ply:SetYRPString("roleIcon", rolTab.string_icon)
 			ply:SetYRPString("roleColor", rolTab.string_color)
 			ply:SetYRPInt("speedwalk", tonumber(rolTab.int_speedwalk))
@@ -888,7 +888,7 @@ function YRPIsWhitelisted(ply, id)
 		local steamid = ply:YRPSteamID()
 		local _plyAllowedAll = YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "'")
 
-		if WORKED(_plyAllowedAll, "_plyAllowedAll", true) then
+		if YRPWORKED(_plyAllowedAll, "_plyAllowedAll", true) then
 			_plyAllowedAll = _plyAllowedAll[1]
 
 			if _plyAllowedAll.roleID == "-1" and _plyAllowedAll.groupID == "-1" then
@@ -1154,7 +1154,7 @@ end
 function canVoteRole(ply, roleID)
 	local tmpTableRole = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. roleID)
 
-	if WORKED(tmpTableRole, "tmpTableRole") then
+	if YRPWORKED(tmpTableRole, "tmpTableRole") then
 		local uses = tonumber(tmpTableRole[1].int_uses)
 		local maxamount = tonumber(tmpTableRole[1].int_maxamount)
 		if uses < tonumber(player.GetCount()) * (tonumber(tmpTableRole[1].int_amountpercentage) / 100) and uses < maxamount or maxamount <= 0 and tonumber(tmpTableRole[1].bool_voteable) == 1 then return true end

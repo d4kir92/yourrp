@@ -27,9 +27,9 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	local w = 800
 	local x = 20
 	local PARENT = GetSettingsSite()
-	if not PanelAlive(PARENT) then return end
+	if not YRPPanelAlive(PARENT) then return end
 
-	if PanelAlive(PARENT.ug) then
+	if YRPPanelAlive(PARENT.ug) then
 		PARENT.ug:Remove()
 	end
 
@@ -63,7 +63,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		if UGS and UGS[CURRENT_USERGROUP] then
 			UGS[CURRENT_USERGROUP].string_name = string.upper(string_name)
 
-			if PanelAlive(NAME) then
+			if YRPPanelAlive(NAME) then
 				NAME:SetText(string.upper(UGS[CURRENT_USERGROUP].string_name))
 			end
 		end
@@ -121,7 +121,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		function window:Paint(pw, ph)
 			surfaceWindow(self, pw, ph, YRP.lang_string("LID_color"))
 
-			if not PanelAlive(PARENT) then
+			if not YRPPanelAlive(PARENT) then
 				self:Remove()
 			end
 		end
@@ -339,7 +339,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	end
 
 	net.Receive("nws_yrp_usergroup_update_string_sweps", function(len2)
-		if PanelAlive(SWEPS) then
+		if YRPPanelAlive(SWEPS) then
 			local string_sweps = net.ReadString()
 
 			if type(UGS[CURRENT_USERGROUP].string_sweps) == "string" then
@@ -543,7 +543,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	end
 
 	net.Receive("nws_yrp_usergroup_update_string_nonesweps", function(len2)
-		if PanelAlive(NONESWEPS) then
+		if YRPPanelAlive(NONESWEPS) then
 			local string_nonesweps = net.ReadString()
 
 			if type(UGS[CURRENT_USERGROUP].string_nonesweps) == "string" then
@@ -901,7 +901,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		net.Receive("nws_yrp_usergroup_update_" .. name, function(len2)
 			local b = net.ReadString()
 
-			if PanelAlive(tmp4.cb) then
+			if YRPPanelAlive(tmp4.cb) then
 				tmp4.cb.serverside = true
 				tmp4.cb:SetValue(b)
 				tmp4.cb.serverside = false
@@ -1078,7 +1078,7 @@ end)
 
 function YRPAddUG(tbl)
 	local PARENT = GetSettingsSite()
-	if not PanelAlive(PARENT) or not PanelAlive(PARENT.uglist) then return end
+	if not YRPPanelAlive(PARENT) or not YRPPanelAlive(PARENT.uglist) then return end
 	UGS[tonumber(tbl.uniqueID)] = tbl
 	DUGS[tonumber(tbl.uniqueID)] = YRPCreateD("YButton", PARENT.uglist, PARENT.uglist:GetWide(), YRP.ctr(100), 0, 0)
 	local _ug = DUGS[tonumber(tbl.uniqueID)]
@@ -1279,7 +1279,7 @@ function UpdateUsergroupsList()
 	N_UGS = YRPSortUGS(N_UGS)
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) and PanelAlive(PARENT.uglist) then
+	if YRPPanelAlive(PARENT) and YRPPanelAlive(PARENT.uglist) then
 		PARENT.uglist:Clear()
 		UGS = {}
 
@@ -1347,7 +1347,7 @@ end)
 function YRPOpenSettingsUsergroups()
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		CURRENT_USERGROUP = nil
 
 		function PARENT:OnRemove()

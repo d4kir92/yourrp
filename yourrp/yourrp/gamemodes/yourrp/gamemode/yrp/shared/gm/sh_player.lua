@@ -333,7 +333,7 @@ function Player:UpdateMoney()
 			local money = self:GetYRPString("money", "FAILED")
 			if money == "FAILED" then return false end
 
-			if WORKED(money, "ply:money UpdateMoney", true) then
+			if YRPWORKED(money, "ply:money UpdateMoney", true) then
 				YRP_SQL_UPDATE("yrp_characters", {
 					["money"] = money
 				}, "uniqueID = " .. _char_id)
@@ -342,7 +342,7 @@ function Player:UpdateMoney()
 			local moneybank = tonumber(self:GetYRPString("moneybank", "FAILED"))
 			if moneybank == "FAILED" then return false end
 
-			if WORKED(moneybank, "ply:moneybank UpdateMoney", true) then
+			if YRPWORKED(moneybank, "ply:moneybank UpdateMoney", true) then
 				YRP_SQL_UPDATE("yrp_characters", {
 					["moneybank"] = moneybank
 				}, "uniqueID = " .. _char_id)

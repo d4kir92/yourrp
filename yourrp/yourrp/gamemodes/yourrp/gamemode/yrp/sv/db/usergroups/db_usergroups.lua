@@ -1241,10 +1241,10 @@ end
 
 -- Functions
 hook.Add("PlayerSpawnVehicle", "yrp_vehicles_restriction", function(pl, model, name, tab)
-	if EntityAlive(pl) then
+	if YRPEntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_vehicles", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 
-		if WORKED(_tmp, "PlayerSpawnVehicle failed") then
+		if YRPWORKED(_tmp, "PlayerSpawnVehicle failed") then
 			_tmp = _tmp[1]
 
 			if tobool(_tmp.bool_vehicles) then
@@ -1260,10 +1260,10 @@ hook.Add("PlayerSpawnVehicle", "yrp_vehicles_restriction", function(pl, model, n
 end)
 
 hook.Add("PlayerGiveSWEP", "yrp_weapons_restriction", function(pl)
-	if EntityAlive(pl) then
+	if YRPEntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_weapons", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 
-		if WORKED(_tmp, "PlayerGiveSWEP failed") then
+		if YRPWORKED(_tmp, "PlayerGiveSWEP failed") then
 			_tmp = _tmp[1]
 
 			if tobool(_tmp.bool_weapons) then
@@ -1353,7 +1353,7 @@ function YRPSendNotification(ply, msg)
 end
 
 hook.Add("PlayerSpawnSWEP", "yrp_weapons_restriction", function(pl)
-	if EntityAlive(pl) then
+	if YRPEntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_weapons", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 
 		if IsNotNilAndNotFalse(_tmp) then
@@ -1375,7 +1375,7 @@ hook.Add("PlayerSpawnSWEP", "yrp_weapons_restriction", function(pl)
 end)
 
 hook.Add("PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
-	if EntityAlive(pl) then
+	if YRPEntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_entities", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 
 		if IsNotNilAndNotFalse(_tmp) then
@@ -1397,10 +1397,10 @@ hook.Add("PlayerSpawnSENT", "yrp_entities_restriction", function(pl)
 end)
 
 hook.Add("PlayerSpawnEffect", "yrp_effects_restriction", function(pl)
-	if EntityAlive(pl) then
+	if YRPEntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_effects", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 
-		if WORKED(_tmp, "PlayerSpawnEffect failed") then
+		if YRPWORKED(_tmp, "PlayerSpawnEffect failed") then
 			_tmp = _tmp[1]
 
 			if tobool(_tmp.bool_effects) then
@@ -1416,10 +1416,10 @@ hook.Add("PlayerSpawnEffect", "yrp_effects_restriction", function(pl)
 end)
 
 hook.Add("PlayerSpawnNPC", "yrp_npcs_restriction", function(pl)
-	if EntityAlive(pl) then
+	if YRPEntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_npcs", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 
-		if WORKED(_tmp, "PlayerSpawnNPC failed") then
+		if YRPWORKED(_tmp, "PlayerSpawnNPC failed") then
 			_tmp = _tmp[1]
 
 			if tobool(_tmp.bool_npcs) then
@@ -1435,7 +1435,7 @@ hook.Add("PlayerSpawnNPC", "yrp_npcs_restriction", function(pl)
 end)
 
 hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl)
-	if EntityAlive(pl) then
+	if YRPEntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_props", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 
 		if IsNotNilAndNotFalse(_tmp, "PlayerSpawnProp failed") then
@@ -1458,7 +1458,7 @@ hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl)
 end)
 
 hook.Add("PlayerSpawnRagdoll", "yrp_ragdolls_restriction", function(pl, model)
-	if EntityAlive(pl) then
+	if YRPEntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_ragdolls", "string_name = '" .. tostring(string.lower(pl:GetUserGroup())) .. "'")
 
 		if IsNotNilAndNotFalse(_tmp) then
@@ -1481,7 +1481,7 @@ end)
 function YRPRenderEquipment(ply, name, mode, color)
 	local _eq = ply:GetYRPEntity(name)
 
-	if EntityAlive(_eq) then
+	if YRPEntityAlive(_eq) then
 		_eq:SetRenderMode(mode)
 		_eq:SetColor(color)
 		_eq:SetYRPInt(name .. "mode", mode)
@@ -1494,7 +1494,7 @@ function YRPRenderEquipments(ply, mode, color)
 end
 
 function YRPRenderColor(ply, mode, color)
-	if EntityAlive(ply) and mode and color and ply:GetWeapons() then
+	if YRPEntityAlive(ply) and mode and color and ply:GetWeapons() then
 		ply:SetRenderMode(mode)
 		ply:SetColor(color)
 
@@ -1510,7 +1510,7 @@ local cloakColor = Color(255, 255, 255, 0)
 local normalColor = Color(255, 255, 255, 255)
 
 function YRPRender(ply)
-	if EntityAlive(ply) then
+	if YRPEntityAlive(ply) then
 		ply.oldrenderstatus = ply.oldrenderstatus or ""
 
 		if ply:GetYRPBool("cloaked", false) then
@@ -1644,7 +1644,7 @@ end
 local toolantispam = {}
 
 hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
-	if EntityAlive(pl) and IsNotNilAndNotFalse(tool) then
+	if YRPEntityAlive(pl) and IsNotNilAndNotFalse(tool) then
 		--YRP.msg("gm", "CanTool: " .. tool)
 		local tools = {}
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
@@ -1666,19 +1666,19 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 			if tr and tr.Entity and IsValid(tr.Entity) and tr.Entity:GetRPOwner() then
 				local Owner = tr.Entity:GetRPOwner()
 
-				if Owner == pl or not EntityAlive(Owner) or pl:HasAccess("yrp_can_tool", true) then
+				if Owner == pl or not YRPEntityAlive(Owner) or pl:HasAccess("yrp_can_tool", true) then
 					return true
 				else
 					if not table.HasValue(toolantispam, pl) then
 						table.insert(toolantispam, pl)
 
-						if EntityAlive(Owner) then
+						if YRPEntityAlive(Owner) then
 							YRP.msg("note", "[CanTool] " .. pl:RPName() .. " tried to modify entity from: " .. Owner:RPName())
 							YRPNotiToPlyDisallowed(pl, "You are not the owner!")
 						end
 
 						timer.Simple(2, function()
-							if EntityAlive(pl) then
+							if YRPEntityAlive(pl) then
 								table.RemoveByValue(toolantispam, pl)
 							end
 						end)
@@ -1712,7 +1712,7 @@ hook.Add("CanTool", "yrp_can_tool", function(pl, tr, tool)
 end)
 
 hook.Add("CanProperty", "yrp_canproperty", function(pl, property, ent)
-	if EntityAlive(pl) and IsNotNilAndNotFalse(property) and pl.GetUserGroup ~= nil then
+	if YRPEntityAlive(pl) and IsNotNilAndNotFalse(property) and pl.GetUserGroup ~= nil then
 		--YRP.msg( "gm", "CanProperty: " .. property)
 		local tools = {}
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")

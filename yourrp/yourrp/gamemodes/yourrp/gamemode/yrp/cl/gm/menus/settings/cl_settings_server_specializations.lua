@@ -5,7 +5,7 @@ net.Receive("nws_yrp_get_specializations", function()
 	local _specializations = net.ReadTable()
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		local sph = PARENT:GetTall()
 		_li.ea = YRPCreateD("DPanel", PARENT, ScW() - YRP.ctr(40 + 480 + 40 + 40), sph - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40))
 
@@ -16,7 +16,7 @@ net.Receive("nws_yrp_get_specializations", function()
 		_li._spe = YRPCreateD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
 		_li._spe:SetListHeader(YRP.lang_string("LID_specializations"))
 		--_li._spe:SetDStrForAdd( "specialization_add" )
-		_li._spe:SetEditArEntityAlive(_li.ea)
+		_li._spe:SetEditArYRPEntityAlive(_li.ea)
 
 		function _li.eaf(tbl)
 			for i, child in pairs(_li.ea:GetChildren()) do

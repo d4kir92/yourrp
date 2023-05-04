@@ -81,11 +81,11 @@ function YRPHelpPrint(sender)
 end
 
 function YRPDropWeapon(sender)
-	if EntityAlive(sender) then
+	if YRPEntityAlive(sender) then
 		local _weapon = sender:GetActiveWeapon()
 
 		if _weapon ~= nil and PlayersCanDropWeapons() then
-			if EntityAlive(_weapon) then
+			if YRPEntityAlive(_weapon) then
 				sender:DropSWEP(_weapon:GetClass())
 			end
 		else
@@ -263,7 +263,7 @@ function YRPChatDnd(sender)
 end
 
 function YRPChatRenamePlayer(sender, text)
-	if not EntityAlive(sender) then return false end
+	if not YRPEntityAlive(sender) then return false end
 
 	if GetGlobalYRPBool("bool_characters_changeable_name", false) or sender:HasAccess("YRPChatRenamePlayer", true) then
 		local name, newname = text, nil
@@ -441,7 +441,7 @@ function YRPAddXPChat(sender, text)
 		if isnumber(_xp) then
 			local _receiver = GetPlayerByName(_name)
 
-			if EntityAlive(_receiver) then
+			if YRPEntityAlive(_receiver) then
 				_receiver:AddXP(_xp)
 
 				return ""
@@ -485,7 +485,7 @@ function YRPSetLevelChat(sender, text)
 		if isnumber(_lvl) then
 			local _receiver = GetPlayerByName(_name)
 
-			if EntityAlive(_receiver) then
+			if YRPEntityAlive(_receiver) then
 				_receiver:SetLevel(_lvl)
 
 				return ""
@@ -522,7 +522,7 @@ cmdsM["name"] = YRPChatRenamePlayer
 cmdsM["nick"] = YRPChatRenamePlayer
 
 function YRPRunCommand(sender, command, text)
-	if not EntityAlive(sender) then return false end
+	if not YRPEntityAlive(sender) then return false end
 	if command == nil then return false end
 	command = string.lower(command)
 	text = text or ""
@@ -694,7 +694,7 @@ timer.Simple(4, function()
 				return ""
 			elseif tab.int_mode == eWhisper then
 				-- Whisper
-				if EntityAlive(target) then
+				if YRPEntityAlive(target) then
 					net.Start("nws_yrp_player_say")
 					net.WriteTable(pk2)
 					net.Send(sender)
@@ -709,11 +709,11 @@ timer.Simple(4, function()
 				end
 			elseif tab.int_mode == eCustom then
 				return ""
-			elseif EntityAlive(sender) then
+			elseif YRPEntityAlive(sender) then
 				-- Custom -- May in the future
 				YRPRunCommand(sender, channel, text) -- no return, it breaks custom chat addons, like atlas
 			end
-		elseif EntityAlive(sender) then
+		elseif YRPEntityAlive(sender) then
 			YRPRunCommand(sender, channel, text) -- no return, it breaks custom chat addons, like atlas
 		end
 	end)

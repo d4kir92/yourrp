@@ -252,7 +252,7 @@ function addRole(rol, parent, mainparent)
 end
 
 function addRoleRow(rol, parent)
-	if PanelAlive(parent) then
+	if YRPPanelAlive(parent) then
 		local RRW = YRP.ctr(600)
 		local RRH = YRP.ctr(150)
 		local _rr = YRPCreateD("DHorizontalScroller", parent.content, RRW, RRH, 0, 0) --parent:GetWide() - 2*YRP.ctr(parent:GetSpacing() ), YRP.ctr(400), 0, 0)
@@ -286,7 +286,7 @@ function getRoles(uid, parent)
 end
 
 function addGroup(grp, parent)
-	if parent ~= NULL and PanelAlive(parent) then
+	if parent ~= NULL and YRPPanelAlive(parent) then
 		local _grp = YRPCreateD("DYRPCollapsibleCategory", parent, parent:GetWide() - YRP.ctr(80), YRP.ctr(200), YRP.ctr(0), YRP.ctr(0))
 		_grp:SetHeader(grp.string_name)
 		_grp:SetSpacing(30)
@@ -358,7 +358,7 @@ function addGroup(grp, parent)
 			_grp.icon:SetHTML(GetHTMLImage(grp.string_icon, _grp.icon:GetWide(), _grp.icon:GetTall()))
 		end
 
-		if PanelAlive(parent) then
+		if YRPPanelAlive(parent) then
 			--if tostring(grp.int_parentgroup) ~= "0" then -- removed to make it work for under one by one
 			-- first additem!
 			if parent.AddItem then

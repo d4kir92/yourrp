@@ -133,7 +133,7 @@ function LoadCharacters()
 			curChar = -1
 		end
 
-		if PanelAlive(CharMenu.charactersBackground) then
+		if YRPPanelAlive(CharMenu.charactersBackground) then
 			CharMenu.charactersBackground.text = ""
 
 			if IsNotNilAndNotFalse(chars) then
@@ -141,7 +141,7 @@ function LoadCharacters()
 				CharMenu.character.amountevent = 0
 
 				if #chars < 1 then
-					if PanelAlive(CharMenu.frame) then
+					if YRPPanelAlive(CharMenu.frame) then
 						CharMenu.frame:Close()
 					end
 
@@ -382,7 +382,7 @@ function LoadCharacters()
 										net.WriteString(tmpChar.charid)
 										net.SendToServer()
 
-										if PanelAlive(CharMenu.frame) then
+										if YRPPanelAlive(CharMenu.frame) then
 											CharMenu.frame:Close()
 										end
 									end
@@ -694,7 +694,7 @@ function LoadCharacters()
 										if self.playermodels ~= nil and self.playermodelID ~= nil then
 											local _playermodel = self.playermodels[self.playermodelID] or nil
 
-											if _playermodel ~= nil and CharMenu.charplayermodel ~= NULL and PanelAlive(CharMenu.charplayermodel) then
+											if _playermodel ~= nil and CharMenu.charplayermodel ~= NULL and YRPPanelAlive(CharMenu.charplayermodel) then
 												if not strEmpty(_playermodel) then
 													CharMenu.charplayermodel:SetModel(_playermodel)
 												else
@@ -767,7 +767,7 @@ function LoadCharacters()
 							isEventChar = self.bool_eventchar
 
 							if CharMenu.character.amount < LocalPlayer():GetYRPInt("int_characters_max", 1) then
-								if PanelAlive(CharMenu.frame) then
+								if YRPPanelAlive(CharMenu.frame) then
 									CharMenu.frame:Close()
 								end
 
@@ -803,7 +803,7 @@ function LoadCharacters()
 
 						function addCharEvent:DoClick()
 							if CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
-								if PanelAlive(CharMenu.frame) then
+								if YRPPanelAlive(CharMenu.frame) then
 									CharMenu.frame:Close()
 								end
 
@@ -847,7 +847,7 @@ function LoadCharacters()
 							isEventChar = self.bool_eventchar
 
 							if CharMenu.character.amount < LocalPlayer():GetYRPInt("int_characters_max", 1) then
-								if PanelAlive(CharMenu.frame) then
+								if YRPPanelAlive(CharMenu.frame) then
 									CharMenu.frame:Close()
 								end
 
@@ -884,7 +884,7 @@ function LoadCharacters()
 
 						function addCharEvent:DoClick()
 							if CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
-								if PanelAlive(CharMenu.frame) then
+								if YRPPanelAlive(CharMenu.frame) then
 									CharMenu.frame:Close()
 								end
 
@@ -903,13 +903,13 @@ function LoadCharacters()
 			end
 		end
 
-		if PanelAlive(CharMenu.characterList) and CharMenu.characterList.GetCanvas and CharMenu.characterList:GetWide() > CharMenu.characterList:GetCanvas():GetWide() then
+		if YRPPanelAlive(CharMenu.characterList) and CharMenu.characterList.GetCanvas and CharMenu.characterList:GetWide() > CharMenu.characterList:GetCanvas():GetWide() then
 			--CharMenu.characterList:SetWide(CharMenu.characterList:GetCanvas():GetWide() ) -- breaks vertical
 			local _, py = CharMenu.characterList:GetPos()
 			CharMenu.characterList:SetPos(CharMenu.charactersBackground:GetWide() / 2 - CharMenu.characterList:GetWide() / 2, py)
 		end
 
-		if CharMenu and PanelAlive(CharMenu.frame) then
+		if CharMenu and YRPPanelAlive(CharMenu.frame) then
 			CharMenu.frame:Show()
 			CharMenu.frame:MakePopup()
 		end
@@ -924,7 +924,7 @@ end)
 net.Receive("nws_yrp_get_characters", function(len)
 	local first = net.ReadBool()
 
-	if first and PanelAlive(CharMenu.characterList) then
+	if first and YRPPanelAlive(CharMenu.characterList) then
 		chars = {}
 		CharMenu.characterList:Clear()
 	end
@@ -968,7 +968,7 @@ end)
 function openCharacterSelection(force)
 	if IsVoidCharEnabled() or not GetGlobalYRPBool("bool_character_system", true) then return end
 
-	if CharMenu and PanelAlive(CharMenu.characterList) then
+	if CharMenu and YRPPanelAlive(CharMenu.characterList) then
 		CharMenu.characterList:Clear()
 	end
 
@@ -988,7 +988,7 @@ function openCharacterSelection(force)
 	CharMenu.character.amountevent = 0
 	YRPOpenMenu()
 
-	if not PanelAlive(CharMenu.frame) then
+	if not YRPPanelAlive(CharMenu.frame) then
 		YRP_CharDesign = string.lower(GetGlobalYRPString("text_character_design"))
 
 		function CharMenu.logic()
@@ -1047,7 +1047,7 @@ function openCharacterSelection(force)
 				end
 
 				-- Get Newest Background for the Menu
-				if PanelAlive(CharMenu) and PanelAlive(CharMenu.frame) then
+				if YRPPanelAlive(CharMenu) and YRPPanelAlive(CharMenu.frame) then
 					local oldurl = CharMenu.frame.bg.url
 					local newurl = GetGlobalYRPString("text_character_background", "")
 
@@ -1211,7 +1211,7 @@ function openCharacterSelection(force)
 						net.WriteString(curChar)
 						net.SendToServer()
 
-						if PanelAlive(CharMenu.frame) then
+						if YRPPanelAlive(CharMenu.frame) then
 							CharMenu.frame:Close()
 						end
 					end
@@ -1261,7 +1261,7 @@ function openCharacterSelection(force)
 
 			function charactersCreate:DoClick()
 				if CharMenu.character.amount < LocalPlayer():GetYRPInt("int_characters_max", 1) then
-					if PanelAlive(CharMenu.frame) then
+					if YRPPanelAlive(CharMenu.frame) then
 						CharMenu.frame:Close()
 					end
 
@@ -1281,7 +1281,7 @@ function openCharacterSelection(force)
 
 			function charactersCreateEvent:DoClick()
 				if CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
-					if PanelAlive(CharMenu.frame) then
+					if YRPPanelAlive(CharMenu.frame) then
 						CharMenu.frame:Close()
 					end
 
@@ -1441,7 +1441,7 @@ function openCharacterSelection(force)
 						net.WriteString(curChar)
 						net.SendToServer()
 
-						if PanelAlive(CharMenu.frame) then
+						if YRPPanelAlive(CharMenu.frame) then
 							CharMenu.frame:Close()
 						end
 					end
@@ -1493,7 +1493,7 @@ function openCharacterSelection(force)
 
 			function charactersCreate:DoClick()
 				if CharMenu.character.amount < LocalPlayer():GetYRPInt("int_characters_max", 1) then
-					if PanelAlive(CharMenu.frame) then
+					if YRPPanelAlive(CharMenu.frame) then
 						CharMenu.frame:Close()
 					end
 
@@ -1513,7 +1513,7 @@ function openCharacterSelection(force)
 
 			function charactersCreateEvent:DoClick()
 				if CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
-					if PanelAlive(CharMenu.frame) then
+					if YRPPanelAlive(CharMenu.frame) then
 						CharMenu.frame:Close()
 					end
 
@@ -1928,7 +1928,7 @@ function openCharacterSelection(force)
 						net.WriteString(curChar)
 						net.SendToServer()
 
-						if PanelAlive(CharMenu.frame) then
+						if YRPPanelAlive(CharMenu.frame) then
 							CharMenu.frame:Close()
 						end
 					end

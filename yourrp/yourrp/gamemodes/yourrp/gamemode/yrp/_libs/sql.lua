@@ -26,7 +26,7 @@ function YRP_SQL_Show_Last_Error()
 	elseif CLIENT then
 		local lply = LocalPlayer()
 
-		if EntityAlive(lply) then
+		if YRPEntityAlive(lply) then
 			lply:PrintMessage(HUD_PRINTTALK, "[YourRP|DATABASE] CLIENT-DATABASE:")
 			lply:PrintMessage(HUD_PRINTTALK, _last_error)
 		end
@@ -80,7 +80,7 @@ local _show_db_if_not_empty = false
 function db_is_empty(db_name)
 	local _tmp = YRP_SQL_SELECT(db_name, "*", nil)
 
-	if WORKED(_tmp, db_name .. " is empty!") then
+	if YRPWORKED(_tmp, db_name .. " is empty!") then
 		if _show_db_if_not_empty then
 			YRP.msg("db", "[db_is_empty] " .. db_name)
 			printTab(_tmp, db_name)
@@ -92,7 +92,7 @@ function db_is_empty(db_name)
 	end
 end
 
-function db_WORKED(query)
+function db_YRPWORKED(query)
 	if query == nil then
 		return "worked"
 	else

@@ -196,7 +196,7 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 		ply:SetYRPBool("yrp_characterselection", false)
 
 		timer.Simple(0.1, function()
-			if EntityAlive(ply) then
+			if YRPEntityAlive(ply) then
 				ply:Spawn()
 			end
 		end)

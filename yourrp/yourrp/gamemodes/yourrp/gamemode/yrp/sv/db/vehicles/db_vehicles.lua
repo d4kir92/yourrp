@@ -34,7 +34,7 @@ net.Receive("nws_yrp_getVehicleInfo", function(len, ply)
 	local _vehicleID = net.ReadString()
 	local _vehicleTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "ownerCharID = '" .. _vehicle:GetYRPInt("ownerCharID", 0) .. "' AND item_id = " .. _vehicleID)
 
-	if WORKED(_vehicleTab, "getVehicleInfo | No buyed vehicle! Dont work on spawnmenu vehicle") then
+	if YRPWORKED(_vehicleTab, "getVehicleInfo | No buyed vehicle! Dont work on spawnmenu vehicle") then
 		local owner = ""
 
 		for k, v in pairs(player.GetAll()) do

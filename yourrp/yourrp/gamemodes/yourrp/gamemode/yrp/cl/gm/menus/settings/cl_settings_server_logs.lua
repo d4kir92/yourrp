@@ -16,7 +16,7 @@ function BuildLogs(parent, typ)
 	net.SendToServer()
 
 	net.Receive("nws_yrp_get_logs", function(len)
-		if PanelAlive(parent) then
+		if YRPPanelAlive(parent) then
 			local tab = net.ReadTable()
 
 			for i, v in pairs(tab) do
@@ -391,7 +391,7 @@ end
 function BuildLogsSite()
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		-- TABS
 		local tabs = YRPCreateD("YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 

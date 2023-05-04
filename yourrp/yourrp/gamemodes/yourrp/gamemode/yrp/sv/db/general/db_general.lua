@@ -2108,7 +2108,7 @@ net.Receive("nws_yrp_ply_kick", function(len, ply)
 	if not ply:HasAccess("nws_yrp_ply_kick", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:Kick("You get kicked by " .. ply:YRPName())
 	end
 end)
@@ -2119,7 +2119,7 @@ net.Receive("nws_yrp_ply_ban", function(len, ply)
 	if not ply:HasAccess("nws_yrp_ply_ban", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:Ban(24 * 60, false)
 		_target:Kick("You get banned for 24 hours by " .. ply:YRPName())
 	else
@@ -2237,7 +2237,7 @@ function YRPDoUnRagdoll(ply)
 		--ply:SetParent(nil)
 		local ragdoll = ply:GetYRPEntity("ragdoll")
 
-		if EntityAlive(ragdoll) then
+		if YRPEntityAlive(ragdoll) then
 			ply:SetPos(ragdoll:GetPos())
 			ragdoll:Remove()
 		end
@@ -2255,7 +2255,7 @@ net.Receive("nws_yrp_ragdoll", function(len, ply)
 	if not ply:HasAccess("nws_yrp_ragdoll", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		YRPDoRagdoll(_target)
 	end
 end)
@@ -2266,7 +2266,7 @@ net.Receive("nws_yrp_unragdoll", function(len, ply)
 	if not ply:HasAccess("nws_yrp_unragdoll", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		YRPDoUnRagdoll(_target)
 	end
 end)
@@ -2277,7 +2277,7 @@ net.Receive("nws_yrp_freeze", function(len, ply)
 	if not ply:HasAccess("nws_yrp_freeze", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) and _target.Freeze then
+	if YRPEntityAlive(_target) and _target.Freeze then
 		_target:Freeze(true)
 	end
 end)
@@ -2288,7 +2288,7 @@ net.Receive("nws_yrp_unfreeze", function(len, ply)
 	if not ply:HasAccess("nws_yrp_unfreeze", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:Freeze(false)
 	end
 end)
@@ -2299,7 +2299,7 @@ net.Receive("nws_yrp_god", function(len, ply)
 	if not ply:HasAccess("nws_yrp_god", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:GodEnable()
 		_target:AddFlags(FL_GODMODE)
 		_target:SetYRPBool("godmode", true)
@@ -2312,7 +2312,7 @@ net.Receive("nws_yrp_ungod", function(len, ply)
 	if not ply:HasAccess("nws_yrp_ungod", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:GodDisable()
 		_target:RemoveFlags(FL_GODMODE)
 		_target:SetYRPBool("godmode", false)
@@ -2325,7 +2325,7 @@ net.Receive("nws_yrp_cloak", function(len, ply)
 	if not ply:HasAccess("nws_yrp_cloak", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:SetYRPBool("cloaked", true)
 	end
 end)
@@ -2336,7 +2336,7 @@ net.Receive("nws_yrp_uncloak", function(len, ply)
 	if not ply:HasAccess("nws_yrp_uncloak", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:SetYRPBool("cloaked", false)
 	end
 end)
@@ -2347,7 +2347,7 @@ net.Receive("nws_yrp_blind", function(len, ply)
 	if not ply:HasAccess("nws_yrp_blind", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:SetYRPBool("blinded", true)
 	end
 end)
@@ -2358,7 +2358,7 @@ net.Receive("nws_yrp_unblind", function(len, ply)
 	if not ply:HasAccess("nws_yrp_unblind", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:SetYRPBool("blinded", false)
 	end
 end)
@@ -2369,7 +2369,7 @@ net.Receive("nws_yrp_ignite", function(len, ply)
 	if not ply:HasAccess("nws_yrp_ignite", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:Ignite(10, 10)
 	end
 end)
@@ -2380,7 +2380,7 @@ net.Receive("nws_yrp_extinguish", function(len, ply)
 	if not ply:HasAccess("nws_yrp_extinguish", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:Extinguish()
 	end
 end)
@@ -2391,7 +2391,7 @@ net.Receive("nws_yrp_slay", function(len, ply)
 	if not ply:HasAccess("nws_yrp_slay", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:Kill()
 	end
 end)
@@ -2402,7 +2402,7 @@ net.Receive("nws_yrp_slap", function(len, ply)
 	if not ply:HasAccess("nws_yrp_slap", true) then return end
 	local _target = net.ReadEntity()
 
-	if EntityAlive(_target) then
+	if YRPEntityAlive(_target) then
 		_target:SetVelocity(Vector(0, 0, 600))
 	end
 end)

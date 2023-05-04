@@ -705,13 +705,13 @@ function SendRoleList(ply, gro, pre)
 		if pre > 0 then
 			headername = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. pre .. "'")
 
-			if WORKED(headername) then
+			if YRPWORKED(headername) then
 				headername = headername[1].string_name
 			end
 		else
 			headername = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. gro .. "'")
 
-			if WORKED(headername) then
+			if YRPWORKED(headername) then
 				headername = headername[1].string_name
 			end
 		end
@@ -2005,7 +2005,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len, ply)
 	charid = tonumber(charid)
 	local target = YRPGetPlayerByCharID(charid)
 
-	if EntityAlive(target) and target:IsPlayer() then
+	if YRPEntityAlive(target) and target:IsPlayer() then
 		local idcard = YRP_SQL_SELECT("yrp_general", "*", nil)
 		idcard = tobool(idcard[1].bool_identity_card)
 		local chatab = target:YRPGetCharacterTable()

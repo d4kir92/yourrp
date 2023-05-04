@@ -333,7 +333,7 @@ timer.Create("ServerThink", TICK, 0, function()
 
 		if GetGlobalYRPBool("bool_radiation", false) then
 			for k, ent in pairs(ents.GetAll()) do
-				if ent and EntityAlive(ent) and ent:IsNPC() then
+				if ent and YRPEntityAlive(ent) and ent:IsNPC() then
 					YRPConRA(ent)
 				end
 			end
@@ -388,7 +388,7 @@ timer.Create("ServerThink", TICK, 0, function()
 						_dealer:Spawn()
 
 						timer.Simple(1, function()
-							if EntityAlive(_dealer.Entity) then
+							if YRPEntityAlive(_dealer.Entity) then
 								_dealer.Entity:LookupSequence("idle_all_01")
 								_dealer.Entity:ResetSequence("idle_all_01")
 							end

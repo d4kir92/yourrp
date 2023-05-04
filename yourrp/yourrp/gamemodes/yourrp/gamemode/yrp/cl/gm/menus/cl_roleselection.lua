@@ -13,7 +13,7 @@ local menue = nil
 function CreateRolePreviewContent()
 	local parent = CharacterMenu or RoleMenu
 
-	if not PanelAlive(parent) then
+	if not YRPPanelAlive(parent) then
 		YRP.msg("note", "[CreateRolePreviewContent] failed to get Parent")
 
 		return
@@ -30,7 +30,7 @@ function CreateRolePreviewContent()
 	local ew = (nw - YRP.ctr(4 * 20)) / 3
 	local hh = 80
 
-	if PanelAlive(menue) then
+	if YRPPanelAlive(menue) then
 		menue:Hide()
 	end
 
@@ -281,7 +281,7 @@ function CreateRolePreviewContent()
 
 			function getrole:DoClick()
 				if LocalPlayer().cc then
-					if PanelAlive(parent) then
+					if YRPPanelAlive(parent) then
 						parent:Clear()
 					end
 
@@ -315,7 +315,7 @@ function CreateRolePreviewContent()
 
 		function back:DoClick()
 			if LocalPlayer().rolepreview then
-				if PanelAlive(menue) then
+				if YRPPanelAlive(menue) then
 					menue:Show()
 				end
 
@@ -439,19 +439,19 @@ function CreateRoleSelectionContent(PARENT)
 
 		function back:DoClick()
 			if not LocalPlayer().onefaction and (not LocalPlayer().rolepreview and LocalPlayer():GetYRPInt("char_count", 0) > 0) then
-				if PanelAlive(parent) then
+				if YRPPanelAlive(parent) then
 					parent:Clear()
 				end
 
 				CreateFactionSelectionContent()
 			elseif LocalPlayer().onefaction then
-				if PanelAlive(parent) then
+				if YRPPanelAlive(parent) then
 					parent:Remove()
 				end
 
 				YRPOpenCharacterSelection()
 			else
-				if PanelAlive(parent) then
+				if YRPPanelAlive(parent) then
 					parent:Clear()
 				end
 
@@ -462,7 +462,7 @@ function CreateRoleSelectionContent(PARENT)
 
 	-- Groups
 	net.Receive("nws_yrp_roleselection_getgroups", function(len)
-		if PanelAlive(lis) then
+		if YRPPanelAlive(lis) then
 			local gtab = net.ReadTable()
 			local factioncount = tonumber(net.ReadString())
 			local w = lis:GetWide() -- YRP.ctr(2 * config.br)
@@ -471,7 +471,7 @@ function CreateRoleSelectionContent(PARENT)
 			for i, grp in SortedPairsByMemberValue(gtab, "int_position") do
 				grp.uniqueID = tonumber(grp.uniqueID)
 
-				if PanelAlive(lis) then
+				if YRPPanelAlive(lis) then
 					-- Category Group
 					local group = YRPCreateD("YCollapsibleCategory", lis, w, h, 0, 0)
 					group:SetS(w, h)

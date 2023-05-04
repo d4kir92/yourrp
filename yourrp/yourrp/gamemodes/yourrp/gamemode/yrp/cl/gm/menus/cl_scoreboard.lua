@@ -189,19 +189,19 @@ function YRPNotSelf(ply)
 end
 
 function YRPIsScoreboardVisible()
-	if PanelAlive(YRPScoreboard) and YRPScoreboard:IsVisible() then return true end
+	if YRPPanelAlive(YRPScoreboard) and YRPScoreboard:IsVisible() then return true end
 
 	return false
 end
 
 function YRPCloseSBS()
-	if not PanelAlive(YRPScoreboard) then return end
+	if not YRPPanelAlive(YRPScoreboard) then return end
 	YRPScoreboard:Hide()
 	gui.EnableScreenClicker(false)
 end
 
 function YRPSortScoreboard()
-	if not PanelAlive(YRPScoreboard) then return end
+	if not YRPPanelAlive(YRPScoreboard) then return end
 	local lply = LocalPlayer()
 
 	if lply.yrp_sb_reverse == nil then
@@ -264,7 +264,7 @@ function YRPSortScoreboard()
 end
 
 function YRPScoreboardAddPlayer(ply)
-	if PanelAlive(YRPScoreboard) and IsValid(ply) and not table.HasValue(YRPScoreboard.plys, ply) then
+	if YRPPanelAlive(YRPScoreboard) and IsValid(ply) and not table.HasValue(YRPScoreboard.plys, ply) then
 		table.insert(YRPScoreboard.plys, ply)
 		local plyframe = YRPCreateD("DPanel", YRPScoreboard.list, size, size, 0, 0)
 		plyframe:Dock(TOP)
@@ -741,7 +741,7 @@ function YRPScoreboardAddPlayer(ply)
 							surface.PlaySound("garrysmod/ui_hover.wav")
 						end
 
-						if not PanelAlive(self.tt) then
+						if not YRPPanelAlive(self.tt) then
 							self.tt = YRPCreateD("DFrame", nil, 100, 20, 0, 0)
 							self.tt:SetTitle("")
 							self.tt:ShowCloseButton(false)
@@ -764,7 +764,7 @@ function YRPScoreboardAddPlayer(ply)
 						self.hovering = false
 						self.clicked = false
 
-						if PanelAlive(self.tt) then
+						if YRPPanelAlive(self.tt) then
 							self.tt:Remove()
 						end
 					end
@@ -802,7 +802,7 @@ function YRPScoreboardAddPlayer(ply)
 end
 
 function YRPOpenSBS()
-	if not PanelAlive(YRPScoreboard) then return end
+	if not YRPPanelAlive(YRPScoreboard) then return end
 	local lply = LocalPlayer()
 	-- Table Header
 	YRPScoreboard.Header:Clear()
@@ -856,7 +856,7 @@ function YRPOpenSBS()
 	end
 
 	timer.Simple(0.05, function()
-		if PanelAlive(YRPScoreboard) then
+		if YRPPanelAlive(YRPScoreboard) then
 			local sw = 0
 
 			for i, v in pairs(YRPScoreboard.Header:GetChildren()) do
@@ -924,7 +924,7 @@ function YRPDrawOrder(self, x, y, text, font, art)
 end
 
 function YRPInitScoreboard()
-	if PanelAlive(YRPScoreboard) then
+	if YRPPanelAlive(YRPScoreboard) then
 		YRPScoreboard:Remove()
 	end
 

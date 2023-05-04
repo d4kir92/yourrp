@@ -120,7 +120,7 @@ function YRPVoiceChannel(edit, uid)
 				table.insert(augs, ug.string_name)
 			end
 
-			if PanelAlive(win) and PanelAlive(win.augs) then
+			if YRPPanelAlive(win) and YRPPanelAlive(win.augs) then
 				win.augs:AddItem(vline)
 			end
 		end
@@ -165,7 +165,7 @@ function YRPVoiceChannel(edit, uid)
 				table.insert(agrps, ug.uniqueID)
 			end
 
-			if PanelAlive(win) and PanelAlive(win.agrps) then
+			if YRPPanelAlive(win) and YRPPanelAlive(win.agrps) then
 				win.agrps:AddItem(vline)
 			end
 		end
@@ -210,7 +210,7 @@ function YRPVoiceChannel(edit, uid)
 				table.insert(arols, ug.uniqueID)
 			end
 
-			if PanelAlive(win) and PanelAlive(win.arols) then
+			if YRPPanelAlive(win) and YRPPanelAlive(win.arols) then
 				win.arols:AddItem(vline)
 			end
 		end
@@ -256,7 +256,7 @@ function YRPVoiceChannel(edit, uid)
 				table.insert(pugs, ug.string_name)
 			end
 
-			if PanelAlive(win) and PanelAlive(win.pugs) then
+			if YRPPanelAlive(win) and YRPPanelAlive(win.pugs) then
 				win.pugs:AddItem(vline)
 			end
 		end
@@ -301,7 +301,7 @@ function YRPVoiceChannel(edit, uid)
 				table.insert(pgrps, ug.uniqueID)
 			end
 
-			if PanelAlive(win) and PanelAlive(win.pgrps) then
+			if YRPPanelAlive(win) and YRPPanelAlive(win.pgrps) then
 				win.pgrps:AddItem(vline)
 			end
 		end
@@ -346,7 +346,7 @@ function YRPVoiceChannel(edit, uid)
 				table.insert(prols, ug.uniqueID)
 			end
 
-			if PanelAlive(win) and PanelAlive(win.prols) then
+			if YRPPanelAlive(win) and YRPPanelAlive(win.prols) then
 				win.prols:AddItem(vline)
 			end
 		end
@@ -797,7 +797,7 @@ end)
 
 function YRPToggleVoiceMenu()
 	if GetGlobalYRPBool("bool_voice", false) then
-		if PanelAlive(vm.win) then
+		if YRPPanelAlive(vm.win) then
 			surface.PlaySound("npc/metropolice/vo/off2.wav")
 			CloseVoiceMenu()
 		elseif YRPIsNoMenuOpen() then

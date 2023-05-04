@@ -295,7 +295,7 @@ function Player:VisualEquipment(name, slot)
 						local _model = _item.WorldModel
 						local _old = self:GetYRPEntity(name)
 
-						if EntityAlive(_old) then
+						if YRPEntityAlive(_old) then
 							_old:Remove()
 						end
 
@@ -339,7 +339,7 @@ function Player:VisualEquipment(name, slot)
 					else
 						local _old = self:GetYRPEntity(name)
 
-						if EntityAlive(_old) then
+						if YRPEntityAlive(_old) then
 							_old:Remove()
 							self:SetYRPEntity(name, NULL)
 							self:SetYRPString(name .. "ClassName", "")
@@ -378,7 +378,7 @@ end
 util.AddNetworkString("nws_yrp_update_backpack")
 
 net.Receive("nws_yrp_update_backpack", function(len, ply)
-	if EntityAlive(ply) then
+	if YRPEntityAlive(ply) then
 		local _bp = ply:UpdateBackpack()
 
 		if _bp ~= nil then
@@ -407,7 +407,7 @@ end)
 util.AddNetworkString("nws_yrp_update_slot_backpack")
 
 net.Receive("nws_yrp_update_slot_backpack", function(len, ply)
-	if EntityAlive(ply) then
+	if YRPEntityAlive(ply) then
 		local _charid = ply:CharID()
 		local _uid = YRP_SQL_SELECT(DATABASE_NAME, "eqbp", "uniqueID = '" .. _charid .. "'")
 
@@ -693,13 +693,13 @@ function YRPSendCharacters(ply, from)
 				netTable[_charCount].faction.string_icon = ""
 				local tmp = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(v.roleID))
 
-				if WORKED(tmp, "charGetCharacters role") then
+				if YRPWORKED(tmp, "charGetCharacters role") then
 					tmp = tmp[1]
 					netTable[_charCount].role = tmp
 				else
 					local tmpDefault = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. "1")
 
-					if WORKED(tmpDefault, "charGetCharacters tmpDefault") then
+					if YRPWORKED(tmpDefault, "charGetCharacters tmpDefault") then
 						tmpDefault = tmpDefault[1]
 						netTable[_charCount].role = tmpDefault
 					end
@@ -714,7 +714,7 @@ function YRPSendCharacters(ply, from)
 					tmp2 = tmp2[1]
 					local tmp3 = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tonumber(tmp2.int_groupID) .. "'")
 
-					if WORKED(tmp3, "charGetCharacters group") then
+					if YRPWORKED(tmp3, "charGetCharacters group") then
 						tmp3 = tmp3[1]
 						netTable[_charCount].group = tmp3
 						netTable[_charCount].faction = GetFactionTable(tmp3.uniqueID)
@@ -820,7 +820,7 @@ function YRPCreateCharacter(ply, tab)
 			if char == nil then
 				local chars = YRP_SQL_SELECT("yrp_characters", "*", nil)
 
-				if WORKED(chars, "[YRPCreateCharacter] chars") then
+				if YRPWORKED(chars, "[YRPCreateCharacter] chars") then
 					local charid = tonumber(chars[#chars].uniqueID)
 
 					local result = YRP_SQL_UPDATE("yrp_players", {

@@ -7,11 +7,11 @@ local play = true
 net.Receive("nws_yrp_get_menu_bodygroups", function(len)
 	local _tbl = net.ReadTable()
 
-	if _tbl.string_playermodels ~= nil and PanelAlive(_yrp_appearance.window) then
+	if _tbl.string_playermodels ~= nil and YRPPanelAlive(_yrp_appearance.window) then
 		local _skin = tonumber(_tbl.skin)
 		local _pms = string.Explode(",", _tbl.string_playermodels)
 
-		if PanelAlive(_yrp_appearance.left) then
+		if YRPPanelAlive(_yrp_appearance.left) then
 			if _yrp_appearance.left.GetChildren ~= nil then
 				for i, child in pairs(_yrp_appearance.left:GetChildren()) do
 					child:Remove()
@@ -249,7 +249,7 @@ net.Receive("nws_yrp_get_menu_bodygroups", function(len)
 					net.WriteInt(_tmpSkin.cur, 16)
 					net.SendToServer()
 
-					if EntityAlive(_appe.r.pm.Entity) then
+					if YRPEntityAlive(_appe.r.pm.Entity) then
 						_appe.r.pm.Entity:SetSkin(_tmpSkin.cur)
 					end
 				end
@@ -336,7 +336,7 @@ net.Receive("nws_yrp_get_menu_bodygroups", function(len)
 				end
 			end
 		end
-	elseif PanelAlive(_yrp_appearance.window) then
+	elseif YRPPanelAlive(_yrp_appearance.window) then
 		function _yrp_appearance.window:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)
 			local tab = {}
@@ -386,7 +386,7 @@ function open_appearance()
 	_yrp_appearance.window:SetHeaderHeight(YRP.ctr(100))
 
 	function _yrp_appearance.window:OnClose()
-		if PanelAlive(_yrp_appearance.window) then
+		if YRPPanelAlive(_yrp_appearance.window) then
 			_yrp_appearance.window:Remove()
 		end
 	end

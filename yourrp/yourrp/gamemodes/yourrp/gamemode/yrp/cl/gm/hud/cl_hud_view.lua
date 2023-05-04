@@ -31,10 +31,10 @@ function YRPHudView()
 	local lply = LocalPlayer()
 	local _eyeTrace = lply:GetEyeTrace()
 
-	if _eyeTrace.Entity and EntityAlive(_eyeTrace.Entity) then
+	if _eyeTrace.Entity and YRPEntityAlive(_eyeTrace.Entity) then
 		local ent = _eyeTrace.Entity
 
-		if EntityAlive(ent) then
+		if YRPEntityAlive(ent) then
 			local plypos = lply:GetPos()
 			local entpos = ent:WorldSpaceCenter()
 

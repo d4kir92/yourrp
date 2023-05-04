@@ -101,7 +101,7 @@ net.Receive("nws_yrp_item_store", function(len)
 	slotID = tonumber(slotID)
 	local slot = GetSlotPanel(slotID)
 
-	if PanelAlive(slot) then
+	if YRPPanelAlive(slot) then
 		local i = YRPCreateD("YItem", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 		i:SetItemID(item.uniqueID)
 		i:SetModel(item.text_worldmodel)

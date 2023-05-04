@@ -111,7 +111,7 @@ function Player:DropSWEP(cname, force)
 						local ttl = math.Clamp(GetGlobalYRPInt("int_ttlsweps", 60), 0, 3600)
 
 						timer.Simple(ttl, function()
-							if EntityAlive(ent) and not ent:GetOwner():IsValid() then
+							if YRPEntityAlive(ent) and not ent:GetOwner():IsValid() then
 								if ttl <= 1 then
 									YRP.msg("note", "SWEP was removed TTL: " .. ttl)
 								end

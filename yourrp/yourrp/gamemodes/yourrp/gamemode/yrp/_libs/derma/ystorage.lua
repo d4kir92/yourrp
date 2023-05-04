@@ -75,7 +75,7 @@ function PANEL:SetStorageID(storageID, slots)
 					line:AddPanel(slot)
 					c = c + 1
 
-					if EntityAlive(s) then
+					if YRPEntityAlive(s) then
 						local i = YRPCreateD("YItem", nil, YRPItemSize(), YRPItemSize(), 0, 0)
 						i:SetModel(s:GetModel())
 						i:SetE(s)
@@ -117,7 +117,7 @@ net.Receive("nws_yrp_storage_get_slots", function(len)
 end)
 
 function BuildStorage(storage, slots)
-	if PanelAlive(storage) then
+	if YRPPanelAlive(storage) then
 		local c = 1
 		local sp = (storage:GetWide() - storage:GetCols() * YRPItemSize()) / (storage:GetCols() - 1)
 		storage:SetSpacing(sp)

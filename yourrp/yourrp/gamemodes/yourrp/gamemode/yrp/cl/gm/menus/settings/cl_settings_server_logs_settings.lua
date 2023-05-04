@@ -10,7 +10,7 @@ function BuildLogsSettings(parent, typ)
 	net.Receive("nws_yrp_get_logs_settings", function(len)
 		local tab = net.ReadTable()
 
-		if PanelAlive(parent) then
+		if YRPPanelAlive(parent) then
 			for i, v in pairs(tab) do
 				local line = YRPCreateD("YPanel", nil, parent:GetWide(), YRP.ctr(60))
 				local ts = YRPCreateD("YLabel", line, YRP.ctr(500), line:GetTall(), 0, 0)
@@ -40,7 +40,7 @@ end
 function BuildLogsSiteSettings()
 	local PARENT = GetSettingsSite()
 
-	if PanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT) then
 		-- TABS
 		local tabs = YRPCreateD("YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 
