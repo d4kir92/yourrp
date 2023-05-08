@@ -125,9 +125,14 @@ end
 if SERVER then
 	function Entity:CPPISetOwner(ent)
 		self:SetYRPEntity("cppiowner", ent)
+		self:SetYRPEntity("yrp_owner", ent)
 	end
 end
 
 function Entity:CPPIGetOwner()
-	return self:GetYRPEntity("cppiowner")
+	if YRPEntityAlive(self:GetYRPEntity("cppiowner")) then
+		return self:GetYRPEntity("cppiowner")
+	else
+		return self:GetYRPEntity("yrp_owner")
+	end
 end
