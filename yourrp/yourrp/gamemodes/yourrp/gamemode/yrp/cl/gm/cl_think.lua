@@ -799,7 +799,7 @@ net.Receive("nws_yrp_Send_DarkRP_Jobs", function(len)
 		teamname = teamTab.identifier
 	end
 
-	_G[string.upper(teamname)] = teamuid
+	_G[teamTab.command] = teamuid
 
 	if teamuid and teamname then
 		RPExtraTeams[teamuid] = teamTab
@@ -852,6 +852,7 @@ net.Receive("nws_yrp_Combine_DarkRPTables", function(len)
 	end
 
 	hook.Run("bKeypads.ConfigUpdated")
+	hook.Run("PostGamemodeLoaded")
 
 	if GAMEMODE.DarkRPFinishedLoading then
 		GAMEMODE:DarkRPFinishedLoading()
