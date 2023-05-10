@@ -13,7 +13,7 @@ end
 function YRPCloseDoorOptions()
 	YRPCloseMenu()
 
-	if yrp_door and YRPPanelAlive(yrp_door.window) then
+	if yrp_door and YRPPanelAlive(yrp_door.window) and yrp_door.window.Close then
 		yrp_door.window:Close()
 		yrp_door.window = nil
 	end
@@ -98,6 +98,7 @@ function YRPDoorBuyWindow(door, tabBuilding)
 
 	function yrp_door.window:Close()
 		yrp_door.window:Remove()
+		yrp_door.window = nil
 	end
 
 	yrp_door.window.systime = SysTime()

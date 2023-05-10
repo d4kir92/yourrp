@@ -497,17 +497,25 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				_yes:SetText(YRP.lang_string("LID_yes"))
 
 				function _yes:DoClick()
-					if ea.tab.uniqueID then
+					if ea and ea.tab and ea.tab.uniqueID then
 						net.Start("nws_yrp_settings_delete_group")
 						net.WriteString(ea.tab.uniqueID)
 						net.WriteBool(recursive:GetValue())
 						net.SendToServer()
 					end
 
-					ea.background:Clear()
-					ea.typ = nil
-					ea.tab = nil
-					win:Close()
+					if ea and ea.background then
+						ea.background:Clear()
+					end
+
+					if ea then
+						ea.typ = nil
+						ea.tab = nil
+					end
+
+					if win then
+						win:Close()
+					end
 				end
 
 				local _no = YRPCreateD("YButton", win:GetContent(), YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), 0)

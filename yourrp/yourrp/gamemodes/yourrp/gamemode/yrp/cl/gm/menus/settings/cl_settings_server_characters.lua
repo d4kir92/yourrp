@@ -1,3 +1,5 @@
+local YRPCharList = nil
+
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 net.Receive("nws_yrp_setting_characters", function(len)
 	local PARENT = GetSettingsSite()
@@ -16,7 +18,7 @@ net.Receive("nws_yrp_setting_characters", function(len)
 
 			descr = descr or ""
 
-			if YRPPanelAlive(YRPCharList) then
+			if YRPPanelAlive(YRPCharList) and YRPCharList.AddLine then
 				YRPCharList:AddLine(tab.SteamID, tab.rpname, tab.text_idcardid, descr, tab.groupID, tab.roleID, tab.money, tab.moneybank, tab.int_level, event, archi)
 			end
 		end

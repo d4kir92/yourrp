@@ -593,7 +593,9 @@ function LoadCharacters()
 										notification.AddLegacy("CHAR ID is invalid", NOTIFY_GENERIC, 5)
 									end
 
-									_window:Close()
+									if _window then
+										_window:Close()
+									end
 								end
 
 								local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
@@ -924,7 +926,7 @@ end)
 net.Receive("nws_yrp_get_characters", function(len)
 	local first = net.ReadBool()
 
-	if first and YRPPanelAlive(CharMenu.characterList) then
+	if first and YRPPanelAlive(CharMenu.characterList) and CharMenu.characterList.Clear then
 		chars = {}
 		CharMenu.characterList:Clear()
 	end
@@ -968,7 +970,7 @@ end)
 function openCharacterSelection(force)
 	if IsVoidCharEnabled() or not GetGlobalYRPBool("bool_character_system", true) then return end
 
-	if CharMenu and YRPPanelAlive(CharMenu.characterList) then
+	if CharMenu and YRPPanelAlive(CharMenu.characterList) and CharMenu.characterList.Clear then
 		CharMenu.characterList:Clear()
 	end
 

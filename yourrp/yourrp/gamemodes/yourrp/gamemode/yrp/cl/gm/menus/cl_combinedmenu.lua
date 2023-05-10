@@ -17,7 +17,7 @@ end
 function YRPCloseCombinedMenu()
 	cm.open = false
 
-	if YRPPanelAlive(cm.win) and cm.win.Hide then
+	if cm and YRPPanelAlive(cm.win) and cm.win and cm.win.Hide then
 		cm.win:Hide()
 	end
 end
@@ -684,7 +684,7 @@ function YRPOpenCombinedMenu()
 		else
 			cm.win:UpdateSize(cm.menu.ph)
 		end
-	elseif YRPPanelAlive(cm.win) and cm.win.Show then
+	elseif YRPPanelAlive(cm.win) and cm.win and cm.win.Show then
 		cm.win:Show()
 
 		for i, site in pairs(cm.sites) do
