@@ -28,13 +28,13 @@ function YRPEntityAlive(obj)
 	if obj == nil then return false end
 	if type(obj) == "number" then return false end
 	if type(obj) == "string" then return false end
-	if obj ~= nil and obj ~= NULL and tostring(obj) ~= "[NULL Entity]" and obj:IsValid() then return true end
+	if obj == nil or obj == NULL or tostring(obj) == "[NULL Entity]" then return false end
 
-	return false
+	return true
 end
 
 function YRPPanelAlive(obj)
-	if obj ~= nil and obj ~= NULL and tostring(obj) ~= "[NULL Panel]" then return true end
+	if obj == nil or obj == NULL or tostring(obj) == "[NULL Panel]" then return false end
 
-	return false
+	return true
 end

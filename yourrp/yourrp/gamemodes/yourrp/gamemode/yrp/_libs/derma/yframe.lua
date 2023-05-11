@@ -319,8 +319,4 @@ function PANEL:Think()
 	end
 end
 
-function PANEL:IsValid()
-	return true
-end
-
 vgui.Register("YFrame", PANEL, "DFrame")
