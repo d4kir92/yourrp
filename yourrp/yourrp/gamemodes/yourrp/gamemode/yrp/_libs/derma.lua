@@ -1391,16 +1391,14 @@ function YRPTestHTML(pnl, url, rem)
 		end
 	else
 		http.Fetch(url, function(body, len, headers, code)
-			if YRPPanelAlive(pnl) and pnl.SetVisible and pnl.Remove then
-				if code ~= 200 then
-					if rem and pnl.Remove then
-						pnl:Remove()
-					elseif pnl.SetVisible then
-						pnl:SetVisible(false)
-					end
-				elseif pnl.SetVisible then
-					pnl:SetVisible(true)
+			if code ~= 200 then
+				if rem and YRPPanelAlive(pnl) and pnl.Remove then
+					pnl:Remove()
+				elseif YRPPanelAlive(pnl) and pnl.SetVisible then
+					pnl:SetVisible(false)
 				end
+			elseif YRPPanelAlive(pnl) and pnl.SetVisible then
+				pnl:SetVisible(true)
 			end
 		end, function(error)
 			if pnl and YRPPanelAlive(pnl) then
