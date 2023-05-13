@@ -36,7 +36,7 @@ function SetChatMode(mode)
 	if type(mode) == "string" then
 		CHATMODE = string.upper(mode)
 
-		if YRPPanelAlive(yrpChat, "yrpChat") and YRPPanelAlive(yrpChat.comboBox, "yrpChat.comboBox") then
+		if IsNotNilAndNotFalse(yrpChat, "yrpChat") and YRPPanelAlive(yrpChat.comboBox, "yrpChat.comboBox") then
 			yrpChat.comboBox:SetText(CHATMODE)
 		end
 	end

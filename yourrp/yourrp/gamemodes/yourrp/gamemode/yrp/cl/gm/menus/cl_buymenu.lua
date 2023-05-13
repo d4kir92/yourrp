@@ -375,8 +375,8 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 	local _dealer = net.ReadTable()
 	local _dealer_uid = _dealer.uniqueID
 	local _tabs = net.ReadTable()
-	if not YRPPanelAlive(BUYMENU) then return end
-	if not YRPPanelAlive(BUYMENU.tabs) then return end
+	if not IsNotNilAndNotFalse(BUYMENU) then return end
+	if not YRPPanelAlive(BUYMENU.tabs, "BUYMENU.tabs 1") then return end
 	BUYMENU.dUID = _dealer_uid
 
 	if BUYMENU.content:GetParent().standalone then
@@ -384,8 +384,8 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 	end
 
 	for i, tab in pairs(_tabs) do
-		if not YRPPanelAlive(BUYMENU) then return end
-		if not YRPPanelAlive(BUYMENU.tabs) then return end
+		if not IsNotNilAndNotFalse(BUYMENU) then return end
+		if not YRPPanelAlive(BUYMENU.tabs, "BUYMENU.tabs 2") then return end
 		local _tab = BUYMENU.tabs:AddTab(tab.name, tab.uniqueID)
 
 		function _tab:GetCategories()
@@ -549,8 +549,8 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 	end
 
 	if LocalPlayer():HasAccess("show_get_tabs2") then
-		if not YRPPanelAlive(BUYMENU) then return end
-		if not YRPPanelAlive(BUYMENU.tabs) then return end
+		if not IsNotNilAndNotFalse(BUYMENU) then return end
+		if not YRPPanelAlive(BUYMENU.tabs, "BUYMENU.tabs 3") then return end
 		BUYMENU.addtab = YRPCreateD("DButton", BUYMENU.content, YRP.ctr(80), YRP.ctr(90), BUYMENU.content:GetWide() - YRP.ctr(100 + 100), YRP.ctr(10))
 		BUYMENU.addtab:SetText("")
 
@@ -569,7 +569,7 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 			local _tmp = YRPCreateD("DFrame", nil, YRP.ctr(420), YRP.ctr(50 + 10 + 100 + 10 + 50 + 10), 0, 0)
 
 			function _tmp:Paint(pw, ph)
-				if not YRPPanelAlive(BUYMENU.tabs) then
+				if not YRPPanelAlive(BUYMENU.tabs, "BUYMENU.tabs 5") then
 					self:Remove()
 				end
 
@@ -586,7 +586,7 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 			net.Receive("nws_yrp_shop_get_all_tabs", function(l)
 				local _ts = net.ReadTable()
 
-				if YRPPanelAlive(_tmp.tabs) then
+				if YRPPanelAlive(_tmp.tabs, "_tmp.tabs") then
 					for i, tab in pairs(_ts) do
 						_tmp.tabs.plus:AddChoice(tab.name, tab.uniqueID)
 					end
@@ -624,8 +624,8 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 	--[[ Settings ]]
 	--
 	if LocalPlayer():HasAccess("show_get_tabs3") then
-		if not YRPPanelAlive(BUYMENU) then return end
-		if not YRPPanelAlive(BUYMENU.tabs) then return end
+		if not IsNotNilAndNotFalse(BUYMENU) then return end
+		if not YRPPanelAlive(BUYMENU.tabs, "BUYMENU.tabs 4") then return end
 		BUYMENU.settings = YRPCreateD("YButton", BUYMENU.content, YRP.ctr(80), YRP.ctr(80), BUYMENU.content:GetWide() - YRP.ctr(100), YRP.ctr(10))
 		BUYMENU.settings:SetText("")
 
@@ -748,7 +748,7 @@ end)
 function CreateBuyMenuContent(parent, uid)
 	uid = uid or 1
 
-	if YRPPanelAlive(parent) then
+	if YRPPanelAlive(parent, "parent buymenu") then
 		BUYMENU.content = parent
 		--[[ Shop ]]
 		--
@@ -758,7 +758,7 @@ function CreateBuyMenuContent(parent, uid)
 		BUYMENU.shop:SetNoSizing(false)
 
 		function BUYMENU.shop:Paint(pw, ph)
-			if YRPPanelAlive(BUYMENU.content) then
+			if YRPPanelAlive(BUYMENU.content, "BUYMENU.content") then
 				self:SetWide(BUYMENU.content:GetWide())
 				self:SetTall(BUYMENU.content:GetTall() - YRP.ctr(100))
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 100, 240) )
