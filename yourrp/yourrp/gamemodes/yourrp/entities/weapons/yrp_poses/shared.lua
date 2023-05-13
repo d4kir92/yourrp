@@ -472,7 +472,7 @@ function SWEP:Reload()
 		self.delay = CurTime() + 1
 
 		if input.IsShiftDown() and LocalPlayer():SteamID() == "76561198002066427" then
-			if not YRPPanelAlive(self.config) then
+			if not YRPPanelAlive(self.config, "76561198002066427") then
 				local ply = LocalPlayer()
 				ply.yrp_ang = Angle(0, 0, 0)
 				self.config = YRPCreateD("YFrame", nil, YRP.ctr(600), YRP.ctr(1000), 0, 0)
@@ -552,11 +552,11 @@ function SWEP:Reload()
 
 					y = y + 1
 				end
-			elseif YRPPanelAlive(self.config) then
+			elseif YRPPanelAlive(self.config, "poses") then
 				self.config:Remove()
 			end
 		else
-			if not YRPPanelAlive(self.yrpposes) then
+			if not YRPPanelAlive(self.yrpposes, "poses2") then
 				self.yrpposes = YRPCreateD("YFrame", nil, YRP.ctr(10), YRP.ctr(960), 0, 0)
 				self.yrpposes:SetTitle("LID_poses")
 				local x = 0
@@ -580,7 +580,7 @@ function SWEP:Reload()
 							net.WriteString(name)
 							net.SendToServer()
 
-							if YRPPanelAlive(self.win) then
+							if YRPPanelAlive(self.win, "poses3") then
 								self.win:Close()
 							end
 						end
@@ -603,7 +603,7 @@ function SWEP:Reload()
 				self.yrpposes:SetSize(YRP.ctr(20) + maxx * YRP.ctr(560 + 10) + YRP.ctr(10), self.yrpposes:GetHeaderHeight() + YRP.ctr(10) + maxy * YRP.ctr(50 + 10) + YRP.ctr(20))
 				self.yrpposes:Center()
 				self.yrpposes:MakePopup()
-			elseif YRPPanelAlive(self.yrpposes) then
+			elseif YRPPanelAlive(self.yrpposes, "poses4") then
 				self.yrpposes:Remove()
 			end
 		end

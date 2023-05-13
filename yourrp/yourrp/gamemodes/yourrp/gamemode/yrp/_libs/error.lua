@@ -30,11 +30,25 @@ function YRPEntityAlive(obj)
 	if type(obj) == "string" then return false end
 	if obj == nil or obj == NULL or tostring(obj) == "[NULL Entity]" then return false end
 
-	return true
+	return IsValid(obj)
 end
 
-function YRPPanelAlive(obj)
+function YRPPanelAlive(obj, from)
+	if type(obj) == "table" then
+		YRP.msg("error", "YRPPanelAlive > IS TABLE" .. tostring(from) .. tostring(obj))
+
+		for i, v in pairs(obj) do
+			YRP.msg("error", "YRPPanelAlive >> " .. tostring(i) .. " " .. tostring(v))
+		end
+	elseif type(obj) == "string" then
+		YRP.msg("error", "YRPPanelAlive > IS STRING" .. " " .. tostring(obj))
+	elseif type(obj) == "number" then
+		YRP.msg("error", "YRPPanelAlive > IS NUMBER" .. " " .. tostring(obj))
+	elseif type(obj) == "bool" then
+		YRP.msg("error", "YRPPanelAlive > IS BOOL" .. " " .. tostring(obj))
+	end
+
 	if obj == nil or obj == NULL or tostring(obj) == "[NULL Panel]" then return false end
 
-	return true
+	return IsValid(obj)
 end

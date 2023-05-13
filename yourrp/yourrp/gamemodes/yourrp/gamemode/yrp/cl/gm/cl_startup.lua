@@ -206,7 +206,7 @@ function YRP.DChangeLanguage(parent, x, y, size, vert)
 		end
 
 		function window:OnRemove()
-			if YRPPanelAlive(LanguageChanger) then
+			if YRPPanelAlive(LanguageChanger, "LanguageChanger") then
 				LanguageChanger.selecting = false
 			end
 		end
@@ -1793,7 +1793,7 @@ function drawIDCard(ply, scale, px, py)
 					end
 
 					function test:Paint(pw, ph)
-						if YRPPanelAlive(test) then
+						if YRPPanelAlive(test, "test") then
 							test.mat = test:GetHTMLMaterial()
 
 							if test.mat ~= nil and not test.found then

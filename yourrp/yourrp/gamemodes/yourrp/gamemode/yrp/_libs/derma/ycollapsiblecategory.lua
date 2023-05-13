@@ -132,7 +132,7 @@ function PANEL:Init()
 		local nex = NEXTS[tonumber(rols[1].int_prerole)]
 		local rlis = nex.rlis
 
-		if not YRPPanelAlive(rlis) then
+		if not YRPPanelAlive(rlis, "rlis") then
 			YRP.msg("note", "rlis invalid")
 
 			return
@@ -366,11 +366,11 @@ function PANEL:Init()
 			net.WriteString(rol.uniqueID)
 			net.SendToServer()
 
-			if YRPPanelAlive(self.rlis) then
+			if YRPPanelAlive(self.rlis, "self.rlis") then
 				local remove = false
 
 				for i, v in pairs(self.rlis.Panels) do
-					if YRPPanelAlive(v) then
+					if YRPPanelAlive(v, "rlis.Panels") then
 						if v.GetName and v:GetName() == "DPanelList" then
 							if remove then
 								v:Remove()
@@ -400,7 +400,7 @@ function PANEL:Init()
 			ruid = tonumber(ruid)
 			local nextP = NEXTS[ruid]
 
-			if YRPPanelAlive(nextP) then
+			if YRPPanelAlive(nextP, "nextP") then
 				if not b then
 					nextP:Remove()
 				else
@@ -413,9 +413,9 @@ function PANEL:Init()
 		net.WriteString(rol.uniqueID)
 		net.SendToServer()
 
-		if YRPPanelAlive(lis) then
+		if YRPPanelAlive(lis, "lis 1") then
 			lis:AddItem(r)
-		elseif YRPPanelAlive(rlis) then
+		elseif YRPPanelAlive(rlis, "rlis 1") then
 			rlis:AddPanel(r)
 		end
 	end
@@ -425,7 +425,7 @@ function PANEL:Init()
 		local grptab = this.grptab or {}
 		base.con:Clear()
 
-		if YRPPanelAlive(base) then
+		if YRPPanelAlive(base, "base") then
 			local rw = 800
 			local rh = 160
 
@@ -492,7 +492,7 @@ function PANEL:Init()
 				group:SetContentColor(StringToColor(grp.string_color))
 				group:SetGroupUID(grp.uniqueID)
 
-				if YRPPanelAlive(base.con) then
+				if YRPPanelAlive(base.con, "base.con") then
 					base.con:AddItem(group)
 				else
 					group:Remove()

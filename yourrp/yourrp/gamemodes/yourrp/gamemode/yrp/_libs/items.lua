@@ -300,11 +300,11 @@ if CLIENT then
 					item_handler[tonumber(uid)][y][x].slot:Remove()
 					local _item = item_handler[tonumber(uid)][y][x].item
 
-					if YRPPanelAlive(_item) then
+					if YRPPanelAlive(_item, "_item") then
 						_item:Remove()
 						local _parent = _item:GetParent()
 
-						if YRPPanelAlive(_parent) then
+						if YRPPanelAlive(_parent, "_parent") then
 							_parent:Remove()
 						end
 					end
@@ -314,12 +314,12 @@ if CLIENT then
 	end
 
 	function AddStorage(pnl, uid, w, h, typ)
-		if YRPPanelAlive(pnl) then
+		if YRPPanelAlive(pnl, "AddStorage 1") then
 			item_handler[tonumber(uid)] = {}
 			item_handler[tonumber(uid)].pnl = pnl
 			pnl.uid = uid
 
-			if YRPPanelAlive(item_handler[tonumber(uid)].pnl) then
+			if YRPPanelAlive(item_handler[tonumber(uid)].pnl, "AddStorage 2") then
 				item_handler[tonumber(uid)].pnl:SetSize(YRP.ctr(ICON_SIZE * w), YRP.ctr(ICON_SIZE * h))
 
 				for y = 1, h do
@@ -387,7 +387,7 @@ if CLIENT then
 	end
 
 	function SetCamPosition(pnl, item)
-		if YRPPanelAlive(pnl) and pnl.Entity ~= nil and pnl.Entity:IsValid() then
+		if YRPPanelAlive(pnl, "SetCamPosition") and pnl.Entity ~= nil and pnl.Entity:IsValid() then
 			local _mins, _maxs = pnl.Entity:GetRenderBounds()
 			local _center = (_mins + _maxs) / 2
 			pnl:SetFOV(90)
@@ -403,7 +403,7 @@ if CLIENT then
 
 		local _storage = item_handler[tonumber(tab.storageID)].pnl
 
-		if YRPPanelAlive(_storage) then
+		if YRPPanelAlive(_storage, "AddItemToStorage") then
 			local _parent = item_handler[tonumber(tab.storageID)].pnl:GetParent()
 			local _x, _y = item_handler[tonumber(tab.storageID)].pnl:GetPos()
 			local _bg = YRPCreateD("DPanel", _parent, YRP.ctr(ICON_SIZE * tab.sizew), YRP.ctr(ICON_SIZE * tab.sizeh), _x + YRP.ctr((tab.posx - 1) * ICON_SIZE), _y + YRP.ctr((tab.posy - 1) * ICON_SIZE))

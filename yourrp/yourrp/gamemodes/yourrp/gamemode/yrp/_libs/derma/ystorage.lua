@@ -117,7 +117,7 @@ net.Receive("nws_yrp_storage_get_slots", function(len)
 end)
 
 function BuildStorage(storage, slots)
-	if YRPPanelAlive(storage) then
+	if YRPPanelAlive(storage, "storage") then
 		local c = 1
 		local sp = (storage:GetWide() - storage:GetCols() * YRPItemSize()) / (storage:GetCols() - 1)
 		storage:SetSpacing(sp)

@@ -70,7 +70,7 @@ function YRPCloseAllMenues()
 	closeTicketMenu()
 	closeCharMenu()
 	closeKeybindsMenu()
-	closeCharacterSelection()
+	YRPCloseCharacterSelection()
 	close_appearance()
 	YRPCloseInventory()
 	CloseRoleMenu()
@@ -106,7 +106,7 @@ function YRPUseFunction(str)
 			YRPToggleLawsMenu()
 		elseif str == "openCharacterMenu" then
 			done_tutorial("tut_cs")
-			toggleCharacterSelection()
+			YRPToggleCharacterSelection()
 		elseif str == "openAppearance" then
 			YRPToggleAppearanceMenu()
 		elseif str == "openInventory" then
@@ -682,8 +682,7 @@ function YRP_CalcView(lply, pos, angles, fov)
 							return view
 						end
 					elseif tonumber(lply.yrp_view_range) > -200 and tonumber(lply.yrp_view_range) <= 0 then
-					else --Disabled --view.drawviewer = false --
-						--Firstperson realistic
+					else
 						local _tmpThick = 16
 						local _head = lply:LookupBone("ValveBiped.Bip01_Head1")
 

@@ -18,15 +18,17 @@ function ENTITY:GetYRPAngle(key, value)
 end
 
 function ENTITY:SetYRPAngle(key, value)
-	if self:GetYRPAngle(key) ~= value or value == Angle(0, 0, 0) then
-		if NWSystem == 1 then
-			self:SetNWAngle(key, value)
-		else
-			self:SetNW2Angle(key, value)
+	if IsValid(self) then
+		if self:GetYRPAngle(key) ~= value or value == Angle(0, 0, 0) then
+			if NWSystem == 1 then
+				self:SetNWAngle(key, value)
+			else
+				self:SetNW2Angle(key, value)
+			end
+		elseif YRPDEBUGENTITY then
+			c["angle"] = c["angle"] or 0
+			c["angle"] = c["angle"] + 1
 		end
-	elseif YRPDEBUGENTITY then
-		c["angle"] = c["angle"] or 0
-		c["angle"] = c["angle"] + 1
 	end
 end
 
@@ -44,15 +46,17 @@ function ENTITY:GetYRPBool(key, value)
 end
 
 function ENTITY:SetYRPBool(key, value)
-	if self:GetYRPBool(key) ~= value or value == false then
-		if NWSystem == 1 then
-			self:SetNWBool(key, value)
-		else
-			self:SetNW2Bool(key, value)
+	if IsValid(self) then
+		if self:GetYRPBool(key) ~= value or value == false then
+			if NWSystem == 1 then
+				self:SetNWBool(key, value)
+			else
+				self:SetNW2Bool(key, value)
+			end
+		elseif YRPDEBUGENTITY then
+			c["bool"] = c["bool"] or 0
+			c["bool"] = c["bool"] + 1
 		end
-	elseif YRPDEBUGENTITY then
-		c["bool"] = c["bool"] or 0
-		c["bool"] = c["bool"] + 1
 	end
 end
 
@@ -70,15 +74,17 @@ function ENTITY:GetYRPEntity(key, value)
 end
 
 function ENTITY:SetYRPEntity(key, value)
-	if self:GetYRPEntity(key) ~= value or value == NULL then
-		if NWSystem == 1 then
-			self:SetNWEntity(key, value)
-		else
-			self:SetNW2Entity(key, value)
+	if IsValid(self) then
+		if self:GetYRPEntity(key) ~= value or value == NULL then
+			if NWSystem == 1 then
+				self:SetNWEntity(key, value)
+			else
+				self:SetNW2Entity(key, value)
+			end
+		elseif YRPDEBUGENTITY then
+			c["entity"] = c["entity"] or 0
+			c["entity"] = c["entity"] + 1
 		end
-	elseif YRPDEBUGENTITY then
-		c["entity"] = c["entity"] or 0
-		c["entity"] = c["entity"] + 1
 	end
 end
 
@@ -96,15 +102,17 @@ function ENTITY:GetYRPFloat(key, value)
 end
 
 function ENTITY:SetYRPFloat(key, value)
-	if math.abs(self:GetYRPFloat(key) - value) > 0.0001 or value == -1.0 or value == 0.0 then
-		if NWSystem == 1 then
-			self:SetNWFloat(key, tonumber(value))
-		else
-			self:SetNW2Float(key, tonumber(value))
+	if IsValid(self) then
+		if math.abs(self:GetYRPFloat(key) - value) > 0.0001 or value == -1.0 or value == 0.0 then
+			if NWSystem == 1 then
+				self:SetNWFloat(key, tonumber(value))
+			else
+				self:SetNW2Float(key, tonumber(value))
+			end
+		elseif YRPDEBUGENTITY then
+			c["float"] = c["float"] or 0
+			c["float"] = c["float"] + 1
 		end
-	elseif YRPDEBUGENTITY then
-		c["float"] = c["float"] or 0
-		c["float"] = c["float"] + 1
 	end
 end
 
@@ -122,15 +130,17 @@ function ENTITY:GetYRPInt(key, value)
 end
 
 function ENTITY:SetYRPInt(key, value)
-	if self:GetYRPInt(key) ~= value or value == -1 or value == 0 then
-		if NWSystem == 1 then
-			self:SetNWInt(key, tonumber(value))
-		else
-			self:SetNW2Int(key, tonumber(value))
+	if IsValid(self) then
+		if self:GetYRPInt(key) ~= value or value == -1 or value == 0 then
+			if NWSystem == 1 then
+				self:SetNWInt(key, tonumber(value))
+			else
+				self:SetNW2Int(key, tonumber(value))
+			end
+		elseif YRPDEBUGENTITY then
+			c["int"] = c["int"] or 0
+			c["int"] = c["int"] + 1
 		end
-	elseif YRPDEBUGENTITY then
-		c["int"] = c["int"] or 0
-		c["int"] = c["int"] + 1
 	end
 end
 
@@ -148,15 +158,17 @@ function ENTITY:GetYRPString(key, value)
 end
 
 function ENTITY:SetYRPString(key, value)
-	if self:GetYRPString(key) ~= value or value == "" and string.lower(key) ~= "usergroup" then
-		if NWSystem == 1 then
-			self:SetNWString(key, tostring(value))
-		else
-			self:SetNW2String(key, tostring(value))
+	if IsValid(self) then
+		if self:GetYRPString(key) ~= value or value == "" and string.lower(key) ~= "usergroup" then
+			if NWSystem == 1 then
+				self:SetNWString(key, tostring(value))
+			else
+				self:SetNW2String(key, tostring(value))
+			end
+		elseif YRPDEBUGENTITY then
+			c["string"] = c["string"] or 0
+			c["string"] = c["string"] + 1
 		end
-	elseif YRPDEBUGENTITY then
-		c["string"] = c["string"] or 0
-		c["string"] = c["string"] + 1
 	end
 end
 
@@ -174,15 +186,17 @@ function ENTITY:GetYRPVector(key, value)
 end
 
 function ENTITY:SetYRPVector(key, value)
-	if self:GetYRPVector(key) ~= value or value == Vector(0, 0, 0) then
-		if NWSystem == 1 then
-			self:SetNWVector(key, value)
-		else
-			self:SetNW2Vector(key, value)
+	if IsValid(self) then
+		if self:GetYRPVector(key) ~= value or value == Vector(0, 0, 0) then
+			if NWSystem == 1 then
+				self:SetNWVector(key, value)
+			else
+				self:SetNW2Vector(key, value)
+			end
+		elseif YRPDEBUGENTITY then
+			c["vector"] = c["vector"] or 0
+			c["vector"] = c["vector"] + 1
 		end
-	elseif YRPDEBUGENTITY then
-		c["vector"] = c["vector"] or 0
-		c["vector"] = c["vector"] + 1
 	end
 end
 

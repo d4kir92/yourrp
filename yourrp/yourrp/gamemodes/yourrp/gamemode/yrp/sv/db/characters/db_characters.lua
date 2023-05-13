@@ -669,7 +669,7 @@ function SendLoopCharacterList(ply, tab)
 	end
 end
 
-util.AddNetworkString("nws_yrp_openCharacterCreation")
+util.AddNetworkString("nws_yrp_YRPOpenCharacterCreation")
 
 function YRPSendCharacters(ply, from)
 	if ply:IsBot() then return end
@@ -731,7 +731,7 @@ function YRPSendCharacters(ply, from)
 
 		SendLoopCharacterList(ply, netTable)
 	else
-		net.Start("nws_yrp_openCharacterCreation")
+		net.Start("nws_yrp_YRPOpenCharacterCreation")
 		net.Send(ply)
 	end
 end

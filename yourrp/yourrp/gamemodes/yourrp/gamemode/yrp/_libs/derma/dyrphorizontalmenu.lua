@@ -130,7 +130,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 			self.stabs:SetDraggable(false)
 
 			function self.stabs:Paint(pw, ph)
-				if not YRPPanelAlive(self:GetParent()) then
+				if not YRPPanelAlive(self:GetParent(), "ShowSubTabs") then
 					self:HideSubTabs()
 				end
 
@@ -285,7 +285,7 @@ function PANEL:GetMenuInfo(netstr)
 	net.SendToServer()
 
 	net.Receive(netstr, function(len)
-		if YRPPanelAlive(self) then
+		if YRPPanelAlive(self, "GetMenuInfo") then
 			local tabs = net.ReadTable()
 			local subtabs = net.ReadTable()
 

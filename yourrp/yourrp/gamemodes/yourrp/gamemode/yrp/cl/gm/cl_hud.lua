@@ -211,7 +211,7 @@ end)
 HUD_AVATAR = HUD_AVATAR or nil
 PAvatar = PAvatar or nil
 
-if YRPPanelAlive(PAvatar) then
+if YRPPanelAlive(PAvatar, "PAvatar") then
 	PAvatar:Remove()
 end
 
@@ -231,7 +231,7 @@ function PAvatar:Paint(pw, ph)
 		drawRoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255, 255))
 		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
-		if YRPPanelAlive(HUD_AVATAR) then
+		if YRPPanelAlive(HUD_AVATAR, "HUD_AVATAR") then
 			HUD_AVATAR:SetPaintedManually(false)
 			HUD_AVATAR:PaintManual()
 			HUD_AVATAR:SetPaintedManually(true)
@@ -252,7 +252,7 @@ timer.Simple(1, function()
 	ava.version = -1
 
 	function HUD_AVATARUpdate()
-		if not YRPPanelAlive(HUD_AVATAR) then return end
+		if not YRPPanelAlive(HUD_AVATAR, "HUD_AVATAR 2") then return end
 		HUD_AVATAR:MoveToBack()
 		local lply = LocalPlayer()
 
@@ -471,7 +471,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 		draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	if yrp_loading_screen and YRPPanelAlive(yrp_loading_screen) then
+	if yrp_loading_screen and YRPPanelAlive(yrp_loading_screen, "yrp_loading_screen 2") then
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(10, 10, 10))
 	end
 

@@ -48,7 +48,7 @@ function PANEL:Init()
 	end
 
 	function self.header:DoClick()
-		if YRPPanelAlive(self:GetParent()) and not self:GetParent().locked then
+		if YRPPanelAlive(self:GetParent(), "self.header") and not self:GetParent().locked then
 			self:GetParent().open = not self:GetParent().open
 			self:GetParent():ReSize()
 			self:GetParent():DoClick()

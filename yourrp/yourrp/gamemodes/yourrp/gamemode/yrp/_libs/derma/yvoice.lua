@@ -193,7 +193,7 @@ hook.Add("PlayerEndVoice", "YRP_VOICE_MODULE_PlayerEndVoice", function(ply)
 end)
 
 local function YRPCreateVoiceVGUI()
-	if YRPPanelAlive(yrp_VoicePanelList) then
+	if YRPPanelAlive(yrp_VoicePanelList, "yrp_VoicePanelList") then
 		yrp_VoicePanelList:Remove()
 	end
 

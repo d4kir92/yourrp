@@ -215,7 +215,7 @@ net.Receive("nws_yrp_setting_events", function(len)
 		net.Receive("nws_yrp_get_events", function(le)
 			local tab = net.ReadTable()
 
-			if IsNotNilAndNotFalse(tab) and YRPPanelAlive(EVENT) and YRPPanelAlive(EVENT.EventList) then
+			if IsNotNilAndNotFalse(tab) and IsNotNilAndNotFalse(EVENT, "EVENT") and YRPPanelAlive(EVENT.EventList, "EVENT.EventList") then
 				EVENT.EventList:Clear()
 
 				for n, event in pairs(tab) do

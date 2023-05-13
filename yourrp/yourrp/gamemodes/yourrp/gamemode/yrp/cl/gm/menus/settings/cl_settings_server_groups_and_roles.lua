@@ -1232,7 +1232,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			cur_role.gro = role.int_groupID
 			cur_role.edi = role.uniqueID
 
-			if not YRPPanelAlive(ea) then
+			if not ea then
 				YRP.msg("note", "Closed F8/Switched f8 site?")
 
 				return
