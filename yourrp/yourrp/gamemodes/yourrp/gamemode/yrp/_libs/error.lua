@@ -35,13 +35,13 @@ end
 
 function YRPPanelAlive(obj, from)
 	if type(obj) == "table" then
-		YRP.msg("error", "YRPPanelAlive > IS TABLE" .. tostring(from) .. " " .. tostring(obj))
+		YRP.msg("error", "YRPPanelAlive > IS TABLE " .. tostring(from) .. " " .. table.ToString(obj, "X", false))
 	elseif type(obj) == "string" then
-		YRP.msg("error", "YRPPanelAlive > IS STRING" .. tostring(from) .. " " .. tostring(obj))
+		YRP.msg("error", "YRPPanelAlive > IS STRING " .. tostring(from) .. " " .. tostring(obj))
 	elseif type(obj) == "number" then
-		YRP.msg("error", "YRPPanelAlive > IS NUMBER" .. tostring(from) .. " " .. tostring(obj))
+		YRP.msg("error", "YRPPanelAlive > IS NUMBER " .. tostring(from) .. " " .. tostring(obj))
 	elseif type(obj) == "bool" then
-		YRP.msg("error", "YRPPanelAlive > IS BOOL" .. tostring(from) .. " " .. tostring(obj))
+		YRP.msg("error", "YRPPanelAlive > IS BOOL " .. tostring(from) .. " " .. tostring(obj))
 	end
 
 	if obj == nil or obj == NULL or tostring(obj) == "[NULL Panel]" then return false end

@@ -190,14 +190,14 @@ function YRPDoorBuyWindow(door, tabBuilding)
 			local _tmpBuildings = net.ReadTable()
 			tabBuilding.uniqueID = tonumber(tabBuilding.uniqueID)
 
-			if YRPPanelAlive(_ComboBoxHouseName) then
+			if YRPPanelAlive(_ComboBoxHouseName, "_ComboBoxHouseName 1") then
 				_ComboBoxHouseName.setup = true
 
 				if _ComboBoxHouseName ~= NULL then
 					for k, v in pairs(_tmpBuildings) do
 						v.uniqueID = tonumber(v.uniqueID)
 
-						if YRPPanelAlive(_ComboBoxHouseName) then
+						if YRPPanelAlive(_ComboBoxHouseName, "_ComboBoxHouseName 2") then
 							local isbuilding = false
 
 							if v.uniqueID == tabBuilding.uniqueID then
@@ -248,9 +248,9 @@ function YRPDoorBuyWindow(door, tabBuilding)
 			net.Receive("nws_yrp_getBuildingGroups", function()
 				local _tmpGroups = net.ReadTable()
 
-				if YRPPanelAlive(_ComboBoxGroupName) then
+				if YRPPanelAlive(_ComboBoxGroupName, "_ComboBoxHouseName 3") then
 					for k, v in pairs(_tmpGroups) do
-						if YRPPanelAlive(_ComboBoxGroupName) then
+						if YRPPanelAlive(_ComboBoxGroupName, "_ComboBoxHouseName 4") then
 							v.uniqueID = tonumber(v.uniqueID)
 
 							if v.uniqueID == 0 then

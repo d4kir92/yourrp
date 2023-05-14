@@ -926,7 +926,7 @@ end)
 net.Receive("nws_yrp_get_characters", function(len)
 	local first = net.ReadBool()
 
-	if first and YRPPanelAlive(CharMenu.characterList) and CharMenu.characterList.Clear then
+	if first and YRPPanelAlive(CharMenu.characterList, "CharMenu.characterList") and CharMenu.characterList.Clear then
 		chars = {}
 		CharMenu.characterList:Clear()
 	end
@@ -970,7 +970,7 @@ end)
 function YRPOCS(force)
 	if IsVoidCharEnabled() or not GetGlobalYRPBool("bool_character_system", true) then return end
 
-	if CharMenu and YRPPanelAlive(CharMenu.characterList) and CharMenu.characterList.Clear then
+	if CharMenu and YRPPanelAlive(CharMenu.characterList, "CharMenu.characterList 2") and CharMenu.characterList.Clear then
 		CharMenu.characterList:Clear()
 	end
 
@@ -990,7 +990,7 @@ function YRPOCS(force)
 	CharMenu.character.amountevent = 0
 	YRPOpenMenu()
 
-	if not YRPPanelAlive(CharMenu.frame) then
+	if not YRPPanelAlive(CharMenu.frame, "CharMenu.frame 1") then
 		YRP_CharDesign = string.lower(GetGlobalYRPString("text_character_design"))
 
 		function CharMenu.logic()
@@ -1049,7 +1049,7 @@ function YRPOCS(force)
 				end
 
 				-- Get Newest Background for the Menu
-				if YRPPanelAlive(CharMenu) and YRPPanelAlive(CharMenu.frame) then
+				if IsNotNilAndNotFalse(CharMenu) and YRPPanelAlive(CharMenu.frame) then
 					local oldurl = CharMenu.frame.bg.url
 					local newurl = GetGlobalYRPString("text_character_background", "")
 

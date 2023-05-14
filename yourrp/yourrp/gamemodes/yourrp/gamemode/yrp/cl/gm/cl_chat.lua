@@ -537,7 +537,7 @@ local function InitYRPChat()
 				yrpChat.writeField:DrawTextEntryText(Color(255, 255, 255, 255), Color(255, 255, 255, 0), Color(255, 255, 255, 255))
 				--if !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
 				--timer.Simple(0.1, function()
-				--if YRPPanelAlive(yrpChat.window) and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
+				--if YRPPanelAlive(yrpChat.window, "test2424") and !yrpChat.writeField:HasFocus() and !yrpChat.comboBox:HasFocus() and !yrpChat.comboBox:IsHovered() then
 				--yrpChat.closeChatbox( "NOT FOCUS ANYMORE" )
 				--end
 				--end)

@@ -87,7 +87,7 @@ function YRPOpenInventory(target)
 		net.Receive("nws_yrp_get_inventory", function(len)
 			local storageID = net.ReadString()
 
-			if YRPPanelAlive(YRPInventory()) then
+			if YRPPanelAlive(YRPInventory(), "YRPInventory() 1") then
 				inv.storage = YRPCreateD("YStorage", inv.win, YRPItemSize() * 5 + YRP.ctr(inv.br) * 4, YRPItemSize(), YRP.ctr(inv.sp), YRP.ctr(inv.sp))
 				inv.storage:SetCols(5)
 				inv.storage:SetStorageID(storageID)
@@ -120,7 +120,7 @@ YRPCloseInventory()
 net.Receive("nws_yrp_open_storage", function(len)
 	YRPOpenInventory(true)
 
-	if YRPPanelAlive(YRPInventory()) then
+	if YRPPanelAlive(YRPInventory(), "YRPInventory() 2") then
 		local wsuid = net.ReadString()
 		local name = net.ReadString()
 

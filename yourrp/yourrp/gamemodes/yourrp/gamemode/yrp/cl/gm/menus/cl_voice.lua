@@ -5,12 +5,12 @@ local colb = Color(100, 100, 255)
 local vm = {}
 vm.adminmode = false
 
-function CloseVoiceMenu()
+function YRPCloseVoiceMenu()
 	vm.win:Remove()
 end
 
 function YRPVoiceChannel(edit, uid)
-	CloseVoiceMenu()
+	YRPCloseVoiceMenu()
 	local name = ""
 	local hear = false
 	local augs = {}
@@ -378,7 +378,7 @@ function YRPVoiceChannel(edit, uid)
 			win:Remove()
 
 			timer.Simple(0.4, function()
-				OpenVoiceMenu()
+				YRPOpenVoiceMenu()
 			end)
 		end
 
@@ -396,7 +396,7 @@ function YRPVoiceChannel(edit, uid)
 			win:Remove()
 
 			timer.Simple(0.4, function()
-				OpenVoiceMenu()
+				YRPOpenVoiceMenu()
 			end)
 		end
 	else
@@ -421,7 +421,7 @@ function YRPVoiceChannel(edit, uid)
 			win:Remove()
 
 			timer.Simple(0.4, function()
-				OpenVoiceMenu()
+				YRPOpenVoiceMenu()
 			end)
 		end
 	end
@@ -578,7 +578,7 @@ function YRPUpdateVoiceList()
 					end
 
 					function dn:DoClick()
-						CloseVoiceMenu()
+						YRPCloseVoiceMenu()
 						net.Start("nws_yrp_channel_dn")
 						net.WriteString(channel.uniqueID)
 						net.SendToServer()
@@ -602,7 +602,7 @@ function YRPUpdateVoiceList()
 					end
 
 					function up:DoClick()
-						CloseVoiceMenu()
+						YRPCloseVoiceMenu()
 						net.Start("nws_yrp_channel_up")
 						net.WriteString(channel.uniqueID)
 						net.SendToServer()
@@ -615,7 +615,7 @@ function YRPUpdateVoiceList()
 	end
 end
 
-function OpenVoiceMenu()
+function YRPOpenVoiceMenu()
 	local lply = LocalPlayer()
 	vm.win = YRPCreateD("YFrame", nil, YRP.ctr(1200), YRP.ctr(1400), 0, 0)
 
@@ -680,7 +680,7 @@ function OpenVoiceMenu()
 
 	YRPUpdateVoiceList()
 
-	if lply:HasAccess("OpenVoiceMenu1") then
+	if lply:HasAccess("YRPOpenVoiceMenu1") then
 		local size = YRP.ctr(50)
 		-- ADMIN MODE
 		vm.win.showall = YRPCreateD("DCheckBox", CONTENT, size, size, YRP.ctr(0), CONTENT:GetTall() - YRP.ctr(50))
@@ -715,7 +715,7 @@ function OpenVoiceMenu()
 			YRPVoiceChannel(false)
 		end
 
-		if not vm.adminmode or not lply:HasAccess("OpenVoiceMenu2") then
+		if not vm.adminmode or not lply:HasAccess("YRPOpenVoiceMenu2") then
 			vm.win.add:Hide()
 		end
 
@@ -752,7 +752,7 @@ function OpenVoiceMenu()
 			net.SendToServer()
 		end
 
-		if not vm.adminmode or not lply:HasAccess("OpenVoiceMenu3") then
+		if not vm.adminmode or not lply:HasAccess("YRPOpenVoiceMenu3") then
 			vm.win.maxactive:Hide()
 			vm.win.maxpassive:Hide()
 		end
@@ -788,21 +788,21 @@ function OpenVoiceMenu()
 end
 
 net.Receive("nws_yrp_channel_dn", function(len)
-	OpenVoiceMenu()
+	YRPOpenVoiceMenu()
 end)
 
 net.Receive("nws_yrp_channel_up", function(len)
-	OpenVoiceMenu()
+	YRPOpenVoiceMenu()
 end)
 
 function YRPToggleVoiceMenu()
 	if GetGlobalYRPBool("bool_voice", false) then
 		if YRPPanelAlive(vm.win) then
 			surface.PlaySound("npc/metropolice/vo/off2.wav")
-			CloseVoiceMenu()
+			YRPCloseVoiceMenu()
 		elseif YRPIsNoMenuOpen() then
 			surface.PlaySound("npc/metropolice/vo/on2.wav")
-			OpenVoiceMenu()
+			YRPOpenVoiceMenu()
 		end
 	end
 end

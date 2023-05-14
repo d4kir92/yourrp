@@ -189,19 +189,19 @@ function YRPNotSelf(ply)
 end
 
 function YRPIsScoreboardVisible()
-	if YRPPanelAlive(YRPScoreboard) and YRPScoreboard:IsVisible() then return true end
+	if YRPPanelAlive(YRPScoreboard, "YRPScoreboard 1") and YRPScoreboard:IsVisible() then return true end
 
 	return false
 end
 
 function YRPCloseSBS()
-	if not YRPPanelAlive(YRPScoreboard) then return end
+	if not YRPPanelAlive(YRPScoreboard, "YRPScoreboard 2") then return end
 	YRPScoreboard:Hide()
 	gui.EnableScreenClicker(false)
 end
 
 function YRPSortScoreboard()
-	if not YRPPanelAlive(YRPScoreboard) then return end
+	if not YRPPanelAlive(YRPScoreboard, "YRPScoreboard 3") then return end
 	local lply = LocalPlayer()
 
 	if lply.yrp_sb_reverse == nil then
@@ -264,7 +264,7 @@ function YRPSortScoreboard()
 end
 
 function YRPScoreboardAddPlayer(ply)
-	if YRPPanelAlive(YRPScoreboard) and IsValid(ply) and not table.HasValue(YRPScoreboard.plys, ply) then
+	if YRPPanelAlive(YRPScoreboard, "YRPScoreboard 4") and IsValid(ply) and not table.HasValue(YRPScoreboard.plys, ply) then
 		table.insert(YRPScoreboard.plys, ply)
 		local plyframe = YRPCreateD("DPanel", YRPScoreboard.list, size, size, 0, 0)
 		plyframe:Dock(TOP)
@@ -802,7 +802,7 @@ function YRPScoreboardAddPlayer(ply)
 end
 
 function YRPOpenSBS()
-	if not YRPPanelAlive(YRPScoreboard) then return end
+	if not YRPPanelAlive(YRPScoreboard, "YRPScoreboard 5") then return end
 	local lply = LocalPlayer()
 	-- Table Header
 	YRPScoreboard.Header:Clear()
@@ -856,7 +856,7 @@ function YRPOpenSBS()
 	end
 
 	timer.Simple(0.05, function()
-		if YRPPanelAlive(YRPScoreboard) then
+		if YRPPanelAlive(YRPScoreboard, "YRPScoreboard 6") then
 			local sw = 0
 
 			for i, v in pairs(YRPScoreboard.Header:GetChildren()) do
@@ -924,7 +924,7 @@ function YRPDrawOrder(self, x, y, text, font, art)
 end
 
 function YRPInitScoreboard()
-	if YRPPanelAlive(YRPScoreboard) then
+	if YRPPanelAlive(YRPScoreboard, "YRPScoreboard 7") then
 		YRPScoreboard:Remove()
 	end
 

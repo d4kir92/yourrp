@@ -181,7 +181,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 				net.WriteString(tmpTargetCharID)
 				net.SendToServer()
 
-				if YRPPanelAlive(yrp_Interact) then
+				if YRPPanelAlive(yrp_Interact, "yrp_Interact 1") then
 					yrp_Interact:Close()
 				end
 			end
@@ -200,7 +200,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 				net.WriteString(tmpTargetCharID)
 				net.SendToServer()
 
-				if YRPPanelAlive(yrp_Interact) then
+				if YRPPanelAlive(yrp_Interact, "yrp_Interact 2") then
 					yrp_Interact:Close()
 				end
 			end
@@ -219,7 +219,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 				net.WriteString(tmpTargetCharID)
 				net.SendToServer()
 
-				if YRPPanelAlive(yrp_Interact) then
+				if YRPPanelAlive(yrp_Interact, "yrp_Interact 3") then
 					yrp_Interact:Close()
 				end
 			end
@@ -235,7 +235,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 		btnbtnSpecialization:SetText(YRP.lang_string("LID_specializations"))
 
 		function btnbtnSpecialization:DoClick()
-			if YRPPanelAlive(yrp_Interact) then
+			if YRPPanelAlive(yrp_Interact, "yrp_Interact 4") then
 				yrp_Interact:Close()
 			end
 
@@ -282,7 +282,7 @@ function YRPOpenGiveSpec(charid, ruid)
 	net.Receive("nws_yrp_get_role_specs", function(len)
 		local nettab = net.ReadTable()
 
-		if YRPPanelAlive(win) and YRPPanelAlive(win.dpl) then
+		if YRPPanelAlive(win, "win xx") and YRPPanelAlive(win.dpl, "win.dpl") then
 			local ply = NULL
 
 			for i, v in pairs(player.GetAll()) do

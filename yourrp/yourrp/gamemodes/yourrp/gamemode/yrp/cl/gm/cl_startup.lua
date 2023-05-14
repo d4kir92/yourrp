@@ -380,7 +380,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		end
 
 		for i, v in pairs(tab) do
-			if YRPPanelAlive(pmsel) and pmsel.strsearch ~= nil and v.PrintName and string.find(string.lower(v.PrintName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.ClassName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.WorldModel), pmsel.strsearch or "", 1, true) then
+			if YRPPanelAlive(pmsel, "pmsel 1") and pmsel.strsearch ~= nil and v.PrintName and string.find(string.lower(v.PrintName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.ClassName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.WorldModel), pmsel.strsearch or "", 1, true) then
 				self.nothingfound = false
 				self.count = self.count + 1
 
@@ -426,7 +426,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 						d_pm.model = YRPCreateD("DModelPanel", d_pm, msize, msize, mbr, my)
 
 						timer.Simple(0.1 * self.fcount, function()
-							if YRPPanelAlive(d_pm) and YRPPanelAlive(d_pm.model) then
+							if YRPPanelAlive(d_pm, "d_pm 1") and YRPPanelAlive(d_pm.model, "d_pm.model") then
 								d_pm.model:SetModel(v.WorldModel)
 							end
 						end)
@@ -457,7 +457,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 							end
 						end
 
-						if not multiple and YRPPanelAlive(pmsel) then
+						if not multiple and YRPPanelAlive(pmsel, "pmsel 2") then
 							if fu then
 								fu()
 							end
@@ -524,7 +524,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 				fu()
 			end
 
-			if YRPPanelAlive(pmsel) then
+			if YRPPanelAlive(pmsel, "pmsel 3") then
 				pmsel:Close()
 			end
 		end
@@ -537,7 +537,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 	end
 
 	timer.Simple(1, function()
-		if YRPPanelAlive(pmsel) then
+		if YRPPanelAlive(pmsel, "pmsel 4") then
 			pmsel:Search("")
 		end
 	end)

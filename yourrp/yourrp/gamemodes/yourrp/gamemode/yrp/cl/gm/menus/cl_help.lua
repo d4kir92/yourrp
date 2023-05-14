@@ -230,7 +230,7 @@ net.Receive("nws_yrp_getsitestaff", function(len)
 end)
 
 net.Receive("nws_yrp_getsiteserverrules", function(len)
-	if YRPPanelAlive(HELPMENU) then
+	if YRPPanelAlive(HELPMENU, "HELPMENU") then
 		local serverrules = net.ReadString()
 		local page = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 

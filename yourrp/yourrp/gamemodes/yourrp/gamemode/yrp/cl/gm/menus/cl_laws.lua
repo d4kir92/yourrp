@@ -16,7 +16,7 @@ function CloseLawsMenu()
 end
 
 function CreateLawsContent(PARENT)
-	if not YRPPanelAlive(PARENT) then return end
+	if not YRPPanelAlive(PARENT, "PARENT 123") then return end
 	local lply = LocalPlayer()
 
 	net.Receive("nws_yrp_get_laws", function(len)
@@ -24,7 +24,7 @@ function CreateLawsContent(PARENT)
 		local laws = lawtab.string_laws
 		local lockdowntext = lawtab.string_lockdowntext
 		local lockdown = tobool(lawtab.bool_lockdown)
-		if not YRPPanelAlive(PARENT) then return end
+		if not YRPPanelAlive(PARENT, "PARENT 312") then return end
 
 		if not lply:GetYRPBool("bool_" .. "ismayor", false) then
 			if PARENT:IsValid() then
