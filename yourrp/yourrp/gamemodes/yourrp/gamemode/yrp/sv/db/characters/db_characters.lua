@@ -609,7 +609,7 @@ end
 util.AddNetworkString("nws_yrp_received_chars")
 
 net.Receive("nws_yrp_received_chars", function(len, ply)
-	MsgC(Color(0, 255, 0), "Player Received Charlist", "\n")
+	MsgC(Color(0, 255, 0), "Player received charlist", "\n")
 	ply.receivedchars = true
 end)
 
@@ -617,13 +617,15 @@ end)
 --
 function SendLoopCharacterList(ply, tab)
 	if ply:IsBot() then return end
+	if ply.sendchars then return end
+	ply.sendchars = true
 	ply:SetupCharID()
 	local c = 1
 
 	for i, char in pairs(tab) do
 		char.c = c
 
-		timer.Simple(char.c * 0.25, function()
+		timer.Simple(char.c * 0.01, function()
 			if IsValid(ply) and tab and char then
 				local last = false
 				local first = false
@@ -645,6 +647,7 @@ function SendLoopCharacterList(ply, tab)
 				if last then
 					net.Start("nws_yrp_received_chars")
 					net.Send(ply)
+					ply.sendchars = false
 
 					--YRP.msg( "note", "Player Send Charlist: " .. tostring( char.c ) .. "/" .. tostring( #tab ) )
 					timer.Simple(10, function()
@@ -739,7 +742,7 @@ end
 --[[ Client ask for Characters ]]
 --
 net.Receive("nws_yrp_get_characters", function(len, ply)
-	--YRP.msg( "db", ply:YRPName() .. " ask for characters" )
+	YRP.msg("db", ply:YRPName() .. " ask for characters")
 	if ply:IsBot() then return end
 	YRPSendCharacters(ply, "nws_yrp_get_characters")
 

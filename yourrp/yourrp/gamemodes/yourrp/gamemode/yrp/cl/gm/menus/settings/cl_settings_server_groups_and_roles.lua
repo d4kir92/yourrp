@@ -3,7 +3,7 @@
 net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 	local PARENT = GetSettingsSite()
 
-	if YRPPanelAlive(PARENT) then
+	if YRPPanelAlive(PARENT, "GAR 1") then
 		local cur_group = {}
 		cur_group.cur = 0
 		cur_group.par = 0
@@ -115,7 +115,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local _uid = tonumber(net.ReadString())
 			local name = net.ReadString()
 
-			if YRPPanelAlive(gs.gplist) and gs.gplist[_uid] and gs.gplist[_uid].text then
+			if YRPPanelAlive(gs.gplist, "GAR 2") and gs.gplist[_uid] and gs.gplist[_uid].text then
 				gs.gplist[_uid].text = name
 			end
 		end)
@@ -124,7 +124,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local _uid = tonumber(net.ReadString())
 			local color = net.ReadString()
 
-			if YRPPanelAlive(gs) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_color and isnumber(_uid) and gs.gplist[_uid] ~= nil then
+			if IsNotNilAndNotFalse(gs) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_color and isnumber(_uid) and gs.gplist[_uid] ~= nil then
 				gs.gplist[_uid].string_color = stc(color)
 			end
 		end)
@@ -133,7 +133,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local _uid = tonumber(net.ReadString())
 			local icon = net.ReadString()
 
-			if YRPPanelAlive(gs.gplist) and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_icon then
+			if YRPPanelAlive(gs.gplist, "GAR 3") and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_icon then
 				gs.gplist[_uid].string_icon = icon
 				gs.gplist[_uid].ico:SetHTML(GetHTMLImage(gs.gplist[_uid].string_icon, gs.gplist[_uid].ico:GetWide(), gs.gplist[_uid].ico:GetTall()))
 				YRPTestHTML(gs.gplist[_uid].ico, gs.gplist[_uid].string_icon, false)
@@ -277,7 +277,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 		end
 
 		net.Receive("nws_yrp_settings_subscribe_grouplist", function(le)
-			if YRPPanelAlive(gs.gplist) then
+			if YRPPanelAlive(gs.gplist, "GAR 4") then
 				gs.gplist:ClearList()
 				local parentgroup = net.ReadTable()
 
@@ -414,7 +414,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 		end
 
 		net.Receive("nws_yrp_settings_role_update_name", function(le)
-			if YRPPanelAlive(rs.rplist) then
+			if YRPPanelAlive(rs.rplist, "GAR 5") then
 				local _uid = tonumber(net.ReadString())
 				local name = net.ReadString()
 
@@ -427,7 +427,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 		end)
 
 		net.Receive("nws_yrp_settings_role_update_color", function(le)
-			if YRPPanelAlive(rs) then
+			if IsNotNilAndNotFalse(rs) then
 				local _uid = tonumber(net.ReadString())
 				local color = net.ReadString()
 
@@ -438,11 +438,11 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 		end)
 
 		net.Receive("nws_yrp_settings_role_update_icon", function(le)
-			if YRPPanelAlive(rs.rplist) then
+			if YRPPanelAlive(rs.rplist, "GAR 6") then
 				local _uid = tonumber(net.ReadString())
 				local icon = net.ReadString()
 
-				if YRPPanelAlive(rs.rplist[_uid]) then
+				if YRPPanelAlive(rs.rplist[_uid], "GAR 7") then
 					rs.rplist[_uid].string_icon = icon
 					rs.rplist[_uid].ico:SetHTML(GetHTMLImage(rs.rplist[_uid].string_icon, rs.rplist[_uid].ico:GetWide(), rs.rplist[_uid].ico:GetTall()))
 					YRPTestHTML(rs.rplist[_uid].ico, rs.rplist[_uid].string_icon, false)
@@ -618,7 +618,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local groups = net.ReadTable()
 			local db_ugs = net.ReadTable()
 
-			if YRPPanelAlive(ea.background) then
+			if YRPPanelAlive(ea.background, "GAR 8") then
 				if group.uniqueID ~= nil then
 					net.Start("nws_yrp_settings_subscribe_rolelist")
 					net.WriteString(group.uniqueID)
@@ -1208,7 +1208,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				end
 
 				timer.Simple(0.01, function()
-					if cur_role.gro and rs and YRPPanelAlive(rs.rplist) and rs.rplist[role.uniqueID] and rs.rplist[role.uniqueID].uniqueID then
+					if cur_role.gro and rs and YRPPanelAlive(rs.rplist, "GAR 9") and rs.rplist[role.uniqueID] and rs.rplist[role.uniqueID].uniqueID then
 						net.Start("nws_yrp_settings_subscribe_rolelist")
 						net.WriteString(cur_role.gro)
 						net.WriteString(rs.rplist[role.uniqueID].uniqueID)
@@ -1653,12 +1653,12 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					function pmwin.list:RefreshList()
 						local lpl = LocalPlayer()
 
-						if IsNotNilAndNotFalse(lpl.yrpseltab) and pmwin.list ~= nil and YRPPanelAlive(pmwin.list) then
+						if IsNotNilAndNotFalse(lpl.yrpseltab) and pmwin.list ~= nil and YRPPanelAlive(pmwin.list, "GAR 10") then
 							pmwin.list:Clear()
 
 							for i, pm in pairs(lpl.yrpseltab) do
 								timer.Simple(i * 0.001, function()
-									if YRPPanelAlive(pmwin) and YRPPanelAlive(pmwin.list) then
+									if IsNotNilAndNotFalse(pmwin) and YRPPanelAlive(pmwin.list, "GAR 11") then
 										local line = YRPCreateD("DPanel", pmwin.list, YRP.ctr(200), YRP.ctr(64), 0, 0)
 										line.pm = pm
 
@@ -1776,7 +1776,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 								self.searchstr = string.Replace(self.searchstr, "]", "")
 								self.searchstr = string.Replace(self.searchstr, "%", "")
 
-								if YRPPanelAlive(win.dpl) and string.find(string.lower(pm.string_name), self.searchstr, 1, true) or string.find(string.lower(pm.string_models), self.searchstr, 1, true) then
+								if YRPPanelAlive(win.dpl, "GAR 12") and string.find(string.lower(pm.string_name), self.searchstr, 1, true) or string.find(string.lower(pm.string_models), self.searchstr, 1, true) then
 									local line = YRPCreateD("YButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
 									line.string_name = pm.string_name
 									line.models = string.Explode(",", pm.string_models)
@@ -1868,7 +1868,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					local tab = net.ReadTable()
 					table.insert(pms, tab)
 
-					if YRPPanelAlive(win) then
+					if YRPPanelAlive(win, "GAR 13") then
 						win:Search(win:GetText())
 					end
 				end)
@@ -3112,7 +3112,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 		end)
 
 		net.Receive("nws_yrp_settings_subscribe_rolelist", function(le)
-			if YRPPanelAlive(rs.rplist) then
+			if YRPPanelAlive(rs.rplist, "GAR 14") then
 				rs.rplist:ClearList()
 				local roles = net.ReadTable()
 				local headername = net.ReadString()

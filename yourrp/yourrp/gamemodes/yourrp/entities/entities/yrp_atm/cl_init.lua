@@ -20,7 +20,7 @@ function ENT:Draw()
 			local bankName = "YRP Bank [" .. GetGlobalYRPString("text_money_pre", "") .. lply:GetYRPString("moneybank", "-1") .. GetGlobalYRPString("text_money_pos", "") .. "]"
 
 			if self.ent:GetYRPString("status") == "startup" then
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
+				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 100, 255))
 				draw.SimpleTextOutlined("..." .. YRP.lang_string("LID_loading") .. "...", "Y_80_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			elseif self.ent:GetYRPString("status") == "logo" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 255, 255))
