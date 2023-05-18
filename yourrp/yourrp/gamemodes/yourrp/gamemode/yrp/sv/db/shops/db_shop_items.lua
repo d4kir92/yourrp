@@ -314,10 +314,12 @@ function SpawnVehicle(item, pos, ang)
 end
 
 function YRPSpawnItem(ply, item, duid, count, itemColor)
+	if item.ClassName == nil then return false end
+	if item.type == nil then return false end
 	ClassName = item.ClassName -- fix for WAC addons, dumb!
 
 	if item.type == "weapons" then
-		if count == 1 then
+		if count == 1 and item.ClassName then
 			local wep = ply:Give(item.ClassName)
 
 			if IsNotNilAndNotFalse(wep) and wep ~= NULL then
@@ -338,7 +340,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 
 		local shipment = ents.Create("yrp_shipment")
 
-		if shipment then
+		if shipment and item.ClassName then
 			shipment:Spawn()
 			tp_to(shipment, ply:GetPos())
 			shipment:SetDisplayName(item.name)

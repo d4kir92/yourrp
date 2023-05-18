@@ -8,15 +8,18 @@ util.AddNetworkString("nws_yrp_getPlayerNotes")
 
 net.Receive("nws_yrp_getPlayerNotes", function(len, ply)
 	local p = net.ReadEntity()
-	local notes = YRP_SQL_SELECT(DBNotes, "*", "SteamID = '" .. p:YRPSteamID() .. "'")
 
-	if not IsNotNilAndNotFalse(notes) then
-		notes = {}
+	if YRPEntityAlive(p) then
+		local notes = YRP_SQL_SELECT(DBNotes, "*", "SteamID = '" .. p:YRPSteamID() .. "'")
+
+		if not IsNotNilAndNotFalse(notes) then
+			notes = {}
+		end
+
+		net.Start("nws_yrp_getPlayerNotes")
+		net.WriteTable(notes)
+		net.Send(ply)
 	end
-
-	net.Start("nws_yrp_getPlayerNotes")
-	net.WriteTable(notes)
-	net.Send(ply)
 end)
 
 util.AddNetworkString("nws_yrp_addJailNote")

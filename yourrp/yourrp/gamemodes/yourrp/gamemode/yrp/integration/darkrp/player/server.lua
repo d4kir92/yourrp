@@ -12,10 +12,10 @@ function Player:addCustomEntity(tblEnt)
 end
 
 function Player:addPocketItem(ent)
-	--Description: Add an item to the pocket of the player.
-	YRPDarkrpNotFound("addPocketItem(ent)")
 end
 
+--Description: Add an item to the pocket of the player.
+--YRPDarkrpNotFound("addPocketItem(ent)")
 function Player:applyPlayerClassVars(applyHealth)
 	--Description: Applies all variables in a player's associated GMod player class to the player.
 	if applyHealth then

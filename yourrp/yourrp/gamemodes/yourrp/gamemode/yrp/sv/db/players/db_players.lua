@@ -157,7 +157,9 @@ defaultsweps["yrp_key"] = true
 defaultsweps["yrp_unarmed"] = true
 
 function YRPPlayerGive(ply, cname, bNoAmmo)
-	ply:Give(cname, bNoAmmo)
+	if cname then
+		ply:Give(cname, bNoAmmo)
+	end
 end
 
 function YRPSetRole(ply, rid, force, pmid, bgs)
