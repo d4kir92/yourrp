@@ -171,12 +171,14 @@ function Player:AddLevel(level)
 				["int_level"] = newlvl
 			}, "uniqueID = '" .. charid .. "'")
 
-			if result ~= nil then
-				YRP.msg("error", "AddLevel FAILED #1: " .. tostring(result))
-			else
-				self:SetYRPString("int_level", newlvl)
-				self:AddLevel(level)
-			end
+			timer.Simple(0.1, function()
+				if result ~= nil then
+					YRP.msg("error", "AddLevel FAILED #1: " .. tostring(result))
+				elseif YRPEntityAlive(self) then
+					self:SetYRPString("int_level", newlvl)
+					self:AddLevel(level)
+				end
+			end)
 		end
 	elseif level < 0 then
 		level = level + 1
@@ -187,12 +189,14 @@ function Player:AddLevel(level)
 				["int_level"] = newlvl
 			}, "uniqueID = '" .. charid .. "'")
 
-			if result ~= nil then
-				YRP.msg("error", "AddLevel FAILED #2: " .. tostring(result))
-			else
-				self:SetYRPString("int_level", newlvl)
-				self:AddLevel(level)
-			end
+			timer.Simple(0.1, function()
+				if result ~= nil then
+					YRP.msg("error", "AddLevel FAILED #2: " .. tostring(result))
+				elseif YRPEntityAlive(self) then
+					self:SetYRPString("int_level", newlvl)
+					self:AddLevel(level)
+				end
+			end)
 		end
 	end
 end
