@@ -51,7 +51,7 @@ net.Receive("nws_yrp_askCoordsMM", function(len, ply)
 	end
 end)
 
-function try_new_pos(dir, size, space, tmpX, tmpY, tmpZ)
+function YRPTryNewPos(dir, size, space, tmpX, tmpY, tmpZ)
 	local _fails = 3
 	local _tmpEnd = 0
 	local _result = dir
@@ -72,7 +72,7 @@ function try_new_pos(dir, size, space, tmpX, tmpY, tmpZ)
 	return _result
 end
 
-function search_coords(ent)
+function YRPSearchCoords(ent)
 	local _size = 1000000
 	local _space = 8
 
@@ -80,31 +80,31 @@ function search_coords(ent)
 		_map_size.spawnPointsH = ent:GetPos().z - 64
 	end
 
-	local testUp = try_new_pos(ent:GetPos().z, _size, _space, ent:GetPos().x, ent:GetPos().y, nil)
+	local testUp = YRPTryNewPos(ent:GetPos().z, _size, _space, ent:GetPos().x, ent:GetPos().y, nil)
 
 	if testUp > _map_size.sizeUp then
 		_map_size.sizeUp = testUp
 	end
 
-	local testE = try_new_pos(ent:GetPos().x, _size, _space, nil, ent:GetPos().y, _map_size.sizeUp)
+	local testE = YRPTryNewPos(ent:GetPos().x, _size, _space, nil, ent:GetPos().y, _map_size.sizeUp)
 
 	if testE > _map_size.sizeE then
 		_map_size.sizeE = testE
 	end
 
-	local testW = try_new_pos(ent:GetPos().x, -_size, -_space, nil, ent:GetPos().y, _map_size.sizeUp)
+	local testW = YRPTryNewPos(ent:GetPos().x, -_size, -_space, nil, ent:GetPos().y, _map_size.sizeUp)
 
 	if testW < _map_size.sizeW then
 		_map_size.sizeW = testW
 	end
 
-	local testN = try_new_pos(ent:GetPos().y, _size, _space, ent:GetPos().x, nil, _map_size.sizeUp)
+	local testN = YRPTryNewPos(ent:GetPos().y, _size, _space, ent:GetPos().x, nil, _map_size.sizeUp)
 
 	if testN > _map_size.sizeN then
 		_map_size.sizeN = testN
 	end
 
-	local testS = try_new_pos(ent:GetPos().y, -_size, -_space, ent:GetPos().x, nil, _map_size.sizeUp)
+	local testS = YRPTryNewPos(ent:GetPos().y, -_size, -_space, ent:GetPos().x, nil, _map_size.sizeUp)
 
 	if testS < _map_size.sizeS then
 		_map_size.sizeS = testS
@@ -113,7 +113,7 @@ end
 
 local tries = 0
 
-function get_coords()
+function YRPGetCoords()
 	tries = tries + 1
 
 	if skyCamera == nil then
@@ -134,7 +134,7 @@ function get_coords()
 	local _hasNoSpawnpoints = true
 
 	for k, v in pairs(ents.GetAll()) do
-		if YRPEntityAlive(v) and (v:GetClass() == "info_player_teamspawn" or v:GetClass() == "info_player_terrorist" or v:GetClass() == "info_player_counterterrorist") then
+		if v and YRPEntityAlive(v) and (v:GetClass() == "info_player_teamspawn" or v:GetClass() == "info_player_terrorist" or v:GetClass() == "info_player_counterterrorist") then
 			_hasNoSpawnpoints = true
 		end
 	end
@@ -142,28 +142,28 @@ function get_coords()
 	for k, v in pairs(ents.GetAll()) do
 		if _hasNoSpawnpoints then
 			if v:GetClass() == "info_player_start" then
-				search_coords(v)
+				YRPSearchCoords(v)
 			end
 		else
 			if v:GetClass() == "info_player_teamspawn" then
-				search_coords(v)
+				YRPSearchCoords(v)
 			elseif v:GetClass() == "info_player_terrorist" then
-				search_coords(v)
+				YRPSearchCoords(v)
 			elseif v:GetClass() == "info_player_counterterrorist" then
-				search_coords(v)
+				YRPSearchCoords(v)
 			end
 		end
 
 		if v:GetClass() == "prop_door_rotating" then
-			search_coords(v)
+			YRPSearchCoords(v)
 		end
 
 		if v:GetClass() == "func_door" then
-			search_coords(v)
+			YRPSearchCoords(v)
 		end
 
 		if v:GetClass() == "func_door_rotating" then
-			search_coords(v)
+			YRPSearchCoords(v)
 		end
 	end
 
@@ -209,5 +209,5 @@ function get_coords()
 end
 
 function YRPGetMapDoors()
-	get_coords()
+	YRPGetCoords()
 end

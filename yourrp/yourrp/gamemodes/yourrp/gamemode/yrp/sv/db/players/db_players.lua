@@ -157,7 +157,7 @@ defaultsweps["yrp_key"] = true
 defaultsweps["yrp_unarmed"] = true
 
 function YRPPlayerGive(ply, cname, bNoAmmo)
-	if YRPEntityAlive(ply) and ply:Alive() and cname then
+	if YRPEntityAlive(ply) and ply:Alive() and cname ~= nil and not strEmpty(cname) then
 		ply:Give(cname, bNoAmmo)
 	end
 end
