@@ -171,7 +171,7 @@ function Player:AddLevel(level)
 				["int_level"] = newlvl
 			}, "uniqueID = '" .. charid .. "'")
 
-			timer.Simple(0.1, function()
+			timer.Simple(0.01, function()
 				if result ~= nil then
 					YRP.msg("error", "AddLevel FAILED #1: " .. tostring(result))
 				elseif YRPEntityAlive(self) then
@@ -242,8 +242,12 @@ function Player:AddXP(xp)
 						if result ~= nil then
 							YRP.msg("note", "AddXP FAILED #1: " .. tostring(result))
 						else
-							self:AddLevel(1)
-							self:AddXP(newxp)
+							timer.Simple(0.01, function()
+								if YRPEntityAlive(self) then
+									self:AddLevel(1)
+									self:AddXP(newxp)
+								end
+							end)
 						end
 					else
 						local result = YRP_SQL_UPDATE("yrp_characters", {
@@ -284,8 +288,12 @@ function Player:AddXP(xp)
 						if result ~= nil then
 							YRP.msg("note", "AddXP FAILED #3: " .. tostring(result))
 						else
-							self:AddLevel(-1)
-							self:AddXP(newxp)
+							timer.Simple(0.01, function()
+								if YRPEntityAlive(self) then
+									self:AddLevel(-1)
+									self:AddXP(newxp)
+								end
+							end)
 						end
 					else
 						local result = YRP_SQL_UPDATE("yrp_characters", {
