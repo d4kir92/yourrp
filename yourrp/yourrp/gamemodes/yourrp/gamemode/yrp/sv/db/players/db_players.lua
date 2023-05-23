@@ -155,10 +155,57 @@ end
 local defaultsweps = {}
 defaultsweps["yrp_key"] = true
 defaultsweps["yrp_unarmed"] = true
+local _hl2Weapons = {}
+table.insert(_hl2Weapons, "weapon_357")
+table.insert(_hl2Weapons, "weapon_alyxgun")
+table.insert(_hl2Weapons, "weapon_annabelle")
+table.insert(_hl2Weapons, "weapon_ar2")
+table.insert(_hl2Weapons, "weapon_brickbat")
+table.insert(_hl2Weapons, "weapon_bugbait")
+table.insert(_hl2Weapons, "weapon_crossbow")
+table.insert(_hl2Weapons, "weapon_crowbar")
+table.insert(_hl2Weapons, "weapon_frag")
+table.insert(_hl2Weapons, "weapon_physgun")
+table.insert(_hl2Weapons, "weapon_physcannon")
+table.insert(_hl2Weapons, "weapon_pistol")
+table.insert(_hl2Weapons, "weapon_rpg")
+table.insert(_hl2Weapons, "weapon_shotgun")
+table.insert(_hl2Weapons, "weapon_smg1")
+table.insert(_hl2Weapons, "weapon_striderbuster")
+table.insert(_hl2Weapons, "weapon_stunstick")
+table.insert(_hl2Weapons, "weapon_slam")
+
+function YRPDoesWeaponExists(cname)
+	if list.Get("Weapon")[cname] then
+		return true
+	elseif weapons.Get(cname) then
+		return true
+	elseif weapons.GetStored(cname) then
+		return true
+	elseif scripted_ents.GetStored(cname) then
+		return true
+	else
+		for i, v in pairs(weapons.GetList()) do
+			if v.ClassName == cname then return true end
+		end
+
+		for i, v in pairs(_hl2Weapons) do
+			if v == cname then return true end
+		end
+	end
+
+	return false
+end
 
 function YRPPlayerGive(ply, cname, bNoAmmo)
-	if YRPEntityAlive(ply) and ply:Alive() and cname ~= nil and not strEmpty(cname) then
-		ply:Give(cname, bNoAmmo)
+	if cname == nil then return false end
+	if strEmpty(cname) then return false end
+	if YRPDoesWeaponExists(cname) == false then return false end
+
+	if YRPEntityAlive(ply) and ply:Alive() and not strEmpty(cname) then
+		ply:Give(cname, bNoAmmo or false)
+
+		return true
 	end
 end
 
@@ -237,12 +284,7 @@ function YRPSetRole(ply, rid, force, pmid, bgs)
 		for i, slot in pairs(YRPGetCharSWEPS(ply)) do
 			for x, wep in pairs(slot) do
 				if not strEmpty(wep) then
-					local _, err = pcall(YRPPlayerGive, ply, wep)
-
-					if err then
-						YRPMsg(err)
-					end
-					--ply:Give(wep)
+					YRPPlayerGive(ply, wep)
 				end
 			end
 		end
@@ -258,12 +300,7 @@ function YRPSetRole(ply, rid, force, pmid, bgs)
 					local slots = YRPGetSlotsOfSWEP(swep)
 
 					if slots.slot_no then
-						local _, err = pcall(YRPPlayerGive, ply, swep)
-
-						if err then
-							YRPMsg(err)
-						end
-						--ply:Give(swep)
+						YRPPlayerGive(ply, swep)
 					end
 				end
 			end
@@ -272,12 +309,7 @@ function YRPSetRole(ply, rid, force, pmid, bgs)
 		rolTab = rolTab[1]
 
 		for i, swep in pairs(string.Explode(",", rolTab.string_sweps)) do
-			local _, err = pcall(YRPPlayerGive, ply, swep)
-
-			if err then
-				YRPMsg(err)
-			end
-			--ply:Give(swep)
+			YRPPlayerGive(ply, swep)
 		end
 	end
 
@@ -674,12 +706,7 @@ function YRPSetRoleValues(ply, pmid)
 
 			for k, swep in pairs(tmpSWEPTable) do
 				if swep ~= nil and swep ~= NULL and swep ~= "" and ply:Alive() then
-					local _, err = pcall(YRPPlayerGive, ply, swep)
-
-					if err then
-						YRPMsg(err)
-					end
-					--ply:Give(swep)
+					YRPPlayerGive(ply, swep)
 				end
 			end
 

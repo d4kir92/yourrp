@@ -1754,16 +1754,11 @@ function Player:UserGroupLoadout()
 		local SWEPS = UG.string_sweps
 		self:SetYRPString("usergroup_sweps", UG.string_sweps)
 
-		if SWEPS then
+		if SWEPS and not strEmpty(SWEPS) then
 			SWEPS = string.Explode(",", SWEPS)
 
 			for i, swep in pairs(SWEPS) do
-				local _, err = pcall(YRPPlayerGive, self, swep)
-
-				if err then
-					YRPMsg(err)
-				end
-				--self:Give(swep)
+				YRPPlayerGive(self, swep)
 			end
 		end
 

@@ -182,12 +182,7 @@ net.Receive("nws_yrp_slot_swep_add", function(len, ply)
 	table.insert(tab, cname)
 
 	if not YRPHasWeapon(ply, cname) then
-		local _, err = pcall(YRPPlayerGive, ply, cname)
-
-		if err then
-			YRPMsg(err)
-		end
-
+		YRPPlayerGive(ply, cname)
 		--ply:Give( cname )
 		YRPUpdateCharSlot(ply, art, tab)
 	end
@@ -1306,12 +1301,7 @@ function YRPGetSpecData(ply)
 				tabSpec = tabSpec[1]
 
 				for id, val in pairs(string.Explode(",", tabSpec.sweps)) do
-					local _, err = pcall(YRPPlayerGive, ply, val)
-
-					if err then
-						YRPMsg(err)
-					end
-					--ply:Give( v )
+					YRPPlayerGive(ply, val)
 				end
 
 				if not strEmpty(tabSpec.pms) then
