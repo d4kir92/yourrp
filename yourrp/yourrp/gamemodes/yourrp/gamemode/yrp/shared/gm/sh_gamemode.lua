@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 348 -- do NOT change this!
+GM.VersionBuild = 349 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -924,9 +924,41 @@ end
 
 YRPCheckDarkRP()
 
-function GetSENTsList()
-	return scripted_ents.GetList()
+function YRPAddEntToTable(res, name, ent)
+	res[ent.ClassName or name] = {
+		["ClassName"] = ent.ClassName or name,
+		["PrintName"] = ent.PrintName or ent.t.PrintName,
+		["Category"] = ent.Category or ent.t.Category
+	}
 end
+
+function YRPGetSENTsList()
+	local res = {}
+	local c = 1
+
+	for i, ent in pairs(list.Get("SpawnableEntities")) do
+		YRPAddEntToTable(res, i, ent)
+
+		if c == 1 then
+			pTab(ent)
+			c = c + 1
+		end
+	end
+
+	for i, ent in pairs(scripted_ents.GetList()) do
+		YRPAddEntToTable(res, i, ent)
+
+		if c == 2 then
+			pTab(ent)
+			c = c + 1
+			pTab(res[i])
+		end
+	end
+
+	return res
+end
+
+YRPGetSENTsList()
 --[[
 local function Test()
 	print("----")

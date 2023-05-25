@@ -91,7 +91,7 @@ net.Receive("nws_yrp_get_specializations", function()
 					end
 				end
 
-				local allsweps = GetSWEPsList()
+				local allsweps = YRPGetSWEPsList()
 				local cl_sweps = {}
 				local count = 0
 

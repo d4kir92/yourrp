@@ -239,7 +239,7 @@ function isInTable(mytable, item)
 	return false
 end
 
-function GetSWEPsList()
+function YRPGetSWEPsList()
 	local sweps = {}
 	local cnames = {}
 
@@ -262,7 +262,7 @@ end
 
 function GetSwepWorldModel(swepcn)
 	local result = ""
-	local allsweps = GetSWEPsList()
+	local allsweps = YRPGetSWEPsList()
 
 	for i, swep in pairs(allsweps) do
 		if swep.ClassName == swepcn then
@@ -275,7 +275,7 @@ function GetSwepWorldModel(swepcn)
 end
 
 function GetSWEPWorldModel(ClassName)
-	local sweps = GetSWEPsList()
+	local sweps = YRPGetSWEPsList()
 
 	for k, v in pairs(sweps) do
 		if v.WorldModel == nil then
@@ -297,7 +297,7 @@ function GetSWEPWorldModel(ClassName)
 end
 
 function GetSWEPPrintName(ClassName)
-	local sweps = GetSWEPsList()
+	local sweps = YRPGetSWEPsList()
 
 	for k, v in pairs(sweps) do
 		if v.WorldModel == nil then

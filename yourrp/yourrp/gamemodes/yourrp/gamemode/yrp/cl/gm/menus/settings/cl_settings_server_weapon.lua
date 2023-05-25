@@ -94,7 +94,7 @@ net.Receive("nws_yrp_weapon_menu", function(len)
 	YRPWeaponSlotNum(PARENT, 10, 70, "LID_secondaryslots", 1, 5, "slots_secondary", DBTab.slots_secondary)
 	YRPWeaponSlotNum(PARENT, 10, 130, "LID_sidearmslots", 1, 5, "slots_sidearm", DBTab.slots_sidearm)
 	YRPWeaponSlotNum(PARENT, 10, 190, "LID_gadgetslots", 1, 5, "slots_gadget", DBTab.slots_gadget)
-	local allsweps = GetSWEPsList()
+	local allsweps = YRPGetSWEPsList()
 	local cl_sweps = {}
 	local count = 0
 

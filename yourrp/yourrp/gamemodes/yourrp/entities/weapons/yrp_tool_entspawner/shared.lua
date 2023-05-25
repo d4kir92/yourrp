@@ -135,14 +135,14 @@ if CLIENT then
 		w.classname = YRPCreateD("DComboBox", w:GetContent(), YRP.ctr(sw), YRP.ctr(50), YRP.ctr(10), YRP.ctr(350))
 		w.classname:SetText(stab.string_classname)
 
-		for i, v in pairs(GetSENTsList()) do
-			w.classname:AddChoice(i, i)
+		for i, v in pairs(YRPGetSENTsList()) do
+			w.classname:AddChoice(v.PrintName, i)
 		end
 
 		function w.classname:OnSelect()
 			net.Start("nws_yrp_update_map_string_classname")
 			net.WriteString(stab.uniqueID)
-			net.WriteString(self:GetText())
+			net.WriteString(self:GetOptionData(self:GetSelectedID()))
 			net.SendToServer()
 		end
 	end)

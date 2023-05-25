@@ -154,7 +154,7 @@ if CLIENT then
 		w.swep:SetText(stab.string_swep)
 		w.swep:AddChoice("", "")
 
-		for i, v in pairs(GetSWEPsList()) do
+		for i, v in pairs(YRPGetSWEPsList()) do
 			w.swep:AddChoice(v.ClassName, v.ClassName)
 		end
 

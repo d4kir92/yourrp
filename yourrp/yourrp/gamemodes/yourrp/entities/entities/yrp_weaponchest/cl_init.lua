@@ -20,7 +20,7 @@ local function YRPGetModelOfSWEP(cname)
 		if v and v:GetClass() == cname then return v:GetModel() end
 	end
 
-	for i, v in pairs(GetSWEPsList()) do
+	for i, v in pairs(YRPGetSWEPsList()) do
 		if v and v.ClassName == cname then return v.WorldModel end
 	end
 
@@ -32,7 +32,7 @@ local function YRPGetPrintNameOfSWEP(cname)
 		if v and v:GetClass() == cname then return v:GetPrintName() end
 	end
 
-	for i, v in pairs(GetSWEPsList()) do
+	for i, v in pairs(YRPGetSWEPsList()) do
 		if v and v.ClassName == cname then return v.PrintName end
 	end
 	--"LID_empty"

@@ -898,7 +898,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 							draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 						end
 
-						local allsweps = GetSWEPsList()
+						local allsweps = YRPGetSWEPsList()
 						local cl_sweps = {}
 						local count = 0
 
@@ -1959,7 +1959,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					end
 				end
 
-				local allsweps = GetSWEPsList()
+				local allsweps = YRPGetSWEPsList()
 				local cl_sweps = {}
 				local count = 0
 
@@ -2055,7 +2055,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 						end
 					end
 
-					local allsweps = GetSWEPsList()
+					local allsweps = YRPGetSWEPsList()
 					local cl_sweps = {}
 					local count = 0
 
@@ -2605,7 +2605,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
-				local allndsweps = GetSWEPsList()
+				local allndsweps = YRPGetSWEPsList()
 				local cl_ndsweps = {}
 				local count = 0
 

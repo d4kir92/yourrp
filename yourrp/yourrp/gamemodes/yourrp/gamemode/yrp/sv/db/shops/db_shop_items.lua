@@ -350,6 +350,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 
 			return true
 		end
+
 		--[[for i = 1, count do
 			local wmw = ents.Create( item.ClassName )
 			if wmw then
@@ -362,6 +363,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 				return false
 			end
 		end]]
+		YRP.msg("error", "[Spawn Item] #1 FAILED TO SPAWN: " .. item.ClassName)
 
 		return false
 	end
@@ -404,7 +406,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 
 	if TARGETPOS == nil then
 		TARGETPOS = ply:GetPos()
-		--YRP.msg( "gm", "[Spawn Item] Item To Player" )
+		YRP.msg("gm", "[Spawn Item] Item To Player")
 	end
 
 	TARGETPOS = TARGETPOS
@@ -475,10 +477,12 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 					end
 
 					ent:SetYRPInt("item_uniqueID", item.uniqueID)
-					--YRP.msg( "gm", "[Spawn Item] WORKED #1" )
+					YRP.msg("gm", "[Spawn Item] WORKED #1")
 
 					return true, ent
 				else
+					YRP.msg("error", "[Spawn Item] #2 FAILED TO SPAWN: " .. item.ClassName)
+
 					return false, NULL
 				end
 			else
@@ -502,7 +506,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 					end
 
 					ent:SetYRPInt("item_uniqueID", item.uniqueID)
-					--YRP.msg( "gm", "[Spawn Item] WORKED #2" )
+					YRP.msg("gm", "[Spawn Item] WORKED #2")
 
 					return true, ent
 				else
@@ -521,7 +525,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 			if vehicle and simfphys then
 				ent = simfphys.SpawnVehicle(nil, tr2.HitPos + Vector(0, 0, 50), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
 				ent:SetYRPInt("item_uniqueID", item.uniqueID)
-				--YRP.msg( "gm", "[Spawn Item] WORKED #3" )
+				YRP.msg("gm", "[Spawn Item] WORKED #3")
 				--ent:SetOwner(ply)
 				ent:SetYRPEntity("yrp_owner", ply)
 				ent:Activate()
@@ -557,7 +561,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 					ent:Activate()
 					ent:SetAngles(TARGETANG)
 					ent:SetYRPInt("item_uniqueID", item.uniqueID)
-					--YRP.msg( "gm", "[Spawn Item] WORKED #4" )
+					YRP.msg("gm", "[Spawn Item] WORKED #4")
 					--ent:SetOwner(ply)
 					ent:SetYRPEntity("yrp_owner", ply)
 

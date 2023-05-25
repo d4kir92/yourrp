@@ -399,25 +399,21 @@ net.Receive("nws_yrp_get_shop_items", function()
 					local _itemlist = {}
 
 					if value == "weapons" then
-						local swepsL = GetSWEPsList()
+						local swepsL = YRPGetSWEPsList()
 						_itemlist = swepsL
 						openSingleSelector(_itemlist, "selected_shop_item")
 					elseif value == "entities" then
-						local _sentlist = GetSENTsList()
+						local _sentlist = YRPGetSENTsList()
 						local tmpTable = {}
 						local count = 0
 
 						for k, v in pairs(_sentlist) do
 							count = count + 1
 							tmpTable[count] = tmpTable[count] or {}
-							tmpTable[count].ClassName = k
+							tmpTable[count].ClassName = k or v.ClassName
 							tmpTable[count].WorldModel = ""
-							tmpTable[count].PrintName = ""
+							tmpTable[count].PrintName = v.PrintName
 							tmpTable[count].ishidden = false
-
-							if v.t then
-								tmpTable[count].PrintName = v.t.PrintName
-							end
 						end
 
 						_itemlist = tmpTable

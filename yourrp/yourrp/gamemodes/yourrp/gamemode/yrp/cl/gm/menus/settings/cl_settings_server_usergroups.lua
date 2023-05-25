@@ -309,7 +309,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 			end
 		end
 
-		local allsweps = GetSWEPsList()
+		local allsweps = YRPGetSWEPsList()
 		local cl_sweps = {}
 		local count = 0
 
@@ -501,7 +501,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	function NONESWEPS.button:DoClick()
 		local lply = LocalPlayer()
 		lply.yrpseltab = {}
-		local allsweps = GetSWEPsList()
+		local allsweps = YRPGetSWEPsList()
 		local cl_sweps = {}
 		local count = 0
 		local validate = {}
