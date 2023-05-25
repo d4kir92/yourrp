@@ -397,7 +397,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 			SP = SP[1]
 			YRP.msg("gm", "[Spawn Item] Item To Storagepoint")
 			local pos = string.Explode(",", SP.position)
-			TARGETPOS = Vector(pos[1], pos[2], pos[3]) + Vector(0, 0, 100)
+			TARGETPOS = Vector(pos[1], pos[2], pos[3])
 			local ang = string.Explode(",", SP.angle)
 			TARGETANG = Angle(ang[1], ang[2], ang[3])
 			hasstorage = true
@@ -409,7 +409,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 		YRP.msg("gm", "[Spawn Item] Item To Player")
 	end
 
-	TARGETPOS = TARGETPOS
+	TARGETPOS = TARGETPOS + Vector(0, 0, 100)
 	local foundpos = false
 	local ang = Angle(0, 0, 0)
 
