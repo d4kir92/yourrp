@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 350 -- do NOT change this!
+GM.VersionBuild = 351 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -924,11 +924,21 @@ end
 
 YRPCheckDarkRP()
 
+local function YGetCategory(ent)
+	if ent.Category then return ent.Category end
+	if ent.t and ent.t.Category then return ent.t.Category end
+end
+
+local function YGetPrintName(ent)
+	if ent.Category then return ent.PrintName end
+	if ent.t and ent.t.PrintName then return ent.t.PrintName end
+end
+
 function YRPAddEntToTable(res, name, ent)
 	res[ent.ClassName or name] = {
 		["ClassName"] = ent.ClassName or name,
-		["PrintName"] = ent.PrintName or ent.t.PrintName,
-		["Category"] = ent.Category or ent.t.Category
+		["PrintName"] = YGetPrintName(ent),
+		["Category"] = YGetCategory(ent)
 	}
 end
 
