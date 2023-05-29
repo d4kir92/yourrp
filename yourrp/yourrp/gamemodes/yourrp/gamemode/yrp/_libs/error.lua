@@ -1,4 +1,9 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local tostring = tostring
+local type = type
+local table = table
+local IsValid = IsValid
+
 -- #ERROR #BUGS
 function IsNilOrFalse(obj)
 	if obj == nil or obj == false then return true end

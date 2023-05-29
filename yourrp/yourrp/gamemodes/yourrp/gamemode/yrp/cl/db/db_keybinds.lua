@@ -1,4 +1,10 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local type = type
+local file = file
+local util = util
+local timer = timer
+local tonumber = tonumber
+local isnumber = isnumber
 local YRP_KeybindsLoaded = false
 local YRP_KEYBINDS = {}
 YRP_KEYBINDS["menu_character_selection"] = KEY_F2
