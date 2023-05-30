@@ -371,8 +371,8 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 	local hasstorage = false
 	local TARGETPOS = nil
 	local TARGETANG = Angle(0, 0, 0)
-	local mins = Vector(10, 10, 10)
-	local maxs = Vector(-10, -10, -10)
+	local mins = Vector(-10, -10, -10)
+	local maxs = Vector(10, 10, 10)
 	local dist = 10
 	local wm = ents.Create("prop_physics")
 
@@ -409,7 +409,6 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 		YRP.msg("gm", "[Spawn Item] Item To Player")
 	end
 
-	TARGETPOS = TARGETPOS + Vector(0, 0, 100)
 	local foundpos = false
 	local ang = Angle(0, 0, 0)
 
@@ -423,22 +422,40 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 
 	if not tr.Hit then
 		foundpos = true
-	else
-		for i = 0, 315, 45 do
-			ang = Angle(0, i, 0)
-			local pos = TARGETPOS + ang:Forward() * dist
+	end
 
-			tr = util.TraceHull({
-				start = pos,
-				endpos = pos,
-				mins = mins,
-				maxs = maxs,
-				mask = MASK_SHOT_HULL
-			})
+	if not foundpos then
+		for dis = 1, 10 do
+			if not foundpos then
+				for i = 0, 360 - 15, 15 do
+					if not foundpos then
+						for hei = 0, 6 do
+							ang = Angle(0, i, 0)
+							local pos = TARGETPOS + ang:Forward() * 100 * dis
 
-			if not tr.Hit then
-				TARGETPOS = pos
-				foundpos = true
+							if hei > 0 then
+								pos = pos + Vector(0, 0, hei / 5 * math.abs(maxs.z - mins.z))
+							end
+
+							tr = util.TraceHull({
+								start = pos,
+								endpos = pos,
+								mins = mins,
+								maxs = maxs,
+								mask = MASK_SHOT_HULL
+							})
+
+							if not tr.Hit then
+								TARGETPOS = pos
+								foundpos = true
+								break
+							end
+						end
+					else
+						break
+					end
+				end
+			else
 				break
 			end
 		end
@@ -446,6 +463,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 
 	if not foundpos then
 		YRP.msg("note", "[Spawn Item] NOT ENOUGH SPACE? cn: " .. item.ClassName .. " wm: " .. item.WorldModel .. " distance: " .. tostring(dist) .. " hasstorage: " .. tostring(hasstorage))
+		ply:PrintMessage(HUD_PRINTCENTER, "NOT ENOUGH SPACE TO SPAWN")
 
 		return false
 	end

@@ -17,10 +17,10 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug", "INT DEFAULT 0")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_server_debug_voice", "INT DEFAULT 0")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_gm", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_db", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_noti", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_lang", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_n", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_l", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_darkrp", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_chat", "INT DEFAULT 0")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_c", "INT DEFAULT 0")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_msg_channel_debug", "INT DEFAULT 0")
 --[[ Gamemode Settings ]]
 --
