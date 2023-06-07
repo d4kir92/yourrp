@@ -560,20 +560,20 @@ net.Receive("nws_yrp_update_bool_msg_channel_db", function(len, ply)
 	GeneralUpdateGlobalBool(ply, "nws_yrp_update_bool_msg_channel_db", "bool_msg_channel_db", b)
 end)
 
-util.AddNetworkString("nws_yrp_update_bool_msg_channel_lang")
+util.AddNetworkString("nws_yrp_update_bool_msg_channel_l")
 
-net.Receive("nws_yrp_update_bool_msg_channel_lang", function(len, ply)
-	if not ply:HasAccess("nws_yrp_update_bool_msg_channel_lang", true) then return end
+net.Receive("nws_yrp_update_bool_msg_channel_l", function(len, ply)
+	if not ply:HasAccess("nws_yrp_update_bool_msg_channel_l", true) then return end
 	local b = btn(net.ReadBool())
-	GeneralUpdateGlobalBool(ply, "nws_yrp_update_bool_msg_channel_lang", "bool_msg_channel_lang", b)
+	GeneralUpdateGlobalBool(ply, "nws_yrp_update_bool_msg_channel_l", "bool_msg_channel_l", b)
 end)
 
-util.AddNetworkString("nws_yrp_update_bool_msg_channel_noti")
+util.AddNetworkString("nws_yrp_update_bool_msg_channel_n")
 
-net.Receive("nws_yrp_update_bool_msg_channel_noti", function(len, ply)
-	if not ply:HasAccess("nws_yrp_update_bool_msg_channel_noti", true) then return end
+net.Receive("nws_yrp_update_bool_msg_channel_n", function(len, ply)
+	if not ply:HasAccess("nws_yrp_update_bool_msg_channel_n", true) then return end
 	local b = btn(net.ReadBool())
-	GeneralUpdateGlobalBool(ply, "nws_yrp_update_bool_msg_channel_noti", "bool_msg_channel_noti", b)
+	GeneralUpdateGlobalBool(ply, "nws_yrp_update_bool_msg_channel_n", "bool_msg_channel_n", b)
 end)
 
 util.AddNetworkString("nws_yrp_update_bool_msg_channel_darkrp")
@@ -584,12 +584,12 @@ net.Receive("nws_yrp_update_bool_msg_channel_darkrp", function(len, ply)
 	GeneralUpdateGlobalBool(ply, "nws_yrp_update_bool_msg_channel_darkrp", "bool_msg_channel_darkrp", b)
 end)
 
-util.AddNetworkString("nws_yrp_update_bool_msg_channel_chat")
+util.AddNetworkString("nws_yrp_update_bool_msg_channel_ch")
 
-net.Receive("nws_yrp_update_bool_msg_channel_chat", function(len, ply)
-	if not ply:HasAccess("nws_yrp_update_bool_msg_channel_chat", true) then return end
+net.Receive("nws_yrp_update_bool_msg_channel_ch", function(len, ply)
+	if not ply:HasAccess("nws_yrp_update_bool_msg_channel_ch", true) then return end
 	local b = btn(net.ReadBool())
-	GeneralUpdateGlobalBool(ply, "nws_yrp_update_bool_msg_channel_chat", "bool_msg_channel_chat", b)
+	GeneralUpdateGlobalBool(ply, "nws_yrp_update_bool_msg_channel_ch", "bool_msg_channel_ch", b)
 end)
 
 util.AddNetworkString("nws_yrp_update_bool_msg_channel_debug")
