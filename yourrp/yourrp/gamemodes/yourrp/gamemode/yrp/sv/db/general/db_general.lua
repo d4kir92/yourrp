@@ -584,12 +584,12 @@ net.Receive("nws_yrp_update_bool_msg_channel_darkrp", function(len, ply)
 	GeneralUpdateGlobalBool(ply, "nws_yrp_update_bool_msg_channel_darkrp", "bool_msg_channel_darkrp", b)
 end)
 
-util.AddNetworkString("nws_yrp_update_bool_msg_channel_ch")
+util.AddNetworkString("nws_yrp_update_bool_msg_channel_c")
 
-net.Receive("nws_yrp_update_bool_msg_channel_ch", function(len, ply)
-	if not ply:HasAccess("nws_yrp_update_bool_msg_channel_ch", true) then return end
+net.Receive("nws_yrp_update_bool_msg_channel_c", function(len, ply)
+	if not ply:HasAccess("nws_yrp_update_bool_msg_channel_c", true) then return end
 	local b = btn(net.ReadBool())
-	GeneralUpdateGlobalBool(ply, "nws_yrp_update_bool_msg_channel_ch", "bool_msg_channel_ch", b)
+	GeneralUpdateGlobalBool(ply, "nws_yrp_update_bool_msg_channel_c", "bool_msg_channel_c", b)
 end)
 
 util.AddNetworkString("nws_yrp_update_bool_msg_channel_debug")
