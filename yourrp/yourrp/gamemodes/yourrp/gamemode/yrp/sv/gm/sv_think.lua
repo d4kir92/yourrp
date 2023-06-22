@@ -376,23 +376,26 @@ timer.Create("ServerThink", TICK, 0, function()
 						YRP.msg("gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!")
 						_del = _del[1]
 						local _dealer = ents.Create("yrp_dealer")
-						_dealer:SetYRPString("dealerID", dealer.uniqueID)
-						_dealer:SetYRPString("name", dealer.name)
-						local _pos = string.Explode(",", _del.position)
-						_pos = Vector(_pos[1], _pos[2], _pos[3])
-						_dealer:SetPos(_pos)
-						local _ang = string.Explode(",", _del.angle)
-						_ang = Angle(0, _ang[2], 0)
-						_dealer:SetAngles(_ang)
-						_dealer:SetModel(dealer.WorldModel)
-						_dealer:Spawn()
 
-						timer.Simple(1, function()
-							if YRPEntityAlive(_dealer.Entity) then
-								_dealer.Entity:LookupSequence("idle_all_01")
-								_dealer.Entity:ResetSequence("idle_all_01")
-							end
-						end)
+						if _dealer then
+							_dealer:SetYRPString("dealerID", dealer.uniqueID)
+							_dealer:SetYRPString("name", dealer.name)
+							local _pos = string.Explode(",", _del.position)
+							_pos = Vector(_pos[1], _pos[2], _pos[3])
+							_dealer:SetPos(_pos)
+							local _ang = string.Explode(",", _del.angle)
+							_ang = Angle(0, _ang[2], 0)
+							_dealer:SetAngles(_ang)
+							_dealer:SetModel(dealer.WorldModel)
+							_dealer:Spawn()
+
+							timer.Simple(1, function()
+								if YRPEntityAlive(_dealer.Entity) then
+									_dealer.Entity:LookupSequence("idle_all_01")
+									_dealer.Entity:ResetSequence("idle_all_01")
+								end
+							end)
+						end
 					end
 				end
 			end
