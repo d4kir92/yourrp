@@ -363,7 +363,7 @@ function F8OpenSettings()
 
 	if YRPPanelAlive(sm.win) == false then
 		local sites = {}
-		local c = 1
+		local c = 0
 
 		if lply:GetYRPBool("bool_players", false) or lply:GetYRPBool("bool_whitelist", false) then
 			sites[c] = {}
@@ -411,10 +411,6 @@ function F8OpenSettings()
 			sites[c].icon = "64_theater-masks"
 			sites[c].content = SettingsTabsContent
 			c = c + 1
-		end
-
-		if c == 1 then
-			YRPOpenSettingsUsergroups()
 		end
 
 		sm.win = YRPCreateD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
@@ -702,6 +698,10 @@ function F8OpenSettings()
 		else
 			sm.win:UpdateCustomeSize(sm.menu.ph)
 		end
+
+		if c == 0 then
+			YRPOpenSettingsUsergroups()
+		end
 	elseif YRPPanelAlive(sm.win) then
 		sm.win:Show()
 	end
@@ -712,27 +712,3 @@ net.Receive("nws_yrp_setting_hasnoaccess", function(len)
 	local usergroups = net.ReadString()
 	F8RequireUG(YRP.lang_string(site), usergroups)
 end)
---[[
-settings_players		-- Give Role, ...
-settings_licenses		-- Manage Licenses
-settings_shops			-- Manage Shops
-logs					-- LOGS: Kills, connections, spawns, ...
-scale?					-- NEW! Scale hunger, thirst, radiation
-
-settings_status			-- Status about the gamemode, whats missing, ...
-settings_feedback		-- Tickets from players, ...
-
-settings_general		-- General server/gamemode settings, THIS MAY SPLIT SOMEDAY
-settings_realistic		-- Realistic things, like damage, ...
-settings_groupsandroles	-- Factions, Groups, ROLES, ...
-levelsystem				-- Manage levelsystem
-settings_design			-- Design of interface and HUD, also font
-settings_map			-- Map things for gamemode, Spawnpoints, dealers, ...
-
-settings_database		-- Database tables, remove or change to mysql
-settings_usergroup		-- Manage Usergroups
-whitelist				-- Whitelist roles, groups, ...
-blacklist				-- NEW! disallow items for inventory pickup 
-
-settings_yourrp_addons	-- Other yourrp addons are here
-]]

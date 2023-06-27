@@ -314,7 +314,7 @@ timer.Simple(1, GetULXUserGroups)
 util.AddNetworkString("nws_yrp_connect_Settings_UserGroups")
 
 net.Receive("nws_yrp_connect_Settings_UserGroups", function(len, ply)
-	if not ply:GetYRPBool("bool_usergroups", false) then return end
+	if not ply:CanAccess("bool_usergroups") then return end
 	GetULXUserGroups()
 
 	if ply:CanAccess("bool_usergroups") then
