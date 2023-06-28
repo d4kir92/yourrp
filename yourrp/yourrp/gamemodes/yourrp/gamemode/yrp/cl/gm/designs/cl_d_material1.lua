@@ -97,7 +97,7 @@ function _mat1.DrawWindow(window, pw, ph, title)
 	draw.RoundedBox(0, 0, YRP.ctr(50), pw, ph - YRP.ctr(50), _color_bg)
 	--[[ Title ]]
 	--
-	surfaceText(YRP.lang_string(_title), "Y_22_500", YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1, 1)
+	surfaceText(YRP.trans(_title), "Y_22_500", YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1, 1)
 end
 
 RegisterWindowFunction(_mat1.name, _mat1.DrawWindow)
@@ -127,7 +127,7 @@ function _mat1.YRPDrawButton(btn, pw, ph, text, color, px, py, ax, ah, forcelang
 	--[[ text ]]
 	--
 	if forcelang then
-		_text = YRP.lang_string(_text)
+		_text = YRP.trans(_text)
 	end
 
 	surfaceText(_text, _mat1.textFont, px or pw / 2, py or ph / 2, Color(255, 255, 255, 255), ax or 1, ay or 1, 1)
@@ -153,7 +153,7 @@ function _mat1.DrawPanel(pnl, pw, ph, text, color, px, py, ax, ah)
 	draw.RoundedBox(0, 0, 0, pw, ph, _color_bar)
 	--[[ text ]]
 	--
-	surfaceText(YRP.lang_string(_text), _mat1.textFont, px or pw / 2, py or ph / 2, color or Color(255, 255, 255, 255), ax or 1, ay or 1, 1)
+	surfaceText(YRP.trans(_text), _mat1.textFont, px or pw / 2, py or ph / 2, color or Color(255, 255, 255, 255), ax or 1, ay or 1, 1)
 end
 
 RegisterPanelFunction(_mat1.name, _mat1.DrawPanel)

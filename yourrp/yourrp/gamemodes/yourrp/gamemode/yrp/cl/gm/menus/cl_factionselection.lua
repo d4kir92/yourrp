@@ -56,7 +56,7 @@ function CreateFactionSelectionContent()
 		local header = YRPCreateD("DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200))
 
 		function header:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_chooseyourfaction"), "Y_36_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_chooseyourfaction"), "Y_36_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local btn = {}

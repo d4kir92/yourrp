@@ -143,7 +143,7 @@ if CLIENT then
 			local frame = YRPCreateD("YFrame", nil, YRP.ctr(1100), YRP.ctr(590), 0, 0)
 			frame:Center()
 			frame:SetHeaderHeight(YRP.ctr(100))
-			frame:SetTitle(YRP.lang_string("LID_about") .. " ( " .. YRP.lang_string("LID_visible") .. ": " .. YRP.lang_string("LID_adminonly") .. " )")
+			frame:SetTitle(YRP.trans("LID_about") .. " ( " .. YRP.trans("LID_visible") .. ": " .. YRP.trans("LID_adminonly") .. " )")
 
 			function frame:Paint(pw, ph)
 				if not IsYRPOutdated() then
@@ -156,17 +156,17 @@ if CLIENT then
 			function frame.con:Paint(pw, ph)
 				local tab = {}
 				tab["yrp"] = "YourRP"
-				draw.SimpleTextOutlined(YRP.lang_string("LID_newyourrpversionavailable", tab), "Y_24_500", pw / 2, YRP.ctr(50), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_currentversion") .. ":", "Y_24_500", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				draw.SimpleTextOutlined(YRP.lang_string("LID_client") .. ": ", "Y_24_500", pw / 2, YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP.trans("LID_newyourrpversionavailable", tab), "Y_24_500", pw / 2, YRP.ctr(50), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP.trans("LID_currentversion") .. ":", "Y_24_500", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP.trans("LID_client") .. ": ", "Y_24_500", pw / 2, YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				draw.SimpleTextOutlined(GAMEMODE.Version .. ":" .. GAMEMODE.VersionBuild, "Y_24_500", pw / 2, YRP.ctr(150), YRPGetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				draw.SimpleTextOutlined("( " .. string.upper(GAMEMODE.dedicated) .. " ) " .. YRP.lang_string("LID_server") .. ": ", "Y_24_500", pw / 2, YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined("( " .. string.upper(GAMEMODE.dedicated) .. " ) " .. YRP.trans("LID_server") .. ": ", "Y_24_500", pw / 2, YRP.ctr(200), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				draw.SimpleTextOutlined(GAMEMODE.VersionServer, "Y_24_500", pw / 2, YRP.ctr(200), YRPGetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 
 				if GetGlobalYRPString("YRP_VERSIONART", "X") == "workshop" then
-					draw.SimpleTextOutlined(YRP.lang_string("LID_workshopversion") .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+					draw.SimpleTextOutlined(YRP.trans("LID_workshopversion") .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				else
-					draw.SimpleTextOutlined(YRP.lang_string("LID_githubversion") .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+					draw.SimpleTextOutlined(YRP.trans("LID_githubversion") .. ": ", "Y_24_500", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				end
 
 				if on then

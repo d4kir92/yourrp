@@ -8,7 +8,7 @@ net.Receive("nws_yrp_get_shops", function()
 	if YRPPanelAlive(PARENT) then
 		_sh._sho = YRPCreateD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
 		_sh._sho.tbl = _shops
-		_sh._sho:SetListHeader(YRP.lang_string("LID_settings_shops"))
+		_sh._sho:SetListHeader(YRP.trans("LID_settings_shops"))
 		_sh._sho:SetEditArYRPEntityAlive(_sh.ea)
 
 		function _sh._sho:AddFunction()
@@ -41,7 +41,7 @@ net.Receive("nws_yrp_get_shops", function()
 			--
 			_sh._sho._name = YRPCreateD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 			_sh._sho._name.textentry.tbl = tbl
-			_sh._sho._name:SetHeader(YRP.lang_string("LID_name"))
+			_sh._sho._name:SetHeader(YRP.trans("LID_name"))
 			_sh._sho._name:SetText(tbl.name)
 
 			function _sh._sho._name.textentry:OnChange()
@@ -72,7 +72,7 @@ net.Receive("nws_yrp_get_shop_categories", function()
 	if YRPPanelAlive(PARENT) then
 		_sh._cat = YRPCreateD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40 + 500 + 40))
 		_sh._cat.tbl = _scats
-		_sh._cat:SetListHeader(YRP.lang_string("LID_categories"))
+		_sh._cat:SetListHeader(YRP.trans("LID_categories"))
 		_sh._cat:SetEditArYRPEntityAlive(_sh.ea)
 
 		function _sh._cat:AddFunction()
@@ -108,7 +108,7 @@ net.Receive("nws_yrp_get_shop_categories", function()
 			if YRPPanelAlive(_sh.ea) and YRPPanelAlive(_sh._cat) then
 				_sh._cat._name = YRPCreateD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 				_sh._cat._name.textentry.tbl = tbl
-				_sh._cat._name:SetHeader(YRP.lang_string("LID_name"))
+				_sh._cat._name:SetHeader(YRP.trans("LID_name"))
 				_sh._cat._name:SetText(tbl.name)
 
 				function _sh._cat._name.textentry:OnChange()
@@ -141,7 +141,7 @@ net.Receive("nws_yrp_get_shop_items", function()
 	if YRPPanelAlive(PARENT) then
 		_sh._sit = YRPCreateD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40 + 500 + 40 + 500 + 40))
 		_sh._sit.tbl = _sitems
-		_sh._sit:SetListHeader(YRP.lang_string("LID_items"))
+		_sh._sit:SetListHeader(YRP.trans("LID_items"))
 		_sh._sit:SetEditArYRPEntityAlive(_sh.ea)
 
 		function _sh._sit:AddFunction()
@@ -173,7 +173,7 @@ net.Receive("nws_yrp_get_shop_items", function()
 			if YRPPanelAlive(_sh.ea) and YRPPanelAlive(_sh._sit) then
 				_sh._sit.itemname = YRPCreateD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(150))
 				_sh._sit.itemname.textentry.tbl = tbl
-				_sh._sit.itemname:SetHeader(YRP.lang_string("LID_name"))
+				_sh._sit.itemname:SetHeader(YRP.trans("LID_name"))
 				_sh._sit.itemname:SetText(tbl.name)
 
 				function _sh._sit.itemname.textentry:SendNewName()
@@ -200,7 +200,7 @@ net.Receive("nws_yrp_get_shop_items", function()
 				--
 				_sh._sit.itemdesc = YRPCreateD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(400), 0, YRP.ctr(300))
 				_sh._sit.itemdesc.textentry.tbl = tbl
-				_sh._sit.itemdesc:SetHeader(YRP.lang_string("LID_description"))
+				_sh._sit.itemdesc:SetHeader(YRP.trans("LID_description"))
 				_sh._sit.itemdesc:SetText(tbl.description)
 				_sh._sit.itemdesc.textentry:SetMultiline(true)
 
@@ -227,7 +227,7 @@ net.Receive("nws_yrp_get_shop_items", function()
 				--[[ Price ]]
 				--
 				_sh._sit.itemprice = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(750))
-				_sh._sit.itemprice:SetHeader(YRP.lang_string("LID_price"))
+				_sh._sit.itemprice:SetHeader(YRP.trans("LID_price"))
 				_sh._sit.itemprice:INITPanel("DNumberWang")
 				_sh._sit.itemprice.plus.tbl = tbl
 				_sh._sit.itemprice.plus:SetMin(0)
@@ -249,7 +249,7 @@ net.Receive("nws_yrp_get_shop_items", function()
 				--[[ LEVEL ]]
 				--
 				_sh._sit.itemlevel = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(900))
-				_sh._sit.itemlevel:SetHeader(YRP.lang_string("LID_level"))
+				_sh._sit.itemlevel:SetHeader(YRP.trans("LID_level"))
 				_sh._sit.itemlevel:INITPanel("DNumberWang")
 				_sh._sit.itemlevel.plus.tbl = tbl
 				_sh._sit.itemlevel.plus:SetMin(0)
@@ -272,15 +272,15 @@ net.Receive("nws_yrp_get_shop_items", function()
 				--
 				--[[
 				_sh._sit.itemquan = YRPCreateD( "DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1050) )
-				_sh._sit.itemquan:SetHeader(YRP.lang_string( "LID_quantity" ) .. " ( " .. YRP.lang_string( "LID_wip" ) .. " )" )
+				_sh._sit.itemquan:SetHeader(YRP.trans( "LID_quantity" ) .. " ( " .. YRP.trans( "LID_wip" ) .. " )" )
 				_sh._sit.itemquan:INITPanel( "DComboBox" )
 				_sh._sit.itemquan.plus.tbl = tbl
-				_sh._sit.itemquan.plus:AddChoice(YRP.lang_string( "LID_disabled" ), -1)
+				_sh._sit.itemquan.plus:AddChoice(YRP.trans( "LID_disabled" ), -1)
 				for i=1, 32 do
 					_sh._sit.itemquan.plus:AddChoice(i, i)
 				end
 				if tonumber(tbl.quantity) == -1 then
-					_sh._sit.itemquan.plus:ChooseOption(YRP.lang_string( "LID_disabled" ), tonumber(tbl.quantity) )
+					_sh._sit.itemquan.plus:ChooseOption(YRP.trans( "LID_disabled" ), tonumber(tbl.quantity) )
 				else
 					_sh._sit.itemquan.plus:ChooseOption(tbl.quantity, tonumber(tbl.quantity) )
 				end
@@ -299,7 +299,7 @@ net.Receive("nws_yrp_get_shop_items", function()
 				--[[ Cooldown ]]
 				--
 				_sh._sit.itemcool = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1200))
-				_sh._sit.itemcool:SetHeader(YRP.lang_string("LID_cooldown"))
+				_sh._sit.itemcool:SetHeader(YRP.trans("LID_cooldown"))
 				_sh._sit.itemcool:INITPanel("DNumberWang")
 				_sh._sit.itemcool.plus.tbl = tbl
 				_sh._sit.itemcool.plus:SetMin(0)
@@ -321,7 +321,7 @@ net.Receive("nws_yrp_get_shop_items", function()
 				--[[ License ]]
 				--
 				_sh._sit.itemlice = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1350))
-				_sh._sit.itemlice:SetHeader(YRP.lang_string("LID_licenses"))
+				_sh._sit.itemlice:SetHeader(YRP.trans("LID_licenses"))
 				_sh._sit.itemlice:INITPanel("DComboBox")
 				_sh._sit.itemlice.plus.tbl = tbl
 				net.Start("nws_yrp_get_all_licenses_simple")
@@ -331,7 +331,7 @@ net.Receive("nws_yrp_get_shop_items", function()
 					local _licenses = net.ReadTable()
 
 					if YRPPanelAlive(_sh._sit) and YRPPanelAlive(_sh._sit.itemlice) and YRPPanelAlive(_sh._sit.itemlice.plus) then
-						_sh._sit.itemlice.plus:AddChoice(YRP.lang_string("LID_none"), -1)
+						_sh._sit.itemlice.plus:AddChoice(YRP.trans("LID_none"), -1)
 
 						for i, lic in pairs(_licenses) do
 							local _b = false
@@ -360,7 +360,7 @@ net.Receive("nws_yrp_get_shop_items", function()
 				--[[ Permanent ]]
 				--
 				_sh._sit.itemperm = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1500))
-				_sh._sit.itemperm:SetHeader(YRP.lang_string("LID_permanent") .. " ( " .. YRP.lang_string("LID_wip") .. " )")
+				_sh._sit.itemperm:SetHeader(YRP.trans("LID_permanent") .. " ( " .. YRP.trans("LID_wip") .. " )")
 				_sh._sit.itemperm:INITPanel("DCheckBox")
 				_sh._sit.itemperm.plus.tbl = tbl
 				_sh._sit.itemperm.plus:SetChecked(tobool(tbl.permanent))
@@ -386,13 +386,13 @@ net.Receive("nws_yrp_get_shop_items", function()
 				--[[ TYPE ]]
 				--
 				_sh._sit.type = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
-				_sh._sit.type:SetHeader(YRP.lang_string("LID_type"))
+				_sh._sit.type:SetHeader(YRP.trans("LID_type"))
 				_sh._sit.type:INITPanel("DComboBox")
-				_sh._sit.type.plus:AddChoice(YRP.lang_string("LID_weapons"), "weapons")
-				_sh._sit.type.plus:AddChoice(YRP.lang_string("LID_entities"), "entities")
-				_sh._sit.type.plus:AddChoice(YRP.lang_string("LID_vehicles"), "vehicles")
-				_sh._sit.type.plus:AddChoice(YRP.lang_string("LID_licenses"), "licenses")
-				_sh._sit.type.plus:AddChoice(YRP.lang_string("LID_roles"), "roles")
+				_sh._sit.type.plus:AddChoice(YRP.trans("LID_weapons"), "weapons")
+				_sh._sit.type.plus:AddChoice(YRP.trans("LID_entities"), "entities")
+				_sh._sit.type.plus:AddChoice(YRP.trans("LID_vehicles"), "vehicles")
+				_sh._sit.type.plus:AddChoice(YRP.trans("LID_licenses"), "licenses")
+				_sh._sit.type.plus:AddChoice(YRP.trans("LID_roles"), "roles")
 				_sh._sit.type.plus.tbl = tbl
 
 				function _sh._sit.type.plus:OnSelect(panel, index, value)

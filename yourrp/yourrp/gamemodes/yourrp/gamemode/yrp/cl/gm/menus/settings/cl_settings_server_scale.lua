@@ -33,7 +33,7 @@ function BuildScaleSite()
 
 		Y = Y + 120 + 50
 		local scale_stamina_up = YRPCreateD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
-		scale_stamina_up:SetHeader(YRP.lang_string("LID_stamina") .. " " .. "▲")
+		scale_stamina_up:SetHeader(YRP.trans("LID_stamina") .. " " .. "▲")
 		scale_stamina_up:SetMin(0.1)
 		scale_stamina_up:SetMax(10.0)
 		scale_stamina_up:SetValue(GetGlobalYRPFloat("float_scale_stamina_up", 0))
@@ -46,7 +46,7 @@ function BuildScaleSite()
 
 		Y = Y + 120
 		local scale_stamina_down = YRPCreateD("YNumberWang", PARENT, YRP.ctr(SW), YRP.ctr(100), YRP.ctr(20), YRP.ctr(Y))
-		scale_stamina_down:SetHeader(YRP.lang_string("LID_stamina") .. " " .. "▼")
+		scale_stamina_down:SetHeader(YRP.trans("LID_stamina") .. " " .. "▼")
 		scale_stamina_down:SetMin(0.1)
 		scale_stamina_down:SetMax(10.0)
 		scale_stamina_down:SetValue(GetGlobalYRPFloat("float_scale_stamina_down", 0))

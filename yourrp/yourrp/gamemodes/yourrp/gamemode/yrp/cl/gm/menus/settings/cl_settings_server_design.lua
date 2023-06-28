@@ -31,7 +31,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 		local hud_design_header = YRPCreateD("DPanel", hud_design_bg, hud_design_bg:GetWide(), YRP.ctr(50), 0, 0)
 
 		function hud_design_header:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_design"), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_design"), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local hud_design_choice = YRPCreateD("DComboBox", hud_design_bg, hud_design_bg:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
@@ -46,7 +46,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 			local name = design.name .. " by " .. design.author
 
 			if tonumber(design.progress) < 100 then
-				name = name .. " ( " .. design.progress .. "% " .. YRP.lang_string("LID_done") .. " )"
+				name = name .. " ( " .. design.progress .. "% " .. YRP.trans("LID_done") .. " )"
 			end
 
 			hud_design_choice:AddChoice(name, design.name, selected)
@@ -237,7 +237,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 						-- Dragbar
 						draw.RoundedBox(0, 0, 0, pw, YRP.ctr(50), Color(0, 0, 255, math.Clamp(cur_alpha, 0, 200)))
 						-- Name
-						draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", YRP.ctr(36 + 8 + 8), YRP.ctr(20), Color(255, 255, 255, cur_alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRP.trans(tab.name), "DermaDefault", YRP.ctr(36 + 8 + 8), YRP.ctr(20), Color(255, 255, 255, cur_alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 						-- Border
 						local tbr = {}
 						tbr.r = 0
@@ -330,7 +330,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 
 						function win.winset:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 200))
-							draw.SimpleText(YRP.lang_string(tab.name), "DermaDefault", YRP.ctr(50), YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP.trans(tab.name), "DermaDefault", YRP.ctr(50), YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							local x, y = self:GetPos()
 							local mx, my = gui.MousePos()
 
@@ -376,7 +376,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 							local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							local cb = YRPCreateD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -397,7 +397,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 							local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							local btn = YRPCreateD("DButton", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -495,7 +495,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 							local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", YRP.ctr(200 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans(t.name), "DermaDefault", YRP.ctr(200 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							line.cb = YRPCreateD("DComboBox", line, YRP.ctr(200), YRP.ctr(50), 0, 0)
@@ -525,7 +525,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 							local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
 
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							t.color = lply:HudValue(t.element, t.art)
@@ -572,7 +572,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 							local line = YRPCreateD("DPanel", nil, YRP.ctr(500), YRP.ctr(50), 0, 0)
 
 							function line:Paint(pw, ph)
-								draw.SimpleText(YRP.lang_string(t.name), "DermaDefault", YRP.ctr(420), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans(t.name), "DermaDefault", YRP.ctr(420), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							local cb = YRPCreateD("DTextEntry", line, YRP.ctr(400), YRP.ctr(50), 0, 0)
@@ -710,7 +710,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 			for i = 1, 10 do
 				local BOX = {}
 				BOX.element = "BOX" .. i
-				BOX.name = YRP.lang_string("LID_box") .. " " .. i
+				BOX.name = YRP.trans("LID_box") .. " " .. i
 				AddElement(BOX)
 			end
 
@@ -873,7 +873,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 				end
 
 				draw.RoundedBox(0, 0, 0, pw, ph, color)
-				draw.SimpleText(YRP.lang_string("LID_customize") .. " ( " .. YRP.lang_string("LID_gridsize") .. " " .. size .. " )", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.trans("LID_customize") .. " ( " .. YRP.trans("LID_gridsize") .. " " .. size .. " )", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
 			function hud_x:DoClick()
@@ -920,7 +920,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 			end
 
 			draw.RoundedBox(0, 0, 0, pw, ph, color)
-			draw.SimpleText(YRP.lang_string("LID_settodefault"), "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_settodefault"), "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		function hud_reset_settings:DoClick()
@@ -953,7 +953,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 		local if_font_header = YRPCreateD("DPanel", if_font_bg, if_font_bg:GetWide(), YRP.ctr(50), 0, 0)
 
 		function if_font_header:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_font"), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_font"), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local if_font_choice = YRPCreateD("DComboBox", if_font_bg, if_font_bg:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
@@ -985,7 +985,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 		local if_design_header = YRPCreateD("DPanel", if_design_bg, if_design_bg:GetWide(), YRP.ctr(50), 0, 0)
 
 		function if_design_header:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_design"), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_design"), "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local if_design_choice = YRPCreateD("DComboBox", if_design_bg, if_design_bg:GetWide(), YRP.ctr(50), 0, YRP.ctr(50))
@@ -1003,7 +1003,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 			local name = design.name .. " by " .. design.author
 
 			if tonumber(design.progress) < 100 then
-				name = name .. " ( " .. design.progress .. "% " .. YRP.lang_string("LID_done") .. " )"
+				name = name .. " ( " .. design.progress .. "% " .. YRP.trans("LID_done") .. " )"
 			end
 
 			if_design_choice:AddChoice(name, design.name, selected)
@@ -1035,7 +1035,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 
 				-- HeaderHeight
 				local if_hh = YRPCreateD("DYRPNumberWang", nil, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(600))
-				if_hh:SetHeader(YRP.lang_string("LID_headerheight"))
+				if_hh:SetHeader(YRP.trans("LID_headerheight"))
 				if_hh.numberwang:SetMin(50)
 				if_hh.numberwang:SetMax(150)
 				if_hh.numberwang:SetValue(GetGlobalYRPInt("int_headerheight", 100))
@@ -1079,7 +1079,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 
 							function ycol:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-								draw.SimpleText(YRP.lang_string(name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans(name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							ycol.cm = YRPCreateD("YColorMenuButton", ycol, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -1102,7 +1102,7 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 
 							function ycol:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-								draw.SimpleText(YRP.lang_string(name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans(name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 							end
 
 							ycol.cm = YRPCreateD("YColorMenuButton", ycol, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -1138,12 +1138,12 @@ net.Receive("nws_yrp_get_design_settings", function(len)
 
 		function pv_btn:Paint(pw, ph)
 			local tab = {}
-			tab.text = YRP.lang_string(self:GetText())
+			tab.text = YRP.trans(self:GetText())
 
 			if self:IsDown() then
-				tab.text = tab.text .. " ( " .. YRP.lang_string("LID_pressed") .. " )"
+				tab.text = tab.text .. " ( " .. YRP.trans("LID_pressed") .. " )"
 			elseif self:IsHovered() then
-				tab.text = tab.text .. " ( " .. YRP.lang_string("LID_hovered") .. " )"
+				tab.text = tab.text .. " ( " .. YRP.trans("LID_hovered") .. " )"
 			end
 
 			hook.Run("YButtonPaint", self, pw, ph, tab)

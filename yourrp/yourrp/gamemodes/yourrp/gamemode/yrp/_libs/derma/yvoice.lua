@@ -73,7 +73,7 @@ function PANEL:Setup(ply)
 			text = table.concat(channels, ", ")
 		else
 			if GetGlobalYRPBool("bool_voice_module_locally") then
-				text = YRP.lang_string("LID_environment")
+				text = YRP.trans("LID_environment")
 			else
 				self:Remove()
 			end

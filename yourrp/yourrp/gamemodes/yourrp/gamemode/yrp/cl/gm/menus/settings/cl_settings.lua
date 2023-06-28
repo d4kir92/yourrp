@@ -95,12 +95,12 @@ function F8RequireUG(site, usergroups)
 
 	function notallowed:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
-		surfaceText(YRP.lang_string("LID_settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "Y_24_500", w / 2, h / 2, Color(0, 255, 0), 1, 1)
+		surfaceText(YRP.trans("LID_settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "Y_24_500", w / 2, h / 2, Color(0, 255, 0), 1, 1)
 
 		if site ~= "usergroups" then
-			surfaceText(YRP.lang_string("LID_settings_gotof8usergroups"), "Y_24_500", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
+			surfaceText(YRP.trans("LID_settings_gotof8usergroups"), "Y_24_500", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
 		else
-			surfaceText(YRP.lang_string("LID_settings_giveyourselftheusergroup", allugs), "Y_24_500", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
+			surfaceText(YRP.trans("LID_settings_giveyourselftheusergroup", allugs), "Y_24_500", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
 			surfaceText("(In SERVER Console) (Respawn after usergroup changed!) Example:", "Y_24_500", w / 2, h / 2 + YRP.ctr(250), Color(255, 255, 0), 1, 1)
 		end
 	end
@@ -141,28 +141,28 @@ function SettingsTabsContent()
 		if lply:GetYRPBool("bool_events", false) then
 			tabs:AddOption("LID_event", function(parent)
 				OpenSettingsEvents()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_event")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_event")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_players", false) then
 			tabs:AddOption("LID_settings_players", function(parent)
 				OpenSettingsPlayers()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_players")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_players")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_players", false) then
 			tabs:AddOption("LID_characters", function(parent)
 				OpenSettingsCharacters()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_characters")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_characters")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_whitelist", false) then
 			tabs:AddOption("LID_whitelist", function(parent)
 				OpenSettingsWhitelist()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_whitelist")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_whitelist")))
 			end)
 		end
 
@@ -171,49 +171,49 @@ function SettingsTabsContent()
 		if lply:GetYRPBool("bool_status", false) then
 			tabs:AddOption("LID_settings_status", function(parent)
 				OpenSettingsStatus()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_status")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_settings_status")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_groupsandroles", false) then
 			tabs:AddOption("LID_settings_groupsandroles", function(parent)
 				OpenSettingsGroupsAndRoles()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_groupsandroles")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_settings_groupsandroles")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_map", false) then
 			tabs:AddOption("LID_settings_map", function(parent)
 				OpenSettingsMap()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_map")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_settings_map")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_logs", false) then
 			tabs:AddOption("LID_logs", function(parent)
 				OpenSettingsLogs()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_logs")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_logs")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_logs", false) then
 			tabs:AddOption("LID_logs_settings", function(parent)
 				OpenSettingsLogsSettings()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_logs_settings")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_logs_settings")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_blacklist", false) then
 			tabs:AddOption("LID_blacklist", function(parent)
 				OpenSettingsBlacklist()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_blacklist")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_blacklist")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_feedback", false) then
 			tabs:AddOption("LID_tickets", function(parent)
 				OpenSettingsFeedback()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_tickets")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_tickets")))
 			end)
 		end
 
@@ -222,63 +222,63 @@ function SettingsTabsContent()
 		if lply:GetYRPBool("bool_usergroups", false) then
 			tabs:AddOption("LID_settings_usergroups", function(parent)
 				YRPOpenSettingsUsergroups()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_usergroups")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_settings_usergroups")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_realistic", false) then
 			tabs:AddOption("LID_settings_realistic", function(parent)
 				OpenSettingsRealistic()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_realistic")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_settings_realistic")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_shops", false) then
 			tabs:AddOption("LID_settings_shops", function(parent)
 				OpenSettingsShops()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_shops")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_settings_shops")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_licenses", false) then
 			tabs:AddOption("LID_settings_licenses", function(parent)
 				OpenSettingsLicenses()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_licenses")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_settings_licenses")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_specializations", false) then
 			tabs:AddOption("LID_specializations", function(parent)
 				OpenSettingsSpecializations()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_specializations")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_specializations")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_levelsystem", false) then
 			tabs:AddOption("LID_levelsystem", function(parent)
 				OpenSettingsLevelsystem()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_levelsystem")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_levelsystem")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_design", false) then
 			tabs:AddOption("LID_settings_design", function(parent)
 				OpenSettingsDesign()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_design")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_settings_design")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_scale", false) then
 			tabs:AddOption("LID_scale", function(parent)
 				OpenSettingsScale()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_scale")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_scale")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_weaponsystem", false) then
 			tabs:AddOption("LID_weaponsystem", function(parent)
 				OpenSettingsWeaponSystem()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_weaponsystem")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_weaponsystem")))
 			end)
 		end
 
@@ -287,14 +287,14 @@ function SettingsTabsContent()
 		if lply:GetYRPBool("bool_general", false) then
 			tabs:AddOption("LID_settings_general", function(parent)
 				OpenSettingsGeneral()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_general")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_settings_general")))
 			end)
 		end
 
 		if lply:GetYRPBool("bool_ac_database", false) then
 			tabs:AddOption("LID_settings_database", function(parent)
 				OpenSettingsDatabase()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_database")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_settings_database")))
 			end)
 		end
 
@@ -333,7 +333,7 @@ function SettingsTabsContent()
 		if lply:GetYRPBool("bool_yourrp_addons", false) then
 			tabs:AddOption("LID_settings_yourrp_addons", function(parent)
 				OpenSettingsYourRPAddons()
-				sm.win:SetTitle(string.upper(YRP.lang_string("LID_settings_yourrp_addons")))
+				sm.win:SetTitle(string.upper(YRP.trans("LID_settings_yourrp_addons")))
 			end)
 		end
 
@@ -428,7 +428,7 @@ function F8OpenSettings()
 		function sm.win:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)
 			draw.SimpleText(self:GetTitle(), "Y_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.lang_string("LID_players") .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw / 2 - YRP.ctr(300), self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_players") .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw / 2 - YRP.ctr(300), self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 			draw.SimpleText("YourRP Version.: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2 + YRP.ctr(120), self:GetHeaderHeight() / 2, YRPGetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 			if sm.win.reload and (sm.win.reload.sw ~= sm.win:GetWide() or sm.win.reload.sh ~= sm.win:GetTall()) then
@@ -533,7 +533,7 @@ function F8OpenSettings()
 
 			draw.SimpleText(GetGlobalYRPString( "text_server_name", "-" ), "Y_18_500", ph / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			draw.SimpleText( "YourRP Version.: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, YRPGetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.lang_string( "LID_map" ) .. ": " .. game.GetMap() .. "        " .. YRP.lang_string( "LID_players" ) .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans( "LID_map" ) .. ": " .. game.GetMap() .. "        " .. YRP.trans( "LID_players" ) .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end]]
 		local content = sm.win:GetContent()
 		-- MENU
@@ -621,7 +621,7 @@ function F8OpenSettings()
 
 		for i, v in pairs(sites) do
 			if v.name ~= "hr" then
-				local tw, _ = surface.GetTextSize(YRP.lang_string(v.name))
+				local tw, _ = surface.GetTextSize(YRP.trans(v.name))
 
 				if tw > sm.menu.pw then
 					sm.menu.pw = tw
@@ -656,13 +656,13 @@ function F8OpenSettings()
 					end
 
 					surface.SetFont(font)
-					local ptw, _ = surface.GetTextSize(YRP.lang_string(v.name))
+					local ptw, _ = surface.GetTextSize(YRP.trans(v.name))
 
 					if ptw > sm.menu.pw then
 						sm.menu.pw = ptw
 					end
 
-					draw.SimpleText(YRP.lang_string(v.name), font, ph, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.trans(v.name), font, ph, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				function site:DoClick()
@@ -710,5 +710,5 @@ end
 net.Receive("nws_yrp_setting_hasnoaccess", function(len)
 	local site = net.ReadString()
 	local usergroups = net.ReadString()
-	F8RequireUG(YRP.lang_string(site), usergroups)
+	F8RequireUG(YRP.trans(site), usergroups)
 end)

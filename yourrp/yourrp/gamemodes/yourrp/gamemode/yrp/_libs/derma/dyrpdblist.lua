@@ -85,7 +85,7 @@ function PANEL:Init()
 	function self.listheader:Paint(pw, ph)
 		local color = Color(0, 255, 0)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0))
-		surfaceText(self.textpre .. " " .. YRP.lang_string(self.text) .. " " .. self.textpos, "Y_24_500", pw / 2, ph / 2, YRPTextColor(color), 1, 1)
+		surfaceText(self.textpre .. " " .. YRP.trans(self.text) .. " " .. self.textpos, "Y_24_500", pw / 2, ph / 2, YRPTextColor(color), 1, 1)
 	end
 
 	--[[ List ]]

@@ -56,7 +56,7 @@ function optionVehicleWindow(vehicle, vehicleTab)
 		end
 	end
 
-	yrp_vehicle.window:SetTitle(YRP.lang_string("LID_owner") .. ": " .. owner)
+	yrp_vehicle.window:SetTitle(YRP.trans("LID_owner") .. ": " .. owner)
 
 	function yrp_vehicle.window:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph)
@@ -78,7 +78,7 @@ function optionVehicleWindow(vehicle, vehicleTab)
 		end
 
 		_buttonRemoveOwner.tab = {
-			["text"] = YRP.lang_string("LID_removeowner")
+			["text"] = YRP.trans("LID_removeowner")
 		}
 
 		function _buttonRemoveOwner:Paint(pw, ph)

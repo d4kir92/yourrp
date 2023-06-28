@@ -57,7 +57,7 @@ function CreateCharContent(parent)
 		cl_rpNamelabel:SetText("")
 
 		function cl_rpNamelabel:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_name"), "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_name"), "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		Y = Y + 50
@@ -77,7 +77,7 @@ function CreateCharContent(parent)
 	cl_rpDescriptionlabel:SetText("")
 
 	function cl_rpDescriptionlabel:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string("LID_description"), "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans("LID_description"), "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	Y = Y + 50
@@ -96,7 +96,7 @@ function CreateCharContent(parent)
 		cl_birthdayheader:SetText("")
 
 		function cl_birthdayheader:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_birthday"), "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_birthday"), "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		Y = Y + 50
@@ -116,7 +116,7 @@ function CreateCharContent(parent)
 		cl_bodyheightheader:SetText("")
 
 		function cl_bodyheightheader:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_bodyheight"), "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_bodyheight"), "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		Y = Y + 50
@@ -136,7 +136,7 @@ function CreateCharContent(parent)
 		cl_weightheader:SetText("")
 
 		function cl_weightheader:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_weight"), "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_weight"), "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		Y = Y + 50
@@ -153,12 +153,12 @@ function CreateCharContent(parent)
 	function attr:Paint(pw, ph)
 		hook.Run( "YPanelPaint", self, pw, ph)
 
-		draw.SimpleText(YRP.lang_string( "LID_strength" ) .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(20), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-		draw.SimpleText(YRP.lang_string( "LID_agility" ) .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(60), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-		draw.SimpleText(YRP.lang_string( "LID_stamina" ) .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-		draw.SimpleText(YRP.lang_string( "LID_intellect" ) .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(140), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-		draw.SimpleText(YRP.lang_string( "LID_spirit" ) .. ":" , "Y_14_500", YRP.ctr(20), YRP.ctr(180), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-		draw.SimpleText(YRP.lang_string( "LID_armor" ) .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(220), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleText(YRP.trans( "LID_strength" ) .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(20), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleText(YRP.trans( "LID_agility" ) .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(60), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleText(YRP.trans( "LID_stamina" ) .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(100), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleText(YRP.trans( "LID_intellect" ) .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(140), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleText(YRP.trans( "LID_spirit" ) .. ":" , "Y_14_500", YRP.ctr(20), YRP.ctr(180), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleText(YRP.trans( "LID_armor" ) .. ":", "Y_14_500", YRP.ctr(20), YRP.ctr(220), Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 		
 		draw.SimpleText(lply:GetYRPInt( "int_strength", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(20), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 		draw.SimpleText(lply:GetYRPInt( "int_agility", 0), "Y_14_500", pw - YRP.ctr(20), YRP.ctr(60), Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
@@ -177,7 +177,7 @@ function CreateCharContent(parent)
 			hook.Run("YButtonPaint", self, pw, ph)
 		else
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 0, 0, 255))
-			draw.SimpleTextOutlined(YRP.lang_string("LID_cooldown"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+			draw.SimpleTextOutlined(YRP.trans("LID_cooldown"), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 		end
 	end
 

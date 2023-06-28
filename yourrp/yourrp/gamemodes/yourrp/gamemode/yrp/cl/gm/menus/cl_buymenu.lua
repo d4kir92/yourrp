@@ -114,7 +114,7 @@ function createShopItem(item, duid, id)
 		_i.name.name = item.name
 
 		if item.type == "licenses" then
-			_i.name.name = YRP.lang_string("LID_license") .. ": " .. _i.name.name
+			_i.name.name = YRP.trans("LID_license") .. ": " .. _i.name.name
 		end
 
 		function _i.name:Paint(pw, ph)
@@ -159,7 +159,7 @@ function createShopItem(item, duid, id)
 
 		function _i.permanent:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 0) )
-			draw.SimpleText("[" .. YRP.lang_string("LID_permanent") .. "]", "Y_30_500", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
+			draw.SimpleText("[" .. YRP.trans("LID_permanent") .. "]", "Y_30_500", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 		end
 	end
 
@@ -170,7 +170,7 @@ function createShopItem(item, duid, id)
 			function _i.owned:Paint(pw, ph)
 				local _color = Color(100, 255, 100)
 				draw.RoundedBox(0, 0, 0, pw, ph, _color)
-				draw.SimpleText(YRP.lang_string("LID_owned"), "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0, 255), 1, 1)
+				draw.SimpleText(YRP.trans("LID_owned"), "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0, 255), 1, 1)
 			end
 		elseif IsLevelSystemEnabled() and LocalPlayer():Level() < item.int_level then
 			_i.require = YRPCreateD("DPanel", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE))
@@ -181,7 +181,7 @@ function createShopItem(item, duid, id)
 				draw.RoundedBox(0, 0, 0, pw, ph, _color)
 				local tab = {}
 				tab["LEVEL"] = self.level
-				draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. YRP.lang_string("LID_levelx", tab), "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0, 255), 1, 1)
+				draw.SimpleText(YRP.trans("LID_requires") .. ": " .. YRP.trans("LID_levelx", tab), "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0, 255), 1, 1)
 			end
 		else
 			_i.buy = YRPCreateD("YButton", _i, YRP.ctr(W - H - 20), YRP.ctr(HE), YRP.ctr(H), YRP.ctr(H - 20 - HE))
@@ -190,7 +190,7 @@ function createShopItem(item, duid, id)
 
 			function _i.buy:Paint(pw, ph)
 				local _color = Color(34, 139, 34)
-				local _text = YRP.lang_string("LID_buy")
+				local _text = YRP.trans("LID_buy")
 
 				if not LocalPlayer():canAfford(item.price) then
 					_color = Color(255, 100, 100)
@@ -209,7 +209,7 @@ function createShopItem(item, duid, id)
 
 				if LocalPlayer():GetYRPFloat("buy_ts" .. item.uniqueID, 0.0) > CurTime() then
 					_color = Color(0, 255, 0)
-					_text = YRP.lang_string("LID_oncooldown")
+					_text = YRP.trans("LID_oncooldown")
 				end
 
 				self:SetText(_text)
@@ -268,7 +268,7 @@ function createShopItem(item, duid, id)
 		function _i.require:Paint(pw, ph)
 			local _color = Color(255, 100, 100)
 			draw.RoundedBox(0, 0, 0, pw, ph, _color)
-			draw.SimpleText(YRP.lang_string("LID_requires") .. ": " .. lnames[item.licenseID], "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0, 255), 1, 1)
+			draw.SimpleText(YRP.trans("LID_requires") .. ": " .. lnames[item.licenseID], "Y_24_500", pw / 2, ph / 2, Color(0, 0, 0, 255), 1, 1)
 		end
 	end
 
@@ -336,7 +336,7 @@ function createStorageItem(item, duid)
 			end
 
 			draw.RoundedBox(0, 0, 0, pw, ph, _color)
-			draw.SimpleText(YRP.lang_string(self.name), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
+			draw.SimpleText(YRP.trans(self.name), "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 		end
 
 		function _i.spawn:DoClick()
@@ -462,7 +462,7 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 
 						function _remove:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(200, 50, 50))
-							draw.SimpleText(YRP.lang_string("LID_remove") .. " [" .. YRP.lang_string("LID_tab") .. "] => " .. tab.name, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
+							draw.SimpleText(YRP.trans("LID_remove") .. " [" .. YRP.trans("LID_tab") .. "] => " .. tab.name, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 						end
 
 						function _remove:DoClick()
@@ -489,7 +489,7 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 		end
 
 		if tab.haspermanent then
-			local _tab2 = BUYMENU.tabs:AddTab(YRP.lang_string("LID_mystorage") .. ": " .. tab.name, tab.uniqueID)
+			local _tab2 = BUYMENU.tabs:AddTab(YRP.trans("LID_mystorage") .. ": " .. tab.name, tab.uniqueID)
 
 			function _tab2:GetCategories()
 				net.Receive("nws_yrp_shop_get_categories", function(le)
@@ -581,7 +581,7 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 			_tmp:MakePopup()
 			_tmp.tabs = YRPCreateD("DYRPPanelPlus", _tmp, YRP.ctr(400), YRP.ctr(100), YRP.ctr(10), YRP.ctr(50 + 10))
 			_tmp.tabs:INITPanel("DComboBox")
-			_tmp.tabs:SetHeader(YRP.lang_string("LID_tabs"))
+			_tmp.tabs:SetHeader(YRP.trans("LID_tabs"))
 
 			net.Receive("nws_yrp_shop_get_all_tabs", function(l)
 				local _ts = net.ReadTable()
@@ -651,7 +651,7 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 
 				_set.name = YRPCreateD("DYRPPanelPlus", _set, YRP.ctr(660), YRP.ctr(100), YRP.ctr(20), YRP.ctr(60))
 				_set.name:INITPanel("DTextEntry")
-				_set.name:SetHeader(YRP.lang_string("LID_name"))
+				_set.name:SetHeader(YRP.trans("LID_name"))
 				_set.name:SetText(_dealer.name)
 
 				function _set.name.plus:OnChange()
@@ -664,7 +664,7 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 
 				_set.pmodel = YRPCreateD("DYRPPanelPlus", _set, YRP.ctr(660), YRP.ctr(100), YRP.ctr(20), YRP.ctr(170))
 				_set.pmodel:INITPanel("YButton")
-				_set.pmodel:SetHeader(YRP.lang_string("LID_appearance"))
+				_set.pmodel:SetHeader(YRP.trans("LID_appearance"))
 				_set.pmodel.plus:SetText("LID_change")
 
 				function _set.pmodel.plus:Paint(pw, ph)
@@ -719,7 +719,7 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 				local _storages = net.ReadTable()
 				_set.storagepoint = YRPCreateD("DYRPPanelPlus", _set, YRP.ctr(660), YRP.ctr(100), YRP.ctr(20), YRP.ctr(280))
 				_set.storagepoint:INITPanel("DComboBox")
-				_set.storagepoint:SetHeader(YRP.lang_string("LID_storagepoint") .. " (Where the items should spawn)")
+				_set.storagepoint:SetHeader(YRP.trans("LID_storagepoint") .. " (Where the items should spawn)")
 
 				for i, storage in pairs(_storages) do
 					local _sp = false

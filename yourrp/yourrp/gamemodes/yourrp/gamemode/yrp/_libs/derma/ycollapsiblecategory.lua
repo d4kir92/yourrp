@@ -12,11 +12,11 @@ net.Receive("nws_yrp_want_role", function(len, ply)
 		local popup = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(120 + 20 + 60 + 20 + 20 + 100), 0, 0)
 		popup:Center()
 		popup:MakePopup()
-		popup:SetTitle(YRP.lang_string(result))
+		popup:SetTitle(YRP.trans(result))
 		local ok = YRPCreateD("YLabel", popup:GetContent(), YRP.ctr(760), YRP.ctr(120), popup:GetContent():GetWide() / 2 - YRP.ctr(760 / 2), popup:GetContent():GetTall() - YRP.ctr(60 + 20 + 120))
-		ok:SetText(YRP.lang_string(result))
+		ok:SetText(YRP.trans(result))
 		local ok2 = YRPCreateD("YButton", popup:GetContent(), YRP.ctr(400), YRP.ctr(60), popup:GetContent():GetWide() / 2 - YRP.ctr(400 / 2), popup:GetContent():GetTall() - YRP.ctr(60))
-		ok2:SetText(YRP.lang_string("LID_ok"))
+		ok2:SetText(YRP.trans("LID_ok"))
 
 		function ok2:DoClick()
 			popup:Close()
@@ -320,7 +320,7 @@ function PANEL:Init()
 				YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - 2 * YRP.ctr(40), ph - 2 * YRP.ctr(40), YRP.ctr(50), YRP.ctr(40), Color(255, 100, 100))
 
 				if rol.int_requireslevel > LocalPlayer():Level() then
-					draw.SimpleText(string.sub(YRP.lang_string("LID_level"), 1, 3) .. ". " .. rol.int_requireslevel, "Y_24_500", ph / 2 + YRP.ctr(10), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(string.sub(YRP.trans("LID_level"), 1, 3) .. ". " .. rol.int_requireslevel, "Y_24_500", ph / 2 + YRP.ctr(10), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 		end

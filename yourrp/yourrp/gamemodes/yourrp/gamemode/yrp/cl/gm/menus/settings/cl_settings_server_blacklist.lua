@@ -4,8 +4,8 @@ function BuildBlacklis(parent, tabBL, tab)
 	parent:Clear()
 	local lis = YRPCreateD("DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
 	lis:AddColumn("uniqueID"):SetFixedWidth(80)
-	lis:AddColumn(YRP.lang_string("LID_name"))
-	lis:AddColumn(YRP.lang_string("LID_value"))
+	lis:AddColumn(YRP.trans("LID_name"))
+	lis:AddColumn(YRP.trans("LID_value"))
 
 	function lis:Think()
 		if self.w ~= parent:GetWide() - YRP.ctr(60 + 500) or self.h ~= parent:GetTall() - YRP.ctr(40) or self.x ~= YRP.ctr(20) or self.y ~= YRP.ctr(20) then
@@ -25,7 +25,7 @@ function BuildBlacklis(parent, tabBL, tab)
 	end
 
 	local btnAdd = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(20))
-	btnAdd:SetText(YRP.lang_string("LID_addentry"))
+	btnAdd:SetText(YRP.trans("LID_addentry"))
 
 	function btnAdd:DoClick()
 		local AddFrame = YRPCreateD("YFrame", nil, YRP.ctr(500), YRP.ctr(500), 0, 0)
@@ -59,7 +59,7 @@ function BuildBlacklis(parent, tabBL, tab)
 		addlis:AddItem(BLValue)
 		addlis:AddItem(HR)
 		local BLAdd = YRPCreateD("DButton", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
-		BLAdd:SetText(YRP.lang_string("LID_add"))
+		BLAdd:SetText(YRP.trans("LID_add"))
 
 		function BLAdd:DoClick()
 			if BLName:GetOptionData(BLName:GetSelectedID()) ~= nil then
@@ -90,7 +90,7 @@ function BuildBlacklis(parent, tabBL, tab)
 	end
 
 	local btnRem = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(70))
-	btnRem:SetText(YRP.lang_string("LID_removeentry"))
+	btnRem:SetText(YRP.trans("LID_removeentry"))
 
 	function btnRem:DoClick()
 		if lis:GetSelectedLine() ~= nil and lis:GetLine(lis:GetSelectedLine()):GetValue(1) ~= nil then

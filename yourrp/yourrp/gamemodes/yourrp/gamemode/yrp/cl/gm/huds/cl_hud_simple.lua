@@ -237,13 +237,13 @@ function HUDSimpleCompass()
 	if coord % 90 > 4 and coord % 90 < 86 then
 		tab.text = lply:CoordAngle() - lply:CoordAngle() % 5 .. "°"
 	elseif coord >= 355 or coord <= 5 then
-		tab.text = YRP.lang_string("LID_north_short")
+		tab.text = YRP.trans("LID_north_short")
 	elseif coord >= 175 and coord <= 185 then
-		tab.text = YRP.lang_string("LID_south_short")
+		tab.text = YRP.trans("LID_south_short")
 	elseif coord >= 265 and coord <= 275 then
-		tab.text = YRP.lang_string("LID_west_short")
+		tab.text = YRP.trans("LID_west_short")
 	elseif coord >= 85 and coord <= 95 then
-		tab.text = YRP.lang_string("LID_east_short")
+		tab.text = YRP.trans("LID_east_short")
 	else
 		tab.text = "FAILED! " .. coord
 	end
@@ -312,7 +312,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["north"].font = "Y_" .. nextfontsize .. "_500"
 			Simple["COM"]["north"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["north"].brcolor = lply:HudValue("COM", "TB")
-			Simple["COM"]["north"].text = YRP.lang_string("LID_north_short")
+			Simple["COM"]["north"].text = YRP.trans("LID_north_short")
 			Simple["COM"]["south"].w = w
 			Simple["COM"]["south"].h = h
 			Simple["COM"]["south"].fx = x + w / 2
@@ -322,7 +322,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["south"].font = "Y_" .. nextfontsize .. "_500"
 			Simple["COM"]["south"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["south"].brcolor = lply:HudValue("COM", "TB")
-			Simple["COM"]["south"].text = YRP.lang_string("LID_south_short")
+			Simple["COM"]["south"].text = YRP.trans("LID_south_short")
 			Simple["COM"]["east"].w = w
 			Simple["COM"]["east"].h = h
 			Simple["COM"]["east"].fx = x + w / 2
@@ -332,7 +332,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["east"].font = "Y_" .. nextfontsize .. "_500"
 			Simple["COM"]["east"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["east"].brcolor = lply:HudValue("COM", "TB")
-			Simple["COM"]["east"].text = YRP.lang_string("LID_east_short")
+			Simple["COM"]["east"].text = YRP.trans("LID_east_short")
 			Simple["COM"]["west"].w = w
 			Simple["COM"]["west"].h = h
 			Simple["COM"]["west"].fx = x + w / 2
@@ -342,7 +342,7 @@ function HUDSimpleCompass()
 			Simple["COM"]["west"].font = "Y_" .. nextfontsize .. "_500"
 			Simple["COM"]["west"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["west"].brcolor = lply:HudValue("COM", "TB")
-			Simple["COM"]["west"].text = YRP.lang_string("LID_west_short")
+			Simple["COM"]["west"].text = YRP.trans("LID_west_short")
 
 			for i = 0, 360, 30 do
 				if i % 90 ~= 0 then
@@ -406,28 +406,28 @@ function HUDSimpleCompass()
 
 			-- North
 			Simple["COM"]["north"].x = x + (fw + w * 0.5) % w
-			Simple["COM"]["north"].text = YRP.lang_string("LID_north_short")
+			Simple["COM"]["north"].text = YRP.trans("LID_north_short")
 			local alpha = GetFadeAlpha(x, Simple["COM"]["north"].x, w)
 			Simple["COM"]["north"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["north"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
 			HudText(Simple["COM"]["north"])
 			-- South
 			Simple["COM"]["south"].x = x + (fw + w * 0.0) % w
-			Simple["COM"]["south"].text = YRP.lang_string("LID_south_short")
+			Simple["COM"]["south"].text = YRP.trans("LID_south_short")
 			alpha = GetFadeAlpha(x, Simple["COM"]["south"].x, w)
 			Simple["COM"]["south"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["south"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
 			HudText(Simple["COM"]["south"])
 			-- East
 			Simple["COM"]["east"].x = x + (fw + w * 0.75) % w
-			Simple["COM"]["east"].text = YRP.lang_string("LID_east_short")
+			Simple["COM"]["east"].text = YRP.trans("LID_east_short")
 			alpha = GetFadeAlpha(x, Simple["COM"]["east"].x, w)
 			Simple["COM"]["east"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["east"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
 			HudText(Simple["COM"]["east"])
 			-- West
 			Simple["COM"]["west"].x = x + (fw + w * 0.25) % w
-			Simple["COM"]["west"].text = YRP.lang_string("LID_west_short")
+			Simple["COM"]["west"].text = YRP.trans("LID_west_short")
 			alpha = GetFadeAlpha(x, Simple["COM"]["west"].x, w)
 			Simple["COM"]["west"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["west"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
@@ -786,9 +786,9 @@ function HUDSimple()
 			XP.max = lply:GetMaxXP()
 
 			if XP.cur < XP.max then
-				XP.text = YRP.lang_string("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " ( " .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%) " .. YRP.lang_string("LID_level") .. " " .. lply:Level()
+				XP.text = YRP.trans("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " ( " .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%) " .. YRP.trans("LID_level") .. " " .. lply:Level()
 			else
-				XP.text = YRP.lang_string("LID_level") .. " " .. lply:Level()
+				XP.text = YRP.trans("LID_level") .. " " .. lply:Level()
 			end
 
 			HUDSimpleBAR(XP)
@@ -960,7 +960,7 @@ function HUDSimple()
 			end
 		end
 
-		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps
+		PE.text = YRP.trans("LID_fps") .. ": " .. fps
 
 		if lply:HudValue("PE", "EXTR") then
 			PE.text = PE.text .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. " )"
@@ -1003,7 +1003,7 @@ function HUDSimple()
 		NE.element = "NE"
 		NE.cur = 0
 		NE.max = 1
-		NE.text = YRP.lang_string("LID_ping") .. ": " .. ping
+		NE.text = YRP.trans("LID_ping") .. ": " .. ping
 
 		if lply:HudValue("NE", "EXTR") then
 			NE.text = NE.text .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. " )"

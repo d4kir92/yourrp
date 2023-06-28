@@ -160,7 +160,7 @@ function Player:CurrentSalaryTime()
 end
 
 function Player:GetCastName()
-	return YRP.lang_string(self:GetYRPString("castname", ""))
+	return YRP.trans(self:GetYRPString("castname", ""))
 end
 
 function Player:CastTimeCurrent()
@@ -223,7 +223,7 @@ function Player:Condition()
 			_sttext = _sttext .. ", "
 		end
 
-		_sttext = _sttext .. YRP.lang_string("LID_youarebleeding")
+		_sttext = _sttext .. YRP.trans("LID_youarebleeding")
 	end
 
 	if self:GetYRPBool("cuffed") then
@@ -231,7 +231,7 @@ function Player:Condition()
 			_sttext = _sttext .. ", "
 		end
 
-		_sttext = _sttext .. YRP.lang_string("LID_cuffed")
+		_sttext = _sttext .. YRP.trans("LID_cuffed")
 	end
 
 	if self:GetYRPFloat("hunger", 100) < 20 then
@@ -239,7 +239,7 @@ function Player:Condition()
 			_sttext = _sttext .. ", "
 		end
 
-		_sttext = _sttext .. YRP.lang_string("LID_hungry")
+		_sttext = _sttext .. YRP.trans("LID_hungry")
 	end
 
 	if self:GetYRPFloat("thirst", 100) < 20.0 then
@@ -247,7 +247,7 @@ function Player:Condition()
 			_sttext = _sttext .. ", "
 		end
 
-		_sttext = _sttext .. YRP.lang_string("LID_thirsty")
+		_sttext = _sttext .. YRP.trans("LID_thirsty")
 	end
 
 	if self:GetYRPBool("broken_leg_right", false) then
@@ -255,7 +255,7 @@ function Player:Condition()
 			_sttext = _sttext .. ", "
 		end
 
-		_sttext = _sttext .. YRP.lang_string("LID_yourrightlegisbroken")
+		_sttext = _sttext .. YRP.trans("LID_yourrightlegisbroken")
 	end
 
 	if self:GetYRPBool("broken_leg_left", false) then
@@ -263,7 +263,7 @@ function Player:Condition()
 			_sttext = _sttext .. ", "
 		end
 
-		_sttext = _sttext .. YRP.lang_string("LID_yourleftlegisbroken")
+		_sttext = _sttext .. YRP.trans("LID_yourleftlegisbroken")
 	end
 
 	if self:GetYRPBool("broken_arm_right", false) then
@@ -271,7 +271,7 @@ function Player:Condition()
 			_sttext = _sttext .. ", "
 		end
 
-		_sttext = _sttext .. YRP.lang_string("LID_yourrightarmisbroken")
+		_sttext = _sttext .. YRP.trans("LID_yourrightarmisbroken")
 	end
 
 	if self:GetYRPBool("broken_arm_left", false) then
@@ -279,7 +279,7 @@ function Player:Condition()
 			_sttext = _sttext .. ", "
 		end
 
-		_sttext = _sttext .. YRP.lang_string("LID_yourleftarmisbroken")
+		_sttext = _sttext .. YRP.trans("LID_yourleftarmisbroken")
 	end
 
 	if self:GetYRPBool("injail", false) then
@@ -287,7 +287,7 @@ function Player:Condition()
 			_sttext = _sttext .. ", "
 		end
 
-		_sttext = _sttext .. YRP.lang_string("LID_jail") .. ": " .. self:GetYRPInt("jailtime", 0)
+		_sttext = _sttext .. YRP.trans("LID_jail") .. ": " .. self:GetYRPInt("jailtime", 0)
 	end
 
 	return _sttext

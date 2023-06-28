@@ -72,14 +72,14 @@ function CreateTicketContent(parent)
 	TICKET.titleP = YRPCreateD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(170))
 
 	function TICKET.titleP:Paint(pw, ph)
-		surfaceText(YRP.lang_string("LID_title"), "Y_25_500", YRP.ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
+		surfaceText(YRP.trans("LID_title"), "Y_25_500", YRP.ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
 	end
 
 	TICKET.titleT = YRPCreateD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(220))
 	TICKET.ticketP = YRPCreateD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(300))
 
 	function TICKET.ticketP:Paint(pw, ph)
-		surfaceText(YRP.lang_string("LID_ticket") .. " ( " .. YRP.lang_string("LID_problems") .. ", " .. YRP.lang_string("LID_suggestions") .. ", ...)", "Y_25_500", YRP.ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
+		surfaceText(YRP.trans("LID_ticket") .. " ( " .. YRP.trans("LID_problems") .. ", " .. YRP.trans("LID_suggestions") .. ", ...)", "Y_25_500", YRP.ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
 	end
 
 	TICKET.ticketT = YRPCreateD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(500), YRP.ctr(20), YRP.ctr(350))
@@ -87,7 +87,7 @@ function CreateTicketContent(parent)
 	TICKET.contactP = YRPCreateD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(900))
 
 	function TICKET.contactP:Paint(pw, ph)
-		surfaceText(YRP.lang_string("LID_contact") .. " ( " .. YRP.lang_string("LID_notrequired") .. " )", "Y_25_500", YRP.ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
+		surfaceText(YRP.trans("LID_contact") .. " ( " .. YRP.trans("LID_notrequired") .. " )", "Y_25_500", YRP.ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
 	end
 
 	TICKET.contactT = YRPCreateD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(950))

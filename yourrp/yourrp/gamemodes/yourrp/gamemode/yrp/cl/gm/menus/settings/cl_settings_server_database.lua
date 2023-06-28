@@ -21,7 +21,7 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 		scroller.h = PARENT:GetTall() - 2 * br
 		local Scroller = DHorizontalScroller(scroller)
 		local yourrpdatabase = YRPCreateD("YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
-		yourrpdatabase:SetText("LID_yourrpdatabase")
+		yourrpdatabase:SetText(YRP.trans("LID_yourrpdatabase") .. " (FOR EXPERIENCED ADMINISTRATORS ONLY)")
 
 		function yourrpdatabase:Paint(pw, ph)
 			hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -40,18 +40,18 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 		ble.parent = yrp_db
 		ble.color = YRPGetColor("2")
 		ble.brx = YRP.ctr(50)
-		local sqlmode = DIntComboBoxBox(bl, nil, "LID_sqlmode", nil)
+		local sqlmode = DIntComboBoxBox(bl, nil, YRP.trans("LID_sqlmode") .. " (FOR EXPERIENCED ADMINISTRATORS ONLY)", nil)
 
 		if tonumber(YRP_SQL.int_mode) == 0 then
-			sqlmode:AddChoice("SQLite", 0, true)
+			sqlmode:AddChoice("SQLite (CURRENTLY)", 0, true)
 		else
 			sqlmode:AddChoice("SQLite", 0)
 		end
 
 		if tonumber(YRP_SQL.int_mode) == 1 then
-			sqlmode:AddChoice("MySQL ( " .. YRP.lang_string("LID_external") .. " )", 1, true)
+			sqlmode:AddChoice("MySQL ( " .. YRP.trans("LID_external") .. " ) (CURRENTLY)", 1, true)
 		else
-			sqlmode:AddChoice("MySQL ( " .. YRP.lang_string("LID_external") .. " )", 1)
+			sqlmode:AddChoice("MySQL ( " .. YRP.trans("LID_external") .. " )", 1)
 		end
 
 		DHR(dhr)
@@ -70,10 +70,10 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 			vals["amount"] = i
 
 			if i > 1 then
-				create[i].name = YRP.lang_string("LID_xhours", vals)
+				create[i].name = YRP.trans("LID_xhours", vals)
 				create[i].data = i
 			else
-				create[i].name = YRP.lang_string("LID_1hour", vals)
+				create[i].name = YRP.trans("LID_1hour", vals)
 				create[i].data = i
 			end
 		end
@@ -87,10 +87,10 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 			vals["amount"] = i
 
 			if i > 1 then
-				delete[i].name = YRP.lang_string("LID_xdays", vals)
+				delete[i].name = YRP.trans("LID_xdays", vals)
 				delete[i].data = i
 			else
-				delete[i].name = YRP.lang_string("LID_1day", vals)
+				delete[i].name = YRP.trans("LID_1day", vals)
 				delete[i].data = i
 			end
 		end
@@ -100,7 +100,7 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 		yrp_db.createbackupnow:SetText("")
 
 		yrp_db.createbackupnow.tab = {
-			["text"] = YRP.lang_string("LID_createbackupnow") .. " ( data/yrp_backups/)"
+			["text"] = YRP.trans("LID_createbackupnow") .. " ( data/yrp_backups/)"
 		}
 
 		function yrp_db.createbackupnow:Paint(pw, ph)
@@ -121,9 +121,18 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 
 		function yrp_db.change_to_sqlmode:Paint(pw, ph)
 			local tex, dat = sqlmode:GetSelected()
-			self.tab.text = YRP.lang_string("LID_changetosqlmode") .. ": " .. tex
-			hook.Run("YButtonPaint", self, pw, ph, self.tab)
 			dat = tonumber(dat)
+			tex = string.Replace(tex, " (CURRENTLY)", "")
+
+			if dat ~= tonumber(YRP_SQL.int_mode) then
+				yrp_db.change_to_sqlmode:SetEnabled(true)
+				yrp_db.change_to_sqlmode:SetTall(25)
+				self.tab.text = YRP.trans("LID_changetosqlmode") .. ": " .. tex
+				hook.Run("YButtonPaint", self, pw, ph, self.tab)
+			else
+				yrp_db.change_to_sqlmode:SetEnabled(false)
+				yrp_db.change_to_sqlmode:SetTall(1)
+			end
 
 			if dat == 0 then
 				yrp_db.host:GetParent():SetSize(0, 0)
@@ -157,9 +166,13 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 
 		function yrp_db.change_to_sqlmode:DoClick()
 			local _, dat = sqlmode:GetSelected()
-			net.Start("nws_yrp_change_to_sql_mode")
-			net.WriteInt(dat, 32)
-			net.SendToServer()
+			dat = tonumber(dat)
+
+			if dat ~= tonumber(YRP_SQL.int_mode) then
+				net.Start("nws_yrp_change_to_sql_mode")
+				net.WriteInt(dat, 32)
+				net.SendToServer()
+			end
 		end
 
 		DHR(dhr)
@@ -198,7 +211,7 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 		yourrptables:AddItem(_rem_and_change)
 
 		_rem_and_change.tab = {
-			["text"] = YRP.lang_string("LID_droptablesandchangelevel")
+			["text"] = YRP.trans("LID_droptablesandchangelevel")
 		}
 
 		function _rem_and_change:Paint(pw, ph)
@@ -218,9 +231,9 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 
 			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("LID_areyousure"))
+			_window:SetTitle(YRP.trans("LID_areyousure"))
 			local _yesButton = createVGUI("YButton", _window, 200, 50, 10, 60)
-			_yesButton:SetText(YRP.lang_string("LID_yes"))
+			_yesButton:SetText(YRP.trans("LID_yes"))
 
 			function _yesButton:DoClick()
 				net.Start("nws_yrp_drop_tables")
@@ -230,7 +243,7 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 			end
 
 			local _noButton = createVGUI("YButton", _window, 200, 50, 10 + 200 + 10, 60)
-			_noButton:SetText(YRP.lang_string("LID_no"))
+			_noButton:SetText(YRP.trans("LID_no"))
 
 			function _noButton:DoClick()
 				_window:Close()
@@ -262,7 +275,7 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 		yourrprelatedtables:AddItem(_rem_and_change2)
 
 		_rem_and_change2.tab = {
-			["text"] = YRP.lang_string("LID_droptablesandchangelevel")
+			["text"] = YRP.trans("LID_droptablesandchangelevel")
 		}
 
 		function _rem_and_change2:Paint(pw, ph)
@@ -282,9 +295,9 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 
 			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("LID_areyousure"))
+			_window:SetTitle(YRP.trans("LID_areyousure"))
 			local _yesButton = createVGUI("YButton", _window, 200, 50, 10, 60)
-			_yesButton:SetText(YRP.lang_string("LID_yes"))
+			_yesButton:SetText(YRP.trans("LID_yes"))
 
 			function _yesButton:DoClick()
 				net.Start("nws_yrp_drop_tables")
@@ -294,7 +307,7 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 			end
 
 			local _noButton = createVGUI("YButton", _window, 200, 50, 10 + 200 + 10, 60)
-			_noButton:SetText(YRP.lang_string("LID_no"))
+			_noButton:SetText(YRP.trans("LID_no"))
 
 			function _noButton:DoClick()
 				_window:Close()
@@ -326,7 +339,7 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 		othertables:AddItem(_rem_and_change3)
 
 		_rem_and_change3.tab = {
-			["text"] = YRP.lang_string("LID_droptablesandchangelevel")
+			["text"] = YRP.trans("LID_droptablesandchangelevel")
 		}
 
 		function _rem_and_change3:Paint(pw, ph)
@@ -346,9 +359,9 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 
 			local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			_window:Center()
-			_window:SetTitle(YRP.lang_string("LID_areyousure"))
+			_window:SetTitle(YRP.trans("LID_areyousure"))
 			local _yesButton = createVGUI("YButton", _window, 200, 50, 10, 60)
-			_yesButton:SetText(YRP.lang_string("LID_yes"))
+			_yesButton:SetText(YRP.trans("LID_yes"))
 
 			function _yesButton:DoClick()
 				net.Start("nws_yrp_drop_tables")
@@ -358,7 +371,7 @@ net.Receive("nws_yrp_connect_Settings_Database", function(len)
 			end
 
 			local _noButton = createVGUI("YButton", _window, 200, 50, 10 + 200 + 10, 60)
-			_noButton:SetText(YRP.lang_string("LID_no"))
+			_noButton:SetText(YRP.trans("LID_no"))
 
 			function _noButton:DoClick()
 				_window:Close()

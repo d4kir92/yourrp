@@ -40,7 +40,7 @@ function YRPCreateCharacterSettingsContent()
 	local header = YRPCreateD("DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200))
 
 	function header:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string("LID_charactercreation"), "Y_36_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans("LID_charactercreation"), "Y_36_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	local btn = {}
@@ -201,7 +201,7 @@ function YRPCreateCharacterSettingsContent()
 			name:SetText("")
 
 			if name.SetPlaceholderText then
-				name:SetPlaceholderText(YRP.lang_string("LID_enteryourfirstname"))
+				name:SetPlaceholderText(YRP.trans("LID_enteryourfirstname"))
 			end
 
 			function name:PerformLayout()
@@ -223,7 +223,7 @@ function YRPCreateCharacterSettingsContent()
 			surname:SetText("")
 
 			if surname.SetPlaceholderText then
-				surname:SetPlaceholderText(YRP.lang_string("LID_enteryoursurname"))
+				surname:SetPlaceholderText(YRP.trans("LID_enteryoursurname"))
 			end
 
 			function surname:PerformLayout()

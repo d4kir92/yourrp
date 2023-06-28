@@ -85,7 +85,7 @@ function DrawText(tab)
 	tab.text = tab.text or "NoText"
 
 	if tab.lforce or tab.lforce == nil then
-		tab.text = YRP.lang_string(tab.text)
+		tab.text = YRP.trans(tab.text)
 	end
 
 	tab.font = tab.font or "Y_14_700"
@@ -197,7 +197,7 @@ function DName(tab)
 	function dname:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.lang_string(tab.name)
+		text.text = YRP.trans(tab.name)
 		text.x = YRP.ctr(10)
 		text.y = ph / 2
 		text.font = "Y_18_500"
@@ -234,7 +234,7 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 	function dintcomboboxbox.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.lang_string(name) .. ":"
+		text.text = YRP.trans(name) .. ":"
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_500"
@@ -296,7 +296,7 @@ function DBoolLine(tab, value, str, netstr)
 	function dboolline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.lang_string(str)
+		text.text = YRP.trans(str)
 		text.x = tab.brx + tab.h + YRP.ctr(10)
 		text.y = ph / 2
 		text.font = "Y_22_500"
@@ -363,7 +363,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 	function dfloatline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.lang_string(name)
+		text.text = YRP.trans(name)
 		text.x = tab.brx + YRP.ctr(200) + YRP.ctr(10)
 		text.y = ph / 2
 		text.font = "Y_22_500"
@@ -374,7 +374,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 
 		if dmg ~= nil and dfloatline.dnumberwang ~= nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. YRP.lang_string("LID_damage")
+			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. YRP.trans("LID_damage")
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "Y_22_500"
@@ -447,7 +447,7 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 	function dintline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.lang_string(name) .. ":"
+		text.text = YRP.trans(name) .. ":"
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_500"
@@ -520,7 +520,7 @@ function DStringBox(tab, str, name, netstr)
 	function dstringline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.lang_string(name) .. ":"
+		text.text = YRP.trans(name) .. ":"
 		text.x = YRP.ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_500"
@@ -604,7 +604,7 @@ function DHeader(tab, header)
 	function hea:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local head = {}
-		head.text = YRP.lang_string(header)
+		head.text = YRP.trans(header)
 		head.x = YRP.ctr(10)
 		head.y = ph / 2
 		head.font = "Y_22_500"

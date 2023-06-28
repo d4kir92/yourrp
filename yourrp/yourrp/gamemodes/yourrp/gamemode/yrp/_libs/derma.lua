@@ -11,14 +11,14 @@ end
 function YRPAreYouSure(yes, no)
 	local win = createVGUI("YFrame", nil, 630, 100 + 10 + 50 + 10, 0, 0)
 	win:Center()
-	win:SetTitle(YRP.lang_string("LID_areyousure"))
+	win:SetTitle(YRP.trans("LID_areyousure"))
 
 	function win:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph)
 	end
 
 	local _yes = createVGUI("DButton", win, 300, 50, 10, 110)
-	_yes:SetText(YRP.lang_string("LID_yes"))
+	_yes:SetText(YRP.trans("LID_yes"))
 
 	function _yes:DoClick()
 		if yes ~= nil then
@@ -29,7 +29,7 @@ function YRPAreYouSure(yes, no)
 	end
 
 	local _no = createVGUI("DButton", win, 300, 50, 10 + 300 + 10, 110)
-	_no:SetText(YRP.lang_string("LID_no"))
+	_no:SetText(YRP.trans("LID_no"))
 
 	function _no:DoClick()
 		if no ~= nil then
@@ -595,7 +595,7 @@ function paintButton(self, pw, ph, mytext)
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
 	local _brC = Color(0, 0, 0, 255)
 	paintBr(pw, ph, _brC)
-	draw.SimpleTextOutlined(YRP.lang_string(mytext), "Y_18_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+	draw.SimpleTextOutlined(YRP.trans(mytext), "Y_18_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
 end
 
 function paintPanel(self, pw, ph, color)
@@ -616,10 +616,10 @@ function paintInv(self, pw, ph, text1, text2)
 	draw.RoundedBox(0, 0, 0, pw, ph, color_pi)
 	local _brC = Color(255, 255, 255, 255)
 	paintBr(pw, ph, _brC)
-	draw.SimpleTextOutlined(YRP.lang_string(text1), "DermaDefault", YRP.ctr(15), ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, YRP.ctr(1), Color(0, 0, 0, 255))
+	draw.SimpleTextOutlined(YRP.trans(text1), "DermaDefault", YRP.ctr(15), ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, YRP.ctr(1), Color(0, 0, 0, 255))
 
 	if text2 ~= nil then
-		draw.SimpleTextOutlined(YRP.lang_string(text2), "DermaDefault", YRP.ctr(15), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, YRP.ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(YRP.trans(text2), "DermaDefault", YRP.ctr(15), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, YRP.ctr(1), Color(0, 0, 0, 255))
 	end
 end
 
@@ -970,7 +970,7 @@ function createMDMenu(parent, w, h, x, y)
 		self.site:Clear()
 		self.lastsite = _hook
 		tmp.cursite = tmp.sites[_hook].site
-		tmp:SetTitle(string.upper(YRP.lang_string(tmp.sites[_hook].site)))
+		tmp:SetTitle(string.upper(YRP.trans(tmp.sites[_hook].site)))
 		hook.Call(_hook)
 	end
 
@@ -1000,7 +1000,7 @@ function createMDMenu(parent, w, h, x, y)
 			local tmpCat = YRPCreateD("DPanel", tmp.menulist, IconSize, YRP.ctr(0), BR, YRP.ctr(posY))
 
 			function tmpCat:Paint(pw, ph)
-				draw.SimpleTextOutlined(string.upper(YRP.lang_string(v)), "Y_18_500", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(string.upper(YRP.trans(v)), "Y_18_500", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			end
 
 			tmp.menulist:AddItem(tmpCat)
@@ -1030,7 +1030,7 @@ function createMDMenu(parent, w, h, x, y)
 							surface.SetMaterial(_w.material)
 							surface.DrawTexturedRect(BR, BR, IconSize - 2 * BR, IconSize - 2 * BR)
 						end
-						--draw.SimpleTextOutlined(string.upper(YRP.lang_string(_w.site) ), "Y_18_500", YRP.ctr(80 + 10), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+						--draw.SimpleTextOutlined(string.upper(YRP.trans(_w.site) ), "Y_18_500", YRP.ctr(80 + 10), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 					end
 
 					function tmp2:DoClick()
@@ -1083,7 +1083,7 @@ function createMDMenu(parent, w, h, x, y)
 		draw.RoundedBox(0, 0, 0, pw, ph, color_bot1)
 		draw.SimpleText(GetGlobalYRPString("text_server_name", "-"), "Y_18_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		draw.SimpleText("YourRP Version.: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, YRPGetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.lang_string("LID_players") .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.trans("LID_players") .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
 	function tmp.bot:Think()
@@ -1116,8 +1116,8 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 			draw.RoundedBox(0, pw / 2, 0, pw / 2, ph, get_dsbg_col())
 		end
 
-		draw.SimpleTextOutlined(YRP.lang_string("LID_dark"), "Y_24_500", 1 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_light"), "Y_24_500", 3 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(YRP.trans("LID_dark"), "Y_24_500", 1 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(YRP.trans("LID_light"), "Y_24_500", 3 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end
 
 	function tmp:DoClick()

@@ -92,7 +92,7 @@ function PANEL:SiteNotFound()
 
 	function self.site:Paint(pw, ph)
 		draw.SimpleText("[Site Not Found]", "Y_18_500", pw / 2, ph / 2, Color(255, 255, 0, 255), 1, 1)
-		draw.SimpleText("[" .. YRP.lang_string("LID_wip") .. "]", "Y_18_500", pw / 2, ph / 2 + YRP.ctr(50), Color(255, 255, 0, 255), 1, 1)
+		draw.SimpleText("[" .. YRP.trans("LID_wip") .. "]", "Y_18_500", pw / 2, ph / 2 + YRP.ctr(50), Color(255, 255, 0, 255), 1, 1)
 	end
 end
 
@@ -107,7 +107,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 		spacer = YRP.ctr(100)
 	end
 
-	local TAB = YRPCreateD("YButton", self, YRPGetTextLength(YRP.lang_string(name), "Y_22_500") + YRP.ctr(30 * 2) + spacer, YRP.ctr(100), YRP.ctr(400), 0)
+	local TAB = YRPCreateD("YButton", self, YRPGetTextLength(YRP.trans(name), "Y_22_500") + YRP.ctr(30 * 2) + spacer, YRP.ctr(100), YRP.ctr(400), 0)
 	TAB.menu = self
 	TAB.name = name
 	TAB.netstr = netstr
@@ -219,7 +219,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 			self.selected = false
 		end
 
-		DrawSelector(self, pw, ph, YRP.lang_string(self.name), self.selected, hassubtabs)
+		DrawSelector(self, pw, ph, YRP.trans(self.name), self.selected, hassubtabs)
 
 		if self.hassubtabs then
 			local br = YRP.ctr(20)

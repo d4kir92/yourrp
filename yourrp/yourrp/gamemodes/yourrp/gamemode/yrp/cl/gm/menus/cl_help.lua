@@ -31,13 +31,13 @@ function replaceKeyName(str)
 	elseif str == "leftarrow" then
 		return "←"
 	elseif str == "home" then
-		return YRP.lang_string("LID_numpadhome")
+		return YRP.trans("LID_numpadhome")
 	elseif str == "plus" then
 		return "+"
 	elseif str == "minus" then
 		return "-"
 	elseif str == "ins" then
-		return YRP.lang_string("LID_keyinsert")
+		return YRP.trans("LID_keyinsert")
 	else
 		return str
 	end
@@ -51,9 +51,9 @@ function nicekey(key_str)
 			local _end = string.sub(_str, 4)
 			_end = replaceKeyName(_end)
 
-			return YRP.lang_string("LID_keynumpad") .. " " .. _end
+			return YRP.trans("LID_keynumpad") .. " " .. _end
 		elseif string.find(_str, "pg", 1, true) then
-			return YRP.lang_string("LID_keypage") .. " " .. replaceKeyName(_str)
+			return YRP.trans("LID_keypage") .. " " .. replaceKeyName(_str)
 		end
 
 		_str = replaceKeyName(_str)
@@ -73,11 +73,11 @@ function AddKeybind(plist, keybind, lstr, icon, disabled)
 		local color = Color(255, 255, 255, 255)
 
 		if disabled ~= nil and not GetGlobalYRPBool(disabled) then
-			text = "[" .. YRP.lang_string("LID_disabled") .. "] "
+			text = "[" .. YRP.trans("LID_disabled") .. "] "
 			color = Color(255, 255, 100, 255)
 		end
 
-		text = text .. YRP.lang_string(lstr)
+		text = text .. YRP.trans(lstr)
 		draw.SimpleText(text, "Y_18_500", ph + YRP.ctr(10), ph / 2, color, 0, 1)
 		YRP.DrawIcon(YRP.GetDesignIcon(icon), ph - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), color)
 		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "Y_18_500", ph + YRP.ctr(700), ph / 2, Color(255, 255, 255, 255), 0, 1)
@@ -116,7 +116,7 @@ net.Receive("nws_yrp_getsitehelp", function(len)
 			local mo = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(60), 0, posy)
 
 			function mo:Paint(pw, ph)
-				draw.SimpleText(YRP.lang_string("LID_motd") .. ": " .. motd, "Y_22_500", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
+				draw.SimpleText(YRP.trans("LID_motd") .. ": " .. motd, "Y_22_500", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
 			end
 
 			posy = posy + mo:GetTall() + YRP.ctr(20)
@@ -204,8 +204,8 @@ net.Receive("nws_yrp_getsitestaff", function(len)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 255, 200))
 
 				if YRPEntityAlive(pl) then
-					draw.SimpleText(YRP.lang_string("LID_name") .. ": " .. pl:RPName(), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
-					draw.SimpleText(YRP.lang_string("LID_usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(50 + 25), Color(255, 255, 255, 255), 0, 1)
+					draw.SimpleText(YRP.trans("LID_name") .. ": " .. pl:RPName(), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
+					draw.SimpleText(YRP.trans("LID_usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(50 + 25), Color(255, 255, 255, 255), 0, 1)
 				end
 			end
 
@@ -235,7 +235,7 @@ net.Receive("nws_yrp_getsiteserverrules", function(len)
 		local page = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
 
 		function page:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_rules"), "Y_22_500", 0, 0, Color(255, 255, 255, 255), 0, 0)
+			draw.SimpleText(YRP.trans("LID_rules"), "Y_22_500", 0, 0, Color(255, 255, 255, 255), 0, 0)
 		end
 
 		page.serverrules = YRPCreateD("RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(50), 0, YRP.ctr(50))

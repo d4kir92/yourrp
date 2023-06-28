@@ -106,7 +106,7 @@ if CLIENT then
 
 		if self.Time > 0 and not self.Drag then
 			textColor.a = mainColor.a * self.Time
-			draw.SimpleText(YRP.lang_string("LID_drag"), "Y_30_500", x, y, textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_drag"), "Y_30_500", x, y, textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		if self.Drag and IsValid(self.Drag.Entity) then

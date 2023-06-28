@@ -104,7 +104,7 @@ hook.Add("HUDPaint", "yrp_hud_safezone", function()
 	local lply = LocalPlayer()
 
 	if IsInsideSafezone(lply) then
-		draw.SimpleText(YRP.lang_string("LID_safezone"), "Y_24_500", ScrW() / 2, YRP.ctr(650), Color(100, 100, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans("LID_safezone"), "Y_24_500", ScrW() / 2, YRP.ctr(650), Color(100, 100, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 end)
 
@@ -123,7 +123,7 @@ hook.Add("HUDPaint", "yrp_hud_zone", function()
 
 	if inzone and zonedelay > CurTime() then
 		zonecolor = StringToColor(zonecolor)
-		draw.SimpleText(YRP.lang_string("LID_entered") .. ":", "Y_30_500", ScrW() / 2, YRP.ctr(400), zonecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans("LID_entered") .. ":", "Y_30_500", ScrW() / 2, YRP.ctr(400), zonecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		draw.SimpleText(zonename, "Y_80_500", ScrW() / 2, YRP.ctr(500), zonecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 end)
@@ -171,10 +171,10 @@ hook.Add("HUDPaint", "yrp_hud_levelup", function()
 			levelup:SetPos(ScrW() / 2 - levelup:GetWide() / 2, ScrH() / 2 - levelup:GetTall() / 2 - YRP.ctr(400))
 			levelup:ShowCloseButton(false)
 			levelup:SetTitle("")
-			levelup.LID_levelup = YRP.lang_string("LID_levelup")
+			levelup.LID_levelup = YRP.trans("LID_levelup")
 			local tab = {}
 			tab["LEVEL"] = lply:Level()
-			levelup.LID_levelx = YRP.lang_string("LID_levelx", tab)
+			levelup.LID_levelx = YRP.trans("LID_levelx", tab)
 			levelup.lucolor = Color(255, 255, 100, 255)
 			levelup.lxcolor = Color(255, 255, 255, 255)
 			levelup.brcolor = Color(0, 0, 0, 255)
@@ -453,19 +453,19 @@ hook.Add("HUDPaint", "yrp_hud", function()
 
 	if lply:GetYRPBool("yrp_spawning", false) then
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 255)) -- Black Background - Respawning
-		draw.SimpleText(YRP.lang_string("LID_pleasewait"), "Y_18_500", ScrW() / 2, ScrH() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string("LID_respawning"), "Y_40_500", ScrW() / 2, ScrH() / 2 + YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans("LID_pleasewait"), "Y_18_500", ScrW() / 2, ScrH() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans("LID_respawning"), "Y_40_500", ScrW() / 2, ScrH() / 2 + YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	if lply:GetYRPBool("yrp_speaking", false) then
-		local text = YRP.lang_string("LID_youarespeaking")
+		local text = YRP.trans("LID_youarespeaking")
 
 		if lply:GetYRPBool("mute_voice", false) then
-			text = text .. " ( " .. YRP.lang_string("LID_speaklocal") .. " )"
+			text = text .. " ( " .. YRP.trans("LID_speaklocal") .. " )"
 		end
 
 		if YRPGetVoiceRangeText(lply) ~= "" then
-			text = text .. " ( " .. YRP.lang_string("LID_range") .. " " .. YRPGetVoiceRangeText(lply) .. " [" .. YRPGetVoiceRange(lply) .. "])"
+			text = text .. " ( " .. YRP.trans("LID_range") .. " " .. YRPGetVoiceRangeText(lply) .. " [" .. YRPGetVoiceRange(lply) .. "])"
 		end
 
 		draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -477,15 +477,15 @@ hook.Add("HUDPaint", "yrp_hud", function()
 
 	if GetGlobalYRPBool("blinded", false) then
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(255, 255, 255, 255))
-		surfaceText(YRP.lang_string("LID_blinded"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(100), Color(255, 255, 0, 255), 1, 1)
+		surfaceText(YRP.trans("LID_blinded"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(100), Color(255, 255, 0, 255), 1, 1)
 	end
 
 	if lply:IsFlagSet(FL_FROZEN) then
-		surfaceText(YRP.lang_string("LID_frozen"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(150), Color(255, 255, 0, 255), 1, 1)
+		surfaceText(YRP.trans("LID_frozen"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(150), Color(255, 255, 0, 255), 1, 1)
 	end
 
 	if lply:GetYRPBool("cloaked", false) then
-		surfaceText(YRP.lang_string("LID_cloaked"), "Y_30_500", ScrW2(), ScrH2() - YRP.ctr(400), Color(255, 255, 0, 255), 1, 1)
+		surfaceText(YRP.trans("LID_cloaked"), "Y_30_500", ScrW2(), ScrH2() - YRP.ctr(400), Color(255, 255, 0, 255), 1, 1)
 	end
 
 	DrawEquipment(lply, "backpack")
@@ -499,7 +499,7 @@ hook.Add("HUDPaint", "yrp_hud", function()
 	local _target = LocalPlayer():GetYRPString("hittargetName", "")
 
 	if not strEmpty(_target) then
-		surfaceText(YRP.lang_string("LID_target") .. ": " .. LocalPlayer():GetYRPString("hittargetName", ""), "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 0, 0, 255), 0, 0)
+		surfaceText(YRP.trans("LID_target") .. ": " .. LocalPlayer():GetYRPString("hittargetName", ""), "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 0, 0, 255), 0, 0)
 		LocalPlayer():drawHitInfo()
 	end
 
@@ -599,7 +599,7 @@ hook.Add("HUDPaint", "yrp_hud_collectionid", function()
 	local lply = LocalPlayer()
 
 	if YRPCollectionID() == "0" and lply:HasAccess("hud1") then
-		local text = "[STEAM] " .. YRP.lang_string("LID_thecollectionidismissing") .. " ( " .. "to start config: " .. "+host_workshop_collection WORKSHOPID" .. " )"
+		local text = "[STEAM] " .. YRP.trans("LID_thecollectionidismissing") .. " ( " .. "to start config: " .. "+host_workshop_collection WORKSHOPID" .. " )"
 		draw.SimpleTextOutlined(text, "Y_50_500", ScrW() / 2, ScrH() * 0.2, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end
 end, hook.MONITOR_HIGH)
@@ -762,21 +762,21 @@ hook.Add("HUDPaint", "yrp_voice_module", function()
 		if ca == 0 then
 			VO.text = "-"
 		else
-			VO.text = YRP.lang_string("LID_active") .. ": " .. table.concat(texta, ", ")
+			VO.text = YRP.trans("LID_active") .. ": " .. table.concat(texta, ", ")
 		end
 
-		VO.text = VO.text .. " | " .. YRP.lang_string("LID_passive") .. ": "
+		VO.text = VO.text .. " | " .. YRP.trans("LID_passive") .. ": "
 
 		if cp == 0 then
 			VO.text = VO.text .. "-"
 		elseif cp <= 3 then
 			VO.text = VO.text .. table.concat(textp, ", ")
 		else
-			VO.text = VO.text .. string.Replace(YRP.lang_string("LID_xpassive"), "X", cp)
+			VO.text = VO.text .. string.Replace(YRP.trans("LID_xpassive"), "X", cp)
 		end
 
 		if ca == 0 and cp == 0 then
-			VO.text = "" .. string.Replace(YRP.lang_string("LID_presskeytoenablevoicemenu"), "KEY", YRPGetKeybindName("voice_menu")) .. ""
+			VO.text = "" .. string.Replace(YRP.trans("LID_presskeytoenablevoicemenu"), "KEY", YRPGetKeybindName("voice_menu")) .. ""
 		else
 			VO.text = VO.text .. " ( " .. input.GetKeyName(KEY_LSHIFT) .. " + " .. YRPGetKeybindName("voice_menu") .. " )"
 		end

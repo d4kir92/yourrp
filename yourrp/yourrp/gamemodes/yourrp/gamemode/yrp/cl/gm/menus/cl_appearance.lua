@@ -119,7 +119,7 @@ net.Receive("nws_yrp_get_menu_bodygroups", function(len)
 				local _tmpPM = YRPCreateD("DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(80), ScW() / 2, _yrp_appearance.window:GetHeaderHeight())
 				_tmpPM.cur = _pmid
 				_tmpPM.max = #_pms
-				_tmpPM.name = YRP.lang_string("LID_appearance")
+				_tmpPM.name = YRP.trans("LID_appearance")
 
 				function _tmpPM:Paint(pw, ph)
 					hook.Run("YPanelPaint", self, pw, ph)
@@ -193,7 +193,7 @@ net.Receive("nws_yrp_get_menu_bodygroups", function(len)
 					_tmpSkin.max = _appe.r.pm.Entity:SkinCount()
 				end
 
-				_tmpSkin.name = YRP.lang_string("LID_skin")
+				_tmpSkin.name = YRP.trans("LID_skin")
 
 				function _tmpSkin:Paint(pw, ph)
 					hook.Run("YPanelPaint", self, pw, ph)

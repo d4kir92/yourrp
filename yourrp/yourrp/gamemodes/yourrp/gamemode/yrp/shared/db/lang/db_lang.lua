@@ -137,7 +137,7 @@ end
 
 local nf = {}
 
-function YRP.lang_string(var, vals)
+function YRP.trans(var, vals)
 	var = tostring(var)
 
 	if string.StartWith(var, "LID_") then
@@ -164,7 +164,7 @@ function YRP.lang_string(var, vals)
 			-- IF HAVE VALS
 			if IsNotNilAndNotFalse(vals) then
 				if type(vals) == "string" then
-					return YRP.lang_string(var)
+					return YRP.trans(var)
 				else
 					for id, val in pairs(vals) do
 						translation = string.Replace(translation, "%" .. id .. "%", val)
@@ -227,7 +227,7 @@ function YRP.read_language(short, init)
 		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
 
 		if not default then
-			YRP.msg("lang", "Get Language-Pack [" .. YRP.lang_string("LID_initshort") .. "] " .. YRP.lang_string("LID_initlanguage") .. "/" .. YRP.lang_string("LID_initinenglish"))
+			YRP.msg("lang", "Get Language-Pack [" .. YRP.trans("LID_initshort") .. "] " .. YRP.trans("LID_initlanguage") .. "/" .. YRP.trans("LID_initinenglish"))
 		end
 
 		YRP.read_lang("resource/localization/yrp/general/lang_" .. short .. ".properties")
@@ -306,7 +306,7 @@ function YRP.LoadLanguage(short, init)
 			YRP.read_language(short, init)
 		end
 
-		YRP.msg("lang", "Language changed to [" .. YRP.lang_string("LID_initshort") .. "] " .. YRP.lang_string("LID_initlanguage"))
+		YRP.msg("lang", "Language changed to [" .. YRP.trans("LID_initshort") .. "] " .. YRP.trans("LID_initlanguage"))
 		YRP.send_lang(short) -- Send To Server
 		hook.Run("yrp_current_language_changed") -- Update Chat
 	end
@@ -328,11 +328,11 @@ function YRP.add_language(short)
 		yrp_button_info[short]["author"] = "D4KiR"
 		yrp_button_info[short]["steamid64"] = ""
 	else
-		yrp_button_info[short]["inenglish"] = YRP.lang_string("LID_initinenglish")
-		yrp_button_info[short]["language"] = YRP.lang_string("LID_initlanguage")
-		yrp_button_info[short]["short"] = YRP.lang_string("LID_initshort")
-		yrp_button_info[short]["author"] = YRP.lang_string("LID_initauthor")
-		yrp_button_info[short]["steamid64"] = YRP.lang_string("LID_steamid64")
+		yrp_button_info[short]["inenglish"] = YRP.trans("LID_initinenglish")
+		yrp_button_info[short]["language"] = YRP.trans("LID_initlanguage")
+		yrp_button_info[short]["short"] = YRP.trans("LID_initshort")
+		yrp_button_info[short]["author"] = YRP.trans("LID_initauthor")
+		yrp_button_info[short]["steamid64"] = YRP.trans("LID_steamid64")
 	end
 end
 

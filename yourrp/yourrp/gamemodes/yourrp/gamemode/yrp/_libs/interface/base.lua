@@ -53,7 +53,7 @@ function YRPDCheckBoxes(tab)
 		local text = {}
 
 		if tab.lforce then
-			text.text = YRP.lang_string(tab.header) .. ":"
+			text.text = YRP.trans(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -74,7 +74,7 @@ function YRPDCheckBoxes(tab)
 	function pnl.DButton:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 		local change = {}
-		change.text = "[" .. YRP.lang_string("LID_change") .. "] ( " .. tab.value .. " )"
+		change.text = "[" .. YRP.trans("LID_change") .. "] ( " .. tab.value .. " )"
 		change.font = "Y_22_700"
 		change.x = YRP.ctr(10)
 		change.y = ph / 2
@@ -90,7 +90,7 @@ function YRPDCheckBoxes(tab)
 			window:SetTitle("")
 
 			function window:Paint(pw, ph)
-				surfaceWindow(self, pw, ph, YRP.lang_string("LID_usergroups"))
+				surfaceWindow(self, pw, ph, YRP.trans("LID_usergroups"))
 			end
 
 			window.cm = YRPCreateD("DPanelList", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20))
@@ -229,7 +229,7 @@ function YRPDCheckBox(tab)
 		local text = {}
 
 		if tab.lforce then
-			text.text = YRP.lang_string(tab.header)
+			text.text = YRP.trans(tab.header)
 		else
 			text.text = tab.header
 		end
@@ -309,7 +309,7 @@ function YRPDComboBox(tab)
 		local text = {}
 
 		if tab.lforce then
-			text.text = YRP.lang_string(tab.header) .. ":"
+			text.text = YRP.trans(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -388,7 +388,7 @@ function YRPDComboBoxHUD(tab)
 		local text = {}
 
 		if tab.lforce then
-			text.text = YRP.lang_string(tab.header) .. ":"
+			text.text = YRP.trans(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -467,7 +467,7 @@ function DColor(tab)
 		local text = {}
 
 		if tab.lforce then
-			text.text = YRP.lang_string(tab.header) .. ":"
+			text.text = YRP.trans(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -505,7 +505,7 @@ function DColor(tab)
 			window:SetTitle("")
 
 			function window:Paint(pw, ph)
-				surfaceWindow(self, pw, ph, YRP.lang_string("LID_color"))
+				surfaceWindow(self, pw, ph, YRP.trans("LID_color"))
 			end
 
 			window.cm = YRPCreateD("DColorMixer", window, YRP.ctr(500), YRP.ctr(500), YRP.ctr(20), YRP.ctr(50 + 20))
@@ -571,7 +571,7 @@ function DIntBox(tab)
 		local text = {}
 
 		if tab.lforce then
-			text.text = YRP.lang_string(tab.header) .. ":"
+			text.text = YRP.trans(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -655,7 +655,7 @@ function DTextBox(tab)
 		local text = {}
 
 		if tab.lforce then
-			text.text = YRP.lang_string(tab.header) .. ":"
+			text.text = YRP.trans(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -670,7 +670,7 @@ function DTextBox(tab)
 
 		if dmg ~= nil and pnl.dtextentry ~= nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.lang_string("LID_damage")
+			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.trans("LID_damage")
 			DMG.x = pw - YRP.ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "Y_22_700"
@@ -859,7 +859,7 @@ function DAttributeBar(tab)
 			local text = {}
 
 			if tab.lforce then
-				text.text = YRP.lang_string(tab.header) .. ": " .. tab.dnw[1].value .. "/" .. tab.dnw[2].value
+				text.text = YRP.trans(tab.header) .. ": " .. tab.dnw[1].value .. "/" .. tab.dnw[2].value
 
 				if tab.dnw[3] ~= nil then
 					text.text = text.text .. " ( " .. tab.dnw[3].value
@@ -946,7 +946,7 @@ function DStringListBox(tab)
 		local text = {}
 
 		if tab.lforce then
-			text.text = YRP.lang_string(tab.header) .. ":"
+			text.text = YRP.trans(tab.header) .. ":"
 		else
 			text.text = tab.header .. ":"
 		end
@@ -1009,23 +1009,23 @@ function DStringListBox(tab)
 					local test = {}
 
 					if tobool(v.slots.slot_primary) then
-						table.insert(test, YRP.lang_string("LID_primary"))
+						table.insert(test, YRP.trans("LID_primary"))
 					end
 
 					if tobool(v.slots.slot_secondary) then
-						table.insert(test, YRP.lang_string("LID_secondary"))
+						table.insert(test, YRP.trans("LID_secondary"))
 					end
 
 					if tobool(v.slots.slot_sidearm) then
-						table.insert(test, YRP.lang_string("LID_sidearm"))
+						table.insert(test, YRP.trans("LID_sidearm"))
 					end
 
 					if tobool(v.slots.slot_gadget) then
-						table.insert(test, YRP.lang_string("LID_gadget"))
+						table.insert(test, YRP.trans("LID_gadget"))
 					end
 
 					if tobool(v.slots.slot_no) then
-						table.insert(test, YRP.lang_string("LID_noslot"))
+						table.insert(test, YRP.trans("LID_noslot"))
 					end
 
 					text = table.concat(test, ", ")

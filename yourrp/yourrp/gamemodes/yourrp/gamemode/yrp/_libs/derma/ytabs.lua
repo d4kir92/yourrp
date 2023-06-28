@@ -47,7 +47,7 @@ function PANEL:AddOption(name, func, height)
 	function tab:Paint(pw, ph)
 		if self.tabs.auto then
 			surface.SetFont("Y_26_500")
-			local tw, _ = surface.GetTextSize(YRP.lang_string(name))
+			local tw, _ = surface.GetTextSize(YRP.trans(name))
 			self:SetWide(tw + YRP.ctr(80))
 		else
 			self:SetWide(YRP.ctr(self.tabs.tabwide))
@@ -69,7 +69,7 @@ function PANEL:AddOption(name, func, height)
 
 		self.h = math.Clamp(self.h, 0, 10)
 		draw.RoundedBox(0, YRP.ctr(20), ph - YRP.ctr(self.h), pw - YRP.ctr(40), YRP.ctr(self.h), self.color)
-		draw.SimpleText(YRP.lang_string(name), "Y_26_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans(name), "Y_26_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	self.tabs[name] = func

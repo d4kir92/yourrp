@@ -76,12 +76,12 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				if self.group ~= "" then
 					local inp = {}
 					inp.group = self.group
-					tab2.text = YRP.lang_string("LID_groupsof", inp)
+					tab2.text = YRP.trans("LID_groupsof", inp)
 				else
-					tab2.text = YRP.lang_string("LID_factions")
+					tab2.text = YRP.trans("LID_factions")
 				end
 			else
-				tab2.text = YRP.lang_string("LID_loading")
+				tab2.text = YRP.trans("LID_loading")
 			end
 
 			DrawText(tab2)
@@ -237,7 +237,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			gs.gplist[group.uniqueID].ch:SetText("")
 			local ch = gs.gplist[group.uniqueID].ch
 			surface.SetFont("Y_14_700")
-			local text = YRP.lang_string("LID_undergroups") .. " ▶"
+			local text = YRP.trans("LID_undergroups") .. " ▶"
 			local tw, _ = surface.GetTextSize(text)
 			tw = tw + YRP.ctr(20)
 			ch:SetWide(tw)
@@ -328,9 +328,9 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				if self.headername ~= nil then
 					local inp = {}
 					inp.group = self.headername
-					tab2.text = YRP.lang_string("LID_rolesof", inp)
+					tab2.text = YRP.trans("LID_rolesof", inp)
 				else
-					tab2.text = YRP.lang_string("LID_loading")
+					tab2.text = YRP.trans("LID_loading")
 				end
 
 				DrawText(tab2)
@@ -480,7 +480,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				win:SetHeaderHeight(YRP.ctr(100))
 				win:Center()
 				win:MakePopup()
-				win:SetTitle(YRP.lang_string("LID_areyousure"))
+				win:SetTitle(YRP.trans("LID_areyousure"))
 
 				function win:Paint(pw, ph)
 					hook.Run("YFramePaint", self, pw, ph)
@@ -494,7 +494,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 
 				local recursive = YRPCreateD("DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), 0, YRP.ctr(50 + 20))
 				local _yes = YRPCreateD("YButton", win:GetContent(), YRP.ctr(300), YRP.ctr(50), 0, 0)
-				_yes:SetText(YRP.lang_string("LID_yes"))
+				_yes:SetText(YRP.trans("LID_yes"))
 
 				function _yes:DoClick()
 					if ea and ea.tab and ea.tab.uniqueID then
@@ -519,7 +519,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				end
 
 				local _no = YRPCreateD("YButton", win:GetContent(), YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), 0)
-				_no:SetText(YRP.lang_string("LID_no"))
+				_no:SetText(YRP.trans("LID_no"))
 
 				function _no:DoClick()
 					win:Close()
@@ -590,9 +590,9 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				tab2.ax = 0
 
 				if ea.tab.uniqueID == 1 then
-					tab2.text = "[MAIN] " .. YRP.lang_string("LID_" .. ea.typ) .. ": " .. ea.tab.string_name
+					tab2.text = "[MAIN] " .. YRP.trans("LID_" .. ea.typ) .. ": " .. ea.tab.string_name
 				else
-					tab2.text = YRP.lang_string("LID_" .. ea.typ) .. ": " .. ea.tab.string_name
+					tab2.text = YRP.trans("LID_" .. ea.typ) .. ": " .. ea.tab.string_name
 				end
 
 				local darkrpjobname = YRPConvertToDarkRPJobName(ea.tab.string_name)
@@ -701,7 +701,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					ea[group.uniqueID].desc = DTextBox(desc)
 					DHr(hr)
 					local othergroups = {}
-					othergroups[0] = YRP.lang_string("LID_factions")
+					othergroups[0] = YRP.trans("LID_factions")
 
 					for i, tab in pairs(groups) do
 						tab.uniqueID = tonumber(tab.uniqueID)
@@ -826,7 +826,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 						local visible = {}
 						visible.parent = ea.restriction:GetContent()
 						visible.uniqueID = group.uniqueID
-						visible.header = YRP.lang_string("LID_visible") .. " ( " .. YRP.lang_string("LID_charactercreation") .. " )"
+						visible.header = YRP.trans("LID_visible") .. " ( " .. YRP.trans("LID_charactercreation") .. " )"
 						visible.netstr = "nws_yrp_update_group_bool_visible_cc"
 						visible.value = group.bool_visible_cc
 						visible.uniqueID = group.uniqueID
@@ -838,7 +838,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					local visible2 = {}
 					visible2.parent = ea.restriction:GetContent()
 					visible2.uniqueID = group.uniqueID
-					visible2.header = YRP.lang_string("LID_visible") .. " ( " .. YRP.lang_string("LID_rolemenu") .. " )"
+					visible2.header = YRP.trans("LID_visible") .. " ( " .. YRP.trans("LID_rolemenu") .. " )"
 					visible2.netstr = "nws_yrp_update_group_bool_visible_rm"
 					visible2.value = group.bool_visible_rm
 					visible2.uniqueID = group.uniqueID
@@ -895,7 +895,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 
 						function winswep:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-							draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP.trans("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 						end
 
 						local allsweps = YRPGetSWEPsList()
@@ -1000,7 +1000,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 
 					function ammoheader:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-						draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRP.trans(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 
 					ammolist = YRPCreateD("DPanelList", ammobg, YRP.ctr(800 - 23 - 20), YRP.ctr(800), 0, YRP.ctr(50))
@@ -1175,7 +1175,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			rs.rplist[role.uniqueID].ch = YRPCreateD("YButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), rs.rplist[role.uniqueID]:GetWide() - YRP.ctr(66), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(60))
 			rs.rplist[role.uniqueID].ch:SetText("")
 			local ch = rs.rplist[role.uniqueID].ch
-			local text = YRP.lang_string("LID_nextranks") .. " ▶"
+			local text = YRP.trans("LID_nextranks") .. " ▶"
 			surface.SetFont("Y_14_700")
 			local tw, _ = surface.GetTextSize(text)
 			tw = tw + YRP.ctr(20)
@@ -1335,7 +1335,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			ea[role.uniqueID].icon = DTextBox(icon)
 			DHr(hr)
 			local maxa = {}
-			maxa[0] = YRP.lang_string("LID_disabled")
+			maxa[0] = YRP.trans("LID_disabled")
 
 			for i = 1, 128 do
 				maxa[i] = i
@@ -1428,7 +1428,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			ea[role.uniqueID].requireslevel = DIntBox(salarytime)
 			DHr(hr)
 			local otherroles = {}
-			otherroles[0] = YRP.lang_string("LID_none")
+			otherroles[0] = YRP.trans("LID_none")
 
 			for i, tab in pairs(roles) do
 				tab.uniqueID = tonumber(tab.uniqueID)
@@ -1442,7 +1442,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				local prerole = {}
 				prerole.parent = ea.info:GetContent()
 				prerole.uniqueID = role.uniqueID
-				prerole.header = YRP.lang_string("LID_prerole") .. " | " .. YRP.lang_string("LID_prerank")
+				prerole.header = YRP.trans("LID_prerole") .. " | " .. YRP.trans("LID_prerank")
 				prerole.netstr = "nws_yrp_update_role_int_prerole"
 				prerole.value = tonumber(role.int_prerole)
 				prerole.uniqueID = role.uniqueID
@@ -1453,18 +1453,18 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			end
 
 			local rod_roles = {}
-			rod_roles[0] = YRP.lang_string("LID_none")
+			rod_roles[0] = YRP.trans("LID_none")
 
 			for i, tab in pairs(roles) do
 				tab.uniqueID = tonumber(tab.uniqueID)
 				rod_roles[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
 			end
 
-			rod_roles[0] = YRP.lang_string("LID_none")
+			rod_roles[0] = YRP.trans("LID_none")
 			local roleondeath = {}
 			roleondeath.parent = ea.info:GetContent()
 			roleondeath.uniqueID = role.uniqueID
-			roleondeath.header = YRP.lang_string("LID_roleafterdeath")
+			roleondeath.header = YRP.trans("LID_roleafterdeath")
 			roleondeath.netstr = "nws_yrp_update_role_int_roleondeath"
 			roleondeath.value = tonumber(role.int_roleondeath)
 			roleondeath.uniqueID = role.uniqueID
@@ -1678,14 +1678,14 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 
 					function pmwin:Paint(pw, ph)
 						hook.Run("YFramePaint", self, pw, ph)
-						draw.SimpleText(YRP.lang_string("LID_name") .. ": ", "DermaDefault", YRP.ctr(20 + 300 + 20 + 300 + 20 + 120), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-						draw.SimpleText(YRP.lang_string("LID_minimumsize") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-						draw.SimpleText(YRP.lang_string("LID_maximumsize") .. ":", "DermaDefault", YRP.ctr(40 + 200 + 20), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-						draw.SimpleText(YRP.lang_string("LID_models") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(410), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText(YRP.trans("LID_name") .. ": ", "DermaDefault", YRP.ctr(20 + 300 + 20 + 300 + 20 + 120), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRP.trans("LID_minimumsize") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText(YRP.trans("LID_maximumsize") .. ":", "DermaDefault", YRP.ctr(40 + 200 + 20), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+						draw.SimpleText(YRP.trans("LID_models") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(410), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 					end
 
 					pmwin.selpm = YRPCreateD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
-					pmwin.selpm:SetText(YRP.lang_string("LID_playermodels"))
+					pmwin.selpm:SetText(YRP.trans("LID_playermodels"))
 
 					function pmwin.selpm:DoClick()
 						local allvalidmodels = player_manager.AllValidModels()
@@ -1704,7 +1704,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					end
 
 					pmwin.selnpm = YRPCreateD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20 + 300 + 20), YRP.ctr(50 + 20))
-					pmwin.selnpm:SetText(YRP.lang_string("LID_othermodels"))
+					pmwin.selnpm:SetText(YRP.trans("LID_othermodels"))
 
 					function pmwin.selnpm:DoClick()
 						local noneplayermodels = {}
@@ -1729,7 +1729,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					end
 
 					pmwin.add = YRPCreateD("YButton", pmcontent, YRP.ctr(200), YRP.ctr(50), pmcontent:GetWide() / 2 - YRP.ctr(200 / 2), pmcontent:GetTall() - YRP.ctr(50 + 20))
-					pmwin.add:SetText(YRP.lang_string("LID_add"))
+					pmwin.add:SetText(YRP.trans("LID_add"))
 
 					function pmwin.add:DoClick()
 						if pmwin.WorldModel ~= "" then
@@ -1816,7 +1816,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 
 									function line.remove:Paint(spw, sph)
 										draw.RoundedBox(16, 0, 0, pw, sph, Color(255, 140, 140))
-										draw.SimpleText(YRP.lang_string("LID_remove") .. " ( " .. pm.uses .. " " .. "uses" .. " )", "DermaDefault", spw / 2, sph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										draw.SimpleText(YRP.trans("LID_remove") .. " ( " .. pm.uses .. " " .. "uses" .. " )", "DermaDefault", spw / 2, sph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 									end
 
 									if line.models[1] ~= nil then
@@ -1927,7 +1927,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				local info2 = YRPCreateD("DPanel", equipment, 100, 32, 0, 0)
 
 				function info2:Paint(pw, ph)
-					draw.SimpleText("First Go to F8 -> " .. YRP.lang_string("LID_administration") .. " -> " .. YRP.lang_string("LID_weaponsystem"), "Y_18_700", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText("First Go to F8 -> " .. YRP.trans("LID_administration") .. " -> " .. YRP.trans("LID_weaponsystem"), "Y_18_700", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				equipment:AddItem(info2)
@@ -1938,9 +1938,9 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			sweps.uniqueID = role.uniqueID
 
 			if GetGlobalYRPBool("bool_weapon_system", true) then
-				sweps.header = YRP.lang_string("LID_possiblesweps") .. ": Not Equipped => " .. YRP.lang_string("LID_weaponchest") .. ""
+				sweps.header = YRP.trans("LID_possiblesweps") .. ": Not Equipped => " .. YRP.trans("LID_weaponchest") .. ""
 			else
-				sweps.header = YRP.lang_string("LID_sweps")
+				sweps.header = YRP.trans("LID_sweps")
 			end
 
 			sweps.netstr = "nws_yrp_update_role_string_sweps"
@@ -2038,7 +2038,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				local swepsonspawn = {}
 				swepsonspawn.parent = ea.equipment:GetContent()
 				swepsonspawn.uniqueID = role.uniqueID
-				swepsonspawn.header = YRP.lang_string("LID_swepsatspawn") .. " (Equipped if slot is not full!)"
+				swepsonspawn.header = YRP.trans("LID_swepsatspawn") .. " (Equipped if slot is not full!)"
 				swepsonspawn.netstr = "nws_yrp_update_role_string_sweps_onspawn"
 				swepsonspawn.value = role.string_sweps_onspawn
 				swepsonspawn.uniqueID = role.uniqueID
@@ -2139,7 +2139,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 
 			function ammoheader:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-				draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.trans(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
 			ammolist = YRPCreateD("DPanelList", ammobg, YRP.ctr(800 - 23 - 20), YRP.ctr(300), 0, YRP.ctr(50))
@@ -2233,7 +2233,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 
 				function winlicenses:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.trans("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
 				net.Receive("nws_yrp_get_all_licenses", function(l)
@@ -2474,7 +2474,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 				local bool_canbeagent = {}
 				bool_canbeagent.parent = ea.restriction:GetContent()
 				bool_canbeagent.uniqueID = role.uniqueID
-				bool_canbeagent.header = YRP.lang_string("LID_isagent")
+				bool_canbeagent.header = YRP.trans("LID_isagent")
 				bool_canbeagent.netstr = "nws_yrp_update_role_bool_canbeagent"
 				bool_canbeagent.value = role.bool_canbeagent
 				bool_canbeagent.uniqueID = role.uniqueID
@@ -2486,7 +2486,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local visible = {}
 			visible.parent = ea.restriction:GetContent()
 			visible.uniqueID = role.uniqueID
-			visible.header = YRP.lang_string("LID_visible") .. " ( " .. YRP.lang_string("LID_charactercreation") .. " )"
+			visible.header = YRP.trans("LID_visible") .. " ( " .. YRP.trans("LID_charactercreation") .. " )"
 			visible.netstr = "nws_yrp_update_role_bool_visible_cc"
 			visible.value = role.bool_visible_cc
 			visible.uniqueID = role.uniqueID
@@ -2496,7 +2496,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local visible2 = {}
 			visible2.parent = ea.restriction:GetContent()
 			visible2.uniqueID = role.uniqueID
-			visible2.header = YRP.lang_string("LID_visible") .. " ( " .. YRP.lang_string("LID_rolemenu") .. " )"
+			visible2.header = YRP.trans("LID_visible") .. " ( " .. YRP.trans("LID_rolemenu") .. " )"
 			visible2.netstr = "nws_yrp_update_role_bool_visible_rm"
 			visible2.value = role.bool_visible_rm
 			visible2.uniqueID = role.uniqueID
@@ -2543,7 +2543,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local tab_a = {}
 
 			for i, v in pairs(abis) do
-				tab_a[string.lower(v)] = YRP.lang_string("LID_" .. string.lower(v))
+				tab_a[string.lower(v)] = YRP.trans("LID_" .. string.lower(v))
 			end
 
 			DHr(hr)
@@ -2557,7 +2557,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local string_hud = {}
 			string_hud.parent = ea.restriction:GetContent()
 			string_hud.uniqueID = role.uniqueID
-			string_hud.header = YRP.lang_string("LID_hud")
+			string_hud.header = YRP.trans("LID_hud")
 			string_hud.netstr = "nws_yrp_update_role_string_hud"
 			string_hud.value = role.string_hud
 			string_hud.uniqueID = role.uniqueID
@@ -2602,7 +2602,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 
 				function winndswep:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.trans("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
 				local allndsweps = YRPGetSWEPsList()
@@ -2702,7 +2702,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local specializations = {}
 			specializations.parent = ea.restriction:GetContent()
 			specializations.uniqueID = role.uniqueID
-			specializations.header = YRP.lang_string("LID_specializations") .. " Permission to give it"
+			specializations.header = YRP.trans("LID_specializations") .. " Permission to give it"
 			specializations.netstr = "nws_yrp_update_role_string_specializations"
 			specializations.value = role.string_specializations
 			specializations.uniqueID = role.uniqueID
@@ -2717,7 +2717,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 
 				function winspecializations:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-					draw.SimpleText(YRP.lang_string("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.trans("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
 				net.Receive("nws_yrp_get_all_specializations", function(l)
@@ -2955,13 +2955,13 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local tab_a2 = {}
 
 			for i, v in pairs(abis) do
-				tab_a2[string.lower(v)] = YRP.lang_string("LID_" .. string.lower(v))
+				tab_a2[string.lower(v)] = YRP.trans("LID_" .. string.lower(v))
 			end
 
 			local string_ability = {}
 			string_ability.parent = ea.attributes:GetContent()
 			string_ability.uniqueID = role.uniqueID
-			string_ability.header = YRP.lang_string("LID_ability") .. " (for addons)"
+			string_ability.header = YRP.trans("LID_ability") .. " (for addons)"
 			string_ability.netstr = "nws_yrp_update_role_string_ability"
 			string_ability.value = role.string_ability
 			string_ability.uniqueID = role.uniqueID
@@ -2971,7 +2971,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 			local ability = {}
 			ability.parent = ea.attributes:GetContent()
 			ability.uniqueID = role.uniqueID
-			ability.header = YRP.lang_string("LID_ability")
+			ability.header = YRP.trans("LID_ability")
 			ability.uniqueID = role.uniqueID
 			ability.lforce = false
 			ability.dnw = {}

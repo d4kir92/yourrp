@@ -80,21 +80,21 @@ function SWEP:PrimaryAttack()
 		if YRPEntityAlive(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalYRPInt("int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
 				if YRPLockDoor(self:GetOwner(), ent, ent:GetYRPString("buildingID", "Failed")) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_lockeddoor"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_lockeddoor"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
 				end
 			elseif ent:IsVehicle() and ent:GetYRPInt("item_uniqueID", 0) ~= 0 then
 				if YRPLockVehicle(self:GetOwner(), ent, ent:GetYRPInt("item_uniqueID", 0)) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_lockedvehicle"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_lockedvehicle"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
 				end
 			else
 				if YRPLockVehicle(self:GetOwner(), ent, ent:GetYRPInt("item_uniqueID", 0)) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_lockedvehicle"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_lockedvehicle"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
 				end
 			end
 		end
@@ -108,21 +108,21 @@ function SWEP:SecondaryAttack()
 		if YRPEntityAlive(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalYRPInt("int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
 				if YRPUnlockDoor(self:GetOwner(), ent, ent:GetYRPString("buildingID", "Failed")) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_unlockeddoor"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_unlockeddoor"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
 				end
 			elseif ent:GetYRPInt("item_uniqueID", 0) ~= 0 then
 				if YRPUnlockVehicle(self:GetOwner(), ent, ent:GetYRPInt("item_uniqueID", 0)) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_unlockedvehicle"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_unlockedvehicle"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
 				end
 			else
 				if YRPUnlockVehicle(self:GetOwner(), ent, ent:GetYRPInt("item_uniqueID", 0)) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_unlockedvehicle"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_unlockedvehicle"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.lang_string("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
 				end
 			end
 		end

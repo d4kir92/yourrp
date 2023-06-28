@@ -21,7 +21,7 @@ hook.Add("YFramePaint", "YFrame_Material", function(self, pw, ph, tab)
 		draw.RoundedBoxEx(r, 0, hh, pw, ph - hh, YRPInterfaceValue("YFrame", "BG"), false, false, true, true) --YRPInterfaceValue( "YFrame", "BG" ) )
 
 		if self.GetTitle ~= nil then
-			draw.SimpleText(YRP.lang_string(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		return true
@@ -77,7 +77,7 @@ hook.Add("YButtonPaint", "YButton_Material", function(self, pw, ph, tab)
 		end
 
 		draw.RoundedBox(r, tab.x, tab.y, pw, ph, Color(color.r, color.g, color.b, color.a))
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, YRPTextColor(color), tab.ax or TEXT_ALIGN_CENTER, tab.ay or TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans(tab.text or self:GetText()), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, YRPTextColor(color), tab.ax or TEXT_ALIGN_CENTER, tab.ay or TEXT_ALIGN_CENTER)
 
 		return true
 	end
@@ -131,7 +131,7 @@ hook.Add("YButtonRPaint", "YButtonR_Material", function(self, pw, ph, tab)
 		end
 
 		draw.RoundedBox(r, tab.x, tab.y, pw, ph, Color(color.r, color.g, color.b, color.a))
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans(tab.text or self:GetText()), "Y_18_500", tab.x + pw / 2, tab.y + ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 		return true
 	end
@@ -184,7 +184,7 @@ hook.Add("YButtonAPaint", "YButtonA_Material", function(self, pw, ph, tab)
 		end
 
 		draw.RoundedBox(r, 0, 0, pw, ph, Color(color.r, color.g, color.b, color.a))
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor or Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor or Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 		return true
 	end
@@ -217,7 +217,7 @@ hook.Add("YLabelPaint", "YLabel_Material", function(self, pw, ph, tab)
 			ty = YRP.ctr(20)
 		end
 
-		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_24_500", tx, ty, tcolor, ax, ay)
+		draw.SimpleText(YRP.trans(self:GetText()), "Y_24_500", tx, ty, tcolor, ax, ay)
 
 		return true
 	end
@@ -246,7 +246,7 @@ hook.Add("YTextFieldPaint", "YTextFieldPaint_Material", function(self, pw, ph, t
 			ty = YRP.ctr(20)
 		end
 
-		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
+		draw.SimpleText(YRP.trans(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
 
 		return true
 	end
@@ -417,7 +417,7 @@ hook.Add("YGroupBoxPaint", "YGroupBox_Material", function(self, pw, ph, tab)
 		draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), color2)
 		local x, y = self.con:GetPos()
 		draw.RoundedBox(0, x, y, self.con:GetWide(), self.con:GetTall(), color3)
-		draw.SimpleText(YRP.lang_string(tab.text or self:GetText()), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans(tab.text or self:GetText()), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 		return true
 	end

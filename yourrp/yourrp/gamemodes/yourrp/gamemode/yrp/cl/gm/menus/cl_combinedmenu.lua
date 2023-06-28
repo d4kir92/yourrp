@@ -38,7 +38,7 @@ function YRPCreateRulesContent(PARENT)
 	local page = YRPCreateD("DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20))
 
 	function page:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string("LID_rules"), "Y_22_500", 0, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.SimpleText(YRP.trans("LID_rules"), "Y_22_500", 0, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 	end
 
 	page.serverrules = YRPCreateD("RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(70), 0, YRP.ctr(70))
@@ -606,7 +606,7 @@ function YRPOpenCombinedMenu()
 
 		for i, v in pairs(sites) do
 			if v.name ~= "hr" then
-				local tw, _ = surface.GetTextSize(YRP.lang_string(v.name))
+				local tw, _ = surface.GetTextSize(YRP.trans(v.name))
 
 				if tw > cm.menu.pw then
 					cm.menu.pw = tw
@@ -641,14 +641,14 @@ function YRPOpenCombinedMenu()
 					end
 
 					surface.SetFont(font)
-					local tw2, _ = surface.GetTextSize(YRP.lang_string(v.name))
+					local tw2, _ = surface.GetTextSize(YRP.trans(v.name))
 
 					if tw2 > cm.menu.pw then
 						cm.menu.pw = tw2
 						--cm.win:UpdateSize()
 					end
 
-					draw.SimpleText(YRP.lang_string(v.name), font, ph, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.trans(v.name), font, ph, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				function site:DoClick()

@@ -5,12 +5,12 @@ net.Receive("nws_yrp_setting_players", function(len)
 	if YRPPanelAlive(PARENT) then
 		local _giveListView = YRPCreateD("DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 		_giveListView:AddColumn("SteamID")
-		_giveListView:AddColumn(YRP.lang_string("LID_nick"))
-		_giveListView:AddColumn(YRP.lang_string("LID_name"))
-		_giveListView:AddColumn(YRP.lang_string("LID_idcardid"))
-		_giveListView:AddColumn(YRP.lang_string("LID_group"))
-		_giveListView:AddColumn(YRP.lang_string("LID_role"))
-		_giveListView:AddColumn(YRP.lang_string("LID_money"))
+		_giveListView:AddColumn(YRP.trans("LID_nick"))
+		_giveListView:AddColumn(YRP.trans("LID_name"))
+		_giveListView:AddColumn(YRP.trans("LID_idcardid"))
+		_giveListView:AddColumn(YRP.trans("LID_group"))
+		_giveListView:AddColumn(YRP.trans("LID_role"))
+		_giveListView:AddColumn(YRP.trans("LID_money"))
 
 		for n, y in pairs(player.GetAll()) do
 			_giveListView:AddLine(y:YRPSteamID(), y:SteamName(), y:RPName(), y:IDCardID(), y:GetYRPString("groupName"), y:GetYRPString("roleName"), y:GetYRPString("money"))
@@ -40,18 +40,18 @@ net.Receive("nws_yrp_setting_players", function(len)
 			end)
 
 			local _buttonSetRPName = createVGUI("DButton", _tmpPanel, 400, 50, 10, 10)
-			_buttonSetRPName:SetText(YRP.lang_string("LID_rpname"))
+			_buttonSetRPName:SetText(YRP.trans("LID_rpname"))
 
 			function _buttonSetRPName:DoClick()
 				local _rpnameFrame = createVGUI("DFrame", nil, 400, 180, 0, 0)
 				_rpnameFrame:Center()
 				_rpnameFrame:ShowCloseButton(true)
 				_rpnameFrame:SetDraggable(true)
-				_rpnameFrame:SetTitle(YRP.lang_string("LID_rpname"))
+				_rpnameFrame:SetTitle(YRP.trans("LID_rpname"))
 				local _newrpname = createVGUI("DTextEntry", _rpnameFrame, 380, 50, 10, 60)
 				_newrpname:SetText(ply:GetYRPString("rpname", "FAILED"))
 				local _rpnameButton = createVGUI("DButton", _rpnameFrame, 380, 50, 10, 60 + 10 + 50)
-				_rpnameButton:SetText(YRP.lang_string("LID_rpname"))
+				_rpnameButton:SetText(YRP.trans("LID_rpname"))
 
 				function _rpnameButton:DoClick()
 					net.Start("nws_yrp_set_rpname")
@@ -69,14 +69,14 @@ net.Receive("nws_yrp_setting_players", function(len)
 			end
 
 			local _buttonRole = createVGUI("DButton", _tmpPanel, 400, 50, 10, 70)
-			_buttonRole:SetText(YRP.lang_string("LID_giverole"))
+			_buttonRole:SetText(YRP.trans("LID_giverole"))
 
 			function _buttonRole:DoClick()
 				local _giveFrame = createVGUI("DFrame", nil, 400, 305, 0, 0)
 				_giveFrame:Center()
 				_giveFrame:ShowCloseButton(true)
 				_giveFrame:SetDraggable(true)
-				_giveFrame:SetTitle(YRP.lang_string("LID_giverole"))
+				_giveFrame:SetTitle(YRP.trans("LID_giverole"))
 				local _giveComboBox = createVGUI("DComboBox", _giveFrame, 380, 50, 10, 85)
 
 				net.Receive("nws_yrp_give_getGroTab", function(le)
@@ -111,7 +111,7 @@ net.Receive("nws_yrp_setting_players", function(len)
 				end
 
 				local _giveButton = createVGUI("DButton", _giveFrame, 380, 50, 10, 185 + 60)
-				_giveButton:SetText(YRP.lang_string("LID_give"))
+				_giveButton:SetText(YRP.trans("LID_give"))
 
 				function _giveButton:DoClick()
 					if isnumber(tonumber(_giveComboBox2:GetOptionData(_giveComboBox2:GetSelectedID()))) then
@@ -125,26 +125,26 @@ net.Receive("nws_yrp_setting_players", function(len)
 
 				function _giveFrame:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
-					draw.SimpleTextOutlined(YRP.lang_string("LID_group") .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
-					draw.SimpleTextOutlined(YRP.lang_string("LID_role") .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(85 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
+					draw.SimpleTextOutlined(YRP.trans("LID_group") .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
+					draw.SimpleTextOutlined(YRP.trans("LID_role") .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(85 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
 				end
 
 				_giveFrame:MakePopup()
 			end
 
 			local _buttonSetID = createVGUI("DButton", _tmpPanel, 400, 50, 10, 130)
-			_buttonSetID:SetText(YRP.lang_string("LID_setidcardid"))
+			_buttonSetID:SetText(YRP.trans("LID_setidcardid"))
 
 			function _buttonSetID:DoClick()
 				local _idcardidFrame = createVGUI("DFrame", nil, 400, 180, 0, 0)
 				_idcardidFrame:Center()
 				_idcardidFrame:ShowCloseButton(true)
 				_idcardidFrame:SetDraggable(true)
-				_idcardidFrame:SetTitle(YRP.lang_string("LID_setidcardid"))
+				_idcardidFrame:SetTitle(YRP.trans("LID_setidcardid"))
 				local _newidcardid = createVGUI("DTextEntry", _idcardidFrame, 380, 50, 10, 60)
 				_newidcardid:SetText(ply:GetYRPString("idcardid", "FAILED"))
 				local _idcardidButton = createVGUI("DButton", _idcardidFrame, 380, 50, 10, 60 + 10 + 50)
-				_idcardidButton:SetText(YRP.lang_string("LID_setidcardid"))
+				_idcardidButton:SetText(YRP.trans("LID_setidcardid"))
 
 				function _idcardidButton:DoClick()
 					net.Start("nws_yrp_set_idcardid")
@@ -162,7 +162,7 @@ net.Receive("nws_yrp_setting_players", function(len)
 			end
 
 			local _buttonRemoveArrests = createVGUI("DButton", _tmpPanel, 400, 50, 10, 190)
-			_buttonRemoveArrests:SetText(YRP.lang_string("LID_removearrests"))
+			_buttonRemoveArrests:SetText(YRP.trans("LID_removearrests"))
 
 			function _buttonRemoveArrests:DoClick()
 				net.Start("nws_yrp_removearrests")
@@ -171,14 +171,14 @@ net.Receive("nws_yrp_setting_players", function(len)
 			end
 
 			local _buttonGiveLicense = createVGUI("DButton", _tmpPanel, 400, 50, 10, 250)
-			_buttonGiveLicense:SetText(YRP.lang_string("LID_givelicense"))
+			_buttonGiveLicense:SetText(YRP.trans("LID_givelicense"))
 
 			function _buttonGiveLicense:DoClick()
 				local _licenseFrame = createVGUI("DFrame", nil, 400, 180, 0, 0)
 				_licenseFrame:Center()
 				_licenseFrame:ShowCloseButton(true)
 				_licenseFrame:SetDraggable(true)
-				_licenseFrame:SetTitle(YRP.lang_string("LID_givelicense"))
+				_licenseFrame:SetTitle(YRP.trans("LID_givelicense"))
 				local license = 0
 				local _newlicense = createVGUI("DComboBox", _licenseFrame, 380, 50, 10, 60)
 
@@ -197,7 +197,7 @@ net.Receive("nws_yrp_setting_players", function(len)
 				net.Start("nws_yrp_get_licenses_player")
 				net.SendToServer()
 				local _licenseButton = createVGUI("DButton", _licenseFrame, 380, 50, 10, 60 + 10 + 50)
-				_licenseButton:SetText(YRP.lang_string("LID_givelicense"))
+				_licenseButton:SetText(YRP.trans("LID_givelicense"))
 
 				function _licenseButton:DoClick()
 					net.Start("nws_yrp_givelicense")
@@ -215,14 +215,14 @@ net.Receive("nws_yrp_setting_players", function(len)
 			end
 
 			local _buttonRemoveLicense = createVGUI("DButton", _tmpPanel, 400, 50, 10, 310)
-			_buttonRemoveLicense:SetText(YRP.lang_string("LID_removelicense"))
+			_buttonRemoveLicense:SetText(YRP.trans("LID_removelicense"))
 
 			function _buttonRemoveLicense:DoClick()
 				local _licenseFrame = createVGUI("DFrame", nil, 400, 180, 0, 0)
 				_licenseFrame:Center()
 				_licenseFrame:ShowCloseButton(true)
 				_licenseFrame:SetDraggable(true)
-				_licenseFrame:SetTitle(YRP.lang_string("LID_removelicense"))
+				_licenseFrame:SetTitle(YRP.trans("LID_removelicense"))
 				local license = 0
 				local _newlicense = createVGUI("DComboBox", _licenseFrame, 380, 50, 10, 60)
 
@@ -241,7 +241,7 @@ net.Receive("nws_yrp_setting_players", function(len)
 				net.Start("nws_yrp_get_licenses_player")
 				net.SendToServer()
 				local _licenseButton = createVGUI("DButton", _licenseFrame, 380, 50, 10, 60 + 10 + 50)
-				_licenseButton:SetText(YRP.lang_string("LID_removelicense"))
+				_licenseButton:SetText(YRP.trans("LID_removelicense"))
 
 				function _licenseButton:DoClick()
 					net.Start("nws_yrp_removelicense")

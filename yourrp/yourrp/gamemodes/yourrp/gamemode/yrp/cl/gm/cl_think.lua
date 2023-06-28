@@ -52,14 +52,14 @@ keys["_hold"] = 0
 
 hook.Add("HUDWeaponPickedUp", "yrp_translate_weaponname", function(wep)
 	if wep.LanguageString ~= nil then
-		wep.PrintName = YRP.lang_string(wep.LanguageString)
+		wep.PrintName = YRP.trans(wep.LanguageString)
 	end
 end)
 
 function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 	-- Change language
 	if newWeapon.LanguageString ~= nil then
-		newWeapon.PrintName = YRP.lang_string(newWeapon.LanguageString)
+		newWeapon.PrintName = YRP.trans(newWeapon.LanguageString)
 	end
 end
 
@@ -157,11 +157,11 @@ function YRPUseFunction(str)
 			local _weapon = LocalPlayer():GetActiveWeapon()
 
 			if _weapon ~= NULL then
-				local _pname = _weapon:GetPrintName() or _weapon.PrintName or YRP.lang_string("LID_weapon")
+				local _pname = _weapon:GetPrintName() or _weapon.PrintName or YRP.trans("LID_weapon")
 				local tab = {}
 				tab["ITEM"] = _pname
-				local cannotbedropped = YRP.lang_string("LID_cannotbedropped", tab)
-				local hasbeendropped = YRP.lang_string("LID_hasbeendropped", tab)
+				local cannotbedropped = YRP.trans("LID_cannotbedropped", tab)
+				local hasbeendropped = YRP.trans("LID_hasbeendropped", tab)
 
 				if _weapon.notdropable == nil then
 					net.Receive("nws_yrp_dropswep", function(len)
@@ -681,8 +681,7 @@ function YRP_CalcView(lply, pos, angles, fov)
 
 							return view
 						end
-					elseif tonumber(lply.yrp_view_range) > -200 and tonumber(lply.yrp_view_range) <= 0 then
-					else
+					elseif tonumber(lply.yrp_view_range) <= -200 then
 						local _tmpThick = 16
 						local _head = lply:LookupBone("ValveBiped.Bip01_Head1")
 

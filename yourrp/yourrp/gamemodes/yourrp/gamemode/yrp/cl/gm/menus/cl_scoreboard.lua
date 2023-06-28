@@ -455,9 +455,9 @@ function YRPScoreboardAddPlayer(ply)
 
 								if v.name == "name" then
 									if not ply:LoadedGamemode() then
-										text = "[" .. YRP.lang_string("LID_loading") .. "]"
+										text = "[" .. YRP.trans("LID_loading") .. "]"
 									elseif ply:IsInCharacterSelection() then
-										text = "[" .. YRP.lang_string("LID_characterselection") .. "]"
+										text = "[" .. YRP.trans("LID_characterselection") .. "]"
 									end
 								end
 
@@ -555,9 +555,9 @@ function YRPScoreboardAddPlayer(ply)
 			"LID_info", "128_info-circle", false, false, function()
 				if IsValid(ply) and ply:YRPSteamID() and ply:SteamID() then
 					SetClipboardText("SteamID: \t" .. ply:YRPSteamID() .. " \nRPName: \t" .. ply:RPName() .. " \nSteamName: \t" .. ply:SteamName())
-					notification.AddLegacy("[" .. string.upper(YRP.lang_string("LID_info")) .. "] COPIED TO CLIPBOARD", NOTIFY_GENERIC, 3)
+					notification.AddLegacy("[" .. string.upper(YRP.trans("LID_info")) .. "] COPIED TO CLIPBOARD", NOTIFY_GENERIC, 3)
 				else
-					notification.AddLegacy("[" .. string.upper(YRP.lang_string("LID_info")) .. "] PLAYER IS NOT VALID", NOTIFY_ERROR, 3)
+					notification.AddLegacy("[" .. string.upper(YRP.trans("LID_info")) .. "] PLAYER IS NOT VALID", NOTIFY_ERROR, 3)
 				end
 			end
 		}
@@ -748,7 +748,7 @@ function YRPScoreboardAddPlayer(ply)
 							self.tt:SetDraggable(false)
 
 							function self.tt:Paint(ppw, pph)
-								draw.SimpleText(YRP.lang_string(btn[1]), "Y_16_500", ppw / 2, pph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans(btn[1]), "Y_16_500", ppw / 2, pph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 								if not YRPIsScoreboardVisible() then
 									self:Remove()
@@ -817,7 +817,7 @@ function YRPOpenSBS()
 			function sortbtn:Paint(pw, ph)
 				local siz = 16 + 4
 				local px = pw / 2
-				local text = YRP.lang_string(v.tran)
+				local text = YRP.trans(v.tran)
 
 				if v.name == "level" and string.len(text) > 3 then
 					text = string.sub(text, 1, 3)
@@ -972,7 +972,7 @@ function YRPInitScoreboard()
 
 		-- MOUSE HELP
 		if not vgui.CursorVisible() then
-			draw.SimpleText(YRP.lang_string("LID_rightclicktoshowmouse"), "Open Sans_24", pw / 2, 34, Color(255, 255, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_rightclicktoshowmouse"), "Open Sans_24", pw / 2, 34, Color(255, 255, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		-- BOTTOM LEFT
@@ -992,9 +992,9 @@ function YRPInitScoreboard()
 	function YRPScoreboard.BotBar:Paint(pw, ph)
 		-- Table Footer
 		draw.RoundedBox(5, 0, 0, YRPScoreboard.w, hr, Color(255, 255, 255, 255))
-		draw.SimpleText(string.upper(YRP.lang_string("LID_map")) .. ": " .. GetNiceMapName(), "Open Sans_28", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(string.upper(YRP.trans("LID_map")) .. ": " .. GetNiceMapName(), "Open Sans_28", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		draw.SimpleText("YourRP by D4KiR", "Open Sans_28", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers() .. " (" .. string.upper(YRP.lang_string("LID_players")) .. ")", "Open Sans_28", pw, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers() .. " (" .. string.upper(YRP.trans("LID_players")) .. ")", "Open Sans_28", pw, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
 	YRPScoreboard.TopBar = YRPCreateD("DPanel", YRPScoreboard, 128, 128, 0, 0)

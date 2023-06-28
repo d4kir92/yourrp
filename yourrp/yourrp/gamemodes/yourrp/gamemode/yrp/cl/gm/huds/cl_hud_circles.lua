@@ -147,7 +147,7 @@ function HUDCircles()
 		if IsLevelSystemEnabled() then
 			local tab = {}
 			tab["LEVEL"] = lply:Level()
-			HUDCirclesDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.lang_string("LID_levelx", tab) .. " ( " .. lply:XP() .. "%)")
+			HUDCirclesDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.trans("LID_levelx", tab) .. " ( " .. lply:XP() .. "%)")
 		end
 
 		if lply:Battery() < 100 then
@@ -162,8 +162,8 @@ function HUDCircles()
 		HUDCirclesDrawText("NA", lply:RPName())
 		HUDCirclesDrawText("CR", os.date("%H:%M", os.time()))
 		HUDCirclesDrawText("CC", lply:FormattedCharPlayTime())
-		HUDCirclesDrawText("PE", YRP.lang_string("LID_fps") .. ": " .. GetFPS())
-		HUDCirclesDrawText("NE", YRP.lang_string("LID_ping") .. ": " .. lply:Ping())
+		HUDCirclesDrawText("PE", YRP.trans("LID_fps") .. ": " .. GetFPS())
+		HUDCirclesDrawText("NE", YRP.trans("LID_ping") .. ": " .. lply:Ping())
 		local wep = lply:GetActiveWeapon()
 
 		if wep ~= NULL then

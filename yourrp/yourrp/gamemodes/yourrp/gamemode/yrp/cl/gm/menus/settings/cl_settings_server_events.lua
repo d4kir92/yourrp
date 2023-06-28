@@ -9,7 +9,7 @@ net.Receive("nws_yrp_setting_events", function(len)
 		local sh = PARENT:GetTall() / 3
 		-- Event Chars
 		EVENT.EventChars = YRPCreateD("DListView", PARENT, sw, sh * 2 - YRP.ctr(100), 0, YRP.ctr(100) + sh)
-		EVENT.EventChars:AddColumn(YRP.lang_string("LID_name"))
+		EVENT.EventChars:AddColumn(YRP.trans("LID_name"))
 		EVENT.EventChars:AddColumn("Event Character ID"):SetFixedWidth(120)
 		EVENT.EventChars:AddColumn("Event Character NAME")
 
@@ -202,8 +202,8 @@ net.Receive("nws_yrp_setting_events", function(len)
 		end
 
 		EVENT.EventList = YRPCreateD("DListView", PARENT, sw, sh - YRP.ctr(100), 0, YRP.ctr(100))
-		EVENT.EventList:AddColumn(YRP.lang_string("LID_id")):SetFixedWidth(80)
-		EVENT.EventList:AddColumn(YRP.lang_string("LID_name"))
+		EVENT.EventList:AddColumn(YRP.trans("LID_id")):SetFixedWidth(80)
+		EVENT.EventList:AddColumn(YRP.trans("LID_name"))
 
 		function EVENT.EventList:OnRowSelected(rowIndex, row)
 			local uid = EVENT.EventList:GetLine(EVENT.EventList:GetSelectedLine()):GetValue(1)

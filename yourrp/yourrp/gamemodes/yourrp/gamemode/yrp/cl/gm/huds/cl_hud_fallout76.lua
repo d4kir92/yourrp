@@ -324,7 +324,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["north"].font = "Y_14_500"
 			FO76[tab.element]["north"].color = FOColor()
 			FO76[tab.element]["north"].brcolor = Color(0, 0, 0, 255)
-			FO76[tab.element]["north"].text = YRP.lang_string("LID_north_short")
+			FO76[tab.element]["north"].text = YRP.trans("LID_north_short")
 			FO76[tab.element]["south"].w = h / 8
 			FO76[tab.element]["south"].h = h
 			FO76[tab.element]["south"].x = x + w / 2
@@ -334,7 +334,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["south"].font = "Y_14_500"
 			FO76[tab.element]["south"].color = FOColor()
 			FO76[tab.element]["south"].brcolor = Color(0, 0, 0, 255)
-			FO76[tab.element]["south"].text = YRP.lang_string("LID_south_short")
+			FO76[tab.element]["south"].text = YRP.trans("LID_south_short")
 			FO76[tab.element]["east"].w = h / 8
 			FO76[tab.element]["east"].h = h
 			FO76[tab.element]["east"].x = x + w / 2
@@ -344,7 +344,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["east"].font = "Y_14_500"
 			FO76[tab.element]["east"].color = FOColor()
 			FO76[tab.element]["east"].brcolor = Color(0, 0, 0, 255)
-			FO76[tab.element]["east"].text = YRP.lang_string("LID_east_short")
+			FO76[tab.element]["east"].text = YRP.trans("LID_east_short")
 			FO76[tab.element]["west"].w = h / 8
 			FO76[tab.element]["west"].h = h
 			FO76[tab.element]["west"].x = x + w / 2
@@ -354,7 +354,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["west"].font = "Y_14_500"
 			FO76[tab.element]["west"].color = FOColor()
 			FO76[tab.element]["west"].brcolor = Color(0, 0, 0, 255)
-			FO76[tab.element]["west"].text = YRP.lang_string("LID_west_short")
+			FO76[tab.element]["west"].text = YRP.trans("LID_west_short")
 		else
 			HudBox(FO76[tab.element]["BG"])
 			HudBox(FO76[tab.element]["Bar"])
@@ -428,43 +428,43 @@ function HUD_FO76()
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and not YRPIsScoreboardVisible() and GetGlobalYRPBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Fallout 76" then
 		local HP = {}
 		HP.element = "HP"
-		HP.text = YRP.lang_string("LID_hp")
+		HP.text = YRP.trans("LID_hp")
 		HP.cur = lply:Health()
 		HP.max = lply:GetMaxHealth()
 		FO76Element(HP)
 		local AR = {}
 		AR.element = "AR"
-		AR.text = YRP.lang_string("LID_ar")
+		AR.text = YRP.trans("LID_ar")
 		AR.cur = lply:Armor()
 		AR.max = lply:GetMaxArmor()
 		FO76Element(AR)
 		local ST = {}
 		ST.element = "ST"
-		ST.text = YRP.lang_string("LID_st")
+		ST.text = YRP.trans("LID_st")
 		ST.cur = lply:Stamina()
 		ST.max = lply:GetMaxStamina()
 		FO76Element(ST)
 		local HU = {}
 		HU.element = "HU"
-		HU.text = YRP.lang_string("LID_hu")
+		HU.text = YRP.trans("LID_hu")
 		HU.cur = lply:Hunger()
 		HU.max = lply:GetMaxHunger()
 		FO76Element(HU)
 		local TH = {}
 		TH.element = "TH"
-		TH.text = YRP.lang_string("LID_th")
+		TH.text = YRP.trans("LID_th")
 		TH.cur = lply:Hunger()
 		TH.max = lply:GetMaxHunger()
 		FO76Element(TH)
 		local RA = {}
 		RA.element = "RA"
-		RA.text = YRP.lang_string("LID_ra")
+		RA.text = YRP.trans("LID_ra")
 		RA.cur = lply:Radiation()
 		RA.max = lply:GetMaxRadiation()
 		FO76Element(RA)
 		local AB = {}
 		AB.element = "AB"
-		AB.text = YRP.lang_string("LID_ab")
+		AB.text = YRP.trans("LID_ab")
 		AB.cur = lply:Ability()
 		AB.max = lply:GetMaxAbility()
 		FO76Element(AB)
@@ -472,7 +472,7 @@ function HUD_FO76()
 
 		if IsLevelSystemEnabled() then
 			XP.element = "XP"
-			XP.text = YRP.lang_string("LID_xp")
+			XP.text = YRP.trans("LID_xp")
 			XP.cur = lply:XP()
 			XP.max = lply:GetMaxXP()
 			XP.centertext = lply:Level()
@@ -546,7 +546,7 @@ function HUD_FO76()
 
 		local NE = {}
 		NE.element = "NE"
-		NE.text = YRP.lang_string("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. " )"
+		NE.text = YRP.trans("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. " )"
 		NE.tcolor = pingcolor
 		FO76Name(NE)
 		local PE = {}
@@ -580,7 +580,7 @@ function HUD_FO76()
 			end
 		end
 
-		PE.text = YRP.lang_string("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. " )"
+		PE.text = YRP.trans("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. " )"
 		PE.tcolor = fpscolor
 		FO76Name(PE)
 		local MO = {}
@@ -604,7 +604,7 @@ function HUD_FO76()
 		if batterypower <= 100 then
 			local BA = {}
 			BA.element = "BA"
-			BA.text = YRP.lang_string("LID_ba")
+			BA.text = YRP.trans("LID_ba")
 			BA.cur = batterypower
 			BA.max = 100
 			FO76Element(BA)

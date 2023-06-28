@@ -37,7 +37,7 @@ net.Receive("nws_yrp_get_licenses", function()
 		end
 
 		_li._lic = YRPCreateD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(1600), YRP.ctr(40), YRP.ctr(40 + 50 + 10))
-		_li._lic:SetListHeader(YRP.lang_string("LID_licenses"))
+		_li._lic:SetListHeader(YRP.trans("LID_licenses"))
 		--_li._lic:SetDStrForAdd( "license_add" )
 		_li._lic:SetEditArYRPEntityAlive(_li.ea)
 
@@ -50,7 +50,7 @@ net.Receive("nws_yrp_get_licenses", function()
 			--
 			_li.name = YRPCreateD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 			_li.name.textentry.tbl = tbl
-			_li.name:SetHeader(YRP.lang_string("LID_name"))
+			_li.name:SetHeader(YRP.trans("LID_name"))
 			_li.name:SetText(tbl.name)
 
 			function _li.name.textentry:OnChange()
@@ -65,7 +65,7 @@ net.Receive("nws_yrp_get_licenses", function()
 			--
 			_li.desc = YRPCreateD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(400), 0, YRP.ctr(150))
 			_li.desc.textentry.tbl = tbl
-			_li.desc:SetHeader(YRP.lang_string("LID_description"))
+			_li.desc:SetHeader(YRP.trans("LID_description"))
 			_li.desc:SetText(tbl.description)
 
 			function _li.desc.textentry:OnChange()
@@ -80,7 +80,7 @@ net.Receive("nws_yrp_get_licenses", function()
 			--
 			_li.price = YRPCreateD("DYRPNumberWang", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(600))
 			_li.price.numberwang.tbl = tbl
-			_li.price:SetHeader(YRP.lang_string("LID_price"))
+			_li.price:SetHeader(YRP.trans("LID_price"))
 			_li.price:SetValue(tbl.price)
 
 			function _li.price.numberwang:OnChange()

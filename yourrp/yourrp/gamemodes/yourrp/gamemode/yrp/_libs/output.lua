@@ -49,9 +49,9 @@ end
 
 function bool_status(b)
 	if tobool(b) then
-		return YRP.lang_string("LID_enabled")
+		return YRP.trans("LID_enabled")
 	elseif not tobool(b) then
-		return YRP.lang_string("LID_disabled")
+		return YRP.trans("LID_disabled")
 	end
 end
 
@@ -237,7 +237,7 @@ function YRP.msg(chan, str_msg, tochat, force)
 						err:SetTitle("")
 
 						function err:Paint(pw, ph)
-							draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.lang_string("LID_error") .. "] " .. "Look into the console!", "Y_14_500", Color(0, 255, 0), Color(0, 0, 0, 255))
+							draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.trans("LID_error") .. "] " .. "Look into the console!", "Y_14_500", Color(0, 255, 0), Color(0, 0, 0, 255))
 						end
 
 						timer.Simple(8, function()

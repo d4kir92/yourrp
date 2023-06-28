@@ -101,7 +101,7 @@ if CLIENT then
 		w:SetTitle("LID_entspawner")
 		-- Respawn time
 		w.respawntext = YRPCreateD("YLabel", w:GetContent(), YRP.ctr(sw), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
-		w.respawntext:SetText(YRP.lang_string("LID_respawntime") .. " ( " .. YRP.lang_string("LID_seconds") .. " )")
+		w.respawntext:SetText(YRP.trans("LID_respawntime") .. " ( " .. YRP.trans("LID_seconds") .. " )")
 		w.respawn = YRPCreateD("DNumberWang", w:GetContent(), YRP.ctr(sw), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
 		w.respawn:SetMin(1)
 		w.respawn:SetMax(60 * 60 * 6)

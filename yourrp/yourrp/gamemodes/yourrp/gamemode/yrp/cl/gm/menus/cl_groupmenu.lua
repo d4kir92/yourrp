@@ -16,7 +16,7 @@ function YRPToggleGroupMenu()
 	elseif YRPIsNoMenuOpen() then
 		YRPOpenMenu()
 		GMENU = YRPCreateD("YFrame", nil, 600, 600, 0, 0)
-		GMENU:SetTitle(string.format("%s: %s", YRP.lang_string("LID_group"), LocalPlayer():GetGroupName()))
+		GMENU:SetTitle(string.format("%s: %s", YRP.trans("LID_group"), LocalPlayer():GetGroupName()))
 		GMENU:Center()
 		GMENU:MakePopup()
 		GMENU:SetSizable(true)
@@ -189,11 +189,11 @@ function YRPToggleGroupMenu()
 
 			if IsValid(GMENU) then
 				GMENU.charid = char.uniqueID
-				GMENU.membername:SetText(string.format("%s: %s", YRP.lang_string("LID_name"), char.name))
+				GMENU.membername:SetText(string.format("%s: %s", YRP.trans("LID_name"), char.name))
 				GMENU.membername:Show()
-				GMENU.memberstatus:SetText(string.format("%s: %s", YRP.lang_string("LID_status"), YRPGetCharStatusByName(char.name)))
+				GMENU.memberstatus:SetText(string.format("%s: %s", YRP.trans("LID_status"), YRPGetCharStatusByName(char.name)))
 				GMENU.memberstatus:Show()
-				GMENU.memberrole:SetText(string.format("%s: %s", YRP.lang_string("LID_role"), char.roleName))
+				GMENU.memberrole:SetText(string.format("%s: %s", YRP.trans("LID_role"), char.roleName))
 				GMENU.memberrole:Show()
 
 				if char.uniqueID ~= LocalPlayer():CharID() then

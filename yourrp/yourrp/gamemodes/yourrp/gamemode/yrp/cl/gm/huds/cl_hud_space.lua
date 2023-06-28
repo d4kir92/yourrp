@@ -70,7 +70,7 @@ function YRPHUDSpace()
 			local t = {}
 			t["LEVEL"] = lply:Level()
 
-			ELES["XP"] = {lply:XP(), lply:GetMaxXP(), XP, YRP.lang_string("LID_levelx", t) .. " ( " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " )"}
+			ELES["XP"] = {lply:XP(), lply:GetMaxXP(), XP, YRP.trans("LID_levelx", t) .. " ( " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " )"}
 
 			ELES["CH"] = {0, nil, nil, nil, 1}
 
@@ -80,9 +80,9 @@ function YRPHUDSpace()
 			ELES["CC"] = {0, nil, CC, lply:FormattedCharPlayTime(),}
 
 			--2
-			ELES["PE"] = {0, nil, nil, YRP.lang_string("LID_fps") .. ": " .. GetFPS(), 2}
+			ELES["PE"] = {0, nil, nil, YRP.trans("LID_fps") .. ": " .. GetFPS(), 2}
 
-			ELES["NE"] = {0, nil, nil, YRP.lang_string("LID_ping") .. ": " .. lply:Ping(), 2}
+			ELES["NE"] = {0, nil, nil, YRP.trans("LID_ping") .. ": " .. lply:Ping(), 2}
 
 			ELES["SN"] = {0, nil, nil, GetGlobalYRPString("text_server_name", "SERVERNAME"), 2}
 

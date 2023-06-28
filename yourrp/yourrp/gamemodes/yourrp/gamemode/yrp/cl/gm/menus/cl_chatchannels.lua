@@ -84,7 +84,7 @@ function YRPChatChannel(edit, uid)
 			end
 		end
 
-		win.mode:AddChoice(YRP.lang_string(v[1]), v[2], selected)
+		win.mode:AddChoice(YRP.trans(v[1]), v[2], selected)
 	end
 
 	-- STRUCTURE
@@ -173,7 +173,7 @@ function YRPChatChannel(edit, uid)
 
 	-- USERGROUPCOLOr
 	win.rolecolor = YRPCreateD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(960), YRP.ctr(310))
-	win.rolecolor:SetText(YRP.lang_string("LID_role") .. " ( " .. YRP.lang_string("LID_color") .. " )")
+	win.rolecolor:SetText(YRP.trans("LID_role") .. " ( " .. YRP.trans("LID_color") .. " )")
 
 	function win.rolecolor:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%ROCOLOR%")
@@ -200,7 +200,7 @@ function YRPChatChannel(edit, uid)
 
 	-- USERGROUPCOLOr
 	win.usergroupcolor = YRPCreateD("YButton", CON, YRP.ctr(620), YRP.ctr(50), YRP.ctr(640), YRP.ctr(370))
-	win.usergroupcolor:SetText(YRP.lang_string("LID_usergroup") .. " ( " .. YRP.lang_string("LID_color") .. " )")
+	win.usergroupcolor:SetText(YRP.trans("LID_usergroup") .. " ( " .. YRP.trans("LID_color") .. " )")
 
 	function win.usergroupcolor:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%UGCOLOR%")

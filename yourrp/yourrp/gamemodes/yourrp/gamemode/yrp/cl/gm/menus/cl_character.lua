@@ -38,7 +38,7 @@ surface.CreateFont("Saira_100", {
 local yrp_logo = Material("yrp/yrp_icon")
 
 function YRPGetCharBGNotFound()
-	return YRPGetKeybindName("menu_settings") .. " >> " .. YRP.lang_string("LID_server") .. " >> " .. YRP.lang_string("LID_general") .. " >> " .. YRP.lang_string("LID_character_background") .. " (enter a weblink to an image)"
+	return YRPGetKeybindName("menu_settings") .. " >> " .. YRP.trans("LID_server") .. " >> " .. YRP.trans("LID_general") .. " >> " .. YRP.trans("LID_character_background") .. " (enter a weblink to an image)"
 end
 
 local isEventChar = false
@@ -257,7 +257,7 @@ function YRPLoadCharacters()
 						tmpChar.rol = tmpChar.rolename
 
 						if IsLevelSystemEnabled() then
-							tmpChar.rol = YRP.lang_string("LID_level") .. " " .. tmpChar.level .. "    " .. tmpChar.rol
+							tmpChar.rol = YRP.trans("LID_level") .. " " .. tmpChar.level .. "    " .. tmpChar.rol
 						end
 
 						tmpChar.cni = cni
@@ -353,12 +353,12 @@ function YRPLoadCharacters()
 										t.text = math.Round(LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) - CurTime(), 0)
 
 										if LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
-											t.text = YRP.lang_string("LID_play") -- .. " ( " .. _cur .. " )"
+											t.text = YRP.trans("LID_play") -- .. " ( " .. _cur .. " )"
 										end
 
 										if (tmpChar:YRPIsHovered() or self:IsHovered()) and not tmpChar.charplayermodel.Pressed then
 											if LocalPlayer():Alive() then
-												t.text = YRP.lang_string("LID_close") .. " ( " .. LocalPlayer():RPName() .. " )"
+												t.text = YRP.trans("LID_close") .. " ( " .. LocalPlayer():RPName() .. " )"
 												t.color = Color(255, 100, 100, 255)
 												self:SetText(t.text)
 												hook.Run("YButtonRPaint", self, pw, ph)
@@ -412,9 +412,9 @@ function YRPLoadCharacters()
 							function deleteChar:DoClick()
 								local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 								_window:Center()
-								_window:SetTitle(YRP.lang_string("LID_areyousure"))
+								_window:SetTitle(YRP.trans("LID_areyousure"))
 								local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-								_yesButton:SetText(YRP.lang_string("LID_yes"))
+								_yesButton:SetText(YRP.trans("LID_yes"))
 
 								function _yesButton:DoClick()
 									if IsNotNilAndNotFalse(tmpChar.charid) then
@@ -429,7 +429,7 @@ function YRPLoadCharacters()
 								end
 
 								local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-								_noButton:SetText(YRP.lang_string("LID_no"))
+								_noButton:SetText(YRP.trans("LID_no"))
 
 								function _noButton:DoClick()
 									_window:Close()
@@ -457,7 +457,7 @@ function YRPLoadCharacters()
 
 								if IsLevelSystemEnabled() then
 									py2 = py2 + tabh * 2
-									draw.SimpleText(YRP.lang_string("LID_level") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(YRP.trans("LID_level") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									draw.SimpleText(self.level, "Y_30_500", posx + tabw, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									local barbr = ScrW() * 0.04
 									local barw = DefaultCharPanelW - posx - tabw - posx - barbr
@@ -481,16 +481,16 @@ function YRPLoadCharacters()
 								end
 
 								py2 = py2 + tabh * 2
-								draw.SimpleText(YRP.lang_string("LID_role") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans("LID_role") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								draw.SimpleText(self.rolename, "Y_30_500", posx + tabw, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								py2 = py2 + tabh
-								draw.SimpleText(YRP.lang_string("LID_group") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans("LID_group") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								draw.SimpleText(self.groupname, "Y_30_500", posx + tabw, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								py2 = py2 + tabh * 2
-								draw.SimpleText(YRP.lang_string("LID_health") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans("LID_health") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								draw.SimpleText(self.health, "Y_30_500", posx + tabw, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								py2 = py2 + tabh
-								draw.SimpleText(YRP.lang_string("LID_armor") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans("LID_armor") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								draw.SimpleText(self.armor, "Y_30_500", posx + tabw, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 								if self.cni > LocalPlayer():GetYRPInt("int_characters_max", 1) then
@@ -580,9 +580,9 @@ function YRPLoadCharacters()
 							function deleteChar:DoClick()
 								local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 								_window:Center()
-								_window:SetTitle(YRP.lang_string("LID_areyousure"))
+								_window:SetTitle(YRP.trans("LID_areyousure"))
 								local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-								_yesButton:SetText(YRP.lang_string("LID_yes"))
+								_yesButton:SetText(YRP.trans("LID_yes"))
 
 								function _yesButton:DoClick()
 									if IsNotNilAndNotFalse(tmpChar.charid) then
@@ -599,7 +599,7 @@ function YRPLoadCharacters()
 								end
 
 								local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-								_noButton:SetText(YRP.lang_string("LID_no"))
+								_noButton:SetText(YRP.trans("LID_no"))
 
 								function _noButton:DoClick()
 									_window:Close()
@@ -655,7 +655,7 @@ function YRPLoadCharacters()
 										end
 
 										local x = ph + YRP.ctr(30)
-										draw.SimpleText(YRP.lang_string("LID_event") .. ": " .. self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(YRP.trans("LID_event") .. ": " .. self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 										draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 										draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 										draw.SimpleText(self.rol, "Y_18_500", x, YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -792,7 +792,7 @@ function YRPLoadCharacters()
 						function addCharEvent:Paint(pw, ph)
 							if CharMenu.character.amountevent and CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
-								draw.SimpleText(YRP.lang_string("LID_event"), "Y_30_700", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans("LID_event"), "Y_30_700", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								local sw = pw - 2 * YRP.ctr(180)
 								local breite = YRP.ctr(50)
 
@@ -872,7 +872,7 @@ function YRPLoadCharacters()
 						function addCharEvent:Paint(pw, ph)
 							if CharMenu.character.amountevent and CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
 								draw.RoundedBox(50, 0, 0, pw, ph, Color(51, 51, 51, 200))
-								draw.SimpleText(YRP.lang_string("LID_event"), "Y_30_700", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP.trans("LID_event"), "Y_30_700", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								local sw = pw - 2 * YRP.ctr(180)
 								local sh = ph - 2 * YRP.ctr(180)
 								local breite = YRP.ctr(50)
@@ -958,7 +958,7 @@ hook.Add("HUDPaint", "yrp_logout", function()
 				logout = false
 			end
 
-			draw.SimpleText(string.format("%s (%0.1f%s)", YRP.lang_string("LID_logout"), logoutts - CurTime(), string.lower(string.sub(YRP.lang_string("LID_seconds"), 1, 1))), "Y_30_700", ScrW() / 2, ScrH() * 0.25, Color(255, 255, 255, 255), 1, 1)
+			draw.SimpleText(string.format("%s (%0.1f%s)", YRP.trans("LID_logout"), logoutts - CurTime(), string.lower(string.sub(YRP.trans("LID_seconds"), 1, 1))), "Y_30_700", ScrW() / 2, ScrH() * 0.25, Color(255, 255, 255, 255), 1, 1)
 		elseif logout then
 			logout = false
 			net.Start("nws_yrp_LogOut")
@@ -1038,14 +1038,14 @@ function YRPOCS(force)
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
 				-- Header of Menu
-				draw.SimpleText(YRP.lang_string("LID_characterselection"), "Y_18_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.trans("LID_characterselection"), "Y_18_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				-- Current Character Name
 				draw.SimpleText(_cur, "Y_40_500", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				local aecur = CharMenu.character.amountevent or -1
 				local aemax = LocalPlayer():GetYRPInt("int_charactersevent_max", 1)
 
 				if aecur < aemax then
-					draw.SimpleText(YRP.lang_string("LID_event"), "Y_30_700", pw / 2 - YRP.ctr(480), ph - YRP.ctr(180), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.trans("LID_event"), "Y_30_700", pw / 2 - YRP.ctr(480), ph - YRP.ctr(180), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				-- Get Newest Background for the Menu
@@ -1068,7 +1068,7 @@ function YRPOCS(force)
 			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32 * 5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
 			local border = YRP.ctr(50)
 			CharMenu.charactersBackground = YRPCreateD("DPanel", CharMenu.frame, YRP.ctr(fw), ScrH() - (2 * border), (ScrW() - ScW()) / 2 + border, border)
-			CharMenu.charactersBackground.text = YRP.lang_string("LID_siteisloading")
+			CharMenu.charactersBackground.text = YRP.trans("LID_siteisloading")
 
 			function CharMenu.charactersBackground:Paint(pw, ph)
 				local color = YRPInterfaceValue("YFrame", "NC")
@@ -1098,7 +1098,7 @@ function YRPOCS(force)
 
 				-- Current and Max Count of Possible Characters
 				if aemax > 0 then
-					draw.SimpleText(YRP.lang_string("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw - YRP.ctr(20), ph - YRP.ctr(50), aecolor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw - YRP.ctr(20), ph - YRP.ctr(50), aecolor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
 				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -1185,11 +1185,11 @@ function YRPOCS(force)
 					tab.text = math.Round(LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) - CurTime(), 0)
 
 					if LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
-						tab.text = YRP.lang_string("LID_play") -- .. " ( " .. _cur .. " )"
+						tab.text = YRP.trans("LID_play") -- .. " ( " .. _cur .. " )"
 					end
 
 					if LocalPlayer() ~= nil and LocalPlayer():Alive() then
-						tab.text = YRP.lang_string("LID_close")
+						tab.text = YRP.trans("LID_close")
 						tab.color = Color(255, 100, 100, 255)
 					end
 
@@ -1231,9 +1231,9 @@ function YRPOCS(force)
 			function deleteChar:DoClick()
 				local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 				_window:Center()
-				_window:SetTitle(YRP.lang_string("LID_areyousure"))
+				_window:SetTitle(YRP.trans("LID_areyousure"))
 				local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-				_yesButton:SetText(YRP.lang_string("LID_yes"))
+				_yesButton:SetText(YRP.trans("LID_yes"))
 
 				function _yesButton:DoClick()
 					net.Start("nws_yrp_delete_own_character")
@@ -1243,7 +1243,7 @@ function YRPOCS(force)
 				end
 
 				local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-				_noButton:SetText(YRP.lang_string("LID_no"))
+				_noButton:SetText(YRP.trans("LID_no"))
 
 				function _noButton:DoClick()
 					_window:Close()
@@ -1319,7 +1319,7 @@ function YRPOCS(force)
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
 				-- Header of Menu
-				draw.SimpleText(YRP.lang_string("LID_characterselection"), "Y_18_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP.trans("LID_characterselection"), "Y_18_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				-- Current Character Name
 				draw.SimpleText(_cur, "Y_40_500", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				-- Get Newest Background for the Menu
@@ -1345,14 +1345,14 @@ function YRPOCS(force)
 
 				-- Current and Max Count of Possible Characters
 				if aemax > 0 then
-					draw.SimpleText(YRP.lang_string("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw - br - YRP.ctr(600), ph - br - YRP.ctr(200) - br - YRP.ctr(100), color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw - br - YRP.ctr(600), ph - br - YRP.ctr(200) - br - YRP.ctr(100), color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 
 			-- Language Changer / LanguageChanger
 			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32 * 5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
 			CharMenu.charactersBackground = YRPCreateD("DPanel", CharMenu.frame, ScrW() - (2 * br), YRP.ctr(200) + (2 * br), br, ScrH() - YRP.ctr(200) - 2 * br - br)
-			CharMenu.charactersBackground.text = YRP.lang_string("LID_siteisloading")
+			CharMenu.charactersBackground.text = YRP.trans("LID_siteisloading")
 
 			function CharMenu.charactersBackground:Paint(pw, ph)
 				local colo = YRPInterfaceValue("YFrame", "NC")
@@ -1414,11 +1414,11 @@ function YRPOCS(force)
 					tab.text = math.Round(LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) - CurTime(), 0)
 
 					if LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
-						tab.text = YRP.lang_string("LID_play") -- .. " ( " .. _cur .. " )"
+						tab.text = YRP.trans("LID_play") -- .. " ( " .. _cur .. " )"
 					end
 
 					if LocalPlayer() ~= nil and LocalPlayer():Alive() then
-						tab.text = YRP.lang_string("LID_close")
+						tab.text = YRP.trans("LID_close")
 						tab.color = Color(255, 100, 100, 255)
 					end
 
@@ -1461,9 +1461,9 @@ function YRPOCS(force)
 			function deleteChar:DoClick()
 				local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 				_window:Center()
-				_window:SetTitle(YRP.lang_string("LID_areyousure"))
+				_window:SetTitle(YRP.trans("LID_areyousure"))
 				local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-				_yesButton:SetText(YRP.lang_string("LID_yes"))
+				_yesButton:SetText(YRP.trans("LID_yes"))
 
 				function _yesButton:DoClick()
 					net.Start("nws_yrp_delete_own_character")
@@ -1475,7 +1475,7 @@ function YRPOCS(force)
 				end
 
 				local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-				_noButton:SetText(YRP.lang_string("LID_no"))
+				_noButton:SetText(YRP.trans("LID_no"))
 
 				function _noButton:DoClick()
 					_window:Close()
@@ -1583,7 +1583,7 @@ function YRPOCS(force)
 				end
 
 				if aemax > 0 then
-					draw.SimpleText(YRP.lang_string("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw / 2, ph - YRP.ctr(200), aecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw / 2, ph - YRP.ctr(200), aecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 
@@ -1626,7 +1626,7 @@ function YRPOCS(force)
 
 			local charw = YRP.ctr(3 * 350 * 2 + 2 * 200)
 			CharMenu.charactersBackground = YRPCreateD("DPanel", CharMenu.frame, charw, ScrH() - YRP.ctr(600 + 360), ScrW() / 2 - charw / 2, YRP.ctr(600))
-			CharMenu.charactersBackground.text = YRP.lang_string("LID_siteisloading")
+			CharMenu.charactersBackground.text = YRP.trans("LID_siteisloading")
 
 			function CharMenu.charactersBackground:Paint(pw, ph)
 				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -1760,7 +1760,7 @@ function YRPOCS(force)
 				end
 
 				if aemax > 0 then
-					draw.SimpleText(YRP.lang_string("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw / 2 + DefaultCharW / 2 + YRP.ctr(10), ph - YRP.ctr(40), aecolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP.trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw / 2 + DefaultCharW / 2 + YRP.ctr(10), ph - YRP.ctr(40), aecolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 			end
 
@@ -1770,7 +1770,7 @@ function YRPOCS(force)
 			local charw = DefaultCharW
 			local charh = DefaultCharH
 			CharMenu.charactersBackground = YRPCreateD("DPanel", CharMenu.frame, charw, charh, ScrW() / 2 - charw / 2, ScrH() / 2 - charh / 2)
-			CharMenu.charactersBackground.text = YRP.lang_string("LID_siteisloading")
+			CharMenu.charactersBackground.text = YRP.trans("LID_siteisloading")
 
 			function CharMenu.charactersBackground:Paint(pw, ph)
 				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -1903,13 +1903,13 @@ function YRPOCS(force)
 				tab.color = Color(38, 222, 129)
 
 				if LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() and validchar then
-					text = YRP.lang_string("LID_play") -- .. " ( " .. curCharName .. " )"
+					text = YRP.trans("LID_play") -- .. " ( " .. curCharName .. " )"
 				else
 					text = ""
 				end
 
 				if LocalPlayer() ~= nil and LocalPlayer():Alive() then
-					text = YRP.lang_string("LID_close")
+					text = YRP.trans("LID_close")
 					tab.color = Color(120, 0, 0, 255)
 				end
 

@@ -76,7 +76,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 		end
 	end
 
-	yrp_Interact:SetTitle(YRP.lang_string("LID_interactmenu"))
+	yrp_Interact:SetTitle(YRP.trans("LID_interactmenu"))
 
 	function yrp_Interact:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph)
@@ -104,7 +104,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 		--[[ Description ]]
 		--
 		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(590), content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), Color(255, 255, 255, 255))
-		draw.SimpleTextOutlined(YRP.lang_string("LID_description") .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(610), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(255, 255, 255, 0))
+		draw.SimpleTextOutlined(YRP.trans("LID_description") .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(610), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(255, 255, 255, 0))
 	end
 
 	if idcard then
@@ -115,7 +115,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 	end
 
 	--[[local btnTrade = createVGUI( "YButton", content, 500, 50, 10, 1000)
-	btnTrade:SetText(YRP.lang_string( "LID_trade" ) .. " (in future update)" )
+	btnTrade:SetText(YRP.trans( "LID_trade" ) .. " (in future update)" )
 	function btnTrade:Paint(pw, ph)
 		hook.Run( "YButtonPaint", self, pw, ph)
 	end]]
@@ -142,7 +142,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 
 		function btnVerwarnung:Paint(pw, ph)
 			hook.Run("YLabelPaint", self, pw, ph)
-			btnVerwarnung:SetText(YRP.lang_string("LID_warnings") .. ": " .. ply:GetYRPInt("int_warnings", -1))
+			btnVerwarnung:SetText(YRP.trans("LID_warnings") .. ": " .. ply:GetYRPInt("int_warnings", -1))
 		end
 
 		local btnVerstoesseUp = createVGUI("YButton", content, 50, 50, 10, 1110)
@@ -167,14 +167,14 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 
 		function btnVerstoesse:Paint(pw, ph)
 			hook.Run("YLabelPaint", self, pw, ph)
-			btnVerstoesse:SetText(YRP.lang_string("LID_violations") .. ": " .. ply:GetYRPInt("int_violations", -1))
+			btnVerstoesse:SetText(YRP.trans("LID_violations") .. ": " .. ply:GetYRPInt("int_violations", -1))
 		end
 	end
 
 	if isInstructor then
 		if promoteable then
 			local btnPromote = createVGUI("YButton", content, 500, 50, 520, 1000)
-			btnPromote:SetText(YRP.lang_string("LID_promote") .. ": " .. promoteName)
+			btnPromote:SetText(YRP.trans("LID_promote") .. ": " .. promoteName)
 
 			function btnPromote:DoClick()
 				net.Start("nws_yrp_promotePlayer")
@@ -193,7 +193,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 
 		if demoteable then
 			local btnDemote = createVGUI("YButton", content, 500, 50, 520, 1000 + 10 + 50)
-			btnDemote:SetText(YRP.lang_string("LID_demote") .. ": " .. demoteName)
+			btnDemote:SetText(YRP.trans("LID_demote") .. ": " .. demoteName)
 
 			function btnDemote:DoClick()
 				net.Start("nws_yrp_demotePlayer")
@@ -212,7 +212,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 
 		if not promoteable and not demoteable then
 			local btnbtnInviteToGroup = createVGUI("YButton", content, 500, 50, 520, 1000)
-			btnbtnInviteToGroup:SetText(YRP.lang_string("LID_invitetogroup"))
+			btnbtnInviteToGroup:SetText(YRP.trans("LID_invitetogroup"))
 
 			function btnbtnInviteToGroup:DoClick()
 				net.Start("nws_yrp_invitetogroup")
@@ -232,7 +232,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 
 	if hasspecs then
 		local btnbtnSpecialization = createVGUI("YButton", content, 500, 50, 520, 1120)
-		btnbtnSpecialization:SetText(YRP.lang_string("LID_specializations"))
+		btnbtnSpecialization:SetText(YRP.trans("LID_specializations"))
 
 		function btnbtnSpecialization:DoClick()
 			if YRPPanelAlive(yrp_Interact, "yrp_Interact 4") then
@@ -369,7 +369,7 @@ net.Receive("nws_yrp_invite_ply", function(len)
 	local content = win:GetContent()
 
 	function content:Paint(pw, ph)
-		local text = YRP.lang_string("LID_youwereinvited")
+		local text = YRP.trans("LID_youwereinvited")
 		draw.SimpleText(text .. ":", "Y_16_500", pw / 2, YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		draw.SimpleText(group.string_name, "Y_16_500", pw / 2, YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		draw.SimpleText(role.string_name, "Y_16_500", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)

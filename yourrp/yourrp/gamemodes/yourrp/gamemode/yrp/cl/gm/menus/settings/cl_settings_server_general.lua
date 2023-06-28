@@ -7,7 +7,7 @@ function CreateCheckBoxLine(dpanellist, val, lstr, netstr, fixx, textcolor)
 
 	function background:Paint(pw, ph)
 		surfacePanel(self, pw, ph, "", nil, self.text_posx + YRP.ctr(fixx), nil, 0, 1)
-		draw.SimpleText(YRP.lang_string(lstr), "Y_16_500", self.text_posx + YRP.ctr(fixx), ph / 2, textcolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans(lstr), "Y_16_500", self.text_posx + YRP.ctr(fixx), ph / 2, textcolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	background.checkbox = YRPCreateD("DCheckBox", background, YRP.ctr(50), YRP.ctr(50), 0 + YRP.ctr(fixx), 0)
@@ -53,7 +53,7 @@ function CreateButtonLine(dpanellist, lstr, netstr, lstr2)
 	local background = YRPCreateD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.trans(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
 	background.button = YRPCreateD("YButton", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
@@ -66,7 +66,7 @@ function CreateButtonLine(dpanellist, lstr, netstr, lstr2)
 
 	function background.button:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph, {
-			["text"] = YRP.lang_string(self.text),
+			["text"] = YRP.trans(self.text),
 			["color"] = Color(200, 200, 200, 255)
 		})
 	end
@@ -85,7 +85,7 @@ function CreateTextBoxLine(dpanellist, text, lstr, netstr)
 	local background = YRPCreateD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.trans(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
 	local textbox = YRPCreateD("DTextEntry", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
@@ -119,7 +119,7 @@ function CreateComboBoxLine(dpanellist, text, lstr, netstr, default, choices)
 	local background = YRPCreateD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.trans(lstr) .. ":", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
 	local combobox = YRPCreateD("DComboBox", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
@@ -163,7 +163,7 @@ function CreateTextBoxBox(dpanellist, text, lstr, netstr)
 	local background = YRPCreateD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(50 + 400 + 10), 0, 0)
 
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10), YRP.ctr(25), 0, 1)
+		surfacePanel(self, pw, ph, YRP.trans(lstr) .. ":", nil, YRP.ctr(10), YRP.ctr(25), 0, 1)
 	end
 
 	local textbox = YRPCreateD("DTextEntry", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(400), YRP.ctr(10), YRP.ctr(50))
@@ -198,7 +198,7 @@ function CreateTextBoxLineSpecial(dpanellist, text, text2, lstr, netstr, netstr2
 	local background = YRPCreateD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ": ( " .. GetGlobalYRPString("text_money_pre", "") .. "100" .. GetGlobalYRPString("text_money_pos", "") .. " )", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.trans(lstr) .. ": ( " .. GetGlobalYRPString("text_money_pre", "") .. "100" .. GetGlobalYRPString("text_money_pos", "") .. " )", nil, YRP.ctr(10), ph * 1 / 4, 0, 1)
 	end
 
 	background.textbox = YRPCreateD("DTextEntry", background, YRP.ctr(400) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
@@ -254,7 +254,7 @@ function CreateNumberWangLine(dpanellist, value, lstr, netstr, fixx, max, min)
 	local background = YRPCreateD("DPanel", nil, dpanellist:GetWide(), YRP.ctr(100 + 10), 0, 0)
 
 	function background:Paint(pw, ph)
-		surfacePanel(self, pw, ph, YRP.lang_string(lstr) .. ":", nil, YRP.ctr(10) + YRP.ctr(fixx), ph * 1 / 4, 0, 1)
+		surfacePanel(self, pw, ph, YRP.trans(lstr) .. ":", nil, YRP.ctr(10) + YRP.ctr(fixx), ph * 1 / 4, 0, 1)
 	end
 
 	background.numberwang = YRPCreateD("DNumberWang", background, dpanellist:GetWide() - YRP.ctr(20 * 2) - YRP.ctr(fixx), YRP.ctr(50), YRP.ctr(10) + YRP.ctr(fixx), YRP.ctr(50))
@@ -370,7 +370,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 
 		General_Slider:AddPanel(SERVER_SETTINGS)
 		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_server_reload, "LID_automaticreloadingoftheserver", "nws_yrp_update_bool_server_reload")
-		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_server_reload_notification, YRP.lang_string("LID_automaticreloadingoftheserver") .. " (Notification)", "nws_yrp_update_bool_server_reload_notification")
+		CreateCheckBoxLine(SERVER_SETTINGS:GetContent(), GEN.bool_server_reload_notification, YRP.trans("LID_automaticreloadingoftheserver") .. " (Notification)", "nws_yrp_update_bool_server_reload_notification")
 		CreateHRLine(SERVER_SETTINGS:GetContent())
 		CreateTextBoxLine(SERVER_SETTINGS:GetContent(), GEN.text_server_name, "LID_hostname", "nws_yrp_update_text_server_name")
 		CreateTextBoxLine(SERVER_SETTINGS:GetContent(), GEN.text_server_logo, "LID_serverlogo", "nws_yrp_update_text_server_logo")
@@ -423,7 +423,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 		text_view_distance.numberwang:SetMax(9999)
 		text_view_distance.numberwang:SetMin(-200)
 		CreateHRLine(GAMEMODE_SETTINGS:GetContent())
-		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_canbeowned, YRP.lang_string("LID_buildingsystem") .. ": " .. YRP.lang_string("LID_canbeowned"), "nws_yrp_update_bool_canbeowned")
+		CreateCheckBoxLine(GAMEMODE_SETTINGS:GetContent(), GEN.bool_canbeowned, YRP.trans("LID_buildingsystem") .. ": " .. YRP.trans("LID_canbeowned"), "nws_yrp_update_bool_canbeowned")
 		CreateCheckBoxLineTab(GAMEMODE_SETTINGS:GetContent(), GEN.bool_removebuildingowner, "LID_removethebuildingowneratdisconnect", "nws_yrp_update_bool_removebuildingowner")
 		CreateCheckBoxLineTab(GAMEMODE_SETTINGS:GetContent(), GEN.bool_removebuildingownercharswitch, "LID_removethebuildingowneratcharswitch", "nws_yrp_update_bool_removebuildingownercharswitch")
 		CreateNumberWangLine(GAMEMODE_SETTINGS:GetContent(), GEN.text_removebuildingownertime, "LID_timeremovethebuildingowneratdisconnect", "nws_yrp_update_text_removebuildingownertime", 50)
@@ -456,7 +456,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_realistic_system, "LID_realisticsystem", "nws_yrp_update_bool_realistic_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_level_system, "LID_levelsystem", "nws_yrp_update_bool_level_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_weapon_system, "LID_weaponsystem", "nws_yrp_update_bool_weapon_system")
-		local wc_mdl = CreateButtonLine(GAMEMODE_SYSTEMS:GetContent(), YRP.lang_string("LID_weaponchest") .. " ( " .. YRP.lang_string("LID_model") .. " )", "nws_yrp_update_text_weaponchest_model", "LID_change")
+		local wc_mdl = CreateButtonLine(GAMEMODE_SYSTEMS:GetContent(), YRP.trans("LID_weaponchest") .. " ( " .. YRP.trans("LID_model") .. " )", "nws_yrp_update_text_weaponchest_model", "LID_change")
 
 		function YRPWeaponchestUpdateModel()
 			local mdl = LocalPlayer().yrpseltab[1]
@@ -496,7 +496,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_map_system, "LID_map", "nws_yrp_update_bool_map_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_laws_system, "LID_laws", "nws_yrp_update_bool_laws_system")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_appearance_system, "LID_appearancesystem", "nws_yrp_update_bool_appearance_system")
-		local wc_mdl_f = CreateButtonLine(GAMEMODE_SYSTEMS:GetContent(), YRP.lang_string("LID_appearance") .. " ( " .. YRP.lang_string("LID_model") .. " )", "nws_yrp_update_text_appearance_model", "LID_change")
+		local wc_mdl_f = CreateButtonLine(GAMEMODE_SYSTEMS:GetContent(), YRP.trans("LID_appearance") .. " ( " .. YRP.trans("LID_model") .. " )", "nws_yrp_update_text_appearance_model", "LID_change")
 
 		function YRPAppearanceUpdateModel()
 			local mdl = LocalPlayer().yrpseltab[1]
@@ -540,13 +540,13 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_players_die_on_role_switch, "LID_playersdieonroleswitch", "nws_yrp_update_bool_players_die_on_role_switch")
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice, "LID_voicechat", "nws_yrp_update_bool_voice")
-		CreateCheckBoxLineTab(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_module, YRP.lang_string("LID_voicemodule") .. " (YourRP)", "nws_yrp_update_bool_voice_module")
-		CreateCheckBoxLineTab(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_module_locally, YRP.lang_string("LID_voicemodule") .. " (YourRP) [" .. YRP.lang_string("local") .. "]", "nws_yrp_update_bool_voice_module_locally")
-		CreateNumberWangLine(GAMEMODE_SYSTEMS:GetContent(), GEN.int_voice_max_range, YRP.lang_string("LID_maxvoicerange"), "nws_yrp_update_int_voice_max_range", 50)
-		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_3d, YRP.lang_string("LID_voicechat") .. " (3D)", "nws_yrp_update_bool_voice_3d")
+		CreateCheckBoxLineTab(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_module, YRP.trans("LID_voicemodule") .. " (YourRP)", "nws_yrp_update_bool_voice_module")
+		CreateCheckBoxLineTab(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_module_locally, YRP.trans("LID_voicemodule") .. " (YourRP) [" .. YRP.trans("local") .. "]", "nws_yrp_update_bool_voice_module_locally")
+		CreateNumberWangLine(GAMEMODE_SYSTEMS:GetContent(), GEN.int_voice_max_range, YRP.trans("LID_maxvoicerange"), "nws_yrp_update_int_voice_max_range", 50)
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_3d, YRP.trans("LID_voicechat") .. " (3D)", "nws_yrp_update_bool_voice_3d")
 		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_voice_idcardid, "IDCardID in Voicechat", "nws_yrp_update_bool_voice_idcardid")
 		CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
-		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_gmod_voice_module, YRP.lang_string("LID_voicemodule") .. " (GMOD)", "nws_yrp_update_bool_gmod_voice_module")
+		CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_gmod_voice_module, YRP.trans("LID_voicemodule") .. " (GMOD)", "nws_yrp_update_bool_gmod_voice_module")
 		--[[ GAMEMODE VISUALS ]]
 		--
 		local GAMEMODE_VISUALS = YRPCreateD("YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
@@ -572,9 +572,9 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat, "LID_yourrpchat", "nws_yrp_update_bool_yrp_chat")
-		CreateNumberWangLine(GAMEMODE_VISUALS:GetContent(), GEN.int_yrp_chat_range_local, YRP.lang_string("LID_localchatrange"), "nws_yrp_update_int_yrp_chat_range_local", 50, 1000, 20)
-		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idstructure, YRP.lang_string("LID_idstructure") .. " (!D 1Dig., !L 1Let., !N 1Num.)", "nws_yrp_update_text_idstructure")
-		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idcard_background, YRP.lang_string("LID_background") .. " ( " .. YRP.lang_string("LID_idcard") .. " )", "nws_yrp_update_text_idcard_background")
+		CreateNumberWangLine(GAMEMODE_VISUALS:GetContent(), GEN.int_yrp_chat_range_local, YRP.trans("LID_localchatrange"), "nws_yrp_update_int_yrp_chat_range_local", 50, 1000, 20)
+		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idstructure, YRP.trans("LID_idstructure") .. " (!D 1Dig., !L 1Let., !N 1Num.)", "nws_yrp_update_text_idstructure")
+		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idcard_background, YRP.trans("LID_background") .. " ( " .. YRP.trans("LID_idcard") .. " )", "nws_yrp_update_text_idcard_background")
 		local gs = 8
 		local idcard_change = YRPCreateD("YButton", GAMEMODE_VISUALS:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, 0)
 		idcard_change:SetText("LID_change")
@@ -609,7 +609,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 				local name = string.upper(ele)
 
 				if not string.find(ele, "box", 1, true) then
-					name = YRP.lang_string("LID_" .. ele)
+					name = YRP.trans("LID_" .. ele)
 				end
 
 				local sw = GetGlobalYRPInt("int_" .. ele .. "_w", 10)
@@ -917,7 +917,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 				end
 
 				e.setting = YRPCreateD("YButton", e, YRP.ctr(70), YRP.ctr(50), X, 0)
-				e.setting:SetText(string.sub(YRP.lang_string("LID_settings"), 1, 3) .. ".")
+				e.setting:SetText(string.sub(YRP.trans("LID_settings"), 1, 3) .. ".")
 
 				function e.setting:DoClick()
 					local win = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(1000), 0, 0)
@@ -935,17 +935,17 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 					function content:Paint(pw, ph)
 						draw.SimpleText("TEXT ALIGN", "DermaDefault", YRP.ctr(10), YRP.ctr(560), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 						draw.SimpleText("TEXT HEIGHT", "DermaDefault", YRP.ctr(10), YRP.ctr(680), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-						draw.SimpleText(YRP.lang_string("LID_title"), "DermaDefault", YRP.ctr(60), YRP.ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRP.trans("LID_title"), "DermaDefault", YRP.ctr(60), YRP.ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 
 					win.ele = ele
 					win.colortype = YRPCreateD("DComboBox", win:GetContent(), YRP.ctr(400), YRP.ctr(50), 0, YRP.ctr(0))
 					local cho = {}
-					cho[1] = YRP.lang_string("LID_custom") .. "-" .. YRP.lang_string("LID_color")
-					cho[2] = YRP.lang_string("LID_faction") .. "-" .. YRP.lang_string("LID_color")
-					cho[3] = YRP.lang_string("LID_group") .. "-" .. YRP.lang_string("LID_color")
-					cho[4] = YRP.lang_string("LID_role") .. "-" .. YRP.lang_string("LID_color")
-					cho[5] = YRP.lang_string("LID_usergroup") .. "-" .. YRP.lang_string("LID_color")
+					cho[1] = YRP.trans("LID_custom") .. "-" .. YRP.trans("LID_color")
+					cho[2] = YRP.trans("LID_faction") .. "-" .. YRP.trans("LID_color")
+					cho[3] = YRP.trans("LID_group") .. "-" .. YRP.trans("LID_color")
+					cho[4] = YRP.trans("LID_role") .. "-" .. YRP.trans("LID_color")
+					cho[5] = YRP.trans("LID_usergroup") .. "-" .. YRP.trans("LID_color")
 
 					for id, v in pairs(cho) do
 						local selected = false
@@ -954,7 +954,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 							selected = true
 						end
 
-						win.colortype:AddChoice(YRP.lang_string(v), id, selected)
+						win.colortype:AddChoice(YRP.trans(v), id, selected)
 					end
 
 					function win.colortype:OnSelect(index, value)
@@ -1022,7 +1022,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 		end
 
 		GAMEMODE_VISUALS:GetContent():AddItem(idcard_change)
-		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_show_securitylevel, YRP.lang_string("LID_securitylevel") .. " (Show/Hide on Door)", "nws_yrp_update_bool_show_securitylevel")
+		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_show_securitylevel, YRP.trans("LID_securitylevel") .. " (Show/Hide on Door)", "nws_yrp_update_bool_show_securitylevel")
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_play_button, "LID_playbutton", "nws_yrp_update_bool_yrp_play_button")
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
@@ -1097,9 +1097,9 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 		function money_reset.button:DoClick()
 			local win = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 			win:Center()
-			win:SetTitle(YRP.lang_string("LID_areyousure"))
+			win:SetTitle(YRP.trans("LID_areyousure"))
 			local _yesButton = createVGUI("YButton", win, 200, 50, 10, 60)
-			_yesButton:SetText(YRP.lang_string("LID_yes"))
+			_yesButton:SetText(YRP.trans("LID_yes"))
 
 			function _yesButton:DoClick()
 				net.Start("nws_yrp_moneyreset")
@@ -1108,7 +1108,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 			end
 
 			local _noButton = createVGUI("YButton", win, 200, 50, 10 + 200 + 10, 60)
-			_noButton:SetText(YRP.lang_string("LID_no"))
+			_noButton:SetText(YRP.trans("LID_no"))
 
 			function _noButton:DoClick()
 				win:Close()
@@ -1133,16 +1133,16 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_changeable_name, "LID_namechangeable", "nws_yrp_update_bool_characters_changeable_name")
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
-		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_removeondeath, YRP.lang_string("LID_removeondeath") .. " (REMOVES CHAR ON DEATH)", "nws_yrp_update_bool_characters_removeondeath", nil, Color(0, 255, 0))
+		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_removeondeath, YRP.trans("LID_removeondeath") .. " (REMOVES CHAR ON DEATH)", "nws_yrp_update_bool_characters_removeondeath", nil, Color(0, 255, 0))
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_birthday, "LID_birthday", "nws_yrp_update_bool_characters_birthday")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_bodyheight, "LID_bodyheight", "nws_yrp_update_bool_characters_bodyheight")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_characters_weight, "LID_weight", "nws_yrp_update_bool_characters_weight")
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
-		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_logouttime, YRP.lang_string("LID_logouttime"), "nws_yrp_update_int_logouttime")
+		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_logouttime, YRP.trans("LID_logouttime"), "nws_yrp_update_int_logouttime")
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
-		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_min, YRP.lang_string("LID_respawntime") .. " [" .. YRP.lang_string("LID_min") .. "]", "nws_yrp_update_int_deathtimestamp_min")
-		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_max, YRP.lang_string("LID_respawntime") .. " [" .. YRP.lang_string("LID_max") .. "]", "nws_yrp_update_int_deathtimestamp_max")
+		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_min, YRP.trans("LID_respawntime") .. " [" .. YRP.trans("LID_min") .. "]", "nws_yrp_update_int_deathtimestamp_min")
+		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_max, YRP.trans("LID_respawntime") .. " [" .. YRP.trans("LID_max") .. "]", "nws_yrp_update_int_deathtimestamp_max")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_deathscreen, "LID_deathscreen", "nws_yrp_update_bool_deathscreen")
 		--[[ SOCIAL SETTINGS ]]
 		--
@@ -1158,10 +1158,10 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_forum, "LID_forum", "nws_yrp_update_text_social_forum")
 		CreateHRLine(SOCIAL_SETTINGS:GetContent())
 		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_discord, "LID_discord", "nws_yrp_update_text_social_discord")
-		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_discord_widgetid, YRP.lang_string("LID_discord") .. " " .. YRP.lang_string("LID_serverid"), "nws_yrp_update_text_social_discord_widgetid")
-		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_teamspeak_ip, YRP.lang_string("LID_teamspeak") .. " [" .. YRP.lang_string("LID_ip") .. "/" .. YRP.lang_string("LID_hostname") .. "]", "nws_yrp_update_text_social_teamspeak_ip")
-		CreateNumberWangLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_teamspeak_port, YRP.lang_string("LID_teamspeak") .. " [" .. YRP.lang_string("LID_port") .. "]", "nws_yrp_update_text_social_teamspeak_port")
-		CreateNumberWangLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_teamspeak_query_port, YRP.lang_string("LID_teamspeak") .. " [" .. YRP.lang_string("LID_queryport") .. "]", "nws_yrp_update_text_social_teamspeak_query_port")
+		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_discord_widgetid, YRP.trans("LID_discord") .. " " .. YRP.trans("LID_serverid"), "nws_yrp_update_text_social_discord_widgetid")
+		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_teamspeak_ip, YRP.trans("LID_teamspeak") .. " [" .. YRP.trans("LID_ip") .. "/" .. YRP.trans("LID_hostname") .. "]", "nws_yrp_update_text_social_teamspeak_ip")
+		CreateNumberWangLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_teamspeak_port, YRP.trans("LID_teamspeak") .. " [" .. YRP.trans("LID_port") .. "]", "nws_yrp_update_text_social_teamspeak_port")
+		CreateNumberWangLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_teamspeak_query_port, YRP.trans("LID_teamspeak") .. " [" .. YRP.trans("LID_queryport") .. "]", "nws_yrp_update_text_social_teamspeak_query_port")
 		CreateHRLine(SOCIAL_SETTINGS:GetContent())
 		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_youtube, "Youtube", "nws_yrp_update_text_social_youtube")
 		CreateTextBoxLine(SOCIAL_SETTINGS:GetContent(), GEN.text_social_twitch, "Twitch", "nws_yrp_update_text_social_twitch")

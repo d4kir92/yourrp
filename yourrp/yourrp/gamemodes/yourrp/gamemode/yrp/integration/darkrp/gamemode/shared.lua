@@ -25,7 +25,7 @@ end
 function DarkRP.addPhrase(Languagename, key, translation)
 	--Description: Add a phrase to the existing translation.
 	--YRPDarkrpNotFound( "addPhrase( " .. Languagename .. ", " .. key .. ", " .. translation .. " )" )
-	if Languagename == "en" and not string.StartWith(YRP.lang_string("LID_" .. key), "LID_") then
+	if Languagename == "en" and not string.StartWith(YRP.trans("LID_" .. key), "LID_") then
 		YRP.set_lang_string("LID_" .. key, translation)
 	end
 end
@@ -360,7 +360,7 @@ function DarkRP.getPhrase(key, parameters)
 		key = "money"
 	end
 
-	local _translation = YRP.lang_string("LID_" .. key)
+	local _translation = YRP.trans("LID_" .. key)
 
 	return _translation
 end

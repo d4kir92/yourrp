@@ -740,7 +740,7 @@ function GM:PlayerDeathThink(pl)
 	if pl:GetYRPInt("int_deathtimestamp_max", 0) > CurTime() then
 		if GetGlobalYRPBool("bool_deathscreen", false) == false and YRPDeathKeys(pl) and pl.deadts < CurTime() then
 			pl.deadts = CurTime() + 0.3
-			pl:PrintMessage(HUD_PRINTCENTER, string.format(YRP.lang_string("LID_youreunconsious") .. ". (%0.1f" .. "s)", pl:GetYRPInt("int_deathtimestamp_max", 0) - CurTime()))
+			pl:PrintMessage(HUD_PRINTCENTER, string.format(YRP.trans("LID_youreunconsious") .. ". (%0.1f" .. "s)", pl:GetYRPInt("int_deathtimestamp_max", 0) - CurTime()))
 		end
 
 		return false

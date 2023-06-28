@@ -68,11 +68,11 @@ local function YRPCreateSlot(x, y, art, id)
 			slot.mdl:SetCamPos(Vector(0, 0, 0) - Vector(-40, 0, -20))
 		end
 
-		draw.SimpleText(YRP.lang_string("LID_" .. art), "Y_20_500", 10, 16, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string(name), "Y_20_500", pw - 10, 16, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans("LID_" .. art), "Y_20_500", 10, 16, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans(name), "Y_20_500", pw - 10, 16, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
 		if cname and not strEmpty(cname) and cname ~= "LID_empty" and self:IsHovered() then
-			local text = YRP.lang_string("LID_tostore")
+			local text = YRP.trans("LID_tostore")
 			local font = "Y_40_500"
 			local color = Color(160, 0, 0, 120)
 			surface.SetFont(font)
@@ -140,11 +140,11 @@ local function YRPCreateSWEP(x, y, art, cname)
 			slot.mdl:SetCamPos(Vector(0, 0, 0) - Vector(-40, 0, -20))
 		end
 
-		draw.SimpleText(YRP.lang_string("LID_" .. art), "Y_20_500", 10, 16, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.lang_string(name), "Y_20_500", pw - 10, 16, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans("LID_" .. art), "Y_20_500", 10, 16, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans(name), "Y_20_500", pw - 10, 16, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
 		if self:IsHovered() then
-			local text = YRP.lang_string("LID_equip")
+			local text = YRP.trans("LID_equip")
 			local font = "Y_40_500"
 			local color = Color(0, 160, 0, 120)
 			surface.SetFont(font)

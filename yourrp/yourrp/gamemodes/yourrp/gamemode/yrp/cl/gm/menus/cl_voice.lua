@@ -51,7 +51,7 @@ function YRPVoiceChannel(edit, uid)
 
 	-- Defaults
 	win.defaultsheader = YRPCreateD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(0))
-	win.defaultsheader:SetText(YRP.lang_string("LID_defaults"))
+	win.defaultsheader:SetText(YRP.trans("LID_defaults"))
 	win.defaultsbg = YRPCreateD("DPanel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50))
 
 	function win.defaultsbg:Paint(pw, ph)
@@ -64,7 +64,7 @@ function YRPVoiceChannel(edit, uid)
 	local line = YRPCreateD("DPanel", nil, YRP.ctr(40), YRP.ctr(40), 0, 0)
 
 	function line:Paint(pw, ph)
-		draw.SimpleText(YRP.lang_string("LID_hearq"), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans("LID_hearq"), "Y_14_500", YRP.ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	line.cb = YRPCreateD("DCheckBox", line, YRP.ctr(40), YRP.ctr(40), 0, 0)
@@ -85,7 +85,7 @@ function YRPVoiceChannel(edit, uid)
 	-- ACTIVE --
 	-- USERGROUPS
 	win.augsheader = YRPCreateD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(150))
-	win.augsheader:SetText("[" .. YRP.lang_string("LID_active") .. "] " .. YRP.lang_string("LID_usergroups"))
+	win.augsheader:SetText("[" .. YRP.trans("LID_active") .. "] " .. YRP.trans("LID_usergroups"))
 	win.augsbg = YRPCreateD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(200))
 
 	function win.augsbg:Paint(pw, ph)
@@ -130,7 +130,7 @@ function YRPVoiceChannel(edit, uid)
 	net.SendToServer()
 	-- GROUPS
 	win.agrpsheader = YRPCreateD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(450))
-	win.agrpsheader:SetText("[" .. YRP.lang_string("LID_active") .. "] " .. YRP.lang_string("LID_groups"))
+	win.agrpsheader:SetText("[" .. YRP.trans("LID_active") .. "] " .. YRP.trans("LID_groups"))
 	win.agrpsbg = YRPCreateD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(500))
 
 	function win.agrpsbg:Paint(pw, ph)
@@ -175,7 +175,7 @@ function YRPVoiceChannel(edit, uid)
 	net.SendToServer()
 	-- ROLES
 	win.arolsheader = YRPCreateD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(750))
-	win.arolsheader:SetText("[" .. YRP.lang_string("LID_active") .. "] " .. YRP.lang_string("LID_roles"))
+	win.arolsheader:SetText("[" .. YRP.trans("LID_active") .. "] " .. YRP.trans("LID_roles"))
 	win.arolsbg = YRPCreateD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(0), YRP.ctr(800))
 
 	function win.arolsbg:Paint(pw, ph)
@@ -221,7 +221,7 @@ function YRPVoiceChannel(edit, uid)
 	-- PASSIVE --
 	-- USERGROUPS
 	win.pugsheader = YRPCreateD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(150))
-	win.pugsheader:SetText("[" .. YRP.lang_string("LID_passive") .. "] " .. YRP.lang_string("LID_usergroups"))
+	win.pugsheader:SetText("[" .. YRP.trans("LID_passive") .. "] " .. YRP.trans("LID_usergroups"))
 	win.pugsbg = YRPCreateD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(200))
 
 	function win.pugsbg:Paint(pw, ph)
@@ -266,7 +266,7 @@ function YRPVoiceChannel(edit, uid)
 	net.SendToServer()
 	-- GROUPS
 	win.pgrpsheader = YRPCreateD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(450))
-	win.pgrpsheader:SetText("[" .. YRP.lang_string("LID_passive") .. "] " .. YRP.lang_string("LID_groups"))
+	win.pgrpsheader:SetText("[" .. YRP.trans("LID_passive") .. "] " .. YRP.trans("LID_groups"))
 	win.pgrpsbg = YRPCreateD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(500))
 
 	function win.pgrpsbg:Paint(pw, ph)
@@ -311,7 +311,7 @@ function YRPVoiceChannel(edit, uid)
 	net.SendToServer()
 	-- ROLES
 	win.prolsheader = YRPCreateD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(750))
-	win.prolsheader:SetText("[" .. YRP.lang_string("LID_passive") .. "] " .. YRP.lang_string("LID_roles"))
+	win.prolsheader:SetText("[" .. YRP.trans("LID_passive") .. "] " .. YRP.trans("LID_roles"))
 	win.prolsbg = YRPCreateD("DPanel", CON, YRP.ctr(760), YRP.ctr(200), YRP.ctr(800), YRP.ctr(800))
 
 	function win.prolsbg:Paint(pw, ph)
@@ -628,7 +628,7 @@ function YRPOpenVoiceMenu()
 		end
 
 		if not self.toggle then
-			draw.SimpleText(string.Replace(YRP.lang_string("LID_presskeytoenablevoicemenu"), "KEY", YRPGetKeybindName("voice_menu")), "Y_30_500", pw / 2, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(string.Replace(YRP.trans("LID_presskeytoenablevoicemenu"), "KEY", YRPGetKeybindName("voice_menu")), "Y_30_500", pw / 2, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local hh = 24
@@ -637,7 +637,7 @@ function YRPOpenVoiceMenu()
 			hh = self:GetHeaderHeight()
 		end
 
-		draw.SimpleText(YRP.lang_string(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	vm.win:SetLanguageChanger(false)
@@ -650,7 +650,7 @@ function YRPOpenVoiceMenu()
 
 	function vm.win.listheader:Paint(pw, ph)
 		if lply:GetYRPBool("yrp_ToggleVoiceMenu", true) then
-			draw.SimpleText(YRP.lang_string("LID_name"), "Y_20_500", YRP.ctr(80), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_name"), "Y_20_500", YRP.ctr(80), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			draw.SimpleText(lply:GetYRPInt("yrp_voice_channel_active_mic", 0) .. "/" .. GetGlobalYRPInt("int_max_channels_active", 1), "Y_20_500", YRP.ctr(990), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			draw.SimpleText(lply:GetYRPInt("yrp_voice_channel_passive_voice", 0) .. "/" .. GetGlobalYRPInt("int_max_channels_passive", 3), "Y_20_500", YRP.ctr(1100), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
@@ -723,12 +723,12 @@ function YRPOpenVoiceMenu()
 		vm.win.showalllabel:SetText("")
 
 		function vm.win.showalllabel:Paint(pw, ph)
-			draw.SimpleText(YRP.lang_string("LID_adminmode"), "Y_16_700", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_adminmode"), "Y_16_700", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		-- MAX ACTIVE
 		vm.win.maxactive = YRPCreateD("DNumSlider", CONTENT, YRP.ctr(380), size, YRP.ctr(40 + 20 + 40 + 20 + 200 + 20), CONTENT:GetTall() - YRP.ctr(50))
-		vm.win.maxactive:SetText(YRP.lang_string("LID_maxactive"))
+		vm.win.maxactive:SetText(YRP.trans("LID_maxactive"))
 		vm.win.maxactive:SetDecimals(0)
 		vm.win.maxactive:SetMinMax(0, 10)
 		vm.win.maxactive:SetValue(GetGlobalYRPInt("int_max_channels_active", 1))
@@ -741,7 +741,7 @@ function YRPOpenVoiceMenu()
 
 		-- MAX Passive
 		vm.win.maxpassive = YRPCreateD("DNumSlider", CONTENT, YRP.ctr(380), size, YRP.ctr(40 + 20 + 40 + 20 + 200 + 20 + 350 + 20), CONTENT:GetTall() - YRP.ctr(50))
-		vm.win.maxpassive:SetText(YRP.lang_string("LID_maxpassive"))
+		vm.win.maxpassive:SetText(YRP.trans("LID_maxpassive"))
 		vm.win.maxpassive:SetDecimals(0)
 		vm.win.maxpassive:SetMinMax(0, 10)
 		vm.win.maxpassive:SetValue(GetGlobalYRPInt("int_max_channels_passive", 3))

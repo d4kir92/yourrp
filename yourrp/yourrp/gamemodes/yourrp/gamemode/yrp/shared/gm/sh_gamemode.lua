@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 356 -- do NOT change this!
+GM.VersionBuild = 357 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -525,11 +525,11 @@ end
 function YRPGetVoiceRangeText(ply)
 	if IsValid(ply) then
 		local ranges = {
-			[0] = YRP.lang_string("LID_whisper"),
-			[1] = YRP.lang_string("LID_quiet"),
+			[0] = YRP.trans("LID_whisper"),
+			[1] = YRP.trans("LID_quiet"),
 			[2] = "",
-			[3] = YRP.lang_string("LID_noisy"),
-			[4] = YRP.lang_string("LID_yell")
+			[3] = YRP.trans("LID_noisy"),
+			[4] = YRP.trans("LID_yell")
 		}
 
 		return ranges[ply:GetYRPInt("voice_range", 2)]
@@ -957,20 +957,3 @@ function YRPGetSENTsList()
 end
 
 YRPGetSENTsList()
---[[
-local function Test()
-	print("----")
-
-	local c = 0
-	for i, v in pairs( ents.GetAll() ) do
-		if string.find( string.lower( v:GetClass() ), "c_baseflex", 1, true ) then
-			c = c + 1
-			print(c, v)
-		end
-	end
-	print("total: " .. c)
-
-	timer.Simple(2, Test)
-end
-Test()
-]]

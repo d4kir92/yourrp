@@ -61,7 +61,7 @@ function AddYRPAddon(parent, tab)
 	if not strEmpty(tab.name) then
 		_add_on.name = YRPCreateD("DTextEntry", _add_on, _add_on:GetWide() - YRP.ctr(160), YRP.ctr(100), YRP.ctr(140), YRP.ctr(20))
 		_add_on.name:SetEditable(false)
-		_add_on.name:SetText(YRP.lang_string("LID_name") .. ": " .. tab.name)
+		_add_on.name:SetText(YRP.trans("LID_name") .. ": " .. tab.name)
 
 		function _add_on.name:PerformLayout()
 			local ts = 24
@@ -79,7 +79,7 @@ function AddYRPAddon(parent, tab)
 	if not strEmpty(tab.author) then
 		_add_on.author = YRPCreateD("DTextEntry", _add_on, _add_on:GetWide() - YRP.ctr(160), YRP.ctr(100), YRP.ctr(140), YRP.ctr(140))
 		_add_on.author:SetEditable(false)
-		_add_on.author:SetText(YRP.lang_string("LID_s_author") .. ": " .. tab.author)
+		_add_on.author:SetText(YRP.trans("LID_s_author") .. ": " .. tab.author)
 
 		function _add_on.author:PerformLayout()
 			local ts = 18
@@ -98,7 +98,7 @@ function AddYRPAddon(parent, tab)
 		_add_on.description = YRPCreateD("DTextEntry", _add_on, _add_on:GetWide() - YRP.ctr(160), YRP.ctr(420), YRP.ctr(140), YRP.ctr(260))
 		_add_on.description:SetEditable(false)
 		_add_on.description:SetMultiline(true)
-		_add_on.description:SetText(YRP.lang_string("LID_description") .. ":\n" .. tab.description)
+		_add_on.description:SetText(YRP.trans("LID_description") .. ":\n" .. tab.description)
 
 		function _add_on.description:PerformLayout()
 			local ts = 18

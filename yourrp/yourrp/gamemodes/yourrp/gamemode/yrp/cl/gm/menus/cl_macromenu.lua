@@ -29,9 +29,8 @@ function UseMacro(uid)
 		end
 
 		for i, v in pairs(tab) do
-			if not strEmpty(v) then
-				if string.StartWith(v, "#") then
-				elseif string.StartWith(v, "/timer") then
+			if not strEmpty(v) and not string.StartWith(v, "#") then
+				if string.StartWith(v, "/timer") then
 					local cd = tonumber(string.sub(v, 7))
 					tim = tim + cd
 				else
@@ -77,7 +76,7 @@ net.Receive("nws_yrp_get_macros", function(len)
 		function _mm.bind:OnChange(num)
 			if num ~= -1 and YRPGetKeybind(self.keybind) ~= nil and self.keybind ~= nil and not YRPSetKeybind(self.keybind, num) and num ~= 0 then
 				_mm.bind:SetSelectedNumber(YRPGetKeybind(self.keybind))
-				Derma_Message(YRP.lang_string("LID_hotkeyinuse") .. "!", YRP.lang_string("LID_error"), YRP.lang_string("LID_ok"))
+				Derma_Message(YRP.trans("LID_hotkeyinuse") .. "!", YRP.trans("LID_error"), YRP.trans("LID_ok"))
 			end
 		end
 
@@ -130,7 +129,7 @@ function OpenMacroMenu()
 		_mm.window = YRPCreateD("YFrame", nil, YRP.ctr(720 + 36), YRP.ctr(820), 0, 0)
 		_mm.window:Center()
 		_mm.window:MakePopup()
-		_mm.window:SetTitle(YRP.lang_string("LID_macromenu"))
+		_mm.window:SetTitle(YRP.trans("LID_macromenu"))
 		_mm.window:SetHeaderHeight(YRP.ctr(100))
 		_mm.content = _mm.window:GetContent()
 		net.Start("nws_yrp_get_macros")

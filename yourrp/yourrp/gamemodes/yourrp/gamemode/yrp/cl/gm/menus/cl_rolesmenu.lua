@@ -316,7 +316,7 @@ function addGroup(grp, parent)
 			local name = self.tbl.string_name
 
 			if tonumber(self.tbl.int_parentgroup) == 0 then
-				name = YRP.lang_string("LID_faction") .. ": " .. name
+				name = YRP.trans("LID_faction") .. ": " .. name
 			end
 
 			draw.SimpleText(name, "Y_24_500", _x, ph / 2, Color(255, 255, 255, 255), 0, 1)

@@ -951,7 +951,7 @@ net.Receive("nws_yrp_player_say", function(len)
 				if s2 then
 					local lid = string.sub(v, s, s2 - 1)
 					lid = string.Trim(lid)
-					pk[i] = string.Replace(pk[i], lid, YRP.lang_string(lid))
+					pk[i] = string.Replace(pk[i], lid, YRP.trans(lid))
 					pk[i] = string.Replace(pk[i], ";", "")
 				end
 			end

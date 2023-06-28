@@ -37,7 +37,7 @@ function CreateLawsContent(PARENT)
 		else
 			-- LAWS
 			_la.lawsheader = YRPCreateD("YLabel", PARENT, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
-			_la.lawsheader:SetText(YRP.lang_string("LID_laws"))
+			_la.lawsheader:SetText(YRP.trans("LID_laws"))
 
 			function _la.lawsheader:Paint(pw, ph)
 				hook.Run("YLabelPaint", self, pw, ph)
@@ -55,7 +55,7 @@ function CreateLawsContent(PARENT)
 
 			-- LOCKDOWN
 			_la.lockdownheader = YRPCreateD("YLabel", PARENT, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(0))
-			_la.lockdownheader:SetText(YRP.lang_string("LID_lockdowntext"))
+			_la.lockdownheader:SetText(YRP.trans("LID_lockdowntext"))
 
 			function _la.lockdownheader:Paint(pw, ph)
 				hook.Run("YLabelPaint", self, pw, ph)
@@ -72,8 +72,8 @@ function CreateLawsContent(PARENT)
 
 			_la.lockdowntoggle = YRPCreateD("YButton", PARENT, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(120))
 			_la.lockdowntoggle:SetPressed(lockdown)
-			local ld_enabled = YRP.lang_string("LID_lockdown") .. " ( " .. YRP.lang_string("LID_enabled") .. " )"
-			local ld_disabled = YRP.lang_string("LID_lockdown") .. " ( " .. YRP.lang_string("LID_disabled") .. " )"
+			local ld_enabled = YRP.trans("LID_lockdown") .. " ( " .. YRP.trans("LID_enabled") .. " )"
+			local ld_disabled = YRP.trans("LID_lockdown") .. " ( " .. YRP.trans("LID_disabled") .. " )"
 
 			if lockdown then
 				_la.lockdowntoggle:SetText(ld_enabled)
@@ -178,14 +178,14 @@ function OpenLawsMenu()
 	_la.window = YRPCreateD("YFrame", nil, YRP.ctr(1600), YRP.ctr(1200), 0, 0)
 	_la.window:Center()
 	_la.window:MakePopup()
-	_la.window:SetTitle(YRP.lang_string("LID_laws"))
+	_la.window:SetTitle(YRP.trans("LID_laws"))
 	_la.window:SetHeaderHeight(YRP.ctr(100))
 
 	function _la.window:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph)
 	end
 
-	_la.window:SetTitle(YRP.lang_string("LID_laws") .. " | " .. YRP.lang_string("LID_lockdown"))
+	_la.window:SetTitle(YRP.trans("LID_laws") .. " | " .. YRP.trans("LID_lockdown"))
 	local content = _la.window:GetContent()
 	CreateLawsContent(content)
 end

@@ -50,22 +50,22 @@ local function DrawThinCompass(px, py, sw, sh)
 				end
 
 				if ang == 0 then
-					direction = YRP.lang_string("LID_north_short")
+					direction = YRP.trans("LID_north_short")
 					surface.SetDrawColor(100, 100, 255, alpha)
 				elseif ang == 180 then
-					direction = YRP.lang_string("LID_south_short")
+					direction = YRP.trans("LID_south_short")
 				elseif ang == 90 then
-					direction = YRP.lang_string("LID_east_short")
+					direction = YRP.trans("LID_east_short")
 				elseif ang == 270 then
-					direction = YRP.lang_string("LID_west_short")
+					direction = YRP.trans("LID_west_short")
 				elseif ang == 45 then
-					direction = YRP.lang_string("LID_north_short") .. YRP.lang_string("LID_east_short")
+					direction = YRP.trans("LID_north_short") .. YRP.trans("LID_east_short")
 				elseif ang == 135 then
-					direction = YRP.lang_string("LID_south_short") .. YRP.lang_string("LID_east_short")
+					direction = YRP.trans("LID_south_short") .. YRP.trans("LID_east_short")
 				elseif ang == 225 then
-					direction = YRP.lang_string("LID_south_short") .. YRP.lang_string("LID_west_short")
+					direction = YRP.trans("LID_south_short") .. YRP.trans("LID_west_short")
 				elseif ang == 315 then
-					direction = YRP.lang_string("LID_north_short") .. YRP.lang_string("LID_west_short")
+					direction = YRP.trans("LID_north_short") .. YRP.trans("LID_west_short")
 				else
 					direction = ""
 				end
@@ -189,9 +189,9 @@ function YRPDrawThin(tab)
 		-- Text
 		if HUD_THIN[name].stext and HUD_THIN[name].text then
 			if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
-				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tx), HUDMOTIONY(HUD_THIN[name].ty), HUD_THIN[name].colortext, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+				draw.SimpleText(YRP.trans(HUD_THIN[name].text), HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tx), HUDMOTIONY(HUD_THIN[name].ty), HUD_THIN[name].colortext, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			else
-				draw.SimpleText(YRP.lang_string(HUD_THIN[name].text), HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tx), HUDMOTIONY(HUD_THIN[name].ty), HUD_THIN[name].colortext, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+				draw.SimpleText(YRP.trans(HUD_THIN[name].text), HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tx), HUDMOTIONY(HUD_THIN[name].ty), HUD_THIN[name].colortext, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			end
 		end
 

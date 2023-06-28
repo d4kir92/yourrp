@@ -110,11 +110,11 @@ if SERVER then
 end
 
 function Player:YRPGetLanguage()
-	return YRP.get_language_name(self:GetYRPString("client_lang", YRP.lang_string("LID_none")))
+	return YRP.get_language_name(self:GetYRPString("client_lang", YRP.trans("LID_none")))
 end
 
 function Player:YRPGetLanguageShort()
-	return self:GetYRPString("client_lang", YRP.lang_string("LID_none"))
+	return self:GetYRPString("client_lang", YRP.trans("LID_none"))
 end
 
 local accessTab = {}

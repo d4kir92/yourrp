@@ -14,7 +14,7 @@ net.Receive("nws_yrp_get_specializations", function()
 		end
 
 		_li._spe = YRPCreateD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
-		_li._spe:SetListHeader(YRP.lang_string("LID_specializations"))
+		_li._spe:SetListHeader(YRP.trans("LID_specializations"))
 		--_li._spe:SetDStrForAdd( "specialization_add" )
 		_li._spe:SetEditArYRPEntityAlive(_li.ea)
 
@@ -27,7 +27,7 @@ net.Receive("nws_yrp_get_specializations", function()
 			--
 			_li.name = YRPCreateD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
 			_li.name.textentry.tbl = tbl
-			_li.name:SetHeader(YRP.lang_string("LID_name"))
+			_li.name:SetHeader(YRP.trans("LID_name"))
 			_li.name:SetText(tbl.name)
 
 			function _li.name.textentry:OnChange()
@@ -42,7 +42,7 @@ net.Receive("nws_yrp_get_specializations", function()
 			--
 			_li.prefix = YRPCreateD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(110))
 			_li.prefix.textentry.tbl = tbl
-			_li.prefix:SetHeader(YRP.lang_string("LID_prefix"))
+			_li.prefix:SetHeader(YRP.trans("LID_prefix"))
 			_li.prefix:SetText(tbl.prefix)
 
 			function _li.prefix.textentry:OnChange()
@@ -57,7 +57,7 @@ net.Receive("nws_yrp_get_specializations", function()
 			--
 			_li.suffix = YRPCreateD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(220))
 			_li.suffix.textentry.tbl = tbl
-			_li.suffix:SetHeader(YRP.lang_string("LID_suffix"))
+			_li.suffix:SetHeader(YRP.trans("LID_suffix"))
 			_li.suffix:SetText(tbl.suffix)
 
 			function _li.suffix.textentry:OnChange()

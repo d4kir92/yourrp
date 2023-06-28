@@ -102,7 +102,7 @@ net.Receive("nws_yrp_storage_open", function(len)
 
 		function bag:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "NC"))
-			draw.SimpleText(YRP.lang_string("LID_bag"), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP.trans("LID_bag"), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 			if YRPInventory() == nil then
 				self:Remove()

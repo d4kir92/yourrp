@@ -46,7 +46,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	local NAME = YRPCreateD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20))
 	NAME.strname = true
 	NAME:INITPanel("DTextEntry")
-	NAME:SetHeader(YRP.lang_string("LID_name"))
+	NAME:SetHeader(YRP.trans("LID_name"))
 	NAME:SetText(string.upper(ug.string_name))
 
 	function NAME.plus:OnChange()
@@ -77,7 +77,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	local DISPLAYNAME = YRPCreateD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20))
 	DISPLAYNAME.displayname = true
 	DISPLAYNAME:INITPanel("DTextEntry")
-	DISPLAYNAME:SetHeader(YRP.lang_string("LID_displayname"))
+	DISPLAYNAME:SetHeader(YRP.trans("LID_displayname"))
 	DISPLAYNAME:SetText(ug.string_displayname)
 
 	function DISPLAYNAME.plus:OnChange()
@@ -103,7 +103,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	-- COLOR
 	local COLOR = YRPCreateD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20))
 	COLOR:INITPanel("YButton")
-	COLOR:SetHeader(YRP.lang_string("LID_color"))
+	COLOR:SetHeader(YRP.trans("LID_color"))
 	COLOR.plus:SetText("LID_change")
 
 	function COLOR.plus:Paint(pw, ph)
@@ -119,7 +119,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		window:SetTitle("")
 
 		function window:Paint(pw, ph)
-			surfaceWindow(self, pw, ph, YRP.lang_string("LID_color"))
+			surfaceWindow(self, pw, ph, YRP.trans("LID_color"))
 
 			if not YRPPanelAlive(PARENT) then
 				self:Remove()
@@ -149,7 +149,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	UGS[CURRENT_USERGROUP].ICON = YRPCreateD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(100), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20))
 	local ICON = UGS[CURRENT_USERGROUP].ICON
 	ICON:INITPanel("DTextEntry")
-	ICON:SetHeader(YRP.lang_string("LID_icon"))
+	ICON:SetHeader(YRP.trans("LID_icon"))
 	ICON:SetText(ug.string_icon)
 
 	function ICON.plus:OnChange()
@@ -178,7 +178,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	ug.string_sweps = tmp
 	local SWEPS = YRPCreateD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 100 + 20))
 	SWEPS:INITPanel("DPanel")
-	SWEPS:SetHeader(YRP.lang_string("LID_weapons"))
+	SWEPS:SetHeader(YRP.trans("LID_weapons"))
 	SWEPS:SetText(ug.string_icon)
 
 	function SWEPS.plus:Paint(pw, ph)
@@ -387,7 +387,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	ug.string_nonesweps = tmp2
 	local NONESWEPS = YRPCreateD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500 + 50), YRP.ctr(x), YRP.ctr(20 + 100 + 20 + 100 + 20 + 100 + 20 + 500 + 50 + 50 + 20 + 100 + 20))
 	NONESWEPS:INITPanel("DPanel")
-	NONESWEPS:SetHeader(YRP.lang_string("LID_ndsweps"))
+	NONESWEPS:SetHeader(YRP.trans("LID_ndsweps"))
 	NONESWEPS:SetText(ug.string_icon)
 
 	function NONESWEPS.plus:Paint(pw, ph)
@@ -580,7 +580,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	y = 20
 	local LICENSES = YRPCreateD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(y))
 	LICENSES:INITPanel("DPanelList")
-	LICENSES:SetHeader(YRP.lang_string("LID_licenses"))
+	LICENSES:SetHeader(YRP.trans("LID_licenses"))
 	LICENSES:SetText(ug.string_icon)
 
 	function LICENSES.plus:Paint(pw, ph)
@@ -650,7 +650,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		y = y + 550 + 20
 		local YTOOLS = YRPCreateD("DYRPPanelPlus", PARENT, YRP.ctr(w), YRP.ctr(50 + 500), YRP.ctr(x), YRP.ctr(y))
 		YTOOLS:INITPanel("DPanelList")
-		YTOOLS:SetHeader(YRP.lang_string("LID_tools"))
+		YTOOLS:SetHeader(YRP.trans("LID_tools"))
 		YTOOLS:SetText(ug.string_icon)
 
 		function YTOOLS.plus:Paint(pw, ph)
@@ -789,7 +789,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 
 	function ammoheader:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-		draw.SimpleText(YRP.lang_string(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP.trans(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	ammolist = YRPCreateD("DPanelList", ammobg, YRP.ctr(w), YRP.ctr(500), 0, YRP.ctr(50))
@@ -879,7 +879,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		local tmp4 = YRPCreateD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
 
 		function tmp4:Paint(pw, ph)
-			surfacePanel(self, pw, ph, YRP.lang_string(lstr), color, YRP.ctr(50 + 10), nil, 0, 1)
+			surfacePanel(self, pw, ph, YRP.trans(lstr), color, YRP.ctr(50 + 10), nil, 0, 1)
 		end
 
 		tmp4.cb = YRPCreateD("DCheckBox", tmp4, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -965,7 +965,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		ACCESSAddCheckBox("bool_permaprops", "Perma Props", Color(255, 0, 0, 255))
 		-- Import
 		ACCESSAddHr()
-		ACCESSAddCheckBox("bool_import_darkrp", YRP.lang_string("LID_import") .. " DarkRP", Color(255, 255, 0, 255))
+		ACCESSAddCheckBox("bool_import_darkrp", YRP.trans("LID_import") .. " DarkRP", Color(255, 255, 0, 255))
 		-- YourRP
 		ACCESSAddHr()
 		ACCESSAddCheckBox("bool_yourrp_addons", "LID_settings_yourrp_addons")
@@ -1009,7 +1009,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 		local tmp7 = YRPCreateD("DPanel", PARENT, YRP.ctr(800), YRP.ctr(50), 0, 0)
 
 		function tmp7:Paint(pw, ph)
-			surfacePanel(self, pw, ph, YRP.lang_string(lstr), nil, YRP.ctr(50 + 10), nil, 0, 1)
+			surfacePanel(self, pw, ph, YRP.trans(lstr), nil, YRP.ctr(50 + 10), nil, 0, 1)
 		end
 
 		tmp7.cb = YRPCreateD("DCheckBox", tmp7, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -1073,7 +1073,7 @@ net.Receive("nws_yrp_connect_Settings_UserGroup", function(len)
 	GAMEPLAYAddCheckBox("bool_canseeenemiesonmap", "LID_gp_canseeenemiesonmap")
 	GAMEPLAYAddHr()
 	GAMEPLAYAddIntBox("int_characters_max", "LID_charactersmax")
-	GAMEPLAYAddIntBox("int_charactersevent_max", YRP.lang_string("LID_charactersmax") .. " (EVENT)")
+	GAMEPLAYAddIntBox("int_charactersevent_max", YRP.trans("LID_charactersmax") .. " (EVENT)")
 end)
 
 function YRPAddUG(tbl)
@@ -1408,7 +1408,7 @@ function YRPOpenSettingsUsergroups()
 
 		function _ugs_title:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-			surfaceText(YRP.lang_string("LID_usergroups"), "Y_26_500", pw / 2, ph / 2, Color(0, 0, 0, 255), 1, 1)
+			surfaceText(YRP.trans("LID_usergroups"), "Y_26_500", pw / 2, ph / 2, Color(0, 0, 0, 255), 1, 1)
 		end
 
 		--[[ UserGroupsList ]]

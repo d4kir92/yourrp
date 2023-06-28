@@ -246,7 +246,7 @@ function YRPGetKeybindName(kbname, show)
 		end
 
 		if string.StartWith(kbname, "in_") then
-			_kb = YRP.lang_string("LID_" .. kbname)
+			_kb = YRP.trans("LID_" .. kbname)
 		end
 
 		if IsNotNilAndNotFalse(_kb) then
