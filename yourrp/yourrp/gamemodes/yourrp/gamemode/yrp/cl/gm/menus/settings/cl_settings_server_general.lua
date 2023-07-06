@@ -89,7 +89,11 @@ function CreateTextBoxLine(dpanellist, text, lstr, netstr)
 	end
 
 	local textbox = YRPCreateD("DTextEntry", background, dpanellist:GetWide() - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
-	textbox:SetText(text)
+
+	if text then
+		textbox:SetText(text)
+	end
+
 	textbox.serverside = false
 
 	function textbox:OnChange()

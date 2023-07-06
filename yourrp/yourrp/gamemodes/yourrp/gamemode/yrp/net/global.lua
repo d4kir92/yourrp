@@ -14,7 +14,7 @@ function GetGlobalYRPTable(key, value)
 end
 
 function SetGlobalYRPTable(key, value)
-	if type(key) == "string" and type(value) == "table" then
+	if key and value and type(key) == "string" and type(value) == "table" then
 		YRP_Global_Tables[key] = value
 
 		if SERVER then
@@ -31,10 +31,12 @@ end
 if SERVER then
 	net.Receive("YRPGetGlobalYRPTables", function(len, ply)
 		for key, value in pairs(YRP_Global_Tables) do
-			net.Start("YRPSetGlobalYRPTable")
-			net.WriteString(key)
-			net.WriteTable(value)
-			net.Send(ply)
+			if key and value and type(key) == "string" and type(value) == "table" then
+				net.Start("YRPSetGlobalYRPTable")
+				net.WriteString(key)
+				net.WriteTable(value)
+				net.Send(ply)
+			end
 		end
 	end)
 end
