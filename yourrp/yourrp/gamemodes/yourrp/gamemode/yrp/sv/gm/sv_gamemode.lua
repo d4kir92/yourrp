@@ -989,7 +989,7 @@ hook.Add("ScalePlayerDamage", "YRP_ScalePlayerDamage", function(ply, hitgroup, d
 				if IsValid(attacker) and attacker:IsPlayer() then
 					YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_health', '" .. attacker:SteamID() .. "', '" .. ply:SteamID() .. "', '" .. dmginfo:GetDamage() .. "'")
 				elseif IsValid(attacker) then
-					YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID() .. "', '" .. damage .. "', '" .. YRP_SQL_STR_IN(attacker:GetName() .. attacker:GetClass()) .. "'")
+					YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_target_steamid, string_value, string_alttarget", "'" .. os.time() .. "' ,'LID_health', '" .. ply:SteamID() .. "', '" .. damage .. "', " .. YRP_SQL_STR_IN(attacker:GetName() .. attacker:GetClass()) .. "")
 				end
 			end
 		end
