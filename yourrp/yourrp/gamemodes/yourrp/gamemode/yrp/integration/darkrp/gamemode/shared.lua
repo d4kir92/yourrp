@@ -87,9 +87,11 @@ end
 AddEntity = DarkRP.createEntity
 
 function DarkRP.createEntityGroup(name, teamNrs)
-	--Description: Create an entity group for DarkRP.
-	YRPDarkrpNotFound("createEntityGroup( " .. name .. ", " .. tostring(teamNrs) .. " )")
 end
+
+--Description: Create an entity group for DarkRP.
+--YRPDarkrpNotFound("createEntityGroup( " .. name .. ", " .. tostring(teamNrs) .. " )")
+AddDoorGroup = DarkRP.createEntityGroup
 
 function DarkRP.createFood(name, tbl)
 	--Description: Create food for DarkRP.

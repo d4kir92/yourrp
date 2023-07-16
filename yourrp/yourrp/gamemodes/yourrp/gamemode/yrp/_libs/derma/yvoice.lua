@@ -6,6 +6,7 @@ local sh = YRP.ctr(128)
 local px = ScrW() - sw + br
 local py = 2.5 * sh
 local iconsize = sh - 2 * br
+local circlesize = 10
 
 function PANEL:UpdateValues()
 	br = YRP.ctr(5)
@@ -52,13 +53,20 @@ function PANEL:Init()
 end
 
 function PANEL:Setup(ply)
+	if not IsValid(ply) then return end
 	self:UpdateValues()
 	yrp_VoicePanelList:SetPos(px, py)
 	yrp_VoicePanelList:SetSize(sw, ScrH() - 5 * sh)
 
 	if GetGlobalYRPBool("bool_voice_module") then
 		self.ply = ply
-		self.PlayerName:SetText(ply:IDCardID() .. " " .. ply:RPName())
+
+		if ply.RPName then
+			self.PlayerName:SetText(ply:IDCardID() .. " " .. ply:RPName())
+		else
+			self.PlayerName:SetText(ply:IDCardID() .. " " .. ply:Nick())
+		end
+
 		local channels = {}
 
 		for i, v in pairs(GetGlobalYRPTable("yrp_voice_channels")) do
@@ -108,9 +116,8 @@ function PANEL:Paint(w, h)
 	if not IsValid(self.ply) then return end
 	local vol = self.ply:VoiceVolume()
 	draw.RoundedBox(br, 0, 0, w, h, Color(0, vol * 255, 0, 240))
-	local circlesize = 10
 
-	if YRP.GetDesignIcon("circle") then
+	if YRP.GetDesignIcon("circle") and self.ply.GetFactionColor then
 		surface.SetDrawColor(self.ply:GetFactionColor())
 		surface.SetMaterial(YRP.GetDesignIcon("circle"))
 		surface.DrawTexturedRect(br, br, circlesize, circlesize)
@@ -152,6 +159,7 @@ derma.DefineControl("VoiceNotifyYRP", "", PANEL, "DPanel")
 hook.Add("PlayerStartVoice", "YRP_VOICE_MODULE_PlayerStartVoice", function(ply)
 	if not GetGlobalYRPBool("bool_voice_module") then return end
 	if not IsValid(yrp_VoicePanelList) then return end
+	if not IsValid(ply) then return end
 	-- There'd be an exta one if voice_loopback is on, so remove it.
 	GAMEMODE:PlayerEndVoice(ply)
 
@@ -166,7 +174,6 @@ hook.Add("PlayerStartVoice", "YRP_VOICE_MODULE_PlayerStartVoice", function(ply)
 		return
 	end
 
-	if not IsValid(ply) then return end
 	local pnl = yrp_VoicePanelList:Add("VoiceNotifyYRP")
 	pnl:Setup(ply)
 	PlayerVoicePanels[ply] = pnl
