@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 362 -- do NOT change this!
+GM.VersionBuild = 363 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -898,6 +898,12 @@ function YRPCleanUpName(name)
 	return name
 end
 
+function loadLanguages()
+end
+
+function loadModules()
+end
+
 function loadCustomDarkRPItems()
 end
 
@@ -907,9 +913,9 @@ end
 function GM:DarkRPFinishedLoading()
 	-- GAMEMODE gets set after the last statement in the gamemode files is run. That is not the case in this hook
 	GAMEMODE = GAMEMODE or GM
-	--loadLanguages()
-	--loadModules()
-	--loadCustomDarkRPItems()
+	loadLanguages()
+	loadModules()
+	loadCustomDarkRPItems()
 	hook.Call("loadCustomDarkRPItems", self)
 	hook.Call("postLoadCustomDarkRPItems", self)
 end

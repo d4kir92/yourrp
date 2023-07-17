@@ -504,7 +504,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 						net.SendToServer()
 					end
 
-					if ea and ea.background then
+					if ea and YRPEntityAlive(ea.background) and ea.background.Clear then
 						ea.background:Clear()
 					end
 

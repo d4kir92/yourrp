@@ -441,7 +441,7 @@ function Player:DRPSendCategoriesToPlayer()
 end
 
 -- darkrp
-timer.Simple(1, function()
+timer.Simple(10, function()
 	if GAMEMODE.DarkRPFinishedLoading then
 		GAMEMODE:DarkRPFinishedLoading()
 	end
