@@ -61,10 +61,12 @@ function PANEL:Setup(ply)
 	if GetGlobalYRPBool("bool_voice_module") then
 		self.ply = ply
 
-		if ply.RPName then
-			self.PlayerName:SetText(ply:IDCardID() .. " " .. ply:RPName())
-		else
-			self.PlayerName:SetText(ply:IDCardID() .. " " .. ply:Nick())
+		if ply and ply.IDCardID then
+			if ply.RPName then
+				self.PlayerName:SetText(ply:IDCardID() .. " " .. ply:RPName())
+			else
+				self.PlayerName:SetText(ply:IDCardID() .. " " .. ply:Nick())
+			end
 		end
 
 		local channels = {}
@@ -126,8 +128,8 @@ function PANEL:Paint(w, h)
 end
 
 function PANEL:Think()
-	if IsValid(self.ply) then
-		if GetGlobalYRPBool("bool_voice_idcardid", false) then
+	if IsValid(self.ply) and self.ply.RPName then
+		if GetGlobalYRPBool("bool_voice_idcardid", false) and self.ply.IDCardID then
 			self.PlayerName:SetText(self.ply:IDCardID() .. " " .. self.ply:RPName())
 		else
 			self.PlayerName:SetText(self.ply:RPName())

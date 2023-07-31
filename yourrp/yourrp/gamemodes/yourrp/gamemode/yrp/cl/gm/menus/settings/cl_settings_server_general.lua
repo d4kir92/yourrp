@@ -206,7 +206,7 @@ function CreateTextBoxLineSpecial(dpanellist, text, text2, lstr, netstr, netstr2
 	end
 
 	background.textbox = YRPCreateD("DTextEntry", background, YRP.ctr(400) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
-	background.textbox:SetText(text)
+	background.textbox:SetText(text or "MISSING")
 	background.textbox.serverside = false
 
 	function background.textbox:OnChange()
@@ -228,7 +228,7 @@ function CreateTextBoxLineSpecial(dpanellist, text, text2, lstr, netstr, netstr2
 	end)
 
 	background.textbox2 = YRPCreateD("DTextEntry", background, YRP.ctr(400) - YRP.ctr(10 * 2), YRP.ctr(50), YRP.ctr(10 + 400), YRP.ctr(50))
-	background.textbox2:SetText(text2)
+	background.textbox2:SetText(text2 or "MISSING")
 	background.textbox2.serverside = false
 
 	function background.textbox2:OnChange()
