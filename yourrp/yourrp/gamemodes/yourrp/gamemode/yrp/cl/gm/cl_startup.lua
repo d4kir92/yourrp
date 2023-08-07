@@ -616,6 +616,7 @@ function openSingleSelector(tab, closeF, web)
 	end
 
 	function showList()
+		if not YRPPanelAlive(PanelSelect) then return end
 		local tmpBr = 10
 		local tmpX = 0
 		local tmpY = 0
