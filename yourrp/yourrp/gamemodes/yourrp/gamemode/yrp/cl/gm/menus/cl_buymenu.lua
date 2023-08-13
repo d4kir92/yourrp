@@ -496,7 +496,7 @@ net.Receive("nws_yrp_shop_get_tabs", function(len)
 					local _uid = net.ReadString()
 					local _cats = net.ReadTable()
 
-					if IsNotNilAndNotFalse(BUYMENU.content) then
+					if IsNotNilAndNotFalse(BUYMENU.content) and YRPPanelAlive(BUYMENU.shop) and BUYMENU.shop.Clear then
 						BUYMENU.shop:Clear()
 
 						for j, cat in pairs(_cats) do
