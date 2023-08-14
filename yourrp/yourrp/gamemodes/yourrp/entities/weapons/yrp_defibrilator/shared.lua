@@ -35,12 +35,20 @@ function SWEP:PrimaryAttack()
 		local ply = self:GetOwner()
 		local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)
 
+		if ply.OldCreateRagdoll ~= ply.CreateRagdoll then
+			ply:PrintMessage(HUD_PRINTCENTER, "[REVIVE] There is another REVIVE SYSTEM INSTALLED")
+		end
+
 		if tr.Hit then
 			self.target = tr.Entity
 
 			if self.target:GetClass() == "prop_ragdoll" then
 				ply:StartCasting("revive", "LID_revive", 0, self.target, 0.1, 200, 1, false)
+			else
+				ply:PrintMessage(HUD_PRINTCENTER, "[REVIVE] NO REVIVABLE FOUND FOR DEFIBRILATOR (Class: " .. tostring(self.target:GetClass()) .. ")")
 			end
+		else
+			ply:PrintMessage(HUD_PRINTCENTER, "[REVIVE] NO TARGET FOUND FOR DEFIBRILATOR")
 		end
 	end
 end
@@ -55,10 +63,10 @@ if SERVER then
 			if pos ~= nil then
 				ply:YRPRevive(pos)
 			else
-				YRP.msg("note", "[REVIVE] Ragdoll is not valid")
+				ply:PrintMessage(HUD_PRINTCENTER, "[REVIVE] Ragdoll is not valid")
 			end
 		else
-			YRP.msg("note", "[REVIVE] target player is not valid")
+			ply:PrintMessage(HUD_PRINTCENTER, "[REVIVE] target player is not valid")
 		end
 	end)
 end

@@ -580,8 +580,13 @@ function IsNoNotDroppableRoleSwep(ply, cname)
 end
 
 local PLAYER = FindMetaTable("Player")
+PLAYER.OldCreateRagdoll = PLAYER.OldCreateRagdoll or PLAYER.CreateRagdoll
 
-function PLAYER:CreateRagdoll()
+function PLAYER:YRPCreateRagdoll()
+	if PLAYER.OldCreateRagdoll ~= PLAYER.CreateRagdoll then
+		self:PrintMessage(HUD_PRINTCENTER, "[REVIVE] There is another REVIVE SYSTEM INSTALLED")
+	end
+
 	local ply = self
 	local oldragdoll = ply:GetRagdollEntity()
 
@@ -656,7 +661,12 @@ function PLAYER:AddPlayTime(force)
 end
 
 function GM:DoPlayerDeath(ply, attacker, dmginfo)
-	ply:CreateRagdoll()
+	ply:YRPCreateRagdoll()
+
+	if PLAYER.OldCreateRagdoll ~= PLAYER.CreateRagdoll then
+		ply:CreateRagdoll()
+	end
+
 	ply:AddDeaths(1)
 
 	if attacker:IsValid() and attacker:IsPlayer() then

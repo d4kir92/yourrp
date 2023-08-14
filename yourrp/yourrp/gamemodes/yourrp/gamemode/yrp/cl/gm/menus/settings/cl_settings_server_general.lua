@@ -1125,7 +1125,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 		CreateCheckBoxLine(MONEY_SETTINGS:GetContent(), GEN.bool_money_printer_spawn_money, "LID_moneyprinterspawnmoney", "nws_yrp_update_bool_money_printer_spawn_money")
 		--[[ CHARACTERS SETTINGS ]]
 		--
-		local CHARACTERS_SETTINGS = YRPCreateD("YGroupBox", General_Slider, YRP.ctr(800), General_Slider:GetTall(), 0, 0)
+		local CHARACTERS_SETTINGS = YRPCreateD("YGroupBox", General_Slider, YRP.ctr(1000), General_Slider:GetTall(), 0, 0)
 		CHARACTERS_SETTINGS:SetText("LID_characterssettings")
 
 		function CHARACTERS_SETTINGS:Paint(pw, ph)
@@ -1146,7 +1146,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_logouttime, YRP.trans("LID_logouttime"), "nws_yrp_update_int_logouttime")
 		CreateHRLine(CHARACTERS_SETTINGS:GetContent())
 		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_min, YRP.trans("LID_respawntime") .. " [" .. YRP.trans("LID_min") .. "]", "nws_yrp_update_int_deathtimestamp_min")
-		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_max, YRP.trans("LID_respawntime") .. " [" .. YRP.trans("LID_max") .. "]", "nws_yrp_update_int_deathtimestamp_max")
+		CreateNumberWangLine(CHARACTERS_SETTINGS:GetContent(), GEN.int_deathtimestamp_max, YRP.trans("LID_respawntime") .. " [" .. YRP.trans("LID_max") .. "]" .. "(afterwards no longer revivable)", "nws_yrp_update_int_deathtimestamp_max")
 		CreateCheckBoxLine(CHARACTERS_SETTINGS:GetContent(), GEN.bool_deathscreen, "LID_deathscreen", "nws_yrp_update_bool_deathscreen")
 		--[[ SOCIAL SETTINGS ]]
 		--
