@@ -66,7 +66,7 @@ if SERVER then
 				ply:PrintMessage(HUD_PRINTCENTER, "[REVIVE] Ragdoll is not valid")
 			end
 		else
-			ply:PrintMessage(HUD_PRINTCENTER, "[REVIVE] target player is not valid")
+			PrintMessage(HUD_PRINTCENTER, "[REVIVE] target player is not valid")
 		end
 	end)
 end
