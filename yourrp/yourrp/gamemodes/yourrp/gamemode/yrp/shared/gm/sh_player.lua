@@ -3,6 +3,10 @@ function YRPIsChatEnabled(from)
 	return GetGlobalYRPBool("bool_yrp_chat", false)
 end
 
+function YRPIsChatCommandsEnabled()
+	return GetGlobalYRPBool("bool_yrp_chat_commands", false)
+end
+
 function GetPlayerByName(name)
 	if name == nil then return NULL end
 	name = string.lower(name)

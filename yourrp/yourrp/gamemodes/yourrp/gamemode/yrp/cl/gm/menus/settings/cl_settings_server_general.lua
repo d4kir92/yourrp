@@ -575,6 +575,7 @@ net.Receive("nws_yrp_connect_Settings_General", function(len)
 		CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "LID_characterdesign", "nws_yrp_update_text_character_design", GetGlobalYRPString("text_character_design", "Default"), {"Default", "HorizontalNEW", "Horizontal", "Vertical"})
 
 		CreateHRLine(GAMEMODE_VISUALS:GetContent())
+		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat_commands, "YourRP Chat Commands", "nws_yrp_update_bool_yrp_chat_commands")
 		CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_chat, "LID_yourrpchat", "nws_yrp_update_bool_yrp_chat")
 		CreateNumberWangLine(GAMEMODE_VISUALS:GetContent(), GEN.int_yrp_chat_range_local, YRP.trans("LID_localchatrange"), "nws_yrp_update_int_yrp_chat_range_local", 50, 1000, 20)
 		CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_idstructure, YRP.trans("LID_idstructure") .. " (!D 1Dig., !L 1Let., !N 1Num.)", "nws_yrp_update_text_idstructure")

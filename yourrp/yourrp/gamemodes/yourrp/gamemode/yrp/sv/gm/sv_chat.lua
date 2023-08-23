@@ -525,6 +525,7 @@ cmdsM["name"] = YRPChatRenamePlayer
 cmdsM["nick"] = YRPChatRenamePlayer
 
 function YRPRunCommand(sender, command, text)
+	if not YRPIsChatCommandsEnabled() then return false end
 	if not YRPEntityAlive(sender) then return false end
 	if command == nil then return false end
 	command = string.lower(command)
