@@ -786,7 +786,7 @@ net.Receive("nws_yrp_getBuildingInfo", function(len, ply)
 		tab["G"] = tabGroup
 		YRPSendBuildingInfo(ply, door, tab)
 	else
-		YRP.msg("note", "getBuildingInfo -> Building not found in Database. [Map: " .. GetMapNameDB() .. "]")
+		YRP.msg("error", "getBuildingInfo -> Building not found in Database. [Map: " .. GetMapNameDB() .. "][id: " .. buid .. "]")
 	end
 end)
 

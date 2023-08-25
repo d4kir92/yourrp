@@ -226,7 +226,7 @@ function YRP.msg(chan, str_msg, tochat, force)
 				end
 
 				if cn == "ERROR" or cn == "MISSING" or cn == "ACCESS" then
-					if YRPNewError(str) then
+					if YRPNewError and YRPNewError(str) then
 						YRPAddError(str, str, REALM)
 					end
 
@@ -245,7 +245,7 @@ function YRP.msg(chan, str_msg, tochat, force)
 						end)
 					end
 				elseif cn == "DARKRP" then
-					if YRPNewError(str) then
+					if YRPNewError and YRPNewError(str) then
 						YRPAddError(str, str, REALM)
 					end
 				end

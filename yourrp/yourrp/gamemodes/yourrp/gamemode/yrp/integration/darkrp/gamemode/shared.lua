@@ -7,6 +7,21 @@ else
 	include("server.lua")
 end
 
+function DarkRP.error(message, stack, hints, path, line)
+	--Description: Throw a simplerr formatted error. Also halts the stack, which means that statements after calling this function will not execute.
+	YRPDarkrpNotFound("error( " .. message .. ", " .. tostring(stack) .. ", hints, " .. tostring(path) .. ", " .. tostring(line) .. " )")
+
+	return false, "this say nothing"
+end
+
+function DarkRP.errorNoHalt(message, stack, hints, path, line)
+	--Description: Throw a simplerr formatted error. Unlike DarkRP.error, this does not halt the stack. This means that statements after
+	--						 calling this function will be executed like normal.
+	YRPDarkrpNotFound("errorNoHalt( " .. message .. ", " .. tostring(stack) .. ", hints, " .. tostring(path) .. ", " .. tostring(line) .. " )")
+
+	return false, "this say nothing"
+end
+
 function DarkRP.addChatCommandsLanguage(languageCode, translations)
 	--Description: Add a translation table for chat command descriptions. See darkrpmod/lua/darkrp_language/chatcommands.lua for an example.
 	YRPDarkrpNotFound("addChatCommandsLanguage( " .. languageCode .. ", table)")
@@ -181,28 +196,44 @@ function DarkRP.createVehicle(name, tbl)
 	YRPDarkrpNotFound("createVehicle( " .. name .. ", tbl)")
 end
 
-local declarechatcmds = {}
+DarkRP.chatCommands = DarkRP.chatCommands or {}
 
-function DarkRP.declareChatCommand(tab)
+local validChatCommand = {
+	command = isstring,
+	description = isstring,
+	delay = isnumber,
+}
+
+local checkChatCommand = function(tbl)
+	for k in pairs(validChatCommand) do
+		if not validChatCommand[k](tbl[k]) then return false, k end
+	end
+
+	return true
+end
+
+function DarkRP.declareChatCommand(tbl)
 	--Description: Declare a chat command ( describe it)
-	--YRPDarkrpNotFound(table.ToString( tab or {}, "declareChatCommand", false ) )
-	declarechatcmds[tab.command] = tab
+	DarkRP.chatCommands = DarkRP.chatCommands or {}
+	local valid, element = checkChatCommand(tbl)
+
+	if not valid then
+		DarkRP.error("Incorrect chat command! " .. element .. " is invalid!", 2)
+	end
+
+	tbl.command = string.lower(tbl.command)
+	DarkRP.chatCommands[tbl.command] = DarkRP.chatCommands[tbl.command] or tbl
+
+	for k, v in pairs(tbl) do
+		DarkRP.chatCommands[tbl.command][k] = v
+	end
 end
 
-function DarkRP.error(message, stack, hints, path, line)
-	--Description: Throw a simplerr formatted error. Also halts the stack, which means that statements after calling this function will not execute.
-	YRPDarkrpNotFound("error( " .. message .. ", " .. tostring(stack) .. ", hints, " .. path .. ", " .. tostring(line) .. " )")
-
-	return false, "this say nothing"
-end
-
-function DarkRP.errorNoHalt(message, stack, hints, path, line)
-	--Description: Throw a simplerr formatted error. Unlike DarkRP.error, this does not halt the stack. This means that statements after
-	--						 calling this function will be executed like normal.
-	YRPDarkrpNotFound("errorNoHalt( " .. message .. ", " .. tostring(stack) .. ", hints, " .. path .. ", " .. tostring(line) .. " )")
-
-	return false, "this say nothing"
-end
+DarkRP.declareChatCommand({
+	command = "advert",
+	description = "Create a billboard holding an advertisement.",
+	delay = 1.5
+})
 
 function DarkRP.explodeArg(arg)
 	--Description: String arguments exploded into a table. It accounts for substrings in quotes, which makes it more intelligent than string.Explode
@@ -260,10 +291,10 @@ function DarkRP.getCategories()
 end
 
 function DarkRP.getChatCommand(command)
+	DarkRP.chatCommands = DarkRP.chatCommands or {}
 	--Description: Get the information on a chat command.
-	YRPDarkrpNotFound("getChatCommand( " .. command .. " )")
 
-	return {}
+	return DarkRP.chatCommands[string.lower(command)]
 end
 
 function DarkRP.getChatCommandDescription(command)
@@ -273,10 +304,10 @@ function DarkRP.getChatCommandDescription(command)
 	return "OLD getChatCommandDescription"
 end
 
-YRPDarkrpDefineChatCmds = YRPDarkrpDefineChatCmds or {}
-
 function DarkRP.getChatCommands()
-	return YRPDarkrpDefineChatCmds
+	DarkRP.chatCommands = DarkRP.chatCommands or {}
+
+	return DarkRP.chatCommands
 end
 
 --Description: Get every chat command.
