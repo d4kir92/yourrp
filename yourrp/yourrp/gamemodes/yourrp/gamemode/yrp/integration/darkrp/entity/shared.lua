@@ -92,26 +92,19 @@ function Entity:isKeysOwnable()
 	return self:GetYRPBool("bool_canbeowned", true)
 end
 
---Description: Whether this door can be bought.
 function Entity:isKeysOwned()
 	return self:GetYRPBool("bool_hasowner", false) == true
 end
 
---Description: Whether this door is owned by someone.
 function Entity:isKeysOwnedBy(ply)
 	return IsOwnedBy(ply, self)
 end
 
---Description: Whether this door is owned or co-owned by this player
 function Entity:isMasterOwner(ply)
-	--Description: Whether the player is the main owner of the door ( as opposed to a co-owner).
-	YRPDarkrpNotFound("isMasterOwner(ply)")
-
-	return false
+	return self:GetYRPInt("ownerCharID", 0) == ply:CharID()
 end
 
 function Entity:isMoneyBag()
-	--Description: Whether this entity is a money bag
 	YRPDarkrpNotFound("isMoneyBag()")
 
 	return false

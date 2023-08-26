@@ -550,174 +550,178 @@ local oldDistLocal = 0
 local distLocal = 0
 
 --local oldtext = text
-if YRPIsChatCommandsEnabled() then
-	hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
-		local channel = ""
+timer.Simple(0, function()
+	if YRPIsChatCommandsEnabled() then
+		hook.Add("PlayerSay", "YRP_PlayerSay", function(sender, text, teamChat)
+			local channel = ""
 
-		if oldDistLocal ~= GetGlobalYRPInt("int_yrp_chat_range_local", 400) then
-			oldDistLocal = GetGlobalYRPInt("int_yrp_chat_range_local", 400)
-			distLocal = GetGlobalYRPInt("int_yrp_chat_range_local", 400) ^ 2
-		end
-
-		-- Find Channel
-		if string.StartWith(text, "!") or string.StartWith(text, "/") or string.StartWith(text, "@") then
-			local s, _ = string.find(text, " ", 1, true)
-
-			if s then
-				channel = string.sub(text, 2, s - 1)
-				text = string.sub(text, s + 1)
-			else
-				channel = string.sub(text, 2)
-				text = ""
+			if oldDistLocal ~= GetGlobalYRPInt("int_yrp_chat_range_local", 400) then
+				oldDistLocal = GetGlobalYRPInt("int_yrp_chat_range_local", 400)
+				distLocal = GetGlobalYRPInt("int_yrp_chat_range_local", 400) ^ 2
 			end
 
-			channel = string.upper(channel)
-		end
+			-- Find Channel
+			if string.StartWith(text, "!") or string.StartWith(text, "/") or string.StartWith(text, "@") then
+				local s, _ = string.find(text, " ", 1, true)
 
-		if strEmpty(channel) then
-			channel = "SAY"
-		end
+				if s then
+					channel = string.sub(text, 2, s - 1)
+					text = string.sub(text, s + 1)
+				else
+					channel = string.sub(text, 2)
+					text = ""
+				end
 
-		-- TARGET
-		local target = NULL
-		local texttab = string.Explode(" ", text, false)
-
-		if texttab[1] then
-			local tar = GetPlayerByRPName(texttab[1])
-
-			if tar then
-				target = tar
-			end
-		end
-
-		-- Replace words with names
-		text = YRPReplaceWithPlayerNames(text)
-		-- Channels
-		local tab = YRP_SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. channel .. "'")
-
-		if IsNotNilAndNotFalse(tab) then
-			tab = tab[1]
-			tab.int_mode = tonumber(tab.int_mode)
-			local structure = tab.string_structure
-			local structure2 = tab.string_structure2
-			local pk = YRPChatReplaceCMDS(structure, sender, text)
-			local pk2 = YRPChatReplaceCMDS(structure2, sender, text)
-
-			if channel ~= "HELP" and not strEmpty(text) then
-				YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID() .. "', " .. YRP_SQL_STR_IN(text) .. "")
+				channel = string.upper(channel)
 			end
 
-			if not tobool(tab.bool_enabled) then return "" end
+			if strEmpty(channel) then
+				channel = "SAY"
+			end
 
-			if tab.int_mode == eGlobal then
-				net.Start("nws_yrp_player_say")
-				net.WriteTable(pk)
-				net.Broadcast()
+			-- TARGET
+			local target = NULL
+			local texttab = string.Explode(" ", text, false)
 
-				return ""
-			elseif tab.int_mode == eLocal then
-				local plys = {}
+			if texttab[1] then
+				local tar = GetPlayerByRPName(texttab[1])
 
-				for i, p in pairs(player.GetAll()) do
-					if p:GetPos():DistToSqr(sender:GetPos()) < distLocal then
-						table.insert(plys, p)
+				if tar then
+					target = tar
+				end
+			end
+
+			-- Replace words with names
+			text = YRPReplaceWithPlayerNames(text)
+			-- Channels
+			local tab = YRP_SQL_SELECT("yrp_chat_channels", "*", "string_name = '" .. channel .. "'")
+
+			if IsNotNilAndNotFalse(tab) then
+				tab = tab[1]
+				tab.int_mode = tonumber(tab.int_mode)
+				local structure = tab.string_structure
+				local structure2 = tab.string_structure2
+				local pk = YRPChatReplaceCMDS(structure, sender, text)
+				local pk2 = YRPChatReplaceCMDS(structure2, sender, text)
+
+				if channel ~= "HELP" and not strEmpty(text) then
+					YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "', 'LID_chat', '" .. sender:SteamID() .. "', " .. YRP_SQL_STR_IN(text) .. "")
+				end
+
+				if not tobool(tab.bool_enabled) then return "" end
+
+				if tab.int_mode == eGlobal then
+					net.Start("nws_yrp_player_say")
+					net.WriteTable(pk)
+					net.Broadcast()
+
+					return ""
+				elseif tab.int_mode == eLocal then
+					local plys = {}
+
+					for i, p in pairs(player.GetAll()) do
+						if p:GetPos():DistToSqr(sender:GetPos()) < distLocal then
+							table.insert(plys, p)
+						end
 					end
-				end
 
-				if #plys > 0 then
-					net.Start("nws_yrp_player_say")
-					net.WriteTable(pk)
-					net.Send(plys)
-				end
-
-				return ""
-			elseif tab.int_mode == eFaction then
-				local plys = {}
-
-				for i, p in pairs(player.GetAll()) do
-					if p:GetFactionUID() == sender:GetFactionUID() then
-						table.insert(plys, p)
+					if #plys > 0 then
+						net.Start("nws_yrp_player_say")
+						net.WriteTable(pk)
+						net.Send(plys)
 					end
-				end
 
-				if #plys > 0 then
-					net.Start("nws_yrp_player_say")
-					net.WriteTable(pk)
-					net.Send(plys)
-				end
+					return ""
+				elseif tab.int_mode == eFaction then
+					local plys = {}
 
-				return ""
-			elseif tab.int_mode == eGroup then
-				local plys = {}
-
-				for i, p in pairs(player.GetAll()) do
-					if p:GetGroupUID() == sender:GetGroupUID() then
-						table.insert(plys, p)
+					for i, p in pairs(player.GetAll()) do
+						if p:GetFactionUID() == sender:GetFactionUID() then
+							table.insert(plys, p)
+						end
 					end
-				end
 
-				if #plys > 0 then
-					net.Start("nws_yrp_player_say")
-					net.WriteTable(pk)
-					net.Send(plys)
-				end
-
-				return ""
-			elseif tab.int_mode == eRole then
-				local plys = {}
-
-				for i, p in pairs(player.GetAll()) do
-					if p:GetRoleUID() == sender:GetRoleUID() then
-						table.insert(plys, p)
+					if #plys > 0 then
+						net.Start("nws_yrp_player_say")
+						net.WriteTable(pk)
+						net.Send(plys)
 					end
-				end
 
-				if #plys > 0 then
-					net.Start("nws_yrp_player_say")
-					net.WriteTable(pk)
-					net.Send(plys)
-				end
+					return ""
+				elseif tab.int_mode == eGroup then
+					local plys = {}
 
-				return ""
-			elseif tab.int_mode == eUsergroup then
-				local plys = {}
-
-				for i, p in pairs(player.GetAll()) do
-					if p:GetUserGroup() == sender:GetUserGroup() then
-						table.insert(plys, p)
+					for i, p in pairs(player.GetAll()) do
+						if p:GetGroupUID() == sender:GetGroupUID() then
+							table.insert(plys, p)
+						end
 					end
-				end
 
-				if #plys > 0 then
-					net.Start("nws_yrp_player_say")
-					net.WriteTable(pk)
-					net.Send(plys)
-				end
+					if #plys > 0 then
+						net.Start("nws_yrp_player_say")
+						net.WriteTable(pk)
+						net.Send(plys)
+					end
 
-				return ""
-			elseif tab.int_mode == eWhisper then
-				-- Whisper
-				if YRPEntityAlive(target) then
-					net.Start("nws_yrp_player_say")
-					net.WriteTable(pk2)
-					net.Send(sender)
-					net.Start("nws_yrp_player_say")
-					net.WriteTable(pk)
-					net.Send(target)
-				elseif texttab[1] then
-					pk2[2] = "\"" .. texttab[1] .. "\" is not on this server."
-					net.Start("nws_yrp_player_say")
-					net.WriteTable(pk2)
-					net.Send(sender)
+					return ""
+				elseif tab.int_mode == eRole then
+					local plys = {}
+
+					for i, p in pairs(player.GetAll()) do
+						if p:GetRoleUID() == sender:GetRoleUID() then
+							table.insert(plys, p)
+						end
+					end
+
+					if #plys > 0 then
+						net.Start("nws_yrp_player_say")
+						net.WriteTable(pk)
+						net.Send(plys)
+					end
+
+					return ""
+				elseif tab.int_mode == eUsergroup then
+					local plys = {}
+
+					for i, p in pairs(player.GetAll()) do
+						if p:GetUserGroup() == sender:GetUserGroup() then
+							table.insert(plys, p)
+						end
+					end
+
+					if #plys > 0 then
+						net.Start("nws_yrp_player_say")
+						net.WriteTable(pk)
+						net.Send(plys)
+					end
+
+					return ""
+				elseif tab.int_mode == eWhisper then
+					-- Whisper
+					if YRPEntityAlive(target) then
+						net.Start("nws_yrp_player_say")
+						net.WriteTable(pk2)
+						net.Send(sender)
+						net.Start("nws_yrp_player_say")
+						net.WriteTable(pk)
+						net.Send(target)
+					elseif texttab[1] then
+						pk2[2] = "\"" .. texttab[1] .. "\" is not on this server."
+						net.Start("nws_yrp_player_say")
+						net.WriteTable(pk2)
+						net.Send(sender)
+					end
+				elseif tab.int_mode == eCustom then
+					return ""
+				elseif YRPEntityAlive(sender) then
+					-- Custom -- May in the future
+					YRPRunCommand(sender, channel, text) -- no return, it breaks custom chat addons, like atlas
 				end
-			elseif tab.int_mode == eCustom then
-				return ""
 			elseif YRPEntityAlive(sender) then
-				-- Custom -- May in the future
 				YRPRunCommand(sender, channel, text) -- no return, it breaks custom chat addons, like atlas
 			end
-		elseif YRPEntityAlive(sender) then
-			YRPRunCommand(sender, channel, text) -- no return, it breaks custom chat addons, like atlas
-		end
-	end)
-end
+		end)
+	else
+		YRP.msg("note", "YourRP - Chat Commands (and channels) are disabled - F8 General -> Yourrp Chat Commands")
+	end
+end)
