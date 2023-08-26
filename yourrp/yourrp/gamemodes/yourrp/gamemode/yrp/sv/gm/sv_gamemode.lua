@@ -1618,31 +1618,37 @@ net.Receive("nws_yrp_voice_set_max_passive", function(len, ply)
 	SetGlobalYRPInt("int_max_channels_passive", maxi)
 end)
 
-hook.Add("PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, talker)
-	if GetGlobalYRPBool("bool_voice", false) then
-		if listener == talker then return false end
-		local canhear = false
+timer.Simple(0, function()
+	if GetGlobalYRPBool("bool_voice", false) or GetGlobalYRPBool("bool_voice_3d", false) then
+		hook.Add("PlayerCanHearPlayersVoice", "YRP_voicesystem", function(listener, talker)
+			if GetGlobalYRPBool("bool_voice", false) then
+				if listener == talker then return false end
+				local canhear = false
 
-		for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable("yrp_voice_channels", {}), "int_position", false) do
-			-- If Talker allowed to talk and both are in that channel
-			if IsActiveInChannel(talker, channel.uniqueID) and (IsInChannel(listener, channel.uniqueID) or IsActiveInChannel(listener, channel.uniqueID)) then
-				canhear = true
-				break
+				for i, channel in SortedPairsByMemberValue(GetGlobalYRPTable("yrp_voice_channels", {}), "int_position", false) do
+					-- If Talker allowed to talk and both are in that channel
+					if IsActiveInChannel(talker, channel.uniqueID) and (IsInChannel(listener, channel.uniqueID) or IsActiveInChannel(listener, channel.uniqueID)) then
+						canhear = true
+						break
+					end
+				end
+
+				if canhear and not talker:GetYRPBool("mute_voice", false) then
+					return true
+				else
+					if YRPIsInMaxVoiceRange(listener, talker) and YRPIsInSpeakRange(listener, talker) then return true end
+				end
+				-- new
+
+				return false
+			elseif GetGlobalYRPBool("bool_voice_3d", false) then
+				if YRPIsInMaxVoiceRange(listener, talker) and YRPIsInSpeakRange(listener, talker) then return true end
+
+				return false
 			end
-		end
-
-		if canhear and not talker:GetYRPBool("mute_voice", false) then
-			return true
-		else
-			if YRPIsInMaxVoiceRange(listener, talker) and YRPIsInSpeakRange(listener, talker) then return true end
-		end
-		-- new
-
-		return false
-	elseif GetGlobalYRPBool("bool_voice_3d", false) then
-		if YRPIsInMaxVoiceRange(listener, talker) and YRPIsInSpeakRange(listener, talker) then return true end
-
-		return false
+		end)
+	else
+		YRP.msg("note", "YourRP Voicechat and Voicechat3D is disabled")
 	end
 end)
 
