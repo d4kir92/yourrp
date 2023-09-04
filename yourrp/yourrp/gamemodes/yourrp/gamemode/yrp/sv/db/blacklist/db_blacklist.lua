@@ -28,8 +28,6 @@ function LoadBlacklist()
 		SetGlobalYRPTable("yrp_blacklist_entities", tabEntities)
 	end
 
-	pTab(tabProps)
-
 	if IsNotNilAndNotFalse(tabProps) then
 		SetGlobalYRPTable("yrp_blacklist_props", tabProps)
 	end

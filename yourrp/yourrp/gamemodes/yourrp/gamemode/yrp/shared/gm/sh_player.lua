@@ -826,6 +826,7 @@ function YRPCanLock(ply, door, open)
 		if ply:GetSecurityLevel() >= door:SecurityLevel() then
 			if door:GetYRPInt("ownerCharID", 0) > 0 then
 				if ply:CharID() == door:GetYRPInt("ownerCharID", 0) then return true end --YRP.msg( "note", "[canLock] " .. "IsOwner" )
+				if door:IsCoOwner(ply) then return true end
 				YRP.msg("note", "[canLock] " .. "Building has owner, but not this one! (from Player: " .. ply:RPName() .. " )")
 
 				return false

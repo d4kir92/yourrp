@@ -16,11 +16,6 @@ end
 function SetGlobalYRPTable(key, value)
 	if key and value and type(key) == "string" and type(value) == "table" then
 		YRP_Global_Tables[key] = value
-		print("SET", key, value)
-
-		if key == "yrp_blacklist_props" then
-			pTab(value)
-		end
 
 		if SERVER then
 			net.Start("YRPSetGlobalYRPTable")

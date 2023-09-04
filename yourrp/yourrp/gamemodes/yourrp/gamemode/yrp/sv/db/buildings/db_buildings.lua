@@ -9,6 +9,7 @@ local DATABASE_NAME_BUILDINGS = "yrp_" .. GetMapNameDB() .. "_buildings"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "groupID", "INTEGER DEFAULT 0")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "buildingprice", "TEXT DEFAULT 100")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "ownerCharID", "TEXT DEFAULT ''")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "coownerCharIDs", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "name", "TEXT DEFAULT 'Building'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_header", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_description", "TEXT DEFAULT ''")
@@ -66,13 +67,15 @@ function YRPAllowedToUseDoor(id, ply, door)
 				-- If char not available anymore => remove ownership
 				if not IsNotNilAndNotFalse(_tmpChaTab) then
 					YRP_SQL_UPDATE(DATABASE_NAME_BUILDINGS, {
-						["ownerCharID"] = ""
+						["ownerCharID"] = "",
+						["coownerCharIDs"] = ""
 					}, "uniqueID = '" .. id .. "'")
 
 					door:SetYRPString("ownerRPName", "")
 					door:SetYRPInt("ownerGroupUID", -99)
 					door:SetYRPString("ownerGroup", "")
 					door:SetYRPInt("ownerCharID", 0)
+					door:SetYRPString("coownerCharIDs", "")
 					door:SetYRPBool("bool_hasowner", false)
 					YRPFireUnlock(door)
 				else
@@ -157,6 +160,7 @@ function YRPLoadDoors()
 								if IsNotNilAndNotFalse(tabChar.rpname) then
 									v:SetYRPString("ownerRPName", tabChar.rpname)
 									v:SetYRPInt("ownerCharID", tonumber(w.ownerCharID))
+									v:SetYRPString("coownerCharIDs", w.coownerCharIDs)
 									v:SetYRPBool("bool_hasowner", true)
 								end
 							end
@@ -351,11 +355,13 @@ function YRPBuildingRemoveOwner(SteamID)
 					v:SetYRPInt("ownerGroupUID", -99)
 					v:SetYRPString("ownerGroup", "")
 					v:SetYRPInt("ownerCharID", 0)
+					v:SetYRPString("coownerCharIDs", "")
 					v:SetYRPBool("bool_hasowner", false)
 					YRPFireUnlock(v)
 
 					YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
-						["ownerCharID"] = ""
+						["ownerCharID"] = "",
+						["coownerCharIDs"] = ""
 					}, "uniqueID = '" .. v:GetYRPString("uniqueID") .. "'")
 				end
 			end
@@ -375,6 +381,7 @@ net.Receive("nws_yrp_removeOwner", function(len, ply)
 
 	YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
 		["ownerCharID"] = "",
+		["coownerCharIDs"] = "",
 		["groupID"] = 0
 	}, "uniqueID = '" .. _tmpBuildingID .. "'")
 
@@ -384,6 +391,7 @@ net.Receive("nws_yrp_removeOwner", function(len, ply)
 			v:SetYRPInt("ownerGroupUID", -99)
 			v:SetYRPString("ownerGroup", "")
 			v:SetYRPInt("ownerCharID", 0)
+			v:SetYRPString("coownerCharIDs", "")
 			v:SetYRPBool("bool_hasowner", false)
 			YRPFireUnlock(v)
 		end
@@ -405,6 +413,7 @@ net.Receive("nws_yrp_sellBuilding", function(len, ply)
 			v:SetYRPInt("ownerGroupUID", -99)
 			v:SetYRPString("ownerGroup", "")
 			v:SetYRPInt("ownerCharID", 0)
+			v:SetYRPString("coownerCharIDs", "")
 			v:SetYRPBool("bool_hasowner", false)
 			YRPFireUnlock(v)
 
@@ -429,7 +438,8 @@ net.Receive("nws_yrp_buyBuilding", function(len, ply)
 				ply:addMoney(-_tmpTable[1].buildingprice)
 
 				YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
-					["ownerCharID"] = ply:CharID()
+					["ownerCharID"] = ply:CharID(),
+					["coownerCharIDs"] = ""
 				}, "uniqueID = '" .. _tmpBuildingID .. "'")
 
 				local tabChar = YRP_SQL_SELECT("yrp_characters", "rpname", "uniqueID = " .. ply:CharID())
@@ -442,6 +452,7 @@ net.Receive("nws_yrp_buyBuilding", function(len, ply)
 					if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
 						v:SetYRPString("ownerRPName", tabChar.rpname)
 						v:SetYRPInt("ownerCharID", tonumber(ply:CharID()))
+						v:SetYRPString("coownerCharIDs", _tmpTable[1].coownerCharIDs)
 						v:SetYRPBool("bool_hasowner", true)
 					end
 				end
@@ -452,6 +463,64 @@ net.Receive("nws_yrp_buyBuilding", function(len, ply)
 			end
 		else
 			YRP.msg("gm", ply:RPName() .. " has not enough money to buy door")
+		end
+	else
+		YRP.msg("note", "buildings disabled")
+	end
+end)
+
+util.AddNetworkString("nws_yrp_addCoownerBuilding")
+
+net.Receive("nws_yrp_addCoownerBuilding", function(len, ply)
+	if GetGlobalYRPBool("bool_building_system", false) then
+		local _tmpBuildingID = net.ReadString()
+		local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
+		local newCoowner = net.ReadString()
+
+		if _tmpTable then
+			local coownerCharIDs = _tmpTable[1].coownerCharIDs
+			local cotab = string.Explode(",", coownerCharIDs)
+			local newCoTab = {}
+
+			for i, v in pairs(cotab) do
+				if not strEmpty(v) then
+					table.insert(newCoTab, v)
+				end
+			end
+
+			table.insert(newCoTab, newCoowner)
+			coownerCharIDs = table.concat(newCoTab, ",")
+
+			YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+				["coownerCharIDs"] = coownerCharIDs
+			}, "uniqueID = '" .. _tmpBuildingID .. "'")
+
+			for k, v in pairs(GetAllDoors()) do
+				if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
+					v:SetYRPString("coownerCharIDs", coownerCharIDs)
+				end
+			end
+		else
+			YRP.msg("note", "Building doesn't exists")
+		end
+	else
+		YRP.msg("note", "buildings disabled")
+	end
+end)
+
+util.AddNetworkString("nws_yrp_removeAllCoownerBuilding")
+
+net.Receive("nws_yrp_removeAllCoownerBuilding", function(len, ply)
+	if GetGlobalYRPBool("bool_building_system", false) then
+		local _tmpBuildingID = net.ReadString()
+		local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
+
+		if _tmpTable then
+			YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+				["coownerCharIDs"] = ""
+			}, "uniqueID = '" .. _tmpBuildingID .. "'")
+		else
+			YRP.msg("note", "Building doesn't exists")
 		end
 	else
 		YRP.msg("note", "buildings disabled")
