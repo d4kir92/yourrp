@@ -19,7 +19,7 @@ function BuildBlacklis(parent, tabBL, tab)
 	end
 
 	for k, bla in pairs(tabBL) do
-		if tab == "LID_all" or tab == "LID_inventory" and bla.name == "inventory" or tab == "LID_chat" and bla.name == "chat" or tab == "LID_entities" and bla.name == "entities" then
+		if tab == "LID_all" or tab == "LID_inventory" and bla.name == "inventory" or tab == "LID_chat" and bla.name == "chat" or tab == "LID_entities" and bla.name == "entities" or tab == "LID_props" and bla.name == "props" then
 			lis:AddLine(bla.uniqueID, bla.name, bla.value)
 		end
 	end
@@ -40,7 +40,7 @@ function BuildBlacklis(parent, tabBL, tab)
 		addlis:AddItem(BLNameHeader)
 		local BLName = YRPCreateD("DComboBox", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
 
-		for k, v in pairs({"chat", "inventory", "entities"}) do
+		for k, v in pairs({"chat", "inventory", "entities", "props"}) do
 			BLName:AddChoice(v, v)
 		end
 
@@ -168,6 +168,10 @@ net.Receive("nws_yrp_blacklist_get", function(len)
 
 		tabs:AddOption("LID_entities", function(parent)
 			BuildBlacklis(parent, tabBL, "LID_entities")
+		end)
+
+		tabs:AddOption("LID_props", function(parent)
+			BuildBlacklis(parent, tabBL, "LID_props")
 		end)
 
 		tabs:GoToSite(tab)

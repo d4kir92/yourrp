@@ -140,8 +140,6 @@ end
 --Description: Start a lockdown.
 --YRPDarkrpNotFound( "lockdown(ply)" )
 function DarkRP.log(message, colour, noFileSave)
-	--Description: Log a message in DarkRP
-	YRPDarkrpNotFound("log( " .. message .. ", " .. tostring(colour) .. ", " .. tostring(noFileSave) .. " )")
 end
 
 util.AddNetworkString("nws_yrp_sendNotify")

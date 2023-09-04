@@ -14,6 +14,7 @@ function LoadBlacklist()
 	local tabChat = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "chat" .. "'")
 	local tabInventory = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "inventory" .. "'")
 	local tabEntities = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "entities" .. "'")
+	local tabProps = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "props" .. "'")
 
 	if IsNotNilAndNotFalse(tabChat) then
 		SetGlobalYRPTable("yrp_blacklist_chat", tabChat)
@@ -25,6 +26,12 @@ function LoadBlacklist()
 
 	if IsNotNilAndNotFalse(tabEntities) then
 		SetGlobalYRPTable("yrp_blacklist_entities", tabEntities)
+	end
+
+	pTab(tabProps)
+
+	if IsNotNilAndNotFalse(tabProps) then
+		SetGlobalYRPTable("yrp_blacklist_props", tabProps)
 	end
 end
 

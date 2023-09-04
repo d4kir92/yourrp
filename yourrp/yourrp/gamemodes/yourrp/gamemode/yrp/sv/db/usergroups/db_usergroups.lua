@@ -1434,7 +1434,7 @@ hook.Add("PlayerSpawnNPC", "yrp_npcs_restriction", function(pl)
 	end
 end)
 
-hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl)
+hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl, mdl)
 	if YRPEntityAlive(pl) then
 		local _tmp = YRP_SQL_SELECT(DATABASE_NAME, "bool_props", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 
@@ -1442,6 +1442,14 @@ hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl)
 			_tmp = _tmp[1]
 
 			if tobool(_tmp.bool_props) then
+				if PropBlacklisted(mdl) then
+					if not pl:HasAccess("spawnpropblacklistnoti") then
+						YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] has no right to spawn blacklisted prop.")
+					end
+
+					return pl:HasAccess("spawnpropblacklist")
+				end
+
 				return true
 			else
 				YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] tried to spawn a prop.")
@@ -1547,6 +1555,16 @@ function EntBlacklisted(ent)
 
 	for i, black in pairs(blacklist) do
 		if string.find(ent:GetClass(), black.value, 1, true) or string.find(ent:GetModel(), black.value, 1, true) then return true end
+	end
+
+	return false
+end
+
+function PropBlacklisted(prop)
+	local blacklist = GetGlobalYRPTable("yrp_blacklist_props", {})
+
+	for i, black in pairs(blacklist) do
+		if string.find(prop, black.value, 1, true) then return true end
 	end
 
 	return false
