@@ -65,6 +65,8 @@ function YRPConHG(ply, time)
 	local newval = tonumber(ply:GetYRPFloat("hunger", 0.0)) - 0.01 * GetGlobalYRPFloat("float_scale_hunger", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
 	ply:SetYRPFloat("hunger", newval)
+	ply.DarkRPVars = ply.DarkRPVars or {}
+	ply.DarkRPVars.Energy = newval
 
 	if tonumber(ply:GetYRPFloat("hunger", 0.0)) < 20.0 then
 		ply:TakeDamage(ply:GetMaxHealth() / 50, ply)

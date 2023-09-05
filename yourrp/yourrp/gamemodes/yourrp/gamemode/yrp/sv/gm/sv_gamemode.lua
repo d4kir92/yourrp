@@ -176,6 +176,12 @@ hook.Add("PlayerAuthed", "yrp_PlayerAuthed", function(ply, steamid, uniqueid)
 		end
 	end
 
+	ply.DarkRPVars = {}
+	ply.DarkRPVars.money = 0
+	ply.DarkRPVars.salary = 0
+	ply.DarkRPVars.job = ""
+	ply.DarkRPVars.Energy = 0
+
 	timer.Simple(0.01, function()
 		if IsValid(ply) then
 			ply.yrpauthed = true
@@ -315,6 +321,8 @@ function YRPPlayerLoadout(ply)
 
 				--ply:EquipWeapons()
 				ply:SetYRPFloat("hunger", 100)
+				ply.DarkRPVars = ply.DarkRPVars or {}
+				ply.DarkRPVars.Energy = 100
 				ply:SetYRPFloat("thirst", 100)
 				ply:SetYRPFloat("GetCurRadiation", 0)
 			else

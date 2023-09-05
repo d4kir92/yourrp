@@ -602,6 +602,7 @@ function YRPSetRoleValues(ply, pmid)
 
 			ply:SetJumpPower(tonumber(rolTab.int_powerjump)) -- * rolTab.playermodelsize)
 			ply:SetYRPString("salary", rolTab.int_salary)
+			ply.salary = rolTab.int_salary
 			ply:SetYRPString("roleName", rolTab.string_name)
 			ply.DarkRPVars = ply.DarkRPVars or {}
 			ply.DarkRPVars.job = rolTab.string_name

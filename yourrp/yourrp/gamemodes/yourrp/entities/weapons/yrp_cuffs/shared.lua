@@ -51,7 +51,7 @@ end
 
 if CLIENT then
 	function YRP_DrawCuff(ply)
-		if ply:GetYRPBool("cuffed", false) then
+		if ply.GetYRPBool and ply:GetYRPBool("cuffed", false) then
 			local _r_hand = ply:LookupBone("ValveBiped.Bip01_R_Hand")
 
 			if _r_hand ~= nil then
@@ -136,6 +136,7 @@ function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 end
 
 hook.Add("SetupMove", "YRP_SetupMove_Cuffs", function(ply, mv, cmd)
+	if ply.GetYRPBool == nil then return end
 	if not ply:GetYRPBool("cuffed", false) then return end
 	local target = ply:GetYRPEntity("cuff_target")
 

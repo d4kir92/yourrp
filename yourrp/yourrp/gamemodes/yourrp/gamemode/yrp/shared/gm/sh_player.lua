@@ -74,6 +74,18 @@ function Player:IsTyping()
 	end
 end
 
+if CLIENT then
+	hook.Add("Think", "YRPSyncDarkRPVars", function()
+		local ply = LocalPlayer()
+
+		if ply and ply.DarkRPVars then
+			ply.DarkRPVars.Energy = ply:GetYRPFloat("hunger", 0)
+			ply.DarkRPVars.salary = ply:Salary()
+			ply.DarkRPVars.money = ply:Money()
+		end
+	end)
+end
+
 if SERVER then
 	function Player:YRPEat(num)
 		num = tonumber(num)
@@ -86,6 +98,8 @@ if SERVER then
 			self:EmitSound(name)
 			local newhunger = math.Clamp(self:GetYRPFloat("hunger", 0.0) + num, 0, 100.0)
 			self:SetYRPFloat("hunger", newhunger)
+			self.DarkRPVars = self.DarkRPVars or {}
+			self.DarkRPVars.Energy = newhunger
 		end
 	end
 

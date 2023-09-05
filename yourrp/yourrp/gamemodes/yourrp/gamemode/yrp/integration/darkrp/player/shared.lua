@@ -332,15 +332,9 @@ function Player:nickSortedPlayers()
 	return {}
 end
 
-Player.DarkRPVars = {}
-Player.DarkRPVars.money = 0
-Player.DarkRPVars.job = ""
-
---
 local function RetrievePlayerVar(userID, var, value)
 end
 
---RetrievePlayerVar
 local DarkRPVarById = {}
 local UNKNOWN_DARKRPVAR = 255
 
