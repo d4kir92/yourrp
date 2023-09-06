@@ -122,7 +122,7 @@ function HUDIcons()
 		local battery = system.BatteryPower()
 		HUDIconsDrawIcon("BA", BA, battery / 255)
 		HUDIconsDrawText("CR", os.date("%H:%M", os.time()))
-		HUDIconsDrawText("CC", lply:FormattedCharPlayTime())
+		HUDIconsDrawText("CC", lply:YRPFormattedCharPlayTime())
 		HUDIconsDrawText("RO", lply:GetRoleName())
 		HUDIconsDrawText("NA", lply:RPName())
 

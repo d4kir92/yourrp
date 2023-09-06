@@ -593,7 +593,7 @@ function HUD_FO76()
 		FO76Name(CR)
 		local CC = {}
 		CC.element = "CC"
-		CC.text = lply:FormattedCharPlayTime()
+		CC.text = lply:YRPFormattedCharPlayTime()
 		FO76Name(CC)
 		local ID = {}
 		ID.element = "ID"

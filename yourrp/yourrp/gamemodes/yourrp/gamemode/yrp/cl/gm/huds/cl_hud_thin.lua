@@ -406,7 +406,7 @@ function YRPHUDThin()
 		local CC = {}
 		CC.name = "CC"
 		CC.text = "LID_playtime"
-		CC.valuetext = lply:FormattedCharPlayTime()
+		CC.valuetext = lply:YRPFormattedCharPlayTime()
 		YRPDrawThin(CC)
 		local LO = {}
 		LO.name = "LO"

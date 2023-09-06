@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 376 -- do NOT change this!
+GM.VersionBuild = 377 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -798,7 +798,7 @@ function YRPChatReplaceCMDS(structure, ply, text)
 	local newtext = string.Explode(" ", text, false)
 
 	if newtext[1] and #newtext[1] >= 4 then
-		local target = GetPlayerByRPName(newtext[1])
+		local target = YRPGetPlayerByRPName(newtext[1])
 
 		if YRPEntityAlive(target) then
 			result = string.Replace(result, "%TARGET%", target:RPName())

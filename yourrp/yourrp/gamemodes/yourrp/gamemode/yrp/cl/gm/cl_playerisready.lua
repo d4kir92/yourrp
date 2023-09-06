@@ -70,10 +70,6 @@ end)
 function GM:InitPostEntity()
 	YRPStartSendingStartData("GM InitPostEntity")
 	local ply = LocalPlayer()
-	print("TEST", ply)
-	print("##############")
-	print("##############")
-	print("##############")
 	ply.DarkRPVars = {}
 	ply.DarkRPVars.money = 0
 	ply.DarkRPVars.salary = 0

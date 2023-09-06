@@ -279,7 +279,7 @@ function YRPChatRenamePlayer(sender, text)
 				end
 			end
 
-			local ply = GetPlayerByName(tab[1])
+			local ply = YRPGetPlayerByName(tab[1])
 
 			if tab[#tab] ~= nil then
 				name = tab[#tab]
@@ -305,7 +305,7 @@ function YRPChatRenamePlayer(sender, text)
 			name, newname = tab[1], tab[2]
 
 			if name and newname then
-				local ply = GetPlayerByName(name)
+				local ply = YRPGetPlayerByName(name)
 
 				if ply ~= NULL then
 					ply:SetRPName(newname, "chat command 2.3")
@@ -333,7 +333,7 @@ function YRPChatGiveLicense(sender, text)
 	local args = string.Explode(" ", text)
 	local name = args[1]
 	local lname = args[2]
-	local ply = GetPlayerByName(name)
+	local ply = YRPGetPlayerByName(name)
 	local lid = GetLicenseIDByName(lname)
 
 	if IsValid(ply) and IsNotNilAndNotFalse(lid) then
@@ -350,7 +350,7 @@ function YRPSetMoney(sender, text)
 		local _money = tonumber(_table[2])
 
 		if isnumber(_money) then
-			local ply = GetPlayerByName(_name)
+			local ply = YRPGetPlayerByName(_name)
 
 			if ply ~= NULL then
 				if ply.addMoney == nil then
@@ -380,7 +380,7 @@ function YRPRevive(sender, text)
 	if sender:HasAccess("YRPRevive", true) then
 		local _table = string.Explode(" ", text, false)
 		local _name = _table[1]
-		local ply = GetPlayerByName(_name)
+		local ply = YRPGetPlayerByName(_name)
 
 		if IsValid(ply) and ply:IsPlayer() then
 			if ply:Alive() then
@@ -413,7 +413,7 @@ function YRPAddMoneyChat(sender, text)
 		local _money = tonumber(_table[2])
 
 		if isnumber(_money) then
-			local ply = GetPlayerByName(_name)
+			local ply = YRPGetPlayerByName(_name)
 
 			if ply ~= NULL then
 				if ply.addMoney == nil then
@@ -429,6 +429,8 @@ function YRPAddMoneyChat(sender, text)
 			else
 				sender:ChatPrint("\nCommand-FAILED: Player not found")
 			end
+		else
+			YRP.msg("note", "[AddMoney] wrong arguments!")
 		end
 	else
 		YRP.msg("note", sender:Nick() .. " tried to use addmoney!")
@@ -442,7 +444,7 @@ function YRPAddXPChat(sender, text)
 		local _xp = tonumber(_table[2])
 
 		if isnumber(_xp) then
-			local _receiver = GetPlayerByName(_name)
+			local _receiver = YRPGetPlayerByName(_name)
 
 			if YRPEntityAlive(_receiver) then
 				_receiver:AddXP(_xp)
@@ -464,7 +466,7 @@ function YRPAddLevelChat(sender, text)
 		local _lvl = tonumber(_table[2])
 
 		if isnumber(_lvl) then
-			local _receiver = GetPlayerByName(_name)
+			local _receiver = YRPGetPlayerByName(_name)
 
 			if IsNotNilAndNotFalse(_receiver) and _receiver.AddLevel ~= nil then
 				_receiver:AddLevel(_lvl)
@@ -486,7 +488,7 @@ function YRPSetLevelChat(sender, text)
 		local _lvl = tonumber(_table[2])
 
 		if isnumber(_lvl) then
-			local _receiver = GetPlayerByName(_name)
+			local _receiver = YRPGetPlayerByName(_name)
 
 			if YRPEntityAlive(_receiver) then
 				_receiver:SetLevel(_lvl)
@@ -584,7 +586,7 @@ timer.Simple(0, function()
 			local texttab = string.Explode(" ", text, false)
 
 			if texttab[1] then
-				local tar = GetPlayerByRPName(texttab[1])
+				local tar = YRPGetPlayerByRPName(texttab[1])
 
 				if tar then
 					target = tar

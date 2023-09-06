@@ -6,6 +6,19 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT '-'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT '100'")
 
+function YRPUpdateLicenseTable()
+	local tab = {}
+	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+
+	for i, v in pairs(_all) do
+		tab[v.uniqueID] = v.name
+	end
+
+	SetGlobalYRPTable("yrp_licenses", tab)
+end
+
+YRPUpdateLicenseTable()
+
 function send_licenses(ply)
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
@@ -67,6 +80,7 @@ net.Receive("nws_yrp_license_add", function(len, ply)
 	local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new license'")
 	YRP.msg("db", "Add new license: " .. tostring(_new))
 	send_licenses(ply)
+	YRPUpdateLicenseTable()
 end)
 
 util.AddNetworkString("nws_yrp_license_rem")
@@ -76,6 +90,7 @@ net.Receive("nws_yrp_license_rem", function(len, ply)
 	local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 	YRP.msg("db", "Removed license: " .. tostring(_uid))
 	send_licenses(ply)
+	YRPUpdateLicenseTable()
 end)
 
 util.AddNetworkString("nws_yrp_edit_license_name")
@@ -89,6 +104,7 @@ net.Receive("nws_yrp_edit_license_name", function(len, ply)
 	}, "uniqueID = " .. _uid)
 
 	YRP.msg("db", "edit_license_name: " .. tostring(_new_name))
+	YRPUpdateLicenseTable()
 end)
 
 util.AddNetworkString("nws_yrp_edit_license_description")
@@ -102,6 +118,7 @@ net.Receive("nws_yrp_edit_license_description", function(len, ply)
 	}, "uniqueID = " .. _uid)
 
 	YRP.msg("db", "edit_license_description: " .. tostring(_new_description))
+	YRPUpdateLicenseTable()
 end)
 
 util.AddNetworkString("nws_yrp_edit_license_price")
@@ -115,6 +132,7 @@ net.Receive("nws_yrp_edit_license_price", function(len, ply)
 	}, "uniqueID = " .. _uid)
 
 	YRP.msg("db", "edit_license_price: " .. tostring(_new_price))
+	YRPUpdateLicenseTable()
 end)
 
 util.AddNetworkString("nws_yrp_get_all_licenses_simple")

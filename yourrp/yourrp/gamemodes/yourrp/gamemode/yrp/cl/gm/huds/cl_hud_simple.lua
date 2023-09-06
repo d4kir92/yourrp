@@ -759,7 +759,7 @@ function HUDSimple()
 		CC.element = "CC"
 		CC.cur = 0
 		CC.max = 1
-		CC.text = lply:FormattedCharPlayTime()
+		CC.text = lply:YRPFormattedCharPlayTime()
 		CC.icon = icons["CC"]
 		HUDSimpleBAR(CC)
 		HP = {}

@@ -7,7 +7,7 @@ function YRPIsChatCommandsEnabled()
 	return GetGlobalYRPBool("bool_yrp_chat_commands", false)
 end
 
-function GetPlayerByName(name)
+function YRPGetPlayerByName(name)
 	if name == nil then return NULL end
 	name = string.lower(name)
 
@@ -18,7 +18,7 @@ function GetPlayerByName(name)
 	return NULL
 end
 
-function GetPlayerByRPName(name)
+function YRPGetPlayerByRPName(name)
 	if name == nil then return NULL end
 	name = string.lower(name)
 
@@ -29,7 +29,7 @@ function GetPlayerByRPName(name)
 	return NULL
 end
 
-function GetPlayerBySteamName(name)
+function YRPGetPlayerBySteamName(name)
 	if name == nil then return NULL end
 	name = string.lower(name)
 
@@ -46,12 +46,12 @@ function Player:YRPSteamID()
 	return self:SteamID() or self:UniqueID()
 end
 
-function Player:CharPlayTime()
+function Player:YRPCharPlayTime()
 	return os.time() - self:GetYRPInt("ts_spawned") + tonumber(self:GetYRPString("text_playtime", "0"))
 end
 
-function Player:FormattedCharPlayTime()
-	local time = self:CharPlayTime()
+function Player:YRPFormattedCharPlayTime()
+	local time = self:YRPCharPlayTime()
 	--local seco = time % 60
 	local minu = math.floor(time / 60 % 60, 0)
 
@@ -822,6 +822,20 @@ function Player:HasLicense(license)
 	end
 
 	return false
+end
+
+function Player:GetAllLicenses()
+	local lids = self:GetLicenseIDs()
+	local tab = GetGlobalYRPTable("yrp_licenses")
+	local res = {}
+
+	for i, v in pairs(tab) do
+		if lids[tonumber(i)] then
+			table.insert(res, v)
+		end
+	end
+
+	return table.concat(res, ", ")
 end
 
 -- DOORS

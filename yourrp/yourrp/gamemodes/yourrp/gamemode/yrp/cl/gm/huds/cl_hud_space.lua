@@ -77,7 +77,7 @@ function YRPHUDSpace()
 			ELES["CR"] = {0, nil, CR, os.date("%H:%M", os.time()),}
 
 			--2
-			ELES["CC"] = {0, nil, CC, lply:FormattedCharPlayTime(),}
+			ELES["CC"] = {0, nil, CC, lply:YRPFormattedCharPlayTime(),}
 
 			--2
 			ELES["PE"] = {0, nil, nil, YRP.trans("LID_fps") .. ": " .. GetFPS(), 2}

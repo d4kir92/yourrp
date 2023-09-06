@@ -5,7 +5,7 @@ function YRPToggleInteractMenu()
 	local lply = LocalPlayer()
 	local eyeTrace = lply:GetEyeTrace()
 
-	--openInteractMenu(LocalPlayer():CharID() )
+	--openInteractMenu(LocalPlayer():CharID())
 	if eyeTrace.Entity:IsPlayer() and YRPIsNoMenuOpen() then
 		if eyeTrace.Entity:GetColor().a > 0 then
 			openInteractMenu(eyeTrace.Entity:CharID())
@@ -83,6 +83,7 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 	end
 
 	local content = yrp_Interact:GetContent()
+	local licenses = ply:GetAllLicenses()
 
 	function content:Paint(pw, ph)
 		local scaleW = pw / (GetGlobalYRPInt("int_" .. "background" .. "_w", 100) + 20)
@@ -94,15 +95,10 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 		end
 
 		drawIDCard(ply, scale, YRP.ctr(10), YRP.ctr(10))
-
 		--[[ Licenses ]]
-		--
-		if LocalPlayer():isCP() or LocalPlayer():GetYRPBool("bool_canusewarnsystem", false) then
-			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(470), content:GetWide() - YRP.ctr(20), YRP.ctr(100), Color(255, 255, 255, 255))
-		end
-
+		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(500), content:GetWide() - YRP.ctr(20), YRP.ctr(50), Color(255, 255, 255, 255))
+		draw.SimpleTextOutlined(YRP.trans("LID_licenses") .. ": " .. licenses, "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(520), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(255, 255, 255, 0))
 		--[[ Description ]]
-		--
 		draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(590), content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), Color(255, 255, 255, 255))
 		draw.SimpleTextOutlined(YRP.trans("LID_description") .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(610), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(255, 255, 255, 0))
 	end
@@ -114,11 +110,6 @@ net.Receive("nws_yrp_openInteractMenu", function(len)
 		_tmpDescription:SetText(tmpRPDescription or "")
 	end
 
-	--[[local btnTrade = createVGUI( "YButton", content, 500, 50, 10, 1000)
-	btnTrade:SetText(YRP.trans( "LID_trade" ) .. " (in future update)" )
-	function btnTrade:Paint(pw, ph)
-		hook.Run( "YButtonPaint", self, pw, ph)
-	end]]
 	if LocalPlayer():isCP() or LocalPlayer():GetYRPBool("bool_canusewarnsystem", false) then
 		local btnVerwarnungUp = createVGUI("YButton", content, 50, 50, 10, 1000)
 		btnVerwarnungUp:SetText("⮝")

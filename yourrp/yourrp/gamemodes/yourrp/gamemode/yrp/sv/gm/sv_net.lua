@@ -124,7 +124,7 @@ concommand.Add("darkrp", function(ply, cmd, args)
 	if args[1] and args[1] == "forcerpname" then
 		local playername = args[2]
 		local newrpname = args[3]
-		local pl = GetPlayerByName(playername)
+		local pl = YRPGetPlayerByName(playername)
 
 		if YRPEntityAlive(pl) then
 			pl:SetRPName(newrpname, "darkrp forcerpname")
@@ -153,7 +153,7 @@ concommand.Add("darkrp", function(ply, cmd, args)
 		local rolename = args[3]
 
 		if playername and rolename then
-			local p = GetPlayerByName(playername)
+			local p = YRPGetPlayerByName(playername)
 			local rid = _G["TEAM_" .. string.upper(rolename)]
 
 			if p and rid then
@@ -212,7 +212,7 @@ concommand.Add("yrp_givelicense", function(ply, cmd, args)
 
 	local name = args[1]
 	local lname = args[2]
-	local pl = GetPlayerByName(name)
+	local pl = YRPGetPlayerByName(name)
 	local lid = GetLicenseIDByName(lname)
 
 	if IsValid(pl) and IsNotNilAndNotFalse(lid) then

@@ -87,6 +87,38 @@ function AddHUDElement(tab, reset)
 end
 
 function DefaultHUDSettings(reset)
+	for i = 1, 10 do
+		BOX = {}
+		BOX.element = "BOX" .. i
+		BOX.floats = {}
+		BOX.floats.POSI_X = 0.5 + (i - 1) * 50 / 1920
+		BOX.floats.POSI_Y = 0.5
+		BOX.floats.SIZE_W = 50 / 1920
+		BOX.floats.SIZE_H = 50 / 1080
+		BOX.bools = {}
+		BOX.bools.VISI = 0
+		BOX.bools.ROUN = 0
+		BOX.bools.ICON = 1
+		BOX.bools.TEXT = 1
+		BOX.bools.PERC = 1
+		BOX.bools.BACK = 1
+		BOX.bools.BORD = 0
+		BOX.bools.EXTR = 1
+		BOX.colors = {}
+		BOX.colors.TE = "255, 255, 255, 255"
+		BOX.colors.TB = "255, 255, 255, 255"
+		BOX.colors.BG = "255, 255, 255, 255"
+		BOX.colors.BA = "255, 255, 255, 255"
+		BOX.colors.BR = "255, 255, 255, 255"
+		BOX.ints = {}
+		BOX.ints.AX = 1
+		BOX.ints.AY = 1
+		BOX.ints.TS = 18
+		BOX.strings = {}
+		BOX.strings.CTEX = ""
+		AddHUDElement(BOX, reset)
+	end
+	
 	reset = reset or false
 	local HP = {}
 	HP.element = "HP"
@@ -980,37 +1012,6 @@ function DefaultHUDSettings(reset)
 	VO.ints.TS = 24
 	AddHUDElement(VO, reset)
 
-	for i = 1, 10 do
-		BOX = {}
-		BOX.element = "BOX" .. i
-		BOX.floats = {}
-		BOX.floats.POSI_X = 0.5 + (i - 1) * 50 / 1920
-		BOX.floats.POSI_Y = 0.5
-		BOX.floats.SIZE_W = 50 / 1920
-		BOX.floats.SIZE_H = 50 / 1080
-		BOX.bools = {}
-		BOX.bools.VISI = 0
-		BOX.bools.ROUN = 0
-		BOX.bools.ICON = 1
-		BOX.bools.TEXT = 1
-		BOX.bools.PERC = 1
-		BOX.bools.BACK = 1
-		BOX.bools.BORD = 0
-		BOX.bools.EXTR = 1
-		BOX.colors = {}
-		BOX.colors.TE = "255, 255, 255, 255"
-		BOX.colors.TB = "255, 255, 255, 255"
-		BOX.colors.BG = "255, 255, 255, 255"
-		BOX.colors.BA = "255, 255, 255, 255"
-		BOX.colors.BR = "255, 255, 255, 255"
-		BOX.ints = {}
-		BOX.ints.AX = 1
-		BOX.ints.AY = 1
-		BOX.ints.TS = 18
-		BOX.strings = {}
-		BOX.strings.CTEX = ""
-		AddHUDElement(BOX, reset)
-	end
 end
 
 DefaultHUDSettings()
