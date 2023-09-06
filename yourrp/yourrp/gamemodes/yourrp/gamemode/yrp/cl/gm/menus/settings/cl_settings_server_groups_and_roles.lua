@@ -2249,61 +2249,63 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 						cl_licenses[count].PrintName = v.name
 					end
 
-					winlicenses.dpl = YRPCreateD("DPanelList", winlicenses, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
-					winlicenses.dpl:EnableVerticalScrollbar(true)
-					local height = ScrH() - YRP.ctr(100)
+					if winlicenses then
+						winlicenses.dpl = YRPCreateD("DPanelList", winlicenses, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+						winlicenses.dpl:EnableVerticalScrollbar(true)
+						local height = ScrH() - YRP.ctr(100)
 
-					function winlicenses:Search(strsearch)
-						strsearch = string.lower(strsearch)
-						strsearch = string.Replace(strsearch, "[", "")
-						strsearch = string.Replace(strsearch, "]", "")
-						strsearch = string.Replace(strsearch, "%", "")
-						self.dpl:Clear()
+						function winlicenses:Search(strsearch)
+							strsearch = string.lower(strsearch)
+							strsearch = string.Replace(strsearch, "[", "")
+							strsearch = string.Replace(strsearch, "]", "")
+							strsearch = string.Replace(strsearch, "%", "")
+							self.dpl:Clear()
 
-						if strsearch ~= nil then
-							for i, v in pairs(cl_licenses) do
-								v.PrintName = v.PrintName or ""
-								v.ClassName = v.ClassName or ""
-								v.WorldModel = v.WorldModel or ""
+							if strsearch ~= nil then
+								for i, v in pairs(cl_licenses) do
+									v.PrintName = v.PrintName or ""
+									v.ClassName = v.ClassName or ""
+									v.WorldModel = v.WorldModel or ""
 
-								if string.find(string.lower(v.PrintName), strsearch, 1, true) or string.find(string.lower(v.ClassName), strsearch, 1, true) or string.find(string.lower(v.WorldModel), strsearch, 1, true) then
-									local d_licenses = YRPCreateD("YButton", nil, winlicenses.dpl:GetWide(), height / 4, 0, 0)
-									d_licenses:SetText(v.PrintName)
+									if string.find(string.lower(v.PrintName), strsearch, 1, true) or string.find(string.lower(v.ClassName), strsearch, 1, true) or string.find(string.lower(v.WorldModel), strsearch, 1, true) then
+										local d_licenses = YRPCreateD("YButton", nil, winlicenses.dpl:GetWide(), height / 4, 0, 0)
+										d_licenses:SetText(v.PrintName)
 
-									function d_licenses:DoClick()
-										net.Start("nws_yrp_add_role_license")
-										net.WriteInt(role.uniqueID, 32)
-										net.WriteString(v.ClassName)
-										net.SendToServer()
-										winlicenses:Close()
-									end
-
-									if v.WorldModel ~= "" and v.WorldModel ~= nil then
-										d_licenses.model = YRPCreateD("DModelPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
-										d_licenses.model:SetModel(v.WorldModel)
-									elseif v.WorldModel == "" then
-										d_licenses.model = YRPCreateD("DPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
-
-										function d_licenses.model:Paint(pw, ph)
-											draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
-											draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+										function d_licenses:DoClick()
+											net.Start("nws_yrp_add_role_license")
+											net.WriteInt(role.uniqueID, 32)
+											net.WriteString(v.ClassName)
+											net.SendToServer()
+											winlicenses:Close()
 										end
-									end
 
-									winlicenses.dpl:AddItem(d_licenses)
+										if v.WorldModel ~= "" and v.WorldModel ~= nil then
+											d_licenses.model = YRPCreateD("DModelPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
+											d_licenses.model:SetModel(v.WorldModel)
+										elseif v.WorldModel == "" then
+											d_licenses.model = YRPCreateD("DPanel", d_licenses, d_licenses:GetTall(), d_licenses:GetTall(), 0, 0)
+
+											function d_licenses.model:Paint(pw, ph)
+												draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
+												draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+											end
+										end
+
+										winlicenses.dpl:AddItem(d_licenses)
+									end
 								end
 							end
 						end
-					end
 
-					winlicenses:Search("")
-					winlicenses.search = YRPCreateD("DTextEntry", winlicenses, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
+						winlicenses:Search("")
+						winlicenses.search = YRPCreateD("DTextEntry", winlicenses, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
 
-					function winlicenses.search:OnChange()
-						local searchtext = self:GetText()
+						function winlicenses.search:OnChange()
+							local searchtext = self:GetText()
 
-						if searchtext ~= nil then
-							winlicenses:Search(searchtext)
+							if searchtext ~= nil then
+								winlicenses:Search(searchtext)
+							end
 						end
 					end
 				end)
