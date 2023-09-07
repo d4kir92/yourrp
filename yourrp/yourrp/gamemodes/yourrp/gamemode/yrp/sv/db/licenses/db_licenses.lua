@@ -10,8 +10,10 @@ function YRPUpdateLicenseTable()
 	local tab = {}
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 
-	for i, v in pairs(_all) do
-		tab[v.uniqueID] = v.name
+	if _all then
+		for i, v in pairs(_all) do
+			tab[v.uniqueID] = v.name
+		end
 	end
 
 	SetGlobalYRPTable("yrp_licenses", tab)
