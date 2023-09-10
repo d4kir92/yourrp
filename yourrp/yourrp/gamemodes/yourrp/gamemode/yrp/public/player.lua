@@ -532,8 +532,8 @@ end
 
 function YRPAddToTable(tTab, sTab)
 	for i, v in pairs(sTab) do
-		if not strEmpty(v) then
-			table.insert(tTab, v)
+		if v and not strEmpty(v) then
+			tTab[tonumber(v)] = tonumber(v)
 		end
 	end
 end

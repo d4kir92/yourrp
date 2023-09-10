@@ -810,6 +810,8 @@ function GM:GetFallDamage(ply, speed)
 end
 
 hook.Add("PlayerSwitchWeapon", "yrp_playerswitchweapon", function(ply, oldWeapon, newWeapon)
+	ply:InteruptCasting()
+
 	if newWeapon:IsScripted() and newWeapon:GetYRPString("swep_holdtype", "") == "" then
 		local _hold_type = newWeapon.HoldType or newWeapon:GetHoldType() or "normal"
 		newWeapon:SetYRPString("swep_holdtype", _hold_type)

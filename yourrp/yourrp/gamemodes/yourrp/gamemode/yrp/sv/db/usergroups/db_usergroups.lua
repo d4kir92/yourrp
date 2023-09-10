@@ -1809,7 +1809,7 @@ function Player:UserGroupLoadout()
 
 			for i, lic in pairs(_licenseIDs) do
 				if tonumber(lic) ~= nil then
-					self:AddLicense(lic)
+					GiveLicense(self, lic)
 				end
 			end
 

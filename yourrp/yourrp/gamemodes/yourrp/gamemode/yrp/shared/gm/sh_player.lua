@@ -495,8 +495,6 @@ if SERVER then
 					self:StopCasting(cost)
 					timer.Remove(self:YRPSteamID() .. "castduration")
 				end
-				--[[ Channeling ]]
-				--
 			elseif self:GetYRPInt("castmode") == 1 then
 				self:SetYRPFloat("castcur", self:GetYRPFloat("castcur") - tick)
 
@@ -815,7 +813,9 @@ function Player:YRPGetUserGroupColor()
 end
 
 function Player:HasLicense(license)
-	if table.HasValue(self:GetLicenseIDs(), license) then
+	local tab = self:GetLicenseIDs()
+
+	if license and tab[tonumber(license)] then
 		return true
 	elseif tonumber(license) == -1 then
 		return true

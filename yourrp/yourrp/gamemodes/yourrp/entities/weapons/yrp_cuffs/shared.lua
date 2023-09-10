@@ -79,6 +79,22 @@ if CLIENT then
 end
 
 if SERVER then
+	function YRPUnleashPlayer(ply, target)
+		target:SetYRPBool("cuffed", false)
+		local _weapon = target:GetActiveWeapon()
+
+		if YRPEntityAlive(_weapon) then
+			_weapon:Remove()
+		end
+
+		if not target:HasWeapon("yrp_unarmed") then
+			target:Give("yrp_unarmed")
+		end
+
+		target:SelectWeapon("yrp_unarmed")
+		target:InteruptCasting()
+	end
+
 	hook.Add("yrp_castdone_tieup", "tieup", function(args)
 		if not args.target:GetYRPBool("cuffed", false) then
 			args.target:Give("yrp_cuffed")
@@ -89,6 +105,7 @@ if SERVER then
 			local target = args.target
 			ply:SetYRPEntity("cuff_target", target)
 			target:SetYRPEntity("cuff_target", ply)
+			target:InteruptCasting()
 		end
 	end)
 end
@@ -96,18 +113,9 @@ end
 if SERVER then
 	hook.Add("yrp_castdone_unleash", "unleash", function(args)
 		if args.target:GetYRPBool("cuffed", false) then
-			args.target:SetYRPBool("cuffed", false)
-			local _weapon = args.target:GetActiveWeapon()
-
-			if YRPEntityAlive(_weapon) then
-				_weapon:Remove()
-			end
-
-			if not args.target:HasWeapon("yrp_unarmed") then
-				args.target:Give("yrp_unarmed")
-			end
-
-			args.target:SelectWeapon("yrp_unarmed")
+			local ply = args.attacker
+			local target = args.target
+			YRPUnleashPlayer(ply, target)
 		end
 	end)
 end
@@ -184,5 +192,9 @@ hook.Add("SetupMove", "YRP_SetupMove_Cuffs", function(ply, mv, cmd)
 		end
 
 		mv:SetVelocity(dir)
+
+		if distFromTarget > 500 then
+			YRPUnleashPlayer(target, ply)
+		end
 	end
 end)

@@ -523,7 +523,7 @@ function YRPSetRoleValues(ply, pmid)
 
 					if _lic ~= nil and _lic ~= false then
 						_lic = _lic[1]
-						ply:AddLicense(_lic.ClassName)
+						GiveLicense(ply, _lic.ClassName)
 					end
 				end
 
@@ -626,7 +626,7 @@ function YRPSetRoleValues(ply, pmid)
 
 			for i, lic in pairs(_licenseIDs) do
 				if tonumber(lic) ~= nil then
-					ply:AddLicense(lic)
+					GiveLicense(ply, lic)
 				end
 			end
 

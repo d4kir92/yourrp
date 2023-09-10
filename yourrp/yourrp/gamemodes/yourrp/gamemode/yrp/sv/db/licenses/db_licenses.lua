@@ -247,13 +247,24 @@ function Player:AddLicense(license)
 				end
 			else
 				YRP.msg("error", "#1 HIT MAXIMUM LICENSE-IDS: " .. LID)
+
+				return false
 			end
 		end
 
 		self:SetYRPString("licenseIDs1", tostring(SLIDs1))
 		self:SetYRPString("licenseIDs2", tostring(SLIDs2))
 		self:SetYRPString("licenseIDs3", tostring(SLIDs3))
+		local tab = GetGlobalYRPTable("yrp_licenses")
+
+		if tab[license] then
+			YRP.msg("note", "Added License (" .. tab[license] .. ") to " .. self:RPName())
+		end
+
+		return true
 	end
+
+	return false
 end
 
 function Player:RemoveLicense(license)
@@ -352,7 +363,7 @@ end
 function GiveLicense(ply, lid)
 	if not IsValid(ply) then return end
 	if not IsNotNilAndNotFalse(lid) then return end
-	YRP.msg("gm", "Give " .. ply:RPName() .. " LicenseID " .. lid)
+	YRP.msg("gm", "Give " .. ply:RPName() .. " LicenseID: " .. lid)
 	ply:AddLicense(lid)
 	ply:SetYRPInt("licenseIDsVersion", ply:GetYRPInt("licenseIDsVersion", 0) + 1)
 end
