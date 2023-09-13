@@ -3096,7 +3096,7 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 
 					pcall(function(ply)
 						RSPLY = ply
-						local error = RunString(code, "[RS] GroupsAndRoles: role:" .. role.uniqueID, false)
+						local error = RunString(code, "[RS] [GroupsAndRoles] role:" .. role.uniqueID .. " code: " .. tostring(code), false)
 
 						if type(error) == "string" then
 							notification.AddLegacy("ERROR in PlayerSpawn: " .. tostring(error), NOTIFY_ERROR, 6)

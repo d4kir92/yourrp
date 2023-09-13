@@ -193,7 +193,7 @@ hook.Add("SetupMove", "YRP_SetupMove_Cuffs", function(ply, mv, cmd)
 
 		mv:SetVelocity(dir)
 
-		if distFromTarget > 500 then
+		if distFromTarget > 500 and SERVER and YRPUnleashPlayer then
 			YRPUnleashPlayer(target, ply)
 		end
 	end
