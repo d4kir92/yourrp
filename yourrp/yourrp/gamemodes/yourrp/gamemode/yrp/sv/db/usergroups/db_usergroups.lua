@@ -1443,11 +1443,11 @@ hook.Add("PlayerSpawnProp", "yrp_props_restriction", function(pl, mdl)
 
 			if tobool(_tmp.bool_props) then
 				if PropBlacklisted(mdl) then
-					if not pl:HasAccess("spawnpropblacklistnoti") then
+					if not pl:HasAccess("spawnpropblacklistnoti", true) then
 						YRP.msg("note", pl:Nick() .. " [" .. string.lower(pl:GetUserGroup()) .. "] has no right to spawn blacklisted prop.")
 					end
 
-					return pl:HasAccess("spawnpropblacklist")
+					return pl:HasAccess("spawnpropblacklist", true)
 				end
 
 				return true

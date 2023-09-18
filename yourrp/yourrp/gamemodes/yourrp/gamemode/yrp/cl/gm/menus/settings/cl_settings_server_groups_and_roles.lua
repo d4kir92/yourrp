@@ -3095,7 +3095,9 @@ net.Receive("nws_yrp_subscribe_Settings_GroupsAndRoles", function(len)
 					local code = ea[role.uniqueID].plySpawn.DTextEntry:GetText()
 
 					pcall(function(ply)
-						RSPLY = ply
+						RSPLY = ply or LocalPlayer()
+						code = "local ply = RSPLY; " .. code
+						print(code)
 						local error = RunString(code, "[RS] [GroupsAndRoles] role:" .. role.uniqueID .. " code: " .. tostring(code), false)
 
 						if type(error) == "string" then

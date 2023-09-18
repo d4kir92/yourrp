@@ -320,7 +320,7 @@ function YRPPlayerLoadout(ply)
 				end
 
 				--ply:EquipWeapons()
-				ply:SetYRPFloat("hunger", 100)
+				ply:YRPSetHunger(100)
 				ply.DarkRPVars = ply.DarkRPVars or {}
 				ply.DarkRPVars.Energy = 100
 				ply:SetYRPFloat("thirst", 100)
@@ -358,11 +358,11 @@ function YRPPlayerSpawn(ply, transition)
 			if IsValid(ply) then
 				pcall(function(pl)
 					RSPLY = pl or ply
-					code = "local ply = RSPLY;" .. code
+					code = "local ply = RSPLY; " .. code
 					local err = RunString(code, "role:" .. rolTab.uniqueID, false)
 
 					if type(err) == "string" then
-						YRP.msg("note", "ERROR [PlayerSpawn]: " .. tostring(err))
+						YRP.msg("note", "ERROR [PlayerSpawn]: " .. tostring(err) .. " code: " .. tostring(code))
 					end
 
 					RSPLY = nil

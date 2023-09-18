@@ -87,6 +87,10 @@ if CLIENT then
 end
 
 if SERVER then
+	function Player:YRPSetHunger(num)
+		self:SetYRPFloat("hunger", num)
+	end
+
 	function Player:YRPEat(num)
 		num = tonumber(num)
 
@@ -97,7 +101,7 @@ if SERVER then
 			util.PrecacheSound(name)
 			self:EmitSound(name)
 			local newhunger = math.Clamp(self:GetYRPFloat("hunger", 0.0) + num, 0, 100.0)
-			self:SetYRPFloat("hunger", newhunger)
+			self:YRPSetHunger(newhunger)
 			self.DarkRPVars = self.DarkRPVars or {}
 			self.DarkRPVars.Energy = newhunger
 		end

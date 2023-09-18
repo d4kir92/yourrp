@@ -187,6 +187,8 @@ function Player:setSelfDarkRPVar(variable, value, target)
 			self:SetLevel(value)
 		elseif variable == "xp" then
 			self:SetXP(value)
+		elseif variable == "energy" then
+			self:YRPSetHunger(value)
 		elseif unhandled[variable] == nil then
 			YRPDarkrpNotFound("setDarkRPVar( " .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. " )")
 

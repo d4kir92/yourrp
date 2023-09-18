@@ -64,7 +64,7 @@ function YRPConHG(ply, time)
 	if GetGlobalYRPBool("bool_onlywhencook", false) and not IsCookPlaying() then return false end
 	local newval = tonumber(ply:GetYRPFloat("hunger", 0.0)) - 0.01 * GetGlobalYRPFloat("float_scale_hunger", 1.0)
 	newval = math.Clamp(newval, 0.0, 100.0)
-	ply:SetYRPFloat("hunger", newval)
+	ply:YRPSetHunger(newval)
 	ply.DarkRPVars = ply.DarkRPVars or {}
 	ply.DarkRPVars.Energy = newval
 
