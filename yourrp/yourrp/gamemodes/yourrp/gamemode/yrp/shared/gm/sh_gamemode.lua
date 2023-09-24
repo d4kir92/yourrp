@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 382 -- do NOT change this!
+GM.VersionBuild = 383 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -948,6 +948,22 @@ function YRPAddEntToTable(res, name, ent)
 		["PrintName"] = YGetPrintName(ent),
 		["Category"] = YGetCategory(ent)
 	}
+end
+
+local currentPropList = nil
+function YRPGetPROPsList()
+	if currentPropList == nil then
+		currentPropList = {}
+		for i, v in pairs(spawnmenu.GetPropTable()) do
+			if v.contents then
+				for x, w in pairs(v.contents) do
+					table.insert(currentPropList, w.model)
+				end
+			end
+		end
+	end
+
+	return currentPropList
 end
 
 function YRPGetSENTsList()
