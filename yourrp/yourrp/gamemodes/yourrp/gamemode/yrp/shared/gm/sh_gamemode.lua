@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 381 -- do NOT change this!
+GM.VersionBuild = 382 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -25,7 +25,6 @@ local gmvs = GM.VersionStable
 local gmvb = GM.VersionBeta
 local gmvc = GM.VersionCanary
 local gmbn = GM.VersionBuild
-
 function YRPGetVersion()
 	return gmvs .. "." .. gmvb .. "." .. gmvc
 end
@@ -53,11 +52,9 @@ end
 if SERVER then
 	local doubleinstalledpath = ""
 	SetGlobalYRPString("YRP_VERSIONART", "GITHUB")
-
 	for i, wsi in pairs(engine.GetAddons()) do
 		if tostring(wsi.wsid) == "1114204152" then
 			SetGlobalYRPString("YRP_VERSIONART", "WORKSHOP")
-
 			if file.Exists("gamemodes/yourrp/yourrp.txt", "MOD") then
 				SetGlobalYRPBool("yrp_double_installed", true)
 				doubleinstalledpath = "yourrp"
@@ -79,27 +76,29 @@ if SERVER then
 	local count = 0
 	local dir = 1
 	hook.Remove("Think", "yrp_double_installed")
+	hook.Add(
+		"Think",
+		"yrp_double_installed",
+		function()
+			if CurTime() < delay then return end
+			delay = CurTime() + 1
+			count = count + dir
+			if count > 3 then
+				dir = -1
+				count = 20
+			elseif count == 0 then
+				dir = 1
+			end
 
-	hook.Add("Think", "yrp_double_installed", function()
-		if CurTime() < delay then return end
-		delay = CurTime() + 1
-		count = count + dir
-
-		if count > 3 then
-			dir = -1
-			count = 20
-		elseif count == 0 then
-			dir = 1
+			if YRPIsDoubleInstalled() and dir == 1 then
+				YRPHR(Color(0, 255, 0))
+				MsgC(Color(0, 255, 0), "[YourRP] YourRP is DOUBLE installed!" .. "\n")
+				MsgC(Color(0, 255, 0), "[YourRP] Please REMOVE the folder: Server/garrysmod/gamemodes/" .. tostring(doubleinstalledpath) .. " <-" .. "\n")
+				MsgC(Color(0, 255, 0), "[YourRP] You will not lose your Data (Data is saved in: Server/garrysmod/sv.db)" .. "\n")
+				YRPHR(Color(0, 255, 0))
+			end
 		end
-
-		if YRPIsDoubleInstalled() and dir == 1 then
-			YRPHR(Color(0, 255, 0))
-			MsgC(Color(0, 255, 0), "[YourRP] YourRP is DOUBLE installed!" .. "\n")
-			MsgC(Color(0, 255, 0), "[YourRP] Please REMOVE the folder: Server/garrysmod/gamemodes/" .. tostring(doubleinstalledpath) .. " <-" .. "\n")
-			MsgC(Color(0, 255, 0), "[YourRP] You will not lose your Data (Data is saved in: Server/garrysmod/sv.db)" .. "\n")
-			YRPHR(Color(0, 255, 0))
-		end
-	end)
+	)
 end
 
 function GM:Initialize()
@@ -115,18 +114,15 @@ end
 function GetNiceMapName()
 	local map = game.GetMap()
 	local _first = string.find(map, "_", 1, true)
-
 	if _first ~= nil then
 		map = string.sub(map, _first + 1)
 	end
 
 	map = string.Explode("_", map)
 	local _new_map = {}
-
 	for i, str in pairs(map) do
 		local _tab = string.Explode("", str)
 		local _insert = true
-
 		for j, char in pairs(_tab) do
 			if isnumber(tonumber(char)) then
 				_insert = false
@@ -218,72 +214,79 @@ function YRPMsg(text, color)
 	MsgC(color, text, "\n")
 end
 
-concommand.Add("yrp_version", function(ply, cmd, args)
-	local _text = "Gamemode-Version: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " ) [" .. GetGlobalYRPString("YRP_VERSIONART", "X") .. "]"
-	local _color = Color(0, 255, 0)
-
-	if string.upper(GAMEMODE.VersionSort) == "OUTDATED" then
-		_color = Color(0, 255, 0)
-	end
-
-	YRPHR(_color)
-	YRPMsg(_text, _color)
-	YRPHR(_color)
-end)
-
-concommand.Add("yrp_status", function(ply, cmd, args)
-	YRPHR()
-	YRPMsg(string.format("%14s %s", "Version:", YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " ) [" .. GetGlobalYRPString("YRP_VERSIONART", "X") .. "]"))
-	YRPMsg(string.format("%14s %s", "Servername:", YRPGetHostName()))
-	YRPMsg(string.format("%14s %s", "IP:", game.GetIPAddress()))
-	YRPMsg(string.format("%14s %s", "Map:", GetMapNameDB()))
-	YRPMsg(string.format("%14s %s", "Players:", tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers())))
-
-	if FrameTime then
-		YRPMsg(string.format("%14s %0.2f", "Tickrate:", 1 / FrameTime()))
-	end
-
-	YRPHR()
-end)
-
-concommand.Add("yrp_maps", function(ply, cmd, args)
-	YRPHR()
-	YRPMsg("[MAPS ON SERVER]")
-	local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
-
-	for i, map in pairs(allmaps) do
-		local mapname = string.Replace(map, ".bsp", "")
-		YRPMsg(i .. "\t" .. mapname)
-	end
-
-	YRPHR()
-end)
-
-concommand.Add("yrp_map", function(ply, cmd, args)
-	YRPHR()
-	local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
-
-	for i, map in pairs(allmaps) do
-		local mapname = string.Replace(map, ".bsp", "")
-		allmaps[i] = mapname
-	end
-
-	local id = tonumber(args[1])
-	local map = allmaps[id]
-
-	if map ~= nil then
-		if SERVER then
-			YRPMsg("[yrp_map] Changelevel to " .. map)
-			RunConsoleCommand("changelevel", map)
-		else
-			YRPMsg("[yrp_map] ONLY AVAILABLE ON SERVER!")
+concommand.Add(
+	"yrp_version",
+	function(ply, cmd, args)
+		local _text = "Gamemode-Version: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " ) [" .. GetGlobalYRPString("YRP_VERSIONART", "X") .. "]"
+		local _color = Color(0, 255, 0)
+		if string.upper(GAMEMODE.VersionSort) == "OUTDATED" then
+			_color = Color(0, 255, 0)
 		end
-	else
-		YRPMsg("[yrp_map] ID OUT OF RANGE")
-	end
 
-	YRPHR()
-end)
+		YRPHR(_color)
+		YRPMsg(_text, _color)
+		YRPHR(_color)
+	end
+)
+
+concommand.Add(
+	"yrp_status",
+	function(ply, cmd, args)
+		YRPHR()
+		YRPMsg(string.format("%14s %s", "Version:", YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.VersionSort) .. " ) [" .. GetGlobalYRPString("YRP_VERSIONART", "X") .. "]"))
+		YRPMsg(string.format("%14s %s", "Servername:", YRPGetHostName()))
+		YRPMsg(string.format("%14s %s", "IP:", game.GetIPAddress()))
+		YRPMsg(string.format("%14s %s", "Map:", GetMapNameDB()))
+		YRPMsg(string.format("%14s %s", "Players:", tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers())))
+		if FrameTime then
+			YRPMsg(string.format("%14s %0.2f", "Tickrate:", 1 / FrameTime()))
+		end
+
+		YRPHR()
+	end
+)
+
+concommand.Add(
+	"yrp_maps",
+	function(ply, cmd, args)
+		YRPHR()
+		YRPMsg("[MAPS ON SERVER]")
+		local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
+		for i, map in pairs(allmaps) do
+			local mapname = string.Replace(map, ".bsp", "")
+			YRPMsg(i .. "\t" .. mapname)
+		end
+
+		YRPHR()
+	end
+)
+
+concommand.Add(
+	"yrp_map",
+	function(ply, cmd, args)
+		YRPHR()
+		local allmaps = file.Find("maps/*.bsp", "GAME", "nameasc")
+		for i, map in pairs(allmaps) do
+			local mapname = string.Replace(map, ".bsp", "")
+			allmaps[i] = mapname
+		end
+
+		local id = tonumber(args[1])
+		local map = allmaps[id]
+		if map ~= nil then
+			if SERVER then
+				YRPMsg("[yrp_map] Changelevel to " .. map)
+				RunConsoleCommand("changelevel", map)
+			else
+				YRPMsg("[yrp_map] ONLY AVAILABLE ON SERVER!")
+			end
+		else
+			YRPMsg("[yrp_map] ID OUT OF RANGE")
+		end
+
+		YRPHR()
+	end
+)
 
 function makeString(str, len)
 	str = string.sub(str, 1, len)
@@ -292,25 +295,27 @@ function makeString(str, len)
 	return str
 end
 
-concommand.Add("yrp_players", function(ply, cmd, args)
-	YRPHR(Color(255, 255, 0))
-	local structure = "%-4s %-20s %-10s %-10s %-20s"
-	MsgC(Color(255, 255, 0), "Players:\t" .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()) .. "\n")
-	MsgC(Color(255, 255, 0), string.format(structure, "ID", "SteamID", "Ready?", "OS", "Name") .. "\n")
-	MsgC(Color(255, 255, 0), "--------------------------------------------------------------------------------" .. "\n")
+concommand.Add(
+	"yrp_players",
+	function(ply, cmd, args)
+		YRPHR(Color(255, 255, 0))
+		local structure = "%-4s %-20s %-10s %-10s %-20s"
+		MsgC(Color(255, 255, 0), "Players:\t" .. tostring(player.GetCount()) .. "/" .. tostring(game.MaxPlayers()) .. "\n")
+		MsgC(Color(255, 255, 0), string.format(structure, "ID", "SteamID", "Ready?", "OS", "Name") .. "\n")
+		MsgC(Color(255, 255, 0), "--------------------------------------------------------------------------------" .. "\n")
+		for i, pl in pairs(player.GetAll()) do
+			local _id = makeString(pl:UserID(), 4)
+			local _steamid = makeString(pl:YRPSteamID(), 20)
+			local _ready = tostring(pl:GetYRPBool("yrp_received_ready", false))
+			local _os = makeString(pl:GetYRPString("yrp_os"), 10)
+			local _name = makeString(pl:YRPName(), 20)
+			local _str = string.format(structure, _id, _steamid, _ready, _os, _name)
+			MsgC(Color(255, 255, 0), _str .. "\n")
+		end
 
-	for i, pl in pairs(player.GetAll()) do
-		local _id = makeString(pl:UserID(), 4)
-		local _steamid = makeString(pl:YRPSteamID(), 20)
-		local _ready = tostring(pl:GetYRPBool("yrp_received_ready", false))
-		local _os = makeString(pl:GetYRPString("yrp_os"), 10)
-		local _name = makeString(pl:YRPName(), 20)
-		local _str = string.format(structure, _id, _steamid, _ready, _os, _name)
-		MsgC(Color(255, 255, 0), _str .. "\n")
+		YRPHR(Color(255, 255, 0))
 	end
-
-	YRPHR(Color(255, 255, 0))
-end)
+)
 
 function PrintHelp()
 	YRP.msg("note", "Shared Commands:")
@@ -337,25 +342,32 @@ function PrintHelp()
 	YRP.msg("note", "yrp_givelicense NAME LICENSENAME")
 end
 
-concommand.Add("yrp_help", function(ply, cmd, args)
-	PrintHelp()
-end)
+concommand.Add(
+	"yrp_help",
+	function(ply, cmd, args)
+		PrintHelp()
+	end
+)
 
-concommand.Add("yrp__help", function(ply, cmd, args)
-	PrintHelp()
-end)
+concommand.Add(
+	"yrp__help",
+	function(ply, cmd, args)
+		PrintHelp()
+	end
+)
 
 if SERVER then
 	local function CollectCollectionID()
 		local cvar = GetConVar("host_workshop_collection")
-
 		if cvar then
 			local num = cvar:GetString()
-
 			if num == "0" then
-				timer.Simple(1, function()
-					CollectCollectionID()
-				end)
+				timer.Simple(
+					1,
+					function()
+						CollectCollectionID()
+					end
+				)
 			end
 
 			SetGlobalYRPString("YRPCollectionID", num or "0")
@@ -373,13 +385,19 @@ function PrintCollectionID()
 	YRP.msg("note", "Server - CollectionID: " .. YRPCollectionID())
 end
 
-concommand.Add("yrp_collectionid", function(ply, cmd, args)
-	PrintCollectionID()
-end)
+concommand.Add(
+	"yrp_collectionid",
+	function(ply, cmd, args)
+		PrintCollectionID()
+	end
+)
 
-concommand.Add("yrp_collection", function(ply, cmd, args)
-	PrintCollectionID()
-end)
+concommand.Add(
+	"yrp_collection",
+	function(ply, cmd, args)
+		PrintCollectionID()
+	end
+)
 
 function IsYRPEntityAlive(ply, uid)
 	for i, ent in pairs(ents.GetAll()) do
@@ -394,7 +412,6 @@ RunConsoleCommand("gmod_mcore_test", "1")
 RunConsoleCommand("mat_queue_mode", "-1")
 RunConsoleCommand("studio_queue_mode", "1")
 RunConsoleCommand("r_hunkalloclightmaps", "0")
-
 if CLIENT then
 	-- Multicore (Client) enable:
 	RunConsoleCommand("cl_threaded_bone_setup", "1")
@@ -411,47 +428,56 @@ end
 
 if SERVER then
 	util.AddNetworkString("YRPGetServerInfo")
-
-	net.Receive("YRPGetServerInfo", function(len, ply)
-		local tab = {}
-		tab.Version = GAMEMODE.Version
-		tab.VersionStable = GAMEMODE.VersionStable
-		tab.VersionBeta = GAMEMODE.VersionBeta
-		tab.VersionCanary = GAMEMODE.VersionCanary
-		tab.VersionBuild = GAMEMODE.VersionBuild
-		tab.isdedicated = game.IsDedicated()
-		net.Start("YRPGetServerInfo")
-		net.WriteTable(tab)
-		net.Send(ply)
-	end)
+	net.Receive(
+		"YRPGetServerInfo",
+		function(len, ply)
+			local tab = {}
+			tab.Version = GAMEMODE.Version
+			tab.VersionStable = GAMEMODE.VersionStable
+			tab.VersionBeta = GAMEMODE.VersionBeta
+			tab.VersionCanary = GAMEMODE.VersionCanary
+			tab.VersionBuild = GAMEMODE.VersionBuild
+			tab.isdedicated = game.IsDedicated()
+			net.Start("YRPGetServerInfo")
+			net.WriteTable(tab)
+			net.Send(ply)
+		end
+	)
 
 	local tmp = YRP_SQL_SELECT("yrp_general", "text_gamemode_name", nil)
-
 	if IsNotNilAndNotFalse(tmp) then
 		tmp = tmp[1]
 		GM.BaseName = tmp.text_gamemode_name
 	end
 
 	util.AddNetworkString("YRPGetGamemodename")
-
-	net.Receive("YRPGetGamemodename", function(len, ply)
-		if GAMEMODE and GAMEMODE.BaseName then
-			net.Start("YRPGetGamemodename")
-			net.WriteString(GAMEMODE.BaseName)
-			net.Send(ply)
+	net.Receive(
+		"YRPGetGamemodename",
+		function(len, ply)
+			if GAMEMODE and GAMEMODE.BaseName then
+				net.Start("YRPGetGamemodename")
+				net.WriteString(GAMEMODE.BaseName)
+				net.Send(ply)
+			end
 		end
-	end)
+	)
 end
 
 if CLIENT then
-	net.Receive("YRPGetGamemodename", function(len)
-		GAMEMODE.BaseName = net.ReadString()
-	end)
+	net.Receive(
+		"YRPGetGamemodename",
+		function(len)
+			GAMEMODE.BaseName = net.ReadString()
+		end
+	)
 
-	timer.Simple(1, function()
-		net.Start("YRPGetGamemodename")
-		net.SendToServer()
-	end)
+	timer.Simple(
+		1,
+		function()
+			net.Start("YRPGetGamemodename")
+			net.SendToServer()
+		end
+	)
 end
 
 function GetAllDoors()
@@ -460,7 +486,6 @@ function GetAllDoors()
 	local funcDoors = ents.FindByClass("func_door")
 	local funcDoorRs = ents.FindByClass("func_door_rotating")
 	local doors = {}
-
 	for i, v in pairs(propDoors) do
 		table.insert(doors, v)
 	end
@@ -492,7 +517,6 @@ function IsInChannel(ply, cuid, skip)
 	skip = skip or false
 	if ply:GetYRPBool("yrp_ToggleVoiceMenu", true) == false then return false end
 	local channel = GetGlobalYRPTable("yrp_voice_channels", {})[cuid]
-
 	if channel then
 		local ug = ply:GetUserGroup()
 		local grp = ply:GetGroupUID()
@@ -509,7 +533,6 @@ function IsActiveInChannel(ply, cuid, skip)
 	skip = skip or false
 	if ply:GetYRPBool("yrp_ToggleVoiceMenu", true) == false then return false end
 	local channel = GetGlobalYRPTable("yrp_voice_channels", {})[cuid]
-
 	if channel then
 		local ug = ply:GetUserGroup()
 		local grp = ply:GetGroupUID()
@@ -576,21 +599,16 @@ end
 if system.IsLinux() then
 	_MsgC = _MsgC or MsgC
 	_ErrorNoHalt = _ErrorNoHalt or ErrorNoHalt
-
 	local available_colors = {Color(0, 0, 0, 255), Color(128, 0, 0), Color(0, 128, 0), Color(128, 128, 0), Color(0, 0, 128), Color(128, 0, 128), Color(0, 128, 128), Color(192, 192, 192), Color(128, 128, 128), Color(0, 255, 0), Color(0, 255, 0), Color(255, 255, 0), Color(0, 0, 255, 255), Color(255, 0, 255), Color(0, 255, 255), Color(255, 255, 255, 255), Color(0, 0, 0, 255), Color(0, 0, 95), Color(0, 0, 135), Color(0, 0, 175), Color(0, 0, 215), Color(0, 0, 255, 255), Color(0, 95, 0), Color(0, 95, 95), Color(0, 95, 135), Color(0, 95, 175), Color(0, 95, 215), Color(0, 95, 255), Color(0, 135, 0), Color(0, 135, 95), Color(0, 135, 135), Color(0, 135, 175), Color(0, 135, 215), Color(0, 135, 255), Color(0, 175, 0), Color(0, 175, 95), Color(0, 175, 135), Color(0, 175, 175), Color(0, 175, 215), Color(0, 175, 255), Color(0, 215, 0), Color(0, 215, 95), Color(0, 215, 135), Color(0, 215, 175), Color(0, 215, 215), Color(0, 215, 255), Color(0, 255, 0), Color(0, 255, 95), Color(0, 255, 135), Color(0, 255, 175), Color(0, 255, 215), Color(0, 255, 255), Color(95, 0, 0), Color(95, 0, 95), Color(95, 0, 135), Color(95, 0, 175), Color(95, 0, 215), Color(95, 0, 255), Color(95, 95, 0), Color(95, 95, 95), Color(95, 95, 135), Color(95, 95, 175), Color(95, 95, 215), Color(95, 95, 255), Color(95, 135, 0), Color(95, 135, 95), Color(95, 135, 135), Color(95, 135, 175), Color(95, 135, 215), Color(95, 135, 255), Color(95, 175, 0), Color(95, 175, 95), Color(95, 175, 135), Color(95, 175, 175), Color(95, 175, 215), Color(95, 175, 255), Color(95, 215, 0), Color(95, 215, 95), Color(95, 215, 135), Color(95, 215, 175), Color(95, 215, 215), Color(95, 215, 255), Color(95, 255, 0), Color(95, 255, 95), Color(95, 255, 135), Color(95, 255, 175), Color(95, 255, 215), Color(95, 255, 255), Color(135, 0, 0), Color(135, 0, 95), Color(135, 0, 135), Color(135, 0, 175), Color(135, 0, 215), Color(135, 0, 255), Color(135, 95, 0), Color(135, 95, 95), Color(135, 95, 135), Color(135, 95, 175), Color(135, 95, 215), Color(135, 95, 255), Color(135, 135, 0), Color(135, 135, 95), Color(135, 135, 135), Color(135, 135, 175), Color(135, 135, 215), Color(135, 135, 255), Color(135, 175, 0), Color(135, 175, 95), Color(135, 175, 135), Color(135, 175, 175), Color(135, 175, 215), Color(135, 175, 255), Color(135, 215, 0), Color(135, 215, 95), Color(135, 215, 135), Color(135, 215, 175), Color(135, 215, 215), Color(135, 215, 255), Color(135, 255, 0), Color(135, 255, 95), Color(135, 255, 135), Color(135, 255, 175), Color(135, 255, 215), Color(135, 255, 255), Color(175, 0, 0), Color(175, 0, 95), Color(175, 0, 135), Color(175, 0, 175), Color(175, 0, 215), Color(175, 0, 255), Color(175, 95, 0), Color(175, 95, 95), Color(175, 95, 135), Color(175, 95, 175), Color(175, 95, 215), Color(175, 95, 255), Color(175, 135, 0), Color(175, 135, 95), Color(175, 135, 135), Color(175, 135, 175), Color(175, 135, 215), Color(175, 135, 255), Color(175, 175, 0), Color(175, 175, 95), Color(175, 175, 135), Color(175, 175, 175), Color(175, 175, 215), Color(175, 175, 255), Color(175, 215, 0), Color(175, 215, 95), Color(175, 215, 135), Color(175, 215, 175), Color(175, 215, 215), Color(175, 215, 255), Color(175, 255, 0), Color(175, 255, 95), Color(175, 255, 135), Color(175, 255, 175), Color(175, 255, 215), Color(175, 255, 255), Color(215, 0, 0), Color(215, 0, 95), Color(215, 0, 135), Color(215, 0, 175), Color(215, 0, 215), Color(215, 0, 255), Color(215, 95, 0), Color(215, 95, 95), Color(215, 95, 135), Color(215, 95, 175), Color(215, 95, 215), Color(215, 95, 255), Color(215, 135, 0), Color(215, 135, 95), Color(215, 135, 135), Color(215, 135, 175), Color(215, 135, 215), Color(215, 135, 255), Color(215, 175, 0), Color(215, 175, 95), Color(215, 175, 135), Color(215, 175, 175), Color(215, 175, 215), Color(215, 175, 255), Color(215, 215, 0), Color(215, 215, 95), Color(215, 215, 135), Color(215, 215, 175), Color(215, 215, 215), Color(215, 215, 255), Color(215, 255, 0), Color(215, 255, 95), Color(215, 255, 135), Color(215, 255, 175), Color(215, 255, 215), Color(215, 255, 255), Color(0, 255, 0), Color(255, 0, 95), Color(255, 0, 135), Color(255, 0, 175), Color(255, 0, 215), Color(255, 0, 255), Color(255, 95, 0), Color(255, 95, 95), Color(255, 95, 135), Color(255, 95, 175), Color(255, 95, 215), Color(255, 95, 255), Color(255, 135, 0), Color(255, 135, 95), Color(255, 135, 135), Color(255, 135, 175), Color(255, 135, 215), Color(255, 135, 255), Color(255, 175, 0), Color(255, 175, 95), Color(255, 175, 135), Color(255, 175, 175), Color(255, 175, 215), Color(255, 175, 255), Color(255, 215, 0), Color(255, 215, 95), Color(255, 215, 135), Color(255, 215, 175), Color(255, 215, 215), Color(255, 215, 255), Color(255, 255, 0), Color(255, 255, 95), Color(255, 255, 135), Color(255, 255, 175), Color(255, 255, 215), Color(255, 255, 255, 255), Color(8, 8, 8), Color(18, 18, 18), Color(28, 28, 28), Color(38, 38, 38), Color(48, 48, 48), Color(58, 58, 58), Color(68, 68, 68), Color(78, 78, 78), Color(88, 88, 88), Color(98, 98, 98), Color(108, 108, 108), Color(118, 118, 118), Color(128, 128, 128), Color(138, 138, 138), Color(148, 148, 148), Color(158, 158, 158), Color(168, 168, 168), Color(178, 178, 178), Color(188, 188, 188), Color(198, 198, 198), Color(208, 208, 208), Color(218, 218, 218), Color(228, 228, 228), Color(238, 238, 238)}
-
 	local n_available_colors = #available_colors
 	local color_clear_sequence = "\27[0m"
 	local color_start_sequence = "\27[38;5;"
 	local background_sequence = "\27[48;5;"
-
 	local function color_id_from_color(col)
 		local dist, windist, ri
-
 		for i = 1, n_available_colors do
 			local color = available_colors[i]
 			dist = (col.r - color.r) ^ 2 + (col.g - color.g) ^ 2 + (col.b - color.b) ^ 2
-
 			if i == 1 or dist < windist then
 				windist = dist
 				ri = i
@@ -602,7 +620,6 @@ if system.IsLinux() then
 
 	function print_colored(text, color, background_color, style)
 		local color_sequence = color_clear_sequence
-
 		if color ~= nil then
 			if istable(color) then
 				color_sequence = color_start_sequence .. color_id_from_color(color) .. "m"
@@ -650,7 +667,6 @@ if system.IsLinux() then
 
 	function MsgC(...)
 		local this_sequence = color_clear_sequence
-
 		for k, v in ipairs({...}) do
 			if istable(v) then
 				this_sequence = color_start_sequence .. color_id_from_color(v) .. "m"
@@ -686,10 +702,8 @@ end
 function YRPReplaceWithPlayerNames(text)
 	if text == nil then return "" end
 	local found = false
-
 	for _, p in pairs(player.GetAll()) do
 		local s, e = string.find(string.lower(text), string.lower(p:RPName()), 1, true)
-
 		if s then
 			local pre = string.sub(text, 1, s - 1)
 			local pos = string.sub(text, e + 1)
@@ -700,7 +714,6 @@ function YRPReplaceWithPlayerNames(text)
 
 	if not found then
 		local test = string.Explode(" ", text)
-
 		for i, str in pairs(test) do
 			for _, p in pairs(player.GetAll()) do
 				if #str >= 5 and string.StartWith(string.lower(p:RPName()), string.lower(str)) then
@@ -725,7 +738,6 @@ function YRP_RN(text)
 	local ex = string.sub(text, cs + 3, e - 1)
 	ex = string.Explode(",", ex)
 	local rn = nil
-
 	if ex[1] and ex[2] and isnumber(tonumber(ex[1])) and isnumber(tonumber(ex[2])) then
 		rn = math.random(tonumber(ex[1]), tonumber(ex[2]))
 	elseif isnumber(tonumber(ex[1])) then
@@ -751,10 +763,8 @@ function YRP_RT(text)
 	local ex = string.sub(text, cs + 3, e - 1)
 	ex = string.Explode(",", ex)
 	local words = {}
-
 	for i, v in pairs(ex) do
 		local word = string.gsub(v, "%s+", "")
-
 		if not strEmpty(word) then
 			table.insert(words, word)
 		end
@@ -762,7 +772,6 @@ function YRP_RT(text)
 
 	if table.Count(words) > 1 then
 		local rn = table.Random(words)
-
 		if rn then
 			text = pre .. rn .. suf
 
@@ -779,7 +788,6 @@ function YRPChatReplaceCMDS(structure, ply, text)
 	result = string.Replace(result, "%UGCOLOR%", "Color( " .. ugcolor.r .. "," .. ugcolor.g .. "," .. ugcolor.b .. " )")
 	local rocolor = ply:GetRoleColor()
 	result = string.Replace(result, "%ROCOLOR%", "Color( " .. rocolor.r .. "," .. rocolor.g .. "," .. rocolor.b .. " )")
-
 	if ply:GetYRPBool("bool_chat") then
 		result = string.Replace(result, "%USERGROUP%", string.upper(ply:GetUserGroup()))
 	else
@@ -796,14 +804,11 @@ function YRPChatReplaceCMDS(structure, ply, text)
 	result = string.Replace(result, "%GROUP%", ply:GetGroupName())
 	result = string.Replace(result, "%ROLE%", ply:GetRoleName())
 	local newtext = string.Explode(" ", text, false)
-
 	if newtext[1] and #newtext[1] >= 4 then
 		local target = YRPGetPlayerByRPName(newtext[1])
-
 		if YRPEntityAlive(target) then
 			result = string.Replace(result, "%TARGET%", target:RPName())
 			table.remove(newtext, 1)
-
 			if table.Count(newtext) > 0 then
 				text = table.concat(newtext, " ")
 			end
@@ -814,17 +819,13 @@ function YRPChatReplaceCMDS(structure, ply, text)
 	result = YRP_RN(result)
 	result = YRP_RT(result)
 	local pk = {}
-
 	while not strEmpty(result) do
 		local cs = string.find(result, "Color(", 1, true)
-
 		if cs == 1 then
 			local _, e = string.find(result, ")", 1, true)
-
 			if e then
 				local color = string.sub(result, cs + 6, e - 1)
 				color = string.Explode(",", color)
-
 				if isnumber(tonumber(color[1])) and isnumber(tonumber(color[2])) and isnumber(tonumber(color[3])) then
 					table.insert(pk, Color(color[1] or 255, color[2] or 255, color[3] or 255))
 					result = string.sub(result, e + 1)
@@ -874,20 +875,22 @@ function YRPCheckReadyTable(tab)
 end
 
 if CLIENT then
-	timer.Simple(1, function()
-		YRPHR(Color(255, 255, 0))
-		MsgC(Color(255, 255, 0), "[GAME VERSION] Server: " .. GetGlobalYRPInt("serverversion", VERSION) .. "\n")
-		MsgC(Color(255, 255, 0), "[GAME VERSION] Client: " .. VERSION .. "\n")
-		YRPHR(Color(255, 255, 0))
-
-		if tonumber(GetGlobalYRPInt("serverversion", VERSION)) > VERSION then
-			MsgC(Color(0, 255, 0), "YOUR GAME IS OUTDATED!" .. "\n")
-		elseif tonumber(GetGlobalYRPInt("serverversion", VERSION)) < VERSION and BRANCH == "unknown" then
-			MsgC(Color(0, 255, 0), "SERVER IS OUTDATED!" .. "\n")
-		else
-			MsgC(Color(0, 255, 0), "YOUR GAME IS UP-To-Date!" .. "\n")
+	timer.Simple(
+		1,
+		function()
+			YRPHR(Color(255, 255, 0))
+			MsgC(Color(255, 255, 0), "[GAME VERSION] Server: " .. GetGlobalYRPInt("serverversion", VERSION) .. "\n")
+			MsgC(Color(255, 255, 0), "[GAME VERSION] Client: " .. VERSION .. "\n")
+			YRPHR(Color(255, 255, 0))
+			if tonumber(GetGlobalYRPInt("serverversion", VERSION)) > VERSION then
+				MsgC(Color(0, 255, 0), "YOUR GAME IS OUTDATED!" .. "\n")
+			elseif tonumber(GetGlobalYRPInt("serverversion", VERSION)) < VERSION and BRANCH == "unknown" then
+				MsgC(Color(0, 255, 0), "SERVER IS OUTDATED!" .. "\n")
+			else
+				MsgC(Color(0, 255, 0), "YOUR GAME IS UP-To-Date!" .. "\n")
+			end
 		end
-	end)
+	)
 end
 
 function YRPCleanUpName(name)
@@ -929,7 +932,6 @@ function YRPCheckDarkRP()
 end
 
 YRPCheckDarkRP()
-
 local function YGetCategory(ent)
 	if ent.Category then return ent.Category end
 	if ent.t and ent.t.Category then return ent.t.Category end
@@ -950,7 +952,6 @@ end
 
 function YRPGetSENTsList()
 	local res = {}
-
 	for i, ent in pairs(list.Get("SpawnableEntities")) do
 		YRPAddEntToTable(res, i, ent)
 	end
