@@ -1,6 +1,5 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local Player = FindMetaTable("Player")
-
 function Player:abortHit(message)
 	--Description: Abort a hit
 	YRPDarkrpNotFound("abortHit( " .. message .. " )")
@@ -27,10 +26,12 @@ function Player:arrest(time, Arrester)
 	--Description: Arrest a player.
 	--YRPDarkrpNotFound( "arrest( " .. tostring(time) .. ", " .. Arrester:Nick() .. " )" )
 	self:SetYRPInt("jailtime", time)
-
-	timer.Simple(0.02, function()
-		self:SetYRPBool("injail", true)
-	end)
+	timer.Simple(
+		0.02,
+		function()
+			self:SetYRPBool("injail", true)
+		end
+	)
 end
 
 function Player:changeAllowed(team)
@@ -46,7 +47,6 @@ function Player:changeTeam(team, force, suppressNotification)
 		end
 
 		YRPSetRole(self, team, false, nil)
-
 		if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
 			self:Spawn()
 		end
@@ -166,12 +166,10 @@ unhandled["salary"] = true
 unhandled["job"] = true
 unhandled["wantedReason"] = true
 unhandled["HasGunlicense"] = true
-
 function Player:setSelfDarkRPVar(variable, value, target)
 	--Description: Set a shared variable. Make sure the variable is registered with DarkRP.registerDarkRPVar!
 	if value == nil then return false end
 	target = target or self
-
 	if variable then
 		if variable == "Thirst" then
 			target:Drink(value - target:GetYRPFloat("thirst", 0.0))
@@ -189,9 +187,11 @@ function Player:setSelfDarkRPVar(variable, value, target)
 			self:SetXP(value)
 		elseif variable == "energy" then
 			self:YRPSetHunger(value)
+		elseif variable == "jailpos" then
+			YRP.msg("note", "Use yourrp jailpos swep!")
 		elseif unhandled[variable] == nil then
+			--
 			YRPDarkrpNotFound("setDarkRPVar( " .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. " )")
-
 			if target == self then
 				self[variable] = value
 			else
