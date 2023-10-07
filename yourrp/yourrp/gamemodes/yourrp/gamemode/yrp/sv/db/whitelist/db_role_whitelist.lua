@@ -125,7 +125,7 @@ net.Receive(
 			local dat = util.DateStamp()
 			local status = "Manually by " .. ply:SteamName()
 			local name = target:SteamName()
-			YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', " .. YRP_SQL_STR_IN(_nick) .. ", " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', " .. YRP_SQL_STR_IN(name) .. "'")
+			YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', " .. YRP_SQL_STR_IN(_nick) .. ", " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', " .. YRP_SQL_STR_IN(name) .. "")
 			YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. target:SteamID() .. "', 'Role: " .. DBRole.string_name .. "'")
 		else
 			YRP.msg("note", "whitelistPlayer FAILED! CALL DEVS")
