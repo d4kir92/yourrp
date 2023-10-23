@@ -7,12 +7,10 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0") -- storageID
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_printname", "TEXT DEFAULT 'Unnamed'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_classname", "TEXT DEFAULT 'yrp_money_printer'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props_junk/garbage_takeoutcarton001a.mdl'")
-
 --YRP_SQL_ADD_COLUMN(DATABASE_NAME, "tab_properties", "TEXT DEFAULT ''" )
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 function InventoryBlacklisted(cname)
 	local blacklist = GetGlobalYRPTable("yrp_blacklist_inventory", {})
-
 	for i, black in pairs(blacklist) do
 		if string.find(cname, black.value, 1, true) then
 			YRP.msg("note", "Blacklisted for inventory: " .. cname)
@@ -27,7 +25,6 @@ end
 function CreateItem(slotID, tab)
 	slotID = tonumber(slotID)
 	tab = tab or {}
-
 	if istable(tab) then
 		tab.text_classname = tab.text_classname or "Unnamed"
 		tab.text_printname = tab.text_printname or "yrp_money_printer"
@@ -38,7 +35,6 @@ function CreateItem(slotID, tab)
 		tab.int_storageID = tab.int_storageID or 0
 		tab.text_type = tab.text_type or "item"
 		tab.int_fixed = tab.int_fixed or "0"
-
 		if InventoryBlacklisted(tab.text_classname) or InventoryBlacklisted(tab.text_worldmodel) then
 			YRP.msg("note", "[CreateItem] blacklisted item!")
 
@@ -53,7 +49,6 @@ function CreateItem(slotID, tab)
 	end
 
 	local last = YRP_SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
-
 	if IsNotNilAndNotFalse(last) then
 		last = last[1]
 		StoreItem(slotID, last)
@@ -67,6 +62,12 @@ function CreateItem(slotID, tab)
 end
 
 function CreateItemByEntity(slotID, entity)
+	if entity == NULL then
+		YRP.msg("db", "[CreateItemByEntity] ENTITY is NULL (not exists anymore)")
+
+		return false
+	end
+
 	if entity:IsPlayer() or entity:IsWorld() or entity:CreatedByMap() or entity:GetOwner():IsPlayer() or strEmpty(entity:GetModel()) or entity:IsVehicle() then
 		YRP.msg("db", "[CreateItemByEntity] INVALID")
 
@@ -78,13 +79,10 @@ function CreateItemByEntity(slotID, entity)
 	tab.text_printname = entity:GetName()
 	tab.text_worldmodel = entity:GetModel()
 	tab.text_type = entity.text_type or "item"
-
 	if tab.text_type == "bag" then
 		tab.int_storageID = entity._suid
-
 		if tab.int_storageID == nil then
 			local storage = CreateStorage(entity.bag_size)
-
 			if IsNotNilAndNotFalse(storage) then
 				tab.int_storageID = storage.uniqueID
 
@@ -104,13 +102,10 @@ end
 
 function GetItem(slotID)
 	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_slotID = '" .. slotID .. "'")
-
 	if IsNotNilAndNotFalse(item) then
 		item = item[1]
-
 		if item.text_type == "bag" then
 			local storage = YRP_SQL_SELECT("yrp_inventory_storages", "*", "uniqueID = '" .. item.int_storageID .. "'")
-
 			if not IsNotNilAndNotFalse(storage) then
 				YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. item.uniqueID .. "'")
 
@@ -126,10 +121,8 @@ function GetItem(slotID)
 end
 
 util.AddNetworkString("nws_yrp_item_unstore")
-
 function UnstoreItem(slotID, ply)
 	slotID = tonumber(slotID)
-
 	if ply ~= nil then
 		net.Start("nws_yrp_item_unstore")
 		net.WriteString(slotID)
@@ -144,19 +137,15 @@ function UnstoreItem(slotID, ply)
 end
 
 util.AddNetworkString("nws_yrp_item_store")
-
 function StoreItem(slotID, itemTable, ply)
 	slotID = tonumber(slotID)
 	itemTable.isinv = false
-
 	if ply then
 		itemTable.int_slotID = tonumber(itemTable.int_slotID)
 		local invstor = GetCharacterStorage(ply)
 		local invslots = YRP_SQL_SELECT("yrp_inventory_slots", "*", "int_storageID = '" .. invstor.uniqueID .. "'")
-
 		for i, v in pairs(invslots) do
 			v.uniqueID = tonumber(v.uniqueID)
-
 			if itemTable.int_slotID == v.uniqueID then
 				itemTable.isinv = true
 			end
@@ -193,10 +182,8 @@ function DropItem(ply, slotID)
 	UnstoreItem(slotID)
 	RemoveItem(item.uniqueID)
 	local e = ents.Create(item.text_classname)
-
 	if IsValid(e) then
 		e:SetModel(item.text_worldmodel)
-
 		if item.text_type == "bag" then
 			e:SetStorage(item.int_storageID)
 		end
@@ -209,7 +196,6 @@ function DropItem(ply, slotID)
 end
 
 util.AddNetworkString("yrpclosebag")
-
 function CloseBag(storID)
 	net.Start("yrpclosebag")
 	net.WriteString(storID)
@@ -221,7 +207,6 @@ function MoveItem(itemID, slotID)
 	slotID = tonumber(slotID)
 	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
 	local slot = YRP_SQL_SELECT("yrp_inventory_slots", "*", "uniqueID = '" .. slotID .. "'")
-
 	-- if both exists
 	if IsNotNilAndNotFalse(item) and IsNotNilAndNotFalse(slot) then
 		item = item[1]
@@ -229,7 +214,6 @@ function MoveItem(itemID, slotID)
 		slot.int_storageID = tonumber(slot.int_storageID)
 		item.int_fixed = tonumber(item.int_fixed)
 		item.int_storageID = tonumber(item.int_storageID)
-
 		if item.int_fixed == 1 then
 			YRP.msg("db", "[MoveItem] Item is fixed")
 
@@ -251,7 +235,6 @@ function MoveItem(itemID, slotID)
 		if item.text_type == "bag" then
 			for i, slot2 in pairs(GetStorageSlots(item.int_storageID)) do
 				local ite = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_slotID = '" .. slot2.uniqueID .. "'")
-
 				if IsNotNilAndNotFalse(ite) then
 					YRP.msg("db", "Bag is not empty")
 
@@ -262,16 +245,18 @@ function MoveItem(itemID, slotID)
 
 		local oldslot = item.int_slotID
 		local newslot = slot.uniqueID
-
 		-- when no item in target
 		if not GetItem(slotID) then
 			if item.text_type == "bag" then
 				CloseBag(item.int_storageID)
 			end
 
-			YRP_SQL_UPDATE(DATABASE_NAME, {
-				["int_slotID"] = newslot
-			}, "uniqueID = '" .. item.uniqueID .. "'")
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_slotID"] = newslot
+				}, "uniqueID = '" .. item.uniqueID .. "'"
+			)
 
 			UnstoreItem(oldslot)
 			StoreItem(newslot, item)
@@ -281,7 +266,6 @@ function MoveItem(itemID, slotID)
 	else
 		local e = net.ReadEntity()
 		local added = CreateItemByEntity(slotID, e)
-
 		if IsNotNilAndNotFalse(e) and added then
 			e:Remove()
 		else
@@ -292,45 +276,48 @@ end
 
 -- Networking
 util.AddNetworkString("nws_yrp_item_clicked")
-
-net.Receive("nws_yrp_item_clicked", function(len, ply)
-	local itemID = net.ReadString()
-	itemID = tonumber(itemID)
-	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
-
-	if IsNotNilAndNotFalse(item) then
-		item = item[1]
-		item.int_storageID = tonumber(item.int_storageID)
-
-		if item.int_storageID ~= 0 then
-			OpenStorage(ply, item.int_storageID)
+net.Receive(
+	"nws_yrp_item_clicked",
+	function(len, ply)
+		local itemID = net.ReadString()
+		itemID = tonumber(itemID)
+		local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
+		if IsNotNilAndNotFalse(item) then
+			item = item[1]
+			item.int_storageID = tonumber(item.int_storageID)
+			if item.int_storageID ~= 0 then
+				OpenStorage(ply, item.int_storageID)
+			else
+				YRP.msg("db", "[yrp_item_clicked] item is not a storage")
+			end
 		else
-			YRP.msg("db", "[yrp_item_clicked] item is not a storage")
+			YRP.msg("db", "[yrp_item_clicked] item not exists")
 		end
-	else
-		YRP.msg("db", "[yrp_item_clicked] item not exists")
 	end
-end)
+)
 
 util.AddNetworkString("nws_yrp_item_move")
-
-net.Receive("nws_yrp_item_move", function(len, ply)
-	local itemID = net.ReadString()
-	local slotID = net.ReadString()
-	itemID = tonumber(itemID)
-	slotID = tonumber(slotID)
-	MoveItem(itemID, slotID)
-end)
+net.Receive(
+	"nws_yrp_item_move",
+	function(len, ply)
+		local itemID = net.ReadString()
+		local slotID = net.ReadString()
+		itemID = tonumber(itemID)
+		slotID = tonumber(slotID)
+		MoveItem(itemID, slotID)
+	end
+)
 
 util.AddNetworkString("nws_yrp_item_drop")
-
-net.Receive("nws_yrp_item_drop", function(len, ply)
-	local itemID = net.ReadString()
-	itemID = tonumber(itemID)
-	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
-
-	if IsNotNilAndNotFalse(item) then
-		item = item[1]
-		DropItem(ply, item.int_slotID)
+net.Receive(
+	"nws_yrp_item_drop",
+	function(len, ply)
+		local itemID = net.ReadString()
+		itemID = tonumber(itemID)
+		local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
+		if IsNotNilAndNotFalse(item) then
+			item = item[1]
+			DropItem(ply, item.int_slotID)
+		end
 	end
-end)
+)
