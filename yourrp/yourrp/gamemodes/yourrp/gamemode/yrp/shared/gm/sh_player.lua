@@ -10,7 +10,6 @@ end
 function YRPGetPlayerByName(name)
 	if name == nil then return NULL end
 	name = string.lower(name)
-
 	for i, ply in pairs(player.GetAll()) do
 		if ply:IsPlayer() and string.find(string.lower(ply:RPName()), name, 1, true) or string.find(string.lower(ply:SteamName()), name, 1, true) or string.find(string.lower(ply:Nick()), name, 1, true) or string.find(string.lower(ply:GetName()), name, 1, true) then return ply end
 	end
@@ -21,7 +20,6 @@ end
 function YRPGetPlayerByRPName(name)
 	if name == nil then return NULL end
 	name = string.lower(name)
-
 	for i, ply in pairs(player.GetAll()) do
 		if string.find(string.lower(ply:RPName()), name, 1, true) then return ply end
 	end
@@ -32,7 +30,6 @@ end
 function YRPGetPlayerBySteamName(name)
 	if name == nil then return NULL end
 	name = string.lower(name)
-
 	for i, ply in pairs(player.GetAll()) do
 		if string.find(string.lower(ply:SteamName()), name, 1, true) then return ply end
 	end
@@ -41,7 +38,6 @@ function YRPGetPlayerBySteamName(name)
 end
 
 local Player = FindMetaTable("Player")
-
 function Player:YRPSteamID()
 	return self:SteamID() or self:UniqueID()
 end
@@ -54,7 +50,6 @@ function Player:YRPFormattedCharPlayTime()
 	local time = self:YRPCharPlayTime()
 	--local seco = time % 60
 	local minu = math.floor(time / 60 % 60, 0)
-
 	if minu < 10 then
 		minu = "0" .. minu
 	end
@@ -65,7 +60,6 @@ function Player:YRPFormattedCharPlayTime()
 end
 
 Player.oldIsTyping = Player.oldIsTyping or Player.IsTyping
-
 function Player:IsTyping()
 	if YRPIsChatEnabled("IsTyping") then
 		return self:GetYRPBool("istyping", false)
@@ -75,15 +69,18 @@ function Player:IsTyping()
 end
 
 if CLIENT then
-	hook.Add("Think", "YRPSyncDarkRPVars", function()
-		local ply = LocalPlayer()
-
-		if ply and ply.DarkRPVars then
-			ply.DarkRPVars.Energy = ply:GetYRPFloat("hunger", 0)
-			ply.DarkRPVars.salary = ply:Salary()
-			ply.DarkRPVars.money = ply:Money()
+	hook.Add(
+		"Think",
+		"YRPSyncDarkRPVars",
+		function()
+			local ply = LocalPlayer()
+			if ply and ply.DarkRPVars then
+				ply.DarkRPVars.Energy = ply:GetYRPFloat("hunger", 0)
+				ply.DarkRPVars.salary = ply:Salary()
+				ply.DarkRPVars.money = ply:Money()
+			end
 		end
-	end)
+	)
 end
 
 if SERVER then
@@ -93,10 +90,8 @@ if SERVER then
 
 	function Player:YRPEat(num)
 		num = tonumber(num)
-
 		if isnumber(num) then
 			local eatsounds = {"npc/barnacle/barnacle_crunch2.wav", "npc/barnacle/barnacle_crunch3.wav", "physics/body/body_medium_break4.wav"}
-
 			local name, _ = table.Random(eatsounds)
 			util.PrecacheSound(name)
 			self:EmitSound(name)
@@ -109,10 +104,8 @@ if SERVER then
 
 	function Player:YRPDrink(num, permille)
 		num = tonumber(num)
-
 		if isnumber(num) then
 			local drinksounds = {"npc/barnacle/barnacle_gulp1.wav", "npc/barnacle/barnacle_gulp2.wav", "drink1.wav"}
-
 			local name, _ = table.Random(drinksounds)
 			util.PrecacheSound(name)
 			self:EmitSound(name)
@@ -122,7 +115,6 @@ if SERVER then
 
 		if GetGlobalYRPBool("bool_permille", false) and permille ~= nil then
 			permille = tonumber(permille)
-
 			if isnumber(permille) and permille > 0 then
 				local newpermille = math.Clamp(self:GetYRPFloat("permille", 0.0) + permille, 0, self:GetMaxPermille())
 				self:SetYRPFloat("permille", newpermille)
@@ -140,10 +132,8 @@ function Player:YRPGetLanguageShort()
 end
 
 local accessTab = {}
-
 function Player:HasAccess(from, skip)
 	local hasAccess = self:GetYRPBool("bool_adminaccess", false) or self:IsSuperAdmin()
-
 	if not hasAccess and SERVER and skip == nil then
 		if from == nil then
 			local trace = tostring(debug.traceback())
@@ -161,7 +151,6 @@ end
 
 function Player:YRPHasStorageItem(uid)
 	if not IsNotNilAndNotFalse(uid) then return false end
-
 	if self.yrpstorage == nil or self:GetYRPString("storage", "") ~= self.yrpstoragestr then
 		self.yrpstoragestr = self:GetYRPString("storage", "")
 		self.yrpstorage = string.Explode(",", self.yrpstoragestr)
@@ -180,7 +169,6 @@ end
 
 function Player:IsInCharacterSelection()
 	if self:IsBot() then return false end
-
 	if GetGlobalYRPBool("bool_character_system") and not IsVoidCharEnabled() then
 		return self:GetYRPBool("yrp_characterselection", false)
 	else
@@ -193,10 +181,8 @@ function Player:GetPlyTab()
 		if self:IsValid() then
 			if self:GetYRPBool("finishedloadingcharacter", false) then
 				local steamid = self:YRPSteamID()
-
 				if steamid ~= nil and steamid ~= false and steamid ~= "" then
 					local yrp_players = YRP_SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamid .. "'")
-
 					if IsNotNilAndNotFalse(yrp_players) then
 						self.plytab = yrp_players[1]
 
@@ -224,7 +210,6 @@ function Player:IsCharacterValid()
 			else
 				if self:GetYRPBool("finishedloadingcharacter", false) then
 					local _cha_tab = self:YRPGetCharacterTable()
-
 					if _cha_tab == false then
 						return false
 					else
@@ -246,7 +231,6 @@ function Player:HasCharacterSelected()
 			else
 				if self:GetYRPBool("finishedloadingcharacter", false) then
 					local _ply_tab = self:GetPlyTab()
-
 					if IsNotNilAndNotFalse(_ply_tab) and tostring(_ply_tab.CurrentCharacter) ~= "NULL" and _ply_tab.CurrentCharacter ~= NULL then
 						local chatab = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _ply_tab.CurrentCharacter .. "'")
 						if IsNotNilAndNotFalse(chatab) then return true end
@@ -266,10 +250,8 @@ function Player:YRPGetCharacterTable()
 		if self:IsValid() then
 			if self:GetYRPBool("finishedloadingcharacter", false) then
 				local _tmp = self:GetPlyTab()
-
 				if IsNotNilAndNotFalse(_tmp) then
 					local yrp_characters = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. _tmp.CurrentCharacter .. "'")
-
 					if IsNotNilAndNotFalse(yrp_characters) then
 						self.chatab = yrp_characters[1]
 
@@ -296,10 +278,8 @@ function Player:YRPGetRoleTable()
 		if self:IsValid() then
 			if self:GetYRPBool("finishedloadingcharacter", false) then
 				local yrp_characters = self:YRPGetCharacterTable()
-
 				if IsNotNilAndNotFalse(yrp_characters) and IsNotNilAndNotFalse(yrp_characters.roleID) then
 					local yrp_roles = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. yrp_characters.roleID)
-
 					if IsNotNilAndNotFalse(yrp_roles) then
 						self.roltab = yrp_roles[1]
 
@@ -324,10 +304,8 @@ function Player:YRPGetGroupTable()
 		if self:IsValid() then
 			if self:GetYRPBool("finishedloadingcharacter", false) then
 				local yrp_characters = self:YRPGetCharacterTable()
-
 				if IsNotNilAndNotFalse(yrp_characters) and IsNotNilAndNotFalse(yrp_characters.groupID) then
 					local yrp_groups = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. yrp_characters.groupID)
-
 					if IsNotNilAndNotFalse(yrp_groups) then
 						self.grotab = yrp_groups[1]
 
@@ -350,24 +328,27 @@ end
 function Player:UpdateMoney()
 	if SERVER and self:HasCharacterSelected() then
 		local _char_id = self:CharID()
-
 		if _char_id ~= false then
 			local money = self:GetYRPString("money", "FAILED")
 			if money == "FAILED" then return false end
-
 			if YRPWORKED(money, "ply:money UpdateMoney", true) then
-				YRP_SQL_UPDATE("yrp_characters", {
-					["money"] = money
-				}, "uniqueID = " .. _char_id)
+				YRP_SQL_UPDATE(
+					"yrp_characters",
+					{
+						["money"] = money
+					}, "uniqueID = " .. _char_id
+				)
 			end
 
 			local moneybank = tonumber(self:GetYRPString("moneybank", "FAILED"))
 			if moneybank == "FAILED" then return false end
-
 			if YRPWORKED(moneybank, "ply:moneybank UpdateMoney", true) then
-				YRP_SQL_UPDATE("yrp_characters", {
-					["moneybank"] = moneybank
-				}, "uniqueID = " .. _char_id)
+				YRP_SQL_UPDATE(
+					"yrp_characters",
+					{
+						["moneybank"] = moneybank
+					}, "uniqueID = " .. _char_id
+				)
 			end
 		end
 	end
@@ -395,7 +376,6 @@ if SERVER then
 
 	function Player:StopCasting(cost)
 		cost = cost or 0
-
 		if self:GetYRPString("GetAbilityType", "none") ~= "none" and self:GetYRPInt("GetCurAbility", 0) >= cost then
 			self:SetYRPInt("GetCurAbility", self:GetYRPInt("GetCurAbility", 0) - cost)
 		elseif self:GetYRPString("GetAbilityType", "none") ~= "none" then
@@ -419,7 +399,6 @@ if SERVER then
 		--[[ failed casting ]]
 		--
 		self:SetYRPBool("iscasting", false)
-
 		if timer.Exists(self:YRPSteamID() .. "castduration") then
 			timer.Remove(self:YRPSteamID() .. "castduration")
 		end
@@ -449,14 +428,12 @@ if SERVER then
 		self:SetYRPString("castnet", net_str)
 		self:SetYRPInt("castmode", mode or 0)
 		self:SetYRPBool("castcanmove", canmove or false)
-
 		if not self:GetYRPBool("castcanmove") then
 			self:SetYRPVector("castposition", self:GetPos())
 		end
 
 		self:SetYRPString("castname", lang_str)
 		self:SetYRPFloat("castmax", duration or 1.0)
-
 		if self:GetYRPInt("castmode") == 0 then
 			self:SetYRPFloat("castcur", 0.0)
 		elseif self:GetYRPInt("castmode") == 1 then
@@ -469,45 +446,45 @@ if SERVER then
 		--[[ Start casting ]]
 		--
 		self:SetYRPBool("iscasting", true)
+		timer.Create(
+			self:YRPSteamID() .. "castduration",
+			tick,
+			0,
+			function()
+				--YRP.msg( "note", self:GetYRPString( "castname" ) .. " " .. tostring(self:GetYRPFloat( "castcur" ) ))
+				--[[ Casting ]]
+				--
+				if self:GetYRPInt("castmode") == 0 then
+					self:SetYRPFloat("castcur", self:GetYRPFloat("castcur") + tick)
+					if not self:GetYRPBool("castcanmove") then
+						local _o_pos = self:GetYRPVector("castposition")
+						local _c_pos = self:GetPos()
+						local _space = 3
+						--[[ x, y moved ]]
+						--
+						if _c_pos.x + _space < _o_pos.x or _c_pos.x - _space > _o_pos.x or _c_pos.y + _space < _o_pos.y or _c_pos.y - _space > _o_pos.y then
+							self:InteruptCasting()
+						end
 
-		timer.Create(self:YRPSteamID() .. "castduration", tick, 0, function()
-			--YRP.msg( "note", self:GetYRPString( "castname" ) .. " " .. tostring(self:GetYRPFloat( "castcur" ) ))
-			--[[ Casting ]]
-			--
-			if self:GetYRPInt("castmode") == 0 then
-				self:SetYRPFloat("castcur", self:GetYRPFloat("castcur") + tick)
-
-				if not self:GetYRPBool("castcanmove") then
-					local _o_pos = self:GetYRPVector("castposition")
-					local _c_pos = self:GetPos()
-					local _space = 3
-
-					--[[ x, y moved ]]
-					--
-					if _c_pos.x + _space < _o_pos.x or _c_pos.x - _space > _o_pos.x or _c_pos.y + _space < _o_pos.y or _c_pos.y - _space > _o_pos.y then
-						self:InteruptCasting()
+						if not IsValid(target) then return end
+						if self:OBBCenter():Distance(target:OBBCenter()) > self:GetYRPFloat("castrange") then
+							self:InteruptCasting()
+						end
 					end
 
-					if not IsValid(target) then return end
-
-					if self:OBBCenter():Distance(target:OBBCenter()) > self:GetYRPFloat("castrange") then
-						self:InteruptCasting()
+					if self:GetYRPFloat("castcur") >= self:GetYRPFloat("castmax") then
+						self:StopCasting(cost)
+						timer.Remove(self:YRPSteamID() .. "castduration")
 					end
-				end
-
-				if self:GetYRPFloat("castcur") >= self:GetYRPFloat("castmax") then
-					self:StopCasting(cost)
-					timer.Remove(self:YRPSteamID() .. "castduration")
-				end
-			elseif self:GetYRPInt("castmode") == 1 then
-				self:SetYRPFloat("castcur", self:GetYRPFloat("castcur") - tick)
-
-				if self:GetYRPFloat("castcur") <= 0.0 then
-					self:StopCasting(cost)
-					timer.Remove(self:YRPSteamID() .. "castduration")
+				elseif self:GetYRPInt("castmode") == 1 then
+					self:SetYRPFloat("castcur", self:GetYRPFloat("castcur") - tick)
+					if self:GetYRPFloat("castcur") <= 0.0 then
+						self:StopCasting(cost)
+						timer.Remove(self:YRPSteamID() .. "castduration")
+					end
 				end
 			end
-		end)
+		)
 	end
 
 	function Player:updateMoney(money)
@@ -521,7 +498,6 @@ if SERVER then
 	function Player:addMoney(money)
 		if IsNotNilAndNotFalse(money) and isnumber(money) and isnumber(tonumber(self:GetYRPString("money"))) then
 			local newmoney = math.Round(tonumber(self:GetYRPString("money")), 2) + math.Round(money, 2)
-
 			if self:GetYRPBool("moneyready", false) then
 				self:SetYRPString("money", math.Round(newmoney, 2))
 				self:UpdateMoney()
@@ -570,17 +546,22 @@ if SERVER then
 	end
 
 	function Player:resetUptimeCurrent()
-		local _res = YRP_SQL_UPDATE("yrp_players", {
-			["uptime_current"] = 0
-		}, "SteamID = '" .. self:YRPSteamID() .. "'")
+		local _res = YRP_SQL_UPDATE(
+			"yrp_players",
+			{
+				["uptime_current"] = 0
+			}, "SteamID = '" .. self:YRPSteamID() .. "'"
+		)
 	end
 
 	function Player:SaveUptimeTotal()
 		local uptime_total = self:UptimeTotal()
-
-		local _res = YRP_SQL_UPDATE("yrp_players", {
-			["uptime_total"] = uptime_total
-		}, "SteamID = '" .. self:YRPSteamID() .. "'")
+		local _res = YRP_SQL_UPDATE(
+			"yrp_players",
+			{
+				["uptime_total"] = uptime_total
+			}, "SteamID = '" .. self:YRPSteamID() .. "'"
+		)
 	end
 
 	function Player:Heal(amount)
@@ -613,7 +594,6 @@ function Player:FormattedUptimeCurrent()
 	if self:UptimeCurrent() == os.time() then return "BOT" end
 	local hms = os.date("!%H:%M", self:UptimeCurrent())
 	local days = math.floor(self:UptimeCurrent() / (24 * 3600))
-
 	-- years + months + days
 	if days >= 365 then
 		local years = math.floor(days / 365)
@@ -639,7 +619,6 @@ function Player:FormattedUptimeTotal()
 	if self:UptimeTotal() == os.time() then return "BOT" end
 	local hms = os.date("!%H:%M:%S", self:UptimeTotal())
 	local days = math.floor(self:UptimeTotal() / (24 * 3600))
-
 	-- years + months + days
 	if days >= 365 then
 		local years = math.floor(days / 365)
@@ -669,11 +648,9 @@ function Player:canAfford(money)
 	if self:GetYRPBool("moneyready", false) then
 		if money == nil then return false end
 		if self:GetYRPString("money", 0) == nil then return false end
-
 		if isnumber(tonumber(money)) then
 			money = math.abs(tonumber(money))
 			local curmoney = tonumber(self:GetYRPString("money", 0))
-
 			if curmoney >= money then
 				return true
 			else
@@ -696,7 +673,6 @@ function Player:canAffordBank(money)
 		if money == nil then return false end
 		if self:GetYRPString("moneybank") == nil then return false end
 		local _tmpMoney = math.abs(tonumber(money))
-
 		if isnumber(_tmpMoney) and tonumber(self:GetYRPString("moneybank")) then
 			if tonumber(self:GetYRPString("moneybank")) >= _tmpMoney then
 				return true
@@ -718,18 +694,18 @@ function Player:YRPRPName()
 end
 
 Player.SteamName = Player.SteamName or Player.Name
-
 function Player:Name()
 	if self.YRPRPName then
 		return self:YRPRPName()
-	else
+	elseif self.SteamName then
 		return self:SteamName()
 	end
+
+	return self:Name()
 end
 
 Player.GetName = Player.Name
 Player.Nick = Player.Name
-
 function Player:YRPName()
 	if not IsValid(self) then return "FAIL" end
 
@@ -740,15 +716,18 @@ function Player:Team()
 	return tonumber(self:GetYRPString("roleUniqueID", "0"))
 end
 
-timer.Simple(2, function()
-	function team.GetName(index)
-		if RPExtraTeams[index] then
-			return RPExtraTeams[index].name
-		else
-			return "FAILED TO FIND TEAMNAME"
+timer.Simple(
+	2,
+	function()
+		function team.GetName(index)
+			if RPExtraTeams[index] then
+				return RPExtraTeams[index].name
+			else
+				return "FAILED TO FIND TEAMNAME"
+			end
 		end
 	end
-end)
+)
 
 function Player:YRPGetRoleColor()
 	local _rc = self:GetYRPString("roleColor", "255,0,0")
@@ -818,7 +797,6 @@ end
 
 function Player:HasLicense(license)
 	local tab = self:GetLicenseIDs()
-
 	if license and tab[tonumber(license)] then
 		return true
 	elseif tonumber(license) == -1 then
@@ -832,7 +810,6 @@ function Player:GetAllLicenses()
 	local lids = self:GetLicenseIDs()
 	local tab = GetGlobalYRPTable("yrp_licenses")
 	local res = {}
-
 	for i, v in pairs(tab) do
 		if lids[tonumber(i)] then
 			table.insert(res, v)
@@ -919,8 +896,12 @@ function canVehicleLock(ply, veh)
 	end
 end
 
-hook.Add("StartCommand", "YRP_StartCommand", function(ply, cmd)
-	if ply and ply:GetYRPBool("ragdolled", false) and cmd:KeyDown(IN_ATTACK) then
-		cmd:RemoveKey(IN_ATTACK)
+hook.Add(
+	"StartCommand",
+	"YRP_StartCommand",
+	function(ply, cmd)
+		if ply and ply:GetYRPBool("ragdolled", false) and cmd:KeyDown(IN_ATTACK) then
+			cmd:RemoveKey(IN_ATTACK)
+		end
 	end
-end)
+)
