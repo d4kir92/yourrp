@@ -3,7 +3,6 @@
 yrpstartedsending = yrpstartedsending or false
 yrpreceivedstartdata = yrpreceivedstartdata or false
 yrpreceivedserverdata = yrpreceivedserverdata or false
-
 function YRPReceivedStartData()
 	return yrpreceivedstartdata
 end
@@ -14,7 +13,6 @@ end
 
 local function YRPGetClientInfo()
 	local info = {}
-
 	if system.IsWindows() then
 		info.os = 0
 	elseif system.IsLinux() then
@@ -32,10 +30,13 @@ local function YRPGetClientInfo()
 	return info
 end
 
-net.Receive("nws_yrp_receivedstartdata", function(len)
-	MsgC(Color(0, 255, 0), "[LOADING] SERVER -> CLIENT: Server Received Start Data", "\n")
-	yrpreceivedstartdata = true
-end)
+net.Receive(
+	"nws_yrp_receivedstartdata",
+	function(len)
+		MsgC(Color(0, 255, 0), "[LOADING] SERVER -> CLIENT: Server Received Start Data", "\n")
+		yrpreceivedstartdata = true
+	end
+)
 
 local function YRPSendAskData(from)
 	local info = YRPGetClientInfo()
@@ -46,13 +47,15 @@ local function YRPSendAskData(from)
 	net.WriteString(info.beta)
 	net.SendToServer()
 	MsgC(Color(255, 255, 255, 255), "[LOADING] Sended StartData", "\n")
-
-	timer.Simple(8, function()
-		if not yrpreceivedstartdata then
-			MsgC(Color(255, 255, 0), "[LOADING] Retry Send StartData", "\n")
-			YRPSendAskData("RETRY")
+	timer.Simple(
+		8,
+		function()
+			if not yrpreceivedstartdata then
+				MsgC(Color(255, 255, 0), "[LOADING] Retry Send StartData", "\n")
+				YRPSendAskData("RETRY")
+			end
 		end
-	end)
+	)
 end
 
 local function YRPStartSendingStartData(from)
@@ -63,9 +66,13 @@ local function YRPStartSendingStartData(from)
 	end
 end
 
-hook.Add("InitPostEntity", "YRP_INITPOSTENTITY", function()
-	YRPStartSendingStartData("HOOK InitPostEntity")
-end)
+hook.Add(
+	"InitPostEntity",
+	"YRP_INITPOSTENTITY",
+	function()
+		YRPStartSendingStartData("HOOK InitPostEntity")
+	end
+)
 
 function GM:InitPostEntity()
 	YRPStartSendingStartData("GM InitPostEntity")
@@ -77,10 +84,13 @@ function GM:InitPostEntity()
 	ply.DarkRPVars.Energy = 0
 end
 
-net.Receive("nws_yrp_sendserverdata", function(len)
-	if not yrpreceivedserverdata then
-		yrpreceivedserverdata = true
-		net.Start("nws_yrp_receivedserverdata")
-		net.SendToServer()
+net.Receive(
+	"nws_yrp_sendserverdata",
+	function(len)
+		if not yrpreceivedserverdata then
+			yrpreceivedserverdata = true
+			net.Start("nws_yrp_receivedserverdata")
+			net.SendToServer()
+		end
 	end
-end)
+)

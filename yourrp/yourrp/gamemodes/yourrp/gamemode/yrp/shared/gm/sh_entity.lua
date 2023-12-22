@@ -1,24 +1,23 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
-local Entity = FindMetaTable( "Entity" )
+local Entity = FindMetaTable("Entity")
 function Entity:HasStorage()
-	return self:GetYRPBool( "hasinventory", false)
+	return self:GetYRPBool("hasinventory", false)
 end
 
 function Entity:StorageName()
-	return self:GetYRPString( "storagename", "" )
+	return self:GetYRPString("storagename", "")
 end
 
 function Entity:IsWorldStorage()
-	return self:GetYRPString( "isaworldstorage", false)
+	return self:GetYRPString("isaworldstorage", false)
 end
 
 function Entity:ItemSizeW()
-	return tonumber(self:GetYRPString( "item_size_w", nil) )
+	return tonumber(self:GetYRPString("item_size_w", nil))
 end
 
 function Entity:ItemSizeH()
-	return tonumber(self:GetYRPString( "item_size_h", nil) )
+	return tonumber(self:GetYRPString("item_size_h", nil))
 end
 
 function Entity:IsDealer()

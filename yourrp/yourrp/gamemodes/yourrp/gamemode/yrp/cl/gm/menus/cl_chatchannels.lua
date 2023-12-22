@@ -1,6 +1,5 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local vm = {}
-
 function CloseChatMenu()
 	vm.win:Remove()
 end
@@ -21,7 +20,6 @@ function YRPChatChannel(edit, uid)
 	local win = YRPCreateD("YFrame", nil, YRP.ctr(1600), YRP.ctr(1360), 0, 0)
 	win:Center()
 	win:MakePopup()
-
 	if edit then
 		win:SetTitle("LID_edit")
 	else
@@ -33,7 +31,6 @@ function YRPChatChannel(edit, uid)
 	win.nameheader = YRPCreateD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(0))
 	win.nameheader:SetText("LID_name")
 	win.name = YRPCreateD("DTextEntry", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(50))
-
 	function win.name:OnChange()
 		name = win.name:GetText()
 	end
@@ -47,10 +44,8 @@ function YRPChatChannel(edit, uid)
 	win.modeheader = YRPCreateD("YLabel", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(0))
 	win.modeheader:SetText("LID_mode")
 	win.mode = YRPCreateD("DComboBox", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(50))
-
 	function win.mode:OnSelect(index, value, data)
 		mode = data
-
 		if YRPPanelAlive(win.structure2) then
 			if mode == 6 then
 				win.structure2header:Show()
@@ -62,23 +57,11 @@ function YRPChatChannel(edit, uid)
 		end
 	end
 
-	local modes = {
-		{"LID_globalchat", 0},
-		{"LID_localchat", 1},
-		{"LID_faction", 2},
-		{"LID_group", 3},
-		{"LID_role", 4},
-		{"LID_usergroup", 5},
-		{"LID_whisper", 6},
-		{"LID_custom", 9},
-	}
-
+	local modes = {{"LID_globalchat", 0}, {"LID_localchat", 1}, {"LID_faction", 2}, {"LID_group", 3}, {"LID_role", 4}, {"LID_usergroup", 5}, {"LID_whisper", 6}, {"LID_custom", 9},}
 	for i, v in pairs(modes) do
 		local selected = false
-
 		if edit and GetGlobalYRPTable("yrp_chat_channels")[uid] then
 			mode = tonumber(GetGlobalYRPTable("yrp_chat_channels")[uid].int_mode)
-
 			if isnumber(mode) and v[2] == mode then
 				selected = true
 			end
@@ -91,10 +74,8 @@ function YRPChatChannel(edit, uid)
 	win.structureheader = YRPCreateD("YLabel", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(150))
 	win.structureheader:SetText("LID_structure")
 	win.structure = YRPCreateD("DTextEntry", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(200))
-
 	function win.structure:OnChange()
 		structure = win.structure:GetText()
-
 		if YRPPanelAlive(win.previewrich) then
 			win.previewrich:UpdatePreview("structure")
 		end
@@ -102,7 +83,6 @@ function YRPChatChannel(edit, uid)
 
 	if edit and GetGlobalYRPTable("yrp_chat_channels")[uid] then
 		structure = GetGlobalYRPTable("yrp_chat_channels")[uid].string_structure
-
 		if isstring(structure) then
 			win.structure:SetText(structure)
 		end
@@ -111,7 +91,6 @@ function YRPChatChannel(edit, uid)
 	-- RPName
 	win.rpname = YRPCreateD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(0), YRP.ctr(250))
 	win.rpname:SetText("LID_rpname")
-
 	function win.rpname:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%RPNAME%")
 		structure = win.structure:GetText()
@@ -120,7 +99,6 @@ function YRPChatChannel(edit, uid)
 	-- STEAMNAME
 	win.steamname = YRPCreateD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), YRP.ctr(250))
 	win.steamname:SetText("LID_steamname")
-
 	function win.steamname:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%STEAMNAME%")
 		structure = win.structure:GetText()
@@ -129,7 +107,6 @@ function YRPChatChannel(edit, uid)
 	-- USERGROUP
 	win.usergroup = YRPCreateD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(640), YRP.ctr(250))
 	win.usergroup:SetText("LID_usergroup")
-
 	function win.usergroup:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%USERGROUP%")
 		structure = win.structure:GetText()
@@ -138,7 +115,6 @@ function YRPChatChannel(edit, uid)
 	-- IDCARDID
 	win.idcardid = YRPCreateD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(960), YRP.ctr(250))
 	win.idcardid:SetText("LID_idcardid")
-
 	function win.idcardid:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%IDCARDID%")
 		structure = win.structure:GetText()
@@ -147,7 +123,6 @@ function YRPChatChannel(edit, uid)
 	-- FACTION
 	win.faction = YRPCreateD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(0), YRP.ctr(310))
 	win.faction:SetText("LID_faction")
-
 	function win.faction:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%FACTION%")
 		structure = win.structure:GetText()
@@ -156,7 +131,6 @@ function YRPChatChannel(edit, uid)
 	-- GROUP
 	win.group = YRPCreateD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), YRP.ctr(310))
 	win.group:SetText("LID_group")
-
 	function win.group:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%GROUP%")
 		structure = win.structure:GetText()
@@ -165,7 +139,6 @@ function YRPChatChannel(edit, uid)
 	-- ROLE
 	win.role = YRPCreateD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(640), YRP.ctr(310))
 	win.role:SetText("LID_role")
-
 	function win.role:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%ROLE%")
 		structure = win.structure:GetText()
@@ -174,7 +147,6 @@ function YRPChatChannel(edit, uid)
 	-- USERGROUPCOLOr
 	win.rolecolor = YRPCreateD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(960), YRP.ctr(310))
 	win.rolecolor:SetText(YRP.trans("LID_role") .. " ( " .. YRP.trans("LID_color") .. " )")
-
 	function win.rolecolor:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%ROCOLOR%")
 		structure = win.structure:GetText()
@@ -183,7 +155,6 @@ function YRPChatChannel(edit, uid)
 	-- TEXT
 	win.text = YRPCreateD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(0), YRP.ctr(370))
 	win.text:SetText("LID_text")
-
 	function win.text:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%TEXT%")
 		structure = win.structure:GetText()
@@ -192,7 +163,6 @@ function YRPChatChannel(edit, uid)
 	-- TARGET
 	win.target = YRPCreateD("YButton", CON, YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), YRP.ctr(370))
 	win.target:SetText("LID_target")
-
 	function win.target:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%TARGET%")
 		structure = win.structure:GetText()
@@ -201,7 +171,6 @@ function YRPChatChannel(edit, uid)
 	-- USERGROUPCOLOr
 	win.usergroupcolor = YRPCreateD("YButton", CON, YRP.ctr(620), YRP.ctr(50), YRP.ctr(640), YRP.ctr(370))
 	win.usergroupcolor:SetText(YRP.trans("LID_usergroup") .. " ( " .. YRP.trans("LID_color") .. " )")
-
 	function win.usergroupcolor:DoClick()
 		win.structure:SetText(win.structure:GetText() .. "%UGCOLOR%")
 		structure = win.structure:GetText()
@@ -211,10 +180,8 @@ function YRPChatChannel(edit, uid)
 	win.structure2header = YRPCreateD("YLabel", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(450))
 	win.structure2header:SetText("BACK")
 	win.structure2 = YRPCreateD("DTextEntry", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(500))
-
 	function win.structure2:OnChange()
 		structure2 = win.structure2:GetText()
-
 		if YRPPanelAlive(win.previewrich) then
 			win.previewrich:UpdatePreview("structure2")
 		end
@@ -222,7 +189,6 @@ function YRPChatChannel(edit, uid)
 
 	if edit and GetGlobalYRPTable("yrp_chat_channels")[uid] then
 		structure2 = GetGlobalYRPTable("yrp_chat_channels")[uid].string_structure2
-
 		if isstring(structure2) then
 			win.structure2:SetText(structure2)
 		end
@@ -238,7 +204,6 @@ function YRPChatChannel(edit, uid)
 
 	-- enabled
 	win.enabled = YRPCreateD("DCheckBox", CON, YRP.ctr(50), YRP.ctr(50), YRP.ctr(0), YRP.ctr(600))
-
 	if edit and GetGlobalYRPTable("yrp_chat_channels")[uid] then
 		win.enabled:SetChecked(tobool(GetGlobalYRPTable("yrp_chat_channels")[uid].bool_enabled))
 	else
@@ -260,7 +225,6 @@ function YRPChatChannel(edit, uid)
 	win.previewtext = YRPCreateD("DTextEntry", CON, YRP.ctr(1600), YRP.ctr(50), YRP.ctr(0), YRP.ctr(750))
 	win.previewtext:SetText("")
 	win.previewtext:SetPlaceholderText("Example Text")
-
 	function win.previewtext:OnChange()
 		if YRPPanelAlive(win.previewrich) then
 			win.previewrich:UpdatePreview("previewtext")
@@ -269,12 +233,10 @@ function YRPChatChannel(edit, uid)
 
 	win.previewrich = YRPCreateD("RichText", CON, YRP.ctr(1600), YRP.ctr(200), YRP.ctr(0), YRP.ctr(800))
 	win.previewrich:SetText(win.structure:GetText())
-
 	function win.previewrich:UpdatePreview(from)
 		if YRPPanelAlive(win.previewrich) and YRPPanelAlive(win.previewtext) then
 			win.previewrich:SetText("")
 			local pk = YRPChatReplaceCMDS(win.structure:GetText(), LocalPlayer(), YRPReplaceWithPlayerNames(win.previewtext:GetText()))
-
 			if mode == 6 then
 				win.previewrich:InsertColorChange(255, 255, 255, 255)
 				win.previewrich:AppendText("Target chat:\n")
@@ -292,14 +254,12 @@ function YRPChatChannel(edit, uid)
 
 			if mode == 6 then
 				win.previewrich:AppendText("\n")
-
 				if mode == 6 then
 					win.previewrich:InsertColorChange(255, 255, 255, 255)
 					win.previewrich:AppendText("Own chat:\n")
 				end
 
 				local pk2 = YRPChatReplaceCMDS(win.structure2:GetText(), LocalPlayer(), YRPReplaceWithPlayerNames(win.previewtext:GetText()))
-
 				for i, v in pairs(pk2) do
 					if type(v) == "string" then
 						win.previewrich:AppendText(v)
@@ -313,20 +273,21 @@ function YRPChatChannel(edit, uid)
 		end
 
 		if from == "INIT" then
-			timer.Simple(0.5, function()
-				if win and win.previewrich then
-					win.previewrich:UpdatePreview(from)
+			timer.Simple(
+				0.5,
+				function()
+					if win and win.previewrich then
+						win.previewrich:UpdatePreview(from)
+					end
 				end
-			end)
+			)
 		end
 	end
 
 	win.previewrich:UpdatePreview("INIT")
-
 	if edit then
 		win.save = YRPCreateD("YButton", CON, YRP.ctr(760), YRP.ctr(50), 0, YRP.ctr(1170))
 		win.save:SetText("LID_save")
-
 		function win.save:Paint(pw, ph)
 			hook.Run("YButtonAPaint", self, pw, ph)
 		end
@@ -347,16 +308,17 @@ function YRPChatChannel(edit, uid)
 			net.WriteString(uid)
 			net.SendToServer()
 			win:Remove()
-
-			timer.Simple(0.4, function()
-				OpenChatMenu()
-			end)
+			timer.Simple(
+				0.4,
+				function()
+					OpenChatMenu()
+				end
+			)
 		end
 
 		if GetGlobalYRPTable("yrp_chat_channels")[uid] and GetGlobalYRPTable("yrp_chat_channels")[uid]["bool_removeable"] then
 			win.rem = YRPCreateD("YButton", CON, YRP.ctr(760), YRP.ctr(50), YRP.ctr(800), YRP.ctr(1170))
 			win.rem:SetText("LID_remove")
-
 			function win.rem:Paint(pw, ph)
 				hook.Run("YButtonRPaint", self, pw, ph)
 			end
@@ -366,16 +328,17 @@ function YRPChatChannel(edit, uid)
 				net.WriteString(uid)
 				net.SendToServer()
 				win:Remove()
-
-				timer.Simple(0.4, function()
-					OpenChatMenu()
-				end)
+				timer.Simple(
+					0.4,
+					function()
+						OpenChatMenu()
+					end
+				)
 			end
 		end
 	else
 		win.add = YRPCreateD("YButton", CON, YRP.ctr(760), YRP.ctr(50), 0, YRP.ctr(1170))
 		win.add:SetText("LID_add")
-
 		function win.add:Paint(pw, ph)
 			hook.Run("YButtonAPaint", self, pw, ph)
 		end
@@ -395,10 +358,12 @@ function YRPChatChannel(edit, uid)
 			net.WriteTable(prols)
 			net.SendToServer()
 			win:Remove()
-
-			timer.Simple(0.4, function()
-				OpenChatMenu()
-			end)
+			timer.Simple(
+				0.4,
+				function()
+					OpenChatMenu()
+				end
+			)
 		end
 	end
 end
@@ -415,25 +380,20 @@ function OpenChatMenu()
 	vm.win.list:SetSpacing(YRP.ctr(10))
 	local h = YRP.ctr(80)
 	local pbr = YRP.ctr(20)
-
 	for i, channel in pairs(GetGlobalYRPTable("yrp_chat_channels", {})) do
 		if lply:HasAccess("OpenChatMenu1") or lply:GetYRPBool("bool_chat") then
 			local line = YRPCreateD("DPanel", nil, CONTENT:GetWide(), h, 0, 0)
-
 			function line:Paint(pw, ph)
 			end
 
 			local bg = YRPCreateD("DPanel", line, CONTENT:GetWide() - YRP.ctr(26), h, 0, 0)
-
 			function bg:Paint(pw, ph)
 				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue("YFrame", "PC"))
 			end
 
 			local status = YRPCreateD("DPanel", bg, h, h, 0, 0)
-
 			function status:Paint(pw, ph)
 				local color = Color(255, 0, 0, 255)
-
 				if channel.bool_enabled == 1 then
 					color = Color(0, 255, 0, 255)
 				end
@@ -444,10 +404,8 @@ function OpenChatMenu()
 			if lply:HasAccess("OpenChatMenu2") or lply:GetYRPBool("bool_chat") then
 				local edit = YRPCreateD("DButton", bg, h, h, 0, 0)
 				edit:SetText("")
-
 				function edit:Paint(pw, ph)
 					local br = YRP.ctr(8)
-
 					if YRP.GetDesignIcon("edit") then
 						surface.SetMaterial(YRP.GetDesignIcon("edit"))
 						surface.SetDrawColor(Color(255, 255, 255, 255))
@@ -461,7 +419,6 @@ function OpenChatMenu()
 			end
 
 			local name = YRPCreateD("DPanel", bg, YRP.ctr(800), h, h + pbr, 0)
-
 			function name:Paint(pw, ph)
 				draw.SimpleText(channel.string_name, "Y_24_500", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
@@ -474,7 +431,6 @@ function OpenChatMenu()
 		local size = YRP.ctr(50)
 		vm.win.add = YRPCreateD("YButton", CONTENT, size, size, YRP.ctr(0), CONTENT:GetTall() - YRP.ctr(50))
 		vm.win.add:SetText("+")
-
 		function vm.win.add:Paint(pw, ph)
 			hook.Run("YButtonAPaint", self, pw, ph)
 		end

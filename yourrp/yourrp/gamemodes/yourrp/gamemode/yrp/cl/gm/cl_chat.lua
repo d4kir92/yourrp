@@ -2,11 +2,8 @@
 -- #CHAT
 yrpChat = yrpChat or {}
 local yrp_chat_show = false
-
 local commands = {"/rpname [NAME] NEWNAME", "!rpname [NAME] NEWNAME", "/pm NAME MESSAGE", "!pm NAME MESSAGE", "/w NAME MESSAGE", "!w NAME MESSAGE", "/afk", "!afk", "/dnd", "!dnd", "/help", "!help", "/dropweapon", "!dropweapon", "/dropmoney AMOUNT", "!dropmoney AMOUNT"}
-
 local admincommands = {"/tag_ug", "!tag_ug", "/tag_tra", "!tag_tra", "/setmoney NAME AMOUNT", "!setmoney NAME AMOUNT", "/addxp NAME AMOUNT", "!addxp NAME AMOUNT", "/addlevel NAME AMOUNT", "!addlevel NAME AMOUNT", "/setlevel NAME AMOUNT", "!setlevel NAME AMOUNT", "/revive NAME", "!revive NAME", "/alert TEXT", "!alert TEXT", "/givelicense NAME LICENSENAME", "!givelicense NAME LICENSENAME"}
-
 local yrp_logo = Material("yrp/yrp_icon")
 local words = 0
 local _delay = 4
@@ -23,7 +20,6 @@ local BOTBAR_H = 36
 local C_HE = Color(40, 130, 180, 255)
 local C_BG = Color(46, 46, 46, 255)
 local C_FG = Color(32, 32, 32, 255)
-
 local function IsChatVisible()
 	return _showChat
 end
@@ -35,7 +31,6 @@ end
 function SetChatMode(mode)
 	if type(mode) == "string" then
 		CHATMODE = string.upper(mode)
-
 		if IsNotNilAndNotFalse(yrpChat, "yrpChat") and YRPPanelAlive(yrpChat.comboBox, "yrpChat.comboBox") then
 			yrpChat.comboBox:SetText(CHATMODE)
 		end
@@ -44,9 +39,7 @@ end
 
 local function ContainsIp(...)
 	local tab = {...}
-
 	local str = ""
-
 	for i, v in pairs(tab) do
 		if isstring(v) then
 			str = str .. v
@@ -54,13 +47,10 @@ local function ContainsIp(...)
 	end
 
 	tab = string.Explode(" ", str)
-
 	for i, v in pairs(tab) do
 		local ex = string.Explode(".", v)
-
 		if table.Count(ex) == 4 then
 			local isip = true
-
 			for j, n in pairs(ex) do
 				if isnumber(tonumber(n)) then
 					if tonumber(n) > 255 then
@@ -82,10 +72,8 @@ end
 
 local function ChatBlacklisted(...)
 	local tab = {...}
-
 	local blacklist = GetGlobalYRPTable("yrp_blacklist_chat", {})
 	local str = ""
-
 	for i, v in pairs(tab) do
 		if isstring(v) then
 			str = str .. v
@@ -103,13 +91,10 @@ local function update_chat_choices()
 	if YRPPanelAlive(yrpChat.window, "yrpChat.window") and yrpChat.comboBox ~= nil then
 		yrpChat.comboBox:Clear()
 		chatids = {}
-
 		for i, v in pairs(GetGlobalYRPTable("yrp_chat_channels")) do
 			local enabled = tobool(v.bool_enabled)
-
 			if enabled then
 				local selected = false
-
 				if CHATMODE == v.string_name then
 					selected = true
 				end
@@ -121,16 +106,24 @@ local function update_chat_choices()
 	end
 end
 
-hook.Add("Think", "yrp_think_chat_choices", function()
-	if GetGlobalYRPTable("yrp_chat_channels", {}) ~= oldchoices then
-		oldchoices = GetGlobalYRPTable("yrp_chat_channels", {})
+hook.Add(
+	"Think",
+	"yrp_think_chat_choices",
+	function()
+		if GetGlobalYRPTable("yrp_chat_channels", {}) ~= oldchoices then
+			oldchoices = GetGlobalYRPTable("yrp_chat_channels", {})
+			update_chat_choices()
+		end
+	end
+)
+
+hook.Add(
+	"yrp_language_changed",
+	"chat_language_changed",
+	function()
 		update_chat_choices()
 	end
-end)
-
-hook.Add("yrp_language_changed", "chat_language_changed", function()
-	update_chat_choices()
-end)
+)
 
 function ChatIsClosedForChat()
 	if chatclosedforkeybinds and YRPIsChatEnabled("chatclosedforchat") then
@@ -142,7 +135,6 @@ end
 
 counti = counti or 0
 counti = counti + 1
-
 local function YRPCheckChatVisible()
 	if yrpChat.window ~= nil then
 		if CurTime() > _fadeout and not yrpChat.window:HasFocus() and not yrpChat.writeField:HasFocus() and not yrpChat.comboBox:HasFocus() and not yrpChat.settings:HasFocus() then
@@ -186,14 +178,12 @@ local function YRPCreateText()
 	newtext:SetMouseInputEnabled(false)
 	newtext:Dock(TOP)
 	newtext:SetVerticalScrollbarEnabled(false)
-
 	function newtext:Paint(pw, ph)
 	end
 
 	--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255,255,0,200) )
 	function newtext:GetFontSize()
 		local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue("CH", "TS")
-
 		if ts ~= nil then
 			ts = tonumber(ts)
 		end
@@ -212,7 +202,6 @@ local function YRPCreateText()
 
 	function newtext:PerformLayout()
 		local font = self:GetFontInternal()
-
 		if font then
 			if self.SetUnderlineFont ~= nil then
 				self:SetUnderlineFont(font)
@@ -227,20 +216,17 @@ local function YRPCreateText()
 
 	newtext:DockMargin(0, 0, 0, 4)
 	newtext.text = ""
-
 	function newtext:GetText()
 		return newtext.text
 	end
 
 	newtext.OldAppendText = newtext.AppendText
-
 	function newtext:AppendText(msg)
 		newtext.text = newtext.text .. msg
 		newtext:OldAppendText(msg)
 	end
 
 	newtext.OldInsertClickableTextStart = newtext.InsertClickableTextStart
-
 	function newtext:InsertClickableTextStart(signal)
 		newtext:SetMouseInputEnabled(true)
 		newtext:OldInsertClickableTextStart(signal)
@@ -253,7 +239,6 @@ local function InitYRPChat()
 	if YRPIsChatEnabled("InitYRPChat") then
 		local lply = LocalPlayer()
 		lply.yrp_timestamp = lply.yrp_timestamp or false
-
 		if yrpChat.window == nil then
 			-- MAIN FRAME
 			yrpChat.window = YRPCreateD("DFrame", nil, 100, 100, 100, 100)
@@ -261,16 +246,13 @@ local function InitYRPChat()
 			yrpChat.window:SetTitle("")
 			yrpChat.window:ShowCloseButton(false)
 			yrpChat.window:SetDraggable(false)
-
 			function yrpChat.window:Paint(pw, ph)
 				if IsChatVisible() then
 					draw.RoundedBoxEx(5, 0, 0, pw, TOPBAR_H, C_HE, true, true, false, false)
 					draw.RoundedBoxEx(5, 0, TOPBAR_H, pw, ph - TOPBAR_H, C_FG, false, false, true, true)
-
 					if self.logo then
 						if self.logo.svlogo ~= GetGlobalYRPString("text_server_logo", "") then
 							self.logo.svlogo = GetGlobalYRPString("text_server_logo", "")
-
 							if not strEmpty(GetGlobalYRPString("text_server_logo", "")) then
 								self.logo:SetHTML(GetHTMLImage(GetGlobalYRPString("text_server_logo", ""), TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR))
 								self.logo:Show()
@@ -288,13 +270,11 @@ local function InitYRPChat()
 
 					local x, y = yrpChat.window:GetPos()
 					local w, h = yrpChat.window:GetSize()
-
 					if lply.HudValue then
 						local px = lply:HudValue("CH", "POSI_X")
 						local py = lply:HudValue("CH", "POSI_Y")
 						local sw = lply:HudValue("CH", "SIZE_W")
 						local sh = lply:HudValue("CH", "SIZE_H")
-
 						--YRP.msg( "deb", "InitYRPChat x " .. x .. ", y " .. y .. ", w " .. w .. ", h " .. h .. ", px " .. px .. ", py " .. py .. ", sw " .. sw ..", sh " .. sh)
 						if px ~= x or py ~= y or sw ~= w or sh ~= h then
 							yrpChat.window:SetPos(px, py)
@@ -304,7 +284,6 @@ local function InitYRPChat()
 						local _com = yrpChat.writeField:GetText()
 						_com = string.upper(_com)
 						local test = string.sub(_com, 3)
-
 						if (string.StartWith(_com, "!S") or string.StartWith(_com, "/S")) and test ~= nil and chatids[test] ~= nil then
 							yrpChat.writeField:SetText("")
 							yrpChat.comboBox:ChooseOption(test)
@@ -319,11 +298,9 @@ local function InitYRPChat()
 			yrpChat.TopBar = YRPCreateD("DPanel", yrpChat.window, TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR, 0, 0)
 			yrpChat.TopBar:DockMargin(0, 0, 0, BR)
 			yrpChat.TopBar:Dock(TOP)
-
 			function yrpChat.TopBar:Paint(pw, ph)
 				if IsChatVisible() then
 					local name = GetGlobalYRPString("text_server_name", "")
-
 					if strEmpty(name) then
 						name = YRPGetHostName()
 					end
@@ -337,7 +314,6 @@ local function InitYRPChat()
 			yrpChat.BotBar = YRPCreateD("DPanel", yrpChat.window, BOTBAR_H - 2 * BR, BOTBAR_H - 2 * BR, 0, 0)
 			yrpChat.BotBar:DockMargin(0, BR, 0, 0)
 			yrpChat.BotBar:Dock(BOTTOM)
-
 			function yrpChat.BotBar:Paint(pw, ph)
 			end
 
@@ -348,7 +324,6 @@ local function InitYRPChat()
 			yrpChat.content:DockMargin(0, BR, 0, 0)
 			yrpChat.content.delay = 0
 			yrpChat.content.oldy = 0
-
 			function yrpChat.content:Paint(pw, ph)
 				if IsChatVisible() then
 					draw.RoundedBox(0, 0, 0, pw, ph, C_BG)
@@ -368,7 +343,6 @@ local function InitYRPChat()
 			end
 
 			local sbar = yrpChat.content.VBar
-
 			function sbar:Paint(w, h)
 				if IsChatVisible() then
 					draw.RoundedBox(0, 0, 0, w, h, Color(255, 255, 255, 10))
@@ -408,7 +382,6 @@ local function InitYRPChat()
 			yrpChat.comboBox:Dock(LEFT)
 			yrpChat.comboBox:DockMargin(0, 0, BR, 0)
 			update_chat_choices()
-
 			function yrpChat.comboBox:Paint(pw, ph)
 				surface.SetDrawColor(Color(255, 255, 255, 0))
 				surface.DrawRect(0, 0, pw, ph)
@@ -426,11 +399,9 @@ local function InitYRPChat()
 			yrpChat.settings:Dock(RIGHT)
 			yrpChat.settings:DockMargin(BR, 0, 0, 0)
 			yrpChat.settings:SetText("")
-
 			function yrpChat.settings:Paint(pw, ph)
 				local w = pw - pw % 4
 				local h = ph - ph % 4
-
 				if YRP.GetDesignIcon("64_cog") ~= nil then
 					surface.SetDrawColor(Color(255, 255, 255, 255))
 					surface.SetMaterial(YRP.GetDesignIcon("64_cog"))
@@ -447,7 +418,6 @@ local function InitYRPChat()
 				tila:SetText("Timestamp")
 				local ticb = YRPCreateD("DCheckBox", win:GetContent(), 25, 25, 0, 0)
 				ticb:SetChecked(lply.yrp_timestamp)
-
 				function ticb:OnChange()
 					lply.yrp_timestamp = not lply.yrp_timestamp
 				end
@@ -458,10 +428,8 @@ local function InitYRPChat()
 				tsnw:SetValue(LocalPlayer().CH_TS or LocalPlayer():HudValue("CH", "TS"))
 				tsnw:SetMin(10)
 				tsnw:SetMax(64)
-
 				function tsnw:OnValueChanged(val)
 					local v = tsnw:GetValue()
-
 					if v >= 10 and v <= 64 then
 						LocalPlayer().CH_TS = tsnw:GetValue()
 					end
@@ -473,10 +441,8 @@ local function InitYRPChat()
 				denw:SetValue(LocalPlayer():GetYRPInt("int_chatdelay", 4))
 				denw:SetMin(1)
 				denw:SetMax(50)
-
 				function denw:OnValueChanged(val)
 					local v = denw:GetValue()
-
 					if v >= 1 and v <= 50 then
 						net.Start("nws_yrp_chatdelay")
 						net.WriteInt(v, 8)
@@ -488,10 +454,8 @@ local function InitYRPChat()
 			yrpChat.writeField = YRPCreateD("DTextEntry", yrpChat.BotBar, 0, BOTBAR_H - 2 * BR, 0, 0)
 			yrpChat.writeField:Dock(BOTTOM)
 			yrpChat.writeField:SetHistoryEnabled(true)
-
 			function yrpChat.writeField:GetAutoComplete(text)
 				local suggestions = {}
-
 				for _, ply in ipairs(player.GetAll()) do
 					if string.StartWith(ply:RPName(), text) then
 						table.insert(suggestions, ply:Nick())
@@ -517,7 +481,6 @@ local function InitYRPChat()
 
 			function yrpChat.writeField:PerformLayout()
 				local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue("CH", "TS")
-
 				if ts > 6 then
 					if self.SetUnderlineFont ~= nil then
 						self:SetUnderlineFont("Y_" .. ts .. "_500")
@@ -552,21 +515,22 @@ local function InitYRPChat()
 					if not strEmpty(string.Trim(self:GetText())) then
 						local tex = self:GetText()
 						local text = ""
-
 						for i = 0, 10 do
-							timer.Simple(2 * i, function()
-								if not strEmpty(string.Trim(tex)) then
-									text = string.sub(tex, 1, 120)
-									tex = string.sub(tex, 121)
-									yrpChat.writeField:AddHistory(text)
-
-									if string.StartWith(text, "!") or string.StartWith(text, "/") or string.StartWith(text, "@") then
-										LocalPlayer():ConCommand("say \"" .. text .. "\"")
-									else
-										LocalPlayer():ConCommand("say \"!" .. CHATMODE .. " " .. text .. "\"")
+							timer.Simple(
+								2 * i,
+								function()
+									if not strEmpty(string.Trim(tex)) then
+										text = string.sub(tex, 1, 120)
+										tex = string.sub(tex, 121)
+										yrpChat.writeField:AddHistory(text)
+										if string.StartWith(text, "!") or string.StartWith(text, "/") or string.StartWith(text, "@") then
+											LocalPlayer():ConCommand("say \"" .. text .. "\"")
+										else
+											LocalPlayer():ConCommand("say \"!" .. CHATMODE .. " " .. text .. "\"")
+										end
 									end
 								end
-							end)
+							)
 						end
 					end
 
@@ -613,10 +577,12 @@ local function InitYRPChat()
 					gamemode.Call("ChatTextChanged", "")
 					yrpChat.window:SetMouseInputEnabled(false)
 					yrpChat.window:SetKeyboardInputEnabled(false)
-
-					timer.Simple(0.1, function()
-						chatclosedforkeybinds = true
-					end)
+					timer.Simple(
+						0.1,
+						function()
+							chatclosedforkeybinds = true
+						end
+					)
 				end
 			end
 
@@ -634,12 +600,9 @@ local function InitYRPChat()
 
 			function chat.AddText(...)
 				if ContainsIp(...) or ChatBlacklisted(...) then return end
-
 				local args = {...}
-
 				local last = args[#args]
 				local istext = true
-
 				if last and type(last) == "string" and (string.EndsWith(last, ".jpeg") or string.EndsWith(last, ".jpg") or string.EndsWith(last, ".png") or string.EndsWith(last, ".gif")) then
 					istext = false
 				end
@@ -647,7 +610,6 @@ local function InitYRPChat()
 				if istext then
 					local newtext = YRPCreateText()
 					_delay = 3
-
 					if lply.yrp_timestamp and YRPIsChatEnabled("chataddtext") then
 						local clock = {}
 						clock.sec = os.date("%S")
@@ -669,7 +631,6 @@ local function InitYRPChat()
 					end]]
 					for i, obj in pairs(args) do
 						local t = string.lower(type(obj))
-
 						if t == "table" then
 							if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
 								newtext:InsertColorChange(obj.r, obj.g, obj.b, 255)
@@ -677,7 +638,6 @@ local function InitYRPChat()
 						elseif t == "string" then
 							_delay = _delay + string.len(obj)
 							local _text = string.Explode(" ", obj)
-
 							for k, str in pairs(_text) do
 								if not strEmpty(str) then
 									words = words + 1
@@ -691,19 +651,16 @@ local function InitYRPChat()
 								_l.l_www = false
 								_l.l_secure = false
 								_l.l_start = string.find(str, "https://", 1, true)
-
 								if _l.l_start ~= nil then
 									_l.l_secure = true
 								else
 									_l.l_secure = false
 									_l.l_start = string.find(str, "http://", 1, true)
-
 									if _l.l_start == nil then
 										_l.l_www = true
 										_l.l_start = string.find(str, "www.", 1, true)
 									else
 										_l.l_start = string.find(str, ".", 1, true)
-
 										if _l.l_start ~= nil then
 											_l.l_point = true
 										end
@@ -713,7 +670,6 @@ local function InitYRPChat()
 								if _l.l_start ~= nil then
 									_l.l_end = #str
 									local _link = string.sub(str, _l.l_start, _l.l_end)
-
 									if _l.l_www then
 										_link = "https://" .. _link
 									end
@@ -729,7 +685,6 @@ local function InitYRPChat()
 										newtext:AppendText(_link)
 										newtext:InsertClickableTextEnd() -- End clickable text here
 										newtext:InsertColorChange(255, 255, 255, 255)
-
 										function newtext:ActionSignal(signalName, signalValue)
 											if signalName == "TextClicked" and signalValue == _link then
 												gui.OpenURL(_link)
@@ -739,7 +694,6 @@ local function InitYRPChat()
 								else
 									if string.find(str, "<", 1, true) then
 										local nstr = string.Explode("<", str)
-
 										for id, v in pairs(nstr) do
 											YRPChatChangeYRPTextColor(newtext, v, "red", Color(255, 0, 0, 255))
 											YRPChatChangeYRPTextColor(newtext, v, "green", Color(0, 255, 0, 255))
@@ -761,7 +715,6 @@ local function InitYRPChat()
 							end
 						elseif t == "entity" and obj:IsPlayer() then
 							local col = GAMEMODE:GetTeamColor(obj)
-
 							if isnumber(tonumber(col.r)) and isnumber(tonumber(col.g)) and isnumber(tonumber(col.b)) then
 								yrpChat.richText:InsertColorChange(col.r, col.g, col.b, 255)
 								newtext:AppendText(obj:Nick())
@@ -774,7 +727,6 @@ local function InitYRPChat()
 							--YRP.msg( "error", "chat.addtext (entity): " .. tostring(obj) )
 							-- invalid players
 							local col = GAMEMODE:GetTeamColor(obj)
-
 							if isnumber(tonumber(col.r)) and isnumber(tonumber(col.g)) and isnumber(tonumber(col.b)) then
 								newtext:InsertColorChange(col.r, col.g, col.b, 255)
 								newtext:AppendText(obj:RPName())
@@ -793,7 +745,6 @@ local function InitYRPChat()
 
 					_fadeout = CurTime() + LocalPlayer():GetYRPInt("int_chatdelay", 4)
 					local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue("CH", "TS")
-
 					if ts > 0 then
 						surface.SetFont("Y_" .. ts .. "_500")
 					end
@@ -807,7 +758,6 @@ local function InitYRPChat()
 					local w = lply:HudValue("CH", "SIZE_W")
 					--local h = lply:HudValue("CH", "SIZE_H")
 					local newtext = YRPCreateText()
-
 					if args[1] and type(args[1]) == "table" then
 						local col = args[1]
 						newtext:InsertColorChange(col.r, col.g, col.b, 255)
@@ -818,7 +768,6 @@ local function InitYRPChat()
 					end
 
 					local ts = LocalPlayer().CH_TS or LocalPlayer():HudValue("CH", "TS")
-
 					if ts > 0 then
 						surface.SetFont("Y_" .. ts .. "_500")
 					end
@@ -838,7 +787,6 @@ local function InitYRPChat()
 
 			yrpChat.content:GoToEnd()
 			yrpChat.content:GoToEnd()
-
 			function YRPChatThink()
 				if YRPPanelAlive(yrpChat.window, "yrpChat.window 3") then
 					YRPCheckChatVisible()
@@ -853,7 +801,6 @@ end
 
 local function CheckIfRemoved()
 	local wasremoved = false
-
 	if YRPPanelAlive(yrpChat.window, "yrpChat.window 4") then
 		yrpChat.window:Remove()
 		yrpChat.window = nil
@@ -871,116 +818,132 @@ local function CheckIfRemoved()
 end
 
 timer.Simple(0, CheckIfRemoved)
-
-hook.Add("PlayerBindPress", "yrp_overrideChatbind", function(ply, bind, pressed)
-	if YRPIsChatEnabled("PlayerBindPress") then
-		local bTeam = nil
-
-		if bind == "messagemode" then
-			bTeam = false
-		elseif bind == "messagemode2" then
-			bTeam = true
-		else
-			return
-		end
-
-		if YRPPanelAlive(yrpChat.window, "yrpChat.window 6") then
-			yrpChat:openChatbox(bTeam)
-		else
-			if not YRPPanelAlive(yrpChat.window, "yrpChat.window 7") and YRPIsChatEnabled("PlayerBindPress2") then
-				InitYRPChat()
+hook.Add(
+	"PlayerBindPress",
+	"yrp_overrideChatbind",
+	function(ply, bind, pressed)
+		if YRPIsChatEnabled("PlayerBindPress") then
+			local bTeam = nil
+			if bind == "messagemode" then
+				bTeam = false
+			elseif bind == "messagemode2" then
+				bTeam = true
+			else
+				return
 			end
 
-			if not YRPPanelAlive(yrpChat.window, "yrpChat.window 8") and YRPIsChatEnabled("PlayerBindPress3") then
-				notification.AddLegacy("[YourRP] [yrp_overrideChatbind] ChatBox Window broken", NOTIFY_ERROR, 10)
+			if YRPPanelAlive(yrpChat.window, "yrpChat.window 6") then
+				yrpChat:openChatbox(bTeam)
+			else
+				if not YRPPanelAlive(yrpChat.window, "yrpChat.window 7") and YRPIsChatEnabled("PlayerBindPress2") then
+					InitYRPChat()
+				end
+
+				if not YRPPanelAlive(yrpChat.window, "yrpChat.window 8") and YRPIsChatEnabled("PlayerBindPress3") then
+					notification.AddLegacy("[YourRP] [yrp_overrideChatbind] ChatBox Window broken", NOTIFY_ERROR, 10)
+				end
 			end
+
+			return true
 		end
-
-		return true
 	end
-end)
+)
 
-hook.Add("ChatText", "yrp_serverNotifications", function(index, name, text, typ)
-	local lply = LocalPlayer()
-
-	if lply:IsValid() and YRPIsChatEnabled("ChatText") then
-		if typ == "none" and YRPPanelAlive(yrpChat.content, "yrpChat.window 9") and lply:HasAccess("chat2") then
-			notification.AddLegacy(text, NOTIFY_GENERIC, 6)
+hook.Add(
+	"ChatText",
+	"yrp_serverNotifications",
+	function(index, name, text, typ)
+		local lply = LocalPlayer()
+		if lply:IsValid() and YRPIsChatEnabled("ChatText") then
+			if typ == "none" and YRPPanelAlive(yrpChat.content, "yrpChat.window 9") and lply:HasAccess("chat2") then
+				notification.AddLegacy(text, NOTIFY_GENERIC, 6)
+			end
+		else
+			if typ == "none" then return true end
+			if typ == "joinleave" then return true end
 		end
-	else
-		if typ == "none" then return true end
-		if typ == "joinleave" then return true end
 	end
-end)
+)
 
-hook.Add("HUDShouldDraw", "yrp_noMoreDefault", function(name)
-	local lply = LocalPlayer()
-	if lply:IsValid() and YRPIsChatEnabled("HUDShouldDraw") and name == "CHudChat" then return false end
-end)
-
-net.Receive("yrpsendanim", function()
-	local ply = net.ReadEntity()
-	local slot = net.ReadInt(32)
-	local activity = net.ReadInt(32)
-	local loop = net.ReadBool()
-
-	if ply:IsValid() and IsNotNilAndNotFalse(slot) and IsNotNilAndNotFalse(activity) and IsNotNilAndNotFalse(loop) then
-		ply:AnimRestartGesture(slot, activity, loop)
+hook.Add(
+	"HUDShouldDraw",
+	"yrp_noMoreDefault",
+	function(name)
+		local lply = LocalPlayer()
+		if lply:IsValid() and YRPIsChatEnabled("HUDShouldDraw") and name == "CHudChat" then return false end
 	end
-end)
+)
 
-net.Receive("yrpstopanim", function()
-	local ply = net.ReadEntity()
-	local slot = net.ReadInt(32)
-
-	if ply:IsValid() and IsNotNilAndNotFalse(slot) then
-		ply:AnimResetGestureSlot(slot)
+net.Receive(
+	"yrpsendanim",
+	function()
+		local ply = net.ReadEntity()
+		local slot = net.ReadInt(32)
+		local activity = net.ReadInt(32)
+		local loop = net.ReadBool()
+		if ply:IsValid() and IsNotNilAndNotFalse(slot) and IsNotNilAndNotFalse(activity) and IsNotNilAndNotFalse(loop) then
+			ply:AnimRestartGesture(slot, activity, loop)
+		end
 	end
-end)
+)
 
-net.Receive("nws_yrp_player_say", function(len)
-	local pk = net.ReadTable()
+net.Receive(
+	"yrpstopanim",
+	function()
+		local ply = net.ReadEntity()
+		local slot = net.ReadInt(32)
+		if ply:IsValid() and IsNotNilAndNotFalse(slot) then
+			ply:AnimResetGestureSlot(slot)
+		end
+	end
+)
 
-	for i, v in pairs(pk) do
-		if isstring(v) then
-			local s, _ = string.find(v, "LID_", 1, true)
-
-			if s then
-				local s2, _ = string.find(v, ";", 1, true)
-
-				if s2 then
-					local lid = string.sub(v, s, s2 - 1)
-					lid = string.Trim(lid)
-					pk[i] = string.Replace(pk[i], lid, YRP.trans(lid))
-					pk[i] = string.Replace(pk[i], ";", "")
+net.Receive(
+	"nws_yrp_player_say",
+	function(len)
+		local pk = net.ReadTable()
+		for i, v in pairs(pk) do
+			if isstring(v) then
+				local s, _ = string.find(v, "LID_", 1, true)
+				if s then
+					local s2, _ = string.find(v, ";", 1, true)
+					if s2 then
+						local lid = string.sub(v, s, s2 - 1)
+						lid = string.Trim(lid)
+						pk[i] = string.Replace(pk[i], lid, YRP.trans(lid))
+						pk[i] = string.Replace(pk[i], ";", "")
+					end
 				end
 			end
 		end
+
+		chat.AddText(unpack(pk))
+		chat.PlaySound()
 	end
+)
 
-	chat.AddText(unpack(pk))
-	chat.PlaySound()
-end)
-
-hook.Add("OnPlayerChat", "YRPHideCommands", function(ply, strText, bTeam, bDead)
-	if string.StartWith(strText, "!") or string.StartWith(strText, "/") or string.StartWith(strText, "@") then
-		local channel = string.Explode(" ", strText, false)
-		channel = channel[1] or ""
-		channel = string.Replace(channel, "!", "")
-		channel = string.Replace(channel, "/", "")
-		channel = string.lower(channel)
-		local ischannel = false
-
-		for i, v in pairs(GetGlobalYRPTable("yrp_chat_channels")) do
-			if string.lower(v.string_name) == channel then
-				ischannel = true
+hook.Add(
+	"OnPlayerChat",
+	"YRPHideCommands",
+	function(ply, strText, bTeam, bDead)
+		if string.StartWith(strText, "!") or string.StartWith(strText, "/") or string.StartWith(strText, "@") then
+			local channel = string.Explode(" ", strText, false)
+			channel = channel[1] or ""
+			channel = string.Replace(channel, "!", "")
+			channel = string.Replace(channel, "/", "")
+			channel = string.lower(channel)
+			local ischannel = false
+			for i, v in pairs(GetGlobalYRPTable("yrp_chat_channels")) do
+				if string.lower(v.string_name) == channel then
+					ischannel = true
+				end
 			end
-		end
 
-		if not ischannel then
-			YRP.msg("note", "HIDE COMMANDS: " .. tostring(strText))
-		end
+			if not ischannel then
+				YRP.msg("note", "HIDE COMMANDS: " .. tostring(strText))
+			end
 
-		return true
+			return true
+		end
 	end
-end)
+)

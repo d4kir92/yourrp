@@ -1,6 +1,5 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local Player = FindMetaTable("Player")
-
 if CLIENT then
 	function Player:GetHudDesignName()
 		if self:GetYRPString("string_hud", "serverdefault") ~= "serverdefault" then
@@ -17,23 +16,16 @@ if CLIENT then
 	-- string element for example "health", art for example "SIZE_W"
 	function Player:HudValue(element, art)
 		local hfloats = {"POSI_X", "POSI_Y", "SIZE_W", "SIZE_H"}
-
 		local hbools = {"VISI", "ROUN", "ICON", "TEXT", "PERC", "BACK", "BORD", "EXTR"}
-
 		local hcolors = {"TE", "TB", "BG", "BA", "BR"}
-
 		local hints = {"AX", "AY", "TS"}
-
 		local hstrings = {"CTEX"}
-
 		if YRPHUD ~= nil then
 			if table.HasValue(hfloats, art) then
 				--local f_val = self:GetYRPFloat( "float_HUD_" .. element .. "_" .. art, -1.0)
 				local f_val = YRPHUD("float_HUD_" .. element .. "_" .. art, -1.0)
-
 				if art == "POSI_X" or art == "SIZE_W" then
 					f_val = f_val * ScW()
-
 					if art == "POSI_X" and BiggerThen16_9() then
 						f_val = f_val + PosX()
 					end
@@ -62,7 +54,6 @@ if CLIENT then
 				end
 			elseif table.HasValue(hints, art) then
 				local ay = YRPHUD("int_HUD_" .. element .. "_" .. art, -1)
-
 				if art == "AY" then
 					if ay == 3 then
 						ay = 0
@@ -86,15 +77,10 @@ if CLIENT then
 
 	function Player:HudElement(element)
 		local hfloats = {"POSI_X", "POSI_Y", "SIZE_W", "SIZE_H"}
-
 		local hbools = {"VISI", "ROUN", "ICON", "TEXT", "PERC", "BACK", "BORD", "EXTR"}
-
 		local hcolors = {"TE", "TB", "BG", "BA", "BR"}
-
 		local hints = {"AX", "AY", "TS"}
-
 		local ele = {}
-
 		for i, v in pairs(hfloats) do
 			ele[v] = self:HudValue(element, v)
 		end
@@ -116,7 +102,6 @@ if CLIENT then
 
 	function Player:HudElementVisible(element)
 		if self:HudValue(element, "VISI") == false then return false end
-
 		if not self:Alive() then
 			return false
 		elseif element == "CA" then
@@ -137,7 +122,6 @@ if CLIENT then
 			return IsLevelSystemEnabled()
 		elseif element == "WP" then
 			local weapon = self:GetActiveWeapon()
-
 			if weapon:IsValid() then
 				local clip1max = weapon:GetMaxClip1()
 				local ammo1 = self:GetAmmoCount(weapon:GetPrimaryAmmoType())
@@ -148,7 +132,6 @@ if CLIENT then
 			return false
 		elseif element == "WS" then
 			local weapon = self:GetActiveWeapon()
-
 			if weapon:IsValid() then
 				local clip2max = weapon:GetMaxClip2()
 				local ammo2 = self:GetAmmoCount(weapon:GetSecondaryAmmoType())
@@ -169,7 +152,6 @@ if CLIENT then
 			return self:Armor() >= 0
 		elseif element == "WN" then
 			local weapon = self:GetActiveWeapon()
-
 			if weapon:IsValid() then
 				return true
 			else

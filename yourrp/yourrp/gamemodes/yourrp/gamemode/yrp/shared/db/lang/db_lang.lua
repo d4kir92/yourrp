@@ -30,7 +30,6 @@ table.insert(yrp_shorts, "tr")
 table.insert(yrp_shorts, "uk")
 table.insert(yrp_shorts, "zh-cn")
 table.insert(yrp_shorts, "zh-tw")
-
 function YRP.GetLanguageAutoInfo()
 	local auto = {}
 	auto.inenglish = "Automatic"
@@ -43,7 +42,6 @@ end
 
 AddCSLuaFile("read_lang.lua")
 include("read_lang.lua")
-
 function YRP.set_lang_string(var, str)
 	var = tostring(var)
 	str = tostring(str)
@@ -73,7 +71,6 @@ end
 local hascontent = false
 local hasfakecontent = false
 local searchedforcontent = false
-
 function YRPTestContentAddons()
 	if engine.GetAddons() and table.Count(engine.GetAddons()) <= 0 then
 		YRP.msg("note", "CAN'T GET ADDON LIST")
@@ -81,15 +78,12 @@ function YRPTestContentAddons()
 
 	if (not searchedforcontent or hascontent == false) and SERVER and engine.GetAddons() and table.Count(engine.GetAddons()) > 0 then
 		searchedforcontent = true
-
 		for i, addon in pairs(engine.GetAddons()) do
 			if addon.wsid then
 				addon.wsid = tostring(addon.wsid)
-
 				if addon.wsid == "1189643820" then
 					hascontent = true
 					SetGlobalYRPBool("yrp_hascontent", true)
-
 					if not addon.mounted or not addon.downloaded then
 						YRP.msg("note", "YOURRP CONTENT IS NOT MOUNTED/DOWNLOADED!")
 					end
@@ -112,10 +106,14 @@ function YRPTestDarkrpmodification()
 	end
 end
 
-hook.Add("PostGamemodeLoaded", "Check_YourRP_Content", function()
-	YRPTestContentAddons()
-	YRPTestDarkrpmodification()
-end)
+hook.Add(
+	"PostGamemodeLoaded",
+	"Check_YourRP_Content",
+	function()
+		YRPTestContentAddons()
+		YRPTestDarkrpmodification()
+	end
+)
 
 function HasYRPContent()
 	return GetGlobalYRPBool("yrp_hascontent", false) or hascontent
@@ -136,22 +134,17 @@ function PrintLIDError(var)
 end
 
 local nf = {}
-
 function YRP.trans(var, vals)
 	var = tostring(var)
-
 	if string.StartWith(var, "LID_") then
 		local va = "LID_" .. string.lower(string.sub(var, 5))
-
 		-- if is not modified
 		if va == var then
 			local translation = yrp_current_lang[string.lower(var)]
-
 			-- IF NOT FOUND
 			if not IsNotNilAndNotFalse(translation) then
 				if CLIENT then
 					LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
-
 					if nf[var] == nil and LocalPlayer().LoadedGamemode and LocalPlayer():LoadedGamemode() and LocalPlayer().badyourrpcontent ~= "" then
 						nf[var] = var
 						PrintLIDError(var)
@@ -218,14 +211,12 @@ end
 function YRP.read_language(short, init)
 	short = tostring(short)
 	local default = false
-
 	if short == "en" then
 		default = true
 	end
 
 	if not init then
 		YRP.read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
-
 		if not default then
 			YRP.msg("lang", "Get Language-Pack [" .. YRP.trans("LID_initshort") .. "] " .. YRP.trans("LID_initlanguage") .. "/" .. YRP.trans("LID_initinenglish"))
 		end
@@ -267,28 +258,23 @@ function YRP.LoadLanguage(short, init)
 	end
 
 	short = tostring(short)
-
 	if init then
 		YRP.read_language(short, init)
 	else
 		if short == "auto" then
 			YRP.msg("lang", "[AUTOMATIC DETECTION]")
 			YRP.search_language()
-
 			if yrp_current_lang.get_language ~= "" then
 				short = string.lower(yrp_current_lang.get_language)
 				YRP.msg("lang", "Found Language: " .. "[" .. short .. "]")
-
 				if not YRP.check_languagepack() then
 					short = "en"
-
 					if CLIENT then
 						YRP.msg("lang", "Can't find Language-Pack, using Default-Language-Pack.")
 					end
 				end
 			else
 				short = "en"
-
 				if CLIENT then
 					YRP.msg("lang", "Can't find Language from Game, using Default-Language-Pack.")
 				end
@@ -316,7 +302,6 @@ end
 
 function YRP.add_language(short)
 	short = tostring(short)
-
 	if yrp_button_info[short] == nil then
 		yrp_button_info[short] = {}
 	end

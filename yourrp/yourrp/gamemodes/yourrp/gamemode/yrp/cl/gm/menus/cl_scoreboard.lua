@@ -2,78 +2,89 @@
 -- #scoreboard #Scoreboard #SCOREBOARD
 local color1 = Color(0, 0, 0, 255)
 local color2 = Color(255, 255, 255, 255)
+surface.CreateFont(
+	"Open Sans_60",
+	{
+		font = "Open Sans",
+		extended = true,
+		size = 60,
+		weight = 700,
+		blursize = 0,
+		scanlines = 0,
+		antialias = true,
+		underline = false,
+		italic = false,
+		strikeout = false,
+		symbol = false,
+		rotary = false,
+		shadow = false,
+		additive = false,
+		outline = false
+	}
+)
 
-surface.CreateFont("Open Sans_60", {
-	font = "Open Sans",
-	extended = true,
-	size = 60,
-	weight = 700,
-	blursize = 0,
-	scanlines = 0,
-	antialias = true,
-	underline = false,
-	italic = false,
-	strikeout = false,
-	symbol = false,
-	rotary = false,
-	shadow = false,
-	additive = false,
-	outline = false
-})
+surface.CreateFont(
+	"Open Sans_28",
+	{
+		font = "Open Sans",
+		extended = true,
+		size = 28,
+		weight = 700,
+		blursize = 0,
+		scanlines = 0,
+		antialias = true,
+		underline = false,
+		italic = false,
+		strikeout = false,
+		symbol = false,
+		rotary = false,
+		shadow = false,
+		additive = false,
+		outline = false
+	}
+)
 
-surface.CreateFont("Open Sans_28", {
-	font = "Open Sans",
-	extended = true,
-	size = 28,
-	weight = 700,
-	blursize = 0,
-	scanlines = 0,
-	antialias = true,
-	underline = false,
-	italic = false,
-	strikeout = false,
-	symbol = false,
-	rotary = false,
-	shadow = false,
-	additive = false,
-	outline = false
-})
+surface.CreateFont(
+	"Open Sans_24",
+	{
+		font = "Open Sans",
+		extended = true,
+		size = 24,
+		weight = 500,
+		blursize = 0,
+		scanlines = 0,
+		antialias = true,
+		underline = false,
+		italic = false,
+		strikeout = false,
+		symbol = false,
+		rotary = false,
+		shadow = false,
+		additive = false,
+		outline = false
+	}
+)
 
-surface.CreateFont("Open Sans_24", {
-	font = "Open Sans",
-	extended = true,
-	size = 24,
-	weight = 500,
-	blursize = 0,
-	scanlines = 0,
-	antialias = true,
-	underline = false,
-	italic = false,
-	strikeout = false,
-	symbol = false,
-	rotary = false,
-	shadow = false,
-	additive = false,
-	outline = false
-})
-
-surface.CreateFont("Open Sans_16", {
-	font = "Open Sans",
-	extended = true,
-	size = 16,
-	weight = 500,
-	blursize = 0,
-	scanlines = 0,
-	antialias = true,
-	underline = false,
-	italic = false,
-	strikeout = false,
-	symbol = false,
-	rotary = false,
-	shadow = false,
-	additive = false,
-	outline = false
-})
+surface.CreateFont(
+	"Open Sans_16",
+	{
+		font = "Open Sans",
+		extended = true,
+		size = 16,
+		weight = 500,
+		blursize = 0,
+		scanlines = 0,
+		antialias = true,
+		underline = false,
+		italic = false,
+		strikeout = false,
+		symbol = false,
+		rotary = false,
+		shadow = false,
+		additive = false,
+		outline = false
+	}
+)
 
 local xn = 160
 local alwaysshow = {}
@@ -81,7 +92,6 @@ alwaysshow["avatar"] = true
 alwaysshow["ping"] = true
 alwaysshow["mute"] = true
 alwaysshow["scroll"] = true
-
 local function YRPIsElementEnabled(name)
 	if alwaysshow[name] then return true end
 
@@ -183,7 +193,6 @@ local eles = {
 
 local size = 40
 local hr = 2
-
 function YRPNotSelf(ply)
 	return ply ~= LocalPlayer()
 end
@@ -203,7 +212,6 @@ end
 function YRPSortScoreboard()
 	if not YRPPanelAlive(YRPScoreboard, "YRPScoreboard 3") then return end
 	local lply = LocalPlayer()
-
 	if lply.yrp_sb_reverse == nil then
 		lply.yrp_sb_reverse = false
 	end
@@ -219,19 +227,16 @@ function YRPSortScoreboard()
 	YRPScoreboard.id = YRPScoreboard.id + 1
 	local id = YRPScoreboard.id
 	local plys = {}
-
 	for i, ply in pairs(player.GetAll()) do
 		if IsValid(ply) then
 			local entry = {}
 			entry.ply = ply
 			entry.rolename = ply:GetRoleUID()
-
 			if entry.rolename <= 0 then
 				entry.rolename = 999999
 			end
 
 			entry.groupname = ply:GetGroupUID()
-
 			if entry.groupname <= 0 then
 				entry.groupname = 999999
 			end
@@ -249,16 +254,17 @@ function YRPSortScoreboard()
 	end
 
 	local c = 0
-
 	if IsNotNilAndNotFalse(lply.yrp_sb_sortby) and lply.yrp_sb_reverse ~= nil then
 		for i, entry in SortedPairsByMemberValue(plys, lply.yrp_sb_sortby, lply.yrp_sb_reverse) do
 			c = c + 1
-
-			timer.Simple(c * 0.01, function()
-				if YRPScoreboard and YRPScoreboard.id == id and entry and entry.ply then
-					YRPScoreboardAddPlayer(entry.ply)
+			timer.Simple(
+				c * 0.01,
+				function()
+					if YRPScoreboard and YRPScoreboard.id == id and entry and entry.ply then
+						YRPScoreboardAddPlayer(entry.ply)
+					end
 				end
-			end)
+			)
 		end
 	end
 end
@@ -271,10 +277,8 @@ function YRPScoreboardAddPlayer(ply)
 		plyframe.open = false
 		plyframe.targh = size
 		plyframe.lerph = size
-
 		function plyframe:Paint(pw, ph)
 			self.lerph = Lerp(8 * FrameTime(), self.lerph, self.targh)
-
 			if self.open then
 				self.targh = size * 2
 			else
@@ -282,7 +286,6 @@ function YRPScoreboardAddPlayer(ply)
 			end
 
 			self:SetTall(self.lerph)
-
 			if self.open then
 				draw.RoundedBox(0, 1, 1, pw - 2, ph - 2, Color(0, 0, 0, 100))
 			end
@@ -291,7 +294,6 @@ function YRPScoreboardAddPlayer(ply)
 		-- First Line
 		local plypnl = YRPCreateD("DPanel", plyframe, size, size, 0, 0)
 		plypnl:Dock(TOP)
-
 		function plypnl:Paint(pw, ph)
 			if IsValid(ply) then
 				if self.Mute then
@@ -309,13 +311,11 @@ function YRPScoreboardAddPlayer(ply)
 		end
 
 		local x = 0
-
 		for i, v in ipairs(eles) do
 			if YRPIsElementEnabled(v.name) then
 				if v.name == "avatar" then
 					local avatarp = YRPCreateD("DPanel", plypnl, v.size, size, 0, 0)
 					avatarp:Dock(LEFT)
-
 					function avatarp:Paint(pw, ph)
 						local br = 3
 						draw.RoundedBox(0, br, br, pw - 2 * br, ph - 2 * br, Color(255, 255, 255, 255))
@@ -330,7 +330,6 @@ function YRPScoreboardAddPlayer(ply)
 					plypnl.Mute:SetText("")
 					plypnl.Mute:Dock(LEFT)
 					plypnl.Muted = ply:IsMuted()
-
 					plypnl.Mute.DoClick = function(s)
 						if IsValid(ply) then
 							ply:SetMuted(not ply:IsMuted())
@@ -347,7 +346,6 @@ function YRPScoreboardAddPlayer(ply)
 					plypnl.Mute.Paint = function(s, w, h)
 						if IsValid(ply) then
 							local img = YRP.GetDesignIcon("volume_up")
-
 							if ply:GetVoiceVolumeScale() <= 0.0 then
 								img = YRP.GetDesignIcon("volume_off")
 							elseif ply:GetVoiceVolumeScale() <= 0.25 then
@@ -373,7 +371,6 @@ function YRPScoreboardAddPlayer(ply)
 							end
 
 							local a = 255 - math.Clamp(CurTime() - (s.LastTick or 0), 0, 3) * 255
-
 							if a > 0 then
 								color1.a = a * 0.75
 								color2.a = a
@@ -386,17 +383,14 @@ function YRPScoreboardAddPlayer(ply)
 					local plyinf = YRPCreateD("DButton", plypnl, v.size, 32, 0, 0)
 					plyinf:SetText("")
 					plyinf:Dock(LEFT)
-
 					function plyinf:Paint(pw, ph)
 						if IsValid(ply) and v.func and ply[v.func] then
 							local text = ply[v.func](ply)
-
 							if v.name == "usergroup" then
 								text = string.upper(text)
 							end
 
 							local font = "Open Sans_24"
-
 							if ply:LoadedGamemode() and YRP.GetDesignIcon("circle") and v.cfun and ply[v.cfun] and ply:CharID() > 0 then
 								local circlesize = ph * 0.4
 								surface.SetFont(font)
@@ -419,11 +413,9 @@ function YRPScoreboardAddPlayer(ply)
 								local px = pw / 2
 								local ax = TEXT_ALIGN_CENTER
 								local col = Color(255, 255, 255, 255)
-
 								if v.name == "ping" then
 									local br = 4
 									local mat = YRP.GetDesignIcon("signal3")
-
 									if text >= 300 then
 										col = Color(255, 0, 0, 255)
 										mat = YRP.GetDesignIcon("signal1")
@@ -505,11 +497,9 @@ function YRPScoreboardAddPlayer(ply)
 		-- Second Line
 		local plyopt2 = YRPCreateD("DPanel", plyframe, size, size, 0, 0)
 		plyopt2:Dock(FILL)
-
 		function plyopt2:Paint(pw, ph)
 			local iconsize = math.ceil(ph * 0.666)
 			local br = (ph - iconsize) / 2
-
 			if IsValid(ply) and LocalPlayer():HasAccess("YRPScoreboardAddPlayer1") then
 				-- Money
 				if YRP.GetDesignIcon("64_money-bill") then
@@ -523,7 +513,6 @@ function YRPScoreboardAddPlayer(ply)
 			end
 
 			local text = "GMOD: "
-
 			if ply:GetYRPString("gmod_beta", "unknown") ~= "unknown" then
 				text = text .. ply:GetYRPString("gmod_beta", "unknown")
 			else
@@ -536,15 +525,17 @@ function YRPScoreboardAddPlayer(ply)
 		local adminbtns = YRPCreateD("DHorizontalScroller", plyopt2, size, size, 0, 0)
 		--adminbtns:Dock( RIGHT )
 		adminbtns:SetOverlap(-10)
-
 		function adminbtns:Paint(pw, ph)
 		end
 
 		--
 		local btns = {}
-
 		btns[1] = {
-			"LID_account", "account", false, false, function()
+			"LID_account",
+			"account",
+			false,
+			false,
+			function()
 				if IsValid(ply) then
 					ply:ShowProfile()
 				end
@@ -552,7 +543,11 @@ function YRPScoreboardAddPlayer(ply)
 		}
 
 		btns[2] = {
-			"LID_info", "128_info-circle", false, false, function()
+			"LID_info",
+			"128_info-circle",
+			false,
+			false,
+			function()
 				if IsValid(ply) and ply:YRPSteamID() and ply:SteamID() then
 					SetClipboardText("SteamID: \t" .. ply:YRPSteamID() .. " \nRPName: \t" .. ply:RPName() .. " \nSteamName: \t" .. ply:SteamName())
 					notification.AddLegacy("[" .. string.upper(YRP.trans("LID_info")) .. "] COPIED TO CLIPBOARD", NOTIFY_GENERIC, 3)
@@ -563,7 +558,11 @@ function YRPScoreboardAddPlayer(ply)
 		}
 
 		btns[3] = {
-			"LID_tpto", "128_arrow-circle-up", true, true, function()
+			"LID_tpto",
+			"128_arrow-circle-up",
+			true,
+			true,
+			function()
 				if IsValid(ply) and YRPNotSelf(ply) then
 					net.Start("nws_yrp_tp_tpto")
 					net.WriteEntity(ply)
@@ -573,7 +572,11 @@ function YRPScoreboardAddPlayer(ply)
 		}
 
 		btns[4] = {
-			"LID_bring", "128_arrow-circle-down", true, true, function()
+			"LID_bring",
+			"128_arrow-circle-down",
+			true,
+			true,
+			function()
 				if IsValid(ply) and YRPNotSelf(ply) then
 					net.Start("nws_yrp_tp_bring")
 					net.WriteEntity(ply)
@@ -583,7 +586,11 @@ function YRPScoreboardAddPlayer(ply)
 		}
 
 		btns[5] = {
-			"LID_return", "return", true, false, function()
+			"LID_return",
+			"return",
+			true,
+			false,
+			function()
 				if IsValid(ply) then
 					net.Start("nws_yrp_tp_return")
 					net.WriteEntity(ply)
@@ -602,7 +609,11 @@ function YRPScoreboardAddPlayer(ply)
 		}
 
 		btns[6] = {
-			"LID_freeze", "128_snowflake", true, false, function()
+			"LID_freeze",
+			"128_snowflake",
+			true,
+			false,
+			function()
 				if IsValid(ply) then
 					if not ply:IsFlagSet(FL_FROZEN) then
 						net.Start("nws_yrp_freeze")
@@ -627,7 +638,11 @@ function YRPScoreboardAddPlayer(ply)
 		}
 
 		btns[7] = {
-			"LID_spectate", "eye", true, true, function()
+			"LID_spectate",
+			"eye",
+			true,
+			true,
+			function()
 				if IsValid(ply) and YRPNotSelf(ply) then
 					local frame = vgui.Create("DFrame")
 					frame:SetTitle(ply:RPName() .. " [" .. ply:SteamName() .. "]")
@@ -635,31 +650,32 @@ function YRPScoreboardAddPlayer(ply)
 					frame:Center()
 					frame:SetScreenLock(true)
 					frame:SetSizable(true)
-
 					--frame:MakePopup()
 					function frame:Paint(w, h)
 						if IsValid(ply) then
 							local px, py = self:GetPos()
-
-							local tr = util.TraceHull({
-								start = ply:EyePos(),
-								endpos = ply:EyePos() - (ply:GetAimVector() * 200),
-								filter = ply,
-								mins = Vector(-10, -10, -10),
-								maxs = Vector(10, 10, 10),
-								mask = MASK_SHOT_HULL
-							})
+							local tr = util.TraceHull(
+								{
+									start = ply:EyePos(),
+									endpos = ply:EyePos() - (ply:GetAimVector() * 200),
+									filter = ply,
+									mins = Vector(-10, -10, -10),
+									maxs = Vector(10, 10, 10),
+									mask = MASK_SHOT_HULL
+								}
+							)
 
 							local old = DisableClipping(true) -- Avoid issues introduced by the natural clipping of Panel rendering
-
-							render.RenderView({
-								origin = tr.HitPos, --ply:EyePos() - ply:GetRenderAngles():Forward() * 200,
-								angles = ply:GetRenderAngles(), -- + LocalPlayer():GetAngles(),
-								x = px,
-								y = py,
-								w = w,
-								h = h
-							})
+							render.RenderView(
+								{
+									origin = tr.HitPos, --ply:EyePos() - ply:GetRenderAngles():Forward() * 200,
+									angles = ply:GetRenderAngles(), -- + LocalPlayer():GetAngles(),
+									x = px,
+									y = py,
+									w = w,
+									h = h
+								}
+							)
 
 							DisableClipping(old)
 						else
@@ -671,7 +687,11 @@ function YRPScoreboardAddPlayer(ply)
 		}
 
 		btns[8] = {
-			"LID_cloak", "incognito", true, false, function()
+			"LID_cloak",
+			"incognito",
+			true,
+			false,
+			function()
 				if IsValid(ply) then
 					if not ply:GetYRPBool("cloaked", false) then
 						net.Start("nws_yrp_cloak")
@@ -696,7 +716,11 @@ function YRPScoreboardAddPlayer(ply)
 		}
 
 		btns[9] = {
-			"LID_kick", "128_fist-raised", true, true, function()
+			"LID_kick",
+			"128_fist-raised",
+			true,
+			true,
+			function()
 				if IsValid(ply) then
 					net.Start("nws_yrp_ply_kick")
 					net.WriteEntity(ply)
@@ -706,7 +730,11 @@ function YRPScoreboardAddPlayer(ply)
 		}
 
 		btns[10] = {
-			"LID_ban", "128_gavel", true, true, function()
+			"LID_ban",
+			"128_gavel",
+			true,
+			true,
+			function()
 				if IsValid(ply) then
 					net.Start("nws_yrp_ply_ban")
 					net.WriteEntity(ply)
@@ -716,7 +744,6 @@ function YRPScoreboardAddPlayer(ply)
 		}
 
 		local c = 0
-
 		for i, btn in pairs(btns) do
 			if not btn[3] or (btn[3] and LocalPlayer():HasAccess("YRPScoreboardAddPlayer2")) and (not btn[4] or (btn[4] and YRPNotSelf(ply))) then
 				c = c + 1
@@ -725,11 +752,9 @@ function YRPScoreboardAddPlayer(ply)
 				b:SetText("")
 				b.icon = btn[2]
 				b.iconcolor = Color(255, 255, 255, 255)
-
 				function b:Paint(pw, ph)
 					local iconsize = math.ceil(ph * 0.666)
 					local br = (ph - iconsize) / 2
-
 					if self:IsDown() or self:IsPressed() then
 						if not self.clicked then
 							self.clicked = true
@@ -746,10 +771,8 @@ function YRPScoreboardAddPlayer(ply)
 							self.tt:SetTitle("")
 							self.tt:ShowCloseButton(false)
 							self.tt:SetDraggable(false)
-
 							function self.tt:Paint(ppw, pph)
 								draw.SimpleText(YRP.trans(btn[1]), "Y_16_500", ppw / 2, pph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
 								if not YRPIsScoreboardVisible() then
 									self:Remove()
 								end
@@ -763,21 +786,18 @@ function YRPScoreboardAddPlayer(ply)
 					else
 						self.hovering = false
 						self.clicked = false
-
 						if YRPPanelAlive(self.tt) then
 							self.tt:Remove()
 						end
 					end
 
 					local alpha = 100
-
 					if self:IsHovered() then
 						alpha = 255
 					end
 
 					local color = self.iconcolor
 					color.a = alpha
-
 					if YRP.GetDesignIcon(btn[2]) then
 						surface.SetMaterial(YRP.GetDesignIcon(btn[2]))
 						surface.SetDrawColor(color)
@@ -807,18 +827,15 @@ function YRPOpenSBS()
 	-- Table Header
 	YRPScoreboard.Header:Clear()
 	local x = 0
-
 	for i, v in ipairs(eles) do
 		if YRPIsElementEnabled(v.name) then
 			local sortbtn = YRPCreateD("DButton", YRPScoreboard.Header, v.size, 40, x, 0)
 			sortbtn:SetText("")
 			sortbtn:Dock(LEFT)
-
 			function sortbtn:Paint(pw, ph)
 				local siz = 16 + 4
 				local px = pw / 2
 				local text = YRP.trans(v.tran)
-
 				if v.name == "level" and string.len(text) > 3 then
 					text = string.sub(text, 1, 3)
 					text = text .. "."
@@ -855,36 +872,35 @@ function YRPOpenSBS()
 		end
 	end
 
-	timer.Simple(0.05, function()
-		if YRPPanelAlive(YRPScoreboard, "YRPScoreboard 6") then
-			local sw = 0
+	timer.Simple(
+		0.05,
+		function()
+			if YRPPanelAlive(YRPScoreboard, "YRPScoreboard 6") then
+				local sw = 0
+				for i, v in pairs(YRPScoreboard.Header:GetChildren()) do
+					sw = sw + v:GetWide()
+				end
 
-			for i, v in pairs(YRPScoreboard.Header:GetChildren()) do
-				sw = sw + v:GetWide()
+				YRPScoreboard.Header:SetWide(sw)
+				YRPScoreboard:SetWide(sw + 4 * 2)
+				YRPScoreboard:Center()
+				YRPScoreboard:Show()
+				gui.EnableScreenClicker(true)
+				YRPSortScoreboard()
 			end
-
-			YRPScoreboard.Header:SetWide(sw)
-			YRPScoreboard:SetWide(sw + 4 * 2)
-			YRPScoreboard:Center()
-			YRPScoreboard:Show()
-			gui.EnableScreenClicker(true)
-			YRPSortScoreboard()
 		end
-	end)
+	)
 end
 
 local yrp_logo = Material("yrp/yrp_icon")
-
 function YRPDrawOrder(self, x, y, text, font, art)
 	local lply = LocalPlayer()
-
 	if lply.yrp_sb_sortby == art then
 		surface.SetFont(font)
 		local sw, _ = surface.GetTextSize(text)
 		local siz = 16
 		x = x + sw / 2 + 4
 		y = y - siz / 2
-
 		local triangle = {
 			{
 				x = x + 0,
@@ -937,10 +953,8 @@ function YRPInitScoreboard()
 	YRPScoreboard:SetDraggable(false)
 	YRPScoreboard.delay = 0
 	YRPScoreboard.w = ScrW()
-
 	function YRPScoreboard:Paint(pw, ph)
 		Derma_DrawBackgroundBlur(self, 0)
-
 		if self.amount ~= player.GetCount() then
 			self.amount = player.GetCount()
 			YRPOpenSBS()
@@ -949,7 +963,6 @@ function YRPInitScoreboard()
 		if self.logo then
 			if self.logo.svlogo ~= GetGlobalYRPString("text_server_logo", "") then
 				self.logo.svlogo = GetGlobalYRPString("text_server_logo", "")
-
 				if not strEmpty(GetGlobalYRPString("text_server_logo", "")) then
 					YRPScoreboard.logo:SetHTML(GetHTMLImage(GetGlobalYRPString("text_server_logo", ""), 128, 128))
 					YRPScoreboard.logo:Show()
@@ -978,7 +991,6 @@ function YRPInitScoreboard()
 		-- BOTTOM LEFT
 		local br = 2
 		local server = ""
-
 		if GAMEMODE.dedicated then
 			server = " [Dedicated]"
 		end
@@ -988,7 +1000,6 @@ function YRPInitScoreboard()
 
 	YRPScoreboard.BotBar = YRPCreateD("DPanel", YRPScoreboard, 128, 32, 0, 0)
 	YRPScoreboard.BotBar:Dock(BOTTOM)
-
 	function YRPScoreboard.BotBar:Paint(pw, ph)
 		-- Table Footer
 		draw.RoundedBox(5, 0, 0, YRPScoreboard.w, hr, Color(255, 255, 255, 255))
@@ -999,11 +1010,9 @@ function YRPInitScoreboard()
 
 	YRPScoreboard.TopBar = YRPCreateD("DPanel", YRPScoreboard, 128, 128, 0, 0)
 	YRPScoreboard.TopBar:Dock(TOP)
-
 	function YRPScoreboard.TopBar:Paint(pw, ph)
 		-- NAME
 		local name = GetGlobalYRPString("text_server_name", "")
-
 		if strEmpty(name) then
 			name = YRPGetHostName()
 		end
@@ -1013,7 +1022,6 @@ function YRPInitScoreboard()
 
 	YRPScoreboard.Header = YRPCreateD("DPanel", YRPScoreboard, 32, 32, 0, 0)
 	YRPScoreboard.Header:Dock(TOP)
-
 	function YRPScoreboard.Header:Paint(pw, ph)
 		draw.RoundedBox(5, 0, 32 - hr, pw, hr, Color(255, 255, 255, 255))
 	end
@@ -1021,13 +1029,11 @@ function YRPInitScoreboard()
 	YRPScoreboard.list = YRPCreateD("DScrollPanel", YRPScoreboard, 100, 100, 0, 0)
 	YRPScoreboard.list:Dock(FILL)
 	YRPScoreboard.list:SetPadding(0)
-
 	function YRPScoreboard.list:Paint(pw, ph)
 	end
 
 	--
 	local sbar = YRPScoreboard.list.VBar
-
 	if IsValid(sbar) then
 		function sbar:Paint(w, h)
 			draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
@@ -1052,7 +1058,6 @@ function YRPInitScoreboard()
 end
 
 YRPInitScoreboard()
-
 function GM:ScoreboardShow()
 	if GetGlobalYRPBool("bool_yrp_scoreboard") then
 		YRPOpenSBS()

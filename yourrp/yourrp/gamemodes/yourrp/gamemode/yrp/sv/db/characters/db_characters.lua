@@ -1319,6 +1319,29 @@ net.Receive(
 	end
 )
 
+function YRPGetSpecNames(charID)
+	local nettab = {}
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charID .. "'")
+	if tab and tab[1] then
+		tab = tab[1]
+		if tab.string_specializations ~= nil then
+			for i, v in pairs(string.Explode(",", tab.string_specializations)) do
+				local tabSpec = YRP_SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
+				if tabSpec and tabSpec[1] then
+					tabSpec = tabSpec[1]
+					table.insert(nettab, tabSpec.name)
+				end
+			end
+		end
+	end
+
+	if #nettab == 0 then
+		table.insert(nettab, "-")
+	end
+
+	return nettab
+end
+
 function YRPGetSpecData(ply)
 	local charid = ply:CharID()
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")

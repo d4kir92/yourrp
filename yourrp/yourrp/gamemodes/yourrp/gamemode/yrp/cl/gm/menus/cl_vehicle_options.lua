@@ -1,7 +1,6 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #VEHICLEOPTIONS
 local yrp_vehicle = {}
-
 function YRPToggleVehicleOptions(vehicle, vehicleID)
 	if YRPIsNoMenuOpen() and not YRPPanelAlive(yrp_vehicle.window) then
 		openVehicleOptions(vehicle, vehicleID)
@@ -12,20 +11,22 @@ end
 
 function closeVehicleOptions()
 	YRPCloseMenu()
-
 	if YRPPanelAlive(yrp_vehicle.window) then
 		yrp_vehicle.window:Close()
 		yrp_vehicle.window = nil
 	end
 end
 
-net.Receive("nws_yrp_getVehicleInfo", function(len)
-	if net.ReadBool() then
-		local vehicle = net.ReadEntity()
-		local _tmpVehicle = net.ReadTable()
-		optionVehicleWindow(vehicle, _tmpVehicle)
+net.Receive(
+	"nws_yrp_getVehicleInfo",
+	function(len)
+		if net.ReadBool() then
+			local vehicle = net.ReadEntity()
+			local _tmpVehicle = net.ReadTable()
+			optionVehicleWindow(vehicle, _tmpVehicle)
+		end
 	end
-end)
+)
 
 function optionVehicleWindow(vehicle, vehicleTab)
 	YRPOpenMenu()
@@ -33,7 +34,6 @@ function optionVehicleWindow(vehicle, vehicleTab)
 	yrp_vehicle.window = createVGUI("YFrame", nil, 1090, 160, 0, 0)
 	yrp_vehicle.window:Center()
 	yrp_vehicle.window:SetTitle("")
-
 	function yrp_vehicle.window:Close()
 		yrp_vehicle.window:Remove()
 	end
@@ -49,7 +49,6 @@ function optionVehicleWindow(vehicle, vehicleTab)
 	local ownercharid = vehicleTab[1].ownerCharID
 	ownercharid = tonumber(ownercharid)
 	local owner = ""
-
 	for i, v in pairs(player.GetAll()) do
 		if v:CharID() == ownercharid then
 			owner = v:RPName()
@@ -57,7 +56,6 @@ function optionVehicleWindow(vehicle, vehicleTab)
 	end
 
 	yrp_vehicle.window:SetTitle(YRP.trans("LID_owner") .. ": " .. owner)
-
 	function yrp_vehicle.window:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph)
 		draw.RoundedBox(0, YRP.ctr(4), YRP.ctr(160), pw - YRP.ctr(8), YRP.ctr(70 - 4), Color(255, 255, 0, 200))
@@ -66,12 +64,10 @@ function optionVehicleWindow(vehicle, vehicleTab)
 	if lply:HasAccess("optionVehicleWindow") or (vehicle:GetRPOwner() and LocalPlayer() == vehicle:GetRPOwner()) then
 		local _buttonRemoveOwner = createVGUI("YButton", yrp_vehicle.window, 530, 50, 545, 170)
 		_buttonRemoveOwner:SetText("")
-
 		function _buttonRemoveOwner:DoClick()
 			net.Start("nws_yrp_removeVehicleOwner")
 			net.WriteString(vehicleTab[1].uniqueID)
 			net.SendToServer()
-
 			if YRPPanelAlive(yrp_vehicle.window) then
 				yrp_vehicle.window:Close()
 			end

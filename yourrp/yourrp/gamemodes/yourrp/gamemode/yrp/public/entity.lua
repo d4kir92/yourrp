@@ -3,7 +3,6 @@
 --[[ Entity Functions ]]
 --
 local Entity = FindMetaTable("Entity")
-
 function Entity:GetRPOwner()
 	return self:GetYRPEntity("yrp_owner", NULL)
 end
@@ -24,7 +23,6 @@ end
 
 function Entity:IsCoOwner(ply)
 	local coownerIDs = self:GetYRPString("coownerCharIDs", "")
-
 	if not strEmpty(coownerIDs) then
 		for k, v in pairs(string.Explode(",", coownerIDs)) do
 			if not strEmpty(v) and tonumber(v) == ply:CharID() then return true end

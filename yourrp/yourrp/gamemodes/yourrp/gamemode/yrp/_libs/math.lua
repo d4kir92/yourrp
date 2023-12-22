@@ -2,7 +2,6 @@
 -- Screen
 local HA = {}
 HA.w = 0
-
 function HScrW()
 	return ScrW()
 end
@@ -46,7 +45,6 @@ end
 -- Frame Settings
 local fw = 2400
 local fh = 1600
-
 function FW()
 	return YRP.ctr(fw)
 end
@@ -104,7 +102,6 @@ end
 
 function ggT(_num1, _num2)
 	local _ggt = _num1 % _num2
-
 	while _ggt ~= 0 do
 		_num1 = _num2
 		_num2 = _ggt
@@ -129,7 +126,6 @@ end
 function lowerToScreen(w, h)
 	local tmpW = w
 	local tmpH = h
-
 	if w > ScrW() then
 		local per = tmpW / ScrW()
 		tmpW = tmpW / per
@@ -152,7 +148,6 @@ function ctrF(tmpNumber)
 end
 
 YRP = YRP or {}
-
 function YRP.ctr(input)
 	if input ~= nil then
 		return math.Round((tonumber(input) / 2160) * ScrH(), 0)

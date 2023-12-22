@@ -1,6 +1,5 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local sp = sp or {}
-
 function IsSpVisible()
 	return sp.visible
 end
@@ -23,7 +22,6 @@ end
 
 function closeSP()
 	YRPCloseMenu()
-
 	if sp ~= nil and sp.visible then
 		sp.visible = false
 		sp:Close()

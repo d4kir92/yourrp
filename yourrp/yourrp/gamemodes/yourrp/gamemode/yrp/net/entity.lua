@@ -3,7 +3,6 @@ local NWSystem = 2
 local ENTITY = FindMetaTable("Entity")
 YRPDEBUGENTITY = false
 local c = {}
-
 -- ANGLE
 function ENTITY:GetYRPAngle(key, value)
 	if IsValid(self) then
@@ -204,7 +203,6 @@ if YRPDEBUGENTITY then
 	YRPDEBUGENTITY_V = YRPDEBUGENTITY_V or 0
 	YRPDEBUGENTITY_V = YRPDEBUGENTITY_V + 1
 	local v = YRPDEBUGENTITY_V
-
 	local function ShowStatsLoop()
 		if pTab then
 			MsgC(Color(0, 255, 0), "YRP - ENTITY:\n")

@@ -7,7 +7,6 @@ include("player/interface.lua")
 --[[ Player Functions ]]
 --
 local Player = FindMetaTable("Player")
-
 function Player:GetRagdollEntity()
 	return self:GetYRPEntity("yrp_ragdoll", NULL)
 end
@@ -16,7 +15,6 @@ function Player:YRPRevive(pos)
 	if not IsValid(self) then return end
 	self.ignorespawnpoint = true
 	self:Spawn()
-
 	if pos and isvector(pos) then
 		self:SetPos(pos)
 	end
@@ -24,7 +22,6 @@ end
 
 function Player:Battery()
 	local battery = system.BatteryPower()
-
 	if battery > 100 then
 		battery = 100
 	end
@@ -217,7 +214,6 @@ end
 
 function Player:Condition()
 	local _sttext = ""
-
 	if self:IsBleeding() then
 		if _sttext ~= "" then
 			_sttext = _sttext .. ", "
@@ -347,14 +343,12 @@ end
 
 function string.point(num)
 	if num == nil then return num end
-
 	if isnumber(num) then
 		num = string.format("%f", num)
 		num = string.match(num, "^(.-)%.?0*$") -- Remove trailing zeros
 	end
 
 	local k
-
 	while true do
 		num, k = string.gsub(num, "^(-?%d+)(%d%d%d)", "%1.%2")
 		if k == 0 then break end
@@ -372,7 +366,6 @@ if CLIENT then
 
 	function MoneyFormatRounded(money, round)
 		round = round or 1
-
 		if round > 3 then
 			round = 3
 		elseif round < 0 then
@@ -399,7 +392,6 @@ end
 
 function Player:FormattedMoneyRounded(round)
 	round = round or 1
-
 	if round > 3 then
 		round = 3
 	elseif round < 0 then
@@ -411,7 +403,6 @@ end
 
 function Player:FormattedMoneyBankRounded(round)
 	round = round or 1
-
 	if round > 3 then
 		round = 3
 	elseif round < 0 then
@@ -423,7 +414,6 @@ end
 
 function Player:FormattedSalaryRounded(round)
 	round = round or 1
-
 	if round > 3 then
 		round = 3
 	elseif round < 0 then
@@ -504,11 +494,9 @@ end
 function Player:GetRoleName()
 	if self.YRPGetRoleName then
 		local RoleName = self:YRPGetRoleName()
-
 		if IsValid(self) then
 			local prefix = self:GetYRPString("spec_prefix", "")
 			local suffix = self:GetYRPString("spec_suffix", "")
-
 			if not strEmpty(prefix) then
 				RoleName = prefix .. " " .. RoleName
 			end
@@ -542,7 +530,6 @@ function Player:GetLicenseIDs()
 	local LIDs1 = self:GetYRPString("licenseIDs1", "")
 	local LIDs2 = self:GetYRPString("licenseIDs2", "")
 	local LIDs3 = self:GetYRPString("licenseIDs3", "")
-
 	if self.LIDs == nil or self.licenseIDsVersion ~= self:GetYRPInt("licenseIDsVersion", 0) then
 		self.licenseIDsVersion = self:GetYRPInt("licenseIDsVersion", 0)
 		self.LIDs = {}

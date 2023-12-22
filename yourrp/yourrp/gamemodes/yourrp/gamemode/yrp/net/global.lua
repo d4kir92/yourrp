@@ -3,7 +3,6 @@ local NWSystem = 2
 YRP_Global_Tables = YRP_Global_Tables or {}
 YRPDEBUGGLOBAL = false
 local c = {}
-
 if SERVER then
 	util.AddNetworkString("YRPSetGlobalYRPTable")
 	util.AddNetworkString("YRPGetGlobalYRPTables")
@@ -16,7 +15,6 @@ end
 function SetGlobalYRPTable(key, value)
 	if key and value and type(key) == "string" and type(value) == "table" then
 		YRP_Global_Tables[key] = value
-
 		if SERVER then
 			net.Start("YRPSetGlobalYRPTable")
 			net.WriteString(key)
@@ -29,31 +27,44 @@ function SetGlobalYRPTable(key, value)
 end
 
 if SERVER then
-	net.Receive("YRPGetGlobalYRPTables", function(len, ply)
-		for key, value in pairs(YRP_Global_Tables) do
-			if key and value and type(key) == "string" and type(value) == "table" then
-				net.Start("YRPSetGlobalYRPTable")
-				net.WriteString(key)
-				net.WriteTable(value)
-				net.Send(ply)
+	net.Receive(
+		"YRPGetGlobalYRPTables",
+		function(len, ply)
+			for key, value in pairs(YRP_Global_Tables) do
+				if key and value and type(key) == "string" and type(value) == "table" then
+					net.Start("YRPSetGlobalYRPTable")
+					net.WriteString(key)
+					net.WriteTable(value)
+					net.Send(ply)
+				end
 			end
 		end
-	end)
+	)
 end
 
 if CLIENT then
-	net.Receive("YRPSetGlobalYRPTable", function(len)
-		local key = net.ReadString()
-		local tab = net.ReadTable()
-		SetGlobalYRPTable(key, tab)
-	end)
+	net.Receive(
+		"YRPSetGlobalYRPTable",
+		function(len)
+			local key = net.ReadString()
+			local tab = net.ReadTable()
+			SetGlobalYRPTable(key, tab)
+		end
+	)
 
-	hook.Add("PostGamemodeLoaded", "yrp_PostGamemodeLoaded_GlobalTable", function()
-		timer.Simple(0.1, function()
-			net.Start("YRPGetGlobalYRPTables")
-			net.SendToServer()
-		end)
-	end)
+	hook.Add(
+		"PostGamemodeLoaded",
+		"yrp_PostGamemodeLoaded_GlobalTable",
+		function()
+			timer.Simple(
+				0.1,
+				function()
+					net.Start("YRPGetGlobalYRPTables")
+					net.SendToServer()
+				end
+			)
+		end
+	)
 end
 
 -- OTHER (REDUCE SET NETWORKING)
@@ -130,7 +141,6 @@ end
 
 function SetGlobalYRPFloat(index, value)
 	value = tonumber(value)
-
 	if math.abs(GetGlobalYRPFloat(index) - value) > 0.0001 or value == 0 then
 		if NWSystem == 1 then
 			SetGlobalFloat(index, value)
@@ -153,7 +163,6 @@ end
 
 function SetGlobalYRPInt(index, value)
 	value = tonumber(value)
-
 	if GetGlobalYRPInt(index) ~= value or value == 0 then
 		if NWSystem == 1 then
 			SetGlobalInt(index, value)
@@ -216,7 +225,6 @@ if YRPDEBUGGLOBAL then
 	YRPDEBUGGLOBAL_V = YRPDEBUGGLOBAL_V or 0
 	YRPDEBUGGLOBAL_V = YRPDEBUGGLOBAL_V + 1
 	local v = YRPDEBUGGLOBAL_V
-
 	local function ShowStatsLoop()
 		if pTab then
 			MsgC(Color(0, 255, 0), "YRP - GLOBAL:\n")

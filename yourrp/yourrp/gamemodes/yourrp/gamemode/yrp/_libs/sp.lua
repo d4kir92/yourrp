@@ -1,13 +1,16 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _load = 0
-
-timer.Create("_load", 1, 0, function()
-	_load = _load + 25
-
-	if _load > 100 then
-		_load = 0
+timer.Create(
+	"_load",
+	1,
+	0,
+	function()
+		_load = _load + 25
+		if _load > 100 then
+			_load = 0
+		end
 	end
-end)
+)
 
 function drawBattery(x)
 	local y = ctrb(6)
@@ -20,7 +23,6 @@ function drawBattery(x)
 	--Grey Form of Battery
 	draw.RoundedBox(0, x + ctrb(_ba.w - _ba.ws) / 2, y, ctrb(_ba.ws), ctrb(_ba.hs), Color(100, 100, 100, 200))
 	draw.RoundedBox(0, x, y + ctrb(_ba.hs), ctrb(_ba.w), ctrb(_ba.h - _ba.hs), Color(100, 100, 100, 200))
-
 	if _bp > 100 then
 		_bp = _load
 		_text = 100
@@ -48,20 +50,22 @@ end
 function appPosition(parent, x, y, nr)
 	local _tmp = YRPCreateD("DPanel", parent, ctrb(64), ctrb(64), x, y)
 	_tmp.nr = nr
-
 	function _tmp:Paint(pw, ph)
 		if self:IsHovered() then
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 1))
 		end
 	end
 
-	_tmp:Receiver("APP", function(receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY)
-		if isDropped and receiver:IsHovered() then
-			local _x, _y = receiver:GetPos()
-			tableOfDroppedPanels[1]:SetPos(_x + YRP.ctr(1), _y + YRP.ctr(1))
-			changeAppPosition(tableOfDroppedPanels[1].tbl.ClassName, receiver.nr)
-		end
-	end, {})
+	_tmp:Receiver(
+		"APP",
+		function(receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY)
+			if isDropped and receiver:IsHovered() then
+				local _x, _y = receiver:GetPos()
+				tableOfDroppedPanels[1]:SetPos(_x + YRP.ctr(1), _y + YRP.ctr(1))
+				changeAppPosition(tableOfDroppedPanels[1].tbl.ClassName, receiver.nr)
+			end
+		end, {}
+	)
 
 	return _tmp
 end
@@ -76,16 +80,13 @@ function createSmartphone(parent, w, h, x, y)
 	--[[ Elements ]]
 	--
 	_tmp.display = YRPCreateD("DPanel", _tmp, w, h, 0, 0)
-
 	function _tmp.display:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, YRPGetSpBackColor())
-
 		if self.apps ~= nil then
 			for i, app in pairs(getAllDBApps()) do
 				local _x = getTblX(app.Position, 5)
 				local _y = getTblY(app.Position, 5)
 				local _appName = app.PrintName
-
 				if app.LangName ~= nil then
 					local _name = YRP.trans(app.LangName, app.PrintName)
 					_appName = _name
@@ -103,7 +104,6 @@ function createSmartphone(parent, w, h, x, y)
 	--[[ TOP BAR ]]
 	--
 	_tmp.topbar = YRPCreateD("DPanel", _tmp, w, ctrb(40), 0, 0)
-
 	function _tmp.topbar:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
 		local _clock = {}
@@ -117,14 +117,12 @@ function createSmartphone(parent, w, h, x, y)
 	--[[ BOT BAR ]]
 	--
 	_tmp.botbar = YRPCreateD("DPanel", _tmp, w, ctrb(40), 0, h - ctrb(40))
-
 	function _tmp.botbar:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 100, 255))
 	end
 
 	_tmp.botbar.buttonhome = YRPCreateD("DButton", _tmp.botbar, w / 3, ctrb(40), w / 3, 0)
 	_tmp.botbar.buttonhome:SetText("")
-
 	function _tmp.botbar.buttonhome:Paint(pw, ph)
 		if self:IsHovered() then
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 100, 255))
@@ -141,7 +139,6 @@ function createSmartphone(parent, w, h, x, y)
 
 	_tmp.botbar.buttonback = YRPCreateD("DButton", _tmp.botbar, w / 3, ctrb(40), (w / 3) * 2, 0)
 	_tmp.botbar.buttonback:SetText("")
-
 	function _tmp.botbar.buttonback:Paint(pw, ph)
 		if self:IsHovered() then
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 100, 255))
@@ -153,7 +150,6 @@ function createSmartphone(parent, w, h, x, y)
 
 	_tmp.botbar.buttonapps = YRPCreateD("DButton", _tmp.botbar, w / 3, ctrb(40), 0, 0)
 	_tmp.botbar.buttonapps:SetText("")
-
 	function _tmp.botbar.buttonapps:Paint(pw, ph)
 		if self:IsHovered() then
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 100, 255))
@@ -167,7 +163,6 @@ function createSmartphone(parent, w, h, x, y)
 	--
 	function _tmp.display:ClearDisplay()
 		local _childs = self:GetChildren()
-
 		for i, child in pairs(_childs) do
 			child:Remove()
 		end
@@ -217,11 +212,9 @@ function createSmartphone(parent, w, h, x, y)
 		_tmp.pos = {}
 		local _x = 0
 		local _y = 0
-
 		for i = 0, 24 do
 			_tmp.pos[i] = appPosition(_tmp.display, ctrb(40) + _x * ctrb(64) + _x * ctrb(40), ctrb(40) + ctrb(40) + _y * ctrb(64) + _y * ctrb(40 + 30), i)
 			_x = _x + 1
-
 			if _x > 4 then
 				_x = 0
 				_y = _y + 1
@@ -233,7 +226,6 @@ function createSmartphone(parent, w, h, x, y)
 		_tmp.display.apps = {}
 		local _px = 0
 		local _py = 0
-
 		for i, app in pairs(getAllDBApps()) do
 			_px = getTblX(app.Position, 5)
 			_py = getTblY(app.Position, 5)

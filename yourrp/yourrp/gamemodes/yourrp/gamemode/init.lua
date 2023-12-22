@@ -103,15 +103,17 @@ AddCSLuaFile("yrp/cl/gm/menus/cl_chatchannels.lua")
 -- includes 
 include("shared.lua")
 include("yrp/sv/sv_includes.lua")
-
 function YRPLoadServerInfo()
 	if game.GetIPAddress() and game.IsDedicated() and not string.StartWith(game.GetIPAddress(), "0.0.0.0:") then
-		timer.Simple(0.1, function()
-			SetGlobalYRPBool("isserverdedicated", game.IsDedicated())
-			SetGlobalYRPString("serverip", game.GetIPAddress())
-			SetGlobalYRPInt("serverversion", VERSION)
-			SetGlobalYRPString("serverversionstr", VERSIONSTR)
-		end)
+		timer.Simple(
+			0.1,
+			function()
+				SetGlobalYRPBool("isserverdedicated", game.IsDedicated())
+				SetGlobalYRPString("serverip", game.GetIPAddress())
+				SetGlobalYRPInt("serverversion", VERSION)
+				SetGlobalYRPString("serverversionstr", VERSIONSTR)
+			end
+		)
 	else
 		timer.Simple(0.1, YRPLoadServerInfo)
 	end

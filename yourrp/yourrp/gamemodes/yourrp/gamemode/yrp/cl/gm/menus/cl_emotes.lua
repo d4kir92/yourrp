@@ -1,6 +1,5 @@
 --Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _em = {}
-
 function YRPToggleEmotesMenu()
 	if YRPIsNoMenuOpen() then
 		OpenEmotesMenu()
@@ -19,7 +18,6 @@ end
 
 function circleBorder(x, y, radius, seg, a_start, a_ang)
 	local cir = {}
-
 	for i = 0, seg do
 		local a = math.rad(((i / seg) * -a_ang) + 180 - a_start)
 		local _coord = {}
@@ -34,7 +32,6 @@ end
 function circleCoords(x, y, radius_outside, radius_inside, seg, a_start, a_ang)
 	local cir = circleBorder(x, y, radius_outside, seg, a_start, a_ang)
 	local cir2 = circleBorder(x, y, radius_inside, seg, a_start, a_ang)
-
 	for i, cord in pairs(table.Reverse(cir2)) do
 		table.insert(cir, cord)
 	end
@@ -43,7 +40,6 @@ function circleCoords(x, y, radius_outside, radius_inside, seg, a_start, a_ang)
 end
 
 local _emotes = {}
-
 function GetEmotes()
 	return _emotes
 end
@@ -74,7 +70,6 @@ AddEmote("LID_emoteforward", ACT_SIGNAL_FORWARD) --"forward"
 AddEmote("LID_give", ACT_GMOD_GESTURE_ITEM_GIVE)
 local _vec_emo = {}
 local _seg = #GetEmotes()
-
 for i = 0, _seg do
 	local a = math.rad(((i / _seg) * -360) + 180 - (360 / _seg) / 2)
 	local _coord = {}
@@ -84,7 +79,6 @@ for i = 0, _seg do
 end
 
 local _test = {}
-
 for i = 1, _seg do
 	local _segment = circleCoords(YRP.ctr(950), YRP.ctr(950), YRP.ctr(900), YRP.ctr(700), 8, (i - 1) * 360 / _seg + 0.5, 360 / _seg - 1)
 	table.insert(_test, _segment)
@@ -100,7 +94,6 @@ function OpenEmotesMenu()
 	_em.window:SetTitle("")
 	_em.emotes = YRPCreateD("DButton", _em.window, YRP.ctr(1900), YRP.ctr(1900), 0, 0)
 	_em.emotes:SetText("")
-
 	function _em.emotes:Paint(pw, ph)
 	end
 
@@ -120,7 +113,6 @@ function OpenEmotesMenu()
 		local _abs_b = math.sqrt(math.pow(_mid.x, 2) + math.pow(_mid.y, 2), 2)
 		local _multi = _mp.x * _mid.x + _mp.y * _mid.y
 		local _cos_a = 0
-
 		if (_abs_a or _abs_b) == 0 then
 			_cos_a = 0
 		else
@@ -128,7 +120,6 @@ function OpenEmotesMenu()
 		end
 
 		local _ang = 0
-
 		if _mp.x >= 0 then
 			_ang = 180 - math.deg(math.acos(_cos_a))
 		else
@@ -136,7 +127,6 @@ function OpenEmotesMenu()
 		end
 
 		_em.emotes.select = math.Round(1 + _ang / (360 / #_test) - _ang / (360 / #_test) % 1)
-
 		for e = 1, _seg do
 			for i = 1, #_test[e] / 2 do
 				local _quad = {}
@@ -145,7 +135,6 @@ function OpenEmotesMenu()
 				table.insert(_quad, _test[e][#_test[e] - i])
 				table.insert(_quad, _test[e][#_test[e] - (i - 1)])
 				local _color = Color(40, 40, 40, 120)
-
 				if e == _em.emotes.select then
 					_color = Color(255, 255, 255, 120)
 				end
@@ -166,7 +155,6 @@ function OpenEmotesMenu()
 		if self.select ~= nil then
 			local _sel = self.select
 			CloseEmotesMenu()
-
 			if _sel ~= nil and GetEmotes()[_sel] ~= nil then
 				--RunConsoleCommand( "act", GetEmotes()[_sel].cmd)
 				--LocalPlayer():AnimRestartGesture( GESTURE_SLOT_CUSTOM, GetEmotes()[_sel].cmd, true )
@@ -178,11 +166,13 @@ function OpenEmotesMenu()
 	end
 end
 
-net.Receive("nws_yrp_do_act", function(len)
-	local pl = net.ReadEntity()
-	local act = net.ReadString()
-
-	if IsValid(pl) then
-		pl:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true)
+net.Receive(
+	"nws_yrp_do_act",
+	function(len)
+		local pl = net.ReadEntity()
+		local act = net.ReadString()
+		if IsValid(pl) then
+			pl:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true)
+		end
 	end
-end)
+)

@@ -13,28 +13,22 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.	If not, see < http://www.gnu.org/licenses/ >.
-]]--
-
+]]
+--
 YRP = YRP or {}
-
 _yrp = {}
-
 -- ADD LUAS
 function add_luas(str)
 	AddCSLuaFile(str)
 	include(str)
 end
 
-add_luas( "yrp/net/entity.lua" )
-add_luas( "yrp/net/global.lua" )
-
-add_luas( "yrp/_libs/_libs_includes.lua" )
-
-add_luas( "yrp/shared/sh_includes.lua" )
-
-add_luas( "yrp/integration/integration.lua" )
-
-add_luas( "yrp/public/yrp.lua" )
-add_luas( "yrp/public/player.lua" )
-add_luas( "yrp/public/entity.lua" )
-add_luas( "yrp/public/gamemode.lua" )
+add_luas("yrp/net/entity.lua")
+add_luas("yrp/net/global.lua")
+add_luas("yrp/_libs/_libs_includes.lua")
+add_luas("yrp/shared/sh_includes.lua")
+add_luas("yrp/integration/integration.lua")
+add_luas("yrp/public/yrp.lua")
+add_luas("yrp/public/player.lua")
+add_luas("yrp/public/entity.lua")
+add_luas("yrp/public/gamemode.lua")

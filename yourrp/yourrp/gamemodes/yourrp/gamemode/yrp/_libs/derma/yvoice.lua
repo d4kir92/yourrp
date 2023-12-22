@@ -7,7 +7,6 @@ local px = ScrW() - sw + br
 local py = 2.5 * sh
 local iconsize = sh - 2 * br
 local circlesize = 10
-
 function PANEL:UpdateValues()
 	br = YRP.ctr(5)
 	sw = YRP.ctr(680)
@@ -27,7 +26,6 @@ function PANEL:Init()
 	self.mdl = vgui.Create("DModelPanel", self)
 	self.mdl:SetPos(br, br)
 	self.mdl:SetSize(iconsize, iconsize)
-
 	function self.mdl:LayoutEntity(ent)
 		ent:SetSequence(ent:LookupSequence("menu_gman"))
 		self:RunAnimation()
@@ -57,10 +55,8 @@ function PANEL:Setup(ply)
 	self:UpdateValues()
 	yrp_VoicePanelList:SetPos(px, py)
 	yrp_VoicePanelList:SetSize(sw, ScrH() - 5 * sh)
-
 	if GetGlobalYRPBool("bool_voice_module") then
 		self.ply = ply
-
 		if ply and ply.IDCardID then
 			if ply.RPName then
 				self.PlayerName:SetText(ply:IDCardID() .. " " .. ply:RPName())
@@ -70,7 +66,6 @@ function PANEL:Setup(ply)
 		end
 
 		local channels = {}
-
 		for i, v in pairs(GetGlobalYRPTable("yrp_voice_channels")) do
 			if IsActiveInChannel(ply, v.uniqueID) and (IsInChannel(LocalPlayer(), v.uniqueID) or IsActiveInChannel(LocalPlayer(), v.uniqueID)) then
 				table.insert(channels, v.string_name)
@@ -78,7 +73,6 @@ function PANEL:Setup(ply)
 		end
 
 		local text = ""
-
 		if table.Count(channels) > 0 then
 			text = table.concat(channels, ", ")
 		else
@@ -92,13 +86,10 @@ function PANEL:Setup(ply)
 		self.Channels:SetText(text)
 		--self.Avatar:SetPlayer( ply )
 		self.mdl:SetModel(ply:GetModel())
-
 		if self.mdl.Entity and YRPEntityAlive(self.mdl.Entity) then
 			local head = self.mdl.Entity:LookupBone("ValveBiped.Bip01_Head1")
-
 			if head then
 				local eyepos = self.mdl.Entity:GetBonePosition(head) + Vector(0, 0, 3)
-
 				if eyepos then
 					eyepos:Add(Vector(0, 0, 2)) -- Move up slightly
 					self.mdl:SetLookAt(eyepos)
@@ -118,7 +109,6 @@ function PANEL:Paint(w, h)
 	if not IsValid(self.ply) then return end
 	local vol = self.ply:VoiceVolume()
 	draw.RoundedBox(br, 0, 0, w, h, Color(0, vol * 255, 0, 240))
-
 	if YRP.GetDesignIcon("circle") and self.ply.GetFactionColor then
 		surface.SetDrawColor(self.ply:GetFactionColor())
 		surface.SetMaterial(YRP.GetDesignIcon("circle"))
@@ -157,29 +147,31 @@ function PANEL:FadeOut(anim, delta, data)
 end
 
 derma.DefineControl("VoiceNotifyYRP", "", PANEL, "DPanel")
+hook.Add(
+	"PlayerStartVoice",
+	"YRP_VOICE_MODULE_PlayerStartVoice",
+	function(ply)
+		if not GetGlobalYRPBool("bool_voice_module") then return end
+		if not IsValid(yrp_VoicePanelList) then return end
+		if not IsValid(ply) then return end
+		-- There'd be an exta one if voice_loopback is on, so remove it.
+		GAMEMODE:PlayerEndVoice(ply)
+		if IsValid(PlayerVoicePanels[ply]) then
+			if PlayerVoicePanels[ply].fadeAnim then
+				PlayerVoicePanels[ply].fadeAnim:Stop()
+				PlayerVoicePanels[ply].fadeAnim = nil
+			end
 
-hook.Add("PlayerStartVoice", "YRP_VOICE_MODULE_PlayerStartVoice", function(ply)
-	if not GetGlobalYRPBool("bool_voice_module") then return end
-	if not IsValid(yrp_VoicePanelList) then return end
-	if not IsValid(ply) then return end
-	-- There'd be an exta one if voice_loopback is on, so remove it.
-	GAMEMODE:PlayerEndVoice(ply)
+			PlayerVoicePanels[ply]:SetAlpha(255)
 
-	if IsValid(PlayerVoicePanels[ply]) then
-		if PlayerVoicePanels[ply].fadeAnim then
-			PlayerVoicePanels[ply].fadeAnim:Stop()
-			PlayerVoicePanels[ply].fadeAnim = nil
+			return
 		end
 
-		PlayerVoicePanels[ply]:SetAlpha(255)
-
-		return
+		local pnl = yrp_VoicePanelList:Add("VoiceNotifyYRP")
+		pnl:Setup(ply)
+		PlayerVoicePanels[ply] = pnl
 	end
-
-	local pnl = yrp_VoicePanelList:Add("VoiceNotifyYRP")
-	pnl:Setup(ply)
-	PlayerVoicePanels[ply] = pnl
-end)
+)
 
 local function VoiceClean()
 	for k, v in pairs(PlayerVoicePanels) do
@@ -190,16 +182,18 @@ local function VoiceClean()
 end
 
 timer.Create("VoiceClean", 10, 0, VoiceClean)
-
-hook.Add("PlayerEndVoice", "YRP_VOICE_MODULE_PlayerEndVoice", function(ply)
-	if not GetGlobalYRPBool("bool_voice_module") then return end
-
-	if IsValid(PlayerVoicePanels[ply]) then
-		if PlayerVoicePanels[ply].fadeAnim then return end
-		PlayerVoicePanels[ply].fadeAnim = Derma_Anim("FadeOut", PlayerVoicePanels[ply], PlayerVoicePanels[ply].FadeOut)
-		PlayerVoicePanels[ply].fadeAnim:Start(2)
+hook.Add(
+	"PlayerEndVoice",
+	"YRP_VOICE_MODULE_PlayerEndVoice",
+	function(ply)
+		if not GetGlobalYRPBool("bool_voice_module") then return end
+		if IsValid(PlayerVoicePanels[ply]) then
+			if PlayerVoicePanels[ply].fadeAnim then return end
+			PlayerVoicePanels[ply].fadeAnim = Derma_Anim("FadeOut", PlayerVoicePanels[ply], PlayerVoicePanels[ply].FadeOut)
+			PlayerVoicePanels[ply].fadeAnim:Start(2)
+		end
 	end
-end)
+)
 
 local function YRPCreateVoiceVGUI()
 	if YRPPanelAlive(yrp_VoicePanelList, "yrp_VoicePanelList") then
@@ -210,7 +204,6 @@ local function YRPCreateVoiceVGUI()
 	yrp_VoicePanelList:ParentToHUD()
 	yrp_VoicePanelList:SetPos(px, py)
 	yrp_VoicePanelList:SetSize(sw, ScrH() - 5 * sh)
-
 	if yrp_VoicePanelList.SetPaintBackground then
 		yrp_VoicePanelList:SetPaintBackground(false)
 	end

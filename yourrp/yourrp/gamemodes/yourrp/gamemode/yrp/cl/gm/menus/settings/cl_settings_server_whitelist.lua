@@ -6,7 +6,6 @@ local tabG = {}
 local loadedR = false
 local loadedG = false
 local loadedW = false
-
 function BuildWhitelis(parent, tab)
 	if not YRPPanelAlive(parent) then
 		YRP.msg("note", "[BuildWhitelis] failed! parent: " .. tostring(parent))
@@ -22,7 +21,6 @@ function BuildWhitelis(parent, tab)
 		lis:AddColumn(YRP.trans("LID_role"))
 		lis:AddColumn(YRP.trans("LID_time")):SetFixedWidth(120)
 		lis:AddColumn(YRP.trans("LID_status"))
-
 		function lis:Think()
 			if self.w ~= parent:GetWide() - YRP.ctr(60 + 500) or self.h ~= parent:GetTall() - YRP.ctr(40) or self.x ~= YRP.ctr(20) or self.y ~= YRP.ctr(20) then
 				self.w = parent:GetWide() - YRP.ctr(60 + 500)
@@ -52,7 +50,6 @@ function BuildWhitelis(parent, tab)
 		for k, whi in pairs(tabW) do
 			if whi.roleID ~= nil then
 				local found = false
-
 				-- ROLE
 				if whi.roleID and whi.roleID > 0 and (tab == "LID_all" or tab == "LID_roles") then
 					for l, rol in pairs(tabR) do
@@ -85,7 +82,6 @@ function BuildWhitelis(parent, tab)
 				else
 					local rolname = "-"
 					local grpname = "-"
-
 					if whi.roleID > 0 then
 						for l, rol in pairs(tabR) do
 							if rol.uniqueID == whi.roleID then
@@ -121,7 +117,6 @@ function BuildWhitelis(parent, tab)
 
 		local btnAdd = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(20))
 		btnAdd:SetText(YRP.trans("LID_addentry") .. " ( " .. YRP.trans("LID_role") .. " )")
-
 		function btnAdd:DoClick()
 			local _whitelisFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
 			_whitelisFrame:Center()
@@ -129,22 +124,18 @@ function BuildWhitelis(parent, tab)
 			_whitelisFrame:SetDraggable(true)
 			_whitelisFrame:SetTitle("Whitelist")
 			local _whitelisComboBoxPlys = createVGUI("DComboBox", _whitelisFrame, 380, 50, 10, 100)
-
 			for k, v in pairs(player.GetAll()) do
 				_whitelisComboBoxPlys:AddChoice(v:Nick(), v:YRPSteamID())
 			end
 
 			local _whitelisComboBox = createVGUI("DComboBox", _whitelisFrame, 380, 50, 10, 200)
-
 			for k, v in pairs(tabG) do
 				_whitelisComboBox:AddChoice(v.string_name, v.uniqueID)
 			end
 
 			local _whitelisComboBox2 = createVGUI("DComboBox", _whitelisFrame, 380, 50, 10, 300)
-
 			function _whitelisComboBox:OnSelect()
 				_whitelisComboBox2:Clear()
-
 				for k, v in pairs(tabR) do
 					for l, w in pairs(tabG) do
 						if _whitelisComboBox:GetOptionData(_whitelisComboBox:GetSelectedID()) == v.int_groupID then
@@ -157,7 +148,6 @@ function BuildWhitelis(parent, tab)
 
 			local _whitelisButton = createVGUI("DButton", _whitelisFrame, 380, 50, 10, 400)
 			_whitelisButton:SetText(YRP.trans("LID_whitelistplayer"))
-
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID()) ~= nil then
 					net.Start("nws_yrp_whitelistPlayer")
@@ -165,7 +155,6 @@ function BuildWhitelis(parent, tab)
 					local _cb2_id = _whitelisComboBox2:GetSelectedID()
 					local _cb1_data = _whitelisComboBoxPlys:GetOptionData(_cb1_id)
 					local _cb2_data = _whitelisComboBox2:GetOptionData(_cb2_id)
-
 					if _cb1_data ~= nil and _cb2_data ~= nil then
 						net.WriteString(_cb1_data)
 						net.WriteInt(tonumber(_cb2_data), 16)
@@ -201,7 +190,6 @@ function BuildWhitelis(parent, tab)
 
 		local btnGroup = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(90))
 		btnGroup:SetText(YRP.trans("LID_addentry") .. " ( " .. YRP.trans("LID_group") .. " )")
-
 		function btnGroup:DoClick()
 			local _whitelisFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
 			_whitelisFrame:Center()
@@ -209,20 +197,17 @@ function BuildWhitelis(parent, tab)
 			_whitelisFrame:SetDraggable(true)
 			_whitelisFrame:SetTitle("Whitelist")
 			local _whitelisComboBoxPlys = createVGUI("DComboBox", _whitelisFrame, 380, 50, 10, 100)
-
 			for k, v in pairs(player.GetAll()) do
 				_whitelisComboBoxPlys:AddChoice(v:Nick(), v:YRPSteamID())
 			end
 
 			local _whitelisComboBox = createVGUI("DComboBox", _whitelisFrame, 380, 50, 10, 200)
-
 			for k, v in pairs(tabG) do
 				_whitelisComboBox:AddChoice(v.string_name, v.uniqueID)
 			end
 
 			local _whitelisButton = createVGUI("DButton", _whitelisFrame, 380, 50, 10, 400)
 			_whitelisButton:SetText(YRP.trans("LID_whitelistplayer"))
-
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID()) ~= nil and _whitelisComboBox:GetOptionData(_whitelisComboBox:GetSelectedID()) ~= nil then
 					net.Start("nws_yrp_whitelistPlayerGroup")
@@ -257,7 +242,6 @@ function BuildWhitelis(parent, tab)
 
 		local btnAll = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(160))
 		btnAll:SetText(YRP.trans("LID_addentry") .. " ( " .. YRP.trans("LID_all") .. " )")
-
 		function btnAll:DoClick()
 			local _whitelisFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
 			_whitelisFrame:Center()
@@ -265,14 +249,12 @@ function BuildWhitelis(parent, tab)
 			_whitelisFrame:SetDraggable(true)
 			_whitelisFrame:SetTitle("Whitelist")
 			local _whitelisComboBoxPlys = createVGUI("DComboBox", _whitelisFrame, 380, 50, 10, 100)
-
 			for k, v in pairs(player.GetAll()) do
 				_whitelisComboBoxPlys:AddChoice(v:Nick(), v:YRPSteamID())
 			end
 
 			local _whitelisButton = createVGUI("DButton", _whitelisFrame, 380, 50, 10, 400)
 			_whitelisButton:SetText(YRP.trans("LID_whitelistplayer"))
-
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID()) ~= nil then
 					net.Start("nws_yrp_whitelistPlayerAll")
@@ -305,16 +287,13 @@ function BuildWhitelis(parent, tab)
 
 		local btnRem = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(230))
 		btnRem:SetText(YRP.trans("LID_removeentry"))
-
 		function btnRem:DoClick()
 			if lis:GetSelectedLine() ~= nil then
 				local uid = lis:GetLine(lis:GetSelectedLine()):GetValue(1)
-
 				if uid ~= nil then
 					net.Start("nws_yrp_whitelistPlayerRemove")
 					net.WriteInt(uid, 16)
 					net.SendToServer()
-
 					for i, v in pairs(tabW) do
 						if v.uniqueID == uid then
 							tabW[i] = nil
@@ -348,81 +327,113 @@ function BuildWhitelis(parent, tab)
 			btnRem:Remove()
 		end
 	else
-		timer.Simple(0.1, function()
-			BuildWhitelis(parent, tab)
-		end)
+		timer.Simple(
+			0.1,
+			function()
+				BuildWhitelis(parent, tab)
+			end
+		)
 	end
 end
 
-net.Receive("nws_yrp_getGroupsWhitelist", function(len)
-	tabG = net.ReadTable()
-	loadedG = true
-end)
+net.Receive(
+	"nws_yrp_getGroupsWhitelist",
+	function(len)
+		tabG = net.ReadTable()
+		loadedG = true
+	end
+)
 
-net.Receive("nws_yrp_getRolesWhitelist", function(len)
-	tabR = net.ReadTable()
-	loadedR = true
-end)
+net.Receive(
+	"nws_yrp_getRolesWhitelist",
+	function(len)
+		tabR = net.ReadTable()
+		loadedR = true
+	end
+)
 
-net.Receive("nws_yrp_getRoleWhitelist_line", function(len)
-	local PARENT = GetSettingsSite()
+net.Receive(
+	"nws_yrp_getRoleWhitelist_line",
+	function(len)
+		local PARENT = GetSettingsSite()
+		if YRPPanelAlive(PARENT) then
+			local site = PARENT
+			local id = net.ReadString() or "0"
+			id = tonumber(id)
+			tabW[id] = net.ReadTable()
+			if net.ReadBool() then
+				loadedW = true
+				-- TABS
+				local tabs = YRPCreateD("YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
+				function tabs:Think()
+					self:SetSize(site:GetWide(), site:GetTall())
+				end
 
-	if YRPPanelAlive(PARENT) then
-		local site = PARENT
-		local id = net.ReadString() or "0"
-		id = tonumber(id)
-		tabW[id] = net.ReadTable()
+				tabs:AddOption(
+					"LID_all",
+					function(parent)
+						BuildWhitelis(parent, "LID_all")
+					end
+				)
 
-		if net.ReadBool() then
-			loadedW = true
-			-- TABS
-			local tabs = YRPCreateD("YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
+				tabs:AddOption(
+					"LID_roles",
+					function(parent)
+						BuildWhitelis(parent, "LID_roles")
+					end
+				)
 
-			function tabs:Think()
-				self:SetSize(site:GetWide(), site:GetTall())
+				tabs:AddOption(
+					"LID_groups",
+					function(parent)
+						BuildWhitelis(parent, "LID_groups")
+					end
+				)
+
+				tabs:AddOption(
+					"LID_manually",
+					function(parent)
+						BuildWhitelis(parent, "LID_manually")
+					end
+				)
+
+				tabs:AddOption(
+					"LID_promote",
+					function(parent)
+						BuildWhitelis(parent, "LID_promote")
+					end
+				)
+
+				tabs:GoToSite("LID_all")
 			end
-
-			tabs:AddOption("LID_all", function(parent)
-				BuildWhitelis(parent, "LID_all")
-			end)
-
-			tabs:AddOption("LID_roles", function(parent)
-				BuildWhitelis(parent, "LID_roles")
-			end)
-
-			tabs:AddOption("LID_groups", function(parent)
-				BuildWhitelis(parent, "LID_groups")
-			end)
-
-			tabs:AddOption("LID_manually", function(parent)
-				BuildWhitelis(parent, "LID_manually")
-			end)
-
-			tabs:AddOption("LID_promote", function(parent)
-				BuildWhitelis(parent, "LID_promote")
-			end)
-
-			tabs:GoToSite("LID_all")
 		end
 	end
-end)
+)
 
 function OpenSettingsWhitelist()
 	loadedR = false
 	loadedG = false
+	timer.Simple(
+		0.1,
+		function()
+			net.Start("nws_yrp_getGroupsWhitelist")
+			net.SendToServer()
+		end
+	)
 
-	timer.Simple(0.1, function()
-		net.Start("nws_yrp_getGroupsWhitelist")
-		net.SendToServer()
-	end)
+	timer.Simple(
+		0.2,
+		function()
+			net.Start("nws_yrp_getRolesWhitelist")
+			net.SendToServer()
+		end
+	)
 
-	timer.Simple(0.2, function()
-		net.Start("nws_yrp_getRolesWhitelist")
-		net.SendToServer()
-	end)
-
-	timer.Simple(0.3, function()
-		net.Start("nws_yrp_getRoleWhitelist")
-		net.SendToServer()
-	end)
+	timer.Simple(
+		0.3,
+		function()
+			net.Start("nws_yrp_getRoleWhitelist")
+			net.SendToServer()
+		end
+	)
 end
