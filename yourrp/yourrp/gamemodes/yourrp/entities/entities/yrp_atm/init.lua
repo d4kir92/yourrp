@@ -2,31 +2,34 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
-
 function ENT:Initialize()
 	self:SetModel("models/yrp/yrp_atm.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_NONE)
 	self:SetSolid(SOLID_VPHYSICS)
 	local phys = self:GetPhysicsObject()
-
 	if phys:IsValid() then
 		phys:Wake()
 	end
 
 	self:SetYRPString("status", "startup")
-
-	timer.Simple(4, function()
-		if self:IsValid() then
-			self:SetYRPString("status", "logo")
-		end
-
-		timer.Simple(3, function()
+	timer.Simple(
+		4,
+		function()
 			if self:IsValid() then
-				self:SetYRPString("status", "home")
+				self:SetYRPString("status", "logo")
 			end
-		end)
-	end)
+
+			timer.Simple(
+				3,
+				function()
+					if self:IsValid() then
+						self:SetYRPString("status", "home")
+					end
+				end
+			)
+		end
+	)
 
 	self.pressed = false
 	self.menu = {}
@@ -49,7 +52,6 @@ function ENT:Use(activator, caller)
 end
 
 local pressed = false
-
 function ENT:ChangeMenu()
 	self.menu.home = false
 	self.menu.withdraw = false
@@ -57,7 +59,6 @@ function ENT:ChangeMenu()
 	self.menu.transfer = false
 	self.menu.other = falsecha
 	self.menu.fail = false
-
 	for k, v in pairs(self.buttons) do
 		if v ~= nil and v ~= NULL then
 			v:Remove()
@@ -68,7 +69,6 @@ end
 function ENT:ATMPressPrev(ply)
 	local _tmpPlayers = YRP_SQL_SELECT("yrp_characters", "*", nil)
 	self.namePos = self.namePos - 4
-
 	if self.namePos < 1 then
 		self.namePos = 1
 	end
@@ -78,7 +78,6 @@ function ENT:ATMPressPrev(ply)
 	local i = 1
 	self.names = {}
 	self.SteamIDs = {}
-
 	for k, v in pairs(_tmpPlayers) do
 		if k >= self.namePos then
 			if v.rpname ~= nil and v.rpname ~= NULL then
@@ -112,7 +111,6 @@ function ENT:ATMPressNext(ply)
 	local i = 1
 	self.names = {}
 	self.SteamIDs = {}
-
 	for k, v in pairs(_tmpPlayers) do
 		if k >= self.namePos then
 			if v.rpname ~= nil and v.rpname ~= NULL then
@@ -147,14 +145,12 @@ function ENT:createButtonNumber(parent, up, forward, right, add)
 	tmp:SetColor(Color(255, 0, 0, 0))
 	tmp:SetRenderMode(RENDERMODE_TRANSALPHA)
 	tmp.parent = parent
-
 	function tmp:Use(activator, caller, useType, value)
 		if not pressed then
 			pressed = true
 			local filename = "buttons/button14.wav"
 			util.PrecacheSound(filename)
 			self:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
-
 			if add ~= "<" then
 				tmp.parent:SetYRPString("othermoney", tmp.parent:GetYRPString("othermoney", "") .. add)
 			else
@@ -162,9 +158,12 @@ function ENT:createButtonNumber(parent, up, forward, right, add)
 				tmp.parent:SetYRPString("othermoney", stringExp)
 			end
 
-			timer.Simple(0.2, function()
-				pressed = false
-			end)
+			timer.Simple(
+				0.2,
+				function()
+					pressed = false
+				end
+			)
 		end
 	end
 
@@ -181,14 +180,12 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 	tmp:SetRenderMode(RENDERMODE_TRANSALPHA)
 	tmp.parent = parent
 	tmp.money = tonumber(_money)
-
 	function tmp:Use(activator, caller, useType, value)
 		if not pressed then
 			pressed = true
 			local filename = "buttons/button14.wav"
 			util.PrecacheSound(filename)
 			self:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
-
 			if func ~= nil then
 				if func == "ATMPressNext" then
 					self.parent:ATMPressNext(activator)
@@ -213,27 +210,28 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 						self.money = tonumber(self.parent:GetYRPString("othermoney", "0"))
 					elseif self.parent:GetYRPString("prevstatus") == "transfer" then
 						self.money = tonumber(self.parent:GetYRPString("othermoney", "0"))
-
 						if self.money ~= nil and isnumber(self.money) then
 							if self.money > 0 and activator:canAffordBank(self.money) then
 								local dbSelectActivator = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = " .. activator:CharID())
 								local dbSelectTarget = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = " .. tostring(self.parent:GetYRPString("SteamID")))
-
-								if dbSelectTarget ~= nil and dbSelectActivator ~= nil and dbSelectTarget[1] and dbSelectTarget[1].SteamID ~= activator:YRPSteamID() then
+								if dbSelectActivator ~= nil and dbSelectTarget ~= nil and dbSelectTarget[1] ~= nil and dbSelectTarget[1].SteamID ~= activator:YRPSteamID() then
 									dbSelectActivator[1].moneybank = dbSelectActivator[1].moneybank - self.money
-
-									YRP_SQL_UPDATE("yrp_characters", {
-										["moneybank"] = dbSelectActivator[1].moneybank
-									}, "uniqueID = " .. activator:CharID())
+									YRP_SQL_UPDATE(
+										"yrp_characters",
+										{
+											["moneybank"] = dbSelectActivator[1].moneybank
+										}, "uniqueID = " .. activator:CharID()
+									)
 
 									dbSelectTarget[1].moneybank = dbSelectTarget[1].moneybank + self.money
-
-									YRP_SQL_UPDATE("yrp_characters", {
-										["moneybank"] = dbSelectTarget[1].moneybank
-									}, "uniqueID = '" .. self.parent:GetYRPString("SteamID") .. "'")
+									YRP_SQL_UPDATE(
+										"yrp_characters",
+										{
+											["moneybank"] = dbSelectTarget[1].moneybank
+										}, "uniqueID = '" .. self.parent:GetYRPString("SteamID") .. "'"
+									)
 
 									activator:SetYRPString("moneybank", dbSelectActivator[1].moneybank)
-
 									for k, v in pairs(player.GetAll()) do
 										if v:YRPSteamID() == dbSelectTarget[1].SteamID then
 											v:SetYRPString("moneybank", dbSelectTarget[1].moneybank)
@@ -257,9 +255,12 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 				self.parent:SetYRPString("status", status)
 			end
 
-			timer.Simple(0.2, function()
-				pressed = false
-			end)
+			timer.Simple(
+				0.2,
+				function()
+					pressed = false
+				end
+			)
 
 			if self.money ~= nil and isnumber(tonumber(self.money)) then
 				if self.money > 0 then
@@ -318,7 +319,6 @@ function ENT:Think()
 		if not self.menu.transfer then
 			self.menu.transfer = true
 			self:SetYRPString("prevstatus", "transfer")
-
 			if self:GetYRPString("name1") ~= "nil" then
 				self.buttons.transferName1 = self:createButton(self, 49.74, 7.14, 8.8, "other", nil, "ATMPressPlayer1")
 			end
@@ -328,7 +328,6 @@ function ENT:Think()
 			end
 
 			self.buttons.transferPrev = self:createButton(self, 46.36, 10.54, 8.8, nil, nil, "ATMPressPrev")
-
 			if self:GetYRPString("name3") ~= "nil" then
 				self.buttons.transferName3 = self:createButton(self, 49.74, 7.14, -0.8, "other", nil, "ATMPressPlayer3")
 			end
