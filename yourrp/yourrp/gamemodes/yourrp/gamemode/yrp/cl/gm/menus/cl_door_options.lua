@@ -504,7 +504,7 @@ function YRPOpenDoorOptions(door)
 	YRPCloseDoorOptions()
 	if not yrp_door.waitforanswer then
 		yrp_door.waitforanswer = true
-		YRP.msg("[DoorOptions] Wait for server answer")
+		YRP.msg("[DoorOptions] Wait for Server answer")
 		net.Start("nws_yrp_getBuildingInfo")
 		net.WriteEntity(door)
 		net.SendToServer()
