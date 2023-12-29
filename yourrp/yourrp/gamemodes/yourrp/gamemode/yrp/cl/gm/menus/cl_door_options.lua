@@ -6,6 +6,8 @@ function YRPToggleDoorOptions(door)
 		YRPOpenDoorOptions(door)
 	elseif not mouseVisible then
 		YRPCloseDoorOptions()
+	else
+		YRP.msg("note", "Can't toggle door options")
 	end
 end
 
@@ -502,13 +504,17 @@ function YRPOpenDoorOptions(door)
 	YRPCloseDoorOptions()
 	if not yrp_door.waitforanswer then
 		yrp_door.waitforanswer = true
+		YRP.msg("[DoorOptions] Wait for server answer")
 		net.Start("nws_yrp_getBuildingInfo")
 		net.WriteEntity(door)
 		net.SendToServer()
 		timer.Simple(
-			1,
+			10,
 			function()
-				yrp_door.waitforanswer = false
+				if yrp_door.waitforanswer then
+					YRP.msg("note", "[DoorOptions] Waited to long for answer from Server")
+					yrp_door.waitforanswer = false
+				end
 			end
 		)
 	end
