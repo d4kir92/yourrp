@@ -70,6 +70,21 @@ function YRPGetSteamIdByCharId(charId)
 	return nil
 end
 
+function YRPUpdateResetLevel(ply)
+	YRP_SQL_UPDATE(
+		DATABASE_NAME,
+		{
+			["int_level"] = 1
+		}
+	)
+
+	for i, v in pairs(player.GetAll()) do
+		if YRPEntityAlive(v) then
+			v:SetLevel(1)
+		end
+	end
+end
+
 function YRPUpdateCharSlot(ply, art, pri)
 	local tab = {}
 	for i, v in pairs(pri) do

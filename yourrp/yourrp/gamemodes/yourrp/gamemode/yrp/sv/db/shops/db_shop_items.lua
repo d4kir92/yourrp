@@ -571,7 +571,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 				vehicle = list.Get("simfphys_vehicles")[item.ClassName]
 			end
 
-			if vehicle and simfphys then
+			if vehicle and simfphys and simfphys.SpawnVehicle then
 				ent = simfphys.SpawnVehicle(nil, tr2.HitPos + Vector(0, 0, 50), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
 				ent:SetYRPInt("item_uniqueID", item.uniqueID)
 				YRP.msg("gm", "[Spawn Item] WORKED #3")

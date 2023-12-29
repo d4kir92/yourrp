@@ -3,7 +3,7 @@
 yrpChat = yrpChat or {}
 local yrp_chat_show = false
 local commands = {"/rpname [NAME] NEWNAME", "!rpname [NAME] NEWNAME", "/pm NAME MESSAGE", "!pm NAME MESSAGE", "/w NAME MESSAGE", "!w NAME MESSAGE", "/afk", "!afk", "/dnd", "!dnd", "/help", "!help", "/dropweapon", "!dropweapon", "/dropmoney AMOUNT", "!dropmoney AMOUNT"}
-local admincommands = {"/tag_ug", "!tag_ug", "/tag_tra", "!tag_tra", "/setmoney NAME AMOUNT", "!setmoney NAME AMOUNT", "/addxp NAME AMOUNT", "!addxp NAME AMOUNT", "/addlevel NAME AMOUNT", "!addlevel NAME AMOUNT", "/setlevel NAME AMOUNT", "!setlevel NAME AMOUNT", "/revive NAME", "!revive NAME", "/alert TEXT", "!alert TEXT", "/givelicense NAME LICENSENAME", "!givelicense NAME LICENSENAME"}
+local admincommands = {"/tag_ug", "!tag_ug", "/tag_tra", "!tag_tra", "/setmoney NAME AMOUNT", "!setmoney NAME AMOUNT", "/addxp NAME AMOUNT", "!addxp NAME AMOUNT", "/addlevel NAME AMOUNT", "!addlevel NAME AMOUNT", "/setlevel NAME AMOUNT", "!setlevel NAME AMOUNT", "!resetlevels true", "/resetlevels true", "/revive NAME", "!revive NAME", "/alert TEXT", "!alert TEXT", "/givelicense NAME LICENSENAME", "!givelicense NAME LICENSENAME"}
 local yrp_logo = Material("yrp/yrp_icon")
 local words = 0
 local _delay = 4
