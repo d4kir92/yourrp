@@ -54,7 +54,7 @@ net.Receive(
 				LocalPlayer():PrintMessage(HUD_PRINTCENTER, "[Building] net Table broken")
 			end
 		else
-			YRP.msg("error", "Got Door Data to late!")
+			YRP.msg("note", "Got Door Data to late!")
 		end
 	end
 )
@@ -503,7 +503,9 @@ function YRPDoorOptionWindow(door, tabBuilding, tabOwner, tabGroup)
 	end
 end
 
+local id = 0
 function YRPOpenDoorOptions(door)
+	id = id + 1
 	YRPCloseDoorOptions()
 	if not yrp_door.waitforanswer then
 		yrp_door.waitforanswer = true
@@ -511,10 +513,11 @@ function YRPOpenDoorOptions(door)
 		net.Start("nws_yrp_getBuildingInfo")
 		net.WriteEntity(door)
 		net.SendToServer()
+		local lid = id
 		timer.Simple(
-			10,
+			14,
 			function()
-				if yrp_door.waitforanswer then
+				if yrp_door.waitforanswer and lid == id then
 					YRP.msg("note", "[DoorOptions] Waited to long for answer from Server")
 					yrp_door.waitforanswer = false
 				end
