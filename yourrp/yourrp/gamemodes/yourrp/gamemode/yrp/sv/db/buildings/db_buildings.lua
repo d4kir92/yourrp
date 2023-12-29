@@ -100,7 +100,7 @@ function YRPAllowedToUseDoor(id, ply, door)
 end
 
 function YRPSearchForDoors()
-	YRP.msg("db", "[Buildings] Search Map for Doors")
+	YRP.msg("note", "[Buildings] Search Map for Doors")
 	for k, v in pairs(GetAllDoors()) do
 		YRP_SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
 		local _tmpBuildingTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
@@ -111,7 +111,7 @@ function YRPSearchForDoors()
 	end
 
 	local allDoorsNum = table.Count(GetAllDoors())
-	YRP.msg("db", "[Buildings] Done finding them ( " .. allDoorsNum .. " doors found)")
+	YRP.msg("note", "[Buildings] Done finding them ( " .. allDoorsNum .. " doors found)")
 
 	return allDoorsNum
 end
@@ -119,18 +119,33 @@ end
 util.AddNetworkString("nws_yrp_loaded_doors")
 function YRPLoadDoors()
 	if GetGlobalYRPBool("bool_building_system", false) then
-		YRP.msg("db", "[Buildings] Setting up Doors!")
+		YRP.msg("note", "[Buildings] Setting up Doors!")
+		local problems = 0
 		local _tmpDoors = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 		if IsNotNilAndNotFalse(_tmpDoors) then
-			for i, door in pairs(GetAllDoors()) do
-				if YRPWORKED(_tmpDoors[i], "YRPLoadDoors 2") then
-					door:SetYRPString("buildingID", _tmpDoors[i].buildingID)
-					door:SetYRPString("uniqueID", i)
-					HasUseFunction(door)
-				else
-					YRP.msg("note", "[Buildings] more doors, then in list!")
+			if #_tmpDoors == 0 then
+				YRP.msg("note", "[Buildings] No Doors in Database")
+			else
+				for i, door in pairs(GetAllDoors()) do
+					if YRPWORKED(_tmpDoors[i], "YRPLoadDoors 2") then
+						door:SetYRPString("buildingID", _tmpDoors[i].buildingID)
+						door:SetYRPString("uniqueID", i)
+						HasUseFunction(door)
+					else
+						problems = problems + 1
+						YRP.msg("note", "[Buildings] Door not found in database")
+					end
 				end
 			end
+		else
+			problems = problems + 1
+			YRP.msg("note", "[Buildings] no doors in database!")
+		end
+
+		if problems == 0 then
+			YRP.msg("note", "[Buildings] No Problems found!")
+		else
+			YRP.msg("note", string.format("[Buildings] Found %s Problems!", problems))
 		end
 
 		local _tmpBuildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
@@ -196,7 +211,7 @@ function YRPLoadDoors()
 			end
 		end
 
-		--YRP.msg( "db", "[Buildings] Map Doors are now available!" )
+		YRP.msg("note", string.format("[Buildings] %s Doors are now available!", #GetAllDoors()))
 		SetGlobalYRPBool("loaded_doors", true)
 		net.Start("nws_yrp_loaded_doors")
 		net.Broadcast()
@@ -204,14 +219,14 @@ function YRPLoadDoors()
 end
 
 function YRPCheckMapDoors()
-	--YRP.msg( "db", "[Buildings] Get Database Doors and Buildings" )
+	YRP.msg("note", "[Buildings] Get Database Doors and Buildings")
 	local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 	local _tmpTable2 = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
 	if IsNotNilAndNotFalse(_tmpTable) and IsNotNilAndNotFalse(_tmpTable2) then
-		--YRP.msg( "db", "[Buildings] Found! ( " .. tostring(table.Count(_tmpTable) ) .. " Doors | " .. tostring(table.Count(_tmpTable) ) .. " Buildings)" )
+		--YRP.msg( "note", "[Buildings] Found! ( " .. tostring(table.Count(_tmpTable) ) .. " Doors | " .. tostring(table.Count(_tmpTable) ) .. " Buildings)" )
 		local doors = GetAllDoors()
 		if table.Count(_tmpTable) < table.Count(doors) then
-			YRP.msg("db", "[Buildings] New doors found!")
+			YRP.msg("note", "[Buildings] New doors found!")
 			YRPSearchForDoors()
 		end
 	else

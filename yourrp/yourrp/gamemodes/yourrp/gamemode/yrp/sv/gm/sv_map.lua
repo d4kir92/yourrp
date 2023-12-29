@@ -20,46 +20,49 @@ util.AddNetworkString("nws_yrp_askCoords")
 util.AddNetworkString("nws_yrp_sendCoords")
 util.AddNetworkString("nws_yrp_askCoordsMM")
 util.AddNetworkString("nws_yrp_sendCoordsMM")
-
-net.Receive("nws_yrp_askCoords", function(len, ply)
-	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
-		net.Start("nws_yrp_sendCoords")
-		net.WriteBool(false)
-		net.WriteTable(_map_size)
-		net.Send(ply)
-		YRPGetMapDoors()
-	else
-		net.Start("nws_yrp_sendCoords")
-		net.WriteBool(true)
-		net.WriteTable(_map_size)
-		net.Send(ply)
+net.Receive(
+	"nws_yrp_askCoords",
+	function(len, ply)
+		if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
+			net.Start("nws_yrp_sendCoords")
+			net.WriteBool(false)
+			net.WriteTable(_map_size)
+			net.Send(ply)
+			YRPGetMapCoords()
+		else
+			net.Start("nws_yrp_sendCoords")
+			net.WriteBool(true)
+			net.WriteTable(_map_size)
+			net.Send(ply)
+		end
 	end
-end)
+)
 
-net.Receive("nws_yrp_askCoordsMM", function(len, ply)
-	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
-		net.Start("nws_yrp_sendCoordsMM")
-		net.WriteBool(false)
-		net.WriteTable(_map_size)
-		net.Send(ply)
-		YRPGetMapDoors()
-	else
-		net.Start("nws_yrp_sendCoordsMM")
-		net.WriteBool(true)
-		net.WriteTable(_map_size)
-		net.Send(ply)
+net.Receive(
+	"nws_yrp_askCoordsMM",
+	function(len, ply)
+		if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
+			net.Start("nws_yrp_sendCoordsMM")
+			net.WriteBool(false)
+			net.WriteTable(_map_size)
+			net.Send(ply)
+			YRPGetMapCoords()
+		else
+			net.Start("nws_yrp_sendCoordsMM")
+			net.WriteBool(true)
+			net.WriteTable(_map_size)
+			net.Send(ply)
+		end
 	end
-end)
+)
 
 function YRPTryNewPos(dir, size, space, tmpX, tmpY, tmpZ)
 	local _fails = 3
 	local _tmpEnd = 0
 	local _result = dir
-
 	for i = dir, size, space do
 		if util.IsInWorld(Vector(tmpX or i, tmpY or i, tmpZ or i)) and _tmpEnd < _fails then
 			_result = i
-
 			if _tmpEnd > 0 then
 				_tmpEnd = 0
 			end
@@ -75,47 +78,39 @@ end
 function YRPSearchCoords(ent)
 	local _size = 1000000
 	local _space = 8
-
 	if ent:GetPos().z - 64 > _map_size.spawnPointsH then
 		_map_size.spawnPointsH = ent:GetPos().z - 64
 	end
 
 	local testUp = YRPTryNewPos(ent:GetPos().z, _size, _space, ent:GetPos().x, ent:GetPos().y, nil)
-
 	if testUp > _map_size.sizeUp then
 		_map_size.sizeUp = testUp
 	end
 
 	local testE = YRPTryNewPos(ent:GetPos().x, _size, _space, nil, ent:GetPos().y, _map_size.sizeUp)
-
 	if testE > _map_size.sizeE then
 		_map_size.sizeE = testE
 	end
 
 	local testW = YRPTryNewPos(ent:GetPos().x, -_size, -_space, nil, ent:GetPos().y, _map_size.sizeUp)
-
 	if testW < _map_size.sizeW then
 		_map_size.sizeW = testW
 	end
 
 	local testN = YRPTryNewPos(ent:GetPos().y, _size, _space, ent:GetPos().x, nil, _map_size.sizeUp)
-
 	if testN > _map_size.sizeN then
 		_map_size.sizeN = testN
 	end
 
 	local testS = YRPTryNewPos(ent:GetPos().y, -_size, -_space, ent:GetPos().x, nil, _map_size.sizeUp)
-
 	if testS < _map_size.sizeS then
 		_map_size.sizeS = testS
 	end
 end
 
 local tries = 0
-
 function YRPGetCoords()
 	tries = tries + 1
-
 	if skyCamera == nil then
 		skyCamera = ents.FindByClass("sky_camera")
 		skyCamera = skyCamera[1]
@@ -123,7 +118,6 @@ function YRPGetCoords()
 
 	if _map_size.hasFog == nil then
 		local tmpTable = ents.FindByClass("fog_controller")
-
 		if tmpTable[1] ~= nil then
 			_map_size.hasFog = true
 		else
@@ -132,7 +126,6 @@ function YRPGetCoords()
 	end
 
 	local _hasNoSpawnpoints = true
-
 	for k, v in pairs(ents.GetAll()) do
 		if v and YRPEntityAlive(v) and (v:GetClass() == "info_player_teamspawn" or v:GetClass() == "info_player_terrorist" or v:GetClass() == "info_player_counterterrorist") then
 			_hasNoSpawnpoints = true
@@ -173,7 +166,6 @@ function YRPGetCoords()
 	_map_size.sizeS = math.Round(_map_size.sizeS)
 	_map_size.sizeW = math.Round(_map_size.sizeW)
 	_map_size.sizeUp = math.Round(_map_size.sizeUp)
-
 	if _map_size.sizeUp - _map_size.spawnPointsH < 5000 then
 		_map_size.eventH = _map_size.sizeUp
 	else
@@ -188,7 +180,6 @@ function YRPGetCoords()
 	_map_size.sizeFE = _map_size.sizeX * _map_size.sizeY
 	_map_size.midX = _map_size.sizeE - (_map_size.sizeX / 2)
 	_map_size.midY = _map_size.sizeN - (_map_size.sizeY / 2)
-
 	if _map_size.sizeX >= _map_size.sizeY then
 		_map_size.facX = 1
 		_map_size.facY = _map_size.sizeX / _map_size.sizeY --X: 30000 / 10000 = 3
@@ -199,15 +190,17 @@ function YRPGetCoords()
 
 	--Ohne Problem durchcgelaufen
 	_map_size.error = 0
-
 	if (_map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999) and tries < 5 then
-		timer.Simple(5, function()
-			YRP.msg("note", "YRPGetMapDoors() retry")
-			YRPGetMapDoors()
-		end)
+		timer.Simple(
+			5,
+			function()
+				YRP.msg("note", "YRPGetMapCoords() retry")
+				YRPGetMapCoords()
+			end
+		)
 	end
 end
 
-function YRPGetMapDoors()
+function YRPGetMapCoords()
 	YRPGetCoords()
 end
