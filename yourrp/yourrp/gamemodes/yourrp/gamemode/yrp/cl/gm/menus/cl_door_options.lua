@@ -22,6 +22,7 @@ end
 net.Receive(
 	"nws_yrp_sendBuildingInfo",
 	function(len)
+		YRP.msg("note", "[DoorOptions] Got Date from Server")
 		if yrp_door.waitforanswer then
 			yrp_door.waitforanswer = false
 			local door = net.ReadEntity()
@@ -52,6 +53,8 @@ net.Receive(
 				YRP.msg("note", "getBuildingInfo net Table broken")
 				LocalPlayer():PrintMessage(HUD_PRINTCENTER, "[Building] net Table broken")
 			end
+		else
+			YRP.msg("error", "Got Door Data to late!")
 		end
 	end
 )
