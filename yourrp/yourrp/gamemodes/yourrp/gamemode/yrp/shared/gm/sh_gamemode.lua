@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 398 -- do NOT change this!
+GM.VersionBuild = 399 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -954,7 +954,9 @@ local currentPropList = nil
 function YRPGetPROPsList()
 	if currentPropList == nil then
 		currentPropList = {}
+		print("-----------------")
 		for i, v in pairs(spawnmenu.GetPropTable()) do
+			print(i, v)
 			if v.contents then
 				for x, w in pairs(v.contents) do
 					table.insert(currentPropList, w.model)
@@ -970,10 +972,25 @@ function YRPGetPROPsList()
 				end
 			end
 		end
+
+		AddToTabRecursive(currentPropList, "models/", "GAME", "*.mdl")
+		for _, addon in SortedPairsByMemberValue(engine.GetAddons(), "title") do
+			if not addon.downloaded or not addon.mounted then continue end
+			AddToTabRecursive(currentPropList, "models/", addon.title, "*.mdl")
+		end
 	end
 
 	return currentPropList
 end
+
+timer.Simple(
+	1,
+	function()
+		if CLIENT then
+			YRPGetPROPsList()
+		end
+	end
+)
 
 function YRPGetSENTsList()
 	local res = {}
