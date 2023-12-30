@@ -70,12 +70,23 @@ hook.Add(
 	"InitPostEntity",
 	"YRP_INITPOSTENTITY",
 	function()
-		YRPStartSendingStartData("HOOK InitPostEntity")
+		timer.Simple(
+			1,
+			function()
+				YRPStartSendingStartData("HOOK InitPostEntity")
+			end
+		)
 	end
 )
 
 function GM:InitPostEntity()
-	YRPStartSendingStartData("GM InitPostEntity")
+	timer.Simple(
+		1,
+		function()
+			YRPStartSendingStartData("GM InitPostEntity")
+		end
+	)
+
 	local ply = LocalPlayer()
 	ply.DarkRPVars = {}
 	ply.DarkRPVars.money = 0

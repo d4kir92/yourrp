@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 397 -- do NOT change this!
+GM.VersionBuild = 398 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -958,6 +958,15 @@ function YRPGetPROPsList()
 			if v.contents then
 				for x, w in pairs(v.contents) do
 					table.insert(currentPropList, w.model)
+				end
+			end
+		end
+
+		for addonname, addontab in pairs(spawnmenu.GetCustomPropTable()) do
+			for i, tab in pairs(addontab.contents) do
+				-- not category:
+				if tab.model ~= nil then
+					table.insert(currentPropList, tab.model)
 				end
 			end
 		end
