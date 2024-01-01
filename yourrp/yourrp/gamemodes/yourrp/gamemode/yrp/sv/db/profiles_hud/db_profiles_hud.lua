@@ -1,52 +1,54 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_profiles_hud"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "profile_name", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
-
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 function GetHudProfiles()
 	return YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'name'")
 end
 
 util.AddNetworkString("nws_yrp_change_to_hud_profile")
+net.Receive(
+	"nws_yrp_change_to_hud_profile",
+	function()
+		local profile_name = net.ReadString()
+		YRP_SQL_UPDATE(
+			"yrp_design",
+			{
+				["string_hud_profile"] = profile_name
+			}, "uniqueID = 1"
+		)
 
-net.Receive("nws_yrp_change_to_hud_profile", function()
-	local profile_name = net.ReadString()
+		SetGlobalYRPString("string_hud_profile", profile_name)
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. profile_name .. "'")
+		if IsNotNilAndNotFalse(tab) then
+			for i, v in pairs(tab) do
+				local name = v.name
+				local value = v.value
+				YRP_SQL_UPDATE(
+					"yrp_hud",
+					{
+						["value"] = value
+					}, "name = '" .. name .. "'"
+				)
+			end
 
-	YRP_SQL_UPDATE("yrp_design", {
-		["string_hud_profile"] = profile_name
-	}, "uniqueID = 1")
-
-	SetGlobalYRPString("string_hud_profile", profile_name)
-	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. profile_name .. "'")
-
-	if IsNotNilAndNotFalse(tab) then
-		for i, v in pairs(tab) do
-			local name = v.name
-			local value = v.value
-
-			YRP_SQL_UPDATE("yrp_hud", {
-				["value"] = value
-			}, "name = '" .. name .. "'")
+			HudLoadoutAll()
+		else
+			YRP.msg("note", "HUD Profile: " .. profile_name .. " (not found)")
 		end
-
-		HudLoadoutAll()
-	else
-		YRP.msg("note", "HUD Profile: " .. profile_name .. " (not found)")
 	end
-end)
+)
 
 function HudToCode(name)
 	MsgC(Color(255, 255, 255, 255), "local " .. string.Replace(name, " ", "_") .. " = {}" .. "\n")
 	local tab = YRP_SQL_SELECT("yrp_hud", "*", nil)
-
 	for i, v in SortedPairsByMemberValue(tab, "name") do
 		local prefix = string.Replace(name, " ", "_") .. "." .. ""
 		v.value = tonumber(v.value) or v.value
-
 		if isnumber(v.value) then
 			MsgC(Color(255, 255, 255, 255), prefix .. v.name .. " = " .. v.value .. "\n")
 		elseif isstring(v.value) then
@@ -58,26 +60,25 @@ end
 --HudToCode( "Identifycard" )
 local HUDPROFILEVERSION = 1
 YRPHUDS = YRPHUDS or {}
-
 function HudProfileToDataBase(name, tab)
 	YRP.msg("db", "Load Hud Profile: " .. name, nil)
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. name .. "'")
-
 	if dbtab == nil then
 		YRP.msg("db", "Missing Hud Profile: " .. name, nil, true)
 		YRP_SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. "name" .. "', '" .. name .. "'")
-
 		for i, v in pairs(tab) do
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. i .. "', '" .. v .. "'")
 		end
 	else
 		if tab.Version ~= HUDPROFILEVERSION then
 			YRP.msg("db", "Updating Hud Profile: " .. name, nil, true)
-
 			for i, v in pairs(tab) do
-				YRP_SQL_UPDATE(DATABASE_NAME, {
-					["value"] = v
-				}, "name = '" .. i .. "' AND profile_name = '" .. name .. "'")
+				YRP_SQL_UPDATE(
+					DATABASE_NAME,
+					{
+						["value"] = v
+					}, "name = '" .. i .. "' AND profile_name = '" .. name .. "'"
+				)
 			end
 		end
 	end
@@ -855,7 +856,6 @@ function ProfilesYourRPDefault()
 end
 
 ProfilesYourRPDefault()
-
 function ProfilesTopBar()
 	if YRPHUDS.TopBar == nil then
 		YRPHUDS.TopBar = true
@@ -1626,7 +1626,6 @@ function ProfilesTopBar()
 end
 
 ProfilesTopBar()
-
 function ProfilesIdentifycard()
 	if YRPHUDS.Identifycard == nil then
 		YRPHUDS.Identifycard = true

@@ -1,20 +1,16 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function fake_true()
 	return true
 end
 
 local Simple = {}
-
 function HUDSimpleBG(tab)
 	local lply = LocalPlayer()
-
 	if lply:HudValue(tab.element, "VISI") and lply:HudValue(tab.element, "BACK") and lply:HudElementVisible(tab.element) then
 		tab.visiblefunc = tab.visiblefunc or fake_true
-
 		if tab.visiblefunc() then
 			Simple[tab.element] = Simple[tab.element] or {}
 			Simple[tab.element]["background"] = Simple[tab.element]["background"] or {}
-
 			if GetGlobalYRPInt("YRPHUDVersion", -1) ~= Simple[tab.element]["background"]["version"] then
 				Simple[tab.element]["background"]["version"] = GetGlobalYRPInt("YRPHUDVersion", -1)
 				local w = lply:HudValue(tab.element, "SIZE_W")
@@ -26,7 +22,6 @@ function HUDSimpleBG(tab)
 				Simple[tab.element]["background"].fx = x
 				Simple[tab.element]["background"].fy = y
 				Simple[tab.element]["background"].r = 0
-
 				if lply:HudValue(tab.element, "ROUN") then
 					Simple[tab.element]["background"].r = tab.r or YRP.ctr(15)
 				end
@@ -48,13 +43,11 @@ end
 
 function HUDSimpleBAR(tab)
 	local lply = LocalPlayer()
-
 	if lply:HudValue(tab.element, "VISI") and lply:HudElementVisible(tab.element) then
 		Simple[tab.element] = Simple[tab.element] or {}
 		Simple[tab.element]["bar"] = Simple[tab.element]["bar"] or {}
 		Simple[tab.element]["icon"] = Simple[tab.element]["icon"] or {}
 		Simple[tab.element]["text"] = Simple[tab.element]["text"] or {}
-
 		if GetGlobalYRPInt("YRPHUDVersion", -1) ~= Simple[tab.element]["bar"]["version"] then
 			Simple[tab.element]["bar"]["version"] = GetGlobalYRPInt("YRPHUDVersion", -1)
 			local w = lply:HudValue(tab.element, "SIZE_W")
@@ -70,7 +63,6 @@ function HUDSimpleBAR(tab)
 			Simple[tab.element]["bar"].x = x
 			Simple[tab.element]["bar"].y = y
 			Simple[tab.element]["bar"].r = 0
-
 			if lply:HudValue(tab.element, "ROUN") then
 				Simple[tab.element]["bar"].r = tab.r or YRP.ctr(15)
 			end
@@ -80,7 +72,6 @@ function HUDSimpleBAR(tab)
 			Simple[tab.element]["text"].ay = lply:HudValue(tab.element, "AY")
 			local ax = Simple[tab.element]["text"].ax
 			local ay = Simple[tab.element]["text"].ay
-
 			if lply:HudValue(tab.element, "ROUN") then
 				Simple[tab.element]["text"].fx = x + h / 2 + (w - h) / 2 * ax
 				Simple[tab.element]["text"].fy = y + h / 16 + (h - h / 8) / 2 * ay
@@ -91,7 +82,6 @@ function HUDSimpleBAR(tab)
 
 			Simple[tab.element]["text"].text = tab.element
 			local fontsize = lply:HudValue(tab.element, "TS")
-
 			if fontsize <= 0 then
 				fontsize = 14
 			end
@@ -99,7 +89,6 @@ function HUDSimpleBAR(tab)
 			Simple[tab.element]["text"].font = "Y_" .. fontsize .. "_500"
 			Simple[tab.element]["text"].color = lply:HudValue(tab.element, "TE")
 			Simple[tab.element]["text"].brcolor = lply:HudValue(tab.element, "TB")
-
 			if Simple[tab.element]["bar"].fw > Simple[tab.element]["bar"].fh then
 				Simple[tab.element]["icon"].w = Simple[tab.element]["bar"].fh * 0.75
 				Simple[tab.element]["icon"].h = Simple[tab.element]["bar"].fh * 0.75
@@ -124,7 +113,6 @@ function HUDSimpleBAR(tab)
 			Simple[tab.element]["text"].y = HUDMOTIONY(Simple[tab.element]["text"].fy)
 			Simple[tab.element]["icon"].x = HUDMOTIONX(Simple[tab.element]["icon"].fx)
 			Simple[tab.element]["icon"].y = HUDMOTIONY(Simple[tab.element]["icon"].fy)
-
 			if tab.max ~= nil and tab.cur ~= nil then
 				if Simple[tab.element]["bar"].fw > Simple[tab.element]["bar"].fh then
 					Simple[tab.element]["bar"].h = Simple[tab.element]["bar"].fh
@@ -143,7 +131,6 @@ function HUDSimpleBAR(tab)
 			end
 
 			Simple[tab.element]["text"].text = ""
-
 			if tab.text ~= nil and lply:HudValue(tab.element, "TEXT") then
 				Simple[tab.element]["text"].text = tab.text
 			end
@@ -167,14 +154,11 @@ end
 
 function HUDSimpleBR(tab)
 	local lply = LocalPlayer()
-
 	if lply:HudValue(tab.element, "VISI") and lply:HudValue(tab.element, "BORD") and lply:HudElementVisible(tab.element) then
 		tab.visiblefunc = tab.visiblefunc or fake_true
-
 		if lply:HudValue(tab.element, "VISI") and tab.visiblefunc() then
 			Simple[tab.element] = Simple[tab.element] or {}
 			Simple[tab.element]["border"] = Simple[tab.element]["border"] or {}
-
 			if Simple[tab.element]["border"].fx and Simple[tab.element]["border"].fy then
 				Simple[tab.element]["border"].x = HUDMOTIONX(Simple[tab.element]["border"].fx)
 				Simple[tab.element]["border"].y = HUDMOTIONY(Simple[tab.element]["border"].fy)
@@ -192,7 +176,6 @@ function HUDSimpleBR(tab)
 				Simple[tab.element]["border"].fx = x
 				Simple[tab.element]["border"].fy = y
 				Simple[tab.element]["border"].r = 0
-
 				if lply:HudValue(tab.element, "ROUN") then
 					Simple[tab.element]["border"].r = tab.r or YRP.ctr(15)
 				end
@@ -211,7 +194,6 @@ end
 function GetFadeAlpha(ox, cx, ow)
 	local alpha = 1
 	local pos = (cx - ox) / ow
-
 	if pos <= 0.01 then
 		alpha = 0
 	elseif pos >= 0.99 then
@@ -233,7 +215,6 @@ function HUDSimpleCompass()
 	local lply = LocalPlayer()
 	local tab = {}
 	local coord = lply:CoordAngle()
-
 	if coord % 90 > 4 and coord % 90 < 86 then
 		tab.text = lply:CoordAngle() - lply:CoordAngle() % 5 .. "°"
 	elseif coord >= 355 or coord <= 5 then
@@ -249,7 +230,6 @@ function HUDSimpleCompass()
 	end
 
 	tab.visiblefunc = tab.visiblefunc or fake_true
-
 	if lply:HudValue("COM", "VISI") and tab.visiblefunc() then
 		Simple["COM"] = Simple["COM"] or {}
 		Simple["COM"]["needle"] = Simple["COM"]["needle"] or {}
@@ -258,7 +238,6 @@ function HUDSimpleCompass()
 		Simple["COM"]["south"] = Simple["COM"]["south"] or {}
 		Simple["COM"]["east"] = Simple["COM"]["east"] or {}
 		Simple["COM"]["west"] = Simple["COM"]["west"] or {}
-
 		if GetGlobalYRPInt("YRPHUDVersion", -1) ~= Simple["COM"]["degree"]["version"] then
 			Simple["COM"]["degree"]["version"] = GetGlobalYRPInt("YRPHUDVersion", -1)
 			local w = lply:HudValue("COM", "SIZE_W")
@@ -272,14 +251,12 @@ function HUDSimpleCompass()
 			Simple["COM"]["needle"].fy = y
 			Simple["COM"]["needle"].color = Color(255, 255, 255, 255)
 			local fontsize = lply:HudValue("COM", "TS")
-
 			if fontsize <= 0 then
 				fontsize = 8
 			end
 
 			local fontsizes = GetFontSizeTable()
 			local fsid = 0
-
 			for i, size in pairs(fontsizes) do
 				if fontsize == size then
 					fsid = i + 1
@@ -287,7 +264,6 @@ function HUDSimpleCompass()
 			end
 
 			local nextfontsize = fontsize
-
 			if fontsizes[fsid + 1] ~= nil then
 				nextfontsize = fontsizes[fsid + 1]
 			elseif fontsizes[fsid] ~= nil then
@@ -343,7 +319,6 @@ function HUDSimpleCompass()
 			Simple["COM"]["west"].color = lply:HudValue("COM", "TE")
 			Simple["COM"]["west"].brcolor = lply:HudValue("COM", "TB")
 			Simple["COM"]["west"].text = YRP.trans("LID_west_short")
-
 			for i = 0, 360, 30 do
 				if i % 90 ~= 0 then
 					Simple["COM"][i .. "num"] = {}
@@ -377,7 +352,6 @@ function HUDSimpleCompass()
 			Simple["COM"]["east"].y = HUDMOTIONY(Simple["COM"]["east"].fy)
 			Simple["COM"]["west"].x = HUDMOTIONX(Simple["COM"]["west"].fx)
 			Simple["COM"]["west"].y = HUDMOTIONY(Simple["COM"]["west"].fy)
-
 			for i = 0, 360, 30 do
 				if i % 90 ~= 0 then
 					Simple["COM"][i .. "num"].x = HUDMOTIONX(Simple["COM"][i .. "num"].fx)
@@ -390,7 +364,6 @@ function HUDSimpleCompass()
 			x = Simple["COM"]["degree"].x - Simple["COM"]["north"].w / 2
 			w = Simple["COM"]["north"].w
 			local fw = (w * (lply:CoordAngle() / 360)) * -1
-
 			-- striche
 			for i = 0, 360, 30 do
 				if i % 90 ~= 0 then
@@ -435,7 +408,6 @@ function HUDSimpleCompass()
 			-- Degree Number
 			Simple["COM"]["degree"].text = tab.text
 			HudText(Simple["COM"]["degree"])
-
 			-- Needle
 			--HudBox(Simple["COM"]["needle"])
 			local triangle = {
@@ -456,7 +428,6 @@ function HUDSimpleCompass()
 			surface.SetDrawColor(255, 255, 255, 180)
 			draw.NoTexture()
 			surface.DrawPoly(triangle)
-
 			local triangle2 = {
 				{
 					x = Simple["COM"]["needle"].x - 5,
@@ -481,7 +452,6 @@ end
 
 local _fps = 144
 local _fps_delay = 0
-
 function FPS_Think()
 	if CurTime() > _fps_delay then
 		_fps_delay = CurTime() + 0.5
@@ -490,7 +460,6 @@ function FPS_Think()
 end
 
 hook.Add("HUDPaint", "yrp_think_fps", FPS_Think)
-
 function GetFPS()
 	return _fps
 end
@@ -529,13 +498,10 @@ icons["CR"] = "64_clock"
 icons["CC"] = "64_clock"
 icons["RO"] = "64_user-graduate"
 icons["NA"] = "64_user"
-
 function HUDSimple()
 	local lply = LocalPlayer()
-
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and not YRPIsScoreboardVisible() and GetGlobalYRPBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Simple" then
 		local batterypower = system.BatteryPower()
-
 		-- Background
 		for i = 1, 10 do
 			local BOX = {}
@@ -563,7 +529,6 @@ function HUDSimple()
 		local AR = {}
 		AR.element = "AR"
 		HUDSimpleBG(AR)
-
 		if IsLevelSystemEnabled() then
 			local XP = {}
 			XP.element = "XP"
@@ -579,7 +544,6 @@ function HUDSimple()
 		local RO = {}
 		RO.element = "RO"
 		HUDSimpleBG(RO)
-
 		if GetGlobalYRPBool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"
@@ -628,7 +592,6 @@ function HUDSimple()
 		local WN = {}
 		WN.element = "WN"
 		local weapon = lply:GetActiveWeapon()
-
 		if IsValid(weapon) then
 			local clip1 = weapon:Clip1()
 			local clip1max = weapon:GetMaxClip1()
@@ -636,13 +599,11 @@ function HUDSimple()
 			local clip2 = weapon:Clip2()
 			local clip2max = weapon:GetMaxClip2()
 			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
-
 			if clip1 > 0 or ammo1 > 0 then
 				WP.visible = true
 				WP.cur = clip1
 				WP.max = clip1max
 				WP.text = ""
-
 				if clip1 > 0 then
 					WP.text = clip1 .. " / " .. clip1max
 				end
@@ -661,7 +622,6 @@ function HUDSimple()
 				WS.cur = clip2
 				WS.max = clip2max
 				WS.text = ""
-
 				if clip2 > 0 then
 					WS.text = clip2 .. " / " .. clip2max
 				end
@@ -689,7 +649,6 @@ function HUDSimple()
 		end
 
 		HUDSimpleBG(WN)
-
 		if batterypower <= 100 then
 			local BA = {}
 			BA.element = "BA"
@@ -717,7 +676,6 @@ function HUDSimple()
 		local PM = {}
 		PM.element = "PM"
 		HUDSimpleBG(PM)
-
 		-- Midground
 		for i = 1, 10 do
 			local BOX = {}
@@ -779,12 +737,10 @@ function HUDSimple()
 		AR.icon = icons["AR"]
 		HUDSimpleBAR(AR)
 		XP = {}
-
 		if IsLevelSystemEnabled() then
 			XP.element = "XP"
 			XP.cur = lply:XP()
 			XP.max = lply:GetMaxXP()
-
 			if XP.cur < XP.max then
 				XP.text = YRP.trans("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " ( " .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%) " .. YRP.trans("LID_level") .. " " .. lply:Level()
 			else
@@ -816,7 +772,6 @@ function HUDSimple()
 		RO.icon = icons["RO"]
 		--RO.tcolor = lply:GetRoleColor()
 		HUDSimpleBAR(RO)
-
 		if GetGlobalYRPBool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"
@@ -891,7 +846,6 @@ function HUDSimple()
 		AB.percentage = math.Round(lply:Ability() / lply:GetMaxAbility() * 100, 1) .. "%"
 		AB.icon = icons["AB"]
 		HUDSimpleBAR(AB)
-
 		if WP.visible then
 			HUDSimpleBAR(WP)
 		end
@@ -901,7 +855,6 @@ function HUDSimple()
 		end
 
 		HUDSimpleBAR(WN)
-
 		if batterypower <= 100 then
 			if batterypower > 100 then
 				batterypower = 100
@@ -929,11 +882,9 @@ function HUDSimple()
 		PE.element = "PE"
 		PE.cur = 0
 		PE.max = 1
-
 		if CurTime() > fps_delay then
 			fps_delay = CurTime() + 0.5
 			fps = GetFPS()
-
 			if lply:HudValue("PE", "EXTR") then
 				if fps < fpsmin then
 					fpsmin = fps
@@ -943,7 +894,6 @@ function HUDSimple()
 
 				fpscou = fpscou + 1
 				fpstavg = fpstavg + fps
-
 				if fpscou > 9 then
 					fpsavg = math.Round(fpstavg / 10, 0)
 					fpscou = 0
@@ -961,18 +911,15 @@ function HUDSimple()
 		end
 
 		PE.text = YRP.trans("LID_fps") .. ": " .. fps
-
 		if lply:HudValue("PE", "EXTR") then
 			PE.text = PE.text .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. " )"
 		end
 
 		PE.tcolor = fpscolor
 		HUDSimpleBAR(PE)
-
 		if CurTime() > ping_delay then
 			ping_delay = CurTime() + 0.5
 			ping = lply:Ping()
-
 			if lply:HudValue("NE", "EXTR") then
 				if ping < pingmin then
 					pingmin = ping
@@ -982,7 +929,6 @@ function HUDSimple()
 
 				pingcou = pingcou + 1
 				pingtavg = pingtavg + ping
-
 				if pingcou > 9 then
 					pingavg = math.Round(pingtavg / 10, 0)
 					pingcou = 0
@@ -1004,7 +950,6 @@ function HUDSimple()
 		NE.cur = 0
 		NE.max = 1
 		NE.text = YRP.trans("LID_ping") .. ": " .. ping
-
 		if lply:HudValue("NE", "EXTR") then
 			NE.text = NE.text .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. " )"
 		end
@@ -1020,7 +965,6 @@ function HUDSimple()
 		local _y = math.Round(lply:GetPos().y, 0)
 		MI.text = "x: " .. tostring(_x) .. " y: " .. tostring(_y)
 		HUDSimpleBAR(MI)
-
 		if lply:Lockdown() then
 			local LO = {}
 			LO.element = "LO"
@@ -1041,7 +985,6 @@ function HUDSimple()
 		AR = {}
 		AR.element = "AR"
 		HUDSimpleBR(AR)
-
 		if IsLevelSystemEnabled() then
 			XP = {}
 			XP.element = "XP"
@@ -1057,7 +1000,6 @@ function HUDSimple()
 		RO = {}
 		RO.element = "RO"
 		HUDSimpleBR(RO)
-
 		if GetGlobalYRPBool("bool_stamina", false) then
 			local ST = {}
 			ST.element = "ST"
@@ -1098,20 +1040,17 @@ function HUDSimple()
 		AB.element = "AB"
 		HUDSimpleBR(AB)
 		WP.element = "WP"
-
 		if WP.visible then
 			HUDSimpleBR(WP)
 		end
 
 		WS.element = "WS"
-
 		if WS.visible then
 			HUDSimpleBR(WS)
 		end
 
 		WN.element = "WN"
 		HUDSimpleBR(WN)
-
 		if batterypower <= 100 then
 			local BA = {}
 			BA.element = "BA"
@@ -1148,6 +1087,9 @@ function HUDSimple()
 	end
 end
 
-timer.Simple(1, function()
-	hook.Add("HUDPaint", "yrp_hud_design_Simple", HUDSimple)
-end)
+timer.Simple(
+	1,
+	function()
+		hook.Add("HUDPaint", "yrp_hud_design_Simple", HUDSimple)
+	end
+)

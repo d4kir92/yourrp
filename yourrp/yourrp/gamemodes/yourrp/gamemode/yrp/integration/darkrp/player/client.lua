@@ -1,6 +1,5 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local Player = FindMetaTable("Player")
-
 function Player:drawHitInfo()
 end
 
@@ -39,11 +38,9 @@ end
 --Description: Stop drawing the hit information above a hitman.
 --
 local keyNames
-
 function input.KeyNameToNumber(str)
 	if not keyNames then
 		keyNames = {}
-
 		for i = 1, 107 do
 			keyNames[input.GetKeyName(i)] = i
 		end

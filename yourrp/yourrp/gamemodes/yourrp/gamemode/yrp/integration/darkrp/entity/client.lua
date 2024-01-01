@@ -1,8 +1,6 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
-local Entity = FindMetaTable( "Entity" )
-
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local Entity = FindMetaTable("Entity")
 function Entity:drawOwnableInfo()
-	--Description: Draw the ownability information on a door or vehicle.
-	--YRPDarkrpNotFound( "drawOwnableInfo()" )
 end
+--Description: Draw the ownability information on a door or vehicle.
+--YRPDarkrpNotFound( "drawOwnableInfo()" )

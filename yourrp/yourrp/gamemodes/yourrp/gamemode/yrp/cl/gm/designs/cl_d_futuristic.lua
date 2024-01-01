@@ -1,10 +1,9 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _fut = {}
 _fut.author = "D4KiR"
 _fut.name = "Futuristic"
 _fut.textFont = "Y_18_500"
 YRPRegisterDesign(_fut)
-
 function _fut.GetAlpha()
 	if InterfaceTransparent() then
 		return 200
@@ -80,7 +79,6 @@ YRPAddColor(_fut.name, "purple", "3", Color(13, 63, 135)) -- Selected
 YRPAddColor(_fut.name, "purple", "4", Color(90, 90, 90)) -- Background Highlight
 YRPAddColor(_fut.name, "purple", "5", Color(51, 51, 51)) -- Background
 YRPAddColor(_fut.name, "purple", "6", Color(255, 255, 255, 255)) -- Border
-
 function _fut.GetColor(color, style)
 	return _fut.color[color][style]
 end
@@ -89,7 +87,6 @@ local g_up = Material("vgui/gradient_up")
 local g_dn = Material("vgui/gradient_down")
 local g_ri = Material("vgui/gradient-r")
 local g_le = Material("vgui/gradient-l")
-
 function LaserBorder(pw, ph)
 	local _size = YRP.ctr(12)
 	surface.SetDrawColor(_fut.GetColor(InterfaceColor(), InterfaceStyle()))
@@ -122,7 +119,6 @@ function _fut.DrawWindow(window, pw, ph, title)
 	--
 	local _color_bar = _fut.color[InterfaceColor()][InterfaceStyle()]
 	local _color_bg = _fut.color["bg"][InterfaceStyle()]
-
 	if InterfaceTransparent() then
 		if InterfaceStyle() == "dark" then
 			_color_bar.a = 160
@@ -138,7 +134,6 @@ function _fut.DrawWindow(window, pw, ph, title)
 
 	draw.RoundedBox(0, 0, 0, pw, YRP.ctr(50), _color_bar)
 	draw.RoundedBox(0, 0, YRP.ctr(50), pw, ph - YRP.ctr(50), _color_bg)
-
 	if InterfaceBorder() then
 		LaserBorder(pw, ph)
 	end
@@ -149,7 +144,6 @@ function _fut.DrawWindow(window, pw, ph, title)
 end
 
 RegisterWindowFunction(_fut.name, _fut.DrawWindow)
-
 function _fut.YRPDrawButton(btn, pw, ph, text, color)
 	--[[ Vars ]]
 	--
@@ -157,7 +151,6 @@ function _fut.YRPDrawButton(btn, pw, ph, text, color)
 	--[[ Background ]]
 	--
 	local _color_bar = _fut.GetColor(InterfaceColor(), InterfaceStyle())
-
 	if InterfaceTransparent() then
 		_color_bar.a = 60
 	else
@@ -165,14 +158,12 @@ function _fut.YRPDrawButton(btn, pw, ph, text, color)
 	end
 
 	local _hovered = 0
-
 	if btn:IsHovered() then
 		_hovered = 60
 	end
 
 	local _color = color or _color_bar
 	draw.RoundedBox(0, 0, 0, pw, ph, Color(_color.r + _hovered, _color.g + _hovered, _color.b + _hovered, _color.a))
-
 	if InterfaceBorder() then
 		LaserBorder(pw, ph)
 	end
@@ -183,7 +174,6 @@ function _fut.YRPDrawButton(btn, pw, ph, text, color)
 end
 
 RegisterButtonFunction(_fut.name, _fut.DrawButton)
-
 function _fut.DrawPanel(pnl, pw, ph, text, color, px, py, ax, ah)
 	--[[ Vars ]]
 	--
@@ -191,7 +181,6 @@ function _fut.DrawPanel(pnl, pw, ph, text, color, px, py, ax, ah)
 	--[[ Background ]]
 	--
 	local _color_bar = _fut.GetColor(InterfaceColor(), InterfaceStyle())
-
 	if InterfaceTransparent() then
 		_color_bar.a = 60
 	else
@@ -199,7 +188,6 @@ function _fut.DrawPanel(pnl, pw, ph, text, color, px, py, ax, ah)
 	end
 
 	draw.RoundedBox(0, 0, 0, pw, ph, _color_bar)
-
 	if InterfaceBorder() then
 		LaserBorder(pw, ph)
 	end

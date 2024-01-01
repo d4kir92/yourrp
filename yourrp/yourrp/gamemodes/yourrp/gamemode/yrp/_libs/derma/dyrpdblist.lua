@@ -1,9 +1,7 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 function paintDBButton(self, pw, ph, color, text)
 	local _color = color
-
 	if self:IsHovered() then
 		_color = Color(255, 255, 0)
 	end
@@ -17,7 +15,6 @@ function PANEL:Init()
 	--[[ Header ]]
 	--
 	self.header = YRPCreateD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
-
 	function self.header:Paint(pw, ph)
 	end
 
@@ -25,7 +22,6 @@ function PANEL:Init()
 	self.panels = {}
 	self.header.add = YRPCreateD("DButton", self.header, self:GetWide() / 5, self:GetTall(), 0, 0)
 	self.header.add:SetText("")
-
 	function self.header.add:Paint(pw, ph)
 		paintDBButton(self, pw, ph, Color(0, 255, 0), "+")
 	end
@@ -36,7 +32,6 @@ function PANEL:Init()
 
 	self.header.rem = YRPCreateD("DButton", self.header, self:GetWide() / 5, self:GetTall(), 4 * (self:GetWide() / 5), 0)
 	self.header.rem:SetText("")
-
 	function self.header.rem:Paint(pw, ph)
 		if _pnl.uid ~= nil then
 			paintDBButton(self, pw, ph, Color(0, 255, 0), "-")
@@ -53,7 +48,6 @@ function PANEL:Init()
 	function self.header:Think()
 		local _w = self:GetWide()
 		local _x = self.rem:GetPos()
-
 		if _x ~= 3 * (_w / 5) then
 			self.rem:SetPos(4 * (_w / 5), 0)
 		end
@@ -81,7 +75,6 @@ function PANEL:Init()
 	self.listheader.textpre = ""
 	self.listheader.text = "UNNAMED"
 	self.listheader.textpos = ""
-
 	function self.listheader:Paint(pw, ph)
 		local color = Color(0, 255, 0)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0))
@@ -92,7 +85,6 @@ function PANEL:Init()
 	--
 	self.list = YRPCreateD("DScrollPanel", self, self:GetWide(), self:GetTall() - YRP.ctr(110), 0, 0)
 	self.list:SetPadding(2)
-
 	--self.list:SetNoSizing(true)
 	function self.list:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 100))
@@ -102,7 +94,6 @@ function PANEL:Init()
 	--
 	function self:SetListHeader(text, pre, pos)
 		self.listheader.text = text
-
 		if pre ~= nil then
 			self.listheader.textpre = pre
 		end
@@ -126,10 +117,8 @@ function PANEL:Init()
 		local _new = YRPCreateD("DButton", nil, self:GetWide(), YRP.ctr(50), 0, 0)
 		_new:SetText("")
 		_new.tbl = tbl
-
 		function _new:Paint(pw, ph)
 			local _color = Color(255, 255, 255, 255)
-
 			if self:IsHovered() or _pnl.uid == self.tbl.uniqueID then
 				_color = Color(255, 255, 0)
 			end
@@ -166,13 +155,11 @@ end
 
 function PANEL:Think()
 	local _x = self.listheader:GetPos()
-
 	if YRP.ctr(60) ~= _x then
 		self.listheader:SetPos(0, YRP.ctr(60))
 	end
 
 	_x = self.list:GetPos()
-
 	if YRP.ctr(110) ~= _x then
 		self.list:SetPos(0, YRP.ctr(110))
 	end

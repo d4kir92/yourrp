@@ -1,10 +1,9 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 -- #Resources #Content #Addons
 YRPWDLOADED = YRPWDLOADED or false
 YRPLOADEDGMAS = YRPLOADEDGMAS or {}
-
 function YRPWorkshopDownload()
 	if YRPWDLOADED == false then
 		YRPWDLOADED = true
@@ -27,7 +26,6 @@ function YRPWorkshopDownload()
 		local form = math.log10(_wscount) - math.log10(_wscount) % 1 + 1
 		local header = ""
 		header = header .. " NR"
-
 		for i = 1, form do
 			header = header .. " "
 		end
@@ -36,10 +34,8 @@ function YRPWorkshopDownload()
 		YRP.msg("gm", header)
 		local i = 0
 		local d = 0
-
 		for k, ws in pairs(_wsitems) do
 			i = i + 1
-
 			if ws.mounted and ws.downloaded then
 				YRP.msg("gm", "+[" .. string.format("%0" .. form .. "d", k) .. "] [" .. tostring(ws.title) .. "]")
 				resource.AddWorkshop(tostring(ws.wsid))
@@ -71,6 +67,9 @@ function YRPWorkshopDownload()
 	end
 end
 
-timer.Simple(0, function()
-	YRPWorkshopDownload()
-end)
+timer.Simple(
+	0,
+	function()
+		YRPWorkshopDownload()
+	end
+)

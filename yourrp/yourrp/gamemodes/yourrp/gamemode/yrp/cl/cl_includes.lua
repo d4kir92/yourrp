@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 YRP.msg("gm", "Loading cl_includes.lua")
 include("db/db_database.lua")
 include("gm/cl_playerisready.lua")

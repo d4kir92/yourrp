@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_realistic"
@@ -29,7 +29,6 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_npc_legs", "TEXT DEFAULT '0.6
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_entities", "TEXT DEFAULT '1'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_hitfactor_vehicles", "TEXT DEFAULT '1'")
 local HANDLER_REALISTIC = {}
-
 function RemFromHandler_Realistic(ply)
 	table.RemoveByValue(HANDLER_REALISTIC, ply)
 end
@@ -41,29 +40,32 @@ function AddToHandler_Realistic(ply)
 end
 
 util.AddNetworkString("nws_yrp_connect_Settings_Realistic")
+net.Receive(
+	"nws_yrp_connect_Settings_Realistic",
+	function(len, ply)
+		if ply:CanAccess("bool_realistic") then
+			AddToHandler_Realistic(ply)
+			local _yrp_realistic = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+			if IsNotNilAndNotFalse(_yrp_realistic) then
+				_yrp_realistic = _yrp_realistic[1]
+			else
+				_yrp_realistic = {}
+			end
 
-net.Receive("nws_yrp_connect_Settings_Realistic", function(len, ply)
-	if ply:CanAccess("bool_realistic") then
-		AddToHandler_Realistic(ply)
-		local _yrp_realistic = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-
-		if IsNotNilAndNotFalse(_yrp_realistic) then
-			_yrp_realistic = _yrp_realistic[1]
-		else
-			_yrp_realistic = {}
+			net.Start("nws_yrp_connect_Settings_Realistic")
+			net.WriteTable(_yrp_realistic)
+			net.Send(ply)
 		end
-
-		net.Start("nws_yrp_connect_Settings_Realistic")
-		net.WriteTable(_yrp_realistic)
-		net.Send(ply)
 	end
-end)
+)
 
 util.AddNetworkString("nws_yrp_disconnect_Settings_Realistic")
-
-net.Receive("nws_yrp_disconnect_Settings_Realistic", function(len, ply)
-	RemFromHandler_Realistic(ply)
-end)
+net.Receive(
+	"nws_yrp_disconnect_Settings_Realistic",
+	function(len, ply)
+		RemFromHandler_Realistic(ply)
+	end
+)
 
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 	YRP.msg("note", DATABASE_NAME .. " has not the default values, adding them")
@@ -73,7 +75,6 @@ end
 
 local yrp_realistic = {}
 local _init_realistic = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-
 if _init_realistic ~= false and _init_realistic ~= nil then
 	yrp_realistic = _init_realistic[1]
 end
@@ -90,10 +91,12 @@ end
 
 function YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
 	l_db[str] = value
-
-	YRP_SQL_UPDATE(db_name, {
-		[str] = l_db[str]
-	}, "uniqueID = '1'")
+	YRP_SQL_UPDATE(
+		db_name,
+		{
+			[str] = l_db[str]
+		}, "uniqueID = '1'"
+	)
 
 	YRPSendToOthers(handler, ply, netstr, l_db[str])
 end
@@ -101,7 +104,6 @@ end
 function YRPUpdateBool(handler, db_name, ply, netstr, str, l_db, value)
 	YRP.msg("db", ply:YRPName() .. " updated bool " .. str .. " to: " .. tostring(tobool(value)))
 	YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
-
 	for i, pl in pairs(player.GetAll()) do
 		pl:SetYRPBool(str, tobool(value))
 	end
@@ -110,7 +112,6 @@ end
 function YRPUpdateFloat(handler, db_name, ply, netstr, str, l_db, value)
 	YRP.msg("db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring(value))
 	YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
-
 	for i, pl in pairs(player.GetAll()) do
 		pl:SetYRPFloat(str, value)
 	end
@@ -119,18 +120,22 @@ end
 for str, val in pairs(yrp_realistic) do
 	if string.find(str, "bool_", 1, true) then
 		util.AddNetworkString("nws_yrp_update_" .. str)
-
-		net.Receive("nws_yrp_update_" .. str, function(len, ply)
-			local b = btn(net.ReadBool())
-			YRPUpdateBool(HANDLER_REALISTIC, DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_realistic, b)
-		end)
+		net.Receive(
+			"nws_yrp_update_" .. str,
+			function(len, ply)
+				local b = btn(net.ReadBool())
+				YRPUpdateBool(HANDLER_REALISTIC, DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_realistic, b)
+			end
+		)
 	elseif string.find(str, "float_", 1, true) then
 		util.AddNetworkString("nws_yrp_update_" .. str)
-
-		net.Receive("nws_yrp_update_" .. str, function(len, ply)
-			local f = net.ReadFloat()
-			YRPUpdateFloat(HANDLER_REALISTIC, DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_realistic, f)
-		end)
+		net.Receive(
+			"nws_yrp_update_" .. str,
+			function(len, ply)
+				local f = net.ReadFloat()
+				YRPUpdateFloat(HANDLER_REALISTIC, DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_realistic, f)
+			end
+		)
 	end
 end
 

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 util.AddNetworkString("nws_yrp_dbGetGeneral")
 util.AddNetworkString("nws_yrp_dbGetQuestions")
 util.AddNetworkString("nws_yrp_hardresetdatabase")
@@ -53,17 +53,14 @@ table.insert(YRP_DBS, "yrp_voice_channels")
 table.insert(YRP_DBS, "yrp_chat_channels")
 table.insert(YRP_DBS, "yrp_weapon_options")
 table.insert(YRP_DBS, "yrp_weapon_slots")
-
 function GetDBNames()
 	return YRP_DBS
 end
 
 local _db_reseted = false
-
 function reset_database()
 	YRP.msg("db", "reset Database")
 	_db_reseted = true
-
 	for k, v in pairs(YRP_DBS) do
 		YRP_SQL_DROP_TABLE(v)
 	end
@@ -72,29 +69,40 @@ function reset_database()
 end
 
 --reset_database()
-net.Receive("nws_yrp_hardresetdatabase", function(len, ply)
-	if string.lower(ply:GetUserGroup()) == "superadmin" then
-		YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
-		YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
-		YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
-		YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
-		PrintMessage(HUD_PRINTCENTER, "Hard RESET by [" .. ply:Nick() .. "] in 10sec changelevel")
-		reset_database()
+net.Receive(
+	"nws_yrp_hardresetdatabase",
+	function(len, ply)
+		if string.lower(ply:GetUserGroup()) == "superadmin" then
+			YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+			YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+			YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+			YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+			PrintMessage(HUD_PRINTCENTER, "Hard RESET by [" .. ply:Nick() .. "] in 10sec changelevel")
+			reset_database()
+			timer.Simple(
+				1,
+				function()
+					db_init_database()
+				end
+			)
 
-		timer.Simple(1, function()
-			db_init_database()
-		end)
+			timer.Simple(
+				5,
+				function()
+					PrintMessage(HUD_PRINTCENTER, "Hard RESET by [" .. ply:Nick() .. "] in 5sec changelevel")
+				end
+			)
 
-		timer.Simple(5, function()
-			PrintMessage(HUD_PRINTCENTER, "Hard RESET by [" .. ply:Nick() .. "] in 5sec changelevel")
-		end)
-
-		timer.Simple(10, function()
-			PrintMessage(HUD_PRINTCENTER, "Hard RESET by [" .. ply:Nick() .. "]")
-			game.ConsoleCommand("changelevel " .. string.lower(GetMapName()) .. "\n")
-		end)
+			timer.Simple(
+				10,
+				function()
+					PrintMessage(HUD_PRINTCENTER, "Hard RESET by [" .. ply:Nick() .. "]")
+					game.ConsoleCommand("changelevel " .. string.lower(GetMapName()) .. "\n")
+				end
+			)
+		end
 	end
-end)
+)
 
 function yrp_db_loaded()
 	return yrp_db.loaded
@@ -103,7 +111,6 @@ end
 function db_init_database()
 	if YRP_SQL_INIT_DATABASE then
 		YRP.msg("db", "LOAD DATABASES")
-
 		for i, db in pairs(YRP_DBS) do
 			YRP_SQL_INIT_DATABASE(db)
 		end
@@ -169,34 +176,34 @@ local DATABASE_NAME = "yrp_darkrp"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
 util.AddNetworkString("nws_yrp_darkrp_bool")
+net.Receive(
+	"nws_yrp_darkrp_bool",
+	function(len, ply)
+		local name = net.ReadString()
+		local b = net.ReadBool()
+		if not IsNotNilAndNotFalse(YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "bool_" .. name .. "'")) then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "" .. YRP_SQL_STR_IN("bool_" .. name) .. ", '" .. tonum(b) .. "'")
+		else
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["value"] = tonum(b)
+				}, "name = '" .. "bool_" .. name .. "'"
+			)
+		end
 
-net.Receive("nws_yrp_darkrp_bool", function(len, ply)
-	local name = net.ReadString()
-	local b = net.ReadBool()
-
-	if not IsNotNilAndNotFalse(YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "bool_" .. name .. "'")) then
-		YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "" .. YRP_SQL_STR_IN("bool_" .. name) .. ", '" .. tonum(b) .. "'")
-	else
-		YRP_SQL_UPDATE(DATABASE_NAME, {
-			["value"] = tonum(b)
-		}, "name = '" .. "bool_" .. name .. "'")
+		UpdateDarkRPTable()
 	end
-
-	UpdateDarkRPTable()
-end)
+)
 
 util.AddNetworkString("nws_yrp_update_yrp_darkrp")
-
 function UpdateDarkRPTable(ply)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-
 	if IsNotNilAndNotFalse(tab) then
 		local yrp_darkrp = {}
-
 		for i, v in pairs(tab) do
 			local name = v.name
 			local value = v.value
-
 			if string.StartWith(name, "bool_") then
 				yrp_darkrp[name] = tobool(value)
 			else
@@ -206,7 +213,6 @@ function UpdateDarkRPTable(ply)
 
 		SetDarkRPTab(yrp_darkrp)
 		UpdateDarkRP(DarkRP)
-
 		if ply == nil then
 			net.Start("nws_yrp_update_yrp_darkrp")
 			net.WriteTable(yrp_darkrp)
@@ -219,6 +225,9 @@ function UpdateDarkRPTable(ply)
 	end
 end
 
-timer.Simple(4, function()
-	UpdateDarkRPTable()
-end)
+timer.Simple(
+	4,
+	function()
+		UpdateDarkRPTable()
+	end
+)

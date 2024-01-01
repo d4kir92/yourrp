@@ -1,6 +1,5 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 function PANEL:LayoutEntity(ent)
 end
 
@@ -8,7 +7,6 @@ end
 function PANEL:Init()
 	self.panel = vgui.Create("DModelPanel", self)
 	self.panel:SetPaintedManually(true)
-
 	function self.panel:LayoutEntity(ent)
 		PANEL:LayoutEntity(ent)
 	end

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 _filterENTS = ents.GetAll()
 local _filterTime = CurTime()
 local hud = {}
@@ -18,11 +18,9 @@ hud["bl"] = 0
 hud["rt"] = 0
 hud["ra"] = 0
 hud["hy"] = 0
-
 function roundMoney(_money, round)
 	if _money ~= nil then
 		local money = tonumber(_money)
-
 		if money >= 1000 and money < 1000000 then
 			return math.Round(money / 1000, round) .. "K"
 		elseif money >= 1000000 and money < 1000000000 then
@@ -44,7 +42,6 @@ function showIcon(str, material)
 end
 
 local once = true
-
 local tabs = {
 	["spawnmenu.content_tab"] = "bool_props",
 	["spawnmenu.category.npcs"] = "bool_npcs",
@@ -59,105 +56,117 @@ local tabs = {
 	["spawnmenu.category.saves"] = "bool_saves"
 }
 
-hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
-	YRPOpenMenu()
-	local lply = LocalPlayer()
-	if not IsValid(lply) then return false end
-
-	-- Fix tabsorting
-	if once then
-		once = false
-
-		timer.Simple(0.2, function()
-			if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 1") then
-				g_SpawnMenu:Close(true) -- close it after short time
-
-				timer.Simple(0.1, function()
-					if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 2") and g_SpawnMenu.Open then
-						g_SpawnMenu:Open() -- reopen with handling the tabs
-						hook.Run("SpawnMenuOpen") -- reload the hook
+hook.Add(
+	"SpawnMenuOpen",
+	"yrp_spawn_menu_open",
+	function()
+		YRPOpenMenu()
+		local lply = LocalPlayer()
+		if not IsValid(lply) then return false end
+		-- Fix tabsorting
+		if once then
+			once = false
+			timer.Simple(
+				0.2,
+				function()
+					if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 1") then
+						g_SpawnMenu:Close(true) -- close it after short time
+						timer.Simple(
+							0.1,
+							function()
+								if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 2") and g_SpawnMenu.Open then
+									g_SpawnMenu:Open() -- reopen with handling the tabs
+									hook.Run("SpawnMenuOpen") -- reload the hook
+								end
+							end
+						)
 					end
-				end)
-			end
-		end)
-	else -- Handling Tabs
-		local allhidden = true -- for when all disabllowed
-		local firsttab = nil
-
-		-- Loop through all tabs of spawnmenu
-		if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 3") then
-			for i, v in pairs(g_SpawnMenu.CreateMenu.Items) do
-				local tab = v.Tab -- tab
-				local text = tab:GetText() -- tab name
-
-				for lstr, bstr in pairs(tabs) do
-					-- if tabtext == tabletabtext
-					if text == language.GetPhrase(lstr) then
-						tab:SetVisible(LocalPlayer():GetYRPBool(bstr, false)) -- set visible if allowed to
-
-						-- if allowed
-						if LocalPlayer():GetYRPBool(bstr) then
-							allhidden = false -- then disable hiding the whole element
-
-							-- if not firsttab found
-							if firsttab == nil then
-								firsttab = lstr -- set it
+				end
+			)
+		else -- Handling Tabs
+			local allhidden = true -- for when all disabllowed
+			local firsttab = nil
+			-- Loop through all tabs of spawnmenu
+			if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 3") then
+				for i, v in pairs(g_SpawnMenu.CreateMenu.Items) do
+					local tab = v.Tab -- tab
+					local text = tab:GetText() -- tab name
+					for lstr, bstr in pairs(tabs) do
+						-- if tabtext == tabletabtext
+						if text == language.GetPhrase(lstr) then
+							tab:SetVisible(LocalPlayer():GetYRPBool(bstr, false)) -- set visible if allowed to
+							-- if allowed
+							if LocalPlayer():GetYRPBool(bstr) then
+								allhidden = false -- then disable hiding the whole element
+								-- if not firsttab found
+								if firsttab == nil then
+									firsttab = lstr -- set it
+								end
 							end
 						end
 					end
 				end
-			end
 
-			-- Switch to allowed tab if on an unallowed one
-			local text = g_SpawnMenu.CreateMenu:GetActiveTab():GetText() -- active tab of spawnmenu
-			local changefirstpage = false
+				-- Switch to allowed tab if on an unallowed one
+				local text = g_SpawnMenu.CreateMenu:GetActiveTab():GetText() -- active tab of spawnmenu
+				local changefirstpage = false
+				for lstr, bstr in pairs(tabs) do
+					-- if active tab text == table tab text
+					if language.GetPhrase(text) == language.GetPhrase(lstr) and not lply:GetYRPBool(bstr) then
+						changefirstpage = true -- then change tab
+					end
+				end
 
-			for lstr, bstr in pairs(tabs) do
-				-- if active tab text == table tab text
-				if language.GetPhrase(text) == language.GetPhrase(lstr) and not lply:GetYRPBool(bstr) then
-					changefirstpage = true -- then change tab
+				-- change first tab page, because currently on unallowed
+				if changefirstpage and firsttab then
+					g_SpawnMenu:OpenCreationMenuTab("#" .. firsttab) -- changes to new tab page
+				end
+
+				-- Hide the whole element when all disallowed
+				if allhidden then
+					g_SpawnMenu.CreateMenu:SetVisible(false)
+				else
+					g_SpawnMenu.CreateMenu:SetVisible(true)
 				end
 			end
-
-			-- change first tab page, because currently on unallowed
-			if changefirstpage and firsttab then
-				g_SpawnMenu:OpenCreationMenuTab("#" .. firsttab) -- changes to new tab page
-			end
-
-			-- Hide the whole element when all disallowed
-			if allhidden then
-				g_SpawnMenu.CreateMenu:SetVisible(false)
-			else
-				g_SpawnMenu.CreateMenu:SetVisible(true)
-			end
 		end
-	end
 
-	return LocalPlayer():GetYRPBool("bool_canusespawnmenu", false)
-end, hook.MONITOR_HIGH)
+		return LocalPlayer():GetYRPBool("bool_canusespawnmenu", false)
+	end, hook.MONITOR_HIGH
+)
 
-hook.Add("SpawnMenuClose", "yrp_spawn_menu_close", function()
-	YRPCloseMenu()
-end, hook.MONITOR_HIGH)
+hook.Add(
+	"SpawnMenuClose",
+	"yrp_spawn_menu_close",
+	function()
+		YRPCloseMenu()
+	end, hook.MONITOR_HIGH
+)
 
 local contextMenuOpen = false
+hook.Add(
+	"ContextMenuOpen",
+	"YRPOnContextMenuOpen",
+	function()
+		contextMenuOpen = true
 
-hook.Add("ContextMenuOpen", "YRPOnContextMenuOpen", function()
-	contextMenuOpen = true
+		return LocalPlayer():GetYRPBool("bool_canusecontextmenu", false)
+	end, hook.MONITOR_HIGH
+)
 
-	return LocalPlayer():GetYRPBool("bool_canusecontextmenu", false)
-end, hook.MONITOR_HIGH)
-
-hook.Add("ContextMenuClose", "YRPOnContextMenuClose", function()
-	contextMenuOpen = false
-end, hook.MONITOR_HIGH)
+hook.Add(
+	"ContextMenuClose",
+	"YRPOnContextMenuClose",
+	function()
+		contextMenuOpen = false
+	end, hook.MONITOR_HIGH
+)
 
 function sText(text, font, x, y, color, ax, ay)
 	surface.SetFont(font)
 	local _, h = surface.GetTextSize(text)
 	local _ax = 0
 	local _ay = 0
-
 	if ay == 1 then
 		_ay = h / 2
 	end
@@ -174,7 +183,6 @@ function drawMenuInfo()
 		local color = Color(255, 255, 255, 20)
 		local x = ibr
 		local y = ibr
-
 		--[[ F1 ]]
 		--
 		if IsNotNilAndNotFalse(YRP.GetDesignIcon("help")) then
@@ -193,7 +201,6 @@ local _alpha = 130
 local HUD = {}
 HUD.count = 0
 HUD.refresh = false
-
 function HudRefreshEnable()
 	HUD.refresh = true
 end
@@ -205,7 +212,6 @@ end
 function drawHUDElement(dbV, cur, max, text, icon, color)
 	if tobool(HudV(dbV .. "to")) then
 		local _r = 0
-
 		if color ~= nil and cur ~= nil and max ~= nil then
 			if tonumber(cur) > tonumber(max) then
 				cur = max
@@ -234,7 +240,6 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 			end
 
 			draw.RoundedBox(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color(HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga")))
-
 			if tonumber(max) >= 0 then
 				if not tobool(HudV(dbV .. "tr")) then
 					draw.RoundedBox(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color)
@@ -244,11 +249,9 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 			end
 
 			local _st = {}
-
 			if text ~= nil and HudV(dbV .. "tt") == 1 then
 				_st.br = 10
 				local _pw = 0
-
 				if HudV(dbV .. "tx") == 0 then
 					_pw = YRP.ctr(_st.br)
 				elseif HudV(dbV .. "tx") == 1 then
@@ -258,7 +261,6 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 				end
 
 				local _ph = 0
-
 				if HudV(dbV .. "ty") == 3 then
 					_ph = YRP.ctr(_st.br)
 				elseif HudV(dbV .. "ty") == 1 then
@@ -294,7 +296,6 @@ function YRPHudThirdperson(ply, color)
 		ply.yrp_view_range = ply.yrp_view_range or 0
 		ply.yrp_view_range_view = ply.yrp_view_range_view or 0
 		local _3PText = ""
-
 		if ply.yrp_view_range <= -200 then
 			_3PText = YRP.trans("LID_fppr")
 		elseif ply.yrp_view_range > -200 and ply.yrp_view_range < 0 then
@@ -330,7 +331,6 @@ end
 function YRPHudPlayer(ply)
 	if ply:GetHudDesignName() ~= "notloaded" then
 		drawMenuInfo()
-
 		if ply:Alive() and not contextMenuOpen then
 			YRPHudThirdperson(ply)
 		end

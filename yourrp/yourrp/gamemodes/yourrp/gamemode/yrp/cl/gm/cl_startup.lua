@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local searchIcon = Material("icon16/magnifier.png")
 function OpenHelpTranslatingWindow()
 	local window = YRPCreateD("DFrame", nil, YRP.ctr(1200), YRP.ctr(500), 0, 0)

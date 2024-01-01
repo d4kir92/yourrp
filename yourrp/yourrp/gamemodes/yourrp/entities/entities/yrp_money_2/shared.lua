@@ -1,15 +1,10 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile()
-
 ENT.Base = "yrp_money"
-
-ENT.PrintName		= "YourRP - 5 Money"
+ENT.PrintName = "YourRP - 5 Money"
 ENT.Category = "[YourRP] Money"
-
 ENT.Editable = false
 ENT.Spawnable = true
 ENT.AdminOnly = true
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
-
 ENT.money = 5

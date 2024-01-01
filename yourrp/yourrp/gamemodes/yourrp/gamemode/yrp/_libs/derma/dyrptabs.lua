@@ -1,10 +1,8 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 function PANEL:Init()
 	self.color_sel = Color(0, 0, 255, 255)
 	self.color_uns = Color(255, 255, 0)
-
 	function self:SetSelectedColor(col)
 		self.color_sel = col
 	end
@@ -16,7 +14,6 @@ function PANEL:Init()
 	self.tabs = {}
 	self.slider = YRPCreateD("DHorizontalScroller", self, self:GetWide(), self:GetTall(), 0, 0)
 	self.OldSetSize = self.OldSetSize or self.SetSize
-
 	function self:SetSize(w, h)
 		self:OldSetSize(w, h)
 		self.slider:SetSize(w, h)
@@ -30,7 +27,6 @@ function PANEL:Init()
 		surface.SetFont("Y_24_500")
 		local _tw, _th = surface.GetTextSize(str)
 		local _w = self:GetTall()
-
 		if _tw > _w then
 			_w = _tw
 		end
@@ -42,7 +38,6 @@ function PANEL:Init()
 		_tmp.name = str
 		_tmp.selected = false
 		_tmp.base = self
-
 		function _tmp:Paint(pw, ph)
 			if self:IsHovered() then
 				draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(255, 255, 255, 254), true, true)
@@ -51,7 +46,6 @@ function PANEL:Init()
 			draw.RoundedBoxEx(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"), true, true)
 			local _color = Color(255, 255, 255, 255)
 			local font = "Y_24_500"
-
 			if self.selected then
 				font = "Y_24_500"
 				_color = YRPInterfaceValue("YButton", "SC")

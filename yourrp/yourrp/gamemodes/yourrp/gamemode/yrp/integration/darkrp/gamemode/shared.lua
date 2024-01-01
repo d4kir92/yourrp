@@ -1,6 +1,5 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile("client.lua")
-
 if CLIENT then
 	include("client.lua")
 else
@@ -75,11 +74,9 @@ function DarkRP.createCategory(tbl)
 	--YRPDarkrpNotFound( "createCategory( " .. table.ToString( tbl or {}, "tbl", false ) .." )" )
 	if SERVER and YRPIMPORTDARKRP and tbl.categorises == "jobs" then
 		local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "string_name = '" .. tbl.name .. "'")
-
 		if group == nil then
 			MsgC(Color(0, 255, 0), "[YRPImportCategory]", " Add Group ( ", tbl.name, " )", "\n")
 			local res = YRP_SQL_INSERT_INTO("yrp_ply_groups", "string_name, string_color", YRP_SQL_STR_IN(tbl.name) .. ", " .. YRP_SQL_STR_IN(YRPColorToString(tbl.color)))
-
 			if res ~= nil then
 				MsgC(Color(0, 255, 0), "[YRPImportCategory]", " FAILED? ( ", res, " )", "\n")
 			end
@@ -100,14 +97,12 @@ end
 --Description: Create an entity for DarkRP.
 --YRPDarkrpNotFound( "createEntity( " .. name .. ", tbl)" )
 AddEntity = DarkRP.createEntity
-
 function DarkRP.createEntityGroup(name, teamNrs)
 end
 
 --Description: Create an entity group for DarkRP.
 --YRPDarkrpNotFound("createEntityGroup( " .. name .. ", " .. tostring(teamNrs) .. " )")
 AddDoorGroup = DarkRP.createEntityGroup
-
 function DarkRP.createFood(name, tbl)
 	--Description: Create food for DarkRP.
 	YRPDarkrpNotFound("createFood( " .. name .. ", tbl)")
@@ -124,7 +119,6 @@ function DarkRP.createJob(name, tbl)
 	if SERVER and YRPIMPORTDARKRP and tbl and tbl.category then
 		local groupid = 1
 		local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "string_name = '" .. tbl.category .. "'")
-
 		if group == nil then
 			MsgC(Color(0, 255, 0), "[YRPImportJob]", " Group not found ( ", tbl.category, " )", "\n")
 		elseif group and group[1] then
@@ -156,12 +150,10 @@ function DarkRP.createJob(name, tbl)
 			vals = vals .. ","
 			vals = vals .. YRP_SQL_STR_IN(tbl.max)
 			local res = YRP_SQL_INSERT_INTO("yrp_ply_roles", cols, vals)
-
 			if res == nil then
 				local rols = YRP_SQL_SELECT("yrp_ply_roles", "string_name, uniqueID", nil)
 				local rol = rols[#rols]
 				local ruid = rol.uniqueID
-
 				-- SWEPS
 				for i, swepcn in pairs(tbl.weapons) do
 					AddSwepToRole(ruid, swepcn)
@@ -197,7 +189,6 @@ function DarkRP.createVehicle(name, tbl)
 end
 
 DarkRP.chatCommands = DarkRP.chatCommands or {}
-
 local validChatCommand = {
 	command = isstring,
 	description = isstring,
@@ -216,24 +207,24 @@ function DarkRP.declareChatCommand(tbl)
 	--Description: Declare a chat command ( describe it)
 	DarkRP.chatCommands = DarkRP.chatCommands or {}
 	local valid, element = checkChatCommand(tbl)
-
 	if not valid then
 		DarkRP.error("Incorrect chat command! " .. element .. " is invalid!", 2)
 	end
 
 	tbl.command = string.lower(tbl.command)
 	DarkRP.chatCommands[tbl.command] = DarkRP.chatCommands[tbl.command] or tbl
-
 	for k, v in pairs(tbl) do
 		DarkRP.chatCommands[tbl.command][k] = v
 	end
 end
 
-DarkRP.declareChatCommand({
-	command = "advert",
-	description = "Create a billboard holding an advertisement.",
-	delay = 1.5
-})
+DarkRP.declareChatCommand(
+	{
+		command = "advert",
+		description = "Create a billboard holding an advertisement.",
+		delay = 1.5
+	}
+)
 
 function DarkRP.explodeArg(arg)
 	--Description: String arguments exploded into a table. It accounts for substrings in quotes, which makes it more intelligent than string.Explode
@@ -285,7 +276,6 @@ CATEGORIES.shipments = CATEGORIES.shipments or {}
 CATEGORIES.weapons = CATEGORIES.weapons or {}
 CATEGORIES.ammo = CATEGORIES.ammo or {}
 CATEGORIES.vehicles = CATEGORIES.vehicles or {}
-
 function DarkRP.getCategories()
 	return CATEGORIES
 end
@@ -357,11 +347,9 @@ function DarkRP.getIncompleteChatCommands()
 end
 
 jobByCmd = jobByCmd or {}
-
 function DarkRP.getJobByCommand(command)
 	--Description: Get the job table and number from the command of the job.
 	if not jobByCmd[command] then return nil, nil end
-
 	if RPExtraTeams[jobByCmd[command]] or jobByCmd[command] then
 		return RPExtraTeams[jobByCmd[command]], jobByCmd[command]
 	else
@@ -385,7 +373,6 @@ end
 function DarkRP.getPhrase(key, parameters)
 	--Description: Get a phrase from the selected language.
 	key = tostring(key)
-
 	--YRPDarkrpNotFound( "getPhrase( " .. key .. ", parameters)" )
 	if key == "job" then
 		key = "role"
@@ -515,11 +502,9 @@ local _G = _G
 local multistatements
 local MySQLite_config = MySQLite_config or RP_MySQLConfig or FPP_MySQLConfig
 local moduleLoaded
-
 local function loadMySQLModule()
 	if moduleLoaded or not MySQLite_config or not MySQLite_config.EnableMySQL then return end
 	local moo, tmsql = file.Exists("bin/gmsv_mysqloo_*.dll", "LUA"), file.Exists("bin/gmsv_tmysql4_*.dll", "LUA")
-
 	if not moo and not tmsql then
 		error("Could not find a suitable MySQL module. Supported modules are MySQLOO and tmysql4.")
 	end
@@ -529,7 +514,6 @@ local function loadMySQLModule()
 	multistatements = CLIENT_MULTI_STATEMENTS
 	mysqlOO = mysqloo
 	TMySQL = tmysql
-
 	if MySQLite_config.Preferred_module == "tmysql4" then
 		if not tmysql.Version or tmysql.Version < 4.1 then
 			MsgC(Color(0, 255, 0), "Using older tmysql version, please consider updating!\n")
@@ -544,7 +528,6 @@ end
 
 loadMySQLModule()
 module("MySQLite")
-
 -- Helper function to return the first value found when iterating over a table.
 -- Replaces the now deprecated table.GetFirstValue
 local function arbitraryTableValue(tbl)
@@ -555,20 +538,21 @@ end
 
 function initialize(config)
 	MySQLite_config = config or MySQLite_config
-
 	if not MySQLite_config then
 		ErrorNoHalt("Warning: No MySQL config!")
 	end
 
 	loadMySQLModule()
-
 	if MySQLite_config.EnableMySQL then
 		connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
 	else
-		timer.Simple(0, function()
-			_G.GAMEMODE.DatabaseInitialized = _G.GAMEMODE.DatabaseInitialized or function() end
-			hook.Call("DatabaseInitialized", _G.GAMEMODE)
-		end)
+		timer.Simple(
+			0,
+			function()
+				_G.GAMEMODE.DatabaseInitialized = _G.GAMEMODE.DatabaseInitialized or function() end
+				hook.Call("DatabaseInitialized", _G.GAMEMODE)
+			end
+		)
 	end
 end
 
@@ -577,7 +561,6 @@ local msOOConnect
 databaseObject = nil
 local queuedQueries
 local cachedQueries
-
 function isMySQL()
 	return CONNECTED_TO_MYSQL
 end
@@ -598,7 +581,6 @@ end
 function commit(onFinished)
 	if not CONNECTED_TO_MYSQL then
 		sql.Commit()
-
 		if onFinished then
 			onFinished()
 		end
@@ -612,7 +594,6 @@ function commit(onFinished)
 
 	if #queuedQueries == 0 then
 		queuedQueries = nil
-
 		if onFinished then
 			onFinished()
 		end
@@ -626,11 +607,9 @@ function commit(onFinished)
 	-- Handle queued queries in order
 	local queuePos = 0
 	local call
-
 	-- Recursion invariant: queuePos > 0 and queue[queuePos] <= #queue
 	call = function(...)
 		queuePos = queuePos + 1
-
 		if queue[queuePos].callback then
 			queue[queuePos].callback(...)
 		end
@@ -655,11 +634,14 @@ end
 
 function queueQuery(sqlText, callback, errorCallback)
 	if CONNECTED_TO_MYSQL then
-		table.insert(queuedQueries, {
-			query = sqlText,
-			callback = callback,
-			onError = errorCallback
-		})
+		table.insert(
+			queuedQueries,
+			{
+				query = sqlText,
+				callback = callback,
+				onError = errorCallback
+			}
+		)
 
 		return
 	end
@@ -671,7 +653,6 @@ end
 local function msOOQuery(sqlText, callback, errorCallback, queryValue)
 	local queryObject = databaseObject:query(sqlText)
 	local data
-
 	queryObject.onData = function(Q, D)
 		data = data or {}
 		data[#data + 1] = D
@@ -680,7 +661,6 @@ local function msOOQuery(sqlText, callback, errorCallback, queryValue)
 	queryObject.onError = function(Q, E)
 		if databaseObject:status() == mysqlOO.DATABASE_NOT_CONNECTED then
 			table.insert(cachedQueries, {sqlText, callback, queryValue})
-
 			-- Immediately try reconnecting
 			msOOConnect(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
 
@@ -688,7 +668,6 @@ local function msOOQuery(sqlText, callback, errorCallback, queryValue)
 		end
 
 		local supp = errorCallback and errorCallback(E, sqlText)
-
 		if not supp then
 			error(E .. " (" .. sqlText .. ")")
 		end
@@ -696,7 +675,6 @@ local function msOOQuery(sqlText, callback, errorCallback, queryValue)
 
 	queryObject.onSuccess = function()
 		local res = queryValue and data and data[1] and arbitraryTableValue(data[1]) or not queryValue and data or nil
-
 		if callback then
 			callback(res, queryObject:lastInsert())
 		end
@@ -708,10 +686,8 @@ end
 local function tmsqlQuery(sqlText, callback, errorCallback, queryValue)
 	local call = function(res)
 		res = res[1] -- For now only support one result set
-
 		if not res.status then
 			local supp = errorCallback and errorCallback(res.error, sqlText)
-
 			if not supp then
 				error(res.error .. " (" .. sqlText .. ")")
 			end
@@ -725,7 +701,6 @@ local function tmsqlQuery(sqlText, callback, errorCallback, queryValue)
 		end
 
 		if queryValue and callback then return callback(res.data and res.data[1] and arbitraryTableValue(res.data[1]) or nil) end
-
 		if callback then
 			callback(res.data, res.lastid)
 		end
@@ -738,11 +713,9 @@ local function SQLiteQuery(sqlText, callback, errorCallback, queryValue)
 	sql.m_strError = "" -- reset last error
 	local lastError = sql.LastError()
 	local Result = queryValue and sql.QueryValue(sqlText) or sql.Query(sqlText)
-
 	if sql.LastError() and sql.LastError() ~= lastError then
 		local err = sql.LastError()
 		local supp = errorCallback and errorCallback(err, sqlText)
-
 		if supp == false then
 			error(err .. " (" .. sqlText .. ")", 2)
 		end
@@ -771,11 +744,9 @@ end
 
 local function onConnected()
 	CONNECTED_TO_MYSQL = true
-
 	-- Run the queries that were called before the connection was made
 	for k, v in pairs(cachedQueries or {}) do
 		cachedQueries[k] = nil
-
 		if v[3] then
 			queryValue(v[1], v[2])
 		else
@@ -790,15 +761,17 @@ end
 
 msOOConnect = function(host, username, password, database_name, database_port)
 	databaseObject = mysqlOO.connect(host, username, password, database_name, database_port)
-
 	if timer.Exists("darkrp_check_mysql_status") then
 		timer.Remove("darkrp_check_mysql_status")
 	end
 
 	databaseObject.onConnectionFailed = function(_, msg)
-		timer.Simple(5, function()
-			msOOConnect(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
-		end)
+		timer.Simple(
+			5,
+			function()
+				msOOConnect(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
+			end
+		)
 
 		error("Connection failed! " .. tostring(msg) .. "\nTrying again in 5 seconds.")
 	end
@@ -809,18 +782,20 @@ end
 
 local function tmsqlConnect(host, username, password, database_name, database_port)
 	local db, err = TMySQL.Connect(host, username, password, database_name, database_port, nil, MySQLite_config.MultiStatements and multistatements or nil)
-
 	if err then
 		error("Connection failed! " .. err .. "\n")
 	end
 
 	databaseObject = db
 	onConnected()
-
 	if TMySQL.Version and TMySQL.Version >= 4.1 then
-		hook.Add("Think", "MySQLite:tmysqlPoll", function()
-			db:Poll()
-		end)
+		hook.Add(
+			"Think",
+			"MySQLite:tmysqlPoll",
+			function()
+				db:Poll()
+			end
+		)
 	end
 end
 
@@ -844,7 +819,10 @@ function tableExists(tbl, callback, errorCallback)
 		return exists
 	end
 
-	queryValue(string.format("SHOW TABLES LIKE %s", SQLStr(tbl)), function(v)
-		callback(v ~= nil)
-	end, errorCallback)
+	queryValue(
+		string.format("SHOW TABLES LIKE %s", SQLStr(tbl)),
+		function(v)
+			callback(v ~= nil)
+		end, errorCallback
+	)
 end

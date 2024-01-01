@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function showOwner(eyeTrace)
 	if GetGlobalYRPBool("bool_yrp_showowner", true) then
 		if eyeTrace.Entity:GetOwner() ~= nil and eyeTrace.Entity:GetOwner() ~= NULL then
@@ -10,17 +10,14 @@ function showOwner(eyeTrace)
 				draw.SimpleText(YRP.trans("LID_owner") .. ": " .. eyeTrace.Entity:GetRPOwner():RPName(), "Y_16_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			elseif not strEmpty(eyeTrace.Entity:GetYRPString("ownerRPName", "")) or not strEmpty(eyeTrace.Entity:GetYRPString("ownerGroup", "")) then
 				local groupname = eyeTrace.Entity:GetYRPString("ownerGroup", "")
-
 				if string.lower(groupname) == "public" then
 					groupname = YRP.trans("LID_public")
 				end
 
 				draw.SimpleText(YRP.trans("LID_owner") .. ": " .. eyeTrace.Entity:GetYRPString("ownerRPName", "") .. groupname, "Y_16_500", ScrW() / 2, ScrH2() + YRP.ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				local coownerIDs = eyeTrace.Entity:GetYRPString("coownerCharIDs", "")
-
 				if not strEmpty(coownerIDs) then
 					local coowners = ""
-
 					for i, v in pairs(string.Explode(",", coownerIDs)) do
 						for x, p in pairs(player.GetAll()) do
 							if p:CharID() == tonumber(v) then
@@ -49,23 +46,18 @@ end
 function YRPHudView()
 	local lply = LocalPlayer()
 	local _eyeTrace = lply:GetEyeTrace()
-
 	if _eyeTrace.Entity and YRPEntityAlive(_eyeTrace.Entity) then
 		local ent = _eyeTrace.Entity
-
 		if YRPEntityAlive(ent) then
 			local plypos = lply:GetPos()
 			local entpos = ent:WorldSpaceCenter()
-
 			if entpos == Vector(0, 0, 0) then
 				entpos = ent:GetPos()
 			end
 
 			if entpos:Distance(plypos) > GetGlobalYRPInt("int_door_distance", 200) then return end
-
 			if GetGlobalYRPBool("bool_building_system", false) and ent:YRPIsDoor() and plypos:Distance(entpos) < GetGlobalYRPInt("int_door_distance", 200) and GetGlobalYRPBool("bool_canbeowned", true) then
 				local canbeowned = ent:GetYRPBool("bool_canbeowned", false)
-
 				if canbeowned or lply:HasAccess("YRPHudView") then
 					local tab2 = {}
 					tab2["KEY"] = "[" .. string.upper(YRPGetKeybindName("menu_options_door")) .. "]"
@@ -77,7 +69,6 @@ function YRPHudView()
 				local tab = {}
 				tab["KEY"] = "[" .. string.upper(YRPGetKeybindName("in_use")) .. "]"
 				draw.SimpleText(YRP.trans("LID_presstogetin", tab), "Y_16_500", ScrW() / 2, ScrH2() + YRP.ctr(650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-
 				if ent:GetYRPString("ownerRPName") == lply:Nick() then
 					local tab2 = {}
 					tab2["KEY"] = "[" .. string.upper(YRPGetKeybindName("menu_options_vehicle")) .. "]"
@@ -110,7 +101,6 @@ function YRPHudView()
 				draw.SimpleText(YRP.trans("LID_presstoopenname", key), "Y_16_500", ScrW() / 2, ScrH2() + YRP.ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			elseif ent:GetYRPBool("yrp_has_use", false) then
 				local text = "PRESS [" .. string.upper(YRPGetKeybindName("in_use")) .. "]"
-
 				if ent:GetYRPString("yrp_use_message", "") ~= "" then
 					text = text .. ": " .. ent:GetYRPString("yrp_use_message", "")
 				end

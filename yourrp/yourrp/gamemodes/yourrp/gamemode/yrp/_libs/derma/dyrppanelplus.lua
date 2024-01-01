@@ -1,16 +1,13 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 function PANEL:Init()
 	self.header = YRPCreateD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 	self.header.text = "UNNAMED"
-
 	function self:SetHeader(text)
 		self.header.text = text
 	end
 
 	self.header.color = Color(255, 255, 255, 255)
-
 	function self.header:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
 		surfaceText(YRP.trans(self.text), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), 1, 1)
@@ -20,7 +17,6 @@ end
 function PANEL:INITPanel(derma)
 	self.plus = YRPCreateD(derma, self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, self.header:GetTall())
 	self.plus.getclass = derma
-
 	function self:SetText(text)
 		self.plus:SetText(text)
 	end
@@ -42,7 +38,6 @@ function PANEL:Think()
 	end
 
 	local _px, _py = self.plus:GetPos()
-
 	if _py ~= self.header:GetTall() then
 		self.plus:SetPos(0, self.header:GetTall())
 	end

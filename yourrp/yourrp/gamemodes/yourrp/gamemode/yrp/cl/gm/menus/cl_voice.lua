@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local colr = Color(170, 0, 0)
 local colg = Color(0, 200, 0)
 local colb = Color(100, 100, 255)

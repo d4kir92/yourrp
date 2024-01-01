@@ -1,9 +1,8 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 DarkRP = DarkRP or {}
 DarkRP.disabledDefaults = DarkRP.disabledDefaults or {}
 DarkRP.disabledDefaults.modules = DarkRP.disabledDefaults.modules or {}
 DarkRP.hooks = {}
-
 function DarkRP.stub()
 end
 
@@ -57,7 +56,6 @@ DarkRP.disabledDefaults["entities"] = {
 }
 
 DarkRP.disabledDefaults["vehicles"] = {}
-
 DarkRP.disabledDefaults["food"] = {
 	["Banana"] = false,
 	["Bunch of bananas"] = false,
@@ -140,14 +138,12 @@ include("darkrp/gamemode/shared.lua")
 include("darkrp/player/shared.lua")
 include("darkrp/entity/shared.lua")
 include("darkrp/config/config.lua")
-
 --include( "darkrp/scoreboard/sh_scoreboard.lua" )
 if CLIENT then
 	include("darkrp/drawfunction.lua")
 end
 
 local Vector = FindMetaTable("Vector")
-
 function Vector:isInSight(filter, ply)
 	--Description: Decides whether the vector could be seen by the player if they
 	--						 were to look at it.
@@ -169,14 +165,12 @@ end
 
 -- NETWORKING
 local tab_darkrp = {}
-
 function SetDarkRPTab(tab)
 	tab_darkrp = tab
 end
 
 function GetDarkRPVar(name, var)
 	local value = tab_darkrp[name]
-
 	if value ~= nil then
 		return value
 	else
@@ -197,11 +191,14 @@ function UpdateDarkRP(tab)
 	end
 end
 
-net.Receive("nws_yrp_update_yrp_darkrp", function(len)
-	local tab = net.ReadTable()
-	SetDarkRPTab(tab)
-	UpdateDarkRP(DarkRP)
-end)
+net.Receive(
+	"nws_yrp_update_yrp_darkrp",
+	function(len)
+		local tab = net.ReadTable()
+		SetDarkRPTab(tab)
+		UpdateDarkRP(DarkRP)
+	end
+)
 
 function AddExtraTeam(...)
 end

@@ -1,12 +1,9 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 PANEL._text = ""
 PANEL._hovertext = ""
 PANEL._selectedtext = ""
 PANEL._selected = false
-
 function PANEL:GetText()
 	return self._text
 end
@@ -15,8 +12,7 @@ function PANEL:NewSetText(str)
 	self._text = str
 	self._hovertext = str
 	self._selectedtext = str
-
-	self:OldSetText( "" )
+	self:OldSetText("")
 end
 
 function PANEL:GetHoverText()
@@ -44,7 +40,7 @@ function PANEL:SetPressed(selected)
 end
 
 function PANEL:Paint(pw, ph)
-	hook.Run( "YButtonPaint", self, pw, ph)
+	hook.Run("YButtonPaint", self, pw, ph)
 end
 
 function PANEL:Init()
@@ -54,4 +50,4 @@ function PANEL:Init()
 	end
 end
 
-vgui.Register( "YButton", PANEL, "DButton" )
+vgui.Register("YButton", PANEL, "DButton")

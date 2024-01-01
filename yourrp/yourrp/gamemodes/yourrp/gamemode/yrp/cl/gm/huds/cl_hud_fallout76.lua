@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function FOColor()
 	return Color(249, 247, 196, 255)
 end
@@ -14,12 +14,10 @@ FO76["Bar"] = {}
 FO76["TEXT"] = {}
 FO76["CENTERTEXT"] = {}
 FO76["BR"] = {}
-
 function FO76BG(tab)
 	local lply = LocalPlayer()
 	FO76["BG"][tab.element] = FO76["BG"][tab.element] or {}
 	FO76["BR"][tab.element] = FO76["BR"][tab.element] or {}
-
 	if lply:HudValue("hud_version", 0) ~= FO76["BG"][tab.element]["version"] then
 		FO76["BG"][tab.element]["version"] = lply:HudValue("hud_version", 0)
 		local w = lply:HudValue(tab.element, "SIZE_W")
@@ -54,7 +52,6 @@ function FO76Element(tab)
 	FO76["TEXT"][tab.element] = FO76["TEXT"][tab.element] or {}
 	FO76["CENTERTEXT"][tab.element] = FO76["CENTERTEXT"][tab.element] or {}
 	FO76["BR"][tab.element] = FO76["BR"][tab.element] or {}
-
 	if lply:HudValue("hud_version", 0) ~= FO76["BGBar"][tab.element]["version"] then
 		FO76["BGBar"][tab.element]["version"] = lply:HudValue("hud_version", 0)
 		local w = lply:HudValue(tab.element, "SIZE_W")
@@ -64,7 +61,6 @@ function FO76Element(tab)
 		tab.thickness = ScrV(0.016)
 		tab.br = 0.08
 		FO76["BG"][tab.element].r = 0
-
 		if lply:HudValue(tab.element, "TEXT") then
 			FO76["BG"][tab.element].w = w - h
 		else
@@ -72,7 +68,6 @@ function FO76Element(tab)
 		end
 
 		FO76["BG"][tab.element].h = tab.thickness
-
 		if lply:HudValue(tab.element, "TEXT") then
 			FO76["BG"][tab.element].x = x + h
 		else
@@ -90,7 +85,6 @@ function FO76Element(tab)
 		FO76["BGBar"][tab.element].y = FO76["BG"][tab.element].y + 1 * br
 		FO76["BGBar"][tab.element].color = FOColorBG()
 		local m = {}
-
 		if lply:HudValue(tab.element, "TEXT") then
 			m.x = x + h
 		else
@@ -98,7 +92,6 @@ function FO76Element(tab)
 		end
 
 		m.y = y + (h - tab.thickness) / 2
-
 		if lply:HudValue(tab.element, "TEXT") then
 			m.w = w - h
 		else
@@ -128,7 +121,6 @@ function FO76Element(tab)
 		FO76["CENTERTEXT"][tab.element].font = "Y_18_500"
 		FO76["CENTERTEXT"][tab.element].color = Color(0, 0, 0, 255)
 		FO76["BR"][tab.element].r = 0
-
 		if lply:HudValue(tab.element, "TEXT") then
 			FO76["BR"][tab.element].w = w - h
 		else
@@ -136,7 +128,6 @@ function FO76Element(tab)
 		end
 
 		FO76["BR"][tab.element].h = tab.thickness
-
 		if lply:HudValue(tab.element, "TEXT") then
 			FO76["BR"][tab.element].x = x + h
 		else
@@ -148,13 +139,11 @@ function FO76Element(tab)
 	elseif lply:HudElementVisible(tab.element) then
 		HudBox(FO76["BG"][tab.element])
 		HudBox(FO76["BGBar"][tab.element])
-
 		if tab.cur ~= nil and tab.max ~= nil then
 			FO76["Bar"][tab.element].w = FO76["Bar"][tab.element].fw * tab.cur / tab.max
 		end
 
 		HudBox(FO76["Bar"][tab.element])
-
 		if tab.text ~= nil and lply:HudValue(tab.element, "TEXT") then
 			FO76["TEXT"][tab.element].text = tab.text
 			HudText(FO76["TEXT"][tab.element])
@@ -174,11 +163,9 @@ function FO76Element(tab)
 end
 
 FO76["NAME"] = {}
-
 function FO76Name(tab)
 	local lply = LocalPlayer()
 	FO76["NAME"][tab.element] = FO76["NAME"][tab.element] or {}
-
 	if lply:HudValue("hud_version", 0) ~= FO76["NAME"][tab.element]["version"] then
 		FO76["NAME"][tab.element]["version"] = lply:HudValue("hud_version", 0)
 		local w = lply:HudValue(tab.element, "SIZE_W")
@@ -188,7 +175,6 @@ function FO76Name(tab)
 		local ax = lply:HudValue(tab.element, "AX")
 		local ay = lply:HudValue(tab.element, "AY")
 		local fontsize = lply:HudValue(tab.element, "TS")
-
 		if fontsize <= 0 then
 			fontsize = 14
 		end
@@ -218,11 +204,9 @@ function FO76Name(tab)
 end
 
 FO76["NUM"] = {}
-
 function FO76Numbers(tab)
 	local lply = LocalPlayer()
 	FO76["NUM"][tab.element] = FO76["NUM"][tab.element] or {}
-
 	if lply:HudValue("hud_version", 0) ~= FO76["NUM"][tab.element]["version"] then
 		FO76["NUM"][tab.element]["version"] = lply:HudValue("hud_version", 0)
 		local w = lply:HudValue(tab.element, "SIZE_W")
@@ -230,7 +214,6 @@ function FO76Numbers(tab)
 		local x = lply:HudValue(tab.element, "POSI_X")
 		local y = lply:HudValue(tab.element, "POSI_Y")
 		local fontsize = lply:HudValue(tab.element, "TS")
-
 		if fontsize <= 0 then
 			fontsize = 14
 		end
@@ -250,11 +233,9 @@ function FO76Numbers(tab)
 end
 
 FO76["CHAT"] = {}
-
 function FO76Chat(tab)
 	local lply = LocalPlayer()
 	FO76["CHAT"][tab.element] = FO76["CHAT"][tab.element] or {}
-
 	if lply:HudValue("hud_version", 0) ~= FO76["CHAT"][tab.element]["version"] then
 		FO76["CHAT"][tab.element]["version"] = lply:HudValue("hud_version", 0)
 		local w = lply:HudValue(tab.element, "SIZE_W")
@@ -273,10 +254,8 @@ function FO76Chat(tab)
 end
 
 local test = true
-
 function HUDFO76Compass(tab)
 	local lply = LocalPlayer()
-
 	if lply:HudValue(tab.element, "VISI") then
 		FO76[tab.element] = FO76[tab.element] or {}
 		FO76[tab.element]["BG"] = FO76[tab.element]["BG"] or {}
@@ -286,7 +265,6 @@ function HUDFO76Compass(tab)
 		FO76[tab.element]["south"] = FO76[tab.element]["south"] or {}
 		FO76[tab.element]["east"] = FO76[tab.element]["east"] or {}
 		FO76[tab.element]["west"] = FO76[tab.element]["west"] or {}
-
 		if lply:HudValue("hud_version", 0) ~= FO76[tab.element]["degree"]["version"] or test then
 			test = false
 			FO76[tab.element]["degree"]["version"] = lply:HudValue("hud_version", 0)
@@ -421,10 +399,8 @@ local pingtavg = 0
 local pingcou = 0
 local ping_delay = 0
 local pingcolor = Color(0, 0, 0, 255)
-
 function HUD_FO76()
 	local lply = LocalPlayer()
-
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and not YRPIsScoreboardVisible() and GetGlobalYRPBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Fallout 76" then
 		local HP = {}
 		HP.element = "HP"
@@ -469,7 +445,6 @@ function HUD_FO76()
 		AB.max = lply:GetMaxAbility()
 		FO76Element(AB)
 		local XP = {}
-
 		if IsLevelSystemEnabled() then
 			XP.element = "XP"
 			XP.text = YRP.trans("LID_xp")
@@ -483,7 +458,6 @@ function HUD_FO76()
 		COM.element = "COM"
 		HUDFO76Compass(COM)
 		local weapon = lply:GetActiveWeapon()
-
 		if IsValid(weapon) then
 			local clip1 = weapon:Clip1()
 			local clip1max = weapon:GetMaxClip1()
@@ -491,7 +465,6 @@ function HUD_FO76()
 			local clip2max = weapon:GetMaxClip2()
 			local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
 			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
-
 			if ammo1 ~= nil then
 				local WP = {}
 				WP.element = "WP"
@@ -519,7 +492,6 @@ function HUD_FO76()
 		if CurTime() > ping_delay then
 			ping_delay = CurTime() + 0.5
 			ping = lply:Ping()
-
 			if ping < pingmin then
 				pingmin = ping
 			elseif ping > pingmax then
@@ -528,7 +500,6 @@ function HUD_FO76()
 
 			pingcou = pingcou + 1
 			pingtavg = pingtavg + ping
-
 			if pingcou > 9 then
 				pingavg = math.Round(pingtavg / 10, 0)
 				pingcou = 0
@@ -551,11 +522,9 @@ function HUD_FO76()
 		FO76Name(NE)
 		local PE = {}
 		PE.element = "PE"
-
 		if CurTime() > fps_delay then
 			fps_delay = CurTime() + 0.5
 			fps = GetFPS()
-
 			if fps < fpsmin then
 				fpsmin = fps
 			elseif fps > fpsmax then
@@ -564,7 +533,6 @@ function HUD_FO76()
 
 			fpscou = fpscou + 1
 			fpstavg = fpstavg + fps
-
 			if fpscou > 9 then
 				fpsavg = math.Round(fpstavg / 10, 0)
 				fpscou = 0
@@ -600,7 +568,6 @@ function HUD_FO76()
 		ID.text = lply:GetYRPString("idcardid", "")
 		FO76Name(ID)
 		local batterypower = system.BatteryPower()
-
 		if batterypower <= 100 then
 			local BA = {}
 			BA.element = "BA"
@@ -638,6 +605,9 @@ function HUD_FO76()
 	end
 end
 
-timer.Simple(1, function()
-	hook.Add("HUDPaint", "yrp_hud_design_Fallout76", HUD_FO76)
-end)
+timer.Simple(
+	1,
+	function()
+		hook.Add("HUDPaint", "yrp_hud_design_Fallout76", HUD_FO76)
+	end
+)

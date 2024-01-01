@@ -1,6 +1,5 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 function PANEL:Init()
 	self.header = YRPCreateD("DButton", self, 100, 50, 0, 0)
 	self.header:SetText("")
@@ -15,11 +14,9 @@ function PANEL:Init()
 	self.spacing = 10
 	self.headertext = "Header"
 	self.locked = false
-
 	function self:PaintHeader(pw, ph)
 		local br = YRP.ctr(20)
 		local _hl = 0
-
 		if self.header:IsHovered() then
 			_hl = 70
 		end
@@ -27,7 +24,6 @@ function PANEL:Init()
 		draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl, self.color.a), true, true, not self:IsOpen(), not self:IsOpen())
 		draw.SimpleText(self.headertext, "Y_24_500", ph / 2, ph / 2, Color(255, 255, 255, 255), 0, 1)
 		local icon = YRP.GetDesignIcon("64_angle-down")
-
 		if self:IsOpen() then
 			icon = YRP.GetDesignIcon("64_angle-up")
 		end
@@ -67,7 +63,6 @@ end
 
 function PANEL:ClearContent()
 	local pnls = self:GetPanels()
-
 	for i, panel in pairs(pnls) do
 		table.RemoveByValue(pnls, panel)
 		panel:Remove()
@@ -89,7 +84,6 @@ end
 function PANEL:ReSize()
 	local _tab = self:GetPanels()
 	self.height = 0
-
 	for i, panel in pairs(_tab) do
 		if i > 1 then
 			self.height = self.height + panel:GetTall() + ctrb(self:GetSpacing())
@@ -110,7 +104,6 @@ function PANEL:ReSize()
 	end
 
 	local _grandparent = self:GetParent():GetParent()
-
 	if _grandparent ~= nil then
 		if _grandparent.ReSize ~= nil then
 			_grandparent:ReSize()

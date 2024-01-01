@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local icons = {}
 icons["RA"] = "64_radiation"
 icons["HP"] = "64_heart"
@@ -22,19 +22,15 @@ icons["NE"] = "wifi"
 icons["XP"] = "64_atom"
 icons["WP"] = "bullet"
 icons["WS"] = "bullet_secondary"
-
 local function DrawThinCompass(px, py, sw, sh)
 	local lply = LocalPlayer()
-
 	if IsValid(lply) then
 		local dir = lply:CoordAngle()
-
 		for i = 0, 24 - 1 do
 			local ang = i * 15
 			local dif = math.AngleDifference(ang, dir)
 			local ndist = 20
 			local offang = (ndist * 14) / 3
-
 			if math.abs(dif) < offang then
 				local alpha = math.Clamp(0.8 - (math.abs(dif) / offang), 0, 1) * 255
 				local pos = -dif / 15 * sw / 10
@@ -42,7 +38,6 @@ local function DrawThinCompass(px, py, sw, sh)
 				local font = "Y_16_500"
 				local dfont = "Y_18_500"
 				local white = Color(200, 200, 200, alpha)
-
 				if YRP.GetDesignIcon("keyboard_arrow_down") then
 					surface.SetDrawColor(100, 100, 255)
 					surface.SetMaterial(YRP.GetDesignIcon("keyboard_arrow_down"))
@@ -84,12 +79,10 @@ end
 
 local animationTime = 4
 local HUD_THIN = {}
-
 function YRPDrawThin(tab)
 	local lply = LocalPlayer()
 	local name = tab.name
 	HUD_THIN[name] = HUD_THIN[name] or {}
-
 	if tab.cur and tab.max then
 		tab.cur = math.Clamp(tab.cur, 0, tab.max)
 	elseif tab.cur and tab.cur < 0 then
@@ -116,7 +109,6 @@ function YRPDrawThin(tab)
 		HUD_THIN[name].ix = HUD_THIN[name].x + HUD_THIN[name].h * 0.2
 		HUD_THIN[name].iy = HUD_THIN[name].y + HUD_THIN[name].h * 0.2
 		HUD_THIN[name].ih = HUD_THIN[name].h * 0.6
-
 		if tab.valuetext then
 			HUD_THIN[name].ts = math.Clamp(math.Round(HUD_THIN[name].h * 0.6, 0), 6, 100)
 		else
@@ -125,7 +117,6 @@ function YRPDrawThin(tab)
 
 		HUD_THIN[name].font = "Y_" .. HUD_THIN[name].ts .. "_500"
 		HUD_THIN[name].text = tab.text
-
 		if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
 			HUD_THIN[name].tx = HUD_THIN[name].x + HUD_THIN[name].h
 			HUD_THIN[name].ty = HUD_THIN[name].y + HUD_THIN[name].h * 0.2
@@ -178,7 +169,6 @@ function YRPDrawThin(tab)
 		-- Icon
 		if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
 			local iconmat = YRP.GetDesignIcon(HUD_THIN[name].iconmat)
-
 			if iconmat then
 				surface.SetDrawColor(Color(255, 255, 255, 255))
 				surface.SetMaterial(iconmat)
@@ -200,7 +190,6 @@ function YRPDrawThin(tab)
 			draw.SimpleText(tab.valuetext, HUD_THIN[name].font, HUDMOTIONX(HUD_THIN[name].tvx), HUDMOTIONY(HUD_THIN[name].tvy), HUD_THIN[name].colortext, HUD_THIN[name].tvax, HUD_THIN[name].tvay)
 		elseif tab.cur then
 			local cur = tab.cur
-
 			if lply:HudValue(name, "PERC") then
 				--
 				cur = math.Round(tab.cur / tab.max * 100, 1) .. "%"
@@ -219,7 +208,6 @@ end
 
 function YRPHUDThin()
 	local lply = LocalPlayer()
-
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and not YRPIsScoreboardVisible() and GetGlobalYRPBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Thin" then
 		if lply:HudElementVisible("COM") then
 			DrawThinCompass(lply:HudValue("COM", "POSI_X"), lply:HudValue("COM", "POSI_Y"), lply:HudValue("COM", "SIZE_W"), lply:HudValue("COM", "SIZE_H"))
@@ -303,7 +291,6 @@ function YRPHUDThin()
 		RA.max = lply:GetMaxRadiation()
 		YRPDrawThin(RA)
 		local weapon = lply:GetActiveWeapon()
-
 		if IsValid(weapon) then
 			local clip1 = weapon:Clip1()
 			local clip1max = weapon:GetMaxClip1()
@@ -312,7 +299,6 @@ function YRPHUDThin()
 			local clip2max = weapon:GetMaxClip2()
 			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
 			local wpammo = ""
-
 			if clip1 >= 0 and clip1max >= 0 then
 				wpammo = wpammo .. clip1 .. "/" .. clip1max
 			end
@@ -333,7 +319,6 @@ function YRPHUDThin()
 			WP.valuetext = wpammo
 			YRPDrawThin(WP)
 			local wsammo = ""
-
 			if clip2 >= 0 and clip2max >= 0 then
 				wsammo = wsammo .. clip2 .. "/" .. clip2max
 			end
@@ -388,7 +373,6 @@ function YRPHUDThin()
 		CON.name = "CON"
 		CON.valuetext = lply:Condition()
 		YRPDrawThin(CON)
-
 		if lply:GetActiveWeapon() and lply:GetActiveWeapon().GetPrintName then
 			local WN = {}
 			WN.name = "WN"

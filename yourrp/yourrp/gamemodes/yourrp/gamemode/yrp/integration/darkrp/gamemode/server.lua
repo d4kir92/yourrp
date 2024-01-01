@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function DarkRP.addJailPos(pos)
 end
 
@@ -44,7 +44,6 @@ function DarkRP.customEntityLimitReached(tblEnt)
 end
 
 YRPDarkrpDefineChatCmds = YRPDarkrpDefineChatCmds or {}
-
 function DarkRP.defineChatCommand(command, callback)
 	--Description: Create a chat command that calls the function
 	--YRPDarkrpNotFound( "defineChatCommand( " .. command .. ", callback)" )
@@ -143,7 +142,6 @@ function DarkRP.log(message, colour, noFileSave)
 end
 
 util.AddNetworkString("nws_yrp_sendNotify")
-
 function DarkRP.notify(ply, msgType, time, message)
 	--Description: Log a message in DarkRP
 	if ply and ply:IsPlayer() and IsNotNilAndNotFalse(message) then
@@ -224,7 +222,6 @@ end
 function DarkRP.retrieveRPNames(name, callback)
 	--Description: Whether a given RP name is taken by someone else.
 	local inuse = false
-
 	for i, v in pairs(player.GetAll()) do
 		if v:YRPRPName() == name then
 			inuse = true

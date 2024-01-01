@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local type = type
 local file = file
 local util = util
@@ -41,7 +41,6 @@ YRP_KEYBINDS["sp_close"] = KEY_DOWN
 YRP_KEYBINDS["voice_mute"] = KEY_HOME
 YRP_KEYBINDS["voice_range_up"] = KEY_PAGEUP
 YRP_KEYBINDS["voice_range_dn"] = KEY_PAGEDOWN
-
 for i = 1, 49 do
 	YRP_KEYBINDS["m_" .. i] = 0
 end
@@ -49,7 +48,6 @@ end
 local yrp_keybinds = {}
 yrp_keybinds.version = 4
 local dbfile = "yrp_keybinds/yrp_keybinds.json"
-
 function YRPKeybindsMSG(msg)
 	MsgC(Color(0, 255, 0), "[YourRP] [KEYBINDS] " .. msg .. "\n")
 end
@@ -65,18 +63,14 @@ function YRPKeybindsCheckFile()
 		file.Write(dbfile, util.TableToJSON(YRP_KEYBINDS, true))
 	elseif dbfile then
 		local data = file.Read(dbfile, "DATA")
-
 		if data then
 			local testfile = util.JSONToTable(data)
-
 			if testfile == nil or table.Count(testfile) <= 0 then
 				YRP.msg("note", "[KEYBINDS] File is empty.")
 				file.Write(dbfile, util.TableToJSON(YRP_KEYBINDS, true))
 				data = file.Read(dbfile, "DATA")
-
 				if data then
 					testfile = util.JSONToTable(data)
-
 					if testfile == nil or table.Count(testfile) <= 0 then
 						YRP.msg("error", "[KEYBINDS] File is still empty.")
 					end
@@ -101,7 +95,6 @@ end
 function YRPKeybindsSave()
 	YRPKeybindsCheckFile()
 	YRPKeybindsMSG("Save Keybinds")
-
 	if dbfile then
 		file.Write(dbfile, util.TableToJSON(yrp_keybinds, true))
 	end
@@ -116,17 +109,14 @@ function YRPKeybindsLoad()
 
 	YRPKeybindsCheckFile()
 	YRPKeybindsMSG("Load Keybinds")
-
 	if dbfile and file.Exists(dbfile, "DATA") then
 		yrp_keybinds = util.JSONToTable(file.Read(dbfile, "DATA"))
-
 		if yrp_keybinds then
 			for name, key in pairs(yrp_keybinds) do
 				yrp_keybinds[name] = tonumber(key)
 			end
 
 			local missing = false
-
 			for name, key in pairs(YRP_KEYBINDS) do
 				-- missing entry
 				if yrp_keybinds[name] == nil then
@@ -155,7 +145,6 @@ function YRPKeybindsLoad()
 end
 
 YRPKeybindsLoad()
-
 function KBTab()
 	if YRP_KeybindsLoaded then
 		return yrp_keybinds
@@ -177,15 +166,12 @@ function YRPGetKeybind(name)
 		if name == nil then return -1 end
 		if name and type(tonumber(name)) == "number" then return name end
 		name = tostring(name)
-
 		if YRP_KeybindsLoaded and yrp_keybinds and name and yrp_keybinds[name] ~= nil then
 			return tonumber(yrp_keybinds[name])
 		elseif YRP_KeybindsLoaded and yrp_keybinds and dbfile then
 			local data = file.Read(dbfile, "DATA")
-
 			if data then
 				local dbf = util.JSONToTable(data)
-
 				if dbf then
 					YRP.msg("error", "[KEYBINDS] Failed to get Keybind: " .. tostring(name) .. " result: " .. tostring(yrp_keybinds[name]))
 					YRP.msg("error", "[KEYBINDS] Content: " .. tostring(table.ToString(dbf, "File")))
@@ -235,7 +221,6 @@ end
 
 function YRPGetKeybindName(kbname, show)
 	local _kb = kbname or ""
-
 	if YRP_KeybindsLoaded then
 		if not string.StartWith(kbname, "in_") and YRPGetKeybind(kbname) then
 			_kb = YRPGetKeybind(kbname)
@@ -263,10 +248,12 @@ function YRPResetKeybinds()
 	end
 end
 
-net.Receive("nws_yrp_setServerKeybinds", function(len)
-	local keytab = net.ReadTable()
-
-	for i, ktab in pairs(keytab) do
-		YRPSetKeybind(ktab.name, ktab.value)
+net.Receive(
+	"nws_yrp_setServerKeybinds",
+	function(len)
+		local keytab = net.ReadTable()
+		for i, ktab in pairs(keytab) do
+			YRPSetKeybind(ktab.name, ktab.value)
+		end
 	end
-end)
+)

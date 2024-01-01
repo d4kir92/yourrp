@@ -1,10 +1,9 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _mat1 = {}
 _mat1.author = "D4KiR"
 _mat1.name = "Material Design 1"
 _mat1.textFont = "Y_18_500"
 YRPRegisterDesign(_mat1)
-
 function _mat1.GetAlpha()
 	if InterfaceTransparent() then
 		return 200
@@ -65,7 +64,6 @@ YRPAddColor(_mat1.name, "purple", "3", Color(13, 63, 135)) -- Selected
 YRPAddColor(_mat1.name, "purple", "4", Color(90, 90, 90)) -- Background Highlight
 YRPAddColor(_mat1.name, "purple", "5", Color(51, 51, 51)) -- Background
 YRPAddColor(_mat1.name, "purple", "6", Color(255, 255, 255, 255)) -- Border
-
 function _mat1.GetColor(color, style)
 	return _mat1.color[color][style]
 end
@@ -79,7 +77,6 @@ function _mat1.DrawWindow(window, pw, ph, title)
 	local _color_bar = YRPGetColor("2")
 	local _color_bg = _mat1.color["bg"][InterfaceStyle()]
 	local _color_br = _mat1.color["br"][InterfaceStyle()]
-
 	if InterfaceTransparent() then
 		if InterfaceStyle() == "dark" then
 			_color_bar.a = 100
@@ -101,7 +98,6 @@ function _mat1.DrawWindow(window, pw, ph, title)
 end
 
 RegisterWindowFunction(_mat1.name, _mat1.DrawWindow)
-
 function _mat1.YRPDrawButton(btn, pw, ph, text, color, px, py, ax, ah, forcelang)
 	--[[ Vars ]]
 	--
@@ -110,7 +106,6 @@ function _mat1.YRPDrawButton(btn, pw, ph, text, color, px, py, ax, ah, forcelang
 	--
 	local _color_bar = YRPGetColor("2")
 	local _color_br = YRPGetColor("6")
-
 	if InterfaceTransparent() then
 		_color_bar.a = 220
 	else
@@ -123,7 +118,6 @@ function _mat1.YRPDrawButton(btn, pw, ph, text, color, px, py, ax, ah, forcelang
 
 	local _color = color or _color_bar
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
-
 	--[[ text ]]
 	--
 	if forcelang then
@@ -134,7 +128,6 @@ function _mat1.YRPDrawButton(btn, pw, ph, text, color, px, py, ax, ah, forcelang
 end
 
 RegisterButtonFunction(_mat1.name, _mat1.DrawButton)
-
 function _mat1.DrawPanel(pnl, pw, ph, text, color, px, py, ax, ah)
 	--[[ Vars ]]
 	--
@@ -143,7 +136,6 @@ function _mat1.DrawPanel(pnl, pw, ph, text, color, px, py, ax, ah)
 	--
 	local _color_bar = YRPGetColor("2")
 	local _color_br = YRPGetColor("6")
-
 	if InterfaceTransparent() then
 		_color_bar.a = 220
 	else

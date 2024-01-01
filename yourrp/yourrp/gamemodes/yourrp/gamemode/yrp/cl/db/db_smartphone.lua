@@ -1,10 +1,9 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local YRP_SMARTPHONE = {}
 YRP_SMARTPHONE["color_back"] = Color(0, 0, 0, 255)
 YRP_SMARTPHONE["color_case"] = Color(0, 0, 0, 255)
 local yrp_smartphone = {}
 local dbfile = "yrp_smartphone/yrp_smartphone.json"
-
 function YRPSmartphoneMSG(msg, col)
 	local color = col or Color(0, 255, 0)
 	MsgC(color, "[YourRP] [SMARTPHONE] " .. msg .. "\n")
@@ -25,10 +24,8 @@ end
 function YRPSmartphoneLoad()
 	YRPSmartphoneCheckFile()
 	YRPSmartphoneMSG("Load Smartphone")
-
 	if file.Exists(dbfile, "DATA") then
 		yrp_smartphone = util.JSONToTable(file.Read(dbfile, "DATA"))
-
 		for i, v in pairs(yrp_smartphone) do
 			yrp_smartphone[i] = YRPTableToColor(v)
 		end

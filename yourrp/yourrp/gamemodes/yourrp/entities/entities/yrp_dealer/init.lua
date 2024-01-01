@@ -1,8 +1,7 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
-
 function ENT:Initialize()
 	self:SetHullType(HULL_HUMAN)
 	self:SetHullSizeNormal()
@@ -13,7 +12,6 @@ function ENT:Initialize()
 	self:DropToFloor()
 	self:SetHealth(100)
 	self:SetUseType(SIMPLE_USE)
-
 	if IsDealerImmortal() then
 		self:SetYRPBool("immortal", true)
 	else
@@ -23,12 +21,10 @@ end
 
 function ENT:OnTakeDamage(dmg)
 	self:SetHealth(self:Health() - dmg:GetDamage())
-
 	if IsDealerImmortal() then
 		self:SetYRPBool("immortal", true)
 	else
 		self:SetYRPBool("immortal", false)
-
 		if self:Health() <= 0 then
 			self:SetSchedule(SCHED_FALL_TO_GROUND)
 			local _rd = ents.Create("prop_ragdoll")
@@ -37,12 +33,14 @@ function ENT:OnTakeDamage(dmg)
 			_rd:SetAngles(self:GetAngles())
 			_rd:Spawn()
 			self:Remove()
-
-			timer.Simple(9, function()
-				if tostring(_rd) ~= "[NULL Entity]" then
-					_rd:Remove()
+			timer.Simple(
+				9,
+				function()
+					if tostring(_rd) ~= "[NULL Entity]" then
+						_rd:Remove()
+					end
 				end
-			end)
+			)
 		end
 	end
 end
@@ -61,15 +59,16 @@ function ENT:Open(activator, caller)
 	if not activator:GetYRPBool("open_menu", false) then
 		activator:SetYRPBool("open_menu", true)
 		self:OpenBuyMenu(activator)
-
-		timer.Simple(1, function()
-			activator:SetYRPBool("open_menu", false)
-		end)
+		timer.Simple(
+			1,
+			function()
+				activator:SetYRPBool("open_menu", false)
+			end
+		)
 	end
 end
 
 util.AddNetworkString("nws_yrp_open_buy_menu")
-
 function ENT:OpenBuyMenu(pl)
 	net.Start("nws_yrp_open_buy_menu")
 	net.WriteString(self:GetYRPString("dealerID", "-1"))

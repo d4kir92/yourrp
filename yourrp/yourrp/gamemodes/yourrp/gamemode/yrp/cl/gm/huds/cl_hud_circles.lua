@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local HP = Material("vgui/material/icon_favorite.png")
 local AR = Material("vgui/material/icon_security.png")
 local HU = Material("vgui/material/icon_restaurant.png")
@@ -12,38 +12,43 @@ local WS = Material("vgui/material/icon_add_circle.png")
 local MO = Material("vgui/material/icon_add.png")
 local SA = Material("vgui/material/icon_add_circle.png")
 local RA = YRP.GetDesignIcon("radiation")
-
 function drawC(x, y, radius, seg, color)
 	surface.SetDrawColor(color)
 	draw.NoTexture()
 	local cir = {}
-
-	table.insert(cir, {
-		x = x,
-		y = y,
-		u = 0.5,
-		v = 0.5
-	})
+	table.insert(
+		cir,
+		{
+			x = x,
+			y = y,
+			u = 0.5,
+			v = 0.5
+		}
+	)
 
 	for i = 0, seg do
 		local a = math.rad((i / seg) * -360)
+		table.insert(
+			cir,
+			{
+				x = x + math.sin(a) * radius,
+				y = y + math.cos(a) * radius,
+				u = math.sin(a) / 2 + 0.5,
+				v = math.cos(a) / 2 + 0.5
+			}
+		)
+	end
 
-		table.insert(cir, {
+	local a = math.rad(0) -- This is needed for non absolute segment counts
+	table.insert(
+		cir,
+		{
 			x = x + math.sin(a) * radius,
 			y = y + math.cos(a) * radius,
 			u = math.sin(a) / 2 + 0.5,
 			v = math.cos(a) / 2 + 0.5
-		})
-	end
-
-	local a = math.rad(0) -- This is needed for non absolute segment counts
-
-	table.insert(cir, {
-		x = x + math.sin(a) * radius,
-		y = y + math.cos(a) * radius,
-		u = math.sin(a) / 2 + 0.5,
-		v = math.cos(a) / 2 + 0.5
-	})
+		}
+	)
 
 	surface.DrawPoly(cir)
 end
@@ -51,7 +56,6 @@ end
 function HUDCirclesDrawIcon(ele, icon, perc, text)
 	perc = math.Round(perc, 3)
 	local lply = LocalPlayer()
-
 	if lply:HudElementVisible(ele) then
 		local color = lply:HudValue(ele, "BA")
 		local h = lply:HudValue(ele, "SIZE_H")
@@ -92,7 +96,6 @@ function HUDCirclesDrawIcon(ele, icon, perc, text)
 		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NOTEQUAL)
 		drawC(midx, midy, h / 2, 32, Color(0, 0, 0, 255))
 		render.SetStencilEnable(false)
-
 		if icon then
 			surface.SetDrawColor(Color(255, 255, 255, 255))
 			surface.SetMaterial(icon)
@@ -100,7 +103,6 @@ function HUDCirclesDrawIcon(ele, icon, perc, text)
 		end
 
 		local fontsize = lply:HudValue(ele, "TS")
-
 		if fontsize <= 0 then
 			fontsize = 14
 		end
@@ -112,14 +114,12 @@ end
 
 function HUDCirclesDrawText(ele, text)
 	local lply = LocalPlayer()
-
 	if lply:HudElementVisible(ele) then
 		local w = lply:HudValue(ele, "SIZE_W")
 		local h = lply:HudValue(ele, "SIZE_H")
 		local x = lply:HudValue(ele, "POSI_X")
 		local y = lply:HudValue(ele, "POSI_Y")
 		local fontsize = lply:HudValue(ele, "TS")
-
 		if fontsize <= 0 then
 			fontsize = 14
 		end
@@ -135,7 +135,6 @@ end
 
 function HUDCircles()
 	local lply = LocalPlayer()
-
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and not YRPIsScoreboardVisible() and GetGlobalYRPBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Circles" then
 		HUDCirclesDrawIcon("HP", HP, lply:Health() / lply:GetMaxHealth())
 		HUDCirclesDrawIcon("AR", AR, lply:Armor() / lply:GetMaxArmor())
@@ -143,7 +142,6 @@ function HUDCircles()
 		HUDCirclesDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxThirst())
 		HUDCirclesDrawIcon("ST", ST, lply:Stamina() / lply:GetMaxStamina())
 		HUDCirclesDrawIcon("RA", RA, lply:Radiation() / lply:GetMaxRadiation())
-
 		if IsLevelSystemEnabled() then
 			local tab = {}
 			tab["LEVEL"] = lply:Level()
@@ -165,13 +163,11 @@ function HUDCircles()
 		HUDCirclesDrawText("PE", YRP.trans("LID_fps") .. ": " .. GetFPS())
 		HUDCirclesDrawText("NE", YRP.trans("LID_ping") .. ": " .. lply:Ping())
 		local wep = lply:GetActiveWeapon()
-
 		if wep ~= NULL then
 			local clip1 = wep:Clip1()
 			local maxclip1 = wep:GetMaxClip1()
 			local ammo1 = lply:GetAmmoCount(wep:GetPrimaryAmmoType())
 			local am1t = ""
-
 			if clip1 > -1 then
 				am1t = am1t .. clip1 .. "/" .. maxclip1
 			end
@@ -192,7 +188,6 @@ function HUDCircles()
 			local maxclip2 = wep:GetMaxClip2()
 			local ammo2 = lply:GetAmmoCount(wep:GetSecondaryAmmoType())
 			local am2t = ""
-
 			if clip2 > -1 then
 				am2t = am2t .. clip2 .. "/" .. maxclip2
 			end
@@ -219,6 +214,9 @@ function HUDCircles()
 	end
 end
 
-timer.Simple(1, function()
-	hook.Add("HUDPaint", "yrp_hud_design_Circles", HUDCircles)
-end)
+timer.Simple(
+	1,
+	function()
+		hook.Add("HUDPaint", "yrp_hud_design_Circles", HUDCircles)
+	end
+)

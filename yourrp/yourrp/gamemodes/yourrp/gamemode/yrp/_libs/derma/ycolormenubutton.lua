@@ -1,6 +1,5 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 function PANEL:ColorChanged(col)
 end
 
@@ -10,7 +9,6 @@ function PANEL:DoClick()
 	local ctrl = YRPCreateD("YColorMenu", nil, YRP.ctr(600), YRP.ctr(600), mx - YRP.ctr(20), my - YRP.ctr(20))
 	ctrl:MakePopup()
 	ctrl:SetColor(self._col)
-
 	ctrl.ValueChanged = function(sel, color)
 		if self and self.ValueChanged then
 			self:SetColor(color)

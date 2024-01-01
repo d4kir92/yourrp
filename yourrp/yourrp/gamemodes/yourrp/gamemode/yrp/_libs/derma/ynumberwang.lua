@@ -1,6 +1,5 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 function PANEL:Paint(pw, ph)
 	draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 10))
 end
@@ -46,14 +45,12 @@ end
 
 function PANEL:Init()
 	self.header = YRPCreateD("DPanel", self, 10, 10, 0, 0)
-
 	function self.header:Paint(pw, ph)
 		draw.SimpleText(YRP.trans(self.name) or "UNNAMED", "Y_" .. math.Round(ph / 3 * 2) .. "_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	self.numberwang = YRPCreateD("DNumberWang", self, 10, 10, 0, 10)
 	self.numberwang.main = self
-
 	function self.numberwang:PerformLayout()
 		self:SetFontInternal("Y_18_500")
 		self:SetPaintBackgroundEnabled(true)
@@ -74,7 +71,6 @@ function PANEL:Init()
 	function self.numberwang:OnValueChanged(val)
 		val = tonumber(val)
 		local newval = math.Clamp(val, self:GetMin(), self:GetMax())
-
 		if newval == val then
 			self.main:OnValueChanged(newval)
 		else

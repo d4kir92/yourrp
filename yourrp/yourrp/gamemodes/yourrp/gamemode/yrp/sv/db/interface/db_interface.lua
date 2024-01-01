@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_interface"
@@ -6,11 +6,9 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 local INTERFACES = {}
-
 function AddIFElement(tab)
 	for name, value in pairs(tab.floats) do
 		local _name = "float_IF_" .. tab.element .. "_" .. name
-
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
@@ -18,7 +16,6 @@ function AddIFElement(tab)
 
 	for name, value in pairs(tab.bools) do
 		local _name = "bool_IF_" .. tab.element .. "_" .. name
-
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
@@ -26,7 +23,6 @@ function AddIFElement(tab)
 
 	for name, value in pairs(tab.colors) do
 		local _name = "color_IF_" .. tab.element .. "_" .. name
-
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 		end
@@ -35,7 +31,6 @@ function AddIFElement(tab)
 	if tab.ints ~= nil then
 		for name, value in pairs(tab.ints) do
 			local _name = "int_IF_" .. tab.element .. "_" .. name
-
 			if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
 				YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
 			end
@@ -90,10 +85,8 @@ AddIFElement(Blur)
 --[[ LOADOUT ]]
 --
 YRPIFVersion = YRPIFVersion or -1
-
 function IFLoadoutAll()
 	local ifeles = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-
 	if IsNotNilAndNotFalse(ifeles) then
 		for i, ele in pairs(ifeles) do
 			if ele.name ~= nil then
@@ -116,67 +109,79 @@ end
 
 IFLoadoutAll()
 util.AddNetworkString("nws_yrp_get_interface_settings")
-
-net.Receive("nws_yrp_get_interface_settings", function(len, ply)
-	local element = net.ReadString()
-	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '" .. "%_IF_" .. element .. "_%'")
-
-	if IsNotNilAndNotFalse(tab) then
-		table.SortByMember(tab, "name", true)
-		net.Start("nws_yrp_get_interface_settings")
-		net.WriteTable(tab)
-		net.Send(ply)
+net.Receive(
+	"nws_yrp_get_interface_settings",
+	function(len, ply)
+		local element = net.ReadString()
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '" .. "%_IF_" .. element .. "_%'")
+		if IsNotNilAndNotFalse(tab) then
+			table.SortByMember(tab, "name", true)
+			net.Start("nws_yrp_get_interface_settings")
+			net.WriteTable(tab)
+			net.Send(ply)
+		end
 	end
-end)
+)
 
 util.AddNetworkString("nws_yrp_update_interface_color")
+net.Receive(
+	"nws_yrp_update_interface_color",
+	function(len, ply)
+		local name = net.ReadString()
+		local color = net.ReadString()
+		YRP.msg("db", "value = '" .. color .. "'" .. "name = '" .. name .. "'")
+		YRP_SQL_UPDATE(
+			DATABASE_NAME,
+			{
+				["value"] = color
+			}, "name = '" .. name .. "'"
+		)
 
-net.Receive("nws_yrp_update_interface_color", function(len, ply)
-	local name = net.ReadString()
-	local color = net.ReadString()
-	YRP.msg("db", "value = '" .. color .. "'" .. "name = '" .. name .. "'")
-
-	YRP_SQL_UPDATE(DATABASE_NAME, {
-		["value"] = color
-	}, "name = '" .. name .. "'")
-
-	IFLoadoutAll()
-end)
+		IFLoadoutAll()
+	end
+)
 
 function ResetDesign()
 	local tab = INTERFACES[GetGlobalYRPString("string_interface_design", "")]
-
 	if tab ~= nil then
 		for name, value in pairs(tab.floats) do
 			local _name = "float_IF_" .. GetGlobalYRPString("string_interface_design", "Material") .. "_" .. name
-
-			YRP_SQL_UPDATE(DATABASE_NAME, {
-				["value"] = value
-			}, "name = '" .. _name .. "'")
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["value"] = value
+				}, "name = '" .. _name .. "'"
+			)
 		end
 
 		for name, value in pairs(tab.bools) do
 			local _name = "bool_IF_" .. GetGlobalYRPString("string_interface_design", "Material") .. "_" .. name
-
-			YRP_SQL_UPDATE(DATABASE_NAME, {
-				["value"] = value
-			}, "name = '" .. _name .. "'")
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["value"] = value
+				}, "name = '" .. _name .. "'"
+			)
 		end
 
 		for name, value in pairs(tab.colors) do
 			local _name = "color_IF_" .. GetGlobalYRPString("string_interface_design", "Material") .. "_" .. name
-
-			YRP_SQL_UPDATE(DATABASE_NAME, {
-				["value"] = value
-			}, "name = '" .. _name .. "'")
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["value"] = value
+				}, "name = '" .. _name .. "'"
+			)
 		end
 
 		for name, value in pairs(tab.ints) do
 			local _name = "int_IF_" .. GetGlobalYRPString("string_interface_design", "Material") .. "_" .. name
-
-			YRP_SQL_UPDATE(DATABASE_NAME, {
-				["value"] = value
-			}, "name = '" .. _name .. "'")
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["value"] = value
+				}, "name = '" .. _name .. "'"
+			)
 		end
 	end
 
@@ -184,7 +189,9 @@ function ResetDesign()
 end
 
 util.AddNetworkString("nws_yrp_reset_interface_design")
-
-net.Receive("nws_yrp_reset_interface_design", function(len, ply)
-	ResetDesign()
-end)
+net.Receive(
+	"nws_yrp_reset_interface_design",
+	function(len, ply)
+		ResetDesign()
+	end
+)

@@ -1,7 +1,5 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 function PANEL:GetText()
 	return self._text
 end
@@ -22,7 +20,7 @@ function PANEL:GetBorder()
 	return YRP.ctr(self._border)
 end
 
-function PANEL:SetBorder( b)
+function PANEL:SetBorder(b)
 	self._border = b
 end
 
@@ -31,17 +29,18 @@ function PANEL:AddItem(p)
 	self.con:AddItem(p)
 	self:UpdateSize()
 end
+
 function PANEL:SetSpacing(s)
 	self.con:SetSpacing(s)
 end
 
-function PANEL:AutoSize( b)
+function PANEL:AutoSize(b)
 	self._autosize = b
 	self:UpdateSize()
 end
 
 function PANEL:Paint(pw, ph)
-	hook.Run( "YGroupBox", self, pw, ph)
+	hook.Run("YGroupBox", self, pw, ph)
 end
 
 function PANEL:GetContent()
@@ -51,14 +50,15 @@ end
 function PANEL:UpdateSize()
 	if self._autosize then
 		local h = 0
-		for i, v in pairs(self:GetContent():GetItems() ) do
+		for i, v in pairs(self:GetContent():GetItems()) do
 			h = h + v:GetTall()
 		end
-		self:SetTall(h + 2 * self:GetBorder() + self:GetHeaderHeight() )
+
+		self:SetTall(h + 2 * self:GetBorder() + self:GetHeaderHeight())
 	end
 
-	self.con:SetSize(self:GetWide() - 2 * self:GetBorder(), self:GetTall() - 2 * self:GetBorder() - self:GetHeaderHeight() )
-	self.con:SetPos(self:GetBorder(), self:GetHeaderHeight() + self:GetBorder() )
+	self.con:SetSize(self:GetWide() - 2 * self:GetBorder(), self:GetTall() - 2 * self:GetBorder() - self:GetHeaderHeight())
+	self.con:SetPos(self:GetBorder(), self:GetHeaderHeight() + self:GetBorder())
 end
 
 function PANEL:OnSizeChanged(pw, ph)
@@ -66,7 +66,6 @@ function PANEL:OnSizeChanged(pw, ph)
 end
 
 function PANEL:Think()
-
 end
 
 function PANEL:Init()
@@ -74,13 +73,12 @@ function PANEL:Init()
 	self._border = 20
 	self._text = "GroupBox"
 	self._autosize = false
-
-	self.con = YRPCreateD( "DPanelList", self, 10, 10, 0, 0)
+	self.con = YRPCreateD("DPanelList", self, 10, 10, 0, 0)
 	self.con:EnableVerticalScrollbar()
-	self.con:SetText( "CONTENT" )
+	self.con:SetText("CONTENT")
 	function self.con:Paint(pw, ph)
-		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	end
+	--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 end
 
-vgui.Register( "YGroupBox", PANEL, "DPanel" )
+vgui.Register("YGroupBox", PANEL, "DPanel")

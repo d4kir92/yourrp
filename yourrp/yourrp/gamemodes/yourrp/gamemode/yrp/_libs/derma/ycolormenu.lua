@@ -1,6 +1,5 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 function PANEL:ValueChanged(col)
 	self._col = col
 end
@@ -8,7 +7,6 @@ end
 function PANEL:Init()
 	self:SetTitle("LID_color")
 	local ctrl = YRPCreateD("DColorMixer", self, self:GetWide() - YRP.ctr(40), self:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
-
 	ctrl.ValueChanged = function(ctr, color)
 		self:ValueChanged(color)
 	end
@@ -38,7 +36,6 @@ function PANEL:Think()
 	local pw, ph = self:GetSize()
 	self._cm:SetSize(pw - YRP.ctr(40), ph - YRP.ctr(40))
 	local mx, my = gui.MousePos()
-
 	if mx < px then
 		self:Remove()
 	elseif mx > px + pw then

@@ -1,22 +1,17 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function YRPIsValidEntityForTeleport(ent)
-	if !IsValid(ent) then
-		YRP.msg( "note", "[YRPIsValidEntityForTeleport] Entity is not valid to teleport >>> ent: " .. tostring(ent) )
+	if not IsValid(ent) then
+		YRP.msg("note", "[YRPIsValidEntityForTeleport] Entity is not valid to teleport >>> ent: " .. tostring(ent))
+
 		return false
 	end
+
 	return true
 end
 
 function enough_space(ply, pos)
-	if !YRPIsValidEntityForTeleport(ply) then
-		return false
-	end
-
-	if pos == nil then
-		return false
-	end
-
+	if not YRPIsValidEntityForTeleport(ply) then return false end
+	if pos == nil then return false end
 	local tr = {
 		start = pos,
 		endpos = pos,
@@ -26,7 +21,7 @@ function enough_space(ply, pos)
 	}
 
 	local hullTrace = util.TraceHull(tr)
-	if !hullTrace.Hit then
+	if not hullTrace.Hit then
 		return true
 	else
 		return false
@@ -34,13 +29,10 @@ function enough_space(ply, pos)
 end
 
 function get_ground_pos(ply, pos)
-	if !YRPIsValidEntityForTeleport(ply) then
-		return pos
-	end
-
+	if not YRPIsValidEntityForTeleport(ply) then return pos end
 	local tr = {
 		start = pos,
-		endpos = pos-Vector(0, 0, 9999),
+		endpos = pos - Vector(0, 0, 9999),
 		mins = Vector(-18, -18, 0),
 		maxs = Vector(18, 18, 75)
 	}
@@ -54,10 +46,7 @@ function get_ground_pos(ply, pos)
 end
 
 function tp_to(ply, pos)
-	if !YRPIsValidEntityForTeleport(ply) then
-		return false
-	end
-
+	if not YRPIsValidEntityForTeleport(ply) then return false end
 	local _pos = Vector(pos[1], pos[2], pos[3])
 	local _angle = Angle(0, 0, 0)
 	local _tmpAngle = ply:EyeAngles() or ply:GetAngles()
@@ -67,9 +56,9 @@ function tp_to(ply, pos)
 		else
 			ply:SetAngles(_angle)
 		end
-		if enough_space(ply, _pos + Vector(0, 0, 2) ) then
-			local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2) )
 
+		if enough_space(ply, _pos + Vector(0, 0, 2)) then
+			local __pos = get_ground_pos(ply, _pos + Vector(0, 0, 2))
 			ply:SetPos(__pos)
 			if ply:IsPlayer() then
 				ply:SetEyeAngles(_tmpAngle)
@@ -98,10 +87,12 @@ function tp_to(ply, pos)
 			end
 		end
 	end
+
 	if ply.RPName then
-		YRP.msg( "note", "[tp_to] >>> FAILED TO TELEPORT! " .. ply:RPName() .. " (not enough space!) <<<" )
+		YRP.msg("note", "[tp_to] >>> FAILED TO TELEPORT! " .. ply:RPName() .. " (not enough space!) <<<")
 	else
-		YRP.msg( "note", "[tp_to] >>> FAILED! TELEPORTED TO EARLY?" )
+		YRP.msg("note", "[tp_to] >>> FAILED! TELEPORTED TO EARLY?")
 	end
+
 	return false
 end

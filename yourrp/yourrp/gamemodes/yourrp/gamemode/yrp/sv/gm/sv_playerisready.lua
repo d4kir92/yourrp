@@ -1,21 +1,22 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 util.AddNetworkString("nws_yrp_sendstartdata")
 util.AddNetworkString("nws_yrp_receivedstartdata")
 util.AddNetworkString("nws_yrp_sendserverdata")
 util.AddNetworkString("nws_yrp_receivedserverdata")
-
-net.Receive("nws_yrp_receivedserverdata", function(len, ply)
-	ply.receivedserverdata = true
-	MsgC(Color(0, 255, 0), "[LOADING] SENDED SERVER DATA", "\n")
-end)
+net.Receive(
+	"nws_yrp_receivedserverdata",
+	function(len, ply)
+		ply.receivedserverdata = true
+		MsgC(Color(0, 255, 0), "[LOADING] SENDED SERVER DATA", "\n")
+	end
+)
 
 local function YRPPlayerLoadedGame(ply)
 	ply:SetupCharID()
 	ply:SetYRPBool("finishedloadingcharacter", true)
 	YRPSendCharCount(ply)
 	ply:UserGroupLoadout()
-
 	if IsValid(ply) and ply.KillSilent then
 		if GetGlobalYRPBool("bool_character_system", true) then
 			ply:Spawn()
@@ -26,40 +27,45 @@ local function YRPPlayerLoadedGame(ply)
 	end
 
 	YRP.msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading.")
+	timer.Simple(
+		6,
+		function()
+			if not IsValid(ply) then return end
+			UpdateDarkRPTable(ply)
+			if ply.DRPSendTeamsToPlayer and ply.DRPSendCategoriesToPlayer then
+				ply:DRPSendTeamsToPlayer()
+				ply:DRPSendCategoriesToPlayer()
+			else
+				if ply.DRPSendTeamsToPlayer == nil then
+					YRP.msg("error", "Function not found! DRPSendTeamsToPlayer")
+				end
 
-	timer.Simple(6, function()
-		if not IsValid(ply) then return end
-		UpdateDarkRPTable(ply)
-
-		if ply.DRPSendTeamsToPlayer and ply.DRPSendCategoriesToPlayer then
-			ply:DRPSendTeamsToPlayer()
-			ply:DRPSendCategoriesToPlayer()
-		else
-			if ply.DRPSendTeamsToPlayer == nil then
-				YRP.msg("error", "Function not found! DRPSendTeamsToPlayer")
-			end
-
-			if ply.DRPSendCategoriesToPlayer == nil then
-				YRP.msg("error", "Function not found! DRPSendCategoriesToPlayer")
+				if ply.DRPSendCategoriesToPlayer == nil then
+					YRP.msg("error", "Function not found! DRPSendCategoriesToPlayer")
+				end
 			end
 		end
-	end)
+	)
 
-	timer.Simple(12, function()
-		if not IsValid(ply) then return end
-		--MsgC( Color( 255, 255, 255, 255 ), "[LOADING] SEND SERVER DATA", "\n" )
-		net.Start("nws_yrp_sendserverdata")
-		net.Send(ply)
-
-		timer.Simple(12, function()
+	timer.Simple(
+		12,
+		function()
 			if not IsValid(ply) then return end
-
-			if not ply.receivedserverdata then
-				MsgC(Color(255, 255, 0), "[LOADING] FAILED SEND SERVER DATA: " .. ply:Nick(), "\n")
-				YRPPlayerLoadedGame(ply)
-			end
-		end)
-	end)
+			--MsgC( Color( 255, 255, 255, 255 ), "[LOADING] SEND SERVER DATA", "\n" )
+			net.Start("nws_yrp_sendserverdata")
+			net.Send(ply)
+			timer.Simple(
+				12,
+				function()
+					if not IsValid(ply) then return end
+					if not ply.receivedserverdata then
+						MsgC(Color(255, 255, 0), "[LOADING] FAILED SEND SERVER DATA: " .. ply:Nick(), "\n")
+						YRPPlayerLoadedGame(ply)
+					end
+				end
+			)
+		end
+	)
 
 	return true
 end
@@ -75,7 +81,6 @@ local function YRPCheckFinishLoading()
 		if IsValid(ply) and ply.yrploaded == nil and ply:SteamID() ~= nil and ply:GetYRPBool("finishedloadingcharacter", false) == true then
 			ply.yrploaded = true
 			ply:SetYRPBool("finishedloading", true)
-
 			if YRPCLIENTOpenCharacterSelection ~= nil then
 				if not ply:IsBot() then
 					YRPCLIENTOpenCharacterSelection(ply)
@@ -89,7 +94,6 @@ local function YRPCheckFinishLoading()
 			net.WriteString(ply:Nick())
 			net.Broadcast()
 			ply:ChatPrint("!help for help")
-
 			if os.time() ~= nil and YRP_SQL_INSERT_INTO ~= nil then
 				YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_value", "'" .. os.time() .. "' ,'LID_connections', '" .. ply:SteamID() .. "', '" .. "connected" .. "'")
 			end
@@ -99,7 +103,6 @@ end
 
 local function YRPCheckFinishLoadingLoop()
 	local _, err = pcall(YRPCheckFinishLoading)
-
 	if err then
 		YRPMsg(err)
 	end
@@ -108,7 +111,6 @@ local function YRPCheckFinishLoadingLoop()
 end
 
 YRPCheckFinishLoadingLoop()
-
 local function YRPReceivedReadyMessage(len, ply, tab)
 	if not IsValid(ply) then
 		YRP.msg("error", "[LOADING] player is not valid: " .. tostring(ply))
@@ -121,7 +123,6 @@ local function YRPReceivedReadyMessage(len, ply, tab)
 	ostab[1] = "linux"
 	ostab[2] = "osx"
 	ostab[3] = "other"
-
 	if ostab[tab.os] == nil then
 		YRP.msg("error", "[LOADING] OS is invalid: " .. tostring(tab.os))
 
@@ -134,7 +135,6 @@ local function YRPReceivedReadyMessage(len, ply, tab)
 	local Branch = tab.branch
 	local Beta = tab.beta
 	ply:SetYRPString("yrp_os", OS)
-
 	if Country == nil then
 		YRP.msg("error", ply:YRPName() .. " Client is broken, Country = " .. tostring(Country))
 		ply:Kick("YOUR GAME IS BROKEN! PLEASE VERIFY DATA")
@@ -145,7 +145,6 @@ local function YRPReceivedReadyMessage(len, ply, tab)
 	ply:SetYRPString("yrp_country", Country or "unknown")
 	ply:SetYRPFloat("uptime_current", os.time())
 	local _ret = YRP_SQL_SELECT("yrp_players", "uptime_total", "SteamID = '" .. ply:YRPSteamID() .. "'")
-
 	if IsNotNilAndNotFalse(_ret) then
 		ply:SetYRPFloat("uptime_total", _ret[1].uptime_total)
 	else
@@ -155,7 +154,6 @@ local function YRPReceivedReadyMessage(len, ply, tab)
 	MsgC(Color(0, 0, 255, 255), "###############################################################################" .. "\n") --##########
 	MsgC(Color(0, 0, 255, 255), ply:SteamName() .. " is using OS: " .. ply:GetYRPString("yrp_os", "-") .. " ( " .. tostring(Branch) .. " )" .. "\n")
 	MsgC(Color(0, 0, 255, 255), ply:SteamName() .. " is from Country: " .. YRPGetCountryName(Country, "IS READY") .. "\n")
-
 	if ply:GetYRPString("gmod_beta", "unknown") ~= "unknown" then
 		MsgC(Color(0, 0, 255, 255), ply:SteamName() .. " is using GMod BETA: " .. ply:GetYRPString("gmod_beta", "unknown") .. "\n")
 	end
@@ -164,29 +162,31 @@ local function YRPReceivedReadyMessage(len, ply, tab)
 	YRPStartSendingData(ply)
 end
 
-net.Receive("nws_yrp_sendstartdata", function(len, ply)
-	local osid = net.ReadUInt(2)
-	local branch = net.ReadString()
-	local country = net.ReadString()
-	local beta = net.ReadString()
-	net.Start("nws_yrp_receivedstartdata")
-	net.Send(ply)
-	--MsgC( Color( 255, 255, 255, 255 ), "[LOADING] CLIENT -> SERVER: Start Data", "\n" )
-	local tab = {}
-	tab["os"] = osid
-	tab["branch"] = branch
-	tab["country"] = country
-	tab["beta"] = beta
+net.Receive(
+	"nws_yrp_sendstartdata",
+	function(len, ply)
+		local osid = net.ReadUInt(2)
+		local branch = net.ReadString()
+		local country = net.ReadString()
+		local beta = net.ReadString()
+		net.Start("nws_yrp_receivedstartdata")
+		net.Send(ply)
+		--MsgC( Color( 255, 255, 255, 255 ), "[LOADING] CLIENT -> SERVER: Start Data", "\n" )
+		local tab = {}
+		tab["os"] = osid
+		tab["branch"] = branch
+		tab["country"] = country
+		tab["beta"] = beta
+		if not YRPCheckReadyTable(tab) then
+			YRP.msg("error", "[LOADING] Ready Table is broken! #" .. ply.readycounter)
 
-	if not YRPCheckReadyTable(tab) then
-		YRP.msg("error", "[LOADING] Ready Table is broken! #" .. ply.readycounter)
+			return
+		end
 
-		return
+		if not ply.receivedstartdata then
+			ply.receivedstartdata = true
+			MsgC(Color(0, 255, 0), "[LOADING] CLIENT -> SERVER: Start Data [ACCEPTED]", "\n")
+			YRPReceivedReadyMessage(len, ply, tab)
+		end
 	end
-
-	if not ply.receivedstartdata then
-		ply.receivedstartdata = true
-		MsgC(Color(0, 255, 0), "[LOADING] CLIENT -> SERVER: Start Data [ACCEPTED]", "\n")
-		YRPReceivedReadyMessage(len, ply, tab)
-	end
-end)
+)

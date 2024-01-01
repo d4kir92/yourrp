@@ -1,6 +1,5 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 function PANEL:UPDATESIZE()
 	self.hs:SetSize(self:GetWide(), YRP.ctr(self.height))
 	self.site:SetSize(self:GetWide(), self:GetTall() - YRP.ctr(self.height))
@@ -11,7 +10,6 @@ function PANEL:Init()
 	self.hs = YRPCreateD("DHorizontalScroller", self, 0, 0, 0, 0)
 	self.hs:SetOverlap(-YRP.ctr(20))
 	self.site = YRPCreateD("DPanel", self, 0, 0, 0, 0)
-
 	function self.site:Paint(pw, ph)
 	end
 
@@ -37,7 +35,6 @@ function PANEL:AddOption(name, func, height)
 	local tab = YRPCreateD("DButton", nil, YRP.ctr(400), YRP.ctr(height), 0, 0)
 	tab:SetText("")
 	tab.tabs = self
-
 	function tab:DoClick()
 		if IsNotNilAndNotFalse(name) then
 			self.tabs:GoToSite(name)
@@ -56,7 +53,6 @@ function PANEL:AddOption(name, func, height)
 		self.color = Color(100, 100, 255)
 		self.h = self.h or 0
 		self.delay = 0.8
-
 		if self.tabs.current == name then
 			self.h = self.h + self.delay
 			self.color = Color(100, 100, 255)
@@ -88,7 +84,6 @@ end
 
 function PANEL:Paint(w, h)
 	local x, y = self:GetPos()
-
 	if self.sw ~= w or self.sh ~= h or self.px ~= x or self.py ~= y then
 		self.sw = w
 		self.sh = h

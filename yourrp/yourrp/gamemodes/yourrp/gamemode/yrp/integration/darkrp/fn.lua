@@ -1,14 +1,11 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function fp(tbl)
 	local func = tbl[1]
 
 	return function(...)
 		local fnArgs = {}
-
 		local arg = {...}
-
 		local tblN = table.maxn(tbl)
-
 		for i = 2, tblN do
 			fnArgs[i - 1] = tbl[i]
 		end
@@ -34,7 +31,6 @@ local fp = fp
 module("fn")
 --Parameter manipulation
 Id = function(...) return ... end
-
 Flip = function(f)
 	if not f then
 		error("not a function")
@@ -78,7 +74,6 @@ do
 end
 
 _G.fc = Compose
-
 -- Definition from http://lua-users.org/wiki/CurriedLua
 Curry = function(func, num_args)
 	if not num_args then
@@ -111,14 +106,11 @@ end
 Partial = function(func, ...)
 	local args = {...}
 
-	return function(...)
-		return func(unpack(table.Add(args, {...})))
-	end
+	return function(...) return func(unpack(table.Add(args, {...}))) end
 end
 
 Apply = function(f, ...) return f(...) end
 Const = function(a, b) return a end
-
 Until = function(cmp, fn, val)
 	if cmp(val) then return val end
 
@@ -149,15 +141,12 @@ Succ = Compose{Add, 1}
 Pred = Compose{Flip(Sub), 1}
 Even = Compose{fp{Eq, 0}, fp{Flip(Mod), 2}}
 Odd = Compose{Not, Even}
-
 --Functional logical operators and conditions
 FAnd = function(fns)
 	return function(...)
 		local val
-
 		for _, f in pairs(fns) do
 			val = {f(...)}
-
 			if not val[1] then return unpack(val) end
 		end
 
@@ -168,10 +157,8 @@ end
 FOr = function(fns)
 	return function(...)
 		local val
-
 		for _, f in pairs(fns) do
 			val = {f(...)}
-
 			if val[1] then return unpack(val) end
 		end
 
@@ -180,7 +167,6 @@ FOr = function(fns)
 end
 
 Not = function(x) return not x end
-
 If = function(f, Then, Else)
 	return function(x)
 		if f(x) then
@@ -201,10 +187,8 @@ Map = function(f, xs)
 end
 
 Append = function(xs, ys) return table.Add(xs, ys) end
-
 Filter = function(f, xs)
 	local res = {}
-
 	for k, v in pairs(xs) do
 		if f(v) then
 			res[k] = v
@@ -223,7 +207,6 @@ end
 
 Head = function(xs) return table.GetFirstValue(xs) end
 Last = function(xs) return xs[#xs] or table.GetLastValue(xs) end
-
 Tail = function(xs)
 	table.remove(xs, 1)
 
@@ -237,7 +220,6 @@ Init = function(xs)
 end
 
 GetValue = function(i, xs) return xs[i] end
-
 Null = function(xs)
 	for k, v in pairs(xs) do
 		return false
@@ -248,10 +230,8 @@ end
 
 Length = function(xs) return #xs end
 Index = function(xs, i) return xs[i] end
-
 Reverse = function(xs)
 	local res = {}
-
 	for i = #xs, 1, -1 do
 		res[#xs - i + 1] = xs[i]
 	end

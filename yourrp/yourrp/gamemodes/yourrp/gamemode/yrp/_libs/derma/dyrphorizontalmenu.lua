@@ -1,13 +1,11 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function DrawSelector(btn, w, h, text, selected, hassubtabs)
 	local spacer = 0
-
 	if hassubtabs then
 		spacer = YRP.ctr(100)
 	end
 
 	draw.SimpleText(text, "Y_22_500", w / 2 - spacer / 2, h / 2, Color(255, 255, 255, 255), 1, 1)
-
 	if btn.ani_h == nil then
 		btn.ani_h = 0
 	end
@@ -23,7 +21,6 @@ function DrawSelector(btn, w, h, text, selected, hassubtabs)
 	end
 
 	local color = YRPGetColor("2")
-
 	if btn:IsHovered() then
 		color = YRPGetColor("1")
 	elseif selected then
@@ -35,11 +32,9 @@ end
 
 local PANEL = {}
 local color_red = Color(255, 0, 0, 100)
-
 function PANEL:Init()
 	self.tabs = {}
 	self.hscroller = YRPCreateD("DHorizontalScroller", self, self:GetWide(), YRP.ctr(100), 0, 0)
-
 	function self.hscroller:Paint(pw, ph)
 	end
 
@@ -47,7 +42,6 @@ function PANEL:Init()
 	self.w = 0
 	self.h = 0
 	self.site = YRPCreateD("DPanel", self, 0, 0, 0, 0)
-
 	function self.site:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, color_red)
 	end
@@ -58,7 +52,6 @@ function PANEL:AddPanel(pnl)
 	self.hscroller:AddPanel(pnl)
 	self.w = 0
 	self.x = 0
-
 	for i, tab in pairs(self.tabs) do
 		self.w = self.w + tab:GetWide()
 	end
@@ -70,7 +63,6 @@ end
 function PANEL:MakeSpacer()
 	local spacer = YRPCreateD("YButton", self, YRP.ctr(30), YRP.ctr(100), 0, 0)
 	spacer:SetText("")
-
 	function spacer:Paint(pw, ph)
 	end
 
@@ -89,7 +81,6 @@ end
 
 function PANEL:SiteNotFound()
 	self:ClearSite()
-
 	function self.site:Paint(pw, ph)
 		draw.SimpleText("[Site Not Found]", "Y_18_500", pw / 2, ph / 2, Color(255, 255, 0, 255), 1, 1)
 		draw.SimpleText("[" .. YRP.trans("LID_wip") .. "]", "Y_18_500", pw / 2, ph / 2 + YRP.ctr(50), Color(255, 255, 0, 255), 1, 1)
@@ -102,7 +93,6 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 	end
 
 	local spacer = 0
-
 	if hassubtabs then
 		spacer = YRP.ctr(100)
 	end
@@ -113,7 +103,6 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 	TAB.netstr = netstr
 	TAB:SetText("")
 	TAB.subtabs = {}
-
 	function TAB:HideSubTabs()
 		if self.stabs ~= nil then
 			self.stabs:Remove()
@@ -128,7 +117,6 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 			self.stabs:SetTitle("")
 			self.stabs:ShowCloseButton(false)
 			self.stabs:SetDraggable(false)
-
 			function self.stabs:Paint(pw, ph)
 				if not YRPPanelAlive(self:GetParent(), "ShowSubTabs") then
 					self:HideSubTabs()
@@ -136,7 +124,6 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 
 				local mx, my = gui.MousePos()
 				local px, py = self:GetPos()
-
 				if mx > px + pw then
 					self:GetParent():HideSubTabs()
 				elseif mx < px then
@@ -150,7 +137,6 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 			end
 
 			self.stabs.pl = YRPCreateD("DPanelList", self.stabs, self.stabs:GetWide(), self.stabs:GetTall(), 0, 0)
-
 			for i, subtab in pairs(self.subtabs) do
 				local st = YRPCreateD("YButton", self.stabs.pl, self.stabs:GetWide(), self:GetTall(), 0, 0)
 				st:SetText("")
@@ -159,14 +145,12 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 				st.netstr = subtab.netstr or ""
 				st.url = subtab.url or ""
 				st.func = subtab.func or nil
-
 				st.tab = {
 					["text"] = self.name
 				}
 
 				function st:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph, self.tab)
-
 					if self.url ~= "" or self.func ~= nil then
 						local br = YRP.ctr(10)
 						local size = ph - 2 * YRP.ctr(20)
@@ -174,7 +158,6 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 					end
 
 					local icon = ""
-
 					if string.find(string.lower(subtab.name), "discord", 1, true) then
 						icon = "discord"
 					elseif string.find(string.lower(subtab.name), "teamspeak", 1, true) then
@@ -220,7 +203,6 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 		end
 
 		DrawSelector(self, pw, ph, YRP.trans(self.name), self.selected, hassubtabs)
-
 		if self.hassubtabs then
 			local br = YRP.ctr(20)
 			YRP.DrawIcon(YRP.GetDesignIcon("64_angle-down"), ph - br * 2, ph - br * 2, pw - br - ph / 2 - br, br, YRPGetColor("6"))
@@ -236,14 +218,12 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 
 	function TAB:DoClick()
 		self.menu.current_site = self.name
-
 		if self.netstr ~= "" then
 			self.menu:ClearSite()
 			net.Start(self.netstr)
 			net.SendToServer()
 		else
 			self:HideSubTabs()
-
 			if self.subtabs[1].netstr ~= "" then
 				net.Start(self.subtabs[1].netstr)
 				net.SendToServer()
@@ -271,7 +251,6 @@ end
 
 function PANEL:SetStartTab(name)
 	self.starttab = name
-
 	for i, tab in pairs(self.tabs) do
 		if tab.name == name then
 			tab:DoClick()
@@ -283,43 +262,40 @@ end
 function PANEL:GetMenuInfo(netstr)
 	net.Start(netstr)
 	net.SendToServer()
-
-	net.Receive(netstr, function(len)
-		if YRPPanelAlive(self, "GetMenuInfo") then
-			local tabs = net.ReadTable()
-			local subtabs = net.ReadTable()
-
-			for i, tab in pairs(tabs) do
-				local starttab = false
-
-				if tab.name == self.starttab then
-					starttab = true
-				end
-
-				local hassubtabs = false
-
-				for _i, subtab in pairs(subtabs) do
-					if subtab.parent == tab.name then
-						hassubtabs = true
+	net.Receive(
+		netstr,
+		function(len)
+			if YRPPanelAlive(self, "GetMenuInfo") then
+				local tabs = net.ReadTable()
+				local subtabs = net.ReadTable()
+				for i, tab in pairs(tabs) do
+					local starttab = false
+					if tab.name == self.starttab then
+						starttab = true
 					end
-				end
 
-				local pnl = self:AddTab(tab.name, tab.netstr, starttab, hassubtabs)
+					local hassubtabs = false
+					for _i, subtab in pairs(subtabs) do
+						if subtab.parent == tab.name then
+							hassubtabs = true
+						end
+					end
 
-				for _i, subtab in pairs(subtabs) do
-					if subtab.parent == tab.name then
-						pnl.hassubtabs = true
-						pnl:AddToTab(subtab.name, subtab.netstr, subtab.url, subtab.func)
+					local pnl = self:AddTab(tab.name, tab.netstr, starttab, hassubtabs)
+					for _i, subtab in pairs(subtabs) do
+						if subtab.parent == tab.name then
+							pnl.hassubtabs = true
+							pnl:AddToTab(subtab.name, subtab.netstr, subtab.url, subtab.func)
+						end
 					end
 				end
 			end
 		end
-	end)
+	)
 end
 
 function PANEL:Think()
 	local _mx, _my = gui.MousePos()
-
 	if self.w ~= self:GetWide() or self.h ~= self:GetTall() then
 		self.w = self:GetWide()
 		self.h = self:GetTall()

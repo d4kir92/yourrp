@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/specializations/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/specializations/gpl.txt)
 local _li = {}
 net.Receive(
 	"nws_yrp_get_specializations",

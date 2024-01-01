@@ -1,10 +1,8 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
-
 function PANEL:Init()
 	self.header = YRPCreateD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
 	self.header.text = "UNNAMED"
-
 	function self:SetHeader(text)
 		self.header.text = text
 	end
@@ -15,7 +13,6 @@ function PANEL:Init()
 	end
 
 	self.numberwang = YRPCreateD("DNumberWang", self, self:GetWide(), self:GetTall() - self.header:GetTall(), 0, YRP.ctr(50))
-
 	function self:SetValue(val)
 		self.numberwang:SetValue(val)
 	end

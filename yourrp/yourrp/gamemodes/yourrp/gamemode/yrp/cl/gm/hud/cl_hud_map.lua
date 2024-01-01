@@ -1,9 +1,8 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 --cl_hud_map.lua
 local map = {}
 local _map = _map or {}
 _map.open = false
-
 function getCoords()
 	net.Start("nws_yrp_askCoords")
 	net.SendToServer()
@@ -31,10 +30,8 @@ function closeMap()
 end
 
 local CamDataMap = {}
-
 function openMap()
 	local lply = LocalPlayer()
-
 	if GetGlobalYRPBool("bool_map_system", false) then
 		map.open = true
 		_map.window = vgui.Create("DFrame")
@@ -44,7 +41,6 @@ function openMap()
 		_map.window:ShowCloseButton(false)
 		_map.window:SetDraggable(false)
 		_map.window.tick = CurTime()
-
 		function _map.window:Paint(pw, ph)
 			if self.tick < CurTime() and input.IsMouseDown(MOUSE_RIGHT) or input.IsMouseDown(MOUSE_MIDDLE) then
 				gui.EnableScreenClicker(not vgui.CursorVisible())
@@ -67,15 +63,15 @@ function openMap()
 				draw.RoundedBox(0, win.x, win.y, win.w, win.h, Color(0, 0, 0, 255))
 				local _mapName = GetNiceMapName()
 				local _testHeight = 4000
-
-				local tr = util.TraceLine({
-					start = lply:GetPos() + Vector(0, 0, 16),
-					endpos = lply:GetPos() + Vector(0, 0, _testHeight),
-					filter = _filterENTS
-				})
+				local tr = util.TraceLine(
+					{
+						start = lply:GetPos() + Vector(0, 0, 16),
+						endpos = lply:GetPos() + Vector(0, 0, _testHeight),
+						filter = _filterENTS
+					}
+				)
 
 				local _height = 0
-
 				if tr.Hit then
 					_height = tr.HitPos.z
 				else
@@ -94,10 +90,13 @@ function openMap()
 				CamDataMap.orthotop = map.sizeS
 				CamDataMap.orthobottom = map.sizeN
 				map_RT = GetRenderTarget("YRP_Map", win.w, win.h, true)
-
-				map_RT_mat = CreateMaterial("YRP_Map", "UnlitGeneric", {
-					["$basetexture"] = "YRP_Map"
-				})
+				map_RT_mat = CreateMaterial(
+					"YRP_Map",
+					"UnlitGeneric",
+					{
+						["$basetexture"] = "YRP_Map"
+					}
+				)
 
 				local old_RT = render.GetRenderTarget()
 				local old_w, old_h = ScrW(), ScrH()
@@ -105,7 +104,6 @@ function openMap()
 				render.SetViewPort(win.x, win.y, win.w, win.h)
 				render.Clear(0, 0, 0, 0)
 				cam.Start2D()
-
 				if CamDataMap then
 					render.RenderView(CamDataMap)
 				end
@@ -119,7 +117,6 @@ function openMap()
 				local plyPos = {}
 				plyPos.xMax = map.sizeX
 				plyPos.yMax = map.sizeY
-
 				if map.sizeW < 0 then
 					plyPos.xtmp = lply:GetPos().x - map.sizeW
 				else
@@ -137,7 +134,6 @@ function openMap()
 				local nulPos = {}
 				nulPos.xMax = map.sizeX
 				nulPos.yMax = map.sizeY
-
 				if map.sizeW < 0 then
 					nulPos.xtmp = 0 - map.sizeW
 				else
@@ -154,16 +150,13 @@ function openMap()
 				nulPos.y = win.y + win.h - win.h * (nulPos.ytmp / nulPos.yMax)
 				local gridcolor = Color(50, 50, 50)
 				local fixc = 0
-
 				for y = nulPos.y - YRP.ctr(300), 0, -YRP.ctr(200) do
 					fixc = fixc + 1
 				end
 
 				local c = 0
-
 				for y = nulPos.y, win.h, YRP.ctr(200) do
 					local color = gridcolor
-
 					if y == nulPos.y then
 						color = Color(150, 50, 50)
 					end
@@ -173,7 +166,6 @@ function openMap()
 
 				for y = nulPos.y, 0, -YRP.ctr(200) do
 					local color = gridcolor
-
 					if y == nulPos.y then
 						color = Color(150, 50, 50)
 					end
@@ -192,18 +184,14 @@ function openMap()
 				end
 
 				local fixc2 = 0
-
 				for x = nulPos.x - YRP.ctr(300), win.x, -YRP.ctr(200) do
 					fixc2 = fixc2 + 1
 				end
 
 				local c2 = 0
-
 				local let = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
-
 				for x = nulPos.x, win.x + win.w, YRP.ctr(200) do
 					local color = gridcolor
-
 					if x == nulPos.x then
 						color = Color(150, 50, 50)
 					end
@@ -213,7 +201,6 @@ function openMap()
 
 				for x = nulPos.x, win.x, -YRP.ctr(200) do
 					local color = gridcolor
-
 					if x == nulPos.x then
 						color = Color(150, 50, 50)
 					end
@@ -246,14 +233,12 @@ function openMap()
 				draw.SimpleText(math.Round(lply:GetPos().x, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				draw.SimpleText(", " .. math.Round(lply:GetPos().y, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				draw.SimpleText("[M] - " .. YRP.trans("LID_map") .. ": " .. _mapName, "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
-
 				if lply:GetYRPBool("bool_canseeteammatesonmap", false) or lply:GetYRPBool("bool_canseeenemiesonmap", false) then
 					for k, pl in pairs(player.GetAll()) do
 						if pl ~= lply and (pl:GetGroupName() == lply:GetGroupName() and lply:GetYRPBool("bool_canseeteammatesonmap", false)) or (pl:GetGroupName() ~= lply:GetGroupName() and lply:GetYRPBool("bool_canseeenemiesonmap", false)) then
 							local tmp = {}
 							tmp.xMax = map.sizeX
 							tmp.yMax = map.sizeY
-
 							if map.sizeW < 0 then
 								tmp.xtmp = pl:GetPos().x - map.sizeW
 							else
@@ -275,7 +260,6 @@ function openMap()
 							local psh = YRP.ctr(50)
 							local prot = pl:EyeAngles().y - 90
 							local pl_col = Color(100, 100, 255, 255)
-
 							if pl:GetGroupName() == lply:GetGroupName() then
 								pl_col = Color(100, 255, 100, 255)
 							elseif pl:GetGroupName() ~= lply:GetGroupName() then
@@ -304,11 +288,14 @@ function openMap()
 	end
 end
 
-net.Receive("nws_yrp_sendCoords", function()
-	if net.ReadBool() then
-		map = net.ReadTable()
-		openMap()
-	else
-		YRP.msg("note", "wait for server coords")
+net.Receive(
+	"nws_yrp_sendCoords",
+	function()
+		if net.ReadBool() then
+			map = net.ReadTable()
+			openMap()
+		else
+			YRP.msg("note", "wait for server coords")
+		end
 	end
-end)
+)

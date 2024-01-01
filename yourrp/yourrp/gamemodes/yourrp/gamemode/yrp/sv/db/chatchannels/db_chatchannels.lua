@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 -- CHAT CHANNELS
@@ -18,10 +18,8 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_enabled", "TEXT DEFAULT '1'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbedisabled", "TEXT DEFAULT '1'")
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 local all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-
 if IsNotNilAndNotFalse(all) then
 	local tab = {}
-
 	for i, v in pairs(all) do
 		if not table.HasValue(tab, v.string_name) then
 			table.insert(tab, v.string_name) -- INSERT UNIQUE
@@ -32,7 +30,6 @@ if IsNotNilAndNotFalse(all) then
 end
 
 local yrp_chat_channels = {}
-
 -- CREATE DEFAULT CHANNELS
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "OOC" .. "'") == nil then
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'OOC', 'Color( 100, 255, 100 )[OOC] %STEAMNAME%: Color( 255, 255, 255, 255 )%TEXT%', 0, 0")
@@ -89,35 +86,41 @@ end
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "W" .. "'") == nil then
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, string_structure2, int_mode, bool_removeable", "'W', 'Color( 255, 100, 255 )von %RPNAME%: %TEXT%', 'Color( 255, 100, 255 )zu %TARGET%: %TEXT%', 6, 0")
 else
-	YRP_SQL_UPDATE(DATABASE_NAME, {
-		["int_mode"] = 6
-	}, "string_name = 'W'")
+	YRP_SQL_UPDATE(
+		DATABASE_NAME,
+		{
+			["int_mode"] = 6
+		}, "string_name = 'W'"
+	)
 end
 
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "PM" .. "'") == nil then
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, string_structure2, int_mode, bool_removeable", "'PM', 'Color( 255, 100, 255 )von %RPNAME%: %TEXT%', 'Color( 255, 100, 255 )zu %TARGET%: %TEXT%', 6, 0")
 else
-	YRP_SQL_UPDATE(DATABASE_NAME, {
-		["int_mode"] = 6
-	}, "string_name = 'PM'")
+	YRP_SQL_UPDATE(
+		DATABASE_NAME,
+		{
+			["int_mode"] = 6
+		}, "string_name = 'PM'"
+	)
 end
 
 local dbChannels = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_structure", nil)
-
 if dbChannels then
 	for i, v in pairs(dbChannels) do
 		local string_structure = string.Replace(v.string_structure, "Color( 0, 255, 0 )", "Color( 0, 255, 0 )")
-
-		YRP_SQL_UPDATE(DATABASE_NAME, {
-			["string_structure"] = string_structure
-		}, "uniqueID = '" .. v.uniqueID .. "'")
+		YRP_SQL_UPDATE(
+			DATABASE_NAME,
+			{
+				["string_structure"] = string_structure
+			}, "uniqueID = '" .. v.uniqueID .. "'"
+		)
 	end
 end
 
 function GenerateChatTable()
 	yrp_chat_channels = {}
 	local channels = YRP_SQL_SELECT(DATABASE_NAME, "*")
-
 	if IsNotNilAndNotFalse(channels) then
 		for i, channel in pairs(channels) do
 			yrp_chat_channels[tonumber(channel.uniqueID)] = {}
@@ -136,13 +139,11 @@ function GenerateChatTable()
 			yrp_chat_channels[tonumber(channel.uniqueID)]["bool_enabled"] = tonumber(channel.bool_enabled)
 			-- ACTIVE
 			local augs = {}
-
 			if channel.string_active_usergroups then
 				augs = string.Explode(",", channel.string_active_usergroups)
 			end
 
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_active_usergroups"] = {}
-
 			for _, ug in pairs(augs) do
 				if not strEmpty(ug) then
 					yrp_chat_channels[tonumber(channel.uniqueID)]["string_active_usergroups"][ug] = true
@@ -150,13 +151,11 @@ function GenerateChatTable()
 			end
 
 			local agrps = {}
-
 			if channel.string_active_groups then
 				agrps = string.Explode(",", channel.string_active_groups)
 			end
 
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_active_groups"] = {}
-
 			for _, grp in pairs(agrps) do
 				if not strEmpty(grp) then
 					yrp_chat_channels[tonumber(channel.uniqueID)]["string_active_groups"][tonumber(grp)] = true
@@ -164,13 +163,11 @@ function GenerateChatTable()
 			end
 
 			local arols = {}
-
 			if channel.string_active_roles then
 				arols = string.Explode(",", channel.string_active_roles)
 			end
 
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_active_roles"] = {}
-
 			for _, rol in pairs(arols) do
 				if not strEmpty(rol) then
 					yrp_chat_channels[tonumber(channel.uniqueID)]["string_active_roles"][tonumber(rol)] = true
@@ -179,13 +176,11 @@ function GenerateChatTable()
 
 			-- PASSIVE
 			local pugs = {}
-
 			if channel.string_passive_usergroups then
 				pugs = string.Explode(",", channel.string_passive_usergroups)
 			end
 
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_passive_usergroups"] = {}
-
 			for _, ug in pairs(pugs) do
 				if not strEmpty(ug) then
 					yrp_chat_channels[tonumber(channel.uniqueID)]["string_passive_usergroups"][ug] = true
@@ -193,13 +188,11 @@ function GenerateChatTable()
 			end
 
 			local pgrps = {}
-
 			if channel.string_passive_groups then
 				pgrps = string.Explode(",", channel.string_passive_groups)
 			end
 
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_passive_groups"] = {}
-
 			for _, grp in pairs(pgrps) do
 				if not strEmpty(grp) then
 					yrp_chat_channels[tonumber(channel.uniqueID)]["string_passive_groups"][tonumber(grp)] = true
@@ -207,13 +200,11 @@ function GenerateChatTable()
 			end
 
 			local prols = {}
-
 			if channel.string_passive_roles then
 				prols = string.Explode(",", channel.string_passive_roles)
 			end
 
 			yrp_chat_channels[tonumber(channel.uniqueID)]["string_passive_roles"] = {}
-
 			for _, rol in pairs(prols) do
 				if not strEmpty(rol) then
 					yrp_chat_channels[tonumber(channel.uniqueID)]["string_passive_roles"][tonumber(rol)] = true
@@ -229,132 +220,146 @@ end
 
 GenerateChatTable()
 util.AddNetworkString("nws_yrp_cm_get_active_usergroups")
-
-net.Receive("nws_yrp_cm_get_active_usergroups", function(len, ply)
-	local ugs = YRP_SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
-
-	if IsNotNilAndNotFalse(ugs) then
-		net.Start("nws_yrp_cm_get_active_usergroups")
-		net.WriteTable(ugs)
-		net.Send(ply)
+net.Receive(
+	"nws_yrp_cm_get_active_usergroups",
+	function(len, ply)
+		local ugs = YRP_SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
+		if IsNotNilAndNotFalse(ugs) then
+			net.Start("nws_yrp_cm_get_active_usergroups")
+			net.WriteTable(ugs)
+			net.Send(ply)
+		end
 	end
-end)
+)
 
 util.AddNetworkString("nws_yrp_cm_get_active_groups")
-
-net.Receive("nws_yrp_cm_get_active_groups", function(len, ply)
-	local grps = YRP_SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
-
-	if IsNotNilAndNotFalse(grps) then
-		net.Start("nws_yrp_cm_get_active_groups")
-		net.WriteTable(grps)
-		net.Send(ply)
+net.Receive(
+	"nws_yrp_cm_get_active_groups",
+	function(len, ply)
+		local grps = YRP_SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
+		if IsNotNilAndNotFalse(grps) then
+			net.Start("nws_yrp_cm_get_active_groups")
+			net.WriteTable(grps)
+			net.Send(ply)
+		end
 	end
-end)
+)
 
 util.AddNetworkString("nws_yrp_cm_get_active_roles")
-
-net.Receive("nws_yrp_cm_get_active_roles", function(len, ply)
-	local rols = YRP_SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
-
-	if IsNotNilAndNotFalse(rols) then
-		net.Start("nws_yrp_cm_get_active_roles")
-		net.WriteTable(rols)
-		net.Send(ply)
+net.Receive(
+	"nws_yrp_cm_get_active_roles",
+	function(len, ply)
+		local rols = YRP_SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
+		if IsNotNilAndNotFalse(rols) then
+			net.Start("nws_yrp_cm_get_active_roles")
+			net.WriteTable(rols)
+			net.Send(ply)
+		end
 	end
-end)
+)
 
 util.AddNetworkString("nws_yrp_cm_get_passive_usergroups")
-
-net.Receive("nws_yrp_cm_get_passive_usergroups", function(len, ply)
-	local ugs = YRP_SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
-
-	if IsNotNilAndNotFalse(ugs) then
-		net.Start("nws_yrp_cm_get_passive_usergroups")
-		net.WriteTable(ugs)
-		net.Send(ply)
+net.Receive(
+	"nws_yrp_cm_get_passive_usergroups",
+	function(len, ply)
+		local ugs = YRP_SQL_SELECT("yrp_usergroups", "uniqueID, string_name", nil)
+		if IsNotNilAndNotFalse(ugs) then
+			net.Start("nws_yrp_cm_get_passive_usergroups")
+			net.WriteTable(ugs)
+			net.Send(ply)
+		end
 	end
-end)
+)
 
 util.AddNetworkString("nws_yrp_cm_get_passive_groups")
-
-net.Receive("nws_yrp_cm_get_passive_groups", function(len, ply)
-	local grps = YRP_SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
-
-	if IsNotNilAndNotFalse(grps) then
-		net.Start("nws_yrp_cm_get_passive_groups")
-		net.WriteTable(grps)
-		net.Send(ply)
+net.Receive(
+	"nws_yrp_cm_get_passive_groups",
+	function(len, ply)
+		local grps = YRP_SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", nil)
+		if IsNotNilAndNotFalse(grps) then
+			net.Start("nws_yrp_cm_get_passive_groups")
+			net.WriteTable(grps)
+			net.Send(ply)
+		end
 	end
-end)
+)
 
 util.AddNetworkString("nws_yrp_cm_get_passive_roles")
-
-net.Receive("nws_yrp_cm_get_passive_roles", function(len, ply)
-	local rols = YRP_SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
-
-	if IsNotNilAndNotFalse(rols) then
-		net.Start("nws_yrp_cm_get_passive_roles")
-		net.WriteTable(rols)
-		net.Send(ply)
+net.Receive(
+	"nws_yrp_cm_get_passive_roles",
+	function(len, ply)
+		local rols = YRP_SQL_SELECT("yrp_ply_roles", "uniqueID, string_name", nil)
+		if IsNotNilAndNotFalse(rols) then
+			net.Start("nws_yrp_cm_get_passive_roles")
+			net.WriteTable(rols)
+			net.Send(ply)
+		end
 	end
-end)
+)
 
 util.AddNetworkString("nws_yrp_chat_channel_add")
-
-net.Receive("nws_yrp_chat_channel_add", function(len, ply)
-	local name = string.upper(net.ReadString())
-	local mode = net.ReadString()
-	local structure = net.ReadString()
-	local structure2 = net.ReadString()
-	local enabled = tonumber(net.ReadString())
-	local augs = table.concat(net.ReadTable(), ",")
-	local agrps = table.concat(net.ReadTable(), ",")
-	local arols = table.concat(net.ReadTable(), ",")
-	local pugs = table.concat(net.ReadTable(), ",")
-	local pgrps = table.concat(net.ReadTable(), ",")
-	local prols = table.concat(net.ReadTable(), ",")
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_mode, string_structure, string_structure2, bool_enabled, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles", "'" .. name .. "', '" .. mode .. "', '" .. structure .. "', '" .. structure2 .. "', '" .. enabled .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols .. "'")
-	GenerateChatTable()
-end)
+net.Receive(
+	"nws_yrp_chat_channel_add",
+	function(len, ply)
+		local name = string.upper(net.ReadString())
+		local mode = net.ReadString()
+		local structure = net.ReadString()
+		local structure2 = net.ReadString()
+		local enabled = tonumber(net.ReadString())
+		local augs = table.concat(net.ReadTable(), ",")
+		local agrps = table.concat(net.ReadTable(), ",")
+		local arols = table.concat(net.ReadTable(), ",")
+		local pugs = table.concat(net.ReadTable(), ",")
+		local pgrps = table.concat(net.ReadTable(), ",")
+		local prols = table.concat(net.ReadTable(), ",")
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_mode, string_structure, string_structure2, bool_enabled, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles", "'" .. name .. "', '" .. mode .. "', '" .. structure .. "', '" .. structure2 .. "', '" .. enabled .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols .. "'")
+		GenerateChatTable()
+	end
+)
 
 util.AddNetworkString("nws_yrp_chat_channel_save")
+net.Receive(
+	"nws_yrp_chat_channel_save",
+	function(len, ply)
+		local name = string.upper(net.ReadString())
+		local mode = net.ReadString()
+		local structure = net.ReadString()
+		local structure2 = net.ReadString()
+		local enabled = tonumber(net.ReadString())
+		local augs = table.concat(net.ReadTable(), ",")
+		local agrps = table.concat(net.ReadTable(), ",")
+		local arols = table.concat(net.ReadTable(), ",")
+		local pugs = table.concat(net.ReadTable(), ",")
+		local pgrps = table.concat(net.ReadTable(), ",")
+		local prols = table.concat(net.ReadTable(), ",")
+		local uid = net.ReadString()
+		YRP_SQL_UPDATE(
+			DATABASE_NAME,
+			{
+				["string_name"] = name,
+				["int_mode"] = mode,
+				["string_structure"] = structure,
+				["string_structure2"] = structure2,
+				["bool_enabled"] = enabled,
+				["string_active_usergroups"] = augs,
+				["string_active_groups"] = agrps,
+				["string_active_roles"] = arols,
+				["string_passive_usergroups"] = pugs,
+				["string_passive_groups"] = pgrps,
+				["string_passive_roles"] = prols
+			}, "uniqueID = '" .. uid .. "'"
+		)
 
-net.Receive("nws_yrp_chat_channel_save", function(len, ply)
-	local name = string.upper(net.ReadString())
-	local mode = net.ReadString()
-	local structure = net.ReadString()
-	local structure2 = net.ReadString()
-	local enabled = tonumber(net.ReadString())
-	local augs = table.concat(net.ReadTable(), ",")
-	local agrps = table.concat(net.ReadTable(), ",")
-	local arols = table.concat(net.ReadTable(), ",")
-	local pugs = table.concat(net.ReadTable(), ",")
-	local pgrps = table.concat(net.ReadTable(), ",")
-	local prols = table.concat(net.ReadTable(), ",")
-	local uid = net.ReadString()
-
-	YRP_SQL_UPDATE(DATABASE_NAME, {
-		["string_name"] = name,
-		["int_mode"] = mode,
-		["string_structure"] = structure,
-		["string_structure2"] = structure2,
-		["bool_enabled"] = enabled,
-		["string_active_usergroups"] = augs,
-		["string_active_groups"] = agrps,
-		["string_active_roles"] = arols,
-		["string_passive_usergroups"] = pugs,
-		["string_passive_groups"] = pgrps,
-		["string_passive_roles"] = prols
-	}, "uniqueID = '" .. uid .. "'")
-
-	GenerateChatTable()
-end)
+		GenerateChatTable()
+	end
+)
 
 util.AddNetworkString("nws_yrp_chat_channel_rem")
-
-net.Receive("nws_yrp_chat_channel_rem", function(len, ply)
-	local uid = net.ReadString()
-	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
-	GenerateChatTable()
-end)
+net.Receive(
+	"nws_yrp_chat_channel_rem",
+	function(len, ply)
+		local uid = net.ReadString()
+		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
+		GenerateChatTable()
+	end
+)

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function DarkRP.addChatReceiver(prefix, text, hearFunc)
 end
 
@@ -99,19 +99,20 @@ end
 
 local function charWrap(tex, remainingWidth, maxWidth)
 	local totalWidth = 0
+	tex = tex:gsub(
+		".",
+		function(char)
+			totalWidth = totalWidth + surface.GetTextSize(char)
+			if totalWidth >= remainingWidth then
+				totalWidth = surface.GetTextSize(char)
+				remainingWidth = maxWidth
 
-	tex = tex:gsub(".", function(char)
-		totalWidth = totalWidth + surface.GetTextSize(char)
+				return "\n" .. char
+			end
 
-		if totalWidth >= remainingWidth then
-			totalWidth = surface.GetTextSize(char)
-			remainingWidth = maxWidth
-
-			return "\n" .. char
+			return char
 		end
-
-		return char
-	end)
+	)
 
 	return tex, totalWidth
 end
@@ -121,39 +122,39 @@ function DarkRP.textWrap(tex, font, maxWidth)
 	local totalWidth = 0
 	surface.SetFont(font)
 	local spaceWidth = surface.GetTextSize(' ')
+	tex = tex:gsub(
+		"(%s?[%S]+)",
+		function(word)
+			local char = string.sub(word, 1, 1)
+			if char == "\n" or char == "\t" then
+				totalWidth = 0
+			end
 
-	tex = tex:gsub("(%s?[%S]+)", function(word)
-		local char = string.sub(word, 1, 1)
+			local wordlen = surface.GetTextSize(word)
+			totalWidth = totalWidth + wordlen
+			-- Wrap around when the max width is reached
+			-- Split the word if the word is too big
+			if wordlen >= maxWidth then
+				local splitWord, splitPoint = charWrap(word, maxWidth - (totalWidth - wordlen), maxWidth)
+				totalWidth = splitPoint
 
-		if char == "\n" or char == "\t" then
-			totalWidth = 0
+				return splitWord
+			elseif totalWidth < maxWidth then
+				return word
+			end
+
+			-- Split before the word
+			if char == ' ' then
+				totalWidth = wordlen - spaceWidth
+
+				return '\n' .. string.sub(word, 2)
+			end
+
+			totalWidth = wordlen
+
+			return '\n' .. word
 		end
-
-		local wordlen = surface.GetTextSize(word)
-		totalWidth = totalWidth + wordlen
-
-		-- Wrap around when the max width is reached
-		-- Split the word if the word is too big
-		if wordlen >= maxWidth then
-			local splitWord, splitPoint = charWrap(word, maxWidth - (totalWidth - wordlen), maxWidth)
-			totalWidth = splitPoint
-
-			return splitWord
-		elseif totalWidth < maxWidth then
-			return word
-		end
-
-		-- Split before the word
-		if char == ' ' then
-			totalWidth = wordlen - spaceWidth
-
-			return '\n' .. string.sub(word, 2)
-		end
-
-		totalWidth = wordlen
-
-		return '\n' .. word
-	end)
+	)
 
 	return tex
 end
@@ -163,7 +164,10 @@ end
 
 --Description: Toggle the state of the F4 menu (open or closed).
 --YRPDarkrpNotFound( "toggleF4Menu()" )
-net.Receive("nws_yrp_sendNotify", function()
-	local message = net.ReadString()
-	notification.AddLegacy(message, NOTIFY_GENERIC, 3)
-end)
+net.Receive(
+	"nws_yrp_sendNotify",
+	function()
+		local message = net.ReadString()
+		notification.AddLegacy(message, NOTIFY_GENERIC, 3)
+	end
+)

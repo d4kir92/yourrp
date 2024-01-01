@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local YRP_TUTORIALS = {}
 YRP_TUTORIALS["tut_all"] = 1
 YRP_TUTORIALS["tut_cs"] = 1
@@ -18,7 +18,6 @@ YRP_TUTORIALS["tut_f1info"] = 1
 YRP_TUTORIALS["tut_all"] = 1
 local yrp_tutorials = {}
 local dbfile = "yrp_tutorials/yrp_tutorials.json"
-
 function YRPTutorialsMSG(msg)
 	MsgC(Color(0, 255, 0), "[YourRP] [TUTORIALS] " .. msg .. "\n")
 end
@@ -53,10 +52,13 @@ function done_tutorial(str, time)
 			time = 0
 		end
 
-		timer.Simple(time, function()
-			yrp_tutorials[str] = 0
-			YRPTutorialsSave()
-		end)
+		timer.Simple(
+			time,
+			function()
+				yrp_tutorials[str] = 0
+				YRPTutorialsSave()
+			end
+		)
 	end
 end
 

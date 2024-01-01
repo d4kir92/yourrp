@@ -1,7 +1,6 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local Player = FindMetaTable("Player")
 AddCSLuaFile("client.lua")
-
 if CLIENT then
 	include("client.lua")
 else
@@ -31,11 +30,9 @@ function Player:canKeysUnlock(door)
 end
 
 SetGlobalYRPBool("DarkRP_LockDown", false)
-
 function Player:getDarkRPVar(var)
 	--Description: Get the value of a DarkRPVar, which is shared between server and client.
 	local notavailable = "feature not available yet"
-
 	if var == "money" then
 		return tonumber(self:GetYRPString("money", "-1"))
 	elseif var == "salary" then
@@ -73,7 +70,6 @@ function Player:getDarkRPVar(var)
 	else -- notavailable -- notavailable
 		local _nw_var = self:GetYRPInt(var)
 		local _nw_var2 = self:GetYRPString(var)
-
 		if _nw_var ~= nil then
 			if tonumber(_nw_var) == nil then
 				return _nw_var
@@ -131,7 +127,6 @@ function YRPConvertToDarkRPCategory(tab, cat)
 	t.name = tab.name or tab.string_name or "-"
 	t.categorises = cat
 	t.startExpanded = true
-
 	if tab.string_color and type(tab.string_color) == "string" then
 		t.color = StringToColor(tab.string_color)
 	elseif tab.color then
@@ -170,10 +165,8 @@ end
 
 if RPExtraTeams == nil then
 	RPExtraTeams = {}
-
 	for i = 0, 2000 do
 		RPExtraTeams[i] = YRPMakeJobTable(i)
-
 		if i == 0 then
 			RPExtraTeams[i].name = "LOADING"
 			RPExtraTeams[i].model = "models/player/skeleton.mdl"
@@ -183,7 +176,6 @@ if RPExtraTeams == nil then
 end
 
 jobByCmd = jobByCmd or {}
-
 function GetRPExtraTeams()
 	for i, ply in pairs(player.GetAll()) do
 		local _job = ply:getJobTable()
@@ -195,7 +187,6 @@ end
 
 GetRPExtraTeams()
 RPExtraTeamDoors = RPExtraTeamDoors or {}
-
 function Player:getJobTable()
 	--Description: Get the job table of a player.
 	local darkrpJobTab = RPExtraTeams[self:Team()]
@@ -203,13 +194,11 @@ function Player:getJobTable()
 	_job.team = self:GetRoleUID()
 	_job.name = self:GetYRPString("roleName", "INVALID")
 	local _pms = {}
-
 	if darkrpJobTab then
 		_pms = darkrpJobTab.model
 	end
 
 	local pms = {}
-
 	if type(_pms) == "table" then
 		for i, v in pairs(_pms) do
 			if not strEmpty(v) then
@@ -232,7 +221,6 @@ function Player:getJobTable()
 	_job.salary = tonumber(self:GetYRPString("salary", "INVALID"))
 	_job.admin = tonumber(self:GetYRPBool("isadminonly")) or 0
 	_job.vote = self:GetYRPBool("isVoteable") or false
-
 	if self:GetLicenseIDs() then
 		_job.hasLicense = true
 	else
@@ -337,11 +325,9 @@ end
 
 local DarkRPVarById = {}
 local UNKNOWN_DARKRPVAR = 255
-
 function DarkRP.readNetDarkRPVar()
 	local DarkRPVarId = net.ReadUInt(DARKRP_ID_BITS)
 	local DarkRPVar = DarkRPVarById[DarkRPVarId]
-
 	if DarkRPVarId == UNKNOWN_DARKRPVAR then
 		local name, value = readUnknown()
 
@@ -360,20 +346,16 @@ local function doRetrieve()
 end
 
 net.Receive("nws_yrp_darkRP_PlayerVar", doRetrieve)
-
 local function doRetrieveRemoval()
 end
 
 --doRetrieveRemoval
 net.Receive("nws_yrp_darkRP_PlayerVarRemoval", doRetrieveRemoval)
-
 local function InitializeDarkRPVars(len)
 	local plyCount = net.ReadUInt(8)
-
 	for i = 1, plyCount do
 		local userID = net.ReadUInt(16)
 		local varCount = net.ReadUInt(DarkRP.DARKRP_ID_BITS + 2)
-
 		for j = 1, varCount do
 			local var, valu = DarkRP.readNetDarkRPVar()
 			RetrievePlayerVar(userID, var, valu)
@@ -382,23 +364,30 @@ local function InitializeDarkRPVars(len)
 end
 
 net.Receive("nws_yrp_darkRP_InitializeVars", InitializeDarkRPVars)
-
 --timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
-net.Receive("nws_yrp_darkRP_DarkRPVarDisconnect", function(len)
-	local userID = net.ReadUInt(16)
-	DarkRPVars[userID] = nil
-end)
-
-timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
-	for _, v in ipairs(player.GetAll()) do
-		if v:getDarkRPVar("rpname") then continue end
-		RunConsoleCommand("_sendDarkRPvars")
-
-		return
+net.Receive(
+	"nws_yrp_darkRP_DarkRPVarDisconnect",
+	function(len)
+		local userID = net.ReadUInt(16)
+		DarkRPVars[userID] = nil
 	end
+)
 
-	timer.Remove("DarkRPCheckifitcamethrough")
-end)
+timer.Create(
+	"DarkRPCheckifitcamethrough",
+	15,
+	0,
+	function()
+		for _, v in ipairs(player.GetAll()) do
+			if v:getDarkRPVar("rpname") then continue end
+			RunConsoleCommand("_sendDarkRPvars")
+
+			return
+		end
+
+		timer.Remove("DarkRPCheckifitcamethrough")
+	end
+)
 
 CustomVehicles = {}
 CustomShipments = {}

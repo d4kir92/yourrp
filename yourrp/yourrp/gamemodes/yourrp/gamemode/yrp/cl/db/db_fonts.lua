@@ -1,12 +1,10 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local font = font or "Ubuntu"
 local fontscale = fontscale or 1
 local fonts = fonts or {}
-
 function YRP.AddFont(fontname, scale)
 	fontname = fontname or ""
 	local fontID = string.lower(fontname)
-
 	if fontID ~= "" and fonts[fontID] == nil and scale ~= nil then
 		local fontentry = {}
 		fontentry.name = fontname
@@ -44,7 +42,6 @@ YRP.AddFont("Swanky and Moo Moo", 1.3)
 YRP.AddFont("Tahoma", 1)
 YRP.AddFont("Ubuntu", 1)
 YRP.AddFont("ZombieA", 0.74)
-
 function YRP.GetFonts()
 	return fonts
 end
@@ -54,12 +51,10 @@ function YRP.GetFont()
 end
 
 local savedfonts = {}
-
 function YRP.SetFont(fontname)
 	if IsNotNilAndNotFalse(fontname) then
 		local fontID = string.lower(fontname)
 		local fontTab = fonts[fontID]
-
 		if IsNotNilAndNotFalse(fontTab) then
 			font = fontTab.name or ""
 			fontscale = fontTab.scale or ""
@@ -72,15 +67,21 @@ function YRP.SetFont(fontname)
 	end
 end
 
-net.Receive("nws_yrp_set_font", function(len)
-	local fname = net.ReadString()
-	YRP.SetFont(fname)
-end)
+net.Receive(
+	"nws_yrp_set_font",
+	function(len)
+		local fname = net.ReadString()
+		YRP.SetFont(fname)
+	end
+)
 
-timer.Simple(10, function()
-	net.Start("nws_yrp_set_font")
-	net.SendToServer()
-end)
+timer.Simple(
+	10,
+	function()
+		net.Start("nws_yrp_set_font")
+		net.SendToServer()
+	end
+)
 
 function GetFontSizeTable()
 	local tab = {}
@@ -105,34 +106,34 @@ end
 function yrp_create_font(_name, _font, _size, _weight, _outline, _shadow)
 	if IsNotNilAndNotFalse(_name) and IsNotNilAndNotFalse(_font) and IsNotNilAndNotFalse(_size) and not table.HasValue(savedfonts, _name) then
 		table.insert(savedfonts, _name)
-
-		surface.CreateFont(_name, {
-			font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-			extended = true,
-			size = YRP.ctr(_size * fontscale * 2),
-			weight = _weight or 500,
-			blursize = 0,
-			scanlines = 0,
-			antialias = true,
-			underline = false,
-			italic = false,
-			strikeout = false,
-			symbol = false,
-			rotary = false,
-			shadow = _shadow or false,
-			additive = false,
-			outline = _outline or false
-		})
+		surface.CreateFont(
+			_name,
+			{
+				font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+				extended = true,
+				size = YRP.ctr(_size * fontscale * 2),
+				weight = _weight or 500,
+				blursize = 0,
+				scanlines = 0,
+				antialias = true,
+				underline = false,
+				italic = false,
+				strikeout = false,
+				symbol = false,
+				rotary = false,
+				shadow = _shadow or false,
+				additive = false,
+				outline = _outline or false
+			}
+		)
 	end
 end
 
 local oldfont = ""
-
 function changeFontSize()
 	if YRP.GetFont() ~= oldfont then
 		oldfont = YRP.GetFont()
 		YRP.msg("db", "changeFontSize")
-
 		for s = 4, 100 do
 			yrp_create_font("Y_" .. s .. "_500", YRP.GetFont(), s, 500, false)
 			yrp_create_font("Y_" .. s .. "_700", YRP.GetFont(), s, 700, false)
@@ -161,7 +162,6 @@ end
 
 changeFontSize()
 local files, _ = file.Find("resource/fonts/*.ttf", "GAME")
-
 for i, f in pairs(files) do
 	if string.EndsWith(f, "-regular.ttf") then
 		local fo = string.Replace(f, "-regular.ttf", "")

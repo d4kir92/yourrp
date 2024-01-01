@@ -1,12 +1,10 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 include("shared.lua")
 ent = ENT
 ENT.name = {}
 ENT.SteamID = {}
-
 function ENT:Draw()
 	local lply = LocalPlayer()
-
 	if self.display == nil then
 		self.display = vgui.Create("DFrame")
 		self.display:SetTitle("")
@@ -15,10 +13,8 @@ function ENT:Draw()
 		self.display:SetDraggable(false)
 		self.display:SetPaintedManually(true)
 		self.display.ent = self
-
 		function self.display:Paint(pw, ph)
 			local bankName = "YRP Bank [" .. GetGlobalYRPString("text_money_pre", "") .. lply:GetYRPString("moneybank", "-1") .. GetGlobalYRPString("text_money_pos", "") .. "]"
-
 			if self.ent:GetYRPString("status") == "startup" then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 100, 255))
 				draw.SimpleTextOutlined("..." .. YRP.trans("LID_loading") .. "...", "Y_80_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
@@ -79,7 +75,6 @@ function ENT:Draw()
 				draw.SimpleTextOutlined(bankName, "Y_80_500", 15, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
 				draw.RoundedBox(0, 0, 150, pw, 100, Color(255, 255, 255, 255))
 				draw.SimpleTextOutlined(YRP.trans("LID_transfer"), "Y_80_500", pw / 2, 150 + 50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-
 				if self.ent:GetYRPString("name1") ~= "nil" then
 					draw.RoundedBox(0, 0, 300, 400, 100, Color(255, 255, 255, 255))
 					draw.SimpleTextOutlined(self.ent:GetYRPString("name1", "EMPTY"), "Y_40_500", 200, 300 + 50 - 20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
@@ -96,7 +91,6 @@ function ENT:Draw()
 				draw.SimpleTextOutlined(YRP.trans("LID_prev"), "Y_60_500", 200, 600 + 50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				draw.RoundedBox(0, 0, 850, 400, 100, Color(255, 255, 255, 255))
 				draw.SimpleTextOutlined(YRP.trans("LID_back"), "Y_60_500", 200, 850 + 50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-
 				if self.ent:GetYRPString("name3") ~= "nil" then
 					draw.RoundedBox(0, pw - 400, 300, 400, 100, Color(255, 255, 255, 255))
 					draw.SimpleTextOutlined(self.ent:GetYRPString("name3", "EMPTY"), "Y_40_500", pw - 200, 300 + 50 - 20, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
@@ -117,7 +111,6 @@ function ENT:Draw()
 				draw.RoundedBox(0, 0, 150, pw, 100, Color(255, 255, 255, 255))
 				local otherText = ""
 				local otherTextPos = YRP.trans("LID_other")
-
 				if self.ent:GetYRPString("prevstatus") == "withdraw" then
 					otherText = YRP.trans("LID_withdraw")
 				elseif self.ent:GetYRPString("prevstatus") == "deposit" then
@@ -154,7 +147,6 @@ function ENT:Draw()
 				draw.SimpleTextOutlined("0", "Y_60_500", 800, 700 + 50, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				draw.RoundedBox(0, 600, 850, 400, 100, Color(255, 255, 255, 255))
 				local _confirm = ""
-
 				if self.ent:GetYRPString("prevstatus") == "withdraw" then
 					_confirm = YRP.trans("LID_withdraw")
 				elseif self.ent:GetYRPString("prevstatus") == "deposit" then

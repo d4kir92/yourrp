@@ -1,4 +1,4 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local DATABASE_NAME = "yrp_inventory_items"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_slotID", "INT DEFAULT 0")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")

@@ -1,7 +1,6 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local Entity = FindMetaTable("Entity")
 AddCSLuaFile("client.lua")
-
 if CLIENT then
 	include("client.lua")
 else
@@ -14,7 +13,6 @@ function Entity:getDoorData()
 	self.DoorData = self.DoorData or {}
 	self.DoorData.owner = nil
 	local charid = self:GetYRPInt("ownerCharID", 0)
-
 	if YRPEntityAlive(self:GetRPOwner()) then
 		self.DoorData.owner = self:GetRPOwner():UserID()
 	elseif charid and charid > 0 then

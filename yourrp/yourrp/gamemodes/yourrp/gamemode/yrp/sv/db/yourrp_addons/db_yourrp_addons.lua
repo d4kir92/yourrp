@@ -1,10 +1,9 @@
---Copyright (C) 2017-2023 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 YRP = YRP or {}
 local yrp_addons = {}
 local HANDLER_YOURRP_ADDONS = {}
-
 function RemFromHandler_YourRP_Addons(ply)
 	table.RemoveByValue(HANDLER_YOURRP_ADDONS, ply)
 end
@@ -16,30 +15,32 @@ function AddToHandler_YourRP_Addons(ply)
 end
 
 util.AddNetworkString("nws_yrp_connect_Settings_YourRP_Addons")
+net.Receive(
+	"nws_yrp_connect_Settings_YourRP_Addons",
+	function(len, ply)
+		if ply:CanAccess("bool_yourrp_addons") then
+			AddToHandler_YourRP_Addons(ply)
+			if table.Count(yrp_addons) == 0 then
+				hook.Run("get_yourrp_addons")
+			end
 
-net.Receive("nws_yrp_connect_Settings_YourRP_Addons", function(len, ply)
-	if ply:CanAccess("bool_yourrp_addons") then
-		AddToHandler_YourRP_Addons(ply)
-
-		if table.Count(yrp_addons) == 0 then
-			hook.Run("get_yourrp_addons")
+			net.Start("nws_yrp_connect_Settings_YourRP_Addons")
+			net.WriteTable(yrp_addons)
+			net.Send(ply)
 		end
-
-		net.Start("nws_yrp_connect_Settings_YourRP_Addons")
-		net.WriteTable(yrp_addons)
-		net.Send(ply)
 	end
-end)
+)
 
 util.AddNetworkString("nws_yrp_disconnect_Settings_YourRP_Addons")
-
-net.Receive("nws_yrp_disconnect_Settings_YourRP_Addons", function(len, ply)
-	RemFromHandler_YourRP_Addons(ply)
-end)
+net.Receive(
+	"nws_yrp_disconnect_Settings_YourRP_Addons",
+	function(len, ply)
+		RemFromHandler_YourRP_Addons(ply)
+	end
+)
 
 function YRP:AddYRPAddon(tab)
 	YRP.msg("db", "Add YourRP Addon( " .. tostring(tab.name) .. " by " .. tostring(tab.author) .. " )")
-
 	if type(tab) ~= "table" then
 		YRP.msg("note", "[AddYRPAddon] invalid arguments!")
 
@@ -53,7 +54,6 @@ function YRP:AddYRPAddon(tab)
 	tab.workshopid = tab.workshopid or ""
 	tab.discord = tab.discord or ""
 	tab.settings = tab.settings or ""
-
 	if strEmpty(tab.name) then
 		YRP.msg("note", "[AddYRPAddon] [" .. tab.name .. "] name is wrong!")
 
