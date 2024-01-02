@@ -39,7 +39,7 @@ function FO76BG(tab)
 		FO76["BR"][tab.element].y = y
 		FO76["BR"][tab.element].color = Color(0, 0, 0, 255)
 	elseif lply:HudElementVisible(tab.element) then
-		HudBox(FO76["BG"][tab.element])
+		YRPHudBox(FO76["BG"][tab.element])
 		HudBoxBr(FO76["BR"][tab.element])
 	end
 end
@@ -137,23 +137,23 @@ function FO76Element(tab)
 		FO76["BR"][tab.element].y = y + (h - tab.thickness) / 2
 		FO76["BR"][tab.element].color = Color(0, 0, 0, 255)
 	elseif lply:HudElementVisible(tab.element) then
-		HudBox(FO76["BG"][tab.element])
-		HudBox(FO76["BGBar"][tab.element])
+		YRPHudBox(FO76["BG"][tab.element])
+		YRPHudBox(FO76["BGBar"][tab.element])
 		if tab.cur ~= nil and tab.max ~= nil then
 			FO76["Bar"][tab.element].w = FO76["Bar"][tab.element].fw * tab.cur / tab.max
 		end
 
-		HudBox(FO76["Bar"][tab.element])
+		YRPHudBox(FO76["Bar"][tab.element])
 		if tab.text ~= nil and lply:HudValue(tab.element, "TEXT") then
 			FO76["TEXT"][tab.element].text = tab.text
-			HudText(FO76["TEXT"][tab.element])
+			YRPHudText(FO76["TEXT"][tab.element])
 		else
 			FO76["TEXT"][tab.element].text = ""
 		end
 
 		if tab.centertext ~= nil and lply:HudValue(tab.element, "TEXT") then
 			FO76["CENTERTEXT"][tab.element].text = tab.centertext
-			HudText(FO76["CENTERTEXT"][tab.element])
+			YRPHudText(FO76["CENTERTEXT"][tab.element])
 		else
 			FO76["CENTERTEXT"][tab.element].text = ""
 		end
@@ -199,7 +199,7 @@ function FO76Name(tab)
 		FO76["NAME"][tab.element].color = tab.tcolor or FOColor()
 	elseif lply:HudElementVisible(tab.element) then
 		FO76["NAME"][tab.element].text = tab.text
-		HudText(FO76["NAME"][tab.element])
+		YRPHudText(FO76["NAME"][tab.element])
 	end
 end
 
@@ -228,7 +228,7 @@ function FO76Numbers(tab)
 		FO76["NUM"][tab.element].color = FOColor()
 	elseif lply:HudElementVisible(tab.element) then
 		FO76["NUM"][tab.element].text = tab.text
-		HudText(FO76["NUM"][tab.element])
+		YRPHudText(FO76["NUM"][tab.element])
 	end
 end
 
@@ -249,7 +249,7 @@ function FO76Chat(tab)
 		FO76["CHAT"][tab.element].y = y
 		FO76["CHAT"][tab.element].color = Color(0, 0, 0, 100)
 	else
-		HudBox(FO76["CHAT"][tab.element])
+		YRPHudBox(FO76["CHAT"][tab.element])
 	end
 end
 
@@ -334,8 +334,8 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["west"].brcolor = Color(0, 0, 0, 255)
 			FO76[tab.element]["west"].text = YRP.trans("LID_west_short")
 		else
-			HudBox(FO76[tab.element]["BG"])
-			HudBox(FO76[tab.element]["Bar"])
+			YRPHudBox(FO76[tab.element]["BG"])
+			YRPHudBox(FO76[tab.element]["Bar"])
 			local x = FO76[tab.element]["degree"].x - FO76[tab.element]["degree"].w / 2
 			local w = FO76[tab.element]["degree"].w
 			local fw = (w * (lply:CoordAngle() / 360)) * -1
@@ -347,8 +347,8 @@ function HUDFO76Compass(tab)
 			hr_n.x = hr_n.x - YRP.ctr(4)
 			hr_n.w = YRP.ctr(8)
 			hr_n.h = hr_n.h * 0.3
-			HudBox(hr_n)
-			HudText(FO76[tab.element]["north"])
+			YRPHudBox(hr_n)
+			YRPHudText(FO76[tab.element]["north"])
 			-- South
 			FO76[tab.element]["south"].x = x + (fw + w * 0.0) % w
 			FO76[tab.element]["south"].text = "S"
@@ -357,8 +357,8 @@ function HUDFO76Compass(tab)
 			hr_s.x = hr_s.x - YRP.ctr(4)
 			hr_s.w = YRP.ctr(8)
 			hr_s.h = hr_s.h * 0.3
-			HudBox(hr_s)
-			HudText(FO76[tab.element]["south"])
+			YRPHudBox(hr_s)
+			YRPHudText(FO76[tab.element]["south"])
 			-- East
 			FO76[tab.element]["east"].x = x + (fw + w * 0.75) % w
 			FO76[tab.element]["east"].text = "E"
@@ -367,8 +367,8 @@ function HUDFO76Compass(tab)
 			hr_e.x = hr_e.x - YRP.ctr(4)
 			hr_e.w = YRP.ctr(8)
 			hr_e.h = hr_e.h * 0.3
-			HudBox(hr_e)
-			HudText(FO76[tab.element]["east"])
+			YRPHudBox(hr_e)
+			YRPHudText(FO76[tab.element]["east"])
 			-- West
 			FO76[tab.element]["west"].x = x + (fw + w * 0.25) % w
 			FO76[tab.element]["west"].text = "W"
@@ -377,8 +377,8 @@ function HUDFO76Compass(tab)
 			hr_w.x = hr_w.x - YRP.ctr(4)
 			hr_w.w = YRP.ctr(8)
 			hr_w.h = hr_w.h * 0.3
-			HudBox(hr_w)
-			HudText(FO76[tab.element]["west"])
+			YRPHudBox(hr_w)
+			YRPHudText(FO76[tab.element]["west"])
 		end
 	end
 end

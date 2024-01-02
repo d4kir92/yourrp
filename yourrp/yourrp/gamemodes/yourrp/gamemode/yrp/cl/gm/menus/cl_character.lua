@@ -82,7 +82,7 @@ function YRPOpenCharacterCreation(from)
 			Derma_DrawBackgroundBlur(self, 0)
 			if win.bg.url ~= GetGlobalYRPString("text_character_background", "") then
 				win.bg.url = GetGlobalYRPString("text_character_background", "")
-				win.bg:SetHTML(GetHTMLImage(GetGlobalYRPString("text_character_background", ""), win:GetWide(), win:GetTall()))
+				win.bg:SetHTML(YRPGetHTMLImage(GetGlobalYRPString("text_character_background", ""), win:GetWide(), win:GetTall()))
 			end
 		end
 
@@ -673,7 +673,7 @@ function YRPLoadCharacters()
 
 								if not strEmpty(tmpChar.factionIcon) and tmpChar.factionIcon ~= "http://www.famfamfam.com/lab/icons/silk/icons/group.png" and tmpChar.icon == nil then
 									tmpChar.icon = YRPCreateD("DHTML", tmpChar, tmpChar:GetTall() * 0.8, tmpChar:GetTall() * 0.8, tmpChar:GetWide() - tmpChar:GetTall() * 0.9, tmpChar:GetTall() * 0.1)
-									tmpChar.icon:SetHTML(GetHTMLImage(tmpChar.factionIcon, tmpChar.icon:GetWide(), tmpChar.icon:GetTall()))
+									tmpChar.icon:SetHTML(YRPGetHTMLImage(tmpChar.factionIcon, tmpChar.icon:GetWide(), tmpChar.icon:GetTall()))
 								end
 							end
 						end
@@ -996,7 +996,7 @@ function YRPOCS(force)
 					local newurl = GetGlobalYRPString("text_character_background", "")
 					if oldurl ~= newurl then
 						CharMenu.frame.bg.url = newurl
-						CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
+						CharMenu.frame.bg:SetHTML(YRPGetHTMLImage(newurl, ScrW(), ScrH())) -- url?
 					end
 
 					if newurl and strEmpty(newurl) and YRPGetCharBGNotFound then
@@ -1249,7 +1249,7 @@ function YRPOCS(force)
 				local newurl = GetGlobalYRPString("text_character_background", "")
 				if oldurl ~= newurl then
 					CharMenu.frame.bg.url = newurl
-					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
+					CharMenu.frame.bg:SetHTML(YRPGetHTMLImage(newurl, ScrW(), ScrH())) -- url?
 				end
 
 				if newurl and strEmpty(newurl) and YRPGetCharBGNotFound then
@@ -1459,7 +1459,7 @@ function YRPOCS(force)
 				local newurl = GetGlobalYRPString("text_character_background", "")
 				if oldurl ~= newurl then
 					CharMenu.frame.bg.url = newurl
-					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
+					CharMenu.frame.bg:SetHTML(YRPGetHTMLImage(newurl, ScrW(), ScrH())) -- url?
 				end
 
 				if newurl and strEmpty(newurl) and YRPGetCharBGNotFound then
@@ -1502,7 +1502,7 @@ function YRPOCS(force)
 					if self.logo.svlogo ~= GetGlobalYRPString("text_server_logo", "") then
 						self.logo.svlogo = GetGlobalYRPString("text_server_logo", "")
 						if not strEmpty(GetGlobalYRPString("text_server_logo", "")) then
-							self.logo:SetHTML(GetHTMLImage(GetGlobalYRPString("text_server_logo", ""), iconsize, iconsize))
+							self.logo:SetHTML(YRPGetHTMLImage(GetGlobalYRPString("text_server_logo", ""), iconsize, iconsize))
 							self.logo:Show()
 						else
 							self.logo:Hide()
@@ -1621,7 +1621,7 @@ function YRPOCS(force)
 				local newurl = GetGlobalYRPString("text_character_background", "")
 				if oldurl ~= newurl then
 					CharMenu.frame.bg.url = newurl
-					CharMenu.frame.bg:SetHTML(GetHTMLImage(newurl, ScrW(), ScrH())) -- url?
+					CharMenu.frame.bg:SetHTML(YRPGetHTMLImage(newurl, ScrW(), ScrH())) -- url?
 				end
 
 				if newurl and strEmpty(newurl) and YRPGetCharBGNotFound then

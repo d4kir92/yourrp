@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local MaterialBlur = Material("pp/blurscreen.png", "noclamp")
-function DrawRectBlur(pnl, px, py, sw, sh, blur)
+function YRPDrawRectBlur(pnl, px, py, sw, sh, blur)
 	render.ClearStencil()
 	render.SetStencilEnable(true)
 	render.SetStencilReferenceValue(1)
@@ -64,26 +64,28 @@ local function DrawBlur(r, px, py, sw, sh, alpha)
 	end
 end
 
-function DrawRectBlurHUD(r, px, py, sw, sh, alpha)
+function YRPDrawRectBlurHUD(r, px, py, sw, sh, alpha)
 	DrawBlur(r, px, py, sw, sh, alpha)
 end
 
-function DrawText(tab)
-	tab = tab or {}
-	tab.x = tab.x or 0
-	tab.y = tab.y or 0
-	tab.color = tab.color or Color(255, 255, 255, 255)
-	tab.br = tab.br or 1
-	tab.brcolor = tab.brcolor or Color(0, 0, 0, 255)
-	tab.ax = tab.ax or 1
-	tab.ay = tab.ay or 1
-	tab.text = tab.text or "NoText"
-	if tab.lforce or tab.lforce == nil then
-		tab.text = YRP.trans(tab.text)
-	end
+function YRPYRPDrawText(tab)
+	if type(tab) == "table" then
+		tab = tab or {}
+		tab.x = tab.x or 0
+		tab.y = tab.y or 0
+		tab.color = tab.color or Color(255, 255, 255, 255)
+		tab.br = tab.br or 1
+		tab.brcolor = tab.brcolor or Color(0, 0, 0, 255)
+		tab.ax = tab.ax or 1
+		tab.ay = tab.ay or 1
+		tab.text = tab.text or "NoText"
+		if tab.lforce or tab.lforce == nil then
+			tab.text = YRP.trans(tab.text)
+		end
 
-	tab.font = tab.font or "Y_14_700"
-	draw.SimpleText(tab.text, tab.font, tab.x, tab.y, YRPTextColor(tab.color), tab.ax, tab.ay)
+		tab.font = tab.font or "Y_14_700"
+		draw.SimpleText(tab.text, tab.font, tab.x, tab.y, YRPTextColor(tab.color), tab.ax, tab.ay)
+	end
 end
 
 function DrawPanel(panel, tab)
@@ -141,7 +143,7 @@ function DGroup(tab)
 		text.br = 0
 		text.ax = 1
 		text.ay = 1
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	dgroup.content = YRPCreateD("DPanelList", dgroup.header, tab.w - 2 * tab.br, tab.h - 1 * tab.br - YRP.ctr(50), tab.br, YRP.ctr(50))
@@ -193,7 +195,7 @@ function DName(tab)
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	if tab.parent ~= nil then
@@ -228,7 +230,7 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	dintcomboboxbox.dcombobox = YRPCreateD("DComboBox", dintcomboboxbox.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
@@ -286,7 +288,7 @@ function DBoolLine(tab, value, str, netstr)
 		text.color = Color(0, 0, 0, 255)
 		text.br = 0
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	dboolline.dcheckbox = YRPCreateD("DCheckBox", dboolline.line, tab.h, tab.h, tab.brx, 0)
@@ -351,7 +353,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 		text.color = Color(0, 0, 0, 255)
 		text.br = 0
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 		if dmg ~= nil and dfloatline.dnumberwang ~= nil then
 			local DMG = {}
 			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. YRP.trans("LID_damage")
@@ -361,7 +363,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 			DMG.color = Color(0, 0, 0, 255)
 			DMG.br = 0
 			DMG.ax = 2
-			DrawText(DMG)
+			YRPDrawText(DMG)
 		end
 	end
 
@@ -432,7 +434,7 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	dintline.dnumberwang = YRPCreateD("DNumberWang", dintline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
@@ -503,7 +505,7 @@ function DStringBox(tab, str, name, netstr)
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	dstringline.dtextentry = YRPCreateD("DTextEntry", dstringline.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
@@ -584,7 +586,7 @@ function DHeader(tab, header)
 		head.color = Color(0, 0, 0, 255)
 		head.br = 0
 		head.ax = 0
-		DrawText(head)
+		YRPDrawText(head)
 	end
 
 	if tab.parent ~= nil then

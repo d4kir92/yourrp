@@ -11,7 +11,7 @@ hook.Add(
 				hh = self:GetHeaderHeight()
 			end
 
-			DrawRectBlur(self, 0, 0, pw, ph, 5) --draw.RoundedBox(0, 0, 0, pw, hh, YRPInterfaceValue( "YFrame", "HB" ) )
+			YRPDrawRectBlur(self, 0, 0, pw, ph, 5) --draw.RoundedBox(0, 0, 0, pw, hh, YRPInterfaceValue( "YFrame", "HB" ) )
 			draw.RoundedBox(0, 0, 0, pw, hh, YRPInterfaceValue("YFrame", "HB")) --YRPInterfaceValue( "YFrame", "BG" ) )
 			if self.GetTitle ~= nil then
 				draw.SimpleText(YRP.trans(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)

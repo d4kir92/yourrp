@@ -20,7 +20,7 @@ function YRPVoiceChannel(edit, uid)
 	local prols = {}
 	local win = YRPCreateD("YFrame", nil, YRP.ctr(1600), YRP.ctr(1210), 0, 0)
 	function win:Paint(pw, ph)
-		DrawRectBlurHUD(5, 0, 0, pw, ph, 255)
+		YRPDrawRectBlurHUD(5, 0, 0, pw, ph, 255)
 	end
 
 	win:Center()
@@ -424,7 +424,7 @@ function YRPUpdateVoiceList()
 
 				local bg = YRPCreateD("DPanel", line, CONTENT:GetWide() - YRP.ctr(26), h, 0, 0)
 				function bg:Paint(pw, ph)
-					DrawRectBlurHUD(YRP.ctr(10), 0, 0, pw, ph, 255) --draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "PC" ) )
+					YRPDrawRectBlurHUD(YRP.ctr(10), 0, 0, pw, ph, 255) --draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "PC" ) )
 				end
 
 				local status = YRPCreateD("DPanel", bg, h, h, 0, 0)
@@ -581,7 +581,7 @@ function YRPOpenVoiceMenu()
 	local lply = LocalPlayer()
 	vm.win = YRPCreateD("YFrame", nil, YRP.ctr(1200), YRP.ctr(1400), 0, 0)
 	function vm.win:Paint(pw, ph)
-		DrawRectBlurHUD(5, 0, 0, pw, ph, 255)
+		YRPDrawRectBlurHUD(5, 0, 0, pw, ph, 255)
 		if self.toggle ~= lply:GetYRPBool("yrp_ToggleVoiceMenu", true) then
 			self.toggle = lply:GetYRPBool("yrp_ToggleVoiceMenu", true)
 			YRPUpdateVoiceList()

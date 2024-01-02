@@ -1713,9 +1713,9 @@ function drawIDCard(ply, scale, px, py)
 					logos[ele] = true
 					local test = YRPCreateD("DHTML", nil, w, h, 0, 0)
 					if string.find(ele, "logo", 1, true) then
-						test:SetHTML(GetHTMLImage(GetGlobalYRPString("text_server_logo", ""), w, h))
+						test:SetHTML(YRPGetHTMLImage(GetGlobalYRPString("text_server_logo", ""), w, h))
 					else
-						test:SetHTML(GetHTMLImage(GetGlobalYRPString("text_idcard_background", ""), w, h))
+						test:SetHTML(YRPGetHTMLImage(GetGlobalYRPString("text_idcard_background", ""), w, h))
 					end
 
 					function test:Paint(pw, ph)

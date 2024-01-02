@@ -373,7 +373,7 @@ function YRP_PMUpdate()
 				YRP_SL.y = lply:HudValue("SL", "POSI_Y")
 				YRP_SL:SetPos(YRP_SL.x, YRP_SL.y)
 				YRP_SL:SetSize(YRP_SL.h, YRP_SL.h)
-				YRP_SL:SetHTML(GetHTMLImage(YRP_SL.url, YRP_SL.h, YRP_SL.h))
+				YRP_SL:SetHTML(YRPGetHTMLImage(YRP_SL.url, YRP_SL.h, YRP_SL.h))
 				YRP_SL:SetVisible(YRP_SL.visible)
 			end
 		else
@@ -787,7 +787,7 @@ hook.Add(
 			end
 
 			VO.tw = VO.tw + VO.h / 2
-			DrawRectBlurHUD(15, VO.tx - VO.tw / 2, VO.y, VO.tw, VO.h, 200)
+			YRPDrawRectBlurHUD(15, VO.tx - VO.tw / 2, VO.y, VO.tw, VO.h, 200)
 			draw.SimpleText(VO.text, VO.font, VO.tx, VO.ty, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end

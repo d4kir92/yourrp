@@ -964,7 +964,7 @@ function YRPInitScoreboard()
 			if self.logo.svlogo ~= GetGlobalYRPString("text_server_logo", "") then
 				self.logo.svlogo = GetGlobalYRPString("text_server_logo", "")
 				if not strEmpty(GetGlobalYRPString("text_server_logo", "")) then
-					YRPScoreboard.logo:SetHTML(GetHTMLImage(GetGlobalYRPString("text_server_logo", ""), 128, 128))
+					YRPScoreboard.logo:SetHTML(YRPGetHTMLImage(GetGlobalYRPString("text_server_logo", ""), 128, 128))
 					YRPScoreboard.logo:Show()
 				else
 					YRPScoreboard.logo:Hide()

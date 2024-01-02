@@ -332,7 +332,7 @@ function addGroup(grp, parent)
 
 		if strUrl(grp.string_icon) then
 			_grp.icon = YRPCreateD("DHTML", _grp, _grp:GetTall() - 2 * BR, _grp:GetTall() - 2 * BR, BR, BR)
-			_grp.icon:SetHTML(GetHTMLImage(grp.string_icon, _grp.icon:GetWide(), _grp.icon:GetTall()))
+			_grp.icon:SetHTML(YRPGetHTMLImage(grp.string_icon, _grp.icon:GetWide(), _grp.icon:GetTall()))
 		end
 
 		if YRPPanelAlive(parent) then

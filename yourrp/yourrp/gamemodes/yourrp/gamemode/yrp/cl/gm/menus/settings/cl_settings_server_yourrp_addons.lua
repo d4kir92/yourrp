@@ -10,10 +10,10 @@ function AddYRPAddon(parent, tab)
 		tab.icon = "http://www.famfamfam.com/lab/icons/silk/icons/plugin.png"
 	end
 
-	_add_on.icon:SetHTML(GetHTMLImage(tab.icon, YRP.ctr(100), YRP.ctr(100)))
+	_add_on.icon:SetHTML(YRPGetHTMLImage(tab.icon, YRP.ctr(100), YRP.ctr(100)))
 	if not strEmpty(tab.workshopid) then
 		_add_on.workshop = YRPCreateD("DHTML", _add_on, YRP.ctr(100), YRP.ctr(100), YRP.ctr(20), YRP.ctr(140))
-		_add_on.workshop:SetHTML(GetHTMLImage("https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/120px-Steam_icon_logo.svg.png", YRP.ctr(100), YRP.ctr(100)))
+		_add_on.workshop:SetHTML(YRPGetHTMLImage("https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/120px-Steam_icon_logo.svg.png", YRP.ctr(100), YRP.ctr(100)))
 		_add_on.workshopbutton = YRPCreateD("DButton", _add_on.workshop, YRP.ctr(100), YRP.ctr(100), 0, 0)
 		_add_on.workshopbutton:SetText("")
 		function _add_on.workshopbutton:Paint(pw, ph)
@@ -26,7 +26,7 @@ function AddYRPAddon(parent, tab)
 
 	if not strEmpty(tab.discord) then
 		_add_on.discord = YRPCreateD("DHTML", _add_on, YRP.ctr(100), YRP.ctr(100), YRP.ctr(20), YRP.ctr(260))
-		_add_on.discord:SetHTML(GetHTMLImage("https://i.imgur.com/rUUpbXO.png", YRP.ctr(100), YRP.ctr(100)))
+		_add_on.discord:SetHTML(YRPGetHTMLImage("https://i.imgur.com/rUUpbXO.png", YRP.ctr(100), YRP.ctr(100)))
 		_add_on.discordbutton = YRPCreateD("DButton", _add_on.discord, YRP.ctr(100), YRP.ctr(100), 0, 0)
 		_add_on.discordbutton:SetText("")
 		function _add_on.discordbutton:Paint(pw, ph)
@@ -143,7 +143,7 @@ net.Receive(
 					tab.ay = 1
 					tab.font = "Y_18_500"
 					tab.text = "empty"
-					DrawText(tab)
+					YRPDrawText(tab)
 				end
 
 				addons:AddItem(_empty)

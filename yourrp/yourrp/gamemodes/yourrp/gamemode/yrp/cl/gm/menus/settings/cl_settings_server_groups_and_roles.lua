@@ -37,7 +37,7 @@ net.Receive(
 					tab2.ay = 1
 					tab2.text = "◀"
 					tab2.font = "Y_18_700"
-					DrawText(tab2)
+					YRPDrawText(tab2)
 				else
 					local tab = {}
 					tab.color = YRPGetColor("3")
@@ -81,7 +81,7 @@ net.Receive(
 					tab2.text = YRP.trans("LID_loading")
 				end
 
-				DrawText(tab2)
+				YRPDrawText(tab2)
 			end
 
 			gs.add = YRPCreateD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), YRP.ctr(20))
@@ -135,7 +135,7 @@ net.Receive(
 					local icon = net.ReadString()
 					if YRPPanelAlive(gs.gplist, "GAR 3") and gs.gplist and gs.gplist[_uid] and gs.gplist[_uid].string_icon then
 						gs.gplist[_uid].string_icon = icon
-						gs.gplist[_uid].ico:SetHTML(GetHTMLImage(gs.gplist[_uid].string_icon, gs.gplist[_uid].ico:GetWide(), gs.gplist[_uid].ico:GetTall()))
+						gs.gplist[_uid].ico:SetHTML(YRPGetHTMLImage(gs.gplist[_uid].string_icon, gs.gplist[_uid].ico:GetWide(), gs.gplist[_uid].ico:GetTall()))
 						YRPTestHTML(gs.gplist[_uid].ico, gs.gplist[_uid].string_icon, false)
 					end
 				end
@@ -171,7 +171,7 @@ net.Receive(
 					tab2.font = "Y_18_700"
 					tab2.lforce = false
 					tab2.color = gs.gplist[group.uniqueID]["string_color"]
-					DrawText(tab2)
+					YRPDrawText(tab2)
 				end
 
 				function pnl:DoClick()
@@ -185,7 +185,7 @@ net.Receive(
 				function ico:Paint(pw, ph)
 				end
 
-				ico:SetHTML(GetHTMLImage(group.string_icon, ico:GetWide(), ico:GetTall()))
+				ico:SetHTML(YRPGetHTMLImage(group.string_icon, ico:GetWide(), ico:GetTall()))
 				YRPTestHTML(ico, group.string_icon, false)
 				gs.gplist[group.uniqueID].up = YRPCreateD("YButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), YRP.ctr(10))
 				gs.gplist[group.uniqueID].up:SetText("")
@@ -248,7 +248,7 @@ net.Receive(
 					tab2.text = text
 					tab2.font = "Y_14_700"
 					tab2.color = tab.color
-					DrawText(tab2)
+					YRPDrawText(tab2)
 				end
 
 				function ch:DoClick()
@@ -326,7 +326,7 @@ net.Receive(
 						tab2.text = YRP.trans("LID_loading")
 					end
 
-					DrawText(tab2)
+					YRPDrawText(tab2)
 				end
 			end
 
@@ -345,7 +345,7 @@ net.Receive(
 						tab2.ay = 1
 						tab2.text = "◀"
 						tab2.font = "Y_18_700"
-						DrawText(tab2)
+						YRPDrawText(tab2)
 					else
 						local tab = {}
 						tab.color = YRPGetColor("3")
@@ -438,7 +438,7 @@ net.Receive(
 						local icon = net.ReadString()
 						if YRPPanelAlive(rs.rplist[_uid], "GAR 7") then
 							rs.rplist[_uid].string_icon = icon
-							rs.rplist[_uid].ico:SetHTML(GetHTMLImage(rs.rplist[_uid].string_icon, rs.rplist[_uid].ico:GetWide(), rs.rplist[_uid].ico:GetTall()))
+							rs.rplist[_uid].ico:SetHTML(YRPGetHTMLImage(rs.rplist[_uid].string_icon, rs.rplist[_uid].ico:GetWide(), rs.rplist[_uid].ico:GetTall()))
 							YRPTestHTML(rs.rplist[_uid].ico, rs.rplist[_uid].string_icon, false)
 						end
 					end
@@ -540,7 +540,7 @@ net.Receive(
 						tab2.ax = 0
 						tab2.text = "[ ]"
 						tab2.font = "Y_18_700"
-						DrawText(tab2)
+						YRPDrawText(tab2)
 					end
 				elseif ea.typ ~= nil then
 					local tab = {}
@@ -595,7 +595,7 @@ net.Receive(
 
 					tab2.font = "Y_18_700"
 					tab2.color = tab.color
-					DrawText(tab2)
+					YRPDrawText(tab2)
 				end
 			end
 
@@ -1073,7 +1073,7 @@ net.Receive(
 					tab2.font = "Y_18_700"
 					tab2.lforce = false
 					tab2.color = rs.rplist[role.uniqueID]["string_color"]
-					DrawText(tab2)
+					YRPDrawText(tab2)
 				end
 
 				function pnl:DoClick()
@@ -1087,7 +1087,7 @@ net.Receive(
 				function ico:Paint(pw, ph)
 				end
 
-				ico:SetHTML(GetHTMLImage(role.string_icon, ico:GetWide(), ico:GetTall()))
+				ico:SetHTML(YRPGetHTMLImage(role.string_icon, ico:GetWide(), ico:GetTall()))
 				YRPTestHTML(ico, role.string_icon, false)
 				rs.rplist[role.uniqueID].up = YRPCreateD("YButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), YRP.ctr(10))
 				rs.rplist[role.uniqueID].up:SetText("")
@@ -1150,7 +1150,7 @@ net.Receive(
 					tab2.text = text
 					tab2.font = "Y_14_700"
 					tab2.color = tab.color
-					DrawText(tab2)
+					YRPDrawText(tab2)
 				end
 
 				function ch:DoClick()

@@ -120,7 +120,7 @@ function CreateFactionSelectionContent()
 								px = h + YRP.ctr(20)
 								sw = w - h - 2 * YRP.ctr(20)
 								local logo = YRPCreateD("DHTML", faction, h - 2 * YRP.ctr(config.br), h - 2 * YRP.ctr(config.br), YRP.ctr(config.br), YRP.ctr(config.br))
-								logo:SetHTML(GetHTMLImage(url, logo:GetWide(), logo:GetTall()))
+								logo:SetHTML(YRPGetHTMLImage(url, logo:GetWide(), logo:GetTall()))
 							end
 
 							local name = YRPCreateD("DPanel", faction, sw, YRP.ctr(100), px, 0)

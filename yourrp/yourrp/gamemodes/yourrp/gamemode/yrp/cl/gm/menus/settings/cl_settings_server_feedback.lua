@@ -10,7 +10,7 @@ function GetAvatarUrl(steamid)
 			if str_start ~= nil then
 				local str_end = string.find(body, ".jpg\">", str_start, true)
 				body = string.sub(body, str_start + 49, str_end + 3)
-				_avatars[steamid] = GetHTMLImage(body, YRP.ctr(200), YRP.ctr(200))
+				_avatars[steamid] = YRPGetHTMLImage(body, YRP.ctr(200), YRP.ctr(200))
 			end
 		end,
 		function(error)

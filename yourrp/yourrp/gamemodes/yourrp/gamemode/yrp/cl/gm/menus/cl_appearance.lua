@@ -319,7 +319,7 @@ net.Receive(
 				tab.y = ph / 2
 				tab.font = "Y_22_500"
 				tab.text = "Role Has No Playermodel!"
-				DrawText(tab)
+				YRPDrawText(tab)
 			end
 		end
 	end

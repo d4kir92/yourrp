@@ -45,15 +45,11 @@ function RegisterHUDElement(design, element, func)
 	HUD[design][element] = func
 end
 
-function DrawHUDElement(design, element)
-	HUD[design][element]()
-end
-
 function ScrV(dec)
 	return ScrH() * dec
 end
 
-function HudBox(tab)
+function YRPHudBox(tab)
 	local vTab = tab or {}
 	vTab.r = vTab.r or 0
 	vTab.x = vTab.x or 0
@@ -68,18 +64,18 @@ function HudBoxBr(tab)
 	tab.br = tab.br or 1
 	local up = table.Copy(tab)
 	up.h = tab.br
-	HudBox(up)
+	YRPHudBox(up)
 	local dn = table.Copy(tab)
 	dn.h = tab.br
 	dn.y = tab.y + tab.h - tab.br
-	HudBox(dn)
+	YRPHudBox(dn)
 	local le = table.Copy(tab)
 	le.w = tab.br
-	HudBox(le)
+	YRPHudBox(le)
 	local ri = table.Copy(tab)
 	ri.w = tab.br
 	ri.x = tab.x + tab.w - tab.br
-	HudBox(ri)
+	YRPHudBox(ri)
 end
 
 function HudBoxBrRounded(tab)
@@ -127,10 +123,10 @@ function HudBoxBrRounded(tab)
 end
 
 function OldHudBoxBr(tab)
-	HudBox(tab[1])
-	HudBox(tab[2])
-	HudBox(tab[3])
-	HudBox(tab[4])
+	YRPHudBox(tab[1])
+	YRPHudBox(tab[2])
+	YRPHudBox(tab[3])
+	YRPHudBox(tab[4])
 end
 
 function GetBorderTab(tab)
@@ -166,12 +162,8 @@ function GetBorderTab(tab)
 	return tab
 end
 
-function HudText(tab)
+function YRPHudText(tab)
 	draw.SimpleText(tab.text, tab.font, tab.x, tab.y, tab.color, tab.ax, tab.ay)
-end
-
-function HudTextBr(tab)
-	draw.SimpleTextOutlined(tab.text, tab.font, tab.x, tab.y, tab.color, tab.ax, tab.ay, 1, tab.brcolor)
 end
 
 function stc(str)
@@ -217,7 +209,7 @@ function YRPDrawButton(button, tab)
 	tab.text.x = tab.text.x or tab.w / 2
 	tab.text.y = tab.text.y or tab.h / 2
 	tab.text.color = tab.color or Color(255, 255, 255, 255)
-	DrawText(tab.text)
+	YRPDrawText(tab.text)
 end
 
 function YRPGetTextLength(text, font)
@@ -228,7 +220,7 @@ function YRPGetTextLength(text, font)
 end
 
 local yrp_if = {}
-function GetHTMLImage(url, w, h)
+function YRPGetHTMLImage(url, w, h)
 	return "<style type=\"text/css\"> body { padding: 0; margin: 0; border:0; } img { padding: 0; margin: 0; border:0; } </style> <body> <img src=\"" .. url .. "\" width=\"" .. w .. "\" height=\"" .. h .. "\"/> </body>"
 end
 
@@ -873,7 +865,7 @@ function createMDMenu(parent, w, h, x, y)
 	tmp.discord.logo = YRPCreateD("DHTML", tmp.discord, icon_size, icon_size, 0, 0)
 	tmp.discord.btn = YRPCreateD("DButton", tmp.discord, icon_size, icon_size, 0, 0)
 	tmp.discord.btn:SetText("")
-	local img = GetHTMLImage("https://discordapp.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg", icon_size, icon_size)
+	local img = YRPGetHTMLImage("https://discordapp.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg", icon_size, icon_size)
 	tmp.discord.logo:SetHTML(img)
 	function tmp.discord:Paint(pw, ph)
 		icon_size = tmp:GetHeaderHeight() - YRP.ctr(20)

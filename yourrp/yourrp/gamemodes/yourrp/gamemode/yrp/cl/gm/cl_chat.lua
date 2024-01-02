@@ -254,7 +254,7 @@ local function InitYRPChat()
 						if self.logo.svlogo ~= GetGlobalYRPString("text_server_logo", "") then
 							self.logo.svlogo = GetGlobalYRPString("text_server_logo", "")
 							if not strEmpty(GetGlobalYRPString("text_server_logo", "")) then
-								self.logo:SetHTML(GetHTMLImage(GetGlobalYRPString("text_server_logo", ""), TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR))
+								self.logo:SetHTML(YRPGetHTMLImage(GetGlobalYRPString("text_server_logo", ""), TOPBAR_H - 2 * BR, TOPBAR_H - 2 * BR))
 								self.logo:Show()
 							else
 								self.logo:Hide()
@@ -779,7 +779,7 @@ local function InitYRPChat()
 					img:SetParent(yrpChat.content)
 					img:SetMouseInputEnabled(false)
 					img:Dock(TOP)
-					img:SetHTML(GetHTMLImage(last, w - 32, 250))
+					img:SetHTML(YRPGetHTMLImage(last, w - 32, 250))
 					img:DockMargin(4, 0, 0, 4)
 					img:SetEnabled(true)
 				end

@@ -122,7 +122,7 @@ function HUDSimpleBAR(tab)
 					Simple[tab.element]["bar"].y = Simple[tab.element]["bar"].fy + Simple[tab.element]["bar"].fh - Simple[tab.element]["bar"].h
 				end
 
-				HudBox(Simple[tab.element]["bar"])
+				YRPHudBox(Simple[tab.element]["bar"])
 			end
 
 			if lply:HudValue(tab.element, "ICON") and tab.icon and YRP.GetDesignIcon(tab.icon) then
@@ -147,7 +147,7 @@ function HUDSimpleBAR(tab)
 				Simple[tab.element]["text"].font = tab.tfont
 			end
 
-			HudText(Simple[tab.element]["text"])
+			YRPHudText(Simple[tab.element]["text"])
 		end
 	end
 end
@@ -368,12 +368,12 @@ function HUDSimpleCompass()
 			for i = 0, 360, 30 do
 				if i % 90 ~= 0 then
 					--Simple["COM"][i].x = x + (fw + w * i / 360) % w
-					--HudBox(Simple["COM"][i])
+					--YRPHudBox(Simple["COM"][i])
 					Simple["COM"][i .. "num"].x = x + (fw + w * i / 360) % w
 					local alpha = GetFadeAlpha(x, Simple["COM"][i .. "num"].x, w)
 					Simple["COM"][i .. "num"].color = Color(255, 255, 255, alpha * 255)
 					Simple["COM"][i .. "num"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
-					HudText(Simple["COM"][i .. "num"])
+					YRPHudText(Simple["COM"][i .. "num"])
 				end
 			end
 
@@ -383,33 +383,33 @@ function HUDSimpleCompass()
 			local alpha = GetFadeAlpha(x, Simple["COM"]["north"].x, w)
 			Simple["COM"]["north"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["north"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
-			HudText(Simple["COM"]["north"])
+			YRPHudText(Simple["COM"]["north"])
 			-- South
 			Simple["COM"]["south"].x = x + (fw + w * 0.0) % w
 			Simple["COM"]["south"].text = YRP.trans("LID_south_short")
 			alpha = GetFadeAlpha(x, Simple["COM"]["south"].x, w)
 			Simple["COM"]["south"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["south"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
-			HudText(Simple["COM"]["south"])
+			YRPHudText(Simple["COM"]["south"])
 			-- East
 			Simple["COM"]["east"].x = x + (fw + w * 0.75) % w
 			Simple["COM"]["east"].text = YRP.trans("LID_east_short")
 			alpha = GetFadeAlpha(x, Simple["COM"]["east"].x, w)
 			Simple["COM"]["east"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["east"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
-			HudText(Simple["COM"]["east"])
+			YRPHudText(Simple["COM"]["east"])
 			-- West
 			Simple["COM"]["west"].x = x + (fw + w * 0.25) % w
 			Simple["COM"]["west"].text = YRP.trans("LID_west_short")
 			alpha = GetFadeAlpha(x, Simple["COM"]["west"].x, w)
 			Simple["COM"]["west"].color = Color(255, 255, 255, alpha * 255)
 			Simple["COM"]["west"].brcolor = Color(0, 0, 0, alpha * 255 * 0.7)
-			HudText(Simple["COM"]["west"])
+			YRPHudText(Simple["COM"]["west"])
 			-- Degree Number
 			Simple["COM"]["degree"].text = tab.text
-			HudText(Simple["COM"]["degree"])
+			YRPHudText(Simple["COM"]["degree"])
 			-- Needle
-			--HudBox(Simple["COM"]["needle"])
+			--YRPHudBox(Simple["COM"]["needle"])
 			local triangle = {
 				{
 					x = Simple["COM"]["needle"].x - 5,

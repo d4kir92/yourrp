@@ -112,7 +112,7 @@ function PANEL:Init()
 			x = ph + YRP.ctr(10)
 			if self.ico ~= base._icon then
 				self.ico = base._icon
-				base.icon:SetHTML(GetHTMLImage(self.ico, ph - 2 * YRP.ctr(20), ph - 2 * YRP.ctr(20)))
+				base.icon:SetHTML(YRPGetHTMLImage(self.ico, ph - 2 * YRP.ctr(20), ph - 2 * YRP.ctr(20)))
 			end
 		else
 			x = ph / 2

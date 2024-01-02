@@ -1136,7 +1136,7 @@ function YRPAddUG(tbl)
 	DUGS[tonumber(tbl.uniqueID)].icon = YRPCreateD("DHTML", _ug, _icon.size, _icon.size, _icon.br + UP:GetWide() + _icon.br, _icon.br)
 	function _ug.UpdateIcon(uid, strIcon)
 		uid = tonumber(uid)
-		local HTMLCODE = GetHTMLImage(strIcon, _icon.size, _icon.size)
+		local HTMLCODE = YRPGetHTMLImage(strIcon, _icon.size, _icon.size)
 		local icon = DUGS[uid].icon
 		if icon then
 			if strEmpty(HTMLCODE) then

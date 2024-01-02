@@ -59,7 +59,7 @@ function YRPDCheckBoxes(tab)
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	pnl.DButton = YRPCreateD("DButton", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
@@ -73,7 +73,7 @@ function YRPDCheckBoxes(tab)
 		change.x = YRP.ctr(10)
 		change.y = ph / 2
 		change.ax = 0
-		DrawText(change)
+		YRPDrawText(change)
 	end
 
 	if tab.netstr ~= nil and tab.uniqueID ~= nil then
@@ -120,7 +120,7 @@ function YRPDCheckBoxes(tab)
 					ta.x = YRP.ctr(60)
 					ta.y = ph / 2
 					ta.ax = 0
-					DrawText(ta)
+					YRPDrawText(ta)
 				end
 
 				ch.ch = YRPCreateD("DCheckBox", ch, YRP.ctr(50), YRP.ctr(50), 0, 0)
@@ -149,7 +149,7 @@ function YRPDCheckBoxes(tab)
 						ta.y = ph / 2
 						ta.ax = 0
 						ta.lforce = false
-						DrawText(ta)
+						YRPDrawText(ta)
 					end
 
 					sch.ch = YRPCreateD("DCheckBox", sch, YRP.ctr(50), YRP.ctr(50), YRP.ctr(50), 0)
@@ -223,7 +223,7 @@ function YRPDCheckBox(tab)
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	pnl.DCheckBox = YRPCreateD("DCheckBox", pnl.line, tab.h, tab.h, 0, 0)
@@ -300,7 +300,7 @@ function YRPDComboBox(tab)
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	pnl.DComboBox = YRPCreateD("DComboBox", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
@@ -376,7 +376,7 @@ function YRPDComboBoxHUD(tab)
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	pnl.DComboBox = YRPCreateD("DComboBox", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
@@ -452,7 +452,7 @@ function DColor(tab)
 		text.color = tab.color
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	pnl.DButton = YRPCreateD("DButton", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
@@ -467,7 +467,7 @@ function DColor(tab)
 		change.x = pw / 2
 		change.y = ph / 2
 		change.color = self.color
-		DrawText(change)
+		YRPDrawText(change)
 	end
 
 	if tab.netstr ~= nil and tab.uniqueID ~= nil then
@@ -551,7 +551,7 @@ function DIntBox(tab)
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	pnl.DNumberWang = YRPCreateD("DNumberWang", pnl.line, tab.w, tab.h / 2, tab.brx, tab.h / 2)
@@ -632,7 +632,7 @@ function DTextBox(tab)
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 		if dmg ~= nil and pnl.dtextentry ~= nil then
 			local DMG = {}
 			DMG.text = dmg:GetValue() * pnl.dtextentry:GetValue() .. " " .. YRP.trans("LID_damage")
@@ -642,7 +642,7 @@ function DTextBox(tab)
 			DMG.color = Color(0, 0, 0, 255)
 			DMG.br = 1
 			DMG.ax = 2
-			DrawText(DMG)
+			YRPDrawText(DMG)
 		end
 	end
 
@@ -831,7 +831,7 @@ function DAttributeBar(tab)
 			text.color = Color(255, 255, 255, 255)
 			text.br = 1
 			text.ax = 0
-			DrawText(text)
+			YRPDrawText(text)
 		end
 	end
 
@@ -905,7 +905,7 @@ function DStringListBox(tab)
 		text.color = Color(255, 255, 255, 255)
 		text.br = 1
 		text.ax = 0
-		DrawText(text)
+		YRPDrawText(text)
 	end
 
 	pnl.add = YRPCreateD("DButton", pnl.bg, YRP.ctr(50), YRP.ctr(50), tab.w - YRP.ctr(50), 0)
