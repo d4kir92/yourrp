@@ -68,7 +68,7 @@ function YRPDrawRectBlurHUD(r, px, py, sw, sh, alpha)
 	DrawBlur(r, px, py, sw, sh, alpha)
 end
 
-function YRPYRPDrawText(tab)
+function YRPDrawText(tab)
 	if type(tab) == "table" then
 		tab = tab or {}
 		tab.x = tab.x or 0
