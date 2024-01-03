@@ -106,11 +106,13 @@ net.Receive(
 					_sh._cat._name:SetText(tbl.name)
 					function _sh._cat._name.textentry:OnChange()
 						self.tbl.name = self:GetValue()
-						net.Start("nws_yrp_category_edit_name")
-						net.WriteString(self.tbl.uniqueID)
-						net.WriteString(self.tbl.name)
-						net.WriteString(_sh._sho.uid)
-						net.SendToServer()
+						if _sh._sho.uid and self.tbl.uniqueID then
+							net.Start("nws_yrp_category_edit_name")
+							net.WriteString(self.tbl.uniqueID)
+							net.WriteString(self.tbl.name)
+							net.WriteString(_sh._sho.uid)
+							net.SendToServer()
+						end
 					end
 
 					net.Start("nws_yrp_get_shop_items")
