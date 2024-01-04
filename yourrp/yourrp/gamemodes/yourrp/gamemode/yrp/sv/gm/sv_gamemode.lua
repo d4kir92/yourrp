@@ -721,16 +721,22 @@ hook.Add(
 
 		if IsDropItemsOnDeathEnabled() then
 			local _weapons = ply:GetWeapons()
-			local _cooldown_item = 120
+			local _cooldown_item = 60
 			for i, wep in pairs(_weapons) do
 				if wep:GetModel() ~= "" and IsNoDefaultWeapon(wep:GetClass()) and IsNoRoleSwep(ply, wep:GetClass()) and IsNoGroupSwep(ply, wep:GetClass()) and IsNoUserGroupWeapon(ply, wep:GetClass()) then
-					ply:DropSWEP(wep:GetClass(), true)
+					local wepClass = wep:GetClass()
 					timer.Simple(
-						_cooldown_item,
+						0.04 * i,
 						function()
-							if wep:IsValid() and wep:GetOwner() == "" then
-								wep:Remove()
-							end
+							ply:DropSWEP(wepClass, true)
+							timer.Simple(
+								_cooldown_item,
+								function()
+									if wep:IsValid() and wep:GetOwner() == "" then
+										wep:Remove()
+									end
+								end
+							)
 						end
 					)
 				end

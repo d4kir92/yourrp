@@ -108,7 +108,7 @@ function Player:DropSWEP(cname, force)
 								ent:SetYRPInt("clip1", wep:GetClip1())
 							end
 
-							if ent:GetPhysicsObject():IsValid() and IsValid(self) then
+							if force == nil and ent:GetPhysicsObject():IsValid() and IsValid(self) then
 								ent:GetPhysicsObject():SetVelocity(self:EyeAngles():Forward() * 360)
 							end
 
