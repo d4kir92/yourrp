@@ -35,6 +35,10 @@ function PANEL:SetMax(max)
 	self.numberwang:SetMax(max)
 end
 
+function PANEL:SetDecimals(max)
+	self.numberwang:SetDecimals(max)
+end
+
 function PANEL:SetValue(val)
 	val = math.Clamp(val, self:GetMin(), self:GetMax())
 	self.numberwang:SetValue(val)
@@ -69,7 +73,7 @@ function PANEL:Init()
 	end
 
 	function self.numberwang:OnValueChanged(val)
-		val = tonumber(val)
+		val = tonumber(string.format("%0.2f", val))
 		local newval = math.Clamp(val, self:GetMin(), self:GetMax())
 		if newval == val then
 			self.main:OnValueChanged(newval)

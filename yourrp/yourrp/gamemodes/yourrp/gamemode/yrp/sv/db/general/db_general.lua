@@ -267,6 +267,10 @@ function YRPLoadGlobals()
 				SetGlobalYRPInt(name, tonumber(value))
 			elseif string.StartWith(name, "text_") then
 				SetGlobalYRPString(name, tostring(value))
+			elseif string.StartWith(name, "float_") then
+				SetGlobalYRPFloat(name, tonumber(value))
+			elseif name ~= "uniqueID" then
+				print(">> MISSING SET GLOBAL FOR NAME:", name, value)
 			end
 		end
 
@@ -437,6 +441,8 @@ function GeneralUpdateInt(ply, netstr, str, value)
 end
 
 function GeneralUpdateFloat(ply, netstr, str, value)
+	value = tonumber(string.format("%0.2f", value))
+	value = math.Clamp(value, 0.01, 100)
 	YRP.msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
 	GeneralUpdateValue(ply, netstr, str, value)
 	SetGlobalYRPFloat(str, value)
