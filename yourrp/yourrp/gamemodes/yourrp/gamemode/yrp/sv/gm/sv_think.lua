@@ -129,11 +129,53 @@ function YRPConST(ply, _time)
 		end
 	end
 
-	if ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply:InVehicle() then
-		ply.yrpjumping = ply.yrpjumping or 1
+	if ply.yrpjumping == nil then
+		ply.yrpjumping = 1
+	end
+
+	if ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:GetMoveType() ~= MOVETYPE_LADDER and not ply:InVehicle() then
 		ply.yrpjumpposz = ply.yrpjumpposz or ply:GetPos().z
+		local onGround = true
+		local height = nil
+		local tr = util.TraceHull(
+			{
+				start = ply:GetPos(),
+				endpos = ply:GetPos() + ply:GetUp() * -100,
+				filter = ents.GetAll(),
+				mins = Vector(-16, -16, -16),
+				maxs = Vector(16, 16, 16),
+				mask = MASK_SHOT_HULL
+			}
+		)
+
+		--ply:GetPos(), ply:GetPos() * ply:GetUp() * -100, ents.GetAll())
+		if tr.HitPos then
+			height = ply:GetPos() - tr.HitPos
+			height = height.z
+			if height > 10 then
+				onGround = false
+			end
+		end
+
+		if height == 100 then
+			height = 0
+			onGround = true
+		end
+
+		if ply.yrpjumping == -2 then
+			ply.yrpjumping = -1
+			timer.Simple(
+				1,
+				function()
+					ply.yrpjumping = 0
+				end
+			)
+		elseif ply.yrpjumping == 0 then
+			ply.yrpjumping = 1
+		end
+
 		-- LEAVE GROUND
-		if ply.yrpjumping == 1 and not ply:IsOnGround() then
+		if ply.yrpjumping == 1 and not onGround then
 			ply.yrpjumpposz = ply:GetPos().z
 			ply.yrpjumping = 2
 		elseif ply.yrpjumping == 2 then
@@ -145,7 +187,7 @@ function YRPConST(ply, _time)
 				ply.yrpjumping = 1
 				ply.yrpjumpposz = ply:GetPos().z
 			end
-		elseif ply.yrpjumping == 3 then
+		elseif ply.yrpjumping == 3 and onGround then
 			-- FULL JUMP, remove stamina
 			ply.yrpjumping = 1
 			local newval = ply:GetYRPFloat("GetCurStamina", 0) - GetGlobalYRPFloat("float_scale_stamina_jump", 30)
@@ -154,6 +196,8 @@ function YRPConST(ply, _time)
 				ply:SetYRPFloat("GetCurStamina", newval)
 			end
 		end
+	else
+		ply.yrpjumping = -2
 	end
 
 	if _time % 1.0 == 0 then
