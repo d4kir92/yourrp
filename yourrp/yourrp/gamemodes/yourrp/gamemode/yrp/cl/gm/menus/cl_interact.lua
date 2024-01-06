@@ -88,7 +88,7 @@ net.Receive(
 				scale = scaleH
 			end
 
-			drawIDCard(ply, scale, YRP.ctr(10), YRP.ctr(10))
+			YRPDrawIDCard(ply, scale, YRP.ctr(10), YRP.ctr(10))
 			--[[ Licenses ]]
 			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(500), content:GetWide() - YRP.ctr(20), YRP.ctr(50), Color(255, 255, 255, 255))
 			draw.SimpleTextOutlined(YRP.trans("LID_licenses") .. ": " .. licenses, "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(520), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(255, 255, 255, 0))

@@ -584,10 +584,10 @@ net.Receive(
 						draw.RoundedBox(0, x, 0, 1, ph, Color(255, 255, 255, 255))
 					end
 
-					drawIDCard(LocalPlayer(), 1)
+					YRPDrawIDCard(LocalPlayer(), 1)
 				end
 
-				local elements = {"background", "box1", "box2", "box3", "box4", "box5", "box6", "box7", "box8", "hostname", "role", "group", "idcardid", "faction", "rpname", "securitylevel", "serverlogo", "birthday", "bodyheight", "weight"}
+				local elements = {"background", "box1", "box2", "box3", "box4", "box5", "serverlogo", "box6", "box7", "box8", "hostname", "role", "group", "idcardid", "faction", "rpname", "securitylevel", "birthday", "bodyheight", "weight"}
 				--"grouplogo",
 				local register = {}
 				for i, ele in pairs(elements) do

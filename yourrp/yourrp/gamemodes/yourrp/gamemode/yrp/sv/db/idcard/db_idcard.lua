@@ -28,7 +28,7 @@ else
 end
 
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
-local elements = {"background", "box1", "box2", "box3", "box4", "box5", "box6", "box7", "box8", "hostname", "role", "group", "idcardid", "faction", "rpname", "securitylevel", "serverlogo", "birthday", "bodyheight", "weight"}
+local elements = {"background", "box1", "box2", "box3", "box4", "box5", "serverlogo", "box6", "box7", "box8", "hostname", "role", "group", "idcardid", "faction", "rpname", "securitylevel", "birthday", "bodyheight", "weight"}
 --"grouplogo",
 local names = {"bool_ELEMENT_visible", "int_ELEMENT_x", "int_ELEMENT_y", "int_ELEMENT_w", "int_ELEMENT_h", "int_ELEMENT_r", "int_ELEMENT_g", "int_ELEMENT_b", "int_ELEMENT_a", "int_ELEMENT_ax", "int_ELEMENT_ay", "int_ELEMENT_colortype", "bool_ELEMENT_title"}
 -- CONFIG

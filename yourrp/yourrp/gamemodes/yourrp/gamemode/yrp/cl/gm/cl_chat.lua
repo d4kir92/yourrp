@@ -156,8 +156,10 @@ local function YRPCheckChatVisible()
 		if YRPScoreboard:IsVisible() or YRPScoreboard:IsVisible() then
 			chatAlpha = 0
 			yrpChat.window:SetVisible(false)
+			yrpChat.window:Hide()
 		else
 			yrpChat.window:SetVisible(true)
+			yrpChat.window:Show()
 			chatAlpha = math.Clamp(chatAlpha, 0, 255)
 			--yrpChat.window:SetAlpha( chatAlpha)
 			yrpChat.window.logo:SetAlpha(chatAlpha)

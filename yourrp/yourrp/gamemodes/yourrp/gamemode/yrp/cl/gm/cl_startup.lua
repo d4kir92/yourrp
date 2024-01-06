@@ -1580,14 +1580,14 @@ net.Receive(
 
 local logos = {}
 local mats = {}
-function drawIDCard(ply, scale, px, py)
+function YRPDrawIDCard(ply, scale, px, py)
 	px = px or 0
 	py = py or 0
 	if scale == nil then
 		scale = 1
 	end
 
-	local elements = {"background", "box1", "box2", "box3", "box4", "box5", "box6", "box7", "box8", "hostname", "role", "group", "idcardid", "faction", "rpname", "securitylevel", "serverlogo", "birthday", "bodyheight", "weight"}
+	local elements = {"background", "box1", "box2", "box3", "box4", "box5", "serverlogo", "box6", "box7", "box8", "hostname", "role", "group", "idcardid", "faction", "rpname", "securitylevel", "birthday", "bodyheight", "weight"}
 	--"grouplogo",
 	for i, ele in pairs(elements) do
 		if GetGlobalYRPBool("bool_" .. ele .. "_visible", false) then
@@ -1745,7 +1745,7 @@ function drawIDCard(ply, scale, px, py)
 					end
 				end
 
-				if ele ~= "serverlogo" and ele ~= "background" and mats[ele] ~= nil then
+				if mats[ele] ~= nil then
 					surface.SetDrawColor(color)
 					surface.SetMaterial(mats[ele])
 					surface.DrawTexturedRect(x, y, w, h)
@@ -2252,7 +2252,7 @@ net.Receive(
 					function pinfo:Paint(pw, ph)
 						if IsValid(plist) and plist.ply and IsValid(plist.ply) and plist.ply:IsPlayer() then
 							local scale = self:GetWide() / GetGlobalYRPInt("int_" .. "background" .. "_w", 100)
-							drawIDCard(plist.ply, scale, 0, 0)
+							YRPDrawIDCard(plist.ply, scale, 0, 0)
 						end
 					end
 
