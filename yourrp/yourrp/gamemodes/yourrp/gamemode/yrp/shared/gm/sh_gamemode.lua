@@ -981,15 +981,6 @@ function YRPGetPROPsList()
 	return currentPropList
 end
 
-timer.Simple(
-	1,
-	function()
-		if CLIENT then
-			YRPGetPROPsList()
-		end
-	end
-)
-
 function YRPGetSENTsList()
 	local res = {}
 	for i, ent in pairs(list.Get("SpawnableEntities")) do
@@ -1002,5 +993,3 @@ function YRPGetSENTsList()
 
 	return res
 end
-
-YRPGetSENTsList()
