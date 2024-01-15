@@ -2328,19 +2328,20 @@ net.Receive(
 						requireslevel.max = 10000000
 						ea[role.uniqueID].requireslevel = DIntBox(requireslevel)
 						DHr(hr)
-						if GetGlobalYRPBool("bool_building_system", false) then
-							local securitylevel = {}
-							securitylevel.parent = ea.restriction:GetContent()
-							securitylevel.header = "LID_securitylevel"
-							securitylevel.netstr = "nws_yrp_update_role_int_securitylevel"
-							securitylevel.value = role.int_securitylevel
-							securitylevel.uniqueID = role.uniqueID
-							securitylevel.lforce = false
-							securitylevel.min = 0
-							securitylevel.max = 1000
-							ea[role.uniqueID].securitylevel = DIntBox(securitylevel)
-							DHr(hr)
-						end
+					end
+
+					if GetGlobalYRPBool("bool_building_system", false) then
+						local securitylevel = {}
+						securitylevel.parent = ea.restriction:GetContent()
+						securitylevel.header = "LID_securitylevel"
+						securitylevel.netstr = "nws_yrp_update_role_int_securitylevel"
+						securitylevel.value = role.int_securitylevel
+						securitylevel.uniqueID = role.uniqueID
+						securitylevel.lforce = false
+						securitylevel.min = 0
+						securitylevel.max = 1000
+						ea[role.uniqueID].securitylevel = DIntBox(securitylevel)
+						DHr(hr)
 					end
 
 					if role.uniqueID > 1 then
@@ -2369,19 +2370,16 @@ net.Receive(
 						DHr(hr)
 					end
 
-					if role.uniqueID > 1 then
-						local bool_canbeagent = {}
-						bool_canbeagent.parent = ea.restriction:GetContent()
-						bool_canbeagent.uniqueID = role.uniqueID
-						bool_canbeagent.header = YRP.trans("LID_isagent")
-						bool_canbeagent.netstr = "nws_yrp_update_role_bool_canbeagent"
-						bool_canbeagent.value = role.bool_canbeagent
-						bool_canbeagent.uniqueID = role.uniqueID
-						bool_canbeagent.lforce = false
-						ea[role.uniqueID].bool_canbeagent = YRPDCheckBox(bool_canbeagent)
-						DHr(hr)
-					end
-
+					local bool_canbeagent = {}
+					bool_canbeagent.parent = ea.restriction:GetContent()
+					bool_canbeagent.uniqueID = role.uniqueID
+					bool_canbeagent.header = YRP.trans("LID_isagent")
+					bool_canbeagent.netstr = "nws_yrp_update_role_bool_canbeagent"
+					bool_canbeagent.value = role.bool_canbeagent
+					bool_canbeagent.uniqueID = role.uniqueID
+					bool_canbeagent.lforce = false
+					ea[role.uniqueID].bool_canbeagent = YRPDCheckBox(bool_canbeagent)
+					DHr(hr)
 					local visible = {}
 					visible.parent = ea.restriction:GetContent()
 					visible.uniqueID = role.uniqueID
