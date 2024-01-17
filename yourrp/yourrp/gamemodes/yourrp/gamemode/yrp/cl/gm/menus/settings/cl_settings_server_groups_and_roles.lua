@@ -2380,16 +2380,19 @@ net.Receive(
 					bool_canbeagent.lforce = false
 					ea[role.uniqueID].bool_canbeagent = YRPDCheckBox(bool_canbeagent)
 					DHr(hr)
-					local visible = {}
-					visible.parent = ea.restriction:GetContent()
-					visible.uniqueID = role.uniqueID
-					visible.header = YRP.trans("LID_visible") .. " ( " .. YRP.trans("LID_charactercreation") .. " )"
-					visible.netstr = "nws_yrp_update_role_bool_visible_cc"
-					visible.value = role.bool_visible_cc
-					visible.uniqueID = role.uniqueID
-					visible.lforce = false
-					ea[role.uniqueID].visible = YRPDCheckBox(visible)
-					DHr(hr)
+					if role.uniqueID > 1 then
+						local visible = {}
+						visible.parent = ea.restriction:GetContent()
+						visible.uniqueID = role.uniqueID
+						visible.header = YRP.trans("LID_visible") .. " ( " .. YRP.trans("LID_charactercreation") .. " )"
+						visible.netstr = "nws_yrp_update_role_bool_visible_cc"
+						visible.value = role.bool_visible_cc
+						visible.uniqueID = role.uniqueID
+						visible.lforce = false
+						ea[role.uniqueID].visible = YRPDCheckBox(visible)
+						DHr(hr)
+					end
+
 					local visible2 = {}
 					visible2.parent = ea.restriction:GetContent()
 					visible2.uniqueID = role.uniqueID
