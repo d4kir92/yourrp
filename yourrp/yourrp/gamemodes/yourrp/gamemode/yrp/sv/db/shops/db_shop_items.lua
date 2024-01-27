@@ -518,52 +518,35 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 		local ent = nil
 		local ENT = scripted_ents.GetStored(item.ClassName)
 		if ENT ~= nil then
-			if ENT.t ~= nil and ENT.t.SpawnFunction ~= nil then
-				ent = ENT.t:SpawnFunction(ply, tr2, item.ClassName)
-				if ent then
-					--ent:SetOwner(ply)
-					ent:SetYRPEntity("yrp_owner", ply)
-					ent:Activate()
-					ent:SetAngles(TARGETANG)
-					if not hasstorage then
-						ent:SetPos(ply:GetPos() + ply:GetForward() * 64 + ply:GetUp() * 64)
-					end
-
-					ent:SetYRPInt("item_uniqueID", item.uniqueID)
-					YRP.msg("gm", "[Spawn Item] WORKED #1")
+			ent = ents.Create(item.ClassName)
+			if IsValid(ent) then
+				if ent.SpawnFunction then
+					ent:SpawnFunction(ply, tr2, item.ClassName)
 
 					return true, ent
 				else
-					YRP.msg("error", "[Spawn Item] #2 FAILED TO SPAWN: " .. item.ClassName)
-
-					return false, NULL
-				end
-			else
-				ent = ents.Create(item.ClassName)
-				if IsValid(ent) then
-					ent:SetPos(tr2.HitPos + Vector(0, 0, 25))
-					--ent:SetOwner(ply)
-					ent:SetYRPEntity("yrp_owner", ply)
 					local _, err = pcall(YRPEntSpawn, ent)
 					if err then
 						YRPMsg(err)
 					end
-
-					ent:Activate()
-					ent:SetAngles(TARGETANG)
-					if not hasstorage then
-						ent:SetPos(ply:GetPos() + ply:GetForward() * 64 + ply:GetUp() * 64)
-					end
-
-					ent:SetYRPInt("item_uniqueID", item.uniqueID)
-					YRP.msg("gm", "[Spawn Item] WORKED #2")
-
-					return true, ent
-				else
-					YRP.msg("note", "[Spawn Item] Not valid #1: " .. item.ClassName)
-
-					return false
 				end
+
+				ent:SetPos(tr2.HitPos + Vector(0, 0, 25))
+				--ent:SetOwner(ply)
+				ent:SetYRPEntity("yrp_owner", ply)
+				ent:SetAngles(TARGETANG)
+				if not hasstorage then
+					ent:SetPos(ply:GetPos() + ply:GetForward() * 64 + ply:GetUp() * 64)
+				end
+
+				ent:SetYRPInt("item_uniqueID", item.uniqueID)
+				YRP.msg("gm", "[Spawn Item] WORKED #2")
+
+				return true, ent
+			else
+				YRP.msg("note", "[Spawn Item] Not valid #1: " .. item.ClassName)
+
+				return false
 			end
 		else
 			local vehicle = nil
