@@ -20,9 +20,11 @@ hook.Add(
 		YRPSetTSLastOnline(ply:YRPSteamID())
 		-- Remove all items belong to the player
 		for i, ent in pairs(ents.GetAll()) do
-			if ent and (ent.PermaProps or ent.PermaPropID) then continue end -- if perma propped => ignore
-			if ent and (ent:GetOwner() == ply or ent:GetRPOwner() == ply) then
-				ent:Remove()
+			if IsValid(ent) then
+				if ent.PermaProps or ent.PermaPropID then continue end -- if perma propped => ignore
+				if ent:GetOwner() == ply or ent:GetRPOwner() == ply then
+					ent:Remove()
+				end
 			end
 		end
 	end

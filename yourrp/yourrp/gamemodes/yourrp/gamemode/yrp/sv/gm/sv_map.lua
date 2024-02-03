@@ -133,30 +133,32 @@ function YRPGetCoords()
 	end
 
 	for k, v in pairs(ents.GetAll()) do
-		if _hasNoSpawnpoints then
-			if v:GetClass() == "info_player_start" then
+		if IsValid(v) then
+			if _hasNoSpawnpoints then
+				if v:GetClass() == "info_player_start" then
+					YRPSearchCoords(v)
+				end
+			else
+				if v:GetClass() == "info_player_teamspawn" then
+					YRPSearchCoords(v)
+				elseif v:GetClass() == "info_player_terrorist" then
+					YRPSearchCoords(v)
+				elseif v:GetClass() == "info_player_counterterrorist" then
+					YRPSearchCoords(v)
+				end
+			end
+
+			if v:GetClass() == "prop_door_rotating" then
 				YRPSearchCoords(v)
 			end
-		else
-			if v:GetClass() == "info_player_teamspawn" then
-				YRPSearchCoords(v)
-			elseif v:GetClass() == "info_player_terrorist" then
-				YRPSearchCoords(v)
-			elseif v:GetClass() == "info_player_counterterrorist" then
+
+			if v:GetClass() == "func_door" then
 				YRPSearchCoords(v)
 			end
-		end
 
-		if v:GetClass() == "prop_door_rotating" then
-			YRPSearchCoords(v)
-		end
-
-		if v:GetClass() == "func_door" then
-			YRPSearchCoords(v)
-		end
-
-		if v:GetClass() == "func_door_rotating" then
-			YRPSearchCoords(v)
+			if v:GetClass() == "func_door_rotating" then
+				YRPSearchCoords(v)
+			end
 		end
 	end
 
