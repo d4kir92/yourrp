@@ -85,7 +85,7 @@ function YRPChangeUserGroup(ply, cmd, args)
 			end
 
 			YRP.msg("note", _cmdpre .. "Player [" .. args[1] .. "] not found.")
-		elseif ply:HasAccess("YRPChangeUserGroup") or ply:IPAddress() == "loopback" then
+		elseif ply:HasAccess("YRPChangeUserGroup", true) or ply:IPAddress() == "loopback" then
 			--[[ if admin/superadmin/owner tries ]]
 			--
 			for k, v in pairs(player.GetAll()) do

@@ -2524,7 +2524,9 @@ net.Receive(
 										net.WriteInt(role.uniqueID, 32)
 										net.WriteString(v.ClassName)
 										net.SendToServer()
-										winndswep:Close()
+										if winndswep and winndswep.Close then
+											winndswep:Close()
+										end
 									end
 
 									if v.WorldModel ~= "" then
@@ -2538,7 +2540,9 @@ net.Receive(
 										end
 									end
 
-									winndswep.dpl:AddItem(d_ndswep)
+									if winndswep and winndswep.dpl then
+										winndswep.dpl:AddItem(d_ndswep)
+									end
 								end
 							end
 						end

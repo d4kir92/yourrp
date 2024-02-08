@@ -350,7 +350,7 @@ function YRPOpenSelector(tab, multiple, ret, fu)
 		end
 
 		for i, v in pairs(tab) do
-			if YRPPanelAlive(pmsel, "pmsel 1") and pmsel.strsearch ~= nil and v.PrintName and string.find(string.lower(v.PrintName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.ClassName), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.WorldModel), pmsel.strsearch or "", 1, true) then
+			if YRPPanelAlive(pmsel, "pmsel 1") and pmsel.strsearch ~= nil and v.PrintName ~= nil and (string.find(string.lower(v.PrintName or ""), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.ClassName or ""), pmsel.strsearch or "", 1, true) or string.find(string.lower(v.WorldModel or ""), pmsel.strsearch or "", 1, true)) then
 				self.nothingfound = false
 				self.count = self.count + 1
 				if self.count > pmsel.nr and self.count <= pmsel.nr + pmsel.perpage then

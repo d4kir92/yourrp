@@ -495,7 +495,7 @@ function LoadWorldStorages()
 
 			if not found then
 				local stor = ents.Create(v.string_classname)
-				if stor then
+				if stor and IsValid(stor) then
 					local pos = string.Explode(",", v.position)
 					stor:SetPos(Vector(pos[1], pos[2], pos[3]))
 					local ang = string.Explode(",", v.angle)
