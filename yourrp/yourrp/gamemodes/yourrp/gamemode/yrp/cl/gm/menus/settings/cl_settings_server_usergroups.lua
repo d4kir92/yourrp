@@ -719,17 +719,19 @@ net.Receive(
 				end
 
 				function cb3:OnChange(bVal)
-					if bVal then
-						table.insert(UGS[CURRENT_USERGROUP].string_tools, v)
-					else
-						table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, v)
-					end
+					if UGS[CURRENT_USERGROUP] then
+						if bVal then
+							table.insert(UGS[CURRENT_USERGROUP].string_tools, v)
+						else
+							table.RemoveByValue(UGS[CURRENT_USERGROUP].string_tools, v)
+						end
 
-					local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
-					net.Start("nws_yrp_usergroup_update_string_tools")
-					net.WriteString(CURRENT_USERGROUP)
-					net.WriteString(str)
-					net.SendToServer()
+						local str = table.concat(UGS[CURRENT_USERGROUP].string_tools, ",")
+						net.Start("nws_yrp_usergroup_update_string_tools")
+						net.WriteString(CURRENT_USERGROUP)
+						net.WriteString(str)
+						net.SendToServer()
+					end
 				end
 
 				YTOOLS.plus:AddItem(line3)

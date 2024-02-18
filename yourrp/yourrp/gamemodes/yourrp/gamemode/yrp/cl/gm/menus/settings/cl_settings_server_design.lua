@@ -299,342 +299,344 @@ net.Receive(
 						net.Receive(
 							"nws_yrp_get_hud_element_settings",
 							function(le)
-								local eletab = net.ReadTable()
-								local wx, wy = win:GetPos()
-								win.visible = false
-								win.winset = YRPCreateD("DFrame", nil, YRP.ctr(900), YRP.ctr(900), wx, wy)
-								win.winset:MakePopup()
-								win.winset:SetTitle("")
-								win.winset:Center()
-								table.insert(editarea["settingswindows"], win.winset)
-								function win.winset:Paint(pw, ph)
-									draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 200))
-									draw.SimpleText(YRP.trans(tab.name), "DermaDefault", YRP.ctr(50), YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									local x, y = self:GetPos()
-									local mx, my = gui.MousePos()
-									if input.IsMouseDown(MOUSE_FIRST) and (mx < x or mx > x + pw or my < y or my > y + ph) and YRPPanelAlive(win.winset.dpl) then
-										local childrens = win.winset.dpl:GetItems()
-										local open = false
-										for i, item in pairs(childrens) do
-											if item.cb ~= nil and item.cb:IsMenuOpen() then
-												open = true
-											end
-										end
-
-										if not open then
-											win.winset:Close()
-										end
-									end
-
-									if x + self:GetWide() > ScW() + PosX() then
-										self:SetPos(ScW() + PosX() - self:GetWide(), y)
-									elseif x < PosX() then
-										self:SetPos(PosX(), y)
-									elseif y + self:GetTall() > ScH() then
-										self:SetPos(x, ScH() - self:GetTall())
-									elseif y < 0 then
-										self:SetPos(x, 0)
-									elseif modx ~= 0 or mody ~= 0 then
-										self:SetPos(x, y)
-									end
-								end
-
-								function win.winset:OnRemove()
-									if win.visible ~= nil then
-										win.visible = true
-									end
-
-									table.RemoveByValue(editarea["settingswindows"], win.winset)
-								end
-
-								win.winset.dpl = YRPCreateD("DPanelList", win.winset, win.winset:GetWide() - YRP.ctr(20 + 20), win.winset:GetTall() - YRP.ctr(50 + 20 + 20), YRP.ctr(20), YRP.ctr(50 + 20))
-								function win.winset:AddCheckBox(t)
-									local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
-									function line:Paint(pw, ph)
-										draw.SimpleText(YRP.trans(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									end
-
-									local cb = YRPCreateD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
-									cb:SetValue(t.value)
-									function cb:OnChange(bVal)
-										net.Start("nws_yrp_update_hud_bool")
-										net.WriteString(t.element)
-										net.WriteString(t.art)
-										net.WriteBool(bVal)
-										net.SendToServer()
-									end
-
-									win.winset.dpl:AddItem(line)
-								end
-
-								function win.winset:AddTextPosition(t)
-									local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
-									function line:Paint(pw, ph)
-										draw.SimpleText(YRP.trans(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									end
-
-									local btn = YRPCreateD("DButton", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
-									btn:SetText("")
-									function btn:DoClick()
+								if win then
+									local eletab = net.ReadTable()
+									local wx, wy = win:GetPos()
+									win.visible = false
+									win.winset = YRPCreateD("DFrame", nil, YRP.ctr(900), YRP.ctr(900), wx, wy)
+									win.winset:MakePopup()
+									win.winset:SetTitle("")
+									win.winset:Center()
+									table.insert(editarea["settingswindows"], win.winset)
+									function win.winset:Paint(pw, ph)
+										draw.RoundedBox(0, 0, 0, pw, ph, Color(40, 40, 40, 200))
+										draw.SimpleText(YRP.trans(tab.name), "DermaDefault", YRP.ctr(50), YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										local x, y = self:GetPos()
 										local mx, my = gui.MousePos()
-										local tp = YRPCreateD("DFrame", nil, YRP.ctr(300), YRP.ctr(350), mx, my)
-										tp:SetTitle("")
-										tp:MakePopup()
-										function tp:Paint(pw, ph)
-											draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
-											local x, y = self:GetPos()
-											local modx2, mody2 = x % boxspace, y % boxspace
-											if not self:IsDragging() then
-												if x + self:GetWide() > ScW() + PosX() then
-													self:SetPos(ScW() + PosX() - self:GetWide(), y)
-												elseif x < PosX() then
-													self:SetPos(PosX(), y)
-												elseif y + self:GetTall() > ScH() then
-													self:SetPos(x, ScH() - self:GetTall())
-												elseif y < 0 then
-													self:SetPos(x, 0)
-												elseif modx2 ~= 0 or mody2 ~= 0 then
-													x = x - modx2
-													y = y - mody2
-													self:SetPos(x, y)
+										if input.IsMouseDown(MOUSE_FIRST) and (mx < x or mx > x + pw or my < y or my > y + ph) and YRPPanelAlive(win.winset.dpl) then
+											local childrens = win.winset.dpl:GetItems()
+											local open = false
+											for i, item in pairs(childrens) do
+												if item.cb ~= nil and item.cb:IsMenuOpen() then
+													open = true
 												end
+											end
+
+											if not open then
+												win.winset:Close()
 											end
 										end
 
-										for y = 0, 3 do
-											for x = 0, 3 do
-												--local id = x .. "," .. y
-												local tp_btn = YRPCreateD("DButton", tp, YRP.ctr(100), YRP.ctr(100), x * YRP.ctr(100), y * YRP.ctr(100) + YRP.ctr(50))
-												tp_btn:SetText("")
-												function tp_btn:Paint(pw, ph)
-													local bw = pw - YRP.ctr(8)
-													local bh = ph - YRP.ctr(8)
-													local bx = YRP.ctr(8) / 2
-													local by = YRP.ctr(8) / 2
-													local _w = bw - YRP.ctr(8)
-													local _h = bh - YRP.ctr(8)
-													local _x = bx + YRP.ctr(8) / 2
-													local _y = by + YRP.ctr(8) / 2
-													local _size = YRP.ctr(20)
-													draw.RoundedBox(0, bx, by, bw, bh, Color(255, 255, 255, 255))
-													draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * x, _y + (_h - _size) / 2 * y, _size, _size, Color(0, 0, 0, 255))
-												end
-
-												function tp_btn:DoClick()
-													net.Start("nws_yrp_update_hud_text_position")
-													net.WriteString(t.element)
-													net.WriteInt(x, 4)
-													net.WriteInt(y, 4)
-													net.SendToServer()
-													tp:Close()
-												end
-											end
+										if x + self:GetWide() > ScW() + PosX() then
+											self:SetPos(ScW() + PosX() - self:GetWide(), y)
+										elseif x < PosX() then
+											self:SetPos(PosX(), y)
+										elseif y + self:GetTall() > ScH() then
+											self:SetPos(x, ScH() - self:GetTall())
+										elseif y < 0 then
+											self:SetPos(x, 0)
+										elseif modx ~= 0 or mody ~= 0 then
+											self:SetPos(x, y)
 										end
 									end
 
-									function btn:Paint(pw, ph)
-										local color = Color(255, 255, 255, 255)
-										if self:IsHovered() then
-											color = Color(255, 255, 0, 255)
+									function win.winset:OnRemove()
+										if win.visible ~= nil then
+											win.visible = true
 										end
 
-										draw.RoundedBox(0, 0, 0, pw, ph, color)
-										local ax = lply:HudValue(tab.element, "AX")
-										local ay = lply:HudValue(tab.element, "AY")
-										if ay == 3 then
-											ay = 0
-										elseif ay == 4 then
-											ay = 2
+										table.RemoveByValue(editarea["settingswindows"], win.winset)
+									end
+
+									win.winset.dpl = YRPCreateD("DPanelList", win.winset, win.winset:GetWide() - YRP.ctr(20 + 20), win.winset:GetTall() - YRP.ctr(50 + 20 + 20), YRP.ctr(20), YRP.ctr(50 + 20))
+									function win.winset:AddCheckBox(t)
+										local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
+										function line:Paint(pw, ph)
+											draw.SimpleText(YRP.trans(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 										end
 
-										local _w = pw - YRP.ctr(8)
-										local _h = ph - YRP.ctr(8)
-										local _x = YRP.ctr(8) / 2
-										local _y = YRP.ctr(8) / 2
-										local _size = YRP.ctr(20)
-										draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * ax, _y + (_h - _size) / 2 * ay, _size, _size, Color(0, 0, 0, 255))
-									end
-
-									win.winset.dpl:AddItem(line)
-								end
-
-								function win.winset:AddComboBox(t)
-									local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
-									function line:Paint(pw, ph)
-										draw.SimpleText(YRP.trans(t.name), "DermaDefault", YRP.ctr(200 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									end
-
-									line.cb = YRPCreateD("DComboBox", line, YRP.ctr(200), YRP.ctr(50), 0, 0)
-									line.cb:SetSortItems(false)
-									for i, choice in pairs(t.choices) do
-										local selected = false
-										if choice == t.value then
-											selected = true
-										end
-
-										line.cb:AddChoice(choice, choice, selected)
-									end
-
-									function line.cb:OnSelect(index, value, data)
-										net.Start("nws_yrp_update_hud_ts")
-										net.WriteString(t.element)
-										net.WriteInt(data, 8)
-										net.SendToServer()
-									end
-
-									win.winset.dpl:AddItem(line)
-								end
-
-								function win.winset:AddColorMixer(t)
-									local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
-									function line:Paint(pw, ph)
-										draw.SimpleText(YRP.trans(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-									end
-
-									t.color = lply:HudValue(t.element, t.art)
-									local btn = YRPCreateD("DButton", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
-									btn:SetText("")
-									function btn:Paint(pw, ph)
-										draw.RoundedBox(ph / 2, 0, 0, pw, ph, t.color)
-									end
-
-									function btn:DoClick()
-										-- ColorMixer
-										local cmwin = YRPCreateD("DFrame", nil, YRP.ctr(400 + 20 + 20), YRP.ctr(450 + 20 + 20), 0, 0)
-										cmwin:SetTitle("")
-										cmwin:Center()
-										cmwin:MakePopup()
-										function cmwin:Paint(pw, ph)
-											local x, y = self:GetPos()
-											local mx, my = gui.MousePos()
-											if input.IsMouseDown(MOUSE_FIRST) and (mx < x or mx > x + pw or my < y or my > y + ph) then
-												cmwin:Close()
-											end
-										end
-
-										cmwin.cm = YRPCreateD("DColorMixer", cmwin, YRP.ctr(400), YRP.ctr(400), YRP.ctr(20), YRP.ctr(50 + 20))
-										cmwin.cm:SetColor(t.color)
-										function cmwin.cm:ValueChanged(col)
-											t.color = col
-											net.Start("nws_yrp_update_hud_color")
+										local cb = YRPCreateD("DCheckBox", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+										cb:SetValue(t.value)
+										function cb:OnChange(bVal)
+											net.Start("nws_yrp_update_hud_bool")
 											net.WriteString(t.element)
 											net.WriteString(t.art)
-											net.WriteString("" .. col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a .. "")
+											net.WriteBool(bVal)
 											net.SendToServer()
 										end
+
+										win.winset.dpl:AddItem(line)
 									end
 
-									win.winset.dpl:AddItem(line)
-								end
+									function win.winset:AddTextPosition(t)
+										local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
+										function line:Paint(pw, ph)
+											draw.SimpleText(YRP.trans(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										end
 
-								function win.winset:AddTextBox(t)
-									local line = YRPCreateD("DPanel", nil, YRP.ctr(500), YRP.ctr(50), 0, 0)
-									function line:Paint(pw, ph)
-										draw.SimpleText(YRP.trans(t.name), "DermaDefault", YRP.ctr(420), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										local btn = YRPCreateD("DButton", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+										btn:SetText("")
+										function btn:DoClick()
+											local mx, my = gui.MousePos()
+											local tp = YRPCreateD("DFrame", nil, YRP.ctr(300), YRP.ctr(350), mx, my)
+											tp:SetTitle("")
+											tp:MakePopup()
+											function tp:Paint(pw, ph)
+												draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
+												local x, y = self:GetPos()
+												local modx2, mody2 = x % boxspace, y % boxspace
+												if not self:IsDragging() then
+													if x + self:GetWide() > ScW() + PosX() then
+														self:SetPos(ScW() + PosX() - self:GetWide(), y)
+													elseif x < PosX() then
+														self:SetPos(PosX(), y)
+													elseif y + self:GetTall() > ScH() then
+														self:SetPos(x, ScH() - self:GetTall())
+													elseif y < 0 then
+														self:SetPos(x, 0)
+													elseif modx2 ~= 0 or mody2 ~= 0 then
+														x = x - modx2
+														y = y - mody2
+														self:SetPos(x, y)
+													end
+												end
+											end
+
+											for y = 0, 3 do
+												for x = 0, 3 do
+													--local id = x .. "," .. y
+													local tp_btn = YRPCreateD("DButton", tp, YRP.ctr(100), YRP.ctr(100), x * YRP.ctr(100), y * YRP.ctr(100) + YRP.ctr(50))
+													tp_btn:SetText("")
+													function tp_btn:Paint(pw, ph)
+														local bw = pw - YRP.ctr(8)
+														local bh = ph - YRP.ctr(8)
+														local bx = YRP.ctr(8) / 2
+														local by = YRP.ctr(8) / 2
+														local _w = bw - YRP.ctr(8)
+														local _h = bh - YRP.ctr(8)
+														local _x = bx + YRP.ctr(8) / 2
+														local _y = by + YRP.ctr(8) / 2
+														local _size = YRP.ctr(20)
+														draw.RoundedBox(0, bx, by, bw, bh, Color(255, 255, 255, 255))
+														draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * x, _y + (_h - _size) / 2 * y, _size, _size, Color(0, 0, 0, 255))
+													end
+
+													function tp_btn:DoClick()
+														net.Start("nws_yrp_update_hud_text_position")
+														net.WriteString(t.element)
+														net.WriteInt(x, 4)
+														net.WriteInt(y, 4)
+														net.SendToServer()
+														tp:Close()
+													end
+												end
+											end
+										end
+
+										function btn:Paint(pw, ph)
+											local color = Color(255, 255, 255, 255)
+											if self:IsHovered() then
+												color = Color(255, 255, 0, 255)
+											end
+
+											draw.RoundedBox(0, 0, 0, pw, ph, color)
+											local ax = lply:HudValue(tab.element, "AX")
+											local ay = lply:HudValue(tab.element, "AY")
+											if ay == 3 then
+												ay = 0
+											elseif ay == 4 then
+												ay = 2
+											end
+
+											local _w = pw - YRP.ctr(8)
+											local _h = ph - YRP.ctr(8)
+											local _x = YRP.ctr(8) / 2
+											local _y = YRP.ctr(8) / 2
+											local _size = YRP.ctr(20)
+											draw.RoundedBox(_h / 2, _x + (_w - _size) / 2 * ax, _y + (_h - _size) / 2 * ay, _size, _size, Color(0, 0, 0, 255))
+										end
+
+										win.winset.dpl:AddItem(line)
 									end
 
-									local cb = YRPCreateD("DTextEntry", line, YRP.ctr(400), YRP.ctr(50), 0, 0)
-									cb:SetText(t.value)
-									function cb:OnTextChanged()
-										net.Start("nws_yrp_update_hud_text")
-										net.WriteString(t.element)
-										net.WriteString(self:GetText())
-										net.SendToServer()
+									function win.winset:AddComboBox(t)
+										local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
+										function line:Paint(pw, ph)
+											draw.SimpleText(YRP.trans(t.name), "DermaDefault", YRP.ctr(200 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										end
+
+										line.cb = YRPCreateD("DComboBox", line, YRP.ctr(200), YRP.ctr(50), 0, 0)
+										line.cb:SetSortItems(false)
+										for i, choice in pairs(t.choices) do
+											local selected = false
+											if choice == t.value then
+												selected = true
+											end
+
+											line.cb:AddChoice(choice, choice, selected)
+										end
+
+										function line.cb:OnSelect(index, value, data)
+											net.Start("nws_yrp_update_hud_ts")
+											net.WriteString(t.element)
+											net.WriteInt(data, 8)
+											net.SendToServer()
+										end
+
+										win.winset.dpl:AddItem(line)
 									end
 
-									win.winset.dpl:AddItem(line)
-								end
+									function win.winset:AddColorMixer(t)
+										local line = YRPCreateD("DPanel", nil, YRP.ctr(400), YRP.ctr(50), 0, 0)
+										function line:Paint(pw, ph)
+											draw.SimpleText(YRP.trans(t.name), "DermaDefault", ph + YRP.ctr(20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										end
 
-								local visi = {}
-								visi.name = "LID_visible"
-								visi.element = tab.element
-								visi.art = "VISI"
-								visi.value = eletab["bool_HUD_" .. tab.element .. "_VISI"]
-								win.winset:AddCheckBox(visi)
-								local roun = {}
-								roun.name = "LID_rounded"
-								roun.element = tab.element
-								roun.art = "ROUN"
-								roun.value = eletab["bool_HUD_" .. tab.element .. "_ROUN"]
-								win.winset:AddCheckBox(roun)
-								local icon = {}
-								icon.name = "LID_icon"
-								icon.element = tab.element
-								icon.art = "ICON"
-								icon.value = eletab["bool_HUD_" .. tab.element .. "_ICON"]
-								win.winset:AddCheckBox(icon)
-								local text = {}
-								text.name = "LID_text"
-								text.element = tab.element
-								text.art = "TEXT"
-								text.value = eletab["bool_HUD_" .. tab.element .. "_TEXT"]
-								win.winset:AddCheckBox(text)
-								local perc = {}
-								perc.name = "LID_percentage"
-								perc.element = tab.element
-								perc.art = "PERC"
-								perc.value = eletab["bool_HUD_" .. tab.element .. "_PERC"]
-								win.winset:AddCheckBox(perc)
-								local back = {}
-								back.name = "LID_background"
-								back.element = tab.element
-								back.art = "BACK"
-								back.value = eletab["bool_HUD_" .. tab.element .. "_BACK"]
-								win.winset:AddCheckBox(back)
-								local bord = {}
-								bord.name = "LID_border"
-								bord.element = tab.element
-								bord.art = "BORD"
-								bord.value = eletab["bool_HUD_" .. tab.element .. "_BORD"]
-								win.winset:AddCheckBox(bord)
-								local extr = {}
-								extr.name = "LID_extra"
-								extr.element = tab.element
-								extr.art = "EXTR"
-								extr.value = eletab["bool_HUD_" .. tab.element .. "_EXTR"]
-								win.winset:AddCheckBox(extr)
-								local textposi = {}
-								textposi.name = "LID_textposition"
-								textposi.element = tab.element
-								win.winset:AddTextPosition(textposi)
-								local textsize = {}
-								textsize.name = "LID_textsize"
-								textsize.element = tab.element
-								textsize.choices = GetFontSizeTable()
-								textsize.value = lply:HudValue(tab.element, "TS")
-								win.winset:AddComboBox(textsize)
-								local colorbar = {}
-								colorbar.name = "LID_barcolor"
-								colorbar.element = tab.element
-								colorbar.art = "BA"
-								win.winset:AddColorMixer(colorbar)
-								local colortext = {}
-								colortext.name = "LID_textcolor"
-								colortext.element = tab.element
-								colortext.art = "TE"
-								win.winset:AddColorMixer(colortext)
-								local colortextborder = {}
-								colortextborder.name = "LID_textbordercolor"
-								colortextborder.element = tab.element
-								colortextborder.art = "TB"
-								win.winset:AddColorMixer(colortextborder)
-								local colorbackground = {}
-								colorbackground.name = "LID_backgroundcolor"
-								colorbackground.element = tab.element
-								colorbackground.art = "BG"
-								win.winset:AddColorMixer(colorbackground)
-								local colorborder = {}
-								colorborder.name = "LID_bordercolor"
-								colorborder.element = tab.element
-								colorborder.art = "BR"
-								win.winset:AddColorMixer(colorborder)
-								if eletab["text_HUD_" .. tab.element .. "_CTEX"] then
-									local text2 = {}
-									text2.name = "LID_text"
-									text2.element = tab.element
-									text2.art = "text"
-									text2.value = eletab["text_HUD_" .. tab.element .. "_CTEX"]
-									win.winset:AddTextBox(text2)
+										t.color = lply:HudValue(t.element, t.art)
+										local btn = YRPCreateD("DButton", line, YRP.ctr(50), YRP.ctr(50), 0, 0)
+										btn:SetText("")
+										function btn:Paint(pw, ph)
+											draw.RoundedBox(ph / 2, 0, 0, pw, ph, t.color)
+										end
+
+										function btn:DoClick()
+											-- ColorMixer
+											local cmwin = YRPCreateD("DFrame", nil, YRP.ctr(400 + 20 + 20), YRP.ctr(450 + 20 + 20), 0, 0)
+											cmwin:SetTitle("")
+											cmwin:Center()
+											cmwin:MakePopup()
+											function cmwin:Paint(pw, ph)
+												local x, y = self:GetPos()
+												local mx, my = gui.MousePos()
+												if input.IsMouseDown(MOUSE_FIRST) and (mx < x or mx > x + pw or my < y or my > y + ph) then
+													cmwin:Close()
+												end
+											end
+
+											cmwin.cm = YRPCreateD("DColorMixer", cmwin, YRP.ctr(400), YRP.ctr(400), YRP.ctr(20), YRP.ctr(50 + 20))
+											cmwin.cm:SetColor(t.color)
+											function cmwin.cm:ValueChanged(col)
+												t.color = col
+												net.Start("nws_yrp_update_hud_color")
+												net.WriteString(t.element)
+												net.WriteString(t.art)
+												net.WriteString("" .. col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a .. "")
+												net.SendToServer()
+											end
+										end
+
+										win.winset.dpl:AddItem(line)
+									end
+
+									function win.winset:AddTextBox(t)
+										local line = YRPCreateD("DPanel", nil, YRP.ctr(500), YRP.ctr(50), 0, 0)
+										function line:Paint(pw, ph)
+											draw.SimpleText(YRP.trans(t.name), "DermaDefault", YRP.ctr(420), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										end
+
+										local cb = YRPCreateD("DTextEntry", line, YRP.ctr(400), YRP.ctr(50), 0, 0)
+										cb:SetText(t.value)
+										function cb:OnTextChanged()
+											net.Start("nws_yrp_update_hud_text")
+											net.WriteString(t.element)
+											net.WriteString(self:GetText())
+											net.SendToServer()
+										end
+
+										win.winset.dpl:AddItem(line)
+									end
+
+									local visi = {}
+									visi.name = "LID_visible"
+									visi.element = tab.element
+									visi.art = "VISI"
+									visi.value = eletab["bool_HUD_" .. tab.element .. "_VISI"]
+									win.winset:AddCheckBox(visi)
+									local roun = {}
+									roun.name = "LID_rounded"
+									roun.element = tab.element
+									roun.art = "ROUN"
+									roun.value = eletab["bool_HUD_" .. tab.element .. "_ROUN"]
+									win.winset:AddCheckBox(roun)
+									local icon = {}
+									icon.name = "LID_icon"
+									icon.element = tab.element
+									icon.art = "ICON"
+									icon.value = eletab["bool_HUD_" .. tab.element .. "_ICON"]
+									win.winset:AddCheckBox(icon)
+									local text = {}
+									text.name = "LID_text"
+									text.element = tab.element
+									text.art = "TEXT"
+									text.value = eletab["bool_HUD_" .. tab.element .. "_TEXT"]
+									win.winset:AddCheckBox(text)
+									local perc = {}
+									perc.name = "LID_percentage"
+									perc.element = tab.element
+									perc.art = "PERC"
+									perc.value = eletab["bool_HUD_" .. tab.element .. "_PERC"]
+									win.winset:AddCheckBox(perc)
+									local back = {}
+									back.name = "LID_background"
+									back.element = tab.element
+									back.art = "BACK"
+									back.value = eletab["bool_HUD_" .. tab.element .. "_BACK"]
+									win.winset:AddCheckBox(back)
+									local bord = {}
+									bord.name = "LID_border"
+									bord.element = tab.element
+									bord.art = "BORD"
+									bord.value = eletab["bool_HUD_" .. tab.element .. "_BORD"]
+									win.winset:AddCheckBox(bord)
+									local extr = {}
+									extr.name = "LID_extra"
+									extr.element = tab.element
+									extr.art = "EXTR"
+									extr.value = eletab["bool_HUD_" .. tab.element .. "_EXTR"]
+									win.winset:AddCheckBox(extr)
+									local textposi = {}
+									textposi.name = "LID_textposition"
+									textposi.element = tab.element
+									win.winset:AddTextPosition(textposi)
+									local textsize = {}
+									textsize.name = "LID_textsize"
+									textsize.element = tab.element
+									textsize.choices = GetFontSizeTable()
+									textsize.value = lply:HudValue(tab.element, "TS")
+									win.winset:AddComboBox(textsize)
+									local colorbar = {}
+									colorbar.name = "LID_barcolor"
+									colorbar.element = tab.element
+									colorbar.art = "BA"
+									win.winset:AddColorMixer(colorbar)
+									local colortext = {}
+									colortext.name = "LID_textcolor"
+									colortext.element = tab.element
+									colortext.art = "TE"
+									win.winset:AddColorMixer(colortext)
+									local colortextborder = {}
+									colortextborder.name = "LID_textbordercolor"
+									colortextborder.element = tab.element
+									colortextborder.art = "TB"
+									win.winset:AddColorMixer(colortextborder)
+									local colorbackground = {}
+									colorbackground.name = "LID_backgroundcolor"
+									colorbackground.element = tab.element
+									colorbackground.art = "BG"
+									win.winset:AddColorMixer(colorbackground)
+									local colorborder = {}
+									colorborder.name = "LID_bordercolor"
+									colorborder.element = tab.element
+									colorborder.art = "BR"
+									win.winset:AddColorMixer(colorborder)
+									if eletab["text_HUD_" .. tab.element .. "_CTEX"] then
+										local text2 = {}
+										text2.name = "LID_text"
+										text2.element = tab.element
+										text2.art = "text"
+										text2.value = eletab["text_HUD_" .. tab.element .. "_CTEX"]
+										win.winset:AddTextBox(text2)
+									end
 								end
 							end
 						)
