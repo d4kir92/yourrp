@@ -37,13 +37,18 @@ end
 function YRPTutorialsLoad()
 	YRPTutorialsCheckFile()
 	YRPTutorialsMSG("Load Tutorials")
-	yrp_tutorials = util.JSONToTable(file.Read(dbfile, "DATA"))
+	local data = util.JSONToTable(file.Read(dbfile, "DATA"))
+	if data then
+		yrp_tutorials = data
+	end
 end
 
 function YRPTutorialsSave()
 	YRPTutorialsCheckFile()
 	YRPTutorialsMSG("Save Tutorials")
-	file.Write(dbfile, util.TableToJSON(yrp_tutorials, true))
+	if yrp_tutorials then
+		file.Write(dbfile, util.TableToJSON(yrp_tutorials, true))
+	end
 end
 
 function done_tutorial(str, time)
@@ -68,7 +73,9 @@ function reset_tutorial(str)
 end
 
 function get_tutorial(str)
-	return tobool(yrp_tutorials[str])
+	if yrp_tutorials then return tobool(yrp_tutorials[str]) end
+
+	return false
 end
 
 function YRPCheckTutorials()
