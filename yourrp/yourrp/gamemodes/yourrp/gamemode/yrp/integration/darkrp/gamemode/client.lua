@@ -30,7 +30,7 @@ end
 
 function DarkRP.getF4MenuPanel()
 	--Description: Get the F4 menu panel.
-	YRPDarkrpNotFound("getF4MenuPanel( " .. text .. " )")
+	YRPDarkrpNotFound("getF4MenuPanel()")
 
 	return NULL
 end
