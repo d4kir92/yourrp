@@ -221,28 +221,28 @@ function YRPToggleGroupMenu()
 						line:DockMargin(0, 5, 0, 0)
 						GMENU.specsinfo:AddItem(line)
 					end
-				end
 
-				if char.canspecs then
-					GMENU.specs:Show()
-				else
-					GMENU.specs:Hide()
-				end
+					if char.canspecs then
+						GMENU.specs:Show()
+					else
+						GMENU.specs:Hide()
+					end
 
-				if char.candemote then
-					GMENU.demote:Show()
-				else
-					GMENU.demote:Hide()
-				end
+					if char.candemote then
+						GMENU.demote:Show()
+					else
+						GMENU.demote:Hide()
+					end
 
-				if char.uniqueID ~= LocalPlayer():CharID() then
-					if char.canpromote then
-						GMENU.promote:Show()
+					if char.uniqueID ~= LocalPlayer():CharID() then
+						if char.canpromote then
+							GMENU.promote:Show()
+						else
+							GMENU.promote:Hide()
+						end
 					else
 						GMENU.promote:Hide()
 					end
-				else
-					GMENU.promote:Hide()
 				end
 			end
 		)
@@ -253,46 +253,45 @@ function YRPToggleGroupMenu()
 				local members = net.ReadTable()
 				if IsValid(GMENU) then
 					GMENU.list:Clear()
-				end
-
-				for i, v in pairs(members) do
-					if IsValid(GMENU) and v.rpname ~= "ID_RPNAME" and v.rpname ~= "BOTNAME" then
-						v.uniqueID = tonumber(v.uniqueID)
-						local plline = YRPCreateD("YPanel", GMENU.list, 30, 30, 0, 0)
-						plline:Dock(TOP)
-						plline:DockMargin(0, 0, 0, 2)
-						plline.pl = YRPCreateD("YButton", plline, 30, 30, 0, 0)
-						plline.pl:Dock(FILL)
-						plline.pl:SetText(v.rpname)
-						plline.pl.rad = 0
-						function plline.pl:DoClick()
-							net.Start("nws_yrp_group_getmember")
-							net.WriteUInt(v.uniqueID, 24)
-							net.SendToServer()
-						end
-
-						if LocalPlayer():GetYRPBool("isInstructor") and LocalPlayer():CharID() ~= v.uniqueID then
-							plline.del = YRPCreateD("YButton", plline, 30, 30, 0, 0)
-							plline.del:Dock(RIGHT)
-							plline.del:SetText("X")
-							function plline.del:Paint(pw, ph)
-								local color = Color(200, 160, 160, 255)
-								if self:IsHovered() then
-									color = Color(200, 0, 0, 255)
-								end
-
-								draw.RoundedBox(0, 0, 0, pw, ph, color)
-								if YRP.GetDesignIcon("64_trash") then
-									surface.SetMaterial(YRP.GetDesignIcon("64_trash"))
-									surface.SetDrawColor(Color(255, 255, 255, 255))
-									surface.DrawTexturedRect(pw * 0.25, ph * 0.25, pw * 0.5, ph * 0.5)
-								end
-							end
-
-							function plline.del:DoClick()
-								net.Start("nws_yrp_group_delmember")
+					for i, v in pairs(members) do
+						if IsValid(GMENU) and v.rpname ~= "ID_RPNAME" and v.rpname ~= "BOTNAME" then
+							v.uniqueID = tonumber(v.uniqueID)
+							local plline = YRPCreateD("YPanel", GMENU.list, 30, 30, 0, 0)
+							plline:Dock(TOP)
+							plline:DockMargin(0, 0, 0, 2)
+							plline.pl = YRPCreateD("YButton", plline, 30, 30, 0, 0)
+							plline.pl:Dock(FILL)
+							plline.pl:SetText(v.rpname)
+							plline.pl.rad = 0
+							function plline.pl:DoClick()
+								net.Start("nws_yrp_group_getmember")
 								net.WriteUInt(v.uniqueID, 24)
 								net.SendToServer()
+							end
+
+							if LocalPlayer():GetYRPBool("isInstructor") and LocalPlayer():CharID() ~= v.uniqueID then
+								plline.del = YRPCreateD("YButton", plline, 30, 30, 0, 0)
+								plline.del:Dock(RIGHT)
+								plline.del:SetText("X")
+								function plline.del:Paint(pw, ph)
+									local color = Color(200, 160, 160, 255)
+									if self:IsHovered() then
+										color = Color(200, 0, 0, 255)
+									end
+
+									draw.RoundedBox(0, 0, 0, pw, ph, color)
+									if YRP.GetDesignIcon("64_trash") then
+										surface.SetMaterial(YRP.GetDesignIcon("64_trash"))
+										surface.SetDrawColor(Color(255, 255, 255, 255))
+										surface.DrawTexturedRect(pw * 0.25, ph * 0.25, pw * 0.5, ph * 0.5)
+									end
+								end
+
+								function plline.del:DoClick()
+									net.Start("nws_yrp_group_delmember")
+									net.WriteUInt(v.uniqueID, 24)
+									net.SendToServer()
+								end
 							end
 						end
 					end
