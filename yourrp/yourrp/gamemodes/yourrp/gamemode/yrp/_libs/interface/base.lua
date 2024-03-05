@@ -1,4 +1,5 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local _type = type
 function DHr(tab)
 	tab = tab or {}
 	tab.parent = tab.parent or nil
@@ -934,7 +935,7 @@ function DStringListBox(tab)
 	function pnl.dpl:AddLines(t)
 		pnl.dpl:Clear()
 		for i, v in pairs(t) do
-			if type(v) == "table" then
+			if _type(v) == "table" then
 				v.h = v.h or YRP.ctr(70)
 				v.br = v.br or YRP.ctr(10)
 				local line = YRPCreateD("DButton", nil, pnl.dpl:GetWide(), v.h, 0, 0)

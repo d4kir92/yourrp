@@ -1,4 +1,5 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local _type = type
 local searchIcon = Material("icon16/magnifier.png")
 function OpenHelpTranslatingWindow()
 	local window = YRPCreateD("DFrame", nil, YRP.ctr(1200), YRP.ctr(500), 0, 0)
@@ -724,7 +725,7 @@ function YRPHUD(name, failed)
 		return GetGlobalYRPString(name, "")
 	elseif string.StartWith(name, "color_HUD_") then
 		local vecname = GetGlobalYRPString(name, "255,0,0,255")
-		if type(vecname) == "string" then
+		if _type(vecname) == "string" then
 			if vTab[vecname] == nil then
 				vTab[vecname] = StringToColor(vecname)
 			end

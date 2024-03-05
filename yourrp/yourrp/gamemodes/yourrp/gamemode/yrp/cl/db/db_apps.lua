@@ -1,4 +1,5 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local _type = type
 --[[ APP ]]
 --
 local APP = {}
@@ -22,7 +23,7 @@ function addApp(app)
 		YRP.msg("note", "[addApp] -> app is missing!")
 	end
 
-	if type(app) == "table" then
+	if _type(app) == "table" then
 		if app.PrintName == nil then
 			YRP.msg("note", "[addApp] -> app.PrintName is missing!")
 		end

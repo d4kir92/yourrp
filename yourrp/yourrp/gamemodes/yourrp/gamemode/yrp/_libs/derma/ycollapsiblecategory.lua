@@ -1,4 +1,5 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local _type = type
 local PANEL = {}
 local w = 10
 local h = 10
@@ -164,7 +165,7 @@ function PANEL:Init()
 
 	function AddRole(rlis, rol, sw, sh, lis)
 		rol.uniqueID = tonumber(rol.uniqueID)
-		if type(rol.string_usergroups) ~= "table" then
+		if _type(rol.string_usergroups) ~= "table" then
 			rol.string_usergroups = string.Explode(",", rol.string_usergroups)
 		end
 
@@ -274,11 +275,11 @@ function PANEL:Init()
 		end
 
 		local diameter = YRP.ctr(h) - 2 * YRP.ctr(10)
-		if type(rol.pms) ~= "table" and type(rol.pms) == "string" then
+		if _type(rol.pms) ~= "table" and _type(rol.pms) == "string" then
 			rol.pms = string.Explode(",", rol.pms)
 		end
 
-		if type(rol.pms) == "table" and not strEmpty(rol.pms[1]) then
+		if _type(rol.pms) == "table" and not strEmpty(rol.pms[1]) then
 			local pm = YRPCreateD("YModelPanel", bg, diameter, diameter, YRP.ctr(20), YRP.ctr(10))
 			pm:SetModel(rol.pms[1])
 			if pm.panel and pm.panel.Entity and pm.panel.Entity:IsValid() then
@@ -416,7 +417,7 @@ function PANEL:Init()
 			local rw = 800
 			local rh = 160
 			for i, rol in SortedPairsByMemberValue(roltab, "int_position") do
-				if type(rol.string_usergroups) ~= "table" then
+				if _type(rol.string_usergroups) ~= "table" then
 					rol.string_usergroups = string.Explode(",", rol.string_usergroups)
 				else
 					rol.string_usergroups = {}

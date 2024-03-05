@@ -1,4 +1,5 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local _type = type
 -- #CHAT
 yrpChat = yrpChat or {}
 local yrp_chat_show = false
@@ -29,7 +30,7 @@ function GetChatMode()
 end
 
 function SetChatMode(mode)
-	if type(mode) == "string" then
+	if _type(mode) == "string" then
 		CHATMODE = string.upper(mode)
 		if IsNotNilAndNotFalse(yrpChat, "yrpChat") and YRPPanelAlive(yrpChat.comboBox, "yrpChat.comboBox") then
 			yrpChat.comboBox:SetText(CHATMODE)
@@ -605,7 +606,7 @@ local function InitYRPChat()
 				local args = {...}
 				local last = args[#args]
 				local istext = true
-				if last and type(last) == "string" and (string.EndsWith(last, ".jpeg") or string.EndsWith(last, ".jpg") or string.EndsWith(last, ".png") or string.EndsWith(last, ".gif")) then
+				if last and _type(last) == "string" and (string.EndsWith(last, ".jpeg") or string.EndsWith(last, ".jpg") or string.EndsWith(last, ".png") or string.EndsWith(last, ".gif")) then
 					istext = false
 				end
 
@@ -624,7 +625,7 @@ local function InitYRPChat()
 
 					-- REMOVE CHAT COMMANDS
 					--[[for i, obj in pairs(args) do
-						local t = string.lower(type(obj))
+						local t = string.lower(_type(obj))
 
 						if t == "string" and string.StartWith(obj, ": !") or string.StartWith(obj, ": /") then
 							YRP.msg("note", "HIDE COMMANDS: " .. tostring(obj))
@@ -632,7 +633,7 @@ local function InitYRPChat()
 						end
 					end]]
 					for i, obj in pairs(args) do
-						local t = string.lower(type(obj))
+						local t = string.lower(_type(obj))
 						if t == "table" then
 							if isnumber(tonumber(obj.r)) and isnumber(tonumber(obj.g)) and isnumber(tonumber(obj.b)) then
 								newtext:InsertColorChange(obj.r, obj.g, obj.b, 255)
@@ -760,7 +761,7 @@ local function InitYRPChat()
 					local w = lply:HudValue("CH", "SIZE_W")
 					--local h = lply:HudValue("CH", "SIZE_H")
 					local newtext = YRPCreateText()
-					if args[1] and type(args[1]) == "table" then
+					if args[1] and _type(args[1]) == "table" then
 						local col = args[1]
 						newtext:InsertColorChange(col.r, col.g, col.b, 255)
 					end

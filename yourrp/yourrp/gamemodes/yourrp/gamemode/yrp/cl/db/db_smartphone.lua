@@ -1,4 +1,5 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local _type = type
 local YRP_SMARTPHONE = {}
 YRP_SMARTPHONE["color_back"] = Color(0, 0, 0, 255)
 YRP_SMARTPHONE["color_case"] = Color(0, 0, 0, 255)
@@ -46,7 +47,7 @@ function setSpBackColor(color)
 end
 
 function YRPGetSpBackColor()
-	if yrp_smartphone["color_back"] ~= nil and type(yrp_smartphone["color_back"]) == "table" then
+	if yrp_smartphone["color_back"] ~= nil and _type(yrp_smartphone["color_back"]) == "table" then
 		return yrp_smartphone["color_back"]
 	else
 		return Color(255, 0, 0, 255)
@@ -59,7 +60,7 @@ function setSpCaseColor(color)
 end
 
 function YRPGetSpCaseColor()
-	if yrp_smartphone["color_case"] ~= nil and type(yrp_smartphone["color_case"]) == "table" then
+	if yrp_smartphone["color_case"] ~= nil and _type(yrp_smartphone["color_case"]) == "table" then
 		return yrp_smartphone["color_case"]
 	else
 		return Color(255, 0, 0, 255)

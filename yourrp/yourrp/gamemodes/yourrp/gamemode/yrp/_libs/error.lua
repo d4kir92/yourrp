@@ -1,8 +1,8 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-local tostring = tostring
-local type = type
-local table = table
-local IsValid = IsValid
+local _tostring = tostring
+local _type = type
+local _table = table
+local _IsValid = IsValid
 -- #ERROR #BUGS
 function IsNilOrFalse(obj)
 	if obj == nil or obj == false then return true end
@@ -21,7 +21,7 @@ function YRPWORKED(obj, name, _silence)
 		return true
 	else
 		if not _silence then
-			YRP.msg("note", "NOT WORKED: " .. tostring(obj) .. " " .. tostring(name))
+			YRP.msg("note", "NOT WORKED: " .. _tostring(obj) .. " " .. _tostring(name))
 		end
 
 		return false
@@ -30,25 +30,25 @@ end
 
 function YRPEntityAlive(obj)
 	if obj == nil then return false end
-	if type(obj) == "number" then return false end
-	if type(obj) == "string" then return false end
-	if obj == nil or obj == NULL or tostring(obj) == "[NULL Entity]" then return false end
+	if _type(obj) == "number" then return false end
+	if _type(obj) == "string" then return false end
+	if obj == nil or obj == NULL or _tostring(obj) == "[NULL Entity]" then return false end
 
-	return IsValid(obj)
+	return _IsValid(obj)
 end
 
 function YRPPanelAlive(obj, from)
-	if type(obj) == "table" then
-		YRP.msg("error", "YRPPanelAlive > IS TABLE " .. tostring(from) .. " " .. table.ToString(obj, "X", false))
-	elseif type(obj) == "string" then
-		YRP.msg("error", "YRPPanelAlive > IS STRING " .. tostring(from) .. " " .. tostring(obj))
-	elseif type(obj) == "number" then
-		YRP.msg("error", "YRPPanelAlive > IS NUMBER " .. tostring(from) .. " " .. tostring(obj))
-	elseif type(obj) == "bool" then
-		YRP.msg("error", "YRPPanelAlive > IS BOOL " .. tostring(from) .. " " .. tostring(obj))
+	if _type(obj) == "table" then
+		YRP.msg("error", "YRPPanelAlive > IS TABLE " .. _tostring(from) .. " " .. _table.ToString(obj, "X", false))
+	elseif _type(obj) == "string" then
+		YRP.msg("error", "YRPPanelAlive > IS STRING " .. _tostring(from) .. " " .. _tostring(obj))
+	elseif _type(obj) == "number" then
+		YRP.msg("error", "YRPPanelAlive > IS NUMBER " .. _tostring(from) .. " " .. _tostring(obj))
+	elseif _type(obj) == "bool" then
+		YRP.msg("error", "YRPPanelAlive > IS BOOL " .. _tostring(from) .. " " .. _tostring(obj))
 	end
 
-	if obj == nil or obj == NULL or tostring(obj) == "[NULL Panel]" then return false end
+	if obj == nil or obj == NULL or _tostring(obj) == "[NULL Panel]" then return false end
 
-	return IsValid(obj)
+	return _IsValid(obj)
 end

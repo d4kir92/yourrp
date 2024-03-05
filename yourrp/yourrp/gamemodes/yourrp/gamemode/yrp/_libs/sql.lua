@@ -1,4 +1,5 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local _type = type
 function disk_full(error)
 	if string.find(error, "database or disk is full", 1, true) then
 		if SERVER then
@@ -54,7 +55,7 @@ end
 
 function YRP_SQL_STR_OUT(str)
 	local _res = str
-	if type(_res) == "string" then
+	if _type(_res) == "string" then
 		_res = string.Replace(_res, "§01§", "'")
 
 		return _res
@@ -285,7 +286,7 @@ function YRP_SQL_UPDATE(db_table, db_sets, db_where)
 	end
 
 	local c = 0
-	if type(db_sets) == "string" then
+	if _type(db_sets) == "string" then
 		YRP.msg("error", "[YRP_SQL_UPDATE] FAIL: db_table " .. db_table .. " db_sets " .. db_sets .. " db_where " .. db_where)
 
 		return

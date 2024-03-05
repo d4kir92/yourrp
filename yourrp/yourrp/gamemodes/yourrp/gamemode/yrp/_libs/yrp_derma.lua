@@ -1,4 +1,5 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local _type = type
 local MaterialBlur = Material("pp/blurscreen.png", "noclamp")
 function YRPDrawRectBlur(pnl, px, py, sw, sh, blur)
 	render.ClearStencil()
@@ -69,7 +70,7 @@ function YRPDrawRectBlurHUD(r, px, py, sw, sh, alpha)
 end
 
 function YRPDrawText(tab)
-	if type(tab) == "table" then
+	if _type(tab) == "table" then
 		tab = tab or {}
 		tab.x = tab.x or 0
 		tab.y = tab.y or 0

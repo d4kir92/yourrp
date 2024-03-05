@@ -1,4 +1,6 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local _type = type
+local _tostring = tostring
 local vm = {}
 function CloseChatMenu()
 	vm.win:Remove()
@@ -243,12 +245,12 @@ function YRPChatChannel(edit, uid)
 			end
 
 			for i, v in pairs(pk) do
-				if type(v) == "string" then
+				if _type(v) == "string" then
 					win.previewrich:AppendText(v)
-				elseif type(v) == "table" then
+				elseif _type(v) == "table" then
 					win.previewrich:InsertColorChange(v.r, v.g, v.b, 255)
 				else
-					YRP.msg("note", "[previewrich] ELSE: " .. tostring(type(v)) .. " " .. tostring(v))
+					YRP.msg("note", "[previewrich] ELSE: " .. _tostring(_type(v)) .. " " .. _tostring(v))
 				end
 			end
 
@@ -261,12 +263,12 @@ function YRPChatChannel(edit, uid)
 
 				local pk2 = YRPChatReplaceCMDS(win.structure2:GetText(), LocalPlayer(), YRPReplaceWithPlayerNames(win.previewtext:GetText()))
 				for i, v in pairs(pk2) do
-					if type(v) == "string" then
+					if _type(v) == "string" then
 						win.previewrich:AppendText(v)
-					elseif type(v) == "table" then
+					elseif _type(v) == "table" then
 						win.previewrich:InsertColorChange(v.r, v.g, v.b, 255)
 					else
-						YRP.msg("note", "[previewrich] ELSE: " .. tostring(type(v)) .. " " .. tostring(v))
+						YRP.msg("note", "[previewrich] ELSE: " .. _tostring(_type(v)) .. " " .. _tostring(v))
 					end
 				end
 			end

@@ -1,5 +1,5 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-local type = type
+local _type = type
 local file = file
 local util = util
 local timer = timer
@@ -136,7 +136,7 @@ function YRPKeybindsLoad()
 		YRP.msg("error", "[KEYBINDS] FILE DOESN'T EXISTS")
 	end
 
-	if type(yrp_keybinds) ~= "table" then
+	if _type(yrp_keybinds) ~= "table" then
 		local fi = file.Read(dbfile, "DATA")
 		YRP.msg("error", "[KEYBINDS] [" .. LocalPlayer():YRPName() .. "|" .. LocalPlayer():SteamID() .. "] KeybindsLoad FAILED, broken file? [" .. tostring(fi) .. "]")
 	else
@@ -164,7 +164,7 @@ end
 function YRPGetKeybind(name)
 	if YRP_KeybindsLoaded then
 		if name == nil then return -1 end
-		if name and type(tonumber(name)) == "number" then return name end
+		if name and _type(tonumber(name)) == "number" then return name end
 		name = tostring(name)
 		if YRP_KeybindsLoaded and yrp_keybinds and name and yrp_keybinds[name] ~= nil then
 			return tonumber(yrp_keybinds[name])

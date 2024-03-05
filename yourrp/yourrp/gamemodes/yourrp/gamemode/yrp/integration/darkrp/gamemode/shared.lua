@@ -288,9 +288,6 @@ function DarkRP.getChatCommand(command)
 end
 
 function DarkRP.getChatCommandDescription(command)
-	--Description: Get the translated description of a chat command.
-	YRPDarkrpNotFound("getChatCommandDescription( " .. command .. " )")
-
 	return "OLD getChatCommandDescription"
 end
 
@@ -300,19 +297,14 @@ function DarkRP.getChatCommands()
 	return DarkRP.chatCommands
 end
 
---Description: Get every chat command.
---YRPDarkrpNotFound( "getChatCommands()" )
 function DarkRP.getDemoteGroup(teamNr)
 	return {}
 end
 
---Description: Get the demote group of a team. Every team in the same group will return the same object.
---set(Disjoint-Set) the demote group identifier
 function DarkRP.getDemoteGroups()
 	return {}
 end
 
---Description: Get all demote groups Every team in the same group will return the same object.
 function DarkRP.getDoorVars()
 	--Description: Internal function, retrieves all the registered door variables.
 	YRPDarkrpNotFound("getDoorVars()")
@@ -361,8 +353,6 @@ function DarkRP.getLaws()
 	return {}
 end
 
---Description: Get the table of all current laws.
---YRPDarkrpNotFound( "getLaws()" )
 function DarkRP.getMissingPhrases(languageCode)
 	--Description: Get all the phrases a language is missing.
 	YRPDarkrpNotFound("getMissingPhrases( " .. languageCode .. " )")
@@ -414,8 +404,6 @@ end
 function DarkRP.removeChatCommand(command)
 end
 
---Description: Remove a chat command
---YRPDarkrpNotFound( "removeChatCommand( " .. command .. " )" )
 function DarkRP.removeDemoteGroup(name)
 	--Description: Remove an demotegroup from DarkRP. NOTE: Must be called from
 	--						 BOTH server AND client to properly get it removed!
