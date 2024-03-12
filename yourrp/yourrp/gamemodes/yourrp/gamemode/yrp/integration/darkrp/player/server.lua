@@ -189,6 +189,10 @@ function Player:setSelfDarkRPVar(variable, value, target)
 			self:YRPSetHunger(value)
 		elseif variable == "jailpos" then
 			YRP.msg("note", "Use yourrp jailpos swep!")
+		elseif variable == "AFK" then
+			target:SetAFK(true)
+		elseif variable == "AFKDemoted" then
+			target:SetAFK(false)
 		elseif unhandled[variable] == nil then
 			--
 			YRPDarkrpNotFound("setDarkRPVar( " .. tostring(variable) .. ", " .. tostring(value) .. ", " .. tostring(target) .. " )")
