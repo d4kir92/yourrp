@@ -80,7 +80,7 @@ local function YRPCreateSlot(x, y, art, id)
 
 	function slot.btn:DoClick()
 		local cname = YRPGetSlotSWEP("slot_" .. art, id)
-		if cname and cname ~= "LID_empty" then
+		if art and cname and cname ~= "LID_empty" then
 			net.Start("nws_yrp_slot_swep_rem")
 			net.WriteString(art)
 			net.WriteString(cname)
@@ -143,10 +143,13 @@ local function YRPCreateSWEP(x, y, art, cname)
 	end
 
 	function slot.btn:DoClick()
-		net.Start("nws_yrp_slot_swep_add")
-		net.WriteString(art)
-		net.WriteString(cname)
-		net.SendToServer()
+		if art and cname then
+			net.Start("nws_yrp_slot_swep_add")
+			net.WriteString(art)
+			net.WriteString(cname)
+			net.SendToServer()
+		end
+
 		win:ClearList()
 	end
 
