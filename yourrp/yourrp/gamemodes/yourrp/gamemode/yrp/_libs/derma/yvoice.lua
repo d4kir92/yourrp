@@ -57,7 +57,7 @@ function PANEL:Setup(ply)
 	yrp_VoicePanelList:SetSize(sw, ScrH() - 5 * sh)
 	if GetGlobalYRPBool("bool_voice_module") then
 		self.ply = ply
-		if ply and ply.IDCardID then
+		if ply and ply.IDCardID and GetGlobalYRPBool("bool_voice_idcardid", false) then
 			if ply.RPName then
 				self.PlayerName:SetText(ply:IDCardID() .. " " .. ply:RPName())
 			else

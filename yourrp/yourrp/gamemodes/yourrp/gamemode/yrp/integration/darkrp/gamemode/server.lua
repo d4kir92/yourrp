@@ -237,12 +237,10 @@ function DarkRP.retrieveRPNames(name, callback)
 end
 
 function DarkRP.retrieveSalary(ply, callback)
-	--Description: Get a player's salary from the database.
-	YRPDarkrpNotFound("retrieveSalary(ply, callback)")
-
-	return 0
+	return ply:Salary()
 end
 
+--Description: Get a player's salary from the database.
 function DarkRP.retrieveTeamSpawnPos(team)
 	--Description: Retrieve a random spawn position for a job.
 	YRPDarkrpNotFound("retrieveTeamSpawnPos(team)")
