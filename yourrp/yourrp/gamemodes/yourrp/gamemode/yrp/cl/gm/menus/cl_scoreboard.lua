@@ -729,6 +729,8 @@ function YRPScoreboardAddPlayer(ply)
 			end
 		}
 
+		--[[
+		-- BAN player, seem to happen to often.. :D
 		btns[10] = {
 			"LID_ban",
 			"128_gavel",
@@ -741,8 +743,7 @@ function YRPScoreboardAddPlayer(ply)
 					net.SendToServer()
 				end
 			end
-		}
-
+		}]]
 		local c = 0
 		for i, btn in pairs(btns) do
 			if not btn[3] or (btn[3] and LocalPlayer():HasAccess("YRPScoreboardAddPlayer2")) and (not btn[4] or (btn[4] and YRPNotSelf(ply))) then
