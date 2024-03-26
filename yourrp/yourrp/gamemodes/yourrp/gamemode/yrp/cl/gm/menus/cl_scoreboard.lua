@@ -730,7 +730,7 @@ function YRPScoreboardAddPlayer(ply)
 		}
 
 		--[[
-		-- BAN player, seem to happen to often.. :D
+		BAN player, seem to happen to often.. :D
 		btns[10] = {
 			"LID_ban",
 			"128_gavel",
