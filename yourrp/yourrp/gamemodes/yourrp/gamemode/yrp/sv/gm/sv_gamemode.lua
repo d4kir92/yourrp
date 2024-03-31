@@ -302,7 +302,6 @@ function YRPPlayerLoadout(ply)
 					if not IsVoidCharEnabled() then
 						ply:SetYRPString("money", chaTab.money)
 						ply:SetYRPString("moneybank", chaTab.moneybank)
-						ply:SetYRPBool("moneyready", true)
 						ply:SetYRPString("rpname", chaTab.rpname)
 						ply:SetYRPString("rpdescription", chaTab.rpdescription)
 						for i, v in pairs(string.Explode("\n", chaTab.rpdescription)) do
@@ -330,6 +329,7 @@ function YRPPlayerLoadout(ply)
 			end
 		end
 
+		ply:SetYRPBool("moneyready", true)
 		--YRP.msg( "note", "[PlayerLoadout] " .. ply:YRPName() .. " has no character selected." )
 		ply:UpdateBackpack()
 	else
