@@ -21,7 +21,7 @@ hook.Add(
 		-- Remove all items belong to the player
 		for i, ent in pairs(ents.GetAll()) do
 			if IsValid(ent) then
-				if ent.PermaProps or ent.PermaPropID then continue end -- if perma propped => ignore
+				if ent.PermaProps or ent.PermaProps_ID then continue end -- if perma propped => ignore
 				if ent:GetOwner() == ply or ent:GetRPOwner() == ply then
 					ent:Remove()
 				end
@@ -1778,7 +1778,12 @@ hook.Add(
 		-- Rebuild Doors
 		YRP.msg("note", "RELOAD DOORS")
 		YRPLoadDoors()
-		YRPLoadWorldStorages()
+		C_Timer.After(
+			0.1,
+			function()
+				YRPLoadWorldStorages()
+			end
+		)
 	end
 )
 

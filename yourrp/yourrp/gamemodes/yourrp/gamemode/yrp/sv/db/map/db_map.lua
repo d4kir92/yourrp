@@ -485,7 +485,6 @@ function YRPLoadWorldStorages()
 	local storages = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "storage" .. "'")
 	local count = 0
 	if IsNotNilAndNotFalse(storages) then
-		YRP.msg("note", "STORAGES: ", #storages)
 		for i, v in pairs(storages) do
 			v.linkID = v.linkID or 0
 			v.linkID = tonumber(v.linkID)
@@ -516,7 +515,7 @@ function YRPLoadWorldStorages()
 end
 
 timer.Simple(
-	4,
+	3,
 	function()
 		YRPLoadWorldStorages()
 	end
