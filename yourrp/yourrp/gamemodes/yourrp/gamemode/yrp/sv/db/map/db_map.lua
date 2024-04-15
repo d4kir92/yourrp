@@ -480,9 +480,12 @@ function YRPRegisterObject(obj)
 	end
 end
 
-function LoadWorldStorages()
+function YRPLoadWorldStorages()
+	YRP.msg("note", "LOAD WORLD STORAGES")
 	local storages = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "storage" .. "'")
+	local count = 0
 	if IsNotNilAndNotFalse(storages) then
+		YRP.msg("note", "STORAGES: ", #storages)
 		for i, v in pairs(storages) do
 			v.linkID = v.linkID or 0
 			v.linkID = tonumber(v.linkID)
@@ -502,16 +505,19 @@ function LoadWorldStorages()
 					stor:SetAngles(Angle(ang[1], ang[2], ang[3]))
 					stor:Spawn()
 					stor:SetStorage(v.linkID)
+					count = count + 1
 					stor.uid = v.uniqueID
 				end
 			end
 		end
 	end
+
+	YRP.msg("note", string.format("Spawned %s Storages", count))
 end
 
 timer.Simple(
 	4,
 	function()
-		LoadWorldStorages()
+		YRPLoadWorldStorages()
 	end
 )

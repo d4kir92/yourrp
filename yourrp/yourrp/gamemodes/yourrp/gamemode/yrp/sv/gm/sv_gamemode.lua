@@ -1778,7 +1778,7 @@ hook.Add(
 		-- Rebuild Doors
 		YRP.msg("note", "RELOAD DOORS")
 		YRPLoadDoors()
-		LoadWorldStorages()
+		YRPLoadWorldStorages()
 	end
 )
 
