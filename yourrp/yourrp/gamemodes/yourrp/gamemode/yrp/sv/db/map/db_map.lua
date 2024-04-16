@@ -515,7 +515,7 @@ function YRPLoadWorldStorages()
 end
 
 timer.Simple(
-	3,
+	0,
 	function()
 		YRPLoadWorldStorages()
 	end

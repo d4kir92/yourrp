@@ -1778,7 +1778,7 @@ hook.Add(
 		-- Rebuild Doors
 		YRP.msg("note", "RELOAD DOORS")
 		YRPLoadDoors()
-		C_Timer.After(
+		timer.Simple(
 			0.1,
 			function()
 				YRPLoadWorldStorages()
