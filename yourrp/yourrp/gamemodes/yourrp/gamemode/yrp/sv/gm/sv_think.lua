@@ -301,6 +301,7 @@ function YRPIsTeleporterAlive(uid)
 			if tonumber(tel:GetYRPInt("yrp_teleporter_uid", -1)) ~= -1 and tonumber(tel:GetYRPInt("yrp_teleporter_uid", -1)) == tonumber(uid) then return true end
 			tel.PermaProps = true
 			tel.PermaProps_ID = 0
+			tel.PermaPropsID = 0
 		end
 	end
 
@@ -454,6 +455,7 @@ timer.Create(
 								tp:Spawn()
 								tp.PermaProps = true
 								tp.PermaProps_ID = 0
+								tp.PermaPropsID = 0
 								YRP.msg("note", "[YourRP Teleporters] " .. "Was dead, respawned")
 							else
 								YRP.msg("note", "FAILED TO CREATE TELEPORTER, is [YourRP Teleporters] missing?")

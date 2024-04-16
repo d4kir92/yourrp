@@ -21,7 +21,7 @@ hook.Add(
 		-- Remove all items belong to the player
 		for i, ent in pairs(ents.GetAll()) do
 			if IsValid(ent) then
-				if ent.PermaProps or ent.PermaProps_ID then continue end -- if perma propped => ignore
+				if ent.PermaProps or ent.PermaPropsID ~= nil or ent.PermaProps_ID ~= nil then continue end -- if perma propped => ignore
 				if ent:GetOwner() == ply or ent:GetRPOwner() == ply then
 					ent:Remove()
 				end
@@ -1775,15 +1775,8 @@ hook.Add(
 	"PostCleanupMap",
 	"yrp_PostCleanupMap_doors",
 	function()
-		-- Rebuild Doors
 		YRP.msg("note", "RELOAD DOORS")
 		YRPLoadDoors()
-		timer.Simple(
-			0.1,
-			function()
-				YRPLoadWorldStorages()
-			end
-		)
 	end
 )
 

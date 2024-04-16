@@ -39,6 +39,7 @@ end
 function ENT:Think()
 	self.PermaProps = true
 	self.PermaProps_ID = 0
+	self.PermaPropsID = 0
 	if self:GetPersistent() then
 		self:SetPersistent(false)
 		local msg = "Do NOT persist (permaprop) Storage containers!"

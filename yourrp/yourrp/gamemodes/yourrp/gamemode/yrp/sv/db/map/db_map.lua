@@ -514,9 +514,27 @@ function YRPLoadWorldStorages()
 	YRP.msg("note", string.format("Spawned %s Storages", count))
 end
 
-timer.Simple(
-	0,
-	function()
-		YRPLoadWorldStorages()
+function YRPCheckIfStoragesExists()
+	local storages = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "storage" .. "'")
+	if IsNotNilAndNotFalse(storages) then
+		for i, v in pairs(storages) do
+			v.linkID = v.linkID or 0
+			v.linkID = tonumber(v.linkID)
+			local found = false
+			for j, ent in pairs(ents.GetAll()) do
+				if ent and ent._suid and ent._suid == v.linkID then
+					found = true
+				end
+			end
+
+			if not found then
+				YRPLoadWorldStorages()
+				break
+			end
+		end
 	end
-)
+
+	timer.Simple(1, YRPCheckIfStoragesExists)
+end
+
+YRPCheckIfStoragesExists()
