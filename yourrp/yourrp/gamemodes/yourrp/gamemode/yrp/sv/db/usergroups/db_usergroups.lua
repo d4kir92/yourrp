@@ -3,81 +3,81 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_usergroups"
 local sts = {
-	["string_ammos"] = '',
-	["string_color"] = '0,0,0,255',
-	["string_displayname"] = '',
-	["string_icon"] = 'http://www.famfamfam.com/lab/icons/silk/icons/shield.png',
-	["string_licenses"] = '',
-	["string_name"] = 'unnamed usergroup',
-	["string_nonesweps"] = '',
-	["string_sents"] = '',
-	["string_sweps"] = '',
-	["string_tools"] = '',
+	["string_ammos"] = "",
+	["string_color"] = "0,0,0,255",
+	["string_displayname"] = "",
+	["string_icon"] = "http://www.famfamfam.com/lab/icons/silk/icons/shield.png",
+	["string_licenses"] = "",
+	["string_name"] = "unnamed usergroup",
+	["string_nonesweps"] = "",
+	["string_sents"] = "",
+	["string_sweps"] = "",
+	["string_tools"] = "",
 }
 
 local bos = {
-	["bool_ac_database"] = '0',
-	["bool_adminaccess"] = '0',
-	["bool_blacklist"] = '0',
-	["bool_bodygroups"] = '0',
-	["bool_canseeenemiesonmap"] = '0',
-	["bool_canseeteammatesonmap"] = '0',
-	["bool_canusecontextmenu"] = '0',
-	["bool_canusespawnmenu"] = '0',
-	["bool_canusewarnsystem"] = '0',
-	["bool_chat"] = '1',
-	["bool_collision"] = '0',
-	["bool_darkrp"] = '0',
-	["bool_design"] = '0',
-	["bool_drive"] = '0',
-	["bool_dupes"] = '0',
-	["bool_effects"] = '0',
-	["bool_entities"] = '0',
-	["bool_events"] = '0',
-	["bool_feedback"] = '0',
-	["bool_flashlight"] = '0',
-	["bool_general"] = '0',
-	["bool_gravgunpunt"] = '0',
-	["bool_gravity"] = '0',
-	["bool_groupsandroles"] = '0',
-	["bool_ignite"] = '0',
-	["bool_keepupright"] = '0',
-	["bool_levelsystem"] = '0',
-	["bool_licenses"] = '0',
-	["bool_logs"] = '0',
-	["bool_map"] = '0',
-	["bool_money"] = '0',
-	["bool_npcs"] = '0',
-	["bool_permaprops"] = '0',
-	["bool_physgunpickup"] = '0',
-	["bool_physgunpickupignoreblacklist"] = '0',
-	["bool_physgunpickupotherowner"] = '0',
-	["bool_physgunpickupplayer"] = '0',
-	["bool_physgunpickupworld"] = '0',
-	["bool_players"] = '0',
-	["bool_postprocess"] = '0',
-	["bool_props"] = '0',
-	["bool_ragdolls"] = '0',
-	["bool_realistic"] = '0',
-	["bool_removeable"] = '1',
-	["bool_saves"] = '0',
-	["bool_scale"] = '0',
-	["bool_shops"] = '0',
-	["bool_specializations"] = '0',
-	["bool_status"] = '0',
-	["bool_usergroups"] = '0',
-	["bool_vehicles"] = '0',
-	["bool_weapons"] = '0',
-	["bool_weaponsystem"] = '0',
-	["bool_whitelist"] = '0',
-	["bool_import_darkrp"] = '0',
-	["bool_yourrp_addons"] = '0',
+	["bool_ac_database"] = "0",
+	["bool_adminaccess"] = "0",
+	["bool_blacklist"] = "0",
+	["bool_bodygroups"] = "0",
+	["bool_canseeenemiesonmap"] = "0",
+	["bool_canseeteammatesonmap"] = "0",
+	["bool_canusecontextmenu"] = "0",
+	["bool_canusespawnmenu"] = "0",
+	["bool_canusewarnsystem"] = "0",
+	["bool_chat"] = "1",
+	["bool_collision"] = "0",
+	["bool_darkrp"] = "0",
+	["bool_design"] = "0",
+	["bool_drive"] = "0",
+	["bool_dupes"] = "0",
+	["bool_effects"] = "0",
+	["bool_entities"] = "0",
+	["bool_events"] = "0",
+	["bool_feedback"] = "0",
+	["bool_flashlight"] = "0",
+	["bool_general"] = "0",
+	["bool_gravgunpunt"] = "0",
+	["bool_gravity"] = "0",
+	["bool_groupsandroles"] = "0",
+	["bool_ignite"] = "0",
+	["bool_keepupright"] = "0",
+	["bool_levelsystem"] = "0",
+	["bool_licenses"] = "0",
+	["bool_logs"] = "0",
+	["bool_map"] = "0",
+	["bool_money"] = "0",
+	["bool_npcs"] = "0",
+	["bool_permaprops"] = "0",
+	["bool_physgunpickup"] = "0",
+	["bool_physgunpickupignoreblacklist"] = "0",
+	["bool_physgunpickupotherowner"] = "0",
+	["bool_physgunpickupplayer"] = "0",
+	["bool_physgunpickupworld"] = "0",
+	["bool_players"] = "0",
+	["bool_postprocess"] = "0",
+	["bool_props"] = "0",
+	["bool_ragdolls"] = "0",
+	["bool_realistic"] = "0",
+	["bool_removeable"] = "1",
+	["bool_saves"] = "0",
+	["bool_scale"] = "0",
+	["bool_shops"] = "0",
+	["bool_specializations"] = "0",
+	["bool_status"] = "0",
+	["bool_usergroups"] = "0",
+	["bool_vehicles"] = "0",
+	["bool_weapons"] = "0",
+	["bool_weaponsystem"] = "0",
+	["bool_whitelist"] = "0",
+	["bool_import_darkrp"] = "0",
+	["bool_yourrp_addons"] = "0",
 }
 
 local ins = {
-	["int_characters_max"] = '1',
-	["int_charactersevent_max"] = '1',
-	["int_position"] = '1',
+	["int_characters_max"] = "1",
+	["int_charactersevent_max"] = "1",
+	["int_position"] = "1",
 }
 
 for i, v in SortedPairs(sts) do
@@ -1817,10 +1817,9 @@ end
 local toolantispam = {}
 hook.Add(
 	"CanTool",
-	"yrp_can_tool",
-	function(pl, tr, tool)
-		if YRPEntityAlive(pl) and IsNotNilAndNotFalse(tool) then
-			--YRP.msg("gm", "CanTool: " .. tool)
+	"      yrp_can_tool",
+	function(pl, tr, toolname, tool, button)
+		if YRPEntityAlive(pl) and IsNotNilAndNotFalse(toolname) then
 			local tools = {}
 			local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_tools", "string_name = '" .. string.lower(pl:GetUserGroup()) .. "'")
 			if IsNotNilAndNotFalse(tab) then
@@ -1831,7 +1830,7 @@ hook.Add(
 			local hasright = false
 			if table.HasValue(tools, "all") then
 				hasright = true
-			elseif table.HasValue(tools, string.lower(tool)) then
+			elseif table.HasValue(tools, string.lower(toolname)) then
 				hasright = true
 			end
 
@@ -1866,18 +1865,18 @@ hook.Add(
 					return true
 				end
 			else
-				YRPNotiToPlyDisallowed(pl, "NO RIGHTS - Tool: " .. tostring(tool) .. " >>> " .. "menu_settings" .. " -> " .. "LID_management" .. " -> " .. "LID_usergroups" .. " -> " .. "LID_tools")
-				YRP.msg("note", "[CanTool] " .. "NO RIGHTS - Tool: " .. tostring(tool))
+				YRPNotiToPlyDisallowed(pl, "NO RIGHTS - Tool: " .. tostring(toolname) .. " >>> " .. "menu_settings" .. " -> " .. "LID_management" .. " -> " .. "LID_usergroups" .. " -> " .. "LID_tools")
+				YRP.msg("note", "[CanTool] " .. "NO RIGHTS - Tool: " .. tostring(toolname))
 
 				return false
 			end
 
-			YRPNotiToPlyDisallowed(pl, "FAIL FOR TOOL: " .. tostring(tool))
-			YRP.msg("note", "[CanTool] " .. "FAIL FOR TOOL: " .. tostring(tool))
+			YRPNotiToPlyDisallowed(pl, "FAIL FOR TOOL: " .. tostring(toolname))
+			YRP.msg("note", "[CanTool] " .. "FAIL FOR TOOL: " .. tostring(toolname))
 
 			return false
 		else
-			if not IsNotNilAndNotFalse(tool) then
+			if not IsNotNilAndNotFalse(toolname) then
 				YRP.msg("note", "[CanTool] Tool is not valid!")
 			else
 				YRP.msg("error", "[CanTool] Player is not valid!")
@@ -1888,7 +1887,7 @@ hook.Add(
 
 hook.Add(
 	"CanProperty",
-	"yrp_canproperty",
+	"      yrp_canproperty",
 	function(pl, property, ent)
 		if YRPEntityAlive(pl) and IsNotNilAndNotFalse(property) and pl.GetUserGroup ~= nil then
 			--YRP.msg( "gm", "CanProperty: " .. property)

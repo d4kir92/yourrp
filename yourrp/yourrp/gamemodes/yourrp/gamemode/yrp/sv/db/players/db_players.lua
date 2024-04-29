@@ -240,13 +240,9 @@ function YRPSetRole(ply, rid, force, pmid, bgs)
 		return false
 	end
 
-	if true then
-		ply:StripWeapons()
-		--ply:StripAmmo()
-		ply:UserGroupLoadout()
-		YRPGiveSpecs(ply)
-	end
-
+	ply:StripWeapons()
+	ply:UserGroupLoadout()
+	YRPGiveSpecs(ply)
 	if rid ~= ply:GetRoleUID() then
 		YRPUpdateBodyGroups(ply, pmid, bgs)
 	end

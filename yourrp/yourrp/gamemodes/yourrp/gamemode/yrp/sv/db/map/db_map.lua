@@ -447,7 +447,10 @@ net.Receive(
 )
 
 local mapobjects = {}
-function YRPUnRegisterObject(obj, uid)
+function YRPUnRegisterObject(obj)
+	if not YRPEntityAlive(obj) then return end
+	if obj._suid == nil then return end
+	YRP_SQL_DELETE_FROM(DATABASE_NAME, "linkID = '" .. obj._suid .. "'")
 end
 
 function YRPRegisterObject(obj)
@@ -534,7 +537,16 @@ function YRPCheckIfStoragesExists()
 		end
 	end
 
-	timer.Simple(1, YRPCheckIfStoragesExists)
+	timer.Simple(2, YRPCheckIfStoragesExists)
 end
 
-YRPCheckIfStoragesExists()
+timer.Simple(4, YRPCheckIfStoragesExists)
+hook.Add(
+	"EntityRemoved",
+	"YRP_EntityRemoved",
+	function(ent, fullUpdate)
+		if not ent:IsSolid() and ent:GetMoveType() == MOVETYPE_NONE and ent:GetNoDraw() then
+			YRPUnRegisterObject(ent)
+		end
+	end
+)

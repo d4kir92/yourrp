@@ -893,20 +893,6 @@ hook.Add(
 			YRPHUDUpdateAnchors()
 			YRPHUDVersion = YRPHUDVersion + 1
 		end
-
-		if false then
-			--			      name       anchor 		posx		posy 		sizew 	sizeh 	material
-			YRPHUDDrawTexture("tl_icon", "TOPLEFT", 10, 10, 200, 200, "yrp/yrp_icon")
-			YRPHUDDrawTexture("tr_icon", "TOPRIGHT", -210, 10, 200, 200, "yrp/yrp_icon")
-			YRPHUDDrawTexture("bl_icon", "BOTTOMLEFT", 10, -210, 200, 200, "yrp/yrp_icon")
-			YRPHUDDrawTexture("br_icon", "BOTTOMRIGHT", -210, -210, 200, 200, "yrp/yrp_icon")
-			YRPHUDDrawTexture("ce_icon", "CENTER", -200 / 2, -200 / 2, 200, 200, "yrp/yrp_icon")
-			YRPHUDDrawTexture("to_icon", "TOP", -200 / 2, 10, 200, 200, "yrp/yrp_icon")
-			YRPHUDDrawTexture("bo_icon", "BOTTOM", -200 / 2, -210, 200, 200, "yrp/yrp_icon")
-			YRPHUDDrawTexture("le_icon", "LEFT", 10, -200 / 2, 200, 200, "yrp/yrp_icon")
-			YRPHUDDrawTexture("ri_icon", "RIGHT", -210, -200 / 2, 200, 200, "yrp/yrp_icon")
-			YRPHUDDrawText("ce_text", "CENTER", 0, 0, "TESTTEXT", YRPHUDGetFont(40, false), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		end
 	end
 )
 
