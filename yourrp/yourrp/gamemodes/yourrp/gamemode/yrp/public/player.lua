@@ -625,3 +625,12 @@ function Player:GetUserGroupNice()
 		return string.upper(self:GetUserGroup())
 	end
 end
+
+-- SET ROLE
+function Player:SetRole(rid)
+	if SERVER then
+		YRPSetRole(self, rid)
+	else
+		YRP.msg("note", "SetRole is serversided")
+	end
+end
