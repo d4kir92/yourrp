@@ -2590,8 +2590,10 @@ net.Receive(
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_tp_bring", true) then return end
 		local _target = net.ReadEntity()
-		_target:SetYRPVector("yrpoldpos", _target:GetPos())
-		YRPTeleportToPoint(_target, ply:GetPos())
+		if IsValid(_target) then
+			_target:SetYRPVector("yrpoldpos", _target:GetPos())
+			YRPTeleportToPoint(_target, ply:GetPos())
+		end
 	end
 )
 
@@ -2601,7 +2603,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_tp_return", true) then return end
 		local _target = net.ReadEntity()
-		if _target:GetYRPVector("yrpoldpos") ~= Vector(0, 0, 0) then
+		if IsValid(_target) and _target:GetYRPVector("yrpoldpos") ~= Vector(0, 0, 0) then
 			YRPTeleportToPoint(_target, _target:GetYRPVector("yrpoldpos"))
 			_target:SetYRPVector("yrpoldpos", Vector(0, 0, 0)) -- RESET
 		end
@@ -2614,7 +2616,9 @@ net.Receive(
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_tp_jail", true) then return end
 		local _target = net.ReadEntity()
-		teleportToJailpoint(_target, 5 * 60)
+		if IsValid(_target) then
+			teleportToJailpoint(_target, 5 * 60)
+		end
 	end
 )
 
@@ -2624,7 +2628,9 @@ net.Receive(
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_tp_unjail", true) then return end
 		local _target = net.ReadEntity()
-		teleportToReleasepoint(_target)
+		if IsValid(_target) then
+			teleportToReleasepoint(_target)
+		end
 	end
 )
 
