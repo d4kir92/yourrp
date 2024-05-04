@@ -2551,7 +2551,7 @@ net.Receive(
 		if not ply:HasAccess("nws_yrp_tp_tpto_steamid", true) then return end
 		local steamid = net.ReadString()
 		local _target = YRPGetPlayerBySteamID(steamid)
-		if _target then
+		if _target and IsValid(_target) then
 			YRPTeleportToPoint(ply, _target:GetPos())
 		end
 	end
@@ -2564,7 +2564,7 @@ net.Receive(
 		if not ply:HasAccess("nws_yrp_tp_bring_steamid", true) then return end
 		local steamid = net.ReadString()
 		local _target = YRPGetPlayerBySteamID(steamid)
-		if _target then
+		if _target and IsValid(_target) then
 			YRPTeleportToPoint(_target, ply:GetPos())
 		end
 	end
@@ -2576,7 +2576,7 @@ net.Receive(
 	function(len, ply)
 		if IsValid(ply) and ply:HasAccess("nws_yrp_tp_tpto", true) then
 			local _target = net.ReadEntity()
-			if IsValid(_target) then
+			if _target and IsValid(_target) then
 				ply:SetYRPVector("yrpoldpos", ply:GetPos())
 				YRPTeleportToPoint(ply, _target:GetPos())
 			end
@@ -2590,7 +2590,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_tp_bring", true) then return end
 		local _target = net.ReadEntity()
-		if IsValid(_target) then
+		if _target and IsValid(_target) then
 			_target:SetYRPVector("yrpoldpos", _target:GetPos())
 			YRPTeleportToPoint(_target, ply:GetPos())
 		end
@@ -2603,7 +2603,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_tp_return", true) then return end
 		local _target = net.ReadEntity()
-		if IsValid(_target) and _target:GetYRPVector("yrpoldpos") ~= Vector(0, 0, 0) then
+		if _target and IsValid(_target) and _target:GetYRPVector("yrpoldpos") ~= Vector(0, 0, 0) then
 			YRPTeleportToPoint(_target, _target:GetYRPVector("yrpoldpos"))
 			_target:SetYRPVector("yrpoldpos", Vector(0, 0, 0)) -- RESET
 		end
@@ -2616,7 +2616,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_tp_jail", true) then return end
 		local _target = net.ReadEntity()
-		if IsValid(_target) then
+		if _target and IsValid(_target) then
 			teleportToJailpoint(_target, 5 * 60)
 		end
 	end
@@ -2628,7 +2628,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_tp_unjail", true) then return end
 		local _target = net.ReadEntity()
-		if IsValid(_target) then
+		if _target and IsValid(_target) then
 			teleportToReleasepoint(_target)
 		end
 	end
