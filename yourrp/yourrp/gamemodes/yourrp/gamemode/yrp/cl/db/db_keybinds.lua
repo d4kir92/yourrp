@@ -84,11 +84,11 @@ function YRPKeybindsCheckFile()
 	end
 
 	if not file.Exists("yrp_keybinds", "DATA") then
-		YRP.msg("error", "[KEYBINDS] FAILED TO CREATE KEYBIND FOLDER")
+		YRP.msg("note", "[KEYBINDS] FAILED TO CREATE KEYBIND FOLDER, NO SPACE ON DISK??")
 	end
 
 	if not file.Exists(dbfile, "DATA") then
-		YRP.msg("error", "[KEYBINDS] FAILED TO CREATE KEYBIND FILE")
+		YRP.msg("note", "[KEYBINDS] FAILED TO CREATE KEYBIND FILE, NO SPACE ON DISK??")
 	end
 end
 
@@ -109,7 +109,7 @@ function YRPKeybindsLoad()
 
 	YRPKeybindsCheckFile()
 	YRPKeybindsMSG("Load Keybinds")
-	if dbfile and file.Exists(dbfile, "DATA") then
+	if file.Exists(dbfile, "DATA") then
 		yrp_keybinds = util.JSONToTable(file.Read(dbfile, "DATA"))
 		if yrp_keybinds then
 			for name, key in pairs(yrp_keybinds) do
@@ -133,7 +133,7 @@ function YRPKeybindsLoad()
 			YRP.msg("error", "FAILED TO LOAD KEYBINDS! fi: [" .. tostring(fi) .. "]")
 		end
 	else
-		YRP.msg("error", "[KEYBINDS] FILE DOESN'T EXISTS")
+		YRP.msg("note", "[KEYBINDS] FILE DOESN'T EXISTS, NO SPACE ON DISK??")
 	end
 
 	if _type(yrp_keybinds) ~= "table" then
@@ -168,7 +168,7 @@ function YRPGetKeybind(name)
 		name = tostring(name)
 		if YRP_KeybindsLoaded and yrp_keybinds and name and yrp_keybinds[name] ~= nil then
 			return tonumber(yrp_keybinds[name])
-		elseif YRP_KeybindsLoaded and yrp_keybinds and dbfile then
+		elseif YRP_KeybindsLoaded and yrp_keybinds then
 			local data = file.Read(dbfile, "DATA")
 			if data then
 				local dbf = util.JSONToTable(data)
@@ -183,7 +183,7 @@ function YRPGetKeybind(name)
 					return -1
 				end
 			else
-				YRP.msg("error", "[KEYBINDS] Failed to get Data")
+				YRP.msg("note", "[KEYBINDS] Failed to get FILE Data, NO SPACE ON DISK??")
 
 				return -1
 			end
