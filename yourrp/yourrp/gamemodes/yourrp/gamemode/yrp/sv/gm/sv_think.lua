@@ -288,8 +288,8 @@ function YRPCheckSalary(ply)
 end
 
 function YRPIsDealerAlive(uid)
-	for j, npc in pairs(ents.GetAll()) do
-		if npc and npc:IsNPC() and tonumber(npc:GetYRPString("dealerID", "0")) == tonumber(uid) then return true end
+	for j, ent in pairs(ents.GetAll()) do
+		if ent and IsValid(ent) and ent:IsNPC() and tonumber(ent:GetYRPString("dealerID", "0")) == tonumber(uid) then return true end
 	end
 
 	return false
