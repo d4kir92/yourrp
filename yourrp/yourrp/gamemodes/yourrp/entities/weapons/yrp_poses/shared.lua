@@ -24,7 +24,6 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Ammo = "none"
 SWEP.DrawCrosshair = true
 SWEP.HoldType = "normal"
-
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
 end
@@ -334,7 +333,6 @@ yrp_poses["standing"]["coverears"]["ValveBiped.Bip01_R_Hand"].ang = Angle(-25, 4
 ]]
 local nang = Angle(0, 0, 0)
 local nvec = Vector(0, 0, 0)
-
 function YRPResetPoses(ply)
 	for i = 0, 100 do
 		ply["posesang"][i] = ply["posesang"][i] or nang
@@ -352,14 +350,12 @@ function YRPDoPoses()
 		ply.yrppose = ply:GetYRPString("yrp_pose", "salute")
 		ply.yrpposestatus = ply.yrpposestatus or ""
 		local weapon = ply:GetActiveWeapon()
-
 		if IsValid(weapon) then
 			if weapon:GetClass() ~= "yrp_poses" then
 				ply.yrpposestatus = "reset"
 			else
 				local vel = ply:GetVelocity()
 				vel = Vector(vel[1], vel[2], 0)
-
 				if ply:IsSprinting() or not ply:IsOnGround() or vel:Length() > 110 then
 					ply.yrpposestatus = "reset"
 				elseif yrp_poses[ply.yrpposeart][ply.yrppose] then
@@ -379,8 +375,8 @@ function YRPDoPoses()
 
 		if ply.oldposestatus ~= ply.yrpposestatus then
 			ply.oldposestatus = ply.yrpposestatus
-			ply.yrp_pose_delay = CurTime() + 0.8
-			ply.yrp_pose_delay_update = 0.02
+			ply.yrp_pose_delay = CurTime() + 0.6
+			ply.yrp_pose_delay_update = 0.03
 		elseif ply.yrp_pose_delay < CurTime() then
 			ply.yrp_pose_delay_update = 0.3
 		end
@@ -388,33 +384,28 @@ function YRPDoPoses()
 		if ply.yrp_pose_delay > CurTime() then
 			ply["posesang"] = ply["posesang"] or {}
 			ply["posespos"] = ply["posespos"] or {}
-
 			if ply.yrpposestatus == "do" then
 				for ii, v in pairs(yrp_poses[ply.yrpposeart][ply.yrppose]) do
 					local boneID = ply:LookupBone(ii)
-
 					if boneID and v.ang then
 						ply["posesang"][boneID] = ply["posesang"][boneID] or Angle(0, 0, 0)
-						ply["posesang"][boneID] = LerpAngle(8 * FrameTime(), ply["posesang"][boneID], v.ang)
+						ply["posesang"][boneID] = LerpAngle(32 * FrameTime(), ply["posesang"][boneID], v.ang)
 					end
 
 					if boneID and v.pos then
 						ply["posespos"][boneID] = ply["posespos"][boneID] or Vector(0, 0, 0)
-						ply["posespos"][boneID] = LerpVector(8 * FrameTime(), ply["posespos"][boneID], v.pos)
+						ply["posespos"][boneID] = LerpVector(32 * FrameTime(), ply["posespos"][boneID], v.pos)
 					end
 				end
 			end
 		end
 
 		ply.yrp_pose_delay_nw = ply.yrp_pose_delay_nw or 0
-
 		if ply.yrp_pose_delay_nw < CurTime() then
 			ply.yrp_pose_delay_nw = CurTime() + ply.yrp_pose_delay_update
-
 			if ply.yrpposestatus == "do" then
 				for ii, v in pairs(yrp_poses[ply.yrpposeart][ply.yrppose]) do
 					local boneID = ply:LookupBone(ii)
-
 					if boneID and v.ang then
 						ply:ManipulateBoneAngles(boneID, ply["posesang"][boneID])
 					end
@@ -430,36 +421,42 @@ function YRPDoPoses()
 	end
 end
 
-hook.Add("Think", "yrp_pose_think", function()
-	if SERVER then
-		YRPDoPoses()
+hook.Add(
+	"Think",
+	"yrp_pose_think",
+	function()
+		if SERVER then
+			YRPDoPoses()
+		end
 	end
-end)
+)
 
 if SERVER then
 	util.AddNetworkString("nws_yrp_change_pose")
-
-	net.Receive("nws_yrp_change_pose", function(len, ply)
-		local pose_art = net.ReadString()
-		local pose = net.ReadString()
-
-		if pose then
-			ply:SetYRPBool("yrp_pose_status", false)
-			ply:SetYRPString("yrp_pose_art", pose_art)
-			ply:SetYRPString("yrp_pose", pose)
-
-			timer.Simple(0.33, function()
-				if IsValid(ply) then
-					ply:SetYRPBool("yrp_pose_status", true)
-				end
-			end)
+	net.Receive(
+		"nws_yrp_change_pose",
+		function(len, ply)
+			local pose_art = net.ReadString()
+			local pose = net.ReadString()
+			if pose then
+				ply:SetYRPBool("yrp_pose_status", false)
+				ply:SetYRPString("yrp_pose_art", pose_art)
+				ply:SetYRPString("yrp_pose", pose)
+				timer.Simple(
+					0.33,
+					function()
+						if IsValid(ply) then
+							ply:SetYRPBool("yrp_pose_status", true)
+						end
+					end
+				)
+			end
 		end
-	end)
+	)
 end
 
 function SWEP:Reload()
 	self:SetWeaponHoldType(self.HoldType)
-
 	if SERVER then
 		local ply = self:GetOwner()
 		ply:SetYRPBool("yrp_pose_status", false)
@@ -470,7 +467,6 @@ function SWEP:Reload()
 		self.delay = self.delay or 0
 		if CurTime() < self.delay then return end
 		self.delay = CurTime() + 1
-
 		if input.IsShiftDown() and LocalPlayer():SteamID() == "76561198002066427" then
 			if not YRPPanelAlive(self.config, "76561198002066427") then
 				local ply = LocalPlayer()
@@ -495,12 +491,10 @@ function SWEP:Reload()
 				bones["ValveBiped.Bip01_L_Finger01"] = {}
 				bones["ValveBiped.Bip01_L_Finger02"] = {}
 				local y = 0
-
 				for name, values in pairs(bones) do
 					local btn = YRPCreateD("YButton", self.config:GetContent(), YRP.ctr(500), YRP.ctr(50), 0, y * YRP.ctr(50 + 10))
 					btn:SetText(name)
 					btn.win = self.config
-
 					function btn:DoClick()
 						local win = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), YRP.ctr(800), YRP.ctr(800))
 						win:SetTitle(name)
@@ -509,11 +503,9 @@ function SWEP:Reload()
 						win.pit:SetMin(-360)
 						win.pit:SetMax(360)
 						win.pit:SetValue(0)
-
 						function win.pit:OnValueChanged(value)
 							ply.yrp_ang.p = value
 							local boneID = ply:LookupBone(name)
-
 							if boneID then
 								ply:ManipulateBoneAngles(boneID, ply.yrp_ang)
 							end
@@ -523,11 +515,9 @@ function SWEP:Reload()
 						win.yaw:SetMin(-360)
 						win.yaw:SetMax(360)
 						win.yaw:SetValue(0)
-
 						function win.yaw:OnValueChanged(value)
 							ply.yrp_ang.y = value
 							local boneID = ply:LookupBone(name)
-
 							if boneID then
 								ply:ManipulateBoneAngles(boneID, ply.yrp_ang)
 							end
@@ -537,11 +527,9 @@ function SWEP:Reload()
 						win.rol:SetMin(-360)
 						win.rol:SetMax(360)
 						win.rol:SetValue(0)
-
 						function win.rol:OnValueChanged(value)
 							ply.yrp_ang.r = value
 							local boneID = ply:LookupBone(name)
-
 							if boneID then
 								ply:ManipulateBoneAngles(boneID, ply.yrp_ang)
 							end
@@ -563,23 +551,19 @@ function SWEP:Reload()
 				local y = 0
 				local maxy = 0
 				local maxx = 0
-
 				for namecategory, categorytab in pairs(yrp_poses) do
 					local btn = YRPCreateD("YLabel", self.yrpposes:GetContent(), YRP.ctr(560), YRP.ctr(50), x * YRP.ctr(560 + 10), y * YRP.ctr(50 + 10))
 					btn:SetText("LID_" .. namecategory)
 					y = y + 1
-
 					for name, values in pairs(categorytab) do
 						local cBtn = YRPCreateD("YButton", self.yrpposes:GetContent(), YRP.ctr(560), YRP.ctr(50), x * YRP.ctr(560 + 10), y * YRP.ctr(50 + 10))
 						cBtn:SetText("LID_" .. name)
 						cBtn.win = self.yrpposes
-
 						function cBtn:DoClick()
 							net.Start("nws_yrp_change_pose")
 							net.WriteString(namecategory)
 							net.WriteString(name)
 							net.SendToServer()
-
 							if YRPPanelAlive(self.win, "poses3") then
 								self.win:Close()
 							end
@@ -594,7 +578,6 @@ function SWEP:Reload()
 
 					x = x + 1
 					y = 0
-
 					if maxx < x then
 						maxx = x
 					end
