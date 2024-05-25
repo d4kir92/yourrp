@@ -205,6 +205,8 @@ function YRPLoadDoors()
 							v:SetYRPString("text_description", w.text_description)
 						end
 
+						v:SetYRPString("name", w.name)
+						v:SetYRPString("buildingprice", w.buildingprice)
 						break
 					end
 				end
@@ -589,6 +591,8 @@ net.Receive(
 				["buildingprice"] = _tmpNewPrice
 			}, "uniqueID = " .. _tmpBuildingID
 		)
+
+		YRPChangeBuildingString(tonumber(_tmpBuildingID), "buildingprice", _tmpNewPrice)
 	end
 )
 
@@ -698,6 +702,8 @@ net.Receive(
 					["name"] = _tmpNewName
 				}, "uniqueID = " .. _tmpBuildingID
 			)
+
+			YRPChangeBuildingString(tonumber(_tmpBuildingID), "name", _tmpNewName)
 		else
 			YRP.msg("note", "changeBuildingName failed")
 		end

@@ -1469,18 +1469,6 @@ net.Receive(
 )
 
 function DrawDoorText(door)
-	local header = door:GetYRPString("text_header", "")
-	surface.SetFont("Y_24_500")
-	local head_size = surface.GetTextSize(header)
-	surface.SetTextColor(Color(255, 255, 255, 255))
-	surface.SetTextPos(-head_size / 2, -80)
-	surface.DrawText(header)
-	local description = door:GetYRPString("text_description", "")
-	surface.SetFont("Y_14_500")
-	local desc_size = surface.GetTextSize(description)
-	surface.SetTextColor(Color(255, 255, 255, 255))
-	surface.SetTextPos(-desc_size / 2, -50)
-	surface.DrawText(description)
 	local sl = door:SecurityLevel()
 	if sl > 0 and GetGlobalYRPBool("bool_securitylevel_system", false) and GetGlobalYRPBool("bool_show_securitylevel", true) then
 		local int_securitylevel = YRP.trans("LID_securitylevel") .. ": " .. sl
@@ -1489,6 +1477,34 @@ function DrawDoorText(door)
 		surface.SetTextColor(Color(255, 255, 255, 255))
 		surface.SetTextPos(-secu_size / 2, -20)
 		surface.DrawText(int_securitylevel)
+	else
+		if door:GetYRPBool("bool_hasowner", false) then
+			local header = door:GetYRPString("text_header", "")
+			surface.SetFont("Y_24_500")
+			local head_size = surface.GetTextSize(header)
+			surface.SetTextColor(Color(255, 255, 255, 255))
+			surface.SetTextPos(-head_size / 2, -80)
+			surface.DrawText(header)
+			local description = door:GetYRPString("text_description", "")
+			surface.SetFont("Y_14_500")
+			local desc_size = surface.GetTextSize(description)
+			surface.SetTextColor(Color(255, 255, 255, 255))
+			surface.SetTextPos(-desc_size / 2, -50)
+			surface.DrawText(description)
+		else
+			local buildingprice = formatMoney(door:GetYRPString("buildingprice", ""))
+			surface.SetFont("Y_24_500")
+			local head_size = surface.GetTextSize(buildingprice)
+			surface.SetTextColor(Color(255, 255, 255, 255))
+			surface.SetTextPos(-head_size / 2, -80)
+			surface.DrawText(buildingprice)
+			local name = door:GetYRPString("name", "")
+			surface.SetFont("Y_14_500")
+			local desc_size = surface.GetTextSize(name)
+			surface.SetTextColor(Color(255, 255, 255, 255))
+			surface.SetTextPos(-desc_size / 2, -50)
+			surface.DrawText(name)
+		end
 	end
 end
 
