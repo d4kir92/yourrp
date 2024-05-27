@@ -113,14 +113,6 @@ end
 
 function YRPConST(ply, _time)
 	if not IsValid(ply) then return false end
-	if GetGlobalYRPBool("bool_onlywhencook", false) and not IsCookPlaying() then
-		if ply:GetYRPFloat("GetCurStamina") ~= 100 then
-			ply:SetYRPFloat("GetCurStamina", 100)
-		end
-
-		return false
-	end
-
 	if ply:GetMoveType() == MOVETYPE_NOCLIP then
 		local newval = ply:GetYRPFloat("GetCurStamina", 0) + 20
 		newval = math.Round(math.Clamp(newval, 0, ply:GetYRPFloat("GetMaxStamina", 100)), 1)
