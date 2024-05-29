@@ -57,6 +57,15 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slot_sidearm", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slot_gadget", "TEXT DEFAULT ''")
 -- Specs
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_specializations", "TEXT DEFAULT ''")
+function YRPIsOwningCharacter(ply, charId)
+	if ply == nil then return false end
+	if charId == nil then return false end
+	local tab = YRP_SQL_SELECT("yrp_characters", "uniqueID, SteamID", "uniqueID = '" .. charId .. "'")
+	if tab and tab[1] and ply:SteamID() == tab[1].SteamID then return true end
+
+	return false
+end
+
 function YRPGetSteamIdByCharId(charId)
 	if charId then
 		local tab = YRP_SQL_SELECT("yrp_characters", "uniqueID, SteamID", "uniqueID = '" .. charId .. "'")
@@ -931,6 +940,12 @@ net.Receive(
 	"nws_yrp_EnterWorld",
 	function(len, ply)
 		local cuid = net.ReadString()
+		if not YRPIsOwningCharacter(ply, cuid) then
+			YRP.msg("note", string.format("Exploiter [%s] found, ban him.", ply:SteamName()))
+
+			return
+		end
+
 		if ply:Alive() then
 			ply:KillSilent()
 		end
