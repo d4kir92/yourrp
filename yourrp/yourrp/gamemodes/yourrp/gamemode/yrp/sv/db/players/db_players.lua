@@ -226,7 +226,8 @@ function YRPPlayerGive(ply, cname, bNoAmmo)
 	end
 end
 
-function YRPSetRole(ply, rid, force, pmid, bgs)
+function YRPSetRole(from, ply, rid, force, pmid, bgs)
+	YRP.msg("note", "[YRPSetRole] " .. from)
 	if rid == nil then
 		YRP.msg("note", "[YRPSetRole] No roleid")
 
@@ -330,7 +331,7 @@ function YRPSetRole(ply, rid, force, pmid, bgs)
 end
 
 function YRPGiveRole(ply, rid, force)
-	YRPSetRole(ply, rid, force, nil)
+	YRPSetRole("YRPGiveRole", ply, rid, force, nil)
 end
 
 function YFAR(str, f, r)
@@ -876,9 +877,9 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_giveRole")
+util.AddNetworkString("nws_yrp_give_role")
 net.Receive(
-	"nws_yrp_giveRole",
+	"nws_yrp_give_role",
 	function(len, ply)
 		local _tmpSteamID = net.ReadString()
 		local uniqueIDRole = net.ReadInt(16)
@@ -887,7 +888,7 @@ net.Receive(
 			if IsValid(_ply) and tostring(_ply:YRPSteamID()) == tostring(_tmpSteamID) then
 				YRPRemRolVals(_ply)
 				YRPRemGroVals(_ply)
-				YRPSetRole(_ply, uniqueIDRole, true)
+				YRPSetRole("nws_yrp_give_role", _ply, uniqueIDRole, true)
 				YRP.msg("note", tostring(_ply:Nick()) .. " is now the role: " .. tostring(uniqueIDRole))
 
 				return true
@@ -1018,7 +1019,7 @@ function startVote(ply, tabl)
 					end
 
 					if _yes > _no and (_yes + _no) > 1 then
-						YRPSetRole(votePly, table[1].uniqueID)
+						YRPSetRole("startVote", votePly, table[1].uniqueID)
 					else
 						YRP.msg("gm", "VOTE: not enough yes")
 					end
@@ -1176,9 +1177,9 @@ function canVoteRole(ply, roleID)
 	return false
 end
 
-util.AddNetworkString("nws_yrp_wantRole")
+util.AddNetworkString("nws_yrp_want_role")
 net.Receive(
-	"nws_yrp_wantRole",
+	"nws_yrp_want_role",
 	function(len, ply)
 		local uniqueIDRole = net.ReadInt(16)
 		local pmid = net.ReadInt(16)
@@ -1194,7 +1195,7 @@ net.Receive(
 			end
 
 			--New role
-			YRPSetRole(ply, uniqueIDRole, false, pmid, bgs)
+			YRPSetRole("nws_yrp_want_role", ply, uniqueIDRole, false, pmid, bgs)
 			if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
 				ply:Spawn()
 				YRPTeleportToSpawnpoint(ply, "switchrole")

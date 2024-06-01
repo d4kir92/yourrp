@@ -113,7 +113,7 @@ net.Receive(
 					_giveButton:SetText(YRP.trans("LID_give"))
 					function _giveButton:DoClick()
 						if isnumber(tonumber(_giveComboBox2:GetOptionData(_giveComboBox2:GetSelectedID()))) then
-							net.Start("nws_yrp_giveRole")
+							net.Start("nws_yrp_give_role")
 							net.WriteString(_tmpSteamID)
 							net.WriteInt(_giveComboBox2:GetOptionData(_giveComboBox2:GetSelectedID()), 16)
 							net.SendToServer()

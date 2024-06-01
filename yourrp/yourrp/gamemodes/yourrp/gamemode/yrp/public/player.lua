@@ -631,7 +631,7 @@ function Player:SetRole(rid)
 	if SERVER then
 		YRPRemRolVals(self)
 		YRPRemGroVals(self)
-		YRPSetRole(self, rid, true)
+		YRPSetRole("Player:SetRole", self, rid, true)
 	else
 		YRP.msg("note", "SetRole is serversided")
 	end

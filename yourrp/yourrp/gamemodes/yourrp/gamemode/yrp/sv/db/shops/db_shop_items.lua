@@ -656,7 +656,7 @@ net.Receive(
 					local rid = _item.ClassName
 					YRPRemRolVals(ply)
 					YRPRemGroVals(ply)
-					YRPSetRole(ply, rid, true)
+					YRPSetRole("nws_yrp_item_buy", ply, rid, true)
 				else
 					local _spawned, ent = YRPSpawnItem(ply, _item, duid, count, itemColor)
 					if _spawned then

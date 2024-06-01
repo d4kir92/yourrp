@@ -27,6 +27,13 @@ hook.Add(
 				end
 			end
 		end
+
+		if IsValid(ply) then
+			local ragdoll = ply:GetRagdollEntity()
+			if IsValid(ragdoll) and ragdoll.index == ply:GetYRPInt("ent_ragdollindex") then
+				ragdoll:Remove()
+			end
+		end
 	end
 )
 
@@ -285,7 +292,7 @@ function YRPPlayerLoadout(ply)
 				ply:SetupCharID()
 				local _rol_tab = ply:YRPGetRoleTable()
 				if IsNotNilAndNotFalse(_rol_tab) then
-					YRPSetRole(ply, _rol_tab.uniqueID)
+					YRPSetRole("YRPPlayerLoadout", ply, _rol_tab.uniqueID)
 					YRPSetPlayerModel(ply)
 				else
 					YRP.msg("note", "Give role failed -> KillSilent -> " .. ply:YRPName() .. " role: " .. tostring(_rol_tab))
@@ -718,7 +725,7 @@ hook.Add(
 
 		local roleondeathuid = ply:GetRoleOnDeathRoleUID()
 		if roleondeathuid > 0 then
-			YRPSetRole(ply, roleondeathuid, false)
+			YRPSetRole("yrp_player_spawn_DoPlayerDeath", ply, roleondeathuid, false)
 		end
 
 		if IsDropItemsOnDeathEnabled() then

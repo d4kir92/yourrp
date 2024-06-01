@@ -2240,7 +2240,7 @@ net.Receive(
 				)
 
 				if IsValid(target) then
-					YRPSetRole(target, tmpTableTargetPromoteRole.uniqueID, true)
+					YRPSetRole("nws_yrp_promotePlayer", target, tmpTableTargetPromoteRole.uniqueID, true)
 				end
 
 				YRP.msg("note", ply:Nick() .. " promoted " .. chatab.rpname .. " to " .. tmpTableTargetPromoteRole.string_name)
@@ -2287,7 +2287,7 @@ net.Receive(
 			)
 
 			if IsValid(target) then
-				YRPSetRole(target, tmpTableTargetDemoteRole.uniqueID)
+				YRPSetRole("nws_yrp_demotePlayer", target, tmpTableTargetDemoteRole.uniqueID)
 			end
 
 			YRP.msg("note", ply:Nick() .. " demoted " .. chatab.rpname .. " to " .. tmpTableTargetDemoteRole.string_name)
@@ -2375,7 +2375,7 @@ net.Receive(
 			role = role[1]
 			addToWhitelist(tonumber(role.uniqueID), ply)
 			addToWhitelistGroup(tonumber(role.int_groupID), ply)
-			YRPSetRole(ply, tonumber(role.uniqueID))
+			YRPSetRole("nws_yrp_invite_accept", ply, tonumber(role.uniqueID))
 			YRP.msg("note", "[yrp_invite_accept] Added to whitelist and setrole for " .. ply:YRPName())
 			YRPUpdateGroupMemberLists()
 		else

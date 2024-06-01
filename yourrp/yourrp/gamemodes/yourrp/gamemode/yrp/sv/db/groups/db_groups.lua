@@ -996,7 +996,7 @@ net.Receive(
 
 		local target = YRPGetPlayerByCharID(uid)
 		if IsValid(target) then
-			YRPSetRole(target, 1, force)
+			YRPSetRole("nws_yrp_group_delmember", target, 1, force)
 		end
 
 		YRPSendGroupMember(ply, uid)
