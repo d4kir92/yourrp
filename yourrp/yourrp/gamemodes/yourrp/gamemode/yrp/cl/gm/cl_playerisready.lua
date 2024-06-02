@@ -105,3 +105,15 @@ net.Receive(
 		end
 	end
 )
+
+timer.Create(
+	"important",
+	1,
+	0,
+	function()
+		if ConVar and ConVar("sv_allowcslua") and ConVar("sv_allowcslua"):GetBool() then
+			YRP.msg("note", "NOT ALLOWED TO USE LUA SCRIPTS")
+			RunConsoleCommand("disconnect")
+		end
+	end
+)

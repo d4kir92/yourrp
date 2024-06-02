@@ -46,7 +46,7 @@ function Player:changeTeam(team, force, suppressNotification)
 			self:KillSilent()
 		end
 
-		YRPSetRole(self, team, false, nil)
+		YRPSetRole("changeTeam", self, team, false, nil)
 		if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
 			self:Spawn()
 		end

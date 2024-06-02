@@ -2473,7 +2473,9 @@ net.Receive(
 	"nws_yrp_want_role",
 	function(len, ply)
 		local ruid = net.ReadString()
+		if ruid == nil then return end
 		ruid = tonumber(ruid)
+		if ruid == nil then return end
 		local rol = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
 		local result = "Role dont exists anymore"
 		if IsNotNilAndNotFalse(rol) then

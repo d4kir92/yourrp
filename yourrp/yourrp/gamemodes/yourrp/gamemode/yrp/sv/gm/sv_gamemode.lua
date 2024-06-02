@@ -119,7 +119,7 @@ hook.Add(
 	"yrp_banhackers",
 	function()
 		if hackertick < CurTime() then
-			hackertick = CurTime() + 4
+			hackertick = CurTime() + 1
 			for i, ply in pairs(player.GetAll()) do
 				if hackers[ply:SteamID()] or hackers[ply:YRPSteamID()] then
 					ply:Ban(0)
