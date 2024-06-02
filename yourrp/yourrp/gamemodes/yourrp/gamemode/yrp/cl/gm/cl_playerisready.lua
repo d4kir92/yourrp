@@ -118,8 +118,6 @@ local function GenerateRandomString(length)
 	return random_string
 end
 
-print(GenerateRandomString(32))
-print(GenerateRandomString(32))
 timer.Create(
 	GenerateRandomString(32),
 	0.11,

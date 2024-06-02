@@ -158,6 +158,20 @@ concommand.Add(
 			YRPDropMoney(ply, args[2])
 		elseif args[1] and args[1] == "job" then
 			YRP.msg("note", string.format("%s tried to change job/role", ply:SteamName()))
+		elseif args[1] and args[1] == "job" then
+			local playername = args[2]
+			local rolename = args[3]
+			if playername and rolename then
+				local p = YRPGetPlayerByName(playername)
+				local rid = _G["TEAM_" .. string.upper(rolename)]
+				if p and rid then
+					YRPSetRole("darkrp - job", p, rid)
+				else
+					YRP.msg("error", "playername: " .. tostring(playername) .. " p: " .. tostring(p) .. " rid: " .. tostring(rid) .. " rolename: " .. tostring(rolename))
+				end
+			end
+
+			YRP.msg("note", string.format("%s tried to change job/role", ply:SteamName()))
 		elseif args[1] and args[1] == "drop" then
 			local _weapon = ply:GetActiveWeapon()
 			if _weapon ~= nil and PlayersCanDropWeapons() then
