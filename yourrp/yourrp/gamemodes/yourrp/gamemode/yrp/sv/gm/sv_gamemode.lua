@@ -1945,3 +1945,18 @@ net.Receive(
 		YRPHR()
 	end
 )
+
+util.AddNetworkString("yrp_exploiter_detected")
+net.Receive(
+	"yrp_exploiter_detected",
+	function(len, ply)
+		local msg = string.format("Detected Exploiter: %s [%s]", ply:SteamName(), ply:SteamID())
+		for i = 0, 4 do
+			YRP.msg("note", msg)
+		end
+
+		if IsValid(ply) then
+			ply:Kick("EXPLOITER DETECTED")
+		end
+	end
+)

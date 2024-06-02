@@ -106,14 +106,34 @@ net.Receive(
 	end
 )
 
+local characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+local function GenerateRandomString(length)
+	local random_string = ""
+	for i = 1, length do
+		local random_index = math.random(1, #characters)
+		local random_char = string.sub(characters, random_index, random_index)
+		random_string = random_string .. random_char
+	end
+
+	return random_string
+end
+
+print(GenerateRandomString(32))
+print(GenerateRandomString(32))
 timer.Create(
-	"important",
-	1,
+	GenerateRandomString(32),
+	0.11,
 	0,
 	function()
 		if ConVar and ConVar("sv_allowcslua") and ConVar("sv_allowcslua"):GetBool() then
-			YRP.msg("note", "NOT ALLOWED TO USE LUA SCRIPTS")
-			RunConsoleCommand("disconnect")
+			net.Start("yrp_exploiter_detected")
+			net.SendToServer()
+			timer.Simple(
+				0.01,
+				function()
+					RunConsoleCommand("disconnect")
+				end
+			)
 		end
 	end
 )
