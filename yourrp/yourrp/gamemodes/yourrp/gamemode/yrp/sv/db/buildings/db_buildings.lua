@@ -442,7 +442,7 @@ net.Receive(
 		if GetGlobalYRPBool("bool_building_system", false) then
 			local _tmpBuildingID = net.ReadString()
 			local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
-			if ply:canAfford(_tmpTable[1].buildingprice) then
+			if _tmpTable and _tmpTable[1] and ply:canAfford(_tmpTable[1].buildingprice) then
 				if (_tmpTable[1].ownerCharID == "" or _tmpTable[1].ownerCharID == " ") and tonumber(_tmpTable[1].groupID) <= 0 then
 					ply:addMoney(-_tmpTable[1].buildingprice)
 					YRP_SQL_UPDATE(

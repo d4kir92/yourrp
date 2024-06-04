@@ -42,7 +42,9 @@ util.AddNetworkString("nws_yrp_jail")
 net.Receive(
 	"nws_yrp_jail",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_canusewarnsystem", false) then return end
 		local target = net.ReadEntity()
+		if not IsValid(target) then return end
 		local jail = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. target:YRPSteamID() .. "'")
 		if IsNotNilAndNotFalse(jail) then
 			jail = jail[1]
@@ -56,7 +58,9 @@ util.AddNetworkString("nws_yrp_unjail")
 net.Receive(
 	"nws_yrp_unjail",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_canusewarnsystem", false) then return end
 		local target = net.ReadEntity()
+		if not IsValid(target) then return end
 		YRP_SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. target:YRPSteamID() .. "'")
 		teleportToReleasepoint(target)
 	end
