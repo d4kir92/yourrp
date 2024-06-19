@@ -299,7 +299,7 @@ net.Receive(
 						net.Receive(
 							"nws_yrp_get_hud_element_settings",
 							function(le)
-								if win then
+								if win and IsValid(win) then
 									local eletab = net.ReadTable()
 									local wx, wy = win:GetPos()
 									win.visible = false
