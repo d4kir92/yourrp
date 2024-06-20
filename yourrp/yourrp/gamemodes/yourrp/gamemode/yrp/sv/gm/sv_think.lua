@@ -709,12 +709,14 @@ hook.Add(
 						local npc = ents.Create(npc_spawner.string_classname)
 						if npc:IsValid() then
 							npc:Spawn()
-							if not strEmpty(npc_spawner.string_swep) then
-								npc:Give(npc_spawner.string_swep)
-							end
+							if npc then
+								if not strEmpty(npc_spawner.string_swep) and npc.Give then
+									npc:Give(npc_spawner.string_swep)
+								end
 
-							YRPTeleportToPoint(npc, pos)
-							table.insert(YNPCs[v.uniqueID].npcs, npc)
+								YRPTeleportToPoint(npc, pos)
+								table.insert(YNPCs[v.uniqueID].npcs, npc)
+							end
 						end
 					end
 				end
