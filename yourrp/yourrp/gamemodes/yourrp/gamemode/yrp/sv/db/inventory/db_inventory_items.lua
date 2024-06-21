@@ -120,7 +120,7 @@ function GetItem(slotID)
 	return false
 end
 
-util.AddNetworkString("nws_yrp_item_unstore")
+YRP.AddNetworkString("nws_yrp_item_unstore")
 function UnstoreItem(slotID, ply)
 	slotID = tonumber(slotID)
 	if ply ~= nil then
@@ -136,7 +136,7 @@ function UnstoreItem(slotID, ply)
 	end
 end
 
-util.AddNetworkString("nws_yrp_item_store")
+YRP.AddNetworkString("nws_yrp_item_store")
 function StoreItem(slotID, itemTable, ply)
 	slotID = tonumber(slotID)
 	itemTable.isinv = false
@@ -195,7 +195,7 @@ function DropItem(ply, slotID)
 	end
 end
 
-util.AddNetworkString("yrpclosebag")
+YRP.AddNetworkString("yrpclosebag")
 function CloseBag(storID)
 	net.Start("yrpclosebag")
 	net.WriteString(storID)
@@ -275,7 +275,7 @@ function MoveItem(itemID, slotID)
 end
 
 -- Networking
-util.AddNetworkString("nws_yrp_item_clicked")
+YRP.AddNetworkString("nws_yrp_item_clicked")
 net.Receive(
 	"nws_yrp_item_clicked",
 	function(len, ply)
@@ -296,7 +296,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_item_move")
+YRP.AddNetworkString("nws_yrp_item_move")
 net.Receive(
 	"nws_yrp_item_move",
 	function(len, ply)
@@ -308,7 +308,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_item_drop")
+YRP.AddNetworkString("nws_yrp_item_drop")
 net.Receive(
 	"nws_yrp_item_drop",
 	function(len, ply)

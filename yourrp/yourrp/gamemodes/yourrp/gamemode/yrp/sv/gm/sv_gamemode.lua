@@ -1070,7 +1070,7 @@ hook.Add(
 	end
 )
 
-util.AddNetworkString("nws_yrp_voice_start")
+YRP.AddNetworkString("nws_yrp_voice_start")
 net.Receive(
 	"nws_yrp_voice_start",
 	function(len, ply)
@@ -1078,7 +1078,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_voice_end")
+YRP.AddNetworkString("nws_yrp_voice_end")
 net.Receive(
 	"nws_yrp_voice_end",
 	function(len, ply)
@@ -1086,7 +1086,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_mute_voice")
+YRP.AddNetworkString("nws_yrp_mute_voice")
 net.Receive(
 	"nws_yrp_mute_voice",
 	function(len, ply)
@@ -1094,7 +1094,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_voice_range_up")
+YRP.AddNetworkString("nws_yrp_voice_range_up")
 net.Receive(
 	"nws_yrp_voice_range_up",
 	function(len, ply)
@@ -1102,7 +1102,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_voice_range_dn")
+YRP.AddNetworkString("nws_yrp_voice_range_dn")
 net.Receive(
 	"nws_yrp_voice_range_dn",
 	function(len, ply)
@@ -1225,7 +1225,7 @@ function GenerateVoiceTable()
 end
 
 GenerateVoiceTable()
-util.AddNetworkString("nws_yrp_vm_get_active_usergroups")
+YRP.AddNetworkString("nws_yrp_vm_get_active_usergroups")
 net.Receive(
 	"nws_yrp_vm_get_active_usergroups",
 	function(len, ply)
@@ -1238,7 +1238,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_vm_get_active_groups")
+YRP.AddNetworkString("nws_yrp_vm_get_active_groups")
 net.Receive(
 	"nws_yrp_vm_get_active_groups",
 	function(len, ply)
@@ -1251,7 +1251,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_vm_get_active_roles")
+YRP.AddNetworkString("nws_yrp_vm_get_active_roles")
 net.Receive(
 	"nws_yrp_vm_get_active_roles",
 	function(len, ply)
@@ -1264,7 +1264,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_vm_get_passive_usergroups")
+YRP.AddNetworkString("nws_yrp_vm_get_passive_usergroups")
 net.Receive(
 	"nws_yrp_vm_get_passive_usergroups",
 	function(len, ply)
@@ -1277,7 +1277,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_vm_get_passive_groups")
+YRP.AddNetworkString("nws_yrp_vm_get_passive_groups")
 net.Receive(
 	"nws_yrp_vm_get_passive_groups",
 	function(len, ply)
@@ -1290,7 +1290,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_vm_get_passive_roles")
+YRP.AddNetworkString("nws_yrp_vm_get_passive_roles")
 net.Receive(
 	"nws_yrp_vm_get_passive_roles",
 	function(len, ply)
@@ -1303,7 +1303,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_voice_channel_add")
+YRP.AddNetworkString("nws_yrp_voice_channel_add")
 net.Receive(
 	"nws_yrp_voice_channel_add",
 	function(len, ply)
@@ -1336,7 +1336,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_voice_channel_save")
+YRP.AddNetworkString("nws_yrp_voice_channel_save")
 net.Receive(
 	"nws_yrp_voice_channel_save",
 	function(len, ply)
@@ -1367,7 +1367,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_voice_channel_rem")
+YRP.AddNetworkString("nws_yrp_voice_channel_rem")
 net.Receive(
 	"nws_yrp_voice_channel_rem",
 	function(len, ply)
@@ -1393,7 +1393,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_channel_up")
+YRP.AddNetworkString("nws_yrp_channel_up")
 net.Receive(
 	"nws_yrp_channel_up",
 	function(len, ply)
@@ -1443,7 +1443,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_channel_dn")
+YRP.AddNetworkString("nws_yrp_channel_dn")
 net.Receive(
 	"nws_yrp_channel_dn",
 	function(len, ply)
@@ -1551,7 +1551,7 @@ function YRPSwitchToVoiceChannel(ply, uid)
 	YRPCountPassiveChannels(ply)
 end
 
-util.AddNetworkString("nws_yrp_mutemic_channel")
+YRP.AddNetworkString("nws_yrp_mutemic_channel")
 net.Receive(
 	"nws_yrp_mutemic_channel",
 	function(len, ply)
@@ -1568,7 +1568,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_mute_channel")
+YRP.AddNetworkString("nws_yrp_mute_channel")
 net.Receive(
 	"nws_yrp_mute_channel",
 	function(len, ply)
@@ -1583,7 +1583,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_mutemic_channel_all")
+YRP.AddNetworkString("nws_yrp_mutemic_channel_all")
 net.Receive(
 	"nws_yrp_mutemic_channel_all",
 	function(len, ply)
@@ -1597,7 +1597,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_mute_channel_all")
+YRP.AddNetworkString("nws_yrp_mute_channel_all")
 net.Receive(
 	"nws_yrp_mute_channel_all",
 	function(len, ply)
@@ -1649,7 +1649,7 @@ function YRPMoveAllToNext(ply)
 	end
 end
 
-util.AddNetworkString("nws_yrp_next_voice_channel")
+YRP.AddNetworkString("nws_yrp_next_voice_channel")
 net.Receive(
 	"nws_yrp_next_voice_channel",
 	function(len, ply)
@@ -1660,7 +1660,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_ToggleVoiceMenu")
+YRP.AddNetworkString("nws_yrp_ToggleVoiceMenu")
 net.Receive(
 	"nws_yrp_ToggleVoiceMenu",
 	function(len, ply)
@@ -1668,7 +1668,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_voice_set_max_active")
+YRP.AddNetworkString("nws_yrp_voice_set_max_active")
 net.Receive(
 	"nws_yrp_voice_set_max_active",
 	function(len, ply)
@@ -1684,7 +1684,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_voice_set_max_passive")
+YRP.AddNetworkString("nws_yrp_voice_set_max_passive")
 net.Receive(
 	"nws_yrp_voice_set_max_passive",
 	function(len, ply)
@@ -1932,7 +1932,7 @@ function YRPImportFileToTable(filename, name)
 	end
 end
 
-util.AddNetworkString("nws_yrp_import_darkrp")
+YRP.AddNetworkString("nws_yrp_import_darkrp")
 net.Receive(
 	"nws_yrp_import_darkrp",
 	function(len, ply)
@@ -1946,7 +1946,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("yrp_exploiter_detected")
+YRP.AddNetworkString("yrp_exploiter_detected")
 net.Receive(
 	"yrp_exploiter_detected",
 	function(len, ply)

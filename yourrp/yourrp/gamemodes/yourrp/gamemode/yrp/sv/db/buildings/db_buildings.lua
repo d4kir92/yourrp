@@ -116,7 +116,7 @@ function YRPSearchForDoors()
 	return allDoorsNum
 end
 
-util.AddNetworkString("nws_yrp_loaded_doors")
+YRP.AddNetworkString("nws_yrp_loaded_doors")
 function YRPLoadDoors()
 	if GetGlobalYRPBool("bool_building_system", false) then
 		YRP.msg("note", "[Buildings] Setting up Doors!")
@@ -238,21 +238,21 @@ function YRPCheckMapDoors()
 	YRPLoadDoors()
 end
 
-util.AddNetworkString("nws_yrp_sendBuildingInfo")
-util.AddNetworkString("nws_yrp_getBuildingInfo")
-util.AddNetworkString("nws_yrp_getBuildings")
-util.AddNetworkString("nws_yrp_changeBuildingName")
-util.AddNetworkString("nws_yrp_changeBuildingID")
-util.AddNetworkString("nws_yrp_changeBuildingPrice")
-util.AddNetworkString("nws_yrp_changeBuildingSL")
-util.AddNetworkString("nws_yrp_changeBuildingHeader")
-util.AddNetworkString("nws_yrp_changeBuildingDescription")
-util.AddNetworkString("nws_yrp_getBuildingGroups")
-util.AddNetworkString("nws_yrp_setBuildingOwnerGroup")
-util.AddNetworkString("nws_yrp_buyBuilding")
-util.AddNetworkString("nws_yrp_removeOwner")
-util.AddNetworkString("nws_yrp_sellBuilding")
-util.AddNetworkString("nws_yrp_addnewbuilding")
+YRP.AddNetworkString("nws_yrp_sendBuildingInfo")
+YRP.AddNetworkString("nws_yrp_getBuildingInfo")
+YRP.AddNetworkString("nws_yrp_getBuildings")
+YRP.AddNetworkString("nws_yrp_changeBuildingName")
+YRP.AddNetworkString("nws_yrp_changeBuildingID")
+YRP.AddNetworkString("nws_yrp_changeBuildingPrice")
+YRP.AddNetworkString("nws_yrp_changeBuildingSL")
+YRP.AddNetworkString("nws_yrp_changeBuildingHeader")
+YRP.AddNetworkString("nws_yrp_changeBuildingDescription")
+YRP.AddNetworkString("nws_yrp_getBuildingGroups")
+YRP.AddNetworkString("nws_yrp_setBuildingOwnerGroup")
+YRP.AddNetworkString("nws_yrp_buyBuilding")
+YRP.AddNetworkString("nws_yrp_removeOwner")
+YRP.AddNetworkString("nws_yrp_sellBuilding")
+YRP.AddNetworkString("nws_yrp_addnewbuilding")
 net.Receive(
 	"nws_yrp_addnewbuilding",
 	function(len, ply)
@@ -266,7 +266,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_door_anim")
+YRP.AddNetworkString("nws_yrp_door_anim")
 function YRPFireUnlock(ent, owner)
 	ent:Fire("Unlock")
 	if YRPEntityAlive(owner) then
@@ -480,7 +480,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_addCoownerBuilding")
+YRP.AddNetworkString("nws_yrp_addCoownerBuilding")
 net.Receive(
 	"nws_yrp_addCoownerBuilding",
 	function(len, ply)
@@ -521,7 +521,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_removeAllCoownerBuilding")
+YRP.AddNetworkString("nws_yrp_removeAllCoownerBuilding")
 net.Receive(
 	"nws_yrp_removeAllCoownerBuilding",
 	function(len, ply)
@@ -632,7 +632,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_canBuildingBeOwned")
+YRP.AddNetworkString("nws_yrp_canBuildingBeOwned")
 net.Receive(
 	"nws_yrp_canBuildingBeOwned",
 	function(len, ply)
@@ -911,7 +911,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_lockdown_buildings")
+YRP.AddNetworkString("nws_yrp_update_lockdown_buildings")
 net.Receive(
 	"nws_yrp_update_lockdown_buildings",
 	function(len, ply)

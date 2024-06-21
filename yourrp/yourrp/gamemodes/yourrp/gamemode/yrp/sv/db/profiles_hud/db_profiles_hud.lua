@@ -10,7 +10,7 @@ function GetHudProfiles()
 	return YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'name'")
 end
 
-util.AddNetworkString("nws_yrp_change_to_hud_profile")
+YRP.AddNetworkString("nws_yrp_change_to_hud_profile")
 net.Receive(
 	"nws_yrp_change_to_hud_profile",
 	function()

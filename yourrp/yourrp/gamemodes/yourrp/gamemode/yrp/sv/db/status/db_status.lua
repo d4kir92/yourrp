@@ -12,7 +12,7 @@ function AddToHandler_Status(ply)
 	end
 end
 
-util.AddNetworkString("nws_yrp_connect_Settings_Status")
+YRP.AddNetworkString("nws_yrp_connect_Settings_Status")
 net.Receive(
 	"nws_yrp_connect_Settings_Status",
 	function(len, ply)
@@ -119,7 +119,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_disconnect_Settings_Status")
+YRP.AddNetworkString("nws_yrp_disconnect_Settings_Status")
 net.Receive(
 	"nws_yrp_disconnect_Settings_Status",
 	function(len, ply)

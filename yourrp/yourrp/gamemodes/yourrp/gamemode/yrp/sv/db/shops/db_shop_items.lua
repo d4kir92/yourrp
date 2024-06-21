@@ -16,7 +16,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "type", "TEXT DEFAULT 'weapons'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT 'weapon_crowbar'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "PrintName", "TEXT DEFAULT 'unnamed item'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "WorldModel", "TEXT DEFAULT ''")
-util.AddNetworkString("nws_yrp_get_shop_items")
+YRP.AddNetworkString("nws_yrp_get_shop_items")
 function send_shop_items(ply, uid)
 	local _s_items = YRP_SQL_SELECT(DATABASE_NAME, "*", "categoryID = " .. uid)
 	local _nw = _s_items
@@ -37,7 +37,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_item_add")
+YRP.AddNetworkString("nws_yrp_shop_item_add")
 net.Receive(
 	"nws_yrp_shop_item_add",
 	function(len, ply)
@@ -48,7 +48,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_item_rem")
+YRP.AddNetworkString("nws_yrp_shop_item_rem")
 net.Receive(
 	"nws_yrp_shop_item_rem",
 	function(len, ply)
@@ -60,7 +60,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_item_edit_name")
+YRP.AddNetworkString("nws_yrp_shop_item_edit_name")
 net.Receive(
 	"nws_yrp_shop_item_edit_name",
 	function(len, ply)
@@ -78,7 +78,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_item_edit_desc")
+YRP.AddNetworkString("nws_yrp_shop_item_edit_desc")
 net.Receive(
 	"nws_yrp_shop_item_edit_desc",
 	function(len, ply)
@@ -96,7 +96,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_item_edit_price")
+YRP.AddNetworkString("nws_yrp_shop_item_edit_price")
 net.Receive(
 	"nws_yrp_shop_item_edit_price",
 	function(len, ply)
@@ -114,7 +114,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_item_edit_level")
+YRP.AddNetworkString("nws_yrp_shop_item_edit_level")
 net.Receive(
 	"nws_yrp_shop_item_edit_level",
 	function(len, ply)
@@ -132,7 +132,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_item_edit_quan")
+YRP.AddNetworkString("nws_yrp_shop_item_edit_quan")
 net.Receive(
 	"nws_yrp_shop_item_edit_quan",
 	function(len, ply)
@@ -150,7 +150,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_item_edit_cool")
+YRP.AddNetworkString("nws_yrp_shop_item_edit_cool")
 net.Receive(
 	"nws_yrp_shop_item_edit_cool",
 	function(len, ply)
@@ -168,7 +168,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_item_edit_lice")
+YRP.AddNetworkString("nws_yrp_shop_item_edit_lice")
 net.Receive(
 	"nws_yrp_shop_item_edit_lice",
 	function(len, ply)
@@ -187,7 +187,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_item_edit_perm")
+YRP.AddNetworkString("nws_yrp_shop_item_edit_perm")
 net.Receive(
 	"nws_yrp_shop_item_edit_perm",
 	function(len, ply)
@@ -205,7 +205,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_get_items_storage")
+YRP.AddNetworkString("nws_yrp_shop_get_items_storage")
 net.Receive(
 	"nws_yrp_shop_get_items_storage",
 	function(len, ply)
@@ -229,7 +229,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_get_items")
+YRP.AddNetworkString("nws_yrp_shop_get_items")
 net.Receive(
 	"nws_yrp_shop_get_items",
 	function(len, ply)
@@ -269,7 +269,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_item_edit_base")
+YRP.AddNetworkString("nws_yrp_shop_item_edit_base")
 net.Receive(
 	"nws_yrp_shop_item_edit_base",
 	function(len, ply)
@@ -615,7 +615,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 	return false
 end
 
-util.AddNetworkString("nws_yrp_item_buy")
+YRP.AddNetworkString("nws_yrp_item_buy")
 net.Receive(
 	"nws_yrp_item_buy",
 	function(len, ply)
@@ -710,7 +710,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_item_spawn")
+YRP.AddNetworkString("nws_yrp_item_spawn")
 net.Receive(
 	"nws_yrp_item_spawn",
 	function(len, ply)
@@ -738,7 +738,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_item_despawn")
+YRP.AddNetworkString("nws_yrp_item_despawn")
 net.Receive(
 	"nws_yrp_item_despawn",
 	function(len, ply)

@@ -46,7 +46,7 @@ if IsNotNilAndNotFalse(dbpms) then
 	end
 end
 
-util.AddNetworkString("nws_yrp_rem_playermodel")
+YRP.AddNetworkString("nws_yrp_rem_playermodel")
 net.Receive(
 	"nws_yrp_rem_playermodel",
 	function(len, ply)

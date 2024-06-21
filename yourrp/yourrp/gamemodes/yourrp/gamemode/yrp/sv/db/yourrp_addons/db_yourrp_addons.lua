@@ -14,7 +14,7 @@ function AddToHandler_YourRP_Addons(ply)
 	end
 end
 
-util.AddNetworkString("nws_yrp_connect_Settings_YourRP_Addons")
+YRP.AddNetworkString("nws_yrp_connect_Settings_YourRP_Addons")
 net.Receive(
 	"nws_yrp_connect_Settings_YourRP_Addons",
 	function(len, ply)
@@ -31,7 +31,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_disconnect_Settings_YourRP_Addons")
+YRP.AddNetworkString("nws_yrp_disconnect_Settings_YourRP_Addons")
 net.Receive(
 	"nws_yrp_disconnect_Settings_YourRP_Addons",
 	function(len, ply)

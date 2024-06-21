@@ -17,7 +17,7 @@ function YRPTeleportToPoint(ply, pos)
 	tp_to(ply, Vector(pos[1], pos[2], pos[3]))
 end
 
-util.AddNetworkString("nws_yrp_noti")
+YRP.AddNetworkString("nws_yrp_noti")
 function YRPTeleportToSpawnpoint(ply, from)
 	if ply.ignorespawnpoint == true then
 		timer.Simple(
@@ -120,9 +120,9 @@ function YRPTeleportToSpawnpoint(ply, from)
 	return false
 end
 
-util.AddNetworkString("nws_yrp_getMapList")
-util.AddNetworkString("nws_yrp_dbInsertIntoMap")
-util.AddNetworkString("nws_yrp_removeMapEntry")
+YRP.AddNetworkString("nws_yrp_getMapList")
+YRP.AddNetworkString("nws_yrp_dbInsertIntoMap")
+YRP.AddNetworkString("nws_yrp_removeMapEntry")
 net.Receive(
 	"nws_yrp_removeMapEntry",
 	function(len, ply)
@@ -161,7 +161,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getMapListGroups")
+YRP.AddNetworkString("nws_yrp_getMapListGroups")
 net.Receive(
 	"nws_yrp_getMapListGroups",
 	function(len, ply)
@@ -177,7 +177,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getMapListRoles")
+YRP.AddNetworkString("nws_yrp_getMapListRoles")
 net.Receive(
 	"nws_yrp_getMapListRoles",
 	function(len, ply)
@@ -222,7 +222,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_dealer_settings")
+YRP.AddNetworkString("nws_yrp_dealer_settings")
 net.Receive(
 	"nws_yrp_dealer_settings",
 	function(len, ply)
@@ -238,7 +238,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_teleportto")
+YRP.AddNetworkString("nws_yrp_teleportto")
 net.Receive(
 	"nws_yrp_teleportto",
 	function(len, ply)
@@ -255,7 +255,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_map_name")
+YRP.AddNetworkString("nws_yrp_update_map_name")
 net.Receive(
 	"nws_yrp_update_map_name",
 	function(len, ply)
@@ -273,7 +273,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_map_color")
+YRP.AddNetworkString("nws_yrp_update_map_color")
 net.Receive(
 	"nws_yrp_update_map_color",
 	function(len, ply)
@@ -291,7 +291,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_map_int_respawntime")
+YRP.AddNetworkString("nws_yrp_update_map_int_respawntime")
 net.Receive(
 	"nws_yrp_update_map_int_respawntime",
 	function(len, ply)
@@ -310,7 +310,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_map_string_swep")
+YRP.AddNetworkString("nws_yrp_update_map_string_swep")
 net.Receive(
 	"nws_yrp_update_map_string_swep",
 	function(len, ply)
@@ -328,7 +328,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_map_int_amount")
+YRP.AddNetworkString("nws_yrp_update_map_int_amount")
 net.Receive(
 	"nws_yrp_update_map_int_amount",
 	function(len, ply)
@@ -347,7 +347,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_map_string_classname")
+YRP.AddNetworkString("nws_yrp_update_map_string_classname")
 net.Receive(
 	"nws_yrp_update_map_string_classname",
 	function(len, ply)
@@ -367,7 +367,7 @@ net.Receive(
 )
 
 -- NEW MAP PAGE
-util.AddNetworkString("nws_yrp_getMapSite")
+YRP.AddNetworkString("nws_yrp_getMapSite")
 net.Receive(
 	"nws_yrp_getMapSite",
 	function(len, ply)
@@ -377,7 +377,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getMapTab")
+YRP.AddNetworkString("nws_yrp_getMapTab")
 net.Receive(
 	"nws_yrp_getMapTab",
 	function(len, ply)

@@ -4,7 +4,7 @@
 local DATABASE_NAME = "yrp_events"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_eventname", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_chars", "TEXT DEFAULT ''")
-util.AddNetworkString("nws_yrp_setting_events")
+YRP.AddNetworkString("nws_yrp_setting_events")
 net.Receive(
 	"nws_yrp_setting_events",
 	function(len, ply)
@@ -27,7 +27,7 @@ function YRPSendEvents(ply)
 	net.Send(ply)
 end
 
-util.AddNetworkString("nws_yrp_get_events")
+YRP.AddNetworkString("nws_yrp_get_events")
 net.Receive(
 	"nws_yrp_get_events",
 	function(len, ply)
@@ -37,7 +37,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_event_add")
+YRP.AddNetworkString("nws_yrp_event_add")
 net.Receive(
 	"nws_yrp_event_add",
 	function(len, ply)
@@ -51,7 +51,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_event_remove")
+YRP.AddNetworkString("nws_yrp_event_remove")
 net.Receive(
 	"nws_yrp_event_remove",
 	function(len, ply)
@@ -78,7 +78,7 @@ function YRPSendEventChars(ply, uid)
 	net.Send(ply)
 end
 
-util.AddNetworkString("nws_yrp_get_event_chars")
+YRP.AddNetworkString("nws_yrp_get_event_chars")
 net.Receive(
 	"nws_yrp_get_event_chars",
 	function(len, ply)
@@ -87,7 +87,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_event_get_chars")
+YRP.AddNetworkString("nws_yrp_event_get_chars")
 net.Receive(
 	"nws_yrp_event_get_chars",
 	function(len, ply)
@@ -103,7 +103,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_event_char_add")
+YRP.AddNetworkString("nws_yrp_event_char_add")
 net.Receive(
 	"nws_yrp_event_char_add",
 	function(len, ply)
@@ -134,7 +134,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_event_char_remove")
+YRP.AddNetworkString("nws_yrp_event_char_remove")
 net.Receive(
 	"nws_yrp_event_char_remove",
 	function(len, ply)
@@ -221,7 +221,7 @@ function YRPSpawnAsCharacter(ply, cuid, force)
 	end
 end
 
-util.AddNetworkString("nws_yrp_info3")
+YRP.AddNetworkString("nws_yrp_info3")
 function YRPNotiBro(msg)
 	if msg then
 		net.Start("nws_yrp_info3")
@@ -230,7 +230,7 @@ function YRPNotiBro(msg)
 	end
 end
 
-util.AddNetworkString("nws_yrp_event_start")
+YRP.AddNetworkString("nws_yrp_event_start")
 net.Receive(
 	"nws_yrp_event_start",
 	function(len, ply)
@@ -256,7 +256,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_event_end")
+YRP.AddNetworkString("nws_yrp_event_end")
 net.Receive(
 	"nws_yrp_event_end",
 	function(len, ply)

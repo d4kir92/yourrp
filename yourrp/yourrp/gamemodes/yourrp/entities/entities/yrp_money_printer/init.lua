@@ -2,8 +2,8 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
-util.AddNetworkString("nws_yrp_getMoneyPrintMenu")
-util.AddNetworkString("nws_yrp_upgradeCPU")
+YRP.AddNetworkString("nws_yrp_getMoneyPrintMenu")
+YRP.AddNetworkString("nws_yrp_upgradeCPU")
 net.Receive(
 	"nws_yrp_upgradeCPU",
 	function(len, ply)
@@ -19,7 +19,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_upgradeCooler")
+YRP.AddNetworkString("nws_yrp_upgradeCooler")
 net.Receive(
 	"nws_yrp_upgradeCooler",
 	function(len, ply)
@@ -35,7 +35,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_upgradePrinter")
+YRP.AddNetworkString("nws_yrp_upgradePrinter")
 net.Receive(
 	"nws_yrp_upgradePrinter",
 	function(len, ply)
@@ -50,7 +50,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_upgradeStorage")
+YRP.AddNetworkString("nws_yrp_upgradeStorage")
 net.Receive(
 	"nws_yrp_upgradeStorage",
 	function(len, ply)
@@ -67,7 +67,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_fuelUp")
+YRP.AddNetworkString("nws_yrp_fuelUp")
 net.Receive(
 	"nws_yrp_fuelUp",
 	function(len, ply)
@@ -85,7 +85,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_repairMP")
+YRP.AddNetworkString("nws_yrp_repairMP")
 net.Receive(
 	"nws_yrp_repairMP",
 	function(len, ply)
@@ -103,7 +103,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_withdrawMoney")
+YRP.AddNetworkString("nws_yrp_withdrawMoney")
 net.Receive(
 	"nws_yrp_withdrawMoney",
 	function(len, ply)
@@ -116,7 +116,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_startMoneyPrinter")
+YRP.AddNetworkString("nws_yrp_startMoneyPrinter")
 net.Receive(
 	"nws_yrp_startMoneyPrinter",
 	function(len, ply)

@@ -32,7 +32,7 @@ function LoadBlacklist()
 end
 
 LoadBlacklist()
-util.AddNetworkString("nws_yrp_blacklist_get")
+YRP.AddNetworkString("nws_yrp_blacklist_get")
 net.Receive(
 	"nws_yrp_blacklist_get",
 	function(len, ply)
@@ -53,7 +53,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_blacklist_add")
+YRP.AddNetworkString("nws_yrp_blacklist_add")
 net.Receive(
 	"nws_yrp_blacklist_add",
 	function(len, ply)
@@ -68,7 +68,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_blacklist_remove")
+YRP.AddNetworkString("nws_yrp_blacklist_remove")
 net.Receive(
 	"nws_yrp_blacklist_remove",
 	function(len, ply)

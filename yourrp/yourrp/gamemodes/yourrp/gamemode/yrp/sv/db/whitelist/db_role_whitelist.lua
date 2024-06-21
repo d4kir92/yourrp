@@ -10,14 +10,14 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "groupID", "INTEGER DEFAULT -1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "roleID", "INTEGER DEFAULT -1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "status", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "date", "TEXT DEFAULT '0000-00-00 00-00-00'")
-util.AddNetworkString("nws_yrp_getRoleWhitelist")
-util.AddNetworkString("nws_yrp_getRoleWhitelist_line")
-util.AddNetworkString("nws_yrp_whitelistPlayer")
-util.AddNetworkString("nws_yrp_whitelistPlayerGroup")
-util.AddNetworkString("nws_yrp_whitelistPlayerAll")
-util.AddNetworkString("nws_yrp_whitelistPlayerRemove")
-util.AddNetworkString("nws_yrp_InfoBox")
-util.AddNetworkString("nws_yrp_getGroupsWhitelist")
+YRP.AddNetworkString("nws_yrp_getRoleWhitelist")
+YRP.AddNetworkString("nws_yrp_getRoleWhitelist_line")
+YRP.AddNetworkString("nws_yrp_whitelistPlayer")
+YRP.AddNetworkString("nws_yrp_whitelistPlayerGroup")
+YRP.AddNetworkString("nws_yrp_whitelistPlayerAll")
+YRP.AddNetworkString("nws_yrp_whitelistPlayerRemove")
+YRP.AddNetworkString("nws_yrp_InfoBox")
+YRP.AddNetworkString("nws_yrp_getGroupsWhitelist")
 net.Receive(
 	"nws_yrp_getGroupsWhitelist",
 	function(len, ply)
@@ -31,7 +31,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getRolesWhitelist")
+YRP.AddNetworkString("nws_yrp_getRolesWhitelist")
 net.Receive(
 	"nws_yrp_getRolesWhitelist",
 	function(len, ply)

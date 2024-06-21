@@ -16,7 +16,7 @@ if IsNotNilAndNotFalse(logTab) then
 	end
 end
 
-util.AddNetworkString("nws_yrp_get_logs_settings")
+YRP.AddNetworkString("nws_yrp_get_logs_settings")
 net.Receive(
 	"nws_yrp_get_logs_settings",
 	function(len, ply)

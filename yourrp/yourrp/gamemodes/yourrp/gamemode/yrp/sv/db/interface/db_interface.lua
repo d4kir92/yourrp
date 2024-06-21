@@ -108,7 +108,7 @@ function IFLoadoutAll()
 end
 
 IFLoadoutAll()
-util.AddNetworkString("nws_yrp_get_interface_settings")
+YRP.AddNetworkString("nws_yrp_get_interface_settings")
 net.Receive(
 	"nws_yrp_get_interface_settings",
 	function(len, ply)
@@ -123,7 +123,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_interface_color")
+YRP.AddNetworkString("nws_yrp_update_interface_color")
 net.Receive(
 	"nws_yrp_update_interface_color",
 	function(len, ply)
@@ -188,7 +188,7 @@ function ResetDesign()
 	IFLoadoutAll()
 end
 
-util.AddNetworkString("nws_yrp_reset_interface_design")
+YRP.AddNetworkString("nws_yrp_reset_interface_design")
 net.Receive(
 	"nws_yrp_reset_interface_design",
 	function(len, ply)

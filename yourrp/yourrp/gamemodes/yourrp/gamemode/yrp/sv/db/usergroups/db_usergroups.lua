@@ -253,7 +253,7 @@ function AddToHandler_UserGroups(ply)
 	end
 end
 
-util.AddNetworkString("nws_yrp_disconnect_Settings_UserGroups")
+YRP.AddNetworkString("nws_yrp_disconnect_Settings_UserGroups")
 net.Receive(
 	"nws_yrp_disconnect_Settings_UserGroups",
 	function(len, ply)
@@ -305,7 +305,7 @@ function GetULXUserGroups()
 end
 
 timer.Simple(1, GetULXUserGroups)
-util.AddNetworkString("nws_yrp_connect_Settings_UserGroups")
+YRP.AddNetworkString("nws_yrp_connect_Settings_UserGroups")
 net.Receive(
 	"nws_yrp_connect_Settings_UserGroups",
 	function(len, ply)
@@ -363,7 +363,7 @@ function AddToHandler_UserGroup(ply, uid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_disconnect_Settings_UserGroup")
+YRP.AddNetworkString("nws_yrp_disconnect_Settings_UserGroup")
 net.Receive(
 	"nws_yrp_disconnect_Settings_UserGroup",
 	function(len, ply)
@@ -373,7 +373,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_connect_Settings_UserGroup")
+YRP.AddNetworkString("nws_yrp_connect_Settings_UserGroup")
 net.Receive(
 	"nws_yrp_connect_Settings_UserGroup",
 	function(len, ply)
@@ -396,7 +396,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_add")
+YRP.AddNetworkString("nws_yrp_usergroup_add")
 net.Receive(
 	"nws_yrp_usergroup_add",
 	function(len, ply)
@@ -407,7 +407,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_rem")
+YRP.AddNetworkString("nws_yrp_usergroup_rem")
 net.Receive(
 	"nws_yrp_usergroup_rem",
 	function(len, ply)
@@ -430,7 +430,7 @@ function Player:NoAccess(site, usergroups)
 	net.Send(self)
 end
 
-util.AddNetworkString("nws_yrp_setting_hasnoaccess")
+YRP.AddNetworkString("nws_yrp_setting_hasnoaccess")
 function Player:CanAccess(site)
 	local lsite = string.Replace(site, "bool_", "")
 	local usergroups = ""
@@ -466,7 +466,7 @@ end
 
 --[[ Usergroup Edit ]]
 --
-util.AddNetworkString("nws_yrp_usergroup_update_string_name")
+YRP.AddNetworkString("nws_yrp_usergroup_update_string_name")
 net.Receive(
 	"nws_yrp_usergroup_update_string_name",
 	function(len, ply)
@@ -491,7 +491,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_string_displayname")
+YRP.AddNetworkString("nws_yrp_usergroup_update_string_displayname")
 net.Receive(
 	"nws_yrp_usergroup_update_string_displayname",
 	function(len, ply)
@@ -516,7 +516,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_string_color")
+YRP.AddNetworkString("nws_yrp_usergroup_update_string_color")
 net.Receive(
 	"nws_yrp_usergroup_update_string_color",
 	function(len, ply)
@@ -541,7 +541,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_icon")
+YRP.AddNetworkString("nws_yrp_usergroup_update_icon")
 net.Receive(
 	"nws_yrp_usergroup_update_icon",
 	function(len, ply)
@@ -567,7 +567,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_string_sweps")
+YRP.AddNetworkString("nws_yrp_usergroup_update_string_sweps")
 net.Receive(
 	"nws_yrp_usergroup_update_string_sweps",
 	function(len, ply)
@@ -591,7 +591,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_string_nonesweps")
+YRP.AddNetworkString("nws_yrp_usergroup_update_string_nonesweps")
 net.Receive(
 	"nws_yrp_usergroup_update_string_nonesweps",
 	function(len, ply)
@@ -615,7 +615,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_string_ammos")
+YRP.AddNetworkString("nws_yrp_usergroup_update_string_ammos")
 net.Receive(
 	"nws_yrp_usergroup_update_string_ammos",
 	function(len, ply)
@@ -698,7 +698,7 @@ function UGCheckBox(ply, uid, name, value)
 	end
 end
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_ac_database")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_ac_database")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_ac_database",
 	function(len, ply)
@@ -709,7 +709,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_chat")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_chat")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_chat",
 	function(len, ply)
@@ -720,7 +720,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_darkrp")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_darkrp")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_darkrp",
 	function(len, ply)
@@ -731,7 +731,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_permaprops")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_permaprops")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_permaprops",
 	function(len, ply)
@@ -742,7 +742,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_status")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_status")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_status",
 	function(len, ply)
@@ -753,7 +753,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_import_darkrp")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_import_darkrp")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_import_darkrp",
 	function(len, ply)
@@ -764,7 +764,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_yourrp_addons")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_yourrp_addons")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_yourrp_addons",
 	function(len, ply)
@@ -775,7 +775,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_adminaccess")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_adminaccess")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_adminaccess",
 	function(len, ply)
@@ -786,7 +786,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_general")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_general")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_general",
 	function(len, ply)
@@ -797,7 +797,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_levelsystem")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_levelsystem")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_levelsystem",
 	function(len, ply)
@@ -808,7 +808,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_design")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_design")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_design",
 	function(len, ply)
@@ -819,7 +819,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_realistic")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_realistic")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_realistic",
 	function(len, ply)
@@ -830,7 +830,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_money")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_money")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_money",
 	function(len, ply)
@@ -841,7 +841,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_licenses")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_licenses")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_licenses",
 	function(len, ply)
@@ -852,7 +852,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_specializations")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_specializations")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_specializations",
 	function(len, ply)
@@ -863,7 +863,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_weaponsystem")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_weaponsystem")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_weaponsystem",
 	function(len, ply)
@@ -874,7 +874,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_shops")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_shops")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_shops",
 	function(len, ply)
@@ -885,7 +885,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_map")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_map")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_map",
 	function(len, ply)
@@ -896,7 +896,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_feedback")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_feedback")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_feedback",
 	function(len, ply)
@@ -907,7 +907,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_usergroups")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_usergroups")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_usergroups",
 	function(len, ply)
@@ -918,7 +918,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_logs")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_logs")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_logs",
 	function(len, ply)
@@ -929,7 +929,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_blacklist")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_blacklist")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_blacklist",
 	function(len, ply)
@@ -940,7 +940,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_scale")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_scale")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_scale",
 	function(len, ply)
@@ -951,7 +951,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_groupsandroles")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_groupsandroles")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_groupsandroles",
 	function(len, ply)
@@ -962,7 +962,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_players")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_players")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_players",
 	function(len, ply)
@@ -973,7 +973,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_events")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_events")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_events",
 	function(len, ply)
@@ -984,7 +984,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_whitelist")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_whitelist")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_whitelist",
 	function(len, ply)
@@ -995,7 +995,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_vehicles")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_vehicles")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_vehicles",
 	function(len, ply)
@@ -1006,7 +1006,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_weapons")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_weapons")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_weapons",
 	function(len, ply)
@@ -1017,7 +1017,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_entities")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_entities")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_entities",
 	function(len, ply)
@@ -1028,7 +1028,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_effects")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_effects")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_effects",
 	function(len, ply)
@@ -1039,7 +1039,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_npcs")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_npcs")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_npcs",
 	function(len, ply)
@@ -1050,7 +1050,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_props")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_props")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_props",
 	function(len, ply)
@@ -1061,7 +1061,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_ragdolls")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_ragdolls")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_ragdolls",
 	function(len, ply)
@@ -1072,7 +1072,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_postprocess")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_postprocess")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_postprocess",
 	function(len, ply)
@@ -1083,7 +1083,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_dupes")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_dupes")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_dupes",
 	function(len, ply)
@@ -1094,7 +1094,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_saves")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_saves")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_saves",
 	function(len, ply)
@@ -1105,7 +1105,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_ignite")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_ignite")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_ignite",
 	function(len, ply)
@@ -1116,7 +1116,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_drive")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_drive")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_drive",
 	function(len, ply)
@@ -1127,7 +1127,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_flashlight")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_flashlight")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_flashlight",
 	function(len, ply)
@@ -1138,7 +1138,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_collision")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_collision")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_collision",
 	function(len, ply)
@@ -1149,7 +1149,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_gravity")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_gravity")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_gravity",
 	function(len, ply)
@@ -1160,7 +1160,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_keepupright")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_keepupright")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_keepupright",
 	function(len, ply)
@@ -1171,7 +1171,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_bodygroups")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_bodygroups")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_bodygroups",
 	function(len, ply)
@@ -1182,7 +1182,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_physgunpickup")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_physgunpickup")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_physgunpickup",
 	function(len, ply)
@@ -1193,7 +1193,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_physgunpickupplayer")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_physgunpickupplayer")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_physgunpickupplayer",
 	function(len, ply)
@@ -1204,7 +1204,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_physgunpickupworld")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_physgunpickupworld")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_physgunpickupworld",
 	function(len, ply)
@@ -1215,7 +1215,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_physgunpickupotherowner")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_physgunpickupotherowner")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_physgunpickupotherowner",
 	function(len, ply)
@@ -1226,7 +1226,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_physgunpickupignoreblacklist")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_physgunpickupignoreblacklist")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_physgunpickupignoreblacklist",
 	function(len, ply)
@@ -1237,7 +1237,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_gravgunpunt")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_gravgunpunt")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_gravgunpunt",
 	function(len, ply)
@@ -1248,7 +1248,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_canseeteammatesonmap")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_canseeteammatesonmap")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_canseeteammatesonmap",
 	function(len, ply)
@@ -1259,7 +1259,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_canseeenemiesonmap")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_canseeenemiesonmap")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_canseeenemiesonmap",
 	function(len, ply)
@@ -1270,7 +1270,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_canusewarnsystem")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_canusewarnsystem")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_canusewarnsystem",
 	function(len, ply)
@@ -1281,7 +1281,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_canusecontextmenu")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_canusecontextmenu")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_canusecontextmenu",
 	function(len, ply)
@@ -1292,7 +1292,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_bool_canusespawnmenu")
+YRP.AddNetworkString("nws_yrp_usergroup_update_bool_canusespawnmenu")
 net.Receive(
 	"nws_yrp_usergroup_update_bool_canusespawnmenu",
 	function(len, ply)
@@ -1303,7 +1303,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_int_characters_max")
+YRP.AddNetworkString("nws_yrp_usergroup_update_int_characters_max")
 net.Receive(
 	"nws_yrp_usergroup_update_int_characters_max",
 	function(len, ply)
@@ -1314,7 +1314,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_int_charactersevent_max")
+YRP.AddNetworkString("nws_yrp_usergroup_update_int_charactersevent_max")
 net.Receive(
 	"nws_yrp_usergroup_update_int_charactersevent_max",
 	function(len, ply)
@@ -1326,7 +1326,7 @@ net.Receive(
 )
 
 local antinoti1spam = {}
-util.AddNetworkString("nws_yrp_info")
+YRP.AddNetworkString("nws_yrp_info")
 function YRPNotiToPlyDisallowed(ply, msg)
 	if not table.HasValue(antinoti1spam, ply) then
 		table.insert(antinoti1spam, ply)
@@ -1343,7 +1343,7 @@ function YRPNotiToPlyDisallowed(ply, msg)
 end
 
 local antinoti2spam = {}
-util.AddNetworkString("nws_yrp_info2")
+YRP.AddNetworkString("nws_yrp_info2")
 function YRPNotiToPly(msg, ply)
 	if msg and not table.HasValue(antinoti2spam, ply) then
 		table.insert(antinoti2spam, ply)
@@ -1500,7 +1500,7 @@ hook.Add(
 	end
 )
 
-util.AddNetworkString("nws_yrp_notification")
+YRP.AddNetworkString("nws_yrp_notification")
 function YRPSendNotification(ply, msg)
 	net.Start("nws_yrp_notification")
 	net.WriteString(msg)
@@ -1977,7 +1977,7 @@ function Player:UserGroupLoadout()
 	YRPCountPassiveChannels(self)
 end
 
-util.AddNetworkString("nws_yrp_restartserver")
+YRP.AddNetworkString("nws_yrp_restartserver")
 net.Receive(
 	"nws_yrp_restartserver",
 	function(len, ply)
@@ -1986,7 +1986,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_updateUsergroupsList")
+YRP.AddNetworkString("nws_yrp_updateUsergroupsList")
 function ReloadUsergroupsList()
 	SortUserGroups()
 	timer.Simple(
@@ -2013,7 +2013,7 @@ function ReloadUsergroupsList()
 	)
 end
 
-util.AddNetworkString("nws_yrp_settings_usergroup_position_up")
+YRP.AddNetworkString("nws_yrp_settings_usergroup_position_up")
 net.Receive(
 	"nws_yrp_settings_usergroup_position_up",
 	function(len, ply)
@@ -2051,7 +2051,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_settings_usergroup_position_dn")
+YRP.AddNetworkString("nws_yrp_settings_usergroup_position_dn")
 net.Receive(
 	"nws_yrp_settings_usergroup_position_dn",
 	function(len, ply)
@@ -2089,7 +2089,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_perma_props")
+YRP.AddNetworkString("nws_yrp_get_perma_props")
 net.Receive(
 	"nws_yrp_get_perma_props",
 	function(len, ply)
@@ -2148,7 +2148,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_permaprops_remove")
+YRP.AddNetworkString("nws_yrp_permaprops_remove")
 net.Receive(
 	"nws_yrp_permaprops_remove",
 	function(len, ply)
@@ -2160,7 +2160,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_permaprops_close")
+YRP.AddNetworkString("nws_yrp_permaprops_close")
 net.Receive(
 	"nws_yrp_permaprops_close",
 	function(len, ply)
@@ -2170,7 +2170,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_permaprops_teleport")
+YRP.AddNetworkString("nws_yrp_permaprops_teleport")
 net.Receive(
 	"nws_yrp_permaprops_teleport",
 	function(len, ply)
@@ -2187,7 +2187,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_perma_props2")
+YRP.AddNetworkString("nws_yrp_get_perma_props2")
 net.Receive(
 	"nws_yrp_get_perma_props2",
 	function(len, ply)
@@ -2246,7 +2246,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_permaprops_remove2")
+YRP.AddNetworkString("nws_yrp_permaprops_remove2")
 net.Receive(
 	"nws_yrp_permaprops_remove2",
 	function(len, ply)
@@ -2258,7 +2258,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_permaprops_close2")
+YRP.AddNetworkString("nws_yrp_permaprops_close2")
 net.Receive(
 	"nws_yrp_permaprops_close2",
 	function(len, ply)
@@ -2268,7 +2268,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_permaprops_teleport2")
+YRP.AddNetworkString("nws_yrp_permaprops_teleport2")
 net.Receive(
 	"nws_yrp_permaprops_teleport2",
 	function(len, ply)
@@ -2285,7 +2285,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_usergroup_licenses")
+YRP.AddNetworkString("nws_yrp_get_usergroup_licenses")
 net.Receive(
 	"nws_yrp_get_usergroup_licenses",
 	function(len, ply)
@@ -2299,7 +2299,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_string_licenses")
+YRP.AddNetworkString("nws_yrp_usergroup_update_string_licenses")
 net.Receive(
 	"nws_yrp_usergroup_update_string_licenses",
 	function(len, ply)
@@ -2317,7 +2317,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_string_tools")
+YRP.AddNetworkString("nws_yrp_usergroup_update_string_tools")
 net.Receive(
 	"nws_yrp_usergroup_update_string_tools",
 	function(len, ply)
@@ -2335,7 +2335,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_usergroup_update_string_ammos")
+YRP.AddNetworkString("nws_yrp_usergroup_update_string_ammos")
 net.Receive(
 	"nws_yrp_usergroup_update_string_ammos",
 	function(len, ply)

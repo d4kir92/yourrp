@@ -32,7 +32,7 @@ function ENT:Think()
 	end
 end
 
-util.AddNetworkString("nws_yrp_openAM")
+YRP.AddNetworkString("nws_yrp_openAM")
 function ENT:Use(activator, caller)
 	if not activator:GetYRPBool("clicked", false) then
 		activator:SetYRPBool("clicked", true)

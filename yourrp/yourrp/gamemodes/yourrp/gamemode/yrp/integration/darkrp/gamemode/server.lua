@@ -141,7 +141,7 @@ end
 function DarkRP.log(message, colour, noFileSave)
 end
 
-util.AddNetworkString("nws_yrp_sendNotify")
+YRP.AddNetworkString("nws_yrp_sendNotify")
 function DarkRP.notify(ply, msgType, time, message)
 	--Description: Log a message in DarkRP
 	if IsValid(ply) and ply.IsPlayer and ply:IsPlayer() and IsNotNilAndNotFalse(message) then

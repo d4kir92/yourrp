@@ -72,7 +72,7 @@ function DisconnectFromSlot(ply, slotID)
 end
 
 -- Networking
-util.AddNetworkString("nws_yrp_storage_get_slots")
+YRP.AddNetworkString("nws_yrp_storage_get_slots")
 net.Receive(
 	"nws_yrp_storage_get_slots",
 	function(len, ply)
@@ -109,7 +109,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_slot_connect")
+YRP.AddNetworkString("nws_yrp_slot_connect")
 net.Receive(
 	"nws_yrp_slot_connect",
 	function(len, ply)
@@ -118,7 +118,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_slot_disconnect")
+YRP.AddNetworkString("nws_yrp_slot_disconnect")
 net.Receive(
 	"nws_yrp_slot_disconnect",
 	function(len, ply)

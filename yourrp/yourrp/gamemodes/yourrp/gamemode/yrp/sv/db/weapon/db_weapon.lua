@@ -23,7 +23,7 @@ function YRPSetWeaponSettings()
 end
 
 YRPSetWeaponSettings()
-util.AddNetworkString("nws_yrp_set_slot_amount")
+YRP.AddNetworkString("nws_yrp_set_slot_amount")
 net.Receive(
 	"nws_yrp_set_slot_amount",
 	function(len, ply)
@@ -67,8 +67,8 @@ function YRPGetSlotsOfSWEP(cn)
 	return tab
 end
 
-util.AddNetworkString("nws_yrp_weapon_menu")
-util.AddNetworkString("nws_yrp_weapon_menu_weapon")
+YRP.AddNetworkString("nws_yrp_weapon_menu")
+YRP.AddNetworkString("nws_yrp_weapon_menu_weapon")
 net.Receive(
 	"nws_yrp_weapon_menu",
 	function(len, ply)
@@ -100,7 +100,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_set_slot_weapon")
+YRP.AddNetworkString("nws_yrp_set_slot_weapon")
 net.Receive(
 	"nws_yrp_set_slot_weapon",
 	function(len, ply)

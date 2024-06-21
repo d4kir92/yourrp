@@ -33,7 +33,7 @@ function YRPSetTSLastOnline(steamId)
 	end
 end
 
-util.AddNetworkString("nws_yrp_chatdelay")
+YRP.AddNetworkString("nws_yrp_chatdelay")
 net.Receive(
 	"nws_yrp_chatdelay",
 	function(len, ply)
@@ -50,13 +50,13 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_setting_players")
-util.AddNetworkString("YRPOpenCharacterMenu")
-util.AddNetworkString("nws_yrp_setPlayerValues")
-util.AddNetworkString("nws_yrp_setRoleValues")
-util.AddNetworkString("nws_yrp_getPlyList")
-util.AddNetworkString("nws_yrp_getCharakterList")
-util.AddNetworkString("nws_yrp_getrpdescription")
+YRP.AddNetworkString("nws_yrp_setting_players")
+YRP.AddNetworkString("YRPOpenCharacterMenu")
+YRP.AddNetworkString("nws_yrp_setPlayerValues")
+YRP.AddNetworkString("nws_yrp_setRoleValues")
+YRP.AddNetworkString("nws_yrp_getPlyList")
+YRP.AddNetworkString("nws_yrp_getCharakterList")
+YRP.AddNetworkString("nws_yrp_getrpdescription")
 net.Receive(
 	"nws_yrp_setting_players",
 	function(len, ply)
@@ -828,7 +828,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_give_getGroTab")
+YRP.AddNetworkString("nws_yrp_give_getGroTab")
 net.Receive(
 	"nws_yrp_give_getGroTab",
 	function(len, ply)
@@ -843,7 +843,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_give_getRolTab")
+YRP.AddNetworkString("nws_yrp_give_getRolTab")
 net.Receive(
 	"nws_yrp_give_getRolTab",
 	function(len, ply)
@@ -877,7 +877,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_give_role")
+YRP.AddNetworkString("nws_yrp_give_role")
 net.Receive(
 	"nws_yrp_give_role",
 	function(len, ply)
@@ -897,7 +897,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_whitelist_infoplayer")
+YRP.AddNetworkString("nws_yrp_whitelist_infoplayer")
 function YRPWhitelistInfoPlayer(ply, msg)
 	net.Start("nws_yrp_whitelist_infoplayer")
 	net.WriteString(msg)
@@ -965,7 +965,7 @@ function YRPIsWhitelisted(ply, id)
 	return false
 end
 
-util.AddNetworkString("nws_yrp_voteNo")
+YRP.AddNetworkString("nws_yrp_voteNo")
 net.Receive(
 	"nws_yrp_voteNo",
 	function(len, ply)
@@ -973,7 +973,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_voteYes")
+YRP.AddNetworkString("nws_yrp_voteYes")
 net.Receive(
 	"nws_yrp_voteYes",
 	function(len, ply)
@@ -1177,9 +1177,9 @@ function canVoteRole(ply, roleID)
 	return false
 end
 
-util.AddNetworkString("nws_yrp_want_role")
+YRP.AddNetworkString("nws_yrp_want_role_char")
 net.Receive(
-	"nws_yrp_want_role",
+	"nws_yrp_want_role_char",
 	function(len, ply)
 		local uniqueIDRole = net.ReadInt(16)
 		local pmid = net.ReadInt(16)
@@ -1195,7 +1195,7 @@ net.Receive(
 			end
 
 			--New role
-			YRPSetRole("nws_yrp_want_role", ply, uniqueIDRole, false, pmid, bgs)
+			YRPSetRole("nws_yrp_want_role_char", ply, uniqueIDRole, false, pmid, bgs)
 			if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
 				ply:Spawn()
 				YRPTeleportToSpawnpoint(ply, "switchrole")

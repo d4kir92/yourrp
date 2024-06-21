@@ -25,7 +25,7 @@ function Player:LockdownLoadout()
 	end
 end
 
-util.AddNetworkString("nws_yrp_set_lockdowntext")
+YRP.AddNetworkString("nws_yrp_set_lockdowntext")
 net.Receive(
 	"nws_yrp_set_lockdowntext",
 	function(len, ply)
@@ -82,7 +82,7 @@ function GetRandomAlarm()
 	return table.Random(alarms)
 end
 
-util.AddNetworkString("nws_yrp_update_lockdown_alarms")
+YRP.AddNetworkString("nws_yrp_update_lockdown_alarms")
 net.Receive(
 	"nws_yrp_update_lockdown_alarms",
 	function(len, ply)
@@ -107,7 +107,7 @@ function RemoveFromLockdownSpeakers(ent)
 	table.RemoveByValue(_G["LOCKDOWN_ENTITIES"], ent)
 end
 
-util.AddNetworkString("nws_yrp_set_lockdown")
+YRP.AddNetworkString("nws_yrp_set_lockdown")
 net.Receive(
 	"nws_yrp_set_lockdown",
 	function(len, ply)

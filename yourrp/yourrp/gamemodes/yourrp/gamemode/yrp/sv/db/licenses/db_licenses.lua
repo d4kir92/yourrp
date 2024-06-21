@@ -30,7 +30,7 @@ function send_licenses(ply)
 	net.Send(ply)
 end
 
-util.AddNetworkString("nws_yrp_get_all_licenses")
+YRP.AddNetworkString("nws_yrp_get_all_licenses")
 net.Receive(
 	"nws_yrp_get_all_licenses",
 	function(len, ply)
@@ -46,7 +46,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_licenses")
+YRP.AddNetworkString("nws_yrp_get_licenses")
 net.Receive(
 	"nws_yrp_get_licenses",
 	function(len, ply)
@@ -68,7 +68,7 @@ function sendlicenses(ply)
 	net.Send(ply)
 end
 
-util.AddNetworkString("nws_yrp_getlicenses")
+YRP.AddNetworkString("nws_yrp_getlicenses")
 net.Receive(
 	"nws_yrp_getlicenses",
 	function(len, ply)
@@ -76,7 +76,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_license_add")
+YRP.AddNetworkString("nws_yrp_license_add")
 net.Receive(
 	"nws_yrp_license_add",
 	function(len, ply)
@@ -87,7 +87,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_license_rem")
+YRP.AddNetworkString("nws_yrp_license_rem")
 net.Receive(
 	"nws_yrp_license_rem",
 	function(len, ply)
@@ -99,7 +99,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_edit_license_name")
+YRP.AddNetworkString("nws_yrp_edit_license_name")
 net.Receive(
 	"nws_yrp_edit_license_name",
 	function(len, ply)
@@ -117,7 +117,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_edit_license_description")
+YRP.AddNetworkString("nws_yrp_edit_license_description")
 net.Receive(
 	"nws_yrp_edit_license_description",
 	function(len, ply)
@@ -135,7 +135,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_edit_license_price")
+YRP.AddNetworkString("nws_yrp_edit_license_price")
 net.Receive(
 	"nws_yrp_edit_license_price",
 	function(len, ply)
@@ -153,7 +153,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_all_licenses_simple")
+YRP.AddNetworkString("nws_yrp_get_all_licenses_simple")
 net.Receive(
 	"nws_yrp_get_all_licenses_simple",
 	function(len, ply)
@@ -168,7 +168,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_role_add_license")
+YRP.AddNetworkString("nws_yrp_role_add_license")
 net.Receive(
 	"nws_yrp_role_add_license",
 	function(len, ply)
@@ -196,7 +196,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_role_rem_license")
+YRP.AddNetworkString("nws_yrp_role_rem_license")
 net.Receive(
 	"nws_yrp_role_rem_license",
 	function(len, ply)
@@ -331,7 +331,7 @@ function Player:RemoveLicense(license)
 	end
 end
 
-util.AddNetworkString("nws_yrp_getLicenseName")
+YRP.AddNetworkString("nws_yrp_getLicenseName")
 net.Receive(
 	"nws_yrp_getLicenseName",
 	function(len, ply)

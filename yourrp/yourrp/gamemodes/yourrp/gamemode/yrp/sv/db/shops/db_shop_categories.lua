@@ -4,7 +4,7 @@
 local DATABASE_NAME = "yrp_shop_categories"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "shopID", "INT DEFAULT -1")
-util.AddNetworkString("nws_yrp_get_shop_categories")
+YRP.AddNetworkString("nws_yrp_get_shop_categories")
 function send_categories(ply, uid)
 	local _cats = YRP_SQL_SELECT(DATABASE_NAME, "*", "shopID = " .. uid)
 	local _nw = _cats
@@ -25,7 +25,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_category_add")
+YRP.AddNetworkString("nws_yrp_category_add")
 net.Receive(
 	"nws_yrp_category_add",
 	function(len, ply)
@@ -36,7 +36,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_category_rem")
+YRP.AddNetworkString("nws_yrp_category_rem")
 net.Receive(
 	"nws_yrp_category_rem",
 	function(len, ply)
@@ -48,7 +48,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_category_edit_name")
+YRP.AddNetworkString("nws_yrp_category_edit_name")
 net.Receive(
 	"nws_yrp_category_edit_name",
 	function(len, ply)
@@ -66,7 +66,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_get_categories")
+YRP.AddNetworkString("nws_yrp_shop_get_categories")
 net.Receive(
 	"nws_yrp_shop_get_categories",
 	function(len, ply)

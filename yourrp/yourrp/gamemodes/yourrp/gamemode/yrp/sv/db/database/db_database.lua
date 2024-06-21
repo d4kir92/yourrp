@@ -12,7 +12,7 @@ function AddToHandler_Database(ply)
 	end
 end
 
-util.AddNetworkString("nws_yrp_connect_Settings_Database")
+YRP.AddNetworkString("nws_yrp_connect_Settings_Database")
 net.Receive(
 	"nws_yrp_connect_Settings_Database",
 	function(len, ply)
@@ -50,7 +50,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_disconnect_Settings_Database")
+YRP.AddNetworkString("nws_yrp_disconnect_Settings_Database")
 net.Receive(
 	"nws_yrp_disconnect_Settings_Database",
 	function(len, ply)
@@ -59,8 +59,8 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_sql_info")
-util.AddNetworkString("nws_yrp_drop_tables")
+YRP.AddNetworkString("nws_yrp_get_sql_info")
+YRP.AddNetworkString("nws_yrp_drop_tables")
 net.Receive(
 	"nws_yrp_drop_tables",
 	function(len, ply)
@@ -143,7 +143,7 @@ function CreateBackup()
 end
 
 local bu_ts = 0
-util.AddNetworkString("nws_yrp_makebackup")
+YRP.AddNetworkString("nws_yrp_makebackup")
 net.Receive(
 	"nws_yrp_makebackup",
 	function(len, ply)

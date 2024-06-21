@@ -6,9 +6,9 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "target", "TEXT DEFAULT 'No Target'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "reward", "INTEGER DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT 'NO DESCRIPTION'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "contract_SteamID", "TEXT DEFAULT ''")
-util.AddNetworkString("nws_yrp_placehit")
-util.AddNetworkString("nws_yrp_gethits")
-util.AddNetworkString("nws_yrp_accepthit")
+YRP.AddNetworkString("nws_yrp_placehit")
+YRP.AddNetworkString("nws_yrp_gethits")
+YRP.AddNetworkString("nws_yrp_accepthit")
 net.Receive(
 	"nws_yrp_placehit",
 	function(len, ply)
@@ -39,7 +39,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_contracts")
+YRP.AddNetworkString("nws_yrp_get_contracts")
 net.Receive(
 	"nws_yrp_get_contracts",
 	function(len, ply)

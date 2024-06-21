@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-util.AddNetworkString("nws_yrp_restartServer")
-util.AddNetworkString("nws_yrp_updateServer")
-util.AddNetworkString("nws_yrp_cancelRestartServer")
+YRP.AddNetworkString("nws_yrp_restartServer")
+YRP.AddNetworkString("nws_yrp_updateServer")
+YRP.AddNetworkString("nws_yrp_cancelRestartServer")
 --Restart Server
 net.Receive(
 	"nws_yrp_restartServer",

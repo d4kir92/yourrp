@@ -1,9 +1,9 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
-util.AddNetworkString("nws_yrp_sendstartdata")
-util.AddNetworkString("nws_yrp_receivedstartdata")
-util.AddNetworkString("nws_yrp_sendserverdata")
-util.AddNetworkString("nws_yrp_receivedserverdata")
+YRP.AddNetworkString("nws_yrp_sendstartdata")
+YRP.AddNetworkString("nws_yrp_receivedstartdata")
+YRP.AddNetworkString("nws_yrp_sendserverdata")
+YRP.AddNetworkString("nws_yrp_receivedserverdata")
 net.Receive(
 	"nws_yrp_receivedserverdata",
 	function(len, ply)

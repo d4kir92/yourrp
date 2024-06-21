@@ -25,14 +25,12 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 SWEP.DrawCrosshair = true
 SWEP.HoldType = "pistol"
-
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
 end
 
 function SWEP:Reload()
 	local pos = ""
-
 	for i, v in pairs(GetGlobalYRPTable("yrp_radiation")) do
 		pos = v.pos
 	end
@@ -45,39 +43,35 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	util.AddNetworkString("nws_yrp_radiation_options")
+	YRP.AddNetworkString("nws_yrp_radiation_options")
 end
 
 local size = 128
 local key_delay = CurTime()
 local keydown = false
-
 function SWEP:Think()
 	if SERVER and key_delay < CurTime() then
 		local ply = self:GetOwner()
 		key_delay = CurTime() + 0.1
-
 		if ply:KeyDown(IN_USE) and not keydown then
 			keydown = true
 			local pos = Vector(0, 0, 0)
-
-			local tr = util.TraceLine({
-				start = ply:EyePos(),
-				endpos = ply:EyePos() + ply:EyeAngles():Forward() * 10000,
-				filter = function(ent)
-					if ent:GetClass() == "prop_physics" then return true end
-				end
-			})
+			local tr = util.TraceLine(
+				{
+					start = ply:EyePos(),
+					endpos = ply:EyePos() + ply:EyeAngles():Forward() * 10000,
+					filter = function(ent)
+						if ent:GetClass() == "prop_physics" then return true end
+					end
+				}
+			)
 
 			pos = tr.HitPos or pos
-
 			for i, v in pairs(GetGlobalYRPTable("yrp_radiation")) do
 				local p = StringToVector(v.pos)
-
 				if p:Distance(pos) < size * 2 then
 					YRP.msg("db", "Option Radiation")
 					local stab = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
-
 					if IsNotNilAndNotFalse(stab) then
 						stab = stab[1]
 						net.Start("nws_yrp_radiation_options")
@@ -93,40 +87,39 @@ function SWEP:Think()
 end
 
 if CLIENT then
-	net.Receive("nws_yrp_radiation_options", function()
-		if YRPIsNoMenuOpen() then
-			local stab = net.ReadTable()
-			local w = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
-			w:Center()
-			w:MakePopup()
-			w:SetHeaderHeight(YRP.ctr(100))
-			w:SetTitle("LID_radiation")
-			-- name time
-			w.nametext = YRPCreateD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
-			w.nametext:SetText("LID_name")
-			w.name = YRPCreateD("DTextEntry", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
-			w.name:SetText(stab.name)
-
-			function w.name:OnChange()
-				local name = self:GetText()
-				net.Start("nws_yrp_update_map_name")
-				net.WriteString(stab.uniqueID)
-				net.WriteString(name)
-				net.SendToServer()
+	net.Receive(
+		"nws_yrp_radiation_options",
+		function()
+			if YRPIsNoMenuOpen() then
+				local stab = net.ReadTable()
+				local w = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+				w:Center()
+				w:MakePopup()
+				w:SetHeaderHeight(YRP.ctr(100))
+				w:SetTitle("LID_radiation")
+				-- name time
+				w.nametext = YRPCreateD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
+				w.nametext:SetText("LID_name")
+				w.name = YRPCreateD("DTextEntry", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
+				w.name:SetText(stab.name)
+				function w.name:OnChange()
+					local name = self:GetText()
+					net.Start("nws_yrp_update_map_name")
+					net.WriteString(stab.uniqueID)
+					net.WriteString(name)
+					net.SendToServer()
+				end
 			end
 		end
-	end)
+	)
 end
 
 function SWEP:PrimaryAttack()
 	self.pdelay = self.pdelay or 0
-
 	if self.pdelay < CurTime() then
 		self.pdelay = CurTime() + 0.4
-
 		if CLIENT then
 			local lply = LocalPlayer()
-
 			if self.startpos == nil then
 				self.startpos = string.Explode(" ", tostring(lply:GetPos()))
 				self.startang = string.Explode(" ", tostring(lply:GetAngles()))
@@ -152,7 +145,6 @@ end
 
 function IsInsideRadiation(ply)
 	if not IsValid(ply) then return false end
-
 	for i, v in pairs(GetGlobalYRPTable("yrp_radiation")) do
 		local pos = string.Explode(",", v.pos)
 		local spos = Vector(pos[1], pos[2], pos[3])
@@ -173,13 +165,11 @@ end
 function SWEP:SecondaryAttack()
 	if SERVER then
 		local ply = self:GetOwner()
-
 		for i, v in pairs(GetGlobalYRPTable("yrp_radiation")) do
 			local pos = string.Explode(",", v.pos)
 			local spos = Vector(pos[1], pos[2], pos[3])
 			local epos = Vector(pos[4], pos[5], pos[6])
 			inbox = ents.FindInBox(spos, epos)
-
 			for id, e in pairs(inbox) do
 				if e == ply then
 					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
@@ -197,27 +187,29 @@ if CLIENT then
 	local r = math.random(0, 255)
 	local g = math.random(0, 255)
 	local b = math.random(0, 255)
+	hook.Add(
+		"PostDrawTranslucentRenderables",
+		"yrp_draw_radiation",
+		function()
+			if LocalPlayer():GetActiveWeapon():IsValid() and LocalPlayer():GetActiveWeapon():GetClass() == "yrp_tool_radiation" then
+				if delay < CurTime() then
+					delay = CurTime() + 0.1
+					r = math.random(0, 255)
+					g = math.random(0, 255)
+					b = math.random(0, 255)
+				end
 
-	hook.Add("PostDrawTranslucentRenderables", "yrp_draw_radiation", function()
-		if LocalPlayer():GetActiveWeapon():IsValid() and LocalPlayer():GetActiveWeapon():GetClass() == "yrp_tool_radiation" then
-			if delay < CurTime() then
-				delay = CurTime() + 0.1
-				r = math.random(0, 255)
-				g = math.random(0, 255)
-				b = math.random(0, 255)
-			end
-
-			for i, v in pairs(GetGlobalYRPTable("yrp_radiation")) do
-				local pos = string.Explode(",", v.pos)
-				local spos = Vector(pos[1], pos[2], pos[3])
-				local epos = Vector(pos[4], pos[5], pos[6])
-
-				if LocalPlayer():GetPos():Distance(spos) < 6000 then
-					render.SetColorMaterial()
-					render.DrawBox(spos, Angle(0, 0, 0), Vector(0, 0, 0), epos - spos, Color(40, 223, 40, 100))
-					--render.DrawSphere(spos, size, 16, 16, Color(r, g, b, 200) )
+				for i, v in pairs(GetGlobalYRPTable("yrp_radiation")) do
+					local pos = string.Explode(",", v.pos)
+					local spos = Vector(pos[1], pos[2], pos[3])
+					local epos = Vector(pos[4], pos[5], pos[6])
+					if LocalPlayer():GetPos():Distance(spos) < 6000 then
+						render.SetColorMaterial()
+						render.DrawBox(spos, Angle(0, 0, 0), Vector(0, 0, 0), epos - spos, Color(40, 223, 40, 100))
+						--render.DrawSphere(spos, size, 16, 16, Color(r, g, b, 200) )
+					end
 				end
 			end
 		end
-	end)
+	)
 end

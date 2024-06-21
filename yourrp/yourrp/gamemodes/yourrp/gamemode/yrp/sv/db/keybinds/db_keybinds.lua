@@ -9,7 +9,7 @@ if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 end
 
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
-util.AddNetworkString("nws_yrp_setServerKeybinds")
+YRP.AddNetworkString("nws_yrp_setServerKeybinds")
 local PLAYER = FindMetaTable("Player")
 function PLAYER:SetServerKeybinds()
 	local selresult = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
@@ -22,7 +22,7 @@ function PLAYER:SetServerKeybinds()
 	end
 end
 
-util.AddNetworkString("nws_yrp_setserverdefaultkeybind")
+YRP.AddNetworkString("nws_yrp_setserverdefaultkeybind")
 net.Receive(
 	"nws_yrp_setserverdefaultkeybind",
 	function(len, ply)
@@ -43,7 +43,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_forcesetkeybinds")
+YRP.AddNetworkString("nws_yrp_forcesetkeybinds")
 net.Receive(
 	"nws_yrp_forcesetkeybinds",
 	function(len, ply)

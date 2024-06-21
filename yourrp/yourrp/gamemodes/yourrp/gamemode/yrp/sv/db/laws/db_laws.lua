@@ -15,7 +15,7 @@ if IsNotNilAndNotFalse(dblaws) then
 	SetGlobalYRPString("sting_laws", dblaws.string_laws)
 end
 
-util.AddNetworkString("nws_yrp_get_laws")
+YRP.AddNetworkString("nws_yrp_get_laws")
 net.Receive(
 	"nws_yrp_get_laws",
 	function(len, ply)
@@ -44,7 +44,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_set_lawsymbol")
+YRP.AddNetworkString("nws_yrp_set_lawsymbol")
 net.Receive(
 	"nws_yrp_set_lawsymbol",
 	function(len, ply)
@@ -60,7 +60,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_set_laws")
+YRP.AddNetworkString("nws_yrp_set_laws")
 net.Receive(
 	"nws_yrp_set_laws",
 	function(len, ply)

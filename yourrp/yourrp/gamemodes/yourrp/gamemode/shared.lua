@@ -23,6 +23,18 @@ function add_luas(str)
 	include(str)
 end
 
+if SERVER then
+	local nws = {}
+	function YRP.AddNetworkString(name)
+		if name == nil then return end
+		if nws[name] == nil then
+			util.AddNetworkString(name)
+		else
+			YRP.msg("error", "DOUBLE NETWORK STRING" .. name)
+		end
+	end
+end
+
 add_luas("yrp/net/entity.lua")
 add_luas("yrp/net/global.lua")
 add_luas("yrp/_libs/_libs_includes.lua")

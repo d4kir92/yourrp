@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
-util.AddNetworkString("nws_yrp_get_sql_info")
+YRP.AddNetworkString("nws_yrp_get_sql_info")
 local DATABASE_NAME = "yrp_sql"
 function SQLITE_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 	--YRP.msg( "db", "YRP_SQL_CHECK_IF_COLUMN_EXISTS( " .. tostring( db_name) .. ", " .. tostring( column_name) .. " )" )
@@ -156,7 +156,7 @@ end
 
 for str, val in pairs(yrp_sql) do
 	if string.find(str, "int_", 1, true) then
-		util.AddNetworkString("nws_yrp_update_" .. str)
+		YRP.AddNetworkString("nws_yrp_update_" .. str)
 		net.Receive(
 			"nws_yrp_update_" .. str,
 			function(len, ply)
@@ -165,7 +165,7 @@ for str, val in pairs(yrp_sql) do
 			end
 		)
 	elseif string.find(str, "float_", 1, true) then
-		util.AddNetworkString("nws_yrp_update_" .. str)
+		YRP.AddNetworkString("nws_yrp_update_" .. str)
 		net.Receive(
 			"nws_yrp_update_" .. str,
 			function(len, ply)
@@ -174,7 +174,7 @@ for str, val in pairs(yrp_sql) do
 			end
 		)
 	elseif string.find(str, "string_", 1, true) then
-		util.AddNetworkString("nws_yrp_update_" .. str)
+		YRP.AddNetworkString("nws_yrp_update_" .. str)
 		net.Receive(
 			"nws_yrp_update_" .. str,
 			function(len, ply)
@@ -198,7 +198,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_change_to_sql_mode")
+YRP.AddNetworkString("nws_yrp_change_to_sql_mode")
 net.Receive(
 	"nws_yrp_change_to_sql_mode",
 	function(len, ply)

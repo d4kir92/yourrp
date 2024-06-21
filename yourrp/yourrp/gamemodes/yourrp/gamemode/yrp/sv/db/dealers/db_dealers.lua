@@ -16,7 +16,7 @@ if _minus ~= nil then
 	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '-1'")
 end
 
-util.AddNetworkString("nws_yrp_dealer_add")
+YRP.AddNetworkString("nws_yrp_dealer_add")
 function dealer_rem(uid)
 	uid = tonumber(uid)
 	local _del = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
@@ -70,7 +70,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_dealer_add_tab")
+YRP.AddNetworkString("nws_yrp_dealer_add_tab")
 net.Receive(
 	"nws_yrp_dealer_add_tab",
 	function(len, ply)
@@ -96,7 +96,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_dealer_rem_tab")
+YRP.AddNetworkString("nws_yrp_dealer_rem_tab")
 net.Receive(
 	"nws_yrp_dealer_rem_tab",
 	function(len, ply)
@@ -118,7 +118,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_dealer_edit_name")
+YRP.AddNetworkString("nws_yrp_dealer_edit_name")
 net.Receive(
 	"nws_yrp_dealer_edit_name",
 	function(len, ply)
@@ -139,7 +139,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_dealer_edit_worldmodel")
+YRP.AddNetworkString("nws_yrp_dealer_edit_worldmodel")
 net.Receive(
 	"nws_yrp_dealer_edit_worldmodel",
 	function(len, ply)
@@ -162,7 +162,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_dealer_edit_storagepoints")
+YRP.AddNetworkString("nws_yrp_dealer_edit_storagepoints")
 net.Receive(
 	"nws_yrp_dealer_edit_storagepoints",
 	function(len, ply)

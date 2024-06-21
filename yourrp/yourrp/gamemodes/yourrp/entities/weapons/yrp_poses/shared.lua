@@ -432,7 +432,7 @@ hook.Add(
 )
 
 if SERVER then
-	util.AddNetworkString("nws_yrp_change_pose")
+	YRP.AddNetworkString("nws_yrp_change_pose")
 	net.Receive(
 		"nws_yrp_change_pose",
 		function(len, ply)

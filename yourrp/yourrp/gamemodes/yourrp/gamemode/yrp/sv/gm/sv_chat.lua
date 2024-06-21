@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #CHAT
-util.AddNetworkString("nws_yrp_showAlert")
+YRP.AddNetworkString("nws_yrp_showAlert")
 local alerts = {}
 function AddAlert(str)
 	table.insert(alerts, str)
@@ -29,8 +29,8 @@ if not YRPAlertsHOOKED then
 	YRPSetAlerts()
 end
 
-util.AddNetworkString("nws_yrp_player_say")
-util.AddNetworkString("nws_yrp_startchat")
+YRP.AddNetworkString("nws_yrp_player_say")
+YRP.AddNetworkString("nws_yrp_startchat")
 net.Receive(
 	"nws_yrp_startchat",
 	function(len, ply)
@@ -38,7 +38,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_finishchat")
+YRP.AddNetworkString("nws_yrp_finishchat")
 net.Receive(
 	"nws_yrp_finishchat",
 	function(len, ply)
@@ -203,7 +203,7 @@ function show_tag_ug(sender)
 	end
 end
 
-util.AddNetworkString("nws_yrp_set_chat_mode")
+YRP.AddNetworkString("nws_yrp_set_chat_mode")
 net.Receive(
 	"nws_yrp_set_chat_mode",
 	function(len, ply)
@@ -212,7 +212,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("yrpsendanim")
+YRP.AddNetworkString("yrpsendanim")
 function YRPSendAnim(ply, slot, activity, loop)
 	net.Start("yrpsendanim")
 	net.WriteEntity(ply)
@@ -222,7 +222,7 @@ function YRPSendAnim(ply, slot, activity, loop)
 	net.Broadcast()
 end
 
-util.AddNetworkString("yrpstopanim")
+YRP.AddNetworkString("yrpstopanim")
 function YRPStopAnim(ply, slot)
 	net.Start("yrpstopanim")
 	net.WriteEntity(ply)
@@ -237,7 +237,7 @@ function Player:SetAFK(bo)
 	YRPSendAnim(self, GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_SIT, false)
 end
 
-util.AddNetworkString("nws_yrp_notafk")
+YRP.AddNetworkString("nws_yrp_notafk")
 net.Receive(
 	"nws_yrp_notafk",
 	function(len, ply)
@@ -248,7 +248,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_setafk")
+YRP.AddNetworkString("nws_yrp_setafk")
 net.Receive(
 	"nws_yrp_setafk",
 	function(len, ply)

@@ -26,7 +26,7 @@ function Player:LevelSystemLoadout()
 	end
 end
 
-util.AddNetworkString("nws_yrp_get_levelsystem_settings")
+YRP.AddNetworkString("nws_yrp_get_levelsystem_settings")
 net.Receive(
 	"nws_yrp_get_levelsystem_settings",
 	function(len, ply)
@@ -50,7 +50,7 @@ if IsNotNilAndNotFalse(yrp_levelsystem) then
 	end
 end
 
-util.AddNetworkString("nws_yrp_update_ls_int_level_min")
+YRP.AddNetworkString("nws_yrp_update_ls_int_level_min")
 net.Receive(
 	"nws_yrp_update_ls_int_level_min",
 	function(len, ply)
@@ -64,7 +64,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_ls_int_level_max")
+YRP.AddNetworkString("nws_yrp_update_ls_int_level_max")
 net.Receive(
 	"nws_yrp_update_ls_int_level_max",
 	function(len, ply)
@@ -78,7 +78,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_ls_int_level_start")
+YRP.AddNetworkString("nws_yrp_update_ls_int_level_start")
 net.Receive(
 	"nws_yrp_update_ls_int_level_start",
 	function(len, ply)
@@ -92,7 +92,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_ls_float_multiplier")
+YRP.AddNetworkString("nws_yrp_update_ls_float_multiplier")
 net.Receive(
 	"nws_yrp_update_ls_float_multiplier",
 	function(len, ply)
@@ -106,7 +106,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_ls_int_xp_for_levelup")
+YRP.AddNetworkString("nws_yrp_update_ls_int_xp_for_levelup")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_for_levelup",
 	function(len, ply)
@@ -120,7 +120,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_ls_int_xp_per_kill")
+YRP.AddNetworkString("nws_yrp_update_ls_int_xp_per_kill")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_per_kill",
 	function(len, ply)
@@ -134,7 +134,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_ls_int_xp_per_minute")
+YRP.AddNetworkString("nws_yrp_update_ls_int_xp_per_minute")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_per_minute",
 	function(len, ply)
@@ -148,7 +148,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_ls_int_xp_per_revive")
+YRP.AddNetworkString("nws_yrp_update_ls_int_xp_per_revive")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_per_revive",
 	function(len, ply)

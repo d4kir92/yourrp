@@ -171,7 +171,7 @@ function Player:IsAllowedToDropSWEPUG(cname)
 	return true
 end
 
-util.AddNetworkString("nws_yrp_dropswep")
+YRP.AddNetworkString("nws_yrp_dropswep")
 net.Receive(
 	"nws_yrp_dropswep",
 	function(len, ply)

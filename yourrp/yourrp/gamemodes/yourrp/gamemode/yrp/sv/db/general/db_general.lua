@@ -219,7 +219,7 @@ function AddToHandler_General(ply)
 	end
 end
 
-util.AddNetworkString("nws_yrp_connect_Settings_General")
+YRP.AddNetworkString("nws_yrp_connect_Settings_General")
 net.Receive(
 	"nws_yrp_connect_Settings_General",
 	function(len, ply)
@@ -239,7 +239,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_disconnect_Settings_General")
+YRP.AddNetworkString("nws_yrp_disconnect_Settings_General")
 net.Receive(
 	"nws_yrp_disconnect_Settings_General",
 	function(len, ply)
@@ -346,7 +346,7 @@ function IsDropMoneyOnDeathEnabled()
 	return GetGlobalYRPBool("bool_YRPDropMoneyChat_on_death", false)
 end
 
-util.AddNetworkString("nws_yrp_do_act")
+YRP.AddNetworkString("nws_yrp_do_act")
 net.Receive(
 	"nws_yrp_do_act",
 	function(len, ply)
@@ -468,7 +468,7 @@ end
 
 --[[ SERVER SETTINGS ]]
 --
-util.AddNetworkString("nws_yrp_update_bool_server_reload_notification")
+YRP.AddNetworkString("nws_yrp_update_bool_server_reload_notification")
 net.Receive(
 	"nws_yrp_update_bool_server_reload_notification",
 	function(len, ply)
@@ -478,7 +478,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_server_reload")
+YRP.AddNetworkString("nws_yrp_update_bool_server_reload")
 net.Receive(
 	"nws_yrp_update_bool_server_reload",
 	function(len, ply)
@@ -488,7 +488,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_server_logo")
+YRP.AddNetworkString("nws_yrp_update_text_server_logo")
 net.Receive(
 	"nws_yrp_update_text_server_logo",
 	function(len, ply)
@@ -498,7 +498,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_server_name")
+YRP.AddNetworkString("nws_yrp_update_text_server_name")
 net.Receive(
 	"nws_yrp_update_text_server_name",
 	function(len, ply)
@@ -508,7 +508,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_server_rules")
+YRP.AddNetworkString("nws_yrp_update_text_server_rules")
 net.Receive(
 	"nws_yrp_update_text_server_rules",
 	function(len, ply)
@@ -518,7 +518,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_server_welcome_message")
+YRP.AddNetworkString("nws_yrp_update_text_server_welcome_message")
 net.Receive(
 	"nws_yrp_update_text_server_welcome_message",
 	function(len, ply)
@@ -528,7 +528,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_server_message_of_the_day")
+YRP.AddNetworkString("nws_yrp_update_text_server_message_of_the_day")
 net.Receive(
 	"nws_yrp_update_text_server_message_of_the_day",
 	function(len, ply)
@@ -538,7 +538,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_server_debug")
+YRP.AddNetworkString("nws_yrp_update_bool_server_debug")
 net.Receive(
 	"nws_yrp_update_bool_server_debug",
 	function(len, ply)
@@ -550,7 +550,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_server_debug_voice")
+YRP.AddNetworkString("nws_yrp_update_bool_server_debug_voice")
 net.Receive(
 	"nws_yrp_update_bool_server_debug_voice",
 	function(len, ply)
@@ -560,7 +560,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_int_server_debug_tick")
+YRP.AddNetworkString("nws_yrp_update_int_server_debug_tick")
 net.Receive(
 	"nws_yrp_update_int_server_debug_tick",
 	function(len, ply)
@@ -572,7 +572,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_msg_channel_gm")
+YRP.AddNetworkString("nws_yrp_update_bool_msg_channel_gm")
 net.Receive(
 	"nws_yrp_update_bool_msg_channel_gm",
 	function(len, ply)
@@ -582,7 +582,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_msg_channel_db")
+YRP.AddNetworkString("nws_yrp_update_bool_msg_channel_db")
 net.Receive(
 	"nws_yrp_update_bool_msg_channel_db",
 	function(len, ply)
@@ -592,7 +592,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_msg_channel_l")
+YRP.AddNetworkString("nws_yrp_update_bool_msg_channel_l")
 net.Receive(
 	"nws_yrp_update_bool_msg_channel_l",
 	function(len, ply)
@@ -602,7 +602,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_msg_channel_n")
+YRP.AddNetworkString("nws_yrp_update_bool_msg_channel_n")
 net.Receive(
 	"nws_yrp_update_bool_msg_channel_n",
 	function(len, ply)
@@ -612,7 +612,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_msg_channel_darkrp")
+YRP.AddNetworkString("nws_yrp_update_bool_msg_channel_darkrp")
 net.Receive(
 	"nws_yrp_update_bool_msg_channel_darkrp",
 	function(len, ply)
@@ -622,7 +622,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_msg_channel_c")
+YRP.AddNetworkString("nws_yrp_update_bool_msg_channel_c")
 net.Receive(
 	"nws_yrp_update_bool_msg_channel_c",
 	function(len, ply)
@@ -632,7 +632,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_msg_channel_debug")
+YRP.AddNetworkString("nws_yrp_update_bool_msg_channel_debug")
 net.Receive(
 	"nws_yrp_update_bool_msg_channel_debug",
 	function(len, ply)
@@ -644,7 +644,7 @@ net.Receive(
 
 --[[ GAMEMODE SETTINGS ]]
 --
-util.AddNetworkString("nws_yrp_update_text_gamemode_name")
+YRP.AddNetworkString("nws_yrp_update_text_gamemode_name")
 net.Receive(
 	"nws_yrp_update_text_gamemode_name",
 	function(len, ply)
@@ -655,7 +655,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_graffiti_disabled")
+YRP.AddNetworkString("nws_yrp_update_bool_graffiti_disabled")
 net.Receive(
 	"nws_yrp_update_bool_graffiti_disabled",
 	function(len, ply)
@@ -664,7 +664,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_suicide_disabled")
+YRP.AddNetworkString("nws_yrp_update_bool_suicide_disabled")
 net.Receive(
 	"nws_yrp_update_bool_suicide_disabled",
 	function(len, ply)
@@ -673,7 +673,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_team_set")
+YRP.AddNetworkString("nws_yrp_update_bool_team_set")
 net.Receive(
 	"nws_yrp_update_bool_team_set",
 	function(len, ply)
@@ -682,7 +682,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_team_color")
+YRP.AddNetworkString("nws_yrp_update_bool_team_color")
 net.Receive(
 	"nws_yrp_update_bool_team_color",
 	function(len, ply)
@@ -691,7 +691,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_antipropkill")
+YRP.AddNetworkString("nws_yrp_update_bool_antipropkill")
 net.Receive(
 	"nws_yrp_update_bool_antipropkill",
 	function(len, ply)
@@ -700,7 +700,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_drop_items_on_death")
+YRP.AddNetworkString("nws_yrp_update_bool_drop_items_on_death")
 net.Receive(
 	"nws_yrp_update_bool_drop_items_on_death",
 	function(len, ply)
@@ -709,7 +709,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_drop_items_role")
+YRP.AddNetworkString("nws_yrp_update_bool_drop_items_role")
 net.Receive(
 	"nws_yrp_update_bool_drop_items_role",
 	function(len, ply)
@@ -718,7 +718,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_players_need_to_introduce")
+YRP.AddNetworkString("nws_yrp_update_bool_players_need_to_introduce")
 net.Receive(
 	"nws_yrp_update_bool_players_need_to_introduce",
 	function(len, ply)
@@ -727,7 +727,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_players_can_YRPDropWeapons")
+YRP.AddNetworkString("nws_yrp_update_bool_players_can_YRPDropWeapons")
 net.Receive(
 	"nws_yrp_update_bool_players_can_YRPDropWeapons",
 	function(len, ply)
@@ -736,7 +736,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_players_start_with_default_role")
+YRP.AddNetworkString("nws_yrp_update_bool_players_start_with_default_role")
 net.Receive(
 	"nws_yrp_update_bool_players_start_with_default_role",
 	function(len, ply)
@@ -745,7 +745,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_dealers_can_take_damage")
+YRP.AddNetworkString("nws_yrp_update_bool_dealers_can_take_damage")
 net.Receive(
 	"nws_yrp_update_bool_dealers_can_take_damage",
 	function(len, ply)
@@ -754,7 +754,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_thirdperson")
+YRP.AddNetworkString("nws_yrp_update_bool_thirdperson")
 net.Receive(
 	"nws_yrp_update_bool_thirdperson",
 	function(len, ply)
@@ -763,7 +763,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_view_distance")
+YRP.AddNetworkString("nws_yrp_update_text_view_distance")
 net.Receive(
 	"nws_yrp_update_text_view_distance",
 	function(len, ply)
@@ -772,7 +772,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_chat_ooc")
+YRP.AddNetworkString("nws_yrp_update_bool_chat_ooc")
 net.Receive(
 	"nws_yrp_update_bool_chat_ooc",
 	function(len, ply)
@@ -781,7 +781,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_chat_looc")
+YRP.AddNetworkString("nws_yrp_update_bool_chat_looc")
 net.Receive(
 	"nws_yrp_update_bool_chat_looc",
 	function(len, ply)
@@ -790,7 +790,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_chat_role")
+YRP.AddNetworkString("nws_yrp_update_bool_chat_role")
 net.Receive(
 	"nws_yrp_update_bool_chat_role",
 	function(len, ply)
@@ -799,7 +799,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_chat_group")
+YRP.AddNetworkString("nws_yrp_update_bool_chat_group")
 net.Receive(
 	"nws_yrp_update_bool_chat_group",
 	function(len, ply)
@@ -808,7 +808,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_chat_yell")
+YRP.AddNetworkString("nws_yrp_update_bool_chat_yell")
 net.Receive(
 	"nws_yrp_update_bool_chat_yell",
 	function(len, ply)
@@ -817,7 +817,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_chat_service")
+YRP.AddNetworkString("nws_yrp_update_bool_chat_service")
 net.Receive(
 	"nws_yrp_update_bool_chat_service",
 	function(len, ply)
@@ -826,7 +826,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_canbeowned")
+YRP.AddNetworkString("nws_yrp_update_bool_canbeowned")
 net.Receive(
 	"nws_yrp_update_bool_canbeowned",
 	function(len, ply)
@@ -835,7 +835,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_removebuildingowner")
+YRP.AddNetworkString("nws_yrp_update_bool_removebuildingowner")
 net.Receive(
 	"nws_yrp_update_bool_removebuildingowner",
 	function(len, ply)
@@ -844,7 +844,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_removebuildingownercharswitch")
+YRP.AddNetworkString("nws_yrp_update_bool_removebuildingownercharswitch")
 net.Receive(
 	"nws_yrp_update_bool_removebuildingownercharswitch",
 	function(len, ply)
@@ -853,7 +853,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_removebuildingownertime")
+YRP.AddNetworkString("nws_yrp_update_text_removebuildingownertime")
 net.Receive(
 	"nws_yrp_update_text_removebuildingownertime",
 	function(len, ply)
@@ -862,7 +862,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_autopickup")
+YRP.AddNetworkString("nws_yrp_update_bool_autopickup")
 net.Receive(
 	"nws_yrp_update_bool_autopickup",
 	function(len, ply)
@@ -871,7 +871,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_int_ttlsweps")
+YRP.AddNetworkString("nws_yrp_update_int_ttlsweps")
 net.Receive(
 	"nws_yrp_update_int_ttlsweps",
 	function(len, ply)
@@ -882,7 +882,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_int_afkkicktime")
+YRP.AddNetworkString("nws_yrp_update_int_afkkicktime")
 net.Receive(
 	"nws_yrp_update_int_afkkicktime",
 	function(len, ply)
@@ -895,7 +895,7 @@ net.Receive(
 
 --[[ GAMEMODE SYSTEMS ]]
 --
-util.AddNetworkString("nws_yrp_update_bool_onlywhencook")
+YRP.AddNetworkString("nws_yrp_update_bool_onlywhencook")
 net.Receive(
 	"nws_yrp_update_bool_onlywhencook",
 	function(len, ply)
@@ -904,7 +904,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_hunger")
+YRP.AddNetworkString("nws_yrp_update_bool_hunger")
 net.Receive(
 	"nws_yrp_update_bool_hunger",
 	function(len, ply)
@@ -913,7 +913,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_hunger_health_regeneration")
+YRP.AddNetworkString("nws_yrp_update_bool_hunger_health_regeneration")
 net.Receive(
 	"nws_yrp_update_bool_hunger_health_regeneration",
 	function(len, ply)
@@ -922,7 +922,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_hunger_health_regeneration_tickrate")
+YRP.AddNetworkString("nws_yrp_update_text_hunger_health_regeneration_tickrate")
 net.Receive(
 	"nws_yrp_update_text_hunger_health_regeneration_tickrate",
 	function(len, ply)
@@ -931,7 +931,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_thirst")
+YRP.AddNetworkString("nws_yrp_update_bool_thirst")
 net.Receive(
 	"nws_yrp_update_bool_thirst",
 	function(len, ply)
@@ -940,7 +940,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_permille")
+YRP.AddNetworkString("nws_yrp_update_bool_permille")
 net.Receive(
 	"nws_yrp_update_bool_permille",
 	function(len, ply)
@@ -949,7 +949,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_stamina")
+YRP.AddNetworkString("nws_yrp_update_bool_stamina")
 net.Receive(
 	"nws_yrp_update_bool_stamina",
 	function(len, ply)
@@ -958,7 +958,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_radiation")
+YRP.AddNetworkString("nws_yrp_update_bool_radiation")
 net.Receive(
 	"nws_yrp_update_bool_radiation",
 	function(len, ply)
@@ -967,7 +967,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_map_system")
+YRP.AddNetworkString("nws_yrp_update_bool_map_system")
 net.Receive(
 	"nws_yrp_update_bool_map_system",
 	function(len, ply)
@@ -976,7 +976,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_character_system")
+YRP.AddNetworkString("nws_yrp_update_bool_character_system")
 net.Receive(
 	"nws_yrp_update_bool_character_system",
 	function(len, ply)
@@ -985,7 +985,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_building_system")
+YRP.AddNetworkString("nws_yrp_update_bool_building_system")
 net.Receive(
 	"nws_yrp_update_bool_building_system",
 	function(len, ply)
@@ -994,7 +994,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_securitylevel_system")
+YRP.AddNetworkString("nws_yrp_update_bool_securitylevel_system")
 net.Receive(
 	"nws_yrp_update_bool_securitylevel_system",
 	function(len, ply)
@@ -1003,7 +1003,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_allbuildingsunlocked")
+YRP.AddNetworkString("nws_yrp_update_bool_allbuildingsunlocked")
 net.Receive(
 	"nws_yrp_update_bool_allbuildingsunlocked",
 	function(len, ply)
@@ -1012,7 +1012,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_inventory_system")
+YRP.AddNetworkString("nws_yrp_update_bool_inventory_system")
 net.Receive(
 	"nws_yrp_update_bool_inventory_system",
 	function(len, ply)
@@ -1021,7 +1021,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_realistic_system")
+YRP.AddNetworkString("nws_yrp_update_bool_realistic_system")
 net.Receive(
 	"nws_yrp_update_bool_realistic_system",
 	function(len, ply)
@@ -1030,7 +1030,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_level_system")
+YRP.AddNetworkString("nws_yrp_update_bool_level_system")
 net.Receive(
 	"nws_yrp_update_bool_level_system",
 	function(len, ply)
@@ -1039,7 +1039,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_weapon_system")
+YRP.AddNetworkString("nws_yrp_update_bool_weapon_system")
 net.Receive(
 	"nws_yrp_update_bool_weapon_system",
 	function(len, ply)
@@ -1048,7 +1048,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_weapon_system_model")
+YRP.AddNetworkString("nws_yrp_update_text_weapon_system_model")
 net.Receive(
 	"nws_yrp_update_text_weapon_system_model",
 	function(len, ply)
@@ -1057,7 +1057,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_identity_card")
+YRP.AddNetworkString("nws_yrp_update_bool_identity_card")
 net.Receive(
 	"nws_yrp_update_bool_identity_card",
 	function(len, ply)
@@ -1066,7 +1066,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_laws_system")
+YRP.AddNetworkString("nws_yrp_update_bool_laws_system")
 net.Receive(
 	"nws_yrp_update_bool_laws_system",
 	function(len, ply)
@@ -1075,7 +1075,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_appearance_system")
+YRP.AddNetworkString("nws_yrp_update_bool_appearance_system")
 net.Receive(
 	"nws_yrp_update_bool_appearance_system",
 	function(len, ply)
@@ -1084,7 +1084,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_appearance_model")
+YRP.AddNetworkString("nws_yrp_update_text_appearance_model")
 net.Receive(
 	"nws_yrp_update_text_appearance_model",
 	function(len, ply)
@@ -1093,7 +1093,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_smartphone_system")
+YRP.AddNetworkString("nws_yrp_update_bool_smartphone_system")
 net.Receive(
 	"nws_yrp_update_bool_smartphone_system",
 	function(len, ply)
@@ -1102,7 +1102,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_players_can_switch_faction")
+YRP.AddNetworkString("nws_yrp_update_bool_players_can_switch_faction")
 net.Receive(
 	"nws_yrp_update_bool_players_can_switch_faction",
 	function(len, ply)
@@ -1111,7 +1111,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_players_can_switch_role")
+YRP.AddNetworkString("nws_yrp_update_bool_players_can_switch_role")
 net.Receive(
 	"nws_yrp_update_bool_players_can_switch_role",
 	function(len, ply)
@@ -1120,7 +1120,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_players_die_on_role_switch")
+YRP.AddNetworkString("nws_yrp_update_bool_players_die_on_role_switch")
 net.Receive(
 	"nws_yrp_update_bool_players_die_on_role_switch",
 	function(len, ply)
@@ -1129,7 +1129,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_wanted_system")
+YRP.AddNetworkString("nws_yrp_update_bool_wanted_system")
 net.Receive(
 	"nws_yrp_update_bool_wanted_system",
 	function(len, ply)
@@ -1138,7 +1138,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_voice")
+YRP.AddNetworkString("nws_yrp_update_bool_voice")
 net.Receive(
 	"nws_yrp_update_bool_voice",
 	function(len, ply)
@@ -1147,7 +1147,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_voice_module")
+YRP.AddNetworkString("nws_yrp_update_bool_voice_module")
 net.Receive(
 	"nws_yrp_update_bool_voice_module",
 	function(len, ply)
@@ -1156,7 +1156,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_voice_module_locally")
+YRP.AddNetworkString("nws_yrp_update_bool_voice_module_locally")
 net.Receive(
 	"nws_yrp_update_bool_voice_module_locally",
 	function(len, ply)
@@ -1165,7 +1165,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_voice_idcardid")
+YRP.AddNetworkString("nws_yrp_update_bool_voice_idcardid")
 net.Receive(
 	"nws_yrp_update_bool_voice_idcardid",
 	function(len, ply)
@@ -1174,7 +1174,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_voice_3d")
+YRP.AddNetworkString("nws_yrp_update_bool_voice_3d")
 net.Receive(
 	"nws_yrp_update_bool_voice_3d",
 	function(len, ply)
@@ -1183,7 +1183,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_int_voice_max_range")
+YRP.AddNetworkString("nws_yrp_update_int_voice_max_range")
 net.Receive(
 	"nws_yrp_update_int_voice_max_range",
 	function(len, ply)
@@ -1194,7 +1194,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_gmod_voice_module")
+YRP.AddNetworkString("nws_yrp_update_bool_gmod_voice_module")
 net.Receive(
 	"nws_yrp_update_bool_gmod_voice_module",
 	function(len, ply)
@@ -1205,7 +1205,7 @@ net.Receive(
 
 --[[ GAMEMODE VISUALS ]]
 --
-util.AddNetworkString("nws_yrp_update_bool_yrp_combined_menu")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_combined_menu")
 net.Receive(
 	"nws_yrp_update_bool_yrp_combined_menu",
 	function(len, ply)
@@ -1214,7 +1214,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_role_menu")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_role_menu")
 net.Receive(
 	"nws_yrp_update_bool_yrp_role_menu",
 	function(len, ply)
@@ -1223,7 +1223,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_help_menu")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_help_menu")
 net.Receive(
 	"nws_yrp_update_bool_yrp_help_menu",
 	function(len, ply)
@@ -1232,7 +1232,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_buy_menu")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_buy_menu")
 net.Receive(
 	"nws_yrp_update_bool_yrp_buy_menu",
 	function(len, ply)
@@ -1241,7 +1241,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_char_menu")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_char_menu")
 net.Receive(
 	"nws_yrp_update_bool_yrp_char_menu",
 	function(len, ply)
@@ -1250,7 +1250,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_keybinds_menu")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_keybinds_menu")
 net.Receive(
 	"nws_yrp_update_bool_yrp_keybinds_menu",
 	function(len, ply)
@@ -1259,7 +1259,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_tickets_menu")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_tickets_menu")
 net.Receive(
 	"nws_yrp_update_bool_yrp_tickets_menu",
 	function(len, ply)
@@ -1268,7 +1268,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_macro_menu")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_macro_menu")
 net.Receive(
 	"nws_yrp_update_bool_yrp_macro_menu",
 	function(len, ply)
@@ -1277,7 +1277,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_character_background")
+YRP.AddNetworkString("nws_yrp_update_text_character_background")
 net.Receive(
 	"nws_yrp_update_text_character_background",
 	function(len, ply)
@@ -1287,7 +1287,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_character_design")
+YRP.AddNetworkString("nws_yrp_update_text_character_design")
 net.Receive(
 	"nws_yrp_update_text_character_design",
 	function(len, ply)
@@ -1297,7 +1297,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_chat")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_chat")
 net.Receive(
 	"nws_yrp_update_bool_yrp_chat",
 	function(len, ply)
@@ -1306,7 +1306,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_chat_commands")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_chat_commands")
 net.Receive(
 	"nws_yrp_update_bool_yrp_chat_commands",
 	function(len, ply)
@@ -1315,7 +1315,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_name")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_name")
 net.Receive(
 	"nws_yrp_update_bool_yrp_chat_show_name",
 	function(len, ply)
@@ -1324,7 +1324,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_rolename")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_rolename")
 net.Receive(
 	"nws_yrp_update_bool_yrp_chat_show_rolename",
 	function(len, ply)
@@ -1333,7 +1333,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_factionname")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_factionname")
 net.Receive(
 	"nws_yrp_update_bool_yrp_chat_show_factionname",
 	function(len, ply)
@@ -1342,7 +1342,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_groupname")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_groupname")
 net.Receive(
 	"nws_yrp_update_bool_yrp_chat_show_groupname",
 	function(len, ply)
@@ -1351,7 +1351,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_usergroup")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_usergroup")
 net.Receive(
 	"nws_yrp_update_bool_yrp_chat_show_usergroup",
 	function(len, ply)
@@ -1360,7 +1360,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_idcard_background")
+YRP.AddNetworkString("nws_yrp_update_text_idcard_background")
 net.Receive(
 	"nws_yrp_update_text_idcard_background",
 	function(len, ply)
@@ -1369,7 +1369,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_idstructure")
+YRP.AddNetworkString("nws_yrp_update_text_idstructure")
 net.Receive(
 	"nws_yrp_update_text_idstructure",
 	function(len, ply)
@@ -1379,7 +1379,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_idcardid")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_chat_show_idcardid")
 net.Receive(
 	"nws_yrp_update_bool_yrp_chat_show_idcardid",
 	function(len, ply)
@@ -1388,7 +1388,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_show_securitylevel")
+YRP.AddNetworkString("nws_yrp_update_bool_show_securitylevel")
 net.Receive(
 	"nws_yrp_update_bool_show_securitylevel",
 	function(len, ply)
@@ -1397,7 +1397,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_int_yrp_chat_range_local")
+YRP.AddNetworkString("nws_yrp_update_int_yrp_chat_range_local")
 net.Receive(
 	"nws_yrp_update_int_yrp_chat_range_local",
 	function(len, ply)
@@ -1408,7 +1408,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_showowner")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_showowner")
 net.Receive(
 	"nws_yrp_update_bool_yrp_showowner",
 	function(len, ply)
@@ -1417,7 +1417,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_crosshair")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_crosshair")
 net.Receive(
 	"nws_yrp_update_bool_yrp_crosshair",
 	function(len, ply)
@@ -1426,7 +1426,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_play_button")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_play_button")
 net.Receive(
 	"nws_yrp_update_bool_yrp_play_button",
 	function(len, ply)
@@ -1435,7 +1435,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_hud")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_hud")
 net.Receive(
 	"nws_yrp_update_bool_yrp_hud",
 	function(len, ply)
@@ -1444,7 +1444,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_hud_swaying")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_hud_swaying")
 net.Receive(
 	"nws_yrp_update_bool_yrp_hud_swaying",
 	function(len, ply)
@@ -1453,7 +1453,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard",
 	function(len, ply)
@@ -1462,7 +1462,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_yrp_scoreboard_style")
+YRP.AddNetworkString("nws_yrp_update_text_yrp_scoreboard_style")
 net.Receive(
 	"nws_yrp_update_text_yrp_scoreboard_style",
 	function(len, ply)
@@ -1471,7 +1471,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_level")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_level")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_level",
 	function(len, ply)
@@ -1480,7 +1480,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_name")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_name")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_name",
 	function(len, ply)
@@ -1489,7 +1489,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_usergroup")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_usergroup")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_usergroup",
 	function(len, ply)
@@ -1498,7 +1498,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_rolename")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_rolename")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_rolename",
 	function(len, ply)
@@ -1507,7 +1507,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_factionname")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_factionname")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_factionname",
 	function(len, ply)
@@ -1516,7 +1516,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_groupname")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_groupname")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_groupname",
 	function(len, ply)
@@ -1525,7 +1525,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_language")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_language")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_language",
 	function(len, ply)
@@ -1534,7 +1534,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_country")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_country")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_country",
 	function(len, ply)
@@ -1543,7 +1543,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_playtime")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_playtime")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_playtime",
 	function(len, ply)
@@ -1552,7 +1552,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_frags")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_frags")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_frags",
 	function(len, ply)
@@ -1561,7 +1561,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_deaths")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_deaths")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_deaths",
 	function(len, ply)
@@ -1570,7 +1570,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_operating_system")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_operating_system")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_operating_system",
 	function(len, ply)
@@ -1579,7 +1579,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_playtime")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_playtime")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_playtime",
 	function(len, ply)
@@ -1588,7 +1588,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_idcardid")
+YRP.AddNetworkString("nws_yrp_update_bool_yrp_scoreboard_show_idcardid")
 net.Receive(
 	"nws_yrp_update_bool_yrp_scoreboard_show_idcardid",
 	function(len, ply)
@@ -1597,7 +1597,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head",
 	function(len, ply)
@@ -1606,7 +1606,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_target")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_target")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_target",
 	function(len, ply)
@@ -1615,7 +1615,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_idcardid")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_idcardid")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_idcardid",
 	function(len, ply)
@@ -1624,7 +1624,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_name")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_name")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_name",
 	function(len, ply)
@@ -1633,7 +1633,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_name_onlyfaction")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_name_onlyfaction")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_name_onlyfaction",
 	function(len, ply)
@@ -1642,7 +1642,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_name_onlygroup")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_name_onlygroup")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_name_onlygroup",
 	function(len, ply)
@@ -1651,7 +1651,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_name_onlyrole")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_name_onlyrole")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_name_onlyrole",
 	function(len, ply)
@@ -1660,7 +1660,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_clan")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_clan")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_clan",
 	function(len, ply)
@@ -1669,7 +1669,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_level")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_level")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_level",
 	function(len, ply)
@@ -1678,7 +1678,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_rolename")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_rolename")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_rolename",
 	function(len, ply)
@@ -1687,7 +1687,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_factionname")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_factionname")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_factionname",
 	function(len, ply)
@@ -1696,7 +1696,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_groupname")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_groupname")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_groupname",
 	function(len, ply)
@@ -1705,7 +1705,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_health")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_health")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_health",
 	function(len, ply)
@@ -1714,7 +1714,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_armor")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_armor")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_armor",
 	function(len, ply)
@@ -1723,7 +1723,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_usergroup")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_usergroup")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_usergroup",
 	function(len, ply)
@@ -1732,7 +1732,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_target_forced")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_target_forced")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_target_forced",
 	function(len, ply)
@@ -1741,7 +1741,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_voice")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_voice")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_voice",
 	function(len, ply)
@@ -1750,7 +1750,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_head_chat")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_head_chat")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_head_chat",
 	function(len, ply)
@@ -1759,7 +1759,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side",
 	function(len, ply)
@@ -1768,7 +1768,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side_target")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side_target")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side_target",
 	function(len, ply)
@@ -1777,7 +1777,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side_name")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side_name")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side_name",
 	function(len, ply)
@@ -1786,7 +1786,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side_idcardid")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side_idcardid")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side_idcardid",
 	function(len, ply)
@@ -1795,7 +1795,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side_clan")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side_clan")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side_clan",
 	function(len, ply)
@@ -1804,7 +1804,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side_level")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side_level")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side_level",
 	function(len, ply)
@@ -1813,7 +1813,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side_rolename")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side_rolename")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side_rolename",
 	function(len, ply)
@@ -1822,7 +1822,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side_factionname")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side_factionname")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side_factionname",
 	function(len, ply)
@@ -1831,7 +1831,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side_groupname")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side_groupname")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side_groupname",
 	function(len, ply)
@@ -1840,7 +1840,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side_health")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side_health")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side_health",
 	function(len, ply)
@@ -1849,7 +1849,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side_armor")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side_armor")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side_armor",
 	function(len, ply)
@@ -1858,7 +1858,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_tag_on_side_usergroup")
+YRP.AddNetworkString("nws_yrp_update_bool_tag_on_side_usergroup")
 net.Receive(
 	"nws_yrp_update_bool_tag_on_side_usergroup",
 	function(len, ply)
@@ -1869,7 +1869,7 @@ net.Receive(
 
 --[[ MONEY SETTINGS ]]
 --
-util.AddNetworkString("nws_yrp_update_bool_YRPDropMoneyChat_on_death")
+YRP.AddNetworkString("nws_yrp_update_bool_YRPDropMoneyChat_on_death")
 net.Receive(
 	"nws_yrp_update_bool_YRPDropMoneyChat_on_death",
 	function(len, ply)
@@ -1878,7 +1878,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_money_max_amount_of_dropped_money")
+YRP.AddNetworkString("nws_yrp_update_text_money_max_amount_of_dropped_money")
 net.Receive(
 	"nws_yrp_update_text_money_max_amount_of_dropped_money",
 	function(len, ply)
@@ -1887,7 +1887,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_money_pre")
+YRP.AddNetworkString("nws_yrp_update_text_money_pre")
 net.Receive(
 	"nws_yrp_update_text_money_pre",
 	function(len, ply)
@@ -1896,7 +1896,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_money_pos")
+YRP.AddNetworkString("nws_yrp_update_text_money_pos")
 net.Receive(
 	"nws_yrp_update_text_money_pos",
 	function(len, ply)
@@ -1905,7 +1905,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_money_model")
+YRP.AddNetworkString("nws_yrp_update_text_money_model")
 net.Receive(
 	"nws_yrp_update_text_money_model",
 	function(len, ply)
@@ -1914,7 +1914,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_money_printer_spawn_money")
+YRP.AddNetworkString("nws_yrp_update_bool_money_printer_spawn_money")
 net.Receive(
 	"nws_yrp_update_bool_money_printer_spawn_money",
 	function(len, ply)
@@ -1925,7 +1925,7 @@ net.Receive(
 
 --[[ CHARACTERS SETTINGS ]]
 --
-util.AddNetworkString("nws_yrp_update_text_characters_money_start")
+YRP.AddNetworkString("nws_yrp_update_text_characters_money_start")
 net.Receive(
 	"nws_yrp_update_text_characters_money_start",
 	function(len, ply)
@@ -1934,7 +1934,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_characters_changeable_name")
+YRP.AddNetworkString("nws_yrp_update_bool_characters_changeable_name")
 net.Receive(
 	"nws_yrp_update_bool_characters_changeable_name",
 	function(len, ply)
@@ -1943,7 +1943,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_characters_removeondeath")
+YRP.AddNetworkString("nws_yrp_update_bool_characters_removeondeath")
 net.Receive(
 	"nws_yrp_update_bool_characters_removeondeath",
 	function(len, ply)
@@ -1952,7 +1952,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_characters_birthday")
+YRP.AddNetworkString("nws_yrp_update_bool_characters_birthday")
 net.Receive(
 	"nws_yrp_update_bool_characters_birthday",
 	function(len, ply)
@@ -1961,7 +1961,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_characters_bodyheight")
+YRP.AddNetworkString("nws_yrp_update_bool_characters_bodyheight")
 net.Receive(
 	"nws_yrp_update_bool_characters_bodyheight",
 	function(len, ply)
@@ -1970,7 +1970,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_characters_weight")
+YRP.AddNetworkString("nws_yrp_update_bool_characters_weight")
 net.Receive(
 	"nws_yrp_update_bool_characters_weight",
 	function(len, ply)
@@ -1979,7 +1979,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_int_logouttime")
+YRP.AddNetworkString("nws_yrp_update_int_logouttime")
 net.Receive(
 	"nws_yrp_update_int_logouttime",
 	function(len, ply)
@@ -1990,7 +1990,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_int_deathtimestamp_min")
+YRP.AddNetworkString("nws_yrp_update_int_deathtimestamp_min")
 net.Receive(
 	"nws_yrp_update_int_deathtimestamp_min",
 	function(len, ply)
@@ -2001,7 +2001,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_int_deathtimestamp_max")
+YRP.AddNetworkString("nws_yrp_update_int_deathtimestamp_max")
 net.Receive(
 	"nws_yrp_update_int_deathtimestamp_max",
 	function(len, ply)
@@ -2012,7 +2012,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_bool_deathscreen")
+YRP.AddNetworkString("nws_yrp_update_bool_deathscreen")
 net.Receive(
 	"nws_yrp_update_bool_deathscreen",
 	function(len, ply)
@@ -2023,7 +2023,7 @@ net.Receive(
 
 --[[ SOCIAL SETTINGS ]]
 --
-util.AddNetworkString("nws_yrp_update_text_social_website")
+YRP.AddNetworkString("nws_yrp_update_text_social_website")
 net.Receive(
 	"nws_yrp_update_text_social_website",
 	function(len, ply)
@@ -2033,7 +2033,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_forum")
+YRP.AddNetworkString("nws_yrp_update_text_social_forum")
 net.Receive(
 	"nws_yrp_update_text_social_forum",
 	function(len, ply)
@@ -2043,7 +2043,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_discord")
+YRP.AddNetworkString("nws_yrp_update_text_social_discord")
 net.Receive(
 	"nws_yrp_update_text_social_discord",
 	function(len, ply)
@@ -2053,7 +2053,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_discord_widgetid")
+YRP.AddNetworkString("nws_yrp_update_text_social_discord_widgetid")
 net.Receive(
 	"nws_yrp_update_text_social_discord_widgetid",
 	function(len, ply)
@@ -2063,7 +2063,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_teamspeak_ip")
+YRP.AddNetworkString("nws_yrp_update_text_social_teamspeak_ip")
 net.Receive(
 	"nws_yrp_update_text_social_teamspeak_ip",
 	function(len, ply)
@@ -2073,7 +2073,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_teamspeak_port")
+YRP.AddNetworkString("nws_yrp_update_text_social_teamspeak_port")
 net.Receive(
 	"nws_yrp_update_text_social_teamspeak_port",
 	function(len, ply)
@@ -2083,7 +2083,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_teamspeak_query_port")
+YRP.AddNetworkString("nws_yrp_update_text_social_teamspeak_query_port")
 net.Receive(
 	"nws_yrp_update_text_social_teamspeak_query_port",
 	function(len, ply)
@@ -2093,7 +2093,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_youtube")
+YRP.AddNetworkString("nws_yrp_update_text_social_youtube")
 net.Receive(
 	"nws_yrp_update_text_social_youtube",
 	function(len, ply)
@@ -2103,7 +2103,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_twitch")
+YRP.AddNetworkString("nws_yrp_update_text_social_twitch")
 net.Receive(
 	"nws_yrp_update_text_social_twitch",
 	function(len, ply)
@@ -2112,7 +2112,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_twitter")
+YRP.AddNetworkString("nws_yrp_update_text_social_twitter")
 net.Receive(
 	"nws_yrp_update_text_social_twitter",
 	function(len, ply)
@@ -2122,7 +2122,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_facebook")
+YRP.AddNetworkString("nws_yrp_update_text_social_facebook")
 net.Receive(
 	"nws_yrp_update_text_social_facebook",
 	function(len, ply)
@@ -2132,7 +2132,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_instagram")
+YRP.AddNetworkString("nws_yrp_update_text_social_instagram")
 net.Receive(
 	"nws_yrp_update_text_social_instagram",
 	function(len, ply)
@@ -2142,7 +2142,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_text_social_steamgroup")
+YRP.AddNetworkString("nws_yrp_update_text_social_steamgroup")
 net.Receive(
 	"nws_yrp_update_text_social_steamgroup",
 	function(len, ply)
@@ -2152,7 +2152,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_float_scale_hunger")
+YRP.AddNetworkString("nws_yrp_update_float_scale_hunger")
 net.Receive(
 	"nws_yrp_update_float_scale_hunger",
 	function(len, ply)
@@ -2161,7 +2161,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_float_scale_thirst")
+YRP.AddNetworkString("nws_yrp_update_float_scale_thirst")
 net.Receive(
 	"nws_yrp_update_float_scale_thirst",
 	function(len, ply)
@@ -2170,7 +2170,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_float_scale_stamina_up")
+YRP.AddNetworkString("nws_yrp_update_float_scale_stamina_up")
 net.Receive(
 	"nws_yrp_update_float_scale_stamina_up",
 	function(len, ply)
@@ -2179,7 +2179,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_float_scale_stamina_down")
+YRP.AddNetworkString("nws_yrp_update_float_scale_stamina_down")
 net.Receive(
 	"nws_yrp_update_float_scale_stamina_down",
 	function(len, ply)
@@ -2188,7 +2188,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_float_scale_radiation_in")
+YRP.AddNetworkString("nws_yrp_update_float_scale_radiation_in")
 net.Receive(
 	"nws_yrp_update_float_scale_radiation_in",
 	function(len, ply)
@@ -2197,7 +2197,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_float_scale_radiation_out")
+YRP.AddNetworkString("nws_yrp_update_float_scale_radiation_out")
 net.Receive(
 	"nws_yrp_update_float_scale_radiation_out",
 	function(len, ply)
@@ -2206,7 +2206,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_float_scale_stamina_jump")
+YRP.AddNetworkString("nws_yrp_update_float_scale_stamina_jump")
 net.Receive(
 	"nws_yrp_update_float_scale_stamina_jump",
 	function(len, ply)
@@ -2232,7 +2232,7 @@ local function YRPAddSubTab(tab, parent, name, netstr, url, func)
 	table.insert(tab, entry)
 end
 
-util.AddNetworkString("nws_yrp_gethelpmenu")
+YRP.AddNetworkString("nws_yrp_gethelpmenu")
 net.Receive(
 	"nws_yrp_gethelpmenu",
 	function(len, ply)
@@ -2258,7 +2258,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsitehelp")
+YRP.AddNetworkString("nws_yrp_getsitehelp")
 net.Receive(
 	"nws_yrp_getsitehelp",
 	function(len, ply)
@@ -2269,7 +2269,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsitestaff")
+YRP.AddNetworkString("nws_yrp_getsitestaff")
 net.Receive(
 	"nws_yrp_getsitestaff",
 	function(len, ply)
@@ -2286,7 +2286,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsiteserverrules")
+YRP.AddNetworkString("nws_yrp_getsiteserverrules")
 net.Receive(
 	"nws_yrp_getsiteserverrules",
 	function(len, ply)
@@ -2303,7 +2303,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsitecollection")
+YRP.AddNetworkString("nws_yrp_getsitecollection")
 net.Receive(
 	"nws_yrp_getsitecollection",
 	function(len, ply)
@@ -2313,7 +2313,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsitecommunitywebsite")
+YRP.AddNetworkString("nws_yrp_getsitecommunitywebsite")
 net.Receive(
 	"nws_yrp_getsitecommunitywebsite",
 	function(len, ply)
@@ -2330,7 +2330,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsitecommunityforum")
+YRP.AddNetworkString("nws_yrp_getsitecommunityforum")
 net.Receive(
 	"nws_yrp_getsitecommunityforum",
 	function(len, ply)
@@ -2347,7 +2347,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsitecommunitydiscord")
+YRP.AddNetworkString("nws_yrp_getsitecommunitydiscord")
 net.Receive(
 	"nws_yrp_getsitecommunitydiscord",
 	function(len, ply)
@@ -2366,7 +2366,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsitecommunityteamspeak")
+YRP.AddNetworkString("nws_yrp_getsitecommunityteamspeak")
 net.Receive(
 	"nws_yrp_getsitecommunityteamspeak",
 	function(len, ply)
@@ -2388,7 +2388,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsitecommunitytwitter")
+YRP.AddNetworkString("nws_yrp_getsitecommunitytwitter")
 net.Receive(
 	"nws_yrp_getsitecommunitytwitter",
 	function(len, ply)
@@ -2405,7 +2405,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsitecommunityyoutube")
+YRP.AddNetworkString("nws_yrp_getsitecommunityyoutube")
 net.Receive(
 	"nws_yrp_getsitecommunityyoutube",
 	function(len, ply)
@@ -2422,7 +2422,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsitecommunityfacebook")
+YRP.AddNetworkString("nws_yrp_getsitecommunityfacebook")
 net.Receive(
 	"nws_yrp_getsitecommunityfacebook",
 	function(len, ply)
@@ -2439,7 +2439,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsitecommunitysteamgroup")
+YRP.AddNetworkString("nws_yrp_getsitecommunitysteamgroup")
 net.Receive(
 	"nws_yrp_getsitecommunitysteamgroup",
 	function(len, ply)
@@ -2456,7 +2456,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsiteyourrpnew")
+YRP.AddNetworkString("nws_yrp_getsiteyourrpnew")
 net.Receive(
 	"nws_yrp_getsiteyourrpnew",
 	function(len, ply)
@@ -2465,7 +2465,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsiteyourrpdiscord")
+YRP.AddNetworkString("nws_yrp_getsiteyourrpdiscord")
 net.Receive(
 	"nws_yrp_getsiteyourrpdiscord",
 	function(len, ply)
@@ -2474,7 +2474,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsiteyourrpservers")
+YRP.AddNetworkString("nws_yrp_getsiteyourrpservers")
 net.Receive(
 	"nws_yrp_getsiteyourrpservers",
 	function(len, ply)
@@ -2483,7 +2483,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getsiteyourrptranslations")
+YRP.AddNetworkString("nws_yrp_getsiteyourrptranslations")
 net.Receive(
 	"nws_yrp_getsiteyourrptranslations",
 	function(len, ply)
@@ -2494,7 +2494,7 @@ net.Receive(
 
 --[[ OLD GETTER BELOW ]]
 --
-util.AddNetworkString("nws_yrp_dbUpdate")
+YRP.AddNetworkString("nws_yrp_dbUpdate")
 net.Receive(
 	"nws_yrp_dbUpdate",
 	function(len, ply)
@@ -2509,7 +2509,7 @@ net.Receive(
 )
 
 -- Scoreboard Commands
-util.AddNetworkString("nws_yrp_ply_kick")
+YRP.AddNetworkString("nws_yrp_ply_kick")
 net.Receive(
 	"nws_yrp_ply_kick",
 	function(len, ply)
@@ -2521,7 +2521,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_ply_ban")
+YRP.AddNetworkString("nws_yrp_ply_ban")
 net.Receive(
 	"nws_yrp_ply_ban",
 	function(len, ply)
@@ -2544,7 +2544,7 @@ function YRPGetPlayerBySteamID(steamid)
 	return nil
 end
 
-util.AddNetworkString("nws_yrp_tp_tpto_steamid")
+YRP.AddNetworkString("nws_yrp_tp_tpto_steamid")
 net.Receive(
 	"nws_yrp_tp_tpto_steamid",
 	function(len, ply)
@@ -2557,7 +2557,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_tp_bring_steamid")
+YRP.AddNetworkString("nws_yrp_tp_bring_steamid")
 net.Receive(
 	"nws_yrp_tp_bring_steamid",
 	function(len, ply)
@@ -2570,7 +2570,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_tp_tpto")
+YRP.AddNetworkString("nws_yrp_tp_tpto")
 net.Receive(
 	"nws_yrp_tp_tpto",
 	function(len, ply)
@@ -2584,7 +2584,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_tp_bring")
+YRP.AddNetworkString("nws_yrp_tp_bring")
 net.Receive(
 	"nws_yrp_tp_bring",
 	function(len, ply)
@@ -2597,7 +2597,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_tp_return")
+YRP.AddNetworkString("nws_yrp_tp_return")
 net.Receive(
 	"nws_yrp_tp_return",
 	function(len, ply)
@@ -2610,7 +2610,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_tp_jail")
+YRP.AddNetworkString("nws_yrp_tp_jail")
 net.Receive(
 	"nws_yrp_tp_jail",
 	function(len, ply)
@@ -2622,7 +2622,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_tp_unjail")
+YRP.AddNetworkString("nws_yrp_tp_unjail")
 net.Receive(
 	"nws_yrp_tp_unjail",
 	function(len, ply)
@@ -2673,7 +2673,7 @@ function YRPDoUnRagdoll(ply)
 	end
 end
 
-util.AddNetworkString("nws_yrp_ragdoll")
+YRP.AddNetworkString("nws_yrp_ragdoll")
 net.Receive(
 	"nws_yrp_ragdoll",
 	function(len, ply)
@@ -2685,7 +2685,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_unragdoll")
+YRP.AddNetworkString("nws_yrp_unragdoll")
 net.Receive(
 	"nws_yrp_unragdoll",
 	function(len, ply)
@@ -2697,7 +2697,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_freeze")
+YRP.AddNetworkString("nws_yrp_freeze")
 net.Receive(
 	"nws_yrp_freeze",
 	function(len, ply)
@@ -2709,7 +2709,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_unfreeze")
+YRP.AddNetworkString("nws_yrp_unfreeze")
 net.Receive(
 	"nws_yrp_unfreeze",
 	function(len, ply)
@@ -2721,7 +2721,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_god")
+YRP.AddNetworkString("nws_yrp_god")
 net.Receive(
 	"nws_yrp_god",
 	function(len, ply)
@@ -2735,7 +2735,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_ungod")
+YRP.AddNetworkString("nws_yrp_ungod")
 net.Receive(
 	"nws_yrp_ungod",
 	function(len, ply)
@@ -2749,7 +2749,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_cloak")
+YRP.AddNetworkString("nws_yrp_cloak")
 net.Receive(
 	"nws_yrp_cloak",
 	function(len, ply)
@@ -2761,7 +2761,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_uncloak")
+YRP.AddNetworkString("nws_yrp_uncloak")
 net.Receive(
 	"nws_yrp_uncloak",
 	function(len, ply)
@@ -2773,7 +2773,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_blind")
+YRP.AddNetworkString("nws_yrp_blind")
 net.Receive(
 	"nws_yrp_blind",
 	function(len, ply)
@@ -2785,7 +2785,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_unblind")
+YRP.AddNetworkString("nws_yrp_unblind")
 net.Receive(
 	"nws_yrp_unblind",
 	function(len, ply)
@@ -2797,7 +2797,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_ignite")
+YRP.AddNetworkString("nws_yrp_ignite")
 net.Receive(
 	"nws_yrp_ignite",
 	function(len, ply)
@@ -2809,7 +2809,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_extinguish")
+YRP.AddNetworkString("nws_yrp_extinguish")
 net.Receive(
 	"nws_yrp_extinguish",
 	function(len, ply)
@@ -2821,7 +2821,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_slay")
+YRP.AddNetworkString("nws_yrp_slay")
 net.Receive(
 	"nws_yrp_slay",
 	function(len, ply)
@@ -2833,7 +2833,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_slap")
+YRP.AddNetworkString("nws_yrp_slap")
 net.Receive(
 	"nws_yrp_slap",
 	function(len, ply)

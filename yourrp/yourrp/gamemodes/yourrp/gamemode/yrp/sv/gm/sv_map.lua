@@ -16,10 +16,10 @@ _map_size.facX = 1
 _map_size.facY = 1
 _map_size.error = 0
 local skyCamera = nil
-util.AddNetworkString("nws_yrp_askCoords")
-util.AddNetworkString("nws_yrp_sendCoords")
-util.AddNetworkString("nws_yrp_askCoordsMM")
-util.AddNetworkString("nws_yrp_sendCoordsMM")
+YRP.AddNetworkString("nws_yrp_askCoords")
+YRP.AddNetworkString("nws_yrp_sendCoords")
+YRP.AddNetworkString("nws_yrp_askCoordsMM")
+YRP.AddNetworkString("nws_yrp_sendCoordsMM")
 net.Receive(
 	"nws_yrp_askCoords",
 	function(len, ply)

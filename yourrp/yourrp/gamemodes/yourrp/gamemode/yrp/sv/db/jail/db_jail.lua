@@ -4,7 +4,7 @@
 local DBNotes = "yrp_jail_notes"
 YRP_SQL_ADD_COLUMN(DBNotes, "SteamID", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DBNotes, "note", "TEXT DEFAULT ''")
-util.AddNetworkString("nws_yrp_getPlayerNotes")
+YRP.AddNetworkString("nws_yrp_getPlayerNotes")
 net.Receive(
 	"nws_yrp_getPlayerNotes",
 	function(len, ply)
@@ -22,7 +22,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_addJailNote")
+YRP.AddNetworkString("nws_yrp_addJailNote")
 net.Receive(
 	"nws_yrp_addJailNote",
 	function(len, ply)
@@ -32,7 +32,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_removeJailNote")
+YRP.AddNetworkString("nws_yrp_removeJailNote")
 net.Receive(
 	"nws_yrp_removeJailNote",
 	function(len, ply)
@@ -151,7 +151,7 @@ function clean_up_jail(ply)
 	teleportToReleasepoint(ply)
 end
 
-util.AddNetworkString("nws_yrp_dbAddJail")
+YRP.AddNetworkString("nws_yrp_dbAddJail")
 net.Receive(
 	"nws_yrp_dbAddJail",
 	function(len, ply)
@@ -182,7 +182,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_dbRemJail")
+YRP.AddNetworkString("nws_yrp_dbRemJail")
 net.Receive(
 	"nws_yrp_dbRemJail",
 	function(len, ply)

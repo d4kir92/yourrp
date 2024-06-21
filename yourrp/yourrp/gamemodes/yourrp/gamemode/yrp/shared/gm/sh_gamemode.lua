@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 447 -- do NOT change this!
+GM.VersionBuild = 448 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -427,7 +427,7 @@ elseif SERVER then
 end
 
 if SERVER then
-	util.AddNetworkString("YRPGetServerInfo")
+	YRP.AddNetworkString("YRPGetServerInfo")
 	net.Receive(
 		"YRPGetServerInfo",
 		function(len, ply)
@@ -450,7 +450,7 @@ if SERVER then
 		GM.BaseName = tmp.text_gamemode_name
 	end
 
-	util.AddNetworkString("YRPGetGamemodename")
+	YRP.AddNetworkString("YRPGetGamemodename")
 	net.Receive(
 		"YRPGetGamemodename",
 		function(len, ply)

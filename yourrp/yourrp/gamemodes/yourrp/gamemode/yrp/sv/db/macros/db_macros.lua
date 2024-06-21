@@ -4,7 +4,7 @@
 local DATABASE_NAME = "yrp_macros"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
-util.AddNetworkString("nws_yrp_get_macros")
+YRP.AddNetworkString("nws_yrp_get_macros")
 net.Receive(
 	"nws_yrp_get_macros",
 	function(len, ply)
@@ -27,7 +27,7 @@ if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'm_1'") == nil then
 	end
 end
 
-util.AddNetworkString("nws_yrp_update_macro")
+YRP.AddNetworkString("nws_yrp_update_macro")
 net.Receive(
 	"nws_yrp_update_macro",
 	function(len, ply)

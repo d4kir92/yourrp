@@ -15,7 +15,7 @@ hook.Add(
 	end
 )
 
-util.AddNetworkString("nws_yrp_client_lang")
+YRP.AddNetworkString("nws_yrp_client_lang")
 net.Receive(
 	"nws_yrp_client_lang",
 	function(len, ply)
@@ -300,7 +300,7 @@ function YRPIsTeleporterAlive(uid)
 	return false
 end
 
-util.AddNetworkString("nws_yrp_autoreload")
+YRP.AddNetworkString("nws_yrp_autoreload")
 local _time = 0
 local TICK = 0.1
 local DEC = 1

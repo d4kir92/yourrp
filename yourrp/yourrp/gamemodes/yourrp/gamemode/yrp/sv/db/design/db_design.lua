@@ -185,7 +185,7 @@ end
 
 YRPDesignLoadout("Init")
 local once = false
-util.AddNetworkString("nws_yrp_ply_changed_resolution")
+YRP.AddNetworkString("nws_yrp_ply_changed_resolution")
 net.Receive(
 	"nws_yrp_ply_changed_resolution",
 	function(len, ply)
@@ -216,7 +216,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_change_hud_design")
+YRP.AddNetworkString("nws_yrp_change_hud_design")
 net.Receive(
 	"nws_yrp_change_hud_design",
 	function(len, ply)
@@ -262,7 +262,7 @@ IF_Blur.name = "Blur"
 IF_Blur.author = "D4KiR"
 IF_Blur.progress = 50
 RegisterInterfaceDesign(IF_Blur)
-util.AddNetworkString("nws_yrp_change_interface_design")
+YRP.AddNetworkString("nws_yrp_change_interface_design")
 net.Receive(
 	"nws_yrp_change_interface_design",
 	function(len, ply)
@@ -281,7 +281,7 @@ net.Receive(
 )
 
 -- F8 Design Page
-util.AddNetworkString("nws_yrp_get_design_settings")
+YRP.AddNetworkString("nws_yrp_get_design_settings")
 net.Receive(
 	"nws_yrp_get_design_settings",
 	function(len, ply)
@@ -302,7 +302,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_set_font")
+YRP.AddNetworkString("nws_yrp_set_font")
 function YRPSendFontName(ply)
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "string_fontname", "uniqueID = '1'")
 	if IsNotNilAndNotFalse(dbtab) then
@@ -320,7 +320,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_font")
+YRP.AddNetworkString("nws_yrp_update_font")
 net.Receive(
 	"nws_yrp_update_font",
 	function(len, ply)
@@ -339,7 +339,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_change_headerheight")
+YRP.AddNetworkString("nws_yrp_change_headerheight")
 net.Receive(
 	"nws_yrp_change_headerheight",
 	function(len, ply)

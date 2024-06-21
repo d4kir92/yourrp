@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-util.AddNetworkString("nws_yrp_dbGetGeneral")
-util.AddNetworkString("nws_yrp_dbGetQuestions")
-util.AddNetworkString("nws_yrp_hardresetdatabase")
+YRP.AddNetworkString("nws_yrp_dbGetGeneral")
+YRP.AddNetworkString("nws_yrp_dbGetQuestions")
+YRP.AddNetworkString("nws_yrp_hardresetdatabase")
 local yrp_db = {}
 yrp_db.version = 1
 yrp_db.loaded = false
@@ -175,7 +175,7 @@ include("specializations/db_specializations.lua")
 local DATABASE_NAME = "yrp_darkrp"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
-util.AddNetworkString("nws_yrp_darkrp_bool")
+YRP.AddNetworkString("nws_yrp_darkrp_bool")
 net.Receive(
 	"nws_yrp_darkrp_bool",
 	function(len, ply)
@@ -196,7 +196,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_update_yrp_darkrp")
+YRP.AddNetworkString("nws_yrp_update_yrp_darkrp")
 function UpdateDarkRPTable(ply)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if IsNotNilAndNotFalse(tab) then

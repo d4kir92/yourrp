@@ -272,7 +272,7 @@ function CreateRolePreviewContent()
 							bgs[i] = LocalPlayer()["charcreate_bg" .. i]
 						end
 
-						net.Start("nws_yrp_want_role")
+						net.Start("nws_yrp_want_role_char")
 						net.WriteInt(LocalPlayer().charcreate_ruid, 16)
 						net.WriteInt(LocalPlayer().charcreate_rpmid, 16)
 						net.WriteTable(bgs)

@@ -114,7 +114,7 @@ timer.Simple(
 )
 
 -- Networking
-util.AddNetworkString("nws_yrp_get_inventory")
+YRP.AddNetworkString("nws_yrp_get_inventory")
 net.Receive(
 	"nws_yrp_get_inventory",
 	function(len, ply)
@@ -142,7 +142,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_storage_open")
+YRP.AddNetworkString("nws_yrp_storage_open")
 function OpenStorage(ply, storageID)
 	storageID = tonumber(storageID)
 	local storage = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. storageID .. "'")

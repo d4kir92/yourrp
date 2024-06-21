@@ -355,7 +355,7 @@ function YRPBuildDarkrpTeams()
 end
 
 YRPBuildDarkrpTeams()
-util.AddNetworkString("nws_yrp_Send_DarkRP_Jobs")
+YRP.AddNetworkString("nws_yrp_Send_DarkRP_Jobs")
 local Player = FindMetaTable("Player")
 function Player:DRPSendTeamsToPlayer()
 	self.yrp_darkrp_index = 1
@@ -418,8 +418,8 @@ if IsNotNilAndNotFalse(drp_allgroups) then
 	end
 end
 
-util.AddNetworkString("nws_yrp_Send_DarkRP_Categories")
-util.AddNetworkString("nws_yrp_Combine_DarkRPTables")
+YRP.AddNetworkString("nws_yrp_Send_DarkRP_Categories")
+YRP.AddNetworkString("nws_yrp_Combine_DarkRPTables")
 function Player:DRPSendCategoriesToPlayer()
 	local count = 0
 	for i, group in pairs(CATEGORIES.jobs) do
@@ -497,7 +497,7 @@ for str, val in pairs(yrp_ply_roles) do
 	if string.find(str, "string_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
-		util.AddNetworkString(tab.netstr)
+		YRP.AddNetworkString(tab.netstr)
 		net.Receive(
 			tab.netstr,
 			function(len, ply)
@@ -512,7 +512,7 @@ for str, val in pairs(yrp_ply_roles) do
 				tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 				BroadcastString(tab)
 				if tab.netstr == "nws_yrp_update_role_string_name" then
-					util.AddNetworkString("nws_yrp_settings_role_update_name")
+					YRP.AddNetworkString("nws_yrp_settings_role_update_name")
 					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 					if IsNotNilAndNotFalse(puid) then
 						puid = puid[1]
@@ -523,7 +523,7 @@ for str, val in pairs(yrp_ply_roles) do
 						BroadcastString(tab)
 					end
 				elseif tab.netstr == "nws_yrp_update_role_string_color" then
-					util.AddNetworkString("nws_yrp_settings_role_update_color")
+					YRP.AddNetworkString("nws_yrp_settings_role_update_color")
 					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 					if IsNotNilAndNotFalse(puid) then
 						puid = puid[1]
@@ -534,7 +534,7 @@ for str, val in pairs(yrp_ply_roles) do
 						BroadcastString(tab)
 					end
 				elseif tab.netstr == "nws_yrp_update_role_string_icon" then
-					util.AddNetworkString("nws_yrp_settings_role_update_icon")
+					YRP.AddNetworkString("nws_yrp_settings_role_update_icon")
 					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 					if IsNotNilAndNotFalse(puid) then
 						puid = puid[1]
@@ -550,7 +550,7 @@ for str, val in pairs(yrp_ply_roles) do
 	elseif string.find(str, "int_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
-		util.AddNetworkString(tab.netstr)
+		YRP.AddNetworkString(tab.netstr)
 		net.Receive(
 			tab.netstr,
 			function(len, ply)
@@ -580,7 +580,7 @@ for str, val in pairs(yrp_ply_roles) do
 	elseif string.find(str, "float_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
-		util.AddNetworkString(tab.netstr)
+		YRP.AddNetworkString(tab.netstr)
 		net.Receive(
 			tab.netstr,
 			function(len, ply)
@@ -608,7 +608,7 @@ for str, val in pairs(yrp_ply_roles) do
 	elseif string.find(str, "bool_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
-		util.AddNetworkString(tab.netstr)
+		YRP.AddNetworkString(tab.netstr)
 		net.Receive(
 			tab.netstr,
 			function(len, ply)
@@ -801,7 +801,7 @@ function DuplicateRole(ruid, guid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_duplicated_role")
+YRP.AddNetworkString("nws_yrp_duplicated_role")
 net.Receive(
 	"nws_yrp_duplicated_role",
 	function(len, ply)
@@ -812,7 +812,7 @@ net.Receive(
 )
 
 -- Role menu
-util.AddNetworkString("nws_yrp_get_grp_roles")
+YRP.AddNetworkString("nws_yrp_get_grp_roles")
 net.Receive(
 	"nws_yrp_get_grp_roles",
 	function(len, ply)
@@ -834,7 +834,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_rol_prerole")
+YRP.AddNetworkString("nws_yrp_get_rol_prerole")
 net.Receive(
 	"nws_yrp_get_rol_prerole",
 	function(len, ply)
@@ -855,7 +855,7 @@ net.Receive(
 )
 
 -- Role Settings
-util.AddNetworkString("nws_yrp_settings_subscribe_rolelist")
+YRP.AddNetworkString("nws_yrp_settings_subscribe_rolelist")
 net.Receive(
 	"nws_yrp_settings_subscribe_rolelist",
 	function(len, ply)
@@ -867,7 +867,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_settings_subscribe_prerolelist")
+YRP.AddNetworkString("nws_yrp_settings_subscribe_prerolelist")
 net.Receive(
 	"nws_yrp_settings_subscribe_prerolelist",
 	function(len, ply)
@@ -883,7 +883,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_settings_add_role")
+YRP.AddNetworkString("nws_yrp_settings_add_role")
 net.Receive(
 	"nws_yrp_settings_add_role",
 	function(len, ply)
@@ -945,7 +945,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_settings_role_position_up")
+YRP.AddNetworkString("nws_yrp_settings_role_position_up")
 net.Receive(
 	"nws_yrp_settings_role_position_up",
 	function(len, ply)
@@ -987,7 +987,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_settings_role_position_dn")
+YRP.AddNetworkString("nws_yrp_settings_role_position_dn")
 net.Receive(
 	"nws_yrp_settings_role_position_dn",
 	function(len, ply)
@@ -1029,7 +1029,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_settings_subscribe_role")
+YRP.AddNetworkString("nws_yrp_settings_subscribe_role")
 net.Receive(
 	"nws_yrp_settings_subscribe_role",
 	function(len, ply)
@@ -1067,7 +1067,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_settings_unsubscribe_role")
+YRP.AddNetworkString("nws_yrp_settings_unsubscribe_role")
 net.Receive(
 	"nws_yrp_settings_unsubscribe_role",
 	function(len, ply)
@@ -1077,7 +1077,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_settings_unsubscribe_rolelist")
+YRP.AddNetworkString("nws_yrp_settings_unsubscribe_rolelist")
 net.Receive(
 	"nws_yrp_settings_unsubscribe_rolelist",
 	function(len, ply)
@@ -1088,7 +1088,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_settings_delete_role")
+YRP.AddNetworkString("nws_yrp_settings_delete_role")
 net.Receive(
 	"nws_yrp_settings_delete_role",
 	function(len, ply)
@@ -1129,7 +1129,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_getScoreboardGroups")
+YRP.AddNetworkString("nws_yrp_getScoreboardGroups")
 net.Receive(
 	"nws_yrp_getScoreboardGroups",
 	function(len, ply)
@@ -1177,7 +1177,7 @@ function SendCustomFlags(uid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_get_role_customflags")
+YRP.AddNetworkString("nws_yrp_get_role_customflags")
 net.Receive(
 	"nws_yrp_get_role_customflags",
 	function(len, ply)
@@ -1187,7 +1187,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_all_role_customflags")
+YRP.AddNetworkString("nws_yrp_get_all_role_customflags")
 net.Receive(
 	"nws_yrp_get_all_role_customflags",
 	function(len, ply)
@@ -1203,7 +1203,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_add_role_flag")
+YRP.AddNetworkString("nws_yrp_add_role_flag")
 net.Receive(
 	"nws_yrp_add_role_flag",
 	function(len, ply)
@@ -1235,7 +1235,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_rem_role_flag")
+YRP.AddNetworkString("nws_yrp_rem_role_flag")
 net.Receive(
 	"nws_yrp_rem_role_flag",
 	function(len, ply)
@@ -1297,7 +1297,7 @@ function SendPlayermodels(uid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_get_role_playermodels")
+YRP.AddNetworkString("nws_yrp_get_role_playermodels")
 net.Receive(
 	"nws_yrp_get_role_playermodels",
 	function(len, ply)
@@ -1307,7 +1307,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_all_playermodels")
+YRP.AddNetworkString("nws_yrp_get_all_playermodels")
 net.Receive(
 	"nws_yrp_get_all_playermodels",
 	function(len, ply)
@@ -1372,7 +1372,7 @@ function AddPlayermodelToRole(ruid, muid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_add_role_playermodel")
+YRP.AddNetworkString("nws_yrp_add_role_playermodel")
 net.Receive(
 	"nws_yrp_add_role_playermodel",
 	function(len, ply)
@@ -1400,7 +1400,7 @@ function YRPAddPlayermodelsToRole(pms, name, min, max, ruid)
 	AddPlayermodelToRole(ruid, lastentry.uniqueID)
 end
 
-util.AddNetworkString("nws_yrp_add_playermodels")
+YRP.AddNetworkString("nws_yrp_add_playermodels")
 net.Receive(
 	"nws_yrp_add_playermodels",
 	function(len, ply)
@@ -1437,7 +1437,7 @@ function RemPlayermodelFromRole(ruid, muid)
 	SendPlayermodels(ruid)
 end
 
-util.AddNetworkString("nws_yrp_rem_role_playermodel")
+YRP.AddNetworkString("nws_yrp_rem_role_playermodel")
 net.Receive(
 	"nws_yrp_rem_role_playermodel",
 	function(len, ply)
@@ -1478,7 +1478,7 @@ function SendSweps(uid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_get_role_sweps")
+YRP.AddNetworkString("nws_yrp_get_role_sweps")
 net.Receive(
 	"nws_yrp_get_role_sweps",
 	function(len, ply)
@@ -1517,7 +1517,7 @@ function AddSwepToRole(ruid, swepcn)
 	end
 end
 
-util.AddNetworkString("nws_yrp_add_role_swep")
+YRP.AddNetworkString("nws_yrp_add_role_swep")
 net.Receive(
 	"nws_yrp_add_role_swep",
 	function(len, ply)
@@ -1553,7 +1553,7 @@ function RemSwepFromRole(ruid, swepcn)
 	SendSweps(ruid)
 end
 
-util.AddNetworkString("nws_yrp_rem_role_swep")
+YRP.AddNetworkString("nws_yrp_rem_role_swep")
 net.Receive(
 	"nws_yrp_rem_role_swep",
 	function(len, ply)
@@ -1585,7 +1585,7 @@ function SendSwepsOnSpawn(uid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_get_role_sweps_onspawn")
+YRP.AddNetworkString("nws_yrp_get_role_sweps_onspawn")
 net.Receive(
 	"nws_yrp_get_role_sweps_onspawn",
 	function(len, ply)
@@ -1622,7 +1622,7 @@ function AddSwepToRoleOnSpawn(ruid, swepcn)
 	end
 end
 
-util.AddNetworkString("nws_yrp_add_role_swep_onspawn")
+YRP.AddNetworkString("nws_yrp_add_role_swep_onspawn")
 net.Receive(
 	"nws_yrp_add_role_swep_onspawn",
 	function(len, ply)
@@ -1658,7 +1658,7 @@ function RemSwepFromRoleOnSpawn(ruid, swepcn)
 	SendSwepsOnSpawn(ruid)
 end
 
-util.AddNetworkString("nws_yrp_rem_role_swep_onspawn")
+YRP.AddNetworkString("nws_yrp_rem_role_swep_onspawn")
 net.Receive(
 	"nws_yrp_rem_role_swep_onspawn",
 	function(len, ply)
@@ -1689,7 +1689,7 @@ function SendNDSweps(uid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_get_role_ndsweps")
+YRP.AddNetworkString("nws_yrp_get_role_ndsweps")
 net.Receive(
 	"nws_yrp_get_role_ndsweps",
 	function(len, ply)
@@ -1724,7 +1724,7 @@ function AddNDSwepToRole(ruid, ndswepcn)
 	end
 end
 
-util.AddNetworkString("nws_yrp_add_role_ndswep")
+YRP.AddNetworkString("nws_yrp_add_role_ndswep")
 net.Receive(
 	"nws_yrp_add_role_ndswep",
 	function(len, ply)
@@ -1758,7 +1758,7 @@ function RemNDSwepFromRole(ruid, ndswepcn)
 	SendNDSweps(ruid)
 end
 
-util.AddNetworkString("nws_yrp_rem_role_ndswep")
+YRP.AddNetworkString("nws_yrp_rem_role_ndswep")
 net.Receive(
 	"nws_yrp_rem_role_ndswep",
 	function(len, ply)
@@ -1833,7 +1833,7 @@ function CleanUpLicenses(ruid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_get_role_licenses")
+YRP.AddNetworkString("nws_yrp_get_role_licenses")
 net.Receive(
 	"nws_yrp_get_role_licenses",
 	function(len, ply)
@@ -1844,7 +1844,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_all_licenses")
+YRP.AddNetworkString("nws_yrp_get_all_licenses")
 net.Receive(
 	"nws_yrp_get_all_licenses",
 	function(len, ply)
@@ -1885,7 +1885,7 @@ function AddLicenseToRole(ruid, muid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_add_role_license")
+YRP.AddNetworkString("nws_yrp_add_role_license")
 net.Receive(
 	"nws_yrp_add_role_license",
 	function(len, ply)
@@ -1896,7 +1896,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_add_license")
+YRP.AddNetworkString("nws_yrp_add_license")
 net.Receive(
 	"nws_yrp_add_license",
 	function(len, ply)
@@ -1911,7 +1911,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_rem_role_license")
+YRP.AddNetworkString("nws_yrp_rem_role_license")
 net.Receive(
 	"nws_yrp_rem_role_license",
 	function(len, ply)
@@ -1986,7 +1986,7 @@ function CleanUpSpecializations(ruid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_get_role_specializations")
+YRP.AddNetworkString("nws_yrp_get_role_specializations")
 net.Receive(
 	"nws_yrp_get_role_specializations",
 	function(len, ply)
@@ -1997,7 +1997,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_all_specializations")
+YRP.AddNetworkString("nws_yrp_get_all_specializations")
 net.Receive(
 	"nws_yrp_get_all_specializations",
 	function(len, ply)
@@ -2038,7 +2038,7 @@ function AddSpecializationToRole(ruid, muid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_add_role_specialization")
+YRP.AddNetworkString("nws_yrp_add_role_specialization")
 net.Receive(
 	"nws_yrp_add_role_specialization",
 	function(len, ply)
@@ -2049,7 +2049,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_rem_role_specialization")
+YRP.AddNetworkString("nws_yrp_rem_role_specialization")
 net.Receive(
 	"nws_yrp_rem_role_specialization",
 	function(len, ply)
@@ -2060,7 +2060,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_openInteractMenu")
+YRP.AddNetworkString("nws_yrp_openInteractMenu")
 net.Receive(
 	"nws_yrp_openInteractMenu",
 	function(len, ply)
@@ -2139,7 +2139,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_isidcardenabled")
+YRP.AddNetworkString("nws_yrp_isidcardenabled")
 net.Receive(
 	"nws_yrp_isidcardenabled",
 	function(len, ply)
@@ -2208,7 +2208,7 @@ function YRPGetPlayerByCharID(uid)
 	return NULL
 end
 
-util.AddNetworkString("nws_yrp_promotePlayer")
+YRP.AddNetworkString("nws_yrp_promotePlayer")
 net.Receive(
 	"nws_yrp_promotePlayer",
 	function(len, ply)
@@ -2256,7 +2256,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_demotePlayer")
+YRP.AddNetworkString("nws_yrp_demotePlayer")
 net.Receive(
 	"nws_yrp_demotePlayer",
 	function(len, ply)
@@ -2325,9 +2325,9 @@ function YRPGetFirstRankUID(ruid)
 	return resultuid
 end
 
-util.AddNetworkString("nws_yrp_invitetogroup")
-util.AddNetworkString("nws_yrp_invite_ply")
-util.AddNetworkString("nws_yrp_invite_accept")
+YRP.AddNetworkString("nws_yrp_invitetogroup")
+YRP.AddNetworkString("nws_yrp_invite_ply")
+YRP.AddNetworkString("nws_yrp_invite_accept")
 net.Receive(
 	"nws_yrp_invitetogroup",
 	function(len, ply)
@@ -2410,7 +2410,7 @@ function GetRoleTable(rid)
 	return result
 end
 
-util.AddNetworkString("nws_yrp_getallroles")
+YRP.AddNetworkString("nws_yrp_getallroles")
 net.Receive(
 	"nws_yrp_getallroles",
 	function(len, ply)
@@ -2432,7 +2432,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_get_next_ranks")
+YRP.AddNetworkString("nws_yrp_get_next_ranks")
 net.Receive(
 	"nws_yrp_get_next_ranks",
 	function(len, ply)
@@ -2450,7 +2450,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_hasnext_ranks")
+YRP.AddNetworkString("nws_yrp_hasnext_ranks")
 net.Receive(
 	"nws_yrp_hasnext_ranks",
 	function(len, ply)
@@ -2468,7 +2468,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_want_role")
+YRP.AddNetworkString("nws_yrp_want_role")
 net.Receive(
 	"nws_yrp_want_role",
 	function(len, ply)
@@ -2513,7 +2513,7 @@ function YRPSendRoleSpecs(ply, ruid)
 	end
 end
 
-util.AddNetworkString("nws_yrp_get_role_specs")
+YRP.AddNetworkString("nws_yrp_get_role_specs")
 net.Receive(
 	"nws_yrp_get_role_specs",
 	function(len, ply)
@@ -2523,7 +2523,7 @@ net.Receive(
 )
 
 -- For Custom Charsystems
-util.AddNetworkString("getallroles")
+YRP.AddNetworkString("getallroles")
 net.Receive(
 	"getallroles",
 	function(len, ply)
@@ -2539,7 +2539,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("getallroles_whitelisted")
+YRP.AddNetworkString("getallroles_whitelisted")
 net.Receive(
 	"getallroles_whitelisted",
 	function(len, ply)
@@ -2557,7 +2557,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("getcharacters")
+YRP.AddNetworkString("getcharacters")
 net.Receive(
 	"getcharacters",
 	function(len, ply)

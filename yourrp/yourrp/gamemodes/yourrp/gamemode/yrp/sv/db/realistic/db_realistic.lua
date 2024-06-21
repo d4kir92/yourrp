@@ -39,7 +39,7 @@ function AddToHandler_Realistic(ply)
 	end
 end
 
-util.AddNetworkString("nws_yrp_connect_Settings_Realistic")
+YRP.AddNetworkString("nws_yrp_connect_Settings_Realistic")
 net.Receive(
 	"nws_yrp_connect_Settings_Realistic",
 	function(len, ply)
@@ -59,7 +59,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_disconnect_Settings_Realistic")
+YRP.AddNetworkString("nws_yrp_disconnect_Settings_Realistic")
 net.Receive(
 	"nws_yrp_disconnect_Settings_Realistic",
 	function(len, ply)
@@ -119,7 +119,7 @@ end
 
 for str, val in pairs(yrp_realistic) do
 	if string.find(str, "bool_", 1, true) then
-		util.AddNetworkString("nws_yrp_update_" .. str)
+		YRP.AddNetworkString("nws_yrp_update_" .. str)
 		net.Receive(
 			"nws_yrp_update_" .. str,
 			function(len, ply)
@@ -128,7 +128,7 @@ for str, val in pairs(yrp_realistic) do
 			end
 		)
 	elseif string.find(str, "float_", 1, true) then
-		util.AddNetworkString("nws_yrp_update_" .. str)
+		YRP.AddNetworkString("nws_yrp_update_" .. str)
 		net.Receive(
 			"nws_yrp_update_" .. str,
 			function(len, ply)

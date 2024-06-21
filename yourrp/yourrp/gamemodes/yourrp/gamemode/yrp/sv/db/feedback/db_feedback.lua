@@ -12,7 +12,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "rpname", "TEXT DEFAULT 'UNNAMED'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "status", "TEXT DEFAULT 'open'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "timestamp", "TEXT DEFAULT ''")
 local deleteafter = 60 * 60 * 24
-util.AddNetworkString("nws_yrp_get_ticket")
+YRP.AddNetworkString("nws_yrp_get_ticket")
 net.Receive(
 	"nws_yrp_get_ticket",
 	function(len, ply)
@@ -40,7 +40,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_add_ticket")
+YRP.AddNetworkString("nws_yrp_add_ticket")
 net.Receive(
 	"nws_yrp_add_ticket",
 	function(len, ply)
@@ -53,7 +53,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_fb_movetoopen")
+YRP.AddNetworkString("nws_yrp_fb_movetoopen")
 net.Receive(
 	"nws_yrp_fb_movetowip",
 	function(len, ply)
@@ -67,7 +67,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_fb_movetowip")
+YRP.AddNetworkString("nws_yrp_fb_movetowip")
 net.Receive(
 	"nws_yrp_fb_movetowip",
 	function(len, ply)
@@ -81,7 +81,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_fb_movetoclosed")
+YRP.AddNetworkString("nws_yrp_fb_movetoclosed")
 net.Receive(
 	"nws_yrp_fb_movetoclosed",
 	function(len, ply)

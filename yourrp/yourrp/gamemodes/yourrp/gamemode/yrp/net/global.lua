@@ -4,7 +4,7 @@ YRP_Global_Tables = YRP_Global_Tables or {}
 YRPDEBUGGLOBAL = false
 local c = {}
 if SERVER then
-	util.AddNetworkString("YRPSetGlobalYRPTable")
+	YRP.AddNetworkString("YRPSetGlobalYRPTable")
 end
 
 function GetGlobalYRPTable(key, value)

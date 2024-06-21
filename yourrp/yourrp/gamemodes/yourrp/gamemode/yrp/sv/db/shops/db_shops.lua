@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_shops"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
-util.AddNetworkString("nws_yrp_get_shops")
+YRP.AddNetworkString("nws_yrp_get_shops")
 function send_shops(ply)
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
@@ -25,7 +25,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_add")
+YRP.AddNetworkString("nws_yrp_shop_add")
 net.Receive(
 	"nws_yrp_shop_add",
 	function(len, ply)
@@ -35,7 +35,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_rem")
+YRP.AddNetworkString("nws_yrp_shop_rem")
 net.Receive(
 	"nws_yrp_shop_rem",
 	function(len, ply)
@@ -46,7 +46,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_edit_name")
+YRP.AddNetworkString("nws_yrp_shop_edit_name")
 net.Receive(
 	"nws_yrp_shop_edit_name",
 	function(len, ply)
@@ -82,7 +82,7 @@ function HasShopPermanent(tab)
 	return false
 end
 
-util.AddNetworkString("nws_yrp_shop_get_tabs")
+YRP.AddNetworkString("nws_yrp_shop_get_tabs")
 function YRPOpenBuyMenu(ply, uid)
 	--YRP.msg( "note", "OpenBuyMenu | ply: " .. tostring(ply:RPName() ) .. " | uid: " .. tostring(uid) )
 	local _dealer = YRP_SQL_SELECT("yrp_dealers", "*", "uniqueID = '" .. uid .. "'")
@@ -118,7 +118,7 @@ net.Receive(
 	end
 )
 
-util.AddNetworkString("nws_yrp_shop_get_all_tabs")
+YRP.AddNetworkString("nws_yrp_shop_get_all_tabs")
 net.Receive(
 	"nws_yrp_shop_get_all_tabs",
 	function(len, ply)
