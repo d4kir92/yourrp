@@ -168,7 +168,7 @@ local color1 = Color(0, 0, 0, 120)
 local oldlevel = oldlevel or nil --ply:Level()
 hook.Add(
 	"HUDPaint",
-	"yrp_hud_levelup",
+	"yrp_hud_levelUp",
 	function()
 		local lply = LocalPlayer()
 		if IsLevelSystemEnabled() then
@@ -179,38 +179,40 @@ hook.Add(
 			if oldlevel ~= lply:Level() then
 				oldlevel = lply:Level()
 				surface.PlaySound("garrysmod/content_downloaded.wav")
-				local levelup = YRPCreateD("DFrame", nil, YRP.ctr(600), YRP.ctr(160), 0, 0)
-				levelup:SetPos(ScrW() / 2 - levelup:GetWide() / 2, ScrH() / 2 - levelup:GetTall() / 2 - YRP.ctr(400))
-				levelup:ShowCloseButton(false)
-				levelup:SetTitle("")
-				levelup.LID_levelup = YRP.trans("LID_levelup")
-				local tab = {}
-				tab["LEVEL"] = lply:Level()
-				levelup.LID_levelx = YRP.trans("LID_levelx", tab)
-				levelup.lucolor = Color(255, 255, 100, 255)
-				levelup.lxcolor = Color(255, 255, 255, 255)
-				levelup.brcolor = Color(0, 0, 0, 255)
-				levelup.level = oldlevel
-				function levelup:Paint(pw, ph)
-					surface.SetFont("Y_36_500")
-					local tw, _ = surface.GetTextSize(self.LID_levelup)
-					tw = tw + 2 * YRP.ctr(20)
-					self.aw = self.aw or 0
-					draw.RoundedBox(YRP.ctr(10), pw / 2 - self.aw / 2, 0, self.aw, ph, color1)
-					if self.aw < tw then
-						self.aw = math.Clamp(self.aw + 5, 0, tw)
-					else
-						draw.SimpleText(self.LID_levelup, "Y_36_500", pw / 2, ph / 4, self.lucolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-						draw.SimpleText(self.LID_levelx, "Y_24_500", pw / 2, ph / 4 * 3, self.lxcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-					end
+				local levelUp = YRPCreateD("DFrame", nil, YRP.ctr(600), YRP.ctr(160), 0, 0)
+				if levelUp and levelUp.GetWide and levelUp.GetTall then
+					levelUp:SetPos(ScrW() / 2 - levelUp:GetWide() / 2, ScrH() / 2 - levelUp:GetTall() / 2 - YRP.ctr(400))
+					levelUp:ShowCloseButton(false)
+					levelUp:SetTitle("")
+					levelUp.LID_levelUp = YRP.trans("LID_levelUp")
+					local tab = {}
+					tab["LEVEL"] = lply:Level()
+					levelUp.LID_levelx = YRP.trans("LID_levelx", tab)
+					levelUp.lucolor = Color(255, 255, 100, 255)
+					levelUp.lxcolor = Color(255, 255, 255, 255)
+					levelUp.brcolor = Color(0, 0, 0, 255)
+					levelUp.level = oldlevel
+					function levelUp:Paint(pw, ph)
+						surface.SetFont("Y_36_500")
+						local tw, _ = surface.GetTextSize(self.LID_levelUp)
+						tw = tw + 2 * YRP.ctr(20)
+						self.aw = self.aw or 0
+						draw.RoundedBox(YRP.ctr(10), pw / 2 - self.aw / 2, 0, self.aw, ph, color1)
+						if self.aw < tw then
+							self.aw = math.Clamp(self.aw + 5, 0, tw)
+						else
+							draw.SimpleText(self.LID_levelUp, "Y_36_500", pw / 2, ph / 4, self.lucolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							draw.SimpleText(self.LID_levelx, "Y_24_500", pw / 2, ph / 4 * 3, self.lxcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						end
 
-					if self.level ~= lply:Level() then
-						self:Remove()
-					end
+						if self.level ~= lply:Level() then
+							self:Remove()
+						end
 
-					self.delay = self.delay or CurTime() + 6
-					if self.delay < CurTime() then
-						self:Remove()
+						self.delay = self.delay or CurTime() + 6
+						if self.delay < CurTime() then
+							self:Remove()
+						end
 					end
 				end
 			end

@@ -276,23 +276,23 @@ net.Receive(
 				function addBtn:DoClick()
 					local addPos = string.Explode(" ", tostring(lply:GetPos()))
 					local addAng = string.Explode(" ", tostring(lply:GetAngles()))
-					if addWin.linkID ~= nil then
+					if addPos ~= nil and addAng ~= nil and addWin.linkID ~= nil and addWin.type ~= nil then
 						if tab == "groupspawnpoints" or tab == "rolespawnpoints" then
 							net.Start("nws_yrp_dbInsertIntoMap")
 							net.WriteString("yrp_" .. GetMapNameDB())
 							net.WriteString("position, angle, linkID, type")
-							local addStr = "'" .. tonumber(addPos[1]) .. "," .. tonumber(addPos[2]) .. "," .. tonumber(addPos[3] + 4) .. "', '" .. tonumber(addAng[1]) .. "," .. tonumber(addAng[2]) .. "," .. tonumber(addAng[3]) .. "', " .. tostring(addWin.linkID) .. ", '" .. addWin.type .. "'"
+							local addStr = "'" .. tonumber(addPos[1]) .. "," .. tonumber(addPos[2]) .. "," .. tonumber(addPos[3] + 4) .. "', '" .. tonumber(addAng[1]) .. "," .. tonumber(addAng[2]) .. "," .. tonumber(addAng[3]) .. "', " .. tostring(addWin.linkID) .. ", '" .. tostring(addWin.type) .. "'"
 							net.WriteString(addStr)
 							net.SendToServer()
 						end
 					elseif tab == "dealers" then
 						net.Start("nws_yrp_dealer_add")
 						net.SendToServer()
-					elseif tab == "storagepoints" then
+					elseif tab == "storagepoints" and addPos ~= nil and addAng ~= nil and addWin.type ~= nil then
 						net.Start("nws_yrp_dbInsertIntoMap")
 						net.WriteString("yrp_" .. GetMapNameDB())
 						net.WriteString("position, angle, name, type")
-						local addStr = "'" .. tonumber(addPos[1]) .. "," .. tonumber(addPos[2]) .. "," .. tonumber(addPos[3] + 4) .. "', '" .. tonumber(addAng[1]) .. "," .. tonumber(addAng[2]) .. "," .. tonumber(addAng[3]) .. "', " .. YRP_SQL_STR_IN(tostring(addWin.name)) .. ", '" .. addWin.type .. "'"
+						local addStr = "'" .. tonumber(addPos[1]) .. "," .. tonumber(addPos[2]) .. "," .. tonumber(addPos[3] + 4) .. "', '" .. tonumber(addAng[1]) .. "," .. tonumber(addAng[2]) .. "," .. tonumber(addAng[3]) .. "', " .. YRP_SQL_STR_IN(tostring(addWin.name)) .. ", '" .. tostring(addWin.type) .. "'"
 						net.WriteString(addStr)
 						net.SendToServer()
 					end
