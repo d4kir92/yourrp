@@ -862,7 +862,6 @@ hook.Add(
 				notification.AddLegacy(text, NOTIFY_GENERIC, 6)
 			end
 		else
-			if typ == "none" then return true end
 			if typ == "joinleave" then return true end
 		end
 	end
