@@ -2163,7 +2163,7 @@ function addToWhitelistByPly(SteamID, roleID, groupID, nick, ply, targetSteamID)
 	if YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. SteamID .. "' AND roleID = " .. roleID) == nil then
 		local dat = util.DateStamp()
 		local status = "Promoted by " .. ply:SteamName()
-		YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', " .. YRP_SQL_STR_IN(nick) .. ", " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', " .. YRP_SQL_STR_IN(nick) .. "")
+		YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', " .. YRP_SQL_STR_IN(nick) .. ", " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', " .. YRP_SQL_STR_IN(status) .. ", " .. YRP_SQL_STR_IN(nick) .. "")
 	else
 		YRP.msg("note", "is already in whitelist")
 	end
@@ -2175,7 +2175,7 @@ function addToWhitelist(roleID, ply)
 		local dat = util.DateStamp()
 		local status = "Invited " .. ply:SteamName()
 		local name = ply:SteamName()
-		YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, roleID, date, status, name", "'" .. ply:YRPSteamID() .. "', " .. YRP_SQL_STR_IN(ply:RPName()) .. ", " .. roleID .. ", '" .. dat .. "', '" .. status .. "', " .. YRP_SQL_STR_IN(name) .. "")
+		YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, roleID, date, status, name", "'" .. ply:YRPSteamID() .. "', " .. YRP_SQL_STR_IN(ply:RPName()) .. ", " .. roleID .. ", '" .. dat .. "', " .. YRP_SQL_STR_IN(status) .. ", " .. YRP_SQL_STR_IN(name) .. "")
 	else
 		YRP.msg("note", "is already in whitelist")
 	end
@@ -2187,7 +2187,7 @@ function addToWhitelistGroup(groupID, ply)
 		local dat = util.DateStamp()
 		local status = "Invited " .. ply:SteamName()
 		local name = ply:SteamName()
-		YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. ply:YRPSteamID() .. "', " .. YRP_SQL_STR_IN(ply:RPName()) .. ", " .. groupID .. ", '" .. dat .. "', '" .. status .. "', " .. YRP_SQL_STR_IN(name) .. "")
+		YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. ply:YRPSteamID() .. "', " .. YRP_SQL_STR_IN(ply:RPName()) .. ", " .. groupID .. ", '" .. dat .. "', " .. YRP_SQL_STR_IN(status) .. ", " .. YRP_SQL_STR_IN(name) .. "")
 	else
 		YRP.msg("note", "is already in whitelist")
 	end
