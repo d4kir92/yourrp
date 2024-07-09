@@ -16,7 +16,7 @@ end
 
 local function YRPGetModelOfSWEP(cname)
 	for i, v in pairs(LocalPlayer():GetWeapons()) do
-		if v and v:GetClass() == cname then return v:GetModel() end
+		if v and v:GetClass() == cname and v.GetModel then return v:GetModel() end
 	end
 
 	for i, v in pairs(YRPGetSWEPsList()) do
