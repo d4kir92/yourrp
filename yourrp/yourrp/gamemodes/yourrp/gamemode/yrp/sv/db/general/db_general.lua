@@ -65,6 +65,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_identity_card", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_map_system", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_character_system", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_building_system", "INT DEFAULT 1")
+YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_building_system_3d", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_securitylevel_system", "INT DEFAULT 0")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_allbuildingsunlocked", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_inventory_system", "INT DEFAULT 0")
@@ -991,6 +992,15 @@ net.Receive(
 	function(len, ply)
 		local b = btn(net.ReadBool())
 		GeneralUpdateBool(ply, "nws_yrp_update_bool_building_system", "bool_building_system", b)
+	end
+)
+
+YRP.AddNetworkString("nws_yrp_update_bool_building_system_3d")
+net.Receive(
+	"nws_yrp_update_bool_building_system_3d",
+	function(len, ply)
+		local b = btn(net.ReadBool())
+		GeneralUpdateBool(ply, "nws_yrp_update_bool_building_system_3d", "bool_building_system_3d", b)
 	end
 )
 

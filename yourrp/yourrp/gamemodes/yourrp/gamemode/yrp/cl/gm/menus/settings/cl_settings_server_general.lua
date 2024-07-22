@@ -449,6 +449,7 @@ net.Receive(
 			CreateHRLine(GAMEMODE_SYSTEMS:GetContent())
 			CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_character_system, "LID_charactersystem", "nws_yrp_update_bool_character_system")
 			CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_building_system, "LID_buildingsystem", "nws_yrp_update_bool_building_system")
+			CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_building_system, "LID_buildingsystem_3d", "nws_yrp_update_bool_building_system_3d")
 			CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_allbuildingsunlocked, "LID_allbuildingsunlocked", "nws_yrp_update_bool_allbuildingsunlocked")
 			CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_securitylevel_system, "LID_securitylevelsystem", "nws_yrp_update_bool_securitylevel_system")
 			CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_inventory_system, "LID_inventorysystem", "nws_yrp_update_bool_inventory_system")

@@ -1517,45 +1517,42 @@ function loadDoorTexts()
 			"yrp_door_info",
 			function()
 				local DOORS = GetAllDoors()
-				for i, door in pairs(DOORS) do
-					if door ~= nil and door ~= NULL and LocalPlayer():GetPos():Distance(door:GetPos()) < 500 then
-						local ang = Angle(0, 0, 0)
-						local mins = door:OBBMins()
-						local maxs = door:OBBMaxs()
-						local x = maxs.x - mins.x
-						local y = maxs.y - mins.y
-						local pos = door:LocalToWorld(door:OBBCenter())
-						if x > y then
-							ang = Angle(0, door:GetAngles().y, 90)
-							pos = pos + door:GetRight() * y * 0.7
-						else
-							ang = Angle(0, door:GetAngles().y + 90, 90)
-							pos = pos + door:GetForward() * x * 0.7
-						end
+				if GetGlobalYRPBool("bool_building_system", false) and GetGlobalYRPBool("bool_building_system_3d", false) then
+					for i, door in pairs(DOORS) do
+						if door ~= nil and door ~= NULL and LocalPlayer():GetPos():Distance(door:GetPos()) < 500 then
+							local ang = Angle(0, 0, 0)
+							local mins = door:OBBMins()
+							local maxs = door:OBBMaxs()
+							local x = maxs.x - mins.x
+							local y = maxs.y - mins.y
+							local pos = door:LocalToWorld(door:OBBCenter())
+							if x > y then
+								ang = Angle(0, door:GetAngles().y, 90)
+								pos = pos + door:GetRight() * y * 0.7
+							else
+								ang = Angle(0, door:GetAngles().y + 90, 90)
+								pos = pos + door:GetForward() * x * 0.7
+							end
 
-						--render.DrawSphere(pos, 10, 8, 8, Color( 0, 255, 0 ) )
-						if GetGlobalYRPBool("bool_building_system", false) then
+							--render.DrawSphere(pos, 10, 8, 8, Color( 0, 255, 0 ) )
 							cam.Start3D2D(pos, ang, 0.2)
 							DrawDoorText(door)
 							cam.End3D2D()
-						end
+							ang = Angle(0, 180, 0)
+							mins = door:OBBMins()
+							maxs = door:OBBMaxs()
+							x = maxs.x - mins.x
+							y = maxs.y - mins.y
+							pos = door:LocalToWorld(door:OBBCenter())
+							if x > y then
+								ang = Angle(0, door:GetAngles().y, 90)
+								pos = pos - door:GetRight() * y * 0.7
+							else
+								ang = Angle(0, door:GetAngles().y + 90, 90)
+								pos = pos - door:GetForward() * x * 0.7
+							end
 
-						ang = Angle(0, 180, 0)
-						mins = door:OBBMins()
-						maxs = door:OBBMaxs()
-						x = maxs.x - mins.x
-						y = maxs.y - mins.y
-						pos = door:LocalToWorld(door:OBBCenter())
-						if x > y then
-							ang = Angle(0, door:GetAngles().y, 90)
-							pos = pos - door:GetRight() * y * 0.7
-						else
-							ang = Angle(0, door:GetAngles().y + 90, 90)
-							pos = pos - door:GetForward() * x * 0.7
-						end
-
-						ang = ang + Angle(0, 180, 0)
-						if GetGlobalYRPBool("bool_building_system", false) then
+							ang = ang + Angle(0, 180, 0)
 							cam.Start3D2D(pos, ang, 0.2)
 							DrawDoorText(door)
 							cam.End3D2D()
