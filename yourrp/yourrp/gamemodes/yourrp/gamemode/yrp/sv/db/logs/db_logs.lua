@@ -20,7 +20,7 @@ if IsNotNilAndNotFalse(logTab) then
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_get_logs")
+YRP:AddNetworkString("nws_yrp_get_logs")
 net.Receive(
 	"nws_yrp_get_logs",
 	function(len, ply)

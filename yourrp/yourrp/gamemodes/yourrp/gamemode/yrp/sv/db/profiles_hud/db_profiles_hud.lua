@@ -10,7 +10,7 @@ function GetHudProfiles()
 	return YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'name'")
 end
 
-YRP.AddNetworkString("nws_yrp_change_to_hud_profile")
+YRP:AddNetworkString("nws_yrp_change_to_hud_profile")
 net.Receive(
 	"nws_yrp_change_to_hud_profile",
 	function()
@@ -38,7 +38,7 @@ net.Receive(
 
 			HudLoadoutAll()
 		else
-			YRP.msg("note", "HUD Profile: " .. profile_name .. " (not found)")
+			YRP:msg("note", "HUD Profile: " .. profile_name .. " (not found)")
 		end
 	end
 )
@@ -61,17 +61,17 @@ end
 local HUDPROFILEVERSION = 1
 YRPHUDS = YRPHUDS or {}
 function HudProfileToDataBase(name, tab)
-	YRP.msg("db", "Load Hud Profile: " .. name, nil)
+	YRP:msg("db", "Load Hud Profile: " .. name, nil)
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. name .. "'")
 	if dbtab == nil then
-		YRP.msg("db", "Missing Hud Profile: " .. name, nil, true)
+		YRP:msg("db", "Missing Hud Profile: " .. name, nil, true)
 		YRP_SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. "name" .. "', '" .. name .. "'")
 		for i, v in pairs(tab) do
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "profile_name, name, value", "'" .. name .. "', '" .. i .. "', '" .. v .. "'")
 		end
 	else
 		if tab.Version ~= HUDPROFILEVERSION then
-			YRP.msg("db", "Updating Hud Profile: " .. name, nil, true)
+			YRP:msg("db", "Updating Hud Profile: " .. name, nil, true)
 			for i, v in pairs(tab) do
 				YRP_SQL_UPDATE(
 					DATABASE_NAME,
@@ -83,7 +83,7 @@ function HudProfileToDataBase(name, tab)
 		end
 	end
 
-	YRP.msg("db", "Loaded Hud Profile: " .. name, nil)
+	YRP:msg("db", "Loaded Hud Profile: " .. name, nil)
 end
 
 function ProfilesYourRPDefault()

@@ -12,7 +12,7 @@ function AddToHandler_Database(ply)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_connect_Settings_Database")
+YRP:AddNetworkString("nws_yrp_connect_Settings_Database")
 net.Receive(
 	"nws_yrp_connect_Settings_Database",
 	function(len, ply)
@@ -50,7 +50,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_disconnect_Settings_Database")
+YRP:AddNetworkString("nws_yrp_disconnect_Settings_Database")
 net.Receive(
 	"nws_yrp_disconnect_Settings_Database",
 	function(len, ply)
@@ -59,14 +59,14 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_sql_info")
-YRP.AddNetworkString("nws_yrp_drop_tables")
+YRP:AddNetworkString("nws_yrp_get_sql_info")
+YRP:AddNetworkString("nws_yrp_drop_tables")
 net.Receive(
 	"nws_yrp_drop_tables",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_ac_database", false) then return end
 		local _drop_tables = net.ReadTable()
-		CreateBackup()
+		YRPCreateBackup()
 		for i, tab in pairs(_drop_tables) do
 			if tab.name ~= "yrp_sql" and tab.name ~= "sqlite_sequence" then
 				YRP_SQL_DROP_TABLE(tab)
@@ -86,12 +86,12 @@ function GetBackupCreateTime()
 
 			return num
 		else
-			YRP.msg("error", "[GetBackupCreateTime] is not a number: " .. tostring(num))
+			YRP:msg("error", "[GetBackupCreateTime] is not a number: " .. tostring(num))
 
 			return 60
 		end
 	else
-		YRP.msg("note", "Database for BACKUP is broken, is it removed from database?")
+		YRP:msg("note", "Database for BACKUP is broken, is it removed from database?")
 
 		return 60
 	end
@@ -103,7 +103,7 @@ function CreateYRPBackupsFolder()
 		if file.Exists("yrp_backups", "DATA") then
 			return true
 		else
-			YRP.msg("note", "yrp_backups folder failed to create")
+			YRP:msg("note", "yrp_backups folder failed to create")
 
 			return false
 		end
@@ -112,8 +112,8 @@ function CreateYRPBackupsFolder()
 	end
 end
 
-function RemoveOldBackups()
-	--YRP.msg( "db", "[BACKUP] Remove old ones" )
+function YRPRemoveOldBackups()
+	--YRP:msg( "db", "[BACKUP] Remove old ones" )
 	if CreateYRPBackupsFolder() then
 		local backups = file.Find("yrp_backups/sv_backup_*.txt", "DATA")
 		local _remove_after = sql.Query("SELECT int_backup_delete FROM yrp_sql WHERE uniqueID = 1;")
@@ -122,34 +122,34 @@ function RemoveOldBackups()
 			for i, fi in pairs(backups) do
 				if os.time() - (_remove_after * 60 * 60 * 24) > file.Time("yrp_backups/" .. fi, "DATA") then
 					file.Delete("yrp_backups/" .. fi, "DATA")
-					YRP.msg("note", "[BACKUP] " .. "Removed: " .. fi)
+					YRP:msg("note", "[BACKUP] " .. "Removed: " .. fi)
 				end
 			end
 		else
-			MsgC(Color(0, 255, 0), "RemoveOldBackups IS BROKEN (Corrupted sv.db file? Modified Gamemode?)\n")
+			MsgC(Color(0, 255, 0), "YRPRemoveOldBackups IS BROKEN (Corrupted sv.db file? Modified Gamemode?)\n")
 		end
 	end
 end
 
-function CreateBackup()
-	YRP.msg("db", "[BACKUP] Create backup")
+function YRPCreateBackup()
+	YRP:msg("db", "[BACKUP] Create backup")
 	if CreateYRPBackupsFolder() then
 		local _fi = "yrp_backups/" .. "sv" .. "_" .. "backup" .. "_" .. os.time() .. "___" .. os.date("%Y_%m_%d___%H_%M_%S", os.time()) .. ".txt"
 		file.Write(_fi, file.Read("sv.db", "GAME"))
 		if not file.Exists(_fi, "DATA") then
-			YRP.msg("note", "Failed to create")
+			YRP:msg("note", "Failed to create")
 		end
 	end
 end
 
 local bu_ts = 0
-YRP.AddNetworkString("nws_yrp_makebackup")
+YRP:AddNetworkString("nws_yrp_makebackup")
 net.Receive(
 	"nws_yrp_makebackup",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_ac_database", false) then return end
 		if bu_ts > CurTime() then return end
 		bu_ts = CurTime() + 20
-		CreateBackup()
+		YRPCreateBackup()
 	end
 )

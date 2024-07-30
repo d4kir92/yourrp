@@ -121,7 +121,7 @@ DarkRP.disabledDefaults["workarounds"] = {
 }
 
 function YRPDarkrpNotFound(name)
-	YRP.msg("darkrp", "[MISSING] " .. name)
+	YRP:msg("darkrp", "[MISSING] " .. name)
 end
 
 AddCSLuaFile("darkrp/fn.lua")
@@ -176,7 +176,7 @@ function GetDarkRPVar(name, var)
 	else
 		return var
 	end
-	--YRP.msg( "note", "[GetDarkRPVar] FAIL " .. tostring(name) .. ", " .. tostring( var) )
+	--YRP:msg( "note", "[GetDarkRPVar] FAIL " .. tostring(name) .. ", " .. tostring( var) )
 end
 
 function UpdateDarkRP(tab)

@@ -28,7 +28,7 @@ function YRPSendSpecPMs(uid, ply)
 	net.Send(ply)
 end
 
-YRP.AddNetworkString("nws_yrp_get_specialization_pms")
+YRP:AddNetworkString("nws_yrp_get_specialization_pms")
 net.Receive(
 	"nws_yrp_get_specialization_pms",
 	function(len, ply)
@@ -37,7 +37,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_spec_add_pm")
+YRP:AddNetworkString("nws_yrp_spec_add_pm")
 net.Receive(
 	"nws_yrp_spec_add_pm",
 	function(len, ply)
@@ -75,7 +75,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_spec_rem_pm")
+YRP:AddNetworkString("nws_yrp_spec_rem_pm")
 net.Receive(
 	"nws_yrp_spec_rem_pm",
 	function(len, ply)
@@ -132,7 +132,7 @@ function YRPSendSpecSWEPS(uid, ply)
 	net.Send(ply)
 end
 
-YRP.AddNetworkString("nws_yrp_get_specialization_sweps")
+YRP:AddNetworkString("nws_yrp_get_specialization_sweps")
 net.Receive(
 	"nws_yrp_get_specialization_sweps",
 	function(len, ply)
@@ -141,7 +141,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_spec_add_swep")
+YRP:AddNetworkString("nws_yrp_spec_add_swep")
 net.Receive(
 	"nws_yrp_spec_add_swep",
 	function(len, ply)
@@ -181,7 +181,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_spec_rem_swep")
+YRP:AddNetworkString("nws_yrp_spec_rem_swep")
 net.Receive(
 	"nws_yrp_spec_rem_swep",
 	function(len, ply)
@@ -224,7 +224,7 @@ function send_specializations(ply)
 	net.Send(ply)
 end
 
-YRP.AddNetworkString("nws_yrp_get_all_specializations")
+YRP:AddNetworkString("nws_yrp_get_all_specializations")
 net.Receive(
 	"nws_yrp_get_all_specializations",
 	function(len, ply)
@@ -240,7 +240,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_specializations")
+YRP:AddNetworkString("nws_yrp_get_specializations")
 net.Receive(
 	"nws_yrp_get_specializations",
 	function(len, ply)
@@ -262,7 +262,7 @@ function sendspecializations(ply)
 	net.Send(ply)
 end
 
-YRP.AddNetworkString("nws_yrp_getspecializations")
+YRP:AddNetworkString("nws_yrp_getspecializations")
 net.Receive(
 	"nws_yrp_getspecializations",
 	function(len, ply)
@@ -270,28 +270,28 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_specialization_add")
+YRP:AddNetworkString("nws_yrp_specialization_add")
 net.Receive(
 	"nws_yrp_specialization_add",
 	function(len, ply)
 		local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new specialization'")
-		YRP.msg("db", "Add new specialization: " .. tostring(_new))
+		YRP:msg("db", "Add new specialization: " .. tostring(_new))
 		send_specializations(ply)
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_specialization_rem")
+YRP:AddNetworkString("nws_yrp_specialization_rem")
 net.Receive(
 	"nws_yrp_specialization_rem",
 	function(len, ply)
 		local _uid = net.ReadString()
 		local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
-		YRP.msg("db", "Removed specialization: " .. tostring(_uid))
+		YRP:msg("db", "Removed specialization: " .. tostring(_uid))
 		send_specializations(ply)
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_edit_specialization_name")
+YRP:AddNetworkString("nws_yrp_edit_specialization_name")
 net.Receive(
 	"nws_yrp_edit_specialization_name",
 	function(len, ply)
@@ -304,11 +304,11 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "edit_specialization_name: " .. tostring(_new_name))
+		YRP:msg("db", "edit_specialization_name: " .. tostring(_new_name))
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_edit_specialization_prefix")
+YRP:AddNetworkString("nws_yrp_edit_specialization_prefix")
 net.Receive(
 	"nws_yrp_edit_specialization_prefix",
 	function(len, ply)
@@ -321,11 +321,11 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "edit_specialization_prefix: " .. tostring(_new_prefix))
+		YRP:msg("db", "edit_specialization_prefix: " .. tostring(_new_prefix))
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_edit_specialization_suffix")
+YRP:AddNetworkString("nws_yrp_edit_specialization_suffix")
 net.Receive(
 	"nws_yrp_edit_specialization_suffix",
 	function(len, ply)
@@ -338,11 +338,11 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "edit_specialization_suffix: " .. tostring(_new_suffix))
+		YRP:msg("db", "edit_specialization_suffix: " .. tostring(_new_suffix))
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_all_specializations_simple")
+YRP:AddNetworkString("nws_yrp_get_all_specializations_simple")
 net.Receive(
 	"nws_yrp_get_all_specializations_simple",
 	function(len, ply)
@@ -357,7 +357,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_role_add_specialization")
+YRP:AddNetworkString("nws_yrp_role_add_specialization")
 net.Receive(
 	"nws_yrp_role_add_specialization",
 	function(len, ply)
@@ -385,7 +385,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_role_rem_specialization")
+YRP:AddNetworkString("nws_yrp_role_rem_specialization")
 net.Receive(
 	"nws_yrp_role_rem_specialization",
 	function(len, ply)
@@ -442,7 +442,7 @@ function Player:AddSpecialization(specialization)
 		lnames = table.concat(lnames, ", ")
 		self:SetYRPString("specializationNames", lnames)
 	else
-		YRP.msg("note", "[AddSpecialization] id is nil")
+		YRP:msg("note", "[AddSpecialization] id is nil")
 	end
 end
 
@@ -476,7 +476,7 @@ function Player:RemoveSpecialization(specialization)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_getSpecializationName")
+YRP:AddNetworkString("nws_yrp_getSpecializationName")
 net.Receive(
 	"nws_yrp_getSpecializationName",
 	function(len, ply)
@@ -494,7 +494,7 @@ net.Receive(
 
 function GetSpecializationIDByName(lname)
 	if lname == nil then
-		YRP.msg("note", "GetSpecializationIDByName: " .. "name == " .. tostring(lname))
+		YRP:msg("note", "GetSpecializationIDByName: " .. "name == " .. tostring(lname))
 
 		return nil
 	end
@@ -519,18 +519,18 @@ end
 
 function GiveSpecialization(ply, lid)
 	if not IsValid(ply) then
-		YRP.msg("note", "[GiveSpecialization] ply is invalid")
+		YRP:msg("note", "[GiveSpecialization] ply is invalid")
 
 		return
 	end
 
 	if lid == nil then
-		YRP.msg("note", "[GiveSpecialization] lid is nil")
+		YRP:msg("note", "[GiveSpecialization] lid is nil")
 
 		return
 	end
 
-	YRP.msg("gm", "Give " .. ply:RPName() .. " SpecializationID " .. lid)
+	YRP:msg("gm", "Give " .. ply:RPName() .. " SpecializationID " .. lid)
 	ply:AddSpecialization(lid)
 	YRPGiveSpecs(ply)
 end
@@ -538,7 +538,7 @@ end
 function RemoveSpecialization(ply, lid)
 	if not IsValid(ply) then return end
 	if not IsNotNilAndNotFalse(lid) then return end
-	YRP.msg("gm", "Removed from " .. ply:RPName() .. " SpecializationID " .. lid)
+	YRP:msg("gm", "Removed from " .. ply:RPName() .. " SpecializationID " .. lid)
 	ply:RemoveSpecialization(lid)
 end
 

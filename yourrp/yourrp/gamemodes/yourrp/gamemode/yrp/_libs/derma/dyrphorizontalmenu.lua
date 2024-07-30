@@ -2,7 +2,7 @@
 function DrawSelector(btn, w, h, text, selected, hassubtabs)
 	local spacer = 0
 	if hassubtabs then
-		spacer = YRP.ctr(100)
+		spacer = YRP:ctr(100)
 	end
 
 	draw.SimpleText(text, "Y_22_500", w / 2 - spacer / 2, h / 2, Color(255, 255, 255, 255), 1, 1)
@@ -27,14 +27,14 @@ function DrawSelector(btn, w, h, text, selected, hassubtabs)
 		color = YRPGetColor("3")
 	end
 
-	draw.RoundedBox(0, 0, h - YRP.ctr(btn.ani_h), w, YRP.ctr(btn.ani_h), color)
+	draw.RoundedBox(0, 0, h - YRP:ctr(btn.ani_h), w, YRP:ctr(btn.ani_h), color)
 end
 
 local PANEL = {}
 local color_red = Color(255, 0, 0, 100)
 function PANEL:Init()
 	self.tabs = {}
-	self.hscroller = YRPCreateD("DHorizontalScroller", self, self:GetWide(), YRP.ctr(100), 0, 0)
+	self.hscroller = YRPCreateD("DHorizontalScroller", self, self:GetWide(), YRP:ctr(100), 0, 0)
 	function self.hscroller:Paint(pw, ph)
 	end
 
@@ -56,12 +56,12 @@ function PANEL:AddPanel(pnl)
 		self.w = self.w + tab:GetWide()
 	end
 
-	self.hscroller:SetSize(self.w, YRP.ctr(100))
+	self.hscroller:SetSize(self.w, YRP:ctr(100))
 	self.hscroller:SetPos(self:GetWide() / 2 - self.w / 2, 0)
 end
 
 function PANEL:MakeSpacer()
-	local spacer = YRPCreateD("YButton", self, YRP.ctr(30), YRP.ctr(100), 0, 0)
+	local spacer = YRPCreateD("YButton", self, YRP:ctr(30), YRP:ctr(100), 0, 0)
 	spacer:SetText("")
 	function spacer:Paint(pw, ph)
 	end
@@ -83,7 +83,7 @@ function PANEL:SiteNotFound()
 	self:ClearSite()
 	function self.site:Paint(pw, ph)
 		draw.SimpleText("[Site Not Found]", "Y_18_500", pw / 2, ph / 2, Color(255, 255, 0, 255), 1, 1)
-		draw.SimpleText("[" .. YRP.trans("LID_wip") .. "]", "Y_18_500", pw / 2, ph / 2 + YRP.ctr(50), Color(255, 255, 0, 255), 1, 1)
+		draw.SimpleText("[" .. YRP:trans("LID_wip") .. "]", "Y_18_500", pw / 2, ph / 2 + YRP:ctr(50), Color(255, 255, 0, 255), 1, 1)
 	end
 end
 
@@ -94,10 +94,10 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 
 	local spacer = 0
 	if hassubtabs then
-		spacer = YRP.ctr(100)
+		spacer = YRP:ctr(100)
 	end
 
-	local TAB = YRPCreateD("YButton", self, YRPGetTextLength(YRP.trans(name), "Y_22_500") + YRP.ctr(30 * 2) + spacer, YRP.ctr(100), YRP.ctr(400), 0)
+	local TAB = YRPCreateD("YButton", self, YRPGetTextLength(YRP:trans(name), "Y_22_500") + YRP:ctr(30 * 2) + spacer, YRP:ctr(100), YRP:ctr(400), 0)
 	TAB.menu = self
 	TAB.name = name
 	TAB.netstr = netstr
@@ -113,7 +113,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 	function TAB:ShowSubTabs()
 		if self.stabs == nil then
 			local posx, posy = self:LocalToScreen(0, 0)
-			self.stabs = YRPCreateD("DFrame", self, YRP.ctr(400), self:GetTall() * table.Count(self.subtabs), posx, posy + self:GetTall())
+			self.stabs = YRPCreateD("DFrame", self, YRP:ctr(400), self:GetTall() * table.Count(self.subtabs), posx, posy + self:GetTall())
 			self.stabs:SetTitle("")
 			self.stabs:ShowCloseButton(false)
 			self.stabs:SetDraggable(false)
@@ -133,7 +133,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 				elseif my < py and mx > px + self:GetParent():GetWide() then
 					self:GetParent():HideSubTabs()
 				end
-				--draw.RoundedBox( 0, 0, YRP.ctr(4), pw, ph - YRP.ctr(8), Color( 0, 0, 255, 255) )
+				--draw.RoundedBox( 0, 0, YRP:ctr(4), pw, ph - YRP:ctr(8), Color( 0, 0, 255, 255) )
 			end
 
 			self.stabs.pl = YRPCreateD("DPanelList", self.stabs, self.stabs:GetWide(), self.stabs:GetTall(), 0, 0)
@@ -152,9 +152,9 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 				function st:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph, self.tab)
 					if self.url ~= "" or self.func ~= nil then
-						local br = YRP.ctr(10)
-						local size = ph - 2 * YRP.ctr(20)
-						YRP.DrawIcon(YRP.GetDesignIcon("launch"), size, size, pw - size - br, ph / 2 - size / 2, YRPGetColor("6"))
+						local br = YRP:ctr(10)
+						local size = ph - 2 * YRP:ctr(20)
+						YRP:DrawIcon(YRP:GetDesignIcon("launch"), size, size, pw - size - br, ph / 2 - size / 2, YRPGetColor("6"))
 					end
 
 					local icon = ""
@@ -169,8 +169,8 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 					end
 
 					if not strEmpty(icon) then
-						local br = YRP.ctr(20)
-						YRP.DrawIcon(YRP.GetDesignIcon(icon), ph - 2 * br, ph - 2 * br, br, br, YRPGetColor("6"))
+						local br = YRP:ctr(20)
+						YRP:DrawIcon(YRP:GetDesignIcon(icon), ph - 2 * br, ph - 2 * br, br, br, YRPGetColor("6"))
 					end
 				end
 
@@ -202,10 +202,10 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 			self.selected = false
 		end
 
-		DrawSelector(self, pw, ph, YRP.trans(self.name), self.selected, hassubtabs)
+		DrawSelector(self, pw, ph, YRP:trans(self.name), self.selected, hassubtabs)
 		if self.hassubtabs then
-			local br = YRP.ctr(20)
-			YRP.DrawIcon(YRP.GetDesignIcon("64_angle-down"), ph - br * 2, ph - br * 2, pw - br - ph / 2 - br, br, YRPGetColor("6"))
+			local br = YRP:ctr(20)
+			YRP:DrawIcon(YRP:GetDesignIcon("64_angle-down"), ph - br * 2, ph - br * 2, pw - br - ph / 2 - br, br, YRPGetColor("6"))
 		end
 
 		if self:IsHovered() then
@@ -299,8 +299,8 @@ function PANEL:Think()
 	if self.w ~= self:GetWide() or self.h ~= self:GetTall() then
 		self.w = self:GetWide()
 		self.h = self:GetTall()
-		self.site:SetSize(self:GetWide() - YRP.ctr(2 * 20), self:GetTall() - YRP.ctr(100 + 20 + 20))
-		self.site:SetPos(YRP.ctr(20), YRP.ctr(100 + 20))
+		self.site:SetSize(self:GetWide() - YRP:ctr(2 * 20), self:GetTall() - YRP:ctr(100 + 20 + 20))
+		self.site:SetPos(YRP:ctr(20), YRP:ctr(100 + 20))
 	end
 end
 

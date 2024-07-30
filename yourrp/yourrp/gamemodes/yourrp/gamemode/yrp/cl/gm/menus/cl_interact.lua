@@ -42,8 +42,8 @@ net.Receive(
 		local demoteable = net.ReadBool()
 		local demoteName = net.ReadString()
 		local hasspecs = net.ReadBool()
-		yrp_Interact = YRPCreateD("YFrame", nil, YRP.ctr(1090), YRP.ctr(1360), 0, 0)
-		yrp_Interact:SetHeaderHeight(YRP.ctr(100))
+		yrp_Interact = YRPCreateD("YFrame", nil, YRP:ctr(1090), YRP:ctr(1360), 0, 0)
+		yrp_Interact:SetHeaderHeight(YRP:ctr(100))
 		function yrp_Interact:OnClose()
 			YRPCloseMenu()
 		end
@@ -73,7 +73,7 @@ net.Receive(
 			end
 		end
 
-		yrp_Interact:SetTitle(YRP.trans("LID_interactmenu"))
+		yrp_Interact:SetTitle(YRP:trans("LID_interactmenu"))
 		function yrp_Interact:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)
 		end
@@ -82,23 +82,23 @@ net.Receive(
 		local licenses = ply:GetAllLicenses()
 		function content:Paint(pw, ph)
 			local scaleW = pw / (GetGlobalYRPInt("int_" .. "background" .. "_w", 100) + 20)
-			local scaleH = YRP.ctr(470) / (GetGlobalYRPInt("int_" .. "background" .. "_h", 100) + 20)
+			local scaleH = YRP:ctr(470) / (GetGlobalYRPInt("int_" .. "background" .. "_h", 100) + 20)
 			local scale = scaleW
 			if scaleH < scaleW then
 				scale = scaleH
 			end
 
-			YRPDrawIDCard(ply, scale, YRP.ctr(10), YRP.ctr(10))
+			YRPDrawIDCard(ply, scale, YRP:ctr(10), YRP:ctr(10))
 			--[[ Licenses ]]
-			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(500), content:GetWide() - YRP.ctr(20), YRP.ctr(50), Color(255, 255, 255, 255))
-			draw.SimpleTextOutlined(YRP.trans("LID_licenses") .. ": " .. licenses, "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(520), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(255, 255, 255, 0))
+			draw.RoundedBox(0, YRP:ctr(10), YRP:ctr(500), content:GetWide() - YRP:ctr(20), YRP:ctr(50), Color(255, 255, 255, 255))
+			draw.SimpleTextOutlined(YRP:trans("LID_licenses") .. ": " .. licenses, "Y_20_500", YRP:ctr(10 + 10), YRP:ctr(520), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(255, 255, 255, 0))
 			--[[ Description ]]
-			draw.RoundedBox(0, YRP.ctr(10), YRP.ctr(590), content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), Color(255, 255, 255, 255))
-			draw.SimpleTextOutlined(YRP.trans("LID_description") .. ":", "Y_20_500", YRP.ctr(10 + 10), YRP.ctr(610), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(255, 255, 255, 0))
+			draw.RoundedBox(0, YRP:ctr(10), YRP:ctr(590), content:GetWide() - YRP:ctr(20), YRP:ctr(400 - 50), Color(255, 255, 255, 255))
+			draw.SimpleTextOutlined(YRP:trans("LID_description") .. ":", "Y_20_500", YRP:ctr(10 + 10), YRP:ctr(610), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(255, 255, 255, 0))
 		end
 
 		if idcard then
-			local _tmpDescription = YRPCreateD("DTextEntry", content, content:GetWide() - YRP.ctr(20), YRP.ctr(400 - 50), YRP.ctr(10), YRP.ctr(640))
+			local _tmpDescription = YRPCreateD("DTextEntry", content, content:GetWide() - YRP:ctr(20), YRP:ctr(400 - 50), YRP:ctr(10), YRP:ctr(640))
 			_tmpDescription:SetMultiline(true)
 			_tmpDescription:SetEditable(false)
 			_tmpDescription:SetText(tmpRPDescription or "")
@@ -124,7 +124,7 @@ net.Receive(
 			local btnVerwarnung = createVGUI("YLabel", content, 450, 100, 60, 1000)
 			function btnVerwarnung:Paint(pw, ph)
 				hook.Run("YLabelPaint", self, pw, ph)
-				btnVerwarnung:SetText(YRP.trans("LID_warnings") .. ": " .. ply:GetYRPInt("int_warnings", -1))
+				btnVerwarnung:SetText(YRP:trans("LID_warnings") .. ": " .. ply:GetYRPInt("int_warnings", -1))
 			end
 
 			local btnVerstoesseUp = createVGUI("YButton", content, 50, 50, 10, 1110)
@@ -146,14 +146,14 @@ net.Receive(
 			local btnVerstoesse = createVGUI("YLabel", content, 450, 100, 60, 1110)
 			function btnVerstoesse:Paint(pw, ph)
 				hook.Run("YLabelPaint", self, pw, ph)
-				btnVerstoesse:SetText(YRP.trans("LID_violations") .. ": " .. ply:GetYRPInt("int_violations", -1))
+				btnVerstoesse:SetText(YRP:trans("LID_violations") .. ": " .. ply:GetYRPInt("int_violations", -1))
 			end
 		end
 
 		if isInstructor then
 			if promoteable then
 				local btnPromote = createVGUI("YButton", content, 500, 50, 520, 1000)
-				btnPromote:SetText(YRP.trans("LID_promote") .. ": " .. promoteName)
+				btnPromote:SetText(YRP:trans("LID_promote") .. ": " .. promoteName)
 				function btnPromote:DoClick()
 					net.Start("nws_yrp_promotePlayer")
 					net.WriteString(tmpTargetCharID)
@@ -170,7 +170,7 @@ net.Receive(
 
 			if demoteable then
 				local btnDemote = createVGUI("YButton", content, 500, 50, 520, 1000 + 10 + 50)
-				btnDemote:SetText(YRP.trans("LID_demote") .. ": " .. demoteName)
+				btnDemote:SetText(YRP:trans("LID_demote") .. ": " .. demoteName)
 				function btnDemote:DoClick()
 					net.Start("nws_yrp_demotePlayer")
 					net.WriteString(tmpTargetCharID)
@@ -187,7 +187,7 @@ net.Receive(
 
 			if not promoteable and not demoteable then
 				local btnbtnInviteToGroup = createVGUI("YButton", content, 500, 50, 520, 1000)
-				btnbtnInviteToGroup:SetText(YRP.trans("LID_invitetogroup"))
+				btnbtnInviteToGroup:SetText(YRP:trans("LID_invitetogroup"))
 				function btnbtnInviteToGroup:DoClick()
 					net.Start("nws_yrp_invitetogroup")
 					net.WriteString(tmpTargetCharID)
@@ -205,7 +205,7 @@ net.Receive(
 
 		if hasspecs then
 			local btnbtnSpecialization = createVGUI("YButton", content, 500, 50, 520, 1120)
-			btnbtnSpecialization:SetText(YRP.trans("LID_specializations"))
+			btnbtnSpecialization:SetText(YRP:trans("LID_specializations"))
 			function btnbtnSpecialization:DoClick()
 				if YRPPanelAlive(yrp_Interact, "yrp_Interact 4") then
 					yrp_Interact:Close()
@@ -334,19 +334,19 @@ net.Receive(
 	function(len)
 		local role = net.ReadTable()
 		local group = net.ReadTable()
-		local win = YRPCreateD("YFrame", nil, YRP.ctr(600), YRP.ctr(400), 0, 0)
+		local win = YRPCreateD("YFrame", nil, YRP:ctr(600), YRP:ctr(400), 0, 0)
 		win:SetTitle("LID_invitation")
 		win:Center()
 		win:MakePopup()
 		local content = win:GetContent()
 		function content:Paint(pw, ph)
-			local text = YRP.trans("LID_youwereinvited")
-			draw.SimpleText(text .. ":", "Y_16_500", pw / 2, YRP.ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(group.string_name, "Y_16_500", pw / 2, YRP.ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(role.string_name, "Y_16_500", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			local text = YRP:trans("LID_youwereinvited")
+			draw.SimpleText(text .. ":", "Y_16_500", pw / 2, YRP:ctr(20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(group.string_name, "Y_16_500", pw / 2, YRP:ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(role.string_name, "Y_16_500", pw / 2, YRP:ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
-		win.accept = YRPCreateD("YButton", content, YRP.ctr(200), YRP.ctr(50), content:GetWide() / 2 - YRP.ctr(200 + 5), content:GetTall() - YRP.ctr(50 + 10))
+		win.accept = YRPCreateD("YButton", content, YRP:ctr(200), YRP:ctr(50), content:GetWide() / 2 - YRP:ctr(200 + 5), content:GetTall() - YRP:ctr(50 + 10))
 		win.accept:SetText("LID_accept")
 		function win.accept:DoClick()
 			net.Start("nws_yrp_invite_accept")
@@ -355,7 +355,7 @@ net.Receive(
 			win:Close()
 		end
 
-		win.decline = YRPCreateD("YButton", content, YRP.ctr(200), YRP.ctr(50), content:GetWide() / 2 + YRP.ctr(5), content:GetTall() - YRP.ctr(50 + 10))
+		win.decline = YRPCreateD("YButton", content, YRP:ctr(200), YRP:ctr(50), content:GetWide() / 2 + YRP:ctr(5), content:GetTall() - YRP:ctr(50 + 10))
 		win.decline:SetText("LID_decline")
 		function win.decline:DoClick()
 			win:Close()

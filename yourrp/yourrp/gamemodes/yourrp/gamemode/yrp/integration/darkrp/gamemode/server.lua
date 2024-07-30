@@ -141,7 +141,7 @@ end
 function DarkRP.log(message, colour, noFileSave)
 end
 
-YRP.AddNetworkString("nws_yrp_sendNotify")
+YRP:AddNetworkString("nws_yrp_sendNotify")
 function DarkRP.notify(ply, msgType, time, message)
 	--Description: Log a message in DarkRP
 	if IsValid(ply) and ply.IsPlayer and ply:IsPlayer() and IsNotNilAndNotFalse(message) then
@@ -149,7 +149,7 @@ function DarkRP.notify(ply, msgType, time, message)
 		net.WriteString(message)
 		net.Send(ply)
 	else
-		YRP.msg("gm", "[DarkRP.notify] message is NIL")
+		YRP:msg("gm", "[DarkRP.notify] message is NIL")
 	end
 end
 
@@ -178,7 +178,7 @@ function DarkRP.payPlayer(sender, receiver, amount)
 		sender:AddMoney(-amount)
 		receiver:AddMoney(amount)
 	else
-		YRP.msg("note", sender:RPName() .. " don't have enough money to payplayer " .. receiver:RPName())
+		YRP:msg("note", sender:RPName() .. " don't have enough money to payplayer " .. receiver:RPName())
 	end
 end
 

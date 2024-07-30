@@ -6,7 +6,7 @@ function CreateStorage(size, inv)
 	if not IsNotNilAndNotFalse(size) then return end
 	local result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_storage_size", "'" .. size .. "'")
 	if result == nil then
-		YRP.msg("db", "Created Storage")
+		YRP:msg("db", "Created Storage")
 		local last = YRP_SQL_SELECT(DATABASE_NAME, "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
 		if IsNotNilAndNotFalse(last) then
 			last = last[1]
@@ -16,10 +16,10 @@ function CreateStorage(size, inv)
 
 			return last
 		else
-			YRP.msg("note", "Failed to get last storage: " .. tostring(last))
+			YRP:msg("note", "Failed to get last storage: " .. tostring(last))
 		end
 	else
-		YRP.msg("note", "Failed to create storage: " .. tostring(result))
+		YRP:msg("note", "Failed to create storage: " .. tostring(result))
 	end
 end
 
@@ -40,20 +40,20 @@ function GetCharacterStorage(ply, retry)
 				return GetCharacterStorage(ply, retry)
 			else
 				ply:PrintMessage(HUD_PRINTCENTER, "No Storage for this Character (Inventory)")
-				YRP.msg("note", "[GetCharacterStorage] (Inventory) no storage")
+				YRP:msg("note", "[GetCharacterStorage] (Inventory) no storage")
 			end
 		end
 	end
 
 	ply:PrintMessage(HUD_PRINTCENTER, "Failed to Get Storage for this Character (Inventory)")
-	YRP.msg("note", "[GetCharacterStorage] (Inventory) FAILED!")
+	YRP:msg("note", "[GetCharacterStorage] (Inventory) FAILED!")
 
 	return {}
 end
 
 function YRPCreateCharacterStorages(retry)
 	if retry then
-		YRP.msg("note", "[CreateCharacterStorages] (Inventory) RETRY!")
+		YRP:msg("note", "[CreateCharacterStorages] (Inventory) RETRY!")
 	end
 
 	local chars = YRP_SQL_SELECT("yrp_characters", "*", nil)
@@ -80,7 +80,7 @@ function YRPCreateCharacterStorages(retry)
 
 			-- Create storage if not exists
 			if strEmpty(char.int_storageID) or tonumber(char.int_storageID) == 0 then
-				YRP.msg("db", "YRPCreateCharacterStorages empty or 0")
+				YRP:msg("db", "YRPCreateCharacterStorages empty or 0")
 				local bagsStorage = CreateStorage(5, true)
 				if IsNotNilAndNotFalse(bagsStorage) then
 					YRP_SQL_UPDATE(
@@ -91,7 +91,7 @@ function YRPCreateCharacterStorages(retry)
 					)
 				end
 			elseif not IsNotNilAndNotFalse(YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'")) then
-				YRP.msg("db", "YRPCreateCharacterStorages WRONG")
+				YRP:msg("db", "YRPCreateCharacterStorages WRONG")
 				local bagsStorage = CreateStorage(5, true)
 				if IsNotNilAndNotFalse(bagsStorage) then
 					YRP_SQL_UPDATE(
@@ -114,7 +114,7 @@ timer.Simple(
 )
 
 -- Networking
-YRP.AddNetworkString("nws_yrp_get_inventory")
+YRP:AddNetworkString("nws_yrp_get_inventory")
 net.Receive(
 	"nws_yrp_get_inventory",
 	function(len, ply)
@@ -137,12 +137,12 @@ net.Receive(
 			net.Send(ply)
 		else
 			ply:PrintMessage(HUD_PRINTCENTER, "Failed to Get Storage-Info for this Character (Inventory)")
-			YRP.msg("note", "[get_inventory] No GetCharacterStorage")
+			YRP:msg("note", "[get_inventory] No GetCharacterStorage")
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_storage_open")
+YRP:AddNetworkString("nws_yrp_storage_open")
 function OpenStorage(ply, storageID)
 	storageID = tonumber(storageID)
 	local storage = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. storageID .. "'")
@@ -168,6 +168,6 @@ function OpenStorage(ply, storageID)
 		net.WriteBool(isinv)
 		net.Send(ply)
 	else
-		YRP.msg("db", "[yrp_storage_open] Storage not exists.")
+		YRP:msg("db", "[yrp_storage_open] Storage not exists.")
 	end
 end

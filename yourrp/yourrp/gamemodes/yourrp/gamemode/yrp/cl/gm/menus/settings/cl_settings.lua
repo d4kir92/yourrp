@@ -89,18 +89,18 @@ function F8RequireUG(site, usergroups)
 	local notallowed = YRPCreateD("DPanel", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
 	function notallowed:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
-		surfaceText(YRP.trans("LID_settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "Y_24_500", w / 2, h / 2, Color(0, 255, 0), 1, 1)
+		surfaceText(YRP:trans("LID_settings_yourusergrouphasnopermission") .. " [ " .. site .. " ]", "Y_24_500", w / 2, h / 2, Color(0, 255, 0), 1, 1)
 		if site ~= "usergroups" then
-			surfaceText(YRP.trans("LID_settings_gotof8usergroups"), "Y_24_500", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
+			surfaceText(YRP:trans("LID_settings_gotof8usergroups"), "Y_24_500", w / 2, h / 2 + YRP:ctr(100), Color(255, 255, 0), 1, 1)
 		else
-			surfaceText(YRP.trans("LID_settings_giveyourselftheusergroup", allugs), "Y_24_500", w / 2, h / 2 + YRP.ctr(100), Color(255, 255, 0), 1, 1)
-			surfaceText("(In SERVER Console) (Respawn after usergroup changed!) Example:", "Y_24_500", w / 2, h / 2 + YRP.ctr(250), Color(255, 255, 0), 1, 1)
+			surfaceText(YRP:trans("LID_settings_giveyourselftheusergroup", allugs), "Y_24_500", w / 2, h / 2 + YRP:ctr(100), Color(255, 255, 0), 1, 1)
+			surfaceText("(In SERVER Console) (Respawn after usergroup changed!) Example:", "Y_24_500", w / 2, h / 2 + YRP:ctr(250), Color(255, 255, 0), 1, 1)
 		end
 	end
 
 	if site == "usergroups" then
 		for i, v in pairs(ugs) do
-			local example = YRPCreateD("DTextEntry", PARENT, YRP.ctr(1400), YRP.ctr(50), PARENT:GetWide() / 2 - YRP.ctr(1400 / 2), PARENT:GetTall() / 2 + YRP.ctr(300) + (i - 1) * YRP.ctr(60))
+			local example = YRPCreateD("DTextEntry", PARENT, YRP:ctr(1400), YRP:ctr(50), PARENT:GetWide() / 2 - YRP:ctr(1400 / 2), PARENT:GetTall() / 2 + YRP:ctr(300) + (i - 1) * YRP:ctr(60))
 			if DAMVERSION then
 				example:SetText("dam addply \"" .. lply:RPName() .. "\" " .. v)
 			elseif SAM_LOADED then
@@ -115,7 +115,7 @@ end
 concommand.Add(
 	"yrp_open_settings",
 	function(ply, cmd, args)
-		YRP.msg("gm", "Open settings window")
+		YRP:msg("gm", "Open settings window")
 		F8OpenSettings()
 	end
 )
@@ -136,7 +136,7 @@ function SettingsTabsContent()
 				"LID_event",
 				function(parent)
 					OpenSettingsEvents()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_event")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_event")))
 				end
 			)
 		end
@@ -146,7 +146,7 @@ function SettingsTabsContent()
 				"LID_settings_players",
 				function(parent)
 					OpenSettingsPlayers()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_players")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_players")))
 				end
 			)
 		end
@@ -156,7 +156,7 @@ function SettingsTabsContent()
 				"LID_characters",
 				function(parent)
 					OpenSettingsCharacters()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_characters")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_characters")))
 				end
 			)
 		end
@@ -166,7 +166,7 @@ function SettingsTabsContent()
 				"LID_whitelist",
 				function(parent)
 					OpenSettingsWhitelist()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_whitelist")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_whitelist")))
 				end
 			)
 		end
@@ -178,7 +178,7 @@ function SettingsTabsContent()
 				"LID_settings_status",
 				function(parent)
 					OpenSettingsStatus()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_settings_status")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_settings_status")))
 				end
 			)
 		end
@@ -188,7 +188,7 @@ function SettingsTabsContent()
 				"LID_settings_groupsandroles",
 				function(parent)
 					OpenSettingsGroupsAndRoles()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_settings_groupsandroles")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_settings_groupsandroles")))
 				end
 			)
 		end
@@ -198,7 +198,7 @@ function SettingsTabsContent()
 				"LID_settings_map",
 				function(parent)
 					OpenSettingsMap()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_settings_map")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_settings_map")))
 				end
 			)
 		end
@@ -208,7 +208,7 @@ function SettingsTabsContent()
 				"LID_logs",
 				function(parent)
 					OpenSettingsLogs()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_logs")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_logs")))
 				end
 			)
 		end
@@ -218,7 +218,7 @@ function SettingsTabsContent()
 				"LID_logs_settings",
 				function(parent)
 					OpenSettingsLogsSettings()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_logs_settings")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_logs_settings")))
 				end
 			)
 		end
@@ -228,7 +228,7 @@ function SettingsTabsContent()
 				"LID_blacklist",
 				function(parent)
 					OpenSettingsBlacklist()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_blacklist")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_blacklist")))
 				end
 			)
 		end
@@ -238,7 +238,7 @@ function SettingsTabsContent()
 				"LID_tickets",
 				function(parent)
 					OpenSettingsFeedback()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_tickets")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_tickets")))
 				end
 			)
 		end
@@ -250,7 +250,7 @@ function SettingsTabsContent()
 				"LID_settings_usergroups",
 				function(parent)
 					YRPOpenSettingsUsergroups()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_settings_usergroups")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_settings_usergroups")))
 				end
 			)
 		end
@@ -260,7 +260,7 @@ function SettingsTabsContent()
 				"LID_settings_realistic",
 				function(parent)
 					OpenSettingsRealistic()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_settings_realistic")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_settings_realistic")))
 				end
 			)
 		end
@@ -270,7 +270,7 @@ function SettingsTabsContent()
 				"LID_settings_shops",
 				function(parent)
 					OpenSettingsShops()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_settings_shops")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_settings_shops")))
 				end
 			)
 		end
@@ -280,7 +280,7 @@ function SettingsTabsContent()
 				"LID_settings_licenses",
 				function(parent)
 					OpenSettingsLicenses()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_settings_licenses")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_settings_licenses")))
 				end
 			)
 		end
@@ -290,7 +290,7 @@ function SettingsTabsContent()
 				"LID_specializations",
 				function(parent)
 					OpenSettingsSpecializations()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_specializations")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_specializations")))
 				end
 			)
 		end
@@ -300,7 +300,7 @@ function SettingsTabsContent()
 				"LID_levelsystem",
 				function(parent)
 					OpenSettingsLevelsystem()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_levelsystem")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_levelsystem")))
 				end
 			)
 		end
@@ -310,7 +310,7 @@ function SettingsTabsContent()
 				"LID_settings_design",
 				function(parent)
 					OpenSettingsDesign()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_settings_design")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_settings_design")))
 				end
 			)
 		end
@@ -320,7 +320,7 @@ function SettingsTabsContent()
 				"LID_scale",
 				function(parent)
 					OpenSettingsScale()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_scale")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_scale")))
 				end
 			)
 		end
@@ -330,7 +330,7 @@ function SettingsTabsContent()
 				"LID_weaponsystem",
 				function(parent)
 					OpenSettingsWeaponSystem()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_weaponsystem")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_weaponsystem")))
 				end
 			)
 		end
@@ -342,7 +342,7 @@ function SettingsTabsContent()
 				"LID_settings_general",
 				function(parent)
 					OpenSettingsGeneral()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_settings_general")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_settings_general")))
 				end
 			)
 		end
@@ -352,7 +352,7 @@ function SettingsTabsContent()
 				"LID_settings_database",
 				function(parent)
 					OpenSettingsDatabase()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_settings_database")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_settings_database")))
 				end
 			)
 		end
@@ -406,7 +406,7 @@ function SettingsTabsContent()
 				"LID_settings_yourrp_addons",
 				function(parent)
 					OpenSettingsYourRPAddons()
-					sm.win:SetTitle(string.upper(YRP.trans("LID_settings_yourrp_addons")))
+					sm.win:SetTitle(string.upper(YRP:trans("LID_settings_yourrp_addons")))
 				end
 			)
 		end
@@ -431,7 +431,7 @@ function F8OpenSettings()
 	end
 
 	sm.open = true
-	local br = YRP.ctr(20)
+	local br = YRP:ctr(20)
 	if YRPPanelAlive(sm.win) == false then
 		local sites = {}
 		local c = 0
@@ -486,21 +486,21 @@ function F8OpenSettings()
 		sm.win = YRPCreateD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
 		sm.win:SetTitle("")
 		sm.win:MakePopup()
-		--sm.win:SetHeaderHeight(YRP.ctr(100) )
+		--sm.win:SetHeaderHeight(YRP:ctr(100) )
 		sm.win:SetBorder(0)
 		sm.win:CanMaximise()
 		sm.win:SetMaximised(LocalPlayer().settingsmaximised, "SETTING")
 		sm.win:SetSizable(true)
 		sm.win:SetMinWidth(700)
 		sm.win:SetMinHeight(700)
-		local rlsize = sm.win:GetHeaderHeight() - YRP.ctr(20)
+		local rlsize = sm.win:GetHeaderHeight() - YRP:ctr(20)
 		function sm.win:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)
 			draw.SimpleText(self:GetTitle(), "Y_18_500", self:GetHeaderHeight() / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.trans("LID_players") .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw / 2 - YRP.ctr(300), self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-			draw.SimpleText("YourRP Version.: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2 + YRP.ctr(120), self:GetHeaderHeight() / 2, YRPGetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_players") .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw / 2 - YRP:ctr(300), self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			draw.SimpleText("YourRP Version.: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2 + YRP:ctr(120), self:GetHeaderHeight() / 2, YRPGetVersionColor(), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			if sm.win.reload and (sm.win.reload.sw ~= sm.win:GetWide() or sm.win.reload.sh ~= sm.win:GetTall()) then
-				sm.win.reload:SetPos(sm.win:GetWide() - sm.win:GetHeaderHeight() * 5.6 - rlsize, YRP.ctr(10))
+				sm.win.reload:SetPos(sm.win:GetWide() - sm.win:GetHeaderHeight() * 5.6 - rlsize, YRP:ctr(10))
 			end
 		end
 
@@ -512,9 +512,9 @@ function F8OpenSettings()
 		sm.win.reload:SetText("")
 		function sm.win.reload:Paint(pw, ph)
 			hook.Run("YButtonPaint", self, pw, ph)
-			local pbr = YRP.ctr(10)
-			if YRP.GetDesignIcon("64_angle-right") ~= nil then
-				surface.SetMaterial(YRP.GetDesignIcon("64_sync"))
+			local pbr = YRP:ctr(10)
+			if YRP:GetDesignIcon("64_angle-right") ~= nil then
+				surface.SetMaterial(YRP:GetDesignIcon("64_sync"))
 				surface.SetDrawColor(Color(255, 255, 255, 255))
 				surface.DrawTexturedRect(pbr, pbr, ph - 2 * pbr, ph - 2 * pbr)
 			end
@@ -531,8 +531,8 @@ function F8OpenSettings()
 		end
 
 		-- LOGO
-		local logoS = sm.win:GetHeaderHeight() - YRP.ctr(20)
-		sm.win.logo = YRPCreateD("YPanel", sm.win, YRP.ctr(200), logoS, sm.win:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10))
+		local logoS = sm.win:GetHeaderHeight() - YRP:ctr(20)
+		sm.win.logo = YRPCreateD("YPanel", sm.win, YRP:ctr(200), logoS, sm.win:GetWide() / 2 - YRP:ctr(200), YRP:ctr(10))
 		sm.win.logo.yrp = Material("vgui/yrp/logo100_beta.png")
 		function sm.win.logo:Paint(pw, ph)
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
@@ -540,36 +540,36 @@ function F8OpenSettings()
 			surface.SetMaterial(self.yrp)
 			surface.DrawTexturedRect(0, 0, 400 * logoS / 130, 130 * logoS / 130)
 			self.w = self.w or 0
-			if self.w ~= 400 * logoS / 130 or self.h ~= logoS or self.x ~= sm.win:GetWide() / 2 - self.w or self.y ~= YRP.ctr(10) then
+			if self.w ~= 400 * logoS / 130 or self.h ~= logoS or self.x ~= sm.win:GetWide() / 2 - self.w or self.y ~= YRP:ctr(10) then
 				self.w = 400 * logoS / 130
 				self.h = logoS
 				self.x = sm.win:GetWide() / 2 - self.w
-				self.y = YRP.ctr(10)
+				self.y = YRP:ctr(10)
 				self:SetSize(self.w, self.h)
 				self:SetPos(self.x, self.y)
 			end
 		end
 
 		-- DISCORD
-		local icon_size = sm.win:GetHeaderHeight() - YRP.ctr(20)
+		local icon_size = sm.win:GetHeaderHeight() - YRP:ctr(20)
 		local icon_x, icon_y = sm.win.logo:GetPos()
-		icon_x = icon_x + sm.win.logo:GetWide() + YRP.ctr(20)
+		icon_x = icon_x + sm.win.logo:GetWide() + YRP:ctr(20)
 		sm.win.discord = YRPCreateD("YPanel", sm.win, icon_size, icon_size, icon_x, icon_y)
 		sm.win.discord.logo = YRPCreateD("DPanel", sm.win.discord, icon_size, icon_size, 0, 0)
 		sm.win.discord.btn = YRPCreateD("DButton", sm.win.discord, icon_size, icon_size, 0, 0)
 		sm.win.discord.btn:SetText("")
 		function sm.win.discord.logo:Paint(pw, ph)
-			if YRP.GetDesignIcon("discord") then
+			if YRP:GetDesignIcon("discord") then
 				surface.SetDrawColor(Color(255, 255, 255, 255))
-				surface.SetMaterial(YRP.GetDesignIcon("discord"))
+				surface.SetMaterial(YRP:GetDesignIcon("discord"))
 				surface.DrawTexturedRect(0, 0, ph, ph)
 			end
 		end
 
 		function sm.win.discord:Paint(pw, ph)
-			icon_size = sm.win:GetHeaderHeight() - YRP.ctr(20)
+			icon_size = sm.win:GetHeaderHeight() - YRP:ctr(20)
 			icon_x, icon_y = sm.win.logo:GetPos()
-			icon_x = icon_x + sm.win.logo:GetWide() + YRP.ctr(20)
+			icon_x = icon_x + sm.win.logo:GetWide() + YRP:ctr(20)
 			if self.w ~= icon_size or self.h ~= icon_size or self.x ~= icon_x or self.y ~= icon_y then
 				self.w = icon_size
 				self.h = icon_size
@@ -589,30 +589,30 @@ function F8OpenSettings()
 			gui.OpenURL("https://discord.gg/CXXDCMJ")
 		end
 
-		--[[sm.win.botbar = YRPCreateD( "DPanel", sm.win, sm.win:GetWide(), YRP.ctr(50), 0, 0)
+		--[[sm.win.botbar = YRPCreateD( "DPanel", sm.win, sm.win:GetWide(), YRP:ctr(50), 0, 0)
 		function sm.win.botbar:Paint(pw, ph)
 			self:SetWide(sm.win:GetWide() )
-			self:SetPos(0, sm.win:GetTall() - YRP.ctr(50) )
+			self:SetPos(0, sm.win:GetTall() - YRP:ctr(50) )
 			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue( "YFrame", "NC" ) )
 
 			draw.SimpleText(GetGlobalYRPString( "text_server_name", "-" ), "Y_18_500", ph / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			draw.SimpleText( "YourRP Version.: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, YRPGetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.trans( "LID_map" ) .. ": " .. game.GetMap() .. "        " .. YRP.trans( "LID_players" ) .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans( "LID_map" ) .. ": " .. game.GetMap() .. "        " .. YRP:trans( "LID_players" ) .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end]]
 		local content = sm.win:GetContent()
 		-- MENU
 		sm.menu = YRPCreateD("DPanelList", content, 10, BFH() - sm.win:GetHeaderHeight(), 0, 0)
 		sm.menu:SetText("")
-		sm.menu.pw = YRP.ctr(64) + 2 * br
-		sm.menu.ph = YRP.ctr(64) + 2 * br
+		sm.menu.pw = YRP:ctr(64) + 2 * br
+		sm.menu.ph = YRP:ctr(64) + 2 * br
 		sm.menu.expanded = sm.menu.expanded or lply.settings_expanded
 		local font = "Y_" .. math.Clamp(math.Round(sm.menu.ph - 2 * br), 4, 100) .. "_500"
 		function sm.menu:Paint(pw, ph)
-			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"), false, false, true, false)
+			draw.RoundedBoxEx(YRP:ctr(10), 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"), false, false, true, false)
 			self:SetTall(sm.win:GetTall() - sm.win:GetHeaderHeight())
 		end
 
-		sm.menu:SetSpacing(YRP.ctr(20))
+		sm.menu:SetSpacing(YRP:ctr(20))
 		sm.menu.expander = YRPCreateD("DButton", sm.win, sm.menu.ph, sm.menu.ph, 0, sm.win:GetTall() - sm.menu.ph)
 		sm.menu.expander:SetText("")
 		function sm.menu.expander:DoClick()
@@ -630,12 +630,12 @@ function F8OpenSettings()
 		function sm.menu.expander:Paint(pw, ph)
 			self:SetPos(0, sm.win:GetTall() - sm.menu.ph)
 			if lply.settings_expanded then
-				if YRP.GetDesignIcon("64_angle-left") ~= nil then
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+				if YRP:GetDesignIcon("64_angle-left") ~= nil then
+					surface.SetMaterial(YRP:GetDesignIcon("64_angle-left"))
 				end
 			else
-				if YRP.GetDesignIcon("64_angle-right") ~= nil then
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+				if YRP:GetDesignIcon("64_angle-right") ~= nil then
+					surface.SetMaterial(YRP:GetDesignIcon("64_angle-right"))
 				end
 			end
 
@@ -679,7 +679,7 @@ function F8OpenSettings()
 		surface.SetFont(font)
 		for i, v in pairs(sites) do
 			if v.name ~= "hr" then
-				local tw, _ = surface.GetTextSize(YRP.trans(v.name))
+				local tw, _ = surface.GetTextSize(YRP:trans(v.name))
 				if tw > sm.menu.pw then
 					sm.menu.pw = tw
 				end
@@ -703,19 +703,19 @@ function F8OpenSettings()
 
 					self.aw = Lerp(10 * FrameTime(), self.aw, target)
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
-					if YRP.GetDesignIcon(v.icon) ~= nil then
+					if YRP:GetDesignIcon(v.icon) ~= nil then
 						surface.SetDrawColor(Color(255, 255, 255, 255))
-						surface.SetMaterial(YRP.GetDesignIcon(v.icon))
+						surface.SetMaterial(YRP:GetDesignIcon(v.icon))
 						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
 					end
 
 					surface.SetFont(font)
-					local ptw, _ = surface.GetTextSize(YRP.trans(v.name))
+					local ptw, _ = surface.GetTextSize(YRP:trans(v.name))
 					if ptw > sm.menu.pw then
 						sm.menu.pw = ptw
 					end
 
-					draw.SimpleText(YRP.trans(v.name), font, ph, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP:trans(v.name), font, ph, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				function site:DoClick()
@@ -733,10 +733,10 @@ function F8OpenSettings()
 
 				sm.menu:AddItem(site)
 			else
-				sm.sites[v.name] = YRPCreateD("DPanel", sm.menu, sm.menu.pw, YRP.ctr(20), 0, 0)
+				sm.sites[v.name] = YRPCreateD("DPanel", sm.menu, sm.menu.pw, YRP:ctr(20), 0, 0)
 				local site = sm.sites[v.name]
 				function site:Paint(pw, ph)
-					local hr = YRP.ctr(2)
+					local hr = YRP:ctr(2)
 					draw.RoundedBox(0, br, ph / 2 - hr / 2, pw - br * 2, hr, Color(255, 255, 255, 255))
 				end
 
@@ -763,6 +763,6 @@ net.Receive(
 	function(len)
 		local site = net.ReadString()
 		local usergroups = net.ReadString()
-		F8RequireUG(YRP.trans(site), usergroups)
+		F8RequireUG(YRP:trans(site), usergroups)
 	end
 )

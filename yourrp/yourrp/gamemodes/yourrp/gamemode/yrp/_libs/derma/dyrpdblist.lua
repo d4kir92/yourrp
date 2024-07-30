@@ -14,7 +14,7 @@ function PANEL:Init()
 	local _pnl = self
 	--[[ Header ]]
 	--
-	self.header = YRPCreateD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
+	self.header = YRPCreateD("DPanel", self, self:GetWide(), YRP:ctr(50), 0, 0)
 	function self.header:Paint(pw, ph)
 	end
 
@@ -71,19 +71,19 @@ function PANEL:Init()
 
 	--[[ List Header ]]
 	--
-	self.listheader = YRPCreateD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
+	self.listheader = YRPCreateD("DPanel", self, self:GetWide(), YRP:ctr(50), 0, 0)
 	self.listheader.textpre = ""
 	self.listheader.text = "UNNAMED"
 	self.listheader.textpos = ""
 	function self.listheader:Paint(pw, ph)
 		local color = Color(0, 255, 0)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0))
-		surfaceText(self.textpre .. " " .. YRP.trans(self.text) .. " " .. self.textpos, "Y_24_500", pw / 2, ph / 2, YRPTextColor(color), 1, 1)
+		surfaceText(self.textpre .. " " .. YRP:trans(self.text) .. " " .. self.textpos, "Y_24_500", pw / 2, ph / 2, YRPTextColor(color), 1, 1)
 	end
 
 	--[[ List ]]
 	--
-	self.list = YRPCreateD("DScrollPanel", self, self:GetWide(), self:GetTall() - YRP.ctr(110), 0, 0)
+	self.list = YRPCreateD("DScrollPanel", self, self:GetWide(), self:GetTall() - YRP:ctr(110), 0, 0)
 	self.list:SetPadding(2)
 	--self.list:SetNoSizing(true)
 	function self.list:Paint(pw, ph)
@@ -114,7 +114,7 @@ function PANEL:Init()
 	end
 
 	function self:AddEntry(tbl)
-		local _new = YRPCreateD("DButton", nil, self:GetWide(), YRP.ctr(50), 0, 0)
+		local _new = YRPCreateD("DButton", nil, self:GetWide(), YRP:ctr(50), 0, 0)
 		_new:SetText("")
 		_new.tbl = tbl
 		function _new:Paint(pw, ph)
@@ -155,13 +155,13 @@ end
 
 function PANEL:Think()
 	local _x = self.listheader:GetPos()
-	if YRP.ctr(60) ~= _x then
-		self.listheader:SetPos(0, YRP.ctr(60))
+	if YRP:ctr(60) ~= _x then
+		self.listheader:SetPos(0, YRP:ctr(60))
 	end
 
 	_x = self.list:GetPos()
-	if YRP.ctr(110) ~= _x then
-		self.list:SetPos(0, YRP.ctr(110))
+	if YRP:ctr(110) ~= _x then
+		self.list:SetPos(0, YRP:ctr(110))
 	end
 
 	if self:GetWide() ~= self.header:GetWide() then
@@ -176,8 +176,8 @@ function PANEL:Think()
 		self.list:SetWide(self:GetWide())
 	end
 
-	if self.list:GetTall() ~= self:GetTall() - YRP.ctr(120) then
-		self.list:SetTall(self:GetTall() - YRP.ctr(120))
+	if self.list:GetTall() ~= self:GetTall() - YRP:ctr(120) then
+		self.list:SetTall(self:GetTall() - YRP:ctr(120))
 	end
 end
 

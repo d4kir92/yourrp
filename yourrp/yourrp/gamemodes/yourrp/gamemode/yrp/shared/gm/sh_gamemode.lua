@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 455 -- do NOT change this!
+GM.VersionBuild = 456 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -318,28 +318,28 @@ concommand.Add(
 )
 
 function PrintHelp()
-	YRP.msg("note", "Shared Commands:")
-	YRP.msg("note", "yrp_status")
-	YRP.msg("note", "	Shows info")
-	YRP.msg("note", "yrp_version")
-	YRP.msg("note", "	Shows gamemode version")
-	YRP.msg("note", "yrp_players")
-	YRP.msg("note", "	Shows all players")
-	YRP.msg("note", "yrp_usergroup RPNAME UserGroup")
-	YRP.msg("note", "	Put a player with the RPNAME to the UserGroup")
-	YRP.msg("note", "yrp_maps")
-	YRP.msg("note", "	Shows all maps on server")
-	YRP.msg("note", "yrp_map ID")
-	YRP.msg("note", "	Changelevel to map ID")
-	YRP.msg("note", "yrp_collection / yrp_collectionid")
-	YRP.msg("note", "	Shows servers collectionid")
-	YRP.msg("note", "Client Commands:")
-	YRP.msg("note", "yrp_cl_hud X")
-	YRP.msg("note", "	1: Shows hud, 0: Hide hud")
-	YRP.msg("note", "yrp_open_settings")
-	YRP.msg("note", "	Toggle settings menu")
-	YRP.msg("note", "Server Commands:")
-	YRP.msg("note", "yrp_givelicense NAME LICENSENAME")
+	YRP:msg("note", "Shared Commands:")
+	YRP:msg("note", "yrp_status")
+	YRP:msg("note", "	Shows info")
+	YRP:msg("note", "yrp_version")
+	YRP:msg("note", "	Shows gamemode version")
+	YRP:msg("note", "yrp_players")
+	YRP:msg("note", "	Shows all players")
+	YRP:msg("note", "yrp_usergroup RPNAME UserGroup")
+	YRP:msg("note", "	Put a player with the RPNAME to the UserGroup")
+	YRP:msg("note", "yrp_maps")
+	YRP:msg("note", "	Shows all maps on server")
+	YRP:msg("note", "yrp_map ID")
+	YRP:msg("note", "	Changelevel to map ID")
+	YRP:msg("note", "yrp_collection / yrp_collectionid")
+	YRP:msg("note", "	Shows servers collectionid")
+	YRP:msg("note", "Client Commands:")
+	YRP:msg("note", "yrp_cl_hud X")
+	YRP:msg("note", "	1: Shows hud, 0: Hide hud")
+	YRP:msg("note", "yrp_open_settings")
+	YRP:msg("note", "	Toggle settings menu")
+	YRP:msg("note", "Server Commands:")
+	YRP:msg("note", "yrp_givelicense NAME LICENSENAME")
 end
 
 concommand.Add(
@@ -382,7 +382,7 @@ function YRPCollectionID()
 end
 
 function PrintCollectionID()
-	YRP.msg("note", "Server - CollectionID: " .. YRPCollectionID())
+	YRP:msg("note", "Server - CollectionID: " .. YRPCollectionID())
 end
 
 concommand.Add(
@@ -427,7 +427,7 @@ elseif SERVER then
 end
 
 if SERVER then
-	YRP.AddNetworkString("YRPGetServerInfo")
+	YRP:AddNetworkString("YRPGetServerInfo")
 	net.Receive(
 		"YRPGetServerInfo",
 		function(len, ply)
@@ -450,7 +450,7 @@ if SERVER then
 		GM.BaseName = tmp.text_gamemode_name
 	end
 
-	YRP.AddNetworkString("YRPGetGamemodename")
+	YRP:AddNetworkString("YRPGetGamemodename")
 	net.Receive(
 		"YRPGetGamemodename",
 		function(len, ply)
@@ -548,11 +548,11 @@ end
 function YRPGetVoiceRangeText(ply)
 	if IsValid(ply) then
 		local ranges = {
-			[0] = YRP.trans("LID_whisper"),
-			[1] = YRP.trans("LID_quiet"),
+			[0] = YRP:trans("LID_whisper"),
+			[1] = YRP:trans("LID_quiet"),
 			[2] = "",
-			[3] = YRP.trans("LID_noisy"),
-			[4] = YRP.trans("LID_yell")
+			[3] = YRP:trans("LID_noisy"),
+			[4] = YRP:trans("LID_yell")
 		}
 
 		return ranges[ply:GetYRPInt("voice_range", 2)]
@@ -852,20 +852,20 @@ end
 
 function YRPCheckReadyTable(tab)
 	if not IsNotNilAndNotFalse(tab) then
-		YRP.msg("error", "[CheckReadyTable] Table INVALID: " .. tostring(tab))
+		YRP:msg("error", "[CheckReadyTable] Table INVALID: " .. tostring(tab))
 
 		return false
 	end
 
 	if table.Count(tab) ~= 4 then
-		YRP.msg("error", "[CheckReadyTable] Table is size: " .. table.Count(tab))
+		YRP:msg("error", "[CheckReadyTable] Table is size: " .. table.Count(tab))
 
 		return false
 	end
 
 	for i, v in pairs(tab) do
 		if v == nil then
-			YRP.msg("error", "[CheckReadyTable] Table-Entry is nil at index: " .. tostring(i))
+			YRP:msg("error", "[CheckReadyTable] Table-Entry is nil at index: " .. tostring(i))
 
 			return false
 		end
@@ -925,7 +925,7 @@ end
 
 function YRPCheckDarkRP()
 	if gmod and gmod.GetGamemode() and gmod.GetGamemode().Name ~= "DarkRP" then
-		YRP.msg("note", "Modified Files Detected, DarkRP addons will not work with that.")
+		YRP:msg("note", "Modified Files Detected, DarkRP addons will not work with that.")
 	end
 
 	timer.Simple(1, YRPCheckDarkRP)

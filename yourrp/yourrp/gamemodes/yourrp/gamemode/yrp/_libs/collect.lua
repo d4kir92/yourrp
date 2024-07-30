@@ -19,7 +19,7 @@ if SERVER then
 	function YRPSendServerInfo()
 		if game.IsDedicated() then
 			if GAMEMODE then
-				YRP.msg("note", "> Send Server Info <")
+				YRP:msg("note", "> Send Server Info <")
 				local entry = {}
 				-- IP
 				entry["entry.2055994870"] = tostring(game.GetIPAddress())
@@ -54,18 +54,18 @@ if SERVER then
 						function(body, length, headers, code)
 							if code == 200 then
 								-- worked
-								YRP.msg("note", "[Send Server] Info: Success")
+								YRP:msg("note", "[Send Server] Info: Success")
 								YRP_INFO_WAS_SENDED = true
 							else
-								YRP.msg("note", "[Send Server] Info HTTP CODE: " .. tostring(code))
+								YRP:msg("note", "[Send Server] Info HTTP CODE: " .. tostring(code))
 							end
 						end,
 						function(failed)
-							YRP.msg("note", "[Send Server] Info failed: " .. tostring(failed))
+							YRP:msg("note", "[Send Server] Info failed: " .. tostring(failed))
 						end
 					)
 				else
-					YRP.msg("note", "[Send Server] Already Send")
+					YRP:msg("note", "[Send Server] Already Send")
 				end
 			else
 				timer.Simple(1, YRPSendServerInfo)

@@ -12,7 +12,7 @@ function CreateSlot(storageID, inv)
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_storageID", "'" .. storageID .. "'")
 		end
 	else
-		YRP.msg("db", "[CreateSlot] storageID is invalid")
+		YRP:msg("db", "[CreateSlot] storageID is invalid")
 	end
 end
 
@@ -24,12 +24,12 @@ function GetStorageSlots(storageID)
 		if IsNotNilAndNotFalse(yrp_slots) then
 			slots = yrp_slots
 		else
-			YRP.msg("db", "[GetStorageSlots] there are no slots")
+			YRP:msg("db", "[GetStorageSlots] there are no slots")
 		end
 
 		return slots
 	else
-		YRP.msg("db", "[GetStorageSlots] storageID invalid")
+		YRP:msg("db", "[GetStorageSlots] storageID invalid")
 
 		return {}
 	end
@@ -72,7 +72,7 @@ function DisconnectFromSlot(ply, slotID)
 end
 
 -- Networking
-YRP.AddNetworkString("nws_yrp_storage_get_slots")
+YRP:AddNetworkString("nws_yrp_storage_get_slots")
 net.Receive(
 	"nws_yrp_storage_get_slots",
 	function(len, ply)
@@ -94,7 +94,7 @@ net.Receive(
 						tab.int_storageID = storage.uniqueID
 						CreateItem(bp.uniqueID, tab)
 					else
-						YRP.msg("db", "Failed to create backpack")
+						YRP:msg("db", "Failed to create backpack")
 					end
 				end
 			end
@@ -104,12 +104,12 @@ net.Receive(
 			net.WriteTable(slots)
 			net.Send(ply)
 		else
-			YRP.msg("db", "yrp_storage_get_slots failed")
+			YRP:msg("db", "yrp_storage_get_slots failed")
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_slot_connect")
+YRP:AddNetworkString("nws_yrp_slot_connect")
 net.Receive(
 	"nws_yrp_slot_connect",
 	function(len, ply)
@@ -118,7 +118,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_slot_disconnect")
+YRP:AddNetworkString("nws_yrp_slot_disconnect")
 net.Receive(
 	"nws_yrp_slot_disconnect",
 	function(len, ply)

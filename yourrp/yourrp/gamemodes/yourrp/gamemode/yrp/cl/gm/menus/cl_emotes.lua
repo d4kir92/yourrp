@@ -73,26 +73,26 @@ local _seg = #GetEmotes()
 for i = 0, _seg do
 	local a = math.rad(((i / _seg) * -360) + 180 - (360 / _seg) / 2)
 	local _coord = {}
-	_coord.x = YRP.ctr(950) + math.sin(a) * YRP.ctr(800)
-	_coord.y = YRP.ctr(950) + math.cos(a) * YRP.ctr(800)
+	_coord.x = YRP:ctr(950) + math.sin(a) * YRP:ctr(800)
+	_coord.y = YRP:ctr(950) + math.cos(a) * YRP:ctr(800)
 	table.insert(_vec_emo, _coord)
 end
 
 local _test = {}
 for i = 1, _seg do
-	local _segment = circleCoords(YRP.ctr(950), YRP.ctr(950), YRP.ctr(900), YRP.ctr(700), 8, (i - 1) * 360 / _seg + 0.5, 360 / _seg - 1)
+	local _segment = circleCoords(YRP:ctr(950), YRP:ctr(950), YRP:ctr(900), YRP:ctr(700), 8, (i - 1) * 360 / _seg + 0.5, 360 / _seg - 1)
 	table.insert(_test, _segment)
 end
 
 function OpenEmotesMenu()
 	YRPOpenMenu()
-	_em.window = YRPCreateD("DFrame", nil, YRP.ctr(1900), YRP.ctr(1900), 0, 0)
+	_em.window = YRPCreateD("DFrame", nil, YRP:ctr(1900), YRP:ctr(1900), 0, 0)
 	_em.window:Center()
 	_em.window:ShowCloseButton(false)
 	_em.window:SetDraggable(false)
 	_em.window:MakePopup()
 	_em.window:SetTitle("")
-	_em.emotes = YRPCreateD("DButton", _em.window, YRP.ctr(1900), YRP.ctr(1900), 0, 0)
+	_em.emotes = YRPCreateD("DButton", _em.window, YRP:ctr(1900), YRP:ctr(1900), 0, 0)
 	_em.emotes:SetText("")
 	function _em.emotes:Paint(pw, ph)
 	end
@@ -147,7 +147,7 @@ function OpenEmotesMenu()
 
 		--surfaceText( "WINKEL: " .. tostring(math.Round(_ang, 0) ) .. " SELECT: " .. _em.emotes.select, "Y_24_500", _mx+self:GetWide()/2, _my+self:GetTall()/2, Color( 0, 0, 255, 255 ), 1, 1)
 		for e = 1, _seg do
-			surfaceText(YRP.trans(GetEmotes()[e].name), "Y_22_500", _vec_emo[e].x, _vec_emo[e].y, Color(255, 255, 255, 255), 1, 1)
+			surfaceText(YRP:trans(GetEmotes()[e].name), "Y_22_500", _vec_emo[e].x, _vec_emo[e].y, Color(255, 255, 255, 255), 1, 1)
 		end
 	end
 

@@ -59,7 +59,7 @@ function openMap()
 				win.w, win.h = lowerToScreen(map.sizeX, map.sizeY)
 				win.x = (ScrW() / 2) - (win.w / 2)
 				win.y = (ScrH() / 2) - (win.h / 2)
-				draw.RoundedBox(0, win.x - YRP.ctr(2), win.y - YRP.ctr(2), win.w + YRP.ctr(4), win.h + YRP.ctr(4), Color(255, 255, 0, 240))
+				draw.RoundedBox(0, win.x - YRP:ctr(2), win.y - YRP:ctr(2), win.w + YRP:ctr(4), win.h + YRP:ctr(4), Color(255, 255, 0, 240))
 				draw.RoundedBox(0, win.x, win.y, win.w, win.h, Color(0, 0, 0, 255))
 				local _mapName = GetNiceMapName()
 				local _testHeight = 4000
@@ -150,71 +150,71 @@ function openMap()
 				nulPos.y = win.y + win.h - win.h * (nulPos.ytmp / nulPos.yMax)
 				local gridcolor = Color(50, 50, 50)
 				local fixc = 0
-				for y = nulPos.y - YRP.ctr(300), 0, -YRP.ctr(200) do
+				for y = nulPos.y - YRP:ctr(300), 0, -YRP:ctr(200) do
 					fixc = fixc + 1
 				end
 
 				local c = 0
-				for y = nulPos.y, win.h, YRP.ctr(200) do
+				for y = nulPos.y, win.h, YRP:ctr(200) do
 					local color = gridcolor
 					if y == nulPos.y then
 						color = Color(150, 50, 50)
 					end
 
-					draw.RoundedBox(0, win.x, y, win.w, YRP.ctr(2), color)
+					draw.RoundedBox(0, win.x, y, win.w, YRP:ctr(2), color)
 				end
 
-				for y = nulPos.y, 0, -YRP.ctr(200) do
+				for y = nulPos.y, 0, -YRP:ctr(200) do
 					local color = gridcolor
 					if y == nulPos.y then
 						color = Color(150, 50, 50)
 					end
 
-					draw.RoundedBox(0, win.x, y, win.w, YRP.ctr(2), color)
+					draw.RoundedBox(0, win.x, y, win.w, YRP:ctr(2), color)
 				end
 
-				for y = nulPos.y - YRP.ctr(100), 0, -YRP.ctr(200) do
-					draw.SimpleText(math.abs(c - fixc) + 1, "Y_24_500", win.x + YRP.ctr(20), y, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				for y = nulPos.y - YRP:ctr(100), 0, -YRP:ctr(200) do
+					draw.SimpleText(math.abs(c - fixc) + 1, "Y_24_500", win.x + YRP:ctr(20), y, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c = c + 1
 				end
 
-				for y = nulPos.y - YRP.ctr(100), win.h, YRP.ctr(200) do
-					draw.SimpleText(c, "Y_24_500", win.x + YRP.ctr(20), y, Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				for y = nulPos.y - YRP:ctr(100), win.h, YRP:ctr(200) do
+					draw.SimpleText(c, "Y_24_500", win.x + YRP:ctr(20), y, Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c = c + 1
 				end
 
 				local fixc2 = 0
-				for x = nulPos.x - YRP.ctr(300), win.x, -YRP.ctr(200) do
+				for x = nulPos.x - YRP:ctr(300), win.x, -YRP:ctr(200) do
 					fixc2 = fixc2 + 1
 				end
 
 				local c2 = 0
 				local let = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
-				for x = nulPos.x, win.x + win.w, YRP.ctr(200) do
+				for x = nulPos.x, win.x + win.w, YRP:ctr(200) do
 					local color = gridcolor
 					if x == nulPos.x then
 						color = Color(150, 50, 50)
 					end
 
-					draw.RoundedBox(0, x, win.y, YRP.ctr(2), win.h, color)
+					draw.RoundedBox(0, x, win.y, YRP:ctr(2), win.h, color)
 				end
 
-				for x = nulPos.x, win.x, -YRP.ctr(200) do
+				for x = nulPos.x, win.x, -YRP:ctr(200) do
 					local color = gridcolor
 					if x == nulPos.x then
 						color = Color(150, 50, 50)
 					end
 
-					draw.RoundedBox(0, x, win.y, YRP.ctr(2), win.h, color)
+					draw.RoundedBox(0, x, win.y, YRP:ctr(2), win.h, color)
 				end
 
-				for x = nulPos.x - YRP.ctr(100), win.x, -YRP.ctr(200) do
-					draw.SimpleText(let[math.abs(c2 - fixc2) + 1], "Y_24_500", x, win.y + YRP.ctr(20), Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				for x = nulPos.x - YRP:ctr(100), win.x, -YRP:ctr(200) do
+					draw.SimpleText(let[math.abs(c2 - fixc2) + 1], "Y_24_500", x, win.y + YRP:ctr(20), Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c2 = c2 + 1
 				end
 
-				for x = nulPos.x + YRP.ctr(100), win.x + win.w, YRP.ctr(200) do
-					draw.SimpleText(let[c2], "Y_24_500", x, win.y + YRP.ctr(20), Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				for x = nulPos.x + YRP:ctr(100), win.x + win.w, YRP:ctr(200) do
+					draw.SimpleText(let[c2], "Y_24_500", x, win.y + YRP:ctr(20), Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					c2 = c2 + 1
 				end
 
@@ -222,17 +222,17 @@ function openMap()
 				--You
 				local x = plyPos.x
 				local y = plyPos.y
-				local w = YRP.ctr(50)
-				local h = YRP.ctr(50)
+				local w = YRP:ctr(50)
+				local h = YRP:ctr(50)
 				local rot = lply:EyeAngles().y - 90
 				surface.SetDrawColor(100, 100, 255, 255)
-				surface.SetMaterial(YRP.GetDesignIcon("navigation"))
+				surface.SetMaterial(YRP:GetDesignIcon("navigation"))
 				surface.DrawTexturedRectRotated(x, y, w, h, rot)
-				draw.SimpleText(YRP.trans("LID_you"), "Y_24_500", plyPos.x, plyPos.y - YRP.ctr(50), Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(YRP:trans("LID_you"), "Y_24_500", plyPos.x, plyPos.y - YRP:ctr(50), Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				--Coords
-				draw.SimpleText(math.Round(lply:GetPos().x, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				draw.SimpleText(", " .. math.Round(lply:GetPos().y, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP.ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-				draw.SimpleText("[M] - " .. YRP.trans("LID_map") .. ": " .. _mapName, "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(math.Round(lply:GetPos().x, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP:ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText(", " .. math.Round(lply:GetPos().y, -1), "Y_24_500", ScrW() / 2, ScrH() - YRP:ctr(25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleText("[M] - " .. YRP:trans("LID_map") .. ": " .. _mapName, "Y_24_500", YRP:ctr(10), YRP:ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
 				if lply:GetYRPBool("bool_canseeteammatesonmap", false) or lply:GetYRPBool("bool_canseeenemiesonmap", false) then
 					for k, pl in pairs(player.GetAll()) do
 						if pl ~= lply and (pl:GetGroupName() == lply:GetGroupName() and lply:GetYRPBool("bool_canseeteammatesonmap", false)) or (pl:GetGroupName() ~= lply:GetGroupName() and lply:GetYRPBool("bool_canseeenemiesonmap", false)) then
@@ -256,8 +256,8 @@ function openMap()
 							--Draw
 							local ppx = tmp.x
 							local ppy = tmp.y
-							local psw = YRP.ctr(50)
-							local psh = YRP.ctr(50)
+							local psw = YRP:ctr(50)
+							local psh = YRP:ctr(50)
 							local prot = pl:EyeAngles().y - 90
 							local pl_col = Color(100, 100, 255, 255)
 							if pl:GetGroupName() == lply:GetGroupName() then
@@ -267,9 +267,9 @@ function openMap()
 							end
 
 							surface.SetDrawColor(pl_col)
-							surface.SetMaterial(YRP.GetDesignIcon("navigation"))
+							surface.SetMaterial(YRP:GetDesignIcon("navigation"))
 							surface.DrawTexturedRectRotated(ppx, ppy, psw, psh, prot)
-							draw.SimpleText(pl:Nick(), "Y_24_500", tmp.x, tmp.y - YRP.ctr(50), Color(0, 0, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+							draw.SimpleText(pl:Nick(), "Y_24_500", tmp.x, tmp.y - YRP:ctr(50), Color(0, 0, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 						end
 					end
 				end
@@ -295,7 +295,7 @@ net.Receive(
 			map = net.ReadTable()
 			openMap()
 		else
-			YRP.msg("note", "wait for server coords")
+			YRP:msg("note", "wait for server coords")
 		end
 	end
 )

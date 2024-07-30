@@ -1,16 +1,16 @@
 local PANEL = {}
 local PlayerVoicePanels = {}
-local br = YRP.ctr(5)
-local sw = YRP.ctr(680)
-local sh = YRP.ctr(128)
+local br = YRP:ctr(5)
+local sw = YRP:ctr(680)
+local sh = YRP:ctr(128)
 local px = ScrW() - sw + br
 local py = 2.5 * sh
 local iconsize = sh - 2 * br
 local circlesize = 10
 function PANEL:UpdateValues()
-	br = YRP.ctr(5)
-	sw = YRP.ctr(680)
-	sh = YRP.ctr(128)
+	br = YRP:ctr(5)
+	sw = YRP:ctr(680)
+	sh = YRP:ctr(128)
 	px = ScrW() - sw + br
 	py = 2.5 * sh
 	iconsize = sh - 2 * br
@@ -77,7 +77,7 @@ function PANEL:Setup(ply)
 			text = table.concat(channels, ", ")
 		else
 			if GetGlobalYRPBool("bool_voice_module_locally") then
-				text = YRP.trans("LID_environment")
+				text = YRP:trans("LID_environment")
 			else
 				self:Remove()
 			end
@@ -109,9 +109,9 @@ function PANEL:Paint(w, h)
 	if not IsValid(self.ply) then return end
 	local vol = self.ply:VoiceVolume()
 	draw.RoundedBox(br, 0, 0, w, h, Color(0, vol * 255, 0, 240))
-	if YRP.GetDesignIcon("circle") and self.ply.GetFactionColor then
+	if YRP:GetDesignIcon("circle") and self.ply.GetFactionColor then
 		surface.SetDrawColor(self.ply:GetFactionColor())
-		surface.SetMaterial(YRP.GetDesignIcon("circle"))
+		surface.SetMaterial(YRP:GetDesignIcon("circle"))
 		surface.DrawTexturedRect(br, br, circlesize, circlesize)
 	end
 	--draw.RoundedBox( br, br, br, iconsize, iconsize, self.ply:GetFactionColor() )

@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-YRP.AddNetworkString("nws_yrp_dbGetGeneral")
-YRP.AddNetworkString("nws_yrp_dbGetQuestions")
-YRP.AddNetworkString("nws_yrp_hardresetdatabase")
+YRP:AddNetworkString("nws_yrp_dbGetGeneral")
+YRP:AddNetworkString("nws_yrp_dbGetQuestions")
+YRP:AddNetworkString("nws_yrp_hardresetdatabase")
 local yrp_db = {}
 yrp_db.version = 1
 yrp_db.loaded = false
@@ -59,13 +59,13 @@ end
 
 local _db_reseted = false
 function reset_database()
-	YRP.msg("db", "reset Database")
+	YRP:msg("db", "reset Database")
 	_db_reseted = true
 	for k, v in pairs(YRP_DBS) do
 		YRP_SQL_DROP_TABLE(v)
 	end
 
-	YRP.msg("db", "DONE reset Database")
+	YRP:msg("db", "DONE reset Database")
 end
 
 --reset_database()
@@ -73,10 +73,10 @@ net.Receive(
 	"nws_yrp_hardresetdatabase",
 	function(len, ply)
 		if string.lower(ply:GetUserGroup()) == "superadmin" then
-			YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
-			YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
-			YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
-			YRP.msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+			YRP:msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+			YRP:msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+			YRP:msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
+			YRP:msg("note", "[" .. ply:Nick() .. "] hard reseted the DATABASE!")
 			PrintMessage(HUD_PRINTCENTER, "Hard RESET by [" .. ply:Nick() .. "] in 10sec changelevel")
 			reset_database()
 			timer.Simple(
@@ -110,15 +110,15 @@ end
 
 function db_init_database()
 	if YRP_SQL_INIT_DATABASE then
-		YRP.msg("db", "LOAD DATABASES")
+		YRP:msg("db", "LOAD DATABASES")
 		for i, db in pairs(YRP_DBS) do
 			YRP_SQL_INIT_DATABASE(db)
 		end
 
 		yrp_db.loaded = true
-		YRP.msg("db", "DONE Loading DATABASES")
+		YRP:msg("db", "DONE Loading DATABASES")
 	else
-		YRP.msg("db", "RETRY LOAD DATABASES")
+		YRP:msg("db", "RETRY LOAD DATABASES")
 		timer.Simple(0.01, db_init_database)
 	end
 end
@@ -175,7 +175,7 @@ include("specializations/db_specializations.lua")
 local DATABASE_NAME = "yrp_darkrp"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
-YRP.AddNetworkString("nws_yrp_darkrp_bool")
+YRP:AddNetworkString("nws_yrp_darkrp_bool")
 net.Receive(
 	"nws_yrp_darkrp_bool",
 	function(len, ply)
@@ -196,7 +196,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_yrp_darkrp")
+YRP:AddNetworkString("nws_yrp_update_yrp_darkrp")
 function UpdateDarkRPTable(ply)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if IsNotNilAndNotFalse(tab) then
@@ -207,7 +207,7 @@ function UpdateDarkRPTable(ply)
 			if string.StartWith(name, "bool_") then
 				yrp_darkrp[name] = tobool(value)
 			else
-				YRP.msg("db", name .. ": " .. value)
+				YRP:msg("db", name .. ": " .. value)
 			end
 		end
 

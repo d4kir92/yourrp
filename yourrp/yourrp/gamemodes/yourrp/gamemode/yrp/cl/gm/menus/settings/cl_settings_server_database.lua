@@ -13,7 +13,7 @@ net.Receive(
 			local TAB_YRP_RELATED = net.ReadTable()
 			local TAB_YRP_OTHER = net.ReadTable()
 			local YRP_SQL = net.ReadTable()
-			local br = YRP.ctr(20)
+			local br = YRP:ctr(20)
 			local scroller = {}
 			scroller.parent = PARENT
 			scroller.x = br
@@ -21,8 +21,8 @@ net.Receive(
 			scroller.w = PARENT:GetWide() - 2 * br
 			scroller.h = PARENT:GetTall() - 2 * br
 			local Scroller = DHorizontalScroller(scroller)
-			local yourrpdatabase = YRPCreateD("YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
-			yourrpdatabase:SetText(YRP.trans("LID_yourrpdatabase") .. " (FOR EXPERIENCED ADMINISTRATORS ONLY)")
+			local yourrpdatabase = YRPCreateD("YGroupBox", Scroller, YRP:ctr(1000), Scroller:GetTall(), 0, 0)
+			yourrpdatabase:SetText(YRP:trans("LID_yourrpdatabase") .. " (FOR EXPERIENCED ADMINISTRATORS ONLY)")
 			function yourrpdatabase:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
 			end
@@ -39,8 +39,8 @@ net.Receive(
 			local ble = {}
 			ble.parent = yrp_db
 			ble.color = YRPGetColor("2")
-			ble.brx = YRP.ctr(50)
-			local sqlmode = DIntComboBoxBox(bl, nil, YRP.trans("LID_sqlmode") .. " (FOR EXPERIENCED ADMINISTRATORS ONLY)", nil)
+			ble.brx = YRP:ctr(50)
+			local sqlmode = DIntComboBoxBox(bl, nil, YRP:trans("LID_sqlmode") .. " (FOR EXPERIENCED ADMINISTRATORS ONLY)", nil)
 			if tonumber(YRP_SQL.int_mode) == 0 then
 				sqlmode:AddChoice("SQLite (CURRENTLY)", 0, true)
 			else
@@ -48,9 +48,9 @@ net.Receive(
 			end
 
 			if tonumber(YRP_SQL.int_mode) == 1 then
-				sqlmode:AddChoice("MySQL ( " .. YRP.trans("LID_external") .. " ) (CURRENTLY)", 1, true)
+				sqlmode:AddChoice("MySQL ( " .. YRP:trans("LID_external") .. " ) (CURRENTLY)", 1, true)
 			else
-				sqlmode:AddChoice("MySQL ( " .. YRP.trans("LID_external") .. " )", 1)
+				sqlmode:AddChoice("MySQL ( " .. YRP:trans("LID_external") .. " )", 1)
 			end
 
 			DHR(dhr)
@@ -59,7 +59,7 @@ net.Receive(
 			yrp_db.data = DStringBox(bl, YRP_SQL.string_database, "LID_database", "nws_yrp_update_string_database")
 			yrp_db.user = DStringBox(bl, YRP_SQL.string_username, "LID_username", "nws_yrp_update_string_username")
 			yrp_db.pass = DStringBox(bl, YRP_SQL.string_password, "LID_password", "nws_yrp_update_string_password")
-			yrp_db.change_to_sqlmode = YRPCreateD("YButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
+			yrp_db.change_to_sqlmode = YRPCreateD("YButton", nil, yrp_db:GetWide(), YRP:ctr(50), 0, 0)
 			yrp_db:AddItem(yrp_db.change_to_sqlmode)
 			local create = {}
 			for i = 1, 6 do
@@ -67,10 +67,10 @@ net.Receive(
 				local vals = {}
 				vals["amount"] = i
 				if i > 1 then
-					create[i].name = YRP.trans("LID_xhours", vals)
+					create[i].name = YRP:trans("LID_xhours", vals)
 					create[i].data = i
 				else
-					create[i].name = YRP.trans("LID_1hour", vals)
+					create[i].name = YRP:trans("LID_1hour", vals)
 					create[i].data = i
 				end
 			end
@@ -82,19 +82,19 @@ net.Receive(
 				local vals = {}
 				vals["amount"] = i
 				if i > 1 then
-					delete[i].name = YRP.trans("LID_xdays", vals)
+					delete[i].name = YRP:trans("LID_xdays", vals)
 					delete[i].data = i
 				else
-					delete[i].name = YRP.trans("LID_1day", vals)
+					delete[i].name = YRP:trans("LID_1day", vals)
 					delete[i].data = i
 				end
 			end
 
 			yrp_db.dele = DIntComboBoxBox(bl, delete, "LID_removebackupolderthen", "nws_yrp_update_int_backup_delete", tonumber(YRP_SQL.int_backup_delete))
-			yrp_db.createbackupnow = YRPCreateD("YButton", nil, yrp_db:GetWide(), YRP.ctr(50), 0, 0)
+			yrp_db.createbackupnow = YRPCreateD("YButton", nil, yrp_db:GetWide(), YRP:ctr(50), 0, 0)
 			yrp_db.createbackupnow:SetText("")
 			yrp_db.createbackupnow.tab = {
-				["text"] = YRP.trans("LID_createbackupnow") .. " ( data/yrp_backups/)"
+				["text"] = YRP:trans("LID_createbackupnow") .. " ( data/yrp_backups/)"
 			}
 
 			function yrp_db.createbackupnow:Paint(pw, ph)
@@ -119,7 +119,7 @@ net.Receive(
 				if dat ~= tonumber(YRP_SQL.int_mode) then
 					yrp_db.change_to_sqlmode:SetEnabled(true)
 					yrp_db.change_to_sqlmode:SetTall(25)
-					self.tab.text = YRP.trans("LID_changetosqlmode") .. ": " .. tex
+					self.tab.text = YRP:trans("LID_changetosqlmode") .. ": " .. tex
 					hook.Run("YButtonPaint", self, pw, ph, self.tab)
 				else
 					yrp_db.change_to_sqlmode:SetEnabled(false)
@@ -132,18 +132,18 @@ net.Receive(
 					yrp_db.data:GetParent():SetSize(0, 0)
 					yrp_db.user:GetParent():SetSize(0, 0)
 					yrp_db.pass:GetParent():SetSize(0, 0)
-					yrp_db.crea:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP.ctr(100))
-					yrp_db.dele:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP.ctr(100))
-					yrp_db.createbackupnow:SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP.ctr(50))
-					Scroller.YourRPTables:GetParent():SetSize(yrp_db:GetParent():GetWide(), YRP.ctr(100))
-					Scroller.YourRPRelatedTables:GetParent():SetSize(yrp_db:GetParent():GetWide(), YRP.ctr(100))
+					yrp_db.crea:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP:ctr(100))
+					yrp_db.dele:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP:ctr(100))
+					yrp_db.createbackupnow:SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP:ctr(50))
+					Scroller.YourRPTables:GetParent():SetSize(yrp_db:GetParent():GetWide(), YRP:ctr(100))
+					Scroller.YourRPRelatedTables:GetParent():SetSize(yrp_db:GetParent():GetWide(), YRP:ctr(100))
 					Scroller:SetOverlap(-9)
 				elseif dat == 1 then
-					yrp_db.host:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP.ctr(100))
-					yrp_db.port:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP.ctr(100))
-					yrp_db.data:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP.ctr(100))
-					yrp_db.user:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP.ctr(100))
-					yrp_db.pass:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP.ctr(100))
+					yrp_db.host:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP:ctr(100))
+					yrp_db.port:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP:ctr(100))
+					yrp_db.data:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP:ctr(100))
+					yrp_db.user:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP:ctr(100))
+					yrp_db.pass:GetParent():SetSize(yrp_db.change_to_sqlmode:GetWide(), YRP:ctr(100))
 					yrp_db.crea:GetParent():SetSize(0, 0)
 					yrp_db.dele:GetParent():SetSize(0, 0)
 					yrp_db.createbackupnow:SetSize(0, 0)
@@ -167,7 +167,7 @@ net.Receive(
 			end
 
 			DHR(dhr)
-			local restartServer = YRPCreateD("YButton", yourrpdatabase.parent, YRP.ctr(400), YRP.ctr(50), YRP.ctr(3000), YRP.ctr(900))
+			local restartServer = YRPCreateD("YButton", yourrpdatabase.parent, YRP:ctr(400), YRP:ctr(50), YRP:ctr(3000), YRP:ctr(900))
 			restartServer:SetText("RESTART SERVER")
 			function restartServer:DoClick()
 				net.Start("nws_yrp_restartserver")
@@ -175,7 +175,7 @@ net.Receive(
 			end
 
 			Scroller.YourRPDatabase:AddItem(restartServer)
-			local yourrptables = YRPCreateD("YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall() - YRP.ctr(60), 0, 0)
+			local yourrptables = YRPCreateD("YGroupBox", Scroller, YRP:ctr(1000), Scroller:GetTall() - YRP:ctr(60), 0, 0)
 			yourrptables:SetText("LID_yourrptables")
 			function yourrptables:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -183,7 +183,7 @@ net.Receive(
 
 			Scroller:AddPanel(yourrptables)
 			Scroller.YourRPTables = yourrptables:GetContent()
-			Scroller.YourRPTables:SetTall(Scroller.YourRPTables:GetTall() - YRP.ctr(60))
+			Scroller.YourRPTables:SetTall(Scroller.YourRPTables:GetTall() - YRP:ctr(60))
 			local dbtab = {}
 			dbtab.parent = Scroller.YourRPTables
 			dbtab.color = YRPGetColor("2")
@@ -194,11 +194,11 @@ net.Receive(
 
 			local _x, _y = Scroller.YourRPTables:GetPos()
 			local _w, _h = Scroller.YourRPTables:GetSize()
-			local _rem_and_change = YRPCreateD("YButton", Scroller.YourRPTables:GetParent(), Scroller.YourRPTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10))
+			local _rem_and_change = YRPCreateD("YButton", Scroller.YourRPTables:GetParent(), Scroller.YourRPTables:GetWide(), YRP:ctr(50), _x, _y + _h + YRP:ctr(10))
 			_rem_and_change:SetText("")
 			yourrptables:AddItem(_rem_and_change)
 			_rem_and_change.tab = {
-				["text"] = YRP.trans("LID_droptablesandchangelevel")
+				["text"] = YRP:trans("LID_droptablesandchangelevel")
 			}
 
 			function _rem_and_change:Paint(pw, ph)
@@ -217,9 +217,9 @@ net.Receive(
 
 				local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 				_window:Center()
-				_window:SetTitle(YRP.trans("LID_areyousure"))
+				_window:SetTitle(YRP:trans("LID_areyousure"))
 				local _yesButton = createVGUI("YButton", _window, 200, 50, 10, 60)
-				_yesButton:SetText(YRP.trans("LID_yes"))
+				_yesButton:SetText(YRP:trans("LID_yes"))
 				function _yesButton:DoClick()
 					net.Start("nws_yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -228,7 +228,7 @@ net.Receive(
 				end
 
 				local _noButton = createVGUI("YButton", _window, 200, 50, 10 + 200 + 10, 60)
-				_noButton:SetText(YRP.trans("LID_no"))
+				_noButton:SetText(YRP:trans("LID_no"))
 				function _noButton:DoClick()
 					_window:Close()
 				end
@@ -236,7 +236,7 @@ net.Receive(
 				_window:MakePopup()
 			end
 
-			local yourrprelatedtables = YRPCreateD("YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
+			local yourrprelatedtables = YRPCreateD("YGroupBox", Scroller, YRP:ctr(1000), Scroller:GetTall(), 0, 0)
 			yourrprelatedtables:SetText("LID_yourrprelatedtables")
 			function yourrprelatedtables:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -244,7 +244,7 @@ net.Receive(
 
 			Scroller:AddPanel(yourrprelatedtables)
 			Scroller.YourRPRelatedTables = yourrprelatedtables:GetContent()
-			Scroller.YourRPRelatedTables:SetTall(Scroller.YourRPRelatedTables:GetTall() - YRP.ctr(60))
+			Scroller.YourRPRelatedTables:SetTall(Scroller.YourRPRelatedTables:GetTall() - YRP:ctr(60))
 			dbtab.parent = Scroller.YourRPRelatedTables
 			dbtab.color = YRPGetColor("2")
 			local yrp_r_tabs = {}
@@ -252,11 +252,11 @@ net.Receive(
 				yrp_r_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil)
 			end
 
-			local _rem_and_change2 = YRPCreateD("YButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10))
+			local _rem_and_change2 = YRPCreateD("YButton", Scroller.YourRPRelatedTables:GetParent(), Scroller.YourRPRelatedTables:GetWide(), YRP:ctr(50), _x, _y + _h + YRP:ctr(10))
 			_rem_and_change2:SetText("")
 			yourrprelatedtables:AddItem(_rem_and_change2)
 			_rem_and_change2.tab = {
-				["text"] = YRP.trans("LID_droptablesandchangelevel")
+				["text"] = YRP:trans("LID_droptablesandchangelevel")
 			}
 
 			function _rem_and_change2:Paint(pw, ph)
@@ -275,9 +275,9 @@ net.Receive(
 
 				local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 				_window:Center()
-				_window:SetTitle(YRP.trans("LID_areyousure"))
+				_window:SetTitle(YRP:trans("LID_areyousure"))
 				local _yesButton = createVGUI("YButton", _window, 200, 50, 10, 60)
-				_yesButton:SetText(YRP.trans("LID_yes"))
+				_yesButton:SetText(YRP:trans("LID_yes"))
 				function _yesButton:DoClick()
 					net.Start("nws_yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -286,7 +286,7 @@ net.Receive(
 				end
 
 				local _noButton = createVGUI("YButton", _window, 200, 50, 10 + 200 + 10, 60)
-				_noButton:SetText(YRP.trans("LID_no"))
+				_noButton:SetText(YRP:trans("LID_no"))
 				function _noButton:DoClick()
 					_window:Close()
 				end
@@ -294,7 +294,7 @@ net.Receive(
 				_window:MakePopup()
 			end
 
-			local othertables = YRPCreateD("YGroupBox", Scroller, YRP.ctr(1000), Scroller:GetTall(), 0, 0)
+			local othertables = YRPCreateD("YGroupBox", Scroller, YRP:ctr(1000), Scroller:GetTall(), 0, 0)
 			othertables:SetText("LID_othertables")
 			function othertables:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -302,7 +302,7 @@ net.Receive(
 
 			Scroller:AddPanel(othertables)
 			local OtherTables = othertables:GetContent()
-			OtherTables:SetTall(OtherTables:GetTall() - YRP.ctr(60))
+			OtherTables:SetTall(OtherTables:GetTall() - YRP:ctr(60))
 			dbtab.parent = OtherTables
 			dbtab.color = YRPGetColor("2")
 			local other_tabs = {}
@@ -310,11 +310,11 @@ net.Receive(
 				other_tabs[tab.name] = DBoolLine(dbtab, 0, tab.name, nil)
 			end
 
-			local _rem_and_change3 = YRPCreateD("YButton", OtherTables:GetParent(), OtherTables:GetWide(), YRP.ctr(50), _x, _y + _h + YRP.ctr(10))
+			local _rem_and_change3 = YRPCreateD("YButton", OtherTables:GetParent(), OtherTables:GetWide(), YRP:ctr(50), _x, _y + _h + YRP:ctr(10))
 			_rem_and_change3:SetText("")
 			othertables:AddItem(_rem_and_change3)
 			_rem_and_change3.tab = {
-				["text"] = YRP.trans("LID_droptablesandchangelevel")
+				["text"] = YRP:trans("LID_droptablesandchangelevel")
 			}
 
 			function _rem_and_change3:Paint(pw, ph)
@@ -333,9 +333,9 @@ net.Receive(
 
 				local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 				_window:Center()
-				_window:SetTitle(YRP.trans("LID_areyousure"))
+				_window:SetTitle(YRP:trans("LID_areyousure"))
 				local _yesButton = createVGUI("YButton", _window, 200, 50, 10, 60)
-				_yesButton:SetText(YRP.trans("LID_yes"))
+				_yesButton:SetText(YRP:trans("LID_yes"))
 				function _yesButton:DoClick()
 					net.Start("nws_yrp_drop_tables")
 					net.WriteTable(_nw_tab)
@@ -344,7 +344,7 @@ net.Receive(
 				end
 
 				local _noButton = createVGUI("YButton", _window, 200, 50, 10 + 200 + 10, 60)
-				_noButton:SetText(YRP.trans("LID_no"))
+				_noButton:SetText(YRP:trans("LID_no"))
 				function _noButton:DoClick()
 					_window:Close()
 				end

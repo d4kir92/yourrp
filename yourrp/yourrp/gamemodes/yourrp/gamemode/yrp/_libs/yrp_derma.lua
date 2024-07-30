@@ -81,7 +81,7 @@ function YRPDrawText(tab)
 		tab.ay = tab.ay or 1
 		tab.text = tab.text or "NoText"
 		if tab.lforce or tab.lforce == nil then
-			tab.text = YRP.trans(tab.text)
+			tab.text = YRP:trans(tab.text)
 		end
 
 		tab.font = tab.font or "Y_14_700"
@@ -134,7 +134,7 @@ function DGroup(tab)
 	dgroup.header = YRPCreateD("DPanel", tab.parent, tab.w, tab.h, tab.x, tab.y)
 	function dgroup.header:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
-		ph = YRP.ctr(50)
+		ph = YRP:ctr(50)
 		local text = {}
 		text.text = tab.name
 		text.x = pw / 2
@@ -147,7 +147,7 @@ function DGroup(tab)
 		YRPDrawText(text)
 	end
 
-	dgroup.content = YRPCreateD("DPanelList", dgroup.header, tab.w - 2 * tab.br, tab.h - 1 * tab.br - YRP.ctr(50), tab.br, YRP.ctr(50))
+	dgroup.content = YRPCreateD("DPanelList", dgroup.header, tab.w - 2 * tab.br, tab.h - 1 * tab.br - YRP:ctr(50), tab.br, YRP:ctr(50))
 	dgroup.content:EnableVerticalScrollbar(true)
 	function dgroup.content:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.bgcolor)
@@ -167,7 +167,7 @@ function DGroup(tab)
 			dgroup.content.height = dgroup.content.height + child:GetTall()
 		end
 
-		dgroup.header:SetTall(dgroup.content.height + YRP.ctr(50 + 20))
+		dgroup.header:SetTall(dgroup.content.height + YRP:ctr(50 + 20))
 		dgroup.content:SetTall(dgroup.content.height)
 	end
 
@@ -179,8 +179,8 @@ function DName(tab)
 	tab.parent = tab.parent or nil
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
-	tab.w = tab.w or YRP.ctr(50)
-	tab.h = tab.h or YRP.ctr(50)
+	tab.w = tab.w or YRP:ctr(50)
+	tab.h = tab.h or YRP:ctr(50)
 	tab.br = tab.br or 0
 	tab.color = tab.color or Color(255, 255, 255, 255)
 	tab.bgcolor = tab.bgcolor or Color(80, 80, 80)
@@ -189,8 +189,8 @@ function DName(tab)
 	function dname:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.trans(tab.name)
-		text.x = YRP.ctr(10)
+		text.text = YRP:trans(tab.name)
+		text.x = YRP:ctr(10)
 		text.y = ph / 2
 		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
@@ -215,7 +215,7 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 		tab.w = tab.w or 300
 	end
 
-	tab.h = tab.h or YRP.ctr(100)
+	tab.h = tab.h or YRP:ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255, 255)
@@ -224,8 +224,8 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 	function dintcomboboxbox.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.trans(name) .. ":"
-		text.x = YRP.ctr(10)
+		text.text = YRP:trans(name) .. ":"
+		text.x = YRP:ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
@@ -272,7 +272,7 @@ function DBoolLine(tab, value, str, netstr)
 		tab.w = tab.w or 100
 	end
 
-	tab.h = tab.h or YRP.ctr(50)
+	tab.h = tab.h or YRP:ctr(50)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255, 255)
@@ -282,8 +282,8 @@ function DBoolLine(tab, value, str, netstr)
 	function dboolline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.trans(str)
-		text.x = tab.brx + tab.h + YRP.ctr(10)
+		text.text = YRP:trans(str)
+		text.x = tab.brx + tab.h + YRP:ctr(10)
 		text.y = ph / 2
 		text.font = "Y_22_500"
 		text.color = Color(0, 0, 0, 255)
@@ -337,7 +337,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 		tab.w = tab.w or 300
 	end
 
-	tab.h = tab.h or YRP.ctr(50)
+	tab.h = tab.h or YRP:ctr(50)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255, 255)
@@ -347,8 +347,8 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 	function dfloatline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.trans(name)
-		text.x = tab.brx + YRP.ctr(200) + YRP.ctr(10)
+		text.text = YRP:trans(name)
+		text.x = tab.brx + YRP:ctr(200) + YRP:ctr(10)
 		text.y = ph / 2
 		text.font = "Y_22_500"
 		text.color = Color(0, 0, 0, 255)
@@ -357,8 +357,8 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 		YRPDrawText(text)
 		if dmg ~= nil and dfloatline.dnumberwang ~= nil then
 			local DMG = {}
-			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. YRP.trans("LID_damage")
-			DMG.x = pw - YRP.ctr(10)
+			DMG.text = dmg:GetValue() * dfloatline.dnumberwang:GetValue() .. " " .. YRP:trans("LID_damage")
+			DMG.x = pw - YRP:ctr(10)
 			DMG.y = ph / 2
 			DMG.font = "Y_22_500"
 			DMG.color = Color(0, 0, 0, 255)
@@ -368,7 +368,7 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 		end
 	end
 
-	dfloatline.dnumberwang = YRPCreateD("DNumberWang", dfloatline.line, YRP.ctr(200), tab.h, tab.brx, 0)
+	dfloatline.dnumberwang = YRPCreateD("DNumberWang", dfloatline.line, YRP:ctr(200), tab.h, tab.brx, 0)
 	dfloatline.dnumberwang:SetMax(max or 100)
 	dfloatline.dnumberwang:SetMin(min or 0)
 	dfloatline.dnumberwang:SetDecimals(6)
@@ -419,7 +419,7 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 		tab.w = tab.w or 300
 	end
 
-	tab.h = tab.h or YRP.ctr(100)
+	tab.h = tab.h or YRP:ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255, 255)
@@ -428,8 +428,8 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 	function dintline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.trans(name) .. ":"
-		text.x = YRP.ctr(10)
+		text.text = YRP:trans(name) .. ":"
+		text.x = YRP:ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
@@ -489,7 +489,7 @@ function DStringBox(tab, str, name, netstr)
 		tab.w = tab.w or 300
 	end
 
-	tab.h = tab.h or YRP.ctr(100)
+	tab.h = tab.h or YRP:ctr(100)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255, 255)
@@ -499,8 +499,8 @@ function DStringBox(tab, str, name, netstr)
 	function dstringline.line:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local text = {}
-		text.text = YRP.trans(name) .. ":"
-		text.x = YRP.ctr(10)
+		text.text = YRP:trans(name) .. ":"
+		text.x = YRP:ctr(10)
 		text.y = ph / 4
 		text.font = "Y_18_500"
 		text.color = Color(255, 255, 255, 255)
@@ -546,7 +546,7 @@ function DHR(tab)
 		tab.w = tab.w or 100
 	end
 
-	tab.h = tab.h or YRP.ctr(30)
+	tab.h = tab.h or YRP:ctr(30)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255, 255)
@@ -572,7 +572,7 @@ function DHeader(tab, header)
 		tab.w = tab.w or 100
 	end
 
-	tab.h = tab.h or YRP.ctr(50)
+	tab.h = tab.h or YRP:ctr(50)
 	tab.x = tab.x or 0
 	tab.y = tab.y or 0
 	tab.color = tab.color or Color(255, 255, 255, 255)
@@ -580,8 +580,8 @@ function DHeader(tab, header)
 	function hea:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, tab.color)
 		local head = {}
-		head.text = YRP.trans(header)
-		head.x = YRP.ctr(10)
+		head.text = YRP:trans(header)
+		head.x = YRP:ctr(10)
 		head.y = ph / 2
 		head.font = "Y_22_500"
 		head.color = Color(0, 0, 0, 255)

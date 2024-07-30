@@ -42,7 +42,7 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	YRP.AddNetworkString("nws_yrp_jailpoints_options")
+	YRP:AddNetworkString("nws_yrp_jailpoints_options")
 end
 
 local size = 8
@@ -69,7 +69,7 @@ function SWEP:Think()
 			for i, v in pairs(GetGlobalYRPTable("yrp_jailpoints")) do
 				local p = StringToVector(v.pos)
 				if p:Distance(pos) < size * 2 then
-					YRP.msg("db", "Option Jailpoint")
+					YRP:msg("db", "Option Jailpoint")
 					local stab = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' AND uniqueID = '" .. v.uniqueID .. "'")
 					if IsNotNilAndNotFalse(stab) then
 						stab = stab[1]
@@ -91,15 +91,15 @@ if CLIENT then
 		function()
 			if YRPIsNoMenuOpen() then
 				local stab = net.ReadTable()
-				local w = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+				local w = YRPCreateD("YFrame", nil, YRP:ctr(800), YRP:ctr(800), 0, 0)
 				w:Center()
 				w:MakePopup()
-				w:SetHeaderHeight(YRP.ctr(100))
+				w:SetHeaderHeight(YRP:ctr(100))
 				w:SetTitle("LID_jailpoint")
 				-- name time
-				w.nametext = YRPCreateD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
+				w.nametext = YRPCreateD("YLabel", w:GetContent(), YRP:ctr(400), YRP:ctr(50), YRP:ctr(10), YRP:ctr(0))
 				w.nametext:SetText("LID_name")
-				w.name = YRPCreateD("DTextEntry", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
+				w.name = YRPCreateD("DTextEntry", w:GetContent(), YRP:ctr(400), YRP:ctr(50), YRP:ctr(10), YRP:ctr(50))
 				w.name:SetText(stab.name)
 				function w.name:OnChange()
 					local name = self:GetText()
@@ -143,7 +143,7 @@ function SWEP:PrimaryAttack()
 			)
 
 			pos = tr.HitPos or pos
-			YRP.msg("db", "Added Jailpoint")
+			YRP:msg("db", "Added Jailpoint")
 			UpdateJailpointTable()
 		end
 	end
@@ -169,7 +169,7 @@ function SWEP:SecondaryAttack()
 			local p = StringToVector(v.pos)
 			if p:Distance(pos) < size * 2 then
 				YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "type = 'jailpoint' AND uniqueID = '" .. v.uniqueID .. "'")
-				YRP.msg("db", "Removed Spawner")
+				YRP:msg("db", "Removed Spawner")
 				found = true
 			end
 		end
@@ -179,7 +179,7 @@ function SWEP:SecondaryAttack()
 				local p = StringToVector(v.pos)
 				if p:Distance(ply:GetPos()) < 160 then
 					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "type = 'jailpoint' AND uniqueID = '" .. v.uniqueID .. "'")
-					YRP.msg("db", "Removed Spawner")
+					YRP:msg("db", "Removed Spawner")
 				end
 			end
 		end

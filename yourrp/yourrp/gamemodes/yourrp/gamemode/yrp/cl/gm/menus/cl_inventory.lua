@@ -42,7 +42,7 @@ function YRPCloseInventory()
 end
 
 function YRPItemSize()
-	return YRP.ctr(100)
+	return YRP:ctr(100)
 end
 
 function YRPInventory()
@@ -64,11 +64,11 @@ function YRPOpenInventory(target)
 		end
 
 		local lply = LocalPlayer()
-		inv.w = 5 * YRPItemSize() + 4 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp)
-		inv.h = YRPItemSize() + 2 * YRP.ctr(inv.sp)
-		lply.invx = ScrW() - YRP.ctr(50)
-		lply.invy = ScrH() - (YRPItemSize() + YRP.ctr(60))
-		inv.win = YRPCreateD("DFrame", nil, inv.w, inv.h, ScrW() - inv.w - YRP.ctr(50), ScrH() - inv.h)
+		inv.w = 5 * YRPItemSize() + 4 * YRP:ctr(inv.br) + 2 * YRP:ctr(inv.sp)
+		inv.h = YRPItemSize() + 2 * YRP:ctr(inv.sp)
+		lply.invx = ScrW() - YRP:ctr(50)
+		lply.invy = ScrH() - (YRPItemSize() + YRP:ctr(60))
+		inv.win = YRPCreateD("DFrame", nil, inv.w, inv.h, ScrW() - inv.w - YRP:ctr(50), ScrH() - inv.h)
 		inv.win:MakePopup()
 		inv.win:SetTitle("")
 		inv.win:ShowCloseButton(false)
@@ -82,21 +82,21 @@ function YRPOpenInventory(target)
 			function(len)
 				local storageID = net.ReadString()
 				if YRPPanelAlive(YRPInventory(), "YRPInventory() 1") then
-					inv.storage = YRPCreateD("YStorage", inv.win, YRPItemSize() * 5 + YRP.ctr(inv.br) * 4, YRPItemSize(), YRP.ctr(inv.sp), YRP.ctr(inv.sp))
+					inv.storage = YRPCreateD("YStorage", inv.win, YRPItemSize() * 5 + YRP:ctr(inv.br) * 4, YRPItemSize(), YRP:ctr(inv.sp), YRP:ctr(inv.sp))
 					inv.storage:SetCols(5)
 					inv.storage:SetStorageID(storageID)
 					local nettab = net.ReadTable()
 					if table.Count(nettab) > 0 and not target then
-						inv.env = YRPCreateD("DFrame", nil, 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp), 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp) + YRP.ctr(50), 0, 0)
+						inv.env = YRPCreateD("DFrame", nil, 4 * YRPItemSize() + 3 * YRP:ctr(inv.br) + 2 * YRP:ctr(inv.sp), 4 * YRPItemSize() + 3 * YRP:ctr(inv.br) + 2 * YRP:ctr(inv.sp) + YRP:ctr(50), 0, 0)
 						inv.env:MakePopup()
 						inv.env:Center()
 						inv.env:SetTitle("")
 						function inv.env:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "NC"))
-							draw.SimpleText(YRP.trans("LID_environment"), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP:trans("LID_environment"), "Y_18_500", YRP:ctr(20), YRP:ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 						end
 
-						inv.envstor = YRPCreateD("YStorage", inv.env, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRP.ctr(inv.sp), YRP.ctr(50) + YRP.ctr(inv.sp))
+						inv.envstor = YRPCreateD("YStorage", inv.env, YRPItemSize() * 4 + YRP:ctr(inv.br) * 3, YRPItemSize() * 4 + YRP:ctr(inv.br) * 3, YRP:ctr(inv.sp), YRP:ctr(50) + YRP:ctr(inv.sp))
 						inv.envstor:SetStorageID(0, nettab)
 					end
 				end
@@ -120,7 +120,7 @@ net.Receive(
 				inv.env2:Remove()
 			end
 
-			inv.env2 = YRPCreateD("DFrame", nil, 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp), 4 * YRPItemSize() + 3 * YRP.ctr(inv.br) + 2 * YRP.ctr(inv.sp) + YRP.ctr(50), 0, 0)
+			inv.env2 = YRPCreateD("DFrame", nil, 4 * YRPItemSize() + 3 * YRP:ctr(inv.br) + 2 * YRP:ctr(inv.sp), 4 * YRPItemSize() + 3 * YRP:ctr(inv.br) + 2 * YRP:ctr(inv.sp) + YRP:ctr(50), 0, 0)
 			inv.env2:MakePopup()
 			inv.env2:Center()
 			inv.env2:SetTitle("")
@@ -130,10 +130,10 @@ net.Receive(
 				end
 
 				draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "NC"))
-				draw.SimpleText(name, "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(name, "Y_18_500", YRP:ctr(20), YRP:ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			inv.envstor2 = YRPCreateD("YStorage", inv.env2, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRPItemSize() * 4 + YRP.ctr(inv.br) * 3, YRP.ctr(inv.sp), YRP.ctr(50) + YRP.ctr(inv.sp))
+			inv.envstor2 = YRPCreateD("YStorage", inv.env2, YRPItemSize() * 4 + YRP:ctr(inv.br) * 3, YRPItemSize() * 4 + YRP:ctr(inv.br) * 3, YRP:ctr(inv.sp), YRP:ctr(50) + YRP:ctr(inv.sp))
 			inv.envstor2:SetStorageID(wsuid)
 		end
 	end

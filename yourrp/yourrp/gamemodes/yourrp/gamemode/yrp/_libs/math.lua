@@ -46,31 +46,31 @@ end
 local fw = 2400
 local fh = 1600
 function FW()
-	return YRP.ctr(fw)
+	return YRP:ctr(fw)
 end
 
 function FH()
-	return YRP.ctr(fh)
+	return YRP:ctr(fh)
 end
 
 function PX()
-	return ScrW() / 2 - YRP.ctr(fw) / 2
+	return ScrW() / 2 - YRP:ctr(fw) / 2
 end
 
 function PY()
-	return ScrH() / 2 - YRP.ctr(fh) / 2
+	return ScrH() / 2 - YRP:ctr(fh) / 2
 end
 
 function BFW()
 	if BiggerThen16_9() then
-		return ScrH() * 16 / 9 - YRP.ctr(400)
+		return ScrH() * 16 / 9 - YRP:ctr(400)
 	else
-		return ScrW() - YRP.ctr(400)
+		return ScrW() - YRP:ctr(400)
 	end
 end
 
 function BFH()
-	return ScrH() - YRP.ctr(200)
+	return ScrH() - YRP:ctr(200)
 end
 
 function BPX()
@@ -148,7 +148,7 @@ function ctrF(tmpNumber)
 end
 
 YRP = YRP or {}
-function YRP.ctr(input)
+function YRP:ctr(input)
 	if input ~= nil then
 		return math.Round((tonumber(input) / 2160) * ScrH(), 0)
 	else
@@ -164,9 +164,9 @@ function under1080p()
 	end
 end
 
-function YRP.fonttr(fontsize)
+function YRP:fonttr(fontsize)
 	if not under1080p() then
-		return YRP.ctr(fontsize)
+		return YRP:ctr(fontsize)
 	else
 		return fontsize
 	end
@@ -175,7 +175,7 @@ end
 function ctrb(input)
 	if input ~= nil then
 		if not under1080p() then
-			return YRP.ctr(input)
+			return YRP:ctr(input)
 		else
 			return input / 2
 		end

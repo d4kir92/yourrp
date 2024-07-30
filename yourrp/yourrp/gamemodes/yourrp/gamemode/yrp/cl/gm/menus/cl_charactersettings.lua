@@ -18,12 +18,12 @@ function YRPCreateCharacterSettingsContent()
 	end
 
 	local parent = CharacterMenu or RoleMenu
-	local ew = YRP.ctr(config.w - 4 * 20) / 3
+	local ew = YRP:ctr(config.w - 4 * 20) / 3
 	local site = YRPCreateD("DPanel", parent, parent:GetWide(), parent:GetTall(), 0, 0)
 	function site:Paint(pw, ph)
 	end
 
-	local win = YRPCreateD("DPanel", site, YRP.ctr(config.w), YRP.ctr(config.h), 0, 0)
+	local win = YRPCreateD("DPanel", site, YRP:ctr(config.w), YRP:ctr(config.h), 0, 0)
 	function win:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "NC"))
 	end
@@ -34,15 +34,15 @@ function YRPCreateCharacterSettingsContent()
 	function debug:DoClick()
 		parent:Remove()
 	end]]
-	local header = YRPCreateD("DPanel", site, YRP.ctr(1000), YRP.ctr(100), site:GetWide() / 2 - YRP.ctr(500), YRP.ctr(200))
+	local header = YRPCreateD("DPanel", site, YRP:ctr(1000), YRP:ctr(100), site:GetWide() / 2 - YRP:ctr(500), YRP:ctr(200))
 	function header:Paint(pw, ph)
-		draw.SimpleText(YRP.trans("LID_charactercreation"), "Y_36_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP:trans("LID_charactercreation"), "Y_36_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	local btn = {}
 	btn.w = 500
 	btn.h = 75
-	local back = YRPCreateD("YButton", site, YRP.ctr(btn.w), YRP.ctr(btn.h), site:GetWide() / 2 - YRP.ctr(btn.w) / 2, ScH() - YRP.ctr(200))
+	local back = YRPCreateD("YButton", site, YRP:ctr(btn.w), YRP:ctr(btn.h), site:GetWide() / 2 - YRP:ctr(btn.w) / 2, ScH() - YRP:ctr(200))
 	back:SetText("LID_back")
 	function back:Paint(pw, ph)
 		hook.Run("YButtonRPaint", self, pw, ph)
@@ -59,17 +59,17 @@ function YRPCreateCharacterSettingsContent()
 			local rol = net.ReadTable()
 			rol.int_namelength = tonumber(rol.int_namelength)
 			-- TOP
-			local descheader1 = YRPCreateD("YLabel", win, YRP.ctr(config.w - 2 * 20), YRP.ctr(config.hh), YRP.ctr(20), YRP.ctr(20))
+			local descheader1 = YRPCreateD("YLabel", win, YRP:ctr(config.w - 2 * 20), YRP:ctr(config.hh), YRP:ctr(20), YRP:ctr(20))
 			descheader1:SetText(rol.string_name)
 			-- MID
-			local pmsheader = YRPCreateD("YLabel", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(20 + config.hh + 20))
+			local pmsheader = YRPCreateD("YLabel", win, ew, YRP:ctr(config.hh), ew + 2 * YRP:ctr(20), YRP:ctr(20 + config.hh + 20))
 			pmsheader:SetText("LID_character")
-			local pmsbg = YRPCreateD("YPanel", win, ew, YRP.ctr(config.h - 520), ew + 2 * YRP.ctr(20), YRP.ctr(200))
+			local pmsbg = YRPCreateD("YPanel", win, ew, YRP:ctr(config.h - 520), ew + 2 * YRP:ctr(20), YRP:ctr(200))
 			function pmsbg:Paint(pw, ph)
 				hook.Run("YTextFieldPaint", self, pw, ph)
 			end
 
-			local pms = YRPCreateD("DModelPanel", win, pmsbg:GetWide(), pmsbg:GetTall(), ew + 2 * YRP.ctr(20), YRP.ctr(200))
+			local pms = YRPCreateD("DModelPanel", win, pmsbg:GetWide(), pmsbg:GetTall(), ew + 2 * YRP:ctr(20), YRP:ctr(200))
 			pms.models = string.Explode(",", tostring(rol.pms))
 			pms:SetCamPos(Vector(50, 50, 50))
 			pms:SetLookAt(Vector(0, 0, 40))
@@ -106,7 +106,7 @@ function YRPCreateCharacterSettingsContent()
 
 			LocalPlayer().charcreate_name = ""
 			LocalPlayer().charcreate_namelast = ""
-			local confirm = YRPCreateD("YButton", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 100))
+			local confirm = YRPCreateD("YButton", win, ew, YRP:ctr(config.hh), ew + 2 * YRP:ctr(20), YRP:ctr(config.h - 100))
 			confirm:SetText("LID_enteraname")
 			function confirm:Paint(pw, ph)
 				local tab = {}
@@ -186,10 +186,10 @@ function YRPCreateCharacterSettingsContent()
 			end
 
 			if rol.int_namelength > 0 then
-				local name = YRPCreateD("DTextEntry", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 200) - YRP.ctr(config.hh) - YRP.ctr(20))
+				local name = YRPCreateD("DTextEntry", win, ew, YRP:ctr(config.hh), ew + 2 * YRP:ctr(20), YRP:ctr(config.h - 200) - YRP:ctr(config.hh) - YRP:ctr(20))
 				name:SetText("")
 				if name.SetPlaceholderText then
-					name:SetPlaceholderText(YRP.trans("LID_enteryourfirstname"))
+					name:SetPlaceholderText(YRP:trans("LID_enteryourfirstname"))
 				end
 
 				function name:PerformLayout()
@@ -207,10 +207,10 @@ function YRPCreateCharacterSettingsContent()
 					LocalPlayer().charcreate_name = nam
 				end
 
-				local surname = YRPCreateD("DTextEntry", win, ew, YRP.ctr(config.hh), ew + 2 * YRP.ctr(20), YRP.ctr(config.h - 200))
+				local surname = YRPCreateD("DTextEntry", win, ew, YRP:ctr(config.hh), ew + 2 * YRP:ctr(20), YRP:ctr(config.h - 200))
 				surname:SetText("")
 				if surname.SetPlaceholderText then
-					surname:SetPlaceholderText(YRP.trans("LID_enteryoursurname"))
+					surname:SetPlaceholderText(YRP:trans("LID_enteryoursurname"))
 				end
 
 				function surname:PerformLayout()
@@ -232,9 +232,9 @@ function YRPCreateCharacterSettingsContent()
 			-- LEFT
 			if pms.Entity ~= nil then
 				local bgs = pms.Entity:GetBodyGroups()
-				local appeheader = YRPCreateD("YLabel", win, ew, YRP.ctr(config.hh), YRP.ctr(20), YRP.ctr(20 + config.hh + 20))
+				local appeheader = YRPCreateD("YLabel", win, ew, YRP:ctr(config.hh), YRP:ctr(20), YRP:ctr(20 + config.hh + 20))
 				appeheader:SetText("LID_appearance")
-				local appe = YRPCreateD("DPanelList", win, ew, YRP.ctr(config.h - 2 * config.hh - 3 * config.br), YRP.ctr(20), YRP.ctr(20 + config.hh + 20 + config.hh))
+				local appe = YRPCreateD("DPanelList", win, ew, YRP:ctr(config.h - 2 * config.hh - 3 * config.br), YRP:ctr(20), YRP:ctr(20 + config.hh + 20 + config.hh))
 				appe:EnableVerticalScrollbar()
 				function appe:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "BG"))
@@ -257,23 +257,23 @@ function YRPCreateCharacterSettingsContent()
 					draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 				end
 
-				appe:SetSpacing(YRP.ctr(config.br))
+				appe:SetSpacing(YRP:ctr(config.br))
 				for _, bg in pairs(bgs) do
 					LocalPlayer()["charcreate_bg" .. bg.id] = 0
 					if table.Count(bg.submodels) > 1 then
-						local pbg = YRPCreateD("DPanel", nil, ew, YRP.ctr(config.hh * 2), 0, 0)
+						local pbg = YRPCreateD("DPanel", nil, ew, YRP:ctr(config.hh * 2), 0, 0)
 						function pbg:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "PC"))
-							draw.SimpleText(LocalPlayer()["charcreate_bg" .. bg.id] + 1 .. "/" .. table.Count(bg.submodels) .. " " .. bg["name"], "Y_18_500", YRP.ctr(config.hh + config.br), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(LocalPlayer()["charcreate_bg" .. bg.id] + 1 .. "/" .. table.Count(bg.submodels) .. " " .. bg["name"], "Y_18_500", YRP:ctr(config.hh + config.br), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 						end
 
-						local skinup = YRPCreateD("YButton", pbg, YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.1), YRP.ctr(config.hh * 0.1))
+						local skinup = YRPCreateD("YButton", pbg, YRP:ctr(config.hh * 0.8), YRP:ctr(config.hh * 0.8), YRP:ctr(config.hh * 0.1), YRP:ctr(config.hh * 0.1))
 						skinup:SetText("")
 						function skinup:Paint(pw, ph)
 							if LocalPlayer()["charcreate_bg" .. bg.id] + 1 < table.Count(bg.submodels) then
 								hook.Run("YButtonPaint", self, pw, ph)
 								surface.SetDrawColor(Color(255, 255, 255, 255))
-								surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+								surface.SetMaterial(YRP:GetDesignIcon("64_angle-up"))
 								surface.DrawTexturedRect(0, 0, pw, ph)
 							end
 						end
@@ -285,13 +285,13 @@ function YRPCreateCharacterSettingsContent()
 							end
 						end
 
-						local skindn = YRPCreateD("YButton", pbg, YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.8), YRP.ctr(config.hh * 0.1), YRP.ctr(config.hh + config.hh * 0.1))
+						local skindn = YRPCreateD("YButton", pbg, YRP:ctr(config.hh * 0.8), YRP:ctr(config.hh * 0.8), YRP:ctr(config.hh * 0.1), YRP:ctr(config.hh + config.hh * 0.1))
 						skindn:SetText("")
 						function skindn:Paint(pw, ph)
 							if LocalPlayer()["charcreate_bg" .. bg.id] > 0 then
 								hook.Run("YButtonPaint", self, pw, ph)
 								surface.SetDrawColor(Color(255, 255, 255, 255))
-								surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+								surface.SetMaterial(YRP:GetDesignIcon("64_angle-down"))
 								surface.DrawTexturedRect(0, 0, pw, ph)
 							end
 						end
@@ -309,7 +309,7 @@ function YRPCreateCharacterSettingsContent()
 			end
 
 			-- RIGHT
-			local lis = YRPCreateD("DPanelList", win, ew, YRP.ctr(config.h - config.br * 2 - config.hh - config.br), ew * 2 + 3 * YRP.ctr(20), YRP.ctr(120))
+			local lis = YRPCreateD("DPanelList", win, ew, YRP:ctr(config.h - config.br * 2 - config.hh - config.br), ew * 2 + 3 * YRP:ctr(20), YRP:ctr(120))
 			lis:EnableVerticalScrollbar()
 			function lis:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "BG"))
@@ -332,16 +332,16 @@ function YRPCreateCharacterSettingsContent()
 				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 			end
 
-			local hr = YRPCreateD("DPanel", nil, ew, YRP.ctr(config.br), 0, 0)
+			local hr = YRPCreateD("DPanel", nil, ew, YRP:ctr(config.br), 0, 0)
 			function hr:Paint(pw, ph)
 			end
 
 			-- Birthday
 			if GetGlobalYRPBool("bool_characters_birthday", false) then
-				local birtheader = YRPCreateD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+				local birtheader = YRPCreateD("YLabel", nil, ew, YRP:ctr(config.hh), ew * 2 + 3 * YRP:ctr(20), 0)
 				birtheader:SetText("LID_birthday")
 				lis:AddItem(birtheader)
-				local birt = YRPCreateD("DTextEntry", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+				local birt = YRPCreateD("DTextEntry", nil, ew, YRP:ctr(config.hh), ew * 2 + 3 * YRP:ctr(20), 0)
 				birt:SetText("")
 				function birt:PerformLayout()
 					if self.SetUnderlineFont ~= nil then
@@ -363,10 +363,10 @@ function YRPCreateCharacterSettingsContent()
 
 			-- Bodyheight
 			if GetGlobalYRPBool("bool_characters_bodyheight", false) then
-				local boheheader = YRPCreateD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+				local boheheader = YRPCreateD("YLabel", nil, ew, YRP:ctr(config.hh), ew * 2 + 3 * YRP:ctr(20), 0)
 				boheheader:SetText("LID_bodyheight")
 				lis:AddItem(boheheader)
-				local bohe = YRPCreateD("DNumberWang", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+				local bohe = YRPCreateD("DNumberWang", nil, ew, YRP:ctr(config.hh), ew * 2 + 3 * YRP:ctr(20), 0)
 				bohe:SetText("")
 				bohe:SetFontInternal("Y_18_500")
 				function bohe:OnChange()
@@ -379,10 +379,10 @@ function YRPCreateCharacterSettingsContent()
 
 			-- Weight
 			if GetGlobalYRPBool("bool_characters_weight", false) then
-				local weigheader = YRPCreateD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+				local weigheader = YRPCreateD("YLabel", nil, ew, YRP:ctr(config.hh), ew * 2 + 3 * YRP:ctr(20), 0)
 				weigheader:SetText("LID_weight")
 				lis:AddItem(weigheader)
-				local weig = YRPCreateD("DNumberWang", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+				local weig = YRPCreateD("DNumberWang", nil, ew, YRP:ctr(config.hh), ew * 2 + 3 * YRP:ctr(20), 0)
 				weig:SetText("")
 				weig:SetFontInternal("Y_18_500")
 				function weig:OnChange()
@@ -394,10 +394,10 @@ function YRPCreateCharacterSettingsContent()
 			end
 
 			-- Description
-			local descheader = YRPCreateD("YLabel", nil, ew, YRP.ctr(config.hh), ew * 2 + 3 * YRP.ctr(20), 0)
+			local descheader = YRPCreateD("YLabel", nil, ew, YRP:ctr(config.hh), ew * 2 + 3 * YRP:ctr(20), 0)
 			descheader:SetText("LID_description")
 			lis:AddItem(descheader)
-			local desc = YRPCreateD("DTextEntry", nil, ew, YRP.ctr(400), ew * 2 + 3 * YRP.ctr(20), 0)
+			local desc = YRPCreateD("DTextEntry", nil, ew, YRP:ctr(400), ew * 2 + 3 * YRP:ctr(20), 0)
 			desc:SetMultiline(true)
 			desc:SetText("")
 			function desc:PerformLayout()

@@ -11,7 +11,7 @@ end
 
 local Player = FindMetaTable("Player")
 function Player:LockdownLoadout()
-	--YRP.msg( "gm", self:SteamName() .. " LockdownLoadout" )
+	--YRP:msg( "gm", self:SteamName() .. " LockdownLoadout" )
 	local lockdown = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 	if IsNotNilAndNotFalse(lockdown) then
 		lockdown = lockdown[1]
@@ -21,17 +21,17 @@ function Player:LockdownLoadout()
 			pl:SetYRPString("string_lockdowntext", lockdown.string_lockdowntext)
 		end
 	else
-		YRP.msg("note", "Database for Lockdown is broken, is it removed from database?")
+		YRP:msg("note", "Database for Lockdown is broken, is it removed from database?")
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_set_lockdowntext")
+YRP:AddNetworkString("nws_yrp_set_lockdowntext")
 net.Receive(
 	"nws_yrp_set_lockdowntext",
 	function(len, ply)
 		local string_lockdowntext = net.ReadString()
 		string_lockdowntext = string_lockdowntext
-		YRP.msg("db", "Changed lockdowntext to: " .. string_lockdowntext)
+		YRP:msg("db", "Changed lockdowntext to: " .. string_lockdowntext)
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -82,7 +82,7 @@ function GetRandomAlarm()
 	return table.Random(alarms)
 end
 
-YRP.AddNetworkString("nws_yrp_update_lockdown_alarms")
+YRP:AddNetworkString("nws_yrp_update_lockdown_alarms")
 net.Receive(
 	"nws_yrp_update_lockdown_alarms",
 	function(len, ply)
@@ -107,13 +107,13 @@ function RemoveFromLockdownSpeakers(ent)
 	table.RemoveByValue(_G["LOCKDOWN_ENTITIES"], ent)
 end
 
-YRP.AddNetworkString("nws_yrp_set_lockdown")
+YRP:AddNetworkString("nws_yrp_set_lockdown")
 net.Receive(
 	"nws_yrp_set_lockdown",
 	function(len, ply)
 		local bool_lockdown = net.ReadBool()
 		int_lockdown = tonum(bool_lockdown)
-		YRP.msg("db", "Changed bool_lockdown to: " .. tostring(int_lockdown))
+		YRP:msg("db", "Changed bool_lockdown to: " .. tostring(int_lockdown))
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -128,7 +128,7 @@ net.Receive(
 		if bool_lockdown then
 			SetGlobalYRPBool("DarkRP_LockDown", true)
 			-- LOCKDOWN START
-			YRP.msg("note", ply:RPName() .. " started a lockdown!")
+			YRP:msg("note", ply:RPName() .. " started a lockdown!")
 			sound.Add(
 				{
 					name = "sound_lockdown",
@@ -165,7 +165,7 @@ net.Receive(
 		else
 			SetGlobalYRPBool("DarkRP_LockDown", false)
 			--LOCKDOWN END
-			YRP.msg("note", ply:RPName() .. " stopped the lockdown!")
+			YRP:msg("note", ply:RPName() .. " stopped the lockdown!")
 			for i, speaker in pairs(_G["LOCKDOWN_ENTITIES"]) do
 				speaker:StopSound("sound_lockdown")
 			end

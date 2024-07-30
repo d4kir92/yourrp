@@ -27,12 +27,12 @@ hook.Add(
 		local lply = LocalPlayer()
 		local weapon = lply:GetActiveWeapon()
 		if weapon:IsValid() and weapon:GetClass() == "yrp_idcard" then
-			local scale = YRP.ctr(900) / GetGlobalYRPInt("int_" .. "background" .. "_w", 100)
+			local scale = YRP:ctr(900) / GetGlobalYRPInt("int_" .. "background" .. "_w", 100)
 			local w = GetGlobalYRPInt("int_" .. "background" .. "_w", 100)
 			local h = GetGlobalYRPInt("int_" .. "background" .. "_h", 100)
 			w = w * scale
 			h = h * scale
-			YRPDrawIDCard(lply, scale, ScrW() - w - YRP.ctr(200), ScrH() - h - YRP.ctr(200))
+			YRPDrawIDCard(lply, scale, ScrW() - w - YRP:ctr(200), ScrH() - h - YRP:ctr(200))
 		end
 	end
 )

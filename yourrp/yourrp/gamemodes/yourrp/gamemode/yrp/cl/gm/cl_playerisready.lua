@@ -62,7 +62,7 @@ local function YRPStartSendingStartData(from)
 	if not yrpstartedsending then
 		yrpstartedsending = true
 		YRPSendAskData(from)
-		YRP.initLang()
+		YRP:initLang()
 	end
 end
 

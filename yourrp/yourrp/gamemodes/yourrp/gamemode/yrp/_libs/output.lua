@@ -48,9 +48,9 @@ end
 
 function bool_status(b)
 	if tobool(b) then
-		return YRP.trans("LID_enabled")
+		return YRP:trans("LID_enabled")
 	elseif not tobool(b) then
-		return YRP.trans("LID_disabled")
+		return YRP:trans("LID_disabled")
 	end
 end
 
@@ -131,7 +131,7 @@ function MSGChannelEnabled(chan)
 		return true
 	elseif GetGlobalYRPBool("yrp_general_loaded") then
 		if not IsChannelRegistered(chan) then
-			YRP.msg("error", "!!!" .. chan .. "!!!")
+			YRP:msg("error", "!!!" .. chan .. "!!!")
 		elseif GetGlobalYRPBool("bool_msg_channel_" .. chan) == true then
 			return true
 		end
@@ -150,7 +150,7 @@ end
 local rc = GetRealmColor()
 local _msgcache = {}
 local yrpmsgantispam = {}
-function YRP.msg(chan, str_msg, tochat, force)
+function YRP:msg(chan, str_msg, tochat, force)
 	if not isstring(chan) then return false end
 	if not isstring(str_msg) then return false end
 	if force or strEmpty(str_msg) or not table.HasValue(yrpmsgantispam, str_msg) then
@@ -218,12 +218,12 @@ function YRP.msg(chan, str_msg, tochat, force)
 					end
 
 					if CLIENT and cn == "ERROR" and YRPCreateD ~= nil then
-						local err = YRPCreateD("DFrame", nil, YRP.ctr(600), YRP.ctr(60), YRP.ctr(60), YRP.ctr(400))
+						local err = YRPCreateD("DFrame", nil, YRP:ctr(600), YRP:ctr(60), YRP:ctr(60), YRP:ctr(400))
 						err:ShowCloseButton(false)
 						err:SetDraggable(false)
 						err:SetTitle("")
 						function err:Paint(pw, ph)
-							draw.WordBox(YRP.ctr(12), 0, 0, "[YourRP] [" .. YRP.trans("LID_error") .. "] " .. "Look into the console!", "Y_14_500", Color(0, 255, 0), Color(0, 0, 0, 255))
+							draw.WordBox(YRP:ctr(12), 0, 0, "[YourRP] [" .. YRP:trans("LID_error") .. "] " .. "Look into the console!", "Y_14_500", Color(0, 255, 0), Color(0, 0, 0, 255))
 						end
 
 						timer.Simple(
@@ -265,11 +265,11 @@ function printTab(ta, name)
 	end
 
 	_header = _header .. name .. "( " .. tostring(ta) .. " )"
-	YRP.msg("note", _header)
+	YRP:msg("note", _header)
 	if istable(table) then
 		PrintTable(ta)
 	else
-		YRP.msg("note", "printTab " .. tostring(ta) .. " is not a table!")
+		YRP:msg("note", "printTab " .. tostring(ta) .. " is not a table!")
 	end
 end
 
@@ -531,7 +531,7 @@ countries["ZM"] = "Zambia"
 countries["ZW"] = "Zimbabwe"
 function YRPGetCountryName(id, from)
 	if id == nil then
-		YRP.msg("error", "[YRPGetCountryName] NO INPUT: " .. tostring(id) .. " from: " .. tostring(from))
+		YRP:msg("error", "[YRPGetCountryName] NO INPUT: " .. tostring(id) .. " from: " .. tostring(from))
 
 		return ""
 	end
@@ -541,11 +541,11 @@ function YRPGetCountryName(id, from)
 	if IsNotNilAndNotFalse(countryname) then
 		return countryname
 	elseif string.len(id) == 2 then
-		YRP.msg("error", "[YRPGetCountryName] Missing Country: " .. tostring(id))
+		YRP:msg("error", "[YRPGetCountryName] Missing Country: " .. tostring(id))
 
 		return id
 	else
-		YRP.msg("error", "[YRPGetCountryName] Input Wrong: " .. tostring(id) .. " from: " .. tostring(from))
+		YRP:msg("error", "[YRPGetCountryName] Input Wrong: " .. tostring(id) .. " from: " .. tostring(from))
 
 		return id
 	end

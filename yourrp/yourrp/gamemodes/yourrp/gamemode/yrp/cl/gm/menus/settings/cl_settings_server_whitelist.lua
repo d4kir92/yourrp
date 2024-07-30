@@ -8,25 +8,25 @@ local loadedG = false
 local loadedW = false
 function BuildWhitelis(parent, tab)
 	if not YRPPanelAlive(parent) then
-		YRP.msg("note", "[BuildWhitelis] failed! parent: " .. tostring(parent))
+		YRP:msg("note", "[BuildWhitelis] failed! parent: " .. tostring(parent))
 	end
 
 	if loadedR and loadedG and loadedW and YRPPanelAlive(parent) then
-		local lis = YRPCreateD("DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
+		local lis = YRPCreateD("DListView", parent, parent:GetWide() - YRP:ctr(60 + 500), parent:GetTall() - YRP:ctr(140), YRP:ctr(20), YRP:ctr(20))
 		lis:AddColumn("uniqueID"):SetFixedWidth(60)
 		lis:AddColumn("SteamID"):SetFixedWidth(130)
-		lis:AddColumn(YRP.trans("LID_nick"))
-		lis:AddColumn(YRP.trans("LID_name"))
-		lis:AddColumn(YRP.trans("LID_group"))
-		lis:AddColumn(YRP.trans("LID_role"))
-		lis:AddColumn(YRP.trans("LID_time")):SetFixedWidth(120)
-		lis:AddColumn(YRP.trans("LID_status"))
+		lis:AddColumn(YRP:trans("LID_nick"))
+		lis:AddColumn(YRP:trans("LID_name"))
+		lis:AddColumn(YRP:trans("LID_group"))
+		lis:AddColumn(YRP:trans("LID_role"))
+		lis:AddColumn(YRP:trans("LID_time")):SetFixedWidth(120)
+		lis:AddColumn(YRP:trans("LID_status"))
 		function lis:Think()
-			if self.w ~= parent:GetWide() - YRP.ctr(60 + 500) or self.h ~= parent:GetTall() - YRP.ctr(40) or self.x ~= YRP.ctr(20) or self.y ~= YRP.ctr(20) then
-				self.w = parent:GetWide() - YRP.ctr(60 + 500)
-				self.h = parent:GetTall() - YRP.ctr(40)
-				self.x = YRP.ctr(20)
-				self.y = YRP.ctr(20)
+			if self.w ~= parent:GetWide() - YRP:ctr(60 + 500) or self.h ~= parent:GetTall() - YRP:ctr(40) or self.x ~= YRP:ctr(20) or self.y ~= YRP:ctr(20) then
+				self.w = parent:GetWide() - YRP:ctr(60 + 500)
+				self.h = parent:GetTall() - YRP:ctr(40)
+				self.x = YRP:ctr(20)
+				self.y = YRP:ctr(20)
 				self:SetSize(self.w, self.h)
 				self:SetPos(self.x, self.y)
 			end
@@ -77,7 +77,7 @@ function BuildWhitelis(parent, tab)
 					end
 				elseif tab == "LID_all" then
 					-- ALL
-					lis:AddLine(whi.uniqueID, whi.SteamID, YRP_SQL_STR_OUT(whi.nick), whi.name, YRP.trans("LID_all"), YRP.trans("LID_all"), whi.date, whi.status)
+					lis:AddLine(whi.uniqueID, whi.SteamID, YRP_SQL_STR_OUT(whi.nick), whi.name, YRP:trans("LID_all"), YRP:trans("LID_all"), whi.date, whi.status)
 					found = true
 				else
 					local rolname = "-"
@@ -100,8 +100,8 @@ function BuildWhitelis(parent, tab)
 					end
 
 					if grpname == "-" and rolname == "-" then
-						grpname = YRP.trans("LID_all")
-						rolname = YRP.trans("LID_all")
+						grpname = YRP:trans("LID_all")
+						rolname = YRP:trans("LID_all")
 					end
 
 					if string.StartWith(whi.status, "Manually") and tab == "LID_manually" then
@@ -115,8 +115,8 @@ function BuildWhitelis(parent, tab)
 			end
 		end
 
-		local btnAdd = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(20))
-		btnAdd:SetText(YRP.trans("LID_addentry") .. " ( " .. YRP.trans("LID_role") .. " )")
+		local btnAdd = YRPCreateD("YButton", parent, YRP:ctr(500), YRP:ctr(50), parent:GetWide() - YRP:ctr(20 + 500), YRP:ctr(20))
+		btnAdd:SetText(YRP:trans("LID_addentry") .. " ( " .. YRP:trans("LID_role") .. " )")
 		function btnAdd:DoClick()
 			local _whitelisFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
 			_whitelisFrame:Center()
@@ -147,7 +147,7 @@ function BuildWhitelis(parent, tab)
 			end
 
 			local _whitelisButton = createVGUI("DButton", _whitelisFrame, 380, 50, 10, 400)
-			_whitelisButton:SetText(YRP.trans("LID_whitelistplayer"))
+			_whitelisButton:SetText(YRP:trans("LID_whitelistplayer"))
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID()) ~= nil then
 					net.Start("nws_yrp_whitelistPlayer")
@@ -169,27 +169,27 @@ function BuildWhitelis(parent, tab)
 
 			function _whitelisFrame:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
-				draw.SimpleTextOutlined(YRP.trans("LID_player") .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
-				draw.SimpleTextOutlined(YRP.trans("LID_group") .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(85 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
-				draw.SimpleTextOutlined(YRP.trans("LID_role") .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(185 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP:trans("LID_player") .. ":", "Y_24_500", YRP:ctr(10), YRP:ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP:trans("LID_group") .. ":", "Y_24_500", YRP:ctr(10), YRP:ctr(85 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP:trans("LID_role") .. ":", "Y_24_500", YRP:ctr(10), YRP:ctr(185 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
 			end
 
 			_whitelisFrame:MakePopup()
 		end
 
 		function btnAdd:Think()
-			if self.w ~= YRP.ctr(500) or self.h ~= YRP.ctr(50) or self.x ~= parent:GetWide() - YRP.ctr(20 + 500) or self.y ~= YRP.ctr(20) then
-				self.w = YRP.ctr(500)
-				self.h = YRP.ctr(50)
-				self.x = parent:GetWide() - YRP.ctr(20 + 500)
-				self.y = YRP.ctr(20)
+			if self.w ~= YRP:ctr(500) or self.h ~= YRP:ctr(50) or self.x ~= parent:GetWide() - YRP:ctr(20 + 500) or self.y ~= YRP:ctr(20) then
+				self.w = YRP:ctr(500)
+				self.h = YRP:ctr(50)
+				self.x = parent:GetWide() - YRP:ctr(20 + 500)
+				self.y = YRP:ctr(20)
 				self:SetSize(self.w, self.h)
 				self:SetPos(self.x, self.y)
 			end
 		end
 
-		local btnGroup = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(90))
-		btnGroup:SetText(YRP.trans("LID_addentry") .. " ( " .. YRP.trans("LID_group") .. " )")
+		local btnGroup = YRPCreateD("YButton", parent, YRP:ctr(500), YRP:ctr(50), parent:GetWide() - YRP:ctr(20 + 500), YRP:ctr(90))
+		btnGroup:SetText(YRP:trans("LID_addentry") .. " ( " .. YRP:trans("LID_group") .. " )")
 		function btnGroup:DoClick()
 			local _whitelisFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
 			_whitelisFrame:Center()
@@ -207,7 +207,7 @@ function BuildWhitelis(parent, tab)
 			end
 
 			local _whitelisButton = createVGUI("DButton", _whitelisFrame, 380, 50, 10, 400)
-			_whitelisButton:SetText(YRP.trans("LID_whitelistplayer"))
+			_whitelisButton:SetText(YRP:trans("LID_whitelistplayer"))
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID()) ~= nil and _whitelisComboBox:GetOptionData(_whitelisComboBox:GetSelectedID()) ~= nil then
 					net.Start("nws_yrp_whitelistPlayerGroup")
@@ -222,26 +222,26 @@ function BuildWhitelis(parent, tab)
 
 			function _whitelisFrame:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
-				draw.SimpleTextOutlined(YRP.trans("LID_player") .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
-				draw.SimpleTextOutlined(YRP.trans("LID_group") .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(85 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP:trans("LID_player") .. ":", "Y_24_500", YRP:ctr(10), YRP:ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP:trans("LID_group") .. ":", "Y_24_500", YRP:ctr(10), YRP:ctr(85 + 65), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
 			end
 
 			_whitelisFrame:MakePopup()
 		end
 
 		function btnGroup:Think()
-			if self.w ~= YRP.ctr(500) or self.h ~= YRP.ctr(50) or self.x ~= parent:GetWide() - YRP.ctr(20 + 500) or self.y ~= YRP.ctr(90) then
-				self.w = YRP.ctr(500)
-				self.h = YRP.ctr(50)
-				self.x = parent:GetWide() - YRP.ctr(20 + 500)
-				self.y = YRP.ctr(90)
+			if self.w ~= YRP:ctr(500) or self.h ~= YRP:ctr(50) or self.x ~= parent:GetWide() - YRP:ctr(20 + 500) or self.y ~= YRP:ctr(90) then
+				self.w = YRP:ctr(500)
+				self.h = YRP:ctr(50)
+				self.x = parent:GetWide() - YRP:ctr(20 + 500)
+				self.y = YRP:ctr(90)
 				self:SetSize(self.w, self.h)
 				self:SetPos(self.x, self.y)
 			end
 		end
 
-		local btnAll = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(160))
-		btnAll:SetText(YRP.trans("LID_addentry") .. " ( " .. YRP.trans("LID_all") .. " )")
+		local btnAll = YRPCreateD("YButton", parent, YRP:ctr(500), YRP:ctr(50), parent:GetWide() - YRP:ctr(20 + 500), YRP:ctr(160))
+		btnAll:SetText(YRP:trans("LID_addentry") .. " ( " .. YRP:trans("LID_all") .. " )")
 		function btnAll:DoClick()
 			local _whitelisFrame = createVGUI("DFrame", nil, 400, 500, 0, 0)
 			_whitelisFrame:Center()
@@ -254,7 +254,7 @@ function BuildWhitelis(parent, tab)
 			end
 
 			local _whitelisButton = createVGUI("DButton", _whitelisFrame, 380, 50, 10, 400)
-			_whitelisButton:SetText(YRP.trans("LID_whitelistplayer"))
+			_whitelisButton:SetText(YRP:trans("LID_whitelistplayer"))
 			function _whitelisButton:DoClick()
 				if _whitelisComboBoxPlys:GetOptionData(_whitelisComboBoxPlys:GetSelectedID()) ~= nil then
 					net.Start("nws_yrp_whitelistPlayerAll")
@@ -268,25 +268,25 @@ function BuildWhitelis(parent, tab)
 
 			function _whitelisFrame:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_dbg_col())
-				draw.SimpleTextOutlined(YRP.trans("LID_player") .. ":", "Y_24_500", YRP.ctr(10), YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(YRP:trans("LID_player") .. ":", "Y_24_500", YRP:ctr(10), YRP:ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
 			end
 
 			_whitelisFrame:MakePopup()
 		end
 
 		function btnAll:Think(pw, ph)
-			if self.w ~= YRP.ctr(500) or self.h ~= YRP.ctr(50) or self.x ~= parent:GetWide() - YRP.ctr(20 + 500) or self.y ~= YRP.ctr(160) then
-				self.w = YRP.ctr(500)
-				self.h = YRP.ctr(50)
-				self.x = parent:GetWide() - YRP.ctr(20 + 500)
-				self.y = YRP.ctr(160)
+			if self.w ~= YRP:ctr(500) or self.h ~= YRP:ctr(50) or self.x ~= parent:GetWide() - YRP:ctr(20 + 500) or self.y ~= YRP:ctr(160) then
+				self.w = YRP:ctr(500)
+				self.h = YRP:ctr(50)
+				self.x = parent:GetWide() - YRP:ctr(20 + 500)
+				self.y = YRP:ctr(160)
 				self:SetSize(self.w, self.h)
 				self:SetPos(self.x, self.y)
 			end
 		end
 
-		local btnRem = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(230))
-		btnRem:SetText(YRP.trans("LID_removeentry"))
+		local btnRem = YRPCreateD("YButton", parent, YRP:ctr(500), YRP:ctr(50), parent:GetWide() - YRP:ctr(20 + 500), YRP:ctr(230))
+		btnRem:SetText(YRP:trans("LID_removeentry"))
 		function btnRem:DoClick()
 			if lis:GetSelectedLine() ~= nil then
 				local uid = lis:GetLine(lis:GetSelectedLine()):GetValue(1)
@@ -312,11 +312,11 @@ function BuildWhitelis(parent, tab)
 		end
 
 		function btnRem:Think()
-			if self.w ~= YRP.ctr(500) or self.h ~= YRP.ctr(50) or self.x ~= parent:GetWide() - YRP.ctr(20 + 500) or self.y ~= YRP.ctr(230) then
-				self.w = YRP.ctr(500)
-				self.h = YRP.ctr(50)
-				self.x = parent:GetWide() - YRP.ctr(20 + 500)
-				self.y = YRP.ctr(230)
+			if self.w ~= YRP:ctr(500) or self.h ~= YRP:ctr(50) or self.x ~= parent:GetWide() - YRP:ctr(20 + 500) or self.y ~= YRP:ctr(230) then
+				self.w = YRP:ctr(500)
+				self.h = YRP:ctr(50)
+				self.x = parent:GetWide() - YRP:ctr(20 + 500)
+				self.y = YRP:ctr(230)
 				self:SetSize(self.w, self.h)
 				self:SetPos(self.x, self.y)
 			end

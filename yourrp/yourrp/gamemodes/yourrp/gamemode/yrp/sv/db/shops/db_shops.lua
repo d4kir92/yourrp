@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_shops"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
-YRP.AddNetworkString("nws_yrp_get_shops")
+YRP:AddNetworkString("nws_yrp_get_shops")
 function send_shops(ply)
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all
@@ -25,28 +25,28 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_add")
+YRP:AddNetworkString("nws_yrp_shop_add")
 net.Receive(
 	"nws_yrp_shop_add",
 	function(len, ply)
 		local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new shop'")
-		YRP.msg("db", "shop_add: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_add: " .. db_WORKED(_new))
 		send_shops(ply)
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_rem")
+YRP:AddNetworkString("nws_yrp_shop_rem")
 net.Receive(
 	"nws_yrp_shop_rem",
 	function(len, ply)
 		local _uid = net.ReadString()
 		local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
-		YRP.msg("db", "shop_rem: " .. tostring(_uid))
+		YRP:msg("db", "shop_rem: " .. tostring(_uid))
 		send_shops(ply)
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_edit_name")
+YRP:AddNetworkString("nws_yrp_shop_edit_name")
 net.Receive(
 	"nws_yrp_shop_edit_name",
 	function(len, ply)
@@ -59,7 +59,7 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "shop_edit_name: " .. tostring(_uid))
+		YRP:msg("db", "shop_edit_name: " .. tostring(_uid))
 	end
 )
 
@@ -82,9 +82,9 @@ function HasShopPermanent(tab)
 	return false
 end
 
-YRP.AddNetworkString("nws_yrp_shop_get_tabs")
+YRP:AddNetworkString("nws_yrp_shop_get_tabs")
 function YRPOpenBuyMenu(ply, uid)
-	--YRP.msg( "note", "OpenBuyMenu | ply: " .. tostring(ply:RPName() ) .. " | uid: " .. tostring(uid) )
+	--YRP:msg( "note", "OpenBuyMenu | ply: " .. tostring(ply:RPName() ) .. " | uid: " .. tostring(uid) )
 	local _dealer = YRP_SQL_SELECT("yrp_dealers", "*", "uniqueID = '" .. uid .. "'")
 	if _dealer ~= nil then
 		_dealer = _dealer[1]
@@ -106,7 +106,7 @@ function YRPOpenBuyMenu(ply, uid)
 		net.WriteTable(_nw_tabs)
 		net.Send(ply)
 	else
-		YRP.msg("note", "Dealer not found")
+		YRP:msg("note", "Dealer not found")
 	end
 end
 
@@ -118,7 +118,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_get_all_tabs")
+YRP:AddNetworkString("nws_yrp_shop_get_all_tabs")
 net.Receive(
 	"nws_yrp_shop_get_all_tabs",
 	function(len, ply)

@@ -16,7 +16,7 @@ function PANEL:SetHeaderHeight(num)
 	if isnumber(num) then
 		self._headerheight = num
 	else
-		YRP.msg("note", "SetHeaderHeight | num is not a number: " .. tostring(num) .. "!")
+		YRP:msg("note", "SetHeaderHeight | num is not a number: " .. tostring(num) .. "!")
 	end
 
 	self:DockPadding(5, num + 5, 5, 5)
@@ -121,7 +121,7 @@ function PANEL:UpdateSize()
 end
 
 function PANEL:InternalUpdateSize()
-	local br = YRP.ctr(self._border)
+	local br = YRP:ctr(self._border)
 	local header = self:GetHeaderHeight()
 	local pw = self:GetWide()
 	local ph = self:GetTall()
@@ -170,7 +170,7 @@ function PANEL:Init()
 		self._cb = true
 	end
 
-	self:SetHeaderHeight(YRP.ctr(GetGlobalYRPInt("int_headerheight", 100)))
+	self:SetHeaderHeight(YRP:ctr(GetGlobalYRPInt("int_headerheight", 100)))
 	self._border = 20
 	self:ShowCloseButton(false)
 	self.close = YRPCreateD("YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
@@ -196,7 +196,7 @@ function PANEL:Init()
 		self.main:SetMaximised(nil, "BTN")
 	end
 
-	self.langu = YRP.DChangeLanguage(self, self:GetWide() - self:GetHeaderHeight() * 0.3 * 5.6, self:GetHeaderHeight() * 0.7 / 2, self:GetHeaderHeight() * 0.3, true)
+	self.langu = YRP:DChangeLanguage(self, self:GetWide() - self:GetHeaderHeight() * 0.3 * 5.6, self:GetHeaderHeight() * 0.7 / 2, self:GetHeaderHeight() * 0.3, true)
 	self.con = YRPCreateD("YPanel", self, 1000, 1000, 0, 0)
 	function self.con:Paint(pw, ph)
 	end
@@ -210,8 +210,8 @@ function PANEL:Init()
 end
 
 function PANEL:Think()
-	if self._headerheight ~= YRP.ctr(GetGlobalYRPInt("int_headerheight", 100)) then
-		self._headerheight = YRP.ctr(GetGlobalYRPInt("int_headerheight", 100))
+	if self._headerheight ~= YRP:ctr(GetGlobalYRPInt("int_headerheight", 100)) then
+		self._headerheight = YRP:ctr(GetGlobalYRPInt("int_headerheight", 100))
 		self:InternalUpdateSize()
 		self:UpdateSize()
 	end
@@ -231,10 +231,10 @@ function PANEL:Think()
 		self.close:SetPos(self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
 		if self.canmiximise then
 			self.btnmax:SetSize(self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6)
-			self.btnmax:SetPos(self.close:GetPos() - self.btnmax:GetWide() - YRP.ctr(20), self:GetHeaderHeight() * 0.2)
+			self.btnmax:SetPos(self.close:GetPos() - self.btnmax:GetWide() - YRP:ctr(20), self:GetHeaderHeight() * 0.2)
 			if IsValid(self.langu) then
 				self.langu:SetTall(self:GetHeaderHeight() * 0.3)
-				self.langu:SetPos(self.btnmax:GetPos() - self.langu:GetWide() - YRP.ctr(20), self:GetHeaderHeight() * 0.7 / 2)
+				self.langu:SetPos(self.btnmax:GetPos() - self.langu:GetWide() - YRP:ctr(20), self:GetHeaderHeight() * 0.7 / 2)
 			end
 		else
 			if IsValid(self.langu) then

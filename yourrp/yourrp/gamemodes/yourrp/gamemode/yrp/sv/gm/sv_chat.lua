@@ -1,6 +1,6 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #CHAT
-YRP.AddNetworkString("nws_yrp_showAlert")
+YRP:AddNetworkString("nws_yrp_showAlert")
 local alerts = {}
 function AddAlert(str)
 	table.insert(alerts, str)
@@ -29,8 +29,8 @@ if not YRPAlertsHOOKED then
 	YRPSetAlerts()
 end
 
-YRP.AddNetworkString("nws_yrp_player_say")
-YRP.AddNetworkString("nws_yrp_startchat")
+YRP:AddNetworkString("nws_yrp_player_say")
+YRP:AddNetworkString("nws_yrp_startchat")
 net.Receive(
 	"nws_yrp_startchat",
 	function(len, ply)
@@ -38,7 +38,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_finishchat")
+YRP:AddNetworkString("nws_yrp_finishchat")
 net.Receive(
 	"nws_yrp_finishchat",
 	function(len, ply)
@@ -87,7 +87,7 @@ function YRPDropWeapon(sender)
 				sender:DropSWEP(_weapon:GetClass())
 			end
 		else
-			YRP.msg("note", sender:YRPName() .. " drop weapon is disabled!")
+			YRP:msg("note", sender:YRPName() .. " drop weapon is disabled!")
 		end
 	end
 end
@@ -132,14 +132,14 @@ function YRPDropMoney(ply, amount)
 
 			emoney:Spawn()
 			emoney:SetMoney(_moneyAmount)
-			YRP.msg("note", ply:Nick() .. " dropped " .. _moneyAmount .. " money")
+			YRP:msg("note", ply:Nick() .. " dropped " .. _moneyAmount .. " money")
 
 			return ""
 		else
-			YRP.msg("note", ply:Nick() .. " can't afford to dropmoney ( " .. _moneyAmount .. " )")
+			YRP:msg("note", ply:Nick() .. " can't afford to dropmoney ( " .. _moneyAmount .. " )")
 		end
 	else
-		YRP.msg("note", "YRPDropMoney invalid input")
+		YRP:msg("note", "YRPDropMoney invalid input")
 	end
 end
 
@@ -149,7 +149,7 @@ function YRPDropMoneyChat(sender, text)
 	if isnumber(_money) then
 		YRPDropMoney(sender, _money)
 	else
-		YRP.msg("note", "Failed dropmoney")
+		YRP:msg("note", "Failed dropmoney")
 	end
 
 	sender:ChatPrint("\nCommand-FAILED")
@@ -203,7 +203,7 @@ function show_tag_ug(sender)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_set_chat_mode")
+YRP:AddNetworkString("nws_yrp_set_chat_mode")
 net.Receive(
 	"nws_yrp_set_chat_mode",
 	function(len, ply)
@@ -212,7 +212,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("yrpsendanim")
+YRP:AddNetworkString("yrpsendanim")
 function YRPSendAnim(ply, slot, activity, loop)
 	net.Start("yrpsendanim")
 	net.WriteEntity(ply)
@@ -222,7 +222,7 @@ function YRPSendAnim(ply, slot, activity, loop)
 	net.Broadcast()
 end
 
-YRP.AddNetworkString("yrpstopanim")
+YRP:AddNetworkString("yrpstopanim")
 function YRPStopAnim(ply, slot)
 	net.Start("yrpstopanim")
 	net.WriteEntity(ply)
@@ -237,7 +237,7 @@ function Player:SetAFK(bo)
 	YRPSendAnim(self, GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_SIT, false)
 end
 
-YRP.AddNetworkString("nws_yrp_notafk")
+YRP:AddNetworkString("nws_yrp_notafk")
 net.Receive(
 	"nws_yrp_notafk",
 	function(len, ply)
@@ -248,7 +248,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_setafk")
+YRP:AddNetworkString("nws_yrp_setafk")
 net.Receive(
 	"nws_yrp_setafk",
 	function(len, ply)
@@ -333,7 +333,7 @@ function YRPChatGiveLicense(sender, text)
 	if IsValid(ply) and IsNotNilAndNotFalse(lid) then
 		GiveLicense(ply, lid)
 	else
-		YRP.msg("note", "[yrp_givelicense] Not found")
+		YRP:msg("note", "[yrp_givelicense] Not found")
 	end
 end
 
@@ -352,11 +352,11 @@ function YRPSetMoney(sender, text)
 				end
 
 				ply:SetMoney(_money)
-				YRP.msg("note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money)
+				YRP:msg("note", sender:Nick() .. " sets the money of " .. ply:Nick() .. " to " .. _money)
 
 				return ""
 			else
-				YRP.msg("note", "[YRPSetMoney] Name: " .. tostring(_name) .. " not found!")
+				YRP:msg("note", "[YRPSetMoney] Name: " .. tostring(_name) .. " not found!")
 
 				return ""
 			end
@@ -364,7 +364,7 @@ function YRPSetMoney(sender, text)
 
 		sender:ChatPrint("\nCommand-FAILED")
 	else
-		YRP.msg("note", sender:YRPName() .. " tried to use setmoney!")
+		YRP:msg("note", sender:YRPName() .. " tried to use setmoney!")
 	end
 end
 
@@ -392,7 +392,7 @@ function YRPRevive(sender, text)
 			sender:ChatPrint("\nCommand-FAILED")
 		end
 	else
-		YRP.msg("note", sender:YRPName() .. " tried to use setmoney!")
+		YRP:msg("note", sender:YRPName() .. " tried to use setmoney!")
 	end
 end
 
@@ -411,17 +411,17 @@ function YRPAddMoneyChat(sender, text)
 				end
 
 				ply:addMoney(_money)
-				YRP.msg("note", sender:Nick() .. " adds " .. _money .. " to " .. ply:Nick())
+				YRP:msg("note", sender:Nick() .. " adds " .. _money .. " to " .. ply:Nick())
 
 				return ""
 			else
 				sender:ChatPrint("\nCommand-FAILED: Player not found")
 			end
 		else
-			YRP.msg("note", "[AddMoney] wrong arguments!")
+			YRP:msg("note", "[AddMoney] wrong arguments!")
 		end
 	else
-		YRP.msg("note", sender:Nick() .. " tried to use addmoney!")
+		YRP:msg("note", sender:Nick() .. " tried to use addmoney!")
 	end
 end
 
@@ -441,7 +441,7 @@ function YRPAddXPChat(sender, text)
 			end
 		end
 	else
-		YRP.msg("note", sender:Nick() .. " tried to use addxp!")
+		YRP:msg("note", sender:Nick() .. " tried to use addxp!")
 	end
 end
 
@@ -461,7 +461,7 @@ function YRPAddLevelChat(sender, text)
 			end
 		end
 	else
-		YRP.msg("note", sender:Nick() .. " tried to use addlevel!")
+		YRP:msg("note", sender:Nick() .. " tried to use addlevel!")
 	end
 end
 
@@ -481,7 +481,7 @@ function YRPSetLevelChat(sender, text)
 			end
 		end
 	else
-		YRP.msg("note", sender:Nick() .. " tried to use setlevel!")
+		YRP:msg("note", sender:Nick() .. " tried to use setlevel!")
 	end
 end
 
@@ -494,10 +494,10 @@ function YRPResetLevelsChat(sender, text)
 				YRPUpdateResetLevel(sender)
 			end
 		else
-			YRP.msg("note", "missing true")
+			YRP:msg("note", "missing true")
 		end
 	else
-		YRP.msg("note", sender:Nick() .. " tried to use resetlevels!")
+		YRP:msg("note", sender:Nick() .. " tried to use resetlevels!")
 	end
 end
 
@@ -714,7 +714,7 @@ timer.Simple(
 				end
 			)
 		else
-			YRP.msg("note", "YourRP - Chat Commands (and channels) are disabled - F8 General -> Yourrp Chat Commands")
+			YRP:msg("note", "YourRP - Chat Commands (and channels) are disabled - F8 General -> Yourrp Chat Commands")
 		end
 	end
 )

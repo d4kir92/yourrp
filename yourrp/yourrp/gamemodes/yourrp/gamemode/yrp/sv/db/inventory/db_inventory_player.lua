@@ -118,7 +118,7 @@ function Player:DropSWEP(cname, force)
 								function()
 									if YRPEntityAlive(ent) and ent.GetOwner and not YRPEntityAlive(ent:GetOwner()) then
 										if ttl <= 1 then
-											YRP.msg("note", "SWEP was removed TTL: " .. ttl)
+											YRP:msg("note", "SWEP was removed TTL: " .. ttl)
 										end
 
 										ent:Remove()
@@ -171,7 +171,7 @@ function Player:IsAllowedToDropSWEPUG(cname)
 	return true
 end
 
-YRP.AddNetworkString("nws_yrp_dropswep")
+YRP:AddNetworkString("nws_yrp_dropswep")
 net.Receive(
 	"nws_yrp_dropswep",
 	function(len, ply)
@@ -183,7 +183,7 @@ net.Receive(
 				ply:DropSWEP(_wclass)
 			end
 		else
-			YRP.msg("note", ply:YRPName() .. " PlayersCanDropWeapons == FALSE")
+			YRP:msg("note", ply:YRPName() .. " PlayersCanDropWeapons == FALSE")
 		end
 	end
 )

@@ -7,13 +7,13 @@ net.Receive(
 		local PARENT = GetSettingsSite()
 		if YRPPanelAlive(PARENT) then
 			local sph = PARENT:GetTall()
-			_li.ea = YRPCreateD("DPanel", PARENT, ScW() - YRP.ctr(40 + 480 + 40 + 40), sph - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40))
+			_li.ea = YRPCreateD("DPanel", PARENT, ScW() - YRP:ctr(40 + 480 + 40 + 40), sph - YRP:ctr(80), YRP:ctr(40 + 480 + 40), YRP:ctr(40))
 			function _li.ea:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 			end
 
-			_li._spe = YRPCreateD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
-			_li._spe:SetListHeader(YRP.trans("LID_specializations"))
+			_li._spe = YRPCreateD("DYRPDBList", PARENT, YRP:ctr(480), YRP:ctr(500), YRP:ctr(40), YRP:ctr(40))
+			_li._spe:SetListHeader(YRP:trans("LID_specializations"))
 			--_li._spe:SetDStrForAdd( "specialization_add" )
 			_li._spe:SetEditArYRPEntityAlive(_li.ea)
 			function _li.eaf(tbl)
@@ -23,9 +23,9 @@ net.Receive(
 
 				--[[ NAME ]]
 				--
-				_li.name = YRPCreateD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
+				_li.name = YRPCreateD("DYRPTextEntry", _li.ea, YRP:ctr(800), YRP:ctr(100), 0, 0)
 				_li.name.textentry.tbl = tbl
-				_li.name:SetHeader(YRP.trans("LID_name"))
+				_li.name:SetHeader(YRP:trans("LID_name"))
 				_li.name:SetText(tbl.name)
 				function _li.name.textentry:OnChange()
 					self.tbl.name = self:GetValue()
@@ -37,9 +37,9 @@ net.Receive(
 
 				--[[ Prefix ]]
 				--
-				_li.prefix = YRPCreateD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(110))
+				_li.prefix = YRPCreateD("DYRPTextEntry", _li.ea, YRP:ctr(800), YRP:ctr(100), 0, YRP:ctr(110))
 				_li.prefix.textentry.tbl = tbl
-				_li.prefix:SetHeader(YRP.trans("LID_prefix"))
+				_li.prefix:SetHeader(YRP:trans("LID_prefix"))
 				_li.prefix:SetText(tbl.prefix)
 				function _li.prefix.textentry:OnChange()
 					self.tbl.prefix = self:GetValue()
@@ -51,9 +51,9 @@ net.Receive(
 
 				--[[ Suffix ]]
 				--
-				_li.suffix = YRPCreateD("DYRPTextEntry", _li.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(220))
+				_li.suffix = YRPCreateD("DYRPTextEntry", _li.ea, YRP:ctr(800), YRP:ctr(100), 0, YRP:ctr(220))
 				_li.suffix.textentry.tbl = tbl
-				_li.suffix:SetHeader(YRP.trans("LID_suffix"))
+				_li.suffix:SetHeader(YRP:trans("LID_suffix"))
 				_li.suffix:SetText(tbl.suffix)
 				function _li.suffix.textentry:OnChange()
 					self.tbl.suffix = self:GetValue()
@@ -71,10 +71,10 @@ net.Receive(
 				sweps.header = "LID_sweps"
 				sweps.value = tbl.sweps or ""
 				sweps.uniqueID = tbl.uniqueID
-				sweps.w = YRP.ctr(800)
-				sweps.h = YRP.ctr(325)
-				sweps.x = YRP.ctr(0)
-				sweps.y = YRP.ctr(330)
+				sweps.w = YRP:ctr(800)
+				sweps.h = YRP:ctr(325)
+				sweps.x = YRP:ctr(0)
+				sweps.y = YRP:ctr(330)
 				sweps.doclick = function()
 					local lply = LocalPlayer()
 					lply.yrpseltab = {}
@@ -134,7 +134,7 @@ net.Receive(
 								tbl.sweps = table.concat(tmp, ",")
 							end
 
-							swep.h = YRP.ctr(120)
+							swep.h = YRP:ctr(120)
 							table.insert(cl_sweps, swep)
 						end
 
@@ -155,10 +155,10 @@ net.Receive(
 				pms.header = "LID_playermodels"
 				pms.value = tbl.pms or ""
 				pms.uniqueID = tbl.uniqueID
-				pms.w = YRP.ctr(800)
-				pms.h = YRP.ctr(600)
-				pms.x = YRP.ctr(0)
-				pms.y = YRP.ctr(665)
+				pms.w = YRP:ctr(800)
+				pms.h = YRP:ctr(600)
+				pms.x = YRP:ctr(0)
+				pms.y = YRP:ctr(665)
 				pms.doclick = function()
 					local lply = LocalPlayer()
 					lply.yrpseltab = {}
@@ -229,7 +229,7 @@ net.Receive(
 								tbl.pms = table.concat(tmp, ",")
 							end
 
-							pms2.h = YRP.ctr(120)
+							pms2.h = YRP:ctr(120)
 							table.insert(cl_pms, pms2)
 						end
 

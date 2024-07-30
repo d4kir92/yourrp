@@ -124,11 +124,11 @@ if SERVER then
 end
 
 function Player:YRPGetLanguage()
-	return YRP.get_language_name(self:GetYRPString("client_lang", YRP.trans("LID_none")))
+	return YRP:get_language_name(self:GetYRPString("client_lang", YRP:trans("LID_none")))
 end
 
 function Player:YRPGetLanguageShort()
-	return self:GetYRPString("client_lang", YRP.trans("LID_none"))
+	return self:GetYRPString("client_lang", YRP:trans("LID_none"))
 end
 
 local accessTab = {}
@@ -139,10 +139,10 @@ function Player:HasAccess(from, skip)
 			local trace = tostring(debug.traceback())
 			trace = string.Replace(trace, "\t", "")
 			trace = string.Replace(trace, "\n", "-> ")
-			YRP.msg("access", "[HasAccess] Missing \"from\": " .. trace)
+			YRP:msg("access", "[HasAccess] Missing \"from\": " .. trace)
 		elseif not table.HasValue(accessTab, from) then
 			table.insert(accessTab, from)
-			YRP.msg("access", "[HasAccess] Tried to Access: " .. tostring(from))
+			YRP:msg("access", "[HasAccess] Tried to Access: " .. tostring(from))
 		end
 	end
 
@@ -188,14 +188,14 @@ function Player:GetPlyTab()
 
 						return self.plytab
 					else
-						YRP.msg("note", "[GetPlyTab] table: " .. tostring(yrp_players) .. " SteamID [" .. tostring(steamid) .. "]")
+						YRP:msg("note", "[GetPlyTab] table: " .. tostring(yrp_players) .. " SteamID [" .. tostring(steamid) .. "]")
 					end
 				else
-					YRP.msg("note", "[GetPlyTab] SteamID failed [" .. tostring(steamid) .. "]")
+					YRP:msg("note", "[GetPlyTab] SteamID failed [" .. tostring(steamid) .. "]")
 				end
 			end
 		else
-			YRP.msg("error", "[GetPlyTab] player is invalid. ( " .. tostring(self:YRPSteamID()) .. " ) IsPlayer()?: " .. tostring(self:IsPlayer()))
+			YRP:msg("error", "[GetPlyTab] player is invalid. ( " .. tostring(self:YRPSteamID()) .. " ) IsPlayer()?: " .. tostring(self:IsPlayer()))
 		end
 	end
 
@@ -218,7 +218,7 @@ function Player:IsCharacterValid()
 				end
 			end
 		else
-			YRP.msg("note", "[IsCharacterValid] not valid or not a player " .. self:YRPName())
+			YRP:msg("note", "[IsCharacterValid] not valid or not a player " .. self:YRPName())
 		end
 	end
 end
@@ -238,7 +238,7 @@ function Player:HasCharacterSelected()
 				end
 			end
 		else
-			YRP.msg("note", "[HasCharacterSelected] not valid or not a player " .. self:YRPName())
+			YRP:msg("note", "[HasCharacterSelected] not valid or not a player " .. self:YRPName())
 		end
 	end
 
@@ -257,16 +257,16 @@ function Player:YRPGetCharacterTable()
 
 						return self.chatab
 					elseif yrp_characters == nil then
-						YRP.msg("note", "[GetChaTab] Character not exists.")
+						YRP:msg("note", "[GetChaTab] Character not exists.")
 					else
-						YRP.msg("error", "[GetChaTab] yrp_characters failed [" .. tostring(yrp_characters) .. "]")
+						YRP:msg("error", "[GetChaTab] yrp_characters failed [" .. tostring(yrp_characters) .. "]")
 					end
 				else
-					YRP.msg("note", "[GetChaTab] failed: " .. "PlyTab: " .. tostring(_tmp))
+					YRP:msg("note", "[GetChaTab] failed: " .. "PlyTab: " .. tostring(_tmp))
 				end
 			end
 		else
-			YRP.msg("note", "[GetChaTab] not valid or not a player " .. self:YRPName())
+			YRP:msg("note", "[GetChaTab] not valid or not a player " .. self:YRPName())
 		end
 	end
 
@@ -285,14 +285,14 @@ function Player:YRPGetRoleTable()
 
 						return self.roltab
 					elseif yrp_roles == nil then
-						YRP.msg("note", "[GetRolTab] Role not exists.")
+						YRP:msg("note", "[GetRolTab] Role not exists.")
 					else
-						YRP.msg("error", "[GetRolTab] yrp_roles failed [" .. tostring(yrp_roles) .. "]")
+						YRP:msg("error", "[GetRolTab] yrp_roles failed [" .. tostring(yrp_roles) .. "]")
 					end
 				end
 			end
 		else
-			YRP.msg("note", "[GetRolTab] not valid or not a player " .. self:YRPName())
+			YRP:msg("note", "[GetRolTab] not valid or not a player " .. self:YRPName())
 		end
 	end
 
@@ -314,7 +314,7 @@ function Player:YRPGetGroupTable()
 				end
 			end
 		else
-			YRP.msg("note", "[GetGroTab] not valid or not a player " .. self:YRPName())
+			YRP:msg("note", "[GetGroTab] not valid or not a player " .. self:YRPName())
 		end
 	end
 
@@ -451,7 +451,7 @@ if SERVER then
 			tick,
 			0,
 			function()
-				--YRP.msg( "note", self:GetYRPString( "castname" ) .. " " .. tostring(self:GetYRPFloat( "castcur" ) ))
+				--YRP:msg( "note", self:GetYRPString( "castname" ) .. " " .. tostring(self:GetYRPFloat( "castcur" ) ))
 				--[[ Casting ]]
 				--
 				if self:GetYRPInt("castmode") == 0 then
@@ -502,7 +502,7 @@ if SERVER then
 				self:SetYRPString("money", math.Round(newmoney, 2))
 				self:UpdateMoney()
 			else
-				YRP.msg("note", "[addMoney] player not ready for getting money: " .. self:YRPName())
+				YRP:msg("note", "[addMoney] player not ready for getting money: " .. self:YRPName())
 			end
 		end
 	end
@@ -521,7 +521,7 @@ if SERVER then
 				self:SetYRPString("money", math.Round(money, 2))
 				self:UpdateMoney()
 			else
-				YRP.msg("note", "[SetMoney] player not ready for getting money: " .. self:YRPName())
+				YRP:msg("note", "[SetMoney] player not ready for getting money: " .. self:YRPName())
 			end
 		end
 	end
@@ -532,7 +532,7 @@ if SERVER then
 				self:SetYRPString("moneybank", math.Round(money, 2))
 				self:UpdateMoney()
 			else
-				YRP.msg("note", "[SetMoneyBank] player not ready for getting money: " .. self:YRPName())
+				YRP:msg("note", "[SetMoneyBank] player not ready for getting money: " .. self:YRPName())
 			end
 		end
 	end
@@ -659,12 +659,12 @@ function Player:canAfford(money)
 
 			return false
 		else
-			YRP.msg("note", "canAfford needs a number as input!")
+			YRP:msg("note", "canAfford needs a number as input!")
 
 			return false
 		end
 	else
-		YRP.msg("note", "[canAfford] player not ready for getting money: " .. self:YRPName())
+		YRP:msg("note", "[canAfford] player not ready for getting money: " .. self:YRPName())
 	end
 end
 
@@ -681,7 +681,7 @@ function Player:canAffordBank(money)
 			end
 		end
 	else
-		YRP.msg("note", "[canAffordBank] player not ready for getting money: " .. self:YRPName())
+		YRP:msg("note", "[canAffordBank] player not ready for getting money: " .. self:YRPName())
 	end
 end
 
@@ -834,9 +834,9 @@ function YRPCanLock(ply, door, open)
 	if door:YRPIsDoor() then
 		if ply:GetSecurityLevel() >= door:SecurityLevel() then
 			if door:GetYRPInt("ownerCharID", 0) > 0 then
-				if ply:CharID() == door:GetYRPInt("ownerCharID", 0) then return true end --YRP.msg( "note", "[canLock] " .. "IsOwner" )
+				if ply:CharID() == door:GetYRPInt("ownerCharID", 0) then return true end --YRP:msg( "note", "[canLock] " .. "IsOwner" )
 				if door:IsCoOwner(ply) then return true end
-				YRP.msg("note", "[canLock] " .. "Building has owner, but not this one! (from Player: " .. ply:RPName() .. " )")
+				YRP:msg("note", "[canLock] " .. "Building has owner, but not this one! (from Player: " .. ply:RPName() .. " )")
 
 				return false
 			elseif door:GetYRPString("ownerGroup", "") ~= "" then
@@ -849,7 +849,7 @@ function YRPCanLock(ply, door, open)
 				end
 
 				if open == nil then
-					YRP.msg("note", "[canLock] " .. "Building has group owner, but not this group! (from Player: " .. ply:RPName() .. " )")
+					YRP:msg("note", "[canLock] " .. "Building has group owner, but not this group! (from Player: " .. ply:RPName() .. " )")
 				end
 
 				return false
@@ -857,19 +857,19 @@ function YRPCanLock(ply, door, open)
 				if open then
 					return true
 				else
-					YRP.msg("note", "[canLock] " .. "Building has no owner! (from Player: " .. ply:RPName() .. " )")
+					YRP:msg("note", "[canLock] " .. "Building has no owner! (from Player: " .. ply:RPName() .. " )")
 
 					return false
 				end
 			else
-				YRP.msg("error", "[canLock] " .. "Unknown Error")
+				YRP:msg("error", "[canLock] " .. "Unknown Error")
 
 				return false
 			end
 
 			return true
 		else
-			YRP.msg("note", "[canLock] " .. "Building has higher securitylevel! (from Player: " .. ply:RPName() .. " )")
+			YRP:msg("note", "[canLock] " .. "Building has higher securitylevel! (from Player: " .. ply:RPName() .. " )")
 
 			return false
 		end
@@ -890,7 +890,7 @@ function canVehicleLock(ply, veh)
 
 		return false
 	else
-		YRP.msg("error", "canVehicleLock ELSE")
+		YRP:msg("error", "canVehicleLock ELSE")
 
 		return false
 	end

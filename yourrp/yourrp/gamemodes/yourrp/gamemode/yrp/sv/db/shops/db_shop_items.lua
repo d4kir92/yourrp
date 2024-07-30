@@ -16,7 +16,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "type", "TEXT DEFAULT 'weapons'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT 'weapon_crowbar'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "PrintName", "TEXT DEFAULT 'unnamed item'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "WorldModel", "TEXT DEFAULT ''")
-YRP.AddNetworkString("nws_yrp_get_shop_items")
+YRP:AddNetworkString("nws_yrp_get_shop_items")
 function send_shop_items(ply, uid)
 	local _s_items = YRP_SQL_SELECT(DATABASE_NAME, "*", "categoryID = " .. uid)
 	local _nw = _s_items
@@ -37,30 +37,30 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_item_add")
+YRP:AddNetworkString("nws_yrp_shop_item_add")
 net.Receive(
 	"nws_yrp_shop_item_add",
 	function(len, ply)
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "categoryID", _catID)
-		YRP.msg("db", "shop_item_add: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_add: " .. db_WORKED(_new))
 		send_shop_items(ply, _catID)
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_item_rem")
+YRP:AddNetworkString("nws_yrp_shop_item_rem")
 net.Receive(
 	"nws_yrp_shop_item_rem",
 	function(len, ply)
 		local _uid = net.ReadString()
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
-		YRP.msg("db", "shop_item_rem: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_rem: " .. db_WORKED(_new))
 		send_shop_items(ply, _catID)
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_item_edit_name")
+YRP:AddNetworkString("nws_yrp_shop_item_edit_name")
 net.Receive(
 	"nws_yrp_shop_item_edit_name",
 	function(len, ply)
@@ -74,11 +74,11 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "shop_item_edit_name: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_name: " .. db_WORKED(_new))
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_item_edit_desc")
+YRP:AddNetworkString("nws_yrp_shop_item_edit_desc")
 net.Receive(
 	"nws_yrp_shop_item_edit_desc",
 	function(len, ply)
@@ -92,11 +92,11 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "shop_item_edit_desc: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_desc: " .. db_WORKED(_new))
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_item_edit_price")
+YRP:AddNetworkString("nws_yrp_shop_item_edit_price")
 net.Receive(
 	"nws_yrp_shop_item_edit_price",
 	function(len, ply)
@@ -110,11 +110,11 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "shop_item_edit_price: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_price: " .. db_WORKED(_new))
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_item_edit_level")
+YRP:AddNetworkString("nws_yrp_shop_item_edit_level")
 net.Receive(
 	"nws_yrp_shop_item_edit_level",
 	function(len, ply)
@@ -128,11 +128,11 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "shop_item_edit_level: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_level: " .. db_WORKED(_new))
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_item_edit_quan")
+YRP:AddNetworkString("nws_yrp_shop_item_edit_quan")
 net.Receive(
 	"nws_yrp_shop_item_edit_quan",
 	function(len, ply)
@@ -146,11 +146,11 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "shop_item_edit_quan: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_quan: " .. db_WORKED(_new))
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_item_edit_cool")
+YRP:AddNetworkString("nws_yrp_shop_item_edit_cool")
 net.Receive(
 	"nws_yrp_shop_item_edit_cool",
 	function(len, ply)
@@ -164,11 +164,11 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "shop_item_edit_cool: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_cool: " .. db_WORKED(_new))
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_item_edit_lice")
+YRP:AddNetworkString("nws_yrp_shop_item_edit_lice")
 net.Receive(
 	"nws_yrp_shop_item_edit_lice",
 	function(len, ply)
@@ -182,12 +182,12 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "shop_item_edit_lice: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_lice: " .. db_WORKED(_new))
 		local _test = YRP_SQL_SELECT(DATABASE_NAME, "licenseID", "uniqueID = " .. _uid)
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_item_edit_perm")
+YRP:AddNetworkString("nws_yrp_shop_item_edit_perm")
 net.Receive(
 	"nws_yrp_shop_item_edit_perm",
 	function(len, ply)
@@ -201,11 +201,11 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "shop_item_edit_perm: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_perm: " .. db_WORKED(_new))
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_get_items_storage")
+YRP:AddNetworkString("nws_yrp_shop_get_items_storage")
 net.Receive(
 	"nws_yrp_shop_get_items_storage",
 	function(len, ply)
@@ -229,7 +229,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_get_items")
+YRP:AddNetworkString("nws_yrp_shop_get_items")
 net.Receive(
 	"nws_yrp_shop_get_items",
 	function(len, ply)
@@ -269,7 +269,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_shop_item_edit_base")
+YRP:AddNetworkString("nws_yrp_shop_item_edit_base")
 net.Receive(
 	"nws_yrp_shop_item_edit_base",
 	function(len, ply)
@@ -288,12 +288,12 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "shop_item_edit_base: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_base: " .. db_WORKED(_new))
 	end
 )
 
 function SpawnVehicle(item, pos, ang)
-	YRP.msg("gm", "SpawnVehicle( " .. tostring(item) .. ", " .. tostring(pos) .. ", " .. tostring(ang) .. " )")
+	YRP:msg("gm", "SpawnVehicle( " .. tostring(item) .. ", " .. tostring(pos) .. ", " .. tostring(ang) .. " )")
 	local vehicles = get_all_vehicles()
 	local vehicle = {}
 	local _custom = ""
@@ -302,7 +302,7 @@ function SpawnVehicle(item, pos, ang)
 			_custom = v.Custom
 			vehicle = v
 			if v.Custom == "simfphys" then
-				YRP.msg("gm", "[SpawnVehicle] simfphys vehicle")
+				YRP:msg("gm", "[SpawnVehicle] simfphys vehicle")
 				local spawnname = item.ClassName
 				local _vehicle = list.Get("simfphys_vehicles")[spawnname]
 				local car = simfphys.SpawnVehicleSimple(v.ClassName, pos, ang)
@@ -311,7 +311,7 @@ function SpawnVehicle(item, pos, ang)
 					0.2,
 					function()
 						if simfphys ~= nil and simfphys.RegisterEquipment ~= nil then
-							YRP.msg("gm", "[SpawnVehicle] -> simfphys armored vehilce")
+							YRP:msg("gm", "[SpawnVehicle] -> simfphys armored vehilce")
 							simfphys.RegisterEquipment(car)
 						end
 					end
@@ -347,7 +347,7 @@ function SpawnVehicle(item, pos, ang)
 
 		return car
 	else
-		YRP.msg("note", "[SpawnVehicle] vehicle not available anymore")
+		YRP:msg("note", "[SpawnVehicle] vehicle not available anymore")
 
 		return NULL
 	end
@@ -368,7 +368,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 			else
 				for i, ws in pairs(engine.GetAddons()) do
 					if ws.wsid == "167545348" then
-						YRP.msg("note", "[Spawn Item] [IMPORTANT] Addon: " .. ws.title .. " is installed, which is overriding the GIVE function")
+						YRP:msg("note", "[Spawn Item] [IMPORTANT] Addon: " .. ws.title .. " is installed, which is overriding the GIVE function")
 
 						return false
 					end
@@ -400,7 +400,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 				return false
 			end
 		end]]
-		YRP.msg("error", "[Spawn Item] #1 FAILED TO SPAWN: " .. item.ClassName)
+		YRP:msg("error", "[Spawn Item] #1 FAILED TO SPAWN: " .. item.ClassName)
 
 		return false
 	end
@@ -429,7 +429,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 		local SP = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "Storagepoint" .. "' AND uniqueID = '" .. SPUID .. "'")
 		if IsNotNilAndNotFalse(SP) then
 			SP = SP[1]
-			YRP.msg("gm", "[Spawn Item] Item To Storagepoint")
+			YRP:msg("gm", "[Spawn Item] Item To Storagepoint")
 			local pos = string.Explode(",", SP.position)
 			TARGETPOS = Vector(pos[1], pos[2], pos[3])
 			local ang = string.Explode(",", SP.angle)
@@ -440,7 +440,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 
 	if TARGETPOS == nil then
 		TARGETPOS = ply:GetPos()
-		YRP.msg("gm", "[Spawn Item] Item To Player")
+		YRP:msg("gm", "[Spawn Item] Item To Player")
 	end
 
 	local foundpos = false
@@ -498,7 +498,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 	end
 
 	if not foundpos then
-		YRP.msg("note", "[Spawn Item] NOT ENOUGH SPACE? cn: " .. item.ClassName .. " wm: " .. item.WorldModel .. " distance: " .. tostring(dist) .. " hasstorage: " .. tostring(hasstorage))
+		YRP:msg("note", "[Spawn Item] NOT ENOUGH SPACE? cn: " .. item.ClassName .. " wm: " .. item.WorldModel .. " distance: " .. tostring(dist) .. " hasstorage: " .. tostring(hasstorage))
 		ply:PrintMessage(HUD_PRINTCENTER, "NOT ENOUGH SPACE TO SPAWN")
 
 		return false
@@ -540,11 +540,11 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 				end
 
 				ent:SetYRPInt("item_uniqueID", item.uniqueID)
-				YRP.msg("gm", "[Spawn Item] WORKED #2")
+				YRP:msg("gm", "[Spawn Item] WORKED #2")
 
 				return true, ent
 			else
-				YRP.msg("note", "[Spawn Item] Not valid #1: " .. item.ClassName)
+				YRP:msg("note", "[Spawn Item] Not valid #1: " .. item.ClassName)
 
 				return false
 			end
@@ -557,7 +557,7 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 			if vehicle and simfphys and simfphys.SpawnVehicle then
 				ent = simfphys.SpawnVehicle(nil, tr2.HitPos + Vector(0, 0, 50), Angle(0, 0, 0), vehicle.Model, vehicle.Class, item.ClassName, vehicle, true)
 				ent:SetYRPInt("item_uniqueID", item.uniqueID)
-				YRP.msg("gm", "[Spawn Item] WORKED #3")
+				YRP:msg("gm", "[Spawn Item] WORKED #3")
 				--ent:SetOwner(ply)
 				ent:SetYRPEntity("yrp_owner", ply)
 				ent:Activate()
@@ -590,13 +590,13 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 					ent:Activate()
 					ent:SetAngles(TARGETANG)
 					ent:SetYRPInt("item_uniqueID", item.uniqueID)
-					YRP.msg("gm", "[Spawn Item] WORKED #4")
+					YRP:msg("gm", "[Spawn Item] WORKED #4")
 					--ent:SetOwner(ply)
 					ent:SetYRPEntity("yrp_owner", ply)
 
 					return true, ent
 				else
-					YRP.msg("note", "[Spawn Item] Not valid #2: " .. item.ClassName)
+					YRP:msg("note", "[Spawn Item] Not valid #2: " .. item.ClassName)
 
 					return false
 				end
@@ -607,15 +607,15 @@ function YRPSpawnItem(ply, item, duid, count, itemColor)
 			ent:SetAngles(TARGETANG)
 		end
 	else
-		YRP.msg("note", "[Spawn Item] Not enough space for item, cn: " .. item.ClassName .. " distance: " .. tostring(dist) .. " hasstorage: " .. tostring(hasstorage))
+		YRP:msg("note", "[Spawn Item] Not enough space for item, cn: " .. item.ClassName .. " distance: " .. tostring(dist) .. " hasstorage: " .. tostring(hasstorage))
 	end
 
-	YRP.msg("note", "[Spawn Item] FAILED! " .. item.ClassName)
+	YRP:msg("note", "[Spawn Item] FAILED! " .. item.ClassName)
 
 	return false
 end
 
-YRP.AddNetworkString("nws_yrp_item_buy")
+YRP:AddNetworkString("nws_yrp_item_buy")
 net.Receive(
 	"nws_yrp_item_buy",
 	function(len, ply)
@@ -635,13 +635,13 @@ net.Receive(
 			end
 
 			if ply:GetYRPFloat("buy_ts" .. _item.uniqueID, 0.0) > CurTime() then
-				YRP.msg("note", "[item_buy] On Cooldown")
+				YRP:msg("note", "[item_buy] On Cooldown")
 
 				return
 			end
 
 			if ply:canAfford(totalPrice) then
-				YRP.msg("gm", ply:YRPName() .. " buyed " .. _item.name .. " for " .. totalPrice)
+				YRP:msg("gm", ply:YRPName() .. " buyed " .. _item.name .. " for " .. totalPrice)
 				timer.Simple(
 					0.3,
 					function()
@@ -675,7 +675,7 @@ net.Receive(
 							ply:SetYRPFloat("buy_ts" .. _item.uniqueID, CurTime() + _item.cooldown)
 						end
 					else
-						YRP.msg("note", "Failed to spawn item from shop, spawned: " .. tostring(_spawned))
+						YRP:msg("note", "Failed to spawn item from shop, spawned: " .. tostring(_spawned))
 
 						return false
 					end
@@ -710,7 +710,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_item_spawn")
+YRP:AddNetworkString("nws_yrp_item_spawn")
 net.Receive(
 	"nws_yrp_item_spawn",
 	function(len, ply)
@@ -729,7 +729,7 @@ net.Receive(
 								AddVehicle(ent, ply, _item)
 							end
 						else
-							YRP.msg("note", "[item_spawn] Item not alive/valid.")
+							YRP:msg("note", "[item_spawn] Item not alive/valid.")
 						end
 					end
 				end
@@ -738,7 +738,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_item_despawn")
+YRP:AddNetworkString("nws_yrp_item_despawn")
 net.Receive(
 	"nws_yrp_item_despawn",
 	function(len, ply)

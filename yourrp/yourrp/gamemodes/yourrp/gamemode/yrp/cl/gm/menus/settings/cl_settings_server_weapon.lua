@@ -4,7 +4,7 @@ local DBTab2 = {}
 local cbs = {}
 local function YRPWeaponSlotNum(parent, x, y, lid, smin, smax, sart, sval)
 	local slider = YRPCreateD("DNumSlider", parent, 400, 50, x, y)
-	slider:SetText(YRP.trans(lid))
+	slider:SetText(YRP:trans(lid))
 	slider:SetDecimals(0)
 	slider:SetMinMax(smin, smax)
 	slider:SetValue(sval)
@@ -119,12 +119,12 @@ net.Receive(
 		function header:Paint(pw, ph)
 			local color = Color(80, 80, 80)
 			draw.RoundedBox(3, 0, 0, pw, ph, color)
-			draw.SimpleText(YRP.trans("LID_name"), "Y_16_700", ph / 2, ph / 2, YRPTextColor(color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.trans("LID_primary"), "Y_16_700", pw - 60 - spacer * 4 + 8, ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.trans("LID_secondary"), "Y_16_700", pw - 60 - spacer * 3 + 8, ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.trans("LID_sidearm"), "Y_16_700", pw - 60 - spacer * 2 + 8, ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.trans("LID_gadget"), "Y_16_700", pw - 60 - spacer * 1 + 8, ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.trans("LID_noslot"), "Y_16_700", pw - 60 - spacer * 0 + 8, ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_name"), "Y_16_700", ph / 2, ph / 2, YRPTextColor(color), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_primary"), "Y_16_700", pw - 60 - spacer * 4 + 8, ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_secondary"), "Y_16_700", pw - 60 - spacer * 3 + 8, ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_sidearm"), "Y_16_700", pw - 60 - spacer * 2 + 8, ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_gadget"), "Y_16_700", pw - 60 - spacer * 1 + 8, ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_noslot"), "Y_16_700", pw - 60 - spacer * 0 + 8, ph / 2, YRPTextColor(color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local lis = YRPCreateD("DPanelList", PARENT, sw, PARENT:GetTall() - 10 - 30 - 30 - 10, 400 + 10, 10 + 30 + 30)

@@ -345,17 +345,17 @@ function YRPScoreboardAddPlayer(ply)
 
 					plypnl.Mute.Paint = function(s, w, h)
 						if IsValid(ply) then
-							local img = YRP.GetDesignIcon("volume_up")
+							local img = YRP:GetDesignIcon("volume_up")
 							if ply:GetVoiceVolumeScale() <= 0.0 then
-								img = YRP.GetDesignIcon("volume_off")
+								img = YRP:GetDesignIcon("volume_off")
 							elseif ply:GetVoiceVolumeScale() <= 0.25 then
-								img = YRP.GetDesignIcon("volume_mute")
+								img = YRP:GetDesignIcon("volume_mute")
 							elseif ply:GetVoiceVolumeScale() < 0.5 then
-								img = YRP.GetDesignIcon("volume_down")
+								img = YRP:GetDesignIcon("volume_down")
 							end
 
 							if IsValid(ply) and ply:IsMuted() then
-								img = YRP.GetDesignIcon("volume_off")
+								img = YRP:GetDesignIcon("volume_off")
 							end
 
 							if img then
@@ -391,23 +391,23 @@ function YRPScoreboardAddPlayer(ply)
 							end
 
 							local font = "Open Sans_24"
-							if ply:LoadedGamemode() and YRP.GetDesignIcon("circle") and v.cfun and ply[v.cfun] and ply:CharID() > 0 then
+							if ply:LoadedGamemode() and YRP:GetDesignIcon("circle") and v.cfun and ply[v.cfun] and ply:CharID() > 0 then
 								local circlesize = ph * 0.4
 								surface.SetFont(font)
 								local tsw, _ = surface.GetTextSize(text)
 								local br = 4
 								local col = ply[v.cfun](ply)
 								surface.SetDrawColor(col)
-								surface.SetMaterial(YRP.GetDesignIcon("circle"))
+								surface.SetMaterial(YRP:GetDesignIcon("circle"))
 								surface.DrawTexturedRect(pw / 2 - tsw / 2 - circlesize - br, ph / 2 - circlesize / 2, circlesize, circlesize)
 							end
 
 							if v.name == "language" then
 								if ply:HasLanguage() then
-									self.lang = YRP.GetDesignIcon("lang_" .. ply:GetLanguageShort())
+									self.lang = YRP:GetDesignIcon("lang_" .. ply:GetLanguageShort())
 									local sh = math.ceil(size * 0.6)
 									local sw = sh * 1.49
-									YRP.DrawIcon(self.lang, sw, sh, pw / 2 - sw / 2, ph / 2 - sh / 2, Color(255, 255, 255, 255))
+									YRP:DrawIcon(self.lang, sw, sh, pw / 2 - sw / 2, ph / 2 - sh / 2, Color(255, 255, 255, 255))
 								end
 							else
 								local px = pw / 2
@@ -415,19 +415,19 @@ function YRPScoreboardAddPlayer(ply)
 								local col = Color(255, 255, 255, 255)
 								if v.name == "ping" then
 									local br = 4
-									local mat = YRP.GetDesignIcon("signal3")
+									local mat = YRP:GetDesignIcon("signal3")
 									if text >= 300 then
 										col = Color(255, 0, 0, 255)
-										mat = YRP.GetDesignIcon("signal1")
+										mat = YRP:GetDesignIcon("signal1")
 									elseif text >= 150 then
 										col = Color(255, 100, 100, 255)
-										mat = YRP.GetDesignIcon("signal1")
+										mat = YRP:GetDesignIcon("signal1")
 									elseif text >= 100 then
 										col = Color(255, 255, 100)
-										mat = YRP.GetDesignIcon("signal2")
+										mat = YRP:GetDesignIcon("signal2")
 									else
 										col = Color(100, 255, 100, 255)
-										mat = YRP.GetDesignIcon("signal3")
+										mat = YRP:GetDesignIcon("signal3")
 									end
 
 									if mat then
@@ -447,9 +447,9 @@ function YRPScoreboardAddPlayer(ply)
 
 								if v.name == "name" then
 									if not ply:LoadedGamemode() then
-										text = "[" .. YRP.trans("LID_loading") .. "]"
+										text = "[" .. YRP:trans("LID_loading") .. "]"
 									elseif ply:IsInCharacterSelection() then
-										text = "[" .. YRP.trans("LID_characterselection") .. "]"
+										text = "[" .. YRP:trans("LID_characterselection") .. "]"
 									end
 								end
 
@@ -463,10 +463,10 @@ function YRPScoreboardAddPlayer(ply)
 
 								if v.name == "operating_system" then
 									if ply:HasOS() then
-										self.lang = YRP.GetDesignIcon("os_" .. ply:OS())
+										self.lang = YRP:GetDesignIcon("os_" .. ply:OS())
 										local sh = math.ceil(size * 0.6)
 										local sw = sh
-										YRP.DrawIcon(self.lang, sw, sh, pw / 2 - sw / 2, ph / 2 - sh / 2, Color(255, 255, 255, 255))
+										YRP:DrawIcon(self.lang, sw, sh, pw / 2 - sw / 2, ph / 2 - sh / 2, Color(255, 255, 255, 255))
 									end
 
 									if ply:GetYRPString("gmod_branch", "unknown") ~= "64Bit" and not ply:IsBot() then
@@ -502,8 +502,8 @@ function YRPScoreboardAddPlayer(ply)
 			local br = (ph - iconsize) / 2
 			if IsValid(ply) and LocalPlayer():HasAccess("YRPScoreboardAddPlayer1") then
 				-- Money
-				if YRP.GetDesignIcon("64_money-bill") then
-					surface.SetMaterial(YRP.GetDesignIcon("64_money-bill"))
+				if YRP:GetDesignIcon("64_money-bill") then
+					surface.SetMaterial(YRP:GetDesignIcon("64_money-bill"))
 					surface.SetDrawColor(Color(255, 255, 255, 255))
 					surface.DrawTexturedRect(br, br, iconsize, iconsize)
 				end
@@ -550,9 +550,9 @@ function YRPScoreboardAddPlayer(ply)
 			function()
 				if IsValid(ply) and ply:YRPSteamID() and ply:SteamID() then
 					SetClipboardText("SteamID: \t" .. ply:YRPSteamID() .. " \nRPName: \t" .. ply:RPName() .. " \nSteamName: \t" .. ply:SteamName())
-					notification.AddLegacy("[" .. string.upper(YRP.trans("LID_info")) .. "] COPIED TO CLIPBOARD", NOTIFY_GENERIC, 3)
+					notification.AddLegacy("[" .. string.upper(YRP:trans("LID_info")) .. "] COPIED TO CLIPBOARD", NOTIFY_GENERIC, 3)
 				else
-					notification.AddLegacy("[" .. string.upper(YRP.trans("LID_info")) .. "] PLAYER IS NOT VALID", NOTIFY_ERROR, 3)
+					notification.AddLegacy("[" .. string.upper(YRP:trans("LID_info")) .. "] PLAYER IS NOT VALID", NOTIFY_ERROR, 3)
 				end
 			end
 		}
@@ -773,7 +773,7 @@ function YRPScoreboardAddPlayer(ply)
 							self.tt:ShowCloseButton(false)
 							self.tt:SetDraggable(false)
 							function self.tt:Paint(ppw, pph)
-								draw.SimpleText(YRP.trans(btn[1]), "Y_16_500", ppw / 2, pph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP:trans(btn[1]), "Y_16_500", ppw / 2, pph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								if not YRPIsScoreboardVisible() then
 									self:Remove()
 								end
@@ -799,8 +799,8 @@ function YRPScoreboardAddPlayer(ply)
 
 					local color = self.iconcolor
 					color.a = alpha
-					if YRP.GetDesignIcon(btn[2]) then
-						surface.SetMaterial(YRP.GetDesignIcon(btn[2]))
+					if YRP:GetDesignIcon(btn[2]) then
+						surface.SetMaterial(YRP:GetDesignIcon(btn[2]))
 						surface.SetDrawColor(color)
 						surface.DrawTexturedRect(br, br, iconsize, iconsize)
 					end
@@ -836,7 +836,7 @@ function YRPOpenSBS()
 			function sortbtn:Paint(pw, ph)
 				local siz = 16 + 4
 				local px = pw / 2
-				local text = YRP.trans(v.tran)
+				local text = YRP:trans(v.tran)
 				if v.name == "level" and string.len(text) > 3 then
 					text = string.sub(text, 1, 3)
 					text = text .. "."
@@ -986,7 +986,7 @@ function YRPInitScoreboard()
 
 		-- MOUSE HELP
 		if not vgui.CursorVisible() then
-			draw.SimpleText(YRP.trans("LID_rightclicktoshowmouse"), "Open Sans_24", pw / 2, 34, Color(255, 255, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_rightclicktoshowmouse"), "Open Sans_24", pw / 2, 34, Color(255, 255, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		-- BOTTOM LEFT
@@ -1004,9 +1004,9 @@ function YRPInitScoreboard()
 	function YRPScoreboard.BotBar:Paint(pw, ph)
 		-- Table Footer
 		draw.RoundedBox(5, 0, 0, YRPScoreboard.w, hr, Color(255, 255, 255, 255))
-		draw.SimpleText(string.upper(YRP.trans("LID_map")) .. ": " .. GetNiceMapName(), "Open Sans_28", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(string.upper(YRP:trans("LID_map")) .. ": " .. GetNiceMapName(), "Open Sans_28", 0, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		draw.SimpleText("YourRP by D4KiR", "Open Sans_28", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers() .. " (" .. string.upper(YRP.trans("LID_players")) .. ")", "Open Sans_28", pw, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(player.GetCount() .. "/" .. game.MaxPlayers() .. " (" .. string.upper(YRP:trans("LID_players")) .. ")", "Open Sans_28", pw, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
 	YRPScoreboard.TopBar = YRPCreateD("DPanel", YRPScoreboard, 128, 128, 0, 0)

@@ -219,7 +219,7 @@ function GenerateChatTable()
 end
 
 GenerateChatTable()
-YRP.AddNetworkString("nws_yrp_cm_get_active_usergroups")
+YRP:AddNetworkString("nws_yrp_cm_get_active_usergroups")
 net.Receive(
 	"nws_yrp_cm_get_active_usergroups",
 	function(len, ply)
@@ -232,7 +232,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_cm_get_active_groups")
+YRP:AddNetworkString("nws_yrp_cm_get_active_groups")
 net.Receive(
 	"nws_yrp_cm_get_active_groups",
 	function(len, ply)
@@ -245,7 +245,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_cm_get_active_roles")
+YRP:AddNetworkString("nws_yrp_cm_get_active_roles")
 net.Receive(
 	"nws_yrp_cm_get_active_roles",
 	function(len, ply)
@@ -258,7 +258,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_cm_get_passive_usergroups")
+YRP:AddNetworkString("nws_yrp_cm_get_passive_usergroups")
 net.Receive(
 	"nws_yrp_cm_get_passive_usergroups",
 	function(len, ply)
@@ -271,7 +271,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_cm_get_passive_groups")
+YRP:AddNetworkString("nws_yrp_cm_get_passive_groups")
 net.Receive(
 	"nws_yrp_cm_get_passive_groups",
 	function(len, ply)
@@ -284,7 +284,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_cm_get_passive_roles")
+YRP:AddNetworkString("nws_yrp_cm_get_passive_roles")
 net.Receive(
 	"nws_yrp_cm_get_passive_roles",
 	function(len, ply)
@@ -297,7 +297,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_chat_channel_add")
+YRP:AddNetworkString("nws_yrp_chat_channel_add")
 net.Receive(
 	"nws_yrp_chat_channel_add",
 	function(len, ply)
@@ -317,7 +317,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_chat_channel_save")
+YRP:AddNetworkString("nws_yrp_chat_channel_save")
 net.Receive(
 	"nws_yrp_chat_channel_save",
 	function(len, ply)
@@ -354,7 +354,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_chat_channel_rem")
+YRP:AddNetworkString("nws_yrp_chat_channel_rem")
 net.Receive(
 	"nws_yrp_chat_channel_rem",
 	function(len, ply)

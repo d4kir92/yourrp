@@ -11,10 +11,10 @@ function GetStoragePanel(storageID)
 		if IsNotNilAndNotFalse(YRP_STORAGES[storageID]) then
 			return YRP_STORAGES[storageID]
 		else
-			YRP.msg("note", "[GetStoragePanel] no panel with: " .. tostring(storageID))
+			YRP:msg("note", "[GetStoragePanel] no panel with: " .. tostring(storageID))
 		end
 	else
-		YRP.msg("note", "[GetStoragePanel] storageID is invalid: " .. tostring(storageID))
+		YRP:msg("note", "[GetStoragePanel] storageID is invalid: " .. tostring(storageID))
 	end
 end
 
@@ -24,10 +24,10 @@ function SetStoragePanel(storageID, pnl)
 		if not IsNotNilAndNotFalse(YRP_STORAGES[storageID]) then
 			YRP_STORAGES[storageID] = pnl
 		else
-			YRP.msg("note", "[SetStoragePanel] there is already a storage with storageID: " .. tostring(storageID))
+			YRP:msg("note", "[SetStoragePanel] there is already a storage with storageID: " .. tostring(storageID))
 		end
 	else
-		YRP.msg("note", "[SetStoragePanel] storageID is invalid: " .. tostring(storageID))
+		YRP:msg("note", "[SetStoragePanel] storageID is invalid: " .. tostring(storageID))
 	end
 end
 
@@ -78,7 +78,7 @@ function PANEL:SetStorageID(storageID, slots)
 			end
 		end
 	else
-		YRP.msg("note", "[SetStorageID] storageID is invalid: " .. tostring(storageID))
+		YRP:msg("note", "[SetStorageID] storageID is invalid: " .. tostring(storageID))
 	end
 end
 
@@ -133,9 +133,9 @@ function BuildStorage(storage, slots)
 		storage:EnableVerticalScrollbar()
 		local ph = math.Round(c / 4)
 		storage:SetTall(ph * YRPItemSize() + (ph - 1) * sp)
-		storage:GetParent():SetTall(storage:GetTall() + YRP.ctr(50 + 20 + 20))
+		storage:GetParent():SetTall(storage:GetTall() + YRP:ctr(50 + 20 + 20))
 	else
-		YRP.msg("note", "Storage is closed.")
+		YRP:msg("note", "Storage is closed.")
 	end
 end
 

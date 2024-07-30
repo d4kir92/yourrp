@@ -13,9 +13,9 @@ function GetSlotPanel(slotID)
 		else
 			return nil
 		end
-		--YRP.msg( "note", "[GetSlotPanel] no panel with: " .. tostring(slotID) )
+		--YRP:msg( "note", "[GetSlotPanel] no panel with: " .. tostring(slotID) )
 	else
-		YRP.msg("note", "[GetSlotPanel] slotID is invalid: " .. tostring(slotID))
+		YRP:msg("note", "[GetSlotPanel] slotID is invalid: " .. tostring(slotID))
 	end
 end
 
@@ -25,10 +25,10 @@ function SetSlotPanel(slotID, pnl)
 		if not IsNotNilAndNotFalse(YRP_SLOTS[slotID]) then
 			YRP_SLOTS[slotID] = pnl
 		else
-			YRP.msg("note", "[SetSlotPanel] there is already a Slot with slotID: " .. tostring(slotID))
+			YRP:msg("note", "[SetSlotPanel] there is already a Slot with slotID: " .. tostring(slotID))
 		end
 	else
-		YRP.msg("note", "[SetSlotPanel] slotID is invalid: " .. tostring(slotID))
+		YRP:msg("note", "[SetSlotPanel] slotID is invalid: " .. tostring(slotID))
 	end
 end
 

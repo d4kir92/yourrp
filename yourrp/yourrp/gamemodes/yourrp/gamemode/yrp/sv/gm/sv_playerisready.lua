@@ -1,9 +1,9 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
-YRP.AddNetworkString("nws_yrp_sendstartdata")
-YRP.AddNetworkString("nws_yrp_receivedstartdata")
-YRP.AddNetworkString("nws_yrp_sendserverdata")
-YRP.AddNetworkString("nws_yrp_receivedserverdata")
+YRP:AddNetworkString("nws_yrp_sendstartdata")
+YRP:AddNetworkString("nws_yrp_receivedstartdata")
+YRP:AddNetworkString("nws_yrp_sendserverdata")
+YRP:AddNetworkString("nws_yrp_receivedserverdata")
 net.Receive(
 	"nws_yrp_receivedserverdata",
 	function(len, ply)
@@ -26,7 +26,7 @@ local function YRPPlayerLoadedGame(ply)
 		end
 	end
 
-	YRP.msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading.")
+	YRP:msg("note", ">> " .. tostring(ply:YRPName()) .. " finished loading.")
 	timer.Simple(
 		6,
 		function()
@@ -37,11 +37,11 @@ local function YRPPlayerLoadedGame(ply)
 				ply:DRPSendCategoriesToPlayer()
 			else
 				if ply.DRPSendTeamsToPlayer == nil then
-					YRP.msg("error", "Function not found! DRPSendTeamsToPlayer")
+					YRP:msg("error", "Function not found! DRPSendTeamsToPlayer")
 				end
 
 				if ply.DRPSendCategoriesToPlayer == nil then
-					YRP.msg("error", "Function not found! DRPSendCategoriesToPlayer")
+					YRP:msg("error", "Function not found! DRPSendCategoriesToPlayer")
 				end
 			end
 		end
@@ -86,7 +86,7 @@ local function YRPCheckFinishLoading()
 					YRPCLIENTOpenCharacterSelection(ply)
 				end
 			else
-				YRP.msg("error", "YRPCLIENTOpenCharacterSelection is NIL")
+				YRP:msg("error", "YRPCLIENTOpenCharacterSelection is NIL")
 			end
 
 			net.Start("nws_yrp_noti")
@@ -113,7 +113,7 @@ end
 YRPCheckFinishLoadingLoop()
 local function YRPReceivedReadyMessage(len, ply, tab)
 	if not IsValid(ply) then
-		YRP.msg("error", "[LOADING] player is not valid: " .. tostring(ply))
+		YRP:msg("error", "[LOADING] player is not valid: " .. tostring(ply))
 
 		return
 	end
@@ -124,7 +124,7 @@ local function YRPReceivedReadyMessage(len, ply, tab)
 	ostab[2] = "osx"
 	ostab[3] = "other"
 	if ostab[tab.os] == nil then
-		YRP.msg("error", "[LOADING] OS is invalid: " .. tostring(tab.os))
+		YRP:msg("error", "[LOADING] OS is invalid: " .. tostring(tab.os))
 
 		return
 	end
@@ -136,7 +136,7 @@ local function YRPReceivedReadyMessage(len, ply, tab)
 	local Beta = tab.beta
 	ply:SetYRPString("yrp_os", OS)
 	if Country == nil then
-		YRP.msg("error", ply:YRPName() .. " Client is broken, Country = " .. tostring(Country))
+		YRP:msg("error", ply:YRPName() .. " Client is broken, Country = " .. tostring(Country))
 		ply:Kick("YOUR GAME IS BROKEN! PLEASE VERIFY DATA")
 	end
 
@@ -178,7 +178,7 @@ net.Receive(
 		tab["country"] = country
 		tab["beta"] = beta
 		if not YRPCheckReadyTable(tab) then
-			YRP.msg("error", "[LOADING] Ready Table is broken! #" .. ply.readycounter)
+			YRP:msg("error", "[LOADING] Ready Table is broken! #" .. ply.readycounter)
 
 			return
 		end

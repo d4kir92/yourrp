@@ -43,7 +43,7 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	YRP.AddNetworkString("nws_yrp_safezone_options")
+	YRP:AddNetworkString("nws_yrp_safezone_options")
 end
 
 local size = 8
@@ -70,7 +70,7 @@ function SWEP:Think()
 			for i, v in pairs(GetGlobalYRPTable("yrp_safezone")) do
 				local p = StringToVector(v.pos)
 				if p:Distance(pos) < size * 2 then
-					YRP.msg("db", "Option Safezone")
+					YRP:msg("db", "Option Safezone")
 					local stab = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
 					if IsNotNilAndNotFalse(stab) then
 						stab = stab[1]
@@ -92,15 +92,15 @@ if CLIENT then
 		function()
 			if YRPIsNoMenuOpen() then
 				local stab = net.ReadTable()
-				local w = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+				local w = YRPCreateD("YFrame", nil, YRP:ctr(800), YRP:ctr(800), 0, 0)
 				w:Center()
 				w:MakePopup()
-				w:SetHeaderHeight(YRP.ctr(100))
+				w:SetHeaderHeight(YRP:ctr(100))
 				w:SetTitle("LID_safezone")
 				-- name time
-				w.nametext = YRPCreateD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
+				w.nametext = YRPCreateD("YLabel", w:GetContent(), YRP:ctr(400), YRP:ctr(50), YRP:ctr(10), YRP:ctr(0))
 				w.nametext:SetText("LID_name")
-				w.name = YRPCreateD("DTextEntry", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
+				w.name = YRPCreateD("DTextEntry", w:GetContent(), YRP:ctr(400), YRP:ctr(50), YRP:ctr(10), YRP:ctr(50))
 				w.name:SetText(stab.name)
 				function w.name:OnChange()
 					local name = self:GetText()
@@ -180,7 +180,7 @@ function SWEP:SecondaryAttack()
 			for id, e in pairs(inbox) do
 				if e == ply then
 					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
-					YRP.msg("db", "Removed Safezone")
+					YRP:msg("db", "Removed Safezone")
 				end
 			end
 		end

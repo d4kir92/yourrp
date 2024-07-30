@@ -23,7 +23,7 @@ net.Receive(
 			local gs = PARENT.gs
 			PARENT.rs = {}
 			local rs = PARENT.rs
-			gs.bac = YRPCreateD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), YRP.ctr(20))
+			gs.bac = YRPCreateD("YButton", PARENT, YRP:ctr(60), YRP:ctr(60), YRP:ctr(20), YRP:ctr(20))
 			gs.bac:SetText("")
 			function gs.bac:Paint(pw, ph)
 				if cur_group.cur > 0 then
@@ -57,7 +57,7 @@ net.Receive(
 				end
 			end
 
-			gs.top = YRPCreateD("DPanel", PARENT, YRP.ctr(800 - 120), YRP.ctr(60), YRP.ctr(80), YRP.ctr(20))
+			gs.top = YRPCreateD("DPanel", PARENT, YRP:ctr(800 - 120), YRP:ctr(60), YRP:ctr(80), YRP:ctr(20))
 			function gs.top:Paint(pw, ph)
 				local tab = {}
 				tab.color = YRPGetColor("3")
@@ -73,18 +73,18 @@ net.Receive(
 					if self.group ~= "" then
 						local inp = {}
 						inp.group = self.group
-						tab2.text = YRP.trans("LID_groupsof", inp)
+						tab2.text = YRP:trans("LID_groupsof", inp)
 					else
-						tab2.text = YRP.trans("LID_factions")
+						tab2.text = YRP:trans("LID_factions")
 					end
 				else
-					tab2.text = YRP.trans("LID_loading")
+					tab2.text = YRP:trans("LID_loading")
 				end
 
 				YRPDrawText(tab2)
 			end
 
-			gs.add = YRPCreateD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), YRP.ctr(20))
+			gs.add = YRPCreateD("YButton", PARENT, YRP:ctr(60), YRP:ctr(60), YRP:ctr(20 + 800 - 60), YRP:ctr(20))
 			gs.add:SetText("+")
 			function gs.add:Paint(pw, ph)
 				hook.Run("YButtonAPaint", self, pw, ph)
@@ -96,11 +96,11 @@ net.Receive(
 				net.SendToServer()
 			end
 
-			local listH = PARENT:GetTall() / 2 - 2 * YRP.ctr(30) - 3 * YRP.ctr(10)
-			gs.glist = YRPCreateD("DPanel", PARENT, YRP.ctr(800), listH, YRP.ctr(20), YRP.ctr(20 + 60))
+			local listH = PARENT:GetTall() / 2 - 2 * YRP:ctr(30) - 3 * YRP:ctr(10)
+			gs.glist = YRPCreateD("DPanel", PARENT, YRP:ctr(800), listH, YRP:ctr(20), YRP:ctr(20 + 60))
 			gs.gplist = YRPCreateD("DPanelList", gs.glist, gs.glist:GetWide(), gs.glist:GetTall(), 0, 0)
 			gs.gplist:EnableVerticalScrollbar(true)
-			gs.gplist:SetSpacing(YRP.ctr(10))
+			gs.gplist:SetSpacing(YRP:ctr(10))
 			function gs.gplist:ClearList()
 				gs.top.group = nil
 				gs.gplist:Clear()
@@ -144,7 +144,7 @@ net.Receive(
 			function CreateLineGroup(parent, group)
 				group.uniqueID = tonumber(group.uniqueID)
 				gs.gplist[group.uniqueID] = gs.gplist[group.uniqueID] or {}
-				gs.gplist[group.uniqueID] = YRPCreateD("YButton", parent, parent:GetWide() - YRP.ctr(20), YRP.ctr(120), 0, 0)
+				gs.gplist[group.uniqueID] = YRPCreateD("YButton", parent, parent:GetWide() - YRP:ctr(20), YRP:ctr(120), 0, 0)
 				gs.gplist[group.uniqueID]:SetText("")
 				for i, e in pairs(group) do
 					if string.StartWith(i, "int_") then
@@ -163,8 +163,8 @@ net.Receive(
 					DrawPanel(self, tab)
 					self.text = self.text or group.string_name --.. " [UID: " .. group.uniqueID .. "]"
 					local tab2 = {}
-					tab2.x = YRP.ctr(182)
-					tab2.y = YRP.ctr(20)
+					tab2.x = YRP:ctr(182)
+					tab2.y = YRP:ctr(20)
 					tab2.ax = 0
 					tab2.ay = 0
 					tab2.text = self.text
@@ -180,22 +180,22 @@ net.Receive(
 					net.SendToServer()
 				end
 
-				gs.gplist[group.uniqueID].ico = YRPCreateD("DHTML", gs.gplist[group.uniqueID], gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(20), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(20), YRP.ctr(60), YRP.ctr(10))
+				gs.gplist[group.uniqueID].ico = YRPCreateD("DHTML", gs.gplist[group.uniqueID], gs.gplist[group.uniqueID]:GetTall() - YRP:ctr(20), gs.gplist[group.uniqueID]:GetTall() - YRP:ctr(20), YRP:ctr(60), YRP:ctr(10))
 				local ico = gs.gplist[group.uniqueID].ico
 				function ico:Paint(pw, ph)
 				end
 
 				ico:SetHTML(YRPGetHTMLImage(group.string_icon, ico:GetWide(), ico:GetTall()))
 				YRPTestHTML(ico, group.string_icon, false)
-				gs.gplist[group.uniqueID].up = YRPCreateD("YButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), YRP.ctr(10))
+				gs.gplist[group.uniqueID].up = YRPCreateD("YButton", gs.gplist[group.uniqueID], YRP:ctr(40), YRP:ctr(40), YRP:ctr(10), YRP:ctr(10))
 				gs.gplist[group.uniqueID].up:SetText("")
 				local up = gs.gplist[group.uniqueID].up
 				function up:Paint(pw, ph)
 					if gs.gplist[group.uniqueID].int_position > 1 then
 						hook.Run("YButtonPaint", self, pw, ph)
-						if YRP.GetDesignIcon("64_angle-up") then
+						if YRP:GetDesignIcon("64_angle-up") then
 							surface.SetDrawColor(Color(255, 255, 255, 255))
-							surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+							surface.SetMaterial(YRP:GetDesignIcon("64_angle-up"))
 							surface.DrawTexturedRect(0, 0, pw, ph)
 						end
 					end
@@ -207,15 +207,15 @@ net.Receive(
 					net.SendToServer()
 				end
 
-				gs.gplist[group.uniqueID].dn = YRPCreateD("YButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(40 + 10))
+				gs.gplist[group.uniqueID].dn = YRPCreateD("YButton", gs.gplist[group.uniqueID], YRP:ctr(40), YRP:ctr(40), YRP:ctr(10), gs.gplist[group.uniqueID]:GetTall() - YRP:ctr(40 + 10))
 				gs.gplist[group.uniqueID].dn:SetText("")
 				local dn = gs.gplist[group.uniqueID].dn
 				function dn:Paint(pw, ph)
 					if gs.gplist[group.uniqueID].int_position < table.Count(gs.gplist.tab) then
 						hook.Run("YButtonPaint", self, pw, ph)
-						if YRP.GetDesignIcon("64_angle-down") then
+						if YRP:GetDesignIcon("64_angle-down") then
 							surface.SetDrawColor(Color(255, 255, 255, 255))
-							surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+							surface.SetMaterial(YRP:GetDesignIcon("64_angle-down"))
 							surface.DrawTexturedRect(0, 0, pw, ph)
 						end
 					end
@@ -227,15 +227,15 @@ net.Receive(
 					net.SendToServer()
 				end
 
-				gs.gplist[group.uniqueID].ch = YRPCreateD("YButton", gs.gplist[group.uniqueID], YRP.ctr(40), YRP.ctr(40), gs.gplist[group.uniqueID]:GetWide() - YRP.ctr(66), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(60))
+				gs.gplist[group.uniqueID].ch = YRPCreateD("YButton", gs.gplist[group.uniqueID], YRP:ctr(40), YRP:ctr(40), gs.gplist[group.uniqueID]:GetWide() - YRP:ctr(66), gs.gplist[group.uniqueID]:GetTall() - YRP:ctr(60))
 				gs.gplist[group.uniqueID].ch:SetText("")
 				local ch = gs.gplist[group.uniqueID].ch
 				surface.SetFont("Y_14_700")
-				local text = YRP.trans("LID_undergroups") .. " ▶"
+				local text = YRP:trans("LID_undergroups") .. " ▶"
 				local tw, _ = surface.GetTextSize(text)
-				tw = tw + YRP.ctr(20)
+				tw = tw + YRP:ctr(20)
 				ch:SetWide(tw)
-				ch:SetPos(gs.gplist[group.uniqueID]:GetWide() - tw - YRP.ctr(10 + 10), gs.gplist[group.uniqueID]:GetTall() - YRP.ctr(40 + 10))
+				ch:SetPos(gs.gplist[group.uniqueID]:GetWide() - tw - YRP:ctr(10 + 10), gs.gplist[group.uniqueID]:GetTall() - YRP:ctr(40 + 10))
 				function ch:Paint(pw, ph)
 					local tab = {}
 					tab.color = Color(255, 255, 100)
@@ -304,8 +304,8 @@ net.Receive(
 			net.Start("nws_yrp_settings_subscribe_grouplist")
 			net.WriteString(cur_group.par)
 			net.SendToServer()
-			local listH2 = PARENT:GetTall() / 2 - 2 * YRP.ctr(30) - 3 * YRP.ctr(10)
-			rs.top = YRPCreateD("DPanel", PARENT, YRP.ctr(800 - 120), YRP.ctr(60), YRP.ctr(80), listH2 + YRP.ctr(20 + 60 + 20))
+			local listH2 = PARENT:GetTall() / 2 - 2 * YRP:ctr(30) - 3 * YRP:ctr(10)
+			rs.top = YRPCreateD("DPanel", PARENT, YRP:ctr(800 - 120), YRP:ctr(60), YRP:ctr(80), listH2 + YRP:ctr(20 + 60 + 20))
 			function rs.top:Paint(pw, ph)
 				if rs.top.headername ~= nil then
 					local tab = {}
@@ -321,16 +321,16 @@ net.Receive(
 					if self.headername ~= nil then
 						local inp = {}
 						inp.group = self.headername
-						tab2.text = YRP.trans("LID_rolesof", inp)
+						tab2.text = YRP:trans("LID_rolesof", inp)
 					else
-						tab2.text = YRP.trans("LID_loading")
+						tab2.text = YRP:trans("LID_loading")
 					end
 
 					YRPDrawText(tab2)
 				end
 			end
 
-			rs.bac = YRPCreateD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20), listH2 + YRP.ctr(20 + 60 + 20))
+			rs.bac = YRPCreateD("YButton", PARENT, YRP:ctr(60), YRP:ctr(60), YRP:ctr(20), listH2 + YRP:ctr(20 + 60 + 20))
 			rs.bac:SetText("")
 			function rs.bac:Paint(pw, ph)
 				if rs.top.headername ~= nil and IsNotNilAndNotFalse(cur_role.pre) then
@@ -368,7 +368,7 @@ net.Receive(
 				end
 			end
 
-			rs.add = YRPCreateD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(20 + 800 - 60), listH2 + YRP.ctr(20 + 60 + 20))
+			rs.add = YRPCreateD("YButton", PARENT, YRP:ctr(60), YRP:ctr(60), YRP:ctr(20 + 800 - 60), listH2 + YRP:ctr(20 + 60 + 20))
 			rs.add:SetText("+")
 			function rs.add:Paint(pw, ph)
 				if rs.top.headername ~= nil then
@@ -385,7 +385,7 @@ net.Receive(
 				end
 			end
 
-			rs.rlist = YRPCreateD("DPanel", PARENT, YRP.ctr(800), listH2, YRP.ctr(20), listH2 + 2 * YRP.ctr(20) + 2 * YRP.ctr(60))
+			rs.rlist = YRPCreateD("DPanel", PARENT, YRP:ctr(800), listH2, YRP:ctr(20), listH2 + 2 * YRP:ctr(20) + 2 * YRP:ctr(60))
 			function rs.rlist:Paint(pw, ph)
 				if rs.top.headername ~= nil then
 					local tab = {}
@@ -396,7 +396,7 @@ net.Receive(
 
 			rs.rplist = YRPCreateD("DPanelList", rs.rlist, rs.rlist:GetWide(), rs.rlist:GetTall(), 0, 0)
 			rs.rplist:EnableVerticalScrollbar(true)
-			rs.rplist:SetSpacing(YRP.ctr(10))
+			rs.rplist:SetSpacing(YRP:ctr(10))
 			function rs.rplist:ClearList()
 				rs.top.headername = nil
 				rs.rplist:Clear()
@@ -411,7 +411,7 @@ net.Receive(
 						if IsNotNilAndNotFalse(rs.rplist[_uid]) then
 							rs.rplist[_uid].text = name
 						else
-							YRP.msg("note", "[settings_role_update_name] index is invalid")
+							YRP:msg("note", "[settings_role_update_name] index is invalid")
 						end
 					end
 				end
@@ -447,8 +447,8 @@ net.Receive(
 
 			PARENT.ea = {}
 			local ea = PARENT.ea
-			ea.background = YRPCreateD("DHorizontalScroller", PARENT, PARENT:GetWide() - YRP.ctr(860), PARENT:GetTall() - YRP.ctr(20 + 60 + 20), YRP.ctr(840), YRP.ctr(20 + 60))
-			ea.background:SetOverlap(-YRP.ctr(20))
+			ea.background = YRPCreateD("DHorizontalScroller", PARENT, PARENT:GetWide() - YRP:ctr(860), PARENT:GetTall() - YRP:ctr(20 + 60 + 20), YRP:ctr(840), YRP:ctr(20 + 60))
+			ea.background:SetOverlap(-YRP:ctr(20))
 			--[[function ea.background:Paint(pw, ph)
 			if ea.typ ~= nil then
 				local tab = {}
@@ -456,7 +456,7 @@ net.Receive(
 				DrawPanel(self, tab)
 			end
 		end]]
-			ea.del = YRPCreateD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(840), YRP.ctr(20))
+			ea.del = YRPCreateD("YButton", PARENT, YRP:ctr(60), YRP:ctr(60), YRP:ctr(840), YRP:ctr(20))
 			ea.del:SetText("-")
 			function ea.del:Paint(pw, ph)
 				if ea.typ ~= nil and tonumber(ea.tab.uniqueID) ~= 1 then
@@ -470,23 +470,23 @@ net.Receive(
 
 			function ea.del:DoClick()
 				if ea.typ == "group" and tonumber(ea.tab.uniqueID) ~= 1 then
-					local win = YRPCreateD("YFrame", nil, YRP.ctr(660), YRP.ctr(300), 0, 0)
-					win:SetHeaderHeight(YRP.ctr(100))
+					local win = YRPCreateD("YFrame", nil, YRP:ctr(660), YRP:ctr(300), 0, 0)
+					win:SetHeaderHeight(YRP:ctr(100))
 					win:Center()
 					win:MakePopup()
-					win:SetTitle(YRP.trans("LID_areyousure"))
+					win:SetTitle(YRP:trans("LID_areyousure"))
 					function win:Paint(pw, ph)
 						hook.Run("YFramePaint", self, pw, ph)
 					end
 
 					local content = win:GetContent()
 					function content:Paint(pw, ph)
-						draw.SimpleText("Recursive" .. " - " .. "If checked, removes everything behind!", "DermaDefault", YRP.ctr(60), YRP.ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+						draw.SimpleText("Recursive" .. " - " .. "If checked, removes everything behind!", "DermaDefault", YRP:ctr(60), YRP:ctr(50 + 20 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 
-					local recursive = YRPCreateD("DCheckBox", win:GetContent(), YRP.ctr(50), YRP.ctr(50), 0, YRP.ctr(50 + 20))
-					local _yes = YRPCreateD("YButton", win:GetContent(), YRP.ctr(300), YRP.ctr(50), 0, 0)
-					_yes:SetText(YRP.trans("LID_yes"))
+					local recursive = YRPCreateD("DCheckBox", win:GetContent(), YRP:ctr(50), YRP:ctr(50), 0, YRP:ctr(50 + 20))
+					local _yes = YRPCreateD("YButton", win:GetContent(), YRP:ctr(300), YRP:ctr(50), 0, 0)
+					_yes:SetText(YRP:trans("LID_yes"))
 					function _yes:DoClick()
 						if ea and ea.tab and ea.tab.uniqueID then
 							net.Start("nws_yrp_settings_delete_group")
@@ -509,8 +509,8 @@ net.Receive(
 						end
 					end
 
-					local _no = YRPCreateD("YButton", win:GetContent(), YRP.ctr(300), YRP.ctr(50), YRP.ctr(320), 0)
-					_no:SetText(YRP.trans("LID_no"))
+					local _no = YRPCreateD("YButton", win:GetContent(), YRP:ctr(300), YRP:ctr(50), YRP:ctr(320), 0)
+					_no:SetText(YRP:trans("LID_no"))
 					function _no:DoClick()
 						win:Close()
 					end
@@ -524,7 +524,7 @@ net.Receive(
 				end
 			end
 
-			ea.dup = YRPCreateD("YButton", PARENT, YRP.ctr(60), YRP.ctr(60), YRP.ctr(900), YRP.ctr(20))
+			ea.dup = YRPCreateD("YButton", PARENT, YRP:ctr(60), YRP:ctr(60), YRP:ctr(900), YRP:ctr(20))
 			ea.dup:SetText("")
 			function ea.dup:Paint(pw, ph)
 				if ea.typ ~= nil then
@@ -535,7 +535,7 @@ net.Receive(
 						local tab2 = {}
 						tab2.w = pw
 						tab2.h = ph
-						tab2.x = YRP.ctr(20)
+						tab2.x = YRP:ctr(20)
 						tab2.y = ph / 2
 						tab2.ax = 0
 						tab2.text = "[ ]"
@@ -563,7 +563,7 @@ net.Receive(
 				end
 			end
 
-			ea.top = YRPCreateD("DPanel", PARENT, PARENT:GetWide() - YRP.ctr(980), YRP.ctr(60), YRP.ctr(960), YRP.ctr(20))
+			ea.top = YRPCreateD("DPanel", PARENT, PARENT:GetWide() - YRP:ctr(980), YRP:ctr(60), YRP:ctr(960), YRP:ctr(20))
 			function ea.top:Paint(pw, ph)
 				if ea.typ ~= nil then
 					local tab = {}
@@ -573,13 +573,13 @@ net.Receive(
 					local tab2 = {}
 					tab2.w = pw
 					tab2.h = ph
-					tab2.x = YRP.ctr(20)
+					tab2.x = YRP:ctr(20)
 					tab2.y = ph / 2
 					tab2.ax = 0
 					if ea.tab.uniqueID == 1 then
-						tab2.text = "[MAIN] " .. YRP.trans("LID_" .. ea.typ) .. ": " .. ea.tab.string_name
+						tab2.text = "[MAIN] " .. YRP:trans("LID_" .. ea.typ) .. ": " .. ea.tab.string_name
 					else
-						tab2.text = YRP.trans("LID_" .. ea.typ) .. ": " .. ea.tab.string_name
+						tab2.text = YRP:trans("LID_" .. ea.typ) .. ": " .. ea.tab.string_name
 					end
 
 					local darkrpjobname = YRPConvertToDarkRPJobName(ea.tab.string_name)
@@ -620,9 +620,9 @@ net.Receive(
 							ea.tab = group
 							ea[group.uniqueID] = ea[group.uniqueID] or {}
 							ea.background:Clear()
-							local col1 = YRPCreateD("DPanelList", ea.background, YRP.ctr(1000), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
-							col1:SetSpacing(YRP.ctr(20))
-							local info = YRPCreateD("YGroupBox", col1, YRP.ctr(1000), YRP.ctr(920), YRP.ctr(0), YRP.ctr(0))
+							local col1 = YRPCreateD("DPanelList", ea.background, YRP:ctr(1000), ea.background:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
+							col1:SetSpacing(YRP:ctr(20))
+							local info = YRPCreateD("YGroupBox", col1, YRP:ctr(1000), YRP:ctr(920), YRP:ctr(0), YRP:ctr(0))
 							info:SetText("LID_general")
 							function info:Paint(pw, ph)
 								hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -649,7 +649,7 @@ net.Receive(
 							name.lforce = false
 							ea[group.uniqueID].name = DTextBox(name)
 							local hr = {}
-							hr.h = YRP.ctr(16)
+							hr.h = YRP:ctr(16)
 							hr.parent = ea.info:GetContent()
 							DHr(hr)
 							local color = {}
@@ -685,7 +685,7 @@ net.Receive(
 							ea[group.uniqueID].desc = DTextBox(desc)
 							DHr(hr)
 							local othergroups = {}
-							othergroups[0] = YRP.trans("LID_factions")
+							othergroups[0] = YRP:trans("LID_factions")
 							for i, tab in pairs(groups) do
 								tab.uniqueID = tonumber(tab.uniqueID)
 								group.uniqueID = tonumber(group.uniqueID)
@@ -716,7 +716,7 @@ net.Receive(
 							iscp.value = group.bool_iscp
 							iscp.uniqueID = group.uniqueID
 							ea[group.uniqueID].iscp = YRPDCheckBox(iscp)
-							local restriction = YRPCreateD("YGroupBox", col1, YRP.ctr(1000), YRP.ctr(570), YRP.ctr(0), YRP.ctr(0))
+							local restriction = YRPCreateD("YGroupBox", col1, YRP:ctr(1000), YRP:ctr(570), YRP:ctr(0), YRP:ctr(0))
 							restriction:SetText("LID_restriction")
 							function restriction:Paint(pw, ph)
 								hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -743,7 +743,7 @@ net.Receive(
 										ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
 										ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
 									else
-										YRP.msg("note", "WHATS THAT? #1")
+										YRP:msg("note", "WHATS THAT? #1")
 										pFTab(ug)
 									end
 								end
@@ -805,7 +805,7 @@ net.Receive(
 								local visible = {}
 								visible.parent = ea.restriction:GetContent()
 								visible.uniqueID = group.uniqueID
-								visible.header = YRP.trans("LID_visible") .. " ( " .. YRP.trans("LID_charactercreation") .. " )"
+								visible.header = YRP:trans("LID_visible") .. " ( " .. YRP:trans("LID_charactercreation") .. " )"
 								visible.netstr = "nws_yrp_update_group_bool_visible_cc"
 								visible.value = group.bool_visible_cc
 								visible.uniqueID = group.uniqueID
@@ -817,15 +817,15 @@ net.Receive(
 							local visible2 = {}
 							visible2.parent = ea.restriction:GetContent()
 							visible2.uniqueID = group.uniqueID
-							visible2.header = YRP.trans("LID_visible") .. " ( " .. YRP.trans("LID_rolemenu") .. " )"
+							visible2.header = YRP:trans("LID_visible") .. " ( " .. YRP:trans("LID_rolemenu") .. " )"
 							visible2.netstr = "nws_yrp_update_group_bool_visible_rm"
 							visible2.value = group.bool_visible_rm
 							visible2.uniqueID = group.uniqueID
 							visible2.lforce = false
 							ea[group.uniqueID].visible2 = YRPDCheckBox(visible2)
-							local col2 = YRPCreateD("DPanelList", ea.background, YRP.ctr(800 + 24), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+							local col2 = YRPCreateD("DPanelList", ea.background, YRP:ctr(800 + 24), ea.background:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
 							col2:EnableVerticalScrollbar(true)
-							col2:SetSpacing(YRP.ctr(20))
+							col2:SetSpacing(YRP:ctr(20))
 							local sbar = col2.VBar
 							function sbar:Paint(w, h)
 								draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
@@ -843,7 +843,7 @@ net.Receive(
 								draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 							end
 
-							local equipment = YRPCreateD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1250), 0, 0)
+							local equipment = YRPCreateD("YGroupBox", ea.background, YRP:ctr(800), YRP:ctr(1250), 0, 0)
 							equipment:SetText("LID_equipment")
 							function equipment:Paint(pw, ph)
 								hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -862,7 +862,7 @@ net.Receive(
 							sweps.value = group.string_sweps
 							sweps.uniqueID = group.uniqueID
 							sweps.w = ea.equipment:GetContent():GetWide()
-							sweps.h = YRP.ctr(325)
+							sweps.h = YRP:ctr(325)
 							sweps.doclick = function()
 								local winswep = YRPCreateD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 								winswep:SetTitle("")
@@ -870,7 +870,7 @@ net.Receive(
 								winswep:MakePopup()
 								function winswep:Paint(pw, ph)
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-									draw.SimpleText(YRP.trans("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(YRP:trans("LID_search") .. ": ", "DermaDefault", YRP:ctr(20 + 100), YRP:ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 								end
 
 								local allsweps = YRPGetSWEPsList()
@@ -884,9 +884,9 @@ net.Receive(
 									cl_sweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
 								end
 
-								winswep.dpl = YRPCreateD("DPanelList", winswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+								winswep.dpl = YRPCreateD("DPanelList", winswep, ScrW() - YRP:ctr(20 * 2), ScrH() - YRP:ctr(100 + 20), YRP:ctr(20), YRP:ctr(100))
 								winswep.dpl:EnableVerticalScrollbar(true)
-								local height = ScrH() - YRP.ctr(100)
+								local height = ScrH() - YRP:ctr(100)
 								function winswep:Search(strsearch)
 									strsearch = string.lower(strsearch)
 									strsearch = string.Replace(strsearch, "[", "")
@@ -922,7 +922,7 @@ net.Receive(
 								end
 
 								winswep:Search("")
-								winswep.search = YRPCreateD("DTextEntry", winswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
+								winswep.search = YRPCreateD("DTextEntry", winswep, ScrW() - YRP:ctr(20 + 100 + 20), YRP:ctr(50), YRP:ctr(20 + 100), YRP:ctr(50))
 								function winswep.search:OnChange()
 									winswep:Search(self:GetText())
 								end
@@ -947,7 +947,7 @@ net.Receive(
 											net.SendToServer()
 										end
 
-										swep.h = YRP.ctr(120)
+										swep.h = YRP:ctr(120)
 										table.insert(cl_sweps, swep)
 									end
 
@@ -963,15 +963,15 @@ net.Receive(
 							hr.parent = ea.equipment:GetContent()
 							DHr(hr)
 							-- Ammunation
-							local ammobg = YRPCreateD("YPanel", col2, YRP.ctr(800), YRP.ctr(850), 0, 0)
-							local ammoheader = YRPCreateD("YLabel", ammobg, YRP.ctr(800), YRP.ctr(50), 0, 0)
+							local ammobg = YRPCreateD("YPanel", col2, YRP:ctr(800), YRP:ctr(850), 0, 0)
+							local ammoheader = YRPCreateD("YLabel", ammobg, YRP:ctr(800), YRP:ctr(50), 0, 0)
 							ammoheader:SetText("LID_ammo")
 							function ammoheader:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-								draw.SimpleText(YRP.trans(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP:trans(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 							end
 
-							ammolist = YRPCreateD("DPanelList", ammobg, YRP.ctr(800 - 23 - 20), YRP.ctr(800), 0, YRP.ctr(50))
+							ammolist = YRPCreateD("DPanelList", ammobg, YRP:ctr(800 - 23 - 20), YRP:ctr(800), 0, YRP:ctr(50))
 							ammolist:SetSpacing(2)
 							ammolist:EnableVerticalScrollbar(true)
 							local sbar2 = ammolist.VBar
@@ -1015,15 +1015,15 @@ net.Receive(
 							end
 
 							for i, v in pairs(game.GetAmmoTypes()) do
-								local abg = YRPCreateD("YPanel", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
-								local ahe = YRPCreateD("YLabel", abg, YRP.ctr(400), YRP.ctr(50), 0, 0)
+								local abg = YRPCreateD("YPanel", nil, YRP:ctr(800), YRP:ctr(50), 0, 0)
+								local ahe = YRPCreateD("YLabel", abg, YRP:ctr(400), YRP:ctr(50), 0, 0)
 								ahe:SetText(v)
 								function ahe:Paint(pw, ph)
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255))
 									draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								end
 
-								local ava = YRPCreateD("DNumberWang", abg, YRP.ctr(400), YRP.ctr(50), YRP.ctr(400), 0)
+								local ava = YRPCreateD("DNumberWang", abg, YRP:ctr(400), YRP:ctr(50), YRP:ctr(400), 0)
 								ava:SetDecimals(0)
 								ava:SetMin(0)
 								ava:SetMax(999)
@@ -1046,7 +1046,7 @@ net.Receive(
 			function CreateLineRole(parent, role)
 				role.uniqueID = tonumber(role.uniqueID)
 				rs.rplist[role.uniqueID] = rs.rplist[role.uniqueID] or {}
-				rs.rplist[role.uniqueID] = YRPCreateD("YButton", parent, parent:GetWide() - YRP.ctr(20), YRP.ctr(120), 0, 0)
+				rs.rplist[role.uniqueID] = YRPCreateD("YButton", parent, parent:GetWide() - YRP:ctr(20), YRP:ctr(120), 0, 0)
 				rs.rplist[role.uniqueID]:SetText("")
 				for i, e in pairs(role) do
 					if string.StartWith(i, "int_") then
@@ -1065,8 +1065,8 @@ net.Receive(
 					DrawPanel(self, tab)
 					self.text = self.text or role.string_name --.. " [UID: " .. role.uniqueID .. "]"
 					local tab2 = {}
-					tab2.x = YRP.ctr(182)
-					tab2.y = YRP.ctr(20)
+					tab2.x = YRP:ctr(182)
+					tab2.y = YRP:ctr(20)
 					tab2.ax = 0
 					tab2.ay = 0
 					tab2.text = self.text
@@ -1082,22 +1082,22 @@ net.Receive(
 					net.SendToServer()
 				end
 
-				rs.rplist[role.uniqueID].ico = YRPCreateD("DHTML", rs.rplist[role.uniqueID], rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(20), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(20), YRP.ctr(60), YRP.ctr(10))
+				rs.rplist[role.uniqueID].ico = YRPCreateD("DHTML", rs.rplist[role.uniqueID], rs.rplist[role.uniqueID]:GetTall() - YRP:ctr(20), rs.rplist[role.uniqueID]:GetTall() - YRP:ctr(20), YRP:ctr(60), YRP:ctr(10))
 				local ico = rs.rplist[role.uniqueID].ico
 				function ico:Paint(pw, ph)
 				end
 
 				ico:SetHTML(YRPGetHTMLImage(role.string_icon, ico:GetWide(), ico:GetTall()))
 				YRPTestHTML(ico, role.string_icon, false)
-				rs.rplist[role.uniqueID].up = YRPCreateD("YButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), YRP.ctr(10))
+				rs.rplist[role.uniqueID].up = YRPCreateD("YButton", rs.rplist[role.uniqueID], YRP:ctr(40), YRP:ctr(40), YRP:ctr(10), YRP:ctr(10))
 				rs.rplist[role.uniqueID].up:SetText("")
 				local up = rs.rplist[role.uniqueID].up
 				function up:Paint(pw, ph)
 					if rs.rplist[role.uniqueID].int_position > 1 then
 						hook.Run("YButtonPaint", self, pw, ph)
-						if YRP.GetDesignIcon("64_angle-up") then
+						if YRP:GetDesignIcon("64_angle-up") then
 							surface.SetDrawColor(Color(255, 255, 255, 255))
-							surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+							surface.SetMaterial(YRP:GetDesignIcon("64_angle-up"))
 							surface.DrawTexturedRect(0, 0, pw, ph)
 						end
 					end
@@ -1109,15 +1109,15 @@ net.Receive(
 					net.SendToServer()
 				end
 
-				rs.rplist[role.uniqueID].dn = YRPCreateD("YButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), YRP.ctr(10), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(40 + 10))
+				rs.rplist[role.uniqueID].dn = YRPCreateD("YButton", rs.rplist[role.uniqueID], YRP:ctr(40), YRP:ctr(40), YRP:ctr(10), rs.rplist[role.uniqueID]:GetTall() - YRP:ctr(40 + 10))
 				rs.rplist[role.uniqueID].dn:SetText("")
 				local dn = rs.rplist[role.uniqueID].dn
 				function dn:Paint(pw, ph)
 					if rs.rplist[role.uniqueID].int_position < table.Count(rs.rplist.tab) then
 						hook.Run("YButtonPaint", self, pw, ph)
-						if YRP.GetDesignIcon("64_angle-down") then
+						if YRP:GetDesignIcon("64_angle-down") then
 							surface.SetDrawColor(Color(255, 255, 255, 255))
-							surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+							surface.SetMaterial(YRP:GetDesignIcon("64_angle-down"))
 							surface.DrawTexturedRect(0, 0, pw, ph)
 						end
 					end
@@ -1129,15 +1129,15 @@ net.Receive(
 					net.SendToServer()
 				end
 
-				rs.rplist[role.uniqueID].ch = YRPCreateD("YButton", rs.rplist[role.uniqueID], YRP.ctr(40), YRP.ctr(40), rs.rplist[role.uniqueID]:GetWide() - YRP.ctr(66), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(60))
+				rs.rplist[role.uniqueID].ch = YRPCreateD("YButton", rs.rplist[role.uniqueID], YRP:ctr(40), YRP:ctr(40), rs.rplist[role.uniqueID]:GetWide() - YRP:ctr(66), rs.rplist[role.uniqueID]:GetTall() - YRP:ctr(60))
 				rs.rplist[role.uniqueID].ch:SetText("")
 				local ch = rs.rplist[role.uniqueID].ch
-				local text = YRP.trans("LID_nextranks") .. " ▶"
+				local text = YRP:trans("LID_nextranks") .. " ▶"
 				surface.SetFont("Y_14_700")
 				local tw, _ = surface.GetTextSize(text)
-				tw = tw + YRP.ctr(20)
+				tw = tw + YRP:ctr(20)
 				ch:SetWide(tw)
-				ch:SetPos(rs.rplist[role.uniqueID]:GetWide() - tw - YRP.ctr(10 + 10), rs.rplist[role.uniqueID]:GetTall() - YRP.ctr(40 + 10))
+				ch:SetPos(rs.rplist[role.uniqueID]:GetWide() - tw - YRP:ctr(10 + 10), rs.rplist[role.uniqueID]:GetTall() - YRP:ctr(40 + 10))
 				function ch:Paint(pw, ph)
 					local tab = {}
 					tab.color = Color(255, 255, 100)
@@ -1192,7 +1192,7 @@ net.Receive(
 					cur_role.gro = role.int_groupID
 					cur_role.edi = role.uniqueID
 					if not ea then
-						YRP.msg("note", "Closed F8/Switched f8 site?")
+						YRP:msg("note", "Closed F8/Switched f8 site?")
 
 						return
 					end
@@ -1202,9 +1202,9 @@ net.Receive(
 					if role.uniqueID == nil then return end
 					ea[role.uniqueID] = ea[role.uniqueID] or {}
 					ea.background:Clear()
-					local col1 = YRPCreateD("DPanelList", ea.background, YRP.ctr(800 + 24), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+					local col1 = YRPCreateD("DPanelList", ea.background, YRP:ctr(800 + 24), ea.background:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
 					col1:EnableVerticalScrollbar(true)
-					col1:SetSpacing(YRP.ctr(20))
+					col1:SetSpacing(YRP:ctr(20))
 					local sbar3 = col1.VBar
 					function sbar3:Paint(w, h)
 						draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
@@ -1222,7 +1222,7 @@ net.Receive(
 						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 					end
 
-					local info = YRPCreateD("YGroupBox", col1, YRP.ctr(800), YRP.ctr(866), YRP.ctr(20), YRP.ctr(20))
+					local info = YRPCreateD("YGroupBox", col1, YRP:ctr(800), YRP:ctr(866), YRP:ctr(20), YRP:ctr(20))
 					info:SetText("LID_general")
 					function info:Paint(pw, ph)
 						hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -1249,7 +1249,7 @@ net.Receive(
 					name.lforce = false
 					ea[role.uniqueID].name = DTextBox(name)
 					local hr = {}
-					hr.h = YRP.ctr(16)
+					hr.h = YRP:ctr(16)
 					hr.parent = ea.info:GetContent()
 					DHr(hr)
 					local identifier = {}
@@ -1290,7 +1290,7 @@ net.Receive(
 					ea[role.uniqueID].icon = DTextBox(icon)
 					DHr(hr)
 					local maxa = {}
-					maxa[0] = YRP.trans("LID_disabled")
+					maxa[0] = YRP:trans("LID_disabled")
 					for i = 1, 128 do
 						maxa[i] = i
 					end
@@ -1380,7 +1380,7 @@ net.Receive(
 					ea[role.uniqueID].requireslevel = DIntBox(salarytime)
 					DHr(hr)
 					local otherroles = {}
-					otherroles[0] = YRP.trans("LID_none")
+					otherroles[0] = YRP:trans("LID_none")
 					for i, tab in pairs(roles) do
 						tab.uniqueID = tonumber(tab.uniqueID)
 						if tab.uniqueID ~= role.uniqueID and tab.int_groupID == role.int_groupID then
@@ -1392,7 +1392,7 @@ net.Receive(
 						local prerole = {}
 						prerole.parent = ea.info:GetContent()
 						prerole.uniqueID = role.uniqueID
-						prerole.header = YRP.trans("LID_prerole") .. " | " .. YRP.trans("LID_prerank")
+						prerole.header = YRP:trans("LID_prerole") .. " | " .. YRP:trans("LID_prerank")
 						prerole.netstr = "nws_yrp_update_role_int_prerole"
 						prerole.value = tonumber(role.int_prerole)
 						prerole.uniqueID = role.uniqueID
@@ -1403,17 +1403,17 @@ net.Receive(
 					end
 
 					local rod_roles = {}
-					rod_roles[0] = YRP.trans("LID_none")
+					rod_roles[0] = YRP:trans("LID_none")
 					for i, tab in pairs(roles) do
 						tab.uniqueID = tonumber(tab.uniqueID)
 						rod_roles[tab.uniqueID] = tab.string_name --.. " [UID: " .. tab.uniqueID .. "]"
 					end
 
-					rod_roles[0] = YRP.trans("LID_none")
+					rod_roles[0] = YRP:trans("LID_none")
 					local roleondeath = {}
 					roleondeath.parent = ea.info:GetContent()
 					roleondeath.uniqueID = role.uniqueID
-					roleondeath.header = YRP.trans("LID_roleafterdeath")
+					roleondeath.header = YRP:trans("LID_roleafterdeath")
 					roleondeath.netstr = "nws_yrp_update_role_int_roleondeath"
 					roleondeath.value = tonumber(role.int_roleondeath)
 					roleondeath.uniqueID = role.uniqueID
@@ -1422,7 +1422,7 @@ net.Receive(
 					ea[role.uniqueID].roleondeath = YRPDComboBox(roleondeath)
 					ea.info:AutoSize(true)
 					-- FLAGS
-					local flags = YRPCreateD("YGroupBox", col1, ea.info:GetWide(), YRP.ctr(800), YRP.ctr(20), ea.info.y + ea.info:GetTall() + YRP.ctr(20))
+					local flags = YRPCreateD("YGroupBox", col1, ea.info:GetWide(), YRP:ctr(800), YRP:ctr(20), ea.info.y + ea.info:GetTall() + YRP:ctr(20))
 					flags:SetText("LID_flags")
 					function flags:Paint(pw, ph)
 						hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -1451,19 +1451,19 @@ net.Receive(
 					custom_flags.value = role.string_customflags
 					custom_flags.uniqueID = role.uniqueID
 					custom_flags.w = ea.flags:GetContent():GetWide()
-					custom_flags.h = YRP.ctr(225)
+					custom_flags.h = YRP:ctr(225)
 					custom_flags.doclick = function()
 						net.Receive(
 							"nws_yrp_get_all_role_customflags",
 							function()
 								local cf = net.ReadTable()
-								local win = YRPCreateD("DFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+								local win = YRPCreateD("DFrame", nil, YRP:ctr(800), YRP:ctr(800), 0, 0)
 								win:SetTitle("")
 								win:Center()
 								win:MakePopup()
-								win.dpl = YRPCreateD("DPanelList", win, YRP.ctr(800), YRP.ctr(750), 0, YRP.ctr(50))
+								win.dpl = YRPCreateD("DPanelList", win, YRP:ctr(800), YRP:ctr(750), 0, YRP:ctr(50))
 								for i, flag in pairs(cf) do
-									local line = YRPCreateD("YButton", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
+									local line = YRPCreateD("YButton", nil, YRP:ctr(800), YRP:ctr(50), 0, 0)
 									line:SetText(flag.string_name)
 									function line:DoClick()
 										net.Start("nws_yrp_add_role_flag")
@@ -1506,9 +1506,9 @@ net.Receive(
 					net.WriteInt(role.uniqueID, 32)
 					net.SendToServer()
 					ea.flags:AutoSize(true)
-					local col2 = YRPCreateD("DPanelList", ea.background, YRP.ctr(800 + 24), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+					local col2 = YRPCreateD("DPanelList", ea.background, YRP:ctr(800 + 24), ea.background:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
 					col2:EnableVerticalScrollbar(true)
-					col2:SetSpacing(YRP.ctr(20))
+					col2:SetSpacing(YRP:ctr(20))
 					local sbar4 = col2.VBar
 					function sbar4:Paint(w, h)
 						draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
@@ -1526,7 +1526,7 @@ net.Receive(
 						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 					end
 
-					local appearance = YRPCreateD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(800), YRP.ctr(840), YRP.ctr(20))
+					local appearance = YRPCreateD("YGroupBox", ea.background, YRP:ctr(800), YRP:ctr(800), YRP:ctr(840), YRP:ctr(20))
 					appearance:SetText("LID_appearance")
 					function appearance:Paint(pw, ph)
 						hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -1543,31 +1543,31 @@ net.Receive(
 					playermodels.value = role.string_playermodels
 					playermodels.uniqueID = role.uniqueID
 					playermodels.w = ea.appearance:GetContent():GetWide()
-					playermodels.h = YRP.ctr(425)
+					playermodels.h = YRP:ctr(425)
 					playermodels.doclick = function()
 						local pms = {}
-						local win = YRPCreateD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1400), 0, 0)
-						win:SetHeaderHeight(YRP.ctr(100))
+						local win = YRPCreateD("YFrame", nil, YRP:ctr(1400), YRP:ctr(1400), 0, 0)
+						win:SetHeaderHeight(YRP:ctr(100))
 						win:SetTitle("LID_search")
 						win:Center()
 						win:MakePopup()
 						local content = win:GetContent()
-						win.add = YRPCreateD("YButton", content, YRP.ctr(50), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
+						win.add = YRPCreateD("YButton", content, YRP:ctr(50), YRP:ctr(50), YRP:ctr(20), YRP:ctr(20))
 						win.add:SetText("+")
 						function win.add:DoClick()
 							win:Close()
 							local lply = LocalPlayer()
 							lply.yrpseltab = {}
-							local pmwin = YRPCreateD("YFrame", nil, YRP.ctr(1400), YRP.ctr(1400), 0, 0)
-							pmwin:SetHeaderHeight(YRP.ctr(100))
+							local pmwin = YRPCreateD("YFrame", nil, YRP:ctr(1400), YRP:ctr(1400), 0, 0)
+							pmwin:SetHeaderHeight(YRP:ctr(100))
 							pmwin:Center()
 							pmwin:MakePopup()
 							pmwin:SetTitle("")
 							local pmcontent = pmwin:GetContent()
 							pmwin.pms = {}
-							pmwin.name = YRPCreateD("DTextEntry", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20 + 300 + 20 + 300 + 20 + 100), YRP.ctr(50 + 20))
-							pmwin.float_min = YRPCreateD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20), YRP.ctr(210))
-							pmwin.float_max = YRPCreateD("DNumberWang", pmcontent, YRP.ctr(200), YRP.ctr(50), YRP.ctr(20 + 200 + 20), YRP.ctr(210))
+							pmwin.name = YRPCreateD("DTextEntry", pmcontent, YRP:ctr(300), YRP:ctr(50), YRP:ctr(20 + 300 + 20 + 300 + 20 + 100), YRP:ctr(50 + 20))
+							pmwin.float_min = YRPCreateD("DNumberWang", pmcontent, YRP:ctr(200), YRP:ctr(50), YRP:ctr(20), YRP:ctr(210))
+							pmwin.float_max = YRPCreateD("DNumberWang", pmcontent, YRP:ctr(200), YRP:ctr(50), YRP:ctr(20 + 200 + 20), YRP:ctr(210))
 							pmwin.float_min:SetMinMax(0.1, 100.0)
 							pmwin.float_max:SetMinMax(0.1, 100.0)
 							pmwin.float_min:SetValue(1.0)
@@ -1588,7 +1588,7 @@ net.Receive(
 								end
 							end
 
-							pmwin.list = YRPCreateD("DPanelList", pmcontent, pmcontent:GetWide() - YRP.ctr(40), pmcontent:GetTall() - YRP.ctr(20 + 50 + 20 + 300 + 20 + 20), YRP.ctr(20), YRP.ctr(300 + 20))
+							pmwin.list = YRPCreateD("DPanelList", pmcontent, pmcontent:GetWide() - YRP:ctr(40), pmcontent:GetTall() - YRP:ctr(20 + 50 + 20 + 300 + 20 + 20), YRP:ctr(20), YRP:ctr(300 + 20))
 							pmwin.list:EnableVerticalScrollbar(true)
 							pmwin.list:SetSpacing(10)
 							function pmwin.list:RefreshList()
@@ -1600,14 +1600,14 @@ net.Receive(
 											i * 0.001,
 											function()
 												if IsNotNilAndNotFalse(pmwin) and YRPPanelAlive(pmwin.list, "GAR 11") then
-													local line = YRPCreateD("DPanel", pmwin.list, YRP.ctr(200), YRP.ctr(64), 0, 0)
+													local line = YRPCreateD("DPanel", pmwin.list, YRP:ctr(200), YRP:ctr(64), 0, 0)
 													line.pm = pm
 													function line:Paint(pw, ph)
 														draw.RoundedBox(ph / 2, 0, 0, pw, ph, Color(255, 255, 255, 255))
-														draw.SimpleText(self.pm, "DermaDefault", ph + YRP.ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+														draw.SimpleText(self.pm, "DermaDefault", ph + YRP:ctr(10), ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 													end
 
-													line.dmp = YRPCreateD("DModelPanel", line, YRP.ctr(64), YRP.ctr(64), 0, 0)
+													line.dmp = YRPCreateD("DModelPanel", line, YRP:ctr(64), YRP:ctr(64), 0, 0)
 													line.dmp:SetModel(pm)
 													pmwin.list:AddItem(line)
 												end
@@ -1619,14 +1619,14 @@ net.Receive(
 
 							function pmwin:Paint(pw, ph)
 								hook.Run("YFramePaint", self, pw, ph)
-								draw.SimpleText(YRP.trans("LID_name") .. ": ", "DermaDefault", YRP.ctr(20 + 300 + 20 + 300 + 20 + 120), YRP.ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-								draw.SimpleText(YRP.trans("LID_minimumsize") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-								draw.SimpleText(YRP.trans("LID_maximumsize") .. ":", "DermaDefault", YRP.ctr(40 + 200 + 20), YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-								draw.SimpleText(YRP.trans("LID_models") .. ":", "DermaDefault", YRP.ctr(40), YRP.ctr(410), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+								draw.SimpleText(YRP:trans("LID_name") .. ": ", "DermaDefault", YRP:ctr(20 + 300 + 20 + 300 + 20 + 120), YRP:ctr(150), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP:trans("LID_minimumsize") .. ":", "DermaDefault", YRP:ctr(40), YRP:ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+								draw.SimpleText(YRP:trans("LID_maximumsize") .. ":", "DermaDefault", YRP:ctr(40 + 200 + 20), YRP:ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+								draw.SimpleText(YRP:trans("LID_models") .. ":", "DermaDefault", YRP:ctr(40), YRP:ctr(410), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 							end
 
-							pmwin.selpm = YRPCreateD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20), YRP.ctr(50 + 20))
-							pmwin.selpm:SetText(YRP.trans("LID_playermodels"))
+							pmwin.selpm = YRPCreateD("YButton", pmcontent, YRP:ctr(300), YRP:ctr(50), YRP:ctr(20), YRP:ctr(50 + 20))
+							pmwin.selpm:SetText(YRP:trans("LID_playermodels"))
 							function pmwin.selpm:DoClick()
 								local allvalidmodels = player_manager.AllValidModels()
 								local cl_pms = {}
@@ -1642,8 +1642,8 @@ net.Receive(
 								YRPOpenSelector(cl_pms, true, "worldmodel", pmwin.list.RefreshList)
 							end
 
-							pmwin.selnpm = YRPCreateD("YButton", pmcontent, YRP.ctr(300), YRP.ctr(50), YRP.ctr(20 + 300 + 20), YRP.ctr(50 + 20))
-							pmwin.selnpm:SetText(YRP.trans("LID_othermodels"))
+							pmwin.selnpm = YRPCreateD("YButton", pmcontent, YRP:ctr(300), YRP:ctr(50), YRP:ctr(20 + 300 + 20), YRP:ctr(50 + 20))
+							pmwin.selnpm:SetText(YRP:trans("LID_othermodels"))
 							function pmwin.selnpm:DoClick()
 								local noneplayermodels = {}
 								for _, addon in SortedPairsByMemberValue(engine.GetAddons(), "title") do
@@ -1664,8 +1664,8 @@ net.Receive(
 								YRPOpenSelector(cl_pms, true, "worldmodel", pmwin.list.RefreshList)
 							end
 
-							pmwin.add = YRPCreateD("YButton", pmcontent, YRP.ctr(200), YRP.ctr(50), pmcontent:GetWide() / 2 - YRP.ctr(200 / 2), pmcontent:GetTall() - YRP.ctr(50 + 20))
-							pmwin.add:SetText(YRP.trans("LID_add"))
+							pmwin.add = YRPCreateD("YButton", pmcontent, YRP:ctr(200), YRP:ctr(50), pmcontent:GetWide() / 2 - YRP:ctr(200 / 2), pmcontent:GetTall() - YRP:ctr(50 + 20))
+							pmwin.add:SetText(YRP:trans("LID_add"))
 							function pmwin.add:DoClick()
 								if pmwin.WorldModel ~= "" then
 									local lpl = LocalPlayer()
@@ -1688,7 +1688,7 @@ net.Receive(
 							hook.Run("YButtonAPaint", self, pw, ph)
 						end
 
-						win.dpl = YRPCreateD("DPanelList", content, content:GetWide() - YRP.ctr(20 * 2), content:GetTall() - YRP.ctr(20 + 50 + 20 + 20), YRP.ctr(20), YRP.ctr(20 + 50 + 20))
+						win.dpl = YRPCreateD("DPanelList", content, content:GetWide() - YRP:ctr(20 * 2), content:GetTall() - YRP:ctr(20 + 50 + 20 + 20), YRP:ctr(20), YRP:ctr(20 + 50 + 20))
 						win.dpl:EnableVerticalScrollbar(true)
 						function win.dpl:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
@@ -1708,7 +1708,7 @@ net.Receive(
 										self.searchstr = string.Replace(self.searchstr, "]", "")
 										self.searchstr = string.Replace(self.searchstr, "%", "")
 										if YRPPanelAlive(win.dpl, "GAR 12") and string.find(string.lower(pm.string_name), self.searchstr, 1, true) or string.find(string.lower(pm.string_models), self.searchstr, 1, true) then
-											local line = YRPCreateD("YButton", nil, YRP.ctr(800), YRP.ctr(200), 0, 0)
+											local line = YRPCreateD("YButton", nil, YRP:ctr(800), YRP:ctr(200), 0, 0)
 											line.string_name = pm.string_name
 											line.models = string.Explode(",", pm.string_models)
 											line:SetText("")
@@ -1722,11 +1722,11 @@ net.Receive(
 
 											function line:Paint(spw, sph)
 												draw.RoundedBox(0, 0, 0, spw, sph, Color(140, 140, 140))
-												draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + YRP.ctr(20), sph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-												draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP.ctr(20), sph / 3 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+												draw.SimpleText(line.string_name, "DermaDefault", line:GetTall() + YRP:ctr(20), sph / 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+												draw.SimpleText(line.models[1], "DermaDefault", line:GetTall() + YRP:ctr(20), sph / 3 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 											end
 
-											line.remove = YRPCreateD("YButton", line, YRP.ctr(300), YRP.ctr(100), win.dpl:GetWide() - YRP.ctr(350), YRP.ctr(50))
+											line.remove = YRPCreateD("YButton", line, YRP:ctr(300), YRP:ctr(100), win.dpl:GetWide() - YRP:ctr(350), YRP:ctr(50))
 											line.remove:SetText("LID_remove")
 											function line.remove:DoClick()
 												function YRPNoDeletePMS()
@@ -1745,7 +1745,7 @@ net.Receive(
 
 											function line.remove:Paint(spw, sph)
 												draw.RoundedBox(16, 0, 0, pw, sph, Color(255, 140, 140))
-												draw.SimpleText(YRP.trans("LID_remove") .. " ( " .. pm.uses .. " " .. "uses" .. " )", "DermaDefault", spw / 2, sph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+												draw.SimpleText(YRP:trans("LID_remove") .. " ( " .. pm.uses .. " " .. "uses" .. " )", "DermaDefault", spw / 2, sph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 											end
 
 											if line.models[1] ~= nil then
@@ -1782,7 +1782,7 @@ net.Receive(
 						end
 
 						win:Search("")
-						win.search = YRPCreateD("DTextEntry", content, content:GetWide() - YRP.ctr(20 + 50 + 20 + 20), YRP.ctr(50), YRP.ctr(20 + 50 + 20), YRP.ctr(20))
+						win.search = YRPCreateD("DTextEntry", content, content:GetWide() - YRP:ctr(20 + 50 + 20 + 20), YRP:ctr(50), YRP:ctr(20 + 50 + 20), YRP:ctr(20))
 						function win.search:OnChange()
 							win:Search(self:GetText())
 						end
@@ -1791,7 +1791,7 @@ net.Receive(
 							"nws_yrp_get_all_playermodels",
 							function(l)
 								if l > 128000 then
-									YRP.msg("note", "[get_all_playermodels] len: " .. l)
+									YRP:msg("note", "[get_all_playermodels] len: " .. l)
 								end
 
 								local tab = net.ReadTable()
@@ -1819,7 +1819,7 @@ net.Receive(
 									net.SendToServer()
 								end
 
-								v.h = YRP.ctr(100)
+								v.h = YRP:ctr(100)
 							end
 
 							if ea[role.uniqueID].playermodels.dpl.AddLines ~= nil then
@@ -1841,7 +1841,7 @@ net.Receive(
 					bool_savebodygroups.lforce = false
 					ea[role.uniqueID].bool_savebodygroups = YRPDCheckBox(bool_savebodygroups)
 					ea.appearance:AutoSize(true)
-					local equipment = YRPCreateD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1250), ea.appearance.x, ea.appearance.y + ea.appearance:GetTall() + YRP.ctr(20))
+					local equipment = YRPCreateD("YGroupBox", ea.background, YRP:ctr(800), YRP:ctr(1250), ea.appearance.x, ea.appearance.y + ea.appearance:GetTall() + YRP:ctr(20))
 					equipment:SetText("LID_equipment")
 					function equipment:Paint(pw, ph)
 						hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -1854,7 +1854,7 @@ net.Receive(
 					if GetGlobalYRPBool("bool_weapon_system", true) then
 						local info2 = YRPCreateD("DPanel", equipment, 100, 32, 0, 0)
 						function info2:Paint(pw, ph)
-							draw.SimpleText("First Go to F8 -> " .. YRP.trans("LID_administration") .. " -> " .. YRP.trans("LID_weaponsystem"), "Y_18_700", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							draw.SimpleText("First Go to F8 -> " .. YRP:trans("LID_administration") .. " -> " .. YRP:trans("LID_weaponsystem"), "Y_18_700", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						end
 
 						equipment:AddItem(info2)
@@ -1864,16 +1864,16 @@ net.Receive(
 					sweps.parent = ea.equipment:GetContent()
 					sweps.uniqueID = role.uniqueID
 					if GetGlobalYRPBool("bool_weapon_system", true) then
-						sweps.header = YRP.trans("LID_possiblesweps") .. ": Not Equipped => " .. YRP.trans("LID_weaponchest") .. ""
+						sweps.header = YRP:trans("LID_possiblesweps") .. ": Not Equipped => " .. YRP:trans("LID_weaponchest") .. ""
 					else
-						sweps.header = YRP.trans("LID_sweps")
+						sweps.header = YRP:trans("LID_sweps")
 					end
 
 					sweps.netstr = "nws_yrp_update_role_string_sweps"
 					sweps.value = role.string_sweps
 					sweps.uniqueID = role.uniqueID
 					sweps.w = ea.equipment:GetContent():GetWide()
-					sweps.h = YRP.ctr(325)
+					sweps.h = YRP:ctr(325)
 					sweps.doclick = function()
 						local lply = LocalPlayer()
 						lply.yrpseltab = {}
@@ -1939,7 +1939,7 @@ net.Receive(
 									role.string_sweps = table.concat(tmp, ",")
 								end
 
-								swep.h = YRP.ctr(120)
+								swep.h = YRP:ctr(120)
 								table.insert(cl_sweps, swep)
 							end
 
@@ -1958,12 +1958,12 @@ net.Receive(
 						local swepsonspawn = {}
 						swepsonspawn.parent = ea.equipment:GetContent()
 						swepsonspawn.uniqueID = role.uniqueID
-						swepsonspawn.header = YRP.trans("LID_swepsatspawn") .. " (Equipped if slot is not full!)"
+						swepsonspawn.header = YRP:trans("LID_swepsatspawn") .. " (Equipped if slot is not full!)"
 						swepsonspawn.netstr = "nws_yrp_update_role_string_sweps_onspawn"
 						swepsonspawn.value = role.string_sweps_onspawn
 						swepsonspawn.uniqueID = role.uniqueID
 						swepsonspawn.w = ea.equipment:GetContent():GetWide()
-						swepsonspawn.h = YRP.ctr(325)
+						swepsonspawn.h = YRP:ctr(325)
 						swepsonspawn.doclick = function()
 							local lply = LocalPlayer()
 							lply.yrpseltab = {}
@@ -2030,7 +2030,7 @@ net.Receive(
 										role.string_sweps_onspawn = table.concat(tmp, ",")
 									end
 
-									swep.h = YRP.ctr(120)
+									swep.h = YRP:ctr(120)
 									table.insert(cl_sweps, swep)
 								end
 
@@ -2048,15 +2048,15 @@ net.Receive(
 					end
 
 					-- Ammunation
-					local ammobg = YRPCreateD("YPanel", col2, YRP.ctr(800), YRP.ctr(350), 0, 0)
-					local ammoheader = YRPCreateD("YLabel", ammobg, YRP.ctr(800), YRP.ctr(50), 0, 0)
+					local ammobg = YRPCreateD("YPanel", col2, YRP:ctr(800), YRP:ctr(350), 0, 0)
+					local ammoheader = YRPCreateD("YLabel", ammobg, YRP:ctr(800), YRP:ctr(50), 0, 0)
 					ammoheader:SetText("LID_ammo")
 					function ammoheader:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
-						draw.SimpleText(YRP.trans(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText(YRP:trans(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 
-					ammolist = YRPCreateD("DPanelList", ammobg, YRP.ctr(800 - 23 - 20), YRP.ctr(300), 0, YRP.ctr(50))
+					ammolist = YRPCreateD("DPanelList", ammobg, YRP:ctr(800 - 23 - 20), YRP:ctr(300), 0, YRP:ctr(50))
 					ammolist:SetSpacing(2)
 					ammolist:EnableVerticalScrollbar(true)
 					local sbar = ammolist.VBar
@@ -2100,15 +2100,15 @@ net.Receive(
 					end
 
 					for i, v in pairs(game.GetAmmoTypes()) do
-						local abg = YRPCreateD("YPanel", nil, YRP.ctr(800), YRP.ctr(50), 0, 0)
-						local ahe = YRPCreateD("YLabel", abg, YRP.ctr(400), YRP.ctr(50), 0, 0)
+						local abg = YRPCreateD("YPanel", nil, YRP:ctr(800), YRP:ctr(50), 0, 0)
+						local ahe = YRPCreateD("YLabel", abg, YRP:ctr(400), YRP:ctr(50), 0, 0)
 						ahe:SetText(v)
 						function ahe:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255))
 							draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 						end
 
-						local ava = YRPCreateD("DNumberWang", abg, YRP.ctr(400), YRP.ctr(50), YRP.ctr(400), 0)
+						local ava = YRPCreateD("DNumberWang", abg, YRP:ctr(400), YRP:ctr(50), YRP:ctr(400), 0)
 						ava:SetDecimals(0)
 						ava:SetMin(0)
 						ava:SetMax(999)
@@ -2132,7 +2132,7 @@ net.Receive(
 					licenses.value = role.string_licenses
 					licenses.uniqueID = role.uniqueID
 					licenses.w = ea.equipment:GetContent():GetWide()
-					licenses.h = YRP.ctr(325)
+					licenses.h = YRP:ctr(325)
 					licenses.doclick = function()
 						local winlicenses = YRPCreateD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 						winlicenses:SetTitle("")
@@ -2140,7 +2140,7 @@ net.Receive(
 						winlicenses:MakePopup()
 						function winlicenses:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-							draw.SimpleText(YRP.trans("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP:trans("LID_search") .. ": ", "DermaDefault", YRP:ctr(20 + 100), YRP:ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 						end
 
 						net.Receive(
@@ -2158,9 +2158,9 @@ net.Receive(
 								end
 
 								if winlicenses then
-									winlicenses.dpl = YRPCreateD("DPanelList", winlicenses, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+									winlicenses.dpl = YRPCreateD("DPanelList", winlicenses, ScrW() - YRP:ctr(20 * 2), ScrH() - YRP:ctr(100 + 20), YRP:ctr(20), YRP:ctr(100))
 									winlicenses.dpl:EnableVerticalScrollbar(true)
-									local height = ScrH() - YRP.ctr(100)
+									local height = ScrH() - YRP:ctr(100)
 									function winlicenses:Search(strsearch)
 										strsearch = string.lower(strsearch)
 										strsearch = string.Replace(strsearch, "[", "")
@@ -2201,7 +2201,7 @@ net.Receive(
 									end
 
 									winlicenses:Search("")
-									winlicenses.search = YRPCreateD("DTextEntry", winlicenses, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
+									winlicenses.search = YRPCreateD("DTextEntry", winlicenses, ScrW() - YRP:ctr(20 + 100 + 20), YRP:ctr(50), YRP:ctr(20 + 100), YRP:ctr(50))
 									function winlicenses.search:OnChange()
 										local searchtext = self:GetText()
 										if searchtext ~= nil then
@@ -2236,7 +2236,7 @@ net.Receive(
 										net.SendToServer()
 									end
 
-									license.h = YRP.ctr(120)
+									license.h = YRP:ctr(120)
 									table.insert(cl_licenses, license)
 								end
 							end
@@ -2251,9 +2251,9 @@ net.Receive(
 					net.WriteInt(role.uniqueID, 32)
 					net.SendToServer()
 					ea.equipment:AutoSize(true)
-					local col3 = YRPCreateD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+					local col3 = YRPCreateD("DPanelList", ea.background, YRP:ctr(800), ea.background:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
 					col3:EnableVerticalScrollbar(true)
-					col3:SetSpacing(YRP.ctr(20))
+					col3:SetSpacing(YRP:ctr(20))
 					local sbar2 = col3.VBar
 					function sbar2:Paint(w, h)
 						draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
@@ -2271,7 +2271,7 @@ net.Receive(
 						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 					end
 
-					local restriction = YRPCreateD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1650), YRP.ctr(1660), YRP.ctr(20))
+					local restriction = YRPCreateD("YGroupBox", ea.background, YRP:ctr(800), YRP:ctr(1650), YRP:ctr(1660), YRP:ctr(20))
 					restriction:SetText("LID_restriction")
 					function restriction:Paint(pw, ph)
 						hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -2298,7 +2298,7 @@ net.Receive(
 								ugs["ALL"]["choices"][string.upper(ug.string_name)] = ugs["ALL"]["choices"][string.upper(ug.string_name)] or {}
 								ugs["ALL"]["choices"][string.upper(ug.string_name)].checked = table.HasValue(gugs, string.upper(ug.string_name))
 							else
-								YRP.msg("note", "WHATS THAT? #2")
+								YRP:msg("note", "WHATS THAT? #2")
 								pFTab(ug)
 							end
 						end
@@ -2373,7 +2373,7 @@ net.Receive(
 					local bool_canbeagent = {}
 					bool_canbeagent.parent = ea.restriction:GetContent()
 					bool_canbeagent.uniqueID = role.uniqueID
-					bool_canbeagent.header = YRP.trans("LID_isagent")
+					bool_canbeagent.header = YRP:trans("LID_isagent")
 					bool_canbeagent.netstr = "nws_yrp_update_role_bool_canbeagent"
 					bool_canbeagent.value = role.bool_canbeagent
 					bool_canbeagent.uniqueID = role.uniqueID
@@ -2384,7 +2384,7 @@ net.Receive(
 						local visible = {}
 						visible.parent = ea.restriction:GetContent()
 						visible.uniqueID = role.uniqueID
-						visible.header = YRP.trans("LID_visible") .. " ( " .. YRP.trans("LID_charactercreation") .. " )"
+						visible.header = YRP:trans("LID_visible") .. " ( " .. YRP:trans("LID_charactercreation") .. " )"
 						visible.netstr = "nws_yrp_update_role_bool_visible_cc"
 						visible.value = role.bool_visible_cc
 						visible.uniqueID = role.uniqueID
@@ -2396,7 +2396,7 @@ net.Receive(
 					local visible2 = {}
 					visible2.parent = ea.restriction:GetContent()
 					visible2.uniqueID = role.uniqueID
-					visible2.header = YRP.trans("LID_visible") .. " ( " .. YRP.trans("LID_rolemenu") .. " )"
+					visible2.header = YRP:trans("LID_visible") .. " ( " .. YRP:trans("LID_rolemenu") .. " )"
 					visible2.netstr = "nws_yrp_update_role_bool_visible_rm"
 					visible2.value = role.bool_visible_rm
 					visible2.uniqueID = role.uniqueID
@@ -2439,7 +2439,7 @@ net.Receive(
 					local abis = {"none", "mana", "force", "rage", "energy"}
 					local tab_a = {}
 					for i, v in pairs(abis) do
-						tab_a[string.lower(v)] = YRP.trans("LID_" .. string.lower(v))
+						tab_a[string.lower(v)] = YRP:trans("LID_" .. string.lower(v))
 					end
 
 					DHr(hr)
@@ -2451,7 +2451,7 @@ net.Receive(
 					local string_hud = {}
 					string_hud.parent = ea.restriction:GetContent()
 					string_hud.uniqueID = role.uniqueID
-					string_hud.header = YRP.trans("LID_hud")
+					string_hud.header = YRP:trans("LID_hud")
 					string_hud.netstr = "nws_yrp_update_role_string_hud"
 					string_hud.value = role.string_hud
 					string_hud.uniqueID = role.uniqueID
@@ -2484,7 +2484,7 @@ net.Receive(
 					ndsweps.value = role.string_ndsweps
 					ndsweps.uniqueID = role.uniqueID
 					ndsweps.w = ea.restriction:GetContent():GetWide()
-					ndsweps.h = YRP.ctr(325)
+					ndsweps.h = YRP:ctr(325)
 					ndsweps.doclick = function()
 						local winndswep = YRPCreateD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 						winndswep:SetTitle("")
@@ -2492,7 +2492,7 @@ net.Receive(
 						winndswep:MakePopup()
 						function winndswep:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-							draw.SimpleText(YRP.trans("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP:trans("LID_search") .. ": ", "DermaDefault", YRP:ctr(20 + 100), YRP:ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 						end
 
 						local allndsweps = YRPGetSWEPsList()
@@ -2506,9 +2506,9 @@ net.Receive(
 							cl_ndsweps[count].PrintName = v.PrintName or v.ClassName or "NO PRINTNAME"
 						end
 
-						winndswep.dpl = YRPCreateD("DPanelList", winndswep, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+						winndswep.dpl = YRPCreateD("DPanelList", winndswep, ScrW() - YRP:ctr(20 * 2), ScrH() - YRP:ctr(100 + 20), YRP:ctr(20), YRP:ctr(100))
 						winndswep.dpl:EnableVerticalScrollbar(true)
-						local height = ScrH() - YRP.ctr(100)
+						local height = ScrH() - YRP:ctr(100)
 						function winndswep:Search(strsearch)
 							strsearch = string.lower(strsearch)
 							strsearch = string.Replace(strsearch, "[", "")
@@ -2548,7 +2548,7 @@ net.Receive(
 						end
 
 						winndswep:Search("")
-						winndswep.search = YRPCreateD("DTextEntry", winndswep, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
+						winndswep.search = YRPCreateD("DTextEntry", winndswep, ScrW() - YRP:ctr(20 + 100 + 20), YRP:ctr(50), YRP:ctr(20 + 100), YRP:ctr(50))
 						function winndswep.search:OnChange()
 							winndswep:Search(self:GetText())
 						end
@@ -2572,7 +2572,7 @@ net.Receive(
 									net.SendToServer()
 								end
 
-								ndswep.h = YRP.ctr(120)
+								ndswep.h = YRP:ctr(120)
 								table.insert(cl_ndsweps, ndswep)
 							end
 
@@ -2590,12 +2590,12 @@ net.Receive(
 					local specializations = {}
 					specializations.parent = ea.restriction:GetContent()
 					specializations.uniqueID = role.uniqueID
-					specializations.header = YRP.trans("LID_specializations") .. " Permission to give it"
+					specializations.header = YRP:trans("LID_specializations") .. " Permission to give it"
 					specializations.netstr = "nws_yrp_update_role_string_specializations"
 					specializations.value = role.string_specializations
 					specializations.uniqueID = role.uniqueID
 					specializations.w = ea.restriction:GetContent():GetWide()
-					specializations.h = YRP.ctr(325)
+					specializations.h = YRP:ctr(325)
 					specializations.doclick = function()
 						local winspecializations = YRPCreateD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 						winspecializations:SetTitle("")
@@ -2603,7 +2603,7 @@ net.Receive(
 						winspecializations:MakePopup()
 						function winspecializations:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 255))
-							draw.SimpleText(YRP.trans("LID_search") .. ": ", "DermaDefault", YRP.ctr(20 + 100), YRP.ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+							draw.SimpleText(YRP:trans("LID_search") .. ": ", "DermaDefault", YRP:ctr(20 + 100), YRP:ctr(50 + 25), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 						end
 
 						net.Receive(
@@ -2620,9 +2620,9 @@ net.Receive(
 									cl_specializations[count].PrintName = v.name
 								end
 
-								winspecializations.dpl = YRPCreateD("DPanelList", winspecializations, ScrW() - YRP.ctr(20 * 2), ScrH() - YRP.ctr(100 + 20), YRP.ctr(20), YRP.ctr(100))
+								winspecializations.dpl = YRPCreateD("DPanelList", winspecializations, ScrW() - YRP:ctr(20 * 2), ScrH() - YRP:ctr(100 + 20), YRP:ctr(20), YRP:ctr(100))
 								winspecializations.dpl:EnableVerticalScrollbar(true)
-								local height = ScrH() - YRP.ctr(100)
+								local height = ScrH() - YRP:ctr(100)
 								function winspecializations:Search(strsearch)
 									strsearch = string.lower(strsearch)
 									strsearch = string.Replace(strsearch, "[", "")
@@ -2663,7 +2663,7 @@ net.Receive(
 								end
 
 								winspecializations:Search("")
-								winspecializations.search = YRPCreateD("DTextEntry", winspecializations, ScrW() - YRP.ctr(20 + 100 + 20), YRP.ctr(50), YRP.ctr(20 + 100), YRP.ctr(50))
+								winspecializations.search = YRPCreateD("DTextEntry", winspecializations, ScrW() - YRP:ctr(20 + 100 + 20), YRP:ctr(50), YRP:ctr(20 + 100), YRP:ctr(50))
 								function winspecializations.search:OnChange()
 									local searchtext = self:GetText()
 									if searchtext ~= nil then
@@ -2697,7 +2697,7 @@ net.Receive(
 										net.SendToServer()
 									end
 
-									specialization.h = YRP.ctr(120)
+									specialization.h = YRP:ctr(120)
 									table.insert(cl_specializations, specialization)
 								end
 							end
@@ -2712,9 +2712,9 @@ net.Receive(
 					net.WriteInt(role.uniqueID, 32)
 					net.SendToServer()
 					ea.restriction:AutoSize(true)
-					local col4 = YRPCreateD("DPanelList", ea.background, YRP.ctr(800), ea.background:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+					local col4 = YRPCreateD("DPanelList", ea.background, YRP:ctr(800), ea.background:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
 					col4:EnableVerticalScrollbar(true)
-					col4:SetSpacing(YRP.ctr(20))
+					col4:SetSpacing(YRP:ctr(20))
 					local sbar5 = col4.VBar
 					function sbar5:Paint(w, h)
 						draw.RoundedBox(0, 0, 0, w, h, YRPInterfaceValue("YFrame", "NC"))
@@ -2732,7 +2732,7 @@ net.Receive(
 						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 					end
 
-					local attributes = YRPCreateD("YGroupBox", ea.background, YRP.ctr(800), YRP.ctr(1400), ea.restriction.x + ea.restriction:GetWide() + YRP.ctr(20), YRP.ctr(20))
+					local attributes = YRPCreateD("YGroupBox", ea.background, YRP:ctr(800), YRP:ctr(1400), ea.restriction.x + ea.restriction:GetWide() + YRP:ctr(20), YRP:ctr(20))
 					attributes:SetText("LID_attributes")
 					function attributes:Paint(pw, ph)
 						hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -2832,13 +2832,13 @@ net.Receive(
 
 					local tab_a2 = {}
 					for i, v in pairs(abis) do
-						tab_a2[string.lower(v)] = YRP.trans("LID_" .. string.lower(v))
+						tab_a2[string.lower(v)] = YRP:trans("LID_" .. string.lower(v))
 					end
 
 					local string_ability = {}
 					string_ability.parent = ea.attributes:GetContent()
 					string_ability.uniqueID = role.uniqueID
-					string_ability.header = YRP.trans("LID_ability") .. " (for addons)"
+					string_ability.header = YRP:trans("LID_ability") .. " (for addons)"
 					string_ability.netstr = "nws_yrp_update_role_string_ability"
 					string_ability.value = role.string_ability
 					string_ability.uniqueID = role.uniqueID
@@ -2848,7 +2848,7 @@ net.Receive(
 					local ability = {}
 					ability.parent = ea.attributes:GetContent()
 					ability.uniqueID = role.uniqueID
-					ability.header = YRP.trans("LID_ability")
+					ability.header = YRP:trans("LID_ability")
 					ability.uniqueID = role.uniqueID
 					ability.lforce = false
 					ability.dnw = {}

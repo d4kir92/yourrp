@@ -14,7 +14,7 @@ function AddToHandler_YourRP_Addons(ply)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_connect_Settings_YourRP_Addons")
+YRP:AddNetworkString("nws_yrp_connect_Settings_YourRP_Addons")
 net.Receive(
 	"nws_yrp_connect_Settings_YourRP_Addons",
 	function(len, ply)
@@ -31,7 +31,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_disconnect_Settings_YourRP_Addons")
+YRP:AddNetworkString("nws_yrp_disconnect_Settings_YourRP_Addons")
 net.Receive(
 	"nws_yrp_disconnect_Settings_YourRP_Addons",
 	function(len, ply)
@@ -40,9 +40,9 @@ net.Receive(
 )
 
 function YRP:AddYRPAddon(tab)
-	YRP.msg("db", "Add YourRP Addon( " .. tostring(tab.name) .. " by " .. tostring(tab.author) .. " )")
+	YRP:msg("db", "Add YourRP Addon( " .. tostring(tab.name) .. " by " .. tostring(tab.author) .. " )")
 	if type(tab) ~= "table" then
-		YRP.msg("note", "[AddYRPAddon] invalid arguments!")
+		YRP:msg("note", "[AddYRPAddon] invalid arguments!")
 
 		return false
 	end
@@ -55,32 +55,32 @@ function YRP:AddYRPAddon(tab)
 	tab.discord = tab.discord or ""
 	tab.settings = tab.settings or ""
 	if strEmpty(tab.name) then
-		YRP.msg("note", "[AddYRPAddon] [" .. tab.name .. "] name is wrong!")
+		YRP:msg("note", "[AddYRPAddon] [" .. tab.name .. "] name is wrong!")
 
 		return false
 	end
 
 	if strEmpty(tab.author) then
-		YRP.msg("note", "[AddYRPAddon] [" .. tab.name .. "] author is wrong!")
+		YRP:msg("note", "[AddYRPAddon] [" .. tab.name .. "] author is wrong!")
 
 		return false
 	end
 
 	if not strEmpty(tab.workshopid) and not isnumber(tonumber(tab.workshopid)) then
-		YRP.msg("note", "[AddYRPAddon] [" .. tab.name .. "] WorkshopID is wrong!")
+		YRP:msg("note", "[AddYRPAddon] [" .. tab.name .. "] WorkshopID is wrong!")
 
 		return false
 	end
 
 	if not strEmpty(tab.discord) and not string.find(tab.discord, "discord.gg", 1, true) then
-		YRP.msg("note", "[AddYRPAddon] [" .. tab.name .. "] Discord link is wrong!")
+		YRP:msg("note", "[AddYRPAddon] [" .. tab.name .. "] Discord link is wrong!")
 
 		return false
 	end
 
 	if tab.name ~= "" then
 		yrp_addons[tab.name .. " by " .. tab.author] = tab
-		YRP.msg("db", "Added YourRP Addon( " .. tostring(tab.name) .. " by " .. tostring(tab.author) .. " )")
+		YRP:msg("db", "Added YourRP Addon( " .. tostring(tab.name) .. " by " .. tostring(tab.author) .. " )")
 
 		return true
 	end

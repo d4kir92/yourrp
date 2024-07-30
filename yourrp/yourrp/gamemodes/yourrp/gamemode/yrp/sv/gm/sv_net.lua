@@ -1,13 +1,13 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-YRP.AddNetworkString("nws_yrp_restartServer")
-YRP.AddNetworkString("nws_yrp_updateServer")
-YRP.AddNetworkString("nws_yrp_cancelRestartServer")
+YRP:AddNetworkString("nws_yrp_restartServer")
+YRP:AddNetworkString("nws_yrp_updateServer")
+YRP:AddNetworkString("nws_yrp_cancelRestartServer")
 --Restart Server
 net.Receive(
 	"nws_yrp_restartServer",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_restartServer") then return end
-		YRP.msg("gm", "RunConsoleCommand(map)")
+		YRP:msg("gm", "RunConsoleCommand(map)")
 		RunConsoleCommand("map", game.GetMap())
 	end
 )
@@ -38,11 +38,11 @@ net.Receive(
 				if countdown > 10 then
 					if (countdown % 10) == 0 then
 						PrintMessage(HUD_PRINTCENTER, message)
-						YRP.msg("server", message)
+						YRP:msg("server", message)
 					end
 				elseif countdown <= 10 then
 					PrintMessage(HUD_PRINTCENTER, message)
-					YRP.msg("server", message)
+					YRP:msg("server", message)
 				end
 
 				countdown = countdown - 1
@@ -62,13 +62,13 @@ net.Receive(
 		timer.Remove("timerRestartServer")
 		local message = "Restart Server CANCELED!"
 		PrintMessage(HUD_PRINTCENTER, message)
-		YRP.msg("server", message)
+		YRP:msg("server", message)
 	end
 )
 
 function YRPChangeUserGroup(ply, cmd, args)
-	YRP.msg("note", "This Command (yrp_usergroup) is only for this round!")
-	YRP.msg("note", "Use an admin tool to make yourself permanent to an UserGroup")
+	YRP:msg("note", "This Command (yrp_usergroup) is only for this round!")
+	YRP:msg("note", "Use an admin tool to make yourself permanent to an UserGroup")
 	local _cmdpre = "[" .. string.upper("yrp_usergroup") .. "] "
 	local message = ""
 	if #args == 2 then
@@ -78,41 +78,41 @@ function YRPChangeUserGroup(ply, cmd, args)
 			for k, v in pairs(player.GetAll()) do
 				if string.find(string.lower(v:Nick()), string.lower(args[1]), 1, true) or string.find(string.lower(v:SteamName()), string.lower(args[1]), 1, true) then
 					v:SetUserGroup(args[2])
-					YRP.msg("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
+					YRP:msg("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
 
 					return
 				end
 			end
 
-			YRP.msg("note", _cmdpre .. "Player [" .. args[1] .. "] not found.")
+			YRP:msg("note", _cmdpre .. "Player [" .. args[1] .. "] not found.")
 		elseif ply:HasAccess("YRPChangeUserGroup", true) or ply:IPAddress() == "loopback" then
 			--[[ if admin/superadmin/owner tries ]]
 			--
 			for k, v in pairs(player.GetAll()) do
 				if string.find(string.lower(v:Nick()), string.lower(args[1]), 1, true) or string.find(string.lower(v:SteamName()), string.lower(args[1]), 1, true) then
 					v:SetUserGroup(args[2])
-					YRP.msg("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
+					YRP:msg("note", _cmdpre .. v:YRPName() .. " is now the usergroup " .. args[2])
 
 					return
 				end
 			end
 
-			YRP.msg("note", _cmdpre .. args[1] .. " not found.")
+			YRP:msg("note", _cmdpre .. args[1] .. " not found.")
 		elseif ply:IsPlayer() then
 			--[[ if no rcon rights tries ]]
 			--
 			message = ply:SteamName() .. " tried to give " .. args[1] .. " the usergroup " .. args[2] .. "."
-			YRP.msg("note", _cmdpre .. message)
+			YRP:msg("note", _cmdpre .. message)
 		end
 	else
 		--[[ Failed command ]]
 		--
 		if #args > 2 then
-			YRP.msg("note", _cmdpre .. "To much arguments (yrp_usergroup STEAMNAME/RPNAME UserGroup)")
-			YRP.msg("note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin")
+			YRP:msg("note", _cmdpre .. "To much arguments (yrp_usergroup STEAMNAME/RPNAME UserGroup)")
+			YRP:msg("note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin")
 		else
-			YRP.msg("note", _cmdpre .. "Not enough arguments (yrp_usergroup STEAMNAME/RPNAME UserGroup)")
-			YRP.msg("note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin")
+			YRP:msg("note", _cmdpre .. "Not enough arguments (yrp_usergroup STEAMNAME/RPNAME UserGroup)")
+			YRP:msg("note", _cmdpre .. "Example: yrp_usergroup \"D4KiR | Arno\" superadmin")
 		end
 	end
 end
@@ -139,7 +139,7 @@ concommand.Add(
 			if YRPEntityAlive(pl) then
 				pl:SetRPName(newrpname, "darkrp forcerpname")
 			else
-				YRP.msg("note", "[forcerpname] Player not found")
+				YRP:msg("note", "[forcerpname] Player not found")
 			end
 		elseif args[1] and args[1] == "name" then
 			local newrpname = args[2]
@@ -147,17 +147,17 @@ concommand.Add(
 				ply:SetRPName(newrpname, "darkrp name")
 			end
 		elseif args[1] and args[1] == "wanted" then
-			YRP.msg("note", "[darkrp] wanted: args[1]: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
+			YRP:msg("note", "[darkrp] wanted: args[1]: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
 		elseif args[1] and args[1] == "unwanted" then
-			YRP.msg("note", "[darkrp] unwanted: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
+			YRP:msg("note", "[darkrp] unwanted: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
 		elseif args[1] and args[1] == "warrant" then
-			YRP.msg("note", "[darkrp] warrant: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
+			YRP:msg("note", "[darkrp] warrant: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
 		elseif args[1] and args[1] == "unwarrant" then
-			YRP.msg("note", "[darkrp] unwarrant: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
+			YRP:msg("note", "[darkrp] unwarrant: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
 		elseif args[1] and args[1] == "dropmoney" then
 			YRPDropMoney(ply, args[2])
 		elseif args[1] and args[1] == "job" then
-			YRP.msg("note", string.format("%s tried to change job/role", ply:SteamName()))
+			YRP:msg("note", string.format("%s tried to change job/role", ply:SteamName()))
 		elseif args[1] and args[1] == "job" then
 			local playername = args[2]
 			local rolename = args[3]
@@ -167,11 +167,11 @@ concommand.Add(
 				if p and rid then
 					YRPSetRole("darkrp - job", p, rid)
 				else
-					YRP.msg("error", "playername: " .. tostring(playername) .. " p: " .. tostring(p) .. " rid: " .. tostring(rid) .. " rolename: " .. tostring(rolename))
+					YRP:msg("error", "playername: " .. tostring(playername) .. " p: " .. tostring(p) .. " rid: " .. tostring(rid) .. " rolename: " .. tostring(rolename))
 				end
 			end
 
-			YRP.msg("note", string.format("%s tried to change job/role", ply:SteamName()))
+			YRP:msg("note", string.format("%s tried to change job/role", ply:SteamName()))
 		elseif args[1] and args[1] == "drop" then
 			local _weapon = ply:GetActiveWeapon()
 			if _weapon ~= nil and PlayersCanDropWeapons() then
@@ -179,7 +179,7 @@ concommand.Add(
 					ply:DropSWEP(_weapon:GetClass())
 				end
 			else
-				YRP.msg("note", ply:YRPName() .. " drop weapon is disabled!")
+				YRP:msg("note", ply:YRPName() .. " drop weapon is disabled!")
 			end
 		elseif args[1] and jobByCmd[string.upper(args[1])] then
 			local jobtab = RPExtraTeams[jobByCmd[string.upper(args[1])]]
@@ -195,7 +195,7 @@ concommand.Add(
 			end
 		elseif args[1] and unhandled[args[1]] == nil then
 			if args[1] and not string.StartsWith(string.lower(args[1]), "team_") then
-				YRP.msg("error", "[darkrp] console command: args[1]: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
+				YRP:msg("error", "[darkrp] console command: args[1]: " .. tostring(args[1]) .. " args[2]: " .. tostring(args[2]) .. " args[3]: " .. tostring(args[3]))
 			end
 		end
 	end
@@ -225,7 +225,7 @@ concommand.Add(
 	"yrp_givelicense",
 	function(ply, cmd, args)
 		if #args ~= 2 then
-			YRP.msg("note", "to much/less commands")
+			YRP:msg("note", "to much/less commands")
 		end
 
 		local name = args[1]
@@ -235,7 +235,7 @@ concommand.Add(
 		if IsValid(pl) and IsNotNilAndNotFalse(lid) then
 			GiveLicense(pl, lid)
 		else
-			YRP.msg("note", "[yrp_givelicense] Not found")
+			YRP:msg("note", "[yrp_givelicense] Not found")
 		end
 	end
 )

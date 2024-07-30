@@ -108,7 +108,7 @@ function IFLoadoutAll()
 end
 
 IFLoadoutAll()
-YRP.AddNetworkString("nws_yrp_get_interface_settings")
+YRP:AddNetworkString("nws_yrp_get_interface_settings")
 net.Receive(
 	"nws_yrp_get_interface_settings",
 	function(len, ply)
@@ -123,13 +123,13 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_interface_color")
+YRP:AddNetworkString("nws_yrp_update_interface_color")
 net.Receive(
 	"nws_yrp_update_interface_color",
 	function(len, ply)
 		local name = net.ReadString()
 		local color = net.ReadString()
-		YRP.msg("db", "value = '" .. color .. "'" .. "name = '" .. name .. "'")
+		YRP:msg("db", "value = '" .. color .. "'" .. "name = '" .. name .. "'")
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -188,7 +188,7 @@ function ResetDesign()
 	IFLoadoutAll()
 end
 
-YRP.AddNetworkString("nws_yrp_reset_interface_design")
+YRP:AddNetworkString("nws_yrp_reset_interface_design")
 net.Receive(
 	"nws_yrp_reset_interface_design",
 	function(len, ply)

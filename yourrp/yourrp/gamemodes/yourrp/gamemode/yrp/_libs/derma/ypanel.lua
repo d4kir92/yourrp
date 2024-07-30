@@ -8,7 +8,7 @@ function PANEL:SetHeaderHeight(num)
 	if isnumber(num) then
 		self._headerheight = num
 	else
-		YRP.msg("note", "SetHeaderHeight | num is not a number: " .. tostring(num) .. "!")
+		YRP:msg("note", "SetHeaderHeight | num is not a number: " .. tostring(num) .. "!")
 	end
 end
 

@@ -21,7 +21,7 @@ function YRPWORKED(obj, name, _silence)
 		return true
 	else
 		if not _silence then
-			YRP.msg("note", "NOT WORKED: " .. _tostring(obj) .. " " .. _tostring(name))
+			YRP:msg("note", "NOT WORKED: " .. _tostring(obj) .. " " .. _tostring(name))
 		end
 
 		return false
@@ -39,13 +39,13 @@ end
 
 function YRPPanelAlive(obj, from)
 	if _type(obj) == "table" then
-		YRP.msg("error", "YRPPanelAlive > IS TABLE " .. _tostring(from) .. " " .. _table.ToString(obj, "X", false))
+		YRP:msg("error", "YRPPanelAlive > IS TABLE " .. _tostring(from) .. " " .. _table.ToString(obj, "X", false))
 	elseif _type(obj) == "string" then
-		YRP.msg("error", "YRPPanelAlive > IS STRING " .. _tostring(from) .. " " .. _tostring(obj))
+		YRP:msg("error", "YRPPanelAlive > IS STRING " .. _tostring(from) .. " " .. _tostring(obj))
 	elseif _type(obj) == "number" then
-		YRP.msg("error", "YRPPanelAlive > IS NUMBER " .. _tostring(from) .. " " .. _tostring(obj))
+		YRP:msg("error", "YRPPanelAlive > IS NUMBER " .. _tostring(from) .. " " .. _tostring(obj))
 	elseif _type(obj) == "bool" then
-		YRP.msg("error", "YRPPanelAlive > IS BOOL " .. _tostring(from) .. " " .. _tostring(obj))
+		YRP:msg("error", "YRPPanelAlive > IS BOOL " .. _tostring(from) .. " " .. _tostring(obj))
 	end
 
 	if obj == nil or obj == NULL or _tostring(obj) == "[NULL Panel]" then return false end

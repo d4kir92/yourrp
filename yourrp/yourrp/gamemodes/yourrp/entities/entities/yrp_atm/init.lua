@@ -239,11 +239,11 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 										end
 									end
 
-									YRP.msg("note", activator:RPName() .. " transfered " .. GetGlobalYRPString("text_money_pre", "") .. self.money .. GetGlobalYRPString("text_money_pos", "") .. " to " .. dbSelectTarget[1].rpname)
+									YRP:msg("note", activator:RPName() .. " transfered " .. GetGlobalYRPString("text_money_pre", "") .. self.money .. GetGlobalYRPString("text_money_pos", "") .. " to " .. dbSelectTarget[1].rpname)
 								end
 							end
 						else
-							YRP.msg("note", "self.money is not a number.")
+							YRP:msg("note", "self.money is not a number.")
 						end
 
 						self.money = nil

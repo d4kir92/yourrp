@@ -9,7 +9,7 @@ local XP = Material("vgui/material/icon_star.png")
 local MO = Material("icon16/money.png")
 local SA = Material("icon16/money_add.png")
 local CA = Material("vgui/material/icon_timer.png")
-local RA = YRP.GetDesignIcon("radiation")
+local RA = YRP:GetDesignIcon("radiation")
 function HUDIconsDrawText(ele, text)
 	local lply = LocalPlayer()
 	if lply:HudElementVisible(ele) then
@@ -98,7 +98,7 @@ function HUDIcons()
 		if IsLevelSystemEnabled() then
 			local tab = {}
 			tab["LEVEL"] = lply:Level()
-			HUDIconsDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.trans("LID_levelx", tab) .. " ( " .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%)")
+			HUDIconsDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP:trans("LID_levelx", tab) .. " ( " .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%)")
 		end
 
 		HUDIconsDrawIcon("MO", MO, 1, lply:FormattedMoney())
@@ -118,13 +118,13 @@ function HUDIcons()
 			fps = GetFPS()
 		end
 
-		HUDIconsDrawText("PE", YRP.trans("LID_fps") .. ": " .. fps)
+		HUDIconsDrawText("PE", YRP:trans("LID_fps") .. ": " .. fps)
 		if CurTime() > ping_delay then
 			ping_delay = CurTime() + 0.5
 			ping = lply:Ping()
 		end
 
-		HUDIconsDrawText("NE", YRP.trans("LID_ping") .. ": " .. ping)
+		HUDIconsDrawText("NE", YRP:trans("LID_ping") .. ": " .. ping)
 		local weapon = lply:GetActiveWeapon()
 		if IsValid(weapon) then
 			local wpname = weapon:GetPrintName()

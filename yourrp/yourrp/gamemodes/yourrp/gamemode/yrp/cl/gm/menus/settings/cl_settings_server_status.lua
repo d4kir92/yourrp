@@ -1,9 +1,9 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function AddStatusLine(parent, cat, entry, str_id, color)
-	local sl = YRPCreateD("DPanel", parent, parent:GetWide(), YRP.ctr(50), 0, 0)
+	local sl = YRPCreateD("DPanel", parent, parent:GetWide(), YRP:ctr(50), 0, 0)
 	local _t = {}
 	_t[cat] = entry
-	sl.text = YRP.trans(str_id, _t)
+	sl.text = YRP:trans(str_id, _t)
 	function sl:Paint(pw, ph)
 		local tab = {}
 		tab.color = Color(color.r, color.g, color.b)
@@ -37,7 +37,7 @@ net.Receive(
 			local TAB_ROLES = net.ReadTable()
 			local TAB_GROUPS = net.ReadTable()
 			local TAB_MAP = net.ReadTable()
-			local br = YRP.ctr(20)
+			local br = YRP:ctr(20)
 			local scroller = {}
 			scroller.parent = PARENT
 			scroller.x = br
@@ -45,7 +45,7 @@ net.Receive(
 			scroller.w = PARENT:GetWide() - 2 * br
 			scroller.h = PARENT:GetTall() - 2 * br
 			local Scroller = DHorizontalScroller(scroller)
-			local Group_YourRP = YRPCreateD("YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+			local Group_YourRP = YRPCreateD("YGroupBox", Scroller, YRP:ctr(800), Scroller:GetTall(), 0, 0)
 			Group_YourRP:SetText("YourRP")
 			function Group_YourRP:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -58,7 +58,7 @@ net.Receive(
 				end
 			end
 
-			local Group_Roles = YRPCreateD("YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+			local Group_Roles = YRPCreateD("YGroupBox", Scroller, YRP:ctr(800), Scroller:GetTall(), 0, 0)
 			Group_Roles:SetText("LID_roles")
 			function Group_Roles:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -71,7 +71,7 @@ net.Receive(
 				end
 			end
 
-			local Group_Groups = YRPCreateD("YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+			local Group_Groups = YRPCreateD("YGroupBox", Scroller, YRP:ctr(800), Scroller:GetTall(), 0, 0)
 			Group_Groups:SetText("LID_groups")
 			function Group_Groups:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -84,7 +84,7 @@ net.Receive(
 				end
 			end
 
-			local Group_Map = YRPCreateD("YGroupBox", Scroller, YRP.ctr(800), Scroller:GetTall(), 0, 0)
+			local Group_Map = YRPCreateD("YGroupBox", Scroller, YRP:ctr(800), Scroller:GetTall(), 0, 0)
 			Group_Map:SetText("LID_map")
 			function Group_Map:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)

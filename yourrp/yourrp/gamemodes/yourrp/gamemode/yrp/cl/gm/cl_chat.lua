@@ -278,7 +278,7 @@ local function InitYRPChat()
 						local py = lply:HudValue("CH", "POSI_Y")
 						local sw = lply:HudValue("CH", "SIZE_W")
 						local sh = lply:HudValue("CH", "SIZE_H")
-						--YRP.msg( "deb", "InitYRPChat x " .. x .. ", y " .. y .. ", w " .. w .. ", h " .. h .. ", px " .. px .. ", py " .. py .. ", sw " .. sw ..", sh " .. sh)
+						--YRP:msg( "deb", "InitYRPChat x " .. x .. ", y " .. y .. ", w " .. w .. ", h " .. h .. ", px " .. px .. ", py " .. py .. ", sw " .. sw ..", sh " .. sh)
 						if px ~= x or py ~= y or sw ~= w or sh ~= h then
 							yrpChat.window:SetPos(px, py)
 							yrpChat.window:SetSize(sw, sh)
@@ -354,18 +354,18 @@ local function InitYRPChat()
 
 			function sbar.btnUp:Paint(w, h)
 				--draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
-				if YRP.GetDesignIcon("64_angle-up") then
+				if YRP:GetDesignIcon("64_angle-up") then
 					surface.SetDrawColor(Color(255, 255, 255, 255))
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-up"))
+					surface.SetMaterial(YRP:GetDesignIcon("64_angle-up"))
 					surface.DrawTexturedRect(0, 0, w, h)
 				end
 			end
 
 			function sbar.btnDown:Paint(w, h)
 				--draw.RoundedBox(0, 0, 0, w, h, Color( 60, 60, 60 ) )
-				if YRP.GetDesignIcon("64_angle-down") then
+				if YRP:GetDesignIcon("64_angle-down") then
 					surface.SetDrawColor(Color(255, 255, 255, 255))
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-down"))
+					surface.SetMaterial(YRP:GetDesignIcon("64_angle-down"))
 					surface.DrawTexturedRect(0, 0, w, h)
 				end
 			end
@@ -405,9 +405,9 @@ local function InitYRPChat()
 			function yrpChat.settings:Paint(pw, ph)
 				local w = pw - pw % 4
 				local h = ph - ph % 4
-				if YRP.GetDesignIcon("64_cog") ~= nil then
+				if YRP:GetDesignIcon("64_cog") ~= nil then
 					surface.SetDrawColor(Color(255, 255, 255, 255))
-					surface.SetMaterial(YRP.GetDesignIcon("64_cog"))
+					surface.SetMaterial(YRP:GetDesignIcon("64_cog"))
 					surface.DrawTexturedRect((pw - w) / 2, (ph - h) / 2, w, h)
 				end
 			end
@@ -628,7 +628,7 @@ local function InitYRPChat()
 						local t = string.lower(_type(obj))
 
 						if t == "string" and string.StartWith(obj, ": !") or string.StartWith(obj, ": /") then
-							YRP.msg("note", "HIDE COMMANDS: " .. tostring(obj))
+							YRP:msg("note", "HIDE COMMANDS: " .. tostring(obj))
 							--return false
 						end
 					end]]
@@ -726,8 +726,8 @@ local function InitYRPChat()
 							newtext:AppendText(obj)
 							words = words + 1
 						elseif t == "player" then
-							--YRP.msg( "note", "chat.addtext ( boolean): " .. tostring(obj) )
-							--YRP.msg( "error", "chat.addtext (entity): " .. tostring(obj) )
+							--YRP:msg( "note", "chat.addtext ( boolean): " .. tostring(obj) )
+							--YRP:msg( "error", "chat.addtext (entity): " .. tostring(obj) )
 							-- invalid players
 							local col = GAMEMODE:GetTeamColor(obj)
 							if isnumber(tonumber(col.r)) and isnumber(tonumber(col.g)) and isnumber(tonumber(col.b)) then
@@ -742,7 +742,7 @@ local function InitYRPChat()
 								newtext:AppendText(obj:GetName())
 							end
 						elseif t ~= "boolean" and t ~= "entity" and t ~= "function" and t ~= "panel" then
-							YRP.msg("error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj))
+							YRP:msg("error", "chat.addtext TYPE: " .. t .. " obj: " .. tostring(obj))
 						end
 					end
 
@@ -912,7 +912,7 @@ net.Receive(
 					if s2 then
 						local lid = string.sub(v, s, s2 - 1)
 						lid = string.Trim(lid)
-						pk[i] = string.Replace(pk[i], lid, YRP.trans(lid))
+						pk[i] = string.Replace(pk[i], lid, YRP:trans(lid))
 						pk[i] = string.Replace(pk[i], ";", "")
 					end
 				end
@@ -942,7 +942,7 @@ hook.Add(
 			end
 
 			if not ischannel then
-				YRP.msg("note", "HIDE COMMANDS: " .. tostring(strText))
+				YRP:msg("note", "HIDE COMMANDS: " .. tostring(strText))
 			end
 
 			return true

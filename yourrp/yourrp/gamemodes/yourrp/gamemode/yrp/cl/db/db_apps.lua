@@ -20,26 +20,26 @@ end
 
 function addApp(app)
 	if app == nil then
-		YRP.msg("note", "[addApp] -> app is missing!")
+		YRP:msg("note", "[addApp] -> app is missing!")
 	end
 
 	if _type(app) == "table" then
 		if app.PrintName == nil then
-			YRP.msg("note", "[addApp] -> app.PrintName is missing!")
+			YRP:msg("note", "[addApp] -> app.PrintName is missing!")
 		end
 
 		if app.ClassName == nil then
-			YRP.msg("note", "[addApp] -> app.ClassName is missing!")
+			YRP:msg("note", "[addApp] -> app.ClassName is missing!")
 		end
 
 		if app.OpenApp == nil then
-			YRP.msg("note", "[addApp] -> function app:OpenApp is missing!")
+			YRP:msg("note", "[addApp] -> function app:OpenApp is missing!")
 		end
 
-		YRP.msg("db", "[addApp] Add App: " .. tostring(app.PrintName) .. " [" .. tostring(app.ClassName) .. "]")
+		YRP:msg("db", "[addApp] Add App: " .. tostring(app.PrintName) .. " [" .. tostring(app.ClassName) .. "]")
 		list.Add("yrp_apps", app)
 	else
-		YRP.msg("note", "[addApp] -> Wrong Parameters!")
+		YRP:msg("note", "[addApp] -> Wrong Parameters!")
 	end
 end
 
@@ -107,7 +107,7 @@ function YRPAppsLoad()
 	if fil then
 		yrp_apps = util.JSONToTable(fil)
 	else
-		YRP.msg("note", "APPS BROKEN?")
+		YRP:msg("note", "APPS BROKEN?")
 	end
 end
 

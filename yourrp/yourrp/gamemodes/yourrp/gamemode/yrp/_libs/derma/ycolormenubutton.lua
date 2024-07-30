@@ -6,7 +6,7 @@ end
 -- Overrite
 function PANEL:DoClick()
 	local mx, my = gui.MousePos()
-	local ctrl = YRPCreateD("YColorMenu", nil, YRP.ctr(600), YRP.ctr(600), mx - YRP.ctr(20), my - YRP.ctr(20))
+	local ctrl = YRPCreateD("YColorMenu", nil, YRP:ctr(600), YRP:ctr(600), mx - YRP:ctr(20), my - YRP:ctr(20))
 	ctrl:MakePopup()
 	ctrl:SetColor(self._col)
 	ctrl.ValueChanged = function(sel, color)
@@ -23,7 +23,7 @@ function PANEL:SetColor(col)
 	if IsColor(col) or istable(col) then
 		self._col = col
 	else
-		YRP.msg("note", "Is not a color: " .. tostring(col))
+		YRP:msg("note", "Is not a color: " .. tostring(col))
 	end
 end
 

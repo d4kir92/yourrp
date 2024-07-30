@@ -16,7 +16,7 @@ if IsNotNilAndNotFalse(logTab) then
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_get_logs_settings")
+YRP:AddNetworkString("nws_yrp_get_logs_settings")
 net.Receive(
 	"nws_yrp_get_logs_settings",
 	function(len, ply)
@@ -42,7 +42,7 @@ net.Receive(
 	end
 )
 
-function YRP.log(msg)
-	YRP.msg("note", msg)
+function YRP:log(msg)
+	YRP:msg("note", msg)
 	YRP_SQL_INSERT_INTO("yrp_logs_settings", "string_timestamp, string_text", "'" .. os.time() .. "', " .. YRP_SQL_STR_IN(msg) .. "")
 end

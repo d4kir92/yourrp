@@ -32,7 +32,7 @@ function openTicketMenu()
 	TICKET.window = YRPCreateD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
 	TICKET.window:Center()
 	TICKET.window:SetTitle("LID_sendticket")
-	TICKET.window:SetHeaderHeight(YRP.ctr(100))
+	TICKET.window:SetHeaderHeight(YRP:ctr(100))
 	function TICKET.window:OnClose()
 		YRPCloseMenu()
 	end
@@ -53,7 +53,7 @@ end
 
 function CreateTicketContent(parent)
 	TICKET.content = parent
-	TICKET.discord = YRPCreateD("YButton", TICKET.content, YRP.ctr(800), YRP.ctr(50), YRP.ctr(20), YRP.ctr(20))
+	TICKET.discord = YRPCreateD("YButton", TICKET.content, YRP:ctr(800), YRP:ctr(50), YRP:ctr(20), YRP:ctr(20))
 	TICKET.discord:SetText("LID_getlivesupport")
 	function TICKET.discord:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
@@ -63,33 +63,33 @@ function CreateTicketContent(parent)
 		gui.OpenURL("https://discord.gg/sEgNZxg")
 	end
 
-	TICKET.titleP = YRPCreateD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(170))
+	TICKET.titleP = YRPCreateD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP:ctr(40), YRP:ctr(50), YRP:ctr(20), YRP:ctr(170))
 	function TICKET.titleP:Paint(pw, ph)
-		surfaceText(YRP.trans("LID_title"), "Y_25_500", YRP.ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
+		surfaceText(YRP:trans("LID_title"), "Y_25_500", YRP:ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
 	end
 
-	TICKET.titleT = YRPCreateD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(220))
-	TICKET.ticketP = YRPCreateD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(300))
+	TICKET.titleT = YRPCreateD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP:ctr(40), YRP:ctr(50), YRP:ctr(20), YRP:ctr(220))
+	TICKET.ticketP = YRPCreateD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP:ctr(40), YRP:ctr(50), YRP:ctr(20), YRP:ctr(300))
 	function TICKET.ticketP:Paint(pw, ph)
-		surfaceText(YRP.trans("LID_ticket") .. " ( " .. YRP.trans("LID_problems") .. ", " .. YRP.trans("LID_suggestions") .. ", ...)", "Y_25_500", YRP.ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
+		surfaceText(YRP:trans("LID_ticket") .. " ( " .. YRP:trans("LID_problems") .. ", " .. YRP:trans("LID_suggestions") .. ", ...)", "Y_25_500", YRP:ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
 	end
 
-	TICKET.ticketT = YRPCreateD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(500), YRP.ctr(20), YRP.ctr(350))
+	TICKET.ticketT = YRPCreateD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP:ctr(40), YRP:ctr(500), YRP:ctr(20), YRP:ctr(350))
 	TICKET.ticketT:SetMultiline(true)
-	TICKET.contactP = YRPCreateD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(900))
+	TICKET.contactP = YRPCreateD("DPanel", TICKET.content, TICKET.content:GetWide() - YRP:ctr(40), YRP:ctr(50), YRP:ctr(20), YRP:ctr(900))
 	function TICKET.contactP:Paint(pw, ph)
-		surfaceText(YRP.trans("LID_contact") .. " ( " .. YRP.trans("LID_notrequired") .. " )", "Y_25_500", YRP.ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
+		surfaceText(YRP:trans("LID_contact") .. " ( " .. YRP:trans("LID_notrequired") .. " )", "Y_25_500", YRP:ctr(0), ph / 2, Color(255, 255, 255, 255), 0, 1)
 	end
 
-	TICKET.contactT = YRPCreateD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP.ctr(40), YRP.ctr(50), YRP.ctr(20), YRP.ctr(950))
-	TICKET.send = YRPCreateD("YButton", TICKET.content, YRP.ctr(600), YRP.ctr(50), YRP.ctr(20), YRP.ctr(1050))
+	TICKET.contactT = YRPCreateD("DTextEntry", TICKET.content, TICKET.content:GetWide() - YRP:ctr(40), YRP:ctr(50), YRP:ctr(20), YRP:ctr(950))
+	TICKET.send = YRPCreateD("YButton", TICKET.content, YRP:ctr(600), YRP:ctr(50), YRP:ctr(20), YRP:ctr(1050))
 	TICKET.send:SetText("LID_sendticket")
 	function TICKET.send:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
 	end
 
 	function TICKET.send:DoClick()
-		YRP.msg("gm", "send ticket")
+		YRP:msg("gm", "send ticket")
 		if TICKET.titleT:GetText() ~= "" or TICKET.ticketT:GetText() ~= "" or TICKET.contactT:GetText() ~= "" then
 			local entry = {}
 			entry["entry.1141598078"] = TICKET.titleT:GetText() or "FAILED"

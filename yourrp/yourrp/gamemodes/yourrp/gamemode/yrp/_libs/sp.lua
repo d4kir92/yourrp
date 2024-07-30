@@ -61,7 +61,7 @@ function appPosition(parent, x, y, nr)
 		function(receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY)
 			if isDropped and receiver:IsHovered() then
 				local _x, _y = receiver:GetPos()
-				tableOfDroppedPanels[1]:SetPos(_x + YRP.ctr(1), _y + YRP.ctr(1))
+				tableOfDroppedPanels[1]:SetPos(_x + YRP:ctr(1), _y + YRP:ctr(1))
 				changeAppPosition(tableOfDroppedPanels[1].tbl.ClassName, receiver.nr)
 			end
 		end, {}
@@ -88,7 +88,7 @@ function createSmartphone(parent, w, h, x, y)
 				local _y = getTblY(app.Position, 5)
 				local _appName = app.PrintName
 				if app.LangName ~= nil then
-					local _name = YRP.trans(app.LangName, app.PrintName)
+					local _name = YRP:trans(app.LangName, app.PrintName)
 					_appName = _name
 				end
 
@@ -145,7 +145,7 @@ function createSmartphone(parent, w, h, x, y)
 		else
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
 		end
-		--draw.SimpleTextOutlined(YRP.trans( "LID_wip" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255 ) )
+		--draw.SimpleTextOutlined(YRP:trans( "LID_wip" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255 ) )
 	end
 
 	_tmp.botbar.buttonapps = YRPCreateD("DButton", _tmp.botbar, w / 3, ctrb(40), 0, 0)
@@ -156,7 +156,7 @@ function createSmartphone(parent, w, h, x, y)
 		else
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 255))
 		end
-		--draw.SimpleTextOutlined(YRP.trans( "LID_wip" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255 ) )
+		--draw.SimpleTextOutlined(YRP:trans( "LID_wip" ), "DermaDefault", pw/2, ph/2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color( 0, 0, 0, 255 ) )
 	end
 
 	--[[ Clear Display ]]

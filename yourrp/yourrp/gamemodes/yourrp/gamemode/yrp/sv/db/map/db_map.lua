@@ -13,11 +13,11 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_swep", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_amount", "TEXT DEFAULT '1'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_classname", "TEXT DEFAULT 'npc_zombie'")
 function YRPTeleportToPoint(ply, pos)
-	--YRP.msg( "note", "YRPTeleportToPoint " .. tostring(pos) )
+	--YRP:msg( "note", "YRPTeleportToPoint " .. tostring(pos) )
 	tp_to(ply, Vector(pos[1], pos[2], pos[3]))
 end
 
-YRP.AddNetworkString("nws_yrp_noti")
+YRP:AddNetworkString("nws_yrp_noti")
 function YRPTeleportToSpawnpoint(ply, from)
 	if ply.ignorespawnpoint == true then
 		timer.Simple(
@@ -42,9 +42,9 @@ function YRPTeleportToSpawnpoint(ply, from)
 				local _tmp = string.Explode(",", _randomSpawnPoint.position)
 				local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 				if worked then
-					YRP.msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint")
+					YRP:msg("note", "[" .. ply:Nick() .. "] teleported to RoleSpawnpoint")
 				else
-					YRP.msg("note", "[" .. ply:Nick() .. "] FAILED to teleport to RoleSpawnpoint")
+					YRP:msg("note", "[" .. ply:Nick() .. "] FAILED to teleport to RoleSpawnpoint")
 				end
 
 				_tmp = string.Explode(",", _randomSpawnPoint.angle)
@@ -58,9 +58,9 @@ function YRPTeleportToSpawnpoint(ply, from)
 				local _tmp = string.Explode(",", _randomSpawnPoint.position)
 				local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 				if worked then
-					YRP.msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint")
+					YRP:msg("note", "[" .. ply:Nick() .. "] teleported to GroupSpawnpoint")
 				else
-					YRP.msg("note", "[" .. ply:Nick() .. "] FAILED to teleport to GroupSpawnpoint")
+					YRP:msg("note", "[" .. ply:Nick() .. "] FAILED to teleport to GroupSpawnpoint")
 				end
 
 				_tmp = string.Explode(",", _randomSpawnPoint.angle)
@@ -83,9 +83,9 @@ function YRPTeleportToSpawnpoint(ply, from)
 							local _tmp = string.Explode(",", _randomSpawnPoint.position)
 							local worked = tp_to(ply, Vector(_tmp[1], _tmp[2], _tmp[3]))
 							if worked then
-								YRP.msg("note", "[" .. ply:Nick() .. "] teleported to PARENT - GroupSpawnpoint")
+								YRP:msg("note", "[" .. ply:Nick() .. "] teleported to PARENT - GroupSpawnpoint")
 							else
-								YRP.msg("note", "[" .. ply:Nick() .. "] FAILED to teleport to PARENT - GroupSpawnpoint")
+								YRP:msg("note", "[" .. ply:Nick() .. "] FAILED to teleport to PARENT - GroupSpawnpoint")
 							end
 
 							_tmp = string.Explode(",", _randomSpawnPoint.angle)
@@ -101,7 +101,7 @@ function YRPTeleportToSpawnpoint(ply, from)
 				end
 
 				local _str = "[" .. tostring(groTab.string_name) .. "]" .. " has NO role or group spawnpoint!"
-				YRP.msg("note", _str)
+				YRP:msg("note", _str)
 				net.Start("nws_yrp_noti")
 				net.WriteString("nogroupspawn")
 				net.WriteString(tostring(groTab.string_name))
@@ -111,7 +111,7 @@ function YRPTeleportToSpawnpoint(ply, from)
 				return false
 			end
 		elseif IsNotNilAndNotFalse(groTab) and IsNotNilAndNotFalse(rolTab) and ply:HasCharacterSelected() == true and ply:LoadedGamemode() == true and ply:GetYRPBool("yrpspawnedwithcharacter", false) == true then
-			YRP.msg("error", "[YRPTeleportToSpawnpoint] FAILED! ROLE: " .. tostring(roltab) .. " GROUP: " .. tostring(groTab) .. " CHARACTER: " .. tostring(chaTab) .. " from: " .. tostring(from))
+			YRP:msg("error", "[YRPTeleportToSpawnpoint] FAILED! ROLE: " .. tostring(roltab) .. " GROUP: " .. tostring(groTab) .. " CHARACTER: " .. tostring(chaTab) .. " from: " .. tostring(from))
 
 			return false
 		end
@@ -120,9 +120,9 @@ function YRPTeleportToSpawnpoint(ply, from)
 	return false
 end
 
-YRP.AddNetworkString("nws_yrp_getMapList")
-YRP.AddNetworkString("nws_yrp_dbInsertIntoMap")
-YRP.AddNetworkString("nws_yrp_removeMapEntry")
+YRP:AddNetworkString("nws_yrp_getMapList")
+YRP:AddNetworkString("nws_yrp_dbInsertIntoMap")
+YRP:AddNetworkString("nws_yrp_removeMapEntry")
 net.Receive(
 	"nws_yrp_removeMapEntry",
 	function(len, ply)
@@ -161,7 +161,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_getMapListGroups")
+YRP:AddNetworkString("nws_yrp_getMapListGroups")
 net.Receive(
 	"nws_yrp_getMapListGroups",
 	function(len, ply)
@@ -177,7 +177,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_getMapListRoles")
+YRP:AddNetworkString("nws_yrp_getMapListRoles")
 net.Receive(
 	"nws_yrp_getMapListRoles",
 	function(len, ply)
@@ -215,14 +215,14 @@ net.Receive(
 		if sql.TableExists(_tmpDBTable) then
 			YRP_SQL_INSERT_INTO(_tmpDBTable, _tmpDBCol, _tmpDBVal)
 		else
-			YRP.msg("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
+			YRP:msg("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
 		end
 
 		YRPUpdateAllDBTables()
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_dealer_settings")
+YRP:AddNetworkString("nws_yrp_dealer_settings")
 net.Receive(
 	"nws_yrp_dealer_settings",
 	function(len, ply)
@@ -238,7 +238,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_teleportto")
+YRP:AddNetworkString("nws_yrp_teleportto")
 net.Receive(
 	"nws_yrp_teleportto",
 	function(len, ply)
@@ -255,7 +255,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_map_name")
+YRP:AddNetworkString("nws_yrp_update_map_name")
 net.Receive(
 	"nws_yrp_update_map_name",
 	function(len, ply)
@@ -273,7 +273,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_map_color")
+YRP:AddNetworkString("nws_yrp_update_map_color")
 net.Receive(
 	"nws_yrp_update_map_color",
 	function(len, ply)
@@ -291,7 +291,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_map_int_respawntime")
+YRP:AddNetworkString("nws_yrp_update_map_int_respawntime")
 net.Receive(
 	"nws_yrp_update_map_int_respawntime",
 	function(len, ply)
@@ -310,7 +310,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_map_string_swep")
+YRP:AddNetworkString("nws_yrp_update_map_string_swep")
 net.Receive(
 	"nws_yrp_update_map_string_swep",
 	function(len, ply)
@@ -328,7 +328,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_map_int_amount")
+YRP:AddNetworkString("nws_yrp_update_map_int_amount")
 net.Receive(
 	"nws_yrp_update_map_int_amount",
 	function(len, ply)
@@ -347,7 +347,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_map_string_classname")
+YRP:AddNetworkString("nws_yrp_update_map_string_classname")
 net.Receive(
 	"nws_yrp_update_map_string_classname",
 	function(len, ply)
@@ -367,7 +367,7 @@ net.Receive(
 )
 
 -- NEW MAP PAGE
-YRP.AddNetworkString("nws_yrp_getMapSite")
+YRP:AddNetworkString("nws_yrp_getMapSite")
 net.Receive(
 	"nws_yrp_getMapSite",
 	function(len, ply)
@@ -377,7 +377,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_getMapTab")
+YRP:AddNetworkString("nws_yrp_getMapTab")
 net.Receive(
 	"nws_yrp_getMapTab",
 	function(len, ply)
@@ -484,7 +484,7 @@ function YRPRegisterObject(obj)
 end
 
 function YRPLoadWorldStorages()
-	YRP.msg("note", "LOAD WORLD STORAGES")
+	YRP:msg("note", "LOAD WORLD STORAGES")
 	local storages = YRP_SQL_SELECT(DATABASE_NAME, "*", "type = '" .. "storage" .. "'")
 	local count = 0
 	if IsNotNilAndNotFalse(storages) then
@@ -514,7 +514,7 @@ function YRPLoadWorldStorages()
 		end
 	end
 
-	YRP.msg("note", string.format("Spawned %s Storages", count))
+	YRP:msg("note", string.format("Spawned %s Storages", count))
 end
 
 function YRPCheckIfStoragesExists()

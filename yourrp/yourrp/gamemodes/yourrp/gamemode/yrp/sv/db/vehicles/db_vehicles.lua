@@ -1,8 +1,8 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
-YRP.AddNetworkString("nws_yrp_removeVehicleOwner")
-YRP.AddNetworkString("nws_yrp_getVehicleInfo")
+YRP:AddNetworkString("nws_yrp_removeVehicleOwner")
+YRP:AddNetworkString("nws_yrp_getVehicleInfo")
 local DATABASE_NAME = "yrp_vehicles"
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "keynr", "TEXT DEFAULT '-1'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT 100")

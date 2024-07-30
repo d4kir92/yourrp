@@ -53,7 +53,7 @@ net.Receive(
 					end
 
 					--
-					_appe.r.play = YRPCreateD("YButton", _yrp_appearance.left, YRP.ctr(100), YRP.ctr(100), ScW() / 4, ScrH() - YRP.ctr(200))
+					_appe.r.play = YRPCreateD("YButton", _yrp_appearance.left, YRP:ctr(100), YRP:ctr(100), ScW() / 4, ScrH() - YRP:ctr(200))
 					_appe.r.play:SetText("")
 					function _appe.r.play:Paint(pw, ph)
 						local tab = {}
@@ -72,14 +72,14 @@ net.Receive(
 							color = Color(0, 255, 0)
 						end
 
-						YRP.DrawIcon(YRP.GetDesignIcon(symbol), pw, ph, 0, 0, color)
+						YRP:DrawIcon(YRP:GetDesignIcon(symbol), pw, ph, 0, 0, color)
 					end
 
 					function _appe.r.play:DoClick()
 						play = not play
 					end
 
-					_appe.r.pm = YRPCreateD("DModelPanel", _yrp_appearance.left, ScrH() - _yrp_appearance.window:GetHeaderHeight() - YRP.ctr(100), ScW() / 2, 0, 0)
+					_appe.r.pm = YRPCreateD("DModelPanel", _yrp_appearance.left, ScrH() - _yrp_appearance.window:GetHeaderHeight() - YRP:ctr(100), ScW() / 2, 0, 0)
 					_appe.r.pm:SetModel(_pm)
 					_appe.r.pm:SetAnimated(true)
 					_appe.r.pm.Angles = Angle(0, 0, 0)
@@ -108,16 +108,16 @@ net.Receive(
 					end
 
 					-- Playermodel changing
-					local _tmpPM = YRPCreateD("DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(80), ScW() / 2, _yrp_appearance.window:GetHeaderHeight())
+					local _tmpPM = YRPCreateD("DPanel", _yrp_appearance.left, ScrH2() - YRP:ctr(30), YRP:ctr(80), ScW() / 2, _yrp_appearance.window:GetHeaderHeight())
 					_tmpPM.cur = _pmid
 					_tmpPM.max = #_pms
-					_tmpPM.name = YRP.trans("LID_appearance")
+					_tmpPM.name = YRP:trans("LID_appearance")
 					function _tmpPM:Paint(pw, ph)
 						hook.Run("YPanelPaint", self, pw, ph)
-						draw.SimpleTextOutlined(self.name .. " ( " .. _tmpPM.cur .. "/" .. _tmpPM.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+						draw.SimpleTextOutlined(self.name .. " ( " .. _tmpPM.cur .. "/" .. _tmpPM.max .. " )", "DermaDefault", YRP:ctr(60), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP:ctr(1), Color(0, 0, 0, 255))
 					end
 
-					local _tmpPMUp = YRPCreateD("YButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2))
+					local _tmpPMUp = YRPCreateD("YButton", _tmpPM, YRP:ctr(50), YRP:ctr(80 / 2 - 4), YRP:ctr(2), YRP:ctr(2))
 					_tmpPMUp:SetText("")
 					_tmpPMUp.tab = {
 						["text"] = "↑"
@@ -142,7 +142,7 @@ net.Receive(
 						end
 					end
 
-					local _tmpPMDo = YRPCreateD("YButton", _tmpPM, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40))
+					local _tmpPMDo = YRPCreateD("YButton", _tmpPM, YRP:ctr(50), YRP:ctr(80 / 2 - 4), YRP:ctr(2), YRP:ctr(2 + 40))
 					_tmpPMDo:SetText("")
 					_tmpPMDo.tab = {
 						["text"] = "↓"
@@ -172,20 +172,20 @@ net.Receive(
 						_tbl.bgs = _appe.r.pm.Entity:GetBodyGroups()
 					end
 
-					local _tmpSkin = YRPCreateD("DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(80), ScW() / 2, YRP.ctr(200))
+					local _tmpSkin = YRPCreateD("DPanel", _yrp_appearance.left, ScrH2() - YRP:ctr(30), YRP:ctr(80), ScW() / 2, YRP:ctr(200))
 					_tmpSkin.cur = _skin --_appe.r.pm.Entity:GetSkin()
 					if _appe.r.pm.Entity then
 						_appe.r.pm.Entity:SetSkin(_tmpSkin.cur)
 						_tmpSkin.max = _appe.r.pm.Entity:SkinCount()
 					end
 
-					_tmpSkin.name = YRP.trans("LID_skin")
+					_tmpSkin.name = YRP:trans("LID_skin")
 					function _tmpSkin:Paint(pw, ph)
 						hook.Run("YPanelPaint", self, pw, ph)
-						draw.SimpleTextOutlined(self.name .. " ( " .. _tmpSkin.cur + 1 .. "/" .. _tmpSkin.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+						draw.SimpleTextOutlined(self.name .. " ( " .. _tmpSkin.cur + 1 .. "/" .. _tmpSkin.max .. " )", "DermaDefault", YRP:ctr(60), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP:ctr(1), Color(0, 0, 0, 255))
 					end
 
-					local _tmpSkinUp = YRPCreateD("YButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2))
+					local _tmpSkinUp = YRPCreateD("YButton", _tmpSkin, YRP:ctr(50), YRP:ctr(80 / 2 - 4), YRP:ctr(2), YRP:ctr(2))
 					_tmpSkinUp:SetText("")
 					_tmpSkinUp.tab = {
 						["text"] = "↑"
@@ -210,7 +210,7 @@ net.Receive(
 						end
 					end
 
-					local _tmpSkinDo = YRPCreateD("YButton", _tmpSkin, YRP.ctr(50), YRP.ctr(80 / 2 - 4), YRP.ctr(2), YRP.ctr(2 + 40))
+					local _tmpSkinDo = YRPCreateD("YButton", _tmpSkin, YRP:ctr(50), YRP:ctr(80 / 2 - 4), YRP:ctr(2), YRP:ctr(2 + 40))
 					_tmpSkinDo:SetText("")
 					_tmpSkinDo.tab = {
 						["text"] = "↓"
@@ -245,17 +245,17 @@ net.Receive(
 								end
 
 								local _height = 80
-								local _tmpBg = YRPCreateD("DPanel", _yrp_appearance.left, ScrH2() - YRP.ctr(30), YRP.ctr(_height), ScW() / 2, YRP.ctr(300) + k * YRP.ctr(_height + 2))
+								local _tmpBg = YRPCreateD("DPanel", _yrp_appearance.left, ScrH2() - YRP:ctr(30), YRP:ctr(_height), ScW() / 2, YRP:ctr(300) + k * YRP:ctr(_height + 2))
 								_tmpBg.name = v.name
 								_tmpBg.max = v.num
 								_tmpBg.cur = _cbg[k]
 								_tmpBg.id = v.id
 								function _tmpBg:Paint(pw, ph)
 									hook.Run("YPanelPaint", self, pw, ph)
-									draw.SimpleTextOutlined(self.name .. " ( " .. _tmpBg.cur + 1 .. "/" .. _tmpBg.max .. " )", "DermaDefault", YRP.ctr(60), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+									draw.SimpleTextOutlined(self.name .. " ( " .. _tmpBg.cur + 1 .. "/" .. _tmpBg.max .. " )", "DermaDefault", YRP:ctr(60), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, YRP:ctr(1), Color(0, 0, 0, 255))
 								end
 
-								_tmpBgUp = YRPCreateD("YButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(2))
+								_tmpBgUp = YRPCreateD("YButton", _tmpBg, YRP:ctr(50), YRP:ctr(_height / 2 - 4), YRP:ctr(2), YRP:ctr(2))
 								_tmpBgUp:SetText("")
 								_tmpBgUp.tab = {
 									["text"] = "↑"
@@ -281,7 +281,7 @@ net.Receive(
 									end
 								end
 
-								_tmpBgDo = YRPCreateD("YButton", _tmpBg, YRP.ctr(50), YRP.ctr(_height / 2 - 4), YRP.ctr(2), YRP.ctr(_height / 2 - 2))
+								_tmpBgDo = YRPCreateD("YButton", _tmpBg, YRP:ctr(50), YRP:ctr(_height / 2 - 4), YRP:ctr(2), YRP:ctr(_height / 2 - 2))
 								_tmpBgDo:SetText("")
 								_tmpBgDo.tab = {
 									["text"] = "↓"
@@ -361,7 +361,7 @@ function open_appearance()
 	_yrp_appearance.window:Center()
 	_yrp_appearance.window:SetDraggable(false)
 	_yrp_appearance.window:SetSizable(true)
-	_yrp_appearance.window:SetHeaderHeight(YRP.ctr(100))
+	_yrp_appearance.window:SetHeaderHeight(YRP:ctr(100))
 	function _yrp_appearance.window:OnClose()
 		if YRPPanelAlive(_yrp_appearance.window, "_yrp_appearance.window 4") then
 			_yrp_appearance.window:Remove()

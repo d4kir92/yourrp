@@ -41,7 +41,7 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	YRP.AddNetworkString("nws_yrp_spawner_ent_options")
+	YRP:AddNetworkString("nws_yrp_spawner_ent_options")
 end
 
 local size = 8
@@ -68,7 +68,7 @@ function SWEP:Think()
 			for i, v in pairs(GetGlobalYRPTable("yrp_spawner_ent")) do
 				local p = StringToVector(v.pos)
 				if p:Distance(pos) < size * 2 then
-					YRP.msg("db", "Option ENTSpawner")
+					YRP:msg("db", "Option ENTSpawner")
 					local stab = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. v.uniqueID .. "'")
 					if IsNotNilAndNotFalse(stab) then
 						stab = stab[1]
@@ -90,15 +90,15 @@ if CLIENT then
 		function()
 			local stab = net.ReadTable()
 			local sw = 700
-			local w = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+			local w = YRPCreateD("YFrame", nil, YRP:ctr(800), YRP:ctr(800), 0, 0)
 			w:Center()
 			w:MakePopup()
-			w:SetHeaderHeight(YRP.ctr(100))
+			w:SetHeaderHeight(YRP:ctr(100))
 			w:SetTitle("LID_entspawner")
 			-- Respawn time
-			w.respawntext = YRPCreateD("YLabel", w:GetContent(), YRP.ctr(sw), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
-			w.respawntext:SetText(YRP.trans("LID_respawntime") .. " ( " .. YRP.trans("LID_seconds") .. " )")
-			w.respawn = YRPCreateD("DNumberWang", w:GetContent(), YRP.ctr(sw), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
+			w.respawntext = YRPCreateD("YLabel", w:GetContent(), YRP:ctr(sw), YRP:ctr(50), YRP:ctr(10), YRP:ctr(0))
+			w.respawntext:SetText(YRP:trans("LID_respawntime") .. " ( " .. YRP:trans("LID_seconds") .. " )")
+			w.respawn = YRPCreateD("DNumberWang", w:GetContent(), YRP:ctr(sw), YRP:ctr(50), YRP:ctr(10), YRP:ctr(50))
 			w.respawn:SetMin(1)
 			w.respawn:SetMax(60 * 60 * 6)
 			w.respawn:SetValue(stab.int_respawntime)
@@ -110,9 +110,9 @@ if CLIENT then
 			end
 
 			-- Amount
-			w.amounttext = YRPCreateD("YLabel", w:GetContent(), YRP.ctr(sw), YRP.ctr(50), YRP.ctr(10), YRP.ctr(150))
+			w.amounttext = YRPCreateD("YLabel", w:GetContent(), YRP:ctr(sw), YRP:ctr(50), YRP:ctr(10), YRP:ctr(150))
 			w.amounttext:SetText("LID_quantity")
-			w.amount = YRPCreateD("DNumberWang", w:GetContent(), YRP.ctr(sw), YRP.ctr(50), YRP.ctr(10), YRP.ctr(200))
+			w.amount = YRPCreateD("DNumberWang", w:GetContent(), YRP:ctr(sw), YRP:ctr(50), YRP:ctr(10), YRP:ctr(200))
 			w.amount:SetMin(1)
 			w.amount:SetMax(10)
 			w.amount:SetValue(stab.int_amount)
@@ -124,9 +124,9 @@ if CLIENT then
 			end
 
 			-- ClassName
-			w.classnametext = YRPCreateD("YLabel", w:GetContent(), YRP.ctr(sw), YRP.ctr(50), YRP.ctr(10), YRP.ctr(300))
+			w.classnametext = YRPCreateD("YLabel", w:GetContent(), YRP:ctr(sw), YRP:ctr(50), YRP:ctr(10), YRP:ctr(300))
 			w.classnametext:SetText("LID_entity")
-			w.classname = YRPCreateD("DComboBox", w:GetContent(), YRP.ctr(sw), YRP.ctr(50), YRP.ctr(10), YRP.ctr(350))
+			w.classname = YRPCreateD("DComboBox", w:GetContent(), YRP:ctr(sw), YRP:ctr(50), YRP:ctr(10), YRP:ctr(350))
 			w.classname:SetText(stab.string_classname)
 			for i, v in pairs(YRPGetSENTsList()) do
 				w.classname:AddChoice(v.PrintName, i)
@@ -161,7 +161,7 @@ function SWEP:PrimaryAttack()
 
 			pos = tr.HitPos or pos
 			YRP_SQL_INSERT_INTO("yrp_" .. GetMapNameDB(), "position, type, name, string_classname", "'" .. string.Replace(tostring(pos), " ", ",") .. "', '" .. "spawner_ent" .. "', 'Spawner', 'item_ammo_ar2'")
-			YRP.msg("db", "Added ENT Spawner")
+			YRP:msg("db", "Added ENT Spawner")
 			UpdateSpawnerENTTable()
 		end
 	end
@@ -187,7 +187,7 @@ function SWEP:SecondaryAttack()
 			local p = StringToVector(v.pos)
 			if p:Distance(pos) < size * 2 then
 				YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
-				YRP.msg("db", "Removed Spawner")
+				YRP:msg("db", "Removed Spawner")
 				found = true
 			end
 		end
@@ -197,7 +197,7 @@ function SWEP:SecondaryAttack()
 				local p = StringToVector(v.pos)
 				if p:Distance(ply:GetPos()) < 160 then
 					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
-					YRP.msg("db", "Removed Spawner")
+					YRP:msg("db", "Removed Spawner")
 				end
 			end
 		end

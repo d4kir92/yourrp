@@ -44,6 +44,6 @@ function ENT:Think()
 		self:SetPersistent(false)
 		local msg = "Do NOT persist (permaprop) Storage containers!"
 		PrintMessage(HUD_PRINTCENTER, msg)
-		YRP.msg("note", msg)
+		YRP:msg("note", msg)
 	end
 end

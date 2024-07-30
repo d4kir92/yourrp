@@ -6,7 +6,7 @@ end
 
 function PANEL:Init()
 	self:SetTitle("LID_color")
-	local ctrl = YRPCreateD("DColorMixer", self, self:GetWide() - YRP.ctr(40), self:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+	local ctrl = YRPCreateD("DColorMixer", self, self:GetWide() - YRP:ctr(40), self:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
 	ctrl.ValueChanged = function(ctr, color)
 		self:ValueChanged(color)
 	end
@@ -19,7 +19,7 @@ function PANEL:SetColor(col)
 	if IsColor(col) then
 		self._cm:SetColor(col)
 	else
-		YRP.msg("note", "Is not a color: " .. tostring(col))
+		YRP:msg("note", "Is not a color: " .. tostring(col))
 	end
 end
 
@@ -34,7 +34,7 @@ end
 function PANEL:Think()
 	local px, py = self:GetPos()
 	local pw, ph = self:GetSize()
-	self._cm:SetSize(pw - YRP.ctr(40), ph - YRP.ctr(40))
+	self._cm:SetSize(pw - YRP:ctr(40), ph - YRP:ctr(40))
 	local mx, my = gui.MousePos()
 	if mx < px then
 		self:Remove()

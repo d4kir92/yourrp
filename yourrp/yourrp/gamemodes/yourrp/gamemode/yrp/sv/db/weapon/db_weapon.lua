@@ -7,7 +7,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_secondary", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_sidearm", "INT DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_gadget", "INT DEFAULT 2")
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID == '1'") == nil then
-	YRP.msg("db", "Set Default Weapon Settings")
+	YRP:msg("db", "Set Default Weapon Settings")
 	YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 end
 
@@ -23,7 +23,7 @@ function YRPSetWeaponSettings()
 end
 
 YRPSetWeaponSettings()
-YRP.AddNetworkString("nws_yrp_set_slot_amount")
+YRP:AddNetworkString("nws_yrp_set_slot_amount")
 net.Receive(
 	"nws_yrp_set_slot_amount",
 	function(len, ply)
@@ -67,8 +67,8 @@ function YRPGetSlotsOfSWEP(cn)
 	return tab
 end
 
-YRP.AddNetworkString("nws_yrp_weapon_menu")
-YRP.AddNetworkString("nws_yrp_weapon_menu_weapon")
+YRP:AddNetworkString("nws_yrp_weapon_menu")
+YRP:AddNetworkString("nws_yrp_weapon_menu_weapon")
 net.Receive(
 	"nws_yrp_weapon_menu",
 	function(len, ply)
@@ -100,7 +100,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_set_slot_weapon")
+YRP:AddNetworkString("nws_yrp_set_slot_weapon")
 net.Receive(
 	"nws_yrp_set_slot_weapon",
 	function(len, ply)

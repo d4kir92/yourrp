@@ -15,7 +15,7 @@ if IsNotNilAndNotFalse(dblaws) then
 	SetGlobalYRPString("sting_laws", dblaws.string_laws)
 end
 
-YRP.AddNetworkString("nws_yrp_get_laws")
+YRP:AddNetworkString("nws_yrp_get_laws")
 net.Receive(
 	"nws_yrp_get_laws",
 	function(len, ply)
@@ -44,13 +44,13 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_set_lawsymbol")
+YRP:AddNetworkString("nws_yrp_set_lawsymbol")
 net.Receive(
 	"nws_yrp_set_lawsymbol",
 	function(len, ply)
 		local lawsymbol = net.ReadString()
 		lawsymbol = lawsymbol
-		YRP.msg("db", "Changed lawsymbol to: " .. lawsymbol)
+		YRP:msg("db", "Changed lawsymbol to: " .. lawsymbol)
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -60,13 +60,13 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_set_laws")
+YRP:AddNetworkString("nws_yrp_set_laws")
 net.Receive(
 	"nws_yrp_set_laws",
 	function(len, ply)
 		local laws = net.ReadString()
 		laws = laws
-		YRP.msg("db", "Changed lawsymbol to: " .. laws)
+		YRP:msg("db", "Changed lawsymbol to: " .. laws)
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{

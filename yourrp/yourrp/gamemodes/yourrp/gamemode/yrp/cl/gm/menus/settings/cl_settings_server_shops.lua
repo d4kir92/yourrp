@@ -6,9 +6,9 @@ net.Receive(
 		local _shops = net.ReadTable()
 		local PARENT = GetSettingsSite()
 		if YRPPanelAlive(PARENT) then
-			_sh._sho = YRPCreateD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40))
+			_sh._sho = YRPCreateD("DYRPDBList", PARENT, YRP:ctr(480), YRP:ctr(500), YRP:ctr(40), YRP:ctr(40))
 			_sh._sho.tbl = _shops
-			_sh._sho:SetListHeader(YRP.trans("LID_settings_shops"))
+			_sh._sho:SetListHeader(YRP:trans("LID_settings_shops"))
 			_sh._sho:SetEditArYRPEntityAlive(_sh.ea)
 			function _sh._sho:AddFunction()
 				net.Start("nws_yrp_shop_add")
@@ -36,9 +36,9 @@ net.Receive(
 
 				--[[ NAME ]]
 				--
-				_sh._sho._name = YRPCreateD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
+				_sh._sho._name = YRPCreateD("DYRPTextEntry", _sh.ea, YRP:ctr(800), YRP:ctr(100), 0, 0)
 				_sh._sho._name.textentry.tbl = tbl
-				_sh._sho._name:SetHeader(YRP.trans("LID_name"))
+				_sh._sho._name:SetHeader(YRP:trans("LID_name"))
 				_sh._sho._name:SetText(tbl.name)
 				function _sh._sho._name.textentry:OnChange()
 					self.tbl.name = self:GetValue()
@@ -67,9 +67,9 @@ net.Receive(
 		local _scats = net.ReadTable()
 		local PARENT = GetSettingsSite()
 		if YRPPanelAlive(PARENT) then
-			_sh._cat = YRPCreateD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40 + 500 + 40))
+			_sh._cat = YRPCreateD("DYRPDBList", PARENT, YRP:ctr(480), YRP:ctr(500), YRP:ctr(40), YRP:ctr(40 + 500 + 40))
 			_sh._cat.tbl = _scats
-			_sh._cat:SetListHeader(YRP.trans("LID_categories"))
+			_sh._cat:SetListHeader(YRP:trans("LID_categories"))
 			_sh._cat:SetEditArYRPEntityAlive(_sh.ea)
 			function _sh._cat:AddFunction()
 				if _sh._sho.uid ~= nil then
@@ -100,9 +100,9 @@ net.Receive(
 				--[[ NAME ]]
 				--
 				if YRPPanelAlive(_sh.ea) and YRPPanelAlive(_sh._cat) then
-					_sh._cat._name = YRPCreateD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
+					_sh._cat._name = YRPCreateD("DYRPTextEntry", _sh.ea, YRP:ctr(800), YRP:ctr(100), 0, 0)
 					_sh._cat._name.textentry.tbl = tbl
-					_sh._cat._name:SetHeader(YRP.trans("LID_name"))
+					_sh._cat._name:SetHeader(YRP:trans("LID_name"))
 					_sh._cat._name:SetText(tbl.name)
 					function _sh._cat._name.textentry:OnChange()
 						self.tbl.name = self:GetValue()
@@ -135,9 +135,9 @@ net.Receive(
 		local _sitems = net.ReadTable()
 		local PARENT = GetSettingsSite()
 		if YRPPanelAlive(PARENT) then
-			_sh._sit = YRPCreateD("DYRPDBList", PARENT, YRP.ctr(480), YRP.ctr(500), YRP.ctr(40), YRP.ctr(40 + 500 + 40 + 500 + 40))
+			_sh._sit = YRPCreateD("DYRPDBList", PARENT, YRP:ctr(480), YRP:ctr(500), YRP:ctr(40), YRP:ctr(40 + 500 + 40 + 500 + 40))
 			_sh._sit.tbl = _sitems
-			_sh._sit:SetListHeader(YRP.trans("LID_items"))
+			_sh._sit:SetListHeader(YRP:trans("LID_items"))
 			_sh._sit:SetEditArYRPEntityAlive(_sh.ea)
 			function _sh._sit:AddFunction()
 				if _sh._cat.uid ~= nil then
@@ -165,9 +165,9 @@ net.Receive(
 				--[[ NAME ]]
 				--
 				if YRPPanelAlive(_sh.ea) and YRPPanelAlive(_sh._sit) then
-					_sh._sit.itemname = YRPCreateD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(150))
+					_sh._sit.itemname = YRPCreateD("DYRPTextEntry", _sh.ea, YRP:ctr(800), YRP:ctr(100), 0, YRP:ctr(150))
 					_sh._sit.itemname.textentry.tbl = tbl
-					_sh._sit.itemname:SetHeader(YRP.trans("LID_name"))
+					_sh._sit.itemname:SetHeader(YRP:trans("LID_name"))
 					_sh._sit.itemname:SetText(tbl.name)
 					function _sh._sit.itemname.textentry:SendNewName()
 						if _sh._cat.uid ~= nil then
@@ -191,9 +191,9 @@ net.Receive(
 
 					--[[ Description ]]
 					--
-					_sh._sit.itemdesc = YRPCreateD("DYRPTextEntry", _sh.ea, YRP.ctr(800), YRP.ctr(400), 0, YRP.ctr(300))
+					_sh._sit.itemdesc = YRPCreateD("DYRPTextEntry", _sh.ea, YRP:ctr(800), YRP:ctr(400), 0, YRP:ctr(300))
 					_sh._sit.itemdesc.textentry.tbl = tbl
-					_sh._sit.itemdesc:SetHeader(YRP.trans("LID_description"))
+					_sh._sit.itemdesc:SetHeader(YRP:trans("LID_description"))
 					_sh._sit.itemdesc:SetText(tbl.description)
 					_sh._sit.itemdesc.textentry:SetMultiline(true)
 					function _sh._sit.itemdesc.textentry:SendNewDesc()
@@ -218,8 +218,8 @@ net.Receive(
 
 					--[[ Price ]]
 					--
-					_sh._sit.itemprice = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(750))
-					_sh._sit.itemprice:SetHeader(YRP.trans("LID_price"))
+					_sh._sit.itemprice = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP:ctr(800), YRP:ctr(100), 0, YRP:ctr(750))
+					_sh._sit.itemprice:SetHeader(YRP:trans("LID_price"))
 					_sh._sit.itemprice:INITPanel("DNumberWang")
 					_sh._sit.itemprice.plus.tbl = tbl
 					_sh._sit.itemprice.plus:SetMin(0)
@@ -238,8 +238,8 @@ net.Receive(
 
 					--[[ LEVEL ]]
 					--
-					_sh._sit.itemlevel = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(900))
-					_sh._sit.itemlevel:SetHeader(YRP.trans("LID_level"))
+					_sh._sit.itemlevel = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP:ctr(800), YRP:ctr(100), 0, YRP:ctr(900))
+					_sh._sit.itemlevel:SetHeader(YRP:trans("LID_level"))
 					_sh._sit.itemlevel:INITPanel("DNumberWang")
 					_sh._sit.itemlevel.plus.tbl = tbl
 					_sh._sit.itemlevel.plus:SetMin(0)
@@ -259,16 +259,16 @@ net.Receive(
 					--[[ Quantity ]]
 					--
 					--[[
-				_sh._sit.itemquan = YRPCreateD( "DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1050) )
-				_sh._sit.itemquan:SetHeader(YRP.trans( "LID_quantity" ) .. " ( " .. YRP.trans( "LID_wip" ) .. " )" )
+				_sh._sit.itemquan = YRPCreateD( "DYRPPanelPlus", _sh.ea, YRP:ctr(800), YRP:ctr(100), 0, YRP:ctr(1050) )
+				_sh._sit.itemquan:SetHeader(YRP:trans( "LID_quantity" ) .. " ( " .. YRP:trans( "LID_wip" ) .. " )" )
 				_sh._sit.itemquan:INITPanel( "DComboBox" )
 				_sh._sit.itemquan.plus.tbl = tbl
-				_sh._sit.itemquan.plus:AddChoice(YRP.trans( "LID_disabled" ), -1)
+				_sh._sit.itemquan.plus:AddChoice(YRP:trans( "LID_disabled" ), -1)
 				for i=1, 32 do
 					_sh._sit.itemquan.plus:AddChoice(i, i)
 				end
 				if tonumber(tbl.quantity) == -1 then
-					_sh._sit.itemquan.plus:ChooseOption(YRP.trans( "LID_disabled" ), tonumber(tbl.quantity) )
+					_sh._sit.itemquan.plus:ChooseOption(YRP:trans( "LID_disabled" ), tonumber(tbl.quantity) )
 				else
 					_sh._sit.itemquan.plus:ChooseOption(tbl.quantity, tonumber(tbl.quantity) )
 				end
@@ -286,8 +286,8 @@ net.Receive(
 					--
 					--[[ Cooldown ]]
 					--
-					_sh._sit.itemcool = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1200))
-					_sh._sit.itemcool:SetHeader(YRP.trans("LID_cooldown"))
+					_sh._sit.itemcool = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP:ctr(800), YRP:ctr(100), 0, YRP:ctr(1200))
+					_sh._sit.itemcool:SetHeader(YRP:trans("LID_cooldown"))
 					_sh._sit.itemcool:INITPanel("DNumberWang")
 					_sh._sit.itemcool.plus.tbl = tbl
 					_sh._sit.itemcool.plus:SetMin(0)
@@ -306,8 +306,8 @@ net.Receive(
 
 					--[[ License ]]
 					--
-					_sh._sit.itemlice = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1350))
-					_sh._sit.itemlice:SetHeader(YRP.trans("LID_licenses"))
+					_sh._sit.itemlice = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP:ctr(800), YRP:ctr(100), 0, YRP:ctr(1350))
+					_sh._sit.itemlice:SetHeader(YRP:trans("LID_licenses"))
 					_sh._sit.itemlice:INITPanel("DComboBox")
 					_sh._sit.itemlice.plus.tbl = tbl
 					net.Start("nws_yrp_get_all_licenses_simple")
@@ -317,7 +317,7 @@ net.Receive(
 						function(len)
 							local _licenses = net.ReadTable()
 							if YRPPanelAlive(_sh._sit) and YRPPanelAlive(_sh._sit.itemlice) and YRPPanelAlive(_sh._sit.itemlice.plus) then
-								_sh._sit.itemlice.plus:AddChoice(YRP.trans("LID_none"), -1)
+								_sh._sit.itemlice.plus:AddChoice(YRP:trans("LID_none"), -1)
 								for i, lic in pairs(_licenses) do
 									local _b = false
 									if tonumber(lic.uniqueID) == tonumber(tbl.licenseID) then
@@ -343,8 +343,8 @@ net.Receive(
 
 					--[[ Permanent ]]
 					--
-					_sh._sit.itemperm = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, YRP.ctr(1500))
-					_sh._sit.itemperm:SetHeader(YRP.trans("LID_permanent") .. " ( " .. YRP.trans("LID_wip") .. " )")
+					_sh._sit.itemperm = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP:ctr(800), YRP:ctr(100), 0, YRP:ctr(1500))
+					_sh._sit.itemperm:SetHeader(YRP:trans("LID_permanent") .. " ( " .. YRP:trans("LID_wip") .. " )")
 					_sh._sit.itemperm:INITPanel("DCheckBox")
 					_sh._sit.itemperm.plus.tbl = tbl
 					_sh._sit.itemperm.plus:SetChecked(tobool(tbl.permanent))
@@ -366,15 +366,15 @@ net.Receive(
 
 					--[[ TYPE ]]
 					--
-					_sh._sit.type = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP.ctr(800), YRP.ctr(100), 0, 0)
-					_sh._sit.type:SetHeader(YRP.trans("LID_type"))
+					_sh._sit.type = YRPCreateD("DYRPPanelPlus", _sh.ea, YRP:ctr(800), YRP:ctr(100), 0, 0)
+					_sh._sit.type:SetHeader(YRP:trans("LID_type"))
 					_sh._sit.type:INITPanel("DComboBox")
-					_sh._sit.type.plus:AddChoice(YRP.trans("LID_weapons"), "weapons")
-					_sh._sit.type.plus:AddChoice(YRP.trans("LID_props"), "props")
-					_sh._sit.type.plus:AddChoice(YRP.trans("LID_entities"), "entities")
-					_sh._sit.type.plus:AddChoice(YRP.trans("LID_vehicles"), "vehicles")
-					_sh._sit.type.plus:AddChoice(YRP.trans("LID_licenses"), "licenses")
-					_sh._sit.type.plus:AddChoice(YRP.trans("LID_roles"), "roles")
+					_sh._sit.type.plus:AddChoice(YRP:trans("LID_weapons"), "weapons")
+					_sh._sit.type.plus:AddChoice(YRP:trans("LID_props"), "props")
+					_sh._sit.type.plus:AddChoice(YRP:trans("LID_entities"), "entities")
+					_sh._sit.type.plus:AddChoice(YRP:trans("LID_vehicles"), "vehicles")
+					_sh._sit.type.plus:AddChoice(YRP:trans("LID_licenses"), "licenses")
+					_sh._sit.type.plus:AddChoice(YRP:trans("LID_roles"), "roles")
 					_sh._sit.type.plus.tbl = tbl
 					function _sh._sit.type.plus:OnSelect(panel, index, value)
 						local _itemlist = {}
@@ -488,7 +488,7 @@ function OpenSettingsShops()
 	local setSite = GetSettingsSite()
 	if setSite then
 		local h = setSite:GetTall()
-		_sh.ea = YRPCreateD("DPanel", setSite, ScW() - YRP.ctr(40 + 480 + 40 + 40), h - YRP.ctr(80), YRP.ctr(40 + 480 + 40), YRP.ctr(40))
+		_sh.ea = YRPCreateD("DPanel", setSite, ScW() - YRP:ctr(40 + 480 + 40 + 40), h - YRP:ctr(80), YRP:ctr(40 + 480 + 40), YRP:ctr(40))
 		function _sh.ea:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 		end

@@ -14,7 +14,7 @@ hook.Add(
 			YRPDrawRectBlur(self, 0, 0, pw, ph, 5) --draw.RoundedBox(0, 0, 0, pw, hh, YRPInterfaceValue( "YFrame", "HB" ) )
 			draw.RoundedBox(0, 0, 0, pw, hh, YRPInterfaceValue("YFrame", "HB")) --YRPInterfaceValue( "YFrame", "BG" ) )
 			if self.GetTitle ~= nil then
-				draw.SimpleText(YRP.trans(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP:trans(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			return true
@@ -55,8 +55,8 @@ hook.Add(
 
 			color = tab.color or color
 			tcolor = tab.tcolor or tcolor
-			draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, color.a))
-			draw.SimpleText(YRP.trans(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.RoundedBox(YRP:ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, color.a))
+			draw.SimpleText(YRP:trans(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 			return true
 		end
@@ -92,8 +92,8 @@ hook.Add(
 
 			color = tab.color or color
 			tcolor = tab.tcolor or tcolor
-			draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
-			draw.SimpleText(YRP.trans(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.RoundedBox(YRP:ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, 255))
+			draw.SimpleText(YRP:trans(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 			return true
 		end
@@ -129,8 +129,8 @@ hook.Add(
 
 			color = tab.color or color
 			tcolor = tab.tcolor or tcolor
-			draw.RoundedBox(YRP.ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, color.a))
-			draw.SimpleText(YRP.trans(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.RoundedBox(YRP:ctr(yrpr), 0, 0, pw, ph, Color(color.r, color.g, color.b, color.a))
+			draw.SimpleText(YRP:trans(tab.text or self:GetText()), "Y_18_500", pw / 2, ph / 2, tcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 			return true
 		end
@@ -149,15 +149,15 @@ hook.Add(
 			local ay = tab.ay or TEXT_ALIGN_CENTER
 			local tx = pw / 2
 			if ax == 0 then
-				tx = YRP.ctr(20)
+				tx = YRP:ctr(20)
 			end
 
 			local ty = ph / 2
 			if ay == 3 then
-				ty = YRP.ctr(20)
+				ty = YRP:ctr(20)
 			end
 
-			draw.SimpleText(YRP.trans(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
+			draw.SimpleText(YRP:trans(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
 
 			return true
 		end
@@ -176,15 +176,15 @@ hook.Add(
 			local ay = tab.ay or TEXT_ALIGN_CENTER
 			local tx = pw / 2
 			if ax == 0 then
-				tx = YRP.ctr(20)
+				tx = YRP:ctr(20)
 			end
 
 			local ty = ph / 2
 			if ay == 3 then
-				ty = YRP.ctr(20)
+				ty = YRP:ctr(20)
 			end
 
-			draw.SimpleText(YRP.trans(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
+			draw.SimpleText(YRP:trans(self:GetText()), "Y_18_500", tx, ty, tcolor, ax, ay)
 
 			return true
 		end
@@ -222,11 +222,11 @@ hook.Add(
 			end
 
 			surface.SetDrawColor(color)
-			surface.SetMaterial(YRP.GetDesignIcon("circle"))
+			surface.SetMaterial(YRP:GetDesignIcon("circle"))
 			surface.DrawTexturedRect(0, 0, pw, ph)
 			local br = ph * 0.1
 			surface.SetDrawColor(Color(255, 255, 255, 255))
-			surface.SetMaterial(YRP.GetDesignIcon("add"))
+			surface.SetMaterial(YRP:GetDesignIcon("add"))
 			surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
 
 			return true
@@ -252,11 +252,11 @@ hook.Add(
 			end
 
 			surface.SetDrawColor(color)
-			surface.SetMaterial(YRP.GetDesignIcon("circle"))
+			surface.SetMaterial(YRP:GetDesignIcon("circle"))
 			surface.DrawTexturedRect(0, 0, pw, ph)
 			local br = ph * 0.1
 			surface.SetDrawColor(Color(255, 255, 255, 255))
-			surface.SetMaterial(YRP.GetDesignIcon("remove"))
+			surface.SetMaterial(YRP:GetDesignIcon("remove"))
 			surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
 
 			return true
@@ -283,11 +283,11 @@ hook.Add(
 			end
 
 			surface.SetDrawColor(color)
-			surface.SetMaterial(YRP.GetDesignIcon("circle"))
+			surface.SetMaterial(YRP:GetDesignIcon("circle"))
 			surface.DrawTexturedRect(0, 0, pw, ph)
 			local br = ph * 0.1
 			surface.SetDrawColor(Color(255, 255, 255, 255))
-			surface.SetMaterial(YRP.GetDesignIcon("clear"))
+			surface.SetMaterial(YRP:GetDesignIcon("clear"))
 			surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
 
 			return true
@@ -313,11 +313,11 @@ hook.Add(
 			end
 
 			surface.SetDrawColor(color)
-			surface.SetMaterial(YRP.GetDesignIcon("circle"))
+			surface.SetMaterial(YRP:GetDesignIcon("circle"))
 			surface.DrawTexturedRect(0, 0, pw, ph)
 			local br = ph * 0.1
 			surface.SetDrawColor(Color(255, 255, 255, 255))
-			surface.SetMaterial(YRP.GetDesignIcon("mat_square"))
+			surface.SetMaterial(YRP:GetDesignIcon("mat_square"))
 			surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
 
 			return true
@@ -335,7 +335,7 @@ hook.Add(
 			draw.RoundedBox(0, 0, 0, pw, self:GetHeaderHeight(), Color(60, 60, 60, 60))
 			local x, y = self.con:GetPos()
 			draw.RoundedBox(0, x, y, self.con:GetWide(), self.con:GetTall(), Color(20, 20, 20, 60))
-			draw.SimpleText(YRP.trans(tab.text or self:GetText()), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans(tab.text or self:GetText()), "Y_18_500", pw / 2, self:GetHeaderHeight() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 			return true
 		end

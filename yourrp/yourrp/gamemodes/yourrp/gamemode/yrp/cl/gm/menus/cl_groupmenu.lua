@@ -17,9 +17,9 @@ end
 
 function YRPGetCharIsInstructorTextByName(name)
 	local isInstructor = YRPGetCharIsInstructorByName(name)
-	if isInstructor then return YRP.trans("LID_yes") end
+	if isInstructor then return YRP:trans("LID_yes") end
 
-	return YRP.trans("LID_no")
+	return YRP:trans("LID_no")
 end
 
 local GMENU = nil
@@ -30,7 +30,7 @@ function YRPToggleGroupMenu()
 	elseif YRPIsNoMenuOpen() then
 		YRPOpenMenu()
 		GMENU = YRPCreateD("YFrame", nil, 600, 600, 0, 0)
-		GMENU:SetTitle(string.format("%s: %s", YRP.trans("LID_group"), LocalPlayer():GetGroupName()))
+		GMENU:SetTitle(string.format("%s: %s", YRP:trans("LID_group"), LocalPlayer():GetGroupName()))
 		GMENU:Center()
 		GMENU:MakePopup()
 		GMENU:SetSizable(true)
@@ -200,17 +200,17 @@ function YRPToggleGroupMenu()
 				char.uniqueID = tonumber(char.uniqueID)
 				if IsValid(GMENU) then
 					GMENU.charid = char.uniqueID
-					GMENU.membername:SetText(string.format("%s: %s", YRP.trans("LID_name"), char.name))
+					GMENU.membername:SetText(string.format("%s: %s", YRP:trans("LID_name"), char.name))
 					GMENU.membername:Show()
-					GMENU.memberstatus:SetText(string.format("%s: %s", YRP.trans("LID_status"), YRPGetCharStatusByName(char.name)))
+					GMENU.memberstatus:SetText(string.format("%s: %s", YRP:trans("LID_status"), YRPGetCharStatusByName(char.name)))
 					GMENU.memberstatus:Show()
-					GMENU.memberrole:SetText(string.format("%s: %s", YRP.trans("LID_role"), char.roleName))
+					GMENU.memberrole:SetText(string.format("%s: %s", YRP:trans("LID_role"), char.roleName))
 					GMENU.memberrole:Show()
-					GMENU.instructor:SetText(string.format("%s: %s", YRP.trans("LID_isinstructor"), YRPGetCharIsInstructorTextByName(char.name)))
+					GMENU.instructor:SetText(string.format("%s: %s", YRP:trans("LID_isinstructor"), YRPGetCharIsInstructorTextByName(char.name)))
 					GMENU.instructor:Show()
 					GMENU.specsinfo:Clear()
 					local headline = YRPCreateD("YLabel", GMENU.specsinfo, 36, 30, 0, 0)
-					headline:SetText(YRP.trans("LID_specializations") .. ":")
+					headline:SetText(YRP:trans("LID_specializations") .. ":")
 					headline:Dock(TOP)
 					headline:DockMargin(0, 5, 0, 0)
 					GMENU.specsinfo:AddItem(headline)
@@ -280,8 +280,8 @@ function YRPToggleGroupMenu()
 									end
 
 									draw.RoundedBox(0, 0, 0, pw, ph, color)
-									if YRP.GetDesignIcon("64_trash") then
-										surface.SetMaterial(YRP.GetDesignIcon("64_trash"))
+									if YRP:GetDesignIcon("64_trash") then
+										surface.SetMaterial(YRP:GetDesignIcon("64_trash"))
 										surface.SetDrawColor(Color(255, 255, 255, 255))
 										surface.DrawTexturedRect(pw * 0.25, ph * 0.25, pw * 0.5, ph * 0.5)
 									end

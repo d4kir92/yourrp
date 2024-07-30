@@ -29,13 +29,13 @@ function replaceKeyName(str)
 	elseif str == "leftarrow" then
 		return "←"
 	elseif str == "home" then
-		return YRP.trans("LID_numpadhome")
+		return YRP:trans("LID_numpadhome")
 	elseif str == "plus" then
 		return "+"
 	elseif str == "minus" then
 		return "-"
 	elseif str == "ins" then
-		return YRP.trans("LID_keyinsert")
+		return YRP:trans("LID_keyinsert")
 	else
 		return str
 	end
@@ -48,9 +48,9 @@ function nicekey(key_str)
 			local _end = string.sub(_str, 4)
 			_end = replaceKeyName(_end)
 
-			return YRP.trans("LID_keynumpad") .. " " .. _end
+			return YRP:trans("LID_keynumpad") .. " " .. _end
 		elseif string.find(_str, "pg", 1, true) then
-			return YRP.trans("LID_keypage") .. " " .. replaceKeyName(_str)
+			return YRP:trans("LID_keypage") .. " " .. replaceKeyName(_str)
 		end
 
 		_str = replaceKeyName(_str)
@@ -62,27 +62,27 @@ end
 function AddKeybind(plist, keybind, lstr, icon, disabled)
 	local lply = LocalPlayer()
 	if disabled and not lply:HasAccess("AddKeybind") then return end
-	local kb = YRPCreateD("DPanel", nil, YRP.ctr(100), YRP.ctr(48), 0, 0)
+	local kb = YRPCreateD("DPanel", nil, YRP:ctr(100), YRP:ctr(48), 0, 0)
 	kb.key = keybind
 	function kb:Paint(pw, ph)
 		local text = ""
 		local color = Color(255, 255, 255, 255)
 		if disabled ~= nil and not GetGlobalYRPBool(disabled) then
-			text = "[" .. YRP.trans("LID_disabled") .. "] "
+			text = "[" .. YRP:trans("LID_disabled") .. "] "
 			color = Color(255, 255, 100, 255)
 		end
 
-		text = text .. YRP.trans(lstr)
-		draw.SimpleText(text, "Y_18_500", ph + YRP.ctr(10), ph / 2, color, 0, 1)
-		YRP.DrawIcon(YRP.GetDesignIcon(icon), ph - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), color)
-		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "Y_18_500", ph + YRP.ctr(700), ph / 2, Color(255, 255, 255, 255), 0, 1)
+		text = text .. YRP:trans(lstr)
+		draw.SimpleText(text, "Y_18_500", ph + YRP:ctr(10), ph / 2, color, 0, 1)
+		YRP:DrawIcon(YRP:GetDesignIcon(icon), ph - YRP:ctr(4), ph - YRP:ctr(4), YRP:ctr(2), YRP:ctr(2), color)
+		draw.SimpleText(string.upper("[" .. nicekey(self.key) .. "]"), "Y_18_500", ph + YRP:ctr(700), ph / 2, Color(255, 255, 255, 255), 0, 1)
 	end
 
 	plist:AddItem(kb)
 end
 
 function AddKeybindBr(plist)
-	local kb = YRPCreateD("DPanel", nil, YRP.ctr(100), YRP.ctr(4), 0, 0)
+	local kb = YRPCreateD("DPanel", nil, YRP:ctr(100), YRP:ctr(4), 0, 0)
 	function kb:Paint(pw, ph)
 		draw.RoundedBox(0, 0, ph / 4, pw, ph / 2, Color(255, 255, 255, 255))
 	end
@@ -98,25 +98,25 @@ net.Receive(
 			local motd = net.ReadString()
 			local posy = 0
 			if not strEmpty(welcome_message) then
-				local wm = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(60), 0, posy)
+				local wm = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(2 * 20), YRP:ctr(60), 0, posy)
 				function wm:Paint(pw, ph)
 					draw.SimpleText(welcome_message, "Y_22_500", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
 				end
 
-				posy = posy + wm:GetTall() + YRP.ctr(20)
+				posy = posy + wm:GetTall() + YRP:ctr(20)
 			end
 
 			if not strEmpty(motd) then
-				local mo = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(60), 0, posy)
+				local mo = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(2 * 20), YRP:ctr(60), 0, posy)
 				function mo:Paint(pw, ph)
-					draw.SimpleText(YRP.trans("LID_motd") .. ": " .. motd, "Y_22_500", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
+					draw.SimpleText(YRP:trans("LID_motd") .. ": " .. motd, "Y_22_500", 0, ph / 2, Color(255, 255, 255, 255), 0, 1)
 				end
 
-				posy = posy + mo:GetTall() + YRP.ctr(20)
+				posy = posy + mo:GetTall() + YRP:ctr(20)
 			end
 
-			local keybinds = YRPCreateD("DPanelList", HELPMENU.mainmenu.site, YRP.ctr(1200), HELPMENU.content:GetTall(), 0, posy)
-			keybinds:SetSpacing(YRP.ctr(2))
+			local keybinds = YRPCreateD("DPanelList", HELPMENU.mainmenu.site, YRP:ctr(1200), HELPMENU.content:GetTall(), 0, posy)
+			keybinds:SetSpacing(YRP:ctr(2))
 			AddKeybind(keybinds, "F1", "LID_help", "help")
 			AddKeybind(keybinds, YRPGetKeybindName("menu_role"), "LID_rolemenu", "role", "bool_players_can_switch_role")
 			AddKeybind(keybinds, YRPGetKeybindName("menu_buy"), "LID_buymenu", "shop")
@@ -160,7 +160,7 @@ net.Receive(
 			AddKeybind(keybinds, input.GetKeyName(KEY_LSHIFT) .. " + " .. YRPGetKeybindName("voice_menu"), "LID_nextvoicechannel", "volume_up")
 			AddKeybindBr(keybinds)
 			AddKeybind(keybinds, YRPGetKeybindName("chat_menu"), "LID_chat", "chat")
-			HELPMENU.discord = YRPCreateD("YButton", HELPMENU.mainmenu.site, YRP.ctr(500), YRP.ctr(50), HELPMENU.content:GetWide() - YRP.ctr(560), YRP.ctr(20 + 50 + 20))
+			HELPMENU.discord = YRPCreateD("YButton", HELPMENU.mainmenu.site, YRP:ctr(500), YRP:ctr(50), HELPMENU.content:GetWide() - YRP:ctr(560), YRP:ctr(20 + 50 + 20))
 			HELPMENU.discord:SetText("Get Live Support")
 			function HELPMENU.discord:Paint(pw, ph)
 				hook.Run("YButtonPaint", self, pw, ph)
@@ -170,7 +170,7 @@ net.Receive(
 				gui.OpenURL("https://discord.gg/sEgNZxg")
 			end
 
-			local version = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(2 * 20), YRP.ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - YRP.ctr(50))
+			local version = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(2 * 20), YRP:ctr(50), 0, HELPMENU.mainmenu.site:GetTall() - YRP:ctr(50))
 			function version:Paint(pw, ph)
 				draw.SimpleText("( " .. string.upper(GAMEMODE.dedicated) .. " Server) ( " .. GetGlobalYRPString("YRP_VERSIONART", "X") .. " ) YourRP V.: " .. YRPGetVersionFull() .. " by D4KiR", "Y_22_500", pw, ph / 2, YRPGetVersionColor(), 2, 1)
 			end
@@ -185,27 +185,27 @@ net.Receive(
 	function(len)
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
 			local staff = net.ReadTable()
-			local stafflist = YRPCreateD("DPanelList", HELPMENU.mainmenu.site, YRP.ctr(800), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
-			stafflist:SetSpacing(YRP.ctr(10))
+			local stafflist = YRPCreateD("DPanelList", HELPMENU.mainmenu.site, YRP:ctr(800), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
+			stafflist:SetSpacing(YRP:ctr(10))
 			for i, pl in pairs(staff) do
-				local tmp = YRPCreateD("YButton", stafflist, YRP.ctr(800), YRP.ctr(200), 0, 0)
+				local tmp = YRPCreateD("YButton", stafflist, YRP:ctr(800), YRP:ctr(200), 0, 0)
 				tmp:SetText("")
 				function tmp:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 255, 200))
 					if YRPEntityAlive(pl) then
-						draw.SimpleText(YRP.trans("LID_name") .. ": " .. pl:RPName(), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
-						draw.SimpleText(YRP.trans("LID_usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "Y_18_500", ph + YRP.ctr(10), YRP.ctr(50 + 25), Color(255, 255, 255, 255), 0, 1)
+						draw.SimpleText(YRP:trans("LID_name") .. ": " .. pl:RPName(), "Y_18_500", ph + YRP:ctr(10), YRP:ctr(25), Color(255, 255, 255, 255), 0, 1)
+						draw.SimpleText(YRP:trans("LID_usergroup") .. ": " .. string.upper(pl:GetUserGroup()), "Y_18_500", ph + YRP:ctr(10), YRP:ctr(50 + 25), Color(255, 255, 255, 255), 0, 1)
 					end
 				end
 
-				tmp.avatar = YRPCreateD("AvatarImage", tmp, YRP.ctr(200 - 8), YRP.ctr(200 - 8), YRP.ctr(4), YRP.ctr(4))
-				tmp.avatar:SetPlayer(pl, YRP.ctr(200))
+				tmp.avatar = YRPCreateD("AvatarImage", tmp, YRP:ctr(200 - 8), YRP:ctr(200 - 8), YRP:ctr(4), YRP:ctr(4))
+				tmp.avatar:SetPlayer(pl, YRP:ctr(200))
 				local steamsize = 50
-				tmp.steam = YRPCreateD("YButton", tmp, YRP.ctr(steamsize), YRP.ctr(steamsize), YRP.ctr(200 + 10), YRP.ctr(200 - steamsize - 10))
+				tmp.steam = YRPCreateD("YButton", tmp, YRP:ctr(steamsize), YRP:ctr(steamsize), YRP:ctr(200 + 10), YRP:ctr(200 - steamsize - 10))
 				tmp.steam:SetText("")
 				function tmp.steam:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph)
-					YRP.DrawIcon(YRP.GetDesignIcon("steam"), pw - YRP.ctr(4), ph - YRP.ctr(4), YRP.ctr(2), YRP.ctr(2), YRPGetColor("6"))
+					YRP:DrawIcon(YRP:GetDesignIcon("steam"), pw - YRP:ctr(4), ph - YRP:ctr(4), YRP:ctr(2), YRP:ctr(2), YRPGetColor("6"))
 				end
 
 				function tmp.steam:DoClick()
@@ -225,12 +225,12 @@ net.Receive(
 	function(len)
 		if YRPPanelAlive(HELPMENU, "HELPMENU") then
 			local serverrules = net.ReadString()
-			local page = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+			local page = YRPCreateD("DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 			function page:Paint(pw, ph)
-				draw.SimpleText(YRP.trans("LID_rules"), "Y_22_500", 0, 0, Color(255, 255, 255, 255), 0, 0)
+				draw.SimpleText(YRP:trans("LID_rules"), "Y_22_500", 0, 0, Color(255, 255, 255, 255), 0, 0)
 			end
 
-			page.serverrules = YRPCreateD("RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(50), 0, YRP.ctr(50))
+			page.serverrules = YRPCreateD("RichText", page, page:GetWide(), page:GetTall() - YRP:ctr(50), 0, YRP:ctr(50))
 			function page.serverrules:PerformLayout()
 				if self.SetUnderlineFont ~= nil then
 					self:SetUnderlineFont("Y_18_500")
@@ -252,17 +252,17 @@ net.Receive(
 			local collectionid = tonumber(net.ReadString())
 			if collectionid > 100000000 then
 				local link = "https://steamcommunity.com/sharedfiles/filedetails/?id=" .. collectionid
-				local WorkshopPage = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+				local WorkshopPage = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 				function WorkshopPage:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 				end
 
 				WorkshopPage:OpenURL(link)
-				local openLink = YRPCreateD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+				local openLink = YRPCreateD("YButton", WorkshopPage, YRP:ctr(100), YRP:ctr(100), HELPMENU.content:GetWide() - YRP:ctr(100 + 20 + 20), 0)
 				openLink:SetText("")
 				function openLink:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph)
-					YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+					YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 				end
 
 				function openLink:DoClick()
@@ -279,17 +279,17 @@ net.Receive(
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
 			local link = net.ReadString()
 			if not strEmpty(link) then
-				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 				function page:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 				end
 
 				page:OpenURL(link)
-				local openLink = YRPCreateD("YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+				local openLink = YRPCreateD("YButton", page, YRP:ctr(100), YRP:ctr(100), HELPMENU.content:GetWide() - YRP:ctr(100 + 20 + 20), 0)
 				openLink:SetText("")
 				function openLink:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph)
-					YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+					YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 				end
 
 				function openLink:DoClick()
@@ -306,17 +306,17 @@ net.Receive(
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
 			local link = net.ReadString()
 			if not strEmpty(link) then
-				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 				function page:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 				end
 
 				page:OpenURL(link)
-				local openLink = YRPCreateD("YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+				local openLink = YRPCreateD("YButton", page, YRP:ctr(100), YRP:ctr(100), HELPMENU.content:GetWide() - YRP:ctr(100 + 20 + 20), 0)
 				openLink:SetText("")
 				function openLink:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph)
-					YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+					YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 				end
 
 				function openLink:DoClick()
@@ -334,18 +334,18 @@ net.Receive(
 			local link = net.ReadString()
 			local widgetid = net.ReadString()
 			if not strEmpty(widgetid) then
-				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 				function page:Paint(pw, ph)
 				end
 
-				--draw.RoundedBox( 0, 0, 0, YRP.ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255 ) )
-				local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. YRP.ctr(1000) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
+				--draw.RoundedBox( 0, 0, 0, YRP:ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255 ) )
+				local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. YRP:ctr(1000) .. "\" height=\"" .. page:GetTall() - YRP:ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
 				page:SetHTML(widgetlink)
-				local openLink = YRPCreateD("YButton", page, YRP.ctr(240), YRP.ctr(54), YRP.ctr(760), page:GetTall() - YRP.ctr(92))
+				local openLink = YRPCreateD("YButton", page, YRP:ctr(240), YRP:ctr(54), YRP:ctr(760), page:GetTall() - YRP:ctr(92))
 				openLink:SetText("")
 				function openLink:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph)
-					YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+					YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 					draw.SimpleText("Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 				end
 
@@ -364,21 +364,21 @@ net.Receive(
 			local ip = net.ReadString()
 			local port = net.ReadString()
 			local query_port = net.ReadString()
-			YRP.msg("gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
+			YRP:msg("gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
 			if not strEmpty(ip) then
 				if not strEmpty(port) and not strEmpty(query_port) then
-					local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, YRP.ctr(1000), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+					local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, YRP:ctr(1000), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 					function page:Paint(pw, ph)
-						draw.RoundedBox(0, 0, 0, YRP.ctr(1000 + 2 * 20), ph, Color(40, 40, 40, 255))
+						draw.RoundedBox(0, 0, 0, YRP:ctr(1000 + 2 * 20), ph, Color(40, 40, 40, 255))
 					end
 
 					local widgetlink = "<span id=\"its402545\"><a href=\"https://www.teamspeak3.com/\">teamspeak</a> Hosting by TeamSpeak3.com</span><script type=\"text/javascript\" src=\"https://view.light-speed.com/teamspeak3.php?IP=" .. ip .. "&PORT=" .. port .. "&QUERY= " .. query_port .. "&UID=402545&display=block&font=11px&background=transparent&server_info_background=transparent&server_info_text=%23ffffff&server_name_background=transparent&server_name_text=%23ffffff&info_background=transparent&channel_background=transparent&channel_text=%23ffffff&username_background=transparent&username_text=%23ffffff\"></script>"
 					page:SetHTML(widgetlink)
-					local ipport = YRPCreateD("DTextEntry", HELPMENU.mainmenu.site, YRP.ctr(400), YRP.ctr(50), page:GetWide() + YRP.ctr(20), 0)
+					local ipport = YRPCreateD("DTextEntry", HELPMENU.mainmenu.site, YRP:ctr(400), YRP:ctr(50), page:GetWide() + YRP:ctr(20), 0)
 					ipport:SetText(ip .. ":" .. port)
 					ipport:SetEditable(false)
 				else
-					YRP.msg("note", "missing Port and QueryPort")
+					YRP:msg("note", "missing Port and QueryPort")
 				end
 			end
 		end
@@ -391,17 +391,17 @@ net.Receive(
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
 			local link = net.ReadString()
 			if not strEmpty(link) then
-				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 				function page:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 				end
 
 				page:OpenURL(link)
-				local openLink = YRPCreateD("YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+				local openLink = YRPCreateD("YButton", page, YRP:ctr(100), YRP:ctr(100), HELPMENU.content:GetWide() - YRP:ctr(100 + 20 + 20), 0)
 				openLink:SetText("")
 				function openLink:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph)
-					YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+					YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 				end
 
 				function openLink:DoClick()
@@ -418,17 +418,17 @@ net.Receive(
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
 			local link = net.ReadString()
 			if not strEmpty(link) then
-				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 				function page:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 				end
 
 				page:OpenURL(link)
-				local openLink = YRPCreateD("YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+				local openLink = YRPCreateD("YButton", page, YRP:ctr(100), YRP:ctr(100), HELPMENU.content:GetWide() - YRP:ctr(100 + 20 + 20), 0)
 				openLink:SetText("")
 				function openLink:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph)
-					YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+					YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 				end
 
 				function openLink:DoClick()
@@ -445,17 +445,17 @@ net.Receive(
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
 			local link = net.ReadString()
 			if not strEmpty(link) then
-				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 				function page:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 				end
 
 				page:OpenURL(link)
-				local openLink = YRPCreateD("YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+				local openLink = YRPCreateD("YButton", page, YRP:ctr(100), YRP:ctr(100), HELPMENU.content:GetWide() - YRP:ctr(100 + 20 + 20), 0)
 				openLink:SetText("")
 				function openLink:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph)
-					YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+					YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 				end
 
 				function openLink:DoClick()
@@ -472,17 +472,17 @@ net.Receive(
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
 			local link = net.ReadString()
 			if not strEmpty(link) then
-				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 				function page:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 				end
 
 				page:OpenURL(link)
-				local openLink = YRPCreateD("YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+				local openLink = YRPCreateD("YButton", page, YRP:ctr(100), YRP:ctr(100), HELPMENU.content:GetWide() - YRP:ctr(100 + 20 + 20), 0)
 				openLink:SetText("")
 				function openLink:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph)
-					YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+					YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 				end
 
 				function openLink:DoClick()
@@ -499,14 +499,14 @@ net.Receive(
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
 			local link = "https://steamcommunity.com/sharedfiles/filedetails/changelog/1114204152"
 			if not strEmpty(link) then
-				local posy = YRP.ctr(220)
-				local page = YRPCreateD("HTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20) + posy, 0, -posy)
+				local posy = YRP:ctr(220)
+				local page = YRPCreateD("HTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20) + posy, 0, -posy)
 				page:OpenURL(link)
-				local openLink = YRPCreateD("YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+				local openLink = YRPCreateD("YButton", page, YRP:ctr(100), YRP:ctr(100), HELPMENU.content:GetWide() - YRP:ctr(100 + 20 + 20), 0)
 				openLink:SetText("")
 				function openLink:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph)
-					YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+					YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 				end
 
 				function openLink:DoClick()
@@ -523,18 +523,18 @@ net.Receive(
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
 			local link = "https://discord.gg/sEgNZxg"
 			if not strEmpty(link) then
-				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, YRP.ctr(1040), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+				local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, YRP:ctr(1040), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 				function page:Paint(pw, ph)
 				end
 
 				--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
-				local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=322771229213851648&theme=dark\" width=\"" .. YRP.ctr(1000) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
+				local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=322771229213851648&theme=dark\" width=\"" .. YRP:ctr(1000) .. "\" height=\"" .. page:GetTall() - YRP:ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
 				page:SetHTML(widgetlink)
-				local openLink = YRPCreateD("YButton", page, YRP.ctr(240), YRP.ctr(54), YRP.ctr(760), page:GetTall() - YRP.ctr(92))
+				local openLink = YRPCreateD("YButton", page, YRP:ctr(240), YRP:ctr(54), YRP:ctr(760), page:GetTall() - YRP:ctr(92))
 				openLink:SetText("")
 				function openLink:Paint(pw, ph)
 					hook.Run("YButtonPaint", self, pw, ph)
-					YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+					YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 					draw.SimpleText("Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 				end
 
@@ -542,7 +542,7 @@ net.Receive(
 					gui.OpenURL(link)
 				end
 
-				local page2 = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(1040), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), YRP.ctr(1060), 0)
+				local page2 = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(1040), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), YRP:ctr(1060), 0)
 				page2:OpenURL(link)
 			end
 		end
@@ -554,13 +554,13 @@ net.Receive(
 	function(len)
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
 			local link = "https://sites.google.com/view/yourrp-gmod/serverlist"
-			local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
+			local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
 			page:OpenURL(link)
-			local openLink = YRPCreateD("YButton", page, YRP.ctr(100), YRP.ctr(100), HELPMENU.content:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+			local openLink = YRPCreateD("YButton", page, YRP:ctr(100), YRP:ctr(100), HELPMENU.content:GetWide() - YRP:ctr(100 + 20 + 20), 0)
 			openLink:SetText("")
 			function openLink:Paint(pw, ph)
 				hook.Run("YButtonPaint", self, pw, ph)
-				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+				YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 
 			function openLink:DoClick()
@@ -575,10 +575,10 @@ net.Receive(
 	function(len)
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
 			local Parent = HELPMENU.mainmenu.site
-			--local page = YRPCreateD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP.ctr(20 + 20), HELPMENU.content:GetTall() - YRP.ctr(100 + 20 + 20), 0, 0)
+			--local page = YRPCreateD( "DPanel", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall() - YRP:ctr(100 + 20 + 20), 0, 0)
 			local _longestProgressText = 0
 			local _allProgressTexts = {}
-			for sho, language in SortedPairs(YRP.GetAllLanguages()) do
+			for sho, language in SortedPairs(YRP:GetAllLanguages()) do
 				local text = language.language .. "/" .. language.inenglish
 				if language.percentage ~= nil then
 					language.percentage = tonumber(language.percentage)
@@ -597,18 +597,18 @@ net.Receive(
 			local _h = 74
 			local _icon_h = _h - _br
 			local _icon_w = _icon_h * 1.478
-			local _w = YRP.ctr(800) -- _longestProgressText + YRP.ctr(_icon_w + 20 + 20)
-			local LANGUAGES = YRPCreateD("YGroupBox", Parent, _w, Parent:GetTall() - YRP.ctr(25), Parent:GetWide() / 2 - _w / 2, 0)
+			local _w = YRP:ctr(800) -- _longestProgressText + YRP:ctr(_icon_w + 20 + 20)
+			local LANGUAGES = YRPCreateD("YGroupBox", Parent, _w, Parent:GetTall() - YRP:ctr(25), Parent:GetWide() / 2 - _w / 2, 0)
 			LANGUAGES:SetText("Languages")
 			function LANGUAGES:Paint(pw, ph)
 				hook.Run("YGroupBoxPaint", self, pw, ph)
 			end
 
-			LANGUAGES:SetSpacing(YRP.ctr(10))
-			--page.panellist = YRPCreateD( "DPanelList", page, _w, page:GetTall(), page:GetWide() / 2 - _w / 2, YRP.ctr(100) )
+			LANGUAGES:SetSpacing(YRP:ctr(10))
+			--page.panellist = YRPCreateD( "DPanelList", page, _w, page:GetTall(), page:GetWide() / 2 - _w / 2, YRP:ctr(100) )
 			--page.panellist:SetSpacing(_br)
-			for sho, language in SortedPairs(YRP.GetAllLanguages()) do
-				local lan = YRPCreateD("YButton", nil, LANGUAGES:GetContent():GetWide(), YRP.ctr(_h), 0, 0)
+			for sho, language in SortedPairs(YRP:GetAllLanguages()) do
+				local lan = YRPCreateD("YButton", nil, LANGUAGES:GetContent():GetWide(), YRP:ctr(_h), 0, 0)
 				lan:SetText("")
 				lan.language = language
 				function lan:Paint(pw, ph)
@@ -627,15 +627,15 @@ net.Receive(
 					end
 
 					hook.Run("YButtonPaint", self, pw, ph)
-					draw.SimpleText(_allProgressTexts[sho], "Y_18_500", YRP.ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
-					YRP.DrawIcon(YRP.GetDesignIcon("lang_" .. tostring(self.language.short)), YRP.ctr(_icon_w), YRP.ctr(_icon_h), YRP.ctr(_br), YRP.ctr((_h - _icon_h) / 2), Color(255, 255, 255, 255))
+					draw.SimpleText(_allProgressTexts[sho], "Y_18_500", YRP:ctr(_icon_w + 4 + 10), ph / 2, self.textcol, 0, 1)
+					YRP:DrawIcon(YRP:GetDesignIcon("lang_" .. tostring(self.language.short)), YRP:ctr(_icon_w), YRP:ctr(_icon_h), YRP:ctr(_br), YRP:ctr((_h - _icon_h) / 2), Color(255, 255, 255, 255))
 				end
 
 				function lan:DoClick()
 					if self.language.author == "" then
 						OpenHelpTranslatingWindow()
 					else
-						local win = YRPCreateD("YFrame", nil, YRP.ctr(1000), YRP.ctr(1600), 0, 0)
+						local win = YRPCreateD("YFrame", nil, YRP:ctr(1000), YRP:ctr(1600), 0, 0)
 						win:SetTitle(language.inenglish)
 						win:MakePopup()
 						function win:Paint(pw, ph)
@@ -643,12 +643,12 @@ net.Receive(
 						end
 
 						win:Center()
-						win:SetHeaderHeight(YRP.ctr(100))
+						win:SetHeaderHeight(YRP:ctr(100))
 						for i, steamid64 in pairs(string.Explode(",", language.steamid64)) do
 							if not strEmpty(steamid64) then
 								local plink = "http://steamcommunity.com/profiles/" .. steamid64
-								local bg = YRPCreateD("DPanel", win:GetContent(), win:GetContent():GetWide() - YRP.ctr(40), YRP.ctr(338), YRP.ctr(20), YRP.ctr(20) + (i - 1) * YRP.ctr(338 + 20))
-								local p = YRPCreateD("DHTML", bg, YRP.ctr(1000), YRP.ctr(800), YRP.ctr(-26), YRP.ctr(-272))
+								local bg = YRPCreateD("DPanel", win:GetContent(), win:GetContent():GetWide() - YRP:ctr(40), YRP:ctr(338), YRP:ctr(20), YRP:ctr(20) + (i - 1) * YRP:ctr(338 + 20))
+								local p = YRPCreateD("DHTML", bg, YRP:ctr(1000), YRP:ctr(800), YRP:ctr(-26), YRP:ctr(-272))
 								p:OpenURL(plink)
 								local pb = YRPCreateD("YButton", bg, bg:GetWide(), bg:GetTall(), 0, 0)
 								pb:SetText("")
@@ -667,15 +667,15 @@ net.Receive(
 				LANGUAGES:AddItem(lan)
 			end
 
-			local _helplanWidth = YRP.ctr(400)
+			local _helplanWidth = YRP:ctr(400)
 			local _helplanX = 0
-			if (_longestProgressText + YRP.ctr(2 * (68 + 4 + 10))) > (ScrW() / 2 - _helplanWidth / 2) then
-				_helplanX = (_longestProgressText + 30) + YRP.ctr(2 * (68 + 4 + 10))
+			if (_longestProgressText + YRP:ctr(2 * (68 + 4 + 10))) > (ScrW() / 2 - _helplanWidth / 2) then
+				_helplanX = (_longestProgressText + 30) + YRP:ctr(2 * (68 + 4 + 10))
 			else
 				_helplanX = ScrW() / 2 - _helplanWidth / 2
 			end
 
-			local helplan = YRPCreateD("YButton", Parent, YRP.ctr(400), YRP.ctr(50), Parent:GetWide() - YRP.ctr(400), 0)
+			local helplan = YRPCreateD("YButton", Parent, YRP:ctr(400), YRP:ctr(50), Parent:GetWide() - YRP:ctr(400), 0)
 			helplan:SetText("Help translating")
 			function helplan:Paint(pw, ph)
 				hook.Run("YButtonPaint", self, pw, ph)
@@ -696,7 +696,7 @@ function OpenHelpMenu()
 	HELPMENU.window:Center()
 	HELPMENU.window:SetTitle("LID_helpmenu")
 	HELPMENU.window:SetDraggable(false)
-	HELPMENU.window:SetHeaderHeight(YRP.ctr(100))
+	HELPMENU.window:SetHeaderHeight(YRP:ctr(100))
 	HELPMENU.window:SetBackgroundBlur(true)
 	HELPMENU.window.systime = SysTime()
 	function HELPMENU.window:Paint(pw, ph)
@@ -715,6 +715,6 @@ function CreateHelpMenuContent(parent)
 	if YRPPanelAlive(HELPMENU.mainmenu) then
 		HELPMENU.mainmenu:GetMenuInfo("nws_yrp_gethelpmenu")
 		HELPMENU.mainmenu:SetStartTab("LID_help")
-		HELPMENU.mainmenu:SetHeaderHeight(YRP.ctr(100))
+		HELPMENU.mainmenu:SetHeaderHeight(YRP:ctr(100))
 	end
 end

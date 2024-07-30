@@ -32,12 +32,12 @@ end
 function YRPCreateRulesContent(PARENT)
 	local serverrules = table.concat(GetGlobalYRPTable("text_server_rules", ""), "\n")
 	serverrules = YRP_SQL_STR_OUT(serverrules)
-	local page = YRPCreateD("DPanel", PARENT, PARENT:GetWide() - YRP.ctr(20 + 20), PARENT:GetTall() - YRP.ctr(20 + 20), YRP.ctr(20), YRP.ctr(20))
+	local page = YRPCreateD("DPanel", PARENT, PARENT:GetWide() - YRP:ctr(20 + 20), PARENT:GetTall() - YRP:ctr(20 + 20), YRP:ctr(20), YRP:ctr(20))
 	function page:Paint(pw, ph)
-		draw.SimpleText(YRP.trans("LID_rules"), "Y_22_500", 0, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.SimpleText(YRP:trans("LID_rules"), "Y_22_500", 0, YRP:ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 	end
 
-	page.serverrules = YRPCreateD("RichText", page, page:GetWide(), page:GetTall() - YRP.ctr(70), 0, YRP.ctr(70))
+	page.serverrules = YRPCreateD("RichText", page, page:GetWide(), page:GetTall() - YRP:ctr(70), 0, YRP:ctr(70))
 	function page.serverrules:PerformLayout()
 		if self.SetUnderlineFont ~= nil then
 			self:SetUnderlineFont("Y_18_500")
@@ -57,15 +57,15 @@ function YRPCreateDiscordContent(PARENT)
 	function page:Paint(pw, ph)
 	end
 
-	--draw.RoundedBox( 0, 0, 0, YRP.ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255 ) )
-	local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. PARENT:GetWide() - YRP.ctr(2 * 20) .. "\" height=\"" .. page:GetTall() - YRP.ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
+	--draw.RoundedBox( 0, 0, 0, YRP:ctr(1000 + 2 * 20), ph, Color( 255, 255, 255, 255 ) )
+	local widgetlink = "<iframe src=\"https://canary.discordapp.com/widget?id=" .. widgetid .. "&theme=dark\" width=\"" .. PARENT:GetWide() - YRP:ctr(2 * 20) .. "\" height=\"" .. page:GetTall() - YRP:ctr(2 * 20) .. "\" allowtransparency=\"true\" frameborder=\"0\"></iframe>"
 	page:SetHTML(widgetlink)
-	local openLink = YRPCreateD("YButton", page, YRP.ctr(240), YRP.ctr(54), PARENT:GetWide() - YRP.ctr(280), page:GetTall() - YRP.ctr(92))
+	local openLink = YRPCreateD("YButton", page, YRP:ctr(240), YRP:ctr(54), PARENT:GetWide() - YRP:ctr(280), page:GetTall() - YRP:ctr(92))
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP:GetDesignIcon("launch") ~= nil then
+			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 		end
 
 		draw.SimpleText("Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
@@ -80,7 +80,7 @@ function YRPCreateTeamspeakContent(PARENT)
 	local ip = GetGlobalYRPString("text_social_teamspeak_ip", "")
 	local port = GetGlobalYRPString("text_social_teamspeak_port", "")
 	local query_port = GetGlobalYRPString("text_social_teamspeak_query_port", "")
-	YRP.msg("gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
+	YRP:msg("gm", "TS: " .. ip .. ":" .. port .. " | QPort: " .. query_port)
 	if not strEmpty(ip) then
 		if not strEmpty(port) and not strEmpty(query_port) then
 			local page = YRPCreateD("DHTML", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
@@ -90,11 +90,11 @@ function YRPCreateTeamspeakContent(PARENT)
 			--draw.RoundedBox( 0, 0, 0, pw, ph, Color(40, 40, 40, 255) )
 			local widgetlink = "<span id=\"its402545\"><a href=\"https://www.teamspeak3.com/\">teamspeak</a> Hosting by TeamSpeak3.com</span><script type=\"text/javascript\" src=\"https://view.light-speed.com/teamspeak3.php?IP=" .. ip .. "&PORT=" .. port .. "&QUERY= " .. query_port .. "&UID=402545&display=block&font=11px&background=transparent&server_info_background=transparent&server_info_text=%23ffffff&server_name_background=transparent&server_name_text=%23ffffff&info_background=transparent&channel_background=transparent&channel_text=%23ffffff&username_background=transparent&username_text=%23ffffff\"></script>"
 			page:SetHTML(widgetlink)
-			local ipport = YRPCreateD("DTextEntry", PARENT, YRP.ctr(400), YRP.ctr(50), PARENT:GetWide() - YRP.ctr(420), YRP.ctr(20))
+			local ipport = YRPCreateD("DTextEntry", PARENT, YRP:ctr(400), YRP:ctr(50), PARENT:GetWide() - YRP:ctr(420), YRP:ctr(20))
 			ipport:SetText(ip .. ":" .. port)
 			ipport:SetEditable(true)
 		else
-			YRP.msg("note", "missing Port and QueryPort")
+			YRP:msg("note", "missing Port and QueryPort")
 		end
 	end
 end
@@ -109,12 +109,12 @@ function YRPCreateCollectionContent(PARENT)
 		end
 
 		WorkshopPage:OpenURL(link)
-		local openLink = YRPCreateD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20 + 20), 0)
+		local openLink = YRPCreateD("YButton", WorkshopPage, YRP:ctr(100), YRP:ctr(100), PARENT:GetWide() - YRP:ctr(100 + 20 + 20), 0)
 		openLink:SetText("")
 		function openLink:Paint(pw, ph)
 			hook.Run("YButtonPaint", self, pw, ph)
-			if YRP.GetDesignIcon("launch") ~= nil then
-				YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+			if YRP:GetDesignIcon("launch") ~= nil then
+				YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 			end
 		end
 
@@ -132,12 +132,12 @@ function YRPCreateTwitchContent(PARENT)
 
 	--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	WorkshopPage:OpenURL(link)
-	local openLink = YRPCreateD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	local openLink = YRPCreateD("YButton", WorkshopPage, YRP:ctr(100), YRP:ctr(100), PARENT:GetWide() - YRP:ctr(100 + 20), YRP:ctr(20))
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP:GetDesignIcon("launch") ~= nil then
+			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 		end
 	end
 
@@ -154,11 +154,11 @@ function YRPCreateYoutubeContent(PARENT)
 
 	--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	WorkshopPage:OpenURL(link)
-	local openLink = YRPCreateD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	local openLink = YRPCreateD("YButton", WorkshopPage, YRP:ctr(100), YRP:ctr(100), PARENT:GetWide() - YRP:ctr(100 + 20), YRP:ctr(20))
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 	end
 
 	function openLink:DoClick()
@@ -174,12 +174,12 @@ function YRPCreateTwitterContent(PARENT)
 
 	--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	WorkshopPage:OpenURL(link)
-	local openLink = YRPCreateD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	local openLink = YRPCreateD("YButton", WorkshopPage, YRP:ctr(100), YRP:ctr(100), PARENT:GetWide() - YRP:ctr(100 + 20), YRP:ctr(20))
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP:GetDesignIcon("launch") ~= nil then
+			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 		end
 	end
 
@@ -196,12 +196,12 @@ function YRPCreateSteamGroupContent(PARENT)
 
 	--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	WorkshopPage:OpenURL(link)
-	local openLink = YRPCreateD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	local openLink = YRPCreateD("YButton", WorkshopPage, YRP:ctr(100), YRP:ctr(100), PARENT:GetWide() - YRP:ctr(100 + 20), YRP:ctr(20))
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP:GetDesignIcon("launch") ~= nil then
+			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 		end
 	end
 
@@ -218,12 +218,12 @@ function YRPCreateFacebookContent(PARENT)
 
 	--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	WorkshopPage:OpenURL(link)
-	local openLink = YRPCreateD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	local openLink = YRPCreateD("YButton", WorkshopPage, YRP:ctr(100), YRP:ctr(100), PARENT:GetWide() - YRP:ctr(100 + 20), YRP:ctr(20))
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP:GetDesignIcon("launch") ~= nil then
+			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 		end
 	end
 
@@ -240,12 +240,12 @@ function YRPCreateInstagramContent(PARENT)
 
 	--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 255, 255, 255, 255 ) )
 	WorkshopPage:OpenURL(link)
-	local openLink = YRPCreateD("YButton", WorkshopPage, YRP.ctr(100), YRP.ctr(100), PARENT:GetWide() - YRP.ctr(100 + 20), YRP.ctr(20))
+	local openLink = YRPCreateD("YButton", WorkshopPage, YRP:ctr(100), YRP:ctr(100), PARENT:GetWide() - YRP:ctr(100 + 20), YRP:ctr(20))
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP.GetDesignIcon("launch") ~= nil then
-			YRP.DrawIcon(YRP.GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
+		if YRP:GetDesignIcon("launch") ~= nil then
+			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
 		end
 	end
 
@@ -257,7 +257,7 @@ end
 function YRPOpenCombinedMenu()
 	local lply = LocalPlayer()
 	cm.open = true
-	local br = YRP.ctr(20)
+	local br = YRP:ctr(20)
 	if YRPPanelAlive(cm.win) == false then
 		local sites = {}
 		local c = 1
@@ -438,7 +438,7 @@ function YRPOpenCombinedMenu()
 		cm.win = YRPCreateD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
 		cm.win:SetTitle(GetGlobalYRPString("text_server_name", ""))
 		cm.win:MakePopup()
-		--cm.win:SetHeaderHeight(YRP.ctr(100) )
+		--cm.win:SetHeaderHeight(YRP:ctr(100) )
 		cm.win:SetBorder(0)
 		function cm.win:Paint(pw, ph)
 			if GetGlobalYRPString("text_server_name", "") ~= self:GetTitle() then
@@ -459,7 +459,7 @@ function YRPOpenCombinedMenu()
 		cm.win:SetMinHeight(700)
 		local content = cm.win:GetContent()
 		-- MENU
-		cm.menu = YRPCreateD("DPanelList", content, 10, BFH() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br, 0, 0)
+		cm.menu = YRPCreateD("DPanelList", content, 10, BFH() - cm.win:GetHeaderHeight() - YRP:ctr(64) - 2 * br, 0, 0)
 		cm.menu:EnableVerticalScrollbar()
 		local sbar = cm.menu.VBar
 		function sbar:Paint(w, h)
@@ -480,14 +480,14 @@ function YRPOpenCombinedMenu()
 
 		cm.menu:SetText("")
 		cm.menu.pw = 10
-		cm.menu.ph = YRP.ctr(64) + 2 * br
+		cm.menu.ph = YRP:ctr(64) + 2 * br
 		cm.menu.expanded = lply.combined_expanded or true
 		local font = "Y_" .. math.Clamp(math.Round(cm.menu.ph - 2 * br), 4, 100) .. "_500"
 		function cm.menu:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"))
 		end
 
-		cm.menu:SetSpacing(YRP.ctr(10))
+		cm.menu:SetSpacing(YRP:ctr(10))
 		if cm.menu.expanded then
 			cm.win:UpdateSize(cm.menu.ph)
 		else
@@ -509,14 +509,14 @@ function YRPOpenCombinedMenu()
 		end
 
 		function cm.menu.expander:Paint(pw, ph)
-			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"), false, false, true, false)
+			draw.RoundedBoxEx(YRP:ctr(10), 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"), false, false, true, false)
 			if cm.menu.expanded then
-				if YRP.GetDesignIcon("64_angle-left") ~= nil then
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+				if YRP:GetDesignIcon("64_angle-left") ~= nil then
+					surface.SetMaterial(YRP:GetDesignIcon("64_angle-left"))
 				end
 			else
-				if YRP.GetDesignIcon("64_angle-right") ~= nil then
-					surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+				if YRP:GetDesignIcon("64_angle-right") ~= nil then
+					surface.SetMaterial(YRP:GetDesignIcon("64_angle-right"))
 				end
 			end
 
@@ -552,7 +552,7 @@ function YRPOpenCombinedMenu()
 			cm.menu.pw = 240
 			local sw = pw or cm.menu.pw + cm.menu.ph + 2 * br
 			cm.menu:SetWide(sw)
-			cm.menu:SetTall(cm.win:GetTall() - cm.win:GetHeaderHeight() - YRP.ctr(64) - 2 * br)
+			cm.menu:SetTall(cm.win:GetTall() - cm.win:GetHeaderHeight() - YRP:ctr(64) - 2 * br)
 			cm.menu.expander:SetPos(0, cm.win:GetHeaderHeight() + cm.menu:GetTall())
 			cm.menu.expander:SetWide(sw)
 			cm.site:SetPos(cm.menu:GetWide(), 0)
@@ -563,7 +563,7 @@ function YRPOpenCombinedMenu()
 		surface.SetFont(font)
 		for i, v in pairs(sites) do
 			if v.name ~= "hr" then
-				local tw, _ = surface.GetTextSize(YRP.trans(v.name))
+				local tw, _ = surface.GetTextSize(YRP:trans(v.name))
 				if tw > cm.menu.pw then
 					cm.menu.pw = tw
 				end
@@ -587,20 +587,20 @@ function YRPOpenCombinedMenu()
 
 					self.aw = Lerp(10 * FrameTime(), self.aw, target)
 					draw.RoundedBox(0, 0, 0, self.aw, ph, color)
-					if YRP.GetDesignIcon(v.icon) ~= nil then
+					if YRP:GetDesignIcon(v.icon) ~= nil then
 						surface.SetDrawColor(Color(255, 255, 255, 255))
-						surface.SetMaterial(YRP.GetDesignIcon(v.icon))
+						surface.SetMaterial(YRP:GetDesignIcon(v.icon))
 						surface.DrawTexturedRect(br, br, ph - 2 * br, ph - 2 * br)
 					end
 
 					surface.SetFont(font)
-					local tw2, _ = surface.GetTextSize(YRP.trans(v.name))
+					local tw2, _ = surface.GetTextSize(YRP:trans(v.name))
 					if tw2 > cm.menu.pw then
 						cm.menu.pw = tw2
 						--cm.win:UpdateSize()
 					end
 
-					draw.SimpleText(YRP.trans(v.name), font, ph, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP:trans(v.name), font, ph, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				function site:DoClick()
@@ -618,10 +618,10 @@ function YRPOpenCombinedMenu()
 
 				cm.menu:AddItem(site)
 			else
-				cm.sites[v.name] = YRPCreateD("DPanel", cm.menu, cm.menu.pw, YRP.ctr(20), 0, 0)
+				cm.sites[v.name] = YRPCreateD("DPanel", cm.menu, cm.menu.pw, YRP:ctr(20), 0, 0)
 				local site = cm.sites[v.name]
 				function site:Paint(pw, ph)
-					local hr = YRP.ctr(2)
+					local hr = YRP:ctr(2)
 					draw.RoundedBox(0, br, ph / 2 - hr / 2, pw - br * 2, hr, Color(255, 255, 255, 255))
 				end
 

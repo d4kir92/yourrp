@@ -1,14 +1,14 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:UPDATESIZE()
-	self.hs:SetSize(self:GetWide(), YRP.ctr(self.height))
-	self.site:SetSize(self:GetWide(), self:GetTall() - YRP.ctr(self.height))
-	self.site:SetPos(0, YRP.ctr(self.height))
+	self.hs:SetSize(self:GetWide(), YRP:ctr(self.height))
+	self.site:SetSize(self:GetWide(), self:GetTall() - YRP:ctr(self.height))
+	self.site:SetPos(0, YRP:ctr(self.height))
 end
 
 function PANEL:Init()
 	self.hs = YRPCreateD("DHorizontalScroller", self, 0, 0, 0, 0)
-	self.hs:SetOverlap(-YRP.ctr(20))
+	self.hs:SetOverlap(-YRP:ctr(20))
 	self.site = YRPCreateD("DPanel", self, 0, 0, 0, 0)
 	function self.site:Paint(pw, ph)
 	end
@@ -32,7 +32,7 @@ function PANEL:AddOption(name, func, height)
 	height = height or 100
 	self.height = height
 	self:UPDATESIZE()
-	local tab = YRPCreateD("DButton", nil, YRP.ctr(400), YRP.ctr(height), 0, 0)
+	local tab = YRPCreateD("DButton", nil, YRP:ctr(400), YRP:ctr(height), 0, 0)
 	tab:SetText("")
 	tab.tabs = self
 	function tab:DoClick()
@@ -44,10 +44,10 @@ function PANEL:AddOption(name, func, height)
 	function tab:Paint(pw, ph)
 		if self.tabs.auto then
 			surface.SetFont("Y_26_500")
-			local tw, _ = surface.GetTextSize(YRP.trans(name))
-			self:SetWide(tw + YRP.ctr(80))
+			local tw, _ = surface.GetTextSize(YRP:trans(name))
+			self:SetWide(tw + YRP:ctr(80))
 		else
-			self:SetWide(YRP.ctr(self.tabs.tabwide))
+			self:SetWide(YRP:ctr(self.tabs.tabwide))
 		end
 
 		self.color = Color(100, 100, 255)
@@ -64,8 +64,8 @@ function PANEL:AddOption(name, func, height)
 		end
 
 		self.h = math.Clamp(self.h, 0, 10)
-		draw.RoundedBox(0, YRP.ctr(20), ph - YRP.ctr(self.h), pw - YRP.ctr(40), YRP.ctr(self.h), self.color)
-		draw.SimpleText(YRP.trans(name), "Y_26_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.RoundedBox(0, YRP:ctr(20), ph - YRP:ctr(self.h), pw - YRP:ctr(40), YRP:ctr(self.h), self.color)
+		draw.SimpleText(YRP:trans(name), "Y_26_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	self.tabs[name] = func

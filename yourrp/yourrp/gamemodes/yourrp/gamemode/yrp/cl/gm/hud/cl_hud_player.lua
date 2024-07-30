@@ -38,7 +38,7 @@ end
 function showIcon(str, material)
 	surface.SetDrawColor(Color(255, 255, 255, 255))
 	surface.SetMaterial(material)
-	surface.DrawTexturedRect(anchorW(HudV(str .. "aw")) + YRP.ctr(HudV(str .. "px")) + YRP.ctr(30) - YRP.ctr(16), anchorH(HudV(str .. "ah")) + YRP.ctr(HudV(str .. "py")) + YRP.ctr(HudV(str .. "sh") / 2) - YRP.ctr(16), YRP.ctr(32), YRP.ctr(32))
+	surface.DrawTexturedRect(anchorW(HudV(str .. "aw")) + YRP:ctr(HudV(str .. "px")) + YRP:ctr(30) - YRP:ctr(16), anchorH(HudV(str .. "ah")) + YRP:ctr(HudV(str .. "py")) + YRP:ctr(HudV(str .. "sh") / 2) - YRP:ctr(16), YRP:ctr(32), YRP:ctr(32))
 end
 
 local once = true
@@ -178,21 +178,21 @@ end
 
 function drawMenuInfo()
 	if get_tutorial("tut_f1info") then
-		local isize = YRP.ctr(48)
-		local ibr = YRP.ctr(10)
+		local isize = YRP:ctr(48)
+		local ibr = YRP:ctr(10)
 		local color = Color(255, 255, 255, 20)
 		local x = ibr
 		local y = ibr
 		--[[ F1 ]]
 		--
-		if IsNotNilAndNotFalse(YRP.GetDesignIcon("help")) then
+		if IsNotNilAndNotFalse(YRP:GetDesignIcon("help")) then
 			surface.SetDrawColor(color)
-			surface.SetMaterial(YRP.GetDesignIcon("help"))
+			surface.SetMaterial(YRP:GetDesignIcon("help"))
 			surface.DrawTexturedRect(x, y, isize, isize)
 		end
 
 		x = x + isize + ibr
-		local text = "[" .. "F1" .. "] " .. YRP.trans("LID_help")
+		local text = "[" .. "F1" .. "] " .. YRP:trans("LID_help")
 		sText(text, "Y_18_500", x, y + isize / 2, color, 0, 1)
 	end
 end
@@ -222,11 +222,11 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 				HUD[dbV] = {}
 				HUD[dbV].id = HUD.count
 				HUD[dbV].delay = CurTime()
-				HUD[dbV].x = anchorW(HudV(dbV .. "aw")) + YRP.ctr(HudV(dbV .. "px"))
-				HUD[dbV].y = anchorH(HudV(dbV .. "ah")) + YRP.ctr(HudV(dbV .. "py"))
-				HUD[dbV].w = YRP.ctr(HudV(dbV .. "sw"))
+				HUD[dbV].x = anchorW(HudV(dbV .. "aw")) + YRP:ctr(HudV(dbV .. "px"))
+				HUD[dbV].y = anchorH(HudV(dbV .. "ah")) + YRP:ctr(HudV(dbV .. "py"))
+				HUD[dbV].w = YRP:ctr(HudV(dbV .. "sw"))
 				HUD[dbV].barw = cur / max * HUD[dbV].w
-				HUD[dbV].h = YRP.ctr(HudV(dbV .. "sh"))
+				HUD[dbV].h = YRP:ctr(HudV(dbV .. "sh"))
 				HUD[dbV].r = HUD[dbV].h / 2
 			end
 
@@ -236,7 +236,7 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 			end
 
 			if tobool(HudV(dbV .. "tr")) then
-				_r = YRP.ctr(HudV(dbV .. "sh")) / 2
+				_r = YRP:ctr(HudV(dbV .. "sh")) / 2
 			end
 
 			draw.RoundedBox(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color(HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga")))
@@ -244,7 +244,7 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 				if not tobool(HudV(dbV .. "tr")) then
 					draw.RoundedBox(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color)
 				else
-					drawRoundedBoxStencil(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color, YRP.ctr(HudV(dbV .. "sw")))
+					drawRoundedBoxStencil(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].barw, HUD[dbV].h, color, YRP:ctr(HudV(dbV .. "sw")))
 				end
 			end
 
@@ -253,24 +253,24 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 				_st.br = 10
 				local _pw = 0
 				if HudV(dbV .. "tx") == 0 then
-					_pw = YRP.ctr(_st.br)
+					_pw = YRP:ctr(_st.br)
 				elseif HudV(dbV .. "tx") == 1 then
-					_pw = YRP.ctr(HudV(dbV .. "sw")) / 2
+					_pw = YRP:ctr(HudV(dbV .. "sw")) / 2
 				elseif HudV(dbV .. "tx") == 2 then
-					_pw = YRP.ctr(HudV(dbV .. "sw")) - YRP.ctr(_st.br)
+					_pw = YRP:ctr(HudV(dbV .. "sw")) - YRP:ctr(_st.br)
 				end
 
 				local _ph = 0
 				if HudV(dbV .. "ty") == 3 then
-					_ph = YRP.ctr(_st.br)
+					_ph = YRP:ctr(_st.br)
 				elseif HudV(dbV .. "ty") == 1 then
-					_ph = YRP.ctr(HudV(dbV .. "sh")) / 2
+					_ph = YRP:ctr(HudV(dbV .. "sh")) / 2
 				elseif HudV(dbV .. "ty") == 4 then
-					_ph = YRP.ctr(HudV(dbV .. "sh")) - YRP.ctr(_st.br)
+					_ph = YRP:ctr(HudV(dbV .. "sh")) - YRP:ctr(_st.br)
 				end
 
-				_st.x = anchorW(HudV(dbV .. "aw")) + YRP.ctr(HudV(dbV .. "px")) + _pw
-				_st.y = anchorH(HudV(dbV .. "ah")) + YRP.ctr(HudV(dbV .. "py")) + _ph
+				_st.x = anchorW(HudV(dbV .. "aw")) + YRP:ctr(HudV(dbV .. "px")) + _pw
+				_st.y = anchorH(HudV(dbV .. "ah")) + YRP:ctr(HudV(dbV .. "py")) + _ph
 				draw.SimpleText(text, dbV .. "sf", _st.x, _st.y, Color(255, 255, 255, 255), HudV(dbV .. "tx"), HudV(dbV .. "ty"), 1, Color(0, 0, 0, 255))
 			end
 
@@ -297,26 +297,26 @@ function YRPHudThirdperson(ply, color)
 		ply.yrp_view_range_view = ply.yrp_view_range_view or 0
 		local _3PText = ""
 		if ply.yrp_view_range <= -200 then
-			_3PText = YRP.trans("LID_fppr")
+			_3PText = YRP:trans("LID_fppr")
 		elseif ply.yrp_view_range > -200 and ply.yrp_view_range < 0 then
-			_3PText = YRP.trans("LID_fpp")
+			_3PText = YRP:trans("LID_fpp")
 		elseif ply.yrp_view_range > 0 then
-			_3PText = YRP.trans("LID_tpp")
+			_3PText = YRP:trans("LID_tpp")
 		end
 
-		draw.SimpleText(_3PText .. " ( " .. math.Round(ply.yrp_view_range, -1) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		draw.SimpleText(_3PText .. " ( " .. math.Round(ply.yrp_view_range, -1) .. " )", "Y_24_500", ScrW() / 2, YRP:ctr(2160 / 2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end
 
 	if YRPGetKeybind("view_up") and YRPGetKeybind("view_down") and (input.IsKeyDown(YRPGetKeybind("view_up")) or input.IsKeyDown(YRPGetKeybind("view_down"))) then
-		draw.SimpleText(YRP.trans("LID_viewingheight") .. " ( " .. math.Round(ply.yrp_view_z, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		draw.SimpleText(YRP:trans("LID_viewingheight") .. " ( " .. math.Round(ply.yrp_view_z, 0) .. " )", "Y_24_500", ScrW() / 2, YRP:ctr(2160 / 2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end
 
 	if YRPGetKeybind("view_right") and YRPGetKeybind("view_left") and (input.IsKeyDown(YRPGetKeybind("view_right")) or input.IsKeyDown(YRPGetKeybind("view_left"))) then
-		draw.SimpleText(YRP.trans("LID_viewingposition") .. " ( " .. math.Round(ply.yrp_view_x, 0) .. " )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		draw.SimpleText(YRP:trans("LID_viewingposition") .. " ( " .. math.Round(ply.yrp_view_x, 0) .. " )", "Y_24_500", ScrW() / 2, YRP:ctr(2160 / 2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end
 
 	if YRPGetKeybind("view_spin_right") and YRPGetKeybind("view_spin_left") and (input.IsKeyDown(YRPGetKeybind("view_spin_right")) or input.IsKeyDown(YRPGetKeybind("view_spin_left"))) then
-		draw.SimpleText(YRP.trans("LID_viewingangle") .. " ( " .. math.Round(ply.yrp_view_s, 0) .. "° )", "Y_24_500", ScrW() / 2, YRP.ctr(2160 / 2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		draw.SimpleText(YRP:trans("LID_viewingangle") .. " ( " .. math.Round(ply.yrp_view_s, 0) .. "° )", "Y_24_500", ScrW() / 2, YRP:ctr(2160 / 2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end
 end
 
@@ -336,6 +336,6 @@ function YRPHudPlayer(ply)
 		end
 	else
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 100))
-		draw.SimpleText(YRP.trans("LID_loading") .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleText(YRP:trans("LID_loading") .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP:ctr(1), Color(0, 0, 0, 255))
 	end
 end

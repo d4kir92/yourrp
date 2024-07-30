@@ -16,7 +16,7 @@ function APP:OpenApp(display, x, y, w, h)
 	function _tmp:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, Color(200, 200, 200, 255))
 		draw.RoundedBox(0, 0, 0, pw, ctrb(60), Color(40, 40, 40, 255))
-		surfaceText(YRP.trans("LID_settings"), "Y_36_500", ctrb(10), ctrb(30), Color(255, 255, 255, 255), 0, 1)
+		surfaceText(YRP:trans("LID_settings"), "Y_36_500", ctrb(10), ctrb(30), Color(255, 255, 255, 255), 0, 1)
 	end
 
 	_tmp.colors = YRPCreateD("DButton", display, w, ctrb(60), x, y + ctrb(60))

@@ -21,7 +21,7 @@ function ENT:Think()
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_open_weaponchest")
+YRP:AddNetworkString("nws_yrp_open_weaponchest")
 function ENT:Use(activator, caller, useType, value)
 	if not activator:GetYRPBool("wc_clicked", false) then
 		activator:SetYRPBool("wc_clicked", true)

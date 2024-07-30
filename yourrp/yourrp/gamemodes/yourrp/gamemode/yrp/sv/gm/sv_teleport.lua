@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function YRPIsValidEntityForTeleport(ent)
 	if not IsValid(ent) then
-		YRP.msg("note", "[YRPIsValidEntityForTeleport] Entity is not valid to teleport >>> ent: " .. tostring(ent))
+		YRP:msg("note", "[YRPIsValidEntityForTeleport] Entity is not valid to teleport >>> ent: " .. tostring(ent))
 
 		return false
 	end
@@ -89,9 +89,9 @@ function tp_to(ply, pos)
 	end
 
 	if ply.RPName then
-		YRP.msg("note", "[tp_to] >>> FAILED TO TELEPORT! " .. ply:RPName() .. " (not enough space!) <<<")
+		YRP:msg("note", "[tp_to] >>> FAILED TO TELEPORT! " .. ply:RPName() .. " (not enough space!) <<<")
 	else
-		YRP.msg("note", "[tp_to] >>> FAILED! TELEPORTED TO EARLY?")
+		YRP:msg("note", "[tp_to] >>> FAILED! TELEPORTED TO EARLY?")
 	end
 
 	return false

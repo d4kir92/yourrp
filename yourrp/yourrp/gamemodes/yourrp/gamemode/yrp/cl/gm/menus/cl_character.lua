@@ -43,12 +43,12 @@ surface.CreateFont(
 
 local yrp_logo = Material("yrp/yrp_icon")
 function YRPGetCharBGNotFound()
-	return YRPGetKeybindName("menu_settings") .. " >> " .. YRP.trans("LID_server") .. " >> " .. YRP.trans("LID_general") .. " >> " .. YRP.trans("LID_character_background") .. " (enter a weblink to an image)"
+	return YRPGetKeybindName("menu_settings") .. " >> " .. YRP:trans("LID_server") .. " >> " .. YRP:trans("LID_general") .. " >> " .. YRP:trans("LID_character_background") .. " (enter a weblink to an image)"
 end
 
 local isEventChar = false
 local fw = 860
-local br = YRP.ctr(20)
+local br = YRP:ctr(20)
 local trashicon = ""
 local DefaultCharBR = 0
 local DefaultCharW = 0
@@ -120,9 +120,9 @@ local _cur = ""
 local chars = {}
 local loading = false
 function YRPLoadCharacters()
-	--YRP.msg( "gm", "received characterlist" )
+	--YRP:msg( "gm", "received characterlist" )
 	if not IsVoidCharEnabled() and GetGlobalYRPBool("bool_character_system", true) then
-		trashicon = YRP.GetDesignIcon("64_trash")
+		trashicon = YRP:GetDesignIcon("64_trash")
 		local cache = {}
 		if LocalPlayer().CharID then
 			curChar = tonumber(LocalPlayer():CharID())
@@ -176,13 +176,13 @@ function YRPLoadCharacters()
 						end
 
 						cache[i] = {}
-						local psw = YRP.ctr(fw) - 2 * br
-						local psh = YRP.ctr(200)
+						local psw = YRP:ctr(fw) - 2 * br
+						local psh = YRP:ctr(200)
 						local px = 0
 						local py = 0
 						if YRP_CharDesign == "horizontalnew" then
-							psw = YRP.ctr(350 * 2)
-							psh = YRP.ctr(600 * 2)
+							psw = YRP:ctr(350 * 2)
+							psh = YRP:ctr(600 * 2)
 							px = 0
 							py = 0
 						elseif YRP_CharDesign == "default" then
@@ -245,7 +245,7 @@ function YRPLoadCharacters()
 
 						tmpChar.rol = tmpChar.rolename
 						if IsLevelSystemEnabled() then
-							tmpChar.rol = YRP.trans("LID_level") .. " " .. tmpChar.level .. "    " .. tmpChar.rol
+							tmpChar.rol = YRP:trans("LID_level") .. " " .. tmpChar.level .. "    " .. tmpChar.rol
 						end
 
 						tmpChar.cni = cni
@@ -256,7 +256,7 @@ function YRPLoadCharacters()
 
 							function tmpChar:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
-								draw.SimpleText(self.rpname, "Saira_60", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								draw.SimpleText(self.rpname, "Saira_60", pw / 2, YRP:ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								if self.cni > LocalPlayer():GetYRPInt("int_characters_max", 1) then
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 10))
 									draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -267,8 +267,8 @@ function YRPLoadCharacters()
 								end
 							end
 
-							local mdlsize = tmpChar:GetTall() - YRP.ctr(100)
-							tmpChar.charplayermodel = YRPCreateD("DModelPanel", tmpChar, mdlsize, mdlsize, tmpChar:GetWide() / 2 - mdlsize / 2, YRP.ctr(100))
+							local mdlsize = tmpChar:GetTall() - YRP:ctr(100)
+							tmpChar.charplayermodel = YRPCreateD("DModelPanel", tmpChar, mdlsize, mdlsize, tmpChar:GetWide() / 2 - mdlsize / 2, YRP:ctr(100))
 							tmpChar.charplayermodel:SetModel("models/player/skeleton.mdl")
 							tmpChar.charplayermodel:SetAnimated(true)
 							tmpChar.charplayermodel.Angles = Angle(0, 0, 0)
@@ -315,8 +315,8 @@ function YRPLoadCharacters()
 							end
 
 							local button = {}
-							button.w = YRP.ctr(200 * 2)
-							button.h = YRP.ctr(36 * 2)
+							button.w = YRP:ctr(200 * 2)
+							button.h = YRP:ctr(36 * 2)
 							button.x = tmpChar:GetWide() / 2 - button.w / 2
 							button.y = tmpChar:GetTall() / 2 - button.h / 2
 							local charactersEnter = YRPCreateD("YButton", tmpChar, button.w, button.h, button.x, button.y)
@@ -334,12 +334,12 @@ function YRPLoadCharacters()
 										local t = {}
 										t.text = math.Round(LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) - CurTime(), 0)
 										if LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
-											t.text = YRP.trans("LID_play") -- .. " ( " .. _cur .. " )"
+											t.text = YRP:trans("LID_play") -- .. " ( " .. _cur .. " )"
 										end
 
 										if (tmpChar:YRPIsHovered() or self:IsHovered()) and not tmpChar.charplayermodel.Pressed then
 											if LocalPlayer():Alive() then
-												t.text = YRP.trans("LID_close") .. " ( " .. LocalPlayer():RPName() .. " )"
+												t.text = YRP:trans("LID_close") .. " ( " .. LocalPlayer():RPName() .. " )"
 												t.color = Color(255, 100, 100, 255)
 												self:SetText(t.text)
 												hook.Run("YButtonRPaint", self, pw, ph)
@@ -368,8 +368,8 @@ function YRPLoadCharacters()
 								end
 							end
 
-							local deletesize = YRP.ctr(40)
-							local deletebr = YRP.ctr(20)
+							local deletesize = YRP:ctr(40)
+							local deletebr = YRP:ctr(20)
 							local deleteChar = YRPCreateD("YButton", tmpChar, deletesize, deletesize, tmpChar:GetWide() - deletesize - deletebr, deletebr)
 							deleteChar:SetText("")
 							function deleteChar:Paint(pw, ph)
@@ -389,9 +389,9 @@ function YRPLoadCharacters()
 							function deleteChar:DoClick()
 								local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 								_window:Center()
-								_window:SetTitle(YRP.trans("LID_areyousure"))
+								_window:SetTitle(YRP:trans("LID_areyousure"))
 								local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-								_yesButton:SetText(YRP.trans("LID_yes"))
+								_yesButton:SetText(YRP:trans("LID_yes"))
 								function _yesButton:DoClick()
 									if IsNotNilAndNotFalse(tmpChar.charid) then
 										net.Start("nws_yrp_delete_own_character")
@@ -405,7 +405,7 @@ function YRPLoadCharacters()
 								end
 
 								local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-								_noButton:SetText(YRP.trans("LID_no"))
+								_noButton:SetText(YRP:trans("LID_no"))
 								function _noButton:DoClick()
 									_window:Close()
 								end
@@ -430,7 +430,7 @@ function YRPLoadCharacters()
 								draw.SimpleText(self.rpname, "Y_52_700", DefaultCharPanelW / 2, py2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 								if IsLevelSystemEnabled() then
 									py2 = py2 + tabh * 2
-									draw.SimpleText(YRP.trans("LID_level") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+									draw.SimpleText(YRP:trans("LID_level") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									draw.SimpleText(self.level, "Y_30_500", posx + tabw, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 									local barbr = ScrW() * 0.04
 									local barw = DefaultCharPanelW - posx - tabw - posx - barbr
@@ -452,16 +452,16 @@ function YRPLoadCharacters()
 								end
 
 								py2 = py2 + tabh * 2
-								draw.SimpleText(YRP.trans("LID_role") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP:trans("LID_role") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								draw.SimpleText(self.rolename, "Y_30_500", posx + tabw, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								py2 = py2 + tabh
-								draw.SimpleText(YRP.trans("LID_group") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP:trans("LID_group") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								draw.SimpleText(self.groupname, "Y_30_500", posx + tabw, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								py2 = py2 + tabh * 2
-								draw.SimpleText(YRP.trans("LID_health") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP:trans("LID_health") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								draw.SimpleText(self.health, "Y_30_500", posx + tabw, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								py2 = py2 + tabh
-								draw.SimpleText(YRP.trans("LID_armor") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+								draw.SimpleText(YRP:trans("LID_armor") .. ": ", "Y_30_500", posx, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								draw.SimpleText(self.armor, "Y_30_500", posx + tabw, py2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								if self.cni > LocalPlayer():GetYRPInt("int_characters_max", 1) then
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 10))
@@ -524,8 +524,8 @@ function YRPLoadCharacters()
 								end
 							end
 
-							local deletesize = YRP.ctr(40)
-							local deletebr = YRP.ctr(40)
+							local deletesize = YRP:ctr(40)
+							local deletebr = YRP:ctr(40)
 							local deleteChar = YRPCreateD("YButton", tmpChar, deletesize, deletesize, tmpChar:GetWide() - deletesize - deletebr, deletebr)
 							deleteChar:SetText("")
 							function deleteChar:Paint(pw, ph)
@@ -545,9 +545,9 @@ function YRPLoadCharacters()
 							function deleteChar:DoClick()
 								local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 								_window:Center()
-								_window:SetTitle(YRP.trans("LID_areyousure"))
+								_window:SetTitle(YRP:trans("LID_areyousure"))
 								local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-								_yesButton:SetText(YRP.trans("LID_yes"))
+								_yesButton:SetText(YRP:trans("LID_yes"))
 								function _yesButton:DoClick()
 									if IsNotNilAndNotFalse(tmpChar.charid) then
 										net.Start("nws_yrp_delete_own_character")
@@ -563,7 +563,7 @@ function YRPLoadCharacters()
 								end
 
 								local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-								_noButton:SetText(YRP.trans("LID_no"))
+								_noButton:SetText(YRP:trans("LID_no"))
 								function _noButton:DoClick()
 									_window:Close()
 								end
@@ -613,11 +613,11 @@ function YRPLoadCharacters()
 											draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
 										end
 
-										local x = ph + YRP.ctr(30)
-										draw.SimpleText(YRP.trans("LID_event") .. ": " .. self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-										draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-										draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-										draw.SimpleText(self.rol, "Y_18_500", x, YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										local x = ph + YRP:ctr(30)
+										draw.SimpleText(YRP:trans("LID_event") .. ": " .. self.rpname, "Y_32_500", x, YRP:ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.fac, "Y_18_500", x, YRP:ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.grp, "Y_18_500", x, YRP:ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.rol, "Y_18_500", x, YRP:ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 										if cei > LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
 											draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 10))
 											draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -631,11 +631,11 @@ function YRPLoadCharacters()
 											draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
 										end
 
-										local x = ph + YRP.ctr(30)
-										draw.SimpleText(self.rpname, "Y_32_500", x, YRP.ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-										draw.SimpleText(self.fac, "Y_18_500", x, YRP.ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-										draw.SimpleText(self.grp, "Y_18_500", x, YRP.ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-										draw.SimpleText(self.rol, "Y_18_500", x, YRP.ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										local x = ph + YRP:ctr(30)
+										draw.SimpleText(self.rpname, "Y_32_500", x, YRP:ctr(35), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.fac, "Y_18_500", x, YRP:ctr(85), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.grp, "Y_18_500", x, YRP:ctr(125), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+										draw.SimpleText(self.rol, "Y_18_500", x, YRP:ctr(165), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 										if self.cni > LocalPlayer():GetYRPInt("int_characters_max", 1) then
 											draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100, 10))
 											draw.SimpleText("X", "Y_72_500", pw / 2, ph / 2, Color(255, 255, 100, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -666,7 +666,7 @@ function YRPLoadCharacters()
 												end
 											end
 										else
-											YRP.msg("note", "Character role has no playermodel!")
+											YRP:msg("note", "Character role has no playermodel!")
 										end
 									end
 								end
@@ -696,8 +696,8 @@ function YRPLoadCharacters()
 				end
 
 				if YRP_CharDesign == "horizontalnew" then
-					psw = YRP.ctr(350 * 2)
-					psh = YRP.ctr(600 * 2)
+					psw = YRP:ctr(350 * 2)
+					psh = YRP:ctr(600 * 2)
 					local px = 0
 					local py = 0
 					if CharMenu.character.amount < LocalPlayer():GetYRPInt("int_characters_max", 1) then
@@ -706,9 +706,9 @@ function YRPLoadCharacters()
 						function addChar:Paint(pw, ph)
 							if CharMenu.character.amount < LocalPlayer():GetYRPInt("int_characters_max", 1) then
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
-								local sw = pw - 2 * YRP.ctr(180)
-								local breite = YRP.ctr(50)
-								if YRP.GetDesignIcon("add") ~= nil then
+								local sw = pw - 2 * YRP:ctr(180)
+								local breite = YRP:ctr(50)
+								if YRP:GetDesignIcon("add") ~= nil then
 									draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sw / 2, breite, sw, Color(102, 102, 102, 255))
 									draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
 								end
@@ -740,10 +740,10 @@ function YRPLoadCharacters()
 						function addCharEvent:Paint(pw, ph)
 							if CharMenu.character.amountevent and CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(51, 51, 51, 200))
-								draw.SimpleText(YRP.trans("LID_event"), "Y_30_700", pw / 2, YRP.ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-								local sw = pw - 2 * YRP.ctr(180)
-								local breite = YRP.ctr(50)
-								if YRP.GetDesignIcon("add") ~= nil then
+								draw.SimpleText(YRP:trans("LID_event"), "Y_30_700", pw / 2, YRP:ctr(300), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								local sw = pw - 2 * YRP:ctr(180)
+								local breite = YRP:ctr(50)
+								if YRP:GetDesignIcon("add") ~= nil then
 									draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sw / 2, breite, sw, Color(102, 102, 102, 255))
 									draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
 								end
@@ -779,10 +779,10 @@ function YRPLoadCharacters()
 						function addChar:Paint(pw, ph)
 							if CharMenu.character.amount < LocalPlayer():GetYRPInt("int_characters_max", 1) then
 								draw.RoundedBox(50, 0, 0, pw, ph, Color(51, 51, 51, 200))
-								local sw = pw - 2 * YRP.ctr(180)
-								local sh = ph - 2 * YRP.ctr(180)
-								local breite = YRP.ctr(50)
-								if YRP.GetDesignIcon("add") ~= nil then
+								local sw = pw - 2 * YRP:ctr(180)
+								local sh = ph - 2 * YRP:ctr(180)
+								local breite = YRP:ctr(50)
+								if YRP:GetDesignIcon("add") ~= nil then
 									draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sh / 2, breite, sh, Color(102, 102, 102, 255))
 									draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
 								end
@@ -814,11 +814,11 @@ function YRPLoadCharacters()
 						function addCharEvent:Paint(pw, ph)
 							if CharMenu.character.amountevent and CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
 								draw.RoundedBox(50, 0, 0, pw, ph, Color(51, 51, 51, 200))
-								draw.SimpleText(YRP.trans("LID_event"), "Y_30_700", pw / 2, YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-								local sw = pw - 2 * YRP.ctr(180)
-								local sh = ph - 2 * YRP.ctr(180)
-								local breite = YRP.ctr(50)
-								if YRP.GetDesignIcon("add") ~= nil then
+								draw.SimpleText(YRP:trans("LID_event"), "Y_30_700", pw / 2, YRP:ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+								local sw = pw - 2 * YRP:ctr(180)
+								local sh = ph - 2 * YRP:ctr(180)
+								local breite = YRP:ctr(50)
+								if YRP:GetDesignIcon("add") ~= nil then
 									draw.RoundedBox(breite / 2, pw / 2 - breite / 2, ph / 2 - sh / 2, breite, sh, Color(102, 102, 102, 255))
 									draw.RoundedBox(breite / 2, pw / 2 - sw / 2, ph / 2 - breite / 2, sw, breite, Color(102, 102, 102, 255))
 								end
@@ -905,7 +905,7 @@ hook.Add(
 					logout = false
 				end
 
-				draw.SimpleText(string.format("%s (%0.1f%s)", YRP.trans("LID_logout"), logoutts - CurTime(), string.lower(string.sub(YRP.trans("LID_seconds"), 1, 1))), "Y_30_700", ScrW() / 2, ScrH() * 0.25, Color(255, 255, 255, 255), 1, 1)
+				draw.SimpleText(string.format("%s (%0.1f%s)", YRP:trans("LID_logout"), logoutts - CurTime(), string.lower(string.sub(YRP:trans("LID_seconds"), 1, 1))), "Y_30_700", ScrW() / 2, ScrH() * 0.25, Color(255, 255, 255, 255), 1, 1)
 			elseif logout then
 				logout = false
 				net.Start("nws_yrp_LogOut")
@@ -981,13 +981,13 @@ function YRPOCS(force)
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
 				-- Header of Menu
-				draw.SimpleText(YRP.trans("LID_characterselection"), "Y_18_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP:trans("LID_characterselection"), "Y_18_500", pw / 2, YRP:ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				-- Current Character Name
-				draw.SimpleText(_cur, "Y_40_500", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(_cur, "Y_40_500", pw / 2, YRP:ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				local aecur = CharMenu.character.amountevent or -1
 				local aemax = LocalPlayer():GetYRPInt("int_charactersevent_max", 1)
 				if aecur < aemax then
-					draw.SimpleText(YRP.trans("LID_event"), "Y_30_700", pw / 2 - YRP.ctr(480), ph - YRP.ctr(180), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP:trans("LID_event"), "Y_30_700", pw / 2 - YRP:ctr(480), ph - YRP:ctr(180), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				-- Get Newest Background for the Menu
@@ -1006,13 +1006,13 @@ function YRPOCS(force)
 			end
 
 			-- Language Changer / LanguageChanger
-			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32 * 5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
-			local border = YRP.ctr(50)
-			CharMenu.charactersBackground = YRPCreateD("DPanel", CharMenu.frame, YRP.ctr(fw), ScrH() - (2 * border), (ScrW() - ScW()) / 2 + border, border)
-			CharMenu.charactersBackground.text = YRP.trans("LID_siteisloading")
+			YRP:DChangeLanguage(CharMenu.frame, ScrW() - YRP:ctr(32 * 5.6 + 20), YRP:ctr(20), YRP:ctr(32), true)
+			local border = YRP:ctr(50)
+			CharMenu.charactersBackground = YRPCreateD("DPanel", CharMenu.frame, YRP:ctr(fw), ScrH() - (2 * border), (ScrW() - ScW()) / 2 + border, border)
+			CharMenu.charactersBackground.text = YRP:trans("LID_siteisloading")
 			function CharMenu.charactersBackground:Paint(pw, ph)
 				local color = YRPInterfaceValue("YFrame", "NC")
-				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 100))
+				draw.RoundedBox(YRP:ctr(10), 0, 0, pw, ph, Color(color.r, color.g, color.b, 100))
 				local acur = CharMenu.character.amount or -1
 				local amax = LocalPlayer():GetYRPInt("int_characters_max", 1)
 				local acolor = Color(255, 255, 255, 255)
@@ -1029,22 +1029,22 @@ function YRPOCS(force)
 
 				-- Current and Max Count of Possible Characters
 				if aemax > 0 then
-					draw.SimpleText(acur .. "/" .. amax, "Y_36_500", YRP.ctr(20), ph - YRP.ctr(50), acolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(acur .. "/" .. amax, "Y_36_500", YRP:ctr(20), ph - YRP:ctr(50), acolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				else
-					draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw / 2, ph - YRP.ctr(50), acolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw / 2, ph - YRP:ctr(50), acolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				-- Current and Max Count of Possible Characters
 				if aemax > 0 then
-					draw.SimpleText(YRP.trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw - YRP.ctr(20), ph - YRP.ctr(50), aecolor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP:trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw - YRP:ctr(20), ph - YRP:ctr(50), aecolor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 				end
 
-				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP:ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
 			local cmdlbr = 60
-			local size = ScrH() - 2 * YRP.ctr(cmdlbr)
-			CharMenu.charplayermodel = YRPCreateD("DModelPanel", CharMenu.frame, size, size, ScrW2() - size * 0.48, YRP.ctr(cmdlbr))
+			local size = ScrH() - 2 * YRP:ctr(cmdlbr)
+			CharMenu.charplayermodel = YRPCreateD("DModelPanel", CharMenu.frame, size, size, ScrW2() - size * 0.48, YRP:ctr(cmdlbr))
 			CharMenu.charplayermodel:SetModel("models/player/skeleton.mdl")
 			CharMenu.charplayermodel:SetAnimated(true)
 			CharMenu.charplayermodel.Angles = Angle(0, 0, 0)
@@ -1080,9 +1080,9 @@ function YRPOCS(force)
 			CharMenu.charplayermodel:SetFOV(45)
 			CharMenu.charplayermodel:SetCamPos(Vector(psize, psize, psize))
 			CharMenu.charplayermodel:SetLookAt((mn + mx) * 0.5)
-			CharMenu.characterList = YRPCreateD("DPanelList", CharMenu.charactersBackground, YRP.ctr(fw) - 2 * br, ScrH() - (2 * border) - br - YRP.ctr(120), br, br)
+			CharMenu.characterList = YRPCreateD("DPanelList", CharMenu.charactersBackground, YRP:ctr(fw) - 2 * br, ScrH() - (2 * border) - br - YRP:ctr(120), br, br)
 			CharMenu.characterList:EnableVerticalScrollbar()
-			CharMenu.characterList:SetSpacing(YRP.ctr(20))
+			CharMenu.characterList:SetSpacing(YRP:ctr(20))
 			function CharMenu.characterList:Paint(pw, ph)
 			end
 
@@ -1105,8 +1105,8 @@ function YRPOCS(force)
 			end
 
 			local button = {}
-			button.w = YRP.ctr(600)
-			button.h = YRP.ctr(100)
+			button.w = YRP:ctr(600)
+			button.h = YRP:ctr(100)
 			button.x = ScrW2() - button.w / 2
 			button.y = ScrH() - button.h - border
 			local charactersEnter = YRPCreateD("YButton", CharMenu.frame, button.w, button.h, button.x, button.y)
@@ -1117,11 +1117,11 @@ function YRPOCS(force)
 					local tab = {}
 					tab.text = math.Round(LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) - CurTime(), 0)
 					if LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
-						tab.text = YRP.trans("LID_play") -- .. " ( " .. _cur .. " )"
+						tab.text = YRP:trans("LID_play") -- .. " ( " .. _cur .. " )"
 					end
 
 					if LocalPlayer() ~= nil and LocalPlayer():Alive() then
-						tab.text = YRP.trans("LID_close")
+						tab.text = YRP:trans("LID_close")
 						tab.color = Color(255, 100, 100, 255)
 					end
 
@@ -1150,7 +1150,7 @@ function YRPOCS(force)
 			end
 
 			local px, py = charactersEnter:GetPos()
-			local deleteChar = YRPCreateD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px + br + button.w, py)
+			local deleteChar = YRPCreateD("YButton", CharMenu.frame, YRP:ctr(100), YRP:ctr(100), px + br + button.w, py)
 			deleteChar:SetText("")
 			function deleteChar:Paint(pw, ph)
 				hook.Run("YRemovePaint", self, pw, ph)
@@ -1159,9 +1159,9 @@ function YRPOCS(force)
 			function deleteChar:DoClick()
 				local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 				_window:Center()
-				_window:SetTitle(YRP.trans("LID_areyousure"))
+				_window:SetTitle(YRP:trans("LID_areyousure"))
 				local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-				_yesButton:SetText(YRP.trans("LID_yes"))
+				_yesButton:SetText(YRP:trans("LID_yes"))
 				function _yesButton:DoClick()
 					net.Start("nws_yrp_delete_own_character")
 					net.WriteString(curChar)
@@ -1170,7 +1170,7 @@ function YRPOCS(force)
 				end
 
 				local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-				_noButton:SetText(YRP.trans("LID_no"))
+				_noButton:SetText(YRP:trans("LID_no"))
 				function _noButton:DoClick()
 					_window:Close()
 				end
@@ -1178,7 +1178,7 @@ function YRPOCS(force)
 				_window:MakePopup()
 			end
 
-			local charactersCreate = YRPCreateD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(100), py)
+			local charactersCreate = YRPCreateD("YButton", CharMenu.frame, YRP:ctr(100), YRP:ctr(100), px - br - YRP:ctr(100), py)
 			charactersCreate:SetText("")
 			function charactersCreate:Paint(pw, ph)
 				if CharMenu.character.amount < LocalPlayer():GetYRPInt("int_characters_max", 1) then
@@ -1197,7 +1197,7 @@ function YRPOCS(force)
 				end
 			end
 
-			local charactersCreateEvent = YRPCreateD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(210), py)
+			local charactersCreateEvent = YRPCreateD("YButton", CharMenu.frame, YRP:ctr(100), YRP:ctr(100), px - br - YRP:ctr(210), py)
 			charactersCreateEvent:SetText("")
 			function charactersCreateEvent:Paint(pw, ph)
 				if CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
@@ -1241,9 +1241,9 @@ function YRPOCS(force)
 				-- Blur Background
 				Derma_DrawBackgroundBlur(self, 0)
 				-- Header of Menu
-				draw.SimpleText(YRP.trans("LID_characterselection"), "Y_18_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP:trans("LID_characterselection"), "Y_18_500", pw / 2, YRP:ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				-- Current Character Name
-				draw.SimpleText(_cur, "Y_40_500", pw / 2, YRP.ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(_cur, "Y_40_500", pw / 2, YRP:ctr(110), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				-- Get Newest Background for the Menu
 				local oldurl = CharMenu.frame.bg.url
 				local newurl = GetGlobalYRPString("text_character_background", "")
@@ -1262,24 +1262,24 @@ function YRPOCS(force)
 				local aemax = LocalPlayer():GetYRPInt("int_charactersevent_max", 1)
 				-- Current and Max Count of Possible Characters
 				local color = Color(255, 255, 255)
-				draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw - br - YRP.ctr(100), ph - br - YRP.ctr(200) - br - YRP.ctr(100), color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw - br - YRP:ctr(100), ph - br - YRP:ctr(200) - br - YRP:ctr(100), color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				-- Current and Max Count of Possible Characters
 				if aemax > 0 then
-					draw.SimpleText(YRP.trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw - br - YRP.ctr(600), ph - br - YRP.ctr(200) - br - YRP.ctr(100), color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP:trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw - br - YRP:ctr(600), ph - br - YRP:ctr(200) - br - YRP:ctr(100), color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 
 			-- Language Changer / LanguageChanger
-			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32 * 5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
-			CharMenu.charactersBackground = YRPCreateD("DPanel", CharMenu.frame, ScrW() - (2 * br), YRP.ctr(200) + (2 * br), br, ScrH() - YRP.ctr(200) - 2 * br - br)
-			CharMenu.charactersBackground.text = YRP.trans("LID_siteisloading")
+			YRP:DChangeLanguage(CharMenu.frame, ScrW() - YRP:ctr(32 * 5.6 + 20), YRP:ctr(20), YRP:ctr(32), true)
+			CharMenu.charactersBackground = YRPCreateD("DPanel", CharMenu.frame, ScrW() - (2 * br), YRP:ctr(200) + (2 * br), br, ScrH() - YRP:ctr(200) - 2 * br - br)
+			CharMenu.charactersBackground.text = YRP:trans("LID_siteisloading")
 			function CharMenu.charactersBackground:Paint(pw, ph)
 				local colo = YRPInterfaceValue("YFrame", "NC")
-				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(colo.r, colo.g, colo.b, 120))
-				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.RoundedBox(YRP:ctr(10), 0, 0, pw, ph, Color(colo.r, colo.g, colo.b, 120))
+				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP:ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
-			local size = ScrH() - br - br - YRP.ctr(200) - br - br - br - YRP.ctr(100) - br - br
+			local size = ScrH() - br - br - YRP:ctr(200) - br - br - br - YRP:ctr(100) - br - br
 			CharMenu.charplayermodel = YRPCreateD("DModelPanel", CharMenu.frame, size, size, ScrW2() - size / 2, br)
 			CharMenu.charplayermodel:SetModel("models/player/skeleton.mdl")
 			CharMenu.charplayermodel:SetAnimated(true)
@@ -1310,16 +1310,16 @@ function YRPOCS(force)
 
 			CharMenu.characterList = YRPCreateD("DHorizontalScroller", CharMenu.charactersBackground, CharMenu.charactersBackground:GetWide() - 2 * br, CharMenu.charactersBackground:GetTall() - 2 * br, br, br)
 			--CharMenu.characterList:EnableVerticalScrollbar()
-			CharMenu.characterList:SetOverlap(-YRP.ctr(20))
+			CharMenu.characterList:SetOverlap(-YRP:ctr(20))
 			function CharMenu.characterList:Paint(pw, ph)
 			end
 
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
 			local button = {}
-			button.w = YRP.ctr(600)
-			button.h = YRP.ctr(100)
+			button.w = YRP:ctr(600)
+			button.h = YRP:ctr(100)
 			button.x = ScrW2() - button.w / 2
-			button.y = ScrH() - br - YRP.ctr(200) - br - br - br - button.h
+			button.y = ScrH() - br - YRP:ctr(200) - br - br - br - button.h
 			local charactersEnter = YRPCreateD("YButton", CharMenu.frame, button.w, button.h, button.x, button.y)
 			function charactersEnter:Paint(pw, ph)
 				if isEventChar then
@@ -1328,11 +1328,11 @@ function YRPOCS(force)
 					local tab = {}
 					tab.text = math.Round(LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) - CurTime(), 0)
 					if LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
-						tab.text = YRP.trans("LID_play") -- .. " ( " .. _cur .. " )"
+						tab.text = YRP:trans("LID_play") -- .. " ( " .. _cur .. " )"
 					end
 
 					if LocalPlayer() ~= nil and LocalPlayer():Alive() then
-						tab.text = YRP.trans("LID_close")
+						tab.text = YRP:trans("LID_close")
 						tab.color = Color(255, 100, 100, 255)
 					end
 
@@ -1362,7 +1362,7 @@ function YRPOCS(force)
 			end
 
 			local px, py = charactersEnter:GetPos()
-			local deleteChar = YRPCreateD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px + br + button.w, py)
+			local deleteChar = YRPCreateD("YButton", CharMenu.frame, YRP:ctr(100), YRP:ctr(100), px + br + button.w, py)
 			deleteChar:SetText("")
 			function deleteChar:Paint(pw, ph)
 				hook.Run("YRemovePaint", self, pw, ph)
@@ -1371,9 +1371,9 @@ function YRPOCS(force)
 			function deleteChar:DoClick()
 				local _window = createVGUI("DFrame", nil, 430, 50 + 10 + 50 + 10, 0, 0)
 				_window:Center()
-				_window:SetTitle(YRP.trans("LID_areyousure"))
+				_window:SetTitle(YRP:trans("LID_areyousure"))
 				local _yesButton = createVGUI("DButton", _window, 200, 50, 10, 60)
-				_yesButton:SetText(YRP.trans("LID_yes"))
+				_yesButton:SetText(YRP:trans("LID_yes"))
 				function _yesButton:DoClick()
 					net.Start("nws_yrp_delete_own_character")
 					net.WriteString(curChar)
@@ -1384,7 +1384,7 @@ function YRPOCS(force)
 				end
 
 				local _noButton = createVGUI("DButton", _window, 200, 50, 10 + 200 + 10, 60)
-				_noButton:SetText(YRP.trans("LID_no"))
+				_noButton:SetText(YRP:trans("LID_no"))
 				function _noButton:DoClick()
 					_window:Close()
 				end
@@ -1392,7 +1392,7 @@ function YRPOCS(force)
 				_window:MakePopup()
 			end
 
-			local charactersCreate = YRPCreateD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(100), py)
+			local charactersCreate = YRPCreateD("YButton", CharMenu.frame, YRP:ctr(100), YRP:ctr(100), px - br - YRP:ctr(100), py)
 			charactersCreate:SetText("")
 			function charactersCreate:Paint(pw, ph)
 				if CharMenu.character.amount < LocalPlayer():GetYRPInt("int_characters_max", 1) then
@@ -1411,7 +1411,7 @@ function YRPOCS(force)
 				end
 			end
 
-			local charactersCreateEvent = YRPCreateD("YButton", CharMenu.frame, YRP.ctr(100), YRP.ctr(100), px - br - YRP.ctr(210), py)
+			local charactersCreateEvent = YRPCreateD("YButton", CharMenu.frame, YRP:ctr(100), YRP:ctr(100), px - br - YRP:ctr(210), py)
 			charactersCreateEvent:SetText("")
 			function charactersCreateEvent:Paint(pw, ph)
 				if CharMenu.character.amountevent < LocalPlayer():GetYRPInt("int_charactersevent_max", 1) then
@@ -1474,7 +1474,7 @@ function YRPOCS(force)
 					acolor = Color(255, 100, 100, 255)
 				end
 
-				draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw / 2, ph - YRP.ctr(300), acolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw / 2, ph - YRP:ctr(300), acolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				-- Current and Max Count of Possible Event Characters
 				local aecur = CharMenu.character.amountevent or -1
 				local aemax = LocalPlayer():GetYRPInt("int_charactersevent_max", 1)
@@ -1484,14 +1484,14 @@ function YRPOCS(force)
 				end
 
 				if aemax > 0 then
-					draw.SimpleText(YRP.trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw / 2, ph - YRP.ctr(200), aecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP:trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw / 2, ph - YRP:ctr(200), aecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 
 			-- Language Changer / LanguageChanger
-			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32 * 5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
-			local iconsize = YRP.ctr(120 * 2)
-			local iconbr = YRP.ctr(30)
+			YRP:DChangeLanguage(CharMenu.frame, ScrW() - YRP:ctr(32 * 5.6 + 20), YRP:ctr(20), YRP:ctr(32), true)
+			local iconsize = YRP:ctr(120 * 2)
+			local iconbr = YRP:ctr(30)
 			CharMenu.charactersHeader = YRPCreateD("YPanel", CharMenu.frame, ScrW(), iconsize + iconbr, 0, 0)
 			CharMenu.charactersHeader.logo = YRPCreateD("DHTML", CharMenu.frame, iconsize, iconsize + iconbr, 0, 0)
 			CharMenu.charactersHeader.matlogo = Material("yrp/yrpicon.png")
@@ -1523,23 +1523,23 @@ function YRPOCS(force)
 				draw.SimpleText(YRPGetHostName(), "Saira_100", ph + 1 * self.br, ph / 2, Color(23, 107, 225), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			local charw = YRP.ctr(3 * 350 * 2 + 2 * 200)
-			CharMenu.charactersBackground = YRPCreateD("DPanel", CharMenu.frame, charw, ScrH() - YRP.ctr(600 + 360), ScrW() / 2 - charw / 2, YRP.ctr(600))
-			CharMenu.charactersBackground.text = YRP.trans("LID_siteisloading")
+			local charw = YRP:ctr(3 * 350 * 2 + 2 * 200)
+			CharMenu.charactersBackground = YRPCreateD("DPanel", CharMenu.frame, charw, ScrH() - YRP:ctr(600 + 360), ScrW() / 2 - charw / 2, YRP:ctr(600))
+			CharMenu.charactersBackground.text = YRP:trans("LID_siteisloading")
 			function CharMenu.charactersBackground:Paint(pw, ph)
-				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP:ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
 			CharMenu.characterList = YRPCreateD("DHorizontalScroller", CharMenu.charactersBackground, CharMenu.charactersBackground:GetWide(), CharMenu.charactersBackground:GetTall(), 0, 0)
 			--CharMenu.characterList:EnableVerticalScrollbar()
-			CharMenu.characterList:SetOverlap(-YRP.ctr(200))
+			CharMenu.characterList:SetOverlap(-YRP:ctr(200))
 			function CharMenu.characterList:Paint(pw, ph)
 			end
 
 			--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
 			CharMenu.characterList.OffsetX = 0
-			local arrowbtnsize = YRP.ctr(128)
-			CharMenu.prevChar = YRPCreateD("YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 - charw / 2 - YRP.ctr(100 + 100), YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100 / 2))
+			local arrowbtnsize = YRP:ctr(128)
+			CharMenu.prevChar = YRPCreateD("YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 - charw / 2 - YRP:ctr(100 + 100), YRP:ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP:ctr(100 / 2))
 			CharMenu.prevChar:SetText("")
 			function CharMenu.prevChar:Paint(pw, ph)
 				if CharMenu.characterList.OffsetX > 0 then
@@ -1549,8 +1549,8 @@ function YRPOCS(force)
 						color = YRPInterfaceValue("YButton", "NC")
 					end
 
-					if YRP.GetDesignIcon("64_angle-right") ~= nil then
-						surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+					if YRP:GetDesignIcon("64_angle-right") ~= nil then
+						surface.SetMaterial(YRP:GetDesignIcon("64_angle-left"))
 						surface.SetDrawColor(color)
 						surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
 					end
@@ -1558,7 +1558,7 @@ function YRPOCS(force)
 			end
 
 			function CharMenu.prevChar:DoClick()
-				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX - YRP.ctr(350 * 2 + 200)
+				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX - YRP:ctr(350 * 2 + 200)
 				if CharMenu.characterList.OffsetX <= 0 then
 					CharMenu.characterList.OffsetX = 0
 				end
@@ -1566,7 +1566,7 @@ function YRPOCS(force)
 				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
 			end
 
-			CharMenu.nextChar = YRPCreateD("YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 + charw / 2 + arrowbtnsize, YRP.ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP.ctr(100 / 2))
+			CharMenu.nextChar = YRPCreateD("YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 + charw / 2 + arrowbtnsize, YRP:ctr(600) + CharMenu.charactersBackground:GetTall() / 2 - YRP:ctr(100 / 2))
 			CharMenu.nextChar:SetText("")
 			function CharMenu.nextChar:Paint(pw, ph)
 				if CharMenu.characterList.OffsetX < CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide() then
@@ -1576,8 +1576,8 @@ function YRPOCS(force)
 						color = YRPInterfaceValue("YButton", "NC")
 					end
 
-					if YRP.GetDesignIcon("64_angle-right") ~= nil then
-						surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+					if YRP:GetDesignIcon("64_angle-right") ~= nil then
+						surface.SetMaterial(YRP:GetDesignIcon("64_angle-right"))
 						surface.SetDrawColor(color)
 						surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
 					end
@@ -1585,7 +1585,7 @@ function YRPOCS(force)
 			end
 
 			function CharMenu.nextChar:DoClick()
-				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX + YRP.ctr(350 * 2 + 200)
+				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX + YRP:ctr(350 * 2 + 200)
 				if CharMenu.characterList.OffsetX >= CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide() then
 					CharMenu.characterList.OffsetX = CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide()
 				end
@@ -1636,7 +1636,7 @@ function YRPOCS(force)
 					acolor = Color(255, 100, 100, 255)
 				end
 
-				draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw / 2 + DefaultCharW / 2 + YRP.ctr(10), ph - YRP.ctr(100), acolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(acur .. "/" .. amax, "Y_36_500", pw / 2 + DefaultCharW / 2 + YRP:ctr(10), ph - YRP:ctr(100), acolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				-- Current and Max Count of Possible Event Characters
 				local aecur = CharMenu.character.amountevent or -1
 				local aemax = LocalPlayer():GetYRPInt("int_charactersevent_max", 1)
@@ -1646,29 +1646,29 @@ function YRPOCS(force)
 				end
 
 				if aemax > 0 then
-					draw.SimpleText(YRP.trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw / 2 + DefaultCharW / 2 + YRP.ctr(10), ph - YRP.ctr(40), aecolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText(YRP:trans("LID_event") .. ": " .. aecur .. "/" .. aemax, "Y_36_500", pw / 2 + DefaultCharW / 2 + YRP:ctr(10), ph - YRP:ctr(40), aecolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 			end
 
 			-- Language Changer / LanguageChanger
-			YRP.DChangeLanguage(CharMenu.frame, ScrW() - YRP.ctr(32 * 5.6 + 20), YRP.ctr(20), YRP.ctr(32), true)
+			YRP:DChangeLanguage(CharMenu.frame, ScrW() - YRP:ctr(32 * 5.6 + 20), YRP:ctr(20), YRP:ctr(32), true)
 			YRPUpdateCharValues()
 			local charw = DefaultCharW
 			local charh = DefaultCharH
 			CharMenu.charactersBackground = YRPCreateD("DPanel", CharMenu.frame, charw, charh, ScrW() / 2 - charw / 2, ScrH() / 2 - charh / 2)
-			CharMenu.charactersBackground.text = YRP.trans("LID_siteisloading")
+			CharMenu.charactersBackground.text = YRP:trans("LID_siteisloading")
 			function CharMenu.charactersBackground:Paint(pw, ph)
-				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP.ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(self.text, "Y_36_500", pw / 2, YRP:ctr(50), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
 			CharMenu.characterList = YRPCreateD("DHorizontalScroller", CharMenu.charactersBackground, charw, charh, 0, 0)
 			CharMenu.characterList.OffsetX = 0
 			--CharMenu.characterList:EnableVerticalScrollbar()
-			CharMenu.characterList:SetOverlap(-YRP.ctr(200))
+			CharMenu.characterList:SetOverlap(-YRP:ctr(200))
 			function CharMenu.characterList:Paint(pw, ph)
 				--draw.RoundedBox(0, 0, 0, pw, ph, Color( 255, 0, 0, 255) )
 				if CharMenu.characterList.OffsetX then
-					testid = CharMenu.characterList.OffsetX / (charw + YRP.ctr(200))
+					testid = CharMenu.characterList.OffsetX / (charw + YRP:ctr(200))
 					testid = math.Round(testid)
 					testid = testid + 1
 					if chars[testid] and chars[testid].char and not chars[testid].char.bool_eventchar then
@@ -1699,9 +1699,9 @@ function YRPOCS(force)
 
 			function CharMenu.characterList:OnMouseWheeled(delta)
 				if delta > 0 then
-					CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX - (charw + YRP.ctr(200))
+					CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX - (charw + YRP:ctr(200))
 				else
-					CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX + (charw + YRP.ctr(200))
+					CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX + (charw + YRP:ctr(200))
 				end
 
 				if CharMenu.characterList.OffsetX <= 0 then
@@ -1715,7 +1715,7 @@ function YRPOCS(force)
 				CharMenu.characterList:SetScroll(CharMenu.characterList.OffsetX)
 			end
 
-			local arrowbtnsize = YRP.ctr(128)
+			local arrowbtnsize = YRP:ctr(128)
 			CharMenu.prevChar = YRPCreateD("YButton", CharMenu.frame, arrowbtnsize, arrowbtnsize, ScrW() / 2 - DefaultCharW / 2, ScrH() - arrowbtnsize)
 			CharMenu.prevChar:SetText("")
 			function CharMenu.prevChar:Paint(pw, ph)
@@ -1726,8 +1726,8 @@ function YRPOCS(force)
 						color = YRPInterfaceValue("YButton", "NC")
 					end
 
-					if YRP.GetDesignIcon("64_angle-right") ~= nil then
-						surface.SetMaterial(YRP.GetDesignIcon("64_angle-left"))
+					if YRP:GetDesignIcon("64_angle-right") ~= nil then
+						surface.SetMaterial(YRP:GetDesignIcon("64_angle-left"))
 						surface.SetDrawColor(color)
 						surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
 					end
@@ -1735,7 +1735,7 @@ function YRPOCS(force)
 			end
 
 			function CharMenu.prevChar:DoClick()
-				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX - (charw + YRP.ctr(200))
+				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX - (charw + YRP:ctr(200))
 				if CharMenu.characterList.OffsetX <= 0 then
 					CharMenu.characterList.OffsetX = 0
 				end
@@ -1753,8 +1753,8 @@ function YRPOCS(force)
 						color = YRPInterfaceValue("YButton", "NC")
 					end
 
-					if YRP.GetDesignIcon("64_angle-right") ~= nil then
-						surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+					if YRP:GetDesignIcon("64_angle-right") ~= nil then
+						surface.SetMaterial(YRP:GetDesignIcon("64_angle-right"))
 						surface.SetDrawColor(color)
 						surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
 					end
@@ -1762,7 +1762,7 @@ function YRPOCS(force)
 			end
 
 			function CharMenu.nextChar:DoClick()
-				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX + (charw + YRP.ctr(200))
+				CharMenu.characterList.OffsetX = CharMenu.characterList.OffsetX + (charw + YRP:ctr(200))
 				if CharMenu.characterList.OffsetX >= CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide() then
 					CharMenu.characterList.OffsetX = CharMenu.characterList:GetCanvas():GetWide() - CharMenu.characterList:GetWide()
 				end
@@ -1778,13 +1778,13 @@ function YRPOCS(force)
 				local text = math.Round(LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) - CurTime(), 0)
 				tab.color = Color(38, 222, 129)
 				if LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() and validchar then
-					text = YRP.trans("LID_play") -- .. " ( " .. curCharName .. " )"
+					text = YRP:trans("LID_play") -- .. " ( " .. curCharName .. " )"
 				else
 					text = ""
 				end
 
 				if LocalPlayer() ~= nil and LocalPlayer():Alive() then
-					text = YRP.trans("LID_close")
+					text = YRP:trans("LID_close")
 					tab.color = Color(120, 0, 0, 255)
 				end
 

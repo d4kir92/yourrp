@@ -2,16 +2,16 @@
 -- #BLACKLISTSETTINGS
 function BuildBlacklis(parent, tabBL, tab)
 	parent:Clear()
-	local lis = YRPCreateD("DListView", parent, parent:GetWide() - YRP.ctr(60 + 500), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
+	local lis = YRPCreateD("DListView", parent, parent:GetWide() - YRP:ctr(60 + 500), parent:GetTall() - YRP:ctr(140), YRP:ctr(20), YRP:ctr(20))
 	lis:AddColumn("uniqueID"):SetFixedWidth(80)
-	lis:AddColumn(YRP.trans("LID_name"))
-	lis:AddColumn(YRP.trans("LID_value"))
+	lis:AddColumn(YRP:trans("LID_name"))
+	lis:AddColumn(YRP:trans("LID_value"))
 	function lis:Think()
-		if self.w ~= parent:GetWide() - YRP.ctr(60 + 500) or self.h ~= parent:GetTall() - YRP.ctr(40) or self.x ~= YRP.ctr(20) or self.y ~= YRP.ctr(20) then
-			self.w = parent:GetWide() - YRP.ctr(60 + 500)
-			self.h = parent:GetTall() - YRP.ctr(40)
-			self.x = YRP.ctr(20)
-			self.y = YRP.ctr(20)
+		if self.w ~= parent:GetWide() - YRP:ctr(60 + 500) or self.h ~= parent:GetTall() - YRP:ctr(40) or self.x ~= YRP:ctr(20) or self.y ~= YRP:ctr(20) then
+			self.w = parent:GetWide() - YRP:ctr(60 + 500)
+			self.h = parent:GetTall() - YRP:ctr(40)
+			self.x = YRP:ctr(20)
+			self.y = YRP:ctr(20)
 			self:SetSize(self.w, self.h)
 			self:SetPos(self.x, self.y)
 		end
@@ -23,39 +23,39 @@ function BuildBlacklis(parent, tabBL, tab)
 		end
 	end
 
-	local btnAdd = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(20))
-	btnAdd:SetText(YRP.trans("LID_addentry"))
+	local btnAdd = YRPCreateD("YButton", parent, YRP:ctr(500), YRP:ctr(50), parent:GetWide() - YRP:ctr(20 + 500), YRP:ctr(20))
+	btnAdd:SetText(YRP:trans("LID_addentry"))
 	function btnAdd:DoClick()
-		local AddFrame = YRPCreateD("YFrame", nil, YRP.ctr(500), YRP.ctr(500), 0, 0)
+		local AddFrame = YRPCreateD("YFrame", nil, YRP:ctr(500), YRP:ctr(500), 0, 0)
 		AddFrame:Center()
 		AddFrame:SetDraggable(true)
 		AddFrame:SetTitle("LID_add")
 		AddFrame:MakePopup()
 		local CONTENT = AddFrame:GetContent()
 		local addlis = YRPCreateD("DPanelList", CONTENT, CONTENT:GetWide(), CONTENT:GetTall(), 0, 0)
-		local BLNameHeader = YRPCreateD("YLabel", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
+		local BLNameHeader = YRPCreateD("YLabel", CONTENT, CONTENT:GetWide(), YRP:ctr(50), 0, 0)
 		BLNameHeader:SetText("LID_name")
 		addlis:AddItem(BLNameHeader)
-		local BLName = YRPCreateD("DComboBox", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
+		local BLName = YRPCreateD("DComboBox", CONTENT, CONTENT:GetWide(), YRP:ctr(50), 0, 0)
 		for k, v in pairs({"chat", "inventory", "entities", "props"}) do
 			BLName:AddChoice(v, v)
 		end
 
 		addlis:AddItem(BLName)
-		local HR = YRPCreateD("DPanel", CONTENT, CONTENT:GetWide(), YRP.ctr(20), 0, 0)
+		local HR = YRPCreateD("DPanel", CONTENT, CONTENT:GetWide(), YRP:ctr(20), 0, 0)
 		function HR:Paint(pw, ph)
 		end
 
 		--
 		addlis:AddItem(HR)
-		local BLValueHeader = YRPCreateD("YLabel", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
+		local BLValueHeader = YRPCreateD("YLabel", CONTENT, CONTENT:GetWide(), YRP:ctr(50), 0, 0)
 		BLValueHeader:SetText("LID_value")
 		addlis:AddItem(BLValueHeader)
-		local BLValue = YRPCreateD("DTextEntry", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
+		local BLValue = YRPCreateD("DTextEntry", CONTENT, CONTENT:GetWide(), YRP:ctr(50), 0, 0)
 		addlis:AddItem(BLValue)
 		addlis:AddItem(HR)
-		local BLAdd = YRPCreateD("DButton", CONTENT, CONTENT:GetWide(), YRP.ctr(50), 0, 0)
-		BLAdd:SetText(YRP.trans("LID_add"))
+		local BLAdd = YRPCreateD("DButton", CONTENT, CONTENT:GetWide(), YRP:ctr(50), 0, 0)
+		BLAdd:SetText(YRP:trans("LID_add"))
 		function BLAdd:DoClick()
 			if BLName:GetOptionData(BLName:GetSelectedID()) ~= nil then
 				net.Start("nws_yrp_blacklist_add")
@@ -74,18 +74,18 @@ function BuildBlacklis(parent, tabBL, tab)
 	end
 
 	function btnAdd:Think(pw, ph)
-		if self.w ~= YRP.ctr(500) or self.h ~= YRP.ctr(50) or self.x ~= parent:GetWide() - YRP.ctr(20 + 500) or self.y ~= YRP.ctr(20) then
-			self.w = YRP.ctr(500)
-			self.h = YRP.ctr(50)
-			self.x = parent:GetWide() - YRP.ctr(20 + 500)
-			self.y = YRP.ctr(20)
+		if self.w ~= YRP:ctr(500) or self.h ~= YRP:ctr(50) or self.x ~= parent:GetWide() - YRP:ctr(20 + 500) or self.y ~= YRP:ctr(20) then
+			self.w = YRP:ctr(500)
+			self.h = YRP:ctr(50)
+			self.x = parent:GetWide() - YRP:ctr(20 + 500)
+			self.y = YRP:ctr(20)
 			self:SetSize(self.w, self.h)
 			self:SetPos(self.x, self.y)
 		end
 	end
 
-	local btnRem = YRPCreateD("YButton", parent, YRP.ctr(500), YRP.ctr(50), parent:GetWide() - YRP.ctr(20 + 500), YRP.ctr(70))
-	btnRem:SetText(YRP.trans("LID_removeentry"))
+	local btnRem = YRPCreateD("YButton", parent, YRP:ctr(500), YRP:ctr(50), parent:GetWide() - YRP:ctr(20 + 500), YRP:ctr(70))
+	btnRem:SetText(YRP:trans("LID_removeentry"))
 	function btnRem:DoClick()
 		if lis:GetSelectedLine() ~= nil and lis:GetLine(lis:GetSelectedLine()):GetValue(1) ~= nil then
 			net.Start("nws_yrp_blacklist_remove")
@@ -111,11 +111,11 @@ function BuildBlacklis(parent, tabBL, tab)
 	end
 
 	function btnRem:Think()
-		if self.w ~= YRP.ctr(500) or self.h ~= YRP.ctr(50) or self.x ~= parent:GetWide() - YRP.ctr(20 + 500) or self.y ~= YRP.ctr(90) then
-			self.w = YRP.ctr(500)
-			self.h = YRP.ctr(50)
-			self.x = parent:GetWide() - YRP.ctr(20 + 500)
-			self.y = YRP.ctr(90)
+		if self.w ~= YRP:ctr(500) or self.h ~= YRP:ctr(50) or self.x ~= parent:GetWide() - YRP:ctr(20 + 500) or self.y ~= YRP:ctr(90) then
+			self.w = YRP:ctr(500)
+			self.h = YRP:ctr(50)
+			self.x = parent:GetWide() - YRP:ctr(20 + 500)
+			self.y = YRP:ctr(90)
 			self:SetSize(self.w, self.h)
 			self:SetPos(self.x, self.y)
 		end

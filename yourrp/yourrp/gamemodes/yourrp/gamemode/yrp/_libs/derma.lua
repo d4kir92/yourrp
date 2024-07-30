@@ -11,13 +11,13 @@ end
 function YRPAreYouSure(yes, no)
 	local win = createVGUI("YFrame", nil, 630, 100 + 10 + 50 + 10, 0, 0)
 	win:Center()
-	win:SetTitle(YRP.trans("LID_areyousure"))
+	win:SetTitle(YRP:trans("LID_areyousure"))
 	function win:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph)
 	end
 
 	local _yes = createVGUI("DButton", win, 300, 50, 10, 110)
-	_yes:SetText(YRP.trans("LID_yes"))
+	_yes:SetText(YRP:trans("LID_yes"))
 	function _yes:DoClick()
 		if yes ~= nil then
 			yes()
@@ -27,7 +27,7 @@ function YRPAreYouSure(yes, no)
 	end
 
 	local _no = createVGUI("DButton", win, 300, 50, 10 + 300 + 10, 110)
-	_no:SetText(YRP.trans("LID_no"))
+	_no:SetText(YRP:trans("LID_no"))
 	function _no:DoClick()
 		if no ~= nil then
 			no()
@@ -318,92 +318,92 @@ local _w_icons = {}
 local m_adding = false
 local m_counter = 0
 local m_w_counter = 0
-function YRP.AddDesignIcon(name, path)
+function YRP:AddDesignIcon(name, path)
 	m_w_counter = m_w_counter + 1
 	_w_icons[m_w_counter] = {name, path}
 end
 
-YRP.AddDesignIcon("lang_auto", "vgui/iso_639/" .. "auto" .. ".png")
-YRP.AddDesignIcon("group", "vgui/material/icon_group.png")
-YRP.AddDesignIcon("role", "vgui/material/icon_person.png")
-YRP.AddDesignIcon("help", "vgui/material/icon_help.png")
-YRP.AddDesignIcon("keyboard", "vgui/material/icon_keyboard.png")
-YRP.AddDesignIcon("mouse", "vgui/material/icon_mouse.png")
-YRP.AddDesignIcon("security", "vgui/material/icon_security.png")
-YRP.AddDesignIcon("usergroup", "vgui/material/icon_usergroup.png")
-YRP.AddDesignIcon("character", "vgui/material/icon_character.png")
-YRP.AddDesignIcon("shop", "vgui/material/icon_shop.png")
-YRP.AddDesignIcon("settings", "vgui/material/icon_settings.png")
-YRP.AddDesignIcon("feedback", "vgui/material/icon_feedback.png")
-YRP.AddDesignIcon("map", "vgui/material/icon_map.png")
-YRP.AddDesignIcon("color_lens", "vgui/material/icon_color_lens.png")
-YRP.AddDesignIcon("pin_drop", "vgui/material/icon_pin_drop.png")
-YRP.AddDesignIcon("face", "vgui/material/icon_face.png")
-YRP.AddDesignIcon("smile", "vgui/material/icon_insert_emoticon.png")
-YRP.AddDesignIcon("keyboard_arrow_down", "vgui/material/icon_keyboard_arrow_down.png")
-YRP.AddDesignIcon("keyboard_arrow_up", "vgui/material/icon_keyboard_arrow_up.png")
-YRP.AddDesignIcon("keyboard_arrow_right", "vgui/material/icon_keyboard_arrow_right.png")
-YRP.AddDesignIcon("keyboard_arrow_left", "vgui/material/icon_keyboard_arrow_left.png")
-YRP.AddDesignIcon("unfold_less", "vgui/material/icon_unfold_less.png")
-YRP.AddDesignIcon("unfold_more", "vgui/material/icon_unfold_more.png")
-YRP.AddDesignIcon("record_voice_over", "vgui/material/icon_record_voice_over.png")
-YRP.AddDesignIcon("3d_rotation", "vgui/material/icon_3d_rotation.png")
-YRP.AddDesignIcon("rotate_left", "vgui/material/icon_rotate_left.png")
-YRP.AddDesignIcon("rotate_right", "vgui/material/icon_rotate_right.png")
-YRP.AddDesignIcon("smartphone", "vgui/material/icon_smartphone.png")
-YRP.AddDesignIcon("system_update", "vgui/material/icon_system_update.png")
-YRP.AddDesignIcon("work", "vgui/material/icon_work.png")
-YRP.AddDesignIcon("done", "vgui/material/icon_done.png")
-YRP.AddDesignIcon("navigation", "vgui/material/icon_navigation.png")
-YRP.AddDesignIcon("chat", "vgui/material/icon_chat.png")
-YRP.AddDesignIcon("mic", "vgui/material/icon_mic.png")
-YRP.AddDesignIcon("close", "vgui/material/icon_highlight_off.png")
-YRP.AddDesignIcon("mat_square", "vgui/material/icon_square.png")
-YRP.AddDesignIcon("launch", "vgui/material/icon_launch.png")
-YRP.AddDesignIcon("lock", "vgui/material/icon_lock.png")
-YRP.AddDesignIcon("steam", "vgui/material/icon_steam.png")
-YRP.AddDesignIcon("play", "vgui/material/icon_play.png")
-YRP.AddDesignIcon("play_circle", "vgui/material/icon_play_circle.png")
-YRP.AddDesignIcon("pause", "vgui/material/icon_pause.png")
-YRP.AddDesignIcon("pause_circle", "vgui/material/icon_pause_circle.png")
-YRP.AddDesignIcon("language", "vgui/material/icon_language.png")
-YRP.AddDesignIcon("list", "vgui/material/icon_list.png")
-YRP.AddDesignIcon("edit", "vgui/material/icon_create.png")
-YRP.AddDesignIcon("circle", "vgui/material/icon_circle.png")
-YRP.AddDesignIcon("add", "vgui/material/icon_add.png")
-YRP.AddDesignIcon("remove", "vgui/material/icon_remove.png")
-YRP.AddDesignIcon("shopping_cart", "vgui/material/icon_shop_cart.png")
-YRP.AddDesignIcon("radiation", "vgui/material/icon_radiation.png")
-YRP.AddDesignIcon("dashboard", "vgui/material/icon_dashboard.png")
-YRP.AddDesignIcon("person_pin", "vgui/material/icon_person_pin.png")
-YRP.AddDesignIcon("accessibility", "vgui/material/icon_accessibility.png")
-YRP.AddDesignIcon("gavel", "vgui/material/icon_gavel.png")
-YRP.AddDesignIcon("web", "vgui/material/icon_web.png")
-YRP.AddDesignIcon("forum", "vgui/material/icon_forum.png")
-YRP.AddDesignIcon("policy", "vgui/material/icon_policy.png")
-YRP.AddDesignIcon("ts_white", "vgui/material/icon_teamspeak.png")
-YRP.AddDesignIcon("code", "vgui/material/icon_code.png")
-YRP.AddDesignIcon("eye", "vgui/material/icon_visibility.png")
-YRP.AddDesignIcon("account", "vgui/material/icon_account.png")
-YRP.AddDesignIcon("incognito", "vgui/material/icon_incognito.png")
-YRP.AddDesignIcon("return", "vgui/material/icon_sync.png")
-YRP.AddDesignIcon("wifi", "vgui/material/icon_wifi.png")
-YRP.AddDesignIcon("bullet", "vgui/material/icon_bullet.png")
-YRP.AddDesignIcon("bullet_secondary", "vgui/material/icon_bullet_secondary.png")
-YRP.AddDesignIcon("discord", "vgui/material/icon_discord.png")
-YRP.AddDesignIcon("discord_black", "vgui/material/icon_discord_black.png")
-YRP.AddDesignIcon("discord_white", "vgui/material/icon_discord_white.png")
-YRP.AddDesignIcon("os_windows", "vgui/material/icon_os_windows.png")
-YRP.AddDesignIcon("os_linux", "vgui/material/icon_os_linux.png")
-YRP.AddDesignIcon("os_osx", "vgui/material/icon_os_osx.png")
-YRP.AddDesignIcon("importexport", "vgui/material/icon_import_export.png")
-YRP.AddDesignIcon("volume_up", "vgui/material/icon_volume_up.png")
-YRP.AddDesignIcon("volume_down", "vgui/material/icon_volume_down.png")
-YRP.AddDesignIcon("volume_mute", "vgui/material/icon_volume_mute.png")
-YRP.AddDesignIcon("volume_off", "vgui/material/icon_volume_off.png")
-YRP.AddDesignIcon("signal1", "vgui/material/icon_signal01.png")
-YRP.AddDesignIcon("signal2", "vgui/material/icon_signal02.png")
-YRP.AddDesignIcon("signal3", "vgui/material/icon_signal03.png")
+YRP:AddDesignIcon("lang_auto", "vgui/iso_639/" .. "auto" .. ".png")
+YRP:AddDesignIcon("group", "vgui/material/icon_group.png")
+YRP:AddDesignIcon("role", "vgui/material/icon_person.png")
+YRP:AddDesignIcon("help", "vgui/material/icon_help.png")
+YRP:AddDesignIcon("keyboard", "vgui/material/icon_keyboard.png")
+YRP:AddDesignIcon("mouse", "vgui/material/icon_mouse.png")
+YRP:AddDesignIcon("security", "vgui/material/icon_security.png")
+YRP:AddDesignIcon("usergroup", "vgui/material/icon_usergroup.png")
+YRP:AddDesignIcon("character", "vgui/material/icon_character.png")
+YRP:AddDesignIcon("shop", "vgui/material/icon_shop.png")
+YRP:AddDesignIcon("settings", "vgui/material/icon_settings.png")
+YRP:AddDesignIcon("feedback", "vgui/material/icon_feedback.png")
+YRP:AddDesignIcon("map", "vgui/material/icon_map.png")
+YRP:AddDesignIcon("color_lens", "vgui/material/icon_color_lens.png")
+YRP:AddDesignIcon("pin_drop", "vgui/material/icon_pin_drop.png")
+YRP:AddDesignIcon("face", "vgui/material/icon_face.png")
+YRP:AddDesignIcon("smile", "vgui/material/icon_insert_emoticon.png")
+YRP:AddDesignIcon("keyboard_arrow_down", "vgui/material/icon_keyboard_arrow_down.png")
+YRP:AddDesignIcon("keyboard_arrow_up", "vgui/material/icon_keyboard_arrow_up.png")
+YRP:AddDesignIcon("keyboard_arrow_right", "vgui/material/icon_keyboard_arrow_right.png")
+YRP:AddDesignIcon("keyboard_arrow_left", "vgui/material/icon_keyboard_arrow_left.png")
+YRP:AddDesignIcon("unfold_less", "vgui/material/icon_unfold_less.png")
+YRP:AddDesignIcon("unfold_more", "vgui/material/icon_unfold_more.png")
+YRP:AddDesignIcon("record_voice_over", "vgui/material/icon_record_voice_over.png")
+YRP:AddDesignIcon("3d_rotation", "vgui/material/icon_3d_rotation.png")
+YRP:AddDesignIcon("rotate_left", "vgui/material/icon_rotate_left.png")
+YRP:AddDesignIcon("rotate_right", "vgui/material/icon_rotate_right.png")
+YRP:AddDesignIcon("smartphone", "vgui/material/icon_smartphone.png")
+YRP:AddDesignIcon("system_update", "vgui/material/icon_system_update.png")
+YRP:AddDesignIcon("work", "vgui/material/icon_work.png")
+YRP:AddDesignIcon("done", "vgui/material/icon_done.png")
+YRP:AddDesignIcon("navigation", "vgui/material/icon_navigation.png")
+YRP:AddDesignIcon("chat", "vgui/material/icon_chat.png")
+YRP:AddDesignIcon("mic", "vgui/material/icon_mic.png")
+YRP:AddDesignIcon("close", "vgui/material/icon_highlight_off.png")
+YRP:AddDesignIcon("mat_square", "vgui/material/icon_square.png")
+YRP:AddDesignIcon("launch", "vgui/material/icon_launch.png")
+YRP:AddDesignIcon("lock", "vgui/material/icon_lock.png")
+YRP:AddDesignIcon("steam", "vgui/material/icon_steam.png")
+YRP:AddDesignIcon("play", "vgui/material/icon_play.png")
+YRP:AddDesignIcon("play_circle", "vgui/material/icon_play_circle.png")
+YRP:AddDesignIcon("pause", "vgui/material/icon_pause.png")
+YRP:AddDesignIcon("pause_circle", "vgui/material/icon_pause_circle.png")
+YRP:AddDesignIcon("language", "vgui/material/icon_language.png")
+YRP:AddDesignIcon("list", "vgui/material/icon_list.png")
+YRP:AddDesignIcon("edit", "vgui/material/icon_create.png")
+YRP:AddDesignIcon("circle", "vgui/material/icon_circle.png")
+YRP:AddDesignIcon("add", "vgui/material/icon_add.png")
+YRP:AddDesignIcon("remove", "vgui/material/icon_remove.png")
+YRP:AddDesignIcon("shopping_cart", "vgui/material/icon_shop_cart.png")
+YRP:AddDesignIcon("radiation", "vgui/material/icon_radiation.png")
+YRP:AddDesignIcon("dashboard", "vgui/material/icon_dashboard.png")
+YRP:AddDesignIcon("person_pin", "vgui/material/icon_person_pin.png")
+YRP:AddDesignIcon("accessibility", "vgui/material/icon_accessibility.png")
+YRP:AddDesignIcon("gavel", "vgui/material/icon_gavel.png")
+YRP:AddDesignIcon("web", "vgui/material/icon_web.png")
+YRP:AddDesignIcon("forum", "vgui/material/icon_forum.png")
+YRP:AddDesignIcon("policy", "vgui/material/icon_policy.png")
+YRP:AddDesignIcon("ts_white", "vgui/material/icon_teamspeak.png")
+YRP:AddDesignIcon("code", "vgui/material/icon_code.png")
+YRP:AddDesignIcon("eye", "vgui/material/icon_visibility.png")
+YRP:AddDesignIcon("account", "vgui/material/icon_account.png")
+YRP:AddDesignIcon("incognito", "vgui/material/icon_incognito.png")
+YRP:AddDesignIcon("return", "vgui/material/icon_sync.png")
+YRP:AddDesignIcon("wifi", "vgui/material/icon_wifi.png")
+YRP:AddDesignIcon("bullet", "vgui/material/icon_bullet.png")
+YRP:AddDesignIcon("bullet_secondary", "vgui/material/icon_bullet_secondary.png")
+YRP:AddDesignIcon("discord", "vgui/material/icon_discord.png")
+YRP:AddDesignIcon("discord_black", "vgui/material/icon_discord_black.png")
+YRP:AddDesignIcon("discord_white", "vgui/material/icon_discord_white.png")
+YRP:AddDesignIcon("os_windows", "vgui/material/icon_os_windows.png")
+YRP:AddDesignIcon("os_linux", "vgui/material/icon_os_linux.png")
+YRP:AddDesignIcon("os_osx", "vgui/material/icon_os_osx.png")
+YRP:AddDesignIcon("importexport", "vgui/material/icon_import_export.png")
+YRP:AddDesignIcon("volume_up", "vgui/material/icon_volume_up.png")
+YRP:AddDesignIcon("volume_down", "vgui/material/icon_volume_down.png")
+YRP:AddDesignIcon("volume_mute", "vgui/material/icon_volume_mute.png")
+YRP:AddDesignIcon("volume_off", "vgui/material/icon_volume_off.png")
+YRP:AddDesignIcon("signal1", "vgui/material/icon_signal01.png")
+YRP:AddDesignIcon("signal2", "vgui/material/icon_signal02.png")
+YRP:AddDesignIcon("signal3", "vgui/material/icon_signal03.png")
 local _, folders = file.Find("materials/icons/*", "GAME")
 for _, folder in pairs(folders) do
 	local _, f_folders = file.Find("materials/icons/" .. folder .. "/*", "GAME")
@@ -414,7 +414,7 @@ for _, folder in pairs(folders) do
 			local name = string.Explode("/", f_file)
 			name = folder .. "_" .. name[#name]
 			name = string.Replace(name, ".png", "")
-			YRP.AddDesignIcon(name, f)
+			YRP:AddDesignIcon(name, f)
 		end
 	end
 end
@@ -423,10 +423,10 @@ end
 local flags, _ = file.Find("materials/vgui/iso_3166/*.png", "GAME", "nameasc")
 for i, flag in pairs(flags) do
 	flag = string.Replace(flag, ".png", "")
-	YRP.AddDesignIcon("flag_" .. flag, "vgui/iso_3166/" .. flag .. ".png")
+	YRP:AddDesignIcon("flag_" .. flag, "vgui/iso_3166/" .. flag .. ".png")
 end
 
-function YRP.LoadDesignIcon()
+function YRP:YLoadDesignIcon()
 	if not m_adding and _w_icons[m_counter + 1] ~= nil then
 		m_adding = true
 		m_counter = m_counter + 1
@@ -436,13 +436,13 @@ function YRP.LoadDesignIcon()
 		_icons[name] = mat
 		m_adding = false
 		if _w_icons[m_counter + 1] ~= nil then
-			YRP.LoadDesignIcon()
+			YRP:YLoadDesignIcon()
 		end
 	elseif m_counter ~= m_w_counter then
 		timer.Simple(
 			1,
 			function()
-				YRP.LoadDesignIcon()
+				YRP:YLoadDesignIcon()
 			end
 		)
 	end
@@ -451,18 +451,18 @@ end
 timer.Simple(
 	1,
 	function()
-		YRP.LoadDesignIcon()
+		YRP:YLoadDesignIcon()
 	end
 )
 
-YRP.AddDesignIcon("clear", "vgui/material/icon_clear.png")
-function YRP.GetDesignIcon(name)
+YRP:AddDesignIcon("clear", "vgui/material/icon_clear.png")
+function YRP:GetDesignIcon(name)
 	if _icons[name] ~= nil and tostring(_icons[name]) ~= "Material [___error]" then return _icons[name] end
 
 	return _icons["clear"]
 end
 
-function YRP.DrawIcon(material, w, h, x, y, colo)
+function YRP:DrawIcon(material, w, h, x, y, colo)
 	local col = colo or YRPGetColor("6")
 	if IsNotNilAndNotFalse(material) then
 		surface.SetDrawColor(col)
@@ -495,16 +495,16 @@ function surfaceCheckBox(self, pw, ph, icon)
 			local th = 4
 			local br = 4
 			local color = Color(0, 0, 0, 255)
-			draw.RoundedBox(0, YRP.ctr(br), YRP.ctr(br), pw - YRP.ctr(br * 2), YRP.ctr(th), color)
-			draw.RoundedBox(0, YRP.ctr(br), YRP.ctr(br), YRP.ctr(th), ph - YRP.ctr(br * 2), color)
-			draw.RoundedBox(0, YRP.ctr(br), ph - YRP.ctr(br + th), pw - YRP.ctr(br * 2), YRP.ctr(th), color)
-			draw.RoundedBox(0, pw - YRP.ctr(br + th), YRP.ctr(br), YRP.ctr(th), ph - YRP.ctr(br * 2), color)
+			draw.RoundedBox(0, YRP:ctr(br), YRP:ctr(br), pw - YRP:ctr(br * 2), YRP:ctr(th), color)
+			draw.RoundedBox(0, YRP:ctr(br), YRP:ctr(br), YRP:ctr(th), ph - YRP:ctr(br * 2), color)
+			draw.RoundedBox(0, YRP:ctr(br), ph - YRP:ctr(br + th), pw - YRP:ctr(br * 2), YRP:ctr(th), color)
+			draw.RoundedBox(0, pw - YRP:ctr(br + th), YRP:ctr(br), YRP:ctr(th), ph - YRP:ctr(br * 2), color)
 			if self:GetChecked() then
 				br = 4
-				if YRP.GetDesignIcon(icon) ~= nil then
+				if YRP:GetDesignIcon(icon) ~= nil then
 					surface.SetDrawColor(Color(0, 255, 0))
-					surface.SetMaterial(YRP.GetDesignIcon(icon))
-					surface.DrawTexturedRect(YRP.ctr(br), YRP.ctr(br), pw - YRP.ctr(br * 2), ph - YRP.ctr(8))
+					surface.SetMaterial(YRP:GetDesignIcon(icon))
+					surface.DrawTexturedRect(YRP:ctr(br), YRP:ctr(br), pw - YRP:ctr(br * 2), ph - YRP:ctr(8))
 				end
 			end
 		end
@@ -536,7 +536,7 @@ function YRPOpenMenu()
 end
 
 function paintBr(pw, ph, color)
-	local _br = YRP.ctr(2)
+	local _br = YRP:ctr(2)
 	--links
 	draw.RoundedBox(0, _br, _br, _br, ph - 2 * _br, color)
 	--oben
@@ -562,7 +562,7 @@ function paintButton(self, pw, ph, mytext)
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
 	local _brC = Color(0, 0, 0, 255)
 	paintBr(pw, ph, _brC)
-	draw.SimpleTextOutlined(YRP.trans(mytext), "Y_18_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP.ctr(1), Color(0, 0, 0, 255))
+	draw.SimpleTextOutlined(YRP:trans(mytext), "Y_18_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP:ctr(1), Color(0, 0, 0, 255))
 end
 
 function paintPanel(self, pw, ph, color)
@@ -581,9 +581,9 @@ function paintInv(self, pw, ph, text1, text2)
 	draw.RoundedBox(0, 0, 0, pw, ph, color_pi)
 	local _brC = Color(255, 255, 255, 255)
 	paintBr(pw, ph, _brC)
-	draw.SimpleTextOutlined(YRP.trans(text1), "DermaDefault", YRP.ctr(15), ph - YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, YRP.ctr(1), Color(0, 0, 0, 255))
+	draw.SimpleTextOutlined(YRP:trans(text1), "DermaDefault", YRP:ctr(15), ph - YRP:ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, YRP:ctr(1), Color(0, 0, 0, 255))
 	if text2 ~= nil then
-		draw.SimpleTextOutlined(YRP.trans(text2), "DermaDefault", YRP.ctr(15), YRP.ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, YRP.ctr(1), Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(YRP:trans(text2), "DermaDefault", YRP:ctr(15), YRP:ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, YRP:ctr(1), Color(0, 0, 0, 255))
 	end
 end
 
@@ -767,7 +767,7 @@ function GetFontSizes()
 end
 
 function drawRBox(r, x, y, w, h, col)
-	draw.RoundedBox(YRP.ctr(r), YRP.ctr(x), YRP.ctr(y), YRP.ctr(w), YRP.ctr(h), col)
+	draw.RoundedBox(YRP:ctr(r), YRP:ctr(x), YRP:ctr(y), YRP:ctr(w), YRP:ctr(h), col)
 end
 
 function drawRBoxBr2(r, x, y, w, h, col, br)
@@ -778,14 +778,14 @@ function drawRBoxBr2(r, x, y, w, h, col, br)
 end
 
 function drawRBoxBr(r, x, y, w, h, col, br)
-	draw.RoundedBox(YRP.ctr(r), YRP.ctr(x - br), YRP.ctr(y - br), YRP.ctr(w + 2 * br - 1), YRP.ctr(2 * br), col)
-	draw.RoundedBox(YRP.ctr(r), YRP.ctr(x - br), YRP.ctr(y + h - br), YRP.ctr(w + 2 * br - 1), YRP.ctr(2 * br), col)
-	draw.RoundedBox(YRP.ctr(r), YRP.ctr(x - br), YRP.ctr(y), YRP.ctr(2 * br), YRP.ctr(h), col)
-	draw.RoundedBox(YRP.ctr(r), YRP.ctr(x + w - br), YRP.ctr(y), YRP.ctr(2 * br), YRP.ctr(h), col)
+	draw.RoundedBox(YRP:ctr(r), YRP:ctr(x - br), YRP:ctr(y - br), YRP:ctr(w + 2 * br - 1), YRP:ctr(2 * br), col)
+	draw.RoundedBox(YRP:ctr(r), YRP:ctr(x - br), YRP:ctr(y + h - br), YRP:ctr(w + 2 * br - 1), YRP:ctr(2 * br), col)
+	draw.RoundedBox(YRP:ctr(r), YRP:ctr(x - br), YRP:ctr(y), YRP:ctr(2 * br), YRP:ctr(h), col)
+	draw.RoundedBox(YRP:ctr(r), YRP:ctr(x + w - br), YRP:ctr(y), YRP:ctr(2 * br), YRP:ctr(h), col)
 end
 
 function drawRBoxCr(x, y, size, col)
-	draw.RoundedBox(YRP.ctr(size / 2), YRP.ctr(x), YRP.ctr(y), YRP.ctr(size), YRP.ctr(size), col)
+	draw.RoundedBox(YRP:ctr(size / 2), YRP:ctr(x), YRP:ctr(y), YRP:ctr(size), YRP:ctr(size), col)
 end
 
 function surfaceText(mytext, font, x, y, color, ax, ay, br)
@@ -805,11 +805,11 @@ end
 function createVGUI(art, parent, w, h, x, y)
 	local tmp = vgui.Create(art, parent, nil)
 	if w ~= nil and h ~= nil then
-		tmp:SetSize(YRP.ctr(w), YRP.ctr(h))
+		tmp:SetSize(YRP:ctr(w), YRP:ctr(h))
 	end
 
 	if x ~= nil and y ~= nil then
-		tmp:SetPos(YRP.ctr(x), YRP.ctr(y))
+		tmp:SetPos(YRP:ctr(x), YRP:ctr(y))
 	end
 
 	return tmp
@@ -834,12 +834,12 @@ function createMDMenu(parent, w, h, x, y)
 	tmp.sites = {}
 	tmp.cats = {}
 	tmp.cat = {}
-	local BarW = YRP.ctr(140)
-	local IconSize = YRP.ctr(94)
+	local BarW = YRP:ctr(140)
+	local IconSize = YRP:ctr(94)
 	local BR = (BarW - IconSize) / 2
 	-- LOGO
-	local logoS = tmp:GetHeaderHeight() - YRP.ctr(20)
-	tmp.logo = YRPCreateD("YPanel", tmp, YRP.ctr(200), logoS, tmp:GetWide() / 2 - YRP.ctr(200), YRP.ctr(10))
+	local logoS = tmp:GetHeaderHeight() - YRP:ctr(20)
+	tmp.logo = YRPCreateD("YPanel", tmp, YRP:ctr(200), logoS, tmp:GetWide() / 2 - YRP:ctr(200), YRP:ctr(10))
 	tmp.logo.yrp = Material("vgui/yrp/logo100_beta.png")
 	function tmp.logo:Paint(pw, ph)
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
@@ -847,20 +847,20 @@ function createMDMenu(parent, w, h, x, y)
 		surface.SetMaterial(self.yrp)
 		surface.DrawTexturedRect(0, 0, 400 * logoS / 130, 130 * logoS / 130)
 		self.w = self.w or 0
-		if self.w ~= 400 * logoS / 130 or self.h ~= logoS or self.x ~= tmp:GetWide() / 2 - self.w or self.y ~= YRP.ctr(10) then
+		if self.w ~= 400 * logoS / 130 or self.h ~= logoS or self.x ~= tmp:GetWide() / 2 - self.w or self.y ~= YRP:ctr(10) then
 			self.w = 400 * logoS / 130
 			self.h = logoS
 			self.x = tmp:GetWide() / 2 - self.w
-			self.y = YRP.ctr(10)
+			self.y = YRP:ctr(10)
 			self:SetSize(self.w, self.h)
 			self:SetPos(self.x, self.y)
 		end
 	end
 
 	-- DISCORD
-	local icon_size = tmp:GetHeaderHeight() - YRP.ctr(20)
+	local icon_size = tmp:GetHeaderHeight() - YRP:ctr(20)
 	local icon_x, icon_y = tmp.logo:GetPos()
-	icon_x = icon_x + tmp.logo:GetWide() + YRP.ctr(20)
+	icon_x = icon_x + tmp.logo:GetWide() + YRP:ctr(20)
 	tmp.discord = YRPCreateD("YPanel", tmp, icon_size, icon_size, icon_x, icon_y)
 	tmp.discord.logo = YRPCreateD("DHTML", tmp.discord, icon_size, icon_size, 0, 0)
 	tmp.discord.btn = YRPCreateD("DButton", tmp.discord, icon_size, icon_size, 0, 0)
@@ -868,9 +868,9 @@ function createMDMenu(parent, w, h, x, y)
 	local img = YRPGetHTMLImage("https://discordapp.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg", icon_size, icon_size)
 	tmp.discord.logo:SetHTML(img)
 	function tmp.discord:Paint(pw, ph)
-		icon_size = tmp:GetHeaderHeight() - YRP.ctr(20)
+		icon_size = tmp:GetHeaderHeight() - YRP:ctr(20)
 		icon_x, icon_y = tmp.logo:GetPos()
-		icon_x = icon_x + tmp.logo:GetWide() + YRP.ctr(20)
+		icon_x = icon_x + tmp.logo:GetWide() + YRP:ctr(20)
 		if self.w ~= icon_size or self.h ~= icon_size or self.x ~= icon_x or self.y ~= icon_y then
 			self.w = icon_size
 			self.h = icon_size
@@ -906,7 +906,7 @@ function createMDMenu(parent, w, h, x, y)
 		self.cats[cat][tmpNr].material = material
 	end
 
-	tmp.sitepanel = YRPCreateD("DPanel", tmp, w, h - YRP.ctr(100), 0, YRP.ctr(100))
+	tmp.sitepanel = YRPCreateD("DPanel", tmp, w, h - YRP:ctr(100), 0, YRP:ctr(100))
 	function tmp.sitepanel:Paint(pw, ph)
 	end
 
@@ -915,18 +915,18 @@ function createMDMenu(parent, w, h, x, y)
 		self.site:Clear()
 		self.lastsite = _hook
 		tmp.cursite = tmp.sites[_hook].site
-		tmp:SetTitle(string.upper(YRP.trans(tmp.sites[_hook].site)))
+		tmp:SetTitle(string.upper(YRP:trans(tmp.sites[_hook].site)))
 		hook.Call(_hook)
 	end
 
-	tmp.menu = YRPCreateD("DPanel", tmp, BarW, tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50), 0, tmp:GetHeaderHeight())
-	tmp.menulist = YRPCreateD("DPanelList", tmp.menu, IconSize, tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50) - 2 * BR, BR, BR)
+	tmp.menu = YRPCreateD("DPanel", tmp, BarW, tmp:GetTall() - tmp:GetHeaderHeight() - YRP:ctr(50), 0, tmp:GetHeaderHeight())
+	tmp.menulist = YRPCreateD("DPanelList", tmp.menu, IconSize, tmp:GetTall() - tmp:GetHeaderHeight() - YRP:ctr(50) - 2 * BR, BR, BR)
 	tmp.menulist:EnableVerticalScrollbar(true)
 	function tmp.menu:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, YRPGetColor("5"))
-		if self.w ~= BarW or self.h ~= tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50) or self.x ~= 0 or self.y ~= tmp:GetHeaderHeight() then
+		if self.w ~= BarW or self.h ~= tmp:GetTall() - tmp:GetHeaderHeight() - YRP:ctr(50) or self.x ~= 0 or self.y ~= tmp:GetHeaderHeight() then
 			self.w = BarW
-			self.h = tmp:GetTall() - tmp:GetHeaderHeight() - YRP.ctr(50)
+			self.h = tmp:GetTall() - tmp:GetHeaderHeight() - YRP:ctr(50)
 			self.x = 0
 			self.y = tmp:GetHeaderHeight()
 			self:SetSize(self.w, self.h)
@@ -939,16 +939,16 @@ function createMDMenu(parent, w, h, x, y)
 	local posY = 0
 	function tmp:CreateMenu()
 		for k, v in pairs(tmp.cat) do
-			local tmpCat = YRPCreateD("DPanel", tmp.menulist, IconSize, YRP.ctr(0), BR, YRP.ctr(posY))
+			local tmpCat = YRPCreateD("DPanel", tmp.menulist, IconSize, YRP:ctr(0), BR, YRP:ctr(posY))
 			function tmpCat:Paint(pw, ph)
-				draw.SimpleTextOutlined(string.upper(YRP.trans(v)), "Y_18_500", YRP.ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+				draw.SimpleTextOutlined(string.upper(YRP:trans(v)), "Y_18_500", YRP:ctr(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			end
 
 			tmp.menulist:AddItem(tmpCat)
 			--posY = posY + 50 + 10
 			if tmp.cats[v] ~= nil then
 				for _l, _w in pairs(tmp.cats[v]) do
-					tmp.sites[_w.hook] = YRPCreateD("DButton", nil, IconSize, IconSize, BR, YRP.ctr(posY))
+					tmp.sites[_w.hook] = YRPCreateD("DButton", nil, IconSize, IconSize, BR, YRP:ctr(posY))
 					local tmp2 = tmp.sites[_w.hook]
 					tmp2:SetText("")
 					tmp2.hook = string.lower(_w.hook)
@@ -967,7 +967,7 @@ function createMDMenu(parent, w, h, x, y)
 							surface.SetMaterial(_w.material)
 							surface.DrawTexturedRect(BR, BR, IconSize - 2 * BR, IconSize - 2 * BR)
 						end
-						--draw.SimpleTextOutlined(string.upper(YRP.trans(_w.site) ), "Y_18_500", YRP.ctr(80 + 10), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
+						--draw.SimpleTextOutlined(string.upper(YRP:trans(_w.site) ), "Y_18_500", YRP:ctr(80 + 10), ph / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, 255 ) )
 					end
 
 					function tmp2:DoClick()
@@ -975,7 +975,7 @@ function createMDMenu(parent, w, h, x, y)
 					end
 
 					tmp.menulist:AddItem(tmp2)
-					local tmpHr2 = YRPCreateD("DPanel", nil, IconSize, YRP.ctr(20), 0, YRP.ctr(posY))
+					local tmpHr2 = YRPCreateD("DPanel", nil, IconSize, YRP:ctr(20), 0, YRP:ctr(posY))
 					function tmpHr2:Paint(pw, ph)
 					end
 
@@ -983,7 +983,7 @@ function createMDMenu(parent, w, h, x, y)
 					--posY = posY + 80 + 10
 				end
 
-				local tmpHr = YRPCreateD("DPanel", nil, IconSize, YRP.ctr(0), 0, YRP.ctr(posY))
+				local tmpHr = YRPCreateD("DPanel", nil, IconSize, YRP:ctr(0), 0, YRP:ctr(posY))
 				function tmpHr:Paint(pw, ph)
 				end
 
@@ -994,13 +994,13 @@ function createMDMenu(parent, w, h, x, y)
 	end
 
 	local CONTENT = tmp:GetContent()
-	tmp.site = YRPCreateD("YPanel", tmp, CONTENT:GetWide() - BarW, CONTENT:GetTall() - YRP.ctr(50), BarW, tmp:GetHeaderHeight())
+	tmp.site = YRPCreateD("YPanel", tmp, CONTENT:GetWide() - BarW, CONTENT:GetTall() - YRP:ctr(50), BarW, tmp:GetHeaderHeight())
 	function tmp.site:Paint(pw, ph)
 		local color = YRPInterfaceValue("YFrame", "HB")
 		draw.RoundedBox(0, 0, 0, pw, ph, color)
-		if self.w ~= CONTENT:GetWide() - BarW or self.h ~= CONTENT:GetTall() - YRP.ctr(50) or self.x ~= BarW or self.y ~= tmp:GetHeaderHeight() then
+		if self.w ~= CONTENT:GetWide() - BarW or self.h ~= CONTENT:GetTall() - YRP:ctr(50) or self.x ~= BarW or self.y ~= tmp:GetHeaderHeight() then
 			self.w = CONTENT:GetWide() - BarW
-			self.h = CONTENT:GetTall() - YRP.ctr(50)
+			self.h = CONTENT:GetTall() - YRP:ctr(50)
 			self.x = BarW
 			self.y = tmp:GetHeaderHeight()
 			self:SetSize(self.w, self.h)
@@ -1015,15 +1015,15 @@ function createMDMenu(parent, w, h, x, y)
 		draw.RoundedBox(0, 0, 0, pw, ph, color_bot1)
 		draw.SimpleText(GetGlobalYRPString("text_server_name", "-"), "Y_18_500", ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		draw.SimpleText("YourRP Version.: " .. YRPGetVersionFull() .. " ( " .. string.upper(GAMEMODE.dedicated) .. " Server)", "Y_18_500", pw / 2, ph / 2, YRPGetVersionColor(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText(YRP.trans("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP.trans("LID_players") .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP:trans("LID_map") .. ": " .. game.GetMap() .. "        " .. YRP:trans("LID_players") .. ": " .. player.GetCount() .. "/" .. game.MaxPlayers(), "Y_18_500", pw - ph / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
 	function tmp.bot:Think()
-		if self.w ~= tmp:GetWide() or self.h ~= YRP.ctr(50) or self.px ~= 0 or self.py ~= tmp:GetTall() - YRP.ctr(50) then
+		if self.w ~= tmp:GetWide() or self.h ~= YRP:ctr(50) or self.px ~= 0 or self.py ~= tmp:GetTall() - YRP:ctr(50) then
 			self.w = tmp:GetWide()
-			self.h = YRP.ctr(50)
+			self.h = YRP:ctr(50)
 			self.px = 0
-			self.py = tmp:GetTall() - YRP.ctr(50)
+			self.py = tmp:GetTall() - YRP:ctr(50)
 			self:SetSize(self.w, self.h)
 			self:SetPos(self.px, self.py)
 		end
@@ -1046,8 +1046,8 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 			draw.RoundedBox(0, pw / 2, 0, pw / 2, ph, get_dsbg_col())
 		end
 
-		draw.SimpleTextOutlined(YRP.trans("LID_dark"), "Y_24_500", 1 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-		draw.SimpleTextOutlined(YRP.trans("LID_light"), "Y_24_500", 3 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(YRP:trans("LID_dark"), "Y_24_500", 1 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(YRP:trans("LID_light"), "Y_24_500", 3 * (pw / 4), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end
 
 	function tmp:DoClick()
@@ -1067,7 +1067,7 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 end
 
 function addPColorField(parent, col, x, y)
-	local tmp = YRPCreateD("DButton", parent, YRP.ctr(50), YRP.ctr(50), x, y)
+	local tmp = YRPCreateD("DButton", parent, YRP:ctr(50), YRP:ctr(50), x, y)
 	tmp.color = col
 	tmp:SetText("")
 	function tmp:Paint(pw, ph)
@@ -1086,7 +1086,7 @@ function addPColorField(parent, col, x, y)
 end
 
 function addSColorField(parent, col, x, y)
-	local tmp = YRPCreateD("DButton", parent, YRP.ctr(50), YRP.ctr(50), x, y)
+	local tmp = YRPCreateD("DButton", parent, YRP:ctr(50), YRP:ctr(50), x, y)
 	tmp.color = col
 	tmp:SetText("")
 	function tmp:Paint(pw, ph)
@@ -1126,25 +1126,25 @@ end
 
 function YRPDrawCircle(x, y, radius, seg)
 	if x == nil then
-		YRP.msg("error", "x: " .. tostring(x))
+		YRP:msg("error", "x: " .. tostring(x))
 
 		return
 	end
 
 	if y == nil then
-		YRP.msg("error", "y: " .. tostring(y))
+		YRP:msg("error", "y: " .. tostring(y))
 
 		return
 	end
 
 	if radius == nil then
-		YRP.msg("error", "Radius: " .. tostring(radius))
+		YRP:msg("error", "Radius: " .. tostring(radius))
 
 		return
 	end
 
 	if seg == nil then
-		YRP.msg("error", "Seg: " .. tostring(seg))
+		YRP:msg("error", "Seg: " .. tostring(seg))
 
 		return
 	end

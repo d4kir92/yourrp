@@ -25,12 +25,12 @@ end
 
 if SERVER then
 	local nws = {}
-	function YRP.AddNetworkString(name)
+	function YRP:AddNetworkString(name)
 		if name == nil then return end
 		if nws[name] == nil then
 			util.AddNetworkString(name)
 		else
-			YRP.msg("error", "DOUBLE NETWORK STRING" .. name)
+			YRP:msg("error", "DOUBLE NETWORK STRING" .. name)
 		end
 	end
 end

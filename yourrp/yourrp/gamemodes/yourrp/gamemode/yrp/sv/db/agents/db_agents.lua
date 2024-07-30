@@ -6,23 +6,23 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "target", "TEXT DEFAULT 'No Target'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "reward", "INTEGER DEFAULT 1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT 'NO DESCRIPTION'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "contract_SteamID", "TEXT DEFAULT ''")
-YRP.AddNetworkString("nws_yrp_placehit")
-YRP.AddNetworkString("nws_yrp_gethits")
-YRP.AddNetworkString("nws_yrp_accepthit")
+YRP:AddNetworkString("nws_yrp_placehit")
+YRP:AddNetworkString("nws_yrp_gethits")
+YRP:AddNetworkString("nws_yrp_accepthit")
 net.Receive(
 	"nws_yrp_placehit",
 	function(len, ply)
 		local _steamid = net.ReadString()
 		local _reward = net.ReadString()
 		local _desc = net.ReadString()
-		YRP.msg("note", "[AGENTS] received hit info: " .. _steamid .. ", " .. _reward .. ", " .. _desc)
+		YRP:msg("note", "[AGENTS] received hit info: " .. _steamid .. ", " .. _reward .. ", " .. _desc)
 		_reward = tonumber(_reward)
 		if ply:canAfford(_reward) then
 			ply:addMoney(-_reward)
-			YRP.msg("note", "Set hit")
+			YRP:msg("note", "Set hit")
 			local _res = YRP_SQL_INSERT_INTO(DATABASE_NAME, "target, reward, description, contract_SteamID", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "', '" .. ply:YRPSteamID() .. "'")
 		else
-			YRP.msg("note", "Cant afford hit")
+			YRP:msg("note", "Cant afford hit")
 		end
 	end
 )
@@ -39,7 +39,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_contracts")
+YRP:AddNetworkString("nws_yrp_get_contracts")
 net.Receive(
 	"nws_yrp_get_contracts",
 	function(len, ply)

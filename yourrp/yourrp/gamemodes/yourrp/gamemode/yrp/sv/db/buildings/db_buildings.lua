@@ -83,7 +83,7 @@ function YRPAllowedToUseDoor(id, ply, door)
 					elseif YRPIsUnderGroupOf(ply, bui_guid) then
 						return true
 					else
-						YRP.msg("note", "[YRPAllowedToUseDoor] not allowed")
+						YRP:msg("note", "[YRPAllowedToUseDoor] not allowed")
 
 						return false
 					end
@@ -92,7 +92,7 @@ function YRPAllowedToUseDoor(id, ply, door)
 				end
 			end
 		else
-			YRP.msg("note", "[YRPAllowedToUseDoor] not allowed 2")
+			YRP:msg("note", "[YRPAllowedToUseDoor] not allowed 2")
 
 			return false
 		end
@@ -100,7 +100,7 @@ function YRPAllowedToUseDoor(id, ply, door)
 end
 
 function YRPSearchForDoors()
-	YRP.msg("note", "[Buildings] Search Map for Doors")
+	YRP:msg("note", "[Buildings] Search Map for Doors")
 	for k, v in pairs(GetAllDoors()) do
 		YRP_SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
 		local _tmpBuildingTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
@@ -111,20 +111,20 @@ function YRPSearchForDoors()
 	end
 
 	local allDoorsNum = table.Count(GetAllDoors())
-	YRP.msg("note", "[Buildings] Done finding them ( " .. allDoorsNum .. " doors found)")
+	YRP:msg("note", "[Buildings] Done finding them ( " .. allDoorsNum .. " doors found)")
 
 	return allDoorsNum
 end
 
-YRP.AddNetworkString("nws_yrp_loaded_doors")
+YRP:AddNetworkString("nws_yrp_loaded_doors")
 function YRPLoadDoors()
 	if GetGlobalYRPBool("bool_building_system", false) then
-		YRP.msg("note", "[Buildings] Setting up Doors!")
+		YRP:msg("note", "[Buildings] Setting up Doors!")
 		local problems = 0
 		local _tmpDoors = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 		if IsNotNilAndNotFalse(_tmpDoors) then
 			if #_tmpDoors == 0 then
-				YRP.msg("note", "[Buildings] No Doors in Database")
+				YRP:msg("note", "[Buildings] No Doors in Database")
 			else
 				for i, door in pairs(GetAllDoors()) do
 					if YRPWORKED(_tmpDoors[i], "YRPLoadDoors 2") then
@@ -133,19 +133,19 @@ function YRPLoadDoors()
 						HasUseFunction(door)
 					else
 						problems = problems + 1
-						YRP.msg("note", "[Buildings] Door not found in database")
+						YRP:msg("note", "[Buildings] Door not found in database")
 					end
 				end
 			end
 		else
 			problems = problems + 1
-			YRP.msg("note", "[Buildings] no doors in database!")
+			YRP:msg("note", "[Buildings] no doors in database!")
 		end
 
 		if problems == 0 then
-			YRP.msg("note", "[Buildings] No Problems found!")
+			YRP:msg("note", "[Buildings] No Problems found!")
 		else
-			YRP.msg("note", string.format("[Buildings] Found %s Problems!", problems))
+			YRP:msg("note", string.format("[Buildings] Found %s Problems!", problems))
 		end
 
 		local _tmpBuildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
@@ -213,7 +213,7 @@ function YRPLoadDoors()
 			end
 		end
 
-		YRP.msg("note", string.format("[Buildings] %s Doors are now available!", #GetAllDoors()))
+		YRP:msg("note", string.format("[Buildings] %s Doors are now available!", #GetAllDoors()))
 		SetGlobalYRPBool("loaded_doors", true)
 		net.Start("nws_yrp_loaded_doors")
 		net.Broadcast()
@@ -221,14 +221,14 @@ function YRPLoadDoors()
 end
 
 function YRPCheckMapDoors()
-	YRP.msg("note", "[Buildings] Get Database Doors and Buildings")
+	YRP:msg("note", "[Buildings] Get Database Doors and Buildings")
 	local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 	local _tmpTable2 = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
 	if IsNotNilAndNotFalse(_tmpTable) and IsNotNilAndNotFalse(_tmpTable2) then
-		--YRP.msg( "note", "[Buildings] Found! ( " .. tostring(table.Count(_tmpTable) ) .. " Doors | " .. tostring(table.Count(_tmpTable) ) .. " Buildings)" )
+		--YRP:msg( "note", "[Buildings] Found! ( " .. tostring(table.Count(_tmpTable) ) .. " Doors | " .. tostring(table.Count(_tmpTable) ) .. " Buildings)" )
 		local doors = GetAllDoors()
 		if table.Count(_tmpTable) < table.Count(doors) then
-			YRP.msg("note", "[Buildings] New doors found!")
+			YRP:msg("note", "[Buildings] New doors found!")
 			YRPSearchForDoors()
 		end
 	else
@@ -238,26 +238,26 @@ function YRPCheckMapDoors()
 	YRPLoadDoors()
 end
 
-YRP.AddNetworkString("nws_yrp_sendBuildingInfo")
-YRP.AddNetworkString("nws_yrp_getBuildingInfo")
-YRP.AddNetworkString("nws_yrp_getBuildings")
-YRP.AddNetworkString("nws_yrp_changeBuildingName")
-YRP.AddNetworkString("nws_yrp_changeBuildingID")
-YRP.AddNetworkString("nws_yrp_changeBuildingPrice")
-YRP.AddNetworkString("nws_yrp_changeBuildingSL")
-YRP.AddNetworkString("nws_yrp_changeBuildingHeader")
-YRP.AddNetworkString("nws_yrp_changeBuildingDescription")
-YRP.AddNetworkString("nws_yrp_getBuildingGroups")
-YRP.AddNetworkString("nws_yrp_setBuildingOwnerGroup")
-YRP.AddNetworkString("nws_yrp_buyBuilding")
-YRP.AddNetworkString("nws_yrp_removeOwner")
-YRP.AddNetworkString("nws_yrp_sellBuilding")
-YRP.AddNetworkString("nws_yrp_addnewbuilding")
+YRP:AddNetworkString("nws_yrp_sendBuildingInfo")
+YRP:AddNetworkString("nws_yrp_getBuildingInfo")
+YRP:AddNetworkString("nws_yrp_getBuildings")
+YRP:AddNetworkString("nws_yrp_changeBuildingName")
+YRP:AddNetworkString("nws_yrp_changeBuildingID")
+YRP:AddNetworkString("nws_yrp_changeBuildingPrice")
+YRP:AddNetworkString("nws_yrp_changeBuildingSL")
+YRP:AddNetworkString("nws_yrp_changeBuildingHeader")
+YRP:AddNetworkString("nws_yrp_changeBuildingDescription")
+YRP:AddNetworkString("nws_yrp_getBuildingGroups")
+YRP:AddNetworkString("nws_yrp_setBuildingOwnerGroup")
+YRP:AddNetworkString("nws_yrp_buyBuilding")
+YRP:AddNetworkString("nws_yrp_removeOwner")
+YRP:AddNetworkString("nws_yrp_sellBuilding")
+YRP:AddNetworkString("nws_yrp_addnewbuilding")
 net.Receive(
 	"nws_yrp_addnewbuilding",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_addnewbuilding") then
-			YRP.msg("note", ply:Nick() .. " has no rights to change Building.")
+			YRP:msg("note", ply:Nick() .. " has no rights to change Building.")
 
 			return
 		end
@@ -266,7 +266,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_door_anim")
+YRP:AddNetworkString("nws_yrp_door_anim")
 function YRPFireUnlock(ent, owner)
 	ent:Fire("Unlock")
 	if YRPEntityAlive(owner) then
@@ -338,7 +338,7 @@ function YRPOpenDoor(ply, ent, nr)
 end
 
 function YRPBuildingRemoveOwner(SteamID)
-	YRP.msg("db", "YRPBuildingRemoveOwner( " .. tostring(SteamID) .. " )")
+	YRP:msg("db", "YRPBuildingRemoveOwner( " .. tostring(SteamID) .. " )")
 	local chars = YRP_SQL_SELECT("yrp_characters", "*", "SteamID = '" .. SteamID .. "'")
 	if IsNotNilAndNotFalse(chars) then
 		for i, c in pairs(chars) do
@@ -369,7 +369,7 @@ net.Receive(
 	"nws_yrp_removeOwner",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_removeOwner") then
-			YRP.msg("note", ply:Nick() .. " has no rights to change Building.")
+			YRP:msg("note", ply:Nick() .. " has no rights to change Building.")
 
 			return
 		end
@@ -467,20 +467,20 @@ net.Receive(
 						end
 					end
 
-					YRP.msg("gm", ply:RPName() .. " has buyed a door")
+					YRP:msg("gm", ply:RPName() .. " has buyed a door")
 				else
-					YRP.msg("gm", ply:RPName() .. " has already an owner!")
+					YRP:msg("gm", ply:RPName() .. " has already an owner!")
 				end
 			else
-				YRP.msg("gm", ply:RPName() .. " has not enough money to buy door")
+				YRP:msg("gm", ply:RPName() .. " has not enough money to buy door")
 			end
 		else
-			YRP.msg("note", "buildings disabled")
+			YRP:msg("note", "buildings disabled")
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_addCoownerBuilding")
+YRP:AddNetworkString("nws_yrp_addCoownerBuilding")
 net.Receive(
 	"nws_yrp_addCoownerBuilding",
 	function(len, ply)
@@ -513,15 +513,15 @@ net.Receive(
 					end
 				end
 			else
-				YRP.msg("note", "Building doesn't exists")
+				YRP:msg("note", "Building doesn't exists")
 			end
 		else
-			YRP.msg("note", "buildings disabled")
+			YRP:msg("note", "buildings disabled")
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_removeAllCoownerBuilding")
+YRP:AddNetworkString("nws_yrp_removeAllCoownerBuilding")
 net.Receive(
 	"nws_yrp_removeAllCoownerBuilding",
 	function(len, ply)
@@ -536,10 +536,10 @@ net.Receive(
 					}, "uniqueID = '" .. _tmpBuildingID .. "'"
 				)
 			else
-				YRP.msg("note", "Building doesn't exists")
+				YRP:msg("note", "Building doesn't exists")
 			end
 		else
-			YRP.msg("note", "buildings disabled")
+			YRP:msg("note", "buildings disabled")
 		end
 	end
 )
@@ -632,7 +632,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_canBuildingBeOwned")
+YRP:AddNetworkString("nws_yrp_canBuildingBeOwned")
 net.Receive(
 	"nws_yrp_canBuildingBeOwned",
 	function(len, ply)
@@ -695,7 +695,7 @@ net.Receive(
 		local _tmpBuildingID = net.ReadString()
 		local _tmpNewName = net.ReadString()
 		if IsNotNilAndNotFalse(_tmpBuildingID) then
-			YRP.msg("note", "renamed Building: " .. _tmpNewName)
+			YRP:msg("note", "renamed Building: " .. _tmpNewName)
 			YRP_SQL_UPDATE(
 				"yrp_" .. GetMapNameDB() .. "_buildings",
 				{
@@ -705,7 +705,7 @@ net.Receive(
 
 			YRPChangeBuildingString(tonumber(_tmpBuildingID), "name", _tmpNewName)
 		else
-			YRP.msg("note", "changeBuildingName failed")
+			YRP:msg("note", "changeBuildingName failed")
 		end
 	end
 )
@@ -737,7 +737,7 @@ net.Receive(
 	"nws_yrp_changeBuildingHeader",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_changeBuildingHeader", true) then
-			YRP.msg("note", ply:Nick() .. " has no rights to change Building.")
+			YRP:msg("note", ply:Nick() .. " has no rights to change Building.")
 
 			return
 		end
@@ -745,7 +745,7 @@ net.Receive(
 		local _tmpBuildingID = net.ReadString()
 		local _tmpNewName = net.ReadString()
 		if IsNotNilAndNotFalse(_tmpBuildingID) then
-			YRP.msg("note", "header Building: " .. _tmpNewName)
+			YRP:msg("note", "header Building: " .. _tmpNewName)
 			YRP_SQL_UPDATE(
 				"yrp_" .. GetMapNameDB() .. "_buildings",
 				{
@@ -755,7 +755,7 @@ net.Receive(
 
 			YRPChangeBuildingString(tonumber(_tmpBuildingID), "text_header", _tmpNewName)
 		else
-			YRP.msg("note", "changeBuildingName failed")
+			YRP:msg("note", "changeBuildingName failed")
 		end
 	end
 )
@@ -764,7 +764,7 @@ net.Receive(
 	"nws_yrp_changeBuildingDescription",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_changeBuildingDescription", true) then
-			YRP.msg("note", ply:Nick() .. " has no rights to change Building.")
+			YRP:msg("note", ply:Nick() .. " has no rights to change Building.")
 
 			return
 		end
@@ -772,7 +772,7 @@ net.Receive(
 		local _tmpBuildingID = net.ReadString()
 		local _tmpNewName = net.ReadString()
 		if IsNotNilAndNotFalse(_tmpBuildingID) then
-			YRP.msg("note", "description Building: " .. _tmpNewName)
+			YRP:msg("note", "description Building: " .. _tmpNewName)
 			YRP_SQL_UPDATE(
 				"yrp_" .. GetMapNameDB() .. "_buildings",
 				{
@@ -782,7 +782,7 @@ net.Receive(
 
 			YRPChangeBuildingString(tonumber(_tmpBuildingID), "text_description", _tmpNewName)
 		else
-			YRP.msg("note", "changeBuildingName failed")
+			YRP:msg("note", "changeBuildingName failed")
 		end
 	end
 )
@@ -849,14 +849,14 @@ net.Receive(
 		local door = net.ReadEntity()
 		local buid = door:GetYRPString("buildingID", "")
 		if IsNilOrFalse(buid) or buid == "" then
-			YRP.msg("note", "[getBuildingInfo] -> BuildingID (" .. tostring(buid) .. ") is not valid [Map: " .. GetMapNameDB() .. "]")
+			YRP:msg("note", "[getBuildingInfo] -> BuildingID (" .. tostring(buid) .. ") is not valid [Map: " .. GetMapNameDB() .. "]")
 			ply:PrintMessage(HUD_PRINTCENTER, "Building ID is INVALID")
 
 			return
 		end
 
 		if ply:GetYRPBool("bool_" .. "ishobo", false) then
-			YRP.msg("note", "[getBuildingInfo] Is Hobo, not possible to buy as hobo")
+			YRP:msg("note", "[getBuildingInfo] Is Hobo, not possible to buy as hobo")
 			ply:PrintMessage(HUD_PRINTCENTER, "You are a HOBO, not possible to buy")
 
 			return
@@ -876,7 +876,7 @@ net.Receive(
 					tabOwner = tabOwner[1]
 					--owner = tabOwner.rpname
 				else
-					YRP.msg("note", "[getBuildingInfo] owner dont exists.")
+					YRP:msg("note", "[getBuildingInfo] owner dont exists.")
 					tabOwner = {}
 				end
 			elseif tabBuilding.groupID ~= 0 then
@@ -892,7 +892,7 @@ net.Receive(
 						}, "uniqueID = '" .. buid .. "'"
 					)
 
-					YRP.msg("note", "[getBuildingInfo] group dont exists.")
+					YRP:msg("note", "[getBuildingInfo] group dont exists.")
 					tabGroup = {}
 				end
 			end
@@ -906,12 +906,12 @@ net.Receive(
 			return
 		else
 			ply:PrintMessage(HUD_PRINTCENTER, "Building not found in Database")
-			YRP.msg("error", "getBuildingInfo -> Building not found in Database. [Map: " .. GetMapNameDB() .. "][id: " .. buid .. "]")
+			YRP:msg("error", "getBuildingInfo -> Building not found in Database. [Map: " .. GetMapNameDB() .. "][id: " .. buid .. "]")
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_lockdown_buildings")
+YRP:AddNetworkString("nws_yrp_update_lockdown_buildings")
 net.Receive(
 	"nws_yrp_update_lockdown_buildings",
 	function(len, ply)

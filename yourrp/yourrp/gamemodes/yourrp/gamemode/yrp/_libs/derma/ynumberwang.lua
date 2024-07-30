@@ -5,10 +5,10 @@ function PANEL:Paint(pw, ph)
 end
 
 function PANEL:OnSizeChanged(nw, nh)
-	local br = YRP.ctr(0)
-	self.header:SetSize(nw, YRP.ctr(50))
-	self.numberwang:SetSize(nw - 2 * br, nh - YRP.ctr(50) - 2 * br)
-	self.numberwang:SetPos(br, YRP.ctr(50) + br)
+	local br = YRP:ctr(0)
+	self.header:SetSize(nw, YRP:ctr(50))
+	self.numberwang:SetSize(nw - 2 * br, nh - YRP:ctr(50) - 2 * br)
+	self.numberwang:SetPos(br, YRP:ctr(50) + br)
 end
 
 function PANEL:GetHeader()
@@ -50,7 +50,7 @@ end
 function PANEL:Init()
 	self.header = YRPCreateD("DPanel", self, 10, 10, 0, 0)
 	function self.header:Paint(pw, ph)
-		draw.SimpleText(YRP.trans(self.name) or "UNNAMED", "Y_" .. math.Round(ph / 3 * 2) .. "_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(YRP:trans(self.name) or "UNNAMED", "Y_" .. math.Round(ph / 3 * 2) .. "_500", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	self.numberwang = YRPCreateD("DNumberWang", self, 10, 10, 0, 10)

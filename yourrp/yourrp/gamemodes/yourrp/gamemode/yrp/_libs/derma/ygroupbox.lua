@@ -9,7 +9,7 @@ function PANEL:SetText(t)
 end
 
 function PANEL:GetHeaderHeight()
-	return YRP.ctr(self._headerheight)
+	return YRP:ctr(self._headerheight)
 end
 
 function PANEL:SetHeaderHeight(h)
@@ -17,7 +17,7 @@ function PANEL:SetHeaderHeight(h)
 end
 
 function PANEL:GetBorder()
-	return YRP.ctr(self._border)
+	return YRP:ctr(self._border)
 end
 
 function PANEL:SetBorder(b)

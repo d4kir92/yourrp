@@ -11,7 +11,7 @@ local WP = Material("vgui/material/icon_add.png")
 local WS = Material("vgui/material/icon_add_circle.png")
 local MO = Material("vgui/material/icon_add.png")
 local SA = Material("vgui/material/icon_add_circle.png")
-local RA = YRP.GetDesignIcon("radiation")
+local RA = YRP:GetDesignIcon("radiation")
 function drawC(x, y, radius, seg, color)
 	surface.SetDrawColor(color)
 	draw.NoTexture()
@@ -64,7 +64,7 @@ function HUDCirclesDrawIcon(ele, icon, perc, text)
 		local size = h
 		local midx = x + h / 2
 		local midy = y + h / 2
-		local br = YRP.ctr(12)
+		local br = YRP:ctr(12)
 		local barsize = h - br * 2
 		local fill = barsize * perc
 		--draw.RoundedBox(0, x, y, h, h, Color( 255, 255, 0, 100) )
@@ -145,7 +145,7 @@ function HUDCircles()
 		if IsLevelSystemEnabled() then
 			local tab = {}
 			tab["LEVEL"] = lply:Level()
-			HUDCirclesDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP.trans("LID_levelx", tab) .. " ( " .. lply:XP() .. "%)")
+			HUDCirclesDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP:trans("LID_levelx", tab) .. " ( " .. lply:XP() .. "%)")
 		end
 
 		if lply:Battery() < 100 then
@@ -160,8 +160,8 @@ function HUDCircles()
 		HUDCirclesDrawText("NA", lply:RPName())
 		HUDCirclesDrawText("CR", os.date("%H:%M", os.time()))
 		HUDCirclesDrawText("CC", lply:YRPFormattedCharPlayTime())
-		HUDCirclesDrawText("PE", YRP.trans("LID_fps") .. ": " .. GetFPS())
-		HUDCirclesDrawText("NE", YRP.trans("LID_ping") .. ": " .. lply:Ping())
+		HUDCirclesDrawText("PE", YRP:trans("LID_fps") .. ": " .. GetFPS())
+		HUDCirclesDrawText("NE", YRP:trans("LID_ping") .. ": " .. lply:Ping())
 		local wep = lply:GetActiveWeapon()
 		if wep ~= NULL then
 			local clip1 = wep:Clip1()

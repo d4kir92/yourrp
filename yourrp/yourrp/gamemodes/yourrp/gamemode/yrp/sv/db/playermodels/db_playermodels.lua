@@ -46,7 +46,7 @@ if IsNotNilAndNotFalse(dbpms) then
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_rem_playermodel")
+YRP:AddNetworkString("nws_yrp_rem_playermodel")
 net.Receive(
 	"nws_yrp_rem_playermodel",
 	function(len, ply)
@@ -58,7 +58,7 @@ net.Receive(
 			pms = test[1].string_models
 		end
 
-		YRP.log(ply:RPName() .. " removed PUBLIC ENTRY (playermodels: " .. pms .. " )")
+		YRP:log(ply:RPName() .. " removed PUBLIC ENTRY (playermodels: " .. pms .. " )")
 		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. muid .. "'")
 	end
 )

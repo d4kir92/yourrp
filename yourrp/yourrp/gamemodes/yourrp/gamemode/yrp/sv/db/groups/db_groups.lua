@@ -34,7 +34,7 @@ YRP_SQL_UPDATE(
 YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '0'")
 -- DEFAULT GROUP
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	YRP.msg("note", DATABASE_NAME .. " has not the default group")
+	YRP:msg("note", DATABASE_NAME .. " has not the default group")
 	local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "'1', 'Civilians', '0,0,255', '0', '0'")
 end
 
@@ -77,7 +77,7 @@ for str, val in pairs(yrp_ply_groups) do
 	if string.find(str, "string_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_group_" .. str
-		YRP.AddNetworkString(tab.netstr)
+		YRP:AddNetworkString(tab.netstr)
 		net.Receive(
 			tab.netstr,
 			function(len, ply)
@@ -92,7 +92,7 @@ for str, val in pairs(yrp_ply_groups) do
 				tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
 				BroadcastString(tab)
 				if tab.netstr == "nws_yrp_update_group_string_name" then
-					YRP.AddNetworkString("nws_yrp_settings_group_update_name")
+					YRP:AddNetworkString("nws_yrp_settings_group_update_name")
 					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 					if IsNotNilAndNotFalse(puid) then
 						puid = puid[1]
@@ -103,7 +103,7 @@ for str, val in pairs(yrp_ply_groups) do
 						BroadcastString(tab)
 					end
 				elseif tab.netstr == "nws_yrp_update_group_string_color" then
-					YRP.AddNetworkString("nws_yrp_settings_group_update_color")
+					YRP:AddNetworkString("nws_yrp_settings_group_update_color")
 					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 					if IsNotNilAndNotFalse(puid) then
 						puid = puid[1]
@@ -114,7 +114,7 @@ for str, val in pairs(yrp_ply_groups) do
 						BroadcastString(tab)
 					end
 				elseif tab.netstr == "nws_yrp_update_group_string_icon" then
-					YRP.AddNetworkString("nws_yrp_settings_group_update_icon")
+					YRP:AddNetworkString("nws_yrp_settings_group_update_icon")
 					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 					if IsNotNilAndNotFalse(puid) then
 						puid = puid[1]
@@ -130,7 +130,7 @@ for str, val in pairs(yrp_ply_groups) do
 	elseif string.find(str, "int_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_group_" .. str
-		YRP.AddNetworkString(tab.netstr)
+		YRP:AddNetworkString(tab.netstr)
 		net.Receive(
 			tab.netstr,
 			function(len, ply)
@@ -158,7 +158,7 @@ for str, val in pairs(yrp_ply_groups) do
 	elseif string.find(str, "bool_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_group_" .. str
-		YRP.AddNetworkString(tab.netstr)
+		YRP:AddNetworkString(tab.netstr)
 		net.Receive(
 			tab.netstr,
 			function(len, ply)
@@ -227,7 +227,7 @@ function UnsubscribeGroup(ply, uid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_subscribe_Settings_GroupsAndRoles")
+YRP:AddNetworkString("nws_yrp_subscribe_Settings_GroupsAndRoles")
 net.Receive(
 	"nws_yrp_subscribe_Settings_GroupsAndRoles",
 	function(len, ply)
@@ -238,7 +238,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_unsubscribe_Settings_GroupsAndRoles")
+YRP:AddNetworkString("nws_yrp_unsubscribe_Settings_GroupsAndRoles")
 net.Receive(
 	"nws_yrp_unsubscribe_Settings_GroupsAndRoles",
 	function(len, ply)
@@ -332,11 +332,11 @@ function DuplicateGroup(guid)
 
 		SendGroupList(group.int_parentgroup)
 	else
-		YRP.msg("note", "Group [" .. guid .. "] was deleted.")
+		YRP:msg("note", "Group [" .. guid .. "] was deleted.")
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_settings_duplicate_group")
+YRP:AddNetworkString("nws_yrp_settings_duplicate_group")
 net.Receive(
 	"nws_yrp_settings_duplicate_group",
 	function(len, ply)
@@ -346,7 +346,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_subscribe_grouplist")
+YRP:AddNetworkString("nws_yrp_settings_subscribe_grouplist")
 net.Receive(
 	"nws_yrp_settings_subscribe_grouplist",
 	function(len, ply)
@@ -357,7 +357,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_add_group")
+YRP:AddNetworkString("nws_yrp_settings_add_group")
 net.Receive(
 	"nws_yrp_settings_add_group",
 	function(len, ply)
@@ -384,12 +384,12 @@ net.Receive(
 			--YRP_SQL_UPDATE(DATABASE_NAME, {["int_dn"] = '" .. new_group.uniqueID .. "'", "uniqueID = '" .. up.uniqueID .. "'" )
 		end
 
-		YRP.msg("db", "Added new group: " .. new_group.uniqueID)
+		YRP:msg("db", "Added new group: " .. new_group.uniqueID)
 		SendGroupList(uid)
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_group_position_up")
+YRP:AddNetworkString("nws_yrp_settings_group_position_up")
 net.Receive(
 	"nws_yrp_settings_group_position_up",
 	function(len, ply)
@@ -428,7 +428,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_group_position_dn")
+YRP:AddNetworkString("nws_yrp_settings_group_position_dn")
 net.Receive(
 	"nws_yrp_settings_group_position_dn",
 	function(len, ply)
@@ -467,7 +467,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_subscribe_group")
+YRP:AddNetworkString("nws_yrp_settings_subscribe_group")
 net.Receive(
 	"nws_yrp_settings_subscribe_group",
 	function(len, ply)
@@ -491,7 +491,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_unsubscribe_group")
+YRP:AddNetworkString("nws_yrp_settings_unsubscribe_group")
 net.Receive(
 	"nws_yrp_settings_unsubscribe_group",
 	function(len, ply)
@@ -501,7 +501,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_unsubscribe_grouplist")
+YRP:AddNetworkString("nws_yrp_settings_unsubscribe_grouplist")
 net.Receive(
 	"nws_yrp_settings_unsubscribe_grouplist",
 	function(len, ply)
@@ -590,7 +590,7 @@ function DeleteGroup(guid, recursive)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_settings_delete_group")
+YRP:AddNetworkString("nws_yrp_settings_delete_group")
 net.Receive(
 	"nws_yrp_settings_delete_group",
 	function(len, ply)
@@ -603,7 +603,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_rolesmenu_get_groups")
+YRP:AddNetworkString("nws_yrp_rolesmenu_get_groups")
 net.Receive(
 	"nws_yrp_rolesmenu_get_groups",
 	function(len, ply)
@@ -627,7 +627,7 @@ function GetGroupTable(gid)
 end
 
 -- Faction Selection
-YRP.AddNetworkString("nws_yrp_factionselection_getfactions")
+YRP:AddNetworkString("nws_yrp_factionselection_getfactions")
 net.Receive(
 	"nws_yrp_factionselection_getfactions",
 	function(len, ply)
@@ -643,7 +643,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_roleselection_getgroups")
+YRP:AddNetworkString("nws_yrp_roleselection_getgroups")
 net.Receive(
 	"nws_yrp_roleselection_getgroups",
 	function(len, ply)
@@ -669,9 +669,9 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_roleselection_getcontent")
-YRP.AddNetworkString("nws_yrp_roleselection_getcontent_role")
-YRP.AddNetworkString("nws_yrp_roleselection_getcontent_group")
+YRP:AddNetworkString("nws_yrp_roleselection_getcontent")
+YRP:AddNetworkString("nws_yrp_roleselection_getcontent_role")
+YRP:AddNetworkString("nws_yrp_roleselection_getcontent_group")
 net.Receive(
 	"nws_yrp_roleselection_getcontent",
 	function(len, ply)
@@ -707,7 +707,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_roleselection_getrole")
+YRP:AddNetworkString("nws_yrp_roleselection_getrole")
 net.Receive(
 	"nws_yrp_roleselection_getrole",
 	function(len, ply)
@@ -723,12 +723,12 @@ net.Receive(
 			net.WriteTable(roltab)
 			net.Send(ply)
 		else
-			YRP.msg("note", "[nws_yrp_roleselection_getrole] Role-UID is no valid one: " .. tostring(ruid))
+			YRP:msg("note", "[nws_yrp_roleselection_getrole] Role-UID is no valid one: " .. tostring(ruid))
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_char_getrole")
+YRP:AddNetworkString("nws_yrp_char_getrole")
 net.Receive(
 	"nws_yrp_char_getrole",
 	function(len, ply)
@@ -744,7 +744,7 @@ net.Receive(
 			net.WriteTable(roltab)
 			net.Send(ply)
 		else
-			YRP.msg("error", "[yrp_char_getrole] ruid not valid: " .. tostring(ruid))
+			YRP:msg("error", "[yrp_char_getrole] ruid not valid: " .. tostring(ruid))
 		end
 	end
 )
@@ -780,7 +780,7 @@ function SendSwepsGroup(uid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_settings_get_sweps")
+YRP:AddNetworkString("nws_yrp_settings_get_sweps")
 net.Receive(
 	"nws_yrp_settings_get_sweps",
 	function(len, ply)
@@ -817,7 +817,7 @@ function AddSwepToGroup(guid, swepcn)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_settings_add_sweps")
+YRP:AddNetworkString("nws_yrp_settings_add_sweps")
 net.Receive(
 	"nws_yrp_settings_add_sweps",
 	function(len, ply)
@@ -851,11 +851,11 @@ function RemSwepFromGroup(guid, swepcn)
 
 		SendSwepsGroup(guid)
 	else
-		YRP.msg("note", "[RemSwepFromGroup] Group not exists anymore?")
+		YRP:msg("note", "[RemSwepFromGroup] Group not exists anymore?")
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_settings_rem_sweps")
+YRP:AddNetworkString("nws_yrp_settings_rem_sweps")
 net.Receive(
 	"nws_yrp_settings_rem_sweps",
 	function(len, ply)
@@ -881,7 +881,7 @@ function YRPUpdateGroupMemberLists()
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_group_getmembers")
+YRP:AddNetworkString("nws_yrp_group_getmembers")
 net.Receive(
 	"nws_yrp_group_getmembers",
 	function(len, ply)
@@ -970,7 +970,7 @@ function YRPSendGroupMember(ply, uid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_group_getmember")
+YRP:AddNetworkString("nws_yrp_group_getmember")
 net.Receive(
 	"nws_yrp_group_getmember",
 	function(len, ply)
@@ -980,7 +980,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_group_delmember")
+YRP:AddNetworkString("nws_yrp_group_delmember")
 net.Receive(
 	"nws_yrp_group_delmember",
 	function(len, ply)

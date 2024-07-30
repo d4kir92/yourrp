@@ -15,12 +15,12 @@ hook.Add(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_client_lang")
+YRP:AddNetworkString("nws_yrp_client_lang")
 net.Receive(
 	"nws_yrp_client_lang",
 	function(len, ply)
 		local _lang = net.ReadString()
-		--YRP.msg( "db", ply:YRPName() .. " using language: " .. string.upper(_lang) )
+		--YRP:msg( "db", ply:YRPName() .. " using language: " .. string.upper(_lang) )
 		ply:SetYRPString("client_lang", _lang or "NONE")
 	end
 )
@@ -276,7 +276,7 @@ function YRPCheckSalary(ply)
 			end
 		end
 	end
-	--YRP.msg( "note", "[CheckSalary] Player is not ready to get salary: " .. ply:YRPName() )
+	--YRP:msg( "note", "[CheckSalary] Player is not ready to get salary: " .. ply:YRPName() )
 end
 
 function YRPIsDealerAlive(uid)
@@ -300,249 +300,258 @@ function YRPIsTeleporterAlive(uid)
 	return false
 end
 
-YRP.AddNetworkString("nws_yrp_autoreload")
+YRP:AddNetworkString("nws_yrp_autoreload")
 local _time = 0
 local TICK = 0.1
 local DEC = 1
 local isTPsInstalled = true
-timer.Remove("ServerThink")
-timer.Create(
-	"ServerThink",
-	TICK,
-	0,
-	function()
-		-- Every second
-		if _time % 1.0 == 0 then
-			for k, ply in pairs(player.GetAll()) do
-				ply:AddPlayTime()
-				local afkticktime = tonumber(GetGlobalYRPInt("int_afkkicktime", 0))
-				if afkticktime > 0 and ply:AFK() and not ply:HasAccess("afk", true) and CurTime() - tonumber(ply:GetYRPFloat("afkts", 0)) >= afkticktime then
-					ply:SetYRPBool("isafk", false)
-					ply:Kick("AFK")
-				end
-
-				if ply:GetYRPBool("loaded", false) then
-					if not ply:GetYRPBool("inCombat") then
-						YRPConHP(ply) --HealthReg
-						YRPConAR(ply) --ArmorReg
-						if ply:GetYRPInt("yrp_stars", 0) ~= 0 then
-							ply:SetYRPInt("yrp_stars", 0)
-						end
-					end
-
-					if ply:IsBleeding() then
-						local effect = EffectData()
-						effect:SetOrigin(ply:GetPos() - ply:GetBleedingPosition())
-						effect:SetScale(1)
-						util.Effect("bloodimpact", effect)
-						if ply:Alive() then
-							ply:TakeDamage(0.5, ply, ply)
-						end
-					end
-
-					if GetGlobalYRPBool("bool_hunger", false) and ply:GetYRPBool("bool_hunger", false) and YRPConHG then
-						YRPConHG(ply, _time)
-					end
-
-					if GetGlobalYRPBool("bool_thirst", false) and ply:GetYRPBool("bool_thirst", false) and YRPConTH then
-						YRPConTH(ply)
-					end
-
-					if GetGlobalYRPBool("bool_radiation", false) and YRPConRA then
-						YRPConRA(ply)
-					end
-
-					YRPTimeJail(ply)
-					YRPCheckSalary(ply)
-				end
-			end
-
-			if GetGlobalYRPBool("bool_radiation", false) then
-				for k, ent in pairs(ents.GetAll()) do
-					if ent and YRPEntityAlive(ent) and ent:IsNPC() then
-						YRPConRA(ent)
-					end
-				end
-			end
-		end
-
-		-- Every 0.1 seconds
+function YRP:YLogicServerThink()
+	-- Every second
+	if _time % 1.0 == 0 then
 		for k, ply in pairs(player.GetAll()) do
+			ply:AddPlayTime()
+			local afkticktime = tonumber(GetGlobalYRPInt("int_afkkicktime", 0))
+			if afkticktime > 0 and ply:AFK() and not ply:HasAccess("afk", true) and CurTime() - tonumber(ply:GetYRPFloat("afkts", 0)) >= afkticktime then
+				ply:SetYRPBool("isafk", false)
+				ply:Kick("AFK")
+			end
+
 			if ply:GetYRPBool("loaded", false) then
-				-- Every 0.1
-				YRPRegAB(ply)
-				if GetGlobalYRPBool("bool_stamina", false) and ply:GetYRPBool("bool_stamina", false) then
-					YRPConST(ply, _time)
-				end
-			end
-		end
-
-		if _time % 60.0 == 1 then
-			if YRP.XpPerMinute ~= nil then
-				local xp_per_minute = YRP:XpPerMinute()
-				for i, p in pairs(player.GetAll()) do
-					p:AddXP(xp_per_minute)
-				end
-
-				YRP.msg("note", string.format("[XpPerMinute] Added %s XP to all Players.", xp_per_minute))
-			else
-				YRP:msg("error", "XpPerMinute is nil")
-			end
-		end
-
-		if _time % 30.0 == 1 or GetGlobalYRPBool("nws_yrp_update_teleporters", false) then
-			if GetGlobalYRPBool("nws_yrp_update_teleporters", true) ~= false then
-				SetGlobalYRPBool("nws_yrp_update_teleporters", false)
-			end
-
-			local _dealers = YRP_SQL_SELECT("yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'")
-			if IsNotNilAndNotFalse(_dealers) then
-				for i, dealer in pairs(_dealers) do
-					if tonumber(dealer.uniqueID) ~= 1 and not YRPIsDealerAlive(dealer.uniqueID) then
-						local _del = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'")
-						if _del ~= nil then
-							YRP.msg("gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!")
-							_del = _del[1]
-							local _dealer = ents.Create("yrp_dealer")
-							if _dealer then
-								_dealer:SetYRPString("dealerID", dealer.uniqueID)
-								_dealer:SetYRPString("name", dealer.name)
-								local _pos = string.Explode(",", _del.position)
-								_pos = Vector(_pos[1], _pos[2], _pos[3])
-								_dealer:SetPos(_pos)
-								local _ang = string.Explode(",", _del.angle)
-								_ang = Angle(0, _ang[2], 0)
-								_dealer:SetAngles(_ang)
-								_dealer:SetModel(dealer.WorldModel)
-								_dealer:Spawn()
-								timer.Simple(
-									1,
-									function()
-										if YRPEntityAlive(_dealer.Entity) then
-											_dealer.Entity:LookupSequence("idle_all_01")
-											_dealer.Entity:ResetSequence("idle_all_01")
-										end
-									end
-								)
-							end
-						end
+				if not ply:GetYRPBool("inCombat") then
+					YRPConHP(ply) --HealthReg
+					YRPConAR(ply) --ArmorReg
+					if ply:GetYRPInt("yrp_stars", 0) ~= 0 then
+						ply:SetYRPInt("yrp_stars", 0)
 					end
 				end
-			end
 
-			if YRP_SQL_TABLE_EXISTS("yrp_teleporters") and isTPsInstalled then
-				local teleporters = YRP_SQL_SELECT("yrp_teleporters", "*", "string_map = '" .. game.GetMap() .. "'")
-				if IsNotNilAndNotFalse(teleporters) then
-					if table.Count(teleporters) >= 100 then
-						YRP.msg("note", "There are to many Teleporters created!")
-					end
-
-					for i, teleporter in pairs(teleporters) do
-						if not YRPIsTeleporterAlive(teleporter.uniqueID) then
-							local tp = ents.Create("yrp_teleporter")
-							if IsValid(tp) then
-								local pos = string.Explode(",", teleporter.string_position)
-								pos = Vector(pos[1], pos[2], pos[3])
-								tp:SetPos(pos - tp:GetUp() * 5)
-								local ang = string.Explode(",", teleporter.string_angle)
-								ang = Angle(ang[1], ang[2], ang[3])
-								tp:SetAngles(ang)
-								tp:SetYRPInt("yrp_teleporter_uid", tonumber(teleporter.uniqueID))
-								tp:SetYRPString("string_name", teleporter.string_name)
-								tp:SetYRPString("string_target", teleporter.string_target)
-								tp:Spawn()
-								tp.PermaProps = true
-								tp.PermaProps_ID = 0
-								tp.PermaPropsID = 0
-								YRP.msg("note", "[YourRP Teleporters] " .. "Was dead, respawned")
-							else
-								YRP.msg("note", "FAILED TO CREATE TELEPORTER, is [YourRP Teleporters] missing?")
-								isTPsInstalled = false
-								break
-							end
-						end
+				if ply:IsBleeding() then
+					local effect = EffectData()
+					effect:SetOrigin(ply:GetPos() - ply:GetBleedingPosition())
+					effect:SetScale(1)
+					util.Effect("bloodimpact", effect)
+					if ply:Alive() then
+						ply:TakeDamage(0.5, ply, ply)
 					end
 				end
+
+				if GetGlobalYRPBool("bool_hunger", false) and ply:GetYRPBool("bool_hunger", false) and YRPConHG then
+					YRPConHG(ply, _time)
+				end
+
+				if GetGlobalYRPBool("bool_thirst", false) and ply:GetYRPBool("bool_thirst", false) and YRPConTH then
+					YRPConTH(ply)
+				end
+
+				if GetGlobalYRPBool("bool_radiation", false) and YRPConRA then
+					YRPConRA(ply)
+				end
+
+				YRPTimeJail(ply)
+				YRPCheckSalary(ply)
 			end
 		end
 
-		if _time % GetBackupCreateTime() == 0 then
-			RemoveOldBackups()
-			CreateBackup()
-		end
-
-		local _auto_save = 300
-		if _time % _auto_save == 0 then
-			local _mod = _time % 60
-			local _left = _time / 60 - _mod
-			local _str = "Auto-Save (Uptime: " .. _left .. " " .. "minutes" .. " )"
-			YRPSaveClients(_str)
-			--SaveStorages(_str)
-		end
-
-		local _changelevel = 43200 -- 43200 = 60 * 60 * 12 (12 Hours)
-		if GetGlobalYRPBool("bool_server_reload", false) and _time >= _changelevel then
-			YRP.msg("gm", "Auto Reload Map to prevent Lags/Stutter.")
-			timer.Simple(
-				1,
-				function()
-					game.ConsoleCommand("changelevel " .. GetMapNameDB() .. "\n")
-				end
-			)
-		end
-
-		if GetGlobalYRPBool("bool_server_reload_notification", false) and _time >= _changelevel - 30 then
-			local _str = "Auto Reload in " .. _changelevel - _time .. " sec"
-			YRP.msg("gm", _str)
-			net.Start("nws_yrp_autoreload")
-			net.WriteString(string.format("%0.1f", _changelevel - _time))
-			net.Broadcast()
-		end
-
-		if _time % 1 == 0 and HasDarkrpmodification() then
-			YRPHR(Color(0, 255, 0))
-			MsgC(Color(0, 255, 0), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color(255, 255, 255, 255), "\n")
-			YRPHR(Color(0, 255, 0))
-			YRPTestDarkrpmodification()
-		end
-
-		if _time % 1 == 0 and not HasYRPContent() then
-			YRPHR(Color(255, 255, 0))
-			MsgC(Color(255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color(255, 255, 255, 255), "\n")
-			MsgC(Color(255, 255, 0), "Or is STEAM down?", Color(255, 255, 255, 255), "\n")
-			YRPHR(Color(255, 255, 0))
-			YRPTestContentAddons()
-		end
-
-		if _time % 60 == 0 and YRPCheckAddons then
-			YRPCheckAddons()
-		end
-
-		if _time % 1 == 0 and YRPRemoveBuildingOwner and YRPRemoveBuildingOwner() and GetAllDoors then
-			for i, door in pairs(GetAllDoors()) do
-				local charId = door:GetYRPInt("ownerCharID")
-				if charId ~= 0 then
-					local steamId = YRPGetSteamIdByCharId(charId)
-					local ply = YRPGetPlayerBySteamID(steamId)
-					if ply == nil and steamId then
-						local ts = YRPGetTSLastOnline(steamId)
-						if os.time() - ts >= YRPRemoveBuildingOwnerTime() then
-							YRPBuildingRemoveOwner(steamId)
-						end
-					end
+		if GetGlobalYRPBool("bool_radiation", false) then
+			for k, ent in pairs(ents.GetAll()) do
+				if ent and YRPEntityAlive(ent) and ent:IsNPC() then
+					YRPConRA(ent)
 				end
 			end
 		end
-
-		if _time == 10 or _time > 10 and _time % 3600 == 0 then
-			YRPCheckVersion("think")
-		end
-
-		--IsServerInfoOutdated()
-		_time = _time + TICK
-		_time = math.Round(_time, DEC)
 	end
-)
+
+	-- Every 0.1 seconds
+	for k, ply in pairs(player.GetAll()) do
+		if ply:GetYRPBool("loaded", false) then
+			-- Every 0.1
+			YRPRegAB(ply)
+			if GetGlobalYRPBool("bool_stamina", false) and ply:GetYRPBool("bool_stamina", false) then
+				YRPConST(ply, _time)
+			end
+		end
+	end
+
+	if _time % 60.0 == 1 then
+		if YRP.XpPerMinute ~= nil then
+			local xp_per_minute = YRP:XpPerMinute()
+			for i, p in pairs(player.GetAll()) do
+				p:AddXP(xp_per_minute)
+			end
+
+			YRP:msg("note", string.format("[XpPerMinute] Added %s XP to all Players.", xp_per_minute))
+		else
+			YRP:msg("error", "XpPerMinute is nil")
+		end
+	end
+
+	if _time % 30.0 == 1 or GetGlobalYRPBool("nws_yrp_update_teleporters", false) then
+		if GetGlobalYRPBool("nws_yrp_update_teleporters", true) ~= false then
+			SetGlobalYRPBool("nws_yrp_update_teleporters", false)
+		end
+
+		local _dealers = YRP_SQL_SELECT("yrp_dealers", "*", "map = '" .. GetMapNameDB() .. "'")
+		if IsNotNilAndNotFalse(_dealers) then
+			for i, dealer in pairs(_dealers) do
+				if tonumber(dealer.uniqueID) ~= 1 and not YRPIsDealerAlive(dealer.uniqueID) then
+					local _del = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'dealer' AND linkID = '" .. dealer.uniqueID .. "'")
+					if _del ~= nil then
+						YRP:msg("gm", "DEALER [" .. dealer.name .. "] NOT ALIVE, reviving!")
+						_del = _del[1]
+						local _dealer = ents.Create("yrp_dealer")
+						if _dealer then
+							_dealer:SetYRPString("dealerID", dealer.uniqueID)
+							_dealer:SetYRPString("name", dealer.name)
+							local _pos = string.Explode(",", _del.position)
+							_pos = Vector(_pos[1], _pos[2], _pos[3])
+							_dealer:SetPos(_pos)
+							local _ang = string.Explode(",", _del.angle)
+							_ang = Angle(0, _ang[2], 0)
+							_dealer:SetAngles(_ang)
+							_dealer:SetModel(dealer.WorldModel)
+							_dealer:Spawn()
+							timer.Simple(
+								1,
+								function()
+									if YRPEntityAlive(_dealer.Entity) then
+										_dealer.Entity:LookupSequence("idle_all_01")
+										_dealer.Entity:ResetSequence("idle_all_01")
+									end
+								end
+							)
+						end
+					end
+				end
+			end
+		end
+
+		if YRP_SQL_TABLE_EXISTS("yrp_teleporters") and isTPsInstalled then
+			local teleporters = YRP_SQL_SELECT("yrp_teleporters", "*", "string_map = '" .. game.GetMap() .. "'")
+			if IsNotNilAndNotFalse(teleporters) then
+				if table.Count(teleporters) >= 100 then
+					YRP:msg("note", "There are to many Teleporters created!")
+				end
+
+				for i, teleporter in pairs(teleporters) do
+					if not YRPIsTeleporterAlive(teleporter.uniqueID) then
+						local tp = ents.Create("yrp_teleporter")
+						if IsValid(tp) then
+							local pos = string.Explode(",", teleporter.string_position)
+							pos = Vector(pos[1], pos[2], pos[3])
+							tp:SetPos(pos - tp:GetUp() * 5)
+							local ang = string.Explode(",", teleporter.string_angle)
+							ang = Angle(ang[1], ang[2], ang[3])
+							tp:SetAngles(ang)
+							tp:SetYRPInt("yrp_teleporter_uid", tonumber(teleporter.uniqueID))
+							tp:SetYRPString("string_name", teleporter.string_name)
+							tp:SetYRPString("string_target", teleporter.string_target)
+							tp:Spawn()
+							tp.PermaProps = true
+							tp.PermaProps_ID = 0
+							tp.PermaPropsID = 0
+							YRP:msg("note", "[YourRP Teleporters] " .. "Was dead, respawned")
+						else
+							YRP:msg("note", "FAILED TO CREATE TELEPORTER, is [YourRP Teleporters] missing?")
+							isTPsInstalled = false
+							break
+						end
+					end
+				end
+			end
+		end
+	end
+
+	if _time % GetBackupCreateTime() == 0 then
+		YRPRemoveOldBackups()
+		YRPCreateBackup()
+	end
+
+	local _auto_save = 300
+	if _time % _auto_save == 0 then
+		local _mod = _time % 60
+		local _left = _time / 60 - _mod
+		local _str = "Auto-Save (Uptime: " .. _left .. " " .. "minutes" .. " )"
+		YRPSaveClients(_str)
+		--SaveStorages(_str)
+	end
+
+	local _changelevel = 43200 -- 43200 = 60 * 60 * 12 (12 Hours)
+	if GetGlobalYRPBool("bool_server_reload", false) and _time >= _changelevel then
+		YRP:msg("gm", "Auto Reload Map to prevent Lags/Stutter.")
+		timer.Simple(
+			1,
+			function()
+				game.ConsoleCommand("changelevel " .. GetMapNameDB() .. "\n")
+			end
+		)
+	end
+
+	if GetGlobalYRPBool("bool_server_reload_notification", false) and _time >= _changelevel - 30 then
+		local _str = "Auto Reload in " .. _changelevel - _time .. " sec"
+		YRP:msg("gm", _str)
+		net.Start("nws_yrp_autoreload")
+		net.WriteString(string.format("%0.1f", _changelevel - _time))
+		net.Broadcast()
+	end
+
+	if _time % 1 == 0 and HasDarkrpmodification() then
+		YRPHR(Color(0, 255, 0))
+		MsgC(Color(0, 255, 0), "You have locally \"darkrpmodification\", remove it to make YourRP work!", Color(255, 255, 255, 255), "\n")
+		YRPHR(Color(0, 255, 0))
+		YRPTestDarkrpmodification()
+	end
+
+	if _time % 1 == 0 and not HasYRPContent() then
+		YRPHR(Color(255, 255, 0))
+		MsgC(Color(255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color(255, 255, 255, 255), "\n")
+		MsgC(Color(255, 255, 0), "Or is STEAM down?", Color(255, 255, 255, 255), "\n")
+		YRPHR(Color(255, 255, 0))
+		YRPTestContentAddons()
+	end
+
+	if _time % 60 == 0 and YRPCheckAddons then
+		YRPCheckAddons()
+	end
+
+	if _time % 1 == 0 and YRPRemoveBuildingOwner and YRPRemoveBuildingOwner() and GetAllDoors then
+		for i, door in pairs(GetAllDoors()) do
+			local charId = door:GetYRPInt("ownerCharID")
+			if charId ~= 0 then
+				local steamId = YRPGetSteamIdByCharId(charId)
+				local ply = YRPGetPlayerBySteamID(steamId)
+				if ply == nil and steamId then
+					local ts = YRPGetTSLastOnline(steamId)
+					if os.time() - ts >= YRPRemoveBuildingOwnerTime() then
+						YRPBuildingRemoveOwner(steamId)
+					end
+				end
+			end
+		end
+	end
+
+	if _time == 10 or _time > 10 and _time % 3600 == 0 then
+		YRPCheckVersion("think")
+	end
+
+	--IsServerInfoOutdated()
+	_time = _time + TICK
+	_time = math.Round(_time, DEC)
+end
+
+if YRP.YLogicST == nil then
+	function YRP:YLogicST()
+		timer.Simple(
+			TICK,
+			function()
+				YRP:YLogicST()
+			end
+		)
+
+		YRP:YLogicServerThink()
+	end
+
+	YRP:YLogicST()
+end
 
 function YRPRestartServer()
 	RunConsoleCommand("map", game.GetMap())
@@ -704,7 +713,7 @@ hook.Add(
 					npc_spawner.int_respawntime = tonumber(npc_spawner.int_respawntime)
 					for _, npc in pairs(YNPCs[v.uniqueID].npcs) do
 						if not npc:IsValid() then
-							YRP.msg("gm", "A NPC Died, start respawning...")
+							YRP:msg("gm", "A NPC Died, start respawning...")
 							table.RemoveByValue(YNPCs[v.uniqueID].npcs, npc)
 							YNPCs[v.uniqueID].delay = CurTime() + npc_spawner.int_respawntime
 						end
@@ -744,7 +753,7 @@ hook.Add(
 					ent_spawner.int_respawntime = tonumber(ent_spawner.int_respawntime)
 					for _, ent in pairs(YENTs[v.uniqueID].ents) do
 						if not ent:IsValid() then
-							YRP.msg("gm", "A ENT Died, start respawning...")
+							YRP:msg("gm", "A ENT Died, start respawning...")
 							table.RemoveByValue(YENTs[v.uniqueID].ents, ent)
 							YENTs[v.uniqueID].delay = CurTime() + ent_spawner.int_respawntime
 						end

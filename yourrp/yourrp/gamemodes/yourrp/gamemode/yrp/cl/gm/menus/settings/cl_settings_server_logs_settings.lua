@@ -12,11 +12,11 @@ function BuildLogsSettings(parent, typ)
 			local tab = net.ReadTable()
 			if YRPPanelAlive(parent) then
 				for i, v in pairs(tab) do
-					local line = YRPCreateD("YPanel", nil, parent:GetWide(), YRP.ctr(60))
-					local ts = YRPCreateD("YLabel", line, YRP.ctr(500), line:GetTall(), 0, 0)
+					local line = YRPCreateD("YPanel", nil, parent:GetWide(), YRP:ctr(60))
+					local ts = YRPCreateD("YLabel", line, YRP:ctr(500), line:GetTall(), 0, 0)
 					ts:SetText(os.date("%H:%M:%S - %d/%m/%Y", tonumber(v.string_timestamp)))
 					if typ == "LID_settings" then
-						local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+						local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP:ctr(500), line:GetTall(), YRP:ctr(500), 0)
 						function rt:PerformLayout()
 							if self.SetUnderlineFont ~= nil then
 								self:SetUnderlineFont("Y_18_500")

@@ -25,28 +25,28 @@ function testApp(display, x, y, w, h)
 		function _we:Paint(pw, ph)
 			local tab = {}
 			tab["NAME"] = LocalPlayer():RPName()
-			draw.SimpleText(YRP.trans("LID_welcomeagentx", tab), "Y_24_500", ctrb(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, 0)
+			draw.SimpleText(YRP:trans("LID_welcomeagentx", tab), "Y_24_500", ctrb(10), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, 0)
 		end
 
 		local _target_model = YRPCreateD("DModelPanel", _dw, ctrb(800), ctrb(800), ctrb(400), ctrb(100))
 		local _target_rpname = YRPCreateD("DPanel", _dw, ctrb(800), ctrb(100), ctrb(1200), ctrb(100))
-		_target_rpname.rpname = YRP.trans("LID_none")
+		_target_rpname.rpname = YRP:trans("LID_none")
 		function _target_rpname:Paint(pw, ph)
-			draw.SimpleText(YRP.trans("LID_target") .. ":", "Y_24_500", ctrb(300), ph / 2, Color(255, 255, 255, 255), 2, 0)
+			draw.SimpleText(YRP:trans("LID_target") .. ":", "Y_24_500", ctrb(300), ph / 2, Color(255, 255, 255, 255), 2, 0)
 			draw.SimpleText(self.rpname, "Y_24_500", ctrb(320), ph / 2, Color(255, 255, 255, 255), 0, 0)
 		end
 
 		local _target_reward = YRPCreateD("DPanel", _dw, ctrb(800), ctrb(100), ctrb(1200), ctrb(250))
-		_target_reward.reward = YRP.trans("LID_none")
+		_target_reward.reward = YRP:trans("LID_none")
 		function _target_reward:Paint(pw, ph)
 			draw.SimpleText("Reward" .. ":", "Y_24_500", ctrb(300), ph / 2, Color(255, 255, 255, 255), 2, 0)
 			draw.SimpleText(self.reward, "Y_24_500", ctrb(320), ph / 2, Color(255, 255, 255, 255), 0, 0)
 		end
 
 		local _target_description = YRPCreateD("DPanel", _dw, ctrb(800), ctrb(100), ctrb(1200), ctrb(400))
-		_target_description.description = YRP.trans("LID_none")
+		_target_description.description = YRP:trans("LID_none")
 		function _target_description:Paint(pw, ph)
-			draw.SimpleText(YRP.trans("LID_description") .. ":", "Y_24_500", ctrb(300), ph / 2, Color(255, 255, 255, 255), 2, 0)
+			draw.SimpleText(YRP:trans("LID_description") .. ":", "Y_24_500", ctrb(300), ph / 2, Color(255, 255, 255, 255), 2, 0)
 			draw.SimpleText(self.description, "Y_24_500", ctrb(320), ph / 2, Color(255, 255, 255, 255), 0, 0)
 		end
 
@@ -67,10 +67,10 @@ function testApp(display, x, y, w, h)
 		end
 
 		local _target_list = YRPCreateD("DListView", _dw, ctrb(1000), ctrb(1200), 0, ctrb(100))
-		_target_list:AddColumn(YRP.trans("LID_name"))
-		_target_list:AddColumn(YRP.trans("LID_target"))
-		_target_list:AddColumn(YRP.trans("LID_reward"))
-		_target_list:AddColumn(YRP.trans("LID_description"))
+		_target_list:AddColumn(YRP:trans("LID_name"))
+		_target_list:AddColumn(YRP:trans("LID_target"))
+		_target_list:AddColumn(YRP:trans("LID_reward"))
+		_target_list:AddColumn(YRP:trans("LID_description"))
 		net.Receive(
 			"nws_yrp_gethits",
 			function(len)
@@ -130,9 +130,9 @@ function testApp(display, x, y, w, h)
 				self._hi = YRPCreateD("DPanel", _newhit:GetContent(), ctrb(600), ctrb(1000), ctrb(500), ctrb(20))
 				self._hi.target = value
 				function self._hi:Paint(pw, ph)
-					draw.SimpleText(YRP.trans("LID_target") .. ": " .. self.target, "Y_36_500", ctrb(20), ctrb(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-					draw.SimpleText(YRP.trans("LID_reward") .. ":", "Y_36_500", ctrb(20), ctrb(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-					draw.SimpleText(YRP.trans("LID_description") .. ":", "Y_36_500", ctrb(20), ctrb(350), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+					draw.SimpleText(YRP:trans("LID_target") .. ": " .. self.target, "Y_36_500", ctrb(20), ctrb(100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+					draw.SimpleText(YRP:trans("LID_reward") .. ":", "Y_36_500", ctrb(20), ctrb(200), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+					draw.SimpleText(YRP:trans("LID_description") .. ":", "Y_36_500", ctrb(20), ctrb(350), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 				end
 
 				local _hr = YRPCreateD("DNumberWang", self._hi, ctrb(400), ctrb(50), ctrb(20), ctrb(200))
@@ -156,10 +156,10 @@ function testApp(display, x, y, w, h)
 		end
 
 		local _target_list = YRPCreateD("DListView", _dw, ctrb(1000), ctrb(1200), ctrb(20), ctrb(100))
-		_target_list:AddColumn(YRP.trans("LID_name"))
-		_target_list:AddColumn(YRP.trans("LID_target"))
-		_target_list:AddColumn(YRP.trans("LID_reward"))
-		_target_list:AddColumn(YRP.trans("LID_description"))
+		_target_list:AddColumn(YRP:trans("LID_name"))
+		_target_list:AddColumn(YRP:trans("LID_target"))
+		_target_list:AddColumn(YRP:trans("LID_reward"))
+		_target_list:AddColumn(YRP:trans("LID_description"))
 		net.Receive(
 			"nws_yrp_get_contracts",
 			function(len)

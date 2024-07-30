@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:Init()
-	self.header = YRPCreateD("DPanel", self, self:GetWide(), YRP.ctr(50), 0, 0)
+	self.header = YRPCreateD("DPanel", self, self:GetWide(), YRP:ctr(50), 0, 0)
 	self.header.text = "UNNAMED"
 	function self:SetHeader(text)
 		self.header.text = text
@@ -10,7 +10,7 @@ function PANEL:Init()
 	self.header.color = Color(255, 255, 255, 255)
 	function self.header:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-		surfaceText(YRP.trans(self.text), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), 1, 1)
+		surfaceText(YRP:trans(self.text), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), 1, 1)
 	end
 end
 

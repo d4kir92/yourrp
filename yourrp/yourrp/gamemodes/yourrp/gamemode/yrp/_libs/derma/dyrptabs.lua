@@ -49,7 +49,7 @@ function PANEL:Init()
 			if self.selected then
 				font = "Y_24_500"
 				_color = YRPInterfaceValue("YButton", "SC")
-				draw.RoundedBox(0, YRP.ctr(2), ph - YRP.ctr(4 + 2), pw - 2 * YRP.ctr(2), YRP.ctr(4), _color)
+				draw.RoundedBox(0, YRP:ctr(2), ph - YRP:ctr(4 + 2), pw - 2 * YRP:ctr(2), YRP:ctr(4), _color)
 			end
 
 			draw.SimpleText(self.name, font, pw / 2, ph / 2, _color, 1, 1)

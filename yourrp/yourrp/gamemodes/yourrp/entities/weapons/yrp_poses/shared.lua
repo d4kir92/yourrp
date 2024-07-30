@@ -432,7 +432,7 @@ hook.Add(
 )
 
 if SERVER then
-	YRP.AddNetworkString("nws_yrp_change_pose")
+	YRP:AddNetworkString("nws_yrp_change_pose")
 	net.Receive(
 		"nws_yrp_change_pose",
 		function(len, ply)
@@ -471,7 +471,7 @@ function SWEP:Reload()
 			if not YRPPanelAlive(self.config, "76561198002066427") then
 				local ply = LocalPlayer()
 				ply.yrp_ang = Angle(0, 0, 0)
-				self.config = YRPCreateD("YFrame", nil, YRP.ctr(600), YRP.ctr(1000), 0, 0)
+				self.config = YRPCreateD("YFrame", nil, YRP:ctr(600), YRP:ctr(1000), 0, 0)
 				self.config:SetTitle("CONFIG")
 				self.config:Center()
 				self.config:MakePopup()
@@ -492,14 +492,14 @@ function SWEP:Reload()
 				bones["ValveBiped.Bip01_L_Finger02"] = {}
 				local y = 0
 				for name, values in pairs(bones) do
-					local btn = YRPCreateD("YButton", self.config:GetContent(), YRP.ctr(500), YRP.ctr(50), 0, y * YRP.ctr(50 + 10))
+					local btn = YRPCreateD("YButton", self.config:GetContent(), YRP:ctr(500), YRP:ctr(50), 0, y * YRP:ctr(50 + 10))
 					btn:SetText(name)
 					btn.win = self.config
 					function btn:DoClick()
-						local win = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), YRP.ctr(800), YRP.ctr(800))
+						local win = YRPCreateD("YFrame", nil, YRP:ctr(800), YRP:ctr(800), YRP:ctr(800), YRP:ctr(800))
 						win:SetTitle(name)
 						win:MakePopup()
-						win.pit = YRPCreateD("DNumSlider", win:GetContent(), YRP.ctr(700), YRP.ctr(50), 0, 0)
+						win.pit = YRPCreateD("DNumSlider", win:GetContent(), YRP:ctr(700), YRP:ctr(50), 0, 0)
 						win.pit:SetMin(-360)
 						win.pit:SetMax(360)
 						win.pit:SetValue(0)
@@ -511,7 +511,7 @@ function SWEP:Reload()
 							end
 						end
 
-						win.yaw = YRPCreateD("DNumSlider", win:GetContent(), YRP.ctr(700), YRP.ctr(50), 0, YRP.ctr(50 + 10))
+						win.yaw = YRPCreateD("DNumSlider", win:GetContent(), YRP:ctr(700), YRP:ctr(50), 0, YRP:ctr(50 + 10))
 						win.yaw:SetMin(-360)
 						win.yaw:SetMax(360)
 						win.yaw:SetValue(0)
@@ -523,7 +523,7 @@ function SWEP:Reload()
 							end
 						end
 
-						win.rol = YRPCreateD("DNumSlider", win:GetContent(), YRP.ctr(700), YRP.ctr(50), 0, YRP.ctr(50 + 10 + 50 + 10))
+						win.rol = YRPCreateD("DNumSlider", win:GetContent(), YRP:ctr(700), YRP:ctr(50), 0, YRP:ctr(50 + 10 + 50 + 10))
 						win.rol:SetMin(-360)
 						win.rol:SetMax(360)
 						win.rol:SetValue(0)
@@ -545,18 +545,18 @@ function SWEP:Reload()
 			end
 		else
 			if not YRPPanelAlive(self.yrpposes, "poses2") then
-				self.yrpposes = YRPCreateD("YFrame", nil, YRP.ctr(10), YRP.ctr(960), 0, 0)
+				self.yrpposes = YRPCreateD("YFrame", nil, YRP:ctr(10), YRP:ctr(960), 0, 0)
 				self.yrpposes:SetTitle("LID_poses")
 				local x = 0
 				local y = 0
 				local maxy = 0
 				local maxx = 0
 				for namecategory, categorytab in pairs(yrp_poses) do
-					local btn = YRPCreateD("YLabel", self.yrpposes:GetContent(), YRP.ctr(560), YRP.ctr(50), x * YRP.ctr(560 + 10), y * YRP.ctr(50 + 10))
+					local btn = YRPCreateD("YLabel", self.yrpposes:GetContent(), YRP:ctr(560), YRP:ctr(50), x * YRP:ctr(560 + 10), y * YRP:ctr(50 + 10))
 					btn:SetText("LID_" .. namecategory)
 					y = y + 1
 					for name, values in pairs(categorytab) do
-						local cBtn = YRPCreateD("YButton", self.yrpposes:GetContent(), YRP.ctr(560), YRP.ctr(50), x * YRP.ctr(560 + 10), y * YRP.ctr(50 + 10))
+						local cBtn = YRPCreateD("YButton", self.yrpposes:GetContent(), YRP:ctr(560), YRP:ctr(50), x * YRP:ctr(560 + 10), y * YRP:ctr(50 + 10))
 						cBtn:SetText("LID_" .. name)
 						cBtn.win = self.yrpposes
 						function cBtn:DoClick()
@@ -583,7 +583,7 @@ function SWEP:Reload()
 					end
 				end
 
-				self.yrpposes:SetSize(YRP.ctr(20) + maxx * YRP.ctr(560 + 10) + YRP.ctr(10), self.yrpposes:GetHeaderHeight() + YRP.ctr(10) + maxy * YRP.ctr(50 + 10) + YRP.ctr(20))
+				self.yrpposes:SetSize(YRP:ctr(20) + maxx * YRP:ctr(560 + 10) + YRP:ctr(10), self.yrpposes:GetHeaderHeight() + YRP:ctr(10) + maxy * YRP:ctr(50 + 10) + YRP:ctr(20))
 				self.yrpposes:Center()
 				self.yrpposes:MakePopup()
 			elseif YRPPanelAlive(self.yrpposes, "poses4") then

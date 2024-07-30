@@ -24,7 +24,6 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Ammo = "none"
 SWEP.HoldType = "normal"
-
 function SWEP:Initialize()
 	self:SetHoldType(self.HoldType)
 	self.Time = 0
@@ -40,7 +39,6 @@ end
 function SWEP:PrimaryAttack()
 	local Pos = self:GetOwner():GetShootPos()
 	local Aim = self:GetOwner():GetAimVector()
-
 	local Tr = util.TraceLine{
 		start = Pos,
 		endpos = Pos + Aim * self.Range,
@@ -48,12 +46,10 @@ function SWEP:PrimaryAttack()
 	}
 
 	local HitEnt = Tr.Entity
-
 	if self.Drag then
 		HitEnt = self.Drag.Entity
 	else
 		if not IsValid(HitEnt) or HitEnt:GetMoveType() ~= MOVETYPE_VPHYSICS or HitEnt:IsVehicle() or HitEnt:GetYRPBool("NoDrag", false) or HitEnt.BlockDrag or IsValid(HitEnt:GetParent()) then return end
-
 		if not self.Drag then
 			self.Drag = {
 				OffPos = HitEnt:WorldToLocal(Tr.HitPos),
@@ -65,7 +61,6 @@ function SWEP:PrimaryAttack()
 
 	if CLIENT or not IsValid(HitEnt) then return end
 	local Phys = HitEnt:GetPhysicsObject()
-
 	if IsValid(Phys) then
 		local Pos2 = Pos + Aim * self.Range * self.Drag.Fraction
 		local OffPos = HitEnt:LocalToWorld(self.Drag.OffPos)
@@ -84,12 +79,10 @@ if CLIENT then
 	local x, y = ScrW() / 2, ScrH() / 2
 	local mainColor = Color(40, 40, 255, 255)
 	local textColor = Color(255, 255, 255, 255)
-
 	function SWEP:DrawHUD()
 		if IsValid(self:GetOwner()) and self:GetOwner().GetVehicle and IsValid(self:GetOwner():GetVehicle()) then return end
 		local Pos = self:GetOwner():GetShootPos()
 		local Aim = self:GetOwner():GetAimVector()
-
 		local Tr = util.TraceLine{
 			start = Pos,
 			endpos = Pos + Aim * self.Range,
@@ -97,7 +90,6 @@ if CLIENT then
 		}
 
 		local HitEnt = Tr.Entity
-
 		if IsValid(HitEnt) and HitEnt:GetMoveType() == MOVETYPE_VPHYSICS and not self.rDag and not HitEnt:IsVehicle() and not IsValid(HitEnt:GetParent()) and not HitEnt:GetYRPBool("NoDrag", false) then
 			self.Time = math.min(1, self.Time + 2 * FrameTime())
 		else
@@ -106,7 +98,7 @@ if CLIENT then
 
 		if self.Time > 0 and not self.Drag then
 			textColor.a = mainColor.a * self.Time
-			draw.SimpleText(YRP.trans("LID_drag"), "Y_30_500", x, y, textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_drag"), "Y_30_500", x, y, textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		if self.Drag and IsValid(self.Drag.Entity) then
@@ -115,7 +107,6 @@ if CLIENT then
 			local A = OffPos:ToScreen()
 			local B = Pos2:ToScreen()
 			surface.SetDrawColor(mainColor)
-
 			for size = 1, 5 do
 				surface.DrawCircle(A.x, A.y, size, mainColor)
 				surface.DrawCircle(B.x, B.y, size, mainColor)

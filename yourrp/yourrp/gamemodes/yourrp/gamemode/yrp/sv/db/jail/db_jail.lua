@@ -4,7 +4,7 @@
 local DBNotes = "yrp_jail_notes"
 YRP_SQL_ADD_COLUMN(DBNotes, "SteamID", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DBNotes, "note", "TEXT DEFAULT ''")
-YRP.AddNetworkString("nws_yrp_getPlayerNotes")
+YRP:AddNetworkString("nws_yrp_getPlayerNotes")
 net.Receive(
 	"nws_yrp_getPlayerNotes",
 	function(len, ply)
@@ -22,7 +22,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_addJailNote")
+YRP:AddNetworkString("nws_yrp_addJailNote")
 net.Receive(
 	"nws_yrp_addJailNote",
 	function(len, ply)
@@ -32,7 +32,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_removeJailNote")
+YRP:AddNetworkString("nws_yrp_removeJailNote")
 net.Receive(
 	"nws_yrp_removeJailNote",
 	function(len, ply)
@@ -58,8 +58,8 @@ function teleportToReleasepoint(ply)
 		_tmp = string.Explode(",", _tmpTele[1].angle)
 		ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
 	else
-		local _str = YRP.trans("LID_noreleasepoint")
-		YRP.msg("note", "[teleportToReleasepoint] " .. _str)
+		local _str = YRP:trans("LID_noreleasepoint")
+		YRP:msg("note", "[teleportToReleasepoint] " .. _str)
 		net.Start("nws_yrp_noti")
 		net.WriteString("noreleasepoint")
 		net.WriteString("")
@@ -130,15 +130,15 @@ function teleportToJailpoint(ply, tim, police)
 				end
 			end
 		else
-			local _str = YRP.trans("LID_nojailpoint")
-			YRP.msg("note", "[teleportToJailpoint] " .. _str)
+			local _str = YRP:trans("LID_nojailpoint")
+			YRP:msg("note", "[teleportToJailpoint] " .. _str)
 			net.Start("nws_yrp_noti")
 			net.WriteString("nojailpoint")
 			net.WriteString("")
 			net.Broadcast()
 		end
 	else
-		YRP.msg("note", "[teleportToJailpoint] No Time SET!")
+		YRP:msg("note", "[teleportToJailpoint] No Time SET!")
 	end
 end
 
@@ -151,7 +151,7 @@ function clean_up_jail(ply)
 	teleportToReleasepoint(ply)
 end
 
-YRP.AddNetworkString("nws_yrp_dbAddJail")
+YRP:AddNetworkString("nws_yrp_dbAddJail")
 net.Receive(
 	"nws_yrp_dbAddJail",
 	function(len, ply)
@@ -164,7 +164,7 @@ net.Receive(
 				if sql.TableExists(_tmpDBTable) then
 					YRP_SQL_INSERT_INTO(_tmpDBTable, _tmpDBCol, _tmpDBVal)
 					local _tmpTable = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
-					YRP.msg("note", p:Nick() .. " added to jail")
+					YRP:msg("note", p:Nick() .. " added to jail")
 					p:SetYRPInt("jailtime", _tmpTable[1].time)
 					timer.Simple(
 						0.02,
@@ -173,7 +173,7 @@ net.Receive(
 						end
 					)
 				else
-					YRP.msg("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
+					YRP:msg("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
 				end
 
 				break
@@ -182,7 +182,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_dbRemJail")
+YRP:AddNetworkString("nws_yrp_dbRemJail")
 net.Receive(
 	"nws_yrp_dbRemJail",
 	function(len, ply)

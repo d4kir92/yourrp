@@ -39,17 +39,17 @@ end
 
 function RegisterHUDDesign(tab)
 	if tab.name == nil then
-		YRP.msg("note", "RegisterDesign Failed! Missing Design Name")
+		YRP:msg("note", "RegisterDesign Failed! Missing Design Name")
 
 		return false
 	elseif tab.author == nil then
-		YRP.msg("note", "RegisterDesign Failed! Missing Design Author")
+		YRP:msg("note", "RegisterDesign Failed! Missing Design Author")
 
 		return false
 	end
 
 	if HUDS[tab.name] == nil then
-		YRP.msg("note", "[RegisterDesign] Registered HUD: " .. tostring(tab.name))
+		YRP:msg("note", "[RegisterDesign] Registered HUD: " .. tostring(tab.name))
 		HUDS[tab.name] = tab
 	end
 
@@ -149,17 +149,17 @@ end
 
 function RegisterHUDMASKDesign(tab)
 	if tab.name == nil then
-		YRP.msg("note", "RegisterHUDMASKDesign Failed! Missing Design Name")
+		YRP:msg("note", "RegisterHUDMASKDesign Failed! Missing Design Name")
 
 		return false
 	elseif tab.author == nil then
-		YRP.msg("note", "RegisterHUDMASKDesign Failed! Missing Design Author")
+		YRP:msg("note", "RegisterHUDMASKDesign Failed! Missing Design Author")
 
 		return false
 	end
 
 	if HUDMASKS[tab.name] == nil then
-		YRP.msg("note", "[RegisterHUDMASKDesign] Registered HUD: " .. tostring(tab.name))
+		YRP:msg("note", "[RegisterHUDMASKDesign] Registered HUD: " .. tostring(tab.name))
 		HUDMASKS[tab.name] = tab
 	end
 
@@ -179,17 +179,17 @@ function YRPDesignLoadout(from)
 		SetGlobalYRPString("string_hud_profile", setting.string_hud_profile)
 		SetGlobalYRPInt("int_headerheight", setting.int_headerheight)
 	else
-		YRP.msg("note", "Fatal Error: Design Settings not found")
+		YRP:msg("note", "Fatal Error: Design Settings not found")
 	end
 end
 
 YRPDesignLoadout("Init")
 local once = false
-YRP.AddNetworkString("nws_yrp_ply_changed_resolution")
+YRP:AddNetworkString("nws_yrp_ply_changed_resolution")
 net.Receive(
 	"nws_yrp_ply_changed_resolution",
 	function(len, ply)
-		--YRP.msg( "note", ply:YRPName() .. " changed the Resolution." )
+		--YRP:msg( "note", ply:YRPName() .. " changed the Resolution." )
 		if not once then
 			once = true
 
@@ -216,12 +216,12 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_change_hud_design")
+YRP:AddNetworkString("nws_yrp_change_hud_design")
 net.Receive(
 	"nws_yrp_change_hud_design",
 	function(len, ply)
 		local string_hud_design = net.ReadString()
-		YRP.msg("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
+		YRP:msg("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -237,17 +237,17 @@ net.Receive(
 INTERFACES = INTERFACES or {}
 function RegisterInterfaceDesign(tab)
 	if tab.name == nil then
-		YRP.msg("note", "RegisterDesign Failed! Missing Design Name")
+		YRP:msg("note", "RegisterDesign Failed! Missing Design Name")
 
 		return false
 	elseif tab.author == nil then
-		YRP.msg("note", "RegisterDesign Failed! Missing Design Author")
+		YRP:msg("note", "RegisterDesign Failed! Missing Design Author")
 
 		return false
 	end
 
 	INTERFACES[tab.name] = tab
-	--YRP.msg( "db", "Added Interface Design ( " .. tostring(tab.name) .. " )" )
+	--YRP:msg( "db", "Added Interface Design ( " .. tostring(tab.name) .. " )" )
 
 	return true
 end
@@ -262,12 +262,12 @@ IF_Blur.name = "Blur"
 IF_Blur.author = "D4KiR"
 IF_Blur.progress = 50
 RegisterInterfaceDesign(IF_Blur)
-YRP.AddNetworkString("nws_yrp_change_interface_design")
+YRP:AddNetworkString("nws_yrp_change_interface_design")
 net.Receive(
 	"nws_yrp_change_interface_design",
 	function(len, ply)
 		local string_interface_design = net.ReadString()
-		YRP.msg("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
+		YRP:msg("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -281,7 +281,7 @@ net.Receive(
 )
 
 -- F8 Design Page
-YRP.AddNetworkString("nws_yrp_get_design_settings")
+YRP:AddNetworkString("nws_yrp_get_design_settings")
 net.Receive(
 	"nws_yrp_get_design_settings",
 	function(len, ply)
@@ -302,7 +302,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_set_font")
+YRP:AddNetworkString("nws_yrp_set_font")
 function YRPSendFontName(ply)
 	local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "string_fontname", "uniqueID = '1'")
 	if IsNotNilAndNotFalse(dbtab) then
@@ -320,12 +320,12 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_font")
+YRP:AddNetworkString("nws_yrp_update_font")
 net.Receive(
 	"nws_yrp_update_font",
 	function(len, ply)
 		local string_fontname = net.ReadString()
-		YRP.msg("db", "[DESIGN] string_fontname changed to " .. string_fontname)
+		YRP:msg("db", "[DESIGN] string_fontname changed to " .. string_fontname)
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -339,7 +339,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_change_headerheight")
+YRP:AddNetworkString("nws_yrp_change_headerheight")
 net.Receive(
 	"nws_yrp_change_headerheight",
 	function(len, ply)

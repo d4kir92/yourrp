@@ -43,7 +43,7 @@ function PANEL:Init()
 			net.WriteString(self:GetItemID())
 			net.SendToServer()
 		else
-			YRP.msg("note", "[YItem] self:GetItemID() == nil")
+			YRP:msg("note", "[YItem] self:GetItemID() == nil")
 		end
 	end
 
@@ -72,23 +72,23 @@ net.Receive(
 		if sto ~= nil then
 			sto:GetParent():Remove()
 		else
-			local br = YRP.ctr(20)
-			local sp = YRP.ctr(10)
+			local br = YRP:ctr(20)
+			local sp = YRP:ctr(10)
 			local cols = 4
 			local sh = tonumber(storage.int_storage_size)
 			sh = math.ceil(sh / cols)
 			local ww = YRPItemSize() * cols + br * 2 + sp * (cols - 1)
-			local wh = YRPItemSize() * sh + br * 2 + sp * (sh - 1) + YRP.ctr(50)
+			local wh = YRPItemSize() * sh + br * 2 + sp * (sh - 1) + YRP:ctr(50)
 			local bag = YRPCreateD("DFrame", nil, ww, wh, 0, 0)
 			if isinv then
 				bag:SetPos(lply.invx - ww, lply.invy - wh)
-				if lply.invy - wh - YRP.ctr(20) < YRP.ctr(20) then
-					lply.invx = lply.invx - ww - YRP.ctr(20)
-					lply.invy = ScH() - (YRPItemSize() + YRP.ctr(60))
+				if lply.invy - wh - YRP:ctr(20) < YRP:ctr(20) then
+					lply.invx = lply.invx - ww - YRP:ctr(20)
+					lply.invy = ScH() - (YRPItemSize() + YRP:ctr(60))
 					bag:SetPos(lply.invx - ww, lply.invy - wh)
-					lply.invy = lply.invy - wh - YRP.ctr(20)
+					lply.invy = lply.invy - wh - YRP:ctr(20)
 				else
-					lply.invy = lply.invy - wh - YRP.ctr(20)
+					lply.invy = lply.invy - wh - YRP:ctr(20)
 				end
 			else
 				bag:Center()
@@ -98,7 +98,7 @@ net.Receive(
 			bag:SetTitle("")
 			function bag:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "NC"))
-				draw.SimpleText(YRP.trans("LID_bag"), "Y_18_500", YRP.ctr(20), YRP.ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(YRP:trans("LID_bag"), "Y_18_500", YRP:ctr(20), YRP:ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				if YRPInventory() == nil then
 					self:Remove()
 				end
@@ -106,7 +106,7 @@ net.Receive(
 
 			local psw = YRPItemSize() * cols + sp * (cols - 1)
 			local psh = YRPItemSize() * cols + sp * (cols - 1)
-			bag.storage = YRPCreateD("YStorage", bag, psw, psh, br, br + YRP.ctr(50))
+			bag.storage = YRPCreateD("YStorage", bag, psw, psh, br, br + YRP:ctr(50))
 			bag.storage:SetStorageID(storage.uniqueID)
 		end
 	end

@@ -10,7 +10,7 @@ net.Receive(
 		i = tonumber(i)
 		pp.tab[i] = net.ReadTable()
 		if YRPPanelAlive(pp.list) then
-			local h = YRP.ctr(240)
+			local h = YRP:ctr(240)
 			local line = YRPCreateD("DPanel", nil, pp.list:GetWide(), h, 0, 0)
 			line.c = pp.c
 			line.id = pp.tab[i].id
@@ -19,9 +19,9 @@ net.Receive(
 			line.model = pp.tab[i].model or ""
 			function line:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(45, 45, 45, 100))
-				draw.SimpleText("ID: " .. tostring(self.id) .. "    " .. tostring(self.c) .. "/" .. tostring(self.max), "Y_30_500", ph + YRP.ctr(20), ph / 4, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				draw.SimpleText("ClassName: " .. tostring(self.class), "Y_30_500", ph + YRP.ctr(20), ph / 4 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				draw.SimpleText("WorldModel: " .. tostring(self.model), "Y_30_500", ph + YRP.ctr(20), ph / 4 * 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText("ID: " .. tostring(self.id) .. "    " .. tostring(self.c) .. "/" .. tostring(self.max), "Y_30_500", ph + YRP:ctr(20), ph / 4, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText("ClassName: " .. tostring(self.class), "Y_30_500", ph + YRP:ctr(20), ph / 4 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText("WorldModel: " .. tostring(self.model), "Y_30_500", ph + YRP:ctr(20), ph / 4 * 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			local mdl = YRPCreateD("DModelPanel", line, h, h, 0, 0)
@@ -43,7 +43,7 @@ net.Receive(
 			end
 
 			--mdl:SetModel(self.model)
-			local tel = YRPCreateD("YButton", line, YRP.ctr(480), h, line:GetWide() - YRP.ctr(480 + 20 + 240 + 36), 0)
+			local tel = YRPCreateD("YButton", line, YRP:ctr(480), h, line:GetWide() - YRP:ctr(480 + 20 + 240 + 36), 0)
 			tel:SetText("LID_tpto")
 			tel.line = line
 			tel.id = pp.tab[i].id
@@ -57,7 +57,7 @@ net.Receive(
 				net.SendToServer()
 			end
 
-			local rem = YRPCreateD("YButton", line, YRP.ctr(240), h, line:GetWide() - YRP.ctr(240 + 36), 0)
+			local rem = YRPCreateD("YButton", line, YRP:ctr(240), h, line:GetWide() - YRP:ctr(240 + 36), 0)
 			rem:SetText("LID_remove")
 			rem.line = line
 			rem.id = pp.tab[i].id
@@ -80,9 +80,9 @@ net.Receive(
 function CreatePermaPropsSetting()
 	local PARENT = GetSettingsSite()
 	if YRPPanelAlive(PARENT) then
-		pp.list = YRPCreateD("DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+		pp.list = YRPCreateD("DPanelList", PARENT, PARENT:GetWide() - YRP:ctr(40), PARENT:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
 		pp.list:EnableVerticalScrollbar()
-		pp.list:SetSpacing(YRP.ctr(20))
+		pp.list:SetSpacing(YRP:ctr(20))
 		function pp.list:Paint(pw, ph)
 		end
 
@@ -120,7 +120,7 @@ net.Receive(
 		i = tonumber(i)
 		pp2.tab[i] = net.ReadTable()
 		if YRPPanelAlive(pp2.list) then
-			local h = YRP.ctr(240)
+			local h = YRP:ctr(240)
 			local line = YRPCreateD("DPanel", nil, pp2.list:GetWide(), h, 0, 0)
 			line.c = pp2.c
 			line.id = pp2.tab[i].id
@@ -129,9 +129,9 @@ net.Receive(
 			line.model = pp2.tab[i].model
 			function line:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(45, 45, 45, 100))
-				draw.SimpleText("ID: " .. self.id .. "    " .. self.c .. "/" .. self.max, "Y_30_500", ph + YRP.ctr(20), ph / 4, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				draw.SimpleText("ClassName: " .. self.class, "Y_30_500", ph + YRP.ctr(20), ph / 4 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				draw.SimpleText("WorldModel: " .. self.model, "Y_30_500", ph + YRP.ctr(20), ph / 4 * 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText("ID: " .. self.id .. "    " .. self.c .. "/" .. self.max, "Y_30_500", ph + YRP:ctr(20), ph / 4, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText("ClassName: " .. self.class, "Y_30_500", ph + YRP:ctr(20), ph / 4 * 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText("WorldModel: " .. self.model, "Y_30_500", ph + YRP:ctr(20), ph / 4 * 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			local mdl = YRPCreateD("DModelPanel", line, h, h, 0, 0)
@@ -151,7 +151,7 @@ net.Receive(
 			end
 
 			--mdl:SetModel(self.model)
-			local tel = YRPCreateD("YButton", line, YRP.ctr(480), h, line:GetWide() - YRP.ctr(480 + 20 + 240 + 36), 0)
+			local tel = YRPCreateD("YButton", line, YRP:ctr(480), h, line:GetWide() - YRP:ctr(480 + 20 + 240 + 36), 0)
 			tel:SetText("LID_tpto")
 			tel.line = line
 			tel.id = pp2.tab[i].id
@@ -165,7 +165,7 @@ net.Receive(
 				net.SendToServer()
 			end
 
-			local rem = YRPCreateD("YButton", line, YRP.ctr(240), h, line:GetWide() - YRP.ctr(240 + 36), 0)
+			local rem = YRPCreateD("YButton", line, YRP:ctr(240), h, line:GetWide() - YRP:ctr(240 + 36), 0)
 			rem:SetText("LID_remove")
 			rem.line = line
 			rem.id = pp2.tab[i].id
@@ -188,9 +188,9 @@ net.Receive(
 function CreatePermaPropsSetting2()
 	local PARENT = GetSettingsSite()
 	if YRPPanelAlive(PARENT) then
-		pp2.list = YRPCreateD("DPanelList", PARENT, PARENT:GetWide() - YRP.ctr(40), PARENT:GetTall() - YRP.ctr(40), YRP.ctr(20), YRP.ctr(20))
+		pp2.list = YRPCreateD("DPanelList", PARENT, PARENT:GetWide() - YRP:ctr(40), PARENT:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
 		pp2.list:EnableVerticalScrollbar()
-		pp2.list:SetSpacing(YRP.ctr(20))
+		pp2.list:SetSpacing(YRP:ctr(20))
 		function pp2.list:Paint(pw, ph)
 		end
 

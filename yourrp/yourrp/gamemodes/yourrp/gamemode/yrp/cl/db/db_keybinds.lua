@@ -66,29 +66,29 @@ function YRPKeybindsCheckFile()
 		if data then
 			local testfile = util.JSONToTable(data)
 			if testfile == nil or table.Count(testfile) <= 0 then
-				YRP.msg("note", "[KEYBINDS] File is empty.")
+				YRP:msg("note", "[KEYBINDS] File is empty.")
 				file.Write(dbfile, util.TableToJSON(YRP_KEYBINDS, true))
 				data = file.Read(dbfile, "DATA")
 				if data then
 					testfile = util.JSONToTable(data)
 					if testfile == nil or table.Count(testfile) <= 0 then
-						YRP.msg("error", "[KEYBINDS] File is still empty.")
+						YRP:msg("error", "[KEYBINDS] File is still empty.")
 					end
 				else
-					YRP.msg("error", "[KEYBINDS] FAILED TO READ KEYBINDS FILE #2 fi: " .. tostring(data))
+					YRP:msg("error", "[KEYBINDS] FAILED TO READ KEYBINDS FILE #2 fi: " .. tostring(data))
 				end
 			end
 		else
-			YRP.msg("error", "[KEYBINDS] FAILED TO READ KEYBINDS FILE #1 fi: " .. tostring(data))
+			YRP:msg("error", "[KEYBINDS] FAILED TO READ KEYBINDS FILE #1 fi: " .. tostring(data))
 		end
 	end
 
 	if not file.Exists("yrp_keybinds", "DATA") then
-		YRP.msg("note", "[KEYBINDS] FAILED TO CREATE KEYBIND FOLDER, NO SPACE ON DISK??")
+		YRP:msg("note", "[KEYBINDS] FAILED TO CREATE KEYBIND FOLDER, NO SPACE ON DISK??")
 	end
 
 	if not file.Exists(dbfile, "DATA") then
-		YRP.msg("note", "[KEYBINDS] FAILED TO CREATE KEYBIND FILE, NO SPACE ON DISK??")
+		YRP:msg("note", "[KEYBINDS] FAILED TO CREATE KEYBIND FILE, NO SPACE ON DISK??")
 	end
 end
 
@@ -130,15 +130,15 @@ function YRPKeybindsLoad()
 			end
 		else
 			local fi = file.Read(dbfile, "DATA")
-			YRP.msg("error", "FAILED TO LOAD KEYBINDS! fi: [" .. tostring(fi) .. "]")
+			YRP:msg("error", "FAILED TO LOAD KEYBINDS! fi: [" .. tostring(fi) .. "]")
 		end
 	else
-		YRP.msg("note", "[KEYBINDS] FILE DOESN'T EXISTS, NO SPACE ON DISK??")
+		YRP:msg("note", "[KEYBINDS] FILE DOESN'T EXISTS, NO SPACE ON DISK??")
 	end
 
 	if _type(yrp_keybinds) ~= "table" then
 		local fi = file.Read(dbfile, "DATA")
-		YRP.msg("error", "[KEYBINDS] [" .. LocalPlayer():YRPName() .. "|" .. LocalPlayer():SteamID() .. "] KeybindsLoad FAILED, broken file? [" .. tostring(fi) .. "]")
+		YRP:msg("error", "[KEYBINDS] [" .. LocalPlayer():YRPName() .. "|" .. LocalPlayer():SteamID() .. "] KeybindsLoad FAILED, broken file? [" .. tostring(fi) .. "]")
 	else
 		YRP_KeybindsLoaded = true
 	end
@@ -173,22 +173,22 @@ function YRPGetKeybind(name)
 			if data then
 				local dbf = util.JSONToTable(data)
 				if dbf then
-					YRP.msg("error", "[KEYBINDS] Failed to get Keybind: " .. tostring(name) .. " result: " .. tostring(yrp_keybinds[name]))
-					YRP.msg("error", "[KEYBINDS] Content: " .. tostring(table.ToString(dbf, "File")))
+					YRP:msg("error", "[KEYBINDS] Failed to get Keybind: " .. tostring(name) .. " result: " .. tostring(yrp_keybinds[name]))
+					YRP:msg("error", "[KEYBINDS] Content: " .. tostring(table.ToString(dbf, "File")))
 
 					return -1
 				else
-					YRP.msg("error", "[KEYBINDS] Failed to Parse to Table")
+					YRP:msg("error", "[KEYBINDS] Failed to Parse to Table")
 
 					return -1
 				end
 			else
-				YRP.msg("note", "[KEYBINDS] Failed to get FILE Data, NO SPACE ON DISK??")
+				YRP:msg("note", "[KEYBINDS] Failed to get FILE Data, NO SPACE ON DISK??")
 
 				return -1
 			end
 		else
-			YRP.msg("error", "[KEYBINDS] Failed to Parse to Table")
+			YRP:msg("error", "[KEYBINDS] Failed to Parse to Table")
 
 			return -1
 		end
@@ -196,7 +196,7 @@ function YRPGetKeybind(name)
 		return -1
 	end
 
-	YRP.msg("error", "[KEYBINDS] Unknown error")
+	YRP:msg("error", "[KEYBINDS] Unknown error")
 
 	return -1
 end
@@ -231,7 +231,7 @@ function YRPGetKeybindName(kbname, show)
 		end
 
 		if string.StartWith(kbname, "in_") then
-			_kb = YRP.trans("LID_" .. kbname)
+			_kb = YRP:trans("LID_" .. kbname)
 		end
 
 		if IsNotNilAndNotFalse(_kb) then

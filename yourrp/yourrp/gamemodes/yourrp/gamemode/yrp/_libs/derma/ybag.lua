@@ -11,7 +11,7 @@ end
 
 function PANEL:Init()
 	self:SetTitle("")
-	self.storage = YRPCreateD("YStorage", self, YRP.ctr(100), YRP.ctr(100), 0, YRP.ctr(50))
+	self.storage = YRPCreateD("YStorage", self, YRP:ctr(100), YRP:ctr(100), 0, YRP:ctr(50))
 	self.storage:SetBag(self)
 	self:MakePopup()
 end

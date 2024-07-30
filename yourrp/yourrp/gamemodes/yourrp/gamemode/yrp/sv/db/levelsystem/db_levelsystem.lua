@@ -26,7 +26,7 @@ function Player:LevelSystemLoadout()
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_get_levelsystem_settings")
+YRP:AddNetworkString("nws_yrp_get_levelsystem_settings")
 net.Receive(
 	"nws_yrp_get_levelsystem_settings",
 	function(len, ply)
@@ -50,7 +50,7 @@ if IsNotNilAndNotFalse(yrp_levelsystem) then
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_update_ls_int_level_min")
+YRP:AddNetworkString("nws_yrp_update_ls_int_level_min")
 net.Receive(
 	"nws_yrp_update_ls_int_level_min",
 	function(len, ply)
@@ -64,7 +64,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_ls_int_level_max")
+YRP:AddNetworkString("nws_yrp_update_ls_int_level_max")
 net.Receive(
 	"nws_yrp_update_ls_int_level_max",
 	function(len, ply)
@@ -78,7 +78,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_ls_int_level_start")
+YRP:AddNetworkString("nws_yrp_update_ls_int_level_start")
 net.Receive(
 	"nws_yrp_update_ls_int_level_start",
 	function(len, ply)
@@ -92,7 +92,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_ls_float_multiplier")
+YRP:AddNetworkString("nws_yrp_update_ls_float_multiplier")
 net.Receive(
 	"nws_yrp_update_ls_float_multiplier",
 	function(len, ply)
@@ -106,7 +106,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_ls_int_xp_for_levelup")
+YRP:AddNetworkString("nws_yrp_update_ls_int_xp_for_levelup")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_for_levelup",
 	function(len, ply)
@@ -120,7 +120,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_ls_int_xp_per_kill")
+YRP:AddNetworkString("nws_yrp_update_ls_int_xp_per_kill")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_per_kill",
 	function(len, ply)
@@ -134,7 +134,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_ls_int_xp_per_minute")
+YRP:AddNetworkString("nws_yrp_update_ls_int_xp_per_minute")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_per_minute",
 	function(len, ply)
@@ -148,7 +148,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_ls_int_xp_per_revive")
+YRP:AddNetworkString("nws_yrp_update_ls_int_xp_per_revive")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_per_revive",
 	function(len, ply)
@@ -173,7 +173,7 @@ function Player:ClearXP()
 	)
 
 	if result ~= nil then
-		YRP.msg("note", "ClearXP FAILED #1: " .. tostring(result))
+		YRP:msg("note", "ClearXP FAILED #1: " .. tostring(result))
 	else
 		self:SetYRPInt("int_xp", 0)
 	end
@@ -186,7 +186,7 @@ function Player:AddLevel(level)
 	local minlvl = self:GetMinLevel()
 	local maxlvl = self:GetMaxLevel()
 	if charid <= 0 and self:IsPlayer() and not self:IsBot() then
-		YRP.msg("note", "AddLevel FAILED #3: charid <= 0: " .. tostring(charid) .. " ply: " .. self:YRPName())
+		YRP:msg("note", "AddLevel FAILED #3: charid <= 0: " .. tostring(charid) .. " ply: " .. self:YRPName())
 
 		return
 	end
@@ -206,7 +206,7 @@ function Player:AddLevel(level)
 				0.01,
 				function()
 					if result ~= nil then
-						YRP.msg("error", "AddLevel FAILED #1: " .. tostring(result))
+						YRP:msg("error", "AddLevel FAILED #1: " .. tostring(result))
 					elseif YRPEntityAlive(self) then
 						self:SetYRPString("int_level", newlvl)
 						self:AddLevel(level)
@@ -229,7 +229,7 @@ function Player:AddLevel(level)
 				0.1,
 				function()
 					if result ~= nil then
-						YRP.msg("error", "AddLevel FAILED #2: " .. tostring(result))
+						YRP:msg("error", "AddLevel FAILED #2: " .. tostring(result))
 					elseif YRPEntityAlive(self) then
 						self:SetYRPString("int_level", newlvl)
 						self:AddLevel(level)
@@ -277,7 +277,7 @@ function Player:AddXP(xp)
 						)
 
 						if result ~= nil then
-							YRP.msg("note", "AddXP FAILED #1: " .. tostring(result))
+							YRP:msg("note", "AddXP FAILED #1: " .. tostring(result))
 						else
 							timer.Simple(
 								0.01,
@@ -298,7 +298,7 @@ function Player:AddXP(xp)
 						)
 
 						if result ~= nil then
-							YRP.msg("note", "AddXP FAILED #2: " .. tostring(result))
+							YRP:msg("note", "AddXP FAILED #2: " .. tostring(result))
 						else
 							self:SetYRPInt("int_xp", newxp)
 						end
@@ -314,7 +314,7 @@ function Player:AddXP(xp)
 					)
 
 					if result ~= nil then
-						YRP.msg("note", "AddXP FAILED #5: " .. tostring(result))
+						YRP:msg("note", "AddXP FAILED #5: " .. tostring(result))
 					else
 						self:SetYRPInt("int_xp", maxxp)
 					end
@@ -333,7 +333,7 @@ function Player:AddXP(xp)
 						)
 
 						if result ~= nil then
-							YRP.msg("note", "AddXP FAILED #3: " .. tostring(result))
+							YRP:msg("note", "AddXP FAILED #3: " .. tostring(result))
 						else
 							timer.Simple(
 								0.01,
@@ -354,7 +354,7 @@ function Player:AddXP(xp)
 						)
 
 						if result ~= nil then
-							YRP.msg("note", "AddXP FAILED #4: " .. tostring(result))
+							YRP:msg("note", "AddXP FAILED #4: " .. tostring(result))
 						else
 							self:SetYRPInt("int_xp", newxp)
 						end

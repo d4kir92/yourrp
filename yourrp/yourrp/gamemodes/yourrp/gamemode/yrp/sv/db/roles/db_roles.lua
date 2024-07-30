@@ -70,7 +70,7 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud", "TEXT DEFAULT 'serverdefault'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_mask", "TEXT DEFAULT 'serverdefault'")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_savebodygroups", "INTEGER DEFAULT 1")
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	YRP.msg("note", DATABASE_NAME .. " has not the default role")
+	YRP:msg("note", DATABASE_NAME .. " has not the default role")
 	YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "'1', 'Civilian', '0,0,255', '1', '0'")
 end
 
@@ -90,7 +90,7 @@ function MoveUnusedGroups()
 			local parentgroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
 			if parentgroup == nil then
 				count = count + 1
-				YRP.msg("note", "Group is out of space: " .. group.string_name)
+				YRP:msg("note", "Group is out of space: " .. group.string_name)
 				YRP_SQL_UPDATE(
 					"yrp_ply_groups",
 					{
@@ -98,7 +98,7 @@ function MoveUnusedGroups()
 					}, "uniqueID = '" .. group.uniqueID .. "'"
 				)
 			elseif group.uniqueID == parentgroup[1].int_parentgroup then
-				YRP.msg("note", "YOU MADE A LOOP IN PARENTGROUP!!!")
+				YRP:msg("note", "YOU MADE A LOOP IN PARENTGROUP!!!")
 				YRP_SQL_UPDATE(
 					"yrp_ply_groups",
 					{
@@ -131,7 +131,7 @@ function MoveUnusedRolesToDefault()
 						}, "uniqueID = '" .. role.uniqueID .. "'"
 					)
 				elseif role.uniqueID == prerole[1].int_prerole then
-					YRP.msg("note", "YOU MADE A LOOP in PREROLES!!!")
+					YRP:msg("note", "YOU MADE A LOOP in PREROLES!!!")
 					YRP_SQL_UPDATE(
 						DATABASE_NAME,
 						{
@@ -158,7 +158,7 @@ function MoveUnusedRolesToDefault()
 	end
 
 	if changed then
-		YRP.msg("note", "Moved unused roles to the default group")
+		YRP:msg("note", "Moved unused roles to the default group")
 	end
 end
 
@@ -310,7 +310,7 @@ function YRPConvertToDarkRPJob(tab)
 		if _job.color[1] and _job.color[2] and _job.color[3] then
 			_job.color = Color(_job.color[1], _job.color[2], _job.color[3], _job.color[4] or 255)
 		else
-			YRP.msg("error", "[ConvertToDarkRPJob] color FAIL: " .. tostring(tab.string_color))
+			YRP:msg("error", "[ConvertToDarkRPJob] color FAIL: " .. tostring(tab.string_color))
 			YRPRepairSQLDB(true)
 		end
 	else
@@ -355,7 +355,7 @@ function YRPBuildDarkrpTeams()
 end
 
 YRPBuildDarkrpTeams()
-YRP.AddNetworkString("nws_yrp_Send_DarkRP_Jobs")
+YRP:AddNetworkString("nws_yrp_Send_DarkRP_Jobs")
 local Player = FindMetaTable("Player")
 function Player:DRPSendTeamsToPlayer()
 	self.yrp_darkrp_index = 1
@@ -418,8 +418,8 @@ if IsNotNilAndNotFalse(drp_allgroups) then
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_Send_DarkRP_Categories")
-YRP.AddNetworkString("nws_yrp_Combine_DarkRPTables")
+YRP:AddNetworkString("nws_yrp_Send_DarkRP_Categories")
+YRP:AddNetworkString("nws_yrp_Combine_DarkRPTables")
 function Player:DRPSendCategoriesToPlayer()
 	local count = 0
 	for i, group in pairs(CATEGORIES.jobs) do
@@ -449,7 +449,7 @@ function Player:DRPSendCategoriesToPlayer()
 			end
 		end
 	else
-		YRP.msg("note", "TEAMS not valid")
+		YRP:msg("note", "TEAMS not valid")
 	end
 end
 
@@ -497,7 +497,7 @@ for str, val in pairs(yrp_ply_roles) do
 	if string.find(str, "string_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
-		YRP.AddNetworkString(tab.netstr)
+		YRP:AddNetworkString(tab.netstr)
 		net.Receive(
 			tab.netstr,
 			function(len, ply)
@@ -512,7 +512,7 @@ for str, val in pairs(yrp_ply_roles) do
 				tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 				BroadcastString(tab)
 				if tab.netstr == "nws_yrp_update_role_string_name" then
-					YRP.AddNetworkString("nws_yrp_settings_role_update_name")
+					YRP:AddNetworkString("nws_yrp_settings_role_update_name")
 					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 					if IsNotNilAndNotFalse(puid) then
 						puid = puid[1]
@@ -523,7 +523,7 @@ for str, val in pairs(yrp_ply_roles) do
 						BroadcastString(tab)
 					end
 				elseif tab.netstr == "nws_yrp_update_role_string_color" then
-					YRP.AddNetworkString("nws_yrp_settings_role_update_color")
+					YRP:AddNetworkString("nws_yrp_settings_role_update_color")
 					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 					if IsNotNilAndNotFalse(puid) then
 						puid = puid[1]
@@ -534,7 +534,7 @@ for str, val in pairs(yrp_ply_roles) do
 						BroadcastString(tab)
 					end
 				elseif tab.netstr == "nws_yrp_update_role_string_icon" then
-					YRP.AddNetworkString("nws_yrp_settings_role_update_icon")
+					YRP:AddNetworkString("nws_yrp_settings_role_update_icon")
 					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 					if IsNotNilAndNotFalse(puid) then
 						puid = puid[1]
@@ -550,7 +550,7 @@ for str, val in pairs(yrp_ply_roles) do
 	elseif string.find(str, "int_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
-		YRP.AddNetworkString(tab.netstr)
+		YRP:AddNetworkString(tab.netstr)
 		net.Receive(
 			tab.netstr,
 			function(len, ply)
@@ -580,7 +580,7 @@ for str, val in pairs(yrp_ply_roles) do
 	elseif string.find(str, "float_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
-		YRP.AddNetworkString(tab.netstr)
+		YRP:AddNetworkString(tab.netstr)
 		net.Receive(
 			tab.netstr,
 			function(len, ply)
@@ -608,7 +608,7 @@ for str, val in pairs(yrp_ply_roles) do
 	elseif string.find(str, "bool_", 1, true) then
 		local tab = {}
 		tab.netstr = "nws_yrp_update_role_" .. str
-		YRP.AddNetworkString(tab.netstr)
+		YRP:AddNetworkString(tab.netstr)
 		net.Receive(
 			tab.netstr,
 			function(len, ply)
@@ -759,10 +759,10 @@ function SendRoleList(ply, gro, pre)
 				end
 			end
 		else
-			YRP.msg("note", "headername: " .. tostring(headername))
+			YRP:msg("note", "headername: " .. tostring(headername))
 		end
 	else
-		YRP.msg("error", "SendRoleList( " .. tostring(gro) .. ", " .. tostring(pre) .. " )")
+		YRP:msg("error", "SendRoleList( " .. tostring(gro) .. ", " .. tostring(pre) .. " )")
 	end
 end
 
@@ -796,12 +796,12 @@ function DuplicateRole(ruid, guid)
 				SendRoleList(nil, guid, role.int_prerole)
 			end
 		else
-			YRP.msg("note", "Role [" .. ruid .. "] was deleted.")
+			YRP:msg("note", "Role [" .. ruid .. "] was deleted.")
 		end
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_duplicated_role")
+YRP:AddNetworkString("nws_yrp_duplicated_role")
 net.Receive(
 	"nws_yrp_duplicated_role",
 	function(len, ply)
@@ -812,7 +812,7 @@ net.Receive(
 )
 
 -- Role menu
-YRP.AddNetworkString("nws_yrp_get_grp_roles")
+YRP:AddNetworkString("nws_yrp_get_grp_roles")
 net.Receive(
 	"nws_yrp_get_grp_roles",
 	function(len, ply)
@@ -829,12 +829,12 @@ net.Receive(
 			net.WriteTable(_roles)
 			net.Send(ply)
 		else
-			YRP.msg("note", "Group [" .. _uid .. "] has no roles.")
+			YRP:msg("note", "Group [" .. _uid .. "] has no roles.")
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_rol_prerole")
+YRP:AddNetworkString("nws_yrp_get_rol_prerole")
 net.Receive(
 	"nws_yrp_get_rol_prerole",
 	function(len, ply)
@@ -855,7 +855,7 @@ net.Receive(
 )
 
 -- Role Settings
-YRP.AddNetworkString("nws_yrp_settings_subscribe_rolelist")
+YRP:AddNetworkString("nws_yrp_settings_subscribe_rolelist")
 net.Receive(
 	"nws_yrp_settings_subscribe_rolelist",
 	function(len, ply)
@@ -867,7 +867,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_subscribe_prerolelist")
+YRP:AddNetworkString("nws_yrp_settings_subscribe_prerolelist")
 net.Receive(
 	"nws_yrp_settings_subscribe_prerolelist",
 	function(len, ply)
@@ -883,7 +883,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_add_role")
+YRP:AddNetworkString("nws_yrp_settings_add_role")
 net.Receive(
 	"nws_yrp_settings_add_role",
 	function(len, ply)
@@ -896,7 +896,7 @@ net.Receive(
 			-- Has Prerole
 			has_prerole = true
 			if not IsNotNilAndNotFalse(prerole) then
-				YRP.msg("note", "[settings_add_role] Prerole dont Exists anymore")
+				YRP:msg("note", "[settings_add_role] Prerole dont Exists anymore")
 				SendRoleList(nil, gro, pre)
 
 				return
@@ -940,12 +940,12 @@ net.Receive(
 			--YRP_SQL_UPDATE(DATABASE_NAME, {["int_dn"] = new_role.uniqueID}, "uniqueID = '" .. up.uniqueID .. "'" )
 		end
 
-		YRP.msg("db", "Added new role: " .. new_role.uniqueID)
+		YRP:msg("db", "Added new role: " .. new_role.uniqueID)
 		SendRoleList(nil, gro, pre)
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_role_position_up")
+YRP:AddNetworkString("nws_yrp_settings_role_position_up")
 net.Receive(
 	"nws_yrp_settings_role_position_up",
 	function(len, ply)
@@ -987,7 +987,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_role_position_dn")
+YRP:AddNetworkString("nws_yrp_settings_role_position_dn")
 net.Receive(
 	"nws_yrp_settings_role_position_dn",
 	function(len, ply)
@@ -1029,7 +1029,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_subscribe_role")
+YRP:AddNetworkString("nws_yrp_settings_subscribe_role")
 net.Receive(
 	"nws_yrp_settings_subscribe_role",
 	function(len, ply)
@@ -1062,12 +1062,12 @@ net.Receive(
 			net.WriteTable(hudmasks)
 			net.Send(ply)
 		else
-			YRP.msg("error", "[settings_subscribe_role] " .. tostring(huds) .. " " .. tostring(hudmasks))
+			YRP:msg("error", "[settings_subscribe_role] " .. tostring(huds) .. " " .. tostring(hudmasks))
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_unsubscribe_role")
+YRP:AddNetworkString("nws_yrp_settings_unsubscribe_role")
 net.Receive(
 	"nws_yrp_settings_unsubscribe_role",
 	function(len, ply)
@@ -1077,7 +1077,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_unsubscribe_rolelist")
+YRP:AddNetworkString("nws_yrp_settings_unsubscribe_rolelist")
 net.Receive(
 	"nws_yrp_settings_unsubscribe_rolelist",
 	function(len, ply)
@@ -1088,7 +1088,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_settings_delete_role")
+YRP:AddNetworkString("nws_yrp_settings_delete_role")
 net.Receive(
 	"nws_yrp_settings_delete_role",
 	function(len, ply)
@@ -1100,7 +1100,7 @@ net.Receive(
 			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 			local roledeleted = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
 			if not IsNotNilAndNotFalse(roledeleted) then
-				YRP.msg("note", "Role deleted (uid: " .. tostring(uid) .. " )")
+				YRP:msg("note", "Role deleted (uid: " .. tostring(uid) .. " )")
 			end
 
 			local siblings = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. role.int_groupID .. "'")
@@ -1129,7 +1129,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_getScoreboardGroups")
+YRP:AddNetworkString("nws_yrp_getScoreboardGroups")
 net.Receive(
 	"nws_yrp_getScoreboardGroups",
 	function(len, ply)
@@ -1140,7 +1140,7 @@ net.Receive(
 			net.WriteTable(_tmpGroups)
 			net.Broadcast()
 		else
-			YRP.msg("note", "getScoreboardGroups failed!")
+			YRP:msg("note", "getScoreboardGroups failed!")
 			pFTab(_tmpGroups)
 		end
 	end
@@ -1177,7 +1177,7 @@ function SendCustomFlags(uid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_get_role_customflags")
+YRP:AddNetworkString("nws_yrp_get_role_customflags")
 net.Receive(
 	"nws_yrp_get_role_customflags",
 	function(len, ply)
@@ -1187,7 +1187,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_all_role_customflags")
+YRP:AddNetworkString("nws_yrp_get_all_role_customflags")
 net.Receive(
 	"nws_yrp_get_all_role_customflags",
 	function(len, ply)
@@ -1203,7 +1203,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_add_role_flag")
+YRP:AddNetworkString("nws_yrp_add_role_flag")
 net.Receive(
 	"nws_yrp_add_role_flag",
 	function(len, ply)
@@ -1235,7 +1235,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_rem_role_flag")
+YRP:AddNetworkString("nws_yrp_rem_role_flag")
 net.Receive(
 	"nws_yrp_rem_role_flag",
 	function(len, ply)
@@ -1297,7 +1297,7 @@ function SendPlayermodels(uid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_get_role_playermodels")
+YRP:AddNetworkString("nws_yrp_get_role_playermodels")
 net.Receive(
 	"nws_yrp_get_role_playermodels",
 	function(len, ply)
@@ -1307,7 +1307,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_all_playermodels")
+YRP:AddNetworkString("nws_yrp_get_all_playermodels")
 net.Receive(
 	"nws_yrp_get_all_playermodels",
 	function(len, ply)
@@ -1372,7 +1372,7 @@ function AddPlayermodelToRole(ruid, muid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_add_role_playermodel")
+YRP:AddNetworkString("nws_yrp_add_role_playermodel")
 net.Receive(
 	"nws_yrp_add_role_playermodel",
 	function(len, ply)
@@ -1386,8 +1386,8 @@ net.Receive(
 function YRPAddPlayermodelsToRole(pms, name, min, max, ruid)
 	for i, v in pairs(pms) do
 		if string.find(v, "'", 1, true) then
-			YRP.msg("note", "!!! MODEL HAS > ' < in its path/file -> " .. tostring(v))
-			YRP.msg("note", "!!! CONTACT THE DEVELOPER TO CHANGE THIS")
+			YRP:msg("note", "!!! MODEL HAS > ' < in its path/file -> " .. tostring(v))
+			YRP:msg("note", "!!! CONTACT THE DEVELOPER TO CHANGE THIS")
 
 			return
 		end
@@ -1400,7 +1400,7 @@ function YRPAddPlayermodelsToRole(pms, name, min, max, ruid)
 	AddPlayermodelToRole(ruid, lastentry.uniqueID)
 end
 
-YRP.AddNetworkString("nws_yrp_add_playermodels")
+YRP:AddNetworkString("nws_yrp_add_playermodels")
 net.Receive(
 	"nws_yrp_add_playermodels",
 	function(len, ply)
@@ -1437,7 +1437,7 @@ function RemPlayermodelFromRole(ruid, muid)
 	SendPlayermodels(ruid)
 end
 
-YRP.AddNetworkString("nws_yrp_rem_role_playermodel")
+YRP:AddNetworkString("nws_yrp_rem_role_playermodel")
 net.Receive(
 	"nws_yrp_rem_role_playermodel",
 	function(len, ply)
@@ -1450,7 +1450,7 @@ net.Receive(
 			pms = test[1].string_models
 		end
 
-		YRP.log(ply:RPName() .. " removed playermodels ( " .. pms .. " ) from Role " .. ruid)
+		YRP:log(ply:RPName() .. " removed playermodels ( " .. pms .. " ) from Role " .. ruid)
 		RemPlayermodelFromRole(ruid, muid)
 	end
 )
@@ -1474,11 +1474,11 @@ function SendSweps(uid)
 			end
 		end
 	else
-		YRP.msg("note", "Role not Found")
+		YRP:msg("note", "Role not Found")
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_get_role_sweps")
+YRP:AddNetworkString("nws_yrp_get_role_sweps")
 net.Receive(
 	"nws_yrp_get_role_sweps",
 	function(len, ply)
@@ -1513,11 +1513,11 @@ function AddSwepToRole(ruid, swepcn)
 			SendSweps(ruid)
 		end
 	else
-		YRP.msg("note", "Role not found")
+		YRP:msg("note", "Role not found")
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_add_role_swep")
+YRP:AddNetworkString("nws_yrp_add_role_swep")
 net.Receive(
 	"nws_yrp_add_role_swep",
 	function(len, ply)
@@ -1553,7 +1553,7 @@ function RemSwepFromRole(ruid, swepcn)
 	SendSweps(ruid)
 end
 
-YRP.AddNetworkString("nws_yrp_rem_role_swep")
+YRP:AddNetworkString("nws_yrp_rem_role_swep")
 net.Receive(
 	"nws_yrp_rem_role_swep",
 	function(len, ply)
@@ -1585,7 +1585,7 @@ function SendSwepsOnSpawn(uid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_get_role_sweps_onspawn")
+YRP:AddNetworkString("nws_yrp_get_role_sweps_onspawn")
 net.Receive(
 	"nws_yrp_get_role_sweps_onspawn",
 	function(len, ply)
@@ -1622,7 +1622,7 @@ function AddSwepToRoleOnSpawn(ruid, swepcn)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_add_role_swep_onspawn")
+YRP:AddNetworkString("nws_yrp_add_role_swep_onspawn")
 net.Receive(
 	"nws_yrp_add_role_swep_onspawn",
 	function(len, ply)
@@ -1658,7 +1658,7 @@ function RemSwepFromRoleOnSpawn(ruid, swepcn)
 	SendSwepsOnSpawn(ruid)
 end
 
-YRP.AddNetworkString("nws_yrp_rem_role_swep_onspawn")
+YRP:AddNetworkString("nws_yrp_rem_role_swep_onspawn")
 net.Receive(
 	"nws_yrp_rem_role_swep_onspawn",
 	function(len, ply)
@@ -1689,7 +1689,7 @@ function SendNDSweps(uid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_get_role_ndsweps")
+YRP:AddNetworkString("nws_yrp_get_role_ndsweps")
 net.Receive(
 	"nws_yrp_get_role_ndsweps",
 	function(len, ply)
@@ -1724,7 +1724,7 @@ function AddNDSwepToRole(ruid, ndswepcn)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_add_role_ndswep")
+YRP:AddNetworkString("nws_yrp_add_role_ndswep")
 net.Receive(
 	"nws_yrp_add_role_ndswep",
 	function(len, ply)
@@ -1758,7 +1758,7 @@ function RemNDSwepFromRole(ruid, ndswepcn)
 	SendNDSweps(ruid)
 end
 
-YRP.AddNetworkString("nws_yrp_rem_role_ndswep")
+YRP:AddNetworkString("nws_yrp_rem_role_ndswep")
 net.Receive(
 	"nws_yrp_rem_role_ndswep",
 	function(len, ply)
@@ -1833,7 +1833,7 @@ function CleanUpLicenses(ruid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_get_role_licenses")
+YRP:AddNetworkString("nws_yrp_get_role_licenses")
 net.Receive(
 	"nws_yrp_get_role_licenses",
 	function(len, ply)
@@ -1844,7 +1844,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_all_licenses")
+YRP:AddNetworkString("nws_yrp_get_all_licenses")
 net.Receive(
 	"nws_yrp_get_all_licenses",
 	function(len, ply)
@@ -1885,7 +1885,7 @@ function AddLicenseToRole(ruid, muid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_add_role_license")
+YRP:AddNetworkString("nws_yrp_add_role_license")
 net.Receive(
 	"nws_yrp_add_role_license",
 	function(len, ply)
@@ -1896,7 +1896,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_add_license")
+YRP:AddNetworkString("nws_yrp_add_license")
 net.Receive(
 	"nws_yrp_add_license",
 	function(len, ply)
@@ -1911,7 +1911,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_rem_role_license")
+YRP:AddNetworkString("nws_yrp_rem_role_license")
 net.Receive(
 	"nws_yrp_rem_role_license",
 	function(len, ply)
@@ -1986,7 +1986,7 @@ function CleanUpSpecializations(ruid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_get_role_specializations")
+YRP:AddNetworkString("nws_yrp_get_role_specializations")
 net.Receive(
 	"nws_yrp_get_role_specializations",
 	function(len, ply)
@@ -1997,7 +1997,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_all_specializations")
+YRP:AddNetworkString("nws_yrp_get_all_specializations")
 net.Receive(
 	"nws_yrp_get_all_specializations",
 	function(len, ply)
@@ -2038,7 +2038,7 @@ function AddSpecializationToRole(ruid, muid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_add_role_specialization")
+YRP:AddNetworkString("nws_yrp_add_role_specialization")
 net.Receive(
 	"nws_yrp_add_role_specialization",
 	function(len, ply)
@@ -2049,7 +2049,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_rem_role_specialization")
+YRP:AddNetworkString("nws_yrp_rem_role_specialization")
 net.Receive(
 	"nws_yrp_rem_role_specialization",
 	function(len, ply)
@@ -2060,7 +2060,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_openInteractMenu")
+YRP:AddNetworkString("nws_yrp_openInteractMenu")
 net.Receive(
 	"nws_yrp_openInteractMenu",
 	function(len, ply)
@@ -2111,7 +2111,7 @@ net.Receive(
 								--Only look for 30 preroles
 								tmpCounter = tmpCounter + 1
 								if tmpCounter >= 30 then
-									--YRP.msg( "note", "You have a loop in your preroles!" )
+									--YRP:msg( "note", "You have a loop in your preroles!" )
 									tmpSearch = false
 								end
 							end
@@ -2139,7 +2139,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_isidcardenabled")
+YRP:AddNetworkString("nws_yrp_isidcardenabled")
 net.Receive(
 	"nws_yrp_isidcardenabled",
 	function(len, ply)
@@ -2165,7 +2165,7 @@ function addToWhitelistByPly(SteamID, roleID, groupID, nick, ply, targetSteamID)
 		local status = "Promoted by " .. ply:SteamName()
 		YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. SteamID .. "', " .. YRP_SQL_STR_IN(nick) .. ", " .. groupID .. ", " .. roleID .. ", '" .. dat .. "', " .. YRP_SQL_STR_IN(status) .. ", " .. YRP_SQL_STR_IN(nick) .. "")
 	else
-		YRP.msg("note", "is already in whitelist")
+		YRP:msg("note", "is already in whitelist")
 	end
 end
 
@@ -2177,7 +2177,7 @@ function addToWhitelist(roleID, ply)
 		local name = ply:SteamName()
 		YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, roleID, date, status, name", "'" .. ply:YRPSteamID() .. "', " .. YRP_SQL_STR_IN(ply:RPName()) .. ", " .. roleID .. ", '" .. dat .. "', " .. YRP_SQL_STR_IN(status) .. ", " .. YRP_SQL_STR_IN(name) .. "")
 	else
-		YRP.msg("note", "is already in whitelist")
+		YRP:msg("note", "is already in whitelist")
 	end
 end
 
@@ -2189,7 +2189,7 @@ function addToWhitelistGroup(groupID, ply)
 		local name = ply:SteamName()
 		YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, date, status, name", "'" .. ply:YRPSteamID() .. "', " .. YRP_SQL_STR_IN(ply:RPName()) .. ", " .. groupID .. ", '" .. dat .. "', " .. YRP_SQL_STR_IN(status) .. ", " .. YRP_SQL_STR_IN(name) .. "")
 	else
-		YRP.msg("note", "is already in whitelist")
+		YRP:msg("note", "is already in whitelist")
 	end
 end
 
@@ -2208,7 +2208,7 @@ function YRPGetPlayerByCharID(uid)
 	return NULL
 end
 
-YRP.AddNetworkString("nws_yrp_promotePlayer")
+YRP:AddNetworkString("nws_yrp_promotePlayer")
 net.Receive(
 	"nws_yrp_promotePlayer",
 	function(len, ply)
@@ -2243,20 +2243,20 @@ net.Receive(
 					YRPSetRole("nws_yrp_promotePlayer", target, tmpTableTargetPromoteRole.uniqueID, true)
 				end
 
-				YRP.msg("note", ply:Nick() .. " promoted " .. chatab.rpname .. " to " .. tmpTableTargetPromoteRole.string_name)
+				YRP:msg("note", ply:Nick() .. " promoted " .. chatab.rpname .. " to " .. tmpTableTargetPromoteRole.string_name)
 				YRPSendGroupMember(ply, chatab.uniqueID)
 			else
-				YRP.msg("note", ply:Nick() .. " tried to promote to same role")
+				YRP:msg("note", ply:Nick() .. " tried to promote to same role")
 			end
 		elseif tonumber(tmpTableInstructorRole.bool_instructor) == 0 then
-			YRP.msg("error", "Player: " .. ply:Nick() .. " ( " .. ply:YRPSteamID() .. " ) tried to use promote function! He is not an instructor!")
+			YRP:msg("error", "Player: " .. ply:Nick() .. " ( " .. ply:YRPSteamID() .. " ) tried to use promote function! He is not an instructor!")
 		else
-			YRP.msg("error", "ELSE promote: " .. tostring(tmpTableInstructorRole.bool_instructor))
+			YRP:msg("error", "ELSE promote: " .. tostring(tmpTableInstructorRole.bool_instructor))
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_demotePlayer")
+YRP:AddNetworkString("nws_yrp_demotePlayer")
 net.Receive(
 	"nws_yrp_demotePlayer",
 	function(len, ply)
@@ -2290,12 +2290,12 @@ net.Receive(
 				YRPSetRole("nws_yrp_demotePlayer", target, tmpTableTargetDemoteRole.uniqueID)
 			end
 
-			YRP.msg("note", ply:Nick() .. " demoted " .. chatab.rpname .. " to " .. tmpTableTargetDemoteRole.string_name)
+			YRP:msg("note", ply:Nick() .. " demoted " .. chatab.rpname .. " to " .. tmpTableTargetDemoteRole.string_name)
 			YRPSendGroupMember(ply, chatab.uniqueID)
 		elseif tonumber(tmpTableInstructorRole.bool_instructor) == 0 then
-			YRP.msg("note", "Player: " .. ply:Nick() .. " ( " .. ply:YRPSteamID() .. " ) tried to use demote function! He is not an instructor!")
+			YRP:msg("note", "Player: " .. ply:Nick() .. " ( " .. ply:YRPSteamID() .. " ) tried to use demote function! He is not an instructor!")
 		else
-			YRP.msg("error", "ELSE demote: " .. tostring(tmpTableInstructorRole.bool_instructor))
+			YRP:msg("error", "ELSE demote: " .. tostring(tmpTableInstructorRole.bool_instructor))
 		end
 	end
 )
@@ -2325,9 +2325,9 @@ function YRPGetFirstRankUID(ruid)
 	return resultuid
 end
 
-YRP.AddNetworkString("nws_yrp_invitetogroup")
-YRP.AddNetworkString("nws_yrp_invite_ply")
-YRP.AddNetworkString("nws_yrp_invite_accept")
+YRP:AddNetworkString("nws_yrp_invitetogroup")
+YRP:AddNetworkString("nws_yrp_invite_ply")
+YRP:AddNetworkString("nws_yrp_invite_accept")
 net.Receive(
 	"nws_yrp_invitetogroup",
 	function(len, ply)
@@ -2348,20 +2348,20 @@ net.Receive(
 						net.WriteTable(role)
 						net.WriteTable(group)
 						net.Send(target)
-						YRP.msg("note", "[InviteToGroup] " .. ply:Nick() .. " invited " .. target:Nick() .. " to " .. ply:GetGroupName())
+						YRP:msg("note", "[InviteToGroup] " .. ply:Nick() .. " invited " .. target:Nick() .. " to " .. ply:GetGroupName())
 					else
-						YRP.msg("note", "[InviteToGroup] GROUP DOESN'T EXISTS ANYMORE")
+						YRP:msg("note", "[InviteToGroup] GROUP DOESN'T EXISTS ANYMORE")
 					end
 				else
-					YRP.msg("note", "[InviteToGroup] ROLE DOESN'T EXISTS ANYMORE")
+					YRP:msg("note", "[InviteToGroup] ROLE DOESN'T EXISTS ANYMORE")
 				end
 			elseif tonumber(tmpTableInstructorRole.bool_instructor) == 0 then
-				YRP.msg("note", "[InviteToGroup] Player: " .. ply:Nick() .. " ( " .. ply:YRPSteamID() .. " ) tried to use invite function! He is not an instructor!")
+				YRP:msg("note", "[InviteToGroup] Player: " .. ply:Nick() .. " ( " .. ply:YRPSteamID() .. " ) tried to use invite function! He is not an instructor!")
 			else
-				YRP.msg("error", "[InviteToGroup] ELSE invite: " .. tostring(tmpTableInstructorRole.bool_instructor))
+				YRP:msg("error", "[InviteToGroup] ELSE invite: " .. tostring(tmpTableInstructorRole.bool_instructor))
 			end
 		else
-			YRP.msg("note", "[InviteToGroup] TARGET NOT FOUND")
+			YRP:msg("note", "[InviteToGroup] TARGET NOT FOUND")
 		end
 	end
 )
@@ -2376,10 +2376,10 @@ net.Receive(
 			addToWhitelist(tonumber(role.uniqueID), ply)
 			addToWhitelistGroup(tonumber(role.int_groupID), ply)
 			YRPSetRole("nws_yrp_invite_accept", ply, tonumber(role.uniqueID))
-			YRP.msg("note", "[yrp_invite_accept] Added to whitelist and setrole for " .. ply:YRPName())
+			YRP:msg("note", "[yrp_invite_accept] Added to whitelist and setrole for " .. ply:YRPName())
 			YRPUpdateGroupMemberLists()
 		else
-			YRP.msg("note", "[yrp_invite_accept] ROLE DOESN'T EXISTS ANYMORE")
+			YRP:msg("note", "[yrp_invite_accept] ROLE DOESN'T EXISTS ANYMORE")
 		end
 	end
 )
@@ -2388,7 +2388,7 @@ net.Receive(
 function CheckIfRoleExists(ply, ruid)
 	local result = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. ruid .. "'")
 	if result == nil then
-		YRP.msg("note", "character role not exists anymore! Change back to default role!")
+		YRP:msg("note", "character role not exists anymore! Change back to default role!")
 		YRP_SQL_UPDATE(
 			"yrp_characters",
 			{
@@ -2410,7 +2410,7 @@ function GetRoleTable(rid)
 	return result
 end
 
-YRP.AddNetworkString("nws_yrp_getallroles")
+YRP:AddNetworkString("nws_yrp_getallroles")
 net.Receive(
 	"nws_yrp_getallroles",
 	function(len, ply)
@@ -2432,7 +2432,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_next_ranks")
+YRP:AddNetworkString("nws_yrp_get_next_ranks")
 net.Receive(
 	"nws_yrp_get_next_ranks",
 	function(len, ply)
@@ -2450,7 +2450,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_hasnext_ranks")
+YRP:AddNetworkString("nws_yrp_hasnext_ranks")
 net.Receive(
 	"nws_yrp_hasnext_ranks",
 	function(len, ply)
@@ -2468,7 +2468,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_want_role")
+YRP:AddNetworkString("nws_yrp_want_role")
 net.Receive(
 	"nws_yrp_want_role",
 	function(len, ply)
@@ -2513,7 +2513,7 @@ function YRPSendRoleSpecs(ply, ruid)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_get_role_specs")
+YRP:AddNetworkString("nws_yrp_get_role_specs")
 net.Receive(
 	"nws_yrp_get_role_specs",
 	function(len, ply)
@@ -2523,7 +2523,7 @@ net.Receive(
 )
 
 -- For Custom Charsystems
-YRP.AddNetworkString("getallroles")
+YRP:AddNetworkString("getallroles")
 net.Receive(
 	"getallroles",
 	function(len, ply)
@@ -2539,7 +2539,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("getallroles_whitelisted")
+YRP:AddNetworkString("getallroles_whitelisted")
 net.Receive(
 	"getallroles_whitelisted",
 	function(len, ply)
@@ -2557,7 +2557,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("getcharacters")
+YRP:AddNetworkString("getcharacters")
 net.Receive(
 	"getcharacters",
 	function(len, ply)

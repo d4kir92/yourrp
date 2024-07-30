@@ -43,7 +43,7 @@ function SWEP:Reload()
 end
 
 if SERVER then
-	YRP.AddNetworkString("nws_yrp_zone_options")
+	YRP:AddNetworkString("nws_yrp_zone_options")
 end
 
 local key_delay = CurTime()
@@ -56,7 +56,7 @@ function SWEP:Think()
 			keydown = true
 			local inzone, _, _, zoneuid = IsInsideZone(ply)
 			if inzone then
-				YRP.msg("db", "Option Zone")
+				YRP:msg("db", "Option Zone")
 				local stab = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. zoneuid .. "'")
 				if IsNotNilAndNotFalse(stab) then
 					stab = stab[1]
@@ -77,15 +77,15 @@ if CLIENT then
 		function()
 			if YRPIsNoMenuOpen() then
 				local stab = net.ReadTable()
-				local w = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
+				local w = YRPCreateD("YFrame", nil, YRP:ctr(800), YRP:ctr(800), 0, 0)
 				w:Center()
 				w:MakePopup()
-				w:SetHeaderHeight(YRP.ctr(100))
+				w:SetHeaderHeight(YRP:ctr(100))
 				w:SetTitle("LID_zone")
 				-- name time
-				w.nametext = YRPCreateD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(0))
+				w.nametext = YRPCreateD("YLabel", w:GetContent(), YRP:ctr(400), YRP:ctr(50), YRP:ctr(10), YRP:ctr(0))
 				w.nametext:SetText("LID_name")
-				w.name = YRPCreateD("DTextEntry", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(50))
+				w.name = YRPCreateD("DTextEntry", w:GetContent(), YRP:ctr(400), YRP:ctr(50), YRP:ctr(10), YRP:ctr(50))
 				w.name:SetText(stab.name)
 				function w.name:OnChange()
 					local name = self:GetText()
@@ -96,9 +96,9 @@ if CLIENT then
 				end
 
 				-- color
-				w.nametext = YRPCreateD("YLabel", w:GetContent(), YRP.ctr(400), YRP.ctr(50), YRP.ctr(10), YRP.ctr(150))
+				w.nametext = YRPCreateD("YLabel", w:GetContent(), YRP:ctr(400), YRP:ctr(50), YRP:ctr(10), YRP:ctr(150))
 				w.nametext:SetText("LID_color")
-				w.name = YRPCreateD("DColorMixer", w:GetContent(), YRP.ctr(400), YRP.ctr(400), YRP.ctr(10), YRP.ctr(200))
+				w.name = YRPCreateD("DColorMixer", w:GetContent(), YRP:ctr(400), YRP:ctr(400), YRP:ctr(10), YRP:ctr(200))
 				w.name:SetPalette(true)
 				w.name:SetAlphaBar(false)
 				w.name:SetWangs(true)
@@ -181,7 +181,7 @@ function SWEP:SecondaryAttack()
 			for id, e in pairs(inbox) do
 				if e == ply then
 					YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB(), "uniqueID = '" .. v.uniqueID .. "'")
-					YRP.msg("db", "Removed Zone")
+					YRP:msg("db", "Removed Zone")
 				end
 			end
 		end

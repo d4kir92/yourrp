@@ -14,7 +14,7 @@ function AddCustomFlag(name, typ)
 		local _found = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. name .. "' AND string_type = '" .. typ .. "'")
 		if not _found then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_type", "'" .. name .. "', '" .. typ .. "'")
-			YRP.msg("note", "Custom Flag " .. name .. " ( " .. typ .. " ) added.")
+			YRP:msg("note", "Custom Flag " .. name .. " ( " .. typ .. " ) added.")
 		end
 	end
 end

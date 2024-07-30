@@ -33,7 +33,7 @@ function YRPSetTSLastOnline(steamId)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_chatdelay")
+YRP:AddNetworkString("nws_yrp_chatdelay")
 net.Receive(
 	"nws_yrp_chatdelay",
 	function(len, ply)
@@ -50,13 +50,13 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_setting_players")
-YRP.AddNetworkString("YRPOpenCharacterMenu")
-YRP.AddNetworkString("nws_yrp_setPlayerValues")
-YRP.AddNetworkString("nws_yrp_setRoleValues")
-YRP.AddNetworkString("nws_yrp_getPlyList")
-YRP.AddNetworkString("nws_yrp_getCharakterList")
-YRP.AddNetworkString("nws_yrp_getrpdescription")
+YRP:AddNetworkString("nws_yrp_setting_players")
+YRP:AddNetworkString("YRPOpenCharacterMenu")
+YRP:AddNetworkString("nws_yrp_setPlayerValues")
+YRP:AddNetworkString("nws_yrp_setRoleValues")
+YRP:AddNetworkString("nws_yrp_getPlyList")
+YRP:AddNetworkString("nws_yrp_getCharakterList")
+YRP:AddNetworkString("nws_yrp_getrpdescription")
 net.Receive(
 	"nws_yrp_setting_players",
 	function(len, ply)
@@ -69,7 +69,7 @@ net.Receive(
 
 g_db_reseted = false
 function YRPSaveClients(str)
-	--YRP.msg( "db", string.upper( "[Saving all clients] [" .. str .. "]" ) )
+	--YRP:msg( "db", string.upper( "[Saving all clients] [" .. str .. "]" ) )
 	if YRP_SQL_TABLE_EXISTS(DATABASE_NAME) then
 		if not g_db_reseted then
 			for k, ply in pairs(player.GetAll()) do
@@ -137,10 +137,10 @@ function YRPSaveClients(str)
 				end
 
 				_text = _text .. "]"
-				--YRP.msg( "db", string.upper(_text) )
+				--YRP:msg( "db", string.upper(_text) )
 			end
 		else
-			YRP.msg("db", "no saving, because db reset")
+			YRP:msg("db", "no saving, because db reset")
 		end
 	end
 
@@ -227,16 +227,16 @@ function YRPPlayerGive(ply, cname, bNoAmmo)
 end
 
 function YRPSetRole(from, ply, rid, force, pmid, bgs)
-	YRP.msg("note", "[YRPSetRole] " .. from)
+	YRP:msg("note", "[YRPSetRole] " .. from)
 	if rid == nil then
-		YRP.msg("note", "[YRPSetRole] No roleid")
+		YRP:msg("note", "[YRPSetRole] No roleid")
 
 		return false
 	end
 
 	rid = tonumber(rid)
 	if rid == nil then
-		YRP.msg("note", "[YRPSetRole] rid == nil")
+		YRP:msg("note", "[YRPSetRole] rid == nil")
 
 		return false
 	end
@@ -279,7 +279,7 @@ function YRPSetRole(from, ply, rid, force, pmid, bgs)
 					ga = ga + 1
 					table.insert(gad, swep)
 				else
-					YRP.msg("note", "SLOTS OF ROLE FULL! ( " .. tostring(rolTab.string_name) .. " )")
+					YRP:msg("note", "SLOTS OF ROLE FULL! ( " .. tostring(rolTab.string_name) .. " )")
 				end
 			end
 		end
@@ -455,10 +455,10 @@ function YRPSetRoleData(ply, rid)
 
 					ply:SetYRPString("groupUniqueID", gid)
 				else
-					YRP.msg("note", "_role = " .. tostring(gid))
+					YRP:msg("note", "_role = " .. tostring(gid))
 				end
 			else
-				YRP.msg("note", "_role failed")
+				YRP:msg("note", "_role failed")
 			end
 
 			YRPUpdateRoleUses(_old_uid)
@@ -512,7 +512,7 @@ function YRPSetRoleValues(ply, pmid)
 		if YRPWORKED(rolTab, "YRPSetRoleValues rolTab") and YRPWORKED(ChaTab, "YRPSetRoleValues ChaTab") then
 			if ChaTab.storage ~= nil then
 				local _storage = string.Explode(",", ChaTab.storage)
-				YRP.msg("gm", "[YRPSetRoleValues] " .. ply:YRPName() .. " give permanent Licenses")
+				YRP:msg("gm", "[YRPSetRoleValues] " .. ply:YRPName() .. " give permanent Licenses")
 				for i, lic in pairs(_storage) do
 					local _lic = YRP_SQL_SELECT("yrp_shop_items", "*", "type = 'licenses' AND uniqueID = '" .. lic .. "'")
 					if _lic ~= nil and _lic ~= false then
@@ -540,7 +540,7 @@ function YRPSetRoleValues(ply, pmid)
 				end
 			end
 		else
-			YRP.msg("note", "[SET ROLE VALUES] No role or/and no character -> Suicide")
+			YRP:msg("note", "[SET ROLE VALUES] No role or/and no character -> Suicide")
 			ply:KillSilent()
 		end
 
@@ -663,7 +663,7 @@ function YRPSetRoleValues(ply, pmid)
 				ply:SetTeam(rolTab.uniqueID) -- disables damage against npcs
 			end
 		else
-			YRP.msg("note", "[SET ROLE VALUES] No role selected -> Suicide")
+			YRP:msg("note", "[SET ROLE VALUES] No role selected -> Suicide")
 			ply:KillSilent()
 		end
 
@@ -711,7 +711,7 @@ function YRPSetRoleValues(ply, pmid)
 				ply:SetAmmo(ammo + amount, name)
 			end
 		else
-			YRP.msg("note", "[SET ROLE VALUES] No group selected -> Suicide")
+			YRP:msg("note", "[SET ROLE VALUES] No group selected -> Suicide")
 			ply:KillSilent()
 		end
 
@@ -729,7 +729,7 @@ function set_ply_pos(ply, map, pos, ang)
 				local tmpAng = string.Split(ang, " ")
 				ply:SetEyeAngles(Angle(tonumber(tmpAng[1]), tonumber(tmpAng[2]), tonumber(tmpAng[3])))
 			else
-				YRP.msg("db", "[" .. ply:SteamName() .. "] is new on this map.")
+				YRP:msg("db", "[" .. ply:SteamName() .. "] is new on this map.")
 			end
 		end
 	)
@@ -737,7 +737,7 @@ end
 
 function YRPCLIENTOpenCharacterSelection(ply)
 	if IsValid(ply) and ply:IsPlayer() and ply:IsFullyAuthenticated() then
-		YRP.msg("db", "[" .. ply:SteamName() .. "] -> open character selection.")
+		YRP:msg("db", "[" .. ply:SteamName() .. "] -> open character selection.")
 		net.Start("YRPOpenCharacterMenu")
 		net.Send(ply)
 	else
@@ -751,7 +751,7 @@ function YRPCLIENTOpenCharacterSelection(ply)
 end
 
 function YRPAddPlayer(ply, steamid)
-	YRP.msg("db", "[" .. ply:SteamName() .. "] -> Add player to database.")
+	YRP:msg("db", "[" .. ply:SteamName() .. "] -> Add player to database.")
 	steamid = steamid or ply:YRPSteamID()
 	ply:KillSilent()
 	if steamid ~= nil and steamid ~= false then
@@ -765,41 +765,41 @@ function YRPAddPlayer(ply, steamid)
 		vals = vals .. "'" .. _ostime .. "'"
 		local _insert = YRP_SQL_INSERT_INTO("yrp_players", cols, vals)
 		if _insert == nil then
-			YRP.msg("db", "[" .. ply:SteamName() .. "] -> Successfully added player to database.")
+			YRP:msg("db", "[" .. ply:SteamName() .. "] -> Successfully added player to database.")
 			ply:SetServerKeybinds()
 		else
-			YRP.msg("error", "YRPAddPlayer failed! _insert: " .. tostring(_insert))
+			YRP:msg("error", "YRPAddPlayer failed! _insert: " .. tostring(_insert))
 		end
 	end
 end
 
 function YRPCheckPlayer(ply, steamid)
-	--YRP.msg( "db", "[" .. ply:SteamName() .. "] -> Checking if player is in database." )
+	--YRP:msg( "db", "[" .. ply:SteamName() .. "] -> Checking if player is in database." )
 	steamid = steamid or ply:YRPSteamID()
 	if steamid ~= nil and steamid ~= false or game.SinglePlayer() then
 		local _result = YRP_SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamid .. "'")
 		if _result == nil then
 			YRPAddPlayer(ply, steamid)
 		elseif IsNotNilAndNotFalse(_result) then
-			--YRP.msg( "db", "[" .. ply:SteamName() .. "] is in database." )
+			--YRP:msg( "db", "[" .. ply:SteamName() .. "] is in database." )
 			if #_result > 1 then
-				YRP.msg("db", "[" .. ply:SteamName() .. "] is more then 1 time in database ( " .. #_result .. " )")
+				YRP:msg("db", "[" .. ply:SteamName() .. "] is more then 1 time in database ( " .. #_result .. " )")
 				for k, v in pairs(_result) do
 					if k > 1 then
-						YRP.msg("db", "[" .. ply:SteamName() .. "] delete other entry.")
+						YRP:msg("db", "[" .. ply:SteamName() .. "] delete other entry.")
 						YRP_SQL_DELETE_FROM("yrp_players", "uniqueID = " .. v.uniqueID)
 					end
 				end
 			end
 		else
-			YRP.msg("note", "[YRPCheckPlayer] FAILED ( " .. tostring(_result) .. " )")
+			YRP:msg("note", "[YRPCheckPlayer] FAILED ( " .. tostring(_result) .. " )")
 		end
 	else
-		YRP.msg("error", "SteamID FAILED [" .. tostring(steamid) .. "]")
+		YRP:msg("error", "SteamID FAILED [" .. tostring(steamid) .. "]")
 		timer.Simple(
 			1,
 			function()
-				YRP.msg("db", "[" .. ply:SteamName() .. "] -> Retry check.")
+				YRP:msg("db", "[" .. ply:SteamName() .. "] -> Retry check.")
 				YRPCheckPlayer(ply, steamid)
 			end
 		)
@@ -807,7 +807,7 @@ function YRPCheckPlayer(ply, steamid)
 end
 
 function YRPCheckClient(ply, steamid)
-	--YRP.msg( "db", "[" .. ply:SteamName() .. "] -> Check client ( " .. ply:YRPSteamID() .. " )" )
+	--YRP:msg( "db", "[" .. ply:SteamName() .. "] -> Check client ( " .. ply:YRPSteamID() .. " )" )
 	YRPCheckPlayer(ply, steamid)
 	YRPSaveClients("YRPCheckClient")
 end
@@ -823,12 +823,12 @@ net.Receive(
 			net.WriteTable(_character_table)
 			net.Send(ply)
 		else
-			YRP.msg("note", "[getCharakterList] Character Table from " .. ply:YRPName() .. " is broken.")
+			YRP:msg("note", "[getCharakterList] Character Table from " .. ply:YRPName() .. " is broken.")
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_give_getGroTab")
+YRP:AddNetworkString("nws_yrp_give_getGroTab")
 net.Receive(
 	"nws_yrp_give_getGroTab",
 	function(len, ply)
@@ -838,12 +838,12 @@ net.Receive(
 			net.WriteTable(_tmpGroupList)
 			net.Send(ply)
 		else
-			YRP.msg("note", "give_getGroTab: _tmpGroupList failed!")
+			YRP:msg("note", "give_getGroTab: _tmpGroupList failed!")
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_give_getRolTab")
+YRP:AddNetworkString("nws_yrp_give_getRolTab")
 net.Receive(
 	"nws_yrp_give_getRolTab",
 	function(len, ply)
@@ -854,7 +854,7 @@ net.Receive(
 			net.WriteTable(_tmpRolTab)
 			net.Send(ply)
 		else
-			YRP.msg("note", "give_getRolTab: _tmpRolTab failed!")
+			YRP:msg("note", "give_getRolTab: _tmpRolTab failed!")
 		end
 	end
 )
@@ -872,12 +872,12 @@ net.Receive(
 			net.WriteTable(_tmpRoleList)
 			net.Send(ply)
 		else
-			YRP.msg("note", "getPlyList: _tmpChaList and _tmpRoleList and _tmpGroupList failed!")
+			YRP:msg("note", "getPlyList: _tmpChaList and _tmpRoleList and _tmpGroupList failed!")
 		end
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_give_role")
+YRP:AddNetworkString("nws_yrp_give_role")
 net.Receive(
 	"nws_yrp_give_role",
 	function(len, ply)
@@ -889,7 +889,7 @@ net.Receive(
 				YRPRemRolVals(_ply)
 				YRPRemGroVals(_ply)
 				YRPSetRole("nws_yrp_give_role", _ply, uniqueIDRole, true)
-				YRP.msg("note", tostring(_ply:Nick()) .. " is now the role: " .. tostring(uniqueIDRole))
+				YRP:msg("note", tostring(_ply:Nick()) .. " is now the role: " .. tostring(uniqueIDRole))
 
 				return true
 			end
@@ -897,7 +897,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_whitelist_infoplayer")
+YRP:AddNetworkString("nws_yrp_whitelist_infoplayer")
 function YRPWhitelistInfoPlayer(ply, msg)
 	net.Start("nws_yrp_whitelist_infoplayer")
 	net.WriteString(msg)
@@ -913,7 +913,7 @@ function YRPIsWhitelisted(ply, id)
 		if YRPWORKED(_plyAllowedAll, "_plyAllowedAll", true) then
 			_plyAllowedAll = _plyAllowedAll[1]
 			if _plyAllowedAll.roleID == "-1" and _plyAllowedAll.groupID == "-1" then
-				YRP.msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is ALL whitelisted")
+				YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is ALL whitelisted")
 
 				return true
 			end
@@ -925,11 +925,11 @@ function YRPIsWhitelisted(ply, id)
 			local _plyAllowedGroup = YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND groupID = " .. _group.uniqueID)
 			if tonumber(_group.bool_whitelist) == 1 then
 				if IsNotNilAndNotFalse(_plyAllowedGroup) then
-					YRP.msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is group whitelisted.")
+					YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is group whitelisted.")
 
 					return true
 				else
-					YRP.msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is not group whitelisted.")
+					YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is not group whitelisted.")
 
 					return false
 				end
@@ -939,17 +939,17 @@ function YRPIsWhitelisted(ply, id)
 		if tonumber(_role.bool_whitelist) == 1 or tonumber(_role.int_prerole) > 0 then
 			local _plyAllowedRole = YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND roleID = " .. id)
 			if ply:HasAccess("YRPIsWhitelisted", true) then
-				YRP.msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " has access.")
+				YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " has access.")
 
 				return true
 			else
 				if IsNotNilAndNotFalse(_plyAllowedRole) then
-					YRP.msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is role whitelisted.")
+					YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is role whitelisted.")
 
 					return true
 				else
 					YRPWhitelistInfoPlayer(ply, "LID_youarenotwhitelisted")
-					YRP.msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is not role whitelisted.")
+					YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is not role whitelisted.")
 
 					return false
 				end
@@ -960,12 +960,12 @@ function YRPIsWhitelisted(ply, id)
 	end
 
 	YRPWhitelistInfoPlayer(ply, "ROLE DOESN'T EXISTS ANYMORE")
-	YRP.msg("gm", "[YRPIsWhitelisted]" .. "ROLE DOESN'T EXISTS ANYMORE")
+	YRP:msg("gm", "[YRPIsWhitelisted]" .. "ROLE DOESN'T EXISTS ANYMORE")
 
 	return false
 end
 
-YRP.AddNetworkString("nws_yrp_voteNo")
+YRP:AddNetworkString("nws_yrp_voteNo")
 net.Receive(
 	"nws_yrp_voteNo",
 	function(len, ply)
@@ -973,7 +973,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_voteYes")
+YRP:AddNetworkString("nws_yrp_voteYes")
 net.Receive(
 	"nws_yrp_voteYes",
 	function(len, ply)
@@ -1021,7 +1021,7 @@ function startVote(ply, tabl)
 					if _yes > _no and (_yes + _no) > 1 then
 						YRPSetRole("startVote", votePly, table[1].uniqueID)
 					else
-						YRP.msg("gm", "VOTE: not enough yes")
+						YRP:msg("gm", "VOTE: not enough yes")
 					end
 
 					timer.Remove("voteRunning")
@@ -1031,13 +1031,13 @@ function startVote(ply, tabl)
 			end
 		)
 	else
-		YRP.msg("gm", "a vote is currently running")
+		YRP:msg("gm", "a vote is currently running")
 	end
 end
 
 function canGetRole(ply, roleID, want)
 	if roleID == nil then
-		YRP.msg("note", "[canGetRole] roleID is nil")
+		YRP:msg("note", "[canGetRole] roleID is nil")
 
 		return
 	end
@@ -1051,7 +1051,7 @@ function canGetRole(ply, roleID, want)
 			if tonumber(tmpTableRole.bool_adminonly) == 1 then
 				if not ply:HasAccess("canGetRole") then
 					local text = "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin."
-					YRP.msg("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin.")
+					YRP:msg("gm", "[canGetRole] " .. "ADMIN-ONLY Role: " .. ply:YRPName() .. " is not yourrp - admin.")
 					YRPNotiToPly(text, ply)
 
 					return false
@@ -1062,7 +1062,7 @@ function canGetRole(ply, roleID, want)
 
 			-- Locked
 			if tonumber(tmpTableRole.bool_locked) == 1 then
-				YRP.msg("note", "[canGetRole] " .. "locked")
+				YRP:msg("note", "[canGetRole] " .. "locked")
 
 				return false
 			end
@@ -1071,7 +1071,7 @@ function canGetRole(ply, roleID, want)
 			if IsNotNilAndNotFalse(chatab) then
 				if tonumber(chatab.int_level) < tonumber(tmpTableRole.int_requireslevel) then
 					local text = ply:YRPName() .. " is not high enough (is: " .. tonumber(chatab.int_level) .. " need: " .. tonumber(tmpTableRole.int_requireslevel) .. " )!"
-					YRP.msg("gm", "[canGetRole] " .. text)
+					YRP:msg("gm", "[canGetRole] " .. text)
 					YRPNotiToPly(text, ply)
 
 					return false
@@ -1079,7 +1079,7 @@ function canGetRole(ply, roleID, want)
 			else
 				if 1 < tonumber(tmpTableRole.int_requireslevel) then
 					local text = ply:YRPName() .. " is not high enough (is: " .. 1 .. " need: " .. tonumber(tmpTableRole.int_requireslevel) .. " )!"
-					YRP.msg("gm", "[canGetRole] " .. text)
+					YRP:msg("gm", "[canGetRole] " .. text)
 					YRPNotiToPly(text, ply)
 
 					return false
@@ -1088,7 +1088,7 @@ function canGetRole(ply, roleID, want)
 
 			if tonumber(ply:GetYRPInt("ts_role_" .. ply:GetRoleUID(), 0)) > CurTime() and want then
 				local text = ply:YRPName() .. " is on cooldown for this role!"
-				YRP.msg("gm", "[canGetRole] " .. text)
+				YRP:msg("gm", "[canGetRole] " .. text)
 				YRPNotiToPly(text, ply)
 
 				return false
@@ -1097,7 +1097,7 @@ function canGetRole(ply, roleID, want)
 			-- Whitelist + Prerole
 			if (tonumber(tmpTableRole.bool_whitelist) == 1 or tonumber(tmpTableRole.int_prerole) > 0) and not YRPIsWhitelisted(ply, roleID) then
 				local text = ply:YRPName() .. " is not whitelisted."
-				YRP.msg("gm", "[canGetRole] " .. text)
+				YRP:msg("gm", "[canGetRole] " .. text)
 				--YRPNotiToPly(text, ply)
 
 				return false
@@ -1109,7 +1109,7 @@ function canGetRole(ply, roleID, want)
 			local found = table.HasValue(ugs, ug) or table.HasValue(ugs, "ALL")
 			if not found then
 				local text = ply:YRPName() .. " is not allowed to use this role (UserGroup)."
-				YRP.msg("gm", "[canGetRole] " .. text)
+				YRP:msg("gm", "[canGetRole] " .. text)
 				YRPNotiToPly(text, ply)
 
 				return false
@@ -1118,14 +1118,14 @@ function canGetRole(ply, roleID, want)
 			return true
 		else
 			local text = ply:YRPName() .. " maxamount reached."
-			YRP.msg("gm", "[canGetRole] " .. text)
+			YRP:msg("gm", "[canGetRole] " .. text)
 			YRPNotiToPly(text, ply)
 
 			return false
 		end
 	end
 
-	YRP.msg("note", "[canGetRole] " .. "FAILED: " .. tostring(roleID))
+	YRP:msg("note", "[canGetRole] " .. "FAILED: " .. tostring(roleID))
 
 	return false
 end
@@ -1172,19 +1172,19 @@ function canVoteRole(ply, roleID)
 		if uses < tonumber(player.GetCount()) * (tonumber(tmpTableRole[1].int_amountpercentage) / 100) and uses < maxamount or maxamount <= 0 and tonumber(tmpTableRole[1].bool_voteable) == 1 then return true end
 	end
 
-	YRP.msg("note", "[canVoteRole] " .. "not voteable, max reached")
+	YRP:msg("note", "[canVoteRole] " .. "not voteable, max reached")
 
 	return false
 end
 
-YRP.AddNetworkString("nws_yrp_want_role_char")
+YRP:AddNetworkString("nws_yrp_want_role_char")
 net.Receive(
 	"nws_yrp_want_role_char",
 	function(len, ply)
 		local uniqueIDRole = net.ReadInt(16)
 		local pmid = net.ReadInt(16)
 		local bgs = net.ReadTable()
-		YRP.msg("note", ply:YRPName() .. " wants the role " .. uniqueIDRole)
+		YRP:msg("note", ply:YRPName() .. " wants the role " .. uniqueIDRole)
 		if canGetRole(ply, uniqueIDRole, true) then
 			ply:SetYRPBool("switchrole", true)
 			--Remove Sweps from old role

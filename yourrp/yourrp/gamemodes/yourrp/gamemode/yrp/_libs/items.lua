@@ -8,7 +8,7 @@ ICON_SIZE = 100
 --[[ SHARED ]]
 --
 function PrintStorage(tab)
-	YRP.msg("db", tostring(tab))
+	YRP:msg("db", tostring(tab))
 	for y = 1, #tab do
 		local _row = ""
 		for x = 1, INV_MAXW do
@@ -20,10 +20,10 @@ function PrintStorage(tab)
 			_row = _row .. tostring(_item) .. "\t"
 		end
 
-		YRP.msg("db", _row)
+		YRP:msg("db", _row)
 	end
 
-	YRP.msg("db", "________________________________")
+	YRP:msg("db", "________________________________")
 end
 
 function distance(num1, num2)
@@ -92,7 +92,7 @@ function GetEntityItemSize(ent)
 			return _result
 		end
 	else
-		YRP.msg("error", "GetEntityItemSize failed => ent not alive")
+		YRP:msg("error", "GetEntityItemSize failed => ent not alive")
 	end
 
 	return false
@@ -300,12 +300,12 @@ if CLIENT then
 			item_handler[tonumber(uid)].pnl = pnl
 			pnl.uid = uid
 			if YRPPanelAlive(item_handler[tonumber(uid)].pnl, "AddStorage 2") then
-				item_handler[tonumber(uid)].pnl:SetSize(YRP.ctr(ICON_SIZE * w), YRP.ctr(ICON_SIZE * h))
+				item_handler[tonumber(uid)].pnl:SetSize(YRP:ctr(ICON_SIZE * w), YRP:ctr(ICON_SIZE * h))
 				for y = 1, h do
 					item_handler[tonumber(uid)][y] = {}
 					for x = 1, w do
 						item_handler[tonumber(uid)][y][x] = {}
-						item_handler[tonumber(uid)][y][x].slot = YRPCreateD("DPanel", item_handler[tonumber(uid)].pnl, YRP.ctr(ICON_SIZE), YRP.ctr(ICON_SIZE), YRP.ctr((x - 1) * ICON_SIZE), YRP.ctr((y - 1) * ICON_SIZE))
+						item_handler[tonumber(uid)][y][x].slot = YRPCreateD("DPanel", item_handler[tonumber(uid)].pnl, YRP:ctr(ICON_SIZE), YRP:ctr(ICON_SIZE), YRP:ctr((x - 1) * ICON_SIZE), YRP:ctr((y - 1) * ICON_SIZE))
 						local _edit_slot = item_handler[tonumber(uid)][y][x].slot
 						item_handler[tonumber(uid)][y][x].value = ""
 						_edit_slot.storageID = uid
@@ -346,7 +346,7 @@ if CLIENT then
 							end
 
 							draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-							drawRBBR(0, 0, 0, pw, ph, Color(0, 0, 0, 255), YRP.ctr(4))
+							drawRBBR(0, 0, 0, pw, ph, Color(0, 0, 0, 255), YRP:ctr(4))
 						end
 					end
 				end
@@ -383,21 +383,21 @@ if CLIENT then
 		if YRPPanelAlive(_storage, "AddItemToStorage") then
 			local _parent = item_handler[tonumber(tab.storageID)].pnl:GetParent()
 			local _x, _y = item_handler[tonumber(tab.storageID)].pnl:GetPos()
-			local _bg = YRPCreateD("DPanel", _parent, YRP.ctr(ICON_SIZE * tab.sizew), YRP.ctr(ICON_SIZE * tab.sizeh), _x + YRP.ctr((tab.posx - 1) * ICON_SIZE), _y + YRP.ctr((tab.posy - 1) * ICON_SIZE))
+			local _bg = YRPCreateD("DPanel", _parent, YRP:ctr(ICON_SIZE * tab.sizew), YRP:ctr(ICON_SIZE * tab.sizeh), _x + YRP:ctr((tab.posx - 1) * ICON_SIZE), _y + YRP:ctr((tab.posy - 1) * ICON_SIZE))
 			function _bg:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 			end
 
 			function _bg:PaintOver(pw, ph)
 				local _br = 2
-				draw.RoundedBox(0, 0, 0, pw, YRP.ctr(_br), Color(0, 0, 255, 255))
-				draw.RoundedBox(0, 0, ph - YRP.ctr(_br), pw, YRP.ctr(_br), Color(0, 0, 255, 255))
-				draw.RoundedBox(0, 0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br * 2), Color(0, 0, 255, 255))
-				draw.RoundedBox(0, pw - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br * 2), Color(0, 0, 255, 255))
-				surfaceText(tab.PrintName, "Y_18_500", YRP.ctr(20), YRP.ctr(10), Color(255, 255, 255, 255), 0, 0)
+				draw.RoundedBox(0, 0, 0, pw, YRP:ctr(_br), Color(0, 0, 255, 255))
+				draw.RoundedBox(0, 0, ph - YRP:ctr(_br), pw, YRP:ctr(_br), Color(0, 0, 255, 255))
+				draw.RoundedBox(0, 0, YRP:ctr(_br), YRP:ctr(_br), ph - YRP:ctr(_br * 2), Color(0, 0, 255, 255))
+				draw.RoundedBox(0, pw - YRP:ctr(_br), YRP:ctr(_br), YRP:ctr(_br), ph - YRP:ctr(_br * 2), Color(0, 0, 255, 255))
+				surfaceText(tab.PrintName, "Y_18_500", YRP:ctr(20), YRP:ctr(10), Color(255, 255, 255, 255), 0, 0)
 			end
 
-			local _item = YRPCreateD("DModelPanel", _bg, YRP.ctr(ICON_SIZE * tab.sizew), YRP.ctr(ICON_SIZE * tab.sizeh), 0, 0)
+			local _item = YRPCreateD("DModelPanel", _bg, YRP:ctr(ICON_SIZE * tab.sizew), YRP:ctr(ICON_SIZE * tab.sizeh), 0, 0)
 			_item:InvalidateLayout(true)
 			_item:SetModel(tab.WorldModel)
 			SetCamPosition(_item, tab)
@@ -405,7 +405,7 @@ if CLIENT then
 				return
 			end
 
-			local _item2 = YRPCreateD("DPanel", _bg, YRP.ctr(ICON_SIZE * tab.sizew), YRP.ctr(ICON_SIZE * tab.sizeh), 0, 0)
+			local _item2 = YRPCreateD("DPanel", _bg, YRP:ctr(ICON_SIZE * tab.sizew), YRP:ctr(ICON_SIZE * tab.sizeh), 0, 0)
 			if item_handler[tonumber(tab.storageID)][tonumber(tab.posy)] ~= nil and item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)] ~= nil then
 				item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].item = _item2
 				item_handler[tonumber(tab.storageID)][tonumber(tab.posy)][tonumber(tab.posx)].value = tonumber(tab.uniqueID)
@@ -417,10 +417,10 @@ if CLIENT then
 				--draw.RoundedBox( 0, 0, 0, pw, ph, Color( 0, 0, 0, 240) )
 				function _i:PaintOver(pw, ph)
 					local _br = 2
-					draw.RoundedBox(0, 0, 0, pw, YRP.ctr(_br), Color(0, 0, 255, 255))
-					draw.RoundedBox(0, 0, ph - YRP.ctr(_br), pw, YRP.ctr(_br), Color(0, 0, 255, 255))
-					draw.RoundedBox(0, 0, YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br * 2), Color(0, 0, 255, 255))
-					draw.RoundedBox(0, pw - YRP.ctr(_br), YRP.ctr(_br), YRP.ctr(_br), ph - YRP.ctr(_br * 2), Color(0, 0, 255, 255))
+					draw.RoundedBox(0, 0, 0, pw, YRP:ctr(_br), Color(0, 0, 255, 255))
+					draw.RoundedBox(0, 0, ph - YRP:ctr(_br), pw, YRP:ctr(_br), Color(0, 0, 255, 255))
+					draw.RoundedBox(0, 0, YRP:ctr(_br), YRP:ctr(_br), ph - YRP:ctr(_br * 2), Color(0, 0, 255, 255))
+					draw.RoundedBox(0, pw - YRP:ctr(_br), YRP:ctr(_br), YRP:ctr(_br), ph - YRP:ctr(_br * 2), Color(0, 0, 255, 255))
 				end
 
 				_i:Droppable("slot")

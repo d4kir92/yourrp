@@ -1051,7 +1051,7 @@ function HudLoadoutAll()
 end
 
 HudLoadoutAll()
-YRP.AddNetworkString("nws_yrp_update_hud_x")
+YRP:AddNetworkString("nws_yrp_update_hud_x")
 net.Receive(
 	"nws_yrp_update_hud_x",
 	function(len, ply)
@@ -1068,7 +1068,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_hud_y")
+YRP:AddNetworkString("nws_yrp_update_hud_y")
 net.Receive(
 	"nws_yrp_update_hud_y",
 	function(len, ply)
@@ -1085,7 +1085,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_hud_w")
+YRP:AddNetworkString("nws_yrp_update_hud_w")
 net.Receive(
 	"nws_yrp_update_hud_w",
 	function(len, ply)
@@ -1104,7 +1104,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_hud_h")
+YRP:AddNetworkString("nws_yrp_update_hud_h")
 net.Receive(
 	"nws_yrp_update_hud_h",
 	function(len, ply)
@@ -1123,7 +1123,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_hud_element_settings")
+YRP:AddNetworkString("nws_yrp_get_hud_element_settings")
 net.Receive(
 	"nws_yrp_get_hud_element_settings",
 	function(len, ply)
@@ -1140,7 +1140,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_hud_bool")
+YRP:AddNetworkString("nws_yrp_update_hud_bool")
 net.Receive(
 	"nws_yrp_update_hud_bool",
 	function(len, ply)
@@ -1158,7 +1158,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_hud_text")
+YRP:AddNetworkString("nws_yrp_update_hud_text")
 net.Receive(
 	"nws_yrp_update_hud_text",
 	function(len, ply)
@@ -1175,7 +1175,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_hud_text_position")
+YRP:AddNetworkString("nws_yrp_update_hud_text_position")
 net.Receive(
 	"nws_yrp_update_hud_text_position",
 	function(len, ply)
@@ -1206,7 +1206,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_hud_ts")
+YRP:AddNetworkString("nws_yrp_update_hud_ts")
 net.Receive(
 	"nws_yrp_update_hud_ts",
 	function(len, ply)
@@ -1225,7 +1225,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_update_hud_color")
+YRP:AddNetworkString("nws_yrp_update_hud_color")
 net.Receive(
 	"nws_yrp_update_hud_color",
 	function(len, ply)
@@ -1243,11 +1243,11 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_reset_hud_settings")
+YRP:AddNetworkString("nws_yrp_reset_hud_settings")
 net.Receive(
 	"nws_yrp_reset_hud_settings",
 	function(len, ply)
-		YRP.msg("db", "Reset Hud Settings by " .. ply:YRPName())
+		YRP:msg("db", "Reset Hud Settings by " .. ply:YRPName())
 		DefaultHUDSettings(true)
 		YRPDesignLoadout("reset_hud_settings")
 	end

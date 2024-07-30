@@ -8,7 +8,7 @@ function YRPWorkshopDownload()
 	if YRPWDLOADED == false then
 		YRPWDLOADED = true
 		YRPHR()
-		YRP.msg("gm", "Loading Resources (Workshop-Downloader)")
+		YRP:msg("gm", "Loading Resources (Workshop-Downloader)")
 		YRPSP()
 		-- YourRP Content
 		resource.AddWorkshop("1189643820")
@@ -31,18 +31,18 @@ function YRPWorkshopDownload()
 		end
 
 		header = header .. " NAME"
-		YRP.msg("gm", header)
+		YRP:msg("gm", header)
 		local i = 0
 		local d = 0
 		for k, ws in pairs(_wsitems) do
 			i = i + 1
 			if ws.mounted and ws.downloaded then
-				YRP.msg("gm", "+[" .. string.format("%0" .. form .. "d", k) .. "] [" .. tostring(ws.title) .. "]")
+				YRP:msg("gm", "+[" .. string.format("%0" .. form .. "d", k) .. "] [" .. tostring(ws.title) .. "]")
 				resource.AddWorkshop(tostring(ws.wsid))
 				YRPLOADEDGMAS[tonumber(ws.wsid)] = true
 				d = d + 1
 			else
-				YRP.msg("gm", ">>> Addon [" .. ws.title .. "] not mounted or not downloaded <<<")
+				YRP:msg("gm", ">>> Addon [" .. ws.title .. "] not mounted or not downloaded <<<")
 			end
 		end
 
@@ -60,9 +60,9 @@ function YRPWorkshopDownload()
 			end
 		end]]
 		YRPSP()
-		YRP.msg("gm", "=> " .. tostring(d) .. "/" .. tostring(i) .. " Workshop files that will be send to Clients")
+		YRP:msg("gm", "=> " .. tostring(d) .. "/" .. tostring(i) .. " Workshop files that will be send to Clients")
 		YRPSP()
-		YRP.msg("gm", "Loaded Resources (Workshop-Downloader)")
+		YRP:msg("gm", "Loaded Resources (Workshop-Downloader)")
 		YRPHR()
 	end
 end

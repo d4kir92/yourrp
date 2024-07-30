@@ -36,7 +36,7 @@ function YRPInterfaceValue(element, art)
 	end
 
 	local text = "Element: " .. element .. " ART: " .. art .. " not found."
-	YRP.msg("error", text)
+	YRP:msg("error", text)
 
 	return text
 end

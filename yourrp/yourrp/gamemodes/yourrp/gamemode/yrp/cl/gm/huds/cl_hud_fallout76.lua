@@ -302,7 +302,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["north"].font = "Y_14_500"
 			FO76[tab.element]["north"].color = FOColor()
 			FO76[tab.element]["north"].brcolor = Color(0, 0, 0, 255)
-			FO76[tab.element]["north"].text = YRP.trans("LID_north_short")
+			FO76[tab.element]["north"].text = YRP:trans("LID_north_short")
 			FO76[tab.element]["south"].w = h / 8
 			FO76[tab.element]["south"].h = h
 			FO76[tab.element]["south"].x = x + w / 2
@@ -312,7 +312,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["south"].font = "Y_14_500"
 			FO76[tab.element]["south"].color = FOColor()
 			FO76[tab.element]["south"].brcolor = Color(0, 0, 0, 255)
-			FO76[tab.element]["south"].text = YRP.trans("LID_south_short")
+			FO76[tab.element]["south"].text = YRP:trans("LID_south_short")
 			FO76[tab.element]["east"].w = h / 8
 			FO76[tab.element]["east"].h = h
 			FO76[tab.element]["east"].x = x + w / 2
@@ -322,7 +322,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["east"].font = "Y_14_500"
 			FO76[tab.element]["east"].color = FOColor()
 			FO76[tab.element]["east"].brcolor = Color(0, 0, 0, 255)
-			FO76[tab.element]["east"].text = YRP.trans("LID_east_short")
+			FO76[tab.element]["east"].text = YRP:trans("LID_east_short")
 			FO76[tab.element]["west"].w = h / 8
 			FO76[tab.element]["west"].h = h
 			FO76[tab.element]["west"].x = x + w / 2
@@ -332,7 +332,7 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["west"].font = "Y_14_500"
 			FO76[tab.element]["west"].color = FOColor()
 			FO76[tab.element]["west"].brcolor = Color(0, 0, 0, 255)
-			FO76[tab.element]["west"].text = YRP.trans("LID_west_short")
+			FO76[tab.element]["west"].text = YRP:trans("LID_west_short")
 		else
 			YRPHudBox(FO76[tab.element]["BG"])
 			YRPHudBox(FO76[tab.element]["Bar"])
@@ -344,8 +344,8 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["north"].text = "N"
 			local hr_n = table.Copy(FO76[tab.element]["north"])
 			hr_n.y = hr_n.y - hr_n.h * 0.35
-			hr_n.x = hr_n.x - YRP.ctr(4)
-			hr_n.w = YRP.ctr(8)
+			hr_n.x = hr_n.x - YRP:ctr(4)
+			hr_n.w = YRP:ctr(8)
 			hr_n.h = hr_n.h * 0.3
 			YRPHudBox(hr_n)
 			YRPHudText(FO76[tab.element]["north"])
@@ -354,8 +354,8 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["south"].text = "S"
 			local hr_s = table.Copy(FO76[tab.element]["south"])
 			hr_s.y = hr_s.y - hr_s.h * 0.35
-			hr_s.x = hr_s.x - YRP.ctr(4)
-			hr_s.w = YRP.ctr(8)
+			hr_s.x = hr_s.x - YRP:ctr(4)
+			hr_s.w = YRP:ctr(8)
 			hr_s.h = hr_s.h * 0.3
 			YRPHudBox(hr_s)
 			YRPHudText(FO76[tab.element]["south"])
@@ -364,8 +364,8 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["east"].text = "E"
 			local hr_e = table.Copy(FO76[tab.element]["east"])
 			hr_e.y = hr_e.y - hr_e.h * 0.35
-			hr_e.x = hr_e.x - YRP.ctr(4)
-			hr_e.w = YRP.ctr(8)
+			hr_e.x = hr_e.x - YRP:ctr(4)
+			hr_e.w = YRP:ctr(8)
 			hr_e.h = hr_e.h * 0.3
 			YRPHudBox(hr_e)
 			YRPHudText(FO76[tab.element]["east"])
@@ -374,8 +374,8 @@ function HUDFO76Compass(tab)
 			FO76[tab.element]["west"].text = "W"
 			local hr_w = table.Copy(FO76[tab.element]["west"])
 			hr_w.y = hr_w.y - hr_w.h * 0.35
-			hr_w.x = hr_w.x - YRP.ctr(4)
-			hr_w.w = YRP.ctr(8)
+			hr_w.x = hr_w.x - YRP:ctr(4)
+			hr_w.w = YRP:ctr(8)
 			hr_w.h = hr_w.h * 0.3
 			YRPHudBox(hr_w)
 			YRPHudText(FO76[tab.element]["west"])
@@ -404,50 +404,50 @@ function HUD_FO76()
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and not YRPIsScoreboardVisible() and GetGlobalYRPBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Fallout 76" then
 		local HP = {}
 		HP.element = "HP"
-		HP.text = YRP.trans("LID_hp")
+		HP.text = YRP:trans("LID_hp")
 		HP.cur = lply:Health()
 		HP.max = lply:GetMaxHealth()
 		FO76Element(HP)
 		local AR = {}
 		AR.element = "AR"
-		AR.text = YRP.trans("LID_ar")
+		AR.text = YRP:trans("LID_ar")
 		AR.cur = lply:Armor()
 		AR.max = lply:GetMaxArmor()
 		FO76Element(AR)
 		local ST = {}
 		ST.element = "ST"
-		ST.text = YRP.trans("LID_st")
+		ST.text = YRP:trans("LID_st")
 		ST.cur = lply:Stamina()
 		ST.max = lply:GetMaxStamina()
 		FO76Element(ST)
 		local HU = {}
 		HU.element = "HU"
-		HU.text = YRP.trans("LID_hu")
+		HU.text = YRP:trans("LID_hu")
 		HU.cur = lply:Hunger()
 		HU.max = lply:GetMaxHunger()
 		FO76Element(HU)
 		local TH = {}
 		TH.element = "TH"
-		TH.text = YRP.trans("LID_th")
+		TH.text = YRP:trans("LID_th")
 		TH.cur = lply:Hunger()
 		TH.max = lply:GetMaxHunger()
 		FO76Element(TH)
 		local RA = {}
 		RA.element = "RA"
-		RA.text = YRP.trans("LID_ra")
+		RA.text = YRP:trans("LID_ra")
 		RA.cur = lply:Radiation()
 		RA.max = lply:GetMaxRadiation()
 		FO76Element(RA)
 		local AB = {}
 		AB.element = "AB"
-		AB.text = YRP.trans("LID_ab")
+		AB.text = YRP:trans("LID_ab")
 		AB.cur = lply:Ability()
 		AB.max = lply:GetMaxAbility()
 		FO76Element(AB)
 		local XP = {}
 		if IsLevelSystemEnabled() then
 			XP.element = "XP"
-			XP.text = YRP.trans("LID_xp")
+			XP.text = YRP:trans("LID_xp")
 			XP.cur = lply:XP()
 			XP.max = lply:GetMaxXP()
 			XP.centertext = lply:Level()
@@ -517,7 +517,7 @@ function HUD_FO76()
 
 		local NE = {}
 		NE.element = "NE"
-		NE.text = YRP.trans("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. " )"
+		NE.text = YRP:trans("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. " )"
 		NE.tcolor = pingcolor
 		FO76Name(NE)
 		local PE = {}
@@ -548,7 +548,7 @@ function HUD_FO76()
 			end
 		end
 
-		PE.text = YRP.trans("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. " )"
+		PE.text = YRP:trans("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. " )"
 		PE.tcolor = fpscolor
 		FO76Name(PE)
 		local MO = {}
@@ -571,7 +571,7 @@ function HUD_FO76()
 		if batterypower <= 100 then
 			local BA = {}
 			BA.element = "BA"
-			BA.text = YRP.trans("LID_ba")
+			BA.text = YRP:trans("LID_ba")
 			BA.cur = batterypower
 			BA.max = 100
 			FO76Element(BA)

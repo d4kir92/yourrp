@@ -21,7 +21,7 @@ function ENT:Think()
 	if not IsValid(phys) and lastTS < os.time() then
 		lastTS = os.time() + delay
 		local msg = "[CLOTHING] Model has no Physic Object, cant be used for Clothing"
-		YRP.msg("note", msg)
+		YRP:msg("note", msg)
 		if SERVER then
 			PrintMessage(HUD_PRINTCENTER, msg)
 		end
@@ -32,7 +32,7 @@ function ENT:Think()
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_openAM")
+YRP:AddNetworkString("nws_yrp_openAM")
 function ENT:Use(activator, caller)
 	if not activator:GetYRPBool("clicked", false) then
 		activator:SetYRPBool("clicked", true)

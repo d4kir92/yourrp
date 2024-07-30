@@ -18,7 +18,6 @@ SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "none"
 SWEP.Secondary.Ammo = "none"
 SWEP.HoldType = "melee"
-
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
 end
@@ -33,23 +32,20 @@ local swingsound = Sound("Weapon_Stunstick.Single")
 local hitsound = Sound("Weapon_Stunstick.Melee_Hit")
 SWEP.delay = 0
 SWEP.cooldown = 0.5
-
 function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()
 	if not ply:IsValid() then return false end
 	if CurTime() < self.delay then return end
 	self.delay = CurTime() + self.cooldown
 	local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 64, ply)
-
 	if tr.Hit and CLIENT then
 		self:SendWeaponAnim(ACT_VM_HITCENTER)
 		ply:SetAnimation(PLAYER_ATTACK1)
 		ply:EmitSound(hitsound)
-
 		if tr.Entity:IsPlayer() then
 			if CLIENT then
 				chat.AddText("--- --- --- --- --- --- --- --- ---")
-				chat.AddText(YRP.trans("LID_weapons") .. " ( " .. tr.Entity:RPName() .. " )" .. ":")
+				chat.AddText(YRP:trans("LID_weapons") .. " ( " .. tr.Entity:RPName() .. " )" .. ":")
 			end
 
 			for i, w in pairs(tr.Entity:GetWeapons()) do
@@ -80,10 +76,9 @@ function SWEP:SecondaryAttack()
 	self:SendWeaponAnim(ACT_VM_HITCENTER)
 	ply:SetAnimation(PLAYER_ATTACK1)
 	ply:EmitSound(hitsound)
-
 	if CLIENT then
 		chat.AddText("--- --- --- --- --- --- --- --- ---")
-		chat.AddText(YRP.trans("LID_weapons") .. " ( " .. ply:RPName() .. " )" .. ":")
+		chat.AddText(YRP:trans("LID_weapons") .. " ( " .. ply:RPName() .. " )" .. ":")
 	end
 
 	for i, w in pairs(ply:GetWeapons()) do

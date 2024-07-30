@@ -10,14 +10,14 @@ YRP_SQL_ADD_COLUMN(DATABASE_NAME, "groupID", "INTEGER DEFAULT -1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "roleID", "INTEGER DEFAULT -1")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "status", "TEXT DEFAULT ''")
 YRP_SQL_ADD_COLUMN(DATABASE_NAME, "date", "TEXT DEFAULT '0000-00-00 00-00-00'")
-YRP.AddNetworkString("nws_yrp_getRoleWhitelist")
-YRP.AddNetworkString("nws_yrp_getRoleWhitelist_line")
-YRP.AddNetworkString("nws_yrp_whitelistPlayer")
-YRP.AddNetworkString("nws_yrp_whitelistPlayerGroup")
-YRP.AddNetworkString("nws_yrp_whitelistPlayerAll")
-YRP.AddNetworkString("nws_yrp_whitelistPlayerRemove")
-YRP.AddNetworkString("nws_yrp_InfoBox")
-YRP.AddNetworkString("nws_yrp_getGroupsWhitelist")
+YRP:AddNetworkString("nws_yrp_getRoleWhitelist")
+YRP:AddNetworkString("nws_yrp_getRoleWhitelist_line")
+YRP:AddNetworkString("nws_yrp_whitelistPlayer")
+YRP:AddNetworkString("nws_yrp_whitelistPlayerGroup")
+YRP:AddNetworkString("nws_yrp_whitelistPlayerAll")
+YRP:AddNetworkString("nws_yrp_whitelistPlayerRemove")
+YRP:AddNetworkString("nws_yrp_InfoBox")
+YRP:AddNetworkString("nws_yrp_getGroupsWhitelist")
 net.Receive(
 	"nws_yrp_getGroupsWhitelist",
 	function(len, ply)
@@ -31,7 +31,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_getRolesWhitelist")
+YRP:AddNetworkString("nws_yrp_getRolesWhitelist")
 net.Receive(
 	"nws_yrp_getRolesWhitelist",
 	function(len, ply)
@@ -128,7 +128,7 @@ net.Receive(
 			YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', " .. YRP_SQL_STR_IN(_nick) .. ", " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', " .. YRP_SQL_STR_IN(status) .. ", " .. YRP_SQL_STR_IN(name) .. "")
 			YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. target:SteamID() .. "', 'Role: " .. DBRole.string_name .. "'")
 		else
-			YRP.msg("note", "whitelistPlayer FAILED! CALL DEVS")
+			YRP:msg("note", "whitelistPlayer FAILED! CALL DEVS")
 		end
 
 		sendRoleWhitelist(ply)
@@ -211,6 +211,6 @@ function WhitelistToRole(ply, rid)
 		YRP_SQL_INSERT_INTO("yrp_role_whitelist", "SteamID, nick, groupID, roleID, date, status, name", "'" .. _SteamID .. "', " .. YRP_SQL_STR_IN(_nick) .. ", " .. _groupID .. ", " .. roleID .. ", '" .. dat .. "', " .. YRP_SQL_STR_IN(status) .. ", " .. YRP_SQL_STR_IN(name) .. "")
 		YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_whitelist', '" .. ply:SteamID() .. "', '" .. target:SteamID() .. "', 'Role: " .. DBRole.string_name .. "'")
 	else
-		YRP.msg("note", "WhitelistToRole FAILED! CALL DEVS")
+		YRP:msg("note", "WhitelistToRole FAILED! CALL DEVS")
 	end
 end

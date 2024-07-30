@@ -10,14 +10,14 @@ net.Receive(
 		if result == "worked" then
 			CreateRolePreviewContent()
 		else
-			local popup = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(120 + 20 + 60 + 20 + 20 + 100), 0, 0)
+			local popup = YRPCreateD("YFrame", nil, YRP:ctr(800), YRP:ctr(120 + 20 + 60 + 20 + 20 + 100), 0, 0)
 			popup:Center()
 			popup:MakePopup()
-			popup:SetTitle(YRP.trans(result))
-			local ok = YRPCreateD("YLabel", popup:GetContent(), YRP.ctr(760), YRP.ctr(120), popup:GetContent():GetWide() / 2 - YRP.ctr(760 / 2), popup:GetContent():GetTall() - YRP.ctr(60 + 20 + 120))
-			ok:SetText(YRP.trans(result))
-			local ok2 = YRPCreateD("YButton", popup:GetContent(), YRP.ctr(400), YRP.ctr(60), popup:GetContent():GetWide() / 2 - YRP.ctr(400 / 2), popup:GetContent():GetTall() - YRP.ctr(60))
-			ok2:SetText(YRP.trans("LID_ok"))
+			popup:SetTitle(YRP:trans(result))
+			local ok = YRPCreateD("YLabel", popup:GetContent(), YRP:ctr(760), YRP:ctr(120), popup:GetContent():GetWide() / 2 - YRP:ctr(760 / 2), popup:GetContent():GetTall() - YRP:ctr(60 + 20 + 120))
+			ok:SetText(YRP:trans(result))
+			local ok2 = YRPCreateD("YButton", popup:GetContent(), YRP:ctr(400), YRP:ctr(60), popup:GetContent():GetWide() / 2 - YRP:ctr(400 / 2), popup:GetContent():GetTall() - YRP:ctr(60))
+			ok2:SetText(YRP:trans("LID_ok"))
 			function ok2:DoClick()
 				popup:Close()
 			end
@@ -34,8 +34,8 @@ function PANEL:SetIcon(ico)
 end
 
 function PANEL:Paint(pw, ph)
-	draw.RoundedBoxEx(YRP.ctr(14), 0, YRP.ctr(10), YRP.ctr(20), ph - YRP.ctr(10), self._ccol, false, false, true, false) --self._ccol)
-	draw.RoundedBoxEx(YRP.ctr(14), YRP.ctr(10), YRP.ctr(10), pw - 1 * YRP.ctr(10), ph - 1 * YRP.ctr(10), YRPInterfaceValue("YFrame", "NC"), false, false, false, true) --self._ccol)
+	draw.RoundedBoxEx(YRP:ctr(14), 0, YRP:ctr(10), YRP:ctr(20), ph - YRP:ctr(10), self._ccol, false, false, true, false) --self._ccol)
+	draw.RoundedBoxEx(YRP:ctr(14), YRP:ctr(10), YRP:ctr(10), pw - 1 * YRP:ctr(10), ph - 1 * YRP:ctr(10), YRPInterfaceValue("YFrame", "NC"), false, false, false, true) --self._ccol)
 end
 
 function PANEL:SetList(lis)
@@ -47,8 +47,8 @@ function PANEL:SetS(sw, sh)
 	self._h = sh
 	self:SetSize(sw, sh)
 	self.btn:SetSize(sw, sh)
-	self.con:SetSize(sw - 2 * YRP.ctr(20) - self.con.VBar:GetWide(), sh - 2 * YRP.ctr(20))
-	self.con:SetPos(YRP.ctr(20), YRP.ctr(20))
+	self.con:SetSize(sw - 2 * YRP:ctr(20) - self.con.VBar:GetWide(), sh - 2 * YRP:ctr(20))
+	self.con:SetPos(YRP:ctr(20), YRP:ctr(20))
 end
 
 function PANEL:SetHeaderColor(col)
@@ -80,7 +80,7 @@ function PANEL:Init()
 	-- CON
 	self.con = YRPCreateD("DPanelList", self, 10, 10, 0, 10)
 	self.con:EnableVerticalScrollbar()
-	self.con:SetSpacing(YRP.ctr(20))
+	self.con:SetSpacing(YRP:ctr(20))
 	function self.con:Paint(pw, ph)
 	end
 
@@ -106,20 +106,20 @@ function PANEL:Init()
 	self.btn = YRPCreateD("DButton", self, 10, 10, 0, 0)
 	self.btn:SetText("")
 	function self.btn:Paint(pw, ph)
-		draw.RoundedBoxEx(YRP.ctr(10), 0, 0, YRP.ctr(20), ph, base._hcol, true, false, false, false)
-		draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, YRPInterfaceValue("YFrame", "PC"), false, true, false, false)
+		draw.RoundedBoxEx(YRP:ctr(10), 0, 0, YRP:ctr(20), ph, base._hcol, true, false, false, false)
+		draw.RoundedBoxEx(YRP:ctr(10), YRP:ctr(10), 0, pw - YRP:ctr(10), ph, YRPInterfaceValue("YFrame", "PC"), false, true, false, false)
 		local x = 0
 		if not strEmpty(base._icon) then
-			x = ph + YRP.ctr(10)
+			x = ph + YRP:ctr(10)
 			if self.ico ~= base._icon then
 				self.ico = base._icon
-				base.icon:SetHTML(YRPGetHTMLImage(self.ico, ph - 2 * YRP.ctr(20), ph - 2 * YRP.ctr(20)))
+				base.icon:SetHTML(YRPGetHTMLImage(self.ico, ph - 2 * YRP:ctr(20), ph - 2 * YRP:ctr(20)))
 			end
 		else
 			x = ph / 2
 		end
 
-		draw.SimpleText(base._htext, "Y_" .. math.Clamp(math.Round(ph - 2 * YRP.ctr(20), 0), 4, 100) .. "_500", x, ph / 2, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(base._htext, "Y_" .. math.Clamp(math.Round(ph - 2 * YRP:ctr(20), 0), 4, 100) .. "_500", x, ph / 2, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	net.Receive(
@@ -129,12 +129,12 @@ function PANEL:Init()
 			local nex = NEXTS[tonumber(rols[1].int_prerole)]
 			local rlis = nex.rlis
 			if not YRPPanelAlive(rlis, "rlis") then
-				YRP.msg("note", "rlis invalid")
+				YRP:msg("note", "rlis invalid")
 
 				return
 			end
 
-			local lis = YRPCreateD("DPanelList", nil, YRP.ctr(w + 80 + 30), YRP.ctr(h), 0, 0)
+			local lis = YRPCreateD("DPanelList", nil, YRP:ctr(w + 80 + 30), YRP:ctr(h), 0, 0)
 			lis:EnableVerticalScrollbar()
 			rlis:AddPanel(lis)
 			local sBar = lis.VBar
@@ -176,28 +176,28 @@ function PANEL:Init()
 		rol.int_uses = tonumber(rol.int_uses)
 		rol.int_maxamount = tonumber(rol.int_maxamount)
 		rol.int_prerole = tonumber(rol.int_prerole)
-		local r = YRPCreateD("DPanel", nil, YRP.ctr(sw) + YRP.ctr(80), YRP.ctr(sh), 0, 0)
+		local r = YRPCreateD("DPanel", nil, YRP:ctr(sw) + YRP:ctr(80), YRP:ctr(sh), 0, 0)
 		function r:Paint(pw, ph)
 		end
 
 		--draw.RoundedBox(0, 0, 0, pw, ph, Color( 0, 255, 0 ) )
-		local bg = YRPCreateD("DPanel", r, YRP.ctr(sw), YRP.ctr(sh), 0, 0)
+		local bg = YRPCreateD("DPanel", r, YRP:ctr(sw), YRP:ctr(sh), 0, 0)
 		function bg:Paint(pw, ph)
-			draw.RoundedBoxEx(YRP.ctr(10), 0, 0, YRP.ctr(20), ph, StringToColor(rol.string_color), true, false, true, false)
-			draw.RoundedBoxEx(YRP.ctr(10), YRP.ctr(10), 0, pw - YRP.ctr(10), ph, YRPInterfaceValue("YFrame", "PC"), false, true, false, true)
-			local diameter = ph - 2 * YRP.ctr(10)
-			draw.RoundedBox(diameter / 2, YRP.ctr(18), YRP.ctr(8), diameter + YRP.ctr(4), diameter + YRP.ctr(4), StringToColor(rol.string_color))
-			draw.RoundedBox(diameter / 2, YRP.ctr(20), YRP.ctr(10), diameter, diameter, YRPInterfaceValue("YFrame", "PC"))
-			draw.SimpleText(rol.string_name, "Y_26_500", ph + YRP.ctr(20), ph / 3, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.RoundedBoxEx(YRP:ctr(10), 0, 0, YRP:ctr(20), ph, StringToColor(rol.string_color), true, false, true, false)
+			draw.RoundedBoxEx(YRP:ctr(10), YRP:ctr(10), 0, pw - YRP:ctr(10), ph, YRPInterfaceValue("YFrame", "PC"), false, true, false, true)
+			local diameter = ph - 2 * YRP:ctr(10)
+			draw.RoundedBox(diameter / 2, YRP:ctr(18), YRP:ctr(8), diameter + YRP:ctr(4), diameter + YRP:ctr(4), StringToColor(rol.string_color))
+			draw.RoundedBox(diameter / 2, YRP:ctr(20), YRP:ctr(10), diameter, diameter, YRPInterfaceValue("YFrame", "PC"))
+			draw.SimpleText(rol.string_name, "Y_26_500", ph + YRP:ctr(20), ph / 3, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			if tonumber(rol.int_salary) > 0 then
-				draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP.ctr(20), ph / 3 * 2, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP:ctr(20), ph / 3 * 2, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			if rol.int_maxamount > 0 then
-				local radius = ph / 2 - 1 * YRP.ctr(10)
+				local radius = ph / 2 - 1 * YRP:ctr(10)
 				local x = pw - ph / 2
 				local y = ph / 2
-				radius = ph / 2 - YRP.ctr(10)
+				radius = ph / 2 - YRP:ctr(10)
 				if self.circ == nil then
 					local ang = rol.int_uses / rol.int_maxamount * 360
 					self.circbg = circleBorder(x, y, radius, 32, 0, 360)
@@ -209,7 +209,7 @@ function PANEL:Init()
 						}
 					)
 
-					self.circ2bg = circleBorder(x, y, radius - YRP.ctr(10), 32, 0, 360)
+					self.circ2bg = circleBorder(x, y, radius - YRP:ctr(10), 32, 0, 360)
 					table.insert(
 						self.circ2bg,
 						{
@@ -227,7 +227,7 @@ function PANEL:Init()
 						}
 					)
 
-					self.circ2 = circleBorder(x, y, radius - YRP.ctr(10), 32, 0, ang)
+					self.circ2 = circleBorder(x, y, radius - YRP:ctr(10), 32, 0, ang)
 					table.insert(
 						self.circ2,
 						{
@@ -274,13 +274,13 @@ function PANEL:Init()
 			end
 		end
 
-		local diameter = YRP.ctr(h) - 2 * YRP.ctr(10)
+		local diameter = YRP:ctr(h) - 2 * YRP:ctr(10)
 		if _type(rol.pms) ~= "table" and _type(rol.pms) == "string" then
 			rol.pms = string.Explode(",", rol.pms)
 		end
 
 		if _type(rol.pms) == "table" and not strEmpty(rol.pms[1]) then
-			local pm = YRPCreateD("YModelPanel", bg, diameter, diameter, YRP.ctr(20), YRP.ctr(10))
+			local pm = YRPCreateD("YModelPanel", bg, diameter, diameter, YRP:ctr(20), YRP:ctr(10))
 			pm:SetModel(rol.pms[1])
 			if pm.panel and pm.panel.Entity and pm.panel.Entity:IsValid() then
 				function pm.panel:LayoutEntity(ent)
@@ -306,13 +306,13 @@ function PANEL:Init()
 		btn:SetText("")
 		function btn:Paint(pw, ph)
 			if rol.int_prerole == 0 and (not rol.bool_locked or LocalPlayer():HasAccess("CollapseCategory1")) and rol.int_requireslevel <= LocalPlayer():Level() and self:IsHovered() then
-				draw.RoundedBox(YRP.ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 10))
+				draw.RoundedBox(YRP:ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 10))
 			end
 
 			if rol.bool_locked or rol.int_requireslevel > LocalPlayer():Level() then
-				YRP.DrawIcon(YRP.GetDesignIcon("lock"), ph - 2 * YRP.ctr(40), ph - 2 * YRP.ctr(40), YRP.ctr(50), YRP.ctr(40), Color(255, 100, 100))
+				YRP:DrawIcon(YRP:GetDesignIcon("lock"), ph - 2 * YRP:ctr(40), ph - 2 * YRP:ctr(40), YRP:ctr(50), YRP:ctr(40), Color(255, 100, 100))
 				if rol.int_requireslevel > LocalPlayer():Level() then
-					draw.SimpleText(string.sub(YRP.trans("LID_level"), 1, 3) .. ". " .. rol.int_requireslevel, "Y_24_500", ph / 2 + YRP.ctr(10), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(string.sub(YRP:trans("LID_level"), 1, 3) .. ". " .. rol.int_requireslevel, "Y_24_500", ph / 2 + YRP:ctr(10), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 		end
@@ -332,16 +332,16 @@ function PANEL:Init()
 			end
 		end
 
-		local nex = YRPCreateD("DButton", r, YRP.ctr(80), YRP.ctr(h), r:GetWide() - YRP.ctr(80), 0)
+		local nex = YRPCreateD("DButton", r, YRP:ctr(80), YRP:ctr(h), r:GetWide() - YRP:ctr(80), 0)
 		nex:SetText("")
 		function nex:Paint(pw, ph)
 			if self:IsHovered() then
 				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
 			end
 
-			local br = YRP.ctr(10)
-			if YRP.GetDesignIcon("64_angle-right") ~= nil then
-				surface.SetMaterial(YRP.GetDesignIcon("64_angle-right"))
+			local br = YRP:ctr(10)
+			if YRP:GetDesignIcon("64_angle-right") ~= nil then
+				surface.SetMaterial(YRP:GetDesignIcon("64_angle-right"))
 				surface.SetDrawColor(Color(255, 255, 255, 255))
 				surface.DrawTexturedRect(br, ph / 2 - (pw - 2 * br) / 2, pw - 2 * br, pw - 2 * br)
 			end
@@ -442,7 +442,7 @@ function PANEL:Init()
 				if tonumber(rol.int_prerole) == 0 then
 					w = rw
 					h = rh
-					local rlis = YRPCreateD("DHorizontalScroller", nil, 10, YRP.ctr(h), 0, 0)
+					local rlis = YRPCreateD("DHorizontalScroller", nil, 10, YRP:ctr(h), 0, 0)
 					function rlis:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, color1)
 					end
@@ -452,7 +452,7 @@ function PANEL:Init()
 				end
 			end
 
-			local gw = base._w - 2 * YRP.ctr(20) - base.con.VBar:GetWide()
+			local gw = base._w - 2 * YRP:ctr(20) - base.con.VBar:GetWide()
 			local gh = base._h
 			for i, grp in SortedPairsByMemberValue(grptab, "int_position") do
 				local sw = gw
@@ -486,16 +486,16 @@ function PANEL:Init()
 			local sh = rh * 3.5
 			if base.con:GetCanvas():GetTall() < sh then
 				sh = base.con:GetCanvas():GetTall()
-				sh = math.Clamp(sh, YRP.ctr(999), YRP.ctr(1999))
+				sh = math.Clamp(sh, YRP:ctr(999), YRP:ctr(1999))
 				if base._fh then
 					sh = base._fh
 				end
 
-				sh = YRP.ctr(sh)
-				base:SetTall(sh + YRP.ctr(100 + 2 * 20))
-				base.btn:SetTall(YRP.ctr(100))
+				sh = YRP:ctr(sh)
+				base:SetTall(sh + YRP:ctr(100 + 2 * 20))
+				base.btn:SetTall(YRP:ctr(100))
 				base.con:SetTall(sh)
-				base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20))
+				base.con:SetPos(YRP:ctr(20), YRP:ctr(100) + YRP:ctr(20))
 				base.con:Rebuild()
 				base._lis:Rebuild()
 			else
@@ -504,11 +504,11 @@ function PANEL:Init()
 					sh = base._fh
 				end
 
-				sh = YRP.ctr(sh)
+				sh = YRP:ctr(sh)
 				base:SetTall(sh)
-				base.btn:SetTall(YRP.ctr(100))
-				base.con:SetTall(sh - YRP.ctr(100) - 2 * YRP.ctr(20))
-				base.con:SetPos(YRP.ctr(20), YRP.ctr(100) + YRP.ctr(20))
+				base.btn:SetTall(YRP:ctr(100))
+				base.con:SetTall(sh - YRP:ctr(100) - 2 * YRP:ctr(20))
+				base.con:SetPos(YRP:ctr(20), YRP:ctr(100) + YRP:ctr(20))
 				base.con:Rebuild()
 				base._lis:Rebuild()
 			end
@@ -547,11 +547,11 @@ function PANEL:Init()
 				net.WriteString(base._guid)
 				net.SendToServer()
 			else
-				YRP.msg("note", "ycollapsiblecategory error, base._guid")
+				YRP:msg("note", "ycollapsiblecategory error, base._guid")
 			end
 		else
-			base:SetTall(YRP.ctr(100))
-			base.btn:SetTall(YRP.ctr(100))
+			base:SetTall(YRP:ctr(100))
+			base.btn:SetTall(YRP:ctr(100))
 			base.con:SetTall(0)
 			base.con:SetPos(0, 0)
 			base.con:Clear()
@@ -561,7 +561,7 @@ function PANEL:Init()
 	end
 
 	-- ICON
-	self.icon = YRPCreateD("DHTML", self.btn, YRP.ctr(100) - 2 * YRP.ctr(20), YRP.ctr(100) - 2 * YRP.ctr(20), YRP.ctr(30), YRP.ctr(20))
+	self.icon = YRPCreateD("DHTML", self.btn, YRP:ctr(100) - 2 * YRP:ctr(20), YRP:ctr(100) - 2 * YRP:ctr(20), YRP:ctr(30), YRP:ctr(20))
 end
 
 vgui.Register("YCollapsibleCategory", PANEL, "DPanel")

@@ -88,7 +88,7 @@ local g_dn = Material("vgui/gradient_down")
 local g_ri = Material("vgui/gradient-r")
 local g_le = Material("vgui/gradient-l")
 function LaserBorder(pw, ph)
-	local _size = YRP.ctr(12)
+	local _size = YRP:ctr(12)
 	surface.SetDrawColor(_fut.GetColor(InterfaceColor(), InterfaceStyle()))
 	surface.SetMaterial(g_dn)
 	surface.DrawTexturedRect(0, 0, pw, _size)
@@ -132,15 +132,15 @@ function _fut.DrawWindow(window, pw, ph, title)
 		_color_bg.a = 255
 	end
 
-	draw.RoundedBox(0, 0, 0, pw, YRP.ctr(50), _color_bar)
-	draw.RoundedBox(0, 0, YRP.ctr(50), pw, ph - YRP.ctr(50), _color_bg)
+	draw.RoundedBox(0, 0, 0, pw, YRP:ctr(50), _color_bar)
+	draw.RoundedBox(0, 0, YRP:ctr(50), pw, ph - YRP:ctr(50), _color_bg)
 	if InterfaceBorder() then
 		LaserBorder(pw, ph)
 	end
 
 	--[[ Title ]]
 	--
-	surfaceText(_title, "Y_22_500", YRP.ctr(10), YRP.ctr(25), Color(255, 255, 255, 255), 0, 1)
+	surfaceText(_title, "Y_22_500", YRP:ctr(10), YRP:ctr(25), Color(255, 255, 255, 255), 0, 1)
 end
 
 RegisterWindowFunction(_fut.name, _fut.DrawWindow)

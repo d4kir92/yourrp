@@ -30,7 +30,7 @@ function send_licenses(ply)
 	net.Send(ply)
 end
 
-YRP.AddNetworkString("nws_yrp_get_all_licenses")
+YRP:AddNetworkString("nws_yrp_get_all_licenses")
 net.Receive(
 	"nws_yrp_get_all_licenses",
 	function(len, ply)
@@ -46,7 +46,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_licenses")
+YRP:AddNetworkString("nws_yrp_get_licenses")
 net.Receive(
 	"nws_yrp_get_licenses",
 	function(len, ply)
@@ -68,7 +68,7 @@ function sendlicenses(ply)
 	net.Send(ply)
 end
 
-YRP.AddNetworkString("nws_yrp_getlicenses")
+YRP:AddNetworkString("nws_yrp_getlicenses")
 net.Receive(
 	"nws_yrp_getlicenses",
 	function(len, ply)
@@ -76,30 +76,30 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_license_add")
+YRP:AddNetworkString("nws_yrp_license_add")
 net.Receive(
 	"nws_yrp_license_add",
 	function(len, ply)
 		local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new license'")
-		YRP.msg("db", "Add new license: " .. tostring(_new))
+		YRP:msg("db", "Add new license: " .. tostring(_new))
 		send_licenses(ply)
 		YRPUpdateLicenseTable()
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_license_rem")
+YRP:AddNetworkString("nws_yrp_license_rem")
 net.Receive(
 	"nws_yrp_license_rem",
 	function(len, ply)
 		local _uid = net.ReadString()
 		local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
-		YRP.msg("db", "Removed license: " .. tostring(_uid))
+		YRP:msg("db", "Removed license: " .. tostring(_uid))
 		send_licenses(ply)
 		YRPUpdateLicenseTable()
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_edit_license_name")
+YRP:AddNetworkString("nws_yrp_edit_license_name")
 net.Receive(
 	"nws_yrp_edit_license_name",
 	function(len, ply)
@@ -112,12 +112,12 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "edit_license_name: " .. tostring(_new_name))
+		YRP:msg("db", "edit_license_name: " .. tostring(_new_name))
 		YRPUpdateLicenseTable()
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_edit_license_description")
+YRP:AddNetworkString("nws_yrp_edit_license_description")
 net.Receive(
 	"nws_yrp_edit_license_description",
 	function(len, ply)
@@ -130,12 +130,12 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "edit_license_description: " .. tostring(_new_description))
+		YRP:msg("db", "edit_license_description: " .. tostring(_new_description))
 		YRPUpdateLicenseTable()
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_edit_license_price")
+YRP:AddNetworkString("nws_yrp_edit_license_price")
 net.Receive(
 	"nws_yrp_edit_license_price",
 	function(len, ply)
@@ -148,12 +148,12 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP.msg("db", "edit_license_price: " .. tostring(_new_price))
+		YRP:msg("db", "edit_license_price: " .. tostring(_new_price))
 		YRPUpdateLicenseTable()
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_get_all_licenses_simple")
+YRP:AddNetworkString("nws_yrp_get_all_licenses_simple")
 net.Receive(
 	"nws_yrp_get_all_licenses_simple",
 	function(len, ply)
@@ -168,7 +168,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_role_add_license")
+YRP:AddNetworkString("nws_yrp_role_add_license")
 net.Receive(
 	"nws_yrp_role_add_license",
 	function(len, ply)
@@ -196,7 +196,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_role_rem_license")
+YRP:AddNetworkString("nws_yrp_role_rem_license")
 net.Receive(
 	"nws_yrp_role_rem_license",
 	function(len, ply)
@@ -263,7 +263,7 @@ function Player:AddLicense(license)
 					SLIDs3 = SLIDs3 .. "," .. LID
 				end
 			else
-				YRP.msg("error", "#1 HIT MAXIMUM LICENSE-IDS: " .. LID)
+				YRP:msg("error", "#1 HIT MAXIMUM LICENSE-IDS: " .. LID)
 
 				return false
 			end
@@ -274,7 +274,7 @@ function Player:AddLicense(license)
 		self:SetYRPString("licenseIDs3", tostring(SLIDs3))
 		local tab = GetGlobalYRPTable("yrp_licenses")
 		if tab[license] then
-			YRP.msg("note", "Added License (" .. tab[license] .. ") to " .. self:RPName())
+			YRP:msg("note", "Added License (" .. tab[license] .. ") to " .. self:RPName())
 		end
 
 		return true
@@ -321,7 +321,7 @@ function Player:RemoveLicense(license)
 					SLIDs3 = SLIDs3 .. "," .. LID
 				end
 			else
-				YRP.msg("error", "#2 HIT MAXIMUM LICENSE-IDS: " .. LID)
+				YRP:msg("error", "#2 HIT MAXIMUM LICENSE-IDS: " .. LID)
 			end
 		end
 
@@ -331,7 +331,7 @@ function Player:RemoveLicense(license)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_getLicenseName")
+YRP:AddNetworkString("nws_yrp_getLicenseName")
 net.Receive(
 	"nws_yrp_getLicenseName",
 	function(len, ply)
@@ -349,7 +349,7 @@ net.Receive(
 
 function GetLicenseIDByName(lname)
 	if lname == nil then
-		YRP.msg("note", "GetLicenseIDByName: " .. "NAME == " .. tostring(lname))
+		YRP:msg("note", "GetLicenseIDByName: " .. "NAME == " .. tostring(lname))
 
 		return nil
 	end
@@ -375,7 +375,7 @@ end
 function GiveLicense(ply, lid)
 	if not IsValid(ply) then return end
 	if not IsNotNilAndNotFalse(lid) then return end
-	YRP.msg("gm", "Give " .. ply:RPName() .. " LicenseID: " .. lid)
+	YRP:msg("gm", "Give " .. ply:RPName() .. " LicenseID: " .. lid)
 	ply:AddLicense(lid)
 	ply:SetYRPInt("licenseIDsVersion", ply:GetYRPInt("licenseIDsVersion", 0) + 1)
 end
@@ -383,7 +383,7 @@ end
 function RemoveLicense(ply, lid)
 	if not IsValid(ply) then return end
 	if not IsNotNilAndNotFalse(lid) then return end
-	YRP.msg("gm", "Removed from " .. ply:RPName() .. " LicenseID " .. lid)
+	YRP:msg("gm", "Removed from " .. ply:RPName() .. " LicenseID " .. lid)
 	ply:RemoveLicense(lid)
 	ply:SetYRPInt("licenseIDsVersion", ply:GetYRPInt("licenseIDsVersion", 0) + 1)
 end

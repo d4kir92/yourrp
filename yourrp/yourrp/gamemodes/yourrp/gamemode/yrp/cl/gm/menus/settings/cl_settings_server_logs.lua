@@ -23,11 +23,11 @@ function BuildLogs(parent, typ)
 					local source = GetPlayerBySteamID(v.string_source_steamid)
 					local target = GetPlayerBySteamID(v.string_target_steamid)
 					if IsNotNilAndNotFalse(source) then
-						local line = YRPCreateD("YPanel", nil, parent:GetWide(), YRP.ctr(50))
-						local ts = YRPCreateD("YLabel", line, YRP.ctr(500), line:GetTall(), 0, 0)
+						local line = YRPCreateD("YPanel", nil, parent:GetWide(), YRP:ctr(50))
+						local ts = YRPCreateD("YLabel", line, YRP:ctr(500), line:GetTall(), 0, 0)
 						ts:SetText(os.date("%H:%M:%S - %d/%m/%Y", tonumber(v.string_timestamp)))
 						if typ == "LID_chat" then
-							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP:ctr(500), line:GetTall(), YRP:ctr(500), 0)
 							function rt:PerformLayout()
 								if self.SetUnderlineFont ~= nil then
 									self:SetUnderlineFont("Y_18_500")
@@ -65,7 +65,7 @@ function BuildLogs(parent, typ)
 							rt:InsertColorChange(255, 255, 255, 255)
 							rt:AppendText(": " .. tostring(v.string_value))
 						elseif typ == "LID_connections" then
-							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP:ctr(500), line:GetTall(), YRP:ctr(500), 0)
 							function rt:PerformLayout()
 								self.m_FontName = "Y_18_500"
 								if self.SetUnderlineFont ~= nil then
@@ -104,7 +104,7 @@ function BuildLogs(parent, typ)
 							rt:InsertColorChange(255, 255, 255, 255)
 							rt:AppendText(" " .. tostring(v.string_value))
 						elseif typ == "LID_kills" then
-							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP:ctr(500), line:GetTall(), YRP:ctr(500), 0)
 							function rt:PerformLayout()
 								self.m_FontName = "Y_18_500"
 								if self.SetUnderlineFont ~= nil then
@@ -154,7 +154,7 @@ function BuildLogs(parent, typ)
 
 							rt:InsertClickableTextEnd()
 						elseif typ == "LID_whitelist" then
-							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP:ctr(500), line:GetTall(), YRP:ctr(500), 0)
 							function rt:PerformLayout()
 								self.m_FontName = "Y_18_500"
 								if self.SetUnderlineFont ~= nil then
@@ -203,7 +203,7 @@ function BuildLogs(parent, typ)
 							rt:InsertColorChange(255, 255, 255, 255)
 							rt:AppendText(" [" .. tostring(v.string_value) .. "] ")
 						elseif typ == "LID_spawns" then
-							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP:ctr(500), line:GetTall(), YRP:ctr(500), 0)
 							function rt:PerformLayout()
 								self.m_FontName = "Y_18_500"
 								if self.SetUnderlineFont ~= nil then
@@ -247,7 +247,7 @@ function BuildLogs(parent, typ)
 								rt:AppendText("Missing VALUE")
 							end
 						elseif typ == "LID_health" then
-							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP:ctr(500), line:GetTall(), YRP:ctr(500), 0)
 							function rt:PerformLayout()
 								self.m_FontName = "Y_18_500"
 								if self.SetUnderlineFont ~= nil then
@@ -311,7 +311,7 @@ function BuildLogs(parent, typ)
 								rt:InsertClickableTextEnd()
 							end
 						elseif typ == "LID_health" then
-							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP.ctr(500), line:GetTall(), YRP.ctr(500), 0)
+							local rt = YRPCreateD("RichText", line, parent:GetWide() - YRP:ctr(500), line:GetTall(), YRP:ctr(500), 0)
 							function rt:PerformLayout()
 								self.m_FontName = "Y_18_500"
 								if self.SetUnderlineFont ~= nil then

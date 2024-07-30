@@ -55,10 +55,10 @@ function optionVehicleWindow(vehicle, vehicleTab)
 		end
 	end
 
-	yrp_vehicle.window:SetTitle(YRP.trans("LID_owner") .. ": " .. owner)
+	yrp_vehicle.window:SetTitle(YRP:trans("LID_owner") .. ": " .. owner)
 	function yrp_vehicle.window:Paint(pw, ph)
 		hook.Run("YFramePaint", self, pw, ph)
-		draw.RoundedBox(0, YRP.ctr(4), YRP.ctr(160), pw - YRP.ctr(8), YRP.ctr(70 - 4), Color(255, 255, 0, 200))
+		draw.RoundedBox(0, YRP:ctr(4), YRP:ctr(160), pw - YRP:ctr(8), YRP:ctr(70 - 4), Color(255, 255, 0, 200))
 	end
 
 	if lply:HasAccess("optionVehicleWindow") or (vehicle:GetRPOwner() and LocalPlayer() == vehicle:GetRPOwner()) then
@@ -74,14 +74,14 @@ function optionVehicleWindow(vehicle, vehicleTab)
 		end
 
 		_buttonRemoveOwner.tab = {
-			["text"] = YRP.trans("LID_removeowner")
+			["text"] = YRP:trans("LID_removeowner")
 		}
 
 		function _buttonRemoveOwner:Paint(pw, ph)
 			hook.Run("YButtonPaint", self, pw, ph, self.tab)
 		end
 
-		yrp_vehicle.window:SetSize(YRP.ctr(1090), YRP.ctr(230))
+		yrp_vehicle.window:SetSize(YRP:ctr(1090), YRP:ctr(230))
 		yrp_vehicle.window:Center()
 	end
 

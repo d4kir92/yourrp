@@ -29,30 +29,29 @@ SWEP.ViewModel = "" --"models/props/yrp_key.mdl"
 SWEP.WorldModel = "" --"models/props/yrp_key.mdl"
 SWEP.ShowViewModel = true
 SWEP.ShowWorldModel = true
-
 if CLIENT then
-	net.Receive("nws_yrp_door_anim", function(self, len)
-		local ply = net.ReadEntity()
-
-		if YRPEntityAlive(ply) then
-			local msg = net.ReadString()
-
-			if msg == "lock" then
-				ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE, true)
-			elseif msg == "unlock" then
-				ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE, true)
-			elseif msg == "knock" then
-				ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
+	net.Receive(
+		"nws_yrp_door_anim",
+		function(self, len)
+			local ply = net.ReadEntity()
+			if YRPEntityAlive(ply) then
+				local msg = net.ReadString()
+				if msg == "lock" then
+					ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE, true)
+				elseif msg == "unlock" then
+					ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE, true)
+				elseif msg == "knock" then
+					ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
+				end
 			end
 		end
-	end)
+	)
 end
 
 function SWEP:Reload()
 	if SERVER then
 		local owner = self:GetOwner()
 		owner.ts = owner.ts or CurTime()
-
 		if YRPEntityAlive(owner) and owner.ts + 0.5 < CurTime() then
 			owner.ts = CurTime()
 			owner:EmitSound("physics/wood/wood_crate_impact_hard" .. math.random(1, 5) .. ".wav", 100, math.random(90, 110))
@@ -68,7 +67,6 @@ function SWEP:Think()
 end
 
 SWEP.numbers = {}
-
 function SWEP:AddKeyNr(nr)
 	table.insert(self.numbers, nr)
 end
@@ -76,25 +74,24 @@ end
 function SWEP:PrimaryAttack()
 	if SERVER and self:GetOwner() and self:GetOwner():IsValid() then
 		local ent = self:GetOwner():GetEyeTrace().Entity
-
 		if YRPEntityAlive(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalYRPInt("int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
 				if YRPLockDoor(self:GetOwner(), ent, ent:GetYRPString("buildingID", "Failed")) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_lockeddoor"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_lockeddoor"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_youdonthaveakey"))
 				end
 			elseif ent:IsVehicle() and ent:GetYRPInt("item_uniqueID", 0) ~= 0 then
 				if YRPLockVehicle(self:GetOwner(), ent, ent:GetYRPInt("item_uniqueID", 0)) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_lockedvehicle"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_lockedvehicle"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_youdonthaveakey"))
 				end
 			else
 				if YRPLockVehicle(self:GetOwner(), ent, ent:GetYRPInt("item_uniqueID", 0)) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_lockedvehicle"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_lockedvehicle"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_youdonthaveakey"))
 				end
 			end
 		end
@@ -104,25 +101,24 @@ end
 function SWEP:SecondaryAttack()
 	if SERVER and self:GetOwner() and self:GetOwner():IsValid() then
 		local ent = self:GetOwner():GetEyeTrace().Entity
-
 		if YRPEntityAlive(ent) and ent:GetPos():Distance(self:GetOwner():GetPos()) < GetGlobalYRPInt("int_door_distance", 200) then
 			if ent:GetClass() == "prop_door_rotating" or ent:GetClass() == "func_door" or ent:GetClass() == "func_door_rotating" then
 				if YRPUnlockDoor(self:GetOwner(), ent, ent:GetYRPString("buildingID", "Failed")) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_unlockeddoor"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_unlockeddoor"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_youdonthaveakey"))
 				end
 			elseif ent:GetYRPInt("item_uniqueID", 0) ~= 0 then
 				if YRPUnlockVehicle(self:GetOwner(), ent, ent:GetYRPInt("item_uniqueID", 0)) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_unlockedvehicle"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_unlockedvehicle"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_youdonthaveakey"))
 				end
 			else
 				if YRPUnlockVehicle(self:GetOwner(), ent, ent:GetYRPInt("item_uniqueID", 0)) then
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_unlockedvehicle"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_unlockedvehicle"))
 				else
-					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP.trans("LID_youdonthaveakey"))
+					self:GetOwner():PrintMessage(HUD_PRINTCENTER, YRP:trans("LID_youdonthaveakey"))
 				end
 			end
 		end
@@ -130,7 +126,6 @@ function SWEP:SecondaryAttack()
 end
 
 local wave = Material("vgui/entities/yrp_key.png", "noclamp smooth")
-
 function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 	surface.SetMaterial(wave)
 	surface.SetDrawColor(Color(255, 255, 255, 255))

@@ -111,7 +111,7 @@ hook.Add(
 	function()
 		local lply = LocalPlayer()
 		if IsInsideSafezone(lply) then
-			draw.SimpleText(YRP.trans("LID_safezone"), "Y_24_500", ScrW() / 2, YRP.ctr(650), Color(100, 100, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_safezone"), "Y_24_500", ScrW() / 2, YRP:ctr(650), Color(100, 100, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end
 )
@@ -132,8 +132,8 @@ hook.Add(
 
 		if inzone and zonedelay > CurTime() then
 			zonecolor = StringToColor(zonecolor)
-			draw.SimpleText(YRP.trans("LID_entered") .. ":", "Y_30_500", ScrW() / 2, YRP.ctr(400), zonecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(zonename, "Y_80_500", ScrW() / 2, YRP.ctr(500), zonecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_entered") .. ":", "Y_30_500", ScrW() / 2, YRP:ctr(400), zonecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(zonename, "Y_80_500", ScrW() / 2, YRP:ctr(500), zonecolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end
 )
@@ -160,7 +160,7 @@ hook.Add(
 			end
 		end
 
-		draw.SimpleText(text, font, ScrW() / 2, YRP.ctr(500), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(text, font, ScrW() / 2, YRP:ctr(500), Color(255, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 )
 
@@ -179,15 +179,15 @@ hook.Add(
 			if oldlevel ~= lply:Level() then
 				oldlevel = lply:Level()
 				surface.PlaySound("garrysmod/content_downloaded.wav")
-				local levelUp = YRPCreateD("DFrame", nil, YRP.ctr(600), YRP.ctr(160), 0, 0)
+				local levelUp = YRPCreateD("DFrame", nil, YRP:ctr(600), YRP:ctr(160), 0, 0)
 				if levelUp and levelUp.GetWide and levelUp.GetTall then
-					levelUp:SetPos(ScrW() / 2 - levelUp:GetWide() / 2, ScrH() / 2 - levelUp:GetTall() / 2 - YRP.ctr(400))
+					levelUp:SetPos(ScrW() / 2 - levelUp:GetWide() / 2, ScrH() / 2 - levelUp:GetTall() / 2 - YRP:ctr(400))
 					levelUp:ShowCloseButton(false)
 					levelUp:SetTitle("")
-					levelUp.LID_levelUp = YRP.trans("LID_levelUp")
+					levelUp.LID_levelUp = YRP:trans("LID_levelUp")
 					local tab = {}
 					tab["LEVEL"] = lply:Level()
-					levelUp.LID_levelx = YRP.trans("LID_levelx", tab)
+					levelUp.LID_levelx = YRP:trans("LID_levelx", tab)
 					levelUp.lucolor = Color(255, 255, 100, 255)
 					levelUp.lxcolor = Color(255, 255, 255, 255)
 					levelUp.brcolor = Color(0, 0, 0, 255)
@@ -195,9 +195,9 @@ hook.Add(
 					function levelUp:Paint(pw, ph)
 						surface.SetFont("Y_36_500")
 						local tw, _ = surface.GetTextSize(self.LID_levelUp)
-						tw = tw + 2 * YRP.ctr(20)
+						tw = tw + 2 * YRP:ctr(20)
 						self.aw = self.aw or 0
-						draw.RoundedBox(YRP.ctr(10), pw / 2 - self.aw / 2, 0, self.aw, ph, color1)
+						draw.RoundedBox(YRP:ctr(10), pw / 2 - self.aw / 2, 0, self.aw, ph, color1)
 						if self.aw < tw then
 							self.aw = math.Clamp(self.aw + 5, 0, tw)
 						else
@@ -455,21 +455,21 @@ hook.Add(
 		local lply = LocalPlayer()
 		if lply:GetYRPBool("yrp_spawning", false) then
 			draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 255)) -- Black Background - Respawning
-			draw.SimpleText(YRP.trans("LID_pleasewait"), "Y_18_500", ScrW() / 2, ScrH() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(YRP.trans("LID_respawning"), "Y_40_500", ScrW() / 2, ScrH() / 2 + YRP.ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_pleasewait"), "Y_18_500", ScrW() / 2, ScrH() / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(YRP:trans("LID_respawning"), "Y_40_500", ScrW() / 2, ScrH() / 2 + YRP:ctr(100), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		if lply:GetYRPBool("yrp_speaking", false) then
-			local text = YRP.trans("LID_youarespeaking")
+			local text = YRP:trans("LID_youarespeaking")
 			if lply:GetYRPBool("mute_voice", false) then
-				text = text .. " ( " .. YRP.trans("LID_speaklocal") .. " )"
+				text = text .. " ( " .. YRP:trans("LID_speaklocal") .. " )"
 			end
 
 			if YRPGetVoiceRangeText(lply) ~= "" then
-				text = text .. " ( " .. YRP.trans("LID_range") .. " " .. YRPGetVoiceRangeText(lply) .. " [" .. YRPGetVoiceRange(lply) .. "])"
+				text = text .. " ( " .. YRP:trans("LID_range") .. " " .. YRPGetVoiceRangeText(lply) .. " [" .. YRPGetVoiceRange(lply) .. "])"
 			end
 
-			draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP.ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(text, "Y_24_500", ScrW2(), ScrH2() - YRP:ctr(600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		if yrp_loading_screen and YRPPanelAlive(yrp_loading_screen, "yrp_loading_screen 2") then
@@ -478,15 +478,15 @@ hook.Add(
 
 		if GetGlobalYRPBool("blinded", false) then
 			draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(255, 255, 255, 255))
-			surfaceText(YRP.trans("LID_blinded"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(100), Color(255, 255, 0, 255), 1, 1)
+			surfaceText(YRP:trans("LID_blinded"), "Y_30_500", ScrW2(), ScrH2() + YRP:ctr(100), Color(255, 255, 0, 255), 1, 1)
 		end
 
 		if lply:IsFlagSet(FL_FROZEN) then
-			surfaceText(YRP.trans("LID_frozen"), "Y_30_500", ScrW2(), ScrH2() + YRP.ctr(150), Color(255, 255, 0, 255), 1, 1)
+			surfaceText(YRP:trans("LID_frozen"), "Y_30_500", ScrW2(), ScrH2() + YRP:ctr(150), Color(255, 255, 0, 255), 1, 1)
 		end
 
 		if lply:GetYRPBool("cloaked", false) then
-			surfaceText(YRP.trans("LID_cloaked"), "Y_30_500", ScrW2(), ScrH2() - YRP.ctr(400), Color(255, 255, 0, 255), 1, 1)
+			surfaceText(YRP:trans("LID_cloaked"), "Y_30_500", ScrW2(), ScrH2() - YRP:ctr(400), Color(255, 255, 0, 255), 1, 1)
 		end
 
 		DrawEquipment(lply, "backpack")
@@ -498,7 +498,7 @@ hook.Add(
 
 		local _target = LocalPlayer():GetYRPString("hittargetName", "")
 		if not strEmpty(_target) then
-			surfaceText(YRP.trans("LID_target") .. ": " .. LocalPlayer():GetYRPString("hittargetName", ""), "Y_24_500", YRP.ctr(10), YRP.ctr(10), Color(255, 0, 0, 255), 0, 0)
+			surfaceText(YRP:trans("LID_target") .. ": " .. LocalPlayer():GetYRPString("hittargetName", ""), "Y_24_500", YRP:ctr(10), YRP:ctr(10), Color(255, 0, 0, 255), 0, 0)
 			LocalPlayer():drawHitInfo()
 		end
 
@@ -521,10 +521,10 @@ hook.Add(
 
 		if GetGlobalYRPBool("bool_wanted_system", false) and false then
 			local stars = {}
-			stars.size = YRP.ctr(80)
+			stars.size = YRP:ctr(80)
 			stars.cur = stars.size
-			stars.x = -YRP.ctr(32) + ScrW() - 6 * stars.size
-			stars.y = YRP.ctr(32)
+			stars.x = -YRP:ctr(32) + ScrW() - 6 * stars.size
+			stars.y = YRP:ctr(32)
 			-- Slot
 			surface.SetDrawColor(Color(0, 0, 0, 255))
 			surface.SetMaterial(star)
@@ -532,7 +532,7 @@ hook.Add(
 				surface.DrawTexturedRect(stars.x + x * stars.size, stars.y, stars.cur, stars.cur)
 			end
 
-			stars.cur = YRP.ctr(60)
+			stars.cur = YRP:ctr(60)
 			stars.br = (stars.size - stars.cur) / 2
 			surface.SetDrawColor(100, 100, 100, 255)
 			for x = 1, 5 do
@@ -550,10 +550,10 @@ hook.Add(
 
 		LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
 		if LocalPlayer().badyourrpcontent ~= "" then
-			draw.SimpleText("Your addon is outdated, please delete/redownload ( addons folder):", "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText("Your addon is outdated, please delete/redownload ( addons folder):", "Y_30_500", ScrW2() + YRP:ctr(50), ScrH2() + YRP:ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			local addons = string.Explode("\n", LocalPlayer().badyourrpcontent)
 			for i, v in pairs(addons) do
-				draw.SimpleText("• " .. v, "Y_30_500", ScrW2() + YRP.ctr(50), ScrH2() + YRP.ctr(50) + i * YRP.ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText("• " .. v, "Y_30_500", ScrW2() + YRP:ctr(50), ScrH2() + YRP:ctr(50) + i * YRP:ctr(50), Color(255, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 		end
 
@@ -592,7 +592,7 @@ hook.Add(
 	function()
 		local lply = LocalPlayer()
 		if YRPCollectionID() == "0" and lply:HasAccess("hud1") then
-			local text = "[STEAM] " .. YRP.trans("LID_thecollectionidismissing") .. " ( " .. "to start config: " .. "+host_workshop_collection WORKSHOPID" .. " )"
+			local text = "[STEAM] " .. YRP:trans("LID_thecollectionidismissing") .. " ( " .. "to start config: " .. "+host_workshop_collection WORKSHOPID" .. " )"
 			draw.SimpleTextOutlined(text, "Y_50_500", ScrW() / 2, ScrH() * 0.2, Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 		end
 	end, hook.MONITOR_HIGH
@@ -613,7 +613,7 @@ hook.Add(
 local yrpeh = nil
 function YRPInitEdgeHud()
 	if EdgeHUD and EdgeHUD.Configuration and yrpeh == nil then
-		YRP.msg("note", "EDGEHUD installed, add hunger and thirst.")
+		YRP:msg("note", "EDGEHUD installed, add hunger and thirst.")
 		if EdgeHUD.Configuration.GetConfigValue("LowerLeft") and EdgeHUD.Colors and EdgeHUD.Vars then
 			--Create a variable for the local player.
 			local ply = LocalPlayer()
@@ -759,20 +759,20 @@ hook.Add(
 			if ca == 0 then
 				VO.text = "-"
 			else
-				VO.text = YRP.trans("LID_active") .. ": " .. table.concat(texta, ", ")
+				VO.text = YRP:trans("LID_active") .. ": " .. table.concat(texta, ", ")
 			end
 
-			VO.text = VO.text .. " | " .. YRP.trans("LID_passive") .. ": "
+			VO.text = VO.text .. " | " .. YRP:trans("LID_passive") .. ": "
 			if cp == 0 then
 				VO.text = VO.text .. "-"
 			elseif cp <= 3 then
 				VO.text = VO.text .. table.concat(textp, ", ")
 			else
-				VO.text = VO.text .. string.Replace(YRP.trans("LID_xpassive"), "X", cp)
+				VO.text = VO.text .. string.Replace(YRP:trans("LID_xpassive"), "X", cp)
 			end
 
 			if ca == 0 and cp == 0 then
-				VO.text = "" .. string.Replace(YRP.trans("LID_presskeytoenablevoicemenu"), "KEY", YRPGetKeybindName("voice_menu")) .. ""
+				VO.text = "" .. string.Replace(YRP:trans("LID_presskeytoenablevoicemenu"), "KEY", YRPGetKeybindName("voice_menu")) .. ""
 			else
 				VO.text = VO.text .. " ( " .. input.GetKeyName(KEY_LSHIFT) .. " + " .. YRPGetKeybindName("voice_menu") .. " )"
 			end
@@ -801,7 +801,7 @@ local YRPHUDAnchors = {}
 local YRPTEMPDATA = {}
 local YRPHUDVersion = 0
 function YRPHUDUpdateAnchors()
-	--YRP.msg( "note", "YRPHUDUpdateAnchors()" )
+	--YRP:msg( "note", "YRPHUDUpdateAnchors()" )
 	YRPHUDAnchors["TOPLEFT"] = {0, 0}
 	YRPHUDAnchors["TOPRIGHT"] = {ScrW(), 0}
 	YRPHUDAnchors["BOTTOMLEFT"] = {0, ScrH()}
@@ -816,7 +816,7 @@ end
 YRPHUDUpdateAnchors()
 function YRPHUDValues(name, anchor, posx, posy, sizew, sizeh)
 	if name == nil then
-		YRP.msg("note", "[YRPHUDDrawTexture] NAME IS INVALID")
+		YRP:msg("note", "[YRPHUDDrawTexture] NAME IS INVALID")
 
 		return false
 	end
@@ -825,19 +825,19 @@ function YRPHUDValues(name, anchor, posx, posy, sizew, sizeh)
 		YRPTEMPDATA[name] = {}
 		YRPTEMPDATA[name].version = YRPHUDVersion
 		if anchor == nil then
-			YRP.msg("note", "[YRPHUDDrawTexture] ANCHOR IS INVALID")
+			YRP:msg("note", "[YRPHUDDrawTexture] ANCHOR IS INVALID")
 
 			return false
 		end
 
 		if posx == nil or posy == nil then
-			YRP.msg("note", "[YRPHUDDrawTexture] POSX or POSY IS INVALID")
+			YRP:msg("note", "[YRPHUDDrawTexture] POSX or POSY IS INVALID")
 
 			return false
 		end
 
 		if sizew == nil or sizeh == nil then
-			YRP.msg("note", "[YRPHUDDrawTexture] SIZEW or SIZEH IS INVALID")
+			YRP:msg("note", "[YRPHUDDrawTexture] SIZEW or SIZEH IS INVALID")
 
 			return false
 		end
@@ -856,7 +856,7 @@ end
 function YRPHUDDrawTexture(name, anchor, posx, posy, sizew, sizeh, material)
 	if not YRPHUDValues(name, anchor, posx, posy, sizew, sizeh) then return end
 	if material == nil then
-		YRP.msg("note", "[YRPHUDDrawTexture] MATERIAL IS INVALID")
+		YRP:msg("note", "[YRPHUDDrawTexture] MATERIAL IS INVALID")
 
 		return false
 	end

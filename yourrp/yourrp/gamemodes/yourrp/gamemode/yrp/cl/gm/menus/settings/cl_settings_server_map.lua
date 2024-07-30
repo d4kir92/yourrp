@@ -68,7 +68,7 @@ net.Receive(
 		local PARENT = GetSettingsSite()
 		if YRPPanelAlive(PARENT) then
 			if len > 512000 then
-				YRP.msg("note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)")
+				YRP:msg("note", "getMapList - len: " .. len .. "/" .. "512000 (len is to big)")
 			end
 
 			local tabs = YRPCreateD("YTabs", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
@@ -167,18 +167,18 @@ net.Receive(
 		local parent = PARENT.maptabs.site
 		if not IsNotNilAndNotFalse(parent) or not YRPPanelAlive(parent) then return end
 		parent:Clear()
-		local mapList = YRPCreateD("DListView", parent, parent:GetWide() - YRP.ctr(660), parent:GetTall() - YRP.ctr(140), YRP.ctr(20), YRP.ctr(20))
-		mapList:AddColumn("uniqueID"):SetFixedWidth(YRP.ctr(120))
-		mapList:AddColumn(YRP.trans("LID_position")):SetFixedWidth(YRP.ctr(600))
-		mapList:AddColumn(YRP.trans("LID_angle")):SetFixedWidth(YRP.ctr(500))
-		mapList:AddColumn(YRP.trans("LID_type")):SetFixedWidth(YRP.ctr(600))
-		mapList:AddColumn(YRP.trans("LID_name"))
+		local mapList = YRPCreateD("DListView", parent, parent:GetWide() - YRP:ctr(660), parent:GetTall() - YRP:ctr(140), YRP:ctr(20), YRP:ctr(20))
+		mapList:AddColumn("uniqueID"):SetFixedWidth(YRP:ctr(120))
+		mapList:AddColumn(YRP:trans("LID_position")):SetFixedWidth(YRP:ctr(600))
+		mapList:AddColumn(YRP:trans("LID_angle")):SetFixedWidth(YRP:ctr(500))
+		mapList:AddColumn(YRP:trans("LID_type")):SetFixedWidth(YRP:ctr(600))
+		mapList:AddColumn(YRP:trans("LID_name"))
 		function mapList:Think()
-			if self.w ~= parent:GetWide() - YRP.ctr(660) or self.h ~= parent:GetTall() - YRP.ctr(140) or self.x ~= YRP.ctr(20) or self.y ~= YRP.ctr(20) then
-				self.w = parent:GetWide() - YRP.ctr(660)
-				self.h = parent:GetTall() - YRP.ctr(140)
-				self.x = YRP.ctr(20)
-				self.y = YRP.ctr(20)
+			if self.w ~= parent:GetWide() - YRP:ctr(660) or self.h ~= parent:GetTall() - YRP:ctr(140) or self.x ~= YRP:ctr(20) or self.y ~= YRP:ctr(20) then
+				self.w = parent:GetWide() - YRP:ctr(660)
+				self.h = parent:GetTall() - YRP:ctr(140)
+				self.x = YRP:ctr(20)
+				self.y = YRP:ctr(20)
 				self:SetSize(self.w, self.h)
 				self:SetPos(self.x, self.y)
 			end
@@ -191,13 +191,13 @@ net.Receive(
 		local PY = 20
 		-- ADD
 		--if tab == "groupspawnpoints" or tab == "rolespawnpoints" or tab == "dealers" or tab == "storagepoints" then
-		local btnAdd = YRPCreateD("YButton", parent, YRP.ctr(600), YRP.ctr(50), parent:GetWide() - YRP.ctr(620), YRP.ctr(PY))
-		btnAdd:SetText(YRP.trans("LID_add"))
-		btnAdd.py = YRP.ctr(PY)
+		local btnAdd = YRPCreateD("YButton", parent, YRP:ctr(600), YRP:ctr(50), parent:GetWide() - YRP:ctr(620), YRP:ctr(PY))
+		btnAdd:SetText(YRP:trans("LID_add"))
+		btnAdd.py = YRP:ctr(PY)
 		function btnAdd:DoClick()
 			if tab == "groupspawnpoints" or tab == "rolespawnpoints" or tab == "dealers" or tab == "storagepoints" then
-				local addWin = YRPCreateD("YFrame", nil, YRP.ctr(800), YRP.ctr(800), 0, 0)
-				addWin:SetHeaderHeight(YRP.ctr(100))
+				local addWin = YRPCreateD("YFrame", nil, YRP:ctr(800), YRP:ctr(800), 0, 0)
+				addWin:SetHeaderHeight(YRP:ctr(100))
 				addWin:Center()
 				addWin:MakePopup()
 				addWin:SetTitle("")
@@ -215,10 +215,10 @@ net.Receive(
 				local content = addWin:GetContent()
 				local Y = 0
 				if tab == "groupspawnpoints" or tab == "rolespawnpoints" then
-					addWin.addGrpHeader = YRPCreateD("YLabel", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addGrpHeader = YRPCreateD("YLabel", content, YRP:ctr(760), YRP:ctr(50), YRP:ctr(0), YRP:ctr(Y))
 					Y = Y + 50
 					addWin.addGrpHeader:SetText("LID_group")
-					addWin.addGrp = YRPCreateD("DComboBox", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addGrp = YRPCreateD("DComboBox", content, YRP:ctr(760), YRP:ctr(50), YRP:ctr(0), YRP:ctr(Y))
 					Y = Y + 50
 					for k, v in pairs(dbGrp) do
 						addWin.addGrp:AddChoice(v.string_name, v.uniqueID)
@@ -243,10 +243,10 @@ net.Receive(
 				end
 
 				if tab == "rolespawnpoints" then
-					addWin.addRolHeader = YRPCreateD("YLabel", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addRolHeader = YRPCreateD("YLabel", content, YRP:ctr(760), YRP:ctr(50), YRP:ctr(0), YRP:ctr(Y))
 					Y = Y + 50
 					addWin.addRolHeader:SetText("LID_role")
-					addWin.addRol = YRPCreateD("DComboBox", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addRol = YRPCreateD("DComboBox", content, YRP:ctr(760), YRP:ctr(50), YRP:ctr(0), YRP:ctr(Y))
 					Y = Y + 50
 					function addWin.addRol:OnSelect(index, value, data)
 						if tab == "rolespawnpoints" then
@@ -258,10 +258,10 @@ net.Receive(
 				end
 
 				if tab == "storagepoints" then
-					addWin.addNameHeader = YRPCreateD("YLabel", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addNameHeader = YRPCreateD("YLabel", content, YRP:ctr(760), YRP:ctr(50), YRP:ctr(0), YRP:ctr(Y))
 					Y = Y + 50
 					addWin.addNameHeader:SetText("LID_name")
-					addWin.addName = YRPCreateD("DTextEntry", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
+					addWin.addName = YRPCreateD("DTextEntry", content, YRP:ctr(760), YRP:ctr(50), YRP:ctr(0), YRP:ctr(Y))
 					Y = Y + 50
 					addWin.addName:SetText(addWin.name)
 					function addWin.addName:OnChange()
@@ -271,8 +271,8 @@ net.Receive(
 					Y = Y + 50
 				end
 
-				local addBtn = YRPCreateD("YButton", content, YRP.ctr(760), YRP.ctr(50), YRP.ctr(0), YRP.ctr(Y))
-				addBtn:SetText(YRP.trans("LID_add"))
+				local addBtn = YRPCreateD("YButton", content, YRP:ctr(760), YRP:ctr(50), YRP:ctr(0), YRP:ctr(Y))
+				addBtn:SetText(YRP:trans("LID_add"))
 				function addBtn:DoClick()
 					local addPos = string.Explode(" ", tostring(lply:GetPos()))
 					local addAng = string.Explode(" ", tostring(lply:GetAngles()))
@@ -316,10 +316,10 @@ net.Receive(
 		end
 
 		function btnAdd:Think()
-			if self.w ~= YRP.ctr(600) or self.h ~= YRP.ctr(50) or self.x ~= parent:GetWide() - YRP.ctr(620) or self.y ~= self.py then
-				self.w = YRP.ctr(600)
-				self.h = YRP.ctr(50)
-				self.x = parent:GetWide() - YRP.ctr(620)
+			if self.w ~= YRP:ctr(600) or self.h ~= YRP:ctr(50) or self.x ~= parent:GetWide() - YRP:ctr(620) or self.y ~= self.py then
+				self.w = YRP:ctr(600)
+				self.h = YRP:ctr(50)
+				self.x = parent:GetWide() - YRP:ctr(620)
 				self.y = self.py
 				self:SetSize(self.w, self.h)
 				self:SetPos(self.x, self.y)
@@ -329,9 +329,9 @@ net.Receive(
 		PY = PY + 50 + 20
 		--end
 		-- DELETE
-		local btnDelete = YRPCreateD("YButton", parent, YRP.ctr(600), YRP.ctr(50), parent:GetWide() - YRP.ctr(620), YRP.ctr(PY))
-		btnDelete:SetText(YRP.trans("LID_deleteentry"))
-		btnDelete.py = YRP.ctr(PY)
+		local btnDelete = YRPCreateD("YButton", parent, YRP:ctr(600), YRP:ctr(50), parent:GetWide() - YRP:ctr(620), YRP:ctr(PY))
+		btnDelete:SetText(YRP:trans("LID_deleteentry"))
+		btnDelete.py = YRP:ctr(PY)
 		function btnDelete:DoClick()
 			if mapList:GetSelectedLine() ~= nil then
 				net.Start("nws_yrp_removeMapEntry")
@@ -350,10 +350,10 @@ net.Receive(
 		end
 
 		function btnDelete:Think()
-			if self.w ~= YRP.ctr(600) or self.h ~= YRP.ctr(50) or self.x ~= parent:GetWide() - YRP.ctr(620) or self.y ~= self.py then
-				self.w = YRP.ctr(600)
-				self.h = YRP.ctr(50)
-				self.x = parent:GetWide() - YRP.ctr(620)
+			if self.w ~= YRP:ctr(600) or self.h ~= YRP:ctr(50) or self.x ~= parent:GetWide() - YRP:ctr(620) or self.y ~= self.py then
+				self.w = YRP:ctr(600)
+				self.h = YRP:ctr(50)
+				self.x = parent:GetWide() - YRP:ctr(620)
 				self.y = self.py
 				self:SetSize(self.w, self.h)
 				self:SetPos(self.x, self.y)
@@ -362,9 +362,9 @@ net.Receive(
 
 		PY = PY + 50 + 20
 		-- YRPTeleportToPoint
-		local btnTeleport = YRPCreateD("YButton", parent, YRP.ctr(600), YRP.ctr(50), parent:GetWide() - YRP.ctr(620), YRP.ctr(PY))
-		btnTeleport:SetText(YRP.trans("LID_tpto"))
-		btnTeleport.py = YRP.ctr(PY)
+		local btnTeleport = YRPCreateD("YButton", parent, YRP:ctr(600), YRP:ctr(50), parent:GetWide() - YRP:ctr(620), YRP:ctr(PY))
+		btnTeleport:SetText(YRP:trans("LID_tpto"))
+		btnTeleport.py = YRP:ctr(PY)
 		function btnTeleport:DoClick()
 			if mapList:GetSelectedLine() ~= nil then
 				net.Start("nws_yrp_teleportto")
@@ -382,10 +382,10 @@ net.Receive(
 		end
 
 		function btnTeleport:Think()
-			if self.w ~= YRP.ctr(600) or self.h ~= YRP.ctr(50) or self.x ~= parent:GetWide() - YRP.ctr(620) or self.y ~= self.py then
-				self.w = YRP.ctr(600)
-				self.h = YRP.ctr(50)
-				self.x = parent:GetWide() - YRP.ctr(620)
+			if self.w ~= YRP:ctr(600) or self.h ~= YRP:ctr(50) or self.x ~= parent:GetWide() - YRP:ctr(620) or self.y ~= self.py then
+				self.w = YRP:ctr(600)
+				self.h = YRP:ctr(50)
+				self.x = parent:GetWide() - YRP:ctr(620)
 				self.y = self.py
 				self:SetSize(self.w, self.h)
 				self:SetPos(self.x, self.y)

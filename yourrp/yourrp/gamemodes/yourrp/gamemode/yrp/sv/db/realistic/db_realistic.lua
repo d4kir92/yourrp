@@ -39,7 +39,7 @@ function AddToHandler_Realistic(ply)
 	end
 end
 
-YRP.AddNetworkString("nws_yrp_connect_Settings_Realistic")
+YRP:AddNetworkString("nws_yrp_connect_Settings_Realistic")
 net.Receive(
 	"nws_yrp_connect_Settings_Realistic",
 	function(len, ply)
@@ -59,7 +59,7 @@ net.Receive(
 	end
 )
 
-YRP.AddNetworkString("nws_yrp_disconnect_Settings_Realistic")
+YRP:AddNetworkString("nws_yrp_disconnect_Settings_Realistic")
 net.Receive(
 	"nws_yrp_disconnect_Settings_Realistic",
 	function(len, ply)
@@ -68,9 +68,9 @@ net.Receive(
 )
 
 if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	YRP.msg("note", DATABASE_NAME .. " has not the default values, adding them")
+	YRP:msg("note", DATABASE_NAME .. " has not the default values, adding them")
 	local _result = YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
-	YRP.msg("note", tostring(_result))
+	YRP:msg("note", tostring(_result))
 end
 
 local yrp_realistic = {}
@@ -102,7 +102,7 @@ function YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
 end
 
 function YRPUpdateBool(handler, db_name, ply, netstr, str, l_db, value)
-	YRP.msg("db", ply:YRPName() .. " updated bool " .. str .. " to: " .. tostring(tobool(value)))
+	YRP:msg("db", ply:YRPName() .. " updated bool " .. str .. " to: " .. tostring(tobool(value)))
 	YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
 	for i, pl in pairs(player.GetAll()) do
 		pl:SetYRPBool(str, tobool(value))
@@ -110,7 +110,7 @@ function YRPUpdateBool(handler, db_name, ply, netstr, str, l_db, value)
 end
 
 function YRPUpdateFloat(handler, db_name, ply, netstr, str, l_db, value)
-	YRP.msg("db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring(value))
+	YRP:msg("db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring(value))
 	YRPUpdateValue(handler, db_name, ply, netstr, str, l_db, value)
 	for i, pl in pairs(player.GetAll()) do
 		pl:SetYRPFloat(str, value)
@@ -119,7 +119,7 @@ end
 
 for str, val in pairs(yrp_realistic) do
 	if string.find(str, "bool_", 1, true) then
-		YRP.AddNetworkString("nws_yrp_update_" .. str)
+		YRP:AddNetworkString("nws_yrp_update_" .. str)
 		net.Receive(
 			"nws_yrp_update_" .. str,
 			function(len, ply)
@@ -128,7 +128,7 @@ for str, val in pairs(yrp_realistic) do
 			end
 		)
 	elseif string.find(str, "float_", 1, true) then
-		YRP.AddNetworkString("nws_yrp_update_" .. str)
+		YRP:AddNetworkString("nws_yrp_update_" .. str)
 		net.Receive(
 			"nws_yrp_update_" .. str,
 			function(len, ply)

@@ -31,7 +31,7 @@ function PANEL:UpdateMenu()
 		Height = Height + ele.size
 	end
 
-	self:SetTall(YRP.ctr(Height))
+	self:SetTall(YRP:ctr(Height))
 	local _x, _y = self:GetPos()
 	if _y + self:GetTall() > ScrH() then
 		self:SetPos(_x, ScrH() - self:GetTall())
@@ -41,7 +41,7 @@ end
 function PANEL:AddSpacer()
 	local Entry = {}
 	Entry.size = 10
-	Entry.spacer = YRPCreateD("DPanel", self, self:GetWide(), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight))
+	Entry.spacer = YRPCreateD("DPanel", self, self:GetWide(), YRP:ctr(Entry.size), 0, YRP:ctr(self.lastheight))
 	function Entry.spacer:Paint(pw, ph)
 		draw.RoundedBox(0, 0, ph / 4, pw, ph / 2, Color(0, 0, 0, 255))
 	end
@@ -60,16 +60,16 @@ function PANEL:AddOption(name, icon)
 	end
 
 	Entry.size = 50
-	Entry.icon = YRPCreateD("YPanel", self, YRP.ctr(Entry.size), YRP.ctr(Entry.size), 0, YRP.ctr(self.lastheight))
+	Entry.icon = YRPCreateD("YPanel", self, YRP:ctr(Entry.size), YRP:ctr(Entry.size), 0, YRP:ctr(self.lastheight))
 	function Entry.icon:Paint(pw, ph)
 		if Entry.iconpng ~= "" then
 			surface.SetDrawColor(Color(255, 255, 255, 255))
 			surface.SetMaterial(Entry.iconmat)
-			surface.DrawTexturedRect(YRP.ctr(9), YRP.ctr(9), YRP.ctr(32), YRP.ctr(32))
+			surface.DrawTexturedRect(YRP:ctr(9), YRP:ctr(9), YRP:ctr(32), YRP:ctr(32))
 		end
 	end
 
-	Entry.button = YRPCreateD("YButton", self, self:GetWide() - YRP.ctr(Entry.size), YRP.ctr(Entry.size), YRP.ctr(Entry.size), YRP.ctr(self.lastheight))
+	Entry.button = YRPCreateD("YButton", self, self:GetWide() - YRP:ctr(Entry.size), YRP:ctr(Entry.size), YRP:ctr(Entry.size), YRP:ctr(self.lastheight))
 	Entry.button:SetText(Entry.name)
 	function Entry.button:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)

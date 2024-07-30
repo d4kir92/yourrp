@@ -5,7 +5,7 @@ local _cmdsv = "This command is adminonly/serversided!"
 concommand.Add(
 	"yrp_usergroup",
 	function(ply, cmd, args)
-		YRP.msg("note", _cmdpre .. _cmdsv)
+		YRP:msg("note", _cmdpre .. _cmdsv)
 	end
 )
 
@@ -61,7 +61,7 @@ hook.Add(
 	"yrp_translate_weaponname",
 	function(wep)
 		if wep.LanguageString ~= nil then
-			wep.PrintName = YRP.trans(wep.LanguageString)
+			wep.PrintName = YRP:trans(wep.LanguageString)
 		end
 	end
 )
@@ -69,7 +69,7 @@ hook.Add(
 function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 	-- Change language
 	if newWeapon.LanguageString ~= nil then
-		newWeapon.PrintName = YRP.trans(newWeapon.LanguageString)
+		newWeapon.PrintName = YRP:trans(newWeapon.LanguageString)
 	end
 end
 
@@ -164,11 +164,11 @@ function YRPUseFunction(str)
 			--Inventory
 			local _weapon = LocalPlayer():GetActiveWeapon()
 			if _weapon ~= NULL then
-				local _pname = _weapon:GetPrintName() or _weapon.PrintName or YRP.trans("LID_weapon")
+				local _pname = _weapon:GetPrintName() or _weapon.PrintName or YRP:trans("LID_weapon")
 				local tab = {}
 				tab["ITEM"] = _pname
-				local cannotbedropped = YRP.trans("LID_cannotbedropped", tab)
-				local hasbeendropped = YRP.trans("LID_hasbeendropped", tab)
+				local cannotbedropped = YRP:trans("LID_cannotbedropped", tab)
+				local hasbeendropped = YRP:trans("LID_hasbeendropped", tab)
 				if _weapon.notdropable == nil then
 					net.Receive(
 						"nws_yrp_dropswep",

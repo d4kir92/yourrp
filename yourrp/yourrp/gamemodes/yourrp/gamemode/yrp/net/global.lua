@@ -4,8 +4,8 @@ YRP_Global_Tables = YRP_Global_Tables or {}
 YRPDEBUGGLOBAL = false
 local c = {}
 if SERVER then
-	YRP.AddNetworkString("YRPSetGlobalYRPTable")
-	YRP.AddNetworkString("YRPGetGlobalYRPTables")
+	YRP:AddNetworkString("YRPSetGlobalYRPTable")
+	YRP:AddNetworkString("YRPGetGlobalYRPTables")
 end
 
 function GetGlobalYRPTable(key, value)
@@ -185,7 +185,7 @@ end
 
 function SetGlobalYRPString(index, value)
 	if index and index == "ServerName" then
-		YRP.msg("error", "Someone tried to set ServerName")
+		YRP:msg("error", "Someone tried to set ServerName")
 	end
 
 	if GetGlobalYRPString(index) ~= value or value == "" then
