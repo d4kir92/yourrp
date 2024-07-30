@@ -377,10 +377,16 @@ timer.Create(
 			end
 		end
 
-		if _time % 60.0 == 1 and YRP.XPPerMinute ~= nil then
-			local xp_per_minute = YRP.XPPerMinute()
-			for i, p in pairs(player.GetAll()) do
-				p:AddXP(xp_per_minute)
+		if _time % 60.0 == 1 then
+			if YRP.XpPerMinute ~= nil then
+				local xp_per_minute = YRP:XpPerMinute()
+				for i, p in pairs(player.GetAll()) do
+					p:AddXP(xp_per_minute)
+				end
+
+				YRP.msg("note", string.format("[XpPerMinute] Added %s XP to all Players.", xp_per_minute))
+			else
+				YRP:msg("error", "XpPerMinute is nil")
 			end
 		end
 

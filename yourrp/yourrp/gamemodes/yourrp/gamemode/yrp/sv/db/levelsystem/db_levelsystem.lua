@@ -45,7 +45,7 @@ net.Receive(
 local yrp_levelsystem = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 if IsNotNilAndNotFalse(yrp_levelsystem) then
 	yrp_levelsystem = yrp_levelsystem[1]
-	function YRP.XPPerMinute()
+	function YRP:XpPerMinute()
 		return tonumber(yrp_levelsystem.int_xp_per_minute)
 	end
 end

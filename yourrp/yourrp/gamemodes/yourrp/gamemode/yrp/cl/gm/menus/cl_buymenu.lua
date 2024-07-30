@@ -206,7 +206,6 @@ function createShopItem(item, duid, id)
 					net.WriteString(self.item.count)
 					net.WriteString(self.item.color)
 					net.SendToServer()
-					YRPCloseBuyMenu()
 				end
 			end
 
@@ -612,7 +611,6 @@ net.Receive(
 						_set:Center()
 						_set:MakePopup()
 						function _set:Paint(pw, ph)
-							YRPCloseBuyMenu()
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 0, 0, 200))
 						end
 
