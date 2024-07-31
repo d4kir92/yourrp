@@ -132,13 +132,42 @@ function YRPRemoveOldBackups()
 end
 
 function YRPCreateBackup()
-	YRP:msg("db", "[BACKUP] Create backup")
+	YRP:msg("db", "[BACKUP] Trying to create backup")
 	if CreateYRPBackupsFolder() then
-		local _fi = "yrp_backups/" .. "sv" .. "_" .. "backup" .. "_" .. os.time() .. "___" .. os.date("%Y_%m_%d___%H_%M_%S", os.time()) .. ".txt"
-		file.Write(_fi, file.Read("sv.db", "GAME"))
-		if not file.Exists(_fi, "DATA") then
-			YRP:msg("note", "Failed to create")
+		local backupTime = os.time()
+		if backupTime == nil then
+			YRP:msg("error", "[YRPCreateBackup] Failed to get backupTime")
+
+			return false
 		end
+
+		local backupTS = os.date("%Y_%m_%d___%H_%M_%S", backupTime)
+		if backupTS == nil then
+			YRP:msg("error", "[YRPCreateBackup] Failed to get backupTS")
+
+			return false
+		end
+
+		local _fi = "yrp_backups/sv_backup_" .. backupTime .. "___" .. backupTS .. ".txt"
+		local svdb = file.Read("sv.db", "GAME")
+		if svdb == nil then
+			YRP:msg("note", "[YRPCreateBackup] Failed to Read DATABASE FILE (sv.db)")
+
+			return false
+		end
+
+		file.Write(_fi, svdb)
+		if not file.Exists(_fi, "DATA") then
+			YRP:msg("error", "[YRPCreateBackup] Failed to create backup file in data folder")
+
+			return false
+		end
+
+		YRP:msg("note", "[BACKUP] Created Backup")
+
+		return true
+	else
+		return false
 	end
 end
 
