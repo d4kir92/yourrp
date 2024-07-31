@@ -93,6 +93,7 @@ function YRPDropWeapon(sender)
 end
 
 function YRPDropMoney(ply, amount)
+	amount = tonumber(amount)
 	if ply and amount then
 		local _moneyAmount = math.abs(amount)
 		if ply:canAfford(_moneyAmount) then
