@@ -112,7 +112,7 @@ hook.Add(
 				local changefirstpage = false
 				for lstr, bstr in pairs(tabs) do
 					-- if active tab text == table tab text
-					if language.GetPhrase(text) == language.GetPhrase(lstr) and not lply:GetYRPBool(bstr) then
+					if text and lstr and bstr and language.GetPhrase(text) == language.GetPhrase(lstr) and not lply:GetYRPBool(bstr) then
 						changefirstpage = true -- then change tab
 					end
 				end

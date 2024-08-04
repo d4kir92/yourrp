@@ -379,7 +379,7 @@ function YRP:YLogicServerThink()
 				p:AddXP(xp_per_minute)
 			end
 
-			YRP:msg("note", string.format("[XpPerMinute] Added %s XP to all Players.", xp_per_minute))
+			YRP:msg("debug", string.format("[XpPerMinute] Added %s XP to all Players.", xp_per_minute))
 		else
 			YRP:msg("error", "XpPerMinute is nil")
 		end

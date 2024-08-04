@@ -78,29 +78,42 @@ function ENT:ATMPressPrev(ply)
 	local i = 1
 	self.names = {}
 	self.SteamIDs = {}
-	for k, v in pairs(_tmpPlayers) do
-		if k >= self.namePos then
-			if v.rpname ~= nil and v.rpname ~= NULL then
-				names[i] = v.rpname
-				SteamIDs[i] = v.uniqueID
-			else
-				names[i] = ""
-				SteamIDs[i] = ""
-			end
+	if _tmpPlayers then
+		for k, v in pairs(_tmpPlayers) do
+			if k >= self.namePos then
+				if v.rpname ~= nil and v.rpname ~= NULL then
+					names[i] = v.rpname
+					SteamIDs[i] = v.uniqueID
+				else
+					names[i] = ""
+					SteamIDs[i] = ""
+				end
 
-			i = i + 1
-			if self.namePos > self.namePos + 4 then break end
+				i = i + 1
+				if self.namePos > self.namePos + 4 then break end
+			end
 		end
 	end
 
-	self:SetYRPString("name1", tostring(names[1]))
-	self:SetYRPString("SteamID1", tostring(SteamIDs[1]))
-	self:SetYRPString("name2", tostring(names[2]))
-	self:SetYRPString("SteamID2", tostring(SteamIDs[2]))
-	self:SetYRPString("name3", tostring(names[3]))
-	self:SetYRPString("SteamID3", tostring(SteamIDs[3]))
-	self:SetYRPString("name4", tostring(names[4]))
-	self:SetYRPString("SteamID4", tostring(SteamIDs[4]))
+	if names[1] and SteamIDs[1] then
+		self:SetYRPString("name1", tostring(names[1]))
+		self:SetYRPString("SteamID1", tostring(SteamIDs[1]))
+	end
+
+	if names[2] and SteamIDs[2] then
+		self:SetYRPString("name2", tostring(names[2]))
+		self:SetYRPString("SteamID2", tostring(SteamIDs[2]))
+	end
+
+	if names[3] and SteamIDs[3] then
+		self:SetYRPString("name3", tostring(names[3]))
+		self:SetYRPString("SteamID3", tostring(SteamIDs[3]))
+	end
+
+	if names[4] and SteamIDs[4] then
+		self:SetYRPString("name4", tostring(names[4]))
+		self:SetYRPString("SteamID4", tostring(SteamIDs[4]))
+	end
 end
 
 function ENT:ATMPressNext(ply)
@@ -111,29 +124,42 @@ function ENT:ATMPressNext(ply)
 	local i = 1
 	self.names = {}
 	self.SteamIDs = {}
-	for k, v in pairs(_tmpPlayers) do
-		if k >= self.namePos then
-			if v.rpname ~= nil and v.rpname ~= NULL then
-				names[i] = v.rpname
-				SteamIDs[i] = v.uniqueID
-			else
-				names[i] = ""
-				SteamIDs[i] = ""
-			end
+	if _tmpPlayers then
+		for k, v in pairs(_tmpPlayers) do
+			if k >= self.namePos then
+				if v.rpname ~= nil and v.rpname ~= NULL then
+					names[i] = v.rpname
+					SteamIDs[i] = v.uniqueID
+				else
+					names[i] = ""
+					SteamIDs[i] = ""
+				end
 
-			i = i + 1
-			if self.namePos > self.namePos + 4 then break end
+				i = i + 1
+				if self.namePos > self.namePos + 4 then break end
+			end
 		end
 	end
 
-	self:SetYRPString("name1", tostring(names[1]))
-	self:SetYRPString("SteamID1", tostring(SteamIDs[1]))
-	self:SetYRPString("name2", tostring(names[2]))
-	self:SetYRPString("SteamID2", tostring(SteamIDs[2]))
-	self:SetYRPString("name3", tostring(names[3]))
-	self:SetYRPString("SteamID3", tostring(SteamIDs[3]))
-	self:SetYRPString("name4", tostring(names[4]))
-	self:SetYRPString("SteamID4", tostring(SteamIDs[4]))
+	if names[1] and SteamIDs[1] then
+		self:SetYRPString("name1", tostring(names[1]))
+		self:SetYRPString("SteamID1", tostring(SteamIDs[1]))
+	end
+
+	if names[2] and SteamIDs[2] then
+		self:SetYRPString("name2", tostring(names[2]))
+		self:SetYRPString("SteamID2", tostring(SteamIDs[2]))
+	end
+
+	if names[3] and SteamIDs[3] then
+		self:SetYRPString("name3", tostring(names[3]))
+		self:SetYRPString("SteamID3", tostring(SteamIDs[3]))
+	end
+
+	if names[4] and SteamIDs[4] then
+		self:SetYRPString("name4", tostring(names[4]))
+		self:SetYRPString("SteamID4", tostring(SteamIDs[4]))
+	end
 end
 
 function ENT:createButtonNumber(parent, up, forward, right, add)
