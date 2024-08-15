@@ -282,13 +282,18 @@ hook.Add(
 				color.b = color.b + 50
 			end
 
-			surface.SetDrawColor(color)
-			surface.SetMaterial(YRP:GetDesignIcon("circle"))
-			surface.DrawTexturedRect(0, 0, pw, ph)
+			if YRP:GetDesignIcon("circle") then
+				surface.SetDrawColor(color)
+				surface.SetMaterial(YRP:GetDesignIcon("circle"))
+				surface.DrawTexturedRect(0, 0, pw, ph)
+			end
+
 			local br = ph * 0.1
-			surface.SetDrawColor(Color(255, 255, 255, 255))
-			surface.SetMaterial(YRP:GetDesignIcon("clear"))
-			surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+			if YRP:GetDesignIcon("clear") then
+				surface.SetDrawColor(Color(255, 255, 255, 255))
+				surface.SetMaterial(YRP:GetDesignIcon("clear"))
+				surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+			end
 
 			return true
 		end
