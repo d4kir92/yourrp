@@ -2225,6 +2225,12 @@ net.Receive(
 				tmpTableTargetGroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].int_groupID)
 			else
 				tmpTableTargetPromoteRole = YRP_SQL_SELECT("yrp_ply_roles", "*", "int_prerole = '" .. 0 .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'")
+				if tmpTableTargetPromoteRole == nil then
+					YRP:msg("note", "No Valid Promote Role")
+
+					return
+				end
+
 				tmpTableTargetGroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].int_groupID)
 			end
 
