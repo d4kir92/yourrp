@@ -712,7 +712,13 @@ hook.Add(
 	"yrp_player_spawn_DoPlayerDeath",
 	function(ply, attacker, dmg)
 		if attacker.SteamID and ply.SteamID then
-			YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. os.time() .. "' ,'LID_kills', '" .. attacker:SteamID() .. "', '" .. ply:SteamID() .. "', '" .. dmg:GetDamage() .. "'")
+			local time = os.time()
+			local steamId = ply:SteamID()
+			local attackerSteamId = attacker:SteamID()
+			local damage = dmg:GetDamage()
+			if time and damage then
+				YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. time .. "' ,'LID_kills', '" .. attackerSteamId .. "', '" .. steamId .. "', '" .. damage .. "'")
+			end
 		end
 
 		--YRP:msg( "gm", "[DoPlayerDeath] " .. tostring(ply:YRPName() ) .. " do death." )
