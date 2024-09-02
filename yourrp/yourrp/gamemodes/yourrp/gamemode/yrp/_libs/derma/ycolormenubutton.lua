@@ -10,9 +10,9 @@ function PANEL:DoClick()
 	ctrl:MakePopup()
 	ctrl:SetColor(self._col)
 	ctrl.ValueChanged = function(sel, color)
-		if self and self.ValueChanged then
+		if self and self.ColorChanged then
 			self:SetColor(color)
-			self:ValueChanged(color)
+			self:ColorChanged(color)
 		end
 	end
 
