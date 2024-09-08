@@ -890,7 +890,11 @@ function YRPGetCharacters()
 	net.SendToServer()
 end
 
-YRP_LogOut = YRP_LogOut or false
+local YRP_LogOut = YRP_LogOut or false
+function YRPGetLogout()
+	return YRP_LogOut
+end
+
 local logout = false
 local logoutts = 0
 local logoutpos

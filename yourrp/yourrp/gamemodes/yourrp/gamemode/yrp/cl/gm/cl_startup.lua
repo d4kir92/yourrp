@@ -1794,10 +1794,10 @@ local dsd = CurTime() + 2
 local ds = ds or false
 hook.Add(
 	"Think",
-	"openDeathScreen",
+	"YRP_Open_Death_Screen",
 	function(len)
 		if LocalPlayer() == NULL then return end
-		if not YRP_LogOut and LocalPlayer():LoadedGamemode() and not LocalPlayer():Alive() and not vgui.CursorVisible() and dsd < CurTime() and LocalPlayer():CharID() > 0 and not ds and GetGlobalYRPBool("bool_deathscreen", false) and not customDeathscreen then
+		if not YRPGetLogout() and LocalPlayer():LoadedGamemode() and not LocalPlayer():Alive() and dsd < CurTime() and LocalPlayer():CharID() > 0 and not ds and GetGlobalYRPBool("bool_deathscreen", false) and not customDeathscreen then
 			ds = true
 			local win = YRPCreateD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 			win:SetTitle("")
