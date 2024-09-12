@@ -314,7 +314,6 @@ function YRPKeyPressed(key, str, distance)
 	end
 end
 
-local afktime = CurTime()
 local _view_delay = true
 local blink_delay = 0
 local setup = false
@@ -343,48 +342,6 @@ function YRPKeyPress()
 		if lply:IsInCombat() and CurTime() > blink_delay and not system.HasFocus() then
 			blink_delay = CurTime() + 1
 			system.FlashWindow()
-		end
-
-		if lply:AFK() then
-			local afk = true
-			for i = 107, 113 do
-				if input.IsMouseDown(i) then
-					afk = false
-					break
-				end
-			end
-
-			if afk then
-				for i = 0, 159 do
-					if lply:KeyDown(i) then
-						afk = false
-						break
-					end
-				end
-			end
-
-			if not afk then
-				net.Start("nws_yrp_notafk")
-				net.SendToServer()
-			end
-		else
-			for i = 107, 113 do
-				if input.IsMouseDown(i) then
-					afktime = CurTime()
-				end
-			end
-
-			for i = 0, 159 do
-				if lply:KeyDown(i) then
-					afktime = CurTime()
-				end
-			end
-
-			-- AFKTIME
-			if afktime + 300 < CurTime() then
-				net.Start("nws_yrp_setafk")
-				net.SendToServer()
-			end
 		end
 
 		if not vgui.CursorVisible() then
@@ -551,7 +508,6 @@ end
 
 PLAYER.TauntCam = TauntCamera()
 -- #THIRDPERSON
-local oldang = Angle(0, 0, 0)
 function YRP_CalcView(lply, pos, angles, fov)
 	if angles ~= nil then
 		lply.yrp_view_range = lply.yrp_view_range or 0
@@ -565,12 +521,6 @@ function YRP_CalcView(lply, pos, angles, fov)
 		--and !lply:IsPlayingTaunt() then
 		if lply:Alive() then
 			local view = {}
-			if lply:AFK() and (oldang.p + 1 < angles.p and oldang.p - 1 < angles.p) or (oldang.y + 1 < angles.y and oldang.y - 1 < angles.y) or (oldang.r + 1 < angles.r and oldang.r - 1 < angles.r) then
-				net.Start("nws_yrp_notafk")
-				net.SendToServer()
-			end
-
-			oldang = angles
 			local disablethirdperson = false
 			local weapon = lply:GetActiveWeapon()
 			if weapon ~= NULL and weapon:GetClass() ~= nil then

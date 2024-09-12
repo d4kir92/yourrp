@@ -238,25 +238,32 @@ function Player:SetAFK(bo)
 	YRPSendAnim(self, GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_SIT, false)
 end
 
-YRP:AddNetworkString("nws_yrp_notafk")
-net.Receive(
-	"nws_yrp_notafk",
-	function(len, ply)
-		if ply:AFK() then
-			ply:SetAFK(false)
-			YRPStopAnim(ply, GESTURE_SLOT_ATTACK_AND_RELOAD)
+hook.Add(
+	"KeyPress",
+	"yrp_keypress_afkcheck",
+	function(ply, key)
+		ply.yrp_last_key = CurTime()
+		ply:SetAFK(false)
+	end
+)
+
+function YRPThinkAFk()
+	for i, ply in pairs(player.GetAll()) do
+		ply.yrp_last_key = ply.yrp_last_key or CurTime()
+		if ply.yrp_last_key + 300 < CurTime() then
+			ply:SetAFK(true)
 		end
 	end
-)
 
-YRP:AddNetworkString("nws_yrp_setafk")
-net.Receive(
-	"nws_yrp_setafk",
-	function(len, ply)
-		ply:SetAFK(true)
-	end
-)
+	timer.Simple(
+		1,
+		function()
+			YRPThinkAFk()
+		end
+	)
+end
 
+YRPThinkAFk()
 function YRPChatAfk(sender)
 	sender:SetAFK(not sender:AFK())
 end
