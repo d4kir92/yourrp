@@ -78,9 +78,9 @@ function BuildLogs(parent, typ)
 
 							function rt:ActionSignal(signalName, signalValue)
 								if signalName == "TextClicked" then
-									if source ~= nil and (signalValue == v.string_source_steamid) and source:IsPlayer() then
+									if source and source ~= nil and source ~= NULL and (signalValue == v.string_source_steamid) and source:IsPlayer() then
 										source:ShowProfile()
-									elseif signalValue == v.string_target_steamid then
+									elseif target and target ~= nil and target ~= NULL and signalValue == v.string_target_steamid then
 										target:ShowProfile()
 									end
 								end
