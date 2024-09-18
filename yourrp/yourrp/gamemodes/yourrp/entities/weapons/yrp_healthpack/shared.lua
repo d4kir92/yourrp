@@ -19,7 +19,6 @@ SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "healthpack"
 SWEP.Secondary.Ammo = "healthpacksecondary"
 SWEP.HoldType = "fist"
-
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
 end
@@ -32,15 +31,12 @@ function SWEP:Think()
 end
 
 local _target = nil
-
 function SWEP:PrimaryAttack()
 	if SERVER and self:Clip1() > 0 then
 		local ply = self:GetOwner()
 		local tr = util.QuickTrace(ply:EyePos(), ply:GetAimVector() * 100, ply)
-
 		if tr.Hit then
 			self.target = tr.Entity
-
 			if tr.Entity:IsPlayer() then
 				--StartCasting(net_str, lang_str, mode, target, duration, range, cost, canmove)
 				ply:StartCasting("healthpack", "LID_healing", 0, self.target, 3, 100, 1, false)
@@ -50,11 +46,17 @@ function SWEP:PrimaryAttack()
 end
 
 if SERVER then
-	hook.Add("yrp_castdone_healthpack", "healthpack", function(args)
-		args.target:Heal(100)
-		args.target:StopBleeding()
-		args.attacker:GetActiveWeapon():TakePrimaryAmmo(1)
-	end)
+	hook.Add(
+		"yrp_castdone_healthpack",
+		"healthpack",
+		function(args)
+			args.target:Heal(100)
+			args.target:StopBleeding()
+			if args.attacker:GetActiveWeapon() and args.attacker:GetActiveWeapon().TakePrimaryAmmo then
+				args.attacker:GetActiveWeapon():TakePrimaryAmmo(1)
+			end
+		end
+	)
 end
 
 function SWEP:SecondaryAttack()
@@ -66,7 +68,6 @@ function SWEP:SecondaryAttack()
 end
 
 local wave = Material("vgui/entities/yrp_healthpack.png", "noclamp smooth")
-
 function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 	surface.SetMaterial(wave)
 	surface.SetDrawColor(Color(255, 255, 255, 255))
