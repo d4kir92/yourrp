@@ -110,7 +110,7 @@ hook.Add(
 	"yrp_hud_safezone",
 	function()
 		local lply = LocalPlayer()
-		if IsInsideSafezone(lply) then
+		if IsInsideSafezone and IsInsideSafezone(lply) then
 			draw.SimpleText(YRP:trans("LID_safezone"), "Y_24_500", ScrW() / 2, YRP:ctr(650), Color(100, 100, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end

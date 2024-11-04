@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 355 -- do NOT change this!
 GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 469 -- do NOT change this!
+GM.VersionBuild = 471 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -101,8 +101,10 @@ if SERVER then
 	)
 end
 
+local initOnce = true
 function GM:Initialize()
-	if self.BaseClass and self.BaseClass.Initialize then
+	if self.BaseClass and self.BaseClass.Initialize and initOnce then
+		initOnce = false
 		self.BaseClass.Initialize(self)
 	end
 end
