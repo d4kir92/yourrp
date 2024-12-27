@@ -114,13 +114,25 @@ function DarkRP.createGroupChat(functionOrJob, teamNr)
 end
 
 function DarkRP.createJob(name, tbl)
-	--Description: Create a job for DarkRP.
-	--YRPDarkrpNotFound( "createJob( " .. name .. ", tbl)" )
-	if SERVER and YRPIMPORTDARKRP and tbl and tbl.category then
+	if SERVER and YRPIMPORTDARKRP and tbl and tbl.category ~= nil then
 		local groupid = 1
 		local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "string_name = '" .. tbl.category .. "'")
 		if group == nil then
-			MsgC(Color(0, 255, 0), "[YRPImportJob]", " Group not found ( ", tbl.category, " )", "\n")
+			MsgC(Color(255, 255, 0), "[YRPImportJob]", " Group not found (" .. tbl.category .. "), Creating it.", "\n")
+			local cols = "string_name"
+			local vals = ""
+			vals = vals .. YRP_SQL_STR_IN(tbl.category)
+			local res = YRP_SQL_INSERT_INTO("yrp_ply_groups", cols, vals)
+			if res == nil then
+				local g = YRP_SQL_SELECT("yrp_ply_groups", "string_name, uniqueID", nil)
+				if g and g[1] then
+					group = g[1]
+					groupid = gro.uniqueID
+					MsgC(Color(0, 255, 0), "[YRPImportJob]", "Created Group (" .. tbl.category .. ")", "\n")
+				else
+					MsgC(Color(255, 0, 0), "[YRPImportJob]", "Failed to created Group (" .. tbl.category .. ")", "\n")
+				end
+			end
 		elseif group and group[1] then
 			group = group[1]
 			groupid = tonumber(group.uniqueID)

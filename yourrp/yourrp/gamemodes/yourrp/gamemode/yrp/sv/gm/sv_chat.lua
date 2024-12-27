@@ -1,4 +1,8 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+if SERVER then
+	resource.AddFile("resource/fonts/aero matics regular.ttf")
+end
+
 -- #CHAT
 YRP:AddNetworkString("nws_yrp_showAlert")
 local alerts = {}
