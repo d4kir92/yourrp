@@ -149,13 +149,6 @@ function YRPCreateBackup()
 		end
 
 		local _fi = "yrp_backups/sv_backup_" .. backupTime .. "___" .. backupTS .. ".txt"
-		local svdb = file.Read("sv.db", "GAME")
-		if svdb == nil then
-			YRP:msg("note", "[YRPCreateBackup] Failed to Read DATABASE FILE (sv.db)")
-
-			return false
-		end
-
 		file.Write(_fi, svdb)
 		if not file.Exists(_fi, "DATA") then
 			YRP:msg("error", "[YRPCreateBackup] Failed to create backup file in data folder")

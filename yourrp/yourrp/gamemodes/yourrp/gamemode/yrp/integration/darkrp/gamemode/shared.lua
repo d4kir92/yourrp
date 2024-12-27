@@ -113,7 +113,10 @@ function DarkRP.createGroupChat(functionOrJob, teamNr)
 	YRPDarkrpNotFound("createGroupChat(functionOrJob, " .. tostring(teamNr) .. " )")
 end
 
+local c = 0
 function DarkRP.createJob(name, tbl)
+	print("createjob", tbl, name)
+	c = c + 1
 	if SERVER and YRPIMPORTDARKRP and tbl and tbl.category ~= nil then
 		local groupid = 1
 		local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "string_name = '" .. tbl.category .. "'")
@@ -187,7 +190,7 @@ function DarkRP.createJob(name, tbl)
 		end
 	end
 
-	return -1
+	return c
 end
 
 function DarkRP.createShipment(name, tbl)
