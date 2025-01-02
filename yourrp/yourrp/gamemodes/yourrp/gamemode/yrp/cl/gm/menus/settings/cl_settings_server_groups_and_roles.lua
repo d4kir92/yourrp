@@ -504,7 +504,7 @@ net.Receive(
 							ea.tab = nil
 						end
 
-						if win then
+						if win and win.Close then
 							win:Close()
 						end
 					end
@@ -512,7 +512,9 @@ net.Receive(
 					local _no = YRPCreateD("YButton", win:GetContent(), YRP:ctr(300), YRP:ctr(50), YRP:ctr(320), 0)
 					_no:SetText(YRP:trans("LID_no"))
 					function _no:DoClick()
-						win:Close()
+						if win and win.Close then
+							win:Close()
+						end
 					end
 				elseif ea.typ == "role" and IsNotNilAndNotFalse(ea.tab.uniqueID) and tonumber(ea.tab.uniqueID) ~= 1 then
 					net.Start("nws_yrp_settings_delete_role")
@@ -902,7 +904,9 @@ net.Receive(
 												net.WriteInt(group.uniqueID, 32)
 												net.WriteString(v.ClassName)
 												net.SendToServer()
-												winswep:Close()
+												if winswep and winswep.Close then
+													winswep:Close()
+												end
 											end
 
 											if v.WorldModel ~= "" then
@@ -1470,7 +1474,9 @@ net.Receive(
 										net.WriteInt(role.uniqueID, 32)
 										net.WriteInt(flag.uniqueID, 32)
 										net.SendToServer()
-										win:Close()
+										if win and win.Close then
+											win:Close()
+										end
 									end
 
 									win.dpl:AddItem(line)
@@ -1555,7 +1561,10 @@ net.Receive(
 						win.add = YRPCreateD("YButton", content, YRP:ctr(50), YRP:ctr(50), YRP:ctr(20), YRP:ctr(20))
 						win.add:SetText("+")
 						function win.add:DoClick()
-							win:Close()
+							if win and win.Close then
+								win:Close()
+							end
+
 							local lply = LocalPlayer()
 							lply.yrpseltab = {}
 							local pmwin = YRPCreateD("YFrame", nil, YRP:ctr(1400), YRP:ctr(1400), 0, 0)
@@ -1679,7 +1688,9 @@ net.Receive(
 									net.WriteString(min)
 									net.WriteString(max)
 									net.SendToServer()
-									pmwin:Close()
+									if pmwin and pmwin.Close then
+										pmwin:Close()
+									end
 								end
 							end
 						end
@@ -1717,7 +1728,9 @@ net.Receive(
 												net.WriteInt(role.uniqueID, 32)
 												net.WriteInt(pm.uniqueID, 32)
 												net.SendToServer()
-												win:Close()
+												if win and win.Close then
+													win:Close()
+												end
 											end
 
 											function line:Paint(spw, sph)
@@ -2180,7 +2193,9 @@ net.Receive(
 														net.WriteInt(role.uniqueID, 32)
 														net.WriteString(v.ClassName)
 														net.SendToServer()
-														winlicenses:Close()
+														if winlicenses and winlicenses.Close then
+															winlicenses:Close()
+														end
 													end
 
 													if v.WorldModel ~= "" and v.WorldModel ~= nil then
@@ -2642,7 +2657,9 @@ net.Receive(
 													net.WriteInt(role.uniqueID, 32)
 													net.WriteString(v.ClassName)
 													net.SendToServer()
-													winspecializations:Close()
+													if winspecializations and winspecializations.Close then
+														winspecializations:Close()
+													end
 												end
 
 												if v.WorldModel ~= "" and v.WorldModel ~= nil then
