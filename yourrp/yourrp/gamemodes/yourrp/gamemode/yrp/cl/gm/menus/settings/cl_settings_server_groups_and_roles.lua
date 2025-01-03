@@ -909,14 +909,14 @@ net.Receive(
 												end
 											end
 
-											if v.WorldModel ~= "" then
+											if v.WorldModel and type(v.WorldModel) == "string" and v.WorldModel ~= "" then
 												d_swep.model = YRPCreateD("DModelPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
 												d_swep.model:SetModel(v.WorldModel)
 											else
 												d_swep.model = YRPCreateD("DPanel", d_swep, d_swep:GetTall(), d_swep:GetTall(), 0, 0)
 												function d_swep.model:Paint(pw, ph)
 													draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80))
-													draw.SimpleText("NO MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+													draw.SimpleText("NO VALID MODEL", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 												end
 											end
 
