@@ -896,7 +896,7 @@ net.Receive(
 									strsearch = string.Replace(strsearch, "%", "")
 									self.dpl:Clear()
 									for i, v in pairs(cl_sweps) do
-										if string.find(string.lower(v.PrintName), strsearch, 1, true) or string.find(string.lower(v.ClassName), strsearch, 1, true) or string.find(string.lower(v.WorldModel), strsearch, 1, true) then
+										if (v.PrintName and type(v.PrintName) and string.find(string.lower(v.PrintName), strsearch, 1, true)) or (v.ClassName and type(v.ClassName) and string.find(string.lower(v.ClassName), strsearch, 1, true)) or (v.WorldModel and type(v.WorldModel) and string.find(string.lower(v.WorldModel), strsearch, 1, true)) then
 											local d_swep = YRPCreateD("YButton", nil, winswep.dpl:GetWide(), height / 4, 0, 0)
 											d_swep:SetText(v.PrintName)
 											function d_swep:DoClick()
