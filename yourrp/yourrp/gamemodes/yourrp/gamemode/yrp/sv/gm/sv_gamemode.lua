@@ -716,7 +716,7 @@ hook.Add(
 			local steamId = ply:SteamID()
 			local attackerSteamId = attacker:SteamID()
 			local damage = dmg:GetDamage()
-			if time and damage then
+			if time and damage and steamId and attackerSteamId then
 				YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_source_steamid, string_target_steamid, string_value", "'" .. time .. "' ,'LID_kills', '" .. attackerSteamId .. "', '" .. steamId .. "', '" .. damage .. "'")
 			end
 		end

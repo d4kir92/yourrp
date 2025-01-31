@@ -335,6 +335,8 @@ local nang = Angle(0, 0, 0)
 local nvec = Vector(0, 0, 0)
 function YRPResetPoses(ply)
 	for i = 0, 100 do
+		ply["posesang"] = ply["posesang"] or {}
+		ply["posespos"] = ply["posespos"] or {}
 		ply["posesang"][i] = ply["posesang"][i] or nang
 		ply["posesang"][i] = LerpAngle(12 * FrameTime(), ply["posesang"][i], nang)
 		ply:ManipulateBoneAngles(i, ply["posesang"][i])
