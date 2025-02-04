@@ -1118,22 +1118,7 @@ net.Receive(
 
 -- VOICE CHANNELS
 local DATABASE_NAME = "yrp_voice_channels"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hear", "INTEGER DEFAULT '0'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_mode", "TEXT DEFAULT '0'") -- 0 = Normal, 1 = Global
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT '0'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_usergroups", "TEXT DEFAULT 'superadmin,user'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_groups", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_roles", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_usergroups", "TEXT DEFAULT 'superadmin,user'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_groups", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_roles", "TEXT DEFAULT '1'")
---YRP_SQL_DROP_TABLE(DATABASE_NAME)
 local yrp_voice_channels = {}
-if YRP_SQL_SELECT(DATABASE_NAME, "*") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_hear, string_mode, string_active_usergroups, string_passive_usergroups", "'DEFAULT', '1', '0', 'superadmin, admin, user', 'superadmin, admin, user'")
-end
-
 function GenerateVoiceTable()
 	yrp_voice_channels = {}
 	local channels = YRP_SQL_SELECT(DATABASE_NAME, "*")
@@ -1230,7 +1215,29 @@ function GenerateVoiceTable()
 	SetGlobalYRPTable("yrp_voice_channels", yrp_voice_channels)
 end
 
-GenerateVoiceTable()
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_voice_channels",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hear", "INTEGER DEFAULT '0'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_mode", "TEXT DEFAULT '0'") -- 0 = Normal, 1 = Global
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INT DEFAULT '0'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_usergroups", "TEXT DEFAULT 'superadmin,user'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_groups", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_roles", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_usergroups", "TEXT DEFAULT 'superadmin,user'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_groups", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_roles", "TEXT DEFAULT '1'")
+		--YRP_SQL_DROP_TABLE(DATABASE_NAME)
+		if YRP_SQL_SELECT(DATABASE_NAME, "*") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_hear, string_mode, string_active_usergroups, string_passive_usergroups", "'DEFAULT', '1', '0', 'superadmin, admin, user', 'superadmin, admin, user'")
+		end
+
+		GenerateVoiceTable()
+	end
+)
+
 YRP:AddNetworkString("nws_yrp_vm_get_active_usergroups")
 net.Receive(
 	"nws_yrp_vm_get_active_usergroups",

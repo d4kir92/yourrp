@@ -2,17 +2,31 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_levelsystem"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level_min", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level_max", "INT DEFAULT 100")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level_start", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_for_levelup", "INT DEFAULT 100")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_multiplier", "TEXT DEFAULT '1.5'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_kill", "TEXT DEFAULT '20'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_minute", "TEXT DEFAULT '10'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_revive", "TEXT DEFAULT '30'")
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "'1'")
-end
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_levelsystem",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level_min", "INT DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level_max", "INT DEFAULT 100")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level_start", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_for_levelup", "INT DEFAULT 100")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_multiplier", "TEXT DEFAULT '1.5'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_kill", "TEXT DEFAULT '20'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_minute", "TEXT DEFAULT '10'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_xp_per_revive", "TEXT DEFAULT '30'")
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "'1'")
+		end
+
+		local yrp_levelsystem = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		if IsNotNilAndNotFalse(yrp_levelsystem) then
+			yrp_levelsystem = yrp_levelsystem[1]
+			function YRP:XpPerMinute()
+				return tonumber(yrp_levelsystem.int_xp_per_minute)
+			end
+		end
+	end
+)
 
 --[[ LOADOUT ]]
 --
@@ -41,14 +55,6 @@ net.Receive(
 		end
 	end
 )
-
-local yrp_levelsystem = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
-if IsNotNilAndNotFalse(yrp_levelsystem) then
-	yrp_levelsystem = yrp_levelsystem[1]
-	function YRP:XpPerMinute()
-		return tonumber(yrp_levelsystem.int_xp_per_minute)
-	end
-end
 
 YRP:AddNetworkString("nws_yrp_update_ls_int_level_min")
 net.Receive(

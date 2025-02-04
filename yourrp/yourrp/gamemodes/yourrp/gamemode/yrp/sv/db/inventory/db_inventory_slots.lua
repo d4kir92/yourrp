@@ -1,7 +1,14 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local DATABASE_NAME = "yrp_inventory_slots"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_inventory_slots",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
+	end
+)
+
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 function CreateSlot(storageID, inv)
 	storageID = tonumber(storageID)

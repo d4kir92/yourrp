@@ -12,7 +12,6 @@ table.insert(YRP_DBS, "yrp_ply_groups")
 table.insert(YRP_DBS, "yrp_ply_roles")
 table.insert(YRP_DBS, "yrp_realistic")
 table.insert(YRP_DBS, "yrp_feedback")
-table.insert(YRP_DBS, "yrp_sql")
 table.insert(YRP_DBS, "yrp_flags")
 table.insert(YRP_DBS, "yrp_playermodels")
 table.insert(YRP_DBS, "yrp_design")
@@ -123,7 +122,6 @@ function db_init_database()
 	end
 end
 
-db_init_database()
 include("resources/db_resources.lua")
 include("sql/db_sql.lua")
 include("database/db_database.lua")
@@ -173,8 +171,21 @@ include("weapon/db_weapon.lua")
 include("specializations/db_specializations.lua")
 -- DarkRP
 local DATABASE_NAME = "yrp_darkrp"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_darkrp",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+		timer.Simple(
+			4,
+			function()
+				UpdateDarkRPTable()
+			end
+		)
+	end
+)
+
 YRP:AddNetworkString("nws_yrp_darkrp_bool")
 net.Receive(
 	"nws_yrp_darkrp_bool",
@@ -224,10 +235,3 @@ function UpdateDarkRPTable(ply)
 		end
 	end
 end
-
-timer.Simple(
-	4,
-	function()
-		UpdateDarkRPTable()
-	end
-)

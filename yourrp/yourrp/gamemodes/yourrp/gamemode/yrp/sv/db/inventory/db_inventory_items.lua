@@ -1,14 +1,19 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local DATABASE_NAME = "yrp_inventory_items"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_slotID", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_fixed", "INT DEFAULT 0") -- Fixed = not moveable
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0") -- storageID
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_printname", "TEXT DEFAULT 'Unnamed'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_classname", "TEXT DEFAULT 'yrp_money_printer'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props_junk/garbage_takeoutcarton001a.mdl'")
---YRP_SQL_ADD_COLUMN(DATABASE_NAME, "tab_properties", "TEXT DEFAULT ''" )
---YRP_SQL_DROP_TABLE(DATABASE_NAME)
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_inventory_items",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_slotID", "INT DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_fixed", "INT DEFAULT 0") -- Fixed = not moveable
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0") -- storageID
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_printname", "TEXT DEFAULT 'Unnamed'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_classname", "TEXT DEFAULT 'yrp_money_printer'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props_junk/garbage_takeoutcarton001a.mdl'")
+	end
+)
+
 function InventoryBlacklisted(cname)
 	local blacklist = GetGlobalYRPTable("yrp_blacklist_inventory", {})
 	for i, black in pairs(blacklist) do

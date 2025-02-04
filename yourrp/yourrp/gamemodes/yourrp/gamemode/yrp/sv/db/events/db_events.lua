@@ -2,8 +2,15 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_events"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_eventname", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_chars", "TEXT DEFAULT ''")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_events",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_eventname", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_chars", "TEXT DEFAULT ''")
+	end
+)
+
 YRP:AddNetworkString("nws_yrp_setting_events")
 net.Receive(
 	"nws_yrp_setting_events",

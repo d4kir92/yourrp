@@ -2,9 +2,17 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_licenses"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT '-'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT '100'")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_licenses",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT '-'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT '100'")
+		YRPUpdateLicenseTable()
+	end
+)
+
 function YRPUpdateLicenseTable()
 	local tab = {}
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
@@ -17,7 +25,6 @@ function YRPUpdateLicenseTable()
 	SetGlobalYRPTable("yrp_licenses", tab)
 end
 
-YRPUpdateLicenseTable()
 function send_licenses(ply)
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	local _nm = _all

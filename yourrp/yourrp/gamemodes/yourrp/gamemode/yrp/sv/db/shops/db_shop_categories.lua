@@ -2,8 +2,15 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_shop_categories"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "shopID", "INT DEFAULT -1")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_shop_categories",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "shopID", "INT DEFAULT -1")
+	end
+)
+
 YRP:AddNetworkString("nws_yrp_get_shop_categories")
 function send_categories(ply, uid)
 	local _cats = YRP_SQL_SELECT(DATABASE_NAME, "*", "shopID = " .. uid)
@@ -62,7 +69,7 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP:msg("db", "category_edit_name: " .. db_WORKED(_new))
+		YRP:msg("db", "category_edit_name: " .. YRP_DB_WORKED(_new))
 	end
 )
 

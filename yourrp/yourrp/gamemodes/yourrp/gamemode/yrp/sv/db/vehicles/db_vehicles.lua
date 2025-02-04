@@ -4,11 +4,18 @@
 YRP:AddNetworkString("nws_yrp_removeVehicleOwner")
 YRP:AddNetworkString("nws_yrp_getVehicleInfo")
 local DATABASE_NAME = "yrp_vehicles"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "keynr", "TEXT DEFAULT '-1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT 100")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "ownerCharID", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "item_id", "TEXT DEFAULT ''")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_vehicles",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "keynr", "TEXT DEFAULT '-1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT 100")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "ownerCharID", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "item_id", "TEXT DEFAULT ''")
+	end
+)
+
 function AddVehicle(veh, ply, item)
 	local charid = ply:CharID()
 	local cname = veh:GetClass()

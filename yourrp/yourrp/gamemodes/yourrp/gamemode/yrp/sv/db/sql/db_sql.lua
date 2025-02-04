@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 YRP:AddNetworkString("nws_yrp_get_sql_info")
 local DATABASE_NAME = "yrp_sql"
-function SQLITE_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
+local function SQLITE_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 	--YRP:msg( "db", "YRP_SQL_CHECK_IF_COLUMN_EXISTS( " .. tostring( db_name) .. ", " .. tostring( column_name) .. " )" )
 	local _result = sql.Query("SELECT " .. column_name .. " FROM " .. db_name)
 	if _result == false then
@@ -13,7 +13,7 @@ function SQLITE_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 	end
 end
 
-function SQLITE_ADD_COLUMN(table_name, column_name, datatype)
+local function SQLITE_ADD_COLUMN(table_name, column_name, datatype)
 	--YRP:msg( "db", "YRP_SQL_ADD_COLUMN( " .. tostring(table_name) .. ", " .. tostring( column_name) .. ", " .. tostring( datatype) .. " )" )
 	local _result = SQLITE_CHECK_IF_COLUMN_EXISTS(table_name, column_name)
 	if not _result then
@@ -100,7 +100,7 @@ function UpdateValue(tab)
 		tab.db,
 		{
 			[tab.id] = tab.value
-		}, "uniqueID = '" .. tab.uniqueID .. "'"
+		}, "uniqueID = '" .. tab.uniqueID .. "'", true
 	)
 	--sql.Query( "UPDATE " .. tab.db .. " SET " .. tab.id .. " = '" .. tab.value .. "' WHERE uniqueID = '" .. tab.uniqueID .. "'" )
 end
@@ -126,7 +126,7 @@ function UpdateBool(tab)
 end
 
 -- NEW
-function DBUpdateValue(db_name, str, l_db, value)
+function DBUpdateValue(db_name, str, l_db, value, sqlite)
 	if l_db ~= nil then
 		l_db[str] = value
 	end
@@ -135,7 +135,7 @@ function DBUpdateValue(db_name, str, l_db, value)
 		db_name,
 		{
 			[str] = value
-		}, "uniqueID = '1'"
+		}, "uniqueID = '1'", sqlite
 	)
 end
 
@@ -144,9 +144,9 @@ function DBUpdateFloat(db_name, ply, netstr, str, l_db, value)
 	DBUpdateValue(db_name, str, l_db, value)
 end
 
-function DBUpdateInt(db_name, ply, netstr, str, l_db, value)
+function DBUpdateInt(db_name, ply, netstr, str, l_db, value, sqlite)
 	YRP:msg("db", ply:YRPName() .. " updated int " .. str .. " to: " .. tostring(value))
-	DBUpdateValue(db_name, str, l_db, value)
+	DBUpdateValue(db_name, str, l_db, value, sqlite)
 end
 
 function DBUpdateString(db_name, ply, netstr, str, l_db, value)
@@ -209,11 +209,11 @@ net.Receive(
 			return
 		end
 
-		DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. "int_mode", "int_mode", yrp_sql, _mode)
+		DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. "int_mode", "int_mode", yrp_sql, _mode, true)
 		SetSQLMode(_mode)
 		YRP:msg("note", ply:YRPName() .. " changed sqlmode to " .. GetSQLModeName())
 		timer.Simple(
-			1,
+			3,
 			function()
 				game.ConsoleCommand("changelevel " .. GetMapName() .. "\n")
 			end

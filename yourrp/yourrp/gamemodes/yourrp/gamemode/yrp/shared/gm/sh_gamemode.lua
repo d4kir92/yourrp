@@ -14,9 +14,9 @@ GM.Twitter = "twitter.com/D4KIR" -- do NOT change this!
 GM.Help = "Create your rp you want to make!" -- do NOT change this!
 GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
-GM.VersionBeta = 355 -- do NOT change this!
-GM.VersionCanary = 711 -- do NOT change this!
-GM.VersionBuild = 477 -- do NOT change this!
+GM.VersionBeta = 356 -- do NOT change this!
+GM.VersionCanary = 0 -- do NOT change this!
+GM.VersionBuild = 500 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -446,11 +446,17 @@ if SERVER then
 		end
 	)
 
-	local tmp = YRP_SQL_SELECT("yrp_general", "text_gamemode_name", nil)
-	if IsNotNilAndNotFalse(tmp) then
-		tmp = tmp[1]
-		GM.BaseName = tmp.text_gamemode_name
-	end
+	hook.Add(
+		"YRP_SQLDBREADY",
+		"yrp_BASENAME",
+		function()
+			local tmp = YRP_SQL_SELECT("yrp_general", "text_gamemode_name", nil)
+			if IsNotNilAndNotFalse(tmp) then
+				tmp = tmp[1]
+				GAMEMODE.BaseName = tmp.text_gamemode_name
+			end
+		end
+	)
 
 	YRP:AddNetworkString("YRPGetGamemodename")
 	net.Receive(

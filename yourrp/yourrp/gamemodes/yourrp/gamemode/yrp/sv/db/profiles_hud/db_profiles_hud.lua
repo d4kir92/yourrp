@@ -2,10 +2,19 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_profiles_hud"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "profile_name", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
---YRP_SQL_DROP_TABLE(DATABASE_NAME)
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_profiles_hud",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "profile_name", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+		ProfilesYourRPDefault()
+		ProfilesTopBar()
+		ProfilesIdentifycard()
+	end
+)
+
 function GetHudProfiles()
 	return YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'name'")
 end
@@ -855,7 +864,6 @@ function ProfilesYourRPDefault()
 	end
 end
 
-ProfilesYourRPDefault()
 function ProfilesTopBar()
 	if YRPHUDS.TopBar == nil then
 		YRPHUDS.TopBar = true
@@ -1625,7 +1633,6 @@ function ProfilesTopBar()
 	end
 end
 
-ProfilesTopBar()
 function ProfilesIdentifycard()
 	if YRPHUDS.Identifycard == nil then
 		YRPHUDS.Identifycard = true
@@ -2454,5 +2461,3 @@ function ProfilesIdentifycard()
 		HudProfileToDataBase("Identifycard", Identifycard)
 	end
 end
-
-ProfilesIdentifycard()

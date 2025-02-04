@@ -3,11 +3,19 @@
 -- https://discord.gg/sEgNZxg
 -- #BLACKLIST
 local DATABASE_NAME = "yrp_blacklist"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "value = 'yrp_teleporter'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'inventory', 'yrp_teleporter'")
-end
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_blacklist",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "value = 'yrp_teleporter'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'inventory', 'yrp_teleporter'")
+		end
+
+		LoadBlacklist()
+	end
+)
 
 function LoadBlacklist()
 	local tabChat = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "chat" .. "'")
@@ -31,7 +39,6 @@ function LoadBlacklist()
 	end
 end
 
-LoadBlacklist()
 YRP:AddNetworkString("nws_yrp_blacklist_get")
 net.Receive(
 	"nws_yrp_blacklist_get",

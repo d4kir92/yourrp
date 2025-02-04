@@ -3,120 +3,128 @@
 -- https://discord.gg/sEgNZxg
 -- CHAT CHANNELS
 local DATABASE_NAME = "yrp_chat_channels"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_structure", "TEXT DEFAULT '%TEXT%'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_structure2", "TEXT DEFAULT '%TEXT%'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_mode", "TEXT DEFAULT '0'") -- 0 = GLOBAL, 1 = LOKAL, 2 = FACTION, 3 = GROUP, 4 = ROLE, 5 = UserGroup, 6 = WHISPER, 9 = CUSTOM
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_usergroups", "TEXT DEFAULT 'superadmin,user'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_groups", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_roles", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_usergroups", "TEXT DEFAULT 'superadmin,user'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_groups", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_roles", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_enabled", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbedisabled", "TEXT DEFAULT '1'")
---YRP_SQL_DROP_TABLE(DATABASE_NAME)
-local all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-if IsNotNilAndNotFalse(all) then
-	local tab = {}
-	for i, v in pairs(all) do
-		if not table.HasValue(tab, v.string_name) then
-			table.insert(tab, v.string_name) -- INSERT UNIQUE
-		else
-			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. v.uniqueID .. "'") -- DELETE DOUBLE ONCES
-		end
-	end
-end
-
 local yrp_chat_channels = {}
--- CREATE DEFAULT CHANNELS
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "OOC" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'OOC', 'Color( 100, 255, 100 )[OOC] %STEAMNAME%: Color( 255, 255, 255, 255 )%TEXT%', 0, 0")
-end
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_chat_channels",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_structure", "TEXT DEFAULT '%TEXT%'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_structure2", "TEXT DEFAULT '%TEXT%'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_mode", "TEXT DEFAULT '0'") -- 0 = GLOBAL, 1 = LOKAL, 2 = FACTION, 3 = GROUP, 4 = ROLE, 5 = UserGroup, 6 = WHISPER, 9 = CUSTOM
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_usergroups", "TEXT DEFAULT 'superadmin,user'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_groups", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_active_roles", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_usergroups", "TEXT DEFAULT 'superadmin,user'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_groups", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_passive_roles", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_enabled", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbedisabled", "TEXT DEFAULT '1'")
+		--YRP_SQL_DROP_TABLE(DATABASE_NAME)
+		local all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+		if IsNotNilAndNotFalse(all) then
+			local tab = {}
+			for i, v in pairs(all) do
+				if not table.HasValue(tab, v.string_name) then
+					table.insert(tab, v.string_name) -- INSERT UNIQUE
+				else
+					YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. v.uniqueID .. "'") -- DELETE DOUBLE ONCES
+				end
+			end
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "/" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'" .. "/" .. "', 'Color( 100, 255, 100 )[OOC] %STEAMNAME%: Color( 255, 255, 255, 255 )%TEXT%', 0, 0")
-end
+		-- CREATE DEFAULT CHANNELS
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "OOC" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'OOC', 'Color( 100, 255, 100 )[OOC] %STEAMNAME%: Color( 255, 255, 255, 255 )%TEXT%', 0, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "LOOC" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'LOOC', 'Color( 100, 255, 100 )[LOOC] %STEAMNAME%: Color( 255, 255, 255, 255 )%TEXT%', 1, 0")
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "/" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'" .. "/" .. "', 'Color( 100, 255, 100 )[OOC] %STEAMNAME%: Color( 255, 255, 255, 255 )%TEXT%', 0, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "SAY" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable, bool_canbedisabled", "'SAY', 'Color( 100, 255, 100 )%RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 1, 0, 0")
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "LOOC" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'LOOC', 'Color( 100, 255, 100 )[LOOC] %STEAMNAME%: Color( 255, 255, 255, 255 )%TEXT%', 1, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ADVERT" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ADVERT', 'Color( 255, 255, 0 )[ADVERT] %RPNAME%: %TEXT%', 0, 0")
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "SAY" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable, bool_canbedisabled", "'SAY', 'Color( 100, 255, 100 )%RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 1, 0, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ROLL" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ROLL', 'Color( 100, 100, 255 )%RPNAME% rolled a RN(0,100)', 1, 0")
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ADVERT" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ADVERT', 'Color( 255, 255, 0 )[ADVERT] %RPNAME%: %TEXT%', 0, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "EVENT" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'EVENT', 'Color( 255, 255, 100 )[EVENT] %RPNAME%: Color( 255, 255, 100 )%TEXT%', 0, 0")
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ROLL" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ROLL', 'Color( 100, 100, 255 )%RPNAME% rolled a RN(0,100)', 1, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ROLE" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ROLE', 'Color( 0, 255, 0 )[ROLE] %RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 4, 0")
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "EVENT" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'EVENT', 'Color( 255, 255, 100 )[EVENT] %RPNAME%: Color( 255, 255, 100 )%TEXT%', 0, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "GROUP" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'GROUP', 'Color( 160, 160, 255 )[GROUP] %RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 3, 0")
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ROLE" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ROLE', 'Color( 0, 255, 0 )[ROLE] %RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 4, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "FACTION" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'FACTION', 'Color( 100, 100, 255 )[FACTION] %RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 2, 0")
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "GROUP" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'GROUP', 'Color( 160, 160, 255 )[GROUP] %RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 3, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ME" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ME', 'Color( 0, 255, 0 )%RPNAME% %TEXT%', 1, 0")
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "FACTION" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'FACTION', 'Color( 100, 100, 255 )[FACTION] %RPNAME%: Color( 255, 255, 255, 255 )%TEXT%', 2, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "IT" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'IT', 'Color( 255, 255, 255, 255 )*** %TEXT%', 1, 0")
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ME" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ME', 'Color( 0, 255, 0 )%RPNAME% %TEXT%', 1, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ID" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ID', 'Color( 0, 255, 0 )%RPNAME% Color( 255, 255, 255, 255 )shows his ID, it says: Color( 0, 255, 0 )%IDCARDID%', 1, 0")
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "IT" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'IT', 'Color( 255, 255, 255, 255 )*** %TEXT%', 1, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "W" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, string_structure2, int_mode, bool_removeable", "'W', 'Color( 255, 100, 255 )von %RPNAME%: %TEXT%', 'Color( 255, 100, 255 )zu %TARGET%: %TEXT%', 6, 0")
-else
-	YRP_SQL_UPDATE(
-		DATABASE_NAME,
-		{
-			["int_mode"] = 6
-		}, "string_name = 'W'"
-	)
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ID" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ID', 'Color( 0, 255, 0 )%RPNAME% Color( 255, 255, 255, 255 )shows his ID, it says: Color( 0, 255, 0 )%IDCARDID%', 1, 0")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "PM" .. "'") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, string_structure2, int_mode, bool_removeable", "'PM', 'Color( 255, 100, 255 )von %RPNAME%: %TEXT%', 'Color( 255, 100, 255 )zu %TARGET%: %TEXT%', 6, 0")
-else
-	YRP_SQL_UPDATE(
-		DATABASE_NAME,
-		{
-			["int_mode"] = 6
-		}, "string_name = 'PM'"
-	)
-end
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "W" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, string_structure2, int_mode, bool_removeable", "'W', 'Color( 255, 100, 255 )von %RPNAME%: %TEXT%', 'Color( 255, 100, 255 )zu %TARGET%: %TEXT%', 6, 0")
+		else
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_mode"] = 6
+				}, "string_name = 'W'"
+			)
+		end
 
-local dbChannels = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_structure", nil)
-if dbChannels then
-	for i, v in pairs(dbChannels) do
-		local string_structure = string.Replace(v.string_structure, "Color( 0, 255, 0 )", "Color( 0, 255, 0 )")
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["string_structure"] = string_structure
-			}, "uniqueID = '" .. v.uniqueID .. "'"
-		)
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "PM" .. "'") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, string_structure2, int_mode, bool_removeable", "'PM', 'Color( 255, 100, 255 )von %RPNAME%: %TEXT%', 'Color( 255, 100, 255 )zu %TARGET%: %TEXT%', 6, 0")
+		else
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_mode"] = 6
+				}, "string_name = 'PM'"
+			)
+		end
+
+		local dbChannels = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_structure", nil)
+		if dbChannels then
+			for i, v in pairs(dbChannels) do
+				local string_structure = string.Replace(v.string_structure, "Color( 0, 255, 0 )", "Color( 0, 255, 0 )")
+				YRP_SQL_UPDATE(
+					DATABASE_NAME,
+					{
+						["string_structure"] = string_structure
+					}, "uniqueID = '" .. v.uniqueID .. "'"
+				)
+			end
+		end
+
+		GenerateChatTable()
 	end
-end
+)
 
 function GenerateChatTable()
 	yrp_chat_channels = {}
@@ -218,7 +226,6 @@ function GenerateChatTable()
 	SetGlobalYRPTable("yrp_chat_channels", yrp_chat_channels)
 end
 
-GenerateChatTable()
 YRP:AddNetworkString("nws_yrp_cm_get_active_usergroups")
 net.Receive(
 	"nws_yrp_cm_get_active_usergroups",

@@ -2,14 +2,22 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_weapon_options"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_primary", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_secondary", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_sidearm", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_gadget", "INT DEFAULT 2")
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID == '1'") == nil then
-	YRP:msg("db", "Set Default Weapon Settings")
-	YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
-end
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_weapon_options",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_primary", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_secondary", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_sidearm", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_gadget", "INT DEFAULT 2")
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID == '1'") == nil then
+			YRP:msg("db", "Set Default Weapon Settings")
+			YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
+		end
+
+		YRPSetWeaponSettings()
+	end
+)
 
 function YRPSetWeaponSettings()
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
@@ -22,7 +30,6 @@ function YRPSetWeaponSettings()
 	end
 end
 
-YRPSetWeaponSettings()
 YRP:AddNetworkString("nws_yrp_set_slot_amount")
 net.Receive(
 	"nws_yrp_set_slot_amount",
@@ -43,12 +50,19 @@ net.Receive(
 )
 
 local DATABASE_NAME2 = "yrp_weapon_slots"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "classname", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_primary", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_secondary", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_sidearm", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_gadget", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_no", "INT DEFAULT 0")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_weapon_slots",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "classname", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_primary", "INT DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_secondary", "INT DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_sidearm", "INT DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_gadget", "INT DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_no", "INT DEFAULT 0")
+	end
+)
+
 function YRPGetSlotsOfSWEP(cn)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'")
 	if IsNotNilAndNotFalse(tab) then

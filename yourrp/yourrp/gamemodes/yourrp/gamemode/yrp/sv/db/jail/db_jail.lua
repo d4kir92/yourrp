@@ -2,8 +2,15 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DBNotes = "yrp_jail_notes"
-YRP_SQL_ADD_COLUMN(DBNotes, "SteamID", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DBNotes, "note", "TEXT DEFAULT ''")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_jail_notes",
+	function()
+		YRP_SQL_ADD_COLUMN(DBNotes, "SteamID", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DBNotes, "note", "TEXT DEFAULT ''")
+	end
+)
+
 YRP:AddNetworkString("nws_yrp_getPlayerNotes")
 net.Receive(
 	"nws_yrp_getPlayerNotes",
@@ -42,11 +49,18 @@ net.Receive(
 )
 
 local DATABASE_NAME = "yrp_jail"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "nick", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "reason", "TEXT DEFAULT '-'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "time", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "cell", "INT DEFAULT 1")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_jail",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "nick", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "reason", "TEXT DEFAULT '-'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "time", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "cell", "INT DEFAULT 1")
+	end
+)
+
 function teleportToReleasepoint(ply)
 	ply:SetYRPBool("injail", false)
 	ply:SetYRPInt("jailtime", 0)

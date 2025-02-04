@@ -2,7 +2,14 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_shops"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_shops",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
+	end
+)
+
 YRP:AddNetworkString("nws_yrp_get_shops")
 function send_shops(ply)
 	local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
@@ -30,7 +37,7 @@ net.Receive(
 	"nws_yrp_shop_add",
 	function(len, ply)
 		local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new shop'")
-		YRP:msg("db", "shop_add: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_add: " .. YRP_DB_WORKED(_new))
 		send_shops(ply)
 	end
 )

@@ -2,83 +2,360 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_ply_roles"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'NewRole'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_identifier", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D!D-!D!D!D!D'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/user.png'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_description", "TEXT DEFAULT '-'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_playermodels", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_salary", "INTEGER DEFAULT 50")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_groupID", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps_onspawn", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ndsweps", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_voteable", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_eventrole", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminonly", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_maxamount", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_amountpercentage", "INTEGER DEFAULT 100")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hp", "INTEGER DEFAULT 100")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hpmax", "INTEGER DEFAULT 100")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hpup", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_ar", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_armax", "INTEGER DEFAULT 100")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_arup", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_st", "INTEGER DEFAULT 50")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_stmax", "INTEGER DEFAULT 100")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_stup", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_stdn", "TEXT DEFAULT '0.5'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_namelength", "INTEGER DEFAULT 20")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirst", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_stamina", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_playerspawn", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ability", "TEXT DEFAULT 'none'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_ab", "INTEGER DEFAULT 100")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_abmax", "INTEGER DEFAULT 100")
---YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_abup", "TEXT DEFAULT '5'" )
---YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_abdn", "TEXT DEFAULT '5'" )
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_speedwalk", "INTEGER DEFAULT 160")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_speedrun", "INTEGER DEFAULT 240")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_powerjump", "INTEGER DEFAULT 200")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_prerole", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_roleondeath", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_instructor", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_uses", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_salarytime", "INTEGER DEFAULT 120")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_securitylevel", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbeagent", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_cc", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_rm", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_specializations", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_customflags", "TEXT DEFAULT ''")
---YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_cooldown", "INTEGER DEFAULT 1" )
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_burn", "TEXT DEFAULT '1.0'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_bullet", "TEXT DEFAULT '1.0'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_energybeam", "TEXT DEFAULT '1.0'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud", "TEXT DEFAULT 'serverdefault'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_mask", "TEXT DEFAULT 'serverdefault'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_savebodygroups", "INTEGER DEFAULT 1")
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	YRP:msg("note", DATABASE_NAME .. " has not the default role")
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "'1', 'Civilian', '0,0,255', '1', '0'")
-end
+CATEGORIES = CATEGORIES or {}
+CATEGORIES.jobs = {}
+CATEGORIES.entities = {}
+CATEGORIES.shipments = {}
+CATEGORIES.weapons = {}
+CATEGORIES.ammo = {}
+CATEGORIES.vehicles = {}
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_ply_roles",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'NewRole'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_identifier", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_idstructure", "TEXT DEFAULT '!D!D!D!D-!D!D!D!D-!D!D!D!D'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/user.png'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_description", "TEXT DEFAULT '-'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_playermodels", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_salary", "INTEGER DEFAULT 50")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_groupID", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps_onspawn", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ndsweps", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ammunation", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_voteable", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_eventrole", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_adminonly", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_maxamount", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_amountpercentage", "INTEGER DEFAULT 100")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hp", "INTEGER DEFAULT 100")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hpmax", "INTEGER DEFAULT 100")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_hpup", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_ar", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_armax", "INTEGER DEFAULT 100")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_arup", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_st", "INTEGER DEFAULT 50")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_stmax", "INTEGER DEFAULT 100")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_stup", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_stdn", "TEXT DEFAULT '0.5'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_namelength", "INTEGER DEFAULT 20")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_hunger", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_thirst", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_stamina", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_playerspawn", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ability", "TEXT DEFAULT 'none'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_ab", "INTEGER DEFAULT 100")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_abmax", "INTEGER DEFAULT 100")
+		--YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_abup", "TEXT DEFAULT '5'" )
+		--YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_abdn", "TEXT DEFAULT '5'" )
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_speedwalk", "INTEGER DEFAULT 160")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_speedrun", "INTEGER DEFAULT 240")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_powerjump", "INTEGER DEFAULT 200")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_prerole", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_roleondeath", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_instructor", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_uses", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_salarytime", "INTEGER DEFAULT 120")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_securitylevel", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_canbeagent", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_cc", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_rm", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_licenses", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_specializations", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_customflags", "TEXT DEFAULT ''")
+		--YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_cooldown", "INTEGER DEFAULT 1" )
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_burn", "TEXT DEFAULT '1.0'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_bullet", "TEXT DEFAULT '1.0'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_dmgtype_energybeam", "TEXT DEFAULT '1.0'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud", "TEXT DEFAULT 'serverdefault'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_mask", "TEXT DEFAULT 'serverdefault'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_savebodygroups", "INTEGER DEFAULT 1")
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+			YRP:msg("note", DATABASE_NAME .. " has not the default role")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "'1', 'Civilian', '0,0,255', '1', '0'")
+		end
 
-YRP_SQL_UPDATE(
-	DATABASE_NAME,
-	{
-		["int_uses"] = 0
-	}, nil
+		YRP_SQL_UPDATE(
+			DATABASE_NAME,
+			{
+				["int_uses"] = 0
+			}, nil
+		)
+
+		MoveUnusedRolesToDefault()
+		-- CONVERTING
+		local wrongprerole = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'")
+		if IsNotNilAndNotFalse(wrongprerole) then
+			for i, role in pairs(wrongprerole) do
+				YRP_SQL_UPDATE(
+					DATABASE_NAME,
+					{
+						["int_prerole"] = 0
+					}, "uniqueID = '" .. role.uniqueID .. "'"
+				)
+			end
+		end
+
+		local wrongmaxamount = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_maxamount = -1")
+		if IsNotNilAndNotFalse(wrongmaxamount) then
+			for i, role in pairs(wrongmaxamount) do
+				YRP_SQL_UPDATE(
+					DATABASE_NAME,
+					{
+						["int_maxamount"] = 0
+					}, "uniqueID = '" .. role.uniqueID .. "'"
+				)
+			end
+		end
+
+		local wrongpercentage = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_amountpercentage > 100")
+		if IsNotNilAndNotFalse(wrongpercentage) then
+			for i, role in pairs(wrongpercentage) do
+				YRP_SQL_UPDATE(
+					DATABASE_NAME,
+					{
+						["int_amountpercentage"] = 100
+					}, "uniqueID = '" .. role.uniqueID .. "'"
+				)
+			end
+		end
+
+		local wrongmainrole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		if IsNotNilAndNotFalse(wrongmainrole) then
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["string_usergroups"] = "ALL"
+				}, "uniqueID = '1'"
+			)
+
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_maxamount"] = 0
+				}, "uniqueID = '1'"
+			)
+
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_amountpercentage"] = 100
+				}, "uniqueID = '1'"
+			)
+
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_groupID"] = 1
+				}, "uniqueID = '1'"
+			)
+
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_prerole"] = 0
+				}, "uniqueID = '1'"
+			)
+
+			--YRP_SQL_UPDATE(DATABASE_NAME, {["bool_visible_rm"] = 1}, "uniqueID = '1'" )
+			--YRP_SQL_UPDATE(DATABASE_NAME, {["bool_visible_cc"] = 1}, "uniqueID = '1'" )
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["bool_locked"] = 0
+				}, "uniqueID = '1'"
+			)
+
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["bool_whitelist"] = 0
+				}, "uniqueID = '1'"
+			)
+
+			YRPBuildDarkrpTeams()
+			local yrp_ply_roles = {}
+			local _init_ply_roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+			if IsNotNilAndNotFalse(_init_ply_roles) then
+				yrp_ply_roles = _init_ply_roles[1]
+			end
+
+			local HANDLER_GROUPSANDROLES = {}
+			HANDLER_GROUPSANDROLES["roleslist"] = {}
+			HANDLER_GROUPSANDROLES["roles"] = {}
+			for str, val in pairs(yrp_ply_roles) do
+				if string.find(str, "string_", 1, true) then
+					local tab = {}
+					tab.netstr = "nws_yrp_update_role_" .. str
+					YRP:AddNetworkString(tab.netstr)
+					net.Receive(
+						tab.netstr,
+						function(len, ply)
+							local uid = tonumber(net.ReadString())
+							local s = net.ReadString()
+							tab.ply = ply
+							tab.id = str
+							tab.value = s
+							tab.db = DATABASE_NAME
+							tab.uniqueID = uid
+							UpdateString(tab)
+							tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+							BroadcastString(tab)
+							if tab.netstr == "nws_yrp_update_role_string_name" then
+								YRP:AddNetworkString("nws_yrp_settings_role_update_name")
+								local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+								if IsNotNilAndNotFalse(puid) then
+									puid = puid[1]
+									tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
+									tab.netstr = "nws_yrp_settings_role_update_name"
+									tab.uniqueID = tonumber(puid.uniqueID)
+									tab.force = true
+									BroadcastString(tab)
+								end
+							elseif tab.netstr == "nws_yrp_update_role_string_color" then
+								YRP:AddNetworkString("nws_yrp_settings_role_update_color")
+								local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+								if IsNotNilAndNotFalse(puid) then
+									puid = puid[1]
+									tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
+									tab.netstr = "nws_yrp_settings_role_update_color"
+									tab.uniqueID = tonumber(puid.uniqueID)
+									tab.force = true
+									BroadcastString(tab)
+								end
+							elseif tab.netstr == "nws_yrp_update_role_string_icon" then
+								YRP:AddNetworkString("nws_yrp_settings_role_update_icon")
+								local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+								if IsNotNilAndNotFalse(puid) then
+									puid = puid[1]
+									tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
+									tab.netstr = "nws_yrp_settings_role_update_icon"
+									tab.uniqueID = tonumber(puid.uniqueID)
+									tab.force = true
+									BroadcastString(tab)
+								end
+							end
+						end
+					)
+				elseif string.find(str, "int_", 1, true) then
+					local tab = {}
+					tab.netstr = "nws_yrp_update_role_" .. str
+					YRP:AddNetworkString(tab.netstr)
+					net.Receive(
+						tab.netstr,
+						function(len, ply)
+							local uid = tonumber(net.ReadString())
+							local int = tonumber(net.ReadString())
+							local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+							tab.ply = ply
+							tab.id = str
+							tab.value = int
+							tab.db = DATABASE_NAME
+							tab.uniqueID = uid
+							UpdateInt(tab)
+							tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+							BroadcastInt(tab)
+							if tab.netstr == "nws_yrp_update_role_int_prerole" then
+								if IsNotNilAndNotFalse(cur) then
+									cur = cur[1]
+									SendRoleList(nil, tonumber(cur.int_groupID), tonumber(cur.int_prerole))
+								end
+
+								SendRoleList(nil, tonumber(cur.int_groupID), 0)
+							elseif tab.netstr == "nws_yrp_update_role_int_groupID" then
+								UpdatePrerolesGroupIDs(tab.uniqueID, tab.value)
+							end
+						end
+					)
+				elseif string.find(str, "float_", 1, true) then
+					local tab = {}
+					tab.netstr = "nws_yrp_update_role_" .. str
+					YRP:AddNetworkString(tab.netstr)
+					net.Receive(
+						tab.netstr,
+						function(len, ply)
+							local uid = tonumber(net.ReadString())
+							local float = tonumber(net.ReadString())
+							local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+							tab.ply = ply
+							tab.id = str
+							tab.value = float
+							tab.db = DATABASE_NAME
+							tab.uniqueID = uid
+							UpdateFloat(tab)
+							tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+							BroadcastFloat(tab)
+							if tab.netstr == "nws_yrp_update_role_int_prerole" then
+								if IsNotNilAndNotFalse(cur) then
+									cur = cur[1]
+									SendGroupList(tonumber(cur.float_parentrole))
+								end
+
+								SendGroupList(float)
+							end
+						end
+					)
+				elseif string.find(str, "bool_", 1, true) then
+					local tab = {}
+					tab.netstr = "nws_yrp_update_role_" .. str
+					YRP:AddNetworkString(tab.netstr)
+					net.Receive(
+						tab.netstr,
+						function(len, ply)
+							local uid = tonumber(net.ReadString())
+							local int = tonumber(net.ReadString())
+							local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+							tab.ply = ply
+							tab.id = str
+							tab.value = int
+							tab.db = DATABASE_NAME
+							tab.uniqueID = uid
+							UpdateInt(tab)
+							tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+							BroadcastInt(tab)
+							if tab.netstr == "nws_yrp_update_role_int_prerole" then
+								if IsNotNilAndNotFalse(cur) then
+									cur = cur[1]
+									SendGroupList(tonumber(cur.int_parentrole))
+								end
+
+								SendGroupList(int)
+							end
+						end
+					)
+				end
+			end
+		end
+
+		local drp_allgroups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
+		if IsNotNilAndNotFalse(drp_allgroups) then
+			for i, group in pairs(drp_allgroups) do
+				--local catname = group.string_name
+				local tab = YRPConvertToDarkRPCategory(group, "jobs")
+				--CATEGORIES.jobs[catname] = tab -- break ipairs
+				table.insert(CATEGORIES.jobs, tab)
+			end
+
+			for i, cat in pairs(CATEGORIES.jobs) do
+				cat.members = {}
+				for id, role in pairs(RPExtraTeams) do
+					if role and cat and role.int_groupID == cat.uniqueID then
+						table.insert(cat.members, role)
+					end
+				end
+			end
+		end
+	end
 )
 
 function MoveUnusedGroups()
@@ -162,99 +439,6 @@ function MoveUnusedRolesToDefault()
 	end
 end
 
-MoveUnusedRolesToDefault()
--- CONVERTING
-local wrongprerole = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '-1'")
-if IsNotNilAndNotFalse(wrongprerole) then
-	for i, role in pairs(wrongprerole) do
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["int_prerole"] = 0
-			}, "uniqueID = '" .. role.uniqueID .. "'"
-		)
-	end
-end
-
-local wrongmaxamount = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_maxamount = -1")
-if IsNotNilAndNotFalse(wrongmaxamount) then
-	for i, role in pairs(wrongmaxamount) do
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["int_maxamount"] = 0
-			}, "uniqueID = '" .. role.uniqueID .. "'"
-		)
-	end
-end
-
-local wrongpercentage = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_amountpercentage > 100")
-if IsNotNilAndNotFalse(wrongpercentage) then
-	for i, role in pairs(wrongpercentage) do
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["int_amountpercentage"] = 100
-			}, "uniqueID = '" .. role.uniqueID .. "'"
-		)
-	end
-end
-
-local wrongmainrole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
-if IsNotNilAndNotFalse(wrongmainrole) then
-	YRP_SQL_UPDATE(
-		DATABASE_NAME,
-		{
-			["string_usergroups"] = "ALL"
-		}, "uniqueID = '1'"
-	)
-
-	YRP_SQL_UPDATE(
-		DATABASE_NAME,
-		{
-			["int_maxamount"] = 0
-		}, "uniqueID = '1'"
-	)
-
-	YRP_SQL_UPDATE(
-		DATABASE_NAME,
-		{
-			["int_amountpercentage"] = 100
-		}, "uniqueID = '1'"
-	)
-
-	YRP_SQL_UPDATE(
-		DATABASE_NAME,
-		{
-			["int_groupID"] = 1
-		}, "uniqueID = '1'"
-	)
-
-	YRP_SQL_UPDATE(
-		DATABASE_NAME,
-		{
-			["int_prerole"] = 0
-		}, "uniqueID = '1'"
-	)
-
-	--YRP_SQL_UPDATE(DATABASE_NAME, {["bool_visible_rm"] = 1}, "uniqueID = '1'" )
-	--YRP_SQL_UPDATE(DATABASE_NAME, {["bool_visible_cc"] = 1}, "uniqueID = '1'" )
-	YRP_SQL_UPDATE(
-		DATABASE_NAME,
-		{
-			["bool_locked"] = 0
-		}, "uniqueID = '1'"
-	)
-
-	YRP_SQL_UPDATE(
-		DATABASE_NAME,
-		{
-			["bool_whitelist"] = 0
-		}, "uniqueID = '1'"
-	)
-end
-
--- CONVERTING
 -- darkrp
 jobByCmd = jobByCmd or {}
 function YRPConvertToDarkRPJob(tab)
@@ -354,7 +538,6 @@ function YRPBuildDarkrpTeams()
 	RPExtraTeams = TEMPRPExtraTeams
 end
 
-YRPBuildDarkrpTeams()
 YRP:AddNetworkString("nws_yrp_Send_DarkRP_Jobs")
 local Player = FindMetaTable("Player")
 function Player:DRPSendTeamsToPlayer()
@@ -388,32 +571,6 @@ function Player:DRPSendTeamsToPlayer()
 			net.WriteBool(role.vote)
 			net.WriteTable(role.weapons)
 			net.Send(self)
-		end
-	end
-end
-
-local drp_allgroups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
-CATEGORIES = CATEGORIES or {}
-CATEGORIES.jobs = {}
-CATEGORIES.entities = {}
-CATEGORIES.shipments = {}
-CATEGORIES.weapons = {}
-CATEGORIES.ammo = {}
-CATEGORIES.vehicles = {}
-if IsNotNilAndNotFalse(drp_allgroups) then
-	for i, group in pairs(drp_allgroups) do
-		--local catname = group.string_name
-		local tab = YRPConvertToDarkRPCategory(group, "jobs")
-		--CATEGORIES.jobs[catname] = tab -- break ipairs
-		table.insert(CATEGORIES.jobs, tab)
-	end
-
-	for i, cat in pairs(CATEGORIES.jobs) do
-		cat.members = {}
-		for id, role in pairs(RPExtraTeams) do
-			if role and cat and role.int_groupID == cat.uniqueID then
-				table.insert(cat.members, role)
-			end
 		end
 	end
 end
@@ -481,158 +638,6 @@ function UpdatePrerolesGroupIDs(uid, gid)
 				end
 			)
 		end
-	end
-end
-
-local yrp_ply_roles = {}
-local _init_ply_roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
-if IsNotNilAndNotFalse(_init_ply_roles) then
-	yrp_ply_roles = _init_ply_roles[1]
-end
-
-local HANDLER_GROUPSANDROLES = {}
-HANDLER_GROUPSANDROLES["roleslist"] = {}
-HANDLER_GROUPSANDROLES["roles"] = {}
-for str, val in pairs(yrp_ply_roles) do
-	if string.find(str, "string_", 1, true) then
-		local tab = {}
-		tab.netstr = "nws_yrp_update_role_" .. str
-		YRP:AddNetworkString(tab.netstr)
-		net.Receive(
-			tab.netstr,
-			function(len, ply)
-				local uid = tonumber(net.ReadString())
-				local s = net.ReadString()
-				tab.ply = ply
-				tab.id = str
-				tab.value = s
-				tab.db = DATABASE_NAME
-				tab.uniqueID = uid
-				UpdateString(tab)
-				tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
-				BroadcastString(tab)
-				if tab.netstr == "nws_yrp_update_role_string_name" then
-					YRP:AddNetworkString("nws_yrp_settings_role_update_name")
-					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-					if IsNotNilAndNotFalse(puid) then
-						puid = puid[1]
-						tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-						tab.netstr = "nws_yrp_settings_role_update_name"
-						tab.uniqueID = tonumber(puid.uniqueID)
-						tab.force = true
-						BroadcastString(tab)
-					end
-				elseif tab.netstr == "nws_yrp_update_role_string_color" then
-					YRP:AddNetworkString("nws_yrp_settings_role_update_color")
-					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-					if IsNotNilAndNotFalse(puid) then
-						puid = puid[1]
-						tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-						tab.netstr = "nws_yrp_settings_role_update_color"
-						tab.uniqueID = tonumber(puid.uniqueID)
-						tab.force = true
-						BroadcastString(tab)
-					end
-				elseif tab.netstr == "nws_yrp_update_role_string_icon" then
-					YRP:AddNetworkString("nws_yrp_settings_role_update_icon")
-					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-					if IsNotNilAndNotFalse(puid) then
-						puid = puid[1]
-						tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-						tab.netstr = "nws_yrp_settings_role_update_icon"
-						tab.uniqueID = tonumber(puid.uniqueID)
-						tab.force = true
-						BroadcastString(tab)
-					end
-				end
-			end
-		)
-	elseif string.find(str, "int_", 1, true) then
-		local tab = {}
-		tab.netstr = "nws_yrp_update_role_" .. str
-		YRP:AddNetworkString(tab.netstr)
-		net.Receive(
-			tab.netstr,
-			function(len, ply)
-				local uid = tonumber(net.ReadString())
-				local int = tonumber(net.ReadString())
-				local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-				tab.ply = ply
-				tab.id = str
-				tab.value = int
-				tab.db = DATABASE_NAME
-				tab.uniqueID = uid
-				UpdateInt(tab)
-				tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
-				BroadcastInt(tab)
-				if tab.netstr == "nws_yrp_update_role_int_prerole" then
-					if IsNotNilAndNotFalse(cur) then
-						cur = cur[1]
-						SendRoleList(nil, tonumber(cur.int_groupID), tonumber(cur.int_prerole))
-					end
-
-					SendRoleList(nil, tonumber(cur.int_groupID), 0)
-				elseif tab.netstr == "nws_yrp_update_role_int_groupID" then
-					UpdatePrerolesGroupIDs(tab.uniqueID, tab.value)
-				end
-			end
-		)
-	elseif string.find(str, "float_", 1, true) then
-		local tab = {}
-		tab.netstr = "nws_yrp_update_role_" .. str
-		YRP:AddNetworkString(tab.netstr)
-		net.Receive(
-			tab.netstr,
-			function(len, ply)
-				local uid = tonumber(net.ReadString())
-				local float = tonumber(net.ReadString())
-				local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-				tab.ply = ply
-				tab.id = str
-				tab.value = float
-				tab.db = DATABASE_NAME
-				tab.uniqueID = uid
-				UpdateFloat(tab)
-				tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
-				BroadcastFloat(tab)
-				if tab.netstr == "nws_yrp_update_role_int_prerole" then
-					if IsNotNilAndNotFalse(cur) then
-						cur = cur[1]
-						SendGroupList(tonumber(cur.float_parentrole))
-					end
-
-					SendGroupList(float)
-				end
-			end
-		)
-	elseif string.find(str, "bool_", 1, true) then
-		local tab = {}
-		tab.netstr = "nws_yrp_update_role_" .. str
-		YRP:AddNetworkString(tab.netstr)
-		net.Receive(
-			tab.netstr,
-			function(len, ply)
-				local uid = tonumber(net.ReadString())
-				local int = tonumber(net.ReadString())
-				local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-				tab.ply = ply
-				tab.id = str
-				tab.value = int
-				tab.db = DATABASE_NAME
-				tab.uniqueID = uid
-				UpdateInt(tab)
-				tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
-				BroadcastInt(tab)
-				if tab.netstr == "nws_yrp_update_role_int_prerole" then
-					if IsNotNilAndNotFalse(cur) then
-						cur = cur[1]
-						SendGroupList(tonumber(cur.int_parentrole))
-					end
-
-					SendGroupList(int)
-				end
-			end
-		)
 	end
 end
 

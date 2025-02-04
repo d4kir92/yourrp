@@ -3,19 +3,26 @@
 -- https://discord.gg/sEgNZxg
 -- #buymenu #shops
 local DATABASE_NAME = "yrp_shop_items"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT 'UNNAMED'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT '100'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "categoryID", "INT DEFAULT -1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "quantity", "INT DEFAULT -1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "cooldown", "INT DEFAULT -1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "licenseID", "INT DEFAULT -1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "permanent", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "type", "TEXT DEFAULT 'weapons'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT 'weapon_crowbar'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "PrintName", "TEXT DEFAULT 'unnamed item'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "WorldModel", "TEXT DEFAULT ''")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_shop_items",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "description", "TEXT DEFAULT 'UNNAMED'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "price", "TEXT DEFAULT '100'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "categoryID", "INT DEFAULT -1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "quantity", "INT DEFAULT -1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "cooldown", "INT DEFAULT -1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "licenseID", "INT DEFAULT -1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "permanent", "INT DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "type", "TEXT DEFAULT 'weapons'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "ClassName", "TEXT DEFAULT 'weapon_crowbar'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "PrintName", "TEXT DEFAULT 'unnamed item'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "WorldModel", "TEXT DEFAULT ''")
+	end
+)
+
 YRP:AddNetworkString("nws_yrp_get_shop_items")
 function send_shop_items(ply, uid)
 	local _s_items = YRP_SQL_SELECT(DATABASE_NAME, "*", "categoryID = " .. uid)
@@ -43,7 +50,7 @@ net.Receive(
 	function(len, ply)
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "categoryID", _catID)
-		YRP:msg("db", "shop_item_add: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_add: " .. YRP_DB_WORKED(_new))
 		send_shop_items(ply, _catID)
 	end
 )
@@ -55,7 +62,7 @@ net.Receive(
 		local _uid = net.ReadString()
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
-		YRP:msg("db", "shop_item_rem: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_rem: " .. YRP_DB_WORKED(_new))
 		send_shop_items(ply, _catID)
 	end
 )
@@ -74,7 +81,7 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP:msg("db", "shop_item_edit_name: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_name: " .. YRP_DB_WORKED(_new))
 	end
 )
 
@@ -92,7 +99,7 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP:msg("db", "shop_item_edit_desc: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_desc: " .. YRP_DB_WORKED(_new))
 	end
 )
 
@@ -110,7 +117,7 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP:msg("db", "shop_item_edit_price: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_price: " .. YRP_DB_WORKED(_new))
 	end
 )
 
@@ -128,7 +135,7 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP:msg("db", "shop_item_edit_level: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_level: " .. YRP_DB_WORKED(_new))
 	end
 )
 
@@ -146,7 +153,7 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP:msg("db", "shop_item_edit_quan: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_quan: " .. YRP_DB_WORKED(_new))
 	end
 )
 
@@ -164,7 +171,7 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP:msg("db", "shop_item_edit_cool: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_cool: " .. YRP_DB_WORKED(_new))
 	end
 )
 
@@ -182,7 +189,7 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP:msg("db", "shop_item_edit_lice: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_lice: " .. YRP_DB_WORKED(_new))
 		local _test = YRP_SQL_SELECT(DATABASE_NAME, "licenseID", "uniqueID = " .. _uid)
 	end
 )
@@ -201,7 +208,7 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP:msg("db", "shop_item_edit_perm: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_perm: " .. YRP_DB_WORKED(_new))
 	end
 )
 
@@ -288,7 +295,7 @@ net.Receive(
 			}, "uniqueID = " .. _uid
 		)
 
-		YRP:msg("db", "shop_item_edit_base: " .. db_WORKED(_new))
+		YRP:msg("db", "shop_item_edit_base: " .. YRP_DB_WORKED(_new))
 	end
 )
 

@@ -1,6 +1,19 @@
 --Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local DATABASE_NAME = "yrp_inventory_storages"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_inventory_storages",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1")
+		timer.Simple(
+			3,
+			function()
+				YRPCreateCharacterStorages(false)
+			end
+		)
+	end
+)
+
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 function CreateStorage(size, inv)
 	if not IsNotNilAndNotFalse(size) then return end
@@ -105,13 +118,6 @@ function YRPCreateCharacterStorages(retry)
 		end
 	end
 end
-
-timer.Simple(
-	3,
-	function()
-		YRPCreateCharacterStorages(false)
-	end
-)
 
 -- Networking
 YRP:AddNetworkString("nws_yrp_get_inventory")

@@ -2,15 +2,22 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_players"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamName", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "CurrentCharacter", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "NormalCharacter", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "Timestamp", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_total", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_current", "INT DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "TS_LastOnline", "INT DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_chatdelay", "INT DEFAULT 4")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_players",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamName", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "CurrentCharacter", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "NormalCharacter", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "Timestamp", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_total", "INT DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_current", "INT DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "TS_LastOnline", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_chatdelay", "INT DEFAULT 4")
+	end
+)
+
 function YRPGetTSLastOnline(steamId)
 	local tab = YRP_SQL_SELECT("yrp_players", "*", "SteamID = '" .. steamId .. "'")
 	if tab and tab[1] then
@@ -70,7 +77,7 @@ net.Receive(
 g_db_reseted = false
 function YRPSaveClients(str)
 	--YRP:msg( "db", string.upper( "[Saving all clients] [" .. str .. "]" ) )
-	if YRP_SQL_TABLE_EXISTS(DATABASE_NAME) then
+	if YRP_SQL_TABLE_EXISTS(DATABASE_NAME, "YRPSaveClients #1") then
 		if not g_db_reseted then
 			for k, ply in pairs(player.GetAll()) do
 				local steamid = ply:YRPSteamID()
@@ -82,7 +89,7 @@ function YRPSaveClients(str)
 				)
 
 				ply:AddPlayTime(true)
-				if ply:Alive() and YRP_SQL_TABLE_EXISTS("yrp_characters") then
+				if ply:Alive() and YRP_SQL_TABLE_EXISTS("yrp_characters", "YRPSaveClients #2") then
 					local _char_id = ply:CharID()
 					if YRPWORKED(_char_id, "CharID failed @YRPSaveClients") then
 						YRP_SQL_UPDATE(
@@ -145,7 +152,7 @@ function YRPSaveClients(str)
 	end
 
 	local pp = {}
-	if YRP_SQL_TABLE_EXISTS("permaprops") then
+	if YRP_SQL_TABLE_EXISTS("permaprops", "YRPSaveClients #3") then
 		pp = YRP_SQL_SELECT("permaprops", "*")
 		if pp then
 			YRP_SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")

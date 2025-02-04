@@ -425,7 +425,7 @@ function YRP:YLogicServerThink()
 			end
 		end
 
-		if YRP_SQL_TABLE_EXISTS("yrp_teleporters") and isTPsInstalled then
+		if YRP_SQL_TABLE_EXISTS("yrp_teleporters", "YLogicServerThink") and isTPsInstalled then
 			local teleporters = YRP_SQL_SELECT("yrp_teleporters", "*", "string_map = '" .. game.GetMap() .. "'")
 			if IsNotNilAndNotFalse(teleporters) then
 				if table.Count(teleporters) >= 100 then
@@ -501,7 +501,7 @@ function YRP:YLogicServerThink()
 		YRPTestDarkrpmodification()
 	end
 
-	if _time % 1 == 0 and not HasYRPContent() then
+	if _time % 1 == 30 and not HasYRPContent() then
 		YRPHR(Color(255, 255, 0))
 		MsgC(Color(255, 255, 0), "You don't have \"YourRP Content\" on your Server Collection, add it to make YourRP work!", Color(255, 255, 255, 255), "\n")
 		MsgC(Color(255, 255, 0), "Or is STEAM down?", Color(255, 255, 255, 255), "\n")
@@ -574,7 +574,6 @@ function UpdateSpawnerNPCTable()
 	SetGlobalYRPTable("yrp_spawner_npc", t)
 end
 
-UpdateSpawnerNPCTable()
 function UpdateSpawnerENTTable()
 	local t = {}
 	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_ent'")
@@ -592,7 +591,6 @@ function UpdateSpawnerENTTable()
 	SetGlobalYRPTable("yrp_spawner_ent", t)
 end
 
-UpdateSpawnerENTTable()
 function UpdateJailpointTable()
 	local t = {}
 	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint'")
@@ -611,7 +609,6 @@ function UpdateJailpointTable()
 	SetGlobalYRPTable("yrp_jailpoints", t)
 end
 
-UpdateJailpointTable()
 function UpdateReleasepointTable()
 	local t = {}
 	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'releasepoint'")
@@ -629,7 +626,6 @@ function UpdateReleasepointTable()
 	SetGlobalYRPTable("yrp_releasepoints", t)
 end
 
-UpdateReleasepointTable()
 function UpdateRadiationTable()
 	local t = {}
 	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'radiation'")
@@ -648,7 +644,6 @@ function UpdateRadiationTable()
 	SetGlobalYRPTable("yrp_radiation", t)
 end
 
-UpdateRadiationTable()
 function UpdateSafezoneTable()
 	local t = {}
 	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'safezone'")
@@ -667,7 +662,6 @@ function UpdateSafezoneTable()
 	SetGlobalYRPTable("yrp_safezone", t)
 end
 
-UpdateSafezoneTable()
 function UpdateZoneTable()
 	local t = {}
 	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'zone'")
@@ -687,7 +681,6 @@ function UpdateZoneTable()
 	SetGlobalYRPTable("yrp_zone", t)
 end
 
-UpdateZoneTable()
 local YNPCs = {}
 local YENTs = {}
 local delay = CurTime()

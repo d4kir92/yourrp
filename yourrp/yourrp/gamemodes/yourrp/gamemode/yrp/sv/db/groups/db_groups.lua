@@ -2,180 +2,186 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_ply_groups"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'GroupName'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_description", "TEXT DEFAULT '-'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/group.png'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ents", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_parentgroup", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_cc", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_rm", "INTEGER DEFAULT 1")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_iscp", "INTEGER DEFAULT 0")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
--- PUBLIC GROUP
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = -1") == nil then
-	local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible_rm, bool_visible_cc", "-1, 'PUBLIC', '255,255,255', -1, 0, 0, 0, 0")
-end
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_ply_groups",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'GroupName'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_description", "TEXT DEFAULT '-'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_color", "TEXT DEFAULT '0,0,0'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_usergroups", "TEXT DEFAULT 'ALL'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_icon", "TEXT DEFAULT 'http://www.famfamfam.com/lab/icons/silk/icons/group.png'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_sweps", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ents", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_ammos", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_parentgroup", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_requireslevel", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_position", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_whitelist", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_cc", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_visible_rm", "INTEGER DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_locked", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_iscp", "INTEGER DEFAULT 0")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
+		-- PUBLIC GROUP
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = -1") == nil then
+			local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible_rm, bool_visible_cc", "-1, 'PUBLIC', '255,255,255', -1, 0, 0, 0, 0")
+		end
 
-YRP_SQL_UPDATE(
-	DATABASE_NAME,
-	{
-		["int_parentgroup"] = -1
-	}, "uniqueID = '-1'"
-)
+		YRP_SQL_UPDATE(
+			DATABASE_NAME,
+			{
+				["int_parentgroup"] = -1
+			}, "uniqueID = '-1'"
+		)
 
-YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '0'")
--- DEFAULT GROUP
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	YRP:msg("note", DATABASE_NAME .. " has not the default group")
-	local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "'1', 'Civilians', '0,0,255', '0', '0'")
-end
+		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '0'")
+		-- DEFAULT GROUP
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+			YRP:msg("note", DATABASE_NAME .. " has not the default group")
+			local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "'1', 'Civilians', '0,0,255', '0', '0'")
+		end
 
-YRP_SQL_UPDATE(
-	DATABASE_NAME,
-	{
-		["bool_visible_cc"] = 1
-	}, "uniqueID = '1'"
-)
+		YRP_SQL_UPDATE(
+			DATABASE_NAME,
+			{
+				["bool_visible_cc"] = 1
+			}, "uniqueID = '1'"
+		)
 
-local dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-if dbTab then
-	for i, v in pairs(YRP_SQL_SELECT(DATABASE_NAME, "*", nil)) do
-		v.uniqueID = tonumber(v.uniqueID)
-		v.int_parentgroup = tonumber(v.int_parentgroup)
-		if v.uniqueID ~= -1 and v.int_parentgroup == v.uniqueID then
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["int_parentgroup"] = 0
-				}, "uniqueID = '" .. v.uniqueID .. "'"
-			)
+		local dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+		if dbTab then
+			for i, v in pairs(YRP_SQL_SELECT(DATABASE_NAME, "*", nil)) do
+				v.uniqueID = tonumber(v.uniqueID)
+				v.int_parentgroup = tonumber(v.int_parentgroup)
+				if v.uniqueID ~= -1 and v.int_parentgroup == v.uniqueID then
+					YRP_SQL_UPDATE(
+						DATABASE_NAME,
+						{
+							["int_parentgroup"] = 0
+						}, "uniqueID = '" .. v.uniqueID .. "'"
+					)
+				end
+			end
+		end
+
+		-- Local Table
+		local yrp_ply_groups = {}
+		local _init_ply_groups = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		if IsNotNilAndNotFalse(_init_ply_groups) then
+			yrp_ply_groups = _init_ply_groups[1]
+		end
+
+		local HANDLER_GROUPSANDROLES = {}
+		HANDLER_GROUPSANDROLES["groupslist"] = {}
+		HANDLER_GROUPSANDROLES["groups"] = {}
+		HANDLER_GROUPSANDROLES["roles"] = {}
+		-- Network Things
+		for str, val in pairs(yrp_ply_groups) do
+			if string.find(str, "string_", 1, true) then
+				local tab = {}
+				tab.netstr = "nws_yrp_update_group_" .. str
+				YRP:AddNetworkString(tab.netstr)
+				net.Receive(
+					tab.netstr,
+					function(len, ply)
+						local uid = tonumber(net.ReadString())
+						local s = net.ReadString()
+						tab.ply = ply
+						tab.id = str
+						tab.value = s
+						tab.db = DATABASE_NAME
+						tab.uniqueID = uid
+						UpdateString(tab)
+						tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
+						BroadcastString(tab)
+						if tab.netstr == "nws_yrp_update_group_string_name" then
+							YRP:AddNetworkString("nws_yrp_settings_group_update_name")
+							local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+							if IsNotNilAndNotFalse(puid) then
+								puid = puid[1]
+								tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
+								tab.netstr = "nws_yrp_settings_group_update_name"
+								tab.uniqueID = tonumber(puid.uniqueID)
+								tab.force = true
+								BroadcastString(tab)
+							end
+						elseif tab.netstr == "nws_yrp_update_group_string_color" then
+							YRP:AddNetworkString("nws_yrp_settings_group_update_color")
+							local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+							if IsNotNilAndNotFalse(puid) then
+								puid = puid[1]
+								tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
+								tab.netstr = "nws_yrp_settings_group_update_color"
+								tab.uniqueID = tonumber(puid.uniqueID)
+								tab.force = true
+								BroadcastString(tab)
+							end
+						elseif tab.netstr == "nws_yrp_update_group_string_icon" then
+							YRP:AddNetworkString("nws_yrp_settings_group_update_icon")
+							local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+							if IsNotNilAndNotFalse(puid) then
+								puid = puid[1]
+								tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
+								tab.netstr = "nws_yrp_settings_group_update_icon"
+								tab.uniqueID = tonumber(puid.uniqueID)
+								tab.force = true
+								BroadcastString(tab)
+							end
+						end
+					end
+				)
+			elseif string.find(str, "int_", 1, true) then
+				local tab = {}
+				tab.netstr = "nws_yrp_update_group_" .. str
+				YRP:AddNetworkString(tab.netstr)
+				net.Receive(
+					tab.netstr,
+					function(len, ply)
+						local uid = tonumber(net.ReadString())
+						local int = tonumber(net.ReadString())
+						local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+						tab.ply = ply
+						tab.id = str
+						tab.value = int
+						tab.db = DATABASE_NAME
+						tab.uniqueID = uid
+						UpdateInt(tab)
+						tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
+						BroadcastInt(tab)
+						if tab.netstr == "nws_yrp_update_group_int_parentgroup" then
+							if IsNotNilAndNotFalse(cur) then
+								cur = cur[1]
+								SendGroupList(tonumber(cur.int_parentgroup))
+							end
+
+							SendGroupList(int)
+						end
+					end
+				)
+			elseif string.find(str, "bool_", 1, true) then
+				local tab = {}
+				tab.netstr = "nws_yrp_update_group_" .. str
+				YRP:AddNetworkString(tab.netstr)
+				net.Receive(
+					tab.netstr,
+					function(len, ply)
+						local uid = tonumber(net.ReadString())
+						local bool = tonumber(net.ReadString())
+						tab.ply = ply
+						tab.id = str
+						tab.value = bool
+						tab.db = DATABASE_NAME
+						tab.uniqueID = uid
+						UpdateBool(tab)
+						tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
+						BroadcastBool(tab)
+					end
+				)
+			end
 		end
 	end
-end
-
--- Local Table
-local yrp_ply_groups = {}
-local _init_ply_groups = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
-if IsNotNilAndNotFalse(_init_ply_groups) then
-	yrp_ply_groups = _init_ply_groups[1]
-end
-
-local HANDLER_GROUPSANDROLES = {}
-HANDLER_GROUPSANDROLES["groupslist"] = {}
-HANDLER_GROUPSANDROLES["groups"] = {}
-HANDLER_GROUPSANDROLES["roles"] = {}
--- Network Things
-for str, val in pairs(yrp_ply_groups) do
-	if string.find(str, "string_", 1, true) then
-		local tab = {}
-		tab.netstr = "nws_yrp_update_group_" .. str
-		YRP:AddNetworkString(tab.netstr)
-		net.Receive(
-			tab.netstr,
-			function(len, ply)
-				local uid = tonumber(net.ReadString())
-				local s = net.ReadString()
-				tab.ply = ply
-				tab.id = str
-				tab.value = s
-				tab.db = DATABASE_NAME
-				tab.uniqueID = uid
-				UpdateString(tab)
-				tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
-				BroadcastString(tab)
-				if tab.netstr == "nws_yrp_update_group_string_name" then
-					YRP:AddNetworkString("nws_yrp_settings_group_update_name")
-					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-					if IsNotNilAndNotFalse(puid) then
-						puid = puid[1]
-						tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
-						tab.netstr = "nws_yrp_settings_group_update_name"
-						tab.uniqueID = tonumber(puid.uniqueID)
-						tab.force = true
-						BroadcastString(tab)
-					end
-				elseif tab.netstr == "nws_yrp_update_group_string_color" then
-					YRP:AddNetworkString("nws_yrp_settings_group_update_color")
-					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-					if IsNotNilAndNotFalse(puid) then
-						puid = puid[1]
-						tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
-						tab.netstr = "nws_yrp_settings_group_update_color"
-						tab.uniqueID = tonumber(puid.uniqueID)
-						tab.force = true
-						BroadcastString(tab)
-					end
-				elseif tab.netstr == "nws_yrp_update_group_string_icon" then
-					YRP:AddNetworkString("nws_yrp_settings_group_update_icon")
-					local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-					if IsNotNilAndNotFalse(puid) then
-						puid = puid[1]
-						tab.handler = HANDLER_GROUPSANDROLES["groupslist"][tonumber(puid.int_parentgroup)]
-						tab.netstr = "nws_yrp_settings_group_update_icon"
-						tab.uniqueID = tonumber(puid.uniqueID)
-						tab.force = true
-						BroadcastString(tab)
-					end
-				end
-			end
-		)
-	elseif string.find(str, "int_", 1, true) then
-		local tab = {}
-		tab.netstr = "nws_yrp_update_group_" .. str
-		YRP:AddNetworkString(tab.netstr)
-		net.Receive(
-			tab.netstr,
-			function(len, ply)
-				local uid = tonumber(net.ReadString())
-				local int = tonumber(net.ReadString())
-				local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-				tab.ply = ply
-				tab.id = str
-				tab.value = int
-				tab.db = DATABASE_NAME
-				tab.uniqueID = uid
-				UpdateInt(tab)
-				tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
-				BroadcastInt(tab)
-				if tab.netstr == "nws_yrp_update_group_int_parentgroup" then
-					if IsNotNilAndNotFalse(cur) then
-						cur = cur[1]
-						SendGroupList(tonumber(cur.int_parentgroup))
-					end
-
-					SendGroupList(int)
-				end
-			end
-		)
-	elseif string.find(str, "bool_", 1, true) then
-		local tab = {}
-		tab.netstr = "nws_yrp_update_group_" .. str
-		YRP:AddNetworkString(tab.netstr)
-		net.Receive(
-			tab.netstr,
-			function(len, ply)
-				local uid = tonumber(net.ReadString())
-				local bool = tonumber(net.ReadString())
-				tab.ply = ply
-				tab.id = str
-				tab.value = bool
-				tab.db = DATABASE_NAME
-				tab.uniqueID = uid
-				UpdateBool(tab)
-				tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
-				BroadcastBool(tab)
-			end
-		)
-	end
-end
+)
 
 function RemFromHandler_GroupsAndRoles(ply)
 	table.RemoveByValue(HANDLER_GROUPSANDROLES, ply)

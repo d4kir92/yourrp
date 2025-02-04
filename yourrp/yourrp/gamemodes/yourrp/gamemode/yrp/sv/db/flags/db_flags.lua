@@ -2,12 +2,23 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_flags"
---YRP_SQL_DROP_TABLE(DATABASE_NAME)
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'iscp'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_type", "TEXT DEFAULT 'role'")
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_type", "'iscp', 'role'")
-end
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_flags",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'iscp'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_type", "TEXT DEFAULT 'role'")
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_type", "'iscp', 'role'")
+		end
+
+		AddCustomFlag("iscp", "role")
+		AddCustomFlag("ismayor", "role")
+		AddCustomFlag("ismedic", "role")
+		AddCustomFlag("iscook", "role")
+		AddCustomFlag("ishobo", "role")
+	end
+)
 
 function AddCustomFlag(name, typ)
 	if name ~= nil and typ ~= nil then
@@ -18,9 +29,3 @@ function AddCustomFlag(name, typ)
 		end
 	end
 end
-
-AddCustomFlag("iscp", "role")
-AddCustomFlag("ismayor", "role")
-AddCustomFlag("ismedic", "role")
-AddCustomFlag("iscook", "role")
-AddCustomFlag("ishobo", "role")

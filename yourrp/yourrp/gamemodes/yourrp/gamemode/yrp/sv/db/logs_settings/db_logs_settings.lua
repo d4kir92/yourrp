@@ -2,19 +2,24 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_logs_settings"
---YRP_SQL_DROP_TABLE(DATABASE_NAME)
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_text", "TEXT DEFAULT 'unknown'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_timestamp", "TEXT DEFAULT ''")
 local showafter = 60 * 60 * 2
 local deleteafter = 60 * 60 * 12
-local logTab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-if IsNotNilAndNotFalse(logTab) then
-	for i, t in pairs(logTab) do
-		if os.time() - deleteafter > tonumber(t.string_timestamp) then
-			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. t.uniqueID .. "'")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_logs_settings",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_text", "TEXT DEFAULT 'unknown'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_timestamp", "TEXT DEFAULT ''")
+		local logTab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+		if IsNotNilAndNotFalse(logTab) then
+			for i, t in pairs(logTab) do
+				if os.time() - deleteafter > tonumber(t.string_timestamp) then
+					YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. t.uniqueID .. "'")
+				end
+			end
 		end
 	end
-end
+)
 
 YRP:AddNetworkString("nws_yrp_get_logs_settings")
 net.Receive(

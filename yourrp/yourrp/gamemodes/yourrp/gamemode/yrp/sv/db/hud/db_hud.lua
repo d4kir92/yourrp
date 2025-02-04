@@ -2,11 +2,20 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_hud"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
-end
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_hud",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
+		end
+
+		DefaultHUDSettings()
+		HudLoadoutAll()
+	end
+)
 
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 function AddHUDElement(tab, reset)
@@ -1022,7 +1031,6 @@ function DefaultHUDSettings(reset)
 	AddHUDElement(VO, reset)
 end
 
-DefaultHUDSettings()
 --[[ LOADOUT ]]
 --
 YRPHUDVersion = YRPHUDVersion or -1
@@ -1050,7 +1058,6 @@ function HudLoadoutAll()
 	end
 end
 
-HudLoadoutAll()
 YRP:AddNetworkString("nws_yrp_update_hud_x")
 net.Receive(
 	"nws_yrp_update_hud_x",

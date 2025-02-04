@@ -2,19 +2,27 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_dealers"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'Unnamed dealer'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "tabs", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "WorldModel", "TEXT DEFAULT 'models/player/skeleton.mdl'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "map", "TEXT DEFAULT 'gm_construct'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "storagepoints", "TEXT DEFAULT ''")
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	local _global_shop = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, uniqueID", "'LID_buymenu', 1")
-end
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_dealers",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'Unnamed dealer'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "tabs", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "WorldModel", "TEXT DEFAULT 'models/player/skeleton.mdl'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "map", "TEXT DEFAULT 'gm_construct'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "storagepoints", "TEXT DEFAULT ''")
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+			local _global_shop = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, uniqueID", "'LID_buymenu', 1")
+		end
 
-local _minus = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '-1'")
-if _minus ~= nil then
-	YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '-1'")
-end
+		local _minus = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '-1'")
+		if _minus ~= nil then
+			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '-1'")
+		end
+
+		CleanUpDealers()
+	end
+)
 
 YRP:AddNetworkString("nws_yrp_dealer_add")
 function dealer_rem(uid)
@@ -42,7 +50,6 @@ function CleanUpDealers()
 	end
 end
 
-CleanUpDealers()
 function dealer_add(ply)
 	local _uid = math.Round(math.Rand(1, 999999), 0)
 	local _insert = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, map", "'" .. _uid .. "', '" .. GetMapNameDB() .. "'")

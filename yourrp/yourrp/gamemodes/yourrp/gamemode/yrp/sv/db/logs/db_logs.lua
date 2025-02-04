@@ -2,23 +2,29 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_logs"
---YRP_SQL_DROP_TABLE(DATABASE_NAME)
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_typ", "TEXT DEFAULT 'unknown'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_source_steamid", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_target_steamid", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_value", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_timestamp", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_alttarget", "TEXT DEFAULT ''")
 local showafter = 60 * 60 * 2
 local deleteafter = 60 * 60 * 12
-local logTab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-if IsNotNilAndNotFalse(logTab) then
-	for i, t in pairs(logTab) do
-		if os.time() - deleteafter > tonumber(t.string_timestamp) then
-			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. t.uniqueID .. "'")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_logs",
+	function()
+		--YRP_SQL_DROP_TABLE(DATABASE_NAME)
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_typ", "TEXT DEFAULT 'unknown'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_source_steamid", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_target_steamid", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_value", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_timestamp", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_alttarget", "TEXT DEFAULT ''")
+		local logTab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+		if IsNotNilAndNotFalse(logTab) then
+			for i, t in pairs(logTab) do
+				if os.time() - deleteafter > tonumber(t.string_timestamp) then
+					YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. t.uniqueID .. "'")
+				end
+			end
 		end
 	end
-end
+)
 
 YRP:AddNetworkString("nws_yrp_get_logs")
 net.Receive(

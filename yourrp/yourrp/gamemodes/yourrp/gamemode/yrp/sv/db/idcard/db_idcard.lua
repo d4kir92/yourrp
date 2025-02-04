@@ -2,30 +2,38 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_idcard"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
-end
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_idcard",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
+		end
 
-if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'int_background_x'") ~= nil then
-	YRP_SQL_UPDATE(
-		DATABASE_NAME,
-		{
-			["value"] = 0
-		}, "name = 'int_background_x'"
-	)
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'int_background_x'") ~= nil then
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["value"] = 0
+				}, "name = 'int_background_x'"
+			)
 
-	YRP_SQL_UPDATE(
-		DATABASE_NAME,
-		{
-			["value"] = 0
-		}, "name = 'int_background_y'"
-	)
-else
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_x', '0'")
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_y', '0'")
-end
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["value"] = 0
+				}, "name = 'int_background_y'"
+			)
+		else
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_x', '0'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_y', '0'")
+		end
+
+		LoadIDCardSetting(nil, "INIT")
+	end
+)
 
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 local elements = {"background", "box1", "box2", "box3", "box4", "box5", "serverlogo", "box6", "box7", "box8", "hostname", "role", "group", "idcardid", "faction", "rpname", "securitylevel", "birthday", "bodyheight", "weight"}
@@ -194,5 +202,3 @@ function LoadIDCardSetting(force, from)
 		LoadIDCardSetting(nil, "MISSING and tries < maxtries")
 	end
 end
-
-LoadIDCardSetting(nil, "INIT")

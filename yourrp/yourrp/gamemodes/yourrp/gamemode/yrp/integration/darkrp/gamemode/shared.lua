@@ -115,7 +115,6 @@ end
 
 local c = 0
 function DarkRP.createJob(name, tbl)
-	print("createjob", tbl, name)
 	c = c + 1
 	if SERVER and YRPIMPORTDARKRP and tbl and tbl.category ~= nil then
 		local groupid = 1

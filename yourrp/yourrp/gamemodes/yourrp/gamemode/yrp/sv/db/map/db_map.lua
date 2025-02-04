@@ -2,16 +2,31 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_" .. GetMapNameDB()
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "position", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "angle", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "type", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "linkID", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "color", "TEXT DEFAULT '255,255,255'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_respawntime", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_swep", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_amount", "TEXT DEFAULT '1'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_classname", "TEXT DEFAULT 'npc_zombie'")
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_MAPNAME",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "position", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "angle", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "type", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "linkID", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "color", "TEXT DEFAULT '255,255,255'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_respawntime", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_swep", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_amount", "TEXT DEFAULT '1'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_classname", "TEXT DEFAULT 'npc_zombie'")
+		timer.Simple(4, YRPCheckIfStoragesExists)
+		UpdateSpawnerNPCTable()
+		UpdateSpawnerENTTable()
+		UpdateJailpointTable()
+		UpdateReleasepointTable()
+		UpdateRadiationTable()
+		UpdateSafezoneTable()
+		UpdateZoneTable()
+	end
+)
+
 function YRPTeleportToPoint(ply, pos)
 	--YRP:msg( "note", "YRPTeleportToPoint " .. tostring(pos) )
 	tp_to(ply, Vector(pos[1], pos[2], pos[3]))
@@ -540,7 +555,6 @@ function YRPCheckIfStoragesExists()
 	timer.Simple(2, YRPCheckIfStoragesExists)
 end
 
-timer.Simple(4, YRPCheckIfStoragesExists)
 hook.Add(
 	"EntityRemoved",
 	"YRP_EntityRemoved",

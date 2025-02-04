@@ -1983,7 +1983,7 @@ net.Receive(
 						_add:SetText("LID_add")
 						function _add:DoClick()
 							if _SteamID ~= nil and _Cell ~= nil then
-								local _insert = "'" .. _SteamID .. "', '" .. _reason:GetText() .. "', " .. db_int(_time:GetValue()) .. ", '" .. _nick .. "', '" .. _Cell .. "'"
+								local _insert = "'" .. _SteamID .. "', '" .. _reason:GetText() .. "', " .. YRP_DB_INT(_time:GetValue()) .. ", '" .. _nick .. "', '" .. _Cell .. "'"
 								net.Start("nws_yrp_dbAddJail")
 								net.WriteString("yrp_jail")
 								net.WriteString("SteamID, reason, time, nick, cell")

@@ -2,32 +2,50 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_design"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Impact'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_profile", "TEXT DEFAULT 'YourRP Default'")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'")
-local fir = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
-if fir == nil then
-	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Material', 'Roboto'")
-elseif IsNotNilAndNotFalse(fir) then
-	fir = fir[1]
-	if fir.string_interface_design == "Simple" or fir.string_hud_design == "Material" then
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["string_hud_design"] = "Simple"
-			}, "uniqueID = '" .. "1" .. "'"
-		)
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_design",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_interface_design", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_fontname", "TEXT DEFAULT 'Impact'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_profile", "TEXT DEFAULT 'YourRP Default'")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_headerheight", "INT DEFAULT '100'")
+		local fir = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
+		if fir == nil then
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Material', 'Roboto'")
+		elseif IsNotNilAndNotFalse(fir) then
+			fir = fir[1]
+			if fir.string_interface_design == "Simple" or fir.string_hud_design == "Material" then
+				YRP_SQL_UPDATE(
+					DATABASE_NAME,
+					{
+						["string_hud_design"] = "Simple"
+					}, "uniqueID = '" .. "1" .. "'"
+				)
 
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["string_interface_design"] = "Material"
-			}, "uniqueID = '" .. "1" .. "'"
-		)
+				YRP_SQL_UPDATE(
+					DATABASE_NAME,
+					{
+						["string_interface_design"] = "Material"
+					}, "uniqueID = '" .. "1" .. "'"
+				)
+			end
+		end
+
+		YRPDesignLoadout("Init")
+		local IF_Material = {}
+		IF_Material.name = "Material"
+		IF_Material.author = "D4KiR"
+		IF_Material.progress = 100
+		RegisterInterfaceDesign(IF_Material)
+		local IF_Blur = {}
+		IF_Blur.name = "Blur"
+		IF_Blur.author = "D4KiR"
+		IF_Blur.progress = 50
+		RegisterInterfaceDesign(IF_Blur)
 	end
-end
+)
 
 --YRP_SQL_DROPTABLE(DATABASE_NAME)
 local HUDS = {}
@@ -183,7 +201,6 @@ function YRPDesignLoadout(from)
 	end
 end
 
-YRPDesignLoadout("Init")
 local once = false
 YRP:AddNetworkString("nws_yrp_ply_changed_resolution")
 net.Receive(
@@ -252,16 +269,6 @@ function RegisterInterfaceDesign(tab)
 	return true
 end
 
-local IF_Material = {}
-IF_Material.name = "Material"
-IF_Material.author = "D4KiR"
-IF_Material.progress = 100
-RegisterInterfaceDesign(IF_Material)
-local IF_Blur = {}
-IF_Blur.name = "Blur"
-IF_Blur.author = "D4KiR"
-IF_Blur.progress = 50
-RegisterInterfaceDesign(IF_Blur)
 YRP:AddNetworkString("nws_yrp_change_interface_design")
 net.Receive(
 	"nws_yrp_change_interface_design",

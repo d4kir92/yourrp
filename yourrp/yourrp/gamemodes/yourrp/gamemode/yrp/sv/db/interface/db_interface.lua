@@ -2,9 +2,58 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_interface"
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
---YRP_SQL_DROP_TABLE(DATABASE_NAME)
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_interface",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+		local Material = {}
+		Material.element = "Material"
+		Material.floats = {}
+		Material.bools = {}
+		Material.bools.Rounded = 0
+		Material.colors = {}
+		Material.colors.YFrame_HT = "255, 255, 255, 255" -- Header Textcolor
+		Material.colors.YFrame_HB = "45, 45, 45, 255" -- Header Backgroundcolor
+		Material.colors.YFrame_NC = "35, 35, 35, 255" -- Normal Color
+		Material.colors.YFrame_PC = "55, 55, 55, 255" -- Pressed Color
+		Material.colors.YFrame_HI = "80, 80, 80, 255" -- Highlight Color
+		Material.colors.YFrame_BG = "25, 25, 25, 255" -- Background Color
+		Material.colors.YButton_NT = "0, 0, 0, 255" -- Normal Textcolor
+		Material.colors.YButton_NC = "93, 166, 251, 255" -- Normal Color
+		Material.colors.YButton_HC = "148, 197, 255, 255" -- Hovered Color
+		Material.colors.YButton_PC = "50, 144, 254, 255" -- Pressed Color
+		Material.colors.YButton_SC = "50, 144, 254, 255" -- Selected Color
+		Material.colors.Chat_BG = "0, 0, 0, 100" -- ChatBackground Color
+		Material.colors.Chat_FG = "255, 255, 255, 20" -- ChatForeground Color
+		Material.ints = {}
+		AddIFElement(Material)
+		local Blur = {}
+		Blur.element = "Blur"
+		Blur.floats = {}
+		Blur.bools = {}
+		Blur.bools.Rounded = 0
+		Blur.colors = {}
+		Blur.colors.YFrame_HT = "255, 255, 255, 255" -- Header Textcolor
+		Blur.colors.YFrame_HB = "40, 40, 40, 80" -- Header Backgroundcolor
+		Blur.colors.YFrame_NC = "40, 40, 40, 80" -- Normal Color
+		Blur.colors.YFrame_PC = "50, 50, 50, 80"
+		Blur.colors.YFrame_HI = "80, 80, 80, 80" -- Highlight Color
+		Blur.colors.YFrame_BG = "255, 255, 255, 80" -- Background Color
+		Blur.colors.YButton_NT = "0, 0, 0, 255" -- Normal Textcolor
+		Blur.colors.YButton_NC = "200, 200, 200, 80" -- Normal Color
+		Blur.colors.YButton_HC = "255, 255, 255, 80" -- Hovered Color
+		Blur.colors.YButton_PC = "150, 150, 150, 80" -- Pressed Color
+		Blur.colors.YButton_SC = "220, 220, 220, 80" -- Selected Color
+		Blur.colors.Chat_BG = "0, 0, 0, 100" -- ChatBackground Color
+		Blur.colors.Chat_FG = "255, 255, 255, 20" -- ChatForeground Color
+		Blur.ints = {}
+		AddIFElement(Blur)
+		IFLoadoutAll()
+	end
+)
+
 local INTERFACES = {}
 function AddIFElement(tab)
 	for name, value in pairs(tab.floats) do
@@ -40,48 +89,6 @@ function AddIFElement(tab)
 	INTERFACES[tab.element] = tab
 end
 
-local Material = {}
-Material.element = "Material"
-Material.floats = {}
-Material.bools = {}
-Material.bools.Rounded = 0
-Material.colors = {}
-Material.colors.YFrame_HT = "255, 255, 255, 255" -- Header Textcolor
-Material.colors.YFrame_HB = "45, 45, 45, 255" -- Header Backgroundcolor
-Material.colors.YFrame_NC = "35, 35, 35, 255" -- Normal Color
-Material.colors.YFrame_PC = "55, 55, 55, 255" -- Pressed Color
-Material.colors.YFrame_HI = "80, 80, 80, 255" -- Highlight Color
-Material.colors.YFrame_BG = "25, 25, 25, 255" -- Background Color
-Material.colors.YButton_NT = "0, 0, 0, 255" -- Normal Textcolor
-Material.colors.YButton_NC = "93, 166, 251, 255" -- Normal Color
-Material.colors.YButton_HC = "148, 197, 255, 255" -- Hovered Color
-Material.colors.YButton_PC = "50, 144, 254, 255" -- Pressed Color
-Material.colors.YButton_SC = "50, 144, 254, 255" -- Selected Color
-Material.colors.Chat_BG = "0, 0, 0, 100" -- ChatBackground Color
-Material.colors.Chat_FG = "255, 255, 255, 20" -- ChatForeground Color
-Material.ints = {}
-AddIFElement(Material)
-local Blur = {}
-Blur.element = "Blur"
-Blur.floats = {}
-Blur.bools = {}
-Blur.bools.Rounded = 0
-Blur.colors = {}
-Blur.colors.YFrame_HT = "255, 255, 255, 255" -- Header Textcolor
-Blur.colors.YFrame_HB = "40, 40, 40, 80" -- Header Backgroundcolor
-Blur.colors.YFrame_NC = "40, 40, 40, 80" -- Normal Color
-Blur.colors.YFrame_PC = "50, 50, 50, 80"
-Blur.colors.YFrame_HI = "80, 80, 80, 80" -- Highlight Color
-Blur.colors.YFrame_BG = "255, 255, 255, 80" -- Background Color
-Blur.colors.YButton_NT = "0, 0, 0, 255" -- Normal Textcolor
-Blur.colors.YButton_NC = "200, 200, 200, 80" -- Normal Color
-Blur.colors.YButton_HC = "255, 255, 255, 80" -- Hovered Color
-Blur.colors.YButton_PC = "150, 150, 150, 80" -- Pressed Color
-Blur.colors.YButton_SC = "220, 220, 220, 80" -- Selected Color
-Blur.colors.Chat_BG = "0, 0, 0, 100" -- ChatBackground Color
-Blur.colors.Chat_FG = "255, 255, 255, 20" -- ChatForeground Color
-Blur.ints = {}
-AddIFElement(Blur)
 --[[ LOADOUT ]]
 --
 YRPIFVersion = YRPIFVersion or -1
@@ -107,7 +114,6 @@ function IFLoadoutAll()
 	SetGlobalYRPInt("interface_version", YRPIFVersion)
 end
 
-IFLoadoutAll()
 YRP:AddNetworkString("nws_yrp_get_interface_settings")
 net.Receive(
 	"nws_yrp_get_interface_settings",

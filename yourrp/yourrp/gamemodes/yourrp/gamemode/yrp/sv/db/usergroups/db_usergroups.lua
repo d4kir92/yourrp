@@ -2,182 +2,221 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_usergroups"
-local sts = {
-	["string_ammos"] = "",
-	["string_color"] = "0,0,0,255",
-	["string_displayname"] = "",
-	["string_icon"] = "http://www.famfamfam.com/lab/icons/silk/icons/shield.png",
-	["string_licenses"] = "",
-	["string_name"] = "unnamed usergroup",
-	["string_nonesweps"] = "",
-	["string_sents"] = "",
-	["string_sweps"] = "",
-	["string_tools"] = "",
-}
-
-local bos = {
-	["bool_ac_database"] = "0",
-	["bool_adminaccess"] = "0",
-	["bool_blacklist"] = "0",
-	["bool_bodygroups"] = "0",
-	["bool_canseeenemiesonmap"] = "0",
-	["bool_canseeteammatesonmap"] = "0",
-	["bool_canusecontextmenu"] = "0",
-	["bool_canusespawnmenu"] = "0",
-	["bool_canusewarnsystem"] = "0",
-	["bool_chat"] = "1",
-	["bool_collision"] = "0",
-	["bool_darkrp"] = "0",
-	["bool_design"] = "0",
-	["bool_drive"] = "0",
-	["bool_dupes"] = "0",
-	["bool_effects"] = "0",
-	["bool_entities"] = "0",
-	["bool_events"] = "0",
-	["bool_feedback"] = "0",
-	["bool_flashlight"] = "0",
-	["bool_general"] = "0",
-	["bool_gravgunpunt"] = "0",
-	["bool_gravity"] = "0",
-	["bool_groupsandroles"] = "0",
-	["bool_ignite"] = "0",
-	["bool_keepupright"] = "0",
-	["bool_levelsystem"] = "0",
-	["bool_licenses"] = "0",
-	["bool_logs"] = "0",
-	["bool_map"] = "0",
-	["bool_money"] = "0",
-	["bool_npcs"] = "0",
-	["bool_permaprops"] = "0",
-	["bool_physgunpickup"] = "0",
-	["bool_physgunpickupignoreblacklist"] = "0",
-	["bool_physgunpickupotherowner"] = "0",
-	["bool_physgunpickupplayer"] = "0",
-	["bool_physgunpickupworld"] = "0",
-	["bool_players"] = "0",
-	["bool_postprocess"] = "0",
-	["bool_props"] = "0",
-	["bool_ragdolls"] = "0",
-	["bool_realistic"] = "0",
-	["bool_removeable"] = "1",
-	["bool_saves"] = "0",
-	["bool_scale"] = "0",
-	["bool_shops"] = "0",
-	["bool_specializations"] = "0",
-	["bool_status"] = "0",
-	["bool_usergroups"] = "0",
-	["bool_vehicles"] = "0",
-	["bool_weapons"] = "0",
-	["bool_weaponsystem"] = "0",
-	["bool_whitelist"] = "0",
-	["bool_import_darkrp"] = "0",
-	["bool_yourrp_addons"] = "0",
-}
-
-local ins = {
-	["int_characters_max"] = "1",
-	["int_charactersevent_max"] = "1",
-	["int_position"] = "1",
-}
-
-for i, v in SortedPairs(sts) do
-	YRP_SQL_ADD_COLUMN(DATABASE_NAME, i, "TEXT DEFAULT '" .. v .. "'")
-end
-
-for i, v in SortedPairs(bos) do
-	YRP_SQL_ADD_COLUMN(DATABASE_NAME, i, "INT DEFAULT " .. v .. "")
-end
-
-for i, v in SortedPairs(ins) do
-	YRP_SQL_ADD_COLUMN(DATABASE_NAME, i, "INT DEFAULT " .. v .. "")
-end
-
---YRP_SQL_DROP_TABLE(DATABASE_NAME)
---db_is_empty(DATABASE_NAME)
-timer.Simple(
-	1,
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_usergroups",
 	function()
-		local yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		if IsNotNilAndNotFalse(yrp_usergroups) then
-			for _i, _ug in pairs(yrp_usergroups) do
-				_ug.string_name = _ug.string_name or "failed"
-				_ug.string_name = string.lower(_ug.string_name)
-				YRP_SQL_UPDATE(
-					DATABASE_NAME,
-					{
-						["string_name"] = _ug.string_name
-					}, "uniqueID = '" .. _ug.uniqueID .. "'"
-				)
-			end
+		local sts = {
+			["string_ammos"] = "",
+			["string_color"] = "0,0,0,255",
+			["string_displayname"] = "",
+			["string_icon"] = "http://www.famfamfam.com/lab/icons/silk/icons/shield.png",
+			["string_licenses"] = "",
+			["string_name"] = "unnamed usergroup",
+			["string_nonesweps"] = "",
+			["string_sents"] = "",
+			["string_sweps"] = "",
+			["string_tools"] = "",
+		}
+
+		local bos = {
+			["bool_ac_database"] = "0",
+			["bool_adminaccess"] = "0",
+			["bool_blacklist"] = "0",
+			["bool_bodygroups"] = "0",
+			["bool_canseeenemiesonmap"] = "0",
+			["bool_canseeteammatesonmap"] = "0",
+			["bool_canusecontextmenu"] = "0",
+			["bool_canusespawnmenu"] = "0",
+			["bool_canusewarnsystem"] = "0",
+			["bool_chat"] = "1",
+			["bool_collision"] = "0",
+			["bool_darkrp"] = "0",
+			["bool_design"] = "0",
+			["bool_drive"] = "0",
+			["bool_dupes"] = "0",
+			["bool_effects"] = "0",
+			["bool_entities"] = "0",
+			["bool_events"] = "0",
+			["bool_feedback"] = "0",
+			["bool_flashlight"] = "0",
+			["bool_general"] = "0",
+			["bool_gravgunpunt"] = "0",
+			["bool_gravity"] = "0",
+			["bool_groupsandroles"] = "0",
+			["bool_ignite"] = "0",
+			["bool_keepupright"] = "0",
+			["bool_levelsystem"] = "0",
+			["bool_licenses"] = "0",
+			["bool_logs"] = "0",
+			["bool_map"] = "0",
+			["bool_money"] = "0",
+			["bool_npcs"] = "0",
+			["bool_permaprops"] = "0",
+			["bool_physgunpickup"] = "0",
+			["bool_physgunpickupignoreblacklist"] = "0",
+			["bool_physgunpickupotherowner"] = "0",
+			["bool_physgunpickupplayer"] = "0",
+			["bool_physgunpickupworld"] = "0",
+			["bool_players"] = "0",
+			["bool_postprocess"] = "0",
+			["bool_props"] = "0",
+			["bool_ragdolls"] = "0",
+			["bool_realistic"] = "0",
+			["bool_removeable"] = "1",
+			["bool_saves"] = "0",
+			["bool_scale"] = "0",
+			["bool_shops"] = "0",
+			["bool_specializations"] = "0",
+			["bool_status"] = "0",
+			["bool_usergroups"] = "0",
+			["bool_vehicles"] = "0",
+			["bool_weapons"] = "0",
+			["bool_weaponsystem"] = "0",
+			["bool_whitelist"] = "0",
+			["bool_import_darkrp"] = "0",
+			["bool_yourrp_addons"] = "0",
+		}
+
+		local ins = {
+			["int_characters_max"] = "1",
+			["int_charactersevent_max"] = "1",
+			["int_position"] = "1",
+		}
+
+		for i, v in SortedPairs(sts) do
+			YRP_SQL_ADD_COLUMN(DATABASE_NAME, i, "TEXT DEFAULT '" .. v .. "'")
 		end
 
-		yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		if IsNotNilAndNotFalse(yrp_usergroups) then
-			for _i, _ug in pairs(yrp_usergroups) do
-				local tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug.string_name .. "'")
-				if IsNotNilAndNotFalse(tmp) and #tmp > 1 then
-					for i, ug in pairs(tmp) do
-						if i > 1 then
-							YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. ug.uniqueID .. "'")
+		for i, v in SortedPairs(bos) do
+			YRP_SQL_ADD_COLUMN(DATABASE_NAME, i, "INT DEFAULT " .. v .. "")
+		end
+
+		for i, v in SortedPairs(ins) do
+			YRP_SQL_ADD_COLUMN(DATABASE_NAME, i, "INT DEFAULT " .. v .. "")
+		end
+
+		--YRP_SQL_DROP_TABLE(DATABASE_NAME)
+		--YRP_DB_IS_EMPTY(DATABASE_NAME)
+		timer.Simple(
+			1,
+			function()
+				local yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+				if IsNotNilAndNotFalse(yrp_usergroups) then
+					for _i, _ug in pairs(yrp_usergroups) do
+						_ug.string_name = _ug.string_name or "failed"
+						_ug.string_name = string.lower(_ug.string_name)
+						YRP_SQL_UPDATE(
+							DATABASE_NAME,
+							{
+								["string_name"] = _ug.string_name
+							}, "uniqueID = '" .. _ug.uniqueID .. "'"
+						)
+					end
+				end
+
+				yrp_usergroups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+				if IsNotNilAndNotFalse(yrp_usergroups) then
+					for _i, _ug in pairs(yrp_usergroups) do
+						local tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. _ug.string_name .. "'")
+						if IsNotNilAndNotFalse(tmp) and #tmp > 1 then
+							for i, ug in pairs(tmp) do
+								if i > 1 then
+									YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. ug.uniqueID .. "'")
+								end
+							end
 						end
 					end
 				end
-			end
-		end
 
-		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
-			local cols = {}
-			local vals = {}
-			table.insert(cols, "string_name")
-			table.insert(vals, "'superadmin'")
-			table.insert(cols, "string_tools")
-			table.insert(vals, "'all'")
-			table.insert(cols, "int_position")
-			table.insert(vals, 2)
-			for i, v in pairs(bos) do
-				if i == "bool_removeable" then
-					table.insert(cols, i)
-					table.insert(vals, 0)
+				if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'") == nil then
+					local cols = {}
+					local vals = {}
+					table.insert(cols, "string_name")
+					table.insert(vals, "'superadmin'")
+					table.insert(cols, "string_tools")
+					table.insert(vals, "'all'")
+					table.insert(cols, "int_position")
+					table.insert(vals, 2)
+					for i, v in pairs(bos) do
+						if i == "bool_removeable" then
+							table.insert(cols, i)
+							table.insert(vals, 0)
+						else
+							table.insert(cols, i)
+							table.insert(vals, 1)
+						end
+					end
+
+					YRP_SQL_INSERT_INTO(DATABASE_NAME, table.concat(cols, ","), table.concat(vals, ","))
 				else
-					table.insert(cols, i)
-					table.insert(vals, 1)
-				end
-			end
+					local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'")
+					if tab and tab[1] then
+						tab = tab[1]
+						local vals = {}
+						vals["string_name"] = "superadmin"
+						vals["string_tools"] = "all"
+						vals["int_position"] = 2
+						for i, v in pairs(bos) do
+							if i == "bool_removeable" then
+								vals[i] = 0
+							else
+								vals[i] = 1
+							end
+						end
 
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, table.concat(cols, ","), table.concat(vals, ","))
-		else
-			local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'superadmin'")
-			if tab and tab[1] then
-				tab = tab[1]
-				local vals = {}
-				vals["string_name"] = "superadmin"
-				vals["string_tools"] = "all"
-				vals["int_position"] = 2
-				for i, v in pairs(bos) do
-					if i == "bool_removeable" then
-						vals[i] = 0
+						YRP_SQL_UPDATE(DATABASE_NAME, vals, "uniqueID = '" .. tab.uniqueID .. "'")
 					else
-						vals[i] = 1
+						YRP:msg("note", "superadmin is missing")
 					end
 				end
 
-				YRP_SQL_UPDATE(DATABASE_NAME, vals, "uniqueID = '" .. tab.uniqueID .. "'")
-			else
-				YRP:msg("note", "superadmin is missing")
+				if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'admin'") == nil then
+					local _str = "string_name"
+					local _str2 = "'admin'"
+					YRP_SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
+				end
+
+				if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'user'") == nil then
+					local _str = "string_name"
+					local _str2 = "'user'"
+					YRP_SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
+				end
 			end
-		end
+		)
 
-		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'admin'") == nil then
-			local _str = "string_name"
-			local _str2 = "'admin'"
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
-		end
+		timer.Simple(1, SortUserGroups)
+		timer.Simple(
+			3,
+			function()
+				YRP_SQL_DELETE_FROM(DATABASE_NAME, "string_name = 'yrp_usergroups'")
+				local unremoveable = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'yrp_usergroups'")
+				if unremoveable == nil then
+					local cols = {}
+					local vals = {}
+					table.insert(cols, "string_name")
+					table.insert(vals, "'yrp_usergroups'")
+					table.insert(cols, "string_tools")
+					table.insert(vals, "'all'")
+					table.insert(cols, "int_position")
+					table.insert(vals, 1)
+					for i, v in pairs(bos) do
+						if i == "bool_removeable" then
+							table.insert(cols, i)
+							table.insert(vals, 0)
+						else
+							table.insert(cols, i)
+							table.insert(vals, 1)
+						end
+					end
 
-		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'user'") == nil then
-			local _str = "string_name"
-			local _str2 = "'user'"
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, _str, _str2)
-		end
+					YRP_SQL_INSERT_INTO(DATABASE_NAME, table.concat(cols, ","), table.concat(vals, ","))
+					SortUserGroups()
+				end
+			end
+		)
+
+		timer.Simple(1, GetULXUserGroups)
 	end
 )
 
@@ -208,37 +247,6 @@ function SortUserGroups()
 		end
 	end
 end
-
-timer.Simple(1, SortUserGroups)
-timer.Simple(
-	3,
-	function()
-		YRP_SQL_DELETE_FROM(DATABASE_NAME, "string_name = 'yrp_usergroups'")
-		local unremoveable = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = 'yrp_usergroups'")
-		if unremoveable == nil then
-			local cols = {}
-			local vals = {}
-			table.insert(cols, "string_name")
-			table.insert(vals, "'yrp_usergroups'")
-			table.insert(cols, "string_tools")
-			table.insert(vals, "'all'")
-			table.insert(cols, "int_position")
-			table.insert(vals, 1)
-			for i, v in pairs(bos) do
-				if i == "bool_removeable" then
-					table.insert(cols, i)
-					table.insert(vals, 0)
-				else
-					table.insert(cols, i)
-					table.insert(vals, 1)
-				end
-			end
-
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, table.concat(cols, ","), table.concat(vals, ","))
-			SortUserGroups()
-		end
-	end
-)
 
 --[[ Global Handler ]]
 --
@@ -304,7 +312,6 @@ function GetULXUserGroups()
 	end
 end
 
-timer.Simple(1, GetULXUserGroups)
 YRP:AddNetworkString("nws_yrp_connect_Settings_UserGroups")
 net.Receive(
 	"nws_yrp_connect_Settings_UserGroups",
@@ -2095,7 +2102,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:GetYRPBool("bool_permaprops", false) then return end
 		local tab = {}
-		if YRP_SQL_TABLE_EXISTS("permaprops") then
+		if YRP_SQL_TABLE_EXISTS("permaprops", "nws_yrp_get_perma_props") then
 			tab = YRP_SQL_SELECT("permaprops", "*", nil)
 		end
 
@@ -2154,7 +2161,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:GetYRPBool("bool_permaprops", false) then return end
 		local ppid = net.ReadString()
-		if YRP_SQL_TABLE_EXISTS("permaprops") then
+		if YRP_SQL_TABLE_EXISTS("permaprops", "nws_yrp_permaprops_remove") then
 			YRP_SQL_DELETE_FROM("permaprops", "id = '" .. ppid .. "'")
 		end
 	end
@@ -2176,7 +2183,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:GetYRPBool("bool_permaprops", false) then return end
 		local ppid = net.ReadString()
-		if YRP_SQL_TABLE_EXISTS("permaprops") then
+		if YRP_SQL_TABLE_EXISTS("permaprops", "nws_yrp_permaprops_teleport") then
 			local tab = YRP_SQL_SELECT("permaprops", "*", "id = '" .. ppid .. "'")
 			if IsNotNilAndNotFalse(tab) then
 				tab = tab[1]
@@ -2193,7 +2200,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:GetYRPBool("bool_permaprops", false) then return end
 		local tab = {}
-		if YRP_SQL_TABLE_EXISTS("permaprops_system") then
+		if YRP_SQL_TABLE_EXISTS("permaprops_system", "nws_yrp_get_perma_props2") then
 			tab = YRP_SQL_SELECT("permaprops_system", "*", nil)
 		end
 
@@ -2252,7 +2259,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:GetYRPBool("bool_permaprops", false) then return end
 		local ppid = net.ReadString()
-		if YRP_SQL_TABLE_EXISTS("permaprops_system") then
+		if YRP_SQL_TABLE_EXISTS("permaprops_system", "nws_yrp_permaprops_remove2") then
 			YRP_SQL_DELETE_FROM("permaprops_system", "id = '" .. ppid .. "'")
 		end
 	end
@@ -2274,7 +2281,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:GetYRPBool("bool_permaprops", false) then return end
 		local ppid = net.ReadString()
-		if YRP_SQL_TABLE_EXISTS("permaprops_system") then
+		if YRP_SQL_TABLE_EXISTS("permaprops_system", "nws_yrp_permaprops_teleport2") then
 			local tab = YRP_SQL_SELECT("permaprops_system", "*", "id = '" .. ppid .. "'")
 			if IsNotNilAndNotFalse(tab) then
 				tab = tab[1]
