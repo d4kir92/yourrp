@@ -184,7 +184,7 @@ hook.Add(
 					levelUp:SetPos(ScrW() / 2 - levelUp:GetWide() / 2, ScrH() / 2 - levelUp:GetTall() / 2 - YRP:ctr(400))
 					levelUp:ShowCloseButton(false)
 					levelUp:SetTitle("")
-					levelUp.LID_levelUp = YRP:trans("LID_levelUp")
+					levelUp.LID_levelup = YRP:trans("LID_levelup")
 					local tab = {}
 					tab["LEVEL"] = lply:Level()
 					levelUp.LID_levelx = YRP:trans("LID_levelx", tab)
@@ -194,14 +194,14 @@ hook.Add(
 					levelUp.level = oldlevel
 					function levelUp:Paint(pw, ph)
 						surface.SetFont("Y_36_500")
-						local tw, _ = surface.GetTextSize(self.LID_levelUp)
+						local tw, _ = surface.GetTextSize(self.LID_levelup)
 						tw = tw + 2 * YRP:ctr(20)
 						self.aw = self.aw or 0
 						draw.RoundedBox(YRP:ctr(10), pw / 2 - self.aw / 2, 0, self.aw, ph, color1)
 						if self.aw < tw then
 							self.aw = math.Clamp(self.aw + 5, 0, tw)
 						else
-							draw.SimpleText(self.LID_levelUp, "Y_36_500", pw / 2, ph / 4, self.lucolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							draw.SimpleText(self.LID_levelup, "Y_36_500", pw / 2, ph / 4, self.lucolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 							draw.SimpleText(self.LID_levelx, "Y_24_500", pw / 2, ph / 4 * 3, self.lxcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						end
 
