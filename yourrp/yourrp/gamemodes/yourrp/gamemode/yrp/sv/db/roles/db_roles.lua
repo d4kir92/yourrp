@@ -9,6 +9,9 @@ CATEGORIES.shipments = {}
 CATEGORIES.weapons = {}
 CATEGORIES.ammo = {}
 CATEGORIES.vehicles = {}
+local HANDLER_GROUPSANDROLES = {}
+HANDLER_GROUPSANDROLES["roleslist"] = {}
+HANDLER_GROUPSANDROLES["roles"] = {}
 hook.Add(
 	"YRP_SQLDBREADY",
 	"yrp_ply_roles",
@@ -184,16 +187,13 @@ hook.Add(
 			)
 
 			YRPBuildDarkrpTeams()
-			local yrp_ply_roles = {}
+			local yrp_roles = {}
 			local _init_ply_roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 			if IsNotNilAndNotFalse(_init_ply_roles) then
-				yrp_ply_roles = _init_ply_roles[1]
+				yrp_roles = _init_ply_roles[1]
 			end
 
-			local HANDLER_GROUPSANDROLES = {}
-			HANDLER_GROUPSANDROLES["roleslist"] = {}
-			HANDLER_GROUPSANDROLES["roles"] = {}
-			for str, val in pairs(yrp_ply_roles) do
+			for str, val in pairs(yrp_roles) do
 				if string.find(str, "string_", 1, true) then
 					local tab = {}
 					tab.netstr = "nws_yrp_update_role_" .. str
@@ -393,12 +393,12 @@ end
 
 function MoveUnusedRolesToDefault()
 	local changed = false
-	local allroles = YRP_SQL_SELECT("yrp_ply_roles", "uniqueID, string_name, int_prerole, int_groupID", nil)
+	local allroles = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_name, int_prerole, int_groupID", nil)
 	if IsNotNilAndNotFalse(allroles) then
 		for i, role in pairs(allroles) do
 			-- If prerole not exists remove the prerole
 			if tonumber(role.int_prerole) ~= 0 then
-				local prerole = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. role.int_prerole .. "'")
+				local prerole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. role.int_prerole .. "'")
 				if not IsNotNilAndNotFalse(prerole) then
 					changed = true
 					YRP_SQL_UPDATE(
@@ -1326,7 +1326,7 @@ net.Receive(
 			pm.uses = 0
 			pm.string_models = pm.string_models
 			-- Count uses
-			local roles = YRP_SQL_SELECT("yrp_ply_roles", "uniqueID, string_name, string_playermodels", "string_playermodels LIKE '%" .. pm.uniqueID .. "%'")
+			local roles = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_name, string_playermodels", "string_playermodels LIKE '%" .. pm.uniqueID .. "%'")
 			if roles then
 				for y, role in pairs(roles) do
 					local rolepms = string.Explode(",", role.string_playermodels)
@@ -2077,7 +2077,7 @@ net.Receive(
 			idcard = tobool(idcard[1].bool_identity_card)
 			local chatab = target:YRPGetCharacterTable()
 			if IsNotNilAndNotFalse(chatab) then
-				local targetRole = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. chatab.roleID)
+				local targetRole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. chatab.roleID)
 				local tmpT = ply:YRPGetCharacterTable()
 				local tmpTable = ply:YRPGetRoleTable()
 				if IsNotNilAndNotFalse(tmpT) and IsNotNilAndNotFalse(tmpTable) then
@@ -2089,7 +2089,7 @@ net.Receive(
 					if tonumber(tmpTable.bool_instructor) == 1 then
 						isInstructor = true
 						local tmpSearch = true --targetSteamID
-						local tmpTableSearch = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTable.int_prerole)
+						local tmpTableSearch = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. tmpTable.int_prerole)
 						if IsNotNilAndNotFalse(tmpTableSearch) then
 							local tmpSearchUniqueID = tmpTableSearch[1].int_prerole
 							local tmpCounter = 0
@@ -2098,7 +2098,7 @@ net.Receive(
 									tmpSearchUniqueID = tonumber(tmpTableSearch[1].int_prerole)
 									if tonumber(targetRole[1].int_prerole) ~= 0 and tmpTableSearch[1].uniqueID == targetRole[1].uniqueID then
 										tmpDemote = true
-										local tmp = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. targetRole[1].int_prerole)
+										local tmp = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. targetRole[1].int_prerole)
 										tmpDemoteName = tmp[1].string_name
 									end
 
@@ -2112,7 +2112,7 @@ net.Receive(
 									end
 								end
 
-								tmpTableSearch = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpSearchUniqueID)
+								tmpTableSearch = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. tmpSearchUniqueID)
 								--Only look for 30 preroles
 								tmpCounter = tmpCounter + 1
 								if tmpCounter >= 30 then
@@ -2223,13 +2223,13 @@ net.Receive(
 		local chatab = YRPGetCharTabByID(targetcharid)
 		local tmpTableInstructorRole = ply:YRPGetRoleTable()
 		if tonumber(tmpTableInstructorRole.bool_instructor) == 1 then
-			local tmpTableTargetRole = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. chatab.roleID)
-			local tmpTableTargetPromoteRole = YRP_SQL_SELECT("yrp_ply_roles", "*", "int_prerole = '" .. tmpTableTargetRole[1].uniqueID .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'")
+			local tmpTableTargetRole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. chatab.roleID)
+			local tmpTableTargetPromoteRole = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. tmpTableTargetRole[1].uniqueID .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'")
 			local tmpTableTargetGroup = nil
 			if tmpTableTargetPromoteRole ~= nil then
 				tmpTableTargetGroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetPromoteRole[1].int_groupID)
 			else
-				tmpTableTargetPromoteRole = YRP_SQL_SELECT("yrp_ply_roles", "*", "int_prerole = '" .. 0 .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'")
+				tmpTableTargetPromoteRole = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. 0 .. "' AND int_groupID = '" .. tmpTableInstructorRole.int_groupID .. "'")
 				if tmpTableTargetPromoteRole == nil then
 					YRP:msg("note", "No Valid Promote Role")
 
@@ -2277,13 +2277,13 @@ net.Receive(
 		local chatab = YRPGetCharTabByID(targetcharid)
 		local tmpTableInstructorRole = ply:YRPGetRoleTable()
 		if tonumber(tmpTableInstructorRole.bool_instructor) == 1 then
-			local tmpTableTargetRole = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. chatab.roleID)
-			local tmpTableTargetDemoteRole = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tmpTableTargetRole[1].int_prerole)
+			local tmpTableTargetRole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. chatab.roleID)
+			local tmpTableTargetDemoteRole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. tmpTableTargetRole[1].int_prerole)
 			local tmpTableTargetGroup = nil
 			if tmpTableTargetDemoteRole ~= nil then
 				tmpTableTargetGroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = " .. tmpTableTargetDemoteRole[1].int_groupID)
 			else
-				tmpTableTargetDemoteRole = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '1'")
+				tmpTableTargetDemoteRole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 				tmpTableTargetGroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '1'")
 			end
 
@@ -2575,7 +2575,7 @@ net.Receive(
 		local chars = YRP_SQL_SELECT("yrp_characters", "*", "steamid = '" .. ply:YRPSteamID() .. "'")
 		if IsNotNilAndNotFalse(chars) then
 			for i, char in pairs(chars) do
-				local role = YRP_SQL_SELECT("yrp_ply_roles", "uniqueID, string_name, string_color", "uniqueID = '" .. char.roleID .. "'")
+				local role = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_name, string_color", "uniqueID = '" .. char.roleID .. "'")
 				if role and role[1] then
 					char.rolename = role[1].string_name
 					char.rolecolor = StringToColor(role[1].string_color)

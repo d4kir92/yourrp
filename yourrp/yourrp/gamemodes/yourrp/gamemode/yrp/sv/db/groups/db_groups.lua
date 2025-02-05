@@ -2,6 +2,10 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_ply_groups"
+local HANDLER_GROUPSANDROLES = {}
+HANDLER_GROUPSANDROLES["groupslist"] = {}
+HANDLER_GROUPSANDROLES["groups"] = {}
+HANDLER_GROUPSANDROLES["roles"] = {}
 hook.Add(
 	"YRP_SQLDBREADY",
 	"yrp_ply_groups",
@@ -25,7 +29,7 @@ hook.Add(
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_removeable", "INTEGER DEFAULT 1")
 		-- PUBLIC GROUP
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = -1") == nil then
-			local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible_rm, bool_visible_cc", "-1, 'PUBLIC', '255,255,255', -1, 0, 0, 0, 0")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible_rm, bool_visible_cc", "-1, 'PUBLIC', '255,255,255', -1, 0, 0, 0, 0")
 		end
 
 		YRP_SQL_UPDATE(
@@ -39,7 +43,7 @@ hook.Add(
 		-- DEFAULT GROUP
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 			YRP:msg("note", DATABASE_NAME .. " has not the default group")
-			local _result = YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "'1', 'Civilians', '0,0,255', '0', '0'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable", "'1', 'Civilians', '0,0,255', '0', '0'")
 		end
 
 		YRP_SQL_UPDATE(
@@ -51,7 +55,7 @@ hook.Add(
 
 		local dbTab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 		if dbTab then
-			for i, v in pairs(YRP_SQL_SELECT(DATABASE_NAME, "*", nil)) do
+			for i, v in pairs(dbTab) do
 				v.uniqueID = tonumber(v.uniqueID)
 				v.int_parentgroup = tonumber(v.int_parentgroup)
 				if v.uniqueID ~= -1 and v.int_parentgroup == v.uniqueID then
@@ -66,18 +70,14 @@ hook.Add(
 		end
 
 		-- Local Table
-		local yrp_ply_groups = {}
+		local yrp_groups = {}
 		local _init_ply_groups = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 		if IsNotNilAndNotFalse(_init_ply_groups) then
-			yrp_ply_groups = _init_ply_groups[1]
+			yrp_groups = _init_ply_groups[1]
 		end
 
-		local HANDLER_GROUPSANDROLES = {}
-		HANDLER_GROUPSANDROLES["groupslist"] = {}
-		HANDLER_GROUPSANDROLES["groups"] = {}
-		HANDLER_GROUPSANDROLES["roles"] = {}
 		-- Network Things
-		for str, val in pairs(yrp_ply_groups) do
+		for str, val in pairs(yrp_groups) do
 			if string.find(str, "string_", 1, true) then
 				local tab = {}
 				tab.netstr = "nws_yrp_update_group_" .. str
@@ -519,14 +519,14 @@ net.Receive(
 
 function RemoveUnusedGroups()
 	local count = 0
-	local all_groups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
+	local all_groups = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	for i, grp in pairs(all_groups) do
 		grp.int_parentgroup = tonumber(grp.int_parentgroup)
 		if grp.int_parentgroup > 0 then
-			local parentgroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. grp.int_parentgroup .. "'")
+			local parentgroup = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. grp.int_parentgroup .. "'")
 			if parentgroup == nil then
 				count = count + 1
-				YRP_SQL_DELETE_FROM("yrp_ply_groups", "uniqueID = '" .. grp.uniqueID .. "'")
+				YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. grp.uniqueID .. "'")
 			end
 		end
 	end
@@ -543,7 +543,7 @@ function RemoveUnusedRoles()
 		for i, rol in pairs(all_roles) do
 			rol.int_groupID = tonumber(rol.int_groupID)
 			if rol.int_groupID > 0 then
-				local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. rol.int_groupID .. "'")
+				local group = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. rol.int_groupID .. "'")
 				if group == nil then
 					count = count + 1
 					YRP_SQL_DELETE_FROM("yrp_ply_roles", "uniqueID = '" .. rol.uniqueID .. "'")
@@ -614,7 +614,7 @@ net.Receive(
 	"nws_yrp_rolesmenu_get_groups",
 	function(len, ply)
 		local _uid = tonumber(net.ReadString())
-		local _get_grps = YRP_SQL_SELECT("yrp_ply_groups", "*", "int_parentgroup = " .. _uid)
+		local _get_grps = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = " .. _uid)
 		if IsNotNilAndNotFalse(_get_grps) then
 			net.Start("nws_yrp_rolesmenu_get_groups")
 			net.WriteTable(_get_grps)
@@ -910,7 +910,7 @@ end
 
 function YRPGetGroupNameByID(id)
 	if id == nil then return "NO ID" end
-	local group = YRP_SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", "uniqueID = '" .. id .. "'")
+	local group = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_name", "uniqueID = '" .. id .. "'")
 	if group and group[1] then
 		group = group[1]
 

@@ -49,5 +49,5 @@ net.Receive(
 
 function YRP:log(msg)
 	YRP:msg("note", msg)
-	YRP_SQL_INSERT_INTO("yrp_logs_settings", "string_timestamp, string_text", "'" .. os.time() .. "', " .. YRP_SQL_STR_IN(msg) .. "")
+	YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_timestamp, string_text", "'" .. os.time() .. "', " .. YRP_SQL_STR_IN(msg) .. "")
 end
