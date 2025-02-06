@@ -2,6 +2,7 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_levelsystem"
+local xpPerMinute = 0
 hook.Add(
 	"YRP_SQLDBREADY",
 	"yrp_levelsystem",
@@ -18,11 +19,11 @@ hook.Add(
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "'1'")
 		end
 
-		local yrp_levelsystem = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
-		if IsNotNilAndNotFalse(yrp_levelsystem) then
-			yrp_levelsystem = yrp_levelsystem[1]
+		local system = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		if IsNotNilAndNotFalse(system) then
+			xpPerMinute = tonumber(system[1].int_xp_per_minute)
 			function YRP:XpPerMinute()
-				return tonumber(yrp_levelsystem.int_xp_per_minute)
+				return xpPerMinute
 			end
 		end
 	end
@@ -45,11 +46,11 @@ net.Receive(
 	"nws_yrp_get_levelsystem_settings",
 	function(len, ply)
 		if ply:CanAccess("bool_levelsystem") then
-			local setting = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
-			if IsNotNilAndNotFalse(setting) then
-				setting = setting[1]
+			local system = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+			if IsNotNilAndNotFalse(system) then
+				system = system[1]
 				net.Start("nws_yrp_get_levelsystem_settings")
-				net.WriteTable(setting)
+				net.WriteTable(system)
 				net.Send(ply)
 			end
 		end
@@ -60,13 +61,15 @@ YRP:AddNetworkString("nws_yrp_update_ls_int_level_min")
 net.Receive(
 	"nws_yrp_update_ls_int_level_min",
 	function(len, ply)
-		yrp_levelsystem.int_level_min = net.ReadString()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["int_level_min"] = yrp_levelsystem.int_level_min
-			}, "uniqueID = '1'"
-		)
+		if ply:CanAccess("bool_levelsystem") then
+			local int_level_min = net.ReadString()
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_level_min"] = int_level_min
+				}, "uniqueID = '1'"
+			)
+		end
 	end
 )
 
@@ -74,13 +77,15 @@ YRP:AddNetworkString("nws_yrp_update_ls_int_level_max")
 net.Receive(
 	"nws_yrp_update_ls_int_level_max",
 	function(len, ply)
-		yrp_levelsystem.int_level_max = net.ReadString()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["int_level_max"] = yrp_levelsystem.int_level_max
-			}, "uniqueID = '1'"
-		)
+		if ply:CanAccess("bool_levelsystem") then
+			local int_level_max = net.ReadString()
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_level_max"] = int_level_max
+				}, "uniqueID = '1'"
+			)
+		end
 	end
 )
 
@@ -88,13 +93,15 @@ YRP:AddNetworkString("nws_yrp_update_ls_int_level_start")
 net.Receive(
 	"nws_yrp_update_ls_int_level_start",
 	function(len, ply)
-		yrp_levelsystem.int_level_start = net.ReadString()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["int_level_start"] = yrp_levelsystem.int_level_start
-			}, "uniqueID = '1'"
-		)
+		if ply:CanAccess("bool_levelsystem") then
+			local int_level_start = net.ReadString()
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_level_start"] = int_level_start
+				}, "uniqueID = '1'"
+			)
+		end
 	end
 )
 
@@ -102,13 +109,15 @@ YRP:AddNetworkString("nws_yrp_update_ls_float_multiplier")
 net.Receive(
 	"nws_yrp_update_ls_float_multiplier",
 	function(len, ply)
-		yrp_levelsystem.float_multiplier = net.ReadString()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["float_multiplier"] = yrp_levelsystem.float_multiplier
-			}, "uniqueID = '1'"
-		)
+		if ply:CanAccess("bool_levelsystem") then
+			local float_multiplier = net.ReadString()
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["float_multiplier"] = float_multiplier
+				}, "uniqueID = '1'"
+			)
+		end
 	end
 )
 
@@ -116,13 +125,15 @@ YRP:AddNetworkString("nws_yrp_update_ls_int_xp_for_levelup")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_for_levelup",
 	function(len, ply)
-		yrp_levelsystem.int_xp_for_levelup = net.ReadString()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["int_xp_for_levelup"] = yrp_levelsystem.int_xp_for_levelup
-			}, "uniqueID = '1'"
-		)
+		if ply:CanAccess("bool_levelsystem") then
+			local int_xp_for_levelup = net.ReadString()
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_xp_for_levelup"] = int_xp_for_levelup
+				}, "uniqueID = '1'"
+			)
+		end
 	end
 )
 
@@ -130,13 +141,15 @@ YRP:AddNetworkString("nws_yrp_update_ls_int_xp_per_kill")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_per_kill",
 	function(len, ply)
-		yrp_levelsystem.int_xp_per_kill = net.ReadString()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["int_xp_per_kill"] = yrp_levelsystem.int_xp_per_kill
-			}, "uniqueID = '1'"
-		)
+		if ply:CanAccess("bool_levelsystem") then
+			local int_xp_per_kill = net.ReadString()
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_xp_per_kill"] = int_xp_per_kill
+				}, "uniqueID = '1'"
+			)
+		end
 	end
 )
 
@@ -144,13 +157,16 @@ YRP:AddNetworkString("nws_yrp_update_ls_int_xp_per_minute")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_per_minute",
 	function(len, ply)
-		yrp_levelsystem.int_xp_per_minute = net.ReadString()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["int_xp_per_minute"] = yrp_levelsystem.int_xp_per_minute
-			}, "uniqueID = '1'"
-		)
+		if ply:CanAccess("bool_levelsystem") then
+			local int_xp_per_minute = net.ReadString()
+			xpPerMinute = tonumber(int_xp_per_minute)
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_xp_per_minute"] = int_xp_per_minute
+				}, "uniqueID = '1'"
+			)
+		end
 	end
 )
 
@@ -158,13 +174,15 @@ YRP:AddNetworkString("nws_yrp_update_ls_int_xp_per_revive")
 net.Receive(
 	"nws_yrp_update_ls_int_xp_per_revive",
 	function(len, ply)
-		yrp_levelsystem.int_xp_per_revive = net.ReadString()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["int_xp_per_revive"] = yrp_levelsystem.int_xp_per_revive
-			}, "uniqueID = '1'"
-		)
+		if ply:CanAccess("bool_levelsystem") then
+			local int_xp_per_revive = net.ReadString()
+			YRP_SQL_UPDATE(
+				DATABASE_NAME,
+				{
+					["int_xp_per_revive"] = int_xp_per_revive
+				}, "uniqueID = '1'"
+			)
+		end
 	end
 )
 
