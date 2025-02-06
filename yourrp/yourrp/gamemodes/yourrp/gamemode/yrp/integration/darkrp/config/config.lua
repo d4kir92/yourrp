@@ -1,4 +1,4 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- this config will not be used! its only here to remove some bugs!
 -- in yourrp you can set everything up
 GM.Config = {} -- config table

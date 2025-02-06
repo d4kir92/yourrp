@@ -1,4 +1,4 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 --cl_think.lua
 local _cmdpre = "[COMMAND] "
 local _cmdsv = "This command is adminonly/serversided!"

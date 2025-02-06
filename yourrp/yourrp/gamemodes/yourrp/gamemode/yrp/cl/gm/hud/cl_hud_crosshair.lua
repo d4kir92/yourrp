@@ -1,4 +1,4 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _hl2Weapons = {}
 table.insert(_hl2Weapons, "weapon_357")
 table.insert(_hl2Weapons, "weapon_alyxgun")

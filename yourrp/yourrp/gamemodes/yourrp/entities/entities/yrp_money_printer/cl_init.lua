@@ -1,4 +1,4 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 include("shared.lua")
 function moneyPrinterButton(mp, parent, w, h, x, y, item, _net, name, _up, _full)
 	local tmp = YRPCreateD("DPanel", parent, w, h, x, y)

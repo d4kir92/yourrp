@@ -1,4 +1,4 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function AddStatusLine(parent, cat, entry, str_id, color)
 	local sl = YRPCreateD("DPanel", parent, parent:GetWide(), YRP:ctr(50), 0, 0)
 	local _t = {}

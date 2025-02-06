@@ -1,4 +1,4 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
@@ -88,13 +88,11 @@ function ENT:Use(activator, caller)
 end
 
 function ENT:StartTouch(ent)
-	if ent:GetClass() == "yrp_shipment" then
-		if ent:GetYRPString("classname") == self:GetYRPString("classname") and ent:GetYRPString("itemtype") == self:GetYRPString("itemtype") then
-			local amount = ent:GetYRPInt("amount") + self:GetYRPInt("amount")
-			if self:GetPos().z > ent:GetPos().z then
-				ent:Remove()
-				self:SetAmount(amount)
-			end
+	if ent:GetClass() == "yrp_shipment" and ent:GetYRPString("classname") == self:GetYRPString("classname") and ent:GetYRPString("itemtype") == self:GetYRPString("itemtype") then
+		local amount = ent:GetYRPInt("amount") + self:GetYRPInt("amount")
+		if self:GetPos().z > ent:GetPos().z then
+			ent:Remove()
+			self:SetAmount(amount)
 		end
 	end
 end

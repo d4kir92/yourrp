@@ -1,4 +1,4 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 include("db/db_database.lua")
 include("gm/sv_playerisready.lua")
 include("gm/sv_gamemode.lua")

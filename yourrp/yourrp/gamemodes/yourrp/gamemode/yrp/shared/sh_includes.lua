@@ -1,4 +1,4 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 YRP:msg("gm", "Loading sh_includes.lua")
 add_luas("db/lang/db_lang.lua")
 add_luas("gm/sh_gamemode.lua")

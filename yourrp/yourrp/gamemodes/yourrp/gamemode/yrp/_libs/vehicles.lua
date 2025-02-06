@@ -1,4 +1,4 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function get_vehicles_custom(s_list, s_custom)
 	local _custom_list = list.Get(s_list)
 	for k, v in pairs(_custom_list) do

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local UGS = UGS or {}
 local CURRENT_USERGROUP = nil
 local DUGS = DUGS or {}

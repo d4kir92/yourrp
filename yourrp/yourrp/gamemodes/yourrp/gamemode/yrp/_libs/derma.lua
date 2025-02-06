@@ -1,4 +1,4 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function YRPTextColor(bgcol)
 	if bgcol.r and bgcol.g and bgcol.b then
 		local sum = bgcol.r + bgcol.g + bgcol.b

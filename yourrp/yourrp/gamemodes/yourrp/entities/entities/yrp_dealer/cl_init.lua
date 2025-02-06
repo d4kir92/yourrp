@@ -1,5 +1,5 @@
---Copyright (C) 2017-2024 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-include('shared.lua')
+--Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+include("shared.lua")
 net.Receive(
 	"nws_yrp_open_buy_menu",
 	function(len)
