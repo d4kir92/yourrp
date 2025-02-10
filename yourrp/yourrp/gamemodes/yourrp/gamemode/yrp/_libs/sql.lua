@@ -32,7 +32,7 @@ end
 function YRP_SQL_Show_Last_Error()
 	--YRP:msg( "db", "YRP_SQL_Show_Last_Error()" )
 	local _last_error = tostring(sql.LastError()) or ""
-	MsgC(Color(0, 255, 0), "DATABASE HAS ERROR: " .. _last_error)
+	MsgC(Color(255, 0, 0), "DATABASE HAS ERROR: " .. _last_error .. "\n")
 	if SERVER then
 		PrintMessage(HUD_PRINTCENTER, "[YourRP|DATABASE] SERVER-DATABASE:")
 		PrintMessage(HUD_PRINTCENTER, _last_error)

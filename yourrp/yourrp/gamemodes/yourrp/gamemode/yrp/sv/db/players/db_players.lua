@@ -226,11 +226,13 @@ function YRPPlayerGive(ply, cname, bNoAmmo)
 	if cname == nil then return false end
 	if strEmpty(cname) then return false end
 	if YRPDoesWeaponExists(cname) == false then return false end
-	if YRPEntityAlive(ply) and ply:Alive() and not strEmpty(cname) then
+	if YRPEntityAlive(ply) and ply:Alive() then
 		ply:Give(cname, bNoAmmo or false)
 
 		return true
 	end
+
+	return false
 end
 
 function YRPSetRole(from, ply, rid, force, pmid, bgs)

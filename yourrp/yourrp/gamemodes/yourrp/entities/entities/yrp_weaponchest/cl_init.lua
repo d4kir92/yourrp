@@ -1,5 +1,10 @@
 --Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 include("shared.lua")
+local win = nil
+local w = 300
+local h = 150
+local currentId = 0
+local currentArt = ""
 function ENT:Draw()
 	if LocalPlayer():GetPos():Distance(self:GetPos()) < 2000 then
 		self:DrawModel()
@@ -39,13 +44,15 @@ local function YRPGetPrintNameOfSWEP(cname)
 	return cname
 end
 
-local win = nil
-local w = 300
-local h = 200
 local function YRPCreateSlot(x, y, art, id)
 	local slot = YRPCreateD("DPanel", nil, w + 50, h, x, y)
 	function slot:Paint(pw, ph)
-		draw.RoundedBox(3, 0, 0, pw, ph, Color(40, 40, 40))
+		local color = Color(40, 40, 40)
+		if id == currentId and currentArt == art then
+			color = Color(80, 80, 80)
+		end
+
+		draw.RoundedBox(3, 0, 0, pw, ph, color)
 	end
 
 	slot.mdl = YRPCreateD("DModelPanel", slot, w, h, 0, 0)
@@ -95,9 +102,17 @@ local function YRPCreateSlot(x, y, art, id)
 		if cname and (cname == "LID_empty" or strEmpty(cname)) then
 			hook.Run("YButtonPaint", self, pw, ph)
 		end
+
+		if id == currentId and currentArt == art then
+			slot.btnlist:SetText("<")
+		else
+			slot.btnlist:SetText(">")
+		end
 	end
 
 	function slot.btnlist:DoClick()
+		currentId = id
+		currentArt = art
 		local cname = YRPGetSlotSWEP("slot_" .. art, id)
 		if cname and (cname == "LID_empty" or strEmpty(cname)) then
 			win:UpdateArtList(art)
@@ -143,6 +158,8 @@ local function YRPCreateSWEP(x, y, art, cname)
 	end
 
 	function slot.btn:DoClick()
+		currentId = 0
+		currentArt = ""
 		if art and cname then
 			net.Start("nws_yrp_slot_swep_add")
 			net.WriteString(art)
@@ -164,6 +181,8 @@ net.Receive(
 			win:SetTitle("LID_weaponchest")
 			win:Center()
 			win:MakePopup()
+			currentId = 0
+			currentArt = ""
 			win.art = "primary"
 			function win:OnRemove()
 				win = nil
@@ -197,7 +216,7 @@ net.Receive(
 			end
 
 			function sbar.btnGrip:Paint(bw, bh)
-				draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
+				draw.RoundedBox(bw / 2, 0, 0, bw, bh, YRPInterfaceValue("YFrame", "HI"))
 			end
 
 			for i = 1, GetGlobalYRPInt("yrp_max_slots_primary", 0) do

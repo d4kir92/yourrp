@@ -199,7 +199,13 @@ net.Receive(
 		local art = net.ReadString()
 		local cname = net.ReadString()
 		local currentsweps = ply:GetYRPString("slot_" .. art, "")
-		local tab = string.Explode(",", currentsweps)
+		local tab = nil
+		if strEmpty(currentsweps) then
+			tab = {}
+		else
+			tab = string.Explode(",", currentsweps)
+		end
+
 		table.insert(tab, cname)
 		if not YRPHasWeapon(ply, cname) then
 			YRPPlayerGive(ply, cname)

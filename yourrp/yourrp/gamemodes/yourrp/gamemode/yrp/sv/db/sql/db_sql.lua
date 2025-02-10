@@ -26,6 +26,65 @@ local function SQLITE_ADD_COLUMN(table_name, column_name, datatype)
 	end
 end
 
+function UpdateValue(tab)
+	tab.uniqueID = tab.uniqueID or 1
+	YRP_SQL_UPDATE(
+		tab.db,
+		{
+			[tab.id] = tab.value
+		}, "uniqueID = '" .. tab.uniqueID .. "'", true
+	)
+	--sql.Query( "UPDATE " .. tab.db .. " SET " .. tab.id .. " = '" .. tab.value .. "' WHERE uniqueID = '" .. tab.uniqueID .. "'" )
+end
+
+function UpdateString(tab)
+	YRP:msg("db", tab.ply:YRPName() .. " updated string " .. tab.id .. " to: " .. tab.value)
+	UpdateValue(tab)
+end
+
+function UpdateInt(tab)
+	YRP:msg("db", tab.ply:YRPName() .. " updated int " .. tab.id .. " to: " .. tab.value)
+	UpdateValue(tab)
+end
+
+function UpdateFloat(tab)
+	YRP:msg("db", tab.ply:YRPName() .. " updated float " .. tab.id .. " to: " .. tab.value)
+	UpdateValue(tab)
+end
+
+function UpdateBool(tab)
+	YRP:msg("db", tab.ply:YRPName() .. " updated bool " .. tab.id .. " to: " .. tab.value)
+	UpdateValue(tab)
+end
+
+function DBUpdateValue(db_name, str, l_db, value, sqlite)
+	if l_db ~= nil then
+		l_db[str] = value
+	end
+
+	YRP_SQL_UPDATE(
+		db_name,
+		{
+			[str] = value
+		}, "uniqueID = '1'", sqlite
+	)
+end
+
+function DBUpdateFloat(db_name, ply, netstr, str, l_db, value, sqlite)
+	YRP:msg("db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring(value))
+	DBUpdateValue(db_name, str, l_db, value, sqlite)
+end
+
+function DBUpdateInt(db_name, ply, netstr, str, l_db, value, sqlite)
+	YRP:msg("db", ply:YRPName() .. " updated int " .. str .. " to: " .. tostring(value))
+	DBUpdateValue(db_name, str, l_db, value, sqlite)
+end
+
+function DBUpdateString(db_name, ply, netstr, str, l_db, value, sqlite)
+	YRP:msg("db", ply:YRPName() .. " updated string " .. str .. " to: " .. tostring(value))
+	DBUpdateValue(db_name, str, l_db, value, sqlite)
+end
+
 local yrp_sql = {}
 hook.Add(
 	"YRP_SQLDBREADY",
@@ -58,7 +117,7 @@ hook.Add(
 					"nws_yrp_update_" .. str,
 					function(len, ply)
 						local i = net.ReadInt(32)
-						DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, i)
+						DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, i, true)
 					end
 				)
 			elseif string.find(str, "float_", 1, true) then
@@ -67,7 +126,7 @@ hook.Add(
 					"nws_yrp_update_" .. str,
 					function(len, ply)
 						local f = net.ReadFloat()
-						DBUpdateFloat(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, f)
+						DBUpdateFloat(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, f, true)
 					end
 				)
 			elseif string.find(str, "string_", 1, true) then
@@ -76,7 +135,7 @@ hook.Add(
 					"nws_yrp_update_" .. str,
 					function(len, ply)
 						local s = net.ReadString()
-						DBUpdateString(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, s)
+						DBUpdateString(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, s, true)
 					end
 				)
 			end
@@ -129,66 +188,6 @@ function BroadcastBool(tab)
 			net.Send(pl)
 		end
 	end
-end
-
-function UpdateValue(tab)
-	tab.uniqueID = tab.uniqueID or 1
-	YRP_SQL_UPDATE(
-		tab.db,
-		{
-			[tab.id] = tab.value
-		}, "uniqueID = '" .. tab.uniqueID .. "'", true
-	)
-	--sql.Query( "UPDATE " .. tab.db .. " SET " .. tab.id .. " = '" .. tab.value .. "' WHERE uniqueID = '" .. tab.uniqueID .. "'" )
-end
-
-function UpdateString(tab)
-	YRP:msg("db", tab.ply:YRPName() .. " updated string " .. tab.id .. " to: " .. tab.value)
-	UpdateValue(tab)
-end
-
-function UpdateInt(tab)
-	YRP:msg("db", tab.ply:YRPName() .. " updated int " .. tab.id .. " to: " .. tab.value)
-	UpdateValue(tab)
-end
-
-function UpdateFloat(tab)
-	YRP:msg("db", tab.ply:YRPName() .. " updated float " .. tab.id .. " to: " .. tab.value)
-	UpdateValue(tab)
-end
-
-function UpdateBool(tab)
-	YRP:msg("db", tab.ply:YRPName() .. " updated bool " .. tab.id .. " to: " .. tab.value)
-	UpdateValue(tab)
-end
-
--- NEW
-function DBUpdateValue(db_name, str, l_db, value, sqlite)
-	if l_db ~= nil then
-		l_db[str] = value
-	end
-
-	YRP_SQL_UPDATE(
-		db_name,
-		{
-			[str] = value
-		}, "uniqueID = '1'", sqlite
-	)
-end
-
-function DBUpdateFloat(db_name, ply, netstr, str, l_db, value)
-	YRP:msg("db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring(value))
-	DBUpdateValue(db_name, str, l_db, value)
-end
-
-function DBUpdateInt(db_name, ply, netstr, str, l_db, value, sqlite)
-	YRP:msg("db", ply:YRPName() .. " updated int " .. str .. " to: " .. tostring(value))
-	DBUpdateValue(db_name, str, l_db, value, sqlite)
-end
-
-function DBUpdateString(db_name, ply, netstr, str, l_db, value)
-	YRP:msg("db", ply:YRPName() .. " updated string " .. str .. " to: " .. tostring(value))
-	DBUpdateValue(db_name, str, l_db, value)
 end
 
 net.Receive(

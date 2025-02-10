@@ -2,23 +2,6 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_weapon_options"
-hook.Add(
-	"YRP_SQLDBREADY",
-	"yrp_weapon_options",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_primary", "INT DEFAULT 1")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_secondary", "INT DEFAULT 1")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_sidearm", "INT DEFAULT 1")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_gadget", "INT DEFAULT 2")
-		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID == '1'") == nil then
-			YRP:msg("db", "Set Default Weapon Settings")
-			YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
-		end
-
-		YRPSetWeaponSettings()
-	end
-)
-
 function YRPSetWeaponSettings()
 	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 	if IsNotNilAndNotFalse(tab) then
@@ -29,6 +12,28 @@ function YRPSetWeaponSettings()
 		SetGlobalYRPInt("yrp_max_slots_gadget", tonumber(tab.slots_gadget))
 	end
 end
+
+hook.Add(
+	"YRP_SQLDBREADY",
+	"yrp_weapon_options",
+	function()
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_primary", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_secondary", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_sidearm", "INT DEFAULT 1")
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_gadget", "INT DEFAULT 2")
+		timer.Simple(
+			0,
+			function()
+				if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
+					YRP:msg("db", "Set Default Weapon Settings")
+					YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
+				end
+
+				YRPSetWeaponSettings()
+			end
+		)
+	end
+)
 
 YRP:AddNetworkString("nws_yrp_set_slot_amount")
 net.Receive(
@@ -73,7 +78,8 @@ function YRPGetSlotsOfSWEP(cn)
 		tab.slot_gadget = tobool(tab.slot_gadget)
 		tab.slot_no = tobool(tab.slot_no)
 	else
-		YRP_SQL_INSERT_INTO(DATABASE_NAME2, "'" .. "classname" .. "'", "" .. YRP_SQL_STR_IN(cn) .. "")
+		print("cn", cn)
+		YRP_SQL_INSERT_INTO(DATABASE_NAME2, "classname", "" .. YRP_SQL_STR_IN(cn) .. "")
 
 		return YRPGetSlotsOfSWEP(cn)
 	end
@@ -128,10 +134,22 @@ net.Receive(
 					DATABASE_NAME2,
 					{
 						[ar] = tonum(bo)
-					}, "classname = '" .. cn .. "'"
+					}, "classname = " .. YRP_SQL_STR_IN(cn) .. ""
 				)
 			else
-				YRP_SQL_INSERT_INTO(DATABASE_NAME2, "'" .. "classname" .. "', " .. YRP_SQL_STR_IN(ar) .. "", "" .. YRP_SQL_STR_IN(cn) .. ", '" .. tonum(bo) .. "'")
+				if ar == nil then
+					YRP:msg("db", "Missing ART in nws_yrp_set_slot_weapon")
+
+					return
+				end
+
+				if cn == nil then
+					YRP:msg("db", "Missing ClassName in nws_yrp_set_slot_weapon")
+
+					return
+				end
+
+				YRP_SQL_INSERT_INTO(DATABASE_NAME2, "classname, " .. ar .. "", "" .. YRP_SQL_STR_IN(cn) .. ", '" .. tonum(bo) .. "'")
 			end
 		end
 	end
