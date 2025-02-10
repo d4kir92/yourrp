@@ -78,7 +78,6 @@ function YRPGetSlotsOfSWEP(cn)
 		tab.slot_gadget = tobool(tab.slot_gadget)
 		tab.slot_no = tobool(tab.slot_no)
 	else
-		print("cn", cn)
 		YRP_SQL_INSERT_INTO(DATABASE_NAME2, "classname", "" .. YRP_SQL_STR_IN(cn) .. "")
 
 		return YRPGetSlotsOfSWEP(cn)

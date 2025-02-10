@@ -188,7 +188,7 @@ function YRP_SQL_QUERY(query)
 			local que = YRPSQL.db:query(query)
 			que.onError = function(q, e)
 				if string.find(e, "Unknown column", 1, true) == nil and string.find(e, "doesn't exist", 1, true) == nil then
-					YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_QUERY - ERROR: " .. tostring(e) .. " lastError: " .. YRP_SQL_Show_Last_Error() .. " query: " .. tostring(query))
+					YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_QUERY - ERROR: " .. tostring(e) .. " | LASTERROR: " .. YRP_SQL_Show_Last_Error() .. " | QUERY: " .. tostring(query))
 					q:error()
 				end
 			end

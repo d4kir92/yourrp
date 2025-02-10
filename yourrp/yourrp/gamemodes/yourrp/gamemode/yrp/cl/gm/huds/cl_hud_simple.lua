@@ -741,7 +741,7 @@ function HUDSimple()
 			XP.element = "XP"
 			XP.cur = lply:XP()
 			XP.max = lply:GetMaxXP()
-			if XP.cur < XP.max then
+			if XP.cur <= XP.max then
 				XP.text = YRP:trans("LID_xp") .. ": " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " ( " .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%) " .. YRP:trans("LID_level") .. " " .. lply:Level()
 			else
 				XP.text = YRP:trans("LID_level") .. " " .. lply:Level()

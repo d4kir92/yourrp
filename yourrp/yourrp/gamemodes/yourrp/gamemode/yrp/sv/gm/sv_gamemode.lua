@@ -279,17 +279,14 @@ function YRPPlayerLoadout(ply)
 		--YRP:msg( "gm", "[PlayerLoadout] " .. ply:YRPName() .. " get his role equipment." )
 		YRP:Loadout(ply)
 		if ply:HasCharacterSelected() then
-			--[[ Status Reset ]]
-			--
+			-- Status Reset 
 			ply:SetYRPBool("cuffed", false)
 			ply:SetYRPBool("broken_leg_left", false)
 			ply:SetYRPBool("broken_leg_right", false)
 			ply:SetYRPBool("broken_arm_left", false)
 			ply:SetYRPBool("broken_arm_right", false)
-			--ply:Give( "yrp_unarmed" )
 			local plyT = ply:GetPlyTab()
 			if IsNotNilAndNotFalse(plyT) then
-				ply:SetupCharID()
 				local _rol_tab = ply:YRPGetRoleTable()
 				if IsNotNilAndNotFalse(_rol_tab) then
 					YRPSetRole("YRPPlayerLoadout", ply, _rol_tab.uniqueID)

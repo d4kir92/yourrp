@@ -641,7 +641,6 @@ function SendLoopCharacterList(ply, tab)
 	if ply:IsBot() then return end
 	if ply.sendchars then return end
 	ply.sendchars = true
-	ply:SetupCharID()
 	local c = 1
 	for i, char in pairs(tab) do
 		char.c = c

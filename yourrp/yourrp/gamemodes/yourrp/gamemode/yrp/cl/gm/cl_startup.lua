@@ -1797,7 +1797,7 @@ hook.Add(
 	"YRP_Open_Death_Screen",
 	function(len)
 		if LocalPlayer() == NULL then return end
-		if not YRPGetLogout() and LocalPlayer():LoadedGamemode() and not LocalPlayer():Alive() and dsd < CurTime() and LocalPlayer():CharID() > 0 and not ds and GetGlobalYRPBool("bool_deathscreen", false) and not customDeathscreen then
+		if not LocalPlayer():GetYRPBool("yrp_spawning", false) and not YRPGetLogout() and LocalPlayer():LoadedGamemode() and not LocalPlayer():Alive() and dsd < CurTime() and LocalPlayer():CharID() > 0 and not ds and GetGlobalYRPBool("bool_deathscreen", false) and not customDeathscreen then
 			ds = true
 			local win = YRPCreateD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 			win:SetTitle("")
@@ -1811,6 +1811,7 @@ hook.Add(
 				self.a = self.a or 0
 				self.a = math.Clamp(self.a + 0.02, 0, 1)
 				if LocalPlayer():Alive() or LocalPlayer():CharID() <= 0 then
+					dsd = CurTime() + 5
 					ds = false
 					self:Remove()
 					gui.EnableScreenClicker(false)
@@ -1882,7 +1883,7 @@ hook.Add(
 				hook.Run("YButtonPaint", self, pw, ph)
 			end
 		elseif LocalPlayer():Alive() then
-			dsd = CurTime() + 2
+			dsd = CurTime() + 1.5
 		end
 	end
 )

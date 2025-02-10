@@ -1221,14 +1221,3 @@ net.Receive(
 		end
 	end
 )
-
-local Player = FindMetaTable("Player")
-function Player:SetupCharID()
-	if IsValid(self) then
-		local charid = YRP_SQL_SELECT(DATABASE_NAME, "*", "steamid = '" .. self:YRPSteamID() .. "'")
-		if charid and charid[1] then
-			charid = charid[1].CurrentCharacter
-			self:SetYRPInt("yrp_charid", tonumber(charid))
-		end
-	end
-end

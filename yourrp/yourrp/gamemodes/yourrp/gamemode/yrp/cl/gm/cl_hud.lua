@@ -165,17 +165,15 @@ hook.Add(
 )
 
 local color1 = Color(0, 0, 0, 120)
-local oldlevel = oldlevel or nil --ply:Level()
+local oldlevel = nil
 hook.Add(
 	"HUDPaint",
 	"yrp_hud_levelUp",
 	function()
 		local lply = LocalPlayer()
 		if IsLevelSystemEnabled() then
-			if oldlevel == nil then
-				lply:Level()
-			end
-
+			if lply:Level() <= 0 then return end
+			oldlevel = oldlevel or lply:Level()
 			if oldlevel ~= lply:Level() then
 				oldlevel = lply:Level()
 				surface.PlaySound("garrysmod/content_downloaded.wav")
@@ -193,6 +191,7 @@ hook.Add(
 					levelUp.brcolor = Color(0, 0, 0, 255)
 					levelUp.level = oldlevel
 					function levelUp:Paint(pw, ph)
+						if not lply:Alive() then return end
 						surface.SetFont("Y_36_500")
 						local tw, _ = surface.GetTextSize(self.LID_levelup)
 						tw = tw + 2 * YRP:ctr(20)

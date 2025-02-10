@@ -13,7 +13,6 @@ net.Receive(
 )
 
 local function YRPPlayerLoadedGame(ply)
-	ply:SetupCharID()
 	ply:SetYRPBool("finishedloadingcharacter", true)
 	YRPSendCharCount(ply)
 	ply:UserGroupLoadout()
