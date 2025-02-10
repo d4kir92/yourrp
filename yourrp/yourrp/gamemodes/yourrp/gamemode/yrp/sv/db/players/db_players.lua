@@ -2,6 +2,9 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_players"
+function YRPSaveClients(str)
+end
+
 hook.Add(
 	"YRP_SQLDBREADY",
 	"yrp_players",
@@ -15,6 +18,89 @@ hook.Add(
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_current", "INT DEFAULT 0")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "TS_LastOnline", "INT DEFAULT 1")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_chatdelay", "INT DEFAULT 4")
+		function YRPSaveClients(str)
+			--YRP:msg( "db", string.upper( "[Saving all clients] [" .. str .. "]" ) )
+			if YRP_SQL_TABLE_EXISTS(DATABASE_NAME, "YRPSaveClients #1") then
+				for k, ply in pairs(player.GetAll()) do
+					local steamid = ply:YRPSteamID()
+					local _result = YRP_SQL_UPDATE(
+						DATABASE_NAME,
+						{
+							["Timestamp"] = os.time()
+						}, "SteamID = '" .. steamid .. "'"
+					)
+
+					ply:AddPlayTime(true)
+					if ply:Alive() and YRP_SQL_TABLE_EXISTS("yrp_characters", "YRPSaveClients #2") then
+						local _char_id = ply:CharID()
+						if YRPWORKED(_char_id, "CharID failed @YRPSaveClients") then
+							YRP_SQL_UPDATE(
+								"yrp_characters",
+								{
+									["position"] = tostring(ply:GetPos())
+								}, "uniqueID = " .. _char_id
+							)
+
+							YRP_SQL_UPDATE(
+								"yrp_characters",
+								{
+									["angle"] = tostring(ply:EyeAngles())
+								}, "uniqueID = " .. _char_id
+							)
+
+							if YRPWORKED(ply:GetYRPString("money", "0"), "money failed @YRPSaveClients") and isnumber(tonumber(ply:GetYRPString("money"))) then
+								local _mo_result = YRP_SQL_UPDATE(
+									"yrp_characters",
+									{
+										["money"] = ply:GetYRPString("money", "0")
+									}, "uniqueID = " .. _char_id
+								)
+							end
+
+							if YRPWORKED(ply:GetYRPString("moneybank", "0"), "moneybank failed @YRPSaveClients") and isnumber(tonumber(ply:GetYRPString("moneybank"))) then
+								local _mb_result = YRP_SQL_UPDATE(
+									"yrp_characters",
+									{
+										["moneybank"] = ply:GetYRPString("moneybank", "0")
+									}, "uniqueID = " .. _char_id
+								)
+							end
+
+							if YRPWORKED(GetMapNameDB(), "getmap failed @YRPSaveClients") then
+								YRP_SQL_UPDATE(
+									"yrp_characters",
+									{
+										["map"] = GetMapNameDB()
+									}, "uniqueID = " .. _char_id
+								)
+							end
+						end
+					end
+				end
+
+				local _all_players = player.GetCount() or 0
+				if _all_players > 0 then
+					local _text = "=> [Saved " .. tostring(_all_players) .. " client"
+					if _all_players > 1 then
+						_text = _text .. "s"
+					end
+
+					_text = _text .. "]"
+					--YRP:msg( "db", string.upper(_text) )
+				end
+			else
+				YRP:msg("db", "no saving, because db reset")
+			end
+
+			local pp = {}
+			if YRP_SQL_TABLE_EXISTS("permaprops", "YRPSaveClients #3") then
+				pp = YRP_SQL_SELECT("permaprops", "*")
+				if pp then
+					YRP_SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")
+					YRP_SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_holo%'")
+				end
+			end
+		end
 	end
 )
 
@@ -73,93 +159,6 @@ net.Receive(
 		end
 	end
 )
-
-g_db_reseted = false
-function YRPSaveClients(str)
-	--YRP:msg( "db", string.upper( "[Saving all clients] [" .. str .. "]" ) )
-	if YRP_SQL_TABLE_EXISTS(DATABASE_NAME, "YRPSaveClients #1") then
-		if not g_db_reseted then
-			for k, ply in pairs(player.GetAll()) do
-				local steamid = ply:YRPSteamID()
-				local _result = YRP_SQL_UPDATE(
-					DATABASE_NAME,
-					{
-						["Timestamp"] = os.time()
-					}, "SteamID = '" .. steamid .. "'"
-				)
-
-				ply:AddPlayTime(true)
-				if ply:Alive() and YRP_SQL_TABLE_EXISTS("yrp_characters", "YRPSaveClients #2") then
-					local _char_id = ply:CharID()
-					if YRPWORKED(_char_id, "CharID failed @YRPSaveClients") then
-						YRP_SQL_UPDATE(
-							"yrp_characters",
-							{
-								["position"] = tostring(ply:GetPos())
-							}, "uniqueID = " .. _char_id
-						)
-
-						YRP_SQL_UPDATE(
-							"yrp_characters",
-							{
-								["angle"] = tostring(ply:EyeAngles())
-							}, "uniqueID = " .. _char_id
-						)
-
-						if YRPWORKED(ply:GetYRPString("money", "0"), "money failed @YRPSaveClients") and isnumber(tonumber(ply:GetYRPString("money"))) then
-							local _mo_result = YRP_SQL_UPDATE(
-								"yrp_characters",
-								{
-									["money"] = ply:GetYRPString("money", "0")
-								}, "uniqueID = " .. _char_id
-							)
-						end
-
-						if YRPWORKED(ply:GetYRPString("moneybank", "0"), "moneybank failed @YRPSaveClients") and isnumber(tonumber(ply:GetYRPString("moneybank"))) then
-							local _mb_result = YRP_SQL_UPDATE(
-								"yrp_characters",
-								{
-									["moneybank"] = ply:GetYRPString("moneybank", "0")
-								}, "uniqueID = " .. _char_id
-							)
-						end
-
-						if YRPWORKED(GetMapNameDB(), "getmap failed @YRPSaveClients") then
-							YRP_SQL_UPDATE(
-								"yrp_characters",
-								{
-									["map"] = GetMapNameDB()
-								}, "uniqueID = " .. _char_id
-							)
-						end
-					end
-				end
-			end
-
-			local _all_players = player.GetCount() or 0
-			if _all_players > 0 then
-				local _text = "=> [Saved " .. tostring(_all_players) .. " client"
-				if _all_players > 1 then
-					_text = _text .. "s"
-				end
-
-				_text = _text .. "]"
-				--YRP:msg( "db", string.upper(_text) )
-			end
-		else
-			YRP:msg("db", "no saving, because db reset")
-		end
-	end
-
-	local pp = {}
-	if YRP_SQL_TABLE_EXISTS("permaprops", "YRPSaveClients #3") then
-		pp = YRP_SQL_SELECT("permaprops", "*")
-		if pp then
-			YRP_SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_teleporter%'")
-			YRP_SQL_DELETE_FROM("permaprops", "content LIKE '%yrp_holo%'")
-		end
-	end
-end
 
 function YRPUpdateRoleUses(rid)
 	rid = tonumber(rid)

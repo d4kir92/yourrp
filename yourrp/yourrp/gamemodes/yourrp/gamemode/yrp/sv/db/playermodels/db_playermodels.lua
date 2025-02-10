@@ -3,6 +3,33 @@
 -- https://discord.gg/sEgNZxg
 -- #PLAYERMODELSDATABASE
 local DATABASE_NAME = "yrp_playermodels"
+function YRP_CheckAndRemoveUnusedPlayermodels()
+	local usedpms = {}
+	local roles = YRP_SQL_SELECT("yrp_ply_roles", "string_playermodels, uniqueID", nil)
+	if IsNotNilAndNotFalse(roles) then
+		for i, role in pairs(roles) do
+			if role.string_playermodels then
+				local pms = string.Explode(",", role.string_playermodels)
+				for j, pm in pairs(pms) do
+					if not strEmpty(pm) and not table.HasValue(usedpms, tonumber(pm)) then
+						table.insert(usedpms, tonumber(pm))
+					end
+				end
+			end
+		end
+	end
+
+	local dbpms = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+	if IsNotNilAndNotFalse(dbpms) then
+		for i, pm in pairs(dbpms) do
+			pm.uniqueID = tonumber(pm.uniqueID)
+			if not table.HasValue(usedpms, pm.uniqueID) then
+				YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. pm.uniqueID .. "'")
+			end
+		end
+	end
+end
+
 hook.Add(
 	"YRP_SQLDBREADY",
 	"yrp_playermodels",
@@ -11,43 +38,12 @@ hook.Add(
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_models", "TEXT DEFAULT ''")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_size_min", "TEXT DEFAULT '1'")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_size_max", "TEXT DEFAULT '1'")
-		local oldpms = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		if IsNotNilAndNotFalse(oldpms) then
-			for i, pm in pairs(oldpms) do
-				if pm.string_model ~= nil and pm.string_model ~= "" and pm.string_models == "" then
-					YRP_SQL_UPDATE(
-						DATABASE_NAME,
-						{
-							["string_models"] = pm.string_model
-						}, "uniqueID = '" .. pm.uniqueID .. "'"
-					)
-				end
+		timer.Simple(
+			1,
+			function()
+				YRP_CheckAndRemoveUnusedPlayermodels()
 			end
-		end
-
-		local usedpms = {}
-		local roles = YRP_SQL_SELECT("yrp_ply_roles", "string_playermodels, uniqueID", nil)
-		if IsNotNilAndNotFalse(roles) then
-			for i, role in pairs(roles) do
-				if role.string_playermodels then
-					local pms = string.Explode(",", role.string_playermodels)
-					for j, pm in pairs(pms) do
-						if not strEmpty(pm) and not table.HasValue(usedpms, pm) then
-							table.insert(usedpms, pm)
-						end
-					end
-				end
-			end
-		end
-
-		local dbpms = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		if IsNotNilAndNotFalse(dbpms) then
-			for i, pm in pairs(oldpms) do
-				if not table.HasValue(usedpms, pm.uniqueID) then
-					YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. pm.uniqueID .. "'")
-				end
-			end
-		end
+		)
 	end
 )
 

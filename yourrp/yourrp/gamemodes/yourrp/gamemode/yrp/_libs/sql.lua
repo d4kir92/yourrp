@@ -542,7 +542,7 @@ timer.Simple(
 					SetSQLMode(_sql_settings.int_mode)
 				end
 
-				if GetSQLMode() == 1 then
+				if GetSQLMode() == 1 and not YRPSQL.mysql_worked then
 					YRP:msg("db", "Connect to MYSQL Database")
 					-- MYSQL
 					if file.Find("bin/gmsv_mysqloo_linux.dll", "LUA") == nil and file.Find("bin/gmsv_mysqloo_win32.dll", "LUA") == nil then

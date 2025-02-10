@@ -1274,9 +1274,9 @@ function SendPlayermodels(uid)
 	local role = GetRole(uid)
 	if IsNotNilAndNotFalse(role) then
 		local nettab = {}
-		local flags = string.Explode(",", role.string_playermodels)
-		for i, val in pairs(flags) do
-			local pms = YRP_SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. val .. "'")
+		local string_playermodels = string.Explode(",", role.string_playermodels)
+		for i, id in pairs(string_playermodels) do
+			local pms = YRP_SQL_SELECT("yrp_playermodels", "*", "uniqueID = '" .. id .. "'")
 			if IsNotNilAndNotFalse(pms) then
 				pms = pms[1]
 				local entry = {}
