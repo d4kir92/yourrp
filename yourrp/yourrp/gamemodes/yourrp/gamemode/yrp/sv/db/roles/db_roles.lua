@@ -1332,7 +1332,7 @@ net.Receive(
 					local rolepms = string.Explode(",", role.string_playermodels)
 					if rolepms then
 						for z, rolepm in pairs(rolepms) do
-							if pm.uniqueID == rolepm then
+							if tonumber(pm.uniqueID) == tonumber(rolepm) then
 								pm.uses = pm.uses + 1
 							end
 						end

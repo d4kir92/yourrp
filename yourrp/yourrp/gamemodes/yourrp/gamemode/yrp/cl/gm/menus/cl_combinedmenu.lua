@@ -436,6 +436,8 @@ function YRPOpenCombinedMenu()
 		end
 
 		cm.win = YRPCreateD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
+		cm.win:CanMaximise()
+		cm.win:Setup("YRPCombinedMenu", false, false, BFW(), BFH())
 		cm.win:SetTitle(GetGlobalYRPString("text_server_name", ""))
 		cm.win:MakePopup()
 		--cm.win:SetHeaderHeight(YRP:ctr(100) )
@@ -452,11 +454,9 @@ function YRPOpenCombinedMenu()
 			LocalPlayer().combinedmaximised = false
 		end
 
-		cm.win:CanMaximise()
-		cm.win:SetMaximised(LocalPlayer().combinedmaximised, "COMBINED")
 		cm.win:SetSizable(true)
-		cm.win:SetMinWidth(700)
-		cm.win:SetMinHeight(700)
+		cm.win:SetMinWidth(1200)
+		cm.win:SetMinHeight(800)
 		local content = cm.win:GetContent()
 		-- MENU
 		cm.menu = YRPCreateD("DPanelList", content, 10, BFH() - cm.win:GetHeaderHeight() - YRP:ctr(64) - 2 * br, 0, 0)
@@ -481,36 +481,39 @@ function YRPOpenCombinedMenu()
 		cm.menu:SetText("")
 		cm.menu.pw = 10
 		cm.menu.ph = YRP:ctr(64) + 2 * br
-		cm.menu.expanded = lply.combined_expanded or true
 		local font = "Y_" .. math.Clamp(math.Round(cm.menu.ph - 2 * br), 4, 100) .. "_500"
 		function cm.menu:Paint(pw, ph)
 			draw.RoundedBox(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"))
 		end
 
-		cm.menu:SetSpacing(YRP:ctr(10))
-		if cm.menu.expanded then
-			cm.win:UpdateSize(cm.menu.ph)
-		else
-			cm.win:UpdateSize()
+		function cm.win:UpdateExpander(pw)
+			cm.menu.pw = 240
+			local sw = pw or cm.menu.pw + cm.menu.ph + 2 * br
+			cm.menu:SetWide(sw)
+			cm.menu:SetTall(cm.win:GetTall() - cm.win:GetHeaderHeight() - YRP:ctr(64) - 2 * br)
+			cm.menu.expander:SetPos(0, cm.win:GetHeaderHeight() + cm.menu:GetTall())
+			cm.menu.expander:SetWide(sw)
+			cm.site:SetPos(cm.menu:GetWide(), 0)
+			cm.site:SetWide(cm.win:GetWide() - cm.menu:GetWide())
+			cm.site:SetTall(cm.win:GetTall() - cm.win:GetHeaderHeight())
 		end
 
+		cm.menu:SetSpacing(YRP:ctr(10))
 		cm.menu.expander = YRPCreateD("DButton", cm.win, cm.menu.ph, cm.menu.ph, 0, cm.win:GetHeaderHeight() + cm.menu:GetTall())
 		cm.menu.expander:SetText("")
 		function cm.menu.expander:DoClick()
-			if cm.menu.expanded then
-				cm.win:UpdateSize(cm.menu.ph)
-				cm.menu.expanded = false
+			if cm.win:IsExpanded() then
+				cm.win:UpdateExpander(cm.menu.ph)
+				cm.win:SetExpanded(false)
 			else
-				cm.win:UpdateSize()
-				cm.menu.expanded = true
+				cm.win:UpdateExpander()
+				cm.win:SetExpanded(true)
 			end
-
-			lply.combined_expanded = cm.menu.expanded
 		end
 
 		function cm.menu.expander:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP:ctr(10), 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"), false, false, true, false)
-			if cm.menu.expanded then
+			if cm.win:IsExpanded() then
 				if YRP:GetDesignIcon("64_angle-left") ~= nil then
 					surface.SetMaterial(YRP:GetDesignIcon("64_angle-left"))
 				end
@@ -546,18 +549,6 @@ function YRPOpenCombinedMenu()
 			for i, v in pairs(cm.sites) do
 				v.selected = false
 			end
-		end
-
-		function cm.win:UpdateSize(pw)
-			cm.menu.pw = 240
-			local sw = pw or cm.menu.pw + cm.menu.ph + 2 * br
-			cm.menu:SetWide(sw)
-			cm.menu:SetTall(cm.win:GetTall() - cm.win:GetHeaderHeight() - YRP:ctr(64) - 2 * br)
-			cm.menu.expander:SetPos(0, cm.win:GetHeaderHeight() + cm.menu:GetTall())
-			cm.menu.expander:SetWide(sw)
-			cm.site:SetPos(cm.menu:GetWide(), 0)
-			cm.site:SetWide(cm.win:GetWide() - cm.menu:GetWide())
-			cm.site:SetTall(cm.win:GetTall() - cm.win:GetHeaderHeight())
 		end
 
 		surface.SetFont(font)
@@ -597,7 +588,6 @@ function YRPOpenCombinedMenu()
 					local tw2, _ = surface.GetTextSize(YRP:trans(v.name))
 					if tw2 > cm.menu.pw then
 						cm.menu.pw = tw2
-						--cm.win:UpdateSize()
 					end
 
 					draw.SimpleText(YRP:trans(v.name), font, ph, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -629,10 +619,18 @@ function YRPOpenCombinedMenu()
 			end
 		end
 
-		if cm.menu.expanded == true then
-			cm.win:UpdateSize()
+		function cm.win:UpdateSize()
+			if cm.win:IsExpanded() then
+				cm.win:UpdateExpander()
+			else
+				cm.win:UpdateExpander(cm.menu.ph)
+			end
+		end
+
+		if cm.win:IsExpanded() then
+			cm.win:UpdateExpander()
 		else
-			cm.win:UpdateSize(cm.menu.ph)
+			cm.win:UpdateExpander(cm.menu.ph)
 		end
 	elseif YRPPanelAlive(cm.win) and cm.win and cm.win.Show then
 		cm.win:Show()

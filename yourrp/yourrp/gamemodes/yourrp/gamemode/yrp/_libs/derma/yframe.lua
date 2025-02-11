@@ -72,30 +72,102 @@ end
 function PANEL:ChangedSize()
 end
 
+local dbfile = "yrp_frames/yrp_frames.json"
+local yframes = {}
+if not file.Exists("yrp_frames", "DATA") then
+	file.CreateDir("yrp_frames")
+end
+
+local fil = file.Read(dbfile, "DATA")
+if fil then
+	yframes = util.JSONToTable(fil)
+end
+
+function PANEL:CheckSave(maximised, expanded, sw, sh)
+	self.yrpname = self.yrpname or "default"
+	yframes[self.yrpname] = yframes[self.yrpname] or {}
+	if yframes[self.yrpname].maximised == nil and maximised ~= nil then
+		yframes[self.yrpname].maximised = maximised or false
+		yframes[self.yrpname].expanded = expanded or false
+		yframes[self.yrpname].sw = sw or BFW()
+		yframes[self.yrpname].sh = sh or BFH()
+	end
+end
+
+function PANEL:Setup(name, maximised, expanded, sw, sh)
+	self.yrpname = name
+	self:CheckSave(maximised, expanded, sw, sh)
+	self.ready = true
+	self:SetMaximised(yframes[self.yrpname].maximised, "SetName")
+end
+
+function PANEL:SaveStatus()
+	if self.yrpname then
+		local json = util.TableToJSON(yframes, true)
+		if not file.Exists("yrp_frames", "DATA") then
+			file.CreateDir("yrp_frames")
+		end
+
+		file.Write(dbfile, json)
+	end
+end
+
+function PANEL:IsMaximised()
+	self:CheckSave()
+
+	return yframes[self.yrpname].maximised
+end
+
 function PANEL:CanMaximise()
 	self.canmiximise = true
 	self.btnmax:SetVisible(true)
 end
 
 function PANEL:SetMaximised(b, von)
+	self:CheckSave()
 	if von ~= nil then
 		if b ~= nil then
-			self.maximised = b
+			yframes[self.yrpname].maximised = b
 		else
-			self.maximised = not self.maximised
+			yframes[self.yrpname].maximised = not yframes[self.yrpname].maximised
 		end
 
-		if self.maximised then
+		self:SaveStatus()
+		if yframes[self.yrpname].maximised then
 			self:SetPos(0, 0)
 			self:SetSize(ScrW(), ScrH())
 		else
-			self:SetSize(BFW(), BFH())
+			self:SetSize(yframes[self.yrpname].sw, yframes[self.yrpname].sh)
 			self:Center()
 		end
 
 		self:InternalUpdateSize()
 		self:UpdateSize()
 	end
+end
+
+function PANEL:IsExpanded()
+	self:CheckSave()
+
+	return yframes[self.yrpname].expanded
+end
+
+function PANEL:SetExpanded(b)
+	self:CheckSave()
+	if b ~= nil then
+		yframes[self.yrpname].expanded = b
+	else
+		yframes[self.yrpname].expanded = not yframes[self.yrpname].expanded
+	end
+
+	self:SaveStatus()
+end
+
+function PANEL:SaveSize(sw, sh)
+	self:CheckSave()
+	yframes[self.yrpname].sw = sw
+	yframes[self.yrpname].sh = sh
+	self:SaveStatus()
 end
 
 function PANEL:Sizable(b)
@@ -150,6 +222,9 @@ end
 function PANEL:OnSizeChanged(pw, ph)
 	self:InternalUpdateSize()
 	self:UpdateSize()
+	if self.ready and not self:IsMaximised() then
+		self:SaveSize(pw, ph)
+	end
 end
 
 function PANEL:GetContent()
@@ -161,7 +236,8 @@ function PANEL:Paint(pw, ph)
 end
 
 function PANEL:Init()
-	self.maximised = false
+	local parent = self
+	self:CheckSave()
 	if self._lc == nil then
 		self._lc = true
 	end
@@ -185,9 +261,13 @@ function PANEL:Init()
 	end
 
 	self.btnmax = YRPCreateD("YButton", self, self:GetHeaderHeight() * 0.6, self:GetHeaderHeight() * 0.6, self:GetWide() - self:GetHeaderHeight() * 0.8, self:GetHeaderHeight() * 0.2)
-	self.btnmax:SetText("[ ]")
+	self.btnmax:SetText("")
 	self.btnmax.main = self
-	self.btnmax:SetVisible(self.maximised)
+	self.btnmax:SetVisible(false)
+	function self.btnmax:IsMaximised()
+		return parent:IsMaximised()
+	end
+
 	function self.btnmax:Paint(pw, ph)
 		hook.Run("YMaxPaint", self, pw, ph)
 	end

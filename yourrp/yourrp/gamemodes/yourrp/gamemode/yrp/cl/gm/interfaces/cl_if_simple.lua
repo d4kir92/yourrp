@@ -397,10 +397,18 @@ hook.Add(
 			end
 
 			local br = ph * 0.1
-			if YRP:GetDesignIcon("mat_square") ~= nil then
-				surface.SetDrawColor(Color(255, 255, 255, 255))
-				surface.SetMaterial(YRP:GetDesignIcon("mat_square"))
-				surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+			if self:IsMaximised() then
+				if YRP:GetDesignIcon("mat_square2") ~= nil then
+					surface.SetDrawColor(Color(255, 255, 255, 255))
+					surface.SetMaterial(YRP:GetDesignIcon("mat_square2"))
+					surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+				end
+			else
+				if YRP:GetDesignIcon("mat_square") ~= nil then
+					surface.SetDrawColor(Color(255, 255, 255, 255))
+					surface.SetMaterial(YRP:GetDesignIcon("mat_square"))
+					surface.DrawTexturedRect(br, br, pw - br * 2, ph - br * 2)
+				end
 			end
 
 			return true

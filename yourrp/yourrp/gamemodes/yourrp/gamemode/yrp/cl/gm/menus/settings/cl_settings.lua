@@ -422,14 +422,6 @@ function F8OpenSettings()
 	end
 
 	local lply = LocalPlayer()
-	if lply.settings_expanded == nil then
-		lply.settings_expanded = true
-	end
-
-	if lply.settingsmaximised == nil then
-		lply.settingsmaximised = false
-	end
-
 	sm.open = true
 	local br = YRP:ctr(20)
 	if YRPPanelAlive(sm.win) == false then
@@ -484,15 +476,15 @@ function F8OpenSettings()
 		end
 
 		sm.win = YRPCreateD("YFrame", nil, BFW(), BFH(), BPX(), BPY())
+		sm.win:CanMaximise()
+		sm.win:Setup("YRPSettingsMenu", true, false, BFW(), BFH())
 		sm.win:SetTitle("")
 		sm.win:MakePopup()
 		--sm.win:SetHeaderHeight(YRP:ctr(100) )
 		sm.win:SetBorder(0)
-		sm.win:CanMaximise()
-		sm.win:SetMaximised(LocalPlayer().settingsmaximised, "SETTING")
 		sm.win:SetSizable(true)
-		sm.win:SetMinWidth(700)
-		sm.win:SetMinHeight(700)
+		sm.win:SetMinWidth(1200)
+		sm.win:SetMinHeight(800)
 		local rlsize = sm.win:GetHeaderHeight() - YRP:ctr(20)
 		function sm.win:Paint(pw, ph)
 			hook.Run("YFramePaint", self, pw, ph)
@@ -528,6 +520,23 @@ function F8OpenSettings()
 					YRPToggleSettings()
 				end
 			)
+		end
+
+		function sm.win:UpdateExpander(pw)
+			local sw = pw or sm.menu.pw + sm.menu.ph + 2 * br
+			sm.menu:SetWide(sw)
+			sm.menu:SetTall(sm.win:GetContent():GetTall())
+			sm.site:SetWide(sm.win:GetWide() - sm.menu:GetWide())
+			sm.site:SetTall(sm.win:GetContent():GetTall())
+			sm.site:SetPos(sm.menu:GetWide(), 0)
+		end
+
+		function sm.win:UpdateCustomeSize()
+			if sm.win:IsExpanded() then
+				sm.win:UpdateExpander()
+			else
+				sm.win:UpdateExpander(sm.menu.ph)
+			end
 		end
 
 		-- LOGO
@@ -605,7 +614,6 @@ function F8OpenSettings()
 		sm.menu:SetText("")
 		sm.menu.pw = YRP:ctr(64) + 2 * br
 		sm.menu.ph = YRP:ctr(64) + 2 * br
-		sm.menu.expanded = sm.menu.expanded or lply.settings_expanded
 		local font = "Y_" .. math.Clamp(math.Round(sm.menu.ph - 2 * br), 4, 100) .. "_500"
 		function sm.menu:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP:ctr(10), 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"), false, false, true, false)
@@ -616,20 +624,18 @@ function F8OpenSettings()
 		sm.menu.expander = YRPCreateD("DButton", sm.win, sm.menu.ph, sm.menu.ph, 0, sm.win:GetTall() - sm.menu.ph)
 		sm.menu.expander:SetText("")
 		function sm.menu.expander:DoClick()
-			if lply.settings_expanded then
-				sm.win:UpdateCustomeSize(sm.menu.ph)
-				sm.menu.expanded = false
+			if sm.win:IsExpanded() then
+				sm.win:UpdateExpander(sm.menu.ph)
+				sm.win:SetExpanded(false)
 			else
-				sm.win:UpdateCustomeSize()
-				sm.menu.expanded = true
+				sm.win:UpdateExpander()
+				sm.win:SetExpanded(true)
 			end
-
-			lply.settings_expanded = sm.menu.expanded
 		end
 
 		function sm.menu.expander:Paint(pw, ph)
 			self:SetPos(0, sm.win:GetTall() - sm.menu.ph)
-			if lply.settings_expanded then
+			if sm.win:IsExpanded() then
 				if YRP:GetDesignIcon("64_angle-left") ~= nil then
 					surface.SetMaterial(YRP:GetDesignIcon("64_angle-left"))
 				end
@@ -665,15 +671,6 @@ function F8OpenSettings()
 			for i, v in pairs(sm.sites) do
 				v.selected = false
 			end
-		end
-
-		function sm.win:UpdateCustomeSize(pw)
-			local sw = pw or sm.menu.pw + sm.menu.ph + 2 * br
-			sm.menu:SetWide(sw)
-			sm.menu:SetTall(sm.win:GetContent():GetTall())
-			sm.site:SetWide(sm.win:GetWide() - sm.menu:GetWide())
-			sm.site:SetTall(sm.win:GetContent():GetTall())
-			sm.site:SetPos(sm.menu:GetWide(), 0)
 		end
 
 		surface.SetFont(font)
@@ -744,10 +741,10 @@ function F8OpenSettings()
 			end
 		end
 
-		if lply.settings_expanded then
-			sm.win:UpdateCustomeSize()
+		if sm.win:IsExpanded() then
+			sm.win:UpdateExpander()
 		else
-			sm.win:UpdateCustomeSize(sm.menu.ph)
+			sm.win:UpdateExpander(sm.menu.ph)
 		end
 
 		if c == 0 then
