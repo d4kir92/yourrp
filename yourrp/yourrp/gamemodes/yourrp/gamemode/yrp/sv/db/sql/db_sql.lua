@@ -86,10 +86,10 @@ function DBUpdateString(db_name, ply, netstr, str, l_db, value, sqlite)
 end
 
 local yrp_sql = {}
-hook.Add(
-	"YRP_SQLDBREADY",
-	"yrp_sql_database",
+timer.Simple(
+	0,
 	function()
+		YRP_SQL_INIT_DATABASE(DATABASE_NAME, true)
 		SQLITE_ADD_COLUMN(DATABASE_NAME, "string_mode", "TEXT DEFAULT '0'", true)
 		SQLITE_ADD_COLUMN(DATABASE_NAME, "int_mode", "INT DEFAULT '0'", true)
 		SQLITE_ADD_COLUMN(DATABASE_NAME, "string_host", "TEXT DEFAULT 'UNKNOWN HOST'", true)

@@ -111,7 +111,7 @@ function db_init_database()
 	if YRP_SQL_INIT_DATABASE then
 		YRP:msg("db", "LOAD DATABASES")
 		for i, db in pairs(YRP_DBS) do
-			YRP_SQL_INIT_DATABASE(db)
+			YRP_SQL_INIT_DATABASE(db, false)
 		end
 
 		yrp_db.loaded = true

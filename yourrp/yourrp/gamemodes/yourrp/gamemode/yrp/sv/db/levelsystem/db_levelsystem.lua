@@ -3,6 +3,10 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_levelsystem"
 local xpPerMinute = 0
+function YRP:XpPerMinute()
+	return xpPerMinute
+end
+
 hook.Add(
 	"YRP_SQLDBREADY",
 	"yrp_levelsystem",
@@ -22,9 +26,6 @@ hook.Add(
 		local system = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 		if IsNotNilAndNotFalse(system) then
 			xpPerMinute = tonumber(system[1].int_xp_per_minute)
-			function YRP:XpPerMinute()
-				return xpPerMinute
-			end
 		end
 	end
 )

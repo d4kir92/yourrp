@@ -662,9 +662,9 @@ function YRPTryRepairDatabase()
 	)
 end
 
-function YRP_SQL_INIT_DATABASE(db_name)
+function YRP_SQL_INIT_DATABASE(db_name, sqlite)
 	--YRP:msg( "db", "YRP_SQL_INIT_DATABASE( " .. tostring( db_name) .. " )" )
-	if GetSQLMode() == 0 then
+	if GetSQLMode() == 0 or sqlite then
 		if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
 			local _result = YRP_SQL_CREATE_TABLE(db_name)
 			if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
