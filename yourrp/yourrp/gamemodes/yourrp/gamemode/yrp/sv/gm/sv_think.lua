@@ -463,7 +463,7 @@ function YRP:YLogicServerThink()
 		end
 	end
 
-	if _time % GetBackupCreateTime() == 0 then
+	if _time % GetBackupCreateTime() == 0 and yrp_db_loaded() then
 		YRPRemoveOldBackups()
 		YRPCreateBackup()
 	end

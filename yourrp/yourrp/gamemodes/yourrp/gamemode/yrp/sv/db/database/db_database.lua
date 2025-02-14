@@ -66,7 +66,10 @@ net.Receive(
 	function(len, ply)
 		if not ply:GetYRPBool("bool_ac_database", false) then return end
 		local _drop_tables = net.ReadTable()
-		YRPCreateBackup()
+		if yrp_db_loaded() then
+			YRPCreateBackup()
+		end
+
 		for i, tab in pairs(_drop_tables) do
 			if tab.name ~= "yrp_sql" and tab.name ~= "sqlite_sequence" then
 				YRP_SQL_DROP_TABLE(tab)
@@ -172,6 +175,8 @@ net.Receive(
 		if not ply:GetYRPBool("bool_ac_database", false) then return end
 		if bu_ts > CurTime() then return end
 		bu_ts = CurTime() + 20
-		YRPCreateBackup()
+		if yrp_db_loaded() then
+			YRPCreateBackup()
+		end
 	end
 )
