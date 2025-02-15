@@ -211,14 +211,18 @@ function AddDarkRPModules()
 	local function GetLuaFilesRecursively(folderPath, collectedFiles)
 		collectedFiles = collectedFiles or {}
 		local files, folders = file.Find(folderPath .. "*", "GAME")
-		for _, fileName in ipairs(files) do
-			if string.EndsWith(fileName, ".lua") and string.find(folderPath .. fileName, "lua/darkrp_modules") then
-				table.insert(collectedFiles, folderPath .. fileName)
+		if files then
+			for _, fileName in ipairs(files) do
+				if string.EndsWith(fileName, ".lua") and string.find(folderPath .. fileName, "lua/darkrp_modules") then
+					table.insert(collectedFiles, folderPath .. fileName)
+				end
 			end
 		end
 
-		for _, subfolderName in ipairs(folders) do
-			GetLuaFilesRecursively(folderPath .. subfolderName .. "/", collectedFiles)
+		if folders then
+			for _, subfolderName in ipairs(folders) do
+				GetLuaFilesRecursively(folderPath .. subfolderName .. "/", collectedFiles)
+			end
 		end
 
 		return collectedFiles
@@ -226,30 +230,37 @@ function AddDarkRPModules()
 
 	local rootFolder = "addons/"
 	local luaFiles = GetLuaFilesRecursively(rootFolder)
-	for _, filePath in ipairs(luaFiles) do
-		local fileName = string.match(filePath, ".*/(.*)")
-		local shortPath = RemoveAddonsString(filePath)
-		if string.StartWith(fileName, "sh_") then
-			MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for SHARED: " .. filePath, "\n")
-			if SERVER then
-				AddCSLuaFile(shortPath)
-			end
+	if luaFiles then
+		for _, filePath in ipairs(luaFiles) do
+			local fileName = string.match(filePath, ".*/(.*)")
+			local shortPath = RemoveAddonsString(filePath)
+			if string.StartWith(fileName, "sh_") then
+				MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for SHARED: " .. filePath, "\n")
+				if SERVER then
+					AddCSLuaFile(shortPath)
+				end
 
-			include(shortPath)
-		elseif string.StartWith(fileName, "sv_") then
-			MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for SERVER: " .. filePath, "\n")
-			if SERVER then
 				include(shortPath)
-			end
-		elseif string.StartWith(fileName, "cl_") then
-			MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for CLIENT: " .. filePath, "\n")
-			if SERVER then
-				AddCSLuaFile(shortPath)
-			else
-				include(shortPath)
+			elseif string.StartWith(fileName, "sv_") then
+				MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for SERVER: " .. filePath, "\n")
+				if SERVER then
+					include(shortPath)
+				end
+			elseif string.StartWith(fileName, "cl_") then
+				MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for CLIENT: " .. filePath, "\n")
+				if SERVER then
+					AddCSLuaFile(shortPath)
+				else
+					include(shortPath)
+				end
 			end
 		end
 	end
 end
 
-AddDarkRPModules()
+timer.Simple(
+	1,
+	function()
+		AddDarkRPModules()
+	end
+)

@@ -668,7 +668,7 @@ function YRP_SQL_INIT_DATABASE(db_name, sqlite)
 		if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
 			local _result = YRP_SQL_CREATE_TABLE(db_name)
 			if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
-				YRP:msg("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " (table not exists) lastError: " .. YRP_SQL_Show_Last_Error())
+				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INIT_DATABASE " .. tostring(db_name) .. " FAILED INIT TABLE lastError: " .. YRP_SQL_Show_Last_Error())
 				YRPTryRepairDatabase(db_name)
 			end
 		end
@@ -676,8 +676,7 @@ function YRP_SQL_INIT_DATABASE(db_name, sqlite)
 		if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
 			local _result = YRP_SQL_CREATE_TABLE(db_name)
 			if not YRP_SQL_TABLE_EXISTS(db_name) then
-				YRP:msg("error", GetSQLModeName() .. ": " .. "CREATE TABLE " .. tostring(db_name) .. " fail")
-				YRP_SQL_Show_Last_Error()
+				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INIT_DATABASE " .. tostring(db_name) .. " FAILED INIT TABLE lastError: " .. YRP_SQL_Show_Last_Error())
 				YRPTryRepairDatabase(db_name)
 			end
 		end
