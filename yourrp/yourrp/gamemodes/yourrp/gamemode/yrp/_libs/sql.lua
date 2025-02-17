@@ -7,7 +7,7 @@ end
 
 local function NotReadyMessage(msg, ...)
 	if not ready then
-		print(">>>", msg, ...)
+		print(">>> [NotReadyMessage]", msg, ...)
 	end
 
 	return not ready
@@ -617,7 +617,11 @@ timer.Simple(
 						YRPSQL.db.onConnectionFailed = function(db, serr)
 							YRP:msg("note", ">>> CONNECTION failed (propably wrong connection info or server offline), changing to SQLITE!")
 							YRP:msg("error", "[MYSQL onConnectionFailed] " .. tostring(serr))
+							YRPSQL.mysql_worked = false
 							SetSQLMode(0, true)
+							ready = true
+							db_init_database()
+							IsReady()
 						end
 
 						YRP:msg("db", ">>> Connect to MYSQL Server, if stuck => connection info is wrong or server offline! ( default mysql port: 3306)")

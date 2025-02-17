@@ -137,6 +137,14 @@ function PANEL:SetMaximised(b, von)
 			self:SetPos(0, 0)
 			self:SetSize(ScrW(), ScrH())
 		else
+			if self.maxsw and yframes[self.yrpname].sw > self.maxsw then
+				yframes[self.yrpname].sw = self.maxsw
+			end
+
+			if self.maxsh and yframes[self.yrpname].sh > self.maxsh then
+				yframes[self.yrpname].sh = self.maxsh
+			end
+
 			self:SetSize(yframes[self.yrpname].sw, yframes[self.yrpname].sh)
 			self:Center()
 		end
@@ -176,7 +184,7 @@ function PANEL:Sizable(b)
 	function self.btnMaxim.DoClick()
 		panel.fullscreen = not panel.fullscreen or false
 		if panel.fullscreen then
-			panel:SetSize(ScW(), ScH())
+			panel:SetSize(ScrW(), ScrH())
 			panel:Center()
 		else
 			panel:SetSize(panel:GetMinWidth(), panel:GetMinHeight())
@@ -238,6 +246,8 @@ end
 function PANEL:Init()
 	local parent = self
 	self:CheckSave()
+	self.maxsw = self.maxsw or ScrW() - 100
+	self.maxsh = self.maxsh or ScrH() - 100
 	if self._lc == nil then
 		self._lc = true
 	end
@@ -352,6 +362,14 @@ function PANEL:Think()
 			y = self.m_iMinHeight
 		elseif y > ScrH() - py and self:GetScreenLock() then
 			y = ScrH() - py
+		end
+
+		if self.maxsw and x > self.maxsw then
+			x = self.maxsw
+		end
+
+		if self.maxsh and y > self.maxsh then
+			y = self.maxsh
 		end
 
 		self:SetSize(x, y)
