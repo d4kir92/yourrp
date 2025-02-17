@@ -1954,7 +1954,9 @@ function Player:UserGroupLoadout()
 
 		for name, amount in pairs(ammos) do
 			local ammo = self:GetAmmoCount(name)
-			self:SetAmmo(ammo + amount, name)
+			if ammo then
+				self:SetAmmo(ammo + amount, name)
+			end
 		end
 
 		for i, v in pairs(UG) do

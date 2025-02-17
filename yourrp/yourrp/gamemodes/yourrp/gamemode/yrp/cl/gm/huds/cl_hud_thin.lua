@@ -303,7 +303,7 @@ function YRPHUDThin()
 				wpammo = wpammo .. clip1 .. "/" .. clip1max
 			end
 
-			if ammo1 >= 0 then
+			if ammo1 and ammo1 >= 0 then
 				if not strEmpty(wpammo) then
 					wpammo = wpammo .. " | " .. ammo1
 				else
@@ -323,7 +323,7 @@ function YRPHUDThin()
 				wsammo = wsammo .. clip2 .. "/" .. clip2max
 			end
 
-			if ammo2 >= 0 then
+			if ammo2 and ammo2 >= 0 then
 				if not strEmpty(wsammo) then
 					wsammo = wsammo .. " | " .. ammo2
 				else

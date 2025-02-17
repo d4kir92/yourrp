@@ -617,16 +617,16 @@ function HUDSimple()
 				end
 			end
 
-			if clip2 > 0 or ammo2 > 0 then
+			if (clip2 and clip2 > 0) or (ammo2 and ammo2 > 0) then
 				WS.visible = true
 				WS.cur = clip2
 				WS.max = clip2max
 				WS.text = ""
-				if clip2 > 0 then
+				if clip2 and clip2 > 0 then
 					WS.text = clip2 .. " / " .. clip2max
 				end
 
-				if ammo2 > 0 then
+				if ammo2 and ammo2 > 0 then
 					if WS.text ~= "" then
 						WS.text = WS.text .. " | "
 					end

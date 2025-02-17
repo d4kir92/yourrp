@@ -643,7 +643,9 @@ function YRPSetRoleValues(ply, pmid)
 
 			for name, amount in pairs(ammos) do
 				local ammo = ply:GetAmmoCount(name)
-				ply:SetAmmo(ammo + amount, name)
+				if ammo then
+					ply:SetAmmo(ammo + amount, name)
+				end
 			end
 
 			--custom flags
@@ -716,7 +718,9 @@ function YRPSetRoleValues(ply, pmid)
 
 			for name, amount in pairs(ammos) do
 				local ammo = ply:GetAmmoCount(name)
-				ply:SetAmmo(ammo + amount, name)
+				if ammo then
+					ply:SetAmmo(ammo + amount, name)
+				end
 			end
 		else
 			YRP:msg("note", "[SET ROLE VALUES] No group selected -> Suicide")

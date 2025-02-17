@@ -134,9 +134,17 @@ function HUDIcons()
 			local clip2 = weapon:Clip2()
 			local clip2max = weapon:GetMaxClip2()
 			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
-			HUDIconsDrawText("WN", wpname)
-			HUDIconsDrawText("WP", clip1 .. "/" .. clip1max .. " | " .. ammo1)
-			HUDIconsDrawText("WS", clip2 .. "/" .. clip2max .. " | " .. ammo2)
+			if wpname then
+				HUDIconsDrawText("WN", wpname)
+			end
+
+			if clip1 and clip1max and ammo1 then
+				HUDIconsDrawText("WP", clip1 .. "/" .. clip1max .. " | " .. ammo1)
+			end
+
+			if clip2 and clip2max and ammo2 then
+				HUDIconsDrawText("WS", clip2 .. "/" .. clip2max .. " | " .. ammo2)
+			end
 		end
 
 		if lply:Lockdown() then

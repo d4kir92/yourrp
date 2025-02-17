@@ -39,8 +39,7 @@ function YRPHUDSpace()
 				local clip2max = weapon:GetMaxClip2()
 				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
 				ELES["WP"] = {clip1, clip1max, nil, clip1 .. "/" .. clip1max .. " | " .. ammo1,}
-				local a2 = ammo2
-				ELES["WS"] = {clip2, clip2max, nil, a2,}
+				ELES["WS"] = {clip2, clip2max, nil, ammo2,}
 				ELES["WN"] = {1, 1, nil, weapon:GetPrintName()}
 			end
 

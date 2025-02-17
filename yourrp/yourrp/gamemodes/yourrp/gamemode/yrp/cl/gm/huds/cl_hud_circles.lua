@@ -168,11 +168,11 @@ function HUDCircles()
 			local maxclip1 = wep:GetMaxClip1()
 			local ammo1 = lply:GetAmmoCount(wep:GetPrimaryAmmoType())
 			local am1t = ""
-			if clip1 > -1 then
+			if clip1 and clip1 > -1 then
 				am1t = am1t .. clip1 .. "/" .. maxclip1
 			end
 
-			if ammo1 > -1 then
+			if ammo1 and ammo1 > -1 then
 				if am1t ~= "" then
 					am1t = am1t .. "|"
 				end
@@ -188,11 +188,11 @@ function HUDCircles()
 			local maxclip2 = wep:GetMaxClip2()
 			local ammo2 = lply:GetAmmoCount(wep:GetSecondaryAmmoType())
 			local am2t = ""
-			if clip2 > -1 then
+			if clip2 and clip2 > -1 then
 				am2t = am2t .. clip2 .. "/" .. maxclip2
 			end
 
-			if ammo2 > -1 then
+			if ammo2 and ammo2 > -1 then
 				if am2t ~= "" then
 					am2t = am2t .. "|"
 				end
