@@ -399,54 +399,82 @@ local pingtavg = 0
 local pingcou = 0
 local ping_delay = 0
 local pingcolor = Color(0, 0, 0, 255)
+local HP = {}
+HP.element = "HP"
+local AR = {}
+AR.element = "AR"
+local ST = {}
+ST.element = "ST"
+local HU = {}
+HU.element = "HU"
+local TH = {}
+TH.element = "TH"
+local RA = {}
+RA.element = "RA"
+local AB = {}
+AB.element = "AB"
+local XP = {}
+XP.element = "XP"
+local COM = {}
+COM.element = "COM"
+local WP = {}
+WP.element = "WP"
+local WS = {}
+WS.element = "WS"
+local WN = {}
+WN.element = "WN"
+local NE = {}
+NE.element = "NE"
+local PE = {}
+PE.element = "PE"
+local MO = {}
+MO.element = "MO"
+local CR = {}
+CR.element = "CR"
+local CC = {}
+CC.element = "CC"
+local ID = {}
+ID.element = "ID"
+local BA = {}
+BA.element = "BA"
+local CON = {}
+CON.element = "CON"
+local LO = {}
+LO.element = "LO"
+local CA = {}
+CA.element = "CA"
 function HUD_FO76()
 	local lply = LocalPlayer()
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and not YRPIsScoreboardVisible() and GetGlobalYRPBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Fallout 76" then
-		local HP = {}
-		HP.element = "HP"
 		HP.text = YRP:trans("LID_hp")
 		HP.cur = lply:Health()
 		HP.max = lply:GetMaxHealth()
 		FO76Element(HP)
-		local AR = {}
-		AR.element = "AR"
 		AR.text = YRP:trans("LID_ar")
 		AR.cur = lply:Armor()
 		AR.max = lply:GetMaxArmor()
 		FO76Element(AR)
-		local ST = {}
-		ST.element = "ST"
 		ST.text = YRP:trans("LID_st")
 		ST.cur = lply:Stamina()
 		ST.max = lply:GetMaxStamina()
 		FO76Element(ST)
-		local HU = {}
-		HU.element = "HU"
 		HU.text = YRP:trans("LID_hu")
 		HU.cur = lply:Hunger()
 		HU.max = lply:GetMaxHunger()
 		FO76Element(HU)
-		local TH = {}
-		TH.element = "TH"
 		TH.text = YRP:trans("LID_th")
 		TH.cur = lply:Hunger()
 		TH.max = lply:GetMaxHunger()
 		FO76Element(TH)
-		local RA = {}
-		RA.element = "RA"
 		RA.text = YRP:trans("LID_ra")
 		RA.cur = lply:Radiation()
 		RA.max = lply:GetMaxRadiation()
 		FO76Element(RA)
-		local AB = {}
-		AB.element = "AB"
 		AB.text = YRP:trans("LID_ab")
 		AB.cur = lply:Ability()
 		AB.max = lply:GetMaxAbility()
 		FO76Element(AB)
-		local XP = {}
 		if IsLevelSystemEnabled() then
-			XP.element = "XP"
 			XP.text = YRP:trans("LID_xp")
 			XP.cur = lply:XP()
 			XP.max = lply:GetMaxXP()
@@ -454,8 +482,6 @@ function HUD_FO76()
 			FO76Element(XP)
 		end
 
-		local COM = {}
-		COM.element = "COM"
 		HUDFO76Compass(COM)
 		local weapon = lply:GetActiveWeapon()
 		if IsValid(weapon) then
@@ -466,8 +492,6 @@ function HUD_FO76()
 			local ammo1 = lply:GetAmmoCount(weapon:GetPrimaryAmmoType())
 			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
 			if ammo1 ~= nil then
-				local WP = {}
-				WP.element = "WP"
 				WP.cur = clip1
 				WP.max = clip1max
 				WP.text = clip1 .. "/" .. ammo1
@@ -475,16 +499,12 @@ function HUD_FO76()
 			end
 
 			if ammo2 ~= nil then
-				local WS = {}
-				WS.element = "WS"
 				WS.cur = clip2
 				WS.max = clip2max
 				WS.text = clip2 .. "/" .. ammo2
 				FO76Numbers(WS)
 			end
 
-			local WN = {}
-			WN.element = "WN"
 			WN.text = weapon:GetPrintName()
 			FO76Name(WN)
 		end
@@ -515,13 +535,9 @@ function HUD_FO76()
 			end
 		end
 
-		local NE = {}
-		NE.element = "NE"
 		NE.text = YRP:trans("LID_ping") .. ": " .. ping .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. " )"
 		NE.tcolor = pingcolor
 		FO76Name(NE)
-		local PE = {}
-		PE.element = "PE"
 		if CurTime() > fps_delay then
 			fps_delay = CurTime() + 0.5
 			fps = GetFPS()
@@ -551,26 +567,19 @@ function HUD_FO76()
 		PE.text = YRP:trans("LID_fps") .. ": " .. fps .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. " )"
 		PE.tcolor = fpscolor
 		FO76Name(PE)
-		local MO = {}
-		MO.element = "MO"
-		MO.text = lply:FormattedMoney() .. " (+" .. lply:FormattedSalary() .. " )"
-		FO76Name(MO)
-		local CR = {}
-		CR.element = "CR"
+		if IsMoneyEnabled() then
+			MO.text = lply:FormattedMoney() .. " (+" .. lply:FormattedSalary() .. " )"
+			FO76Name(MO)
+		end
+
 		CR.text = os.date("%H:%M", os.time())
 		FO76Name(CR)
-		local CC = {}
-		CC.element = "CC"
 		CC.text = lply:YRPFormattedCharPlayTime()
 		FO76Name(CC)
-		local ID = {}
-		ID.element = "ID"
 		ID.text = lply:GetYRPString("idcardid", "")
 		FO76Name(ID)
 		local batterypower = system.BatteryPower()
 		if batterypower <= 100 then
-			local BA = {}
-			BA.element = "BA"
 			BA.text = YRP:trans("LID_ba")
 			BA.cur = batterypower
 			BA.max = 100
@@ -578,23 +587,17 @@ function HUD_FO76()
 		end
 
 		if not strEmpty(lply:Condition()) then
-			local CON = {}
-			CON.element = "CON"
 			CON.text = lply:Condition()
 			FO76Name(CON)
 		end
 
 		if lply:Lockdown() then
-			local LO = {}
-			LO.element = "LO"
 			LO.text = "[" .. GTS("lockdown") .. "] " .. lply:LockdownText()
 			LO.tcolor = Color(0, 255, 0)
 			FO76Name(LO)
 		end
 
 		if lply:GetYRPBool("iscasting", false) then
-			local CA = {}
-			CA.element = "CA"
 			CA.cur = lply:CastTimeCurrent()
 			CA.max = lply:CastTimeMax()
 			CA.percentage = math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 0) .. "%"

@@ -1,6 +1,16 @@
 --Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local SPACE = {}
 local ELES = {}
+local t = {}
+function YRPHUDUpdateEntry(name, cur, max, icon, text, typ, wtf)
+	ELES[name] = ELES[name] or {}
+	ELES[name][1] = cur
+	ELES[name][2] = max
+	ELES[name][3] = icon
+	ELES[name][4] = text
+	ELES[name][5] = typ
+end
+
 function YRPHUDSpace()
 	local lply = LocalPlayer()
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() then
@@ -23,13 +33,13 @@ function YRPHUDSpace()
 		local RO = YRP:GetDesignIcon("64_user-graduate")
 		local NA = YRP:GetDesignIcon("64_user")
 		if GetGlobalYRPBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Space" then
-			ELES["HP"] = {lply:Health(), lply:GetMaxHealth(), HP}
-			ELES["AR"] = {lply:Armor(), lply:GetMaxArmor(), AR}
-			ELES["AB"] = {lply:Ability(), lply:GetMaxAbility(), AB, lply:Ability() / lply:GetMaxAbility() * 100 .. "%",}
-			ELES["ST"] = {lply:Stamina(), lply:GetMaxStamina(), ST}
-			ELES["HU"] = {lply:Hunger(), lply:GetMaxHunger(), HU}
-			ELES["TH"] = {lply:Thirst(), lply:GetMaxThirst(), TH}
-			ELES["AL"] = {lply:Permille(), lply:GetMaxPermille(), AL, lply:Permille() / lply:GetMaxPermille() * 100 .. "‰",}
+			YRPHUDUpdateEntry("HP", lply:Health(), lply:GetMaxHealth(), HP)
+			YRPHUDUpdateEntry("AR", lply:Armor(), lply:GetMaxArmor(), AR)
+			YRPHUDUpdateEntry("AB", lply:Ability(), lply:GetMaxAbility(), AB, lply:Ability() / lply:GetMaxAbility() * 100 .. "%")
+			YRPHUDUpdateEntry("ST", lply:Stamina(), lply:GetMaxStamina(), ST)
+			YRPHUDUpdateEntry("HU", lply:Hunger(), lply:GetMaxHunger(), HU)
+			YRPHUDUpdateEntry("TH", lply:Thirst(), lply:GetMaxThirst(), TH)
+			YRPHUDUpdateEntry("AL", lply:Permille(), lply:GetMaxPermille(), AL, lply:Permille() / lply:GetMaxPermille() * 100 .. "‰")
 			local weapon = lply:GetActiveWeapon()
 			if weapon:IsValid() then
 				local clip1 = weapon:Clip1()
@@ -38,35 +48,37 @@ function YRPHUDSpace()
 				local clip2 = weapon:Clip2()
 				local clip2max = weapon:GetMaxClip2()
 				local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
-				ELES["WP"] = {clip1, clip1max, nil, clip1 .. "/" .. clip1max .. " | " .. ammo1,}
-				ELES["WS"] = {clip2, clip2max, nil, ammo2,}
-				ELES["WN"] = {1, 1, nil, weapon:GetPrintName()}
+				YRPHUDUpdateEntry("WP", clip1, clip1max, nil, clip1 .. "/" .. clip1max .. " | " .. ammo1)
+				YRPHUDUpdateEntry("WS", clip2, clip2max, nil, ammo2)
+				YRPHUDUpdateEntry("WN", 1, 1, nil, weapon:GetPrintName())
 			end
 
-			ELES["MO"] = {lply:Money(), nil, MO, lply:FormattedMoney()}
-			ELES["SA"] = {lply:Salary(), nil, SA, lply:FormattedSalary()}
-			ELES["CA"] = {lply:CastTimeCurrent(), lply:CastTimeMax(), CA, lply:GetCastName()}
-			ELES["BA"] = {system.BatteryPower(), 100, BA, system.BatteryPower() .. "%"}
-			local t = {}
+			if IsMoneyEnabled() then
+				YRPHUDUpdateEntry("MO", lply:Money(), nil, MO, lply:FormattedMoney())
+				YRPHUDUpdateEntry("SA", lply:Salary(), nil, SA, lply:FormattedSalary())
+			end
+
+			YRPHUDUpdateEntry("CA", lply:CastTimeCurrent(), lply:CastTimeMax(), CA, lply:GetCastName())
+			YRPHUDUpdateEntry("BA", system.BatteryPower(), 100, BA, system.BatteryPower() .. "%")
 			t["LEVEL"] = lply:Level()
-			ELES["XP"] = {lply:XP(), lply:GetMaxXP(), XP, YRP:trans("LID_levelx", t) .. " ( " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " )"}
-			ELES["CH"] = {0, nil, nil, nil, 1}
-			ELES["CR"] = {0, nil, CR, os.date("%H:%M", os.time()),}
+			YRPHUDUpdateEntry("XP", lply:XP(), lply:GetMaxXP(), XP, YRP:trans("LID_levelx", t) .. " ( " .. lply:XP() .. "/" .. lply:GetMaxXP() .. " )")
+			YRPHUDUpdateEntry("CH", 0, nil, nil, nil, 1)
+			YRPHUDUpdateEntry("CR", 0, nil, CR, os.date("%H:%M", os.time()))
 			--2
-			ELES["CC"] = {0, nil, CC, lply:YRPFormattedCharPlayTime(),}
+			YRPHUDUpdateEntry("CC", 0, nil, CC, lply:YRPFormattedCharPlayTime())
 			--2
-			ELES["PE"] = {0, nil, nil, YRP:trans("LID_fps") .. ": " .. GetFPS(), 2}
-			ELES["NE"] = {0, nil, nil, YRP:trans("LID_ping") .. ": " .. lply:Ping(), 2}
-			ELES["SN"] = {0, nil, nil, GetGlobalYRPString("text_server_name", "SERVERNAME"), 2}
-			ELES["RA"] = {lply:Radiation(), lply:GetMaxRadiation(), RA}
-			ELES["LO"] = {0, nil, nil, "[" .. GTS("lockdown") .. "] " .. lply:LockdownText(), 2}
-			ELES["RO"] = {0, nil, RO, lply:GetRoleName()}
-			ELES["NA"] = {0, nil, NA, lply:RPName()}
-			ELES["ID"] = {0, nil, ID, lply:GetYRPString("idcardid", ""),}
+			YRPHUDUpdateEntry("PE", 0, nil, nil, YRP:trans("LID_fps") .. ": " .. GetFPS(), 2)
+			YRPHUDUpdateEntry("NE", 0, nil, nil, YRP:trans("LID_ping") .. ": " .. lply:Ping(), 2)
+			YRPHUDUpdateEntry("SN", 0, nil, nil, GetGlobalYRPString("text_server_name", "SERVERNAME"), 2)
+			YRPHUDUpdateEntry("RA", lply:Radiation(), lply:GetMaxRadiation(), RA)
+			YRPHUDUpdateEntry("LO", 0, nil, nil, "[" .. GTS("lockdown") .. "] " .. lply:LockdownText(), 2)
+			YRPHUDUpdateEntry("RO", 0, nil, RO, lply:GetRoleName())
+			YRPHUDUpdateEntry("NA", 0, nil, NA, lply:RPName())
+			YRPHUDUpdateEntry("ID", 0, nil, ID, lply:GetYRPString("idcardid", ""))
 			--2
-			ELES["CON"] = {0, nil, nil, lply:Condition()}
+			YRPHUDUpdateEntry("CON", 0, nil, nil, lply:Condition())
 			for id = 1, 10 do
-				ELES["BOX" .. id] = {0, nil, nil, nil, 3}
+				YRPHUDUpdateEntry("BOX" .. id, 0, nil, nil, nil, 3)
 			end
 
 			if GetGlobalYRPInt("YRPHUDVersion", -1) ~= SPACE["version"] then
@@ -80,7 +92,7 @@ function YRPHUDSpace()
 					end
 
 					local BR = YRP:ctr(10)
-					SPACE[ele] = {}
+					SPACE[ele] = SPACE[ele] or {}
 					SPACE[ele].Visible = DB.VISI or false
 					SPACE[ele].w = DB.SIZE_W
 					SPACE[ele].h = DB.SIZE_H

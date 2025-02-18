@@ -1361,28 +1361,31 @@ net.Receive(
 					string_description.h = 140
 					ea[role.uniqueID].string_description = DTextBox(string_description)
 					DHr(hr)
-					local salary = {}
-					salary.parent = ea.info:GetContent()
-					salary.header = "LID_salary"
-					salary.netstr = "nws_yrp_update_role_int_salary"
-					salary.value = role.int_salary
-					salary.uniqueID = role.uniqueID
-					salary.lforce = false
-					salary.min = 0
-					salary.max = GetMaxInt()
-					ea[role.uniqueID].salary = DIntBox(salary)
-					DHr(hr)
-					local salarytime = {}
-					salarytime.parent = ea.info:GetContent()
-					salarytime.header = "LID_timesalary"
-					salarytime.netstr = "nws_yrp_update_role_int_salarytime"
-					salarytime.value = role.int_salarytime
-					salarytime.uniqueID = role.uniqueID
-					salarytime.lforce = false
-					salarytime.min = 1
-					salarytime.max = 9999
-					ea[role.uniqueID].requireslevel = DIntBox(salarytime)
-					DHr(hr)
+					if IsMoneyEnabled() then
+						local salary = {}
+						salary.parent = ea.info:GetContent()
+						salary.header = "LID_salary"
+						salary.netstr = "nws_yrp_update_role_int_salary"
+						salary.value = role.int_salary
+						salary.uniqueID = role.uniqueID
+						salary.lforce = false
+						salary.min = 0
+						salary.max = GetMaxInt()
+						ea[role.uniqueID].salary = DIntBox(salary)
+						DHr(hr)
+						local salarytime = {}
+						salarytime.parent = ea.info:GetContent()
+						salarytime.header = "LID_timesalary"
+						salarytime.netstr = "nws_yrp_update_role_int_salarytime"
+						salarytime.value = role.int_salarytime
+						salarytime.uniqueID = role.uniqueID
+						salarytime.lforce = false
+						salarytime.min = 1
+						salarytime.max = 9999
+						ea[role.uniqueID].requireslevel = DIntBox(salarytime)
+						DHr(hr)
+					end
+
 					local otherroles = {}
 					otherroles[0] = YRP:trans("LID_none")
 					for i, tab in pairs(roles) do

@@ -68,7 +68,7 @@ function CreateRolePreviewContent()
 			end
 
 			desc:SetText(tostring(rol.string_description))
-			if tonumber(rol.int_salary) > 0 then
+			if IsMoneyEnabled() and tonumber(rol.int_salary) > 0 then
 				local salaryheader = YRPCreateD("YLabel", win, ew, YRP:ctr(hh), YRP:ctr(20), nh - YRP:ctr(hh + 20 + hh))
 				salaryheader:SetText("LID_salary")
 				local salary = YRPCreateD("YLabel", win, ew, YRP:ctr(hh), YRP:ctr(20), nh - YRP:ctr(20 + hh))

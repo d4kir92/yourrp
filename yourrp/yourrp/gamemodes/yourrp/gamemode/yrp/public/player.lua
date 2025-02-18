@@ -440,7 +440,7 @@ end
 --[[ Character ]]
 --
 function Player:Level()
-	return tonumber(self:GetYRPString("int_level", "0"))
+	return tonumber(self:GetYRPString("int_level", "1"))
 end
 
 function Player:XP()

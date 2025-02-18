@@ -189,7 +189,7 @@ function PANEL:Init()
 			draw.RoundedBox(diameter / 2, YRP:ctr(18), YRP:ctr(8), diameter + YRP:ctr(4), diameter + YRP:ctr(4), StringToColor(rol.string_color))
 			draw.RoundedBox(diameter / 2, YRP:ctr(20), YRP:ctr(10), diameter, diameter, YRPInterfaceValue("YFrame", "PC"))
 			draw.SimpleText(rol.string_name, "Y_26_500", ph + YRP:ctr(20), ph / 3, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			if tonumber(rol.int_salary) > 0 then
+			if IsMoneyEnabled() and tonumber(rol.int_salary) > 0 then
 				draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP:ctr(20), ph / 3 * 2, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 

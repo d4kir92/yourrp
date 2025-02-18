@@ -75,11 +75,13 @@ function createRoleBox(rol, parent, mainparent)
 		end
 
 		-- Role Salary --
-		_rol.rs = YRPCreateD("DPanel", _rol, _rol:GetWide(), RH, 0, 0)
-		_rol.rs.rolesalary = _rol.rs:GetParent().tbl.int_salary
-		_rol.rs.rolecolor = StringToColor(_rol.rn:GetParent().tbl.string_color)
-		function _rol.rs:Paint(pw, ph)
-			draw.SimpleText(MoneyFormatRounded(self.rolesalary, 0), "Y_20_500", ph + YRP:ctr(10), ph / 3 * 2, Color(255, 255, 255, 255), 0, 1)
+		if IsMoneyEnabled() then
+			_rol.rs = YRPCreateD("DPanel", _rol, _rol:GetWide(), RH, 0, 0)
+			_rol.rs.rolesalary = _rol.rs:GetParent().tbl.int_salary
+			_rol.rs.rolecolor = StringToColor(_rol.rn:GetParent().tbl.string_color)
+			function _rol.rs:Paint(pw, ph)
+				draw.SimpleText(MoneyFormatRounded(self.rolesalary, 0), "Y_20_500", ph + YRP:ctr(10), ph / 3 * 2, Color(255, 255, 255, 255), 0, 1)
+			end
 		end
 
 		-- Role MaxAmount --

@@ -86,6 +86,9 @@ local fps = 0
 local fps_delay = CurTime()
 local ping = 0
 local ping_delay = CurTime()
+local tab = {}
+local COM = {}
+COM.element = "COM"
 function HUDIcons()
 	local lply = LocalPlayer()
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and not YRPIsScoreboardVisible() and GetGlobalYRPBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Icons" then
@@ -96,13 +99,15 @@ function HUDIcons()
 		HUDIconsDrawIcon("TH", TH, lply:Thirst() / lply:GetMaxStamina())
 		HUDIconsDrawIcon("RA", RA, lply:Radiation() / lply:GetMaxRadiation())
 		if IsLevelSystemEnabled() then
-			local tab = {}
 			tab["LEVEL"] = lply:Level()
 			HUDIconsDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP:trans("LID_levelx", tab) .. " ( " .. math.Round(lply:XP() / lply:GetMaxXP() * 100, 0) .. "%)")
 		end
 
-		HUDIconsDrawIcon("MO", MO, 1, lply:FormattedMoney())
-		HUDIconsDrawIcon("SA", SA, lply:CurrentSalaryTime() / lply:SalaryTime(), lply:FormattedSalary())
+		if IsMoneyEnabled() then
+			HUDIconsDrawIcon("MO", MO, 1, lply:FormattedMoney())
+			HUDIconsDrawIcon("SA", SA, lply:CurrentSalaryTime() / lply:SalaryTime(), lply:FormattedSalary())
+		end
+
 		if lply:GetYRPBool("iscasting", false) then
 			HUDIconsDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName())
 		end
@@ -151,15 +156,9 @@ function HUDIcons()
 			HUDIconsDrawText("LO", "[" .. GTS("lockdown") .. "] " .. lply:LockdownText())
 		end
 
-		local COM = {}
-		COM.element = "COM"
 		HUDSimpleBG(COM)
-		COM = {}
-		COM.element = "COM"
 		COM.text = lply:CoordAngle() - lply:CoordAngle() % 5 .. "°"
 		HUDSimpleCompass(COM)
-		COM = {}
-		COM.element = "COM"
 		HUDSimpleBR(COM)
 	end
 end

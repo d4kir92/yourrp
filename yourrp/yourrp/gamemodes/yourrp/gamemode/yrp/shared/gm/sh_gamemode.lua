@@ -16,7 +16,7 @@ GM.dedicated = "-" -- do NOT change this!
 GM.VersionStable = 1 -- do NOT change this!
 GM.VersionBeta = 356 -- do NOT change this!
 GM.VersionCanary = 712 -- do NOT change this!
-GM.VersionBuild = 514 -- do NOT change this!
+GM.VersionBuild = 515 -- do NOT change this!
 GM.Version = GM.VersionStable .. "." .. GM.VersionBeta .. "." .. GM.VersionCanary -- do NOT change this!
 GM.VersionSort = "outdated" -- do NOT change this! --stable, beta, canary
 GM.rpbase = "YourRP" -- do NOT change this! <- this is not for server browser
@@ -1000,4 +1000,8 @@ function YRPGetSENTsList()
 	end
 
 	return res
+end
+
+function IsMoneyEnabled()
+	return GetGlobalYRPBool("bool_yrp_money", false)
 end

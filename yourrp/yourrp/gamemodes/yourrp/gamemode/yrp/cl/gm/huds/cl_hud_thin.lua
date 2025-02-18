@@ -22,6 +22,70 @@ icons["NE"] = "wifi"
 icons["XP"] = "64_atom"
 icons["WP"] = "bullet"
 icons["WS"] = "bullet_secondary"
+local NA = {}
+NA.name = "NA"
+local ID = {}
+ID.name = "ID"
+local CR = {}
+CR.name = "CR"
+local CC = {}
+CC.name = "CC"
+local HP = {}
+HP.name = "HP"
+local AR = {}
+AR.name = "AR"
+local XP = {}
+XP.name = "XP"
+local MO = {}
+MO.name = "MO"
+local SA = {}
+SA.name = "SA"
+local RO = {}
+RO.name = "RO"
+local ST = {}
+ST.name = "ST"
+local RA = {}
+RA.name = "RA"
+local HU = {}
+HU.name = "HU"
+local TH = {}
+TH.name = "TH"
+local AL = {}
+AL.name = "AL"
+local CA = {}
+CA.name = "CA"
+local AB = {}
+AB.name = "AB"
+local WP = {}
+WP.name = "WP"
+local WS = {}
+WS.name = "WS"
+local WN = {}
+WN.name = "WN"
+local BA = {}
+BA.name = "BA"
+local CON = {}
+CON.name = "CON"
+local PE = {}
+PE.name = "PE"
+local NE = {}
+NE.name = "NE"
+local COM = {}
+COM.name = "COM"
+local MI = {}
+MI.name = "MI"
+local PM = {}
+PM.name = "PM"
+local SN = {}
+SN.name = "SN"
+local LO = {}
+LO.name = "LO"
+local BOX = {}
+for i = 1, 10 do
+	BOX["BOX" .. i] = {}
+	BOX["BOX" .. i].name = "PM"
+end
+
 local function DrawThinCompass(px, py, sw, sh)
 	local lply = LocalPlayer()
 	if IsValid(lply) then
@@ -214,78 +278,54 @@ function YRPHUDThin()
 		end
 
 		for i = 1, 10 do
-			local BOX = {}
-			BOX.name = "BOX" .. i
-			BOX.valuetext = lply:HudValue(BOX.name, "CTEX")
-			YRPDrawThin(BOX)
+			BOX["BOX" .. i].valuetext = lply:HudValue(BOX["BOX" .. i].name, "CTEX")
+			YRPDrawThin(BOX["BOX" .. i])
 		end
 
-		local HP = {}
-		HP.name = "HP"
 		HP.text = "LID_health"
 		HP.cur = lply:Health()
 		HP.max = lply:GetMaxHealth()
 		YRPDrawThin(HP)
-		local AR = {}
-		AR.name = "AR"
 		AR.text = "LID_armor"
 		AR.cur = lply:Armor()
 		AR.max = lply:GetMaxArmor()
 		YRPDrawThin(AR)
-		local HU = {}
-		HU.name = "HU"
 		HU.text = "LID_hunger"
 		HU.cur = lply:Hunger()
 		HU.max = lply:GetMaxHunger()
 		YRPDrawThin(HU)
-		local TH = {}
-		TH.name = "TH"
 		TH.text = "LID_thirst"
 		TH.cur = lply:Thirst()
 		TH.max = lply:GetMaxThirst()
 		YRPDrawThin(TH)
-		local ST = {}
-		ST.name = "ST"
 		ST.text = "LID_stamina"
 		ST.cur = lply:Stamina()
 		ST.max = lply:GetMaxStamina()
 		YRPDrawThin(ST)
-		local PE = {}
-		PE.name = "PE"
 		PE.text = "LID_fps"
 		PE.cur = math.Clamp(GetFPS(), 0, 144)
 		PE.max = 144
 		PE.ignorepercent = true
 		YRPDrawThin(PE)
-		local NE = {}
-		NE.name = "NE"
 		NE.text = "LID_ping"
 		NE.cur = math.Clamp(lply:Ping(), 0, 200)
 		NE.max = 200
 		NE.ignorepercent = true
 		YRPDrawThin(NE)
-		local XP = {}
-		XP.name = "XP"
 		XP.text = "LID_xp"
 		XP.cur = lply:XP()
 		XP.max = lply:GetMaxXP()
 		XP.valuetext = "(" .. lply:Level() .. ") " .. lply:XP() .. "/" .. lply:MaxXP() .. " ( " .. math.Round(lply:XP() / lply:MaxXP() * 100, 1) .. "%)"
 		YRPDrawThin(XP)
-		local BA = {}
-		BA.name = "BA"
 		BA.text = "LID_battery"
 		BA.cur = system.BatteryPower()
 		BA.max = 100
 		YRPDrawThin(BA)
-		local CA = {}
-		CA.name = "CA"
 		CA.text = lply:GetCastName()
 		CA.cur = lply:CastTimeCurrent()
 		CA.max = lply:CastTimeMax()
 		CA.valuetext = math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 1) .. "%"
 		YRPDrawThin(CA)
-		local RA = {}
-		RA.name = "RA"
 		RA.text = "LID_radiation"
 		RA.cur = lply:Radiation()
 		RA.max = lply:GetMaxRadiation()
@@ -311,8 +351,6 @@ function YRPHUDThin()
 				end
 			end
 
-			local WP = {}
-			WP.name = "WP"
 			WP.text = "LID_ammo"
 			WP.cur = clip1
 			WP.max = clip1max
@@ -331,8 +369,6 @@ function YRPHUDThin()
 				end
 			end
 
-			local WS = {}
-			WS.name = "WS"
 			WS.text = "LID_ammo"
 			WS.cur = clip2
 			WS.max = clip2
@@ -340,60 +376,41 @@ function YRPHUDThin()
 			YRPDrawThin(WS)
 		end
 
-		local NA = {}
-		NA.name = "NA"
 		NA.text = "LID_name"
 		NA.valuetext = lply:RPName()
 		YRPDrawThin(NA)
-		local RO = {}
-		RO.name = "RO"
 		RO.text = "LID_role"
 		RO.valuetext = lply:GetRoleName()
 		YRPDrawThin(RO)
-		local ID = {}
-		ID.name = "ID"
 		ID.text = "LID_id"
 		ID.valuetext = lply:IDCardID()
 		YRPDrawThin(ID)
-		local SN = {}
-		SN.name = "SN"
 		SN.valuetext = YRPGetHostName()
 		YRPDrawThin(SN)
-		local MO = {}
-		MO.name = "MO"
-		MO.text = "LID_money"
-		MO.valuetext = lply:FormattedMoney()
-		YRPDrawThin(MO)
-		local SA = {}
-		SA.name = "SA"
-		SA.text = "LID_salary"
-		SA.valuetext = "+" .. lply:FormattedSalary(1)
-		YRPDrawThin(SA)
-		local CON = {}
-		CON.name = "CON"
+		if IsMoneyEnabled() then
+			MO.text = "LID_money"
+			MO.valuetext = lply:FormattedMoney()
+			YRPDrawThin(MO)
+			SA.text = "LID_salary"
+			SA.valuetext = "+" .. lply:FormattedSalary(1)
+			YRPDrawThin(SA)
+		end
+
 		CON.valuetext = lply:Condition()
 		YRPDrawThin(CON)
 		if lply:GetActiveWeapon() and lply:GetActiveWeapon().GetPrintName then
-			local WN = {}
-			WN.name = "WN"
 			WN.valuetext = lply:GetActiveWeapon():GetPrintName()
 			YRPDrawThin(WN)
 		end
 
-		local CR = {}
-		CR.name = "CR"
 		CR.text = "LID_clock"
 		CR.cur = os.date("%H", os.time()) * 60 * 60 + os.date("%M", os.time()) * 60
 		CR.max = 60 * 60 * 24
 		CR.valuetext = os.date("%H:%M", os.time())
 		YRPDrawThin(CR)
-		local CC = {}
-		CC.name = "CC"
 		CC.text = "LID_playtime"
 		CC.valuetext = lply:YRPFormattedCharPlayTime()
 		YRPDrawThin(CC)
-		local LO = {}
-		LO.name = "LO"
 		LO.valuetext = "[" .. GTS("lockdown") .. "] " .. lply:LockdownText()
 		YRPDrawThin(LO)
 	end

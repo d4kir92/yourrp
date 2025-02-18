@@ -1044,6 +1044,7 @@ net.Receive(
 			end
 
 			General_Slider:AddPanel(MONEY_SETTINGS)
+			CreateCheckBoxLine(MONEY_SETTINGS:GetContent(), GEN.bool_yrp_money, "LID_money", "nws_yrp_update_bool_yrp_money")
 			CreateCheckBoxLine(MONEY_SETTINGS:GetContent(), GEN.bool_YRPDropMoneyChat_on_death, "LID_dropmoneyondeath", "nws_yrp_update_bool_YRPDropMoneyChat_on_death")
 			CreateNumberWangLine(MONEY_SETTINGS:GetContent(), GEN.text_money_max_amount_of_dropped_money, "LID_maxamountofdroppedmoney", "nws_yrp_update_text_money_max_amount_of_dropped_money")
 			CreateHRLine(MONEY_SETTINGS:GetContent())

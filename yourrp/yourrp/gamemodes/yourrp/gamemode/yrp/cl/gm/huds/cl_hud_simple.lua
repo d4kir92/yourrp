@@ -498,99 +498,118 @@ icons["CR"] = "64_clock"
 icons["CC"] = "64_clock"
 icons["RO"] = "64_user-graduate"
 icons["NA"] = "64_user"
+local SN = {}
+SN.element = "SN"
+local BOX = {}
+for i = 1, 10 do
+	BOX["BOX" .. i] = {}
+	BOX["BOX" .. i].element = "BOX" .. i
+end
+
+local NA = {}
+NA.element = "NA"
+local ID = {}
+ID.element = "ID"
+local CR = {}
+CR.element = "CR"
+local CC = {}
+CC.element = "CC"
+local HP = {}
+HP.element = "HP"
+local AR = {}
+AR.element = "AR"
+local XP = {}
+XP.element = "XP"
+local MO = {}
+MO.element = "MO"
+local SA = {}
+SA.element = "SA"
+local RO = {}
+RO.element = "RO"
+local ST = {}
+ST.element = "ST"
+local RA = {}
+RA.element = "RA"
+local HU = {}
+HU.element = "HU"
+local TH = {}
+TH.element = "TH"
+local AL = {}
+AL.element = "AL"
+local CA = {}
+CA.element = "CA"
+local AB = {}
+AB.element = "AB"
+local WP = {}
+WP.element = "WP"
+local WS = {}
+WS.element = "WS"
+local WN = {}
+WN.element = "WN"
+local BA = {}
+BA.element = "BA"
+local CON = {}
+CON.element = "CON"
+local PE = {}
+PE.element = "PE"
+local NE = {}
+NE.element = "NE"
+local COM = {}
+COM.element = "COM"
+local MI = {}
+MI.element = "MI"
+local PM = {}
+PM.element = "PM"
 function HUDSimple()
 	local lply = LocalPlayer()
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and not YRPIsScoreboardVisible() and GetGlobalYRPBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Simple" then
 		local batterypower = system.BatteryPower()
 		-- Background
 		for i = 1, 10 do
-			local BOX = {}
-			BOX.element = "BOX" .. i
-			HUDSimpleBG(BOX)
+			HUDSimpleBG(BOX["BOX" .. i])
 		end
 
-		local SN = {}
-		SN.element = "SN"
 		HUDSimpleBG(SN)
-		local NA = {}
-		NA.element = "NA"
 		HUDSimpleBG(NA)
-		local ID = {}
-		ID.element = "ID"
 		HUDSimpleBG(ID)
-		local CR = {}
-		CR.element = "CR"
-		local CC = {}
-		CC.element = "CC"
 		HUDSimpleBG(CR)
-		local HP = {}
-		HP.element = "HP"
+		HUDSimpleBG(CC)
 		HUDSimpleBG(HP)
-		local AR = {}
-		AR.element = "AR"
 		HUDSimpleBG(AR)
 		if IsLevelSystemEnabled() then
-			local XP = {}
-			XP.element = "XP"
 			HUDSimpleBG(XP)
 		end
 
-		local MO = {}
-		MO.element = "MO"
 		HUDSimpleBG(MO)
-		local SA = {}
-		SA.element = "SA"
 		HUDSimpleBG(SA)
-		local RO = {}
-		RO.element = "RO"
 		HUDSimpleBG(RO)
 		if GetGlobalYRPBool("bool_stamina", false) then
-			local ST = {}
-			ST.element = "ST"
 			HUDSimpleBG(ST)
 		end
 
 		if GetGlobalYRPBool("bool_radiation", false) then
-			local RA = {}
-			RA.element = "RA"
 			HUDSimpleBG(RA)
 		end
 
 		if lply:HudElementVisible("HU") then
-			local HU = {}
-			HU.element = "HU"
 			HUDSimpleBG(HU)
 		end
 
 		if GetGlobalYRPBool("bool_thirst", false) then
-			local TH = {}
-			TH.element = "TH"
 			HUDSimpleBG(TH)
 		end
 
 		if GetGlobalYRPBool("bool_permille", false) then
-			local AL = {}
-			AL.element = "AL"
 			HUDSimpleBG(AL)
 		end
 
 		if lply:GetYRPBool("iscasting", false) then
-			local CA = {}
-			CA.element = "CA"
 			HUDSimpleBG(CA)
 		end
 
-		local AB = {}
-		AB.element = "AB"
 		HUDSimpleBG(AB)
-		local WP = {}
-		WP.element = "WP"
 		WP.visible = false
-		local WS = {}
-		WS.element = "WS"
 		WS.visible = false
-		local WN = {}
-		WN.element = "WN"
 		local weapon = lply:GetActiveWeapon()
 		if IsValid(weapon) then
 			local clip1 = weapon:Clip1()
@@ -650,95 +669,63 @@ function HUDSimple()
 
 		HUDSimpleBG(WN)
 		if batterypower <= 100 then
-			local BA = {}
-			BA.element = "BA"
 			HUDSimpleBG(BA)
 		end
 
 		if not strEmpty(lply:Condition()) then
-			local CON = {}
-			CON.element = "CON"
 			HUDSimpleBG(CON)
 		end
 
-		local PE = {}
-		PE.element = "PE"
 		HUDSimpleBG(PE)
-		local NE = {}
-		NE.element = "NE"
 		HUDSimpleBG(NE)
-		local COM = {}
-		COM.element = "COM"
 		HUDSimpleBG(COM)
-		local MI = {}
-		MI.element = "MI"
 		HUDSimpleBG(MI)
-		local PM = {}
-		PM.element = "PM"
 		HUDSimpleBG(PM)
 		-- Midground
 		for i = 1, 10 do
-			local BOX = {}
-			BOX.element = "BOX" .. i
-			BOX.cur = 1
-			BOX.max = 1
-			BOX.text = ""
-			HUDSimpleBAR(BOX)
+			BOX["BOX" .. i].cur = 1
+			BOX["BOX" .. i].max = 1
+			BOX["BOX" .. i].text = ""
+			HUDSimpleBAR(BOX["BOX" .. i])
 		end
 
-		SN = {}
-		SN.element = "SN"
 		SN.cur = 0
 		SN.max = 1
 		SN.text = GetGlobalYRPString("text_server_name", "SERVERNAME")
 		HUDSimpleBAR(SN)
-		NA = {}
-		NA.element = "NA"
 		NA.cur = 0
 		NA.max = 1
 		NA.text = lply:RPName()
 		NA.icon = icons["NA"]
 		HUDSimpleBAR(NA)
-		ID = {}
-		ID.element = "ID"
 		ID.cur = 0
 		ID.max = 1
 		ID.text = lply:GetYRPString("idcardid", "")
 		ID.icon = icons["ID"]
 		HUDSimpleBAR(ID)
-		CR = {}
-		CR.element = "CR"
 		CR.cur = 0
 		CR.max = 1
 		CR.text = os.date("%H:%M", os.time())
 		CR.icon = icons["CR"]
 		HUDSimpleBAR(CR)
-		CC = {}
-		CC.element = "CC"
 		CC.cur = 0
 		CC.max = 1
 		CC.text = lply:YRPFormattedCharPlayTime()
 		CC.icon = icons["CC"]
 		HUDSimpleBAR(CC)
-		HP = {}
-		HP.element = "HP"
 		HP.cur = lply:Health()
 		HP.max = lply:GetMaxHealth()
 		HP.text = lply:Health() .. "/" .. lply:GetMaxHealth()
 		HP.percentage = math.Round(lply:Health() / lply:GetMaxHealth() * 100, 0) .. "%"
 		HP.icon = icons["HP"]
 		HUDSimpleBAR(HP)
-		AR = {}
-		AR.element = "AR"
 		AR.cur = lply:Armor()
 		AR.max = lply:GetMaxArmor()
 		AR.text = lply:Armor() .. "/" .. lply:GetMaxArmor()
 		AR.percentage = math.Round(lply:Armor() / lply:GetMaxArmor() * 100) .. "%"
 		AR.icon = icons["AR"]
 		HUDSimpleBAR(AR)
-		XP = {}
 		if IsLevelSystemEnabled() then
-			XP.element = "XP"
 			XP.cur = lply:XP()
 			XP.max = lply:GetMaxXP()
 			if XP.cur <= XP.max then
@@ -750,22 +737,19 @@ function HUDSimple()
 			HUDSimpleBAR(XP)
 		end
 
-		MO = {}
-		MO.element = "MO"
-		MO.cur = 1
-		MO.max = 1
-		MO.text = lply:FormattedMoney()
-		MO.icon = icons["MO"]
-		HUDSimpleBAR(MO)
-		SA = {}
-		SA.element = "SA"
-		SA.cur = lply:CurrentSalaryTime()
-		SA.max = lply:SalaryTime()
-		SA.text = "+" .. lply:FormattedSalary()
-		SA.icon = icons["SA"]
-		HUDSimpleBAR(SA)
-		RO = {}
-		RO.element = "RO"
+		if IsMoneyEnabled() then
+			MO.cur = 1
+			MO.max = 1
+			MO.text = lply:FormattedMoney()
+			MO.icon = icons["MO"]
+			HUDSimpleBAR(MO)
+			SA.cur = lply:CurrentSalaryTime()
+			SA.max = lply:SalaryTime()
+			SA.text = "+" .. lply:FormattedSalary()
+			SA.icon = icons["SA"]
+			HUDSimpleBAR(SA)
+		end
+
 		RO.cur = 0
 		RO.max = 1
 		RO.text = lply:GetRoleName()
@@ -773,8 +757,6 @@ function HUDSimple()
 		--RO.tcolor = lply:GetRoleColor()
 		HUDSimpleBAR(RO)
 		if GetGlobalYRPBool("bool_stamina", false) then
-			local ST = {}
-			ST.element = "ST"
 			ST.cur = lply:Stamina()
 			ST.max = lply:GetMaxStamina()
 			ST.text = lply:Stamina() .. " / " .. lply:GetMaxStamina()
@@ -784,8 +766,6 @@ function HUDSimple()
 		end
 
 		if GetGlobalYRPBool("bool_hunger", false) then
-			local HU = {}
-			HU.element = "HU"
 			HU.cur = lply:Hunger()
 			HU.max = lply:GetMaxHunger()
 			HU.text = math.Round(lply:Hunger(), 1) .. " / " .. math.Round(lply:GetMaxHunger(), 0)
@@ -795,8 +775,6 @@ function HUDSimple()
 		end
 
 		if GetGlobalYRPBool("bool_thirst", false) then
-			local TH = {}
-			TH.element = "TH"
 			TH.cur = lply:Thirst()
 			TH.max = lply:GetMaxThirst()
 			TH.text = math.Round(lply:Thirst(), 1) .. " / " .. math.Round(lply:GetMaxThirst(), 0)
@@ -806,8 +784,6 @@ function HUDSimple()
 		end
 
 		if GetGlobalYRPBool("bool_permille", false) then
-			local AL = {}
-			AL.element = "AL"
 			AL.cur = lply:Permille()
 			AL.max = lply:GetMaxPermille()
 			AL.text = math.Round(lply:Permille(), 1) .. " / " .. math.Round(lply:GetMaxPermille(), 0)
@@ -817,8 +793,6 @@ function HUDSimple()
 		end
 
 		if GetGlobalYRPBool("bool_radiation", false) then
-			local RA = {}
-			RA.element = "RA"
 			RA.cur = lply:Radiation()
 			RA.max = lply:GetMaxRadiation()
 			RA.text = lply:Radiation() .. " / " .. lply:GetMaxRadiation()
@@ -828,8 +802,6 @@ function HUDSimple()
 		end
 
 		if lply:GetYRPBool("iscasting", false) then
-			local CA = {}
-			CA.element = "CA"
 			CA.cur = lply:CastTimeCurrent()
 			CA.max = lply:CastTimeMax()
 			CA.text = lply:GetCastName()
@@ -838,8 +810,6 @@ function HUDSimple()
 			HUDSimpleBAR(CA)
 		end
 
-		AB = {}
-		AB.element = "AB"
 		AB.cur = lply:Ability()
 		AB.max = lply:GetMaxAbility()
 		AB.text = math.Round(lply:Ability(), 0) .. " / " .. math.Round(lply:GetMaxAbility(), 0)
@@ -860,8 +830,6 @@ function HUDSimple()
 				batterypower = 100
 			end
 
-			local BA = {}
-			BA.element = "BA"
 			BA.cur = batterypower
 			BA.max = 100
 			BA.text = batterypower .. "%"
@@ -870,16 +838,12 @@ function HUDSimple()
 		end
 
 		if not strEmpty(lply:Condition()) then
-			local CON = {}
-			CON.element = "CON"
 			CON.cur = 1
 			CON.max = 1
 			CON.text = lply:Condition()
 			HUDSimpleBAR(CON)
 		end
 
-		PE = {}
-		PE.element = "PE"
 		PE.cur = 0
 		PE.max = 1
 		if CurTime() > fps_delay then
@@ -945,8 +909,6 @@ function HUDSimple()
 			end
 		end
 
-		NE = {}
-		NE.element = "NE"
 		NE.cur = 0
 		NE.max = 1
 		NE.text = YRP:trans("LID_ping") .. ": " .. ping
@@ -957,8 +919,6 @@ function HUDSimple()
 		NE.tcolor = pingcolor
 		HUDSimpleBAR(NE)
 		HUDSimpleCompass()
-		MI = {}
-		MI.element = "MI"
 		MI.cur = 0
 		MI.max = 1
 		local _x = math.Round(lply:GetPos().x, 0)
@@ -966,78 +926,48 @@ function HUDSimple()
 		MI.text = "x: " .. tostring(_x) .. " y: " .. tostring(_y)
 		HUDSimpleBAR(MI)
 		if lply:Lockdown() then
-			local LO = {}
-			LO.element = "LO"
 			LO.text = "[" .. GTS("lockdown") .. "] " .. lply:LockdownText()
 			HUDSimpleBAR(LO)
 		end
 
 		-- Foreground
 		for i = 1, 10 do
-			local BOX = {}
-			BOX.element = "BOX" .. i
-			HUDSimpleBR(BOX)
+			HUDSimpleBR(BOX["BOX" .. i])
 		end
 
-		HP = {}
-		HP.element = "HP"
 		HUDSimpleBR(HP)
-		AR = {}
-		AR.element = "AR"
 		HUDSimpleBR(AR)
 		if IsLevelSystemEnabled() then
-			XP = {}
-			XP.element = "XP"
 			HUDSimpleBR(XP)
 		end
 
-		MO = {}
-		MO.element = "MO"
 		HUDSimpleBR(MO)
-		SA = {}
-		SA.element = "SA"
 		HUDSimpleBR(SA)
-		RO = {}
-		RO.element = "RO"
 		HUDSimpleBR(RO)
 		if GetGlobalYRPBool("bool_stamina", false) then
-			local ST = {}
-			ST.element = "ST"
 			HUDSimpleBR(ST)
 		end
 
 		if GetGlobalYRPBool("bool_radiation", false) then
-			local RA = {}
-			RA.element = "RA"
 			HUDSimpleBR(RA)
 		end
 
 		if GetGlobalYRPBool("bool_hunger", false) then
-			local HU = {}
-			HU.element = "HU"
 			HUDSimpleBR(HU)
 		end
 
 		if GetGlobalYRPBool("bool_thirst", false) then
-			local TH = {}
-			TH.element = "TH"
 			HUDSimpleBR(TH)
 		end
 
 		if GetGlobalYRPBool("bool_permille", false) then
-			local AL = {}
-			AL.element = "AL"
 			HUDSimpleBR(AL)
 		end
 
 		if lply:GetYRPBool("iscasting", false) then
-			local CA = {}
-			CA.element = "CA"
 			HUDSimpleBR(CA)
 		end
 
-		AB = {}
-		AB.element = "AB"
 		HUDSimpleBR(AB)
 		WP.element = "WP"
 		if WP.visible then
@@ -1052,37 +982,19 @@ function HUDSimple()
 		WN.element = "WN"
 		HUDSimpleBR(WN)
 		if batterypower <= 100 then
-			local BA = {}
-			BA.element = "BA"
 			HUDSimpleBR(BA)
 		end
 
 		if not strEmpty(lply:Condition()) then
-			local CON = {}
-			CON.element = "CON"
 			HUDSimpleBR(CON)
 		end
 
-		PE = {}
-		PE.element = "PE"
 		HUDSimpleBR(PE)
-		NE = {}
-		NE.element = "NE"
 		HUDSimpleBR(NE)
-		COM = {}
-		COM.element = "COM"
 		HUDSimpleBR(COM)
-		MI = {}
-		MI.element = "MI"
 		HUDSimpleBR(MI)
-		NA = {}
-		NA.element = "NA"
 		HUDSimpleBR(NA)
-		ID = {}
-		ID.element = "ID"
 		HUDSimpleBR(ID)
-		SN = {}
-		SN.element = "SN"
 		HUDSimpleBR(SN)
 	end
 end

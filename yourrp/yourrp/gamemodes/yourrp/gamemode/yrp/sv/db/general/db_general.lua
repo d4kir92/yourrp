@@ -169,6 +169,7 @@ hook.Add(
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_tag_on_side_usergroup", "INT DEFAULT 1")
 		--[[ Money Settings ]]
 		--
+		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_yrp_money", "INT DEFAULT 1")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "bool_YRPDropMoneyChat_on_death", "INT DEFAULT 1")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_money_max_amount_of_dropped_money", "TEXT DEFAULT '1000'")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_money_pre", "TEXT DEFAULT '$'")
@@ -1887,6 +1888,15 @@ net.Receive(
 
 --[[ MONEY SETTINGS ]]
 --
+YRP:AddNetworkString("nws_yrp_update_bool_yrp_money")
+net.Receive(
+	"nws_yrp_update_bool_yrp_money",
+	function(len, ply)
+		local b = btn(net.ReadBool())
+		GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_money", "bool_yrp_money", b)
+	end
+)
+
 YRP:AddNetworkString("nws_yrp_update_bool_YRPDropMoneyChat_on_death")
 net.Receive(
 	"nws_yrp_update_bool_YRPDropMoneyChat_on_death",
