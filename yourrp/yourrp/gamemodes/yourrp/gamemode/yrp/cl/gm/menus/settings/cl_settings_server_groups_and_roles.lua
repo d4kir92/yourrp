@@ -2594,7 +2594,7 @@ net.Receive(
 								table.insert(cl_ndsweps, ndswep)
 							end
 
-							if ea[role.uniqueID].ndsweps.dpl.AddLines ~= nil then
+							if cl_ndsweps and ea[role.uniqueID].ndsweps.dpl.AddLines ~= nil then
 								ea[role.uniqueID].ndsweps.dpl:AddLines(cl_ndsweps)
 							end
 						end

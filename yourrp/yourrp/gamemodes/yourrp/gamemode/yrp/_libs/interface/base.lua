@@ -941,7 +941,10 @@ function DStringListBox(tab)
 				local line = YRPCreateD("DButton", nil, pnl.dpl:GetWide(), v.h, 0, 0)
 				line:SetText("")
 				line.uniqueID = v.uniqueID
-				line.models = string.Explode(",", v.string_models or "")
+				if v.string_models and type(v.string_models) == "string" then
+					line.models = string.Explode(",", v.string_models or "")
+				end
+
 				line.pmid = 1
 				if table.Count(line.models) > 1 or not strEmpty(line.models[1]) then
 					line.mod = YRPCreateD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, YRP:ctr(40) + v.br, v.br)
