@@ -845,7 +845,7 @@ net.Receive(
 								draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 							end
 
-							local equipment = YRPCreateD("YGroupBox", ea.background, YRP:ctr(800), YRP:ctr(1250), 0, 0)
+							local equipment = YRPCreateD("YGroupBox", ea.background, YRP:ctr(1400), YRP:ctr(1250), 0, 0)
 							equipment:SetText("LID_equipment")
 							function equipment:Paint(pw, ph)
 								hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -1515,7 +1515,7 @@ net.Receive(
 					net.WriteInt(role.uniqueID, 32)
 					net.SendToServer()
 					ea.flags:AutoSize(true)
-					local col2 = YRPCreateD("DPanelList", ea.background, YRP:ctr(800 + 24), ea.background:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
+					local col2 = YRPCreateD("DPanelList", ea.background, YRP:ctr(1400 + 24), ea.background:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
 					col2:EnableVerticalScrollbar(true)
 					col2:SetSpacing(YRP:ctr(20))
 					local sbar4 = col2.VBar
@@ -1535,7 +1535,7 @@ net.Receive(
 						draw.RoundedBox(w / 2, 0, 0, w, h, YRPInterfaceValue("YFrame", "HI"))
 					end
 
-					local appearance = YRPCreateD("YGroupBox", ea.background, YRP:ctr(800), YRP:ctr(800), YRP:ctr(840), YRP:ctr(20))
+					local appearance = YRPCreateD("YGroupBox", ea.background, YRP:ctr(1400), YRP:ctr(800), YRP:ctr(840), YRP:ctr(20))
 					appearance:SetText("LID_appearance")
 					function appearance:Paint(pw, ph)
 						hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -1835,7 +1835,7 @@ net.Receive(
 									net.SendToServer()
 								end
 
-								v.h = YRP:ctr(100)
+								v.h = YRP:ctr(300)
 							end
 
 							if ea[role.uniqueID].playermodels.dpl.AddLines ~= nil then
@@ -1857,7 +1857,7 @@ net.Receive(
 					bool_savebodygroups.lforce = false
 					ea[role.uniqueID].bool_savebodygroups = YRPDCheckBox(bool_savebodygroups)
 					ea.appearance:AutoSize(true)
-					local equipment = YRPCreateD("YGroupBox", ea.background, YRP:ctr(800), YRP:ctr(1250), ea.appearance.x, ea.appearance.y + ea.appearance:GetTall() + YRP:ctr(20))
+					local equipment = YRPCreateD("YGroupBox", ea.background, YRP:ctr(1400), YRP:ctr(1250), ea.appearance.x, ea.appearance.y + ea.appearance:GetTall() + YRP:ctr(20))
 					equipment:SetText("LID_equipment")
 					function equipment:Paint(pw, ph)
 						hook.Run("YGroupBoxPaint", self, pw, ph)
@@ -1937,7 +1937,7 @@ net.Receive(
 							for i, v in pairs(tab_pm) do
 								local swep = {}
 								swep.uniqueID = i
-								swep.string_models = GetSwepWorldModel(v)
+								swep.string_models = GetSWEPWorldModel(v)
 								swep.string_classname = v
 								swep.string_name = v
 								swep.doclick = function()
@@ -1955,7 +1955,7 @@ net.Receive(
 									role.string_sweps = table.concat(tmp, ",")
 								end
 
-								swep.h = YRP:ctr(120)
+								swep.h = YRP:ctr(200)
 								table.insert(cl_sweps, swep)
 							end
 
@@ -2064,15 +2064,15 @@ net.Receive(
 					end
 
 					-- Ammunation
-					local ammobg = YRPCreateD("YPanel", col2, YRP:ctr(800), YRP:ctr(350), 0, 0)
-					local ammoheader = YRPCreateD("YLabel", ammobg, YRP:ctr(800), YRP:ctr(50), 0, 0)
+					local ammobg = YRPCreateD("YPanel", col2, YRP:ctr(1400), YRP:ctr(350), 0, 0)
+					local ammoheader = YRPCreateD("YLabel", ammobg, YRP:ctr(1400), YRP:ctr(50), 0, 0)
 					ammoheader:SetText("LID_ammo")
 					function ammoheader:Paint(pw, ph)
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 						draw.SimpleText(YRP:trans(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 
-					ammolist = YRPCreateD("DPanelList", ammobg, YRP:ctr(800 - 23 - 20), YRP:ctr(300), 0, YRP:ctr(50))
+					ammolist = YRPCreateD("DPanelList", ammobg, YRP:ctr(1400 - 24), YRP:ctr(300), 0, YRP:ctr(50))
 					ammolist:SetSpacing(2)
 					ammolist:EnableVerticalScrollbar(true)
 					local sbar = ammolist.VBar
@@ -2116,15 +2116,15 @@ net.Receive(
 					end
 
 					for i, v in pairs(game.GetAmmoTypes()) do
-						local abg = YRPCreateD("YPanel", nil, YRP:ctr(800), YRP:ctr(50), 0, 0)
-						local ahe = YRPCreateD("YLabel", abg, YRP:ctr(400), YRP:ctr(50), 0, 0)
+						local abg = YRPCreateD("YPanel", nil, YRP:ctr(900), YRP:ctr(50), 0, 0)
+						local ahe = YRPCreateD("YLabel", abg, YRP:ctr(900), YRP:ctr(50), 0, 0)
 						ahe:SetText(v)
 						function ahe:Paint(pw, ph)
 							draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255))
 							draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 						end
 
-						local ava = YRPCreateD("DNumberWang", abg, YRP:ctr(400), YRP:ctr(50), YRP:ctr(400), 0)
+						local ava = YRPCreateD("DNumberWang", abg, YRP:ctr(400), YRP:ctr(50), YRP:ctr(900), 0)
 						ava:SetDecimals(0)
 						ava:SetMin(0)
 						ava:SetMax(999)

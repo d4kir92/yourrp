@@ -1760,6 +1760,7 @@ function YRPSetPlayerModel(ply)
 	local tmpRolePlayermodel = ply:GetPlayerModel()
 	if IsNotNilAndNotFalse(tmpRolePlayermodel) and not strEmpty(tmpRolePlayermodel) then
 		ply:SetModel(tmpRolePlayermodel)
+		YRP:msg("note", ply:YRPName() .. " SET PLAYERMODEL TO: " .. tmpRolePlayermodel)
 	else
 		ply:SetModel("models/player/skeleton.mdl")
 		YRP:msg("note", ply:YRPName() .. " HAS NO PLAYERMODEL")

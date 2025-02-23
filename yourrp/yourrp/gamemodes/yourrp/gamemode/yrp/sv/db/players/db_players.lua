@@ -543,6 +543,7 @@ function YRPSetRoleValues(ply, pmid)
 				if IsNotNilAndNotFalse(pm) and pm.string_model then
 					ply:SetYRPString("string_playermodel", pm.string_model)
 					ply:SetModel(pm.string_model)
+					YRP:msg("note", ply:YRPName() .. " SET ROLE PLAYERMODEL TO: " .. pm.string_model)
 					local randsize = math.Rand(pm.float_size_min, pm.float_size_max)
 					ply:SetModelScale(randsize, 0)
 				end
