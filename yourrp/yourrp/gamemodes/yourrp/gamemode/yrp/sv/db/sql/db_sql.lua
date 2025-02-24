@@ -19,7 +19,7 @@ local function SQLITE_ADD_COLUMN(table_name, column_name, datatype)
 		local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ""
 		local _r = sql.Query(_q)
 		if _r ~= nil then
-			YRP:msg("error", "SQLITE_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. " lastError: " .. YRP_SQL_Show_Last_Error())
+			YRP:msg("error", "SQLITE_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. YRP_SQL_Show_Last_Error())
 		end
 
 		return _r

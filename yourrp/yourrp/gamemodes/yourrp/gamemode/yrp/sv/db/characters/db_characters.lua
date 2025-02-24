@@ -862,7 +862,7 @@ function YRPCreateCharacter(ply, tab)
 					return false
 				end
 			else
-				YRP:msg("error", "[YRPCreateCharacter] failed - char: " .. tostring(char) .. " LastError: " .. YRP_SQL_Show_Last_Error())
+				YRP:msg("error", "[YRPCreateCharacter] failed - char: " .. tostring(char) .. YRP_SQL_Show_Last_Error())
 
 				return false
 			end
