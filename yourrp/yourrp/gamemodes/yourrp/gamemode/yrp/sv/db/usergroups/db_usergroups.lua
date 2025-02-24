@@ -97,7 +97,6 @@ hook.Add(
 		end
 
 		--YRP_SQL_DROP_TABLE(DATABASE_NAME)
-		--YRP_DB_IS_EMPTY(DATABASE_NAME)
 		timer.Simple(
 			1,
 			function()

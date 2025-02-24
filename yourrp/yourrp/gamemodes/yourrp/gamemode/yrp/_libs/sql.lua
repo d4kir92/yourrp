@@ -1,19 +1,47 @@
 --Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _type = type
 local ready = ready or false
-local function IsReady()
+local _show_db_if_not_empty = false
+YRPSQL = YRPSQL or {}
+YRPSQL.mysql_worked = YRPSQL.mysql_worked or false
+YRPSQL.int_mode = YRPSQL.int_mode or 0
+local function _YRPTryRepairDatabase()
+	YRP:msg("db", "ERROR!!! >> retry Load Database in 10sec <<")
+	YRP:msg("db", "ERROR!!! >> Your database is maybe broken! <<")
+	if timer.Exists("retryLoadDatabase") then
+		timer.Remove("retryLoadDatabase")
+	end
+
+	local integrity_check = sql.Query("pragma integrity_check;")
+	YRP:msg("db", "Integrity_check: " .. tostring(integrity_check))
+	local nodes = sql.Query("reindex nodes;")
+	YRP:msg("db", "Nodes: " .. tostring(nodes))
+	local pristine = sql.Query("reindex pristine;")
+	YRP:msg("db", "Pristine: " .. tostring(pristine))
+	timer.Create(
+		"retryLoadDatabase",
+		10,
+		1,
+		function()
+			db_init_database()
+			timer.Remove("retryLoadDatabase")
+		end
+	)
+end
+
+local function _IsReady()
 	hook.Run("YRP_SQLDBREADY")
 end
 
-local function NotReadyMessage(msg, ...)
+local function _NotReadyMessage(msg, ...)
 	if not ready then
-		print(">>> [NotReadyMessage]", msg, ...)
+		print(">>> [_NotReadyMessage]", msg, ...)
 	end
 
 	return not ready
 end
 
-local function disk_full(error)
+local function _YRP_Disk_Full(error)
 	if string.find(error, "database or disk is full", 1, true) then
 		if SERVER then
 			PrintMessage(HUD_PRINTCENTER, "database or disk is full, please make more space!")
@@ -29,7 +57,7 @@ local function disk_full(error)
 	end
 end
 
-function YRP_SQL_Last_Error()
+local function _YRP_SQL_Last_Error()
 	if GetSQLMode() == 0 then
 		local err = tostring(sql.LastError()) or ""
 		MsgC(Color(255, 0, 0), "DATABASE HAS ERROR: " .. err .. "\n")
@@ -47,7 +75,7 @@ function YRP_SQL_Last_Error()
 		timer.Simple(
 			3,
 			function()
-				disk_full(err)
+				_YRP_Disk_Full(err)
 			end
 		)
 
@@ -58,7 +86,7 @@ function YRP_SQL_Last_Error()
 
 			return err or ""
 		else
-			YRP:msg("db", "[YRP_SQL_Last_Error] CURRENTLY NOT CONNECTED TO MYSQL SERVER")
+			YRP:msg("db", "[_YRP_SQL_Last_Error] CURRENTLY NOT CONNECTED TO MYSQL SERVER")
 
 			return ""
 		end
@@ -68,7 +96,7 @@ function YRP_SQL_Last_Error()
 end
 
 function YRP_SQL_Show_Last_Error()
-	local err = YRP_SQL_Last_Error()
+	local err = _YRP_SQL_Last_Error()
 	if err == "" then return "" end
 
 	return " LastError: " .. err
@@ -108,21 +136,6 @@ function YRP_DB_INT(int)
 	end
 end
 
-local _show_db_if_not_empty = false
-function YRP_DB_IS_EMPTY(db_name)
-	local _tmp = YRP_SQL_SELECT(db_name, "*", nil)
-	if YRPWORKED(_tmp, db_name .. " is empty!") then
-		if _show_db_if_not_empty then
-			YRP:msg("db", "[YRP_DB_IS_EMPTY] " .. db_name)
-			printTab(_tmp, db_name)
-		end
-
-		return false
-	else
-		return true
-	end
-end
-
 function YRP_DB_WORKED(query)
 	if query == nil then
 		return "worked"
@@ -131,10 +144,6 @@ function YRP_DB_WORKED(query)
 	end
 end
 
--- NEW SQL API
-YRPSQL = YRPSQL or {}
-YRPSQL.mysql_worked = YRPSQL.mysql_worked or false
-YRPSQL.int_mode = YRPSQL.int_mode or 0
 function GetSQLMode()
 	return tonumber(YRPSQL.int_mode)
 end
@@ -163,7 +172,7 @@ function SetSQLMode(sqlmode, force)
 end
 
 function YRP_SQL_TABLE_EXISTS(db_table, from)
-	if NotReadyMessage("YRP_SQL_TABLE_EXISTS", db_table, from) then return false end
+	if _NotReadyMessage("YRP_SQL_TABLE_EXISTS", db_table, from) then return false end
 	-- YRP:msg( "db", "YRP_SQL_TABLE_EXISTS( " .. tostring( db_table) .. " )" )
 	if GetSQLMode() == 0 then
 		local _r = YRP_SQL_SELECT(db_table, "*", nil)
@@ -185,7 +194,7 @@ function YRP_SQL_TABLE_EXISTS(db_table, from)
 end
 
 function YRP_SQL_QUERY(query)
-	--NotReadyMessage("YRP_SQL_QUERY")
+	--_NotReadyMessage("YRP_SQL_QUERY")
 	query = tostring(query)
 	--YRP:msg( "db", "YRP_SQL_QUERY( " .. tostring(query) .. " )" )
 	if not string.find(query, ";", 1, true) then
@@ -234,7 +243,7 @@ function YRP_SQL_QUERY(query)
 end
 
 function YRP_SQL_DROP_TABLE(db_table)
-	if NotReadyMessage("YRP_SQL_DROP_TABLE", db_table) then return false end
+	if _NotReadyMessage("YRP_SQL_DROP_TABLE", db_table) then return false end
 	local _result = YRP_SQL_QUERY("DROP TABLE " .. db_table .. ";")
 	if _result ~= nil then
 		YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_DROP_TABLE " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. " )" .. YRP_SQL_Show_Last_Error())
@@ -244,7 +253,7 @@ function YRP_SQL_DROP_TABLE(db_table)
 end
 
 function YRP_SQL_CREATE_TABLE(db_table)
-	if NotReadyMessage("YRP_SQL_CREATE_TABLE", db_table) then return false end
+	if _NotReadyMessage("YRP_SQL_CREATE_TABLE", db_table) then return false end
 	YRP:msg("db", "Create Table ( " .. tostring(db_table) .. " )")
 	if GetSQLMode() == 0 then
 		local _q = "CREATE TABLE "
@@ -273,7 +282,7 @@ function YRP_SQL_CREATE_TABLE(db_table)
 end
 
 function YRP_SQL_SELECT(db_table, db_columns, db_where, db_extra)
-	if NotReadyMessage("YRP_SQL_SELECT", db_table, db_columns, db_where, db_extra) then return false end
+	if _NotReadyMessage("YRP_SQL_SELECT", db_table, db_columns, db_where, db_extra) then return false end
 	--YRP:msg( "db", "YRP_SQL_SELECT( " .. tostring( db_table) .. ", " .. tostring( db_columns) .. ", " .. tostring( db_where) .. " )" )
 	if GetSQLMode() == 0 then
 		local _q = "SELECT "
@@ -317,7 +326,7 @@ function YRP_SQL_SELECT(db_table, db_columns, db_where, db_extra)
 end
 
 function YRP_SQL_UPDATE(db_table, db_sets, db_where, sqlite)
-	if NotReadyMessage("YRP_SQL_UPDATE", db_table) then return false end
+	if _NotReadyMessage("YRP_SQL_UPDATE", db_table) then return false end
 	if db_sets == nil then
 		YRP:msg("error", "YRP_SQL_UPDATE-ERROR db_sets == nil: " .. tostring(db_table))
 
@@ -382,7 +391,7 @@ function YRP_SQL_UPDATE(db_table, db_sets, db_where, sqlite)
 end
 
 function YRP_SQL_INSERT_INTO(db_table, db_columns, db_values)
-	if NotReadyMessage("YRP_SQL_INSERT_INTO", db_table) then return false end
+	if _NotReadyMessage("YRP_SQL_INSERT_INTO", db_table) then return false end
 	YRP:msg("debug", "YRP_SQL_INSERT_INTO( " .. tostring(db_table) .. " | " .. tostring(db_columns) .. " | " .. tostring(db_values) .. " )")
 	if GetSQLMode() == 0 then
 		if YRP_SQL_TABLE_EXISTS(db_table, "YRP_SQL_INSERT_INTO") then
@@ -420,7 +429,7 @@ function YRP_SQL_INSERT_INTO(db_table, db_columns, db_values)
 end
 
 function YRP_SQL_INSERT_INTO_DEFAULTVALUES(db_table)
-	if NotReadyMessage("YRP_SQL_INSERT_INTO_DEFAULTVALUES", db_table) then return false end
+	if _NotReadyMessage("YRP_SQL_INSERT_INTO_DEFAULTVALUES", db_table) then return false end
 	--YRP:msg( "db", "YRP_SQL_INSERT_INTO_DEFAULTVALUES( " .. tostring( db_table) .. " )" )
 	if GetSQLMode() == 0 then
 		if YRP_SQL_TABLE_EXISTS(db_table, "YRP_SQL_INSERT_INTO_DEFAULTVALUES") then
@@ -447,7 +456,7 @@ function YRP_SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 end
 
 function YRP_SQL_DELETE_FROM(db_table, db_where)
-	if NotReadyMessage("YRP_SQL_DELETE_FROM", db_table) then return false end
+	if _NotReadyMessage("YRP_SQL_DELETE_FROM", db_table) then return false end
 	if GetSQLMode() == 0 then
 		if YRP_SQL_TABLE_EXISTS(db_table, "YRP_SQL_DELETE_FROM") then
 			local _q = "DELETE FROM "
@@ -482,7 +491,7 @@ function YRP_SQL_DELETE_FROM(db_table, db_where)
 end
 
 function YRP_SQL_CHECK_IF_COLUMN_EXISTS(db_table, column_name)
-	if NotReadyMessage("YRP_SQL_CHECK_IF_COLUMN_EXISTS", db_table) then return false end
+	if _NotReadyMessage("YRP_SQL_CHECK_IF_COLUMN_EXISTS", db_table) then return false end
 	--YRP:msg( "db", "YRP_SQL_CHECK_IF_COLUMN_EXISTS( " .. tostring( db_table) .. ", " .. tostring( column_name) .. " )" )
 	if GetSQLMode() == 0 then
 		local _result = YRP_SQL_SELECT(db_table, column_name, nil)
@@ -502,7 +511,7 @@ function YRP_SQL_CHECK_IF_COLUMN_EXISTS(db_table, column_name)
 end
 
 function YRP_SQL_HAS_COLUMN(db_table, column_name)
-	if NotReadyMessage("YRP_SQL_HAS_COLUMN", db_table) then return false end
+	if _NotReadyMessage("YRP_SQL_HAS_COLUMN", db_table) then return false end
 	if YRPSQL.schema then
 		local _r = YRP_SQL_QUERY("SHOW COLUMNS FROM " .. YRPSQL.schema .. "." .. tostring(db_table) .. " LIKE '" .. column_name .. "';")
 
@@ -515,7 +524,7 @@ function YRP_SQL_HAS_COLUMN(db_table, column_name)
 end
 
 function YRP_SQL_ADD_COLUMN(db_table, column_name, datatype)
-	if NotReadyMessage("YRP_SQL_ADD_COLUMN", db_table) then return false end
+	if _NotReadyMessage("YRP_SQL_ADD_COLUMN", db_table) then return false end
 	if GetSQLMode() == 0 then
 		local _q = "ALTER TABLE " .. db_table .. " ADD " .. column_name .. " " .. datatype .. ";"
 		local _r = YRP_SQL_QUERY(_q)
@@ -548,6 +557,27 @@ function YRP_SQL_ADD_COLUMN(db_table, column_name, datatype)
 		end
 
 		return _r
+	end
+end
+
+function YRP_SQL_INIT_DATABASE(db_name, sqlite)
+	if _NotReadyMessage("YRP_SQL_INIT_DATABASE", db_name, sqlite) then return false end
+	--YRP:msg( "db", "YRP_SQL_INIT_DATABASE( " .. tostring( db_name) .. " )" )
+	if GetSQLMode() == 0 or sqlite then
+		if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
+			local _result = YRP_SQL_CREATE_TABLE(db_name)
+			if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") and _YRP_SQL_Last_Error() ~= "" then
+				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INIT_DATABASE " .. tostring(db_name) .. " FAILED INIT TABLE" .. YRP_SQL_Show_Last_Error())
+				_YRPTryRepairDatabase(db_name)
+			end
+		end
+	elseif GetSQLMode() == 1 then
+		if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
+			local _result = YRP_SQL_CREATE_TABLE(db_name)
+			if not YRP_SQL_TABLE_EXISTS(db_name) and _YRP_SQL_Last_Error() ~= "" then
+				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INIT_DATABASE " .. tostring(db_name) .. " FAILED INIT TABLE" .. YRP_SQL_Show_Last_Error())
+			end
+		end
 	end
 end
 
@@ -631,7 +661,7 @@ timer.Simple(
 							SetSQLMode(1)
 							ready = true
 							db_init_database()
-							IsReady()
+							_IsReady()
 						end
 
 						--YRP_SQL_QUERY( "SET @@global.sql_mode='MYSQL40'" )
@@ -642,7 +672,7 @@ timer.Simple(
 							SetSQLMode(0, true)
 							ready = true
 							db_init_database()
-							IsReady()
+							_IsReady()
 						end
 
 						YRP:msg("db", ">>> Connect to MYSQL Server, if stuck => connection info is wrong or server offline! ( default mysql port: 3306)")
@@ -652,7 +682,7 @@ timer.Simple(
 				else
 					ready = true
 					db_init_database()
-					IsReady()
+					_IsReady()
 				end
 			end
 
@@ -662,47 +692,3 @@ timer.Simple(
 		YRP:msg("db", "Current SQL Mode: " .. GetSQLModeName())
 	end
 )
-
-function YRPTryRepairDatabase()
-	YRP:msg("db", "ERROR!!! >> retry Load Database in 10sec <<")
-	YRP:msg("db", "ERROR!!! >> Your database is maybe broken! <<")
-	if timer.Exists("retryLoadDatabase") then
-		timer.Remove("retryLoadDatabase")
-	end
-
-	local integrity_check = sql.Query("pragma integrity_check;")
-	YRP:msg("db", "Integrity_check: " .. tostring(integrity_check))
-	local nodes = sql.Query("reindex nodes;")
-	YRP:msg("db", "Nodes: " .. tostring(nodes))
-	local pristine = sql.Query("reindex pristine;")
-	YRP:msg("db", "Pristine: " .. tostring(pristine))
-	timer.Create(
-		"retryLoadDatabase",
-		10,
-		1,
-		function()
-			db_init_database()
-			timer.Remove("retryLoadDatabase")
-		end
-	)
-end
-
-function YRP_SQL_INIT_DATABASE(db_name, sqlite)
-	--YRP:msg( "db", "YRP_SQL_INIT_DATABASE( " .. tostring( db_name) .. " )" )
-	if GetSQLMode() == 0 or sqlite then
-		if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
-			local _result = YRP_SQL_CREATE_TABLE(db_name)
-			if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
-				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INIT_DATABASE " .. tostring(db_name) .. " FAILED INIT TABLE" .. YRP_SQL_Show_Last_Error())
-				YRPTryRepairDatabase(db_name)
-			end
-		end
-	elseif GetSQLMode() == 1 then
-		if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
-			local _result = YRP_SQL_CREATE_TABLE(db_name)
-			if not YRP_SQL_TABLE_EXISTS(db_name) then
-				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INIT_DATABASE " .. tostring(db_name) .. " FAILED INIT TABLE" .. YRP_SQL_Show_Last_Error())
-			end
-		end
-	end
-end
