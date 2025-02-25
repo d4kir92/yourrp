@@ -825,7 +825,7 @@ net.Receive(
 							visible2.uniqueID = group.uniqueID
 							visible2.lforce = false
 							ea[group.uniqueID].visible2 = YRPDCheckBox(visible2)
-							local col2 = YRPCreateD("DPanelList", ea.background, YRP:ctr(800 + 24), ea.background:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
+							local col2 = YRPCreateD("DPanelList", ea.background, YRP:ctr(1400 + 24), ea.background:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
 							col2:EnableVerticalScrollbar(true)
 							col2:SetSpacing(YRP:ctr(20))
 							local sbar = col2.VBar
@@ -967,15 +967,15 @@ net.Receive(
 							hr.parent = ea.equipment:GetContent()
 							DHr(hr)
 							-- Ammunation
-							local ammobg = YRPCreateD("YPanel", col2, YRP:ctr(800), YRP:ctr(850), 0, 0)
-							local ammoheader = YRPCreateD("YLabel", ammobg, YRP:ctr(800), YRP:ctr(50), 0, 0)
+							local ammobg = YRPCreateD("YPanel", col2, YRP:ctr(1400), YRP:ctr(850), 0, 0)
+							local ammoheader = YRPCreateD("YLabel", ammobg, YRP:ctr(1400), YRP:ctr(50), 0, 0)
 							ammoheader:SetText("LID_ammo")
 							function ammoheader:Paint(pw, ph)
 								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 								draw.SimpleText(YRP:trans(self:GetText()), "Y_18_700", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 							end
 
-							ammolist = YRPCreateD("DPanelList", ammobg, YRP:ctr(800 - 23 - 20), YRP:ctr(800), 0, YRP:ctr(50))
+							ammolist = YRPCreateD("DPanelList", ammobg, YRP:ctr(1400 - 23 - 20), YRP:ctr(800), 0, YRP:ctr(50))
 							ammolist:SetSpacing(2)
 							ammolist:EnableVerticalScrollbar(true)
 							local sbar2 = ammolist.VBar
@@ -1019,15 +1019,15 @@ net.Receive(
 							end
 
 							for i, v in pairs(game.GetAmmoTypes()) do
-								local abg = YRPCreateD("YPanel", nil, YRP:ctr(800), YRP:ctr(50), 0, 0)
-								local ahe = YRPCreateD("YLabel", abg, YRP:ctr(400), YRP:ctr(50), 0, 0)
+								local abg = YRPCreateD("YPanel", nil, YRP:ctr(1400), YRP:ctr(50), 0, 0)
+								local ahe = YRPCreateD("YLabel", abg, YRP:ctr(1000), YRP:ctr(50), 0, 0)
 								ahe:SetText(v)
 								function ahe:Paint(pw, ph)
 									draw.RoundedBox(0, 0, 0, pw, ph, Color(100, 100, 255))
 									draw.SimpleText(self:GetText(), "Y_18_700", ph / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 								end
 
-								local ava = YRPCreateD("DNumberWang", abg, YRP:ctr(400), YRP:ctr(50), YRP:ctr(400), 0)
+								local ava = YRPCreateD("DNumberWang", abg, YRP:ctr(400), YRP:ctr(50), YRP:ctr(1000), 0)
 								ava:SetDecimals(0)
 								ava:SetMin(0)
 								ava:SetMax(999)
@@ -1496,17 +1496,19 @@ net.Receive(
 						"nws_yrp_get_role_customflags",
 						function()
 							local tab_cf = net.ReadTable()
-							for i, v in pairs(tab_cf) do
-								v.doclick = function()
-									net.Start("nws_yrp_rem_role_flag")
-									net.WriteInt(role.uniqueID, 32)
-									net.WriteInt(v.uniqueID, 32)
-									net.SendToServer()
+							if tab_cf then
+								for i, v in pairs(tab_cf) do
+									v.doclick = function()
+										net.Start("nws_yrp_rem_role_flag")
+										net.WriteInt(role.uniqueID, 32)
+										net.WriteInt(v.uniqueID, 32)
+										net.SendToServer()
+									end
 								end
-							end
 
-							if ea[role.uniqueID].custom_flags.dpl.AddLines ~= nil then
-								ea[role.uniqueID].custom_flags.dpl:AddLines(tab_cf)
+								if ea[role.uniqueID].custom_flags.dpl.AddLines ~= nil then
+									ea[role.uniqueID].custom_flags.dpl:AddLines(tab_cf)
+								end
 							end
 						end
 					)
