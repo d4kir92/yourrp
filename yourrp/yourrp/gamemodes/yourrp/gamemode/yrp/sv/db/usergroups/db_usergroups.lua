@@ -137,6 +137,8 @@ hook.Add(
 					table.insert(vals, "'all'")
 					table.insert(cols, "int_position")
 					table.insert(vals, 2)
+					table.insert(cols, "bool_usergroups")
+					table.insert(vals, 1)
 					for i, v in pairs(bos) do
 						if i == "bool_removeable" then
 							table.insert(cols, i)
@@ -155,6 +157,7 @@ hook.Add(
 						local vals = {}
 						vals["string_name"] = "superadmin"
 						vals["string_tools"] = "all"
+						vals["bool_usergroups"] = 1
 						vals["int_position"] = 2
 						for i, v in pairs(bos) do
 							if i == "bool_removeable" then
@@ -288,9 +291,9 @@ function GetULXUserGroups()
 		local tab = YRP_SQL_SELECT("DAM_UGS", "*", nil)
 		if tab then
 			for i, v in pairs(tab) do
-				local ug = YRP_SQL_SELECT("yrp_usergroups", "*", "string_name = '" .. string.lower(v.name) .. "'")
+				local ug = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. string.lower(v.name) .. "'")
 				if ug == nil then
-					YRP_SQL_INSERT_INTO("yrp_usergroups", "string_name", "'" .. string.lower(v.name) .. "'")
+					YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name", "'" .. string.lower(v.name) .. "'")
 					SortUserGroups()
 				end
 			end
@@ -303,9 +306,9 @@ function GetULXUserGroups()
 	f = string.Explode("\n", f)
 	f = ConvertToMains(f)
 	for i, v in pairs(f) do
-		local dbug = YRP_SQL_SELECT("yrp_usergroups", "*", "string_name = '" .. v .. "'")
+		local dbug = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. v .. "'")
 		if dbug == nil then
-			YRP_SQL_INSERT_INTO("yrp_usergroups", "string_name", "'" .. v .. "'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name", "'" .. v .. "'")
 			SortUserGroups()
 		end
 	end
