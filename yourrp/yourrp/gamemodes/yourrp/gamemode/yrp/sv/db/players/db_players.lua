@@ -6,7 +6,7 @@ function YRPSaveClients(str)
 end
 
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_players",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")

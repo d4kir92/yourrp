@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_usergroups"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_usergroups",
 	function()
 		local sts = {

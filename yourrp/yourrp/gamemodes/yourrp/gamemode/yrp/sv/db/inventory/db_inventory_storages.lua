@@ -1,7 +1,7 @@
 --Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local DATABASE_NAME = "yrp_inventory_storages"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_inventory_storages",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1")

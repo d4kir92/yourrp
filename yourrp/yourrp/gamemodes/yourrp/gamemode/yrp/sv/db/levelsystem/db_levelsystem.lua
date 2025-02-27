@@ -8,7 +8,7 @@ function YRP:XpPerMinute()
 end
 
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GAMEPLAY",
 	"yrp_levelsystem",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level_min", "INT DEFAULT 0")

@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_dealers"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GAMEPLAY",
 	"yrp_dealers",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'Unnamed dealer'")

@@ -5,7 +5,7 @@ YRP:AddNetworkString("nws_yrp_removeVehicleOwner")
 YRP:AddNetworkString("nws_yrp_getVehicleInfo")
 local DATABASE_NAME = "yrp_vehicles"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GAMEPLAY",
 	"yrp_vehicles",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "keynr", "TEXT DEFAULT '-1'")

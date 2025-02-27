@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DBNotes = "yrp_jail_notes"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_jail_notes",
 	function()
 		YRP_SQL_ADD_COLUMN(DBNotes, "SteamID", "TEXT DEFAULT ''")
@@ -50,7 +50,7 @@ net.Receive(
 
 local DATABASE_NAME = "yrp_jail"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_jail",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")

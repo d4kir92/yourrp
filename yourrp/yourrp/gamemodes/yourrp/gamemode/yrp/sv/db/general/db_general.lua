@@ -4,7 +4,7 @@
 local DATABASE_NAME = "yrp_general"
 local yrp_general = {}
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_general",
 	function()
 		--[[ Server Settings ]]

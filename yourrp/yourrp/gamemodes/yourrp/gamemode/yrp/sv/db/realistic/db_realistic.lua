@@ -5,7 +5,7 @@ local DATABASE_NAME = "yrp_realistic"
 local yrp_realistic = {}
 local HANDLER_REALISTIC = {}
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GAMEPLAY",
 	"yrp_realistic",
 	function()
 		--YRP_SQL_DROP_TABLE(DATABASE_NAME)

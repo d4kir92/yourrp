@@ -13,7 +13,7 @@ local HANDLER_GROUPSANDROLES = {}
 HANDLER_GROUPSANDROLES["roleslist"] = {}
 HANDLER_GROUPSANDROLES["roles"] = {}
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_ply_roles",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'NewRole'")

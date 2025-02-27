@@ -7,7 +7,7 @@ HANDLER_GROUPSANDROLES["groupslist"] = {}
 HANDLER_GROUPSANDROLES["groups"] = {}
 HANDLER_GROUPSANDROLES["roles"] = {}
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_ply_groups",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'GroupName'")

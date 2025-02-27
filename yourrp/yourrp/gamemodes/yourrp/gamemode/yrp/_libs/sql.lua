@@ -5,6 +5,32 @@ local _show_db_if_not_empty = false
 YRPSQL = YRPSQL or {}
 YRPSQL.mysql_worked = YRPSQL.mysql_worked or false
 YRPSQL.int_mode = YRPSQL.int_mode or 0
+local function YRP_MYSQL_CHECK_OUTDATED()
+	if system.IsLinux() and (not file.Exists("bin/gmsv_mysqloo_linux.dll", "LUA") or not file.Exists("bin/gmsv_mysqloo_linux64.dll", "LUA")) then
+		if not file.Exists("bin/gmsv_mysqloo_linux.dll", "LUA") then
+			MsgC(Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_linux.dll", "\n")
+		end
+
+		if not file.Exists("bin/gmsv_mysqloo_linux64.dll", "LUA") then
+			MsgC(Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_linux64.dll", "\n")
+		end
+
+		return true
+	elseif system.IsWindows() and (not file.Exists("bin/gmsv_mysqloo_win32.dll", "LUA") or not file.Exists("bin/gmsv_mysqloo_win64.dll", "LUA")) then
+		if not file.Exists("bin/gmsv_mysqloo_win32.dll", "LUA") then
+			MsgC(Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_win32.dll", "\n")
+		end
+
+		if not file.Exists("bin/gmsv_mysqloo_win64.dll", "LUA") then
+			MsgC(Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_win64.dll", "\n")
+		end
+
+		return true
+	end
+
+	return false
+end
+
 local function _YRPTryRepairDatabase()
 	YRP:msg("db", "ERROR!!! >> retry Load Database in 10sec <<")
 	YRP:msg("db", "ERROR!!! >> Your database is maybe broken! <<")
@@ -30,7 +56,17 @@ local function _YRPTryRepairDatabase()
 end
 
 local function _IsReady()
-	hook.Run("YRP_SQLDBREADY")
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOAD TABLES GENERAL (Can Take Some Time..)\n")
+	hook.Run("YRP_SQLDBREADY_GENERAL")
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOAD TABLES GAMEPLAY (Can Take Some Time..)\n")
+	hook.Run("YRP_SQLDBREADY_GAMEPLAY")
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOAD TABLES VISUAL (Can Take Some Time..)\n")
+	hook.Run("YRP_SQLDBREADY_VISUAL")
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOAD TABLES COMMUNICATION (Can Take Some Time..)\n")
+	hook.Run("YRP_SQLDBREADY_COMMUNICATION")
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOAD TABLES INTEGRATION (Can Take Some Time..)\n")
+	hook.Run("YRP_SQLDBREADY_INTEGRATION")
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOADED TABLES.\n")
 end
 
 local function _NotReadyMessage(msg, ...)
@@ -81,6 +117,7 @@ local function _YRP_SQL_Last_Error(que, from)
 
 		return err or ""
 	elseif GetSQLMode() == 1 then
+		YRP_MYSQL_CHECK_OUTDATED()
 		if que == nil then
 			YRP:msg("error", "[_YRP_SQL_Last_Error] MYSQL MISSING QUERY FOR LAST ERROR")
 
@@ -644,27 +681,7 @@ timer.Simple(
 						return
 					end
 
-					if system.IsLinux() and (not file.Exists("bin/gmsv_mysqloo_linux.dll", "LUA") or not file.Exists("bin/gmsv_mysqloo_linux64.dll", "LUA")) then
-						if not file.Exists("bin/gmsv_mysqloo_linux.dll", "LUA") then
-							MsgC(Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_linux.dll", "\n")
-						end
-
-						if not file.Exists("bin/gmsv_mysqloo_linux64.dll", "LUA") then
-							MsgC(Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_linux64.dll", "\n")
-						end
-
-						YRPSQL.outdated = true
-					elseif system.IsWindows() and (not file.Exists("bin/gmsv_mysqloo_win32.dll", "LUA") or not file.Exists("bin/gmsv_mysqloo_win64.dll", "LUA")) then
-						if not file.Exists("bin/gmsv_mysqloo_win32.dll", "LUA") then
-							MsgC(Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_win32.dll", "\n")
-						end
-
-						if not file.Exists("bin/gmsv_mysqloo_win64.dll", "LUA") then
-							MsgC(Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_win64.dll", "\n")
-						end
-
-						YRPSQL.outdated = true
-					else
+					if not YRP_MYSQL_CHECK_OUTDATED() then
 						MsgC(Color(0, 255, 0), "LOAD MODULE MYSQLOO!\n")
 						require("mysqloo")
 						if mysqloo.VERSION ~= "9" or not mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1 then
@@ -673,6 +690,8 @@ timer.Simple(
 							MsgC(Color(86, 156, 214), "https://github.com/syl0r/MySQLOO/releases\n")
 							YRPSQL.outdated = true
 						end
+					else
+						YRPSQL.outdated = true
 					end
 
 					if not YRPSQL.outdated then

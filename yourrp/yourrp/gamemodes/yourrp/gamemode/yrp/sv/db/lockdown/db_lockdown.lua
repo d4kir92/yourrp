@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_lockdown"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GAMEPLAY",
 	"yrp_lockdown",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_lockdowntext", "TEXT DEFAULT 'LockdownText'")

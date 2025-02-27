@@ -5,7 +5,7 @@ local DATABASE_NAME = "yrp_logs"
 local showafter = 60 * 60 * 2
 local deleteafter = 60 * 60 * 12
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_logs",
 	function()
 		--YRP_SQL_DROP_TABLE(DATABASE_NAME)

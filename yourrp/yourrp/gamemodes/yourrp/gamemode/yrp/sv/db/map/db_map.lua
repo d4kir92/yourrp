@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_" .. GetMapNameDB()
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_MAPNAME",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "position", "TEXT DEFAULT ''")

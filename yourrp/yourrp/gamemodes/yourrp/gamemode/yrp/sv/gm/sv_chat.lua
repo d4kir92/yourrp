@@ -561,7 +561,7 @@ local oldDistLocal = 0
 local distLocal = 0
 --local oldtext = text
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_COMMUNICATION",
 	"yrp_CHAT_PLAYERSAY",
 	function()
 		timer.Simple(

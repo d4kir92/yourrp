@@ -4,7 +4,7 @@
 -- #BLACKLIST
 local DATABASE_NAME = "yrp_blacklist"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_blacklist",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")

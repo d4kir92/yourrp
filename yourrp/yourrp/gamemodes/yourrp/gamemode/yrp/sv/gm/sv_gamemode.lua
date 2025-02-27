@@ -1213,7 +1213,7 @@ function GenerateVoiceTable()
 end
 
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_COMMUNICATION",
 	"yrp_voice_channels",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
@@ -1711,7 +1711,7 @@ net.Receive(
 )
 
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_COMMUNICATION",
 	"yrp_VOICE_PlayerCanHearPlayersVoice",
 	function()
 		timer.Simple(

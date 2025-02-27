@@ -4,7 +4,7 @@
 -- #buymenu #shops
 local DATABASE_NAME = "yrp_shop_items"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GAMEPLAY",
 	"yrp_shop_items",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'UNNAMED'")

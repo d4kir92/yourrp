@@ -4,7 +4,7 @@
 -- #WHITELISTDATABASE
 local DATABASE_NAME = "yrp_role_whitelist"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_GENERAL",
 	"yrp_role_whitelist",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")

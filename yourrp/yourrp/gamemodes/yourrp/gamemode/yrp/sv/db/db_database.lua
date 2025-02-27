@@ -172,7 +172,7 @@ include("specializations/db_specializations.lua")
 -- DarkRP
 local DATABASE_NAME = "yrp_darkrp"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_INTEGRATION",
 	"yrp_darkrp",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")

@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_design"
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_VISUAL",
 	"yrp_design",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ''")

@@ -5,7 +5,7 @@
 local DATABASE_NAME = "yrp_chat_channels"
 local yrp_chat_channels = {}
 hook.Add(
-	"YRP_SQLDBREADY",
+	"YRP_SQLDBREADY_COMMUNICATION",
 	"yrp_chat_channels",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
