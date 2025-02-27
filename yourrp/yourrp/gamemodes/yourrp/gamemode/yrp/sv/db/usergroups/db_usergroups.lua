@@ -137,8 +137,6 @@ hook.Add(
 					table.insert(vals, "'all'")
 					table.insert(cols, "int_position")
 					table.insert(vals, 2)
-					table.insert(cols, "bool_usergroups")
-					table.insert(vals, 1)
 					for i, v in pairs(bos) do
 						if i == "bool_removeable" then
 							table.insert(cols, i)
@@ -157,7 +155,6 @@ hook.Add(
 						local vals = {}
 						vals["string_name"] = "superadmin"
 						vals["string_tools"] = "all"
-						vals["bool_usergroups"] = 1
 						vals["int_position"] = 2
 						for i, v in pairs(bos) do
 							if i == "bool_removeable" then

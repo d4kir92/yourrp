@@ -57,7 +57,7 @@ local function _YRP_Disk_Full(error)
 	end
 end
 
-local function _YRP_SQL_Last_Error()
+local function _YRP_SQL_Last_Error(que, from)
 	if GetSQLMode() == 0 then
 		local err = tostring(sql.LastError()) or ""
 		MsgC(Color(255, 0, 0), "DATABASE HAS ERROR: " .. err .. "\n")
@@ -81,8 +81,14 @@ local function _YRP_SQL_Last_Error()
 
 		return err or ""
 	elseif GetSQLMode() == 1 then
+		if que == nil then
+			YRP:msg("error", "[_YRP_SQL_Last_Error] MYSQL MISSING QUERY FOR LAST ERROR")
+
+			return ""
+		end
+
 		if YRPSQL.db ~= nil then
-			local err = YRPSQL.db:error()
+			local err = que:error()
 
 			return err or ""
 		else
@@ -95,8 +101,8 @@ local function _YRP_SQL_Last_Error()
 	return ""
 end
 
-function YRP_SQL_Show_Last_Error()
-	local err = _YRP_SQL_Last_Error()
+function YRP_SQL_Show_Last_Error(que, from)
+	local err = _YRP_SQL_Last_Error(que, from)
 	if err == "" then return "" end
 
 	return " LastError: " .. err
@@ -228,28 +234,36 @@ function YRP_SQL_QUERY(query)
 			if istable(_test) then
 				if #_test == 0 then return nil end --YRP:msg( "db", "YRP_SQL_QUERY TABLE EMPTY 1" )
 
-				return _test
+				return _test, que
 			elseif _test == nil then
-				return false
+				return false, que
 			else --YRP:msg( "db", "YRP_SQL_QUERY TABLE EMPTY 2" )
 				YRP:msg("db", "YRP_SQL_QUERY TABLE MISSING ( " .. tostring(_test) .. " )")
 
-				return false
+				return false, que
 			end
 		else
 			YRP:msg("db", "CURRENTLY NOT CONNECTED TO MYSQL SERVER")
 		end
 	end
+
+	return nil
 end
 
 function YRP_SQL_DROP_TABLE(db_table)
 	if _NotReadyMessage("YRP_SQL_DROP_TABLE", db_table) then return false end
-	local _result = YRP_SQL_QUERY("DROP TABLE " .. db_table .. ";")
+	local _result, que = YRP_SQL_QUERY("DROP TABLE " .. db_table .. ";")
 	if _result ~= nil then
 		YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_DROP_TABLE " .. tostring(db_table) .. " failed! (result: " .. tostring(_result) .. " )" .. YRP_SQL_Show_Last_Error())
 	else
-		YRP:msg("db", "DROPPED " .. tostring(db_table) .. " TABLE" .. YRP_SQL_Show_Last_Error())
+		if GetSQLMode() == 0 then
+			YRP:msg("db", "DROPPED " .. tostring(db_table) .. " TABLE" .. YRP_SQL_Show_Last_Error())
+		elseif GetSQLMode() == 1 then
+			YRP:msg("db", "DROPPED " .. tostring(db_table) .. " TABLE" .. YRP_SQL_Show_Last_Error(que, "DROP_TABLE"))
+		end
 	end
+
+	return _result, que
 end
 
 function YRP_SQL_CREATE_TABLE(db_table)
@@ -323,6 +337,8 @@ function YRP_SQL_SELECT(db_table, db_columns, db_where, db_extra)
 			return false
 		end
 	end
+
+	return nil
 end
 
 function YRP_SQL_UPDATE(db_table, db_sets, db_where, sqlite)
@@ -380,14 +396,18 @@ function YRP_SQL_UPDATE(db_table, db_sets, db_where, sqlite)
 			end
 
 			_q = _q .. ";"
-			local res = YRP_SQL_QUERY(_q)
+			local res, que = YRP_SQL_QUERY(_q)
 			if res ~= nil then
-				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. YRP_SQL_Show_Last_Error())
+				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. YRP_SQL_Show_Last_Error(que, "UPDATE"))
 			end
+
+			return res, que
 		else
 			YRP:msg("note", "[YRP_SQL_UPDATE] " .. GetSQLModeName() .. ": " .. "SCHEMA IS BROKEN")
 		end
 	end
+
+	return nil
 end
 
 function YRP_SQL_INSERT_INTO(db_table, db_columns, db_values)
@@ -418,14 +438,16 @@ function YRP_SQL_INSERT_INTO(db_table, db_columns, db_values)
 			_q = _q .. " ) VALUES ( "
 			_q = _q .. db_values
 			_q = _q .. " );"
-			local _result = YRP_SQL_QUERY(_q)
+			local _result, que = YRP_SQL_QUERY(_q)
 			if _result ~= nil then
-				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. YRP_SQL_Show_Last_Error())
+				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. YRP_SQL_Show_Last_Error(que, "INSERTINTO"))
 			end
 
-			return _result
+			return _result, que
 		end
 	end
+
+	return nil
 end
 
 function YRP_SQL_INSERT_INTO_DEFAULTVALUES(db_table)
@@ -445,14 +467,16 @@ function YRP_SQL_INSERT_INTO_DEFAULTVALUES(db_table)
 		end
 	elseif GetSQLMode() == 1 then
 		if YRP_SQL_TABLE_EXISTS(db_table, "YRP_SQL_INSERT_INTO_DEFAULTVALUES") then
-			local _result = YRP_SQL_QUERY("INSERT INTO " .. db_table .. " VALUES();")
+			local _result, que = YRP_SQL_QUERY("INSERT INTO " .. db_table .. " VALUES();")
 			if _result ~= nil then
-				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO_DEFAULTVALUES failed! result: " .. tostring(_result) .. YRP_SQL_Show_Last_Error())
+				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INSERT_INTO_DEFAULTVALUES failed! result: " .. tostring(_result) .. YRP_SQL_Show_Last_Error(que, "INSERTINTO_DEFAULTVALUE"))
 			end
 
-			return _result
+			return _result, que
 		end
 	end
+
+	return nil
 end
 
 function YRP_SQL_DELETE_FROM(db_table, db_where)
@@ -482,12 +506,16 @@ function YRP_SQL_DELETE_FROM(db_table, db_where)
 				_q = _q .. ";"
 			end
 
-			local _result = YRP_SQL_QUERY(_q)
+			local _result, que = YRP_SQL_QUERY(_q)
 			if _result ~= nil then
-				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. YRP_SQL_Show_Last_Error())
+				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_DELETE_FROM: has failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. YRP_SQL_Show_Last_Error(que, "DELETEFROM"))
 			end
+
+			return _result, que
 		end
 	end
+
+	return nil
 end
 
 function YRP_SQL_CHECK_IF_COLUMN_EXISTS(db_table, column_name)
@@ -508,6 +536,8 @@ function YRP_SQL_CHECK_IF_COLUMN_EXISTS(db_table, column_name)
 			return true
 		end
 	end
+
+	return nil
 end
 
 function YRP_SQL_HAS_COLUMN(db_table, column_name)
@@ -521,6 +551,8 @@ function YRP_SQL_HAS_COLUMN(db_table, column_name)
 
 		return false
 	end
+
+	return nil
 end
 
 function YRP_SQL_ADD_COLUMN(db_table, column_name, datatype)
@@ -558,6 +590,8 @@ function YRP_SQL_ADD_COLUMN(db_table, column_name, datatype)
 
 		return _r
 	end
+
+	return false
 end
 
 function YRP_SQL_INIT_DATABASE(db_name, sqlite)
@@ -570,15 +604,21 @@ function YRP_SQL_INIT_DATABASE(db_name, sqlite)
 				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INIT_DATABASE " .. tostring(db_name) .. " FAILED INIT TABLE" .. YRP_SQL_Show_Last_Error())
 				_YRPTryRepairDatabase(db_name)
 			end
+
+			return _result
 		end
 	elseif GetSQLMode() == 1 then
 		if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
-			local _result = YRP_SQL_CREATE_TABLE(db_name)
+			local _result, que = YRP_SQL_CREATE_TABLE(db_name)
 			if not YRP_SQL_TABLE_EXISTS(db_name) and _YRP_SQL_Last_Error() ~= "" then
-				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INIT_DATABASE " .. tostring(db_name) .. " FAILED INIT TABLE" .. YRP_SQL_Show_Last_Error())
+				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INIT_DATABASE " .. tostring(db_name) .. " FAILED INIT TABLE" .. YRP_SQL_Show_Last_Error(que, "INIT_DATABASE"))
 			end
+
+			return _result, que
 		end
 	end
+
+	return nil
 end
 
 timer.Simple(
