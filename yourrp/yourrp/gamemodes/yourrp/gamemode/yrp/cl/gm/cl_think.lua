@@ -164,7 +164,7 @@ function YRPUseFunction(str)
 			--Inventory
 			local _weapon = LocalPlayer():GetActiveWeapon()
 			if _weapon ~= NULL then
-				local _pname = _weapon:GetPrintName() or _weapon.PrintName or YRP:trans("LID_weapon")
+				local _pname = (_weapon.GetPrintName and _weapon:GetPrintName()) or _weapon.PrintName or YRP:trans("LID_weapon")
 				local tab = {}
 				tab["ITEM"] = _pname
 				local cannotbedropped = YRP:trans("LID_cannotbedropped", tab)
